@@ -58,11 +58,13 @@
                         var textarea = document.getElementById('prompt');
                         console.log('Button pressed');
                         textarea.value = 'Button pressed';
+                        window.startRecording();
                     });
                     button.addEventListener('mouseup', function () {
                         var textarea = document.getElementById('prompt');
                         console.log('Button released');
                         textarea.value = 'Button released';
+                        window.stopRecording();
                     });
                 }
 
@@ -84,4 +86,46 @@
 
     // Start observing the entire document for changes to child nodes and subtree
     observer.observe(document, { childList: true, subtree: true });
+
+    injectScript();
+
+    /**
+     * Hack for userscript lack of access to media APIs
+     */
+    function injectScript() {
+        // Create a new script element
+        var script = document.createElement('script');
+        // Define the script
+        script.textContent = `
+            // This function will be called when the user presses the record button
+            function startRecording() {
+                // Get a stream from the user's microphone
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(function(stream) {
+                    // Create a new MediaRecorder object using the stream
+                    var mediaRecorder = new MediaRecorder(stream);
+                    // Start recording
+                    mediaRecorder.start();
+                    console.log('Recording started');
+                    
+                    // This function will be called when the user releases the record button
+                    window.stopRecording = function() {
+                        // Stop recording
+                        mediaRecorder.stop();
+                        console.log('Recording stopped');
+                        // Remove the stopRecording function
+                        delete window.stopRecording;
+                    }
+                })
+                .catch(function(err) {
+                    console.error('Error getting audio stream: ' + err);
+                });
+            }
+            // Add the startRecording function to the window object so it can be called from outside this script
+            window.startRecording = startRecording;
+        `;
+
+        // Add the script to the page
+        document.body.appendChild(script);
+    }
 })();
