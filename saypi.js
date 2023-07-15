@@ -11,5 +11,12 @@
 (function () {
     'use strict';
 
-    console.log("Hello, Pi!");
+    // Find the first <audio> element
+    var audioElement = document.querySelector('audio');
+    if (audioElement) {
+        // Insert a new <button> element just before the <audio> element
+        audioElement.insertAdjacentHTML('beforebegin', '<button id="talkButton">Talk</button>');
+    } else {
+        console.log('No <audio> element found');
+    }
 })();
