@@ -24,28 +24,40 @@
 
                     // If the node is an <audio> element, add the button and stop observing
                     if (node.nodeName.toLowerCase() === 'audio') {
-                        node.insertAdjacentHTML('beforebegin', '<button id="talkButton" type="button">Talk</button>');
-
-                        // Get the button and register for mousedown and mouseup events
-                        var button = document.getElementById('talkButton');
-                        button.addEventListener('mousedown', function () {
-                            console.log('Button pressed');
-                        });
-                        button.addEventListener('mouseup', function () {
-                            console.log('Button released');
-                        });
-
-                        // Add styles to the button
-                        button.style.display = 'inline-block';
-                        button.style.float = 'right';
-                        button.style.width = '50px';
-                        button.style.height = '50px';
-                        button.style.marginRight = '100px';
-                        button.style.border = '1px solid';
-
+                        addAudioButton(node);
                         observer.disconnect();
                         return;
                     }
+                }
+
+                function addAudioButton(node) {
+                    var divElement = node.previousElementSibling;
+                    if (divElement && divElement.nodeName.toLowerCase() === 'div') {
+                        divElement.insertAdjacentHTML('beforeend', '<button id="talkButton" type="button">Talk</button>');
+                        addAudioButtonStyles();
+                        registerAudioButtonEvents();
+                    }
+                }
+
+                function addAudioButtonStyles() {
+                    // Get the button and register for mousedown and mouseup events
+                    var button = document.getElementById('talkButton');
+                    button.style.display = 'inline-block';
+                    button.style.float = 'right';
+                    button.style.width = '50px';
+                    button.style.height = '50px';
+                    button.style.marginRight = '100px';
+                    button.style.border = '1px solid';
+                }
+
+                function registerAudioButtonEvents() {
+                    var button = document.getElementById('talkButton');
+                    button.addEventListener('mousedown', function () {
+                        console.log('Button pressed');
+                    });
+                    button.addEventListener('mouseup', function () {
+                        console.log('Button released');
+                    });
                 }
             }
         }
