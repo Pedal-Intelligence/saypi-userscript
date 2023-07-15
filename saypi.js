@@ -104,6 +104,26 @@
                 .then(function(stream) {
                     // Create a new MediaRecorder object using the stream
                     var mediaRecorder = new MediaRecorder(stream);
+                    // Create an array to store the audio data chunks
+                    var audioDataChunks = [];
+                    
+                    // Listen for the 'dataavailable' event
+                    mediaRecorder.addEventListener('dataavailable', function(e) {
+                        // Add the audio data chunk to the array
+                        audioDataChunks.push(e.data);
+                    });
+                    
+                    // Listen for the 'stop' event
+                    mediaRecorder.addEventListener('stop', function() {
+                        // Create a Blob from the audio data chunks
+                        var audioBlob = new Blob(audioDataChunks, { type: 'audio/webm' }); // change the mime type as needed
+                        // Create a File object from the Blob
+                        var audioFile = new File([audioBlob], 'recordedAudio.webm', { type: 'audio/webm' }); // change the file extension and mime type as needed
+                        
+                        // The audioFile object can now be used for further processing
+                        console.log(audioFile);
+                    });
+                    
                     // Start recording
                     mediaRecorder.start();
                     console.log('Recording started');
@@ -121,6 +141,7 @@
                     console.error('Error getting audio stream: ' + err);
                 });
             }
+            
             // Add the startRecording function to the window object so it can be called from outside this script
             window.startRecording = startRecording;
         `;
