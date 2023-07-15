@@ -24,7 +24,17 @@
 
                     // If the node is an <audio> element, add the button and stop observing
                     if (node.nodeName.toLowerCase() === 'audio') {
-                        node.insertAdjacentHTML('beforebegin', '<button id="talkButton">Talk</button>');
+                        node.insertAdjacentHTML('beforebegin', '<button id="talkButton" type="button">Talk</button>');
+
+                        // Get the button and register for mousedown and mouseup events
+                        var button = document.getElementById('talkButton');
+                        button.addEventListener('mousedown', function () {
+                            console.log('Button pressed');
+                        });
+                        button.addEventListener('mouseup', function () {
+                            console.log('Button released');
+                        });
+
                         observer.disconnect();
                         return;
                     }
