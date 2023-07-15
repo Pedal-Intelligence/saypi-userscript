@@ -11,9 +11,6 @@
 (function () {
     'use strict';
 
-    var isAudioButtonAdded = false;
-    var isTextAreaIdAdded = false;
-
     // Create a MutationObserver to listen for changes to the DOM
     var observer = new MutationObserver(function (mutations) {
         // Check each mutation
@@ -26,21 +23,59 @@
                     var node = mutation.addedNodes[j];
 
                     // If the node is an <audio> element, add the button and stop observing
-                    if (node.nodeName.toLowerCase() === 'audio' && !isAudioButtonAdded) {
+                    if (node.nodeName.toLowerCase() === 'audio') {
                         addAudioButton(node);
-                        isAudioButtonAdded = true;
-                    }
-
-                    // If the node is a <textarea> element, add an id to it
-                    if (node.nodeName.toLowerCase() === 'textarea' && !isTextAreaIdAdded) {
-                        node.id = 'prompt';
-                        isTextAreaIdAdded = true;
-                    }
-
-                    // If both modifications are done, stop observing
-                    if (isAudioButtonAdded && isTextAreaIdAdded) {
                         observer.disconnect();
                         return;
+                    }
+                }
+
+                function addAudioButton(node) {
+                    var divElement = node.previousElementSibling;
+                    if (divElement && divElement.nodeName.toLowerCase() === 'div') {
+                        divElement.insertAdjacentHTML('beforeend', '<button id="talkButton" type="button">Talk</button>');
+                        addAudioButtonStyles();
+                        registerAudioButtonEvents();
+                    }
+                }
+
+                function addAudioButtonStyles() {
+                    // Get the button and register for mousedown and mouseup events
+                    var button = document.getElementById('talkButton');
+                    button.style.display = 'inline-block';
+                    button.style.float = 'right';
+                    button.style.width = '50px';
+                    button.style.height = '50px';
+                    button.style.marginRight = '100px';
+                    button.style.border = '1px solid';
+                }
+
+                function registerAudioButtonEvents() {
+                    var button = document.getElementById('talkButton');
+
+                    button.addEventListener('mousedown', function () {
+                        idPromptTextArea();
+                        var textarea = document.getElementById('prompt');
+                        console.log('Button pressed');
+                        textarea.value = 'Button pressed';
+                    });
+                    button.addEventListener('mouseup', function () {
+                        var textarea = document.getElementById('prompt');
+                        console.log('Button released');
+                        textarea.value = 'Button released';
+                    });
+                }
+
+                function idPromptTextArea() {
+                    var textarea = document.getElementById('prompt');
+                    if (!textarea) {
+                        // Find the first <textarea> element and give it an id
+                        var textareaElement = document.querySelector('textarea');
+                        if (textareaElement) {
+                            textareaElement.id = 'prompt';
+                        } else {
+                            console.log('No <textarea> element found');
+                        }
                     }
                 }
             }
@@ -49,34 +84,4 @@
 
     // Start observing the entire document for changes to child nodes and subtree
     observer.observe(document, { childList: true, subtree: true });
-
-    function addAudioButton(node) {
-        var divElement = node.previousElementSibling;
-        if (divElement && divElement.nodeName.toLowerCase() === 'div') {
-            divElement.insertAdjacentHTML('beforeend', '<button id="talkButton" type="button">Talk</button>');
-            addAudioButtonStyles();
-            registerAudioButtonEvents();
-        }
-    }
-
-    function addAudioButtonStyles() {
-        // Get the button and register for mousedown and mouseup events
-        var button = document.getElementById('talkButton');
-        button.style.display = 'inline-block';
-        button.style.float = 'right';
-        button.style.width = '50px';
-        button.style.height = '50px';
-        button.style.marginRight = '100px';
-        button.style.border = '1px solid';
-    }
-
-    function registerAudioButtonEvents() {
-        var button = document.getElementById('talkButton');
-        button.addEventListener('mousedown', function () {
-            console.log('Button pressed');
-        });
-        button.addEventListener('mouseup', function () {
-            console.log('Button released');
-        });
-    }
 })();
