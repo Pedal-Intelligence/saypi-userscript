@@ -170,21 +170,17 @@
     function registerAudioButtonEvents() {
         var button = document.getElementById('talkButton');
 
-        console.log('registering button event listeners')
         button.addEventListener('mousedown', function () {
             idPromptTextArea();
             var textarea = document.getElementById('prompt');
             console.log('Button pressed');
-            textarea.value = 'Button pressed';
             unsafeWindow.startRecording();
         });
         button.addEventListener('mouseup', function () {
             var textarea = document.getElementById('prompt');
             console.log('Button released');
-            textarea.value = 'Button released';
             unsafeWindow.stopRecording();
         });
-        console.log('button event listeners registered')
     }
 
     function idPromptTextArea() {
