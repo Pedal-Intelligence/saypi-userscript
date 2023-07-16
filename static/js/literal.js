@@ -18,7 +18,8 @@ function uploadAudio(audioBlob) {
         })
         .then(function (responseJson) {
             var textarea = document.getElementById('prompt');
-            textarea.value = responseJson.transcription;
+            textarea.value = responseJson.text;
+            console.log('Speaker: ' + responseJson.text);
         })
         .catch(function (error) {
             console.log('Looks like there was a problem: ', error);

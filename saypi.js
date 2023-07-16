@@ -172,12 +172,10 @@
 
         button.addEventListener('mousedown', function () {
             idPromptTextArea();
-            var textarea = document.getElementById('prompt');
             console.log('Button pressed');
             unsafeWindow.startRecording();
         });
         button.addEventListener('mouseup', function () {
-            var textarea = document.getElementById('prompt');
             console.log('Button released');
             unsafeWindow.stopRecording();
         });
