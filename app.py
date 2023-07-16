@@ -14,12 +14,26 @@ def transcribe():
     # Load the audio file from the POST request
     audio_file = request.files["audio"]
 
-    # Use the OpenAI Python library to transcribe the audio file
-    try:
-        transcript = openai.Audio.transcribe("whisper-1", audio_file)
-        return transcript
-    except Exception as e:
-        return jsonify({"error": "Failed to transcribe audio", "details": str(e)}), 500
+    # Save the file directly to disk for inspection
+    audio_file.save("received_audio.webm")
+
+    import requests
+    import os
+
+    # Get the API key from the environment variables
+    api_key = os.getenv("OPENAI_API_KEY")
+
+    # Open the file in binary mode
+    with open("received_audio.webm", "rb") as audio_file:
+        # Use the OpenAI Python library to transcribe the audio file
+        try:
+            transcript = openai.Audio.transcribe("whisper-1", audio_file)
+            return transcript
+        except Exception as e:
+            return (
+                jsonify({"error": "Failed to transcribe audio", "details": str(e)}),
+                500,
+            )
 
 
 @app.after_request

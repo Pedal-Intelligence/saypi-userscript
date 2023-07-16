@@ -47,6 +47,17 @@ function startRecording() {
                 // Create a Blob from the audio data chunks
                 var audioBlob = new Blob(audioDataChunks, { type: 'audio/webm' });
 
+                // Log the size of the Blob
+                console.log(`Blob size: ${audioBlob.size} bytes`);
+                // Create a URL from the Blob
+                var audioUrl = URL.createObjectURL(audioBlob);
+                // Create a new audio element and set the source to the audio URL
+                var audioElement = new Audio(audioUrl);
+                // Append the audio element to the body of the document
+                document.body.appendChild(audioElement);
+                // Play the audio
+                audioElement.play();
+
                 // Upload the audio to the server for transcription
                 uploadAudio(audioBlob);
 

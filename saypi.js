@@ -33,6 +33,10 @@
         }
     });
 
+    function injectScript(callback) {
+        return injectScriptRemote(callback);
+    }
+
     function injectScriptRemote(callback) {
         GM_xmlhttpRequest({
             method: "GET",
@@ -147,7 +151,7 @@
             addAudioButtonStyles();
 
             // Call the function to inject the script after the button has been added
-            injectScriptRemote(registerAudioButtonEvents);
+            injectScript(registerAudioButtonEvents);
         }
     }
 
