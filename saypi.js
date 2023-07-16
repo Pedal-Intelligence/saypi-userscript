@@ -5,7 +5,7 @@
 // @description  Speak to Pi with OpenAI's Whisper
 // @author       Ross Cadogan
 // @match        https://heypi.com/*
-// @grant        none
+// @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
 (function () {
@@ -29,108 +29,91 @@
                         return;
                     }
                 }
-
-                function addAudioButton(node) {
-                    var divElement = node.previousElementSibling;
-                    if (divElement && divElement.nodeName.toLowerCase() === 'div') {
-                        divElement.insertAdjacentHTML('beforeend', '<button id="talkButton" type="button">Talk</button>');
-                        addAudioButtonStyles();
-                        registerAudioButtonEvents();
-                    }
-                }
-
-                function addAudioButtonStyles() {
-                    // Get the button and register for mousedown and mouseup events
-                    var button = document.getElementById('talkButton');
-                    button.style.display = 'inline-block';
-                    button.style.float = 'right';
-                    button.style.width = '50px';
-                    button.style.height = '50px';
-                    button.style.marginRight = '100px';
-                    button.style.border = '1px solid';
-                }
-
-                function registerAudioButtonEvents() {
-                    var button = document.getElementById('talkButton');
-
-                    button.addEventListener('mousedown', function () {
-                        idPromptTextArea();
-                        var textarea = document.getElementById('prompt');
-                        console.log('Button pressed');
-                        textarea.value = 'Button pressed';
-                        window.startRecording();
-                    });
-                    button.addEventListener('mouseup', function () {
-                        var textarea = document.getElementById('prompt');
-                        console.log('Button released');
-                        textarea.value = 'Button released';
-                        window.stopRecording();
-                    });
-                }
-
-                function idPromptTextArea() {
-                    var textarea = document.getElementById('prompt');
-                    if (!textarea) {
-                        // Find the first <textarea> element and give it an id
-                        var textareaElement = document.querySelector('textarea');
-                        if (textareaElement) {
-                            textareaElement.id = 'prompt';
-                        } else {
-                            console.log('No <textarea> element found');
-                        }
-                    }
-                }
             }
         }
     });
 
-    // Start observing the entire document for changes to child nodes and subtree
-    observer.observe(document, { childList: true, subtree: true });
+    function injectScriptRemote(callback) {
+        GM_xmlhttpRequest({
+            method: "GET",
+            url: "http://localhost:5000/static/js/literal.js",
+            onload: function (response) {
+                var scriptElement = document.createElement("script");
+                scriptElement.textContent = response.responseText;
+                document.body.appendChild(scriptElement);
 
-    injectScript();
+                // Call the callback function after the script is added
+                if (callback) {
+                    callback();
+                }
+            }
+        });
+    }
 
-    /**
-     * Hack for userscript lack of access to media APIs
-     */
-    function injectScript() {
-        // Create a new script element
-        var script = document.createElement('script');
-        // Define the script
-        script.textContent = `
-            var audioDataChunks = [];
+    function injectScriptLocal(callback) {
+        var scriptElement = document.createElement("script");
+        const scriptText = `
+        var audioDataChunks = [];
 
-            // This function will be called when the user presses the record button
-            function startRecording() {
-                // Get a stream from the user's microphone
-                navigator.mediaDevices.getUserMedia({ audio: true })
-                .then(function(stream) {
+        function uploadAudio(audioBlob) {
+            // Create a FormData object
+            var formData = new FormData();
+            // Add the audio blob to the FormData object
+            formData.append('audio', audioBlob, 'audio.webm');
+            // Post the audio to the server for transcription
+            fetch('http://localhost:5000/transcribe', {
+                method: 'POST',
+                body: formData
+            })
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw Error(response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(function (responseJson) {
+                    var textarea = document.getElementById('prompt');
+                    textarea.value = responseJson.transcription;
+                })
+                .catch(function (error) {
+                    console.log('Looks like there was a problem: ', error);
+                    var textarea = document.getElementById('prompt');
+                    textarea.value = 'Sorry, there was a problem transcribing your audio. Please try again later.';
+                });
+        }
+        
+        // This function will be called when the user presses the record button
+        function startRecording() {
+            // Get a stream from the user's microphone
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(function (stream) {
                     // Create a new MediaRecorder object using the stream
                     var mediaRecorder = new MediaRecorder(stream);
-                    
+        
                     // Listen for the 'dataavailable' event
-                    mediaRecorder.addEventListener('dataavailable', function(e) {
+                    mediaRecorder.addEventListener('dataavailable', function (e) {
                         // Add the audio data chunk to the array
                         audioDataChunks.push(e.data);
                     });
-                    
+        
                     // Listen for the 'stop' event
-                    mediaRecorder.addEventListener('stop', function() {
+                    mediaRecorder.addEventListener('stop', function () {
                         // Create a Blob from the audio data chunks
                         var audioBlob = new Blob(audioDataChunks, { type: 'audio/webm' });
-                        
+        
                         // Upload the audio to the server for transcription
                         uploadAudio(audioBlob);
-                        
+        
                         // Clear the array for the next recording
                         audioDataChunks = [];
                     });
-                    
+        
                     // Start recording
                     mediaRecorder.start();
                     console.log('Recording started');
-                    
+        
                     // This function will be called when the user releases the record button
-                    window.stopRecording = function() {
+                    window.stopRecording = function () {
                         // Stop recording
                         mediaRecorder.stop();
                         console.log('Recording stopped');
@@ -138,35 +121,80 @@
                         delete window.stopRecording;
                     }
                 })
-                .catch(function(err) {
+                .catch(function (err) {
                     console.error('Error getting audio stream: ' + err);
                 });
-            }
-            
-            // Add the startRecording function to the window object so it can be called from outside this script
-            window.startRecording = startRecording;
+        }
+        
+        // Add the startRecording function to the window object so it can be called from outside this script
+        window.startRecording = startRecording;
+        console.log('Recording functions registered (local)')
+        `
+        scriptElement.textContent = scriptText;
+        document.body.appendChild(scriptElement);
 
-            function uploadAudio(audioBlob) {
-                // Create a FormData object
-                var formData = new FormData();
-                // Add the audio blob to the FormData object
-                formData.append('audio', audioBlob, 'audio.webm');
-                // Post the audio to the server for transcription
-                fetch('http://localhost:5000/transcribe', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Transcription: ', data);
-                    // Show the transcription in the textarea
-                    document.getElementById('prompt').value = data;
-                })
-                .catch(error => console.error('Error: ', error));
-            }
-        `;
-
-        // Add the script to the page
-        document.body.appendChild(script);
+        // Call the callback function after the script is added
+        if (callback) {
+            callback();
+        }
     }
+
+    function addAudioButton(node) {
+        var divElement = node.previousElementSibling;
+        if (divElement && divElement.nodeName.toLowerCase() === 'div') {
+            divElement.insertAdjacentHTML('beforeend', '<button id="talkButton" type="button">Talk</button>');
+            addAudioButtonStyles();
+
+            // Call the function to inject the script after the button has been added
+            injectScriptRemote(registerAudioButtonEvents);
+        }
+    }
+
+
+    function addAudioButtonStyles() {
+        // Get the button and register for mousedown and mouseup events
+        var button = document.getElementById('talkButton');
+        button.style.display = 'inline-block';
+        button.style.float = 'right';
+        button.style.width = '50px';
+        button.style.height = '50px';
+        button.style.marginRight = '100px';
+        button.style.border = '1px solid';
+    }
+
+    function registerAudioButtonEvents() {
+        var button = document.getElementById('talkButton');
+
+        console.log('registering button event listeners')
+        button.addEventListener('mousedown', function () {
+            idPromptTextArea();
+            var textarea = document.getElementById('prompt');
+            console.log('Button pressed');
+            textarea.value = 'Button pressed';
+            unsafeWindow.startRecording();
+        });
+        button.addEventListener('mouseup', function () {
+            var textarea = document.getElementById('prompt');
+            console.log('Button released');
+            textarea.value = 'Button released';
+            unsafeWindow.stopRecording();
+        });
+        console.log('button event listeners registered')
+    }
+
+    function idPromptTextArea() {
+        var textarea = document.getElementById('prompt');
+        if (!textarea) {
+            // Find the first <textarea> element and give it an id
+            var textareaElement = document.querySelector('textarea');
+            if (textareaElement) {
+                textareaElement.id = 'prompt';
+            } else {
+                console.log('No <textarea> element found');
+            }
+        }
+    }
+
+    // Start observing the entire document for changes to child nodes and subtree
+    observer.observe(document, { childList: true, subtree: true });
 })();
