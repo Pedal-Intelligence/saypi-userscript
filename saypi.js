@@ -23,13 +23,15 @@
                     var node = mutation.addedNodes[j];
 
                     // If the node is the appropriate container element, add the button and stop observing
-                    if (node.nodeName.toLowerCase() === 'audio') {
-                        var audioNode = node;
-                        // Get the next sibling <div> node
-                        var nextSiblingDiv = audioNode.nextElementSibling;
-                        // Get the first child <div> of the next sibling <div>
-                        var firstChildDiv = nextSiblingDiv.firstElementChild;
-                        addAudioButton(firstChildDiv);
+                    if (node.nodeName.toLowerCase() === 'div' && node.classList.contains('fixed-bottom')) {
+                        var footer = node;
+                        console.log('Found footer');
+                        var buttonContainer = footer.querySelector('.relative.flex.flex-col');
+                        if (buttonContainer) {
+                            addAudioButton(buttonContainer);
+                        } else {
+                            console.log('No button container found in footer');
+                        }
                         observer.disconnect();
                         return;
                     }
