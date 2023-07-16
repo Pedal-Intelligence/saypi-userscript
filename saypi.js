@@ -97,6 +97,8 @@
         var script = document.createElement('script');
         // Define the script
         script.textContent = `
+            var audioDataChunks = [];
+
             // This function will be called when the user presses the record button
             function startRecording() {
                 // Get a stream from the user's microphone
@@ -104,8 +106,6 @@
                 .then(function(stream) {
                     // Create a new MediaRecorder object using the stream
                     var mediaRecorder = new MediaRecorder(stream);
-                    // Create an array to store the audio data chunks
-                    var audioDataChunks = [];
                     
                     // Listen for the 'dataavailable' event
                     mediaRecorder.addEventListener('dataavailable', function(e) {
@@ -116,12 +116,13 @@
                     // Listen for the 'stop' event
                     mediaRecorder.addEventListener('stop', function() {
                         // Create a Blob from the audio data chunks
-                        var audioBlob = new Blob(audioDataChunks, { type: 'audio/webm' }); // change the mime type as needed
-                        // Create a File object from the Blob
-                        var audioFile = new File([audioBlob], 'recordedAudio.webm', { type: 'audio/webm' }); // change the file extension and mime type as needed
+                        var audioBlob = new Blob(audioDataChunks, { type: 'audio/webm' });
                         
-                        // The audioFile object can now be used for further processing
-                        console.log(audioFile);
+                        // Upload the audio to the server for transcription
+                        uploadAudio(audioBlob);
+                        
+                        // Clear the array for the next recording
+                        audioDataChunks = [];
                     });
                     
                     // Start recording
@@ -144,6 +145,25 @@
             
             // Add the startRecording function to the window object so it can be called from outside this script
             window.startRecording = startRecording;
+
+            function uploadAudio(audioBlob) {
+                // Create a FormData object
+                var formData = new FormData();
+                // Add the audio blob to the FormData object
+                formData.append('file', audioBlob, 'audio.webm');
+                // Post the audio to the server for transcription
+                fetch('http://localhost:5000/transcribe', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Transcription: ', data);
+                    // Show the transcription in the textarea
+                    document.getElementById('prompt').value = data;
+                })
+                .catch(error => console.error('Error: ', error));
+            }
         `;
 
         // Add the script to the page
