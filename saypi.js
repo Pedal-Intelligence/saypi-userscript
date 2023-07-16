@@ -22,9 +22,14 @@
                 for (var j = 0; j < mutation.addedNodes.length; j++) {
                     var node = mutation.addedNodes[j];
 
-                    // If the node is an <audio> element, add the button and stop observing
+                    // If the node is the appropriate container element, add the button and stop observing
                     if (node.nodeName.toLowerCase() === 'audio') {
-                        addAudioButton(node);
+                        var audioNode = node;
+                        // Get the next sibling <div> node
+                        var nextSiblingDiv = audioNode.nextElementSibling;
+                        // Get the first child <div> of the next sibling <div>
+                        var firstChildDiv = nextSiblingDiv.firstElementChild;
+                        addAudioButton(firstChildDiv);
                         observer.disconnect();
                         return;
                     }
@@ -144,27 +149,24 @@
         }
     }
 
-    function addAudioButton(node) {
-        var divElement = node.previousElementSibling;
-        if (divElement && divElement.nodeName.toLowerCase() === 'div') {
-            divElement.insertAdjacentHTML('beforeend', '<button id="talkButton" type="button">Talk</button>');
-            addAudioButtonStyles();
+    function addAudioButton(container) {
+        var button = document.createElement('button');
+        button.id = 'talkButton';
+        button.type = 'button';
+        button.className = 'relative flex mt-1 mb-1 rounded-full px-2 py-3 text-center hover:bg-cream-650 hover:text-brand-green-700';
+        button.textContent = 'Talk';
+        container.appendChild(button);
+        addAudioButtonStyles();
 
-            // Call the function to inject the script after the button has been added
-            injectScript(registerAudioButtonEvents);
-        }
+        // Call the function to inject the script after the button has been added
+        injectScript(registerAudioButtonEvents);
     }
 
 
     function addAudioButtonStyles() {
         // Get the button and register for mousedown and mouseup events
         var button = document.getElementById('talkButton');
-        button.style.display = 'inline-block';
-        button.style.float = 'right';
-        button.style.width = '50px';
-        button.style.height = '50px';
-        button.style.marginRight = '100px';
-        button.style.border = '1px solid';
+        button.style.marginTop = '0.25rem;'
     }
 
     function registerAudioButtonEvents() {
