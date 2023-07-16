@@ -150,7 +150,7 @@
                 // Create a FormData object
                 var formData = new FormData();
                 // Add the audio blob to the FormData object
-                formData.append('file', audioBlob, 'audio.webm');
+                formData.append('audio', audioBlob, 'audio.webm');
                 // Post the audio to the server for transcription
                 fetch('http://localhost:5000/transcribe', {
                     method: 'POST',
