@@ -32,8 +32,9 @@ function startRecording() {
     // Get a stream from the user's microphone
     navigator.mediaDevices.getUserMedia({ audio: true })
         .then(function (stream) {
-            // Create a new MediaRecorder object using the stream
-            var mediaRecorder = new MediaRecorder(stream);
+            // Create a new MediaRecorder object using the stream and specifying the MIME type
+            var options = { mimeType: 'audio/webm;codecs=opus' };
+            var mediaRecorder = new MediaRecorder(stream, options);
 
             // Listen for the 'dataavailable' event
             mediaRecorder.addEventListener('dataavailable', function (e) {
