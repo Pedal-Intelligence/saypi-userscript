@@ -89,7 +89,7 @@
 
     function addAudioIcon(button) {
         var iconHtml = `
-        <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 56.25 30">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 56.25 30" class="waveform">
         <defs>
           <clipPath id="a">
             <path d="M.54 12H3v5H.54Zm0 0"/>
@@ -119,6 +119,12 @@
         icon.outerHTML = iconHtml;
     }
 
+    function addStyles(css) {
+        const style = document.createElement('style');
+        style.type = 'text/css';
+        style.appendChild(document.createTextNode(css));
+        document.head.appendChild(style);
+    }
 
     function addAudioButtonStyles() {
         // Get the button and register for mousedown and mouseup events
@@ -126,6 +132,25 @@
         button.style.marginTop = '0.25rem';
         button.style.borderRadius = '18px';
         button.style.width = '120px';
+        // button animation
+        addStyles(`
+            @keyframes pulse {
+                0% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(0.9);
+                }
+                100% {
+                    transform: scale(1);
+                }
+            }
+
+            #talkButton:active .waveform {
+                animation: pulse 1s infinite;
+            }
+        `);
+
     }
 
     function registerAudioButtonEvents() {
