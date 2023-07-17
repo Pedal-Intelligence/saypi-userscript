@@ -18,10 +18,9 @@ function uploadAudio(audioBlob) {
         })
         .then(function (responseJson) {
             var textarea = document.getElementById('prompt');
-            setNativeValue(textarea, responseJson.text);
+            //setNativeValue(textarea, responseJson.text);
             //textarea.value = responseJson.text;
-            //simulateTyping(textarea, responseJson.text, 10);
-
+            simulateTyping(textarea, responseJson.text + " ", 10);
 
             console.log('Speaker: ' + responseJson.text);
         })
@@ -52,7 +51,7 @@ function simulateTyping(element, text, delay) {
     function typeChar() {
         if (i < text.length) {
             // Append the next character and increment i
-            element.value += text[i++];
+            setNativeValue(element, element.value + text[i++]);
             // Call this function again after the delay
             setTimeout(typeChar, delay);
         }
@@ -60,6 +59,7 @@ function simulateTyping(element, text, delay) {
     // Start typing
     typeChar();
 }
+
 
 
 // This function will be called when the user presses the record button
