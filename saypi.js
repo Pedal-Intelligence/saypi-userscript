@@ -79,6 +79,9 @@
         button.id = 'talkButton';
         button.type = 'button';
         button.className = 'relative flex mt-1 mb-1 rounded-full px-2 py-3 text-center bg-cream-550 hover:bg-cream-650 hover:text-brand-green-700 text-muted';
+        // Set ARIA label and tooltip
+        button.setAttribute('aria-label', 'Talk (Press Control + Space to use hotkey)');
+        button.setAttribute('title', 'Talk (Press Control + Space to use hotkey)');
         container.appendChild(button);
         addAudioButtonStyles();
         addAudioIcon(button);
