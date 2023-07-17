@@ -168,8 +168,12 @@
             console.log('Button released');
             unsafeWindow.stopRecording();
         });
-
         registerHotkey();
+
+        // "warm up" the microphone by acquiring it before the user presses the button
+        document.getElementById('talkButton').addEventListener('mouseenter', setupRecording);
+        document.getElementById('talkButton').addEventListener('mouseleave', tearDownRecording);
+        window.addEventListener('beforeunload', tearDownRecording);
     }
 
     function registerHotkey() {
