@@ -23,7 +23,7 @@
                     var node = mutation.addedNodes[j];
 
                     // If the node is the appropriate container element, add the button and stop observing
-                    if (node.nodeName.toLowerCase() === 'div' && node.classList.contains('fixed-bottom')) {
+                    if (node.nodeName.toLowerCase() === 'div' && node.classList.contains('fixed') && node.classList.contains('bottom-16')) {
                         var footer = node;
                         console.log('Found footer');
                         var buttonContainer = footer.querySelector('.relative.flex.flex-col');
@@ -79,7 +79,7 @@
         var button = document.createElement('button');
         button.id = 'talkButton';
         button.type = 'button';
-        button.className = 'relative flex mt-1 mb-1 rounded-full px-2 py-3 text-center hover:bg-cream-650 hover:text-brand-green-700';
+        button.className = 'relative flex mt-1 mb-1 rounded-full px-2 py-3 text-center bg-cream-550 hover:bg-cream-650 hover:text-brand-green-700 text-muted';
         button.textContent = 'Talk';
         container.appendChild(button);
         addAudioButtonStyles();
@@ -92,7 +92,8 @@
     function addAudioButtonStyles() {
         // Get the button and register for mousedown and mouseup events
         var button = document.getElementById('talkButton');
-        button.style.marginTop = '0.25rem;'
+        button.style.marginTop = '0.25rem';
+        button.style.borderRadius = '18px';
     }
 
     function registerAudioButtonEvents() {
