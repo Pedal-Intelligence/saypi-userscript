@@ -18,7 +18,11 @@ function uploadAudio(audioBlob) {
         })
         .then(function (responseJson) {
             var textarea = document.getElementById('prompt');
-            textarea.value = responseJson.text;
+            setNativeValue(textarea, responseJson.text);
+            //textarea.value = responseJson.text;
+            //simulateTyping(textarea, responseJson.text, 10);
+
+
             console.log('Speaker: ' + responseJson.text);
         })
         .catch(function (error) {
@@ -27,6 +31,36 @@ function uploadAudio(audioBlob) {
             textarea.value = 'Sorry, there was a problem transcribing your audio. Please try again later.';
         });
 }
+
+function setNativeValue(element, value) {
+    let lastValue = element.value;
+    element.value = value;
+    let event = new Event("input", { target: element, bubbles: true });
+    // React 15
+    event.simulated = true;
+    // React 16-17
+    let tracker = element._valueTracker;
+    if (tracker) {
+        tracker.setValue(lastValue);
+    }
+    element.dispatchEvent(event);
+}
+
+
+function simulateTyping(element, text, delay) {
+    var i = 0;
+    function typeChar() {
+        if (i < text.length) {
+            // Append the next character and increment i
+            element.value += text[i++];
+            // Call this function again after the delay
+            setTimeout(typeChar, delay);
+        }
+    }
+    // Start typing
+    typeChar();
+}
+
 
 // This function will be called when the user presses the record button
 function startRecording() {
