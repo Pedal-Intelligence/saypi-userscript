@@ -25,7 +25,6 @@
                     // If the node is the appropriate container element, add the button and stop observing
                     if (node.nodeName.toLowerCase() === 'div' && node.classList.contains('fixed') && node.classList.contains('bottom-16')) {
                         var footer = node;
-                        console.log('Found footer');
                         var buttonContainer = footer.querySelector('.relative.flex.flex-col');
                         if (buttonContainer) {
                             addAudioButton(buttonContainer);
@@ -80,12 +79,44 @@
         button.id = 'talkButton';
         button.type = 'button';
         button.className = 'relative flex mt-1 mb-1 rounded-full px-2 py-3 text-center bg-cream-550 hover:bg-cream-650 hover:text-brand-green-700 text-muted';
-        button.textContent = 'Talk';
         container.appendChild(button);
         addAudioButtonStyles();
+        addAudioIcon(button);
 
         // Call the function to inject the script after the button has been added
         injectScript(registerAudioButtonEvents);
+    }
+
+    function addAudioIcon(button) {
+        var iconHtml = `
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 56.25 30">
+        <defs>
+          <clipPath id="a">
+            <path d="M.54 12H3v5H.54Zm0 0"/>
+          </clipPath>
+          <clipPath id="b">
+            <path d="M25 2.2h2v24.68h-2Zm0 0"/>
+          </clipPath>
+          <clipPath id="c">
+            <path d="M53 12h1.98v5H53Zm0 0"/>
+          </clipPath>
+        </defs>
+        <g clip-path="url(#a)">
+          <path fill="#776d6d" d="M1.48 12.71c-.5 0-.9.4-.9.9v1.85a.9.9 0 0 0 1.8 0v-1.84c0-.5-.4-.9-.9-.9Zm0 0"/>
+        </g>
+        <path fill="#776d6d" d="M4.98 6.63c-.5 0-.9.4-.9.9v14.01a.9.9 0 0 0 1.81 0v-14c0-.5-.4-.92-.9-.92Zm3.51 3.1a.9.9 0 0 0-.9.91v7.79a.9.9 0 0 0 1.8 0v-7.79c0-.5-.4-.9-.9-.9ZM12 3.83a.9.9 0 0 0-.91.9v19.6a.9.9 0 0 0 1.8 0V4.74c0-.5-.4-.9-.9-.9Zm3.5 8.29a.9.9 0 0 0-.91.9v3.03a.9.9 0 0 0 1.81 0v-3.03c0-.5-.4-.9-.9-.9ZM19 6.8c-.5 0-.9.4-.9.9v13.68a.9.9 0 0 0 1.8 0V7.7c0-.5-.4-.9-.9-.9Zm3.58-2.97h-.01c-.5 0-.9.4-.9.9l-.13 19.6c0 .5.4.9.9.91.5 0 .9-.4.9-.9l.14-19.6a.9.9 0 0 0-.9-.9Zm0 0"/>
+        <g clip-path="url(#b)">
+          <path fill="#776d6d" d="M26 2.2c-.5 0-.9.4-.9.9v22.86a.9.9 0 1 0 1.81 0V3.11a.9.9 0 0 0-.9-.91Zm0 0"/>
+        </g>
+        <path fill="#776d6d" d="M29.52 7.71a.9.9 0 0 0-.91.9v11.85a.9.9 0 0 0 1.81 0V8.62c0-.5-.4-.9-.9-.9Zm3.5 2.93a.9.9 0 0 0-.9.91v5.97a.9.9 0 0 0 1.8 0v-5.97c0-.5-.4-.9-.9-.9Zm3.5-5.78c-.5 0-.9.4-.9.9v17.55a.9.9 0 0 0 1.81 0V5.76c0-.5-.4-.9-.9-.9Zm3.51 3.34c-.5 0-.9.4-.9.9v10.87a.9.9 0 0 0 1.8 0V9.1a.9.9 0 0 0-.9-.91Zm3.5 3.08c-.5 0-.9.4-.9.91v4.7a.9.9 0 1 0 1.8 0v-4.7a.9.9 0 0 0-.9-.9Zm3.51-7.45a.9.9 0 0 0-.91.9v19.6a.9.9 0 0 0 1.81 0V4.74c0-.5-.4-.9-.9-.9Zm3.5 5.57a.9.9 0 0 0-.9.91v8.45a.9.9 0 0 0 1.8 0v-8.45c0-.5-.4-.9-.9-.9Zm0 0"/>
+        <g clip-path="url(#c)">
+          <path fill="#776d6d" d="M54.04 12.96a.9.9 0 0 0-.9.91v1.33a.9.9 0 1 0 1.8 0v-1.32a.9.9 0 0 0-.9-.92Zm0 0"/>
+        </g>
+      </svg>
+        `;
+        var icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        button.appendChild(icon);
+        icon.outerHTML = iconHtml;
     }
 
 
@@ -94,6 +125,7 @@
         var button = document.getElementById('talkButton');
         button.style.marginTop = '0.25rem';
         button.style.borderRadius = '18px';
+        button.style.width = '120px';
     }
 
     function registerAudioButtonEvents() {
