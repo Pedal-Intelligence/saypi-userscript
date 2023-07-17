@@ -5,8 +5,10 @@ function uploadAudio(audioBlob) {
     var formData = new FormData();
     // Add the audio blob to the FormData object
     formData.append('audio', audioBlob, 'audio.webm');
+    // Get the user's preferred language
+    var language = navigator.language;
     // Post the audio to the server for transcription
-    fetch('http://localhost:5000/transcribe', {
+    fetch('http://localhost:5000/transcribe?language=' + language, {
         method: 'POST',
         body: formData
     })
