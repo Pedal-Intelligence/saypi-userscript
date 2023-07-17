@@ -66,6 +66,9 @@ function simulateTyping(element, text, delay) {
 
 // This function will be called when the user presses the record button
 function startRecording() {
+    // Note the start time
+    var startTime = Date.now();
+
     // Get a stream from the user's microphone
     navigator.mediaDevices.getUserMedia({ audio: true })
         .then(function (stream) {
@@ -94,6 +97,11 @@ function startRecording() {
             // Start recording
             mediaRecorder.start();
             console.log('Recording started');
+            // Note the time when the recording actually starts
+            var actualStartTime = Date.now();
+            var delay = actualStartTime - startTime;
+
+            console.log('Delay between button press and recording start: ' + delay + ' ms');
 
             // This function will be called when the user releases the record button
             window.stopRecording = function () {
