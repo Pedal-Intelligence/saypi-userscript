@@ -84,7 +84,7 @@ function handleStop() {
     audioDataChunks = [];
 }
 
-function setupRecording() {
+function setupRecording(callback) {
     if (mediaRecorder) {
         return;
     }
@@ -104,6 +104,10 @@ function setupRecording() {
         })
         .then(function () {
             console.log('MediaRecorder setup completed');
+            // Invoke the callback function
+            if (typeof callback === 'function') {
+                callback();
+            }
         })
         .catch(function (err) {
             console.error('Error getting audio stream: ' + err);
@@ -136,7 +140,8 @@ function tearDownRecording() {
 function startRecording() {
     // Check if the MediaRecorder is set up
     if (!mediaRecorder) {
-        setupRecording();
+        setupRecording(startRecording);
+        return;
     }
 
     // Note the start time
@@ -154,9 +159,11 @@ function startRecording() {
 
     // This function will be called when the user releases the record button
     window.stopRecording = function () {
-        // Stop recording
-        mediaRecorder.stop();
-        console.log('Recording stopped');
+        if (mediaRecorder && mediaRecorder.state === 'recording') {
+            // Stop recording
+            mediaRecorder.stop();
+            console.log('Recording stopped');
+        }
         // Remove the stopRecording function
         delete window.stopRecording;
     }
