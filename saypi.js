@@ -161,11 +161,9 @@
 
         button.addEventListener('mousedown', function () {
             idPromptTextArea();
-            console.log('Button pressed');
             unsafeWindow.startRecording();
         });
         button.addEventListener('mouseup', function () {
-            console.log('Button released');
             unsafeWindow.stopRecording();
         });
         registerHotkey();
@@ -183,8 +181,6 @@
         document.addEventListener('keydown', function (event) {
             if (event.ctrlKey && event.code === 'Space' && !ctrlDown) {
                 ctrlDown = true;
-                // Replace this with the function you want to call when the key combination is pressed
-                console.log('Control + Space was pressed');
                 // Simulate mousedown event
                 let mouseDownEvent = new Event('mousedown');
                 document.getElementById('talkButton').dispatchEvent(mouseDownEvent);
@@ -195,8 +191,6 @@
         document.addEventListener('keyup', function (event) {
             if (ctrlDown && event.code === 'Space') {
                 ctrlDown = false;
-                // Replace this with the function you want to call when the key combination is released
-                console.log('Control + Space was released');
                 // Simulate mouseup event
                 let mouseUpEvent = new Event('mouseup');
                 document.getElementById('talkButton').dispatchEvent(mouseUpEvent);

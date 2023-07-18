@@ -103,7 +103,6 @@ function setupRecording(callback) {
             mediaRecorder.addEventListener('stop', handleStop);
         })
         .then(function () {
-            console.log('MediaRecorder setup completed');
             // Invoke the callback function
             if (typeof callback === 'function') {
                 callback();
@@ -131,8 +130,6 @@ function tearDownRecording() {
 
     // Clear the MediaRecorder variable
     mediaRecorder = null;
-
-    console.log('MediaRecorder teardown completed');
 }
 
 
@@ -144,18 +141,9 @@ function startRecording() {
         return;
     }
 
-    // Note the start time
-    var startTime = Date.now();
-
     // Start recording
     mediaRecorder.start();
     console.log('Recording started');
-
-    // Note the time when the recording actually starts
-    var actualStartTime = Date.now();
-    var delay = actualStartTime - startTime;
-
-    console.log('Delay between button press and recording start: ' + delay + ' ms');
 
     // This function will be called when the user releases the record button
     window.stopRecording = function () {
