@@ -65,6 +65,7 @@ function simulateTyping(element, text, delay) {
 
 // Declare a global variable for the mediaRecorder
 var mediaRecorder;
+const threshold = 1000; // 1000 ms = 1 second, about the length of "Hey, Pi"
 
 // This function will be called when the 'dataavailable' event fires
 function handleDataAvailable(e) {
@@ -77,12 +78,20 @@ function handleStop() {
     // Create a Blob from the audio data chunks
     var audioBlob = new Blob(audioDataChunks, { type: 'audio/webm' });
 
-    // Upload the audio to the server for transcription
-    uploadAudio(audioBlob);
+    // Get the stop time and calculate the duration
+    var stopTime = Date.now();
+    var duration = stopTime - window.startTime;
+
+    // If the duration is greater than the threshold, upload the audio for transcription
+    if (duration >= threshold) {
+        // Upload the audio to the server for transcription
+        uploadAudio(audioBlob);
+    }
 
     // Clear the array for the next recording
     audioDataChunks = [];
 }
+
 
 function setupRecording(callback) {
     if (mediaRecorder) {
@@ -143,6 +152,10 @@ function startRecording() {
 
     // Start recording
     mediaRecorder.start();
+
+    // Record the start time
+    window.startTime = Date.now();
+
     console.log('Recording started');
 
     // This function will be called when the user releases the record button
@@ -150,12 +163,23 @@ function startRecording() {
         if (mediaRecorder && mediaRecorder.state === 'recording') {
             // Stop recording
             mediaRecorder.stop();
-            console.log('Recording stopped');
+
+            // Record the stop time and calculate the duration
+            var stopTime = Date.now();
+            var duration = stopTime - window.startTime;
+
+            // If the duration is less than the threshold, don't upload the audio for transcription
+            if (duration < threshold) {
+                console.log('Recording was too short, not uploading for transcription');
+            } else {
+                console.log('Recording stopped');
+            }
         }
         // Remove the stopRecording function
         delete window.stopRecording;
     }
 }
+
 
 
 // Add the startRecording function to the window object so it can be called from outside this script
