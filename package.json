@@ -1,0 +1,11 @@
+{
+    "name": "saypi-userscript",
+    "version": "1.0.0",
+    "scripts": {
+      "start": "npx serve -s"
+    },
+    "dependencies": {
+      "serve": "^13.2.0"
+    }
+  }
+  

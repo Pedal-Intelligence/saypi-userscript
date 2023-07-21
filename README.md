@@ -1,5 +1,5 @@
 # Say, Pi Userscript
-![SayPi Logo](saypi_logo.png)
+![SayPi Logo](static/images/saypi_logo.png)
 
 Enhance your voice interactions with Inflection AI's "Hey, Pi" chatbot with the "Say, Pi" userscript for accurate voice dictation and immersive spoken dialogues.
 
