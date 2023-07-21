@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Say, Pi
-// @namespace    http://veloware.com/saypi
+// @namespace    http://www.saypi.ai/
 // @version      1.0.0
 // @description  Speak to Pi with OpenAI's Whisper
 // @author       Ross Cadogan
@@ -44,9 +44,11 @@
     }
 
     function injectScriptRemote(callback) {
+        // Get the URL of the remote script
+        var remoteScriptUrl = 'https://www.saypi.ai/static/js/literal.js';
         GM_xmlhttpRequest({
             method: "GET",
-            url: "http://localhost:5000/static/js/literal.js",
+            url: remoteScriptUrl,
             onload: function (response) {
                 var scriptElement = document.createElement("script");
                 scriptElement.textContent = response.responseText;
