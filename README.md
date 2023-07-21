@@ -1,4 +1,6 @@
 # Say, Pi Userscript
+![SayPi Logo](saypi_logo.png)
+
 Enhance your voice interactions with Inflection AI's "Hey, Pi" chatbot with the "Say, Pi" userscript for accurate voice dictation and immersive spoken dialogues.
 
 **Description:**
@@ -12,7 +14,7 @@ Enhance your voice interactions with Inflection AI's "Hey, Pi" chatbot with the 
 
 **Installation:**
 1. Install a userscript manager extension for your browser (e.g., Tampermonkey, Greasemonkey).
-2. Click on the `saypi-userscript` user.js file in this repository.
+2. Click on the `saypi-userscript` saypi.js file in this repository.
 3. Click the "Raw" button to trigger the userscript installation.
 
 **Compatibility:**
