@@ -11,6 +11,13 @@
 (function () {
     'use strict';
 
+    // Define a global configuration property
+    const config = {
+        webServerUrl: "https://www.saypi.ai",
+        apiServerUrl: "https://api.saypi.ai",
+        // Add other configuration properties as needed
+    };
+
     // Create a MutationObserver to listen for changes to the DOM
     var observer = new MutationObserver(function (mutations) {
         // Check each mutation
@@ -45,13 +52,14 @@
 
     function injectScriptRemote(callback) {
         // Get the URL of the remote script
-        var remoteScriptUrl = 'https://www.saypi.ai/static/js/literal.js';
+        var remoteScriptUrl = webServerUrl + '/static/js/literal.js';
         GM_xmlhttpRequest({
             method: "GET",
             url: remoteScriptUrl,
             onload: function (response) {
                 var scriptElement = document.createElement("script");
-                scriptElement.textContent = response.responseText;
+                const configText = JSON.stringify(config);
+                scriptElement.textContent = configText + response.responseText;
                 document.body.appendChild(scriptElement);
 
                 // Call the callback function after the script is added
@@ -67,7 +75,8 @@
         const scriptText = `
         // Paste the contents of static/js/literal.js here to avoid CORS issues
         `
-        scriptElement.textContent = scriptText;
+        const configText = JSON.stringify(config);
+        scriptElement.textContent = configText + scriptText;
         document.body.appendChild(scriptElement);
 
         // Call the callback function after the script is added
