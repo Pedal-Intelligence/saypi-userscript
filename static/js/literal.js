@@ -7,9 +7,8 @@ function uploadAudio(audioBlob) {
     formData.append('audio', audioBlob, 'audio.webm');
     // Get the user's preferred language
     var language = navigator.language;
-    var apiServer = 'https://api.saypi.ai';
     // Post the audio to the server for transcription
-    fetch(apiServer + '/transcribe?language=' + language, {
+    fetch(config.apiServerUrl + '/transcribe?language=' + language, {
         method: 'POST',
         body: formData
     })
