@@ -13,8 +13,8 @@
 
     // Define a global configuration property
     const config = {
-        webServerUrl: "https://www.saypi.ai",
-        apiServerUrl: "https://api.saypi.ai",
+        webServerUrl: "https://saypi-userscript-8b884a65da2d.herokuapp.com",
+        apiServerUrl: "https://saypi-api-99f6a81b756d.herokuapp.com",
         // Add other configuration properties as needed
     };
 
@@ -58,7 +58,9 @@
             url: remoteScriptUrl,
             onload: function (response) {
                 var scriptElement = document.createElement("script");
-                const configText = JSON.stringify(config);
+                scriptElement.type = "text/javascript";
+                scriptElement.id = 'saypi-script';
+                const configText = 'var config = ' + JSON.stringify(config) + ';';
                 scriptElement.textContent = configText + response.responseText;
                 document.body.appendChild(scriptElement);
 
@@ -72,10 +74,12 @@
 
     function injectScriptLocal(callback) {
         var scriptElement = document.createElement("script");
+        scriptElement.type = "text/javascript";
+        scriptElement.id = 'saypi-script';
         const scriptText = `
         // Paste the contents of static/js/literal.js here to avoid CORS issues
         `
-        const configText = JSON.stringify(config);
+        const configText = 'var config = ' + JSON.stringify(config) + ';';
         scriptElement.textContent = configText + scriptText;
         document.body.appendChild(scriptElement);
 
