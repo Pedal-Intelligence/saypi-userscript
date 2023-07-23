@@ -5,60 +5,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Say, Pi</title>
-    <!-- Add any necessary CSS styles or external libraries here -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 2em;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+
+        h1,
+        h2 {
+            color: #007BFF;
+        }
+
+        h1 {
+            font-size: 2em;
+        }
+
+        h2 {
+            font-size: 1.5em;
+        }
+
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        ol {
+            margin-left: 1em;
+        }
+    </style>
 </head>
 
+
 <body>
-    <h2>Speak with Pi using the "Say, Pi" voice dictation feature.</h2>
+    <h1>Say, Pi</h1>
+    <p>Improve your Pi chatbot experience with "Say, Pi" - a voice dictation feature for immersive spoken dialogues.
+    </p>
 
-    <h3>Description:</h3>
-    <p>The "Say, Pi" application allows you to have immersive spoken dialogues with Pi, the intelligent AI chatbot from
-        Inflection AI's "Hey, Pi" platform. It enhances the voice dictation capabilities, enabling accurate voice
-        transcription and real-time interactions with Pi.</p>
-
-    <h3>Demo:</h3>
-    <p>Watch the demo video below to see "Say, Pi" in action.</p>
     <video width="1280" height="720" controls poster="static/images/saypi_logo.png">
         <source src="static/video/groucho.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 
-
-    <h3>How to Install:</h3>
+    <h2>Installation Guide</h2>
     <ol>
-        <li><strong>Install a userscript manager extension for your browser:</strong> Userscript managers are browser
-            extensions that allow you to run custom userscripts on web pages. Some popular userscript managers include
-            Tampermonkey and Greasemonkey. Choose the one that's compatible with your browser and install it from the
-            extension/add-on store.</li>
-        <li><strong>Install and Enable the "Say, Pi" Userscript:</strong>
-            Click on <a href="saypi.js">saypi.js</a>. Your userscript manager
-            will detect the file as a userscript and prompt you to install it. Confirm the installation to
-            enable the "Say, Pi" userscript for the "Hey, Pi" web platform.
-        </li>
-        <li><strong>Visit the "Hey, Pi" web platform:</strong> Go to <a href="https://heypi.com/">https://heypi.com/</a>
-            using your browser. The "Hey, Pi" platform is where you'll use
-            the "Say, Pi" userscript to interact with Pi, the intelligent AI chatbot.</li>
-        <li><strong>Permissions:</strong> You will be prompted to grant the script permission to access your microphone,
-            and to make requests to this website (to load resources and transcribe audio).
-            Review and accept the permissions to continue.</li>
-        </li>
-        <li><strong>Automatic Injection:</strong> Once you have the userscript manager extension installed and the "Say,
-            Pi" userscript enabled, it will automatically inject a "talk" button onto the "Hey, Pi" web interface.
-            You'll see the "talk" button appear on the page.</li>
-        <li><strong>Start Speaking with Pi:</strong> To start a spoken dialogue with Pi, simply click the "talk" button
-            and hold it while speaking. The userscript will transcribe your speech in real-time and send it to Pi, who
-            will respond with both text and audio.</li>
+        <li><strong>Install a userscript manager:</strong> This could be Tampermonkey, Greasemonkey, or any other
+            manager compatible with your browser. Find it on your extension/add-on store.</li>
+        <li><strong>Install "Say, Pi" Userscript:</strong> Click <a href="saypi.js">here</a> to install. Your userscript
+            manager should prompt you for confirmation.</li>
+        <li><strong>Visit "Hey, Pi":</strong> Go to <a href="https://heypi.com/">https://heypi.com/</a>. You'll find the
+            "talk" button, enabled by "Say, Pi", on the page.</li>
+        <li><strong>Accept permissions:</strong> You'll be prompted to grant permissions for your microphone and for
+            resource loading. Accept to continue.</li>
+        <li><strong>Start Speaking with Pi:</strong> Click and hold the "talk" button while speaking. Your words will be
+            transcribed and sent to Pi in real-time.</li>
     </ol>
 
+    <h2>Compatibility</h2>
+    <p>"Say, Pi" is compatible with popular browsers like Chrome and Edge. Ensure you have a userscript manager
+        installed before using it.</p>
 
-    <h3>Compatibility:</h3>
-    <p>The "Say, Pi" application is compatible with popular browsers such as Chrome and Edge. Please ensure you have a
-        userscript manager extension installed in your browser before using it.</p>
-
-    <h3>Disclaimer:</h3>
-    <p>The "Say, Pi" application is an unofficial enhancement for the "Hey, Pi" web platform. Use it responsibly and
-        respect the terms of service of "Hey, Pi" provided by Inflection AI. We cannot guarantee its compatibility with
-        future updates or changes to the "Hey, Pi" platform.</p>
+    <h2>Disclaimer</h2>
+    <p>"Say, Pi" is an unofficial enhancement for the "Hey, Pi" platform and respects the terms of service of Inflection
+        AI's "Hey, Pi". Compatibility with future updates or changes to the platform is not guaranteed.</p>
 </body>
 
 </html>
