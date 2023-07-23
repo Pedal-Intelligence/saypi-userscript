@@ -13,8 +13,8 @@
 
     // Define a global configuration property
     const config = {
-        webServerUrl: "https://saypi-userscript-8b884a65da2d.herokuapp.com",
-        apiServerUrl: "https://saypi-api-99f6a81b756d.herokuapp.com",
+        webServerUrl: "https://www.saypi.ai",
+        apiServerUrl: "https://api.saypi.ai",
         // Add other configuration properties as needed
     };
 
