@@ -20,11 +20,11 @@
     };
 
     // Define a global configuration property
-    const config = localConfig; /* {
+    const config = {
         webServerUrl: "https://www.saypi.ai",
         apiServerUrl: "https://api.saypi.ai",
         // Add other configuration properties as needed
-    }; */
+    };
 
     // Create a MutationObserver to listen for changes to the DOM
     var observer = new MutationObserver(function (mutations) {
