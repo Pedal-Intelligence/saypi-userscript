@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         Say, Pi
 // @namespace    http://www.saypi.ai/
-// @version      1.0.0
+// @version      1.0.1
 // @description  Speak to Pi with OpenAI's Whisper
 // @author       Ross Cadogan
 // @match        https://pi.ai/*
 // @grant        GM_xmlhttpRequest
-// @updateURL    https://www.saypi.ai/saypi.js
+// @updateURL    https://www.saypi.ai/saypi.user.js
 // @license      MIT
 // ==/UserScript==
 
