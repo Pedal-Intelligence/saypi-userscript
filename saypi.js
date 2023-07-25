@@ -13,12 +13,18 @@
 (function () {
     'use strict';
 
+    const localConfig = {
+        webServerUrl: "http://localhost:3000",
+        apiServerUrl: "http://localhost:5000",
+        // Add other configuration properties as needed
+    };
+
     // Define a global configuration property
-    const config = {
+    const config = localConfig; /* {
         webServerUrl: "https://www.saypi.ai",
         apiServerUrl: "https://api.saypi.ai",
         // Add other configuration properties as needed
-    };
+    }; */
 
     // Create a MutationObserver to listen for changes to the DOM
     var observer = new MutationObserver(function (mutations) {
