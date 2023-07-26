@@ -7,6 +7,7 @@
 // @match        https://pi.ai/*
 // @grant        GM_xmlhttpRequest
 // @updateURL    https://www.saypi.ai/saypi.user.js
+// @downloadURL  https://www.saypi.ai/saypi.user.js
 // @license      MIT
 // ==/UserScript==
 
