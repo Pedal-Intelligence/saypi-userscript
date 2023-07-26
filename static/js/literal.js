@@ -22,12 +22,12 @@ function uploadAudio(audioBlob) {
             var textarea = document.getElementById('prompt');
             //setNativeValue(textarea, responseJson.text);
             //textarea.value = responseJson.text;
-            simulateTyping(textarea, responseJson.text + " ", 10);
+            simulateTyping(textarea, responseJson.text + " ", 5);
 
             console.log('Speaker: ' + responseJson.text);
         })
         .catch(function (error) {
-            console.log('Looks like there was a problem: ', error);
+            console.error('Looks like there was a problem: ', error);
             var textarea = document.getElementById('prompt');
             textarea.value = 'Sorry, there was a problem transcribing your audio. Please try again later.';
         });
