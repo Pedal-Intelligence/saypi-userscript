@@ -26,7 +26,7 @@
         apiServerUrl: "https://api.saypi.ai",
         // Add other configuration properties as needed
     };
-    const config = localConfig;
+    const config = productionConfig;
 
     // Create a MutationObserver to listen for changes to the DOM
     var observer = new MutationObserver(function (mutations) {
