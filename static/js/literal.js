@@ -18,20 +18,20 @@ function uploadAudio(audioBlob) {
             }
             return response.json();
         })
-        .then(function (responseJson) {
-            var textarea = document.getElementById('prompt');
-            //setNativeValue(textarea, responseJson.text);
-            //textarea.value = responseJson.text;
-            simulateTyping(textarea, responseJson.text + " ", 5);
-
-            console.log('Speaker: ' + responseJson.text);
-        })
+        .then(handleTranscriptionResponse)
         .catch(function (error) {
             console.error('Looks like there was a problem: ', error);
             var textarea = document.getElementById('prompt');
             textarea.value = 'Sorry, there was a problem transcribing your audio. Please try again later.';
         });
 }
+
+function handleTranscriptionResponse(responseJson) {
+    var textarea = document.getElementById('prompt');
+    simulateTyping(textarea, responseJson.text + " ", 3);
+    console.log('Speaker: ' + responseJson.text);
+}
+
 
 function setNativeValue(element, value) {
     let lastValue = element.value;
@@ -47,21 +47,41 @@ function setNativeValue(element, value) {
     element.dispatchEvent(event);
 }
 
+function simulateFormSubmit(textarea) {
+    var enterEvent = new KeyboardEvent('keydown', {
+        bubbles: true,
+        key: 'Enter',
+        keyCode: 13,
+        which: 13,
+    });
 
-function simulateTyping(element, text, delay) {
+    textarea.dispatchEvent(enterEvent);
+}
+
+function simulateTyping(element, text, delay_ms) {
     var i = 0;
     function typeChar() {
         if (i < text.length) {
             // Append the next character and increment i
             setNativeValue(element, element.value + text[i++]);
             // Call this function again after the delay
-            setTimeout(typeChar, delay);
+            setTimeout(typeChar, delay_ms);
+        } else {
+            // Check if autosubmit is enabled
+            var talkButton = document.getElementById('talkButton');
+            if (talkButton.dataset.autosubmit === 'true') {
+                // Simulate an "Enter" keypress event
+                simulateFormSubmit(element);
+                console.log('Message autosubmitted');
+            }
+            else {
+                console.log('Autosubmit is disabled');
+            }
         }
     }
     // Start typing
     typeChar();
 }
-
 
 // Declare a global variable for the mediaRecorder
 var mediaRecorder;
