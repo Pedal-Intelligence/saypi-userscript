@@ -117,7 +117,7 @@
 
     function addAudioIcon(button) {
         var iconHtml = `
-        <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 56.25 30" class="waveform" style="fill: #776d6d;">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 56.25 30" class="waveform">
         <defs>
             <clipPath id="a">
                 <path d="M.54 12H3v5H.54Zm0 0"/>
@@ -178,6 +178,12 @@
             #talkButton:active .waveform, #talkButton.active .waveform {
                 animation: pulse 1s infinite;
             }
+            #talkButton .waveform {
+                fill: #776d6d;
+            }
+            #talkButton.autoSubmit .waveform {
+                fill: rgb(65 138 47); /* Pi's text-brand-green-600 */
+            }
         `);
 
     }
@@ -198,6 +204,12 @@
         document.getElementById('talkButton').addEventListener('mouseenter', setupRecording);
         document.getElementById('talkButton').addEventListener('mouseleave', tearDownRecording);
         window.addEventListener('beforeunload', tearDownRecording);
+
+        // Attach a double click event listener to the talk button
+        button.addEventListener('dblclick', function () {
+            // Toggle the CSS classes to indicate the mode
+            button.classList.toggle('autoSubmit');
+        });
     }
 
     function registerHotkey() {
