@@ -209,7 +209,17 @@
         button.addEventListener('dblclick', function () {
             // Toggle the CSS classes to indicate the mode
             button.classList.toggle('autoSubmit');
+
+            // Store the state on the button element using a custom data attribute
+            if (button.getAttribute('data-autosubmit') === 'true') {
+                button.setAttribute('data-autosubmit', 'false');
+                console.log('autosubmit disabled');
+            } else {
+                button.setAttribute('data-autosubmit', 'true');
+                console.log('autosubmit enabled');
+            }
         });
+
     }
 
     function registerHotkey() {
