@@ -28,7 +28,7 @@ function uploadAudio(audioBlob) {
 
 function handleTranscriptionResponse(responseJson) {
     var textarea = document.getElementById('prompt');
-    simulateTyping(textarea, responseJson.text + " ", 3);
+    simulateTyping(textarea, responseJson.text + " ");
     console.log('Speaker: ' + responseJson.text);
 }
 
@@ -58,14 +58,14 @@ function simulateFormSubmit(textarea) {
     textarea.dispatchEvent(enterEvent);
 }
 
-function simulateTyping(element, text, delay_ms) {
+function simulateTyping(element, text) {
     var i = 0;
     function typeChar() {
         if (i < text.length) {
             // Append the next character and increment i
             setNativeValue(element, element.value + text[i++]);
-            // Call this function again after the delay
-            setTimeout(typeChar, delay_ms);
+            // Call this function again before the next repaint
+            requestAnimationFrame(typeChar);
         } else {
             // Check if autosubmit is enabled
             var talkButton = document.getElementById('talkButton');
