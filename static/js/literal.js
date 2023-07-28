@@ -70,13 +70,13 @@ function simulateTyping(element, text) {
         } else {
             // Check if autosubmit is enabled
             var talkButton = document.getElementById('talkButton');
-            if (talkButton.dataset.autosubmit === 'true') {
+            if (talkButton.dataset.autosubmit === 'false') {
+                console.log('Autosubmit is disabled');
+            }
+            else {
                 // Simulate an "Enter" keypress event
                 simulateFormSubmit(element);
                 console.log('Message autosubmitted');
-            }
-            else {
-                console.log('Autosubmit is disabled');
             }
         }
     }

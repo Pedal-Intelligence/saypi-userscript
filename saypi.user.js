@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Say, Pi
 // @namespace    http://www.saypi.ai/
-// @version      1.1.1
+// @version      1.1.2
 // @description  Speak to Pi with OpenAI's Whisper
 // @author       Ross Cadogan
 // @match        https://pi.ai/*
@@ -44,7 +44,7 @@
                         var footer = node;
                         var buttonContainer = footer.querySelector('.relative.flex.flex-col');
                         if (buttonContainer) {
-                            addAudioButton(buttonContainer);
+                            addTalkButton(buttonContainer);
                         } else {
                             console.log('No button container found in footer');
                         }
@@ -99,23 +99,27 @@
         }
     }
 
-    function addAudioButton(container) {
+    function addTalkButton(container) {
         var button = document.createElement('button');
         button.id = 'talkButton';
         button.type = 'button';
         button.className = 'relative flex mt-1 mb-1 rounded-full px-2 py-3 text-center bg-cream-550 hover:bg-cream-650 hover:text-brand-green-700 text-muted';
         // Set ARIA label and tooltip
-        button.setAttribute('aria-label', 'Talk (Press Control + Space to use hotkey)');
-        button.setAttribute('title', 'Talk (Press Control + Space to use hotkey)');
+        const label = 'Talk (Hold Control + Space to use hotkey. Double click to toggle auto-submit on/off)'
+        button.setAttribute('aria-label', label);
+        button.setAttribute('title', label);
+        // enable autosubmit by default
+        button.dataset.autosubmit = 'true';
+        button.classList.add('autoSubmit');
         container.appendChild(button);
-        addAudioButtonStyles();
-        addAudioIcon(button);
+        addTalkButtonStyles();
+        addTalkIcon(button);
 
         // Call the function to inject the script after the button has been added
         injectScript(registerAudioButtonEvents);
     }
 
-    function addAudioIcon(button) {
+    function addTalkIcon(button) {
         var iconHtml = `
         <svg xmlns="http://www.w3.org/2000/svg" version="1.0" viewBox="0 0 56.25 30" class="waveform">
         <defs>
@@ -155,7 +159,7 @@
         document.head.appendChild(style);
     }
 
-    function addAudioButtonStyles() {
+    function addTalkButtonStyles() {
         // Get the button and register for mousedown and mouseup events
         var button = document.getElementById('talkButton');
         button.style.marginTop = '0.25rem';
