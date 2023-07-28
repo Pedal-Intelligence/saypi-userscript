@@ -59,13 +59,14 @@ function simulateFormSubmit(textarea) {
 }
 
 function simulateTyping(element, text) {
+    var words = text.split(' ');  // Split the text into words (may not be ideal for all languages)
     var i = 0;
-    function typeChar() {
-        if (i < text.length) {
-            // Append the next character and increment i
-            setNativeValue(element, element.value + text[i++]);
+    function typeWord() {
+        if (i < words.length) {
+            // Append the next word and a space, then increment i
+            setNativeValue(element, element.value + words[i++] + ' ');
             // Call this function again before the next repaint
-            requestAnimationFrame(typeChar);
+            requestAnimationFrame(typeWord);
         } else {
             // Check if autosubmit is enabled
             var talkButton = document.getElementById('talkButton');
@@ -80,8 +81,9 @@ function simulateTyping(element, text) {
         }
     }
     // Start typing
-    typeChar();
+    typeWord();
 }
+
 
 // Declare a global variable for the mediaRecorder
 var mediaRecorder;
