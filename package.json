@@ -7,6 +7,9 @@
     "dependencies": {
         "express": "",
         "http-proxy-middleware": "",
-        "serve-handler": ""
+        "serve-handler": "",
+        "cheerio": "",
+        "url": "",
+        "axios": ""
     }
 }
