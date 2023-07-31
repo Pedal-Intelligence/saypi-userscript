@@ -10,10 +10,19 @@ app.all(['/', '/index.html'], createProxyMiddleware({
     followRedirects: true
 }));
 
-app.use((req, res) => {
-    return serveHandler(req, res, {
-        public: 'public' // directory to serve
-    });
+app.use((req, res, next) => {
+    if (req.method === 'GET') {
+        return serveHandler(req, res, {
+            public: 'public' // directory to serve
+        });
+    }
+    next();
 });
+
+app.use(createProxyMiddleware({
+    target: 'https://saypi.my.canva.site/',
+    changeOrigin: true,
+    followRedirects: true
+}));
 
 app.listen(process.env.PORT || 3000);
