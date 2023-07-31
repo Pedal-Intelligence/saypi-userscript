@@ -13,6 +13,24 @@ app.get('/saypi.user.js', (req, res) => {
     });
 });
 
+app.get('/static/js/literal.js', (req, res) => {
+    serveHandler(req, res, {
+        public: 'public',
+    });
+});
+
+app.use('/static/images/*', (req, res) => {
+    serveHandler(req, res, {
+        public: 'public',
+    });
+});
+
+app.use('/static/video/*', (req, res) => {
+    serveHandler(req, res, {
+        public: 'public',
+    });
+});
+
 app.all(['/', '/index.html'], async (req, res) => {
     try {
         const response = await axios.get('https://saypi.my.canva.site/', { responseType: 'text' });
@@ -39,12 +57,6 @@ app.all(['/', '/index.html'], async (req, res) => {
     } catch (err) {
         res.status(500).send(err.message);
     }
-});
-
-app.use('/static', (req, res) => {
-    serveHandler(req, res, {
-        public: 'public',
-    });
 });
 
 app.use('*', createProxyMiddleware({
