@@ -4,22 +4,28 @@ const serveHandler = require('serve-handler');
 
 const app = express();
 
-app.all(['/', '/index.html'], createProxyMiddleware({
+// Handle '/saypi.user.js' specifically
+app.get('/saypi.user.js', (req, res) => {
+    serveHandler(req, res, {
+        public: 'public', // directory to serve
+    });
+});
+
+app.get(['/', '/index.html'], createProxyMiddleware({
     target: 'https://saypi.my.canva.site/',
     changeOrigin: true,
     followRedirects: true
 }));
 
-app.use((req, res, next) => {
-    if (req.method === 'GET') {
-        return serveHandler(req, res, {
-            public: 'public' // directory to serve
-        });
-    }
-    next();
+// Check if it's not a local resource
+app.get('/static/*', (req, res) => {
+    serveHandler(req, res, {
+        public: 'public', // directory to serve
+    });
 });
 
-app.use(createProxyMiddleware({
+// Proxy any other request to Canva
+app.use('*', createProxyMiddleware({
     target: 'https://saypi.my.canva.site/',
     changeOrigin: true,
     followRedirects: true
