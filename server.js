@@ -18,11 +18,19 @@ app.all(['/', '/index.html'], async (req, res) => {
         const response = await axios.get('https://saypi.my.canva.site/', { responseType: 'text' });
         const $ = cheerio.load(response.data);
 
-        // Find the link and change its href
+        // Loop over all anchor tags
         $('a').each((index, element) => {
+            // Extract the href value
             const href = $(element).attr('href');
-            if (href && url.parse(href).pathname === '/_link/' && href.includes('saypi.user.js')) {
-                $(element).attr('href', '/saypi.user.js');
+
+            // Check if it matches the pattern
+            if (href && href.includes('/_link/?link=')) {
+                // Extract the link query parameter
+                const parsedUrl = url.parse(href, true);
+                const link = decodeURIComponent(parsedUrl.query.link);
+
+                // Replace the href with the extracted link
+                $(element).attr('href', link);
             }
         });
 
