@@ -65,4 +65,12 @@ app.use('*', createProxyMiddleware({
     followRedirects: true
 }));
 
-app.listen(process.env.PORT || 3000);
+if (require.main === module) {
+    // This means this file was run directly from command line, so start the server
+    app.listen(process.env.PORT || 3000, () => {
+        console.log(`Server listening on port ${process.env.PORT || 3000}`);
+    });
+} else {
+    // This file was required from another module, so export the app without starting the server
+    module.exports = app;
+}
