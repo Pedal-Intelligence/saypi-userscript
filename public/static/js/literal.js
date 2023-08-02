@@ -3,8 +3,12 @@ var audioDataChunks = [];
 function uploadAudio(audioBlob) {
     // Create a FormData object
     var formData = new FormData();
+    var audioFilename = 'audio.webm';
+    if (audioBlob.type === 'audio/mp4') {
+        audioFilename = 'audio.mp4';
+    }
     // Add the audio blob to the FormData object
-    formData.append('audio', audioBlob, 'audio.webm');
+    formData.append('audio', audioBlob, audioFilename);
     // Get the user's preferred language
     var language = navigator.language;
     // Post the audio to the server for transcription
@@ -123,8 +127,13 @@ function setupRecording(callback) {
     // Get a stream from the user's microphone
     navigator.mediaDevices.getUserMedia({ audio: true })
         .then(function (stream) {
+            var audioMimeType = 'audio/webm;codecs=opus';
+            if (!MediaRecorder.isTypeSupported(audioMimeType)) {
+                // use MP4 for Safari
+                audioMimeType = 'audio/mp4';
+            }
             // Create a new MediaRecorder object using the stream and specifying the MIME type
-            var options = { mimeType: 'audio/webm;codecs=opus' };
+            var options = { mimeType: audioMimeType };
             mediaRecorder = new MediaRecorder(stream, options);
 
             // Listen for the 'dataavailable' event
