@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         Say, Pi
 // @namespace    http://www.saypi.ai/
-// @version      1.1.2
+// @version      1.1.3
 // @description  Speak to Pi with OpenAI's Whisper
 // @author       Ross Cadogan
-// @match        https://pi.ai/*
+// @match        https://pi.ai/talk
 // @grant        GM_xmlhttpRequest
-// @updateURL    https://www.saypi.ai/saypi.user.js
-// @downloadURL  https://www.saypi.ai/saypi.user.js
+// @updateURL    https://app.saypi.ai/saypi.user.js
+// @downloadURL  https://app.saypi.ai/saypi.user.js
 // @license      MIT
 // ==/UserScript==
 
@@ -15,14 +15,14 @@
     'use strict';
 
     const localConfig = {
-        webServerUrl: "http://localhost:3000",
+        appServerUrl: "http://localhost:3000",
         apiServerUrl: "http://localhost:5000",
         // Add other configuration properties as needed
     };
 
     // Define a global configuration property
     const productionConfig = {
-        webServerUrl: "https://www.saypi.ai",
+        appServerUrl: "https://app.saypi.ai",
         apiServerUrl: "https://api.saypi.ai",
         // Add other configuration properties as needed
     };
@@ -62,7 +62,7 @@
 
     function injectScriptRemote(callback) {
         // Get the URL of the remote script
-        var remoteScriptUrl = config.webServerUrl + '/static/js/literal.js';
+        var remoteScriptUrl = config.appServerUrl + 'transcriber.js';
         GM_xmlhttpRequest({
             method: "GET",
             url: remoteScriptUrl,
@@ -87,7 +87,7 @@
         scriptElement.type = "text/javascript";
         scriptElement.id = 'saypi-script';
         const scriptText = `
-        // Paste the contents of static/js/literal.js here to avoid CORS issues
+        // Paste the contents of transcriber.js here to avoid CORS issues
         `
         const configText = 'var config = ' + JSON.stringify(config) + ';';
         scriptElement.textContent = configText + scriptText;
