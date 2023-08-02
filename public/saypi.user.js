@@ -162,9 +162,6 @@
     function addTalkButtonStyles() {
         // Get the button and register for mousedown and mouseup events
         var button = document.getElementById('talkButton');
-        button.style.marginTop = '0.25rem';
-        button.style.borderRadius = '18px';
-        button.style.width = '120px';
         // button animation
         addStyles(`
             @keyframes pulse {
@@ -177,6 +174,12 @@
                 100% {
                     transform: scale(1);
                 }
+            }
+            #talkButton {
+                margin-top: 0.25rem;
+                border-radius: 18px;
+                width: 120px;
+                display: block; /* For Safari */
             }
 
             #talkButton:active .waveform, #talkButton.active .waveform {

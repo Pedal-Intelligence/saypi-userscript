@@ -1,5 +1,5 @@
 # Say, Pi Userscript
-![SayPi Logo](static/images/saypi_logo.png)
+![SayPi Logo](public/static/images/saypi_logo.png)
 
 Enhance your voice interactions with Inflection AI's "Hey, Pi" chatbot with the "Say, Pi" userscript for accurate voice dictation and immersive spoken dialogues.
 
@@ -7,7 +7,7 @@ Enhance your voice interactions with Inflection AI's "Hey, Pi" chatbot with the 
 `saypi-userscript` is a powerful userscript that enhances the voice dictation capabilities of Inflection AI's "Hey, Pi" conversational AI chatbot. By installing and enabling this userscript in your web browser, you can have an immersive and interactive spoken dialogue with Pi, the intelligent AI chatbot, directly from the "Hey, Pi" web platform (https://heypi.com/).
 
 **Demo:**
-[![Watch the video](/static/images/groucho.png)](/static/video/groucho.mp4)
+[![Watch the video](public/static/images/groucho.png)](public/static/video/groucho.mp4)
 
 **Features:**
 - **Accurate Voice Dictation:** The userscript leverages advanced speech-to-text technology to provide accurate voice transcription as you speak with Pi.
