@@ -197,7 +197,10 @@
 
     function registerAudioButtonEvents() {
         var button = document.getElementById('talkButton');
-        var context = unsafeWindow || window;
+        var context = window;
+        if (GM_info.scriptHandler !== 'Userscripts') {
+            context = unsafeWindow;
+        }
 
         button.addEventListener('mousedown', function () {
             idPromptTextArea();
