@@ -6,8 +6,8 @@
 // @author       Ross Cadogan
 // @match        https://pi.ai/talk
 // @inject-into  page
-// @updateURL    https://app.saypi.ai/saypi.user.js
-// @downloadURL  https://app.saypi.ai/saypi.user.js
+// @updateURL    https://www.saypi.ai/saypi.user.js
+// @downloadURL  https://www.saypi.ai/saypi.user.js
 // @license      MIT
 // ==/UserScript==
 
