@@ -16,7 +16,7 @@
 
     const localConfig = {
         appServerUrl: "http://localhost:3000",
-        apiServerUrl: "http://localhost:5000",
+        apiServerUrl: "https://localhost:5000",
         // Add other configuration properties as needed
     };
 
@@ -26,7 +26,7 @@
         apiServerUrl: "https://api.saypi.ai",
         // Add other configuration properties as needed
     };
-    const config = productionConfig;
+    const config = localConfig;
 
     const pageScript = require('raw-loader!./transcriber.js').default;
 

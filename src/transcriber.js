@@ -1,4 +1,5 @@
 var audioDataChunks = [];
+var audioMimeType = 'audio/webm;codecs=opus';
 
 function uploadAudio(audioBlob) {
     // Create a FormData object
@@ -102,7 +103,7 @@ function handleDataAvailable(e) {
 // This function will be called when the 'stop' event fires
 function handleStop() {
     // Create a Blob from the audio data chunks
-    var audioBlob = new Blob(audioDataChunks, { type: 'audio/webm' });
+    var audioBlob = new Blob(audioDataChunks, { type: audioMimeType });
 
     // Get the stop time and calculate the duration
     var stopTime = Date.now();
@@ -110,6 +111,14 @@ function handleStop() {
 
     // If the duration is greater than the threshold, upload the audio for transcription
     if (duration >= threshold) {
+        // download the audio
+        var url = URL.createObjectURL(audioBlob);
+        var a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = 'safari_audio.mp4';
+        document.body.appendChild(a);
+        // a.click();
         // Upload the audio to the server for transcription
         uploadAudio(audioBlob);
     }
@@ -127,7 +136,6 @@ function setupRecording(callback) {
     // Get a stream from the user's microphone
     navigator.mediaDevices.getUserMedia({ audio: true })
         .then(function (stream) {
-            var audioMimeType = 'audio/webm;codecs=opus';
             if (!MediaRecorder.isTypeSupported(audioMimeType)) {
                 // use MP4 for Safari
                 audioMimeType = 'audio/mp4';
