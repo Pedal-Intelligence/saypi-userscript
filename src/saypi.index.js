@@ -58,33 +58,8 @@
         }
     });
 
+
     function injectScript(callback) {
-        return injectScriptLocal(callback);
-    }
-
-    function injectScriptRemote(callback) {
-        // Get the URL of the remote script
-        var remoteScriptUrl = config.appServerUrl + 'transcriber.js';
-        GM_xmlhttpRequest({
-            method: "GET",
-            url: remoteScriptUrl,
-            onload: function (response) {
-                var scriptElement = document.createElement("script");
-                scriptElement.type = "text/javascript";
-                scriptElement.id = 'saypi-script';
-                const configText = 'var config = ' + JSON.stringify(config) + ';';
-                scriptElement.textContent = configText + response.responseText;
-                document.body.appendChild(scriptElement);
-
-                // Call the callback function after the script is added
-                if (callback) {
-                    callback();
-                }
-            }
-        });
-    }
-
-    function injectScriptLocal(callback) {
         var scriptElement = document.createElement("script");
         scriptElement.type = "text/javascript";
         scriptElement.id = 'saypi-script';
@@ -202,6 +177,7 @@
             context = unsafeWindow;
         }
 
+        // For desktop
         button.addEventListener('mousedown', function () {
             idPromptTextArea();
             context.startRecording();
@@ -231,7 +207,18 @@
             }
         });
 
+        // For mobile
+        button.addEventListener('touchstart', function (e) {
+            e.preventDefault(); // Prevent the default click behavior from happening
+            idPromptTextArea();
+            context.startRecording();
+        });
+        button.addEventListener('touchend', function () {
+            context.stopRecording();
+        });
+        document.getElementById('talkButton').addEventListener('touchcancel', tearDownRecording);
     }
+
 
     function registerHotkey() {
         // Register a hotkey for the button
