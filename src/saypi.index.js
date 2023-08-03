@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         Say, Pi
 // @namespace    http://www.saypi.ai/
-// @version      1.1.3
+// @version      1.1.5
 // @description  Speak to Pi with OpenAI's Whisper
 // @author       Ross Cadogan
 // @match        https://pi.ai/talk
-// @grant        GM_xmlhttpRequest
+// @inject-into  page
 // @updateURL    https://app.saypi.ai/saypi.user.js
 // @downloadURL  https://app.saypi.ai/saypi.user.js
 // @license      MIT
@@ -26,7 +26,7 @@
         apiServerUrl: "https://api.saypi.ai",
         // Add other configuration properties as needed
     };
-    const config = localConfig;
+    const config = productionConfig;
 
     const pageScript = require('raw-loader!./transcriber.js').default;
 
@@ -197,13 +197,14 @@
 
     function registerAudioButtonEvents() {
         var button = document.getElementById('talkButton');
+        var context = unsafeWindow || window;
 
         button.addEventListener('mousedown', function () {
             idPromptTextArea();
-            unsafeWindow.startRecording();
+            context.startRecording();
         });
         button.addEventListener('mouseup', function () {
-            unsafeWindow.stopRecording();
+            context.stopRecording();
         });
         registerHotkey();
 

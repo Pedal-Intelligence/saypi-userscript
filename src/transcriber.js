@@ -81,7 +81,6 @@ function simulateTyping(element, text) {
             else {
                 // Simulate an "Enter" keypress event
                 simulateFormSubmit(element);
-                console.log('Message autosubmitted');
             }
         }
     }
