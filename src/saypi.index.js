@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Say, Pi
 // @namespace    http://www.saypi.ai/
-// @version      1.1.5
+// @version      1.2.1
 // @description  Speak to Pi with OpenAI's Whisper
 // @author       Ross Cadogan
 // @match        https://pi.ai/talk
@@ -135,8 +135,12 @@
     }
 
     function addTalkButtonStyles() {
-        // Get the button and register for mousedown and mouseup events
-        var button = document.getElementById('talkButton');
+        var isFirefoxAndroid = /Firefox/.test(navigator.userAgent) && /Android/.test(navigator.userAgent);
+        if (isFirefoxAndroid) {
+            // hack for Firefox on Android, which doesn't support :active correctly
+            document.documentElement.classList.add('firefox-android');
+        }
+
         // button animation
         addStyles(`
             @keyframes pulse {
@@ -157,9 +161,10 @@
                 display: block; /* For Safari */
             }
 
-            #talkButton:active .waveform, #talkButton.active .waveform {
+            html:not(.firefox-android) #talkButton:active .waveform,
+            #talkButton.active .waveform {
                 animation: pulse 1s infinite;
-            }
+            }            
             #talkButton .waveform {
                 fill: #776d6d;
             }
@@ -212,11 +217,16 @@
             e.preventDefault(); // Prevent the default click behavior from happening
             idPromptTextArea();
             context.startRecording();
+            this.classList.add('active'); // Add the active class (for Firefox on Android)
         });
         button.addEventListener('touchend', function () {
+            this.classList.remove('active'); // Remove the active class (for Firefox on Android
             context.stopRecording();
         });
-        document.getElementById('talkButton').addEventListener('touchcancel', tearDownRecording);
+        document.getElementById('talkButton').addEventListener('touchcancel', function () {
+            this.classList.remove('active'); // Remove the active class (for Firefox on Android
+            tearDownRecording();
+        });
     }
 
 
