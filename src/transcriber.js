@@ -1,3 +1,51 @@
+// audio output (Pi)
+const audioElement = document.querySelector('audio');
+const piAudioManager = {
+    isSpeaking: false,
+    audioElement: audioElement,  // Use the existing audio element
+
+    play: function (src) {
+        this.audioElement.src = src;
+        this.audioElement.play();
+    },
+
+    stop: function () {
+        if (this.isSpeaking) {
+            this.audioElement.pause();
+        }
+        if (this.audioElement.duration && this.audioElement.currentTime < this.audioElement.duration && !this.audioElement.ended) {
+            this.audioElement.currentTime = this.audioElement.duration; // seek the audio to the end
+            this.audioElement.play(); // trigger the ended event
+        }
+    },
+
+    pause: function () {
+        this.audioElement.pause();
+    },
+
+    resume: function () {
+        this.audioElement.play();
+    }
+}
+audioElement.addEventListener('play', () => {
+    if (!audioElement.ended) {
+        console.log('Pi is speaking');
+        piAudioManager.isSpeaking = true;
+    }
+});
+
+audioElement.addEventListener('pause', () => {
+    console.log('Pi stopped speaking');
+    piAudioManager.isSpeaking = false;
+});
+
+audioElement.addEventListener('ended', () => {
+    console.log('Pi finished speaking');
+    piAudioManager.isSpeaking = false;
+});
+
+
+// audio input (user)
 var audioDataChunks = [];
 var audioMimeType = 'audio/webm;codecs=opus';
 
@@ -34,7 +82,7 @@ function uploadAudio(audioBlob) {
 function handleTranscriptionResponse(responseJson) {
     var textarea = document.getElementById('prompt');
     simulateTyping(textarea, responseJson.text + " ");
-    console.log('Speaker: ' + responseJson.text);
+    console.log('Transcript: ' + responseJson.text);
 }
 
 
@@ -187,6 +235,10 @@ function startRecording() {
         setupRecording(startRecording);
         return;
     }
+    // Check if Pi is currently speaking and stop her audio
+    if (piAudioManager.isSpeaking) {
+        piAudioManager.pause();
+    }
 
     // Start recording
     mediaRecorder.start();
@@ -194,7 +246,7 @@ function startRecording() {
     // Record the start time
     window.startTime = Date.now();
 
-    console.log('Recording started');
+    console.log('User is speaking');
 
     // This function will be called when the user releases the record button
     window.stopRecording = function () {
@@ -208,9 +260,12 @@ function startRecording() {
 
             // If the duration is less than the threshold, don't upload the audio for transcription
             if (duration < threshold) {
+                console.log('User stopped speaking');
                 console.log('Recording was too short, not uploading for transcription');
+                piAudioManager.resume();
             } else {
-                console.log('Recording stopped');
+                console.log('User finished speaking');
+                piAudioManager.stop();
             }
         }
         // Remove the stopRecording function
