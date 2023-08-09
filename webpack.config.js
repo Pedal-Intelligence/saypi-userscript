@@ -1,4 +1,8 @@
+const fs = require('fs');
 const path = require('path');
+const webpack = require('webpack');
+
+const metadata = fs.readFileSync(path.resolve(__dirname, 'src/metadata.txt'), 'utf8');
 
 module.exports = {
     mode: 'development',
@@ -26,4 +30,11 @@ module.exports = {
             },
         ],
     },
+    plugins: [
+        new webpack.BannerPlugin({
+            banner: metadata,
+            raw: true,  // If true, banner will not be wrapped in a comment
+            entryOnly: true // Add the banner only to the entry chunks
+        })
+    ]
 };
