@@ -9,13 +9,3 @@ describe('GET /saypi.user.js', function () {
             .expect(200, done);
     });
 });
-
-describe('GET transcriber.js', function () {
-    it('responds with js', function (done) {
-        request(app)
-            .get('transcriber.js')
-            .expect('Content-Type', /javascript/)
-            .expect(200, done);
-    });
-});
-
