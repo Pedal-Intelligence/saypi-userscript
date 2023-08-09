@@ -6,6 +6,9 @@ Enhance your voice interactions with Inflection AI's "Hey, Pi" chatbot with the 
 **Description:**
 `saypi-userscript` is a powerful userscript that enhances the voice dictation capabilities of Inflection AI's "Hey, Pi" conversational AI chatbot. By installing and enabling this userscript in your web browser, you can have an immersive and interactive spoken dialogue with Pi, the intelligent AI chatbot, directly from the "Hey, Pi" web platform (https://heypi.com/).
 
+**Assembly of the Userscript:**
+The userscript is assembled into a single JavaScript file, `/public/saypi.user.js`, using Webpack. To assemble the script, run `npx webpack` from the command line in the project directory. This will generate the `saypi.user.js` file in the `/public` directory, bundling together all necessary JavaScript modules and assets.
+
 **Demo:**
 [![Watch the video](public/static/images/groucho.png)](public/static/video/groucho.mp4)
 
