@@ -175,8 +175,11 @@
             context.startRecording();
         });
         button.addEventListener('mouseup', function () {
-            context.stopRecording();
+            if (typeof context?.stopRecording === 'function') {
+                context.stopRecording();
+            }
         });
+
         registerHotkey();
 
         // "warm up" the microphone by acquiring it before the user presses the button

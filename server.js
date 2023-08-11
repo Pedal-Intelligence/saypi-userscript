@@ -21,7 +21,7 @@ app.get('/static/js/literal.js', (req, res) => {
 
 if (require.main === module) {
     // This means this file was run directly from command line, so start the server
-    app.listen(process.env.PORT || 3000, () => {
+    app.listen(process.env.PORT || 3000, '0.0.0.0', () => {
         console.log(`App server listening on port ${process.env.PORT || 3000}`);
     });
 } else {
