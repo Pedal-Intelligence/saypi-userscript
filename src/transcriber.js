@@ -1,19 +1,48 @@
 // audio output (Pi)
 const audioElement = document.querySelector('audio');
+if (!audioElement) {
+    console.error("Audio element not found!");
+}
+
+function isSafari() {
+    return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+}
+
+audioElement.preload = "auto"; // enable aggressive preloading of audio
 const piAudioManager = {
     isSpeaking: false,
-    audioElement: audioElement,  // Use the existing audio element
+    audioElement: audioElement,
+    _userStarted: true, // flag to indicate playback has been started by the user (true by default because user must request initial playback)
+    _isLoadCalled: false,  // flag to indicate if the load() method has been called on the audio element
 
-    play: function (src) {
-        this.audioElement.src = src;
+
+    userPlay: function () {
+        if (!isSafari()) {
+            return;
+        }
+
+        this._userStarted = true; // set a flag to indicate playback has been started by the user
+        this.audioElement.load(); // reset for Safari
         this.audioElement.play();
+        console.log('User started playback');
+    },
+
+    autoPlay: function () {
+        if (!isSafari()) {
+            return;
+        }
+
+        if (!this._userStarted) {
+            this.audioElement.pause();
+            console.log('Autoplay prevented');
+        }
     },
 
     stop: function () {
         if (this.isSpeaking) {
             this.audioElement.pause();
         }
-        if (this.audioElement.duration && this.audioElement.currentTime < this.audioElement.duration && !this.audioElement.ended) {
+        if (this.audioElement.duration && !this.audioElement.ended && (this.audioElement.currentTime < this.audioElement.duration)) {
             this.audioElement.currentTime = this.audioElement.duration; // seek the audio to the end
             this.audioElement.play(); // trigger the ended event
         }
@@ -25,23 +54,98 @@ const piAudioManager = {
 
     resume: function () {
         this.audioElement.play();
+    },
+
+    loading: function () {
+        if (!isSafari()) {
+            return;
+        }
+
+        if (!this._isLoadCalled) {
+            this._isLoadCalled = true; // Set the flag to true
+            this.showPlayButton(); // Show the play button
+        } else {
+            this._isLoadCalled = false; // Reset the flag
+        }
+    },
+
+    playing: function () {
+        this.isSpeaking = true;
+        if (isSafari()) {
+            this.hidePlayButton();
+        }
+    },
+
+    stopped: function () {
+        this.isSpeaking = false;
+        this._userStarted = false;
+    },
+
+    showPlayButton: function () {
+        var playButton = document.getElementById('saypi-playAudio');
+        if (!playButton) {
+            playButton = this.createPlayButton();
+        }
+        playButton.style.display = 'block';
+    },
+
+    hidePlayButton: function () {
+        var playButton = document.getElementById('saypi-playAudio');
+        if (playButton) {
+            playButton.style.display = 'none';
+        }
+    },
+
+    createPlayButton: function () {
+        var playButton = document.createElement('button');
+        playButton.id = 'saypi-playAudio';
+        playButton.innerText = 'Hear Pi\'s Response';
+        playButton.style.position = 'fixed';
+        playButton.style.top = '50%';
+        playButton.style.left = '50%';
+        playButton.style.transform = 'translate(-50%, 50%)';
+        playButton.style.padding = '10px 20px';
+        playButton.style.fontSize = '24px';
+        playButton.style.borderRadius = '5px';
+        playButton.style.border = 'none';
+        playButton.style.backgroundColor = 'rgb(228 216 193)';
+        playButton.style.zIndex = '9999'; // ensure it's on top of other elements
+        playButton.style.display = 'none'; // initially hidden
+        document.body.appendChild(playButton);
+
+        // Event listener to start playback
+        playButton.addEventListener('click', () => {
+            this.userPlay();
+            this.hidePlayButton();
+        });
+
+        return playButton;
     }
 }
-audioElement.addEventListener('play', () => {
-    if (!audioElement.ended) {
-        console.log('Pi is speaking');
-        piAudioManager.isSpeaking = true;
-    }
+
+// Intercept Autoplay Events (autoplay doesn't work on Safari)
+audioElement.addEventListener('play', function () {
+    piAudioManager.autoPlay();
+});
+
+audioElement.addEventListener('loadstart', function () {
+    piAudioManager.loading();
+});
+
+// Event listeners for detecting when Pi is speaking
+audioElement.addEventListener('playing', () => {
+    console.log('Pi is speaking');
+    piAudioManager.playing();
 });
 
 audioElement.addEventListener('pause', () => {
     console.log('Pi stopped speaking');
-    piAudioManager.isSpeaking = false;
+    piAudioManager.stopped();
 });
 
 audioElement.addEventListener('ended', () => {
     console.log('Pi finished speaking');
-    piAudioManager.isSpeaking = false;
+    piAudioManager.stopped();
 });
 
 
