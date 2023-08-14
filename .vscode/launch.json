@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "msedge",
+            "name": "https://pi.ai/talk",
+            "request": "launch",
+            "url": "https://pi.ai/talk"
+        }
+    ]
+}
