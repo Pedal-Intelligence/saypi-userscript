@@ -52,6 +52,13 @@ import "./mobileStyles.css";
       }
     }
   });
+  addControlPanel();
+
+  function addControlPanel() {
+    const controlPanel = document.createElement("div");
+    controlPanel.id = "control-panel";
+    document.body.prepend(controlPanel);
+  }
 
   function injectScript(callback) {
     var scriptElement = document.createElement("script");
