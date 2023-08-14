@@ -62,8 +62,13 @@
 
 
     function addTalkButton(container) {
+        // create a containing div
+        var panel = document.createElement('div');
+        panel.id = 'saypi-panel';
+        container.appendChild(panel);
+
         var button = document.createElement('button');
-        button.id = 'talkButton';
+        button.id = 'saypi-talkButton';
         button.type = 'button';
         button.className = 'relative flex mt-1 mb-1 rounded-full px-2 py-3 text-center bg-cream-550 hover:bg-cream-650 hover:text-brand-green-700 text-muted';
         // Set ARIA label and tooltip
@@ -73,7 +78,7 @@
         // enable autosubmit by default
         button.dataset.autosubmit = 'true';
         button.classList.add('autoSubmit');
-        container.appendChild(button);
+        panel.appendChild(button);
         addTalkButtonStyles();
         addTalkIcon(button);
 
@@ -141,29 +146,69 @@
                     transform: scale(1);
                 }
             }
-            #talkButton {
+            #saypi-talkButton {
                 margin-top: 0.25rem;
                 border-radius: 18px;
                 width: 120px;
                 display: block; /* For Safari */
             }
 
-            html:not(.firefox-android) #talkButton:active .waveform,
-            #talkButton.active .waveform {
+            html:not(.firefox-android) #saypi-talkButton:active .waveform,
+            #saypi-talkButton.active .waveform {
                 animation: pulse 1s infinite;
             }            
-            #talkButton .waveform {
+            #saypi-talkButton .waveform {
                 fill: #776d6d;
             }
-            #talkButton.autoSubmit .waveform {
+            #saypi-talkButton.autoSubmit .waveform {
                 fill: rgb(65 138 47); /* Pi's text-brand-green-600 */
+            }
+        `);
+
+        addStyles(`
+            @media (max-width: 768px) {
+                /* mobile styles go here */
+                #pi-panel, #saypi-panel {
+                    width: 100%;
+                    height: 50vh;
+                    position: fixed;
+                    left: 0;
+                  }
+                  #pi-panel {
+                    background-color: rgba(0, 128, 0, 0.5);
+                    top: 0;
+                  }
+                  #saypi-panel {
+                    background-color: rgba(245, 238, 223, 0.5);
+                    bottom: 0;
+                  }                
+                  /* make the buttons fill the panels */
+                  #saypi-talkButton {
+                    width: 100%;
+                    height: 100%;
+                    background-color: transparent;
+                    border-radius: 0;
+                    margin: 0;
+                  }
+                  /* move audio controls (mute/unmute, voice selection) to top */
+                  div[data-projection-id='13'] {
+                    position: absolute;
+                    bottom: 79vh;
+                    right: 30px;
+                  }
+                  /* flip voice list below audio controls */
+                  div[data-projection-id='14'] {
+                    position: relative;
+                    top: 325px;
+                  }
+                }
             }
         `);
 
     }
 
     function registerAudioButtonEvents() {
-        var button = document.getElementById('talkButton');
+        var button = document.getElementById('saypi-talkButton');
         var context = window;
         if (GM_info.scriptHandler !== 'Userscripts') {
             context = unsafeWindow;
@@ -183,8 +228,8 @@
         registerHotkey();
 
         // "warm up" the microphone by acquiring it before the user presses the button
-        document.getElementById('talkButton').addEventListener('mouseenter', setupRecording);
-        document.getElementById('talkButton').addEventListener('mouseleave', tearDownRecording);
+        document.getElementById('saypi-talkButton').addEventListener('mouseenter', setupRecording);
+        document.getElementById('saypi-talkButton').addEventListener('mouseleave', tearDownRecording);
         window.addEventListener('beforeunload', tearDownRecording);
 
         // Attach a double click event listener to the talk button
@@ -213,7 +258,7 @@
             this.classList.remove('active'); // Remove the active class (for Firefox on Android
             context.stopRecording();
         });
-        document.getElementById('talkButton').addEventListener('touchcancel', function () {
+        document.getElementById('saypi-talkButton').addEventListener('touchcancel', function () {
             this.classList.remove('active'); // Remove the active class (for Firefox on Android
             tearDownRecording();
         });
@@ -229,7 +274,7 @@
                 ctrlDown = true;
                 // Simulate mousedown event
                 let mouseDownEvent = new Event('mousedown');
-                document.getElementById('talkButton').dispatchEvent(mouseDownEvent);
+                document.getElementById('saypi-talkButton').dispatchEvent(mouseDownEvent);
                 talkButton.classList.add('active'); // Add the active class
             }
         });
@@ -239,7 +284,7 @@
                 ctrlDown = false;
                 // Simulate mouseup event
                 let mouseUpEvent = new Event('mouseup');
-                document.getElementById('talkButton').dispatchEvent(mouseUpEvent);
+                document.getElementById('saypi-talkButton').dispatchEvent(mouseUpEvent);
                 talkButton.classList.remove('active');
             }
         });

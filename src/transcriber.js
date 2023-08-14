@@ -97,6 +97,10 @@ const piAudioManager = {
     },
 
     createPlayButton: function () {
+        // create a containing div
+        var panel = document.createElement('div');
+        panel.id = 'pi-panel';
+
         var playButton = document.createElement('button');
         playButton.id = 'saypi-playAudio';
         playButton.innerText = 'Hear Pi\'s Response';
@@ -111,7 +115,9 @@ const piAudioManager = {
         playButton.style.backgroundColor = 'rgb(228 216 193)';
         playButton.style.zIndex = '9999'; // ensure it's on top of other elements
         playButton.style.display = 'none'; // initially hidden
-        document.body.appendChild(playButton);
+
+        panel.appendChild(playButton);
+        document.body.appendChild(panel);
 
         // Event listener to start playback
         playButton.addEventListener('click', () => {
@@ -226,7 +232,7 @@ function simulateTyping(element, text) {
             requestAnimationFrame(typeWord);
         } else {
             // Check if autosubmit is enabled
-            var talkButton = document.getElementById('talkButton');
+            var talkButton = document.getElementById('saypi-talkButton');
             if (talkButton.dataset.autosubmit === 'false') {
                 console.log('Autosubmit is disabled');
             }
