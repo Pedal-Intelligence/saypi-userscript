@@ -1,3 +1,5 @@
+import './talkButtonStyles.css';
+import './mobileStyles.css';
 (function () {
     'use strict';
 
@@ -132,79 +134,6 @@
             // hack for Firefox on Android, which doesn't support :active correctly
             document.documentElement.classList.add('firefox-android');
         }
-
-        // button animation
-        addStyles(`
-            @keyframes pulse {
-                0% {
-                    transform: scale(1);
-                }
-                50% {
-                    transform: scale(0.9);
-                }
-                100% {
-                    transform: scale(1);
-                }
-            }
-            #saypi-talkButton {
-                margin-top: 0.25rem;
-                border-radius: 18px;
-                width: 120px;
-                display: block; /* For Safari */
-            }
-
-            html:not(.firefox-android) #saypi-talkButton:active .waveform,
-            #saypi-talkButton.active .waveform {
-                animation: pulse 1s infinite;
-            }            
-            #saypi-talkButton .waveform {
-                fill: #776d6d;
-            }
-            #saypi-talkButton.autoSubmit .waveform {
-                fill: rgb(65 138 47); /* Pi's text-brand-green-600 */
-            }
-        `);
-
-        addStyles(`
-            @media (max-width: 768px) {
-                /* mobile styles go here */
-                #pi-panel, #saypi-panel {
-                    width: 100%;
-                    height: 50vh;
-                    position: fixed;
-                    left: 0;
-                  }
-                  #pi-panel {
-                    background-color: rgba(0, 128, 0, 0.5);
-                    top: 0;
-                  }
-                  #saypi-panel {
-                    background-color: rgba(245, 238, 223, 0.5);
-                    bottom: 0;
-                  }                
-                  /* make the buttons fill the panels */
-                  #saypi-talkButton {
-                    width: 100%;
-                    height: 100%;
-                    background-color: transparent;
-                    border-radius: 0;
-                    margin: 0;
-                  }
-                  /* move audio controls (mute/unmute, voice selection) to top */
-                  div[data-projection-id='13'] {
-                    position: absolute;
-                    bottom: 79vh;
-                    right: 30px;
-                  }
-                  /* flip voice list below audio controls */
-                  div[data-projection-id='14'] {
-                    position: relative;
-                    top: 325px;
-                  }
-                }
-            }
-        `);
-
     }
 
     function registerAudioButtonEvents() {

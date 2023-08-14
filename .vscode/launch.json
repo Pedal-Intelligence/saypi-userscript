@@ -2,9 +2,15 @@
     "configurations": [
         {
             "type": "msedge",
-            "name": "https://pi.ai/talk",
+            "name": "Hey Pi",
             "request": "launch",
             "url": "https://pi.ai/talk"
+        },
+        {
+            "type": "msedge",
+            "name": "Say, Pi (update script)",
+            "request": "launch",
+            "url": "http://localhost:3000/saypi.user.js"
         }
     ]
 }

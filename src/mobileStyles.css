@@ -1,0 +1,36 @@
+@media (max-width: 768px) {
+    /* mobile styles go here */
+    #pi-panel, #saypi-panel {
+        width: 100%;
+        height: 50vh;
+        position: fixed;
+        left: 0;
+      }
+      #pi-panel {
+        background-color: rgba(0, 128, 0, 0.5);
+        top: 0;
+      }
+      #saypi-panel {
+        background-color: rgba(245, 238, 223, 0.5);
+        bottom: 0;
+      }                
+      /* make the buttons fill the panels */
+      #saypi-talkButton {
+        width: 100%;
+        height: 100%;
+        background-color: transparent;
+        border-radius: 0;
+        margin: 0;
+      }
+      /* move audio controls (mute/unmute, voice selection) to top */
+      div[data-projection-id='13'] {
+        position: absolute;
+        bottom: 79vh;
+        right: 30px;
+      }
+      /* flip voice list below audio controls */
+      div[data-projection-id='14'] {
+        position: relative;
+        top: 325px;
+      }
+}

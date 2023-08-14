@@ -1,0 +1,28 @@
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+#saypi-talkButton {
+    margin-top: 0.25rem;
+    border-radius: 18px;
+    width: 120px;
+    display: block; /* For Safari */
+}
+
+html:not(.firefox-android) #saypi-talkButton:active .waveform,
+#saypi-talkButton.active .waveform {
+    animation: pulse 1s infinite;
+}            
+#saypi-talkButton .waveform {
+    fill: #776d6d;
+}
+#saypi-talkButton.autoSubmit .waveform {
+    fill: rgb(65 138 47); /* Pi's text-brand-green-600 */
+}
