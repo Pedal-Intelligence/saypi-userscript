@@ -46,7 +46,10 @@ import rectanglesSVG from "./rectangles.svg";
             if (buttonContainer) {
               addTalkButton(buttonContainer);
             } else {
-              console.log("No button container found in footer");
+              console.warn("No button container found in footer");
+            }
+            if (!identifyFooter()) {
+              console.warn("Footer not found");
             }
             observer.disconnect();
             return;
@@ -55,12 +58,26 @@ import rectanglesSVG from "./rectangles.svg";
       }
     }
   });
-  addControlPanel();
+  function identifyFooter() {
+    // Find all audio elements on the page
+    var audioElements = document.querySelectorAll("audio");
+    var found = false; // default to not found
 
-  function addControlPanel() {
-    const controlPanel = document.createElement("div");
-    controlPanel.id = "control-panel";
-    document.body.prepend(controlPanel);
+    audioElements.forEach(function (audio) {
+      var precedingDiv = audio.previousElementSibling;
+
+      // If we've already found a div, we can skip further iterations
+      if (found) return;
+
+      // Check if the preceding element is a div
+      if (precedingDiv && precedingDiv.tagName.toLowerCase() === "div") {
+        // Assign an ID to the div
+        precedingDiv.id = "saypi-footer";
+        found = true; // set to found
+      }
+    });
+
+    return found;
   }
 
   function injectScript(callback) {
