@@ -1,5 +1,5 @@
 /* Gentle Pulsation */
-@keyframes scaleAnimation {
+@keyframes pulse {
   0%,
   100% {
     transform: scale(1); /* Original size */
@@ -10,5 +10,5 @@
 }
 
 #Layer_1 {
-  animation: scaleAnimation 5s infinite; /* Apply animation to the SVG with ID "Layer_1" */
+  animation: pulse 5s infinite; /* Apply animation to the SVG with ID "Layer_1" */
 }
