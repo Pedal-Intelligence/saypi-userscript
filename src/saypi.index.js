@@ -1,6 +1,8 @@
-import "./talkButtonStyles.css";
-import "./mobileStyles.css";
+import "./talkButton.css";
+import "./mobile.css";
+import "./rectangles.css";
 import talkIconSVG from "./waveform.svg";
+import rectanglesSVG from "./rectangles.svg";
 (function () {
   "use strict";
 
@@ -75,6 +77,10 @@ import talkIconSVG from "./waveform.svg";
     }
   }
 
+  function isMobileView() {
+    return window.matchMedia("(max-width: 768px)").matches;
+  }
+
   function addTalkButton(container) {
     // create a containing div
     var panel = document.createElement("div");
@@ -103,9 +109,19 @@ import talkIconSVG from "./waveform.svg";
   }
 
   function addTalkIcon(button) {
-    var icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    button.appendChild(icon);
-    icon.outerHTML = talkIconSVG;
+    updateIconContent(button);
+
+    window.matchMedia("(max-width: 768px)").addListener(() => {
+      updateIconContent(button);
+    });
+  }
+
+  function updateIconContent(iconContainer) {
+    if (isMobileView()) {
+      iconContainer.innerHTML = rectanglesSVG;
+    } else {
+      iconContainer.innerHTML = talkIconSVG;
+    }
   }
 
   function addStyles(css) {
