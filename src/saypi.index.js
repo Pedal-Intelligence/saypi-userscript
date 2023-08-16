@@ -278,7 +278,7 @@ import rectanglesSVG from "./rectangles.svg";
     const talkButtonAnimations = ["readyToRespond"];
     talkButtonAnimations.forEach((animation) => {
       if (animation !== keepAnimation) {
-        inanimateTalkButton(animation);
+        inanimate(animation);
       }
     });
   }
