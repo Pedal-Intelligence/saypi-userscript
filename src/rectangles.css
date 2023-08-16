@@ -1,14 +1,106 @@
-/* Gentle Pulsation */
-@keyframes scaleAnimation {
+@keyframes pulse_outermost {
   0%,
   100% {
-    transform: scale(1); /* Original size */
+    transform: scale(1);
   }
   50% {
-    transform: scale(0.6); /* Scaled down to 60% */
+    transform: scale(0.92);
+  }
+}
+.outermost {
+  animation: pulse_outermost 5s infinite;
+  transform-origin: center;
+}
+
+@keyframes pulse_second {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.856);
+  }
+}
+.second {
+  animation: pulse_second 5s infinite;
+  transform-origin: center;
+}
+
+@keyframes pulse_third {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.792);
+  }
+}
+.third {
+  animation: pulse_third 5s infinite;
+  transform-origin: center;
+}
+
+@keyframes pulse_fourth {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.728);
+  }
+}
+.fourth {
+  animation: pulse_fourth 5s infinite;
+  transform-origin: center;
+}
+
+@keyframes pulse_fifth {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.664);
+  }
+}
+.fifth {
+  animation: pulse_fifth 5s infinite;
+  transform-origin: center;
+}
+
+@keyframes pulse_innermost {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.6);
+  }
+}
+.innermost {
+  animation: pulse_innermost 5s infinite;
+  transform-origin: center;
+}
+
+/* bounce animation to indicate Pi is waiting to speak */
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-5%);
+  }
+  60% {
+    transform: translateY(-3%);
   }
 }
 
-#Layer_1 {
-  animation: scaleAnimation 5s infinite; /* Apply animation to the SVG with ID "Layer_1" */
+.readyToRespond {
+  animation-name: bounce;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
 }

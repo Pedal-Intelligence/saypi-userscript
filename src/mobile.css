@@ -1,6 +1,5 @@
 @media (max-width: 768px) {
   /* mobile styles go here */
-  #control-panel,
   #saypi-panel {
     width: 100%;
     position: fixed;
@@ -22,8 +21,7 @@
   }
   /* surface primary controls: "...", "experiences", "unmute/mute" */
   #__next > main > div > div > div.fixed.top-4.right-6 > button,
-  div[data-projection-id="12"] > button,
-  button[data-projection-id="16"] {
+  div[data-projection-id="12"] > button {
     transform: scale(2);
     z-index: 50;
   }
@@ -31,6 +29,7 @@
   button[data-projection-id="16"] > div[data-projection-id="17"],
   button[data-projection-id="16"] > div[data-projection-id="18"] {
     transform: scale(2) !important;
+    z-index: 50;
   }
   /* hide footer */
   #saypi-footer {

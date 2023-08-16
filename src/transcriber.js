@@ -72,7 +72,7 @@ const piAudioManager = {
 
     if (!this._isLoadCalled) {
       this._isLoadCalled = true; // Set the flag to true
-      this.showPlayButton(); // Show the play button
+      this.poke(); // Indicate that Pi is waiting to respond
     } else {
       this._isLoadCalled = false; // Reset the flag
     }
@@ -87,53 +87,44 @@ const piAudioManager = {
     this._userStarted = false;
   },
 
-  showPlayButton: function () {
-    var playButton = document.getElementById("saypi-playAudio");
-    if (!playButton) {
-      playButton = this.createPlayButton();
-    }
-    playButton.style.display = "block";
-  },
+  poke: function () {
+    animateTalkButton("readyToRespond");
+    var talkButton = document.getElementById("saypi-talkButton");
 
-  hidePlayButton: function () {
-    var playButton = document.getElementById("saypi-playAudio");
-    if (playButton) {
-      playButton.style.display = "none";
-    }
-  },
-
-  createPlayButton: function () {
-    // create a containing div
-    var panel = document.createElement("div");
-    panel.id = "pi-panel";
-
-    var playButton = document.createElement("button");
-    playButton.id = "saypi-playAudio";
-    playButton.innerText = "Hear Pi's Response";
-    playButton.style.position = "fixed";
-    playButton.style.top = "50%";
-    playButton.style.left = "50%";
-    playButton.style.transform = "translate(-50%, 50%)";
-    playButton.style.padding = "10px 20px";
-    playButton.style.fontSize = "24px";
-    playButton.style.borderRadius = "5px";
-    playButton.style.border = "none";
-    playButton.style.backgroundColor = "rgb(228 216 193)";
-    playButton.style.zIndex = "9999"; // ensure it's on top of other elements
-    playButton.style.display = "none"; // initially hidden
-
-    panel.appendChild(playButton);
-    document.body.appendChild(panel);
-
-    // Event listener to start playback
-    playButton.addEventListener("click", () => {
+    // Event listener to start playback (run once and block other listeners)
+    talkButton.addEventListener("click", () => {
       this.userPlay();
-      this.hidePlayButton();
+      talkButton.removeEventListener("click", handleClick);
+      stopAnimations();
     });
-
-    return playButton;
   },
 };
+
+/* animation functions: where should they live? */
+function animateTalkButton(animation) {
+  // Example using vanilla JavaScript
+  let rectangles = document.querySelectorAll(
+    ".outermost, .second, .third, .fourth, .fifth, .innermost"
+  );
+
+  // To activate the animation
+  rectangles.forEach((rect) => rect.classList.add(animation));
+}
+
+function inanimateTalkButton(animation) {
+  // Example using vanilla JavaScript
+  let rectangles = document.querySelectorAll(
+    ".outermost, .second, .third, .fourth, .fifth, .innermost"
+  );
+
+  // To revert to the default pulse animation
+  rectangles.forEach((rect) => rect.classList.remove(animation));
+}
+
+function stopAnimations() {
+  const talkButtonAnimations = ["readyToRespond"];
+  talkButtonAnimations.forEach((animation) => inanimateTalkButton(animation));
+}
 
 // Intercept Autoplay Events (autoplay doesn't work on Safari)
 audioElement.addEventListener("play", function () {

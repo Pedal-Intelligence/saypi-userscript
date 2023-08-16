@@ -58,14 +58,13 @@ import rectanglesSVG from "./rectangles.svg";
       }
     }
   });
-
   function identifyFooter() {
     // Find all audio elements on the page
-    let audioElements = document.querySelectorAll("audio");
-    let found = false; // default to not found
+    var audioElements = document.querySelectorAll("audio");
+    var found = false; // default to not found
 
-    audioElements.forEach((audio) => {
-      let precedingDiv = audio.previousElementSibling;
+    audioElements.forEach(function (audio) {
+      var precedingDiv = audio.previousElementSibling;
 
       // If we've already found a div, we can skip further iterations
       if (found) return;
