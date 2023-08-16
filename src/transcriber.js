@@ -1,3 +1,9 @@
+// Dispatch Custom Event
+function dispatchCustomEvent(eventName, detail = {}) {
+  const event = new CustomEvent(eventName, { detail });
+  window.dispatchEvent(event);
+}
+
 // audio output (Pi)
 const audioElement = document.querySelector("audio");
 if (!audioElement) {
@@ -74,9 +80,6 @@ const piAudioManager = {
 
   playing: function () {
     this.isSpeaking = true;
-    if (isSafari()) {
-      this.hidePlayButton();
-    }
   },
 
   stopped: function () {
@@ -139,22 +142,26 @@ audioElement.addEventListener("play", function () {
 
 audioElement.addEventListener("loadstart", function () {
   piAudioManager.loading();
+  dispatchCustomEvent("saypi:piWaiting");
 });
 
 // Event listeners for detecting when Pi is speaking
 audioElement.addEventListener("playing", () => {
   console.log("Pi is speaking");
   piAudioManager.playing();
+  dispatchCustomEvent("saypi:piSpeaking");
 });
 
 audioElement.addEventListener("pause", () => {
   console.log("Pi stopped speaking");
   piAudioManager.stopped();
+  dispatchCustomEvent("saypi:piStoppedSpeaking");
 });
 
 audioElement.addEventListener("ended", () => {
   console.log("Pi finished speaking");
   piAudioManager.stopped();
+  dispatchCustomEvent("saypi:piFinishedSpeaking");
 });
 
 // audio input (user)

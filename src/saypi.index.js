@@ -46,7 +46,10 @@ import rectanglesSVG from "./rectangles.svg";
             if (buttonContainer) {
               addTalkButton(buttonContainer);
             } else {
-              console.log("No button container found in footer");
+              console.warn("No button container found in footer");
+            }
+            if (!identifyFooter()) {
+              console.warn("Footer not found");
             }
             observer.disconnect();
             return;
@@ -55,12 +58,27 @@ import rectanglesSVG from "./rectangles.svg";
       }
     }
   });
-  addControlPanel();
 
-  function addControlPanel() {
-    const controlPanel = document.createElement("div");
-    controlPanel.id = "control-panel";
-    document.body.prepend(controlPanel);
+  function identifyFooter() {
+    // Find all audio elements on the page
+    let audioElements = document.querySelectorAll("audio");
+    let found = false; // default to not found
+
+    audioElements.forEach((audio) => {
+      let precedingDiv = audio.previousElementSibling;
+
+      // If we've already found a div, we can skip further iterations
+      if (found) return;
+
+      // Check if the preceding element is a div
+      if (precedingDiv && precedingDiv.tagName.toLowerCase() === "div") {
+        // Assign an ID to the div
+        precedingDiv.id = "saypi-footer";
+        found = true; // set to found
+      }
+    });
+
+    return found;
   }
 
   function injectScript(callback) {
@@ -202,6 +220,18 @@ import rectanglesSVG from "./rectangles.svg";
         this.classList.remove("active"); // Remove the active class (for Firefox on Android
         tearDownRecording();
       });
+
+    registerCustomAudioEventListeners();
+  }
+
+  function registerCustomAudioEventListeners() {
+    window.addEventListener("saypi:piSpeaking", function (e) {
+      // Handle the piSpeaking event, e.g., start an animation or show a UI element.
+      console.log("piSpeaking event received by UI script");
+      if (isSafari()) {
+        this.hidePlayButton();
+      }
+    });
   }
 
   function registerHotkey() {

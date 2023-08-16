@@ -7,14 +7,10 @@
     left: 0;
     background-color: rgba(245, 238, 223, 0.9);
   }
-  #control-panel {
-    height: 10vh;
-    bottom: 0;
-  }
   #saypi-panel {
-    height: 90vh;
+    height: 100vh;
     top: 0;
-    padding: 10%;
+    padding: 5%;
   }
   /* make the buttons fill the panels */
   #saypi-talkButton {
@@ -24,14 +20,20 @@
     border-radius: 0;
     margin: 0;
   }
-  /* move audio controls (mute/unmute, voice selection) to top 
-      div[data-projection-id='13'] {
-        ...
-      }
-      /* flip voice list below audio controls 
-      div[data-projection-id='14'] {
-        position: relative;
-        top: 325px;
-      }
-      */
+  /* surface primary controls: "...", "experiences", "unmute/mute" */
+  #__next > main > div > div > div.fixed.top-4.right-6 > button,
+  div[data-projection-id="12"] > button,
+  button[data-projection-id="16"] {
+    transform: scale(2);
+    z-index: 50;
+  }
+  /* override React changes on audio button */
+  button[data-projection-id="16"] > div[data-projection-id="17"],
+  button[data-projection-id="16"] > div[data-projection-id="18"] {
+    transform: scale(2) !important;
+  }
+  /* hide footer */
+  #saypi-footer {
+    display: none;
+  }
 }
