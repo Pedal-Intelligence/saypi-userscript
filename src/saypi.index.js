@@ -224,14 +224,65 @@ import rectanglesSVG from "./rectangles.svg";
   }
 
   function registerCustomAudioEventListeners() {
+    window.addEventListener("saypi:piReadyToRespond", function (e) {
+      console.log("piReadyToRespond event received by UI script");
+      if (isSafari()) {
+        pokeUser();
+      }
+    });
+
     window.addEventListener("saypi:piSpeaking", function (e) {
       // Handle the piSpeaking event, e.g., start an animation or show a UI element.
       console.log("piSpeaking event received by UI script");
       if (isSafari()) {
-        this.hidePlayButton();
+        unpokeUser();
       }
     });
   }
+
+  function pokeUser() {
+    animate("readyToRespond");
+  }
+
+  function unpokeUser() {
+    inanimate("readyToRespond");
+  }
+
+  /* begin animation functions */
+  function animate(animation) {
+    stopOtherAnimations(animation);
+
+    let rectangles = document.querySelectorAll(
+      ".outermost, .second, .third, .fourth, .fifth, .innermost"
+    );
+
+    // To activate the animation
+    rectangles.forEach((rect) => rect.classList.add(animation));
+  }
+
+  function inanimate(animation) {
+    let rectangles = document.querySelectorAll(
+      ".outermost, .second, .third, .fourth, .fifth, .innermost"
+    );
+
+    // To revert to the default pulse animation
+    rectangles.forEach((rect) => rect.classList.remove(animation));
+  }
+
+  function stopAllAnimations() {
+    const talkButtonAnimations = ["readyToRespond"];
+    talkButtonAnimations.forEach((animation) => inanimate(animation));
+  }
+
+  function stopOtherAnimations(keepAnimation) {
+    const talkButtonAnimations = ["readyToRespond"];
+    talkButtonAnimations.forEach((animation) => {
+      if (animation !== keepAnimation) {
+        inanimateTalkButton(animation);
+      }
+    });
+  }
+  /* end animation functions */
 
   function registerHotkey() {
     // Register a hotkey for the button

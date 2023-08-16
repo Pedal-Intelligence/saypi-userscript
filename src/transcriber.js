@@ -21,6 +21,14 @@ const piAudioManager = {
   _userStarted: true, // flag to indicate playback has been started by the user (true by default because user must request initial playback)
   _isLoadCalled: false, // flag to indicate if the load() method has been called on the audio element
 
+  isLoadCalled: function () {
+    return this._isLoadCalled;
+  },
+
+  setIsLoadCalled: function (value) {
+    this._isLoadCalled = value;
+  },
+
   userPlay: function () {
     if (!isSafari()) {
       return;
@@ -65,19 +73,6 @@ const piAudioManager = {
     this.audioElement.play();
   },
 
-  loading: function () {
-    if (!isSafari()) {
-      return;
-    }
-
-    if (!this._isLoadCalled) {
-      this._isLoadCalled = true; // Set the flag to true
-      this.poke(); // Indicate that Pi is waiting to respond
-    } else {
-      this._isLoadCalled = false; // Reset the flag
-    }
-  },
-
   playing: function () {
     this.isSpeaking = true;
   },
@@ -86,45 +81,7 @@ const piAudioManager = {
     this.isSpeaking = false;
     this._userStarted = false;
   },
-
-  poke: function () {
-    animateTalkButton("readyToRespond");
-    var talkButton = document.getElementById("saypi-talkButton");
-
-    // Event listener to start playback (run once and block other listeners)
-    talkButton.addEventListener("click", () => {
-      this.userPlay();
-      talkButton.removeEventListener("click", handleClick);
-      stopAnimations();
-    });
-  },
 };
-
-/* animation functions: where should they live? */
-function animateTalkButton(animation) {
-  // Example using vanilla JavaScript
-  let rectangles = document.querySelectorAll(
-    ".outermost, .second, .third, .fourth, .fifth, .innermost"
-  );
-
-  // To activate the animation
-  rectangles.forEach((rect) => rect.classList.add(animation));
-}
-
-function inanimateTalkButton(animation) {
-  // Example using vanilla JavaScript
-  let rectangles = document.querySelectorAll(
-    ".outermost, .second, .third, .fourth, .fifth, .innermost"
-  );
-
-  // To revert to the default pulse animation
-  rectangles.forEach((rect) => rect.classList.remove(animation));
-}
-
-function stopAnimations() {
-  const talkButtonAnimations = ["readyToRespond"];
-  talkButtonAnimations.forEach((animation) => inanimateTalkButton(animation));
-}
 
 // Intercept Autoplay Events (autoplay doesn't work on Safari)
 audioElement.addEventListener("play", function () {
@@ -132,8 +89,12 @@ audioElement.addEventListener("play", function () {
 });
 
 audioElement.addEventListener("loadstart", function () {
-  piAudioManager.loading();
-  dispatchCustomEvent("saypi:piWaiting");
+  if (!piAudioManager.isLoadCalled()) {
+    piAudioManager.setIsLoadCalled(true); // Set the flag to true
+    dispatchCustomEvent("saypi:piReadyToRespond");
+  } else {
+    piAudioManager.setIsLoadCalled(false); // Reset the flag
+  }
 });
 
 // Event listeners for detecting when Pi is speaking
