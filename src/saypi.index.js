@@ -277,8 +277,8 @@ import rectanglesSVG from "./rectangles.svg";
   }
 
   function handlePlayButtonClick() {
-    piAudioManager.userPlay();
     unpokeUser();
+    piAudioManager.userPlay();
   }
 
   /* begin animation functions */

@@ -41,10 +41,6 @@ const piAudioManager = {
   },
 
   autoPlay: function () {
-    if (!isSafari()) {
-      return;
-    }
-
     if (!this._userStarted) {
       this.audioElement.pause();
       console.log("Autoplay prevented");
@@ -85,19 +81,16 @@ const piAudioManager = {
 
 // Intercept Autoplay Events (autoplay doesn't work on Safari)
 audioElement.addEventListener("play", function () {
-  piAudioManager.autoPlay();
+  if (isSafari()) {
+    piAudioManager.autoPlay();
+  }
 });
 
 audioElement.addEventListener("loadstart", function () {
-  console.log("loadstart event fired");
-  //  if (!piAudioManager.isLoadCalled()) {
-  //    console.log("load() method was called");
-  //    piAudioManager.setIsLoadCalled(true); // Set the flag to true
-  dispatchCustomEvent("saypi:piReadyToRespond");
-  //  } else {
-  //    console.log("load() method was not called");
-  //    piAudioManager.setIsLoadCalled(false); // Reset the flag
-  //  }
+  if (isSafari()) {
+    console.log("Pi is waiting to speak");
+    dispatchCustomEvent("saypi:piReadyToRespond");
+  }
 });
 
 // Event listeners for detecting when Pi is speaking
