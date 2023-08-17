@@ -1,3 +1,4 @@
+import ButtonModule from "./ButtonModule.js";
 import "./talkButton.css";
 import "./mobile.css";
 import "./rectangles.css";
@@ -5,6 +6,8 @@ import talkIconSVG from "./waveform.svg";
 import rectanglesSVG from "./rectangles.svg";
 (function () {
   "use strict";
+
+  const buttonModule = new ButtonModule();
 
   const localConfig = {
     appServerUrl: "http://localhost:3000",
@@ -21,6 +24,7 @@ import rectanglesSVG from "./rectangles.svg";
   const config = productionConfig;
 
   const pageScript = require("raw-loader!./transcriber.js").default;
+  addUserAgentFlags();
 
   // Create a MutationObserver to listen for changes to the DOM
   var observer = new MutationObserver(function (mutations) {
@@ -104,21 +108,27 @@ import rectanglesSVG from "./rectangles.svg";
     panel.id = "saypi-panel";
     container.appendChild(panel);
 
-    var button = document.createElement("button");
-    button.id = "saypi-talkButton";
-    button.type = "button";
-    button.className =
-      "relative flex mt-1 mb-1 rounded-full px-2 py-3 text-center bg-cream-550 hover:bg-cream-650 hover:text-brand-green-700 text-muted";
-    // Set ARIA label and tooltip
+    // Create the talk button using ButtonModule
     const label =
       "Talk (Hold Control + Space to use hotkey. Double click to toggle auto-submit on/off)";
+    var button = buttonModule.createButton("", () => {}); // The callback is empty for now, but you can add functionalities if needed.
+
+    button.id = "saypi-talkButton";
+    button.type = "button";
+
+    // Set ARIA label and tooltip
     button.setAttribute("aria-label", label);
     button.setAttribute("title", label);
-    // enable autosubmit by default
+
+    const classNames =
+      "relative flex mt-1 mb-1 rounded-full px-2 py-3 text-center bg-cream-550 hover:bg-cream-650 hover:text-brand-green-700 text-muted";
+    button.classList.add(classNames.split(" "));
+
+    // Enable autosubmit by default
     button.dataset.autosubmit = "true";
     button.classList.add("autoSubmit");
+
     panel.appendChild(button);
-    addTalkButtonStyles();
     addTalkIcon(button);
 
     // Call the function to inject the script after the button has been added
@@ -141,14 +151,7 @@ import rectanglesSVG from "./rectangles.svg";
     }
   }
 
-  function addStyles(css) {
-    const style = document.createElement("style");
-    style.type = "text/css";
-    style.appendChild(document.createTextNode(css));
-    document.head.appendChild(style);
-  }
-
-  function addTalkButtonStyles() {
+  function addUserAgentFlags() {
     var isFirefoxAndroid =
       /Firefox/.test(navigator.userAgent) &&
       /Android/.test(navigator.userAgent);
@@ -239,12 +242,13 @@ import rectanglesSVG from "./rectangles.svg";
   }
 
   function createPlayButton() {
-    let playButton = document.createElement("button");
+    const label = "Hear Pi's response";
+    let playButton = buttonModule.createButton("", () => {});
     playButton.id = "saypi-playButton";
     playButton.type = "button";
     playButton.className = "hidden play-button";
-    playButton.setAttribute("aria-label", "Hear Pi's response");
-    playButton.setAttribute("title", "Hear Pi's response");
+    playButton.setAttribute("aria-label", label);
+    playButton.setAttribute("title", label);
     playButton.addEventListener("click", handlePlayButtonClick);
     document.body.appendChild(playButton);
     return playButton;

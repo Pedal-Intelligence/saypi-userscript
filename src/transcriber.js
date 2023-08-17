@@ -148,6 +148,7 @@ function uploadAudio(audioBlob) {
 }
 
 function handleTranscriptionResponse(responseJson) {
+  // TODO: raise an event instead of calling simulateTyping() directly
   var textarea = document.getElementById("prompt");
   simulateTyping(textarea, responseJson.text + " ");
   console.log("Transcript: " + responseJson.text);
@@ -167,6 +168,7 @@ function setNativeValue(element, value) {
   element.dispatchEvent(event);
 }
 
+// TODO: Remove this function and call ButtonModule.simulateFormSubmit() instead
 function simulateFormSubmit(textarea) {
   var enterEvent = new KeyboardEvent("keydown", {
     bubbles: true,
@@ -178,6 +180,7 @@ function simulateFormSubmit(textarea) {
   textarea.dispatchEvent(enterEvent);
 }
 
+// TODO: move this function up to the UI module, have it triggered by an event ("transcribed")
 function simulateTyping(element, text) {
   var words = text.split(" "); // Split the text into words (may not be ideal for all languages)
   var i = 0;
