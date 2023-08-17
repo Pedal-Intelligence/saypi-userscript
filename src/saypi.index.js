@@ -159,68 +159,66 @@ import rectanglesSVG from "./rectangles.svg";
   }
 
   function registerAudioButtonEvents() {
-    var button = document.getElementById("saypi-talkButton");
-    var context = window;
+    const button = document.getElementById("saypi-talkButton");
+    let context = window;
     if (GM_info.scriptHandler !== "Userscripts") {
       context = unsafeWindow;
     }
 
-    // For desktop
-    button.addEventListener("mousedown", function () {
-      idPromptTextArea();
-      context.startRecording();
-    });
-    button.addEventListener("mouseup", function () {
-      if (typeof context?.stopRecording === "function") {
+    const talkHandlers = {
+      mousedown: function () {
+        idPromptTextArea();
+        context.startRecording();
+      },
+      mouseup: function () {
+        if (typeof context?.stopRecording === "function") {
+          context.stopRecording();
+        }
+      },
+      dblclick: function () {
+        // Toggle the CSS classes to indicate the mode
+        button.classList.toggle("autoSubmit");
+        if (button.getAttribute("data-autosubmit") === "true") {
+          button.setAttribute("data-autosubmit", "false");
+          console.log("autosubmit disabled");
+        } else {
+          button.setAttribute("data-autosubmit", "true");
+          console.log("autosubmit enabled");
+        }
+      },
+      touchstart: function (e) {
+        e.preventDefault();
+        idPromptTextArea();
+        context.startRecording();
+        button.classList.add("active");
+      },
+      touchend: function () {
+        button.classList.remove("active");
         context.stopRecording();
-      }
-    });
+      },
+    };
 
+    for (const eventType in talkHandlers) {
+      button.addEventListener(eventType, talkHandlers[eventType]);
+    }
+
+    registerOtherAudioButtonEvents(button);
+    registerCustomAudioEventListeners();
     registerHotkey();
+  }
+
+  function registerOtherAudioButtonEvents(button) {
+    /* other handlers for the talk button, but not 'press to talk' */
 
     // "warm up" the microphone by acquiring it before the user presses the button
-    document
-      .getElementById("saypi-talkButton")
-      .addEventListener("mouseenter", setupRecording);
-    document
-      .getElementById("saypi-talkButton")
-      .addEventListener("mouseleave", tearDownRecording);
+    button.addEventListener("mouseenter", setupRecording);
+    button.addEventListener("mouseleave", tearDownRecording);
     window.addEventListener("beforeunload", tearDownRecording);
 
-    // Attach a double click event listener to the talk button
-    button.addEventListener("dblclick", function () {
-      // Toggle the CSS classes to indicate the mode
-      button.classList.toggle("autoSubmit");
-
-      // Store the state on the button element using a custom data attribute
-      if (button.getAttribute("data-autosubmit") === "true") {
-        button.setAttribute("data-autosubmit", "false");
-        console.log("autosubmit disabled");
-      } else {
-        button.setAttribute("data-autosubmit", "true");
-        console.log("autosubmit enabled");
-      }
+    button.addEventListener("touchcancel", function () {
+      this.classList.remove("active"); // Remove the active class (for Firefox on Android)
+      tearDownRecording();
     });
-
-    // For mobile
-    button.addEventListener("touchstart", function (e) {
-      e.preventDefault(); // Prevent the default click behavior from happening
-      idPromptTextArea();
-      context.startRecording();
-      this.classList.add("active"); // Add the active class (for Firefox on Android)
-    });
-    button.addEventListener("touchend", function () {
-      this.classList.remove("active"); // Remove the active class (for Firefox on Android
-      context.stopRecording();
-    });
-    document
-      .getElementById("saypi-talkButton")
-      .addEventListener("touchcancel", function () {
-        this.classList.remove("active"); // Remove the active class (for Firefox on Android
-        tearDownRecording();
-      });
-
-    registerCustomAudioEventListeners();
   }
 
   function registerCustomAudioEventListeners() {
@@ -240,12 +238,47 @@ import rectanglesSVG from "./rectangles.svg";
     });
   }
 
+  function createPlayButton() {
+    let playButton = document.createElement("button");
+    playButton.id = "saypi-playButton";
+    playButton.type = "button";
+    playButton.className = "hidden play-button";
+    playButton.setAttribute("aria-label", "Hear Pi's response");
+    playButton.setAttribute("title", "Hear Pi's response");
+    playButton.addEventListener("click", handlePlayButtonClick);
+    document.body.appendChild(playButton);
+    return playButton;
+  }
+
+  function showPlayButton() {
+    let playButton = document.getElementById("saypi-playButton");
+    if (!playButton) {
+      playButton = createPlayButton();
+    }
+    playButton.classList.remove("hidden");
+  }
+
+  function hidePlayButton() {
+    let playButton = document.getElementById("saypi-playButton");
+    if (playButton) {
+      playButton.classList.add("hidden");
+    }
+  }
+
+  let talkButton = document.getElementById("saypi-talkButton");
   function pokeUser() {
     animate("readyToRespond");
+    showPlayButton();
   }
 
   function unpokeUser() {
     inanimate("readyToRespond");
+    hidePlayButton();
+  }
+
+  function handlePlayButtonClick() {
+    piAudioManager.userPlay();
+    unpokeUser();
   }
 
   /* begin animation functions */
