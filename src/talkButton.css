@@ -30,9 +30,9 @@ html:not(.firefox-android) #saypi-talkButton:active .waveform,
 .hidden {
   display: none;
 }
-.play-button {
+#saypi-playButton.play-button {
   /* position over the talk button, but under any controls */
-  z-index: 10;
-  background-color: transparent;
+  z-index: 70; /* talk button z-index is 59 or 60 */
+  background-color: rgba(0, 0, 0, 0); /* transparent without holes */
   border: none;
 }

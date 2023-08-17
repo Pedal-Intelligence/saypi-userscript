@@ -1,12 +1,14 @@
 @media (max-width: 768px) {
   /* mobile styles go here */
-  #saypi-panel {
+  #saypi-panel,
+  .play-button {
     width: 100%;
     position: fixed;
     left: 0;
     background-color: rgba(245, 238, 223, 0.9);
   }
-  #saypi-panel {
+  #saypi-panel,
+  .play-button {
     height: 100vh;
     top: 0;
     padding: 5%;
