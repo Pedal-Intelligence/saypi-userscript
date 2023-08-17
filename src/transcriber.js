@@ -138,20 +138,15 @@ function uploadAudio(audioBlob) {
       }
       return response.json();
     })
-    .then(handleTranscriptionResponse)
+    .then(function (responseJson) {
+      dispatchCustomEvent("saypi:transcribed", { text: responseJson.text });
+    })
     .catch(function (error) {
       console.error("Looks like there was a problem: ", error);
       var textarea = document.getElementById("prompt");
       textarea.value =
         "Sorry, there was a problem transcribing your audio. Please try again later.";
     });
-}
-
-function handleTranscriptionResponse(responseJson) {
-  // TODO: raise an event instead of calling simulateTyping() directly
-  var textarea = document.getElementById("prompt");
-  simulateTyping(textarea, responseJson.text + " ");
-  console.log("Transcript: " + responseJson.text);
 }
 
 function setNativeValue(element, value) {
@@ -166,43 +161,6 @@ function setNativeValue(element, value) {
     tracker.setValue(lastValue);
   }
   element.dispatchEvent(event);
-}
-
-// TODO: Remove this function and call ButtonModule.simulateFormSubmit() instead
-function simulateFormSubmit(textarea) {
-  var enterEvent = new KeyboardEvent("keydown", {
-    bubbles: true,
-    key: "Enter",
-    keyCode: 13,
-    which: 13,
-  });
-
-  textarea.dispatchEvent(enterEvent);
-}
-
-// TODO: move this function up to the UI module, have it triggered by an event ("transcribed")
-function simulateTyping(element, text) {
-  var words = text.split(" "); // Split the text into words (may not be ideal for all languages)
-  var i = 0;
-  function typeWord() {
-    if (i < words.length) {
-      // Append the next word and a space, then increment i
-      setNativeValue(element, element.value + words[i++] + " ");
-      // Call this function again before the next repaint
-      requestAnimationFrame(typeWord);
-    } else {
-      // Check if autosubmit is enabled
-      var talkButton = document.getElementById("saypi-talkButton");
-      if (talkButton.dataset.autosubmit === "false") {
-        console.log("Autosubmit is disabled");
-      } else {
-        // Simulate an "Enter" keypress event
-        simulateFormSubmit(element);
-      }
-    }
-  }
-  // Start typing
-  typeWord();
 }
 
 // Declare a global variable for the mediaRecorder

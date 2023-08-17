@@ -23,6 +23,9 @@ export default class ButtonModule {
 
   // Simulate an "Enter" keypress event on a form
   simulateFormSubmit() {
+    if (!this.textarea) {
+      this.textarea = document.getElementById("prompt");
+    }
     const enterEvent = new KeyboardEvent("keydown", {
       bubbles: true,
       key: "Enter",
@@ -34,7 +37,10 @@ export default class ButtonModule {
   }
 
   // Function to handle auto-submit based on the button's data attribute
-  handleAutoSubmit(text) {
+  handleAutoSubmit() {
+    if (!this.talkButton) {
+      this.talkButton = document.getElementById("saypi-talkButton");
+    }
     if (this.talkButton.dataset.autosubmit === "false") {
       console.log("Autosubmit is disabled");
     } else {
