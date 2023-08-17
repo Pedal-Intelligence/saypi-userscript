@@ -89,10 +89,13 @@ audioElement.addEventListener("play", function () {
 });
 
 audioElement.addEventListener("loadstart", function () {
+  console.log("loadstart event fired");
   if (!piAudioManager.isLoadCalled()) {
+    console.log("load() method was called");
     piAudioManager.setIsLoadCalled(true); // Set the flag to true
     dispatchCustomEvent("saypi:piReadyToRespond");
   } else {
+    console.log("load() method was not called");
     piAudioManager.setIsLoadCalled(false); // Reset the flag
   }
 });
