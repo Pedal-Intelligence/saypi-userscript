@@ -216,13 +216,13 @@
     transform: scale(1) rotate(0deg);
   }
   25% {
-    transform: scale(1.015) rotate(-3deg);
+    transform: scale(0.995);
   }
   50% {
-    transform: scale(0.92) rotate(0deg);
+    transform: scale(0.9);
   }
   75% {
-    transform: scale(0.9) rotate(3deg);
+    transform: scale(0.895);
   }
 }
 .outermost.piSpeaking {
@@ -236,13 +236,13 @@
     transform: scale(1) rotate(0deg);
   }
   25% {
-    transform: scale(1.015) rotate(-3deg);
+    transform: scale(0.98) rotate(-1deg);
   }
   50% {
-    transform: scale(0.89) rotate(0deg);
+    transform: scale(0.87) rotate(0deg);
   }
   75% {
-    transform: scale(0.87) rotate(3deg);
+    transform: scale(0.865) rotate(1deg);
   }
 }
 .second.piSpeaking {
@@ -256,13 +256,13 @@
     transform: scale(1) rotate(0deg);
   }
   25% {
-    transform: scale(1.015) rotate(-3deg);
+    transform: scale(0.965) rotate(-2deg);
   }
   50% {
-    transform: scale(0.86) rotate(0deg);
+    transform: scale(0.84) rotate(0deg);
   }
   75% {
-    transform: scale(0.84) rotate(3deg);
+    transform: scale(0.835) rotate(2deg);
   }
 }
 .third.piSpeaking {
@@ -276,13 +276,13 @@
     transform: scale(1) rotate(0deg);
   }
   25% {
-    transform: scale(1.015) rotate(-3deg);
+    transform: scale(0.95) rotate(-3deg);
   }
   50% {
-    transform: scale(0.83) rotate(0deg);
+    transform: scale(0.81) rotate(0deg);
   }
   75% {
-    transform: scale(0.81) rotate(3deg);
+    transform: scale(0.805) rotate(3deg);
   }
 }
 .fourth.piSpeaking {
@@ -296,13 +296,13 @@
     transform: scale(1) rotate(0deg);
   }
   25% {
-    transform: scale(1.015) rotate(-3deg);
+    transform: scale(0.935) rotate(-4deg);
   }
   50% {
-    transform: scale(0.8) rotate(0deg);
+    transform: scale(0.78) rotate(0deg);
   }
   75% {
-    transform: scale(0.78) rotate(3deg);
+    transform: scale(0.775) rotate(4deg);
   }
 }
 .fifth.piSpeaking {
@@ -316,13 +316,13 @@
     transform: scale(1) rotate(0deg);
   }
   25% {
-    transform: scale(1.015) rotate(-3deg);
+    transform: scale(0.92) rotate(-5deg);
   }
   50% {
-    transform: scale(0.77) rotate(0deg);
+    transform: scale(0.75) rotate(0deg);
   }
   75% {
-    transform: scale(0.75) rotate(3deg);
+    transform: scale(0.745) rotate(5deg);
   }
 }
 .innermost.piSpeaking {
