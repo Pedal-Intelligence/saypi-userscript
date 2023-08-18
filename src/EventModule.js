@@ -1,4 +1,3 @@
-import ButtonModule from "./ButtonModule";
 export default class EventModule {
   static context = window;
   static init() {
@@ -37,7 +36,6 @@ export default class EventModule {
   }
 
   static simulateTyping(element, text) {
-    const buttonModule = new ButtonModule();
     var words = text.split(" ");
     var i = 0;
 
@@ -46,7 +44,8 @@ export default class EventModule {
         EventModule.setNativeValue(element, element.value + words[i++] + " ");
         requestAnimationFrame(typeWord);
       } else {
-        buttonModule.handleAutoSubmit();
+        EventModule.dispatchCustomEvent("saypi:autoSubmit");
+        //buttonModule.handleAutoSubmit();
       }
     };
 

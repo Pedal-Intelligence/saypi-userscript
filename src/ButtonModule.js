@@ -1,9 +1,7 @@
 export default class ButtonModule {
   constructor() {
-    this.textarea = document.getElementById("prompt");
-    this.talkButton = document.getElementById("saypi-talkButton");
-
     this.registerButtonEvents();
+    this.registerOtherEvents();
   }
 
   registerButtonEvents() {
@@ -13,6 +11,10 @@ export default class ButtonModule {
     window.addEventListener("saypi:receivedUserInput", () => {
       this.unpokeUser();
     });
+  }
+
+  registerOtherEvents() {
+    window.addEventListener("saypi:autoSubmit", ButtonModule.handleAutoSubmit);
   }
 
   // Function to create a new button
@@ -33,10 +35,9 @@ export default class ButtonModule {
   }
 
   // Simulate an "Enter" keypress event on a form
-  simulateFormSubmit() {
-    if (!this.textarea) {
-      this.textarea = document.getElementById("prompt");
-    }
+  static simulateFormSubmit() {
+    const textarea = document.getElementById("prompt");
+
     const enterEvent = new KeyboardEvent("keydown", {
       bubbles: true,
       key: "Enter",
@@ -44,18 +45,17 @@ export default class ButtonModule {
       which: 13,
     });
 
-    this.textarea.dispatchEvent(enterEvent);
+    textarea.dispatchEvent(enterEvent);
   }
 
   // Function to handle auto-submit based on the button's data attribute
-  handleAutoSubmit() {
-    if (!this.talkButton) {
-      this.talkButton = document.getElementById("saypi-talkButton");
-    }
-    if (this.talkButton.dataset.autosubmit === "false") {
+  static handleAutoSubmit() {
+    const talkButton = document.getElementById("saypi-talkButton");
+
+    if (talkButton.dataset.autosubmit === "false") {
       console.log("Autosubmit is disabled");
     } else {
-      this.simulateFormSubmit();
+      ButtonModule.simulateFormSubmit();
     }
   }
 
