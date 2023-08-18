@@ -26,7 +26,7 @@ import rectanglesSVG from "./rectangles.svg";
 
   const pageScript = require("raw-loader!./transcriber.js").default;
   addUserAgentFlags();
-  EventModule.handleAudioEvents();
+  EventModule.init();
 
   // Create a MutationObserver to listen for changes to the DOM
   var observer = new MutationObserver(function (mutations) {
@@ -165,47 +165,32 @@ import rectanglesSVG from "./rectangles.svg";
 
   function registerAudioButtonEvents() {
     const button = document.getElementById("saypi-talkButton");
+
+    // Setting the correct context
     let context = window;
     if (GM_info.scriptHandler !== "Userscripts") {
       context = unsafeWindow;
     }
+    EventModule.setContext(context); // Set the context for EventModule
 
-    const talkHandlers = {
-      mousedown: function () {
-        idPromptTextArea();
-        context.startRecording();
-      },
-      mouseup: function () {
-        if (typeof context?.stopRecording === "function") {
-          context.stopRecording();
-        }
-      },
-      dblclick: function () {
-        // Toggle the CSS classes to indicate the mode
-        button.classList.toggle("autoSubmit");
-        if (button.getAttribute("data-autosubmit") === "true") {
-          button.setAttribute("data-autosubmit", "false");
-          console.log("autosubmit disabled");
-        } else {
-          button.setAttribute("data-autosubmit", "true");
-          console.log("autosubmit enabled");
-        }
-      },
-      touchstart: function (e) {
-        e.preventDefault();
-        idPromptTextArea();
-        context.startRecording();
-        button.classList.add("active");
-      },
-      touchend: function () {
-        button.classList.remove("active");
-        context.stopRecording();
-      },
-    };
-
-    for (const eventType in talkHandlers) {
-      button.addEventListener(eventType, talkHandlers[eventType]);
-    }
+    // Attach the event listeners
+    button.addEventListener(
+      "mousedown",
+      EventModule.handleTalkMouseDown.bind(EventModule)
+    );
+    button.addEventListener(
+      "mouseup",
+      EventModule.handleTalkMouseUp.bind(EventModule)
+    );
+    button.addEventListener("dblclick", () =>
+      EventModule.handleTalkDoubleClick(button)
+    );
+    button.addEventListener("touchstart", (e) =>
+      EventModule.handleTalkTouchStart(button, e)
+    );
+    button.addEventListener("touchend", () =>
+      EventModule.handleTalkTouchEnd(button)
+    );
 
     registerOtherAudioButtonEvents(button);
     registerCustomAudioEventListeners();
@@ -348,19 +333,6 @@ import rectanglesSVG from "./rectangles.svg";
         talkButton.classList.remove("active");
       }
     });
-  }
-
-  function idPromptTextArea() {
-    var textarea = document.getElementById("prompt");
-    if (!textarea) {
-      // Find the first <textarea> element and give it an id
-      var textareaElement = document.querySelector("textarea");
-      if (textareaElement) {
-        textareaElement.id = "prompt";
-      } else {
-        console.log("No <textarea> element found");
-      }
-    }
   }
 
   // Start observing the entire document for changes to child nodes and subtree
