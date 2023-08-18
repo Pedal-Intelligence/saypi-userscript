@@ -1,4 +1,5 @@
 import ButtonModule from "./ButtonModule.js";
+import EventModule from "./EventModule.js";
 import "./talkButton.css";
 import "./mobile.css";
 import "./rectangles.css";
@@ -25,7 +26,7 @@ import rectanglesSVG from "./rectangles.svg";
 
   const pageScript = require("raw-loader!./transcriber.js").default;
   addUserAgentFlags();
-  handleAudioEvents(); // TODO: move this to EventModule.js
+  EventModule.handleAudioEvents();
 
   // Create a MutationObserver to listen for changes to the DOM
   var observer = new MutationObserver(function (mutations) {
@@ -240,34 +241,6 @@ import rectanglesSVG from "./rectangles.svg";
         unpokeUser();
       }
     });
-  }
-
-  function handleAudioEvents() {
-    window.addEventListener("saypi:transcribed", handleTranscriptionResponse);
-  }
-
-  function handleTranscriptionResponse(transcriptionEvent) {
-    var transcript = transcriptionEvent.detail.text;
-    var textarea = document.getElementById("prompt");
-    simulateTyping(textarea, transcript + " ");
-    console.log("Transcript: " + transcript);
-  }
-
-  function simulateTyping(element, text) {
-    var words = text.split(" "); // Split the text into words (may not be ideal for all languages)
-    var i = 0;
-    function typeWord() {
-      if (i < words.length) {
-        // Append the next word and a space, then increment i
-        setNativeValue(element, element.value + words[i++] + " ");
-        // Call this function again before the next repaint
-        requestAnimationFrame(typeWord);
-      } else {
-        buttonModule.handleAutoSubmit();
-      }
-    }
-    // Start typing
-    typeWord();
   }
 
   function createPlayButton() {

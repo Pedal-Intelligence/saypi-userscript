@@ -149,20 +149,6 @@ function uploadAudio(audioBlob) {
     });
 }
 
-function setNativeValue(element, value) {
-  let lastValue = element.value;
-  element.value = value;
-  let event = new Event("input", { target: element, bubbles: true });
-  // React 15
-  event.simulated = true;
-  // React 16-17
-  let tracker = element._valueTracker;
-  if (tracker) {
-    tracker.setValue(lastValue);
-  }
-  element.dispatchEvent(event);
-}
-
 // Declare a global variable for the mediaRecorder
 var mediaRecorder;
 const threshold = 1000; // 1000 ms = 1 second, about the length of "Hey, Pi"
