@@ -259,6 +259,7 @@ function startRecording() {
   window.startTime = Date.now();
 
   console.log("User is speaking");
+  dispatchCustomEvent("saypi:userSpeaking");
 
   // This function will be called when the user releases the record button
   window.stopRecording = function () {
@@ -274,10 +275,12 @@ function startRecording() {
       if (duration < threshold) {
         console.log("User stopped speaking");
         console.log("Recording was too short, not uploading for transcription");
+        dispatchCustomEvent("saypi:userStoppedSpeaking");
         piAudioManager.resume();
       } else {
         console.log("User finished speaking");
         piAudioManager.stop();
+        dispatchCustomEvent("saypi:userFinishedSpeaking");
       }
     }
     // Remove the stopRecording function

@@ -22,6 +22,16 @@ export default class ButtonModule {
         });
       }
     );
+    window.addEventListener("saypi:userSpeaking", () => {
+      AnimationModule.animate("userSpeaking");
+    });
+    ["saypi:userStoppedSpeaking", "saypi:userFinishedSpeaking"].forEach(
+      (eventName) => {
+        window.addEventListener(eventName, () => {
+          AnimationModule.inanimate("userSpeaking");
+        });
+      }
+    );
   }
 
   registerOtherEvents() {
