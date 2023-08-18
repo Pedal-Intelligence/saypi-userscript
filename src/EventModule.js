@@ -15,6 +15,13 @@ export default class EventModule {
     );
   }
 
+  // Dispatch Custom Event
+  // TODO: remove duplicated function from transcriber.js
+  static dispatchCustomEvent(eventName, detail = {}) {
+    const event = new CustomEvent(eventName, { detail });
+    window.dispatchEvent(event);
+  }
+
   static handleAudioEvents() {
     window.addEventListener(
       "saypi:transcribed",
@@ -110,5 +117,45 @@ export default class EventModule {
         console.warn("No <textarea> element found");
       }
     }
+  }
+
+  static registerOtherAudioButtonEvents(button) {
+    // "warm up" the microphone by acquiring it before the user presses the button
+    button.addEventListener("mouseenter", () => {
+      EventModule.dispatchCustomEvent("saypi:requestSetupRecording");
+    });
+    button.addEventListener("mouseleave", () => {
+      EventModule.dispatchCustomEvent("saypi:requestTearDownRecording");
+    });
+    window.addEventListener("beforeunload", () => {
+      EventModule.dispatchCustomEvent("saypi:requestTearDownRecording");
+    });
+    button.addEventListener("touchcancel", () => {
+      button.classList.remove("active"); // Remove the active class (for Firefox on Android)
+      EventModule.dispatchCustomEvent("saypi:requestTearDownRecording");
+    });
+  }
+
+  static registerCustomAudioEventListeners() {
+    window.addEventListener("saypi:piReadyToRespond", function (e) {
+      console.log("piReadyToRespond event received by UI script");
+      if (isSafari()) {
+        EventModule.dispatchCustomEvent("saypi:awaitingUserInput");
+      }
+    });
+
+    window.addEventListener("saypi:piSpeaking", function (e) {
+      // Handle the piSpeaking event, e.g., start an animation or show a UI element.
+      console.log("piSpeaking event received by UI script");
+      if (isSafari()) {
+        EventModule.dispatchCustomEvent("saypi:receivedUserInput");
+      }
+    });
+  }
+
+  // TODO: dedupe this function from transcriber.js
+  // where should it live?
+  static isSafari() {
+    return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
   }
 }

@@ -10,6 +10,7 @@ if (!audioElement) {
   console.error("Audio element not found!");
 }
 
+// TODO: dedupe this function from EventModule.js
 function isSafari() {
   return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 }

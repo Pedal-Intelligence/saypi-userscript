@@ -193,86 +193,12 @@ import rectanglesSVG from "./rectangles.svg";
       EventModule.handleTalkTouchEnd(button)
     );
 
-    registerOtherAudioButtonEvents(button);
-    registerCustomAudioEventListeners();
+    EventModule.registerOtherAudioButtonEvents(button);
+    EventModule.registerCustomAudioEventListeners();
     registerHotkey();
   }
 
-  function registerOtherAudioButtonEvents(button) {
-    /* other handlers for the talk button, but not 'press to talk' */
-
-    // "warm up" the microphone by acquiring it before the user presses the button
-    button.addEventListener("mouseenter", setupRecording);
-    button.addEventListener("mouseleave", tearDownRecording);
-    window.addEventListener("beforeunload", tearDownRecording);
-
-    button.addEventListener("touchcancel", function () {
-      this.classList.remove("active"); // Remove the active class (for Firefox on Android)
-      tearDownRecording();
-    });
-  }
-
-  function registerCustomAudioEventListeners() {
-    window.addEventListener("saypi:piReadyToRespond", function (e) {
-      console.log("piReadyToRespond event received by UI script");
-      if (isSafari()) {
-        pokeUser();
-      }
-    });
-
-    window.addEventListener("saypi:piSpeaking", function (e) {
-      // Handle the piSpeaking event, e.g., start an animation or show a UI element.
-      console.log("piSpeaking event received by UI script");
-      if (isSafari()) {
-        unpokeUser();
-      }
-    });
-  }
-
-  function createPlayButton() {
-    const label = "Hear Pi's response";
-    let playButton = buttonModule.createButton("", () => {});
-    playButton.id = "saypi-playButton";
-    playButton.type = "button";
-    playButton.className = "hidden play-button";
-    playButton.setAttribute("aria-label", label);
-    playButton.setAttribute("title", label);
-    playButton.addEventListener("click", handlePlayButtonClick);
-    document.body.appendChild(playButton);
-    return playButton;
-  }
-
-  function showPlayButton() {
-    let playButton = document.getElementById("saypi-playButton");
-    if (!playButton) {
-      playButton = createPlayButton();
-    }
-    playButton.classList.remove("hidden");
-  }
-
-  function hidePlayButton() {
-    let playButton = document.getElementById("saypi-playButton");
-    if (playButton) {
-      playButton.classList.add("hidden");
-    }
-  }
-
   let talkButton = document.getElementById("saypi-talkButton");
-  function pokeUser() {
-    AnimationModule.animate("readyToRespond");
-    showPlayButton();
-  }
-
-  function unpokeUser() {
-    AnimationModule.inanimate("readyToRespond");
-    hidePlayButton();
-  }
-
-  function handlePlayButtonClick() {
-    unpokeUser();
-    piAudioManager.userPlay();
-  }
-
   function registerHotkey() {
     // Register a hotkey for the button
     let ctrlDown = false;
