@@ -13,12 +13,12 @@ export default class ButtonModule {
       this.unpokeUser();
     });
     window.addEventListener("saypi:piSpeaking", () => {
-      AnimationModule.animate("speaking");
+      AnimationModule.animate("piSpeaking");
     });
     ["saypi:piStoppedSpeaking", "saypi:piFinishedSpeaking"].forEach(
       (eventName) => {
         window.addEventListener(eventName, () => {
-          AnimationModule.inanimate("speaking");
+          AnimationModule.inanimate("piSpeaking");
         });
       }
     );

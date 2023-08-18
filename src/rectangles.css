@@ -216,16 +216,16 @@
     transform: scale(1) rotate(0deg);
   }
   25% {
-    transform: scale(1.02) rotate(-2deg);
+    transform: scale(1.015) rotate(-3deg);
   }
   50% {
-    transform: scale(1) rotate(0deg);
+    transform: scale(0.92) rotate(0deg);
   }
   75% {
-    transform: scale(0.9) rotate(2deg);
+    transform: scale(0.9) rotate(3deg);
   }
 }
-.outermost.speaking {
+.outermost.piSpeaking {
   animation: speaking_outermost 2s infinite;
   transform-origin: center;
 }
@@ -236,16 +236,16 @@
     transform: scale(1) rotate(0deg);
   }
   25% {
-    transform: scale(1.02) rotate(-2deg);
+    transform: scale(1.015) rotate(-3deg);
   }
   50% {
-    transform: scale(1) rotate(0deg);
+    transform: scale(0.89) rotate(0deg);
   }
   75% {
-    transform: scale(0.87) rotate(2deg);
+    transform: scale(0.87) rotate(3deg);
   }
 }
-.second.speaking {
+.second.piSpeaking {
   animation: speaking_second 2s infinite;
   transform-origin: center;
 }
@@ -256,16 +256,16 @@
     transform: scale(1) rotate(0deg);
   }
   25% {
-    transform: scale(1.02) rotate(-2deg);
+    transform: scale(1.015) rotate(-3deg);
   }
   50% {
-    transform: scale(1) rotate(0deg);
+    transform: scale(0.86) rotate(0deg);
   }
   75% {
-    transform: scale(0.84) rotate(2deg);
+    transform: scale(0.84) rotate(3deg);
   }
 }
-.third.speaking {
+.third.piSpeaking {
   animation: speaking_third 2s infinite;
   transform-origin: center;
 }
@@ -276,16 +276,16 @@
     transform: scale(1) rotate(0deg);
   }
   25% {
-    transform: scale(1.02) rotate(-2deg);
+    transform: scale(1.015) rotate(-3deg);
   }
   50% {
-    transform: scale(1) rotate(0deg);
+    transform: scale(0.83) rotate(0deg);
   }
   75% {
-    transform: scale(0.81) rotate(2deg);
+    transform: scale(0.81) rotate(3deg);
   }
 }
-.fourth.speaking {
+.fourth.piSpeaking {
   animation: speaking_fourth 2s infinite;
   transform-origin: center;
 }
@@ -296,16 +296,16 @@
     transform: scale(1) rotate(0deg);
   }
   25% {
-    transform: scale(1.02) rotate(-2deg);
+    transform: scale(1.015) rotate(-3deg);
   }
   50% {
-    transform: scale(1) rotate(0deg);
+    transform: scale(0.8) rotate(0deg);
   }
   75% {
-    transform: scale(0.78) rotate(2deg);
+    transform: scale(0.78) rotate(3deg);
   }
 }
-.fifth.speaking {
+.fifth.piSpeaking {
   animation: speaking_fifth 2s infinite;
   transform-origin: center;
 }
@@ -316,16 +316,16 @@
     transform: scale(1) rotate(0deg);
   }
   25% {
-    transform: scale(1.02) rotate(-2deg);
+    transform: scale(1.015) rotate(-3deg);
   }
   50% {
-    transform: scale(1) rotate(0deg);
+    transform: scale(0.77) rotate(0deg);
   }
   75% {
-    transform: scale(0.75) rotate(2deg);
+    transform: scale(0.75) rotate(3deg);
   }
 }
-.innermost.speaking {
+.innermost.piSpeaking {
   animation: speaking_innermost 2s infinite;
   transform-origin: center;
 }
