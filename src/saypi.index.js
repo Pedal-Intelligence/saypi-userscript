@@ -1,3 +1,4 @@
+import AnimationModule from "./AnimationModule.js";
 import ButtonModule from "./ButtonModule.js";
 import EventModule from "./EventModule.js";
 import "./talkButton.css";
@@ -258,12 +259,12 @@ import rectanglesSVG from "./rectangles.svg";
 
   let talkButton = document.getElementById("saypi-talkButton");
   function pokeUser() {
-    animate("readyToRespond");
+    AnimationModule.animate("readyToRespond");
     showPlayButton();
   }
 
   function unpokeUser() {
-    inanimate("readyToRespond");
+    AnimationModule.inanimate("readyToRespond");
     hidePlayButton();
   }
 
@@ -271,42 +272,6 @@ import rectanglesSVG from "./rectangles.svg";
     unpokeUser();
     piAudioManager.userPlay();
   }
-
-  /* begin animation functions */
-  function animate(animation) {
-    stopOtherAnimations(animation);
-
-    let rectangles = document.querySelectorAll(
-      ".outermost, .second, .third, .fourth, .fifth, .innermost"
-    );
-
-    // To activate the animation
-    rectangles.forEach((rect) => rect.classList.add(animation));
-  }
-
-  function inanimate(animation) {
-    let rectangles = document.querySelectorAll(
-      ".outermost, .second, .third, .fourth, .fifth, .innermost"
-    );
-
-    // To revert to the default pulse animation
-    rectangles.forEach((rect) => rect.classList.remove(animation));
-  }
-
-  function stopAllAnimations() {
-    const talkButtonAnimations = ["readyToRespond"];
-    talkButtonAnimations.forEach((animation) => inanimate(animation));
-  }
-
-  function stopOtherAnimations(keepAnimation) {
-    const talkButtonAnimations = ["readyToRespond"];
-    talkButtonAnimations.forEach((animation) => {
-      if (animation !== keepAnimation) {
-        inanimate(animation);
-      }
-    });
-  }
-  /* end animation functions */
 
   function registerHotkey() {
     // Register a hotkey for the button
