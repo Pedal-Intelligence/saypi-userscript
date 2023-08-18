@@ -1,3 +1,4 @@
+import AnimationModule from "./AnimationModule";
 export default class ButtonModule {
   constructor() {
     this.registerButtonEvents();
@@ -11,6 +12,16 @@ export default class ButtonModule {
     window.addEventListener("saypi:receivedUserInput", () => {
       this.unpokeUser();
     });
+    window.addEventListener("saypi:piSpeaking", () => {
+      AnimationModule.animate("speaking");
+    });
+    ["saypi:piStoppedSpeaking", "saypi:piFinishedSpeaking"].forEach(
+      (eventName) => {
+        window.addEventListener(eventName, () => {
+          AnimationModule.inanimate("speaking");
+        });
+      }
+    );
   }
 
   registerOtherEvents() {

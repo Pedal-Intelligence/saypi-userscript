@@ -208,3 +208,124 @@
   animation-duration: 2s;
   animation-iteration-count: infinite;
 }
+
+/* playful animation to indicate Pi is speaking */
+@keyframes speaking_outermost {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.02) rotate(-2deg);
+  }
+  50% {
+    transform: scale(1) rotate(0deg);
+  }
+  75% {
+    transform: scale(0.9) rotate(2deg);
+  }
+}
+.outermost.speaking {
+  animation: speaking_outermost 2s infinite;
+  transform-origin: center;
+}
+
+@keyframes speaking_second {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.02) rotate(-2deg);
+  }
+  50% {
+    transform: scale(1) rotate(0deg);
+  }
+  75% {
+    transform: scale(0.87) rotate(2deg);
+  }
+}
+.second.speaking {
+  animation: speaking_second 2s infinite;
+  transform-origin: center;
+}
+
+@keyframes speaking_third {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.02) rotate(-2deg);
+  }
+  50% {
+    transform: scale(1) rotate(0deg);
+  }
+  75% {
+    transform: scale(0.84) rotate(2deg);
+  }
+}
+.third.speaking {
+  animation: speaking_third 2s infinite;
+  transform-origin: center;
+}
+
+@keyframes speaking_fourth {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.02) rotate(-2deg);
+  }
+  50% {
+    transform: scale(1) rotate(0deg);
+  }
+  75% {
+    transform: scale(0.81) rotate(2deg);
+  }
+}
+.fourth.speaking {
+  animation: speaking_fourth 2s infinite;
+  transform-origin: center;
+}
+
+@keyframes speaking_fifth {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.02) rotate(-2deg);
+  }
+  50% {
+    transform: scale(1) rotate(0deg);
+  }
+  75% {
+    transform: scale(0.78) rotate(2deg);
+  }
+}
+.fifth.speaking {
+  animation: speaking_fifth 2s infinite;
+  transform-origin: center;
+}
+
+@keyframes speaking_innermost {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.02) rotate(-2deg);
+  }
+  50% {
+    transform: scale(1) rotate(0deg);
+  }
+  75% {
+    transform: scale(0.75) rotate(2deg);
+  }
+}
+.innermost.speaking {
+  animation: speaking_innermost 2s infinite;
+  transform-origin: center;
+}
