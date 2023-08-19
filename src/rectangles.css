@@ -345,7 +345,7 @@
 .outermost.userSpeaking {
   --width-factor: 0.0621; /* 20/322 */
   animation: userSpeakingAnimation 2s infinite;
-  --spread-amount: -500%;
+  --spread-amount: -475%;
   fill: #b3e0fe;
 }
 
@@ -373,13 +373,13 @@
 .fifth.userSpeaking {
   --width-factor: 0.5; /* 20/40 */
   animation: userSpeakingAnimation 2s infinite;
-  --spread-amount: 95%;
+  --spread-amount: 80%;
   fill: #0b69e3;
 }
 
 .innermost.userSpeaking {
   --width-factor: 2; /* 20/10 */
   animation: userSpeakingAnimation 2s infinite;
-  --spread-amount: 70%;
+  --spread-amount: 62%;
   fill: #0053bf;
 }
