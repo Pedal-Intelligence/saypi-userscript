@@ -329,3 +329,57 @@
   animation: speaking_innermost 2s infinite;
   transform-origin: center;
 }
+
+/* wave animation to indicate user is speaking */
+@keyframes userSpeakingAnimation {
+  50% {
+    transform: scaleY(0.05) scaleX(var(--width-factor))
+      translateX(calc(-50% + var(--spread-amount)));
+  }
+  100% {
+    transform: scaleY(1) scaleX(var(--width-factor))
+      translateX(calc(-50% + var(--spread-amount)));
+  }
+}
+
+.outermost.userSpeaking {
+  --width-factor: 0.0621; /* 20/322 */
+  animation: userSpeakingAnimation 2s infinite;
+  --spread-amount: -500%;
+  fill: #b3e0fe;
+}
+
+.second.userSpeaking {
+  --width-factor: 0.0787; /* 20/254 */
+  animation: userSpeakingAnimation 2s infinite;
+  --spread-amount: -200%;
+  fill: #89c2ff;
+}
+
+.third.userSpeaking {
+  --width-factor: 0.1093; /* 20/183 */
+  animation: userSpeakingAnimation 2s infinite;
+  --spread-amount: -20%;
+  fill: #5fa4ff;
+}
+
+.fourth.userSpeaking {
+  --width-factor: 0.1818; /* 20/110 */
+  animation: userSpeakingAnimation 2s infinite;
+  --spread-amount: 75%;
+  fill: #3586ff;
+}
+
+.fifth.userSpeaking {
+  --width-factor: 0.5; /* 20/40 */
+  animation: userSpeakingAnimation 2s infinite;
+  --spread-amount: 95%;
+  fill: #0b69e3;
+}
+
+.innermost.userSpeaking {
+  --width-factor: 2; /* 20/10 */
+  animation: userSpeakingAnimation 2s infinite;
+  --spread-amount: 70%;
+  fill: #0053bf;
+}
