@@ -341,45 +341,93 @@
       translateX(calc(-50% + var(--spread-amount)));
   }
 }
+/* user speaking oscillation animation */
+@keyframes waveform_outermost {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  25%,
+  75% {
+    transform: scaleY(0.9);
+  }
+}
+
+@keyframes waveform_second {
+  0%,
+  100% {
+    transform: scaleY(0.9);
+  }
+  25%,
+  75% {
+    transform: scaleY(0.8);
+  }
+}
+
+@keyframes waveform_third {
+  0%,
+  100% {
+    transform: scaleY(0.8);
+  }
+  25%,
+  75% {
+    transform: scaleY(0.7);
+  }
+}
+
+@keyframes waveform_fourth {
+  0%,
+  100% {
+    transform: scaleY(0.7);
+  }
+  25%,
+  75% {
+    transform: scaleY(0.6);
+  }
+}
+
+@keyframes waveform_fifth {
+  0%,
+  100% {
+    transform: scaleY(0.6);
+  }
+  25%,
+  75% {
+    transform: scaleY(0.5);
+  }
+}
+
+@keyframes waveform_innermost {
+  0%,
+  100% {
+    transform: scaleY(0.5);
+  }
+  25%,
+  75% {
+    transform: scaleY(0.4);
+  }
+}
 
 .outermost.userSpeaking {
-  --width-factor: 0.0621; /* 20/322 */
-  animation: userSpeakingAnimation 2s infinite;
-  --spread-amount: -475%;
-  fill: #b3e0fe;
+  animation: waveform_outermost 0.7s infinite alternate;
 }
 
 .second.userSpeaking {
-  --width-factor: 0.0787; /* 20/254 */
-  animation: userSpeakingAnimation 2s infinite;
-  --spread-amount: -200%;
-  fill: #89c2ff;
+  animation: waveform_second 0.65s infinite alternate;
 }
 
 .third.userSpeaking {
-  --width-factor: 0.1093; /* 20/183 */
-  animation: userSpeakingAnimation 2s infinite;
-  --spread-amount: -20%;
-  fill: #5fa4ff;
+  animation: waveform_third 0.6s infinite alternate;
 }
 
 .fourth.userSpeaking {
-  --width-factor: 0.1818; /* 20/110 */
-  animation: userSpeakingAnimation 2s infinite;
-  --spread-amount: 75%;
-  fill: #3586ff;
+  animation: waveform_fourth 0.55s infinite alternate;
 }
 
 .fifth.userSpeaking {
-  --width-factor: 0.5; /* 20/40 */
-  animation: userSpeakingAnimation 2s infinite;
-  --spread-amount: 80%;
-  fill: #0b69e3;
+  animation: waveform_fifth 0.5s infinite alternate;
 }
 
 .innermost.userSpeaking {
-  --width-factor: 2; /* 20/10 */
-  animation: userSpeakingAnimation 2s infinite;
-  --spread-amount: 62%;
-  fill: #0053bf;
+  animation: waveform_innermost 0.45s infinite alternate;
 }
