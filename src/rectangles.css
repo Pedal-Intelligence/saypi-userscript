@@ -345,66 +345,66 @@
 @keyframes waveform_outermost {
   0%,
   100% {
-    transform: scaleY(1);
+    transform: scaleY(1) scaleX(1);
   }
   25%,
   75% {
-    transform: scaleY(0.9);
+    transform: scaleY(0.9) scaleX(0.9);
   }
 }
 
 @keyframes waveform_second {
   0%,
   100% {
-    transform: scaleY(0.9);
+    transform: scaleY(0.9) scaleX(0.9);
   }
   25%,
   75% {
-    transform: scaleY(0.8);
+    transform: scaleY(0.8) scaleX(0.8);
   }
 }
 
 @keyframes waveform_third {
   0%,
   100% {
-    transform: scaleY(0.8);
+    transform: scaleY(0.8) scaleX(0.8);
   }
   25%,
   75% {
-    transform: scaleY(0.7);
+    transform: scaleY(0.7) scaleX(0.7);
   }
 }
 
 @keyframes waveform_fourth {
   0%,
   100% {
-    transform: scaleY(0.7);
+    transform: scaleY(0.7) scaleX(0.7);
   }
   25%,
   75% {
-    transform: scaleY(0.6);
+    transform: scaleY(0.6) scaleX(0.6);
   }
 }
 
 @keyframes waveform_fifth {
   0%,
   100% {
-    transform: scaleY(0.6);
+    transform: scaleY(0.6) scaleX(0.6);
   }
   25%,
   75% {
-    transform: scaleY(0.5);
+    transform: scaleY(0.5) scaleX(0.5);
   }
 }
 
 @keyframes waveform_innermost {
   0%,
   100% {
-    transform: scaleY(0.5);
+    transform: scaleY(0.5) scaleX(0.5);
   }
   25%,
   75% {
-    transform: scaleY(0.4);
+    transform: scaleY(0.4) scaleX(0.4);
   }
 }
 
