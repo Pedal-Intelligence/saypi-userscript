@@ -1,6 +1,9 @@
 import AnimationModule from "./AnimationModule";
 export default class ButtonModule {
   constructor() {
+    this.playButton = null;
+    // Binding methods to the current instance
+    this.handlePlayButtonClick = this.handlePlayButtonClick.bind(this);
     this.registerButtonEvents();
     this.registerOtherEvents();
   }
@@ -82,34 +85,32 @@ export default class ButtonModule {
 
   createPlayButton() {
     const label = "Hear Pi's response";
-    let playButton = this.createButton("", () => {});
-    playButton.id = "saypi-playButton";
-    playButton.type = "button";
-    playButton.className = "hidden play-button";
-    playButton.setAttribute("aria-label", label);
-    playButton.setAttribute("title", label);
-    playButton.addEventListener("click", handlePlayButtonClick);
-    document.body.appendChild(playButton);
-    return playButton;
+    this.playButton = this.createButton("", () => {});
+    this.playButton.id = "saypi-playButton";
+    this.playButton.type = "button";
+    this.playButton.className = "hidden play-button";
+    this.playButton.setAttribute("aria-label", label);
+    this.playButton.setAttribute("title", label);
+    this.playButton.addEventListener("click", this.handlePlayButtonClick);
+    document.body.appendChild(this.playButton);
+    return this.playButton;
   }
 
   showPlayButton() {
-    let playButton = document.getElementById("saypi-playButton");
-    if (!playButton) {
-      playButton = createPlayButton();
+    if (!this.playButton) {
+      this.createPlayButton();
     }
-    playButton.classList.remove("hidden");
+    this.playButton.classList.remove("hidden");
   }
 
   hidePlayButton() {
-    let playButton = document.getElementById("saypi-playButton");
-    if (playButton) {
-      playButton.classList.add("hidden");
+    if (this.playButton) {
+      this.playButton.classList.add("hidden");
     }
   }
 
   handlePlayButtonClick() {
-    unpokeUser();
+    this.unpokeUser();
     piAudioManager.userPlay();
   }
 
