@@ -26,11 +26,15 @@ export default class ButtonModule {
       }
     );
     window.addEventListener("saypi:userSpeaking", () => {
+      const talkButton = document.getElementById("saypi-talkButton");
+      talkButton.classList.add("active"); // Add the active class (for Firefox on Android)
       AnimationModule.animate("userSpeaking");
     });
     ["saypi:userStoppedSpeaking", "saypi:userFinishedSpeaking"].forEach(
       (eventName) => {
         window.addEventListener(eventName, () => {
+          const talkButton = document.getElementById("saypi-talkButton");
+          talkButton.classList.remove("active"); // Remove the active class (for Firefox on Android)
           AnimationModule.inanimate("userSpeaking");
         });
       }
@@ -60,7 +64,7 @@ export default class ButtonModule {
 
   // Simulate an "Enter" keypress event on a form
   static simulateFormSubmit() {
-    const textarea = document.getElementById("prompt");
+    const textarea = document.getElementById("saypi-prompt");
 
     const enterEvent = new KeyboardEvent("keydown", {
       bubbles: true,

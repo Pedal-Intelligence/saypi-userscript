@@ -55,8 +55,8 @@ import rectanglesSVG from "./rectangles.svg";
             } else {
               console.warn("No button container found in footer");
             }
-            if (!identifyFooter()) {
-              console.warn("Footer not found");
+            if (!annotateDOM()) {
+              console.warn("Required elements not found in DOM");
             }
             observer.disconnect();
             return;
@@ -65,7 +65,30 @@ import rectanglesSVG from "./rectangles.svg";
       }
     }
   });
-  function identifyFooter() {
+
+  function annotateDOM() {
+    // Add an ID to the prompt textarea
+    const foundPrompt = addIdPromptTextArea();
+    const foundFooter = addIdFooter();
+    return foundPrompt && foundFooter;
+  }
+
+  function addIdPromptTextArea() {
+    var textarea = document.getElementById("saypi-prompt");
+    if (!textarea) {
+      // Find the first <textarea> element and give it an id
+      var textareaElement = document.querySelector("textarea");
+      if (textareaElement) {
+        textareaElement.id = "saypi-prompt";
+      } else {
+        console.warn("No <textarea> element found");
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function addIdFooter() {
     // Find all audio elements on the page
     var audioElements = document.querySelectorAll("audio");
     var found = false; // default to not found
@@ -195,35 +218,7 @@ import rectanglesSVG from "./rectangles.svg";
 
     EventModule.registerOtherAudioButtonEvents(button);
     EventModule.registerCustomAudioEventListeners();
-    registerHotkey();
-  }
-
-  let talkButton = document.getElementById("saypi-talkButton");
-  function registerHotkey() {
-    // Register a hotkey for the button
-    let ctrlDown = false;
-
-    document.addEventListener("keydown", function (event) {
-      if (event.ctrlKey && event.code === "Space" && !ctrlDown) {
-        ctrlDown = true;
-        // Simulate mousedown event
-        let mouseDownEvent = new Event("mousedown");
-        document
-          .getElementById("saypi-talkButton")
-          .dispatchEvent(mouseDownEvent);
-        talkButton.classList.add("active"); // Add the active class
-      }
-    });
-
-    document.addEventListener("keyup", function (event) {
-      if (ctrlDown && event.code === "Space") {
-        ctrlDown = false;
-        // Simulate mouseup event
-        let mouseUpEvent = new Event("mouseup");
-        document.getElementById("saypi-talkButton").dispatchEvent(mouseUpEvent);
-        talkButton.classList.remove("active");
-      }
-    });
+    EventModule.registerHotkey();
   }
 
   // Start observing the entire document for changes to child nodes and subtree

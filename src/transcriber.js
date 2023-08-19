@@ -1,6 +1,7 @@
 // Dispatch Custom Event
 function dispatchCustomEvent(eventName, detail = {}) {
   const event = new CustomEvent(eventName, { detail });
+  console.log("dispatching event: " + eventName);
   window.dispatchEvent(event);
 }
 
@@ -44,7 +45,6 @@ const piAudioManager = {
   autoPlay: function () {
     if (!this._userStarted) {
       this.audioElement.pause();
-      console.log("Autoplay prevented");
     }
   },
 
@@ -89,26 +89,22 @@ audioElement.addEventListener("play", function () {
 
 audioElement.addEventListener("loadstart", function () {
   if (isSafari()) {
-    console.log("Pi is waiting to speak");
     dispatchCustomEvent("saypi:piReadyToRespond");
   }
 });
 
 // Event listeners for detecting when Pi is speaking
 audioElement.addEventListener("playing", () => {
-  console.log("Pi is speaking");
   piAudioManager.playing();
   dispatchCustomEvent("saypi:piSpeaking");
 });
 
 audioElement.addEventListener("pause", () => {
-  console.log("Pi stopped speaking");
   piAudioManager.stopped();
   dispatchCustomEvent("saypi:piStoppedSpeaking");
 });
 
 audioElement.addEventListener("ended", () => {
-  console.log("Pi finished speaking");
   piAudioManager.stopped();
   dispatchCustomEvent("saypi:piFinishedSpeaking");
 });
@@ -144,7 +140,7 @@ function uploadAudio(audioBlob) {
     })
     .catch(function (error) {
       console.error("Looks like there was a problem: ", error);
-      var textarea = document.getElementById("prompt");
+      var textarea = document.getElementById("saypi-prompt");
       textarea.value =
         "Sorry, there was a problem transcribing your audio. Please try again later.";
     });
@@ -240,7 +236,7 @@ function tearDownRecording() {
   mediaRecorder = null;
 }
 
-// This function will be called when the user presses the record button
+// To request recording, other modules can dispatch a custom event audio:startRecording
 function startRecording() {
   // Check if the MediaRecorder is set up
   if (!mediaRecorder) {
@@ -258,35 +254,45 @@ function startRecording() {
   // Record the start time
   window.startTime = Date.now();
 
-  console.log("User is speaking");
   dispatchCustomEvent("saypi:userSpeaking");
-
-  // This function will be called when the user releases the record button
-  window.stopRecording = function () {
-    if (mediaRecorder && mediaRecorder.state === "recording") {
-      // Stop recording
-      mediaRecorder.stop();
-
-      // Record the stop time and calculate the duration
-      var stopTime = Date.now();
-      var duration = stopTime - window.startTime;
-
-      // If the duration is less than the threshold, don't upload the audio for transcription
-      if (duration < threshold) {
-        console.log("User stopped speaking");
-        console.log("Recording was too short, not uploading for transcription");
-        dispatchCustomEvent("saypi:userStoppedSpeaking");
-        piAudioManager.resume();
-      } else {
-        console.log("User finished speaking");
-        piAudioManager.stop();
-        dispatchCustomEvent("saypi:userFinishedSpeaking");
-      }
-    }
-    // Remove the stopRecording function
-    delete window.stopRecording;
-  };
 }
 
-// Add the startRecording function to the window object so it can be called from outside this script
-window.startRecording = startRecording;
+// To stop recording, other modules can dispatch a custom event audio:stopRecording
+function stopRecording() {
+  if (mediaRecorder && mediaRecorder.state === "recording") {
+    // Stop recording
+    mediaRecorder.stop();
+
+    // Record the stop time and calculate the duration
+    var stopTime = Date.now();
+    var duration = stopTime - window.startTime;
+
+    // If the duration is less than the threshold, don't upload the audio for transcription
+    if (duration < threshold) {
+      console.log("Recording was too short, not uploading for transcription");
+      dispatchCustomEvent("saypi:userStoppedSpeaking");
+      piAudioManager.resume();
+    } else {
+      piAudioManager.stop();
+      dispatchCustomEvent("saypi:userFinishedSpeaking");
+    }
+  }
+}
+
+function registerCustomAudioEventListeners() {
+  window.addEventListener("audio:setupRecording", function (e) {
+    setupRecording();
+  });
+
+  window.addEventListener("audio:tearDownRecording", function (e) {
+    tearDownRecording();
+  });
+
+  window.addEventListener("audio:startRecording", function (e) {
+    startRecording();
+  });
+  window.addEventListener("audio:stopRecording", function (e) {
+    stopRecording();
+  });
+}
+registerCustomAudioEventListeners();

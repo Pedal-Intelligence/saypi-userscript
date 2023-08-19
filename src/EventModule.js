@@ -18,6 +18,7 @@ export default class EventModule {
   // TODO: remove duplicated function from transcriber.js
   static dispatchCustomEvent(eventName, detail = {}) {
     const event = new CustomEvent(eventName, { detail });
+    console.log("dispatching event: " + eventName);
     window.dispatchEvent(event);
   }
 
@@ -30,7 +31,7 @@ export default class EventModule {
 
   static handleTranscriptionResponse(transcriptionEvent) {
     var transcript = transcriptionEvent.detail.text;
-    var textarea = document.getElementById("prompt");
+    var textarea = document.getElementById("saypi-prompt");
     EventModule.simulateTyping(textarea, transcript + " ");
     console.log("Transcript: " + transcript);
   }
@@ -67,14 +68,11 @@ export default class EventModule {
   }
 
   static handleTalkMouseDown() {
-    EventModule.idPromptTextArea();
-    this.context.startRecording();
+    dispatchCustomEvent("audio:startRecording");
   }
 
   static handleTalkMouseUp() {
-    if (typeof this.context?.stopRecording === "function") {
-      this.context.stopRecording();
-    }
+    dispatchCustomEvent("audio:stopRecording");
   }
 
   static handleTalkDoubleClick(button) {
@@ -91,53 +89,35 @@ export default class EventModule {
 
   static handleTalkTouchStart(button, e) {
     e.preventDefault();
-    EventModule.idPromptTextArea();
-    this.context.startRecording();
-    button.classList.add("active");
+    this.dispatchCustomEvent("audio:startRecording");
   }
 
   static handleTalkTouchEnd(button) {
-    button.classList.remove("active");
-    this.context.stopRecording();
+    this.dispatchCustomEvent("audio:stopRecording");
   }
 
   static setContext(ctx) {
     this.context = ctx;
   }
 
-  static idPromptTextArea() {
-    var textarea = document.getElementById("prompt");
-    if (!textarea) {
-      // Find the first <textarea> element and give it an id
-      var textareaElement = document.querySelector("textarea");
-      if (textareaElement) {
-        textareaElement.id = "prompt";
-      } else {
-        console.warn("No <textarea> element found");
-      }
-    }
-  }
-
   static registerOtherAudioButtonEvents(button) {
     // "warm up" the microphone by acquiring it before the user presses the button
     button.addEventListener("mouseenter", () => {
-      EventModule.dispatchCustomEvent("saypi:requestSetupRecording");
+      EventModule.dispatchCustomEvent("audio:setupRecording");
     });
     button.addEventListener("mouseleave", () => {
-      EventModule.dispatchCustomEvent("saypi:requestTearDownRecording");
+      EventModule.dispatchCustomEvent("audio:tearDownRecording");
     });
     window.addEventListener("beforeunload", () => {
-      EventModule.dispatchCustomEvent("saypi:requestTearDownRecording");
+      EventModule.dispatchCustomEvent("audio:tearDownRecording");
     });
     button.addEventListener("touchcancel", () => {
-      button.classList.remove("active"); // Remove the active class (for Firefox on Android)
-      EventModule.dispatchCustomEvent("saypi:requestTearDownRecording");
+      EventModule.dispatchCustomEvent("audio:tearDownRecording");
     });
   }
 
   static registerCustomAudioEventListeners() {
     window.addEventListener("saypi:piReadyToRespond", function (e) {
-      console.log("piReadyToRespond event received by UI script");
       if (isSafari()) {
         EventModule.dispatchCustomEvent("saypi:awaitingUserInput");
       }
@@ -145,7 +125,6 @@ export default class EventModule {
 
     window.addEventListener("saypi:piSpeaking", function (e) {
       // Handle the piSpeaking event, e.g., start an animation or show a UI element.
-      console.log("piSpeaking event received by UI script");
       if (isSafari()) {
         EventModule.dispatchCustomEvent("saypi:receivedUserInput");
       }
@@ -156,5 +135,25 @@ export default class EventModule {
   // where should it live?
   static isSafari() {
     return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  }
+
+  /* events to direct the audio module to start/stop recording */
+
+  static registerHotkey() {
+    let ctrlDown = false;
+
+    document.addEventListener("keydown", (event) => {
+      if (event.ctrlKey && event.code === "Space" && !ctrlDown) {
+        ctrlDown = true;
+        this.dispatchCustomEvent("audio:startRecording");
+      }
+    });
+
+    document.addEventListener("keyup", (event) => {
+      if (ctrlDown && event.code === "Space") {
+        ctrlDown = false;
+        this.dispatchCustomEvent("audio:stopRecording");
+      }
+    });
   }
 }
