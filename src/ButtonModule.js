@@ -39,6 +39,12 @@ export default class ButtonModule {
         });
       }
     );
+    window.addEventListener("saypi:transcribing", () => {
+      AnimationModule.animate("transcribing");
+    });
+    window.addEventListener("saypi:transcribed", () => {
+      AnimationModule.inanimate("transcribing");
+    });
   }
 
   registerOtherEvents() {

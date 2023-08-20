@@ -124,6 +124,7 @@ function uploadAudio(audioBlob) {
   formData.append("audio", audioBlob, audioFilename);
   // Get the user's preferred language
   var language = navigator.language;
+  dispatchCustomEvent("saypi:transcribing");
   // Post the audio to the server for transcription
   fetch(config.apiServerUrl + "/transcribe?language=" + language, {
     method: "POST",
@@ -167,14 +168,6 @@ function handleStop() {
 
   // If the duration is greater than the threshold, upload the audio for transcription
   if (duration >= threshold) {
-    // download the audio
-    var url = URL.createObjectURL(audioBlob);
-    var a = document.createElement("a");
-    a.style.display = "none";
-    a.href = url;
-    a.download = "safari_audio.mp4";
-    document.body.appendChild(a);
-    // a.click();
     // Upload the audio to the server for transcription
     uploadAudio(audioBlob);
   }
