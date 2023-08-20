@@ -432,50 +432,51 @@
   animation: waveform_innermost 0.45s infinite alternate;
 }
 
-/* animation to indicate Say, Pi is transcribing audio to text */
-@keyframes colorPulse_outermost {
+/* flipcard animation to indicate Say, Pi is transcribing audio to text */
+@keyframes transcribingFlip {
   0%,
   100% {
-    transform: scale(1);
-    fill: #e4f2d1;
+    transform: rotateY(0deg);
+    fill: var(--original-color);
   }
   50% {
-    transform: scale(0.92);
-    fill: #b3e0fe; /* Blue shade */
+    transform: rotateY(180deg);
+    fill: var(--transcribing-color);
   }
 }
+
 .outermost.transcribing {
-  animation: colorPulse_outermost 3s infinite;
+  --original-color: #e4f2d1;
+  --transcribing-color: #b3e0fe;
+  animation: transcribingFlip 1.5s infinite;
 }
 
-@keyframes colorPulse_second {
-  0%,
-  100% {
-    transform: scale(1);
-    fill: #cce8b5;
-  }
-  50% {
-    transform: scale(0.856);
-    fill: #89c2ff; /* Blue shade */
-  }
-}
 .second.transcribing {
-  animation: colorPulse_second 3s infinite;
+  --original-color: #cce8b5;
+  --transcribing-color: #89c2ff;
+  animation: transcribingFlip 1.6s infinite;
 }
 
-/* ... Similar animations for the other rectangles ... */
-
-@keyframes colorPulse_innermost {
-  0%,
-  100% {
-    transform: scale(1);
-    fill: #428a2f;
-  }
-  50% {
-    transform: scale(0.6);
-    fill: #0053bf; /* Blue shade */
-  }
+.third.transcribing {
+  --original-color: #b3db95;
+  --transcribing-color: #5fa4ff;
+  animation: transcribingFlip 1.7s infinite;
 }
+
+.fourth.transcribing {
+  --original-color: #9bd078;
+  --transcribing-color: #3586ff;
+  animation: transcribingFlip 1.8s infinite;
+}
+
+.fifth.transcribing {
+  --original-color: #83c55c;
+  --transcribing-color: #0b69e3;
+  animation: transcribingFlip 1.9s infinite;
+}
+
 .innermost.transcribing {
-  animation: colorPulse_innermost 3s infinite;
+  --original-color: #428a2f;
+  --transcribing-color: #0053bf;
+  animation: transcribingFlip 2s infinite;
 }
