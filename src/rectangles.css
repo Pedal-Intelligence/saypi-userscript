@@ -431,3 +431,51 @@
 .innermost.userSpeaking {
   animation: waveform_innermost 0.45s infinite alternate;
 }
+
+/* animation to indicate Say, Pi is transcribing audio to text */
+@keyframes colorPulse_outermost {
+  0%,
+  100% {
+    transform: scale(1);
+    fill: #e4f2d1;
+  }
+  50% {
+    transform: scale(0.92);
+    fill: #b3e0fe; /* Blue shade */
+  }
+}
+.outermost.transcribing {
+  animation: colorPulse_outermost 3s infinite;
+}
+
+@keyframes colorPulse_second {
+  0%,
+  100% {
+    transform: scale(1);
+    fill: #cce8b5;
+  }
+  50% {
+    transform: scale(0.856);
+    fill: #89c2ff; /* Blue shade */
+  }
+}
+.second.transcribing {
+  animation: colorPulse_second 3s infinite;
+}
+
+/* ... Similar animations for the other rectangles ... */
+
+@keyframes colorPulse_innermost {
+  0%,
+  100% {
+    transform: scale(1);
+    fill: #428a2f;
+  }
+  50% {
+    transform: scale(0.6);
+    fill: #0053bf; /* Blue shade */
+  }
+}
+.innermost.transcribing {
+  animation: colorPulse_innermost 3s infinite;
+}
