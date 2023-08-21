@@ -1,10 +1,9 @@
 import ButtonModule from "./ButtonModule.js";
 import EventModule from "./EventModule.js";
+import { isMobileView, addUserAgentFlags } from "./UserAgentModule.js";
 import "./talkButton.css";
 import "./mobile.scss";
 import "./rectangles.css";
-import talkIconSVG from "./waveform.svg";
-import rectanglesSVG from "./rectangles.svg";
 (function () {
   "use strict";
 
@@ -56,6 +55,9 @@ import rectanglesSVG from "./rectangles.svg";
             }
             if (!annotateDOM()) {
               console.warn("Required elements not found in DOM");
+            }
+            if (isMobileView()) {
+              buttonModule.createExitButton();
             }
             observer.disconnect();
             return;
@@ -123,10 +125,6 @@ import rectanglesSVG from "./rectangles.svg";
     }
   }
 
-  function isMobileView() {
-    return window.matchMedia("(max-width: 768px)").matches;
-  }
-
   function addTalkButton(container) {
     // create a containing div
     var panel = document.createElement("div");
@@ -154,43 +152,10 @@ import rectanglesSVG from "./rectangles.svg";
     button.classList.add("autoSubmit");
 
     panel.appendChild(button);
-    addTalkIcon(button);
+    buttonModule.addTalkIcon(button);
 
     // Call the function to inject the script after the button has been added
     injectScript(registerAudioButtonEvents);
-  }
-
-  function addTalkIcon(button) {
-    updateIconContent(button);
-
-    window.matchMedia("(max-width: 768px)").addListener(() => {
-      updateIconContent(button);
-    });
-  }
-
-  function updateIconContent(iconContainer) {
-    if (isMobileView()) {
-      iconContainer.innerHTML = rectanglesSVG;
-    } else {
-      iconContainer.innerHTML = talkIconSVG;
-    }
-  }
-
-  function addUserAgentFlags() {
-    var isFirefoxAndroid =
-      /Firefox/.test(navigator.userAgent) &&
-      /Android/.test(navigator.userAgent);
-    const element = document.documentElement;
-    if (isFirefoxAndroid) {
-      // hack for Firefox on Android, which doesn't support :active correctly
-      element.classList.add("firefox-android");
-    }
-
-    if (isMobileView()) {
-      element.classList.add("mobile-view");
-    } else {
-      element.classList.remove("mobile-view");
-    }
   }
 
   function registerAudioButtonEvents() {

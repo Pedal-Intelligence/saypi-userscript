@@ -1,4 +1,8 @@
 import AnimationModule from "./AnimationModule";
+import { exitMobileMode, isMobileView } from "./UserAgentModule";
+import exitIconSVG from "./exit.svg";
+import rectanglesSVG from "./rectangles.svg";
+import talkIconSVG from "./waveform.svg";
 export default class ButtonModule {
   constructor() {
     this.playButton = null;
@@ -73,6 +77,53 @@ export default class ButtonModule {
     }
   }
 
+  addTalkIcon(button) {
+    this.updateIconContent(button);
+
+    window.matchMedia("(max-width: 768px)").addListener(() => {
+      this.updateIconContent(button);
+    });
+    this.setupClassObserver(button);
+  }
+
+  updateIconContent(iconContainer) {
+    if (isMobileView()) {
+      iconContainer.innerHTML = rectanglesSVG;
+    } else {
+      iconContainer.innerHTML = talkIconSVG;
+    }
+  }
+
+  setupClassObserver(button) {
+    const targetNode = document.documentElement; // The <html> element
+
+    const config = { attributes: true, attributeFilter: ["class"] };
+
+    const callback = (mutationsList, observer) => {
+      for (let mutation of mutationsList) {
+        if (mutation.type === "attributes") {
+          if (mutation.attributeName === "class") {
+            if (document.documentElement.classList.contains("mobile-view")) {
+              // 'mobile-view' class was added
+              this.updateIconContent(button);
+            } else {
+              // 'mobile-view' class was removed
+              this.updateIconContent(button);
+            }
+          }
+        }
+      }
+    };
+
+    const observer = new MutationObserver(callback);
+
+    // Start observing the target node for configured mutations
+    observer.observe(targetNode, config);
+
+    // Later, you can stop observing by calling:
+    // observer.disconnect();
+  }
+
   // Simulate an "Enter" keypress event on a form
   static simulateFormSubmit() {
     const textarea = document.getElementById("saypi-prompt");
@@ -96,6 +147,22 @@ export default class ButtonModule {
     } else {
       ButtonModule.simulateFormSubmit();
     }
+  }
+
+  createExitButton() {
+    const label = "Exit Voice-Controlled Mobile Mode";
+    const button = this.createButton("", () => {
+      exitMobileMode();
+    });
+    button.id = "saypi-exitButton";
+    button.type = "button";
+    button.className =
+      "exit-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+    button.setAttribute("aria-label", label);
+    button.setAttribute("title", label);
+    button.innerHTML = exitIconSVG;
+    document.body.appendChild(button);
+    return button;
   }
 
   createPlayButton() {

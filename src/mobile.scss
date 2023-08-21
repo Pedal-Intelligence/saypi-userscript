@@ -20,18 +20,31 @@
       margin: 0;
     }
 
+    /* Pi controls: experiences */
     #__next > main > div > div > div.fixed.top-4.right-6 > button,
     div[data-projection-id="12"] > button {
       transform: scale(2);
       z-index: 50;
     }
 
+    /* Pi controls: mute/unmute */
     button[data-projection-id="16"] {
       > div[data-projection-id="17"],
       > div[data-projection-id="18"] {
         transform: scale(2) !important;
         z-index: 50;
       }
+    }
+
+    #saypi-exitButton {
+      position: fixed;
+      top: 10px;
+      left: 12px;
+      width: 52px;
+      height: 52px;
+      padding: 6px;
+      border: 0;
+      z-index: 60;
     }
 
     #saypi-footer {
