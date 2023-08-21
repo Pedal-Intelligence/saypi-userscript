@@ -32,11 +32,19 @@ export default class EventModule {
   }
 
   static handleTranscriptionResponse(transcriptionEvent) {
-    const transcript = transcriptionEvent.detail.text;
+    let transcript = transcriptionEvent.detail.text;
     console.log("Transcript: " + transcript);
     const textarea = document.getElementById("saypi-prompt");
     if (isMobileView()) {
-      EventModule.setNativeValue(textarea, transcript + " ");
+      // if transcript is > 1000 characters, truncate it to 999 characters plus an ellipsis
+      if (transcript.length > 1000) {
+        transcript = transcript.substring(0, 999) + "…";
+        console.warn(
+          "Transcript was too long for Pi. Truncated to 999 characters, losing the following text: ... " +
+            transcript.substring(999)
+        );
+      }
+      EventModule.setNativeValue(textarea, transcript);
     } else {
       EventModule.simulateTyping(textarea, transcript + " ");
     }

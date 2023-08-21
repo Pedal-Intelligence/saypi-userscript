@@ -40,7 +40,6 @@ const piAudioManager = {
     this.audioElement.load(); // reset for Safari
     dispatchCustomEvent("audio:loading");
     this.audioElement.play();
-    console.log("User started playback");
   },
 
   autoPlay: function () {
@@ -83,14 +82,12 @@ const piAudioManager = {
 
 // Intercept Autoplay Events (autoplay doesn't work on Safari)
 audioElement.addEventListener("play", function () {
-  console.log("play");
   if (isSafari()) {
     piAudioManager.autoPlay();
   }
 });
 
 audioElement.addEventListener("loadstart", function () {
-  console.log("loadstart");
   if (isSafari()) {
     dispatchCustomEvent("saypi:piReadyToRespond");
   }
@@ -98,13 +95,11 @@ audioElement.addEventListener("loadstart", function () {
 
 // Event listeners for detecting when Pi is speaking
 audioElement.addEventListener("playing", () => {
-  console.log("playing");
   piAudioManager.playing();
   dispatchCustomEvent("saypi:piSpeaking");
 });
 
 audioElement.addEventListener("pause", () => {
-  console.log("pause");
   piAudioManager.stopped();
   dispatchCustomEvent("saypi:piStoppedSpeaking");
 });
