@@ -19,6 +19,8 @@
         "css-loader": "^6.8.1",
         "mocha": "^10.2.0",
         "raw-loader": "^4.0.2",
+        "sass": "^1.66.1",
+        "sass-loader": "^13.3.2",
         "style-loader": "^3.3.3",
         "supertest": "^6.3.3",
         "webpack": "^5.88.2",

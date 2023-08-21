@@ -1,8 +1,7 @@
-import AnimationModule from "./AnimationModule.js";
 import ButtonModule from "./ButtonModule.js";
 import EventModule from "./EventModule.js";
 import "./talkButton.css";
-import "./mobile.css";
+import "./mobile.scss";
 import "./rectangles.css";
 import talkIconSVG from "./waveform.svg";
 import rectanglesSVG from "./rectangles.svg";
@@ -181,9 +180,16 @@ import rectanglesSVG from "./rectangles.svg";
     var isFirefoxAndroid =
       /Firefox/.test(navigator.userAgent) &&
       /Android/.test(navigator.userAgent);
+    const element = document.documentElement;
     if (isFirefoxAndroid) {
       // hack for Firefox on Android, which doesn't support :active correctly
-      document.documentElement.classList.add("firefox-android");
+      element.classList.add("firefox-android");
+    }
+
+    if (isMobileView()) {
+      element.classList.add("mobile-view");
+    } else {
+      element.classList.remove("mobile-view");
     }
   }
 

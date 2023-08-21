@@ -45,10 +45,10 @@ export default class EventModule {
         );
       }
       EventModule.setNativeValue(textarea, transcript);
+      EventModule.dispatchCustomEvent("saypi:autoSubmit");
     } else {
       EventModule.simulateTyping(textarea, transcript + " ");
     }
-    EventModule.dispatchCustomEvent("saypi:autoSubmit");
   }
 
   static simulateTyping(element, text) {
@@ -60,7 +60,7 @@ export default class EventModule {
         EventModule.setNativeValue(element, element.value + words[i++] + " ");
         requestAnimationFrame(typeWord);
       } else {
-        return;
+        EventModule.dispatchCustomEvent("saypi:autoSubmit");
       }
     };
 
