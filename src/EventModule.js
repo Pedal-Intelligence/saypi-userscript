@@ -1,3 +1,5 @@
+import { isSafari, isMobileView } from "./UserAgentModule.js";
+
 export default class EventModule {
   static context = window;
   static init() {
@@ -30,23 +32,27 @@ export default class EventModule {
   }
 
   static handleTranscriptionResponse(transcriptionEvent) {
-    var transcript = transcriptionEvent.detail.text;
-    var textarea = document.getElementById("saypi-prompt");
-    EventModule.simulateTyping(textarea, transcript + " ");
+    const transcript = transcriptionEvent.detail.text;
     console.log("Transcript: " + transcript);
+    const textarea = document.getElementById("saypi-prompt");
+    if (isMobileView()) {
+      EventModule.setNativeValue(textarea, transcript + " ");
+    } else {
+      EventModule.simulateTyping(textarea, transcript + " ");
+    }
+    EventModule.dispatchCustomEvent("saypi:autoSubmit");
   }
 
   static simulateTyping(element, text) {
-    var words = text.split(" ");
-    var i = 0;
+    const words = text.split(" ");
+    let i = 0;
 
     const typeWord = () => {
       if (i < words.length) {
         EventModule.setNativeValue(element, element.value + words[i++] + " ");
         requestAnimationFrame(typeWord);
       } else {
-        EventModule.dispatchCustomEvent("saypi:autoSubmit");
-        //buttonModule.handleAutoSubmit();
+        return;
       }
     };
 
@@ -129,12 +135,6 @@ export default class EventModule {
         EventModule.dispatchCustomEvent("saypi:receivedUserInput");
       }
     });
-  }
-
-  // TODO: dedupe this function from transcriber.js
-  // where should it live?
-  static isSafari() {
-    return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
   }
 
   /* events to direct the audio module to start/stop recording */
