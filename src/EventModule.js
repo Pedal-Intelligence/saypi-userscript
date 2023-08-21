@@ -123,7 +123,7 @@ export default class EventModule {
       }
     });
 
-    window.addEventListener("saypi:piSpeaking", function (e) {
+    window.addEventListener("audio:loading", function (e) {
       // Handle the piSpeaking event, e.g., start an animation or show a UI element.
       if (isSafari()) {
         EventModule.dispatchCustomEvent("saypi:receivedUserInput");

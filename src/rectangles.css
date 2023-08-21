@@ -480,3 +480,38 @@
   --transcribing-color: #0053bf;
   animation: transcribingFlip 2s infinite;
 }
+
+/* inhalation animation to indicate Pi is preparing to speak */
+@keyframes loadingInhalation {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05); /* Slightly scaled up */
+  }
+}
+
+.outermost.loading {
+  animation: loadingInhalation 2s infinite;
+}
+
+.second.loading {
+  animation: loadingInhalation 2.1s infinite;
+}
+
+.third.loading {
+  animation: loadingInhalation 2.2s infinite;
+}
+
+.fourth.loading {
+  animation: loadingInhalation 2.3s infinite;
+}
+
+.fifth.loading {
+  animation: loadingInhalation 2.4s infinite;
+}
+
+.innermost.loading {
+  animation: loadingInhalation 2.5s infinite;
+}

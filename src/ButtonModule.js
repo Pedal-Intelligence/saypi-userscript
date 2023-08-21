@@ -15,7 +15,12 @@ export default class ButtonModule {
     window.addEventListener("saypi:receivedUserInput", () => {
       this.unpokeUser();
     });
+    window.addEventListener("audio:loading", () => {
+      AnimationModule.animate("loading");
+    });
     window.addEventListener("saypi:piSpeaking", () => {
+      this.unpokeUser(); // playback has started, user input is no longer needed
+      AnimationModule.inanimate("loading");
       AnimationModule.animate("piSpeaking");
     });
     ["saypi:piStoppedSpeaking", "saypi:piFinishedSpeaking"].forEach(
@@ -121,6 +126,7 @@ export default class ButtonModule {
 
   handlePlayButtonClick() {
     this.unpokeUser();
+    dispatchCustomEvent("saypi:receivedUserInput"); // doubling up with previous line?
     piAudioManager.userPlay();
   }
 
