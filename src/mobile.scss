@@ -1,0 +1,54 @@
+@media (max-width: 768px) {
+  html.mobile-view {
+    #saypi-panel,
+    .play-button {
+      width: 100%;
+      position: fixed;
+      left: 0;
+      background-color: rgba(245, 238, 223, 0.98);
+
+      height: 100vh;
+      top: 0;
+      padding: 5%;
+    }
+
+    #saypi-talkButton {
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
+      border-radius: 0;
+      margin: 0;
+    }
+
+    /* Pi controls: experiences */
+    #__next > main > div > div > div.fixed.top-4.right-6 > button,
+    div[data-projection-id="12"] > button {
+      transform: scale(2);
+      z-index: 50;
+    }
+
+    /* Pi controls: mute/unmute */
+    button[data-projection-id="16"] {
+      > div[data-projection-id="17"],
+      > div[data-projection-id="18"] {
+        transform: scale(2) !important;
+        z-index: 50;
+      }
+    }
+
+    #saypi-exitButton {
+      position: fixed;
+      top: 10px;
+      left: 12px;
+      width: 52px;
+      height: 52px;
+      padding: 6px;
+      border: 0;
+      z-index: 60;
+    }
+
+    #saypi-footer {
+      display: none;
+    }
+  }
+}

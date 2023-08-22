@@ -1,0 +1,517 @@
+@keyframes pulse_outermost {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.92);
+  }
+}
+.outermost {
+  animation: pulse_outermost 5s infinite;
+  transform-origin: center;
+}
+
+@keyframes pulse_second {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.856);
+  }
+}
+.second {
+  animation: pulse_second 5s infinite;
+  transform-origin: center;
+}
+
+@keyframes pulse_third {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.792);
+  }
+}
+.third {
+  animation: pulse_third 5s infinite;
+  transform-origin: center;
+}
+
+@keyframes pulse_fourth {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.728);
+  }
+}
+.fourth {
+  animation: pulse_fourth 5s infinite;
+  transform-origin: center;
+}
+
+@keyframes pulse_fifth {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.664);
+  }
+}
+.fifth {
+  animation: pulse_fifth 5s infinite;
+  transform-origin: center;
+}
+
+@keyframes pulse_innermost {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.6);
+  }
+}
+.innermost {
+  animation: pulse_innermost 5s infinite;
+  transform-origin: center;
+}
+
+/* bounce animation to indicate Pi is waiting to speak */
+@keyframes bounce_outermost {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-5%);
+  }
+  60% {
+    transform: translateY(-3%);
+  }
+}
+.outermost.readyToRespond {
+  animation-name: bounce_outermost;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes bounce_second {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-5.8%);
+  }
+  60% {
+    transform: translateY(-3.48%);
+  }
+}
+.second.readyToRespond {
+  animation-name: bounce_second;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes bounce_third {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-6.6%);
+  }
+  60% {
+    transform: translateY(-3.96%);
+  }
+}
+.third.readyToRespond {
+  animation-name: bounce_third;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes bounce_fourth {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-7.4%);
+  }
+  60% {
+    transform: translateY(-4.44%);
+  }
+}
+.fourth.readyToRespond {
+  animation-name: bounce_fourth;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes bounce_fifth {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-8.2%);
+  }
+  60% {
+    transform: translateY(-4.92%);
+  }
+}
+.fifth.readyToRespond {
+  animation-name: bounce_fifth;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes bounce_innermost {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-9%);
+  }
+  60% {
+    transform: translateY(-5.4%);
+  }
+}
+.innermost.readyToRespond {
+  animation-name: bounce_innermost;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+/* playful animation to indicate Pi is speaking */
+@keyframes speaking_outermost {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(0.995);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  75% {
+    transform: scale(0.895);
+  }
+}
+.outermost.piSpeaking {
+  animation: speaking_outermost 2s infinite;
+  transform-origin: center;
+}
+
+@keyframes speaking_second {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(0.98) rotate(-1deg);
+  }
+  50% {
+    transform: scale(0.87) rotate(0deg);
+  }
+  75% {
+    transform: scale(0.865) rotate(1deg);
+  }
+}
+.second.piSpeaking {
+  animation: speaking_second 2s infinite;
+  transform-origin: center;
+}
+
+@keyframes speaking_third {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(0.965) rotate(-2deg);
+  }
+  50% {
+    transform: scale(0.84) rotate(0deg);
+  }
+  75% {
+    transform: scale(0.835) rotate(2deg);
+  }
+}
+.third.piSpeaking {
+  animation: speaking_third 2s infinite;
+  transform-origin: center;
+}
+
+@keyframes speaking_fourth {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(0.95) rotate(-3deg);
+  }
+  50% {
+    transform: scale(0.81) rotate(0deg);
+  }
+  75% {
+    transform: scale(0.805) rotate(3deg);
+  }
+}
+.fourth.piSpeaking {
+  animation: speaking_fourth 2s infinite;
+  transform-origin: center;
+}
+
+@keyframes speaking_fifth {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(0.935) rotate(-4deg);
+  }
+  50% {
+    transform: scale(0.78) rotate(0deg);
+  }
+  75% {
+    transform: scale(0.775) rotate(4deg);
+  }
+}
+.fifth.piSpeaking {
+  animation: speaking_fifth 2s infinite;
+  transform-origin: center;
+}
+
+@keyframes speaking_innermost {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(0.92) rotate(-5deg);
+  }
+  50% {
+    transform: scale(0.75) rotate(0deg);
+  }
+  75% {
+    transform: scale(0.745) rotate(5deg);
+  }
+}
+.innermost.piSpeaking {
+  animation: speaking_innermost 2s infinite;
+  transform-origin: center;
+}
+
+/* wave animation to indicate user is speaking */
+@keyframes userSpeakingAnimation {
+  50% {
+    transform: scaleY(0.05) scaleX(var(--width-factor))
+      translateX(calc(-50% + var(--spread-amount)));
+  }
+  100% {
+    transform: scaleY(1) scaleX(var(--width-factor))
+      translateX(calc(-50% + var(--spread-amount)));
+  }
+}
+/* user speaking oscillation animation */
+@keyframes waveform_outermost {
+  0%,
+  100% {
+    transform: scaleY(1) scaleX(1);
+  }
+  25%,
+  75% {
+    transform: scaleY(0.9) scaleX(0.9);
+  }
+}
+
+@keyframes waveform_second {
+  0%,
+  100% {
+    transform: scaleY(0.9) scaleX(0.9);
+  }
+  25%,
+  75% {
+    transform: scaleY(0.8) scaleX(0.8);
+  }
+}
+
+@keyframes waveform_third {
+  0%,
+  100% {
+    transform: scaleY(0.8) scaleX(0.8);
+  }
+  25%,
+  75% {
+    transform: scaleY(0.7) scaleX(0.7);
+  }
+}
+
+@keyframes waveform_fourth {
+  0%,
+  100% {
+    transform: scaleY(0.7) scaleX(0.7);
+  }
+  25%,
+  75% {
+    transform: scaleY(0.6) scaleX(0.6);
+  }
+}
+
+@keyframes waveform_fifth {
+  0%,
+  100% {
+    transform: scaleY(0.6) scaleX(0.6);
+  }
+  25%,
+  75% {
+    transform: scaleY(0.5) scaleX(0.5);
+  }
+}
+
+@keyframes waveform_innermost {
+  0%,
+  100% {
+    transform: scaleY(0.5) scaleX(0.5);
+  }
+  25%,
+  75% {
+    transform: scaleY(0.4) scaleX(0.4);
+  }
+}
+
+.outermost.userSpeaking {
+  animation: waveform_outermost 0.7s infinite alternate;
+}
+
+.second.userSpeaking {
+  animation: waveform_second 0.65s infinite alternate;
+}
+
+.third.userSpeaking {
+  animation: waveform_third 0.6s infinite alternate;
+}
+
+.fourth.userSpeaking {
+  animation: waveform_fourth 0.55s infinite alternate;
+}
+
+.fifth.userSpeaking {
+  animation: waveform_fifth 0.5s infinite alternate;
+}
+
+.innermost.userSpeaking {
+  animation: waveform_innermost 0.45s infinite alternate;
+}
+
+/* flipcard animation to indicate Say, Pi is transcribing audio to text */
+@keyframes transcribingFlip {
+  0%,
+  100% {
+    transform: rotateY(0deg);
+    fill: var(--original-color);
+  }
+  50% {
+    transform: rotateY(180deg);
+    fill: var(--transcribing-color);
+  }
+}
+
+.outermost.transcribing {
+  --original-color: #e4f2d1;
+  --transcribing-color: #b3e0fe;
+  animation: transcribingFlip 1.5s infinite;
+}
+
+.second.transcribing {
+  --original-color: #cce8b5;
+  --transcribing-color: #89c2ff;
+  animation: transcribingFlip 1.6s infinite;
+}
+
+.third.transcribing {
+  --original-color: #b3db95;
+  --transcribing-color: #5fa4ff;
+  animation: transcribingFlip 1.7s infinite;
+}
+
+.fourth.transcribing {
+  --original-color: #9bd078;
+  --transcribing-color: #3586ff;
+  animation: transcribingFlip 1.8s infinite;
+}
+
+.fifth.transcribing {
+  --original-color: #83c55c;
+  --transcribing-color: #0b69e3;
+  animation: transcribingFlip 1.9s infinite;
+}
+
+.innermost.transcribing {
+  --original-color: #428a2f;
+  --transcribing-color: #0053bf;
+  animation: transcribingFlip 2s infinite;
+}
+
+/* inhalation animation to indicate Pi is preparing to speak */
+@keyframes loadingInhalation {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05); /* Slightly scaled up */
+  }
+}
+
+.outermost.loading {
+  animation: loadingInhalation 2s infinite;
+}
+
+.second.loading {
+  animation: loadingInhalation 2.1s infinite;
+}
+
+.third.loading {
+  animation: loadingInhalation 2.2s infinite;
+}
+
+.fourth.loading {
+  animation: loadingInhalation 2.3s infinite;
+}
+
+.fifth.loading {
+  animation: loadingInhalation 2.4s infinite;
+}
+
+.innermost.loading {
+  animation: loadingInhalation 2.5s infinite;
+}
