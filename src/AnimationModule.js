@@ -1,7 +1,13 @@
 export default class AnimationModule {
   static rectanglesSelector =
     ".outermost, .second, .third, .fourth, .fifth, .innermost";
-  static talkButtonAnimations = ["readyToRespond"];
+  static talkButtonAnimations = [
+    "loading",
+    "piSpeaking",
+    "userSpeaking",
+    "transcribing",
+    "readyToRespond",
+  ];
 
   static animate(animation) {
     this.stopOtherAnimations(animation);
