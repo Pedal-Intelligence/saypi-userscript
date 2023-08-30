@@ -481,37 +481,43 @@
   animation: transcribingFlip 2s infinite;
 }
 
-/* inhalation animation to indicate Pi is preparing to speak */
-@keyframes loadingInhalation {
+/* heartbeat animation to indicate Pi is preparing to speak */
+@keyframes heartbeat {
   0%,
   100% {
-    transform: scale(1);
+    opacity: 1;
   }
   50% {
-    transform: scale(1.05); /* Slightly scaled up */
+    opacity: 0.5;
   }
 }
 
-.outermost.loading {
-  animation: loadingInhalation 2s infinite;
+.loading .outermost {
+  animation: heartbeat 2s infinite;
+  animation-delay: 0s;
 }
 
-.second.loading {
-  animation: loadingInhalation 2.1s infinite;
+.loading .second {
+  animation: heartbeat 2s infinite;
+  animation-delay: 0.4s;
 }
 
-.third.loading {
-  animation: loadingInhalation 2.2s infinite;
+.loading .third {
+  animation: heartbeat 2s infinite;
+  animation-delay: 0.8s;
 }
 
-.fourth.loading {
-  animation: loadingInhalation 2.3s infinite;
+.loading .fourth {
+  animation: heartbeat 2s infinite;
+  animation-delay: 1.2s;
 }
 
-.fifth.loading {
-  animation: loadingInhalation 2.4s infinite;
+.loading .fifth {
+  animation: heartbeat 2s infinite;
+  animation-delay: 1.6s;
 }
 
-.innermost.loading {
-  animation: loadingInhalation 2.5s infinite;
+.loading .innermost {
+  animation: heartbeat 2s infinite;
+  animation-delay: 2s;
 }
