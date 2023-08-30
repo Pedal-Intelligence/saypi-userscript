@@ -50,5 +50,10 @@
     #saypi-footer {
       display: none;
     }
+
+    #saypi-prompt {
+      /* hides virtual keyboard on android */
+      display: none;
+    }
   }
 }
