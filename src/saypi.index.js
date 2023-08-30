@@ -11,7 +11,8 @@ import "./rectangles.css";
 
   const localConfig = {
     appServerUrl: "http://localhost:3000",
-    apiServerUrl: "https://localhost:5000",
+    apiServerUrl: "http://localhost:8080",
+    //apiServerUrl: "https://localhost:4443",
     // Add other configuration properties as needed
   };
 
