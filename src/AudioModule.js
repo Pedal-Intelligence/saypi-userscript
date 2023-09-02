@@ -80,7 +80,7 @@ const piAudioManager = {
   },
 };
 
-// Intercept Autoplay Events (autoplay doesn't work on Safari)
+// Intercept Autoplay Events (can't autoplay full audio on Safari)
 audioElement.addEventListener("play", function () {
   if (isSafari()) {
     piAudioManager.autoPlay();
@@ -113,40 +113,6 @@ audioElement.addEventListener("ended", () => {
 var audioDataChunks = [];
 var audioMimeType = "audio/webm;codecs=opus";
 
-function uploadAudio(audioBlob) {
-  // Create a FormData object
-  var formData = new FormData();
-  var audioFilename = "audio.webm";
-  if (audioBlob.type === "audio/mp4") {
-    audioFilename = "audio.mp4";
-  }
-  // Add the audio blob to the FormData object
-  formData.append("audio", audioBlob, audioFilename);
-  // Get the user's preferred language
-  var language = navigator.language;
-  dispatchCustomEvent("saypi:transcribing");
-  // Post the audio to the server for transcription
-  fetch(config.apiServerUrl + "/transcribe?language=" + language, {
-    method: "POST",
-    body: formData,
-  })
-    .then(function (response) {
-      if (!response.ok) {
-        throw Error(response.statusText);
-      }
-      return response.json();
-    })
-    .then(function (responseJson) {
-      dispatchCustomEvent("saypi:transcribed", { text: responseJson.text });
-    })
-    .catch(function (error) {
-      console.error("Looks like there was a problem: ", error);
-      var textarea = document.getElementById("saypi-prompt");
-      textarea.value =
-        "Sorry, there was a problem transcribing your audio. Please try again later.";
-    });
-}
-
 // Declare a global variable for the mediaRecorder
 var mediaRecorder;
 const threshold = 1000; // 1000 ms = 1 second, about the length of "Hey, Pi"
@@ -169,7 +135,10 @@ function handleStop() {
   // If the duration is greater than the threshold, upload the audio for transcription
   if (duration >= threshold) {
     // Upload the audio to the server for transcription
-    uploadAudio(audioBlob);
+    dispatchCustomEvent("saypi:userFinishedSpeaking", {
+      duration: duration,
+      blob: audioBlob,
+    });
   }
 
   // Clear the array for the next recording
@@ -263,15 +232,15 @@ function stopRecording() {
     // If the duration is less than the threshold, don't upload the audio for transcription
     if (duration < threshold) {
       console.log("Recording was too short, not uploading for transcription");
-      dispatchCustomEvent("saypi:userStoppedSpeaking");
+      dispatchCustomEvent("saypi:userStoppedSpeaking", { duration: duration });
       piAudioManager.resume();
     } else {
       piAudioManager.stop();
-      dispatchCustomEvent("saypi:userFinishedSpeaking");
     }
   }
 }
 
+/* These events are used to control/pass requests to the audio module from other modules */
 function registerCustomAudioEventListeners() {
   window.addEventListener("audio:setupRecording", function (e) {
     setupRecording();

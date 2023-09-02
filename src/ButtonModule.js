@@ -20,40 +20,20 @@ export default class ButtonModule {
       this.unpokeUser();
     });
     window.addEventListener("audio:loading", () => {
-      AnimationModule.animate("loading");
+      AnimationModule.startAnimation("loading");
     });
     window.addEventListener("saypi:piSpeaking", () => {
       this.unpokeUser(); // playback has started, user input is no longer needed
-      AnimationModule.inanimate("loading");
-      AnimationModule.animate("piSpeaking");
+      AnimationModule.stopAnimation("loading");
+      AnimationModule.startAnimation("piSpeaking");
     });
     ["saypi:piStoppedSpeaking", "saypi:piFinishedSpeaking"].forEach(
       (eventName) => {
         window.addEventListener(eventName, () => {
-          AnimationModule.inanimate("piSpeaking");
+          AnimationModule.stopAnimation("piSpeaking");
         });
       }
     );
-    window.addEventListener("saypi:userSpeaking", () => {
-      const talkButton = document.getElementById("saypi-talkButton");
-      talkButton.classList.add("active"); // Add the active class (for Firefox on Android)
-      AnimationModule.animate("userSpeaking");
-    });
-    ["saypi:userStoppedSpeaking", "saypi:userFinishedSpeaking"].forEach(
-      (eventName) => {
-        window.addEventListener(eventName, () => {
-          const talkButton = document.getElementById("saypi-talkButton");
-          talkButton.classList.remove("active"); // Remove the active class (for Firefox on Android)
-          AnimationModule.inanimate("userSpeaking");
-        });
-      }
-    );
-    window.addEventListener("saypi:transcribing", () => {
-      AnimationModule.animate("transcribing");
-    });
-    window.addEventListener("saypi:transcribed", () => {
-      AnimationModule.inanimate("transcribing");
-    });
   }
 
   registerOtherEvents() {
@@ -198,12 +178,15 @@ export default class ButtonModule {
   }
 
   pokeUser() {
-    AnimationModule.animate("readyToRespond");
+    AnimationModule.startAnimation("readyToRespond");
     this.showPlayButton();
   }
 
   unpokeUser() {
-    AnimationModule.inanimate("readyToRespond");
+    AnimationModule.stopAnimation("readyToRespond");
     this.hidePlayButton();
   }
 }
+
+// Singleton
+export const buttonModule = new ButtonModule();

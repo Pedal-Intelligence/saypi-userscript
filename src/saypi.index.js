@@ -1,4 +1,4 @@
-import ButtonModule from "./ButtonModule.js";
+import { buttonModule } from "./ButtonModule.js";
 import EventModule from "./EventModule.js";
 import { isMobileView, addUserAgentFlags } from "./UserAgentModule.js";
 import "./talkButton.css";
@@ -6,8 +6,6 @@ import "./mobile.scss";
 import "./rectangles.css";
 (function () {
   "use strict";
-
-  const buttonModule = new ButtonModule();
 
   const localConfig = {
     appServerUrl: "http://localhost:3000",
@@ -24,7 +22,7 @@ import "./rectangles.css";
   };
   const config = productionConfig;
 
-  const pageScript = require("raw-loader!./transcriber.js").default;
+  const pageScript = require("raw-loader!./AudioModule.js").default;
   addUserAgentFlags();
   EventModule.init();
 
@@ -116,8 +114,7 @@ import "./rectangles.css";
     var scriptElement = document.createElement("script");
     scriptElement.type = "text/javascript";
     scriptElement.id = "saypi-script";
-    const configText = "var config = " + JSON.stringify(config) + ";";
-    scriptElement.textContent = configText + pageScript;
+    scriptElement.textContent = pageScript;
     document.body.appendChild(scriptElement);
 
     // Call the callback function after the script is added

@@ -1,10 +1,11 @@
-import { isSafari, isMobileView } from "./UserAgentModule.js";
+import { isSafari } from "./UserAgentModule.js";
+import StateMachineService from "./StateMachineService.js";
 
 export default class EventModule {
   static context = window;
   static init() {
     // All the event listeners can be added here
-    this.handleAudioEvents();
+    this.registerStateMachineEvents(StateMachineService.actor);
     // Any other initializations...
   }
 
@@ -22,33 +23,6 @@ export default class EventModule {
     const event = new CustomEvent(eventName, { detail });
     console.log("dispatching event: " + eventName);
     window.dispatchEvent(event);
-  }
-
-  static handleAudioEvents() {
-    window.addEventListener(
-      "saypi:transcribed",
-      EventModule.handleTranscriptionResponse
-    );
-  }
-
-  static handleTranscriptionResponse(transcriptionEvent) {
-    let transcript = transcriptionEvent.detail.text;
-    console.log("Transcript: " + transcript);
-    const textarea = document.getElementById("saypi-prompt");
-    if (isMobileView()) {
-      // if transcript is > 1000 characters, truncate it to 999 characters plus an ellipsis
-      if (transcript.length > 1000) {
-        transcript = transcript.substring(0, 999) + "…";
-        console.warn(
-          "Transcript was too long for Pi. Truncated to 999 characters, losing the following text: ... " +
-            transcript.substring(999)
-        );
-      }
-      EventModule.setNativeValue(textarea, transcript);
-      EventModule.dispatchCustomEvent("saypi:autoSubmit");
-    } else {
-      EventModule.simulateTyping(textarea, transcript + " ");
-    }
   }
 
   static simulateTyping(element, text) {
@@ -142,6 +116,22 @@ export default class EventModule {
       if (isSafari()) {
         EventModule.dispatchCustomEvent("saypi:receivedUserInput");
       }
+    });
+  }
+
+  static registerStateMachineEvents(actor) {
+    window.addEventListener("saypi:userSpeaking", () => {
+      actor.send("saypi:userSpeaking");
+    });
+    ["saypi:userStoppedSpeaking", "saypi:userFinishedSpeaking"].forEach(
+      (eventName) => {
+        window.addEventListener(eventName, () => {
+          actor.send(eventName);
+        });
+      }
+    );
+    window.addEventListener("saypi:transcribing", () => {
+      actor.send("saypi:transcribing");
     });
   }
 
