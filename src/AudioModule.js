@@ -1,5 +1,4 @@
-// depends on injecting script (saypi.index.js) declaring the EventBus as a global variable
-console.log("AudioModule.js: EventBus", window.EventBus);
+// depends on the injecting script (saypi.index.js) declaring the EventBus as a global variable
 const EventBus = window.EventBus;
 
 // audio output (Pi)

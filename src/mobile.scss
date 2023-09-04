@@ -20,11 +20,10 @@
       margin: 0;
     }
 
-    /* Pi controls: experiences */
+    /* Pi controls: ellipsis, experiences */
     #__next > main > div > div > div.fixed.top-4.right-6 > button,
-    div[data-projection-id="12"] > button {
-      transform: scale(2);
-      z-index: 50;
+    button[data-projection-id="12"] {
+      transform: scale(1.5);
     }
 
     /* Pi controls: mute/unmute */
@@ -33,6 +32,13 @@
       > div[data-projection-id="18"] {
         transform: scale(2) !important;
         z-index: 50;
+      }
+    }
+
+    /* hide voice selections */
+    @for $i from 19 through 26 {
+      button[data-projection-id="#{$i}"] {
+        display: none;
       }
     }
 
