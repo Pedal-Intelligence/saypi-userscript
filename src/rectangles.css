@@ -486,38 +486,46 @@
   0%,
   100% {
     opacity: 1;
+    fill: var(--original-color);
   }
   50% {
     opacity: 0.5;
+    fill: rgb(245 238 223); /* bg-cream-550 */
   }
 }
 
-.loading .outermost {
+.outermost.loading {
+  --original-color: #e4f2d1;
   animation: heartbeat 2s infinite;
   animation-delay: 0s;
 }
 
-.loading .second {
+.second.loading {
+  --original-color: #cce8b5;
   animation: heartbeat 2s infinite;
   animation-delay: 0.4s;
 }
 
-.loading .third {
+.third.loading {
+  --original-color: #b3db95;
   animation: heartbeat 2s infinite;
   animation-delay: 0.8s;
 }
 
-.loading .fourth {
+.fourth.loading {
+  --original-color: #9bd078;
   animation: heartbeat 2s infinite;
   animation-delay: 1.2s;
 }
 
-.loading .fifth {
+.fifth.loading {
+  --original-color: #83c55c;
   animation: heartbeat 2s infinite;
   animation-delay: 1.6s;
 }
 
-.loading .innermost {
+.innermost.loading {
+  --original-color: #428a2f;
   animation: heartbeat 2s infinite;
   animation-delay: 2s;
 }
