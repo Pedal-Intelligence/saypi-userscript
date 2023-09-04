@@ -28,7 +28,7 @@ export default class EventModule {
   }
 
   // Dispatch Custom Event
-  // TODO: remove duplicated function from transcriber.js
+  // TODO: remove duplicated function from AudioModule.js
   static dispatchCustomEvent(eventName, detail = {}) {
     const event = new CustomEvent(eventName, { detail });
     console.log("dispatching event: " + eventName);

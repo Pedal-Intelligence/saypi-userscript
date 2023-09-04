@@ -1,5 +1,5 @@
 // Dispatch Custom Event
-function dispatchCustomEvent(eventName, detail = {}) {
+export function dispatchCustomEvent(eventName, detail = {}) {
   const event = new CustomEvent(eventName, { detail });
   console.log("dispatching event: " + eventName);
   window.dispatchEvent(event);

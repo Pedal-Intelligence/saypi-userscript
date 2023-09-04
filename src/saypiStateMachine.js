@@ -1,11 +1,12 @@
 import { buttonModule } from "./ButtonModule";
 import { createMachine } from "xstate";
 import AnimationModule from "./AnimationModule";
-import { isSafari } from "./UserAgentModule";
+import { isSafari, isMobileView } from "./UserAgentModule";
 import {
   uploadAudio,
   handleTranscriptionResponse,
 } from "./TranscriptionModule";
+import { dispatchCustomEvent } from "./AudioModule";
 
 export const machine = createMachine(
   {
@@ -15,7 +16,7 @@ export const machine = createMachine(
     states: {
       idle: {
         description: "Initial state.\nGentle pulsing animation.",
-        entry: "stopAllAnimations",
+        entry: ["stopAllAnimations", "acquireMicrophone"],
         on: {
           "saypi:userSpeaking": {
             target: "userSpeaking",
@@ -218,6 +219,14 @@ export const machine = createMachine(
       deactivateTalkButton: (context, event) => {
         const talkButton = document.getElementById("saypi-talkButton");
         talkButton.classList.remove("active"); // Remove the active class (for Firefox on Android)
+      },
+
+      acquireMicrophone: (context, event) => {
+        // warmup the microphone on idle in mobile view,
+        // since there's no mouseover event to trigger it
+        if (isMobileView()) {
+          dispatchCustomEvent("audio:setupRecording");
+        }
       },
     },
     services: {},
