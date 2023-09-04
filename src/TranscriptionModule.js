@@ -1,5 +1,6 @@
 import StateMachineService from "./StateMachineService.js";
 import { isMobileView } from "./UserAgentModule.js";
+import EventBus from "./EventBus.js";
 import EventModule from "./EventModule.js";
 
 const config = {
@@ -56,7 +57,7 @@ export function handleTranscriptionResponse(transcript) {
       );
     }
     EventModule.setNativeValue(textarea, transcript);
-    EventModule.dispatchCustomEvent("saypi:autoSubmit");
+    EventBus.emit("saypi:autoSubmit");
   } else {
     EventModule.simulateTyping(textarea, transcript + " ");
   }

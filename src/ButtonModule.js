@@ -1,4 +1,5 @@
 import { exitMobileMode, isMobileView } from "./UserAgentModule";
+import EventBus from "./EventBus";
 import EventModule from "./EventModule.js";
 import StateMachineService from "./StateMachineService.js";
 import exitIconSVG from "./exit.svg";
@@ -14,7 +15,7 @@ export default class ButtonModule {
   }
 
   registerOtherEvents() {
-    window.addEventListener("saypi:autoSubmit", ButtonModule.handleAutoSubmit);
+    EventBus.on("saypi:autoSubmit", ButtonModule.handleAutoSubmit);
   }
 
   // Function to create a new button
@@ -150,7 +151,7 @@ export default class ButtonModule {
 
   handlePlayButtonClick() {
     this.actor.send("saypi:play");
-    EventModule.dispatchCustomEvent("audio:reload");
+    EventBus.emit("audio:reload");
   }
 }
 

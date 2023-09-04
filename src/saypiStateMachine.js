@@ -6,7 +6,7 @@ import {
   uploadAudio,
   handleTranscriptionResponse,
 } from "./TranscriptionModule";
-import { dispatchCustomEvent } from "./AudioModule";
+import EventBus from "./EventBus";
 
 export const machine = createMachine(
   {
@@ -225,7 +225,7 @@ export const machine = createMachine(
         // warmup the microphone on idle in mobile view,
         // since there's no mouseover event to trigger it
         if (isMobileView()) {
-          dispatchCustomEvent("audio:setupRecording");
+          EventBus.emit("audio:setupRecording");
         }
       },
     },

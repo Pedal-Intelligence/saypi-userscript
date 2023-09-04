@@ -1,3 +1,4 @@
+import EventBus from "./EventBus.js";
 import StateMachineService from "./StateMachineService.js";
 
 const USER_SPEAKING = "saypi:userSpeaking";
@@ -12,7 +13,6 @@ const READY = "saypi:ready";
 const PLAY = "saypi:play";
 
 export default class EventModule {
-  static context = window;
   static init() {
     // All the event listeners can be added here
     this.registerStateMachineEvents(StateMachineService.actor);
@@ -27,14 +27,6 @@ export default class EventModule {
     );
   }
 
-  // Dispatch Custom Event
-  // TODO: remove duplicated function from AudioModule.js
-  static dispatchCustomEvent(eventName, detail = {}) {
-    const event = new CustomEvent(eventName, { detail });
-    console.log("dispatching event: " + eventName);
-    window.dispatchEvent(event);
-  }
-
   static simulateTyping(element, text) {
     const words = text.split(" ");
     let i = 0;
@@ -44,7 +36,7 @@ export default class EventModule {
         EventModule.setNativeValue(element, element.value + words[i++] + " ");
         requestAnimationFrame(typeWord);
       } else {
-        EventModule.dispatchCustomEvent("saypi:autoSubmit");
+        EventBus.emit("saypi:autoSubmit");
       }
     };
 
@@ -66,11 +58,11 @@ export default class EventModule {
   }
 
   static handleTalkMouseDown() {
-    dispatchCustomEvent("audio:startRecording");
+    EventBus.emit("audio:startRecording");
   }
 
   static handleTalkMouseUp() {
-    dispatchCustomEvent("audio:stopRecording");
+    EventBus.emit("audio:stopRecording");
   }
 
   static handleTalkDoubleClick(button) {
@@ -87,62 +79,58 @@ export default class EventModule {
 
   static handleTalkTouchStart(button, e) {
     e.preventDefault();
-    this.dispatchCustomEvent("audio:startRecording");
+    EventBus.emit("audio:startRecording");
   }
 
   static handleTalkTouchEnd(button) {
-    this.dispatchCustomEvent("audio:stopRecording");
-  }
-
-  static setContext(ctx) {
-    this.context = ctx;
+    EventBus.emit("audio:stopRecording");
   }
 
   static registerOtherAudioButtonEvents(button) {
     // "warm up" the microphone by acquiring it before the user presses the button
     button.addEventListener("mouseenter", () => {
-      EventModule.dispatchCustomEvent("audio:setupRecording");
+      EventBus.emit("audio:setupRecording");
     });
     button.addEventListener("mouseleave", () => {
-      EventModule.dispatchCustomEvent("audio:tearDownRecording");
+      EventBus.emit("audio:tearDownRecording");
     });
     window.addEventListener("beforeunload", () => {
-      EventModule.dispatchCustomEvent("audio:tearDownRecording");
+      EventBus.emit("audio:tearDownRecording");
     });
     button.addEventListener("touchcancel", () => {
-      EventModule.dispatchCustomEvent("audio:tearDownRecording");
+      EventBus.emit("audio:tearDownRecording");
     });
   }
 
   static registerStateMachineEvents(actor) {
-    window.addEventListener(USER_SPEAKING, () => {
+    EventBus.on(USER_SPEAKING, () => {
       actor.send(USER_SPEAKING);
     });
 
     [USER_STOPPED_SPEAKING, USER_FINISHED_SPEAKING].forEach((eventName) => {
-      window.addEventListener(eventName, (event) => {
-        if (event && event.detail) {
-          actor.send({ type: eventName, ...event.detail });
+      EventBus.on(eventName, (detail) => {
+        if (detail) {
+          actor.send({ type: eventName, ...detail });
         } else {
           console.warn(`Received ${eventName} without details.`);
         }
       });
     });
 
-    window.addEventListener(TRANSCRIBING, () => {
+    EventBus.on(TRANSCRIBING, () => {
       actor.send(TRANSCRIBING);
     });
 
     [PI_SPEAKING, PI_STOPPED_SPEAKING, PI_FINISHED_SPEAKING].forEach(
       (eventName) => {
-        window.addEventListener(eventName, () => {
+        EventBus.on(eventName, () => {
           actor.send(eventName);
         });
       }
     );
 
     [PAUSE, READY, PLAY].forEach((eventName) => {
-      window.addEventListener(eventName, () => {
+      EventBus.on(eventName, () => {
         actor.send(eventName);
       });
     });
@@ -156,14 +144,14 @@ export default class EventModule {
     document.addEventListener("keydown", (event) => {
       if (event.ctrlKey && event.code === "Space" && !ctrlDown) {
         ctrlDown = true;
-        this.dispatchCustomEvent("audio:startRecording");
+        EventBus.emit("audio:startRecording");
       }
     });
 
     document.addEventListener("keyup", (event) => {
       if (ctrlDown && event.code === "Space") {
         ctrlDown = false;
-        this.dispatchCustomEvent("audio:stopRecording");
+        EventBus.emit("audio:stopRecording");
       }
     });
   }
