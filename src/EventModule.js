@@ -1,5 +1,15 @@
-import { isSafari } from "./UserAgentModule.js";
 import StateMachineService from "./StateMachineService.js";
+
+const USER_SPEAKING = "saypi:userSpeaking";
+const USER_STOPPED_SPEAKING = "saypi:userStoppedSpeaking";
+const USER_FINISHED_SPEAKING = "saypi:userFinishedSpeaking";
+const TRANSCRIBING = "saypi:transcribing";
+const PI_SPEAKING = "saypi:piSpeaking";
+const PI_STOPPED_SPEAKING = "saypi:piStoppedSpeaking";
+const PI_FINISHED_SPEAKING = "saypi:piFinishedSpeaking";
+const PAUSE = "saypi:pause";
+const READY = "saypi:ready";
+const PLAY = "saypi:play";
 
 export default class EventModule {
   static context = window;
@@ -104,34 +114,37 @@ export default class EventModule {
     });
   }
 
-  static registerCustomAudioEventListeners() {
-    window.addEventListener("saypi:piReadyToRespond", function (e) {
-      if (isSafari()) {
-        EventModule.dispatchCustomEvent("saypi:awaitingUserInput");
-      }
-    });
-
-    window.addEventListener("audio:loading", function (e) {
-      // Handle the piSpeaking event, e.g., start an animation or show a UI element.
-      if (isSafari()) {
-        EventModule.dispatchCustomEvent("saypi:receivedUserInput");
-      }
-    });
-  }
-
   static registerStateMachineEvents(actor) {
-    window.addEventListener("saypi:userSpeaking", () => {
-      actor.send("saypi:userSpeaking");
+    window.addEventListener(USER_SPEAKING, () => {
+      actor.send(USER_SPEAKING);
     });
-    ["saypi:userStoppedSpeaking", "saypi:userFinishedSpeaking"].forEach(
+
+    [USER_STOPPED_SPEAKING, USER_FINISHED_SPEAKING].forEach((eventName) => {
+      window.addEventListener(eventName, (event) => {
+        if (event && event.detail) {
+          actor.send({ type: eventName, ...event.detail });
+        } else {
+          console.warn(`Received ${eventName} without details.`);
+        }
+      });
+    });
+
+    window.addEventListener(TRANSCRIBING, () => {
+      actor.send(TRANSCRIBING);
+    });
+
+    [PI_SPEAKING, PI_STOPPED_SPEAKING, PI_FINISHED_SPEAKING].forEach(
       (eventName) => {
         window.addEventListener(eventName, () => {
           actor.send(eventName);
         });
       }
     );
-    window.addEventListener("saypi:transcribing", () => {
-      actor.send("saypi:transcribing");
+
+    [PAUSE, READY, PLAY].forEach((eventName) => {
+      window.addEventListener(eventName, () => {
+        actor.send(eventName);
+      });
     });
   }
 

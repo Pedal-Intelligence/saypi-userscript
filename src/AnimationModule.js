@@ -6,7 +6,7 @@ export default class AnimationModule {
     "piSpeaking",
     "userSpeaking",
     "transcribing",
-    "readyToRespond",
+    "paused",
   ];
 
   static startAnimation(animation) {

@@ -186,7 +186,6 @@ import "./rectangles.css";
     );
 
     EventModule.registerOtherAudioButtonEvents(button);
-    EventModule.registerCustomAudioEventListeners();
     EventModule.registerHotkey();
   }
 

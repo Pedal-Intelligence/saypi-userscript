@@ -9,7 +9,7 @@ import {
 
 export const machine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFiANmAMSpoAOWCArrGAE4DK5YKA1lgHZQDaADAF1EocgHtYWAC5ZRnYSAAeiAMwB2PjmUBOPgDYtuvsr4AOZSYBMAGhBpEWrRZyqLu3QEYT7gKzmALKrKAL5BNmTYeIQkZJQI5Ci0YPxCSCBiEtKy8koIahraegZGpubWtoi6qqrOrt4mJjqefH7eIWHoEfhEpOixlMysHNzJ8ulSMnKpOXmaOvqGxmaWNnYIfpY4AW7NXt6+fu5tIOG4iUws7FxQPRRUZwBiXFiwABaQA5fDgqPi41lTiAsBicvncnm09UCK0Q6g07lUum8WncbgsgT2RxOODOHyG1xidzoTEkonILAguKuI1SY0yk1AOQsfG81RMfmUbjZ2kM7mhCAsfg0WgR3kRKO0wt0wVCxw6pyJlO4N1iknoKE4sAAxvQsAAjKnfGm-OnZQHAnCg8FaSHKPm6CwmHCVbYC5TaCzmTFynDxRIQZVUcgEdDUkTGiamhDuPg6TTs1SigJmZHeO1VGpucXRhaqL2YXD9C54gNxLCMElk95Fg0pMMZCMAqPaPwWnyVLwegzuPx8kyqdw4SV1JGGEweaXtfM+svVpUEmgK2e8Q11v70xSA5ms9mc9lFXnlBCZweuBb7FxovMRQuDK4lyiPTjPN4UpehtLh-4MxDuZsW7x+LoWx7A4yyHhyA4uIiUoOoBCJXrgqrqlqOr6nOvRUEhGranqkDvrSDbfrkei6Dg8LAmCDi6H2qaHl4Fp8IxfC1C0or2ghOAEKIKAQHe843p8y61h+9ZfhuTZaC23htqoHbct2abVFBdQNHwTQtCEMqcKIEBwPIJw-KJ645AAtLofImd4g4ODZtk2WOHFdGAhlrpGfhlKsOjVDydTGMoQJaKKHE4kuLkmo2ArqBayhgkBRQtHyLKkY4iJaMo3iFN4QIcb6dAQGFhHiUijrKOyXgtLJHJsnaRg4BYtTWjGakeBYOUzre3AFWJOQollziBOYbhSoxJh2tGZEIoY0nRoxBgcVhKF6lcXXGSo2jKGR6wQS0aWSolbibA17LdmKE6ylOXE8ctRpGZG7j1aR7nuJJHJVH4gWjYe9pWUOJizUC0atJpQA */
+    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFiANmAMSpoAOWCArrGAE4DK5YKA1lgHZQDaADAF1EocgHtYWAC5ZRnYSAAeiAMwB2PjmUBOPgDYAjLq379y3QBoQaRPr5atOXaq26ALKoBMy-QA5TAX39LMmw8QhIySgRyFFowfiEkEDEJaVl5JQQ1DW09Q2NTCytEVSMcUo8tH3cfVWVXM0Dg9FD8IlJ0KMpmVg5uBPkUqRk5JMzszR0DIxMzS2sEVx8PHHddAFZSrWVN3V0+daaQENw4phZ2LigOiiozgDEuLFgAC0gey-7BQfFh9LHEJUtK4cOs+Ko6ps+Hp1sp5ohYbpQR4NqV6j4tOsPEcTjgzh8+tdInc6ExJKJyCwIASrgMkkM0qNQJkPHwMThlnwzMo7Bj1j44cUEB5XBotKV1vywXs9r4cS1TqSadwblFJPQUJxYABjehYABGtO+9N+jIygPsILBEJ26hhgoWrg2OD4KKxVS5EMl8swuBicQgqqo5AI6DpIlNI3NCFsOk0DS9ugFrO88IQEJB6m8ro8qlcHixrh9oW6F0JQeiWEY5Mp7zLRsSEdSUYBMfzSNcWg8It0BZ26xcafFPhwXZcTh8SZ8m30xb9VfrKuJNCVi94xqbfyZikBbIcnO5vMxArTnZHudRlQzKOUc5wpd6VwrlEenGeb2pa-DyUj-2ZNnbUFvGUbxgS5TYtDTMx9HKN1NghPRqmnO91U1HU9UNJdOioVCtV1A1IG-BkW3-LJeRwfR1l7HQQO7TE0z8UFoWhdRfAFfRczvAhRBQCAn2XB9PnXRsf2bP8dzbFFVi7Hs+0lQchWcVRHGcNwqPBfQdB8O9-ToQNl3oVgIDQIjf23TI9jFJMKn2fYBR8NN9mUHBuw2KjKlqbtZyOThRAgOB5BOH4xPMxAAFoigWCKXWY2K4vBO82jAYKt2jfM0w49ZNHWSj3O7PxNKLIJjgVPFV0fbgUrNVsC1dJiEOWflclUU9TBciV827fkDlvYrcV0yAqpIiSBxHeo1HzfQaiohzFLMCjVOWbxcx5Q4+tKwTCSG8TMkMapyjBNlPFRTtTydZFL1MVk-BQjU8Iwq5ttCrJ8yyjiz0qBo9io086ohNzVB8ad1lcAcuJ4vjKpNELo0ysaqiWYEM3qNM8yysc3DWXxQbWwIgA */
     id: "sayPi",
     initial: "idle",
     states: {
@@ -33,7 +33,15 @@ export const machine = createMachine(
         description:
           "User is speaking and being recorded by the microphone.\nWaveform animation.",
 
-        entry: ["startAnimation", "activateTalkButton"],
+        entry: [
+          {
+            type: "startAnimation",
+            params: {
+              animation: "userSpeaking",
+            },
+          },
+          "activateTalkButton",
+        ],
 
         exit: [
           {
@@ -69,17 +77,26 @@ export const machine = createMachine(
               animation: "paused",
             },
           },
-          "showPlayButton",
         ],
-        exit: {
-          type: "stopAnimation",
-          params: {
-            animation: "paused",
+        exit: [
+          {
+            type: "stopAnimation",
+            params: {
+              animation: "paused",
+            },
           },
-        },
+        ],
         on: {
           "saypi:play": {
             target: "loading",
+            actions: "hidePlayButton",
+          },
+
+          "saypi:ready": {
+            target: "paused",
+            internal: true,
+            description: `Enough audio has been buffered to start playback.`,
+            actions: "showPlayButton",
           },
         },
       },
@@ -165,29 +182,32 @@ export const machine = createMachine(
         AnimationModule.stopAllAnimations();
       },
 
-      startAnimation: (context, event) => {
-        console.log("startAnimation", event);
-        AnimationModule.startAnimation(event.params.animation);
+      startAnimation: (context, event, { action }) => {
+        AnimationModule.startAnimation(action.params.animation);
       },
 
-      stopAnimation: (context, event) => {
-        AnimationModule.stopAnimation(event.params.animation);
+      stopAnimation: (context, event, { action }) => {
+        AnimationModule.stopAnimation(action.params.animation);
       },
 
       transcribeAudio: (context, event) => {
         console.log("transcribeAudio", event);
-        const audioBlob = event.params.audioBlob;
+        const audioBlob = event.blob;
         uploadAudio(audioBlob);
       },
 
       handleTranscriptionResponse: (context, event) => {
         console.log("handleTranscriptionResponse", event);
-        const transcription = event.params.text;
+        const transcription = event.text;
         handleTranscriptionResponse(transcription);
       },
 
       showPlayButton: (context, event) => {
         buttonModule.showPlayButton();
+      },
+
+      hidePlayButton: (context, event) => {
+        buttonModule.hidePlayButton();
       },
 
       activateTalkButton: (context, event) => {
@@ -203,11 +223,12 @@ export const machine = createMachine(
     services: {},
     guards: {
       tooShortForUpload: (context, event) => {
-        return event.params.duration < 1000;
+        console.log("tooShortForUpload", event);
+        return event.duration < 1000;
       },
 
       longEnoughForUpload: (context, event) => {
-        return event.params.duration >= 1000;
+        return event.duration >= 1000;
       },
 
       isSafari: (context, event) => {

@@ -1,5 +1,6 @@
 import StateMachineService from "./StateMachineService.js";
 import { isMobileView } from "./UserAgentModule.js";
+import EventModule from "./EventModule.js";
 
 const config = {
   appServerUrl: process.env.APP_SERVER_URL,

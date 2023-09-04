@@ -1,39 +1,16 @@
-import AnimationModule from "./AnimationModule";
 import { exitMobileMode, isMobileView } from "./UserAgentModule";
+import EventModule from "./EventModule.js";
+import StateMachineService from "./StateMachineService.js";
 import exitIconSVG from "./exit.svg";
 import rectanglesSVG from "./rectangles.svg";
 import talkIconSVG from "./waveform.svg";
 export default class ButtonModule {
   constructor() {
     this.playButton = null;
+    this.actor = StateMachineService.actor;
     // Binding methods to the current instance
     this.handlePlayButtonClick = this.handlePlayButtonClick.bind(this);
-    this.registerButtonEvents();
     this.registerOtherEvents();
-  }
-
-  registerButtonEvents() {
-    window.addEventListener("saypi:awaitingUserInput", () => {
-      this.pokeUser();
-    });
-    window.addEventListener("saypi:receivedUserInput", () => {
-      this.unpokeUser();
-    });
-    window.addEventListener("audio:loading", () => {
-      AnimationModule.startAnimation("loading");
-    });
-    window.addEventListener("saypi:piSpeaking", () => {
-      this.unpokeUser(); // playback has started, user input is no longer needed
-      AnimationModule.stopAnimation("loading");
-      AnimationModule.startAnimation("piSpeaking");
-    });
-    ["saypi:piStoppedSpeaking", "saypi:piFinishedSpeaking"].forEach(
-      (eventName) => {
-        window.addEventListener(eventName, () => {
-          AnimationModule.stopAnimation("piSpeaking");
-        });
-      }
-    );
   }
 
   registerOtherEvents() {
@@ -172,19 +149,8 @@ export default class ButtonModule {
   }
 
   handlePlayButtonClick() {
-    this.unpokeUser();
-    dispatchCustomEvent("saypi:receivedUserInput"); // doubling up with previous line?
-    piAudioManager.userPlay();
-  }
-
-  pokeUser() {
-    AnimationModule.startAnimation("readyToRespond");
-    this.showPlayButton();
-  }
-
-  unpokeUser() {
-    AnimationModule.stopAnimation("readyToRespond");
-    this.hidePlayButton();
+    this.actor.send("saypi:play");
+    EventModule.dispatchCustomEvent("audio:reload");
   }
 }
 

@@ -31,20 +31,20 @@ const piAudioManager = {
     this._isLoadCalled = value;
   },
 
-  userPlay: function () {
+  reload: function () {
     if (!isSafari()) {
       return;
     }
 
     this._userStarted = true; // set a flag to indicate playback has been started by the user
     this.audioElement.load(); // reset for Safari
-    dispatchCustomEvent("audio:loading");
     this.audioElement.play();
   },
 
   autoPlay: function () {
     if (!this._userStarted) {
       this.audioElement.pause();
+      dispatchCustomEvent("saypi:pause");
     }
   },
 
@@ -89,7 +89,8 @@ audioElement.addEventListener("play", function () {
 
 audioElement.addEventListener("loadstart", function () {
   if (isSafari()) {
-    dispatchCustomEvent("saypi:piReadyToRespond");
+    // tell the state machine that Pi is ready to speak (while paused)
+    dispatchCustomEvent("saypi:ready");
   }
 });
 
@@ -255,6 +256,9 @@ function registerCustomAudioEventListeners() {
   });
   window.addEventListener("audio:stopRecording", function (e) {
     stopRecording();
+  });
+  window.addEventListener("audio:reload", function (e) {
+    piAudioManager.reload();
   });
 }
 registerCustomAudioEventListeners();
