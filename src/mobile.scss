@@ -22,23 +22,20 @@
 
     /* Pi controls: ellipsis, experiences */
     #__next > main > div > div > div.fixed.top-4.right-6 > button,
-    button[data-projection-id="12"] {
+    #saypi-experiences-button {
       transform: scale(1.5);
     }
 
     /* Pi controls: mute/unmute */
-    button[data-projection-id="16"] {
-      > div[data-projection-id="17"],
-      > div[data-projection-id="18"] {
+    #saypi-audio-controls {
+      /* hide the voice options */
+      div.p-1 {
+        display: none;
+      }
+      /* scale the mute button */
+      button.group {
         transform: scale(2) !important;
         z-index: 50;
-      }
-    }
-
-    /* hide voice selections */
-    @for $i from 19 through 26 {
-      button[data-projection-id="#{$i}"] {
-        display: none;
       }
     }
 
