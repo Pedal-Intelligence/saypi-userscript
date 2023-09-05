@@ -1,10 +1,21 @@
-import { isSafari, isMobileView } from "./UserAgentModule.js";
+import EventBus from "./EventBus.js";
+import StateMachineService from "./StateMachineService.js";
+
+const USER_SPEAKING = "saypi:userSpeaking";
+const USER_STOPPED_SPEAKING = "saypi:userStoppedSpeaking";
+const USER_FINISHED_SPEAKING = "saypi:userFinishedSpeaking";
+const TRANSCRIBING = "saypi:transcribing";
+const PI_SPEAKING = "saypi:piSpeaking";
+const PI_STOPPED_SPEAKING = "saypi:piStoppedSpeaking";
+const PI_FINISHED_SPEAKING = "saypi:piFinishedSpeaking";
+const PAUSE = "saypi:pause";
+const READY = "saypi:ready";
+const PLAY = "saypi:play";
 
 export default class EventModule {
-  static context = window;
   static init() {
     // All the event listeners can be added here
-    this.handleAudioEvents();
+    this.registerStateMachineEvents(StateMachineService.actor);
     // Any other initializations...
   }
 
@@ -16,41 +27,6 @@ export default class EventModule {
     );
   }
 
-  // Dispatch Custom Event
-  // TODO: remove duplicated function from transcriber.js
-  static dispatchCustomEvent(eventName, detail = {}) {
-    const event = new CustomEvent(eventName, { detail });
-    console.log("dispatching event: " + eventName);
-    window.dispatchEvent(event);
-  }
-
-  static handleAudioEvents() {
-    window.addEventListener(
-      "saypi:transcribed",
-      EventModule.handleTranscriptionResponse
-    );
-  }
-
-  static handleTranscriptionResponse(transcriptionEvent) {
-    let transcript = transcriptionEvent.detail.text;
-    console.log("Transcript: " + transcript);
-    const textarea = document.getElementById("saypi-prompt");
-    if (isMobileView()) {
-      // if transcript is > 1000 characters, truncate it to 999 characters plus an ellipsis
-      if (transcript.length > 1000) {
-        transcript = transcript.substring(0, 999) + "…";
-        console.warn(
-          "Transcript was too long for Pi. Truncated to 999 characters, losing the following text: ... " +
-            transcript.substring(999)
-        );
-      }
-      EventModule.setNativeValue(textarea, transcript);
-      EventModule.dispatchCustomEvent("saypi:autoSubmit");
-    } else {
-      EventModule.simulateTyping(textarea, transcript + " ");
-    }
-  }
-
   static simulateTyping(element, text) {
     const words = text.split(" ");
     let i = 0;
@@ -60,7 +36,7 @@ export default class EventModule {
         EventModule.setNativeValue(element, element.value + words[i++] + " ");
         requestAnimationFrame(typeWord);
       } else {
-        EventModule.dispatchCustomEvent("saypi:autoSubmit");
+        EventBus.emit("saypi:autoSubmit");
       }
     };
 
@@ -82,11 +58,11 @@ export default class EventModule {
   }
 
   static handleTalkMouseDown() {
-    dispatchCustomEvent("audio:startRecording");
+    EventBus.emit("audio:startRecording");
   }
 
   static handleTalkMouseUp() {
-    dispatchCustomEvent("audio:stopRecording");
+    EventBus.emit("audio:stopRecording");
   }
 
   static handleTalkDoubleClick(button) {
@@ -103,45 +79,60 @@ export default class EventModule {
 
   static handleTalkTouchStart(button, e) {
     e.preventDefault();
-    this.dispatchCustomEvent("audio:startRecording");
+    EventBus.emit("audio:startRecording");
   }
 
   static handleTalkTouchEnd(button) {
-    this.dispatchCustomEvent("audio:stopRecording");
-  }
-
-  static setContext(ctx) {
-    this.context = ctx;
+    EventBus.emit("audio:stopRecording");
   }
 
   static registerOtherAudioButtonEvents(button) {
     // "warm up" the microphone by acquiring it before the user presses the button
     button.addEventListener("mouseenter", () => {
-      EventModule.dispatchCustomEvent("audio:setupRecording");
+      EventBus.emit("audio:setupRecording");
     });
     button.addEventListener("mouseleave", () => {
-      EventModule.dispatchCustomEvent("audio:tearDownRecording");
+      EventBus.emit("audio:tearDownRecording");
     });
     window.addEventListener("beforeunload", () => {
-      EventModule.dispatchCustomEvent("audio:tearDownRecording");
+      EventBus.emit("audio:tearDownRecording");
     });
     button.addEventListener("touchcancel", () => {
-      EventModule.dispatchCustomEvent("audio:tearDownRecording");
+      EventBus.emit("audio:tearDownRecording");
     });
   }
 
-  static registerCustomAudioEventListeners() {
-    window.addEventListener("saypi:piReadyToRespond", function (e) {
-      if (isSafari()) {
-        EventModule.dispatchCustomEvent("saypi:awaitingUserInput");
-      }
+  static registerStateMachineEvents(actor) {
+    EventBus.on(USER_SPEAKING, () => {
+      actor.send(USER_SPEAKING);
     });
 
-    window.addEventListener("audio:loading", function (e) {
-      // Handle the piSpeaking event, e.g., start an animation or show a UI element.
-      if (isSafari()) {
-        EventModule.dispatchCustomEvent("saypi:receivedUserInput");
+    [USER_STOPPED_SPEAKING, USER_FINISHED_SPEAKING].forEach((eventName) => {
+      EventBus.on(eventName, (detail) => {
+        if (detail) {
+          actor.send({ type: eventName, ...detail });
+        } else {
+          console.warn(`Received ${eventName} without details.`);
+        }
+      });
+    });
+
+    EventBus.on(TRANSCRIBING, () => {
+      actor.send(TRANSCRIBING);
+    });
+
+    [PI_SPEAKING, PI_STOPPED_SPEAKING, PI_FINISHED_SPEAKING].forEach(
+      (eventName) => {
+        EventBus.on(eventName, () => {
+          actor.send(eventName);
+        });
       }
+    );
+
+    [PAUSE, READY, PLAY].forEach((eventName) => {
+      EventBus.on(eventName, () => {
+        actor.send(eventName);
+      });
     });
   }
 
@@ -153,14 +144,14 @@ export default class EventModule {
     document.addEventListener("keydown", (event) => {
       if (event.ctrlKey && event.code === "Space" && !ctrlDown) {
         ctrlDown = true;
-        this.dispatchCustomEvent("audio:startRecording");
+        EventBus.emit("audio:startRecording");
       }
     });
 
     document.addEventListener("keyup", (event) => {
       if (ctrlDown && event.code === "Space") {
         ctrlDown = false;
-        this.dispatchCustomEvent("audio:stopRecording");
+        EventBus.emit("audio:stopRecording");
       }
     });
   }

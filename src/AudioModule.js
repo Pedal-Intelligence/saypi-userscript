@@ -1,9 +1,5 @@
-// Dispatch Custom Event
-function dispatchCustomEvent(eventName, detail = {}) {
-  const event = new CustomEvent(eventName, { detail });
-  console.log("dispatching event: " + eventName);
-  window.dispatchEvent(event);
-}
+// depends on the injecting script (saypi.index.js) declaring the EventBus as a global variable
+const EventBus = window.EventBus;
 
 // audio output (Pi)
 const audioElement = document.querySelector("audio");
@@ -31,20 +27,20 @@ const piAudioManager = {
     this._isLoadCalled = value;
   },
 
-  userPlay: function () {
+  reload: function () {
     if (!isSafari()) {
       return;
     }
 
     this._userStarted = true; // set a flag to indicate playback has been started by the user
     this.audioElement.load(); // reset for Safari
-    dispatchCustomEvent("audio:loading");
     this.audioElement.play();
   },
 
   autoPlay: function () {
     if (!this._userStarted) {
       this.audioElement.pause();
+      EventBus.emit("saypi:pause");
     }
   },
 
@@ -80,7 +76,7 @@ const piAudioManager = {
   },
 };
 
-// Intercept Autoplay Events (autoplay doesn't work on Safari)
+// Intercept Autoplay Events (can't autoplay full audio on Safari)
 audioElement.addEventListener("play", function () {
   if (isSafari()) {
     piAudioManager.autoPlay();
@@ -89,63 +85,30 @@ audioElement.addEventListener("play", function () {
 
 audioElement.addEventListener("loadstart", function () {
   if (isSafari()) {
-    dispatchCustomEvent("saypi:piReadyToRespond");
+    // tell the state machine that Pi is ready to speak (while paused)
+    EventBus.emit("saypi:ready");
   }
 });
 
 // Event listeners for detecting when Pi is speaking
 audioElement.addEventListener("playing", () => {
   piAudioManager.playing();
-  dispatchCustomEvent("saypi:piSpeaking");
+  EventBus.emit("saypi:piSpeaking");
 });
 
 audioElement.addEventListener("pause", () => {
   piAudioManager.stopped();
-  dispatchCustomEvent("saypi:piStoppedSpeaking");
+  EventBus.emit("saypi:piStoppedSpeaking");
 });
 
 audioElement.addEventListener("ended", () => {
   piAudioManager.stopped();
-  dispatchCustomEvent("saypi:piFinishedSpeaking");
+  EventBus.emit("saypi:piFinishedSpeaking");
 });
 
 // audio input (user)
 var audioDataChunks = [];
 var audioMimeType = "audio/webm;codecs=opus";
-
-function uploadAudio(audioBlob) {
-  // Create a FormData object
-  var formData = new FormData();
-  var audioFilename = "audio.webm";
-  if (audioBlob.type === "audio/mp4") {
-    audioFilename = "audio.mp4";
-  }
-  // Add the audio blob to the FormData object
-  formData.append("audio", audioBlob, audioFilename);
-  // Get the user's preferred language
-  var language = navigator.language;
-  dispatchCustomEvent("saypi:transcribing");
-  // Post the audio to the server for transcription
-  fetch(config.apiServerUrl + "/transcribe?language=" + language, {
-    method: "POST",
-    body: formData,
-  })
-    .then(function (response) {
-      if (!response.ok) {
-        throw Error(response.statusText);
-      }
-      return response.json();
-    })
-    .then(function (responseJson) {
-      dispatchCustomEvent("saypi:transcribed", { text: responseJson.text });
-    })
-    .catch(function (error) {
-      console.error("Looks like there was a problem: ", error);
-      var textarea = document.getElementById("saypi-prompt");
-      textarea.value =
-        "Sorry, there was a problem transcribing your audio. Please try again later.";
-    });
-}
 
 // Declare a global variable for the mediaRecorder
 var mediaRecorder;
@@ -169,7 +132,10 @@ function handleStop() {
   // If the duration is greater than the threshold, upload the audio for transcription
   if (duration >= threshold) {
     // Upload the audio to the server for transcription
-    uploadAudio(audioBlob);
+    EventBus.emit("saypi:userFinishedSpeaking", {
+      duration: duration,
+      blob: audioBlob,
+    });
   }
 
   // Clear the array for the next recording
@@ -247,7 +213,7 @@ function startRecording() {
   // Record the start time
   window.startTime = Date.now();
 
-  dispatchCustomEvent("saypi:userSpeaking");
+  EventBus.emit("saypi:userSpeaking");
 }
 
 // To stop recording, other modules can dispatch a custom event audio:stopRecording
@@ -263,29 +229,32 @@ function stopRecording() {
     // If the duration is less than the threshold, don't upload the audio for transcription
     if (duration < threshold) {
       console.log("Recording was too short, not uploading for transcription");
-      dispatchCustomEvent("saypi:userStoppedSpeaking");
+      EventBus.emit("saypi:userStoppedSpeaking", { duration: duration });
       piAudioManager.resume();
     } else {
       piAudioManager.stop();
-      dispatchCustomEvent("saypi:userFinishedSpeaking");
     }
   }
 }
 
+/* These events are used to control/pass requests to the audio module from other modules */
 function registerCustomAudioEventListeners() {
-  window.addEventListener("audio:setupRecording", function (e) {
+  EventBus.on("audio:setupRecording", function (e) {
     setupRecording();
   });
 
-  window.addEventListener("audio:tearDownRecording", function (e) {
+  EventBus.on("audio:tearDownRecording", function (e) {
     tearDownRecording();
   });
 
-  window.addEventListener("audio:startRecording", function (e) {
+  EventBus.on("audio:startRecording", function (e) {
     startRecording();
   });
-  window.addEventListener("audio:stopRecording", function (e) {
+  EventBus.on("audio:stopRecording", function (e) {
     stopRecording();
+  });
+  EventBus.on("audio:reload", function (e) {
+    piAudioManager.reload();
   });
 }
 registerCustomAudioEventListeners();

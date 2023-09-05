@@ -82,7 +82,7 @@
   transform-origin: center;
 }
 
-/* bounce animation to indicate Pi is waiting to speak */
+/* bounce animation to indicate Pi is paused awaiting permission to speak */
 @keyframes bounce_outermost {
   0%,
   20%,
@@ -98,7 +98,7 @@
     transform: translateY(-3%);
   }
 }
-.outermost.readyToRespond {
+.outermost.paused {
   animation-name: bounce_outermost;
   animation-duration: 2s;
   animation-iteration-count: infinite;
@@ -119,7 +119,7 @@
     transform: translateY(-3.48%);
   }
 }
-.second.readyToRespond {
+.second.paused {
   animation-name: bounce_second;
   animation-duration: 2s;
   animation-iteration-count: infinite;
@@ -140,7 +140,7 @@
     transform: translateY(-3.96%);
   }
 }
-.third.readyToRespond {
+.third.paused {
   animation-name: bounce_third;
   animation-duration: 2s;
   animation-iteration-count: infinite;
@@ -161,7 +161,7 @@
     transform: translateY(-4.44%);
   }
 }
-.fourth.readyToRespond {
+.fourth.paused {
   animation-name: bounce_fourth;
   animation-duration: 2s;
   animation-iteration-count: infinite;
@@ -182,7 +182,7 @@
     transform: translateY(-4.92%);
   }
 }
-.fifth.readyToRespond {
+.fifth.paused {
   animation-name: bounce_fifth;
   animation-duration: 2s;
   animation-iteration-count: infinite;
@@ -203,7 +203,7 @@
     transform: translateY(-5.4%);
   }
 }
-.innermost.readyToRespond {
+.innermost.paused {
   animation-name: bounce_innermost;
   animation-duration: 2s;
   animation-iteration-count: infinite;
@@ -481,37 +481,51 @@
   animation: transcribingFlip 2s infinite;
 }
 
-/* inhalation animation to indicate Pi is preparing to speak */
-@keyframes loadingInhalation {
+/* heartbeat animation to indicate Pi is preparing to speak */
+@keyframes heartbeat {
   0%,
   100% {
-    transform: scale(1);
+    opacity: 1;
+    fill: var(--original-color);
   }
   50% {
-    transform: scale(1.05); /* Slightly scaled up */
+    opacity: 0.5;
+    fill: rgb(245 238 223); /* bg-cream-550 */
   }
 }
 
 .outermost.loading {
-  animation: loadingInhalation 2s infinite;
+  --original-color: #e4f2d1;
+  animation: heartbeat 2s infinite;
+  animation-delay: 0s;
 }
 
 .second.loading {
-  animation: loadingInhalation 2.1s infinite;
+  --original-color: #cce8b5;
+  animation: heartbeat 2s infinite;
+  animation-delay: 0.4s;
 }
 
 .third.loading {
-  animation: loadingInhalation 2.2s infinite;
+  --original-color: #b3db95;
+  animation: heartbeat 2s infinite;
+  animation-delay: 0.8s;
 }
 
 .fourth.loading {
-  animation: loadingInhalation 2.3s infinite;
+  --original-color: #9bd078;
+  animation: heartbeat 2s infinite;
+  animation-delay: 1.2s;
 }
 
 .fifth.loading {
-  animation: loadingInhalation 2.4s infinite;
+  --original-color: #83c55c;
+  animation: heartbeat 2s infinite;
+  animation-delay: 1.6s;
 }
 
 .innermost.loading {
-  animation: loadingInhalation 2.5s infinite;
+  --original-color: #428a2f;
+  animation: heartbeat 2s infinite;
+  animation-delay: 2s;
 }

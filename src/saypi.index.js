@@ -1,4 +1,5 @@
-import ButtonModule from "./ButtonModule.js";
+import { buttonModule } from "./ButtonModule.js";
+import EventBus from "./EventBus.js";
 import EventModule from "./EventModule.js";
 import { isMobileView, addUserAgentFlags } from "./UserAgentModule.js";
 import "./talkButton.css";
@@ -7,25 +8,10 @@ import "./rectangles.css";
 (function () {
   "use strict";
 
-  const buttonModule = new ButtonModule();
-
-  const localConfig = {
-    appServerUrl: "http://localhost:3000",
-    apiServerUrl: "https://localhost:5000",
-    // Add other configuration properties as needed
-  };
-
-  // Define a global configuration property
-  const productionConfig = {
-    appServerUrl: "https://app.saypi.ai",
-    apiServerUrl: "https://api.saypi.ai",
-    // Add other configuration properties as needed
-  };
-  const config = productionConfig;
-
-  const pageScript = require("raw-loader!./transcriber.js").default;
+  const pageScript = require("raw-loader!./AudioModule.js").default;
   addUserAgentFlags();
   EventModule.init();
+  setupEventBus();
 
   // Create a MutationObserver to listen for changes to the DOM
   var observer = new MutationObserver(function (mutations) {
@@ -66,6 +52,15 @@ import "./rectangles.css";
       }
     }
   });
+
+  function setupEventBus() {
+    // Setting the correct context
+    let context = window;
+    if (GM_info.scriptHandler !== "Userscripts") {
+      context = unsafeWindow;
+    }
+    context.EventBus = EventBus; // Make the EventBus available to the page script
+  }
 
   function annotateDOM() {
     // Add an ID to the prompt textarea
@@ -115,8 +110,7 @@ import "./rectangles.css";
     var scriptElement = document.createElement("script");
     scriptElement.type = "text/javascript";
     scriptElement.id = "saypi-script";
-    const configText = "var config = " + JSON.stringify(config) + ";";
-    scriptElement.textContent = configText + pageScript;
+    scriptElement.textContent = pageScript;
     document.body.appendChild(scriptElement);
 
     // Call the callback function after the script is added
@@ -161,13 +155,6 @@ import "./rectangles.css";
   function registerAudioButtonEvents() {
     const button = document.getElementById("saypi-talkButton");
 
-    // Setting the correct context
-    let context = window;
-    if (GM_info.scriptHandler !== "Userscripts") {
-      context = unsafeWindow;
-    }
-    EventModule.setContext(context); // Set the context for EventModule
-
     // Attach the event listeners
     button.addEventListener(
       "mousedown",
@@ -188,7 +175,6 @@ import "./rectangles.css";
     );
 
     EventModule.registerOtherAudioButtonEvents(button);
-    EventModule.registerCustomAudioEventListeners();
     EventModule.registerHotkey();
   }
 

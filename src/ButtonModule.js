@@ -1,63 +1,21 @@
-import AnimationModule from "./AnimationModule";
 import { exitMobileMode, isMobileView } from "./UserAgentModule";
+import EventBus from "./EventBus";
+import EventModule from "./EventModule.js";
+import StateMachineService from "./StateMachineService.js";
 import exitIconSVG from "./exit.svg";
 import rectanglesSVG from "./rectangles.svg";
 import talkIconSVG from "./waveform.svg";
 export default class ButtonModule {
   constructor() {
     this.playButton = null;
+    this.actor = StateMachineService.actor;
     // Binding methods to the current instance
     this.handlePlayButtonClick = this.handlePlayButtonClick.bind(this);
-    this.registerButtonEvents();
     this.registerOtherEvents();
   }
 
-  registerButtonEvents() {
-    window.addEventListener("saypi:awaitingUserInput", () => {
-      this.pokeUser();
-    });
-    window.addEventListener("saypi:receivedUserInput", () => {
-      this.unpokeUser();
-    });
-    window.addEventListener("audio:loading", () => {
-      AnimationModule.animate("loading");
-    });
-    window.addEventListener("saypi:piSpeaking", () => {
-      this.unpokeUser(); // playback has started, user input is no longer needed
-      AnimationModule.inanimate("loading");
-      AnimationModule.animate("piSpeaking");
-    });
-    ["saypi:piStoppedSpeaking", "saypi:piFinishedSpeaking"].forEach(
-      (eventName) => {
-        window.addEventListener(eventName, () => {
-          AnimationModule.inanimate("piSpeaking");
-        });
-      }
-    );
-    window.addEventListener("saypi:userSpeaking", () => {
-      const talkButton = document.getElementById("saypi-talkButton");
-      talkButton.classList.add("active"); // Add the active class (for Firefox on Android)
-      AnimationModule.animate("userSpeaking");
-    });
-    ["saypi:userStoppedSpeaking", "saypi:userFinishedSpeaking"].forEach(
-      (eventName) => {
-        window.addEventListener(eventName, () => {
-          const talkButton = document.getElementById("saypi-talkButton");
-          talkButton.classList.remove("active"); // Remove the active class (for Firefox on Android)
-          AnimationModule.inanimate("userSpeaking");
-        });
-      }
-    );
-    window.addEventListener("saypi:transcribing", () => {
-      AnimationModule.animate("transcribing");
-    });
-    window.addEventListener("saypi:transcribed", () => {
-      AnimationModule.inanimate("transcribing");
-    });
-  }
-
   registerOtherEvents() {
-    window.addEventListener("saypi:autoSubmit", ButtonModule.handleAutoSubmit);
+    EventBus.on("saypi:autoSubmit", ButtonModule.handleAutoSubmit);
   }
 
   // Function to create a new button
@@ -192,18 +150,10 @@ export default class ButtonModule {
   }
 
   handlePlayButtonClick() {
-    this.unpokeUser();
-    dispatchCustomEvent("saypi:receivedUserInput"); // doubling up with previous line?
-    piAudioManager.userPlay();
-  }
-
-  pokeUser() {
-    AnimationModule.animate("readyToRespond");
-    this.showPlayButton();
-  }
-
-  unpokeUser() {
-    AnimationModule.inanimate("readyToRespond");
-    this.hidePlayButton();
+    this.actor.send("saypi:play");
+    EventBus.emit("audio:reload");
   }
 }
+
+// Singleton
+export const buttonModule = new ButtonModule();
