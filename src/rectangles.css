@@ -530,45 +530,58 @@
   animation-delay: 2s;
 }
 
-/* dissary animation to indicate an error */
+/* toned-down dissary animation to indicate an error */
+/* toned-down error animation with reduced opacity */
 @keyframes errorAnimation {
   0% {
-    transform: rotate(0deg) translate(0px, 0px);
+    transform: rotate(0deg) translate(0%, 0%);
+  }
+  25% {
+    transform: rotate(-5deg) translate(-5%, 5%);
   }
   50% {
-    transform: rotate(45deg) translate(10px, 5px);
+    transform: rotate(5deg) translate(5%, -5%);
+  }
+  75% {
+    transform: rotate(-5deg) translate(-5%, 5%);
   }
   100% {
-    transform: rotate(-45deg) translate(-10px, -5px);
+    transform: rotate(0deg) translate(0%, 0%);
   }
 }
 
 .outermost.error {
-  animation: errorAnimation 2s infinite;
-  fill: #ff6666; /* shade of red */
+  animation: errorAnimation 25s 1;
+  fill: #ff0000;
+  fill-opacity: 0.7;
 }
 
 .second.error {
-  animation: errorAnimation 2.2s infinite;
-  fill: #ff4d4d; /* another shade of red */
+  animation: errorAnimation 25s 1;
+  fill: #ff3300;
+  fill-opacity: 0.7;
 }
 
 .third.error {
-  animation: errorAnimation 2.4s infinite;
-  fill: #ff3333; /* another shade of red */
+  animation: errorAnimation 25s 1;
+  fill: #ff6600;
+  fill-opacity: 0.7;
 }
 
 .fourth.error {
-  animation: errorAnimation 2.6s infinite;
-  fill: #ff1a1a; /* another shade of red */
+  animation: errorAnimation 25s 1;
+  fill: #ff9900;
+  fill-opacity: 0.7;
 }
 
 .fifth.error {
-  animation: errorAnimation 2.8s infinite;
-  fill: #ff0000; /* pure red */
+  animation: errorAnimation 25s 1;
+  fill: #ffcc00;
+  fill-opacity: 0.7;
 }
 
 .innermost.error {
-  animation: errorAnimation 3s infinite;
-  fill: #e60000; /* dark red */
+  animation: errorAnimation 25s 1;
+  fill: #ffff00;
+  fill-opacity: 0.7;
 }

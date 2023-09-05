@@ -137,7 +137,10 @@ export const machine = createMachine(
               animation: "transcribing",
             },
           },
-          "transcribeAudio",
+          {
+            type: "transcribeAudio",
+            params: {},
+          },
         ],
         exit: {
           type: "stopAnimation",
@@ -148,8 +151,15 @@ export const machine = createMachine(
         on: {
           "saypi:transcribed": {
             target: "idle",
-            actions: "handleTranscriptionResponse",
+            actions: {
+              type: "handleTranscriptionResponse",
+              params: {},
+            },
             description: "Successfully transcribed user audio to text.",
+          },
+          "saypi:transcribeFailed": {
+            target: "#sayPi.errors.transcribeFailed",
+            description: "Received an error response from the /transcribe API",
           },
         },
       },
@@ -175,10 +185,35 @@ export const machine = createMachine(
       },
       errors: {
         description: "Error parent state.",
+        entry: {
+          type: "startAnimation",
+          params: {
+            animation: "error",
+          },
+        },
+        exit: {
+          type: "stopAnimation",
+          params: {
+            animation: "error",
+          },
+        },
+        after: {
+          20000: [
+            {
+              target: "#sayPi.idle",
+              actions: [],
+              description: "Reset to the idle state and clear errors.",
+            },
+            {
+              internal: false,
+            },
+          ],
+        },
         initial: "transcribeFailed",
         states: {
           transcribeFailed: {
             description: "The /transcribe API responded with an error.",
+            type: "final",
           },
         },
       },
