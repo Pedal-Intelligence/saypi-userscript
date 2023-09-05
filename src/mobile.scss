@@ -36,6 +36,10 @@
       button.group {
         transform: scale(2) !important;
         z-index: 50;
+        /* hide the voice selector twisty */
+        + button {
+          display: none;
+        }
       }
     }
 
