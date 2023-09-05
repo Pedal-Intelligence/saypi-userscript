@@ -37,10 +37,7 @@ export function uploadAudio(audioBlob) {
     })
     .catch(function (error) {
       console.error("Looks like there was a problem: ", error);
-      //TODO: raise an event to the state machine instead
-      var textarea = document.getElementById("saypi-prompt");
-      textarea.value =
-        "Sorry, there was a problem transcribing your audio. Please try again later.";
+      StateMachineService.actor.send("saypi:transcribeFailed");
     });
 }
 

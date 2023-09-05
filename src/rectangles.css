@@ -529,3 +529,46 @@
   animation: heartbeat 2s infinite;
   animation-delay: 2s;
 }
+
+/* dissary animation to indicate an error */
+@keyframes errorAnimation {
+  0% {
+    transform: rotate(0deg) translate(0px, 0px);
+  }
+  50% {
+    transform: rotate(45deg) translate(10px, 5px);
+  }
+  100% {
+    transform: rotate(-45deg) translate(-10px, -5px);
+  }
+}
+
+.outermost.error {
+  animation: errorAnimation 2s infinite;
+  fill: #ff6666; /* shade of red */
+}
+
+.second.error {
+  animation: errorAnimation 2.2s infinite;
+  fill: #ff4d4d; /* another shade of red */
+}
+
+.third.error {
+  animation: errorAnimation 2.4s infinite;
+  fill: #ff3333; /* another shade of red */
+}
+
+.fourth.error {
+  animation: errorAnimation 2.6s infinite;
+  fill: #ff1a1a; /* another shade of red */
+}
+
+.fifth.error {
+  animation: errorAnimation 2.8s infinite;
+  fill: #ff0000; /* pure red */
+}
+
+.innermost.error {
+  animation: errorAnimation 3s infinite;
+  fill: #e60000; /* dark red */
+}

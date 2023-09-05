@@ -173,6 +173,15 @@ export const machine = createMachine(
           },
         },
       },
+      errors: {
+        description: "Error parent state.",
+        initial: "transcribeFailed",
+        states: {
+          transcribeFailed: {
+            description: "The /transcribe API responded with an error.",
+          },
+        },
+      },
     },
     predictableActionArguments: true,
     preserveActionOrder: true,
