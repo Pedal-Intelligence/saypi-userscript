@@ -1,7 +1,8 @@
 @media (max-width: 768px) {
   html.mobile-view {
     #saypi-panel,
-    .play-button {
+    .play-button,
+    .notification {
       width: 100%;
       position: fixed;
       left: 0;
@@ -18,6 +19,16 @@
       background-color: transparent;
       border-radius: 0;
       margin: 0;
+    }
+
+    #saypi-notification {
+      z-index: 100;
+      background-color: transparent;
+      svg {
+        width: 75%;
+        height: 100%;
+        margin: auto;
+      }
     }
 
     /* Pi controls: ellipsis, experiences */

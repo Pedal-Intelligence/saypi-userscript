@@ -5,6 +5,7 @@ import StateMachineService from "./StateMachineService.js";
 import exitIconSVG from "./exit.svg";
 import rectanglesSVG from "./rectangles.svg";
 import talkIconSVG from "./waveform.svg";
+import mutedMicIconSVG from "./muted_microphone.svg";
 export default class ButtonModule {
   constructor() {
     this.playButton = null;
@@ -152,6 +153,33 @@ export default class ButtonModule {
   handlePlayButtonClick() {
     this.actor.send("saypi:play");
     EventBus.emit("audio:reload");
+  }
+
+  showNotification(details) {
+    const icon = details.icon;
+    let iconSVG;
+    if (icon === "muted-microphone") {
+      iconSVG = mutedMicIconSVG;
+    }
+
+    const notification = document.getElementById("saypi-notification");
+    if (notification) {
+      notification.classList.remove("hidden");
+      notification.innerHTML = iconSVG;
+    } else {
+      const notification = document.createElement("div");
+      notification.id = "saypi-notification";
+      notification.className = "notification";
+      notification.innerHTML = iconSVG;
+      document.body.appendChild(notification);
+    }
+  }
+
+  dismissNotification() {
+    const notification = document.getElementById("saypi-notification");
+    if (notification) {
+      notification.classList.add("hidden");
+    }
   }
 }
 

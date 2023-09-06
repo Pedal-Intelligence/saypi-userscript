@@ -31,16 +31,17 @@ export function uploadAudio(audioBlob) {
       return response.json();
     })
     .then(function (responseJson) {
-      StateMachineService.actor.send("saypi:transcribed", {
-        text: responseJson.text,
-      });
+      if (responseJson.text.length === 0) {
+        StateMachineService.actor.send("saypi:transcribedEmpty");
+      } else {
+        StateMachineService.actor.send("saypi:transcribed", {
+          text: responseJson.text,
+        });
+      }
     })
     .catch(function (error) {
       console.error("Looks like there was a problem: ", error);
-      //TODO: raise an event to the state machine instead
-      var textarea = document.getElementById("saypi-prompt");
-      textarea.value =
-        "Sorry, there was a problem transcribing your audio. Please try again later.";
+      StateMachineService.actor.send("saypi:transcribeFailed");
     });
 }
 

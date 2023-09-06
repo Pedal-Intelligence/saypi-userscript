@@ -36,3 +36,13 @@ html:not(.firefox-android) #saypi-talkButton:active .waveform,
   background-color: rgba(0, 0, 0, 0); /* transparent without holes */
   border: none;
 }
+
+html:not(.mobile-view) #saypi-notification > svg {
+  width: 300px;
+  height: 100px;
+  padding-right: 150px;
+  padding-bottom: 30px;
+  bottom: 0;
+  right: 0;
+  position: fixed;
+}
