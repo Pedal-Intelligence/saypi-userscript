@@ -23,7 +23,7 @@ export const machine = createMachine(
           },
           "saypi:pause": {
             target: "paused",
-            cond: "isSafari",
+            cond: "isSafariMobile",
           },
           "saypi:piSpeaking": {
             target: "piSpeaking",
@@ -324,8 +324,8 @@ export const machine = createMachine(
         return event.duration >= 1000;
       },
 
-      isSafari: (context, event) => {
-        return isSafari();
+      isSafariMobile: (context, event) => {
+        return isSafari() && isMobileView();
       },
     },
     delays: {},
