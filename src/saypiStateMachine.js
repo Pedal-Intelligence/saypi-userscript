@@ -10,7 +10,7 @@ import EventBus from "./EventBus";
 
 export const machine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFiANmAMSpoAOWCArrGAE4DK5YKA1lgHZQDaADAF1EocgHtYWAC5ZRnYSAAeiAMwB2PjmUBOPgDYAjLq379y3QBoQaRPr5atOXaq26ALKoBMy-QA5TAX39LMmw8QhIySgRyFFowfiEkEDEJaVl5JQQ1DW09Q2NTCytEVSMcUo8tH3cfVWVXM0Dg9FD8IlJ0KMpmVg5uBPkUqRk5JMzszR0DIxMzS2sEVx8PHHddAFZSrWVN3V0+daaQENw4phZ2LigOiiozgDEuLFgAC0gey-7BQfFh9LHEJUtK4cOs+Ko6ps+Hp1sp5ohYbpQR4NqV6j4tOsPEcTjgzh8+tdInc6ExJKJyCwIASrgMkkM0qNQJkPHwMThlnwzMo7Bj1j44cUEB5XBotKV1vywXs9r4cS1TqSadwblFJPQUJxYABjehYABGtO+9N+jIygPsILBEJ26hhgoWrg2OD4KKxVS5EMl8swuBicQgqqo5AI6DpIlNI3NCFsOk0DS9ugFrO88IQEJB6m8ro8qlcHixrh9oW6F0JQeiWEY5Mp7zLRsSEdSUYBMfzSNcWg8It0BZ26xcafFPhwXZcTh8SZ8m30xb9VfrKuJNCVi94xqbfyZikBbIcnO5vMxArTnZHudRlQzKOUc5wpd6VwrlEenGeb2pa-DyUj-2ZNnbUFvGUbxgS5TYtDTMx9HKN1NghPRqmnO91U1HU9UNJdOioVCtV1A1IG-BkW3-LJeRwfR1l7HQQO7TE0z8UFoWhdRfAFfRczvAhRBQCAn2XB9PnXRsf2bP8dzbFFVi7Hs+0lQchWcVRHGcNwqPBfQdB8O9-ToQNl3oVgIDQIjf23TI9jFJMKn2fYBR8NN9mUHBuw2KjKlqbtZyOThRAgOB5BOH4xPMxAAFoigWCKXWY2K4vBO82jAYKt2jfM0w49ZNHWSj3O7PxNKLIJjgVPFV0fbgUrNVsC1dJiEOWflclUU9TBciV827fkDlvYrcV0yAqpIiSBxHeo1HzfQaiohzFLMCjVOWbxcx5Q4+tKwTCSG8TMkMapyjBNlPFRTtTydZFL1MVk-BQjU8Iwq5ttCrJ8yyjiz0qBo9io086ohNzVB8ad1lcAcuJ4vjKpNELo0ysaqiWYEM3qNM8yysc3DWXxQbWwIgA */
+    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFiANmAMSpoAOWCArrGAE4DK5YKA1lgHZQDaADAF1EocgHtYWAC5ZRnYSAAeiAMwB2PjmUBOPgDYAjLq379y3QBoQaRPr5atOXaq26ALKoBMy-QA5TAX39LMmw8QhIySgRyFFowfiEkEDEJaVl5JQQ1DW09Q2NTCytEVSMcUo8tH3cfVWVXM0Dg9FD8IlJ0KMpmVg5uBPkUqRk5JMzszR0DIxMzS2sEVx8PHHddAFZSrWVN3V0+daaQENw4phZ2LigOiiozgDEuLFgAC0gey-7BQfFh9LHEJUtK4cOs+Ko6ps+Hp1sp5ohYbpQR4NqV6j4tOsPEcTjgzh8+tdInc6ExJKJyCwIASrgMkkM0qNQJkPHwMThlnwzMo7Bj1j44cUEB5XBotKV1vywXs9r4cS1TqSadwblFJPQUJxYABjehYABGtO+9N+jIygPsILBEJ26hhgoWrg2OD4KKxVS5EMl8swuBicQgqqo5AI6DpIlNI3NCFsOk0DS9ugFrO88IQEJB6m8ro8qlcHixrh9oX9dEDxIQ9FYEDQ4eSkf+zMQezFSYq+32Ap8af2yhwHjd610lVqA-0xb9WGVRM6wan5Mp7wuhLrDKjAJj+aRri0A6dBZ26xcafFPhwu5cTh8SZ8m3HQWOCpw3WXVyDNCVr6+iQjqXXTeFNkHE5bleUxAU0x3M9c1RSoMxRZQJ2fKcvxnW5oiwR5OGeN5qVQ1cGyZRQbC3UFvGUbxgS5TYtDTMx9HKQcIXUJMlkOB9cXVTUdT1Q0VQrLitV1A1IAIv9G2IrJeRwfQh0qLllAHTE0z8UFoWhdRfAFfRcyQwSeINN8BI1ITeLAe4UCwIgIDEv4iMdV1yglTYfFvdZXCPSxxmqM81CgyoGj2Ic9JMgy+LQtVQuE-VIAAUQAW3ISRa2NX87OjPg0z4JCCFEFAICM2cMOnWyzQ3fRSJ3Pdh1hSVjyFZxVEcZw3CHcF9B0HwkIYehRHoWBiAUWBJBQSQwBwFAADMxvoAAKVl1IAShuUIer62BSv-ST3IcZRlj8Ase1cmSWuWbxcx5djml9HA1v6wbhtG8appm+b1L4ZbcTujb9B-etxKIzIds0fadPWHtRROlwzp0uoDkCB9OFECA4HkE4fgB6MAFoljTLHajU9StKMcUPHva7WnCDH0o3fM0zBzR1lkuSBz8Dqiw4p98VQ6myoAgtHOtdRln5XJVEg0x+wlfMB35A5EM5m7S0gXmtqBqp4z8smaiHbsGrMKGky8WHLqQl9eiuVWJMyQxqnKME2U8VEd0gp1kVg0xWT8ELuOiy2TUxjd6gLGSRSqAKzA2IoHJWCENhctyPK0HK8oK7grcBmwC18qolmBDN6jTPN1nPSo3DWXwPKux8bu+jPozphq7f0FqbSPDwBQVincG+nB9Oi8zLOs+uNx0E9SkNmGLvhxXVvoXr+pweKsG1WL576keALHoUTE2ZqXFk+w3FMBXAiAA */
     id: "sayPi",
     initial: "idle",
     states: {
@@ -30,6 +30,7 @@ export const machine = createMachine(
           },
         },
       },
+
       userSpeaking: {
         description:
           "User is speaking and being recorded by the microphone.\nWaveform animation.",
@@ -68,6 +69,7 @@ export const machine = createMachine(
           },
         },
       },
+
       paused: {
         description:
           "Blocking action on Safari.\nUser must press play to hear Pi's response.\nBounce animation.",
@@ -101,6 +103,7 @@ export const machine = createMachine(
           },
         },
       },
+
       piSpeaking: {
         description:
           "Pi's synthesised speech audio is playing.\nPlayful animation.",
@@ -128,6 +131,7 @@ export const machine = createMachine(
           },
         },
       },
+
       transcribing: {
         description: "Transcribing audio to text.\nCard flip animation.",
         entry: [
@@ -157,12 +161,20 @@ export const machine = createMachine(
             },
             description: "Successfully transcribed user audio to text.",
           },
+
           "saypi:transcribeFailed": {
             target: "#sayPi.errors.transcribeFailed",
             description: "Received an error response from the /transcribe API",
           },
+
+          "saypi:transcribedEmpty": {
+            target: "#sayPi.errors.micError",
+            description:
+              "Received an empty response from the /transcribe API (no speech detected)",
+          },
         },
       },
+
       loading: {
         description: "Pi's audio is loading.",
         entry: {
@@ -183,22 +195,12 @@ export const machine = createMachine(
           },
         },
       },
+
       errors: {
         description: "Error parent state.",
-        entry: {
-          type: "startAnimation",
-          params: {
-            animation: "error",
-          },
-        },
-        exit: {
-          type: "stopAnimation",
-          params: {
-            animation: "error",
-          },
-        },
+
         after: {
-          20000: [
+          10000: [
             {
               target: "#sayPi.idle",
               actions: [],
@@ -209,11 +211,39 @@ export const machine = createMachine(
             },
           ],
         },
+
         initial: "transcribeFailed",
+
         states: {
           transcribeFailed: {
             description: "The /transcribe API responded with an error.",
             type: "final",
+            entry: {
+              type: "startAnimation",
+              params: {
+                animation: "error",
+              },
+            },
+
+            exit: {
+              type: "stopAnimation",
+              params: {
+                animation: "error",
+              },
+            },
+          },
+
+          micError: {
+            type: "final",
+            description: `No audio input detected`,
+            entry: {
+              type: "showNotification",
+              params: { icon: "muted-microphone" },
+            },
+            exit: {
+              type: "dismissNotification",
+              params: {},
+            },
           },
         },
       },
@@ -271,6 +301,16 @@ export const machine = createMachine(
         if (isMobileView()) {
           EventBus.emit("audio:setupRecording");
         }
+      },
+
+      showNotification: (context, event, { action }) => {
+        const icon = action.params.icon;
+        const message = action.params.message;
+        buttonModule.showNotification({ icon, message });
+      },
+
+      dismissNotification: (context, event) => {
+        buttonModule.dismissNotification();
       },
     },
     services: {},

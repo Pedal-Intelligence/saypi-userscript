@@ -31,9 +31,13 @@ export function uploadAudio(audioBlob) {
       return response.json();
     })
     .then(function (responseJson) {
-      StateMachineService.actor.send("saypi:transcribed", {
-        text: responseJson.text,
-      });
+      if (responseJson.text.length === 0) {
+        StateMachineService.actor.send("saypi:transcribedEmpty");
+      } else {
+        StateMachineService.actor.send("saypi:transcribed", {
+          text: responseJson.text,
+        });
+      }
     })
     .catch(function (error) {
       console.error("Looks like there was a problem: ", error);
