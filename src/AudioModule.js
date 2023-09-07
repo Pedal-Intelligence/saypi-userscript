@@ -1,3 +1,8 @@
+// import state machines for audio input and output
+const { interpret } = require("xstate");
+//const audioInputMachine = require("./state-machines/AudioInputMachine");
+//const createAudioOutputMachine = require("./state-machines/AudioOutputMachine");
+
 // depends on the injecting script (saypi.index.js) declaring the EventBus as a global variable
 const EventBus = window.EventBus;
 
@@ -5,106 +10,37 @@ const EventBus = window.EventBus;
 const audioElement = document.querySelector("audio");
 if (!audioElement) {
   console.error("Audio element not found!");
+} else {
+  audioElement.preload = "auto"; // enable aggressive preloading of audio
 }
 
-// TODO: dedupe this function from EventModule.js
-function isSafari() {
-  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+const initialContext = { userStarted: true, audioElement: audioElement };
+const audioOutputActor = interpret(audioInputMachine).start();
+
+function registerAudioPlaybackEvents(audio, actor) {
+  audio.addEventListener("loadstart", function () {
+    actor.send("loadStart");
+  });
+
+  // Intercept Autoplay Events (can't autoplay full audio on Safari)
+  audio.addEventListener("play", function () {
+    actor.send("play");
+  });
+
+  // Event listeners for detecting when Pi is speaking
+  audio.addEventListener("playing", () => {
+    actor.send("play");
+  });
+
+  audio.addEventListener("pause", () => {
+    actor.send("pause");
+  });
+
+  audio.addEventListener("ended", () => {
+    actor.send("ended");
+  });
 }
-
-audioElement.preload = "auto"; // enable aggressive preloading of audio
-const piAudioManager = {
-  isSpeaking: false,
-  audioElement: audioElement,
-  _userStarted: true, // flag to indicate playback has been started by the user (true by default because user must request initial playback)
-  _isLoadCalled: false, // flag to indicate if the load() method has been called on the audio element
-
-  isLoadCalled: function () {
-    return this._isLoadCalled;
-  },
-
-  setIsLoadCalled: function (value) {
-    this._isLoadCalled = value;
-  },
-
-  reload: function () {
-    if (!isSafari()) {
-      return;
-    }
-
-    this._userStarted = true; // set a flag to indicate playback has been started by the user
-    this.audioElement.load(); // reset for Safari
-    this.audioElement.play();
-  },
-
-  autoPlay: function () {
-    if (!this._userStarted) {
-      this.audioElement.pause();
-      EventBus.emit("saypi:pause");
-    }
-  },
-
-  stop: function () {
-    if (this.isSpeaking) {
-      this.audioElement.pause();
-    }
-    if (
-      this.audioElement.duration &&
-      !this.audioElement.ended &&
-      this.audioElement.currentTime < this.audioElement.duration
-    ) {
-      this.audioElement.currentTime = this.audioElement.duration; // seek the audio to the end
-      this.audioElement.play(); // trigger the ended event
-    }
-  },
-
-  pause: function () {
-    this.audioElement.pause();
-  },
-
-  resume: function () {
-    this.audioElement.play();
-  },
-
-  playing: function () {
-    this.isSpeaking = true;
-  },
-
-  stopped: function () {
-    this.isSpeaking = false;
-    this._userStarted = false;
-  },
-};
-
-// Intercept Autoplay Events (can't autoplay full audio on Safari)
-audioElement.addEventListener("play", function () {
-  if (isSafari()) {
-    piAudioManager.autoPlay();
-  }
-});
-
-audioElement.addEventListener("loadstart", function () {
-  if (isSafari()) {
-    // tell the state machine that Pi is ready to speak (while paused)
-    EventBus.emit("saypi:ready");
-  }
-});
-
-// Event listeners for detecting when Pi is speaking
-audioElement.addEventListener("playing", () => {
-  piAudioManager.playing();
-  EventBus.emit("saypi:piSpeaking");
-});
-
-audioElement.addEventListener("pause", () => {
-  piAudioManager.stopped();
-  EventBus.emit("saypi:piStoppedSpeaking");
-});
-
-audioElement.addEventListener("ended", () => {
-  piAudioManager.stopped();
-  EventBus.emit("saypi:piFinishedSpeaking");
-});
+registerAudioPlaybackEvents(audioElement, audioOutputActor);
 
 // audio input (user)
 var audioDataChunks = [];
@@ -203,9 +139,7 @@ function startRecording() {
     return;
   }
   // Check if Pi is currently speaking and stop her audio
-  if (piAudioManager.isSpeaking) {
-    piAudioManager.pause();
-  }
+  audioOutputActor.send("pause");
 
   // Start recording
   mediaRecorder.start();
@@ -230,15 +164,15 @@ function stopRecording() {
     if (duration < threshold) {
       console.log("Recording was too short, not uploading for transcription");
       EventBus.emit("saypi:userStoppedSpeaking", { duration: duration });
-      piAudioManager.resume();
+      audioOutputActor.send("play"); // resume Pi's audio
     } else {
-      piAudioManager.stop();
+      audioOutputActor.send("stop"); // cancel Pi's audio
     }
   }
 }
 
 /* These events are used to control/pass requests to the audio module from other modules */
-function registerCustomAudioEventListeners() {
+function registerAudioCommands() {
   EventBus.on("audio:setupRecording", function (e) {
     setupRecording();
   });
@@ -254,7 +188,7 @@ function registerCustomAudioEventListeners() {
     stopRecording();
   });
   EventBus.on("audio:reload", function (e) {
-    piAudioManager.reload();
+    audioOutputActor.send("reload");
   });
 }
-registerCustomAudioEventListeners();
+registerAudioCommands();

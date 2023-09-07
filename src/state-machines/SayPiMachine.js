@@ -1,12 +1,12 @@
-import { buttonModule } from "./ButtonModule";
+import { buttonModule } from "../ButtonModule";
 import { createMachine } from "xstate";
-import AnimationModule from "./AnimationModule";
-import { isSafari, isMobileView } from "./UserAgentModule";
+import AnimationModule from "../AnimationModule";
+import { isSafari, isMobileView } from "../UserAgentModule";
 import {
   uploadAudio,
   handleTranscriptionResponse,
-} from "./TranscriptionModule";
-import EventBus from "./EventBus";
+} from "../TranscriptionModule";
+import EventBus from "../EventBus";
 
 export const machine = createMachine(
   {

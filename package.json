@@ -6,6 +6,7 @@
         "test": "mocha test.js"
     },
     "dependencies": {
+        "@xstate/fsm": "^2.1.0",
         "axios": "^1.4.0",
         "cheerio": "^1.0.0-rc.12",
         "express": "^4.18.2",

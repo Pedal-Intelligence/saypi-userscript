@@ -8,7 +8,8 @@ import "./rectangles.css";
 (function () {
   "use strict";
 
-  const pageScript = require("raw-loader!./AudioModule.js").default;
+  const pageScript =
+    require("raw-loader!../public/audioModule.bundle.js").default;
   addUserAgentFlags();
   EventModule.init();
   setupEventBus();
