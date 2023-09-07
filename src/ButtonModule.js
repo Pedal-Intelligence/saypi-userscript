@@ -85,16 +85,22 @@ export default class ButtonModule {
 
   // Simulate an "Enter" keypress event on a form
   static simulateFormSubmit() {
-    const textarea = document.getElementById("saypi-prompt");
+    const submitButton = document.getElementById("saypi-submitButton");
+    if (submitButton) {
+      submitButton.click();
+    } else {
+      /* hit enter key in the prompt textarea, might not work as expected on "new ui layout" */
+      const textarea = document.getElementById("saypi-prompt");
 
-    const enterEvent = new KeyboardEvent("keydown", {
-      bubbles: true,
-      key: "Enter",
-      keyCode: 13,
-      which: 13,
-    });
+      const enterEvent = new KeyboardEvent("keydown", {
+        bubbles: true,
+        key: "Enter",
+        keyCode: 13,
+        which: 13,
+      });
 
-    textarea.dispatchEvent(enterEvent);
+      textarea.dispatchEvent(enterEvent);
+    }
   }
 
   // Function to handle auto-submit based on the button's data attribute
