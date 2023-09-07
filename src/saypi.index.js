@@ -73,8 +73,16 @@ import "./rectangles.css";
     prompt.id = "saypi-prompt";
     const foundFooter = addIdFooter();
     const foundAudioControls = addIdAudioControls();
-    const foundExperiencesButton = addIdExperiencesButton();
-    addTalkButton(prompt.parentElement.parentElement);
+    const promptControlsContainer = prompt.parentElement.parentElement;
+    addIdSubmitButton(promptControlsContainer);
+    addTalkButton(promptControlsContainer);
+  }
+
+  function addIdSubmitButton(container) {
+    const submitButton = container.querySelector("button[type=button]");
+    if (submitButton) {
+      submitButton.id = "saypi-submitButton";
+    }
   }
 
   function addIdFooter() {
@@ -91,7 +99,7 @@ import "./rectangles.css";
       // Check if the preceding element is a div
       if (precedingDiv && precedingDiv.tagName.toLowerCase() === "div") {
         // Assign an ID to the div
-        precedingDiv.id = "saypi-footer";
+        precedingDiv.lastElementChild.id = "saypi-footer";
         found = true; // set to found
       }
     });
@@ -119,21 +127,6 @@ import "./rectangles.css";
     });
 
     return found;
-  }
-
-  function addIdExperiencesButton() {
-    // Find all audio elements on the page
-    var audioControls = document.getElementById("saypi-audio-controls");
-    if (audioControls) {
-      var nextSib = audioControls.nextElementSibling;
-      // Check if the element is a button
-      if (nextSib && nextSib.tagName.toLowerCase() === "button") {
-        // Assign an ID to the div
-        nextSib.id = "saypi-experiences-button";
-        return true;
-      }
-    }
-    return false;
   }
 
   function injectScript(callback) {
