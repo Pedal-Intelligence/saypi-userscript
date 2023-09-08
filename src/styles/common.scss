@@ -1,0 +1,24 @@
+.hidden {
+  display: none;
+}
+#saypi-playButton.play-button {
+  /* position over the talk button, but under any controls */
+  z-index: 70; /* talk button z-index is 59 or 60 */
+  background-color: rgba(0, 0, 0, 0); /* transparent without holes */
+  border: none;
+}
+
+@media (max-width: 768px) {
+  /* maximize (mobile view) button is only displayed on compatible devices */
+  #saypi-enterButton,
+  #saypi-exitButton {
+    position: fixed;
+    top: 4rem;
+    left: 1.25rem;
+    width: 3rem;
+    height: 3rem;
+    padding: 6px;
+    border: 0;
+    z-index: 60;
+  }
+}

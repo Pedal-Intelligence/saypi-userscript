@@ -1,11 +1,15 @@
-import { exitMobileMode, isMobileView } from "./UserAgentModule";
+import {
+  enterMobileMode,
+  exitMobileMode,
+  isMobileView,
+} from "./UserAgentModule";
 import EventBus from "./EventBus";
-import EventModule from "./EventModule.js";
 import StateMachineService from "./StateMachineService.js";
-import exitIconSVG from "./exit.svg";
-import rectanglesSVG from "./rectangles.svg";
-import talkIconSVG from "./waveform.svg";
-import mutedMicIconSVG from "./muted_microphone.svg";
+import exitIconSVG from "./icons/exit.svg";
+import maximizeIconSVG from "./icons/maximize.svg";
+import rectanglesSVG from "./icons/rectangles.svg";
+import talkIconSVG from "./icons/waveform.svg";
+import mutedMicIconSVG from "./icons/muted_microphone.svg";
 export default class ButtonModule {
   constructor() {
     this.playButton = null;
@@ -126,6 +130,22 @@ export default class ButtonModule {
     button.setAttribute("aria-label", label);
     button.setAttribute("title", label);
     button.innerHTML = exitIconSVG;
+    document.body.appendChild(button);
+    return button;
+  }
+
+  createEnterButton() {
+    const label = "Enter Voice-Controlled Mobile Mode";
+    const button = this.createButton("", () => {
+      enterMobileMode();
+    });
+    button.id = "saypi-enterButton";
+    button.type = "button";
+    button.className =
+      "enter-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+    button.setAttribute("aria-label", label);
+    button.setAttribute("title", label);
+    button.innerHTML = maximizeIconSVG;
     document.body.appendChild(button);
     return button;
   }

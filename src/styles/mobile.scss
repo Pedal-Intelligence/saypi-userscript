@@ -58,15 +58,8 @@
       padding-top: 0;
     }
 
-    #saypi-exitButton {
-      position: fixed;
-      top: 10px;
-      left: 12px;
-      width: 52px;
-      height: 52px;
-      padding: 6px;
-      border: 0;
-      z-index: 60;
+    #saypi-enterButton {
+      display: none;
     }
 
     #saypi-footer {

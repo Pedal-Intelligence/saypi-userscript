@@ -1,10 +1,11 @@
 import { buttonModule } from "./ButtonModule.js";
 import EventBus from "./EventBus.js";
 import EventModule from "./EventModule.js";
-import { isMobileView, addUserAgentFlags } from "./UserAgentModule.js";
-import "./talkButton.css";
-import "./mobile.scss";
-import "./rectangles.css";
+import { addUserAgentFlags } from "./UserAgentModule.js";
+import "./styles/common.scss";
+import "./styles/desktop.scss";
+import "./styles/mobile.scss";
+import "./styles/rectangles.css";
 (function () {
   "use strict";
 
@@ -76,6 +77,8 @@ import "./rectangles.css";
     const promptControlsContainer = prompt.parentElement.parentElement;
     addIdSubmitButton(promptControlsContainer);
     addTalkButton(promptControlsContainer);
+    buttonModule.createEnterButton();
+    buttonModule.createExitButton();
   }
 
   function addIdSubmitButton(container) {
