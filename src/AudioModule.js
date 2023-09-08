@@ -1,7 +1,7 @@
 // import state machines for audio input and output
 const { interpret } = require("xstate");
 //const audioInputMachine = require("./state-machines/AudioInputMachine");
-//const createAudioOutputMachine = require("./state-machines/AudioOutputMachine");
+const { audioOutputMachine } = require("./state-machines/AudioOutputMachine");
 
 // depends on the injecting script (saypi.index.js) declaring the EventBus as a global variable
 const EventBus = window.EventBus;
@@ -14,8 +14,12 @@ if (!audioElement) {
   audioElement.preload = "auto"; // enable aggressive preloading of audio
 }
 
-const initialContext = { userStarted: true, audioElement: audioElement };
-const audioOutputActor = interpret(audioInputMachine).start();
+// debug audio output machine
+console.log("Audio Output Machine", audioOutputMachine);
+
+const audioOutputActor = interpret(audioOutputMachine)
+  .onTransition((state) => console.log(state.value))
+  .start();
 
 function registerAudioPlaybackEvents(audio, actor) {
   audio.addEventListener("loadstart", function () {
