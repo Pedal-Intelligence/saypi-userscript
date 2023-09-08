@@ -10,7 +10,6 @@
 
       height: 100vh;
       top: 0;
-      padding: 5%;
     }
 
     #saypi-talkButton {
@@ -54,15 +53,13 @@
       }
     }
 
-    #saypi-exitButton {
-      position: fixed;
-      top: 10px;
-      left: 12px;
-      width: 52px;
-      height: 52px;
-      padding: 6px;
-      border: 0;
-      z-index: 60;
+    /* fix an alignment issue with the "new ui layout" */
+    .text-body-chat-m {
+      padding-top: 0;
+    }
+
+    #saypi-enterButton {
+      display: none;
     }
 
     #saypi-footer {
@@ -71,6 +68,10 @@
 
     #saypi-prompt {
       /* hides virtual keyboard on android */
+      display: none;
+    }
+
+    #saypi-submitButton {
       display: none;
     }
   }

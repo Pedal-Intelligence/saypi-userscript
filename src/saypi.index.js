@@ -1,10 +1,11 @@
 import { buttonModule } from "./ButtonModule.js";
 import EventBus from "./EventBus.js";
 import EventModule from "./EventModule.js";
-import { isMobileView, addUserAgentFlags } from "./UserAgentModule.js";
-import "./talkButton.css";
-import "./mobile.scss";
-import "./rectangles.css";
+import { addUserAgentFlags } from "./UserAgentModule.js";
+import "./styles/common.scss";
+import "./styles/desktop.scss";
+import "./styles/mobile.scss";
+import "./styles/rectangles.css";
 (function () {
   "use strict";
 
@@ -15,44 +16,50 @@ import "./rectangles.css";
   setupEventBus();
 
   // Create a MutationObserver to listen for changes to the DOM
-  var observer = new MutationObserver(function (mutations) {
-    // Check each mutation
-    for (var i = 0; i < mutations.length; i++) {
-      var mutation = mutations[i];
-
-      // If nodes were added, check each one
-      if (mutation.addedNodes.length > 0) {
-        for (var j = 0; j < mutation.addedNodes.length; j++) {
-          var node = mutation.addedNodes[j];
-
-          // If the node is the appropriate container element, add the button and stop observing
+  // textareas are added to the DOM after the page loads
+  const callback = function (mutationsList, observer) {
+    for (const mutation of mutationsList) {
+      if (mutation.type === "childList") {
+        // Iterate through added nodes
+        mutation.addedNodes.forEach((node) => {
+          // Check if added node is a textarea with 'enterkeyhint' attribute
           if (
-            node.nodeName.toLowerCase() === "div" &&
-            node.classList.contains("fixed") &&
-            node.classList.contains("bottom-16")
+            node.nodeName === "TEXTAREA" &&
+            node.hasAttribute("enterkeyhint")
           ) {
-            var footer = node;
-            var buttonContainer = footer.querySelector(
-              ".relative.flex.flex-col"
-            );
-            if (buttonContainer) {
-              addTalkButton(buttonContainer);
-            } else {
-              console.warn("No button container found in footer");
-            }
-            if (!annotateDOM()) {
-              console.warn("Required elements not found in DOM");
-            }
-            if (isMobileView()) {
-              buttonModule.createExitButton();
-            }
+            // Stop observing to avoid any potential infinite loops
             observer.disconnect();
+
+            // Do something with the textarea, like add an event listener
+            annotateDOM(node);
             return;
           }
-        }
+
+          // Check if added node contains a textarea with 'enterkeyhint' attribute
+          if (node.querySelectorAll) {
+            const textareas = node.querySelectorAll("textarea[enterkeyhint]");
+            if (textareas.length > 0) {
+              // Stop observing
+              observer.disconnect();
+
+              // Do something with the first textarea that has 'enterkeyhint'
+              annotateDOM(textareas[0]);
+              return;
+            }
+          }
+        });
       }
     }
-  });
+  };
+
+  // Options for the observer (which mutations to observe)
+  const config = { attributes: false, childList: true, subtree: true };
+
+  // Create an observer instance linked to the callback function
+  const observer = new MutationObserver(callback);
+
+  // Start observing the target node for configured mutations
+  observer.observe(document.body, config);
 
   function setupEventBus() {
     // Setting the correct context
@@ -63,30 +70,23 @@ import "./rectangles.css";
     context.EventBus = EventBus; // Make the EventBus available to the page script
   }
 
-  function annotateDOM() {
+  function annotateDOM(prompt) {
     // Add id attributes to important elements
-    const foundPrompt = addIdPromptTextArea();
+    prompt.id = "saypi-prompt";
     const foundFooter = addIdFooter();
     const foundAudioControls = addIdAudioControls();
-    const foundExperiencesButton = addIdExperiencesButton();
-    return (
-      foundPrompt && foundFooter && foundAudioControls && foundExperiencesButton
-    );
+    const promptControlsContainer = prompt.parentElement.parentElement;
+    addIdSubmitButton(promptControlsContainer);
+    addTalkButton(promptControlsContainer);
+    buttonModule.createEnterButton();
+    buttonModule.createExitButton();
   }
 
-  function addIdPromptTextArea() {
-    var textarea = document.getElementById("saypi-prompt");
-    if (!textarea) {
-      // Find the first <textarea> element and give it an id
-      var textareaElement = document.querySelector("textarea");
-      if (textareaElement) {
-        textareaElement.id = "saypi-prompt";
-      } else {
-        console.warn("No <textarea> element found");
-        return false;
-      }
+  function addIdSubmitButton(container) {
+    const submitButton = container.querySelector("button[type=button]");
+    if (submitButton) {
+      submitButton.id = "saypi-submitButton";
     }
-    return true;
   }
 
   function addIdFooter() {
@@ -103,7 +103,7 @@ import "./rectangles.css";
       // Check if the preceding element is a div
       if (precedingDiv && precedingDiv.tagName.toLowerCase() === "div") {
         // Assign an ID to the div
-        precedingDiv.id = "saypi-footer";
+        precedingDiv.lastElementChild.id = "saypi-footer";
         found = true; // set to found
       }
     });
@@ -133,21 +133,6 @@ import "./rectangles.css";
     return found;
   }
 
-  function addIdExperiencesButton() {
-    // Find all audio elements on the page
-    var audioControls = document.getElementById("saypi-audio-controls");
-    if (audioControls) {
-      var nextSib = audioControls.nextElementSibling;
-      // Check if the element is a button
-      if (nextSib && nextSib.tagName.toLowerCase() === "button") {
-        // Assign an ID to the div
-        nextSib.id = "saypi-experiences-button";
-        return true;
-      }
-    }
-    return false;
-  }
-
   function injectScript(callback) {
     var scriptElement = document.createElement("script");
     scriptElement.type = "text/javascript";
@@ -162,10 +147,18 @@ import "./rectangles.css";
   }
 
   function addTalkButton(container) {
-    // create a containing div
+    // Create a containing div
     var panel = document.createElement("div");
     panel.id = "saypi-panel";
-    container.appendChild(panel);
+
+    // Check if the container has any child elements
+    if (container.childNodes.length > 0) {
+      // Insert the panel as the second-to-last child
+      container.insertBefore(panel, container.lastChild);
+    } else {
+      // If the container has no children, just append the panel
+      container.appendChild(panel);
+    }
 
     // Create the talk button using ButtonModule
     const label =
