@@ -14,9 +14,7 @@ if (!audioElement) {
   audioElement.preload = "auto"; // enable aggressive preloading of audio
 }
 
-const audioOutputActor = interpret(audioOutputMachine)
-  .onTransition((state) => console.log("audio output: ", state.value))
-  .start();
+const audioOutputActor = interpret(audioOutputMachine).start();
 
 function registerAudioPlaybackEvents(audio, actor) {
   audio.addEventListener("loadstart", function () {
@@ -44,9 +42,7 @@ function registerAudioPlaybackEvents(audio, actor) {
 registerAudioPlaybackEvents(audioElement, audioOutputActor);
 
 // audio input (user)
-const audioInputActor = interpret(audioInputMachine)
-  .onTransition((state) => console.log("audio input: ", state.value))
-  .start();
+const audioInputActor = interpret(audioInputMachine).start();
 
 /* These events are used to control/pass requests to the audio module from other modules */
 function registerAudioCommands() {
@@ -77,7 +73,6 @@ function registerAudioCommands() {
   });
   // audio input (recording) events (pass MediaRecorder events -> audio input machine actor)
   EventBus.on("audio:dataavailable", (detail) => {
-    console.log("audio:dataavailable", detail);
     audioInputActor.send({ type: "dataAvailable", ...detail });
   });
   EventBus.on("audio:input:stop", function (e) {

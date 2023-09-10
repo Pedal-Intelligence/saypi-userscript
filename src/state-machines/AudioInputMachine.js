@@ -25,7 +25,6 @@ function setupRecording(callback) {
       var options = { mimeType: audioMimeType };
       mediaRecorder = new MediaRecorder(stream, options);
       mediaRecorder.addEventListener("dataavailable", (event) => {
-        console.log("Data is available from media recorder", event);
         EventBus.emit("audio:dataavailable", {
           data: event.data,
         });
@@ -33,7 +32,6 @@ function setupRecording(callback) {
       mediaRecorder.addEventListener("stop", () => {
         EventBus.emit("audio:input:stop");
       });
-      console.log("MediaRecorder has been setup.");
     })
     .then(function () {
       // Invoke the callback function
@@ -164,7 +162,6 @@ export const audioInputMachine = createMachine(
   {
     actions: {
       startRecording: (context, event) => {
-        console.log("Starting recording");
         // Clear the array for the next recording
         context.audioDataChunks = [];
         context.startTime = Date.now();
@@ -191,16 +188,10 @@ export const audioInputMachine = createMachine(
 
       addData: (context, event) => {
         // Add the new data to the array
-        console.log("Adding audio data to array", event);
-        const chunks = context.audioDataChunks.push(event.data);
-        console.log("Audio data chunks: " + chunks);
+        context.audioDataChunks.push(event.data);
       },
 
       sendData: (context, event) => {
-        console.log(
-          "Sending audio data to server for transcription. Number of chunks: " +
-            context.audioDataChunks.length
-        );
         // Create a Blob from the audio data chunks
         var audioBlob = new Blob(context.audioDataChunks, {
           type: mediaRecorder.mimeType,
