@@ -67,10 +67,16 @@ This is the only command that external modules can send the machine.`,
             cond: "isSafariMobile",
           },
         },
-        entry: {
-          type: "emitEvent",
-          params: { eventName: "saypi:pause" },
-        },
+        entry: [
+          {
+            type: "emitEvent",
+            params: { eventName: "saypi:pause" },
+          },
+          {
+            type: "emitEvent",
+            params: { eventName: "saypi:piStoppedSpeaking" },
+          },
+        ],
       },
       stopped: {
         on: {
@@ -119,6 +125,7 @@ This is the only command that external modules can send the machine.`,
           audio.currentTime = audio.duration; // seek the audio to the end
           audio.play(); // trigger the ended event
         }
+        EventBus.emit("saypi:piFinishedSpeaking");
       },
     },
     guards: {
