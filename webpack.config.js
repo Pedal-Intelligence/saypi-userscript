@@ -22,9 +22,16 @@ module.exports = (env) => {
   return {
     mode: "development",
     devtool: "inline-source-map",
-    entry: "./src/saypi.index.js",
+    entry: {
+      main: "./src/saypi.index.js",
+      audioModule: "./src/AudioModule.js",
+    },
     output: {
-      filename: "saypi.user.js",
+      filename: (chunkData) => {
+        return chunkData.chunk.name === "main"
+          ? "saypi.user.js"
+          : "[name].bundle.js";
+      },
       path: path.resolve(__dirname, "public"),
     },
     module: {

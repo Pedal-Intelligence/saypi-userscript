@@ -1,5 +1,5 @@
 import { interpret } from "xstate";
-import { machine } from "./saypiStateMachine";
+import { machine } from "./state-machines/SayPiMachine";
 
 /**
  * A singleton service that manages the state machine.
