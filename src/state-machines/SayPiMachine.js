@@ -10,7 +10,7 @@ import EventBus from "../EventBus";
 
 export const machine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFiANmAMSpoAOWCArrGAE4DK5YKA1lgHZQDaADAF1EocgHtYWAC5ZRnYSAAeiAMwB2PjmUBOPgDYAjLq379y3QBoQaRPr5atOXaq26ALKoBMy-QA5TAX39LMmw8QhIySgRyFFowfiEkEDEJaVl5JQQ1DW09Q2NTCytEVSMcUo8tH3cfVWVXM0Dg9FD8IlJ0KMpmVg5uBPkUqRk5JMzszR0DIxMzS2sEVx8PHHddAFZSrWVN3V0+daaQENw4phZ2LigOiiozgDEuLFgAC0gey-7BQfFh9LHEJUtK4cOs+Ko6ps+Hp1sp5ohYbpQR4NqV6j4tOsPEcTjgzh8+tdInc6ExJKJyCwIASrgMkkM0qNQJkPHwMThlnwzMo7Bj1j44cUEB5XBotKV1vywXs9r4cS1TqSadwblFJPQUJxYABjehYABGtO+9N+jIygPsILBEJ26hhgoWrg2OD4KKxVS5EMl8swuBicQgqqo5AI6DpIlNI3NCFsOk0DS9ugFrO88IQEJB6m8ro8qlcHixrh9oX9dEDxIQ9FYEDQ4eSkf+zMQezFSYq+32Ap8af2yhwHjd610lVqA-0xb9WGVRM6wan5Mp7wuhLrDKjAJj+aRri0A6dBZ26xcafFPhwu5cTh8SZ8m3HQWOCpw3WXVyDNCVr6+iQjqXXTeFNkHE5bleUxAU0x3M9c1RSoMxRZQJ2fKcvxnW5oiwR5OGeN5qVQ1cGyZRQbC3UFvGUbxgS5TYtDTMx9HKQcIXUJMlkOB9cXVTUdT1Q0VQrLitV1A1IAIv9G2IrJeRwfQh0qLllAHTE0z8UFoWhdRfAFfRcyQwSeINN8BI1ITeLAe4UCwIgIDEv4iMdV1yglTYfFvdZXCPSxxmqM81CgyoGj2Ic9JMgy+LQtVQuE-VIAAUQAW3ISRa2NX87OjPg0z4JCCFEFAICM2cMOnWyzQ3fRSJ3Pdh1hSVjyFZxVEcZw3CHcF9B0HwkIYehRHoWBiAUWBJBQSQwBwFAADMxvoAAKVl1IAShuUIer62BSv-ST3IcZRlj8Ase1cmSWuWbxcx5djml9HA1v6wbhtG8appm+b1L4ZbcTujb9B-etxKIzIds0fadPWHtRROlwzp0uoDkCB9OFECA4HkE4fgB6MAFoljTLHajU9StKMcUPHva7WnCDH0o3fM0zBzR1lkuSBz8Dqiw4p98VQ6myoAgtHOtdRln5XJVEg0x+wlfMB35A5EM5m7S0gXmtqBqp4z8smaiHbsGrMKGky8WHLqQl9eiuVWJMyQxqnKME2U8VEd0gp1kVg0xWT8ELuOiy2TUxjd6gLGSRSqAKzA2IoHJWCENhctyPK0HK8oK7grcBmwC18qolmBDN6jTPN1nPSo3DWXwPKux8bu+jPozphq7f0FqbSPDwBQVincG+nB9Oi8zLOs+uNx0E9SkNmGLvhxXVvoXr+pweKsG1WL576keALHoUTE2ZqXFk+w3FMBXAiAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFiANmAMSpoAOWCArrGAE4DK5YKA1lgHZQDaADAF1EocgHtYWAC5ZRnYSAAeiAMwB2PjmUBOPgDYAjLq379y3QBoQaRPr5atOXaq26ALKoBMy-QA5TAX39LMmw8QhIySgRUADMUeiwAIQJRAGM2SH4hJBAxCWlZeSUEPktrEsDg9FD8IlJ0KMpmVg5uLPk8qRk5HOK1DW09Q2NTCytEVx8PHHddAFZVI2UF3V0+OcqQENxaBmb2Lih6iipd+gAxLixYAAtIfdbeQQ7xLsLexA97Vxw5vlVVMt1Ho5soyohQbpfh55otlJMtHMPJttjgzg9DscoujJKJyCwIBi2s8cp0Cj1QMUPHwfA4pnwzMo7LS5j4weMEB5XBotIs5qy-qtVr4UdUdnQmCwDtwsVRJPQUJxYKkEgAjQ7tUmvclFT7fX7-QELPgg9nlVzzHB8GFIrQ+BkA-mizC4VUpdKQWU0ThutJsTUibXdXUIWw6TSuNSqOa6NnU7zghAAn7qbzWjyqVweJGuZ2hX0eiBe+isCBoAO5IPvSmIVY82OLGF6GnKHyJtbKHAeG0xr4+TwefR53BNKWPL1NXH4+5jjUkwP5YMfUNZqGuLTdi3Z5ZzFyJ3k+HAblxOHyxnwLIdBLZinCjlqYyKnCVEp7ZBdvCmKT40unx3RMnaiJsom66HhmsJfMmMLKMOd5YK+E5YJcnDXHchKzsS76Vou1bfiuMK-N4yjeFo3JAloiZmPoOCePMCwAnoPiTBs16ovKirKmqj4NHKCpKiqWCqpk844Z+IaAYe+i9joJHdoiiZ+AaJr-HwvhsvoGZwRxAncTKT4IDpXFCWA5woFgRAQBWZJLqA5rWrRfILD4F5zK4u6WH0zGHmoYFfJGqwxtp-HGeq+m8YZIWCcJEAAKIALbkJI5aiTZeHFKUHJ8HBKQoBAPEnAg97Sm+Ly4V+xT6KuMwblyujbvye4cs4qiOM4bgxv8+g6D4cEMPQoj0LAxAKLAkgoJIYA4CgMSTfQAAUtgqQAlMcoT9YNsDWVWFWIJl5TZWxt4bUNI1jRNU0zXNi0qXwq2oidW36NhaW7SUiaHdenCiBAcDyNsZXicuAC0kyJsD-a-HBtRgIDOrLlmiaaXMmhzNJvbdn43W5kdLpoi+mFQHDtn4dmDl-IxUysoMqigaYXZ8lm3asussG4-m7oZBAxPpRCdoRr5g7uBesaJoCUL6O1UzeBmTKsVUePFY8PNvYYzG0X8NJ0Qs66gRa0KQaY1J+MFnHRYcKsSVmKOaX5ZFmPMYz2dMAL0aoLn8u5Wg5aIeUW1q5UhsjPl2gi7iZvCYvuUeXxuLMvjufLN5449lsIx4imuD8ksuNLmmAusfX0ANQ04EZ0WmeZllpzWCA6Puiw4DnsZePnctFyXsA4PFWCpLFxeDTX+H1xyJgLG1LjSfYbimGzgRAA */
     id: "sayPi",
     initial: "idle",
     states: {
@@ -21,8 +21,8 @@ export const machine = createMachine(
           "saypi:userSpeaking": {
             target: "userSpeaking",
           },
-          "saypi:pause": {
-            target: "paused",
+          "saypi:safariBlocked": {
+            target: "blocked",
             cond: "isSafariMobile",
           },
           "saypi:piSpeaking": {
@@ -70,7 +70,7 @@ export const machine = createMachine(
         },
       },
 
-      paused: {
+      blocked: {
         description:
           "Blocking action on Safari.\nUser must press play to hear Pi's response.\nBounce animation.",
         entry: [
@@ -90,16 +90,16 @@ export const machine = createMachine(
           },
         ],
         on: {
-          "saypi:play": {
-            target: "loading",
-            actions: "hidePlayButton",
-          },
-
           "saypi:ready": {
-            target: "paused",
+            target: "blocked",
             internal: true,
             description: `Enough audio has been buffered to start playback.`,
             actions: "showPlayButton",
+          },
+
+          "saypi:unblock": {
+            target: "loading",
+            actions: "hidePlayButton",
           },
         },
       },

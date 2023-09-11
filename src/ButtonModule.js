@@ -177,7 +177,7 @@ export default class ButtonModule {
   }
 
   handlePlayButtonClick() {
-    this.actor.send("saypi:play");
+    this.actor.send("saypi:unblock");
     EventBus.emit("audio:reload");
   }
 

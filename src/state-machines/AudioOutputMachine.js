@@ -10,91 +10,113 @@ if (!audioElement) {
 
 export const audioOutputMachine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7A8qgLgA4EB0GEANmAMQVbIQDK+yATvgNoAMAuoqISywM+bADt+IAB6IAjACYArCQAsATg0AOAGwBmAOxdDXebIA0IAJ6IV2lSU2KuXRSpX7FuzWoC+Pi2iYuATE+CR0DBhiUNSEFMiW3HxIIILColgSKTIIKvJqJPqyXGq2urLadopq2hbWuXYOTi5uHl6+-iCB2HhEpBGY0bFosGBJkmki4pI5eQVFJWUVVTV1iPr62iTazlwqst5qihvafgHoPSH99IMxsPhYhOMpkxlZoLP5hcWlessq1VqVkQSlkJCUzkUBz22jUzl0Zy6F2CfTCcQSURihBGY14EyEU0yM3WxRIcO08lhbk0mxUmjWuX0uhIuxcujUTL02k0iO6KNCJHRlkx1Huj2eAgJb2JCAWZK4FKpdNp9OBCAM8hZu0U8nkXncpV5yN6AqFIrAYggkAlqSl02yJK48sVpWVdlV9TymuabOKO0UmlkRqCJtI2NQowgsXiiTxLztRIdCC020UFNKHk0Gt0DM89kczm0smqak0ZdOnT5obROKjYqeccl6XtHzk8kMTVK7OVWcUDI8YIBzgBWZq7I65xDVxrEcg1FYYAGNteLekjudlNdNPduccJF0zQptn0x4RleN05I9cIc4GzDYnEbtubidbCAUHccXdKNN7DMDJA+kWaYHHCaZ+J0YhYFa8ApFW074i+7xrggAC0QL1OhWqsjhkLBpcqJkJQYCIYSyGfAytjKAekKtJ43j4fy1yRNEpHSkmSjKB4+iBkoBiBmUlH7E0hayO41TKox1aCjGmJsauOSeFsRzlAelQaLoB6UfImgiS4J6yPoajsnYUmXuGkbya+KGyLZYLkjpzS2fo8j9jpqjNDqmgqFwsgaIoZmEdekBWeRcjaEZnbqJSAInAy2iKFxWYGIY8i2FmEE+EAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7A8qgLgA4EDEYAtofhpANoAMAuoqIVrBtVgHYsgCeiALQBGAOwBWADQgAHohEBOACzKAdMrEA2LQA4ATPq0iJW-QF9zMtJlwFi+NRggAbMCRdZkEWPmQAnfAZmJBA2Di5eUPkEQwk1aQFERX1FNXoM+hMAZnoJXRFsrUtrdGw8IgI1T28MbigPLwhIcjA-CGQ-YL5wzmwo0BiJfRlBBAKEzPpFDPFdbP1lEpAbcvsqmuaINX8wb34SQhdkfm7Q3si+GJEsrQTsmbNEsdTsybEDD7yCouXVu0qjk2kDURxOdQahDQsDAZ1Y7D6PCuySM90UIn0GKMym+o0Qqn0ai0C0+um+hWKVhWZQBDmqTRBYP4ELI3C2cLCCMu0RRdwkDwxWK0OPyeIQ4noan0Eg++i++UK+T+NIqdOB2yZLIAxshuEz8AALfxYVBQA0ci79ZEIRQytRibTTehaPLZbLzMXDMT23QzB1khW-Kn-VUbBka47M+okC1cq08m2o-nozGGYW4pIIB53Yn6UnkoOlWyhoHh0HQyCHSOxiLxwYKLLqIpiRZmbEZsbZZS6NSFPNygM-SlFtaA+neRkViAkXabGuIgZyBR5ntiG6KRRt9OizPKW32iSzfkFiTK4vrUsT7ZgNmVmFgADWdCYPTjSITpj5Yno2Qxz0QRSEn2-r0GIyjiOIlhUtwWDNPAoQhher61u+9YIEIWhikIRiEqewYqheTiuGAyELtaygjJm2hvKkIh6EoLbdj+Z6jmqTQQqR3JoXRvr2iINwykYJhmGKvGHkeHyHroujKHhI60mGV6cXWS6xBIaTJs60qiYSkhfHu+hFO6igsQpl5bDsewQGM8IoYuMQUeomlPGK+hZESCwgWBEFiKZJbjhZmr1MpqGqVoiirqoMnOq67rZGKCzqH2+aBsO1LnmO6rlqgMIQCF9kKAJRLiK2aYiroCXge8KVDn5hFZTeWz5dauTes52mZhIdq5jVFJQeYQA */
     id: "audioOutput",
-    context: { userStarted: true, audioElement: audioElement },
+    context: { autoplay: false, audioElement: audioElement },
     initial: "idle",
+
     states: {
       idle: {
         on: {
-          loadStart: "loading",
+          loadstart: "loading",
         },
       },
+
       loading: {
         on: {
-          play: "playing",
-          pause: "paused",
-          stop: "stopped",
-        },
-        entry: {
-          type: "emitEvent",
-          params: { eventName: "saypi:ready" },
+          loadedmetadata: "loaded",
         },
       },
-      playing: {
-        on: {
-          pause: "paused",
-          stop: "stopped",
-          ended: "stopped",
-        },
-        entry: [
-          { type: "autoPauseSafari" },
-          {
-            type: "emitEvent",
-            params: { eventName: "saypi:piSpeaking" },
-          },
-        ],
-      },
-      paused: {
-        on: {
-          play: "playing",
-          stop: "stopped",
-          reload: {
-            target: "loading",
 
-            description: `Reload the audio stream for Safari.
-This is the only command that external modules can send the machine.`,
+      loaded: {
+        initial: "ready",
 
-            action: assign((context, event) => {
-              context.audioElement.load();
-              context.audioElement.play();
-              return {
-                userStarted: true,
-                audioElement: context.audioElement,
-              };
-            }),
-
-            cond: "isSafariMobile",
-          },
-        },
-        entry: [
-          {
-            type: "emitEvent",
-            params: { eventName: "saypi:pause" },
-          },
-          {
-            type: "emitEvent",
-            params: { eventName: "saypi:piStoppedSpeaking" },
-          },
-        ],
-      },
-      stopped: {
         on: {
-          loadStart: {
-            target: "loading",
-            description: `Fired when the audio element's src attribute changes with a new response track.`,
+          emptied: "idle",
+        },
+
+        states: {
+          ready: {
+            description: `Audio has loaded and is ready to start playing (further buffering may be required to reach the end).`,
+            on: {
+              play: "playing",
+            },
+            entry: {
+              type: "emitEvent",
+              params: { eventName: "saypi:ready" },
+            },
+          },
+
+          playing: {
+            on: {
+              pause: "paused",
+              ended: "ended",
+              canplaythrough: { target: "playing", internal: true },
+            },
+            always: {
+              target: "paused",
+              cond: "isSafariAutoPlay",
+              actions: [
+                "requestPause",
+                {
+                  type: "emitEvent",
+                  params: { eventName: "saypi:safariBlocked" },
+                },
+              ],
+            },
+            entry: [
+              {
+                type: "emitEvent",
+                params: { eventName: "saypi:piSpeaking" },
+              },
+            ],
+            exit: [
+              {
+                type: "emitEvent",
+                params: { eventName: "saypi:piStoppedSpeaking" },
+              },
+              assign({
+                autoplay: true,
+                audioElement: (context) => context.audioElement,
+              }),
+            ],
+          },
+
+          paused: {
+            on: {
+              play: "playing",
+              reload: {
+                target: "#audioOutput.loading",
+                description: `Reload the audio stream for Safari. This is the only command that external modules can send the machine.`,
+                actions: [
+                  assign((context) => {
+                    return {
+                      autoplay: false,
+                      audioElement: context.audioElement,
+                    };
+                  }),
+                  "reloadAudio",
+                ],
+                cond: "isSafari",
+              },
+            },
+          },
+
+          ended: {
+            on: {
+              seeked: {
+                target: "#audioOutput.loaded.ready",
+                description: `An ended track is seeked back to earlier in the track.`,
+              },
+            },
+            entry: [
+              {
+                type: "emitEvent",
+                params: { eventName: "saypi:piFinishedSpeaking" },
+              },
+            ],
           },
         },
-        entry: [
-          {
-            type: "emitEvent",
-            params: { eventName: "saypi:piStoppedSpeaking" },
-          },
-          assign((context, event) => {
-            return { userStarted: false, audioElement: context.audioElement };
-          }),
-          "seekToEnd",
-        ],
       },
     },
     predictableActionArguments: true,
@@ -105,15 +127,8 @@ This is the only command that external modules can send the machine.`,
       emitEvent: (context, event, { action }) => {
         EventBus.emit(action.params.eventName);
       },
-      autoPauseSafari: (context, event) => {
-        if (!isSafari() || !isMobileView()) {
-          return;
-        }
-
-        if (!context.userStarted) {
-          raise("pause"); // raise and send are available in xstate but not in @xstate/fsm
-          //context.audioElement.pause();
-        }
+      requestPause: (context, event) => {
+        context.audioElement.pause();
       },
       seekToEnd: (context, event) => {
         const audio = context.audioElement;
@@ -127,10 +142,21 @@ This is the only command that external modules can send the machine.`,
         }
         EventBus.emit("saypi:piFinishedSpeaking");
       },
+      requestReload: (context) => {
+        const audio = context.audioElement;
+        audio.load();
+        audio.play();
+      },
     },
     guards: {
+      isSafari: (context, event) => {
+        return isSafari();
+      },
       isSafariMobile: (context, event) => {
         return isSafari() && isMobileView();
+      },
+      isSafariAutoPlay: (context, event) => {
+        return isSafari() && context.autoplay;
       },
     },
   }

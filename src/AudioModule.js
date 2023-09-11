@@ -14,29 +14,49 @@ if (!audioElement) {
   audioElement.preload = "auto"; // enable aggressive preloading of audio
 }
 
-const audioOutputActor = interpret(audioOutputMachine).start();
+function serializeStateValue(stateValue) {
+  if (typeof stateValue === "string") {
+    return stateValue;
+  }
+
+  return Object.keys(stateValue)
+    .map((key) => `${key}:${serializeStateValue(stateValue[key])}`)
+    .join(",");
+}
+
+const audioOutputActor = interpret(audioOutputMachine)
+  .onTransition((state) => {
+    if (state.changed) {
+      const fromState = state.history
+        ? serializeStateValue(state.history.value)
+        : "N/A";
+      const toState = serializeStateValue(state.value);
+      console.log(
+        `Audio Output Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
+      );
+      console.log(state.context);
+    }
+  })
+  .start();
 
 function registerAudioPlaybackEvents(audio, actor) {
-  audio.addEventListener("loadstart", function () {
-    actor.send("loadStart");
+  const events = [
+    "loadstart",
+    "loadedmetadata",
+    "canplaythrough",
+    "play",
+    "pause",
+    "ended",
+    "seeked",
+    "emptied",
+  ];
+
+  events.forEach((event) => {
+    audio.addEventListener(event, () => actor.send(event));
   });
 
-  // Intercept Autoplay Events (can't autoplay full audio on Safari)
-  audio.addEventListener("play", function () {
-    actor.send("play");
-  });
-
-  // Event listeners for detecting when Pi is speaking
   audio.addEventListener("playing", () => {
     actor.send("play");
-  });
-
-  audio.addEventListener("pause", () => {
-    actor.send("pause");
-  });
-
-  audio.addEventListener("ended", () => {
-    actor.send("ended");
   });
 }
 registerAudioPlaybackEvents(audioElement, audioOutputActor);
@@ -60,8 +80,7 @@ function registerAudioCommands() {
     audioOutputActor.send("pause");
 
     // Check if the MediaRecorder is acquired before starting?
-    audioInputActor.send("acquire");
-    audioInputActor.send("start");
+    audioInputActor.send(["acquire", "start"]);
   });
   EventBus.on("audio:stopRecording", function (e) {
     audioInputActor.send("stopRequested");

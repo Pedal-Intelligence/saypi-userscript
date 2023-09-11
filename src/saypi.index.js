@@ -6,6 +6,7 @@ import "./styles/common.scss";
 import "./styles/desktop.scss";
 import "./styles/mobile.scss";
 import "./styles/rectangles.css";
+
 (function () {
   "use strict";
 
