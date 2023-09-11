@@ -8,7 +8,7 @@
   border: none;
 }
 
-@media (max-width: 768px) {
+.mobile-device {
   /* maximize (mobile view) button is only displayed on compatible devices */
   #saypi-enterButton,
   #saypi-exitButton {

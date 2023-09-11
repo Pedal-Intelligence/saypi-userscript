@@ -9,15 +9,23 @@ export function isMobileDevice() {
   );
 }
 
-// Use localStorage to persist user preference
+// this function determines whether to show the mobile view or not
 export function isMobileView() {
-  const userViewPreference = localStorage.getItem("userViewPreference");
+  let userViewPreference = null;
 
-  if (userViewPreference) {
-    return userViewPreference === "mobile";
+  try {
+    userViewPreference = localStorage.getItem("userViewPreference");
+  } catch (e) {
+    console.warn("Could not access localStorage: ", e);
   }
 
-  return isMobileDevice();
+  let prefersMobile = false;
+  if (userViewPreference) {
+    prefersMobile = userViewPreference === "mobile";
+  }
+
+  // Make sure isMobileDevice is defined or imported
+  return isMobileDevice() && prefersMobile;
 }
 
 export function exitMobileMode() {
@@ -57,6 +65,7 @@ export function addDeviceFlags(element) {
 
 export function addViewFlags(element) {
   if (isMobileView()) {
+    element.classList.remove("desktop-view");
     element.classList.add("mobile-view");
   } else {
     element.classList.remove("mobile-view");
