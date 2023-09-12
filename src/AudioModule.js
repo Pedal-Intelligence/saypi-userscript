@@ -2,6 +2,7 @@
 const { interpret } = require("xstate");
 const { audioInputMachine } = require("./state-machines/AudioInputMachine");
 const { audioOutputMachine } = require("./state-machines/AudioOutputMachine");
+const { serializeStateValue } = require("./LoggingModule");
 
 // depends on the injecting script (saypi.index.js) declaring the EventBus as a global variable
 const EventBus = window.EventBus;
@@ -12,16 +13,6 @@ if (!audioElement) {
   console.error("Audio element not found!");
 } else {
   audioElement.preload = "auto"; // enable aggressive preloading of audio
-}
-
-function serializeStateValue(stateValue) {
-  if (typeof stateValue === "string") {
-    return stateValue;
-  }
-
-  return Object.keys(stateValue)
-    .map((key) => `${key}:${serializeStateValue(stateValue[key])}`)
-    .join(",");
 }
 
 const audioOutputActor = interpret(audioOutputMachine)

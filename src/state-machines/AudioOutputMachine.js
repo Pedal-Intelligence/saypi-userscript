@@ -1,5 +1,5 @@
-import { createMachine, assign, raise } from "xstate";
-import { isSafari, isMobileView } from "../UserAgentModule";
+import { createMachine, assign } from "xstate";
+import { isSafari } from "../UserAgentModule";
 
 const EventBus = window.EventBus;
 
@@ -95,7 +95,7 @@ export const audioOutputMachine = createMachine(
                       audioElement: context.audioElement,
                     };
                   }),
-                  "reloadAudio",
+                  "requestReload",
                 ],
                 cond: "isSafari",
               },
@@ -151,9 +151,6 @@ export const audioOutputMachine = createMachine(
     guards: {
       isSafari: (context, event) => {
         return isSafari();
-      },
-      isSafariMobile: (context, event) => {
-        return isSafari() && isMobileView();
       },
       isSafariAutoPlay: (context, event) => {
         return isSafari() && context.autoplay;

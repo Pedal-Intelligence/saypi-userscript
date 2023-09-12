@@ -23,7 +23,7 @@ export const machine = createMachine(
           },
           "saypi:safariBlocked": {
             target: "blocked",
-            cond: "isSafariMobile",
+            cond: "isSafari",
           },
           "saypi:piSpeaking": {
             target: "piSpeaking",
@@ -80,6 +80,7 @@ export const machine = createMachine(
               animation: "paused",
             },
           },
+          "showPlayButton",
         ],
         exit: [
           {
@@ -88,6 +89,7 @@ export const machine = createMachine(
               animation: "paused",
             },
           },
+          "hidePlayButton",
         ],
         on: {
           "saypi:ready": {
@@ -99,7 +101,6 @@ export const machine = createMachine(
 
           "saypi:unblock": {
             target: "loading",
-            actions: "hidePlayButton",
           },
         },
       },
@@ -268,7 +269,7 @@ export const machine = createMachine(
       transcribeAudio: (context, event) => {
         console.log("transcribeAudio", event);
         const audioBlob = event.blob;
-        uploadAudio(audioBlob);
+        uploadAudio(audioBlob, event.duration);
       },
 
       handleTranscriptionResponse: (context, event) => {
@@ -316,7 +317,6 @@ export const machine = createMachine(
     services: {},
     guards: {
       tooShortForUpload: (context, event) => {
-        console.log("tooShortForUpload", event);
         return event.duration < 1000;
       },
 
@@ -324,8 +324,8 @@ export const machine = createMachine(
         return event.duration >= 1000;
       },
 
-      isSafariMobile: (context, event) => {
-        return isSafari() && isMobileView();
+      isSafari: (context, event) => {
+        return isSafari();
       },
     },
     delays: {},

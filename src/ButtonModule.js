@@ -10,6 +10,7 @@ import maximizeIconSVG from "./icons/maximize.svg";
 import rectanglesSVG from "./icons/rectangles.svg";
 import talkIconSVG from "./icons/waveform.svg";
 import mutedMicIconSVG from "./icons/muted_microphone.svg";
+import playIconSVG from "./icons/play.svg";
 export default class ButtonModule {
   constructor() {
     this.playButton = null;
@@ -159,7 +160,9 @@ export default class ButtonModule {
     this.playButton.setAttribute("aria-label", label);
     this.playButton.setAttribute("title", label);
     this.playButton.addEventListener("click", this.handlePlayButtonClick);
+    this.playButton.innerHTML = playIconSVG;
     document.body.appendChild(this.playButton);
+    console.log("Play button created, and added to the DOM.");
     return this.playButton;
   }
 

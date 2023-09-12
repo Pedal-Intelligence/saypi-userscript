@@ -11,6 +11,13 @@ html.mobile-view {
     top: 0;
   }
 
+  #saypi-playButton {
+    background-color: rgba(245, 238, 223, 0.55);
+    svg {
+      padding: 2.5rem;
+    }
+  }
+
   #saypi-talkButton {
     width: 100%;
     height: 100%;

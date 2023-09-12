@@ -19,6 +19,16 @@ html.desktop-view {
     display: block; /* For Safari */
   }
 
+  #saypi-playButton {
+    position: fixed;
+    top: 20%;
+    width: 100%;
+    margin: auto;
+    svg {
+      padding: 2.5rem;
+    }
+  }
+
   html:not(.firefox-android) #saypi-talkButton:active .waveform,
   #saypi-talkButton.active .waveform {
     animation: pulse 1s infinite;

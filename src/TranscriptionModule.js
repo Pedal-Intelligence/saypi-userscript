@@ -8,7 +8,7 @@ const config = {
   apiServerUrl: process.env.API_SERVER_URL,
 };
 
-export function uploadAudio(audioBlob) {
+export function uploadAudio(audioBlob, audioDurationMillis) {
   // Create a FormData object
   var formData = new FormData();
   var audioFilename = "audio.webm";
@@ -19,6 +19,8 @@ export function uploadAudio(audioBlob) {
   formData.append("audio", audioBlob, audioFilename);
   // Get the user's preferred language
   var language = navigator.language;
+
+  const startTime = new Date().getTime();
   // Post the audio to the server for transcription
   fetch(config.apiServerUrl + "/transcribe?language=" + language, {
     method: "POST",
@@ -31,6 +33,17 @@ export function uploadAudio(audioBlob) {
       return response.json();
     })
     .then(function (responseJson) {
+      const endTime = new Date().getTime();
+      const transcriptionDurationMillis = endTime - startTime;
+
+      console.log(
+        "Transcribed " +
+          Math.round(audioDurationMillis / 1000) +
+          "s of audio in " +
+          Math.round(transcriptionDurationMillis / 1000) +
+          "s"
+      );
+
       if (responseJson.text.length === 0) {
         StateMachineService.actor.send("saypi:transcribedEmpty");
       } else {
