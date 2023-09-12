@@ -19,6 +19,20 @@ html.desktop-view {
     display: block; /* For Safari */
   }
 
+  #saypi-playButton {
+    position: fixed;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    max-width: 500px; /* Maximum width */
+    width: 100%;
+    transform: translate(-50%, -50%); /* Necessary for perfect centering */
+    text-align: center; /* To center the inner contents, if any */
+
+    svg {
+      padding: 2.5rem;
+    }
+  }
+
   html:not(.firefox-android) #saypi-talkButton:active .waveform,
   #saypi-talkButton.active .waveform {
     animation: pulse 1s infinite;

@@ -1,5 +1,6 @@
 import { interpret } from "xstate";
 import { machine } from "./state-machines/SayPiMachine";
+import { serializeStateValue } from "./LoggingModule";
 
 /**
  * A singleton service that manages the state machine.
@@ -7,7 +8,15 @@ import { machine } from "./state-machines/SayPiMachine";
 class StateMachineService {
   constructor() {
     this.actor = interpret(machine).onTransition((state) => {
-      console.log(`Transitioned to state: ${state.value}`);
+      if (state.changed) {
+        const fromState = state.history
+          ? serializeStateValue(state.history.value)
+          : "N/A";
+        const toState = serializeStateValue(state.value);
+        console.log(
+          `Say, Pi Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
+        );
+      }
     });
     this.actor.start();
   }

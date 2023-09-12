@@ -8,7 +8,7 @@ const TRANSCRIBING = "saypi:transcribing";
 const PI_SPEAKING = "saypi:piSpeaking";
 const PI_STOPPED_SPEAKING = "saypi:piStoppedSpeaking";
 const PI_FINISHED_SPEAKING = "saypi:piFinishedSpeaking";
-const PAUSE = "saypi:pause";
+const PAUSE = "saypi:safariBlocked";
 const READY = "saypi:ready";
 const PLAY = "saypi:play";
 

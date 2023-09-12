@@ -1,78 +1,83 @@
-@media (max-width: 768px) {
-  html.mobile-view {
-    #saypi-panel,
-    .play-button,
-    .notification {
-      width: 100%;
-      position: fixed;
-      left: 0;
-      background-color: rgba(245, 238, 223, 0.98);
+html.mobile-view {
+  #saypi-panel,
+  .play-button,
+  .notification {
+    width: 100%;
+    position: fixed;
+    left: 0;
+    background-color: rgba(245, 238, 223, 0.98);
 
-      height: 100vh;
-      top: 0;
+    height: 100vh;
+    top: 0;
+  }
+
+  #saypi-playButton {
+    background-color: rgba(245, 238, 223, 0.55);
+    svg {
+      padding: 2.5rem;
     }
+  }
 
-    #saypi-talkButton {
-      width: 100%;
+  #saypi-talkButton {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  #saypi-notification {
+    z-index: 100;
+    background-color: transparent;
+    svg {
+      width: 75%;
       height: 100%;
-      background-color: transparent;
-      border-radius: 0;
-      margin: 0;
+      margin: auto;
     }
+  }
 
-    #saypi-notification {
-      z-index: 100;
-      background-color: transparent;
-      svg {
-        width: 75%;
-        height: 100%;
-        margin: auto;
-      }
+  /* Pi controls: ellipsis, experiences */
+  #__next > main > div > div > div.fixed.top-4.right-6 > button,
+  #saypi-experiences-button {
+    transform: scale(1.5);
+  }
+
+  /* Pi controls: mute/unmute */
+  #saypi-audio-controls {
+    /* hide the voice options */
+    div.p-1 {
+      display: none;
     }
-
-    /* Pi controls: ellipsis, experiences */
-    #__next > main > div > div > div.fixed.top-4.right-6 > button,
-    #saypi-experiences-button {
-      transform: scale(1.5);
-    }
-
-    /* Pi controls: mute/unmute */
-    #saypi-audio-controls {
-      /* hide the voice options */
-      div.p-1 {
+    /* scale the mute button */
+    button.group {
+      transform: scale(2) !important;
+      z-index: 50;
+      /* hide the voice selector twisty */
+      + button {
         display: none;
       }
-      /* scale the mute button */
-      button.group {
-        transform: scale(2) !important;
-        z-index: 50;
-        /* hide the voice selector twisty */
-        + button {
-          display: none;
-        }
-      }
     }
+  }
 
-    /* fix an alignment issue with the "new ui layout" */
-    .text-body-chat-m {
-      padding-top: 0;
-    }
+  /* fix an alignment issue with the "new ui layout" */
+  .text-body-chat-m {
+    padding-top: 0;
+  }
 
-    #saypi-enterButton {
-      display: none;
-    }
+  #saypi-enterButton {
+    display: none;
+  }
 
-    #saypi-footer {
-      display: none;
-    }
+  #saypi-footer {
+    display: none;
+  }
 
-    #saypi-prompt {
-      /* hides virtual keyboard on android */
-      display: none;
-    }
+  #saypi-prompt {
+    /* hides virtual keyboard on android */
+    display: none;
+  }
 
-    #saypi-submitButton {
-      display: none;
-    }
+  #saypi-submitButton {
+    display: none;
   }
 }
