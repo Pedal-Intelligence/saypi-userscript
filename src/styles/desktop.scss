@@ -21,9 +21,13 @@ html.desktop-view {
 
   #saypi-playButton {
     position: fixed;
-    top: 20%;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    max-width: 500px; /* Maximum width */
     width: 100%;
-    margin: auto;
+    transform: translate(-50%, -50%); /* Necessary for perfect centering */
+    text-align: center; /* To center the inner contents, if any */
+
     svg {
       padding: 2.5rem;
     }
