@@ -1,12 +1,8 @@
+import { config } from "./ConfigModule.js";
 import StateMachineService from "./StateMachineService.js";
 import { isMobileView } from "./UserAgentModule.js";
 import EventBus from "./EventBus.js";
 import EventModule from "./EventModule.js";
-
-const config = {
-  appServerUrl: process.env.APP_SERVER_URL,
-  apiServerUrl: process.env.API_SERVER_URL,
-};
 
 export function uploadAudio(audioBlob, audioDurationMillis) {
   // Create a FormData object

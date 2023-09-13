@@ -6,11 +6,14 @@
         "test": "mocha test.js"
     },
     "dependencies": {
+        "@ricky0123/vad-web": "^0.0.12",
         "@xstate/fsm": "^2.1.0",
         "axios": "^1.4.0",
         "cheerio": "^1.0.0-rc.12",
+        "copy-webpack-plugin": "^11.0.0",
         "express": "^4.18.2",
         "http-proxy-middleware": "^2.0.6",
+        "onnxruntime-web": "^1.15.1",
         "serve-handler": "^6.1.5",
         "xstate": "^4.38.2"
     },

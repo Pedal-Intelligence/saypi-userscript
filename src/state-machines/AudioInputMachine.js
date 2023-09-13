@@ -1,62 +1,59 @@
 import { createMachine } from "xstate";
+import { MicVAD } from "@ricky0123/vad-web";
+import { config } from "../ConfigModule";
+import { setupInterceptors } from "../RequestInterceptor";
+
+/* set URLs for VAD resources */
+setupInterceptors();
+const fullWorkletURL = `${config.appServerUrl}/vad.worklet.bundle.min.js`;
 
 const EventBus = window.EventBus;
 
 let audioMimeType = "audio/webm;codecs=opus";
 const threshold = 1000; // 1000 ms = 1 second, about the length of "Hey, Pi"
 
-// Declare a global variable for the mediaRecorder
-var mediaRecorder;
+let microphone;
 
-function setupRecording(callback) {
-  if (mediaRecorder) {
+async function setupRecording(callback) {
+  if (microphone) {
     return;
   }
 
-  // Get a stream from the user's microphone
-  navigator.mediaDevices
-    .getUserMedia({ audio: true })
-    .then(function (stream) {
-      if (!MediaRecorder.isTypeSupported(audioMimeType)) {
-        // use MP4 for Safari
-        audioMimeType = "audio/mp4";
-      }
-      // Create a new MediaRecorder object using the stream and specifying the MIME type
-      var options = { mimeType: audioMimeType };
-      mediaRecorder = new MediaRecorder(stream, options);
-      mediaRecorder.addEventListener("dataavailable", (event) => {
-        EventBus.emit("audio:dataavailable", {
-          data: event.data,
-        });
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then((stream) => {
+        console.log("Permission granted", stream);
+      })
+      .catch((err) => {
+        console.error("Permission denied", err);
       });
-      mediaRecorder.addEventListener("stop", () => {
-        EventBus.emit("audio:input:stop");
-      });
-    })
-    .then(function () {
-      // Invoke the callback function
+  }
+
+  console.log("Setting up microphone for recording...");
+  MicVAD.new({
+    workletURL: fullWorkletURL,
+    onSpeechEnd: (audio) => {
+      EventBus.emit("audio:dataavailable", { data: audio });
+    },
+  })
+    .then((mic) => {
+      console.log("Microphone ready for recording", mic);
+      microphone = mic;
       if (typeof callback === "function") {
         callback();
       }
     })
-    .catch(function (err) {
-      console.error("Error getting audio stream: " + err);
+    .catch((error) => {
+      console.error("Failed to create MicVAD:", error);
     });
 }
 
 function tearDownRecording() {
-  // Check if the MediaRecorder is set up
-  if (!mediaRecorder) {
-    return;
+  if (microphone) {
+    microphone.pause();
   }
-
-  // Stop any ongoing recording
-  if (mediaRecorder.state === "recording") {
-    mediaRecorder.stop();
-  }
-
-  // Clear the MediaRecorder variable
-  mediaRecorder = null;
+  microphone = null;
 }
 
 export const audioInputMachine = createMachine(
@@ -79,7 +76,7 @@ export const audioInputMachine = createMachine(
         description:
           "Acquiring the microphone. Waits until asynchronous call has completed.",
         invoke: {
-          src: "acquireMediaRecorder",
+          src: "acquireMicrophone",
           onDone: {
             target: "acquired",
           },
@@ -99,7 +96,7 @@ export const audioInputMachine = createMachine(
                 target: "recording",
                 actions: {
                   type: "startRecording",
-                  cond: "mediaRecorderAcquired",
+                  cond: "microphoneAcquired",
                 },
               },
             },
@@ -122,7 +119,8 @@ export const audioInputMachine = createMachine(
             },
           },
           pendingStop: {
-            description: "Waiting for the MediaRecorder to stop recording.",
+            description:
+              "Waiting for the media recording device to stop recording.",
             on: {
               stop: {
                 target: "stopped",
@@ -150,7 +148,7 @@ export const audioInputMachine = createMachine(
           release: {
             target: "released",
             actions: {
-              type: "releaseMediaRecorder",
+              type: "releaseMicrophone",
             },
           },
         },
@@ -167,16 +165,14 @@ export const audioInputMachine = createMachine(
         context.startTime = Date.now();
 
         // Start recording
-        mediaRecorder.start();
+        microphone.start();
 
         EventBus.emit("saypi:userSpeaking");
       },
 
       stopRecording: (context, event) => {
-        // TODO: do I need this state check?
-        if (mediaRecorder && mediaRecorder.state === "recording") {
-          // Stop recording
-          mediaRecorder.stop();
+        if (microphone) {
+          microphone.pause();
 
           // Record the stop time and calculate the duration
           var stopTime = Date.now();
@@ -215,7 +211,7 @@ export const audioInputMachine = createMachine(
         }
       },
 
-      releaseMediaRecorder: (context, event) => {
+      releaseMicrophone: (context, event) => {
         tearDownRecording();
       },
 
@@ -224,21 +220,21 @@ export const audioInputMachine = createMachine(
       },
     },
     services: {
-      acquireMediaRecorder: (context, event, { send }) => {
+      acquireMicrophone: (context, event, { send }) => {
         return new Promise((resolve, reject) => {
           setupRecording(() => {
-            if (mediaRecorder) {
+            if (microphone) {
               resolve();
             } else {
-              reject(new Error("Failed to acquire MediaRecorder"));
+              reject(new Error("Failed to acquire microphone resource."));
             }
           });
         });
       },
     },
     guards: {
-      mediaRecorderAcquired: (context, event) => {
-        return mediaRecorder !== null;
+      microphoneAcquired: (context, event) => {
+        return microphone !== null;
       },
       hasData: (context, event) => {
         return context.audioDataChunks.length > 0;
