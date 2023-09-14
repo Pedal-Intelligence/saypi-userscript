@@ -1,9 +1,22 @@
-// Convert a Float32Array to a Blob using WebM Opus encoding
-// This function is hella slow, so it's not recommended for real-time encoding
-export function convertFloat32ArrayToAudioBlobWebM(
-  audioFloat32Array,
-  callback
-) {
+import { encodeWAV } from "./WavEncoder";
+
+/**
+ * Convert a Float32Array of audio samples to a WAV Blob
+ * @param {Float32Array} audioData - The audio samples
+ * @returns {Blob} - The audio in WAV format
+ */
+export function convertToWavBlob(audioData) {
+  const arrayBuffer = encodeWAV(audioData);
+  return new Blob([arrayBuffer], { type: "audio/wav" });
+}
+
+/**
+ * Convert a Float32Array of audio samples to a WAV Blob using WebM Opus encoding
+ * This function is hella slow, so it's not recommended for real-time encoding
+ * @param {Float32Array} audioData - The audio samples
+ * @returns {Blob} - The audio in WebM format
+ */
+export function convertToWebMBlob(audioFloat32Array, callback) {
   // Create an offline audio context
   const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 

@@ -3,7 +3,7 @@ const { log } = actions;
 import { MicVAD } from "@ricky0123/vad-web";
 import { config } from "../ConfigModule";
 import { setupInterceptors } from "../RequestInterceptor";
-import { convertFloat32ArrayToAudioBlobWebM } from "../AudioEncoder";
+import { convertToWavBlob } from "../AudioEncoder";
 
 /* set URLs for VAD resources */
 setupInterceptors();
@@ -48,14 +48,18 @@ async function setupRecording(callback) {
       onSpeechEnd: (rawAudioData) => {
         console.log("Speech ended");
         const startTime = new Date().getTime();
-        convertFloat32ArrayToAudioBlobWebM(rawAudioData, (audioBlob) => {
-          const endTime = new Date().getTime();
-          const audioEncodingDurationMillis = endTime - startTime;
-          console.log(
-            "Transcoded audio in " + audioEncodingDurationMillis + "ms"
-          );
-          EventBus.emit("audio:dataavailable", { blob: audioBlob });
-        });
+        const audioBlob = convertToWavBlob(rawAudioData);
+        const endTime = new Date().getTime();
+        const audioEncodingDurationMillis = endTime - startTime;
+        console.log(
+          "Transcoded audio samples to " +
+            audioBlob.type +
+            " in " +
+            audioEncodingDurationMillis +
+            "ms"
+        );
+        audioMimeType = audioBlob.type;
+        EventBus.emit("audio:dataavailable", { blob: audioBlob });
 
         /* const wavBuffer = utils.encodeWAV(arr);
       const base64 = utils.arrayBufferToBase64(wavBuffer);
