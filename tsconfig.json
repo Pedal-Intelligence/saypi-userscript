@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "strict": true,
     "outDir": "./public",
     "target": "es6",
     "module": "commonjs",
