@@ -1,7 +1,9 @@
-import { createMachine } from "xstate";
+import { createMachine, actions } from "xstate";
+const { log } = actions;
 import { MicVAD } from "@ricky0123/vad-web";
 import { config } from "../ConfigModule";
 import { setupInterceptors } from "../RequestInterceptor";
+import { convertFloat32ArrayToAudioBlobWebM } from "../AudioEncoder";
 
 /* set URLs for VAD resources */
 setupInterceptors();
@@ -19,38 +21,65 @@ async function setupRecording(callback) {
     return;
   }
 
-  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then((stream) => {
-        console.log("Permission granted", stream);
-      })
-      .catch((err) => {
-        console.error("Permission denied", err);
-      });
-  }
-
-  console.log("Setting up microphone for recording...");
-  MicVAD.new({
-    workletURL: fullWorkletURL,
-    onSpeechEnd: (audio) => {
-      EventBus.emit("audio:dataavailable", { data: audio });
-    },
-  })
-    .then((mic) => {
-      console.log("Microphone ready for recording", mic);
-      microphone = mic;
-      if (typeof callback === "function") {
-        callback();
-      }
-    })
-    .catch((error) => {
-      console.error("Failed to create MicVAD:", error);
+  try {
+    console.log("Requesting audio stream...");
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: {
+        channelCount: 1,
+        echoCancellation: true,
+        autoGainControl: true,
+        noiseSuppression: true,
+      },
     });
+    console.log("Setting up microphone...");
+    microphone = await MicVAD.new({
+      workletURL: fullWorkletURL,
+      stream,
+      positiveSpeechThreshold: 0.8,
+      minSpeechFrames: 5,
+      preSpeechPadFrames: 10,
+      onFrameProcessed: (probs) => {
+        //const indicatorColor = interpolateInferno(probs.isSpeech / 2);
+        //document.body.style.setProperty("--indicator-color", indicatorColor);
+      },
+      onSpeechStart: () => {
+        console.log("Speech started");
+      },
+      onSpeechEnd: (rawAudioData) => {
+        console.log("Speech ended");
+        const startTime = new Date().getTime();
+        convertFloat32ArrayToAudioBlobWebM(rawAudioData, (audioBlob) => {
+          const endTime = new Date().getTime();
+          const audioEncodingDurationMillis = endTime - startTime;
+          console.log(
+            "Transcoded audio in " + audioEncodingDurationMillis + "ms"
+          );
+          EventBus.emit("audio:dataavailable", { blob: audioBlob });
+        });
+
+        /* const wavBuffer = utils.encodeWAV(arr);
+      const base64 = utils.arrayBufferToBase64(wavBuffer);
+      const url = `data:audio/wav;base64,${base64}`;
+      const el = addAudio(url);
+      const speechList = document.getElementById("playlist");
+      speechList.prepend(el); */
+      },
+      onVADMisfire: () => {
+        console.log("VAD misfire");
+      },
+    });
+    if (typeof callback === "function") {
+      callback();
+    }
+    console.log("Microphone ready!", microphone);
+  } catch (err) {
+    console.error("VAD failed to load", err);
+  }
 }
 
 function tearDownRecording() {
   if (microphone) {
+    console.log("Tearing down microphone...");
     microphone.pause();
   }
   microphone = null;
@@ -135,11 +164,20 @@ export const audioInputMachine = createMachine(
             },
           },
           stopped: {
-            entry: {
-              type: "sendData",
-              params: {},
-              cond: "hasData",
-            },
+            entry: [
+              {
+                type: log(
+                  (context, event) =>
+                    `chunks: ${context.audioDataChunks.length}, event: ${event.type}`,
+                  "Recording stopped."
+                ),
+              },
+              {
+                type: "sendData",
+                params: {},
+                cond: "hasData",
+              },
+            ],
 
             always: "idle",
           },
@@ -165,13 +203,19 @@ export const audioInputMachine = createMachine(
         context.startTime = Date.now();
 
         // Start recording
-        microphone.start();
+        if (microphone && microphone.listening === false) {
+          console.log("Starting microphone...");
+          microphone.start();
+        } else {
+          console.log("Microphone not ready or already started", microphone);
+        }
 
         EventBus.emit("saypi:userSpeaking");
       },
 
       stopRecording: (context, event) => {
-        if (microphone) {
+        if (microphone && microphone.listening === true) {
+          console.log("Stopping microphone...");
           microphone.pause();
 
           // Record the stop time and calculate the duration
@@ -179,18 +223,29 @@ export const audioInputMachine = createMachine(
           var duration = stopTime - context.startTime;
 
           EventBus.emit("saypi:userStoppedSpeaking", { duration: duration });
+        } else {
+          console.log("Microphone not ready or already stopped", microphone);
         }
       },
 
       addData: (context, event) => {
         // Add the new data to the array
-        context.audioDataChunks.push(event.data);
+        const audioBlob = event.blob;
+        console.log(
+          "Adding audio data to array",
+          audioBlob.type,
+          audioBlob.size
+        );
+        audioBlob.arrayBuffer().then((buffer) => {
+          context.audioDataChunks.push(buffer);
+        });
       },
 
       sendData: (context, event) => {
+        console.log("Sending data to server", context.audioDataChunks.length);
         // Create a Blob from the audio data chunks
         var audioBlob = new Blob(context.audioDataChunks, {
-          type: mediaRecorder.mimeType,
+          type: audioMimeType,
         });
 
         // Get the stop time and calculate the duration
@@ -216,7 +271,7 @@ export const audioInputMachine = createMachine(
       },
 
       logError: (context, event) => {
-        console.error("Error acquiring MediaRecorder: ", event.data);
+        console.error("Error acquiring microphone: ", event.data);
       },
     },
     services: {

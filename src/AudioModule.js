@@ -81,7 +81,7 @@ function registerAudioCommands() {
     audioOutputActor.send("stop"); // cancel Pi's audio
     */
   });
-  // audio input (recording) events (pass MediaRecorder events -> audio input machine actor)
+  // audio input (recording) events (pass media recorder events -> audio input machine actor)
   EventBus.on("audio:dataavailable", (detail) => {
     audioInputActor.send({ type: "dataAvailable", ...detail });
   });
