@@ -3,7 +3,7 @@ const { log } = actions;
 import { MicVAD } from "@ricky0123/vad-web";
 import { config } from "../ConfigModule";
 import { setupInterceptors } from "../RequestInterceptor";
-import { convertToWavBlob } from "../AudioEncoder";
+import { convertToWavBuffer } from "../AudioEncoder";
 
 /* set URLs for VAD resources */
 setupInterceptors();
@@ -11,7 +11,7 @@ const fullWorkletURL = `${config.appServerUrl}/vad.worklet.bundle.min.js`;
 
 const EventBus = window.EventBus;
 
-let audioMimeType = "audio/webm;codecs=opus";
+let audioMimeType = "audio/wav";
 const threshold = 1000; // 1000 ms = 1 second, about the length of "Hey, Pi"
 
 let microphone;
@@ -22,7 +22,6 @@ async function setupRecording(callback) {
   }
 
   try {
-    console.log("Requesting audio stream...");
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: {
         channelCount: 1,
@@ -31,51 +30,28 @@ async function setupRecording(callback) {
         noiseSuppression: true,
       },
     });
-    console.log("Setting up microphone...");
     microphone = await MicVAD.new({
       workletURL: fullWorkletURL,
       stream,
       positiveSpeechThreshold: 0.8,
       minSpeechFrames: 5,
       preSpeechPadFrames: 10,
-      onFrameProcessed: (probs) => {
-        //const indicatorColor = interpolateInferno(probs.isSpeech / 2);
-        //document.body.style.setProperty("--indicator-color", indicatorColor);
-      },
       onSpeechStart: () => {
         console.log("Speech started");
       },
       onSpeechEnd: (rawAudioData) => {
         console.log("Speech ended");
-        const startTime = new Date().getTime();
-        const audioBlob = convertToWavBlob(rawAudioData);
-        const endTime = new Date().getTime();
-        const audioEncodingDurationMillis = endTime - startTime;
-        console.log(
-          "Transcoded audio samples to " +
-            audioBlob.type +
-            " in " +
-            audioEncodingDurationMillis +
-            "ms"
-        );
-        audioMimeType = audioBlob.type;
-        EventBus.emit("audio:dataavailable", { blob: audioBlob });
 
-        /* const wavBuffer = utils.encodeWAV(arr);
-      const base64 = utils.arrayBufferToBase64(wavBuffer);
-      const url = `data:audio/wav;base64,${base64}`;
-      const el = addAudio(url);
-      const speechList = document.getElementById("playlist");
-      speechList.prepend(el); */
+        const audioBuffer = convertToWavBuffer(rawAudioData);
+        EventBus.emit("audio:dataavailable", { buffer: audioBuffer });
       },
       onVADMisfire: () => {
-        console.log("VAD misfire");
+        console.log("VAD misfire. Audio was not speech.");
       },
     });
     if (typeof callback === "function") {
       callback();
     }
-    console.log("Microphone ready!", microphone);
   } catch (err) {
     console.error("VAD failed to load", err);
   }
@@ -83,7 +59,6 @@ async function setupRecording(callback) {
 
 function tearDownRecording() {
   if (microphone) {
-    console.log("Tearing down microphone...");
     microphone.pause();
   }
   microphone = null;
@@ -94,6 +69,7 @@ export const audioInputMachine = createMachine(
     /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AkgOwAdUAXAOgCcwAbMZWSAYmQGMBHVDSgbQAYBdRKAJZYGYtjyCQAD0QBGAGwBmUgFYANCACeiJXIAcpBQHYAnAtP6l+gCw2lAJgU2Avi81pMuQiVIt2nBh4UAwQWHhgpEEAblgA1pGe2PhEZP4c5EFQCDFYzMji4bx8xVLCooWSSDKIqg6aOgj6xnJqCqo8qtbKpjwODm4e6Mk+aWwZWQxg5ORY5KQEVAUAZnMAtn7D3ql+44HBOXix+ZXFpdXlYhJSsghyxioa2oj9qqT97Q-Wdo4KgyBJba+dKcRiUGh0MDnIQiK7hG7yB5qBqIfStDo8HhyHj6Wz2Jxyf6AlLAvaUCBRCA0BiwYjIcjEaEgS6VBEIGxyFSWezGJ6NfTmUhyVQKRSmbFKZQtIlbEljALkihgZhzTDBGnELAEABKYHYcGIkCZLOu1VuJgUaiUvQUDj5iHFrRsAo6DnsFmMnRlXjluwVkCVKvIapCEAKyAAgtFkBglgAjGjG2Gss21Bw8NT6VSmJS8lFNO2kGwOcw8BQKHiS3OE9wA2WjP0ZAMEMB4EMAZU1BA1WqTFVNoFucjkOaMdvzphspiFjgeikrUprQx9DZBipbbayna1oXDUZj8cT-DKyYHNQQk5UVnTenHzwLb1MJYr5YX1e9Ix2a4DtK1LYgDB9nCVSDvII4qLa9oIJ6bz3OYSjOjYXTGKKbi1ngWAQHAUjEqMJ79vCqYIAAtAo+bEY+phUbyPDFs4T6obWuE7OCtD0BA+HAWyxb5sONhGFiqhfHivxLnWK5fmSWScSmoHsumRiIbmUH9NOw6WH0qiqNiVFKB+QLyk2HEXKehFyQ4+gOEWtjKfmQkqHBr6CdpSiqPpvrfhSGBUmAMlnrcShKBmSl5ve4rTsoDhzhWVbSkx9aSf6FKUEGIZ+WZ55dJaJgGKFjQMaQuJRXoMWLu5q5ks2rYdl26UgeetjTlRDi5VBT7GKQ1jFfOsVicxpJJaQv4EP+dVsnIJatBZE2epOWZOG1E2kC0Fb6AoVi5mWaEuEAA */
     context: {
       audioDataChunks: [],
+      waitingToStop: false,
     },
     id: "audioInput",
     initial: "released",
@@ -138,9 +114,6 @@ export const audioInputMachine = createMachine(
             on: {
               stopRequested: {
                 target: "pendingStop",
-                actions: {
-                  type: "stopRecording",
-                },
               },
               dataAvailable: {
                 actions: {
@@ -159,6 +132,7 @@ export const audioInputMachine = createMachine(
                 target: "stopped",
               },
               dataAvailable: {
+                target: "stopped",
                 actions: {
                   type: "addData",
                   params: {},
@@ -166,6 +140,8 @@ export const audioInputMachine = createMachine(
                 internal: true,
               },
             },
+            entry: "prepareStop",
+            exit: "stopping",
           },
           stopped: {
             entry: [
@@ -208,18 +184,24 @@ export const audioInputMachine = createMachine(
 
         // Start recording
         if (microphone && microphone.listening === false) {
-          console.log("Starting microphone...");
           microphone.start();
-        } else {
-          console.log("Microphone not ready or already started", microphone);
         }
 
         EventBus.emit("saypi:userSpeaking");
       },
 
+      prepareStop: (context, event) => {
+        if (microphone && microphone.listening === true) {
+          context.waitingToStop = true;
+        }
+      },
+
+      stopping: (context, event) => {
+        context.waitingToStop = false;
+      },
+
       stopRecording: (context, event) => {
         if (microphone && microphone.listening === true) {
-          console.log("Stopping microphone...");
           microphone.pause();
 
           // Record the stop time and calculate the duration
@@ -227,30 +209,54 @@ export const audioInputMachine = createMachine(
           var duration = stopTime - context.startTime;
 
           EventBus.emit("saypi:userStoppedSpeaking", { duration: duration });
-        } else {
-          console.log("Microphone not ready or already stopped", microphone);
         }
       },
 
       addData: (context, event) => {
         // Add the new data to the array
-        const audioBlob = event.blob;
-        console.log(
-          "Adding audio data to array",
-          audioBlob.type,
-          audioBlob.size
-        );
-        audioBlob.arrayBuffer().then((buffer) => {
-          context.audioDataChunks.push(buffer);
-        });
+        const audioBuffer = event.buffer;
+        const sizeInKb = (audioBuffer.byteLength / 1024).toFixed(2); // Convert to kilobytes and keep 2 decimal places
+        console.log(`Adding ${sizeInKb}kb of audio data to queue`);
+
+        context.audioDataChunks.push(audioBuffer);
+
+        if (context.waitingToStop === true) {
+          microphone.pause();
+          context.waitingToStop = false;
+        }
       },
 
       sendData: (context, event) => {
-        console.log("Sending data to server", context.audioDataChunks.length);
-        // Create a Blob from the audio data chunks
-        var audioBlob = new Blob(context.audioDataChunks, {
+        // Calculate the total size of the audio data chunks
+        const totalSizeInBytes = context.audioDataChunks.reduce(
+          (total, chunk) => total + chunk.byteLength,
+          0
+        );
+        const totalSizeInKb = (totalSizeInBytes / 1024).toFixed(2); // Convert to kilobytes and keep 2 decimal places
+
+        console.log(
+          `Sending ${context.audioDataChunks.length} chunks of audio data to server. Total size: ${totalSizeInKb}kb`
+        );
+
+        // Convert ArrayBuffers to Uint8Arrays and concatenate them
+        const concatenatedData = new Uint8Array(totalSizeInBytes);
+        let offset = 0;
+        for (const chunk of context.audioDataChunks) {
+          concatenatedData.set(new Uint8Array(chunk), offset);
+          offset += chunk.byteLength;
+        }
+
+        // Create a Blob from the concatenated data
+        const audioBlob = new Blob([concatenatedData.buffer], {
           type: audioMimeType,
         });
+
+        console.log(
+          `Assembled audio Blob with MIME type: ${audioBlob.type}, size: ${(
+            audioBlob.size / 1024
+          ).toFixed(2)}kb`,
+          audioBlob
+        );
 
         // Get the stop time and calculate the duration
         var stopTime = Date.now();

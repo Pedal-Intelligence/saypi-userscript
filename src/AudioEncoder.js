@@ -1,12 +1,22 @@
 import { encodeWAV } from "./WavEncoder";
 
 /**
+ * Convert a Float32Array of audio samples to a WAV array buffer
+ * @param {Float32Array} audioData - The audio samples
+ * @returns {ArrayBuffer} - The audio in WAV format as an ArrayBuffer
+ */
+export function convertToWavBuffer(audioData) {
+  const arrayBuffer = encodeWAV(audioData);
+  return arrayBuffer;
+}
+
+/**
  * Convert a Float32Array of audio samples to a WAV Blob
  * @param {Float32Array} audioData - The audio samples
  * @returns {Blob} - The audio in WAV format
  */
 export function convertToWavBlob(audioData) {
-  const arrayBuffer = encodeWAV(audioData);
+  const arrayBuffer = convertToWavBuffer(audioData);
   return new Blob([arrayBuffer], { type: "audio/wav" });
 }
 

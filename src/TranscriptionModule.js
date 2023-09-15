@@ -10,7 +10,17 @@ export function uploadAudio(audioBlob, audioDurationMillis) {
   var audioFilename = "audio.webm";
   if (audioBlob.type === "audio/mp4") {
     audioFilename = "audio.mp4";
+  } else if (audioBlob.type === "audio/wav") {
+    audioFilename = "audio.wav";
   }
+
+  console.log(
+    `Transcribing audio Blob with MIME type: ${audioBlob.type}, size: ${(
+      audioBlob.size / 1024
+    ).toFixed(2)}kb`,
+    audioBlob
+  );
+
   // Add the audio blob to the FormData object
   formData.append("audio", audioBlob, audioFilename);
   // Get the user's preferred language
