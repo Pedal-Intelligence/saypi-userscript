@@ -53,7 +53,20 @@ function registerAudioPlaybackEvents(audio, actor) {
 registerAudioPlaybackEvents(audioElement, audioOutputActor);
 
 // audio input (user)
-const audioInputActor = interpret(audioInputMachine).start();
+const audioInputActor = interpret(audioInputMachine)
+  .onTransition((state) => {
+    if (state.changed) {
+      const fromState = state.history
+        ? serializeStateValue(state.history.value)
+        : "N/A";
+      const toState = serializeStateValue(state.value);
+      console.log(
+        `Audio Input Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
+      );
+      console.log(state.context);
+    }
+  })
+  .start();
 
 /* These events are used to control/pass requests to the audio module from other modules */
 function registerAudioCommands() {
