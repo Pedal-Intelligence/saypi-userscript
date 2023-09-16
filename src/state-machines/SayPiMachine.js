@@ -10,7 +10,7 @@ import EventBus from "../EventBus";
 
 export const machine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCArrGAE4DKdYKA1gVADaABgC6iUHQD2sLGSn4JIAB6IAzAA4AnABYcWgGwBGAEwa1AdgMndFgKwAaEGkRa1JnCZPWTRtWq07HS0AXxCnWmwcdjYpNlgqZVgSFBIwHBQAMzS2AAojYULhAEoadCiYuNgRcSQQaVl5RTrVBE0NPUNTcysbHXsnFwQNIxw7IsK7ApM1Ow07MIjy3AAbLGSwfAEy+kZUTJQ2LAAhFakiXkgapQa5LAUlVutBxAKp-Ss1IysLQO+1RYgSKrdZpLb4KA7BgIBhcHj8CHXOq3JqPRB2EwvBBGaY4frWAz2HFGDS-QHAnBrDbgqA4NhgIhxCACHAsdhwvjbWjQtmcEhSOjcCAchFCMQ3GR3B4tRAzUn6YQGHR2YwmHTKoJYixGLQ4eamFUYnQmOx2Czk5aU0GbFn0xlsZkQ1msTjcTkQqGMEhsFD4WBEI4AIwESMkktRMraOrsOAsFkslh0BjsgQMWIxHnxOksao0HSVFswIOptoZTJZ+CkJBFXPQPJdADECOsABaQGuI8XI8P3ZqgVoBYSdVU9ay2RzORAGDQGHBGbPCNTCONqQmFqJUsEs72+-1B2u7BA7v0BrCBq5dsONXtoqOBWPxx9JlMqrHuDT6LRfpeP8YmdfFluTrHnuZ4HtCIGnueDYoFgKwXrUV5Sn2KjqHmw7dJYY79BOQyzGoOBKl8ASEiYi7WABVolsBPonvuHrcl6tGgeeEAAKIALZ0CQaChvUPbSv2aEdPoI5YX0AyTgg2YxkRwgpsEQTBN8lH0rA0j4I6tKwm6oqejCWAcPygrtrpIaXvx16Cah2Kmh4SrzIqhRaGYphYoSFgfMmagahYXjmKpcAaVpOA6fC4GMLyHZiohlnIbeRh2YROiOQYzmuZiUnWJ5+I+SScY2DqgXqQoIVhe6kKMQZTZbLAbbCmZnaxSiN6RolGLJal6UjJlQx+R++JqolOiKv4xXBSyZwoFp+nlaKfEtdZrQuTGeYmL8bhaOhRjufK2hLou3yksmoThEClpqRNTqBmcFyQPp9LTbxFmLShrRGEqhEmsI62-OMpj+FiSY5SNH12doX7quNpUsjd5yXBA+lMPgcMXAtAlveiug4BM2oWPJZizLtnn7YUXwWMdKaUZuNpOna5ZOpW1aNZVdaRS60Xo1ZmMICa2NaD8eYqqY3zuZ9AsGLMcbzDopjmoClYQHASjAhK3O3joWIALSzhMq6KkNyYUWdFIEMQZCUGr8WRrLfk47oOIzkEwgdO5cY4AES6+FYBikTolGVPEVsRkJ0kmh4XTuJHaU7VJJJ6J7Q6rsquhePLSxFtEbCxPEOCQUGYAwXBkDB61ocLsIol+DYxj67HeEfR7bhDsq8Y+caAfZ1UOAcVgRBsV3bCl0tiAV1XUe1zHQMjHqbjDQp85y9T1o0sPPPfPzo0zPj2oE1iOI5V+uhfL4BiBFYy-UbS9MOiyUUs2vCXaJXWhb5Yy5vL16Lu1mcyy+YUMTaWhpjSOkZZb6MyrNFR+kYzCFDGLoIcJJDC+HWu5bMnhvCy1PkmEYBhL5AVpPnMCEIYGh1mF4WMxp1T+WzKmN87g9TCAFsENUf8frQ00gIMhNlNRSX8DGdUwgPpJmESmewnCyqGQft2dWbUcQeDNBob2xofyJXcjiPEVh1TzlXJYOYkjJpSGmtw2R1tQ72E8hTV+Z9tAdB1BYdyq45zGi2sqd87h-ZAMzpdGG11boIx4e9H67l4Gew+ltPM84LBeIzhuFepZ7RaSCa8DoEc3470-kDJMWilSBDMCMY0F8wghCAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCArrGAE4DKdYKA1gVADaABgC6iUHQD2sLGSn4JIAB6IALAFZhAZhzCAbACYAHAHZDATgCM+7Ru0AaEGkQX9FnIZ1rzV7Wu1tY20AXxCnWmwcdjYpNlgqZVgSFBIwHBQAMzS2AAorYULhAEoadCiYuNgRcSQQaVl5RTrVBDU1C10DE3NrW3snFwRjQxwrKwsLM0K1Q3H9DTCI8twAGyxksHwBMvpGVEyUNiwAIVWpIl5IGqUGuSwFJVajQcQC42McC3sNKzU-wzafTtJYgSJrDZpbb4KC7BgIBhcHj8GE3Op3JpPRAaQyvBDjbSmHCaQLGYR+UymfQfUHgnDrTbQqA4IgKShsMgwnAkNgofCwIjHABGO1o8J5fIFwuuYluMnujxaiCBBj0nWMHUs2gsan0pjxamEGhwpi0wjJVkp1j+tJW9MhWwELLZ7E5zIl-MFWBFMLhjA9Uu9YAAYigsKsZbVJPLMUq2h0ukYzJYbHZHM5sWZPDo5uZzdorCNbZgIYynaz8Oy3dzeZ7haL0OLa4GhZAAKIAWzoJDQaOjjQezVArXanT0Sd6qYGGYQ+j12e0JkMRlMOiCxaiDKhTrYYFZbAgTpY7CRfAbe2YrE4JCkdG4EFPKKEsvRMcHWIQlmpJp0a+MCz+DR9RnNR-xNZdzCAwsqTUDdS23Lld33Q8uXwKQSEfc94WPNhgwIDYAAtIEw1EX37BUhxUdRfkTHoU36dMhmsT5V1JYxxhGf8rDg+0y0Qvc4hQ5k0Iw7gz19MVGBwkjnyjeo30VYdEEMQF9D0YwNH-AIrHscw1DxIxdC8AsFgsclDNMHjd1gaR8CEnBETEp8-QRLAOBvO9iKcgQ+3kgdFKo-ENBxHBgRGIxqXJKY8S0Il7GBaxDW+QwfFCcIwTtazbPsxzkSwqSrxk3yMXfOMdJCsLl2XC1opAoC9CBDQ9XGVcVNMWD0rpLKFBytzvIkxtGAYPDtlgIiH362S5X8yjWnK0ZKoimrjBizSGoWU1ZmCykrLgbKnXOFAhJc3LxKm18Zo-CxDGND5DBg75zTcCwYstYl7C8dxCULYJdpsnqnSFc5LkgFzdyO3syL8iiPxsNRQpStwtJ0ixV30mdLCJIpCk6OxzEsP79q5IGLiuCAXKYfAScuYqFNm7EdT0Io5g+VG-CsV6iRJT7OlMH60vStCIDgJRwWmmG43RoYAFpjSCGZvmpdphCpbjOrtAhiDIShxdjJS2lMMkxm+Q2zJU9iVpnMyPG+fwVO0QozEmHjKniXXSv10CNA8bpnomDR-kY9QbC+ewJgd3pNGMF22FieIa0lL1W1DcNIHdgKRzMrGjD975A5i0DQ8XTR3CtG11ZLaJY6qHAOywIg22rth0-ptos-HL9rDzvw8T5+HuYDikmqNHit0dGEW9hq0vgMGwqXaw3bDxAphDGLxCho66dQsUeHSZZ1K1dJ0AyTgRJ7jRdvzMUDgRUlWzP0A0vC+KlmsJaw5kMXe+OZJDBLPi6Et9aFnujPfQc89Q+H-EHBABYrChQmB-YwuNw4dWWJXMe+8-4HiPIVSa599YpX+D+B24xUYBwLJbIY7RdDgKmBpBYthkEam-ghX+AkcGoXQjJAhgVoLGgfhAhe0CDI6U8P+ew-hLTBXNITAGE9AF60CgHZeCwmaFEauYBYKU5F2SdKdJ8vC5rjFGEBMkKlbCrnAVLdQxCdALBJHzS0mhdH2UOkJIxiBTRElNhvSk7VOiPxAmo1iKUrCAnJEuNBGVK7dT0cTYGZNPH4mELiEClgi46VNO8NW6DNx73LC6DkADyJKNaIuZ+18tJ31MA-PEBYPA3RmIg2pDDWHj2ZBWKsTpiBECYB2JgqxUglOhmU5UnR4HdDnJjAo4SDTjBfnOdqhpwH3TVmEIAA */
     id: "sayPi",
     initial: "listening",
     states: {
@@ -70,50 +70,6 @@ export const machine = createMachine(
 
       listening: {
         states: {
-          transcribing: {
-            description: "Transcribing audio to text.\nCard flip animation.",
-            entry: [
-              {
-                type: "startAnimation",
-                params: {
-                  animation: "transcribing",
-                },
-              },
-              {
-                type: "transcribeAudio",
-                params: {},
-              },
-            ],
-            exit: {
-              type: "stopAnimation",
-              params: {
-                animation: "transcribing",
-              },
-            },
-            on: {
-              "saypi:transcribed": {
-                target: "recording.notSpeaking",
-                actions: {
-                  type: "handleTranscriptionResponse",
-                  params: {},
-                },
-                description: "Successfully transcribed user audio to text.",
-              },
-
-              "saypi:transcribeFailed": {
-                target: "#sayPi.errors.transcribeFailed",
-                description:
-                  "Received an error response from the /transcribe API",
-              },
-
-              "saypi:transcribedEmpty": {
-                target: "#sayPi.errors.micError",
-                description:
-                  "Received an empty response from the /transcribe API (no speech detected)",
-              },
-            },
-          },
-
           recording: {
             initial: "notSpeaking",
 
@@ -144,29 +100,77 @@ export const machine = createMachine(
 
                 on: {
                   "saypi:userStoppedSpeaking": {
-                    target: "transcribing",
-                    cond: "longEnoughForUpload",
-                  },
-                  "saypi:userStoppedSpeaking": {
-                    target: "notSpeaking",
-                    cond: "tooShortForUpload",
-                  },
-                  "saypi:transcribing": {
-                    target: "#sayPi.listening.transcribing",
+                    target: "#sayPi.listening.converting.transcribing",
                   },
                 },
               },
 
               notSpeaking: {
-                description: "Microphone is recording but no speech is detected.",
+                description:
+                  "Microphone is recording but no speech is detected.",
                 on: {
                   "saypi:userFinishedSpeaking": "#sayPi.inactive",
-                  "saypi:userSpeaking": "userSpeaking"
+                  "saypi:userSpeaking": "userSpeaking",
                 },
-              }
+              },
             },
 
-            description: `Microphone is on and VAD is actively listending for user speech.`
+            description: `Microphone is on and VAD is actively listending for user speech.`,
+          },
+
+          converting: {
+            initial: "accumulating",
+
+            states: {
+              transcribing: {
+                description: "Transcribing audio to text.\nCard flip animation.",
+                entry: [
+                  {
+                    type: "startAnimation",
+                    params: {
+                      animation: "transcribing",
+                    },
+                  },
+                  {
+                    type: "transcribeAudio",
+                    params: {},
+                  },
+                ],
+                exit: {
+                  type: "stopAnimation",
+                  params: {
+                    animation: "transcribing",
+                  },
+                },
+                on: {
+                  "saypi:transcribed": {
+                    target: "accumulating",
+                    actions: {
+                      type: "handleTranscriptionResponse",
+                      params: {},
+                    },
+                    description: "Successfully transcribed user audio to text.",
+                  },
+
+                  "saypi:transcribeFailed": {
+                    target: "#sayPi.errors.transcribeFailed",
+                    description:
+                      "Received an error response from the /transcribe API",
+                  },
+
+                  "saypi:transcribedEmpty": {
+                    target: "#sayPi.errors.micError",
+                    description:
+                      "Received an empty response from the /transcribe API (no speech detected)",
+                  },
+                },
+              },
+
+              accumulating: {
+                description: `Accumulating and assembling audio transcriptions into a cohesive prompt.
+Submits a prompt when a threshold is reached.`
+              }
+            }
           }
         },
         entry: ["stopAllAnimations", "acquireMicrophone"],

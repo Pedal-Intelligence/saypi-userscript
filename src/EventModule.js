@@ -4,7 +4,6 @@ import StateMachineService from "./StateMachineService.js";
 const USER_SPEAKING = "saypi:userSpeaking";
 const USER_STOPPED_SPEAKING = "saypi:userStoppedSpeaking";
 const USER_FINISHED_SPEAKING = "saypi:userFinishedSpeaking";
-const TRANSCRIBING = "saypi:transcribing";
 const PI_SPEAKING = "saypi:piSpeaking";
 const PI_STOPPED_SPEAKING = "saypi:piStoppedSpeaking";
 const PI_FINISHED_SPEAKING = "saypi:piFinishedSpeaking";
@@ -115,10 +114,6 @@ export default class EventModule {
           console.warn(`Received ${eventName} without details.`);
         }
       });
-    });
-
-    EventBus.on(TRANSCRIBING, () => {
-      actor.send(TRANSCRIBING);
     });
 
     [PI_SPEAKING, PI_STOPPED_SPEAKING, PI_FINISHED_SPEAKING].forEach(
