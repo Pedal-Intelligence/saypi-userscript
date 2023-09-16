@@ -1,23 +1,65 @@
-import { createMachine, actions } from "xstate";
-const { log } = actions;
-import { MicVAD } from "@ricky0123/vad-web";
+import { MicVAD, RealTimeVADOptions } from "@ricky0123/vad-web";
 import { config } from "../ConfigModule";
 import { setupInterceptors } from "../RequestInterceptor";
 import { convertToWavBlob } from "../AudioEncoder";
+import { createMachine } from "xstate";
 
-/* set URLs for VAD resources */
-setupInterceptors();
-const fullWorkletURL = `${config.appServerUrl}/vad.worklet.bundle.min.js`;
+// Assuming config.appServerUrl is of type string.
+const fullWorkletURL: string = `${config.appServerUrl}/vad.worklet.bundle.min.js`;
+
+// Assuming EventBus is a property of Window and is of type any
+// You might want to provide a more specific type if available
+declare global {
+  interface Window {
+    EventBus: any;
+  }
+}
 
 const EventBus = window.EventBus;
 
-let audioMimeType = "audio/wav";
-let speechStartTime = 0;
-const threshold = 1000; // 1000 ms = 1 second, about the length of "Hey, Pi"
+let audioMimeType: string = "audio/wav";
+let speechStartTime: number = 0;
+const threshold: number = 1000; // 1000 ms = 1 second, about the length of "Hey, Pi"
 
-let microphone;
+setupInterceptors();
 
-async function setupRecording(callback) {
+// Variable to hold the microphone instance. Now has a specific type.
+let microphone: MicVAD | null = null;
+
+// Define the callbacks manually if they are not exported
+interface MyRealTimeVADCallbacks {
+  onSpeechStart?: () => any;
+  onSpeechEnd?: (audio: Float32Array) => any;
+  onVADMisfire?: () => any;
+}
+
+// Options for MicVAD
+const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
+  workletURL: fullWorkletURL,
+  positiveSpeechThreshold: 0.8,
+  minSpeechFrames: 5,
+  preSpeechPadFrames: 10,
+  onSpeechStart: () => {
+    console.log("Speech started");
+    speechStartTime = Date.now();
+  },
+  onSpeechEnd: (rawAudioData: Float32Array) => {
+    console.log("Speech ended");
+    const speechStopTime = Date.now();
+    const speechDuration = speechStopTime - speechStartTime;
+    const audioBlob = convertToWavBlob(rawAudioData);
+    EventBus.emit("audio:dataavailable", {
+      blob: audioBlob,
+      duration: speechDuration,
+    });
+  },
+  onVADMisfire: () => {
+    console.log("VAD misfire. Audio was not speech.");
+  },
+};
+
+// The callback type can be more specific based on your usage
+async function setupRecording(callback?: () => void): Promise<void> {
   if (microphone) {
     return;
   }
@@ -31,26 +73,12 @@ async function setupRecording(callback) {
         noiseSuppression: true,
       },
     });
-    microphone = await MicVAD.new({
-      workletURL: fullWorkletURL,
-      stream,
-      positiveSpeechThreshold: 0.8,
-      minSpeechFrames: 5,
-      preSpeechPadFrames: 10,
-      onSpeechStart: () => {
-        console.log("Speech started");
-        speechStartTime = Date.now();
-      },
-      onSpeechEnd: (rawAudioData) => {
-        console.log("Speech ended");
 
-        const audioBlob = convertToWavBlob(rawAudioData);
-        EventBus.emit("audio:dataavailable", { blob: audioBlob });
-      },
-      onVADMisfire: () => {
-        console.log("VAD misfire. Audio was not speech.");
-      },
+    microphone = await MicVAD.new({
+      ...micVADOptions,
+      stream,
     });
+
     if (typeof callback === "function") {
       callback();
     }
@@ -59,21 +87,38 @@ async function setupRecording(callback) {
   }
 }
 
-function tearDownRecording() {
+function tearDownRecording(): void {
   if (microphone) {
     microphone.pause();
   }
   microphone = null;
 }
 
-export const audioInputMachine = createMachine(
+interface AudioInputContext {
+  waitingToStop: boolean;
+  recordingStartTime: number;
+}
+
+type AudioInputEvent =
+  | { type: "acquire" }
+  | { type: "release" }
+  | { type: "start" }
+  | { type: "stopRequested" }
+  | { type: "dataAvailable"; blob: Blob; duration: number }
+  | { type: "stop" }
+  | { type: "error.platform"; data: any };
+
+export const audioInputMachine = createMachine<
+  AudioInputContext,
+  AudioInputEvent
+>(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AkgOwAdUAXAOgCcwAbMZWSAYmQGMBHVDSgbQAYBdRKAJZYGYtjyCQAD0QBGAGwBmUgFYANCACeiJXIAcpBQHYAnAtP6l+gCw2lAJgU2Avi81pMuQiVIt2nBh4UAwQWHhgpEEAblgA1pGe2PhEZP4c5EFQCDFYzMji4bx8xVLCooWSSDKIqg6aOgj6xnJqCqo8qtbKpjwODm4e6Mk+aWwZWQxg5ORY5KQEVAUAZnMAtn7D3ql+44HBOXix+ZXFpdXlYhJSsghyxioa2oj9qqT97Q-Wdo4KgyBJba+dKcRiUGh0MDnIQiK7hG7yB5qBqIfStDo8HhyHj6Wz2Jxyf6AlLAvaUCBRCA0BiwYjIcjEaEgS6VBEIGxyFSWezGJ6NfTmUhyVQKRSmbFKZQtIlbEljALkihgZhzTDBGnELAEABKYHYcGIkCZLOu1VuJgUaiUvQUDj5iHFrRsAo6DnsFmMnRlXjluwVkCVKvIapCEAKyAAgtFkBglgAjGjG2Gss21Bw8NT6VSmJS8lFNO2kGwOcw8BQKHiS3OE9wA2WjP0ZAMEMB4EMAZU1BA1WqTFVNoFucjkOaMdvzphspiFjgeikrUprQx9DZBipbbayna1oXDUZj8cT-DKyYHNQQk5UVnTenHzwLb1MJYr5YX1e9Ix2a4DtK1LYgDB9nCVSDvII4qLa9oIJ6bz3OYSjOjYXTGKKbi1ngWAQHAUjEqMJ79vCqYIAAtAo+bEY+phUbyPDFs4T6obWuE7OCtD0BA+HAWyxb5sONhGFiqhfHivxLnWK5fmSWScSmoHsumRiIbmUH9NOw6WH0qiqNiVFKB+QLyk2HEXKehFyQ4+gOEWtjKfmQkqHBr6CdpSiqPpvrfhSGBUmAMlnrcShKBmSl5ve4rTsoDhzhWVbSkx9aSf6FKUEGIZ+WZ55dJaJgGKFjQMaQuJRXoMWLu5q5ks2rYdl26UgeetjTlRDi5VBT7GKQ1jFfOsVicxpJJaQv4EP+dVsnIJatBZE2epOWZOG1E2kC0Fb6AoVi5mWaEuEAA */
-    context: {
-      waitingToStop: false,
-    },
     id: "audioInput",
     initial: "released",
+    context: {
+      waitingToStop: false,
+      recordingStartTime: 0,
+    },
     states: {
       released: {
         on: {
@@ -92,7 +137,9 @@ export const audioInputMachine = createMachine(
           },
           onError: {
             target: "released",
-            actions: "logError",
+            actions: {
+              type: "logError",
+            },
           },
         },
       },
@@ -106,8 +153,8 @@ export const audioInputMachine = createMachine(
                 target: "recording",
                 actions: {
                   type: "startRecording",
-                  cond: "microphoneAcquired",
                 },
+                cond: "microphoneAcquired",
               },
             },
           },
@@ -119,7 +166,6 @@ export const audioInputMachine = createMachine(
               dataAvailable: {
                 actions: {
                   type: "sendData",
-                  params: {},
                 },
                 internal: true,
               },
@@ -128,6 +174,9 @@ export const audioInputMachine = createMachine(
           pendingStop: {
             description:
               "Waiting for the media recording device to stop recording.",
+            entry: {
+              type: "prepareStop",
+            },
             on: {
               stop: {
                 target: "stopped",
@@ -136,15 +185,17 @@ export const audioInputMachine = createMachine(
                 target: "stopped",
                 actions: {
                   type: "sendData",
-                  params: {},
                 },
               },
             },
-            entry: "prepareStop",
           },
           stopped: {
-            entry: "notifyStopped",
-            always: "idle",
+            entry: {
+              type: "notifyStopped",
+            },
+            always: {
+              target: "idle",
+            },
           },
         },
         on: {
@@ -188,26 +239,28 @@ export const audioInputMachine = createMachine(
         });
       },
 
-      sendData: (context, event) => {
-        const audioBlob = event.blob;
-        const sizeInKb = (audioBlob.byteLength / 1024).toFixed(2); // Convert to kilobytes and keep 2 decimal places
+      sendData: (
+        context,
+        event: { type: "dataAvailable"; blob: Blob; duration: number }
+      ) => {
+        const { blob, duration } = event;
+        const sizeInKb = (blob.size / 1024).toFixed(2); // Convert to kilobytes and keep 2 decimal places
+
         console.log(`Sending ${sizeInKb}kb of audio data to server`);
 
         if (context.waitingToStop === true) {
-          microphone.pause();
+          microphone?.pause();
           context.waitingToStop = false;
         }
 
-        // Get the stop time and calculate the duration
-        var speechStopTime = Date.now();
-        var speechDuration = speechStopTime - speechStartTime;
+        // Use the duration directly from the event
+        const speechDuration = duration;
 
-        // If the duration is greater than the threshold, upload the audio for transcription
-        if (sizeInKb > 0) {
+        if (Number(sizeInKb) > 0) {
           // Upload the audio to the server for transcription
           EventBus.emit("saypi:userStoppedSpeaking", {
             duration: speechDuration,
-            blob: audioBlob,
+            blob,
           });
         }
       },
@@ -216,13 +269,13 @@ export const audioInputMachine = createMachine(
         tearDownRecording();
       },
 
-      logError: (context, event) => {
+      logError: (context, event: { type: "error.platform"; data: any }) => {
         console.error("Error acquiring microphone: ", event.data);
       },
     },
     services: {
-      acquireMicrophone: (context, event, { send }) => {
-        return new Promise((resolve, reject) => {
+      acquireMicrophone: (context, event) => {
+        return new Promise<void>((resolve, reject) => {
           setupRecording(() => {
             if (microphone) {
               resolve();
@@ -236,9 +289,6 @@ export const audioInputMachine = createMachine(
     guards: {
       microphoneAcquired: (context, event) => {
         return microphone !== null;
-      },
-      hasData: (context, event) => {
-        return context.audioDataChunks.length > 0;
       },
     },
     delays: {},
