@@ -3,7 +3,7 @@ const { log } = actions;
 import { MicVAD } from "@ricky0123/vad-web";
 import { config } from "../ConfigModule";
 import { setupInterceptors } from "../RequestInterceptor";
-import { convertToWavBuffer } from "../AudioEncoder";
+import { convertToWavBlob } from "../AudioEncoder";
 
 /* set URLs for VAD resources */
 setupInterceptors();
@@ -12,6 +12,7 @@ const fullWorkletURL = `${config.appServerUrl}/vad.worklet.bundle.min.js`;
 const EventBus = window.EventBus;
 
 let audioMimeType = "audio/wav";
+let speechStartTime = 0;
 const threshold = 1000; // 1000 ms = 1 second, about the length of "Hey, Pi"
 
 let microphone;
@@ -38,12 +39,13 @@ async function setupRecording(callback) {
       preSpeechPadFrames: 10,
       onSpeechStart: () => {
         console.log("Speech started");
+        speechStartTime = Date.now();
       },
       onSpeechEnd: (rawAudioData) => {
         console.log("Speech ended");
 
-        const audioBuffer = convertToWavBuffer(rawAudioData);
-        EventBus.emit("audio:dataavailable", { buffer: audioBuffer });
+        const audioBlob = convertToWavBlob(rawAudioData);
+        EventBus.emit("audio:dataavailable", { blob: audioBlob });
       },
       onVADMisfire: () => {
         console.log("VAD misfire. Audio was not speech.");
@@ -68,7 +70,6 @@ export const audioInputMachine = createMachine(
   {
     /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AkgOwAdUAXAOgCcwAbMZWSAYmQGMBHVDSgbQAYBdRKAJZYGYtjyCQAD0QBGAGwBmUgFYANCACeiJXIAcpBQHYAnAtP6l+gCw2lAJgU2Avi81pMuQiVIt2nBh4UAwQWHhgpEEAblgA1pGe2PhEZP4c5EFQCDFYzMji4bx8xVLCooWSSDKIqg6aOgj6xnJqCqo8qtbKpjwODm4e6Mk+aWwZWQxg5ORY5KQEVAUAZnMAtn7D3ql+44HBOXix+ZXFpdXlYhJSsghyxioa2oj9qqT97Q-Wdo4KgyBJba+dKcRiUGh0MDnIQiK7hG7yB5qBqIfStDo8HhyHj6Wz2Jxyf6AlLAvaUCBRCA0BiwYjIcjEaEgS6VBEIGxyFSWezGJ6NfTmUhyVQKRSmbFKZQtIlbEljALkihgZhzTDBGnELAEABKYHYcGIkCZLOu1VuJgUaiUvQUDj5iHFrRsAo6DnsFmMnRlXjluwVkCVKvIapCEAKyAAgtFkBglgAjGjG2Gss21Bw8NT6VSmJS8lFNO2kGwOcw8BQKHiS3OE9wA2WjP0ZAMEMB4EMAZU1BA1WqTFVNoFucjkOaMdvzphspiFjgeikrUprQx9DZBipbbayna1oXDUZj8cT-DKyYHNQQk5UVnTenHzwLb1MJYr5YX1e9Ix2a4DtK1LYgDB9nCVSDvII4qLa9oIJ6bz3OYSjOjYXTGKKbi1ngWAQHAUjEqMJ79vCqYIAAtAo+bEY+phUbyPDFs4T6obWuE7OCtD0BA+HAWyxb5sONhGFiqhfHivxLnWK5fmSWScSmoHsumRiIbmUH9NOw6WH0qiqNiVFKB+QLyk2HEXKehFyQ4+gOEWtjKfmQkqHBr6CdpSiqPpvrfhSGBUmAMlnrcShKBmSl5ve4rTsoDhzhWVbSkx9aSf6FKUEGIZ+WZ55dJaJgGKFjQMaQuJRXoMWLu5q5ks2rYdl26UgeetjTlRDi5VBT7GKQ1jFfOsVicxpJJaQv4EP+dVsnIJatBZE2epOWZOG1E2kC0Fb6AoVi5mWaEuEAA */
     context: {
-      audioDataChunks: [],
       waitingToStop: false,
     },
     id: "audioInput",
@@ -117,7 +118,7 @@ export const audioInputMachine = createMachine(
               },
               dataAvailable: {
                 actions: {
-                  type: "addData",
+                  type: "sendData",
                   params: {},
                 },
                 internal: true,
@@ -134,31 +135,15 @@ export const audioInputMachine = createMachine(
               dataAvailable: {
                 target: "stopped",
                 actions: {
-                  type: "addData",
+                  type: "sendData",
                   params: {},
                 },
-                internal: true,
               },
             },
             entry: "prepareStop",
-            exit: "stopping",
           },
           stopped: {
-            entry: [
-              {
-                type: log(
-                  (context, event) =>
-                    `chunks: ${context.audioDataChunks.length}, event: ${event.type}`,
-                  "Recording stopped."
-                ),
-              },
-              {
-                type: "sendData",
-                params: {},
-                cond: "hasData",
-              },
-            ],
-
+            entry: "notifyStopped",
             always: "idle",
           },
         },
@@ -178,9 +163,7 @@ export const audioInputMachine = createMachine(
   {
     actions: {
       startRecording: (context, event) => {
-        // Clear the array for the next recording
-        context.audioDataChunks = [];
-        context.startTime = Date.now();
+        context.recordingStartTime = Date.now();
 
         // Start recording
         if (microphone && microphone.listening === false) {
@@ -196,83 +179,36 @@ export const audioInputMachine = createMachine(
         }
       },
 
-      stopping: (context, event) => {
-        context.waitingToStop = false;
+      notifyStopped: (context, event) => {
+        var recordingStopTime = Date.now();
+        var recordingDuration = recordingStopTime - context.recordingStartTime;
+
+        EventBus.emit("saypi:userFinishedSpeaking", {
+          durationRecording: recordingDuration,
+        });
       },
 
-      stopRecording: (context, event) => {
-        if (microphone && microphone.listening === true) {
-          microphone.pause();
-
-          // Record the stop time and calculate the duration
-          var stopTime = Date.now();
-          var duration = stopTime - context.startTime;
-
-          EventBus.emit("saypi:userStoppedSpeaking", { duration: duration });
-        }
-      },
-
-      addData: (context, event) => {
-        // Add the new data to the array
-        const audioBuffer = event.buffer;
-        const sizeInKb = (audioBuffer.byteLength / 1024).toFixed(2); // Convert to kilobytes and keep 2 decimal places
-        console.log(`Adding ${sizeInKb}kb of audio data to queue`);
-
-        context.audioDataChunks.push(audioBuffer);
+      sendData: (context, event) => {
+        const audioBlob = event.blob;
+        const sizeInKb = (audioBlob.byteLength / 1024).toFixed(2); // Convert to kilobytes and keep 2 decimal places
+        console.log(`Sending ${sizeInKb}kb of audio data to server`);
 
         if (context.waitingToStop === true) {
           microphone.pause();
           context.waitingToStop = false;
         }
-      },
-
-      sendData: (context, event) => {
-        // Calculate the total size of the audio data chunks
-        const totalSizeInBytes = context.audioDataChunks.reduce(
-          (total, chunk) => total + chunk.byteLength,
-          0
-        );
-        const totalSizeInKb = (totalSizeInBytes / 1024).toFixed(2); // Convert to kilobytes and keep 2 decimal places
-
-        console.log(
-          `Sending ${context.audioDataChunks.length} chunks of audio data to server. Total size: ${totalSizeInKb}kb`
-        );
-
-        // Convert ArrayBuffers to Uint8Arrays and concatenate them
-        const concatenatedData = new Uint8Array(totalSizeInBytes);
-        let offset = 0;
-        for (const chunk of context.audioDataChunks) {
-          concatenatedData.set(new Uint8Array(chunk), offset);
-          offset += chunk.byteLength;
-        }
-
-        // Create a Blob from the concatenated data
-        const audioBlob = new Blob([concatenatedData.buffer], {
-          type: audioMimeType,
-        });
-
-        console.log(
-          `Assembled audio Blob with MIME type: ${audioBlob.type}, size: ${(
-            audioBlob.size / 1024
-          ).toFixed(2)}kb`,
-          audioBlob
-        );
 
         // Get the stop time and calculate the duration
-        var stopTime = Date.now();
-        var duration = stopTime - context.startTime;
+        var speechStopTime = Date.now();
+        var speechDuration = speechStopTime - speechStartTime;
 
         // If the duration is greater than the threshold, upload the audio for transcription
-        if (duration >= threshold) {
+        if (sizeInKb > 0) {
           // Upload the audio to the server for transcription
-          EventBus.emit("saypi:userFinishedSpeaking", {
-            duration: duration,
+          EventBus.emit("saypi:userStoppedSpeaking", {
+            duration: speechDuration,
             blob: audioBlob,
           });
-        } else {
-          console.log(
-            "Recording was too short, not uploading for transcription"
-          );
         }
       },
 

@@ -10,190 +10,14 @@ import EventBus from "../EventBus";
 
 export const machine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFiANmAMSpoAOWCArrGAE4DK5YKA1lgHZQDaADAF1EocgHtYWAC5ZRnYSAAeiAMwB2PjmUBOPgDYAjLq379y3QBoQaRPr5atOXaq26ALKoBMy-QA5TAX39LMmw8QhIySgRUADMUeiwAIQJRAGM2SH4hJBAxCWlZeSUEPktrEsDg9FD8IlJ0KMpmVg5uLPk8qRk5HOK1DW09Q2NTCytEVx8PHHddAFZVI2UF3V0+OcqQENxaBmb2Lih6iipd+gAxLixYAAtIfdbeQQ7xLsLexA97Vxw5vlVVMt1Ho5soyohQbpfh55otlJMtHMPJttjgzg9DscoujJKJyCwIBi2s8cp0Cj1QMUPHwfA4pnwzMo7LS5j4weMEB5XBotIs5qy-qtVr4UdUdnQmCwDtwsVRJPQUJxYKkEgAjQ7tUmvclFT7fX7-QELPgg9nlVzzHB8GFIrQ+BkA-mizC4VUpdKQWU0ThutJsTUibXdXUIWw6TSuNSqOa6NnU7zghAAn7qbzWjyqVweJGuZ2hX0eiBe+isCBoAO5IPvSmIVY82OLGF6GnKHyJtbKHAeG0xr4+TwefR53BNKWPL1NXH4+5jjUkwP5YMfUNZqGuLTdi3Z5ZzFyJ3k+HAblxOHyxnwLIdBLZinCjlqYyKnCVEp7ZBdvCmKT40unx3RMnaiJsom66HhmsJfMmMLKMOd5YK+E5YJcnDXHchKzsS76Vou1bfiuMK-N4yjeFo3JAloiZmPoOCePMCwAnoPiTBs16ovKirKmqj4NHKCpKiqWCqpk844Z+IaAYe+i9joJHdoiiZ+AaJr-HwvhsvoGZwRxAncTKT4IDpXFCWA5woFgRAQBWZJLqA5rWrRfILD4F5zK4u6WH0zGHmoYFfJGqwxtp-HGeq+m8YZIWCcJEAAKIALbkJI5aiTZeHFKUHJ8HBKQoBAPEnAg97Sm+Ly4V+xT6KuMwblyujbvye4cs4qiOM4bgxv8+g6D4cEMPQoj0LAxAKLAkgoJIYA4CgMSTfQAAUtgqQAlMcoT9YNsDWVWFWIJl5TZWxt4bUNI1jRNU0zXNi0qXwq2oidW36NhaW7SUiaHdenCiBAcDyNsZXicuAC0kyJsD-a-HBtRgIDOrLlmiaaXMmhzNJvbdn43W5kdLpoi+mFQHDtn4dmDl-IxUysoMqigaYXZ8lm3asussG4-m7oZBAxPpRCdoRr5g7uBesaJoCUL6O1UzeBmTKsVUePFY8PNvYYzG0X8NJ0Qs66gRa0KQaY1J+MFnHRYcKsSVmKOaX5ZFmPMYz2dMAL0aoLn8u5Wg5aIeUW1q5UhsjPl2gi7iZvCYvuUeXxuLMvjufLN5449lsIx4imuD8ksuNLmmAusfX0ANQ04EZ0WmeZllpzWCA6Puiw4DnsZePnctFyXsA4PFWCpLFxeDTX+H1xyJgLG1LjSfYbimGzgRAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCArrGAE4DKdYKA1gVADaABgC6iUHQD2sLGSn4JIAB6IAzAA4AnABYcWgGwBGAEwa1AdgMndFgKwAaEGkRa1JnCZPWTRtWq07HS0AXxCnWmwcdjYpNlgqZVgSFBIwHBQAMzS2AAojYULhAEoadCiYuNgRcSQQaVl5RTrVBE0NPUNTcysbHXsnFwQNIxw7IsK7ApM1Ow07MIjy3AAbLGSwfAEy+kZUTJQ2LAAhFakiXkgapQa5LAUlVutBxAKp-Ss1IysLQO+1RYgSKrdZpLb4KA7BgIBhcHj8CHXOq3JqPRB2EwvBBGaY4frWAz2HFGDS-QHAnBrDbgqA4NhgIhxCACHAsdhwvjbWjQtmcEhSOjcCAchFCMQ3GR3B4tRAzUn6YQGHR2YwmHTKoJYixGLQ4eamFUYnQmOx2Czk5aU0GbFn0xlsZkQ1msTjcTkQqGMEhsFD4WBEI4AIwESMkktRMraOrsOAsFkslh0BjsgQMWIxHnxOksao0HSVFswIOptoZTJZ+CkJBFXPQPJdADECOsABaQGuI8XI8P3ZqgVoBYSdVU9ay2RzORAGDQGHBGbPCNTCONqQmFqJUsEs72+-1B2u7BA7v0BrCBq5dsONXtoqOBWPxx9JlMqrHuDT6LRfpeP8YmdfFluTrHnuZ4HtCIGnueDYoFgKwXrUV5Sn2KjqHmw7dJYY79BOQyzGoOBKl8ASEiYi7WABVolsBPonvuHrcl6tGgeeEAAKIALZ0CQaChvUPbSv2aEdPoI5YX0AyTgg2YxkRwgpsEQTBN8lH0rA0j4I6tKwm6oqejCWAcPygrtrpIaXvx16Cah2Kmh4SrzIqhRaGYphYoSFgfMmagahYXjmKpcAaVpOA6fC4GMLyHZiohlnIbeRh2YROiOQYzmuZiUnWJ5+I+SScY2DqgXqQoIVhe6kKMQZTZbLAbbCmZnaxSiN6RolGLJal6UjJlQx+R++JqolOiKv4xXBSyZwoFp+nlaKfEtdZrQuTGeYmL8bhaOhRjufK2hLou3yksmoThEClpqRNTqBmcFyQPp9LTbxFmLShrRGEqhEmsI62-OMpj+FiSY5SNH12doX7quNpUsjd5yXBA+lMPgcMXAtAlveiug4BM2oWPJZizLtnn7YUXwWMdKaUZuNpOna5ZOpW1aNZVdaRS60Xo1ZmMICa2NaD8eYqqY3zuZ9AsGLMcbzDopjmoClYQHASjAhK3O3joWIALSzhMq6KkNyYUWdFIEMQZCUGr8WRrLfk47oOIzkEwgdO5cY4AES6+FYBikTolGVPEVsRkJ0kmh4XTuJHaU7VJJJ6J7Q6rsquhePLSxFtEbCxPEOCQUGYAwXBkDB61ocLsIol+DYxj67HeEfR7bhDsq8Y+caAfZ1UOAcVgRBsV3bCl0tiAV1XUe1zHQMjHqbjDQp85y9T1o0sPPPfPzo0zPj2oE1iOI5V+uhfL4BiBFYy-UbS9MOiyUUs2vCXaJXWhb5Yy5vL16Lu1mcyy+YUMTaWhpjSOkZZb6MyrNFR+kYzCFDGLoIcJJDC+HWu5bMnhvCy1PkmEYBhL5AVpPnMCEIYGh1mF4WMxp1T+WzKmN87g9TCAFsENUf8frQ00gIMhNlNRSX8DGdUwgPpJmESmewnCyqGQft2dWbUcQeDNBob2xofyJXcjiPEVh1TzlXJYOYkjJpSGmtw2R1tQ72E8hTV+Z9tAdB1BYdyq45zGi2sqd87h-ZAMzpdGG11boIx4e9H67l4Gew+ltPM84LBeIzhuFepZ7RaSCa8DoEc3470-kDJMWilSBDMCMY0F8wghCAA */
     id: "sayPi",
-    initial: "idle",
+    initial: "listening",
     states: {
-      idle: {
-        description: "Initial state.\nGentle pulsing animation.",
-        entry: ["stopAllAnimations", "acquireMicrophone"],
+      inactive: {
+        description: "Idle state, not listening or speaking. Privacy mode.",
         on: {
-          "saypi:userSpeaking": {
-            target: "userSpeaking",
-          },
-          "saypi:safariBlocked": {
-            target: "blocked",
-            cond: "isSafari",
-          },
-          "saypi:piSpeaking": {
-            target: "piSpeaking",
-          },
-        },
-      },
-
-      userSpeaking: {
-        description:
-          "User is speaking and being recorded by the microphone.\nWaveform animation.",
-
-        entry: [
-          {
-            type: "startAnimation",
-            params: {
-              animation: "userSpeaking",
-            },
-          },
-          "activateTalkButton",
-        ],
-
-        exit: [
-          {
-            type: "stopAnimation",
-            params: {
-              animation: "userSpeaking",
-            },
-          },
-          "deactivateTalkButton",
-        ],
-
-        on: {
-          "saypi:userFinishedSpeaking": {
-            target: "transcribing",
-            cond: "longEnoughForUpload",
-          },
-          "saypi:userStoppedSpeaking": {
-            target: "idle",
-            cond: "tooShortForUpload",
-          },
-          "saypi:transcribing": {
-            target: "transcribing",
-          },
-        },
-      },
-
-      blocked: {
-        description:
-          "Blocking action on Safari.\nUser must press play to hear Pi's response.\nBounce animation.",
-        entry: [
-          {
-            type: "startAnimation",
-            params: {
-              animation: "paused",
-            },
-          },
-          "showPlayButton",
-        ],
-        exit: [
-          {
-            type: "stopAnimation",
-            params: {
-              animation: "paused",
-            },
-          },
-          "hidePlayButton",
-        ],
-        on: {
-          "saypi:ready": {
-            target: "blocked",
-            internal: true,
-            description: `Enough audio has been buffered to start playback.`,
-            actions: "showPlayButton",
-          },
-
-          "saypi:unblock": {
-            target: "loading",
-          },
-        },
-      },
-
-      piSpeaking: {
-        description:
-          "Pi's synthesised speech audio is playing.\nPlayful animation.",
-        entry: {
-          type: "startAnimation",
-          params: {
-            animation: "piSpeaking",
-          },
-        },
-        exit: {
-          type: "stopAnimation",
-          params: {
-            animation: "piSpeaking",
-          },
-        },
-        on: {
-          "saypi:piStoppedSpeaking": {
-            target: "idle",
-          },
-          "saypi:userSpeaking": {
-            target: "userSpeaking",
-          },
-          "saypi:piFinishedSpeaking": {
-            target: "idle",
-          },
-        },
-      },
-
-      transcribing: {
-        description: "Transcribing audio to text.\nCard flip animation.",
-        entry: [
-          {
-            type: "startAnimation",
-            params: {
-              animation: "transcribing",
-            },
-          },
-          {
-            type: "transcribeAudio",
-            params: {},
-          },
-        ],
-        exit: {
-          type: "stopAnimation",
-          params: {
-            animation: "transcribing",
-          },
-        },
-        on: {
-          "saypi:transcribed": {
-            target: "idle",
-            actions: {
-              type: "handleTranscriptionResponse",
-              params: {},
-            },
-            description: "Successfully transcribed user audio to text.",
-          },
-
-          "saypi:transcribeFailed": {
-            target: "#sayPi.errors.transcribeFailed",
-            description: "Received an error response from the /transcribe API",
-          },
-
-          "saypi:transcribedEmpty": {
-            target: "#sayPi.errors.micError",
-            description:
-              "Received an empty response from the /transcribe API (no speech detected)",
-          },
-        },
-      },
-
-      loading: {
-        description: "Pi's audio is loading.",
-        entry: {
-          type: "startAnimation",
-          params: {
-            animation: "loading",
-          },
-        },
-        exit: {
-          type: "stopAnimation",
-          params: {
-            animation: "loading",
-          },
-        },
-        on: {
-          "saypi:piSpeaking": {
-            target: "piSpeaking",
-          },
+          "saypi:userSpeaking": "listening",
         },
       },
 
@@ -201,16 +25,11 @@ export const machine = createMachine(
         description: "Error parent state.",
 
         after: {
-          10000: [
-            {
-              target: "#sayPi.idle",
-              actions: [],
-              description: "Reset to the idle state and clear errors.",
-            },
-            {
-              internal: false,
-            },
-          ],
+          10000: {
+            target: "listening",
+            actions: [],
+            description: "Reset to the idle state and clear errors.",
+          },
         },
 
         initial: "transcribeFailed",
@@ -244,6 +63,212 @@ export const machine = createMachine(
             exit: {
               type: "dismissNotification",
               params: {},
+            },
+          },
+        },
+      },
+
+      listening: {
+        states: {
+          transcribing: {
+            description: "Transcribing audio to text.\nCard flip animation.",
+            entry: [
+              {
+                type: "startAnimation",
+                params: {
+                  animation: "transcribing",
+                },
+              },
+              {
+                type: "transcribeAudio",
+                params: {},
+              },
+            ],
+            exit: {
+              type: "stopAnimation",
+              params: {
+                animation: "transcribing",
+              },
+            },
+            on: {
+              "saypi:transcribed": {
+                target: "recording.notSpeaking",
+                actions: {
+                  type: "handleTranscriptionResponse",
+                  params: {},
+                },
+                description: "Successfully transcribed user audio to text.",
+              },
+
+              "saypi:transcribeFailed": {
+                target: "#sayPi.errors.transcribeFailed",
+                description:
+                  "Received an error response from the /transcribe API",
+              },
+
+              "saypi:transcribedEmpty": {
+                target: "#sayPi.errors.micError",
+                description:
+                  "Received an empty response from the /transcribe API (no speech detected)",
+              },
+            },
+          },
+
+          recording: {
+            initial: "notSpeaking",
+
+            states: {
+              userSpeaking: {
+                description:
+                  "User is speaking and being recorded by the microphone.\nWaveform animation.",
+
+                entry: [
+                  {
+                    type: "startAnimation",
+                    params: {
+                      animation: "userSpeaking",
+                    },
+                  },
+                  "activateTalkButton",
+                ],
+
+                exit: [
+                  {
+                    type: "stopAnimation",
+                    params: {
+                      animation: "userSpeaking",
+                    },
+                  },
+                  "deactivateTalkButton",
+                ],
+
+                on: {
+                  "saypi:userStoppedSpeaking": {
+                    target: "transcribing",
+                    cond: "longEnoughForUpload",
+                  },
+                  "saypi:userStoppedSpeaking": {
+                    target: "notSpeaking",
+                    cond: "tooShortForUpload",
+                  },
+                  "saypi:transcribing": {
+                    target: "#sayPi.listening.transcribing",
+                  },
+                },
+              },
+
+              notSpeaking: {
+                description: "Microphone is recording but no speech is detected.",
+                on: {
+                  "saypi:userFinishedSpeaking": "#sayPi.inactive",
+                  "saypi:userSpeaking": "userSpeaking"
+                },
+              }
+            },
+
+            description: `Microphone is on and VAD is actively listending for user speech.`
+          }
+        },
+        entry: ["stopAllAnimations", "acquireMicrophone"],
+        on: {
+          "saypi:safariBlocked": {
+            target: "#sayPi.responding.blocked",
+            cond: "isSafari",
+          },
+          "saypi:piSpeaking": {
+            target: "#sayPi.responding.piSpeaking",
+          },
+        },
+        description: `Actively listening for user input. Simultaneously recording and transcribing user speech. Gentle pulsing animation.`,
+        type: "parallel",
+      },
+
+      responding: {
+        description: `Pi is responding. Synthesised speech is playing or waiting to play.`,
+        initial: "piSpeaking",
+
+        states: {
+          piSpeaking: {
+            description:
+              "Pi's synthesised speech audio is playing.\nPlayful animation.",
+            entry: {
+              type: "startAnimation",
+              params: {
+                animation: "piSpeaking",
+              },
+            },
+            exit: {
+              type: "stopAnimation",
+              params: {
+                animation: "piSpeaking",
+              },
+            },
+            on: {
+              "saypi:piStoppedSpeaking": {
+                target: "#sayPi.listening",
+              },
+              "saypi:userSpeaking": {
+                target: "#sayPi.listening.recording.userSpeaking",
+              },
+              "saypi:piFinishedSpeaking": {
+                target: "#sayPi.listening",
+              },
+            },
+          },
+
+          loading: {
+            description: "Pi's audio is loading.",
+            entry: {
+              type: "startAnimation",
+              params: {
+                animation: "loading",
+              },
+            },
+            exit: {
+              type: "stopAnimation",
+              params: {
+                animation: "loading",
+              },
+            },
+            on: {
+              "saypi:piSpeaking": {
+                target: "piSpeaking",
+              },
+            },
+          },
+
+          blocked: {
+            description:
+              "Blocking action on Safari.\nUser must press play to hear Pi's response.\nBounce animation.",
+            entry: [
+              {
+                type: "startAnimation",
+                params: {
+                  animation: "paused",
+                },
+              },
+              "showPlayButton",
+            ],
+            exit: [
+              {
+                type: "stopAnimation",
+                params: {
+                  animation: "paused",
+                },
+              },
+              "hidePlayButton",
+            ],
+            on: {
+              "saypi:ready": {
+                target: "blocked",
+                internal: true,
+                description: `Enough audio has been buffered to start playback.`,
+                actions: "showPlayButton",
+              },
+
+              "saypi:unblock": {
+                target: "loading",
+              },
             },
           },
         },
