@@ -1,18 +1,77 @@
 import { buttonModule } from "../ButtonModule";
-import { createMachine } from "xstate";
+import { createMachine, Typestate } from "xstate";
 import AnimationModule from "../AnimationModule";
 import { isSafari, isMobileView } from "../UserAgentModule";
-import {
-  uploadAudio,
-  handleTranscriptionResponse,
-} from "../TranscriptionModule";
+import { uploadAudio, setPromptText } from "../TranscriptionModule";
 import EventBus from "../EventBus";
 
-export const machine = createMachine(
+type SayPiEvent =
+  | { type: "saypi:userSpeaking" }
+  | { type: "saypi:userStoppedSpeaking"; duration: number; blob: Blob }
+  | { type: "saypi:userFinishedSpeaking" }
+  | { type: "saypi:transcribed"; text: string }
+  | { type: "saypi:transcribeFailed" }
+  | { type: "saypi:transcribedEmpty" }
+  | { type: "saypi:safariBlocked" }
+  | { type: "saypi:piSpeaking" }
+  | { type: "saypi:piStoppedSpeaking" }
+  | { type: "saypi:piFinishedSpeaking" }
+  | { type: "saypi:ready" }
+  | { type: "saypi:unblock" }
+  | { type: "saypi:submit" };
+
+interface SayPiContext {
+  transcriptions: string[];
+}
+
+// Define the state schema
+type SayPiStateSchema = {
+  states: {
+    inactive: {};
+    errors: {
+      states: {
+        transcribeFailed: {};
+        micError: {};
+      };
+    };
+    listening: {
+      states: {
+        recording: {
+          states: {
+            userSpeaking: {};
+            notSpeaking: {};
+          };
+        };
+        converting: {
+          states: {
+            transcribing: {};
+            accumulating: {};
+            submitting: {};
+          };
+        };
+      };
+    };
+    responding: {
+      states: {
+        piSpeaking: {};
+        loading: {};
+        blocked: {};
+      };
+    };
+  };
+};
+
+interface SayPiTypestate extends Typestate<SayPiContext> {
+  value: "listening" | "inactive" | "errors" | "responding";
+  context: SayPiContext;
+}
+
+export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCArrGAE4DKdYKA1gVADaABgC6iUHQD2sLGSn4JIAB6IALAFZhAZhzCAbACYAHAHZDATgCM+7Ru0AaEGkQX9FnIZ1rzV7Wu1tY20AXxCnWmwcdjYpNlgqZVgSFBIwHBQAMzS2AAorYULhAEoadCiYuNgRcSQQaVl5RTrVBDU1C10DE3NrW3snFwRjQxwrKwsLM0K1Q3H9DTCI8twAGyxksHwBMvpGVEyUNiwAIVWpIl5IGqUGuSwFJVajQcQC42McC3sNKzU-wzafTtJYgSJrDZpbb4KC7BgIBhcHj8GE3Op3JpPRAaQyvBDjbSmHCaQLGYR+UymfQfUHgnDrTbQqA4IgKShsMgwnAkNgofCwIjHABGO1o8J5fIFwuuYluMnujxaiCBBj0nWMHUs2gsan0pjxamEGhwpi0wjJVkp1j+tJW9MhWwELLZ7E5zIl-MFWBFMLhjA9Uu9YAAYigsKsZbVJPLMUq2h0ukYzJYbHZHM5sWZPDo5uZzdorCNbZgIYynaz8Oy3dzeZ7haL0OLa4GhZAAKIAWzoJDQaOjjQezVArXanT0Sd6qYGGYQ+j12e0JkMRlMOiCxaiDKhTrYYFZbAgTpY7CRfAbe2YrE4JCkdG4EFPKKEsvRMcHWIQlmpJp0a+MCz+DR9RnNR-xNZdzCAwsqTUDdS23Lld33Q8uXwKQSEfc94WPNhgwIDYAAtIEw1EX37BUhxUdRfkTHoU36dMhmsT5V1JYxxhGf8rDg+0y0Qvc4hQ5k0Iw7gz19MVGBwkjnyjeo30VYdEEMQF9D0YwNH-AIrHscw1DxIxdC8AsFgsclDNMHjd1gaR8CEnBETEp8-QRLAOBvO9iKcgQ+3kgdFKo-ENBxHBgRGIxqXJKY8S0Il7GBaxDW+QwfFCcIwTtazbPsxzkSwqSrxk3yMXfOMdJCsLl2XC1opAoC9CBDQ9XGVcVNMWD0rpLKFBytzvIkxtGAYPDtlgIiH362S5X8yjWnK0ZKoimrjBizSGoWU1ZmCykrLgbKnXOFAhJc3LxKm18Zo-CxDGND5DBg75zTcCwYstYl7C8dxCULYJdpsnqnSFc5LkgFzdyO3syL8iiPxsNRQpStwtJ0ixV30mdLCJIpCk6OxzEsP79q5IGLiuCAXKYfAScuYqFNm7EdT0Io5g+VG-CsV6iRJT7OlMH60vStCIDgJRwWmmG43RoYAFpjSCGZvmpdphCpbjOrtAhiDIShxdjJS2lMMkxm+Q2zJU9iVpnMyPG+fwVO0QozEmHjKniXXSv10CNA8bpnomDR-kY9QbC+ewJgd3pNGMF22FieIa0lL1W1DcNIHdgKRzMrGjD975A5i0DQ8XTR3CtG11ZLaJY6qHAOywIg22rth0-ptos-HL9rDzvw8T5+HuYDikmqNHit0dGEW9hq0vgMGwqXaw3bDxAphDGLxCho66dQsUeHSZZ1K1dJ0AyTgRJ7jRdvzMUDgRUlWzP0A0vC+KlmsJaw5kMXe+OZJDBLPi6Et9aFnujPfQc89Q+H-EHBABYrChQmB-YwuNw4dWWJXMe+8-4HiPIVSa599YpX+D+B24xUYBwLJbIY7RdDgKmBpBYthkEam-ghX+AkcGoXQjJAhgVoLGgfhAhe0CDI6U8P+ew-hLTBXNITAGE9AF60CgHZeCwmaFEauYBYKU5F2SdKdJ8vC5rjFGEBMkKlbCrnAVLdQxCdALBJHzS0mhdH2UOkJIxiBTRElNhvSk7VOiPxAmo1iKUrCAnJEuNBGVK7dT0cTYGZNPH4mELiEClgi46VNO8NW6DNx73LC6DkADyJKNaIuZ+18tJ31MA-PEBYPA3RmIg2pDDWHj2ZBWKsTpiBECYB2JgqxUglOhmU5UnR4HdDnJjAo4SDTjBfnOdqhpwH3TVmEIAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCArrGAE4DKdYKA1gVADaABgC6iUHQD2sLGSn4JIAB6IArMIAsAJhzCAjGoAcANgCcJ89qMAaEGkRmjuzWbdnhwy0bWbNAX387WmwcdjYpNlgqZVgSFBIwHBQAM0S2AAp9T08AShp0UPDI2BFxJBBpWXlFCtUEDQBmXQNjc0szazsHBCN9HFd3S019AHYTQ0bA4MLcABssOLB8AQL6RlQUlDYsACE5qSJeSDKlKrksBSV6k21uxH1s3W0NYUbG701hNRNpkBD5otEit8FA1gwEAwuDx+KDThVzjVruo7vYHoZdKNBhN9JpRmY-Go-gCcAsliCoDg2GAiJEIAIcCx2NC+KtaBCmZwSFI6NwICzYUIxGcZBcrnVENoLEYcKM3vpbqMNH1RvcEJojGYcC9PO9RtpRuMPsTZqSgcsGdTaWx6aCcPgpCQBWz0BzWGwAGIERYAC0gzrhwoRoqREoa3xahlMFistjRCDMzT0OVuxlGjUM+hNmEB5MtNLpDIdTu4rNB4MYnIDQvKkhDl1qoHq2m0Hz0PkNBLUHy0apMbde+jMj2ERh7RmzoTJwIZtPwlDYZDtJDYKHwsCIOwARi71ggV2uN9uTkG69UG8iEOO9Inxjqx2o1GqvjKDY1fPptMJRkOzFjJ7mM52nOC5LpSB7rpuWA7uW7KMBBR7QWAHooFgcwnrWlT1uKTbqG8kZtDGnRxj0ahuDgg7vOYhL4gBZp5sBCigQyCFQTBYJwfuq6QceEAAKIALZ0CQaDwmeYqNioeFqAR0YdF08YmH0FGeNkjQavo6naHR04Wox87sGByREEQTACUwcwJLuEKwEwW4CXIYlYeeOFSeqOijHoipfn4Cp+M+Gbaq8ZgyeY6afnR1KwNI+C2pSUKloKFaQlgHDcry-qJQITmIheYaGDJOAmBqUrCB4WjNCYaoycIOBju+uKVZ4riRXAMVxTgCUwtZlbutWOXYZJ9QFboxXOB45WaJVz5yjg7zvqYRiaMVJhka10UKB1XVlhxrqMAwXorLAfr8llgaYblrnDY+o0lRNzXTfGag-nN7y+UY3y+AEQT-KaUXtQyBwoHFyXbYKA0uUNjgvHVzhYviZXmI0JHqI0tVKsILyGMVXyNKM60A3aW4HEckDJdSwOiaezkSZeflFTq3ZKViIVPvGGa1VKP4-EY+pSn4+M-SS-2bQyxOHMcEDJUw+Di0cEO02GZGaMmngmIjX7IyjDRo7KGhYz8fhvILP0OhAcBKACIqQ5emhqgAtL8QumgQxBkJQ1uK7hOtDjguJGB9xhDmR+hqp0jRBWrXYvA+dHFFEnuht7vhfnohjpjoSmfqq8ZTZz+sB++2jmKOcdsBEUQ4Kxx4oWhkCJ3lyfLTKrQZ8XfQGtVtyR-oAdfkqxffTMOZhOXJQ4A5RB8WPbAN1d6jN2nz1aVnnfxvqnkY1ompKW+2nOyPukUnPUMIGM+I4B4tyNUavM5z05GvAYSqDAHbw6eaFJUgWNoCCfdNw0vl4bQN9+x3zVM0FWw4TDjA1N+HQakP4MUpFaQsdoqxnSgP-MM2hfKykxgSL8q0QFTWfD8S+CpnBTR8M4TGUwD5Tk-vma0HVizVmwd7XuSogHXymrfQ0fZrAUTHHiD6q1DTLSQUBSkIFDJ-2DDbMMzQWx1Qxj+TQGh+ytggY8VWo59ZKnGF4KRekZFMTkcubiiF2IcLcs0WavMNDqM0c0Roz5cEqU8ONP88pBbD0YcgnAsjFwMmIKZcylkwK2PqI0RMagvLF2VvidWvgIFOE8VoMYyM-AwJMV-YJRlbL2TkFEhRXs3J4nMH7AwPhlQGHfGzHoOh4k6i8K4HesTHwE1FqCaJC81RjFfH+c+BUYFygnAw3AItYoMjBvI8SSc3KPE-BRUYH0nBLWsFKKqudfCvXfG8McS1DndJmXaIGcU+kIEMbKAOf5iqGmNjsppF8cjWEmP3KipyOpy0llcp4z4pqR1bKInQIwTb+CAA */
     id: "sayPi",
     initial: "listening",
+    context: { transcriptions: [] },
     states: {
       inactive: {
         description: "Idle state, not listening or speaking. Privacy mode.",
@@ -123,7 +182,8 @@ export const machine = createMachine(
 
             states: {
               transcribing: {
-                description: "Transcribing audio to text.\nCard flip animation.",
+                description:
+                  "Transcribing audio to text.\nCard flip animation.",
                 entry: [
                   {
                     type: "startAnimation",
@@ -168,10 +228,22 @@ export const machine = createMachine(
 
               accumulating: {
                 description: `Accumulating and assembling audio transcriptions into a cohesive prompt.
-Submits a prompt when a threshold is reached.`
-              }
-            }
-          }
+Submits a prompt when a threshold is reached.`,
+                entry: "combineTranscripts",
+                on: {
+                  "saypi:submit": {
+                    target: "submitting",
+                    description: `Submit combined transcript to Pi.`,
+                    cond: "submissionConditionsMet",
+                  },
+                },
+              },
+
+              submitting: {
+                description: `Submitting prompt to Pi.`,
+              },
+            },
+          },
         },
         entry: ["stopAllAnimations", "acquireMicrophone"],
         on: {
@@ -295,16 +367,26 @@ Submits a prompt when a threshold is reached.`
         AnimationModule.stopAnimation(action.params.animation);
       },
 
-      transcribeAudio: (context, event) => {
+      transcribeAudio: (
+        context,
+        event: {
+          type: "saypi:userStoppedSpeaking";
+          duration: number;
+          blob: Blob;
+        }
+      ) => {
         console.log("transcribeAudio", event);
         const audioBlob = event.blob;
         uploadAudio(audioBlob, event.duration);
       },
 
-      handleTranscriptionResponse: (context, event) => {
+      handleTranscriptionResponse: (
+        SayPiContext,
+        event: { type: "saypi:transcribed"; text: string }
+      ) => {
         console.log("handleTranscriptionResponse", event);
         const transcription = event.text;
-        handleTranscriptionResponse(transcription);
+        SayPiContext.transcriptions.push(transcription);
       },
 
       showPlayButton: (context, event) => {
@@ -317,11 +399,17 @@ Submits a prompt when a threshold is reached.`
 
       activateTalkButton: (context, event) => {
         const talkButton = document.getElementById("saypi-talkButton");
+        if (!talkButton) {
+          return;
+        }
         talkButton.classList.add("active"); // Add the active class (for Firefox on Android)
       },
 
       deactivateTalkButton: (context, event) => {
         const talkButton = document.getElementById("saypi-talkButton");
+        if (!talkButton) {
+          return;
+        }
         talkButton.classList.remove("active"); // Remove the active class (for Firefox on Android)
       },
 
@@ -339,22 +427,29 @@ Submits a prompt when a threshold is reached.`
         buttonModule.showNotification({ icon, message });
       },
 
-      dismissNotification: (context, event) => {
+      dismissNotification: () => {
         buttonModule.dismissNotification();
+      },
+      combineTranscripts: (SayPiContext) => {
+        const prompt = SayPiContext.transcriptions.join(" ");
+        if (prompt.length > 0) {
+          setPromptText(prompt);
+        }
       },
     },
     services: {},
     guards: {
-      tooShortForUpload: (context, event) => {
-        return event.duration < 1000;
-      },
-
-      longEnoughForUpload: (context, event) => {
-        return event.duration >= 1000;
-      },
-
       isSafari: (context, event) => {
         return isSafari();
+      },
+      submissionConditionsMet: (SayPiContext, event, meta) => {
+        const { state } = meta;
+        const allowedState = !(
+          state.matches("listening.recording.userSpeaking") ||
+          state.matches("listening.converting.transcribing")
+        );
+        const transcriptsMerged = SayPiContext.transcriptions.length == 1;
+        return allowedState && transcriptsMerged;
       },
     },
     delays: {},

@@ -9,11 +9,14 @@ interface TranscriptionResponse {
   text: string;
 }
 
-export function uploadAudio(audioBlob: Blob, audioDurationMillis: number): void {
+export function uploadAudio(
+  audioBlob: Blob,
+  audioDurationMillis: number
+): void {
   // Create a FormData object
   const formData = new FormData();
   let audioFilename = "audio.webm";
-  
+
   if (audioBlob.type === "audio/mp4") {
     audioFilename = "audio.mp4";
   } else if (audioBlob.type === "audio/wav") {
@@ -49,7 +52,9 @@ export function uploadAudio(audioBlob: Blob, audioDurationMillis: number): void 
       const transcriptionDurationMillis = endTime - startTime;
 
       console.log(
-        `Transcribed ${Math.round(audioDurationMillis / 1000)}s of audio in ${Math.round(transcriptionDurationMillis / 1000)}s`
+        `Transcribed ${Math.round(
+          audioDurationMillis / 1000
+        )}s of audio in ${Math.round(transcriptionDurationMillis / 1000)}s`
       );
 
       if (responseJson.text.length === 0) {
@@ -66,15 +71,19 @@ export function uploadAudio(audioBlob: Blob, audioDurationMillis: number): void 
     });
 }
 
-export function handleTranscriptionResponse(transcript: string): void {
+export function setPromptText(transcript: string): void {
   console.log(`Transcript: ${transcript}`);
-  const textarea = document.getElementById("saypi-prompt") as HTMLTextAreaElement;
+  const textarea = document.getElementById(
+    "saypi-prompt"
+  ) as HTMLTextAreaElement;
   if (isMobileView()) {
     // if transcript is > 1000 characters, truncate it to 999 characters plus an ellipsis
     if (transcript.length > 1000) {
       transcript = `${transcript.substring(0, 999)}…`;
       console.warn(
-        `Transcript was too long for Pi. Truncated to 999 characters, losing the following text: ... ${transcript.substring(999)}`
+        `Transcript was too long for Pi. Truncated to 999 characters, losing the following text: ... ${transcript.substring(
+          999
+        )}`
       );
     }
     EventModule.setNativeValue(textarea, transcript);
