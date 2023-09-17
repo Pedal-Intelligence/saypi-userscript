@@ -1,5 +1,5 @@
 import { buttonModule } from "../ButtonModule";
-import { createMachine, Typestate } from "xstate";
+import { createMachine, Typestate, assign } from "xstate";
 import AnimationModule from "../AnimationModule";
 import { isSafari, isMobileView } from "../UserAgentModule";
 import { uploadAudio, setPromptText } from "../TranscriptionModule";
@@ -66,9 +66,14 @@ interface SayPiTypestate extends Typestate<SayPiContext> {
   context: SayPiContext;
 }
 
+/* external actions */
+const clearTranscripts = assign({
+  transcriptions: () => [],
+});
+
 export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCArrGAE4DKdYKA1gVADaABgC6iUHQD2sLGSn4JIAB6IArMIAsAJhzCAjGoAcANgCcJ89qMAaEGkRmjuzWbdnhwy0bWbNAX387WmwcdjYpNlgqZVgSFBIwHBQAM0S2AAp9T08AShp0UPDI2BFxJBBpWXlFCtUEDQBmXQNjc0szazsHBCN9HFd3S019AHYTQ0bA4MLcABssOLB8AQL6RlQUlDYsACE5qSJeSDKlKrksBSV6k21uxH1s3W0NYUbG701hNRNpkBD5otEit8FA1gwEAwuDx+KDThVzjVruo7vYHoZdKNBhN9JpRmY-Go-gCcAsliCoDg2GAiJEIAIcCx2NC+KtaBCmZwSFI6NwICzYUIxGcZBcrnVENoLEYcKM3vpbqMNH1RvcEJojGYcC9PO9RtpRuMPsTZqSgcsGdTaWx6aCcPgpCQBWz0BzWGwAGIERYAC0gzrhwoRoqREoa3xahlMFistjRCDMzT0OVuxlGjUM+hNmEB5MtNLpDIdTu4rNB4MYnIDQvKkhDl1qoHq2m0Hz0PkNBLUHy0apMbde+jMj2ERh7RmzoTJwIZtPwlDYZDtJDYKHwsCIOwARi71ggV2uN9uTkG69UG8iEOO9Inxjqx2o1GqvjKDY1fPptMJRkOzFjJ7mM52nOC5LpSB7rpuWA7uW7KMBBR7QWAHooFgcwnrWlT1uKTbqG8kZtDGnRxj0ahuDgg7vOYhL4gBZp5sBCigQyCFQTBYJwfuq6QceEAAKIALZ0CQaDwmeYqNioeFqAR0YdF08YmH0FGeNkjQavo6naHR04Wox87sGByREEQTACUwcwJLuEKwEwW4CXIYlYeeOFSeqOijHoipfn4Cp+M+Gbaq8ZgyeY6afnR1KwNI+C2pSUKloKFaQlgHDcry-qJQITmIheYaGDJOAmBqUrCB4WjNCYaoycIOBju+uKVZ4riRXAMVxTgCUwtZlbutWOXYZJ9QFboxXOB45WaJVz5yjg7zvqYRiaMVJhka10UKB1XVlhxrqMAwXorLAfr8llgaYblrnDY+o0lRNzXTfGag-nN7y+UY3y+AEQT-KaUXtQyBwoHFyXbYKA0uUNjgvHVzhYviZXmI0JHqI0tVKsILyGMVXyNKM60A3aW4HEckDJdSwOiaezkSZeflFTq3ZKViIVPvGGa1VKP4-EY+pSn4+M-SS-2bQyxOHMcEDJUw+Di0cEO02GZGaMmngmIjX7IyjDRo7KGhYz8fhvILP0OhAcBKACIqQ5emhqgAtL8QumgQxBkJQ1uK7hOtDjguJGB9xhDmR+hqp0jRBWrXYvA+dHFFEnuht7vhfnohjpjoSmfqq8ZTZz+sB++2jmKOcdsBEUQ4Kxx4oWhkCJ3lyfLTKrQZ8XfQGtVtyR-oAdfkqxffTMOZhOXJQ4A5RB8WPbAN1d6jN2nz1aVnnfxvqnkY1ompKW+2nOyPukUnPUMIGM+I4B4tyNUavM5z05GvAYSqDAHbw6eaFJUgWNoCCfdNw0vl4bQN9+x3zVM0FWw4TDjA1N+HQakP4MUpFaQsdoqxnSgP-MM2hfKykxgSL8q0QFTWfD8S+CpnBTR8M4TGUwD5Tk-vma0HVizVmwd7XuSogHXymrfQ0fZrAUTHHiD6q1DTLSQUBSkIFDJ-2DDbMMzQWx1Qxj+TQGh+ytggY8VWo59ZKnGF4KRekZFMTkcubiiF2IcLcs0WavMNDqM0c0Roz5cEqU8ONP88pBbD0YcgnAsjFwMmIKZcylkwK2PqI0RMagvLF2VvidWvgIFOE8VoMYyM-AwJMV-YJRlbL2TkFEhRXs3J4nMH7AwPhlQGHfGzHoOh4k6i8K4HesTHwE1FqCaJC81RjFfH+c+BUYFygnAw3AItYoMjBvI8SSc3KPE-BRUYH0nBLWsFKKqudfCvXfG8McS1DndJmXaIGcU+kIEMbKAOf5iqGmNjsppF8cjWEmP3KipyOpy0llcp4z4pqR1bKInQIwTb+CAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCArrGAE4DKdYKA1gVADaABgC6iUHQD2sLGSn4JIAB6IArMIAsAJhzCAjGoAcANgCcJ89qMAaEGkRmjuzWbdnhwy0bWbNAX387WmwcdjYpNlgqZVgSFBIwHBQAM0S2AAp9T08AShp0UPDI2BFxJBBpWXlFCtUEDQBmXQNjc0szazsHBCN9HFd3S019AHYTQ0bA4MLcABssOLB8AQL6RlQUlDYsACE5qSJeSDKlKrksBSV6k21uxH1s3W0NYUbG701hNRNpkBD5otEit8FA1gwEAwuDx+KDThVzjVruo7vYHoZdKNBhN9JpRmY-Go-gCcAsliCoDg2GAiJEIAIcCx2NC+KtaBCmZwSFI6NwICzYUIxGcZBcrnVENoLEYcKM3vpbqMNH1RvcEJojGYcC9PO9RtpRuMPsTZqSgcsGdTaWx6aCcPgpCQBWz0BzWGwAGIERYAC0gzrhwoRoqREoa3xahlMFistjRCDMzT0OVuxlGjUM+hNmEB5MtNLpDIdTu4rNB4MYnIDQvKkhDl1qoHq2m0Hz0PkNBLUHy0apMbde+jMj2ERh7RmzoTJwIZtPwlDYZDtJDYKHwsCIOwARi71ggV2uN9uTkG69UG8iEOO9Inxjqx2o1GqvjKDY1fPptMJRkOzFjJ7mM52nOC5LpSB7rpuWA7uW7KMBBR7QWAHooFgcwnrWlT1uKTbqG8kZtDGnRxj0ahuDgg7vOYhL4gBZp5sBCigQyCFQTBYJwfuq6QceEAAKIALZ0CQaDwmeYqNioeFqAR0YdF08YmH0FGeNkjQavo6naHR04Wox87sGByREEQTACUwcwJKsYlYeeOFSeqOijHoipfn4Cp+M+Gbaq8ZgyeY6afnR1KwNI+C2pSUKloKFaQlgHDcry-rRQINmIheYaGDJOAmBqUrCB4WjNCYaoycIOBju+uLFZ4rjBXAYURTgUUwrubrMilgaYel9n1Flui5c4HiFZoxXPnKODvO+phGJouUmGR9WhQoTUtWWHGuowDBeissB+vynU1iKdmSX1j4DXlw21WN8ZqD+k3vO5RjfL4ARBP8pohY1DIHCgEWxWtgppdhp2OC8FXOFi+IFeYjQkeojTlUqwgvIYuVfI0oxLd9dpbgcRyQLF1J-aJp62RJl4eTlOrdkpWJ+U+8YZuVUo-j8Rj6lKfhY+9JJfStDJ44cxwQLFTD4ELRzAydl5kZoyaeCYMNfnD8MNIjsoaKjPx+G8PMzDm9FAZSIGGQysBMFuAlyGBVDSxTYaaI+WoFV+f4WI0bioqRvgUcOTgGBziPGn8DoQHASgAsdDu4eqaoALRqDg7huGMlhKvozi-LzpoEMQZCUNHoax92Q44LiRjPcYQ5kfoaqdI0PmK12LwPnRxRREXGUlzo5WtOmOhKZ+qrxqNLMaAqagVwP7dsBEUQ4Kxx4oWhkBd716hzTK-daUPBqlbcTeZ8437+W9BtFHPJQ4NbRB8VfbDr6DDRb3ohgD9oe8jz0+rOcjWiaiUm+bSOdDa6QpE-SmnZk5eG0NVI0HNv6OC1K8N4o5nA6k-jpc0FIqQFhtAISBmVIYwNuPA-siC1TNHlsOJSw4vC+FygSbBDFKRWkLHaKsh0iGx20O5WUKMCRfgWnA0az4fjJwVM4UaPgT6thYcbPB1omrFmrDwhymclSkNEZjChho+zWAomOPEz0FqGjmgovSJsmJm1BOo+ozQWwVWRj+J2XhmiNCoY8BW3x3hSkTOpSxuDTaLhYtxRC7F7GIGaBNDmGhXEaH7K2Z8fCVKeCGn+eU+sPpgJwbOGxoS7TEFMuZSyYEolXkTEnWBC0CT4iVr4KhTg0laDGHDPwJhskknAfkgyhTKQWytjbQhwYZaO3GFqbImdHyjgMO+RmPQdBJx1F4VwgDPaPmxgLOxoyY4OUafGMYr4-wtnmUOT2uItnhQZIDEZ4li4aMeLoO6z0nCzWsFKEqo9fZTSaGOWabwJygNCPza5dpfoRQqUqP+lc-y5UNHrL5iz8QK2sJML86YQ4X1wKCpqksRYVKeM+UaTdWwmJ0CMHmgQgA */
     id: "sayPi",
     initial: "listening",
     context: { transcriptions: [] },
@@ -230,17 +235,18 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 description: `Accumulating and assembling audio transcriptions into a cohesive prompt.
 Submits a prompt when a threshold is reached.`,
                 entry: "combineTranscripts",
-                on: {
-                  "saypi:submit": {
-                    target: "submitting",
-                    description: `Submit combined transcript to Pi.`,
-                    cond: "submissionConditionsMet",
-                  },
+                always: {
+                  target: "submitting",
+                  description: `Submit combined transcript to Pi.`,
+                  cond: "submissionConditionsMet",
                 },
               },
 
               submitting: {
                 description: `Submitting prompt to Pi.`,
+                always: "accumulating",
+                entry: "setTranscriptAsPrompt",
+                exit: clearTranscripts,
               },
             },
           },
@@ -430,11 +436,20 @@ Submits a prompt when a threshold is reached.`,
       dismissNotification: () => {
         buttonModule.dismissNotification();
       },
-      combineTranscripts: (SayPiContext) => {
-        const prompt = SayPiContext.transcriptions.join(" ");
-        if (prompt.length > 0) {
-          setPromptText(prompt);
+
+      combineTranscripts: assign((context) => {
+        const transcript = context.transcriptions.join(" ");
+        if (transcript.length > 0) {
+          return {
+            transcriptions: [transcript],
+          };
         }
+        return {};
+      }),
+
+      setTranscriptAsPrompt: (SayPiContext) => {
+        const prompt = SayPiContext.transcriptions[0];
+        setPromptText(prompt);
       },
     },
     services: {},
