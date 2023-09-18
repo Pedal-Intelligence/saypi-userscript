@@ -2,7 +2,7 @@ import { MicVAD, RealTimeVADOptions } from "@ricky0123/vad-web";
 import { config } from "../ConfigModule";
 import { setupInterceptors } from "../RequestInterceptor";
 import { convertToWavBlob } from "../AudioEncoder";
-import { createMachine } from "xstate";
+import { createMachine, assign } from "xstate";
 
 // Assuming config.appServerUrl is of type string.
 const fullWorkletURL: string = `${config.appServerUrl}/vad.worklet.bundle.min.js`;
@@ -42,6 +42,7 @@ const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
   onSpeechStart: () => {
     console.log("Speech started");
     speechStartTime = Date.now();
+    EventBus.emit("saypi:userSpeaking");
   },
   onSpeechEnd: (rawAudioData: Float32Array) => {
     console.log("Speech ended");
@@ -54,7 +55,8 @@ const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
     });
   },
   onVADMisfire: () => {
-    console.log("VAD misfire. Audio was not speech.");
+    console.log("Cancelled. Audio was not speech.");
+    EventBus.emit("saypi:userStoppedSpeaking", { duration: 0 });
   },
 };
 
@@ -84,6 +86,9 @@ async function setupRecording(callback?: () => void): Promise<void> {
     }
   } catch (err) {
     console.error("VAD failed to load", err);
+    console.error(
+      `Application server at ${config.appServerUrl} may be unavailable. Please make sure it is running.`
+    );
   }
 }
 
@@ -96,6 +101,7 @@ function tearDownRecording(): void {
 
 interface AudioInputContext {
   waitingToStop: boolean;
+  waitingToStart: boolean;
   recordingStartTime: number;
 }
 
@@ -113,10 +119,12 @@ export const audioInputMachine = createMachine<
   AudioInputEvent
 >(
   {
+    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AkgOwAdUAXAOgCcwAbMZWSAYmQGMBHVDSgbQAYBdRKAJZYGYtjyCQAD0QBGAGwBmUgFYeG1UoCc2gCxKA7HJ4KANCACeiJXIAcpBYe0K7bpasMHtqgL6+LNExcQhJSFnZODDwoBggsPDBSaIA3LABrJKDsfCIyCI5yaKgEVKxmZHEE3j4aqWFRKskkGURVACYLawQ7PVVSRVMeOyU9bSVlbX9A9BzQ-LZC4oYwcnIsclICKkqAMw2AW3DZkLzwxaiY0rw0iqaaupaGsQkpWQQ5QxV1TR19IxM5isiHa7X6oIUqlUCn0Ll0X2mIGypzCBU4jEoNDoYEeQhELwSb3kXzUGh4Wl0BmMpi6iDsclIY102h4RnaPG0inaiORuVRF0oEGSEBoDFgxGQ5GIuJAzyaRI+7U+Ax4clUIyhhlZI1pPV6pCUoPGekMhjsTjVPJOfIWkUFFDAzA2mBiYuIWAIACUwOw4MRIDK5a8Wu85O1tIYDXZ2nYOcNFM5dVr+p84WbVLp2n0rcEbec7ZAHU7yC7YhBKsgAIIpZAYHYAIxogfx8pD8j0kNIGrsLjcYbkSl1sYcvWUCnHenspqmASR1vm+cKhYIYDwpYAyu6CG6Pc3GsHQO9jA4FBzw5ytXYvtpddpQVGY4bPAZ2gpubPeQu0faV2vipuPTiCtq1rBsm34eoWwPVoEGPRwz10T5hmvIcwVIO84X0ORORMOQczmM5v0LcUPRXCAGD3AlmkPeRtTUNVVHsOQ9A0dpDCBboWQcZwfA0AxFFjPDETwLAIDgKRPzySD90JNsEAAWg4xBFPwlEyExWh6AgaSqIVPROmBD5mPghiFCQwEfFUvNv2KHTWxohA-nQ88eGMJwOWcVRdSNAZsNNJQhjVewrK-AVIDs6D3lfBl2KhP5OUhYZdU8FRUxhbDVEnS0P3nQiwqFDARTACLZIcuQBxUU9mIUPpXK0Nxb1c0geKZZwtSwkK8oLIVKGLUsSuomDmPpZz7HZFiJjYvRbxMUhz1aiMOUnTr+W6rZVw3LcBoVALtGayEKUQxK7CHLQBkNNrVR4I09BW20lyFEiCDI7a5KvPboXaCY7EYmNMoM7o3D0ObdHUAKs3VWx-H8IA */
     id: "audioInput",
     initial: "released",
     context: {
       waitingToStop: false,
+      waitingToStart: false,
       recordingStartTime: 0,
     },
     states: {
@@ -142,6 +150,12 @@ export const audioInputMachine = createMachine<
             },
           },
         },
+        on: {
+          start: {
+            actions: assign({ waitingToStart: true }),
+            internal: true,
+          },
+        },
       },
       acquired: {
         description: "Microphone acquired and ready to start recording.",
@@ -151,14 +165,16 @@ export const audioInputMachine = createMachine<
             on: {
               start: {
                 target: "recording",
-                actions: {
-                  type: "startRecording",
-                },
                 cond: "microphoneAcquired",
               },
             },
+            always: {
+              target: "recording",
+              cond: "pendingStart",
+            },
           },
           recording: {
+            entry: ["startRecording", assign({ waitingToStart: false })],
             on: {
               stopRequested: {
                 target: "pendingStop",
@@ -220,8 +236,6 @@ export const audioInputMachine = createMachine<
         if (microphone && microphone.listening === false) {
           microphone.start();
         }
-
-        EventBus.emit("saypi:userSpeaking");
       },
 
       prepareStop: (context, event) => {
@@ -289,6 +303,9 @@ export const audioInputMachine = createMachine<
     guards: {
       microphoneAcquired: (context, event) => {
         return microphone !== null;
+      },
+      pendingStart: (context, event) => {
+        return context.waitingToStart === true;
       },
     },
     delays: {},

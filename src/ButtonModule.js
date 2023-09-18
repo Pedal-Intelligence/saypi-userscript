@@ -11,6 +11,8 @@ import rectanglesSVG from "./icons/rectangles.svg";
 import talkIconSVG from "./icons/waveform.svg";
 import mutedMicIconSVG from "./icons/muted_microphone.svg";
 import playIconSVG from "./icons/play.svg";
+import callIconSVG from "./icons/call.svg";
+import hangupIconSVG from "./icons/hangup.svg";
 export default class ButtonModule {
   constructor() {
     this.playButton = null;
@@ -18,6 +20,7 @@ export default class ButtonModule {
     // Binding methods to the current instance
     this.handlePlayButtonClick = this.handlePlayButtonClick.bind(this);
     this.registerOtherEvents();
+    this.initCallButton();
   }
 
   registerOtherEvents() {
@@ -208,6 +211,59 @@ export default class ButtonModule {
     const notification = document.getElementById("saypi-notification");
     if (notification) {
       notification.classList.add("hidden");
+    }
+  }
+
+  createCallButton() {
+    const label = "Active continuous listening";
+    const button = this.createButton("", () => {
+      this.actor.send("saypi:call");
+    });
+    button.id = "saypi-callButton";
+    button.type = "button";
+    button.className =
+      "call-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+    button.setAttribute("aria-label", label);
+    button.setAttribute("title", label);
+    button.innerHTML = callIconSVG;
+    document.body.appendChild(button);
+    return button;
+  }
+
+  initCallButton() {
+    const callButton = document.getElementById("saypi-callButton");
+    if (!callButton) {
+      this.createCallButton();
+    }
+  }
+
+  callActive() {
+    const callButton = document.getElementById("saypi-callButton");
+    if (callButton) {
+      callButton.innerHTML = hangupIconSVG;
+      callButton.setAttribute(
+        "aria-label",
+        "Active continuous listening. Click to stop."
+      );
+      callButton.setAttribute("title", "Active continuous listening");
+      callButton.onclick = () => {
+        this.actor.send("saypi:hangup");
+      };
+    }
+  }
+
+  callInactive() {
+    const callButton = document.getElementById("saypi-callButton");
+    if (callButton) {
+      callButton.innerHTML = callIconSVG;
+      callButton.setAttribute(
+        "aria-label",
+        "Click to start continuous listening."
+      );
+      callButton.setAttribute("title", "Not listening. Click to start.");
+      callButton.onclick = () => {
+        this.actor.send("saypi:call");
+      };
     }
   }
 }

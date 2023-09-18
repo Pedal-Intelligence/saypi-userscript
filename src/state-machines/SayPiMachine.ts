@@ -7,7 +7,7 @@ import EventBus from "../EventBus";
 
 type SayPiEvent =
   | { type: "saypi:userSpeaking" }
-  | { type: "saypi:userStoppedSpeaking"; duration: number; blob: Blob }
+  | { type: "saypi:userStoppedSpeaking"; duration: number; blob?: Blob }
   | { type: "saypi:userFinishedSpeaking" }
   | { type: "saypi:transcribed"; text: string }
   | { type: "saypi:transcribeFailed" }
@@ -18,7 +18,9 @@ type SayPiEvent =
   | { type: "saypi:piFinishedSpeaking" }
   | { type: "saypi:ready" }
   | { type: "saypi:unblock" }
-  | { type: "saypi:submit" };
+  | { type: "saypi:submit" }
+  | { type: "saypi:call" }
+  | { type: "saypi:hangup" };
 
 interface SayPiContext {
   transcriptions: string[];
@@ -73,15 +75,23 @@ const clearTranscripts = assign({
 
 export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCArrGAE4DKdYKA1gVADaABgC6iUHQD2sLGSn4JIAB6IArMIAsAJhzCAjGoAcANgCcJ89qMAaEGkRmjuzWbdnhwy0bWbNAX387WmwcdjYpNlgqZVgSFBIwHBQAM0S2AAp9T08AShp0UPDI2BFxJBBpWXlFCtUEDQBmXQNjc0szazsHBCN9HFd3S019AHYTQ0bA4MLcABssOLB8AQL6RlQUlDYsACE5qSJeSDKlKrksBSV6k21uxH1s3W0NYUbG701hNRNpkBD5otEit8FA1gwEAwuDx+KDThVzjVruo7vYHoZdKNBhN9JpRmY-Go-gCcAsliCoDg2GAiJEIAIcCx2NC+KtaBCmZwSFI6NwICzYUIxGcZBcrnVENoLEYcKM3vpbqMNH1RvcEJojGYcC9PO9RtpRuMPsTZqSgcsGdTaWx6aCcPgpCQBWz0BzWGwAGIERYAC0gzrhwoRoqREoa3xahlMFistjRCDMzT0OVuxlGjUM+hNmEB5MtNLpDIdTu4rNB4MYnIDQvKkhDl1qoHq2m0Hz0PkNBLUHy0apMbde+jMj2ERh7RmzoTJwIZtPwlDYZDtJDYKHwsCIOwARi71ggV2uN9uTkG69UG8iEOO9Inxjqx2o1GqvjKDY1fPptMJRkOzFjJ7mM52nOC5LpSB7rpuWA7uW7KMBBR7QWAHooFgcwnrWlT1uKTbqG8kZtDGnRxj0ahuDgg7vOYhL4gBZp5sBCigQyCFQTBYJwfuq6QceEAAKIALZ0CQaDwmeYqNioeFqAR0YdF08YmH0FGeNkjQavo6naHR04Wox87sGByREEQTACUwcwJKsYlYeeOFSeqOijHoipfn4Cp+M+Gbaq8ZgyeY6afnR1KwNI+C2pSUKloKFaQlgHDcry-rRQINmIheYaGDJOAmBqUrCB4WjNCYaoycIOBju+uLFZ4rjBXAYURTgUUwrubrMilgaYel9n1Flui5c4HiFZoxXPnKODvO+phGJouUmGR9WhQoTUtWWHGuowDBeissB+vynU1iKdmSX1j4DXlw21WN8ZqD+k3vO5RjfL4ARBP8pohY1DIHCgEWxWtgppdhp2OC8FXOFi+IFeYjQkeojTlUqwgvIYuVfI0oxLd9dpbgcRyQLF1J-aJp62RJl4eTlOrdkpWJ+U+8YZuVUo-j8Rj6lKfhY+9JJfStDJ44cxwQLFTD4ELRzAydl5kZoyaeCYMNfnD8MNIjsoaKjPx+G8PMzDm9FAZSIGGQysBMFuAlyGBVDSxTYaaI+WoFV+f4WI0bioqRvgUcOTgGBziPGn8DoQHASgAsdDu4eqaoALRqDg7huGMlhKvozi-LzpoEMQZCUNHoax92Q44LiRjPcYQ5kfoaqdI0PmK12LwPnRxRREXGUlzo5WtOmOhKZ+qrxqNLMaAqagVwP7dsBEUQ4Kxx4oWhkBd716hzTK-daUPBqlbcTeZ8437+W9BtFHPJQ4NbRB8VfbDr6DDRb3ohgD9oe8jz0+rOcjWiaiUm+bSOdDa6QpE-SmnZk5eG0NVI0HNv6OC1K8N4o5nA6k-jpc0FIqQFhtAISBmVIYwNuPA-siC1TNHlsOJSw4vC+FygSbBDFKRWkLHaKsh0iGx20O5WUKMCRfgWnA0az4fjJwVM4UaPgT6thYcbPB1omrFmrDwhymclSkNEZjChho+zWAomOPEz0FqGjmgovSJsmJm1BOo+ozQWwVWRj+J2XhmiNCoY8BW3x3hSkTOpSxuDTaLhYtxRC7F7GIGaBNDmGhXEaH7K2Z8fCVKeCGn+eU+sPpgJwbOGxoS7TEFMuZSyYEolXkTEnWBC0CT4iVr4KhTg0laDGHDPwJhskknAfkgyhTKQWytjbQhwYZaO3GFqbImdHyjgMO+RmPQdBJx1F4VwgDPaPmxgLOxoyY4OUafGMYr4-wtnmUOT2uItnhQZIDEZ4li4aMeLoO6z0nCzWsFKEqo9fZTSaGOWabwJygNCPza5dpfoRQqUqP+lc-y5UNHrL5iz8QK2sJML86YQ4X1wKCpqksRYVKeM+UaTdWwmJ0CMHmgQgA */
+    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCxZ5KJYA2gAwC6iodAPawsZQfn4gAHogCMADgBMAVhwBOLgDZFAFk1qA7IrWbNAGhBpEi2bJxcHWxV1kOAzDsUGAvt4u1sHDAAJ2DBYNgqKVgSNjAcFAAzdmCACldHAEoadECQsIjuPiQQIRExCRKZBAVZVQ1tPUNjUwsrGrdFe0dleX1lNR0uZR8-EADcABssGLB8Aigc+kZURJRgrAAhScEiAGtIIsky0SxxSWrlRTa5OrsdWU15HQ1bTS43ZV9-XKmZ9nm+EWtAYCAYAGU6GAUHsFkcSicKhdENobjUMupHkY1MZlK4+t9xr8cNNZoCoDhgmAiOEIAscABXWAhSHQ2FApagpkskiCOhQiCsmFw3jHYSnc5VaxqeTyHAGD46NwmIydHQGNHyZSaHBuPV62TqtRuVyaQkTEn-Ob0qk04J0oE4fCCEhC9nA9Bc5nBABiBBmAAtIG6RcUBOKkVKEMphqoVPJZLodPIDOqdGiRqp9Uq1K5ZHqrubiaSATbqbT6c7XVDhRyQYxucEQ0D4eHymdKqBqooVDquFq1NqDG5nvm0QZNHGXmpDJPOiZZEXMH8yfSafhKMEyI6SMEUPhYEQNgAjBacxi7-eHk+HUUIiMd5EINzaOVcQaKBMGPoucyWRAGAYWbaimeIGLIRgpkugQltajrrpu24UpeB5Hlgp51p6F57qhN4+igWCTLeYalA+kpdogMZATg8aJjoyapqmaKGG4OAPJoBgzlqE7gYo0ErqW8HiIh9Iode6FnvWCBiWhx6QAAogAtnQJBoK2pHtuR0iUVw1G0UmKZpmirjKKo7GTimnTKDovT8Zaq5CRuIRIQkRBEAyikMpMbBnupiKPlG9FXPY2hAeBJrOPImoPDgjz6FomgjsYNh2bB5I4Ahzn0rADLHopohIVQflkZ22kIHoPY4PIXDJsMPYDOm-4IJxrGmKYnjJio35uHZVKwEI+AOhSEI1u655glg4K8vywajaGYqaaV1R1NoOCaMmngJjOJl-u0Gj1HF6ryCOhocb1cADUNOAjWyklYQgjbNlAxWLU+dTBetzyfrI23DLtKIuGxyidOB76yl1539eIV03bWHrLBNfrzLAQaCnNLZ3m2EpLXIpldJ9m0-bmf3MdqbFYhxpl6OxkOXfSOwoEN42w+6L3Y0+OKqODfR6g8eKKG4aKJQYNEfI89GKOtvR8WMFp9XTjrHjs+yQONVKM2pmMaezUbi2tugyoY76DHOaLsfK04PAmIwPEBtPQ-SSu7AcEDjQy+BO-sbORhR0aDN0Dj5m4Ti20Lbgi84JrrZ4UtKHZBDMBQ1BSSz833q9uvXE1ia+GMzoQHAkgTAtOu+wAtC+aJl9RMYOM4tic1i8eEKQSclz7ZUpsZIwi7mpjGy+mg-XZ+ThPA6el2V1nGaYXR99qNW5hBi6y8So8RDgMl4QRREQO3AW+64WftBB-t9xV8gzlHow-MuQShGPOD5UQ8kP8E+9actXDH3IJhcOTUshgmmGP2VKVpyQfxxjUTiah1Ah30NiVoTURw6jisdY6HEl4eDAQ5CktoKxAkgW9Z4vd4HNBMP9P2Is2panVHqfQZ1V53zSmWO0V1HroygEQqMugh7yg+M4GwNghhRSahOOUx0PCeEliZXSODBJ4PLPaSsLonrcMPpfeoZDEGUOxGtUwYVDQKE8D1JhMFwFrmEllQhE8O7VDVF0UCyZBicWskqIW357DHReJowcSgzRmIEnBCkmUtyiRwuJDCXDbEHzKvOf+TjL5GjcYLMRuYcC9E+PmOuQ8RjyOCRlKxYTHTEHcp5bySF1FxMHKoJwKZjrgUArpcck4MneJ+h4WwJodD5PSqElyOU8oFQWFU6o6oIJVQ0IBIYplcyNXaBOA6mDwLGjBj0wJlILoOxsVjOxlF5nWGePKWuyohhAQXPbQa9JU47O1ns9EiYMnfkeC+VMeoNRNV6GZYGulZThz-vIS5V0GZDVGQBEY8pL6-IaC4DwGYtRAyskod5DgAm30CPLbZFJPYuzBTUb+GYXj8ODn4uimTc7eCAA */
     id: "sayPi",
-    initial: "listening",
+    initial: "inactive",
     context: { transcriptions: [] },
     states: {
       inactive: {
         description: "Idle state, not listening or speaking. Privacy mode.",
         on: {
-          "saypi:userSpeaking": "listening",
+          "saypi:call": {
+            target: "listening.recording",
+            description: `Enable the VAD microphone.
+Aka "call" Pi.
+Starts active listening.`,
+            actions: ["callStarted", "startRecording"],
+          },
+
+          "saypi:piSpeaking": "responding.piSpeaking",
         },
       },
 
@@ -163,9 +173,19 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 ],
 
                 on: {
-                  "saypi:userStoppedSpeaking": {
-                    target: "#sayPi.listening.converting.transcribing",
-                  },
+                  "saypi:userStoppedSpeaking": [
+                    {
+                      target: [
+                        "#sayPi.listening.recording.notSpeaking",
+                        "#sayPi.listening.converting.transcribing",
+                      ],
+                      cond: "hasAudio",
+                    },
+                    {
+                      target: "#sayPi.listening.recording.notSpeaking",
+                      cond: "hasNoAudio",
+                    },
+                  ],
                 },
               },
 
@@ -180,6 +200,16 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             },
 
             description: `Microphone is on and VAD is actively listending for user speech.`,
+
+            on: {
+              "saypi:hangup": {
+                target: "#sayPi.inactive",
+                description: `Disable the VAD microphone.
+    Aka "call" Pi.
+    Stops active listening.`,
+                actions: ["stopRecording", "releaseMicrophone", "callEnded"],
+              },
+            },
           },
 
           converting: {
@@ -427,6 +457,14 @@ Submits a prompt when a threshold is reached.`,
         }
       },
 
+      startRecording: (context, event) => {
+        EventBus.emit("audio:startRecording");
+      },
+
+      stopRecording: (context, event) => {
+        EventBus.emit("audio:stopRecording");
+      },
+
       showNotification: (context, event, { action }) => {
         const icon = action.params.icon;
         const message = action.params.message;
@@ -451,11 +489,35 @@ Submits a prompt when a threshold is reached.`,
         const prompt = SayPiContext.transcriptions[0];
         setPromptText(prompt);
       },
+
+      callStarted: () => {
+        buttonModule.callActive();
+      },
+      callEnded: () => {
+        buttonModule.callInactive();
+      },
     },
     services: {},
     guards: {
       isSafari: (context, event) => {
         return isSafari();
+      },
+      hasAudio: (context: SayPiContext, event: SayPiEvent) => {
+        if (event.type === "saypi:userStoppedSpeaking") {
+          return event.blob !== undefined && event.duration > 0;
+        }
+        return false;
+      },
+      hasNoAudio: (context: SayPiContext, event: SayPiEvent) => {
+        console.log("Evaulating hasNoAudio guard", event);
+        if (event.type === "saypi:userStoppedSpeaking") {
+          return (
+            event.blob === undefined ||
+            event.blob.size === 0 ||
+            event.duration === 0
+          );
+        }
+        return false;
       },
       submissionConditionsMet: (SayPiContext, event, meta) => {
         const { state } = meta;

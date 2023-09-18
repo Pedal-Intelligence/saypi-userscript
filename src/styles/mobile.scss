@@ -80,4 +80,17 @@ html.mobile-view {
   #saypi-submitButton {
     display: none;
   }
+
+  #saypi-callButton {
+    position: fixed;
+    bottom: 4rem;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 4.5rem;
+    height: 4.5rem;
+    padding: 6px;
+    border: 0;
+    z-index: 60;
+  }
 }
