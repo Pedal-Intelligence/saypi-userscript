@@ -11,12 +11,28 @@ html.desktop-view {
     }
   }
   #saypi-talkButton,
-  .play-button {
-    margin: 0.5rem;
+  .play-button,
+  .call-button {
     border-radius: 18px;
     height: 2.25rem;
     width: 5rem;
     display: block; /* For Safari */
+  }
+
+  #saypi-talkButton {
+    /* not needed on desktop with call button */
+    display: none;
+  }
+
+  #saypi-callButton {
+    width: 2.25rem;
+    position: relative;
+    margin: 0.5rem 0 0.5rem 0;
+  }
+
+  .saypi-prompt-container {
+    /* make room in the prompt text area for the call button */
+    padding-right: 0;
   }
 
   #saypi-playButton {

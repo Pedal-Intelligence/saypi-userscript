@@ -214,7 +214,7 @@ export default class ButtonModule {
     }
   }
 
-  createCallButton() {
+  createCallButton(container, position = 0) {
     const label = "Active continuous listening";
     const button = this.createButton("", () => {
       this.actor.send("saypi:call");
@@ -226,7 +226,29 @@ export default class ButtonModule {
     button.setAttribute("aria-label", label);
     button.setAttribute("title", label);
     button.innerHTML = callIconSVG;
-    document.body.appendChild(button);
+
+    // Check if a container is provided.
+    if (container) {
+      // If position is 0, simply append the button as the last child.
+      if (position === 0) {
+        container.appendChild(button);
+      } else {
+        // Calculate the index of the reference node for insertBefore().
+        const referenceIndex = container.children.length + position;
+        const referenceNode = container.children[referenceIndex];
+
+        // If a reference node exists, insert the button before it.
+        if (referenceNode) {
+          container.insertBefore(button, referenceNode);
+        } else {
+          // If not, append the button as the last child.
+          container.appendChild(button);
+        }
+      }
+    } else {
+      // If no container is provided, append the button to the body.
+      document.body.appendChild(button);
+    }
     return button;
   }
 

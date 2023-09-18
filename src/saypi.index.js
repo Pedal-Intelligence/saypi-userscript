@@ -74,11 +74,13 @@ import "./styles/rectangles.css";
   function annotateDOM(prompt) {
     // Add id attributes to important elements
     prompt.id = "saypi-prompt";
+    prompt.parentElement.classList.add("saypi-prompt-container");
     const foundFooter = addIdFooter();
     const foundAudioControls = addIdAudioControls();
     const promptControlsContainer = prompt.parentElement.parentElement;
     addIdSubmitButton(promptControlsContainer);
     addTalkButton(promptControlsContainer);
+    buttonModule.createCallButton(promptControlsContainer, -1);
     buttonModule.createEnterButton();
     buttonModule.createExitButton();
   }
