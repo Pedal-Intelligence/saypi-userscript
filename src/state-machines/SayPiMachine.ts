@@ -509,7 +509,6 @@ Submits a prompt when a threshold is reached.`,
         return false;
       },
       hasNoAudio: (context: SayPiContext, event: SayPiEvent) => {
-        console.log("Evaulating hasNoAudio guard", event);
         if (event.type === "saypi:userStoppedSpeaking") {
           return (
             event.blob === undefined ||

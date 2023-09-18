@@ -193,22 +193,34 @@ export const audioInputMachine = createMachine<
             entry: {
               type: "prepareStop",
             },
+            after: {
+              "5000": [
+                {
+                  target: "#audioInput.acquired.stopped",
+                  actions: [],
+                  description: "Stop eventually",
+                },
+                {
+                  internal: false,
+                },
+              ],
+            },
             on: {
               stop: {
                 target: "stopped",
+                description: "Stop immediately",
               },
               dataAvailable: {
                 target: "stopped",
                 actions: {
                   type: "sendData",
                 },
+                description: "Stop after final audio data collected",
               },
             },
           },
           stopped: {
-            entry: {
-              type: "notifyStopped",
-            },
+            entry: assign({ waitingToStop: false }),
             always: {
               target: "idle",
             },
@@ -244,15 +256,6 @@ export const audioInputMachine = createMachine<
         }
       },
 
-      notifyStopped: (context, event) => {
-        var recordingStopTime = Date.now();
-        var recordingDuration = recordingStopTime - context.recordingStartTime;
-
-        EventBus.emit("saypi:userFinishedSpeaking", {
-          durationRecording: recordingDuration,
-        });
-      },
-
       sendData: (
         context,
         event: { type: "dataAvailable"; blob: Blob; duration: number }
@@ -264,7 +267,6 @@ export const audioInputMachine = createMachine<
 
         if (context.waitingToStop === true) {
           microphone?.pause();
-          context.waitingToStop = false;
         }
 
         // Use the duration directly from the event
