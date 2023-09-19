@@ -2,7 +2,7 @@ import { buttonModule } from "../ButtonModule";
 import { createMachine, Typestate, assign } from "xstate";
 import AnimationModule from "../AnimationModule";
 import { isSafari, isMobileView } from "../UserAgentModule";
-import { uploadAudio, setPromptText } from "../TranscriptionModule";
+import { uploadAudioWithRetry, setPromptText } from "../TranscriptionModule";
 import EventBus from "../EventBus";
 
 type SayPiEvent =
@@ -24,6 +24,7 @@ type SayPiEvent =
 
 interface SayPiContext {
   transcriptions: string[];
+  lastState: "inactive" | "listening";
 }
 
 // Define the state schema
@@ -78,10 +79,11 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
     /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCxZ5KJYA2gAwC6iodAPawsZQfn4gAHogCMADgBMAVhwBOLgDZFAFk1qA7IrWbNAGhBpEi2bJxcHWxV1kOAzDsUGAvt4u1sHDAAJ2DBYNgqKVgSNjAcFAAzdmCACldHAEoadECQsIjuPiQQIRExCRKZBAVZVQ1tPUNjUwsrGrdFe0dleX1lNR0uZR8-EADcABssGLB8Aigc+kZURJRgrAAhScEiAGtIIsky0SxxSWrlRTa5OrsdWU15HQ1bTS43ZV9-XKmZ9nm+EWtAYCAYAGU6GAUHsFkcSicKhdENobjUMupHkY1MZlK4+t9xr8cNNZoCoDhgmAiOEIAscABXWAhSHQ2FApagpkskiCOhQiCsmFw3jHYSnc5VaxqeTyHAGD46NwmIydHQGNHyZSaHBuPV62TqtRuVyaQkTEn-Ob0qk04J0oE4fCCEhC9nA9Bc5nBABiBBmAAtIG6RcUBOKkVKEMphqoVPJZLodPIDOqdGiRqp9Uq1K5ZHqrubiaSATbqbT6c7XVDhRyQYxucEQ0D4eHymdKqBqooVDquFq1NqDG5nvm0QZNHGXmpDJPOiZZEXMH8yfSafhKMEyI6SMEUPhYEQNgAjBacxi7-eHk+HUUIiMd5EINzaOVcQaKBMGPoucyWRAGAYWbaimeIGLIRgpkugQltajrrpu24UpeB5Hlgp51p6F57qhN4+igWCTLeYalA+kpdogMZATg8aJjoyapqmaKGG4OAPJoBgzlqE7gYo0ErqW8HiIh9Iode6FnvWCBiWhx6QAAogAtnQJBoK2pHtuR0iUVw1G0UmKZpmirjKKo7GTimnTKDovT8Zaq5CRuIRIQkRBEAyikMpMbBnupiKPlG9FXPY2hAeBJrOPImoPDgjz6FomgjsYNh2bB5I4Ahzn0rADLHopohIVQflkZ22kIHoPY4PIXDJsMPYDOm-4IJxrGmKYnjJio35uHZVKwEI+AOhSEI1u655glg4K8vywajaGYqaaV1R1NoOCaMmngJjOJl-u0Gj1HF6ryCOhocb1cADUNOAjWyklYQgjbNlAxWLU+dTBetzyfrI23DLtKIuGxyidOB76yl1539eIV03bWHrLBNfrzLAQaCnNLZ3m2EpLXIpldJ9m0-bmf3MdqbFYhxpl6OxkOXfSOwoEN42w+6L3Y0+OKqODfR6g8eKKG4aKJQYNEfI89GKOtvR8WMFp9XTjrHjs+yQONVKM2pmMaezUbi2tugyoY76DHOaLsfK04PAmIwPEBtPQ-SSu7AcEDjQy+BO-sbORhR0aDN0Dj5m4Ti20Lbgi84JrrZ4UtKHZBDMBQ1BSSz833q9uvXE1ia+GMzoQHAkgTAtOu+wAtC+aJl9RMYOM4tic1i8eEKQSclz7ZUpsZIwi7mpjGy+mg-XZ+ThPA6el2V1nGaYXR99qNW5hBi6y8So8RDgMl4QRREQO3AW+64WftBB-t9xV8gzlHow-MuQShGPOD5UQ8kP8E+9actXDH3IJhcOTUshgmmGP2VKVpyQfxxjUTiah1Ah30NiVoTURw6jisdY6HEl4eDAQ5CktoKxAkgW9Z4vd4HNBMP9P2Is2panVHqfQZ1V53zSmWO0V1HroygEQqMugh7yg+M4GwNghhRSahOOUx0PCeEliZXSODBJ4PLPaSsLonrcMPpfeoZDEGUOxGtUwYVDQKE8D1JhMFwFrmEllQhE8O7VDVF0UCyZBicWskqIW357DHReJowcSgzRmIEnBCkmUtyiRwuJDCXDbEHzKvOf+TjL5GjcYLMRuYcC9E+PmOuQ8RjyOCRlKxYTHTEHcp5bySF1FxMHKoJwKZjrgUArpcck4MneJ+h4WwJodD5PSqElyOU8oFQWFU6o6oIJVQ0IBIYplcyNXaBOA6mDwLGjBj0wJlILoOxsVjOxlF5nWGePKWuyohhAQXPbQa9JU47O1ns9EiYMnfkeC+VMeoNRNV6GZYGulZThz-vIS5V0GZDVGQBEY8pL6-IaC4DwGYtRAyskod5DgAm30CPLbZFJPYuzBTUb+GYXj8ODn4uimTc7eCAA */
     id: "sayPi",
     initial: "inactive",
-    context: { transcriptions: [] },
+    context: { transcriptions: [], lastState: "inactive" },
     states: {
       inactive: {
         description: "Idle state, not listening or speaking. Privacy mode.",
+        exit: assign({ lastState: "inactive" }),
         on: {
           "saypi:call": {
             target: "listening.recording",
@@ -90,7 +92,6 @@ Aka "call" Pi.
 Starts active listening.`,
             actions: ["callStarted", "startRecording"],
           },
-
           "saypi:piSpeaking": "responding.piSpeaking",
         },
       },
@@ -280,6 +281,7 @@ Submits a prompt when a threshold is reached.`,
           },
         },
         entry: ["stopAllAnimations", "acquireMicrophone"],
+        exit: assign({ lastState: "listening" }),
         on: {
           "saypi:safariBlocked": {
             target: "#sayPi.responding.blocked",
@@ -317,11 +319,11 @@ Submits a prompt when a threshold is reached.`,
               "saypi:piStoppedSpeaking": [
                 {
                   target: "#sayPi.listening",
-                  cond: "isListening",
+                  cond: "wasListening",
                 },
                 {
                   target: "#sayPi.inactive",
-                  cond: "isNotListening",
+                  cond: "wasInactive",
                 },
               ],
               "saypi:userSpeaking": {
@@ -418,7 +420,7 @@ Submits a prompt when a threshold is reached.`,
       ) => {
         console.log("transcribeAudio", event);
         const audioBlob = event.blob;
-        uploadAudio(audioBlob, event.duration);
+        uploadAudioWithRetry(audioBlob, event.duration);
       },
 
       handleTranscriptionResponse: (
@@ -516,16 +518,11 @@ Submits a prompt when a threshold is reached.`,
         const transcriptsMerged = SayPiContext.transcriptions.length == 1;
         return allowedState && transcriptsMerged;
       },
-      isListening: (SayPiContext, event, meta) => {
-        const { state } = meta;
-        return state.matches("listening");
+      wasListening: (SayPiContext) => {
+        return SayPiContext.lastState === "listening";
       },
-      isNotListening: (SayPiContext, event, meta) => {
-        const { state } = meta;
-        console.log("isNotListening guard state:", state);
-        const inactive = !state.matches("listening");
-        console.log("isNotListening guard match?", inactive);
-        return inactive;
+      wasInactive: (SayPiContext) => {
+        return SayPiContext.lastState === "inactive";
       },
     },
     delays: {},
