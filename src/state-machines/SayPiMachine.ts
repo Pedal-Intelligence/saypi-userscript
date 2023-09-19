@@ -314,9 +314,16 @@ Submits a prompt when a threshold is reached.`,
               },
             },
             on: {
-              "saypi:piStoppedSpeaking": {
-                target: "#sayPi.listening",
-              },
+              "saypi:piStoppedSpeaking": [
+                {
+                  target: "#sayPi.listening",
+                  cond: "isListening",
+                },
+                {
+                  target: "#sayPi.inactive",
+                  cond: "isNotListening",
+                },
+              ],
               "saypi:userSpeaking": {
                 target: "#sayPi.listening.recording.userSpeaking",
               },
@@ -508,6 +515,17 @@ Submits a prompt when a threshold is reached.`,
         );
         const transcriptsMerged = SayPiContext.transcriptions.length == 1;
         return allowedState && transcriptsMerged;
+      },
+      isListening: (SayPiContext, event, meta) => {
+        const { state } = meta;
+        return state.matches("listening");
+      },
+      isNotListening: (SayPiContext, event, meta) => {
+        const { state } = meta;
+        console.log("isNotListening guard state:", state);
+        const inactive = !state.matches("listening");
+        console.log("isNotListening guard match?", inactive);
+        return inactive;
       },
     },
     delays: {},
