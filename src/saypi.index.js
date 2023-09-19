@@ -1,7 +1,7 @@
 import { buttonModule } from "./ButtonModule.js";
 import EventBus from "./EventBus.js";
 import EventModule from "./EventModule.js";
-import { addUserAgentFlags } from "./UserAgentModule.js";
+import { addUserAgentFlags, initMode } from "./UserAgentModule.js";
 import "./styles/common.scss";
 import "./styles/desktop.scss";
 import "./styles/mobile.scss";
@@ -78,11 +78,27 @@ import "./styles/rectangles.css";
     const foundFooter = addIdFooter();
     const foundAudioControls = addIdAudioControls();
     const promptControlsContainer = prompt.parentElement.parentElement;
+    promptControlsContainer.id = "saypi-prompt-controls-container";
+    const foundPromptAncestor = addIdPromptAncestor(promptControlsContainer);
     addIdSubmitButton(promptControlsContainer);
     addTalkButton(document.body);
     buttonModule.createCallButton(promptControlsContainer, -1);
     buttonModule.createEnterButton();
     buttonModule.createExitButton();
+    initMode();
+  }
+
+  function addIdPromptAncestor(container) {
+    // climb up the DOM tree until we find a div with class 'w-full'
+    let parent = container.parentElement;
+    while (parent) {
+      if (parent.classList.contains("w-full")) {
+        parent.id = "saypi-prompt-ancestor";
+        return true;
+      }
+      parent = parent.parentElement;
+    }
+    return false;
   }
 
   function addIdSubmitButton(container) {

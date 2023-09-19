@@ -3,6 +3,7 @@ import {
   exitMobileMode,
   isMobileView,
 } from "./UserAgentModule";
+import { appendChild } from "./DOMModule";
 import EventBus from "./EventBus";
 import StateMachineService from "./StateMachineService.js";
 import exitIconSVG from "./icons/exit.svg";
@@ -226,28 +227,7 @@ export default class ButtonModule {
     button.setAttribute("title", label);
     button.innerHTML = callIconSVG;
 
-    // Check if a container is provided.
-    if (container) {
-      // If position is 0, simply append the button as the last child.
-      if (position === 0) {
-        container.appendChild(button);
-      } else {
-        // Calculate the index of the reference node for insertBefore().
-        const referenceIndex = container.children.length + position;
-        const referenceNode = container.children[referenceIndex];
-
-        // If a reference node exists, insert the button before it.
-        if (referenceNode) {
-          container.insertBefore(button, referenceNode);
-        } else {
-          // If not, append the button as the last child.
-          container.appendChild(button);
-        }
-      }
-    } else {
-      // If no container is provided, append the button to the body.
-      document.body.appendChild(button);
-    }
+    appendChild(container, button, position);
     return button;
   }
 
