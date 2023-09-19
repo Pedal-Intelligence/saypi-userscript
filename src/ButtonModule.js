@@ -20,7 +20,6 @@ export default class ButtonModule {
     // Binding methods to the current instance
     this.handlePlayButtonClick = this.handlePlayButtonClick.bind(this);
     this.registerOtherEvents();
-    this.initCallButton();
   }
 
   registerOtherEvents() {
@@ -250,13 +249,6 @@ export default class ButtonModule {
       document.body.appendChild(button);
     }
     return button;
-  }
-
-  initCallButton() {
-    const callButton = document.getElementById("saypi-callButton");
-    if (!callButton) {
-      this.createCallButton();
-    }
   }
 
   callActive() {

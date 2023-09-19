@@ -197,7 +197,7 @@ export const audioInputMachine = createMachine<
               "5000": [
                 {
                   target: "#audioInput.acquired.stopped",
-                  actions: [],
+                  actions: ["stopIfWaiting"],
                   description: "Stop eventually",
                 },
                 {
@@ -212,9 +212,7 @@ export const audioInputMachine = createMachine<
               },
               dataAvailable: {
                 target: "stopped",
-                actions: {
-                  type: "sendData",
-                },
+                actions: ["stopIfWaiting", "sendData"],
                 description: "Stop after final audio data collected",
               },
             },
@@ -262,12 +260,7 @@ export const audioInputMachine = createMachine<
       ) => {
         const { blob, duration } = event;
         const sizeInKb = (blob.size / 1024).toFixed(2); // Convert to kilobytes and keep 2 decimal places
-
         console.log(`Sending ${sizeInKb}kb of audio data to server`);
-
-        if (context.waitingToStop === true) {
-          microphone?.pause();
-        }
 
         // Use the duration directly from the event
         const speechDuration = duration;
@@ -278,6 +271,12 @@ export const audioInputMachine = createMachine<
             duration: speechDuration,
             blob,
           });
+        }
+      },
+
+      stopIfWaiting: (SayPiContext) => {
+        if (SayPiContext.waitingToStop === true) {
+          microphone?.pause();
         }
       },
 

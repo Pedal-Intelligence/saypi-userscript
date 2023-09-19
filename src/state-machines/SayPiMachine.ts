@@ -159,7 +159,6 @@ Starts active listening.`,
                       animation: "userSpeaking",
                     },
                   },
-                  "activateTalkButton",
                 ],
 
                 exit: [
@@ -169,7 +168,6 @@ Starts active listening.`,
                       animation: "userSpeaking",
                     },
                   },
-                  "deactivateTalkButton",
                 ],
 
                 on: {
@@ -431,22 +429,6 @@ Submits a prompt when a threshold is reached.`,
 
       hidePlayButton: (context, event) => {
         buttonModule.hidePlayButton();
-      },
-
-      activateTalkButton: (context, event) => {
-        const talkButton = document.getElementById("saypi-talkButton");
-        if (!talkButton) {
-          return;
-        }
-        talkButton.classList.add("active"); // Add the active class (for Firefox on Android)
-      },
-
-      deactivateTalkButton: (context, event) => {
-        const talkButton = document.getElementById("saypi-talkButton");
-        if (!talkButton) {
-          return;
-        }
-        talkButton.classList.remove("active"); // Remove the active class (for Firefox on Android)
       },
 
       acquireMicrophone: (context, event) => {

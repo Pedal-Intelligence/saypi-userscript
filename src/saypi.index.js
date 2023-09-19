@@ -79,7 +79,7 @@ import "./styles/rectangles.css";
     const foundAudioControls = addIdAudioControls();
     const promptControlsContainer = prompt.parentElement.parentElement;
     addIdSubmitButton(promptControlsContainer);
-    addTalkButton(promptControlsContainer);
+    addTalkButton(document.body);
     buttonModule.createCallButton(promptControlsContainer, -1);
     buttonModule.createEnterButton();
     buttonModule.createExitButton();
@@ -154,26 +154,15 @@ import "./styles/rectangles.css";
     var panel = document.createElement("div");
     panel.id = "saypi-panel";
 
-    // Check if the container has any child elements
-    if (container.childNodes.length > 0) {
-      // Insert the panel as the second-to-last child
-      container.insertBefore(panel, container.lastChild);
-    } else {
-      // If the container has no children, just append the panel
+    if (container) {
       container.appendChild(panel);
+    } else {
+      document.body.appendChild(panel);
     }
 
-    // Create the talk button using ButtonModule
-    const label =
-      "Talk (Hold Control + Space to use hotkey. Double click to toggle auto-submit on/off)";
-    var button = buttonModule.createButton("", () => {}); // The callback is empty for now, but you can add functionalities if needed.
-
+    // talk "button" is no longer a button, but a div
+    var button = document.createElement("div");
     button.id = "saypi-talkButton";
-    button.type = "button";
-
-    // Set ARIA label and tooltip
-    button.setAttribute("aria-label", label);
-    button.setAttribute("title", label);
 
     const classNames =
       "relative flex mt-1 mb-1 rounded-full px-2 py-3 text-center bg-cream-550 hover:bg-cream-650 hover:text-brand-green-700 text-muted";
@@ -187,33 +176,7 @@ import "./styles/rectangles.css";
     buttonModule.addTalkIcon(button);
 
     // Call the function to inject the script after the button has been added
-    injectScript(registerAudioButtonEvents);
-  }
-
-  function registerAudioButtonEvents() {
-    const button = document.getElementById("saypi-talkButton");
-
-    // Attach the event listeners
-    button.addEventListener(
-      "mousedown",
-      EventModule.handleTalkMouseDown.bind(EventModule)
-    );
-    button.addEventListener(
-      "mouseup",
-      EventModule.handleTalkMouseUp.bind(EventModule)
-    );
-    button.addEventListener("dblclick", () =>
-      EventModule.handleTalkDoubleClick(button)
-    );
-    button.addEventListener("touchstart", (e) =>
-      EventModule.handleTalkTouchStart(button, e)
-    );
-    button.addEventListener("touchend", () =>
-      EventModule.handleTalkTouchEnd(button)
-    );
-
-    EventModule.registerOtherAudioButtonEvents(button);
-    EventModule.registerHotkey();
+    injectScript();
   }
 
   // Start observing the entire document for changes to child nodes and subtree

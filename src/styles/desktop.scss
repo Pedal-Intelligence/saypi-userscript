@@ -10,7 +10,6 @@ html.desktop-view {
       transform: scale(1);
     }
   }
-  #saypi-talkButton,
   .play-button,
   .call-button {
     border-radius: 18px;
@@ -47,17 +46,6 @@ html.desktop-view {
     svg {
       padding: 2.5rem;
     }
-  }
-
-  html:not(.firefox-android) #saypi-talkButton:active .waveform,
-  #saypi-talkButton.active .waveform {
-    animation: pulse 1s infinite;
-  }
-  #saypi-talkButton .waveform {
-    fill: #776d6d;
-  }
-  #saypi-talkButton.autoSubmit .waveform {
-    fill: rgb(65 138 47); /* Pi's text-brand-green-600 */
   }
 
   #saypi-notification > svg {
