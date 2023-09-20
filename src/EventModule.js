@@ -27,6 +27,7 @@ export default class EventModule {
   }
 
   static simulateTyping(element, text) {
+    element.focus();
     const words = text.split(" ");
     let i = 0;
 
