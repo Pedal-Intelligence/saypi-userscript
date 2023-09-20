@@ -145,6 +145,8 @@ export const audioOutputMachine = createMachine(
       requestReload: (context) => {
         const audio = context.audioElement;
         audio.load();
+        // may want to consider waiting on the loadedmetadata event
+        // and then calling audio.play() with a catch for any errors
         audio.play();
       },
     },

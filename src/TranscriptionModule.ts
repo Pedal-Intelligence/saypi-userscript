@@ -9,6 +9,13 @@ interface TranscriptionResponse {
   text: string;
 }
 
+const knownNetworkErrorMessages = [
+  "Failed to fetch", // Chromium-based browsers
+  "Load failed", // Safari
+  "NetworkError when attempting to fetch resource.", // Firefox
+  // Add more known error messages here
+];
+
 export async function uploadAudioWithRetry(
   audioBlob: Blob,
   audioDurationMillis: number,
@@ -25,7 +32,11 @@ export async function uploadAudioWithRetry(
       await uploadAudio(audioBlob, audioDurationMillis);
       return;
     } catch (error) {
-      if (error instanceof TypeError && error.message === "Failed to fetch") {
+      // check for timeout errors (30s on Heroku)
+      if (
+        error instanceof TypeError &&
+        knownNetworkErrorMessages.includes(error.message)
+      ) {
         console.log(
           `Attempt ${retryCount + 1}/${maxRetries} failed. Retrying in ${
             delay / 1000

@@ -10,13 +10,6 @@ html.desktop-view {
       transform: scale(1);
     }
   }
-  .play-button,
-  .call-button {
-    border-radius: 18px;
-    height: 2.25rem;
-    width: 5rem;
-    display: block; /* For Safari */
-  }
 
   #saypi-talkButton {
     /* not needed on desktop with call button */
@@ -24,6 +17,7 @@ html.desktop-view {
   }
 
   #saypi-callButton {
+    height: 2.25rem;
     width: 2.25rem;
     position: relative;
     margin: 0.5rem 0 0.5rem 0;
