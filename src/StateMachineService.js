@@ -16,7 +16,6 @@ class StateMachineService {
         console.log(
           `Say, Pi Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
         );
-        console.log(state.context);
       }
     });
     this.actor.start();

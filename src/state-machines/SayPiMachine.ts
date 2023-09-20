@@ -298,6 +298,8 @@ Submits a prompt when a threshold is reached.`,
       responding: {
         description: `Pi is responding. Synthesised speech is playing or waiting to play.`,
         initial: "piSpeaking",
+        entry: "disableCallButton",
+        exit: "enableCallButton",
 
         states: {
           piSpeaking: {
@@ -486,6 +488,12 @@ Submits a prompt when a threshold is reached.`,
       },
       callEnded: () => {
         buttonModule.callInactive();
+      },
+      disableCallButton: () => {
+        buttonModule.disableCallButton();
+      },
+      enableCallButton: () => {
+        buttonModule.enableCallButton();
       },
     },
     services: {},

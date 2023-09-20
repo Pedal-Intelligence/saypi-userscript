@@ -242,6 +242,7 @@ export default class ButtonModule {
       callButton.onclick = () => {
         this.actor.send("saypi:hangup");
       };
+      callButton.classList.add("active");
     }
   }
 
@@ -260,6 +261,26 @@ export default class ButtonModule {
         console.log("call button clicked");
         this.actor.send("saypi:call");
       };
+      callButton.classList.remove("active");
+    }
+  }
+
+  disableCallButton() {
+    const callButton = document.getElementById("saypi-callButton");
+    if (callButton) {
+      callButton.classList.add("disabled");
+      // disable the call action, but always allow hangup
+      if (!callButton.classList.contains("active")) {
+        callButton.disabled = true;
+      }
+    }
+  }
+
+  enableCallButton() {
+    const callButton = document.getElementById("saypi-callButton");
+    if (callButton) {
+      callButton.classList.remove("disabled");
+      callButton.disabled = false;
     }
   }
 }
