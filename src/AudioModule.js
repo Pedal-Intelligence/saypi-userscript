@@ -25,7 +25,6 @@ const audioOutputActor = interpret(audioOutputMachine)
       console.log(
         `Audio Output Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
       );
-      console.log(state.context);
     }
   })
   .start();
@@ -63,7 +62,6 @@ const audioInputActor = interpret(audioInputMachine)
       console.log(
         `Audio Input Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
       );
-      console.log(state.context);
     }
   })
   .start();

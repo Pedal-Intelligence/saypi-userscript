@@ -12,35 +12,45 @@ interface TranscriptionResponse {
 export async function uploadAudioWithRetry(
   audioBlob: Blob,
   audioDurationMillis: number,
-  maxRetries: number = 1
+  maxRetries: number = 3
 ): Promise<void> {
   let retryCount = 0;
-  while (retryCount <= maxRetries) {
+  let delay = 1000; // initial delay of 1 second
+
+  const sleep = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  while (retryCount < maxRetries) {
     try {
       await uploadAudio(audioBlob, audioDurationMillis);
-      // If successful, exit loop
       return;
     } catch (error) {
-      if (
-        error instanceof Response &&
-        error.status === 503 &&
-        retryCount < maxRetries
-      ) {
+      if (error instanceof TypeError && error.message === "Failed to fetch") {
         console.log(
-          `Server timeout transcribing ${Math.round(
-            audioDurationMillis / 1000
-          )}s of audio, retrying... (Attempt ${retryCount + 1}/${maxRetries})`
+          `Attempt ${retryCount + 1}/${maxRetries} failed. Retrying in ${
+            delay / 1000
+          } seconds...`
         );
+        await sleep(delay);
+
+        // Exponential backoff
+        delay *= 2;
+
         retryCount++;
       } else {
-        // If it's not a 503, or we're out of retries, raise the error
-        console.error("Looks like there was a problem: ", error);
+        console.error("Unexpected error: ", error);
         StateMachineService.actor.send("saypi:transcribeFailed", {
           detail: error,
         });
+        return;
       }
     }
   }
+
+  console.error("Max retries reached. Giving up.");
+  StateMachineService.actor.send("saypi:transcribeFailed", {
+    detail: new Error("Max retries reached"),
+  });
 }
 
 async function uploadAudio(
@@ -67,22 +77,26 @@ async function uploadAudio(
     const responseJson: TranscriptionResponse = await response.json();
     const endTime = new Date().getTime();
     const transcriptionDurationMillis = endTime - startTime;
+    const transcript = responseJson.text;
+    const wc = transcript.split(" ").length;
 
     console.log(
       `Transcribed ${Math.round(
         audioDurationMillis / 1000
-      )}s of audio in ${Math.round(transcriptionDurationMillis / 1000)}s`
+      )}s of audio into ${wc} words in ${Math.round(
+        transcriptionDurationMillis / 1000
+      )}s`
     );
 
     if (responseJson.text.length === 0) {
       StateMachineService.actor.send("saypi:transcribedEmpty");
     } else {
       StateMachineService.actor.send("saypi:transcribed", {
-        text: responseJson.text,
+        text: transcript,
       });
     }
   } catch (error) {
-    console.error("Error during uploadAudio:", error);
+    // raise to the next level for retry logic
     throw error;
   }
 }
