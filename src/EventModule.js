@@ -56,51 +56,6 @@ export default class EventModule {
     element.dispatchEvent(event);
   }
 
-  static handleTalkMouseDown() {
-    EventBus.emit("audio:startRecording");
-  }
-
-  static handleTalkMouseUp() {
-    EventBus.emit("audio:stopRecording");
-  }
-
-  static handleTalkDoubleClick(button) {
-    // Toggle the CSS classes to indicate the mode
-    button.classList.toggle("autoSubmit");
-    if (button.getAttribute("data-autosubmit") === "true") {
-      button.setAttribute("data-autosubmit", "false");
-      console.log("autosubmit disabled");
-    } else {
-      button.setAttribute("data-autosubmit", "true");
-      console.log("autosubmit enabled");
-    }
-  }
-
-  static handleTalkTouchStart(button, e) {
-    e.preventDefault();
-    EventBus.emit("audio:startRecording");
-  }
-
-  static handleTalkTouchEnd(button) {
-    EventBus.emit("audio:stopRecording");
-  }
-
-  static registerOtherAudioButtonEvents(button) {
-    // "warm up" the microphone by acquiring it before the user presses the button
-    button.addEventListener("mouseenter", () => {
-      EventBus.emit("audio:setupRecording");
-    });
-    button.addEventListener("mouseleave", () => {
-      EventBus.emit("audio:tearDownRecording");
-    });
-    window.addEventListener("beforeunload", () => {
-      EventBus.emit("audio:tearDownRecording");
-    });
-    button.addEventListener("touchcancel", () => {
-      EventBus.emit("audio:tearDownRecording");
-    });
-  }
-
   static registerStateMachineEvents(actor) {
     EventBus.on(USER_SPEAKING, () => {
       actor.send(USER_SPEAKING);
@@ -128,26 +83,6 @@ export default class EventModule {
       EventBus.on(eventName, () => {
         actor.send(eventName);
       });
-    });
-  }
-
-  /* events to direct the audio module to start/stop recording */
-
-  static registerHotkey() {
-    let ctrlDown = false;
-
-    document.addEventListener("keydown", (event) => {
-      if (event.ctrlKey && event.code === "Space" && !ctrlDown) {
-        ctrlDown = true;
-        EventBus.emit("audio:startRecording");
-      }
-    });
-
-    document.addEventListener("keyup", (event) => {
-      if (ctrlDown && event.code === "Space") {
-        ctrlDown = false;
-        EventBus.emit("audio:stopRecording");
-      }
     });
   }
 }
