@@ -1,16 +1,23 @@
 {
-    "configurations": [
-        {
-            "type": "msedge",
-            "name": "Hey Pi",
-            "request": "launch",
-            "url": "https://pi.ai/talk"
-        },
-        {
-            "type": "msedge",
-            "name": "Say, Pi (update script)",
-            "request": "launch",
-            "url": "http://localhost:3000/saypi.user.js"
-        }
-    ]
+  "configurations": [
+    {
+      "type": "msedge",
+      "name": "Hey Pi",
+      "request": "launch",
+      "url": "https://pi.ai/talk"
+    },
+    {
+      "type": "msedge",
+      "name": "Say, Pi (update script)",
+      "request": "launch",
+      "url": "https://localhost:4443/saypi.user.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Say, Pi (application server)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "start"]
+    }
+  ]
 }

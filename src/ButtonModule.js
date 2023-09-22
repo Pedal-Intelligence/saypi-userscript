@@ -3,6 +3,7 @@ import {
   exitMobileMode,
   isMobileView,
 } from "./UserAgentModule";
+import { appendChild } from "./DOMModule";
 import EventBus from "./EventBus";
 import StateMachineService from "./StateMachineService.js";
 import exitIconSVG from "./icons/exit.svg";
@@ -11,6 +12,8 @@ import rectanglesSVG from "./icons/rectangles.svg";
 import talkIconSVG from "./icons/waveform.svg";
 import mutedMicIconSVG from "./icons/muted_microphone.svg";
 import playIconSVG from "./icons/play.svg";
+import callIconSVG from "./icons/call.svg";
+import hangupIconSVG from "./icons/hangup.svg";
 export default class ButtonModule {
   constructor() {
     this.playButton = null;
@@ -18,17 +21,26 @@ export default class ButtonModule {
     // Binding methods to the current instance
     this.handlePlayButtonClick = this.handlePlayButtonClick.bind(this);
     this.registerOtherEvents();
+
+    // track the frequency of bug #26
+    this.submissionsWithoutAnError = 0;
   }
 
   registerOtherEvents() {
-    EventBus.on("saypi:autoSubmit", ButtonModule.handleAutoSubmit);
+    EventBus.on("saypi:autoSubmit", () => {
+      this.handleAutoSubmit();
+    });
   }
 
   // Function to create a new button
   createButton(label, callback) {
     const button = document.createElement("button");
-    button.textContent = label;
-    button.onclick = callback;
+    if (label) {
+      button.textContent = label;
+    }
+    if (callback) {
+      button.onclick = callback;
+    }
     return button;
   }
 
@@ -89,10 +101,19 @@ export default class ButtonModule {
   }
 
   // Simulate an "Enter" keypress event on a form
-  static simulateFormSubmit() {
+  simulateFormSubmit() {
     const submitButton = document.getElementById("saypi-submitButton");
     if (submitButton) {
-      submitButton.click();
+      if (submitButton.disabled) {
+        // track how often this happens
+        console.error(
+          `Autosubmit failed after ${this.submissionsWithoutAnError} turns.`
+        );
+        this.submissionsWithoutAnError = 0;
+      } else {
+        this.submissionsWithoutAnError++;
+        submitButton.click();
+      }
     } else {
       /* hit enter key in the prompt textarea, might not work as expected on "new ui layout" */
       const textarea = document.getElementById("saypi-prompt");
@@ -109,13 +130,13 @@ export default class ButtonModule {
   }
 
   // Function to handle auto-submit based on the button's data attribute
-  static handleAutoSubmit() {
+  handleAutoSubmit() {
     const talkButton = document.getElementById("saypi-talkButton");
 
     if (talkButton.dataset.autosubmit === "false") {
-      console.log("Autosubmit is disabled");
+      console.log("Autosubmit is off");
     } else {
-      ButtonModule.simulateFormSubmit();
+      this.simulateFormSubmit();
     }
   }
 
@@ -208,6 +229,72 @@ export default class ButtonModule {
     const notification = document.getElementById("saypi-notification");
     if (notification) {
       notification.classList.add("hidden");
+    }
+  }
+
+  createCallButton(container, position = 0) {
+    const button = this.createButton();
+    button.id = "saypi-callButton";
+    button.type = "button";
+    button.className =
+      "call-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+    this.callInactive(button); // mic is off by default
+
+    appendChild(container, button, position);
+    return button;
+  }
+
+  callActive(callButton) {
+    if (!callButton) {
+      callButton = document.getElementById("saypi-callButton");
+    }
+    if (callButton) {
+      const label = "Active continuous listening. Click to stop.";
+      callButton.innerHTML = hangupIconSVG;
+      callButton.setAttribute("aria-label", label);
+      callButton.setAttribute("title", label);
+      callButton.onclick = () => {
+        this.actor.send("saypi:hangup");
+      };
+      callButton.classList.add("active");
+    }
+  }
+
+  callInactive(callButton) {
+    if (!callButton) {
+      callButton = document.getElementById("saypi-callButton");
+    }
+    if (callButton) {
+      callButton.innerHTML = callIconSVG;
+      callButton.setAttribute(
+        "aria-label",
+        "Click to start continuous listening."
+      );
+      callButton.setAttribute("title", "Not listening. Click to start.");
+      callButton.onclick = () => {
+        console.log("call button clicked");
+        this.actor.send("saypi:call");
+      };
+      callButton.classList.remove("active");
+    }
+  }
+
+  disableCallButton() {
+    const callButton = document.getElementById("saypi-callButton");
+    if (callButton) {
+      callButton.classList.add("disabled");
+      // disable the call action, but always allow hangup
+      if (!callButton.classList.contains("active")) {
+        callButton.disabled = true;
+      }
+    }
+  }
+
+  enableCallButton() {
+    const callButton = document.getElementById("saypi-callButton");
+    if (callButton) {
+      callButton.classList.remove("disabled");
+      callButton.disabled = false;
     }
   }
 }

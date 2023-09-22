@@ -10,13 +10,22 @@ html.desktop-view {
       transform: scale(1);
     }
   }
-  #saypi-talkButton,
-  .play-button {
-    margin: 0.5rem;
-    border-radius: 18px;
+
+  #saypi-talkButton {
+    /* not needed on desktop with call button */
+    display: none;
+  }
+
+  #saypi-callButton {
     height: 2.25rem;
-    width: 5rem;
-    display: block; /* For Safari */
+    width: 2.25rem;
+    position: relative;
+    margin: 0.5rem 0 0.5rem 0;
+  }
+
+  .saypi-prompt-container {
+    /* make room in the prompt text area for the call button */
+    padding-right: 0;
   }
 
   #saypi-playButton {
@@ -31,17 +40,6 @@ html.desktop-view {
     svg {
       padding: 2.5rem;
     }
-  }
-
-  html:not(.firefox-android) #saypi-talkButton:active .waveform,
-  #saypi-talkButton.active .waveform {
-    animation: pulse 1s infinite;
-  }
-  #saypi-talkButton .waveform {
-    fill: #776d6d;
-  }
-  #saypi-talkButton.autoSubmit .waveform {
-    fill: rgb(65 138 47); /* Pi's text-brand-green-600 */
   }
 
   #saypi-notification > svg {

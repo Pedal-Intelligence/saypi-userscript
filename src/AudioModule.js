@@ -25,7 +25,6 @@ const audioOutputActor = interpret(audioOutputMachine)
       console.log(
         `Audio Output Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
       );
-      console.log(state.context);
     }
   })
   .start();
@@ -53,7 +52,19 @@ function registerAudioPlaybackEvents(audio, actor) {
 registerAudioPlaybackEvents(audioElement, audioOutputActor);
 
 // audio input (user)
-const audioInputActor = interpret(audioInputMachine).start();
+const audioInputActor = interpret(audioInputMachine)
+  .onTransition((state) => {
+    if (state.changed) {
+      const fromState = state.history
+        ? serializeStateValue(state.history.value)
+        : "N/A";
+      const toState = serializeStateValue(state.value);
+      console.log(
+        `Audio Input Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
+      );
+    }
+  })
+  .start();
 
 /* These events are used to control/pass requests to the audio module from other modules */
 function registerAudioCommands() {
@@ -81,7 +92,7 @@ function registerAudioCommands() {
     audioOutputActor.send("stop"); // cancel Pi's audio
     */
   });
-  // audio input (recording) events (pass MediaRecorder events -> audio input machine actor)
+  // audio input (recording) events (pass media recorder events -> audio input machine actor)
   EventBus.on("audio:dataavailable", (detail) => {
     audioInputActor.send({ type: "dataAvailable", ...detail });
   });

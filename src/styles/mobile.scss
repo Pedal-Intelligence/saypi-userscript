@@ -72,12 +72,27 @@ html.mobile-view {
     display: none;
   }
 
-  #saypi-prompt {
-    /* hides virtual keyboard on android */
+  #saypi-prompt-ancestor {
+    /* hides the row containing the text area control */
+    /* important: hides virtual keyboard on android */
     display: none;
+    /* the call button, usually nested in the prompt, is detached while in mobile view */
   }
 
   #saypi-submitButton {
     display: none;
+  }
+
+  #saypi-callButton {
+    position: fixed;
+    bottom: 4rem;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 4.5rem;
+    height: 4.5rem;
+    padding: 6px;
+    border: 0;
+    z-index: 80;
   }
 }

@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const webpack = require("webpack");
 const dotenv = require("dotenv");
+const CopyPlugin = require("copy-webpack-plugin");
 
 const metadata = fs.readFileSync(
   path.resolve(__dirname, "src/metadata.txt"),
@@ -68,7 +69,15 @@ module.exports = (env) => {
             },
           ],
         },
+        {
+          test: /\.tsx?$/,
+          use: "ts-loader",
+          exclude: /node_modules/,
+        },
       ],
+    },
+    resolve: {
+      extensions: [".tsx", ".ts", ".js"],
     },
     plugins: [
       new webpack.BannerPlugin({
@@ -77,6 +86,22 @@ module.exports = (env) => {
         entryOnly: true,
       }),
       new webpack.DefinePlugin(envKeys), // Inject environment variables
+      new CopyPlugin({
+        patterns: [
+          {
+            from: "node_modules/@ricky0123/vad-web/dist/vad.worklet.bundle.min.js",
+            to: "[name][ext]",
+          },
+          {
+            from: "node_modules/@ricky0123/vad-web/dist/*.onnx",
+            to: "[name][ext]",
+          },
+          {
+            from: "node_modules/onnxruntime-web/dist/*.wasm",
+            to: "[name][ext]",
+          },
+        ],
+      }),
     ],
   };
 };
