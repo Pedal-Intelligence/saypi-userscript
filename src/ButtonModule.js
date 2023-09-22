@@ -21,10 +21,15 @@ export default class ButtonModule {
     // Binding methods to the current instance
     this.handlePlayButtonClick = this.handlePlayButtonClick.bind(this);
     this.registerOtherEvents();
+
+    // track the frequency of bug #26
+    this.submissionsWithoutAnError = 0;
   }
 
   registerOtherEvents() {
-    EventBus.on("saypi:autoSubmit", ButtonModule.handleAutoSubmit);
+    EventBus.on("saypi:autoSubmit", () => {
+      this.handleAutoSubmit();
+    });
   }
 
   // Function to create a new button
@@ -96,10 +101,19 @@ export default class ButtonModule {
   }
 
   // Simulate an "Enter" keypress event on a form
-  static simulateFormSubmit() {
+  simulateFormSubmit() {
     const submitButton = document.getElementById("saypi-submitButton");
     if (submitButton) {
-      submitButton.click();
+      if (submitButton.disabled) {
+        // track how often this happens
+        console.error(
+          `Autosubmit failed after ${this.submissionsWithoutAnError} turns.`
+        );
+        this.submissionsWithoutAnError = 0;
+      } else {
+        this.submissionsWithoutAnError++;
+        submitButton.click();
+      }
     } else {
       /* hit enter key in the prompt textarea, might not work as expected on "new ui layout" */
       const textarea = document.getElementById("saypi-prompt");
@@ -116,13 +130,13 @@ export default class ButtonModule {
   }
 
   // Function to handle auto-submit based on the button's data attribute
-  static handleAutoSubmit() {
+  handleAutoSubmit() {
     const talkButton = document.getElementById("saypi-talkButton");
 
     if (talkButton.dataset.autosubmit === "false") {
-      console.log("Autosubmit is disabled");
+      console.log("Autosubmit is off");
     } else {
-      ButtonModule.simulateFormSubmit();
+      this.simulateFormSubmit();
     }
   }
 
