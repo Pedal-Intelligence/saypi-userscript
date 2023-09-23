@@ -1,7 +1,8 @@
-import { buttonModule } from "./ButtonModule.js";
+import { buttonModule } from "./ButtonModule";
 import EventBus from "./EventBus.js";
 import EventModule from "./EventModule.js";
 import { addUserAgentFlags, initMode } from "./UserAgentModule.js";
+import { submitErrorHandler } from "./SubmitErrorHandler";
 import "./styles/common.scss";
 import "./styles/desktop.scss";
 import "./styles/mobile.scss";
@@ -45,6 +46,8 @@ import "./styles/rectangles.css";
 
               // Do something with the first textarea that has 'enterkeyhint'
               annotateDOM(textareas[0]);
+              submitErrorHandler.initAudioOutputListener();
+              submitErrorHandler.checkForRestorePoint();
               return;
             }
           }
@@ -80,6 +83,7 @@ import "./styles/rectangles.css";
     const promptControlsContainer = prompt.parentElement.parentElement;
     promptControlsContainer.id = "saypi-prompt-controls-container";
     const foundPromptAncestor = addIdPromptAncestor(promptControlsContainer);
+    const foundAudioOutputButton = addIdAudioOutputButton();
     addIdSubmitButton(promptControlsContainer);
     addTalkButton(document.body);
     buttonModule.createCallButton(promptControlsContainer, -1);
@@ -150,6 +154,19 @@ import "./styles/rectangles.css";
     });
 
     return found;
+  }
+
+  function addIdAudioOutputButton() {
+    // audio button is the last button element in the audio controls container
+    const audioButton = document.querySelector(
+      "#saypi-audio-controls > div > div.relative.flex.items-center.justify-end.self-end.p-2 > button"
+    );
+    if (!audioButton) {
+      return false;
+    } else {
+      audioButton.id = "saypi-audio-output-button";
+    }
+    return true;
   }
 
   function injectScript(callback) {
