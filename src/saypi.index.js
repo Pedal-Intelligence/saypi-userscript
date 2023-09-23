@@ -84,7 +84,6 @@ import "./styles/rectangles.css";
     promptControlsContainer.id = "saypi-prompt-controls-container";
     const foundPromptAncestor = addIdPromptAncestor(promptControlsContainer);
     const foundAudioOutputButton = addIdAudioOutputButton();
-    console.log("Found audio output button: " + foundAudioOutputButton);
     addIdSubmitButton(promptControlsContainer);
     addTalkButton(document.body);
     buttonModule.createCallButton(promptControlsContainer, -1);
