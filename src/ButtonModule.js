@@ -6,6 +6,7 @@ import {
 import { appendChild } from "./DOMModule";
 import EventBus from "./EventBus";
 import StateMachineService from "./StateMachineService.js";
+import { submitErrorHandler } from "./SubmitErrorHandler";
 import exitIconSVG from "./icons/exit.svg";
 import maximizeIconSVG from "./icons/maximize.svg";
 import rectanglesSVG from "./icons/rectangles.svg";
@@ -103,13 +104,15 @@ export default class ButtonModule {
   // Simulate an "Enter" keypress event on a form
   simulateFormSubmit() {
     const submitButton = document.getElementById("saypi-submitButton");
+
     if (submitButton) {
-      if (submitButton.disabled) {
+      if (submitErrorHandler.detectSubmitError()) {
         // track how often this happens
         console.error(
           `Autosubmit failed after ${this.submissionsWithoutAnError} turns.`
         );
         this.submissionsWithoutAnError = 0;
+        submitErrorHandler.handleSubmitError();
       } else {
         this.submissionsWithoutAnError++;
         submitButton.click();
