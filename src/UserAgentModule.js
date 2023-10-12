@@ -1,8 +1,5 @@
 import { appendChild } from "./DOMModule";
 
-export function isSafari() {
-  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-}
 export function isMobileDevice() {
   return (
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(

@@ -1,12 +1,6 @@
 .hidden {
   display: none !important;
 }
-#saypi-playButton.play-button {
-  /* position over the talk button, but under any controls */
-  z-index: 70; /* talk button z-index is 59 or 60 */
-  background-color: rgba(0, 0, 0, 0); /* transparent without holes */
-  border: none;
-}
 
 #saypi-callButton.disabled svg path.circle {
   fill: rgb(245 238 223); /* bg-cream-550 */

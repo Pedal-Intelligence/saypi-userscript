@@ -28,20 +28,6 @@ html.desktop-view {
     padding-right: 0;
   }
 
-  #saypi-playButton {
-    position: fixed;
-    top: 50%; /* Center vertically */
-    left: 50%; /* Center horizontally */
-    max-width: 500px; /* Maximum width */
-    width: 100%;
-    transform: translate(-50%, -50%); /* Necessary for perfect centering */
-    text-align: center; /* To center the inner contents, if any */
-
-    svg {
-      padding: 2.5rem;
-    }
-  }
-
   #saypi-notification > svg {
     width: 3rem;
     height: 3rem;

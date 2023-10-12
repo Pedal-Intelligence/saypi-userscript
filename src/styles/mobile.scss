@@ -1,6 +1,5 @@
 html.mobile-view {
   #saypi-panel,
-  .play-button,
   .notification {
     width: 100%;
     position: fixed;
@@ -9,13 +8,6 @@ html.mobile-view {
 
     height: 100vh;
     top: 0;
-  }
-
-  #saypi-playButton {
-    background-color: rgba(245, 238, 223, 0.55);
-    svg {
-      padding: 2.5rem;
-    }
   }
 
   #saypi-talkButton {
