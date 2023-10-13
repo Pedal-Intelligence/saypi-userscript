@@ -12,15 +12,12 @@ import maximizeIconSVG from "./icons/maximize.svg";
 import rectanglesSVG from "./icons/rectangles.svg";
 import talkIconSVG from "./icons/waveform.svg";
 import mutedMicIconSVG from "./icons/muted_microphone.svg";
-import playIconSVG from "./icons/play.svg";
 import callIconSVG from "./icons/call.svg";
 import hangupIconSVG from "./icons/hangup.svg";
 export default class ButtonModule {
   constructor() {
-    this.playButton = null;
     this.actor = StateMachineService.actor;
     // Binding methods to the current instance
-    this.handlePlayButtonClick = this.handlePlayButtonClick.bind(this);
     this.registerOtherEvents();
 
     // track the frequency of bug #26
@@ -173,39 +170,6 @@ export default class ButtonModule {
     button.innerHTML = maximizeIconSVG;
     document.body.appendChild(button);
     return button;
-  }
-
-  createPlayButton() {
-    const label = "Hear Pi's response";
-    this.playButton = this.createButton("", () => {});
-    this.playButton.id = "saypi-playButton";
-    this.playButton.type = "button";
-    this.playButton.className = "hidden play-button";
-    this.playButton.setAttribute("aria-label", label);
-    this.playButton.setAttribute("title", label);
-    this.playButton.addEventListener("click", this.handlePlayButtonClick);
-    this.playButton.innerHTML = playIconSVG;
-    document.body.appendChild(this.playButton);
-    console.log("Play button created, and added to the DOM.");
-    return this.playButton;
-  }
-
-  showPlayButton() {
-    if (!this.playButton) {
-      this.createPlayButton();
-    }
-    this.playButton.classList.remove("hidden");
-  }
-
-  hidePlayButton() {
-    if (this.playButton) {
-      this.playButton.classList.add("hidden");
-    }
-  }
-
-  handlePlayButtonClick() {
-    this.actor.send("saypi:unblock");
-    EventBus.emit("audio:reload");
   }
 
   showNotification(details) {
