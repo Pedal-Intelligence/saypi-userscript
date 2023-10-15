@@ -383,7 +383,6 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           blob: Blob;
         }
       ) => {
-        console.log("transcribeAudio", event);
         const audioBlob = event.blob;
         uploadAudioWithRetry(audioBlob, event.duration);
       },

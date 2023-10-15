@@ -2,7 +2,7 @@
 const { interpret } = require("xstate");
 const { audioInputMachine } = require("./state-machines/AudioInputMachine");
 const { audioOutputMachine } = require("./state-machines/AudioOutputMachine");
-const { serializeStateValue } = require("./LoggingModule");
+const { logger, serializeStateValue } = require("./LoggingModule");
 
 // depends on the injecting script (saypi.index.js) declaring the EventBus as a global variable
 const EventBus = window.EventBus;
@@ -22,7 +22,7 @@ const audioOutputActor = interpret(audioOutputMachine)
         ? serializeStateValue(state.history.value)
         : "N/A";
       const toState = serializeStateValue(state.value);
-      console.log(
+      logger.debug(
         `Audio Output Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
       );
     }
@@ -59,7 +59,7 @@ const audioInputActor = interpret(audioInputMachine)
         ? serializeStateValue(state.history.value)
         : "N/A";
       const toState = serializeStateValue(state.value);
-      console.log(
+      logger.debug(
         `Audio Input Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
       );
     }

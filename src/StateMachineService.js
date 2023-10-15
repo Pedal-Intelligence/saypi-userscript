@@ -1,6 +1,6 @@
 import { interpret } from "xstate";
 import { machine } from "./state-machines/SayPiMachine";
-import { serializeStateValue } from "./LoggingModule";
+import { logger, serializeStateValue } from "./LoggingModule";
 
 /**
  * A singleton service that manages the state machine.
@@ -13,7 +13,7 @@ class StateMachineService {
           ? serializeStateValue(state.history.value)
           : "N/A";
         const toState = serializeStateValue(state.value);
-        console.log(
+        logger.debug(
           `Say, Pi Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
         );
       }
