@@ -7,6 +7,7 @@ import EventModule from "./EventModule";
 // Define the shape of the response JSON object
 interface TranscriptionResponse {
   text: string;
+  pFinishedSpeaking?: number;
 }
 
 const knownNetworkErrorMessages = [
@@ -90,6 +91,10 @@ async function uploadAudio(
     const transcriptionDurationMillis = endTime - startTime;
     const transcript = responseJson.text;
     const wc = transcript.split(" ").length;
+    const payload: TranscriptionResponse = { text: transcript };
+    if (responseJson.pFinishedSpeaking) {
+      payload.pFinishedSpeaking = responseJson.pFinishedSpeaking;
+    }
 
     console.log(
       `Transcribed ${Math.round(
@@ -102,9 +107,7 @@ async function uploadAudio(
     if (responseJson.text.length === 0) {
       StateMachineService.actor.send("saypi:transcribedEmpty");
     } else {
-      StateMachineService.actor.send("saypi:transcribed", {
-        text: transcript,
-      });
+      StateMachineService.actor.send("saypi:transcribed", payload);
     }
   } catch (error) {
     // raise to the next level for retry logic

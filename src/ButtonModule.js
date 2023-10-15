@@ -239,7 +239,6 @@ export default class ButtonModule {
       );
       callButton.setAttribute("title", "Not listening. Click to start.");
       callButton.onclick = () => {
-        console.log("call button clicked");
         this.actor.send("saypi:call");
       };
       callButton.classList.remove("active");
