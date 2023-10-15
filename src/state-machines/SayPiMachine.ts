@@ -9,7 +9,7 @@ type SayPiEvent =
   | { type: "saypi:userSpeaking" }
   | { type: "saypi:userStoppedSpeaking"; duration: number; blob?: Blob }
   | { type: "saypi:userFinishedSpeaking" }
-  | { type: "saypi:transcribed"; text: string }
+  | { type: "saypi:transcribed"; text: string; pFinishedSpeaking?: number }
   | { type: "saypi:transcribeFailed" }
   | { type: "saypi:transcribedEmpty" }
   | { type: "saypi:piSpeaking" }
@@ -22,6 +22,7 @@ type SayPiEvent =
 interface SayPiContext {
   transcriptions: string[];
   lastState: "inactive" | "listening";
+  timeUserStoppedSpeaking: number;
 }
 
 // Define the state schema
@@ -74,6 +75,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
     context: {
       transcriptions: [],
       lastState: "inactive",
+      timeUserStoppedSpeaking: 0,
     },
     id: "sayPi",
     initial: "inactive",
@@ -200,6 +202,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                         "#sayPi.listening.converting.transcribing",
                       ],
                       cond: "hasAudio",
+                      actions: assign({
+                        timeUserStoppedSpeaking: () => new Date().getTime(),
+                      }),
                     },
                     {
                       target: "notSpeaking",
@@ -237,10 +242,12 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 entry: {
                   type: "combineTranscripts",
                 },
-                always: {
-                  target: "submitting",
-                  cond: "submissionConditionsMet",
-                  description: "Submit combined transcript to Pi.",
+                after: {
+                  submissionDelay: {
+                    target: "submitting",
+                    cond: "submissionConditionsMet",
+                    description: "Submit combined transcript to Pi.",
+                  },
                 },
               },
               submitting: {
@@ -478,6 +485,38 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         return SayPiContext.lastState === "inactive";
       },
     },
-    delays: {},
+    delays: {
+      submissionDelay: (context: SayPiContext, event: SayPiEvent) => {
+        if (event.type !== "saypi:transcribed") {
+          return 0;
+        }
+
+        const maxDelay = 10000; // 10 seconds in milliseconds
+
+        // Get the current time (in milliseconds)
+        const currentTime = new Date().getTime();
+
+        // Calculate the time elapsed since the user stopped speaking (in milliseconds)
+        const timeElapsed = currentTime - context.timeUserStoppedSpeaking;
+
+        // Calculate the initial delay based on pFinishedSpeaking
+        let probability = 1;
+        if (event.pFinishedSpeaking !== undefined) {
+          probability = event.pFinishedSpeaking;
+        }
+        const initialDelay = (1 - probability) * maxDelay;
+
+        // Calculate the final delay after accounting for the time already elapsed
+        const finalDelay = Math.max(initialDelay - timeElapsed, 0);
+
+        console.log(
+          "Waiting for",
+          finalDelay / 1000,
+          "seconds before submitting"
+        );
+
+        return finalDelay;
+      },
+    },
   }
 );
