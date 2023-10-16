@@ -106,9 +106,10 @@ import "./styles/rectangles.css";
   }
 
   function addIdSubmitButton(container) {
-    const submitButton = container.querySelector("button[type=button]");
-    if (submitButton) {
-      submitButton.id = "saypi-submitButton";
+    const submitButtons = container.querySelectorAll("button[type=button]");
+    if (submitButtons.length > 0) {
+      const lastSubmitButton = submitButtons[submitButtons.length - 1];
+      lastSubmitButton.id = "saypi-submitButton";
     }
   }
 
