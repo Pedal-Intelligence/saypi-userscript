@@ -20,6 +20,7 @@ const knownNetworkErrorMessages = [
 export async function uploadAudioWithRetry(
   audioBlob: Blob,
   audioDurationMillis: number,
+  precedingTranscripts: string[] = [],
   maxRetries: number = 3
 ): Promise<void> {
   let retryCount = 0;
@@ -30,7 +31,7 @@ export async function uploadAudioWithRetry(
 
   while (retryCount < maxRetries) {
     try {
-      await uploadAudio(audioBlob, audioDurationMillis);
+      await uploadAudio(audioBlob, audioDurationMillis, precedingTranscripts);
       return;
     } catch (error) {
       // check for timeout errors (30s on Heroku)
@@ -67,10 +68,15 @@ export async function uploadAudioWithRetry(
 
 async function uploadAudio(
   audioBlob: Blob,
-  audioDurationMillis: number
+  audioDurationMillis: number,
+  precedingTranscripts: string[] = []
 ): Promise<void> {
   try {
-    const formData = constructTranscriptionFormData(audioBlob);
+    const messages = precedingTranscripts.map((transcript) => ({
+      role: "user",
+      content: transcript,
+    }));
+    const formData = constructTranscriptionFormData(audioBlob, messages);
     const language = navigator.language;
 
     const startTime = new Date().getTime();
@@ -115,7 +121,10 @@ async function uploadAudio(
   }
 }
 
-function constructTranscriptionFormData(audioBlob: Blob) {
+function constructTranscriptionFormData(
+  audioBlob: Blob,
+  messages: { role: string; content: string }[]
+) {
   const formData = new FormData();
   let audioFilename = "audio.webm";
 
@@ -130,9 +139,11 @@ function constructTranscriptionFormData(audioBlob: Blob) {
       audioBlob.size / 1024
     ).toFixed(2)}kb`
   );
+  console.log(`Providing ${messages.length} preceding messages as context`);
 
   // Add the audio blob to the FormData object
   formData.append("audio", audioBlob, audioFilename);
+  formData.append("messages", JSON.stringify(messages));
   return formData;
 }
 

@@ -384,7 +384,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         }
       ) => {
         const audioBlob = event.blob;
-        uploadAudioWithRetry(audioBlob, event.duration);
+        uploadAudioWithRetry(audioBlob, event.duration, context.transcriptions);
       },
 
       handleTranscriptionResponse: (
