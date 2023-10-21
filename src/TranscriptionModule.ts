@@ -7,6 +7,7 @@ import EventModule from "./EventModule";
 // Define the shape of the response JSON object
 interface TranscriptionResponse {
   text: string;
+  sequenceNumber: number;
   pFinishedSpeaking?: number;
 }
 
@@ -16,6 +17,29 @@ const knownNetworkErrorMessages = [
   "NetworkError when attempting to fetch resource.", // Firefox
   // Add more known error messages here
 ];
+
+const sequenceNumsPendingTranscription: Set<number> = new Set();
+let sequenceNum = 0;
+
+function transcriptionSent(): void {
+  sequenceNum++;
+  sequenceNumsPendingTranscription.add(sequenceNum);
+  console.log(`Transcription request ${sequenceNum} sent`);
+}
+
+function transcriptionReceived(seq: number): void {
+  console.log(`Transcription request ${sequenceNum} received`);
+  sequenceNumsPendingTranscription.delete(sequenceNum);
+}
+
+export function isTranscriptionPending(): boolean {
+  return sequenceNumsPendingTranscription.size > 0;
+}
+
+// call after completed user input is submitted
+export function clearPendingTranscriptions(): void {
+  sequenceNumsPendingTranscription.clear();
+}
 
 export async function uploadAudioWithRetry(
   audioBlob: Blob,
@@ -30,6 +54,7 @@ export async function uploadAudioWithRetry(
 
   while (retryCount < maxRetries) {
     try {
+      transcriptionSent();
       await uploadAudio(audioBlob, audioDurationMillis);
       return;
     } catch (error) {
@@ -87,11 +112,18 @@ async function uploadAudio(
     }
 
     const responseJson: TranscriptionResponse = await response.json();
+    const seq = responseJson.sequenceNumber;
+    if (seq !== undefined) {
+      transcriptionReceived(seq);
+    }
     const endTime = new Date().getTime();
     const transcriptionDurationMillis = endTime - startTime;
     const transcript = responseJson.text;
     const wc = transcript.split(" ").length;
-    const payload: TranscriptionResponse = { text: transcript };
+    const payload: TranscriptionResponse = {
+      text: transcript,
+      sequenceNumber: seq,
+    };
     if (responseJson.pFinishedSpeaking) {
       payload.pFinishedSpeaking = responseJson.pFinishedSpeaking;
     }
@@ -133,6 +165,7 @@ function constructTranscriptionFormData(audioBlob: Blob) {
 
   // Add the audio blob to the FormData object
   formData.append("audio", audioBlob, audioFilename);
+  formData.append("sequenceNumber", sequenceNum.toString());
   return formData;
 }
 

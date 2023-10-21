@@ -2,7 +2,12 @@ import { buttonModule } from "../ButtonModule";
 import { createMachine, Typestate, assign } from "xstate";
 import AnimationModule from "../AnimationModule";
 import { isMobileView } from "../UserAgentModule";
-import { uploadAudioWithRetry, setPromptText } from "../TranscriptionModule";
+import {
+  uploadAudioWithRetry,
+  setPromptText,
+  isTranscriptionPending,
+  clearPendingTranscriptions,
+} from "../TranscriptionModule";
 import EventBus from "../EventBus";
 
 type SayPiEvent =
@@ -20,7 +25,7 @@ type SayPiEvent =
   | { type: "saypi:hangup" };
 
 interface SayPiContext {
-  transcriptions: string[];
+  transcriptions: Record<number, string>;
   lastState: "inactive" | "listening";
   timeUserStoppedSpeaking: number;
 }
@@ -67,13 +72,13 @@ interface SayPiTypestate extends Typestate<SayPiContext> {
 
 /* external actions */
 const clearTranscripts = assign({
-  transcriptions: () => [],
+  transcriptions: () => ({}),
 });
 
 export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
   {
     context: {
-      transcriptions: [],
+      transcriptions: {},
       lastState: "inactive",
       timeUserStoppedSpeaking: 0,
     },
@@ -240,7 +245,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 description:
                   "Accumulating and assembling audio transcriptions into a cohesive prompt.\nSubmits a prompt when a threshold is reached.",
                 entry: {
-                  type: "combineTranscripts",
+                  type: "mergeTranscripts",
                 },
                 after: {
                   submissionDelay: {
@@ -255,7 +260,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 entry: {
                   type: "setTranscriptAsPrompt",
                 },
-                exit: clearTranscripts,
+                exit: [clearTranscripts, clearPendingTranscriptions],
                 always: {
                   target: "accumulating",
                 },
@@ -389,11 +394,17 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
 
       handleTranscriptionResponse: (
         SayPiContext,
-        event: { type: "saypi:transcribed"; text: string }
+        event: {
+          type: "saypi:transcribed";
+          text: string;
+          sequenceNumber: number;
+          pFinishedSpeaking?: number;
+        }
       ) => {
         console.log("handleTranscriptionResponse", event);
         const transcription = event.text;
-        SayPiContext.transcriptions.push(transcription);
+        const sequenceNumber = event.sequenceNumber;
+        SayPiContext.transcriptions[sequenceNumber] = transcription;
       },
 
       acquireMicrophone: (context, event) => {
@@ -422,19 +433,50 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         buttonModule.dismissNotification();
       },
 
-      combineTranscripts: assign((context) => {
-        const transcript = context.transcriptions.join(" ");
-        if (transcript.length > 0) {
+      mergeTranscripts: assign((context) => {
+        const sortedKeys = Object.keys(context.transcriptions)
+          .map(Number)
+          .sort((a, b) => a - b);
+
+        let currentSeq = -1;
+        let currentTranscript = "";
+        const mergedTranscripts: string[] = [];
+
+        for (const key of sortedKeys) {
+          if (currentSeq === -1 || key === currentSeq + 1) {
+            // Contiguous sequence
+            currentTranscript += " " + context.transcriptions[key];
+          } else {
+            // Gap in sequence
+            mergedTranscripts.push(currentTranscript.trim());
+            currentTranscript = context.transcriptions[key];
+          }
+          currentSeq = key;
+        }
+
+        if (currentTranscript) {
+          mergedTranscripts.push(currentTranscript.trim());
+        }
+
+        if (mergedTranscripts.length > 0) {
           return {
-            transcriptions: [transcript],
+            transcriptions: mergedTranscripts,
           };
         }
         return {};
       }),
 
       setTranscriptAsPrompt: (SayPiContext) => {
-        const prompt = SayPiContext.transcriptions[0];
-        setPromptText(prompt);
+        const keys = Object.keys(SayPiContext.transcriptions);
+        if (keys.length === 1) {
+          const key = parseInt(keys[0]);
+          const prompt = SayPiContext.transcriptions[key];
+          setPromptText(prompt);
+        } else {
+          console.error(
+            "Not all transcripts have been merged. Not setting prompt."
+          );
+        }
       },
 
       callStarted: () => {
@@ -474,8 +516,14 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           state.matches("listening.recording.userSpeaking") ||
           state.matches("listening.converting.transcribing")
         );
-        const transcriptsMerged = SayPiContext.transcriptions.length == 1;
-        return allowedState && transcriptsMerged;
+        const transcriptsMerged =
+          Object.keys(SayPiContext.transcriptions).length == 1;
+        const pending = isTranscriptionPending();
+        console.log("Allowed state:", allowedState);
+        console.log("Transcripts merged:", transcriptsMerged);
+        console.log("Transcription pending:", pending);
+        console.log("Ready for submission:", allowedState && transcriptsMerged);
+        return allowedState && transcriptsMerged && !pending;
       },
       wasListening: (SayPiContext) => {
         return SayPiContext.lastState === "listening";
