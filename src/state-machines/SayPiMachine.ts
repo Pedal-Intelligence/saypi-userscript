@@ -7,6 +7,7 @@ import {
   setPromptText,
   isTranscriptionPending,
   clearPendingTranscriptions,
+  mergeTranscripts,
 } from "../TranscriptionModule";
 import EventBus from "../EventBus";
 
@@ -244,9 +245,6 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               accumulating: {
                 description:
                   "Accumulating and assembling audio transcriptions into a cohesive prompt.\nSubmits a prompt when a threshold is reached.",
-                entry: {
-                  type: "mergeTranscripts",
-                },
                 after: {
                   submissionDelay: {
                     target: "submitting",
@@ -258,7 +256,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               submitting: {
                 description: "Submitting prompt to Pi.",
                 entry: {
-                  type: "setTranscriptAsPrompt",
+                  type: "mergeAndSubmitTranscript",
                 },
                 exit: [clearTranscripts, clearPendingTranscriptions],
                 always: {
@@ -433,50 +431,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         buttonModule.dismissNotification();
       },
 
-      mergeTranscripts: assign((context) => {
-        const sortedKeys = Object.keys(context.transcriptions)
-          .map(Number)
-          .sort((a, b) => a - b);
-
-        let currentSeq = -1;
-        let currentTranscript = "";
-        const mergedTranscripts: string[] = [];
-
-        for (const key of sortedKeys) {
-          if (currentSeq === -1 || key === currentSeq + 1) {
-            // Contiguous sequence
-            currentTranscript += " " + context.transcriptions[key];
-          } else {
-            // Gap in sequence
-            mergedTranscripts.push(currentTranscript.trim());
-            currentTranscript = context.transcriptions[key];
-          }
-          currentSeq = key;
-        }
-
-        if (currentTranscript) {
-          mergedTranscripts.push(currentTranscript.trim());
-        }
-
-        if (mergedTranscripts.length > 0) {
-          return {
-            transcriptions: mergedTranscripts,
-          };
-        }
-        return {};
-      }),
-
-      setTranscriptAsPrompt: (SayPiContext) => {
-        const keys = Object.keys(SayPiContext.transcriptions);
-        if (keys.length === 1) {
-          const key = parseInt(keys[0]);
-          const prompt = SayPiContext.transcriptions[key];
-          setPromptText(prompt);
-        } else {
-          console.error(
-            "Not all transcripts have been merged. Not setting prompt."
-          );
-        }
+      mergeAndSubmitTranscript: (context) => {
+        const prompt = mergeTranscripts(context.transcriptions).trim();
+        if (prompt) setPromptText(prompt);
       },
 
       callStarted: () => {
@@ -510,26 +467,26 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         }
         return false;
       },
-      submissionConditionsMet: (SayPiContext, event, meta) => {
+      submissionConditionsMet: (
+        context: SayPiContext,
+        event: SayPiEvent,
+        meta
+      ) => {
         const { state } = meta;
         const allowedState = !(
           state.matches("listening.recording.userSpeaking") ||
           state.matches("listening.converting.transcribing")
         );
-        const transcriptsMerged =
-          Object.keys(SayPiContext.transcriptions).length == 1;
+        const empty = Object.keys(context.transcriptions).length === 0;
         const pending = isTranscriptionPending();
-        console.log("Allowed state:", allowedState);
-        console.log("Transcripts merged:", transcriptsMerged);
-        console.log("Transcription pending:", pending);
-        console.log("Ready for submission:", allowedState && transcriptsMerged);
-        return allowedState && transcriptsMerged && !pending;
+        const ready = allowedState && !empty && !pending;
+        return ready;
       },
-      wasListening: (SayPiContext) => {
-        return SayPiContext.lastState === "listening";
+      wasListening: (context: SayPiContext) => {
+        return context.lastState === "listening";
       },
-      wasInactive: (SayPiContext) => {
-        return SayPiContext.lastState === "inactive";
+      wasInactive: (context: SayPiContext) => {
+        return context.lastState === "inactive";
       },
     },
     delays: {

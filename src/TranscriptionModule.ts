@@ -190,3 +190,17 @@ export function setPromptText(transcript: string): void {
     EventModule.simulateTyping(textarea, `${transcript} `);
   }
 }
+
+export function mergeTranscripts(transcripts: Record<number, string>): string {
+  const sortedKeys = Object.keys(transcripts)
+    .map(Number)
+    .sort((a, b) => a - b);
+
+  const sortedTranscripts: string[] = [];
+
+  for (const key of sortedKeys) {
+    sortedTranscripts.push(transcripts[key].trim());
+  }
+
+  return sortedTranscripts.join(" ");
+}
