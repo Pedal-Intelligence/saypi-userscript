@@ -3,6 +3,7 @@ import StateMachineService from "./StateMachineService";
 import { isMobileView } from "./UserAgentModule";
 import EventBus from "./EventBus";
 import EventModule from "./EventModule";
+import { logger } from "./LoggingModule";
 
 // Define the shape of the response JSON object
 interface TranscriptionResponse {
@@ -33,7 +34,7 @@ function checkForExpiredEntries() {
   sequenceNumsPendingTranscription.forEach((entry) => {
     if (now - entry.timestamp > TIMEOUT_MS) {
       sequenceNumsPendingTranscription.delete(entry);
-      console.log(`Transcription request ${entry.seq} timed out`);
+      logger.info(`Transcription request ${entry.seq} timed out`);
     }
   });
 }
@@ -44,7 +45,6 @@ function transcriptionSent(): void {
     seq: sequenceNum,
     timestamp: Date.now(),
   });
-  console.log(`Transcription request ${sequenceNum} sent`);
 }
 
 function transcriptionReceived(seq: number): void {
@@ -52,7 +52,7 @@ function transcriptionReceived(seq: number): void {
   sequenceNumsPendingTranscription.forEach((entry) => {
     if (entry.seq === seq) {
       sequenceNumsPendingTranscription.delete(entry);
-      console.log(
+      logger.debug(
         `Transcription response ${seq} received after ${
           (Date.now() - entry.timestamp) / 1000
         }s`
@@ -94,7 +94,7 @@ export async function uploadAudioWithRetry(
         error instanceof TypeError &&
         knownNetworkErrorMessages.includes(error.message)
       ) {
-        console.log(
+        logger.info(
           `Attempt ${retryCount + 1}/${maxRetries} failed. Retrying in ${
             delay / 1000
           } seconds...`
@@ -165,7 +165,7 @@ async function uploadAudio(
       payload.pFinishedSpeaking = responseJson.pFinishedSpeaking;
     }
 
-    console.log(
+    logger.info(
       `Transcribed ${Math.round(
         audioDurationMillis / 1000
       )}s of audio into ${wc} words in ${Math.round(
@@ -204,7 +204,7 @@ function constructTranscriptionFormData(audioBlob: Blob) {
     audioFilename = "audio.wav";
   }
 
-  console.log(
+  logger.info(
     `Transcribing audio Blob with MIME type: ${audioBlob.type}, size: ${(
       audioBlob.size / 1024
     ).toFixed(2)}kb`
@@ -217,7 +217,7 @@ function constructTranscriptionFormData(audioBlob: Blob) {
 }
 
 export function setPromptText(transcript: string): void {
-  console.log(`Transcript: ${transcript}`);
+  logger.info(`Merged transcript: ${transcript}`);
   const textarea = document.getElementById(
     "saypi-prompt"
   ) as HTMLTextAreaElement;
