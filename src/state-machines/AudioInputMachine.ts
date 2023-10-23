@@ -260,7 +260,7 @@ export const audioInputMachine = createMachine<
       ) => {
         const { blob, duration } = event;
         const sizeInKb = (blob.size / 1024).toFixed(2); // Convert to kilobytes and keep 2 decimal places
-        console.log(`Sending ${sizeInKb}kb of audio data to server`);
+        console.log(`Uploading ${sizeInKb}kb of audio data`);
 
         // Use the duration directly from the event
         const speechDuration = duration;

@@ -2,7 +2,13 @@ import { buttonModule } from "../ButtonModule";
 import { createMachine, Typestate, assign } from "xstate";
 import AnimationModule from "../AnimationModule";
 import { isMobileView } from "../UserAgentModule";
-import { uploadAudioWithRetry, setPromptText } from "../TranscriptionModule";
+import {
+  uploadAudioWithRetry,
+  setPromptText,
+  isTranscriptionPending,
+  clearPendingTranscriptions,
+  mergeTranscripts,
+} from "../TranscriptionModule";
 import EventBus from "../EventBus";
 
 type SayPiEvent =
@@ -20,7 +26,7 @@ type SayPiEvent =
   | { type: "saypi:hangup" };
 
 interface SayPiContext {
-  transcriptions: string[];
+  transcriptions: Record<number, string>;
   lastState: "inactive" | "listening";
   timeUserStoppedSpeaking: number;
 }
@@ -67,13 +73,13 @@ interface SayPiTypestate extends Typestate<SayPiContext> {
 
 /* external actions */
 const clearTranscripts = assign({
-  transcriptions: () => [],
+  transcriptions: () => ({}),
 });
 
 export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
   {
     context: {
-      transcriptions: [],
+      transcriptions: {},
       lastState: "inactive",
       timeUserStoppedSpeaking: 0,
     },
@@ -202,9 +208,14 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                         "#sayPi.listening.converting.transcribing",
                       ],
                       cond: "hasAudio",
-                      actions: assign({
-                        timeUserStoppedSpeaking: () => new Date().getTime(),
-                      }),
+                      actions: [
+                        assign({
+                          timeUserStoppedSpeaking: () => new Date().getTime(),
+                        }),
+                        {
+                          type: "transcribeAudio",
+                        },
+                      ],
                     },
                     {
                       target: "notSpeaking",
@@ -239,9 +250,6 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               accumulating: {
                 description:
                   "Accumulating and assembling audio transcriptions into a cohesive prompt.\nSubmits a prompt when a threshold is reached.",
-                entry: {
-                  type: "combineTranscripts",
-                },
                 after: {
                   submissionDelay: {
                     target: "submitting",
@@ -249,13 +257,33 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     description: "Submit combined transcript to Pi.",
                   },
                 },
+                on: {
+                  "saypi:transcribed": {
+                    target: "accumulating",
+                    actions: {
+                      type: "handleTranscriptionResponse",
+                    },
+                    description:
+                      "Transcribed speech to text (out of sequence response).",
+                  },
+                  "saypi:transcribeFailed": {
+                    target: "#sayPi.errors.transcribeFailed",
+                    description:
+                      "Out of sequence error response from the /transcribe API",
+                  },
+                  "saypi:transcribedEmpty": {
+                    target: "#sayPi.errors.micError",
+                    description:
+                      "Out of sequence empty response from the /transcribe API",
+                  },
+                },
               },
               submitting: {
                 description: "Submitting prompt to Pi.",
                 entry: {
-                  type: "setTranscriptAsPrompt",
+                  type: "mergeAndSubmitTranscript",
                 },
-                exit: clearTranscripts,
+                exit: [clearTranscripts, clearPendingTranscriptions],
                 always: {
                   target: "accumulating",
                 },
@@ -263,17 +291,12 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               transcribing: {
                 description:
                   "Transcribing audio to text.\nCard flip animation.",
-                entry: [
-                  {
-                    type: "startAnimation",
-                    params: {
-                      animation: "transcribing",
-                    },
+                entry: {
+                  type: "startAnimation",
+                  params: {
+                    animation: "transcribing",
                   },
-                  {
-                    type: "transcribeAudio",
-                  },
-                ],
+                },
                 exit: {
                   type: "stopAnimation",
                   params: {
@@ -389,11 +412,17 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
 
       handleTranscriptionResponse: (
         SayPiContext,
-        event: { type: "saypi:transcribed"; text: string }
+        event: {
+          type: "saypi:transcribed";
+          text: string;
+          sequenceNumber: number;
+          pFinishedSpeaking?: number;
+        }
       ) => {
         console.log("handleTranscriptionResponse", event);
         const transcription = event.text;
-        SayPiContext.transcriptions.push(transcription);
+        const sequenceNumber = event.sequenceNumber;
+        SayPiContext.transcriptions[sequenceNumber] = transcription;
       },
 
       acquireMicrophone: (context, event) => {
@@ -422,19 +451,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         buttonModule.dismissNotification();
       },
 
-      combineTranscripts: assign((context) => {
-        const transcript = context.transcriptions.join(" ");
-        if (transcript.length > 0) {
-          return {
-            transcriptions: [transcript],
-          };
-        }
-        return {};
-      }),
-
-      setTranscriptAsPrompt: (SayPiContext) => {
-        const prompt = SayPiContext.transcriptions[0];
-        setPromptText(prompt);
+      mergeAndSubmitTranscript: (context) => {
+        const prompt = mergeTranscripts(context.transcriptions).trim();
+        if (prompt) setPromptText(prompt);
       },
 
       callStarted: () => {
@@ -468,20 +487,26 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         }
         return false;
       },
-      submissionConditionsMet: (SayPiContext, event, meta) => {
+      submissionConditionsMet: (
+        context: SayPiContext,
+        event: SayPiEvent,
+        meta
+      ) => {
         const { state } = meta;
         const allowedState = !(
           state.matches("listening.recording.userSpeaking") ||
           state.matches("listening.converting.transcribing")
         );
-        const transcriptsMerged = SayPiContext.transcriptions.length == 1;
-        return allowedState && transcriptsMerged;
+        const empty = Object.keys(context.transcriptions).length === 0;
+        const pending = isTranscriptionPending();
+        const ready = allowedState && !empty && !pending;
+        return ready;
       },
-      wasListening: (SayPiContext) => {
-        return SayPiContext.lastState === "listening";
+      wasListening: (context: SayPiContext) => {
+        return context.lastState === "listening";
       },
-      wasInactive: (SayPiContext) => {
-        return SayPiContext.lastState === "inactive";
+      wasInactive: (context: SayPiContext) => {
+        return context.lastState === "inactive";
       },
     },
     delays: {
