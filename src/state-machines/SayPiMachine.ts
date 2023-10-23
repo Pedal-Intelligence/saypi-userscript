@@ -208,9 +208,14 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                         "#sayPi.listening.converting.transcribing",
                       ],
                       cond: "hasAudio",
-                      actions: assign({
-                        timeUserStoppedSpeaking: () => new Date().getTime(),
-                      }),
+                      actions: [
+                        assign({
+                          timeUserStoppedSpeaking: () => new Date().getTime(),
+                        }),
+                        {
+                          type: "transcribeAudio",
+                        },
+                      ],
                     },
                     {
                       target: "notSpeaking",
@@ -252,6 +257,26 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     description: "Submit combined transcript to Pi.",
                   },
                 },
+                on: {
+                  "saypi:transcribed": {
+                    target: "accumulating",
+                    actions: {
+                      type: "handleTranscriptionResponse",
+                    },
+                    description:
+                      "Transcribed speech to text (out of sequence response).",
+                  },
+                  "saypi:transcribeFailed": {
+                    target: "#sayPi.errors.transcribeFailed",
+                    description:
+                      "Out of sequence error response from the /transcribe API",
+                  },
+                  "saypi:transcribedEmpty": {
+                    target: "#sayPi.errors.micError",
+                    description:
+                      "Out of sequence empty response from the /transcribe API",
+                  },
+                },
               },
               submitting: {
                 description: "Submitting prompt to Pi.",
@@ -266,17 +291,12 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               transcribing: {
                 description:
                   "Transcribing audio to text.\nCard flip animation.",
-                entry: [
-                  {
-                    type: "startAnimation",
-                    params: {
-                      animation: "transcribing",
-                    },
+                entry: {
+                  type: "startAnimation",
+                  params: {
+                    animation: "transcribing",
                   },
-                  {
-                    type: "transcribeAudio",
-                  },
-                ],
+                },
                 exit: {
                   type: "stopAnimation",
                   params: {

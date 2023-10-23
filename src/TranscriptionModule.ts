@@ -18,21 +18,52 @@ const knownNetworkErrorMessages = [
   // Add more known error messages here
 ];
 
-const sequenceNumsPendingTranscription: Set<number> = new Set();
+// timeout for transcription requests
+const TIMEOUT_MS = 30000; // 30 seconds
+
+// track sequence numbers for in-flight transcription requests
 let sequenceNum = 0;
+const sequenceNumsPendingTranscription: Set<{
+  seq: number;
+  timestamp: number;
+}> = new Set();
+
+function checkForExpiredEntries() {
+  const now = Date.now();
+  sequenceNumsPendingTranscription.forEach((entry) => {
+    if (now - entry.timestamp > TIMEOUT_MS) {
+      sequenceNumsPendingTranscription.delete(entry);
+      console.log(`Transcription request ${entry.seq} timed out`);
+    }
+  });
+}
 
 function transcriptionSent(): void {
   sequenceNum++;
-  sequenceNumsPendingTranscription.add(sequenceNum);
+  sequenceNumsPendingTranscription.add({
+    seq: sequenceNum,
+    timestamp: Date.now(),
+  });
   console.log(`Transcription request ${sequenceNum} sent`);
 }
 
 function transcriptionReceived(seq: number): void {
-  console.log(`Transcription request ${sequenceNum} received`);
-  sequenceNumsPendingTranscription.delete(sequenceNum);
+  // delete entry with matching sequence number
+  sequenceNumsPendingTranscription.forEach((entry) => {
+    if (entry.seq === seq) {
+      sequenceNumsPendingTranscription.delete(entry);
+      console.log(
+        `Transcription response ${seq} received after ${
+          (Date.now() - entry.timestamp) / 1000
+        }s`
+      );
+      return;
+    }
+  });
 }
 
 export function isTranscriptionPending(): boolean {
+  checkForExpiredEntries();
   return sequenceNumsPendingTranscription.size > 0;
 }
 
@@ -98,12 +129,18 @@ async function uploadAudio(
     const formData = constructTranscriptionFormData(audioBlob);
     const language = navigator.language;
 
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    setTimeout(() => controller.abort(), TIMEOUT_MS);
+
     const startTime = new Date().getTime();
     const response: Response = await fetch(
       `${config.apiServerUrl}/transcribe?language=${language}`,
       {
         method: "POST",
         body: formData,
+        signal,
       }
     );
 
@@ -141,8 +178,18 @@ async function uploadAudio(
     } else {
       StateMachineService.actor.send("saypi:transcribed", payload);
     }
-  } catch (error) {
-    // raise to the next level for retry logic
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (error.name === "AbortError") {
+        console.error("Fetch aborted due to timeout", error);
+      } else {
+        console.error("An unexpected error occurred:", error);
+      }
+    } else {
+      console.error("Something thrown that is not an Error object:", error);
+    }
+
+    // re-throw the error if your logic requires it
     throw error;
   }
 }
