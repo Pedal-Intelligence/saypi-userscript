@@ -3,10 +3,12 @@ import StateMachineService from "./StateMachineService";
 import { isMobileView } from "./UserAgentModule";
 import EventBus from "./EventBus";
 import EventModule from "./EventModule";
+import { logger } from "./LoggingModule";
 
 // Define the shape of the response JSON object
 interface TranscriptionResponse {
   text: string;
+  sequenceNumber: number;
   pFinishedSpeaking?: number;
 }
 
@@ -17,10 +19,63 @@ const knownNetworkErrorMessages = [
   // Add more known error messages here
 ];
 
+// timeout for transcription requests
+const TIMEOUT_MS = 30000; // 30 seconds
+
+// track sequence numbers for in-flight transcription requests
+let sequenceNum = 0;
+const sequenceNumsPendingTranscription: Set<{
+  seq: number;
+  timestamp: number;
+}> = new Set();
+
+function checkForExpiredEntries() {
+  const now = Date.now();
+  sequenceNumsPendingTranscription.forEach((entry) => {
+    if (now - entry.timestamp > TIMEOUT_MS) {
+      sequenceNumsPendingTranscription.delete(entry);
+      logger.info(`Transcription request ${entry.seq} timed out`);
+    }
+  });
+}
+
+function transcriptionSent(): void {
+  sequenceNum++;
+  sequenceNumsPendingTranscription.add({
+    seq: sequenceNum,
+    timestamp: Date.now(),
+  });
+}
+
+function transcriptionReceived(seq: number): void {
+  // delete entry with matching sequence number
+  sequenceNumsPendingTranscription.forEach((entry) => {
+    if (entry.seq === seq) {
+      sequenceNumsPendingTranscription.delete(entry);
+      logger.debug(
+        `Transcription response ${seq} received after ${
+          (Date.now() - entry.timestamp) / 1000
+        }s`
+      );
+      return;
+    }
+  });
+}
+
+export function isTranscriptionPending(): boolean {
+  checkForExpiredEntries();
+  return sequenceNumsPendingTranscription.size > 0;
+}
+
+// call after completed user input is submitted
+export function clearPendingTranscriptions(): void {
+  sequenceNumsPendingTranscription.clear();
+}
+
 export async function uploadAudioWithRetry(
   audioBlob: Blob,
   audioDurationMillis: number,
-  precedingTranscripts: string[] = [],
+  precedingTranscripts: Record<number, string> = {},
   maxRetries: number = 3
 ): Promise<void> {
   let retryCount = 0;
@@ -31,6 +86,7 @@ export async function uploadAudioWithRetry(
 
   while (retryCount < maxRetries) {
     try {
+      transcriptionSent();
       await uploadAudio(audioBlob, audioDurationMillis, precedingTranscripts);
       return;
     } catch (error) {
@@ -39,7 +95,7 @@ export async function uploadAudioWithRetry(
         error instanceof TypeError &&
         knownNetworkErrorMessages.includes(error.message)
       ) {
-        console.log(
+        logger.info(
           `Attempt ${retryCount + 1}/${maxRetries} failed. Retrying in ${
             delay / 1000
           } seconds...`
@@ -69,15 +125,26 @@ export async function uploadAudioWithRetry(
 async function uploadAudio(
   audioBlob: Blob,
   audioDurationMillis: number,
-  precedingTranscripts: string[] = []
+  precedingTranscripts: Record<number, string> = {}
 ): Promise<void> {
   try {
-    const messages = precedingTranscripts.map((transcript) => ({
-      role: "user",
-      content: transcript,
-    }));
+    const messages = Object.entries(precedingTranscripts).map(
+      ([seq, content]) => {
+        return {
+          role: "user",
+          content: content,
+          sequenceNumber: Number(seq), // Convert the string to a number
+        };
+      }
+    );
+
     const formData = constructTranscriptionFormData(audioBlob, messages);
     const language = navigator.language;
+
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    setTimeout(() => controller.abort(), TIMEOUT_MS);
 
     const startTime = new Date().getTime();
     const response: Response = await fetch(
@@ -85,6 +152,7 @@ async function uploadAudio(
       {
         method: "POST",
         body: formData,
+        signal,
       }
     );
 
@@ -93,16 +161,23 @@ async function uploadAudio(
     }
 
     const responseJson: TranscriptionResponse = await response.json();
+    const seq = responseJson.sequenceNumber;
+    if (seq !== undefined) {
+      transcriptionReceived(seq);
+    }
     const endTime = new Date().getTime();
     const transcriptionDurationMillis = endTime - startTime;
     const transcript = responseJson.text;
     const wc = transcript.split(" ").length;
-    const payload: TranscriptionResponse = { text: transcript };
+    const payload: TranscriptionResponse = {
+      text: transcript,
+      sequenceNumber: seq,
+    };
     if (responseJson.pFinishedSpeaking) {
       payload.pFinishedSpeaking = responseJson.pFinishedSpeaking;
     }
 
-    console.log(
+    logger.info(
       `Transcribed ${Math.round(
         audioDurationMillis / 1000
       )}s of audio into ${wc} words in ${Math.round(
@@ -115,15 +190,25 @@ async function uploadAudio(
     } else {
       StateMachineService.actor.send("saypi:transcribed", payload);
     }
-  } catch (error) {
-    // raise to the next level for retry logic
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (error.name === "AbortError") {
+        console.error("Fetch aborted due to timeout", error);
+      } else {
+        console.error("An unexpected error occurred:", error);
+      }
+    } else {
+      console.error("Something thrown that is not an Error object:", error);
+    }
+
+    // re-throw the error if your logic requires it
     throw error;
   }
 }
 
 function constructTranscriptionFormData(
   audioBlob: Blob,
-  messages: { role: string; content: string }[]
+  messages: { role: string; content: string; sequenceNumber?: number }[]
 ) {
   const formData = new FormData();
   let audioFilename = "audio.webm";
@@ -134,7 +219,7 @@ function constructTranscriptionFormData(
     audioFilename = "audio.wav";
   }
 
-  console.log(
+  logger.info(
     `Transcribing audio Blob with MIME type: ${audioBlob.type}, size: ${(
       audioBlob.size / 1024
     ).toFixed(2)}kb`
@@ -143,12 +228,13 @@ function constructTranscriptionFormData(
 
   // Add the audio blob to the FormData object
   formData.append("audio", audioBlob, audioFilename);
+  formData.append("sequenceNumber", sequenceNum.toString());
   formData.append("messages", JSON.stringify(messages));
   return formData;
 }
 
 export function setPromptText(transcript: string): void {
-  console.log(`Transcript: ${transcript}`);
+  logger.info(`Merged transcript: ${transcript}`);
   const textarea = document.getElementById(
     "saypi-prompt"
   ) as HTMLTextAreaElement;
@@ -167,4 +253,18 @@ export function setPromptText(transcript: string): void {
   } else {
     EventModule.simulateTyping(textarea, `${transcript} `);
   }
+}
+
+export function mergeTranscripts(transcripts: Record<number, string>): string {
+  const sortedKeys = Object.keys(transcripts)
+    .map(Number)
+    .sort((a, b) => a - b);
+
+  const sortedTranscripts: string[] = [];
+
+  for (const key of sortedKeys) {
+    sortedTranscripts.push(transcripts[key].trim());
+  }
+
+  return sortedTranscripts.join(" ");
 }
