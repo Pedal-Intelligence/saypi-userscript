@@ -1,8 +1,8 @@
 // import state machines for audio input and output
-const { interpret } = require("xstate");
-const { audioInputMachine } = require("./state-machines/AudioInputMachine");
-const { audioOutputMachine } = require("./state-machines/AudioOutputMachine");
-const { logger, serializeStateValue } = require("./LoggingModule");
+import { interpret } from "xstate";
+import { audioInputMachine } from "./state-machines/AudioInputMachine.ts";
+import { audioOutputMachine } from "./state-machines/AudioOutputMachine.js";
+import { logger, serializeStateValue } from "./LoggingModule.js";
 
 // depends on the injecting script (saypi.index.js) declaring the EventBus as a global variable
 const EventBus = window.EventBus;

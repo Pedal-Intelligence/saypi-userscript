@@ -1,18 +1,45 @@
-import { buttonModule } from "./ButtonModule";
+import { buttonModule } from "./ButtonModule.js";
 import EventBus from "./EventBus.js";
 import EventModule from "./EventModule.js";
 import { addUserAgentFlags, initMode } from "./UserAgentModule.js";
-import { submitErrorHandler } from "./SubmitErrorHandler";
+import { submitErrorHandler } from "./SubmitErrorHandler.ts";
+import { config as serverConfig } from "./ConfigModule.js";
+
 import "./styles/common.scss";
 import "./styles/desktop.scss";
 import "./styles/mobile.scss";
 import "./styles/rectangles.css";
 
-(function () {
+(async function () {
   "use strict";
 
-  const pageScript =
-    require("raw-loader!../public/audioModule.bundle.js").default;
+  const audioModuleUrl = `${serverConfig.appServerUrl}/audioModule.bundle.js`;
+
+  let pageScript;
+  try {
+    const response = await fetch(audioModuleUrl);
+    if (!response.ok) {
+      throw new Error("Network response was not ok " + response.statusText);
+    }
+    pageScript = await response.text();
+  } catch (error) {
+    console.error("There has been a problem with your fetch operation:", error);
+    return;
+  }
+
+  function injectScript(callback) {
+    var scriptElement = document.createElement("script");
+    scriptElement.type = "text/javascript";
+    scriptElement.id = "saypi-script";
+    scriptElement.textContent = pageScript;
+    document.body.appendChild(scriptElement);
+
+    // Call the callback function after the script is added
+    if (callback) {
+      callback();
+    }
+  }
+
   addUserAgentFlags();
   EventModule.init();
   setupEventBus();
@@ -168,19 +195,6 @@ import "./styles/rectangles.css";
       audioButton.id = "saypi-audio-output-button";
     }
     return true;
-  }
-
-  function injectScript(callback) {
-    var scriptElement = document.createElement("script");
-    scriptElement.type = "text/javascript";
-    scriptElement.id = "saypi-script";
-    scriptElement.textContent = pageScript;
-    document.body.appendChild(scriptElement);
-
-    // Call the callback function after the script is added
-    if (callback) {
-      callback();
-    }
   }
 
   function addTalkButton(container) {

@@ -1,17 +1,25 @@
-const fs = require("fs");
-const path = require("path");
-const webpack = require("webpack");
-const dotenv = require("dotenv");
-const CopyPlugin = require("copy-webpack-plugin");
+import fs from "fs";
+import path from "path";
+import webpack from "webpack";
+import dotenv from "dotenv";
+import CopyPlugin from "copy-webpack-plugin";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const metadata = fs.readFileSync(
   path.resolve(__dirname, "src/metadata.txt"),
   "utf8"
 );
 
-module.exports = (env) => {
+export default (env, argv) => {
+  // Determine if it's production mode
+  const isProduction = argv.mode === "production";
+
   // Use the dotenv package to load environment variables from .env or .env.production file
-  const envFile = env && env.production ? ".env.production" : ".env";
+  const envFile = isProduction ? ".env.production" : ".env";
   const envVariables = dotenv.config({ path: envFile }).parsed;
 
   // Reduce it to a nice object
@@ -21,8 +29,8 @@ module.exports = (env) => {
   }, {});
 
   return {
-    mode: "development",
-    devtool: "inline-source-map",
+    mode: isProduction ? "production" : "development",
+    devtool: isProduction ? "source-map" : "inline-source-map",
     entry: {
       main: "./src/saypi.index.js",
       audioModule: "./src/AudioModule.js",
@@ -74,10 +82,17 @@ module.exports = (env) => {
           use: "ts-loader",
           exclude: /node_modules/,
         },
+        {
+          test: /audioModule\.bundle\.js$/,
+          use: "raw-loader",
+        },
       ],
     },
     resolve: {
       extensions: [".tsx", ".ts", ".js"],
+    },
+    optimization: {
+      minimize: false, // Prevents minification in production mode
     },
     plugins: [
       new webpack.BannerPlugin({

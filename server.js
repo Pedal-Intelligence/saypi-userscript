@@ -1,13 +1,14 @@
-const fs = require("fs");
-const http = require("http");
-const https = require("https");
-const express = require("express");
-const path = require("path");
+import fs from "fs";
+import http from "http";
+import https from "https";
+import express from "express";
+import path from "path";
 
 const isProduction = process.env.NODE_ENV === "production";
 let server;
 
 const app = express();
+export default app;
 
 // Allowed origins for CORS
 const allowedOrigins = [
@@ -23,6 +24,8 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 app.use("/", express.static(path.join(__dirname, "public")));
 
@@ -42,11 +45,11 @@ if (!isProduction) {
   server = http.createServer(app);
 }
 
-if (require.main === module) {
+if (import.meta.url.endsWith("/server.js")) {
   const port = process.env.PORT || (isProduction ? 80 : 4443);
   server.listen(port, "0.0.0.0", () => {
     console.log(`App server listening on port ${port}`);
   });
 } else {
-  module.exports = app;
+  console.log("saypi-userscript/server.js is being imported");
 }

@@ -1,6 +1,6 @@
 import { interpret } from "xstate";
-import { machine } from "./state-machines/SayPiMachine";
-import { logger, serializeStateValue } from "./LoggingModule";
+import { machine } from "./state-machines/SayPiMachine.ts";
+import { logger, serializeStateValue } from "./LoggingModule.js";
 
 /**
  * A singleton service that manages the state machine.
