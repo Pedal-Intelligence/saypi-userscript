@@ -8,11 +8,14 @@ import "./styles/desktop.scss";
 import "./styles/mobile.scss";
 import "./styles/rectangles.css";
 
-(function () {
+(async function () {
   "use strict";
 
-  const pageScript =
-    require("raw-loader!../public/audioModule.bundle.js").default;
+  const audioModule = await import(
+    "!!raw-loader!../public/audioModule.bundle.js"
+  );
+  const pageScript = audioModule.default;
+
   addUserAgentFlags();
   EventModule.init();
   setupEventBus();

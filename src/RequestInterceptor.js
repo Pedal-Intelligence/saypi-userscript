@@ -1,4 +1,4 @@
-import { config } from "./ConfigModule";
+import { config } from "./ConfigModule.js";
 
 const filesToRedirect = [
   "silero_vad.onnx",
