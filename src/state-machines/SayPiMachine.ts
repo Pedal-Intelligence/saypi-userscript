@@ -535,7 +535,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
 
         console.log(
           "Waiting for",
-          finalDelay / 1000,
+          (finalDelay / 1000).toFixed(1),
           "seconds before submitting"
         );
 
