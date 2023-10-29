@@ -25,15 +25,17 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/", express.static(path.join(import.meta.url, "public")));
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
+app.use("/", express.static(path.join(__dirname, "public")));
 
 if (!isProduction) {
   const privateKey = fs.readFileSync(
-    path.join(import.meta.url, "certificates/localhost-key.pem"),
+    path.join(__dirname, "certificates/localhost-key.pem"),
     "utf8"
   );
   const certificate = fs.readFileSync(
-    path.join(import.meta.url, "certificates/localhost.pem"),
+    path.join(__dirname, "certificates/localhost.pem"),
     "utf8"
   );
 
@@ -43,9 +45,11 @@ if (!isProduction) {
   server = http.createServer(app);
 }
 
-if (import.meta.main) {
+if (import.meta.url.endsWith("/server.js")) {
   const port = process.env.PORT || (isProduction ? 80 : 4443);
   server.listen(port, "0.0.0.0", () => {
     console.log(`App server listening on port ${port}`);
   });
+} else {
+  console.log("saypi-userscript/server.js is being imported");
 }

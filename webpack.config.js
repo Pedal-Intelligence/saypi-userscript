@@ -79,6 +79,10 @@ export default (env) => {
           use: "ts-loader",
           exclude: /node_modules/,
         },
+        {
+          test: /audioModule\.bundle\.js$/,
+          use: "raw-loader",
+        },
       ],
     },
     resolve: {
