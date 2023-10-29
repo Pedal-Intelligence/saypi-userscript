@@ -3,6 +3,8 @@
   "version": "1.2.3",
   "type": "module",
   "scripts": {
+    "build": "webpack --mode production",
+    "dev": "webpack --mode development --watch",
     "start": "node server.js",
     "test": "mocha test.js"
   },

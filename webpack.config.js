@@ -14,9 +14,12 @@ const metadata = fs.readFileSync(
   "utf8"
 );
 
-export default (env) => {
+export default (env, argv) => {
+  // Determine if it's production mode
+  const isProduction = argv.mode === "production";
+
   // Use the dotenv package to load environment variables from .env or .env.production file
-  const envFile = env && env.production ? ".env.production" : ".env";
+  const envFile = isProduction ? ".env.production" : ".env";
   const envVariables = dotenv.config({ path: envFile }).parsed;
 
   // Reduce it to a nice object
@@ -26,8 +29,8 @@ export default (env) => {
   }, {});
 
   return {
-    mode: "development",
-    devtool: "inline-source-map",
+    mode: isProduction ? "production" : "development",
+    devtool: isProduction ? "source-map" : "inline-source-map",
     entry: {
       main: "./src/saypi.index.js",
       audioModule: "./src/AudioModule.js",
@@ -87,6 +90,9 @@ export default (env) => {
     },
     resolve: {
       extensions: [".tsx", ".ts", ".js"],
+    },
+    optimization: {
+      minimize: false, // Prevents minification in production mode
     },
     plugins: [
       new webpack.BannerPlugin({
