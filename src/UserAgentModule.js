@@ -1,4 +1,4 @@
-import { appendChild } from "./DOMModule";
+import { appendChild } from "./DOMModule.ts";
 
 export function isMobileDevice() {
   return (

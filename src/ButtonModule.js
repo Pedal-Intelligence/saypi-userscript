@@ -2,11 +2,11 @@ import {
   enterMobileMode,
   exitMobileMode,
   isMobileView,
-} from "./UserAgentModule";
-import { appendChild } from "./DOMModule";
-import EventBus from "./EventBus";
+} from "./UserAgentModule.js";
+import { appendChild } from "./DOMModule.ts";
+import EventBus from "./EventBus.js";
 import StateMachineService from "./StateMachineService.js";
-import { submitErrorHandler } from "./SubmitErrorHandler";
+import { submitErrorHandler } from "./SubmitErrorHandler.ts";
 import exitIconSVG from "./icons/exit.svg";
 import maximizeIconSVG from "./icons/maximize.svg";
 import rectanglesSVG from "./icons/rectangles.svg";

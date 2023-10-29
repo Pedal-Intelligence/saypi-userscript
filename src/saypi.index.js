@@ -1,8 +1,8 @@
-import { buttonModule } from "./ButtonModule";
+import { buttonModule } from "./ButtonModule.js";
 import EventBus from "./EventBus.js";
 import EventModule from "./EventModule.js";
 import { addUserAgentFlags, initMode } from "./UserAgentModule.js";
-import { submitErrorHandler } from "./SubmitErrorHandler";
+import { submitErrorHandler } from "./SubmitErrorHandler.ts";
 import "./styles/common.scss";
 import "./styles/desktop.scss";
 import "./styles/mobile.scss";
