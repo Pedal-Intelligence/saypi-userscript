@@ -1,7 +1,7 @@
-import { buttonModule } from "../ButtonModule";
+import { buttonModule } from "../ButtonModule.js";
 import { createMachine, Typestate, assign } from "xstate";
-import AnimationModule from "../AnimationModule";
-import { isMobileView } from "../UserAgentModule";
+import AnimationModule from "../AnimationModule.js";
+import { isMobileView } from "../UserAgentModule.js";
 import {
   uploadAudioWithRetry,
   setPromptText,

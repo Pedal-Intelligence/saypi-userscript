@@ -1,9 +1,9 @@
-import { config } from "./ConfigModule";
-import StateMachineService from "./StateMachineService";
-import { isMobileView } from "./UserAgentModule";
-import EventBus from "./EventBus";
-import EventModule from "./EventModule";
-import { logger } from "./LoggingModule";
+import { config } from "./ConfigModule.js";
+import StateMachineService from "./StateMachineService.js";
+import { isMobileView } from "./UserAgentModule.js";
+import EventBus from "./EventBus.js";
+import EventModule from "./EventModule.js";
+import { logger } from "./LoggingModule.js";
 
 // Define the shape of the response JSON object
 interface TranscriptionResponse {
