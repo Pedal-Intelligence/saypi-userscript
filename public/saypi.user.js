@@ -1,8 +1,10 @@
 // ==UserScript==
 // @name         Say, Pi
+// @name:zh-CN   说，Pi 
 // @namespace    http://www.saypi.ai/
-// @version      1.4.6
+// @version      1.4.7
 // @description  Speak to Pi with accurate, hands-free conversations powered by OpenAI's Whisper
+// @description:zh-CN  使用OpenAI的Whisper与Pi对话
 // @author       Ross Cadogan
 // @match        https://pi.ai/talk
 // @inject-into  page
@@ -1610,7 +1612,7 @@ function clearPendingTranscriptions() {
     sequenceNumsPendingTranscription.clear();
 }
 exports.clearPendingTranscriptions = clearPendingTranscriptions;
-function uploadAudioWithRetry(audioBlob, audioDurationMillis, maxRetries = 3) {
+function uploadAudioWithRetry(audioBlob, audioDurationMillis, precedingTranscripts = {}, maxRetries = 3) {
     return __awaiter(this, void 0, void 0, function* () {
         let retryCount = 0;
         let delay = 1000; // initial delay of 1 second
@@ -1618,7 +1620,7 @@ function uploadAudioWithRetry(audioBlob, audioDurationMillis, maxRetries = 3) {
         while (retryCount < maxRetries) {
             try {
                 transcriptionSent();
-                yield uploadAudio(audioBlob, audioDurationMillis);
+                yield uploadAudio(audioBlob, audioDurationMillis, precedingTranscripts);
                 return;
             }
             catch (error) {
@@ -1647,10 +1649,17 @@ function uploadAudioWithRetry(audioBlob, audioDurationMillis, maxRetries = 3) {
     });
 }
 exports.uploadAudioWithRetry = uploadAudioWithRetry;
-function uploadAudio(audioBlob, audioDurationMillis) {
+function uploadAudio(audioBlob, audioDurationMillis, precedingTranscripts = {}) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const formData = constructTranscriptionFormData(audioBlob);
+            const messages = Object.entries(precedingTranscripts).map(([seq, content]) => {
+                return {
+                    role: "user",
+                    content: content,
+                    sequenceNumber: Number(seq), // Convert the string to a number
+                };
+            });
+            const formData = constructTranscriptionFormData(audioBlob, messages);
             const language = navigator.language;
             const controller = new AbortController();
             const { signal } = controller;
@@ -1705,7 +1714,7 @@ function uploadAudio(audioBlob, audioDurationMillis) {
         }
     });
 }
-function constructTranscriptionFormData(audioBlob) {
+function constructTranscriptionFormData(audioBlob, messages) {
     const formData = new FormData();
     let audioFilename = "audio.webm";
     if (audioBlob.type === "audio/mp4") {
@@ -1718,6 +1727,7 @@ function constructTranscriptionFormData(audioBlob) {
     // Add the audio blob to the FormData object
     formData.append("audio", audioBlob, audioFilename);
     formData.append("sequenceNumber", sequenceNum.toString());
+    formData.append("messages", JSON.stringify(messages));
     return formData;
 }
 function setPromptText(transcript) {
@@ -2075,7 +2085,7 @@ exports.machine = (0, xstate_1.createMachine)({
         },
         transcribeAudio: (context, event) => {
             const audioBlob = event.blob;
-            (0, TranscriptionModule_1.uploadAudioWithRetry)(audioBlob, event.duration);
+            (0, TranscriptionModule_1.uploadAudioWithRetry)(audioBlob, event.duration, context.transcriptions);
         },
         handleTranscriptionResponse: (SayPiContext, event) => {
             console.log("handleTranscriptionResponse", event);
@@ -2172,7 +2182,7 @@ exports.machine = (0, xstate_1.createMachine)({
             const initialDelay = (1 - probability) * maxDelay;
             // Calculate the final delay after accounting for the time already elapsed
             const finalDelay = Math.max(initialDelay - timeElapsed, 0);
-            console.log("Waiting for", finalDelay / 1000, "seconds before submitting");
+            console.log("Waiting for", (finalDelay / 1000).toFixed(1), "seconds before submitting");
             return finalDelay;
         },
     },

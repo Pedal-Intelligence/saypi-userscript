@@ -75,6 +75,7 @@ export function clearPendingTranscriptions(): void {
 export async function uploadAudioWithRetry(
   audioBlob: Blob,
   audioDurationMillis: number,
+  precedingTranscripts: Record<number, string> = {},
   maxRetries: number = 3
 ): Promise<void> {
   let retryCount = 0;
@@ -86,7 +87,7 @@ export async function uploadAudioWithRetry(
   while (retryCount < maxRetries) {
     try {
       transcriptionSent();
-      await uploadAudio(audioBlob, audioDurationMillis);
+      await uploadAudio(audioBlob, audioDurationMillis, precedingTranscripts);
       return;
     } catch (error) {
       // check for timeout errors (30s on Heroku)
@@ -123,10 +124,21 @@ export async function uploadAudioWithRetry(
 
 async function uploadAudio(
   audioBlob: Blob,
-  audioDurationMillis: number
+  audioDurationMillis: number,
+  precedingTranscripts: Record<number, string> = {}
 ): Promise<void> {
   try {
-    const formData = constructTranscriptionFormData(audioBlob);
+    const messages = Object.entries(precedingTranscripts).map(
+      ([seq, content]) => {
+        return {
+          role: "user",
+          content: content,
+          sequenceNumber: Number(seq), // Convert the string to a number
+        };
+      }
+    );
+
+    const formData = constructTranscriptionFormData(audioBlob, messages);
     const language = navigator.language;
 
     const controller = new AbortController();
@@ -194,7 +206,10 @@ async function uploadAudio(
   }
 }
 
-function constructTranscriptionFormData(audioBlob: Blob) {
+function constructTranscriptionFormData(
+  audioBlob: Blob,
+  messages: { role: string; content: string; sequenceNumber?: number }[]
+) {
   const formData = new FormData();
   let audioFilename = "audio.webm";
 
@@ -213,6 +228,7 @@ function constructTranscriptionFormData(audioBlob: Blob) {
   // Add the audio blob to the FormData object
   formData.append("audio", audioBlob, audioFilename);
   formData.append("sequenceNumber", sequenceNum.toString());
+  formData.append("messages", JSON.stringify(messages));
   return formData;
 }
 

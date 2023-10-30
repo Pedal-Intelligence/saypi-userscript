@@ -399,7 +399,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
 
       transcribeAudio: (
-        context,
+        context: SayPiContext,
         event: {
           type: "saypi:userStoppedSpeaking";
           duration: number;
@@ -407,7 +407,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         }
       ) => {
         const audioBlob = event.blob;
-        uploadAudioWithRetry(audioBlob, event.duration);
+        uploadAudioWithRetry(audioBlob, event.duration, context.transcriptions);
       },
 
       handleTranscriptionResponse: (
@@ -535,7 +535,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
 
         console.log(
           "Waiting for",
-          finalDelay / 1000,
+          (finalDelay / 1000).toFixed(1),
           "seconds before submitting"
         );
 
