@@ -224,7 +224,6 @@ function constructTranscriptionFormData(
       audioBlob.size / 1024
     ).toFixed(2)}kb`
   );
-  console.log(`Providing ${messages.length} preceding messages as context`);
 
   // Add the audio blob to the FormData object
   formData.append("audio", audioBlob, audioFilename);

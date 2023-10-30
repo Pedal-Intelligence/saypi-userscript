@@ -1724,7 +1724,6 @@ function constructTranscriptionFormData(audioBlob, messages) {
         audioFilename = "audio.wav";
     }
     LoggingModule_js_1.logger.info(`Transcribing audio Blob with MIME type: ${audioBlob.type}, size: ${(audioBlob.size / 1024).toFixed(2)}kb`);
-    console.log(`Providing ${messages.length} preceding messages as context`);
     // Add the audio blob to the FormData object
     formData.append("audio", audioBlob, audioFilename);
     formData.append("sequenceNumber", sequenceNum.toString());
