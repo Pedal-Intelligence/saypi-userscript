@@ -80,6 +80,8 @@ function getHighestKey(transcriptions: Record<number, string>): number {
   );
   return highestKey;
 }
+// time at which the user's prompt is scheduled to be submitted
+var nextSubmissionTime = Date.now();
 
 /* external actions */
 const clearTranscripts = assign({
@@ -260,13 +262,23 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               accumulating: {
                 description:
                   "Accumulating and assembling audio transcriptions into a cohesive prompt.\nSubmits a prompt when a threshold is reached.",
+                after: {
+                  submissionDelay: {
+                    target: "submitting",
+                    cond: "submissionConditionsMet",
+                    description: "Submit combined transcript to Pi.",
+                  },
+                },
                 invoke: {
                   id: "mergeOptimistic",
                   src: (context: SayPiContext, event: SayPiEvent) => {
                     // Check if there are two or more transcripts to merge
                     if (Object.keys(context.transcriptions).length > 1) {
                       // This function should return a Promise that resolves with the merged transcript string
-                      return mergeTranscriptsRemote(context.transcriptions);
+                      return mergeTranscriptsRemote(
+                        context.transcriptions,
+                        nextSubmissionTime
+                      );
                     } else {
                       // If there's one or no transcripts to merge, return a resolved Promise with the existing transcript string or an empty string
                       const existingTranscriptKeys = Object.keys(
@@ -299,26 +311,17 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
 
                           // Use the highest key for the merged transcript
                           const nextKey = getHighestKey(context.transcriptions);
-                          return { [nextKey]: event.data };
-                        },
-                      }),
-                      log(
-                        (
-                          context: SayPiContext,
-                          event: DoneInvokeEvent<string>
-                        ) => {
                           const originalKeys = Object.keys(
                             context.transcriptions
                           );
                           if (originalKeys.length > 1) {
-                            return `Merged transcript accepted: ${originalKeys} into ${getHighestKey(
-                              context.transcriptions
-                            )}`;
-                          } else {
-                            return ""; // No transcripts to merge
+                            console.log(
+                              `Merge accepted: ${originalKeys} into ${nextKey} - ${event.data}`
+                            );
                           }
-                        }
-                      ),
+                          return { [nextKey]: event.data };
+                        },
+                      }),
                     ],
                   },
 
@@ -326,13 +329,6 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     actions: log(
                       "Merge request did not complete, and will be ignored"
                     ),
-                  },
-                },
-                after: {
-                  submissionDelay: {
-                    target: "submitting",
-                    cond: "submissionConditionsMet",
-                    description: "Submit combined transcript to Pi.",
                   },
                 },
                 on: {
@@ -616,6 +612,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           (finalDelay / 1000).toFixed(1),
           "seconds before submitting"
         );
+        nextSubmissionTime = currentTime + finalDelay;
 
         return finalDelay;
       },

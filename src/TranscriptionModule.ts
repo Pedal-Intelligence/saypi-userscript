@@ -274,7 +274,8 @@ export function mergeTranscriptsLocal(
 }
 
 export function mergeTranscriptsRemote(
-  transcripts: Record<number, string>
+  transcripts: Record<number, string>,
+  cutoffTime: number
 ): Promise<string> {
   // First, check if the sequence numbers are continuous
   const keys = Object.keys(transcripts)
@@ -284,9 +285,12 @@ export function mergeTranscriptsRemote(
     // If it's the first element or keys are continuous
     return index === 0 || value === array[index - 1] + 1;
   });
+  // milliseconds until cutoff time
+  const timeRemaining = cutoffTime - Date.now();
+  const averageResponseTime = 2000; //2 seconds
 
-  // Only proceed if we have a continuous sequence and more than one transcript
-  if (isContinuous && keys.length > 1) {
+  // Only proceed if we have a continuous sequence and more than one transcript, and there is enough time remaining
+  if (isContinuous && keys.length > 1 && timeRemaining > averageResponseTime) {
     return fetch(`${config.apiServerUrl}/merge`, {
       method: "POST",
       headers: {
