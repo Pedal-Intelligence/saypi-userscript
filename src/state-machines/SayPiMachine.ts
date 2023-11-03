@@ -1,5 +1,5 @@
 import { buttonModule } from "../ButtonModule.js";
-import { createMachine, Typestate, assign } from "xstate";
+import { createMachine, Typestate, assign, log, DoneInvokeEvent } from "xstate";
 import AnimationModule from "../AnimationModule.js";
 import { isMobileView } from "../UserAgentModule.js";
 import {
@@ -7,7 +7,8 @@ import {
   setPromptText,
   isTranscriptionPending,
   clearPendingTranscriptions,
-  mergeTranscripts,
+  mergeTranscriptsLocal,
+  mergeTranscriptsRemote,
 } from "../TranscriptionModule";
 import EventBus from "../EventBus";
 
@@ -250,6 +251,71 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               accumulating: {
                 description:
                   "Accumulating and assembling audio transcriptions into a cohesive prompt.\nSubmits a prompt when a threshold is reached.",
+                invoke: {
+                  id: "mergeOptimistic",
+                  src: (context: SayPiContext, event: SayPiEvent) => {
+                    console.log("mergeOptimistic", context.transcriptions);
+                    // Check if there are two or more transcripts to merge
+                    if (Object.keys(context.transcriptions).length > 1) {
+                      // This function should return a Promise that resolves with the merged transcript string
+                      return mergeTranscriptsRemote(context.transcriptions);
+                    } else {
+                      // If there's one or no transcripts to merge, return a resolved Promise with the existing transcript string or an empty string
+                      const existingTranscriptKeys = Object.keys(
+                        context.transcriptions
+                      );
+                      if (existingTranscriptKeys.length === 1) {
+                        const key = existingTranscriptKeys[0];
+                        return Promise.resolve(
+                          context.transcriptions[Number(key)]
+                        );
+                      } else {
+                        return Promise.resolve(""); // No transcripts to merge
+                      }
+                    }
+                  },
+
+                  onDone: {
+                    target: "accumulating",
+                    internal: true,
+                    actions: assign({
+                      transcriptions: (
+                        context: SayPiContext,
+                        event: DoneInvokeEvent<string>
+                      ) => {
+                        console.log("mergeOptimistic.onDone", event.data);
+                        // If the event.data is empty, just return the current context.transcriptions
+                        if (!event.data) {
+                          console.log(
+                            "mergeOptimistic.onDone: empty",
+                            context.transcriptions
+                          );
+                          return context.transcriptions;
+                        }
+
+                        // Find the highest existing key in the transcriptions
+                        const highestKey = Object.keys(
+                          context.transcriptions
+                        ).reduce(
+                          (max, key) => Math.max(max, parseInt(key, 10)),
+                          -1
+                        );
+                        // Use the highest key for the merged transcript
+                        const nextKey = highestKey;
+                        console.log("mergeOptimistic.onDone: merging", {
+                          [nextKey]: event.data,
+                        });
+                        return { [nextKey]: event.data };
+                      },
+                    }),
+                  },
+
+                  onError: {
+                    actions: log(
+                      "Merge request did not complete, and will be ignored"
+                    ),
+                  },
+                },
                 after: {
                   submissionDelay: {
                     target: "submitting",
@@ -452,7 +518,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
 
       mergeAndSubmitTranscript: (context) => {
-        const prompt = mergeTranscripts(context.transcriptions).trim();
+        const prompt = mergeTranscriptsLocal(context.transcriptions).trim();
         if (prompt) setPromptText(prompt);
       },
 
