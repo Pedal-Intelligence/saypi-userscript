@@ -6,16 +6,18 @@ html.mobile-view {
     left: 0;
     background-color: rgba(245, 238, 223, 0.98);
 
-    height: 100vh;
+    height: 100svh;
     top: 0;
   }
 
   #saypi-talkButton {
-    width: 100%;
-    height: 100%;
     background-color: transparent;
     border-radius: 0;
     margin: 0;
+    svg {
+      width: 100vw;
+      height: 100svh;
+    }
   }
 
   #saypi-notification {
@@ -32,6 +34,11 @@ html.mobile-view {
   #__next > main > div > div > div.fixed.top-4.right-6 > button,
   #saypi-experiences-button {
     transform: scale(1.5);
+  }
+
+  /* hide an ugly artifact */
+  div.bg-gradient-to-b {
+    display: none;
   }
 
   /* Pi controls: mute/unmute */
