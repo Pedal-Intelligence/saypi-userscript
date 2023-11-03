@@ -72,6 +72,15 @@ interface SayPiTypestate extends Typestate<SayPiContext> {
   context: SayPiContext;
 }
 
+function getHighestKey(transcriptions: Record<number, string>): number {
+  // Find the highest existing key in the transcriptions
+  const highestKey = Object.keys(transcriptions).reduce(
+    (max, key) => Math.max(max, parseInt(key, 10)),
+    -1
+  );
+  return highestKey;
+}
+
 /* external actions */
 const clearTranscripts = assign({
   transcriptions: () => ({}),
@@ -254,7 +263,6 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 invoke: {
                   id: "mergeOptimistic",
                   src: (context: SayPiContext, event: SayPiEvent) => {
-                    console.log("mergeOptimistic", context.transcriptions);
                     // Check if there are two or more transcripts to merge
                     if (Object.keys(context.transcriptions).length > 1) {
                       // This function should return a Promise that resolves with the merged transcript string
@@ -278,36 +286,40 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   onDone: {
                     target: "accumulating",
                     internal: true,
-                    actions: assign({
-                      transcriptions: (
-                        context: SayPiContext,
-                        event: DoneInvokeEvent<string>
-                      ) => {
-                        console.log("mergeOptimistic.onDone", event.data);
-                        // If the event.data is empty, just return the current context.transcriptions
-                        if (!event.data) {
-                          console.log(
-                            "mergeOptimistic.onDone: empty",
+                    actions: [
+                      assign({
+                        transcriptions: (
+                          context: SayPiContext,
+                          event: DoneInvokeEvent<string>
+                        ) => {
+                          // If the event.data is empty, just return the current context.transcriptions
+                          if (!event.data) {
+                            return context.transcriptions;
+                          }
+
+                          // Use the highest key for the merged transcript
+                          const nextKey = getHighestKey(context.transcriptions);
+                          return { [nextKey]: event.data };
+                        },
+                      }),
+                      log(
+                        (
+                          context: SayPiContext,
+                          event: DoneInvokeEvent<string>
+                        ) => {
+                          const originalKeys = Object.keys(
                             context.transcriptions
                           );
-                          return context.transcriptions;
+                          if (originalKeys.length > 1) {
+                            return `Merged transcript accepted: ${originalKeys} into ${getHighestKey(
+                              context.transcriptions
+                            )}`;
+                          } else {
+                            return ""; // No transcripts to merge
+                          }
                         }
-
-                        // Find the highest existing key in the transcriptions
-                        const highestKey = Object.keys(
-                          context.transcriptions
-                        ).reduce(
-                          (max, key) => Math.max(max, parseInt(key, 10)),
-                          -1
-                        );
-                        // Use the highest key for the merged transcript
-                        const nextKey = highestKey;
-                        console.log("mergeOptimistic.onDone: merging", {
-                          [nextKey]: event.data,
-                        });
-                        return { [nextKey]: event.data };
-                      },
-                    }),
+                      ),
+                    ],
                   },
 
                   onError: {

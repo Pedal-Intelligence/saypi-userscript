@@ -233,7 +233,7 @@ function constructTranscriptionFormData(
 }
 
 export function setPromptText(transcript: string): void {
-  logger.info(`Merged transcript: ${transcript}`);
+  logger.info(`Final transcript: ${transcript}`);
   const textarea = document.getElementById(
     "saypi-prompt"
   ) as HTMLTextAreaElement;
@@ -304,14 +304,11 @@ export function mergeTranscriptsRemote(
         return response.json();
       })
       .then((data) => {
-        console.log("Merged transcript:", data.combined_transcript);
+        console.log(`Merged transcripts ${keys}`);
         return data.combined_transcript; // Return the merged transcript
       });
   } else {
     // If the sequence is not continuous, resolve with an empty string
-    console.log(
-      "Transcript sequence is not continuous or insufficient to merge."
-    );
     return Promise.resolve("");
   }
 }
