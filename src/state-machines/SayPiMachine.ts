@@ -12,11 +12,25 @@ import {
 } from "../TranscriptionModule";
 import EventBus from "../EventBus";
 
+type SayPiTranscribedEvent = {
+  type: "saypi:transcribed";
+  text: string;
+  sequenceNumber: number;
+  pFinishedSpeaking?: number;
+  tempo?: number;
+};
+
+type SayPiSpeechStoppedEvent = {
+  type: "saypi:userStoppedSpeaking";
+  duration: number;
+  blob?: Blob;
+};
+
 type SayPiEvent =
   | { type: "saypi:userSpeaking" }
-  | { type: "saypi:userStoppedSpeaking"; duration: number; blob?: Blob }
+  | SayPiSpeechStoppedEvent
   | { type: "saypi:userFinishedSpeaking" }
-  | { type: "saypi:transcribed"; text: string; pFinishedSpeaking?: number }
+  | SayPiTranscribedEvent
   | { type: "saypi:transcribeFailed" }
   | { type: "saypi:transcribedEmpty" }
   | { type: "saypi:piSpeaking" }
@@ -81,7 +95,35 @@ function getHighestKey(transcriptions: Record<number, string>): number {
   return highestKey;
 }
 // time at which the user's prompt is scheduled to be submitted
+// used to judge whether there's time for another remote operation (i.e. merge request)
 var nextSubmissionTime = Date.now();
+
+/* helper functions */
+export function calculateDelay(
+  timeUserStoppedSpeaking: number,
+  probabilityFinished: number,
+  tempo: number,
+  maxDelay: number
+): number {
+  // Get the current time (in milliseconds)
+  const currentTime = new Date().getTime();
+
+  // Calculate the time elapsed since the user stopped speaking (in milliseconds)
+  const timeElapsed = currentTime - timeUserStoppedSpeaking;
+
+  // We invert the tempo because a faster speech (tempo approaching 1) should reduce the delay
+  let tempoFactor = 1 - tempo;
+
+  // Calculate the combined probability factor
+  let combinedProbability = probabilityFinished * tempoFactor;
+
+  // The combined factor influences the initial delay
+  const initialDelay = combinedProbability * maxDelay;
+
+  // Calculate the final delay after accounting for the time already elapsed
+  const finalDelay = Math.max(initialDelay - timeElapsed, 0);
+  return finalDelay;
+}
 
 /* external actions */
 const clearTranscripts = assign({
@@ -474,24 +516,21 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
 
       transcribeAudio: (
         context: SayPiContext,
-        event: {
-          type: "saypi:userStoppedSpeaking";
-          duration: number;
-          blob: Blob;
-        }
+        event: SayPiSpeechStoppedEvent
       ) => {
         const audioBlob = event.blob;
-        uploadAudioWithRetry(audioBlob, event.duration, context.transcriptions);
+        if (audioBlob) {
+          uploadAudioWithRetry(
+            audioBlob,
+            event.duration,
+            context.transcriptions
+          );
+        }
       },
 
       handleTranscriptionResponse: (
         SayPiContext,
-        event: {
-          type: "saypi:transcribed";
-          text: string;
-          sequenceNumber: number;
-          pFinishedSpeaking?: number;
-        }
+        event: SayPiTranscribedEvent
       ) => {
         console.log("handleTranscriptionResponse", event);
         const transcription = event.text;
@@ -547,12 +586,14 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
     guards: {
       hasAudio: (context: SayPiContext, event: SayPiEvent) => {
         if (event.type === "saypi:userStoppedSpeaking") {
+          event = event as SayPiSpeechStoppedEvent;
           return event.blob !== undefined && event.duration > 0;
         }
         return false;
       },
       hasNoAudio: (context: SayPiContext, event: SayPiEvent) => {
         if (event.type === "saypi:userStoppedSpeaking") {
+          event = event as SayPiSpeechStoppedEvent;
           return (
             event.blob === undefined ||
             event.blob.size === 0 ||
@@ -585,33 +626,39 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
     },
     delays: {
       submissionDelay: (context: SayPiContext, event: SayPiEvent) => {
+        // check if the event is a transcription event
         if (event.type !== "saypi:transcribed") {
           return 0;
+        } else {
+          event = event as SayPiTranscribedEvent;
         }
 
         const maxDelay = 10000; // 10 seconds in milliseconds
 
-        // Get the current time (in milliseconds)
-        const currentTime = new Date().getTime();
-
-        // Calculate the time elapsed since the user stopped speaking (in milliseconds)
-        const timeElapsed = currentTime - context.timeUserStoppedSpeaking;
-
         // Calculate the initial delay based on pFinishedSpeaking
-        let probability = 1;
+        let probabilityFinished = 1;
         if (event.pFinishedSpeaking !== undefined) {
-          probability = event.pFinishedSpeaking;
+          probabilityFinished = event.pFinishedSpeaking;
         }
-        const initialDelay = (1 - probability) * maxDelay;
 
-        // Calculate the final delay after accounting for the time already elapsed
-        const finalDelay = Math.max(initialDelay - timeElapsed, 0);
+        // Incorporate the tempo into the delay, defaulting to 0.5 (average tempo) if undefined
+        let tempo = event.tempo !== undefined ? event.tempo : 0.5;
+
+        const finalDelay = calculateDelay(
+          context.timeUserStoppedSpeaking,
+          probabilityFinished,
+          tempo,
+          maxDelay
+        );
 
         console.log(
           "Waiting for",
           (finalDelay / 1000).toFixed(1),
           "seconds before submitting"
         );
+
+        // Get the current time (in milliseconds)
+        const currentTime = new Date().getTime();
         nextSubmissionTime = currentTime + finalDelay;
 
         return finalDelay;

@@ -10,6 +10,7 @@ interface TranscriptionResponse {
   text: string;
   sequenceNumber: number;
   pFinishedSpeaking?: number;
+  tempo?: number;
 }
 
 const knownNetworkErrorMessages = [
@@ -138,7 +139,11 @@ async function uploadAudio(
       }
     );
 
-    const formData = constructTranscriptionFormData(audioBlob, messages);
+    const formData = constructTranscriptionFormData(
+      audioBlob,
+      audioDurationMillis / 1000,
+      messages
+    );
     const language = navigator.language;
 
     const controller = new AbortController();
@@ -173,8 +178,11 @@ async function uploadAudio(
       text: transcript,
       sequenceNumber: seq,
     };
-    if (responseJson.pFinishedSpeaking) {
+    if (responseJson.hasOwnProperty("pFinishedSpeaking")) {
       payload.pFinishedSpeaking = responseJson.pFinishedSpeaking;
+    }
+    if (responseJson.hasOwnProperty("tempo")) {
+      payload.tempo = responseJson.tempo;
     }
 
     logger.info(
@@ -208,6 +216,7 @@ async function uploadAudio(
 
 function constructTranscriptionFormData(
   audioBlob: Blob,
+  audioDurationSeconds: number,
   messages: { role: string; content: string; sequenceNumber?: number }[]
 ) {
   const formData = new FormData();
@@ -227,6 +236,7 @@ function constructTranscriptionFormData(
 
   // Add the audio blob to the FormData object
   formData.append("audio", audioBlob, audioFilename);
+  formData.append("duration", audioDurationSeconds.toString());
   formData.append("sequenceNumber", sequenceNum.toString());
   formData.append("messages", JSON.stringify(messages));
   return formData;
