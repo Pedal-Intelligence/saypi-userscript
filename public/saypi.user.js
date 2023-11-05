@@ -2,7 +2,7 @@
 // @name         Say, Pi
 // @name:zh-CN   说，Pi 
 // @namespace    http://www.saypi.ai/
-// @version      1.4.7
+// @version      1.4.8
 // @description  Speak to Pi with accurate, hands-free conversations powered by OpenAI's Whisper
 // @description:zh-CN  使用OpenAI的Whisper与Pi对话
 // @author       Ross Cadogan
@@ -1659,7 +1659,7 @@ function uploadAudio(audioBlob, audioDurationMillis, precedingTranscripts = {}) 
                     sequenceNumber: Number(seq), // Convert the string to a number
                 };
             });
-            const formData = constructTranscriptionFormData(audioBlob, messages);
+            const formData = constructTranscriptionFormData(audioBlob, audioDurationMillis / 1000, messages);
             const language = navigator.language;
             const controller = new AbortController();
             const { signal } = controller;
@@ -1686,8 +1686,11 @@ function uploadAudio(audioBlob, audioDurationMillis, precedingTranscripts = {}) 
                 text: transcript,
                 sequenceNumber: seq,
             };
-            if (responseJson.pFinishedSpeaking) {
+            if (responseJson.hasOwnProperty("pFinishedSpeaking")) {
                 payload.pFinishedSpeaking = responseJson.pFinishedSpeaking;
+            }
+            if (responseJson.hasOwnProperty("tempo")) {
+                payload.tempo = responseJson.tempo;
             }
             LoggingModule_js_1.logger.info(`Transcribed ${Math.round(audioDurationMillis / 1000)}s of audio into ${wc} words in ${Math.round(transcriptionDurationMillis / 1000)}s`);
             if (responseJson.text.length === 0) {
@@ -1714,7 +1717,7 @@ function uploadAudio(audioBlob, audioDurationMillis, precedingTranscripts = {}) 
         }
     });
 }
-function constructTranscriptionFormData(audioBlob, messages) {
+function constructTranscriptionFormData(audioBlob, audioDurationSeconds, messages) {
     const formData = new FormData();
     let audioFilename = "audio.webm";
     if (audioBlob.type === "audio/mp4") {
@@ -1726,6 +1729,7 @@ function constructTranscriptionFormData(audioBlob, messages) {
     LoggingModule_js_1.logger.info(`Transcribing audio Blob with MIME type: ${audioBlob.type}, size: ${(audioBlob.size / 1024).toFixed(2)}kb`);
     // Add the audio blob to the FormData object
     formData.append("audio", audioBlob, audioFilename);
+    formData.append("duration", audioDurationSeconds.toString());
     formData.append("sequenceNumber", sequenceNum.toString());
     formData.append("messages", JSON.stringify(messages));
     return formData;
@@ -1770,13 +1774,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.machine = void 0;
+exports.machine = exports.calculateDelay = void 0;
 const ButtonModule_js_1 = __webpack_require__(6601);
 const xstate_1 = __webpack_require__(4679);
 const AnimationModule_js_1 = __importDefault(__webpack_require__(9744));
 const UserAgentModule_js_1 = __webpack_require__(4008);
 const TranscriptionModule_1 = __webpack_require__(8673);
 const EventBus_1 = __importDefault(__webpack_require__(7635));
+/* helper functions */
+function calculateDelay(timeUserStoppedSpeaking, probabilityFinished, tempo, maxDelay) {
+    // Get the current time (in milliseconds)
+    const currentTime = new Date().getTime();
+    // Calculate the time elapsed since the user stopped speaking (in milliseconds)
+    const timeElapsed = currentTime - timeUserStoppedSpeaking;
+    // We invert the tempo because a faster speech (tempo approaching 1) should reduce the delay
+    let tempoFactor = 1 - tempo;
+    // Calculate the combined probability factor
+    let combinedProbability = probabilityFinished * tempoFactor;
+    // The combined factor influences the initial delay
+    const initialDelay = combinedProbability * maxDelay;
+    // Calculate the final delay after accounting for the time already elapsed
+    const finalDelay = Math.max(initialDelay - timeElapsed, 0);
+    return finalDelay;
+}
+exports.calculateDelay = calculateDelay;
 /* external actions */
 const clearTranscripts = (0, xstate_1.assign)({
     transcriptions: () => ({}),
@@ -2085,7 +2106,9 @@ exports.machine = (0, xstate_1.createMachine)({
         },
         transcribeAudio: (context, event) => {
             const audioBlob = event.blob;
-            (0, TranscriptionModule_1.uploadAudioWithRetry)(audioBlob, event.duration, context.transcriptions);
+            if (audioBlob) {
+                (0, TranscriptionModule_1.uploadAudioWithRetry)(audioBlob, event.duration, context.transcriptions);
+            }
         },
         handleTranscriptionResponse: (SayPiContext, event) => {
             console.log("handleTranscriptionResponse", event);
@@ -2136,12 +2159,14 @@ exports.machine = (0, xstate_1.createMachine)({
     guards: {
         hasAudio: (context, event) => {
             if (event.type === "saypi:userStoppedSpeaking") {
+                event = event;
                 return event.blob !== undefined && event.duration > 0;
             }
             return false;
         },
         hasNoAudio: (context, event) => {
             if (event.type === "saypi:userStoppedSpeaking") {
+                event = event;
                 return (event.blob === undefined ||
                     event.blob.size === 0 ||
                     event.duration === 0);
@@ -2166,22 +2191,22 @@ exports.machine = (0, xstate_1.createMachine)({
     },
     delays: {
         submissionDelay: (context, event) => {
+            // check if the event is a transcription event
             if (event.type !== "saypi:transcribed") {
                 return 0;
             }
-            const maxDelay = 10000; // 10 seconds in milliseconds
-            // Get the current time (in milliseconds)
-            const currentTime = new Date().getTime();
-            // Calculate the time elapsed since the user stopped speaking (in milliseconds)
-            const timeElapsed = currentTime - context.timeUserStoppedSpeaking;
-            // Calculate the initial delay based on pFinishedSpeaking
-            let probability = 1;
-            if (event.pFinishedSpeaking !== undefined) {
-                probability = event.pFinishedSpeaking;
+            else {
+                event = event;
             }
-            const initialDelay = (1 - probability) * maxDelay;
-            // Calculate the final delay after accounting for the time already elapsed
-            const finalDelay = Math.max(initialDelay - timeElapsed, 0);
+            const maxDelay = 10000; // 10 seconds in milliseconds
+            // Calculate the initial delay based on pFinishedSpeaking
+            let probabilityFinished = 1;
+            if (event.pFinishedSpeaking !== undefined) {
+                probabilityFinished = event.pFinishedSpeaking;
+            }
+            // Incorporate the tempo into the delay, defaulting to 0.5 (average tempo) if undefined
+            let tempo = event.tempo !== undefined ? event.tempo : 0.5;
+            const finalDelay = calculateDelay(context.timeUserStoppedSpeaking, probabilityFinished, tempo, maxDelay);
             console.log("Waiting for", (finalDelay / 1000).toFixed(1), "seconds before submitting");
             return finalDelay;
         },

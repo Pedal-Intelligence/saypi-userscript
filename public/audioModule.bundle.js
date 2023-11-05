@@ -2,7 +2,7 @@
 // @name         Say, Pi
 // @name:zh-CN   说，Pi 
 // @namespace    http://www.saypi.ai/
-// @version      1.4.7
+// @version      1.4.8
 // @description  Speak to Pi with accurate, hands-free conversations powered by OpenAI's Whisper
 // @description:zh-CN  使用OpenAI的Whisper与Pi对话
 // @author       Ross Cadogan
