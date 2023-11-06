@@ -1,20 +1,26 @@
-import { sortTranscripts } from "../src/TranscriptionModule";
-import { expect } from "@jest/globals";
+import { TranscriptMergeService } from "../src/TranscriptMergeService";
+import { expect, describe, it } from "@jest/globals";
 
-describe("sortTranscripts", () => {
+// Create an instance of the service with mock values for the constructor (doesn't make any network requests)
+const transcriptMergeService = new TranscriptMergeService(
+  "http://mock-api-url",
+  "en-US"
+);
+
+describe("TranscriptMergeService.sortTranscripts", () => {
   it("should trim whitespace from transcripts", () => {
     const transcripts: Record<number, string> = {
       1: "  first  ",
       2: "second ",
       3: " third",
     };
-    const sorted = sortTranscripts(transcripts);
+    const sorted = transcriptMergeService.sortTranscripts(transcripts);
     expect(sorted).toEqual(["first", "second", "third"]);
   });
 
   it("should handle an empty list of transcripts", () => {
     const transcripts: Record<number, string> = {};
-    const sorted = sortTranscripts(transcripts);
+    const sorted = transcriptMergeService.sortTranscripts(transcripts);
     expect(sorted).toEqual([]);
   });
 
@@ -24,7 +30,7 @@ describe("sortTranscripts", () => {
       2: "second",
       3: "third",
     };
-    const sorted = sortTranscripts(transcripts);
+    const sorted = transcriptMergeService.sortTranscripts(transcripts);
     expect(sorted).toEqual(["first", "second", "third"]);
   });
 });

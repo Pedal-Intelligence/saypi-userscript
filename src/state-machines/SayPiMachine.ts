@@ -7,9 +7,9 @@ import {
   setPromptText,
   isTranscriptionPending,
   clearPendingTranscriptions,
-  mergeTranscriptsLocal,
-  mergeTranscriptsRemote,
 } from "../TranscriptionModule";
+import { TranscriptMergeService } from "../TranscriptMergeService";
+import { config } from "../ConfigModule";
 import EventBus from "../EventBus";
 
 type SayPiTranscribedEvent = {
@@ -97,6 +97,17 @@ function getHighestKey(transcriptions: Record<number, string>): number {
 // time at which the user's prompt is scheduled to be submitted
 // used to judge whether there's time for another remote operation (i.e. merge request)
 var nextSubmissionTime = Date.now();
+
+const apiServerUrl = config.apiServerUrl;
+if (apiServerUrl === undefined) {
+  throw new Error(
+    "Configuration error: apiServerUrl is not defined. Please check your environment variables."
+  );
+}
+const mergeService = new TranscriptMergeService(
+  apiServerUrl,
+  navigator.language
+);
 
 /* helper functions */
 export function calculateDelay(
@@ -317,7 +328,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     // Check if there are two or more transcripts to merge
                     if (Object.keys(context.transcriptions).length > 1) {
                       // This function should return a Promise that resolves with the merged transcript string
-                      return mergeTranscriptsRemote(
+                      return mergeService.mergeTranscriptsRemote(
                         context.transcriptions,
                         nextSubmissionTime
                       );
@@ -565,7 +576,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
 
       mergeAndSubmitTranscript: (context) => {
-        const prompt = mergeTranscriptsLocal(context.transcriptions).trim();
+        const prompt = mergeService
+          .mergeTranscriptsLocal(context.transcriptions)
+          .trim();
         if (prompt) setPromptText(prompt);
       },
 
