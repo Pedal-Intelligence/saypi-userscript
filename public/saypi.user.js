@@ -9375,12 +9375,16 @@ _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
           (0,UserAgentModule.initMode)();
         };
         setupEventBus = function _setupEventBus() {
-          // Setting the correct context
+          // Default context is window
           var context = window;
-          if (GM_info.scriptHandler !== "Userscripts") {
+
+          // Use typeof to safely check if GM_info is defined and not in a userscript environment
+          if (typeof GM_info !== "undefined" && GM_info.scriptHandler !== "Userscripts") {
             context = unsafeWindow;
           }
-          context.EventBus = EventBus["default"]; // Make the EventBus available to the page script
+
+          // Make the EventBus available to the page script
+          context.EventBus = EventBus["default"];
         };
         injectScript = function _injectScript(callback) {
           var scriptElement = document.createElement("script");

@@ -93,12 +93,19 @@ import "./styles/rectangles.css";
   observer.observe(document.body, config);
 
   function setupEventBus() {
-    // Setting the correct context
+    // Default context is window
     let context = window;
-    if (GM_info.scriptHandler !== "Userscripts") {
+
+    // Use typeof to safely check if GM_info is defined and not in a userscript environment
+    if (
+      typeof GM_info !== "undefined" &&
+      GM_info.scriptHandler !== "Userscripts"
+    ) {
       context = unsafeWindow;
     }
-    context.EventBus = EventBus; // Make the EventBus available to the page script
+
+    // Make the EventBus available to the page script
+    context.EventBus = EventBus;
   }
 
   function annotateDOM(prompt) {
