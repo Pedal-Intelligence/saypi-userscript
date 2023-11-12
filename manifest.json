@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Say, Pi",
+  "version": "1.4.9",
+  "permissions": ["activeTab"],
+  "content_scripts": [
+    {
+      "matches": ["https://pi.ai/*"],
+      "js": ["public/saypi.user.js"]
+    }
+  ],
+  "icons": {
+    "128": "src/icons/waveform-128px.png"
+  }
+}
