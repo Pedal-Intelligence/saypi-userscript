@@ -1,5 +1,5 @@
+import AudioModule from "./AudioModule.js";
 import { buttonModule } from "./ButtonModule.js";
-import EventBus from "./EventBus.js";
 import EventModule from "./EventModule.js";
 import { addUserAgentFlags, initMode } from "./UserAgentModule.js";
 import { submitErrorHandler } from "./SubmitErrorHandler.ts";
@@ -27,22 +27,13 @@ import "./styles/rectangles.css";
     return;
   }
 
-  function injectScript(callback) {
-    var scriptElement = document.createElement("script");
-    scriptElement.type = "text/javascript";
-    scriptElement.id = "saypi-script";
-    scriptElement.textContent = pageScript;
-    document.body.appendChild(scriptElement);
-
-    // Call the callback function after the script is added
-    if (callback) {
-      callback();
-    }
+  function startAudioModule() {
+    const audioModule = new AudioModule();
+    audioModule.start();
   }
 
   addUserAgentFlags();
   EventModule.init();
-  setupEventBus();
 
   // Create a MutationObserver to listen for changes to the DOM
   // textareas are added to the DOM after the page loads
@@ -91,22 +82,6 @@ import "./styles/rectangles.css";
 
   // Start observing the target node for configured mutations
   observer.observe(document.body, config);
-
-  function setupEventBus() {
-    // Default context is window
-    let context = window;
-
-    // Use typeof to safely check if GM_info is defined and not in a userscript environment
-    if (
-      typeof GM_info !== "undefined" &&
-      GM_info.scriptHandler !== "Userscripts"
-    ) {
-      context = unsafeWindow;
-    }
-
-    // Make the EventBus available to the page script
-    context.EventBus = EventBus;
-  }
 
   function annotateDOM(prompt) {
     // Add id attributes to important elements
@@ -231,7 +206,7 @@ import "./styles/rectangles.css";
     buttonModule.addTalkIcon(button);
 
     // Call the function to inject the script after the button has been added
-    injectScript();
+    startAudioModule();
   }
 
   // Start observing the entire document for changes to child nodes and subtree
