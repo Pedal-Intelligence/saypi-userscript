@@ -2,6 +2,7 @@
   "manifest_version": 3,
   "name": "Say, Pi",
   "version": "1.4.9",
+  "description": "A speech to text ehancement for Inflection AI's Pi chatbot, allowing hands-free conversations, with high accuracy, in any language.",
   "permissions": ["activeTab"],
   "content_scripts": [
     {
@@ -10,6 +11,9 @@
     }
   ],
   "icons": {
+    "16": "src/icons/waveform-16px.png",
+    "32": "src/icons/waveform-32px.png",
+    "48": "src/icons/waveform-48px.png",
     "128": "src/icons/waveform-128px.png"
   }
 }
