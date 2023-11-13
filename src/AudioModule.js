@@ -42,7 +42,6 @@ export default class AudioModule {
   }
 
   start() {
-    console.log("AudioModule starting...");
     // audio output (Pi)
     this.audioOutputActor.start();
     this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
@@ -50,7 +49,6 @@ export default class AudioModule {
     // audio input (user)
     this.audioInputActor.start();
     this.registerAudioCommands(this.audioInputActor, this.audioOutputActor);
-    console.log("AudioModule started");
   }
 
   registerAudioPlaybackEvents(audio, actor) {
