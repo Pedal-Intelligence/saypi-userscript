@@ -52,7 +52,7 @@ if (!isProduction) {
 }
 
 if (import.meta.url.endsWith("/server.js")) {
-  const port = process.env.PORT || (tls ? 4443 : 80);
+  const port = process.env.PORT || (tls ? 4443 : 8080);
   server.listen(port, "0.0.0.0", () => {
     console.log(`App server listening on port ${port}`);
   });
