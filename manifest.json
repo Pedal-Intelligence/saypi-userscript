@@ -15,5 +15,16 @@
     "32": "src/icons/bubble-32px.png",
     "48": "src/icons/bubble-48px.png",
     "128": "src/icons/bubble-128px.png"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "public/silero_vad.onnx",
+        "public/*.wasm",
+        "public/saypi.user.js.map",
+        "public/vad.worklet.bundle.min.js"
+      ],
+      "matches": ["https://pi.ai/*"]
+    }
+  ]
 }

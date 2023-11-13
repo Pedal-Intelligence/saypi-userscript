@@ -7906,16 +7906,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   setupInterceptors: () => (/* binding */ setupInterceptors)
 /* harmony export */ });
-/* harmony import */ var _ConfigModule_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8186);
+var filesToRedirect = ["silero_vad.onnx", "ort-wasm-simd.wasm", "ort.min.js.map", "vad.worklet.bundle.min.js"];
 
-var filesToRedirect = ["silero_vad.onnx", "ort-wasm-simd.wasm", "ort.min.js.map"];
+// Function to construct the URL for local extension resources
+function getExtensionResourceUrl(filename) {
+  var web_accessible_resources_dir = "public";
+  var filepath = web_accessible_resources_dir + "/" + filename;
+  return chrome.runtime.getURL(filepath);
+}
 
 // Function to redirect specific XMLHttpRequests
 function redirectXMLHttpRequest(open) {
   XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
     var filename = url.split("/").pop();
     if (filename && filesToRedirect.includes(filename)) {
-      arguments[1] = "".concat(_ConfigModule_js__WEBPACK_IMPORTED_MODULE_0__.config.appServerUrl, "/").concat(filename);
+      // Check if running as a Chrome extension
+      if (chrome.runtime && chrome.runtime.id) {
+        arguments[1] = getExtensionResourceUrl(filename);
+      } else {
+        arguments[1] = "".concat(config.appServerUrl, "/").concat(filename);
+      }
     }
     open.apply(this, arguments);
   };
@@ -7926,7 +7936,12 @@ function redirectFetch(_fetch) {
   window.fetch = function (url, opts) {
     var filename = url.split("/").pop();
     if (filename && filesToRedirect.includes(filename)) {
-      arguments[0] = "".concat(_ConfigModule_js__WEBPACK_IMPORTED_MODULE_0__.config.appServerUrl, "/").concat(filename);
+      // Check if running as a Chrome extension
+      if (chrome.runtime && chrome.runtime.id) {
+        arguments[0] = getExtensionResourceUrl(filename);
+      } else {
+        arguments[0] = "".concat(config.appServerUrl, "/").concat(filename);
+      }
     }
     return _fetch.apply(this, arguments);
   };
