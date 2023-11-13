@@ -12,11 +12,14 @@
   #saypi-exitButton {
     position: fixed;
     top: 4rem;
-    left: 1.25rem;
+    left: 10px;
     width: 3rem;
     height: 3rem;
     padding: 6px;
     border: 0;
     z-index: 60;
+    svg path.inner {
+      color: rgb(13 60 38); /* text-primary-700 */
+    }
   }
 }
