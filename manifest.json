@@ -26,5 +26,9 @@
       ],
       "matches": ["https://pi.ai/*"]
     }
-  ]
+  ],
+  "author": {
+    "email": "ross.cadogan@gmail.com"
+  },
+  "homepage_url": "https://www.saypi.ai"
 }
