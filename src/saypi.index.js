@@ -13,20 +13,6 @@ import "./styles/rectangles.css";
 (async function () {
   "use strict";
 
-  const audioModuleUrl = `${serverConfig.appServerUrl}/audioModule.bundle.js`;
-
-  let pageScript;
-  try {
-    const response = await fetch(audioModuleUrl);
-    if (!response.ok) {
-      throw new Error("Network response was not ok " + response.statusText);
-    }
-    pageScript = await response.text();
-  } catch (error) {
-    console.error("There has been a problem with your fetch operation:", error);
-    return;
-  }
-
   function startAudioModule() {
     const audioModule = new AudioModule();
     audioModule.start();

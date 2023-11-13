@@ -28,6 +28,7 @@ export default (env, argv) => {
     return prev;
   }, {});
 
+  // TODO: Remove audio module bundle some time after v1.5.0, once all users have updated
   return {
     mode: isProduction ? "production" : "development",
     devtool: isProduction ? "source-map" : "inline-source-map",
