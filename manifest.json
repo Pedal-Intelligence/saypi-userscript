@@ -11,9 +11,9 @@
     }
   ],
   "icons": {
-    "16": "src/icons/waveform-16px.png",
-    "32": "src/icons/waveform-32px.png",
-    "48": "src/icons/waveform-48px.png",
-    "128": "src/icons/waveform-128px.png"
+    "16": "src/icons/bubble-16px.png",
+    "32": "src/icons/bubble-32px.png",
+    "48": "src/icons/bubble-48px.png",
+    "128": "src/icons/bubble-128px.png"
   }
 }

@@ -10839,7 +10839,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
   "use strict";
 
-  var audioModuleUrl, pageScript, response, startAudioModule, callback, config, observer, annotateDOM, addIdPromptAncestor, addIdSubmitButton, addIdFooter, addIdAudioControls, addIdAudioOutputButton, addTalkButton;
+  var startAudioModule, callback, config, observer, annotateDOM, addIdPromptAncestor, addIdSubmitButton, addIdFooter, addIdAudioControls, addIdAudioOutputButton, addTalkButton;
   return _regeneratorRuntime().wrap(function _callee$(_context) {
     while (1) switch (_context.prev = _context.next) {
       case 0:
@@ -10960,30 +10960,6 @@ _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
           var audioModule = new AudioModule/* default */.Z();
           audioModule.start();
         };
-        audioModuleUrl = "".concat(ConfigModule.config.appServerUrl, "/audioModule.bundle.js");
-        _context.prev = 9;
-        _context.next = 12;
-        return fetch(audioModuleUrl);
-      case 12:
-        response = _context.sent;
-        if (response.ok) {
-          _context.next = 15;
-          break;
-        }
-        throw new Error("Network response was not ok " + response.statusText);
-      case 15:
-        _context.next = 17;
-        return response.text();
-      case 17:
-        pageScript = _context.sent;
-        _context.next = 24;
-        break;
-      case 20:
-        _context.prev = 20;
-        _context.t0 = _context["catch"](9);
-        console.error("There has been a problem with your fetch operation:", _context.t0);
-        return _context.abrupt("return");
-      case 24:
         (0,UserAgentModule.addUserAgentFlags)();
         EventModule["default"].init();
 
@@ -11043,11 +11019,11 @@ _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
           childList: true,
           subtree: true
         });
-      case 31:
+      case 15:
       case "end":
         return _context.stop();
     }
-  }, _callee, null, [[9, 20]]);
+  }, _callee);
 }))();
 })();
 
