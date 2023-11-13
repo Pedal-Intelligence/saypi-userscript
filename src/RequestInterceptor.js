@@ -1,3 +1,5 @@
+import { config } from "./config.js";
+
 const filesToRedirect = [
   "silero_vad.onnx",
   "ort-wasm-simd.wasm",
