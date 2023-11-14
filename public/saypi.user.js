@@ -2628,6 +2628,20 @@ function constructTranscriptionFormData(audioBlob, audioDurationSeconds, message
     return formData;
 }
 function scrollToBottom(textarea) {
+    // Define the maximum height
+    const maxHeight = 455;
+    // Reset the height to auto to get the correct scrollHeight
+    textarea.style.height = "auto";
+    // Set the height of the textarea, up to the maximum height
+    if (textarea.scrollHeight > maxHeight) {
+        textarea.style.height = `${maxHeight}px`;
+        textarea.style.overflowY = "scroll"; // Enable vertical scrollbar
+    }
+    else {
+        textarea.style.height = `${textarea.scrollHeight}px`;
+        textarea.style.overflowY = "hidden"; // Hide vertical scrollbar
+    }
+    // Scroll to the bottom
     textarea.scrollTop = textarea.scrollHeight;
 }
 /**
