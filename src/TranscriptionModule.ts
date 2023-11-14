@@ -4,6 +4,7 @@ import { isMobileView } from "./UserAgentModule.js";
 import EventBus from "./EventBus.js";
 import EventModule from "./EventModule.js";
 import { logger } from "./LoggingModule.js";
+import { replaceEllipsisWithSpace } from "./TextModule.js";
 
 // Define the shape of the response JSON object
 interface TranscriptionResponse {
@@ -242,11 +243,29 @@ function constructTranscriptionFormData(
   return formData;
 }
 
-export function setPromptText(transcript: string): void {
+function scrollToBottom(textarea: HTMLTextAreaElement) {
+  textarea.scrollTop = textarea.scrollHeight;
+}
+
+/**
+ * Set the prompt textarea to the given transcript, but do not submit it
+ * @param transcript The prompt to be displayed in the prompt textarea
+ */
+export function setDraftPrompt(transcript: string): void {
+  const textarea = document.getElementById(
+    "saypi-prompt"
+  ) as HTMLTextAreaElement;
+
+  textarea.setAttribute("placeholder", `${transcript}`);
+  scrollToBottom(textarea);
+}
+
+export function setFinalPrompt(transcript: string): void {
   logger.info(`Merged transcript: ${transcript}`);
   const textarea = document.getElementById(
     "saypi-prompt"
   ) as HTMLTextAreaElement;
+  textarea.setAttribute("placeholder", "");
   if (isMobileView()) {
     // if transcript is > 1000 characters, truncate it to 999 characters plus an ellipsis
     if (transcript.length > 1000) {
@@ -275,5 +294,7 @@ export function mergeTranscripts(transcripts: Record<number, string>): string {
     sortedTranscripts.push(transcripts[key].trim());
   }
 
-  return sortedTranscripts.join(" ");
+  const joinedTranscripts = sortedTranscripts.join(" ");
+  const mergedTranscript = replaceEllipsisWithSpace(joinedTranscripts);
+  return mergedTranscript;
 }

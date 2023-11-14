@@ -1,4 +1,4 @@
-import { setPromptText } from "./TranscriptionModule";
+import { setFinalPrompt } from "./TranscriptionModule";
 
 interface RestorePoint {
   prompt: string;
@@ -110,7 +110,7 @@ export default class SubmitErrorHandler {
 
       if (timeDifference <= 5) {
         console.log("Restoring application state", restorePoint);
-        setPromptText(restorePoint.prompt);
+        setFinalPrompt(restorePoint.prompt);
         this.activateAudioInput(restorePoint.audioInputEnabled);
         this.activateAudioOutput(restorePoint.audioOutputEnabled);
         // Delete the executed restore point

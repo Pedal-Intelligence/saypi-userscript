@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "./server.js"; // make sure to export your app in server.js
+import app from "../server.js"; // make sure to export your app in server.js
 
 describe("GET Say, Pi userscript", function () {
   it("responds with js", function (done) {

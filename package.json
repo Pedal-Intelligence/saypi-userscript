@@ -6,7 +6,7 @@
     "build": "webpack --mode production",
     "dev": "webpack --mode development --watch",
     "start": "node server.js",
-    "test": "mocha --exit test.js"
+    "test": "mocha --exit 'test/**/*.test.js'"
   },
   "dependencies": {
     "@ricky0123/vad-web": "^0.0.12",

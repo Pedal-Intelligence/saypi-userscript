@@ -2400,7 +2400,7 @@ class SubmitErrorHandler {
             const timeDifference = (currentTime.getTime() - restoreTime.getTime()) / (1000 * 60); // in minutes
             if (timeDifference <= 5) {
                 console.log("Restoring application state", restorePoint);
-                (0, TranscriptionModule_1.setPromptText)(restorePoint.prompt);
+                (0, TranscriptionModule_1.setFinalPrompt)(restorePoint.prompt);
                 this.activateAudioInput(restorePoint.audioInputEnabled);
                 this.activateAudioOutput(restorePoint.audioOutputEnabled);
                 // Delete the executed restore point
@@ -2450,13 +2450,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.mergeTranscripts = exports.setPromptText = exports.uploadAudioWithRetry = exports.clearPendingTranscriptions = exports.isTranscriptionPending = void 0;
+exports.mergeTranscripts = exports.setFinalPrompt = exports.setDraftPrompt = exports.uploadAudioWithRetry = exports.clearPendingTranscriptions = exports.isTranscriptionPending = void 0;
 const ConfigModule_js_1 = __webpack_require__(8186);
 const StateMachineService_js_1 = __importDefault(__webpack_require__(8615));
 const UserAgentModule_js_1 = __webpack_require__(4008);
 const EventBus_js_1 = __importDefault(__webpack_require__(7635));
 const EventModule_js_1 = __importDefault(__webpack_require__(9940));
 const LoggingModule_js_1 = __webpack_require__(484);
+const TextModule_js_1 = __webpack_require__(5154);
 const knownNetworkErrorMessages = [
     "Failed to fetch",
     "Load failed",
@@ -2626,9 +2627,23 @@ function constructTranscriptionFormData(audioBlob, audioDurationSeconds, message
     formData.append("messages", JSON.stringify(messages));
     return formData;
 }
-function setPromptText(transcript) {
+function scrollToBottom(textarea) {
+    textarea.scrollTop = textarea.scrollHeight;
+}
+/**
+ * Set the prompt textarea to the given transcript, but do not submit it
+ * @param transcript The prompt to be displayed in the prompt textarea
+ */
+function setDraftPrompt(transcript) {
+    const textarea = document.getElementById("saypi-prompt");
+    textarea.setAttribute("placeholder", `${transcript}`);
+    scrollToBottom(textarea);
+}
+exports.setDraftPrompt = setDraftPrompt;
+function setFinalPrompt(transcript) {
     LoggingModule_js_1.logger.info(`Merged transcript: ${transcript}`);
     const textarea = document.getElementById("saypi-prompt");
+    textarea.setAttribute("placeholder", "");
     if ((0, UserAgentModule_js_1.isMobileView)()) {
         // if transcript is > 1000 characters, truncate it to 999 characters plus an ellipsis
         if (transcript.length > 1000) {
@@ -2642,7 +2657,7 @@ function setPromptText(transcript) {
         EventModule_js_1.default.simulateTyping(textarea, `${transcript} `);
     }
 }
-exports.setPromptText = setPromptText;
+exports.setFinalPrompt = setFinalPrompt;
 function mergeTranscripts(transcripts) {
     const sortedKeys = Object.keys(transcripts)
         .map(Number)
@@ -2651,7 +2666,9 @@ function mergeTranscripts(transcripts) {
     for (const key of sortedKeys) {
         sortedTranscripts.push(transcripts[key].trim());
     }
-    return sortedTranscripts.join(" ");
+    const joinedTranscripts = sortedTranscripts.join(" ");
+    const mergedTranscript = (0, TextModule_js_1.replaceEllipsisWithSpace)(joinedTranscripts);
+    return mergedTranscript;
 }
 exports.mergeTranscripts = mergeTranscripts;
 
@@ -3244,6 +3261,9 @@ exports.machine = (0, xstate_1.createMachine)({
                                     description: "Submit combined transcript to Pi.",
                                 },
                             },
+                            entry: {
+                                type: "draftPrompt",
+                            },
                             on: {
                                 "saypi:transcribed": {
                                     target: "accumulating",
@@ -3406,10 +3426,15 @@ exports.machine = (0, xstate_1.createMachine)({
         dismissNotification: () => {
             ButtonModule_js_1.buttonModule.dismissNotification();
         },
+        draftPrompt: (context) => {
+            const prompt = (0, TranscriptionModule_1.mergeTranscripts)(context.transcriptions).trim();
+            if (prompt)
+                (0, TranscriptionModule_1.setDraftPrompt)(prompt);
+        },
         mergeAndSubmitTranscript: (context) => {
             const prompt = (0, TranscriptionModule_1.mergeTranscripts)(context.transcriptions).trim();
             if (prompt)
-                (0, TranscriptionModule_1.setPromptText)(prompt);
+                (0, TranscriptionModule_1.setFinalPrompt)(prompt);
         },
         callStarted: () => {
             ButtonModule_js_1.buttonModule.callActive();
@@ -10481,6 +10506,22 @@ var StateMachineService = /*#__PURE__*/_createClass(function StateMachineService
   this.actor.start();
 }); // Singleton
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new StateMachineService());
+
+/***/ }),
+
+/***/ 5154:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   replaceEllipsisWithSpace: () => (/* binding */ replaceEllipsisWithSpace)
+/* harmony export */ });
+function replaceEllipsisWithSpace(text) {
+  return text.replace(/\.\.\. ([A-Z])/g, function (match, p1) {
+    return " ".concat(p1.toLowerCase());
+  });
+}
 
 /***/ }),
 
