@@ -21,7 +21,6 @@
       "resources": [
         "public/silero_vad.onnx",
         "public/*.wasm",
-        "public/saypi.user.js.map",
         "public/vad.worklet.bundle.min.js"
       ],
       "matches": ["https://pi.ai/*"]
