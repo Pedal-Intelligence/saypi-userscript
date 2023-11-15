@@ -248,7 +248,7 @@ function scrollToBottom(textarea: HTMLTextAreaElement) {
   const maxHeight = 455;
 
   // Reset the height to auto to get the correct scrollHeight
-  textarea.style.height = "auto";
+    textarea.style.height = "auto";
 
   // Set the height of the textarea, up to the maximum height
   if (textarea.scrollHeight > maxHeight) {
@@ -282,6 +282,8 @@ export function setFinalPrompt(transcript: string): void {
     "saypi-prompt"
   ) as HTMLTextAreaElement;
   textarea.setAttribute("placeholder", "");
+  const initialHeight = "2rem"; // aka 32px
+  textarea.style.height = initialHeight; // Reset the height after draft preview has been dismissed
   if (isMobileView()) {
     // if transcript is > 1000 characters, truncate it to 999 characters plus an ellipsis
     if (transcript.length > 1000) {

@@ -2658,6 +2658,8 @@ function setFinalPrompt(transcript) {
     LoggingModule_js_1.logger.info(`Merged transcript: ${transcript}`);
     const textarea = document.getElementById("saypi-prompt");
     textarea.setAttribute("placeholder", "");
+    const initialHeight = "2rem"; // aka 32px
+    textarea.style.height = initialHeight; // Reset the height after draft preview has been dismissed
     if ((0, UserAgentModule_js_1.isMobileView)()) {
         // if transcript is > 1000 characters, truncate it to 999 characters plus an ellipsis
         if (transcript.length > 1000) {
