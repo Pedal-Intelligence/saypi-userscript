@@ -1,3 +1,5 @@
+import { replaceEllipsisWithSpace } from "./TextModule";
+
 export class TranscriptMergeService {
   private apiServerUrl: string;
   private navigatorLanguage: string;
@@ -21,7 +23,9 @@ export class TranscriptMergeService {
   }
 
   mergeTranscriptsLocal(transcripts: Record<number, string>): string {
-    return this.sortTranscripts(transcripts).join(" ");
+    const joinedTranscripts = this.sortTranscripts(transcripts).join(" ");
+    const mergedTranscript = replaceEllipsisWithSpace(joinedTranscripts);
+    return mergedTranscript;
   }
 
   mergeTranscriptsRemote(
