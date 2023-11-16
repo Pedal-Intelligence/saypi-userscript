@@ -1,4 +1,3 @@
-import { expect } from "chai";
 import { replaceEllipsisWithSpace } from "../src/TextModule.js";
 
 describe("TextModule", function () {
@@ -22,7 +21,7 @@ describe("TextModule", function () {
 
       testCases.forEach((testCase) => {
         const result = replaceEllipsisWithSpace(testCase.input);
-        expect(result).to.equal(testCase.expected);
+        expect(result).toEqual(testCase.expected);
       });
     });
   });

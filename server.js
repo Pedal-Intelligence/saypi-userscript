@@ -42,7 +42,7 @@ if (!isProduction) {
     server = https.createServer(credentials, app);
     tls = true;
   } else {
-    console.warn(
+    console.log(
       "HTTPS certificates not found. Set CERT_DIR env var to use HTTPS in development environments. Falling back to HTTP."
     );
     server = http.createServer(app);

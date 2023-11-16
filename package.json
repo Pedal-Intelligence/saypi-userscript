@@ -6,18 +6,17 @@
     "build": "webpack --mode production",
     "dev": "webpack --mode development --watch",
     "start": "node server.js",
-    "test-mocha": "mocha --exit 'test/**/*.test.js'",
-    "test-jest": "NODE_OPTIONS=--experimental-vm-modules npx jest --detectOpenHandles --forceExit"
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --detectOpenHandles --forceExit"
   },
   "jest": {
     "preset": "ts-jest/presets/default-esm",
-    "globals": {
-      "ts-jest": {
-        "useESM": true
-      }
-    },
     "transform": {
-      "^.+\\.ts$": "ts-jest"
+      "^.+\\.ts$": [
+        "ts-jest",
+        {
+          "useESM": true
+        }
+      ]
     },
     "testEnvironment": "node",
     "extensionsToTreatAsEsm": [

@@ -1,7 +1,7 @@
 // bundles.test.ts
 import request from "supertest";
-import app from "../server"; // the express server
-import { expect } from "@jest/globals";
+import app from "../server.js"; // the express server
+import { expect, describe, it } from "@jest/globals";
 
 describe("GET Say, Pi userscript", () => {
   it("responds with js", async () => {
