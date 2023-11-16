@@ -3,106 +3,112 @@ import { interpret } from "xstate";
 import { audioInputMachine } from "./state-machines/AudioInputMachine.ts";
 import { audioOutputMachine } from "./state-machines/AudioOutputMachine.js";
 import { logger, serializeStateValue } from "./LoggingModule.js";
+import EventBus from "./EventBus.js";
 
-// depends on the injecting script (saypi.index.js) declaring the EventBus as a global variable
-const EventBus = window.EventBus;
-
-// audio output (Pi)
-const audioElement = document.querySelector("audio");
-if (!audioElement) {
-  console.error("Audio element not found!");
-} else {
-  audioElement.preload = "auto"; // enable aggressive preloading of audio
-}
-
-const audioOutputActor = interpret(audioOutputMachine)
-  .onTransition((state) => {
-    if (state.changed) {
-      const fromState = state.history
-        ? serializeStateValue(state.history.value)
-        : "N/A";
-      const toState = serializeStateValue(state.value);
-      logger.debug(
-        `Audio Output Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
-      );
+export default class AudioModule {
+  constructor() {
+    this.audioElement = document.querySelector("audio");
+    if (!this.audioElement) {
+      console.error("Audio element not found!");
+    } else {
+      this.audioElement.preload = "auto"; // enable aggressive preloading of audio
     }
-  })
-  .start();
 
-function registerAudioPlaybackEvents(audio, actor) {
-  const events = [
-    "loadstart",
-    "loadedmetadata",
-    "canplaythrough",
-    "play",
-    "pause",
-    "ended",
-    "seeked",
-    "emptied",
-  ];
+    this.audioOutputActor = interpret(audioOutputMachine);
+    this.audioOutputActor.onTransition((state) => {
+      if (state.changed) {
+        const fromState = state.history
+          ? serializeStateValue(state.history.value)
+          : "N/A";
+        const toState = serializeStateValue(state.value);
+        logger.debug(
+          `Audio Output Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
+        );
+      }
+    });
 
-  events.forEach((event) => {
-    audio.addEventListener(event, () => actor.send(event));
-  });
+    this.audioInputActor = interpret(audioInputMachine);
+    this.audioInputActor.onTransition((state) => {
+      if (state.changed) {
+        const fromState = state.history
+          ? serializeStateValue(state.history.value)
+          : "N/A";
+        const toState = serializeStateValue(state.value);
+        logger.debug(
+          `Audio Input Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
+        );
+      }
+    });
+  }
 
-  audio.addEventListener("playing", () => {
-    actor.send("play");
-  });
+  start() {
+    // audio output (Pi)
+    this.audioOutputActor.start();
+    this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
+
+    // audio input (user)
+    this.audioInputActor.start();
+    this.registerAudioCommands(this.audioInputActor, this.audioOutputActor);
+  }
+
+  registerAudioPlaybackEvents(audio, actor) {
+    const events = [
+      "loadstart",
+      "loadedmetadata",
+      "canplaythrough",
+      "play",
+      "pause",
+      "ended",
+      "seeked",
+      "emptied",
+    ];
+
+    events.forEach((event) => {
+      audio.addEventListener(event, () => actor.send(event));
+    });
+
+    audio.addEventListener("playing", () => {
+      actor.send("play");
+    });
+  }
+
+  /* These events are used to control/pass requests to the audio module from other modules */
+  registerAudioCommands(inputActor, outputActor) {
+    // audio input (recording) commands
+    EventBus.on("audio:setupRecording", function (e) {
+      inputActor.send("acquire");
+    });
+
+    EventBus.on("audio:tearDownRecording", function (e) {
+      inputActor.send("release");
+    });
+
+    EventBus.on("audio:startRecording", function (e) {
+      // Check if Pi is currently speaking and stop her audio
+      outputActor.send("pause");
+
+      // Check if the microphone is acquired before starting?
+      inputActor.send(["acquire", "start"]);
+    });
+    EventBus.on("audio:stopRecording", function (e) {
+      inputActor.send("stopRequested");
+      /* resume or cancel Pi's audio */
+      /* TODO: reassess how to handle interruptions
+      outputActor.send("play"); // resume Pi's audio
+      outputActor.send("stop"); // cancel Pi's audio
+      */
+    });
+    // audio input (recording) events (pass media recorder events -> audio input machine actor)
+    EventBus.on("audio:dataavailable", (detail) => {
+      inputActor.send({ type: "dataAvailable", ...detail });
+    });
+    EventBus.on("audio:input:stop", function (e) {
+      inputActor.send("stop");
+    });
+
+    // audio output (playback) commands
+    EventBus.on("audio:reload", function (e) {
+      outputActor.send("reload");
+    });
+  }
 }
-registerAudioPlaybackEvents(audioElement, audioOutputActor);
-
-// audio input (user)
-const audioInputActor = interpret(audioInputMachine)
-  .onTransition((state) => {
-    if (state.changed) {
-      const fromState = state.history
-        ? serializeStateValue(state.history.value)
-        : "N/A";
-      const toState = serializeStateValue(state.value);
-      logger.debug(
-        `Audio Input Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
-      );
-    }
-  })
-  .start();
-
-/* These events are used to control/pass requests to the audio module from other modules */
-function registerAudioCommands() {
-  // audio input (recording) commands
-  EventBus.on("audio:setupRecording", function (e) {
-    audioInputActor.send("acquire");
-  });
-
-  EventBus.on("audio:tearDownRecording", function (e) {
-    audioInputActor.send("release");
-  });
-
-  EventBus.on("audio:startRecording", function (e) {
-    // Check if Pi is currently speaking and stop her audio
-    audioOutputActor.send("pause");
-
-    // Check if the MediaRecorder is acquired before starting?
-    audioInputActor.send(["acquire", "start"]);
-  });
-  EventBus.on("audio:stopRecording", function (e) {
-    audioInputActor.send("stopRequested");
-    /* resume or cancel Pi's audio */
-    /* TODO: reassess how to handle interruptions
-    audioOutputActor.send("play"); // resume Pi's audio
-    audioOutputActor.send("stop"); // cancel Pi's audio
-    */
-  });
-  // audio input (recording) events (pass media recorder events -> audio input machine actor)
-  EventBus.on("audio:dataavailable", (detail) => {
-    audioInputActor.send({ type: "dataAvailable", ...detail });
-  });
-  EventBus.on("audio:input:stop", function (e) {
-    audioInputActor.send("stop");
-  });
-
-  // audio output (playback) commands
-  EventBus.on("audio:reload", function (e) {
-    audioOutputActor.send("reload");
-  });
-}
-registerAudioCommands();

@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Say, Pi",
+  "version": "1.4.9",
+  "description": "Seamless speech-to-text enhancement for Pi, the conversational AI. Enjoy hands-free, high-accuracy conversations in any language.",
+  "permissions": ["activeTab"],
+  "content_scripts": [
+    {
+      "matches": ["https://pi.ai/*"],
+      "js": ["public/saypi.user.js"]
+    }
+  ],
+  "icons": {
+    "16": "src/icons/bubble-16px.png",
+    "32": "src/icons/bubble-32px.png",
+    "48": "src/icons/bubble-48px.png",
+    "128": "src/icons/bubble-128px.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "public/silero_vad.onnx",
+        "public/*.wasm",
+        "public/vad.worklet.bundle.min.js"
+      ],
+      "matches": ["https://pi.ai/*"]
+    }
+  ],
+  "author": {
+    "email": "ross.cadogan@gmail.com"
+  },
+  "homepage_url": "https://www.saypi.ai"
+}

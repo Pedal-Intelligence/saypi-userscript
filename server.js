@@ -29,24 +29,30 @@ const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 app.use("/", express.static(path.join(__dirname, "public")));
 
+let tls = false;
 if (!isProduction) {
-  const privateKey = fs.readFileSync(
-    path.join(__dirname, "certificates/localhost-key.pem"),
-    "utf8"
-  );
-  const certificate = fs.readFileSync(
-    path.join(__dirname, "certificates/localhost.pem"),
-    "utf8"
-  );
+  const certDir = process.env.CERT_DIR || path.join(__dirname, "certificates");
+  const privateKeyPath = path.join(certDir, "localhost-key.pem");
+  const certificatePath = path.join(certDir, "localhost.pem");
 
-  const credentials = { key: privateKey, cert: certificate };
-  server = https.createServer(credentials, app);
+  if (fs.existsSync(privateKeyPath) && fs.existsSync(certificatePath)) {
+    const privateKey = fs.readFileSync(privateKeyPath, "utf8");
+    const certificate = fs.readFileSync(certificatePath, "utf8");
+    const credentials = { key: privateKey, cert: certificate };
+    server = https.createServer(credentials, app);
+    tls = true;
+  } else {
+    console.warn(
+      "HTTPS certificates not found. Set CERT_DIR env var to use HTTPS in development environments. Falling back to HTTP."
+    );
+    server = http.createServer(app);
+  }
 } else {
   server = http.createServer(app);
 }
 
 if (import.meta.url.endsWith("/server.js")) {
-  const port = process.env.PORT || (isProduction ? 80 : 4443);
+  const port = process.env.PORT || (tls ? 4443 : 8080);
   server.listen(port, "0.0.0.0", () => {
     console.log(`App server listening on port ${port}`);
   });

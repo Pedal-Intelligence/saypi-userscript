@@ -4,7 +4,8 @@ import AnimationModule from "../AnimationModule.js";
 import { isMobileView } from "../UserAgentModule.js";
 import {
   uploadAudioWithRetry,
-  setPromptText,
+  setDraftPrompt,
+  setFinalPrompt,
   isTranscriptionPending,
   clearPendingTranscriptions,
 } from "../TranscriptionModule";
@@ -322,6 +323,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     description: "Submit combined transcript to Pi.",
                   },
                 },
+                entry: {
+                  type: "draftPrompt",
+                },
                 invoke: {
                   id: "mergeOptimistic",
                   src: (context: SayPiContext, event: SayPiEvent) => {
@@ -575,11 +579,18 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         buttonModule.dismissNotification();
       },
 
-      mergeAndSubmitTranscript: (context) => {
+      draftPrompt: (context: SayPiContext) => {
         const prompt = mergeService
           .mergeTranscriptsLocal(context.transcriptions)
           .trim();
-        if (prompt) setPromptText(prompt);
+        if (prompt) setDraftPrompt(prompt);
+      },
+
+      mergeAndSubmitTranscript: (context: SayPiContext) => {
+        const prompt = mergeService
+          .mergeTranscriptsLocal(context.transcriptions)
+          .trim();
+        if (prompt) setFinalPrompt(prompt);
       },
 
       callStarted: () => {
