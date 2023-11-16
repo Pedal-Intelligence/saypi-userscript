@@ -2,9 +2,9 @@
 // @name         Say, Pi
 // @name:zh-CN   说，Pi 
 // @namespace    http://www.saypi.ai/
-// @version      1.4.8
-// @description  Speak to Pi with accurate, hands-free conversations powered by OpenAI's Whisper
-// @description:zh-CN  使用OpenAI的Whisper与Pi对话
+// @version      1.4.9
+// @description  Seamless speech-to-text enhancement for Pi, the conversational AI. Enjoy hands-free, high-accuracy conversations in any language.
+// @description:zh-CN  为Pi聊天机器人提供无手操作的高精度语音转文字功能，支持多种语言。
 // @author       Ross Cadogan
 // @match        https://pi.ai/talk
 // @inject-into  page
@@ -848,6 +848,511 @@ exports.audioFileToArray = audioFileToArray;
 
 /***/ }),
 
+/***/ 7187:
+/***/ ((module) => {
+
+"use strict";
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+
+var R = typeof Reflect === 'object' ? Reflect : null
+var ReflectApply = R && typeof R.apply === 'function'
+  ? R.apply
+  : function ReflectApply(target, receiver, args) {
+    return Function.prototype.apply.call(target, receiver, args);
+  }
+
+var ReflectOwnKeys
+if (R && typeof R.ownKeys === 'function') {
+  ReflectOwnKeys = R.ownKeys
+} else if (Object.getOwnPropertySymbols) {
+  ReflectOwnKeys = function ReflectOwnKeys(target) {
+    return Object.getOwnPropertyNames(target)
+      .concat(Object.getOwnPropertySymbols(target));
+  };
+} else {
+  ReflectOwnKeys = function ReflectOwnKeys(target) {
+    return Object.getOwnPropertyNames(target);
+  };
+}
+
+function ProcessEmitWarning(warning) {
+  if (console && console.warn) console.warn(warning);
+}
+
+var NumberIsNaN = Number.isNaN || function NumberIsNaN(value) {
+  return value !== value;
+}
+
+function EventEmitter() {
+  EventEmitter.init.call(this);
+}
+module.exports = EventEmitter;
+module.exports.once = once;
+
+// Backwards-compat with node 0.10.x
+EventEmitter.EventEmitter = EventEmitter;
+
+EventEmitter.prototype._events = undefined;
+EventEmitter.prototype._eventsCount = 0;
+EventEmitter.prototype._maxListeners = undefined;
+
+// By default EventEmitters will print a warning if more than 10 listeners are
+// added to it. This is a useful default which helps finding memory leaks.
+var defaultMaxListeners = 10;
+
+function checkListener(listener) {
+  if (typeof listener !== 'function') {
+    throw new TypeError('The "listener" argument must be of type Function. Received type ' + typeof listener);
+  }
+}
+
+Object.defineProperty(EventEmitter, 'defaultMaxListeners', {
+  enumerable: true,
+  get: function() {
+    return defaultMaxListeners;
+  },
+  set: function(arg) {
+    if (typeof arg !== 'number' || arg < 0 || NumberIsNaN(arg)) {
+      throw new RangeError('The value of "defaultMaxListeners" is out of range. It must be a non-negative number. Received ' + arg + '.');
+    }
+    defaultMaxListeners = arg;
+  }
+});
+
+EventEmitter.init = function() {
+
+  if (this._events === undefined ||
+      this._events === Object.getPrototypeOf(this)._events) {
+    this._events = Object.create(null);
+    this._eventsCount = 0;
+  }
+
+  this._maxListeners = this._maxListeners || undefined;
+};
+
+// Obviously not all Emitters should be limited to 10. This function allows
+// that to be increased. Set to zero for unlimited.
+EventEmitter.prototype.setMaxListeners = function setMaxListeners(n) {
+  if (typeof n !== 'number' || n < 0 || NumberIsNaN(n)) {
+    throw new RangeError('The value of "n" is out of range. It must be a non-negative number. Received ' + n + '.');
+  }
+  this._maxListeners = n;
+  return this;
+};
+
+function _getMaxListeners(that) {
+  if (that._maxListeners === undefined)
+    return EventEmitter.defaultMaxListeners;
+  return that._maxListeners;
+}
+
+EventEmitter.prototype.getMaxListeners = function getMaxListeners() {
+  return _getMaxListeners(this);
+};
+
+EventEmitter.prototype.emit = function emit(type) {
+  var args = [];
+  for (var i = 1; i < arguments.length; i++) args.push(arguments[i]);
+  var doError = (type === 'error');
+
+  var events = this._events;
+  if (events !== undefined)
+    doError = (doError && events.error === undefined);
+  else if (!doError)
+    return false;
+
+  // If there is no 'error' event listener then throw.
+  if (doError) {
+    var er;
+    if (args.length > 0)
+      er = args[0];
+    if (er instanceof Error) {
+      // Note: The comments on the `throw` lines are intentional, they show
+      // up in Node's output if this results in an unhandled exception.
+      throw er; // Unhandled 'error' event
+    }
+    // At least give some kind of context to the user
+    var err = new Error('Unhandled error.' + (er ? ' (' + er.message + ')' : ''));
+    err.context = er;
+    throw err; // Unhandled 'error' event
+  }
+
+  var handler = events[type];
+
+  if (handler === undefined)
+    return false;
+
+  if (typeof handler === 'function') {
+    ReflectApply(handler, this, args);
+  } else {
+    var len = handler.length;
+    var listeners = arrayClone(handler, len);
+    for (var i = 0; i < len; ++i)
+      ReflectApply(listeners[i], this, args);
+  }
+
+  return true;
+};
+
+function _addListener(target, type, listener, prepend) {
+  var m;
+  var events;
+  var existing;
+
+  checkListener(listener);
+
+  events = target._events;
+  if (events === undefined) {
+    events = target._events = Object.create(null);
+    target._eventsCount = 0;
+  } else {
+    // To avoid recursion in the case that type === "newListener"! Before
+    // adding it to the listeners, first emit "newListener".
+    if (events.newListener !== undefined) {
+      target.emit('newListener', type,
+                  listener.listener ? listener.listener : listener);
+
+      // Re-assign `events` because a newListener handler could have caused the
+      // this._events to be assigned to a new object
+      events = target._events;
+    }
+    existing = events[type];
+  }
+
+  if (existing === undefined) {
+    // Optimize the case of one listener. Don't need the extra array object.
+    existing = events[type] = listener;
+    ++target._eventsCount;
+  } else {
+    if (typeof existing === 'function') {
+      // Adding the second element, need to change to array.
+      existing = events[type] =
+        prepend ? [listener, existing] : [existing, listener];
+      // If we've already got an array, just append.
+    } else if (prepend) {
+      existing.unshift(listener);
+    } else {
+      existing.push(listener);
+    }
+
+    // Check for listener leak
+    m = _getMaxListeners(target);
+    if (m > 0 && existing.length > m && !existing.warned) {
+      existing.warned = true;
+      // No error code for this since it is a Warning
+      // eslint-disable-next-line no-restricted-syntax
+      var w = new Error('Possible EventEmitter memory leak detected. ' +
+                          existing.length + ' ' + String(type) + ' listeners ' +
+                          'added. Use emitter.setMaxListeners() to ' +
+                          'increase limit');
+      w.name = 'MaxListenersExceededWarning';
+      w.emitter = target;
+      w.type = type;
+      w.count = existing.length;
+      ProcessEmitWarning(w);
+    }
+  }
+
+  return target;
+}
+
+EventEmitter.prototype.addListener = function addListener(type, listener) {
+  return _addListener(this, type, listener, false);
+};
+
+EventEmitter.prototype.on = EventEmitter.prototype.addListener;
+
+EventEmitter.prototype.prependListener =
+    function prependListener(type, listener) {
+      return _addListener(this, type, listener, true);
+    };
+
+function onceWrapper() {
+  if (!this.fired) {
+    this.target.removeListener(this.type, this.wrapFn);
+    this.fired = true;
+    if (arguments.length === 0)
+      return this.listener.call(this.target);
+    return this.listener.apply(this.target, arguments);
+  }
+}
+
+function _onceWrap(target, type, listener) {
+  var state = { fired: false, wrapFn: undefined, target: target, type: type, listener: listener };
+  var wrapped = onceWrapper.bind(state);
+  wrapped.listener = listener;
+  state.wrapFn = wrapped;
+  return wrapped;
+}
+
+EventEmitter.prototype.once = function once(type, listener) {
+  checkListener(listener);
+  this.on(type, _onceWrap(this, type, listener));
+  return this;
+};
+
+EventEmitter.prototype.prependOnceListener =
+    function prependOnceListener(type, listener) {
+      checkListener(listener);
+      this.prependListener(type, _onceWrap(this, type, listener));
+      return this;
+    };
+
+// Emits a 'removeListener' event if and only if the listener was removed.
+EventEmitter.prototype.removeListener =
+    function removeListener(type, listener) {
+      var list, events, position, i, originalListener;
+
+      checkListener(listener);
+
+      events = this._events;
+      if (events === undefined)
+        return this;
+
+      list = events[type];
+      if (list === undefined)
+        return this;
+
+      if (list === listener || list.listener === listener) {
+        if (--this._eventsCount === 0)
+          this._events = Object.create(null);
+        else {
+          delete events[type];
+          if (events.removeListener)
+            this.emit('removeListener', type, list.listener || listener);
+        }
+      } else if (typeof list !== 'function') {
+        position = -1;
+
+        for (i = list.length - 1; i >= 0; i--) {
+          if (list[i] === listener || list[i].listener === listener) {
+            originalListener = list[i].listener;
+            position = i;
+            break;
+          }
+        }
+
+        if (position < 0)
+          return this;
+
+        if (position === 0)
+          list.shift();
+        else {
+          spliceOne(list, position);
+        }
+
+        if (list.length === 1)
+          events[type] = list[0];
+
+        if (events.removeListener !== undefined)
+          this.emit('removeListener', type, originalListener || listener);
+      }
+
+      return this;
+    };
+
+EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
+
+EventEmitter.prototype.removeAllListeners =
+    function removeAllListeners(type) {
+      var listeners, events, i;
+
+      events = this._events;
+      if (events === undefined)
+        return this;
+
+      // not listening for removeListener, no need to emit
+      if (events.removeListener === undefined) {
+        if (arguments.length === 0) {
+          this._events = Object.create(null);
+          this._eventsCount = 0;
+        } else if (events[type] !== undefined) {
+          if (--this._eventsCount === 0)
+            this._events = Object.create(null);
+          else
+            delete events[type];
+        }
+        return this;
+      }
+
+      // emit removeListener for all listeners on all events
+      if (arguments.length === 0) {
+        var keys = Object.keys(events);
+        var key;
+        for (i = 0; i < keys.length; ++i) {
+          key = keys[i];
+          if (key === 'removeListener') continue;
+          this.removeAllListeners(key);
+        }
+        this.removeAllListeners('removeListener');
+        this._events = Object.create(null);
+        this._eventsCount = 0;
+        return this;
+      }
+
+      listeners = events[type];
+
+      if (typeof listeners === 'function') {
+        this.removeListener(type, listeners);
+      } else if (listeners !== undefined) {
+        // LIFO order
+        for (i = listeners.length - 1; i >= 0; i--) {
+          this.removeListener(type, listeners[i]);
+        }
+      }
+
+      return this;
+    };
+
+function _listeners(target, type, unwrap) {
+  var events = target._events;
+
+  if (events === undefined)
+    return [];
+
+  var evlistener = events[type];
+  if (evlistener === undefined)
+    return [];
+
+  if (typeof evlistener === 'function')
+    return unwrap ? [evlistener.listener || evlistener] : [evlistener];
+
+  return unwrap ?
+    unwrapListeners(evlistener) : arrayClone(evlistener, evlistener.length);
+}
+
+EventEmitter.prototype.listeners = function listeners(type) {
+  return _listeners(this, type, true);
+};
+
+EventEmitter.prototype.rawListeners = function rawListeners(type) {
+  return _listeners(this, type, false);
+};
+
+EventEmitter.listenerCount = function(emitter, type) {
+  if (typeof emitter.listenerCount === 'function') {
+    return emitter.listenerCount(type);
+  } else {
+    return listenerCount.call(emitter, type);
+  }
+};
+
+EventEmitter.prototype.listenerCount = listenerCount;
+function listenerCount(type) {
+  var events = this._events;
+
+  if (events !== undefined) {
+    var evlistener = events[type];
+
+    if (typeof evlistener === 'function') {
+      return 1;
+    } else if (evlistener !== undefined) {
+      return evlistener.length;
+    }
+  }
+
+  return 0;
+}
+
+EventEmitter.prototype.eventNames = function eventNames() {
+  return this._eventsCount > 0 ? ReflectOwnKeys(this._events) : [];
+};
+
+function arrayClone(arr, n) {
+  var copy = new Array(n);
+  for (var i = 0; i < n; ++i)
+    copy[i] = arr[i];
+  return copy;
+}
+
+function spliceOne(list, index) {
+  for (; index + 1 < list.length; index++)
+    list[index] = list[index + 1];
+  list.pop();
+}
+
+function unwrapListeners(arr) {
+  var ret = new Array(arr.length);
+  for (var i = 0; i < ret.length; ++i) {
+    ret[i] = arr[i].listener || arr[i];
+  }
+  return ret;
+}
+
+function once(emitter, name) {
+  return new Promise(function (resolve, reject) {
+    function errorListener(err) {
+      emitter.removeListener(name, resolver);
+      reject(err);
+    }
+
+    function resolver() {
+      if (typeof emitter.removeListener === 'function') {
+        emitter.removeListener('error', errorListener);
+      }
+      resolve([].slice.call(arguments));
+    };
+
+    eventTargetAgnosticAddListener(emitter, name, resolver, { once: true });
+    if (name !== 'error') {
+      addErrorHandlerIfEventEmitter(emitter, errorListener, { once: true });
+    }
+  });
+}
+
+function addErrorHandlerIfEventEmitter(emitter, handler, flags) {
+  if (typeof emitter.on === 'function') {
+    eventTargetAgnosticAddListener(emitter, 'error', handler, flags);
+  }
+}
+
+function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
+  if (typeof emitter.on === 'function') {
+    if (flags.once) {
+      emitter.once(name, listener);
+    } else {
+      emitter.on(name, listener);
+    }
+  } else if (typeof emitter.addEventListener === 'function') {
+    // EventTarget does not have `error` event semantics like Node
+    // EventEmitters, we do not listen for `error` events here.
+    emitter.addEventListener(name, function wrapListener(arg) {
+      // IE does not have builtin `{ once: true }` support so we
+      // have to do it manually.
+      if (flags.once) {
+        emitter.removeEventListener(name, wrapListener);
+      }
+      listener(arg);
+    });
+  } else {
+    throw new TypeError('The "emitter" argument must be of type EventEmitter. Received type ' + typeof emitter);
+  }
+}
+
+
+/***/ }),
+
 /***/ 9793:
 /***/ ((module) => {
 
@@ -1008,6 +1513,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.audioInputMachine = void 0;
 const vad_web_1 = __webpack_require__(9762);
@@ -1015,9 +1523,9 @@ const ConfigModule_1 = __webpack_require__(8186);
 const RequestInterceptor_1 = __webpack_require__(4870);
 const AudioEncoder_1 = __webpack_require__(7886);
 const xstate_1 = __webpack_require__(4679);
+const EventBus_js_1 = __importDefault(__webpack_require__(7635));
 // Assuming config.appServerUrl is of type string.
 const fullWorkletURL = `${ConfigModule_1.config.appServerUrl}/vad.worklet.bundle.min.js`;
-const EventBus = window.EventBus;
 let audioMimeType = "audio/wav";
 let speechStartTime = 0;
 const threshold = 1000; // 1000 ms = 1 second, about the length of "Hey, Pi"
@@ -1033,21 +1541,21 @@ const micVADOptions = {
     onSpeechStart: () => {
         console.log("Speech started");
         speechStartTime = Date.now();
-        EventBus.emit("saypi:userSpeaking");
+        EventBus_js_1.default.emit("saypi:userSpeaking");
     },
     onSpeechEnd: (rawAudioData) => {
         console.log("Speech ended");
         const speechStopTime = Date.now();
         const speechDuration = speechStopTime - speechStartTime;
         const audioBlob = (0, AudioEncoder_1.convertToWavBlob)(rawAudioData);
-        EventBus.emit("audio:dataavailable", {
+        EventBus_js_1.default.emit("audio:dataavailable", {
             blob: audioBlob,
             duration: speechDuration,
         });
     },
     onVADMisfire: () => {
         console.log("Cancelled. Audio was not speech.");
-        EventBus.emit("saypi:userStoppedSpeaking", { duration: 0 });
+        EventBus_js_1.default.emit("saypi:userStoppedSpeaking", { duration: 0 });
     },
 };
 // The callback type can be more specific based on your usage
@@ -1220,7 +1728,7 @@ exports.audioInputMachine = (0, xstate_1.createMachine)({
             const speechDuration = duration;
             if (Number(sizeInKb) > 0) {
                 // Upload the audio to the server for transcription
-                EventBus.emit("saypi:userStoppedSpeaking", {
+                EventBus_js_1.default.emit("saypi:userStoppedSpeaking", {
                     duration: speechDuration,
                     blob,
                 });
@@ -7333,6 +7841,63 @@ var config = {
 
 /***/ }),
 
+/***/ 7635:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var events__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7187);
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new events__WEBPACK_IMPORTED_MODULE_0__());
+
+/***/ }),
+
+/***/ 484:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+/* unused harmony exports serializeStateValue, logger */
+function serializeStateValue(stateValue) {
+  if (typeof stateValue === "string") {
+    return stateValue;
+  }
+  return Object.keys(stateValue).map(function (key) {
+    return "".concat(key, ":").concat(serializeStateValue(stateValue[key]));
+  }).join(",");
+}
+var DEBUG = false; // Consider using config and .env to set the DEBUG flag
+
+var logger = {
+  debug: function debug() {
+    if (DEBUG) {
+      var _console;
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+      (_console = console).log.apply(_console, ["DEBUG:"].concat(args));
+    }
+  },
+  info: function info() {
+    var _console2;
+    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
+    }
+    (_console2 = console).log.apply(_console2, ["INFO:"].concat(args));
+  },
+  error: function error() {
+    var _console3;
+    for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+      args[_key3] = arguments[_key3];
+    }
+    (_console3 = console).error.apply(_console3, ["ERROR:"].concat(args));
+  }
+};
+
+/***/ }),
+
 /***/ 4870:
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
@@ -7343,14 +7908,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _ConfigModule_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8186);
 
-var filesToRedirect = ["silero_vad.onnx", "ort-wasm-simd.wasm", "ort.min.js.map"];
+var filesToRedirect = ["silero_vad.onnx", "ort-wasm-simd.wasm", "ort.min.js.map", "vad.worklet.bundle.min.js"];
+
+// Function to construct the URL for local extension resources
+function getExtensionResourceUrl(filename) {
+  var web_accessible_resources_dir = "public";
+  var filepath = web_accessible_resources_dir + "/" + filename;
+  return chrome.runtime.getURL(filepath);
+}
 
 // Function to redirect specific XMLHttpRequests
 function redirectXMLHttpRequest(open) {
   XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
     var filename = url.split("/").pop();
     if (filename && filesToRedirect.includes(filename)) {
-      arguments[1] = "".concat(_ConfigModule_js__WEBPACK_IMPORTED_MODULE_0__.config.appServerUrl, "/").concat(filename);
+      // Check if running as a Chrome extension
+      if (chrome.runtime && chrome.runtime.id) {
+        arguments[1] = getExtensionResourceUrl(filename);
+      } else {
+        arguments[1] = "".concat(_ConfigModule_js__WEBPACK_IMPORTED_MODULE_0__.config.appServerUrl, "/").concat(filename);
+      }
     }
     open.apply(this, arguments);
   };
@@ -7361,7 +7938,12 @@ function redirectFetch(_fetch) {
   window.fetch = function (url, opts) {
     var filename = url.split("/").pop();
     if (filename && filesToRedirect.includes(filename)) {
-      arguments[0] = "".concat(_ConfigModule_js__WEBPACK_IMPORTED_MODULE_0__.config.appServerUrl, "/").concat(filename);
+      // Check if running as a Chrome extension
+      if (chrome.runtime && chrome.runtime.id) {
+        arguments[0] = getExtensionResourceUrl(filename);
+      } else {
+        arguments[0] = "".concat(_ConfigModule_js__WEBPACK_IMPORTED_MODULE_0__.config.appServerUrl, "/").concat(filename);
+      }
     }
     return _fetch.apply(this, arguments);
   };
@@ -7448,16 +8030,18 @@ var __webpack_exports__ = {};
 (() => {
 "use strict";
 
-// EXTERNAL MODULE: ./node_modules/xstate/es/interpreter.js + 3 modules
-var interpreter = __webpack_require__(9805);
+// UNUSED EXPORTS: default
+
 // EXTERNAL MODULE: ./src/state-machines/AudioInputMachine.ts
 var AudioInputMachine = __webpack_require__(1541);
 // EXTERNAL MODULE: ./node_modules/xstate/es/Machine.js
 var Machine = __webpack_require__(629);
+// EXTERNAL MODULE: ./src/EventBus.js
+var src_EventBus = __webpack_require__(7635);
 ;// CONCATENATED MODULE: ./src/state-machines/AudioOutputMachine.js
 
-var EventBus = window.EventBus;
-var audioOutputMachine = (0,Machine/* createMachine */.C)({
+
+var AudioOutputMachine_audioOutputMachine = (0,Machine/* createMachine */.C)({
   context: {
     autoplay: false
   },
@@ -7555,54 +8139,23 @@ var audioOutputMachine = (0,Machine/* createMachine */.C)({
   actions: {
     emitEvent: function emitEvent(context, event, _ref) {
       var action = _ref.action;
-      EventBus.emit(action.params.eventName);
+      src_EventBus["default"].emit(action.params.eventName);
     }
   },
   guards: {},
   services: {},
   delays: {}
 });
-;// CONCATENATED MODULE: ./src/LoggingModule.js
-function serializeStateValue(stateValue) {
-  if (typeof stateValue === "string") {
-    return stateValue;
-  }
-  return Object.keys(stateValue).map(function (key) {
-    return "".concat(key, ":").concat(serializeStateValue(stateValue[key]));
-  }).join(",");
-}
-var DEBUG = false; // Consider using config and .env to set the DEBUG flag
-
-var logger = {
-  debug: function debug() {
-    if (DEBUG) {
-      var _console;
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-      (_console = console).log.apply(_console, ["DEBUG:"].concat(args));
-    }
-  },
-  info: function info() {
-    var _console2;
-    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-      args[_key2] = arguments[_key2];
-    }
-    (_console2 = console).log.apply(_console2, ["INFO:"].concat(args));
-  },
-  error: function error() {
-    var _console3;
-    for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-      args[_key3] = arguments[_key3];
-    }
-    (_console3 = console).error.apply(_console3, ["ERROR:"].concat(args));
-  }
-};
+// EXTERNAL MODULE: ./src/LoggingModule.js
+var LoggingModule = __webpack_require__(484);
 ;// CONCATENATED MODULE: ./src/AudioModule.js
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 // import state machines for audio input and output
@@ -7611,86 +8164,103 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
 
 
 
-// depends on the injecting script (saypi.index.js) declaring the EventBus as a global variable
-var AudioModule_EventBus = window.EventBus;
+var AudioModule = /*#__PURE__*/(/* unused pure expression or super */ null && (function () {
+  function AudioModule() {
+    _classCallCheck(this, AudioModule);
+    this.audioElement = document.querySelector("audio");
+    if (!this.audioElement) {
+      console.error("Audio element not found!");
+    } else {
+      this.audioElement.preload = "auto"; // enable aggressive preloading of audio
+    }
 
-// audio output (Pi)
-var audioElement = document.querySelector("audio");
-if (!audioElement) {
-  console.error("Audio element not found!");
-} else {
-  audioElement.preload = "auto"; // enable aggressive preloading of audio
-}
-
-var audioOutputActor = (0,interpreter/* interpret */.kJ)(audioOutputMachine).onTransition(function (state) {
-  if (state.changed) {
-    var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
-    var toState = serializeStateValue(state.value);
-    logger.debug("Audio Output Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
-  }
-}).start();
-function registerAudioPlaybackEvents(audio, actor) {
-  var events = ["loadstart", "loadedmetadata", "canplaythrough", "play", "pause", "ended", "seeked", "emptied"];
-  events.forEach(function (event) {
-    audio.addEventListener(event, function () {
-      return actor.send(event);
+    this.audioOutputActor = interpret(audioOutputMachine);
+    this.audioOutputActor.onTransition(function (state) {
+      if (state.changed) {
+        var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
+        var toState = serializeStateValue(state.value);
+        logger.debug("Audio Output Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+      }
     });
-  });
-  audio.addEventListener("playing", function () {
-    actor.send("play");
-  });
-}
-registerAudioPlaybackEvents(audioElement, audioOutputActor);
-
-// audio input (user)
-var audioInputActor = (0,interpreter/* interpret */.kJ)(AudioInputMachine.audioInputMachine).onTransition(function (state) {
-  if (state.changed) {
-    var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
-    var toState = serializeStateValue(state.value);
-    logger.debug("Audio Input Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+    this.audioInputActor = interpret(audioInputMachine);
+    this.audioInputActor.onTransition(function (state) {
+      if (state.changed) {
+        var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
+        var toState = serializeStateValue(state.value);
+        logger.debug("Audio Input Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+      }
+    });
   }
-}).start();
+  _createClass(AudioModule, [{
+    key: "start",
+    value: function start() {
+      // audio output (Pi)
+      this.audioOutputActor.start();
+      this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
 
-/* These events are used to control/pass requests to the audio module from other modules */
-function registerAudioCommands() {
-  // audio input (recording) commands
-  AudioModule_EventBus.on("audio:setupRecording", function (e) {
-    audioInputActor.send("acquire");
-  });
-  AudioModule_EventBus.on("audio:tearDownRecording", function (e) {
-    audioInputActor.send("release");
-  });
-  AudioModule_EventBus.on("audio:startRecording", function (e) {
-    // Check if Pi is currently speaking and stop her audio
-    audioOutputActor.send("pause");
+      // audio input (user)
+      this.audioInputActor.start();
+      this.registerAudioCommands(this.audioInputActor, this.audioOutputActor);
+    }
+  }, {
+    key: "registerAudioPlaybackEvents",
+    value: function registerAudioPlaybackEvents(audio, actor) {
+      var events = ["loadstart", "loadedmetadata", "canplaythrough", "play", "pause", "ended", "seeked", "emptied"];
+      events.forEach(function (event) {
+        audio.addEventListener(event, function () {
+          return actor.send(event);
+        });
+      });
+      audio.addEventListener("playing", function () {
+        actor.send("play");
+      });
+    }
 
-    // Check if the MediaRecorder is acquired before starting?
-    audioInputActor.send(["acquire", "start"]);
-  });
-  AudioModule_EventBus.on("audio:stopRecording", function (e) {
-    audioInputActor.send("stopRequested");
-    /* resume or cancel Pi's audio */
-    /* TODO: reassess how to handle interruptions
-    audioOutputActor.send("play"); // resume Pi's audio
-    audioOutputActor.send("stop"); // cancel Pi's audio
-    */
-  });
-  // audio input (recording) events (pass media recorder events -> audio input machine actor)
-  AudioModule_EventBus.on("audio:dataavailable", function (detail) {
-    audioInputActor.send(_objectSpread({
-      type: "dataAvailable"
-    }, detail));
-  });
-  AudioModule_EventBus.on("audio:input:stop", function (e) {
-    audioInputActor.send("stop");
-  });
+    /* These events are used to control/pass requests to the audio module from other modules */
+  }, {
+    key: "registerAudioCommands",
+    value: function registerAudioCommands(inputActor, outputActor) {
+      // audio input (recording) commands
+      EventBus.on("audio:setupRecording", function (e) {
+        inputActor.send("acquire");
+      });
+      EventBus.on("audio:tearDownRecording", function (e) {
+        inputActor.send("release");
+      });
+      EventBus.on("audio:startRecording", function (e) {
+        // Check if Pi is currently speaking and stop her audio
+        outputActor.send("pause");
 
-  // audio output (playback) commands
-  AudioModule_EventBus.on("audio:reload", function (e) {
-    audioOutputActor.send("reload");
-  });
-}
-registerAudioCommands();
+        // Check if the microphone is acquired before starting?
+        inputActor.send(["acquire", "start"]);
+      });
+      EventBus.on("audio:stopRecording", function (e) {
+        inputActor.send("stopRequested");
+        /* resume or cancel Pi's audio */
+        /* TODO: reassess how to handle interruptions
+        outputActor.send("play"); // resume Pi's audio
+        outputActor.send("stop"); // cancel Pi's audio
+        */
+      });
+      // audio input (recording) events (pass media recorder events -> audio input machine actor)
+      EventBus.on("audio:dataavailable", function (detail) {
+        inputActor.send(_objectSpread({
+          type: "dataAvailable"
+        }, detail));
+      });
+      EventBus.on("audio:input:stop", function (e) {
+        inputActor.send("stop");
+      });
+
+      // audio output (playback) commands
+      EventBus.on("audio:reload", function (e) {
+        outputActor.send("reload");
+      });
+    }
+  }]);
+  return AudioModule;
+}()));
+
 })();
 
 /******/ })()

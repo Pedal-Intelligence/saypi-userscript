@@ -3,6 +3,7 @@ import { config } from "../ConfigModule";
 import { setupInterceptors } from "../RequestInterceptor";
 import { convertToWavBlob } from "../AudioEncoder";
 import { createMachine, assign } from "xstate";
+import EventBus from "../EventBus.js";
 
 // Assuming config.appServerUrl is of type string.
 const fullWorkletURL: string = `${config.appServerUrl}/vad.worklet.bundle.min.js`;
@@ -14,8 +15,6 @@ declare global {
     EventBus: any;
   }
 }
-
-const EventBus = window.EventBus;
 
 let audioMimeType: string = "audio/wav";
 let speechStartTime: number = 0;

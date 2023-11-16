@@ -4,6 +4,7 @@ import { isMobileView } from "./UserAgentModule.js";
 import EventBus from "./EventBus.js";
 import EventModule from "./EventModule.js";
 import { logger } from "./LoggingModule.js";
+import { replaceEllipsisWithSpace } from "./TextModule.js";
 
 // Define the shape of the response JSON object
 interface TranscriptionResponse {
@@ -242,11 +243,47 @@ function constructTranscriptionFormData(
   return formData;
 }
 
-export function setPromptText(transcript: string): void {
+function scrollToBottom(textarea: HTMLTextAreaElement) {
+  // Define the maximum height
+  const maxHeight = 455;
+
+  // Reset the height to auto to get the correct scrollHeight
+    textarea.style.height = "auto";
+
+  // Set the height of the textarea, up to the maximum height
+  if (textarea.scrollHeight > maxHeight) {
+    textarea.style.height = `${maxHeight}px`;
+    textarea.style.overflowY = "scroll"; // Enable vertical scrollbar
+  } else {
+    textarea.style.height = `${textarea.scrollHeight}px`;
+    textarea.style.overflowY = "hidden"; // Hide vertical scrollbar
+  }
+
+  // Scroll to the bottom
+  textarea.scrollTop = textarea.scrollHeight;
+}
+
+/**
+ * Set the prompt textarea to the given transcript, but do not submit it
+ * @param transcript The prompt to be displayed in the prompt textarea
+ */
+export function setDraftPrompt(transcript: string): void {
+  const textarea = document.getElementById(
+    "saypi-prompt"
+  ) as HTMLTextAreaElement;
+
+  textarea.setAttribute("placeholder", `${transcript}`);
+  scrollToBottom(textarea);
+}
+
+export function setFinalPrompt(transcript: string): void {
   logger.info(`Merged transcript: ${transcript}`);
   const textarea = document.getElementById(
     "saypi-prompt"
   ) as HTMLTextAreaElement;
+  textarea.setAttribute("placeholder", "");
+  const initialHeight = "2rem"; // aka 32px
+  textarea.style.height = initialHeight; // Reset the height after draft preview has been dismissed
   if (isMobileView()) {
     // if transcript is > 1000 characters, truncate it to 999 characters plus an ellipsis
     if (transcript.length > 1000) {
@@ -275,5 +312,7 @@ export function mergeTranscripts(transcripts: Record<number, string>): string {
     sortedTranscripts.push(transcripts[key].trim());
   }
 
-  return sortedTranscripts.join(" ");
+  const joinedTranscripts = sortedTranscripts.join(" ");
+  const mergedTranscript = replaceEllipsisWithSpace(joinedTranscripts);
+  return mergedTranscript;
 }

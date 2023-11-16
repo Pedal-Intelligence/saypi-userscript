@@ -2,7 +2,7 @@
  * Disabled for now, until combined with the merge branch
  * which introduces Jest and a new test suite layout
 
-import { calculateDelay } from "src/state-machines/SayPiMachine";
+import { calculateDelay } from "../src/state-machines/SayPiMachine";
 
 // Mock Date.getTime()
 const mockCurrentTime = 1600000000000; // Some fixed timestamp
