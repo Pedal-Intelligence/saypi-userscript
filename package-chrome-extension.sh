@@ -13,5 +13,7 @@ cd dist/chrome-extension
 zip -r saypi.chrome.zip *
 cd ../..
 mv dist/chrome-extension/saypi.chrome.zip dist
+cp dist/saypi.chrome.zip dist/saypi.edge.zip
 rm -rf dist/chrome-extension
 echo "Submit dist/saypi.chrome.zip to Chrome Web Store: https://chrome.google.com/webstore/developer/dashboard"
+echo "Submit dist/saypi.edge.zip to MS Edge Web Store:  https://partner.microsoft.com/en-us/dashboard/microsoftedge/overview"
