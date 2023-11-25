@@ -240,6 +240,7 @@ function constructTranscriptionFormData(
   formData.append("duration", audioDurationSeconds.toString());
   formData.append("sequenceNumber", sequenceNum.toString());
   formData.append("messages", JSON.stringify(messages));
+  formData.append("acceptsMerge", "true"); // always accept merge requests (since v1.4.10)
   return formData;
 }
 
