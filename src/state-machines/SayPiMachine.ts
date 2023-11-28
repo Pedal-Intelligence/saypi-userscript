@@ -20,6 +20,7 @@ type SayPiTranscribedEvent = {
   sequenceNumber: number;
   pFinishedSpeaking?: number;
   tempo?: number;
+  merged?: number[];
 };
 
 type SayPiSpeechStoppedEvent = {
@@ -525,6 +526,11 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         const transcription = event.text;
         const sequenceNumber = event.sequenceNumber;
         SayPiContext.transcriptions[sequenceNumber] = transcription;
+        if (event.merged) {
+          event.merged.forEach((mergedSequenceNumber) => {
+            delete SayPiContext.transcriptions[mergedSequenceNumber];
+          });
+        }
       },
 
       acquireMicrophone: (context, event) => {

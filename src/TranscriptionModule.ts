@@ -12,6 +12,7 @@ interface TranscriptionResponse {
   sequenceNumber: number;
   pFinishedSpeaking?: number;
   tempo?: number;
+  merged?: number[];
 }
 
 const knownNetworkErrorMessages = [
@@ -184,6 +185,9 @@ async function uploadAudio(
     }
     if (responseJson.hasOwnProperty("tempo")) {
       payload.tempo = responseJson.tempo;
+    }
+    if (responseJson.hasOwnProperty("merged")) {
+      payload.merged = responseJson.merged;
     }
 
     logger.info(
