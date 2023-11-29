@@ -4,7 +4,8 @@ import { isMobileView } from "./UserAgentModule.js";
 import EventBus from "./EventBus.js";
 import EventModule from "./EventModule.js";
 import { logger } from "./LoggingModule.js";
-import { replaceEllipsisWithSpace } from "./TextModule.js";
+import { PreferenceModule } from './prefs/PreferenceModule';
+
 
 // Define the shape of the response JSON object
 interface TranscriptionResponse {
@@ -141,7 +142,8 @@ async function uploadAudio(
       }
     );
 
-    const formData = constructTranscriptionFormData(
+    // Await the async function to get the formData
+    const formData = await constructTranscriptionFormData(
       audioBlob,
       audioDurationMillis / 1000,
       messages
@@ -219,7 +221,7 @@ async function uploadAudio(
   }
 }
 
-function constructTranscriptionFormData(
+async function constructTranscriptionFormData(
   audioBlob: Blob,
   audioDurationSeconds: number,
   messages: { role: string; content: string; sequenceNumber?: number }[]
@@ -239,14 +241,22 @@ function constructTranscriptionFormData(
     ).toFixed(2)}kb`
   );
 
-  // Add the audio blob to the FormData object
+  // Add the audio and other input parameters to the FormData object
   formData.append("audio", audioBlob, audioFilename);
   formData.append("duration", audioDurationSeconds.toString());
   formData.append("sequenceNumber", sequenceNum.toString());
   formData.append("messages", JSON.stringify(messages));
   formData.append("acceptsMerge", "true"); // always accept merge requests (since v1.4.10)
+
+  // Wait for the preference to be retrieved before appending it to the FormData
+  const preference = await PreferenceModule.getPreference();
+  if (preference) {
+    formData.append("prefer", preference);
+  }
+
   return formData;
 }
+
 
 function scrollToBottom(textarea: HTMLTextAreaElement) {
   // Define the maximum height
