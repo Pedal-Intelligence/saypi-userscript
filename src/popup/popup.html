@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Slider with Icons</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* Additional styles if needed */
+      .slider-thumb {
+        width: 3rem;
+        height: 3rem;
+        background-color: #ffffff;
+        border: 2px solid #000000;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="w-full max-w-lg px-4">
+      <div class="flex justify-between mb-4">
+        <span class="text-2xl">🐇</span>
+        <span class="text-2xl">🦌</span>
+        <span class="text-2xl">🦉</span>
+      </div>
+      <input
+        type="range"
+        min="1"
+        max="3"
+        step="1"
+        value="2"
+        class="slider w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
+      />
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
