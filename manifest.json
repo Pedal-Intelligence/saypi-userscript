@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
   "name": "Say, Pi",
-  "version": "1.4.9",
+  "version": "1.5.0",
   "description": "Seamless speech-to-text enhancement for Pi, the conversational AI. Enjoy hands-free, high-accuracy conversations in any language.",
-  "permissions": [],
+  "permissions": ["storage"],
   "content_scripts": [
     {
       "matches": ["https://pi.ai/*"],
