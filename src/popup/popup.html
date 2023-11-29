@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Slider with Icons</title>
+    <title>Interactive Slider</title>
     <link
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
@@ -13,34 +13,73 @@
       .slider-thumb {
         width: 3rem;
         height: 3rem;
-        background-color: #ffffff;
-        border: 2px solid #000000;
+        background-color: white;
+        border: 2px solid black;
         border-radius: 50%;
         cursor: pointer;
       }
+      #sliderValue {
+        display: block;
+        text-align: center;
+      }
       .icon {
         transition: transform 0.3s ease;
+        padding: 0 0.5rem;
       }
       .icon.active {
         transform: scale(1.5);
       }
+      #preference-selector {
+        padding: 1rem;
+      }
     </style>
   </head>
   <body class="bg-gray-100 flex items-center justify-center h-screen">
-    <div class="w-full max-w-lg px-4">
-      <div class="flex justify-between mb-4">
-        <span class="icon text-2xl">🐇</span>
-        <span class="icon text-2xl active">🦌</span>
-        <span class="icon text-2xl">🦉</span>
+    <div id="preference-selector" class="w-full max-w-lg">
+      <!-- Slider with icons -->
+      <div class="">
+        <!-- Icons -->
+        <div class="flex justify-between mb-2">
+          <span
+            role="img"
+            class="icon text-2xl"
+            aria-label="Hare"
+            slider-value="0"
+            id="speed"
+            >🐇</span
+          >
+          <span
+            role="img"
+            class="icon text-2xl active"
+            aria-label="Deer"
+            slider-value="1"
+            id="balanced"
+            >🦌</span
+          >
+          <span
+            role="img"
+            class="icon text-2xl"
+            aria-label="Owl"
+            slider-value="2"
+            id="accuracy"
+            >🦉</span
+          >
+        </div>
+        <!-- Slider -->
+        <input
+          type="range"
+          min="0"
+          max="2"
+          value="1"
+          class="slider w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
+          id="customRange"
+          title="Select your prefered mode"
+        />
       </div>
-      <input
-        type="range"
-        min="0"
-        max="2"
-        step="1"
-        value="1"
-        class="slider w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
-      />
+      <!-- Text below slider -->
+      <div id="sliderValue" class="mt-2 text-lg font-semibold text-gray-700">
+        balanced
+      </div>
     </div>
 
     <script src="popup.js"></script>
