@@ -18,21 +18,27 @@
         border-radius: 50%;
         cursor: pointer;
       }
+      .icon {
+        transition: transform 0.3s ease;
+      }
+      .icon.active {
+        transform: scale(1.5);
+      }
     </style>
   </head>
   <body class="bg-gray-100 flex items-center justify-center h-screen">
     <div class="w-full max-w-lg px-4">
       <div class="flex justify-between mb-4">
-        <span class="text-2xl">🐇</span>
-        <span class="text-2xl">🦌</span>
-        <span class="text-2xl">🦉</span>
+        <span class="icon text-2xl">🐇</span>
+        <span class="icon text-2xl active">🦌</span>
+        <span class="icon text-2xl">🦉</span>
       </div>
       <input
         type="range"
-        min="1"
-        max="3"
+        min="0"
+        max="2"
         step="1"
-        value="2"
+        value="1"
         class="slider w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
       />
     </div>
