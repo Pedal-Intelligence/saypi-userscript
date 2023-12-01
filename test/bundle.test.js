@@ -1,20 +1,20 @@
+// bundles.test.ts
 import request from "supertest";
-import app from "../server.js"; // make sure to export your app in server.js
+import app from "../server.js"; // the express server
+import { expect, describe, it } from "@jest/globals";
 
-describe("GET Say, Pi userscript", function () {
-  it("responds with js", function (done) {
-    request(app)
-      .get("/saypi.user.js")
-      .expect("Content-Type", /javascript/)
-      .expect(200, done);
+describe("GET Say, Pi userscript", () => {
+  it("responds with js", async () => {
+    const response = await request(app).get("/saypi.user.js");
+    expect(response.headers["content-type"]).toMatch(/javascript/);
+    expect(response.statusCode).toBe(200);
   });
 });
 
-describe("GET audio module bundle", function () {
-  it("responds with js", function (done) {
-    request(app)
-      .get("/audioModule.bundle.js")
-      .expect("Content-Type", /javascript/)
-      .expect(200, done);
+describe("GET audio module bundle", () => {
+  it("responds with js", async () => {
+    const response = await request(app).get("/audioModule.bundle.js");
+    expect(response.headers["content-type"]).toMatch(/javascript/);
+    expect(response.statusCode).toBe(200);
   });
 });

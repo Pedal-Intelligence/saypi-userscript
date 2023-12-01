@@ -9,6 +9,8 @@ cp public/silero_vad.onnx dist/chrome-extension/public
 cp public/vad.worklet.bundle.min.js dist/chrome-extension/public
 mkdir -p dist/chrome-extension/src/icons
 cp src/icons/bubble-*.png dist/chrome-extension/src/icons
+mkdir -p dist/chrome-extension/src/popup
+cp src/popup/*.html src/popup/*.js dist/chrome-extension/src/popup
 cd dist/chrome-extension
 zip -r saypi.chrome.zip *
 cd ../..

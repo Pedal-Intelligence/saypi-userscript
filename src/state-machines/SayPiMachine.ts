@@ -1,5 +1,5 @@
 import { buttonModule } from "../ButtonModule.js";
-import { createMachine, Typestate, assign } from "xstate";
+import { createMachine, Typestate, assign, log, DoneInvokeEvent } from "xstate";
 import AnimationModule from "../AnimationModule.js";
 import { isMobileView } from "../UserAgentModule.js";
 import {
@@ -8,9 +8,11 @@ import {
   setFinalPrompt,
   isTranscriptionPending,
   clearPendingTranscriptions,
-  mergeTranscripts,
 } from "../TranscriptionModule";
+import { TranscriptMergeService } from "../TranscriptMergeService";
+import { config } from "../ConfigModule";
 import EventBus from "../EventBus";
+import { calculateDelay } from "../TimerModule";
 
 type SayPiTranscribedEvent = {
   type: "saypi:transcribed";
@@ -18,6 +20,7 @@ type SayPiTranscribedEvent = {
   sequenceNumber: number;
   pFinishedSpeaking?: number;
   tempo?: number;
+  merged?: number[];
 };
 
 type SayPiSpeechStoppedEvent = {
@@ -86,32 +89,28 @@ interface SayPiTypestate extends Typestate<SayPiContext> {
   context: SayPiContext;
 }
 
-/* helper functions */
-export function calculateDelay(
-  timeUserStoppedSpeaking: number,
-  probabilityFinished: number,
-  tempo: number,
-  maxDelay: number
-): number {
-  // Get the current time (in milliseconds)
-  const currentTime = new Date().getTime();
-
-  // Calculate the time elapsed since the user stopped speaking (in milliseconds)
-  const timeElapsed = currentTime - timeUserStoppedSpeaking;
-
-  // We invert the tempo because a faster speech (tempo approaching 1) should reduce the delay
-  let tempoFactor = 1 - tempo;
-
-  // Calculate the combined probability factor
-  let combinedProbability = probabilityFinished * tempoFactor;
-
-  // The combined factor influences the initial delay
-  const initialDelay = combinedProbability * maxDelay;
-
-  // Calculate the final delay after accounting for the time already elapsed
-  const finalDelay = Math.max(initialDelay - timeElapsed, 0);
-  return finalDelay;
+function getHighestKey(transcriptions: Record<number, string>): number {
+  // Find the highest existing key in the transcriptions
+  const highestKey = Object.keys(transcriptions).reduce(
+    (max, key) => Math.max(max, parseInt(key, 10)),
+    -1
+  );
+  return highestKey;
 }
+// time at which the user's prompt is scheduled to be submitted
+// used to judge whether there's time for another remote operation (i.e. merge request)
+var nextSubmissionTime = Date.now();
+
+const apiServerUrl = config.apiServerUrl;
+if (apiServerUrl === undefined) {
+  throw new Error(
+    "Configuration error: apiServerUrl is not defined. Please check your environment variables."
+  );
+}
+const mergeService = new TranscriptMergeService(
+  apiServerUrl,
+  navigator.language
+);
 
 /* external actions */
 const clearTranscripts = assign({
@@ -302,6 +301,68 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 entry: {
                   type: "draftPrompt",
                 },
+                invoke: {
+                  id: "mergeOptimistic",
+                  src: (context: SayPiContext, event: SayPiEvent) => {
+                    // Check if there are two or more transcripts to merge
+                    if (Object.keys(context.transcriptions).length > 1) {
+                      // This function should return a Promise that resolves with the merged transcript string
+                      return mergeService.mergeTranscriptsRemote(
+                        context.transcriptions,
+                        nextSubmissionTime
+                      );
+                    } else {
+                      // If there's one or no transcripts to merge, return a resolved Promise with the existing transcript string or an empty string
+                      const existingTranscriptKeys = Object.keys(
+                        context.transcriptions
+                      );
+                      if (existingTranscriptKeys.length === 1) {
+                        const key = existingTranscriptKeys[0];
+                        return Promise.resolve(
+                          context.transcriptions[Number(key)]
+                        );
+                      } else {
+                        return Promise.resolve(""); // No transcripts to merge
+                      }
+                    }
+                  },
+
+                  onDone: {
+                    target: "accumulating",
+                    internal: true,
+                    actions: [
+                      assign({
+                        transcriptions: (
+                          context: SayPiContext,
+                          event: DoneInvokeEvent<string>
+                        ) => {
+                          // If the event.data is empty, just return the current context.transcriptions
+                          if (!event.data) {
+                            return context.transcriptions;
+                          }
+
+                          // Use the highest key for the merged transcript
+                          const nextKey = getHighestKey(context.transcriptions);
+                          const originalKeys = Object.keys(
+                            context.transcriptions
+                          );
+                          if (originalKeys.length > 1) {
+                            console.log(
+                              `Merge accepted: ${originalKeys} into ${nextKey} - ${event.data}`
+                            );
+                          }
+                          return { [nextKey]: event.data };
+                        },
+                      }),
+                    ],
+                  },
+
+                  onError: {
+                    actions: log(
+                      "Merge request did not complete, and will be ignored"
+                    ),
+                  },
+                },
                 on: {
                   "saypi:transcribed": {
                     target: "accumulating",
@@ -465,6 +526,11 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         const transcription = event.text;
         const sequenceNumber = event.sequenceNumber;
         SayPiContext.transcriptions[sequenceNumber] = transcription;
+        if (event.merged) {
+          event.merged.forEach((mergedSequenceNumber) => {
+            delete SayPiContext.transcriptions[mergedSequenceNumber];
+          });
+        }
       },
 
       acquireMicrophone: (context, event) => {
@@ -494,12 +560,16 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
 
       draftPrompt: (context: SayPiContext) => {
-        const prompt = mergeTranscripts(context.transcriptions).trim();
+        const prompt = mergeService
+          .mergeTranscriptsLocal(context.transcriptions)
+          .trim();
         if (prompt) setDraftPrompt(prompt);
       },
 
       mergeAndSubmitTranscript: (context: SayPiContext) => {
-        const prompt = mergeTranscripts(context.transcriptions).trim();
+        const prompt = mergeService
+          .mergeTranscriptsLocal(context.transcriptions)
+          .trim();
         if (prompt) setFinalPrompt(prompt);
       },
 
@@ -590,6 +660,10 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           (finalDelay / 1000).toFixed(1),
           "seconds before submitting"
         );
+
+        // Get the current time (in milliseconds)
+        const currentTime = new Date().getTime();
+        nextSubmissionTime = currentTime + finalDelay;
 
         return finalDelay;
       },

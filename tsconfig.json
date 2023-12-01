@@ -2,12 +2,15 @@
   "compilerOptions": {
     "strict": true,
     "outDir": "./public",
-    "target": "es6",
-    "module": "commonjs",
+    "target": "ES6",
+    "module": "ESNext", // Changed to ESNext for ES modules
     "moduleResolution": "node",
     "sourceMap": true,
     "allowJs": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true
   },
   "include": ["src/**/*.ts", "src/**/*.js"]
 }
