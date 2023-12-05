@@ -1368,6 +1368,23 @@ var __filename = "/index.js";
 
 /***/ }),
 
+/***/ 879:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   _: () => (/* binding */ getExtensionResourceUrl)
+/* harmony export */ });
+// Function to construct the URL for local extension resources
+function getExtensionResourceUrl(filename) {
+    const web_accessible_resources_dir = "public";
+    const filepath = web_accessible_resources_dir + "/" + filename;
+    return chrome.runtime.getURL(filepath);
+}
+
+
+/***/ }),
+
 /***/ 933:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -5534,16 +5551,12 @@ var __webpack_exports__ = {};
 var dist = __webpack_require__(762);
 // EXTERNAL MODULE: ./src/ConfigModule.js
 var ConfigModule = __webpack_require__(186);
+// EXTERNAL MODULE: ./src/ResourceModule.ts
+var ResourceModule = __webpack_require__(879);
 ;// CONCATENATED MODULE: ./src/RequestInterceptor.js
 
-var filesToRedirect = ["silero_vad.onnx", "ort-wasm-simd.wasm", "ort.min.js.map", "vad.worklet.bundle.min.js"];
 
-// Function to construct the URL for local extension resources
-function getExtensionResourceUrl(filename) {
-  var web_accessible_resources_dir = "public";
-  var filepath = web_accessible_resources_dir + "/" + filename;
-  return chrome.runtime.getURL(filepath);
-}
+var filesToRedirect = ["silero_vad.onnx", "ort-wasm-simd.wasm", "ort.min.js.map", "vad.worklet.bundle.min.js"];
 
 // Function to redirect specific XMLHttpRequests
 function redirectXMLHttpRequest(open) {
@@ -5552,7 +5565,7 @@ function redirectXMLHttpRequest(open) {
     if (filename && filesToRedirect.includes(filename)) {
       // Check if running as a Chrome extension
       if (chrome.runtime && chrome.runtime.id) {
-        arguments[1] = getExtensionResourceUrl(filename);
+        arguments[1] = (0,ResourceModule/* getExtensionResourceUrl */._)(filename);
       } else {
         arguments[1] = "".concat(ConfigModule/* config */.v.appServerUrl, "/").concat(filename);
       }
@@ -5568,7 +5581,7 @@ function redirectFetch(_fetch) {
     if (filename && filesToRedirect.includes(filename)) {
       // Check if running as a Chrome extension
       if (chrome.runtime && chrome.runtime.id) {
-        arguments[0] = getExtensionResourceUrl(filename);
+        arguments[0] = (0,ResourceModule/* getExtensionResourceUrl */._)(filename);
       } else {
         arguments[0] = "".concat(ConfigModule/* config */.v.appServerUrl, "/").concat(filename);
       }

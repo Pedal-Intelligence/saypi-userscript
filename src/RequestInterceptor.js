@@ -1,4 +1,5 @@
 import { config } from "./ConfigModule.js";
+import { getExtensionResourceUrl } from "./ResourceModule.ts";
 
 const filesToRedirect = [
   "silero_vad.onnx",
@@ -6,13 +7,6 @@ const filesToRedirect = [
   "ort.min.js.map",
   "vad.worklet.bundle.min.js",
 ];
-
-// Function to construct the URL for local extension resources
-function getExtensionResourceUrl(filename) {
-  const web_accessible_resources_dir = "public";
-  const filepath = web_accessible_resources_dir + "/" + filename;
-  return chrome.runtime.getURL(filepath);
-}
 
 // Function to redirect specific XMLHttpRequests
 function redirectXMLHttpRequest(open) {

@@ -2303,6 +2303,23 @@ module.exports = styleTagTransform;
 
 /***/ }),
 
+/***/ 879:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   _: () => (/* binding */ getExtensionResourceUrl)
+/* harmony export */ });
+// Function to construct the URL for local extension resources
+function getExtensionResourceUrl(filename) {
+    const web_accessible_resources_dir = "public";
+    const filepath = web_accessible_resources_dir + "/" + filename;
+    return chrome.runtime.getURL(filepath);
+}
+
+
+/***/ }),
+
 /***/ 933:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -8200,16 +8217,12 @@ var interpreter = __webpack_require__(29);
 var dist = __webpack_require__(762);
 // EXTERNAL MODULE: ./src/ConfigModule.js
 var ConfigModule = __webpack_require__(186);
+// EXTERNAL MODULE: ./src/ResourceModule.ts
+var ResourceModule = __webpack_require__(879);
 ;// CONCATENATED MODULE: ./src/RequestInterceptor.js
 
-var filesToRedirect = ["silero_vad.onnx", "ort-wasm-simd.wasm", "ort.min.js.map", "vad.worklet.bundle.min.js"];
 
-// Function to construct the URL for local extension resources
-function getExtensionResourceUrl(filename) {
-  var web_accessible_resources_dir = "public";
-  var filepath = web_accessible_resources_dir + "/" + filename;
-  return chrome.runtime.getURL(filepath);
-}
+var filesToRedirect = ["silero_vad.onnx", "ort-wasm-simd.wasm", "ort.min.js.map", "vad.worklet.bundle.min.js"];
 
 // Function to redirect specific XMLHttpRequests
 function redirectXMLHttpRequest(open) {
@@ -8218,7 +8231,7 @@ function redirectXMLHttpRequest(open) {
     if (filename && filesToRedirect.includes(filename)) {
       // Check if running as a Chrome extension
       if (chrome.runtime && chrome.runtime.id) {
-        arguments[1] = getExtensionResourceUrl(filename);
+        arguments[1] = (0,ResourceModule/* getExtensionResourceUrl */._)(filename);
       } else {
         arguments[1] = "".concat(ConfigModule/* config */.v.appServerUrl, "/").concat(filename);
       }
@@ -8234,7 +8247,7 @@ function redirectFetch(_fetch) {
     if (filename && filesToRedirect.includes(filename)) {
       // Check if running as a Chrome extension
       if (chrome.runtime && chrome.runtime.id) {
-        arguments[0] = getExtensionResourceUrl(filename);
+        arguments[0] = (0,ResourceModule/* getExtensionResourceUrl */._)(filename);
       } else {
         arguments[0] = "".concat(ConfigModule/* config */.v.appServerUrl, "/").concat(filename);
       }
@@ -9183,6 +9196,22 @@ var AnimationModule = /*#__PURE__*/function () {
 _defineProperty(AnimationModule, "rectanglesSelector", ".outermost, .second, .third, .fourth, .fifth, .innermost");
 _defineProperty(AnimationModule, "talkButtonAnimations", ["piThinking", "piSpeaking", "userSpeaking", "transcribing"]);
 
+// EXTERNAL MODULE: ./src/ResourceModule.ts
+var ResourceModule = __webpack_require__(879);
+;// CONCATENATED MODULE: ./src/NotificationsModule.ts
+
+class AudibleNotificationsModule {
+    constructor() {
+        this.listeningSound = new Audio((0,ResourceModule/* getExtensionResourceUrl */._)('audio/guitar-pluck.mp3'));
+    }
+    listeningStopped() {
+        this.listeningSound.play().catch(e => {
+            console.error("Unable to play audio notification:", e);
+        });
+    }
+}
+/* harmony default export */ const NotificationsModule = (AudibleNotificationsModule);
+
 // EXTERNAL MODULE: ./src/ConfigModule.js
 var ConfigModule = __webpack_require__(186);
 ;// CONCATENATED MODULE: ./src/EventModule.js
@@ -9664,6 +9693,7 @@ function calculateDelay(timeUserStoppedSpeaking, probabilityFinished, tempo, max
 
 
 
+
 function getHighestKey(transcriptions) {
     // Find the highest existing key in the transcriptions
     const highestKey = Object.keys(transcriptions).reduce((max, key) => Math.max(max, parseInt(key, 10)), -1);
@@ -9681,6 +9711,7 @@ const mergeService = new TranscriptMergeService(apiServerUrl, navigator.language
 const clearTranscripts = (0,es/* assign */.f0)({
     transcriptions: () => ({}),
 });
+const audibleNotifications = new NotificationsModule();
 const machine = (0,Machine/* createMachine */.C)({
     context: {
         transcriptions: {},
@@ -9773,6 +9804,11 @@ const machine = (0,Machine/* createMachine */.C)({
                 recording: {
                     description: "Microphone is on and VAD is actively listening for user speech.",
                     initial: "notSpeaking",
+                    exit: [
+                        {
+                            type: "notifyRecordingStopped",
+                        },
+                    ],
                     states: {
                         notSpeaking: {
                             description: "Microphone is recording but no speech is detected.",
@@ -10093,6 +10129,9 @@ const machine = (0,Machine/* createMachine */.C)({
         },
         dismissNotification: () => {
             buttonModule.dismissNotification();
+        },
+        notifyRecordingStopped: () => {
+            audibleNotifications.listeningStopped();
         },
         draftPrompt: (context) => {
             const prompt = mergeService

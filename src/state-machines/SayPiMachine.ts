@@ -1,6 +1,7 @@
 import { buttonModule } from "../ButtonModule.js";
 import { createMachine, Typestate, assign, log, DoneInvokeEvent } from "xstate";
 import AnimationModule from "../AnimationModule.js";
+import AudibleNotificationsModule from "../NotificationsModule";
 import { isMobileView } from "../UserAgentModule.js";
 import {
   uploadAudioWithRetry,
@@ -119,6 +120,8 @@ const clearTranscripts = assign({
   transcriptions: () => ({}),
 });
 
+const audibleNotifications = new AudibleNotificationsModule();
+
 export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
   {
     context: {
@@ -215,6 +218,11 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             description:
               "Microphone is on and VAD is actively listening for user speech.",
             initial: "notSpeaking",
+            exit: [
+              {
+                type: "notifyRecordingStopped",
+              },
+            ],
             states: {
               notSpeaking: {
                 description:
@@ -584,6 +592,10 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
 
       dismissNotification: () => {
         buttonModule.dismissNotification();
+      },
+
+      notifyRecordingStopped: () => {
+        audibleNotifications.listeningStopped();
       },
 
       draftPrompt: (context: SayPiContext) => {

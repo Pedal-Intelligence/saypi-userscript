@@ -21,7 +21,8 @@
       "resources": [
         "public/silero_vad.onnx",
         "public/*.wasm",
-        "public/vad.worklet.bundle.min.js"
+        "public/vad.worklet.bundle.min.js",
+        "public/audio/*.mp3"
       ],
       "matches": ["https://pi.ai/*"]
     }
