@@ -1373,13 +1373,28 @@ var __filename = "/index.js";
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   _: () => (/* binding */ getExtensionResourceUrl)
+/* harmony export */   v: () => (/* binding */ getResourceUrl)
 /* harmony export */ });
-// Function to construct the URL for local extension resources
+/* harmony import */ var _ConfigModule_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(186);
+
+// used by browser extensions
 function getExtensionResourceUrl(filename) {
     const web_accessible_resources_dir = "public";
     const filepath = web_accessible_resources_dir + "/" + filename;
     return chrome.runtime.getURL(filepath);
+}
+// used by userscripts
+function getAppServerResourceUrl(filename) {
+    return `${_ConfigModule_js__WEBPACK_IMPORTED_MODULE_0__/* .config */ .v.appServerUrl}/${filename}`;
+}
+// cross-platform way to get a resource URL
+function getResourceUrl(filename) {
+    if (chrome.runtime && chrome.runtime.id) {
+        return getExtensionResourceUrl(filename);
+    }
+    else {
+        return getAppServerResourceUrl(filename);
+    }
 }
 
 
@@ -5555,7 +5570,6 @@ var ConfigModule = __webpack_require__(186);
 var ResourceModule = __webpack_require__(879);
 ;// CONCATENATED MODULE: ./src/RequestInterceptor.js
 
-
 var filesToRedirect = ["silero_vad.onnx", "ort-wasm-simd.wasm", "ort.min.js.map", "vad.worklet.bundle.min.js"];
 
 // Function to redirect specific XMLHttpRequests
@@ -5563,12 +5577,7 @@ function redirectXMLHttpRequest(open) {
   XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
     var filename = url.split("/").pop();
     if (filename && filesToRedirect.includes(filename)) {
-      // Check if running as a Chrome extension
-      if (chrome.runtime && chrome.runtime.id) {
-        arguments[1] = (0,ResourceModule/* getExtensionResourceUrl */._)(filename);
-      } else {
-        arguments[1] = "".concat(ConfigModule/* config */.v.appServerUrl, "/").concat(filename);
-      }
+      arguments[1] = (0,ResourceModule/* getResourceUrl */.v)(filename);
     }
     open.apply(this, arguments);
   };
@@ -5579,12 +5588,7 @@ function redirectFetch(_fetch) {
   window.fetch = function (url, opts) {
     var filename = url.split("/").pop();
     if (filename && filesToRedirect.includes(filename)) {
-      // Check if running as a Chrome extension
-      if (chrome.runtime && chrome.runtime.id) {
-        arguments[0] = (0,ResourceModule/* getExtensionResourceUrl */._)(filename);
-      } else {
-        arguments[0] = "".concat(ConfigModule/* config */.v.appServerUrl, "/").concat(filename);
-      }
+      arguments[0] = (0,ResourceModule/* getResourceUrl */.v)(filename);
     }
     return _fetch.apply(this, arguments);
   };
