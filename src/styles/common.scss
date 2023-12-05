@@ -23,3 +23,24 @@
     }
   }
 }
+
+@keyframes fillup {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes changeColor {
+  0% { stroke: green; }
+  50% { stroke: yellow; }
+  100% { stroke: red; }
+}
+
+#progress-ring {
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+#progress-ring.active {
+  animation: fillup 10s linear forwards, changeColor 10s linear forwards;
+}
