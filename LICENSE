@@ -1,21 +1,29 @@
-MIT License
+Proprietary Software License for Say, Pi (web frontend)
 
-Copyright (c) 2023 Pedal Intelligence
+Copyright (c) 2023, Ross Cadogan / Say, Pi
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+All rights reserved.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Grant of License
+   This license grants you the following rights:
+   a. Usage: You may use this software for personal and non-commercial purposes.
+   b. Inspection: You may inspect the source code for security and compatibility purposes.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Restrictions
+   You are expressly prohibited from:
+   a. Copying, modifying, merging, forking, or distributing the software for any purpose.
+   b. Decompiling, reverse engineering, disassembling, or otherwise attempting to derive the source code for the software.
+   c. Creating derivative works based on the software.
+   d. Redistributing or sublicensing the software.
+
+3. Termination
+   This License is effective until terminated. It will terminate automatically without notice if you fail to comply with any of its terms and conditions. Upon termination, you must destroy all copies of the software.
+
+4. No Warranty
+   The software is provided "as is", without warranty of any kind, express or implied.
+
+5. Limitation of Liability
+   In no event shall the author or copyright holders be liable for any claim, damages, or other liability arising from the use or inability to use the software.
+
+Ross Cadogan / Say Pi,
+info@saypi.ai
