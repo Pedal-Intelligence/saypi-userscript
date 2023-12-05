@@ -13,6 +13,7 @@ This `user.js` file is what get packaged as a userscript (with `metadata.txt`) a
 ## Demo
 [Watch the demo video on YouTube](https://youtu.be/siJAj879ii4)
 
+
 ## Features
 - **Accurate Voice Dictation:** _Say, Pi_ leverages advanced speech-to-text technology from OpenAI to provide accurate voice transcription as you speak.
 - **Hands-Free Operation:** Once enabled, a "call" button appears on the pi.ai web interface, allowing you to initiate a back-and-forth spoken conversation with Pi effortlessly.
@@ -27,15 +28,21 @@ This `user.js` file is what get packaged as a userscript (with `metadata.txt`) a
 1. Install a userscript manager extension for your browser (e.g., Tampermonkey, Greasemonkey).
 2. Install the userscript from `public/saypi.user.js` file in this repository, or from https://www.saypi.ai.
 
-**Compatibility:**
+## Compatibility
 The _Say, Pi_ works best on Chromium browsers such as Google Chrome, Microsoft Edge, and Kiwi Browser. 
 It also works on these and other browsers, including Safari, as a userscript.
 
-**Contribution:**
+## Contribution
 We are not currently seeking code contributions to the repo. However, if you have ideas for improvements or bug fixes, feel free to discuss them with us on any of our social or support channels. Let's work together to enhance the voice interaction experience with Pi!
 
-**License:**
+## License
 This project is licensed under a proprietary commerical license. Some source code is made available in this repo for public review, but it may not be copied, modified, forked or redistributed - see the [LICENSE](LICENSE) file for details.
 
-**Disclaimer:**
+## Disclaimer
 The "_Say, Pi_ is an unofficial enhancement for Pi.ai. Use it responsibly and respect the terms of service of Pi as provided by Inflection AI. We cannot guarantee its compatibility with future updates or changes to Pi platform.
+
+## Contact Us
+If you have any questions or comments, we'd love to hear from you! Drop us a message any of the channels below, or find us on the [Pi Party](https://pi.ai/discord) Discord server. 🥧
+* Email: info@saypi.ai
+* Twitter/X: @saypi_ai
+* Facebook: [Say, Pi](https://www.facebook.com/profile.php?id=61554182755176)
