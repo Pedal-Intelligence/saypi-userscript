@@ -36,6 +36,7 @@ type SayPiEvent =
   | SayPiTranscribedEvent
   | { type: "saypi:transcribeFailed" }
   | { type: "saypi:transcribedEmpty" }
+  | { type: "saypi:piThinking" }
   | { type: "saypi:piSpeaking" }
   | { type: "saypi:piStoppedSpeaking" }
   | { type: "saypi:piFinishedSpeaking" }
@@ -78,6 +79,7 @@ type SayPiStateSchema = {
     };
     responding: {
       states: {
+        piThinking: {};
         piSpeaking: {};
       };
     };
@@ -433,6 +435,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           },
         },
         on: {
+          "saypi:piThinking": {
+            target: "#sayPi.responding.piThinking",
+          },
           "saypi:piSpeaking": {
             target: "#sayPi.responding.piSpeaking",
           },
@@ -441,7 +446,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
       responding: {
         description:
-          "Pi is responding. Synthesised speech is playing or waiting to play.",
+          "Pi is responding. Text is being generated or synthesised speech is playing or waiting to play.",
         entry: {
           type: "disableCallButton",
         },
@@ -449,7 +454,32 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           type: "enableCallButton",
         },
         initial: "piSpeaking",
+        on: {
+          "saypi:userSpeaking": {
+            target: "#sayPi.listening.recording.userSpeaking",
+          },
+        },
         states: {
+          piThinking: {
+            description: "Pi is contemplating its response.\nThinking animation.",
+            entry: {
+              type: "startAnimation",
+              params: {
+                animation: "piThinking",
+              },
+            },
+            exit: {
+              type: "stopAnimation",
+              params: {
+                animation: "piThinking",
+              },
+            },
+            on: {
+              "saypi:piSpeaking": {
+                target: "#sayPi.responding.piSpeaking",
+              },
+            },
+          },
           piSpeaking: {
             description:
               "Pi's synthesised speech audio is playing.\nPlayful animation.",
@@ -476,9 +506,6 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   cond: "wasInactive",
                 },
               ],
-              "saypi:userSpeaking": {
-                target: "#sayPi.listening.recording.userSpeaking",
-              },
               "saypi:piFinishedSpeaking": {
                 target: "#sayPi.listening",
               },

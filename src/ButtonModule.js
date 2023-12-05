@@ -137,6 +137,7 @@ export default class ButtonModule {
       console.log("Autosubmit is off");
     } else {
       this.simulateFormSubmit();
+      EventBus.emit("saypi:piThinking"); // Pi is responding
     }
   }
 
