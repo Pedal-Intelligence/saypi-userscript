@@ -1,7 +1,7 @@
 import { buttonModule } from "../ButtonModule.js";
-import { createMachine, Typestate, assign, log, DoneInvokeEvent } from "xstate";
+import { createMachine, Typestate, assign, log, DoneInvokeEvent, State } from "xstate";
 import AnimationModule from "../AnimationModule.js";
-import AudibleNotificationsModule from "../NotificationsModule";
+import { AudibleNotificationsModule, VisualNotificationsModule } from "../NotificationsModule";
 import { isMobileView } from "../UserAgentModule.js";
 import {
   uploadAudioWithRetry,
@@ -47,7 +47,9 @@ type SayPiEvent =
 
 interface SayPiContext {
   transcriptions: Record<number, string>;
+  isTranscribing: boolean; // duplicate of state.matches("listening.converting.transcribing")
   lastState: "inactive" | "listening";
+  userIsSpeaking: boolean; // duplicate of state.matches("listening.recording.userSpeaking")
   timeUserStoppedSpeaking: number;
 }
 
@@ -121,12 +123,15 @@ const clearTranscripts = assign({
 });
 
 const audibleNotifications = new AudibleNotificationsModule();
+const visualNotifications = new VisualNotificationsModule();
 
 export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
   {
     context: {
       transcriptions: {},
+      isTranscribing: false,
       lastState: "inactive",
+      userIsSpeaking: false,
       timeUserStoppedSpeaking: 0,
     },
     id: "sayPi",
@@ -239,12 +244,16 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               userSpeaking: {
                 description:
                   "User is speaking and being recorded by the microphone.\nWaveform animation.",
-                entry: {
+                entry: [{
                   type: "startAnimation",
                   params: {
                     animation: "userSpeaking",
                   },
                 },
+              assign({ userIsSpeaking: true }),
+              {
+                type: "cancelCountdownAnimation",
+              }],
                 exit: {
                   type: "stopAnimation",
                   params: {
@@ -261,6 +270,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                       cond: "hasAudio",
                       actions: [
                         assign({
+                          userIsSpeaking: false,
                           timeUserStoppedSpeaking: () => new Date().getTime(),
                         }),
                         {
@@ -407,18 +417,20 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               transcribing: {
                 description:
                   "Transcribing audio to text.\nCard flip animation.",
-                entry: {
+                entry: [{
                   type: "startAnimation",
                   params: {
                     animation: "transcribing",
                   },
                 },
-                exit: {
+              assign({ isTranscribing: true })],
+                exit: [{
                   type: "stopAnimation",
                   params: {
                     animation: "transcribing",
                   },
                 },
+                assign({ isTranscribing: false })],
                 on: {
                   "saypi:transcribed": {
                     target: "accumulating",
@@ -595,6 +607,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
 
       notifyRecordingStopped: () => {
+        visualNotifications.listeningStopped();
         audibleNotifications.listeningStopped();
       },
 
@@ -624,6 +637,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       enableCallButton: () => {
         buttonModule.enableCallButton();
       },
+      cancelCountdownAnimation: () => {
+        visualNotifications.listeningStopped();
+      },
     },
     services: {},
     guards: {
@@ -651,14 +667,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         meta
       ) => {
         const { state } = meta;
-        const allowedState = !(
-          state.matches("listening.recording.userSpeaking") ||
-          state.matches("listening.converting.transcribing")
-        );
-        const empty = Object.keys(context.transcriptions).length === 0;
-        const pending = isTranscriptionPending();
-        const ready = allowedState && !empty && !pending;
-        return ready;
+        return readyToSubmit(state, context);
       },
       wasListening: (context: SayPiContext) => {
         return context.lastState === "listening";
@@ -700,6 +709,13 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           "seconds before submitting"
         );
 
+        // ideally we would use the current state to determine if we're ready to submit,
+        // but we don't have access to the state here, so we'll use the provisional readyToSubmit
+        const ready = provisionallyReadyToSubmit(context);
+        if (finalDelay > 0 && ready) {
+          visualNotifications.listeningTimeRemaining(finalDelay / 1000);
+        }
+
         // Get the current time (in milliseconds)
         const currentTime = new Date().getTime();
         nextSubmissionTime = currentTime + finalDelay;
@@ -709,3 +725,22 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
     },
   }
 );
+function readyToSubmitOnAllowedState(allowedState: boolean, context: SayPiContext): boolean {
+  const empty = Object.keys(context.transcriptions).length === 0;
+  const pending = isTranscriptionPending();
+  const ready = allowedState && !empty && !pending;
+  return ready;
+}
+function provisionallyReadyToSubmit(context: SayPiContext): boolean {
+  const allowedState = !(context.userIsSpeaking || context.isTranscribing); // we don't have access to the state, so we read from a copy in the context (!DRY)
+  console.log("provisionallyReadyToSubmit", allowedState, context);
+  return readyToSubmitOnAllowedState(allowedState, context);
+}
+function readyToSubmit(state: State<SayPiContext, SayPiEvent, any, any, any>, context: SayPiContext): boolean {
+  const allowedState = !(
+    state.matches("listening.recording.userSpeaking") ||
+    state.matches("listening.converting.transcribing")
+  );
+  return readyToSubmitOnAllowedState(allowedState, context);
+}
+

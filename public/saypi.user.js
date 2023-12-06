@@ -9214,7 +9214,50 @@ class AudibleNotificationsModule {
         });
     }
 }
-/* harmony default export */ const NotificationsModule = (AudibleNotificationsModule);
+class VisualNotificationsModule {
+    constructor() {
+        this.ring = document.getElementById('progress-ring');
+    }
+    startCountdown(secondsRemaining) {
+        var _a;
+        if (!this.ring) {
+            this.ring = document.getElementById('progress-ring');
+        }
+        if (!this.ring) {
+            console.error("Unable to find progress ring element");
+            return;
+        }
+        const circumference = (_a = this.ring) === null || _a === void 0 ? void 0 : _a.getTotalLength();
+        this.ring.style.strokeDasharray = `${circumference} ${circumference}`;
+        this.ring.style.strokeDashoffset = `${circumference}`;
+        this.ring.style.animation = `fillup ${secondsRemaining}s linear forwards, changeColor ${secondsRemaining}s linear forwards`;
+        // Add the active class to start the animation
+        this.ring.classList.add('active');
+        console.log(`Starting countdown: ${secondsRemaining.toFixed(1)} seconds remaining...`);
+    }
+    cancelCountdown() {
+        if (!this.ring) {
+            this.ring = document.getElementById('progress-ring');
+        }
+        if (!this.ring) {
+            console.error("Unable to find progress ring element");
+            return;
+        }
+        // Stop the progress ring animation and reset it
+        this.ring.classList.remove('active');
+        void this.ring.style.strokeDasharray;
+        void this.ring.style.strokeDashoffset;
+        this.ring.style.animation = 'none';
+        console.log("Countdown ended");
+    }
+    listeningStopped() {
+        this.cancelCountdown();
+    }
+    listeningTimeRemaining(timeRemaining) {
+        this.cancelCountdown();
+        this.startCountdown(timeRemaining);
+    }
+}
 
 // EXTERNAL MODULE: ./src/ConfigModule.js
 var ConfigModule = __webpack_require__(186);
@@ -9715,11 +9758,14 @@ const mergeService = new TranscriptMergeService(apiServerUrl, navigator.language
 const clearTranscripts = (0,es/* assign */.f0)({
     transcriptions: () => ({}),
 });
-const audibleNotifications = new NotificationsModule();
+const audibleNotifications = new AudibleNotificationsModule();
+const visualNotifications = new VisualNotificationsModule();
 const machine = (0,Machine/* createMachine */.C)({
     context: {
         transcriptions: {},
+        isTranscribing: false,
         lastState: "inactive",
+        userIsSpeaking: false,
         timeUserStoppedSpeaking: 0,
     },
     id: "sayPi",
@@ -9827,12 +9873,16 @@ const machine = (0,Machine/* createMachine */.C)({
                         },
                         userSpeaking: {
                             description: "User is speaking and being recorded by the microphone.\nWaveform animation.",
-                            entry: {
-                                type: "startAnimation",
-                                params: {
-                                    animation: "userSpeaking",
+                            entry: [{
+                                    type: "startAnimation",
+                                    params: {
+                                        animation: "userSpeaking",
+                                    },
                                 },
-                            },
+                                (0,es/* assign */.f0)({ userIsSpeaking: true }),
+                                {
+                                    type: "cancelCountdownAnimation",
+                                }],
                             exit: {
                                 type: "stopAnimation",
                                 params: {
@@ -9849,6 +9899,7 @@ const machine = (0,Machine/* createMachine */.C)({
                                         cond: "hasAudio",
                                         actions: [
                                             (0,es/* assign */.f0)({
+                                                userIsSpeaking: false,
                                                 timeUserStoppedSpeaking: () => new Date().getTime(),
                                             }),
                                             {
@@ -9972,18 +10023,20 @@ const machine = (0,Machine/* createMachine */.C)({
                         },
                         transcribing: {
                             description: "Transcribing audio to text.\nCard flip animation.",
-                            entry: {
-                                type: "startAnimation",
-                                params: {
-                                    animation: "transcribing",
+                            entry: [{
+                                    type: "startAnimation",
+                                    params: {
+                                        animation: "transcribing",
+                                    },
                                 },
-                            },
-                            exit: {
-                                type: "stopAnimation",
-                                params: {
-                                    animation: "transcribing",
+                                (0,es/* assign */.f0)({ isTranscribing: true })],
+                            exit: [{
+                                    type: "stopAnimation",
+                                    params: {
+                                        animation: "transcribing",
+                                    },
                                 },
-                            },
+                                (0,es/* assign */.f0)({ isTranscribing: false })],
                             on: {
                                 "saypi:transcribed": {
                                     target: "accumulating",
@@ -10135,6 +10188,7 @@ const machine = (0,Machine/* createMachine */.C)({
             buttonModule.dismissNotification();
         },
         notifyRecordingStopped: () => {
+            visualNotifications.listeningStopped();
             audibleNotifications.listeningStopped();
         },
         draftPrompt: (context) => {
@@ -10163,6 +10217,9 @@ const machine = (0,Machine/* createMachine */.C)({
         enableCallButton: () => {
             buttonModule.enableCallButton();
         },
+        cancelCountdownAnimation: () => {
+            visualNotifications.listeningStopped();
+        },
     },
     services: {},
     guards: {
@@ -10184,12 +10241,7 @@ const machine = (0,Machine/* createMachine */.C)({
         },
         submissionConditionsMet: (context, event, meta) => {
             const { state } = meta;
-            const allowedState = !(state.matches("listening.recording.userSpeaking") ||
-                state.matches("listening.converting.transcribing"));
-            const empty = Object.keys(context.transcriptions).length === 0;
-            const pending = isTranscriptionPending();
-            const ready = allowedState && !empty && !pending;
-            return ready;
+            return readyToSubmit(state, context);
         },
         wasListening: (context) => {
             return context.lastState === "listening";
@@ -10217,6 +10269,12 @@ const machine = (0,Machine/* createMachine */.C)({
             let tempo = event.tempo !== undefined ? event.tempo : 0.5;
             const finalDelay = calculateDelay(context.timeUserStoppedSpeaking, probabilityFinished, tempo, maxDelay);
             console.log("Waiting for", (finalDelay / 1000).toFixed(1), "seconds before submitting");
+            // ideally we would use the current state to determine if we're ready to submit,
+            // but we don't have access to the state here, so we'll use the provisional readyToSubmit
+            const ready = provisionallyReadyToSubmit(context);
+            if (finalDelay > 0 && ready) {
+                visualNotifications.listeningTimeRemaining(finalDelay / 1000);
+            }
             // Get the current time (in milliseconds)
             const currentTime = new Date().getTime();
             nextSubmissionTime = currentTime + finalDelay;
@@ -10224,6 +10282,22 @@ const machine = (0,Machine/* createMachine */.C)({
         },
     },
 });
+function readyToSubmitOnAllowedState(allowedState, context) {
+    const empty = Object.keys(context.transcriptions).length === 0;
+    const pending = isTranscriptionPending();
+    const ready = allowedState && !empty && !pending;
+    return ready;
+}
+function provisionallyReadyToSubmit(context) {
+    const allowedState = !(context.userIsSpeaking || context.isTranscribing); // we don't have access to the state, so we read from a copy in the context (!DRY)
+    console.log("provisionallyReadyToSubmit", allowedState, context);
+    return readyToSubmitOnAllowedState(allowedState, context);
+}
+function readyToSubmit(state, context) {
+    const allowedState = !(state.matches("listening.recording.userSpeaking") ||
+        state.matches("listening.converting.transcribing"));
+    return readyToSubmitOnAllowedState(allowedState, context);
+}
 
 ;// CONCATENATED MODULE: ./src/StateMachineService.js
 function StateMachineService_typeof(o) { "@babel/helpers - typeof"; return StateMachineService_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, StateMachineService_typeof(o); }
@@ -10362,7 +10436,7 @@ const submitErrorHandler = new SubmitErrorHandler();
 ;// CONCATENATED MODULE: ./src/icons/call.svg
 /* harmony default export */ const call = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 768 767.999994\"\n    preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n    <path class=\"circle\" fill=\"#418a2f\"\n        d=\"M 767.988281 383.984375 C 767.988281 596.058594 596.066406 767.980469 383.996094 767.980469 C 171.921875 767.980469 0 596.058594 0 383.984375 C 0 171.910156 171.921875 -0.0078125 383.996094 -0.0078125 C 596.066406 -0.0078125 767.988281 171.910156 767.988281 383.984375 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n    <path class=\"phone-receiver\" fill=\"#ffffff\"\n        d=\"M 215.726562 199.773438 C 219.746094 194.835938 230.023438 183.625 243.644531 183.769531 C 244.40625 183.777344 245.300781 183.808594 246.34375 183.914062 C 246.34375 183.914062 248.492188 184.144531 250.613281 184.703125 C 268.292969 189.410156 299.921875 224.304688 299.921875 224.304688 C 326.925781 254.09375 334.722656 255.53125 334.636719 266.5 C 334.550781 276.777344 328.140625 284.71875 316.253906 296.566406 C 284.566406 328.148438 277.808594 330.53125 275.351562 340.421875 C 273.902344 346.234375 269.539062 357.511719 289.105469 379.355469 C 318.289062 411.929688 388.1875 478.4375 394.300781 482.515625 C 400.402344 486.585938 422.121094 500.832031 451.300781 474.371094 C 471.226562 456.304688 480.714844 435.066406 494.875 433.785156 C 502.363281 433.089844 507.878906 437.613281 519.167969 447.222656 C 585.886719 503.976562 586.871094 513.933594 586.3125 519.824219 C 585.355469 530.011719 580.75 539.210938 565.316406 550.382812 C 525.953125 578.878906 508.3125 603.992188 428.234375 570.742188 C 348.152344 537.484375 263.996094 453.335938 240.242188 417.359375 C 216.488281 381.390625 179.160156 326.421875 181.878906 288.414062 C 183.769531 261.980469 191.867188 238.863281 191.867188 238.863281 C 199.097656 220.882812 208.71875 207.878906 215.726562 199.773438 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n</svg>");
 ;// CONCATENATED MODULE: ./src/icons/hangup.svg
-/* harmony default export */ const hangup = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 800 800\" preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n    <!-- Your other elements here -->\n    <circle id=\"progress-ring\" cx=\"400\" cy=\"400\" r=\"160\" stroke-width=\"4\" stroke=\"red\"\n        fill=\"transparent\" stroke-dasharray=\"1005\" stroke-dashoffset=\"1005\" class=\"active\"></circle>\n</svg>");
+/* harmony default export */ const hangup = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    viewBox=\"0 0 64 64\" preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n    <path fill=\"#776d6d\"\n        d=\"M 63.75 31.875 C 63.75 49.29395 49.29395 63.75 31.875 63.75 C 14.45605 63.75 0 49.29395 0 31.875 C 0 14.45605 14.45605 0 31.875 0 C 49.29395 0 63.75 14.45605 63.75 31.875 \"\n        fill-opacity=\"0.8\" fill-rule=\"nonzero\" />\n    <path fill=\"#ffffff\"\n        d=\"M 12.727539 34.74707 C 12.728027 34.747314 13.897949 37.758789 15.219788 38.542328 C 16.077148 39.048828 16.793945 38.776855 17.71875 38.340332 C 19.519531 37.490723 21.362305 36.74707 23.290039 36.246094 C 24.087891 36.012695 24.193359 35.574219 24.022461 35.060547 C 23.783203 34.224121 23.540039 33.388672 23.292969 32.553711 C 23.146484 32.042969 23.460938 31.490234 24.179688 31.196289 C 26.69043 30.344238 29.179688 30.243164 31.669922 30.230469 C 31.779297 30.230469 32.053711 30.230469 32.163086 30.230469 C 34.65332 30.243164 37.142578 30.344238 39.65332 31.196289 C 40.37207 31.490234 40.686523 32.042969 40.540039 32.553711 C 40.292969 33.388672 40.049805 34.224121 39.810547 35.060547 C 39.639648 35.574219 39.745117 36.012695 40.542969 36.246094 C 43.470703 36.74707 45.313477 37.490723 47.114258 38.340332 C 47.976562 38.776855 48.693359 39.048828 49.550781 38.542328 C 50.872559 37.758789 52.04248 34.747314 52.042969 34.74707 C 52.222656 32.560547 51.503906 29.84375 48.347656 28.462891 C 43.330078 26.236328 37.943359 25.053711 32.178711 25.016602 C 32.063477 25.016602 31.697266 25.016602 31.571289 25.016602 C 25.806641 25.053711 20.419922 26.236328 15.402344 28.462891 C 12.246094 29.84375 11.527344 32.560547 11.707031 34.74707 \"\n        fill-opacity=\"0.9\" fill-rule=\"nonzero\" />\n    <circle id=\"progress-ring\" cx=\"32\" cy=\"32\" r=\"30\" stroke-width=\"4\" stroke=\"red\"\n        fill=\"transparent\" stroke-dasharray=\"188.4\" stroke-dashoffset=\"188.4\"></circle>\n</svg>");
 ;// CONCATENATED MODULE: ./src/ButtonModule.js
 function ButtonModule_typeof(o) { "@babel/helpers - typeof"; return ButtonModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, ButtonModule_typeof(o); }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
