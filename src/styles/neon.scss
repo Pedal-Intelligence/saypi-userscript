@@ -1,41 +1,41 @@
+$listening-glow-color: #ffd1dc; // sunset-peach
+
 .listening {
     border: none;
     
-    /* Multiple box shadows create the glow effect */
+    // Multiple box shadows create the glow effect
     box-shadow: 
-    0 0 10px #ffd1dc, /* Peach-pink glow */
-    0 0 20px #ffd1dc, /* Peach-pink glow */
-    0 0 30px #ffd1dc, /* Peach-pink glow */
-    0 0 40px #ffd1dc, /* Peach-pink glow */
-    0 0 50px #ffd1dc, /* Peach-pink glow */
-    0 0 60px #ffd1dc, /* Peach-pink glow */
-    0 0 70px #ffd1dc; /* Peach-pink glow */
+    0 0 10px $listening-glow-color,
+    0 0 20px $listening-glow-color,
+    0 0 30px $listening-glow-color,
+    0 0 40px $listening-glow-color,
+    0 0 50px $listening-glow-color,
+    0 0 60px $listening-glow-color,
+    0 0 70px $listening-glow-color;
   
-    /* Animation for the glow to appear to pulse */
+    // Animation for the glow to appear to pulse
     animation: neon-glow-animation 1.5s ease-in-out infinite alternate;
-  }
-  
-  @keyframes neon-glow-animation {
+}
+
+@keyframes neon-glow-animation {
     from {
         box-shadow: 
-        0 0 5px #ffd1dc, /* Peach-pink glow */
-        0 0 10px #ffd1dc, /* Peach-pink glow */
-        0 0 15px #ffd1dc, /* Peach-pink glow */
-        0 0 20px #ffd1dc, /* Peach-pink glow */
-        0 0 25px #ffd1dc, /* Peach-pink glow */
-        0 0 30px #ffd1dc, /* Peach-pink glow */
-        0 0 35px #ffd1dc; /* Peach-pink glow */
-      
+        0 0 5px $listening-glow-color,
+        0 0 10px $listening-glow-color,
+        0 0 15px $listening-glow-color,
+        0 0 20px $listening-glow-color,
+        0 0 25px $listening-glow-color,
+        0 0 30px $listening-glow-color,
+        0 0 35px $listening-glow-color;
     }
     to {
         box-shadow: 
-        0 0 10px #ffd1dc, /* Peach-pink glow */
-        0 0 20px #ffd1dc, /* Peach-pink glow */
-        0 0 30px #ffd1dc, /* Peach-pink glow */
-        0 0 40px #ffd1dc, /* Peach-pink glow */
-        0 0 50px #ffd1dc, /* Peach-pink glow */
-        0 0 60px #ffd1dc, /* Peach-pink glow */
-        0 0 70px #ffd1dc; /* Peach-pink glow */
-      
+        0 0 10px $listening-glow-color,
+        0 0 20px $listening-glow-color,
+        0 0 30px $listening-glow-color,
+        0 0 40px $listening-glow-color,
+        0 0 50px $listening-glow-color,
+        0 0 60px $listening-glow-color,
+        0 0 70px $listening-glow-color;
     }
-  }
+}
