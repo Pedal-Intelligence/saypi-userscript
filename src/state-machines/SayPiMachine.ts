@@ -223,7 +223,21 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             description:
               "Microphone is on and VAD is actively listening for user speech.",
             initial: "notSpeaking",
+            entry: [
+              {
+                type: "startAnimation",
+                params: {
+                  animation: "listening",
+                },
+              },
+            ],
             exit: [
+              {
+                type: "stopAnimation",
+                params: {
+                  animation: "listening",
+                },
+              },
               {
                 type: "notifyRecordingStopped",
               },

@@ -1360,7 +1360,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse_outermost {
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `.hidden{display:none !important}#saypi-callButton.disabled svg path.circle{fill:#f5eedf}.mobile-device #saypi-enterButton,.mobile-device #saypi-exitButton{position:fixed;top:4rem;left:10px;width:3rem;height:3rem;padding:6px;border:0;z-index:60}.mobile-device #saypi-enterButton svg path.inner,.mobile-device #saypi-exitButton svg path.inner{color:#0d3c26}@keyframes fillup{to{stroke-dashoffset:0}}@keyframes changeColor{0%{stroke:green}50%{stroke:#ff0}100%{stroke:red}}#progress-ring{transform:rotate(-90deg);transform-origin:50% 50%}#progress-ring.active{animation:fillup 10s linear forwards,changeColor 10s linear forwards}`, "",{"version":3,"sources":["webpack://./src/styles/common.scss"],"names":[],"mappings":"AAAA,QACE,uBAAA,CAGF,2CACE,YAAA,CAKA,mEAEE,cAAA,CACA,QAAA,CACA,SAAA,CACA,UAAA,CACA,WAAA,CACA,WAAA,CACA,QAAA,CACA,UAAA,CACA,iGACE,aAAA,CAKN,kBACE,GACE,mBAAA,CAAA,CAIJ,uBACE,GAAA,YAAA,CACA,IAAA,WAAA,CACA,KAAA,UAAA,CAAA,CAGF,eACE,wBAAA,CACA,wBAAA,CAGF,sBACE,oEAAA","sourcesContent":[".hidden {\n  display: none !important;\n}\n\n#saypi-callButton.disabled svg path.circle {\n  fill: rgb(245 238 223); /* bg-cream-550 */\n}\n\n.mobile-device {\n  /* maximize (mobile view) button is only displayed on compatible devices */\n  #saypi-enterButton,\n  #saypi-exitButton {\n    position: fixed;\n    top: 4rem;\n    left: 10px;\n    width: 3rem;\n    height: 3rem;\n    padding: 6px;\n    border: 0;\n    z-index: 60;\n    svg path.inner {\n      color: rgb(13 60 38); /* text-primary-700 */\n    }\n  }\n}\n\n@keyframes fillup {\n  to {\n    stroke-dashoffset: 0;\n  }\n}\n\n@keyframes changeColor {\n  0% { stroke: green; }\n  50% { stroke: yellow; }\n  100% { stroke: red; }\n}\n\n#progress-ring {\n  transform: rotate(-90deg);\n  transform-origin: 50% 50%;\n}\n\n#progress-ring.active {\n  animation: fillup 10s linear forwards, changeColor 10s linear forwards;\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `.hidden{display:none !important}#saypi-callButton.disabled svg path.circle{fill:#f5eedf}.mobile-device #saypi-enterButton,.mobile-device #saypi-exitButton{position:fixed;top:4rem;left:10px;width:3rem;height:3rem;padding:6px;border:0;z-index:60}.mobile-device #saypi-enterButton svg path.inner,.mobile-device #saypi-exitButton svg path.inner{color:#0d3c26}@keyframes fillup{to{stroke-dashoffset:0}}@keyframes changeColor{0%{stroke:green}50%{stroke:#ff0}100%{stroke:red}}#progress-ring{transform:rotate(-90deg);transform-origin:50% 50%}#progress-ring.active{animation:fillup 10s linear forwards,changeColor 10s linear forwards}.listening{border:none;box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc;animation:neon-glow-animation 1.5s ease-in-out infinite alternate}@keyframes neon-glow-animation{from{box-shadow:0 0 5px #ffd1dc,0 0 10px #ffd1dc,0 0 15px #ffd1dc,0 0 20px #ffd1dc,0 0 25px #ffd1dc,0 0 30px #ffd1dc,0 0 35px #ffd1dc}to{box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc}}`, "",{"version":3,"sources":["webpack://./src/styles/common.scss","webpack://./src/styles/progress-ring.scss","webpack://./src/styles/neon.scss"],"names":[],"mappings":"AAAA,QACE,uBAAA,CAGF,2CACE,YAAA,CAKA,mEAEE,cAAA,CACA,QAAA,CACA,SAAA,CACA,UAAA,CACA,WAAA,CACA,WAAA,CACA,QAAA,CACA,UAAA,CACA,iGACE,aAAA,CCrBN,kBACI,GACE,mBAAA,CAAA,CAIJ,uBACE,GAAA,YAAA,CACA,IAAA,WAAA,CACA,KAAA,UAAA,CAAA,CAGF,eACE,wBAAA,CACA,wBAAA,CAGF,sBACE,oEAAA,CClBJ,WACI,WAAA,CAGA,iIACA,CAWA,iEAAA,CAGF,+BACE,KACI,gIACA,CASJ,GACI,iIACA,CAAA","sourcesContent":[".hidden {\n  display: none !important;\n}\n\n#saypi-callButton.disabled svg path.circle {\n  fill: rgb(245 238 223); /* bg-cream-550 */\n}\n\n.mobile-device {\n  /* maximize (mobile view) button is only displayed on compatible devices */\n  #saypi-enterButton,\n  #saypi-exitButton {\n    position: fixed;\n    top: 4rem;\n    left: 10px;\n    width: 3rem;\n    height: 3rem;\n    padding: 6px;\n    border: 0;\n    z-index: 60;\n    svg path.inner {\n      color: rgb(13 60 38); /* text-primary-700 */\n    }\n  }\n}\n\n@import \"progress-ring.scss\";\n@import \"neon.scss\";","@keyframes fillup {\n    to {\n      stroke-dashoffset: 0;\n    }\n  }\n  \n  @keyframes changeColor {\n    0% { stroke: green; }\n    50% { stroke: yellow; }\n    100% { stroke: red; }\n  }\n  \n  #progress-ring {\n    transform: rotate(-90deg);\n    transform-origin: 50% 50%;\n  }\n  \n  #progress-ring.active {\n    animation: fillup 10s linear forwards, changeColor 10s linear forwards;\n  }",".listening {\n    border: none;\n    \n    /* Multiple box shadows create the glow effect */\n    box-shadow: \n    0 0 10px #ffd1dc, /* Peach-pink glow */\n    0 0 20px #ffd1dc, /* Peach-pink glow */\n    0 0 30px #ffd1dc, /* Peach-pink glow */\n    0 0 40px #ffd1dc, /* Peach-pink glow */\n    0 0 50px #ffd1dc, /* Peach-pink glow */\n    0 0 60px #ffd1dc, /* Peach-pink glow */\n    0 0 70px #ffd1dc; /* Peach-pink glow */\n  \n  \n    \n    /* Animation for the glow to appear to pulse */\n    animation: neon-glow-animation 1.5s ease-in-out infinite alternate;\n  }\n  \n  @keyframes neon-glow-animation {\n    from {\n        box-shadow: \n        0 0 5px #ffd1dc, /* Peach-pink glow */\n        0 0 10px #ffd1dc, /* Peach-pink glow */\n        0 0 15px #ffd1dc, /* Peach-pink glow */\n        0 0 20px #ffd1dc, /* Peach-pink glow */\n        0 0 25px #ffd1dc, /* Peach-pink glow */\n        0 0 30px #ffd1dc, /* Peach-pink glow */\n        0 0 35px #ffd1dc; /* Peach-pink glow */\n      \n    }\n    to {\n        box-shadow: \n        0 0 10px #ffd1dc, /* Peach-pink glow */\n        0 0 20px #ffd1dc, /* Peach-pink glow */\n        0 0 30px #ffd1dc, /* Peach-pink glow */\n        0 0 40px #ffd1dc, /* Peach-pink glow */\n        0 0 50px #ffd1dc, /* Peach-pink glow */\n        0 0 60px #ffd1dc, /* Peach-pink glow */\n        0 0 70px #ffd1dc; /* Peach-pink glow */\n      \n    }\n  }"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -9162,11 +9162,19 @@ var AnimationModule = /*#__PURE__*/function () {
   _createClass(AnimationModule, null, [{
     key: "startAnimation",
     value: function startAnimation(animation) {
+      console.log("Starting animation", animation);
       this.stopOtherAnimations(animation);
-      var rectangles = document.querySelectorAll(this.rectanglesSelector);
-      rectangles.forEach(function (rect) {
-        return rect.classList.add(animation);
-      });
+      if (this.talkButtonAnimations.includes(animation)) {
+        var rectangles = document.querySelectorAll(this.rectanglesSelector);
+        rectangles.forEach(function (rect) {
+          return rect.classList.add(animation);
+        });
+      }
+      if (this.callButtonAnimations.includes(animation)) {
+        var callButton = document.querySelector(this.callButtonSelector);
+        console.log("Adding animation to call button", animation, callButton);
+        callButton.classList.add(animation);
+      }
     }
   }, {
     key: "stopAnimation",
@@ -9175,6 +9183,8 @@ var AnimationModule = /*#__PURE__*/function () {
       rectangles.forEach(function (rect) {
         return rect.classList.remove(animation);
       });
+      var callButton = document.querySelector(this.callButtonSelector);
+      callButton.classList.remove(animation);
     }
   }, {
     key: "stopAllAnimations",
@@ -9183,12 +9193,24 @@ var AnimationModule = /*#__PURE__*/function () {
       this.talkButtonAnimations.forEach(function (animation) {
         return _this.stopAnimation(animation);
       });
+      this.callButtonAnimations.forEach(function (animation) {
+        return _this.stopAnimation(animation);
+      });
     }
   }, {
     key: "stopOtherAnimations",
     value: function stopOtherAnimations(keepAnimation) {
+      if (this.talkButtonAnimations.includes(keepAnimation)) {
+        this.stopOtherAnimationsByCollection(keepAnimation, this.talkButtonAnimations);
+      } else if (this.callButtonAnimations.includes(keepAnimation)) {
+        this.stopOtherAnimationsByCollection(keepAnimation, this.callButtonAnimations);
+      }
+    }
+  }, {
+    key: "stopOtherAnimationsByCollection",
+    value: function stopOtherAnimationsByCollection(keepAnimation, animationsCollection) {
       var _this2 = this;
-      this.talkButtonAnimations.forEach(function (animation) {
+      animationsCollection.forEach(function (animation) {
         if (animation !== keepAnimation) {
           _this2.stopAnimation(animation);
         }
@@ -9198,7 +9220,9 @@ var AnimationModule = /*#__PURE__*/function () {
   return AnimationModule;
 }();
 _defineProperty(AnimationModule, "rectanglesSelector", ".outermost, .second, .third, .fourth, .fifth, .innermost");
+_defineProperty(AnimationModule, "callButtonSelector", "#saypi-callButton");
 _defineProperty(AnimationModule, "talkButtonAnimations", ["piThinking", "piSpeaking", "userSpeaking", "transcribing"]);
+_defineProperty(AnimationModule, "callButtonAnimations", ["listening"]);
 
 // EXTERNAL MODULE: ./src/ResourceModule.ts
 var ResourceModule = __webpack_require__(879);
@@ -9233,7 +9257,6 @@ class VisualNotificationsModule {
         this.ring.style.animation = `fillup ${secondsRemaining}s linear forwards, changeColor ${secondsRemaining}s linear forwards`;
         // Add the active class to start the animation
         this.ring.classList.add('active');
-        console.log(`Starting countdown: ${secondsRemaining.toFixed(1)} seconds remaining...`);
     }
     cancelCountdown() {
         if (!this.ring) {
@@ -9248,7 +9271,6 @@ class VisualNotificationsModule {
         void this.ring.style.strokeDasharray;
         void this.ring.style.strokeDashoffset;
         this.ring.style.animation = 'none';
-        console.log("Countdown ended");
     }
     listeningStopped() {
         this.cancelCountdown();
@@ -9854,7 +9876,21 @@ const machine = (0,Machine/* createMachine */.C)({
                 recording: {
                     description: "Microphone is on and VAD is actively listening for user speech.",
                     initial: "notSpeaking",
+                    entry: [
+                        {
+                            type: "startAnimation",
+                            params: {
+                                animation: "listening",
+                            },
+                        },
+                    ],
                     exit: [
+                        {
+                            type: "stopAnimation",
+                            params: {
+                                animation: "listening",
+                            },
+                        },
                         {
                             type: "notifyRecordingStopped",
                         },
