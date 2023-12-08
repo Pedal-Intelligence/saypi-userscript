@@ -8,7 +8,7 @@ export default class AnimationModule {
     "userSpeaking",
     "transcribing",
   ];
-  static callButtonAnimations = ["listening"];
+  static callButtonAnimations = ["glow", "glow-fade-out"];
 
   static startAnimation(animation) {
     this.stopOtherAnimations(animation);

@@ -1360,7 +1360,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse_outermost {
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `.hidden{display:none !important}#saypi-callButton.disabled svg path.circle{fill:#f5eedf}.mobile-device #saypi-enterButton,.mobile-device #saypi-exitButton{position:fixed;top:4rem;left:10px;width:3rem;height:3rem;padding:6px;border:0;z-index:60}.mobile-device #saypi-enterButton svg path.inner,.mobile-device #saypi-exitButton svg path.inner{color:#0d3c26}@keyframes fillup{to{stroke-dashoffset:0}}@keyframes changeColor{0%{stroke:green}50%{stroke:#ff0}100%{stroke:red}}#progress-ring{transform:rotate(-90deg);transform-origin:50% 50%}#progress-ring.active{animation:fillup 10s linear forwards,changeColor 10s linear forwards}.listening{border:none;box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc;animation:neon-glow-animation 1.5s ease-in-out infinite alternate}@keyframes neon-glow-animation{from{box-shadow:0 0 5px #ffd1dc,0 0 10px #ffd1dc,0 0 15px #ffd1dc,0 0 20px #ffd1dc,0 0 25px #ffd1dc,0 0 30px #ffd1dc,0 0 35px #ffd1dc}to{box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc}}`, "",{"version":3,"sources":["webpack://./src/styles/common.scss","webpack://./src/styles/progress-ring.scss","webpack://./src/styles/neon.scss"],"names":[],"mappings":"AAAA,QACE,uBAAA,CAGF,2CACE,YAAA,CAKA,mEAEE,cAAA,CACA,QAAA,CACA,SAAA,CACA,UAAA,CACA,WAAA,CACA,WAAA,CACA,QAAA,CACA,UAAA,CACA,iGACE,aAAA,CCrBN,kBACI,GACE,mBAAA,CAAA,CAIJ,uBACE,GAAA,YAAA,CACA,IAAA,WAAA,CACA,KAAA,UAAA,CAAA,CAGF,eACE,wBAAA,CACA,wBAAA,CAGF,sBACE,oEAAA,CChBJ,WACI,WAAA,CAGA,iIACA,CASA,iEAAA,CAGJ,+BACI,KACI,gIACA,CAQJ,GACI,iIACA,CAAA","sourcesContent":[".hidden {\n  display: none !important;\n}\n\n#saypi-callButton.disabled svg path.circle {\n  fill: rgb(245 238 223); /* bg-cream-550 */\n}\n\n.mobile-device {\n  /* maximize (mobile view) button is only displayed on compatible devices */\n  #saypi-enterButton,\n  #saypi-exitButton {\n    position: fixed;\n    top: 4rem;\n    left: 10px;\n    width: 3rem;\n    height: 3rem;\n    padding: 6px;\n    border: 0;\n    z-index: 60;\n    svg path.inner {\n      color: rgb(13 60 38); /* text-primary-700 */\n    }\n  }\n}\n\n@import \"progress-ring.scss\";\n@import \"neon.scss\";","@keyframes fillup {\n    to {\n      stroke-dashoffset: 0;\n    }\n  }\n  \n  @keyframes changeColor {\n    0% { stroke: green; }\n    50% { stroke: yellow; }\n    100% { stroke: red; }\n  }\n  \n  #progress-ring {\n    transform: rotate(-90deg);\n    transform-origin: 50% 50%;\n  }\n  \n  #progress-ring.active {\n    animation: fillup 10s linear forwards, changeColor 10s linear forwards;\n  }","$listening-glow-color: #ffd1dc; // sunset-peach\n\n.listening {\n    border: none;\n    \n    // Multiple box shadows create the glow effect\n    box-shadow: \n    0 0 10px $listening-glow-color,\n    0 0 20px $listening-glow-color,\n    0 0 30px $listening-glow-color,\n    0 0 40px $listening-glow-color,\n    0 0 50px $listening-glow-color,\n    0 0 60px $listening-glow-color,\n    0 0 70px $listening-glow-color;\n  \n    // Animation for the glow to appear to pulse\n    animation: neon-glow-animation 1.5s ease-in-out infinite alternate;\n}\n\n@keyframes neon-glow-animation {\n    from {\n        box-shadow: \n        0 0 5px $listening-glow-color,\n        0 0 10px $listening-glow-color,\n        0 0 15px $listening-glow-color,\n        0 0 20px $listening-glow-color,\n        0 0 25px $listening-glow-color,\n        0 0 30px $listening-glow-color,\n        0 0 35px $listening-glow-color;\n    }\n    to {\n        box-shadow: \n        0 0 10px $listening-glow-color,\n        0 0 20px $listening-glow-color,\n        0 0 30px $listening-glow-color,\n        0 0 40px $listening-glow-color,\n        0 0 50px $listening-glow-color,\n        0 0 60px $listening-glow-color,\n        0 0 70px $listening-glow-color;\n    }\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `.hidden{display:none !important}#saypi-callButton.disabled svg path.circle{fill:#f5eedf}.mobile-device #saypi-enterButton,.mobile-device #saypi-exitButton{position:fixed;top:4rem;left:10px;width:3rem;height:3rem;padding:6px;border:0;z-index:60}.mobile-device #saypi-enterButton svg path.inner,.mobile-device #saypi-exitButton svg path.inner{color:#0d3c26}@keyframes fillup{to{stroke-dashoffset:0}}@keyframes changeColor{0%{stroke:green}50%{stroke:#ff0}100%{stroke:red}}#progress-ring{transform:rotate(-90deg);transform-origin:50% 50%}#progress-ring.active{animation:fillup 10s linear forwards,changeColor 10s linear forwards}.glow{border:none;box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc;animation:neon-glow-animation 1.5s ease-in-out infinite alternate}.glow-fade-out{box-shadow:0 0 10px #f5819c,0 0 20px #f5819c,0 0 30px #f5819c,0 0 40px #f5819c,0 0 50px #f5819c,0 0 60px #f5819c,0 0 70px #f5819c;animation:fade-out-glow-animation 3s ease-out forwards}@keyframes fade-out-glow-animation{from{box-shadow:0 0 10px #f5819c,0 0 20px #f5819c,0 0 30px #f5819c,0 0 40px #f5819c,0 0 50px #f5819c,0 0 60px #f5819c,0 0 70px #f5819c}to{box-shadow:0 0 1px #f5819c,0 0 2px #f5819c,0 0 3px #fff,0 0 4px #fff,0 0 5px #fff}}@keyframes neon-glow-animation{from{box-shadow:0 0 5px #ffd1dc,0 0 10px #ffd1dc,0 0 15px #ffd1dc,0 0 20px #ffd1dc,0 0 25px #ffd1dc,0 0 30px #ffd1dc,0 0 35px #ffd1dc}to{box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc}}`, "",{"version":3,"sources":["webpack://./src/styles/common.scss","webpack://./src/styles/progress-ring.scss","webpack://./src/styles/neon.scss"],"names":[],"mappings":"AAAA,QACE,uBAAA,CAGF,2CACE,YAAA,CAKA,mEAEE,cAAA,CACA,QAAA,CACA,SAAA,CACA,UAAA,CACA,WAAA,CACA,WAAA,CACA,QAAA,CACA,UAAA,CACA,iGACE,aAAA,CCrBN,kBACI,GACE,mBAAA,CAAA,CAIJ,uBACE,GAAA,YAAA,CACA,IAAA,WAAA,CACA,KAAA,UAAA,CAAA,CAGF,eACE,wBAAA,CACA,wBAAA,CAGF,sBACE,oEAAA,CCdJ,MACI,WAAA,CAGA,iIACA,CASA,iEAAA,CAGJ,eACI,iIACA,CASA,sDAAA,CAGJ,mCACI,KACI,iIACA,CAQJ,GACI,iFACA,CAAA,CASR,+BACI,KACI,gIACA,CAQJ,GACI,iIACA,CAAA","sourcesContent":[".hidden {\n  display: none !important;\n}\n\n#saypi-callButton.disabled svg path.circle {\n  fill: rgb(245 238 223); /* bg-cream-550 */\n}\n\n.mobile-device {\n  /* maximize (mobile view) button is only displayed on compatible devices */\n  #saypi-enterButton,\n  #saypi-exitButton {\n    position: fixed;\n    top: 4rem;\n    left: 10px;\n    width: 3rem;\n    height: 3rem;\n    padding: 6px;\n    border: 0;\n    z-index: 60;\n    svg path.inner {\n      color: rgb(13 60 38); /* text-primary-700 */\n    }\n  }\n}\n\n@import \"progress-ring.scss\";\n@import \"neon.scss\";","@keyframes fillup {\n    to {\n      stroke-dashoffset: 0;\n    }\n  }\n  \n  @keyframes changeColor {\n    0% { stroke: green; }\n    50% { stroke: yellow; }\n    100% { stroke: red; }\n  }\n  \n  #progress-ring {\n    transform: rotate(-90deg);\n    transform-origin: 50% 50%;\n  }\n  \n  #progress-ring.active {\n    animation: fillup 10s linear forwards, changeColor 10s linear forwards;\n  }","$glow-color: #ffd1dc; // sunset-peach\n$fade-color: #f5819c; // sunset-peach\n\n\n.glow {\n    border: none;\n    \n    // Multiple box shadows create the glow effect\n    box-shadow: \n    0 0 10px $glow-color,\n    0 0 20px $glow-color,\n    0 0 30px $glow-color,\n    0 0 40px $glow-color,\n    0 0 50px $glow-color,\n    0 0 60px $glow-color,\n    0 0 70px $glow-color;\n  \n    // Animation for the glow to appear to pulse\n    animation: neon-glow-animation 1.5s ease-in-out infinite alternate;\n}\n\n.glow-fade-out {\n    box-shadow: \n    0 0 10px $fade-color,\n    0 0 20px $fade-color,\n    0 0 30px $fade-color,\n    0 0 40px $fade-color,\n    0 0 50px $fade-color,\n    0 0 60px $fade-color,\n    0 0 70px $fade-color;\n\n    // Start the fade out animation\n    animation: fade-out-glow-animation 3s ease-out forwards;\n}\n\n@keyframes fade-out-glow-animation {\n    from {\n        box-shadow: \n        0 0 10px $fade-color,\n        0 0 20px $fade-color,\n        0 0 30px $fade-color,\n        0 0 40px $fade-color,\n        0 0 50px $fade-color,\n        0 0 60px $fade-color,\n        0 0 70px $fade-color;\n    }\n    to {\n        box-shadow:\n        0 0 1px $fade-color,\n        0 0 2px $fade-color,\n        0 0 3px #fff,\n        0 0 4px #fff,\n        0 0 5px #fff,\n    }\n}\n\n\n@keyframes neon-glow-animation {\n    from {\n        box-shadow: \n        0 0 5px $glow-color,\n        0 0 10px $glow-color,\n        0 0 15px $glow-color,\n        0 0 20px $glow-color,\n        0 0 25px $glow-color,\n        0 0 30px $glow-color,\n        0 0 35px $glow-color;\n    }\n    to {\n        box-shadow: \n        0 0 10px $glow-color,\n        0 0 20px $glow-color,\n        0 0 30px $glow-color,\n        0 0 40px $glow-color,\n        0 0 50px $glow-color,\n        0 0 60px $glow-color,\n        0 0 70px $glow-color;\n    }\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -9220,7 +9220,7 @@ var AnimationModule = /*#__PURE__*/function () {
 _defineProperty(AnimationModule, "rectanglesSelector", ".outermost, .second, .third, .fourth, .fifth, .innermost");
 _defineProperty(AnimationModule, "callButtonSelector", "#saypi-callButton");
 _defineProperty(AnimationModule, "talkButtonAnimations", ["piThinking", "piSpeaking", "userSpeaking", "transcribing"]);
-_defineProperty(AnimationModule, "callButtonAnimations", ["listening"]);
+_defineProperty(AnimationModule, "callButtonAnimations", ["glow", "glow-fade-out"]);
 
 // EXTERNAL MODULE: ./src/ResourceModule.ts
 var ResourceModule = __webpack_require__(879);
@@ -9239,41 +9239,75 @@ class AudibleNotificationsModule {
 class VisualNotificationsModule {
     constructor() {
         this.ring = document.getElementById('progress-ring');
+        this.callButton = document.getElementById('saypi-callButton');
+    }
+    /**
+     * The ring and call button elements may not be available until after the extension is loaded.
+     * This method will attempt to find them and set them if they are not already set.
+     */
+    init() {
+        if (!this.ring) {
+            this.ring = document.getElementById('progress-ring');
+        }
+        if (!this.callButton) {
+            this.callButton = document.getElementById('saypi-callButton');
+        }
     }
     startCountdown(secondsRemaining) {
-        var _a;
-        if (!this.ring) {
-            this.ring = document.getElementById('progress-ring');
-        }
-        if (!this.ring) {
-            console.error("Unable to find progress ring element");
-            return;
-        }
-        const circumference = (_a = this.ring) === null || _a === void 0 ? void 0 : _a.getTotalLength();
-        this.ring.style.strokeDasharray = `${circumference} ${circumference}`;
-        this.ring.style.strokeDashoffset = `${circumference}`;
-        this.ring.style.animation = `fillup ${secondsRemaining}s linear forwards, changeColor ${secondsRemaining}s linear forwards`;
-        // Add the active class to start the animation
-        this.ring.classList.add('active');
+        this.startRingAnimation(secondsRemaining);
+        this.startGlowFade(secondsRemaining);
     }
     cancelCountdown() {
-        if (!this.ring) {
-            this.ring = document.getElementById('progress-ring');
-        }
+        this.stopRingAnimation();
+        this.stopGlowFade();
+    }
+    startRingAnimation(secondsRemaining) {
         if (!this.ring) {
             console.error("Unable to find progress ring element");
             return;
         }
-        // Stop the progress ring animation and reset it
+        const circumference = this.ring.getTotalLength();
+        this.ring.style.strokeDasharray = `${circumference} ${circumference}`;
+        this.ring.style.strokeDashoffset = `${circumference}`;
+        this.ring.style.animationDuration = `${secondsRemaining}s`;
+        //this.ring.style.animation = `fillup ${secondsRemaining}s linear forwards, changeColor ${secondsRemaining}s linear forwards`;
+        this.ring.classList.add('active');
+    }
+    stopRingAnimation() {
+        if (!this.ring) {
+            console.error("Unable to find progress ring element");
+            return;
+        }
         this.ring.classList.remove('active');
-        void this.ring.style.strokeDasharray;
-        void this.ring.style.strokeDashoffset;
-        this.ring.style.animation = 'none';
+        //      void this.ring.style.strokeDasharray;
+        //      void this.ring.style.strokeDashoffset;
+        //      this.ring.style.animation = 'none';
+    }
+    startGlowFade(secondsRemaining) {
+        if (!this.callButton) {
+            console.error("Unable to find call button element");
+            return;
+        }
+        this.callButton.classList.remove('glow');
+        this.callButton.classList.add('glow-fade-out');
+        this.callButton.style.animationDuration = `${secondsRemaining}s`;
+        //this.callButton.style.animationTimingFunction = 'ease-out !important';
+    }
+    stopGlowFade() {
+        if (!this.callButton) {
+            console.error("Unable to find call button element");
+            return;
+        }
+        this.callButton.classList.remove('glow-fade-out');
+        //void this.callButton.style.animationDuration;
+        //void this.callButton.style.animationTimingFunction;
     }
     listeningStopped() {
+        this.init();
         this.cancelCountdown();
     }
     listeningTimeRemaining(timeRemaining) {
+        this.init();
         this.cancelCountdown();
         this.startCountdown(timeRemaining);
     }
@@ -9781,6 +9815,7 @@ const clearTranscripts = (0,es/* assign */.f0)({
 const audibleNotifications = new AudibleNotificationsModule();
 const visualNotifications = new VisualNotificationsModule();
 const machine = (0,Machine/* createMachine */.C)({
+    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCRKANiwNoAMAuoqHQHtYWMgPx8QAD0QBGACwBOABw4lMgEwBWADQg0shQHZOOGZzmaAbBYDMSuRbkBfJ7trY8hUhWq0GCBgBlOjAUAGsCKC5eJBBBYVFxWOkETXVdfQR1GxtNHE0zNVt7Cxc3dA8wACcqgSrYKklYEhQSMBwUADM2qoAKM05BgEoaCtxq2vroiXiRLDEJFJtDTRt8zkM1LQzZJRtLU3MrYodNZ1cQd3GauoamlraO7ur+weHRzGvJ2HYZGP4hHMFslEHYFHIcJYrNs9IgFMpIZwFNYZEpDApOOpDDIypcxjgWFhmmB8JEPv4GAAVAAWBAi+CiPBmgMSi0QaR2CDUOEU8MsGLk6ks2MM6lxVwJRLapIZ5MYQRC4Ui01is1ZIIQlnSsIQMhsMhw8L5AqFIrFFwlhOJMqgOCqYCIdQgZL8jGpKAZAFc6CqAQl5klQEtloZ1psNDodfItThDJYlFrjHZTubyp9JdbInaHU6s-gBCRgqF6VA5QhPbBqgAxAhE6mQItKhm+uIsgNshA5QyhzQbLaRzIySzWUzqJSDdScZOOcX4q3SrP2x1VZ0MnD5wuKktlivVRslltq9sa7JI-Kc+QKPL8vbyVYlM6z9PzkmLnMrrO7qr7l3ofxfwISAEOgQggH9myZVU22BINEEnDFVAjC9NGRSFlH1E4ZwtOcpVfNcl1zNcAK3X96EYACgJAhsSObP5mX9GCpDgpETH7ZC5AOGR0LvadH2w59cJtHBHXwSgqjINdiCIT0AFtPRYVoyQgMR2gIcgBDCdoZOqGAAHk6DIGSpSwIhD2gwMmKyZYDS0cMYUyJRskNTgoSHNEMSFBQnw8F8hJEsSJNtKTZPkxTZQmOocDoBSSE6OoZJwbSqj0gysCM5oTLMhiLJSbJsUNWy2J1QwbBMWwbAUVF0UxflvNwXys386pAo6IhpLkmLSP8Egqg9WAiCqLAACNICyoEcrgsdLE5TQ9hwN4hXjarPLqjMFzXJrxKzYKOrC0tXQQHq+oG4awCrFAsBYUbIL9caOy7Hs+yQnVKryGrSqUM4rAUZZVoajaxAC7a2pCzrZQOo78H6waRogABRGSDLQMb1VgzsQzDIqHL1fIhQ+r7+V+-ifMExrAea4H2tCwLGmaVp2i6HpelgT0hvS4QxAAETABS0BGS1SYB0SKckkHdsClHjzRrFcgvcwVEsJEUXcmqvOJ+rBdtTaWpZtmRBpyXGKWTguMx57B0GA0zGROQqo82r1bWvCtfJra10h6Hhq6xgPZO2HDYm3UMQNKdzbhGRQ3UIdbaxDR9kxP7NeE12Wt9mHvcO3qob9s6LquiAA-uuxHrsgdEAcA5exqpaPMMRPMyFoH3azz2hoztPTvhxGSGRm7W2yovuzN+zZC4iE0ksfGLEJyxVvtWBBHwVd9r-cjK2-GjGX+fu7o1GR94hQqw9SQUcC0E2tGWdRT3ONMPHnxfl6irAaTpDOFWLZU+6PI3y+FHkFBRzRGXVICIq4RivjfOecBH5Zg-k2FeZEAhYEAsBUC4Et70V3mjfe8gz6aFLshSqZ84xyAqveU4s9HYPzEE-eB24DpBEougzevxt4-0DtbQ+BCsaTTwXGTgRQKGlGoTA2hcCUGbzLAwGspJYD1jAqw7+5kOz73MPgwhUYUSxlIeQ3iVCLj5ggHACQVwsGo0snITkABaA4bx7EOMGHXR2BBiBkEoOYqWlllizWHiAriCFxxxiUFeXit88TpgivUTxv9OzojyL2TRmQChrEVjbO2mJsSrSibAHAHcRrnUupAGJgdkxrESbwzUFhETpJVrHbJNx6iJRMnDRpJT7r2HKU9EeXJ96HFqctLJjt-pQHaXvOQQ9Km2UNEafk5hTQR3rutW0BEPwMjGTgr6iEekaFFDoyegiCY-SoXfDWDcVnvifhuDBGzLJaBkHkfe2JgHISFIaOQt5MJ8VOU7ISqyn7EU-usqCA894oTWJUy8JhuzWD0Q+cJAtznJ2Fm7UZILsGWQeVobZIDFAJIWnITEVd9RLOdsipuQUxbU0iLc3K18lCckAeoHAuQBn2zVj8kZ5KRa2l1kZEggVaWggPvkH6KxGXGH2VPb6+xSV+RTlmfJNL0UWJSA8kqOLORohUFxdQRg0hx0VqmCJ98xFL2VbdVV7IrE6hyHkdQvI5mCmFBHTQ0CF7iLXFSWk+ASxCt1JiGaHFYy9ggaKKBoiPXmq9ZIoFaLLVeJSFCCEVUQFnAOCsC+qxw2lXOC4IAA */
     context: {
         transcriptions: {},
         isTranscribing: false,
@@ -9878,7 +9913,7 @@ const machine = (0,Machine/* createMachine */.C)({
                         {
                             type: "startAnimation",
                             params: {
-                                animation: "listening",
+                                animation: "glow",
                             },
                         },
                     ],
@@ -9886,7 +9921,7 @@ const machine = (0,Machine/* createMachine */.C)({
                         {
                             type: "stopAnimation",
                             params: {
-                                animation: "listening",
+                                animation: "glow",
                             },
                         },
                         {

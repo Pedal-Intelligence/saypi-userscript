@@ -127,6 +127,7 @@ const visualNotifications = new VisualNotificationsModule();
 
 export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
   {
+    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCRKANiwNoAMAuoqHQHtYWMgPx8QAD0QBGACwBOABw4lMgEwBWADQg0shQHZOOGZzmaAbBYDMSuRbkBfJ7trY8hUhWq0GCBgBlOjAUAGsCKC5eJBBBYVFxWOkETXVdfQR1GxtNHE0zNVt7Cxc3dA8wACcqgSrYKklYEhQSMBwUADM2qoAKM05BgEoaCtxq2vroiXiRLDEJFJtDTRt8zkM1LQzZJRtLU3MrYodNZ1cQd3GauoamlraO7ur+weHRzGvJ2HYZGP4hHMFslEHYFHIcJYrNs9IgFMpIZwFNYZEpDApOOpDDIypcxjgWFhmmB8JEPv4GAAVAAWBAi+CiPBmgMSi0QaR2CDUOEU8MsGLk6ks2MM6lxVwJRLapIZ5MYQRC4Ui01is1ZIIQlnSsIQMhsMhw8L5AqFIrFFwlhOJMqgOCqYCIdQgZL8jGpKAZAFc6CqAQl5klQEtloZ1psNDodfItThDJYlFrjHZTubyp9JdbInaHU6s-gBCRgqF6VA5QhPbBqgAxAhE6mQItKhm+uIsgNshA5QyhzQbLaRzIySzWUzqJSDdScZOOcX4q3SrP2x1VZ0MnD5wuKktlivVRslltq9sa7JI-Kc+QKPL8vbyVYlM6z9PzkmLnMrrO7qr7l3ofxfwISAEOgQggH9myZVU22BINEEnDFVAjC9NGRSFlH1E4ZwtOcpVfNcl1zNcAK3X96EYACgJAhsSObP5mX9GCpDgpETH7ZC5AOGR0LvadH2w59cJtHBHXwSgqjINdiCIT0AFtPRYVoyQgMR2gIcgBDCdoZOqGAAHk6DIGSpSwIhD2gwMmKyZYDS0cMYUyJRskNTgoSHNEMSFBQnw8F8hJEsSJNtKTZPkxTZQmOocDoBSSE6OoZJwbSqj0gysCM5oTLMhiLJSbJsUNWy2J1QwbBMWwbAUVF0UxflvNwXys386pAo6IhpLkmLSP8Egqg9WAiCqLAACNICyoEcrgsdLE5TQ9hwN4hXjarPLqjMFzXJrxKzYKOrC0tXQQHq+oG4awCrFAsBYUbIL9caOy7Hs+yQnVKryGrSqUM4rAUZZVoajaxAC7a2pCzrZQOo78H6waRogABRGSDLQMb1VgzsQzDIqHL1fIhQ+r7+V+-ifMExrAea4H2tCwLGmaVp2i6HpelgT0hvS4QxAAETABS0BGS1SYB0SKckkHdsClHjzRrFcgvcwVEsJEUXcmqvOJ+rBdtTaWpZtmRBpyXGKWTguMx57B0GA0zGROQqo82r1bWvCtfJra10h6Hhq6xgPZO2HDYm3UMQNKdzbhGRQ3UIdbaxDR9kxP7NeE12Wt9mHvcO3qob9s6LquiAA-uuxHrsgdEAcA5exqpaPMMRPMyFoH3azz2hoztPTvhxGSGRm7W2yovuzN+zZC4iE0ksfGLEJyxVvtWBBHwVd9r-cjK2-GjGX+fu7o1GR94hQqw9SQUcC0E2tGWdRT3ONMPHnxfl6irAaTpDOFWLZU+6PI3y+FHkFBRzRGXVICIq4RivjfOecBH5Zg-k2FeZEAhYEAsBUC4Et70V3mjfe8gz6aFLshSqZ84xyAqveU4s9HYPzEE-eB24DpBEougzevxt4-0DtbQ+BCsaTTwXGTgRQKGlGoTA2hcCUGbzLAwGspJYD1jAqw7+5kOz73MPgwhUYUSxlIeQ3iVCLj5ggHACQVwsGo0snITkABaA4bx7EOMGHXR2BBiBkEoOYqWlllizWHiAriCFxxxiUFeXit88TpgivUTxv9OzojyL2TRmQChrEVjbO2mJsSrSibAHAHcRrnUupAGJgdkxrESbwzUFhETpJVrHbJNx6iJRMnDRpJT7r2HKU9EeXJ96HFqctLJjt-pQHaXvOQQ9Km2UNEafk5hTQR3rutW0BEPwMjGTgr6iEekaFFDoyegiCY-SoXfDWDcVnvifhuDBGzLJaBkHkfe2JgHISFIaOQt5MJ8VOU7ISqyn7EU-usqCA894oTWJUy8JhuzWD0Q+cJAtznJ2Fm7UZILsGWQeVobZIDFAJIWnITEVd9RLOdsipuQUxbU0iLc3K18lCckAeoHAuQBn2zVj8kZ5KRa2l1kZEggVaWggPvkH6KxGXGH2VPb6+xSV+RTlmfJNL0UWJSA8kqOLORohUFxdQRg0hx0VqmCJ98xFL2VbdVV7IrE6hyHkdQvI5mCmFBHTQ0CF7iLXFSWk+ASxCt1JiGaHFYy9ggaKKBoiPXmq9ZIoFaLLVeJSFCCEVUQFnAOCsC+qxw2lXOC4IAA */
     context: {
       transcriptions: {},
       isTranscribing: false,
@@ -227,7 +228,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               {
                 type: "startAnimation",
                 params: {
-                  animation: "listening",
+                  animation: "glow",
                 },
               },
             ],
@@ -235,7 +236,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               {
                 type: "stopAnimation",
                 params: {
-                  animation: "listening",
+                  animation: "glow",
                 },
               },
               {
