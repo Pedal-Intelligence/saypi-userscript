@@ -13,6 +13,7 @@ import rectanglesSVG from "./icons/rectangles.svg";
 import talkIconSVG from "./icons/waveform.svg";
 import mutedMicIconSVG from "./icons/muted_microphone.svg";
 import callIconSVG from "./icons/call.svg";
+import callStartingIconSVG from "./icons/call-starting.svg";
 import hangupIconSVG from "./icons/hangup.svg";
 export default class ButtonModule {
   constructor() {
@@ -210,6 +211,20 @@ export default class ButtonModule {
 
     appendChild(container, button, position);
     return button;
+  }
+
+  callStarting(callButton) {
+    if (!callButton) {
+      callButton = document.getElementById("saypi-callButton");
+    }
+    if (callButton) {
+      callButton.innerHTML = callStartingIconSVG;
+      callButton.setAttribute("aria-label", "Starting continuous listening.");
+      callButton.setAttribute("title", "Starting continuous listening.");
+      callButton.onclick = () => {
+        this.actor.send("saypi:hangup");
+      };
+    }
   }
 
   callActive(callButton) {

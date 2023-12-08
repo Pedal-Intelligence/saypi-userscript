@@ -162,7 +162,7 @@ exports.FrameProcessor = FrameProcessor;
 
 /***/ }),
 
-/***/ 978:
+/***/ 626:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -591,7 +591,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.defaultRealTimeVADOptions = exports.AudioNodeVAD = exports.MicVAD = exports.NonRealTimeVAD = exports.Message = exports.FrameProcessor = exports.utils = void 0;
 const ort = __importStar(__webpack_require__(793));
-const _common_1 = __webpack_require__(978);
+const _common_1 = __webpack_require__(626);
 Object.defineProperty(exports, "FrameProcessor", ({ enumerable: true, get: function () { return _common_1.FrameProcessor; } }));
 Object.defineProperty(exports, "Message", ({ enumerable: true, get: function () { return _common_1.Message; } }));
 const model_fetcher_1 = __webpack_require__(756);
@@ -659,7 +659,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AudioNodeVAD = exports.MicVAD = exports.defaultRealTimeVADOptions = void 0;
 const ort = __importStar(__webpack_require__(793));
-const _common_1 = __webpack_require__(978);
+const _common_1 = __webpack_require__(626);
 const model_fetcher_1 = __webpack_require__(756);
 const asset_path_1 = __webpack_require__(709);
 const _getWorkletURL = () => {
@@ -8504,6 +8504,9 @@ const audioInputMachine = (0,Machine/* createMachine */.C)({
         acquired: {
             description: "Microphone acquired and ready to start recording.",
             initial: "idle",
+            entry: {
+                type: "notifyMicrophoneAcquired",
+            },
             states: {
                 idle: {
                     on: {
@@ -8611,6 +8614,9 @@ const audioInputMachine = (0,Machine/* createMachine */.C)({
             if (SayPiContext.waitingToStop === true) {
                 microphone === null || microphone === void 0 ? void 0 : microphone.pause();
             }
+        },
+        notifyMicrophoneAcquired: (context, event) => {
+            EventBus/* default */.Z.emit("saypi:callReady");
         },
         releaseMicrophone: (context, event) => {
             tearDownRecording();
@@ -9327,6 +9333,7 @@ function EventModule_toPropertyKey(arg) { var key = EventModule_toPrimitive(arg,
 function EventModule_toPrimitive(input, hint) { if (EventModule_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (EventModule_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
 
+var CALL_READY = "saypi:callReady";
 var USER_SPEAKING = "saypi:userSpeaking";
 var USER_STOPPED_SPEAKING = "saypi:userStoppedSpeaking";
 var USER_FINISHED_SPEAKING = "saypi:userFinishedSpeaking";
@@ -9406,6 +9413,9 @@ var EventModule = /*#__PURE__*/function () {
   }, {
     key: "registerStateMachineEvents",
     value: function registerStateMachineEvents(actor) {
+      EventBus/* default */.Z.on(CALL_READY, function () {
+        actor.send(CALL_READY);
+      });
       EventBus/* default */.Z.on(USER_SPEAKING, function () {
         actor.send(USER_SPEAKING);
       });
@@ -9831,16 +9841,8 @@ const machine = (0,Machine/* createMachine */.C)({
             exit: (0,es/* assign */.f0)({ lastState: "inactive" }),
             on: {
                 "saypi:call": {
-                    target: "#sayPi.listening.recording",
-                    actions: [
-                        {
-                            type: "callStarted",
-                        },
-                        {
-                            type: "startRecording",
-                        },
-                    ],
-                    description: 'Enable the VAD microphone.\nAka "call" Pi.\nStarts active listening.',
+                    target: "#sayPi.callStarting",
+                    description: 'Place a "call" to Pi.\nAttempts to start the microphone and begin active listening.',
                 },
                 "saypi:piSpeaking": {
                     target: "#sayPi.responding.piSpeaking",
@@ -9850,7 +9852,7 @@ const machine = (0,Machine/* createMachine */.C)({
         errors: {
             description: "Error parent state.",
             after: {
-                "10000": [
+                "5000": [
                     {
                         target: "#sayPi.listening",
                         actions: [],
@@ -9891,6 +9893,35 @@ const machine = (0,Machine/* createMachine */.C)({
                         type: "dismissNotification",
                     },
                     type: "final",
+                },
+            },
+        },
+        callStarting: {
+            description: "Call is starting. Waiting for microphone to be acquired.",
+            entry: [
+                {
+                    type: "callButtonStarting",
+                },
+                {
+                    type: "setupRecording",
+                }
+            ],
+            on: {
+                "saypi:callReady": {
+                    target: "#sayPi.listening.recording",
+                    actions: [
+                        {
+                            type: "callButtonStarted",
+                        },
+                        {
+                            type: "startRecording",
+                        },
+                    ],
+                    description: 'VAD microphone is ready.\nStart it recording.',
+                },
+                "saypi:callFailed": {
+                    target: "#sayPi.errors.micError",
+                    description: "VAD microphone failed to start.\nAudio device not available.",
                 },
             },
         },
@@ -10242,6 +10273,10 @@ const machine = (0,Machine/* createMachine */.C)({
                 EventBus/* default */.Z.emit("audio:setupRecording");
             }
         },
+        setupRecording: (context, event) => {
+            // differs from acquireMicrophone in that it's user-initiated
+            EventBus/* default */.Z.emit("audio:setupRecording");
+        },
         startRecording: (context, event) => {
             EventBus/* default */.Z.emit("audio:startRecording");
         },
@@ -10274,7 +10309,10 @@ const machine = (0,Machine/* createMachine */.C)({
             if (prompt)
                 setFinalPrompt(prompt);
         },
-        callStarted: () => {
+        callButtonStarting: () => {
+            buttonModule.callStarting();
+        },
+        callButtonStarted: () => {
             buttonModule.callActive();
         },
         callEnded: () => {
@@ -10504,6 +10542,8 @@ const submitErrorHandler = new SubmitErrorHandler();
 /* harmony default export */ const muted_microphone = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"500\" zoomAndPan=\"magnify\" viewBox=\"0 0 375 374.999991\" height=\"500\" preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\"><path fill=\"#776d6d\" d=\"M 239.722656 126.441406 L 239.722656 122.300781 C 239.722656 93.507812 216.296875 70.078125 187.5 70.078125 C 158.703125 70.078125 135.277344 93.507812 135.277344 122.300781 L 135.277344 187.953125 C 135.277344 199.988281 139.410156 211.050781 146.273438 219.890625 Z M 239.722656 126.441406 \" fill-opacity=\"1\" fill-rule=\"nonzero\"/><path fill=\"#776d6d\" d=\"M 155.046875 228.792969 C 163.964844 235.898438 175.234375 240.175781 187.5 240.175781 C 216.296875 240.175781 239.722656 216.75 239.722656 187.953125 L 239.722656 144.113281 Z M 155.046875 228.792969 \" fill-opacity=\"1\" fill-rule=\"nonzero\"/><path fill=\"#776d6d\" d=\"M 187.5 0 C 83.945312 0 0 83.945312 0 187.5 C 0 291.054688 83.945312 375 187.5 375 C 291.054688 375 375 291.054688 375 187.5 C 375 83.945312 291.054688 0 187.5 0 Z M 287.484375 96.355469 L 254.640625 129.195312 L 254.640625 187.953125 C 254.640625 224.976562 224.523438 255.097656 187.5 255.097656 C 171.117188 255.097656 156.105469 249.183594 144.4375 239.402344 L 138.109375 245.730469 C 151.417969 257.121094 168.652344 264.046875 187.5 264.046875 C 229.457031 264.046875 263.59375 229.914062 263.59375 187.953125 C 263.59375 183.832031 266.933594 180.496094 271.054688 180.496094 C 275.175781 180.496094 278.515625 183.835938 278.515625 187.953125 C 278.515625 235.625 241.667969 274.828125 194.960938 278.640625 L 194.960938 304.921875 L 220.121094 304.921875 C 224.242188 304.921875 227.582031 308.261719 227.582031 312.382812 C 227.582031 316.5 224.242188 319.839844 220.121094 319.839844 L 154.875 319.839844 C 150.757812 319.839844 147.417969 316.5 147.417969 312.382812 C 147.417969 308.261719 150.757812 304.921875 154.875 304.921875 L 180.039062 304.921875 L 180.039062 278.636719 C 160.007812 277.003906 141.816406 268.824219 127.542969 256.296875 L 96.351562 287.484375 C 95.132812 288.703125 93.53125 289.316406 91.933594 289.316406 C 90.335938 289.316406 88.734375 288.703125 87.515625 287.484375 C 85.074219 285.042969 85.074219 281.085938 87.515625 278.644531 L 118.761719 247.398438 C 104.929688 231.4375 96.484375 210.6875 96.484375 187.953125 C 96.484375 183.832031 99.824219 180.496094 103.941406 180.496094 C 108.0625 180.496094 111.402344 183.835938 111.402344 187.953125 C 111.402344 206.574219 118.148438 223.628906 129.292969 236.867188 L 135.628906 230.53125 C 126.089844 218.9375 120.355469 204.105469 120.355469 187.953125 L 120.355469 122.300781 C 120.355469 85.28125 150.476562 55.160156 187.496094 55.160156 C 221.128906 55.160156 248.980469 80.039062 253.816406 112.34375 L 278.640625 87.515625 C 281.082031 85.078125 285.039062 85.078125 287.480469 87.515625 C 289.925781 89.957031 289.925781 93.914062 287.484375 96.355469 Z M 287.484375 96.355469 \" fill-opacity=\"1\" fill-rule=\"nonzero\"/></svg>");
 ;// CONCATENATED MODULE: ./src/icons/call.svg
 /* harmony default export */ const call = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 768 767.999994\"\n    preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n    <path class=\"circle\" fill=\"#418a2f\"\n        d=\"M 767.988281 383.984375 C 767.988281 596.058594 596.066406 767.980469 383.996094 767.980469 C 171.921875 767.980469 0 596.058594 0 383.984375 C 0 171.910156 171.921875 -0.0078125 383.996094 -0.0078125 C 596.066406 -0.0078125 767.988281 171.910156 767.988281 383.984375 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n    <path class=\"phone-receiver\" fill=\"#ffffff\"\n        d=\"M 215.726562 199.773438 C 219.746094 194.835938 230.023438 183.625 243.644531 183.769531 C 244.40625 183.777344 245.300781 183.808594 246.34375 183.914062 C 246.34375 183.914062 248.492188 184.144531 250.613281 184.703125 C 268.292969 189.410156 299.921875 224.304688 299.921875 224.304688 C 326.925781 254.09375 334.722656 255.53125 334.636719 266.5 C 334.550781 276.777344 328.140625 284.71875 316.253906 296.566406 C 284.566406 328.148438 277.808594 330.53125 275.351562 340.421875 C 273.902344 346.234375 269.539062 357.511719 289.105469 379.355469 C 318.289062 411.929688 388.1875 478.4375 394.300781 482.515625 C 400.402344 486.585938 422.121094 500.832031 451.300781 474.371094 C 471.226562 456.304688 480.714844 435.066406 494.875 433.785156 C 502.363281 433.089844 507.878906 437.613281 519.167969 447.222656 C 585.886719 503.976562 586.871094 513.933594 586.3125 519.824219 C 585.355469 530.011719 580.75 539.210938 565.316406 550.382812 C 525.953125 578.878906 508.3125 603.992188 428.234375 570.742188 C 348.152344 537.484375 263.996094 453.335938 240.242188 417.359375 C 216.488281 381.390625 179.160156 326.421875 181.878906 288.414062 C 183.769531 261.980469 191.867188 238.863281 191.867188 238.863281 C 199.097656 220.882812 208.71875 207.878906 215.726562 199.773438 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n</svg>");
+;// CONCATENATED MODULE: ./src/icons/call-starting.svg
+/* harmony default export */ const call_starting = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 768 767.999994\" preserveAspectRatio=\"xMidYMid meet\"\n    version=\"1.0\">\n    <path fill=\"#4e84be\"\n        d=\"M 767.988281 383.984375 C 767.988281 596.058594 596.066406 767.980469 383.996094 767.980469 C 171.921875 767.980469 0 596.058594 0 383.984375 C 0 171.910156 171.921875 -0.0078125 383.996094 -0.0078125 C 596.066406 -0.0078125 767.988281 171.910156 767.988281 383.984375 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n    <path fill=\"#ffffff\"\n        d=\"M 215.726562 199.773438 C 219.746094 194.835938 230.023438 183.625 243.644531 183.769531 C 244.40625 183.777344 245.300781 183.808594 246.34375 183.914062 C 246.34375 183.914062 248.492188 184.144531 250.613281 184.703125 C 268.292969 189.410156 299.921875 224.304688 299.921875 224.304688 C 326.925781 254.09375 334.722656 255.53125 334.636719 266.5 C 334.550781 276.777344 328.140625 284.71875 316.253906 296.566406 C 284.566406 328.148438 277.808594 330.53125 275.351562 340.421875 C 273.902344 346.234375 269.539062 357.511719 289.105469 379.355469 C 318.289062 411.929688 388.1875 478.4375 394.300781 482.515625 C 400.402344 486.585938 422.121094 500.832031 451.300781 474.371094 C 471.226562 456.304688 480.714844 435.066406 494.875 433.785156 C 502.363281 433.089844 507.878906 437.613281 519.167969 447.222656 C 585.886719 503.976562 586.871094 513.933594 586.3125 519.824219 C 585.355469 530.011719 580.75 539.210938 565.316406 550.382812 C 525.953125 578.878906 508.3125 603.992188 428.234375 570.742188 C 348.152344 537.484375 263.996094 453.335938 240.242188 417.359375 C 216.488281 381.390625 179.160156 326.421875 181.878906 288.414062 C 183.769531 261.980469 191.867188 238.863281 191.867188 238.863281 C 199.097656 220.882812 208.71875 207.878906 215.726562 199.773438 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n</svg>");
 ;// CONCATENATED MODULE: ./src/icons/hangup.svg
 /* harmony default export */ const hangup = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    viewBox=\"0 0 64 64\" preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n    <path fill=\"#776d6d\"\n        d=\"M 63.75 31.875 C 63.75 49.29395 49.29395 63.75 31.875 63.75 C 14.45605 63.75 0 49.29395 0 31.875 C 0 14.45605 14.45605 0 31.875 0 C 49.29395 0 63.75 14.45605 63.75 31.875 \"\n        fill-opacity=\"0.8\" fill-rule=\"nonzero\" />\n    <path fill=\"#ffffff\"\n        d=\"M 12.727539 34.74707 C 12.728027 34.747314 13.897949 37.758789 15.219788 38.542328 C 16.077148 39.048828 16.793945 38.776855 17.71875 38.340332 C 19.519531 37.490723 21.362305 36.74707 23.290039 36.246094 C 24.087891 36.012695 24.193359 35.574219 24.022461 35.060547 C 23.783203 34.224121 23.540039 33.388672 23.292969 32.553711 C 23.146484 32.042969 23.460938 31.490234 24.179688 31.196289 C 26.69043 30.344238 29.179688 30.243164 31.669922 30.230469 C 31.779297 30.230469 32.053711 30.230469 32.163086 30.230469 C 34.65332 30.243164 37.142578 30.344238 39.65332 31.196289 C 40.37207 31.490234 40.686523 32.042969 40.540039 32.553711 C 40.292969 33.388672 40.049805 34.224121 39.810547 35.060547 C 39.639648 35.574219 39.745117 36.012695 40.542969 36.246094 C 43.470703 36.74707 45.313477 37.490723 47.114258 38.340332 C 47.976562 38.776855 48.693359 39.048828 49.550781 38.542328 C 50.872559 37.758789 52.04248 34.747314 52.042969 34.74707 C 52.222656 32.560547 51.503906 29.84375 48.347656 28.462891 C 43.330078 26.236328 37.943359 25.053711 32.178711 25.016602 C 32.063477 25.016602 31.697266 25.016602 31.571289 25.016602 C 25.806641 25.053711 20.419922 26.236328 15.402344 28.462891 C 12.246094 29.84375 11.527344 32.560547 11.707031 34.74707 \"\n        fill-opacity=\"0.9\" fill-rule=\"nonzero\" />\n    <circle id=\"progress-ring\" cx=\"32\" cy=\"32\" r=\"30\" stroke-width=\"4\" stroke=\"red\"\n        fill=\"transparent\" stroke-dasharray=\"188.4\" stroke-dashoffset=\"188.4\"></circle>\n</svg>");
 ;// CONCATENATED MODULE: ./src/ButtonModule.js
@@ -10516,6 +10556,7 @@ function ButtonModule_defineProperties(target, props) { for (var i = 0; i < prop
 function ButtonModule_createClass(Constructor, protoProps, staticProps) { if (protoProps) ButtonModule_defineProperties(Constructor.prototype, protoProps); if (staticProps) ButtonModule_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 function ButtonModule_toPropertyKey(arg) { var key = ButtonModule_toPrimitive(arg, "string"); return ButtonModule_typeof(key) === "symbol" ? key : String(key); }
 function ButtonModule_toPrimitive(input, hint) { if (ButtonModule_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (ButtonModule_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+
 
 
 
@@ -10747,9 +10788,25 @@ var ButtonModule = /*#__PURE__*/function () {
       return button;
     }
   }, {
+    key: "callStarting",
+    value: function callStarting(callButton) {
+      var _this4 = this;
+      if (!callButton) {
+        callButton = document.getElementById("saypi-callButton");
+      }
+      if (callButton) {
+        callButton.innerHTML = call_starting;
+        callButton.setAttribute("aria-label", "Starting continuous listening.");
+        callButton.setAttribute("title", "Starting continuous listening.");
+        callButton.onclick = function () {
+          _this4.actor.send("saypi:hangup");
+        };
+      }
+    }
+  }, {
     key: "callActive",
     value: function callActive(callButton) {
-      var _this4 = this;
+      var _this5 = this;
       if (!callButton) {
         callButton = document.getElementById("saypi-callButton");
       }
@@ -10759,7 +10816,7 @@ var ButtonModule = /*#__PURE__*/function () {
         callButton.setAttribute("aria-label", label);
         callButton.setAttribute("title", label);
         callButton.onclick = function () {
-          _this4.actor.send("saypi:hangup");
+          _this5.actor.send("saypi:hangup");
         };
         callButton.classList.add("active");
       }
@@ -10767,7 +10824,7 @@ var ButtonModule = /*#__PURE__*/function () {
   }, {
     key: "callInactive",
     value: function callInactive(callButton) {
-      var _this5 = this;
+      var _this6 = this;
       if (!callButton) {
         callButton = document.getElementById("saypi-callButton");
       }
@@ -10776,7 +10833,7 @@ var ButtonModule = /*#__PURE__*/function () {
         callButton.setAttribute("aria-label", "Click to start continuous listening.");
         callButton.setAttribute("title", "Not listening. Click to start.");
         callButton.onclick = function () {
-          _this5.actor.send("saypi:call");
+          _this6.actor.send("saypi:call");
         };
         callButton.classList.remove("active");
       }

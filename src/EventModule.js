@@ -1,6 +1,7 @@
 import EventBus from "./EventBus.js";
 import StateMachineService from "./StateMachineService.js";
 
+const CALL_READY = "saypi:callReady";
 const USER_SPEAKING = "saypi:userSpeaking";
 const USER_STOPPED_SPEAKING = "saypi:userStoppedSpeaking";
 const USER_FINISHED_SPEAKING = "saypi:userFinishedSpeaking";
@@ -75,6 +76,9 @@ export default class EventModule {
   }
 
   static registerStateMachineEvents(actor) {
+    EventBus.on(CALL_READY, () => {
+      actor.send(CALL_READY);
+    });
     EventBus.on(USER_SPEAKING, () => {
       actor.send(USER_SPEAKING);
     });

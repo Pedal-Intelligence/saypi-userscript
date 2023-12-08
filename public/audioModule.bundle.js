@@ -162,7 +162,7 @@ exports.FrameProcessor = FrameProcessor;
 
 /***/ }),
 
-/***/ 978:
+/***/ 626:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -591,7 +591,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.defaultRealTimeVADOptions = exports.AudioNodeVAD = exports.MicVAD = exports.NonRealTimeVAD = exports.Message = exports.FrameProcessor = exports.utils = void 0;
 const ort = __importStar(__webpack_require__(793));
-const _common_1 = __webpack_require__(978);
+const _common_1 = __webpack_require__(626);
 Object.defineProperty(exports, "FrameProcessor", ({ enumerable: true, get: function () { return _common_1.FrameProcessor; } }));
 Object.defineProperty(exports, "Message", ({ enumerable: true, get: function () { return _common_1.Message; } }));
 const model_fetcher_1 = __webpack_require__(756);
@@ -659,7 +659,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AudioNodeVAD = exports.MicVAD = exports.defaultRealTimeVADOptions = void 0;
 const ort = __importStar(__webpack_require__(793));
-const _common_1 = __webpack_require__(978);
+const _common_1 = __webpack_require__(626);
 const model_fetcher_1 = __webpack_require__(756);
 const asset_path_1 = __webpack_require__(709);
 const _getWorkletURL = () => {
@@ -5838,6 +5838,9 @@ const AudioInputMachine_audioInputMachine = (0,Machine/* createMachine */.C)({
         acquired: {
             description: "Microphone acquired and ready to start recording.",
             initial: "idle",
+            entry: {
+                type: "notifyMicrophoneAcquired",
+            },
             states: {
                 idle: {
                     on: {
@@ -5945,6 +5948,9 @@ const AudioInputMachine_audioInputMachine = (0,Machine/* createMachine */.C)({
             if (SayPiContext.waitingToStop === true) {
                 microphone === null || microphone === void 0 ? void 0 : microphone.pause();
             }
+        },
+        notifyMicrophoneAcquired: (context, event) => {
+            src_EventBus/* default */.Z.emit("saypi:callReady");
         },
         releaseMicrophone: (context, event) => {
             tearDownRecording();

@@ -159,6 +159,9 @@ export const audioInputMachine = createMachine<
       acquired: {
         description: "Microphone acquired and ready to start recording.",
         initial: "idle",
+        entry: {
+          type: "notifyMicrophoneAcquired",
+        },
         states: {
           idle: {
             on: {
@@ -277,6 +280,10 @@ export const audioInputMachine = createMachine<
         if (SayPiContext.waitingToStop === true) {
           microphone?.pause();
         }
+      },
+
+      notifyMicrophoneAcquired: (context, event) => {
+        EventBus.emit("saypi:callReady");
       },
 
       releaseMicrophone: (context, event) => {

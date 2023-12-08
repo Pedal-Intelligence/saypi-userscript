@@ -43,6 +43,8 @@ type SayPiEvent =
   | { type: "saypi:piFinishedSpeaking" }
   | { type: "saypi:submit" }
   | { type: "saypi:call" }
+  | { type: "saypi:callReady" }
+  | { type: "saypi:callFailed" }
   | { type: "saypi:hangup" };
 
 interface SayPiContext {
@@ -63,6 +65,7 @@ type SayPiStateSchema = {
         micError: {};
       };
     };
+    callStarting: {};
     listening: {
       states: {
         recording: {
@@ -90,7 +93,7 @@ type SayPiStateSchema = {
 };
 
 interface SayPiTypestate extends Typestate<SayPiContext> {
-  value: "listening" | "inactive" | "errors" | "responding";
+  value: "listening" | "inactive" | "callStarting" | "errors" | "responding";
   context: SayPiContext;
 }
 
@@ -143,17 +146,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         exit: assign({ lastState: "inactive" }),
         on: {
           "saypi:call": {
-            target: "#sayPi.listening.recording",
-            actions: [
-              {
-                type: "callStarted",
-              },
-              {
-                type: "startRecording",
-              },
-            ],
+            target: "#sayPi.callStarting",
             description:
-              'Enable the VAD microphone.\nAka "call" Pi.\nStarts active listening.',
+              'Place a "call" to Pi.\nAttempts to start the microphone and begin active listening.',
           },
           "saypi:piSpeaking": {
             target: "#sayPi.responding.piSpeaking",
@@ -163,7 +158,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       errors: {
         description: "Error parent state.",
         after: {
-          "10000": [
+          "5000": [
             {
               target: "#sayPi.listening",
               actions: [],
@@ -204,6 +199,37 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               type: "dismissNotification",
             },
             type: "final",
+          },
+        },
+      },
+      callStarting: {
+        description: "Call is starting. Waiting for microphone to be acquired.",
+        entry: [
+          {
+            type: "callButtonStarting",
+          },
+          {
+            type: "setupRecording",
+          }
+        ],
+        on: {
+          "saypi:callReady": {
+            target: "#sayPi.listening.recording",
+            actions: [
+              {
+                type: "callButtonStarted",
+              },
+              {
+                type: "startRecording",
+              },
+            ],
+            description:
+              'VAD microphone is ready.\nStart it recording.',
+          },
+          "saypi:callFailed": {
+            target: "#sayPi.errors.micError",
+            description:
+              "VAD microphone failed to start.\nAudio device not available.",
           },
         },
       },
@@ -603,6 +629,11 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         }
       },
 
+      setupRecording: (context, event) => {
+        // differs from acquireMicrophone in that it's user-initiated
+        EventBus.emit("audio:setupRecording");
+      },
+
       startRecording: (context, event) => {
         EventBus.emit("audio:startRecording");
       },
@@ -640,7 +671,11 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         if (prompt) setFinalPrompt(prompt);
       },
 
-      callStarted: () => {
+      callButtonStarting: () => {
+        buttonModule.callStarting();
+      },
+
+      callButtonStarted: () => {
         buttonModule.callActive();
       },
       callEnded: () => {
