@@ -265,9 +265,6 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   animation: "glow",
                 },
               },
-              {
-                type: "notifyRecordingStopped",
-              },
             ],
             states: {
               notSpeaking: {
@@ -338,7 +335,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     type: "releaseMicrophone",
                   },
                   {
-                    type: "callEnded",
+                    type: "callHasEnded",
                   },
                 ],
                 description:
@@ -498,6 +495,11 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         on: {
           "saypi:piThinking": {
             target: "#sayPi.responding.piThinking",
+            actions: [
+              {
+                type: "acknowledgeUserInput",
+              },
+            ],
           },
           "saypi:piSpeaking": {
             target: "#sayPi.responding.piSpeaking",
@@ -652,7 +654,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         buttonModule.dismissNotification();
       },
 
-      notifyRecordingStopped: () => {
+      acknowledgeUserInput: () => {
         visualNotifications.listeningStopped();
         audibleNotifications.listeningStopped();
       },
@@ -679,8 +681,10 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         buttonModule.callActive();
         audibleNotifications.callStarted();
       },
-      callEnded: () => {
+      callHasEnded: () => {
+        visualNotifications.listeningStopped();
         buttonModule.callInactive();
+        audibleNotifications.callEnded();
       },
       disableCallButton: () => {
         buttonModule.disableCallButton();

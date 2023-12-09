@@ -9240,6 +9240,7 @@ class AudibleNotificationsModule {
     constructor() {
         this.listeningSound = new Audio((0,ResourceModule/* getResourceUrl */.v)('audio/guitar-pluck.mp3'));
         this.callStartedSound = new Audio((0,ResourceModule/* getResourceUrl */.v)('audio/startup-synth.mp3'));
+        this.callEndedSound = new Audio((0,ResourceModule/* getResourceUrl */.v)('audio/turn-off.mp3'));
     }
     listeningStopped() {
         this.listeningSound.play().catch(e => {
@@ -9248,6 +9249,11 @@ class AudibleNotificationsModule {
     }
     callStarted() {
         this.callStartedSound.play().catch(e => {
+            console.error("Unable to play audio notification:", e);
+        });
+    }
+    callEnded() {
+        this.callEndedSound.play().catch(e => {
             console.error("Unable to play audio notification:", e);
         });
     }
@@ -9965,9 +9971,6 @@ const machine = (0,Machine/* createMachine */.C)({
                                 animation: "glow",
                             },
                         },
-                        {
-                            type: "notifyRecordingStopped",
-                        },
                     ],
                     states: {
                         notSpeaking: {
@@ -10036,7 +10039,7 @@ const machine = (0,Machine/* createMachine */.C)({
                                     type: "releaseMicrophone",
                                 },
                                 {
-                                    type: "callEnded",
+                                    type: "callHasEnded",
                                 },
                             ],
                             description: 'Disable the VAD microphone.\n    Aka "call" Pi.\n    Stops active listening.',
@@ -10171,6 +10174,11 @@ const machine = (0,Machine/* createMachine */.C)({
             on: {
                 "saypi:piThinking": {
                     target: "#sayPi.responding.piThinking",
+                    actions: [
+                        {
+                            type: "acknowledgeUserInput",
+                        },
+                    ],
                 },
                 "saypi:piSpeaking": {
                     target: "#sayPi.responding.piSpeaking",
@@ -10301,7 +10309,7 @@ const machine = (0,Machine/* createMachine */.C)({
         dismissNotification: () => {
             buttonModule.dismissNotification();
         },
-        notifyRecordingStopped: () => {
+        acknowledgeUserInput: () => {
             visualNotifications.listeningStopped();
             audibleNotifications.listeningStopped();
         },
@@ -10326,8 +10334,10 @@ const machine = (0,Machine/* createMachine */.C)({
             buttonModule.callActive();
             audibleNotifications.callStarted();
         },
-        callEnded: () => {
+        callHasEnded: () => {
+            visualNotifications.listeningStopped();
             buttonModule.callInactive();
+            audibleNotifications.callEnded();
         },
         disableCallButton: () => {
             buttonModule.disableCallButton();
