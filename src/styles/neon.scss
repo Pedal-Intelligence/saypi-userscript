@@ -1,5 +1,5 @@
 $glow-color: #ffd1dc; // sunset-peach
-$fade-color: #f5819c; // sunset-peach
+$fade-color: #ffd1dc; // sunset-peach
 
 
 .glow {
@@ -48,7 +48,7 @@ $fade-color: #f5819c; // sunset-peach
         box-shadow:
         0 0 1px $fade-color,
         0 0 2px $fade-color,
-        0 0 3px #fff,
+        0 0 3px $fade-color,
         0 0 4px #fff,
         0 0 5px #fff,
     }
@@ -62,9 +62,7 @@ $fade-color: #f5819c; // sunset-peach
         0 0 10px $glow-color,
         0 0 15px $glow-color,
         0 0 20px $glow-color,
-        0 0 25px $glow-color,
-        0 0 30px $glow-color,
-        0 0 35px $glow-color;
+        0 0 25px #fff,
     }
     to {
         box-shadow: 

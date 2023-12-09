@@ -23,10 +23,10 @@ export interface INotificationsModule {
      * This method will attempt to find them and set them if they are not already set.
      */
     private init() {
-      if (!this.ring) {
+      if (!this.ring || !document.body.contains(this.ring)) {
         this.ring = document.getElementById('progress-ring') as SVGCircleElement | null;
       }
-      if (!this.callButton) {
+      if (!this.callButton || !document.body.contains(this.callButton)) {
         this.callButton = document.getElementById('saypi-callButton') as HTMLElement | null;
       }
     }
