@@ -206,7 +206,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         description: "Call is starting. Waiting for microphone to be acquired.",
         entry: [
           {
-            type: "callButtonStarting",
+            type: "callIsStarting",
           },
           {
             type: "setupRecording",
@@ -217,7 +217,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             target: "#sayPi.listening.recording",
             actions: [
               {
-                type: "callButtonStarted",
+                type: "callHasStarted",
               },
               {
                 type: "startRecording",
@@ -671,12 +671,13 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         if (prompt) setFinalPrompt(prompt);
       },
 
-      callButtonStarting: () => {
+      callIsStarting: () => {
         buttonModule.callStarting();
       },
 
-      callButtonStarted: () => {
+      callHasStarted: () => {
         buttonModule.callActive();
+        audibleNotifications.callStarted();
       },
       callEnded: () => {
         buttonModule.callInactive();

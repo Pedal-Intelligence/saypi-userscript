@@ -3,15 +3,23 @@ import { getResourceUrl } from "./ResourceModule";
 export interface INotificationsModule {
     listeningStopped: () => void;
     listeningTimeRemaining?: (timeRemaining: number) => void;
+    callStarted?: () => void;
   }
   
   export class AudibleNotificationsModule implements INotificationsModule {
-    private listeningSound: HTMLAudioElement = new Audio(getResourceUrl('audio/guitar-pluck.mp3'));  
+    private listeningSound: HTMLAudioElement = new Audio(getResourceUrl('audio/guitar-pluck.mp3'));
+    private callStartedSound: HTMLAudioElement = new Audio(getResourceUrl('audio/startup-synth.mp3'));
     public listeningStopped(): void {
       this.listeningSound.play().catch(e => {
         console.error("Unable to play audio notification:", e);
       });
     }
+    public callStarted(): void {
+      this.callStartedSound.play().catch(e => {
+        console.error("Unable to play audio notification:", e);
+      });
+    }
+    
   }
   
   export class VisualNotificationsModule implements INotificationsModule {

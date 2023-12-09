@@ -1360,7 +1360,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse_outermost {
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `.hidden{display:none !important}#saypi-callButton.disabled svg path.circle{fill:#f5eedf}.mobile-device #saypi-enterButton,.mobile-device #saypi-exitButton{position:fixed;top:4rem;left:10px;width:3rem;height:3rem;padding:6px;border:0;z-index:60}.mobile-device #saypi-enterButton svg path.inner,.mobile-device #saypi-exitButton svg path.inner{color:#0d3c26}@keyframes fillup{to{stroke-dashoffset:0}}@keyframes changeColor{0%{stroke:green}50%{stroke:#ff0}100%{stroke:red}}#progress-ring{transform:rotate(-90deg);transform-origin:50% 50%}#progress-ring.active{animation:fillup 10s linear forwards,changeColor 10s linear forwards}.glow{border:none;box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc;animation:neon-glow-animation 1.5s ease-in-out infinite alternate}.glow-fade-out{box-shadow:0 0 10px #f5819c,0 0 20px #f5819c,0 0 30px #f5819c,0 0 40px #f5819c,0 0 50px #f5819c,0 0 60px #f5819c,0 0 70px #f5819c;animation:fade-out-glow-animation 3s ease-out forwards}@keyframes fade-out-glow-animation{from{box-shadow:0 0 10px #f5819c,0 0 20px #f5819c,0 0 30px #f5819c,0 0 40px #f5819c,0 0 50px #f5819c,0 0 60px #f5819c,0 0 70px #f5819c}to{box-shadow:0 0 1px #f5819c,0 0 2px #f5819c,0 0 3px #fff,0 0 4px #fff,0 0 5px #fff}}@keyframes neon-glow-animation{from{box-shadow:0 0 5px #ffd1dc,0 0 10px #ffd1dc,0 0 15px #ffd1dc,0 0 20px #ffd1dc,0 0 25px #ffd1dc,0 0 30px #ffd1dc,0 0 35px #ffd1dc}to{box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc}}`, "",{"version":3,"sources":["webpack://./src/styles/common.scss","webpack://./src/styles/progress-ring.scss","webpack://./src/styles/neon.scss"],"names":[],"mappings":"AAAA,QACE,uBAAA,CAGF,2CACE,YAAA,CAKA,mEAEE,cAAA,CACA,QAAA,CACA,SAAA,CACA,UAAA,CACA,WAAA,CACA,WAAA,CACA,QAAA,CACA,UAAA,CACA,iGACE,aAAA,CCrBN,kBACI,GACE,mBAAA,CAAA,CAIJ,uBACE,GAAA,YAAA,CACA,IAAA,WAAA,CACA,KAAA,UAAA,CAAA,CAGF,eACE,wBAAA,CACA,wBAAA,CAGF,sBACE,oEAAA,CCdJ,MACI,WAAA,CAGA,iIACA,CASA,iEAAA,CAGJ,eACI,iIACA,CASA,sDAAA,CAGJ,mCACI,KACI,iIACA,CAQJ,GACI,iFACA,CAAA,CASR,+BACI,KACI,gIACA,CAQJ,GACI,iIACA,CAAA","sourcesContent":[".hidden {\n  display: none !important;\n}\n\n#saypi-callButton.disabled svg path.circle {\n  fill: rgb(245 238 223); /* bg-cream-550 */\n}\n\n.mobile-device {\n  /* maximize (mobile view) button is only displayed on compatible devices */\n  #saypi-enterButton,\n  #saypi-exitButton {\n    position: fixed;\n    top: 4rem;\n    left: 10px;\n    width: 3rem;\n    height: 3rem;\n    padding: 6px;\n    border: 0;\n    z-index: 60;\n    svg path.inner {\n      color: rgb(13 60 38); /* text-primary-700 */\n    }\n  }\n}\n\n@import \"progress-ring.scss\";\n@import \"neon.scss\";","@keyframes fillup {\n    to {\n      stroke-dashoffset: 0;\n    }\n  }\n  \n  @keyframes changeColor {\n    0% { stroke: green; }\n    50% { stroke: yellow; }\n    100% { stroke: red; }\n  }\n  \n  #progress-ring {\n    transform: rotate(-90deg);\n    transform-origin: 50% 50%;\n  }\n  \n  #progress-ring.active {\n    animation: fillup 10s linear forwards, changeColor 10s linear forwards;\n  }","$glow-color: #ffd1dc; // sunset-peach\n$fade-color: #f5819c; // sunset-peach\n\n\n.glow {\n    border: none;\n    \n    // Multiple box shadows create the glow effect\n    box-shadow: \n    0 0 10px $glow-color,\n    0 0 20px $glow-color,\n    0 0 30px $glow-color,\n    0 0 40px $glow-color,\n    0 0 50px $glow-color,\n    0 0 60px $glow-color,\n    0 0 70px $glow-color;\n  \n    // Animation for the glow to appear to pulse\n    animation: neon-glow-animation 1.5s ease-in-out infinite alternate;\n}\n\n.glow-fade-out {\n    box-shadow: \n    0 0 10px $fade-color,\n    0 0 20px $fade-color,\n    0 0 30px $fade-color,\n    0 0 40px $fade-color,\n    0 0 50px $fade-color,\n    0 0 60px $fade-color,\n    0 0 70px $fade-color;\n\n    // Start the fade out animation\n    animation: fade-out-glow-animation 3s ease-out forwards;\n}\n\n@keyframes fade-out-glow-animation {\n    from {\n        box-shadow: \n        0 0 10px $fade-color,\n        0 0 20px $fade-color,\n        0 0 30px $fade-color,\n        0 0 40px $fade-color,\n        0 0 50px $fade-color,\n        0 0 60px $fade-color,\n        0 0 70px $fade-color;\n    }\n    to {\n        box-shadow:\n        0 0 1px $fade-color,\n        0 0 2px $fade-color,\n        0 0 3px #fff,\n        0 0 4px #fff,\n        0 0 5px #fff,\n    }\n}\n\n\n@keyframes neon-glow-animation {\n    from {\n        box-shadow: \n        0 0 5px $glow-color,\n        0 0 10px $glow-color,\n        0 0 15px $glow-color,\n        0 0 20px $glow-color,\n        0 0 25px $glow-color,\n        0 0 30px $glow-color,\n        0 0 35px $glow-color;\n    }\n    to {\n        box-shadow: \n        0 0 10px $glow-color,\n        0 0 20px $glow-color,\n        0 0 30px $glow-color,\n        0 0 40px $glow-color,\n        0 0 50px $glow-color,\n        0 0 60px $glow-color,\n        0 0 70px $glow-color;\n    }\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `.hidden{display:none !important}#saypi-callButton.disabled svg path.circle{fill:#f5eedf}.mobile-device #saypi-enterButton,.mobile-device #saypi-exitButton{position:fixed;top:4rem;left:10px;width:3rem;height:3rem;padding:6px;border:0;z-index:60}.mobile-device #saypi-enterButton svg path.inner,.mobile-device #saypi-exitButton svg path.inner{color:#0d3c26}@keyframes fillup{to{stroke-dashoffset:0}}@keyframes changeColor{0%{stroke:green}50%{stroke:#ff0}100%{stroke:red}}#progress-ring{transform:rotate(-90deg);transform-origin:50% 50%}#progress-ring.active{animation:fillup 10s linear forwards,changeColor 10s linear forwards}.glow{border:none;box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc;animation:neon-glow-animation 1.5s ease-in-out infinite alternate}.glow-fade-out{box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc;animation:fade-out-glow-animation 3s ease-out forwards}@keyframes fade-out-glow-animation{from{box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc}to{box-shadow:0 0 1px #ffd1dc,0 0 2px #ffd1dc,0 0 3px #ffd1dc,0 0 4px #fff,0 0 5px #fff}}@keyframes neon-glow-animation{from{box-shadow:0 0 5px #ffd1dc,0 0 10px #ffd1dc,0 0 15px #ffd1dc,0 0 20px #ffd1dc,0 0 25px #fff}to{box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc}}`, "",{"version":3,"sources":["webpack://./src/styles/common.scss","webpack://./src/styles/progress-ring.scss","webpack://./src/styles/neon.scss"],"names":[],"mappings":"AAAA,QACE,uBAAA,CAGF,2CACE,YAAA,CAKA,mEAEE,cAAA,CACA,QAAA,CACA,SAAA,CACA,UAAA,CACA,WAAA,CACA,WAAA,CACA,QAAA,CACA,UAAA,CACA,iGACE,aAAA,CCrBN,kBACI,GACE,mBAAA,CAAA,CAIJ,uBACE,GAAA,YAAA,CACA,IAAA,WAAA,CACA,KAAA,UAAA,CAAA,CAGF,eACE,wBAAA,CACA,wBAAA,CAGF,sBACE,oEAAA,CCdJ,MACI,WAAA,CAGA,iIACA,CASA,iEAAA,CAGJ,eACI,iIACA,CASA,sDAAA,CAGJ,mCACI,KACI,iIACA,CAQJ,GACI,oFACA,CAAA,CASR,+BACI,KACI,2FACA,CAMJ,GACI,iIACA,CAAA","sourcesContent":[".hidden {\n  display: none !important;\n}\n\n#saypi-callButton.disabled svg path.circle {\n  fill: rgb(245 238 223); /* bg-cream-550 */\n}\n\n.mobile-device {\n  /* maximize (mobile view) button is only displayed on compatible devices */\n  #saypi-enterButton,\n  #saypi-exitButton {\n    position: fixed;\n    top: 4rem;\n    left: 10px;\n    width: 3rem;\n    height: 3rem;\n    padding: 6px;\n    border: 0;\n    z-index: 60;\n    svg path.inner {\n      color: rgb(13 60 38); /* text-primary-700 */\n    }\n  }\n}\n\n@import \"progress-ring.scss\";\n@import \"neon.scss\";","@keyframes fillup {\n    to {\n      stroke-dashoffset: 0;\n    }\n  }\n  \n  @keyframes changeColor {\n    0% { stroke: green; }\n    50% { stroke: yellow; }\n    100% { stroke: red; }\n  }\n  \n  #progress-ring {\n    transform: rotate(-90deg);\n    transform-origin: 50% 50%;\n  }\n  \n  #progress-ring.active {\n    animation: fillup 10s linear forwards, changeColor 10s linear forwards;\n  }","$glow-color: #ffd1dc; // sunset-peach\n$fade-color: #ffd1dc; // sunset-peach\n\n\n.glow {\n    border: none;\n    \n    // Multiple box shadows create the glow effect\n    box-shadow: \n    0 0 10px $glow-color,\n    0 0 20px $glow-color,\n    0 0 30px $glow-color,\n    0 0 40px $glow-color,\n    0 0 50px $glow-color,\n    0 0 60px $glow-color,\n    0 0 70px $glow-color;\n  \n    // Animation for the glow to appear to pulse\n    animation: neon-glow-animation 1.5s ease-in-out infinite alternate;\n}\n\n.glow-fade-out {\n    box-shadow: \n    0 0 10px $fade-color,\n    0 0 20px $fade-color,\n    0 0 30px $fade-color,\n    0 0 40px $fade-color,\n    0 0 50px $fade-color,\n    0 0 60px $fade-color,\n    0 0 70px $fade-color;\n\n    // Start the fade out animation\n    animation: fade-out-glow-animation 3s ease-out forwards;\n}\n\n@keyframes fade-out-glow-animation {\n    from {\n        box-shadow: \n        0 0 10px $fade-color,\n        0 0 20px $fade-color,\n        0 0 30px $fade-color,\n        0 0 40px $fade-color,\n        0 0 50px $fade-color,\n        0 0 60px $fade-color,\n        0 0 70px $fade-color;\n    }\n    to {\n        box-shadow:\n        0 0 1px $fade-color,\n        0 0 2px $fade-color,\n        0 0 3px $fade-color,\n        0 0 4px #fff,\n        0 0 5px #fff,\n    }\n}\n\n\n@keyframes neon-glow-animation {\n    from {\n        box-shadow: \n        0 0 5px $glow-color,\n        0 0 10px $glow-color,\n        0 0 15px $glow-color,\n        0 0 20px $glow-color,\n        0 0 25px #fff,\n    }\n    to {\n        box-shadow: \n        0 0 10px $glow-color,\n        0 0 20px $glow-color,\n        0 0 30px $glow-color,\n        0 0 40px $glow-color,\n        0 0 50px $glow-color,\n        0 0 60px $glow-color,\n        0 0 70px $glow-color;\n    }\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -8464,7 +8464,7 @@ function tearDownRecording() {
     microphone = null;
 }
 const audioInputMachine = (0,Machine/* createMachine */.C)({
-    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AkgOwAdUAXAOgCcwAbMZWSAYmQGMBHVDSgbQAYBdRKAJZYGYtjyCQAD0QBGAGwBmUgFYeG1UoCc2gCxKA7HJ4KANCACeiJXIAcpBYe0K7bpasMHtqgL6+LNExcQhJSFnZODDwoBggsPDBSaIA3LABrJKDsfCIyCI5yaKgEVKxmZHEE3j4aqWFRKskkGURVACYLawQ7PVVSRVMeOyU9bSVlbX9A9BzQ-LZC4oYwcnIsclICKkqAMw2AW3DZkLzwxaiY0rw0iqaaupaGsQkpWQQ5QxV1TR19IxM5isiHa7X6oIUqlUCn0Ll0X2mIGypzCBU4jEoNDoYEeQhELwSb3kXzUGh4Wl0BmMpi6iDsclIY102h4RnaPG0inaiORuVRF0oEGSEBoDFgxGQ5GIuJAzyaRI+7U+Ax4clUIyhhlZI1pPV6pCUoPGekMhjsTjVPJOfIWkUFFDAzA2mBiYuIWAIACUwOw4MRIDK5a8Wu85O1tIYDXZ2nYOcNFM5dVr+p84WbVLp2n0rcEbec7ZAHU7yC7YhBKsgAIIpZAYHYAIxogfx8pD8j0kNIGrsLjcYbkSl1sYcvWUCnHenspqmASR1vm+cKhYIYDwpYAyu6CG6Pc3GsHQO9jA4FBzw5ytXYvtpddpQVGY4bPAZ2gpubPeQu0faV2vipuPTiCtq1rBsm34eoWwPVoEGPRwz10T5hmvIcwVIO84X0ORORMOQczmM5v0LcUPRXCAGD3AlmkPeRtTUNVVHsOQ9A0dpDCBboWQcZwfA0AxFFjPDETwLAIDgKRPzySD90JNsEAAWg4xBFPwlEyExWh6AgaSqIVPROmBD5mPghiFCQwEfFUvNv2KHTWxohA-nQ88eGMJwOWcVRdSNAZsNNJQhjVewrK-AVIDs6D3lfBl2KhP5OUhYZdU8FRUxhbDVEnS0P3nQiwqFDARTACLZIcuQBxUU9mIUPpXK0Nxb1c0geKZZwtSwkK8oLIVKGLUsSuomDmPpZz7HZFiJjYvRbxMUhz1aiMOUnTr+W6rZVw3LcBoVALtGayEKUQxK7CHLQBkNNrVR4I09BW20lyFEiCDI7a5KvPboXaCY7EYmNMoM7o3D0ObdHUAKs3VWx-H8IA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AkgOwAdUAXAOgCcwAbMZWSAYmQGMBHVDSgbQAYBdRKAJZYGYtjyCQAD0QBGAOwBmUgBYAnJvUAOVXvUKATADYANCACeiJYYCspY7eM9jruatsHDAX2-m0mLiEJKQs7JwYeFAMEFh4YKSRAG5YANYJAdj4RGRhHOSRUAjJWMzI4nG8fFVSwqIVkkgyiLaG5lYIcnI82g4KtqoKxqrGCiOGqr7+6FnBuWz5hQxg5ORY5KQEVOUAZusAtqEzQTmhCxFRxXgpZQ1VNU11YhJSsp3Kalo6ehpGZpaIQw2UiGHhKHhAwwKZQeIxTECZE4hPIXaKwYjIcjEB5CETPOKvQFyZykOTaJS6Yyg0YQ-4dMkKUjqWzgpSqJS2MHqVQmeGI7LI86UCAMSg0OhgHEgJ4NQmdYwqDRaXT6P7tRDaOSfTSOAzaXS2TV844C+bhYWJCA0BjozHY-i1PGyppvVQ9EGOZzaEzqUFkpTqzpyNkg-VjbTGOQsnitY2BU1nc2QS3WqUyl4uxBu3omJw9H1+8mB7r60P6wzaFkmBQxuOzU4oi2UZjrTBRG3ELAEABKYHYcGIkDTTozoDe2gU6j6oP6ngmxk1xeDqjL5OZdijqm0daRZvyyebraWEHKyAAgklkBhtgAjGjD+qj5oIYy+0iV5m+hdKdRyOyBnV3w5ZRfU0UFtz8BETTmRN9wgTYwDwNsoAAZU7AgOy7B98UaMd5A8YwmVfCENBLVQ-0DfUpzdL0jDZTVyR3BNG2TAhEOQtCuxiU8LyvW97wdR4RwJTNOgIoj1BI38enItoAQQAwtRov9PB4dQlDJJiYJY+C2KQwpOIw6RbUHUIdkHcgAApOR4HgAEomGghshVY9iDPQ7DnTwsSnAkqSyIo+SuhMUgNMMcL+nzFxJkg-ltJc3S3KiQyGGMjFTOQcyVms2z7Mc+N4qTRL9OSjy5AEITHxE7yuiUFQvF9HonE5VRix4dlSDBbRuVZKFFC05yitIdEuzYkVPKfN5iR5EEfTZEZNS3SjyKZGMvE1FklEjAbBSKpgXIm6rn25KdNE5HQhmcAxbEDaN3wjTlI0k6M5F8SC8CwCA4CkOKckdKrcOfABaOlEBBzrcvBUYK1sYkeh2sgxVoegIH+nC5R5QMNJXMFgpMSNbLJYwEdg1E0a858f1Owx1FGdT3HZORmUDCtqJcbooUMJmeQUEmdPJybAUjUghicIFyScSc5EDUZ7Ek5xbENDcKSUPmEpTMABaOt5wSnUWqRVyXfyXIEmWDBRzdhiNa1ipzdrgigwBbchkK1wG3lcQwIdsqk9BsN05PpNSc31bQeCGGt+gVNWhr0jj0LduVuhZUk7HCtlJ2hYk2uZUgWTDJwbBs1XbYKwaHZGggxsT0TFEGUK-0nUE3U8CcAPUvPPDJDRuqcLo3u8IA */
     id: "audioInput",
     initial: "released",
     context: {
@@ -8577,6 +8577,10 @@ const audioInputMachine = (0,Machine/* createMachine */.C)({
                         type: "releaseMicrophone",
                     },
                 },
+                acquire: {
+                    target: "acquired",
+                    description: `When receiving a request to acquire a microphone (setup recording) that is already acquired, trigger notifications.`
+                }
             },
         },
     },
@@ -9235,9 +9239,15 @@ var ResourceModule = __webpack_require__(879);
 class AudibleNotificationsModule {
     constructor() {
         this.listeningSound = new Audio((0,ResourceModule/* getResourceUrl */.v)('audio/guitar-pluck.mp3'));
+        this.callStartedSound = new Audio((0,ResourceModule/* getResourceUrl */.v)('audio/startup-synth.mp3'));
     }
     listeningStopped() {
         this.listeningSound.play().catch(e => {
+            console.error("Unable to play audio notification:", e);
+        });
+    }
+    callStarted() {
+        this.callStartedSound.play().catch(e => {
             console.error("Unable to play audio notification:", e);
         });
     }
@@ -9252,10 +9262,10 @@ class VisualNotificationsModule {
      * This method will attempt to find them and set them if they are not already set.
      */
     init() {
-        if (!this.ring) {
+        if (!this.ring || !document.body.contains(this.ring)) {
             this.ring = document.getElementById('progress-ring');
         }
-        if (!this.callButton) {
+        if (!this.callButton || !document.body.contains(this.callButton)) {
             this.callButton = document.getElementById('saypi-callButton');
         }
     }
@@ -9900,7 +9910,7 @@ const machine = (0,Machine/* createMachine */.C)({
             description: "Call is starting. Waiting for microphone to be acquired.",
             entry: [
                 {
-                    type: "callButtonStarting",
+                    type: "callIsStarting",
                 },
                 {
                     type: "setupRecording",
@@ -9911,7 +9921,7 @@ const machine = (0,Machine/* createMachine */.C)({
                     target: "#sayPi.listening.recording",
                     actions: [
                         {
-                            type: "callButtonStarted",
+                            type: "callHasStarted",
                         },
                         {
                             type: "startRecording",
@@ -10309,11 +10319,12 @@ const machine = (0,Machine/* createMachine */.C)({
             if (prompt)
                 setFinalPrompt(prompt);
         },
-        callButtonStarting: () => {
+        callIsStarting: () => {
             buttonModule.callStarting();
         },
-        callButtonStarted: () => {
+        callHasStarted: () => {
             buttonModule.callActive();
+            audibleNotifications.callStarted();
         },
         callEnded: () => {
             buttonModule.callInactive();
