@@ -9841,7 +9841,7 @@ const clearTranscripts = (0,es/* assign */.f0)({
 const audibleNotifications = new AudibleNotificationsModule();
 const visualNotifications = new VisualNotificationsModule();
 const machine = (0,Machine/* createMachine */.C)({
-    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCRKANiwNoAMAuoqHQHtYWMgPx8QAD0QBGACwBOABw4lMgEwBWADQg0shQHZOOGZzmaAbBYDMSuRbkBfJ7trY8hUhWq0GCBgBlOjAUAGsCKC5eJBBBYVFxWOkETXVdfQR1GxtNHE0zNVt7Cxc3dA8wACcqgSrYKklYEhQSMBwUADM2qoAKM05BgEoaCtxq2vroiXiRLDEJFJtDTRt8zkM1LQzZJRtLU3MrYodNZ1cQd3GauoamlraO7ur+weHRzGvJ2HYZGP4hHMFslEHYFHIcJYrNs9IgFMpIZwFNYZEpDApOOpDDIypcxjgWFhmmB8JEPv4GAAVAAWBAi+CiPBmgMSi0QaR2CDUOEU8MsGLk6ks2MM6lxVwJRLapIZ5MYQRC4Ui01is1ZIIQlnSsIQMhsMhw8L5AqFIrFFwlhOJMqgOCqYCIdQgZL8jGpKAZAFc6CqAQl5klQEtloZ1psNDodfItThDJYlFrjHZTubyp9JdbInaHU6s-gBCRgqF6VA5QhPbBqgAxAhE6mQItKhm+uIsgNshA5QyhzQbLaRzIySzWUzqJSDdScZOOcX4q3SrP2x1VZ0MnD5wuKktlivVRslltq9sa7JI-Kc+QKPL8vbyVYlM6z9PzkmLnMrrO7qr7l3ofxfwISAEOgQggH9myZVU22BINEEnDFVAjC9NGRSFlH1E4ZwtOcpVfNcl1zNcAK3X96EYACgJAhsSObP5mX9GCpDgpETH7ZC5AOGR0LvadH2w59cJtHBHXwSgqjINdiCIT0AFtPRYVoyQgMR2gIcgBDCdoZOqGAAHk6DIGSpSwIhD2gwMmKyZYDS0cMYUyJRskNTgoSHNEMSFBQnw8F8hJEsSJNtKTZPkxTZQmOocDoBSSE6OoZJwbSqj0gysCM5oTLMhiLJSbJsUNWy2J1QwbBMWwbAUVF0UxflvNwXys386pAo6IhpLkmLSP8Egqg9WAiCqLAACNICyoEcrgsdLE5TQ9hwN4hXjarPLqjMFzXJrxKzYKOrC0tXQQHq+oG4awCrFAsBYUbIL9caOy7Hs+yQnVKryGrSqUM4rAUZZVoajaxAC7a2pCzrZQOo78H6waRogABRGSDLQMb1VgzsQzDIqHL1fIhQ+r7+V+-ifMExrAea4H2tCwLGmaVp2i6HpelgT0hvS4QxAAETABS0BGS1SYB0SKckkHdsClHjzRrFcgvcwVEsJEUXcmqvOJ+rBdtTaWpZtmRBpyXGKWTguMx57B0GA0zGROQqo82r1bWvCtfJra10h6Hhq6xgPZO2HDYm3UMQNKdzbhGRQ3UIdbaxDR9kxP7NeE12Wt9mHvcO3qob9s6LquiAA-uuxHrsgdEAcA5exqpaPMMRPMyFoH3azz2hoztPTvhxGSGRm7W2yovuzN+zZC4iE0ksfGLEJyxVvtWBBHwVd9r-cjK2-GjGX+fu7o1GR94hQqw9SQUcC0E2tGWdRT3ONMPHnxfl6irAaTpDOFWLZU+6PI3y+FHkFBRzRGXVICIq4RivjfOecBH5Zg-k2FeZEAhYEAsBUC4Et70V3mjfe8gz6aFLshSqZ84xyAqveU4s9HYPzEE-eB24DpBEougzevxt4-0DtbQ+BCsaTTwXGTgRQKGlGoTA2hcCUGbzLAwGspJYD1jAqw7+5kOz73MPgwhUYUSxlIeQ3iVCLj5ggHACQVwsGo0snITkABaA4bx7EOMGHXR2BBiBkEoOYqWlllizWHiAriCFxxxiUFeXit88TpgivUTxv9OzojyL2TRmQChrEVjbO2mJsSrSibAHAHcRrnUupAGJgdkxrESbwzUFhETpJVrHbJNx6iJRMnDRpJT7r2HKU9EeXJ96HFqctLJjt-pQHaXvOQQ9Km2UNEafk5hTQR3rutW0BEPwMjGTgr6iEekaFFDoyegiCY-SoXfDWDcVnvifhuDBGzLJaBkHkfe2JgHISFIaOQt5MJ8VOU7ISqyn7EU-usqCA894oTWJUy8JhuzWD0Q+cJAtznJ2Fm7UZILsGWQeVobZIDFAJIWnITEVd9RLOdsipuQUxbU0iLc3K18lCckAeoHAuQBn2zVj8kZ5KRa2l1kZEggVaWggPvkH6KxGXGH2VPb6+xSV+RTlmfJNL0UWJSA8kqOLORohUFxdQRg0hx0VqmCJ98xFL2VbdVV7IrE6hyHkdQvI5mCmFBHTQ0CF7iLXFSWk+ASxCt1JiGaHFYy9ggaKKBoiPXmq9ZIoFaLLVeJSFCCEVUQFnAOCsC+qxw2lXOC4IAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCRKANiwNoAMAuoqHQHtYWMgPx8QAD0QBWAEwAaEGkRyA7HIBsOAMyc1AFjkAODcf3GdAXytLa2PIVIVqtBggYBlOmBQBrAiguXiQQQWFRcVDpBHklFQQ5OQMARl19GWMUnRkU7M0bO3QHZjZPEhQAJzJ8KBp0d1KWACVfCDRgiXCRLDEJGINMgE4cIc4ZIeM5TgNjIZ0U+MQUmU4cGc0huR1NFK0Da1sQe1wm8qqaurdGJoAxFCwWSE7Q7sj+xE1FZVUvgxxzIYcilAalCsdirgWFhYCQwPhAvV6IwGAAVAAWBACtRe-CEPT60U+3wS00MOE0Mx0ak2Ml2nAKRxOOGhsPhiOuHiw3l82KCPC6+PeRNiJMQWRwq040pWQwm8jBTMhLJhcIRtRwlTARAElQgHIajHRKFqAFc6LiwkLelFQAMJiMxhMpjM5gslggVpptFpLGo1CsDJoDODmay1YFNdrdfqNfgBCQef4DciEKbYGBKrcCDD0ZAk3zLW8bR8EIMho7xpNprN5osfp6aWoKepNnoZGpqTNQ8rw+yNVqdXrI-HEz5k7Uke505mC4Ei9bCXbVHIKzgDBXLENZsGUkM1B7ZSM9+ZgwYGf7DkVMFDVf2oFGh7GHzPKnPJ5zX+UBHQfBB3-yIR4hEJYitM5gAnsBizLWQaaDIh5qNKOB7moQxfJw4H6Iy14OH26oPoOMaRl+458lOjBfiQP5-gB7ApEBVogUuUiqJwEFZMkMFzHBCENikwYjJsWTsXueyYSGSo3iqbIETgOr4JQ1SRsQRCmgAtqaLAoJcVAQGIYCOOQAh+IZ6mZjAADydBkOpqpYEQC7MbarGJNSaRyB23pIdsDKWB6co6OuDI7Do1LQYMxg9tJ+GRgpSmXDgqkaVpOmIpmlS6jgdDaSQABmurqTg5mVFZNlYHZsIOU5BIuTE2wBqMnnBgsXyaNSB4NsYEyjDIOieZM4VNtFeF3nJ8WZolyWablKbuCQlQmrARCVFgABGzwCq8i51Su3WjJu7Vhf1QYegGciStK7HUqYJ04RCMVjXFYgJSpRBqTNaUfoaCALUtK3rWA9yPJtjHFixMRhUYl1AnS+4pAYnUJCkMz-PIlJqOYyQgmhI23rJz2KZNb0falumcn9+DLatG0QAAoupNkdFtwG1aWUMXassObAGiMBQc6xaCjUxyOJ1J4zJEYahNykatNZOIpIsI6YZKB5XClQABSwKaa2VcIYgACJgNpaAAJRIqNBPSy9xNy+9KWzTiLNMWzYGdv8FaTBu54LJjh4pJjKGcNudKeQcMiIxLsU20TssPjresiLpNXCsuCB6HuMN9ZomO7P6Ad6BSIdBjoky8ys0dPbHr0apT1PrXNjD1wDtOp6B6d7pwaScAsqE6IMIcCYeGw4AGGHobndIpFX1sPjLiUtzTTe-YtVOt0DDxPBA7cQ4gHMwxHPMI0jsg0usV3o4HGNRVJVtS-PtvxzgS+N99qav7TDNM7vu0ZwPnN9BH3hnzfiJ1Ba7HpDkHIQZZ4PxwBlXU5wSDpgQZUTKlRYBUCVhUOESV1aZk1lKTgFswzVwfIgt8uDUGUNgL-UsqQ1yY1MIjYw8FnRnVyMHLYAYB4rGGnffG8DKHIJoeg3UWCcEq3wRrIhV1SG9nIWgjBojYDKIkfRMGO0GEgiCrkIYAlpgh3YmKT0exjDcMRmoOkUNb64VwFqWAgh8DPgommDMb4yLzhduDP+eRkg4E8pjIwGN5B0g9IjGQY8pSR3mFsbqbCJaOOcc+bKWAMRYhXl4LxzstHOQYbndcWxwKWBlJsD0MgepXSrPMaYBi1BJLgCkyM2TeRZO5NRX8+YcmAUFPkkU-j-hBOMCEjIzVDybH+P6XY55jCWAmDsRpTixCpNaROK4P0vCdNoj0zRfS3adxRkMjsIytBjPCfxQKAJI45FWO1OYldBFRmWS4lp3IeluIYNmBEsA8z-l2T47RAy8jHOCWc6x4z+KGCia2EEcEsb9RsEceMEA4ASBOPstOrkDAegALT3WZAQYgZBKCYo7tiyYawxiUgEqYdiUxEJl3WP6JCYwDHqEWU8s4FR45kr3mWAW1SB5TD3LkD0Zye4djLtkQehhJL2MlvePlfirGQU8nkQOKxI6mI5cXMYWhRadkwskOB95HzEVqMq0sKwchqtyHkAMlSjCHnPBdWF5YdgjIaU8mOhFozDjjAmACVqwKrCiQ68Y0FvQmARhMou0FzAD0xoHXmpq5JEQDS+Dxwbtr9M7pkIKnF7WaqdaY2UQyaQI3mGGvIabCa1ygCG-Nnk7Uasddqj0XwolXQdYCMYgc601ztg+eWTtG25oOa5JI6gDoVnEt1LQmgR5cO6tub0BiEaPIVb6+ST9EqJzsiQS4TbXJ9zRvMSKSFdiWBxfxFGaxWwhwWEkWkdiHr3zNQvSMn9AgnpiPwwtexi3tudfxaUzZNgmD9nSDYM8fVKJEdQ+AE6sWQyNYfJC+iQ6dgqXkbhIc2EJtFqYQdFDxFUJ0qg+MlR1KsD-fvf0FiuaI3GF3fcOhDw6BGXq8K3UFgbgJYoue6iKMoLUbQ+jGc0JROY5htjOGGwtW4aLBGBwUbwVIyJ1RIm1Gf03iDCAkmuMC1k6xtlCmEj+nDU+5I2NpUyE04hyj4nyNqLskQOm5GjMjL0UAuT5mOMNm3GsSkwXjHbGEks5plqUPkpiJHcVmRonSjqfUlqgnpLJJWW8jJ+A+SSZRqYrmgSpSrgAWhQYUXssajWfl2L-LvT-BxqsbIpg5hLobCxkrKXNAjPagYxkNggA */
     context: {
         transcriptions: {},
         isTranscribing: false,
@@ -9862,53 +9862,6 @@ const machine = (0,Machine/* createMachine */.C)({
                 },
                 "saypi:piSpeaking": {
                     target: "#sayPi.responding.piSpeaking",
-                },
-            },
-        },
-        errors: {
-            description: "Error parent state.",
-            after: {
-                "5000": [
-                    {
-                        target: "#sayPi.listening",
-                        actions: [],
-                        description: "Reset to the idle state and clear errors.",
-                    },
-                    {
-                        internal: false,
-                    },
-                ],
-            },
-            initial: "transcribeFailed",
-            states: {
-                transcribeFailed: {
-                    description: "The /transcribe API responded with an error.",
-                    entry: {
-                        type: "startAnimation",
-                        params: {
-                            animation: "error",
-                        },
-                    },
-                    exit: {
-                        type: "stopAnimation",
-                        params: {
-                            animation: "error",
-                        },
-                    },
-                    type: "final",
-                },
-                micError: {
-                    description: "No audio input detected",
-                    entry: {
-                        type: "showNotification",
-                        params: {
-                            icon: "muted-microphone",
-                        },
-                    },
-                    exit: {
-                        type: "dismissNotification",
-                    },
-                    type: "final",
                 },
             },
         },
@@ -9936,7 +9889,7 @@ const machine = (0,Machine/* createMachine */.C)({
                     description: 'VAD microphone is ready.\nStart it recording.',
                 },
                 "saypi:callFailed": {
-                    target: "#sayPi.errors.micError",
+                    target: "inactive",
                     description: "VAD microphone failed to start.\nAudio device not available.",
                 },
             },
@@ -10115,11 +10068,11 @@ const machine = (0,Machine/* createMachine */.C)({
                                     description: "Transcribed speech to text (out of sequence response).",
                                 },
                                 "saypi:transcribeFailed": {
-                                    target: "#sayPi.errors.transcribeFailed",
+                                    target: "#sayPi.listening.errorStatus.errors.transcribeFailed",
                                     description: "Out of sequence error response from the /transcribe API",
                                 },
                                 "saypi:transcribedEmpty": {
-                                    target: "#sayPi.errors.micError",
+                                    target: "#sayPi.listening.errorStatus.errors.micError",
                                     description: "Out of sequence empty response from the /transcribe API",
                                 },
                             },
@@ -10159,17 +10112,69 @@ const machine = (0,Machine/* createMachine */.C)({
                                     description: "Successfully transcribed user audio to text.",
                                 },
                                 "saypi:transcribeFailed": {
-                                    target: "#sayPi.errors.transcribeFailed",
+                                    target: "#sayPi.listening.errorStatus.errors.transcribeFailed",
                                     description: "Received an error response from the /transcribe API",
                                 },
                                 "saypi:transcribedEmpty": {
-                                    target: "#sayPi.errors.micError",
+                                    target: "#sayPi.listening.errorStatus.errors.micError",
                                     description: "Received an empty response from the /transcribe API (no speech detected)",
                                 },
                             },
                         },
                     },
                 },
+                errorStatus: {
+                    description: `Handles non-fatal errors during recording and transcription.`,
+                    states: {
+                        normal: {
+                            description: "The system is not exhibiting any errors.",
+                        },
+                        errors: {
+                            description: `Non-fatal transcription or recording errors.`,
+                            after: {
+                                "5000": [
+                                    {
+                                        target: "#sayPi.listening.errorStatus.normal",
+                                        actions: [],
+                                        description: "Reset to the normal state and clear errors.",
+                                    },
+                                ],
+                            },
+                            states: {
+                                transcribeFailed: {
+                                    description: "The /transcribe API responded with an error.",
+                                    entry: {
+                                        type: "startAnimation",
+                                        params: {
+                                            animation: "error",
+                                        },
+                                    },
+                                    exit: {
+                                        type: "stopAnimation",
+                                        params: {
+                                            animation: "error",
+                                        },
+                                    },
+                                    type: "final",
+                                },
+                                micError: {
+                                    description: "No audio input detected",
+                                    entry: {
+                                        type: "showNotification",
+                                        params: {
+                                            icon: "muted-microphone",
+                                        },
+                                    },
+                                    exit: {
+                                        type: "dismissNotification",
+                                    },
+                                    type: "final",
+                                },
+                            },
+                            type: "parallel",
+                        },
+                    },
+                }
             },
             on: {
                 "saypi:piThinking": {
@@ -10182,7 +10187,7 @@ const machine = (0,Machine/* createMachine */.C)({
                 },
                 "saypi:piSpeaking": {
                     target: "#sayPi.responding.piSpeaking",
-                },
+                }
             },
             type: "parallel",
         },
@@ -10252,7 +10257,7 @@ const machine = (0,Machine/* createMachine */.C)({
                     },
                 },
             },
-        },
+        }
     },
     predictableActionArguments: true,
     preserveActionOrder: true,
