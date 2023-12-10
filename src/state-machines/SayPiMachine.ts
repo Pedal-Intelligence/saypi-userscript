@@ -456,6 +456,12 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               },
               errors: {
                 description: `Non-fatal transcription or recording errors.`,
+                entry: {
+                  type: "callHasErrors",
+                },
+                exit: {
+                  type: "callHasNoErrors",
+                },
                 after: {
                   "5000": [
                     {
@@ -697,6 +703,12 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         visualNotifications.listeningStopped();
         buttonModule.callInactive();
         audibleNotifications.callEnded();
+      },
+      callHasErrors: () => {
+        buttonModule.callError();
+      },
+      callHasNoErrors: () => {
+        buttonModule.callActive();
       },
       disableCallButton: () => {
         buttonModule.disableCallButton();

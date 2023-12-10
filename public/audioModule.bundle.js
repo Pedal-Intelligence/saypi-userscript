@@ -162,7 +162,7 @@ exports.FrameProcessor = FrameProcessor;
 
 /***/ }),
 
-/***/ 626:
+/***/ 978:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -560,7 +560,7 @@ exports.assetPath = assetPath;
 
 /***/ }),
 
-/***/ 762:
+/***/ 192:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -591,7 +591,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.defaultRealTimeVADOptions = exports.AudioNodeVAD = exports.MicVAD = exports.NonRealTimeVAD = exports.Message = exports.FrameProcessor = exports.utils = void 0;
 const ort = __importStar(__webpack_require__(793));
-const _common_1 = __webpack_require__(626);
+const _common_1 = __webpack_require__(978);
 Object.defineProperty(exports, "FrameProcessor", ({ enumerable: true, get: function () { return _common_1.FrameProcessor; } }));
 Object.defineProperty(exports, "Message", ({ enumerable: true, get: function () { return _common_1.Message; } }));
 const model_fetcher_1 = __webpack_require__(756);
@@ -659,7 +659,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AudioNodeVAD = exports.MicVAD = exports.defaultRealTimeVADOptions = void 0;
 const ort = __importStar(__webpack_require__(793));
-const _common_1 = __webpack_require__(626);
+const _common_1 = __webpack_require__(978);
 const model_fetcher_1 = __webpack_require__(756);
 const asset_path_1 = __webpack_require__(709);
 const _getWorkletURL = () => {
@@ -5563,7 +5563,7 @@ var __webpack_exports__ = {};
 // UNUSED EXPORTS: default
 
 // EXTERNAL MODULE: ./node_modules/@ricky0123/vad-web/dist/index.js
-var dist = __webpack_require__(762);
+var dist = __webpack_require__(192);
 // EXTERNAL MODULE: ./src/ConfigModule.js
 var ConfigModule = __webpack_require__(186);
 // EXTERNAL MODULE: ./src/ResourceModule.ts

@@ -15,6 +15,7 @@ import mutedMicIconSVG from "./icons/muted_microphone.svg";
 import callIconSVG from "./icons/call.svg";
 import callStartingIconSVG from "./icons/call-starting.svg";
 import hangupIconSVG from "./icons/hangup.svg";
+import hangupMincedIconSVG from "./icons/hangup-minced.svg";
 export default class ButtonModule {
   constructor() {
     this.actor = StateMachineService.actor;
@@ -258,6 +259,19 @@ export default class ButtonModule {
         this.actor.send("saypi:call");
       };
       callButton.classList.remove("active");
+    }
+  }
+
+  callError(callButton) {
+    if (!callButton) {
+      callButton = document.getElementById("saypi-callButton");
+    }
+    if (callButton) {
+      const label =
+        "Non-fatal error encountered. Don't panic, we're still listening.";
+      callButton.innerHTML = hangupMincedIconSVG;
+      callButton.setAttribute("aria-label", label);
+      callButton.setAttribute("title", label);
     }
   }
 
