@@ -97,7 +97,7 @@ export interface INotificationsModule {
         return;
       }
       this.callButton.classList.remove('glow-fade-out');
-      //void this.callButton.style.animationDuration;
+      this.callButton.style.animationDuration = '1.5s'; // reset to default glow duration - see neon.scss for source definition
       //void this.callButton.style.animationTimingFunction;
     }
   
