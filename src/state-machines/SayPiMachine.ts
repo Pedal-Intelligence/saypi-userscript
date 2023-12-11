@@ -14,6 +14,7 @@ import { TranscriptMergeService } from "../TranscriptMergeService";
 import { config } from "../ConfigModule";
 import EventBus from "../EventBus";
 import { calculateDelay } from "../TimerModule";
+import AudioControlsModule from "../AudioControlsModule";
 
 type SayPiTranscribedEvent = {
   type: "saypi:transcribed";
@@ -127,6 +128,7 @@ const clearTranscripts = assign({
 
 const audibleNotifications = new AudibleNotificationsModule();
 const visualNotifications = new VisualNotificationsModule();
+const audioControls = new AudioControlsModule();
 
 export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
   {
@@ -176,6 +178,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               {
                 type: "startRecording",
               },
+              {
+                type: "activateAudioOutput",
+              }
             ],
             description:
               'VAD microphone is ready.\nStart it recording.',
@@ -718,6 +723,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
       cancelCountdownAnimation: () => {
         visualNotifications.listeningStopped();
+      },
+      activateAudioOutput: () => {
+        audioControls.activateAudioOutput(true);
       },
     },
     services: {},

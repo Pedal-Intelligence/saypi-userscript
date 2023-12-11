@@ -560,7 +560,7 @@ exports.assetPath = assetPath;
 
 /***/ }),
 
-/***/ 192:
+/***/ 762:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -5563,7 +5563,7 @@ var __webpack_exports__ = {};
 // UNUSED EXPORTS: default
 
 // EXTERNAL MODULE: ./node_modules/@ricky0123/vad-web/dist/index.js
-var dist = __webpack_require__(192);
+var dist = __webpack_require__(762);
 // EXTERNAL MODULE: ./src/ConfigModule.js
 var ConfigModule = __webpack_require__(186);
 // EXTERNAL MODULE: ./src/ResourceModule.ts
@@ -5989,19 +5989,49 @@ const AudioInputMachine_audioInputMachine = (0,Machine/* createMachine */.C)({
 });
 
 ;// CONCATENATED MODULE: ./src/state-machines/AudioOutputMachine.js
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
 
 var AudioOutputMachine_audioOutputMachine = (0,Machine/* createMachine */.C)({
+  /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7A8qgLgA4EB0GEANmAMQVbISz7IBO+A2gAwC6iohWWBnzYAdnxAAPRAEYAHAFYSANmWdOygEzyALAE5NAZk4KANCACeswzpIyZehcoU6dAdmP2dAX2-m0mLgExPgkdAwYolC09BCQALZgzBDIzFy8SCACQiJY4pnSCAqa5lYIbpp6JIY1NW7KDoYylb7+6Nh4RKThcRDUYPGEIpDpEtnCYhKFMpwkcp76em5ynJqcxiWWiIZymiSaRjsKJqqax4atIAEdwd2xkCQsYAwW1IQUyBajmeO5+aCFeqzBRNM56HQyEE6XalRANZTVWquGQQzg6LSXa5BLqhHoPd6fSLRQhoWBgb78QQTPJTWTrWaOQyaOQyZzNNwyNywhDOKpaY4o+q6QwKTHtbEhML3CAkAkWIn9US9ClZKl-WkIGbGEiM5mshTszncjmzZoCoUOTicsWBTqSvEyuUKgDGyFEcvwAAsWFhUFBPSrfpMCog5NCSMsZIYGgo9Io0XpuS5bGd1FG3HGlj4-FdxXa7gx8aTIG8Pl8eGM1cGAdZ5BH1vJOLs3Ot9Ny1FUzVaHPZli4bTccVLCzKwEqS2SwABrEYVn5VmkhzX0nUgvVszQcrlbcqqEjqA+b4pMg0DiWkchUaiwKcYQgAOTAkg4c8pOWrUkQAFoUVVjDUDD0Qw3B0f9NjKTlbHsdRXAUORwWjTRlF8HNRCwOJ4EyLF83wSt30XGsEB-JZqnWQxAOA0D1nAxBZibGpN2ZNF3Dg8i3DPHCyEoMA8Opf5PwQHQaIQOQ3BIVjakUJp5CQjjblxWIiV49UlzBfYFGWepVAaOQYR3NY9hAvRjL0exmgM5Cc2w+Th16ZSP0KbQlBBZotBbeRWW5HQnAjY4TFAjloTWdirLzGyHUeZ4IDKN8+I1JDDHE0E3KtFllCTAx1IPTgOVUBR+1C21wulWUyyU+d8P4wpFCUcicqA7z5gOdKd1jKo3D81llH0ajNDkocIpJVAyQgeyCIElF7FXJl5itK1TJ0dtOXreZY1E1kmT0fr7RKsc7IquKl0mmRpuZTx5pRY11HEiEW1UeD8scFDvCAA */
   context: {
-    autoplay: false
+    autoplay: false,
+    skip: false
   },
   id: "audioOutput",
   initial: "idle",
   states: {
     idle: {
       on: {
-        loadstart: {
+        loadstart: [{
+          target: "idle",
+          cond: "shouldSkip",
+          internal: true,
+          description: "Skip this track.",
+          actions: [(0,es/* assign */.f0)(function (context, event) {
+            return _objectSpread(_objectSpread({}, context), {}, {
+              skip: false
+            });
+          }), {
+            type: "skipCurrent"
+          }]
+        }, {
           target: "loading"
+        }],
+        skipNext: {
+          target: "idle",
+          internal: true,
+          description: "Do not play the next track.",
+          actions: (0,es/* assign */.f0)(function (context, event) {
+            return _objectSpread(_objectSpread({}, context), {}, {
+              skip: true
+            });
+          })
         }
       }
     },
@@ -6090,24 +6120,32 @@ var AudioOutputMachine_audioOutputMachine = (0,Machine/* createMachine */.C)({
     emitEvent: function emitEvent(context, event, _ref) {
       var action = _ref.action;
       src_EventBus/* default */.Z.emit(action.params.eventName);
+    },
+    skipCurrent: function skipCurrent(context, event) {
+      // send a message back to the audio module to stop playback
+      src_EventBus/* default */.Z.emit("audio:skipCurrent");
     }
   },
-  guards: {},
+  guards: {
+    shouldSkip: function shouldSkip(context) {
+      return context.skip === true;
+    }
+  },
   services: {},
   delays: {}
 });
 // EXTERNAL MODULE: ./src/LoggingModule.js
 var LoggingModule = __webpack_require__(484);
 ;// CONCATENATED MODULE: ./src/AudioModule.js
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function AudioModule_typeof(o) { "@babel/helpers - typeof"; return AudioModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, AudioModule_typeof(o); }
+function AudioModule_ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function AudioModule_objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? AudioModule_ownKeys(Object(t), !0).forEach(function (r) { AudioModule_defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : AudioModule_ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function AudioModule_defineProperty(obj, key, value) { key = AudioModule_toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, AudioModule_toPropertyKey(descriptor.key), descriptor); } }
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function AudioModule_toPropertyKey(arg) { var key = AudioModule_toPrimitive(arg, "string"); return AudioModule_typeof(key) === "symbol" ? key : String(key); }
+function AudioModule_toPrimitive(input, hint) { if (AudioModule_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (AudioModule_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 // import state machines for audio input and output
 
 
@@ -6170,6 +6208,7 @@ var AudioModule = /*#__PURE__*/(/* unused pure expression or super */ null && (f
   }, {
     key: "registerAudioCommands",
     value: function registerAudioCommands(inputActor, outputActor) {
+      var _this = this;
       // audio input (recording) commands
       EventBus.on("audio:setupRecording", function (e) {
         inputActor.send("acquire");
@@ -6194,7 +6233,7 @@ var AudioModule = /*#__PURE__*/(/* unused pure expression or super */ null && (f
       });
       // audio input (recording) events (pass media recorder events -> audio input machine actor)
       EventBus.on("audio:dataavailable", function (detail) {
-        inputActor.send(_objectSpread({
+        inputActor.send(AudioModule_objectSpread({
           type: "dataAvailable"
         }, detail));
       });
@@ -6205,6 +6244,12 @@ var AudioModule = /*#__PURE__*/(/* unused pure expression or super */ null && (f
       // audio output (playback) commands
       EventBus.on("audio:reload", function (e) {
         outputActor.send("reload");
+      });
+      EventBus.on("audio:skipNext", function (e) {
+        outputActor.send("skipNext");
+      });
+      EventBus.on("audio:skipCurrent", function (e) {
+        _this.audioElement.pause();
       });
     }
   }]);

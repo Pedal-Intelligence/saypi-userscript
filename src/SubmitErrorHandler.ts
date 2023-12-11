@@ -1,4 +1,5 @@
 import { setFinalPrompt } from "./TranscriptionModule";
+import AudioControlsModule from "./AudioControlsModule";
 
 interface RestorePoint {
   prompt: string;
@@ -16,6 +17,7 @@ interface RestorePointAutoDate {
 export default class SubmitErrorHandler {
   private restorePointKey: string;
   private audioOutputStatus: boolean = false;
+  private audioControls: AudioControlsModule = new AudioControlsModule();
 
   constructor() {
     // Initialise properties if needed
@@ -111,30 +113,10 @@ export default class SubmitErrorHandler {
       if (timeDifference <= 5) {
         console.log("Restoring application state", restorePoint);
         setFinalPrompt(restorePoint.prompt);
-        this.activateAudioInput(restorePoint.audioInputEnabled);
-        this.activateAudioOutput(restorePoint.audioOutputEnabled);
+        this.audioControls.activateAudioInput(restorePoint.audioInputEnabled);
+        this.audioControls.activateAudioOutput(restorePoint.audioOutputEnabled);
         // Delete the executed restore point
         localStorage.removeItem(this.restorePointKey);
-      }
-    }
-  }
-
-  activateAudioInput(enable: boolean): void {
-    if (enable) {
-      const callButton = document.getElementById("saypi-callButton");
-      if (callButton) {
-        callButton.click();
-      }
-    }
-  }
-
-  activateAudioOutput(enable: boolean): void {
-    if (enable) {
-      const audioOutputButton = document.getElementById(
-        "saypi-audio-output-button"
-      );
-      if (audioOutputButton) {
-        audioOutputButton.click();
       }
     }
   }

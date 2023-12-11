@@ -110,5 +110,11 @@ export default class AudioModule {
     EventBus.on("audio:reload", function (e) {
       outputActor.send("reload");
     });
+    EventBus.on("audio:skipNext", function (e) {
+      outputActor.send("skipNext");
+    });
+    EventBus.on("audio:skipCurrent", (e) => {
+      this.audioElement.pause();
+    });
   }
 }
