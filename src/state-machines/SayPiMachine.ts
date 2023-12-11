@@ -544,6 +544,16 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           "saypi:userSpeaking": {
             target: "#sayPi.listening.recording.userSpeaking",
           },
+          "saypi:hangup": {
+            target: "#sayPi.inactive",
+            actions: [
+              {
+                type: "callHasEnded",
+              },
+            ],
+            description:
+              'End call while Pi is speaking.',
+          },
         },
         states: {
           piThinking: {
