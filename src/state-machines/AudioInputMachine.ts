@@ -169,6 +169,12 @@ export const audioInputMachine = createMachine<
                 target: "recording",
                 cond: "microphoneAcquired",
               },
+              acquire: {
+                description: `When receiving a request to acquire a microphone (setup recording) that is already acquired, trigger notifications.`,
+                actions: {
+                  type: "notifyMicrophoneAcquired",
+                }
+              },
             },
             always: {
               target: "recording",
@@ -233,11 +239,6 @@ export const audioInputMachine = createMachine<
               type: "releaseMicrophone",
             },
           },
-
-          acquire: {
-            target: "acquired",
-            description: `When receiving a request to acquire a microphone (setup recording) that is already acquired, trigger notifications.`
-          }
         },
       },
     },

@@ -207,7 +207,7 @@ export default class ButtonModule {
     button.id = "saypi-callButton";
     button.type = "button";
     button.className =
-      "call-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      "call-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650 m-2";
     this.callInactive(button); // mic is off by default
 
     appendChild(container, button, position);

@@ -5848,6 +5848,12 @@ const AudioInputMachine_audioInputMachine = (0,Machine/* createMachine */.C)({
                             target: "recording",
                             cond: "microphoneAcquired",
                         },
+                        acquire: {
+                            description: `When receiving a request to acquire a microphone (setup recording) that is already acquired, trigger notifications.`,
+                            actions: {
+                                type: "notifyMicrophoneAcquired",
+                            }
+                        },
                     },
                     always: {
                         target: "recording",
@@ -5911,10 +5917,6 @@ const AudioInputMachine_audioInputMachine = (0,Machine/* createMachine */.C)({
                         type: "releaseMicrophone",
                     },
                 },
-                acquire: {
-                    target: "acquired",
-                    description: `When receiving a request to acquire a microphone (setup recording) that is already acquired, trigger notifications.`
-                }
             },
         },
     },
@@ -6175,7 +6177,7 @@ var AudioModule = /*#__PURE__*/(/* unused pure expression or super */ null && (f
       if (state.changed) {
         var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
         var toState = serializeStateValue(state.value);
-        logger.debug("Audio Input Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+        logger.info("Audio Input Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
       }
     });
   }

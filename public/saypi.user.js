@@ -1383,7 +1383,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.hidden{display:none !important}#saypi
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(0.9)}100%{transform:scale(1)}}html.desktop-view #saypi-talkButton{display:none}html.desktop-view #saypi-callButton{height:2.25rem;width:2.25rem;position:relative;margin:.5rem 0 .5rem 0}html.desktop-view .saypi-prompt-container{padding-right:0}html.desktop-view #saypi-notification>svg{width:3rem;height:3rem;bottom:4rem;right:12rem;position:fixed}html.desktop-view #saypi-exitButton{display:none}`, "",{"version":3,"sources":["webpack://./src/styles/desktop.scss"],"names":[],"mappings":"AACE,iBACE,GACE,kBAAA,CAEF,IACE,oBAAA,CAEF,KACE,kBAAA,CAAA,CAIJ,oCAEE,YAAA,CAGF,oCACE,cAAA,CACA,aAAA,CACA,iBAAA,CACA,sBAAA,CAGF,0CAEE,eAAA,CAGF,0CACE,UAAA,CACA,WAAA,CACA,WAAA,CACA,WAAA,CACA,cAAA,CAGF,oCACE,YAAA","sourcesContent":["html.desktop-view {\n  @keyframes pulse {\n    0% {\n      transform: scale(1);\n    }\n    50% {\n      transform: scale(0.9);\n    }\n    100% {\n      transform: scale(1);\n    }\n  }\n\n  #saypi-talkButton {\n    /* not needed on desktop with call button */\n    display: none;\n  }\n\n  #saypi-callButton {\n    height: 2.25rem;\n    width: 2.25rem;\n    position: relative;\n    margin: 0.5rem 0 0.5rem 0;\n  }\n\n  .saypi-prompt-container {\n    /* make room in the prompt text area for the call button */\n    padding-right: 0;\n  }\n\n  #saypi-notification > svg {\n    width: 3rem;\n    height: 3rem;\n    bottom: 4rem;\n    right: 12rem;\n    position: fixed;\n  }\n\n  #saypi-exitButton {\n    display: none;\n  }\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(0.9)}100%{transform:scale(1)}}html.desktop-view #saypi-talkButton{display:none}html.desktop-view #saypi-callButton{width:2.25rem;position:relative}html.desktop-view .saypi-prompt-container{padding-right:0}html.desktop-view #saypi-notification>svg{width:3rem;height:3rem;bottom:4rem;right:12rem;position:fixed}html.desktop-view #saypi-exitButton{display:none}`, "",{"version":3,"sources":["webpack://./src/styles/desktop.scss"],"names":[],"mappings":"AACE,iBACE,GACE,kBAAA,CAEF,IACE,oBAAA,CAEF,KACE,kBAAA,CAAA,CAIJ,oCAEE,YAAA,CAGF,oCACE,aAAA,CACA,iBAAA,CAGF,0CAEE,eAAA,CAGF,0CACE,UAAA,CACA,WAAA,CACA,WAAA,CACA,WAAA,CACA,cAAA,CAGF,oCACE,YAAA","sourcesContent":["html.desktop-view {\n  @keyframes pulse {\n    0% {\n      transform: scale(1);\n    }\n    50% {\n      transform: scale(0.9);\n    }\n    100% {\n      transform: scale(1);\n    }\n  }\n\n  #saypi-talkButton {\n    /* not needed on desktop with call button */\n    display: none;\n  }\n\n  #saypi-callButton {\n    width: 2.25rem;\n    position: relative;\n  }\n\n  .saypi-prompt-container {\n    /* make room in the prompt text area for the call button */\n    padding-right: 0;\n  }\n\n  #saypi-notification > svg {\n    width: 3rem;\n    height: 3rem;\n    bottom: 4rem;\n    right: 12rem;\n    position: fixed;\n  }\n\n  #saypi-exitButton {\n    display: none;\n  }\n}\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -8514,6 +8514,12 @@ const audioInputMachine = (0,Machine/* createMachine */.C)({
                             target: "recording",
                             cond: "microphoneAcquired",
                         },
+                        acquire: {
+                            description: `When receiving a request to acquire a microphone (setup recording) that is already acquired, trigger notifications.`,
+                            actions: {
+                                type: "notifyMicrophoneAcquired",
+                            }
+                        },
                     },
                     always: {
                         target: "recording",
@@ -8577,10 +8583,6 @@ const audioInputMachine = (0,Machine/* createMachine */.C)({
                         type: "releaseMicrophone",
                     },
                 },
-                acquire: {
-                    target: "acquired",
-                    description: `When receiving a request to acquire a microphone (setup recording) that is already acquired, trigger notifications.`
-                }
             },
         },
     },
@@ -8841,7 +8843,7 @@ var AudioModule = /*#__PURE__*/function () {
       if (state.changed) {
         var fromState = state.history ? (0,LoggingModule/* serializeStateValue */.G)(state.history.value) : "N/A";
         var toState = (0,LoggingModule/* serializeStateValue */.G)(state.value);
-        LoggingModule/* logger */.k.debug("Audio Input Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+        LoggingModule/* logger */.k.info("Audio Input Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
       }
     });
   }
@@ -10898,7 +10900,7 @@ var ButtonModule = /*#__PURE__*/function () {
       var button = this.createButton();
       button.id = "saypi-callButton";
       button.type = "button";
-      button.className = "call-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      button.className = "call-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650 m-2";
       this.callInactive(button); // mic is off by default
 
       appendChild(container, button, position);
