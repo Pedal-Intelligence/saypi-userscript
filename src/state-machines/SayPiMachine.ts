@@ -455,6 +455,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
 
           errorStatus: {
             description: `Handles non-fatal errors during recording and transcription.`,
+            initial: "normal",
             states: {
               normal: {
                 description: "The system is not exhibiting any errors.",
