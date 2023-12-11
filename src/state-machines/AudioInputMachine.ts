@@ -118,7 +118,7 @@ export const audioInputMachine = createMachine<
   AudioInputEvent
 >(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AkgOwAdUAXAOgCcwAbMZWSAYmQGMBHVDSgbQAYBdRKAJZYGYtjyCQAD0QBGAGwBmUgFYeG1UoCc2gCxKA7HJ4KANCACeiJXIAcpBYe0K7bpasMHtqgL6+LNExcQhJSFnZODDwoBggsPDBSaIA3LABrJKDsfCIyCI5yaKgEVKxmZHEE3j4aqWFRKskkGURVACYLawQ7PVVSRVMeOyU9bSVlbX9A9BzQ-LZC4oYwcnIsclICKkqAMw2AW3DZkLzwxaiY0rw0iqaaupaGsQkpWQQ5QxV1TR19IxM5isiHa7X6oIUqlUCn0Ll0X2mIGypzCBU4jEoNDoYEeQhELwSb3kXzUGh4Wl0BmMpi6iDsclIY102h4RnaPG0inaiORuVRF0oEGSEBoDFgxGQ5GIuJAzyaRI+7U+Ax4clUIyhhlZI1pPV6pCUoPGekMhjsTjVPJOfIWkUFFDAzA2mBiYuIWAIACUwOw4MRIDK5a8Wu85O1tIYDXZ2nYOcNFM5dVr+p84WbVLp2n0rcEbec7ZAHU7yC7YhBKsgAIIpZAYHYAIxogfx8pD8j0kNIGrsLjcYbkSl1sYcvWUCnHenspqmASR1vm+cKhYIYDwpYAyu6CG6Pc3GsHQO9jA4FBzw5ytXYvtpddpQVGY4bPAZ2gpubPeQu0faV2vipuPTiCtq1rBsm34eoWwPVoEGPRwz10T5hmvIcwVIO84X0ORORMOQczmM5v0LcUPRXCAGD3AlmkPeRtTUNVVHsOQ9A0dpDCBboWQcZwfA0AxFFjPDETwLAIDgKRPzySD90JNsEAAWg4xBFPwlEyExWh6AgaSqIVPROmBD5mPghiFCQwEfFUvNv2KHTWxohA-nQ88eGMJwOWcVRdSNAZsNNJQhjVewrK-AVIDs6D3lfBl2KhP5OUhYZdU8FRUxhbDVEnS0P3nQiwqFDARTACLZIcuQBxUU9mIUPpXK0Nxb1c0geKZZwtSwkK8oLIVKGLUsSuomDmPpZz7HZFiJjYvRbxMUhz1aiMOUnTr+W6rZVw3LcBoVALtGayEKUQxK7CHLQBkNNrVR4I09BW20lyFEiCDI7a5KvPboXaCY7EYmNMoM7o3D0ObdHUAKs3VWx-H8IA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AkgOwAdUAXAOgCcwAbMZWSAYmQGMBHVDSgbQAYBdRKAJZYGYtjyCQAD0QBGAOwBmUgBYAnJvUAOVXvUKATADYANCACeiJYYCspY7eM9jruatsHDAX2-m0mLiEJKQs7JwYeFAMEFh4YKSRAG5YANYJAdj4RGRhHOSRUAjJWMzI4nG8fFVSwqIVkkgyiLaG5lYIcnI82g4KtqoKxqrGCiOGqr7+6FnBuWz5hQxg5ORY5KQEVOUAZusAtqEzQTmhCxFRxXgpZQ1VNU11YhJSsp3Kalo6ehpGZpaIQw2UiGHhKHhAwwKZQeIxTECZE4hPIXaKwYjIcjEB5CETPOKvQFyZykOTaJS6Yyg0YQ-4dMkKUjqWzgpSqJS2MHqVQmeGI7LI86UCAMSg0OhgHEgJ4NQmdYwqDRaXT6P7tRDaOSfTSOAzaXS2TV844C+bhYWJCA0BjozHY-i1PGyppvVQ9EGOZzaEzqUFkpTqzpyNkg-VjbTGOQsnitY2BU1nc2QS3WqUyl4uxBu3omJw9H1+8mB7r60P6wzaFkmBQxuOzU4oi2UZjrTBRG3ELAEABKYHYcGIkDTTozoDe2gU6j6oP6ngmxk1xeDqjL5OZdijqm0daRZvyyebraWEHKyAAgklkBhtgAjGjD+qj5oIYy+0iV5m+hdKdRyOyBnV3w5ZRfU0UFtz8BETTmRN9wgTYwDwNsoAAZU7AgOy7B98UaMd5A8YwmVfCENBLVQ-0DfUpzdL0jDZTVyR3BNG2TAhEOQtCuxiU8LyvW97wdR4RwJTNOgIoj1BI38enItoAQQAwtRov9PB4dQlDJJiYJY+C2KQwpOIw6RbUHUIdkHcgAApOR4HgAEomGghshVY9iDPQ7DnTwsSnAkqSyIo+SuhMUgNMMcL+nzFxJkg-ltJc3S3KiQyGGMjFTOQcyVms2z7Mc+N4qTRL9OSjy5AEITHxE7yuiUFQvF9HonE5VRix4dlSDBbRuVZKFFC05yitIdEuzYkVPKfN5iR5EEfTZEZNS3SjyKZGMvE1FklEjAbBSKpgXIm6rn25KdNE5HQhmcAxbEDaN3wjTlI0k6M5F8SC8CwCA4CkOKckdKrcOfABaOlEBBzrcvBUYK1sYkeh2sgxVoegIH+nC5R5QMNJXMFgpMSNbLJYwEdg1E0a858f1Owx1FGdT3HZORmUDCtqJcbooUMJmeQUEmdPJybAUjUghicIFyScSc5EDUZ7Ek5xbENDcKSUPmEpTMABaOt5wSnUWqRVyXfyXIEmWDBRzdhiNa1ipzdrgigwBbchkK1wG3lcQwIdsqk9BsN05PpNSc31bQeCGGt+gVNWhr0jj0LduVuhZUk7HCtlJ2hYk2uZUgWTDJwbBs1XbYKwaHZGggxsT0TFEGUK-0nUE3U8CcAPUvPPDJDRuqcLo3u8IA */
     id: "audioInput",
     initial: "released",
     context: {
@@ -159,12 +159,21 @@ export const audioInputMachine = createMachine<
       acquired: {
         description: "Microphone acquired and ready to start recording.",
         initial: "idle",
+        entry: {
+          type: "notifyMicrophoneAcquired",
+        },
         states: {
           idle: {
             on: {
               start: {
                 target: "recording",
                 cond: "microphoneAcquired",
+              },
+              acquire: {
+                description: `When receiving a request to acquire a microphone (setup recording) that is already acquired, trigger notifications.`,
+                actions: {
+                  type: "notifyMicrophoneAcquired",
+                }
               },
             },
             always: {
@@ -277,6 +286,10 @@ export const audioInputMachine = createMachine<
         if (SayPiContext.waitingToStop === true) {
           microphone?.pause();
         }
+      },
+
+      notifyMicrophoneAcquired: (context, event) => {
+        EventBus.emit("saypi:callReady");
       },
 
       releaseMicrophone: (context, event) => {

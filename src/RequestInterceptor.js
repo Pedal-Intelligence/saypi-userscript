@@ -1,4 +1,4 @@
-import { config } from "./ConfigModule.js";
+import { getResourceUrl } from "./ResourceModule.ts";
 
 const filesToRedirect = [
   "silero_vad.onnx",
@@ -6,13 +6,6 @@ const filesToRedirect = [
   "ort.min.js.map",
   "vad.worklet.bundle.min.js",
 ];
-
-// Function to construct the URL for local extension resources
-function getExtensionResourceUrl(filename) {
-  const web_accessible_resources_dir = "public";
-  const filepath = web_accessible_resources_dir + "/" + filename;
-  return chrome.runtime.getURL(filepath);
-}
 
 // Function to redirect specific XMLHttpRequests
 function redirectXMLHttpRequest(open) {
@@ -25,12 +18,7 @@ function redirectXMLHttpRequest(open) {
   ) {
     const filename = url.split("/").pop();
     if (filename && filesToRedirect.includes(filename)) {
-      // Check if running as a Chrome extension
-      if (chrome.runtime && chrome.runtime.id) {
-        arguments[1] = getExtensionResourceUrl(filename);
-      } else {
-        arguments[1] = `${config.appServerUrl}/${filename}`;
-      }
+      arguments[1] = getResourceUrl(filename);
     }
     open.apply(this, arguments);
   };
@@ -41,12 +29,7 @@ function redirectFetch(_fetch) {
   window.fetch = function (url, opts) {
     const filename = url.split("/").pop();
     if (filename && filesToRedirect.includes(filename)) {
-      // Check if running as a Chrome extension
-      if (chrome.runtime && chrome.runtime.id) {
-        arguments[0] = getExtensionResourceUrl(filename);
-      } else {
-        arguments[0] = `${config.appServerUrl}/${filename}`;
-      }
+      arguments[0] = getResourceUrl(filename);
     }
     return _fetch.apply(this, arguments);
   };

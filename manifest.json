@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Say, Pi",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Seamless speech-to-text enhancement for Pi, the conversational AI. Enjoy hands-free, high-accuracy conversations in any language.",
   "permissions": ["storage"],
   "content_scripts": [
@@ -21,7 +21,8 @@
       "resources": [
         "public/silero_vad.onnx",
         "public/*.wasm",
-        "public/vad.worklet.bundle.min.js"
+        "public/vad.worklet.bundle.min.js",
+        "public/audio/*.mp3"
       ],
       "matches": ["https://pi.ai/*"]
     }

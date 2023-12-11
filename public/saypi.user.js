@@ -2,7 +2,7 @@
 // @name         Say, Pi
 // @name:zh-CN   说，Pi 
 // @namespace    http://www.saypi.ai/
-// @version      1.5.0
+// @version      1.5.1
 // @description  Seamless speech-to-text enhancement for Pi, the conversational AI. Enjoy hands-free, high-accuracy conversations in any language.
 // @description:zh-CN  为Pi聊天机器人提供无手操作的高精度语音转文字功能，支持多种语言。
 // @author       Ross Cadogan
@@ -948,6 +948,55 @@ ___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse_outermost {
   transform-origin: center;
 }
 
+/* thoughtfulness animation to indicate Pi is thinking */
+/* flipcard animation to indicate Say, Pi is processing the prompt */
+@keyframes thinkingFlip {
+  0%, 100% {
+    transform: rotateY(0deg);
+    fill: var(--original-color);
+  }
+  50% {
+    transform: rotateY(180deg);
+    fill: var(--thinking-color);
+  }
+}
+
+.outermost.piThinking {
+  --original-color: #e4f2d1;
+  --thinking-color: #ffe4b2; /* A light orange for a soft but noticeable transition */
+  animation: thinkingFlip 1.0s ease-in-out;
+}
+
+.second.piThinking {
+  --original-color: #cce8b5;
+  --thinking-color: #ffddb4; /* A slightly different shade of light orange */
+  animation: thinkingFlip 1.1s ease-in-out;
+}
+
+.third.piThinking {
+  --original-color: #b3db95;
+  --thinking-color: #ffd5b7; /* A subtly warmer shade of light orange */
+  animation: thinkingFlip 1.2s ease-in-out;
+}
+
+.fourth.piThinking {
+  --original-color: #9bd078;
+  --thinking-color: #ffcdca; /* A variation leaning towards pink */
+  animation: thinkingFlip 1.3s ease-in-out;
+}
+
+.fifth.piThinking {
+  --original-color: #83c55c;
+  --thinking-color: #ffc5dc; /* A soft pink for contrast */
+  animation: thinkingFlip 1.4s ease-in-out;
+}
+
+.innermost.piThinking {
+  --original-color: #428a2f;
+  --thinking-color: #ffbde6; /* A distinct light magenta */
+  animation: thinkingFlip 1.5s ease-in-out;
+}
+
 /* playful animation to indicate Pi is speaking */
 @keyframes speaking_outermost {
   0%,
@@ -1288,7 +1337,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse_outermost {
   fill: #ffff00;
   fill-opacity: 0.7;
 }
-`, "",{"version":3,"sources":["webpack://./src/styles/rectangles.css"],"names":[],"mappings":"AAAA;EACE;;IAEE,mBAAmB;EACrB;EACA;IACE,sBAAsB;EACxB;AACF;AACA;EACE,sCAAsC;EACtC,wBAAwB;AAC1B;;AAEA;EACE;;IAEE,mBAAmB;EACrB;EACA;IACE,uBAAuB;EACzB;AACF;AACA;EACE,mCAAmC;EACnC,wBAAwB;AAC1B;;AAEA;EACE;;IAEE,mBAAmB;EACrB;EACA;IACE,uBAAuB;EACzB;AACF;AACA;EACE,kCAAkC;EAClC,wBAAwB;AAC1B;;AAEA;EACE;;IAEE,mBAAmB;EACrB;EACA;IACE,uBAAuB;EACzB;AACF;AACA;EACE,mCAAmC;EACnC,wBAAwB;AAC1B;;AAEA;EACE;;IAEE,mBAAmB;EACrB;EACA;IACE,uBAAuB;EACzB;AACF;AACA;EACE,kCAAkC;EAClC,wBAAwB;AAC1B;;AAEA;EACE;;IAEE,mBAAmB;EACrB;EACA;IACE,qBAAqB;EACvB;AACF;AACA;EACE,sCAAsC;EACtC,wBAAwB;AAC1B;;AAEA,iDAAiD;AACjD;EACE;;IAEE,gCAAgC;EAClC;EACA;IACE,uBAAuB;EACzB;EACA;IACE,qBAAqB;EACvB;EACA;IACE,uBAAuB;EACzB;AACF;AACA;EACE,yCAAyC;EACzC,wBAAwB;AAC1B;;AAEA;EACE;;IAEE,gCAAgC;EAClC;EACA;IACE,oCAAoC;EACtC;EACA;IACE,mCAAmC;EACrC;EACA;IACE,oCAAoC;EACtC;AACF;AACA;EACE,sCAAsC;EACtC,wBAAwB;AAC1B;;AAEA;EACE;;IAEE,gCAAgC;EAClC;EACA;IACE,qCAAqC;EACvC;EACA;IACE,mCAAmC;EACrC;EACA;IACE,oCAAoC;EACtC;AACF;AACA;EACE,qCAAqC;EACrC,wBAAwB;AAC1B;;AAEA;EACE;;IAEE,gCAAgC;EAClC;EACA;IACE,oCAAoC;EACtC;EACA;IACE,mCAAmC;EACrC;EACA;IACE,oCAAoC;EACtC;AACF;AACA;EACE,sCAAsC;EACtC,wBAAwB;AAC1B;;AAEA;EACE;;IAEE,gCAAgC;EAClC;EACA;IACE,qCAAqC;EACvC;EACA;IACE,mCAAmC;EACrC;EACA;IACE,oCAAoC;EACtC;AACF;AACA;EACE,qCAAqC;EACrC,wBAAwB;AAC1B;;AAEA;EACE;;IAEE,gCAAgC;EAClC;EACA;IACE,oCAAoC;EACtC;EACA;IACE,mCAAmC;EACrC;EACA;IACE,oCAAoC;EACtC;AACF;AACA;EACE,yCAAyC;EACzC,wBAAwB;AAC1B;;AAEA,gDAAgD;AAChD;EACE;IACE;mDAC+C;EACjD;EACA;IACE;mDAC+C;EACjD;AACF;AACA,wCAAwC;AACxC;EACE;;IAEE,8BAA8B;EAChC;EACA;;IAEE,kCAAkC;EACpC;AACF;;AAEA;EACE;;IAEE,kCAAkC;EACpC;EACA;;IAEE,kCAAkC;EACpC;AACF;;AAEA;EACE;;IAEE,kCAAkC;EACpC;EACA;;IAEE,kCAAkC;EACpC;AACF;;AAEA;EACE;;IAEE,kCAAkC;EACpC;EACA;;IAEE,kCAAkC;EACpC;AACF;;AAEA;EACE;;IAEE,kCAAkC;EACpC;EACA;;IAEE,kCAAkC;EACpC;AACF;;AAEA;EACE;;IAEE,kCAAkC;EACpC;EACA;;IAEE,kCAAkC;EACpC;AACF;;AAEA;EACE,qDAAqD;AACvD;;AAEA;EACE,mDAAmD;AACrD;;AAEA;EACE,iDAAiD;AACnD;;AAEA;EACE,mDAAmD;AACrD;;AAEA;EACE,iDAAiD;AACnD;;AAEA;EACE,sDAAsD;AACxD;;AAEA,yEAAyE;AACzE;EACE;;IAEE,wBAAwB;IACxB,2BAA2B;EAC7B;EACA;IACE,0BAA0B;IAC1B,+BAA+B;EACjC;AACF;;AAEA;EACE,yBAAyB;EACzB,6BAA6B;EAC7B,yCAAyC;AAC3C;;AAEA;EACE,yBAAyB;EACzB,6BAA6B;EAC7B,yCAAyC;AAC3C;;AAEA;EACE,yBAAyB;EACzB,6BAA6B;EAC7B,yCAAyC;AAC3C;;AAEA;EACE,yBAAyB;EACzB,6BAA6B;EAC7B,yCAAyC;AAC3C;;AAEA;EACE,yBAAyB;EACzB,6BAA6B;EAC7B,yCAAyC;AAC3C;;AAEA;EACE,yBAAyB;EACzB,6BAA6B;EAC7B,uCAAuC;AACzC;;AAEA,6DAA6D;AAC7D;EACE;;IAEE,UAAU;IACV,2BAA2B;EAC7B;EACA;IACE,YAAY;IACZ,sBAAsB,EAAE,iBAAiB;EAC3C;AACF;;AAEA,sDAAsD;AACtD,oDAAoD;AACpD;EACE;IACE,yCAAyC;EAC3C;EACA;IACE,2CAA2C;EAC7C;EACA;IACE,0CAA0C;EAC5C;EACA;IACE,2CAA2C;EAC7C;EACA;IACE,yCAAyC;EAC3C;AACF;;AAEA;EACE,+BAA+B;EAC/B,aAAa;EACb,iBAAiB;AACnB;;AAEA;EACE,+BAA+B;EAC/B,aAAa;EACb,iBAAiB;AACnB;;AAEA;EACE,+BAA+B;EAC/B,aAAa;EACb,iBAAiB;AACnB;;AAEA;EACE,+BAA+B;EAC/B,aAAa;EACb,iBAAiB;AACnB;;AAEA;EACE,+BAA+B;EAC/B,aAAa;EACb,iBAAiB;AACnB;;AAEA;EACE,+BAA+B;EAC/B,aAAa;EACb,iBAAiB;AACnB","sourcesContent":["@keyframes pulse_outermost {\n  0%,\n  100% {\n    transform: scale(1);\n  }\n  50% {\n    transform: scale(0.92);\n  }\n}\n.outermost {\n  animation: pulse_outermost 5s infinite;\n  transform-origin: center;\n}\n\n@keyframes pulse_second {\n  0%,\n  100% {\n    transform: scale(1);\n  }\n  50% {\n    transform: scale(0.856);\n  }\n}\n.second {\n  animation: pulse_second 5s infinite;\n  transform-origin: center;\n}\n\n@keyframes pulse_third {\n  0%,\n  100% {\n    transform: scale(1);\n  }\n  50% {\n    transform: scale(0.792);\n  }\n}\n.third {\n  animation: pulse_third 5s infinite;\n  transform-origin: center;\n}\n\n@keyframes pulse_fourth {\n  0%,\n  100% {\n    transform: scale(1);\n  }\n  50% {\n    transform: scale(0.728);\n  }\n}\n.fourth {\n  animation: pulse_fourth 5s infinite;\n  transform-origin: center;\n}\n\n@keyframes pulse_fifth {\n  0%,\n  100% {\n    transform: scale(1);\n  }\n  50% {\n    transform: scale(0.664);\n  }\n}\n.fifth {\n  animation: pulse_fifth 5s infinite;\n  transform-origin: center;\n}\n\n@keyframes pulse_innermost {\n  0%,\n  100% {\n    transform: scale(1);\n  }\n  50% {\n    transform: scale(0.6);\n  }\n}\n.innermost {\n  animation: pulse_innermost 5s infinite;\n  transform-origin: center;\n}\n\n/* playful animation to indicate Pi is speaking */\n@keyframes speaking_outermost {\n  0%,\n  100% {\n    transform: scale(1) rotate(0deg);\n  }\n  25% {\n    transform: scale(0.995);\n  }\n  50% {\n    transform: scale(0.9);\n  }\n  75% {\n    transform: scale(0.895);\n  }\n}\n.outermost.piSpeaking {\n  animation: speaking_outermost 2s infinite;\n  transform-origin: center;\n}\n\n@keyframes speaking_second {\n  0%,\n  100% {\n    transform: scale(1) rotate(0deg);\n  }\n  25% {\n    transform: scale(0.98) rotate(-1deg);\n  }\n  50% {\n    transform: scale(0.87) rotate(0deg);\n  }\n  75% {\n    transform: scale(0.865) rotate(1deg);\n  }\n}\n.second.piSpeaking {\n  animation: speaking_second 2s infinite;\n  transform-origin: center;\n}\n\n@keyframes speaking_third {\n  0%,\n  100% {\n    transform: scale(1) rotate(0deg);\n  }\n  25% {\n    transform: scale(0.965) rotate(-2deg);\n  }\n  50% {\n    transform: scale(0.84) rotate(0deg);\n  }\n  75% {\n    transform: scale(0.835) rotate(2deg);\n  }\n}\n.third.piSpeaking {\n  animation: speaking_third 2s infinite;\n  transform-origin: center;\n}\n\n@keyframes speaking_fourth {\n  0%,\n  100% {\n    transform: scale(1) rotate(0deg);\n  }\n  25% {\n    transform: scale(0.95) rotate(-3deg);\n  }\n  50% {\n    transform: scale(0.81) rotate(0deg);\n  }\n  75% {\n    transform: scale(0.805) rotate(3deg);\n  }\n}\n.fourth.piSpeaking {\n  animation: speaking_fourth 2s infinite;\n  transform-origin: center;\n}\n\n@keyframes speaking_fifth {\n  0%,\n  100% {\n    transform: scale(1) rotate(0deg);\n  }\n  25% {\n    transform: scale(0.935) rotate(-4deg);\n  }\n  50% {\n    transform: scale(0.78) rotate(0deg);\n  }\n  75% {\n    transform: scale(0.775) rotate(4deg);\n  }\n}\n.fifth.piSpeaking {\n  animation: speaking_fifth 2s infinite;\n  transform-origin: center;\n}\n\n@keyframes speaking_innermost {\n  0%,\n  100% {\n    transform: scale(1) rotate(0deg);\n  }\n  25% {\n    transform: scale(0.92) rotate(-5deg);\n  }\n  50% {\n    transform: scale(0.75) rotate(0deg);\n  }\n  75% {\n    transform: scale(0.745) rotate(5deg);\n  }\n}\n.innermost.piSpeaking {\n  animation: speaking_innermost 2s infinite;\n  transform-origin: center;\n}\n\n/* wave animation to indicate user is speaking */\n@keyframes userSpeakingAnimation {\n  50% {\n    transform: scaleY(0.05) scaleX(var(--width-factor))\n      translateX(calc(-50% + var(--spread-amount)));\n  }\n  100% {\n    transform: scaleY(1) scaleX(var(--width-factor))\n      translateX(calc(-50% + var(--spread-amount)));\n  }\n}\n/* user speaking oscillation animation */\n@keyframes waveform_outermost {\n  0%,\n  100% {\n    transform: scaleY(1) scaleX(1);\n  }\n  25%,\n  75% {\n    transform: scaleY(0.9) scaleX(0.9);\n  }\n}\n\n@keyframes waveform_second {\n  0%,\n  100% {\n    transform: scaleY(0.9) scaleX(0.9);\n  }\n  25%,\n  75% {\n    transform: scaleY(0.8) scaleX(0.8);\n  }\n}\n\n@keyframes waveform_third {\n  0%,\n  100% {\n    transform: scaleY(0.8) scaleX(0.8);\n  }\n  25%,\n  75% {\n    transform: scaleY(0.7) scaleX(0.7);\n  }\n}\n\n@keyframes waveform_fourth {\n  0%,\n  100% {\n    transform: scaleY(0.7) scaleX(0.7);\n  }\n  25%,\n  75% {\n    transform: scaleY(0.6) scaleX(0.6);\n  }\n}\n\n@keyframes waveform_fifth {\n  0%,\n  100% {\n    transform: scaleY(0.6) scaleX(0.6);\n  }\n  25%,\n  75% {\n    transform: scaleY(0.5) scaleX(0.5);\n  }\n}\n\n@keyframes waveform_innermost {\n  0%,\n  100% {\n    transform: scaleY(0.5) scaleX(0.5);\n  }\n  25%,\n  75% {\n    transform: scaleY(0.4) scaleX(0.4);\n  }\n}\n\n.outermost.userSpeaking {\n  animation: waveform_outermost 0.7s infinite alternate;\n}\n\n.second.userSpeaking {\n  animation: waveform_second 0.65s infinite alternate;\n}\n\n.third.userSpeaking {\n  animation: waveform_third 0.6s infinite alternate;\n}\n\n.fourth.userSpeaking {\n  animation: waveform_fourth 0.55s infinite alternate;\n}\n\n.fifth.userSpeaking {\n  animation: waveform_fifth 0.5s infinite alternate;\n}\n\n.innermost.userSpeaking {\n  animation: waveform_innermost 0.45s infinite alternate;\n}\n\n/* flipcard animation to indicate Say, Pi is transcribing audio to text */\n@keyframes transcribingFlip {\n  0%,\n  100% {\n    transform: rotateY(0deg);\n    fill: var(--original-color);\n  }\n  50% {\n    transform: rotateY(180deg);\n    fill: var(--transcribing-color);\n  }\n}\n\n.outermost.transcribing {\n  --original-color: #e4f2d1;\n  --transcribing-color: #b3e0fe;\n  animation: transcribingFlip 1.5s infinite;\n}\n\n.second.transcribing {\n  --original-color: #cce8b5;\n  --transcribing-color: #89c2ff;\n  animation: transcribingFlip 1.6s infinite;\n}\n\n.third.transcribing {\n  --original-color: #b3db95;\n  --transcribing-color: #5fa4ff;\n  animation: transcribingFlip 1.7s infinite;\n}\n\n.fourth.transcribing {\n  --original-color: #9bd078;\n  --transcribing-color: #3586ff;\n  animation: transcribingFlip 1.8s infinite;\n}\n\n.fifth.transcribing {\n  --original-color: #83c55c;\n  --transcribing-color: #0b69e3;\n  animation: transcribingFlip 1.9s infinite;\n}\n\n.innermost.transcribing {\n  --original-color: #428a2f;\n  --transcribing-color: #0053bf;\n  animation: transcribingFlip 2s infinite;\n}\n\n/* heartbeat animation to indicate Pi is preparing to speak */\n@keyframes heartbeat {\n  0%,\n  100% {\n    opacity: 1;\n    fill: var(--original-color);\n  }\n  50% {\n    opacity: 0.5;\n    fill: rgb(245 238 223); /* bg-cream-550 */\n  }\n}\n\n/* toned-down dissary animation to indicate an error */\n/* toned-down error animation with reduced opacity */\n@keyframes errorAnimation {\n  0% {\n    transform: rotate(0deg) translate(0%, 0%);\n  }\n  25% {\n    transform: rotate(-5deg) translate(-5%, 5%);\n  }\n  50% {\n    transform: rotate(5deg) translate(5%, -5%);\n  }\n  75% {\n    transform: rotate(-5deg) translate(-5%, 5%);\n  }\n  100% {\n    transform: rotate(0deg) translate(0%, 0%);\n  }\n}\n\n.outermost.error {\n  animation: errorAnimation 25s 1;\n  fill: #ff0000;\n  fill-opacity: 0.7;\n}\n\n.second.error {\n  animation: errorAnimation 25s 1;\n  fill: #ff3300;\n  fill-opacity: 0.7;\n}\n\n.third.error {\n  animation: errorAnimation 25s 1;\n  fill: #ff6600;\n  fill-opacity: 0.7;\n}\n\n.fourth.error {\n  animation: errorAnimation 25s 1;\n  fill: #ff9900;\n  fill-opacity: 0.7;\n}\n\n.fifth.error {\n  animation: errorAnimation 25s 1;\n  fill: #ffcc00;\n  fill-opacity: 0.7;\n}\n\n.innermost.error {\n  animation: errorAnimation 25s 1;\n  fill: #ffff00;\n  fill-opacity: 0.7;\n}\n"],"sourceRoot":""}]);
+`, "",{"version":3,"sources":["webpack://./src/styles/rectangles.css"],"names":[],"mappings":"AAAA;EACE;;IAEE,mBAAmB;EACrB;EACA;IACE,sBAAsB;EACxB;AACF;AACA;EACE,sCAAsC;EACtC,wBAAwB;AAC1B;;AAEA;EACE;;IAEE,mBAAmB;EACrB;EACA;IACE,uBAAuB;EACzB;AACF;AACA;EACE,mCAAmC;EACnC,wBAAwB;AAC1B;;AAEA;EACE;;IAEE,mBAAmB;EACrB;EACA;IACE,uBAAuB;EACzB;AACF;AACA;EACE,kCAAkC;EAClC,wBAAwB;AAC1B;;AAEA;EACE;;IAEE,mBAAmB;EACrB;EACA;IACE,uBAAuB;EACzB;AACF;AACA;EACE,mCAAmC;EACnC,wBAAwB;AAC1B;;AAEA;EACE;;IAEE,mBAAmB;EACrB;EACA;IACE,uBAAuB;EACzB;AACF;AACA;EACE,kCAAkC;EAClC,wBAAwB;AAC1B;;AAEA;EACE;;IAEE,mBAAmB;EACrB;EACA;IACE,qBAAqB;EACvB;AACF;AACA;EACE,sCAAsC;EACtC,wBAAwB;AAC1B;;AAEA,wDAAwD;AACxD,oEAAoE;AACpE;EACE;IACE,wBAAwB;IACxB,2BAA2B;EAC7B;EACA;IACE,0BAA0B;IAC1B,2BAA2B;EAC7B;AACF;;AAEA;EACE,yBAAyB;EACzB,yBAAyB,EAAE,wDAAwD;EACnF,wCAAwC;AAC1C;;AAEA;EACE,yBAAyB;EACzB,yBAAyB,EAAE,+CAA+C;EAC1E,wCAAwC;AAC1C;;AAEA;EACE,yBAAyB;EACzB,yBAAyB,EAAE,0CAA0C;EACrE,wCAAwC;AAC1C;;AAEA;EACE,yBAAyB;EACzB,yBAAyB,EAAE,qCAAqC;EAChE,wCAAwC;AAC1C;;AAEA;EACE,yBAAyB;EACzB,yBAAyB,EAAE,6BAA6B;EACxD,wCAAwC;AAC1C;;AAEA;EACE,yBAAyB;EACzB,yBAAyB,EAAE,6BAA6B;EACxD,wCAAwC;AAC1C;;AAEA,iDAAiD;AACjD;EACE;;IAEE,gCAAgC;EAClC;EACA;IACE,uBAAuB;EACzB;EACA;IACE,qBAAqB;EACvB;EACA;IACE,uBAAuB;EACzB;AACF;AACA;EACE,yCAAyC;EACzC,wBAAwB;AAC1B;;AAEA;EACE;;IAEE,gCAAgC;EAClC;EACA;IACE,oCAAoC;EACtC;EACA;IACE,mCAAmC;EACrC;EACA;IACE,oCAAoC;EACtC;AACF;AACA;EACE,sCAAsC;EACtC,wBAAwB;AAC1B;;AAEA;EACE;;IAEE,gCAAgC;EAClC;EACA;IACE,qCAAqC;EACvC;EACA;IACE,mCAAmC;EACrC;EACA;IACE,oCAAoC;EACtC;AACF;AACA;EACE,qCAAqC;EACrC,wBAAwB;AAC1B;;AAEA;EACE;;IAEE,gCAAgC;EAClC;EACA;IACE,oCAAoC;EACtC;EACA;IACE,mCAAmC;EACrC;EACA;IACE,oCAAoC;EACtC;AACF;AACA;EACE,sCAAsC;EACtC,wBAAwB;AAC1B;;AAEA;EACE;;IAEE,gCAAgC;EAClC;EACA;IACE,qCAAqC;EACvC;EACA;IACE,mCAAmC;EACrC;EACA;IACE,oCAAoC;EACtC;AACF;AACA;EACE,qCAAqC;EACrC,wBAAwB;AAC1B;;AAEA;EACE;;IAEE,gCAAgC;EAClC;EACA;IACE,oCAAoC;EACtC;EACA;IACE,mCAAmC;EACrC;EACA;IACE,oCAAoC;EACtC;AACF;AACA;EACE,yCAAyC;EACzC,wBAAwB;AAC1B;;AAEA,gDAAgD;AAChD;EACE;IACE;mDAC+C;EACjD;EACA;IACE;mDAC+C;EACjD;AACF;AACA,wCAAwC;AACxC;EACE;;IAEE,8BAA8B;EAChC;EACA;;IAEE,kCAAkC;EACpC;AACF;;AAEA;EACE;;IAEE,kCAAkC;EACpC;EACA;;IAEE,kCAAkC;EACpC;AACF;;AAEA;EACE;;IAEE,kCAAkC;EACpC;EACA;;IAEE,kCAAkC;EACpC;AACF;;AAEA;EACE;;IAEE,kCAAkC;EACpC;EACA;;IAEE,kCAAkC;EACpC;AACF;;AAEA;EACE;;IAEE,kCAAkC;EACpC;EACA;;IAEE,kCAAkC;EACpC;AACF;;AAEA;EACE;;IAEE,kCAAkC;EACpC;EACA;;IAEE,kCAAkC;EACpC;AACF;;AAEA;EACE,qDAAqD;AACvD;;AAEA;EACE,mDAAmD;AACrD;;AAEA;EACE,iDAAiD;AACnD;;AAEA;EACE,mDAAmD;AACrD;;AAEA;EACE,iDAAiD;AACnD;;AAEA;EACE,sDAAsD;AACxD;;AAEA,yEAAyE;AACzE;EACE;;IAEE,wBAAwB;IACxB,2BAA2B;EAC7B;EACA;IACE,0BAA0B;IAC1B,+BAA+B;EACjC;AACF;;AAEA;EACE,yBAAyB;EACzB,6BAA6B;EAC7B,yCAAyC;AAC3C;;AAEA;EACE,yBAAyB;EACzB,6BAA6B;EAC7B,yCAAyC;AAC3C;;AAEA;EACE,yBAAyB;EACzB,6BAA6B;EAC7B,yCAAyC;AAC3C;;AAEA;EACE,yBAAyB;EACzB,6BAA6B;EAC7B,yCAAyC;AAC3C;;AAEA;EACE,yBAAyB;EACzB,6BAA6B;EAC7B,yCAAyC;AAC3C;;AAEA;EACE,yBAAyB;EACzB,6BAA6B;EAC7B,uCAAuC;AACzC;;AAEA,6DAA6D;AAC7D;EACE;;IAEE,UAAU;IACV,2BAA2B;EAC7B;EACA;IACE,YAAY;IACZ,sBAAsB,EAAE,iBAAiB;EAC3C;AACF;;AAEA,sDAAsD;AACtD,oDAAoD;AACpD;EACE;IACE,yCAAyC;EAC3C;EACA;IACE,2CAA2C;EAC7C;EACA;IACE,0CAA0C;EAC5C;EACA;IACE,2CAA2C;EAC7C;EACA;IACE,yCAAyC;EAC3C;AACF;;AAEA;EACE,+BAA+B;EAC/B,aAAa;EACb,iBAAiB;AACnB;;AAEA;EACE,+BAA+B;EAC/B,aAAa;EACb,iBAAiB;AACnB;;AAEA;EACE,+BAA+B;EAC/B,aAAa;EACb,iBAAiB;AACnB;;AAEA;EACE,+BAA+B;EAC/B,aAAa;EACb,iBAAiB;AACnB;;AAEA;EACE,+BAA+B;EAC/B,aAAa;EACb,iBAAiB;AACnB;;AAEA;EACE,+BAA+B;EAC/B,aAAa;EACb,iBAAiB;AACnB","sourcesContent":["@keyframes pulse_outermost {\n  0%,\n  100% {\n    transform: scale(1);\n  }\n  50% {\n    transform: scale(0.92);\n  }\n}\n.outermost {\n  animation: pulse_outermost 5s infinite;\n  transform-origin: center;\n}\n\n@keyframes pulse_second {\n  0%,\n  100% {\n    transform: scale(1);\n  }\n  50% {\n    transform: scale(0.856);\n  }\n}\n.second {\n  animation: pulse_second 5s infinite;\n  transform-origin: center;\n}\n\n@keyframes pulse_third {\n  0%,\n  100% {\n    transform: scale(1);\n  }\n  50% {\n    transform: scale(0.792);\n  }\n}\n.third {\n  animation: pulse_third 5s infinite;\n  transform-origin: center;\n}\n\n@keyframes pulse_fourth {\n  0%,\n  100% {\n    transform: scale(1);\n  }\n  50% {\n    transform: scale(0.728);\n  }\n}\n.fourth {\n  animation: pulse_fourth 5s infinite;\n  transform-origin: center;\n}\n\n@keyframes pulse_fifth {\n  0%,\n  100% {\n    transform: scale(1);\n  }\n  50% {\n    transform: scale(0.664);\n  }\n}\n.fifth {\n  animation: pulse_fifth 5s infinite;\n  transform-origin: center;\n}\n\n@keyframes pulse_innermost {\n  0%,\n  100% {\n    transform: scale(1);\n  }\n  50% {\n    transform: scale(0.6);\n  }\n}\n.innermost {\n  animation: pulse_innermost 5s infinite;\n  transform-origin: center;\n}\n\n/* thoughtfulness animation to indicate Pi is thinking */\n/* flipcard animation to indicate Say, Pi is processing the prompt */\n@keyframes thinkingFlip {\n  0%, 100% {\n    transform: rotateY(0deg);\n    fill: var(--original-color);\n  }\n  50% {\n    transform: rotateY(180deg);\n    fill: var(--thinking-color);\n  }\n}\n\n.outermost.piThinking {\n  --original-color: #e4f2d1;\n  --thinking-color: #ffe4b2; /* A light orange for a soft but noticeable transition */\n  animation: thinkingFlip 1.0s ease-in-out;\n}\n\n.second.piThinking {\n  --original-color: #cce8b5;\n  --thinking-color: #ffddb4; /* A slightly different shade of light orange */\n  animation: thinkingFlip 1.1s ease-in-out;\n}\n\n.third.piThinking {\n  --original-color: #b3db95;\n  --thinking-color: #ffd5b7; /* A subtly warmer shade of light orange */\n  animation: thinkingFlip 1.2s ease-in-out;\n}\n\n.fourth.piThinking {\n  --original-color: #9bd078;\n  --thinking-color: #ffcdca; /* A variation leaning towards pink */\n  animation: thinkingFlip 1.3s ease-in-out;\n}\n\n.fifth.piThinking {\n  --original-color: #83c55c;\n  --thinking-color: #ffc5dc; /* A soft pink for contrast */\n  animation: thinkingFlip 1.4s ease-in-out;\n}\n\n.innermost.piThinking {\n  --original-color: #428a2f;\n  --thinking-color: #ffbde6; /* A distinct light magenta */\n  animation: thinkingFlip 1.5s ease-in-out;\n}\n\n/* playful animation to indicate Pi is speaking */\n@keyframes speaking_outermost {\n  0%,\n  100% {\n    transform: scale(1) rotate(0deg);\n  }\n  25% {\n    transform: scale(0.995);\n  }\n  50% {\n    transform: scale(0.9);\n  }\n  75% {\n    transform: scale(0.895);\n  }\n}\n.outermost.piSpeaking {\n  animation: speaking_outermost 2s infinite;\n  transform-origin: center;\n}\n\n@keyframes speaking_second {\n  0%,\n  100% {\n    transform: scale(1) rotate(0deg);\n  }\n  25% {\n    transform: scale(0.98) rotate(-1deg);\n  }\n  50% {\n    transform: scale(0.87) rotate(0deg);\n  }\n  75% {\n    transform: scale(0.865) rotate(1deg);\n  }\n}\n.second.piSpeaking {\n  animation: speaking_second 2s infinite;\n  transform-origin: center;\n}\n\n@keyframes speaking_third {\n  0%,\n  100% {\n    transform: scale(1) rotate(0deg);\n  }\n  25% {\n    transform: scale(0.965) rotate(-2deg);\n  }\n  50% {\n    transform: scale(0.84) rotate(0deg);\n  }\n  75% {\n    transform: scale(0.835) rotate(2deg);\n  }\n}\n.third.piSpeaking {\n  animation: speaking_third 2s infinite;\n  transform-origin: center;\n}\n\n@keyframes speaking_fourth {\n  0%,\n  100% {\n    transform: scale(1) rotate(0deg);\n  }\n  25% {\n    transform: scale(0.95) rotate(-3deg);\n  }\n  50% {\n    transform: scale(0.81) rotate(0deg);\n  }\n  75% {\n    transform: scale(0.805) rotate(3deg);\n  }\n}\n.fourth.piSpeaking {\n  animation: speaking_fourth 2s infinite;\n  transform-origin: center;\n}\n\n@keyframes speaking_fifth {\n  0%,\n  100% {\n    transform: scale(1) rotate(0deg);\n  }\n  25% {\n    transform: scale(0.935) rotate(-4deg);\n  }\n  50% {\n    transform: scale(0.78) rotate(0deg);\n  }\n  75% {\n    transform: scale(0.775) rotate(4deg);\n  }\n}\n.fifth.piSpeaking {\n  animation: speaking_fifth 2s infinite;\n  transform-origin: center;\n}\n\n@keyframes speaking_innermost {\n  0%,\n  100% {\n    transform: scale(1) rotate(0deg);\n  }\n  25% {\n    transform: scale(0.92) rotate(-5deg);\n  }\n  50% {\n    transform: scale(0.75) rotate(0deg);\n  }\n  75% {\n    transform: scale(0.745) rotate(5deg);\n  }\n}\n.innermost.piSpeaking {\n  animation: speaking_innermost 2s infinite;\n  transform-origin: center;\n}\n\n/* wave animation to indicate user is speaking */\n@keyframes userSpeakingAnimation {\n  50% {\n    transform: scaleY(0.05) scaleX(var(--width-factor))\n      translateX(calc(-50% + var(--spread-amount)));\n  }\n  100% {\n    transform: scaleY(1) scaleX(var(--width-factor))\n      translateX(calc(-50% + var(--spread-amount)));\n  }\n}\n/* user speaking oscillation animation */\n@keyframes waveform_outermost {\n  0%,\n  100% {\n    transform: scaleY(1) scaleX(1);\n  }\n  25%,\n  75% {\n    transform: scaleY(0.9) scaleX(0.9);\n  }\n}\n\n@keyframes waveform_second {\n  0%,\n  100% {\n    transform: scaleY(0.9) scaleX(0.9);\n  }\n  25%,\n  75% {\n    transform: scaleY(0.8) scaleX(0.8);\n  }\n}\n\n@keyframes waveform_third {\n  0%,\n  100% {\n    transform: scaleY(0.8) scaleX(0.8);\n  }\n  25%,\n  75% {\n    transform: scaleY(0.7) scaleX(0.7);\n  }\n}\n\n@keyframes waveform_fourth {\n  0%,\n  100% {\n    transform: scaleY(0.7) scaleX(0.7);\n  }\n  25%,\n  75% {\n    transform: scaleY(0.6) scaleX(0.6);\n  }\n}\n\n@keyframes waveform_fifth {\n  0%,\n  100% {\n    transform: scaleY(0.6) scaleX(0.6);\n  }\n  25%,\n  75% {\n    transform: scaleY(0.5) scaleX(0.5);\n  }\n}\n\n@keyframes waveform_innermost {\n  0%,\n  100% {\n    transform: scaleY(0.5) scaleX(0.5);\n  }\n  25%,\n  75% {\n    transform: scaleY(0.4) scaleX(0.4);\n  }\n}\n\n.outermost.userSpeaking {\n  animation: waveform_outermost 0.7s infinite alternate;\n}\n\n.second.userSpeaking {\n  animation: waveform_second 0.65s infinite alternate;\n}\n\n.third.userSpeaking {\n  animation: waveform_third 0.6s infinite alternate;\n}\n\n.fourth.userSpeaking {\n  animation: waveform_fourth 0.55s infinite alternate;\n}\n\n.fifth.userSpeaking {\n  animation: waveform_fifth 0.5s infinite alternate;\n}\n\n.innermost.userSpeaking {\n  animation: waveform_innermost 0.45s infinite alternate;\n}\n\n/* flipcard animation to indicate Say, Pi is transcribing audio to text */\n@keyframes transcribingFlip {\n  0%,\n  100% {\n    transform: rotateY(0deg);\n    fill: var(--original-color);\n  }\n  50% {\n    transform: rotateY(180deg);\n    fill: var(--transcribing-color);\n  }\n}\n\n.outermost.transcribing {\n  --original-color: #e4f2d1;\n  --transcribing-color: #b3e0fe;\n  animation: transcribingFlip 1.5s infinite;\n}\n\n.second.transcribing {\n  --original-color: #cce8b5;\n  --transcribing-color: #89c2ff;\n  animation: transcribingFlip 1.6s infinite;\n}\n\n.third.transcribing {\n  --original-color: #b3db95;\n  --transcribing-color: #5fa4ff;\n  animation: transcribingFlip 1.7s infinite;\n}\n\n.fourth.transcribing {\n  --original-color: #9bd078;\n  --transcribing-color: #3586ff;\n  animation: transcribingFlip 1.8s infinite;\n}\n\n.fifth.transcribing {\n  --original-color: #83c55c;\n  --transcribing-color: #0b69e3;\n  animation: transcribingFlip 1.9s infinite;\n}\n\n.innermost.transcribing {\n  --original-color: #428a2f;\n  --transcribing-color: #0053bf;\n  animation: transcribingFlip 2s infinite;\n}\n\n/* heartbeat animation to indicate Pi is preparing to speak */\n@keyframes heartbeat {\n  0%,\n  100% {\n    opacity: 1;\n    fill: var(--original-color);\n  }\n  50% {\n    opacity: 0.5;\n    fill: rgb(245 238 223); /* bg-cream-550 */\n  }\n}\n\n/* toned-down dissary animation to indicate an error */\n/* toned-down error animation with reduced opacity */\n@keyframes errorAnimation {\n  0% {\n    transform: rotate(0deg) translate(0%, 0%);\n  }\n  25% {\n    transform: rotate(-5deg) translate(-5%, 5%);\n  }\n  50% {\n    transform: rotate(5deg) translate(5%, -5%);\n  }\n  75% {\n    transform: rotate(-5deg) translate(-5%, 5%);\n  }\n  100% {\n    transform: rotate(0deg) translate(0%, 0%);\n  }\n}\n\n.outermost.error {\n  animation: errorAnimation 25s 1;\n  fill: #ff0000;\n  fill-opacity: 0.7;\n}\n\n.second.error {\n  animation: errorAnimation 25s 1;\n  fill: #ff3300;\n  fill-opacity: 0.7;\n}\n\n.third.error {\n  animation: errorAnimation 25s 1;\n  fill: #ff6600;\n  fill-opacity: 0.7;\n}\n\n.fourth.error {\n  animation: errorAnimation 25s 1;\n  fill: #ff9900;\n  fill-opacity: 0.7;\n}\n\n.fifth.error {\n  animation: errorAnimation 25s 1;\n  fill: #ffcc00;\n  fill-opacity: 0.7;\n}\n\n.innermost.error {\n  animation: errorAnimation 25s 1;\n  fill: #ffff00;\n  fill-opacity: 0.7;\n}\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1311,7 +1360,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse_outermost {
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `.hidden{display:none !important}#saypi-callButton.disabled svg path.circle{fill:#f5eedf}.mobile-device #saypi-enterButton,.mobile-device #saypi-exitButton{position:fixed;top:4rem;left:10px;width:3rem;height:3rem;padding:6px;border:0;z-index:60}.mobile-device #saypi-enterButton svg path.inner,.mobile-device #saypi-exitButton svg path.inner{color:#0d3c26}`, "",{"version":3,"sources":["webpack://./src/styles/common.scss"],"names":[],"mappings":"AAAA,QACE,uBAAA,CAGF,2CACE,YAAA,CAKA,mEAEE,cAAA,CACA,QAAA,CACA,SAAA,CACA,UAAA,CACA,WAAA,CACA,WAAA,CACA,QAAA,CACA,UAAA,CACA,iGACE,aAAA","sourcesContent":[".hidden {\n  display: none !important;\n}\n\n#saypi-callButton.disabled svg path.circle {\n  fill: rgb(245 238 223); /* bg-cream-550 */\n}\n\n.mobile-device {\n  /* maximize (mobile view) button is only displayed on compatible devices */\n  #saypi-enterButton,\n  #saypi-exitButton {\n    position: fixed;\n    top: 4rem;\n    left: 10px;\n    width: 3rem;\n    height: 3rem;\n    padding: 6px;\n    border: 0;\n    z-index: 60;\n    svg path.inner {\n      color: rgb(13 60 38); /* text-primary-700 */\n    }\n  }\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `.hidden{display:none !important}#saypi-callButton.disabled svg path.circle{fill:#f5eedf}.mobile-device #saypi-enterButton,.mobile-device #saypi-exitButton{position:fixed;top:4rem;left:10px;width:3rem;height:3rem;padding:6px;border:0;z-index:60}.mobile-device #saypi-enterButton svg path.inner,.mobile-device #saypi-exitButton svg path.inner{color:#0d3c26}@keyframes fillup{to{stroke-dashoffset:0}}@keyframes changeColor{0%{stroke:green}50%{stroke:#ff0}100%{stroke:red}}#progress-ring{transform:rotate(-90deg);transform-origin:50% 50%}#progress-ring.active{animation:fillup 10s linear forwards,changeColor 10s linear forwards}.glow{border:none;box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc;animation:neon-glow-animation 1.5s ease-in-out infinite alternate}.glow-fade-out{box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc;animation:fade-out-glow-animation 3s ease-out forwards}@keyframes fade-out-glow-animation{from{box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc}to{box-shadow:0 0 1px #ffd1dc,0 0 2px #ffd1dc,0 0 3px #ffd1dc,0 0 4px #fff,0 0 5px #fff}}@keyframes neon-glow-animation{from{box-shadow:0 0 5px #ffd1dc,0 0 10px #ffd1dc,0 0 15px #ffd1dc,0 0 20px #ffd1dc,0 0 25px #fff}to{box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc}}`, "",{"version":3,"sources":["webpack://./src/styles/common.scss","webpack://./src/styles/progress-ring.scss","webpack://./src/styles/neon.scss"],"names":[],"mappings":"AAAA,QACE,uBAAA,CAGF,2CACE,YAAA,CAKA,mEAEE,cAAA,CACA,QAAA,CACA,SAAA,CACA,UAAA,CACA,WAAA,CACA,WAAA,CACA,QAAA,CACA,UAAA,CACA,iGACE,aAAA,CCrBN,kBACI,GACE,mBAAA,CAAA,CAIJ,uBACE,GAAA,YAAA,CACA,IAAA,WAAA,CACA,KAAA,UAAA,CAAA,CAGF,eACE,wBAAA,CACA,wBAAA,CAGF,sBACE,oEAAA,CCdJ,MACI,WAAA,CAGA,iIACA,CASA,iEAAA,CAGJ,eACI,iIACA,CASA,sDAAA,CAGJ,mCACI,KACI,iIACA,CAQJ,GACI,oFACA,CAAA,CASR,+BACI,KACI,2FACA,CAMJ,GACI,iIACA,CAAA","sourcesContent":[".hidden {\n  display: none !important;\n}\n\n#saypi-callButton.disabled svg path.circle {\n  fill: rgb(245 238 223); /* bg-cream-550 */\n}\n\n.mobile-device {\n  /* maximize (mobile view) button is only displayed on compatible devices */\n  #saypi-enterButton,\n  #saypi-exitButton {\n    position: fixed;\n    top: 4rem;\n    left: 10px;\n    width: 3rem;\n    height: 3rem;\n    padding: 6px;\n    border: 0;\n    z-index: 60;\n    svg path.inner {\n      color: rgb(13 60 38); /* text-primary-700 */\n    }\n  }\n}\n\n@import \"progress-ring.scss\";\n@import \"neon.scss\";","@keyframes fillup {\n    to {\n      stroke-dashoffset: 0;\n    }\n  }\n  \n  @keyframes changeColor {\n    0% { stroke: green; }\n    50% { stroke: yellow; }\n    100% { stroke: red; }\n  }\n  \n  #progress-ring {\n    transform: rotate(-90deg);\n    transform-origin: 50% 50%;\n  }\n  \n  #progress-ring.active {\n    animation: fillup 10s linear forwards, changeColor 10s linear forwards;\n  }","$glow-color: #ffd1dc; // sunset-peach\n$fade-color: #ffd1dc; // sunset-peach\n\n\n.glow {\n    border: none;\n    \n    // Multiple box shadows create the glow effect\n    box-shadow: \n    0 0 10px $glow-color,\n    0 0 20px $glow-color,\n    0 0 30px $glow-color,\n    0 0 40px $glow-color,\n    0 0 50px $glow-color,\n    0 0 60px $glow-color,\n    0 0 70px $glow-color;\n  \n    // Animation for the glow to appear to pulse\n    animation: neon-glow-animation 1.5s ease-in-out infinite alternate;\n}\n\n.glow-fade-out {\n    box-shadow: \n    0 0 10px $fade-color,\n    0 0 20px $fade-color,\n    0 0 30px $fade-color,\n    0 0 40px $fade-color,\n    0 0 50px $fade-color,\n    0 0 60px $fade-color,\n    0 0 70px $fade-color;\n\n    // Start the fade out animation\n    animation: fade-out-glow-animation 3s ease-out forwards;\n}\n\n@keyframes fade-out-glow-animation {\n    from {\n        box-shadow: \n        0 0 10px $fade-color,\n        0 0 20px $fade-color,\n        0 0 30px $fade-color,\n        0 0 40px $fade-color,\n        0 0 50px $fade-color,\n        0 0 60px $fade-color,\n        0 0 70px $fade-color;\n    }\n    to {\n        box-shadow:\n        0 0 1px $fade-color,\n        0 0 2px $fade-color,\n        0 0 3px $fade-color,\n        0 0 4px #fff,\n        0 0 5px #fff,\n    }\n}\n\n\n@keyframes neon-glow-animation {\n    from {\n        box-shadow: \n        0 0 5px $glow-color,\n        0 0 10px $glow-color,\n        0 0 15px $glow-color,\n        0 0 20px $glow-color,\n        0 0 25px #fff,\n    }\n    to {\n        box-shadow: \n        0 0 10px $glow-color,\n        0 0 20px $glow-color,\n        0 0 30px $glow-color,\n        0 0 40px $glow-color,\n        0 0 50px $glow-color,\n        0 0 60px $glow-color,\n        0 0 70px $glow-color;\n    }\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1334,7 +1383,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.hidden{display:none !important}#saypi
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(0.9)}100%{transform:scale(1)}}html.desktop-view #saypi-talkButton{display:none}html.desktop-view #saypi-callButton{height:2.25rem;width:2.25rem;position:relative;margin:.5rem 0 .5rem 0}html.desktop-view .saypi-prompt-container{padding-right:0}html.desktop-view #saypi-notification>svg{width:3rem;height:3rem;bottom:4rem;right:12rem;position:fixed}html.desktop-view #saypi-exitButton{display:none}`, "",{"version":3,"sources":["webpack://./src/styles/desktop.scss"],"names":[],"mappings":"AACE,iBACE,GACE,kBAAA,CAEF,IACE,oBAAA,CAEF,KACE,kBAAA,CAAA,CAIJ,oCAEE,YAAA,CAGF,oCACE,cAAA,CACA,aAAA,CACA,iBAAA,CACA,sBAAA,CAGF,0CAEE,eAAA,CAGF,0CACE,UAAA,CACA,WAAA,CACA,WAAA,CACA,WAAA,CACA,cAAA,CAGF,oCACE,YAAA","sourcesContent":["html.desktop-view {\n  @keyframes pulse {\n    0% {\n      transform: scale(1);\n    }\n    50% {\n      transform: scale(0.9);\n    }\n    100% {\n      transform: scale(1);\n    }\n  }\n\n  #saypi-talkButton {\n    /* not needed on desktop with call button */\n    display: none;\n  }\n\n  #saypi-callButton {\n    height: 2.25rem;\n    width: 2.25rem;\n    position: relative;\n    margin: 0.5rem 0 0.5rem 0;\n  }\n\n  .saypi-prompt-container {\n    /* make room in the prompt text area for the call button */\n    padding-right: 0;\n  }\n\n  #saypi-notification > svg {\n    width: 3rem;\n    height: 3rem;\n    bottom: 4rem;\n    right: 12rem;\n    position: fixed;\n  }\n\n  #saypi-exitButton {\n    display: none;\n  }\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(0.9)}100%{transform:scale(1)}}html.desktop-view #saypi-talkButton{display:none}html.desktop-view #saypi-callButton{width:2.25rem;position:relative;margin-right:0}html.desktop-view .saypi-prompt-container{padding-right:0}html.desktop-view #saypi-notification>svg{width:3rem;height:3rem;bottom:4rem;right:12rem;position:fixed}html.desktop-view #saypi-exitButton{display:none}`, "",{"version":3,"sources":["webpack://./src/styles/desktop.scss"],"names":[],"mappings":"AACE,iBACE,GACE,kBAAA,CAEF,IACE,oBAAA,CAEF,KACE,kBAAA,CAAA,CAIJ,oCAEE,YAAA,CAGF,oCACE,aAAA,CACA,iBAAA,CACA,cAAA,CAGF,0CAEE,eAAA,CAGF,0CACE,UAAA,CACA,WAAA,CACA,WAAA,CACA,WAAA,CACA,cAAA,CAGF,oCACE,YAAA","sourcesContent":["html.desktop-view {\n  @keyframes pulse {\n    0% {\n      transform: scale(1);\n    }\n    50% {\n      transform: scale(0.9);\n    }\n    100% {\n      transform: scale(1);\n    }\n  }\n\n  #saypi-talkButton {\n    /* not needed on desktop with call button */\n    display: none;\n  }\n\n  #saypi-callButton {\n    width: 2.25rem;\n    position: relative;\n    margin-right: 0;\n  }\n\n  .saypi-prompt-container {\n    /* make room in the prompt text area for the call button */\n    padding-right: 0;\n  }\n\n  #saypi-notification > svg {\n    width: 3rem;\n    height: 3rem;\n    bottom: 4rem;\n    right: 12rem;\n    position: fixed;\n  }\n\n  #saypi-exitButton {\n    display: none;\n  }\n}\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1357,7 +1406,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse{0%{transform:scale(1)
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `html.mobile-view #saypi-panel,html.mobile-view .notification{width:100%;position:fixed;left:0;background-color:rgba(245,238,223,.98);height:100svh;top:0}html.mobile-view #saypi-talkButton{background-color:rgba(0,0,0,0);border-radius:0;margin:0}html.mobile-view #saypi-talkButton svg{width:100vw;height:100svh}html.mobile-view #saypi-notification{z-index:100;background-color:rgba(0,0,0,0)}html.mobile-view #saypi-notification svg{width:75%;height:100%;margin:auto}html.mobile-view #__next>main>div>div>div.fixed.top-4.right-6>button,html.mobile-view #saypi-experiences-button{transform:scale(1.5)}html.mobile-view div.bg-gradient-to-b{display:none}html.mobile-view #saypi-audio-controls div.p-1{display:none}html.mobile-view #saypi-audio-controls button.group{transform:scale(2) !important;z-index:50}html.mobile-view #saypi-audio-controls button.group+button{display:none}html.mobile-view .text-body-chat-m{padding-top:0}html.mobile-view #saypi-enterButton{display:none}html.mobile-view #saypi-footer{display:none}html.mobile-view #saypi-prompt-ancestor{display:none}html.mobile-view #saypi-submitButton{display:none}html.mobile-view #saypi-callButton{position:fixed;bottom:4rem;left:0;right:0;margin:auto;width:4.5rem;height:4.5rem;padding:6px;border:0;z-index:80}`, "",{"version":3,"sources":["webpack://./src/styles/mobile.scss"],"names":[],"mappings":"AACE,6DAEE,UAAA,CACA,cAAA,CACA,MAAA,CACA,sCAAA,CAEA,aAAA,CACA,KAAA,CAGF,mCACE,8BAAA,CACA,eAAA,CACA,QAAA,CACA,uCACE,WAAA,CACA,aAAA,CAIJ,qCACE,WAAA,CACA,8BAAA,CACA,yCACE,SAAA,CACA,WAAA,CACA,WAAA,CAKJ,gHAEE,oBAAA,CAIF,sCACE,YAAA,CAMA,+CACE,YAAA,CAGF,oDACE,6BAAA,CACA,UAAA,CAEA,2DACE,YAAA,CAMN,mCACE,aAAA,CAGF,oCACE,YAAA,CAGF,+BACE,YAAA,CAGF,wCAGE,YAAA,CAIF,qCACE,YAAA,CAGF,mCACE,cAAA,CACA,WAAA,CACA,MAAA,CACA,OAAA,CACA,WAAA,CACA,YAAA,CACA,aAAA,CACA,WAAA,CACA,QAAA,CACA,UAAA","sourcesContent":["html.mobile-view {\n  #saypi-panel,\n  .notification {\n    width: 100%;\n    position: fixed;\n    left: 0;\n    background-color: rgba(245, 238, 223, 0.98);\n\n    height: 100svh;\n    top: 0;\n  }\n\n  #saypi-talkButton {\n    background-color: transparent;\n    border-radius: 0;\n    margin: 0;\n    svg {\n      width: 100vw;\n      height: 100svh;\n    }\n  }\n\n  #saypi-notification {\n    z-index: 100;\n    background-color: transparent;\n    svg {\n      width: 75%;\n      height: 100%;\n      margin: auto;\n    }\n  }\n\n  /* Pi controls: ellipsis, experiences */\n  #__next > main > div > div > div.fixed.top-4.right-6 > button,\n  #saypi-experiences-button {\n    transform: scale(1.5);\n  }\n\n  /* hide an ugly artifact */\n  div.bg-gradient-to-b {\n    display: none;\n  }\n\n  /* Pi controls: mute/unmute */\n  #saypi-audio-controls {\n    /* hide the voice options */\n    div.p-1 {\n      display: none;\n    }\n    /* scale the mute button */\n    button.group {\n      transform: scale(2) !important;\n      z-index: 50;\n      /* hide the voice selector twisty */\n      + button {\n        display: none;\n      }\n    }\n  }\n\n  /* fix an alignment issue with the \"new ui layout\" */\n  .text-body-chat-m {\n    padding-top: 0;\n  }\n\n  #saypi-enterButton {\n    display: none;\n  }\n\n  #saypi-footer {\n    display: none;\n  }\n\n  #saypi-prompt-ancestor {\n    /* hides the row containing the text area control */\n    /* important: hides virtual keyboard on android */\n    display: none;\n    /* the call button, usually nested in the prompt, is detached while in mobile view */\n  }\n\n  #saypi-submitButton {\n    display: none;\n  }\n\n  #saypi-callButton {\n    position: fixed;\n    bottom: 4rem;\n    left: 0;\n    right: 0;\n    margin: auto;\n    width: 4.5rem;\n    height: 4.5rem;\n    padding: 6px;\n    border: 0;\n    z-index: 80;\n  }\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `html.mobile-view #saypi-panel,html.mobile-view .notification{width:100%;position:fixed;left:0;background-color:rgba(245,238,223,.98);height:100svh;top:0}html.mobile-view #saypi-talkButton{background-color:rgba(0,0,0,0);border-radius:0;margin:0}html.mobile-view #saypi-talkButton svg{width:100vw;height:100svh}html.mobile-view #saypi-notification{z-index:100;background-color:rgba(0,0,0,0)}html.mobile-view #saypi-notification svg{width:75%;height:100%;margin:auto}html.mobile-view #__next>main>div>div>div.fixed.top-4.right-6>button,html.mobile-view #saypi-experiences-button{transform:scale(1.5)}html.mobile-view div.bg-gradient-to-b{display:none}html.mobile-view #saypi-audio-controls div.p-1{display:none}html.mobile-view #saypi-audio-controls button.group{transform:scale(2) !important;z-index:50}html.mobile-view #saypi-audio-controls button.group+button{display:none}html.mobile-view .text-body-chat-m{padding-top:0}html.mobile-view #saypi-enterButton{display:none}html.mobile-view #saypi-footer{display:none}html.mobile-view #saypi-prompt-ancestor{display:none}html.mobile-view #saypi-submitButton{display:none}html.mobile-view #saypi-callButton{position:fixed;bottom:4rem;left:0;right:0;margin:auto;width:4.5rem;height:4.5rem;border:0;z-index:80}`, "",{"version":3,"sources":["webpack://./src/styles/mobile.scss"],"names":[],"mappings":"AACE,6DAEE,UAAA,CACA,cAAA,CACA,MAAA,CACA,sCAAA,CAEA,aAAA,CACA,KAAA,CAGF,mCACE,8BAAA,CACA,eAAA,CACA,QAAA,CACA,uCACE,WAAA,CACA,aAAA,CAIJ,qCACE,WAAA,CACA,8BAAA,CACA,yCACE,SAAA,CACA,WAAA,CACA,WAAA,CAKJ,gHAEE,oBAAA,CAIF,sCACE,YAAA,CAMA,+CACE,YAAA,CAGF,oDACE,6BAAA,CACA,UAAA,CAEA,2DACE,YAAA,CAMN,mCACE,aAAA,CAGF,oCACE,YAAA,CAGF,+BACE,YAAA,CAGF,wCAGE,YAAA,CAIF,qCACE,YAAA,CAGF,mCACE,cAAA,CACA,WAAA,CACA,MAAA,CACA,OAAA,CACA,WAAA,CACA,YAAA,CACA,aAAA,CACA,QAAA,CACA,UAAA","sourcesContent":["html.mobile-view {\n  #saypi-panel,\n  .notification {\n    width: 100%;\n    position: fixed;\n    left: 0;\n    background-color: rgba(245, 238, 223, 0.98);\n\n    height: 100svh;\n    top: 0;\n  }\n\n  #saypi-talkButton {\n    background-color: transparent;\n    border-radius: 0;\n    margin: 0;\n    svg {\n      width: 100vw;\n      height: 100svh;\n    }\n  }\n\n  #saypi-notification {\n    z-index: 100;\n    background-color: transparent;\n    svg {\n      width: 75%;\n      height: 100%;\n      margin: auto;\n    }\n  }\n\n  /* Pi controls: ellipsis, experiences */\n  #__next > main > div > div > div.fixed.top-4.right-6 > button,\n  #saypi-experiences-button {\n    transform: scale(1.5);\n  }\n\n  /* hide an ugly artifact */\n  div.bg-gradient-to-b {\n    display: none;\n  }\n\n  /* Pi controls: mute/unmute */\n  #saypi-audio-controls {\n    /* hide the voice options */\n    div.p-1 {\n      display: none;\n    }\n    /* scale the mute button */\n    button.group {\n      transform: scale(2) !important;\n      z-index: 50;\n      /* hide the voice selector twisty */\n      + button {\n        display: none;\n      }\n    }\n  }\n\n  /* fix an alignment issue with the \"new ui layout\" */\n  .text-body-chat-m {\n    padding-top: 0;\n  }\n\n  #saypi-enterButton {\n    display: none;\n  }\n\n  #saypi-footer {\n    display: none;\n  }\n\n  #saypi-prompt-ancestor {\n    /* hides the row containing the text area control */\n    /* important: hides virtual keyboard on android */\n    display: none;\n    /* the call button, usually nested in the prompt, is detached while in mobile view */\n  }\n\n  #saypi-submitButton {\n    display: none;\n  }\n\n  #saypi-callButton {\n    position: fixed;\n    bottom: 4rem;\n    left: 0;\n    right: 0;\n    margin: auto;\n    width: 4.5rem;\n    height: 4.5rem;\n    border: 0;\n    z-index: 80;\n  }\n}\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -2251,6 +2300,38 @@ function styleTagTransform(css, styleElement) {
   }
 }
 module.exports = styleTagTransform;
+
+/***/ }),
+
+/***/ 879:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   v: () => (/* binding */ getResourceUrl)
+/* harmony export */ });
+/* harmony import */ var _ConfigModule_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(186);
+
+// used by browser extensions
+function getExtensionResourceUrl(filename) {
+    const web_accessible_resources_dir = "public";
+    const filepath = web_accessible_resources_dir + "/" + filename;
+    return chrome.runtime.getURL(filepath);
+}
+// used by userscripts
+function getAppServerResourceUrl(filename) {
+    return `${_ConfigModule_js__WEBPACK_IMPORTED_MODULE_0__/* .config */ .v.appServerUrl}/${filename}`;
+}
+// cross-platform way to get a resource URL
+function getResourceUrl(filename) {
+    if (chrome.runtime && chrome.runtime.id) {
+        return getExtensionResourceUrl(filename);
+    }
+    else {
+        return getAppServerResourceUrl(filename);
+    }
+}
+
 
 /***/ }),
 
@@ -8151,28 +8232,18 @@ var interpreter = __webpack_require__(29);
 var dist = __webpack_require__(762);
 // EXTERNAL MODULE: ./src/ConfigModule.js
 var ConfigModule = __webpack_require__(186);
+// EXTERNAL MODULE: ./src/ResourceModule.ts
+var ResourceModule = __webpack_require__(879);
 ;// CONCATENATED MODULE: ./src/RequestInterceptor.js
 
 var filesToRedirect = ["silero_vad.onnx", "ort-wasm-simd.wasm", "ort.min.js.map", "vad.worklet.bundle.min.js"];
-
-// Function to construct the URL for local extension resources
-function getExtensionResourceUrl(filename) {
-  var web_accessible_resources_dir = "public";
-  var filepath = web_accessible_resources_dir + "/" + filename;
-  return chrome.runtime.getURL(filepath);
-}
 
 // Function to redirect specific XMLHttpRequests
 function redirectXMLHttpRequest(open) {
   XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
     var filename = url.split("/").pop();
     if (filename && filesToRedirect.includes(filename)) {
-      // Check if running as a Chrome extension
-      if (chrome.runtime && chrome.runtime.id) {
-        arguments[1] = getExtensionResourceUrl(filename);
-      } else {
-        arguments[1] = "".concat(ConfigModule/* config */.v.appServerUrl, "/").concat(filename);
-      }
+      arguments[1] = (0,ResourceModule/* getResourceUrl */.v)(filename);
     }
     open.apply(this, arguments);
   };
@@ -8183,12 +8254,7 @@ function redirectFetch(_fetch) {
   window.fetch = function (url, opts) {
     var filename = url.split("/").pop();
     if (filename && filesToRedirect.includes(filename)) {
-      // Check if running as a Chrome extension
-      if (chrome.runtime && chrome.runtime.id) {
-        arguments[0] = getExtensionResourceUrl(filename);
-      } else {
-        arguments[0] = "".concat(ConfigModule/* config */.v.appServerUrl, "/").concat(filename);
-      }
+      arguments[0] = (0,ResourceModule/* getResourceUrl */.v)(filename);
     }
     return _fetch.apply(this, arguments);
   };
@@ -8398,7 +8464,7 @@ function tearDownRecording() {
     microphone = null;
 }
 const audioInputMachine = (0,Machine/* createMachine */.C)({
-    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AkgOwAdUAXAOgCcwAbMZWSAYmQGMBHVDSgbQAYBdRKAJZYGYtjyCQAD0QBGAGwBmUgFYeG1UoCc2gCxKA7HJ4KANCACeiJXIAcpBYe0K7bpasMHtqgL6+LNExcQhJSFnZODDwoBggsPDBSaIA3LABrJKDsfCIyCI5yaKgEVKxmZHEE3j4aqWFRKskkGURVACYLawQ7PVVSRVMeOyU9bSVlbX9A9BzQ-LZC4oYwcnIsclICKkqAMw2AW3DZkLzwxaiY0rw0iqaaupaGsQkpWQQ5QxV1TR19IxM5isiHa7X6oIUqlUCn0Ll0X2mIGypzCBU4jEoNDoYEeQhELwSb3kXzUGh4Wl0BmMpi6iDsclIY102h4RnaPG0inaiORuVRF0oEGSEBoDFgxGQ5GIuJAzyaRI+7U+Ax4clUIyhhlZI1pPV6pCUoPGekMhjsTjVPJOfIWkUFFDAzA2mBiYuIWAIACUwOw4MRIDK5a8Wu85O1tIYDXZ2nYOcNFM5dVr+p84WbVLp2n0rcEbec7ZAHU7yC7YhBKsgAIIpZAYHYAIxogfx8pD8j0kNIGrsLjcYbkSl1sYcvWUCnHenspqmASR1vm+cKhYIYDwpYAyu6CG6Pc3GsHQO9jA4FBzw5ytXYvtpddpQVGY4bPAZ2gpubPeQu0faV2vipuPTiCtq1rBsm34eoWwPVoEGPRwz10T5hmvIcwVIO84X0ORORMOQczmM5v0LcUPRXCAGD3AlmkPeRtTUNVVHsOQ9A0dpDCBboWQcZwfA0AxFFjPDETwLAIDgKRPzySD90JNsEAAWg4xBFPwlEyExWh6AgaSqIVPROmBD5mPghiFCQwEfFUvNv2KHTWxohA-nQ88eGMJwOWcVRdSNAZsNNJQhjVewrK-AVIDs6D3lfBl2KhP5OUhYZdU8FRUxhbDVEnS0P3nQiwqFDARTACLZIcuQBxUU9mIUPpXK0Nxb1c0geKZZwtSwkK8oLIVKGLUsSuomDmPpZz7HZFiJjYvRbxMUhz1aiMOUnTr+W6rZVw3LcBoVALtGayEKUQxK7CHLQBkNNrVR4I09BW20lyFEiCDI7a5KvPboXaCY7EYmNMoM7o3D0ObdHUAKs3VWx-H8IA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AkgOwAdUAXAOgCcwAbMZWSAYmQGMBHVDSgbQAYBdRKAJZYGYtjyCQAD0QBGAOwBmUgBYAnJvUAOVXvUKATADYANCACeiJYYCspY7eM9jruatsHDAX2-m0mLiEJKQs7JwYeFAMEFh4YKSRAG5YANYJAdj4RGRhHOSRUAjJWMzI4nG8fFVSwqIVkkgyiLaG5lYIcnI82g4KtqoKxqrGCiOGqr7+6FnBuWz5hQxg5ORY5KQEVOUAZusAtqEzQTmhCxFRxXgpZQ1VNU11YhJSsp3Kalo6ehpGZpaIQw2UiGHhKHhAwwKZQeIxTECZE4hPIXaKwYjIcjEB5CETPOKvQFyZykOTaJS6Yyg0YQ-4dMkKUjqWzgpSqJS2MHqVQmeGI7LI86UCAMSg0OhgHEgJ4NQmdYwqDRaXT6P7tRDaOSfTSOAzaXS2TV844C+bhYWJCA0BjozHY-i1PGyppvVQ9EGOZzaEzqUFkpTqzpyNkg-VjbTGOQsnitY2BU1nc2QS3WqUyl4uxBu3omJw9H1+8mB7r60P6wzaFkmBQxuOzU4oi2UZjrTBRG3ELAEABKYHYcGIkDTTozoDe2gU6j6oP6ngmxk1xeDqjL5OZdijqm0daRZvyyebraWEHKyAAgklkBhtgAjGjD+qj5oIYy+0iV5m+hdKdRyOyBnV3w5ZRfU0UFtz8BETTmRN9wgTYwDwNsoAAZU7AgOy7B98UaMd5A8YwmVfCENBLVQ-0DfUpzdL0jDZTVyR3BNG2TAhEOQtCuxiU8LyvW97wdR4RwJTNOgIoj1BI38enItoAQQAwtRov9PB4dQlDJJiYJY+C2KQwpOIw6RbUHUIdkHcgAApOR4HgAEomGghshVY9iDPQ7DnTwsSnAkqSyIo+SuhMUgNMMcL+nzFxJkg-ltJc3S3KiQyGGMjFTOQcyVms2z7Mc+N4qTRL9OSjy5AEITHxE7yuiUFQvF9HonE5VRix4dlSDBbRuVZKFFC05yitIdEuzYkVPKfN5iR5EEfTZEZNS3SjyKZGMvE1FklEjAbBSKpgXIm6rn25KdNE5HQhmcAxbEDaN3wjTlI0k6M5F8SC8CwCA4CkOKckdKrcOfABaOlEBBzrcvBUYK1sYkeh2sgxVoegIH+nC5R5QMNJXMFgpMSNbLJYwEdg1E0a858f1Owx1FGdT3HZORmUDCtqJcbooUMJmeQUEmdPJybAUjUghicIFyScSc5EDUZ7Ek5xbENDcKSUPmEpTMABaOt5wSnUWqRVyXfyXIEmWDBRzdhiNa1ipzdrgigwBbchkK1wG3lcQwIdsqk9BsN05PpNSc31bQeCGGt+gVNWhr0jj0LduVuhZUk7HCtlJ2hYk2uZUgWTDJwbBs1XbYKwaHZGggxsT0TFEGUK-0nUE3U8CcAPUvPPDJDRuqcLo3u8IA */
     id: "audioInput",
     initial: "released",
     context: {
@@ -8438,12 +8504,21 @@ const audioInputMachine = (0,Machine/* createMachine */.C)({
         acquired: {
             description: "Microphone acquired and ready to start recording.",
             initial: "idle",
+            entry: {
+                type: "notifyMicrophoneAcquired",
+            },
             states: {
                 idle: {
                     on: {
                         start: {
                             target: "recording",
                             cond: "microphoneAcquired",
+                        },
+                        acquire: {
+                            description: `When receiving a request to acquire a microphone (setup recording) that is already acquired, trigger notifications.`,
+                            actions: {
+                                type: "notifyMicrophoneAcquired",
+                            }
                         },
                     },
                     always: {
@@ -8546,6 +8621,9 @@ const audioInputMachine = (0,Machine/* createMachine */.C)({
                 microphone === null || microphone === void 0 ? void 0 : microphone.pause();
             }
         },
+        notifyMicrophoneAcquired: (context, event) => {
+            EventBus/* default */.Z.emit("saypi:callReady");
+        },
         releaseMicrophone: (context, event) => {
             tearDownRecording();
         },
@@ -8579,19 +8657,49 @@ const audioInputMachine = (0,Machine/* createMachine */.C)({
 });
 
 ;// CONCATENATED MODULE: ./src/state-machines/AudioOutputMachine.js
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
 
 var audioOutputMachine = (0,Machine/* createMachine */.C)({
+  /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7A8qgLgA4EB0GEANmAMQVbISz7IBO+A2gAwC6iohWWBnzYAdnxAAPRAEYAHAFYSANmWdOygEzyALAE5NAZk4KANCACeswzpIyZehcoU6dAdmP2dAX2-m0mLgExPgkdAwYolC09BCQALZgzBDIzFy8SCACQiJY4pnSCAqa5lYIbpp6JIY1NW7KDoYylb7+6Nh4RKThcRDUYPGEIpDpEtnCYhKFMpwkcp76em5ynJqcxiWWiIZymiSaRjsKJqqax4atIAEdwd2xkCQsYAwW1IQUyBajmeO5+aCFeqzBRNM56HQyEE6XalRANZTVWquGQQzg6LSXa5BLqhHoPd6fSLRQhoWBgb78QQTPJTWTrWaOQyaOQyZzNNwyNywhDOKpaY4o+q6QwKTHtbEhML3CAkAkWIn9US9ClZKl-WkIGbGEiM5mshTszncjmzZoCoUOTicsWBTqSvEyuUKgDGyFEcvwAAsWFhUFBPSrfpMCog5NCSMsZIYGgo9Io0XpuS5bGd1FG3HGlj4-FdxXa7gx8aTIG8Pl8eGM1cGAdZ5BH1vJOLs3Ot9Ny1FUzVaHPZli4bTccVLCzKwEqS2SwABrEYVn5VmkhzX0nUgvVszQcrlbcqqEjqA+b4pMg0DiWkchUaiwKcYQgAOTAkg4c8pOWrUkQAFoUVVjDUDD0Qw3B0f9NjKTlbHsdRXAUORwWjTRlF8HNRCwOJ4EyLF83wSt30XGsEB-JZqnWQxAOA0D1nAxBZibGpN2ZNF3Dg8i3DPHCyEoMA8Opf5PwQHQaIQOQ3BIVjakUJp5CQjjblxWIiV49UlzBfYFGWepVAaOQYR3NY9hAvRjL0exmgM5Cc2w+Th16ZSP0KbQlBBZotBbeRWW5HQnAjY4TFAjloTWdirLzGyHUeZ4IDKN8+I1JDDHE0E3KtFllCTAx1IPTgOVUBR+1C21wulWUyyU+d8P4wpFCUcicqA7z5gOdKd1jKo3D81llH0ajNDkocIpJVAyQgeyCIElF7FXJl5itK1TJ0dtOXreZY1E1kmT0fr7RKsc7IquKl0mmRpuZTx5pRY11HEiEW1UeD8scFDvCAA */
   context: {
-    autoplay: false
+    autoplay: false,
+    skip: false
   },
   id: "audioOutput",
   initial: "idle",
   states: {
     idle: {
       on: {
-        loadstart: {
+        loadstart: [{
+          target: "idle",
+          cond: "shouldSkip",
+          internal: true,
+          description: "Skip this track.",
+          actions: [(0,es/* assign */.f0)(function (context, event) {
+            return _objectSpread(_objectSpread({}, context), {}, {
+              skip: false
+            });
+          }), {
+            type: "skipCurrent"
+          }]
+        }, {
           target: "loading"
+        }],
+        skipNext: {
+          target: "idle",
+          internal: true,
+          description: "Do not play the next track.",
+          actions: (0,es/* assign */.f0)(function (context, event) {
+            return _objectSpread(_objectSpread({}, context), {}, {
+              skip: true
+            });
+          })
         }
       }
     },
@@ -8680,24 +8788,32 @@ var audioOutputMachine = (0,Machine/* createMachine */.C)({
     emitEvent: function emitEvent(context, event, _ref) {
       var action = _ref.action;
       EventBus/* default */.Z.emit(action.params.eventName);
+    },
+    skipCurrent: function skipCurrent(context, event) {
+      // send a message back to the audio module to stop playback
+      EventBus/* default */.Z.emit("audio:skipCurrent");
     }
   },
-  guards: {},
+  guards: {
+    shouldSkip: function shouldSkip(context) {
+      return context.skip === true;
+    }
+  },
   services: {},
   delays: {}
 });
 // EXTERNAL MODULE: ./src/LoggingModule.js
 var LoggingModule = __webpack_require__(484);
 ;// CONCATENATED MODULE: ./src/AudioModule.js
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function AudioModule_typeof(o) { "@babel/helpers - typeof"; return AudioModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, AudioModule_typeof(o); }
+function AudioModule_ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function AudioModule_objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? AudioModule_ownKeys(Object(t), !0).forEach(function (r) { AudioModule_defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : AudioModule_ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function AudioModule_defineProperty(obj, key, value) { key = AudioModule_toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, AudioModule_toPropertyKey(descriptor.key), descriptor); } }
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function AudioModule_toPropertyKey(arg) { var key = AudioModule_toPrimitive(arg, "string"); return AudioModule_typeof(key) === "symbol" ? key : String(key); }
+function AudioModule_toPrimitive(input, hint) { if (AudioModule_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (AudioModule_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 // import state machines for audio input and output
 
 
@@ -8760,6 +8876,7 @@ var AudioModule = /*#__PURE__*/function () {
   }, {
     key: "registerAudioCommands",
     value: function registerAudioCommands(inputActor, outputActor) {
+      var _this = this;
       // audio input (recording) commands
       EventBus/* default */.Z.on("audio:setupRecording", function (e) {
         inputActor.send("acquire");
@@ -8784,7 +8901,7 @@ var AudioModule = /*#__PURE__*/function () {
       });
       // audio input (recording) events (pass media recorder events -> audio input machine actor)
       EventBus/* default */.Z.on("audio:dataavailable", function (detail) {
-        inputActor.send(_objectSpread({
+        inputActor.send(AudioModule_objectSpread({
           type: "dataAvailable"
         }, detail));
       });
@@ -8795,6 +8912,12 @@ var AudioModule = /*#__PURE__*/function () {
       // audio output (playback) commands
       EventBus/* default */.Z.on("audio:reload", function (e) {
         outputActor.send("reload");
+      });
+      EventBus/* default */.Z.on("audio:skipNext", function (e) {
+        outputActor.send("skipNext");
+      });
+      EventBus/* default */.Z.on("audio:skipCurrent", function (e) {
+        _this.audioElement.pause();
       });
     }
   }]);
@@ -9097,10 +9220,16 @@ var AnimationModule = /*#__PURE__*/function () {
     key: "startAnimation",
     value: function startAnimation(animation) {
       this.stopOtherAnimations(animation);
-      var rectangles = document.querySelectorAll(this.rectanglesSelector);
-      rectangles.forEach(function (rect) {
-        return rect.classList.add(animation);
-      });
+      if (this.talkButtonAnimations.includes(animation)) {
+        var rectangles = document.querySelectorAll(this.rectanglesSelector);
+        rectangles.forEach(function (rect) {
+          return rect.classList.add(animation);
+        });
+      }
+      if (this.callButtonAnimations.includes(animation)) {
+        var callButton = document.querySelector(this.callButtonSelector);
+        callButton.classList.add(animation);
+      }
     }
   }, {
     key: "stopAnimation",
@@ -9109,6 +9238,8 @@ var AnimationModule = /*#__PURE__*/function () {
       rectangles.forEach(function (rect) {
         return rect.classList.remove(animation);
       });
+      var callButton = document.querySelector(this.callButtonSelector);
+      callButton.classList.remove(animation);
     }
   }, {
     key: "stopAllAnimations",
@@ -9117,12 +9248,24 @@ var AnimationModule = /*#__PURE__*/function () {
       this.talkButtonAnimations.forEach(function (animation) {
         return _this.stopAnimation(animation);
       });
+      this.callButtonAnimations.forEach(function (animation) {
+        return _this.stopAnimation(animation);
+      });
     }
   }, {
     key: "stopOtherAnimations",
     value: function stopOtherAnimations(keepAnimation) {
+      if (this.talkButtonAnimations.includes(keepAnimation)) {
+        this.stopOtherAnimationsByCollection(keepAnimation, this.talkButtonAnimations);
+      } else if (this.callButtonAnimations.includes(keepAnimation)) {
+        this.stopOtherAnimationsByCollection(keepAnimation, this.callButtonAnimations);
+      }
+    }
+  }, {
+    key: "stopOtherAnimationsByCollection",
+    value: function stopOtherAnimationsByCollection(keepAnimation, animationsCollection) {
       var _this2 = this;
-      this.talkButtonAnimations.forEach(function (animation) {
+      animationsCollection.forEach(function (animation) {
         if (animation !== keepAnimation) {
           _this2.stopAnimation(animation);
         }
@@ -9132,7 +9275,112 @@ var AnimationModule = /*#__PURE__*/function () {
   return AnimationModule;
 }();
 _defineProperty(AnimationModule, "rectanglesSelector", ".outermost, .second, .third, .fourth, .fifth, .innermost");
-_defineProperty(AnimationModule, "talkButtonAnimations", ["piSpeaking", "userSpeaking", "transcribing"]);
+_defineProperty(AnimationModule, "callButtonSelector", "#saypi-callButton");
+_defineProperty(AnimationModule, "talkButtonAnimations", ["piThinking", "piSpeaking", "userSpeaking", "transcribing"]);
+_defineProperty(AnimationModule, "callButtonAnimations", ["glow", "glow-fade-out"]);
+
+// EXTERNAL MODULE: ./src/ResourceModule.ts
+var ResourceModule = __webpack_require__(879);
+;// CONCATENATED MODULE: ./src/NotificationsModule.ts
+
+class AudibleNotificationsModule {
+    constructor() {
+        this.listeningSound = new Audio((0,ResourceModule/* getResourceUrl */.v)('audio/guitar-pluck.mp3'));
+        this.callStartedSound = new Audio((0,ResourceModule/* getResourceUrl */.v)('audio/startup-synth.mp3'));
+        this.callEndedSound = new Audio((0,ResourceModule/* getResourceUrl */.v)('audio/turn-off.mp3'));
+    }
+    listeningStopped() {
+        this.listeningSound.play().catch(e => {
+            console.error("Unable to play audio notification:", e);
+        });
+    }
+    callStarted() {
+        this.callStartedSound.play().catch(e => {
+            console.error("Unable to play audio notification:", e);
+        });
+    }
+    callEnded() {
+        this.callEndedSound.play().catch(e => {
+            console.error("Unable to play audio notification:", e);
+        });
+    }
+}
+class VisualNotificationsModule {
+    constructor() {
+        this.ring = document.getElementById('progress-ring');
+        this.callButton = document.getElementById('saypi-callButton');
+    }
+    /**
+     * The ring and call button elements may not be available until after the extension is loaded.
+     * This method will attempt to find them and set them if they are not already set.
+     */
+    init() {
+        if (!this.ring || !document.body.contains(this.ring)) {
+            this.ring = document.getElementById('progress-ring');
+        }
+        if (!this.callButton || !document.body.contains(this.callButton)) {
+            this.callButton = document.getElementById('saypi-callButton');
+        }
+    }
+    startCountdown(secondsRemaining) {
+        this.startRingAnimation(secondsRemaining);
+        this.startGlowFade(secondsRemaining);
+    }
+    cancelCountdown() {
+        this.stopRingAnimation();
+        this.stopGlowFade();
+    }
+    startRingAnimation(secondsRemaining) {
+        if (!this.ring) {
+            console.error("Unable to find progress ring element");
+            return;
+        }
+        const circumference = this.ring.getTotalLength();
+        this.ring.style.strokeDasharray = `${circumference} ${circumference}`;
+        this.ring.style.strokeDashoffset = `${circumference}`;
+        this.ring.style.animationDuration = `${secondsRemaining}s`;
+        //this.ring.style.animation = `fillup ${secondsRemaining}s linear forwards, changeColor ${secondsRemaining}s linear forwards`;
+        this.ring.classList.add('active');
+    }
+    stopRingAnimation() {
+        if (!this.ring) {
+            console.error("Unable to find progress ring element");
+            return;
+        }
+        this.ring.classList.remove('active');
+        //      void this.ring.style.strokeDasharray;
+        //      void this.ring.style.strokeDashoffset;
+        //      this.ring.style.animation = 'none';
+    }
+    startGlowFade(secondsRemaining) {
+        if (!this.callButton) {
+            console.error("Unable to find call button element");
+            return;
+        }
+        this.callButton.classList.remove('glow');
+        this.callButton.classList.add('glow-fade-out');
+        this.callButton.style.animationDuration = `${secondsRemaining}s`;
+        //this.callButton.style.animationTimingFunction = 'ease-out !important';
+    }
+    stopGlowFade() {
+        if (!this.callButton) {
+            console.error("Unable to find call button element");
+            return;
+        }
+        this.callButton.classList.remove('glow-fade-out');
+        this.callButton.style.animationDuration = '1.5s'; // reset to default glow duration - see neon.scss for source definition
+        //void this.callButton.style.animationTimingFunction;
+    }
+    listeningStopped() {
+        this.init();
+        this.cancelCountdown();
+    }
+    listeningTimeRemaining(timeRemaining) {
+        this.init();
+        this.cancelCountdown();
+        this.startCountdown(timeRemaining);
+    }
+}
 
 // EXTERNAL MODULE: ./src/ConfigModule.js
 var ConfigModule = __webpack_require__(186);
@@ -9148,9 +9396,11 @@ function EventModule_toPropertyKey(arg) { var key = EventModule_toPrimitive(arg,
 function EventModule_toPrimitive(input, hint) { if (EventModule_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (EventModule_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
 
+var CALL_READY = "saypi:callReady";
 var USER_SPEAKING = "saypi:userSpeaking";
 var USER_STOPPED_SPEAKING = "saypi:userStoppedSpeaking";
 var USER_FINISHED_SPEAKING = "saypi:userFinishedSpeaking";
+var PI_THINKING = "saypi:piThinking";
 var PI_SPEAKING = "saypi:piSpeaking";
 var PI_STOPPED_SPEAKING = "saypi:piStoppedSpeaking";
 var PI_FINISHED_SPEAKING = "saypi:piFinishedSpeaking";
@@ -9226,6 +9476,9 @@ var EventModule = /*#__PURE__*/function () {
   }, {
     key: "registerStateMachineEvents",
     value: function registerStateMachineEvents(actor) {
+      EventBus/* default */.Z.on(CALL_READY, function () {
+        actor.send(CALL_READY);
+      });
       EventBus/* default */.Z.on(USER_SPEAKING, function () {
         actor.send(USER_SPEAKING);
       });
@@ -9240,7 +9493,7 @@ var EventModule = /*#__PURE__*/function () {
           }
         });
       });
-      [PI_SPEAKING, PI_STOPPED_SPEAKING, PI_FINISHED_SPEAKING].forEach(function (eventName) {
+      [PI_THINKING, PI_SPEAKING, PI_STOPPED_SPEAKING, PI_FINISHED_SPEAKING].forEach(function (eventName) {
         EventBus/* default */.Z.on(eventName, function () {
           actor.send(eventName);
         });
@@ -9474,8 +9727,8 @@ function constructTranscriptionFormData(audioBlob, audioDurationSeconds, message
 function scrollToBottom(textarea) {
     // Define the maximum height
     const maxHeight = 455;
-    // Reset the height to auto to get the correct scrollHeight
-    textarea.style.height = "auto";
+    // Reset the height to get the correct scrollHeight
+    textarea.style.height = "2rem"; // (initial height) aka 32px
     // Set the height of the textarea, up to the maximum height
     if (textarea.scrollHeight > maxHeight) {
         textarea.style.height = `${maxHeight}px`;
@@ -9604,7 +9857,37 @@ function calculateDelay(timeUserStoppedSpeaking, probabilityFinished, tempo, max
     return finalDelay;
 }
 
+;// CONCATENATED MODULE: ./src/AudioControlsModule.ts
+
+class AudioControlsModule {
+    activateAudioInput(enable) {
+        if (enable) {
+            const callButton = document.getElementById("saypi-callButton");
+            if (callButton) {
+                callButton.click();
+            }
+        }
+    }
+    activateAudioOutput(enable) {
+        if (enable && !this.isAudioOutputEnabled()) {
+            const audioOutputButton = document.getElementById("saypi-audio-output-button");
+            if (audioOutputButton) {
+                EventBus/* default */.Z.emit("audio:skipNext");
+                audioOutputButton.click();
+            }
+        }
+    }
+    isAudioOutputEnabled() {
+        const svgPathElement = document.querySelector('#saypi-audio-output-button svg path');
+        const svgPath = svgPathElement ? svgPathElement.getAttribute('d') : null;
+        const activePath = "M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 001.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06zM18.584 5.106a.75.75 0 011.06 0c3.808 3.807 3.808 9.98 0 13.788a.75.75 0 11-1.06-1.06 8.25 8.25 0 000-11.668.75.75 0 010-1.06z";
+        return svgPath === activePath;
+    }
+}
+
 ;// CONCATENATED MODULE: ./src/state-machines/SayPiMachine.ts
+
+
 
 
 
@@ -9631,10 +9914,16 @@ const mergeService = new TranscriptMergeService(apiServerUrl, navigator.language
 const clearTranscripts = (0,es/* assign */.f0)({
     transcriptions: () => ({}),
 });
+const audibleNotifications = new AudibleNotificationsModule();
+const visualNotifications = new VisualNotificationsModule();
+const audioControls = new AudioControlsModule();
 const machine = (0,Machine/* createMachine */.C)({
+    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCRKANiwNoAMAuoqHQHtYWMgPx8QAD0QBWAEwAaEGkRyA7HIBsOAMyc1AFjkAODcf3GdAXytLa2PIVIVqtBggYBlOmBQBrAiguXiQQQWFRcVDpBHklFQQ5OQMARl19GWMUnRkU7M0bO3QHZjZPEhQAJzJ8KBp0d1KWACVfCDRgiXCRLDEJGINMgE4cIc4ZIeM5TgNjIZ0U+MQUmU4cGc0huR1NFK0Da1sQe1wm8qqaurdGJoAxFCwWSE7Q7sj+xE1FZVUvgxxzIYcilAalCsdirgWFhYCQwPhAvV6IwGAAVAAWBACtRe-CEPT60U+3wS00MOE0Mx0ak2Ml2nAKRxOOGhsPhiOuHiw3l82KCPC6+PeRNiJMQWRwq040pWQwm8jBTMhLJhcIRtRwlTARAElQgHIajHRKFqAFc6LiwkLelFQAMJiMxhMpjM5gslggVpptFpLGo1CsDJoDODmay1YFNdrdfqNfgBCQef4DciEKbYGBKrcCDD0ZAk3zLW8bR8EIMho7xpNprN5osfp6aWoKepNnoZGpqTNQ8rw+yNVqdXrI-HEz5k7Uke505mC4Ei9bCXbVHIKzgDBXLENZsGUkM1B7ZSM9+ZgwYGf7DkVMFDVf2oFGh7GHzPKnPJ5zX+UBHQfBB3-yIR4hEJYitM5gAnsBizLWQaaDIh5qNKOB7moQxfJw4H6Iy14OH26oPoOMaRl+458lOjBfiQP5-gB7ApEBVogUuUiqJwEFZMkMFzHBCENikwYjJsWTsXueyYSGSo3iqbIETgOr4JQ1SRsQRCmgAtqaLAoJcVAQGIYCOOQAh+IZ6mZjAADydBkOpqpYEQC7MbarGJNSaRyB23pIdsDKWB6co6OuDI7Do1LQYMxg9tJ+GRgpSmXDgqkaVpOmIpmlS6jgdDaSQABmurqTg5mVFZNlYHZsIOU5BIuTE2wBqMnnBgsXyaNSB4NsYEyjDIOieZM4VNtFeF3nJ8WZolyWablKbuCQlQmrARCVFgABGzwCq8i51Su3WjJu7Vhf1QYegGciStK7HUqYJ04RCMVjXFYgJSpRBqTNaUfoaCALUtK3rWA9yPJtjHFixMRhUYl1AnS+4pAYnUJCkMz-PIlJqOYyQgmhI23rJz2KZNb0falumcn9+DLatG0QAAoupNkdFtwG1aWUMXassObAGiMBQc6xaCjUxyOJ1J4zJEYahNykatNZOIpIsI6YZKB5XClQABSwKaa2VcIYgACJgNpaAAJRIqNBPSy9xNy+9KWzTiLNMWzYGdv8FaTBu54LJjh4pJjKGcNudKeQcMiIxLsU20TssPjresiLpNXCsuCB6HuMN9ZomO7P6Ad6BSIdBjoky8ys0dPbHr0apT1PrXNjD1wDtOp6B6d7pwaScAsqE6IMIcCYeGw4AGGHobndIpFX1sPjLiUtzTTe-YtVOt0DDxPBA7cQ4gHMwxHPMI0jsg0usV3o4HGNRVJVtS-PtvxzgS+N99qav7TDNM7vu0ZwPnN9BH3hnzfiJ1Ba7HpDkHIQZZ4PxwBlXU5wSDpgQZUTKlRYBUCVhUOESV1aZk1lKTgFswzVwfIgt8uDUGUNgL-UsqQ1yY1MIjYw8FnRnVyMHLYAYB4rGGnffG8DKHIJoeg3UWCcEq3wRrIhV1SG9nIWgjBojYDKIkfRMGO0GEgiCrkIYAlpgh3YmKT0exjDcMRmoOkUNb64VwFqWAgh8DPgommDMb4yLzhduDP+eRkg4E8pjIwGN5B0g9IjGQY8pSR3mFsbqbCJaOOcc+bKWAMRYhXl4LxzstHOQYbndcWxwKWBlJsD0MgepXSrPMaYBi1BJLgCkyM2TeRZO5NRX8+YcmAUFPkkU-j-hBOMCEjIzVDybH+P6XY55jCWAmDsRpTixCpNaROK4P0vCdNoj0zRfS3adxRkMjsIytBjPCfxQKAJI45FWO1OYldBFRmWS4lp3IeluIYNmBEsA8z-l2T47RAy8jHOCWc6x4z+KGCia2EEcEsb9RsEceMEA4ASBOPstOrkDAegALT3WZAQYgZBKCYo7tiyYawxiUgEqYdiUxEJl3WP6JCYwDHqEWU8s4FR45kr3mWAW1SB5TD3LkD0Zye4djLtkQehhJL2MlvePlfirGQU8nkQOKxI6mI5cXMYWhRadkwskOB95HzEVqMq0sKwchqtyHkAMlSjCHnPBdWF5YdgjIaU8mOhFozDjjAmACVqwKrCiQ68Y0FvQmARhMou0FzAD0xoHXmpq5JEQDS+Dxwbtr9M7pkIKnF7WaqdaY2UQyaQI3mGGvIabCa1ygCG-Nnk7Uasddqj0XwolXQdYCMYgc601ztg+eWTtG25oOa5JI6gDoVnEt1LQmgR5cO6tub0BiEaPIVb6+ST9EqJzsiQS4TbXJ9zRvMSKSFdiWBxfxFGaxWwhwWEkWkdiHr3zNQvSMn9AgnpiPwwtexi3tudfxaUzZNgmD9nSDYM8fVKJEdQ+AE6sWQyNYfJC+iQ6dgqXkbhIc2EJtFqYQdFDxFUJ0qg+MlR1KsD-fvf0FiuaI3GF3fcOhDw6BGXq8K3UFgbgJYoue6iKMoLUbQ+jGc0JROY5htjOGGwtW4aLBGBwUbwVIyJ1RIm1Gf03iDCAkmuMC1k6xtlCmEj+nDU+5I2NpUyE04hyj4nyNqLskQOm5GjMjL0UAuT5mOMNm3GsSkwXjHbGEks5plqUPkpiJHcVmRonSjqfUlqgnpLJJWW8jJ+A+SSZRqYrmgSpSrgAWhQYUXssajWfl2L-LvT-BxqsbIpg5hLobCxkrKXNAjPagYxkNggA */
     context: {
         transcriptions: {},
+        isTranscribing: false,
         lastState: "inactive",
+        userIsSpeaking: false,
         timeUserStoppedSpeaking: 0,
     },
     id: "sayPi",
@@ -9645,66 +9934,43 @@ const machine = (0,Machine/* createMachine */.C)({
             exit: (0,es/* assign */.f0)({ lastState: "inactive" }),
             on: {
                 "saypi:call": {
-                    target: "#sayPi.listening.recording",
-                    actions: [
-                        {
-                            type: "callStarted",
-                        },
-                        {
-                            type: "startRecording",
-                        },
-                    ],
-                    description: 'Enable the VAD microphone.\nAka "call" Pi.\nStarts active listening.',
+                    target: "#sayPi.callStarting",
+                    description: 'Place a "call" to Pi.\nAttempts to start the microphone and begin active listening.',
                 },
                 "saypi:piSpeaking": {
                     target: "#sayPi.responding.piSpeaking",
                 },
             },
         },
-        errors: {
-            description: "Error parent state.",
-            after: {
-                "10000": [
-                    {
-                        target: "#sayPi.listening",
-                        actions: [],
-                        description: "Reset to the idle state and clear errors.",
-                    },
-                    {
-                        internal: false,
-                    },
-                ],
-            },
-            initial: "transcribeFailed",
-            states: {
-                transcribeFailed: {
-                    description: "The /transcribe API responded with an error.",
-                    entry: {
-                        type: "startAnimation",
-                        params: {
-                            animation: "error",
-                        },
-                    },
-                    exit: {
-                        type: "stopAnimation",
-                        params: {
-                            animation: "error",
-                        },
-                    },
-                    type: "final",
+        callStarting: {
+            description: "Call is starting. Waiting for microphone to be acquired.",
+            entry: [
+                {
+                    type: "callIsStarting",
                 },
-                micError: {
-                    description: "No audio input detected",
-                    entry: {
-                        type: "showNotification",
-                        params: {
-                            icon: "muted-microphone",
+                {
+                    type: "setupRecording",
+                }
+            ],
+            on: {
+                "saypi:callReady": {
+                    target: "#sayPi.listening.recording",
+                    actions: [
+                        {
+                            type: "callHasStarted",
                         },
-                    },
-                    exit: {
-                        type: "dismissNotification",
-                    },
-                    type: "final",
+                        {
+                            type: "startRecording",
+                        },
+                        {
+                            type: "activateAudioOutput",
+                        }
+                    ],
+                    description: 'VAD microphone is ready.\nStart it recording.',
+                },
+                "saypi:callFailed": {
+                    target: "inactive",
+                    description: "VAD microphone failed to start.\nAudio device not available.",
                 },
             },
         },
@@ -9723,6 +9989,22 @@ const machine = (0,Machine/* createMachine */.C)({
                 recording: {
                     description: "Microphone is on and VAD is actively listening for user speech.",
                     initial: "notSpeaking",
+                    entry: [
+                        {
+                            type: "startAnimation",
+                            params: {
+                                animation: "glow",
+                            },
+                        },
+                    ],
+                    exit: [
+                        {
+                            type: "stopAnimation",
+                            params: {
+                                animation: "glow",
+                            },
+                        },
+                    ],
                     states: {
                         notSpeaking: {
                             description: "Microphone is recording but no speech is detected.",
@@ -9737,12 +10019,16 @@ const machine = (0,Machine/* createMachine */.C)({
                         },
                         userSpeaking: {
                             description: "User is speaking and being recorded by the microphone.\nWaveform animation.",
-                            entry: {
-                                type: "startAnimation",
-                                params: {
-                                    animation: "userSpeaking",
+                            entry: [{
+                                    type: "startAnimation",
+                                    params: {
+                                        animation: "userSpeaking",
+                                    },
                                 },
-                            },
+                                (0,es/* assign */.f0)({ userIsSpeaking: true }),
+                                {
+                                    type: "cancelCountdownAnimation",
+                                }],
                             exit: {
                                 type: "stopAnimation",
                                 params: {
@@ -9759,6 +10045,7 @@ const machine = (0,Machine/* createMachine */.C)({
                                         cond: "hasAudio",
                                         actions: [
                                             (0,es/* assign */.f0)({
+                                                userIsSpeaking: false,
                                                 timeUserStoppedSpeaking: () => new Date().getTime(),
                                             }),
                                             {
@@ -9785,7 +10072,7 @@ const machine = (0,Machine/* createMachine */.C)({
                                     type: "releaseMicrophone",
                                 },
                                 {
-                                    type: "callEnded",
+                                    type: "callHasEnded",
                                 },
                             ],
                             description: 'Disable the VAD microphone.\n    Aka "call" Pi.\n    Stops active listening.',
@@ -9861,11 +10148,11 @@ const machine = (0,Machine/* createMachine */.C)({
                                     description: "Transcribed speech to text (out of sequence response).",
                                 },
                                 "saypi:transcribeFailed": {
-                                    target: "#sayPi.errors.transcribeFailed",
+                                    target: "#sayPi.listening.errorStatus.errors.transcribeFailed",
                                     description: "Out of sequence error response from the /transcribe API",
                                 },
                                 "saypi:transcribedEmpty": {
-                                    target: "#sayPi.errors.micError",
+                                    target: "#sayPi.listening.errorStatus.errors.micError",
                                     description: "Out of sequence empty response from the /transcribe API",
                                 },
                             },
@@ -9882,18 +10169,20 @@ const machine = (0,Machine/* createMachine */.C)({
                         },
                         transcribing: {
                             description: "Transcribing audio to text.\nCard flip animation.",
-                            entry: {
-                                type: "startAnimation",
-                                params: {
-                                    animation: "transcribing",
+                            entry: [{
+                                    type: "startAnimation",
+                                    params: {
+                                        animation: "transcribing",
+                                    },
                                 },
-                            },
-                            exit: {
-                                type: "stopAnimation",
-                                params: {
-                                    animation: "transcribing",
+                                (0,es/* assign */.f0)({ isTranscribing: true })],
+                            exit: [{
+                                    type: "stopAnimation",
+                                    params: {
+                                        animation: "transcribing",
+                                    },
                                 },
-                            },
+                                (0,es/* assign */.f0)({ isTranscribing: false })],
                             on: {
                                 "saypi:transcribed": {
                                     target: "accumulating",
@@ -9903,27 +10192,94 @@ const machine = (0,Machine/* createMachine */.C)({
                                     description: "Successfully transcribed user audio to text.",
                                 },
                                 "saypi:transcribeFailed": {
-                                    target: "#sayPi.errors.transcribeFailed",
+                                    target: "#sayPi.listening.errorStatus.errors.transcribeFailed",
                                     description: "Received an error response from the /transcribe API",
                                 },
                                 "saypi:transcribedEmpty": {
-                                    target: "#sayPi.errors.micError",
+                                    target: "#sayPi.listening.errorStatus.errors.micError",
                                     description: "Received an empty response from the /transcribe API (no speech detected)",
                                 },
                             },
                         },
                     },
                 },
+                errorStatus: {
+                    description: `Handles non-fatal errors during recording and transcription.`,
+                    initial: "normal",
+                    states: {
+                        normal: {
+                            description: "The system is not exhibiting any errors.",
+                        },
+                        errors: {
+                            description: `Non-fatal transcription or recording errors.`,
+                            entry: {
+                                type: "callHasErrors",
+                            },
+                            exit: {
+                                type: "callHasNoErrors",
+                            },
+                            after: {
+                                "5000": [
+                                    {
+                                        target: "#sayPi.listening.errorStatus.normal",
+                                        actions: [],
+                                        description: "Reset to the normal state and clear errors.",
+                                    },
+                                ],
+                            },
+                            states: {
+                                transcribeFailed: {
+                                    description: "The /transcribe API responded with an error.",
+                                    entry: {
+                                        type: "startAnimation",
+                                        params: {
+                                            animation: "error",
+                                        },
+                                    },
+                                    exit: {
+                                        type: "stopAnimation",
+                                        params: {
+                                            animation: "error",
+                                        },
+                                    },
+                                    type: "final",
+                                },
+                                micError: {
+                                    description: "No audio input detected",
+                                    entry: {
+                                        type: "showNotification",
+                                        params: {
+                                            icon: "muted-microphone",
+                                        },
+                                    },
+                                    exit: {
+                                        type: "dismissNotification",
+                                    },
+                                    type: "final",
+                                },
+                            },
+                            type: "parallel",
+                        },
+                    },
+                }
             },
             on: {
+                "saypi:piThinking": {
+                    target: "#sayPi.responding.piThinking",
+                    actions: [
+                        {
+                            type: "acknowledgeUserInput",
+                        },
+                    ],
+                },
                 "saypi:piSpeaking": {
                     target: "#sayPi.responding.piSpeaking",
-                },
+                }
             },
             type: "parallel",
         },
         responding: {
-            description: "Pi is responding. Synthesised speech is playing or waiting to play.",
+            description: "Pi is responding. Text is being generated or synthesised speech is playing or waiting to play.",
             entry: {
                 type: "disableCallButton",
             },
@@ -9931,7 +10287,41 @@ const machine = (0,Machine/* createMachine */.C)({
                 type: "enableCallButton",
             },
             initial: "piSpeaking",
+            on: {
+                "saypi:userSpeaking": {
+                    target: "#sayPi.listening.recording.userSpeaking",
+                },
+                "saypi:hangup": {
+                    target: "#sayPi.inactive",
+                    actions: [
+                        {
+                            type: "callHasEnded",
+                        },
+                    ],
+                    description: 'End call while Pi is speaking.',
+                },
+            },
             states: {
+                piThinking: {
+                    description: "Pi is contemplating its response.\nThinking animation.",
+                    entry: {
+                        type: "startAnimation",
+                        params: {
+                            animation: "piThinking",
+                        },
+                    },
+                    exit: {
+                        type: "stopAnimation",
+                        params: {
+                            animation: "piThinking",
+                        },
+                    },
+                    on: {
+                        "saypi:piSpeaking": {
+                            target: "#sayPi.responding.piSpeaking",
+                        },
+                    },
+                },
                 piSpeaking: {
                     description: "Pi's synthesised speech audio is playing.\nPlayful animation.",
                     entry: {
@@ -9957,16 +10347,13 @@ const machine = (0,Machine/* createMachine */.C)({
                                 cond: "wasInactive",
                             },
                         ],
-                        "saypi:userSpeaking": {
-                            target: "#sayPi.listening.recording.userSpeaking",
-                        },
                         "saypi:piFinishedSpeaking": {
                             target: "#sayPi.listening",
                         },
                     },
                 },
             },
-        },
+        }
     },
     predictableActionArguments: true,
     preserveActionOrder: true,
@@ -10005,6 +10392,10 @@ const machine = (0,Machine/* createMachine */.C)({
                 EventBus/* default */.Z.emit("audio:setupRecording");
             }
         },
+        setupRecording: (context, event) => {
+            // differs from acquireMicrophone in that it's user-initiated
+            EventBus/* default */.Z.emit("audio:setupRecording");
+        },
         startRecording: (context, event) => {
             EventBus/* default */.Z.emit("audio:startRecording");
         },
@@ -10018,6 +10409,10 @@ const machine = (0,Machine/* createMachine */.C)({
         },
         dismissNotification: () => {
             buttonModule.dismissNotification();
+        },
+        acknowledgeUserInput: () => {
+            visualNotifications.listeningStopped();
+            audibleNotifications.listeningStopped();
         },
         draftPrompt: (context) => {
             const prompt = mergeService
@@ -10033,17 +10428,35 @@ const machine = (0,Machine/* createMachine */.C)({
             if (prompt)
                 setFinalPrompt(prompt);
         },
-        callStarted: () => {
-            buttonModule.callActive();
+        callIsStarting: () => {
+            buttonModule.callStarting();
         },
-        callEnded: () => {
+        callHasStarted: () => {
+            buttonModule.callActive();
+            audibleNotifications.callStarted();
+        },
+        callHasEnded: () => {
+            visualNotifications.listeningStopped();
             buttonModule.callInactive();
+            audibleNotifications.callEnded();
+        },
+        callHasErrors: () => {
+            buttonModule.callError();
+        },
+        callHasNoErrors: () => {
+            buttonModule.callActive();
         },
         disableCallButton: () => {
             buttonModule.disableCallButton();
         },
         enableCallButton: () => {
             buttonModule.enableCallButton();
+        },
+        cancelCountdownAnimation: () => {
+            visualNotifications.listeningStopped();
+        },
+        activateAudioOutput: () => {
+            audioControls.activateAudioOutput(true);
         },
     },
     services: {},
@@ -10066,12 +10479,7 @@ const machine = (0,Machine/* createMachine */.C)({
         },
         submissionConditionsMet: (context, event, meta) => {
             const { state } = meta;
-            const allowedState = !(state.matches("listening.recording.userSpeaking") ||
-                state.matches("listening.converting.transcribing"));
-            const empty = Object.keys(context.transcriptions).length === 0;
-            const pending = isTranscriptionPending();
-            const ready = allowedState && !empty && !pending;
-            return ready;
+            return readyToSubmit(state, context);
         },
         wasListening: (context) => {
             return context.lastState === "listening";
@@ -10099,6 +10507,12 @@ const machine = (0,Machine/* createMachine */.C)({
             let tempo = event.tempo !== undefined ? event.tempo : 0.5;
             const finalDelay = calculateDelay(context.timeUserStoppedSpeaking, probabilityFinished, tempo, maxDelay);
             console.log("Waiting for", (finalDelay / 1000).toFixed(1), "seconds before submitting");
+            // ideally we would use the current state to determine if we're ready to submit,
+            // but we don't have access to the state here, so we'll use the provisional readyToSubmit
+            const ready = provisionallyReadyToSubmit(context);
+            if (finalDelay > 0 && ready) {
+                visualNotifications.listeningTimeRemaining(finalDelay / 1000);
+            }
             // Get the current time (in milliseconds)
             const currentTime = new Date().getTime();
             nextSubmissionTime = currentTime + finalDelay;
@@ -10106,6 +10520,22 @@ const machine = (0,Machine/* createMachine */.C)({
         },
     },
 });
+function readyToSubmitOnAllowedState(allowedState, context) {
+    const empty = Object.keys(context.transcriptions).length === 0;
+    const pending = isTranscriptionPending();
+    const ready = allowedState && !empty && !pending;
+    return ready;
+}
+function provisionallyReadyToSubmit(context) {
+    const allowedState = !(context.userIsSpeaking || context.isTranscribing); // we don't have access to the state, so we read from a copy in the context (!DRY)
+    console.log("provisionallyReadyToSubmit", allowedState, context);
+    return readyToSubmitOnAllowedState(allowedState, context);
+}
+function readyToSubmit(state, context) {
+    const allowedState = !(state.matches("listening.recording.userSpeaking") ||
+        state.matches("listening.converting.transcribing"));
+    return readyToSubmitOnAllowedState(allowedState, context);
+}
 
 ;// CONCATENATED MODULE: ./src/StateMachineService.js
 function StateMachineService_typeof(o) { "@babel/helpers - typeof"; return StateMachineService_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, StateMachineService_typeof(o); }
@@ -10135,9 +10565,11 @@ var StateMachineService = /*#__PURE__*/StateMachineService_createClass(function 
 /* harmony default export */ const src_StateMachineService = (new StateMachineService());
 ;// CONCATENATED MODULE: ./src/SubmitErrorHandler.ts
 
+
 class SubmitErrorHandler {
     constructor() {
         this.audioOutputStatus = false;
+        this.audioControls = new AudioControlsModule();
         // Initialise properties if needed
         this.restorePointKey = "restorePoint";
     }
@@ -10204,26 +10636,10 @@ class SubmitErrorHandler {
             if (timeDifference <= 5) {
                 console.log("Restoring application state", restorePoint);
                 setFinalPrompt(restorePoint.prompt);
-                this.activateAudioInput(restorePoint.audioInputEnabled);
-                this.activateAudioOutput(restorePoint.audioOutputEnabled);
+                this.audioControls.activateAudioInput(restorePoint.audioInputEnabled);
+                this.audioControls.activateAudioOutput(restorePoint.audioOutputEnabled);
                 // Delete the executed restore point
                 localStorage.removeItem(this.restorePointKey);
-            }
-        }
-    }
-    activateAudioInput(enable) {
-        if (enable) {
-            const callButton = document.getElementById("saypi-callButton");
-            if (callButton) {
-                callButton.click();
-            }
-        }
-    }
-    activateAudioOutput(enable) {
-        if (enable) {
-            const audioOutputButton = document.getElementById("saypi-audio-output-button");
-            if (audioOutputButton) {
-                audioOutputButton.click();
             }
         }
     }
@@ -10243,8 +10659,12 @@ const submitErrorHandler = new SubmitErrorHandler();
 /* harmony default export */ const muted_microphone = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"500\" zoomAndPan=\"magnify\" viewBox=\"0 0 375 374.999991\" height=\"500\" preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\"><path fill=\"#776d6d\" d=\"M 239.722656 126.441406 L 239.722656 122.300781 C 239.722656 93.507812 216.296875 70.078125 187.5 70.078125 C 158.703125 70.078125 135.277344 93.507812 135.277344 122.300781 L 135.277344 187.953125 C 135.277344 199.988281 139.410156 211.050781 146.273438 219.890625 Z M 239.722656 126.441406 \" fill-opacity=\"1\" fill-rule=\"nonzero\"/><path fill=\"#776d6d\" d=\"M 155.046875 228.792969 C 163.964844 235.898438 175.234375 240.175781 187.5 240.175781 C 216.296875 240.175781 239.722656 216.75 239.722656 187.953125 L 239.722656 144.113281 Z M 155.046875 228.792969 \" fill-opacity=\"1\" fill-rule=\"nonzero\"/><path fill=\"#776d6d\" d=\"M 187.5 0 C 83.945312 0 0 83.945312 0 187.5 C 0 291.054688 83.945312 375 187.5 375 C 291.054688 375 375 291.054688 375 187.5 C 375 83.945312 291.054688 0 187.5 0 Z M 287.484375 96.355469 L 254.640625 129.195312 L 254.640625 187.953125 C 254.640625 224.976562 224.523438 255.097656 187.5 255.097656 C 171.117188 255.097656 156.105469 249.183594 144.4375 239.402344 L 138.109375 245.730469 C 151.417969 257.121094 168.652344 264.046875 187.5 264.046875 C 229.457031 264.046875 263.59375 229.914062 263.59375 187.953125 C 263.59375 183.832031 266.933594 180.496094 271.054688 180.496094 C 275.175781 180.496094 278.515625 183.835938 278.515625 187.953125 C 278.515625 235.625 241.667969 274.828125 194.960938 278.640625 L 194.960938 304.921875 L 220.121094 304.921875 C 224.242188 304.921875 227.582031 308.261719 227.582031 312.382812 C 227.582031 316.5 224.242188 319.839844 220.121094 319.839844 L 154.875 319.839844 C 150.757812 319.839844 147.417969 316.5 147.417969 312.382812 C 147.417969 308.261719 150.757812 304.921875 154.875 304.921875 L 180.039062 304.921875 L 180.039062 278.636719 C 160.007812 277.003906 141.816406 268.824219 127.542969 256.296875 L 96.351562 287.484375 C 95.132812 288.703125 93.53125 289.316406 91.933594 289.316406 C 90.335938 289.316406 88.734375 288.703125 87.515625 287.484375 C 85.074219 285.042969 85.074219 281.085938 87.515625 278.644531 L 118.761719 247.398438 C 104.929688 231.4375 96.484375 210.6875 96.484375 187.953125 C 96.484375 183.832031 99.824219 180.496094 103.941406 180.496094 C 108.0625 180.496094 111.402344 183.835938 111.402344 187.953125 C 111.402344 206.574219 118.148438 223.628906 129.292969 236.867188 L 135.628906 230.53125 C 126.089844 218.9375 120.355469 204.105469 120.355469 187.953125 L 120.355469 122.300781 C 120.355469 85.28125 150.476562 55.160156 187.496094 55.160156 C 221.128906 55.160156 248.980469 80.039062 253.816406 112.34375 L 278.640625 87.515625 C 281.082031 85.078125 285.039062 85.078125 287.480469 87.515625 C 289.925781 89.957031 289.925781 93.914062 287.484375 96.355469 Z M 287.484375 96.355469 \" fill-opacity=\"1\" fill-rule=\"nonzero\"/></svg>");
 ;// CONCATENATED MODULE: ./src/icons/call.svg
 /* harmony default export */ const call = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 768 767.999994\"\n    preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n    <path class=\"circle\" fill=\"#418a2f\"\n        d=\"M 767.988281 383.984375 C 767.988281 596.058594 596.066406 767.980469 383.996094 767.980469 C 171.921875 767.980469 0 596.058594 0 383.984375 C 0 171.910156 171.921875 -0.0078125 383.996094 -0.0078125 C 596.066406 -0.0078125 767.988281 171.910156 767.988281 383.984375 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n    <path class=\"phone-receiver\" fill=\"#ffffff\"\n        d=\"M 215.726562 199.773438 C 219.746094 194.835938 230.023438 183.625 243.644531 183.769531 C 244.40625 183.777344 245.300781 183.808594 246.34375 183.914062 C 246.34375 183.914062 248.492188 184.144531 250.613281 184.703125 C 268.292969 189.410156 299.921875 224.304688 299.921875 224.304688 C 326.925781 254.09375 334.722656 255.53125 334.636719 266.5 C 334.550781 276.777344 328.140625 284.71875 316.253906 296.566406 C 284.566406 328.148438 277.808594 330.53125 275.351562 340.421875 C 273.902344 346.234375 269.539062 357.511719 289.105469 379.355469 C 318.289062 411.929688 388.1875 478.4375 394.300781 482.515625 C 400.402344 486.585938 422.121094 500.832031 451.300781 474.371094 C 471.226562 456.304688 480.714844 435.066406 494.875 433.785156 C 502.363281 433.089844 507.878906 437.613281 519.167969 447.222656 C 585.886719 503.976562 586.871094 513.933594 586.3125 519.824219 C 585.355469 530.011719 580.75 539.210938 565.316406 550.382812 C 525.953125 578.878906 508.3125 603.992188 428.234375 570.742188 C 348.152344 537.484375 263.996094 453.335938 240.242188 417.359375 C 216.488281 381.390625 179.160156 326.421875 181.878906 288.414062 C 183.769531 261.980469 191.867188 238.863281 191.867188 238.863281 C 199.097656 220.882812 208.71875 207.878906 215.726562 199.773438 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n</svg>");
+;// CONCATENATED MODULE: ./src/icons/call-starting.svg
+/* harmony default export */ const call_starting = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 768 767.999994\" preserveAspectRatio=\"xMidYMid meet\"\n    version=\"1.0\">\n    <path fill=\"#4e84be\"\n        d=\"M 767.988281 383.984375 C 767.988281 596.058594 596.066406 767.980469 383.996094 767.980469 C 171.921875 767.980469 0 596.058594 0 383.984375 C 0 171.910156 171.921875 -0.0078125 383.996094 -0.0078125 C 596.066406 -0.0078125 767.988281 171.910156 767.988281 383.984375 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n    <path fill=\"#ffffff\"\n        d=\"M 215.726562 199.773438 C 219.746094 194.835938 230.023438 183.625 243.644531 183.769531 C 244.40625 183.777344 245.300781 183.808594 246.34375 183.914062 C 246.34375 183.914062 248.492188 184.144531 250.613281 184.703125 C 268.292969 189.410156 299.921875 224.304688 299.921875 224.304688 C 326.925781 254.09375 334.722656 255.53125 334.636719 266.5 C 334.550781 276.777344 328.140625 284.71875 316.253906 296.566406 C 284.566406 328.148438 277.808594 330.53125 275.351562 340.421875 C 273.902344 346.234375 269.539062 357.511719 289.105469 379.355469 C 318.289062 411.929688 388.1875 478.4375 394.300781 482.515625 C 400.402344 486.585938 422.121094 500.832031 451.300781 474.371094 C 471.226562 456.304688 480.714844 435.066406 494.875 433.785156 C 502.363281 433.089844 507.878906 437.613281 519.167969 447.222656 C 585.886719 503.976562 586.871094 513.933594 586.3125 519.824219 C 585.355469 530.011719 580.75 539.210938 565.316406 550.382812 C 525.953125 578.878906 508.3125 603.992188 428.234375 570.742188 C 348.152344 537.484375 263.996094 453.335938 240.242188 417.359375 C 216.488281 381.390625 179.160156 326.421875 181.878906 288.414062 C 183.769531 261.980469 191.867188 238.863281 191.867188 238.863281 C 199.097656 220.882812 208.71875 207.878906 215.726562 199.773438 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n</svg>");
 ;// CONCATENATED MODULE: ./src/icons/hangup.svg
-/* harmony default export */ const hangup = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 768 767.999994\"\n    preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n    <path fill=\"#776d6d\"\n        d=\"M 768 384 C 768 596.074219 596.074219 768 384 768 C 171.925781 768 0 596.074219 0 384 C 0 171.925781 171.925781 0 384 0 C 596.074219 0 768 171.925781 768 384 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n    <path fill=\"#ffffff\"\n        d=\"M 153.695312 418.96875 C 153.71875 418.972656 167.773438 455.105469 183.636719 464.507812 C 193.925781 470.585938 202.523438 467.320312 213.625 462.085938 C 235.234375 451.890625 257.347656 442.476562 280.480469 435.953125 C 286.855469 434.152344 290.832031 427.890625 289.265625 421.722656 C 286.402344 410.6875 283.480469 399.660156 280.507812 388.644531 C 278.808594 382.511719 283.523438 375.988281 291.148438 374.363281 C 320.28125 368.128906 350.152344 364.921875 380.039062 364.769531 C 381.359375 364.769531 386.640625 364.769531 387.960938 364.769531 C 417.847656 364.921875 447.714844 368.128906 476.851562 374.363281 C 484.476562 375.988281 489.191406 382.511719 487.492188 388.644531 C 484.519531 399.660156 481.597656 410.6875 478.734375 421.722656 C 477.167969 427.890625 481.144531 434.152344 487.519531 435.953125 C 510.652344 442.476562 532.765625 451.890625 554.375 462.085938 C 565.476562 467.320312 574.074219 470.585938 584.363281 464.507812 C 600.226562 455.105469 614.28125 418.972656 614.304688 418.96875 C 627.664062 390.730469 619.042969 359.117188 582.167969 342.550781 C 519.960938 314.839844 457.320312 300.640625 388.140625 300.203125 C 386.765625 300.203125 381.238281 300.203125 379.855469 300.203125 C 310.679688 300.640625 248.039062 314.839844 185.832031 342.550781 C 148.949219 359.117188 140.335938 390.730469 153.695312 418.96875 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n</svg>");
+/* harmony default export */ const hangup = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    viewBox=\"0 0 64 64\" preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n    <path fill=\"#776d6d\"\n        d=\"M 63.75 31.875 C 63.75 49.29395 49.29395 63.75 31.875 63.75 C 14.45605 63.75 0 49.29395 0 31.875 C 0 14.45605 14.45605 0 31.875 0 C 49.29395 0 63.75 14.45605 63.75 31.875 \"\n        fill-opacity=\"0.8\" fill-rule=\"nonzero\" />\n    <path fill=\"#ffffff\"\n        d=\"M 12.727539 34.74707 C 12.728027 34.747314 13.897949 37.758789 15.219788 38.542328 C 16.077148 39.048828 16.793945 38.776855 17.71875 38.340332 C 19.519531 37.490723 21.362305 36.74707 23.290039 36.246094 C 24.087891 36.012695 24.193359 35.574219 24.022461 35.060547 C 23.783203 34.224121 23.540039 33.388672 23.292969 32.553711 C 23.146484 32.042969 23.460938 31.490234 24.179688 31.196289 C 26.69043 30.344238 29.179688 30.243164 31.669922 30.230469 C 31.779297 30.230469 32.053711 30.230469 32.163086 30.230469 C 34.65332 30.243164 37.142578 30.344238 39.65332 31.196289 C 40.37207 31.490234 40.686523 32.042969 40.540039 32.553711 C 40.292969 33.388672 40.049805 34.224121 39.810547 35.060547 C 39.639648 35.574219 39.745117 36.012695 40.542969 36.246094 C 43.470703 36.74707 45.313477 37.490723 47.114258 38.340332 C 47.976562 38.776855 48.693359 39.048828 49.550781 38.542328 C 50.872559 37.758789 52.04248 34.747314 52.042969 34.74707 C 52.222656 32.560547 51.503906 29.84375 48.347656 28.462891 C 43.330078 26.236328 37.943359 25.053711 32.178711 25.016602 C 32.063477 25.016602 31.697266 25.016602 31.571289 25.016602 C 25.806641 25.053711 20.419922 26.236328 15.402344 28.462891 C 12.246094 29.84375 11.527344 32.560547 11.707031 34.74707 \"\n        fill-opacity=\"0.9\" fill-rule=\"nonzero\" />\n    <circle id=\"progress-ring\" cx=\"32\" cy=\"32\" r=\"30\" stroke-width=\"4\" stroke=\"red\"\n        fill=\"transparent\" stroke-dasharray=\"188.4\" stroke-dashoffset=\"188.4\"></circle>\n</svg>");
+;// CONCATENATED MODULE: ./src/icons/hangup-minced.svg
+/* harmony default export */ const hangup_minced = ("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!-- Generator: Adobe Illustrator 28.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->\n<svg version=\"1.1\" id=\"Layer_2_00000052807000332147576670000017844573372086964400_\"\n\t xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0 0 768 768\"\n\t style=\"enable-background:new 0 0 768 768;\" xml:space=\"preserve\"><metadata><c2pa:manifest xmlns:c2pa=\"http://c2pa.org/manifest\">AAAsaGp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAACxCanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46dXVpZDo4Y2FkNmI2NC1mZTc3LTRhNTUtODM2NS01Njg4ZjNjM2E3YTcAAAABqGp1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAAMpqdW1iAAAAJmp1bWRjYm9yABEAEIAAAKoAOJtxA2MycGEuYWN0aW9ucwAAAACcY2JvcqFnYWN0aW9uc4GjZmFjdGlvbmtjMnBhLmVkaXRlZG1zb2Z0d2FyZUFnZW50bUFkb2JlIEZpcmVmbHlxZGlnaXRhbFNvdXJjZVR5cGV4Rmh0dHA6Ly9jdi5pcHRjLm9yZy9uZXdzY29kZXMvZGlnaXRhbHNvdXJjZXR5cGUvdHJhaW5lZEFsZ29yaXRobWljTWVkaWEAAACtanVtYgAAAChqdW1kY2JvcgARABCAAACqADibcQNjMnBhLmhhc2guZGF0YQAAAAB9Y2JvcqVqZXhjbHVzaW9uc4GiZXN0YXJ0GQHRZmxlbmd0aBk7OGRuYW1lbmp1bWJmIG1hbmlmZXN0Y2FsZ2ZzaGEyNTZkaGFzaFggCMNPCTa5QR5ZSOAVeP4CmbLHHNfk+N2S7kLeQUa5jJBjcGFkSQAAAAAAAAAAAAAAAgtqdW1iAAAAJGp1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0AAAAB32Nib3KoaGRjOnRpdGxlb0dlbmVyYXRlZCBJbWFnZWlkYzpmb3JtYXRtaW1hZ2Uvc3ZnK3htbGppbnN0YW5jZUlEeCx4bXA6aWlkOjNlM2E0MzA4LTMyZTItNGUxYS1iYmI0LWZlMDMyYWRkYmUzYm9jbGFpbV9nZW5lcmF0b3J4NkFkb2JlX0lsbHVzdHJhdG9yLzI4LjAgYWRvYmVfYzJwYS8wLjcuNiBjMnBhLXJzLzAuMjUuMnRjbGFpbV9nZW5lcmF0b3JfaW5mb4G/ZG5hbWVxQWRvYmUgSWxsdXN0cmF0b3JndmVyc2lvbmQyOC4w/2lzaWduYXR1cmV4GXNlbGYjanVtYmY9YzJwYS5zaWduYXR1cmVqYXNzZXJ0aW9uc4KiY3VybHgnc2VsZiNqdW1iZj1j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C74AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2WQEAdKFoa0QRGITC73KKBuLviuGlo1jOrQQqEhxZ/WWydxLGWAu2BdYUSe56c2ziK2swBjQHkQ8SBUFDj/6VSAz4bzVzG2jR98GJ6Sppfue9H0gbx3SCmOACv5eGwRjjaI+/apPzNQSfEoIl3baURT3WjC7VijM+ZNHxALUdqSLtb+zonrnImcEakDKbD07+2y4s/jKdPI25MExsaZzNJnDUeC9zYwcQd8AUUs7O8jq+ASMRRCKy41eBFpqkS+0DVXhs1asD/2UmD0GuC9pr1B15dP/aS2svhU+52+EihNfAI8EM1CsPBCLwEVlb7tiXDBwYtZtoGUXFpCzvhgknfCxidA==</c2pa:manifest></metadata>\n<style type=\"text/css\">\n\t.st0{fill:#766E72;}\n\t.st1{fill:#B2FFF5;}\n\t.st2{fill:#E2E5CC;}\n\t.st3{fill:#94898F;}\n\t.st4{fill:#B9CCCB;}\n\t.st5{fill:#C3C89C;}\n\t.st6{fill:#A5B5B5;}\n\t.st7{fill:#C0C698;}\n\t.st8{fill:#AE9CA6;}\n\t.st9{fill:#E1C292;}\n\t.st10{fill:#DBB77F;}\n\t.st11{fill:#00DCD3;}\n</style>\n<g id=\"Layer_1-2\">\n\t<g>\n\t\t<path class=\"st0\" d=\"M0.1,414.8c0-2.5,0-5,0-7.5c2.7,0,5.5-0.1,8.2-0.1c2.3,0,3.2-1.1,3-3.2c-0.2-2.1,0.3-4.4-3-4.5\n\t\t\tc-2.7-0.1-5.5,0.3-8.2-0.4c0-10.8,0-21.5,0-32.2c1.7-0.1,3.5-0.2,5.2-0.2c5.9,0,5.9-0.1,6.2-5.9c0.1-2.5-0.8-3.4-3.2-3.3\n\t\t\tc-2.7,0-5.4-0.2-8.1-0.3c0-2.5,0-5,0-7.5c1.9-0.6,4.7,1.3,5.6-2c1.4-5.3,0.5-6.8-4.9-7.4c-0.2,0-0.4-0.2-0.7-0.3\n\t\t\tc0-2.8,0-5.5,0-8.2c2.7-0.1,5.5-0.2,8.2-0.2c1.2,0,2.2-0.1,2.4-1.7c0.2-1.6,0.5-3.2,0.8-4.8c0.3-1.6-0.4-2.2-2.1-2.2\n\t\t\tc-3.1,0-6.2,0-9.4-0.1c0-20.2,0-40.5,0-60.7c3-7.8,6-15.5,9-23.3c0.4-0.9,0.9-2.1-0.8-2.2c-3.2-0.3-1.7-2.1-1.1-3.4\n\t\t\tc4.2-9.7,8.9-19.3,13.8-28.7c1.3-2.5,2.9-3.6,5.8-3.5c7.9,0.2,15.7,0,23.6,0.1c1.9,0,3.2-0.5,4.3-2.3c3.2-5.6,6.5-11.2,9.9-16.8\n\t\t\tc1.4-2.3,1.3-3.2-1.7-3.1c-6.5,0.1-13,0-19.5,0.1c-2.8,0-3.1-0.9-1.6-3c3.1-4.5,6.3-9,9.3-13.6c1.2-1.8,2.6-2.4,4.7-2.4\n\t\t\tc5.9,0.1,11.7,0,17.6,0c1.2,0,2.6,0.2,3.5-0.9c4-5.2,7.9-10.5,12.1-16c-3.4-1.1-6.5-0.4-9.6-0.6c-0.8-0.1-1.9,0.3-2.4-0.6\n\t\t\tc-0.6-1,0.4-1.6,0.9-2.2c5.3-6.3,10.7-12.6,16.4-18.5c1.4-1.5,3-2.4,4.9-2.1c8.3,1.6,14.4-1.8,19.2-8.3c0.2-0.2,0.4-0.3,0.5-0.5\n\t\t\tc0.4-0.6,1.2-1.3,1.1-1.8c-0.2-1.1-1.4-0.8-2.2-0.8c-5.1,0-10.2,0-15.4-0.1c-0.9,0-2.2,0.4-2.6-0.8c-0.3-0.9,0.7-1.5,1.4-2.1\n\t\t\tc2.3-2.1,4.7-4.2,6.8-6.4c2.1-2.1,4.4-3,7.3-2.9c6.5,0.2,13,0.1,19.5,0.1c1.1,0,2.4,0.3,3.3-0.5c3.9-3.2,7.7-6.5,11.6-9.8\n\t\t\tc-0.1-0.4-0.2-0.7-0.3-1.1h-26.9c-0.1-0.4-0.2-0.9-0.3-1.3c6.1-3.2,9.8-10.1,17.7-10.6c0.8-0.1,1.6-0.7,2.3-1.2\n\t\t\tc5.5-3.7,11-7.4,16.5-11.1c0.6-0.4,1.8-1.1,1.7-1.3c-1.3-3.4,2-3.2,3.4-4.3c6.7-5.5,14.4-6.9,22.8-6.1c3.7,0.3,7.5-0.3,11.2,0.1\n\t\t\tc8.6,1,14.4-4.9,21.5-7.8c-0.1-0.4-0.1-0.7-0.1-1.1h-21.7c-0.1-0.4-0.1-0.8-0.2-1.2c8.1-2.8,14.9-9.3,24.2-8.2\n\t\t\tc14.7,1.8,27.6-3.4,41-9.5c-3.3-0.2-6-0.3-9.4-0.5c2.8-1.9,5.4-2.5,7.9-3.1c10.7-2.9,21.1-7.2,32.5-6.3c3.8,0.3,7.7-0.2,11.6-0.3\n\t\t\tc0.9,0.2,1.6-0.1,2.3-0.6c0.5-0.1,1-0.1,1.4-0.2c1.1,0.3,2.1,0,3-0.7c0.5-0.1,1-0.2,1.4-0.3c1.8,0.4,3.5-0.4,5.1-0.8\n\t\t\tC324.6,6.2,331,6.2,337,4c0.4,0,0.8-0.1,1.2-0.1c3.8,0.6,7.4-1.2,11.1-0.9c2.4,0.3,4.4,0.1,4.6-2.9h1.5c0.5,0.8,1,0.7,1.5,0h28.5\n\t\t\tc2,0.9,4.2,0.6,6.3,0.8c19,1.8,38.2-0.5,57.2,2.9c10.6,1.9,21.3,3.5,31.8,6.9h-13c7.4,2.9,14.9,4.8,22.2,7.2\n\t\t\tc4.6,1.5,9.1,2.6,13.9,2.3c10.9-0.7,19.9,4.8,29.4,8.6c0.1,0,0,0.4-0.1,1.2h-18.3c10.9,6.4,21.5,10.7,33.7,9.1\n\t\t\tc1.8-0.2,3.8,0.1,5.6-0.1c8.4-0.7,14.1,5,21,8c-0.1,0.4-0.2,0.8-0.2,1.1h-27.6c1.6,1.1,2.2,1.5,2.8,1.9c5.8,3,11.2,6.4,17.6,8.6\n\t\t\tc6.5,2.2,12,7.5,17.9,11.4c0.5,0.3,1.3,1.2,1.2,1.2c-2.5,2.8,1,3,2,3.9c2.3,2.1,5,3.8,7.3,5.8c2.2,1.9,4.6,2.6,7.5,2.6\n\t\t\tc7.6-0.2,15.2,0,22.9-0.1c1.8,0,3.5,0,4.9,1.3c3.1,2.7,6.4,5.2,9.5,7.9c0.7,0.6,1.9,1.2,1.3,2.3c-0.5,0.9-1.6,0.6-2.4,0.6\n\t\t\tc-6,0-12,0-18,0c-0.7,0-1.6-0.2-2,0.5c-0.5,0.8,0.4,1.3,0.8,1.8c5.3,6,11.1,10.7,19.9,8.8c0.4-0.1,0.8,0,1.1,0\n\t\t\tc8.3,0,15.2,3,20.8,9.1c0.1,0.1,0.2,0.2,0.3,0.3c0.5,0.7,1.6,1.2,1.2,2.1c-0.4,1-1.5,0.6-2.3,0.7c-3,0.3-6.1-0.5-9.4,0.6\n\t\t\tc4.5,5.1,9.4,9.5,12.9,14.7c4.4,6.5,9.8,9.1,17.3,7.8c2.3-0.4,4,0.6,5.5,2.4c3,4.1,6.2,8.1,9.3,12.2c0.6,0.8,1.6,1.5,0.9,2.6\n\t\t\tc-0.6,1-1.8,0.7-2.8,0.7c-5.2,0-10.5,0.1-15.8,0c-2.5,0-2.8,0.9-1.4,2.8c3,4.3,6,8.6,8.8,13c1.2,1.9,2.7,2.6,4.9,2.6\n\t\t\tc6.8-0.1,13.5,0,20.2-0.1c2,0,3.3,0.6,4.3,2.3c3.2,5.5,6.4,11,9.8,16.4c1.8,2.9,0.8,3.6-2.2,3.5c-7.6-0.1-15.2,0-22.9-0.1\n\t\t\tc-2.5,0-3.2,0.7-2,3.1c5.3,9.9,10.2,20.1,14.6,30.4c0.5,1.1,1,2.2,2.4,2c2.5-0.3,3.2,1.3,3.9,3.1c5.4,13.4,10.2,27.1,14,41.1\n\t\t\tc0.5,1.8,1.7,3.7-1.7,4c-1.5,0.1-0.9,1.6-0.7,2.5c2.7,10.9,5.3,21.8,7,32.9c0.3,2.1,1.3,2.9,3.5,2.9c8.5-0.1,17-0.1,25.5-0.1v8.2\n\t\t\tc-1.3,0.8-2.7,0.4-4,0.5c-5.3,0-10.7,0.1-16,0c-2.3,0-3.3,0.6-2.6,3c0.3,0.9,0.3,2,0.3,3c0,2.1,1,2.8,3,2.8\n\t\t\tc6.5-0.1,12.9-0.1,19.4-0.2v9.8c-3.1,0-6.2-0.1-9.3-0.1c-1.2,0-2.1,0.2-2.3,1.8c-0.5,5,0.7,6.5,5.6,6.5c2,0,4,0.1,6,0.1v9\n\t\t\tc-5.6,0-11.2,0-16.8-0.1c-2,0-3.5,0.5-3.2,3c-0.2,4.8,0.2,5.3,4.7,5.3c5.1,0,10.2,0,15.3,0v16.5c-5.5,0-10.9,0-16.4,0.1\n\t\t\tc-3.2,0-3.8,2.2-3.8,4.8c-0.1,2.8,1.5,3.3,3.8,3.3c5.5,0,10.9,0,16.4,0v6.8c-2.8,0.7-5.6,0.3-8.4,0.3c-2.5,0-3.3,1.1-2.5,3.5\n\t\t\tc0,0.8,0,1.6,0.1,2.5c-0.6,0.8-0.9,1.4,0.4,1.7c3.2,0,6.5,0.1,9.7,0.1c0.3,0,0.5,0.1,0.8,0.1v7.5c-6.1,0-12.2,0.1-18.3,0\n\t\t\tc-4.7-0.1-3.2,3.7-3.6,5.9c-0.6,2.8,2,1.9,3.3,2c6.2,0.3,12.4-0.5,18.6,0.5v6.8c-8.1,0.1-16.2,0.3-24.3,0.2\n\t\t\tc-2.9,0-3.2,1.5-3.5,3.6c-0.2,1.8-0.8,3.6,2.1,3.5c1,0,1.9,0.6,1.3,1.6c-1.3,2.5,0.9,7.1-4.5,7.1c-1.2,0-1.3,1.4-1.4,2.3\n\t\t\tc-0.4,2.1-0.5,4.2-1.2,6.2c-0.8,2.6,0.1,3.3,2.6,3.3c6-0.1,12,0,18,0c9.3,0,9.2,0,7.1,9c-0.5,2.3-1.5,3.1-3.8,3\n\t\t\tc-4.6-0.1-9.2,0-13.9,0c-9.7,0-9.6,0-12,9.4c-0.7,2.5,0.2,3.1,2.5,3c3.7-0.1,7.5,0,11.2,0c9,0,9,0,6.3,8.7\n\t\t\tc-0.8,2.5-1.9,3.6-4.7,3.6c-10.7,0-10.6,0.1-14,10.3c-1,2.9-0.1,3.4,2.6,3.3c4.4-0.1,8.7,0,13.1-0.1c2.6-0.1,3.4,0.8,2.3,3.3\n\t\t\tc-2.6,6.2-5.2,12.4-7.6,18.7c-0.9,2.2-2.2,3-4.5,3c-7.6-0.1-15.2,0-22.8-0.1c-2.2,0-3.4,0.7-4.3,2.7c-3,6.4-6.2,12.8-9.4,19.1\n\t\t\tc-1.2,2.4-1,3.2,1.9,3.2c7.5-0.1,15,0,22.5,0c4.3,0,4.3,0,2.3,3.6c-2,3.5-4.2,6.8-5.9,10.4c-1.3,2.7-3.1,3.3-6,3.3\n\t\t\tc-8.5-0.1-17,0-25.5,0.1c-1.5,0-2,1-2.2,2.2c-0.2,0.1-0.2,0.3-0.2,0.5c-2.7,3-4.8,6.4-6.4,10c-0.2,0.1-0.3,0.3-0.3,0.5\n\t\t\tc-1.3,0.8-2.3,1.8-2.1,3.4c0.1,0.6,0.9,0.5,1.5,0.4c8.5,0,17,0,25.5,0c0.6,1.3-0.3,2.2-0.9,3c-2.6,3.7-5.3,7.3-7.8,11\n\t\t\tc-1.4,2-3.2,2.5-5.5,2.5c-4.6-0.1-9.2,0-13.8,0c-1.5,0-3,0-4.1,1.4c-3.7,4.7-7.5,9.3-11.3,13.9c-0.7,0.9-1.1,1.8,0.7,1.9\n\t\t\tc3.7,0.1,7.5,0.2,11.2,0.2c-0.5,0.7-0.9,1.4-1.5,2.1c-4.7,5.4-9.4,10.7-14.2,16c-0.6,0.6-1.2,1.3-1.8,1.9\n\t\t\tc-1.4,0.6-2.5,1.6-3.1,3.1c-1.1,1.1-2.3,2.2-3.4,3.3c-3.9,2.8-7.3,6-10.4,9.7l-0.1,0.1c-2,0.9-3.6,2.3-4.8,4.2\n\t\t\tc-0.7,0.6-1.3,1.2-2,1.8c-1.5,0.4-2.6,1.3-3.2,2.7c-0.4,0.3-0.8,0.7-1.3,1c-2.3,1.3-4.5,2.8-6.1,5.1c-0.7,0.5-1.4,1.1-2.1,1.7\n\t\t\tc-6.6,4.3-12.9,9-19,14c-0.2,0-0.4,0.1-0.5,0.3c-0.8,0-1.4,0.5-1.7,1.2c-0.2,0-0.4,0.1-0.5,0.3c-4.3,1.7-7.6,5-11.7,7\n\t\t\tc-4.1,0-8.2,0.1-12.4,0.1c-2.1-0.2-3.4,1-4.7,2.3c-0.2,0-0.4,0.2-0.5,0.3c-0.8,0.1-1.4,0.3-1.8,1.1c-0.2,0-0.4,0.1-0.5,0.3\n\t\t\tc-1.9,0.4-3.5,1.2-4.7,2.7c-0.2,0-0.4,0.1-0.6,0.3c-1.4,0.4-2.7,0.9-3.6,2.1c1,0.9,2,0.7,2.9,0.5c4.7,0,9.5,0.1,14.2,0.1\n\t\t\tc-0.7,2.4-3.6,2-4.7,3.8c-0.2,0-0.4,0.1-0.6,0.2c-8.9,6-18.9,5.9-29,5.5c-3-0.1-6,0-9,0c-1.1,0-2.3,0-3.3,0.5\n\t\t\tc-6.1,2.7-12.1,5.5-18.3,8.3c0.8,1.1,1.7,0.9,2.5,0.6c7.4,0,14.9,0,22.3,0c0.5,2.4-1.7,2.2-2.9,2.6c-6.9,2.7-13.9,5.3-20.9,7.9\n\t\t\tc-13,0.1-25.9,0.2-38.9,0.3c-10.1,2.8-20.3,5.7-30.5,8.5c0,0.3,0.1,0.6,0.1,0.8h46.2c-3,2.1-6.1,1.5-8.4,3.1c-0.5,0-1,0.1-1.5,0.1\n\t\t\tc-7.6,0.9-15.1,2-22.5,3.6c-1,0.1-2,0.1-2.9,0.2c-5,0.4-10.1,0.8-15.1,1.2c-0.6-0.5-1.1-0.4-1.6,0.2c-3,0.2-5.9,0.3-8.9,0.5\n\t\t\tc-2.6-0.7-5.2-1.6-7.5,0.8h-27.7c-7.5-2-15.1-1.7-22.8-1.8c-0.7,0-1.3-0.1-2-0.1c-1.7-1.1-3.5-1.2-5.4-0.8\n\t\t\tc-0.9-0.1-1.9-0.1-2.8-0.2c-1.9-1-3.9-1.6-6-0.9c-0.7,0-1.4-0.1-2.1-0.1c-2.9-1.7-6.2-1.7-9.4-1.7c-0.7,0-1.3-0.1-2-0.1\n\t\t\tc-2.9-1.3-5.8-2.1-9-1.8c-0.4-0.1-0.9-0.1-1.3-0.2c-0.7-0.9-1.6-1.1-2.7-0.8c-0.4-0.1-0.8-0.1-1.2-0.2c-0.9-0.8-2-1.1-3.2-0.7\n\t\t\tc-0.7,0-1.4-0.1-2.1-0.1c-0.8-0.2-1.7-0.6-2.5-0.6c-19.4-0.4-38.9,1.2-58.2-1.2l-1.3-0.2c-5.2-2.5-10.9-3.4-16.3-5.2\n\t\t\tc-1.2-0.4-2.9-0.2-4.2-2.5H273l0.1-1.1c-8.6-3.1-17.3-6.2-25.9-9.2c-10.2-0.1-20.3-0.1-30.5-0.2c-3.3-2.2-6.8-3.6-10.6-4.5\n\t\t\tc-0.2-0.1-0.4-0.1-0.6-0.2c-1.4-2.4-5.1-1.7-6.1-4.7c7.4,0,14.9,0,22.3,0c0.8,0.2,1.9,0.7,2-0.5c0.1-0.8-0.9-0.8-1.6-0.8l-0.1,0\n\t\t\tc-1.7-1.9-3.9-2.9-6.3-3.3l-2.6-1.3c-2-1.8-4.1-3.5-6.9-3.5c-6.7-0.1-13.4-0.2-20.1-0.3c-0.9-1.1-2-1.6-3.4-1.7\n\t\t\tc-0.2-0.1-0.4-0.2-0.5-0.3c-2.4-3.3-7.2-3.6-10.1-7.8c3.1,0,5.5,0,8,0c0.6,0,1.4-0.2,1.6-0.5c0.5-0.9-0.4-1.3-1-1.7\n\t\t\tc-3-2-5.8-4.3-9.2-5.5c-0.2-0.1-0.3-0.2-0.5-0.3c-1.8-2.5-4.3-3.8-7-4.9c-0.4-0.3-0.9-0.7-1.3-1c-2.1-2.5-4.7-4.4-7.7-5.7\n\t\t\tc-0.2-0.1-0.3-0.2-0.5-0.3c-0.9-2.3-3.1-3.2-4.9-4.5c-5.3-4-9.9-9-15.7-12.5c-0.2-0.1-0.3-0.2-0.5-0.3c-1.8-2.7-4.1-5-7-6.4\n\t\t\tc-0.9-0.9-1.8-1.7-2.7-2.6c-4.5-5.5-9.5-10.5-15-15c-0.6-0.7-1.2-1.3-1.8-2c-1.7-3.2-4.2-5.7-7.1-7.8c-0.3-0.4-0.7-0.8-1.1-1.2\n\t\t\tc-0.6-1.8-1.4-3.3-3.6-3.2c-4.5-0.4-9.1,0.5-13.7-0.5c-2.6-4.3-5.6-8.3-9.5-11.5c-0.1-0.2-0.2-0.3-0.3-0.5c0-1.9-2.2-2.8-2-4.8\n\t\t\tc5.7,0,11.5,0,17.2-0.1c2.5-0.5,0.9-1.6,0.3-2.4c-2.2-3.1-4.4-6.3-6.8-9.3c-1.2-1.6-1.8-3.9-4.2-4.5c-7.8-0.1-15.6-0.1-23.4-0.2\n\t\t\tc-1.9,0-4,0.6-5.8-0.6c-1.3-3.3-3.1-6.2-5.7-8.5c-0.1-0.2-0.2-0.3-0.3-0.5c-0.5-2.2-1.3-4.3-3.4-5.5c-0.1-0.2-0.2-0.3-0.3-0.5\n\t\t\tc0-0.5,0.1-1,0.2-1.6c8.4,0,16.7-0.2,25.1,0c3.4,0,3.6-1,1.9-3.6c-2.2-3.6-4.4-7.3-6.3-11c-1.1-2-2.4-2.8-4.7-2.8\n\t\t\tc-7.9,0.1-15.7-0.1-23.6,0.1c-2.6,0.1-4.1-0.8-5.2-3.2c-2.9-6.2-6-12.3-9.1-18.5c-1.4-2.8-0.5-3.4,2.3-3.4\n\t\t\tc7.2,0.1,14.5-0.1,21.7,0.1c3.1,0.1,3.3-1.1,2.2-3.6c-1.8-4-3.4-8-5-12.1c-3.7-9-3.7-8.9-13.4-9.1c-12.7-0.2-9.6,2.4-14-10\n\t\t\tc-1.5-4.1-1.2-4.4,3.2-4.5c9.8-0.1,9.8-0.1,6.7-9.3c-0.6-1.9-1.6-2.5-3.5-2.5c-5.2,0.1-10.5,0.1-15.7,0.2c0-4.2,0-8.5,0-12.8\n\t\t\tc3.1,0,6.2,0.1,9.3,0.1c6,0,8.2-2.9,6.8-8.7c-0.1-0.4-0.2-0.7-0.3-1.1c-0.3-1.3-1.1-1.8-2.4-1.8c-4.5,0.1-9,0.1-13.4,0.2\n\t\t\tc0-9.5,0-19,0-28.5c2.5,0,4.9-0.1,7.4-0.1c2.1,0.1,3-0.4,2.8-2.9c-0.3-3.5-1.6-4.8-5-4.3c-1.7,0.2-3.4-0.1-5.2-0.2\n\t\t\tc0-2.5,0-5,0-7.5c1.7-1.3,5.6,1.5,5.5-3.4C5.5,414.7,3.3,414.3,0.1,414.8L0.1,414.8z M414.5,366.7c0,0.2-0.1,0.4-0.1,0.6\n\t\t\tc6.5,0.9,13.2,1.5,19.6,2.8c17.8,3.6,35.6,6.4,53.9,5.2c5-0.3,8.2,2.6,10.2,6.9c2.8,5.9,0.5,9.5-5.9,9.5c-7.4,0-14.8,0-22.1,0\n\t\t\tc-4.2,0-3.5,3.9-3.8,6.1c-0.5,2.7,2.3,1.5,3.6,1.5c7.1,0.1,14.2,0,21.4,0.1c1,0,2.4-0.4,3,0.9c1,2.2-1.7,6.5-4.2,6.5\n\t\t\tc-4.2,0.1-8.5,0-12.8,0c-5.1,0-5.2,0.2-6.3,5.3c-0.5,2.1,0.3,2.7,2.2,2.6c2.9-0.1,5.8,0,8.6,0c0.8,0,1.8-0.2,2.1,1\n\t\t\tc0.7,2.6-1.9,6.3-4.5,6.3c-5.4,0-10.8,0-16.1,0c-2,0-4.5-0.6-4.4,2.9c0.1,3.8,1.2,5,4.8,5.1c5.2,0,10.6,0.7,15.7-0.1\n\t\t\tc6.9-1.1,10.2,3.9,15,6.6c0,0.3-0.1,0.7-0.1,1h-21.7c0.7,1.1,1.5,1.5,2.3,1.8c6.7,2.2,13.5,4.2,20.3,6.1c6.7,1.9,13,5.1,19.3,8.7\n\t\t\tc11.2,6.5,22.9,12.9,37.2,11.6c6.6-0.6,11.8-2.2,16-7.1c0.9-1,1.9-2,2.7-3.1c1.1-1.5,2.3-2.5,4.3-2.4c1.7,0,6.6-5.9,6.5-7.5\n\t\t\tc0-0.6-0.4-0.9-0.9-1c-2.4-0.4-1.3-1.7-0.8-3c1.3-3.3,3.5-4.8,7.2-4.4c2.7,0.3,5.5,0.1,8.2,0.1c5.1,0,10.2,0,15.4,0\n\t\t\tc3.7-0.1,4.4-3.5,4.7-5.8c0.3-2.4-2.6-1.2-4.1-1.3c-6-0.2-12,0-18-0.1c-0.9,0-2.5,0.6-2.5-1.2c-0.2-3,3.4-6.6,6.5-6.7\n\t\t\tc5.1,0,10.3-0.2,15.4,0.1c3.6,0.2,5.2-1.2,6.2-4.4c0.8-2.3,0.7-3.2-2-3.1c-2.6,0.1-5.2,0-7.9,0c-0.8,0-1.8,0.3-2.2-0.8\n\t\t\tc-0.9-2.2,2.3-7,4.8-7c5,0,10,0,15-0.1c3.6-0.1,3-3.2,3.3-5.3c0.5-2.7-1.8-2.2-3.3-2.2c-7,0-14-0.1-21,0c-2.6,0-4.5,0.1-4.5-3.6\n\t\t\tc0-3.6,1.4-4.4,4.7-4.3c7.5,0.2,15,0,22.5,0.1c2.8,0.1,3.5-1,3.1-3.6c-0.5-3.2-1.2-6.4-2-9.5c-0.7-2.7-2.2-3.5-4.9-3.4\n\t\t\tc-7,0.1-14-0.2-21,0.2c-4.3,0.2-6.5-1.2-8.2-5.1c-1.3-3-1-3.6,2.2-3.5c7.2,0.1,14.5,0.1,21.7,0c0.8,0,1.9,0.5,2.3-0.6\n\t\t\tc0.3-0.8-0.4-1.4-0.8-2c-2.8-4.3-6.1-7.5-11.9-6.5c-2.3,0.4-4.8-0.3-7.1,0.1c-7.2,1.3-11-3.7-16.3-8.3h11.5c0-1.2-0.6-1.5-1.1-1.8\n\t\t\tc-7.7-4.5-15.4-8.9-24.9-7.6c-2.2,0.3-4.5-0.1-6.7,0.1c-9.8,1-17.3-5.3-26-7.7c0-0.4,0.1-0.8,0.2-1.2h20.5c0-0.4,0.1-0.7,0.1-1.1\n\t\t\tc-9.3-2.7-17.9-7.9-28.2-7.6c-13.5,0.5-27,0.8-39.8-4.6c-2.3-1-4.8-1.5-7.2-2.1c-29.8-7.8-60.1-12.7-90.9-14.6\n\t\t\tc-51.4-3.2-102.1,0.9-152,13.8c-7.9,2-15.7,4.4-23.5,6.6c0.1,0.4,0.1,0.8,0.2,1.1h24.2c-10.5,4-20.2,10-31.9,8.5\n\t\t\tc-2.9-0.4-6,0.1-9-0.1c-9.8-0.8-17.5,5-26.1,7.8c0,0.4,0.1,0.8,0.1,1.2h17.1c0.1,0.5,0.1,0.9,0.2,1.4c-7.5,2.4-13.1,9.4-22.1,7.8\n\t\t\tc-5.9-1-10.1,1.9-13.9,5.6c-0.6,0.6-1.7,1-1.2,2c0.4,1,1.6,0.6,2.4,0.6c4.2,0,8.5,0,12.8,0.1c0.9,0,2.2-0.2,2,1.4\n\t\t\tc-0.4,2.4-6.7,7.6-9.2,7.6c-7,0-14,0.3-21-0.1c-4-0.2-5.9,1.4-7.4,4.7c-1.6,3.7-1.6,3.9,2.5,3.9c7.4,0,14.8,0.1,22.1,0\n\t\t\tc3.1-0.1,3.6,0.9,2.7,3.7c-1,2.9-1.7,6.1-1.9,9.1c-0.2,3.1-1.6,3.6-4.3,3.6c-7.6-0.1-15.2,0.1-22.9-0.1c-2.9-0.1-3.5,1-3.6,3.7\n\t\t\tc-0.1,3.3,1.1,4.3,4.3,4.2c7.5-0.2,15,0,22.5-0.1c3.9,0,2.9,3.1,3.3,5.1c0.6,2.6-1.6,2.3-3.1,2.4c-4.5,0-9,0-13.5,0\n\t\t\tc-1,0-2.1-0.2-2.6,0.9c-0.9,2,2.2,6.9,4.5,6.9c3.1,0.1,6.2,0,9.4,0c2,0,4.9,3.7,4.5,5.9c-0.4,2.5-2.6,1.3-4,1.4\n\t\t\tc-5.1,0.1-10.2,0-15.4,0.1c-1,0-2.4-0.5-2.5,1.4c-0.1,3.2,3.2,6.6,6.5,6.6c6.8,0,13.5,0,20.2,0c2.2,0,5.6,3.8,5.1,5.9\n\t\t\tc-0.7,2.4-2.9,1.2-4.4,1.2c-7,0.1-14,0-21,0.1c-1.1,0-3.3-0.5-2.9,1.2c0.5,2.4,1.3,5.2,4.4,6c2.4,0.6,7.1,5.2,7.5,7.4\n\t\t\tc0.1,0.6,0.1,1-0.5,1.1c-3.3,0.7-0.9,2.2-0.3,3c4.9,6.1,10.3,10.8,19,9.5c5.2-0.8,10.7,0.7,15.9-1.4c10-4,19.3-9.5,30.1-12.1\n\t\t\tc6.5-1.6,13-4.8,19.1-8.4c6.5-3.8,14.1-6.4,22.1-6.3c7.6,0.1,15.2,0.1,22.9,0c4.6,0,8.9-1,12.5-4.2c0.7-0.6,1.9-1.2,1.4-2.4\n\t\t\tc-0.4-0.9-1.5-0.6-2.4-0.6c-6.1,0-12.2,0.1-18.4-0.1c-1.2,0-4.1,1.2-3.5-1.6c0.5-2.2-1.5-6.4,3.6-6.3c5.2,0.1,10.5,0.1,15.7,0\n\t\t\tc1.4,0,4,0.9,3.6-1.7c-0.3-2.2,0.4-5.7-3.8-5.6c-3.1,0.1-6.3,0.2-9.4,0c-3.9-0.3-3-3.8-3.4-6.1c-0.5-2.4,2-1.6,3.2-1.7\n\t\t\tc3.7-0.1,7.5,0,11.2,0c5.1,0,5.6-0.8,3.7-5.6c-0.8-2.1-2.4-1.9-4-1.9c-7.8,0-15.5,0-23.2,0c-2.3,0-4.2-3-4-6\n\t\t\tc0.2-2.7,2.4-1.6,3.8-1.6c7.1-0.1,14.2-0.2,21.4,0c3,0.1,4.6-0.2,3.8-4c-0.9-3.8,0.8-7.1,3.6-9.7c0.7-0.7,2-1,2.1-2.9h-23.4\n\t\t\tc0.3-0.9,0.7-1.2,1.2-1.3c18.8-3.5,37.5-7.3,56.8-7c12.8,0.2,25.5-0.5,38.2-1.4c19.1-1.2,38.2-1,57.2,1.3L414.5,366.7L414.5,366.7\n\t\t\tz M210.8,465.9c-3.8-1.2-14.4-1.1-16.8,0.2C199.8,468.7,204.7,468.6,210.8,465.9z M570.9,465.8c5.6,2.4,11.2,3.1,16.8-0.1\n\t\t\tC582.1,465.1,576.5,465,570.9,465.8z\"/>\n\t\t<path class=\"st1\" d=\"M767.9,339.8c-6.5,0.1-12.9,0.1-19.4,0.2c-2,0-3-0.6-3-2.8c0-1,0-2-0.3-3c-0.7-2.4,0.3-3.1,2.6-3\n\t\t\tc5.3,0.1,10.7,0,16,0c1.3,0,2.7,0.3,4-0.5V339.8L767.9,339.8z\"/>\n\t\t<path class=\"st1\" d=\"M0.1,465.7c4.5-0.1,9-0.1,13.4-0.2c1.3,0,2.1,0.5,2.4,1.8c0.1,0.4,0.2,0.7,0.3,1.1c1.4,5.8-0.8,8.7-6.8,8.7\n\t\t\tc-3.1,0-6.2-0.1-9.3-0.1C0.1,473.2,0.1,469.5,0.1,465.7z\"/>\n\t\t<path class=\"st2\" d=\"M767.9,430.5c-6.2-0.9-12.4-0.1-18.6-0.5c-1.4-0.1-3.9,0.8-3.3-2c0.5-2.2-1.1-6,3.6-5.9\n\t\t\tc6.1,0.1,12.2,0,18.3,0V430.5z\"/>\n\t\t<path class=\"st3\" d=\"M767.9,399.8c-5.5,0-10.9,0-16.4,0c-2.3,0-3.9-0.5-3.8-3.3c0.1-2.6,0.7-4.8,3.8-4.8\n\t\t\tc5.5-0.1,10.9-0.1,16.4-0.1V399.8z\"/>\n\t\t<path class=\"st4\" d=\"M0.1,357c2.7,0.1,5.4,0.3,8.1,0.3c2.4,0,3.3,0.9,3.2,3.3c-0.2,5.8-0.2,5.9-6.2,5.9c-1.7,0-3.5,0.1-5.2,0.2\n\t\t\tC0.1,363.5,0.1,360.3,0.1,357L0.1,357z\"/>\n\t\t<path class=\"st5\" d=\"M0.1,322.5c3.1,0,6.2,0.1,9.4,0.1c1.6,0,2.3,0.6,2.1,2.2c-0.3,1.6-0.6,3.2-0.8,4.8c-0.2,1.5-1.2,1.6-2.4,1.7\n\t\t\tc-2.7,0.1-5.5,0.2-8.2,0.2C0.1,331.5,0.1,322.5,0.1,322.5z\"/>\n\t\t<path class=\"st5\" d=\"M767.9,357.8c-2,0-4-0.1-6-0.1c-4.9,0-6.2-1.5-5.6-6.5c0.2-1.6,1.1-1.8,2.3-1.8c3.1,0,6.2,0.1,9.3,0.1\n\t\t\tL767.9,357.8L767.9,357.8z\"/>\n\t\t<path class=\"st6\" d=\"M0.1,399c2.7,0.7,5.5,0.3,8.2,0.4c3.3,0.1,2.8,2.5,3,4.5c0.2,2.2-0.7,3.3-3,3.2c-2.7,0-5.5,0.1-8.2,0.1\n\t\t\tC0.1,404.5,0.1,401.7,0.1,399L0.1,399z\"/>\n\t\t<path class=\"st3\" d=\"M767.9,375c-5.1,0-10.2,0-15.3,0c-4.6,0-5-0.5-4.7-5.3c6.6,1.8,13.3,0.5,20,0.9L767.9,375L767.9,375z\"/>\n\t\t<path class=\"st7\" d=\"M0.1,429.8c1.7,0.1,3.5,0.4,5.2,0.2c3.5-0.5,4.7,0.8,5,4.3c0.2,2.6-0.6,3-2.8,2.9c-2.5-0.1-4.9,0-7.4,0.1\n\t\t\tC0.1,434.7,0.1,432.2,0.1,429.8L0.1,429.8z\"/>\n\t\t<path class=\"st8\" d=\"M767.9,370.5c-6.7-0.4-13.4,0.9-20-0.9c-0.3-2.4,1.1-3,3.2-3c5.6,0,11.2,0,16.8,0.1L767.9,370.5L767.9,370.5z\n\t\t\t\"/>\n\t\t<path class=\"st7\" d=\"M0.1,339.8c0.2,0.1,0.4,0.3,0.7,0.3c5.4,0.6,6.3,2.1,4.9,7.4c-0.9,3.3-3.7,1.4-5.6,2\n\t\t\tC0.1,346.3,0.1,343,0.1,339.8z\"/>\n\t\t<path class=\"st1\" d=\"M767.2,414.6c-3.2,0-6.5-0.1-9.7-0.1c-0.1-0.6-0.3-1.1-0.4-1.7c0-0.8,0-1.6-0.1-2.5c3.6-1.4,7.3-0.7,10.9-0.8\n\t\t\tv4.5C767.7,414.2,767.4,414.4,767.2,414.6L767.2,414.6z\"/>\n\t\t<path class=\"st5\" d=\"M0.1,414.8c3.2-0.4,5.4,0,5.5,4.1c0.1,4.9-3.8,2-5.5,3.4C0.1,422.2,0.1,414.8,0.1,414.8z\"/>\n\t\t<path class=\"st8\" d=\"M342,2.3c-2.4-0.1-4.8-0.1-7.3-0.2c0.9-1.5,2.4-1.1,3.7-1.2c2-0.1,4,0,5.8-0.8h9.8c-0.3,3-2.3,3.2-4.6,2.9\n\t\t\tC347,1.9,344.6,1.6,342,2.3z\"/>\n\t\t<path class=\"st6\" d=\"M374.2,767.9c0.5-0.7,0-1.2-0.3-1.8c7.6,0.2,15.3-0.2,22.8,1.8H381c-1-0.8-2-1-3,0H374.2z\"/>\n\t\t<path class=\"st9\" d=\"M767.9,409.5c-3.7,0.1-7.4-0.6-10.9,0.8c-0.9-2.4-0.1-3.4,2.5-3.5c2.8-0.1,5.7,0.4,8.4-0.3V409.5L767.9,409.5\n\t\t\tz\"/>\n\t\t<path class=\"st10\" d=\"M457.6,765.2c-1.2,2-4.3,0.3-5.3,2.7H432c0-0.3,0-0.5,0-0.8c3-0.2,5.9-0.3,8.9-0.5c0.5-0.1,1.1-0.1,1.6-0.2\n\t\t\tC447.5,766,452.6,765.6,457.6,765.2L457.6,765.2z\"/>\n\t\t<path class=\"st10\" d=\"M344.2,0.1c-1.9,0.8-3.9,0.7-5.8,0.8c-1.3,0.1-2.8-0.3-3.7,1.2c-2.3,0-5,1.3-6.3-2L344.2,0.1L344.2,0.1z\"/>\n\t\t<path class=\"st3\" d=\"M432,767.1c0,0.3,0,0.5,0,0.8h-7.5C426.7,765.5,429.4,766.4,432,767.1z\"/>\n\t\t<path class=\"st8\" d=\"M357,0.1c-0.5,0.7-1,0.8-1.5,0H357z\"/>\n\t\t<path class=\"st11\" d=\"M378,767.9c1-1,2-0.8,3,0H378z\"/>\n\t\t<path class=\"st9\" d=\"M767.2,414.6c0.3-0.2,0.5-0.4,0.8-0.6v0.8C767.7,414.7,767.4,414.7,767.2,414.6z\"/>\n\t\t<path class=\"st1\" d=\"M414.5,366.7h13c-19-2.3-38.1-2.5-57.2-1.3c-12.7,0.8-25.4,1.6-38.2,1.4c-19.2-0.3-38,3.5-56.8,7\n\t\t\tc-0.4,0.1-0.8,0.4-1.2,1.3h23.4c-0.1,1.9-1.4,2.2-2.1,2.9c-2.8,2.7-4.5,5.9-3.6,9.7c0.9,3.8-0.7,4.1-3.8,4\n\t\t\tc-7.1-0.2-14.2-0.1-21.4,0c-1.3,0-3.5-1.1-3.8,1.6c-0.3,3.1,1.6,6,4,6c7.8,0.1,15.5,0,23.2,0c1.6,0,3.1-0.2,4,1.9\n\t\t\tc1.9,4.8,1.4,5.6-3.7,5.6c-3.8,0-7.5-0.1-11.2,0c-1.3,0-3.7-0.7-3.2,1.7c0.4,2.2-0.5,5.8,3.4,6.1c3.1,0.2,6.2,0.1,9.4,0\n\t\t\tc4.2-0.1,3.5,3.4,3.8,5.6c0.4,2.6-2.2,1.7-3.6,1.7c-5.2,0.1-10.5,0.1-15.7,0c-5.1-0.1-3,4.1-3.6,6.3c-0.6,2.8,2.2,1.6,3.5,1.6\n\t\t\tc6.1,0.2,12.2,0.1,18.4,0.1c0.9,0,2-0.3,2.4,0.6c0.5,1.1-0.7,1.8-1.4,2.4c-3.6,3.1-7.9,4.1-12.5,4.2c-7.6,0.1-15.2,0.1-22.9,0\n\t\t\tc-8-0.1-15.6,2.5-22.1,6.3c-6.2,3.6-12.6,6.8-19.1,8.4c-10.7,2.6-20.1,8.1-30.1,12.1c-5.2,2.1-10.7,0.6-15.9,1.4\n\t\t\tc-8.7,1.3-14.2-3.4-19-9.5c-0.7-0.8-3-2.3,0.3-3c0.6-0.1,0.6-0.5,0.5-1.1c-0.4-2.2-5.1-6.8-7.5-7.4c-3-0.8-3.8-3.6-4.4-6\n\t\t\tc-0.4-1.7,1.8-1.2,2.9-1.2c7-0.1,14,0,21-0.1c1.5,0,3.8,1.2,4.4-1.2c0.6-2-2.9-5.8-5.1-5.9c-6.8,0-13.5,0-20.2,0\n\t\t\tc-3.3,0-6.6-3.4-6.5-6.6c0.1-1.9,1.5-1.4,2.5-1.4c5.1-0.1,10.2,0.1,15.4-0.1c1.4,0,3.6,1.2,4-1.4c0.4-2.2-2.6-5.9-4.5-5.9\n\t\t\tc-3.1-0.1-6.2,0-9.4,0c-2.3,0-5.4-4.9-4.5-6.9c0.5-1.1,1.7-0.9,2.6-0.9c4.5,0,9,0,13.5,0c1.6,0,3.7,0.2,3.1-2.4\n\t\t\tc-0.4-2,0.6-5.1-3.3-5.1c-7.5,0.1-15-0.1-22.5,0.1c-3.3,0.1-4.4-0.9-4.3-4.2c0.1-2.7,0.7-3.8,3.6-3.7c7.6,0.2,15.2,0,22.9,0.1\n\t\t\tc2.7,0,4.1-0.5,4.3-3.6c0.2-3.1,0.9-6.2,1.9-9.1c1-2.9,0.4-3.8-2.7-3.7c-7.4,0.1-14.7,0.1-22.1,0c-4.1,0-4.1-0.2-2.5-3.9\n\t\t\tc1.4-3.3,3.4-4.9,7.4-4.7c7,0.4,14,0.1,21,0.1c2.5,0,8.8-5.2,9.2-7.6c0.2-1.6-1.1-1.4-2-1.4c-4.2-0.1-8.5,0-12.8-0.1\n\t\t\tc-0.8,0-1.9,0.4-2.4-0.6c-0.5-1,0.7-1.5,1.2-2c3.9-3.8,8.1-6.6,13.9-5.6c8.9,1.6,14.6-5.4,22.1-7.8c-0.1-0.5-0.1-0.9-0.2-1.4\n\t\t\th-17.1c0-0.4-0.1-0.8-0.1-1.2c8.6-2.8,16.3-8.5,26.1-7.8c3,0.2,6-0.3,9,0.1c11.7,1.4,21.5-4.6,31.9-8.5h-24.2\n\t\t\tc-0.1-0.4-0.1-0.8-0.2-1.1c7.9-2.2,15.6-4.6,23.5-6.6c49.9-12.9,100.6-16.9,152-13.8c30.8,1.9,61,6.8,90.9,14.6\n\t\t\tc2.4,0.6,4.9,1.1,7.2,2.1c12.8,5.4,26.3,5.1,39.8,4.6c10.3-0.4,18.9,4.8,28.2,7.6c0,0.4-0.1,0.7-0.1,1.1h-20.5\n\t\t\tc0,0.4-0.1,0.8-0.2,1.2c8.7,2.4,16.2,8.7,26,7.7c2.2-0.2,4.5,0.2,6.7-0.1c9.5-1.3,17.2,3.1,24.9,7.6c0.5,0.3,1.1,0.6,1.1,1.8\n\t\t\th-11.5c5.3,4.6,9.1,9.6,16.3,8.3c2.3-0.4,4.8,0.3,7.1-0.1c5.8-1,9.1,2.2,11.9,6.5c0.4,0.6,1.1,1.2,0.8,2c-0.4,1.1-1.5,0.6-2.3,0.6\n\t\t\tc-7.2,0-14.5,0.1-21.7,0c-3.2-0.1-3.4,0.5-2.2,3.5c1.7,3.9,4,5.3,8.2,5.1c7-0.4,14,0,21-0.2c2.7-0.1,4.2,0.7,4.9,3.4\n\t\t\tc0.8,3.1,1.5,6.3,2,9.5c0.4,2.6-0.3,3.6-3.1,3.6c-7.5-0.1-15,0.1-22.5-0.1c-3.2-0.1-4.6,0.6-4.7,4.3c0,3.7,1.9,3.6,4.5,3.6\n\t\t\tc7-0.1,14,0,21,0c1.5,0,3.7-0.5,3.3,2.2c-0.3,2.1,0.3,5.2-3.3,5.3c-5,0.1-10,0-15,0.1c-2.5,0-5.7,4.8-4.8,7\n\t\t\tc0.4,1.1,1.4,0.8,2.2,0.8c2.6,0,5.2,0.1,7.9,0c2.7-0.1,2.8,0.8,2,3.1c-1.1,3.2-2.7,4.6-6.2,4.4c-5.1-0.3-10.2-0.1-15.4-0.1\n\t\t\tc-3.1,0-6.7,3.7-6.5,6.7c0.1,1.9,1.6,1.2,2.5,1.2c6,0.1,12,0,18,0.1c1.5,0,4.4-1.1,4.1,1.3c-0.3,2.3-1,5.8-4.7,5.8\n\t\t\tc-5.1,0.1-10.2,0-15.4,0c-2.8,0-5.5,0.2-8.2-0.1c-3.7-0.4-5.9,1.1-7.2,4.4c-0.5,1.3-1.7,2.5,0.8,3c0.5,0.1,0.9,0.3,0.9,1\n\t\t\tc0.1,1.6-4.8,7.5-6.5,7.5c-2,0-3.2,1-4.3,2.4c-0.8,1.1-1.8,2.1-2.7,3.1c-4.2,5-9.4,6.5-16,7.1c-14.3,1.3-26-5.1-37.2-11.6\n\t\t\tc-6.3-3.7-12.6-6.9-19.3-8.7c-6.8-1.9-13.6-4-20.3-6.1c-0.8-0.3-1.6-0.6-2.3-1.8h21.7c0-0.3,0.1-0.7,0.1-1\n\t\t\tc-4.7-2.7-8.1-7.7-15-6.6c-5.1,0.8-10.5,0.2-15.7,0.1c-3.6,0-4.6-1.3-4.8-5.1c-0.1-3.5,2.3-2.9,4.4-2.9c5.4,0,10.8,0,16.1,0\n\t\t\tc2.6,0,5.2-3.7,4.5-6.3c-0.3-1.2-1.3-1-2.1-1c-2.9,0-5.8-0.1-8.6,0c-2,0-2.7-0.5-2.2-2.6c1-5,1.2-5.2,6.3-5.3c4.2,0,8.5,0,12.8,0\n\t\t\tc2.5,0,5.3-4.3,4.2-6.5c-0.6-1.3-1.9-0.9-3-0.9c-7.1,0-14.2,0-21.4-0.1c-1.3,0-4,1.2-3.6-1.5c0.4-2.3-0.4-6.1,3.8-6.1\n\t\t\tc7.4-0.1,14.8,0,22.1,0c6.4,0,8.6-3.6,5.9-9.5c-2-4.2-5.1-7.2-10.2-6.9c-18.2,1.2-36.1-1.6-53.9-5.2c-6.5-1.3-13.1-1.9-19.6-2.8\n\t\t\tC414.5,367,414.5,366.8,414.5,366.7L414.5,366.7z\"/>\n\t\t<path class=\"st10\" d=\"M477.1,748.9c-3.2,2.6-7.2,3.1-11,4.2c-2.8,0.8-5.8,1-9.3,3.4c14.6,1,28.2-0.5,41.7,1.5\n\t\t\tc-4.5,1.8-9.1,3.3-14,3.3c2.3-1.6,5.4-0.9,8.4-3.1h-46.2c0-0.3-0.1-0.6-0.1-0.8C456.8,754.6,467,751.7,477.1,748.9L477.1,748.9z\"\n\t\t\t/>\n\t\t<path class=\"st6\" d=\"M262.7,756.4c-8.4-1.5-16.5-3.9-24.5-6.8c0.1-0.5,0.1-0.9,0.1-1.4h29c0-0.4,0.1-0.7,0.1-1.1\n\t\t\tc-3.2-1.8-6.7-2.9-10.1-4.2c-3.5-1.3-7.2-2.2-10.1-4.6c8.6,3.1,17.3,6.2,25.9,9.2l-0.1,1.1h-30.9c1.3,2.3,3,2.1,4.2,2.5\n\t\t\tC251.8,753,257.5,753.8,262.7,756.4L262.7,756.4z\"/>\n\t\t<path class=\"st10\" d=\"M710.2,599.8c2.2-0.3,2.1,0.9,1.2,2.1c-3.2,4.6-6.5,9.1-9.9,13.5c-1.2,1.6-3.2,1.7-5.1,1.7\n\t\t\tc-4.4,0-8.7,0-13.1,0c-1.4,0-2.9,0-3.8,1.1c-4.2,4.9-8.4,9.7-11.9,15.2c-1.8-0.1-1.4-1-0.7-1.9c3.8-4.7,7.5-9.3,11.3-13.9\n\t\t\tc1.1-1.4,2.5-1.4,4.1-1.4c4.6,0,9.2-0.1,13.8,0c2.3,0.1,4.1-0.5,5.5-2.5c2.5-3.7,5.2-7.3,7.8-11\n\t\t\tC709.9,602,710.8,601.1,710.2,599.8L710.2,599.8z\"/>\n\t\t<path class=\"st10\" d=\"M574.5,723.1c-4.1,3.9-9,6.2-14.5,6.5c-5.7,0.3-11.5,0.5-17.2,0c-9.8-0.8-17.3,4.3-25.3,8.4\n\t\t\tc-0.8,0.3-1.7,0.5-2.5-0.6c6.2-2.8,12.2-5.6,18.3-8.3c1-0.4,2.2-0.4,3.3-0.5c3-0.1,6-0.1,9,0C555.6,729,565.6,729.1,574.5,723.1\n\t\t\tL574.5,723.1z\"/>\n\t\t<path class=\"st6\" d=\"M324.8,758.3c-9.3,0.1-18.6,0.2-27.9,0.2c-8,0-15.9,0-23.9,0c-3.1,0-6.2-0.2-8.9-2\n\t\t\tc19.4,2.4,38.8,0.8,58.2,1.2C323.1,757.7,323.9,758.1,324.8,758.3L324.8,758.3z\"/>\n\t\t<path class=\"st6\" d=\"M182.3,716.9c-4.3-1.1-7.6-4.2-11.4-6.2c-0.5-0.3-1.1-0.7-1-1.4c0.2-0.9,1.1-0.9,1.8-1\n\t\t\tc1.7-0.1,3.5-0.1,5.2-0.1c0.6,0,1.4,0,1.6-0.7c0.3-0.9-0.5-1.3-1.1-1.7c-2.1-1.3-4.5-2.2-5.8-4.5c3.4,1.2,6.2,3.5,9.2,5.5\n\t\t\tc0.6,0.4,1.5,0.8,1,1.7c-0.2,0.4-1.1,0.5-1.6,0.5c-2.4,0.1-4.9,0-8,0C175.1,713.3,179.9,713.5,182.3,716.9L182.3,716.9z\"/>\n\t\t<path class=\"st9\" d=\"M210.8,465.9c-6.1,2.7-11.1,2.8-16.8,0.2C196.5,464.9,207.1,464.7,210.8,465.9z\"/>\n\t\t<path class=\"st9\" d=\"M570.9,465.8c5.6-0.9,11.2-0.7,16.8-0.1C582.1,468.9,576.5,468.2,570.9,465.8z\"/>\n\t\t<path class=\"st10\" d=\"M539.8,738.1c1.1-0.3,2.2-0.4,3.1,0.5c-0.6,1.5-1.9,1.8-3,2.2c-7.1,2.7-14.2,5.2-21.4,7.8\n\t\t\tc-0.8,0.3-1.7,0.5-2.5,0c7-2.6,14-5.2,20.9-7.9C538.1,740.2,540.2,740.4,539.8,738.1L539.8,738.1z\"/>\n\t\t<path class=\"st6\" d=\"M154.6,689.1c-7.5-4.8-14.5-10.2-20.5-16.9c5.8,3.5,10.3,8.5,15.7,12.5C151.5,685.9,153.8,686.8,154.6,689.1\n\t\t\tL154.6,689.1z\"/>\n\t\t<path class=\"st10\" d=\"M678.8,633.7c0.7,0.4,0.7,1.1,0.3,1.6c-5,5.8-9.6,12-15.9,16.5c4.7-5.3,9.5-10.7,14.2-16\n\t\t\tC677.8,635.1,678.3,634.4,678.8,633.7L678.8,633.7z\"/>\n\t\t<path class=\"st10\" d=\"M624.8,686.3c-1.2,3.2-4.4,4.2-6.8,6c-3.9,2.9-7.3,6.7-12.2,8C611.9,695.3,618.1,690.6,624.8,686.3\n\t\t\tL624.8,686.3z\"/>\n\t\t<path class=\"st10\" d=\"M313.4,8.5c7.6-3.1,15.5-4.5,23.7-4.5c-6,2.1-12.4,2.1-18.6,3.7C316.8,8.1,315.2,8.9,313.4,8.5z\"/>\n\t\t<path class=\"st10\" d=\"M483,761.4c-1.7,2-4.3,1.8-6.5,2c-5.4,0.5-10.6,2.2-16,1.6C467.9,763.4,475.5,762.3,483,761.4L483,761.4z\"/>\n\t\t<path class=\"st6\" d=\"M87,616.3c-2.1-4.7-5.9-8.3-8.5-12.7c-0.7-1.2-1.4-2.3-2.1-3.5c2.3,0.6,2.9,2.8,4.2,4.5\n\t\t\tc2.3,3,4.6,6.2,6.8,9.3C87.9,614.7,89.5,615.9,87,616.3L87,616.3z\"/>\n\t\t<path class=\"st6\" d=\"M123.9,662.8c-5.8-4.2-10.8-9.2-15-15C114.4,652.3,119.4,657.3,123.9,662.8z\"/>\n\t\t<path class=\"st6\" d=\"M81.7,633.1c-4-3.1-7.1-7-9.5-11.5C76.1,624.8,79,628.8,81.7,633.1z\"/>\n\t\t<path class=\"st10\" d=\"M654.8,660.1c-2.8,4-5.9,7.5-10.4,9.7C647.4,666.1,650.9,662.9,654.8,660.1z\"/>\n\t\t<path class=\"st10\" d=\"M603,702.1c-3.2,3.5-6.7,6.5-11.7,7C595.5,707.2,598.8,703.9,603,702.1z\"/>\n\t\t<path class=\"st10\" d=\"M692,585.5c-1,4.1-3.1,7.4-6.4,10C687.3,591.9,689.3,588.5,692,585.5z\"/>\n\t\t<path class=\"st6\" d=\"M205.6,733.4c-2.7-0.3-4.9-1.8-7.3-2.9c-0.6-0.3-1.6-0.7-1.1-1.6s1.5-0.7,2.3-0.2\n\t\t\tC200.4,731.7,204.2,731,205.6,733.4L205.6,733.4z\"/>\n\t\t<path class=\"st6\" d=\"M107.1,645.9c-3-2-5.5-4.5-7.1-7.8C102.9,640.2,105.4,642.7,107.1,645.9z\"/>\n\t\t<path class=\"st6\" d=\"M216.8,738.1c-3.9-0.6-7.5-1.9-10.6-4.5C210,734.5,213.5,735.9,216.8,738.1z\"/>\n\t\t<path class=\"st10\" d=\"M342,2.3c2.5-0.6,5-0.4,7.3,0.7c-3.8-0.2-7.3,1.5-11.1,0.9C339.5,3.4,340.8,2.8,342,2.3z\"/>\n\t\t<path class=\"st6\" d=\"M133.7,671.8c-3-1.4-5.3-3.6-7-6.4C129.6,666.8,131.9,669.1,133.7,671.8z\"/>\n\t\t<path class=\"st6\" d=\"M47.2,599.3c-2.7-2.3-4.5-5.2-5.7-8.5C44.1,593.2,45.9,596.1,47.2,599.3z\"/>\n\t\t<path class=\"st6\" d=\"M162.9,695.1c-3.2-1-5.7-3.1-7.7-5.7C158.1,690.7,160.8,692.6,162.9,695.1z\"/>\n\t\t<path class=\"st6\" d=\"M344.3,762.2c-3.2,0.3-6.1-0.5-9-1.8C338.4,760.1,341.4,760.8,344.3,762.2z\"/>\n\t\t<path class=\"st6\" d=\"M355.6,764c-3.2,0-6.5,0.1-9.4-1.7C349.5,762.3,352.7,762.2,355.6,764z\"/>\n\t\t<path class=\"st10\" d=\"M579.7,719c0.5,0,1.1-0.2,1.4,0c0.8,0.8,0,1.4-0.5,1.7c-1.7,1.1-3.4,2.2-5.5,2.1\n\t\t\tC576.1,721,579.1,721.4,579.7,719L579.7,719z\"/>\n\t\t<path class=\"st6\" d=\"M171.2,701c-2.8-1-5.3-2.4-7-4.9C166.9,697.2,169.4,698.5,171.2,701z\"/>\n\t\t<path class=\"st10\" d=\"M633,679.6c-1.2,2.7-3.3,4.4-6.1,5.1C628.5,682.4,630.7,680.9,633,679.6z\"/>\n\t\t<path class=\"st6\" d=\"M213.2,722.7c-2.7-0.4-4.9-1.8-6.9-3.5C209.1,719.2,211.2,720.9,213.2,722.7z\"/>\n\t\t<path class=\"st6\" d=\"M222.1,727.3c-2.4-0.5-4.8-1.2-6.3-3.3C218.3,724.4,220.4,725.4,222.1,727.3z\"/>\n\t\t<path class=\"st6\" d=\"M71.8,621.2c-1.6-0.7-2.5-2-3.2-3.4c-0.5-1.1,0-1.7,1.2-1.4C69.7,618.3,71.8,619.3,71.8,621.2L71.8,621.2z\"/>\n\t\t<path class=\"st10\" d=\"M566.3,716.4c-0.2,0.8-0.5,1.7-0.7,2.5c-0.9,0.2-1.9,0.4-2.9-0.5C563.6,717.3,564.9,716.8,566.3,716.4\n\t\t\tL566.3,716.4z\"/>\n\t\t<path class=\"st6\" d=\"M41.2,590.4c-1.8-1.4-3-3.2-3.4-5.5C39.8,586.1,40.6,588.2,41.2,590.4z\"/>\n\t\t<path class=\"st10\" d=\"M644.3,669.9c-0.9,2.2-2.5,3.6-4.8,4.2C640.7,672.2,642.3,670.8,644.3,669.9z\"/>\n\t\t<path class=\"st6\" d=\"M363.8,765c-2.1,0.5-4.1,0-6-0.9C359.9,763.4,361.9,764,363.8,765z\"/>\n\t\t<path class=\"st10\" d=\"M571.5,713.4c-0.9,2.1-2.7,2.6-4.7,2.7C568,714.6,569.7,713.8,571.5,713.4z\"/>\n\t\t<path class=\"st6\" d=\"M372,766c-1.9,0.5-3.8,0.5-5.4-0.8C368.5,764.8,370.3,764.9,372,766z\"/>\n\t\t<path class=\"st10\" d=\"M579,709.2c-1.3,1.3-2.7,2.4-4.7,2.3C575.6,710.2,576.9,709,579,709.2z\"/>\n\t\t<path class=\"st10\" d=\"M685.3,596.1c-0.2,1.2-0.4,2.5-0.6,3.7c-0.6,0.2-1.5,0.3-1.5-0.4C683.1,597.9,684.1,596.8,685.3,596.1\n\t\t\tL685.3,596.1z\"/>\n\t\t<path class=\"st6\" d=\"M98.9,636.8c-1.7-0.5-2.4-2.1-3.6-3.2C97.5,633.5,98.3,635.1,98.9,636.8z\"/>\n\t\t<path class=\"st10\" d=\"M637.5,675.9c-0.5,1.7-1.6,2.5-3.2,2.7C634.9,677.2,636,676.3,637.5,675.9z\"/>\n\t\t<path class=\"st10\" d=\"M661.3,653.7c-0.2,1.8-1.2,2.9-3.1,3.1C658.8,655.4,659.8,654.3,661.3,653.7z\"/>\n\t\t<path class=\"st6\" d=\"M186.2,718.8c-1.5,0.1-2.6-0.4-3.4-1.7C184.2,717.2,185.4,717.8,186.2,718.8z\"/>\n\t\t<path class=\"st6\" d=\"M221.8,728.7c0.1-0.4,0.2-0.9,0.4-1.3c0.7,0,1.8,0,1.6,0.8C223.7,729.3,222.6,728.9,221.8,728.7L221.8,728.7z\n\t\t\t\"/>\n\t\t<path class=\"st10\" d=\"M308.9,9.5c0.8-1.1,1.8-1.3,3-0.7C311,9.5,310.1,9.8,308.9,9.5z\"/>\n\t\t<path class=\"st6\" d=\"M330,759.2c-1.2,0.5-2.3,0.3-3.2-0.7C328,758.1,329.1,758.4,330,759.2z\"/>\n\t\t<path class=\"st10\" d=\"M694.5,582.8c-0.4,1.1-1,2-2.2,2.2C692.5,583.8,693,582.8,694.5,582.8z\"/>\n\t\t<path class=\"st10\" d=\"M305.2,10.3c0.5-1,1.3-1.2,2.3-0.6C306.8,10.2,306.1,10.5,305.2,10.3z\"/>\n\t\t<path class=\"st6\" d=\"M333.9,760.2c-1.1,0.3-2,0-2.7-0.8C332.3,759,333.2,759.3,333.9,760.2z\"/>\n\t\t<path class=\"st10\" d=\"M573.8,711.9c-0.3,0.8-1,1.1-1.8,1.1C572.3,712.3,573,712,573.8,711.9z\"/>\n\t\t<path class=\"st6\" d=\"M37.4,584.3c-0.9-0.6-1.6-1.2,0.2-1.6C37.5,583.3,37.5,583.8,37.4,584.3z\"/>\n\t\t<path class=\"st9\" d=\"M757.1,412.8c0.1,0.6,0.3,1.1,0.4,1.7C756.2,414.2,756.4,413.6,757.1,412.8z\"/>\n\t\t<path class=\"st10\" d=\"M605.3,700.6c-0.3,0.8-0.8,1.2-1.7,1.2C603.9,701.1,604.4,700.6,605.3,700.6z\"/>\n\t\t<path class=\"st3\" d=\"M442.5,766.4c-0.5,0.1-1.1,0.1-1.6,0.2C441.3,766,441.9,765.9,442.5,766.4z\"/>\n\t</g>\n</g>\n</svg>\n");
 ;// CONCATENATED MODULE: ./src/ButtonModule.js
 function ButtonModule_typeof(o) { "@babel/helpers - typeof"; return ButtonModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, ButtonModule_typeof(o); }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
@@ -10255,6 +10675,8 @@ function ButtonModule_defineProperties(target, props) { for (var i = 0; i < prop
 function ButtonModule_createClass(Constructor, protoProps, staticProps) { if (protoProps) ButtonModule_defineProperties(Constructor.prototype, protoProps); if (staticProps) ButtonModule_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 function ButtonModule_toPropertyKey(arg) { var key = ButtonModule_toPrimitive(arg, "string"); return ButtonModule_typeof(key) === "symbol" ? key : String(key); }
 function ButtonModule_toPrimitive(input, hint) { if (ButtonModule_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (ButtonModule_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+
+
 
 
 
@@ -10409,6 +10831,7 @@ var ButtonModule = /*#__PURE__*/function () {
         console.log("Autosubmit is off");
       } else {
         this.simulateFormSubmit();
+        EventBus/* default */.Z.emit("saypi:piThinking"); // Pi is responding
       }
     }
   }, {
@@ -10478,16 +10901,32 @@ var ButtonModule = /*#__PURE__*/function () {
       var button = this.createButton();
       button.id = "saypi-callButton";
       button.type = "button";
-      button.className = "call-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      button.className = "call-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650 m-2";
       this.callInactive(button); // mic is off by default
 
       appendChild(container, button, position);
       return button;
     }
   }, {
+    key: "callStarting",
+    value: function callStarting(callButton) {
+      var _this4 = this;
+      if (!callButton) {
+        callButton = document.getElementById("saypi-callButton");
+      }
+      if (callButton) {
+        callButton.innerHTML = call_starting;
+        callButton.setAttribute("aria-label", "Starting continuous listening.");
+        callButton.setAttribute("title", "Starting continuous listening.");
+        callButton.onclick = function () {
+          _this4.actor.send("saypi:hangup");
+        };
+      }
+    }
+  }, {
     key: "callActive",
     value: function callActive(callButton) {
-      var _this4 = this;
+      var _this5 = this;
       if (!callButton) {
         callButton = document.getElementById("saypi-callButton");
       }
@@ -10497,7 +10936,7 @@ var ButtonModule = /*#__PURE__*/function () {
         callButton.setAttribute("aria-label", label);
         callButton.setAttribute("title", label);
         callButton.onclick = function () {
-          _this4.actor.send("saypi:hangup");
+          _this5.actor.send("saypi:hangup");
         };
         callButton.classList.add("active");
       }
@@ -10505,7 +10944,7 @@ var ButtonModule = /*#__PURE__*/function () {
   }, {
     key: "callInactive",
     value: function callInactive(callButton) {
-      var _this5 = this;
+      var _this6 = this;
       if (!callButton) {
         callButton = document.getElementById("saypi-callButton");
       }
@@ -10514,9 +10953,22 @@ var ButtonModule = /*#__PURE__*/function () {
         callButton.setAttribute("aria-label", "Click to start continuous listening.");
         callButton.setAttribute("title", "Not listening. Click to start.");
         callButton.onclick = function () {
-          _this5.actor.send("saypi:call");
+          _this6.actor.send("saypi:call");
         };
         callButton.classList.remove("active");
+      }
+    }
+  }, {
+    key: "callError",
+    value: function callError(callButton) {
+      if (!callButton) {
+        callButton = document.getElementById("saypi-callButton");
+      }
+      if (callButton) {
+        var label = "Non-fatal error encountered. Don't panic, we're still listening.";
+        callButton.innerHTML = hangup_minced;
+        callButton.setAttribute("aria-label", label);
+        callButton.setAttribute("title", label);
       }
     }
   }, {

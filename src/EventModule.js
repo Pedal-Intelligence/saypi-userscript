@@ -1,9 +1,11 @@
 import EventBus from "./EventBus.js";
 import StateMachineService from "./StateMachineService.js";
 
+const CALL_READY = "saypi:callReady";
 const USER_SPEAKING = "saypi:userSpeaking";
 const USER_STOPPED_SPEAKING = "saypi:userStoppedSpeaking";
 const USER_FINISHED_SPEAKING = "saypi:userFinishedSpeaking";
+const PI_THINKING = "saypi:piThinking";
 const PI_SPEAKING = "saypi:piSpeaking";
 const PI_STOPPED_SPEAKING = "saypi:piStoppedSpeaking";
 const PI_FINISHED_SPEAKING = "saypi:piFinishedSpeaking";
@@ -74,6 +76,9 @@ export default class EventModule {
   }
 
   static registerStateMachineEvents(actor) {
+    EventBus.on(CALL_READY, () => {
+      actor.send(CALL_READY);
+    });
     EventBus.on(USER_SPEAKING, () => {
       actor.send(USER_SPEAKING);
     });
@@ -88,12 +93,15 @@ export default class EventModule {
       });
     });
 
-    [PI_SPEAKING, PI_STOPPED_SPEAKING, PI_FINISHED_SPEAKING].forEach(
-      (eventName) => {
-        EventBus.on(eventName, () => {
-          actor.send(eventName);
-        });
-      }
-    );
+    [
+      PI_THINKING,
+      PI_SPEAKING,
+      PI_STOPPED_SPEAKING,
+      PI_FINISHED_SPEAKING,
+    ].forEach((eventName) => {
+      EventBus.on(eventName, () => {
+        actor.send(eventName);
+      });
+    });
   }
 }

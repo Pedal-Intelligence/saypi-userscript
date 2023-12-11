@@ -13,7 +13,9 @@ import rectanglesSVG from "./icons/rectangles.svg";
 import talkIconSVG from "./icons/waveform.svg";
 import mutedMicIconSVG from "./icons/muted_microphone.svg";
 import callIconSVG from "./icons/call.svg";
+import callStartingIconSVG from "./icons/call-starting.svg";
 import hangupIconSVG from "./icons/hangup.svg";
+import hangupMincedIconSVG from "./icons/hangup-minced.svg";
 export default class ButtonModule {
   constructor() {
     this.actor = StateMachineService.actor;
@@ -137,6 +139,7 @@ export default class ButtonModule {
       console.log("Autosubmit is off");
     } else {
       this.simulateFormSubmit();
+      EventBus.emit("saypi:piThinking"); // Pi is responding
     }
   }
 
@@ -204,11 +207,25 @@ export default class ButtonModule {
     button.id = "saypi-callButton";
     button.type = "button";
     button.className =
-      "call-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      "call-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650 m-2";
     this.callInactive(button); // mic is off by default
 
     appendChild(container, button, position);
     return button;
+  }
+
+  callStarting(callButton) {
+    if (!callButton) {
+      callButton = document.getElementById("saypi-callButton");
+    }
+    if (callButton) {
+      callButton.innerHTML = callStartingIconSVG;
+      callButton.setAttribute("aria-label", "Starting continuous listening.");
+      callButton.setAttribute("title", "Starting continuous listening.");
+      callButton.onclick = () => {
+        this.actor.send("saypi:hangup");
+      };
+    }
   }
 
   callActive(callButton) {
@@ -242,6 +259,19 @@ export default class ButtonModule {
         this.actor.send("saypi:call");
       };
       callButton.classList.remove("active");
+    }
+  }
+
+  callError(callButton) {
+    if (!callButton) {
+      callButton = document.getElementById("saypi-callButton");
+    }
+    if (callButton) {
+      const label =
+        "Non-fatal error encountered. Don't panic, we're still listening.";
+      callButton.innerHTML = hangupMincedIconSVG;
+      callButton.setAttribute("aria-label", label);
+      callButton.setAttribute("title", label);
     }
   }
 
