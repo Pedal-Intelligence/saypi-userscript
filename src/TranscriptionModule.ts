@@ -262,8 +262,8 @@ function scrollToBottom(textarea: HTMLTextAreaElement) {
   // Define the maximum height
   const maxHeight = 455;
 
-  // Reset the height to auto to get the correct scrollHeight
-    textarea.style.height = "auto";
+  // Reset the height to get the correct scrollHeight
+    textarea.style.height = "2rem"; // (initial height) aka 32px
 
   // Set the height of the textarea, up to the maximum height
   if (textarea.scrollHeight > maxHeight) {
