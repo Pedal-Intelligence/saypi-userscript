@@ -6177,7 +6177,7 @@ var AudioModule = /*#__PURE__*/(/* unused pure expression or super */ null && (f
       if (state.changed) {
         var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
         var toState = serializeStateValue(state.value);
-        logger.info("Audio Input Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+        logger.debug("Audio Input Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
       }
     });
   }
