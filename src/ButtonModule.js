@@ -16,6 +16,7 @@ import callIconSVG from "./icons/call.svg";
 import callStartingIconSVG from "./icons/call-starting.svg";
 import hangupIconSVG from "./icons/hangup.svg";
 import hangupMincedIconSVG from "./icons/hangup-minced.svg";
+import getMessage from "./i18n.ts";
 export default class ButtonModule {
   constructor() {
     this.actor = StateMachineService.actor;
@@ -144,7 +145,7 @@ export default class ButtonModule {
   }
 
   createExitButton() {
-    const label = "Exit Voice-Controlled Mobile Mode";
+    const label = getMessage("exitMobileMode");
     const button = this.createButton("", () => {
       exitMobileMode();
     });
@@ -160,7 +161,7 @@ export default class ButtonModule {
   }
 
   createEnterButton() {
-    const label = "Enter Voice-Controlled Mobile Mode";
+    const label = getMessage("enterMobileMode");
     const button = this.createButton("", () => {
       enterMobileMode();
     });
@@ -220,8 +221,9 @@ export default class ButtonModule {
     }
     if (callButton) {
       callButton.innerHTML = callStartingIconSVG;
-      callButton.setAttribute("aria-label", "Starting continuous listening.");
-      callButton.setAttribute("title", "Starting continuous listening.");
+      const label = getMessage("callStarting");
+      callButton.setAttribute("aria-label", label);
+      callButton.setAttribute("title", label);
       callButton.onclick = () => {
         this.actor.send("saypi:hangup");
       };
@@ -233,7 +235,7 @@ export default class ButtonModule {
       callButton = document.getElementById("saypi-callButton");
     }
     if (callButton) {
-      const label = "Active continuous listening. Click to stop.";
+      const label = getMessage("callInProgress");
       callButton.innerHTML = hangupIconSVG;
       callButton.setAttribute("aria-label", label);
       callButton.setAttribute("title", label);
@@ -250,11 +252,9 @@ export default class ButtonModule {
     }
     if (callButton) {
       callButton.innerHTML = callIconSVG;
-      callButton.setAttribute(
-        "aria-label",
-        "Click to start continuous listening."
-      );
-      callButton.setAttribute("title", "Not listening. Click to start.");
+      const label = getMessage("callNotStarted");
+      callButton.setAttribute("aria-label", label);
+      callButton.setAttribute("title", label);
       callButton.onclick = () => {
         this.actor.send("saypi:call");
       };
@@ -267,8 +267,7 @@ export default class ButtonModule {
       callButton = document.getElementById("saypi-callButton");
     }
     if (callButton) {
-      const label =
-        "Non-fatal error encountered. Don't panic, we're still listening.";
+      const label = getMessage("callError");
       callButton.innerHTML = hangupMincedIconSVG;
       callButton.setAttribute("aria-label", label);
       callButton.setAttribute("title", label);

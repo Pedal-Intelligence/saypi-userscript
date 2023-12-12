@@ -3,7 +3,6 @@ import { buttonModule } from "./ButtonModule.js";
 import EventModule from "./EventModule.js";
 import { addUserAgentFlags, initMode } from "./UserAgentModule.js";
 import { submitErrorHandler } from "./SubmitErrorHandler.ts";
-import { config as serverConfig } from "./ConfigModule.js";
 
 import "./styles/common.scss";
 import "./styles/desktop.scss";

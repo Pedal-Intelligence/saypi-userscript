@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Say, Pi",
-  "version": "1.5.1",
-  "description": "Seamless speech-to-text enhancement for Pi, the conversational AI. Enjoy hands-free, high-accuracy conversations in any language.",
+  "name": "__MSG_appName__",
+  "version": "1.5.2",
+  "description": "__MSG_appDescription__",
   "permissions": ["storage"],
   "content_scripts": [
     {
@@ -33,5 +33,6 @@
   "homepage_url": "https://www.saypi.ai",
   "action": {
     "default_popup": "src/popup/popup.html"
-  }
+  },
+  "default_locale": "en"
 }
