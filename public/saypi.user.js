@@ -52,9 +52,9 @@ var map = {
 		5387,
 		387
 	],
-	"./jp/messages.json": [
-		4217,
-		217
+	"./ja/messages.json": [
+		8481,
+		481
 	],
 	"./ko/messages.json": [
 		5499,
