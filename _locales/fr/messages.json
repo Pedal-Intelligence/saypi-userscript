@@ -1,0 +1,50 @@
+{
+  "appName": {
+    "message": "Say, Pi",
+    "description": "Le nom de l'application."
+  },
+  "appDescription": {
+    "message": "Amélioration fluide de la parole en texte pour Pi, l'IA conversationnelle. Profitez de conversations mains libres et de haute précision dans n'importe quelle langue.",
+    "description": "La description de l'application."
+  },
+  "exitMobileMode": {
+    "message": "Quitter le mode mobile contrôlé par la voix",
+    "description": "L'étiquette du bouton pour quitter le mode mobile contrôlé par la voix, pour revenir au mode bureau basé sur le texte."
+  },
+  "enterMobileMode": {
+    "message": "Activer le mode mobile contrôlé par la voix",
+    "description": "L'étiquette du bouton pour activer le mode mobile contrôlé par la voix."
+  },
+  "callInProgress": {
+    "message": "Écoute continue active. Cliquez pour arrêter.",
+    "description": "L'infobulle à afficher sur le bouton d'appel lorsqu'un appel est en cours."
+  },
+  "callStarting": {
+    "message": "Démarrage de l'écoute continue...",
+    "description": "L'infobulle à afficher sur le bouton d'appel lors du démarrage d'un appel."
+  },
+  "callNotStarted": {
+    "message": "Cliquez pour démarrer l'écoute continue.",
+    "description": "L'infobulle à afficher sur le bouton d'appel avant le début d'un appel."
+  },
+  "callError": {
+    "message": "Erreur non fatale rencontrée. Ne paniquez pas, nous continuons à écouter.",
+    "description": "L'infobulle à afficher sur le bouton d'appel lorsqu'une erreur non fatale se produit."
+  },
+  "mode_speed": {
+    "message": "vitesse",
+    "description": "Le mode de transcription le plus rapide."
+  },
+  "mode_balanced": {
+    "message": "équilibré",
+    "description": "Le mode de transcription par défaut."
+  },
+  "mode_accuracy": {
+    "message": "précision",
+    "description": "Le mode de transcription le plus précis."
+  },
+  "preferedModeControl": {
+    "message": "Sélectionnez votre mode de transcription préféré",
+    "description": "Le titre (infobulle) de la commande pour sélectionner le mode de transcription préféré."
+  }
+}

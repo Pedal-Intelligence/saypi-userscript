@@ -1,0 +1,50 @@
+{
+  "appName": {
+    "message": "Say, Pi",
+    "description": "El nombre de la aplicación."
+  },
+  "appDescription": {
+    "message": "Mejora de voz a texto sin interrupciones para Pi, el AI conversacional. Disfruta de conversaciones manos libres y de alta precisión en cualquier idioma.",
+    "description": "La descripción de la aplicación."
+  },
+  "exitMobileMode": {
+    "message": "Salir del modo móvil controlado por voz",
+    "description": "La etiqueta del botón para salir del modo móvil controlado por voz y volver al modo de escritorio basado en texto."
+  },
+  "enterMobileMode": {
+    "message": "Entrar en modo móvil controlado por voz",
+    "description": "La etiqueta del botón para entrar en el modo móvil controlado por voz."
+  },
+  "callInProgress": {
+    "message": "Escucha continua activa. Haz clic para detener.",
+    "description": "El tooltip que se muestra en el botón de llamada cuando una llamada está en progreso."
+  },
+  "callStarting": {
+    "message": "Iniciando escucha continua...",
+    "description": "El tooltip que se muestra en el botón de llamada cuando una llamada está comenzando."
+  },
+  "callNotStarted": {
+    "message": "Haz clic para iniciar la escucha continua.",
+    "description": "El tooltip que se muestra en el botón de llamada antes de que comience una llamada."
+  },
+  "callError": {
+    "message": "Error no fatal encontrado. No te preocupes, todavía estamos escuchando.",
+    "description": "El tooltip que se muestra en el botón de llamada cuando ocurre un error no fatal."
+  },
+  "mode_speed": {
+    "message": "velocidad",
+    "description": "El modo de transcripción más rápido."
+  },
+  "mode_balanced": {
+    "message": "equilibrado",
+    "description": "El modo de transcripción predeterminado."
+  },
+  "mode_accuracy": {
+    "message": "precisión",
+    "description": "El modo de transcripción de mayor precisión."
+  },
+  "preferedModeControl": {
+    "message": "Selecciona tu modo de transcripción preferido",
+    "description": "El título (tooltip) del control para seleccionar el modo de transcripción preferido."
+  }
+}

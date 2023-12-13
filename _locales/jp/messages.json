@@ -1,0 +1,52 @@
+{
+  "appName": {
+    "message": "Say, Pi",
+    "description": "アプリケーションの名前。"
+  },
+  "appDescription": {
+    "message": "Pi用のシームレスな音声からテキストへの強化機能、会話型AIをお楽しみください。どの言語でもハンズフリーで高精度な会話が可能です。",
+    "description": "アプリケーションの説明。"
+  },
+  "exitMobileMode": {
+    "message": "音声制御モバイルモードを終了",
+    "description": "音声制御モバイルモードからテキストベースのデスクトップモードに戻るためのボタンのラベル。"
+  },
+  "enterMobileMode": {
+    "message": "音声制御モバイルモードに入る",
+    "description": "音声制御モバイルモードに入るためのボタンのラベル。"
+  },
+  "callInProgress": {
+    "message": "アクティブな連続リスニング中。クリックして停止。",
+    "description": "通話中に通話ボタンに表示されるツールチップ。"
+  },
+  "callStarting": {
+    "message": "連続リスニングを開始しています...",
+    "description": "通話開始時に通話ボタンに表示されるツールチップ。"
+  },
+  "callNotStarted": {
+    "message": "連続リスニングを開始するにはクリックしてください。",
+    "description": "通
+
+話が開始される前に通話ボタンに表示されるツールチップ。"
+  },
+  "callError": {
+    "message": "致命的でないエラーが発生しました。心配しないで、まだ聞いています。",
+    "description": "致命的でないエラーが発生した際に通話ボタンに表示されるツールチップ。"
+  },
+  "mode_speed": {
+    "message": "速度",
+    "description": "最速の転写モード。"
+  },
+  "mode_balanced": {
+    "message": "バランス",
+    "description": "デフォルトの転写モード。"
+  },
+  "mode_accuracy": {
+    "message": "正確さ",
+    "description": "最高の精度を持つ転写モード。"
+  },
+  "preferedModeControl": {
+    "message": "好みの転写モードを選択",
+    "description": "好みの転写モードを選択するためのコントロールのタイトル（ツールチップ）。"
+  }
+}

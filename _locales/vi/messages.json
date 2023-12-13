@@ -1,0 +1,50 @@
+{
+  "appName": {
+    "message": "Say, Pi",
+    "description": "Tên của ứng dụng."
+  },
+  "appDescription": {
+    "message": "Cải thiện chuyển đổi giọng nói sang văn bản liền mạch cho Pi, trí tuệ nhân tạo hội thoại. Tận hưởng cuộc trò chuyện chính xác cao, không cần dùng tay, bằng bất kỳ ngôn ngữ nào.",
+    "description": "Mô tả của ứng dụng."
+  },
+  "exitMobileMode": {
+    "message": "Thoát Chế Độ Di Động Điều Khiển Bằng Giọng Nói",
+    "description": "Nhãn của nút để thoát khỏi chế độ di động điều khiển bằng giọng nói, quay lại chế độ dựa trên văn bản cho máy tính để bàn."
+  },
+  "enterMobileMode": {
+    "message": "Vào Chế Độ Di Động Điều Khiển Bằng Giọng Nói",
+    "description": "Nhãn của nút để vào chế độ di động điều khiển bằng giọng nói."
+  },
+  "callInProgress": {
+    "message": "Đang lắng nghe liên tục. Nhấp để dừng.",
+    "description": "Tooltip hiển thị trên nút gọi khi một cuộc gọi đang diễn ra."
+  },
+  "callStarting": {
+    "message": "Đang bắt đầu lắng nghe liên tục...",
+    "description": "Tooltip hiển thị trên nút gọi khi cuộc gọi đang bắt đầu."
+  },
+  "callNotStarted": {
+    "message": "Nhấp để bắt đầu lắng nghe liên tục.",
+    "description": "Tooltip hiển thị trên nút gọi trước khi cuộc gọi được bắt đầu."
+  },
+  "callError": {
+    "message": "Gặp lỗi không nghiêm trọng. Đừng hoảng sợ, chúng tôi vẫn đang lắng nghe.",
+    "description": "Tooltip hiển thị trên nút gọi khi có lỗi không nghiêm trọng xảy ra."
+  },
+  "mode_speed": {
+    "message": "tốc độ",
+    "description": "Chế độ chuyển đổi văn bản nhanh nhất."
+  },
+  "mode_balanced": {
+    "message": "cân đối",
+    "description": "Chế độ chuyển đổi văn bản mặc định."
+  },
+  "mode_accuracy": {
+    "message": "chính xác",
+    "description": "Chế độ chuyển đổi văn bản chính xác nhất."
+  },
+  "preferedModeControl": {
+    "message": "Chọn chế độ chuyển đổi văn bản ưa thích của bạn",
+    "description": "Tiêu đề (tooltip) của điều khiển để chọn chế độ chuyển đổi văn bản ưa thích."
+  }
+}

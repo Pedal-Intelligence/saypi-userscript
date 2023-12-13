@@ -1,0 +1,50 @@
+{
+  "appName": {
+    "message": "Say, Pi",
+    "description": "Az alkalmazás neve."
+  },
+  "appDescription": {
+    "message": "Problémamentes beszéd-szöveggé alakító kiegészítés a Pi-hez, a beszélgető AI-hez. Élvezze a kéz nélküli, nagy pontosságú beszélgetéseket bármilyen nyelven.",
+    "description": "Az alkalmazás leírása."
+  },
+  "exitMobileMode": {
+    "message": "Kilépés a hangvezérelt mobil módból",
+    "description": "A gomb címkéje a hangvezérelt mobil módból való kilépéshez, vissza a szöveg alapú asztali módba."
+  },
+  "enterMobileMode": {
+    "message": "Belépés a hangvezérelt mobil módba",
+    "description": "A gomb címkéje a hangvezérelt mobil módba való belépéshez."
+  },
+  "callInProgress": {
+    "message": "Aktív folyamatos hallgatás. Kattintson a leállításhoz.",
+    "description": "A hívásgombon megjelenő eszköztipp, amikor a hívás folyamatban van."
+  },
+  "callStarting": {
+    "message": "Folyamatos hallgatás elindítása...",
+    "description": "A hívásgombon megjelenő eszköztipp, amikor a hívás elindul."
+  },
+  "callNotStarted": {
+    "message": "Kattintson a folyamatos hallgatás elindításához.",
+    "description": "A hívásgombon megjelenő eszköztipp, mielőtt a hívás elindulna."
+  },
+  "callError": {
+    "message": "Nem végzetes hiba történt. Ne aggódjon, még hallgatunk.",
+    "description": "A hívásgombon megjelenő eszköztipp, amikor nem végzetes hiba történik."
+  },
+  "mode_speed": {
+    "message": "sebesség",
+    "description": "A leggyorsabb transzkripciós mód."
+  },
+  "mode_balanced": {
+    "message": "kiegyensúlyozott",
+    "description": "Az alapértelmezett transzkripciós mód."
+  },
+  "mode_accuracy": {
+    "message": "pontosság",
+    "description": "A legmagasabb pontosságú transzkripciós mód."
+  },
+  "preferedModeControl": {
+    "message": "Válassza ki a preferált transzkripciós módot",
+    "description": "Az irányító elem címe (eszköztipp), amely a preferált transzkripciós mód kiválasztásához szükséges."
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "appName": {
+    "message": "Say, Pi",
+    "description": "De naam van de applicatie."
+  },
+  "appDescription": {
+    "message": "Naadloze spraak-naar-tekst verbetering voor Pi, de conversatie AI. Geniet van handsfree, zeer nauwkeurige gesprekken in elke taal.",
+    "description": "De beschrijving van de applicatie."
+  },
+  "exitMobileMode": {
+    "message": "Verlaat Stemgestuurde Mobiele Modus",
+    "description": "Het label van de knop om de stemgestuurde mobiele modus te verlaten, terug naar de tekstgebaseerde desktopmodus."
+  },
+  "enterMobileMode": {
+    "message": "Ga naar Stemgestuurde Mobiele Modus",
+    "description": "Het label van de knop om de stemgestuurde mobiele modus te betreden."
+  },
+  "callInProgress": {
+    "message": "Actieve continue luistering. Klik om te stoppen.",
+    "description": "De tooltip die wordt weergegeven op de oproepknop wanneer een gesprek bezig is."
+  },
+  "callStarting": {
+    "message": "Continue luistering starten...",
+    "description": "De tooltip die wordt weergegeven op de oproepknop wanneer een gesprek start."
+  },
+  "callNotStarted": {
+    "message": "Klik om continue luistering te starten.",
+    "description": "De tooltip die wordt weergegeven op de oproepknop voordat een gesprek is gestart."
+  },
+  "callError": {
+    "message": "Niet-fatale fout opgetreden. Geen paniek, we luisteren nog steeds.",
+    "description": "De tooltip die wordt weergegeven op de oproepknop wanneer een niet-fatale fout optreedt."
+  },
+  "mode_speed": {
+    "message": "snelheid",
+    "description": "Snelste transcriptiemodus."
+  },
+  "mode_balanced": {
+    "message": "gebalanceerd",
+    "description": "Standaard transcriptiemodus."
+  },
+  "mode_accuracy": {
+    "message": "nauwkeurigheid",
+    "description": "Transcriptiemodus met de hoogste nauwkeurigheid."
+  },
+  "preferedModeControl": {
+    "message": "Selecteer uw voorkeur transcriptiemodus",
+    "description": "De titel (tooltip) van de controle om de voorkeur transcriptiemodus te selecteren."
+  }
+}

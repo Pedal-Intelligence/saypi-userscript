@@ -1,0 +1,50 @@
+{
+  "appName": {
+    "message": "Say, Pi",
+    "description": "Il nome dell'applicazione."
+  },
+  "appDescription": {
+    "message": "Miglioramento da voce a testo senza soluzione di continuità per Pi, l'AI conversazionale. Goditi conversazioni a mani libere e ad alta precisione in qualsiasi lingua.",
+    "description": "La descrizione dell'applicazione."
+  },
+  "exitMobileMode": {
+    "message": "Esci dalla Modalità Mobile Controllata Vocalmente",
+    "description": "L'etichetta del pulsante per uscire dalla modalità mobile controllata vocalmente, tornando alla modalità desktop basata su testo."
+  },
+  "enterMobileMode": {
+    "message": "Entra nella Modalità Mobile Controllata Vocalmente",
+    "description": "L'etichetta del pulsante per entrare nella modalità mobile controllata vocalmente."
+  },
+  "callInProgress": {
+    "message": "Ascolto continuo attivo. Clicca per fermare.",
+    "description": "Il tooltip da visualizzare sul pulsante di chiamata quando una chiamata è in corso."
+  },
+  "callStarting": {
+    "message": "Avviando l'ascolto continuo...",
+    "description": "Il tooltip da visualizzare sul pulsante di chiamata quando una chiamata sta iniziando."
+  },
+  "callNotStarted": {
+    "message": "Clicca per iniziare l'ascolto continuo.",
+    "description": "Il tooltip da visualizzare sul pulsante di chiamata prima che una chiamata sia iniziata."
+  },
+  "callError": {
+    "message": "Incontrato un errore non fatale. Non preoccuparti, stiamo ancora ascoltando.",
+    "description": "Il tooltip da visualizzare sul pulsante di chiamata quando si verifica un errore non fatale."
+  },
+  "mode_speed": {
+    "message": "velocità",
+    "description": "Modalità di trascrizione più veloce."
+  },
+  "mode_balanced": {
+    "message": "bilanciato",
+    "description": "Modalità di trascrizione predefinita."
+  },
+  "mode_accuracy": {
+    "message": "precisione",
+    "description": "Modalità di trascrizione con la massima precisione."
+  },
+  "preferedModeControl": {
+    "message": "Seleziona la tua modalità di trascrizione preferita",
+    "description": "Il titolo (tooltip) del controllo per selezionare la modalità di trascrizione preferita."
+  }
+}

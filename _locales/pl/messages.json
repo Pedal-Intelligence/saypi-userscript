@@ -1,0 +1,50 @@
+{
+  "appName": {
+    "message": "Say, Pi",
+    "description": "Nazwa aplikacji."
+  },
+  "appDescription": {
+    "message": "Płynna konwersja mowy na tekst dla Pi, konwersacyjnego AI. Ciesz się rozmowami bez użycia rąk, z wysoką dokładnością, w dowolnym języku.",
+    "description": "Opis aplikacji."
+  },
+  "exitMobileMode": {
+    "message": "Wyjdź z mobilnego trybu sterowanego głosem",
+    "description": "Etykieta przycisku wyjścia z mobilnego trybu sterowanego głosem, powrotu do tekstowego trybu desktopowego."
+  },
+  "enterMobileMode": {
+    "message": "Wejdź w mobilny tryb sterowany głosem",
+    "description": "Etykieta przycisku włączenia mobilnego trybu sterowanego głosem."
+  },
+  "callInProgress": {
+    "message": "Aktywne ciągłe słuchanie. Kliknij, aby zatrzymać.",
+    "description": "Podpowiedź wyświetlana na przycisku połączenia, gdy połączenie jest w toku."
+  },
+  "callStarting": {
+    "message": "Rozpoczynanie ciągłego słuchania...",
+    "description": "Podpowiedź wyświetlana na przycisku połączenia, gdy połączenie się rozpoczyna."
+  },
+  "callNotStarted": {
+    "message": "Kliknij, aby rozpocząć ciągłe słuchanie.",
+    "description": "Podpowiedź wyświetlana na przycisku połączenia, zanim połączenie zostanie rozpoczęte."
+  },
+  "callError": {
+    "message": "Napotkano niekrytyczny błąd. Nie panikuj, nadal słuchamy.",
+    "description": "Podpowiedź wyświetlana na przycisku połączenia, gdy wystąpi błąd niekrytyczny."
+  },
+  "mode_speed": {
+    "message": "szybkość",
+    "description": "Najszybszy tryb transkrypcji."
+  },
+  "mode_balanced": {
+    "message": "zrównoważony",
+    "description": "Domyślny tryb transkrypcji."
+  },
+  "mode_accuracy": {
+    "message": "dokładność",
+    "description": "Tryb transkrypcji o najwyższej dokładności."
+  },
+  "preferedModeControl": {
+    "message": "Wybierz preferowany tryb transkrypcji",
+    "description": "Tytuł (podpowiedź) kontrolki do wyboru preferowanego trybu transkrypcji."
+  }
+}

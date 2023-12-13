@@ -1,0 +1,50 @@
+{
+  "appName": {
+    "message": "Say, Pi",
+    "description": "O nome da aplicação."
+  },
+  "appDescription": {
+    "message": "Melhoria contínua de fala para texto para o Pi, a IA conversacional. Desfrute de conversas precisas e mãos-livres em qualquer idioma.",
+    "description": "A descrição da aplicação."
+  },
+  "exitMobileMode": {
+    "message": "Sair do Modo Móvel Controlado por Voz",
+    "description": "O rótulo do botão para sair do modo móvel controlado por voz, voltando para o modo desktop baseado em texto."
+  },
+  "enterMobileMode": {
+    "message": "Entrar no Modo Móvel Controlado por Voz",
+    "description": "O rótulo do botão para entrar no modo móvel controlado por voz."
+  },
+  "callInProgress": {
+    "message": "Escuta contínua ativa. Clique para parar.",
+    "description": "A dica de ferramenta a ser exibida no botão de chamada quando uma chamada está em andamento."
+  },
+  "callStarting": {
+    "message": "Iniciando escuta contínua...",
+    "description": "A dica de ferramenta a ser exibida no botão de chamada quando uma chamada está começando."
+  },
+  "callNotStarted": {
+    "message": "Clique para iniciar a escuta contínua.",
+    "description": "A dica de ferramenta a ser exibida no botão de chamada antes de uma chamada ser iniciada."
+  },
+  "callError": {
+    "message": "Erro não fatal encontrado. Não entre em pânico, ainda estamos ouvindo.",
+    "description": "A dica de ferramenta a ser exibida no botão de chamada quando um erro não fatal ocorre."
+  },
+  "mode_speed": {
+    "message": "velocidade",
+    "description": "Modo de transcrição mais rápido."
+  },
+  "mode_balanced": {
+    "message": "equilibrado",
+    "description": "Modo de transcrição padrão."
+  },
+  "mode_accuracy": {
+    "message": "precisão",
+    "description": "Modo de transcrição de maior precisão."
+  },
+  "preferedModeControl": {
+    "message": "Selecione seu modo de transcrição preferido",
+    "description": "O título (dica de ferramenta) do controle para selecionar o modo de transcrição preferido."
+  }
+}
