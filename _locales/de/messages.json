@@ -1,0 +1,50 @@
+{
+  "appName": {
+    "message": "Say, Pi",
+    "description": "Der Name der Anwendung."
+  },
+  "appDescription": {
+    "message": "Nahtlose Sprach-zu-Text-Verbesserung für Pi, den konversationellen KI-Assistenten. Genießen Sie freihändige, hochpräzise Gespräche in jeder Sprache.",
+    "description": "Die Beschreibung der Anwendung."
+  },
+  "exitMobileMode": {
+    "message": "Sprachgesteuerten Mobilmodus beenden",
+    "description": "Die Bezeichnung des Buttons, um den sprachgesteuerten Mobilmodus zu verlassen und zum textbasierten Desktopmodus zurückzukehren."
+  },
+  "enterMobileMode": {
+    "message": "Sprachgesteuerten Mobilmodus aktivieren",
+    "description": "Die Bezeichnung des Buttons, um den sprachgesteuerten Mobilmodus zu betreten."
+  },
+  "callInProgress": {
+    "message": "Aktives kontinuierliches Zuhören. Klicken, um zu stoppen.",
+    "description": "Der Tooltip, der auf dem Anrufbutton angezeigt wird, wenn ein Anruf läuft."
+  },
+  "callStarting": {
+    "message": "Kontinuierliches Zuhören wird gestartet...",
+    "description": "Der Tooltip, der auf dem Anrufbutton angezeigt wird, wenn ein Anruf beginnt."
+  },
+  "callNotStarted": {
+    "message": "Klicken, um kontinuierliches Zuhören zu starten.",
+    "description": "Der Tooltip, der auf dem Anrufbutton angezeigt wird, bevor ein Anruf gestartet wird."
+  },
+  "callError": {
+    "message": "Nicht schwerwiegender Fehler aufgetreten. Keine Panik, wir hören weiterhin zu.",
+    "description": "Der Tooltip, der auf dem Anrufbutton angezeigt wird, wenn ein nicht schwerwiegender Fehler auftritt."
+  },
+  "mode_speed": {
+    "message": "Geschwindigkeit",
+    "description": "Der schnellste Transkriptionsmodus."
+  },
+  "mode_balanced": {
+    "message": "Ausgewogen",
+    "description": "Der Standard-Transkriptionsmodus."
+  },
+  "mode_accuracy": {
+    "message": "Genauigkeit",
+    "description": "Der Modus mit der höchsten Genauigkeit."
+  },
+  "preferedModeControl": {
+    "message": "Wählen Sie Ihren bevorzugten Transkriptionsmodus",
+    "description": "Der Titel (Tooltip) der Steuerung zur Auswahl des bevorzugten Transkriptionsmodus."
+  }
+}

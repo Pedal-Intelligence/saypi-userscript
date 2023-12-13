@@ -20,6 +20,10 @@
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var map = {
+	"./de/messages.json": [
+		840,
+		840
+	],
 	"./en/messages.json": [
 		51,
 		533
