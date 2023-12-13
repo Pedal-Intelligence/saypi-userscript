@@ -32,9 +32,7 @@
     "description": "गैर-घातक त्रुटि होने पर कॉल बटन पर प्रदर्शित टूलटिप।"
   },
   "mode_speed": {
-    "message": "गति
-
-",
+    "message": "गति",
     "description": "सबसे तेज़ ट्रांसक्रिप्शन मोड।"
   },
   "mode_balanced": {

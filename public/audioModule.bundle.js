@@ -16,7 +16,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 527:
+/***/ 2527:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -27,8 +27,8 @@ were taken (or took inspiration) from https://github.com/snakers4/silero-vad
 */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FrameProcessor = exports.validateOptions = exports.defaultFrameProcessorOptions = void 0;
-const messages_1 = __webpack_require__(531);
-const logging_1 = __webpack_require__(655);
+const messages_1 = __webpack_require__(5531);
+const logging_1 = __webpack_require__(8655);
 const RECOMMENDED_FRAME_SAMPLES = [512, 1024, 1536];
 exports.defaultFrameProcessorOptions = {
     positiveSpeechThreshold: 0.5,
@@ -162,7 +162,7 @@ exports.FrameProcessor = FrameProcessor;
 
 /***/ }),
 
-/***/ 978:
+/***/ 1978:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -195,23 +195,23 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.utils = void 0;
-const _utils = __importStar(__webpack_require__(818));
+const _utils = __importStar(__webpack_require__(5818));
 exports.utils = {
     minFramesForTargetMS: _utils.minFramesForTargetMS,
     arrayBufferToBase64: _utils.arrayBufferToBase64,
     encodeWAV: _utils.encodeWAV,
 };
-__exportStar(__webpack_require__(684), exports);
-__exportStar(__webpack_require__(527), exports);
-__exportStar(__webpack_require__(531), exports);
-__exportStar(__webpack_require__(655), exports);
-__exportStar(__webpack_require__(2), exports);
-__exportStar(__webpack_require__(533), exports);
+__exportStar(__webpack_require__(4684), exports);
+__exportStar(__webpack_require__(2527), exports);
+__exportStar(__webpack_require__(5531), exports);
+__exportStar(__webpack_require__(8655), exports);
+__exportStar(__webpack_require__(2002), exports);
+__exportStar(__webpack_require__(8533), exports);
 //# sourceMappingURL=index.js.map
 
 /***/ }),
 
-/***/ 655:
+/***/ 8655:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -234,7 +234,7 @@ exports.log = _log;
 
 /***/ }),
 
-/***/ 531:
+/***/ 5531:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -252,7 +252,7 @@ var Message;
 
 /***/ }),
 
-/***/ 2:
+/***/ 2002:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -261,7 +261,7 @@ var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Silero = void 0;
 // @ts-ignore
-const logging_1 = __webpack_require__(655);
+const logging_1 = __webpack_require__(8655);
 class Silero {
     constructor(ort, modelFetcher) {
         this.ort = ort;
@@ -307,17 +307,17 @@ Silero.new = async (ort, modelFetcher) => {
 
 /***/ }),
 
-/***/ 684:
+/***/ 4684:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PlatformAgnosticNonRealTimeVAD = exports.defaultNonRealTimeVADOptions = void 0;
-const frame_processor_1 = __webpack_require__(527);
-const messages_1 = __webpack_require__(531);
-const models_1 = __webpack_require__(2);
-const resampler_1 = __webpack_require__(533);
+const frame_processor_1 = __webpack_require__(2527);
+const messages_1 = __webpack_require__(5531);
+const models_1 = __webpack_require__(2002);
+const resampler_1 = __webpack_require__(8533);
 exports.defaultNonRealTimeVADOptions = {
     ...frame_processor_1.defaultFrameProcessorOptions,
 };
@@ -389,14 +389,14 @@ exports.PlatformAgnosticNonRealTimeVAD = PlatformAgnosticNonRealTimeVAD;
 
 /***/ }),
 
-/***/ 533:
+/***/ 8533:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Resampler = void 0;
-const logging_1 = __webpack_require__(655);
+const logging_1 = __webpack_require__(8655);
 class Resampler {
     constructor(options) {
         this.options = options;
@@ -440,7 +440,7 @@ exports.Resampler = Resampler;
 
 /***/ }),
 
-/***/ 818:
+/***/ 5818:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -537,7 +537,7 @@ function writeString(view, offset, string) {
 
 /***/ }),
 
-/***/ 709:
+/***/ 7709:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -560,7 +560,7 @@ exports.assetPath = assetPath;
 
 /***/ }),
 
-/***/ 762:
+/***/ 9762:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -590,12 +590,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.defaultRealTimeVADOptions = exports.AudioNodeVAD = exports.MicVAD = exports.NonRealTimeVAD = exports.Message = exports.FrameProcessor = exports.utils = void 0;
-const ort = __importStar(__webpack_require__(793));
-const _common_1 = __webpack_require__(978);
+const ort = __importStar(__webpack_require__(9793));
+const _common_1 = __webpack_require__(1978);
 Object.defineProperty(exports, "FrameProcessor", ({ enumerable: true, get: function () { return _common_1.FrameProcessor; } }));
 Object.defineProperty(exports, "Message", ({ enumerable: true, get: function () { return _common_1.Message; } }));
-const model_fetcher_1 = __webpack_require__(756);
-const utils_1 = __webpack_require__(227);
+const model_fetcher_1 = __webpack_require__(6756);
+const utils_1 = __webpack_require__(2227);
 class NonRealTimeVAD extends _common_1.PlatformAgnosticNonRealTimeVAD {
     static async new(options = {}) {
         return await this._new(model_fetcher_1.modelFetcher, ort, options);
@@ -603,7 +603,7 @@ class NonRealTimeVAD extends _common_1.PlatformAgnosticNonRealTimeVAD {
 }
 exports.NonRealTimeVAD = NonRealTimeVAD;
 exports.utils = { audioFileToArray: utils_1.audioFileToArray, ..._common_1.utils };
-var real_time_vad_1 = __webpack_require__(759);
+var real_time_vad_1 = __webpack_require__(7759);
 Object.defineProperty(exports, "MicVAD", ({ enumerable: true, get: function () { return real_time_vad_1.MicVAD; } }));
 Object.defineProperty(exports, "AudioNodeVAD", ({ enumerable: true, get: function () { return real_time_vad_1.AudioNodeVAD; } }));
 Object.defineProperty(exports, "defaultRealTimeVADOptions", ({ enumerable: true, get: function () { return real_time_vad_1.defaultRealTimeVADOptions; } }));
@@ -611,14 +611,14 @@ Object.defineProperty(exports, "defaultRealTimeVADOptions", ({ enumerable: true,
 
 /***/ }),
 
-/***/ 756:
+/***/ 6756:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.modelFetcher = void 0;
-const asset_path_1 = __webpack_require__(709);
+const asset_path_1 = __webpack_require__(7709);
 const modelFetcher = async () => {
     const modelURL = (0, asset_path_1.assetPath)("silero_vad.onnx");
     return await fetch(modelURL).then((r) => r.arrayBuffer());
@@ -628,7 +628,7 @@ exports.modelFetcher = modelFetcher;
 
 /***/ }),
 
-/***/ 759:
+/***/ 7759:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -658,10 +658,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AudioNodeVAD = exports.MicVAD = exports.defaultRealTimeVADOptions = void 0;
-const ort = __importStar(__webpack_require__(793));
-const _common_1 = __webpack_require__(978);
-const model_fetcher_1 = __webpack_require__(756);
-const asset_path_1 = __webpack_require__(709);
+const ort = __importStar(__webpack_require__(9793));
+const _common_1 = __webpack_require__(1978);
+const model_fetcher_1 = __webpack_require__(6756);
+const asset_path_1 = __webpack_require__(7709);
 const _getWorkletURL = () => {
     return (0, asset_path_1.assetPath)("vad.worklet.bundle.min.js");
 };
@@ -799,7 +799,7 @@ exports.AudioNodeVAD = AudioNodeVAD;
 
 /***/ }),
 
-/***/ 227:
+/***/ 2227:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -848,7 +848,7 @@ exports.audioFileToArray = audioFileToArray;
 
 /***/ }),
 
-/***/ 187:
+/***/ 7187:
 /***/ ((module) => {
 
 "use strict";
@@ -1353,7 +1353,7 @@ function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
 
 /***/ }),
 
-/***/ 793:
+/***/ 9793:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var __dirname = "/";
@@ -1375,7 +1375,7 @@ var __filename = "/index.js";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   v: () => (/* binding */ getResourceUrl)
 /* harmony export */ });
-/* harmony import */ var _ConfigModule_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(186);
+/* harmony import */ var _ConfigModule_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8186);
 
 // used by browser extensions
 function getExtensionResourceUrl(filename) {
@@ -1400,7 +1400,7 @@ function getResourceUrl(filename) {
 
 /***/ }),
 
-/***/ 933:
+/***/ 8933:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1408,7 +1408,7 @@ function getResourceUrl(filename) {
 /* harmony export */   mu: () => (/* binding */ createInvocableActor)
 /* harmony export */ });
 /* unused harmony exports createDeferredActor, createNullActor, isActor, isSpawnedActor, toActorRef */
-/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(823);
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9823);
 /* harmony import */ var _serviceScope_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(797);
 
 
@@ -1513,7 +1513,7 @@ function toActorRef(actorRefLike) {
 
 /***/ }),
 
-/***/ 122:
+/***/ 9122:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1526,23 +1526,23 @@ __webpack_require__.d(__webpack_exports__, {
 // UNUSED EXPORTS: Machine
 
 // EXTERNAL MODULE: ./node_modules/xstate/es/_virtual/_tslib.js
-var _tslib = __webpack_require__(56);
+var _tslib = __webpack_require__(3056);
 // EXTERNAL MODULE: ./node_modules/xstate/es/utils.js
-var utils = __webpack_require__(823);
+var utils = __webpack_require__(9823);
 // EXTERNAL MODULE: ./node_modules/xstate/es/State.js
-var State = __webpack_require__(911);
+var State = __webpack_require__(4911);
 // EXTERNAL MODULE: ./node_modules/xstate/es/actionTypes.js
-var actionTypes = __webpack_require__(884);
+var actionTypes = __webpack_require__(3884);
 // EXTERNAL MODULE: ./node_modules/xstate/es/actions.js
 var es_actions = __webpack_require__(375);
 // EXTERNAL MODULE: ./node_modules/xstate/es/environment.js
-var environment = __webpack_require__(66);
+var environment = __webpack_require__(4066);
 // EXTERNAL MODULE: ./node_modules/xstate/es/constants.js
-var constants = __webpack_require__(353);
+var constants = __webpack_require__(7353);
 // EXTERNAL MODULE: ./node_modules/xstate/es/stateUtils.js
-var stateUtils = __webpack_require__(115);
+var stateUtils = __webpack_require__(6115);
 // EXTERNAL MODULE: ./node_modules/xstate/es/Actor.js
-var Actor = __webpack_require__(933);
+var Actor = __webpack_require__(8933);
 ;// CONCATENATED MODULE: ./node_modules/xstate/es/invokeUtils.js
 
 
@@ -3199,7 +3199,7 @@ function createMachine(config, options) {
 
 /***/ }),
 
-/***/ 911:
+/***/ 4911:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -3208,12 +3208,12 @@ function createMachine(config, options) {
 /* harmony export */   j_: () => (/* binding */ stateValuesEqual)
 /* harmony export */ });
 /* unused harmony exports bindActionToState, isState, isStateConfig */
-/* harmony import */ var _virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(56);
-/* harmony import */ var _constants_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(353);
-/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(823);
-/* harmony import */ var _stateUtils_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(115);
+/* harmony import */ var _virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3056);
+/* harmony import */ var _constants_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7353);
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9823);
+/* harmony import */ var _stateUtils_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6115);
 /* harmony import */ var _actions_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(375);
-/* harmony import */ var _environment_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(66);
+/* harmony import */ var _environment_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4066);
 
 
 
@@ -3492,7 +3492,7 @@ function () {
 
 /***/ }),
 
-/***/ 56:
+/***/ 3056:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -3585,7 +3585,7 @@ function __spreadArray(to, from, pack) {
 
 /***/ }),
 
-/***/ 884:
+/***/ 3884:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -3605,7 +3605,7 @@ function __spreadArray(to, from, pack) {
 /* harmony export */   sT: () => (/* binding */ stop)
 /* harmony export */ });
 /* unused harmony exports after, doneState, error, errorExecution, errorPlatform */
-/* harmony import */ var _types_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(43);
+/* harmony import */ var _types_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9043);
 
 
 var start = _types_js__WEBPACK_IMPORTED_MODULE_0__/* .ActionTypes */ .M.Start;
@@ -3654,11 +3654,11 @@ var pure = _types_js__WEBPACK_IMPORTED_MODULE_0__/* .ActionTypes */ .M.Pure;
 /* harmony export */   yC: () => (/* binding */ resolveActions)
 /* harmony export */ });
 /* unused harmony exports choose, escalate, forwardTo, getActionFunction, isActionObject, log, pure, resolveLog, resolveRaise, resolveSend, resolveStop, respond, sendParent, sendTo, sendUpdate */
-/* harmony import */ var _virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(56);
-/* harmony import */ var _types_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(43);
-/* harmony import */ var _actionTypes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(884);
-/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(823);
-/* harmony import */ var _environment_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(66);
+/* harmony import */ var _virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3056);
+/* harmony import */ var _types_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9043);
+/* harmony import */ var _actionTypes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3884);
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9823);
+/* harmony import */ var _environment_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4066);
 
 
 
@@ -4317,7 +4317,7 @@ function resolveActions(machine, currentState, currentContext, _event, actionBlo
 
 /***/ }),
 
-/***/ 353:
+/***/ 7353:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -4337,7 +4337,7 @@ var TARGETLESS_KEY = '';
 
 /***/ }),
 
-/***/ 66:
+/***/ 4066:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -4351,7 +4351,7 @@ var IS_PRODUCTION = "production" === 'production';
 
 /***/ }),
 
-/***/ 494:
+/***/ 2494:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -4422,7 +4422,7 @@ var consume = function (fn) {
 
 /***/ }),
 
-/***/ 115:
+/***/ 6115:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -4440,8 +4440,8 @@ var consume = function (fn) {
 /* harmony export */   xZ: () => (/* binding */ getMeta)
 /* harmony export */ });
 /* unused harmony export getAdjList */
-/* harmony import */ var _virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(56);
-/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(823);
+/* harmony import */ var _virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3056);
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9823);
 
 
 
@@ -4708,7 +4708,7 @@ function getTagsFromConfiguration(configuration) {
 
 /***/ }),
 
-/***/ 43:
+/***/ 9043:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -4753,7 +4753,7 @@ var SpecialTargets;
 
 /***/ }),
 
-/***/ 823:
+/***/ 9823:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -4792,11 +4792,11 @@ var SpecialTargets;
 /* harmony export */   yv: () => (/* binding */ updateHistoryValue)
 /* harmony export */ });
 /* unused harmony exports getActionType, interopSymbols, isActor, isBehavior, isObservable, isPromiseLike, isStateLike, keys, pathsToStateValue, reportUnhandledExceptionOnInvocation, toArrayStrict, toObserver, uniqueId, updateHistoryStates */
-/* harmony import */ var _virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(56);
-/* harmony import */ var _types_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(43);
-/* harmony import */ var _actionTypes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(884);
-/* harmony import */ var _constants_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(353);
-/* harmony import */ var _environment_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(66);
+/* harmony import */ var _virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3056);
+/* harmony import */ var _types_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9043);
+/* harmony import */ var _actionTypes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3884);
+/* harmony import */ var _constants_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7353);
+/* harmony import */ var _environment_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4066);
 
 
 
@@ -5428,7 +5428,7 @@ function isRaisableAction(action) {
 
 /***/ }),
 
-/***/ 186:
+/***/ 8186:
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -5442,14 +5442,14 @@ var config = {
 
 /***/ }),
 
-/***/ 635:
+/***/ 7635:
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   Z: () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var events__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(187);
+/* harmony import */ var events__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7187);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new events__WEBPACK_IMPORTED_MODULE_0__());
 
@@ -5563,9 +5563,9 @@ var __webpack_exports__ = {};
 // UNUSED EXPORTS: default
 
 // EXTERNAL MODULE: ./node_modules/@ricky0123/vad-web/dist/index.js
-var dist = __webpack_require__(762);
+var dist = __webpack_require__(9762);
 // EXTERNAL MODULE: ./src/ConfigModule.js
-var ConfigModule = __webpack_require__(186);
+var ConfigModule = __webpack_require__(8186);
 // EXTERNAL MODULE: ./src/ResourceModule.ts
 var ResourceModule = __webpack_require__(879);
 ;// CONCATENATED MODULE: ./src/RequestInterceptor.js
@@ -5710,11 +5710,11 @@ function convertToWavBlob(audioData) {
 }
 
 // EXTERNAL MODULE: ./node_modules/xstate/es/Machine.js + 2 modules
-var Machine = __webpack_require__(122);
+var Machine = __webpack_require__(9122);
 // EXTERNAL MODULE: ./node_modules/xstate/es/index.js
-var es = __webpack_require__(494);
+var es = __webpack_require__(2494);
 // EXTERNAL MODULE: ./src/EventBus.js
-var src_EventBus = __webpack_require__(635);
+var src_EventBus = __webpack_require__(7635);
 ;// CONCATENATED MODULE: ./src/state-machines/AudioInputMachine.ts
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
