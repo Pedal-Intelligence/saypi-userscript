@@ -1,4 +1,18 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // Update elements with internationalised content
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    let messageKey = el.getAttribute("data-i18n");
+    // we use the chrome api instead of i18n.ts because module loading is not supported in the popup
+    el.textContent = chrome.i18n.getMessage(messageKey);
+  });
+  // Update attributes for internationalisation
+  document.querySelectorAll("[data-i18n-attr]").forEach((el) => {
+    let attrInfo = el.getAttribute("data-i18n-attr").split(":");
+    let attrName = attrInfo[0];
+    let messageKey = attrInfo[1];
+    el.setAttribute(attrName, chrome.i18n.getMessage(messageKey));
+  });
+
   var slider = document.getElementById("customRange");
   var output = document.getElementById("sliderValue");
   var preferenceIcons = {
@@ -14,7 +28,8 @@ document.addEventListener("DOMContentLoaded", function () {
         (key) => preferenceIcons[key] === result.prefer
       );
       slider.value = selectedValue;
-      output.textContent = result.prefer;
+      const messageKey = "mode_" + result.prefer;
+      output.textContent = chrome.i18n.getMessage(messageKey);
       setActiveIcon(result.prefer);
     }
   });
@@ -22,7 +37,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Update the current slider value (each time you drag the slider handle)
   slider.oninput = function () {
     var preference = preferenceIcons[this.value];
-    output.textContent = preference;
+    const messageKey = "mode_" + preference;
+    output.textContent = chrome.i18n.getMessage(messageKey);
     setActiveIcon(preference);
 
     // Save the preference

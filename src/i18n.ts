@@ -33,6 +33,7 @@ function convertLanguageToLocale(language: string): string {
 }
 
 function getMessage(messageName: string): string {
+  console.log('getMessage called for message: ' + messageName + ' and locale: ' + navigator.language);
   // Check if running as a Chrome extension
   if (typeof chrome !== "undefined" && chrome.i18n) {
     return chrome.i18n.getMessage(messageName);

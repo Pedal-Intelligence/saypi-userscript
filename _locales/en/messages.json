@@ -30,5 +30,21 @@
   "callError": {
     "message": "Non-fatal error encountered. Don't panic, we're still listening.",
     "description": "The tooltip to display on the call button when a non-fatal error occurs."
+  },
+  "mode_speed": {
+    "message": "speed",
+    "description": "Fastest transcription mode."
+  },
+  "mode_balanced": {
+    "message": "balanced",
+    "description": "Default transcription mode."
+  },
+  "mode_accuracy": {
+    "message": "accuracy",
+    "description": "Highest accuracy mode."
+  },
+  "preferedModeControl": {
+    "message": "Select your prefered transcription mode",
+    "description": "The title (tooltip) of the control to select the prefered transcription mode."
   }
 }

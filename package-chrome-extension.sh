@@ -12,6 +12,7 @@ mkdir -p dist/chrome-extension/src/icons
 cp src/icons/bubble-*.png dist/chrome-extension/src/icons
 mkdir -p dist/chrome-extension/src/popup
 cp src/popup/*.html src/popup/*.js dist/chrome-extension/src/popup
+cp -r _locales dist/chrome-extension
 cd dist/chrome-extension
 zip -r saypi.chrome.zip *
 cd ../..

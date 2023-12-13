@@ -1,3 +1,5 @@
 node_modules
 dist/*
 certificates/*.pem
+_locales_*_messages_json.js
+public/533.js
