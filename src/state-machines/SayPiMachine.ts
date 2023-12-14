@@ -15,6 +15,7 @@ import { config } from "../ConfigModule";
 import EventBus from "../EventBus";
 import { calculateDelay } from "../TimerModule";
 import AudioControlsModule from "../AudioControlsModule";
+import { requestWakeLock, releaseWakeLock } from "../WakeLockModule";
 
 type SayPiTranscribedEvent = {
   type: "saypi:transcribed";
@@ -46,7 +47,8 @@ type SayPiEvent =
   | { type: "saypi:call" }
   | { type: "saypi:callReady" }
   | { type: "saypi:callFailed" }
-  | { type: "saypi:hangup" };
+  | { type: "saypi:hangup" }
+  | { type: "saypi:visible" };
 
 interface SayPiContext {
   transcriptions: Record<number, string>;
@@ -180,6 +182,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               },
               {
                 type: "activateAudioOutput",
+              },
+              {
+                type: "requestWakeLock",
               }
             ],
             description:
@@ -297,6 +302,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   {
                     type: "callHasEnded",
                   },
+                  {
+                    type: "releaseWakeLock",
+                  }
                 ],
                 description:
                   'Disable the VAD microphone.\n    Aka "call" Pi.\n    Stops active listening.',
@@ -523,9 +531,13 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               },
             ],
           },
-
           "saypi:piSpeaking": {
             target: "#sayPi.responding.piSpeaking",
+          },
+          "saypi:visible": {
+            actions: {
+              type: "requestWakeLock",
+            }
           }
         },
         type: "parallel",
@@ -738,6 +750,12 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       activateAudioOutput: () => {
         audioControls.activateAudioOutput(true);
       },
+      requestWakeLock: () => {
+        requestWakeLock();
+      },
+      releaseWakeLock: () => {
+        releaseWakeLock();
+      }
     },
     services: {},
     guards: {
