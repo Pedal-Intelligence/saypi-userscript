@@ -16,10 +16,13 @@ import callIconSVG from "./icons/call.svg";
 import callStartingIconSVG from "./icons/call-starting.svg";
 import hangupIconSVG from "./icons/hangup.svg";
 import hangupMincedIconSVG from "./icons/hangup-minced.svg";
+import lockIconSVG from "./icons/lock.svg";
+import unlockIconSVG from "./icons/unlock.svg";
 import getMessage from "./i18n.ts";
 export default class ButtonModule {
   constructor() {
-    this.actor = StateMachineService.actor;
+    this.sayPiActor = StateMachineService.actor; // the Say, Pi state machine
+    this.screenLockActor = StateMachineService.screenLockActor;
     // Binding methods to the current instance
     this.registerOtherEvents();
 
@@ -34,13 +37,13 @@ export default class ButtonModule {
   }
 
   // Function to create a new button
-  createButton(label, callback) {
+  createButton(textLabel, onClickCallback) {
     const button = document.createElement("button");
-    if (label) {
-      button.textContent = label;
+    if (textLabel) {
+      button.textContent = textLabel;
     }
-    if (callback) {
-      button.onclick = callback;
+    if (onClickCallback) {
+      button.onclick = onClickCallback;
     }
     return button;
   }
@@ -225,7 +228,7 @@ export default class ButtonModule {
       callButton.setAttribute("aria-label", label);
       callButton.setAttribute("title", label);
       callButton.onclick = () => {
-        this.actor.send("saypi:hangup");
+        this.sayPiActor.send("saypi:hangup");
       };
     }
   }
@@ -240,7 +243,7 @@ export default class ButtonModule {
       callButton.setAttribute("aria-label", label);
       callButton.setAttribute("title", label);
       callButton.onclick = () => {
-        this.actor.send("saypi:hangup");
+        this.sayPiActor.send("saypi:hangup");
       };
       callButton.classList.add("active");
     }
@@ -256,7 +259,7 @@ export default class ButtonModule {
       callButton.setAttribute("aria-label", label);
       callButton.setAttribute("title", label);
       callButton.onclick = () => {
-        this.actor.send("saypi:call");
+        this.sayPiActor.send("saypi:call");
       };
       callButton.classList.remove("active");
     }
@@ -291,6 +294,44 @@ export default class ButtonModule {
       callButton.classList.remove("disabled");
       callButton.disabled = false;
     }
+  }
+
+  createLockButton(container) {
+    const label = getMessage("lockButton");
+    const button = document.createElement("button");
+    button.id = "saypi-lockButton";
+    button.type = "button";
+    button.className =
+      "lock-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+    button.setAttribute("aria-label", label);
+    button.setAttribute("title", label);
+    button.innerHTML = lockIconSVG;
+    if (container) {
+      container.appendChild(button);
+      button.onclick = () => {
+        this.screenLockActor.send("lock");
+      };
+    }
+    return button;
+  }
+
+  createUnlockButton(container) {
+    const label = getMessage("unlockButton");
+    const button = document.createElement("button");
+    button.id = "saypi-unlockButton";
+    button.type = "button";
+    button.className =
+      "lock-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+    button.setAttribute("aria-label", label);
+    button.setAttribute("title", label);
+    button.innerHTML = unlockIconSVG;
+    if (container) {
+      container.appendChild(button);
+      button.onclick = () => {
+        this.screenLockActor.send("unlock");
+      };
+    }
+    return button;
   }
 }
 

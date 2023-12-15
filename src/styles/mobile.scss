@@ -93,4 +93,50 @@ html.mobile-view {
     border: 0;
     z-index: 80;
   }
+
+  #saypi-lock-panel button {
+    display: block;
+    left: unset;
+    right: 10px;
+    width: 56px;
+    height: 56px;
+    z-index: 80; // same as call button
+  }
+
+  #saypi-lock-panel {
+    /* unlocked by default */
+    display: block;
+    background-color: transparent;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  .unlocked #saypi-lockButton {
+    display: block !important; // show the lock button when screen is unlocked
+  }
+  .locked #saypi-lockButton {
+    display: none !important; // hide the lock button when screen is locked
+  }
+
+  .unlocked #saypi-unlockButton {
+    display: none !important; // hide the unlock button when screen is unlocked
+  }
+  .locked #saypi-unlockButton {
+    display: block !important; // show the unlock button when screen is unlocked
+    z-index: 101 !important; // above the touch absorber
+  }
+
+  .locked #saypi-touch-absorber {
+    display: block !important; // show the touch absorber when screen is locked
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: 0.5;
+    /* semi-transparent background */
+    background-color: rgba(245, 238, 223, 0.75);
+    width: 100vw;
+    height: 100svh;
+    z-index: 100;
+  }
+
 }
