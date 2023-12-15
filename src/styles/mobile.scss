@@ -139,4 +139,30 @@ html.mobile-view {
     z-index: 100;
   }
 
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }  
+
+  .locked #saypi-locked-text {
+    display: block !important; // show the locked text when screen is locked
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 1rem;
+    /* text */
+    animation-name: fadeIn;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    text-align: center;
+    font-size: xx-large;
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;
+    .subtext {
+      display: block;
+      font-size: large;
+    }
+  }
+
 }

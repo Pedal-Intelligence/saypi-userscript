@@ -46,5 +46,21 @@
   "preferedModeControl": {
     "message": "Select your prefered transcription mode",
     "description": "The title (tooltip) of the control to select the prefered transcription mode."
+  },
+  "lockButton": {
+    "message": "Press to lock the screen",
+    "description": "The title (tooltip) of the button to lock the screen against accidental touches."
+  },
+  "unlockButton": {
+    "message": "Press to unlock the screen",
+    "description": "The title (tooltip) of the button to unlock the screen."
+  },
+  "lockedScreen": {
+    "message": "Screen is locked.",
+    "description": "A message to display prominently when the screen is locked."
+  },
+  "unlockInstruction": {
+    "message": "Long-press to unlock.",
+    "description": "Instructions telling the user how to unlock the screen when locked."
   }
 }

@@ -3,6 +3,7 @@ import { buttonModule } from "./ButtonModule.js";
 import EventModule from "./EventModule.js";
 import { addUserAgentFlags, initMode } from "./UserAgentModule.js";
 import { submitErrorHandler } from "./SubmitErrorHandler.ts";
+import getMessage from "./i18n.ts";
 
 import "./styles/common.scss";
 import "./styles/desktop.scss";
@@ -212,6 +213,16 @@ import "./styles/rectangles.css";
     var touchAbsorber = document.createElement("div");
     touchAbsorber.id = "saypi-touch-absorber";
     panel.appendChild(touchAbsorber);
+
+    var lockedText = document.createElement("p");
+    lockedText.id = "saypi-locked-text";
+    lockedText.innerHTML = getMessage("lockedScreen");
+    panel.appendChild(lockedText);
+    var unlockInstruction = document.createElement("span");
+    unlockInstruction.id = "saypi-unlock-instruction";
+    unlockInstruction.classList.add("subtext");
+    unlockInstruction.innerHTML = getMessage("unlockInstruction");
+    lockedText.appendChild(unlockInstruction);
   }
 
   // Start observing the entire document for changes to child nodes and subtree
