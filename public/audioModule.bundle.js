@@ -5794,6 +5794,8 @@ function setupRecording(callback) {
 function tearDownRecording() {
     if (microphone) {
         microphone.pause();
+        microphone.stream.getTracks().forEach(track => track.stop());
+        console.log("Microphone released");
     }
     microphone = null;
 }
@@ -5911,7 +5913,7 @@ const AudioInputMachine_audioInputMachine = (0,Machine/* createMachine */.C)({
                 },
             },
             on: {
-                release: {
+                "release": {
                     target: "released",
                     actions: {
                         type: "releaseMicrophone",
@@ -5959,6 +5961,7 @@ const AudioInputMachine_audioInputMachine = (0,Machine/* createMachine */.C)({
             src_EventBus/* default */.Z.emit("saypi:callReady");
         },
         releaseMicrophone: (context, event) => {
+            console.log("Releasing microphone");
             tearDownRecording();
         },
         logError: (context, event) => {
@@ -6216,6 +6219,7 @@ var AudioModule = /*#__PURE__*/(/* unused pure expression or super */ null && (f
         inputActor.send("acquire");
       });
       EventBus.on("audio:tearDownRecording", function (e) {
+        console.log("tear down recording");
         inputActor.send("release");
       });
       EventBus.on("audio:startRecording", function (e) {

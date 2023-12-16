@@ -80,7 +80,7 @@ export default class AudioModule {
     });
 
     EventBus.on("audio:tearDownRecording", function (e) {
-      inputActor.send("release");
+            inputActor.send("release");
     });
 
     EventBus.on("audio:startRecording", function (e) {

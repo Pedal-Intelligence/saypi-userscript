@@ -307,9 +307,6 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     type: "stopRecording",
                   },
                   {
-                    type: "releaseMicrophone",
-                  },
-                  {
                     type: "callHasEnded",
                   },
                   {
@@ -573,6 +570,12 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               {
                 type: "callHasEnded",
               },
+              {
+                type: "releaseWakeLock",
+              },
+              {
+                type: "stopRecording",
+              }
             ],
             description:
               'End call while Pi is speaking.',
@@ -698,6 +701,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
 
       stopRecording: (context, event) => {
         EventBus.emit("audio:stopRecording");
+        EventBus.emit("audio:tearDownRecording");
       },
 
       showNotification: (context, event, { action }) => {

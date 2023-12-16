@@ -8553,6 +8553,8 @@ function setupRecording(callback) {
 function tearDownRecording() {
     if (microphone) {
         microphone.pause();
+        microphone.stream.getTracks().forEach(track => track.stop());
+        console.log("Microphone released");
     }
     microphone = null;
 }
@@ -8670,7 +8672,7 @@ const audioInputMachine = (0,Machine/* createMachine */.C)({
                 },
             },
             on: {
-                release: {
+                "release": {
                     target: "released",
                     actions: {
                         type: "releaseMicrophone",
@@ -8718,6 +8720,7 @@ const audioInputMachine = (0,Machine/* createMachine */.C)({
             EventBus/* default */.Z.emit("saypi:callReady");
         },
         releaseMicrophone: (context, event) => {
+            console.log("Releasing microphone");
             tearDownRecording();
         },
         logError: (context, event) => {
@@ -8975,6 +8978,7 @@ var AudioModule = /*#__PURE__*/function () {
         inputActor.send("acquire");
       });
       EventBus/* default */.Z.on("audio:tearDownRecording", function (e) {
+        console.log("tear down recording");
         inputActor.send("release");
       });
       EventBus/* default */.Z.on("audio:startRecording", function (e) {
@@ -10507,9 +10511,6 @@ const machine = (0,Machine/* createMachine */.C)({
                                     type: "stopRecording",
                                 },
                                 {
-                                    type: "releaseMicrophone",
-                                },
-                                {
                                     type: "callHasEnded",
                                 },
                                 {
@@ -10743,6 +10744,12 @@ const machine = (0,Machine/* createMachine */.C)({
                         {
                             type: "callHasEnded",
                         },
+                        {
+                            type: "releaseWakeLock",
+                        },
+                        {
+                            type: "stopRecording",
+                        }
                     ],
                     description: 'End call while Pi is speaking.',
                 },
@@ -10846,7 +10853,9 @@ const machine = (0,Machine/* createMachine */.C)({
             EventBus/* default */.Z.emit("audio:startRecording");
         },
         stopRecording: (context, event) => {
+            console.log("stopping recording in saypi machine");
             EventBus/* default */.Z.emit("audio:stopRecording");
+            EventBus/* default */.Z.emit("audio:tearDownRecording");
         },
         showNotification: (context, event, { action }) => {
             const icon = action.params.icon;

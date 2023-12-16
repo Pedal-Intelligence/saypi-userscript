@@ -94,6 +94,7 @@ async function setupRecording(callback?: () => void): Promise<void> {
 function tearDownRecording(): void {
   if (microphone) {
     microphone.pause();
+    microphone.stream.getTracks().forEach(track => track.stop());
   }
   microphone = null;
 }
@@ -233,7 +234,7 @@ export const audioInputMachine = createMachine<
           },
         },
         on: {
-          release: {
+          "release": {
             target: "released",
             actions: {
               type: "releaseMicrophone",
@@ -293,6 +294,7 @@ export const audioInputMachine = createMachine<
       },
 
       releaseMicrophone: (context, event) => {
+        console.log("Releasing microphone");
         tearDownRecording();
       },
 
