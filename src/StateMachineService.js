@@ -1,5 +1,6 @@
 import { interpret } from "xstate";
 import { machine } from "./state-machines/SayPiMachine.ts";
+import { machine as screenLockMachine } from "./state-machines/ScreenLockMachine.ts";
 import { logger, serializeStateValue } from "./LoggingModule.js";
 
 /**
@@ -19,6 +20,21 @@ class StateMachineService {
       }
     });
     this.actor.start();
+
+    this.screenLockActor = interpret(screenLockMachine).onTransition(
+      (state) => {
+        if (state.changed) {
+          const fromState = state.history
+            ? serializeStateValue(state.history.value)
+            : "N/A";
+          const toState = serializeStateValue(state.value);
+          logger.debug(
+            `Screen Lock Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
+          );
+        }
+      }
+    );
+    this.screenLockActor.start();
   }
 }
 

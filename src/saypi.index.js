@@ -3,6 +3,7 @@ import { buttonModule } from "./ButtonModule.js";
 import EventModule from "./EventModule.js";
 import { addUserAgentFlags, initMode } from "./UserAgentModule.js";
 import { submitErrorHandler } from "./SubmitErrorHandler.ts";
+import getMessage from "./i18n.ts";
 
 import "./styles/common.scss";
 import "./styles/desktop.scss";
@@ -80,6 +81,7 @@ import "./styles/rectangles.css";
     const foundAudioOutputButton = addIdAudioOutputButton();
     addIdSubmitButton(promptControlsContainer);
     addTalkButton(document.body);
+    addLockButtons(document.body);
     buttonModule.createCallButton(promptControlsContainer, -1);
     buttonModule.createEnterButton();
     buttonModule.createExitButton();
@@ -192,6 +194,35 @@ import "./styles/rectangles.css";
 
     // Call the function to inject the script after the button has been added
     startAudioModule();
+  }
+
+  function addLockButtons(container) {
+    // Create a containing div
+    var panel = document.createElement("div");
+    panel.id = "saypi-lock-panel";
+    panel.classList.add("unlocked");
+
+    if (container) {
+      container.appendChild(panel);
+    } else {
+      document.body.appendChild(panel);
+    }
+
+    var lockButton = buttonModule.createLockButton(panel);
+    var unlockButton = buttonModule.createUnlockButton(panel);
+    var touchAbsorber = document.createElement("div");
+    touchAbsorber.id = "saypi-touch-absorber";
+    panel.appendChild(touchAbsorber);
+
+    var lockedText = document.createElement("p");
+    lockedText.id = "saypi-locked-text";
+    lockedText.innerHTML = getMessage("lockedScreen");
+    panel.appendChild(lockedText);
+    var unlockInstruction = document.createElement("span");
+    unlockInstruction.id = "saypi-unlock-instruction";
+    unlockInstruction.classList.add("subtext");
+    unlockInstruction.innerHTML = getMessage("unlockInstruction");
+    lockedText.appendChild(unlockInstruction);
   }
 
   // Start observing the entire document for changes to child nodes and subtree

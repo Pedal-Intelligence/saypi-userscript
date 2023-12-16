@@ -5,12 +5,16 @@ export interface INotificationsModule {
     listeningTimeRemaining?: (timeRemaining: number) => void;
     callStarted?: () => void;
     callEnded?: () => void;
+    lockScreen?: () => void;
+    unlockScreen?: () => void;
   }
   
   export class AudibleNotificationsModule implements INotificationsModule {
     private listeningSound: HTMLAudioElement = new Audio(getResourceUrl('audio/guitar-pluck.mp3'));
     private callStartedSound: HTMLAudioElement = new Audio(getResourceUrl('audio/startup-synth.mp3'));
     private callEndedSound: HTMLAudioElement = new Audio(getResourceUrl('audio/turn-off.mp3'));
+    private lockSound: HTMLAudioElement = new Audio(getResourceUrl('audio/beep-on.mp3'));
+    private unlockSound: HTMLAudioElement = new Audio(getResourceUrl('audio/beep-off.mp3'));
     public listeningStopped(): void {
       this.listeningSound.play().catch(e => {
         console.error("Unable to play audio notification:", e);
@@ -26,7 +30,17 @@ export interface INotificationsModule {
         console.error("Unable to play audio notification:", e);
       });
     }
-    
+    public lockScreen(): void {
+      this.lockSound.play().catch(e => {
+        console.error("Unable to play audio notification:", e);
+      });
+    }
+    public unlockScreen(): void {
+      this.unlockSound.play().catch(e => {
+        console.error("Unable to play audio notification:", e);
+      });
+    }
+
   }
   
   export class VisualNotificationsModule implements INotificationsModule {

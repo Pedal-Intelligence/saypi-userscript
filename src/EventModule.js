@@ -9,6 +9,7 @@ const PI_THINKING = "saypi:piThinking";
 const PI_SPEAKING = "saypi:piSpeaking";
 const PI_STOPPED_SPEAKING = "saypi:piStoppedSpeaking";
 const PI_FINISHED_SPEAKING = "saypi:piFinishedSpeaking";
+const VISIBLE = "saypi:visible";
 
 export default class EventModule {
   static init() {
@@ -102,6 +103,13 @@ export default class EventModule {
       EventBus.on(eventName, () => {
         actor.send(eventName);
       });
+    });
+
+    // notify the actor when the tab is visible
+    document.addEventListener("visibilitychange", async () => {
+      if (document.visibilityState === "visible") {
+        actor.send(VISIBLE);
+      }
     });
   }
 }
