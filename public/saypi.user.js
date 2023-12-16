@@ -9450,6 +9450,34 @@ function isMobileView() {
   // Make sure isMobileDevice is defined or imported
   return isMobileDevice() && prefersMobile;
 }
+function enterFullscreen() {
+  if (!isMobileDevice()) {
+    return;
+  }
+  // Check if the API is available
+  if (document.fullscreenEnabled) {
+    // Request full-screen mode
+    document.documentElement.requestFullscreen()["catch"](function (err) {
+      console.error("Error attempting to enable full-screen mode: ".concat(err.message, " (").concat(err.name, ")"));
+    });
+  } else {
+    console.log("Fullscreen API is not enabled.");
+  }
+}
+function exitFullscreen() {
+  if (!isMobileDevice()) {
+    return;
+  }
+  // Check if the API is available
+  if (document.fullscreenEnabled) {
+    // Request full-screen mode
+    document.exitFullscreen()["catch"](function (err) {
+      console.error("Error attempting to exit full-screen mode: ".concat(err.message, " (").concat(err.name, ")"));
+    });
+  } else {
+    console.log("Fullscreen API is not enabled.");
+  }
+}
 function exitMobileMode() {
   localStorage.setItem("userViewPreference", "desktop"); // Save preference
 
@@ -9457,6 +9485,7 @@ function exitMobileMode() {
   element.classList.remove("mobile-view");
   element.classList.add("desktop-view");
   attachCallButton();
+  exitFullscreen();
 }
 function enterMobileMode() {
   localStorage.setItem("userViewPreference", "mobile"); // Save preference
@@ -9465,6 +9494,7 @@ function enterMobileMode() {
   element.classList.remove("desktop-view");
   element.classList.add("mobile-view");
   detachCallButton();
+  enterFullscreen();
 }
 function attachCallButton() {
   // move the call button back into the text prompt container for desktop view

@@ -27,6 +27,40 @@ export function isMobileView() {
   return isMobileDevice() && prefersMobile;
 }
 
+export function enterFullscreen() {
+  if (!isMobileDevice()) {
+    return;
+  }
+  // Check if the API is available
+  if (document.fullscreenEnabled) {
+    // Request full-screen mode
+    document.documentElement.requestFullscreen().catch((err) => {
+      console.error(
+        `Error attempting to enable full-screen mode: ${err.message} (${err.name})`
+      );
+    });
+  } else {
+    console.log("Fullscreen API is not enabled.");
+  }
+}
+
+export function exitFullscreen() {
+  if (!isMobileDevice()) {
+    return;
+  }
+  // Check if the API is available
+  if (document.fullscreenEnabled) {
+    // Request full-screen mode
+    document.exitFullscreen().catch((err) => {
+      console.error(
+        `Error attempting to exit full-screen mode: ${err.message} (${err.name})`
+      );
+    });
+  } else {
+    console.log("Fullscreen API is not enabled.");
+  }
+}
+
 export function exitMobileMode() {
   localStorage.setItem("userViewPreference", "desktop"); // Save preference
 
@@ -35,6 +69,8 @@ export function exitMobileMode() {
   element.classList.add("desktop-view");
 
   attachCallButton();
+
+  exitFullscreen();
 }
 
 export function enterMobileMode() {
@@ -45,6 +81,8 @@ export function enterMobileMode() {
   element.classList.add("mobile-view");
 
   detachCallButton();
+
+  enterFullscreen();
 }
 
 function attachCallButton() {
