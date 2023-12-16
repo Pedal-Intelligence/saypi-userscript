@@ -60,7 +60,11 @@
     "description": "A message to display prominently when the screen is locked."
   },
   "unlockInstruction": {
-    "message": "Long-press to unlock.",
+    "message": "Hold to unlock.",
     "description": "Instructions telling the user how to unlock the screen when locked."
+  },
+  "continueUnlocking": {
+    "message": "Continue holding to unlock...",
+    "description": "Instructions telling the user how to continue once they have started to press the unlock button."
   }
 }

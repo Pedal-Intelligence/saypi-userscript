@@ -327,8 +327,29 @@ export default class ButtonModule {
     button.innerHTML = unlockIconSVG;
     if (container) {
       container.appendChild(button);
-      button.onclick = () => {
-        this.screenLockActor.send("unlock");
+      let pressTimer;
+      const originalMessage = getMessage("unlockInstruction");
+      const continueUnlockingMessage = getMessage("continueUnlocking");
+
+      button.onmousedown = button.ontouchstart = () => {
+        console.log("unlock button pressed");
+        const instruction = document.getElementById("saypi-unlock-instruction");
+        if (instruction) {
+          instruction.textContent = continueUnlockingMessage;
+        }
+        pressTimer = setTimeout(() => {
+          this.screenLockActor.send("unlock");
+        }, 1500); // Adjust the duration (in milliseconds) for a long-press
+      };
+
+      button.onmouseup = button.ontouchend = () => {
+        console.log("unlock button released");
+        // reset the message
+        const instruction = document.getElementById("saypi-unlock-instruction");
+        if (instruction) {
+          instruction.textContent = originalMessage;
+        }
+        clearTimeout(pressTimer);
       };
     }
     return button;
