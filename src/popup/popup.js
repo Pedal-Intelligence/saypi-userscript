@@ -84,4 +84,20 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
+
+  // Select all input checkboxes
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+  // Add event listener to each checkbox
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", function () {
+      // If the checkbox is checked, add the 'checked' class to its parent
+      // If it's not checked, remove the 'checked' class from its parent
+      if (this.checked) {
+        this.parentElement.classList.add("checked");
+      } else {
+        this.parentElement.classList.remove("checked");
+      }
+    });
+  });
 });

@@ -165,4 +165,9 @@ html.mobile-view {
     }
   }
 
+  /* hide the scrollbar */
+  .scrollbar-gutter-both-edges {
+    visibility: hidden;
+  }
+
 }

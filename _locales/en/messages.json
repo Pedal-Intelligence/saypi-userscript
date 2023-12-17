@@ -66,5 +66,13 @@
   "continueUnlocking": {
     "message": "Continue holding to unlock...",
     "description": "Instructions telling the user how to continue once they have started to press the unlock button."
+  },
+  "autoSubmit": {
+    "message": "Auto-submit",
+    "description": "Label for the checkbox to enable/disable automatic prompt submission."
+  },
+  "soundEffects": {
+    "message": "Sound effects",
+    "description": "Label for the checkbox to enable/disable sound effects."
   }
 }
