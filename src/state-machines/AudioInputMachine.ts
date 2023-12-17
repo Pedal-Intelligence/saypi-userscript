@@ -294,7 +294,6 @@ export const audioInputMachine = createMachine<
       },
 
       releaseMicrophone: (context, event) => {
-        console.log("Releasing microphone");
         tearDownRecording();
       },
 

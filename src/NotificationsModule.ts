@@ -1,12 +1,50 @@
 import { getResourceUrl } from "./ResourceModule";
+import getMessage from "./i18n";
 
 export interface INotificationsModule {
-    listeningStopped: () => void;
+    listeningStopped?: () => void;
     listeningTimeRemaining?: (timeRemaining: number) => void;
     callStarted?: () => void;
     callEnded?: () => void;
     lockScreen?: () => void;
     unlockScreen?: () => void;
+    autoSubmitEnabled?: () => void;
+    autoSubmitDisabled?: () => void;
+  }
+
+  export class TextualNotificationsModule implements INotificationsModule {
+    private notificationElement: HTMLElement | null = document.getElementById('saypi-notification-text') as HTMLElement | null;
+
+    public autoSubmitEnabled = () => {
+      this.showNotification(
+        getMessage("autoSubmitEnabled")
+      );
+    }
+
+    public autoSubmitDisabled = () => {
+      this.showNotification(
+        getMessage("autoSubmitDisabled")
+      );
+    }
+
+    private init() {
+      if (!this.notificationElement || !document.body.contains(this.notificationElement)) {
+        this.notificationElement = document.getElementById('saypi-notification-text') as HTMLElement | null;
+      }
+      if (!this.notificationElement) {
+        const notificationElement = document.createElement('p');
+        notificationElement.id = 'saypi-notification';
+        notificationElement.classList.add('saypi-notification-text');
+        document.body.appendChild(notificationElement);
+        this.notificationElement = notificationElement;
+      }
+    }
+
+    private showNotification(message: string) {
+      this.init();
+      this.notificationElement!.textContent = message;
+      this.notificationElement!.classList.add('active');
+    }
   }
   
   export class AudibleNotificationsModule implements INotificationsModule {
