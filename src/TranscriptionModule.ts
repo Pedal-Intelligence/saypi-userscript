@@ -4,7 +4,7 @@ import { isMobileView } from "./UserAgentModule.js";
 import EventBus from "./EventBus.js";
 import EventModule from "./EventModule.js";
 import { logger } from "./LoggingModule.js";
-import { PreferenceModule } from './prefs/PreferenceModule';
+import { UserPreferenceModule } from './prefs/PreferenceModule';
 
 
 // Define the shape of the response JSON object
@@ -249,7 +249,7 @@ async function constructTranscriptionFormData(
   formData.append("acceptsMerge", "true"); // always accept merge requests (since v1.4.10)
 
   // Wait for the preference to be retrieved before appending it to the FormData
-  const preference = await PreferenceModule.getPreference();
+  const preference = await UserPreferenceModule.getPreferedMode();
   if (preference) {
     formData.append("prefer", preference);
   }

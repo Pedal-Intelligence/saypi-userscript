@@ -1,3 +1,5 @@
+
+import { UserPreferenceModule } from './prefs/PreferenceModule';
 import { getResourceUrl } from "./ResourceModule";
 import getMessage from "./i18n";
 
@@ -53,32 +55,34 @@ export interface INotificationsModule {
     private callEndedSound: HTMLAudioElement = new Audio(getResourceUrl('audio/turn-off.mp3'));
     private lockSound: HTMLAudioElement = new Audio(getResourceUrl('audio/beep-on.mp3'));
     private unlockSound: HTMLAudioElement = new Audio(getResourceUrl('audio/beep-off.mp3'));
-    public listeningStopped(): void {
-      this.listeningSound.play().catch(e => {
-        console.error("Unable to play audio notification:", e);
-      });
-    }
-    public callStarted(): void {
-      this.callStartedSound.play().catch(e => {
-        console.error("Unable to play audio notification:", e);
-      });
-    }
-    public callEnded(): void {
-      this.callEndedSound.play().catch(e => {
-        console.error("Unable to play audio notification:", e);
-      });
-    }
-    public lockScreen(): void {
-      this.lockSound.play().catch(e => {
-        console.error("Unable to play audio notification:", e);
-      });
-    }
-    public unlockScreen(): void {
-      this.unlockSound.play().catch(e => {
-        console.error("Unable to play audio notification:", e);
-      });
+    
+    private async playSound(sound: HTMLAudioElement) {
+      if (await UserPreferenceModule.getSoundEffects()) {
+        sound.play().catch(e => {
+          console.error("Unable to play audio notification:", e);
+        });
+      }
     }
 
+    public listeningStopped(): void {
+      this.playSound(this.listeningSound);
+    }
+
+    public callStarted(): void {
+      this.playSound(this.callStartedSound);
+    }
+
+    public callEnded(): void {
+      this.playSound(this.callEndedSound);
+    }
+
+    public lockScreen(): void {
+      this.playSound(this.lockSound);
+    }
+
+    public unlockScreen(): void {
+      this.playSound(this.unlockSound);
+    }
   }
   
   export class VisualNotificationsModule implements INotificationsModule {

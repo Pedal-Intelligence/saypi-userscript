@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Save the preference
     chrome.storage.sync.set({ prefer: preference }, function () {
-      console.log("Preference saved: " + preference);
+      console.log("User preference saved: prefer " + preference);
     });
   };
 
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Select all input checkboxes
+  // Handling for all checkbox/toggle settings
   const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
   // Add event listener to each checkbox
@@ -99,5 +99,39 @@ document.addEventListener("DOMContentLoaded", function () {
         this.parentElement.classList.remove("checked");
       }
     });
+
+    // If the checkbox has a name attribute
+    if (checkbox.hasAttribute("name")) {
+      const settingName = checkbox.getAttribute("name");
+
+      // Load the saved setting when the popup opens, defaulting to true
+      chrome.storage.sync.get([settingName], function (result) {
+        console.log(
+          "User preference loaded: " +
+            settingName +
+            " is " +
+            result[settingName]
+        );
+        if (result[settingName] === undefined || result[settingName]) {
+          checkbox.checked = true;
+          checkbox.parentElement.classList.add("checked");
+        }
+      });
+
+      // Save the setting when the checkbox is changed
+      checkbox.addEventListener("change", function () {
+        // If the checkbox is checked, add the 'checked' class to its parent
+        // If it's not checked, remove the 'checked' class from its parent
+        if (this.checked) {
+          chrome.storage.sync.set({ [settingName]: true }, function () {
+            console.log("User preference saved: " + settingName + " is on");
+          });
+        } else {
+          chrome.storage.sync.set({ [settingName]: false }, function () {
+            console.log("User preference saved: " + settingName + " is off");
+          });
+        }
+      });
+    }
   });
 });
