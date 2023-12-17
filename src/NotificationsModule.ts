@@ -57,11 +57,15 @@ export interface INotificationsModule {
     private unlockSound: HTMLAudioElement = new Audio(getResourceUrl('audio/beep-off.mp3'));
     
     private async playSound(sound: HTMLAudioElement) {
-      if (await UserPreferenceModule.getSoundEffects()) {
+      const soundEnabled = await UserPreferenceModule.getSoundEffects();
+      if (soundEnabled) {
         sound.play().catch(e => {
           console.error("Unable to play audio notification:", e);
         });
+      } else {
+        console.debug("Sound effects disabled");
       }
+
     }
 
     public listeningStopped(): void {

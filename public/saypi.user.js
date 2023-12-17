@@ -9655,7 +9655,8 @@ var UserPreferenceModule;
         return new Promise((resolve) => {
             if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.sync) {
                 chrome.storage.sync.get(['soundEffects'], (result) => {
-                    if (result.soundEffects) {
+                    console.log("Sound effects preference: ", result.soundEffects);
+                    if (result.soundEffects !== undefined) {
                         resolve(result.soundEffects);
                     }
                     else {
@@ -9674,7 +9675,7 @@ var UserPreferenceModule;
         return new Promise((resolve) => {
             if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.sync) {
                 chrome.storage.sync.get(['autoSubmit'], (result) => {
-                    if (result.autoSubmit) {
+                    if (result.autoSubmit !== undefined) {
                         resolve(result.autoSubmit);
                     }
                     else {
@@ -9801,10 +9802,14 @@ class AudibleNotificationsModule {
     }
     playSound(sound) {
         return NotificationsModule_awaiter(this, void 0, void 0, function* () {
-            if (yield UserPreferenceModule.getSoundEffects()) {
+            const soundEnabled = yield UserPreferenceModule.getSoundEffects();
+            if (soundEnabled) {
                 sound.play().catch(e => {
                     console.error("Unable to play audio notification:", e);
                 });
+            }
+            else {
+                console.log("Sound effects disabled");
             }
         });
     }

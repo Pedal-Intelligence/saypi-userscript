@@ -29,7 +29,7 @@ export module UserPreferenceModule {
     return new Promise((resolve) => {
       if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.sync) {
         chrome.storage.sync.get(['soundEffects'], (result: StorageResult) => {
-          if (result.soundEffects) {
+          if (result.soundEffects !== undefined) {
             resolve(result.soundEffects);
           } else {
             resolve(true);
@@ -46,7 +46,7 @@ export module UserPreferenceModule {
     return new Promise((resolve) => {
       if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.sync) {
         chrome.storage.sync.get(['autoSubmit'], (result: StorageResult) => {
-          if (result.autoSubmit) {
+          if (result.autoSubmit !== undefined) {
             resolve(result.autoSubmit);
           } else {
             resolve(true);

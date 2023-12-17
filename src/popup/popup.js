@@ -85,53 +85,47 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Handling for all checkbox/toggle settings
-  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const soundEffectsInput = document.getElementById("sound-effects");
+  chrome.storage.sync.get(["soundEffects"], function (result) {
+    if (result.soundEffects) {
+      soundEffectsInput.checked = result.soundEffects;
+      soundEffectsInput.parentElement.classList.add("checked");
+    }
+  });
 
-  // Add event listener to each checkbox
-  checkboxes.forEach((checkbox) => {
-    checkbox.addEventListener("change", function () {
-      // If the checkbox is checked, add the 'checked' class to its parent
-      // If it's not checked, remove the 'checked' class from its parent
-      if (this.checked) {
-        this.parentElement.classList.add("checked");
-      } else {
-        this.parentElement.classList.remove("checked");
-      }
+  soundEffectsInput.addEventListener("change", function () {
+    chrome.storage.sync.set({ soundEffects: this.checked }, function () {
+      console.log(
+        "Preference saved: Sound effects are " +
+          (soundEffectsInput.checked ? "on" : "off")
+      );
     });
+    if (this.checked) {
+      this.parentElement.classList.add("checked");
+    } else {
+      this.parentElement.classList.remove("checked");
+    }
+  });
 
-    // If the checkbox has a name attribute
-    if (checkbox.hasAttribute("name")) {
-      const settingName = checkbox.getAttribute("name");
+  const autoSubmitInput = document.getElementById("auto-submit");
+  chrome.storage.sync.get(["autoSubmit"], function (result) {
+    if (result.autoSubmit) {
+      autoSubmitInput.checked = result.autoSubmit;
+      autoSubmitInput.parentElement.classList.add("checked");
+    }
+  });
 
-      // Load the saved setting when the popup opens, defaulting to true
-      chrome.storage.sync.get([settingName], function (result) {
-        console.log(
-          "User preference loaded: " +
-            settingName +
-            " is " +
-            result[settingName]
-        );
-        if (result[settingName] === undefined || result[settingName]) {
-          checkbox.checked = true;
-          checkbox.parentElement.classList.add("checked");
-        }
-      });
-
-      // Save the setting when the checkbox is changed
-      checkbox.addEventListener("change", function () {
-        // If the checkbox is checked, add the 'checked' class to its parent
-        // If it's not checked, remove the 'checked' class from its parent
-        if (this.checked) {
-          chrome.storage.sync.set({ [settingName]: true }, function () {
-            console.log("User preference saved: " + settingName + " is on");
-          });
-        } else {
-          chrome.storage.sync.set({ [settingName]: false }, function () {
-            console.log("User preference saved: " + settingName + " is off");
-          });
-        }
-      });
+  autoSubmitInput.addEventListener("change", function () {
+    chrome.storage.sync.set({ autoSubmit: this.checked }, function () {
+      console.log(
+        "Preference saved: Auto-submit is " +
+          (autoSubmitInput.checked ? "on" : "off")
+      );
+    });
+    if (this.checked) {
+      this.parentElement.classList.add("checked");
+    } else {
+      this.parentElement.classList.remove("checked");
     }
   });
 });
