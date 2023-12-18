@@ -185,10 +185,6 @@ import "./styles/rectangles.css";
       "relative flex mt-1 mb-1 rounded-full px-2 py-3 text-center bg-cream-550 hover:bg-cream-650 hover:text-brand-green-700 text-muted";
     button.classList.add(classNames.split(" "));
 
-    // Enable autosubmit by default
-    button.dataset.autosubmit = "true";
-    button.classList.add("autoSubmit");
-
     panel.appendChild(button);
     buttonModule.addTalkIcon(button);
 

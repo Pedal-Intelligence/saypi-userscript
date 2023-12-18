@@ -19,6 +19,7 @@ import hangupMincedIconSVG from "./icons/hangup-minced.svg";
 import lockIconSVG from "./icons/lock.svg";
 import unlockIconSVG from "./icons/unlock.svg";
 import getMessage from "./i18n.ts";
+import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
 export default class ButtonModule {
   constructor() {
     this.sayPiActor = StateMachineService.actor; // the Say, Pi state machine
@@ -135,15 +136,14 @@ export default class ButtonModule {
     }
   }
 
-  // Function to handle auto-submit based on the button's data attribute
-  handleAutoSubmit() {
-    const talkButton = document.getElementById("saypi-talkButton");
-
-    if (talkButton.dataset.autosubmit === "false") {
-      console.log("Autosubmit is off");
-    } else {
+  // Function to handle auto-submit based on the user preference
+  async handleAutoSubmit() {
+    const autoSubmitEnabled = await UserPreferenceModule.getAutoSubmit();
+    if (autoSubmitEnabled) {
       this.simulateFormSubmit();
       EventBus.emit("saypi:piThinking"); // Pi is responding
+    } else {
+      console.log("Autosubmit is off");
     }
   }
 
