@@ -46,5 +46,33 @@
   "preferedModeControl": {
     "message": "Sélectionnez votre mode de transcription préféré",
     "description": "Le titre (infobulle) de la commande pour sélectionner le mode de transcription préféré."
+  },
+  "autoSubmit": {
+    "description": "Étiquette pour la case à cocher pour activer/désactiver l'envoi automatique de l'invite.",
+    "message": "Soumission automatique"
+  },
+  "continueUnlocking": {
+    "description": "Instructions indiquant à l'utilisateur comment continuer une fois qu'ils ont commencé à appuyer sur le bouton de déverrouillage.",
+    "message": "Continuez à tenir pour déverrouiller..."
+  },
+  "lockButton": {
+    "description": "Le titre (infobulle) du bouton pour verrouiller l'écran contre les touches accidentelles.",
+    "message": "Appuyez pour verrouiller l'écran"
+  },
+  "lockedScreen": {
+    "description": "Un message à afficher de manière proéminente lorsque l'écran est verrouillé.",
+    "message": "L'écran est verrouillé."
+  },
+  "soundEffects": {
+    "description": "Étiquette pour la case à cocher pour activer/désactiver les effets sonores.",
+    "message": "Effets sonores"
+  },
+  "unlockButton": {
+    "description": "Le titre (infobulle) du bouton pour déverrouiller l'écran.",
+    "message": "Appuyez pour déverrouiller l'écran"
+  },
+  "unlockInstruction": {
+    "description": "Instructions indiquant à l'utilisateur comment déverrouiller l'écran lorsqu'il est verrouillé.",
+    "message": "Maintenez pour déverrouiller."
   }
 }

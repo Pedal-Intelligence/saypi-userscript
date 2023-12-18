@@ -46,5 +46,33 @@
   "preferedModeControl": {
     "message": "Selecciona tu modo de transcripción preferido",
     "description": "El título (tooltip) del control para seleccionar el modo de transcripción preferido."
+  },
+  "autoSubmit": {
+    "description": "Etiqueta para la casilla de verificación para habilitar/deshabilitar el envío automático de indicaciones.",
+    "message": "Envío automático"
+  },
+  "continueUnlocking": {
+    "description": "Instrucciones que indican al usuario cómo continuar una vez que han comenzado a presionar el botón de desbloqueo.",
+    "message": "Continúa sosteniendo para desbloquear..."
+  },
+  "lockButton": {
+    "description": "El título (información sobre herramientas) del botón para bloquear la pantalla contra toques accidentales.",
+    "message": "Presiona para bloquear la pantalla"
+  },
+  "lockedScreen": {
+    "description": "Un mensaje para mostrar prominentemente cuando la pantalla está bloqueada.",
+    "message": "La pantalla está bloqueada."
+  },
+  "soundEffects": {
+    "description": "Etiqueta para la casilla de verificación para habilitar/deshabilitar efectos de sonido.",
+    "message": "Efectos de sonido"
+  },
+  "unlockButton": {
+    "description": "El título (información sobre herramientas) del botón para desbloquear la pantalla.",
+    "message": "Presiona para desbloquear la pantalla"
+  },
+  "unlockInstruction": {
+    "description": "Instrucciones que indican al usuario cómo desbloquear la pantalla cuando está bloqueada.",
+    "message": "Mantén presionado para desbloquear."
   }
 }

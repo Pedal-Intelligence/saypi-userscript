@@ -46,5 +46,33 @@
   "preferedModeControl": {
     "message": "Wählen Sie Ihren bevorzugten Transkriptionsmodus",
     "description": "Der Titel (Tooltip) der Steuerung zur Auswahl des bevorzugten Transkriptionsmodus."
+  },
+  "autoSubmit": {
+    "description": "Beschriftung für das Kontrollkästchen zur Aktivierung/Deaktivierung der automatischen Aufforderungseinreichung.",
+    "message": "Automatisch senden"
+  },
+  "continueUnlocking": {
+    "description": "Anweisungen, die dem Benutzer erklären, wie er fortfahren soll, sobald er begonnen hat, den Entriegelungsknopf zu drücken.",
+    "message": "Halten Sie weiterhin gedrückt, um zu entsperren..."
+  },
+  "lockButton": {
+    "description": "Der Titel (Tooltip) der Schaltfläche zum Sperren des Bildschirms gegen versehentliche Berührungen.",
+    "message": "Drücken Sie, um den Bildschirm zu sperren"
+  },
+  "lockedScreen": {
+    "description": "Eine Nachricht, die prominent angezeigt wird, wenn der Bildschirm gesperrt ist.",
+    "message": "Bildschirm ist gesperrt."
+  },
+  "soundEffects": {
+    "description": "Beschriftung für das Kontrollkästchen zum Aktivieren/Deaktivieren von Soundeffekten.",
+    "message": "Soundeffekte"
+  },
+  "unlockButton": {
+    "description": "Der Titel (Tooltip) der Schaltfläche zum Entsperren des Bildschirms.",
+    "message": "Drücken Sie, um den Bildschirm zu entsperren"
+  },
+  "unlockInstruction": {
+    "description": "Anweisungen, die dem Benutzer erklären, wie er den Bildschirm entsperrt, wenn dieser gesperrt ist.",
+    "message": "Halten zum Entsperren."
   }
 }

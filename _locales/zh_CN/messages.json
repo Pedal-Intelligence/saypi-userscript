@@ -46,5 +46,33 @@
   "preferedModeControl": {
     "message": "选择您偏好的转录模式",
     "description": "选择偏好的转录模式的控件的标题（工具提示）。"
+  },
+  "autoSubmit": {
+    "description": "启用/禁用自动提示提交的复选框标签。",
+    "message": "自动提交"
+  },
+  "continueUnlocking": {
+    "description": "指示用户在开始按解锁按钮后如何继续的说明。",
+    "message": "继续按住以解锁..."
+  },
+  "lockButton": {
+    "description": "按钮的标题（工具提示）用于锁定屏幕，防止意外触摸。",
+    "message": "按下以锁定屏幕"
+  },
+  "lockedScreen": {
+    "description": "当屏幕被锁定时，显眼显示的一条信息。",
+    "message": "屏幕已锁定。"
+  },
+  "soundEffects": {
+    "description": "启用/禁用音效的复选框标签。",
+    "message": "音效"
+  },
+  "unlockButton": {
+    "description": "解锁屏幕的按钮标题（工具提示）。",
+    "message": "按下以解锁屏幕"
+  },
+  "unlockInstruction": {
+    "description": "指导用户如何在屏幕锁定时解锁的说明。",
+    "message": "按住以解锁。"
   }
 }

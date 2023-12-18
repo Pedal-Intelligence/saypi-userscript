@@ -46,5 +46,33 @@
   "preferedModeControl": {
     "message": "Selecteer uw voorkeur transcriptiemodus",
     "description": "De titel (tooltip) van de controle om de voorkeur transcriptiemodus te selecteren."
+  },
+  "autoSubmit": {
+    "description": "Label voor het selectievakje om automatische promptinzending in/uit te schakelen.",
+    "message": "Automatisch indienen"
+  },
+  "continueUnlocking": {
+    "description": "Instructies die de gebruiker vertellen hoe verder te gaan zodra ze zijn begonnen met het indrukken van de ontgrendelknop.",
+    "message": "Blijf vasthouden om te ontgrendelen..."
+  },
+  "lockButton": {
+    "description": "De titel (knopinfo) van de knop om het scherm te vergrendelen tegen onbedoelde aanrakingen.",
+    "message": "Druk om het scherm te vergrendelen"
+  },
+  "lockedScreen": {
+    "description": "Een bericht om prominent weer te geven wanneer het scherm is vergrendeld.",
+    "message": "Scherm is vergrendeld."
+  },
+  "soundEffects": {
+    "description": "Label voor het selectievakje om geluidseffecten in/uit te schakelen.",
+    "message": "Geluidseffecten"
+  },
+  "unlockButton": {
+    "description": "De titel (knopinfo) van de knop om het scherm te ontgrendelen.",
+    "message": "Druk om het scherm te ontgrendelen"
+  },
+  "unlockInstruction": {
+    "description": "Instructies die de gebruiker vertellen hoe het scherm te ontgrendelen wanneer het is vergrendeld.",
+    "message": "Vasthouden om te ontgrendelen."
   }
 }

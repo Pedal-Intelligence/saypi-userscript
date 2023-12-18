@@ -46,5 +46,33 @@
   "preferedModeControl": {
     "message": "Wybierz preferowany tryb transkrypcji",
     "description": "Tytuł (podpowiedź) kontrolki do wyboru preferowanego trybu transkrypcji."
+  },
+  "autoSubmit": {
+    "description": "Etykieta dla pola wyboru do włączania/wyłączania automatycznego wysyłania komunikatów.",
+    "message": "Automatyczne wysyłanie"
+  },
+  "continueUnlocking": {
+    "description": "Instrukcje informujące użytkownika, jak kontynuować, gdy zacznie naciskać przycisk odblokowania.",
+    "message": "Kontynuuj przytrzymywanie, aby odblokować..."
+  },
+  "lockButton": {
+    "description": "Tytuł (podpowiedź) przycisku do blokowania ekranu przed przypadkowymi dotknięciami.",
+    "message": "Naciśnij, aby zablokować ekran"
+  },
+  "lockedScreen": {
+    "description": "Wiadomość do wyświetlenia na pierwszym planie, gdy ekran jest zablokowany.",
+    "message": "Ekran jest zablokowany."
+  },
+  "soundEffects": {
+    "description": "Etykieta dla pola wyboru do włączania/wyłączania efektów dźwiękowych.",
+    "message": "Efekty dźwiękowe"
+  },
+  "unlockButton": {
+    "description": "Tytuł (podpowiedź) przycisku do odblokowania ekranu.",
+    "message": "Naciśnij, aby odblokować ekran"
+  },
+  "unlockInstruction": {
+    "description": "Instrukcje informujące użytkownika, jak odblokować ekran, gdy jest zablokowany.",
+    "message": "Przytrzymaj, aby odblokować."
   }
 }

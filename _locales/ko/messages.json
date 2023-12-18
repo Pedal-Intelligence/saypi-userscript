@@ -46,5 +46,33 @@
   "preferedModeControl": {
     "message": "선호하는 전사 모드 선택",
     "description": "선호하는 전사 모드를 선택하기 위한 컨트롤의 제목(툴팁)입니다."
+  },
+  "autoSubmit": {
+    "description": "체크박스의 레이블은 자동 프롬프트 제출을 활성화/비활성화합니다.",
+    "message": "자동 제출"
+  },
+  "continueUnlocking": {
+    "description": "사용자가 잠금 해제 버튼을 누르기 시작한 후에 어떻게 계속할지 알려주는 지시사항.",
+    "message": "잠금을 해제하려면 계속 누르십시오..."
+  },
+  "lockButton": {
+    "description": "버튼의 제목 (툴팁)은 화면을 실수로 터치하는 것을 방지하기 위해 잠급니다.",
+    "message": "화면을 잠그려면 누르세요"
+  },
+  "lockedScreen": {
+    "description": "화면이 잠겨 있을 때 중요하게 표시할 메시지.",
+    "message": "화면이 잠겼습니다."
+  },
+  "soundEffects": {
+    "description": "사운드 효과를 활성화/비활성화하는 체크박스의 라벨.",
+    "message": "사운드 이펙트"
+  },
+  "unlockButton": {
+    "description": "화면 잠금 해제 버튼의 제목 (툴팁).",
+    "message": "화면 잠금을 해제하려면 누르세요"
+  },
+  "unlockInstruction": {
+    "description": "사용자가 잠긴 화면을 어떻게 해제하는지 알려주는 지시사항.",
+    "message": "잠금 해제하려면 누르세요."
   }
 }

@@ -46,5 +46,33 @@
   "preferedModeControl": {
     "message": "Seleziona la tua modalità di trascrizione preferita",
     "description": "Il titolo (tooltip) del controllo per selezionare la modalità di trascrizione preferita."
+  },
+  "autoSubmit": {
+    "description": "Etichetta per la casella di controllo per abilitare/disabilitare l'invio automatico del prompt.",
+    "message": "Invio automatico"
+  },
+  "continueUnlocking": {
+    "description": "Istruzioni che indicano all'utente come procedere una volta iniziato a premere il pulsante di sblocco.",
+    "message": "Continua a tenere premuto per sbloccare..."
+  },
+  "lockButton": {
+    "description": "Il titolo (tooltip) del pulsante per bloccare lo schermo contro i tocchi accidentali.",
+    "message": "Premi per bloccare lo schermo"
+  },
+  "lockedScreen": {
+    "description": "Un messaggio da visualizzare in evidenza quando lo schermo è bloccato.",
+    "message": "Lo schermo è bloccato."
+  },
+  "soundEffects": {
+    "description": "Etichetta per la casella di controllo per abilitare/disabilitare gli effetti sonori.",
+    "message": "Effetti sonori"
+  },
+  "unlockButton": {
+    "description": "Il titolo (tooltip) del pulsante per sbloccare lo schermo.",
+    "message": "Premi per sbloccare lo schermo"
+  },
+  "unlockInstruction": {
+    "description": "Istruzioni che indicano all'utente come sbloccare lo schermo quando è bloccato.",
+    "message": "Tieni premuto per sbloccare."
   }
 }

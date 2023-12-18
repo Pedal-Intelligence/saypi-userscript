@@ -46,5 +46,33 @@
   "preferedModeControl": {
     "message": "Chọn chế độ chuyển đổi văn bản ưa thích của bạn",
     "description": "Tiêu đề (tooltip) của điều khiển để chọn chế độ chuyển đổi văn bản ưa thích."
+  },
+  "autoSubmit": {
+    "description": "Nhãn cho hộp kiểm để bật/tắt tự động gửi lời nhắc.",
+    "message": "Tự động gửi"
+  },
+  "continueUnlocking": {
+    "description": "Hướng dẫn cho người dùng cách tiếp tục sau khi họ đã bắt đầu nhấn nút mở khóa.",
+    "message": "Tiếp tục giữ để mở khóa..."
+  },
+  "lockButton": {
+    "description": "Tiêu đề (chú giải công cụ) của nút để khóa màn hình chống lại những lần chạm tình cờ.",
+    "message": "Nhấn để khóa màn hình"
+  },
+  "lockedScreen": {
+    "description": "Một thông điệp để hiển thị nổi bật khi màn hình bị khóa.",
+    "message": "Màn hình đã bị khóa."
+  },
+  "soundEffects": {
+    "description": "Nhãn cho hộp kiểm để bật/tắt hiệu ứng âm thanh.",
+    "message": "Hiệu ứng âm thanh"
+  },
+  "unlockButton": {
+    "description": "Tiêu đề (chú giải công cụ) của nút để mở khóa màn hình.",
+    "message": "Nhấn để mở khóa màn hình"
+  },
+  "unlockInstruction": {
+    "description": "Hướng dẫn cho người dùng cách mở khóa màn hình khi bị khóa.",
+    "message": "Giữ để mở khóa."
   }
 }

@@ -46,5 +46,33 @@
   "preferedModeControl": {
     "message": "好みの転写モードを選択",
     "description": "好みの転写モードを選択するためのコントロールのタイトル（ツールチップ）。"
+  },
+  "autoSubmit": {
+    "description": "チェックボックスのラベルは、自動プロンプト送信を有効/無効にします。",
+    "message": "自動送信"
+  },
+  "continueUnlocking": {
+    "description": "ユーザーがアンロックボタンを押し始めたらどう進めるかを指示する説明。",
+    "message": "ロックを解除するために続けて押し続けてください..."
+  },
+  "lockButton": {
+    "description": "画面を誤ってタッチするのを防ぐためのボタンのタイトル（ツールチップ）。",
+    "message": "画面をロックするために押してください"
+  },
+  "lockedScreen": {
+    "description": "画面がロックされたときに目立つように表示するメッセージ。",
+    "message": "画面はロックされています。"
+  },
+  "soundEffects": {
+    "description": "サウンドエフェクトを有効/無効にするチェックボックスのラベル。",
+    "message": "効果音"
+  },
+  "unlockButton": {
+    "description": "画面のロックを解除するボタンのタイトル（ツールチップ）。",
+    "message": "画面のロックを解除するには押してください"
+  },
+  "unlockInstruction": {
+    "description": "画面がロックされたときにユーザーが画面のロックを解除する方法を指示します。",
+    "message": "アンロックするために押し続けてください。"
   }
 }

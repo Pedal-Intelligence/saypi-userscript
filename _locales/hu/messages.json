@@ -46,5 +46,33 @@
   "preferedModeControl": {
     "message": "Válassza ki a preferált transzkripciós módot",
     "description": "Az irányító elem címe (eszköztipp), amely a preferált transzkripciós mód kiválasztásához szükséges."
+  },
+  "autoSubmit": {
+    "description": "Címke a jelölőnégyzethez az automatikus beküldés engedélyezéséhez/letiltásához.",
+    "message": "Automatikus beküldés"
+  },
+  "continueUnlocking": {
+    "description": "Utasítások arra vonatkozóan, hogy a felhasználó hogyan folytassa, miután elkezdte megnyomni a feloldó gombot.",
+    "message": "Tartsa lenyomva a feloldáshoz..."
+  },
+  "lockButton": {
+    "description": "A gomb címe (tooltip), amely zárolja a képernyőt a véletlen érintések ellen.",
+    "message": "Nyomja meg a képernyő zárolásához"
+  },
+  "lockedScreen": {
+    "description": "Egy üzenet, amelyet kiemelten jelenítünk meg a képernyő zárolása esetén.",
+    "message": "A képernyő zárolva van."
+  },
+  "soundEffects": {
+    "description": "Címke a hanghatások be-/kikapcsolásához szükséges jelölőnégyzethez.",
+    "message": "Hanghatások"
+  },
+  "unlockButton": {
+    "description": "A gomb címe (tooltip), amely feloldja a képernyőt.",
+    "message": "Nyomja meg a képernyő feloldásához"
+  },
+  "unlockInstruction": {
+    "description": "Utasítások, amelyek elmondják a felhasználónak, hogyan oldja fel a képernyőt, ha le van zárva.",
+    "message": "Tartsd lenyomva a feloldáshoz."
   }
 }
