@@ -1,5 +1,6 @@
 import { createMachine } from "xstate";
 import { AudibleNotificationsModule } from "../NotificationsModule";
+import { enterFullscreen } from "../FullscreenModule";
 
 const notificationsModule = new AudibleNotificationsModule();
 
@@ -14,7 +15,7 @@ export const machine = createMachine(
         on: {
           lock: {
             target: "Locked",
-            actions: ["lockScreen"],
+            actions: ["lockScreen", "fullscreen"],
           },
         },
       },
@@ -53,6 +54,9 @@ export const machine = createMachine(
             lockPanel?.classList.add("unlocked");
             notificationsModule.unlockScreen();
             console.log("Screen unlocked");
+        },
+        fullscreen: () => {
+            enterFullscreen();
         }
     },
     services: {},

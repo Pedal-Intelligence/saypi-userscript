@@ -9429,7 +9429,34 @@ function appendChild(parent, child, position = 0) {
     }
 }
 
+;// CONCATENATED MODULE: ./src/FullscreenModule.ts
+function enterFullscreen() {
+    // Check if the API is available
+    if (document.fullscreenEnabled) {
+        // Request full-screen mode
+        document.documentElement.requestFullscreen().catch((err) => {
+            console.info(`Unable to enter full-screen mode. Maybe starting in mobile view?: ${err.message} (${err.name})`);
+        });
+    }
+    else {
+        console.log("Fullscreen API is not enabled.");
+    }
+}
+function exitFullscreen() {
+    // Check if the API is available
+    if (document.fullscreenEnabled) {
+        // Request full-screen mode
+        document.exitFullscreen().catch((err) => {
+            console.info(`Unable to exit full-screen mode. Maybe starting in desktop view?: ${err.message} (${err.name})`);
+        });
+    }
+    else {
+        console.log("Fullscreen API is not enabled.");
+    }
+}
+
 ;// CONCATENATED MODULE: ./src/UserAgentModule.js
+
 
 function isMobileDevice() {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.matchMedia("(max-width: 768px)").matches;
@@ -9451,34 +9478,6 @@ function isMobileView() {
   // Make sure isMobileDevice is defined or imported
   return isMobileDevice() && prefersMobile;
 }
-function enterFullscreen() {
-  if (!isMobileDevice()) {
-    return;
-  }
-  // Check if the API is available
-  if (document.fullscreenEnabled) {
-    // Request full-screen mode
-    document.documentElement.requestFullscreen()["catch"](function (err) {
-      console.error("Error attempting to enable full-screen mode: ".concat(err.message, " (").concat(err.name, ")"));
-    });
-  } else {
-    console.log("Fullscreen API is not enabled.");
-  }
-}
-function exitFullscreen() {
-  if (!isMobileDevice()) {
-    return;
-  }
-  // Check if the API is available
-  if (document.fullscreenEnabled) {
-    // Request full-screen mode
-    document.exitFullscreen()["catch"](function (err) {
-      console.error("Error attempting to exit full-screen mode: ".concat(err.message, " (").concat(err.name, ")"));
-    });
-  } else {
-    console.log("Fullscreen API is not enabled.");
-  }
-}
 function exitMobileMode() {
   localStorage.setItem("userViewPreference", "desktop"); // Save preference
 
@@ -9495,7 +9494,9 @@ function enterMobileMode() {
   element.classList.remove("desktop-view");
   element.classList.add("mobile-view");
   detachCallButton();
-  enterFullscreen();
+  if (isMobileDevice()) {
+    enterFullscreen();
+  }
 }
 function attachCallButton() {
   // move the call button back into the text prompt container for desktop view
@@ -11134,6 +11135,7 @@ function readyToSubmit(state, context) {
 ;// CONCATENATED MODULE: ./src/state-machines/ScreenLockMachine.ts
 
 
+
 const notificationsModule = new AudibleNotificationsModule();
 const ScreenLockMachine_machine = (0,Machine/* createMachine */.C)({
     id: "Screen Lock",
@@ -11145,7 +11147,7 @@ const ScreenLockMachine_machine = (0,Machine/* createMachine */.C)({
             on: {
                 lock: {
                     target: "Locked",
-                    actions: ["lockScreen"],
+                    actions: ["lockScreen", "fullscreen"],
                 },
             },
         },
@@ -11182,6 +11184,9 @@ const ScreenLockMachine_machine = (0,Machine/* createMachine */.C)({
             lockPanel === null || lockPanel === void 0 ? void 0 : lockPanel.classList.add("unlocked");
             notificationsModule.unlockScreen();
             console.log("Screen unlocked");
+        },
+        fullscreen: () => {
+            enterFullscreen();
         }
     },
     services: {},
