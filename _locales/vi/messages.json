@@ -9,7 +9,7 @@
   },
   "exitMobileMode": {
     "message": "Thoát Chế Độ Di Động Điều Khiển Bằng Giọng Nói",
-    "description": "Nhãn của nút để thoát khỏi chế độ di động điều khiển bằng giọng nói, quay lại chế độ dựa trên văn bản cho máy tính để bàn."
+    "description": "Nhãn nút thoát chế độ di động giọng nói, quay về chế độ văn bản máy tính."
   },
   "enterMobileMode": {
     "message": "Vào Chế Độ Di Động Điều Khiển Bằng Giọng Nói",

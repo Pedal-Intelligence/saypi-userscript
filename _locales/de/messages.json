@@ -9,7 +9,7 @@
   },
   "exitMobileMode": {
     "message": "Sprachgesteuerten Mobilmodus beenden",
-    "description": "Die Bezeichnung des Buttons, um den sprachgesteuerten Mobilmodus zu verlassen und zum textbasierten Desktopmodus zurückzukehren."
+    "description": "Sprachmodus beenden, zu Text-Desktop zurückkehren"
   },
   "enterMobileMode": {
     "message": "Sprachgesteuerten Mobilmodus aktivieren",
@@ -52,7 +52,7 @@
     "message": "Automatisch senden"
   },
   "continueUnlocking": {
-    "description": "Anweisungen, die dem Benutzer erklären, wie er fortfahren soll, sobald er begonnen hat, den Entriegelungsknopf zu drücken.",
+    "description": "Anweisungen für das Fortfahren nach Drücken des Entriegelungsknopfs.",
     "message": "Halten Sie weiterhin gedrückt, um zu entsperren..."
   },
   "lockButton": {

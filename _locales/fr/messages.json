@@ -9,7 +9,7 @@
   },
   "exitMobileMode": {
     "message": "Quitter le mode mobile contrôlé par la voix",
-    "description": "L'étiquette du bouton pour quitter le mode mobile contrôlé par la voix, pour revenir au mode bureau basé sur le texte."
+    "description": "Étiquette pour quitter le mode mobile vocal vers le mode bureau texte."
   },
   "enterMobileMode": {
     "message": "Activer le mode mobile contrôlé par la voix",
@@ -52,7 +52,7 @@
     "message": "Soumission automatique"
   },
   "continueUnlocking": {
-    "description": "Instructions indiquant à l'utilisateur comment continuer une fois qu'ils ont commencé à appuyer sur le bouton de déverrouillage.",
+    "description": "Instructions pour continuer après avoir appuyé sur le bouton de déverrouillage.",
     "message": "Continuez à tenir pour déverrouiller..."
   },
   "lockButton": {

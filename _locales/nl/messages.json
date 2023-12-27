@@ -52,7 +52,7 @@
     "message": "Automatisch indienen"
   },
   "continueUnlocking": {
-    "description": "Instructies die de gebruiker vertellen hoe verder te gaan zodra ze zijn begonnen met het indrukken van de ontgrendelknop.",
+    "description": "Instructies voor voortzetten na indrukken ontgrendelknop.",
     "message": "Blijf vasthouden om te ontgrendelen..."
   },
   "lockButton": {

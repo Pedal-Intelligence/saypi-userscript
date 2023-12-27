@@ -9,7 +9,7 @@
   },
   "exitMobileMode": {
     "message": "Esci dalla Modalità Mobile Controllata Vocalmente",
-    "description": "L'etichetta del pulsante per uscire dalla modalità mobile controllata vocalmente, tornando alla modalità desktop basata su testo."
+    "description": "Etichetta per uscire dalla modalità mobile vocale e tornare al desktop testuale."
   },
   "enterMobileMode": {
     "message": "Entra nella Modalità Mobile Controllata Vocalmente",

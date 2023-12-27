@@ -9,7 +9,7 @@
   },
   "exitMobileMode": {
     "message": "Salir del modo móvil controlado por voz",
-    "description": "La etiqueta del botón para salir del modo móvil controlado por voz y volver al modo de escritorio basado en texto."
+    "description": "Etiqueta para salir del modo móvil por voz y volver al modo de escritorio."
   },
   "enterMobileMode": {
     "message": "Entrar en modo móvil controlado por voz",
@@ -52,7 +52,7 @@
     "message": "Envío automático"
   },
   "continueUnlocking": {
-    "description": "Instrucciones que indican al usuario cómo continuar una vez que han comenzado a presionar el botón de desbloqueo.",
+    "description": "Instrucciones para continuar tras presionar botón de desbloqueo.",
     "message": "Continúa sosteniendo para desbloquear..."
   },
   "lockButton": {
