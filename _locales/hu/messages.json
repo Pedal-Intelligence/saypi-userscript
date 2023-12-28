@@ -4,7 +4,7 @@
     "description": "Az alkalmazás neve."
   },
   "appDescription": {
-    "message": "Problémamentes beszéd-szöveggé alakító kiegészítés a Pi-hez, a beszélgető AI-hez. Élvezze a kéz nélküli, nagy pontosságú beszélgetéseket bármilyen nyelven.",
+    "message": "Beszéd-szöveggé alakítás a Pi-hez. Élvezze a kéz nélküli beszélgetéseket bármilyen nyelven.",
     "description": "Az alkalmazás leírása."
   },
   "exitMobileMode": {

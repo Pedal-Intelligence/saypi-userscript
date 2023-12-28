@@ -4,7 +4,7 @@
     "description": "The name of the application."
   },
   "appDescription": {
-    "message": "Seamless speech-to-text enhancement for Pi, the conversational AI. Enjoy hands-free, high-accuracy conversations in any language.",
+    "message": "Speech-to-text for Pi, the conversational AI. Enjoy hands-free conversations in any language.",
     "description": "The description of the application."
   },
   "exitMobileMode": {

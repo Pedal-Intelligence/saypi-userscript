@@ -4,7 +4,7 @@
     "description": "Der Name der Anwendung."
   },
   "appDescription": {
-    "message": "Nahtlose Sprach-zu-Text-Verbesserung für Pi, den konversationellen KI-Assistenten. Genießen Sie freihändige, hochpräzise Gespräche in jeder Sprache.",
+    "message": "Sprach-zu-Text für Pi, den KI-Assistenten. Genießen Sie Gespräche in jeder Sprache.",
     "description": "Die Beschreibung der Anwendung."
   },
   "exitMobileMode": {

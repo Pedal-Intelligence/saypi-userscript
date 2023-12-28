@@ -4,7 +4,7 @@
     "description": "De naam van de applicatie."
   },
   "appDescription": {
-    "message": "Naadloze spraak-naar-tekst verbetering voor Pi, de conversatie AI. Geniet van handsfree, zeer nauwkeurige gesprekken in elke taal.",
+    "message": "Spraak-naar-tekst voor Pi, de conversatie AI. Handsfree gesprekken in elke taal.",
     "description": "De beschrijving van de applicatie."
   },
   "exitMobileMode": {

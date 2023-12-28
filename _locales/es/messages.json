@@ -4,7 +4,7 @@
     "description": "El nombre de la aplicación."
   },
   "appDescription": {
-    "message": "Mejora de voz a texto sin interrupciones para Pi, el AI conversacional. Disfruta de conversaciones manos libres y de alta precisión en cualquier idioma.",
+    "message": "Conversión de voz a texto para Pi, el AI conversacional. Disfruta charlas manos libres en cualquier idioma.",
     "description": "La descripción de la aplicación."
   },
   "exitMobileMode": {

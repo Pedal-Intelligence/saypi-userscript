@@ -4,7 +4,7 @@
     "description": "Tên của ứng dụng."
   },
   "appDescription": {
-    "message": "Cải thiện chuyển đổi giọng nói sang văn bản liền mạch cho Pi, trí tuệ nhân tạo hội thoại. Tận hưởng cuộc trò chuyện chính xác cao, không cần dùng tay, bằng bất kỳ ngôn ngữ nào.",
+    "message": "Cải thiện giọng nói cho Pi. Cuộc trò chuyện không tay, chính xác mọi ngôn ngữ.",
     "description": "Mô tả của ứng dụng."
   },
   "exitMobileMode": {

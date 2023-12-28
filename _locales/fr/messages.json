@@ -4,7 +4,7 @@
     "description": "Le nom de l'application."
   },
   "appDescription": {
-    "message": "Amélioration fluide de la parole en texte pour Pi, l'IA conversationnelle. Profitez de conversations mains libres et de haute précision dans n'importe quelle langue.",
+    "message": "Transcription vocale pour Pi, l'IA conversationnelle. Dialogues mains libres dans toutes langues.",
     "description": "La description de l'application."
   },
   "exitMobileMode": {

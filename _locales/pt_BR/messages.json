@@ -4,7 +4,7 @@
     "description": "O nome da aplicação."
   },
   "appDescription": {
-    "message": "Melhoria contínua de fala para texto para o Pi, a IA conversacional. Desfrute de conversas precisas e mãos-livres em qualquer idioma.",
+    "message": "Melhoria de fala para texto para Pi. Desfrute de conversas precisas em qualquer língua.",
     "description": "A descrição da aplicação."
   },
   "exitMobileMode": {

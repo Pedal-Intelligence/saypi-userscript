@@ -4,7 +4,7 @@
     "description": "Nazwa aplikacji."
   },
   "appDescription": {
-    "message": "Płynna konwersja mowy na tekst dla Pi, konwersacyjnego AI. Ciesz się rozmowami bez użycia rąk, z wysoką dokładnością, w dowolnym języku.",
+    "message": "Konwersja mowy dla Pi, AI do rozmów. Ciesz się rozmowami w każdym języku.",
     "description": "Opis aplikacji."
   },
   "exitMobileMode": {
