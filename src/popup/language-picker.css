@@ -250,7 +250,7 @@ Usage: codyhouse.co/license
           0 14px 25px rgba(0, 0, 0, 0.12);
         padding: var(--li4-space-3xs) 0;
         border-radius: 0.25em;
-        z-index: 5;
+        z-index: -1; /* hide the dropdown */
         margin-top: var(--picker-vertical-gap);
         margin-bottom: var(--picker-vertical-gap);
         --space-unit: 1rem;
@@ -258,7 +258,7 @@ Usage: codyhouse.co/license
         font-size: var(--text-unit);
         visibility: hidden;
         opacity: 0;
-        transition: visibility 0s 0.2s, opacity 0.2s;
+        transform: translateY(-300px); /* hide the dropdown */
       }
 
       .language-picker__dropdown--right {
@@ -276,6 +276,8 @@ Usage: codyhouse.co/license
         visibility: visible;
         opacity: 1;
         transition: visibility 0s, opacity 0.2s;
+        transform: translateY(0);
+        z-index: 5;
       }
 
       .language-picker__item {

@@ -103,25 +103,7 @@
         balanced
       </div>
     </div>
-    <div class="user-preference-item w-full max-w-lg">
-      <label class="wraper" for="sound-effects">
-        <span class="label-text" data-i18n="soundEffects">Sound Effects</span>
-        <div class="switch-wrap control">
-          <input type="checkbox" id="sound-effects" name="soundEffects" />
-          <div class="switch"></div>
-        </div>
-      </label>
-    </div>
-    <div class="user-preference-item w-full max-w-lg">
-      <label class="wraper" for="auto-submit">
-        <span class="label-text" data-i18n="autoSubmit">Auto Submit</span>
-        <div class="switch-wrap control">
-          <input type="checkbox" id="auto-submit" name="autoSubmit" />
-          <div class="switch"></div>
-        </div>
-      </label>
-    </div>
-    <div class="user-preference-item w-full max-w-lg">
+    <div class="user-preference-item w-full max-w-lg" id="language-preference">
       <div
         class="language-picker language-picker--hide-label js-language-picker"
         data-trigger-class="li4-btn li4-btn--subtle js-tab-focus"
@@ -136,6 +118,30 @@
           </select>
         </form>
       </div>
+    </div>
+    <div
+      class="user-preference-item w-full max-w-lg"
+      id="sounds-effects-preference"
+    >
+      <label class="wraper" for="sound-effects">
+        <span class="label-text" data-i18n="soundEffects">Sound Effects</span>
+        <div class="switch-wrap control">
+          <input type="checkbox" id="sound-effects" name="soundEffects" />
+          <div class="switch"></div>
+        </div>
+      </label>
+    </div>
+    <div
+      class="user-preference-item w-full max-w-lg"
+      id="auto-submit-preference"
+    >
+      <label class="wraper" for="auto-submit">
+        <span class="label-text" data-i18n="autoSubmit">Auto Submit</span>
+        <div class="switch-wrap control">
+          <input type="checkbox" id="auto-submit" name="autoSubmit" />
+          <div class="switch"></div>
+        </div>
+      </label>
     </div>
 
     <script src="language-picker.js"></script>
