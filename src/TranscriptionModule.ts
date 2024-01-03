@@ -4,8 +4,7 @@ import { isMobileView } from "./UserAgentModule.js";
 import EventBus from "./EventBus.js";
 import EventModule from "./EventModule.js";
 import { logger } from "./LoggingModule.js";
-import { UserPreferenceModule } from './prefs/PreferenceModule';
-
+import { UserPreferenceModule } from "./prefs/PreferenceModule";
 
 // Define the shape of the response JSON object
 interface TranscriptionResponse {
@@ -148,7 +147,7 @@ async function uploadAudio(
       audioDurationMillis / 1000,
       messages
     );
-    const language = navigator.language;
+    const language = UserPreferenceModule.getLanguage();
 
     const controller = new AbortController();
     const { signal } = controller;
@@ -257,13 +256,12 @@ async function constructTranscriptionFormData(
   return formData;
 }
 
-
 function scrollToBottom(textarea: HTMLTextAreaElement) {
   // Define the maximum height
   const maxHeight = 455;
 
   // Reset the height to get the correct scrollHeight
-    textarea.style.height = "2rem"; // (initial height) aka 32px
+  textarea.style.height = "2rem"; // (initial height) aka 32px
 
   // Set the height of the textarea, up to the maximum height
   if (textarea.scrollHeight > maxHeight) {

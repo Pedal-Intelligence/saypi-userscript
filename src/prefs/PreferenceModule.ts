@@ -6,6 +6,7 @@ export module UserPreferenceModule {
     prefer?: Preference;
     soundEffects?: boolean;
     autoSubmit?: boolean;
+    language?: string; // e.g. 'en', 'en_US', 'en_GB', 'fr', 'fr_FR', 'fr_CA', etc.
   }
 
   export function getPreferedMode(): Promise<Preference> {
@@ -55,6 +56,23 @@ export module UserPreferenceModule {
       } else {
         // If Chrome storage API is not supported, return true
         resolve(true);
+      }
+    });
+  }
+
+  export function getLanguage(): Promise<string> {
+    return new Promise((resolve) => {
+      if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.sync) {
+        chrome.storage.sync.get(['language'], (result: StorageResult) => {
+          if (result.language) {
+            resolve(result.language);
+          } else {
+            resolve(navigator.language);
+          }
+        });
+      } else {
+        // If Chrome storage API is not supported, return system language
+        resolve(navigator.language);
       }
     });
   }

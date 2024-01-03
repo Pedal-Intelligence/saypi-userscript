@@ -1,7 +1,17 @@
 import { buttonModule } from "../ButtonModule.js";
-import { createMachine, Typestate, assign, log, DoneInvokeEvent, State } from "xstate";
+import {
+  createMachine,
+  Typestate,
+  assign,
+  log,
+  DoneInvokeEvent,
+  State,
+} from "xstate";
 import AnimationModule from "../AnimationModule.js";
-import { AudibleNotificationsModule, VisualNotificationsModule } from "../NotificationsModule";
+import {
+  AudibleNotificationsModule,
+  VisualNotificationsModule,
+} from "../NotificationsModule";
 import { isMobileView } from "../UserAgentModule.js";
 import {
   uploadAudioWithRetry,
@@ -16,6 +26,7 @@ import EventBus from "../EventBus";
 import { calculateDelay } from "../TimerModule";
 import AudioControlsModule from "../AudioControlsModule";
 import { requestWakeLock, releaseWakeLock } from "../WakeLockModule";
+import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
 type SayPiTranscribedEvent = {
   type: "saypi:transcribed";
@@ -118,10 +129,11 @@ if (apiServerUrl === undefined) {
     "Configuration error: apiServerUrl is not defined. Please check your environment variables."
   );
 }
-const mergeService = new TranscriptMergeService(
-  apiServerUrl,
-  navigator.language
-);
+
+let mergeService: TranscriptMergeService;
+UserPreferenceModule.getLanguage().then((language) => {
+  mergeService = new TranscriptMergeService(apiServerUrl, language);
+});
 
 /* external actions */
 const clearTranscripts = assign({
@@ -168,7 +180,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           },
           {
             type: "setupRecording",
-          }
+          },
         ],
         on: {
           "saypi:callReady": {
@@ -185,10 +197,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               },
               {
                 type: "requestWakeLock",
-              }
+              },
             ],
-            description:
-              'VAD microphone is ready.\nStart it recording.',
+            description: "VAD microphone is ready.\nStart it recording.",
           },
           "saypi:hangup": {
             target: "inactive",
@@ -203,7 +214,8 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         after: {
           "20000": {
             target: "inactive",
-            description: "Call failed to start after 20 seconds. Is the microphone available?",
+            description:
+              "Call failed to start after 20 seconds. Is the microphone available?",
           },
         },
       },
@@ -257,16 +269,18 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               userSpeaking: {
                 description:
                   "User is speaking and being recorded by the microphone.\nWaveform animation.",
-                entry: [{
-                  type: "startAnimation",
-                  params: {
-                    animation: "userSpeaking",
+                entry: [
+                  {
+                    type: "startAnimation",
+                    params: {
+                      animation: "userSpeaking",
+                    },
                   },
-                },
-              assign({ userIsSpeaking: true }),
-              {
-                type: "cancelCountdownAnimation",
-              }],
+                  assign({ userIsSpeaking: true }),
+                  {
+                    type: "cancelCountdownAnimation",
+                  },
+                ],
                 exit: {
                   type: "stopAnimation",
                   params: {
@@ -311,7 +325,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   },
                   {
                     type: "releaseWakeLock",
-                  }
+                  },
                 ],
                 description:
                   'Disable the VAD microphone.\n    Aka "call" Pi.\n    Stops active listening.',
@@ -407,7 +421,8 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                       "Transcribed speech to text (out of sequence response).",
                   },
                   "saypi:transcribeFailed": {
-                    target: "#sayPi.listening.errorStatus.errors.transcribeFailed",
+                    target:
+                      "#sayPi.listening.errorStatus.errors.transcribeFailed",
                     description:
                       "Out of sequence error response from the /transcribe API",
                   },
@@ -431,20 +446,24 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               transcribing: {
                 description:
                   "Transcribing audio to text.\nCard flip animation.",
-                entry: [{
-                  type: "startAnimation",
-                  params: {
-                    animation: "transcribing",
+                entry: [
+                  {
+                    type: "startAnimation",
+                    params: {
+                      animation: "transcribing",
+                    },
                   },
-                },
-              assign({ isTranscribing: true })],
-                exit: [{
-                  type: "stopAnimation",
-                  params: {
-                    animation: "transcribing",
+                  assign({ isTranscribing: true }),
+                ],
+                exit: [
+                  {
+                    type: "stopAnimation",
+                    params: {
+                      animation: "transcribing",
+                    },
                   },
-                },
-                assign({ isTranscribing: false })],
+                  assign({ isTranscribing: false }),
+                ],
                 on: {
                   "saypi:transcribed": {
                     target: "accumulating",
@@ -454,7 +473,8 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     description: "Successfully transcribed user audio to text.",
                   },
                   "saypi:transcribeFailed": {
-                    target: "#sayPi.listening.errorStatus.errors.transcribeFailed",
+                    target:
+                      "#sayPi.listening.errorStatus.errors.transcribeFailed",
                     description:
                       "Received an error response from the /transcribe API",
                   },
@@ -488,7 +508,8 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     {
                       target: "#sayPi.listening.errorStatus.normal",
                       actions: [],
-                      description: "Reset to the normal state and clear errors.",
+                      description:
+                        "Reset to the normal state and clear errors.",
                     },
                   ],
                 },
@@ -509,7 +530,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     },
                     type: "final",
                   },
-    
+
                   micError: {
                     description: "No audio input detected",
                     entry: {
@@ -527,7 +548,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 type: "parallel",
               },
             },
-          }
+          },
         },
         on: {
           "saypi:piThinking": {
@@ -544,8 +565,8 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           "saypi:visible": {
             actions: {
               type: "requestWakeLock",
-            }
-          }
+            },
+          },
         },
         type: "parallel",
       },
@@ -575,15 +596,15 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               },
               {
                 type: "stopRecording",
-              }
+              },
             ],
-            description:
-              'End call while Pi is speaking.',
+            description: "End call while Pi is speaking.",
           },
         },
         states: {
           piThinking: {
-            description: "Pi is contemplating its response.\nThinking animation.",
+            description:
+              "Pi is contemplating its response.\nThinking animation.",
             entry: {
               type: "startAnimation",
               params: {
@@ -634,7 +655,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             },
           },
         },
-      }
+      },
     },
     predictableActionArguments: true,
     preserveActionOrder: true,
@@ -769,7 +790,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
       releaseWakeLock: () => {
         releaseWakeLock();
-      }
+      },
     },
     services: {},
     guards: {
@@ -855,7 +876,10 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
     },
   }
 );
-function readyToSubmitOnAllowedState(allowedState: boolean, context: SayPiContext): boolean {
+function readyToSubmitOnAllowedState(
+  allowedState: boolean,
+  context: SayPiContext
+): boolean {
   const empty = Object.keys(context.transcriptions).length === 0;
   const pending = isTranscriptionPending();
   const ready = allowedState && !empty && !pending;
@@ -866,11 +890,13 @@ function provisionallyReadyToSubmit(context: SayPiContext): boolean {
   console.log("provisionallyReadyToSubmit", allowedState, context);
   return readyToSubmitOnAllowedState(allowedState, context);
 }
-function readyToSubmit(state: State<SayPiContext, SayPiEvent, any, any, any>, context: SayPiContext): boolean {
+function readyToSubmit(
+  state: State<SayPiContext, SayPiEvent, any, any, any>,
+  context: SayPiContext
+): boolean {
   const allowedState = !(
     state.matches("listening.recording.userSpeaking") ||
     state.matches("listening.converting.transcribing")
   );
   return readyToSubmitOnAllowedState(allowedState, context);
 }
-

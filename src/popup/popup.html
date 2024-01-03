@@ -8,16 +8,22 @@
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="toggle.css" />
+    <link rel="stylesheet" href="language-picker.css" />
     <style>
       body {
         flex-wrap: wrap;
       }
       .user-preference-item {
         display: block;
-        width: 180px;
+        align-items: center;
+        width: 250px;
         border-bottom: 1px solid #e2e8f0;
         padding: 0.5rem 1rem;
         margin: 0;
+      }
+      .control {
+        margin-left: auto; /* align right */
       }
 
       /* Slider */
@@ -43,63 +49,9 @@
       #preference-selector {
         padding: 1rem;
       }
-
-      /* Toggle */
-      .wraper {
-        display: grid;
-        grid-template-columns: auto auto;
-        gap: 1em;
-        align-items: center;
-      }
-
-      .label-text {
-        font-weight: normal;
-        font-size: 1rem;
-        width: 110px;
-      }
-
-      .switch-wrap {
-        cursor: pointer;
-        background: lightgray;
-        padding: 2px;
-        width: 30px;
-        height: 17px;
-        border-radius: 8.5px;
-      }
-      .switch-wrap.checked {
-        background: rgb(11, 87, 208);
-      }
-
-      .switch-wrap input {
-        position: absolute;
-        opacity: 0;
-        width: 0;
-        height: 0;
-      }
-
-      .switch {
-        height: 100%;
-        display: grid;
-        grid-template-columns: 0fr 1fr 1fr;
-        transition: 0.2s;
-      }
-      .switch::after {
-        content: "";
-        border-radius: 50%;
-        background: #fff;
-        grid-column: 2;
-        transition: background 0.2s;
-      }
-
-      input:checked + .switch {
-        grid-template-columns: 1fr 1fr 0fr;
-      }
-      input:checked + .switch::after {
-        background-color: #fff;
-      }
     </style>
   </head>
-  <body class="flex items-center justify-center h-screen">
+  <body class="flex items-center justify-center">
     <div id="preference-selector" class="w-full max-w-lg user-preference-item">
       <!-- Slider with icons -->
       <div class="">
@@ -154,7 +106,7 @@
     <div class="user-preference-item w-full max-w-lg">
       <label class="wraper" for="sound-effects">
         <span class="label-text" data-i18n="soundEffects">Sound Effects</span>
-        <div class="switch-wrap">
+        <div class="switch-wrap control">
           <input type="checkbox" id="sound-effects" name="soundEffects" />
           <div class="switch"></div>
         </div>
@@ -163,13 +115,30 @@
     <div class="user-preference-item w-full max-w-lg">
       <label class="wraper" for="auto-submit">
         <span class="label-text" data-i18n="autoSubmit">Auto Submit</span>
-        <div class="switch-wrap">
+        <div class="switch-wrap control">
           <input type="checkbox" id="auto-submit" name="autoSubmit" />
           <div class="switch"></div>
         </div>
       </label>
     </div>
+    <div class="user-preference-item w-full max-w-lg">
+      <div
+        class="language-picker language-picker--hide-label js-language-picker"
+        data-trigger-class="li4-btn li4-btn--subtle js-tab-focus"
+      >
+        <label for="language-picker-select" class="label-text">Language</label>
+        <form action="" class="language-picker__form">
+          <select name="language-picker-select" id="language-picker-select">
+            <option lang="de" value="deutsch">Deutsch</option>
+            <option lang="en" value="english" selected>English</option>
+            <option lang="fr" value="francais">Français</option>
+            <option lang="it" value="italiano">Italiano</option>
+          </select>
+        </form>
+      </div>
+    </div>
 
+    <script src="language-picker.js"></script>
     <script src="popup.js"></script>
   </body>
 </html>
