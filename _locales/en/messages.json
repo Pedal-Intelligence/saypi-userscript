@@ -74,5 +74,9 @@
   "soundEffects": {
     "message": "Sound effects",
     "description": "Label for the checkbox to enable/disable sound effects."
+  },
+  "preferedLanguage": {
+    "message": "Language",
+    "description": "Label for a control to select the prefered transcription language."
   }
 }
