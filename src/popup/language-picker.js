@@ -53,12 +53,16 @@ Util.getIndexInArray = function (array, el) {
     initLanguagePickerEvents(this);
   };
 
+  /**
+   * Initialize the language picker.
+   * @param {LanguagePicker} picker - The language picker instance.
+   */
   function initLanguagePicker(picker) {
-    // create the HTML for the custom dropdown element
-    picker.element.insertAdjacentHTML(
-      "beforeend",
-      initButtonPicker(picker) + initListPicker(picker)
-    );
+    // create the custom dropdown element
+    var buttonPicker = initButtonPicker(picker);
+    var listPicker = initListPicker(picker);
+    picker.element.appendChild(buttonPicker);
+    picker.element.appendChild(listPicker);
 
     // save picker elements
     picker.dropdown = picker.element.getElementsByClassName(
@@ -153,74 +157,105 @@ Util.getIndexInArray = function (array, el) {
       picker.trigger.focus();
   }
 
+  /**
+   * Initializes the button picker.
+   *
+   * @param {LanguagePicker} picker - The picker object.
+   * @returns {HTMLButtonElement} - The created button element.
+   */
   function initButtonPicker(picker) {
     // create the button element -> picker trigger
-    // check if we need to add custom classes to the button trigger
-    var customClasses = picker.element.getAttribute("data-trigger-class")
-      ? " " + picker.element.getAttribute("data-trigger-class")
-      : "";
+    var button = document.createElement("button");
+    button.classList.add("language-picker__button");
+    const dataTriggerClasses =
+      picker.element.getAttribute("data-trigger-class");
+    for (const dataTriggerClass of dataTriggerClasses.split(" ")) {
+      button.classList.add(dataTriggerClass);
+    }
+    button.setAttribute(
+      "aria-label",
+      picker.select.value +
+        " " +
+        picker.element.getElementsByTagName("label")[0].textContent
+    );
+    button.setAttribute("aria-expanded", "false");
+    button.setAttribute("aria-controls", picker.pickerId + "-dropdown");
 
-    var button =
-      '<button class="language-picker__button' +
-      customClasses +
-      '" aria-label="' +
-      picker.select.value +
-      " " +
-      picker.element.getElementsByTagName("label")[0].textContent +
-      '" aria-expanded="false" aria-controls="' +
-      picker.pickerId +
-      '-dropdown">';
-    button =
-      button +
-      '<span aria-hidden="true" class="language-picker__label language-picker__flag language-picker__flag--' +
-      picker.select.value +
-      '">' +
-      picker.globeSvgPath +
-      "<em>" +
-      picker.selectedOption +
-      "</em>";
-    button = button + picker.arrowSvgPath + "</span>";
-    return button + "</button>";
+    var span = document.createElement("span");
+    span.setAttribute("aria-hidden", "true");
+    span.classList.add("language-picker__label");
+    span.classList.add("language-picker__flag");
+    span.classList.add("language-picker__flag--" + picker.select.value);
+    span.innerHTML =
+      picker.globeSvgPath + "<em>" + picker.selectedOption + "</em>";
+
+    button.appendChild(span);
+    button.innerHTML += picker.arrowSvgPath;
+
+    return button;
   }
 
+  function saveLanguagePreference(language) {
+    chrome.storage.sync.set({ language: language }, function () {
+      console.log("Preference saved: Language is set to " + language);
+    });
+  }
+
+  /**
+   * Initializes the list picker for the language picker.
+   * @param {LanguagePicker} picker - The language picker object.
+   * @returns {HTMLElement} - The created language picker dropdown.
+   */
   function initListPicker(picker) {
     // create language picker dropdown
-    var list =
-      '<div class="language-picker__dropdown" aria-describedby="' +
-      picker.pickerId +
-      '-description" id="' +
-      picker.pickerId +
-      '-dropdown">';
-    list =
-      list +
-      '<p class="li4-sr-only" id="' +
-      picker.pickerId +
-      '-description">' +
-      picker.element.getElementsByTagName("label")[0].textContent +
-      "</p>";
-    list = list + '<ul class="language-picker__list" role="listbox">';
-    for (var i = 0; i < picker.options.length; i++) {
-      var selected = picker.options[i].selected ? ' aria-selected="true"' : "",
-        language = picker.options[i].getAttribute("lang");
-      list =
-        list +
-        '<li><a lang="' +
-        language +
-        '" hreflang="' +
-        language +
-        '" href="' +
-        getLanguageUrl(picker.options[i]) +
-        '"' +
-        selected +
-        ' role="option" data-value="' +
-        picker.options[i].value +
-        '" class="language-picker__item language-picker__flag language-picker__flag--' +
-        picker.options[i].value +
-        '"><span>' +
-        picker.options[i].text +
-        "</span></a></li>";
-    }
-    return list;
+    var dropdown = document.createElement("div");
+    dropdown.classList.add("language-picker__dropdown");
+    dropdown.setAttribute("aria-describedby", picker.pickerId + "-description");
+    dropdown.id = picker.pickerId + "-dropdown";
+
+    var description = document.createElement("p");
+    description.classList.add("li4-sr-only");
+    description.id = picker.pickerId + "-description";
+    description.textContent =
+      picker.element.getElementsByTagName("label")[0].textContent;
+
+    var list = document.createElement("ul");
+    list.classList.add("language-picker__list");
+    list.setAttribute("role", "listbox");
+
+    console.log(picker.options);
+    Array.from(picker.options).forEach(function (option) {
+      var selected = option.selected;
+      var language = option.getAttribute("lang");
+
+      var listItem = document.createElement("li");
+      var link = document.createElement("a");
+      link.setAttribute("lang", language);
+      link.setAttribute("hreflang", language);
+      link.href = "#";
+      if (selected) {
+        link.setAttribute("aria-selected", "true");
+      }
+      link.setAttribute("data-value", option.value);
+      link.classList.add(
+        "language-picker__item",
+        "language-picker__flag",
+        "language-picker__flag--" + option.value
+      );
+      link.setAttribute("role", "option");
+      link.innerHTML = "<span>" + option.text + "</span>";
+      link.addEventListener("click", function () {
+        saveLanguagePreference(option.value);
+      });
+
+      listItem.appendChild(link);
+      list.appendChild(listItem);
+    });
+
+    dropdown.appendChild(description);
+    dropdown.appendChild(list);
+
+    return dropdown;
   }
 
   function getSelectedOptionText(picker) {
@@ -292,7 +327,13 @@ Util.getIndexInArray = function (array, el) {
     var pickerArray = [];
     for (var i = 0; i < languagePicker.length; i++) {
       (function (i) {
-        pickerArray.push(new LanguagePicker(languagePicker[i]));
+        var picker = new LanguagePicker(languagePicker[i]);
+        pickerArray.push(picker);
+        picker.select.addEventListener("change", function () {
+          chrome.storage.sync.set({ language: this.value }, function () {
+            console.log("Preference saved: Language is set to " + this.value);
+          });
+        });
       })(i);
     }
 
