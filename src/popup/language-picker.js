@@ -108,15 +108,26 @@ Util.getIndexInArray = function (array, el) {
       );
     }
     /* select the user's preferred language (or '' for auto-detect language) */
+    var matched = false;
     for (var i = 0; i < options.length; i++) {
       // note that the language is matched on the lang attribute, not value
       if (languageMatches(options[i].lang, language)) {
+        matched = true;
         options[i].selected = true;
         options.selectedIndex = i;
-        console.log(`Selected language preference: '${language}' (index ${i})`);
       } else {
         options[i].selected = false;
       }
+    }
+    if (!matched) {
+      /* the user's preferred language is not available, default to a newly created 'system' option */
+      const systemOption = document.createElement("option");
+      systemOption.value = "system";
+      systemOption.lang = language;
+      systemOption.text = `System (${language})`;
+      options.add(systemOption);
+      systemOption.selected = true;
+      options.selectedIndex = options.length - 1;
     }
   }
 
@@ -218,7 +229,6 @@ Util.getIndexInArray = function (array, el) {
    */
   function initButtonPicker(picker) {
     const selectedOption = getSelectedOption(picker.options);
-    console.log("Selected option: " + selectedOption);
     // create the button element -> picker trigger]
     var button = document.createElement("button");
     button.classList.add("language-picker__button");
