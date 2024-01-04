@@ -147,7 +147,7 @@ async function uploadAudio(
       audioDurationMillis / 1000,
       messages
     );
-    const language = UserPreferenceModule.getLanguage();
+    const language = await UserPreferenceModule.getLanguage();
 
     const controller = new AbortController();
     const { signal } = controller;

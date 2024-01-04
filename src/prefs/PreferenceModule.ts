@@ -1,4 +1,4 @@
-type Preference = 'speed' | 'balanced' | 'accuracy' | null;
+type Preference = "speed" | "balanced" | "accuracy" | null;
 
 export module UserPreferenceModule {
   // Define an interface for the structure you expect to receive from storage.sync.get
@@ -11,8 +11,12 @@ export module UserPreferenceModule {
 
   export function getPreferedMode(): Promise<Preference> {
     return new Promise((resolve) => {
-      if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.sync) {
-        chrome.storage.sync.get(['prefer'], (result: StorageResult) => {
+      if (
+        typeof chrome !== "undefined" &&
+        chrome.storage &&
+        chrome.storage.sync
+      ) {
+        chrome.storage.sync.get(["prefer"], (result: StorageResult) => {
           if (result.prefer) {
             resolve(result.prefer);
           } else {
@@ -28,8 +32,12 @@ export module UserPreferenceModule {
 
   export function getSoundEffects(): Promise<boolean> {
     return new Promise((resolve) => {
-      if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.sync) {
-        chrome.storage.sync.get(['soundEffects'], (result: StorageResult) => {
+      if (
+        typeof chrome !== "undefined" &&
+        chrome.storage &&
+        chrome.storage.sync
+      ) {
+        chrome.storage.sync.get(["soundEffects"], (result: StorageResult) => {
           if (result.soundEffects !== undefined) {
             resolve(result.soundEffects);
           } else {
@@ -45,8 +53,12 @@ export module UserPreferenceModule {
 
   export function getAutoSubmit(): Promise<boolean> {
     return new Promise((resolve) => {
-      if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.sync) {
-        chrome.storage.sync.get(['autoSubmit'], (result: StorageResult) => {
+      if (
+        typeof chrome !== "undefined" &&
+        chrome.storage &&
+        chrome.storage.sync
+      ) {
+        chrome.storage.sync.get(["autoSubmit"], (result: StorageResult) => {
           if (result.autoSubmit !== undefined) {
             resolve(result.autoSubmit);
           } else {
@@ -62,8 +74,12 @@ export module UserPreferenceModule {
 
   export function getLanguage(): Promise<string> {
     return new Promise((resolve) => {
-      if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.sync) {
-        chrome.storage.sync.get(['language'], (result: StorageResult) => {
+      if (
+        typeof chrome !== "undefined" &&
+        chrome.storage &&
+        chrome.storage.sync
+      ) {
+        chrome.storage.sync.get(["language"], (result: StorageResult) => {
           if (result.language) {
             resolve(result.language);
           } else {
