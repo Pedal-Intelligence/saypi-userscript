@@ -34,24 +34,28 @@ Util.getIndexInArray = function (array, el) {
 // File#: _1_language-picker
 // Usage: codyhouse.co/license
 (function () {
-  var LanguagePicker = function (element) {
-    this.element = element;
-    this.select = this.element.getElementsByTagName("select")[0];
-    this.options = this.select.getElementsByTagName("option");
-    this.selectedOption = getSelectedOptionText(this);
-    this.pickerId = this.select.getAttribute("id");
-    this.trigger = false;
-    this.dropdown = false;
-    this.firstLanguage = false;
-    // dropdown arrow inside the button element
-    this.arrowSvgPath =
-      '<svg viewBox="0 0 16 16"><polygon points="3,5 8,11 13,5 "></polygon></svg>';
-    this.globeSvgPath =
-      '<svg viewBox="0 0 16 16"><path d="M8,0C3.6,0,0,3.6,0,8s3.6,8,8,8s8-3.6,8-8S12.4,0,8,0z M13.9,7H12c-0.1-1.5-0.4-2.9-0.8-4.1 C12.6,3.8,13.6,5.3,13.9,7z M8,14c-0.6,0-1.8-1.9-2-5H10C9.8,12.1,8.6,14,8,14z M6,7c0.2-3.1,1.3-5,2-5s1.8,1.9,2,5H6z M4.9,2.9 C4.4,4.1,4.1,5.5,4,7H2.1C2.4,5.3,3.4,3.8,4.9,2.9z M2.1,9H4c0.1,1.5,0.4,2.9,0.8,4.1C3.4,12.2,2.4,10.7,2.1,9z M11.1,13.1 c0.5-1.2,0.7-2.6,0.8-4.1h1.9C13.6,10.7,12.6,12.2,11.1,13.1z"></path></svg>';
+  class LanguagePicker {
+    constructor(element) {
+      (async () => {
+        this.element = element;
+        this.select = this.element.getElementsByTagName("select")[0];
+        this.options = this.select.options;
+        await selectInitialLanguageOption(this.options);
+        this.pickerId = this.select.getAttribute("id");
+        this.trigger = false;
+        this.dropdown = false;
+        this.firstLanguage = false;
+        // dropdown arrow inside the button element
+        this.arrowSvgPath =
+          '<svg viewBox="0 0 16 16"><polygon points="3,5 8,11 13,5 "></polygon></svg>';
+        this.globeSvgPath =
+          '<svg viewBox="0 0 16 16"><path d="M8,0C3.6,0,0,3.6,0,8s3.6,8,8,8s8-3.6,8-8S12.4,0,8,0z M13.9,7H12c-0.1-1.5-0.4-2.9-0.8-4.1 C12.6,3.8,13.6,5.3,13.9,7z M8,14c-0.6,0-1.8-1.9-2-5H10C9.8,12.1,8.6,14,8,14z M6,7c0.2-3.1,1.3-5,2-5s1.8,1.9,2,5H6z M4.9,2.9 C4.4,4.1,4.1,5.5,4,7H2.1C2.4,5.3,3.4,3.8,4.9,2.9z M2.1,9H4c0.1,1.5,0.4,2.9,0.8,4.1C3.4,12.2,2.4,10.7,2.1,9z M11.1,13.1 c0.5-1.2,0.7-2.6,0.8-4.1h1.9C13.6,10.7,12.6,12.2,11.1,13.1z"></path></svg>';
 
-    initLanguagePicker(this);
-    initLanguagePickerEvents(this);
-  };
+        initLanguagePicker(this);
+        initLanguagePickerEvents(this);
+      })();
+    }
+  }
 
   /**
    * Initialize the language picker.
@@ -75,6 +79,54 @@ Util.getIndexInArray = function (array, el) {
     picker.trigger = picker.element.getElementsByClassName(
       "language-picker__button"
     )[0];
+  }
+
+  function languageMatches(optionLang, userLang) {
+    if (optionLang === userLang) {
+      return true;
+    }
+    if (userLang.startsWith(optionLang + "-")) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Initialise the language options, setting the selected one.
+   * @param {HTMLOptionsCollection} options
+   */
+  async function selectInitialLanguageOption(options) {
+    const result = await new Promise((resolve) =>
+      chrome.storage.sync.get(["language"], resolve)
+    );
+    var language = result.language;
+    if (language === undefined) {
+      /* the user has not set a preferred language, default to the system language */
+      language = navigator.language;
+      console.log(
+        `No language preference set, defaulting to system language: ${language}`
+      );
+    }
+    /* select the user's preferred language (or '' for auto-detect language) */
+    for (var i = 0; i < options.length; i++) {
+      // note that the language is matched on the lang attribute, not value
+      if (languageMatches(options[i].lang, language)) {
+        options[i].selected = true;
+        options.selectedIndex = i;
+        console.log(`Selected language preference: '${language}' (index ${i})`);
+      } else {
+        options[i].selected = false;
+      }
+    }
+  }
+
+  /**
+   *
+   * @param {HTMLOptionsCollection} options - The available options.
+   * @returns {HTMLOptionElement} - The selected option.
+   */
+  function getSelectedOption(options) {
+    return options[options.selectedIndex];
   }
 
   function initLanguagePickerEvents(picker) {
@@ -161,10 +213,13 @@ Util.getIndexInArray = function (array, el) {
    * Initializes the button picker.
    *
    * @param {LanguagePicker} picker - The picker object.
+   * @param {HTMLOptionElement} selectedOption - The selected option.
    * @returns {HTMLButtonElement} - The created button element.
    */
   function initButtonPicker(picker) {
-    // create the button element -> picker trigger
+    const selectedOption = getSelectedOption(picker.options);
+    console.log("Selected option: " + selectedOption);
+    // create the button element -> picker trigger]
     var button = document.createElement("button");
     button.classList.add("language-picker__button");
     const dataTriggerClasses =
@@ -174,7 +229,7 @@ Util.getIndexInArray = function (array, el) {
     }
     button.setAttribute(
       "aria-label",
-      picker.select.value +
+      selectedOption.value +
         " " +
         picker.element.getElementsByTagName("label")[0].textContent
     );
@@ -185,9 +240,9 @@ Util.getIndexInArray = function (array, el) {
     span.setAttribute("aria-hidden", "true");
     span.classList.add("language-picker__label");
     span.classList.add("language-picker__flag");
-    span.classList.add("language-picker__flag--" + picker.select.value);
+    span.classList.add("language-picker__flag--" + selectedOption.value);
     span.innerHTML =
-      picker.globeSvgPath + "<em>" + picker.selectedOption + "</em>";
+      picker.globeSvgPath + "<em>" + selectedOption.text + "</em>";
 
     button.appendChild(span);
     button.innerHTML += picker.arrowSvgPath;
@@ -202,29 +257,16 @@ Util.getIndexInArray = function (array, el) {
   }
 
   /**
-   * Initializes the list picker for the language picker.
-   * @param {LanguagePicker} picker - The language picker object.
-   * @returns {HTMLElement} - The created language picker dropdown.
+   *
+   * @param {HTMLOptionsCollection} options
+   * @returns {HTMLUListElement} - The created list element.
    */
-  function initListPicker(picker) {
-    // create language picker dropdown
-    var dropdown = document.createElement("div");
-    dropdown.classList.add("language-picker__dropdown");
-    dropdown.setAttribute("aria-describedby", picker.pickerId + "-description");
-    dropdown.id = picker.pickerId + "-dropdown";
-
-    var description = document.createElement("p");
-    description.classList.add("li4-sr-only");
-    description.id = picker.pickerId + "-description";
-    description.textContent =
-      picker.element.getElementsByTagName("label")[0].textContent;
-
+  function buildOptionsList(options) {
     var list = document.createElement("ul");
     list.classList.add("language-picker__list");
     list.setAttribute("role", "listbox");
 
-    console.log(picker.options);
-    Array.from(picker.options).forEach(function (option) {
+    Array.from(options).forEach(function (option) {
       var selected = option.selected;
       var language = option.getAttribute("lang");
 
@@ -245,28 +287,39 @@ Util.getIndexInArray = function (array, el) {
       link.setAttribute("role", "option");
       link.innerHTML = "<span>" + option.text + "</span>";
       link.addEventListener("click", function () {
-        saveLanguagePreference(option.value);
+        saveLanguagePreference(option.lang);
       });
 
       listItem.appendChild(link);
       list.appendChild(listItem);
     });
+    return list;
+  }
+
+  /**
+   * Initializes the list picker for the language picker.
+   * @param {LanguagePicker} picker - The language picker object.
+   * @returns {HTMLElement} - The created language picker dropdown.
+   */
+  function initListPicker(picker) {
+    // create language picker dropdown
+    var dropdown = document.createElement("div");
+    dropdown.classList.add("language-picker__dropdown");
+    dropdown.setAttribute("aria-describedby", picker.pickerId + "-description");
+    dropdown.id = picker.pickerId + "-dropdown";
+
+    var description = document.createElement("p");
+    description.classList.add("li4-sr-only");
+    description.id = picker.pickerId + "-description";
+    description.textContent =
+      picker.element.getElementsByTagName("label")[0].textContent;
+
+    var list = buildOptionsList(picker.options);
 
     dropdown.appendChild(description);
     dropdown.appendChild(list);
 
     return dropdown;
-  }
-
-  function getSelectedOptionText(picker) {
-    // used to initialize the label of the picker trigger button
-    var label = "";
-    if ("selectedIndex" in picker.select) {
-      label = picker.options[picker.select.selectedIndex].text;
-    } else {
-      label = picker.select.querySelector("option[selected]").text;
-    }
-    return label;
   }
 
   function getLanguageUrl(option) {
