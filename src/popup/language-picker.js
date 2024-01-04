@@ -100,8 +100,7 @@ Util.getIndexInArray = function (array, el) {
       chrome.storage.sync.get(["language"], resolve)
     );
     var language = result.language;
-    //const systemLanguage = navigator.language;
-    const systemLanguage = "zh-CN"; // default to Chinese for testing - remove this line in production
+    const systemLanguage = navigator.language;
     if (language === undefined) {
       /* the user has not set a preferred language, default to the system language */
       language = systemLanguage;
@@ -122,7 +121,7 @@ Util.getIndexInArray = function (array, el) {
       }
     }
     const systemLanguageMatched =
-      preferedLanguageMatched && language === systemLanguage;
+      preferedLanguageMatched && languageMatches(language, systemLanguage);
     if (!systemLanguageMatched) {
       /* the user's preferred language is not available, default to a newly created 'system' option */
       const systemOption = document.createElement("option");
@@ -204,12 +203,14 @@ Util.getIndexInArray = function (array, el) {
       "language-picker__dropdown--right",
       window.innerWidth < triggerBoundingRect.left + picker.dropdown.offsetWidth
     );
+    /* In an extension popup, there's never enough space to display the downdown above the trigger
     Util.toggleClass(
       picker.dropdown,
       "language-picker__dropdown--up",
       window.innerHeight <
         triggerBoundingRect.bottom + picker.dropdown.offsetHeight
     );
+    */
   }
 
   function checkLanguagePickerClick(picker, target) {

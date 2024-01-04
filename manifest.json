@@ -22,7 +22,8 @@
         "public/silero_vad.onnx",
         "public/*.wasm",
         "public/vad.worklet.bundle.min.js",
-        "public/audio/*.mp3"
+        "public/audio/*.mp3",
+        "src/icons/flags/*.svg"
       ],
       "matches": ["https://pi.ai/*"]
     }
