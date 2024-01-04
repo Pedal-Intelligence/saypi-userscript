@@ -100,34 +100,40 @@ Util.getIndexInArray = function (array, el) {
       chrome.storage.sync.get(["language"], resolve)
     );
     var language = result.language;
+    //const systemLanguage = navigator.language;
+    const systemLanguage = "zh-CN"; // default to Chinese for testing - remove this line in production
     if (language === undefined) {
       /* the user has not set a preferred language, default to the system language */
-      language = navigator.language;
+      language = systemLanguage;
       console.log(
         `No language preference set, defaulting to system language: ${language}`
       );
     }
     /* select the user's preferred language (or '' for auto-detect language) */
-    var matched = false;
+    var preferedLanguageMatched = false;
     for (var i = 0; i < options.length; i++) {
       // note that the language is matched on the lang attribute, not value
       if (languageMatches(options[i].lang, language)) {
-        matched = true;
+        preferedLanguageMatched = true;
         options[i].selected = true;
         options.selectedIndex = i;
       } else {
         options[i].selected = false;
       }
     }
-    if (!matched) {
+    const systemLanguageMatched =
+      preferedLanguageMatched && language === systemLanguage;
+    if (!systemLanguageMatched) {
       /* the user's preferred language is not available, default to a newly created 'system' option */
       const systemOption = document.createElement("option");
       systemOption.value = "system";
-      systemOption.lang = language;
-      systemOption.text = `System (${language})`;
+      systemOption.lang = systemLanguage;
+      systemOption.text = `System (${systemLanguage})`;
       options.add(systemOption);
-      systemOption.selected = true;
-      options.selectedIndex = options.length - 1;
+      if (!preferedLanguageMatched) {
+        systemOption.selected = true;
+        options.selectedIndex = options.length - 1;
+      }
     }
   }
 
