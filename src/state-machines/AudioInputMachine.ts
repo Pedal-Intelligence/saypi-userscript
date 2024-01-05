@@ -4,6 +4,7 @@ import { setupInterceptors } from "../RequestInterceptor";
 import { convertToWavBlob } from "../AudioEncoder";
 import { createMachine, assign } from "xstate";
 import EventBus from "../EventBus.js";
+import { debounce } from "lodash";
 
 // Assuming config.appServerUrl is of type string.
 const fullWorkletURL: string = `${config.appServerUrl}/vad.worklet.bundle.min.js`;
@@ -32,6 +33,13 @@ interface MyRealTimeVADCallbacks {
   onVADMisfire?: () => any;
 }
 
+const debouncedOnFrameProcessed = debounce(
+  (probabilities: { isSpeech: number; notSpeech: number }) => {
+    EventBus.emit("audio:frame", probabilities);
+  },
+  1000 / 60
+); // 1000ms / 60 frames per second
+
 // Options for MicVAD
 const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
   workletURL: fullWorkletURL,
@@ -56,6 +64,9 @@ const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
   onVADMisfire: () => {
     console.log("Cancelled. Audio was not speech.");
     EventBus.emit("saypi:userStoppedSpeaking", { duration: 0 });
+  },
+  onFrameProcessed(probabilities: { isSpeech: number; notSpeech: number }) {
+    debouncedOnFrameProcessed(probabilities);
   },
 };
 
@@ -94,7 +105,7 @@ async function setupRecording(callback?: () => void): Promise<void> {
 function tearDownRecording(): void {
   if (microphone) {
     microphone.pause();
-    microphone.stream.getTracks().forEach(track => track.stop());
+    microphone.stream.getTracks().forEach((track) => track.stop());
   }
   microphone = null;
 }
@@ -174,7 +185,7 @@ export const audioInputMachine = createMachine<
                 description: `When receiving a request to acquire a microphone (setup recording) that is already acquired, trigger notifications.`,
                 actions: {
                   type: "notifyMicrophoneAcquired",
-                }
+                },
               },
             },
             always: {
@@ -234,7 +245,7 @@ export const audioInputMachine = createMachine<
           },
         },
         on: {
-          "release": {
+          release: {
             target: "released",
             actions: {
               type: "releaseMicrophone",

@@ -1,19 +1,21 @@
-$glow-color: #ffd1dc; // sunset-peach
 $fade-color: #ffd1dc; // sunset-peach
 
+:root {
+    --glow-color: #ffd1dc; // sunset-peach
+}
 
 .glow {
     border: none;
     
     // Multiple box shadows create the glow effect
     box-shadow: 
-    0 0 10px $glow-color,
-    0 0 20px $glow-color,
-    0 0 30px $glow-color,
-    0 0 40px $glow-color,
-    0 0 50px $glow-color,
-    0 0 60px $glow-color,
-    0 0 70px $glow-color;
+    0 0 10px var(--glow-color),
+    0 0 20px var(--glow-color),
+    0 0 30px var(--glow-color),
+    0 0 40px var(--glow-color),
+    0 0 50px var(--glow-color),
+    0 0 60px var(--glow-color),
+    0 0 70px var(--glow-color);
   
     // Animation for the glow to appear to pulse
     animation: neon-glow-animation 1.5s ease-in-out infinite alternate;
@@ -50,7 +52,7 @@ $fade-color: #ffd1dc; // sunset-peach
         0 0 2px $fade-color,
         0 0 3px $fade-color,
         0 0 4px #fff,
-        0 0 5px #fff,
+        0 0 5px #fff;
     }
 }
 
@@ -58,20 +60,20 @@ $fade-color: #ffd1dc; // sunset-peach
 @keyframes neon-glow-animation {
     from {
         box-shadow: 
-        0 0 5px $glow-color,
-        0 0 10px $glow-color,
-        0 0 15px $glow-color,
-        0 0 20px $glow-color,
-        0 0 25px #fff,
+        0 0 5px var(--glow-color),
+        0 0 10px var(--glow-color),
+        0 0 15px var(--glow-color),
+        0 0 20px var(--glow-color),
+        0 0 25px #fff;
     }
     to {
         box-shadow: 
-        0 0 10px $glow-color,
-        0 0 20px $glow-color,
-        0 0 30px $glow-color,
-        0 0 40px $glow-color,
-        0 0 50px $glow-color,
-        0 0 60px $glow-color,
-        0 0 70px $glow-color;
+        0 0 10px var(--glow-color),
+        0 0 20px var(--glow-color),
+        0 0 30px var(--glow-color),
+        0 0 40px var(--glow-color),
+        0 0 50px var(--glow-color),
+        0 0 60px var(--glow-color),
+        0 0 70px var(--glow-color);
     }
 }

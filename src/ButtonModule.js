@@ -20,6 +20,7 @@ import lockIconSVG from "./icons/lock.svg";
 import unlockIconSVG from "./icons/unlock.svg";
 import getMessage from "./i18n.ts";
 import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
+import { update } from "lodash";
 export default class ButtonModule {
   constructor() {
     this.sayPiActor = StateMachineService.actor; // the Say, Pi state machine
@@ -34,6 +35,9 @@ export default class ButtonModule {
   registerOtherEvents() {
     EventBus.on("saypi:autoSubmit", () => {
       this.handleAutoSubmit();
+    });
+    EventBus.on("audio:frame", (probabilities) => {
+      this.handleAudioFrame(probabilities);
     });
   }
 
@@ -216,6 +220,69 @@ export default class ButtonModule {
 
     appendChild(container, button, position);
     return button;
+  }
+
+  updateCallButtonColor(color) {
+    const callButton = document.getElementById("saypi-callButton");
+    // find first path element descendant of the call button's svg element child
+    const path = callButton?.querySelector("svg path");
+    if (path) {
+      // set the fill color of the path element
+      path.style.fill = color;
+    }
+  }
+
+  updateCallButtonGlowColor(color) {
+    // set the `--glow-color` CSS variable on the call button
+    const callButton = document.getElementById("saypi-callButton");
+    if (callButton) {
+      callButton.style.setProperty("--glow-color", color);
+    }
+  }
+  /**
+   * Interpolates between a base colour and a peak colour based on intensity.
+   *
+   * @param {string} baseColor - The base colour in hexadecimal format.
+   * @param {string} peakColor - The peak colour in hexadecimal format.
+   * @param {number} intensity - The intensity factor (0.0 to 1.0).
+   * @returns {string} The interpolated colour in hexadecimal format.
+   */
+  interpolateColor(baseColor, peakColor, intensity) {
+    // Ensure intensity is within the range of 0.0 to 1.0
+    intensity = Math.max(0, Math.min(1, intensity));
+
+    // Convert the base and peak colours from hexadecimal to RGB
+    let baseRed = parseInt(baseColor.substring(1, 3), 16);
+    let baseGreen = parseInt(baseColor.substring(3, 5), 16);
+    let baseBlue = parseInt(baseColor.substring(5, 7), 16);
+    let peakRed = parseInt(peakColor.substring(1, 3), 16);
+    let peakGreen = parseInt(peakColor.substring(3, 5), 16);
+    let peakBlue = parseInt(peakColor.substring(5, 7), 16);
+
+    // Interpolate each colour component
+    let newRed = Math.round(baseRed + (peakRed - baseRed) * intensity);
+    let newGreen = Math.round(baseGreen + (peakGreen - baseGreen) * intensity);
+    let newBlue = Math.round(baseBlue + (peakBlue - baseBlue) * intensity);
+
+    // Convert the interpolated RGB back to hexadecimal
+    return `#${newRed.toString(16).padStart(2, "0")}${newGreen
+      .toString(16)
+      .padStart(2, "0")}${newBlue.toString(16).padStart(2, "0")}`;
+  }
+
+  /**
+   *
+   * @param { isSpeech: number; notSpeech: number } probabilities
+   */
+  handleAudioFrame(probabilities) {
+    var baseColor = "#ffd1dc"; // sunset-peach
+    const peakColor = "#FF7F50"; // coral
+    const updatedColor = this.interpolateColor(
+      baseColor,
+      peakColor,
+      probabilities.isSpeech
+    );
+    this.updateCallButtonGlowColor(updatedColor);
   }
 
   callStarting(callButton) {
