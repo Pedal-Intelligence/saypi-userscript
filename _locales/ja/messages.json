@@ -74,5 +74,9 @@
   "unlockInstruction": {
     "description": "画面がロックされたときにユーザーが画面のロックを解除する方法を指示します。",
     "message": "アンロックするために押し続けてください。"
+  },
+  "preferedLanguage": {
+    "message": "言語",
+    "description": "選択したい転写言語を制御するためのラベル。"
   }
 }

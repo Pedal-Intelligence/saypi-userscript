@@ -74,5 +74,9 @@
   "unlockInstruction": {
     "description": "사용자가 잠긴 화면을 어떻게 해제하는지 알려주는 지시사항.",
     "message": "잠금 해제하려면 누르세요."
+  },
+  "preferedLanguage": {
+    "message": "언어",
+    "description": "선호하는 전사 언어를 선택하기 위한 컨트롤 라벨."
   }
 }

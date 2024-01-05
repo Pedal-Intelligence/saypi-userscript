@@ -74,5 +74,9 @@
   "unlockInstruction": {
     "description": "Instrukcje informujące użytkownika, jak odblokować ekran, gdy jest zablokowany.",
     "message": "Przytrzymaj, aby odblokować."
+  },
+  "preferedLanguage": {
+    "message": "Język",
+    "description": "Etykieta do wyboru preferowanego języka transkrypcji."
   }
 }

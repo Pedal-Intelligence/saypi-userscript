@@ -74,5 +74,9 @@
   "unlockInstruction": {
     "description": "指导用户如何在屏幕锁定时解锁的说明。",
     "message": "按住以解锁。"
+  },
+  "preferedLanguage": {
+    "message": "语言",
+    "description": "选择首选转录语言的控制标签。"
   }
 }

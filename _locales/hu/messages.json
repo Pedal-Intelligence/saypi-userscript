@@ -74,5 +74,9 @@
   "unlockInstruction": {
     "description": "Utasítások, amelyek elmondják a felhasználónak, hogyan oldja fel a képernyőt, ha le van zárva.",
     "message": "Tartsd lenyomva a feloldáshoz."
+  },
+  "preferedLanguage": {
+    "message": "Nyelv",
+    "description": "Címke egy vezérlőhöz, amely kiválasztja a preferált átírási nyelvet."
   }
 }

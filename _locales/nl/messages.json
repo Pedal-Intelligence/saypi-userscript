@@ -74,5 +74,9 @@
   "unlockInstruction": {
     "description": "Instructies die de gebruiker vertellen hoe het scherm te ontgrendelen wanneer het is vergrendeld.",
     "message": "Vasthouden om te ontgrendelen."
+  },
+  "preferedLanguage": {
+    "message": "Taal",
+    "description": "Label voor een bedieningselement om de voorkeurstaal voor transcriptie te selecteren."
   }
 }

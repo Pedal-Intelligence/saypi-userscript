@@ -74,5 +74,9 @@
   "unlockInstruction": {
     "description": "Instructions indiquant à l'utilisateur comment déverrouiller l'écran lorsqu'il est verrouillé.",
     "message": "Maintenez pour déverrouiller."
+  },
+  "preferedLanguage": {
+    "message": "Langue",
+    "description": "Étiquette pour un contrôle permettant de sélectionner la langue de transcription préférée."
   }
 }

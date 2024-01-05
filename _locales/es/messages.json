@@ -74,5 +74,9 @@
   "unlockInstruction": {
     "description": "Instrucciones que indican al usuario cómo desbloquear la pantalla cuando está bloqueada.",
     "message": "Mantén presionado para desbloquear."
+  },
+  "preferedLanguage": {
+    "message": "Idioma",
+    "description": "Etiqueta para un control para seleccionar el idioma de transcripción preferido."
   }
 }

@@ -74,5 +74,9 @@
   "unlockInstruction": {
     "description": "Anweisungen, die dem Benutzer erklären, wie er den Bildschirm entsperrt, wenn dieser gesperrt ist.",
     "message": "Halten zum Entsperren."
+  },
+  "preferedLanguage": {
+    "message": "Sprache",
+    "description": "Beschriftung für eine Steuerung zur Auswahl der bevorzugten Transkriptionssprache."
   }
 }

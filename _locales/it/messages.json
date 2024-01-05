@@ -74,5 +74,9 @@
   "unlockInstruction": {
     "description": "Istruzioni che indicano all'utente come sbloccare lo schermo quando è bloccato.",
     "message": "Tieni premuto per sbloccare."
+  },
+  "preferedLanguage": {
+    "message": "Lingua",
+    "description": "Etichetta per un controllo per selezionare la lingua di trascrizione preferita."
   }
 }

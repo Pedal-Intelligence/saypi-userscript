@@ -74,5 +74,9 @@
   "unlockInstruction": {
     "description": "Hướng dẫn cho người dùng cách mở khóa màn hình khi bị khóa.",
     "message": "Giữ để mở khóa."
+  },
+  "preferedLanguage": {
+    "message": "Ngôn ngữ",
+    "description": "Nhãn cho một điều khiển để chọn ngôn ngữ phiên âm ưa thích."
   }
 }
