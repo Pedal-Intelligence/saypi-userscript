@@ -16,7 +16,11 @@ async function loadMessages(locale: string) {
   }
 }
 
-function getLocalMessage(locale: string, messageName: string): string {
+function getLocalMessage(
+  locale: string,
+  messageName: string,
+  substitutions?: string | string[] | undefined
+): string {
   // if the locale is not in the messages object, default to English
   if (!messages[locale]) {
     locale = "en";
@@ -28,7 +32,12 @@ function getLocalMessage(locale: string, messageName: string): string {
     );
     return messageName;
   } else {
-    return messages[locale][messageName].message;
+    const rawMessage = messages[locale][messageName].message;
+    if (substitutions) {
+      return rawMessage.replace("$1", substitutions.toString());
+    } else {
+      return rawMessage;
+    }
   }
 }
 
@@ -37,10 +46,13 @@ function convertLanguageToLocale(language: string): string {
   return language.split("_")[0];
 }
 
-function getMessage(messageName: string): string {
+function getMessage(
+  messageName: string,
+  substitutions?: string | string[] | undefined
+): string {
   // Check if running as a Chrome extension
   if (typeof chrome !== "undefined" && chrome.i18n) {
-    return chrome.i18n.getMessage(messageName);
+    return chrome.i18n.getMessage(messageName, substitutions);
   } else {
     // Fallback for userscript
     UserPreferenceModule.getLanguage()

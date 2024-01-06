@@ -10,6 +10,7 @@ const PI_SPEAKING = "saypi:piSpeaking";
 const PI_STOPPED_SPEAKING = "saypi:piStoppedSpeaking";
 const PI_FINISHED_SPEAKING = "saypi:piFinishedSpeaking";
 const VISIBLE = "saypi:visible";
+const AUDIO_DEVICE_CONNECTED = "saypi:audio:connected";
 
 export default class EventModule {
   static init() {
@@ -84,7 +85,11 @@ export default class EventModule {
       actor.send(USER_SPEAKING);
     });
 
-    [USER_STOPPED_SPEAKING, USER_FINISHED_SPEAKING].forEach((eventName) => {
+    [
+      USER_STOPPED_SPEAKING,
+      USER_FINISHED_SPEAKING,
+      AUDIO_DEVICE_CONNECTED,
+    ].forEach((eventName) => {
       EventBus.on(eventName, (detail) => {
         if (detail) {
           actor.send({ type: eventName, ...detail });

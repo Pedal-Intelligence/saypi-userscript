@@ -26,6 +26,65 @@ setupInterceptors();
 // Variable to hold the microphone instance. Now has a specific type.
 let microphone: MicVAD | null = null;
 
+let previousDeviceIds: string[] = [];
+
+async function monitorAudioInputDevices() {
+  if (microphone === null) {
+    // No microphone instance, so nothing to monitor
+    return;
+  }
+
+  const devices = await navigator.mediaDevices.enumerateDevices();
+  const audioInputDevices = devices.filter(
+    (device) => device.kind === "audioinput"
+  );
+  const currentDeviceIds = audioInputDevices.map((device) => device.deviceId);
+
+  const addedDevices = currentDeviceIds.filter(
+    (id) => !previousDeviceIds.includes(id)
+  );
+  const removedDevices = previousDeviceIds.filter(
+    (id) => !currentDeviceIds.includes(id)
+  );
+
+  const stream = microphone.stream;
+  const track = stream.getTracks()[0];
+  const settings = track.getSettings();
+  const deviceId = settings.deviceId;
+  const deviceLabel = audioInputDevices.find(
+    (device) => device.deviceId === deviceId
+  )?.label;
+
+  if (deviceId && addedDevices.includes(deviceId)) {
+    console.log(
+      `The audio input device used by MicVAD has been added: ${deviceId} (${deviceLabel}))`
+    );
+    EventBus.emit("saypi:audio:connected", { deviceId, deviceLabel });
+  }
+
+  if (deviceId && removedDevices.includes(deviceId)) {
+    console.log("The audio input device used by MicVAD has been removed.");
+  }
+
+  addedDevices.forEach((id) => {
+    const label = audioInputDevices.find(
+      (device) => device.deviceId === id
+    )?.label;
+    console.log(`An audio input device has been added: ${id} (${label})`);
+  });
+  removedDevices.forEach((id) => {
+    const label = audioInputDevices.find(
+      (device) => device.deviceId === id
+    )?.label;
+    console.log(`An audio input device has been removed: ${id} (${label})`);
+  });
+
+  previousDeviceIds = currentDeviceIds;
+}
+
+// Call the function every 5 seconds
+setInterval(monitorAudioInputDevices, 5000);
+
 // Define the callbacks manually if they are not exported
 interface MyRealTimeVADCallbacks {
   onSpeechStart?: () => any;
@@ -130,7 +189,7 @@ export const audioInputMachine = createMachine<
   AudioInputEvent
 >(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AkgOwAdUAXAOgCcwAbMZWSAYmQGMBHVDSgbQAYBdRKAJZYGYtjyCQAD0QBGAOwBmUgBYAnJvUAOVXvUKATADYANCACeiJYYCspY7eM9jruatsHDAX2-m0mLiEJKQs7JwYeFAMEFh4YKSRAG5YANYJAdj4RGRhHOSRUAjJWMzI4nG8fFVSwqIVkkgyiLaG5lYIcnI82g4KtqoKxqrGCiOGqr7+6FnBuWz5hQxg5ORY5KQEVOUAZusAtqEzQTmhCxFRxXgpZQ1VNU11YhJSsp3Kalo6ehpGZpaIQw2UiGHhKHhAwwKZQeIxTECZE4hPIXaKwYjIcjEB5CETPOKvQFyZykOTaJS6Yyg0YQ-4dMkKUjqWzgpSqJS2MHqVQmeGI7LI86UCAMSg0OhgHEgJ4NQmdYwqDRaXT6P7tRDaOSfTSOAzaXS2TV844C+bhYWJCA0BjozHY-i1PGyppvVQ9EGOZzaEzqUFkpTqzpyNkg-VjbTGOQsnitY2BU1nc2QS3WqUyl4uxBu3omJw9H1+8mB7r60P6wzaFkmBQxuOzU4oi2UZjrTBRG3ELAEABKYHYcGIkDTTozoDe2gU6j6oP6ngmxk1xeDqjL5OZdijqm0daRZvyyebraWEHKyAAgklkBhtgAjGjD+qj5oIYy+0iV5m+hdKdRyOyBnV3w5ZRfU0UFtz8BETTmRN9wgTYwDwNsoAAZU7AgOy7B98UaMd5A8YwmVfCENBLVQ-0DfUpzdL0jDZTVyR3BNG2TAhEOQtCuxiU8LyvW97wdR4RwJTNOgIoj1BI38enItoAQQAwtRov9PB4dQlDJJiYJY+C2KQwpOIw6RbUHUIdkHcgAApOR4HgAEomGghshVY9iDPQ7DnTwsSnAkqSyIo+SuhMUgNMMcL+nzFxJkg-ltJc3S3KiQyGGMjFTOQcyVms2z7Mc+N4qTRL9OSjy5AEITHxE7yuiUFQvF9HonE5VRix4dlSDBbRuVZKFFC05yitIdEuzYkVPKfN5iR5EEfTZEZNS3SjyKZGMvE1FklEjAbBSKpgXIm6rn25KdNE5HQhmcAxbEDaN3wjTlI0k6M5F8SC8CwCA4CkOKckdKrcOfABaOlEBBzrcvBUYK1sYkeh2sgxVoegIH+nC5R5QMNJXMFgpMSNbLJYwEdg1E0a858f1Owx1FGdT3HZORmUDCtqJcbooUMJmeQUEmdPJybAUjUghicIFyScSc5EDUZ7Ek5xbENDcKSUPmEpTMABaOt5wSnUWqRVyXfyXIEmWDBRzdhiNa1ipzdrgigwBbchkK1wG3lcQwIdsqk9BsN05PpNSc31bQeCGGt+gVNWhr0jj0LduVuhZUk7HCtlJ2hYk2uZUgWTDJwbBs1XbYKwaHZGggxsT0TFEGUK-0nUE3U8CcAPUvPPDJDRuqcLo3u8IA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AkgOwAdUAXAOgCcwAbMZWSAYmQGMBHVDSgbQAYBdRKAJZYGYtjyCQAD0QBGAOwBmUgBYAnJvUAOVXvUKATADYANCACeiJYYCspY7eM9jruatsHDAX2-m0mLiEJKQs7JwYeFAMEFh4YKSRAG5YANYJAdj4RGRhHOSRUAjJWMzI4nG8fFVSwqIVkkgyiLaG5lYIcnI82g4KtqoKxqrGCiOGqr7+6FnBuWz5hQxg5ORY5KQEVOUAZusAtqEzQTmhCxFRxXgpZQ1VNU11YhJSsp3Kalo6ehpGZpaIQw2UiGHhKHhAwwKZQeIxTECZE4hPIXaKwYjIcjEB5CETPOKvQFyZykOTaJS6Yyg0YQ-4dMkKUjqWzgpSqJS2MHqVQmeGI7LI86UCAMSg0OhgHEgJ4NQmdYwqDRaXT6P7tRDaOSfTSOAzaXS2TV844C+bhYWJCA0BjozHY-i1PGyppvVQ9EGOZzaEzqUFkpTqzpyNkg-VjbTGOQsnitY2BU1nc2QS3WlHcB2PJ0vF2IDQqHjqYMstnGQtDQNyCaMnS2Aa1jmF9lx2anNPJjBWsAMKUy7OgV3ukxOHo+v3kis9XqGfXe7QskwKGPNpFm-LJyjMdaYKI24hYAgAJTA7DgxEgPazBJzCG0CnUfVB-U8E2MmorwdUof1SmZdijqm0ZcEzbCAKDATdyG3aIIHKZAAEEkmQDBtgAIxoC96j7ZoEFLQxSDnZlfVfH9K1sQMdXwjllF9TRQUAvwERNOZEzXUCCDAPAoIAZT3Ahd33DD8Uaft5A8YwmVLCENG6XRK0DfV7zdL0jDZTVySA5iQM2DjuN4mJYIQpDUPQjNcUwq8RM6MSJPUKTCx6VQ5IBBADC1JTSNs9QlDJDTWyFZN2M4woeP3BhpFtM9Qh2M9yAACk5HgeAASiYJi-KTNidOC3jBOdSz3CcGy7Jkxy2mcroTFIbzDBq-oRxcSYGP5TT-MyoKohCvjwoxSLkGilZ4sS5LUvjFqMu09qoE6rg5AETNzOE7CuiUFQvF9HonE5VQJ3ZUgwW0blWShRRfMFcb0X3diRVyrC3mJHkQR9NkRk1AD5McpkYy8TVi0jXwGLwLAIDgKRmpyR0FrlABaOlEBhvahvJBQuiMIweVsU6yDFWh6AgCGhLlHlA28z8wQqkxI0SsljExljUXxvLsJ-e8aNGLz3HZORmUDadFJcbooUMLmeQUWmQIZ27AUjUghicIFyScO85EDUZ7FszxbC5nhiW5GmmrSs7WJTMAJYspmCxlz15Y5NnlfKytVuDZGlH6aml310b0qNjct0KU3FreVw8KGlwJnZCYIQnHQv20HghkXfoFTF1qJt0-d-blboWVJOwarZO9oWJKP7BZMMnBsBKlGT87eKujPr0UQYqsrO9QTdTxb3IrzSFrQtdB0ZlIzkf7vCAA */
     id: "audioInput",
     initial: "released",
     context: {
@@ -171,9 +230,11 @@ export const audioInputMachine = createMachine<
       acquired: {
         description: "Microphone acquired and ready to start recording.",
         initial: "idle",
-        entry: {
-          type: "notifyMicrophoneAcquired",
-        },
+        entry: [
+          {
+            type: "notifyMicrophoneAcquired",
+          },
+        ],
         states: {
           idle: {
             on: {
@@ -301,6 +362,7 @@ export const audioInputMachine = createMachine<
       },
 
       notifyMicrophoneAcquired: (context, event) => {
+        monitorAudioInputDevices();
         EventBus.emit("saypi:callReady");
       },
 

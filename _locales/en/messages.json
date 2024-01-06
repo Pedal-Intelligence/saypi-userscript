@@ -78,5 +78,19 @@
   "preferedLanguage": {
     "message": "Language",
     "description": "Label for a control to select the prefered transcription language."
+  },
+  "audioConnected": {
+    "message": "$microphone$ connected",
+    "description": "Message displayed when a microphone is connected",
+    "placeholders": {
+      "microphone": {
+        "content": "$1",
+        "example": "Microphone 1"
+      }
+    }
+  },
+  "piIsListening": {
+    "message": "Pi is listening...",
+    "description": "Message displayed when Pi is listening for speech."
   }
 }

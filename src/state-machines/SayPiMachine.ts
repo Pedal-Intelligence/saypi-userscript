@@ -10,6 +10,7 @@ import {
 import AnimationModule from "../AnimationModule.js";
 import {
   AudibleNotificationsModule,
+  TextualNotificationsModule,
   VisualNotificationsModule,
 } from "../NotificationsModule";
 import { isMobileView } from "../UserAgentModule.js";
@@ -27,6 +28,7 @@ import { calculateDelay } from "../TimerModule";
 import AudioControlsModule from "../AudioControlsModule";
 import { requestWakeLock, releaseWakeLock } from "../WakeLockModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
+import getMessage from "../i18n";
 
 type SayPiTranscribedEvent = {
   type: "saypi:transcribed";
@@ -41,6 +43,12 @@ type SayPiSpeechStoppedEvent = {
   type: "saypi:userStoppedSpeaking";
   duration: number;
   blob?: Blob;
+};
+
+type SayPiAudioConnectedEvent = {
+  type: "saypi:audio:connected";
+  deviceId: string;
+  deviceLabel: string;
 };
 
 type SayPiEvent =
@@ -59,7 +67,8 @@ type SayPiEvent =
   | { type: "saypi:callReady" }
   | { type: "saypi:callFailed" }
   | { type: "saypi:hangup" }
-  | { type: "saypi:visible" };
+  | { type: "saypi:visible" }
+  | SayPiAudioConnectedEvent;
 
 interface SayPiContext {
   transcriptions: Record<number, string>;
@@ -141,6 +150,7 @@ const clearTranscripts = assign({
 });
 
 const audibleNotifications = new AudibleNotificationsModule();
+const textualNotifications = new TextualNotificationsModule();
 const visualNotifications = new VisualNotificationsModule();
 const audioControls = new AudioControlsModule();
 
@@ -567,6 +577,11 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               type: "requestWakeLock",
             },
           },
+          "saypi:audio:connected": {
+            actions: {
+              type: "notifyAudioConnected",
+            },
+          },
         },
         type: "parallel",
       },
@@ -733,6 +748,13 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
 
       dismissNotification: () => {
         buttonModule.dismissNotification();
+      },
+
+      notifyAudioConnected: (context, event: SayPiAudioConnectedEvent) => {
+        const deviceId = event.deviceId;
+        const deviceLabel = event.deviceLabel;
+        const message = getMessage("audioConnected", deviceLabel);
+        textualNotifications.showTemporaryNotification(message, "microphone");
       },
 
       acknowledgeUserInput: () => {

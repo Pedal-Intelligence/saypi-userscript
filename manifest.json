@@ -23,6 +23,7 @@
         "public/*.wasm",
         "public/vad.worklet.bundle.min.js",
         "public/audio/*.mp3",
+        "public/icons/*.svg",
         "src/icons/flags/*.svg"
       ],
       "matches": ["https://pi.ai/*"]
