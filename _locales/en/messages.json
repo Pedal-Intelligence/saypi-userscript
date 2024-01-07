@@ -85,9 +85,33 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "Microphone 1"
+        "example": "Default - MacBook Pro Microphone"
       }
     }
+  },
+  "audioDisconnected": {
+    "message": "$microphone$ disconnected",
+    "description": "Message displayed when a microphone is disconnected",
+    "placeholders": {
+      "microphone": {
+        "content": "$1",
+        "example": "Default - MacBook Pro Microphone"
+      }
+    }
+  },
+  "audioReconnecting": {
+    "message": "Switching to $microphone$...",
+    "description": "Message displayed when connecting to a new microphone",
+    "placeholders": {
+      "microphone": {
+        "content": "$1",
+        "example": "Default - AirPods Pro"
+      }
+    }
+  },
+  "audioInputError": {
+    "message": "No audio input detected. Check your microphone.",
+    "description": "Message displayed when there is an error with the microphone input"
   },
   "piIsListening": {
     "message": "Pi is listening...",

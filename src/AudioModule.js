@@ -80,7 +80,7 @@ export default class AudioModule {
     });
 
     EventBus.on("audio:tearDownRecording", function (e) {
-            inputActor.send("release");
+      inputActor.send("release");
     });
 
     EventBus.on("audio:startRecording", function (e) {
@@ -104,6 +104,10 @@ export default class AudioModule {
     });
     EventBus.on("audio:input:stop", function (e) {
       inputActor.send("stop");
+    });
+    EventBus.on("audio:input:reconnect", function (e) {
+      inputActor.send("release");
+      inputActor.send(["acquire", "start"]);
     });
 
     // audio output (playback) commands

@@ -50,6 +50,11 @@ type SayPiAudioConnectedEvent = {
   deviceId: string;
   deviceLabel: string;
 };
+type SayPiAudioReconnectEvent = {
+  type: "saypi:audio:reconnect";
+  deviceId: string;
+  deviceLabel: string;
+};
 
 type SayPiEvent =
   | { type: "saypi:userSpeaking" }
@@ -68,7 +73,8 @@ type SayPiEvent =
   | { type: "saypi:callFailed" }
   | { type: "saypi:hangup" }
   | { type: "saypi:visible" }
-  | SayPiAudioConnectedEvent;
+  | SayPiAudioConnectedEvent
+  | SayPiAudioReconnectEvent;
 
 interface SayPiContext {
   transcriptions: Record<number, string>;
@@ -546,7 +552,8 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     entry: {
                       type: "showNotification",
                       params: {
-                        icon: "muted-microphone",
+                        message: getMessage("audioInputError"),
+                        icon: "microphone-muted",
                       },
                     },
                     exit: {
@@ -581,6 +588,16 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             actions: {
               type: "notifyAudioConnected",
             },
+          },
+          "saypi:audio:reconnect": {
+            actions: [
+              {
+                type: "notifyAudioReconnecting",
+              },
+              {
+                type: "reconnectAudio",
+              },
+            ],
           },
         },
         type: "parallel",
@@ -740,21 +757,32 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         EventBus.emit("audio:tearDownRecording");
       },
 
-      showNotification: (context, event, { action }) => {
-        const icon = action.params.icon;
-        const message = action.params.message;
-        buttonModule.showNotification({ icon, message });
+      reconnectAudio: (context, event) => {
+        EventBus.emit("audio:input:reconnect");
       },
 
       dismissNotification: () => {
-        buttonModule.dismissNotification();
+        textualNotifications.hideNotification();
+      },
+
+      showNotification: (context, event, { action }) => {
+        const icon = action.params.icon;
+        const message = action.params.message;
+        textualNotifications.showNotification(message, icon);
       },
 
       notifyAudioConnected: (context, event: SayPiAudioConnectedEvent) => {
         const deviceId = event.deviceId;
         const deviceLabel = event.deviceLabel;
         const message = getMessage("audioConnected", deviceLabel);
-        textualNotifications.showTemporaryNotification(message, "microphone");
+        textualNotifications.showNotification(message, "microphone");
+      },
+
+      notifyAudioReconnecting: (context, event: SayPiAudioReconnectEvent) => {
+        const deviceId = event.deviceId;
+        const deviceLabel = event.deviceLabel;
+        const message = getMessage("audioReconnecting", deviceLabel);
+        textualNotifications.showNotification(message, "microphone-switch");
       },
 
       acknowledgeUserInput: () => {

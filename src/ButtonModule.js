@@ -11,7 +11,6 @@ import exitIconSVG from "./icons/exit.svg";
 import maximizeIconSVG from "./icons/maximize.svg";
 import rectanglesSVG from "./icons/rectangles.svg";
 import talkIconSVG from "./icons/waveform.svg";
-import mutedMicIconSVG from "./icons/muted_microphone.svg";
 import callIconSVG from "./icons/call.svg";
 import callStartingIconSVG from "./icons/call-starting.svg";
 import hangupIconSVG from "./icons/hangup.svg";
@@ -20,7 +19,6 @@ import lockIconSVG from "./icons/lock.svg";
 import unlockIconSVG from "./icons/unlock.svg";
 import getMessage from "./i18n.ts";
 import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
-import { update } from "lodash";
 export default class ButtonModule {
   constructor() {
     this.sayPiActor = StateMachineService.actor; // the Say, Pi state machine
@@ -181,33 +179,6 @@ export default class ButtonModule {
     button.innerHTML = maximizeIconSVG;
     document.body.appendChild(button);
     return button;
-  }
-
-  showNotification(details) {
-    const icon = details.icon;
-    let iconSVG;
-    if (icon === "muted-microphone") {
-      iconSVG = mutedMicIconSVG;
-    }
-
-    const notification = document.getElementById("saypi-notification");
-    if (notification) {
-      notification.classList.remove("hidden");
-      notification.innerHTML = iconSVG;
-    } else {
-      const notification = document.createElement("div");
-      notification.id = "saypi-notification";
-      notification.className = "notification";
-      notification.innerHTML = iconSVG;
-      document.body.appendChild(notification);
-    }
-  }
-
-  dismissNotification() {
-    const notification = document.getElementById("saypi-notification");
-    if (notification) {
-      notification.classList.add("hidden");
-    }
   }
 
   createCallButton(container, position = 0) {

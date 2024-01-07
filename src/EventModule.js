@@ -11,6 +11,7 @@ const PI_STOPPED_SPEAKING = "saypi:piStoppedSpeaking";
 const PI_FINISHED_SPEAKING = "saypi:piFinishedSpeaking";
 const VISIBLE = "saypi:visible";
 const AUDIO_DEVICE_CONNECTED = "saypi:audio:connected";
+const AUDIO_DEVICE_RECONNECT = "saypi:audio:reconnect";
 
 export default class EventModule {
   static init() {
@@ -89,6 +90,7 @@ export default class EventModule {
       USER_STOPPED_SPEAKING,
       USER_FINISHED_SPEAKING,
       AUDIO_DEVICE_CONNECTED,
+      AUDIO_DEVICE_RECONNECT,
     ].forEach((eventName) => {
       EventBus.on(eventName, (detail) => {
         if (detail) {

@@ -27,6 +27,7 @@ setupInterceptors();
 let microphone: MicVAD | null = null;
 
 let previousDeviceIds: string[] = [];
+let previousDefaultDevice: MediaDeviceInfo | null = null;
 
 async function monitorAudioInputDevices() {
   if (microphone === null) {
@@ -38,6 +39,30 @@ async function monitorAudioInputDevices() {
   const audioInputDevices = devices.filter(
     (device) => device.kind === "audioinput"
   );
+
+  // Get the current default device
+  const defaultDevice = audioInputDevices.find(
+    (device) => device.deviceId === "default"
+  );
+
+  // Check if the default device has changed
+  if (
+    defaultDevice &&
+    (!previousDefaultDevice ||
+      defaultDevice.label !== previousDefaultDevice.label)
+  ) {
+    console.log(
+      `The default audio input device has changed: ${defaultDevice.label}`
+    );
+    const firstTime = previousDefaultDevice === null;
+    previousDefaultDevice = defaultDevice;
+    if (!firstTime) {
+      const deviceId = defaultDevice.deviceId;
+      const deviceLabel = defaultDevice.label;
+      EventBus.emit("saypi:audio:reconnect", { deviceId, deviceLabel }); // instruct saypi to switch to the new default device
+    }
+  }
+
   const currentDeviceIds = audioInputDevices.map((device) => device.deviceId);
 
   const addedDevices = currentDeviceIds.filter(
@@ -47,23 +72,25 @@ async function monitorAudioInputDevices() {
     (id) => !currentDeviceIds.includes(id)
   );
 
-  const stream = microphone.stream;
-  const track = stream.getTracks()[0];
-  const settings = track.getSettings();
-  const deviceId = settings.deviceId;
-  const deviceLabel = audioInputDevices.find(
-    (device) => device.deviceId === deviceId
-  )?.label;
+  if (microphone) {
+    const stream = microphone.stream;
+    const track = stream.getTracks()[0];
+    const settings = track.getSettings();
+    const deviceId = settings.deviceId;
+    const deviceLabel = audioInputDevices.find(
+      (device) => device.deviceId === deviceId
+    )?.label;
 
-  if (deviceId && addedDevices.includes(deviceId)) {
-    console.log(
-      `The audio input device used by MicVAD has been added: ${deviceId} (${deviceLabel}))`
-    );
-    EventBus.emit("saypi:audio:connected", { deviceId, deviceLabel });
-  }
+    if (deviceId && addedDevices.includes(deviceId)) {
+      console.log(
+        `The audio input device used by MicVAD has been added: ${deviceId} (${deviceLabel}))`
+      );
+      EventBus.emit("saypi:audio:connected", { deviceId, deviceLabel });
+    }
 
-  if (deviceId && removedDevices.includes(deviceId)) {
-    console.log("The audio input device used by MicVAD has been removed.");
+    if (deviceId && removedDevices.includes(deviceId)) {
+      console.log("The audio input device used by MicVAD has been removed.");
+    }
   }
 
   addedDevices.forEach((id) => {

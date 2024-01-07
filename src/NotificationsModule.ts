@@ -26,7 +26,7 @@ export class TextualNotificationsModule implements INotificationsModule {
     this.showNotification(getMessage("autoSubmitDisabled"));
   };
 
-  public showTemporaryNotification(message: string, iconName?: string) {
+  public showNotification(message: string, iconName?: string) {
     console.log("showTextualNotification", message, iconName);
     this.showNotificationForSeconds(message, 10, iconName);
   }
@@ -54,8 +54,11 @@ export class TextualNotificationsModule implements INotificationsModule {
     }
   }
 
-  private showNotification(message: string, iconName?: string) {
+  private _showNotification(message: string, iconName?: string) {
     this.init();
+    // dismiss any existing notification
+    this.hideNotification();
+    // show new notification
     this.notificationElement!.classList.add("active");
     if (iconName) {
       this.notificationElement!.classList.add("icon");
@@ -67,10 +70,16 @@ export class TextualNotificationsModule implements INotificationsModule {
     this.notificationElement!.appendChild(notificationText);
   }
 
-  private hideNotification() {
+  public hideNotification() {
     this.notificationElement!.classList.remove("active");
     this.notificationElement!.classList.remove("icon");
     this.notificationElement!.style.backgroundImage = "";
+    // remove any child elements
+    while (this.notificationElement!.firstChild) {
+      this.notificationElement!.removeChild(
+        this.notificationElement!.firstChild
+      );
+    }
   }
 
   private showNotificationForSeconds(
@@ -78,7 +87,7 @@ export class TextualNotificationsModule implements INotificationsModule {
     seconds: number,
     iconName?: string
   ) {
-    this.showNotification(message, iconName);
+    this._showNotification(message, iconName);
     setTimeout(() => {
       this.hideNotification();
     }, seconds * 1000);
