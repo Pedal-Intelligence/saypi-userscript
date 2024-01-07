@@ -20,16 +20,6 @@ html.mobile-view {
     }
   }
 
-  #saypi-notification {
-    z-index: 100;
-    background-color: transparent;
-    svg {
-      width: 75%;
-      height: 100%;
-      margin: auto;
-    }
-  }
-
   /* Pi controls: ellipsis, experiences */
   #__next > main > div > div > div.fixed.top-4.right-6 > button,
   #saypi-experiences-button {
@@ -170,4 +160,7 @@ html.mobile-view {
     visibility: hidden;
   }
 
+  #saypi-notification span {
+    padding-left: 20%; /* wider padding for mobile */
+  }
 }

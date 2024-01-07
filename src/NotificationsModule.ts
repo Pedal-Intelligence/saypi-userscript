@@ -15,7 +15,7 @@ export interface INotificationsModule {
 
 export class TextualNotificationsModule implements INotificationsModule {
   private notificationElement: HTMLElement | null = document.getElementById(
-    "saypi-notification-text"
+    "saypi-notification"
   ) as HTMLElement | null;
 
   public autoSubmitEnabled = () => {
@@ -28,7 +28,7 @@ export class TextualNotificationsModule implements INotificationsModule {
 
   public showNotification(message: string, iconName?: string) {
     console.log("showTextualNotification", message, iconName);
-    this.showNotificationForSeconds(message, 10, iconName);
+    this.showNotificationForSeconds(message, 5, iconName);
   }
 
   private init() {
@@ -37,13 +37,13 @@ export class TextualNotificationsModule implements INotificationsModule {
       !document.body.contains(this.notificationElement)
     ) {
       this.notificationElement = document.getElementById(
-        "saypi-notification-text"
+        "saypi-notification"
       ) as HTMLElement | null;
     }
     if (!this.notificationElement) {
       const notificationElement = document.createElement("p");
       notificationElement.id = "saypi-notification";
-      notificationElement.classList.add("saypi-notification-text");
+      notificationElement.classList.add("text-notification");
       document.body.appendChild(notificationElement);
       this.notificationElement = notificationElement;
 
@@ -71,6 +71,7 @@ export class TextualNotificationsModule implements INotificationsModule {
   }
 
   public hideNotification() {
+    this.init();
     this.notificationElement!.classList.remove("active");
     this.notificationElement!.classList.remove("icon");
     this.notificationElement!.style.backgroundImage = "";

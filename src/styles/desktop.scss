@@ -27,14 +27,6 @@ html.desktop-view {
     padding-right: 0;
   }
 
-  #saypi-notification > svg {
-    width: 3rem;
-    height: 3rem;
-    bottom: 4rem;
-    right: 12rem;
-    position: fixed;
-  }
-
   #saypi-exitButton {
     display: none;
   }
@@ -47,45 +39,5 @@ html.desktop-view {
   @keyframes fadeOut {
     from { opacity: 1; }
     to { opacity: 0; }
-  }
-
-  .saypi-notification-text {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    height: auto;
-    padding: 1rem;
-    /* semi-opaque background with rounded corners */
-    background-color: rgba(228, 216, 193, 0.9);
-    border-radius: 1rem;
-    &.active {
-      display: block;
-      /* text */
-      animation-name: fadeIn;
-      animation-duration: 2s;
-      animation-fill-mode: forwards;
-
-      animation-delay: 1s; /* Delay the animation start */
-      animation-fill-mode: both; /* Keep the element visible after animation ends */
-      animation-timing-function: ease-in-out; /* Use ease-in-out timing function */
-      animation-iteration-count: 1; /* Run the animation only once */
-      animation-direction: normal; /* Run the animation in the normal direction */
-    }
-    &.icon {
-      background-repeat: no-repeat;
-      background-position: left center;
-      background-origin: content-box;
-    }
-    span {
-      display: block;
-      text-align: center;
-      font-size: x-large;
-      font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;
-      color: #776d6d;
-      padding-left: 10%;
-    }
   }
 }
