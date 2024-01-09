@@ -28559,6 +28559,7 @@ function readyToSubmit(state, context) {
 
 const notificationsModule = new AudibleNotificationsModule();
 const ScreenLockMachine_machine = (0,Machine/* createMachine */.C)({
+    /** @xstate-layout N4IgpgJg5mDOIC5QGUDGAnMYB2ACAMgPaoDWAdAKrYA2xJkAxLaQNoAMAuoqAA6GwBLAC4DC2biAAeiACxsZZAJwB2AGzrlARhkAOeW2UAaEAE9EAJgCsAZiU3N5+Q8ttFmnQF8PxtJhwE6MiJSRgBXGjp2LiQQPkERMQlpBDkFFXVVLV19I1NEB1UyNmK2K0VXNk0tTS9vEGxCCDgJXyw8YJIJOOFRcRjkgFpVYzMEIa8fDDaA0koIkIgu-h7E-tlzEfzLSyU1Sx0qxXMdNwMJkFb-DqC6SCX43qTESxUyS2U2F01rVWtNFU0mwQ2h2Mj2yhOej2ilUtQ8QA */
     id: "Screen Lock",
     description: "Prevents unintentional touch interactions while locked.",
     initial: "Unlocked",
