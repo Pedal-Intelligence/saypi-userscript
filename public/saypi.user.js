@@ -29497,6 +29497,7 @@ saypi_index_asyncToGenerator( /*#__PURE__*/saypi_index_regeneratorRuntime().mark
           return false;
         };
         annotateDOM = function _annotateDOM(prompt) {
+          console.log("Annotating DOM");
           // Add id attributes to important elements
           prompt.id = "saypi-prompt";
           prompt.parentElement.classList.add("saypi-prompt-container");
@@ -29534,21 +29535,16 @@ saypi_index_asyncToGenerator( /*#__PURE__*/saypi_index_regeneratorRuntime().mark
                 mutation.addedNodes.forEach(function (node) {
                   // Check if added node is a textarea with 'enterkeyhint' attribute
                   if (node.nodeName === "TEXTAREA" && node.hasAttribute("enterkeyhint")) {
-                    // Stop observing to avoid any potential infinite loops
-                    observer.disconnect();
-
-                    // Do something with the textarea, like add an event listener
-                    annotateDOM(node);
+                    if (!document.getElementById("saypi-prompt")) {
+                      annotateDOM(node);
+                    }
                     return;
                   }
 
                   // Check if added node contains a textarea with 'enterkeyhint' attribute
                   if (node.querySelectorAll) {
                     var textareas = node.querySelectorAll("textarea[enterkeyhint]");
-                    if (textareas.length > 0) {
-                      // Stop observing
-                      observer.disconnect();
-
+                    if (textareas.length > 0 && !document.getElementById("saypi-prompt")) {
                       // Do something with the first textarea that has 'enterkeyhint'
                       annotateDOM(textareas[0]);
                       submitErrorHandler.initAudioOutputListener();
