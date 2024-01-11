@@ -68,7 +68,6 @@ import "./styles/rectangles.css";
   observer.observe(document.body, config);
 
   function annotateDOM(prompt) {
-    console.log("Annotating DOM");
     // Add id attributes to important elements
     prompt.id = "saypi-prompt";
     prompt.parentElement.classList.add("saypi-prompt-container");
