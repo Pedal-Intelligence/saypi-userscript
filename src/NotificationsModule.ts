@@ -27,7 +27,6 @@ export class TextualNotificationsModule implements INotificationsModule {
   };
 
   public showNotification(message: string, iconName?: string) {
-    console.log("showTextualNotification", message, iconName);
     this.showNotificationForSeconds(message, 5, iconName);
   }
 
