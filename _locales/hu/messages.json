@@ -78,5 +78,29 @@
   "preferedLanguage": {
     "message": "Nyelv",
     "description": "Címke egy vezérlőhöz, amely kiválasztja a preferált átírási nyelvet."
+  },
+  "audioConnected": {
+    "description": "Üzenet jelenik meg, amikor egy mikrofon csatlakoztatva van",
+    "message": "$mikrofon$ csatlakoztatva",
+    "placeholders": {
+      "microphone": {
+        "content": "1 dollár",
+        "example": "Alapértelmezett - MacBook Pro Mikrofon"
+      }
+    }
+  },
+  "audioInputError": {
+    "description": "Üzenet jelenik meg, amikor az audio üres átiratot eredményez - ez általában a szűrés eredménye.",
+    "message": "Hoppá, ezt nem értettük – lehet, hogy háttérzaj. Próbáljon újra beszélni, vagy ellenőrizze a mikrofon beállításait."
+  },
+  "audioReconnecting": {
+    "description": "Üzenet, amely megjelenik egy új mikrofon csatlakoztatásakor",
+    "message": "Váltás a $mikrofonra$...",
+    "placeholders": {
+      "microphone": {
+        "content": "1 dollár",
+        "example": "Alapértelmezett - AirPods Pro"
+      }
+    }
   }
 }

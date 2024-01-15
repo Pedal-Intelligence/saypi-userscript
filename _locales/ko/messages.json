@@ -78,5 +78,29 @@
   "preferedLanguage": {
     "message": "언어",
     "description": "선호하는 전사 언어를 선택하기 위한 컨트롤 라벨."
+  },
+  "audioConnected": {
+    "description": "마이크로폰이 연결될 때 표시되는 메시지",
+    "message": "$마이크$ 연결됨",
+    "placeholders": {
+      "microphone": {
+        "content": "$1",
+        "example": "기본값 - MacBook Pro 마이크"
+      }
+    }
+  },
+  "audioInputError": {
+    "description": "오디오가 빈 전사로 이어졌을 때 표시되는 메시지 - 보통 필터링의 결과입니다.",
+    "message": "이런, 우리가 그것을 잡지 못했습니다 - 배경 소음일 수 있습니다. 다시 말해 보거나 마이크 설정을 확인해보세요."
+  },
+  "audioReconnecting": {
+    "description": "새로운 마이크에 연결할 때 표시되는 메시지",
+    "message": "$마이크로폰$으로 전환 중...",
+    "placeholders": {
+      "microphone": {
+        "content": "$1",
+        "example": "기본값 - 에어팟 프로"
+      }
+    }
   }
 }

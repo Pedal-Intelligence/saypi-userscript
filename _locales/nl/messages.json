@@ -78,5 +78,29 @@
   "preferedLanguage": {
     "message": "Taal",
     "description": "Label voor een bedieningselement om de voorkeurstaal voor transcriptie te selecteren."
+  },
+  "audioConnected": {
+    "description": "Bericht weergegeven wanneer een microfoon is aangesloten",
+    "message": "$microfoon$ verbonden",
+    "placeholders": {
+      "microphone": {
+        "content": "€1",
+        "example": "Standaard - MacBook Pro Microfoon"
+      }
+    }
+  },
+  "audioInputError": {
+    "description": "Bericht weergegeven wanneer audio resulteerde in een lege transcriptie - meestal het gevolg van filteren.",
+    "message": "Oeps, we hebben dat niet opgevangen - het kan achtergrondgeluid zijn. Probeer opnieuw te spreken, of controleer je microfooninstellingen."
+  },
+  "audioReconnecting": {
+    "description": "Bericht weergegeven bij het verbinden met een nieuwe microfoon",
+    "message": "Overschakelen naar $microfoon$...",
+    "placeholders": {
+      "microphone": {
+        "content": "€1",
+        "example": "Standaard - AirPods Pro"
+      }
+    }
   }
 }

@@ -78,5 +78,29 @@
   "preferedLanguage": {
     "message": "言語",
     "description": "選択したい転写言語を制御するためのラベル。"
+  },
+  "audioConnected": {
+    "description": "マイクロフォンが接続されたときに表示されるメッセージ",
+    "message": "$マイクロフォン$が接続されました",
+    "placeholders": {
+      "microphone": {
+        "content": "1ドル",
+        "example": "デフォルト - MacBook Pro マイクロフォン"
+      }
+    }
+  },
+  "audioInputError": {
+    "description": "オーディオが空の転写を結果として表示されるメッセージ - 通常はフィルタリングの結果です。",
+    "message": "おっと、それをキャッチできませんでした - バックグラウンドノイズかもしれません。もう一度話してみるか、マイクの設定を確認してください。"
+  },
+  "audioReconnecting": {
+    "description": "新しいマイクロフォンに接続するときに表示されるメッセージ",
+    "message": "$マイクロフォン$に切り替え中...",
+    "placeholders": {
+      "microphone": {
+        "content": "1ドル",
+        "example": "デフォルト - AirPods Pro"
+      }
+    }
   }
 }

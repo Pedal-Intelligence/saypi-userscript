@@ -78,5 +78,29 @@
   "preferedLanguage": {
     "message": "Lingua",
     "description": "Etichetta per un controllo per selezionare la lingua di trascrizione preferita."
+  },
+  "audioConnected": {
+    "description": "Messaggio visualizzato quando un microfono è collegato",
+    "message": "$microfono$ connesso",
+    "placeholders": {
+      "microphone": {
+        "content": "1 dollaro",
+        "example": "Predefinito - Microfono MacBook Pro"
+      }
+    }
+  },
+  "audioInputError": {
+    "description": "Messaggio visualizzato quando l'audio ha prodotto una trascrizione vuota - solitamente il risultato di un filtraggio.",
+    "message": "Oops, non abbiamo colto quello - potrebbe essere rumore di fondo. Prova a parlare di nuovo, o controlla le impostazioni del tuo microfono."
+  },
+  "audioReconnecting": {
+    "description": "Messaggio visualizzato quando si collega un nuovo microfono",
+    "message": "Passando a $microfono$...",
+    "placeholders": {
+      "microphone": {
+        "content": "1 dollaro",
+        "example": "Predefinito - AirPods Pro"
+      }
+    }
   }
 }

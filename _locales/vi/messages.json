@@ -78,5 +78,29 @@
   "preferedLanguage": {
     "message": "Ngôn ngữ",
     "description": "Nhãn cho một điều khiển để chọn ngôn ngữ phiên âm ưa thích."
+  },
+  "audioConnected": {
+    "description": "Thông điệp hiển thị khi một chiếc micro được kết nối",
+    "message": "$microphone$ đã được kết nối",
+    "placeholders": {
+      "microphone": {
+        "content": "1 đô la",
+        "example": "Mặc định - Microphone MacBook Pro"
+      }
+    }
+  },
+  "audioInputError": {
+    "description": "Thông điệp hiển thị khi âm thanh dẫn đến một bản ghi âm trống - thường là kết quả của việc lọc.",
+    "message": "Ồ, chúng tôi không nhận được điều đó - có thể là tiếng ồn từ phía sau. Hãy thử nói lại, hoặc kiểm tra cài đặt mic của bạn."
+  },
+  "audioReconnecting": {
+    "description": "Thông điệp hiển thị khi kết nối với một micro mới",
+    "message": "Chuyển sang $microphone$...",
+    "placeholders": {
+      "microphone": {
+        "content": "1 đô la",
+        "example": "Mặc định - AirPods Pro"
+      }
+    }
   }
 }

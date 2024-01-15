@@ -78,5 +78,29 @@
   "preferedLanguage": {
     "message": "Język",
     "description": "Etykieta do wyboru preferowanego języka transkrypcji."
+  },
+  "audioConnected": {
+    "description": "Wiadomość wyświetlana, gdy mikrofon jest podłączony",
+    "message": "Mikrofon podłączony",
+    "placeholders": {
+      "microphone": {
+        "content": "1 dolar",
+        "example": "Domyślny - Mikrofon MacBook Pro"
+      }
+    }
+  },
+  "audioInputError": {
+    "description": "Wiadomość wyświetlana, gdy dźwięk skutkuje pustym transkrypcją - zazwyczaj jest to wynik filtrowania.",
+    "message": "Ups, tego nie złapaliśmy - to może być szum w tle. Spróbuj mówić ponownie lub sprawdź ustawienia mikrofonu."
+  },
+  "audioReconnecting": {
+    "description": "Wiadomość wyświetlana podczas łączenia z nowym mikrofonem",
+    "message": "Przełączanie na $mikrofon$...",
+    "placeholders": {
+      "microphone": {
+        "content": "1 dolar",
+        "example": "Domyślne - AirPods Pro"
+      }
+    }
   }
 }

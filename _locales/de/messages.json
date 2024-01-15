@@ -78,5 +78,29 @@
   "preferedLanguage": {
     "message": "Sprache",
     "description": "Beschriftung für eine Steuerung zur Auswahl der bevorzugten Transkriptionssprache."
+  },
+  "audioConnected": {
+    "description": "Nachricht angezeigt, wenn ein Mikrofon angeschlossen ist",
+    "message": "$Mikrofon$ verbunden",
+    "placeholders": {
+      "microphone": {
+        "content": "1$",
+        "example": "Standard - MacBook Pro Mikrofon"
+      }
+    }
+  },
+  "audioInputError": {
+    "description": "Nachricht angezeigt, wenn Audio in einer leeren Transkription resultiert - normalerweise das Ergebnis des Filterns.",
+    "message": "Hoppla, das haben wir nicht verstanden - es könnte Hintergrundgeräusche geben. Versuchen Sie erneut zu sprechen oder überprüfen Sie Ihre Mikrofoneinstellungen."
+  },
+  "audioReconnecting": {
+    "description": "Nachricht, die angezeigt wird, wenn eine Verbindung zu einem neuen Mikrofon hergestellt wird",
+    "message": "Wechseln zu $Mikrofon$...",
+    "placeholders": {
+      "microphone": {
+        "content": "1 Dollar",
+        "example": "Standard - AirPods Pro"
+      }
+    }
   }
 }

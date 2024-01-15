@@ -78,5 +78,29 @@
   "preferedLanguage": {
     "message": "Langue",
     "description": "Étiquette pour un contrôle permettant de sélectionner la langue de transcription préférée."
+  },
+  "audioConnected": {
+    "description": "Message affiché lorsqu'un microphone est connecté",
+    "message": "$microphone$ connecté",
+    "placeholders": {
+      "microphone": {
+        "content": "1$",
+        "example": "Par défaut - Microphone MacBook Pro"
+      }
+    }
+  },
+  "audioInputError": {
+    "description": "Message affiché lorsque l'audio a donné lieu à une transcription vide - généralement le résultat d'un filtrage.",
+    "message": "Oups, nous n'avons pas capté cela - cela pourrait être un bruit de fond. Essayez de parler à nouveau, ou vérifiez les paramètres de votre micro."
+  },
+  "audioReconnecting": {
+    "description": "Message affiché lors de la connexion à un nouveau microphone",
+    "message": "Passage à $microphone$...",
+    "placeholders": {
+      "microphone": {
+        "content": "1$",
+        "example": "Par défaut - AirPods Pro"
+      }
+    }
   }
 }

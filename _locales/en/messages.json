@@ -100,7 +100,7 @@
     }
   },
   "audioInputError": {
-    "message": "No audio input detected. Check your microphone.",
-    "description": "Message displayed when there is an error with the microphone input"
+    "message": "Oops, we didn't catch that. Can you try saying it again?",
+    "description": "Message displayed when audio resulted in an empty transcription - usually the result of filtering."
   }
 }

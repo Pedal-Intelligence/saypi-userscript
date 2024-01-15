@@ -78,5 +78,29 @@
   "preferedLanguage": {
     "message": "语言",
     "description": "选择首选转录语言的控制标签。"
+  },
+  "audioConnected": {
+    "description": "连接麦克风时显示的消息",
+    "message": "$麦克风$已连接",
+    "placeholders": {
+      "microphone": {
+        "content": "1美元",
+        "example": "默认 - MacBook Pro 麦克风"
+      }
+    }
+  },
+  "audioInputError": {
+    "description": "当音频导致空白转录时显示的消息 - 通常是过滤的结果。",
+    "message": "哎呀，我们没有捕捉到那个 - 可能是背景噪音。请再试一次说话，或者检查你的麦克风设置。"
+  },
+  "audioReconnecting": {
+    "description": "连接新麦克风时显示的消息",
+    "message": "切换到$麦克风$...",
+    "placeholders": {
+      "microphone": {
+        "content": "1美元",
+        "example": "默认 - AirPods Pro"
+      }
+    }
   }
 }
