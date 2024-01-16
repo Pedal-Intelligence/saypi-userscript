@@ -84,7 +84,7 @@
     "message": "Mikrofon podłączony",
     "placeholders": {
       "microphone": {
-        "content": "1 dolar",
+        "content": "1$",
         "example": "Domyślny - Mikrofon MacBook Pro"
       }
     }
@@ -95,10 +95,10 @@
   },
   "audioReconnecting": {
     "description": "Wiadomość wyświetlana podczas łączenia z nowym mikrofonem",
-    "message": "Przełączanie na $mikrofon$...",
+    "message": "Przełączanie na $microphone$...",
     "placeholders": {
       "microphone": {
-        "content": "1 dolar",
+        "content": "1$",
         "example": "Domyślne - AirPods Pro"
       }
     }

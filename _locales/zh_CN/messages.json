@@ -84,7 +84,7 @@
     "message": "$麦克风$已连接",
     "placeholders": {
       "microphone": {
-        "content": "1美元",
+        "content": "1$",
         "example": "默认 - MacBook Pro 麦克风"
       }
     }
@@ -98,7 +98,7 @@
     "message": "切换到$麦克风$...",
     "placeholders": {
       "microphone": {
-        "content": "1美元",
+        "content": "1$",
         "example": "默认 - AirPods Pro"
       }
     }

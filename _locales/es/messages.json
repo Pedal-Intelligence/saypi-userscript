@@ -81,7 +81,7 @@
   },
   "audioConnected": {
     "description": "Mensaje mostrado cuando se conecta un micrófono",
-    "message": "$micrófono$ conectado",
+    "message": "$microphone$ conectado",
     "placeholders": {
       "microphone": {
         "content": "$1",

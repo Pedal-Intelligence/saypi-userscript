@@ -81,7 +81,7 @@
   },
   "audioConnected": {
     "description": "Nachricht angezeigt, wenn ein Mikrofon angeschlossen ist",
-    "message": "$Mikrofon$ verbunden",
+    "message": "$microphone$ verbunden",
     "placeholders": {
       "microphone": {
         "content": "1$",
@@ -95,10 +95,10 @@
   },
   "audioReconnecting": {
     "description": "Nachricht, die angezeigt wird, wenn eine Verbindung zu einem neuen Mikrofon hergestellt wird",
-    "message": "Wechseln zu $Mikrofon$...",
+    "message": "Wechseln zu $microphone$...",
     "placeholders": {
       "microphone": {
-        "content": "1 Dollar",
+        "content": "1$",
         "example": "Standard - AirPods Pro"
       }
     }
