@@ -9,6 +9,8 @@ import "./styles/common.scss";
 import "./styles/desktop.scss";
 import "./styles/mobile.scss";
 import "./styles/rectangles.css";
+import { SpeechSynthesisModule } from "./tts/SpeechSynthesisModule.ts";
+import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
 
 (async function () {
   "use strict";
@@ -73,6 +75,10 @@ import "./styles/rectangles.css";
     prompt.parentElement.classList.add("saypi-prompt-container");
     const foundFooter = addIdFooter();
     const foundAudioControls = addIdAudioControls();
+    if (foundAudioControls) {
+      addIdVoiceMenu();
+      addVoicesToMenu();
+    }
     const promptControlsContainer = prompt.parentElement.parentElement;
     promptControlsContainer.id = "saypi-prompt-controls-container";
     const foundPromptAncestor = addIdPromptAncestor(promptControlsContainer);
@@ -149,6 +155,79 @@ import "./styles/rectangles.css";
     });
 
     return found;
+  }
+
+  function addIdVoiceMenu() {
+    // voice selection menu is the first div descendent of the audio controls container with a class 't-action-m'
+    const audioControlsContainer = document.getElementById(
+      "saypi-audio-controls"
+    );
+    if (!audioControlsContainer) {
+      return false;
+    }
+    const voiceMenu = audioControlsContainer.querySelector("div.t-action-m");
+    if (!voiceMenu) {
+      return false;
+    } else {
+      voiceMenu.id = "saypi-voice-menu";
+    }
+    return true;
+  }
+
+  function addVoicesToMenu() {
+    const voiceMenu = document.getElementById("saypi-voice-menu");
+    if (!voiceMenu) {
+      return false;
+    }
+
+    function populateVoices(voices, menu) {
+      if (!voices || voices.length === 0) {
+        console.log("No voices found");
+        return false;
+      }
+
+      voices.forEach((voice) => {
+        const button = document.createElement("button");
+        // template: <button type="button" class="mb-1 rounded px-2 py-3 text-center hover:bg-neutral-300">Pi 6</button>
+        button.type = "button";
+        button.classList.add(
+          "mb-1",
+          "rounded",
+          "px-2",
+          "py-3",
+          "text-center",
+          "hover:bg-neutral-300",
+          "saypi-voice-button"
+        );
+        button.innerHTML = "Say, Pi - " + voice.name; // TODO: localize
+        button.addEventListener("click", () => {
+          UserPreferenceModule.setVoice(voice);
+        });
+        menu.appendChild(button);
+      });
+
+      console.log(voices.length + " voices added to menu");
+      return true;
+    }
+
+    function registerVoiceChangeHandler(menu) {
+      // for each pre-existing voice button in the menu, add a click handler to unset the voice
+      const voiceButtons = menu.querySelectorAll("button");
+      if (!voiceButtons || voiceButtons.length === 0) {
+        return false;
+      }
+      voiceButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          UserPreferenceModule.unsetVoice();
+        });
+      });
+    }
+
+    registerVoiceChangeHandler(voiceMenu);
+    const speechSynthesis = new SpeechSynthesisModule();
+    speechSynthesis.getVoices().then((voices) => {
+      populateVoices(voices, voiceMenu);
+    });
   }
 
   function addIdAudioOutputButton() {

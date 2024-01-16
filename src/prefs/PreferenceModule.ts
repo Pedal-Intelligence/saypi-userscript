@@ -1,12 +1,20 @@
+import { config } from "../ConfigModule";
+import {
+  SpeechSynthesisModule,
+  SpeechSynthesisVoiceRemote,
+} from "../tts/SpeechSynthesisModule";
+
 type Preference = "speed" | "balanced" | "accuracy" | null;
+export type VoicePreference = SpeechSynthesisVoiceRemote | null;
 
 export module UserPreferenceModule {
   // Define an interface for the structure you expect to receive from storage.sync.get
   interface StorageResult {
-    prefer?: Preference;
+    prefer?: Preference; // prefered mode, i.e. 'speed', 'balanced', 'accuracy'
     soundEffects?: boolean;
     autoSubmit?: boolean;
     language?: string; // e.g. 'en', 'en_US', 'en_GB', 'fr', 'fr_FR', 'fr_CA', etc.
+    voiceId?: string; // prefered speech synthesis voice
   }
 
   export function getPreferedMode(): Promise<Preference> {
@@ -91,5 +99,55 @@ export module UserPreferenceModule {
         resolve(navigator.language);
       }
     });
+  }
+
+  export function getPreferedVoice(): Promise<VoicePreference> {
+    const apiServerUrl = config.apiServerUrl;
+    if (!apiServerUrl) {
+      throw new Error("API server URL is not set");
+    }
+    const tts = new SpeechSynthesisModule(apiServerUrl);
+    return new Promise((resolve) => {
+      if (
+        typeof chrome !== "undefined" &&
+        chrome.storage &&
+        chrome.storage.sync
+      ) {
+        chrome.storage.sync.get(["voiceId"], (result: StorageResult) => {
+          if (result.voiceId) {
+            const voice = tts.getVoiceById(result.voiceId);
+            resolve(voice);
+          } else {
+            resolve(null); // user preference not set
+          }
+        });
+      } else {
+        // If Chrome storage API is not supported, return null
+        resolve(null);
+      }
+    });
+  }
+
+  export function setVoice(voice: SpeechSynthesisVoiceRemote): Promise<void> {
+    if (
+      typeof chrome !== "undefined" &&
+      chrome.storage &&
+      chrome.storage.sync
+    ) {
+      chrome.storage.sync.set({ voiceId: voice.id });
+      console.log(`Voice preference set to ${voice.name}`);
+    }
+    return Promise.resolve();
+  }
+
+  export function unsetVoice(): Promise<void> {
+    if (
+      typeof chrome !== "undefined" &&
+      chrome.storage &&
+      chrome.storage.sync
+    ) {
+      chrome.storage.sync.remove("voiceId");
+    }
+    return Promise.resolve();
   }
 }
