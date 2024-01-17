@@ -77,7 +77,9 @@ import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
     const foundAudioControls = addIdAudioControls();
     if (foundAudioControls) {
       addIdVoiceMenu();
-      addVoicesToMenu();
+      restyleVoiceMenuControls();
+      addVoiceMenuExpansionListener();
+      addVoiceButtonAdditionListener();
     }
     const promptControlsContainer = prompt.parentElement.parentElement;
     promptControlsContainer.id = "saypi-prompt-controls-container";
@@ -174,60 +176,217 @@ import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
     return true;
   }
 
-  function addVoicesToMenu() {
+  function restyleVoiceMenuControls() {
+    const voiceMenu = document.getElementById("saypi-voice-menu");
+    if (!voiceMenu) {
+      return false;
+    }
+    const voiceMenuControls = voiceMenu.nextSibling;
+    if (!voiceMenuControls) {
+      return false;
+    }
+    voiceMenuControls.id = "saypi-voice-menu-controls";
+
+    // Create a MutationObserver instance
+    const observer = new MutationObserver((mutationsList) => {
+      for (let mutation of mutationsList) {
+        if (
+          mutation.type === "attributes" &&
+          mutation.attributeName === "class" &&
+          voiceMenuControls.classList.contains("self-end")
+        ) {
+          voiceMenuControls.classList.remove("self-end");
+        }
+      }
+    });
+
+    // Start observing the voiceMenuControls for configuration changes
+    observer.observe(voiceMenuControls, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+  }
+
+  function registerVoiceChangeHandler(menu) {
+    // for each pre-existing voice button in the menu, add a click handler to unset the voice
+    const voiceButtons = Array.from(menu.querySelectorAll("button"));
+    if (!voiceButtons || voiceButtons.length === 0) {
+      return false;
+    }
+    const builtInPiVoiceButtons = voiceButtons.filter(
+      (button) => !button.classList.contains("saypi-voice-button")
+    );
+    builtInPiVoiceButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        UserPreferenceModule.unsetVoice().then(() => {
+          markVoiceButtonAsSelected(button);
+        });
+      });
+    });
+  }
+
+  function addVoiceMenuExpansionListener() {
+    const audioControlsContainer = document.getElementById(
+      "saypi-audio-controls"
+    );
+    const voiceMenu = document.getElementById("saypi-voice-menu");
+
+    if (!audioControlsContainer || !voiceMenu) {
+      return false;
+    }
+
+    const observerCallback = async function (mutationsList, observer) {
+      const saypiCustomVoiceIsSelected =
+        (await UserPreferenceModule.getVoice()) !== null;
+      for (let mutation of mutationsList) {
+        if (mutation.type === "childList") {
+          for (let node of mutation.addedNodes) {
+            // the addition of a button with an aria-label giving instructions to "close the menu", indicates the voice menu is expanded
+            if (
+              node.nodeName === "BUTTON" &&
+              node.getAttribute("aria-label") &&
+              node === audioControlsContainer.firstChild
+            ) {
+              voiceMenu.classList.add("expanded");
+              // mark the selected voice each time the menu is expanded (because pi.ai recreates the menu each time)
+              addVoicesToMenu(voiceMenu);
+              registerVoiceChangeHandler(voiceMenu);
+            }
+          }
+          for (let node of mutation.removedNodes) {
+            if (node.nodeName === "BUTTON" && node.getAttribute("aria-label")) {
+              voiceMenu.classList.remove("expanded");
+              return;
+            }
+          }
+        }
+      }
+    };
+
+    const observer = new MutationObserver(observerCallback);
+    observer.observe(audioControlsContainer, { childList: true });
+  }
+
+  function populateVoices(voices, menu) {
+    if (!voices || voices.length === 0) {
+      console.log("No voices found");
+      return false;
+    }
+
+    const customVoiceButtons = Array(voices.length);
+
+    voices.forEach((voice) => {
+      // if not already in the menu, add the voice
+      if (menu.querySelector(`button[data-voice-id="${voice.id}"]`)) {
+        // voice already in menu, skip to next voice
+        return;
+      }
+      const button = document.createElement("button");
+      // template: <button type="button" class="mb-1 rounded px-2 py-3 text-center hover:bg-neutral-300">Pi 6</button>
+      button.type = "button";
+      button.classList.add(
+        "mb-1",
+        "rounded",
+        "px-2",
+        "py-3",
+        "text-center",
+        "hover:bg-neutral-300",
+        "saypi-voice-button"
+      );
+      button.innerHTML = "Say, Pi - " + voice.name; // TODO: localize
+      button.addEventListener("click", () => {
+        UserPreferenceModule.setVoice(voice).then(() => {
+          markVoiceButtonAsSelected(button);
+        });
+      });
+      button.dataset.voiceId = voice.id;
+      customVoiceButtons.push(button);
+    });
+
+    // add the custom voice buttons to the start of the menu
+    customVoiceButtons.reverse().forEach((button) => {
+      menu.insertBefore(button, menu.firstChild);
+    });
+
+    return true;
+  }
+
+  function isBuiltInVoiceButton(button) {
+    return !button.classList.contains("saypi-voice-button");
+  }
+
+  function addVoiceButtonAdditionListener() {
+    const voiceMenu = document.getElementById("saypi-voice-menu");
+    if (!voiceMenu) {
+      return false;
+    }
+    // observe the voice menu for changes to child nodes
+    // if a button is added that does not have class 'saypi-voice-button', evaluate whether it should be marked as selected
+    const observerCallback = function (mutationsList, observer) {
+      for (let mutation of mutationsList) {
+        if (mutation.type === "childList") {
+          for (let node of mutation.addedNodes) {
+            if (node.nodeName === "BUTTON") {
+              // a voice button was added to the menu that is not a custom voice button
+              // if a voice is selected, mark the button as selected
+              UserPreferenceModule.getVoice().then((voice) => {
+                const customVoiceIsSelected = voice !== null;
+                if (customVoiceIsSelected) {
+                  if (isBuiltInVoiceButton(node)) {
+                    unmarkButtonAsSelectedVoice(node);
+                  } else if (node.dataset.voiceId === voice.id) {
+                    markButtonAsSelectedVoice(node);
+                  }
+                }
+              });
+            }
+          }
+        }
+      }
+    };
+    const observer = new MutationObserver(observerCallback);
+    observer.observe(voiceMenu, { childList: true });
+  }
+
+  function addVoicesToMenu(voiceMenu) {
+    const speechSynthesis = new SpeechSynthesisModule();
+    speechSynthesis.getVoices().then((voices) => {
+      populateVoices(voices, voiceMenu);
+    });
+  }
+
+  function markButtonAsSelectedVoice(button) {
+    button.disabled = true;
+    button.classList.add("selected", "bg-neutral-300", "text-primary-700");
+    button.classList.remove("hover:bg-neutral-300");
+  }
+
+  function unmarkButtonAsSelectedVoice(button) {
+    button.disabled = false;
+    button.classList.remove("selected", "bg-neutral-300", "text-primary-700");
+    button.classList.add("hover:bg-neutral-300");
+  }
+
+  /**
+   * Mark the specified button as the selected voice, and unmark all other buttons
+   * @param {HTMLButtonElement} button
+   * @returns void
+   */
+  async function markVoiceButtonAsSelected(button) {
     const voiceMenu = document.getElementById("saypi-voice-menu");
     if (!voiceMenu) {
       return false;
     }
 
-    function populateVoices(voices, menu) {
-      if (!voices || voices.length === 0) {
-        console.log("No voices found");
-        return false;
-      }
-
-      voices.forEach((voice) => {
-        const button = document.createElement("button");
-        // template: <button type="button" class="mb-1 rounded px-2 py-3 text-center hover:bg-neutral-300">Pi 6</button>
-        button.type = "button";
-        button.classList.add(
-          "mb-1",
-          "rounded",
-          "px-2",
-          "py-3",
-          "text-center",
-          "hover:bg-neutral-300",
-          "saypi-voice-button"
-        );
-        button.innerHTML = "Say, Pi - " + voice.name; // TODO: localize
-        button.addEventListener("click", () => {
-          UserPreferenceModule.setVoice(voice);
-        });
-        menu.appendChild(button);
-      });
-
-      console.log(voices.length + " voices added to menu");
-      return true;
+    // iterative over buttons in the menu, and mark the selected voice
+    const voiceButtons = voiceMenu.querySelectorAll("button");
+    if (!voiceButtons || voiceButtons.length === 0) {
+      return false;
     }
-
-    function registerVoiceChangeHandler(menu) {
-      // for each pre-existing voice button in the menu, add a click handler to unset the voice
-      const voiceButtons = menu.querySelectorAll("button");
-      if (!voiceButtons || voiceButtons.length === 0) {
-        return false;
-      }
-      voiceButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          UserPreferenceModule.unsetVoice();
-        });
-      });
-    }
-
-    registerVoiceChangeHandler(voiceMenu);
-    const speechSynthesis = new SpeechSynthesisModule();
-    speechSynthesis.getVoices().then((voices) => {
-      populateVoices(voices, voiceMenu);
+    voiceButtons.forEach((button) => {
+      unmarkButtonAsSelectedVoice(button);
     });
+    markButtonAsSelectedVoice(button);
   }
 
   function addIdAudioOutputButton() {

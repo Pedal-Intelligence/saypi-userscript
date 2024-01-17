@@ -69,7 +69,7 @@ class SpeechSynthesisModule {
 
   async createSpeech(text: string): Promise<SpeechSynthesisUtteranceRemote> {
     const preferedVoice: SpeechSynthesisVoiceRemote | null =
-      await UserPreferenceModule.getPreferedVoice();
+      await UserPreferenceModule.getVoice();
     if (!preferedVoice) {
       throw new Error("No voice selected");
     }

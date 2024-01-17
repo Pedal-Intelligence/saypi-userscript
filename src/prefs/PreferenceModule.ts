@@ -101,7 +101,7 @@ export module UserPreferenceModule {
     });
   }
 
-  export function getPreferedVoice(): Promise<VoicePreference> {
+  export function getVoice(): Promise<VoicePreference> {
     const apiServerUrl = config.apiServerUrl;
     if (!apiServerUrl) {
       throw new Error("API server URL is not set");
@@ -113,9 +113,9 @@ export module UserPreferenceModule {
         chrome.storage &&
         chrome.storage.sync
       ) {
-        chrome.storage.sync.get(["voiceId"], (result: StorageResult) => {
+        chrome.storage.sync.get(["voiceId"], async (result: StorageResult) => {
           if (result.voiceId) {
-            const voice = tts.getVoiceById(result.voiceId);
+            const voice = await tts.getVoiceById(result.voiceId);
             resolve(voice);
           } else {
             resolve(null); // user preference not set
@@ -135,7 +135,6 @@ export module UserPreferenceModule {
       chrome.storage.sync
     ) {
       chrome.storage.sync.set({ voiceId: voice.id });
-      console.log(`Voice preference set to ${voice.name}`);
     }
     return Promise.resolve();
   }
