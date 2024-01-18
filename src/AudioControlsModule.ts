@@ -1,7 +1,11 @@
 import EventBus from "./EventBus";
 
 const DEFAULT_AUDIO_PROVIDER = "pi.ai";
-const SAYPI_AUDIO_PROVIDER = "api.saypi.ai";
+import { config } from "./ConfigModule.js";
+
+const CUSTOM_AUDIO_PROVIDER = config.apiServerUrl
+  ? new URL(config.apiServerUrl).hostname
+  : "api.saypi.ai";
 
 export default class AudioControlsModule {
   activateAudioInput(enable: boolean): void {
@@ -37,7 +41,7 @@ export default class AudioControlsModule {
 
   useSayPiForAudioOutput(): void {
     console.log("Using Say, Pi for speech synthesis");
-    EventBus.emit("audio:changeProvider", { provider: SAYPI_AUDIO_PROVIDER });
+    EventBus.emit("audio:changeProvider", { provider: CUSTOM_AUDIO_PROVIDER });
   }
 
   useDefaultForAudioOutput(): void {

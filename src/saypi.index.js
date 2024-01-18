@@ -267,6 +267,14 @@ import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
     observer.observe(audioControlsContainer, { childList: true });
   }
 
+  function introduceVoice(voice) {
+    const introduction = "Hello, World!";
+    const speechSynthesis = new SpeechSynthesisModule();
+    speechSynthesis.createSpeech(introduction).then((utterance) => {
+      speechSynthesis.speak(utterance);
+    });
+  }
+
   function populateVoices(voices, menu) {
     if (!voices || voices.length === 0) {
       console.log("No voices found");
@@ -297,6 +305,7 @@ import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
       button.addEventListener("click", () => {
         UserPreferenceModule.setVoice(voice).then(() => {
           markVoiceButtonAsSelected(button);
+          introduceVoice(voice);
         });
       });
       button.dataset.voiceId = voice.id;

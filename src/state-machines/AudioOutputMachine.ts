@@ -4,7 +4,7 @@ import EventBus from "../EventBus.js";
 type LoadstartEvent = { type: "loadstart"; source: string };
 type ChangeProviderEvent = {
   type: "changeProvider";
-  provider: "pi.ai" | "api.saypi.ai";
+  provider: "pi.ai" | string; // default or custom provider
 };
 type AudioOutputEvent =
   | LoadstartEvent
