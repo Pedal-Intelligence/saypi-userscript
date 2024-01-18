@@ -3,9 +3,11 @@ import {
   SpeechSynthesisModule,
   SpeechSynthesisVoiceRemote,
 } from "../tts/SpeechSynthesisModule";
+import AudioControlsModule from "../AudioControlsModule";
 
 type Preference = "speed" | "balanced" | "accuracy" | null;
 export type VoicePreference = SpeechSynthesisVoiceRemote | null;
+const audioControls = new AudioControlsModule();
 
 export module UserPreferenceModule {
   // Define an interface for the structure you expect to receive from storage.sync.get
@@ -135,6 +137,7 @@ export module UserPreferenceModule {
       chrome.storage.sync
     ) {
       chrome.storage.sync.set({ voiceId: voice.id });
+      audioControls.useSayPiForAudioOutput();
     }
     return Promise.resolve();
   }
@@ -145,7 +148,12 @@ export module UserPreferenceModule {
       chrome.storage &&
       chrome.storage.sync
     ) {
-      chrome.storage.sync.remove("voiceId");
+      chrome.storage.sync.get(["voiceId"]).then((result: StorageResult) => {
+        if (result.voiceId) {
+          chrome.storage.sync.remove("voiceId");
+          audioControls.useDefaultForAudioOutput();
+        }
+      });
     }
     return Promise.resolve();
   }

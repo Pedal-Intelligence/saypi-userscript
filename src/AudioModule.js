@@ -1,7 +1,7 @@
 // import state machines for audio input and output
 import { interpret } from "xstate";
 import { audioInputMachine } from "./state-machines/AudioInputMachine.ts";
-import { audioOutputMachine } from "./state-machines/AudioOutputMachine.js";
+import { audioOutputMachine } from "./state-machines/AudioOutputMachine.ts";
 import { logger, serializeStateValue } from "./LoggingModule.js";
 import EventBus from "./EventBus.js";
 
@@ -51,9 +51,13 @@ export default class AudioModule {
     this.registerAudioCommands(this.audioInputActor, this.audioOutputActor);
   }
 
+  /**
+   *
+   * @param {HTMLAudioElement} audio
+   * @param {audioOutputMachine} actor
+   */
   registerAudioPlaybackEvents(audio, actor) {
     const events = [
-      "loadstart",
       "loadedmetadata",
       "canplaythrough",
       "play",
@@ -62,6 +66,14 @@ export default class AudioModule {
       "seeked",
       "emptied",
     ];
+
+    const sourcedEvents = ["loadstart"];
+    sourcedEvents.forEach((event) => {
+      audio.addEventListener(event, (e) => {
+        const detail = { source: audio.currentSrc };
+        actor.send(event, detail);
+      });
+    });
 
     events.forEach((event) => {
       audio.addEventListener(event, () => actor.send(event));
@@ -116,6 +128,9 @@ export default class AudioModule {
     });
     EventBus.on("audio:skipNext", function (e) {
       outputActor.send("skipNext");
+    });
+    EventBus.on("audio:changeProvider", (detail) => {
+      outputActor.send({ type: "changeProvider", ...detail });
     });
     EventBus.on("audio:skipCurrent", (e) => {
       this.audioElement.pause();

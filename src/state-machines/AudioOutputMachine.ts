@@ -1,15 +1,43 @@
 import { createMachine, assign } from "xstate";
 import EventBus from "../EventBus.js";
 
+type LoadstartEvent = { type: "loadstart"; source: string };
+type ChangeProviderEvent = {
+  type: "changeProvider";
+  provider: "pi.ai" | "api.saypi.ai";
+};
+type AudioOutputEvent =
+  | LoadstartEvent
+  | { type: "skipNext" }
+  | { type: "loadedmetadata" }
+  | { type: "play" }
+  | { type: "pause" }
+  | { type: "ended" }
+  | { type: "canplaythrough" }
+  | { type: "seeked" }
+  | { type: "emptied" }
+  | ChangeProviderEvent;
 export const audioOutputMachine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7A8qgLgA4EB0GEANmAMQVbISz7IBO+A2gAwC6iohWWBnzYAdnxAAPRAEYAHAFYSANmWdOygEzyALAE5NAZk4KANCACeswzpIyZehcoU6dAdmP2dAX2-m0mLgExPgkdAwYolC09BCQALZgzBDIzFy8SCACQiJY4pnSCAqa5lYIbpp6JIY1NW7KDoYylb7+6Nh4RKThcRDUYPGEIpDpEtnCYhKFMpwkcp76em5ynJqcxiWWiIZymiSaRjsKJqqax4atIAEdwd2xkCQsYAwW1IQUyBajmeO5+aCFeqzBRNM56HQyEE6XalRANZTVWquGQQzg6LSXa5BLqhHoPd6fSLRQhoWBgb78QQTPJTWTrWaOQyaOQyZzNNwyNywhDOKpaY4o+q6QwKTHtbEhML3CAkAkWIn9US9ClZKl-WkIGbGEiM5mshTszncjmzZoCoUOTicsWBTqSvEyuUKgDGyFEcvwAAsWFhUFBPSrfpMCog5NCSMsZIYGgo9Io0XpuS5bGd1FG3HGlj4-FdxXa7gx8aTIG8Pl8eGM1cGAdZ5BH1vJOLs3Ot9Ny1FUzVaHPZli4bTccVLCzKwEqS2SwABrEYVn5VmkhzX0nUgvVszQcrlbcqqEjqA+b4pMg0DiWkchUaiwKcYQgAOTAkg4c8pOWrUkQAFoUVVjDUDD0Qw3B0f9NjKTlbHsdRXAUORwWjTRlF8HNRCwOJ4EyLF83wSt30XGsEB-JZqnWQxAOA0D1nAxBZibGpN2ZNF3Dg8i3DPHCyEoMA8Opf5PwQHQaIQOQ3BIVjakUJp5CQjjblxWIiV49UlzBfYFGWepVAaOQYR3NY9hAvRjL0exmgM5Cc2w+Th16ZSP0KbQlBBZotBbeRWW5HQnAjY4TFAjloTWdirLzGyHUeZ4IDKN8+I1JDDHE0E3KtFllCTAx1IPTgOVUBR+1C21wulWUyyU+d8P4wpFCUcicqA7z5gOdKd1jKo3D81llH0ajNDkocIpJVAyQgeyCIElF7FXJl5itK1TJ0dtOXreZY1E1kmT0fr7RKsc7IquKl0mmRpuZTx5pRY11HEiEW1UeD8scFDvCAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7A8qgLgA4EDEAxgBbIB2MACgE5YBuGEYDA2gAwC6ioQllgZ82agJAAPRAA4ATAGYAdAHZVigCwBObZvn7Zs1QBoQAT0QBGeQF9bZtJlwFi+ZWwA2YEp6zIIWHxkBnwefiQQIRExLAlImQRZADZlXXSMzLNLBEUrbjT5ZPljG2L5KwBWSvtHdGw8IgIPCG9ff0Dg0M4rCMFhUXFJRJLtZWKdXS1NYx1NbMRNVVllTSqU+XluTUq17VqQJwbXZq8fWABrDEIAOTApML5JaMG44cRdZW5lm21Kv8q3BSigWCCsCjSGisilU2isyWS1SsByOLia7j8AQwtHaAUgAFswMEIMhguFngNYvFQIl4WNKoptNxEaoDNtZIpkqD8txKqtdEVtKpkrJNIjkQ5DvU0W5lJj2BASGB8YQxJByZEXlT3ghkqYLHI9V8FJVVNxNjZFJsUdLGrL5ZBlAwwAFzCRCJ5kOYNf0YkMEnJll8zfJtEpKqLiiCDUkw-yw0zedxdKobc47c0HRBlB6vdioO60LAwD6opT-TTrFZVJplIpKlVVPlOVUGaDtPW1EztCKDFYU7I08d0XKOo7c+Z80rqArS1qK9IqzW6w3Tc3kq3ozltCllKHk7IG7JkzYapLURmMWPsxOp2QaBP8BQmKgoBQ5+W3gGEEKxgZ0huEaMvWoIKAUaz-EUEY7qKihDjKmbXjmRaQO6nrek8mqftSi5gmK8jKPkVS6EsyScvMMZGHy+5-NC3CKECihweetonFeeLZmAM6ocWYAXOqmG+q8OG0tWtb1o266bty2wEfCyT0WGmwwqa9iStQWDsPAkQXmxFJ+l+lZ4e2fJLHkEGaIxzJnnU6ZsS03j6cJOplMolTFICViWfRpqHqCSwFBy8iVEU7K8humjwZeo5YrQTnat+xQybyaQCskQoimKDZRfZWbxQuiRMSo3z0SUwp6Ka1SghoBFwhGsJeVo7nJDlI5Zk6LoQDkQkJUZiiyFYwalcY6U7KoVWUSKqzERueoKRoNlSnZbVIbecVYQZIkfE2dZbKGwrBfRnKgeNaTEZo9ZlTBrX2qtKEQPlhm4a2fISXqJQwt8W5yB2yizGVOx-OlN2IRxyhcQqj1bWC1SvQ270cmaGjtsKajfHN6Mhsx9hAA */
     context: {
-      autoplay: false,
       skip: false,
+      autoplay: false,
+      provider: "pi.ai",
     },
     id: "audioOutput",
     initial: "idle",
+    on: {
+      changeProvider: {
+        internal: true,
+        actions: assign((context, event) => {
+          return {
+            ...context,
+            provider: event.provider,
+          };
+        }),
+      },
+    },
     states: {
       idle: {
         on: {
@@ -35,7 +63,6 @@ export const audioOutputMachine = createMachine(
               target: "loading",
             },
           ],
-
           skipNext: {
             target: "idle",
             internal: true,
@@ -81,14 +108,12 @@ export const audioOutputMachine = createMachine(
                 eventName: "saypi:piSpeaking",
               },
             },
-            exit: [
-              {
-                type: "emitEvent",
-                params: {
-                  eventName: "saypi:piStoppedSpeaking",
-                },
+            exit: {
+              type: "emitEvent",
+              params: {
+                eventName: "saypi:piStoppedSpeaking",
               },
-            ],
+            },
             on: {
               pause: {
                 target: "paused",
@@ -131,6 +156,10 @@ export const audioOutputMachine = createMachine(
         },
       },
     },
+    schema: {
+      events: {} as AudioOutputEvent,
+      context: {} as { skip: boolean; autoplay: boolean; provider: string },
+    },
     predictableActionArguments: true,
     preserveActionOrder: true,
   },
@@ -145,7 +174,12 @@ export const audioOutputMachine = createMachine(
       },
     },
     guards: {
-      shouldSkip: (context) => {
+      shouldSkip: (context, event: AudioOutputEvent) => {
+        if (event.type === "loadstart") {
+          event = event as LoadstartEvent;
+          const domain = new URL(event.source).hostname;
+          return domain !== context.provider || context.skip === true;
+        }
         return context.skip === true;
       },
     },
