@@ -67,7 +67,10 @@ class SpeechSynthesisModule {
     }
   }
 
-  async createSpeech(text: string): Promise<SpeechSynthesisUtteranceRemote> {
+  async createSpeech(
+    text: string,
+    stream: boolean = false
+  ): Promise<SpeechSynthesisUtteranceRemote> {
     const preferedVoice: SpeechSynthesisVoiceRemote | null =
       await UserPreferenceModule.getVoice();
     if (!preferedVoice) {
@@ -77,7 +80,8 @@ class SpeechSynthesisModule {
     const uuid = generateUUID();
     // data should include the voice id and the text to be synthesized
     const data = { voice: preferedVoice.id, text: text, lang: preferedLang };
-    const uri = `${this.serviceUrl}/speak/${uuid}`;
+    const baseUri = `${this.serviceUrl}/speak/${uuid}`;
+    const uri = stream ? `${baseUri}/stream` : `${baseUri}`;
     const utterance: SpeechSynthesisUtteranceRemote = {
       id: uuid,
       text: text,
@@ -91,6 +95,50 @@ class SpeechSynthesisModule {
       }
       return utterance;
     });
+  }
+
+  private speechStreamTimeouts: { [uuid: string]: NodeJS.Timeout } = {};
+
+  async createSpeechStream(
+    text: string
+  ): Promise<SpeechSynthesisUtteranceRemote> {
+    const utterance = await this.createSpeech(text, true);
+
+    // Start a timeout that will end the stream if not reset in 10 seconds
+    this.speechStreamTimeouts[utterance.id] = setTimeout(() => {
+      this.endSpeechStream(utterance.id);
+    }, 10000);
+
+    return utterance;
+  }
+
+  async addSpeechToStream(uuid: string, text: string): Promise<void> {
+    const data = { text: text };
+    const uri = `${this.serviceUrl}/speak/${uuid}/stream`;
+    const response = await axios.put(uri, data);
+    if (response.status !== 200) {
+      throw new Error("Failed to stream input text to speech");
+    }
+
+    // Reset the timeout
+    if (this.speechStreamTimeouts[uuid]) {
+      clearTimeout(this.speechStreamTimeouts[uuid]);
+      this.speechStreamTimeouts[uuid] = setTimeout(() => {
+        this.endSpeechStream(uuid);
+      }, 10000);
+    }
+  }
+
+  async endSpeechStream(uuid: string): Promise<void> {
+    // Clear the timeout
+    if (this.speechStreamTimeouts[uuid]) {
+      clearTimeout(this.speechStreamTimeouts[uuid]);
+      delete this.speechStreamTimeouts[uuid];
+      console.log("Ending speech stream");
+      this.addSpeechToStream(uuid, "");
+    } else {
+      console.log("Speech stream already ended");
+    }
   }
 
   speak(utterance: SpeechSynthesisUtteranceRemote): Promise<void> {

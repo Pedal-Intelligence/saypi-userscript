@@ -11,6 +11,7 @@ import "./styles/mobile.scss";
 import "./styles/rectangles.css";
 import { SpeechSynthesisModule } from "./tts/SpeechSynthesisModule.ts";
 import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
+import EventBus from "./EventBus.js";
 
 (async function () {
   "use strict";
@@ -86,12 +87,26 @@ import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
     const foundPromptAncestor = addIdPromptAncestor(promptControlsContainer);
     const foundAudioOutputButton = addIdAudioOutputButton();
     addIdSubmitButton(promptControlsContainer);
+    const foundChatHistory = addIdChatHistory();
+    if (foundChatHistory) {
+      registerChatHistoryListener();
+    }
     addTalkButton(document.body);
     addLockButtons(document.body);
     buttonModule.createCallButton(promptControlsContainer, -1);
     buttonModule.createEnterButton();
     buttonModule.createExitButton();
     initMode();
+  }
+
+  function addIdChatHistory() {
+    const chatHistory = document.querySelector("div.t-body-chat");
+    if (!chatHistory) {
+      return false;
+    } else {
+      chatHistory.id = "saypi-chat-history";
+    }
+    return true;
   }
 
   function addIdPromptAncestor(container) {
@@ -396,6 +411,54 @@ import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
       unmarkButtonAsSelectedVoice(button);
     });
     markButtonAsSelectedVoice(button);
+  }
+
+  async function registerChatHistoryListener() {
+    const chatHistory = document.getElementById("saypi-chat-history");
+    if (!chatHistory) {
+      return;
+    }
+    let lastMessage = null;
+    const debouncedEmit = _.debounce((lastMessage) => {
+      console.log("Pi said:", lastMessage.innerText);
+      EventBus.emit("assistant-message-received", {
+        role: "assistant",
+        content: lastMessage.innerText,
+        streaming: true,
+      });
+    }, 0); // ms delay before emitting event
+
+    const speechSynthesis = new SpeechSynthesisModule();
+
+    const observerCallback = function (mutationsList, observer) {
+      for (let mutation of mutationsList) {
+        if (mutation.type === "childList") {
+          for (let node of mutation.addedNodes) {
+            if (
+              node.nodeName === "DIV" &&
+              node.classList.contains("break-anywhere") &&
+              !node.classList.contains("justify-end")
+            ) {
+              // a new chat message was added to the chat history
+              console.log("chat message added to chat history", node);
+              node.classList.add("chat-message", "assistant-message");
+              speechSynthesis.createSpeechStream().then((utterance) => {
+                node.dataset.utteranceId = utterance.id;
+              });
+              lastMessage = node;
+            } else if (node.nodeName === "SPAN") {
+              // streaming text initially appears as within a span node with style display: none and opacity: 0
+              speechSynthesis.addSpeechToStream(
+                lastMessage.dataset.utteranceId,
+                node.innerText
+              );
+            }
+          }
+        }
+      }
+    };
+    const observer = new MutationObserver(observerCallback);
+    observer.observe(chatHistory, { childList: true, subtree: true });
   }
 
   function addIdAudioOutputButton() {
