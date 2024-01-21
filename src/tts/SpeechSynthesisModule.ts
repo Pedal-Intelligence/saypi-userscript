@@ -26,10 +26,20 @@ interface SpeechSynthesisVoiceRemote {
 }
 
 class SpeechSynthesisModule {
+  private static instance: SpeechSynthesisModule; // singleton instance
+
+  public static getInstance(serviceUrl?: string): SpeechSynthesisModule {
+    if (!SpeechSynthesisModule.instance) {
+      SpeechSynthesisModule.instance = new SpeechSynthesisModule(serviceUrl);
+    }
+    return SpeechSynthesisModule.instance;
+  }
+
   private serviceUrl: string;
   private audio: HTMLAudioElement;
 
-  constructor(serviceUrl?: string) {
+  // private constructor to enforce singleton pattern
+  private constructor(serviceUrl?: string) {
     const apiServerUrl = config.apiServerUrl;
     if (!apiServerUrl) {
       throw new Error("No API server URL defined. Check app configuration.");
@@ -144,6 +154,7 @@ class SpeechSynthesisModule {
   speak(utterance: SpeechSynthesisUtteranceRemote): Promise<void> {
     // start audio playback with utterance.uri as the audio source
     this.audio.src = utterance.uri;
+    console.log(`Playing audio from ${utterance.uri}`);
     this.audio.play();
     return Promise.resolve();
   }
@@ -161,6 +172,14 @@ class SpeechSynthesisModule {
   resume(): Promise<void> {
     // nothing for now
     return Promise.resolve();
+  }
+
+  async isEnabled(): Promise<boolean> {
+    // tts is enabled only for non-English languages where a custom voice is selected
+    return (
+      (await UserPreferenceModule.getVoice()) !== null &&
+      (await UserPreferenceModule.getLanguage()) !== "en"
+    );
   }
 }
 

@@ -108,7 +108,7 @@ export module UserPreferenceModule {
     if (!apiServerUrl) {
       throw new Error("API server URL is not set");
     }
-    const tts = new SpeechSynthesisModule(apiServerUrl);
+    const tts = SpeechSynthesisModule.getInstance(apiServerUrl);
     return new Promise((resolve) => {
       if (
         typeof chrome !== "undefined" &&
