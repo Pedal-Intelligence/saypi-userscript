@@ -105,6 +105,18 @@ import EventBus from "./EventBus.js";
       return false;
     } else {
       chatHistory.id = "saypi-chat-history";
+      // select the second div child element of the chat history, which is the past chat messages container
+      const pastChatMessagesContainer =
+        chatHistory.querySelector(":nth-child(2)");
+      if (pastChatMessagesContainer) {
+        pastChatMessagesContainer.id = "saypi-chat-history-past-messages";
+      }
+      // select the third div child element of the chat history, which is the present chat messages container
+      const presentChatMessagesContainer =
+        chatHistory.querySelector(":nth-child(3)");
+      if (presentChatMessagesContainer) {
+        presentChatMessagesContainer.id = "saypi-chat-history-present-messages";
+      }
     }
     return true;
   }
@@ -284,7 +296,7 @@ import EventBus from "./EventBus.js";
 
   function introduceVoice(voice) {
     const introduction = "Hello, World!";
-    const speechSynthesis = new SpeechSynthesisModule();
+    const speechSynthesis = SpeechSynthesisModule.getInstance();
     speechSynthesis.createSpeech(introduction).then((utterance) => {
       speechSynthesis.speak(utterance);
     });
@@ -373,7 +385,7 @@ import EventBus from "./EventBus.js";
   }
 
   function addVoicesToMenu(voiceMenu) {
-    const speechSynthesis = new SpeechSynthesisModule();
+    const speechSynthesis = SpeechSynthesisModule.getInstance();
     speechSynthesis.getVoices().then((voices) => {
       populateVoices(voices, voiceMenu);
     });
@@ -413,22 +425,29 @@ import EventBus from "./EventBus.js";
     markButtonAsSelectedVoice(button);
   }
 
+  function assistantChatMessageAdded(node) {
+    // a new assistant chat message element was added to the chat history
+    // tag the element with a class and start streaming the text
+    console.log("chat message added to chat history", node);
+    node.classList.add("chat-message", "assistant-message");
+    const speechSynthesis = SpeechSynthesisModule.getInstance();
+    if (speechSynthesis.isEnabled()) {
+      speechSynthesis.createSpeechStream().then((utterance) => {
+        node.dataset.utteranceId = utterance.id;
+        speechSynthesis.speak(utterance); // start streaming output
+      });
+    }
+  }
+
   async function registerChatHistoryListener() {
-    const chatHistory = document.getElementById("saypi-chat-history");
+    const chatHistory = document.getElementById(
+      "saypi-chat-history-present-messages"
+    );
     if (!chatHistory) {
       return;
     }
     let lastMessage = null;
-    const debouncedEmit = _.debounce((lastMessage) => {
-      console.log("Pi said:", lastMessage.innerText);
-      EventBus.emit("assistant-message-received", {
-        role: "assistant",
-        content: lastMessage.innerText,
-        streaming: true,
-      });
-    }, 0); // ms delay before emitting event
-
-    const speechSynthesis = new SpeechSynthesisModule();
+    const speechSynthesis = SpeechSynthesisModule.getInstance();
 
     const observerCallback = function (mutationsList, observer) {
       for (let mutation of mutationsList) {
@@ -439,19 +458,16 @@ import EventBus from "./EventBus.js";
               node.classList.contains("break-anywhere") &&
               !node.classList.contains("justify-end")
             ) {
-              // a new chat message was added to the chat history
-              console.log("chat message added to chat history", node);
-              node.classList.add("chat-message", "assistant-message");
-              speechSynthesis.createSpeechStream().then((utterance) => {
-                node.dataset.utteranceId = utterance.id;
-              });
+              assistantChatMessageAdded(node);
               lastMessage = node;
             } else if (node.nodeName === "SPAN") {
               // streaming text initially appears as within a span node with style display: none and opacity: 0
-              speechSynthesis.addSpeechToStream(
-                lastMessage.dataset.utteranceId,
-                node.innerText
-              );
+              if (speechSynthesis.isEnabled()) {
+                speechSynthesis.addSpeechToStream(
+                  lastMessage.dataset.utteranceId,
+                  node.innerText
+                );
+              }
             }
           }
         }

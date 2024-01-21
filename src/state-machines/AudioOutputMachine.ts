@@ -1,5 +1,6 @@
-import { createMachine, assign } from "xstate";
+import { createMachine, assign, actions } from "xstate";
 import EventBus from "../EventBus.js";
+const { log } = actions;
 
 type LoadstartEvent = { type: "loadstart"; source: string };
 type ChangeProviderEvent = {
@@ -77,6 +78,9 @@ export const audioOutputMachine = createMachine(
         },
       },
       loading: {
+        entry: log(
+          (context, event: LoadstartEvent) => `Loading ${event.source}`
+        ),
         on: {
           loadedmetadata: {
             target: "loaded",
@@ -178,6 +182,7 @@ export const audioOutputMachine = createMachine(
         if (event.type === "loadstart") {
           event = event as LoadstartEvent;
           const domain = new URL(event.source).hostname;
+          console.log(`Audio source: ${domain}, provider: ${context.provider}`);
           return domain !== context.provider || context.skip === true;
         }
         return context.skip === true;
