@@ -103,6 +103,23 @@ export module UserPreferenceModule {
     });
   }
 
+  export function hasVoice(): Promise<boolean> {
+    return new Promise((resolve) => {
+      if (
+        typeof chrome !== "undefined" &&
+        chrome.storage &&
+        chrome.storage.sync
+      ) {
+        chrome.storage.sync.get(["voiceId"], (result: StorageResult) => {
+          resolve(!!result.voiceId);
+        });
+      } else {
+        // If Chrome storage API is not supported, return false
+        resolve(false);
+      }
+    });
+  }
+
   export function getVoice(): Promise<VoicePreference> {
     const apiServerUrl = config.apiServerUrl;
     if (!apiServerUrl) {

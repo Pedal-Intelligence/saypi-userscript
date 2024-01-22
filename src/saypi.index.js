@@ -11,7 +11,6 @@ import "./styles/mobile.scss";
 import "./styles/rectangles.css";
 import { SpeechSynthesisModule } from "./tts/SpeechSynthesisModule.ts";
 import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
-import EventBus from "./EventBus.js";
 
 (async function () {
   "use strict";
@@ -263,8 +262,6 @@ import EventBus from "./EventBus.js";
     }
 
     const observerCallback = async function (mutationsList, observer) {
-      const saypiCustomVoiceIsSelected =
-        (await UserPreferenceModule.getVoice()) !== null;
       for (let mutation of mutationsList) {
         if (mutation.type === "childList") {
           for (let node of mutation.addedNodes) {
@@ -434,7 +431,12 @@ import EventBus from "./EventBus.js";
     if (speechSynthesis.isEnabled()) {
       speechSynthesis.createSpeechStream().then((utterance) => {
         node.dataset.utteranceId = utterance.id;
-        speechSynthesis.speak(utterance); // start streaming output
+        console.log("Created audio stream", utterance.id);
+
+        // add a button that will read the chat message aloud
+        addSpeechButton(speechSynthesis, utterance, node);
+
+        autoplaySpeech(speechSynthesis, utterance); // handle any errors
       });
     }
   }
@@ -548,3 +550,38 @@ import EventBus from "./EventBus.js";
   // Start observing the entire document for changes to child nodes and subtree
   observer.observe(document, { childList: true, subtree: true });
 })();
+function autoplaySpeech(speechSynthesis, utterance) {
+  // wait a beat, then start streaming the utterance
+  setTimeout(() => {
+    speechSynthesis
+      .speak(utterance)
+      .then(() => console.log("Reading chat message aloud")) // start streaming output
+      .catch((error) =>
+        console.error(`Error occurred reading chat message: ${error}`)
+      ); // handle any errors
+  }, 1000);
+}
+
+function addSpeechButton(speechSynthesis, utterance, node) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.classList.add(
+    "ml-2",
+    "rounded",
+    "px-2",
+    "py-3",
+    "text-center",
+    "hover:bg-neutral-300",
+    "saypi-chat-message-button"
+  );
+  button.innerHTML = "Read aloud"; // TODO: localize
+  button.addEventListener("click", () => {
+    speechSynthesis
+      .speak(utterance)
+      .then(() => console.log("Reading chat message aloud")) // start streaming output
+      .catch((error) =>
+        console.error(`Error occurred reading chat message: ${error}`)
+      ); // handle any errors
+  });
+  node.appendChild(button);
+}

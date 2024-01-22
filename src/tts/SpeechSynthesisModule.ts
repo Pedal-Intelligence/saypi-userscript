@@ -1,6 +1,7 @@
 import axios from "axios";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { config } from "../ConfigModule";
+import AudioControlsModule from "../AudioControlsModule";
 
 function generateUUID(): string {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -51,6 +52,18 @@ class SpeechSynthesisModule {
       this.audio.id = "saypi-audio";
       document.body.appendChild(this.audio);
     }
+    this.initProvider();
+  }
+
+  initProvider(): void {
+    const audioControls = new AudioControlsModule();
+    this.isEnabled().then((enabled) => {
+      if (enabled) {
+        audioControls.useSayPiForAudioOutput();
+      } else {
+        audioControls.useDefaultForAudioOutput();
+      }
+    });
   }
 
   private voicesCache: SpeechSynthesisVoiceRemote[] = [];
@@ -108,11 +121,14 @@ class SpeechSynthesisModule {
   }
 
   private speechStreamTimeouts: { [uuid: string]: NodeJS.Timeout } = {};
+  private START_OF_SPEECH_MARKER = " "; // In the first message, the text should be a space " " to indicate the start of speech
+  private END_OF_SPEECH_MARKER = ""; // In the last message, the text should be an empty string to indicate the end of speech
 
-  async createSpeechStream(
-    text: string
-  ): Promise<SpeechSynthesisUtteranceRemote> {
-    const utterance = await this.createSpeech(text, true);
+  async createSpeechStream(): Promise<SpeechSynthesisUtteranceRemote> {
+    const utterance = await this.createSpeech(
+      this.START_OF_SPEECH_MARKER,
+      true
+    );
 
     // Start a timeout that will end the stream if not reset in 10 seconds
     this.speechStreamTimeouts[utterance.id] = setTimeout(() => {
@@ -145,18 +161,64 @@ class SpeechSynthesisModule {
       clearTimeout(this.speechStreamTimeouts[uuid]);
       delete this.speechStreamTimeouts[uuid];
       console.log("Ending speech stream");
-      this.addSpeechToStream(uuid, "");
+      this.addSpeechToStream(uuid, this.END_OF_SPEECH_MARKER);
     } else {
       console.log("Speech stream already ended");
     }
   }
 
   speak(utterance: SpeechSynthesisUtteranceRemote): Promise<void> {
-    // start audio playback with utterance.uri as the audio source
-    this.audio.src = utterance.uri;
-    console.log(`Playing audio from ${utterance.uri}`);
-    this.audio.play();
-    return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      // Error handling
+      this.audio.onerror = (event) => {
+        console.error("Error in audio playback", event);
+        reject(new Error(`Error playing audio from ${utterance.uri}`));
+      };
+
+      // Handle successful loading and playing of the audio
+      this.audio.onloadeddata = () => {
+        const endtime = Date.now();
+        const elapsedtime = (endtime - starttime) / 1000;
+        console.log(
+          `Audio is loaded after ${elapsedtime}s from ${utterance.uri}`
+        );
+      };
+
+      this.audio.oncanplay = () => {
+        const endtime = Date.now();
+        const elapsedtime = (endtime - starttime) / 1000;
+        console.log(
+          `Audio is ready to play after ${elapsedtime}s from ${utterance.uri}`
+        );
+        if (this.audio.paused) {
+          this.audio.play().then(resolve).catch(reject);
+        }
+      };
+
+      this.audio.oncanplaythrough = () => {
+        const endtime = Date.now();
+        const elapsedtime = (endtime - starttime) / 1000;
+        console.log(
+          `Audio is ready to play through after ${elapsedtime}s from ${utterance.uri}`
+        );
+        if (this.audio.paused) {
+          //this.audio.play().then(resolve).catch(reject);
+        }
+      };
+
+      // Handle audio playback completion
+      this.audio.onended = () => {
+        const endtime = Date.now();
+        const elapsedtime = (endtime - starttime) / 1000;
+        console.log(`Audio playback ended after ${elapsedtime}s`);
+        resolve();
+      };
+
+      // Start audio playback with utterance.uri as the audio source
+      this.audio.src = utterance.uri;
+      const starttime = Date.now();
+      //this.audio.play().catch(reject);
+    });
   }
 
   cancel(): Promise<void> {
@@ -176,10 +238,7 @@ class SpeechSynthesisModule {
 
   async isEnabled(): Promise<boolean> {
     // tts is enabled only for non-English languages where a custom voice is selected
-    return (
-      (await UserPreferenceModule.getVoice()) !== null &&
-      (await UserPreferenceModule.getLanguage()) !== "en"
-    );
+    return await UserPreferenceModule.hasVoice();
   }
 }
 
