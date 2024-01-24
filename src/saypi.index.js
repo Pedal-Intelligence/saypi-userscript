@@ -81,9 +81,47 @@ import "./styles/rectangles.css";
     addTalkButton(document.body);
     addLockButtons(document.body);
     buttonModule.createCallButton(promptControlsContainer, -1);
-    buttonModule.createEnterButton();
-    buttonModule.createExitButton();
+    const enterExitBtnPos = 1;
+    const mainCtrlPanel = addIdControlPanel();
+    if (mainCtrlPanel.new) {
+      buttonModule.createEnterButton(mainCtrlPanel.element, enterExitBtnPos);
+      buttonModule.createExitButton(mainCtrlPanel.element, enterExitBtnPos);
+    }
     initMode();
+  }
+
+  /**
+   * Identifies and returns the row containing the discover and threads buttons on pi.ai
+   * @returns {element: HTMLElement | null, new: boolean} the container element for the control panel, and whether it was newly created
+   */
+  function addIdControlPanel() {
+    var mainControlPanel = document.getElementById("saypi-control-panel-main");
+    if (mainControlPanel) {
+      return { element: mainControlPanel, new: false };
+    }
+    mainControlPanel = document.querySelector(".flex.items-center.grow");
+    if (!mainControlPanel) {
+      return { element: null, new: false };
+    }
+    mainControlPanel.id = "saypi-control-panel-main";
+    mainControlPanel.classList.add("saypi-control-panel");
+    return { element: mainControlPanel, new: true };
+  }
+
+  /**
+   * Identifies and returns the row containing the discover and threads buttons on pi.ai when the card dialog is open
+   * @returns {HTMLElement | null} the container element for the control panel
+   */
+  function addIdAuxiliaryControlPanel() {
+    const auxControlPanel = document.querySelector(
+      ".bg-card-background > .flex.items-center"
+    );
+    if (!auxControlPanel) {
+      return null;
+    }
+    auxControlPanel.id = "saypi-control-panel-card";
+    auxControlPanel.classList.add("saypi-control-panel");
+    return auxControlPanel;
   }
 
   function addIdPromptAncestor(container) {

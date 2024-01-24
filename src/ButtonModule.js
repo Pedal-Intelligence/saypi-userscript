@@ -3,7 +3,7 @@ import {
   exitMobileMode,
   isMobileView,
 } from "./UserAgentModule.js";
-import { appendChild } from "./DOMModule.ts";
+import { addChild } from "./DOMModule.ts";
 import EventBus from "./EventBus.js";
 import StateMachineService from "./StateMachineService.js";
 import { submitErrorHandler } from "./SubmitErrorHandler.ts";
@@ -149,35 +149,34 @@ export default class ButtonModule {
     }
   }
 
-  createExitButton() {
+  createExitButton(container, position = 0) {
     const label = getMessage("exitMobileMode");
     const button = this.createButton("", () => {
       exitMobileMode();
     });
-    button.id = "saypi-exitButton";
     button.type = "button";
     button.className =
-      "exit-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      "saypi-exit-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
     button.setAttribute("aria-label", label);
     button.setAttribute("title", label);
     button.innerHTML = exitIconSVG;
-    document.body.appendChild(button);
+    addChild(container, button, position);
     return button;
   }
 
-  createEnterButton() {
+  createEnterButton(container, position = 0) {
     const label = getMessage("enterMobileMode");
     const button = this.createButton("", () => {
       enterMobileMode();
     });
-    button.id = "saypi-enterButton";
     button.type = "button";
     button.className =
-      "enter-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      "saypi-enter-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
     button.setAttribute("aria-label", label);
     button.setAttribute("title", label);
     button.innerHTML = maximizeIconSVG;
-    document.body.appendChild(button);
+    // insert the button at the specified position
+    addChild(container, button, position);
     return button;
   }
 
@@ -189,7 +188,7 @@ export default class ButtonModule {
       "call-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650 m-2";
     this.callInactive(button); // mic is off by default
 
-    appendChild(container, button, position);
+    addChild(container, button, position);
     return button;
   }
 

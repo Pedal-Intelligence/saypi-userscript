@@ -1,4 +1,4 @@
-import { appendChild } from "./DOMModule.ts";
+import { addChild } from "./DOMModule.ts";
 import { enterFullscreen, exitFullscreen } from "./FullscreenModule.ts";
 
 export function isMobileDevice() {
@@ -59,7 +59,7 @@ function attachCallButton() {
   const container = document.getElementById("saypi-prompt-controls-container");
   const callButton = document.getElementById("saypi-callButton");
   if (container && callButton) {
-    appendChild(container, callButton, -1);
+    addChild(container, callButton, -1);
   }
 }
 
@@ -67,7 +67,7 @@ function detachCallButton() {
   // remove the call button from the text prompt container while in mobile view
   const callButton = document.getElementById("saypi-callButton");
   if (callButton) {
-    appendChild(document.body, callButton);
+    addChild(document.body, callButton);
   }
 }
 

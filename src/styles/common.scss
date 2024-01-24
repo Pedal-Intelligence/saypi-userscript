@@ -8,12 +8,8 @@
 
 .mobile-device {
   /* maximize (mobile view) button is only displayed on compatible devices */
-  #saypi-enterButton,
-  #saypi-exitButton,
-  .lock-button {
-    position: fixed;
-    top: 5rem;
-    left: 10px;
+  .saypi-enter-button,
+  .saypi-exit-button {
     width: 3rem;
     height: 3rem;
     padding: 6px;

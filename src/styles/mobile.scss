@@ -53,7 +53,7 @@ html.mobile-view {
     padding-top: 0;
   }
 
-  #saypi-enterButton {
+  .saypi-enter-button {
     display: none;
   }
 
@@ -84,6 +84,9 @@ html.mobile-view {
     z-index: 80;
   }
 
+  .lock-button {
+    position: fixed;
+  }
   #saypi-lock-panel button {
     display: block;
     left: unset;
