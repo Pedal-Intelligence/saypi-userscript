@@ -18,6 +18,11 @@ class Observation {
     return this.found && this.isNew && this.decorated;
   }
 
+  // Whether the observed element has been found, but not yet decorated with the extension's enhancements
+  undecorated(): boolean {
+    return this.found && this.isNew && !this.decorated;
+  }
+
   // Where the element does not exist in the DOM
   static notFound(id: string): Observation {
     return new Observation(null, id, false, false, false);
@@ -48,11 +53,13 @@ export function observeDOM(): void {
           const addedElement = node as Element;
           const promptObs = findAndDecoratePromptField(addedElement);
           const ctrlPanelObs = findAndDecorateControlPanel(addedElement);
+          const audioControlsObs = findAndDecorateAudioControls(addedElement);
+          // ... handle other elements
+
+          // notify listeners that (all critical) script content has been loaded
           if (promptObs.isReady()) {
-            // emit event to notify listeners that script content has been loaded
             EventBus.emit("saypi:ui:content-loaded");
           }
-          // ... handle other elements
         });
       [...mutation.removedNodes]
         .filter((node) => node instanceof Element)
@@ -71,6 +78,11 @@ export function observeDOM(): void {
           if (ctrlPanelObs.found) {
             // Control panel is being removed, so search for a replacement in the main document
             findAndDecorateControlPanel(document.body);
+          }
+          const audioControlsObs = findAudioControls(removedElement);
+          if (audioControlsObs.found) {
+            // Audio controls are being removed, so search for a replacement in the main document
+            findAndDecorateAudioControls(document.body);
           }
         });
     });
@@ -107,7 +119,9 @@ function findControlPanel(searchRoot: Element): Observation {
   if (mainControlPanel) {
     return Observation.foundExisting(id, mainControlPanel);
   }
-  mainControlPanel = searchRoot.querySelector(chatbot.getControlPanelSelector());
+  mainControlPanel = searchRoot.querySelector(
+    chatbot.getControlPanelSelector()
+  );
   if (!mainControlPanel) {
     return Observation.notFound(id);
   }
@@ -177,4 +191,32 @@ function findAndDecoratePromptField(searchRoot: Element): Observation {
   }
   return Observation.decorated(obs);
 }
-// ... make sure to handle disconnection of observer when not needed to avoid performance issues
+
+function findAudioControls(searchRoot: Element): Observation {
+  const id = "saypi-audio-controls";
+  const existingAudioControls = document.getElementById(id);
+  if (existingAudioControls) {
+    // Audio controls already exist, no need to search
+    return Observation.foundExisting(id, existingAudioControls);
+  }
+
+  const audioControls = searchRoot.querySelector(
+    chatbot.getAudioControlsSelector()
+  );
+  if (audioControls) {
+    return Observation.notDecorated(id, audioControls);
+  }
+  return Observation.notFound(id);
+}
+
+function decorateAudioControls(audioControls: HTMLElement): void {
+  audioControls.id = "saypi-audio-controls";
+}
+
+function findAndDecorateAudioControls(searchRoot: Element): Observation {
+  const obs = findAudioControls(searchRoot);
+  if (obs.undecorated()) {
+    decorateAudioControls(obs.target as HTMLElement);
+  }
+  return Observation.decorated(obs);
+}

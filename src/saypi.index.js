@@ -40,33 +40,10 @@ import "./styles/rectangles.css";
   function annotateDOM(prompt) {
     // Add id attributes to important elements
 
-    const foundAudioControls = addIdAudioControls();
     const foundAudioOutputButton = addIdAudioOutputButton();
 
     addTalkButton(document.body);
     addLockButtons(document.body);
-  }
-
-  function addIdAudioControls() {
-    // Find all audio elements on the page
-    var audioElements = document.querySelectorAll("audio");
-    var found = false; // default to not found
-
-    audioElements.forEach(function (audio) {
-      var nextDiv = audio.nextElementSibling;
-
-      // If we've already found a div, we can skip further iterations
-      if (found) return;
-
-      // Check if the preceding element is a div
-      if (nextDiv && nextDiv.tagName.toLowerCase() === "div") {
-        // Assign an ID to the div
-        nextDiv.id = "saypi-audio-controls";
-        found = true; // set to found
-      }
-    });
-
-    return found;
   }
 
   function addIdAudioOutputButton() {

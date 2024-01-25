@@ -9,6 +9,10 @@ class PiAIChatbot extends Chatbot {
     return ".pi-submit-button"; // replace with actual submit button selector for pi.ai
   }
 
+  getAudioControlsSelector(): string {
+    return "audio + div";
+  }
+
   getControlPanelSelector(): any {
     return ".flex.items-center.grow";
   }

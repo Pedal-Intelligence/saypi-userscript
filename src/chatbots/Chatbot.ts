@@ -1,6 +1,7 @@
 // Chatbot.ts
 abstract class Chatbot {
-  getControlPanelSelector(): any {
+  abstract getAudioControlsSelector(): string;
+  getControlPanelSelector(): string {
     throw new Error("Method not implemented.");
   }
   // Define abstract methods for getting selectors which the subclasses must implement
