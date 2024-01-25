@@ -2,6 +2,7 @@ import { Chatbot } from "./Chatbot";
 import { PiAIChatbot } from "./Pi";
 import { buttonModule } from "../ButtonModule.js";
 import EventBus from "../EventBus.js";
+import { add } from "lodash";
 
 class Observation {
   constructor(
@@ -11,6 +12,28 @@ class Observation {
     public readonly isNew: boolean,
     public readonly decorated: boolean
   ) {}
+
+  // Whether the observed element is fully loaded and ready to be used
+  isReady(): boolean {
+    return this.found && this.isNew && this.decorated;
+  }
+
+  // Where the element does not exist in the DOM
+  static notFound(id: string): Observation {
+    return new Observation(null, id, false, false, false);
+  }
+  // Where the element exists in the DOM, and has already been decorated with the extension's enhancements
+  static foundExisting(id: string, element: Element): Observation {
+    return new Observation(element, id, true, false, true);
+  }
+  // Where the element exists in the DOM, and has newly been decorated with the extension's enhancements
+  static decorated(obs: Observation): Observation {
+    return new Observation(obs.target, obs.id, obs.found, obs.isNew, true);
+  }
+  // Where the element exists in the DOM, but has not been decorated with the extension's enhancements
+  static notDecorated(id: string, element: Element): Observation {
+    return new Observation(element, id, true, true, false);
+  }
 }
 
 const chatbot: Chatbot = new PiAIChatbot();
@@ -23,8 +46,9 @@ export function observeDOM(): void {
         .filter((node) => node instanceof Element)
         .forEach((node) => {
           const addedElement = node as Element;
-          const obs = findAndDecoratePromptField(addedElement);
-          if (obs.found && obs.isNew && obs.decorated) {
+          const promptObs = findAndDecoratePromptField(addedElement);
+          const ctrlPanelObs = findAndDecorateControlPanel(addedElement);
+          if (promptObs.isReady()) {
             // emit event to notify listeners that script content has been loaded
             EventBus.emit("saypi:ui:content-loaded");
           }
@@ -42,6 +66,11 @@ export function observeDOM(): void {
               // emit event to notify listeners that script content has been loaded
               EventBus.emit("saypi:ui:content-loaded");
             }
+          }
+          const ctrlPanelObs = findControlPanel(removedElement);
+          if (ctrlPanelObs.found) {
+            // Control panel is being removed, so search for a replacement in the main document
+            findAndDecorateControlPanel(document.body);
           }
         });
     });
@@ -66,6 +95,41 @@ function decoratePrompt(prompt: HTMLInputElement): void {
       buttonModule.createCallButton(promptGrandparent, -1);
     }
   }
+}
+
+/**
+ * Identifies and returns the row containing the discover and threads buttons on pi.ai
+ * @returns {element: HTMLElement | null, new: boolean} the container element for the control panel, and whether it was newly created
+ */
+function findControlPanel(searchRoot: Element): Observation {
+  const id = "saypi-control-panel-main";
+  var mainControlPanel = document.getElementById(id);
+  if (mainControlPanel) {
+    return Observation.foundExisting(id, mainControlPanel);
+  }
+  mainControlPanel = searchRoot.querySelector(".flex.items-center.grow");
+  if (!mainControlPanel) {
+    return Observation.notFound(id);
+  }
+  return new Observation(mainControlPanel, id, true, true, false);
+}
+
+function decorateControlPanel(controlPanel: HTMLElement): void {
+  const id = "saypi-control-panel-main";
+  controlPanel.id = id;
+  controlPanel.classList.add("saypi-control-panel");
+
+  const toggleModeBtnPos = 1;
+  buttonModule.createEnterButton(controlPanel, toggleModeBtnPos);
+  buttonModule.createExitButton(controlPanel, toggleModeBtnPos);
+}
+
+function findAndDecorateControlPanel(searchRoot: Element): Observation {
+  const obs = findControlPanel(searchRoot);
+  if (obs.found && obs.isNew && !obs.decorated) {
+    decorateControlPanel(obs.target as HTMLElement);
+  }
+  return Observation.decorated(obs);
 }
 
 function addIdSubmitButton(container: Element) {
@@ -94,16 +158,16 @@ function findPromptField(searchRoot: Element): Observation {
   const existingPrompt = document.getElementById(id);
   if (existingPrompt) {
     // Prompt already exists, no need to search
-    return new Observation(existingPrompt, id, true, false, true);
+    return Observation.foundExisting(id, existingPrompt);
   }
 
   const promptInput = searchRoot.querySelector(
     chatbot.getPromptTextInputSelector()
   );
   if (promptInput) {
-    return new Observation(promptInput, id, true, true, false);
+    return Observation.notDecorated(id, promptInput);
   }
-  return new Observation(null, id, false, false, false);
+  return Observation.notFound(id);
 }
 
 function findAndDecoratePromptField(searchRoot: Element): Observation {
@@ -111,6 +175,6 @@ function findAndDecoratePromptField(searchRoot: Element): Observation {
   if (obs.found && obs.isNew && !obs.decorated) {
     decoratePrompt(obs.target as HTMLInputElement);
   }
-  return new Observation(obs.target, obs.id, obs.found, obs.isNew, true);
+  return Observation.decorated(obs);
 }
 // ... make sure to handle disconnection of observer when not needed to avoid performance issues

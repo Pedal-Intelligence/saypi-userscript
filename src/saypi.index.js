@@ -46,31 +46,10 @@ import "./styles/rectangles.css";
 
     addTalkButton(document.body);
     addLockButtons(document.body);
-    const enterExitBtnPos = 1;
-    const mainCtrlPanel = addIdControlPanel();
-    if (mainCtrlPanel.new) {
-      buttonModule.createEnterButton(mainCtrlPanel.element, enterExitBtnPos);
-      buttonModule.createExitButton(mainCtrlPanel.element, enterExitBtnPos);
-    }
+
   }
 
-  /**
-   * Identifies and returns the row containing the discover and threads buttons on pi.ai
-   * @returns {element: HTMLElement | null, new: boolean} the container element for the control panel, and whether it was newly created
-   */
-  function addIdControlPanel() {
-    var mainControlPanel = document.getElementById("saypi-control-panel-main");
-    if (mainControlPanel) {
-      return { element: mainControlPanel, new: false };
-    }
-    mainControlPanel = document.querySelector(".flex.items-center.grow");
-    if (!mainControlPanel) {
-      return { element: null, new: false };
-    }
-    mainControlPanel.id = "saypi-control-panel-main";
-    mainControlPanel.classList.add("saypi-control-panel");
-    return { element: mainControlPanel, new: true };
-  }
+
 
   function addIdFooter() {
     // Find all audio elements on the page
