@@ -4,6 +4,7 @@ import EventModule from "./EventModule.js";
 import { addUserAgentFlags, initMode } from "./UserAgentModule.js";
 import { submitErrorHandler } from "./SubmitErrorHandler.ts";
 import getMessage from "./i18n.ts";
+import { observeDOM } from "./chatbots/bootstrap.ts";
 
 import "./styles/common.scss";
 import "./styles/desktop.scss";
@@ -65,22 +66,18 @@ import "./styles/rectangles.css";
   const observer = new MutationObserver(callback);
 
   // Start observing the target node for configured mutations
-  observer.observe(document.body, config);
+  //observer.observe(document.body, config);
+  observeDOM();
 
   function annotateDOM(prompt) {
     // Add id attributes to important elements
-    prompt.id = "saypi-prompt";
-    prompt.parentElement.classList.add("saypi-prompt-container");
+
     const foundFooter = addIdFooter();
     const foundAudioControls = addIdAudioControls();
-    const promptControlsContainer = prompt.parentElement.parentElement;
-    promptControlsContainer.id = "saypi-prompt-controls-container";
-    const foundPromptAncestor = addIdPromptAncestor(promptControlsContainer);
     const foundAudioOutputButton = addIdAudioOutputButton();
-    addIdSubmitButton(promptControlsContainer);
+
     addTalkButton(document.body);
     addLockButtons(document.body);
-    buttonModule.createCallButton(promptControlsContainer, -1);
     const enterExitBtnPos = 1;
     const mainCtrlPanel = addIdControlPanel();
     if (mainCtrlPanel.new) {
@@ -106,43 +103,6 @@ import "./styles/rectangles.css";
     mainControlPanel.id = "saypi-control-panel-main";
     mainControlPanel.classList.add("saypi-control-panel");
     return { element: mainControlPanel, new: true };
-  }
-
-  /**
-   * Identifies and returns the row containing the discover and threads buttons on pi.ai when the card dialog is open
-   * @returns {HTMLElement | null} the container element for the control panel
-   */
-  function addIdAuxiliaryControlPanel() {
-    const auxControlPanel = document.querySelector(
-      ".bg-card-background > .flex.items-center"
-    );
-    if (!auxControlPanel) {
-      return null;
-    }
-    auxControlPanel.id = "saypi-control-panel-card";
-    auxControlPanel.classList.add("saypi-control-panel");
-    return auxControlPanel;
-  }
-
-  function addIdPromptAncestor(container) {
-    // climb up the DOM tree until we find a div with class 'w-full'
-    let parent = container.parentElement;
-    while (parent) {
-      if (parent.classList.contains("w-full")) {
-        parent.id = "saypi-prompt-ancestor";
-        return true;
-      }
-      parent = parent.parentElement;
-    }
-    return false;
-  }
-
-  function addIdSubmitButton(container) {
-    const submitButtons = container.querySelectorAll("button[type=button]");
-    if (submitButtons.length > 0) {
-      const lastSubmitButton = submitButtons[submitButtons.length - 1];
-      lastSubmitButton.id = "saypi-submitButton";
-    }
   }
 
   function addIdFooter() {
@@ -258,5 +218,5 @@ import "./styles/rectangles.css";
   }
 
   // Start observing the entire document for changes to child nodes and subtree
-  observer.observe(document, { childList: true, subtree: true });
+  //observer.observe(document, { childList: true, subtree: true });
 })();

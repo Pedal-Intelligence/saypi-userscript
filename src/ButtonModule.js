@@ -181,6 +181,7 @@ export default class ButtonModule {
   }
 
   createCallButton(container, position = 0) {
+    console.log("Adding call button to container", container);
     const button = this.createButton();
     button.id = "saypi-callButton";
     button.type = "button";
