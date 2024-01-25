@@ -1,7 +1,7 @@
 import { Chatbot } from "./Chatbot";
 import { PiAIChatbot } from "./Pi";
 import { buttonModule } from "../ButtonModule.js";
-import { find } from "lodash";
+import EventBus from "../EventBus.js";
 
 class Observation {
   constructor(
@@ -22,18 +22,26 @@ export function observeDOM(): void {
       [...mutation.addedNodes]
         .filter((node) => node instanceof Element)
         .forEach((node) => {
-          const element = node as Element;
-          findAndDecoratePromptField(element);
+          const addedElement = node as Element;
+          const obs = findAndDecoratePromptField(addedElement);
+          if (obs.found && obs.isNew && obs.decorated) {
+            // emit event to notify listeners that script content has been loaded
+            EventBus.emit("saypi:ui:content-loaded");
+          }
           // ... handle other elements
         });
       [...mutation.removedNodes]
         .filter((node) => node instanceof Element)
         .forEach((node) => {
-          const element = node as Element;
-          const obs = findPromptField(element);
+          const removedElement = node as Element;
+          const obs = findPromptField(removedElement);
           if (obs.found) {
             // Prompt field is being removed, so search for a replacement in the main document
             findAndDecoratePromptField(document.body);
+            if (obs.found && obs.isNew && obs.decorated) {
+              // emit event to notify listeners that script content has been loaded
+              EventBus.emit("saypi:ui:content-loaded");
+            }
           }
         });
     });

@@ -5,6 +5,7 @@ import { addUserAgentFlags, initMode } from "./UserAgentModule.js";
 import { submitErrorHandler } from "./SubmitErrorHandler.ts";
 import getMessage from "./i18n.ts";
 import { observeDOM } from "./chatbots/bootstrap.ts";
+import EventBus from "./EventBus.js";
 
 import "./styles/common.scss";
 import "./styles/desktop.scss";
@@ -19,54 +20,21 @@ import "./styles/rectangles.css";
     audioModule.start();
   }
 
+  var isLoaded = false;
+  EventBus.on("saypi:ui:content-loaded", function () {
+    if (isLoaded) {
+      return;
+    }
+    console.log("Content loaded. Initializing...");
+    submitErrorHandler.initAudioOutputListener();
+    submitErrorHandler.checkForRestorePoint();
+    initMode();
+    startAudioModule();
+    isLoaded = true;
+  });
+
   addUserAgentFlags();
   EventModule.init();
-
-  // Create a MutationObserver to listen for changes to the DOM
-  // textareas are added to the DOM after the page loads
-  const callback = function (mutationsList, observer) {
-    for (const mutation of mutationsList) {
-      if (mutation.type === "childList") {
-        // Iterate through added nodes
-        mutation.addedNodes.forEach((node) => {
-          // Check if added node is a textarea with 'enterkeyhint' attribute
-          if (
-            node.nodeName === "TEXTAREA" &&
-            node.hasAttribute("enterkeyhint")
-          ) {
-            if (!document.getElementById("saypi-prompt")) {
-              annotateDOM(node);
-            }
-            return;
-          }
-
-          // Check if added node contains a textarea with 'enterkeyhint' attribute
-          if (node.querySelectorAll) {
-            const textareas = node.querySelectorAll("textarea[enterkeyhint]");
-            if (
-              textareas.length > 0 &&
-              !document.getElementById("saypi-prompt")
-            ) {
-              // Do something with the first textarea that has 'enterkeyhint'
-              annotateDOM(textareas[0]);
-              submitErrorHandler.initAudioOutputListener();
-              submitErrorHandler.checkForRestorePoint();
-              return;
-            }
-          }
-        });
-      }
-    }
-  };
-
-  // Options for the observer (which mutations to observe)
-  const config = { attributes: false, childList: true, subtree: true };
-
-  // Create an observer instance linked to the callback function
-  const observer = new MutationObserver(callback);
-
-  // Start observing the target node for configured mutations
-  //observer.observe(document.body, config);
   observeDOM();
 
   function annotateDOM(prompt) {
@@ -84,7 +52,6 @@ import "./styles/rectangles.css";
       buttonModule.createEnterButton(mainCtrlPanel.element, enterExitBtnPos);
       buttonModule.createExitButton(mainCtrlPanel.element, enterExitBtnPos);
     }
-    initMode();
   }
 
   /**
