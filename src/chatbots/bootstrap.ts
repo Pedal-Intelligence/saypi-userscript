@@ -107,7 +107,7 @@ function findControlPanel(searchRoot: Element): Observation {
   if (mainControlPanel) {
     return Observation.foundExisting(id, mainControlPanel);
   }
-  mainControlPanel = searchRoot.querySelector(".flex.items-center.grow");
+  mainControlPanel = searchRoot.querySelector(chatbot.getControlPanelSelector());
   if (!mainControlPanel) {
     return Observation.notFound(id);
   }

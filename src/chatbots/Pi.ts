@@ -6,10 +6,12 @@ class PiAIChatbot extends Chatbot {
   }
 
   getPromptSubmitButtonSelector(): string {
-    return ".pi-submit-button"; // replace with actual selector for PiAI
+    return ".pi-submit-button"; // replace with actual submit button selector for pi.ai
   }
 
-  // ... other specific implementations of selectors
+  getControlPanelSelector(): any {
+    return ".flex.items-center.grow";
+  }
 }
 
 export { PiAIChatbot };
