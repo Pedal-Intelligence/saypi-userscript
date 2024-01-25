@@ -54,6 +54,8 @@ export function observeDOM(): void {
           const promptObs = findAndDecoratePromptField(addedElement);
           const ctrlPanelObs = findAndDecorateControlPanel(addedElement);
           const audioControlsObs = findAndDecorateAudioControls(addedElement);
+          const audioOutputButtonObs =
+            findAndDecorateAudioOutputButton(addedElement);
           // ... handle other elements
 
           // notify listeners that (all critical) script content has been loaded
@@ -83,6 +85,11 @@ export function observeDOM(): void {
           if (audioControlsObs.found) {
             // Audio controls are being removed, so search for a replacement in the main document
             findAndDecorateAudioControls(document.body);
+          }
+          const audioOutputButtonObs = findAudioOutputButton(removedElement);
+          if (audioOutputButtonObs.found) {
+            // Audio output button is being removed, so search for a replacement in the main document
+            findAndDecorateAudioOutputButton(document.body);
           }
         });
     });
@@ -217,6 +224,35 @@ function findAndDecorateAudioControls(searchRoot: Element): Observation {
   const obs = findAudioControls(searchRoot);
   if (obs.undecorated()) {
     decorateAudioControls(obs.target as HTMLElement);
+  }
+  return Observation.decorated(obs);
+}
+
+function findAudioOutputButton(searchRoot: Element): Observation {
+  const id = "saypi-audio-output-button";
+  const existingAudioOutputButton = document.getElementById(id);
+  if (existingAudioOutputButton) {
+    // Audio output button already exists, no need to search
+    return Observation.foundExisting(id, existingAudioOutputButton);
+  }
+
+  const audioOutputButton = searchRoot.querySelector(
+    chatbot.getAudioOutputButtonSelector()
+  );
+  if (audioOutputButton) {
+    return Observation.notDecorated(id, audioOutputButton);
+  }
+  return Observation.notFound(id);
+}
+
+function decorateAudioOutputButton(audioOutputButton: HTMLElement): void {
+  audioOutputButton.id = "saypi-audio-output-button";
+}
+
+function findAndDecorateAudioOutputButton(searchRoot: Element): Observation {
+  const obs = findAudioOutputButton(searchRoot);
+  if (obs.undecorated()) {
+    decorateAudioOutputButton(obs.target as HTMLElement);
   }
   return Observation.decorated(obs);
 }

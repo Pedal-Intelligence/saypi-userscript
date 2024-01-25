@@ -60,13 +60,13 @@ export default class ButtonModule {
     }
   }
 
-  addTalkIcon(button) {
-    this.updateIconContent(button);
+  addTalkIcon(container) {
+    this.updateIconContent(container);
 
     window.matchMedia("(max-width: 768px)").addListener(() => {
-      this.updateIconContent(button);
+      this.updateIconContent(container);
     });
-    this.setupClassObserver(button);
+    this.setupViewObserver(container);
   }
 
   updateIconContent(iconContainer) {
@@ -77,7 +77,13 @@ export default class ButtonModule {
     }
   }
 
-  setupClassObserver(button) {
+  /**
+   * Monitors the HTML element for changes in the view class
+   * i.e. when the desktop/mobile view is toggled
+   * and updates the icon content accordingly
+   * @param {*} container - The HTML element to hold the icon
+   */
+  setupViewObserver(container) {
     const targetNode = document.documentElement; // The <html> element
 
     const config = { attributes: true, attributeFilter: ["class"] };
@@ -88,10 +94,10 @@ export default class ButtonModule {
           if (mutation.attributeName === "class") {
             if (document.documentElement.classList.contains("mobile-view")) {
               // 'mobile-view' class was added
-              this.updateIconContent(button);
+              this.updateIconContent(container);
             } else {
               // 'mobile-view' class was removed
-              this.updateIconContent(button);
+              this.updateIconContent(container);
             }
           }
         }

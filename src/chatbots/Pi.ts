@@ -13,7 +13,12 @@ class PiAIChatbot extends Chatbot {
     return "audio + div";
   }
 
-  getControlPanelSelector(): any {
+  getAudioOutputButtonSelector(): string {
+    // audio button is the last button element in the audio controls container
+    return "#saypi-audio-controls > div > div.relative.flex.items-center.justify-end.self-end.p-2 > button";
+  }
+
+  getControlPanelSelector(): string {
     return ".flex.items-center.grow";
   }
 }

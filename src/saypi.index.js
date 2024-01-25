@@ -38,28 +38,11 @@ import "./styles/rectangles.css";
   observeDOM();
 
   function annotateDOM(prompt) {
-    // Add id attributes to important elements
-
-    const foundAudioOutputButton = addIdAudioOutputButton();
-
-    addTalkButton(document.body);
+    addVisualisations(document.body);
     addLockButtons(document.body);
   }
 
-  function addIdAudioOutputButton() {
-    // audio button is the last button element in the audio controls container
-    const audioButton = document.querySelector(
-      "#saypi-audio-controls > div > div.relative.flex.items-center.justify-end.self-end.p-2 > button"
-    );
-    if (!audioButton) {
-      return false;
-    } else {
-      audioButton.id = "saypi-audio-output-button";
-    }
-    return true;
-  }
-
-  function addTalkButton(container) {
+  function addVisualisations(container) {
     // Create a containing div
     var panel = document.createElement("div");
     panel.id = "saypi-panel";
@@ -78,11 +61,8 @@ import "./styles/rectangles.css";
       "relative flex mt-1 mb-1 rounded-full px-2 py-3 text-center bg-cream-550 hover:bg-cream-650 hover:text-brand-green-700 text-muted";
     button.classList.add(classNames.split(" "));
 
-    panel.appendChild(button);
     buttonModule.addTalkIcon(button);
-
-    // Call the function to inject the script after the button has been added
-    startAudioModule();
+    panel.appendChild(button);
   }
 
   function addLockButtons(container) {

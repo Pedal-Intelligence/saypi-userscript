@@ -1,5 +1,8 @@
 // Chatbot.ts
 abstract class Chatbot {
+  getAudioOutputButtonSelector(): string {
+    throw new Error("Method not implemented.");
+  }
   abstract getAudioControlsSelector(): string;
   getControlPanelSelector(): string {
     throw new Error("Method not implemented.");
