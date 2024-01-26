@@ -101,7 +101,6 @@ export function observeDOM(): void {
 
 // Function to decorate the prompt input element, and other elements that depend on it
 function decoratePrompt(prompt: HTMLInputElement): void {
-  console.log("Decorating prompt input", prompt);
   prompt.id = "saypi-prompt";
   const promptParent = prompt.parentElement;
   if (promptParent) {

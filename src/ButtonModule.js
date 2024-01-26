@@ -187,7 +187,6 @@ export default class ButtonModule {
   }
 
   createCallButton(container, position = 0) {
-    console.log("Adding call button to container", container);
     const button = this.createButton();
     button.id = "saypi-callButton";
     button.type = "button";
@@ -376,7 +375,6 @@ export default class ButtonModule {
       const continueUnlockingMessage = getMessage("continueUnlocking");
 
       button.onmousedown = button.ontouchstart = () => {
-        console.log("unlock button pressed");
         const instruction = document.getElementById("saypi-unlock-instruction");
         if (instruction) {
           instruction.textContent = continueUnlockingMessage;
@@ -387,7 +385,6 @@ export default class ButtonModule {
       };
 
       button.onmouseup = button.ontouchend = () => {
-        console.log("unlock button released");
         // reset the message
         const instruction = document.getElementById("saypi-unlock-instruction");
         if (instruction) {

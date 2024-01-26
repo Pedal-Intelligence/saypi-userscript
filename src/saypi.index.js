@@ -25,7 +25,11 @@ import "./styles/rectangles.css";
     if (isLoaded) {
       return;
     }
-    console.log("Content loaded. Initializing...");
+    // arguably these two functions are part of the content loading phase,
+    // but they need to be called after other content has been loaded
+    addVisualisations(document.body);
+    addLockButtons(document.body);
+
     submitErrorHandler.initAudioOutputListener();
     submitErrorHandler.checkForRestorePoint();
     initMode();
@@ -36,11 +40,6 @@ import "./styles/rectangles.css";
   addUserAgentFlags();
   EventModule.init();
   observeDOM();
-
-  function annotateDOM(prompt) {
-    addVisualisations(document.body);
-    addLockButtons(document.body);
-  }
 
   function addVisualisations(container) {
     // Create a containing div
@@ -93,7 +92,4 @@ import "./styles/rectangles.css";
     unlockInstruction.innerHTML = getMessage("unlockInstruction");
     lockedText.appendChild(unlockInstruction);
   }
-
-  // Start observing the entire document for changes to child nodes and subtree
-  //observer.observe(document, { childList: true, subtree: true });
 })();
