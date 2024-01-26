@@ -19,6 +19,7 @@ import lockIconSVG from "./icons/lock.svg";
 import unlockIconSVG from "./icons/unlock.svg";
 import getMessage from "./i18n.ts";
 import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
+import AnimationModule from "./AnimationModule.js";
 export default class ButtonModule {
   constructor() {
     this.sayPiActor = StateMachineService.actor; // the Say, Pi state machine
@@ -28,6 +29,9 @@ export default class ButtonModule {
 
     // track the frequency of bug #26
     this.submissionsWithoutAnError = 0;
+
+    // track whether a call is active, so that new button instances can be initialized correctly
+    this.callIsActive = false;
   }
 
   registerOtherEvents() {
@@ -192,9 +196,17 @@ export default class ButtonModule {
     button.type = "button";
     button.className =
       "call-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650 m-2";
-    this.callInactive(button); // mic is off by default
+    if (this.callIsActive) {
+      this.callActive(button);
+    } else {
+      this.callInactive(button);
+    }
 
     addChild(container, button, position);
+    if (this.callIsActive) {
+      // if the call is active, start the glow animation once added to the DOM
+      AnimationModule.startAnimation("glow");
+    }
     return button;
   }
 
@@ -290,6 +302,7 @@ export default class ButtonModule {
       };
       callButton.classList.add("active");
     }
+    this.callIsActive = true;
   }
 
   callInactive(callButton) {
@@ -306,6 +319,7 @@ export default class ButtonModule {
       };
       callButton.classList.remove("active");
     }
+    this.callIsActive = false;
   }
 
   callError(callButton) {

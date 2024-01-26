@@ -289,6 +289,7 @@ export function setDraftPrompt(transcript: string): void {
   scrollToBottom(textarea);
 }
 
+const PROMPT_CHARACTER_LIMIT = 4000;
 export function setFinalPrompt(transcript: string): void {
   logger.info(`Final transcript: ${transcript}`);
   const textarea = document.getElementById(
@@ -299,11 +300,12 @@ export function setFinalPrompt(transcript: string): void {
   textarea.style.height = initialHeight; // Reset the height after draft preview has been dismissed
   if (isMobileView()) {
     // if transcript is > 1000 characters, truncate it to 999 characters plus an ellipsis
-    if (transcript.length > 1000) {
-      transcript = `${transcript.substring(0, 999)}…`;
+    if (transcript.length > PROMPT_CHARACTER_LIMIT) {
+      const truncatedLength = PROMPT_CHARACTER_LIMIT - 1;
+      transcript = `${transcript.substring(0, truncatedLength)}…`;
       console.warn(
-        `Transcript was too long for Pi. Truncated to 999 characters, losing the following text: ... ${transcript.substring(
-          999
+        `Transcript was too long for Pi. Truncated to ${truncatedLength} characters, losing the following text: ... ${transcript.substring(
+          truncatedLength
         )}`
       );
     }
