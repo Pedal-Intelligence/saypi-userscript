@@ -1,4 +1,10 @@
-export function appendChild(
+/**
+ * Append a child node to a parent node, either at a specific position or as the last child.
+ * @param parent The parent node to add the child to.
+ * @param child The node to add.
+ * @param position If positive, indexed from the start of the parent's children. If negative, indexed from the end of the parent's children.
+ */
+export function addChild(
   parent: Element,
   child: Node,
   position: number = 0
@@ -10,7 +16,8 @@ export function appendChild(
       parent.appendChild(child);
     } else {
       // Calculate the index of the reference node for insertBefore().
-      const referenceIndex = parent.children.length + position;
+      const referenceIndex =
+        position > 0 ? position : parent.children.length + position;
       const referenceNode = parent.children[referenceIndex];
 
       // If a reference node exists, insert the button before it.

@@ -3,7 +3,7 @@ import {
   exitMobileMode,
   isMobileView,
 } from "./UserAgentModule.js";
-import { appendChild } from "./DOMModule.ts";
+import { addChild } from "./DOMModule.ts";
 import EventBus from "./EventBus.js";
 import StateMachineService from "./StateMachineService.js";
 import { submitErrorHandler } from "./SubmitErrorHandler.ts";
@@ -19,6 +19,7 @@ import lockIconSVG from "./icons/lock.svg";
 import unlockIconSVG from "./icons/unlock.svg";
 import getMessage from "./i18n.ts";
 import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
+import AnimationModule from "./AnimationModule.js";
 export default class ButtonModule {
   constructor() {
     this.sayPiActor = StateMachineService.actor; // the Say, Pi state machine
@@ -28,6 +29,9 @@ export default class ButtonModule {
 
     // track the frequency of bug #26
     this.submissionsWithoutAnError = 0;
+
+    // track whether a call is active, so that new button instances can be initialized correctly
+    this.callIsActive = false;
   }
 
   registerOtherEvents() {
@@ -60,13 +64,13 @@ export default class ButtonModule {
     }
   }
 
-  addTalkIcon(button) {
-    this.updateIconContent(button);
+  addTalkIcon(container) {
+    this.updateIconContent(container);
 
     window.matchMedia("(max-width: 768px)").addListener(() => {
-      this.updateIconContent(button);
+      this.updateIconContent(container);
     });
-    this.setupClassObserver(button);
+    this.setupViewObserver(container);
   }
 
   updateIconContent(iconContainer) {
@@ -77,7 +81,13 @@ export default class ButtonModule {
     }
   }
 
-  setupClassObserver(button) {
+  /**
+   * Monitors the HTML element for changes in the view class
+   * i.e. when the desktop/mobile view is toggled
+   * and updates the icon content accordingly
+   * @param {*} container - The HTML element to hold the icon
+   */
+  setupViewObserver(container) {
     const targetNode = document.documentElement; // The <html> element
 
     const config = { attributes: true, attributeFilter: ["class"] };
@@ -88,10 +98,10 @@ export default class ButtonModule {
           if (mutation.attributeName === "class") {
             if (document.documentElement.classList.contains("mobile-view")) {
               // 'mobile-view' class was added
-              this.updateIconContent(button);
+              this.updateIconContent(container);
             } else {
               // 'mobile-view' class was removed
-              this.updateIconContent(button);
+              this.updateIconContent(container);
             }
           }
         }
@@ -149,35 +159,34 @@ export default class ButtonModule {
     }
   }
 
-  createExitButton() {
+  createExitButton(container, position = 0) {
     const label = getMessage("exitMobileMode");
     const button = this.createButton("", () => {
       exitMobileMode();
     });
-    button.id = "saypi-exitButton";
     button.type = "button";
     button.className =
-      "exit-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      "saypi-exit-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
     button.setAttribute("aria-label", label);
     button.setAttribute("title", label);
     button.innerHTML = exitIconSVG;
-    document.body.appendChild(button);
+    addChild(container, button, position);
     return button;
   }
 
-  createEnterButton() {
+  createEnterButton(container, position = 0) {
     const label = getMessage("enterMobileMode");
     const button = this.createButton("", () => {
       enterMobileMode();
     });
-    button.id = "saypi-enterButton";
     button.type = "button";
     button.className =
-      "enter-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      "saypi-enter-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
     button.setAttribute("aria-label", label);
     button.setAttribute("title", label);
     button.innerHTML = maximizeIconSVG;
-    document.body.appendChild(button);
+    // insert the button at the specified position
+    addChild(container, button, position);
     return button;
   }
 
@@ -187,9 +196,17 @@ export default class ButtonModule {
     button.type = "button";
     button.className =
       "call-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650 m-2";
-    this.callInactive(button); // mic is off by default
+    if (this.callIsActive) {
+      this.callActive(button);
+    } else {
+      this.callInactive(button);
+    }
 
-    appendChild(container, button, position);
+    addChild(container, button, position);
+    if (this.callIsActive) {
+      // if the call is active, start the glow animation once added to the DOM
+      AnimationModule.startAnimation("glow");
+    }
     return button;
   }
 
@@ -285,6 +302,7 @@ export default class ButtonModule {
       };
       callButton.classList.add("active");
     }
+    this.callIsActive = true;
   }
 
   callInactive(callButton) {
@@ -301,6 +319,7 @@ export default class ButtonModule {
       };
       callButton.classList.remove("active");
     }
+    this.callIsActive = false;
   }
 
   callError(callButton) {
@@ -370,7 +389,6 @@ export default class ButtonModule {
       const continueUnlockingMessage = getMessage("continueUnlocking");
 
       button.onmousedown = button.ontouchstart = () => {
-        console.log("unlock button pressed");
         const instruction = document.getElementById("saypi-unlock-instruction");
         if (instruction) {
           instruction.textContent = continueUnlockingMessage;
@@ -381,7 +399,6 @@ export default class ButtonModule {
       };
 
       button.onmouseup = button.ontouchend = () => {
-        console.log("unlock button released");
         // reset the message
         const instruction = document.getElementById("saypi-unlock-instruction");
         if (instruction) {

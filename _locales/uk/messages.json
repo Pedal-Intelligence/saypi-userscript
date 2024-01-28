@@ -84,7 +84,7 @@
     "message": "$мікрофон$ підключено",
     "placeholders": {
       "microphone": {
-        "content": "1 долар",
+        "content": "1$",
         "example": "Типовий - Мікрофон MacBook Pro"
       }
     }
@@ -98,7 +98,7 @@
     "message": "Перехід на $мікрофон$...",
     "placeholders": {
       "microphone": {
-        "content": "1 долар",
+        "content": "1$",
         "example": "Типово - AirPods Pro"
       }
     }

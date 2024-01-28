@@ -81,7 +81,7 @@
   },
   "audioConnected": {
     "description": "Mensagem exibida quando um microfone está conectado",
-    "message": "$microfone$ conectado",
+    "message": "$microphone$ conectado",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -95,7 +95,7 @@
   },
   "audioReconnecting": {
     "description": "Mensagem exibida ao conectar um novo microfone",
-    "message": "Mudando para $microfone$...",
+    "message": "Mudando para $microphone$...",
     "placeholders": {
       "microphone": {
         "content": "$1",

@@ -84,7 +84,7 @@
     "message": "$microphone$ đã được kết nối",
     "placeholders": {
       "microphone": {
-        "content": "1 đô la",
+        "content": "1$",
         "example": "Mặc định - Microphone MacBook Pro"
       }
     }
@@ -98,7 +98,7 @@
     "message": "Chuyển sang $microphone$...",
     "placeholders": {
       "microphone": {
-        "content": "1 đô la",
+        "content": "1$",
         "example": "Mặc định - AirPods Pro"
       }
     }

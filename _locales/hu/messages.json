@@ -81,10 +81,10 @@
   },
   "audioConnected": {
     "description": "Üzenet jelenik meg, amikor egy mikrofon csatlakoztatva van",
-    "message": "$mikrofon$ csatlakoztatva",
+    "message": "$microphone$ csatlakoztatva",
     "placeholders": {
       "microphone": {
-        "content": "1 dollár",
+        "content": "1$",
         "example": "Alapértelmezett - MacBook Pro Mikrofon"
       }
     }
@@ -95,10 +95,10 @@
   },
   "audioReconnecting": {
     "description": "Üzenet, amely megjelenik egy új mikrofon csatlakoztatásakor",
-    "message": "Váltás a $mikrofonra$...",
+    "message": "Váltás a $microphone$...",
     "placeholders": {
       "microphone": {
-        "content": "1 dollár",
+        "content": "1$",
         "example": "Alapértelmezett - AirPods Pro"
       }
     }

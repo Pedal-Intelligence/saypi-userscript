@@ -81,10 +81,10 @@
   },
   "audioConnected": {
     "description": "Messaggio visualizzato quando un microfono è collegato",
-    "message": "$microfono$ connesso",
+    "message": "$microphone$ connesso",
     "placeholders": {
       "microphone": {
-        "content": "1 dollaro",
+        "content": "1$",
         "example": "Predefinito - Microfono MacBook Pro"
       }
     }
@@ -95,10 +95,10 @@
   },
   "audioReconnecting": {
     "description": "Messaggio visualizzato quando si collega un nuovo microfono",
-    "message": "Passando a $microfono$...",
+    "message": "Passando a $microphone$...",
     "placeholders": {
       "microphone": {
-        "content": "1 dollaro",
+        "content": "1$",
         "example": "Predefinito - AirPods Pro"
       }
     }

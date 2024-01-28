@@ -81,7 +81,7 @@
   },
   "audioConnected": {
     "description": "Bericht weergegeven wanneer een microfoon is aangesloten",
-    "message": "$microfoon$ verbonden",
+    "message": "$microphone$ verbonden",
     "placeholders": {
       "microphone": {
         "content": "€1",
@@ -95,7 +95,7 @@
   },
   "audioReconnecting": {
     "description": "Bericht weergegeven bij het verbinden met een nieuwe microfoon",
-    "message": "Overschakelen naar $microfoon$...",
+    "message": "Overschakelen naar $microphone$...",
     "placeholders": {
       "microphone": {
         "content": "€1",
