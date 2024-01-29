@@ -552,7 +552,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     entry: {
                       type: "showNotification",
                       params: {
-                        message: getMessage("audioInputError"),
+                        message: getMessage("audioInputError", "Pi"),
                         icon: "microphone-muted",
                       },
                     },

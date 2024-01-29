@@ -100,7 +100,13 @@
     }
   },
   "audioInputError": {
-    "message": "Oops, we didn't catch that. Can you try saying it again?",
-    "description": "Message displayed when audio resulted in an empty transcription - usually the result of filtering."
+    "message": "Oops, $chatbot$ didn't catch that. Can you try saying it again?",
+    "description": "Message displayed when audio resulted in an empty transcription - usually the result of filtering.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   }
 }
