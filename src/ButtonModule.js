@@ -10,6 +10,7 @@ import { submitErrorHandler } from "./SubmitErrorHandler.ts";
 import exitIconSVG from "./icons/exit.svg";
 import maximizeIconSVG from "./icons/maximize.svg";
 import rectanglesSVG from "./icons/rectangles.svg";
+import rectanglesDarkModeSVG from "./icons/rectangles-moonlight.svg";
 import talkIconSVG from "./icons/waveform.svg";
 import callIconSVG from "./icons/call.svg";
 import callStartingIconSVG from "./icons/call-starting.svg";
@@ -17,6 +18,8 @@ import hangupIconSVG from "./icons/hangup.svg";
 import hangupMincedIconSVG from "./icons/hangup-minced.svg";
 import lockIconSVG from "./icons/lock.svg";
 import unlockIconSVG from "./icons/unlock.svg";
+import darkModeIconSVG from "./icons/mode-dark-night.svg";
+import lightModeIconSVG from "./icons/mode-light-day.svg";
 import getMessage from "./i18n.ts";
 import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
 import AnimationModule from "./AnimationModule.js";
@@ -24,6 +27,7 @@ export default class ButtonModule {
   constructor() {
     this.sayPiActor = StateMachineService.actor; // the Say, Pi state machine
     this.screenLockActor = StateMachineService.screenLockActor;
+    this.themeToggleActor = StateMachineService.themeToggleActor;
     // Binding methods to the current instance
     this.registerOtherEvents();
 
@@ -75,10 +79,11 @@ export default class ButtonModule {
 
   updateIconContent(iconContainer) {
     if (isMobileView()) {
-      iconContainer.innerHTML = rectanglesSVG;
+      iconContainer.innerHTML = this.getRectanglesSVG();
     } else {
       iconContainer.innerHTML = talkIconSVG;
     }
+    iconContainer.classList.add("saypi-icon");
   }
 
   /**
@@ -166,7 +171,7 @@ export default class ButtonModule {
     });
     button.type = "button";
     button.className =
-      "saypi-exit-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      "saypi-exit-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
     button.setAttribute("aria-label", label);
     button.setAttribute("title", label);
     button.innerHTML = exitIconSVG;
@@ -181,7 +186,7 @@ export default class ButtonModule {
     });
     button.type = "button";
     button.className =
-      "saypi-enter-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      "saypi-enter-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
     button.setAttribute("aria-label", label);
     button.setAttribute("title", label);
     button.innerHTML = maximizeIconSVG;
@@ -359,7 +364,7 @@ export default class ButtonModule {
     button.id = "saypi-lockButton";
     button.type = "button";
     button.className =
-      "lock-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      "lock-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
     button.setAttribute("aria-label", label);
     button.setAttribute("title", label);
     button.innerHTML = lockIconSVG;
@@ -378,7 +383,7 @@ export default class ButtonModule {
     button.id = "saypi-unlockButton";
     button.type = "button";
     button.className =
-      "lock-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      "lock-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
     button.setAttribute("aria-label", label);
     button.setAttribute("title", label);
     button.innerHTML = unlockIconSVG;
@@ -405,6 +410,59 @@ export default class ButtonModule {
           instruction.textContent = originalMessage;
         }
         clearTimeout(pressTimer);
+      };
+    }
+    return button;
+  }
+
+  getRectanglesSVG(theme = "light") {
+    console.log("Getting rectangles SVG for theme", theme);
+    if (theme === "dark") {
+      return rectanglesDarkModeSVG;
+    } else {
+      return rectanglesSVG;
+    }
+  }
+
+  toggleTheme() {
+    this.themeToggleActor.send("toggle");
+  }
+
+  applyTheme(theme) {
+    const button = document.getElementById("saypi-themeToggleButton");
+    if (button) {
+      if (theme === "dark") {
+        button.innerHTML = darkModeIconSVG;
+        const label = getMessage("toggleThemeToLightMode");
+        button.setAttribute("aria-label", label);
+        button.setAttribute("title", label);
+      } else if (theme === "light") {
+        button.innerHTML = lightModeIconSVG;
+        const label = getMessage("toggleThemeToDarkMode");
+        button.setAttribute("aria-label", label);
+        button.setAttribute("title", label);
+      }
+    }
+    const iconContainer = document.querySelector(".saypi-icon");
+    if (iconContainer) {
+      iconContainer.innerHTML = this.getRectanglesSVG(theme);
+    }
+  }
+
+  createThemeToggleButton(container, position = 0) {
+    const label = getMessage("toggleThemeToDarkMode");
+    const button = document.createElement("button");
+    button.id = "saypi-themeToggleButton";
+    button.type = "button";
+    button.className =
+      "theme-toggle-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+    button.setAttribute("aria-label", label);
+    button.setAttribute("title", label);
+    button.innerHTML = lightModeIconSVG;
+    if (container) {
+      addChild(container, button, position);
+      button.onclick = () => {
+        this.toggleTheme();
       };
     }
     return button;

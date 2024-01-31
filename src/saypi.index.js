@@ -28,7 +28,8 @@ import "./styles/rectangles.css";
     // arguably these two functions are part of the content loading phase,
     // but they need to be called after other content has been loaded
     addVisualisations(document.body);
-    addLockButtons(document.body);
+    const controlPanel = document.querySelector(".saypi-control-panel");
+    addLockButtons(controlPanel);
 
     submitErrorHandler.initAudioOutputListener();
     submitErrorHandler.checkForRestorePoint();
@@ -66,26 +67,28 @@ import "./styles/rectangles.css";
 
   function addLockButtons(container) {
     // Create a containing div
-    var panel = document.createElement("div");
-    panel.id = "saypi-lock-panel";
-    panel.classList.add("unlocked");
+    var lockPanel = document.createElement("div");
+    lockPanel.id = "saypi-lock-panel";
+    lockPanel.classList.add("unlocked");
+    document.body.classList.add("unlocked");
 
     if (container) {
-      container.appendChild(panel);
+      container.appendChild(lockPanel);
     } else {
-      document.body.appendChild(panel);
+      document.body.appendChild(lockPanel);
     }
 
-    var lockButton = buttonModule.createLockButton(panel);
-    var unlockButton = buttonModule.createUnlockButton(panel);
+    const buttonContainer = lockPanel;
+    var lockButton = buttonModule.createLockButton(buttonContainer);
+    var unlockButton = buttonModule.createUnlockButton(buttonContainer);
     var touchAbsorber = document.createElement("div");
     touchAbsorber.id = "saypi-touch-absorber";
-    panel.appendChild(touchAbsorber);
+    lockPanel.appendChild(touchAbsorber);
 
     var lockedText = document.createElement("p");
     lockedText.id = "saypi-locked-text";
     lockedText.innerHTML = getMessage("lockedScreen");
-    panel.appendChild(lockedText);
+    lockPanel.appendChild(lockedText);
     var unlockInstruction = document.createElement("span");
     unlockInstruction.id = "saypi-unlock-instruction";
     unlockInstruction.classList.add("subtext");

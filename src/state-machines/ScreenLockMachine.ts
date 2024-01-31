@@ -38,30 +38,34 @@ export const machine = createMachine(
   },
   {
     actions: {
-        lockScreen: () => {
-            const lockPanel = document.getElementById("saypi-lock-panel");
-            const unlockButton = document.getElementById("saypi-unlockButton");
-            lockPanel?.classList.add("locked");
-            unlockButton?.classList.add("glow");
-            lockPanel?.classList.remove("unlocked");
-            notificationsModule.lockScreen();
-            console.log("Screen locked");
-        },
-        unlockScreen: () => {
-            const lockPanel = document.getElementById("saypi-lock-panel");
-            const unlockButton = document.getElementById("saypi-unlockButton");
-            lockPanel?.classList.remove("locked");
-            unlockButton?.classList.remove("glow");
-            lockPanel?.classList.add("unlocked");
-            notificationsModule.unlockScreen();
-            console.log("Screen unlocked");
-        },
-        fullscreen: () => {
-            enterFullscreen();
-        }
+      lockScreen: () => {
+        const lockPanel = document.getElementById("saypi-lock-panel");
+        const unlockButton = document.getElementById("saypi-unlockButton");
+        document.body.classList.add("locked"); // add class to body so that other descendants can style themselves accordingly
+        lockPanel?.classList.add("locked");
+        unlockButton?.classList.add("glow");
+        document.body.classList.remove("unlocked");
+        lockPanel?.classList.remove("unlocked");
+        notificationsModule.lockScreen();
+        console.log("Screen locked");
+      },
+      unlockScreen: () => {
+        const lockPanel = document.getElementById("saypi-lock-panel");
+        const unlockButton = document.getElementById("saypi-unlockButton");
+        document.body.classList.remove("locked");
+        lockPanel?.classList.remove("locked");
+        unlockButton?.classList.remove("glow");
+        document.body.classList.add("unlocked");
+        lockPanel?.classList.add("unlocked");
+        notificationsModule.unlockScreen();
+        console.log("Screen unlocked");
+      },
+      fullscreen: () => {
+        enterFullscreen();
+      },
     },
     services: {},
     guards: {},
     delays: {},
-  },
+  }
 );

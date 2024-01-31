@@ -1,6 +1,7 @@
 import { interpret } from "xstate";
 import { machine } from "./state-machines/SayPiMachine.ts";
 import { machine as screenLockMachine } from "./state-machines/ScreenLockMachine.ts";
+import { machine as themeToggleMachine } from "./state-machines/ThemeToggleMachine.ts";
 import { logger, serializeStateValue } from "./LoggingModule.js";
 
 /**
@@ -35,6 +36,21 @@ class StateMachineService {
       }
     );
     this.screenLockActor.start();
+
+    this.themeToggleActor = interpret(themeToggleMachine).onTransition(
+      (state) => {
+        if (state.changed) {
+          const fromState = state.history
+            ? serializeStateValue(state.history.value)
+            : "N/A";
+          const toState = serializeStateValue(state.value);
+          logger.debug(
+            `Theme Toggle Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
+          );
+        }
+      }
+    );
+    this.themeToggleActor.start();
   }
 }
 

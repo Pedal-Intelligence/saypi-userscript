@@ -108,5 +108,13 @@
         "example": "Pi"
       }
     }
+  },
+  "toggleThemeToDarkMode": {
+    "message": "Switch to dark mode",
+    "description": "Label for the button to toggle to dark mode."
+  },
+  "toggleThemeToLightMode": {
+    "message": "Switch to light mode",
+    "description": "Label for the button to toggle to light mode."
   }
 }

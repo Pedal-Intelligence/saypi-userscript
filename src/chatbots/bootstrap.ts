@@ -142,6 +142,7 @@ function decorateControlPanel(controlPanel: HTMLElement): void {
   const toggleModeBtnPos = 1;
   buttonModule.createEnterButton(controlPanel, toggleModeBtnPos);
   buttonModule.createExitButton(controlPanel, toggleModeBtnPos);
+  buttonModule.createThemeToggleButton(controlPanel, toggleModeBtnPos + 2);
 }
 
 function findAndDecorateControlPanel(searchRoot: Element): Observation {
