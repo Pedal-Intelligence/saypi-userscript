@@ -1,5 +1,6 @@
 import { addChild } from "./DOMModule.ts";
 import { enterFullscreen, exitFullscreen } from "./FullscreenModule.ts";
+import { setNormalMode } from "./ThemeModule.ts";
 
 export function isMobileDevice() {
   return (
@@ -36,8 +37,8 @@ export function exitMobileMode() {
   element.classList.add("desktop-view");
 
   attachCallButton();
-
   exitFullscreen();
+  setNormalMode();
 }
 
 export function enterMobileMode() {
