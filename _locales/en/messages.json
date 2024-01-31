@@ -109,6 +109,16 @@
       }
     }
   },
+  "assistantIsListening": {
+    "message": "$chatbot$ is listening...",
+    "description": "Message displayed when the assistant is listening for speech.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "toggleThemeToDarkMode": {
     "message": "Switch to dark mode",
     "description": "Label for the button to toggle to dark mode."

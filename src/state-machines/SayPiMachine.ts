@@ -16,6 +16,7 @@ import {
 import { isMobileView } from "../UserAgentModule.js";
 import {
   uploadAudioWithRetry,
+  getDraftPrompt,
   setDraftPrompt,
   setFinalPrompt,
   isTranscriptionPending,
@@ -82,6 +83,7 @@ interface SayPiContext {
   lastState: "inactive" | "listening";
   userIsSpeaking: boolean; // duplicate of state.matches("listening.recording.userSpeaking")
   timeUserStoppedSpeaking: number;
+  defaultPlaceholderText: string;
 }
 
 // Define the state schema
@@ -169,6 +171,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       lastState: "inactive",
       userIsSpeaking: false,
       timeUserStoppedSpeaking: 0,
+      defaultPlaceholderText: "Talk to Pi",
     },
     id: "sayPi",
     initial: "inactive",
@@ -260,6 +263,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   animation: "glow",
                 },
               },
+              {
+                type: "listenPrompt",
+              },
             ],
             exit: [
               {
@@ -267,6 +273,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 params: {
                   animation: "glow",
                 },
+              },
+              {
+                type: "clearPrompt",
               },
             ],
             states: {
@@ -788,6 +797,19 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       acknowledgeUserInput: () => {
         visualNotifications.listeningStopped();
         audibleNotifications.listeningStopped();
+      },
+
+      listenPrompt: () => {
+        const message = getMessage("assistantIsListening", "Pi");
+        if (message) {
+          const initialText = getDraftPrompt();
+          assign({ defaultPlaceholderText: initialText });
+          setDraftPrompt(message);
+        }
+      },
+
+      clearPrompt: (context: SayPiContext) => {
+        setDraftPrompt(context.defaultPlaceholderText);
       },
 
       draftPrompt: (context: SayPiContext) => {

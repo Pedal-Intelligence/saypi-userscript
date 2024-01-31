@@ -277,6 +277,17 @@ function scrollToBottom(textarea: HTMLTextAreaElement) {
 }
 
 /**
+ * Get the prompt textarea's current placeholder text
+ */
+export function getDraftPrompt(): string {
+  const textarea = document.getElementById(
+    "saypi-prompt"
+  ) as HTMLTextAreaElement;
+
+  return textarea.getAttribute("placeholder") || "";
+}
+
+/**
  * Set the prompt textarea to the given transcript, but do not submit it
  * @param transcript The prompt to be displayed in the prompt textarea
  */
