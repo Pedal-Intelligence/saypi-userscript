@@ -60,9 +60,11 @@ export class TextualNotificationsModule implements INotificationsModule {
     // show new notification
     this.notificationElement!.classList.add("active");
     if (iconName) {
-      this.notificationElement!.classList.add("icon");
+      const iconElement = document.createElement("img");
+      iconElement.classList.add("icon");
       const iconImageUrl = getResourceUrl(`icons/${iconName}.svg`);
-      this.notificationElement!.style.backgroundImage = `url("${iconImageUrl}")`;
+      iconElement.src = iconImageUrl;
+      this.notificationElement?.appendChild(iconElement);
     }
     const notificationText = document.createElement("span");
     notificationText.textContent = message;
@@ -72,8 +74,6 @@ export class TextualNotificationsModule implements INotificationsModule {
   public hideNotification() {
     this.init();
     this.notificationElement!.classList.remove("active");
-    this.notificationElement!.classList.remove("icon");
-    this.notificationElement!.style.backgroundImage = "";
     // remove any child elements
     while (this.notificationElement!.firstChild) {
       this.notificationElement!.removeChild(

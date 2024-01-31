@@ -169,10 +169,6 @@ html.mobile-view {
     visibility: hidden;
   }
 
-  #saypi-notification span {
-    padding-left: 20%; /* wider padding for mobile */
-  }
-
   /* hide any buttons in the control panel not relevant to mobile */
   .saypi-control-panel button:not(.saypi-control-button) {
     display: none;

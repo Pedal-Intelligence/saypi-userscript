@@ -416,7 +416,6 @@ export default class ButtonModule {
   }
 
   getRectanglesSVG(theme = "light") {
-    console.log("Getting rectangles SVG for theme", theme);
     if (theme === "dark") {
       return rectanglesDarkModeSVG;
     } else {
