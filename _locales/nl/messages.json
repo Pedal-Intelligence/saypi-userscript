@@ -84,14 +84,14 @@
     "message": "$microphone$ verbonden",
     "placeholders": {
       "microphone": {
-        "content": "€1",
+        "content": "$1",
         "example": "Standaard - MacBook Pro Microfoon"
       }
     }
   },
   "audioInputError": {
     "description": "Bericht weergegeven wanneer audio resulteerde in een lege transcriptie - meestal het gevolg van filteren.",
-    "message": "Oeps, we hebben dat niet opgevangen - het kan achtergrondgeluid zijn. Probeer opnieuw te spreken, of controleer je microfooninstellingen."
+    "message": "Oeps, $chatbot$ heeft dat niet opgevangen. Kun je het nog eens proberen te zeggen?"
   },
   "audioReconnecting": {
     "description": "Bericht weergegeven bij het verbinden met een nieuwe microfoon",
@@ -102,5 +102,17 @@
         "example": "Standaard - AirPods Pro"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "Bericht weergegeven wanneer de assistent luistert naar spraak.",
+    "message": "$chatbot$ luistert..."
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Label voor de knop om over te schakelen naar donkere modus.",
+    "message": "Schakel over naar donkere modus"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Label voor de knop om over te schakelen naar lichte modus.",
+    "message": "Schakel over naar lichte modus"
   }
 }

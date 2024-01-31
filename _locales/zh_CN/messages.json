@@ -84,14 +84,14 @@
     "message": "$麦克风$已连接",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "默认 - MacBook Pro 麦克风"
       }
     }
   },
   "audioInputError": {
     "description": "当音频导致空白转录时显示的消息 - 通常是过滤的结果。",
-    "message": "哎呀，我们没有捕捉到那个 - 可能是背景噪音。请再试一次说话，或者检查你的麦克风设置。"
+    "message": "哎呀，$chatbot$没有抓住那个。你能再说一遍吗？"
   },
   "audioReconnecting": {
     "description": "连接新麦克风时显示的消息",
@@ -102,5 +102,17 @@
         "example": "默认 - AirPods Pro"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "当助手正在倾听语音时显示的消息。",
+    "message": "$chatbot$正在倾听..."
+  },
+  "toggleThemeToDarkMode": {
+    "description": "切换至暗黑模式的按钮标签。",
+    "message": "切换到暗黑模式"
+  },
+  "toggleThemeToLightMode": {
+    "description": "切换到亮模式的按钮标签。",
+    "message": "切换到亮模式"
   }
 }

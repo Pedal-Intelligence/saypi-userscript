@@ -84,14 +84,14 @@
     "message": "$microphone$ connecté",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "Par défaut - Microphone MacBook Pro"
       }
     }
   },
   "audioInputError": {
     "description": "Message affiché lorsque l'audio a donné lieu à une transcription vide - généralement le résultat d'un filtrage.",
-    "message": "Oups, nous n'avons pas capté cela - cela pourrait être un bruit de fond. Essayez de parler à nouveau, ou vérifiez les paramètres de votre micro."
+    "message": "Oups, $chatbot$ n'a pas compris cela. Pouvez-vous essayer de le dire à nouveau?"
   },
   "audioReconnecting": {
     "description": "Message affiché lors de la connexion à un nouveau microphone",
@@ -102,5 +102,17 @@
         "example": "Par défaut - AirPods Pro"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "Message affiché lorsque l'assistant écoute la parole.",
+    "message": "$chatbot$ écoute..."
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Étiquette pour le bouton de basculement en mode sombre.",
+    "message": "Passer en mode sombre"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Étiquette pour le bouton de basculement en mode clair.",
+    "message": "Passer en mode clair"
   }
 }

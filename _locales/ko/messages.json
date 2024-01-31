@@ -91,7 +91,7 @@
   },
   "audioInputError": {
     "description": "오디오가 빈 전사로 이어졌을 때 표시되는 메시지 - 보통 필터링의 결과입니다.",
-    "message": "이런, 우리가 그것을 잡지 못했습니다 - 배경 소음일 수 있습니다. 다시 말해 보거나 마이크 설정을 확인해보세요."
+    "message": "이런, $chatbot$가 그것을 이해하지 못했습니다. 다시 말해 볼 수 있을까요?"
   },
   "audioReconnecting": {
     "description": "새로운 마이크에 연결할 때 표시되는 메시지",
@@ -102,5 +102,17 @@
         "example": "기본값 - 에어팟 프로"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "비서가 음성을 듣고 있을 때 표시되는 메시지.",
+    "message": "$chatbot$이 청취 중입니다..."
+  },
+  "toggleThemeToDarkMode": {
+    "description": "다크 모드로 전환하는 버튼의 라벨.",
+    "message": "다크 모드로 전환하세요"
+  },
+  "toggleThemeToLightMode": {
+    "description": "라이트 모드로 전환하는 버튼의 라벨.",
+    "message": "라이트 모드로 전환하세요"
   }
 }

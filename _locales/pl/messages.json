@@ -84,14 +84,14 @@
     "message": "Mikrofon podłączony",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "Domyślny - Mikrofon MacBook Pro"
       }
     }
   },
   "audioInputError": {
     "description": "Wiadomość wyświetlana, gdy dźwięk skutkuje pustym transkrypcją - zazwyczaj jest to wynik filtrowania.",
-    "message": "Ups, tego nie złapaliśmy - to może być szum w tle. Spróbuj mówić ponownie lub sprawdź ustawienia mikrofonu."
+    "message": "Ups, $chatbot$ tego nie złapał. Czy możesz spróbować powiedzieć to jeszcze raz?"
   },
   "audioReconnecting": {
     "description": "Wiadomość wyświetlana podczas łączenia z nowym mikrofonem",
@@ -102,5 +102,17 @@
         "example": "Domyślne - AirPods Pro"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "Wiadomość wyświetlana, gdy asystent nasłuchuje mowy.",
+    "message": "$chatbot$ słucha..."
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Etykieta dla przycisku przełączania na tryb ciemny.",
+    "message": "Przełącz na tryb ciemny"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Etykieta dla przycisku przełączania na tryb jasny.",
+    "message": "Przełącz na tryb jasny"
   }
 }

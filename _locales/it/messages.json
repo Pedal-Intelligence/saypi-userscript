@@ -84,14 +84,14 @@
     "message": "$microphone$ connesso",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "Predefinito - Microfono MacBook Pro"
       }
     }
   },
   "audioInputError": {
     "description": "Messaggio visualizzato quando l'audio ha prodotto una trascrizione vuota - solitamente il risultato di un filtraggio.",
-    "message": "Oops, non abbiamo colto quello - potrebbe essere rumore di fondo. Prova a parlare di nuovo, o controlla le impostazioni del tuo microfono."
+    "message": "Oops, $chatbot$ non ha capito. Puoi provare a dirlo di nuovo?"
   },
   "audioReconnecting": {
     "description": "Messaggio visualizzato quando si collega un nuovo microfono",
@@ -102,5 +102,17 @@
         "example": "Predefinito - AirPods Pro"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "Messaggio visualizzato quando l'assistente sta ascoltando il discorso.",
+    "message": "$chatbot$ sta ascoltando..."
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Etichetta per il pulsante per passare alla modalità scura.",
+    "message": "Passa alla modalità scura"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Etichetta per il pulsante per passare alla modalità luce.",
+    "message": "Passa alla modalità luce"
   }
 }

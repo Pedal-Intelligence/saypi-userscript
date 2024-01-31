@@ -84,14 +84,14 @@
     "message": "$microphone$ đã được kết nối",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "Mặc định - Microphone MacBook Pro"
       }
     }
   },
   "audioInputError": {
     "description": "Thông điệp hiển thị khi âm thanh dẫn đến một bản ghi âm trống - thường là kết quả của việc lọc.",
-    "message": "Ồ, chúng tôi không nhận được điều đó - có thể là tiếng ồn từ phía sau. Hãy thử nói lại, hoặc kiểm tra cài đặt mic của bạn."
+    "message": "Ồ, $chatbot$ không hiểu được. Bạn có thể nói lại không?"
   },
   "audioReconnecting": {
     "description": "Thông điệp hiển thị khi kết nối với một micro mới",
@@ -102,5 +102,17 @@
         "example": "Mặc định - AirPods Pro"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "Thông điệp được hiển thị khi trợ lý đang lắng nghe giọng nói.",
+    "message": "$chatbot$ đang lắng nghe..."
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Nhãn cho nút chuyển sang chế độ tối.",
+    "message": "Chuyển sang chế độ tối"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Nhãn cho nút chuyển sang chế độ sáng.",
+    "message": "Chuyển sang chế độ sáng"
   }
 }

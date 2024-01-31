@@ -91,7 +91,7 @@
   },
   "audioInputError": {
     "description": "Mensagem exibida quando o áudio resultou em uma transcrição vazia - geralmente o resultado de filtragem.",
-    "message": "Ops, não conseguimos captar isso - pode ser ruído de fundo. Tente falar novamente ou verifique as configurações do seu microfone."
+    "message": "Ops, $chatbot$ não entendeu isso. Você pode tentar dizer novamente?"
   },
   "audioReconnecting": {
     "description": "Mensagem exibida ao conectar um novo microfone",
@@ -102,5 +102,17 @@
         "example": "Padrão - AirPods Pro"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "Mensagem exibida quando o assistente está ouvindo a fala.",
+    "message": "$chatbot$ está ouvindo..."
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Etiqueta para o botão de alternar para o modo escuro.",
+    "message": "Mude para o modo escuro"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Etiqueta para o botão de alternar para o modo claro.",
+    "message": "Mude para o modo claro"
   }
 }

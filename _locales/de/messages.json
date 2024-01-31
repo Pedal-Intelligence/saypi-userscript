@@ -84,14 +84,14 @@
     "message": "$microphone$ verbunden",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "Standard - MacBook Pro Mikrofon"
       }
     }
   },
   "audioInputError": {
     "description": "Nachricht angezeigt, wenn Audio in einer leeren Transkription resultiert - normalerweise das Ergebnis des Filterns.",
-    "message": "Hoppla, das haben wir nicht verstanden - es könnte Hintergrundgeräusche geben. Versuchen Sie erneut zu sprechen oder überprüfen Sie Ihre Mikrofoneinstellungen."
+    "message": "Hoppla, $chatbot$ hat das nicht verstanden. Können Sie es noch einmal sagen?"
   },
   "audioReconnecting": {
     "description": "Nachricht, die angezeigt wird, wenn eine Verbindung zu einem neuen Mikrofon hergestellt wird",
@@ -102,5 +102,17 @@
         "example": "Standard - AirPods Pro"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "Nachricht, die angezeigt wird, wenn der Assistent auf Sprache hört.",
+    "message": "$chatbot$ hört zu..."
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Beschriftung für die Schaltfläche zum Umschalten in den Dunkelmodus.",
+    "message": "Wechseln Sie in den Dunkelmodus"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Beschriftung für die Schaltfläche zum Wechseln in den Lichtmodus.",
+    "message": "Wechseln Sie in den Lichtmodus"
   }
 }

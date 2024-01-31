@@ -84,23 +84,47 @@
     "message": "$মাইক্রোফোন$ সংযুক্ত হয়েছে",
     "placeholders": {
       "microphone": {
-        "content": "১ ডলার",
+        "content": "$1",
         "example": "ডিফল্ট - ম্যাকবুক প্রো মাইক্রোফোন"
       }
     }
   },
   "audioInputError": {
     "description": "অডিও ফলে খালি ট্রান্সক্রিপশনের যখন বার্তা প্রদর্শিত - সাধারণতো ফিল্টারিং-র ফল।",
-    "message": "ওহ, আমরা তা ধরে পাইনি - এটি ব্যাকগ্রাউন্ড নয়িজ হতে পারে।  আবার য়েন্দেন, োর্ার্া"
+    "message": "ওহ, $chatbot$ তা ধরতে পারেনি। আপনি কি আবার বলার চেষ্টা করতে পারেন?",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioReconnecting": {
     "description": "নতুন মাইক্রোফোনের সাথে সংযোগ করার সময় প্রদর্শিত বার্তা",
-    "message": "$মাইক্রোফোন$ এ স্থানান্তরিত হচ্ছে...",
+    "message": "$microphone$-এ স্থানান্তর হচ্ছে...",
     "placeholders": {
       "microphone": {
-        "content": "১ ডলার",
+        "content": "$1",
         "example": "ডিফল্ট - এয়ারপডস প্রো"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "যখন সহায়িকা বক্তৃতা শুনে, তখন প্রদর্শিত বার্তা।",
+    "message": "$chatbot$ শুনছে...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "toggleThemeToDarkMode": {
+    "description": "ডার্ক মোডে টগল করার বোতামের জন্য লেবেল।",
+    "message": "ডার্ক মোডে স্থানান্তর করুন"
+  },
+  "toggleThemeToLightMode": {
+    "description": "লাইট মোডে টগল করার বোতামের জন্য লেবেল।",
+    "message": "আলো মোডে স্থানান্তর করুন"
   }
 }

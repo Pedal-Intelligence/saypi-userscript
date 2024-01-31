@@ -84,14 +84,14 @@
     "message": "$マイクロフォン$が接続されました",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "デフォルト - MacBook Pro マイクロフォン"
       }
     }
   },
   "audioInputError": {
     "description": "オーディオが空の転写を結果として表示されるメッセージ - 通常はフィルタリングの結果です。",
-    "message": "おっと、それをキャッチできませんでした - バックグラウンドノイズかもしれません。もう一度話してみるか、マイクの設定を確認してください。"
+    "message": "おっと、$chatbot$がそれを理解できませんでした。もう一度言ってみていただけますか？"
   },
   "audioReconnecting": {
     "description": "新しいマイクロフォンに接続するときに表示されるメッセージ",
@@ -102,5 +102,17 @@
         "example": "デフォルト - AirPods Pro"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "アシスタントが音声を聞いているときに表示されるメッセージ。",
+    "message": "$chatbot$が聞いています..."
+  },
+  "toggleThemeToDarkMode": {
+    "description": "ダークモードに切り替えるためのボタンのラベル。",
+    "message": "ダークモードに切り替えてください"
+  },
+  "toggleThemeToLightMode": {
+    "description": "ライトモードに切り替えるためのボタンのラベル。",
+    "message": "ライトモードに切り替えてください"
   }
 }
