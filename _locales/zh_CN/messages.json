@@ -81,7 +81,7 @@
   },
   "audioConnected": {
     "description": "连接麦克风时显示的消息",
-    "message": "$麦克风$已连接",
+    "message": "$microphone$已连接",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -91,21 +91,33 @@
   },
   "audioInputError": {
     "description": "当音频导致空白转录时显示的消息 - 通常是过滤的结果。",
-    "message": "哎呀，$chatbot$没有抓住那个。你能再说一遍吗？"
+    "message": "哎呀，$chatbot$没有抓住那个。你能再说一遍吗？",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioReconnecting": {
     "description": "连接新麦克风时显示的消息",
-    "message": "切换到$麦克风$...",
+    "message": "切换到$microphone$...",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "默认 - AirPods Pro"
       }
     }
   },
   "assistantIsListening": {
     "description": "当助手正在倾听语音时显示的消息。",
-    "message": "$chatbot$正在倾听..."
+    "message": "$chatbot$正在倾听...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "toggleThemeToDarkMode": {
     "description": "切换至暗黑模式的按钮标签。",

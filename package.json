@@ -1,8 +1,9 @@
 {
   "name": "saypi-userscript",
-  "version": "1.5.6",
+  "version": "1.5.7",
   "type": "module",
   "scripts": {
+    "prebuild": "node i18n-validate.cjs",
     "build": "webpack --mode production",
     "dev": "webpack --mode development --watch",
     "start": "node server.js",

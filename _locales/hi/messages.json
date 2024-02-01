@@ -81,7 +81,7 @@
   },
   "audioConnected": {
     "description": "माइक्रोफ़ोन कनेक्ट होने पर दिखाई देने वाला संदेश",
-    "message": "$माइक्रोफ़ोन$ जुड़ा हुआ है",
+    "message": "$microphone$ जुड़ा हुआ है",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -91,21 +91,33 @@
   },
   "audioInputError": {
     "description": "ऑडियो से खाली ट्रांसक्रिप्शन का परिणाम होने पर प्रदर्शित संदेश - आमतौर पर फ़िल्टरिंग का परिणाम।",
-    "message": "उफ, $chatbot$ ने वह समझा नहीं। क्या आप पुन: कहने की कोशिश कर सकते हैं?"
+    "message": "उफ, $chatbot$ ने वह समझा नहीं। क्या आप पुन: कहने की कोशिश कर सकते हैं?",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioReconnecting": {
     "description": "नए माइक्रोफोन से कनेक्ट होते समय प्रदर्शित संदेश",
     "message": "$microphone$ पर स्विच कर रहे हैं...",
     "placeholders": {
       "microphone": {
-        "content": "₹1",
+        "content": "$1",
         "example": "मूलभूत - एयरपॉड्स प्रो"
       }
     }
   },
   "assistantIsListening": {
     "description": "संदेश जो तब प्रदर्शित होता है जब सहायक वाणी के लिए सुन रहा होता है।",
-    "message": "$chatbot$ सुन रहा है..."
+    "message": "$chatbot$ सुन रहा है...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "toggleThemeToDarkMode": {
     "description": "डार्क मोड को टॉगल करने के लिए बटन का लेबल।",

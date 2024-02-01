@@ -91,21 +91,33 @@
   },
   "audioInputError": {
     "description": "Messaggio visualizzato quando l'audio ha prodotto una trascrizione vuota - solitamente il risultato di un filtraggio.",
-    "message": "Oops, $chatbot$ non ha capito. Puoi provare a dirlo di nuovo?"
+    "message": "Oops, $chatbot$ non ha capito. Puoi provare a dirlo di nuovo?",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioReconnecting": {
     "description": "Messaggio visualizzato quando si collega un nuovo microfono",
     "message": "Passando a $microphone$...",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "Predefinito - AirPods Pro"
       }
     }
   },
   "assistantIsListening": {
     "description": "Messaggio visualizzato quando l'assistente sta ascoltando il discorso.",
-    "message": "$chatbot$ sta ascoltando..."
+    "message": "$chatbot$ sta ascoltando...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "toggleThemeToDarkMode": {
     "description": "Etichetta per il pulsante per passare alla modalità scura.",

@@ -91,21 +91,33 @@
   },
   "audioInputError": {
     "description": "Wiadomość wyświetlana, gdy dźwięk skutkuje pustym transkrypcją - zazwyczaj jest to wynik filtrowania.",
-    "message": "Ups, $chatbot$ tego nie złapał. Czy możesz spróbować powiedzieć to jeszcze raz?"
+    "message": "Ups, $chatbot$ tego nie złapał. Czy możesz spróbować powiedzieć to jeszcze raz?",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioReconnecting": {
     "description": "Wiadomość wyświetlana podczas łączenia z nowym mikrofonem",
     "message": "Przełączanie na $microphone$...",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "Domyślne - AirPods Pro"
       }
     }
   },
   "assistantIsListening": {
     "description": "Wiadomość wyświetlana, gdy asystent nasłuchuje mowy.",
-    "message": "$chatbot$ słucha..."
+    "message": "$chatbot$ słucha...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "toggleThemeToDarkMode": {
     "description": "Etykieta dla przycisku przełączania na tryb ciemny.",

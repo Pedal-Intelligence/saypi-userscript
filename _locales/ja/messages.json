@@ -81,7 +81,7 @@
   },
   "audioConnected": {
     "description": "マイクロフォンが接続されたときに表示されるメッセージ",
-    "message": "$マイクロフォン$が接続されました",
+    "message": "$microphone$が接続されました",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -91,21 +91,33 @@
   },
   "audioInputError": {
     "description": "オーディオが空の転写を結果として表示されるメッセージ - 通常はフィルタリングの結果です。",
-    "message": "おっと、$chatbot$がそれを理解できませんでした。もう一度言ってみていただけますか？"
+    "message": "おっと、$chatbot$がそれを理解できませんでした。もう一度言ってみていただけますか？",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioReconnecting": {
     "description": "新しいマイクロフォンに接続するときに表示されるメッセージ",
-    "message": "$マイクロフォン$に切り替え中...",
+    "message": "$microphone$に切り替え中...",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "デフォルト - AirPods Pro"
       }
     }
   },
   "assistantIsListening": {
     "description": "アシスタントが音声を聞いているときに表示されるメッセージ。",
-    "message": "$chatbot$が聞いています..."
+    "message": "$chatbot$が聞いています...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "toggleThemeToDarkMode": {
     "description": "ダークモードに切り替えるためのボタンのラベル。",

@@ -91,21 +91,33 @@
   },
   "audioInputError": {
     "description": "Thông điệp hiển thị khi âm thanh dẫn đến một bản ghi âm trống - thường là kết quả của việc lọc.",
-    "message": "Ồ, $chatbot$ không hiểu được. Bạn có thể nói lại không?"
+    "message": "Ồ, $chatbot$ không hiểu được. Bạn có thể nói lại không?",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioReconnecting": {
     "description": "Thông điệp hiển thị khi kết nối với một micro mới",
     "message": "Chuyển sang $microphone$...",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "Mặc định - AirPods Pro"
       }
     }
   },
   "assistantIsListening": {
     "description": "Thông điệp được hiển thị khi trợ lý đang lắng nghe giọng nói.",
-    "message": "$chatbot$ đang lắng nghe..."
+    "message": "$chatbot$ đang lắng nghe...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "toggleThemeToDarkMode": {
     "description": "Nhãn cho nút chuyển sang chế độ tối.",

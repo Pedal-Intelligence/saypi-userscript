@@ -91,21 +91,33 @@
   },
   "audioInputError": {
     "description": "Bericht weergegeven wanneer audio resulteerde in een lege transcriptie - meestal het gevolg van filteren.",
-    "message": "Oeps, $chatbot$ heeft dat niet opgevangen. Kun je het nog eens proberen te zeggen?"
+    "message": "Oeps, $chatbot$ heeft dat niet opgevangen. Kun je het nog eens proberen te zeggen?",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioReconnecting": {
     "description": "Bericht weergegeven bij het verbinden met een nieuwe microfoon",
     "message": "Overschakelen naar $microphone$...",
     "placeholders": {
       "microphone": {
-        "content": "€1",
+        "content": "$1",
         "example": "Standaard - AirPods Pro"
       }
     }
   },
   "assistantIsListening": {
     "description": "Bericht weergegeven wanneer de assistent luistert naar spraak.",
-    "message": "$chatbot$ luistert..."
+    "message": "$chatbot$ luistert...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "toggleThemeToDarkMode": {
     "description": "Label voor de knop om over te schakelen naar donkere modus.",

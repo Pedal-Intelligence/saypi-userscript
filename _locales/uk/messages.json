@@ -81,7 +81,7 @@
   },
   "audioConnected": {
     "description": "Повідомлення, що відображається, коли мікрофон підключено",
-    "message": "$мікрофон$ підключено",
+    "message": "$microphone$ підключено",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -91,21 +91,33 @@
   },
   "audioInputError": {
     "description": "Повідомлення, що відображається, коли аудіо дає порожню транскрипцію - зазвичай це результат фільтрації.",
-    "message": "Ой, $chatbot$ цього не зрозумів. Можете повторити?"
+    "message": "Ой, $chatbot$ цього не зрозумів. Можете повторити?",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioReconnecting": {
     "description": "Повідомлення, що відображається при підключенні нового мікрофону",
-    "message": "Перехід на $мікрофон$...",
+    "message": "Перехід на $microphone$...",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "Типово - AirPods Pro"
       }
     }
   },
   "assistantIsListening": {
     "description": "Повідомлення, що відображається, коли помічник слухає мовлення.",
-    "message": "$chatbot$ слухає..."
+    "message": "$chatbot$ слухає...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "toggleThemeToDarkMode": {
     "description": "Напис для кнопки переключення в темний режим.",

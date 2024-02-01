@@ -81,7 +81,7 @@
   },
   "audioConnected": {
     "description": "মাইক্রোফোন সংযুক্ত হলে প্রদর্শিত বার্তা",
-    "message": "$মাইক্রোফোন$ সংযুক্ত হয়েছে",
+    "message": "$microphone$ সংযুক্ত হয়েছে",
     "placeholders": {
       "microphone": {
         "content": "$1",

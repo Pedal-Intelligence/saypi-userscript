@@ -91,7 +91,13 @@
   },
   "audioInputError": {
     "description": "Mensagem exibida quando o áudio resultou em uma transcrição vazia - geralmente o resultado de filtragem.",
-    "message": "Ops, $chatbot$ não entendeu isso. Você pode tentar dizer novamente?"
+    "message": "Ops, $chatbot$ não entendeu isso. Você pode tentar dizer novamente?",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioReconnecting": {
     "description": "Mensagem exibida ao conectar um novo microfone",
@@ -105,7 +111,13 @@
   },
   "assistantIsListening": {
     "description": "Mensagem exibida quando o assistente está ouvindo a fala.",
-    "message": "$chatbot$ está ouvindo..."
+    "message": "$chatbot$ está ouvindo...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "toggleThemeToDarkMode": {
     "description": "Etiqueta para o botão de alternar para o modo escuro.",
