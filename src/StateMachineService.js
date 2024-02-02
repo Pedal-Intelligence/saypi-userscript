@@ -44,7 +44,7 @@ class StateMachineService {
             ? serializeStateValue(state.history.value)
             : "N/A";
           const toState = serializeStateValue(state.value);
-          logger.debug(
+          logger.info(
             `Theme Toggle Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
           );
         }

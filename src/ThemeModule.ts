@@ -1,11 +1,10 @@
 import { buttonModule } from "./ButtonModule";
-export function setDarkMode() {
-  console.log("setDarkMode function");
+export function applyDarkMode() {
   document.body.classList.add("dark");
   buttonModule.applyTheme("dark");
 }
 
-export function setNormalMode() {
+export function applyNormalMode() {
   document.body.classList.remove("dark");
   buttonModule.applyTheme("light");
 }
