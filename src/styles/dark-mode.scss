@@ -1,9 +1,47 @@
 html.mobile-view body.dark {
     #saypi-talkButton {
-        background-color: #c8deea;
+        background-color: #bac5cc;
         opacity: 1;
     }
     .call-button path.circle {
-        fill: #26C6DA;
+        fill: #1C95A3;
     }
+
+    /* The following styles are for the card flip animation in rectangles.css */
+    .outermost.piThinking {
+        --original-color: #a9b7bf;
+        --thinking-color: #ffe4b2; /* A light orange for a soft but noticeable transition */
+        animation: thinkingFlip 1.0s ease-in-out;
+      }
+      
+      .second.piThinking {
+        --original-color: #8f9ca7;
+        --thinking-color: #ffddb4; /* A slightly different shade of light orange */
+        animation: thinkingFlip 1.1s ease-in-out;
+      }
+      
+      .third.piThinking {
+        --original-color: #787d83;
+        --thinking-color: #ffd5b7; /* A subtly warmer shade of light orange */
+        animation: thinkingFlip 1.2s ease-in-out;
+      }
+      
+      .fourth.piThinking {
+        --original-color: #6c7378;
+        --thinking-color: #ffcdca; /* A variation leaning towards pink */
+        animation: thinkingFlip 1.3s ease-in-out;
+      }
+      
+      .fifth.piThinking {
+        --original-color: #313437;
+        --thinking-color: #ffc5dc; /* A soft pink for contrast */
+        animation: thinkingFlip 1.4s ease-in-out;
+      }
+      
+      .innermost.piThinking {
+        --original-color: #1c1c1c;
+        --thinking-color: #ffbde6; /* A distinct light magenta */
+        animation: thinkingFlip 1.5s ease-in-out;
+      }
+      
 }
