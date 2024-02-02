@@ -1,6 +1,7 @@
+import { buttonModule } from "./ButtonModule.js";
 import { addChild } from "./DOMModule.ts";
 import { enterFullscreen, exitFullscreen } from "./FullscreenModule.ts";
-import { setNormalMode } from "./ThemeModule.ts";
+import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
 
 export function isMobileDevice() {
   return (
@@ -38,7 +39,6 @@ export function exitMobileMode() {
 
   attachCallButton();
   exitFullscreen();
-  setNormalMode();
 }
 
 export function enterMobileMode() {
@@ -53,6 +53,9 @@ export function enterMobileMode() {
   if (isMobileDevice()) {
     enterFullscreen();
   }
+  UserPreferenceModule.getTheme().then((theme) => {
+    buttonModule.applyTheme(theme);
+  });
 }
 
 function attachCallButton() {

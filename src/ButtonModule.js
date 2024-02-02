@@ -427,6 +427,10 @@ export default class ButtonModule {
     this.themeToggleActor.send("toggle");
   }
 
+  /**
+   * Applies the theme to the button icons
+   * @param {string} theme: "dark" | "light"
+   */
   applyTheme(theme) {
     const button = document.getElementById("saypi-themeToggleButton");
     if (button) {

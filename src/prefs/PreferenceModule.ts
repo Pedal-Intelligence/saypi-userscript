@@ -7,6 +7,7 @@ export module UserPreferenceModule {
     soundEffects?: boolean;
     autoSubmit?: boolean;
     language?: string; // e.g. 'en', 'en_US', 'en_GB', 'fr', 'fr_FR', 'fr_CA', etc.
+    theme?: string; // 'light' or 'dark'
   }
 
   export function getPreferedMode(): Promise<Preference> {
@@ -89,6 +90,44 @@ export module UserPreferenceModule {
       } else {
         // If Chrome storage API is not supported, return system language
         resolve(navigator.language);
+      }
+    });
+  }
+
+  export function getTheme(): Promise<string> {
+    return new Promise((resolve) => {
+      if (
+        typeof chrome !== "undefined" &&
+        chrome.storage &&
+        chrome.storage.sync
+      ) {
+        chrome.storage.sync.get(["theme"], (result: StorageResult) => {
+          if (result.theme) {
+            resolve(result.theme);
+          } else {
+            resolve("light");
+          }
+        });
+      } else {
+        // If Chrome storage API is not supported, return light theme
+        resolve("light");
+      }
+    });
+  }
+
+  export function setTheme(theme: string): Promise<void> {
+    return new Promise((resolve) => {
+      if (
+        typeof chrome !== "undefined" &&
+        chrome.storage &&
+        chrome.storage.sync
+      ) {
+        chrome.storage.sync.set({ theme }, () => {
+          resolve();
+        });
+      } else {
+        // If Chrome storage API is not supported, do nothing
+        resolve();
       }
     });
   }

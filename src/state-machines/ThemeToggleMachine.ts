@@ -1,10 +1,11 @@
 import { createMachine } from "xstate";
 import { setDarkMode, setNormalMode } from "../ThemeModule";
+import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
 export const machine = createMachine(
   {
     context: {
-      theme: "normal",
+      theme: "light",
     },
     id: "themeToggle",
     initial: "Normal mode",
@@ -43,9 +44,11 @@ export const machine = createMachine(
     actions: {
       setDarkMode: (context, event) => {
         setDarkMode();
+        UserPreferenceModule.setTheme("dark");
       },
       setNormalMode: (context, event) => {
         setNormalMode();
+        UserPreferenceModule.setTheme("light");
       },
     },
     services: {},
