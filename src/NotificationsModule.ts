@@ -110,6 +110,12 @@ export class AudibleNotificationsModule implements INotificationsModule {
   private unlockSound: HTMLAudioElement = new Audio(
     getResourceUrl("audio/beep-off.mp3")
   );
+  private themeOnSound: HTMLAudioElement = new Audio(
+    getResourceUrl("audio/switch-on.mp3")
+  );
+  private themeOffSound: HTMLAudioElement = new Audio(
+    getResourceUrl("audio/switch-off.mp3")
+  );
 
   private async playSound(sound: HTMLAudioElement) {
     const soundEnabled = await UserPreferenceModule.getSoundEffects();
@@ -140,6 +146,14 @@ export class AudibleNotificationsModule implements INotificationsModule {
 
   public unlockScreen(): void {
     this.playSound(this.unlockSound);
+  }
+
+  public themeOn(): void {
+    this.playSound(this.themeOnSound);
+  }
+
+  public themeOff(): void {
+    this.playSound(this.themeOffSound);
   }
 }
 

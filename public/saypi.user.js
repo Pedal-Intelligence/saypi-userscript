@@ -27227,6 +27227,8 @@ class AudibleNotificationsModule {
         this.callEndedSound = new Audio((0,ResourceModule/* getResourceUrl */.v)("audio/turn-off.mp3"));
         this.lockSound = new Audio((0,ResourceModule/* getResourceUrl */.v)("audio/beep-on.mp3"));
         this.unlockSound = new Audio((0,ResourceModule/* getResourceUrl */.v)("audio/beep-off.mp3"));
+        this.themeOnSound = new Audio((0,ResourceModule/* getResourceUrl */.v)("audio/switch-on.mp3"));
+        this.themeOffSound = new Audio((0,ResourceModule/* getResourceUrl */.v)("audio/switch-off.mp3"));
     }
     playSound(sound) {
         return NotificationsModule_awaiter(this, void 0, void 0, function* () {
@@ -27255,6 +27257,12 @@ class AudibleNotificationsModule {
     }
     unlockScreen() {
         this.playSound(this.unlockSound);
+    }
+    themeOn() {
+        this.playSound(this.themeOnSound);
+    }
+    themeOff() {
+        this.playSound(this.themeOffSound);
     }
 }
 class VisualNotificationsModule {
@@ -28714,6 +28722,8 @@ function applyNormalMode() {
 
 
 
+
+const audible = new AudibleNotificationsModule();
 const ThemeToggleMachine_machine = (0,Machine/* createMachine */.C)({
     /** @xstate-layout N4IgpgJg5mDOIC5QBcAWYC2YAqB7KUANmAHSG4CGEAlgHZQDEA2gAwC6ioADrrNctVy1OIAB6IAzCwAsJAGwAmaQE5lAdjkTlStdICsAGhABPSdLkllLRdK1yAjHr1yAHAF83RtJhz4ipcio6RiZ7DiQQHj4BIRFxBClZG1UNLR19I1MEe3tlEjUFOScXWxYXAoU9Dy90LDwCYhIAOVwAJwwKQgACDFwIMAZkP2JWcO5efkFhCPj7FkKSBRd7BV17FVW5NUzEZZIVVVVK45dC6pBvOuHSABEKVoBrHr6BoYawUZEoydiZxDmciQShI1C4JEsZGoJHIdtk1GpLHoJCspA4tMo9NIPJ4QLQXvAIpdfO8vhMYtNQPEALQwkyIKl6SyHZks5QSc5E+r+MiUGj0UnRKZxRDSBSwuZ5JzKFwpMqg6QuKo4znXZptDrdXr9AU-Clif72Er5FjIpEKexbFjbOnZPZbZSuaTSexqB2ndzK2rE7l3R7PbURb7k4UINRWxZ6FgsewSErqGQuWEY-KFZxW5Qu3JKbFuIA */
     context: {
@@ -28755,12 +28765,17 @@ const ThemeToggleMachine_machine = (0,Machine/* createMachine */.C)({
             on: {
                 toggle: {
                     target: "Dark mode",
-                    actions: {
-                        type: "saveMode",
-                        params: {
-                            theme: "dark",
+                    actions: [
+                        {
+                            type: "saveMode",
+                            params: {
+                                theme: "dark",
+                            },
                         },
-                    },
+                        {
+                            type: "soundEffectOn",
+                        },
+                    ],
                 },
             },
         },
@@ -28770,12 +28785,17 @@ const ThemeToggleMachine_machine = (0,Machine/* createMachine */.C)({
             on: {
                 toggle: {
                     target: "Normal mode",
-                    actions: {
-                        type: "saveMode",
-                        params: {
-                            theme: "light",
+                    actions: [
+                        {
+                            type: "saveMode",
+                            params: {
+                                theme: "light",
+                            },
                         },
-                    },
+                        {
+                            type: "soundEffectOff",
+                        },
+                    ],
                 },
             },
         },
@@ -28796,6 +28816,12 @@ const ThemeToggleMachine_machine = (0,Machine/* createMachine */.C)({
         },
         saveMode: (context, event, { action }) => {
             UserPreferenceModule.setTheme(action.params.theme);
+        },
+        soundEffectOn: () => {
+            audible.themeOn();
+        },
+        soundEffectOff: () => {
+            audible.themeOff();
         },
     },
     services: {},

@@ -1,6 +1,9 @@
 import { assign, createMachine } from "xstate";
 import { applyDarkMode, applyNormalMode } from "../ThemeModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
+import { AudibleNotificationsModule } from "../NotificationsModule";
+
+const audible = new AudibleNotificationsModule();
 
 export const machine = createMachine(
   {
@@ -44,12 +47,17 @@ export const machine = createMachine(
         on: {
           toggle: {
             target: "Dark mode",
-            actions: {
-              type: "saveMode",
-              params: {
-                theme: "dark",
+            actions: [
+              {
+                type: "saveMode",
+                params: {
+                  theme: "dark",
+                },
               },
-            },
+              {
+                type: "soundEffectOn",
+              },
+            ],
           },
         },
       },
@@ -59,12 +67,17 @@ export const machine = createMachine(
         on: {
           toggle: {
             target: "Normal mode",
-            actions: {
-              type: "saveMode",
-              params: {
-                theme: "light",
+            actions: [
+              {
+                type: "saveMode",
+                params: {
+                  theme: "light",
+                },
               },
-            },
+              {
+                type: "soundEffectOff",
+              },
+            ],
           },
         },
       },
@@ -86,6 +99,12 @@ export const machine = createMachine(
       },
       saveMode: (context, event, { action }) => {
         UserPreferenceModule.setTheme(action.params.theme);
+      },
+      soundEffectOn: () => {
+        audible.themeOn();
+      },
+      soundEffectOff: () => {
+        audible.themeOff();
       },
     },
     services: {},
