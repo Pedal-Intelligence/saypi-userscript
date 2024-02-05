@@ -13,10 +13,15 @@ const VISIBLE = "saypi:visible";
 const AUDIO_DEVICE_CONNECTED = "saypi:audio:connected";
 const AUDIO_DEVICE_RECONNECT = "saypi:audio:reconnect";
 
+/**
+ * The EventModule translates events sent on the EventBus to StateMachine events,
+ * coordinating interactions between loosely-coupled modules.
+ */
 export default class EventModule {
   static init() {
     // All the event listeners can be added here
     this.registerStateMachineEvents(StateMachineService.actor);
+    this.registerSessionEvents(StateMachineService.analyticsMachineActor);
     // Any other initializations...
   }
 
@@ -117,6 +122,18 @@ export default class EventModule {
       if (document.visibilityState === "visible") {
         actor.send(VISIBLE);
       }
+    });
+  }
+
+  static registerSessionEvents(actor) {
+    EventBus.on("session:started", () => {
+      actor.send("start_session");
+    });
+    EventBus.on("session:ended", () => {
+      actor.send("end_session");
+    });
+    EventBus.on("session:message-sent", () => {
+      actor.send("send_message");
     });
   }
 }

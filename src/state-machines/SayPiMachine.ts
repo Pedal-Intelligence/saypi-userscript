@@ -460,9 +460,14 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               },
               submitting: {
                 description: "Submitting prompt to Pi.",
-                entry: {
-                  type: "mergeAndSubmitTranscript",
-                },
+                entry: [
+                  {
+                    type: "mergeAndSubmitTranscript",
+                  },
+                  {
+                    type: "notifySentMessage",
+                  },
+                ],
                 exit: [clearTranscripts, clearPendingTranscriptions],
                 always: {
                   target: "accumulating",
@@ -833,11 +838,13 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       callHasStarted: () => {
         buttonModule.callActive();
         audibleNotifications.callStarted();
+        EventBus.emit("session:started");
       },
       callHasEnded: () => {
         visualNotifications.listeningStopped();
         buttonModule.callInactive();
         audibleNotifications.callEnded();
+        EventBus.emit("session:ended");
       },
       callHasErrors: () => {
         buttonModule.callError();
@@ -862,6 +869,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
       releaseWakeLock: () => {
         releaseWakeLock();
+      },
+      notifySentMessage: () => {
+        EventBus.emit("session:message-sent");
       },
     },
     services: {},
