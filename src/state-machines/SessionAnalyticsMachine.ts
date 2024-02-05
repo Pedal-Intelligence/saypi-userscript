@@ -1,5 +1,39 @@
 import { Typestate } from "@xstate/fsm";
 import { createMachine, assign } from "xstate";
+import AnalyticsService from "../AnalyticsModule";
+import { config } from "../ConfigModule";
+
+interface ValidatedConfig {
+  GA_MEASUREMENT_ID: string;
+  GA_API_SECRET: string;
+  GA_ENDPOINT: string;
+}
+
+function validateConfig(
+  config: Record<string, string | undefined>
+): ValidatedConfig {
+  if (!config.GA_MEASUREMENT_ID) {
+    throw new Error("GA_MEASUREMENT_ID is not set");
+  }
+  if (!config.GA_API_SECRET) {
+    throw new Error("GA_API_SECRET is not set");
+  }
+  if (!config.GA_ENDPOINT) {
+    throw new Error("GA_ENDPOINT is not set");
+  }
+  return {
+    GA_MEASUREMENT_ID: config.GA_MEASUREMENT_ID,
+    GA_API_SECRET: config.GA_API_SECRET,
+    GA_ENDPOINT: config.GA_ENDPOINT,
+  };
+}
+
+const valid_config = validateConfig(config);
+const analytics = new AnalyticsService(
+  valid_config.GA_MEASUREMENT_ID,
+  valid_config.GA_API_SECRET,
+  valid_config.GA_ENDPOINT
+);
 
 interface SessionContext {
   sessionID: string;
@@ -83,27 +117,41 @@ export const machine = createMachine<
   {
     actions: {
       notifyEndSession: (context: SessionContext, event) => {
-        const duration = Date.now() - context.startTimestamp;
-        const durationInMinutes = duration / 1000 / 60;
+        const durationInMillis = Date.now() - context.startTimestamp;
+        const durationInMinutes = durationInMillis / 1000 / 60;
         console.log(
           `Session ended after ${durationInMinutes.toFixed(1)} mins with ${
             context.messageCount
           } messages sent.`
         );
-      },
-      notifySendMessage: (context, event) => {},
-      notifyStartSession: (context, event) => {
-        console.log("Session started");
-      },
-      incrementMessageCount: (
-        context: SessionContext,
-        event: SendMessageEvent
-      ) => {
-        console.log("Message sent");
-        assign({
-          messageCount: (context: SessionContext) => context.messageCount + 1,
+        analytics.sendEvent("session_end", {
+          session_id: context.sessionID,
+          message_count: context.messageCount,
+          duration_mins: durationInMinutes,
+          engagement_time_msec: durationInMillis,
         });
       },
+      notifySendMessage: (context: SessionContext, event) => {
+        console.log("Message sent", context.messageCount);
+        analytics.sendEvent("message_sent", {
+          session_id: context.sessionID,
+          engagement_time_msec: Date.now() - context.startTimestamp,
+        });
+      },
+      notifyStartSession: (context, event) => {
+        console.log("Session started");
+        const elapsed_ms = Date.now() - context.startTimestamp;
+        analytics.sendEvent("session_start", {
+          session_id: context.sessionID,
+          engagement_time_msec: elapsed_ms,
+        });
+      },
+      incrementMessageCount: assign({
+        messageCount: (context: SessionContext) => {
+          console.log("Message number ", context.messageCount + 1, " sent");
+          return context.messageCount + 1;
+        },
+      }),
     },
     services: {},
     guards: {},

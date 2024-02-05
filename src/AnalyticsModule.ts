@@ -2,17 +2,21 @@ import axios from "axios";
 import { UserPreferenceModule } from "./prefs/PreferenceModule";
 
 class AnalyticsService {
-  private readonly endpoint = "https://www.google-analytics.com/mp/collect";
+  private readonly endpoint: string =
+    "https://www.google-analytics.com/mp/collect";
   private readonly measurementId: string;
   private readonly apiKey: string;
   private clientId: string | null = null;
 
-  constructor(measurementId: string, apiKey: string) {
+  constructor(measurementId: string, apiKey: string, endpoint?: string) {
     this.measurementId = measurementId;
     this.apiKey = apiKey;
     this.getOrCreateClientId().then((clientId) => {
       this.clientId = clientId;
     });
+    if (endpoint) {
+      this.endpoint = endpoint;
+    }
   }
 
   /**
@@ -33,7 +37,10 @@ class AnalyticsService {
   }
 
   async sendEvent(eventName: string, params: Record<string, unknown>) {
-    const consented = UserPreferenceModule.get
+    const consented = await UserPreferenceModule.getDataSharing();
+    if (!consented) {
+      return;
+    }
     const payload = {
       client_id: this.clientId,
       events: [
@@ -44,12 +51,12 @@ class AnalyticsService {
       ],
     };
 
+    /* content-type is text/plain to avoid CORS preflight */
     const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${this.apiKey}`,
+      "Content-Type": "text/plain",
     };
 
-    const url = `${this.endpoint}?measurement_id=${this.measurementId}`;
+    const url = `${this.endpoint}?measurement_id=${this.measurementId}&api_secret=${this.apiKey}`;
     try {
       const response = await axios.post(url, payload, { headers });
       console.log("Event sent:", response.status);
