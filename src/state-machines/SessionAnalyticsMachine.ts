@@ -1,18 +1,30 @@
-import { assign } from "lodash";
-import { createMachine } from "xstate";
+import { Typestate } from "@xstate/fsm";
+import { createMachine, assign } from "xstate";
 
 interface SessionContext {
+  sessionID: string;
   startTimestamp: number;
   messageCount: number;
+}
+interface SessionTypestate extends Typestate<SessionContext> {
+  states: {
+    Idle: {};
+    Active: {};
+  };
 }
 type StartSessionEvent = { type: "start_session" };
 type SendMessageEvent = { type: "send_message" };
 type EndMessageEvent = { type: "end_session" };
 type SessionEvent = EndMessageEvent | SendMessageEvent | StartSessionEvent;
 
-export const machine = createMachine<SessionContext, SessionEvent>(
+export const machine = createMachine<
+  SessionContext,
+  SessionEvent,
+  SessionTypestate
+>(
   {
     context: {
+      sessionID: "",
       startTimestamp: 0,
       messageCount: 0,
     },
@@ -25,9 +37,16 @@ export const machine = createMachine<SessionContext, SessionEvent>(
         on: {
           start_session: {
             target: "Active",
-            actions: {
-              type: "notifyStartSession",
-            },
+            actions: [
+              assign({
+                sessionID: () => Math.random().toString(36).substring(7),
+                startTimestamp: () => Date.now(),
+                messageCount: 0,
+              }),
+              {
+                type: "notifyStartSession",
+              },
+            ],
           },
         },
       },
@@ -81,8 +100,8 @@ export const machine = createMachine<SessionContext, SessionEvent>(
         event: SendMessageEvent
       ) => {
         console.log("Message sent");
-        assign(context, {
-          messageCount: context.messageCount + 1,
+        assign({
+          messageCount: (context: SessionContext) => context.messageCount + 1,
         });
       },
     },

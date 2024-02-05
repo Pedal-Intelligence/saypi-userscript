@@ -8,6 +8,25 @@ export module UserPreferenceModule {
     autoSubmit?: boolean;
     language?: string; // e.g. 'en', 'en_US', 'en_GB', 'fr', 'fr_FR', 'fr_CA', etc.
     theme?: string; // 'light' or 'dark'
+    shareData?: boolean; // has the user consented to data sharing?
+  }
+
+  /**
+   * Get the stored value from the chrome storage
+   * @param {string} key
+   * @param {any} defaultValue
+   * @returns any
+   */
+  function getStoredValue(key: string, defaultValue: any): Promise<any> {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get([key], function (result) {
+        if (result[key] === undefined) {
+          resolve(defaultValue);
+        } else {
+          resolve(result[key]);
+        }
+      });
+    });
   }
 
   export function getPreferedMode(): Promise<Preference> {
@@ -128,6 +147,27 @@ export module UserPreferenceModule {
       } else {
         // If Chrome storage API is not supported, do nothing
         resolve();
+      }
+    });
+  }
+
+  export function getDataSharing(): Promise<boolean> {
+    return new Promise((resolve) => {
+      if (
+        typeof chrome !== "undefined" &&
+        chrome.storage &&
+        chrome.storage.sync
+      ) {
+        chrome.storage.sync.get(["shareData"], (result: StorageResult) => {
+          if (result.shareData !== undefined) {
+            resolve(result.shareData);
+          } else {
+            resolve(true);
+          }
+        });
+      } else {
+        // If Chrome storage API is not supported, return true
+        resolve(true);
       }
     });
   }
