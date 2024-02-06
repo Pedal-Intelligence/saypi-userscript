@@ -59,7 +59,6 @@ class AnalyticsService {
     const url = `${this.endpoint}?measurement_id=${this.measurementId}&api_secret=${this.apiKey}`;
     try {
       const response = await axios.post(url, payload, { headers });
-      console.log("Event sent:", response.status);
     } catch (error) {
       console.error("Error sending event:", error);
     }

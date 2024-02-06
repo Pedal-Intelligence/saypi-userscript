@@ -132,8 +132,11 @@ export default class EventModule {
     EventBus.on("session:ended", () => {
       actor.send("end_session");
     });
-    EventBus.on("session:message-sent", () => {
-      actor.send("send_message");
+    EventBus.on("session:message-sent", (detail) => {
+      actor.send({ type: "send_message", ...detail });
+    });
+    EventBus.on("session:transcribing", (detail) => {
+      actor.send({ type: "transcribing", ...detail });
     });
   }
 }
