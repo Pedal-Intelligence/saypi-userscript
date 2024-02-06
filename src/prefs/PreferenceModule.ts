@@ -29,7 +29,7 @@ export module UserPreferenceModule {
     });
   }
 
-  export function getPreferedMode(): Promise<Preference> {
+  export function getTranscriptionMode(): Promise<Preference> {
     return getStoredValue("prefer", "balanced");
   }
 

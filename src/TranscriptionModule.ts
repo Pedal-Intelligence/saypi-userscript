@@ -248,7 +248,7 @@ async function constructTranscriptionFormData(
   formData.append("acceptsMerge", "true"); // always accept merge requests (since v1.4.10)
 
   // Wait for the preference to be retrieved before appending it to the FormData
-  const preference = await UserPreferenceModule.getPreferedMode();
+  const preference = await UserPreferenceModule.getTranscriptionMode();
   if (preference) {
     formData.append("prefer", preference);
   }

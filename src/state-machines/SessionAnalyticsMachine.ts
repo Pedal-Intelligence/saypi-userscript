@@ -2,6 +2,7 @@ import { Typestate } from "@xstate/fsm";
 import { createMachine, assign } from "xstate";
 import AnalyticsService from "../AnalyticsModule";
 import { config } from "../ConfigModule";
+import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
 interface ValidatedConfig {
   GA_MEASUREMENT_ID: string;
@@ -165,18 +166,29 @@ export const machine = createMachine<
           talk_time_seconds: context.talk_time_seconds,
         });
       },
-      notifySendMessage: (context: SessionContext, event: SendMessageEvent) => {
+      notifySendMessage: async (
+        context: SessionContext,
+        event: SendMessageEvent
+      ) => {
+        const transcriptionMode =
+          await UserPreferenceModule.getTranscriptionMode();
         analytics.sendEvent("message_sent", {
           session_id: context.session_id,
           engagement_time_msec: Date.now() - context.session_start_time,
           delay_msec: event.delay_ms,
+          transcription_mode: transcriptionMode,
         });
       },
-      notifyStartSession: (context, event: StartSessionEvent) => {
+      notifyStartSession: async (context, event: StartSessionEvent) => {
+        const transcriptionMode =
+          await UserPreferenceModule.getTranscriptionMode();
+        const language = await UserPreferenceModule.getLanguage();
         const elapsed_ms = 0;
         analytics.sendEvent("session_started", {
           session_id: context.session_id,
           engagement_time_msec: elapsed_ms,
+          transcription_mode: transcriptionMode,
+          language: language,
         });
       },
       incrementMessageCount: assign({
