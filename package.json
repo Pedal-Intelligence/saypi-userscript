@@ -1,6 +1,6 @@
 {
   "name": "saypi-userscript",
-  "version": "1.5.7",
+  "version": "1.5.8",
   "type": "module",
   "scripts": {
     "prebuild": "node i18n-validate.cjs",
@@ -26,11 +26,15 @@
     "moduleNameMapper": {
       "^(\\.{1,2}/.*)\\.js$": "$1",
       "^.+\\.(css|scss|png|jpg|ttf|woff|woff2|svg)$": "jest-transform-stub"
-    }
+    },
+    "setupFilesAfterEnv": [
+      "./test/jest.setup.js"
+    ]
   },
   "dependencies": {
     "@ricky0123/vad-web": "^0.0.12",
     "@xstate/fsm": "^2.1.0",
+    "@xstate/test": "^0.5.1",
     "axios": "^1.4.0",
     "chai": "^4.3.10",
     "cheerio": "^1.0.0-rc.12",

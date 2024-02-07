@@ -126,5 +126,9 @@
   "toggleThemeToLightMode": {
     "message": "Switch to light mode",
     "description": "Label for the button to toggle to light mode."
+  },
+  "shareAnalytics": {
+    "message": "Share analytics",
+    "description": "Label for the checkbox to enable/disable sharing of analytics."
   }
 }

@@ -8,111 +8,45 @@ export module UserPreferenceModule {
     autoSubmit?: boolean;
     language?: string; // e.g. 'en', 'en_US', 'en_GB', 'fr', 'fr_FR', 'fr_CA', etc.
     theme?: string; // 'light' or 'dark'
+    shareData?: boolean; // has the user consented to data sharing?
   }
 
-  export function getPreferedMode(): Promise<Preference> {
+  /**
+   * Get the stored value from the chrome storage
+   * @param {string} key
+   * @param {any} defaultValue
+   * @returns any
+   */
+  function getStoredValue(key: string, defaultValue: any): Promise<any> {
     return new Promise((resolve) => {
-      if (
-        typeof chrome !== "undefined" &&
-        chrome.storage &&
-        chrome.storage.sync
-      ) {
-        chrome.storage.sync.get(["prefer"], (result: StorageResult) => {
-          if (result.prefer) {
-            resolve(result.prefer);
-          } else {
-            resolve(null);
-          }
-        });
-      } else {
-        // If Chrome storage API is not supported, return null
-        resolve(null);
-      }
+      chrome.storage.sync.get([key], function (result) {
+        if (result[key] === undefined) {
+          resolve(defaultValue);
+        } else {
+          resolve(result[key]);
+        }
+      });
     });
+  }
+
+  export function getTranscriptionMode(): Promise<Preference> {
+    return getStoredValue("prefer", "balanced");
   }
 
   export function getSoundEffects(): Promise<boolean> {
-    return new Promise((resolve) => {
-      if (
-        typeof chrome !== "undefined" &&
-        chrome.storage &&
-        chrome.storage.sync
-      ) {
-        chrome.storage.sync.get(["soundEffects"], (result: StorageResult) => {
-          if (result.soundEffects !== undefined) {
-            resolve(result.soundEffects);
-          } else {
-            resolve(true);
-          }
-        });
-      } else {
-        // If Chrome storage API is not supported, return true
-        resolve(true);
-      }
-    });
+    return getStoredValue("soundEffects", true);
   }
 
   export function getAutoSubmit(): Promise<boolean> {
-    return new Promise((resolve) => {
-      if (
-        typeof chrome !== "undefined" &&
-        chrome.storage &&
-        chrome.storage.sync
-      ) {
-        chrome.storage.sync.get(["autoSubmit"], (result: StorageResult) => {
-          if (result.autoSubmit !== undefined) {
-            resolve(result.autoSubmit);
-          } else {
-            resolve(true);
-          }
-        });
-      } else {
-        // If Chrome storage API is not supported, return true
-        resolve(true);
-      }
-    });
+    return getStoredValue("autoSubmit", true);
   }
 
   export function getLanguage(): Promise<string> {
-    return new Promise((resolve) => {
-      if (
-        typeof chrome !== "undefined" &&
-        chrome.storage &&
-        chrome.storage.sync
-      ) {
-        chrome.storage.sync.get(["language"], (result: StorageResult) => {
-          if (result.language) {
-            resolve(result.language);
-          } else {
-            resolve(navigator.language);
-          }
-        });
-      } else {
-        // If Chrome storage API is not supported, return system language
-        resolve(navigator.language);
-      }
-    });
+    return getStoredValue("language", navigator.language);
   }
 
   export function getTheme(): Promise<string> {
-    return new Promise((resolve) => {
-      if (
-        typeof chrome !== "undefined" &&
-        chrome.storage &&
-        chrome.storage.sync
-      ) {
-        chrome.storage.sync.get(["theme"], (result: StorageResult) => {
-          if (result.theme) {
-            resolve(result.theme);
-          } else {
-            resolve("light");
-          }
-        });
-      } else {
-        // If Chrome storage API is not supported, return light theme
-        resolve("light");
-      }
-    });
+    return getStoredValue("theme", "light");
   }
 
   export function setTheme(theme: string): Promise<void> {
@@ -130,5 +64,9 @@ export module UserPreferenceModule {
         resolve();
       }
     });
+  }
+
+  export function getDataSharing(): Promise<boolean> {
+    return getStoredValue("shareData", false);
   }
 }

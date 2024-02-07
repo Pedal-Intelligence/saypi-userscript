@@ -2,7 +2,7 @@
 // @name         Say, Pi
 // @name:zh-CN   说，Pi 
 // @namespace    http://www.saypi.ai/
-// @version      1.5.7
+// @version      1.5.8
 // @description  Seamless speech-to-text enhancement for Pi, the conversational AI. Enjoy hands-free, high-accuracy conversations in any language.
 // @description:zh-CN  为Pi聊天机器人提供无手操作的高精度语音转文字功能，支持多种语言。
 // @author       Ross Cadogan
@@ -22646,7 +22646,10 @@ function isRaisableAction(action) {
 /* harmony export */ });
 var config = {
   appServerUrl: "https://app.saypi.ai",
-  apiServerUrl: "https://api.saypi.ai"
+  apiServerUrl: "https://api.saypi.ai",
+  GA_MEASUREMENT_ID: "G-N70M5T0ZCB",
+  GA_API_SECRET: "4HsiqPmGS7Gs3TYWOa2ddg",
+  GA_ENDPOINT: "https://www.google-analytics.com/mp/collect"
 };
 
 /***/ }),

@@ -460,9 +460,14 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               },
               submitting: {
                 description: "Submitting prompt to Pi.",
-                entry: {
-                  type: "mergeAndSubmitTranscript",
-                },
+                entry: [
+                  {
+                    type: "mergeAndSubmitTranscript",
+                  },
+                  {
+                    type: "notifySentMessage",
+                  },
+                ],
                 exit: [clearTranscripts, clearPendingTranscriptions],
                 always: {
                   target: "accumulating",
@@ -726,6 +731,11 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             event.duration,
             context.transcriptions
           );
+          EventBus.emit("session:transcribing", {
+            audio_duration_seconds: event.duration / 1000,
+            speech_end_time: Date.now(), // bit hacky, as it assumes the audio is transcribed immediately
+            speech_start_time: Date.now() - event.duration,
+          });
         }
       },
 
@@ -833,11 +843,13 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       callHasStarted: () => {
         buttonModule.callActive();
         audibleNotifications.callStarted();
+        EventBus.emit("session:started");
       },
       callHasEnded: () => {
         visualNotifications.listeningStopped();
         buttonModule.callInactive();
         audibleNotifications.callEnded();
+        EventBus.emit("session:ended");
       },
       callHasErrors: () => {
         buttonModule.callError();
@@ -862,6 +874,11 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
       releaseWakeLock: () => {
         releaseWakeLock();
+      },
+      notifySentMessage: (context: SayPiContext, event: SayPiEvent) => {
+        console.log("notifySentMessage", event);
+        const delay_ms = Date.now() - context.timeUserStoppedSpeaking;
+        EventBus.emit("session:message-sent", { delay_ms: delay_ms });
       },
     },
     services: {},
