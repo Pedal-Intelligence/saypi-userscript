@@ -26837,7 +26837,8 @@ var UserPreferenceModule;
 
 
 function isMobileDevice() {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.matchMedia("(max-width: 768px)").matches;
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.matchMedia("(max-width: 1024px)").matches // fallback for devices that don't have a recognisable mobile user agent, like iPad Pro
+  ;
 }
 
 // this function determines whether to show the mobile view or not
