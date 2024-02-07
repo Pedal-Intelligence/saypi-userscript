@@ -32462,6 +32462,13 @@ const SessionAnalyticsMachine_machine = (0,Machine/* createMachine */.C)({
         },
         Active: {
             description: "The state representing an active session. Messages can be sent and received.",
+            invoke: {
+                src: () => new Promise((resolve) => setTimeout(resolve, 1800000)),
+                onDone: {
+                    target: "Idle",
+                    actions: "notifyEndSession",
+                },
+            },
             on: {
                 transcribing: {
                     actions: "rollupTranscription",
@@ -32475,6 +32482,7 @@ const SessionAnalyticsMachine_machine = (0,Machine/* createMachine */.C)({
                             type: "notifySendMessage",
                         },
                     ],
+                    target: "Active", // re-entrant transition to reset the timer
                 },
                 end_session: {
                     target: "Idle",

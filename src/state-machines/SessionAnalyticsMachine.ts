@@ -123,6 +123,13 @@ export const machine = createMachine<
       Active: {
         description:
           "The state representing an active session. Messages can be sent and received.",
+        invoke: {
+          src: () => new Promise((resolve) => setTimeout(resolve, 1800000)), // 1800000 milliseconds = 30 minutes
+          onDone: {
+            target: "Idle",
+            actions: "notifyEndSession",
+          },
+        },
         on: {
           transcribing: {
             actions: "rollupTranscription",
@@ -136,6 +143,7 @@ export const machine = createMachine<
                 type: "notifySendMessage",
               },
             ],
+            target: "Active", // re-entrant transition to reset the timer
           },
           end_session: {
             target: "Idle",
