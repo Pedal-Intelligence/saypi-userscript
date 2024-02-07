@@ -39,8 +39,8 @@ class AnalyticsService {
     return clientId;
   }
   createClientId(): string {
-    // check if crypto is available
-    if (typeof crypto === "undefined") {
+    // check if crypto is available or the system is under test
+    if (typeof crypto === "undefined" || process.env.NODE_ENV === "test") {
       // used in tests
       return "test-client-id";
     }
