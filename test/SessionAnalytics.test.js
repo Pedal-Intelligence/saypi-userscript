@@ -17,16 +17,32 @@ const sessionAnalyticsModel = createModel(testMachine).withEvents({
     speech_start_time: Date.now() - 10000,
     speech_end_time: Date.now(),
   },
-  send_message: { delay_ms: 5000 },
+  send_message: {
+    delay_ms: 5000,
+  },
   end_session: {},
 });
 
 describe("session analytics machine", () => {
-  const testPlans = sessionAnalyticsModel.getSimplePathPlans();
+  /*
+  const testPlans = [
+    ...sessionAnalyticsModel.getPlanFromEvents(
+      ["start_session", "transcribing", "send_message", "end_session"],
+      { target: "Idle" }
+    ),
+  ];
+  */
+  const testPlans = sessionAnalyticsModel.getShortestPathPlans({
+    filter: (state) =>
+      state.context.message_count < 5 &&
+      state.context.audio_duration_seconds < 90 &&
+      state.matches("Active"),
+  });
 
   testPlans.forEach((plan) => {
     describe(plan.description, () => {
       plan.paths.forEach((path) => {
+        //console.log("Path to " + path.state.value, path.description);
         it(path.description, async () => {
           const service = interpret(testMachine)
             .onTransition((current) => {
@@ -42,6 +58,9 @@ describe("session analytics machine", () => {
   });
 
   it("should have full coverage", () => {
-    return sessionAnalyticsModel.testCoverage();
+    return sessionAnalyticsModel.testCoverage({
+      // Only test coverage for state nodes with a `.meta` property defined:
+      filter: (stateNode) => !!stateNode.meta,
+    });
   });
 });

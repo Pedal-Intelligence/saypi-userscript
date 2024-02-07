@@ -76,6 +76,7 @@ export const machine = createMachine<
   SessionTypestate
 >(
   {
+    /** @xstate-layout N4IgpgJg5mDOIC5SzrAlgewHYEEsEMAbATwBc0BjWAOgEkJCwBiWU-AJ1IH0VZ1sA2gAYAuolAAHDOnLZxIAB6IArAGZl1NQEYATAHYtevQDYjagDQhiiHQE4AHNVtDjO5VoAsO1Xo9bbAL4Blrz8uAQk5FTUOBTkAG7MpOz4WLAU7GgARmhYUMJiSCBSMphY8koI9kbUqvamHqqqHsZqysqW1gg6Qh5OLjrGja32tnq9QSGoZXhEZJQ0sQnMKFgQXAC2qPgwBfIlaLLlRZX2yo56o0L2qlpaqkJCynqdiPZa1B6237bqWmceG56SYgUIzCLzaJLNCJJhgNY8aaCUT7aSHMoVFReahCX5GR7nUy2DyvbpCHSfbS3ZR2HSeMZBYIgLAYCBweRg7CzSILVGlOQnRAAWmMpJFIM54TmURo9EYfPRAtAlS8pLsji0uNUtn0Dh0tI8EqRUp5ULiMLACqOmIQem8OLxvnsdls-g6VkQD2MtWUv3sXmMvR0hsZQA */
     context: {
       session_id: "",
       session_start_time: 0,

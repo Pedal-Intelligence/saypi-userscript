@@ -25,6 +25,12 @@ class AnalyticsService {
    * @returns {string} The client ID
    */
   async getOrCreateClientId(): Promise<string> {
+    // check if localStorage is available
+    if (typeof localStorage === "undefined") {
+      // used in tests
+      return this.createClientId();
+    }
+
     let clientId = localStorage.getItem("ga_client_id");
     if (!clientId) {
       clientId = this.createClientId();
@@ -33,6 +39,11 @@ class AnalyticsService {
     return clientId;
   }
   createClientId(): string {
+    // check if crypto is available
+    if (typeof crypto === "undefined") {
+      // used in tests
+      return "test-client-id";
+    }
     return self.crypto.randomUUID();
   }
 
