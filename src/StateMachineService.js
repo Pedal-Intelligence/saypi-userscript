@@ -45,7 +45,7 @@ class StateMachineService {
             ? serializeStateValue(state.history.value)
             : "N/A";
           const toState = serializeStateValue(state.value);
-          logger.info(
+          logger.debug(
             `Theme Toggle Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
           );
         }
@@ -60,7 +60,7 @@ class StateMachineService {
             ? serializeStateValue(state.history.value)
             : "N/A";
           const toState = serializeStateValue(state.value);
-          logger.info(
+          logger.debug(
             `Session Analytics Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
           );
         }

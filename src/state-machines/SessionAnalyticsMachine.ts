@@ -62,7 +62,11 @@ type TranscriptionEvent = {
   speech_start_time: number;
   speech_end_time: number;
 };
-type SendMessageEvent = { type: "send_message"; delay_ms: number };
+type SendMessageEvent = {
+  type: "send_message";
+  delay_ms: number;
+  wait_time_ms: number;
+};
 type EndSessionEvent = { type: "end_session" };
 type SessionEvent =
   | EndSessionEvent
@@ -142,6 +146,9 @@ export const machine = createMachine<
               {
                 type: "notifySendMessage",
               },
+              {
+                type: "clearLastMessage",
+              },
             ],
             target: "Active", // re-entrant transition to reset the timer
           },
@@ -181,10 +188,21 @@ export const machine = createMachine<
       ) => {
         const transcriptionMode =
           await UserPreferenceModule.getTranscriptionMode();
+
+        // calculate the real-time factor (RTF)
+        const processing_time_ms = event.delay_ms;
+        const speech_duration_ms =
+          context.last_message.talk_time_seconds * 1000;
+        const rtf = processing_time_ms / speech_duration_ms;
+
         analytics.sendEvent("message_sent", {
           session_id: context.session_id,
           engagement_time_msec: Date.now() - context.session_start_time,
           delay_msec: event.delay_ms,
+          wait_time_msec: event.wait_time_ms,
+          talk_time_seconds: context.last_message.talk_time_seconds,
+          audio_duration_seconds: context.last_message.audio_duration_seconds,
+          rtf: rtf,
           transcription_mode: transcriptionMode,
         });
       },
@@ -212,6 +230,8 @@ export const machine = createMachine<
             context.talk_time_seconds + context.last_message.talk_time_seconds
           );
         },
+      }),
+      clearLastMessage: assign({
         last_message: (context: SessionContext, event: SendMessageEvent) => {
           // clear last_message on submit
           return {
@@ -233,7 +253,9 @@ export const machine = createMachine<
           const updated_last_message = {
             speech_start_time: context.last_message.speech_start_time,
             speech_end_time: event.speech_end_time,
-            audio_duration_seconds: event.audio_duration_seconds,
+            audio_duration_seconds:
+              context.last_message.audio_duration_seconds +
+              event.audio_duration_seconds,
             talk_time_seconds: 0,
           };
           if (context.last_message.speech_start_time === 0) {

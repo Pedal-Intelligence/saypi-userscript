@@ -30,6 +30,7 @@ import AudioControlsModule from "../AudioControlsModule";
 import { requestWakeLock, releaseWakeLock } from "../WakeLockModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import getMessage from "../i18n";
+import { last } from "lodash";
 
 type SayPiTranscribedEvent = {
   type: "saypi:transcribed";
@@ -139,6 +140,10 @@ function getHighestKey(transcriptions: Record<number, string>): number {
 // time at which the user's prompt is scheduled to be submitted
 // used to judge whether there's time for another remote operation (i.e. merge request)
 var nextSubmissionTime = Date.now();
+
+// most recent enforced delay while waiting for additional user input
+// captured here for analytics events
+var lastSubmissionDelay = 0;
 
 const apiServerUrl = config.apiServerUrl;
 if (apiServerUrl === undefined) {
@@ -878,7 +883,11 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       notifySentMessage: (context: SayPiContext, event: SayPiEvent) => {
         console.log("notifySentMessage", event);
         const delay_ms = Date.now() - context.timeUserStoppedSpeaking;
-        EventBus.emit("session:message-sent", { delay_ms: delay_ms });
+        const submission_delay_ms = lastSubmissionDelay;
+        EventBus.emit("session:message-sent", {
+          delay_ms: delay_ms,
+          wait_time_ms: submission_delay_ms,
+        });
       },
     },
     services: {},
@@ -959,6 +968,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         // Get the current time (in milliseconds)
         const currentTime = new Date().getTime();
         nextSubmissionTime = currentTime + finalDelay;
+
+        // Capture the delay for analytics events
+        lastSubmissionDelay = finalDelay;
 
         return finalDelay;
       },

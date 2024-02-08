@@ -27894,6 +27894,9 @@ function getHighestKey(transcriptions) {
 // time at which the user's prompt is scheduled to be submitted
 // used to judge whether there's time for another remote operation (i.e. merge request)
 var nextSubmissionTime = Date.now();
+// most recent enforced delay while waiting for additional user input
+// captured here for analytics events
+var lastSubmissionDelay = 0;
 const apiServerUrl = ConfigModule/* config */.v.apiServerUrl;
 if (apiServerUrl === undefined) {
     throw new Error("Configuration error: apiServerUrl is not defined. Please check your environment variables.");
@@ -28552,7 +28555,11 @@ const machine = (0,Machine/* createMachine */.C)({
         notifySentMessage: (context, event) => {
             console.log("notifySentMessage", event);
             const delay_ms = Date.now() - context.timeUserStoppedSpeaking;
-            EventBus/* default */.Z.emit("session:message-sent", { delay_ms: delay_ms });
+            const submission_delay_ms = lastSubmissionDelay;
+            EventBus/* default */.Z.emit("session:message-sent", {
+                delay_ms: delay_ms,
+                wait_time_ms: submission_delay_ms,
+            });
         },
     },
     services: {},
@@ -28612,6 +28619,8 @@ const machine = (0,Machine/* createMachine */.C)({
             // Get the current time (in milliseconds)
             const currentTime = new Date().getTime();
             nextSubmissionTime = currentTime + finalDelay;
+            // Capture the delay for analytics events
+            lastSubmissionDelay = finalDelay;
             return finalDelay;
         },
     },
@@ -32482,6 +32491,9 @@ const SessionAnalyticsMachine_machine = (0,Machine/* createMachine */.C)({
                         {
                             type: "notifySendMessage",
                         },
+                        {
+                            type: "clearLastMessage",
+                        },
                     ],
                     target: "Active", // re-entrant transition to reset the timer
                 },
@@ -32516,10 +32528,18 @@ const SessionAnalyticsMachine_machine = (0,Machine/* createMachine */.C)({
         },
         notifySendMessage: (context, event) => SessionAnalyticsMachine_awaiter(void 0, void 0, void 0, function* () {
             const transcriptionMode = yield UserPreferenceModule.getTranscriptionMode();
+            // calculate the real-time factor (RTF)
+            const processing_time_ms = event.delay_ms;
+            const speech_duration_ms = context.last_message.talk_time_seconds * 1000;
+            const rtf = processing_time_ms / speech_duration_ms;
             analytics.sendEvent("message_sent", {
                 session_id: context.session_id,
                 engagement_time_msec: Date.now() - context.session_start_time,
                 delay_msec: event.delay_ms,
+                wait_time_msec: event.wait_time_ms,
+                talk_time_seconds: context.last_message.talk_time_seconds,
+                audio_duration_seconds: context.last_message.audio_duration_seconds,
+                rtf: rtf,
                 transcription_mode: transcriptionMode,
             });
         }),
@@ -32541,6 +32561,8 @@ const SessionAnalyticsMachine_machine = (0,Machine/* createMachine */.C)({
             talk_time_seconds: (context, event) => {
                 return (context.talk_time_seconds + context.last_message.talk_time_seconds);
             },
+        }),
+        clearLastMessage: (0,es/* assign */.f0)({
             last_message: (context, event) => {
                 // clear last_message on submit
                 return {
@@ -32559,7 +32581,8 @@ const SessionAnalyticsMachine_machine = (0,Machine/* createMachine */.C)({
                 const updated_last_message = {
                     speech_start_time: context.last_message.speech_start_time,
                     speech_end_time: event.speech_end_time,
-                    audio_duration_seconds: event.audio_duration_seconds,
+                    audio_duration_seconds: context.last_message.audio_duration_seconds +
+                        event.audio_duration_seconds,
                     talk_time_seconds: 0,
                 };
                 if (context.last_message.speech_start_time === 0) {
@@ -32617,7 +32640,7 @@ var StateMachineService = /*#__PURE__*/StateMachineService_createClass(function 
     if (state.changed) {
       var fromState = state.history ? (0,LoggingModule/* serializeStateValue */.G)(state.history.value) : "N/A";
       var toState = (0,LoggingModule/* serializeStateValue */.G)(state.value);
-      LoggingModule/* logger */.k.info("Theme Toggle Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+      LoggingModule/* logger */.k.debug("Theme Toggle Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
     }
   });
   this.themeToggleActor.start();
@@ -32625,7 +32648,7 @@ var StateMachineService = /*#__PURE__*/StateMachineService_createClass(function 
     if (state.changed) {
       var fromState = state.history ? (0,LoggingModule/* serializeStateValue */.G)(state.history.value) : "N/A";
       var toState = (0,LoggingModule/* serializeStateValue */.G)(state.value);
-      LoggingModule/* logger */.k.info("Session Analytics Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+      LoggingModule/* logger */.k.debug("Session Analytics Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
     }
   });
   this.analyticsMachineActor.start();
