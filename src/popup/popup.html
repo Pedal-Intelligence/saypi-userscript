@@ -62,6 +62,10 @@
         background-size: contain;
         background-repeat: no-repeat;
       }
+      /* Mobile */
+      .mobile-device #analytics-consent {
+        width: 400px;
+      }
       #analytics-consent.read {
         display: none;
       }
@@ -91,13 +95,14 @@
         display: flex;
         justify-content: space-between;
         margin-top: 1rem;
-        padding: 0 7rem;
+        padding: 0 1.5rem;
       }
       #analytics-consent .buttons button {
         width: 100px;
         border: 2px solid lightskyblue;
         padding: 0.5rem;
         border-radius: 10px;
+        margin: 0 auto;
       }
       #analytics-consent .buttons button:hover {
         background-color: lightskyblue;
@@ -241,7 +246,7 @@
       </div>
 
       <!-- Reset button is primarily for testing -->
-      <div class="user-preference-item w-full max-w-lg hidden">
+      <div class="user-preference-item w-full max-w-lg">
         <button
           type="button"
           id="clear-preferences"
@@ -252,42 +257,44 @@
     </section>
 
     <section id="analytics-consent" class="hidden">
-      <h1>Let's improve Say, Pi together</h1>
-      <p>
+      <h1 data-i18n="consentBetterTogether">Let's improve Say, Pi together</h1>
+      <p data-i18n="consentSharingPurpose">
         Sharing your usage data will help us understand how people use Say, Pi
         so we can make it better for everyone.
       </p>
       <ul>
-        <li>We won't collect or see personal data, like messages or names.</li>
-        <li>
+        <li data-i18n="consentNoPii">We won't collect or see personal data, like messages or names.</li>
+        <li data-i18n="consentPrivacyParamount">
           Your privacy is paramount. Anything you say remains between you and
           Pi.
         </li>
-        <li>
+        <li data-i18n="consentDataDeidentified">
           Analytics are not tied to individuals. Any data used is de-identified.
         </li>
-        <li>
+        <li data-i18n="consentNoSale">
           We won't sell your data to third parties, or use it for advertising.
         </li>
-        <li>You can change your mind at any time.</li>
+        <li data-i18n="consentRightToRevoke">You can change your mind at any time.</li>
       </ul>
       <a
         href="https://www.saypi.ai/privacy-policy"
         target="_blank"
         rel="noopener"
+        data-i18n="consentPrivacyPolicy"
         >Read our Privacy Policy</a
       >
-      <h2>Would you like to participate?</h2>
+      <h2 data-i18n="consentAskParticipate">Would you like to participate?</h2>
       <div class="buttons">
-        <button id="opt-out" type="button" class="btn btn-primary">
+        <button id="opt-out" type="button" class="btn btn-primary" data-i18n="consentOptOut">
           No thanks
         </button>
-        <button id="opt-in" type="button" class="btn btn-primary">
+        <button id="opt-in" type="button" class="btn btn-primary" data-i18n="consentOptIn">
           I'm in!
         </button>
       </div>
     </section>
 
+    <script src="simple-user-agent.js"></script>
     <script src="language-picker.js"></script>
     <script src="popup.js"></script>
   </body>

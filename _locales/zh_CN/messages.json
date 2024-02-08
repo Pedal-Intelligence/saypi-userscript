@@ -126,5 +126,42 @@
   "toggleThemeToLightMode": {
     "description": "切换到亮模式的按钮标签。",
     "message": "切换到亮模式"
+  },
+  "consentAskParticipate": {
+    "message": "你想参加吗？"
+  },
+  "consentBetterTogether": {
+    "message": "让我们一起改善Say, Pi"
+  },
+  "consentDataDeidentified": {
+    "message": "分析并未与个人相关联。使用的任何数据都已进行匿名处理。"
+  },
+  "consentNoPii": {
+    "message": "我们不会收集或查看个人数据，如消息或姓名。"
+  },
+  "consentNoSale": {
+    "message": "我们不会将您的数据出售给第三方，也不会用于广告。"
+  },
+  "consentOptIn": {
+    "message": "我参加！"
+  },
+  "consentOptOut": {
+    "message": "不用谢"
+  },
+  "consentPrivacyParamount": {
+    "message": "您的隐私至关重要。您所说的任何话都只会在您和Pi之间保持。"
+  },
+  "consentRightToRevoke": {
+    "message": "您可以随时改变主意。"
+  },
+  "consentSharingPurpose": {
+    "message": "分享您的使用数据将帮助我们了解人们如何使用Say, Pi，以便我们可以使其更好地服务于所有人。"
+  },
+  "consetPrivacyPolicy": {
+    "message": "阅读我们的隐私政策"
+  },
+  "shareAnalytics": {
+    "description": "用于启用/禁用分享分析的复选框标签。",
+    "message": "分享分析"
   }
 }

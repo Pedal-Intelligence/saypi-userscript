@@ -126,5 +126,42 @@
   "toggleThemeToLightMode": {
     "description": "লাইট মোডে টগল করার বোতামের জন্য লেবেল।",
     "message": "আলো মোডে স্থানান্তর করুন"
+  },
+  "consentAskParticipate": {
+    "message": "আপনি কি অংশগ্রহন করতে চান?"
+  },
+  "consentBetterTogether": {
+    "message": "আমরা একসাথে Say, Pi উন্নীত করি"
+  },
+  "consentDataDeidentified": {
+    "message": "অ্যানালিটিক্স ব্যক্তিদের সাথে জড়িত নয়। ব্যবহৃত কোনো ডেটা পরিচিতি-মুক্ত।"
+  },
+  "consentNoPii": {
+    "message": "আমরা ব্যক্তিগত ডেটা, যেমন বার্তা বা নাম, সংগ্রহ কিংবা দেখিোনি।"
+  },
+  "consentNoSale": {
+    "message": "আমরা তৃতীয় পক্ষের কাছে আপনার ডাটা বিক্রি করবো না, বা এটি বিজ্ঞাপনের জন্য ব্যবহার করবো।"
+  },
+  "consentOptIn": {
+    "message": "আমি অন্তর্ভুক্ত!"
+  },
+  "consentOptOut": {
+    "message": "কোন ধন্যবাদ নেই"
+  },
+  "consentPrivacyParamount": {
+    "message": "আপনার গোপনীয়তা সর্বোচ্চ। আপনি যা বলেন, তা Pi-র এবং আপনার মাঝেরে।"
+  },
+  "consentRightToRevoke": {
+    "message": "আপনি যে কোনো সময়ে আপনার মনের মতামত পরিবর্তন করতে পারেন।"
+  },
+  "consentSharingPurpose": {
+    "message": "আপনার ব্যবহারের ডেটা শেয়ার করা আমাদের Say, Pi-র ব্যবহারিকাড়িরা এটি কীভাবে ব্যবহার করেন, ।"
+  },
+  "consetPrivacyPolicy": {
+    "message": "আমাদের গোপনীয়তা নীতি পড়ুন"
+  },
+  "shareAnalytics": {
+    "description": "এনালিটিক্স শেয়ার করার জন্য চেকবক্সের লেবেল সক্ষম/নিষ্ক্রিয় করুন।",
+    "message": "অ্যানালিটিক্স শেয়ার করুন"
   }
 }

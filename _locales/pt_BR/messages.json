@@ -126,5 +126,42 @@
   "toggleThemeToLightMode": {
     "description": "Etiqueta para o botão de alternar para o modo claro.",
     "message": "Mude para o modo claro"
+  },
+  "consentAskParticipate": {
+    "message": "Gostaria de participar?"
+  },
+  "consentBetterTogether": {
+    "message": "Vamos melhorar o Say, Pi juntos"
+  },
+  "consentDataDeidentified": {
+    "message": "As análises não estão vinculadas a indivíduos. Qualquer dado usado é desidentificado."
+  },
+  "consentNoPii": {
+    "message": "Não coletaremos ou veremos dados pessoais, como mensagens ou nomes."
+  },
+  "consentNoSale": {
+    "message": "Não venderemos seus dados para terceiros, nem os usaremos para publicidade."
+  },
+  "consentOptIn": {
+    "message": "Estou dentro!"
+  },
+  "consentOptOut": {
+    "message": "Não, obrigado"
+  },
+  "consentPrivacyParamount": {
+    "message": "A sua privacidade é primordial. Tudo o que você diz fica entre você e Pi."
+  },
+  "consentRightToRevoke": {
+    "message": "Você pode mudar de ideia a qualquer momento."
+  },
+  "consentSharingPurpose": {
+    "message": "Compartilhar seus dados de uso nos ajudará a entender como as pessoas usam o Say, Pi para que possamos melhorá-lo para todos."
+  },
+  "consetPrivacyPolicy": {
+    "message": "Leia nossa Política de Privacidade"
+  },
+  "shareAnalytics": {
+    "description": "Rótulo para a caixa de seleção para ativar/desativar o compartilhamento de análises.",
+    "message": "Compartilhar análises"
   }
 }

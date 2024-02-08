@@ -126,5 +126,42 @@
   "toggleThemeToLightMode": {
     "description": "Címke a világos módra váltás gombhoz.",
     "message": "Váltson világos módba"
+  },
+  "consentAskParticipate": {
+    "message": "Szeretne részt venni?"
+  },
+  "consentBetterTogether": {
+    "message": "Fejlesszük együtt a Say, Pi-t"
+  },
+  "consentDataDeidentified": {
+    "message": "Az analitikák nem személyekhez vannak kötve. A felhasznált adatok azonosítás nélküliek."
+  },
+  "consentNoPii": {
+    "message": "Nem gyűjtünk és nem látunk személyes adatokat, mint például üzeneteket vagy neveket."
+  },
+  "consentNoSale": {
+    "message": "Nem adjuk el az adataidat harmadik feleknek, vagy használjuk hirdetésre."
+  },
+  "consentOptIn": {
+    "message": "Benne vagyok!"
+  },
+  "consentOptOut": {
+    "message": "Köszönöm, nem."
+  },
+  "consentPrivacyParamount": {
+    "message": "Az Ön adatvédelme elsődleges. Amit mond, az Ön és a Pi között marad."
+  },
+  "consentRightToRevoke": {
+    "message": "Bármikor megváltoztathatod a véleményed."
+  },
+  "consentSharingPurpose": {
+    "message": "Az Ön használati adatainak megosztása segít nekünk megérteni, hogy az emberek hogyan használják a Say, Pi-t, így mindenki számára jobbá tehetjük."
+  },
+  "consetPrivacyPolicy": {
+    "message": "Olvasd el az Adatvédelmi Szabályzatunkat"
+  },
+  "shareAnalytics": {
+    "description": "Címke a jelölőnégyzethez az analitikai adatok megosztásának engedélyezéséhez/letiltásához.",
+    "message": "Megosztási analitika"
   }
 }

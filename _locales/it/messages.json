@@ -126,5 +126,42 @@
   "toggleThemeToLightMode": {
     "description": "Etichetta per il pulsante per passare alla modalità luce.",
     "message": "Passa alla modalità luce"
+  },
+  "consentAskParticipate": {
+    "message": "Ti piacerebbe partecipare?"
+  },
+  "consentBetterTogether": {
+    "message": "Miglioriamo insieme Say, Pi"
+  },
+  "consentDataDeidentified": {
+    "message": "Le analisi non sono legate a individui. Qualsiasi dato utilizzato è de-identificato."
+  },
+  "consentNoPii": {
+    "message": "Non raccoglieremo né vedremo dati personali, come messaggi o nomi."
+  },
+  "consentNoSale": {
+    "message": "Non venderemo i tuoi dati a terzi, né li useremo per la pubblicità."
+  },
+  "consentOptIn": {
+    "message": "Sono dentro!"
+  },
+  "consentOptOut": {
+    "message": "No grazie"
+  },
+  "consentPrivacyParamount": {
+    "message": "La tua privacy è fondamentale. Qualsiasi cosa tu dica rimane tra te e Pi."
+  },
+  "consentRightToRevoke": {
+    "message": "Puoi cambiare idea in qualsiasi momento."
+  },
+  "consentSharingPurpose": {
+    "message": "Condividere i tuoi dati di utilizzo ci aiuterà a capire come le persone usano Say, Pi così possiamo migliorarlo per tutti."
+  },
+  "consetPrivacyPolicy": {
+    "message": "Leggi la nostra Informativa sulla Privacy"
+  },
+  "shareAnalytics": {
+    "description": "Etichetta per la casella di controllo per abilitare/disabilitare la condivisione delle analisi.",
+    "message": "Condividi analisi"
   }
 }

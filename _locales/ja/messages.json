@@ -126,5 +126,42 @@
   "toggleThemeToLightMode": {
     "description": "ライトモードに切り替えるためのボタンのラベル。",
     "message": "ライトモードに切り替えてください"
+  },
+  "consentAskParticipate": {
+    "message": "参加しますか？"
+  },
+  "consentBetterTogether": {
+    "message": "一緒にSay、Piを改善しましょう"
+  },
+  "consentDataDeidentified": {
+    "message": "分析は個々の人物に関連付けられていません。使用されるデータは匿名化されています。"
+  },
+  "consentNoPii": {
+    "message": "私たちは個人データ、メッセージや名前などを収集または閲覧しません。"
+  },
+  "consentNoSale": {
+    "message": "私たちはあなたのデータを第三者に販売したり、広告に使用することはありません。"
+  },
+  "consentOptIn": {
+    "message": "私は参加します！"
+  },
+  "consentOptOut": {
+    "message": "いいえ、結構です"
+  },
+  "consentPrivacyParamount": {
+    "message": "あなたのプライバシーは最優先です。あなたが言うことはすべて、あなたとPiの間で保持されます。"
+  },
+  "consentRightToRevoke": {
+    "message": "あなたはいつでも意見を変えることができます。"
+  },
+  "consentSharingPurpose": {
+    "message": "あなたの使用データを共有することで、私たちは人々がSay, Piをどのように使用しているかを理解し、それを皆さんにとってより良いものにすることができます。"
+  },
+  "consetPrivacyPolicy": {
+    "message": "私たちのプライバシーポリシーをお読みください"
+  },
+  "shareAnalytics": {
+    "description": "分析の共有を有効/無効にするチェックボックスのラベル。",
+    "message": "分析を共有する"
   }
 }

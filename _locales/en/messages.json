@@ -130,5 +130,38 @@
   "shareAnalytics": {
     "message": "Share analytics",
     "description": "Label for the checkbox to enable/disable sharing of analytics."
+  },
+  "consentBetterTogether": {
+    "message": "Let's improve Say, Pi together"
+  },
+  "consentSharingPurpose": {
+    "message": "Sharing your usage data will help us understand how people use Say, Pi so we can make it better for everyone."
+  },
+  "consentNoPii": {
+    "message": "We won't collect or see personal data, like messages or names."
+  },
+  "consentPrivacyParamount": {
+    "message": "Your privacy is paramount. Anything you say remains between you and Pi."
+  },
+  "consentDataDeidentified": {
+    "message": "Analytics are not tied to individuals. Any data used is de-identified."
+  },
+  "consentNoSale": {
+    "message": "We won't sell your data to third parties, or use it for advertising."
+  },
+  "consentRightToRevoke": {
+    "message": "You can change your mind at any time."
+  },
+  "consetPrivacyPolicy": {
+    "message": "Read our Privacy Policy"
+  },
+  "consentAskParticipate": {
+    "message": "Would you like to participate?"
+  },
+  "consentOptOut": {
+    "message": "No thanks"
+  },
+  "consentOptIn": {
+    "message": "I'm in!"
   }
 }

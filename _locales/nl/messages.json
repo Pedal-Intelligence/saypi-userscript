@@ -126,5 +126,42 @@
   "toggleThemeToLightMode": {
     "description": "Label voor de knop om over te schakelen naar lichte modus.",
     "message": "Schakel over naar lichte modus"
+  },
+  "consentAskParticipate": {
+    "message": "Wilt u deelnemen?"
+  },
+  "consentBetterTogether": {
+    "message": "Laten we Say, Pi samen verbeteren"
+  },
+  "consentDataDeidentified": {
+    "message": "Analyses zijn niet gekoppeld aan individuen. Alle gebruikte gegevens zijn geanonimiseerd."
+  },
+  "consentNoPii": {
+    "message": "We verzamelen of zien geen persoonlijke gegevens, zoals berichten of namen."
+  },
+  "consentNoSale": {
+    "message": "We verkopen uw gegevens niet aan derden, of gebruiken het voor reclame."
+  },
+  "consentOptIn": {
+    "message": "Ik doe mee!"
+  },
+  "consentOptOut": {
+    "message": "Nee bedankt"
+  },
+  "consentPrivacyParamount": {
+    "message": "Uw privacy is van het grootste belang. Alles wat u zegt blijft tussen u en Pi."
+  },
+  "consentRightToRevoke": {
+    "message": "Je kunt op elk moment van gedachten veranderen."
+  },
+  "consentSharingPurpose": {
+    "message": "Het delen van uw gebruiksgegevens zal ons helpen begrijpen hoe mensen Say, Pi gebruiken zodat we het voor iedereen kunnen verbeteren."
+  },
+  "consetPrivacyPolicy": {
+    "message": "Lees ons Privacybeleid"
+  },
+  "shareAnalytics": {
+    "description": "Label voor het selectievakje om het delen van analyses in/uit te schakelen.",
+    "message": "Deel analyses"
   }
 }

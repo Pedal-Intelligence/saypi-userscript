@@ -126,5 +126,42 @@
   "toggleThemeToLightMode": {
     "description": "Beschriftung für die Schaltfläche zum Wechseln in den Lichtmodus.",
     "message": "Wechseln Sie in den Lichtmodus"
+  },
+  "consentAskParticipate": {
+    "message": "Möchten Sie teilnehmen?"
+  },
+  "consentBetterTogether": {
+    "message": "Lassen Sie uns Say, Pi gemeinsam verbessern"
+  },
+  "consentDataDeidentified": {
+    "message": "Analysen sind nicht an Einzelpersonen gebunden. Alle verwendeten Daten sind anonymisiert."
+  },
+  "consentNoPii": {
+    "message": "Wir werden keine persönlichen Daten wie Nachrichten oder Namen sammeln oder sehen."
+  },
+  "consentNoSale": {
+    "message": "Wir werden Ihre Daten nicht an Dritte verkaufen oder sie für Werbung verwenden."
+  },
+  "consentOptIn": {
+    "message": "Ich bin dabei!"
+  },
+  "consentOptOut": {
+    "message": "Nein danke"
+  },
+  "consentPrivacyParamount": {
+    "message": "Ihre Privatsphäre ist von größter Bedeutung. Alles, was Sie sagen, bleibt zwischen Ihnen und Pi."
+  },
+  "consentRightToRevoke": {
+    "message": "Sie können Ihre Meinung jederzeit ändern."
+  },
+  "consentSharingPurpose": {
+    "message": "Die Freigabe Ihrer Nutzungsdaten hilft uns zu verstehen, wie die Leute Say, Pi nutzen, damit wir es für alle verbessern können."
+  },
+  "consetPrivacyPolicy": {
+    "message": "Lesen Sie unsere Datenschutzrichtlinie"
+  },
+  "shareAnalytics": {
+    "description": "Beschriftung für das Kontrollkästchen zum Aktivieren/Deaktivieren der Freigabe von Analysen.",
+    "message": "Teilen Sie Analysen"
   }
 }

@@ -126,5 +126,42 @@
   "toggleThemeToLightMode": {
     "description": "Nhãn cho nút chuyển sang chế độ sáng.",
     "message": "Chuyển sang chế độ sáng"
+  },
+  "consentAskParticipate": {
+    "message": "Bạn có muốn tham gia không?"
+  },
+  "consentBetterTogether": {
+    "message": "Hãy cùng nhau cải thiện Say, Pi"
+  },
+  "consentDataDeidentified": {
+    "message": "Phân tích không liên quan đến cá nhân. Bất kỳ dữ liệu nào được sử dụng đều đã được bỏ danh tính."
+  },
+  "consentNoPii": {
+    "message": "Chúng tôi sẽ không thu thập hoặc xem dữ liệu cá nhân, như tin nhắn hay tên."
+  },
+  "consentNoSale": {
+    "message": "Chúng tôi sẽ không bán dữ liệu của bạn cho bên thứ ba, hoặc sử dụng nó cho quảng cáo."
+  },
+  "consentOptIn": {
+    "message": "Tôi tham gia!"
+  },
+  "consentOptOut": {
+    "message": "Không, cảm ơn"
+  },
+  "consentPrivacyParamount": {
+    "message": "Quyền riêng tư của bạn là quan trọng nhất. Bất cứ điều gì bạn nói chỉ giữa bạn và Pi."
+  },
+  "consentRightToRevoke": {
+    "message": "Bạn có thể thay đổi quyết định của mình vào bất kỳ lúc nào."
+  },
+  "consentSharingPurpose": {
+    "message": "Chia sẻ dữ liệu sử dụng của bạn sẽ giúp chúng tôi hiểu cách mọi người sử dụng Say, Pi để chúng tôi có thể cải thiện nó cho mọi người."
+  },
+  "consetPrivacyPolicy": {
+    "message": "Đọc Chính sách Bảo mật của chúng tôi"
+  },
+  "shareAnalytics": {
+    "description": "Nhãn cho hộp kiểm để bật/tắt chia sẻ phân tích.",
+    "message": "Chia sẻ phân tích"
   }
 }
