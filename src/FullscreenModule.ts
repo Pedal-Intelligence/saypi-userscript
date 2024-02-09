@@ -1,12 +1,39 @@
+import {
+  machine as focusMachine,
+  exitFocusMode,
+} from "./state-machines/FocusMachine";
+import { interpret } from "xstate";
+
+const focusActor = interpret(focusMachine);
+const tickInterval = 1000;
+var ticker: NodeJS.Timeout;
+const userInputEvents = ["mousemove", "click", "keypress"];
+
+function handleUserInput() {
+  focusActor.send({ type: "blur" });
+}
+
 export function enterFullscreen() {
   // Check if the API is available
   if (document.fullscreenEnabled) {
     // Request full-screen mode
-    document.documentElement.requestFullscreen().catch((err) => {
-      console.info(
-        `Unable to enter full-screen mode. Maybe starting in mobile view?: ${err.message} (${err.name})`
-      );
-    });
+    document.documentElement
+      .requestFullscreen()
+      .then(() => {
+        focusActor.start();
+        ticker = setInterval(() => {
+          focusActor.send({ type: "tick", time_ms: tickInterval });
+        }, tickInterval);
+        // send any click or keypress to reset the inactivity timer
+        for (const event of userInputEvents) {
+          document.addEventListener(event, handleUserInput);
+        }
+      })
+      .catch((err) => {
+        console.info(
+          `Unable to enter full-screen mode. Maybe starting in mobile view?: ${err.message} (${err.name})`
+        );
+      });
   } else {
     console.log("Fullscreen API is not enabled.");
   }
@@ -16,23 +43,22 @@ export function exitFullscreen() {
   // Check if the API is available
   if (document.fullscreenEnabled) {
     // Request full-screen mode
-    document.exitFullscreen().catch((err) => {
-      console.info(
-        `Unable to exit full-screen mode. Maybe starting in desktop view?: ${err.message} (${err.name})`
-      );
-    });
-    exitFocusMode();
+    document
+      .exitFullscreen()
+      .then(() => {
+        exitFocusMode();
+        focusActor.stop();
+        clearInterval(ticker);
+        for (const event of userInputEvents) {
+          document.removeEventListener(event, handleUserInput);
+        }
+      })
+      .catch((err) => {
+        console.info(
+          `Unable to exit full-screen mode. Maybe starting in desktop view?: ${err.message} (${err.name})`
+        );
+      });
   } else {
     console.log("Fullscreen API is not enabled.");
   }
-}
-
-export function enterFocusMode() {
-  // add focus class to the body
-  document.body.classList.add("focus");
-}
-
-export function exitFocusMode() {
-  // remove focus class from the body
-  document.body.classList.remove("focus");
 }
