@@ -4,8 +4,7 @@
   fill: rgb(245 238 223); /* bg-cream-550 */
 }
 
-.mobile-device {
-  /* maximize (mobile view) button is only displayed on compatible devices */
+
   .saypi-enter-button,
   .saypi-exit-button {
     width: 3rem;
@@ -17,7 +16,7 @@
       color: rgb(13 60 38); /* text-primary-700 */
     }
   }
-}
+
 
 #saypi-lock-panel {
   /* lock panel is only displayed on mobile devices */

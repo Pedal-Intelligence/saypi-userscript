@@ -1,7 +1,7 @@
 import {
-  enterMobileMode,
-  exitMobileMode,
-  isMobileView,
+  enterImmersiveMode,
+  exitImmersiveMode,
+  isViewImmersive,
 } from "./UserAgentModule.js";
 import { addChild } from "./DOMModule.ts";
 import EventBus from "./EventBus.js";
@@ -79,7 +79,7 @@ export default class ButtonModule {
   }
 
   updateIconContent(iconContainer) {
-    if (isMobileView()) {
+    if (isViewImmersive()) {
       iconContainer.innerHTML = this.getRectanglesSVG();
     } else {
       iconContainer.innerHTML = talkIconSVG;
@@ -88,9 +88,9 @@ export default class ButtonModule {
   }
 
   /**
-   * Monitors the HTML element for changes in the view class
-   * i.e. when the desktop/mobile view is toggled
-   * and updates the icon content accordingly
+   * Monitors an element for changes in the view class
+   * i.e. when the view mode is toggled between 'immersive' and 'desktop'
+   * and updates the icon content accordingly (why?)
    * @param {*} container - The HTML element to hold the icon
    */
   setupViewObserver(container) {
@@ -102,11 +102,13 @@ export default class ButtonModule {
       for (let mutation of mutationsList) {
         if (mutation.type === "attributes") {
           if (mutation.attributeName === "class") {
-            if (document.documentElement.classList.contains("mobile-view")) {
-              // 'mobile-view' class was added
+            if (document.documentElement.classList.contains("immersive-view")) {
+              // view mode changed to 'immersive'
+              console.log("immersive view");
               this.updateIconContent(container);
             } else {
-              // 'mobile-view' class was removed
+              // view mode changed to 'desktop'
+              console.log("desktop view");
               this.updateIconContent(container);
             }
           }
@@ -168,7 +170,7 @@ export default class ButtonModule {
   createExitButton(container, position = 0) {
     const label = getMessage("exitImmersiveModeLong");
     const button = this.createButton("", () => {
-      exitMobileMode();
+      exitImmersiveMode();
     });
     button.type = "button";
     button.className =
@@ -183,7 +185,7 @@ export default class ButtonModule {
   createEnterButton(container, position = 0) {
     const label = getMessage("enterImmersiveModeLong");
     const button = this.createButton("", () => {
-      enterMobileMode();
+      enterImmersiveMode();
     });
     button.type = "button";
     button.className =
@@ -201,7 +203,7 @@ export default class ButtonModule {
     const title = getMessage("enterImmersiveModeLong");
     const button = document.createElement("a");
     button.onclick = () => {
-      enterMobileMode();
+      enterImmersiveMode();
     };
     button.className =
       "immersive-mode-button saypi-control-button flex h-16 w-16 flex-col items-center justify-center rounded-xl text-neutral-900 hover:bg-neutral-50-hover hover:text-neutral-900-hover active:bg-neutral-50-tap active:text-neutral-900-tap gap-0.5";

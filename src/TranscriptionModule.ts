@@ -1,6 +1,6 @@
 import { config } from "./ConfigModule.js";
 import StateMachineService from "./StateMachineService.js";
-import { isMobileView } from "./UserAgentModule.js";
+import { isViewImmersive } from "./UserAgentModule.js";
 import EventBus from "./EventBus.js";
 import EventModule from "./EventModule.js";
 import { logger } from "./LoggingModule.js";
@@ -309,7 +309,7 @@ export function setFinalPrompt(transcript: string): void {
   textarea.setAttribute("placeholder", "");
   const initialHeight = "2rem"; // aka 32px
   textarea.style.height = initialHeight; // Reset the height after draft preview has been dismissed
-  if (isMobileView()) {
+  if (isViewImmersive()) {
     // if transcript is > 1000 characters, truncate it to 999 characters plus an ellipsis
     if (transcript.length > PROMPT_CHARACTER_LIMIT) {
       const truncatedLength = PROMPT_CHARACTER_LIMIT - 1;

@@ -11,42 +11,29 @@ export function isMobileDevice() {
   );
 }
 
-// this function determines whether to show the mobile view or not
-export function isMobileView() {
-  let userViewPreference = null;
-
-  try {
-    userViewPreference = localStorage.getItem("userViewPreference");
-  } catch (e) {
-    console.warn("Could not access localStorage: ", e);
-  }
-
-  let prefersMobile = false;
-  if (userViewPreference) {
-    prefersMobile = userViewPreference === "mobile";
-  }
-
-  // Make sure isMobileDevice is defined or imported
-  return isMobileDevice() && prefersMobile;
+// this function determines whether the immersive view is currently active
+export function isViewImmersive() {
+  const element = document.documentElement;
+  return element.classList.contains("immersive-view");
 }
 
-export function exitMobileMode() {
+export function exitImmersiveMode() {
   localStorage.setItem("userViewPreference", "desktop"); // Save preference
 
   const element = document.documentElement;
-  element.classList.remove("mobile-view");
+  element.classList.remove("immersive-view");
   element.classList.add("desktop-view");
 
   attachCallButton();
   exitFullscreen();
 }
 
-export function enterMobileMode() {
-  localStorage.setItem("userViewPreference", "mobile"); // Save preference
+export function enterImmersiveMode() {
+  localStorage.setItem("userViewPreference", "immersive"); // Save preference
 
   const element = document.documentElement;
   element.classList.remove("desktop-view");
-  element.classList.add("mobile-view");
+  element.classList.add("immersive-view");
 
   detachCallButton();
 
@@ -85,7 +72,7 @@ export function addUserAgentFlags() {
   }
 
   addDeviceFlags(element);
-  addViewFlags(element);
+  //addViewFlags(element); // redundant, as this is called in initMode
 }
 
 export function addDeviceFlags(element) {
@@ -94,23 +81,27 @@ export function addDeviceFlags(element) {
   }
 }
 
-export function addViewFlags(element) {
-  if (isMobileView()) {
-    element.classList.remove("desktop-view");
-    element.classList.add("mobile-view");
-  } else {
-    element.classList.remove("mobile-view");
-    element.classList.add("desktop-view");
-  }
+function addViewFlags(element) {
+  UserPreferenceModule.getPrefersImmersiveView().then((immersive) => {
+    if (immersive) {
+      element.classList.remove("desktop-view");
+      element.classList.add("immersive-view");
+    } else {
+      element.classList.remove("immersive-view");
+      element.classList.add("desktop-view");
+    }
+  });
 }
 
 /**
- * Perform initial setup of the UI based on the user's device and view preferences
+ * Perform initial setup of the UI based on the view preferences
  */
 export function initMode() {
-  if (isMobileView()) {
-    enterMobileMode();
-  } else {
-    exitMobileMode();
-  }
+  UserPreferenceModule.getPrefersImmersiveView().then((immersive) => {
+    if (immersive) {
+      enterImmersiveMode();
+    } else {
+      exitImmersiveMode();
+    }
+  });
 }

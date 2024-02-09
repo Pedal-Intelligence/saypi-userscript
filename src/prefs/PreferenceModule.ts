@@ -69,4 +69,21 @@ export module UserPreferenceModule {
   export function getDataSharing(): Promise<boolean> {
     return getStoredValue("shareData", false);
   }
+
+  export function getPrefersImmersiveView(): Promise<boolean> {
+    let userViewPreference = null;
+
+    try {
+      // we use localStorage here because view preference is device specific
+      userViewPreference = localStorage.getItem("userViewPreference");
+    } catch (e) {
+      console.warn("Could not access localStorage: ", e);
+    }
+
+    let prefersMobile = false;
+    if (userViewPreference) {
+      prefersMobile = userViewPreference === "immersive";
+    }
+    return Promise.resolve(prefersMobile);
+  }
 }

@@ -1,4 +1,4 @@
-html.mobile-view {
+html.immersive-view {
   #saypi-panel,
   .notification {
     width: 100%;
@@ -41,7 +41,7 @@ html.mobile-view {
     }
     /* scale the mute button */
     button.group {
-      transform: scale(2) !important;
+      transform: scale(1.5) !important;
       z-index: 50;
       /* hide the voice selector twisty */
       + button {
@@ -171,6 +171,19 @@ html.mobile-view {
 
   /* hide any buttons in the control panel not relevant to mobile */
   .saypi-control-panel button:not(.saypi-control-button) {
+    display: none;
+  }
+
+  /* override lg:hidden, making the control panel's buttons visible in immersive view on desktops */
+  #saypi-control-panel-main.lg\:hidden {
+    display: block;
+  }
+  /* override lg:flex-row-reverse, making the audio control button visible in immersive view on desktops */
+  div.lg\:flex-row-reverse {
+    flex-direction: unset;
+  }
+  /* hide the side panel in immersive mode */
+  #saypi-side-panel.lg\:flex {
     display: none;
   }
   
