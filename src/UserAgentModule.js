@@ -36,10 +36,7 @@ export function enterImmersiveMode() {
   element.classList.add("immersive-view");
 
   detachCallButton();
-
-  if (isMobileDevice()) {
-    enterFullscreen();
-  }
+  enterFullscreen();
   UserPreferenceModule.getTheme().then((theme) => {
     buttonModule.applyTheme(theme);
   });

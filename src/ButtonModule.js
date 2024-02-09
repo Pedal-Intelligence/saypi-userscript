@@ -12,7 +12,6 @@ import maximizeIconSVG from "./icons/maximize.svg";
 import immersiveIconSVG from "./icons/immersive.svg";
 import rectanglesSVG from "./icons/rectangles.svg";
 import rectanglesDarkModeSVG from "./icons/rectangles-moonlight.svg";
-import talkIconSVG from "./icons/waveform.svg";
 import callIconSVG from "./icons/call.svg";
 import callStartingIconSVG from "./icons/call-starting.svg";
 import hangupIconSVG from "./icons/hangup.svg";
@@ -81,8 +80,6 @@ export default class ButtonModule {
   updateIconContent(iconContainer) {
     if (isViewImmersive()) {
       iconContainer.innerHTML = this.getRectanglesSVG();
-    } else {
-      iconContainer.innerHTML = talkIconSVG;
     }
     iconContainer.classList.add("saypi-icon");
   }

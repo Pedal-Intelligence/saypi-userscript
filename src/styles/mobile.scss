@@ -191,5 +191,10 @@ html.immersive-view {
     width: 4rem;
     padding: 6px;
   }
+
+  /* hide controls in focus mode */
+  .focus button {
+    display: none;
+  }
 }
 @import "dark-mode.scss";
