@@ -7,6 +7,9 @@ abstract class Chatbot {
   getControlPanelSelector(): string {
     throw new Error("Method not implemented.");
   }
+  getSidePanelSelector(): string {
+    throw new Error("Method not implemented.");
+  }
   // Define abstract methods for getting selectors which the subclasses must implement
   abstract getPromptTextInputSelector(): string;
   abstract getPromptSubmitButtonSelector(): string;

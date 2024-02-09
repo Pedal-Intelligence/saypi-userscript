@@ -21,6 +21,10 @@ class PiAIChatbot extends Chatbot {
   getControlPanelSelector(): string {
     return ".flex.items-center.grow";
   }
+
+  getSidePanelSelector(): string {
+    return "div.hidden.w-22.flex-col.items-center.gap-1.border-r";
+  }
 }
 
 export { PiAIChatbot };

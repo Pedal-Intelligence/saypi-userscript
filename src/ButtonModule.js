@@ -9,6 +9,7 @@ import StateMachineService from "./StateMachineService.js";
 import { submitErrorHandler } from "./SubmitErrorHandler.ts";
 import exitIconSVG from "./icons/exit.svg";
 import maximizeIconSVG from "./icons/maximize.svg";
+import immersiveIconSVG from "./icons/immersive.svg";
 import rectanglesSVG from "./icons/rectangles.svg";
 import rectanglesDarkModeSVG from "./icons/rectangles-moonlight.svg";
 import talkIconSVG from "./icons/waveform.svg";
@@ -165,7 +166,7 @@ export default class ButtonModule {
   }
 
   createExitButton(container, position = 0) {
-    const label = getMessage("exitMobileMode");
+    const label = getMessage("exitImmersiveModeLong");
     const button = this.createButton("", () => {
       exitMobileMode();
     });
@@ -180,7 +181,7 @@ export default class ButtonModule {
   }
 
   createEnterButton(container, position = 0) {
-    const label = getMessage("enterMobileMode");
+    const label = getMessage("enterImmersiveModeLong");
     const button = this.createButton("", () => {
       enterMobileMode();
     });
@@ -191,6 +192,26 @@ export default class ButtonModule {
     button.setAttribute("title", label);
     button.innerHTML = maximizeIconSVG;
     // insert the button at the specified position
+    addChild(container, button, position);
+    return button;
+  }
+
+  createImmersiveModeButton(container, position = 0) {
+    const label = getMessage("enterImmersiveModeShort");
+    const title = getMessage("enterImmersiveModeLong");
+    const button = document.createElement("a");
+    button.onclick = () => {
+      enterMobileMode();
+    };
+    button.className =
+      "immersive-mode-button saypi-control-button flex h-16 w-16 flex-col items-center justify-center rounded-xl text-neutral-900 hover:bg-neutral-50-hover hover:text-neutral-900-hover active:bg-neutral-50-tap active:text-neutral-900-tap gap-0.5";
+    button.setAttribute("aria-label", title);
+    button.setAttribute("title", title);
+    button.innerHTML = immersiveIconSVG;
+    const labelDiv = document.createElement("div");
+    labelDiv.textContent = label;
+    labelDiv.className = "t-label";
+    button.appendChild(labelDiv);
     addChild(container, button, position);
     return button;
   }

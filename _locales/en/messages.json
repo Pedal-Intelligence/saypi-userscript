@@ -7,13 +7,17 @@
     "message": "Speech-to-text for Pi, the conversational AI. Enjoy hands-free conversations in any language.",
     "description": "The description of the application."
   },
-  "exitMobileMode": {
-    "message": "Exit Voice-Controlled Mobile Mode",
-    "description": "The label of the button to exit voice-controlled mobile mode, back to the text-based desktop mode."
+  "exitImmersiveModeLong": {
+    "message": "Exit Immersive Mode",
+    "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode."
   },
-  "enterMobileMode": {
-    "message": "Enter Voice-Controlled Mobile Mode",
-    "description": "The label of the button to enter voice-controlled mobile mode."
+  "enterImmersiveModeLong": {
+    "message": "Enter Immersive Mode",
+    "description": "The aria-label and title of the button to enter immersive mode on mobile devices."
+  },
+  "enterImmersiveModeShort": {
+    "message": "Immersive",
+    "description": "The text of the button to enter immersive mode on desktop."
   },
   "callInProgress": {
     "message": "Active continuous listening. Click to stop.",

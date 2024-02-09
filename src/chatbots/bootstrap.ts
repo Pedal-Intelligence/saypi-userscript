@@ -53,6 +53,7 @@ export function observeDOM(): void {
           const addedElement = node as Element;
           const promptObs = findAndDecoratePromptField(addedElement);
           const ctrlPanelObs = findAndDecorateControlPanel(addedElement);
+          const sidePanelObs = findAndDecorateSidePanel(addedElement);
           const audioControlsObs = findAndDecorateAudioControls(addedElement);
           const audioOutputButtonObs =
             findAndDecorateAudioOutputButton(addedElement);
@@ -149,6 +150,37 @@ function findAndDecorateControlPanel(searchRoot: Element): Observation {
   const obs = findControlPanel(searchRoot);
   if (obs.found && obs.isNew && !obs.decorated) {
     decorateControlPanel(obs.target as HTMLElement);
+  }
+  return Observation.decorated(obs);
+}
+
+function findSidePanel(searchRoot: Element): Observation {
+  const id = "saypi-side-panel";
+  const existingSidePanel = document.getElementById(id);
+  if (existingSidePanel) {
+    // Side panel already exists, no need to search
+    return Observation.foundExisting(id, existingSidePanel);
+  }
+
+  const sidePanel = searchRoot.querySelector(chatbot.getSidePanelSelector());
+  if (sidePanel) {
+    return Observation.notDecorated(id, sidePanel);
+  }
+  return Observation.notFound(id);
+}
+
+function decorateSidePanel(sidePanel: HTMLElement): void {
+  sidePanel.id = "saypi-side-panel";
+  sidePanel.classList.add("saypi-control-panel"); // the side panel is a secondary control panel for larger screens
+
+  const immersiveModeBtnPos = 1;
+  buttonModule.createImmersiveModeButton(sidePanel, immersiveModeBtnPos);
+}
+
+function findAndDecorateSidePanel(searchRoot: Element): Observation {
+  const obs = findSidePanel(searchRoot);
+  if (obs.found && obs.isNew && !obs.decorated) {
+    decorateSidePanel(obs.target as HTMLElement);
   }
   return Observation.decorated(obs);
 }

@@ -45,4 +45,11 @@ html.desktop-view {
     /* additional margin to align with control panel row */
     margin-top: 0.35rem;
   }
+
+  #saypi-side-panel .immersive-mode-button svg {
+    width: 30px;
+    .cls-1 {
+      stroke: #24381b;
+    }
+  }
 }
