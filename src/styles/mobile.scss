@@ -192,9 +192,11 @@ html.immersive-view {
     padding: 6px;
   }
 
-  /* hide controls in focus mode */
+  /* When this class is applied, buttons fade out */
   .focus button {
-    display: none;
+    opacity: 0; 
+    transition: opacity 0.5s ease-out; 
   }
+
 }
 @import "dark-mode.scss";

@@ -13,7 +13,7 @@ import {
   TextualNotificationsModule,
   VisualNotificationsModule,
 } from "../NotificationsModule";
-import { isViewImmersive } from "../UserAgentModule.js";
+import { ImmersionService } from "../UserAgentModule.js";
 import {
   uploadAudioWithRetry,
   getDraftPrompt,
@@ -762,7 +762,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       acquireMicrophone: (context, event) => {
         // warmup the microphone on idle in mobile view,
         // since there's no mouseover event to trigger it
-        if (isViewImmersive()) {
+        if (ImmersionService.isViewImmersive()) {
           EventBus.emit("audio:setupRecording");
         }
       },

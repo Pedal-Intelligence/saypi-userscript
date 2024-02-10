@@ -1,8 +1,4 @@
-import {
-  enterImmersiveMode,
-  exitImmersiveMode,
-  isViewImmersive,
-} from "./UserAgentModule.js";
+import { ImmersionService } from "./UserAgentModule.js";
 import { addChild } from "./DOMModule.ts";
 import EventBus from "./EventBus.js";
 import StateMachineService from "./StateMachineService.js";
@@ -23,8 +19,17 @@ import lightModeIconSVG from "./icons/mode-day.svg";
 import getMessage from "./i18n.ts";
 import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
 import AnimationModule from "./AnimationModule.js";
+import { Chatbot } from "./chatbots/Chatbot.ts";
+import { ChatbotService } from "./chatbots/ChatbotService.ts";
+
 export default class ButtonModule {
-  constructor() {
+  /**
+   * Initializes the button module with dependencies
+   * @param {Chatbot} chatbot - The chatbot instance (dependency injection)
+   */
+  constructor(chatbot) {
+    this.chatbot = chatbot;
+    this.immersionService = new ImmersionService(chatbot);
     this.sayPiActor = StateMachineService.actor; // the Say, Pi state machine
     this.screenLockActor = StateMachineService.screenLockActor;
     this.themeToggleActor = StateMachineService.themeToggleActor;
@@ -78,7 +83,7 @@ export default class ButtonModule {
   }
 
   updateIconContent(iconContainer) {
-    if (isViewImmersive()) {
+    if (ImmersionService.isViewImmersive()) {
       iconContainer.innerHTML = this.getRectanglesSVG();
     }
     iconContainer.classList.add("saypi-icon");
@@ -167,7 +172,7 @@ export default class ButtonModule {
   createExitButton(container, position = 0) {
     const label = getMessage("exitImmersiveModeLong");
     const button = this.createButton("", () => {
-      exitImmersiveMode();
+      ImmersionService.exitImmersiveMode();
     });
     button.type = "button";
     button.className =
@@ -182,7 +187,7 @@ export default class ButtonModule {
   createEnterButton(container, position = 0) {
     const label = getMessage("enterImmersiveModeLong");
     const button = this.createButton("", () => {
-      enterImmersiveMode();
+      this.immersionService.enterImmersiveMode();
     });
     button.type = "button";
     button.className =
@@ -200,7 +205,7 @@ export default class ButtonModule {
     const title = getMessage("enterImmersiveModeLong");
     const button = document.createElement("a");
     button.onclick = () => {
-      enterImmersiveMode();
+      this.immersionService.enterImmersiveMode();
     };
     button.className =
       "immersive-mode-button saypi-control-button flex h-16 w-16 flex-col items-center justify-center rounded-xl text-neutral-900 hover:bg-neutral-50-hover hover:text-neutral-900-hover active:bg-neutral-50-tap active:text-neutral-900-tap gap-0.5";
@@ -493,4 +498,4 @@ export default class ButtonModule {
 }
 
 // Singleton
-export const buttonModule = new ButtonModule();
+export const buttonModule = new ButtonModule(ChatbotService.getChatbot());

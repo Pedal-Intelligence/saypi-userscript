@@ -1499,7 +1499,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse{0%{transform:scale(1)
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `html.immersive-view #saypi-panel,html.immersive-view .notification{width:100%;position:fixed;left:0;background-color:rgba(245,238,223,.98);height:100svh;top:0}html.immersive-view #saypi-talkButton{background-color:#e9f5da;border-radius:0;margin:0}html.immersive-view #saypi-talkButton svg{width:100vw;height:100svh}html.immersive-view #__next>main>div>div>div.fixed.top-4.right-6>button,html.immersive-view #saypi-experiences-button{transform:scale(1.5)}html.immersive-view div.bg-gradient-to-b{display:none}html.immersive-view #saypi-audio-controls{margin-top:.375rem}html.immersive-view #saypi-audio-controls div.p-1{display:none}html.immersive-view #saypi-audio-controls button.group{transform:scale(1.5) !important;z-index:50}html.immersive-view #saypi-audio-controls button.group+button{display:none}html.immersive-view #saypi-audio-controls div.bg-neutral-200{background-color:rgba(0,0,0,0)}html.immersive-view .text-body-chat-m{padding-top:0}html.immersive-view .saypi-enter-button{display:none}html.immersive-view #saypi-prompt-ancestor{display:none}html.immersive-view #saypi-submitButton{display:none}html.immersive-view #saypi-callButton{position:fixed;bottom:4rem;left:0;right:0;margin:auto;width:4.5rem;height:4.5rem;border:0;z-index:80}html.immersive-view .lock-button{width:3rem;height:3rem;padding:6px;margin-right:1rem;border:0;z-index:60}html.immersive-view .lock-button svg path.inner{color:#0d3c26}html.immersive-view #saypi-lock-panel{display:block;background-color:rgba(0,0,0,0);border-radius:0;margin:0}html.immersive-view .unlocked #saypi-lockButton{display:block !important}html.immersive-view .locked #saypi-lockButton{display:none !important}html.immersive-view .unlocked #saypi-unlockButton{display:none !important}html.immersive-view .locked #saypi-unlockButton{display:block !important;position:relative;z-index:101 !important}html.immersive-view .locked #saypi-touch-absorber{display:block !important;position:fixed;top:0;left:0;opacity:.5;background-color:rgba(245,238,223,.75);width:100vw;height:100svh;z-index:100}@keyframes fadeIn{from{opacity:0}to{opacity:1}}html.immersive-view #saypi-locked-text{display:none}html.immersive-view .locked #saypi-locked-text{display:block !important;position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);width:80%;height:1rem;animation-name:fadeIn;animation-duration:2s;animation-fill-mode:forwards;text-align:center;font-size:xx-large;font-family:"Roboto","Open Sans","Lato","Source Sans Pro","Noto Sans",Arial,sans-serif}html.immersive-view .locked #saypi-locked-text .subtext{display:block;font-size:large}html.immersive-view .scrollbar-gutter-both-edges{visibility:hidden}html.immersive-view .saypi-control-panel button:not(.saypi-control-button){display:none}html.immersive-view #saypi-control-panel-main.lg\\:hidden{display:block}html.immersive-view div.lg\\:flex-row-reverse{flex-direction:unset}html.immersive-view #saypi-side-panel.lg\\:flex{display:none}html.immersive-view .saypi-control-panel button.theme-toggle-button{width:4rem;padding:6px}html.immersive-view .focus button{display:none}html.immersive-view body.dark #saypi-talkButton{background-color:#bac5cc;opacity:1}html.immersive-view body.dark .call-button path.circle{fill:#1c95a3}html.immersive-view body.dark .outermost.piThinking{--original-color: #a9b7bf;--thinking-color: #ffe4b2;animation:thinkingFlip 1s ease-in-out}html.immersive-view body.dark .second.piThinking{--original-color: #8f9ca7;--thinking-color: #ffddb4;animation:thinkingFlip 1.1s ease-in-out}html.immersive-view body.dark .third.piThinking{--original-color: #787d83;--thinking-color: #ffd5b7;animation:thinkingFlip 1.2s ease-in-out}html.immersive-view body.dark .fourth.piThinking{--original-color: #6c7378;--thinking-color: #ffcdca;animation:thinkingFlip 1.3s ease-in-out}html.immersive-view body.dark .fifth.piThinking{--original-color: #313437;--thinking-color: #ffc5dc;animation:thinkingFlip 1.4s ease-in-out}html.immersive-view body.dark .innermost.piThinking{--original-color: #1c1c1c;--thinking-color: #ffbde6;animation:thinkingFlip 1.5s ease-in-out}`, "",{"version":3,"sources":["webpack://./src/styles/mobile.scss","webpack://./src/styles/dark-mode.scss"],"names":[],"mappings":"AACE,mEAEE,UAAA,CACA,cAAA,CACA,MAAA,CACA,sCAAA,CAEA,aAAA,CACA,KAAA,CAGF,sCACE,wBAAA,CACA,eAAA,CACA,QAAA,CACA,0CACE,WAAA,CACA,aAAA,CAKJ,sHAEE,oBAAA,CAIF,yCACE,YAAA,CAIF,0CAEE,kBAAA,CAEA,kDACE,YAAA,CAGF,uDACE,+BAAA,CACA,UAAA,CAEA,8DACE,YAAA,CAIJ,6DACE,8BAAA,CAKJ,sCACE,aAAA,CAGF,wCACE,YAAA,CAGF,2CAGE,YAAA,CAIF,wCACE,YAAA,CAGF,sCACE,cAAA,CACA,WAAA,CACA,MAAA,CACA,OAAA,CACA,WAAA,CACA,YAAA,CACA,aAAA,CACA,QAAA,CACA,UAAA,CAGF,iCACE,UAAA,CACA,WAAA,CACA,WAAA,CACA,iBAAA,CACA,QAAA,CACA,UAAA,CACA,gDACE,aAAA,CAIJ,sCAEE,aAAA,CACA,8BAAA,CACA,eAAA,CACA,QAAA,CAGF,gDACE,wBAAA,CAEF,8CACE,uBAAA,CAGF,kDACE,uBAAA,CAEF,gDACE,wBAAA,CACA,iBAAA,CACA,sBAAA,CAGF,kDACE,wBAAA,CACA,cAAA,CACA,KAAA,CACA,MAAA,CACA,UAAA,CAEA,sCAAA,CACA,WAAA,CACA,aAAA,CACA,WAAA,CAGF,kBACE,KAAA,SAAA,CACA,GAAA,SAAA,CAAA,CAGF,uCACE,YAAA,CAEF,+CACE,wBAAA,CACA,cAAA,CACA,OAAA,CACA,QAAA,CACA,+BAAA,CACA,SAAA,CACA,WAAA,CAEA,qBAAA,CACA,qBAAA,CACA,4BAAA,CACA,iBAAA,CACA,kBAAA,CACA,sFAAA,CACA,wDACE,aAAA,CACA,eAAA,CAKJ,iDACE,iBAAA,CAIF,2EACE,YAAA,CAIF,yDACE,aAAA,CAGF,6CACE,oBAAA,CAGF,+CACE,YAAA,CAGF,oEACE,UAAA,CACA,WAAA,CAIF,kCACE,YAAA,CCnMA,gDACI,wBAAA,CACA,SAAA,CAEJ,uDACI,YAAA,CAIJ,oDACI,yBAAA,CACA,yBAAA,CACA,qCAAA,CAGF,iDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,gDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,iDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,gDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,oDACE,yBAAA,CACA,yBAAA,CACA,uCAAA","sourcesContent":["html.immersive-view {\n  #saypi-panel,\n  .notification {\n    width: 100%;\n    position: fixed;\n    left: 0;\n    background-color: rgba(245, 238, 223, 0.98);\n\n    height: 100svh;\n    top: 0;\n  }\n\n  #saypi-talkButton {\n    background-color: #e9f5da;\n    border-radius: 0;\n    margin: 0;\n    svg {\n      width: 100vw;\n      height: 100svh;\n    }\n  }\n\n  /* Pi controls: ellipsis, experiences */\n  #__next > main > div > div > div.fixed.top-4.right-6 > button,\n  #saypi-experiences-button {\n    transform: scale(1.5);\n  }\n\n  /* hide an ugly artifact */\n  div.bg-gradient-to-b {\n    display: none;\n  }\n\n  /* Pi controls: mute/unmute */\n  #saypi-audio-controls {\n    /* align the mute button with the horizontal control panel */\n    margin-top: 0.375rem;\n    /* hide the voice options */\n    div.p-1 {\n      display: none;\n    }\n    /* scale the mute button */\n    button.group {\n      transform: scale(1.5) !important;\n      z-index: 50;\n      /* hide the voice selector twisty */\n      + button {\n        display: none;\n      }\n    }\n    /* make an ugly artifact transparent on pi.ai */\n    div.bg-neutral-200 {\n      background-color: transparent;\n    }\n  }\n\n  /* fix an alignment issue with the \"new ui layout\" */\n  .text-body-chat-m {\n    padding-top: 0;\n  }\n\n  .saypi-enter-button {\n    display: none;\n  }\n\n  #saypi-prompt-ancestor {\n    /* hides the row containing the text area control */\n    /* important: hides virtual keyboard on android */\n    display: none;\n    /* the call button, usually nested in the prompt, is detached while in mobile view */\n  }\n\n  #saypi-submitButton {\n    display: none;\n  }\n\n  #saypi-callButton {\n    position: fixed;\n    bottom: 4rem;\n    left: 0;\n    right: 0;\n    margin: auto;\n    width: 4.5rem;\n    height: 4.5rem;\n    border: 0;\n    z-index: 80;\n  }\n\n  .lock-button {\n    width: 3rem;\n    height: 3rem;\n    padding: 6px;\n    margin-right: 1rem;\n    border: 0;\n    z-index: 60;\n    svg path.inner {\n      color: rgb(13 60 38); /* text-primary-700 */\n    }\n  }\n\n  #saypi-lock-panel {\n    /* unlocked by default */\n    display: block;\n    background-color: transparent;\n    border-radius: 0;\n    margin: 0;\n  }\n\n  .unlocked #saypi-lockButton {\n    display: block !important; // show the lock button when screen is unlocked\n  }\n  .locked #saypi-lockButton {\n    display: none !important; // hide the lock button when screen is locked\n  }\n\n  .unlocked #saypi-unlockButton {\n    display: none !important; // hide the unlock button when screen is unlocked\n  }\n  .locked #saypi-unlockButton {\n    display: block !important; // show the unlock button when screen is unlocked\n    position: relative; // position (but don't move) the unlock button so that z-index works while locked\n    z-index: 101 !important; // above the touch absorber\n  }\n\n  .locked #saypi-touch-absorber {\n    display: block !important; // show the touch absorber when screen is locked\n    position: fixed;\n    top: 0;\n    left: 0;\n    opacity: 0.5;\n    /* semi-transparent background */\n    background-color: rgba(245, 238, 223, 0.75);\n    width: 100vw;\n    height: 100svh;\n    z-index: 100;\n  }\n\n  @keyframes fadeIn {\n    from { opacity: 0; }\n    to { opacity: 1; }\n  }  \n\n  #saypi-locked-text {\n    display: none; // hide the locked text when screen is unlocked\n  }\n  .locked #saypi-locked-text {\n    display: block !important; // show the locked text when screen is locked\n    position: fixed;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    width: 80%;\n    height: 1rem;\n    /* text */\n    animation-name: fadeIn;\n    animation-duration: 2s;\n    animation-fill-mode: forwards;\n    text-align: center;\n    font-size: xx-large;\n    font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;\n    .subtext {\n      display: block;\n      font-size: large;\n    }\n  }\n\n  /* hide the scrollbar */\n  .scrollbar-gutter-both-edges {\n    visibility: hidden;\n  }\n\n  /* hide any buttons in the control panel not relevant to mobile */\n  .saypi-control-panel button:not(.saypi-control-button) {\n    display: none;\n  }\n\n  /* override lg:hidden, making the control panel's buttons visible in immersive view on desktops */\n  #saypi-control-panel-main.lg\\:hidden {\n    display: block;\n  }\n  /* override lg:flex-row-reverse, making the audio control button visible in immersive view on desktops */\n  div.lg\\:flex-row-reverse {\n    flex-direction: unset;\n  }\n  /* hide the side panel in immersive mode */\n  #saypi-side-panel.lg\\:flex {\n    display: none;\n  }\n  \n  .saypi-control-panel button.theme-toggle-button {\n    width: 4rem;\n    padding: 6px;\n  }\n\n  /* hide controls in focus mode */\n  .focus button {\n    display: none;\n  }\n}\n@import \"dark-mode.scss\";\n","html.immersive-view body.dark {\n    #saypi-talkButton {\n        background-color: #bac5cc;\n        opacity: 1;\n    }\n    .call-button path.circle {\n        fill: #1C95A3;\n    }\n\n    /* The following styles are for the card flip animation in rectangles.css */\n    .outermost.piThinking {\n        --original-color: #a9b7bf;\n        --thinking-color: #ffe4b2; /* A light orange for a soft but noticeable transition */\n        animation: thinkingFlip 1.0s ease-in-out;\n      }\n      \n      .second.piThinking {\n        --original-color: #8f9ca7;\n        --thinking-color: #ffddb4; /* A slightly different shade of light orange */\n        animation: thinkingFlip 1.1s ease-in-out;\n      }\n      \n      .third.piThinking {\n        --original-color: #787d83;\n        --thinking-color: #ffd5b7; /* A subtly warmer shade of light orange */\n        animation: thinkingFlip 1.2s ease-in-out;\n      }\n      \n      .fourth.piThinking {\n        --original-color: #6c7378;\n        --thinking-color: #ffcdca; /* A variation leaning towards pink */\n        animation: thinkingFlip 1.3s ease-in-out;\n      }\n      \n      .fifth.piThinking {\n        --original-color: #313437;\n        --thinking-color: #ffc5dc; /* A soft pink for contrast */\n        animation: thinkingFlip 1.4s ease-in-out;\n      }\n      \n      .innermost.piThinking {\n        --original-color: #1c1c1c;\n        --thinking-color: #ffbde6; /* A distinct light magenta */\n        animation: thinkingFlip 1.5s ease-in-out;\n      }\n      \n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `html.immersive-view #saypi-panel,html.immersive-view .notification{width:100%;position:fixed;left:0;background-color:rgba(245,238,223,.98);height:100svh;top:0}html.immersive-view #saypi-talkButton{background-color:#e9f5da;border-radius:0;margin:0}html.immersive-view #saypi-talkButton svg{width:100vw;height:100svh}html.immersive-view #__next>main>div>div>div.fixed.top-4.right-6>button,html.immersive-view #saypi-experiences-button{transform:scale(1.5)}html.immersive-view div.bg-gradient-to-b{display:none}html.immersive-view #saypi-audio-controls{margin-top:.375rem}html.immersive-view #saypi-audio-controls div.p-1{display:none}html.immersive-view #saypi-audio-controls button.group{transform:scale(1.5) !important;z-index:50}html.immersive-view #saypi-audio-controls button.group+button{display:none}html.immersive-view #saypi-audio-controls div.bg-neutral-200{background-color:rgba(0,0,0,0)}html.immersive-view .text-body-chat-m{padding-top:0}html.immersive-view .saypi-enter-button{display:none}html.immersive-view #saypi-prompt-ancestor{display:none}html.immersive-view #saypi-submitButton{display:none}html.immersive-view #saypi-callButton{position:fixed;bottom:4rem;left:0;right:0;margin:auto;width:4.5rem;height:4.5rem;border:0;z-index:80}html.immersive-view .lock-button{width:3rem;height:3rem;padding:6px;margin-right:1rem;border:0;z-index:60}html.immersive-view .lock-button svg path.inner{color:#0d3c26}html.immersive-view #saypi-lock-panel{display:block;background-color:rgba(0,0,0,0);border-radius:0;margin:0}html.immersive-view .unlocked #saypi-lockButton{display:block !important}html.immersive-view .locked #saypi-lockButton{display:none !important}html.immersive-view .unlocked #saypi-unlockButton{display:none !important}html.immersive-view .locked #saypi-unlockButton{display:block !important;position:relative;z-index:101 !important}html.immersive-view .locked #saypi-touch-absorber{display:block !important;position:fixed;top:0;left:0;opacity:.5;background-color:rgba(245,238,223,.75);width:100vw;height:100svh;z-index:100}@keyframes fadeIn{from{opacity:0}to{opacity:1}}html.immersive-view #saypi-locked-text{display:none}html.immersive-view .locked #saypi-locked-text{display:block !important;position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);width:80%;height:1rem;animation-name:fadeIn;animation-duration:2s;animation-fill-mode:forwards;text-align:center;font-size:xx-large;font-family:"Roboto","Open Sans","Lato","Source Sans Pro","Noto Sans",Arial,sans-serif}html.immersive-view .locked #saypi-locked-text .subtext{display:block;font-size:large}html.immersive-view .scrollbar-gutter-both-edges{visibility:hidden}html.immersive-view .saypi-control-panel button:not(.saypi-control-button){display:none}html.immersive-view #saypi-control-panel-main.lg\\:hidden{display:block}html.immersive-view div.lg\\:flex-row-reverse{flex-direction:unset}html.immersive-view #saypi-side-panel.lg\\:flex{display:none}html.immersive-view .saypi-control-panel button.theme-toggle-button{width:4rem;padding:6px}html.immersive-view .focus button{opacity:0;transition:opacity .5s ease-out}html.immersive-view body.dark #saypi-talkButton{background-color:#bac5cc;opacity:1}html.immersive-view body.dark .call-button path.circle{fill:#1c95a3}html.immersive-view body.dark .outermost.piThinking{--original-color: #a9b7bf;--thinking-color: #ffe4b2;animation:thinkingFlip 1s ease-in-out}html.immersive-view body.dark .second.piThinking{--original-color: #8f9ca7;--thinking-color: #ffddb4;animation:thinkingFlip 1.1s ease-in-out}html.immersive-view body.dark .third.piThinking{--original-color: #787d83;--thinking-color: #ffd5b7;animation:thinkingFlip 1.2s ease-in-out}html.immersive-view body.dark .fourth.piThinking{--original-color: #6c7378;--thinking-color: #ffcdca;animation:thinkingFlip 1.3s ease-in-out}html.immersive-view body.dark .fifth.piThinking{--original-color: #313437;--thinking-color: #ffc5dc;animation:thinkingFlip 1.4s ease-in-out}html.immersive-view body.dark .innermost.piThinking{--original-color: #1c1c1c;--thinking-color: #ffbde6;animation:thinkingFlip 1.5s ease-in-out}`, "",{"version":3,"sources":["webpack://./src/styles/mobile.scss","webpack://./src/styles/dark-mode.scss"],"names":[],"mappings":"AACE,mEAEE,UAAA,CACA,cAAA,CACA,MAAA,CACA,sCAAA,CAEA,aAAA,CACA,KAAA,CAGF,sCACE,wBAAA,CACA,eAAA,CACA,QAAA,CACA,0CACE,WAAA,CACA,aAAA,CAKJ,sHAEE,oBAAA,CAIF,yCACE,YAAA,CAIF,0CAEE,kBAAA,CAEA,kDACE,YAAA,CAGF,uDACE,+BAAA,CACA,UAAA,CAEA,8DACE,YAAA,CAIJ,6DACE,8BAAA,CAKJ,sCACE,aAAA,CAGF,wCACE,YAAA,CAGF,2CAGE,YAAA,CAIF,wCACE,YAAA,CAGF,sCACE,cAAA,CACA,WAAA,CACA,MAAA,CACA,OAAA,CACA,WAAA,CACA,YAAA,CACA,aAAA,CACA,QAAA,CACA,UAAA,CAGF,iCACE,UAAA,CACA,WAAA,CACA,WAAA,CACA,iBAAA,CACA,QAAA,CACA,UAAA,CACA,gDACE,aAAA,CAIJ,sCAEE,aAAA,CACA,8BAAA,CACA,eAAA,CACA,QAAA,CAGF,gDACE,wBAAA,CAEF,8CACE,uBAAA,CAGF,kDACE,uBAAA,CAEF,gDACE,wBAAA,CACA,iBAAA,CACA,sBAAA,CAGF,kDACE,wBAAA,CACA,cAAA,CACA,KAAA,CACA,MAAA,CACA,UAAA,CAEA,sCAAA,CACA,WAAA,CACA,aAAA,CACA,WAAA,CAGF,kBACE,KAAA,SAAA,CACA,GAAA,SAAA,CAAA,CAGF,uCACE,YAAA,CAEF,+CACE,wBAAA,CACA,cAAA,CACA,OAAA,CACA,QAAA,CACA,+BAAA,CACA,SAAA,CACA,WAAA,CAEA,qBAAA,CACA,qBAAA,CACA,4BAAA,CACA,iBAAA,CACA,kBAAA,CACA,sFAAA,CACA,wDACE,aAAA,CACA,eAAA,CAKJ,iDACE,iBAAA,CAIF,2EACE,YAAA,CAIF,yDACE,aAAA,CAGF,6CACE,oBAAA,CAGF,+CACE,YAAA,CAGF,oEACE,UAAA,CACA,WAAA,CAIF,kCACE,SAAA,CACA,+BAAA,CCpMA,gDACI,wBAAA,CACA,SAAA,CAEJ,uDACI,YAAA,CAIJ,oDACI,yBAAA,CACA,yBAAA,CACA,qCAAA,CAGF,iDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,gDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,iDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,gDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,oDACE,yBAAA,CACA,yBAAA,CACA,uCAAA","sourcesContent":["html.immersive-view {\n  #saypi-panel,\n  .notification {\n    width: 100%;\n    position: fixed;\n    left: 0;\n    background-color: rgba(245, 238, 223, 0.98);\n\n    height: 100svh;\n    top: 0;\n  }\n\n  #saypi-talkButton {\n    background-color: #e9f5da;\n    border-radius: 0;\n    margin: 0;\n    svg {\n      width: 100vw;\n      height: 100svh;\n    }\n  }\n\n  /* Pi controls: ellipsis, experiences */\n  #__next > main > div > div > div.fixed.top-4.right-6 > button,\n  #saypi-experiences-button {\n    transform: scale(1.5);\n  }\n\n  /* hide an ugly artifact */\n  div.bg-gradient-to-b {\n    display: none;\n  }\n\n  /* Pi controls: mute/unmute */\n  #saypi-audio-controls {\n    /* align the mute button with the horizontal control panel */\n    margin-top: 0.375rem;\n    /* hide the voice options */\n    div.p-1 {\n      display: none;\n    }\n    /* scale the mute button */\n    button.group {\n      transform: scale(1.5) !important;\n      z-index: 50;\n      /* hide the voice selector twisty */\n      + button {\n        display: none;\n      }\n    }\n    /* make an ugly artifact transparent on pi.ai */\n    div.bg-neutral-200 {\n      background-color: transparent;\n    }\n  }\n\n  /* fix an alignment issue with the \"new ui layout\" */\n  .text-body-chat-m {\n    padding-top: 0;\n  }\n\n  .saypi-enter-button {\n    display: none;\n  }\n\n  #saypi-prompt-ancestor {\n    /* hides the row containing the text area control */\n    /* important: hides virtual keyboard on android */\n    display: none;\n    /* the call button, usually nested in the prompt, is detached while in mobile view */\n  }\n\n  #saypi-submitButton {\n    display: none;\n  }\n\n  #saypi-callButton {\n    position: fixed;\n    bottom: 4rem;\n    left: 0;\n    right: 0;\n    margin: auto;\n    width: 4.5rem;\n    height: 4.5rem;\n    border: 0;\n    z-index: 80;\n  }\n\n  .lock-button {\n    width: 3rem;\n    height: 3rem;\n    padding: 6px;\n    margin-right: 1rem;\n    border: 0;\n    z-index: 60;\n    svg path.inner {\n      color: rgb(13 60 38); /* text-primary-700 */\n    }\n  }\n\n  #saypi-lock-panel {\n    /* unlocked by default */\n    display: block;\n    background-color: transparent;\n    border-radius: 0;\n    margin: 0;\n  }\n\n  .unlocked #saypi-lockButton {\n    display: block !important; // show the lock button when screen is unlocked\n  }\n  .locked #saypi-lockButton {\n    display: none !important; // hide the lock button when screen is locked\n  }\n\n  .unlocked #saypi-unlockButton {\n    display: none !important; // hide the unlock button when screen is unlocked\n  }\n  .locked #saypi-unlockButton {\n    display: block !important; // show the unlock button when screen is unlocked\n    position: relative; // position (but don't move) the unlock button so that z-index works while locked\n    z-index: 101 !important; // above the touch absorber\n  }\n\n  .locked #saypi-touch-absorber {\n    display: block !important; // show the touch absorber when screen is locked\n    position: fixed;\n    top: 0;\n    left: 0;\n    opacity: 0.5;\n    /* semi-transparent background */\n    background-color: rgba(245, 238, 223, 0.75);\n    width: 100vw;\n    height: 100svh;\n    z-index: 100;\n  }\n\n  @keyframes fadeIn {\n    from { opacity: 0; }\n    to { opacity: 1; }\n  }  \n\n  #saypi-locked-text {\n    display: none; // hide the locked text when screen is unlocked\n  }\n  .locked #saypi-locked-text {\n    display: block !important; // show the locked text when screen is locked\n    position: fixed;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    width: 80%;\n    height: 1rem;\n    /* text */\n    animation-name: fadeIn;\n    animation-duration: 2s;\n    animation-fill-mode: forwards;\n    text-align: center;\n    font-size: xx-large;\n    font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;\n    .subtext {\n      display: block;\n      font-size: large;\n    }\n  }\n\n  /* hide the scrollbar */\n  .scrollbar-gutter-both-edges {\n    visibility: hidden;\n  }\n\n  /* hide any buttons in the control panel not relevant to mobile */\n  .saypi-control-panel button:not(.saypi-control-button) {\n    display: none;\n  }\n\n  /* override lg:hidden, making the control panel's buttons visible in immersive view on desktops */\n  #saypi-control-panel-main.lg\\:hidden {\n    display: block;\n  }\n  /* override lg:flex-row-reverse, making the audio control button visible in immersive view on desktops */\n  div.lg\\:flex-row-reverse {\n    flex-direction: unset;\n  }\n  /* hide the side panel in immersive mode */\n  #saypi-side-panel.lg\\:flex {\n    display: none;\n  }\n  \n  .saypi-control-panel button.theme-toggle-button {\n    width: 4rem;\n    padding: 6px;\n  }\n\n  /* When this class is applied, buttons fade out */\n  .focus button {\n    opacity: 0; \n    transition: opacity 0.5s ease-out; \n  }\n\n}\n@import \"dark-mode.scss\";\n","html.immersive-view body.dark {\n    #saypi-talkButton {\n        background-color: #bac5cc;\n        opacity: 1;\n    }\n    .call-button path.circle {\n        fill: #1C95A3;\n    }\n\n    /* The following styles are for the card flip animation in rectangles.css */\n    .outermost.piThinking {\n        --original-color: #a9b7bf;\n        --thinking-color: #ffe4b2; /* A light orange for a soft but noticeable transition */\n        animation: thinkingFlip 1.0s ease-in-out;\n      }\n      \n      .second.piThinking {\n        --original-color: #8f9ca7;\n        --thinking-color: #ffddb4; /* A slightly different shade of light orange */\n        animation: thinkingFlip 1.1s ease-in-out;\n      }\n      \n      .third.piThinking {\n        --original-color: #787d83;\n        --thinking-color: #ffd5b7; /* A subtly warmer shade of light orange */\n        animation: thinkingFlip 1.2s ease-in-out;\n      }\n      \n      .fourth.piThinking {\n        --original-color: #6c7378;\n        --thinking-color: #ffcdca; /* A variation leaning towards pink */\n        animation: thinkingFlip 1.3s ease-in-out;\n      }\n      \n      .fifth.piThinking {\n        --original-color: #313437;\n        --thinking-color: #ffc5dc; /* A soft pink for contrast */\n        animation: thinkingFlip 1.4s ease-in-out;\n      }\n      \n      .innermost.piThinking {\n        --original-color: #1c1c1c;\n        --thinking-color: #ffbde6; /* A distinct light magenta */\n        animation: thinkingFlip 1.5s ease-in-out;\n      }\n      \n}\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -26888,7 +26888,7 @@ function exitFullscreen() {
 }
 
 ;// CONCATENATED MODULE: ./src/prefs/PreferenceModule.ts
-var PreferenceModule_UserPreferenceModule;
+var UserPreferenceModule;
 (function (UserPreferenceModule) {
     /**
      * Get the stored value from the chrome storage
@@ -26964,9 +26964,16 @@ var PreferenceModule_UserPreferenceModule;
         return Promise.resolve(prefersMobile);
     }
     UserPreferenceModule.getPrefersImmersiveView = getPrefersImmersiveView;
-})(PreferenceModule_UserPreferenceModule || (PreferenceModule_UserPreferenceModule = {}));
+})(UserPreferenceModule || (UserPreferenceModule = {}));
 
 ;// CONCATENATED MODULE: ./src/UserAgentModule.js
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+
 
 
 
@@ -26976,32 +26983,6 @@ function isMobileDevice() {
   ;
 }
 
-// this function determines whether the immersive view is currently active
-function isViewImmersive() {
-  var element = document.documentElement;
-  return element.classList.contains("immersive-view");
-}
-function exitImmersiveMode() {
-  localStorage.setItem("userViewPreference", "desktop"); // Save preference
-
-  var element = document.documentElement;
-  element.classList.remove("immersive-view");
-  element.classList.add("desktop-view");
-  attachCallButton();
-  exitFullscreen();
-}
-function enterImmersiveMode() {
-  localStorage.setItem("userViewPreference", "immersive"); // Save preference
-
-  var element = document.documentElement;
-  element.classList.remove("desktop-view");
-  element.classList.add("immersive-view");
-  detachCallButton();
-  enterFullscreen();
-  PreferenceModule_UserPreferenceModule.getTheme().then(function (theme) {
-    buttonModule.applyTheme(theme);
-  });
-}
 function attachCallButton() {
   // move the call button back into the text prompt container for desktop view
   var container = document.getElementById("saypi-prompt-controls-container");
@@ -27032,45 +27013,89 @@ function addDeviceFlags(element) {
     element.classList.add("mobile-device");
   }
 }
-function addViewFlags(element) {
-  UserPreferenceModule.getPrefersImmersiveView().then(function (immersive) {
-    if (immersive) {
+var ImmersionService = /*#__PURE__*/function () {
+  /**
+   * A service that manages the immersive view mode
+   * Uses dependency injection to access the chatbot
+   * @param {Chatbot} chatbot
+   */
+  function ImmersionService(chatbot) {
+    _classCallCheck(this, ImmersionService);
+    this.chatbot = chatbot;
+  }
+
+  /**
+   * Perform initial setup of the UI based on the view preferences
+   */
+  _createClass(ImmersionService, [{
+    key: "initMode",
+    value: function initMode() {
+      var _this = this;
+      UserPreferenceModule.getPrefersImmersiveView().then(function (immersive) {
+        if (immersive) {
+          _this.enterImmersiveMode();
+        } else {
+          _this.exitImmersiveMode();
+        }
+      });
+    }
+
+    // this function determines whether the immersive view is currently active
+  }, {
+    key: "enterImmersiveMode",
+    value: function enterImmersiveMode() {
+      localStorage.setItem("userViewPreference", "immersive"); // Save preference
+
+      // if not already on the talk page, navigate to it
+      // this is to ensure the user is not stuck in the immersive view on a non-chat page
+      var path = this.chatbot.getChatPath();
+      if (window.location.pathname !== path) {
+        window.location = path;
+      }
+      var element = document.documentElement;
       element.classList.remove("desktop-view");
       element.classList.add("immersive-view");
-    } else {
+      detachCallButton();
+      enterFullscreen();
+      UserPreferenceModule.getTheme().then(function (theme) {
+        buttonModule.applyTheme(theme);
+      });
+    }
+  }], [{
+    key: "isViewImmersive",
+    value: function isViewImmersive() {
+      var element = document.documentElement;
+      return element.classList.contains("immersive-view");
+    }
+  }, {
+    key: "exitImmersiveMode",
+    value: function exitImmersiveMode() {
+      localStorage.setItem("userViewPreference", "desktop"); // Save preference
+
+      var element = document.documentElement;
       element.classList.remove("immersive-view");
       element.classList.add("desktop-view");
+      attachCallButton();
+      exitFullscreen();
     }
-  });
-}
-
-/**
- * Perform initial setup of the UI based on the view preferences
- */
-function initMode() {
-  PreferenceModule_UserPreferenceModule.getPrefersImmersiveView().then(function (immersive) {
-    if (immersive) {
-      enterImmersiveMode();
-    } else {
-      exitImmersiveMode();
-    }
-  });
-}
+  }]);
+  return ImmersionService;
+}();
 // EXTERNAL MODULE: ./src/EventBus.js
 var EventBus = __webpack_require__(7635);
 ;// CONCATENATED MODULE: ./src/AnimationModule.js
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function AnimationModule_typeof(o) { "@babel/helpers - typeof"; return AnimationModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, AnimationModule_typeof(o); }
+function AnimationModule_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function AnimationModule_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, AnimationModule_toPropertyKey(descriptor.key), descriptor); } }
+function AnimationModule_createClass(Constructor, protoProps, staticProps) { if (protoProps) AnimationModule_defineProperties(Constructor.prototype, protoProps); if (staticProps) AnimationModule_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _defineProperty(obj, key, value) { key = AnimationModule_toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function AnimationModule_toPropertyKey(arg) { var key = AnimationModule_toPrimitive(arg, "string"); return AnimationModule_typeof(key) === "symbol" ? key : String(key); }
+function AnimationModule_toPrimitive(input, hint) { if (AnimationModule_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (AnimationModule_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 var AnimationModule = /*#__PURE__*/function () {
   function AnimationModule() {
-    _classCallCheck(this, AnimationModule);
+    AnimationModule_classCallCheck(this, AnimationModule);
   }
-  _createClass(AnimationModule, null, [{
+  AnimationModule_createClass(AnimationModule, null, [{
     key: "startAnimation",
     value: function startAnimation(animation) {
       this.stopOtherAnimations(animation);
@@ -27194,7 +27219,7 @@ function getMessage(messageName, substitutions) {
     }
     else {
         // Fallback for userscript
-        PreferenceModule_UserPreferenceModule.getLanguage()
+        UserPreferenceModule.getLanguage()
             .then((lang) => {
             let locale = convertLanguageToLocale(lang);
             if (!messages[locale]) {
@@ -27303,7 +27328,7 @@ class AudibleNotificationsModule {
     }
     playSound(sound) {
         return NotificationsModule_awaiter(this, void 0, void 0, function* () {
-            const soundEnabled = yield PreferenceModule_UserPreferenceModule.getSoundEffects();
+            const soundEnabled = yield UserPreferenceModule.getSoundEffects();
             if (soundEnabled) {
                 sound.play().catch((e) => {
                     console.error("Unable to play audio notification:", e);
@@ -27693,7 +27718,7 @@ function uploadAudio(audioBlob, audioDurationMillis, precedingTranscripts = {}) 
             });
             // Await the async function to get the formData
             const formData = yield constructTranscriptionFormData(audioBlob, audioDurationMillis / 1000, messages);
-            const language = yield PreferenceModule_UserPreferenceModule.getLanguage();
+            const language = yield UserPreferenceModule.getLanguage();
             const controller = new AbortController();
             const { signal } = controller;
             setTimeout(() => controller.abort(), TIMEOUT_MS);
@@ -27771,7 +27796,7 @@ function constructTranscriptionFormData(audioBlob, audioDurationSeconds, message
         formData.append("messages", JSON.stringify(messages));
         formData.append("acceptsMerge", "true"); // always accept merge requests (since v1.4.10)
         // Wait for the preference to be retrieved before appending it to the FormData
-        const preference = yield PreferenceModule_UserPreferenceModule.getTranscriptionMode();
+        const preference = yield UserPreferenceModule.getTranscriptionMode();
         if (preference) {
             formData.append("prefer", preference);
         }
@@ -27818,7 +27843,7 @@ function setFinalPrompt(transcript) {
     textarea.setAttribute("placeholder", "");
     const initialHeight = "2rem"; // aka 32px
     textarea.style.height = initialHeight; // Reset the height after draft preview has been dismissed
-    if (isViewImmersive()) {
+    if (ImmersionService.isViewImmersive()) {
         // if transcript is > 1000 characters, truncate it to 999 characters plus an ellipsis
         if (transcript.length > PROMPT_CHARACTER_LIMIT) {
             const truncatedLength = PROMPT_CHARACTER_LIMIT - 1;
@@ -28023,7 +28048,7 @@ if (apiServerUrl === undefined) {
     throw new Error("Configuration error: apiServerUrl is not defined. Please check your environment variables.");
 }
 let mergeService;
-PreferenceModule_UserPreferenceModule.getLanguage().then((language) => {
+UserPreferenceModule.getLanguage().then((language) => {
     mergeService = new TranscriptMergeService(apiServerUrl, language);
 });
 /* external actions */
@@ -28568,7 +28593,7 @@ const SayPiMachine_machine = (0,Machine/* createMachine */.C)({
         acquireMicrophone: (context, event) => {
             // warmup the microphone on idle in mobile view,
             // since there's no mouseover event to trigger it
-            if (isViewImmersive()) {
+            if (ImmersionService.isViewImmersive()) {
                 EventBus/* default */.Z.emit("audio:setupRecording");
             }
         },
@@ -28859,7 +28884,7 @@ const ThemeToggleMachine_machine = (0,Machine/* createMachine */.C)({
             description: "Determining the initial theme mode.",
             invoke: {
                 id: "getPreferedTheme",
-                src: () => PreferenceModule_UserPreferenceModule.getTheme(),
+                src: () => UserPreferenceModule.getTheme(),
                 onDone: {
                     target: "loaded",
                     actions: (0,es/* assign */.f0)({ theme: (context, event) => event.data }),
@@ -28938,7 +28963,7 @@ const ThemeToggleMachine_machine = (0,Machine/* createMachine */.C)({
             applyNormalMode();
         },
         saveMode: (context, event, { action }) => {
-            PreferenceModule_UserPreferenceModule.setTheme(action.params.theme);
+            UserPreferenceModule.setTheme(action.params.theme);
         },
         soundEffectOn: () => {
             audible.themeOn();
@@ -32486,7 +32511,7 @@ class AnalyticsService {
     }
     sendEvent(eventName, params) {
         return AnalyticsModule_awaiter(this, void 0, void 0, function* () {
-            const consented = yield PreferenceModule_UserPreferenceModule.getDataSharing();
+            const consented = yield UserPreferenceModule.getDataSharing();
             if (!consented) {
                 return;
             }
@@ -32648,7 +32673,7 @@ const SessionAnalyticsMachine_machine = (0,Machine/* createMachine */.C)({
             });
         },
         notifySendMessage: (context, event) => SessionAnalyticsMachine_awaiter(void 0, void 0, void 0, function* () {
-            const transcriptionMode = yield PreferenceModule_UserPreferenceModule.getTranscriptionMode();
+            const transcriptionMode = yield UserPreferenceModule.getTranscriptionMode();
             // calculate the real-time factor (RTF)
             const processing_time_ms = event.delay_ms;
             const speech_duration_ms = context.last_message.talk_time_seconds * 1000;
@@ -32665,8 +32690,8 @@ const SessionAnalyticsMachine_machine = (0,Machine/* createMachine */.C)({
             });
         }),
         notifyStartSession: (context, event) => SessionAnalyticsMachine_awaiter(void 0, void 0, void 0, function* () {
-            const transcriptionMode = yield PreferenceModule_UserPreferenceModule.getTranscriptionMode();
-            const language = yield PreferenceModule_UserPreferenceModule.getLanguage();
+            const transcriptionMode = yield UserPreferenceModule.getTranscriptionMode();
+            const language = yield UserPreferenceModule.getLanguage();
             const elapsed_ms = 0;
             analytics.sendEvent("session_started", {
                 session_id: context.session_id,
@@ -32885,6 +32910,45 @@ const submitErrorHandler = new SubmitErrorHandler();
 /* harmony default export */ const mode_night = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"Layer_2\" data-name=\"Layer 2\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 616 420.11\">\n  <defs>\n    <style>\n      .cls-1 {\n        clip-path: url(#clippath);\n      }\n\n      .cls-2 {\n        fill: none;\n      }\n\n      .cls-2, .cls-3, .cls-4 {\n        stroke-width: 0px;\n      }\n\n      .cls-3 {\n        fill: #1b447a;\n      }\n\n      .cls-4 {\n        fill: #fff;\n      }\n    </style>\n    <clipPath id=\"clippath\">\n      <rect class=\"cls-2\" x=\"-1\" y=\"-.04\" width=\"1024\" height=\"420\"/>\n    </clipPath>\n  </defs>\n  <g class=\"cls-1\">\n    <path class=\"cls-3\" d=\"M404.52,419.8h-194.73C93.88,419.8-.09,325.78-.09,209.82S93.88-.15,209.79-.15h194.73c115.92,0,210.88,94.01,210.88,209.97s-94.97,209.97-210.88,209.97Z\"/>\n  </g>\n  <path class=\"cls-4\" d=\"M404.19,209.82c0,3.05-.07,6.09-.23,9.15s-.37,6.09-.67,9.12c-.31,3.04-.67,6.07-1.12,9.08s-.97,6.01-1.56,9.01c-.6,2.99-1.27,5.96-2,8.92-.73,2.96-1.55,5.89-2.44,8.81s-1.84,5.81-2.87,8.68c-1.03,2.87-2.12,5.72-3.29,8.53s-2.4,5.6-3.71,8.36c-1.31,2.76-2.67,5.48-4.11,8.17s-2.93,5.33-4.51,7.95-3.2,5.19-4.89,7.73c-1.69,2.53-3.45,5.03-5.27,7.48-1.81,2.45-3.69,4.85-5.61,7.21-1.93,2.36-3.93,4.67-5.97,6.93-2.05,2.25-4.15,4.47-6.31,6.61-2.16,2.15-4.36,4.27-6.61,6.31-2.27,2.05-4.57,4.04-6.92,5.97-2.36,1.93-4.76,3.81-7.21,5.63s-4.93,3.57-7.48,5.27c-2.53,1.69-5.11,3.32-7.72,4.89s-5.27,3.07-7.95,4.51-5.41,2.81-8.16,4.11-5.55,2.55-8.36,3.71c-2.81,1.17-5.67,2.27-8.53,3.29s-5.76,1.97-8.68,2.87-5.85,1.69-8.81,2.44c-2.96.73-5.93,1.4-8.92,2-2.99.6-6,1.12-9,1.56-3.01.45-6.04.83-9.07,1.12-3.04.31-6.07.52-9.12.68-3.04.15-6.09.23-9.13.23s-6.09-.08-9.15-.23c-3.04-.15-6.08-.37-9.12-.68-3.03-.29-6.05-.67-9.07-1.12-3.01-.44-6.01-.97-9-1.56s-5.96-1.27-8.92-2c-2.96-.75-5.89-1.56-8.81-2.44s-5.81-1.84-8.68-2.87c-2.87-1.03-5.72-2.12-8.53-3.29s-5.6-2.4-8.36-3.71c-2.76-1.31-5.48-2.67-8.16-4.11s-5.33-2.95-7.95-4.51-5.19-3.2-7.72-4.89c-2.53-1.69-5.03-3.45-7.48-5.27s-4.85-3.69-7.2-5.63c-2.36-1.93-4.67-3.93-6.92-5.97-2.27-2.05-4.47-4.15-6.61-6.31s-4.25-4.36-6.31-6.61c-2.05-2.27-4.04-4.57-5.97-6.93s-3.81-4.76-5.61-7.21c-1.81-2.45-3.57-4.95-5.27-7.48s-3.32-5.12-4.89-7.73-3.07-5.27-4.51-7.95c-1.44-2.69-2.81-5.41-4.11-8.17s-2.53-5.55-3.71-8.36-2.27-5.67-3.29-8.53-1.99-5.76-2.87-8.68c-.88-2.92-1.69-5.85-2.44-8.81-.73-2.96-1.4-5.93-2-8.92-.6-3-1.12-6-1.56-9.01s-.83-6.04-1.12-9.08c-.29-3.03-.52-6.07-.67-9.12s-.23-6.09-.23-9.15.07-6.09.23-9.15c.15-3.05.37-6.09.67-9.12.29-3.04.67-6.07,1.12-9.08s.97-6.03,1.56-9.01,1.27-5.96,2-8.92c.75-2.96,1.56-5.89,2.44-8.81s1.84-5.81,2.87-8.68,2.12-5.72,3.29-8.53,2.4-5.6,3.71-8.36,2.67-5.48,4.11-8.16,2.93-5.33,4.51-7.95,3.2-5.19,4.89-7.73,3.45-5.03,5.27-7.48c1.81-2.45,3.69-4.85,5.63-7.21s3.93-4.67,5.97-6.93,4.15-4.47,6.31-6.63,4.36-4.25,6.61-6.31,4.56-4.04,6.92-5.97c2.36-1.93,4.76-3.81,7.2-5.63,2.45-1.81,4.95-3.57,7.48-5.27s5.11-3.33,7.72-4.89,5.27-3.07,7.95-4.51,5.41-2.81,8.16-4.11c2.76-1.31,5.55-2.55,8.36-3.71,2.81-1.17,5.67-2.27,8.53-3.29s5.76-1.99,8.68-2.87,5.85-1.69,8.81-2.44c2.95-.73,5.93-1.4,8.92-2s5.99-1.12,9-1.56,6.04-.81,9.07-1.12c3.03-.29,6.07-.52,9.12-.67s6.09-.23,9.15-.23,6.09.07,9.13.23c3.05.15,6.08.37,9.12.67,3.03.31,6.05.67,9.07,1.12,3.01.45,6.01.97,9,1.56,2.99.6,5.96,1.27,8.92,2s5.89,1.55,8.81,2.44,5.81,1.84,8.68,2.87,5.72,2.12,8.53,3.29,5.6,2.4,8.36,3.71,5.48,2.67,8.16,4.11,5.33,2.93,7.95,4.51,5.19,3.2,7.72,4.89c2.53,1.69,5.03,3.45,7.48,5.27s4.85,3.69,7.21,5.63,4.67,3.93,6.92,5.97c2.25,2.05,4.47,4.15,6.61,6.31s4.25,4.36,6.31,6.63,4.04,4.57,5.97,6.93c1.93,2.36,3.81,4.76,5.61,7.21,1.81,2.45,3.57,4.93,5.27,7.48s3.32,5.11,4.89,7.73c1.57,2.61,3.07,5.27,4.51,7.95s2.81,5.41,4.11,8.16c1.31,2.76,2.53,5.55,3.71,8.36,1.17,2.81,2.27,5.67,3.29,8.53,1.03,2.87,1.97,5.76,2.87,8.68s1.69,5.85,2.44,8.81c.75,2.96,1.41,5.93,2,8.92.59,2.99,1.12,6,1.56,9.01.44,3.01.81,6.04,1.12,9.08.29,3.03.52,6.07.67,9.12.15,3.04.23,6.09.23,9.15h-.01Z\"/>\n  <path class=\"cls-3\" d=\"M147.16,222.56c-13.33-34.91-5.97-72.67,16.07-99.69-3.72.88-7.41,2.01-11.08,3.43-45.43,17.37-68.2,68.33-50.8,113.79,17.36,45.45,68.31,68.23,113.73,50.83,3.67-1.4,7.17-3.04,10.53-4.83-34.43-5.4-65.08-28.6-78.45-63.51h0Z\"/>\n  <path class=\"cls-3\" d=\"M261.45,169.01l23.6,7.47-23.6,7.48-7.48,23.57-7.44-23.57-23.6-7.48,23.6-7.47,7.44-23.59,7.48,23.59Z\"/>\n  <path class=\"cls-3\" d=\"M324.71,192.12l15.67,4.96-15.67,4.96-4.93,15.64-4.96-15.64-15.63-4.96,15.63-4.96,4.96-15.64,4.93,15.64Z\"/>\n  <path class=\"cls-3\" d=\"M288.52,221.9l11.03,3.48-11.03,3.51-3.48,11-3.49-11-11-3.51,11-3.48,3.49-11.03,3.48,11.03Z\"/>\n</svg>");
 ;// CONCATENATED MODULE: ./src/icons/mode-day.svg
 /* harmony default export */ const mode_day = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"Layer_1\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 616 420\">\n  <defs>\n    <style>\n      .cls-1 {\n        clip-path: url(#clippath);\n      }\n\n      .cls-2 {\n        fill: none;\n      }\n\n      .cls-2, .cls-3, .cls-4 {\n        stroke-width: 0px;\n      }\n\n      .cls-3 {\n        fill: #fff;\n      }\n\n      .cls-4 {\n        fill: #ffc107;\n      }\n    </style>\n    <clipPath id=\"clippath\">\n      <rect class=\"cls-2\" x=\"-408\" y=\"0\" width=\"1024\" height=\"420\"/>\n    </clipPath>\n  </defs>\n  <g class=\"cls-1\">\n    <path class=\"cls-4\" d=\"M405.6,420.18h-195.6C94.05,420.18,0,326.13,0,210.13S94.05.08,210,.08h195.63c115.95,0,209.96,94.06,209.96,210.05-.03,116-94.02,210.05-209.99,210.05Z\"/>\n  </g>\n  <path class=\"cls-3\" d=\"M587.98,210.13c0,3.05-.08,6.1-.22,9.15-.15,3.05-.38,6.09-.67,9.13-.3,3.03-.68,6.06-1.12,9.08-.45,3.02-.97,6.02-1.57,9.01-.59,2.99-1.26,5.97-2,8.93s-1.56,5.9-2.44,8.82c-.88,2.92-1.84,5.81-2.86,8.68-1.03,2.88-2.13,5.72-3.29,8.54s-2.4,5.6-3.71,8.36c-1.3,2.76-2.67,5.48-4.11,8.17-1.44,2.69-2.94,5.34-4.51,7.96s-3.2,5.19-4.9,7.73c-1.69,2.54-3.45,5.03-5.26,7.48-1.82,2.45-3.69,4.85-5.63,7.21-1.93,2.36-3.92,4.67-5.97,6.93-2.05,2.26-4.15,4.47-6.31,6.63-2.16,2.16-4.36,4.26-6.63,6.31-2.26,2.05-4.56,4.04-6.92,5.97-2.35,1.93-4.76,3.81-7.21,5.63-2.45,1.82-4.94,3.57-7.47,5.27-2.54,1.69-5.11,3.32-7.73,4.89s-5.27,3.07-7.95,4.51c-2.69,1.44-5.41,2.81-8.17,4.11-2.76,1.3-5.55,2.54-8.36,3.71-2.82,1.17-5.66,2.26-8.54,3.29-2.87,1.03-5.76,1.98-8.68,2.87-2.92.89-5.85,1.7-8.81,2.44-2.95.74-5.93,1.41-8.92,2.01s-5.99,1.11-9.01,1.56c-3.02.45-6.04.82-9.08,1.12-3.03.3-6.07.53-9.12.67-3.05.15-6.09.22-9.14.22s-6.09-.07-9.14-.22c-3.05-.15-6.08-.37-9.12-.67-3.04-.3-6.06-.67-9.07-1.12-3.02-.45-6.02-.97-9.01-1.56s-5.96-1.27-8.92-2.01-5.9-1.55-8.81-2.44-5.81-1.84-8.68-2.87c-2.88-1.03-5.72-2.13-8.53-3.29-2.82-1.17-5.6-2.41-8.36-3.71-2.76-1.31-5.48-2.68-8.17-4.11-2.69-1.44-5.34-2.94-7.95-4.51s-5.19-3.2-7.73-4.89c-2.53-1.7-5.03-3.45-7.47-5.27-2.45-1.81-4.85-3.69-7.21-5.63-2.35-1.94-4.67-3.93-6.92-5.97-2.26-2.05-4.47-4.15-6.63-6.31-2.16-2.16-4.26-4.36-6.3-6.63-2.05-2.26-4.04-4.57-5.97-6.93-1.94-2.35-3.81-4.76-5.63-7.21-1.82-2.45-3.57-4.94-5.27-7.48-1.7-2.54-3.33-5.11-4.9-7.73s-3.07-5.27-4.51-7.96c-1.44-2.69-2.81-5.42-4.11-8.17-1.31-2.76-2.54-5.55-3.71-8.36s-2.26-5.66-3.29-8.54c-1.03-2.87-1.98-5.77-2.86-8.68-.89-2.92-1.7-5.86-2.44-8.82-.74-2.96-1.41-5.93-2-8.93-.6-2.99-1.12-5.99-1.56-9.01-.45-3.02-.82-6.05-1.12-9.08-.3-3.04-.53-6.08-.67-9.13-.15-3.05-.23-6.09-.23-9.15s.08-6.1.22-9.15c.15-3.05.38-6.08.68-9.12.3-3.04.67-6.06,1.12-9.08.44-3.02.96-6.03,1.56-9.02.59-2.99,1.26-5.97,2-8.93.74-2.96,1.56-5.9,2.44-8.81.89-2.92,1.84-5.82,2.86-8.69,1.03-2.88,2.13-5.72,3.29-8.54s2.4-5.6,3.71-8.36c1.3-2.76,2.67-5.48,4.11-8.17,1.44-2.69,2.94-5.34,4.51-7.96,1.57-2.61,3.2-5.19,4.9-7.73,1.69-2.53,3.45-5.03,5.27-7.48,1.81-2.45,3.69-4.85,5.63-7.21,1.93-2.36,3.92-4.67,5.97-6.93,2.05-2.26,4.15-4.47,6.3-6.63s4.36-4.26,6.63-6.31c2.26-2.05,4.57-4.04,6.92-5.97,2.36-1.94,4.76-3.81,7.21-5.63s4.94-3.57,7.47-5.27c2.54-1.7,5.11-3.33,7.73-4.9s5.27-3.07,7.95-4.51c2.69-1.44,5.41-2.81,8.17-4.11,2.76-1.31,5.54-2.54,8.36-3.71,2.81-1.17,5.66-2.27,8.53-3.29,2.87-1.03,5.77-1.98,8.68-2.87s5.85-1.7,8.81-2.44c2.96-.74,5.93-1.41,8.92-2.01,2.99-.59,5.99-1.11,9.01-1.56s6.04-.82,9.07-1.12c3.04-.3,6.07-.52,9.12-.67s6.09-.22,9.14-.22,6.09.07,9.14.22,6.09.38,9.12.67c3.04.3,6.06.67,9.08,1.12s6.02.97,9.01,1.56c2.99.6,5.97,1.27,8.92,2.01,2.96.74,5.9,1.56,8.81,2.44,2.92.89,5.81,1.84,8.68,2.87,2.88,1.03,5.72,2.13,8.54,3.29,2.81,1.17,5.6,2.4,8.36,3.71,2.76,1.3,5.47,2.67,8.17,4.11,2.69,1.44,5.34,2.94,7.95,4.51s5.19,3.2,7.73,4.9c2.53,1.69,5.03,3.45,7.47,5.27s4.85,3.69,7.21,5.63c2.36,1.93,4.67,3.92,6.92,5.97,2.26,2.05,4.47,4.15,6.63,6.31s4.26,4.36,6.31,6.63,4.04,4.57,5.97,6.93c1.94,2.36,3.81,4.76,5.63,7.21,1.81,2.45,3.57,4.95,5.26,7.48,1.7,2.54,3.33,5.11,4.9,7.73,1.57,2.62,3.07,5.27,4.51,7.96,1.44,2.69,2.81,5.41,4.11,8.17,1.31,2.76,2.54,5.55,3.71,8.36s2.27,5.66,3.29,8.54c1.03,2.87,1.98,5.77,2.87,8.69.88,2.92,1.7,5.85,2.44,8.81s1.41,5.94,2,8.93c.6,2.99,1.12,5.99,1.57,9.02.44,3.02.82,6.04,1.12,9.08.3,3.04.52,6.07.67,9.12.15,3.05.22,6.1.22,9.15Z\"/>\n  <path class=\"cls-4\" d=\"M460.12,213.31c0,1.91-.09,3.82-.28,5.72-.19,1.9-.47,3.79-.84,5.67-.37,1.88-.84,3.73-1.39,5.56-.56,1.83-1.2,3.63-1.93,5.4-.73,1.77-1.55,3.49-2.45,5.18s-1.89,3.33-2.95,4.92c-1.06,1.59-2.2,3.13-3.41,4.6s-2.49,2.9-3.85,4.25-2.77,2.64-4.24,3.85-3.01,2.35-4.6,3.42c-1.59,1.06-3.23,2.04-4.91,2.94-1.69.91-3.42,1.72-5.18,2.45s-3.56,1.38-5.4,1.93c-1.83.55-3.68,1.02-5.56,1.39-1.88.38-3.77.66-5.67.84-1.91.19-3.81.28-5.72.28s-3.82-.09-5.72-.28c-1.9-.19-3.79-.47-5.67-.84-1.88-.37-3.73-.84-5.56-1.39-1.83-.56-3.63-1.2-5.4-1.93s-3.49-1.55-5.18-2.45c-1.68-.9-3.32-1.88-4.91-2.94-1.59-1.06-3.13-2.2-4.6-3.42s-2.89-2.49-4.24-3.85-2.64-2.77-3.85-4.25-2.35-3.01-3.41-4.6c-1.06-1.59-2.05-3.23-2.95-4.92s-1.72-3.41-2.45-5.18c-.73-1.77-1.38-3.56-1.93-5.4-.55-1.83-1.02-3.68-1.39-5.56-.38-1.88-.66-3.77-.84-5.67-.19-1.91-.28-3.81-.28-5.72s.09-3.82.28-5.73c.19-1.9.47-3.79.84-5.67.37-1.88.84-3.73,1.39-5.56.56-1.83,1.2-3.63,1.93-5.4.73-1.77,1.55-3.49,2.45-5.18s1.89-3.33,2.95-4.92c1.06-1.59,2.2-3.13,3.41-4.6s2.49-2.9,3.85-4.25,2.77-2.64,4.24-3.85,3.01-2.35,4.6-3.42c1.59-1.06,3.23-2.04,4.91-2.94,1.69-.9,3.42-1.72,5.18-2.45,1.77-.73,3.56-1.38,5.4-1.93,1.83-.55,3.68-1.02,5.56-1.39s3.77-.66,5.67-.84c1.91-.19,3.81-.28,5.72-.28s3.82.09,5.72.28c1.9.19,3.79.47,5.67.84s3.73.84,5.56,1.39c1.83.56,3.63,1.2,5.4,1.93,1.77.73,3.49,1.55,5.18,2.45,1.68.9,3.32,1.88,4.91,2.94,1.59,1.07,3.13,2.2,4.6,3.42s2.89,2.49,4.24,3.85,2.64,2.77,3.85,4.25,2.35,3.01,3.41,4.6c1.06,1.59,2.05,3.23,2.95,4.92s1.72,3.41,2.45,5.18c.73,1.77,1.38,3.56,1.93,5.4.55,1.83,1.02,3.68,1.39,5.56.38,1.88.66,3.77.84,5.67.19,1.91.28,3.81.28,5.73Z\"/>\n  <path class=\"cls-4\" d=\"M398.04,85.53h7.36v44.92h-7.36v-44.92Z\"/>\n  <path class=\"cls-4\" d=\"M316.77,117.9l5.64-4.74,28.88,34.4-5.64,4.74-28.88-34.4Z\"/>\n  <path class=\"cls-4\" d=\"M275.23,194.81l1.27-7.26,44.23,7.76-1.27,7.26-44.23-7.76Z\"/>\n  <path class=\"cls-4\" d=\"M289.33,274.16l38.85-22.52,3.69,6.38-38.86,22.52-3.69-6.38Z\"/>\n  <path class=\"cls-4\" d=\"M354.77,332.22l15.28-42.24,6.92,2.51-15.28,42.24-6.92-2.51Z\"/>\n  <path class=\"cls-4\" d=\"M426.77,292.35l6.92-2.54,15.45,42.18-6.92,2.53-15.45-42.17Z\"/>\n  <path class=\"cls-4\" d=\"M471.7,257.73l3.67-6.39,38.95,22.35-3.67,6.39-38.95-22.35Z\"/>\n  <path class=\"cls-4\" d=\"M482.57,195.06l44.19-7.94,1.3,7.25-44.19,7.94-1.3-7.25Z\"/>\n  <path class=\"cls-4\" d=\"M451.9,147.28l28.74-34.52,5.66,4.71-28.73,34.52-5.66-4.71Z\"/>\n</svg>");
+;// CONCATENATED MODULE: ./src/chatbots/Pi.ts
+class PiAIChatbot {
+    getPromptTextInputSelector() {
+        return "textarea[enterkeyhint]";
+    }
+    getPromptSubmitButtonSelector() {
+        return ".pi-submit-button"; // replace with actual submit button selector for pi.ai
+    }
+    getAudioControlsSelector() {
+        return "audio + div";
+    }
+    getAudioOutputButtonSelector() {
+        // audio button is the last button element in the audio controls container
+        return "#saypi-audio-controls > div > div.relative.flex.items-center.justify-end.self-end.p-2 > button";
+    }
+    getControlPanelSelector() {
+        return ".flex.items-center.grow";
+    }
+    getSidePanelSelector() {
+        return "div.hidden.w-22.flex-col.items-center.gap-1.border-r";
+    }
+    getChatPath() {
+        return "/talk";
+    }
+}
+
+
+;// CONCATENATED MODULE: ./src/chatbots/ChatbotService.ts
+
+/**
+ * This is the single place a concrete chatbot is created.
+ * All other parts of the application should use this service to get a chatbot.
+ */
+class ChatbotService {
+    static getChatbot() {
+        return new PiAIChatbot();
+    }
+}
+
 ;// CONCATENATED MODULE: ./src/ButtonModule.js
 function ButtonModule_typeof(o) { "@babel/helpers - typeof"; return ButtonModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, ButtonModule_typeof(o); }
 function ButtonModule_regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ ButtonModule_regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == ButtonModule_typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(ButtonModule_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
@@ -32919,9 +32983,17 @@ function ButtonModule_toPrimitive(input, hint) { if (ButtonModule_typeof(input) 
 
 
 
+
+
 var ButtonModule = /*#__PURE__*/function () {
-  function ButtonModule() {
+  /**
+   * Initializes the button module with dependencies
+   * @param {Chatbot} chatbot - The chatbot instance (dependency injection)
+   */
+  function ButtonModule(chatbot) {
     ButtonModule_classCallCheck(this, ButtonModule);
+    this.chatbot = chatbot;
+    this.immersionService = new ImmersionService(chatbot);
     this.sayPiActor = src_StateMachineService.actor; // the Say, Pi state machine
     this.screenLockActor = src_StateMachineService.screenLockActor;
     this.themeToggleActor = src_StateMachineService.themeToggleActor;
@@ -32983,7 +33055,7 @@ var ButtonModule = /*#__PURE__*/function () {
   }, {
     key: "updateIconContent",
     value: function updateIconContent(iconContainer) {
-      if (isViewImmersive()) {
+      if (ImmersionService.isViewImmersive()) {
         iconContainer.innerHTML = this.getRectanglesSVG();
       }
       iconContainer.classList.add("saypi-icon");
@@ -33078,7 +33150,7 @@ var ButtonModule = /*#__PURE__*/function () {
           while (1) switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return PreferenceModule_UserPreferenceModule.getAutoSubmit();
+              return UserPreferenceModule.getAutoSubmit();
             case 2:
               autoSubmitEnabled = _context.sent;
               if (autoSubmitEnabled) {
@@ -33104,7 +33176,7 @@ var ButtonModule = /*#__PURE__*/function () {
       var position = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
       var label = i18n("exitImmersiveModeLong");
       var button = this.createButton("", function () {
-        exitImmersiveMode();
+        ImmersionService.exitImmersiveMode();
       });
       button.type = "button";
       button.className = "saypi-exit-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
@@ -33117,10 +33189,11 @@ var ButtonModule = /*#__PURE__*/function () {
   }, {
     key: "createEnterButton",
     value: function createEnterButton(container) {
+      var _this4 = this;
       var position = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
       var label = i18n("enterImmersiveModeLong");
       var button = this.createButton("", function () {
-        enterImmersiveMode();
+        _this4.immersionService.enterImmersiveMode();
       });
       button.type = "button";
       button.className = "saypi-enter-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
@@ -33134,12 +33207,13 @@ var ButtonModule = /*#__PURE__*/function () {
   }, {
     key: "createImmersiveModeButton",
     value: function createImmersiveModeButton(container) {
+      var _this5 = this;
       var position = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
       var label = i18n("enterImmersiveModeShort");
       var title = i18n("enterImmersiveModeLong");
       var button = document.createElement("a");
       button.onclick = function () {
-        enterImmersiveMode();
+        _this5.immersionService.enterImmersiveMode();
       };
       button.className = "immersive-mode-button saypi-control-button flex h-16 w-16 flex-col items-center justify-center rounded-xl text-neutral-900 hover:bg-neutral-50-hover hover:text-neutral-900-hover active:bg-neutral-50-tap active:text-neutral-900-tap gap-0.5";
       button.setAttribute("aria-label", title);
@@ -33238,7 +33312,7 @@ var ButtonModule = /*#__PURE__*/function () {
   }, {
     key: "callStarting",
     value: function callStarting(callButton) {
-      var _this4 = this;
+      var _this6 = this;
       if (!callButton) {
         callButton = document.getElementById("saypi-callButton");
       }
@@ -33248,14 +33322,14 @@ var ButtonModule = /*#__PURE__*/function () {
         callButton.setAttribute("aria-label", label);
         callButton.setAttribute("title", label);
         callButton.onclick = function () {
-          _this4.sayPiActor.send("saypi:hangup");
+          _this6.sayPiActor.send("saypi:hangup");
         };
       }
     }
   }, {
     key: "callActive",
     value: function callActive(callButton) {
-      var _this5 = this;
+      var _this7 = this;
       if (!callButton) {
         callButton = document.getElementById("saypi-callButton");
       }
@@ -33265,7 +33339,7 @@ var ButtonModule = /*#__PURE__*/function () {
         callButton.setAttribute("aria-label", label);
         callButton.setAttribute("title", label);
         callButton.onclick = function () {
-          _this5.sayPiActor.send("saypi:hangup");
+          _this7.sayPiActor.send("saypi:hangup");
         };
         callButton.classList.add("active");
       }
@@ -33274,7 +33348,7 @@ var ButtonModule = /*#__PURE__*/function () {
   }, {
     key: "callInactive",
     value: function callInactive(callButton) {
-      var _this6 = this;
+      var _this8 = this;
       if (!callButton) {
         callButton = document.getElementById("saypi-callButton");
       }
@@ -33284,7 +33358,7 @@ var ButtonModule = /*#__PURE__*/function () {
         callButton.setAttribute("aria-label", label);
         callButton.setAttribute("title", label);
         callButton.onclick = function () {
-          _this6.sayPiActor.send("saypi:call");
+          _this8.sayPiActor.send("saypi:call");
         };
         callButton.classList.remove("active");
       }
@@ -33327,7 +33401,7 @@ var ButtonModule = /*#__PURE__*/function () {
   }, {
     key: "createLockButton",
     value: function createLockButton(container) {
-      var _this7 = this;
+      var _this9 = this;
       var label = i18n("lockButton");
       var button = document.createElement("button");
       button.id = "saypi-lockButton";
@@ -33339,7 +33413,7 @@ var ButtonModule = /*#__PURE__*/function () {
       if (container) {
         container.appendChild(button);
         button.onclick = function () {
-          _this7.screenLockActor.send("lock");
+          _this9.screenLockActor.send("lock");
         };
       }
       return button;
@@ -33347,7 +33421,7 @@ var ButtonModule = /*#__PURE__*/function () {
   }, {
     key: "createUnlockButton",
     value: function createUnlockButton(container) {
-      var _this8 = this;
+      var _this10 = this;
       var label = i18n("unlockButton");
       var button = document.createElement("button");
       button.id = "saypi-unlockButton";
@@ -33367,7 +33441,7 @@ var ButtonModule = /*#__PURE__*/function () {
             instruction.textContent = continueUnlockingMessage;
           }
           pressTimer = setTimeout(function () {
-            _this8.screenLockActor.send("unlock");
+            _this10.screenLockActor.send("unlock");
           }, 1500); // Adjust the duration (in milliseconds) for a long-press
         };
 
@@ -33427,7 +33501,7 @@ var ButtonModule = /*#__PURE__*/function () {
   }, {
     key: "createThemeToggleButton",
     value: function createThemeToggleButton(container) {
-      var _this9 = this;
+      var _this11 = this;
       var position = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
       var label = i18n("toggleThemeToDarkMode");
       var button = document.createElement("button");
@@ -33440,7 +33514,7 @@ var ButtonModule = /*#__PURE__*/function () {
       if (container) {
         addChild(container, button, position);
         button.onclick = function () {
-          _this9.toggleTheme();
+          _this11.toggleTheme();
         };
       }
       return button;
@@ -33449,49 +33523,8 @@ var ButtonModule = /*#__PURE__*/function () {
   return ButtonModule;
 }(); // Singleton
 
-var buttonModule = new ButtonModule();
-;// CONCATENATED MODULE: ./src/chatbots/Chatbot.ts
-// Chatbot.ts
-class Chatbot {
-    getAudioOutputButtonSelector() {
-        throw new Error("Method not implemented.");
-    }
-    getControlPanelSelector() {
-        throw new Error("Method not implemented.");
-    }
-    getSidePanelSelector() {
-        throw new Error("Method not implemented.");
-    }
-}
-
-
-;// CONCATENATED MODULE: ./src/chatbots/Pi.ts
-
-class PiAIChatbot extends Chatbot {
-    getPromptTextInputSelector() {
-        return "textarea[enterkeyhint]";
-    }
-    getPromptSubmitButtonSelector() {
-        return ".pi-submit-button"; // replace with actual submit button selector for pi.ai
-    }
-    getAudioControlsSelector() {
-        return "audio + div";
-    }
-    getAudioOutputButtonSelector() {
-        // audio button is the last button element in the audio controls container
-        return "#saypi-audio-controls > div > div.relative.flex.items-center.justify-end.self-end.p-2 > button";
-    }
-    getControlPanelSelector() {
-        return ".flex.items-center.grow";
-    }
-    getSidePanelSelector() {
-        return "div.hidden.w-22.flex-col.items-center.gap-1.border-r";
-    }
-}
-
-
+var buttonModule = new ButtonModule(ChatbotService.getChatbot());
 ;// CONCATENATED MODULE: ./src/chatbots/bootstrap.ts
-
 
 
 class Observation {
@@ -33527,217 +33560,221 @@ class Observation {
         return new Observation(element, id, true, true, false);
     }
 }
-const chatbot = new PiAIChatbot();
-function observeDOM() {
-    // MutationObserver setup in a separate file or the same file where you start observing
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            [...mutation.addedNodes]
-                .filter((node) => node instanceof Element)
-                .forEach((node) => {
-                const addedElement = node;
-                const promptObs = findAndDecoratePromptField(addedElement);
-                const ctrlPanelObs = findAndDecorateControlPanel(addedElement);
-                const sidePanelObs = findAndDecorateSidePanel(addedElement);
-                const audioControlsObs = findAndDecorateAudioControls(addedElement);
-                const audioOutputButtonObs = findAndDecorateAudioOutputButton(addedElement);
-                // ... handle other elements
-                // notify listeners that (all critical) script content has been loaded
-                if (promptObs.isReady()) {
-                    EventBus/* default */.Z.emit("saypi:ui:content-loaded");
-                }
-            });
-            [...mutation.removedNodes]
-                .filter((node) => node instanceof Element)
-                .forEach((node) => {
-                const removedElement = node;
-                const obs = findPromptField(removedElement);
-                if (obs.found) {
-                    // Prompt field is being removed, so search for a replacement in the main document
-                    findAndDecoratePromptField(document.body);
-                    if (obs.found && obs.isNew && obs.decorated) {
-                        // emit event to notify listeners that script content has been loaded
+class DOMObserver {
+    constructor(chatbot) {
+        this.chatbot = chatbot;
+    }
+    observeDOM() {
+        // MutationObserver setup in a separate file or the same file where you start observing
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                [...mutation.addedNodes]
+                    .filter((node) => node instanceof Element)
+                    .forEach((node) => {
+                    const addedElement = node;
+                    const promptObs = this.findAndDecoratePromptField(addedElement);
+                    const ctrlPanelObs = this.findAndDecorateControlPanel(addedElement);
+                    const sidePanelObs = this.findAndDecorateSidePanel(addedElement);
+                    const audioControlsObs = this.findAndDecorateAudioControls(addedElement);
+                    const audioOutputButtonObs = this.findAndDecorateAudioOutputButton(addedElement);
+                    // ... handle other elements
+                    // notify listeners that (all critical) script content has been loaded
+                    if (promptObs.isReady()) {
                         EventBus/* default */.Z.emit("saypi:ui:content-loaded");
                     }
-                }
-                const ctrlPanelObs = findControlPanel(removedElement);
-                if (ctrlPanelObs.found) {
-                    // Control panel is being removed, so search for a replacement in the main document
-                    findAndDecorateControlPanel(document.body);
-                }
-                const audioControlsObs = findAudioControls(removedElement);
-                if (audioControlsObs.found) {
-                    // Audio controls are being removed, so search for a replacement in the main document
-                    findAndDecorateAudioControls(document.body);
-                }
-                const audioOutputButtonObs = findAudioOutputButton(removedElement);
-                if (audioOutputButtonObs.found) {
-                    // Audio output button is being removed, so search for a replacement in the main document
-                    findAndDecorateAudioOutputButton(document.body);
-                }
+                });
+                [...mutation.removedNodes]
+                    .filter((node) => node instanceof Element)
+                    .forEach((node) => {
+                    const removedElement = node;
+                    const obs = this.findPromptField(removedElement);
+                    if (obs.found) {
+                        // Prompt field is being removed, so search for a replacement in the main document
+                        this.findAndDecoratePromptField(document.body);
+                        if (obs.found && obs.isNew && obs.decorated) {
+                            // emit event to notify listeners that script content has been loaded
+                            EventBus/* default */.Z.emit("saypi:ui:content-loaded");
+                        }
+                    }
+                    const ctrlPanelObs = this.findControlPanel(removedElement);
+                    if (ctrlPanelObs.found) {
+                        // Control panel is being removed, so search for a replacement in the main document
+                        this.findAndDecorateControlPanel(document.body);
+                    }
+                    const audioControlsObs = this.findAudioControls(removedElement);
+                    if (audioControlsObs.found) {
+                        // Audio controls are being removed, so search for a replacement in the main document
+                        this.findAndDecorateAudioControls(document.body);
+                    }
+                    const audioOutputButtonObs = this.findAudioOutputButton(removedElement);
+                    if (audioOutputButtonObs.found) {
+                        // Audio output button is being removed, so search for a replacement in the main document
+                        this.findAndDecorateAudioOutputButton(document.body);
+                    }
+                });
             });
         });
-    });
-    // Start observing
-    observer.observe(document.body, { childList: true, subtree: true });
-}
-// Function to decorate the prompt input element, and other elements that depend on it
-function decoratePrompt(prompt) {
-    prompt.id = "saypi-prompt";
-    const promptParent = prompt.parentElement;
-    if (promptParent) {
-        promptParent.classList.add("saypi-prompt-container");
-        const promptGrandparent = promptParent.parentElement;
-        if (promptGrandparent) {
-            promptGrandparent.id = "saypi-prompt-controls-container";
-            addIdPromptAncestor(promptGrandparent);
-            addIdSubmitButton(promptGrandparent);
-            buttonModule.createCallButton(promptGrandparent, -1);
+        // Start observing
+        observer.observe(document.body, { childList: true, subtree: true });
+    }
+    // Function to decorate the prompt input element, and other elements that depend on it
+    decoratePrompt(prompt) {
+        prompt.id = "saypi-prompt";
+        const promptParent = prompt.parentElement;
+        if (promptParent) {
+            promptParent.classList.add("saypi-prompt-container");
+            const promptGrandparent = promptParent.parentElement;
+            if (promptGrandparent) {
+                promptGrandparent.id = "saypi-prompt-controls-container";
+                this.addIdPromptAncestor(promptGrandparent);
+                this.addIdSubmitButton(promptGrandparent);
+                buttonModule.createCallButton(promptGrandparent, -1);
+            }
         }
     }
-}
-/**
- * Identifies and returns the row containing the discover and threads buttons on pi.ai
- * @returns {element: HTMLElement | null, new: boolean} the container element for the control panel, and whether it was newly created
- */
-function findControlPanel(searchRoot) {
-    const id = "saypi-control-panel-main";
-    var mainControlPanel = document.getElementById(id);
-    if (mainControlPanel) {
-        return Observation.foundExisting(id, mainControlPanel);
+    /**
+     * Identifies and returns the row containing the discover and threads buttons on pi.ai
+     * @returns {element: HTMLElement | null, new: boolean} the container element for the control panel, and whether it was newly created
+     */
+    findControlPanel(searchRoot) {
+        const id = "saypi-control-panel-main";
+        var mainControlPanel = document.getElementById(id);
+        if (mainControlPanel) {
+            return Observation.foundExisting(id, mainControlPanel);
+        }
+        mainControlPanel = searchRoot.querySelector(this.chatbot.getControlPanelSelector());
+        if (!mainControlPanel) {
+            return Observation.notFound(id);
+        }
+        return new Observation(mainControlPanel, id, true, true, false);
     }
-    mainControlPanel = searchRoot.querySelector(chatbot.getControlPanelSelector());
-    if (!mainControlPanel) {
+    decorateControlPanel(controlPanel) {
+        const id = "saypi-control-panel-main";
+        controlPanel.id = id;
+        controlPanel.classList.add("saypi-control-panel");
+        const toggleModeBtnPos = 1;
+        buttonModule.createEnterButton(controlPanel, toggleModeBtnPos);
+        buttonModule.createExitButton(controlPanel, toggleModeBtnPos);
+        buttonModule.createThemeToggleButton(controlPanel, toggleModeBtnPos + 2);
+    }
+    findAndDecorateControlPanel(searchRoot) {
+        const obs = this.findControlPanel(searchRoot);
+        if (obs.found && obs.isNew && !obs.decorated) {
+            this.decorateControlPanel(obs.target);
+        }
+        return Observation.decorated(obs);
+    }
+    findSidePanel(searchRoot) {
+        const id = "saypi-side-panel";
+        const existingSidePanel = document.getElementById(id);
+        if (existingSidePanel) {
+            // Side panel already exists, no need to search
+            return Observation.foundExisting(id, existingSidePanel);
+        }
+        const sidePanel = searchRoot.querySelector(this.chatbot.getSidePanelSelector());
+        if (sidePanel) {
+            return Observation.notDecorated(id, sidePanel);
+        }
         return Observation.notFound(id);
     }
-    return new Observation(mainControlPanel, id, true, true, false);
-}
-function decorateControlPanel(controlPanel) {
-    const id = "saypi-control-panel-main";
-    controlPanel.id = id;
-    controlPanel.classList.add("saypi-control-panel");
-    const toggleModeBtnPos = 1;
-    buttonModule.createEnterButton(controlPanel, toggleModeBtnPos);
-    buttonModule.createExitButton(controlPanel, toggleModeBtnPos);
-    buttonModule.createThemeToggleButton(controlPanel, toggleModeBtnPos + 2);
-}
-function findAndDecorateControlPanel(searchRoot) {
-    const obs = findControlPanel(searchRoot);
-    if (obs.found && obs.isNew && !obs.decorated) {
-        decorateControlPanel(obs.target);
+    decorateSidePanel(sidePanel) {
+        sidePanel.id = "saypi-side-panel";
+        sidePanel.classList.add("saypi-control-panel"); // the side panel is a secondary control panel for larger screens
+        const immersiveModeBtnPos = 1;
+        buttonModule.createImmersiveModeButton(sidePanel, immersiveModeBtnPos);
     }
-    return Observation.decorated(obs);
-}
-function findSidePanel(searchRoot) {
-    const id = "saypi-side-panel";
-    const existingSidePanel = document.getElementById(id);
-    if (existingSidePanel) {
-        // Side panel already exists, no need to search
-        return Observation.foundExisting(id, existingSidePanel);
-    }
-    const sidePanel = searchRoot.querySelector(chatbot.getSidePanelSelector());
-    if (sidePanel) {
-        return Observation.notDecorated(id, sidePanel);
-    }
-    return Observation.notFound(id);
-}
-function decorateSidePanel(sidePanel) {
-    sidePanel.id = "saypi-side-panel";
-    sidePanel.classList.add("saypi-control-panel"); // the side panel is a secondary control panel for larger screens
-    const immersiveModeBtnPos = 1;
-    buttonModule.createImmersiveModeButton(sidePanel, immersiveModeBtnPos);
-}
-function findAndDecorateSidePanel(searchRoot) {
-    const obs = findSidePanel(searchRoot);
-    if (obs.found && obs.isNew && !obs.decorated) {
-        decorateSidePanel(obs.target);
-    }
-    return Observation.decorated(obs);
-}
-function addIdSubmitButton(container) {
-    const submitButtons = container.querySelectorAll("button[type=button]");
-    if (submitButtons.length > 0) {
-        const lastSubmitButton = submitButtons[submitButtons.length - 1];
-        lastSubmitButton.id = "saypi-submitButton";
-    }
-}
-function addIdPromptAncestor(container) {
-    // climb up the DOM tree until we find a div with class 'w-full'
-    let parent = container.parentElement;
-    while (parent) {
-        if (parent.classList.contains("w-full")) {
-            parent.id = "saypi-prompt-ancestor";
-            return true;
+    findAndDecorateSidePanel(searchRoot) {
+        const obs = this.findSidePanel(searchRoot);
+        if (obs.found && obs.isNew && !obs.decorated) {
+            this.decorateSidePanel(obs.target);
         }
-        parent = parent.parentElement;
+        return Observation.decorated(obs);
     }
-    return false;
-}
-function findPromptField(searchRoot) {
-    const id = "saypi-prompt";
-    const existingPrompt = document.getElementById(id);
-    if (existingPrompt) {
-        // Prompt already exists, no need to search
-        return Observation.foundExisting(id, existingPrompt);
+    addIdSubmitButton(container) {
+        const submitButtons = container.querySelectorAll("button[type=button]");
+        if (submitButtons.length > 0) {
+            const lastSubmitButton = submitButtons[submitButtons.length - 1];
+            lastSubmitButton.id = "saypi-submitButton";
+        }
     }
-    const promptInput = searchRoot.querySelector(chatbot.getPromptTextInputSelector());
-    if (promptInput) {
-        return Observation.notDecorated(id, promptInput);
+    addIdPromptAncestor(container) {
+        // climb up the DOM tree until we find a div with class 'w-full'
+        let parent = container.parentElement;
+        while (parent) {
+            if (parent.classList.contains("w-full")) {
+                parent.id = "saypi-prompt-ancestor";
+                return true;
+            }
+            parent = parent.parentElement;
+        }
+        return false;
     }
-    return Observation.notFound(id);
-}
-function findAndDecoratePromptField(searchRoot) {
-    const obs = findPromptField(searchRoot);
-    if (obs.found && obs.isNew && !obs.decorated) {
-        decoratePrompt(obs.target);
+    findPromptField(searchRoot) {
+        const id = "saypi-prompt";
+        const existingPrompt = document.getElementById(id);
+        if (existingPrompt) {
+            // Prompt already exists, no need to search
+            return Observation.foundExisting(id, existingPrompt);
+        }
+        const promptInput = searchRoot.querySelector(this.chatbot.getPromptTextInputSelector());
+        if (promptInput) {
+            return Observation.notDecorated(id, promptInput);
+        }
+        return Observation.notFound(id);
     }
-    return Observation.decorated(obs);
-}
-function findAudioControls(searchRoot) {
-    const id = "saypi-audio-controls";
-    const existingAudioControls = document.getElementById(id);
-    if (existingAudioControls) {
-        // Audio controls already exist, no need to search
-        return Observation.foundExisting(id, existingAudioControls);
+    findAndDecoratePromptField(searchRoot) {
+        const obs = this.findPromptField(searchRoot);
+        if (obs.found && obs.isNew && !obs.decorated) {
+            this.decoratePrompt(obs.target);
+        }
+        return Observation.decorated(obs);
     }
-    const audioControls = searchRoot.querySelector(chatbot.getAudioControlsSelector());
-    if (audioControls) {
-        return Observation.notDecorated(id, audioControls);
+    findAudioControls(searchRoot) {
+        const id = "saypi-audio-controls";
+        const existingAudioControls = document.getElementById(id);
+        if (existingAudioControls) {
+            // Audio controls already exist, no need to search
+            return Observation.foundExisting(id, existingAudioControls);
+        }
+        const audioControls = searchRoot.querySelector(this.chatbot.getAudioControlsSelector());
+        if (audioControls) {
+            return Observation.notDecorated(id, audioControls);
+        }
+        return Observation.notFound(id);
     }
-    return Observation.notFound(id);
-}
-function decorateAudioControls(audioControls) {
-    audioControls.id = "saypi-audio-controls";
-}
-function findAndDecorateAudioControls(searchRoot) {
-    const obs = findAudioControls(searchRoot);
-    if (obs.undecorated()) {
-        decorateAudioControls(obs.target);
+    decorateAudioControls(audioControls) {
+        audioControls.id = "saypi-audio-controls";
     }
-    return Observation.decorated(obs);
-}
-function findAudioOutputButton(searchRoot) {
-    const id = "saypi-audio-output-button";
-    const existingAudioOutputButton = document.getElementById(id);
-    if (existingAudioOutputButton) {
-        // Audio output button already exists, no need to search
-        return Observation.foundExisting(id, existingAudioOutputButton);
+    findAndDecorateAudioControls(searchRoot) {
+        const obs = this.findAudioControls(searchRoot);
+        if (obs.undecorated()) {
+            this.decorateAudioControls(obs.target);
+        }
+        return Observation.decorated(obs);
     }
-    const audioOutputButton = searchRoot.querySelector(chatbot.getAudioOutputButtonSelector());
-    if (audioOutputButton) {
-        return Observation.notDecorated(id, audioOutputButton);
+    findAudioOutputButton(searchRoot) {
+        const id = "saypi-audio-output-button";
+        const existingAudioOutputButton = document.getElementById(id);
+        if (existingAudioOutputButton) {
+            // Audio output button already exists, no need to search
+            return Observation.foundExisting(id, existingAudioOutputButton);
+        }
+        const audioOutputButton = searchRoot.querySelector(this.chatbot.getAudioOutputButtonSelector());
+        if (audioOutputButton) {
+            return Observation.notDecorated(id, audioOutputButton);
+        }
+        return Observation.notFound(id);
     }
-    return Observation.notFound(id);
-}
-function decorateAudioOutputButton(audioOutputButton) {
-    audioOutputButton.id = "saypi-audio-output-button";
-}
-function findAndDecorateAudioOutputButton(searchRoot) {
-    const obs = findAudioOutputButton(searchRoot);
-    if (obs.undecorated()) {
-        decorateAudioOutputButton(obs.target);
+    decorateAudioOutputButton(audioOutputButton) {
+        audioOutputButton.id = "saypi-audio-output-button";
     }
-    return Observation.decorated(obs);
+    findAndDecorateAudioOutputButton(searchRoot) {
+        const obs = this.findAudioOutputButton(searchRoot);
+        if (obs.undecorated()) {
+            this.decorateAudioOutputButton(obs.target);
+        }
+        return Observation.decorated(obs);
+    }
 }
 
 // EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js
@@ -33899,10 +33936,11 @@ function saypi_index_asyncToGenerator(fn) { return function () { var self = this
 
 
 
+
 saypi_index_asyncToGenerator( /*#__PURE__*/saypi_index_regeneratorRuntime().mark(function _callee() {
   "use strict";
 
-  var startAudioModule, isLoaded, addVisualisations, addLockButtons;
+  var chatbot, startAudioModule, isLoaded, addVisualisations, addLockButtons;
   return saypi_index_regeneratorRuntime().wrap(function _callee$(_context) {
     while (1) switch (_context.prev = _context.next) {
       case 0:
@@ -33955,6 +33993,7 @@ saypi_index_asyncToGenerator( /*#__PURE__*/saypi_index_regeneratorRuntime().mark
           var audioModule = new AudioModule/* default */.Z();
           audioModule.start();
         };
+        chatbot = ChatbotService.getChatbot();
         isLoaded = false;
         EventBus/* default */.Z.on("saypi:ui:content-loaded", function () {
           if (isLoaded) {
@@ -33967,14 +34006,14 @@ saypi_index_asyncToGenerator( /*#__PURE__*/saypi_index_regeneratorRuntime().mark
           addLockButtons(controlPanel);
           submitErrorHandler.initAudioOutputListener();
           submitErrorHandler.checkForRestorePoint();
-          initMode();
+          new ImmersionService(chatbot).initMode();
           startAudioModule();
           isLoaded = true;
         });
         addUserAgentFlags();
         EventModule.init();
-        observeDOM();
-      case 8:
+        new DOMObserver(chatbot).observeDOM();
+      case 9:
       case "end":
         return _context.stop();
     }

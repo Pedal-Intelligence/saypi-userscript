@@ -2,6 +2,7 @@ import { buttonModule } from "./ButtonModule.js";
 import { addChild } from "./DOMModule.ts";
 import { enterFullscreen, exitFullscreen } from "./FullscreenModule.ts";
 import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
+import { Chatbot } from "./chatbots/Chatbot.ts";
 
 export function isMobileDevice() {
   return (
@@ -9,37 +10,6 @@ export function isMobileDevice() {
       navigator.userAgent
     ) || window.matchMedia("(max-width: 1024px)").matches // fallback for devices that don't have a recognisable mobile user agent, like iPad Pro
   );
-}
-
-// this function determines whether the immersive view is currently active
-export function isViewImmersive() {
-  const element = document.documentElement;
-  return element.classList.contains("immersive-view");
-}
-
-export function exitImmersiveMode() {
-  localStorage.setItem("userViewPreference", "desktop"); // Save preference
-
-  const element = document.documentElement;
-  element.classList.remove("immersive-view");
-  element.classList.add("desktop-view");
-
-  attachCallButton();
-  exitFullscreen();
-}
-
-export function enterImmersiveMode() {
-  localStorage.setItem("userViewPreference", "immersive"); // Save preference
-
-  const element = document.documentElement;
-  element.classList.remove("desktop-view");
-  element.classList.add("immersive-view");
-
-  detachCallButton();
-  enterFullscreen();
-  UserPreferenceModule.getTheme().then((theme) => {
-    buttonModule.applyTheme(theme);
-  });
 }
 
 function attachCallButton() {
@@ -78,27 +48,64 @@ export function addDeviceFlags(element) {
   }
 }
 
-function addViewFlags(element) {
-  UserPreferenceModule.getPrefersImmersiveView().then((immersive) => {
-    if (immersive) {
-      element.classList.remove("desktop-view");
-      element.classList.add("immersive-view");
-    } else {
-      element.classList.remove("immersive-view");
-      element.classList.add("desktop-view");
-    }
-  });
-}
+export class ImmersionService {
+  /**
+   * A service that manages the immersive view mode
+   * Uses dependency injection to access the chatbot
+   * @param {Chatbot} chatbot
+   */
+  constructor(chatbot) {
+    this.chatbot = chatbot;
+  }
 
-/**
- * Perform initial setup of the UI based on the view preferences
- */
-export function initMode() {
-  UserPreferenceModule.getPrefersImmersiveView().then((immersive) => {
-    if (immersive) {
-      enterImmersiveMode();
-    } else {
-      exitImmersiveMode();
+  /**
+   * Perform initial setup of the UI based on the view preferences
+   */
+  initMode() {
+    UserPreferenceModule.getPrefersImmersiveView().then((immersive) => {
+      if (immersive) {
+        this.enterImmersiveMode();
+      } else {
+        this.exitImmersiveMode();
+      }
+    });
+  }
+
+  // this function determines whether the immersive view is currently active
+  static isViewImmersive() {
+    const element = document.documentElement;
+    return element.classList.contains("immersive-view");
+  }
+
+  static exitImmersiveMode() {
+    localStorage.setItem("userViewPreference", "desktop"); // Save preference
+
+    const element = document.documentElement;
+    element.classList.remove("immersive-view");
+    element.classList.add("desktop-view");
+
+    attachCallButton();
+    exitFullscreen();
+  }
+
+  enterImmersiveMode() {
+    localStorage.setItem("userViewPreference", "immersive"); // Save preference
+
+    // if not already on the talk page, navigate to it
+    // this is to ensure the user is not stuck in the immersive view on a non-chat page
+    const path = this.chatbot.getChatPath();
+    if (window.location.pathname !== path) {
+      window.location = path;
     }
-  });
+
+    const element = document.documentElement;
+    element.classList.remove("desktop-view");
+    element.classList.add("immersive-view");
+
+    detachCallButton();
+    enterFullscreen();
+    UserPreferenceModule.getTheme().then((theme) => {
+      buttonModule.applyTheme(theme);
+    });
+  }
 }

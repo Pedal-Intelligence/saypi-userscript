@@ -1,6 +1,6 @@
 import { Chatbot } from "./Chatbot";
 
-class PiAIChatbot extends Chatbot {
+class PiAIChatbot implements Chatbot {
   getPromptTextInputSelector(): string {
     return "textarea[enterkeyhint]";
   }
@@ -24,6 +24,10 @@ class PiAIChatbot extends Chatbot {
 
   getSidePanelSelector(): string {
     return "div.hidden.w-22.flex-col.items-center.gap-1.border-r";
+  }
+
+  getChatPath(): string {
+    return "/talk";
   }
 }
 
