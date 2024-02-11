@@ -87,84 +87,6 @@ html.immersive-view {
     z-index: 80;
   }
 
-  .lock-button {
-    width: 3rem;
-    height: 3rem;
-    padding: 6px;
-    margin-right: 1rem;
-    border: 0;
-    z-index: 60;
-    svg path.inner {
-      color: rgb(13 60 38); /* text-primary-700 */
-    }
-  }
-
-  #saypi-lock-panel {
-    /* unlocked by default */
-    display: block;
-    background-color: transparent;
-    border-radius: 0;
-    margin: 0;
-  }
-
-  .unlocked #saypi-lockButton {
-    display: block !important; // show the lock button when screen is unlocked
-  }
-  .locked #saypi-lockButton {
-    display: none !important; // hide the lock button when screen is locked
-  }
-
-  .unlocked #saypi-unlockButton {
-    display: none !important; // hide the unlock button when screen is unlocked
-  }
-  .locked #saypi-unlockButton {
-    display: block !important; // show the unlock button when screen is unlocked
-    position: relative; // position (but don't move) the unlock button so that z-index works while locked
-    z-index: 101 !important; // above the touch absorber
-  }
-
-  .locked #saypi-touch-absorber {
-    display: block !important; // show the touch absorber when screen is locked
-    position: fixed;
-    top: 0;
-    left: 0;
-    opacity: 0.5;
-    /* semi-transparent background */
-    background-color: rgba(245, 238, 223, 0.75);
-    width: 100vw;
-    height: 100svh;
-    z-index: 100;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }  
-
-  #saypi-locked-text {
-    display: none; // hide the locked text when screen is unlocked
-  }
-  .locked #saypi-locked-text {
-    display: block !important; // show the locked text when screen is locked
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    height: 1rem;
-    /* text */
-    animation-name: fadeIn;
-    animation-duration: 2s;
-    animation-fill-mode: forwards;
-    text-align: center;
-    font-size: xx-large;
-    font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;
-    .subtext {
-      display: block;
-      font-size: large;
-    }
-  }
-
   /* hide the scrollbar */
   .scrollbar-gutter-both-edges {
     visibility: hidden;
@@ -193,11 +115,7 @@ html.immersive-view {
     padding: 6px;
   }
 
-  /* When this class is applied, buttons fade out */
-  .focus button {
-    opacity: 0; 
-    transition: opacity 0.5s ease-out; 
-  }
-
 }
 @import "dark-mode.scss";
+@import "focus-mode.scss";
+@import "lock.scss";

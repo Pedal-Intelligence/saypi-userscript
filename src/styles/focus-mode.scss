@@ -1,0 +1,5 @@
+/* When this class is applied, buttons fade out */
+html.immersive-view.mobile-device body.focus button {
+    opacity: 0; 
+    transition: opacity 0.5s ease-out;
+}

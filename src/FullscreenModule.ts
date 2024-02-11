@@ -1,3 +1,4 @@
+import { start } from "repl";
 import {
   machine as focusMachine,
   exitFocusMode,
@@ -13,6 +14,25 @@ function handleUserInput() {
   focusActor.send({ type: "blur" });
 }
 
+function startFocusModeListener() {
+  focusActor.start();
+  ticker = setInterval(() => {
+    focusActor.send({ type: "tick", time_ms: tickInterval });
+  }, tickInterval);
+  // send any click or keypress to reset the inactivity timer
+  for (const event of userInputEvents) {
+    document.addEventListener(event, handleUserInput);
+  }
+}
+
+function stopFocusModeListener() {
+  focusActor.stop();
+  clearInterval(ticker);
+  for (const event of userInputEvents) {
+    document.removeEventListener(event, handleUserInput);
+  }
+}
+
 export function enterFullscreen() {
   // Check if the API is available
   if (document.fullscreenEnabled) {
@@ -20,13 +40,8 @@ export function enterFullscreen() {
     document.documentElement
       .requestFullscreen()
       .then(() => {
-        focusActor.start();
-        ticker = setInterval(() => {
-          focusActor.send({ type: "tick", time_ms: tickInterval });
-        }, tickInterval);
-        // send any click or keypress to reset the inactivity timer
-        for (const event of userInputEvents) {
-          document.addEventListener(event, handleUserInput);
+        if (isMobileDevice()) {
+          startFocusModeListener();
         }
       })
       .catch((err) => {
@@ -46,11 +61,9 @@ export function exitFullscreen() {
     document
       .exitFullscreen()
       .then(() => {
-        exitFocusMode();
-        focusActor.stop();
-        clearInterval(ticker);
-        for (const event of userInputEvents) {
-          document.removeEventListener(event, handleUserInput);
+        if (isMobileDevice()) {
+          exitFocusMode();
+          stopFocusModeListener();
         }
       })
       .catch((err) => {

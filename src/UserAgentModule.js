@@ -8,7 +8,7 @@ export function isMobileDevice() {
   return (
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent
-    ) || window.matchMedia("(max-width: 1024px)").matches // fallback for devices that don't have a recognisable mobile user agent, like iPad Pro
+    ) || window.matchMedia("(max-width: 820px)").matches // fallback for devices that don't have a recognisable mobile user agent, like iPad (Air, Pro is excluded)
   );
 }
 

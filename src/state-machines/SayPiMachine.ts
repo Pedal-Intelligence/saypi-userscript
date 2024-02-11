@@ -157,11 +157,6 @@ UserPreferenceModule.getLanguage().then((language) => {
   mergeService = new TranscriptMergeService(apiServerUrl, language);
 });
 
-/* external actions */
-const clearTranscripts = assign({
-  transcriptions: () => ({}),
-});
-
 const audibleNotifications = new AudibleNotificationsModule();
 const textualNotifications = new TextualNotificationsModule();
 const visualNotifications = new VisualNotificationsModule();
@@ -474,7 +469,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   },
                 ],
                 exit: [
-                  clearTranscripts,
+                  {
+                    type: "clearTranscriptsAction",
+                  },
                   {
                     type: "clearPendingTranscriptionsAction",
                   },
@@ -898,6 +895,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         // discard in-flight transcriptions. Called after a successful submission
         clearPendingTranscriptions();
       },
+      clearTranscriptsAction: assign({
+        transcriptions: () => ({}),
+      }),
     },
     services: {},
     guards: {

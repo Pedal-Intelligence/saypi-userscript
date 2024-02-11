@@ -12,6 +12,7 @@ import "./styles/desktop.scss";
 import "./styles/mobile.scss";
 import "./styles/rectangles.css";
 import { ChatbotService } from "./chatbots/ChatbotService.ts";
+import { addChild } from "./DOMModule.ts";
 
 (async function () {
   "use strict";
@@ -31,8 +32,9 @@ import { ChatbotService } from "./chatbots/ChatbotService.ts";
     // arguably these two functions are part of the content loading phase,
     // but they need to be called after other content has been loaded
     addVisualisations(document.body);
-    const controlPanel = document.querySelector(".saypi-control-panel");
-    addLockButtons(controlPanel);
+    const controlPanel = document.querySelector("#saypi-control-panel-main");
+    const lockPosition = 4; // position of the lock buttons - just before the div.grow separator
+    addLockButtons(controlPanel, lockPosition);
 
     submitErrorHandler.initAudioOutputListener();
     submitErrorHandler.checkForRestorePoint();
@@ -68,7 +70,7 @@ import { ChatbotService } from "./chatbots/ChatbotService.ts";
     panel.appendChild(button);
   }
 
-  function addLockButtons(container) {
+  function addLockButtons(container, position = 0) {
     // Create a containing div
     var lockPanel = document.createElement("div");
     lockPanel.id = "saypi-lock-panel";
@@ -76,7 +78,7 @@ import { ChatbotService } from "./chatbots/ChatbotService.ts";
     document.body.classList.add("unlocked");
 
     if (container) {
-      container.appendChild(lockPanel);
+      addChild(container, lockPanel, position);
     } else {
       document.body.appendChild(lockPanel);
     }
