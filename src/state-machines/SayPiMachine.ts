@@ -473,7 +473,12 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     type: "notifySentMessage",
                   },
                 ],
-                exit: [clearTranscripts, clearPendingTranscriptions],
+                exit: [
+                  clearTranscripts,
+                  {
+                    type: "clearPendingTranscriptionsAction",
+                  },
+                ],
                 always: {
                   target: "accumulating",
                 },
@@ -888,6 +893,10 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           delay_ms: delay_ms,
           wait_time_ms: submission_delay_ms,
         });
+      },
+      clearPendingTranscriptionsAction: () => {
+        // discard in-flight transcriptions. Called after a successful submission
+        clearPendingTranscriptions();
       },
     },
     services: {},
