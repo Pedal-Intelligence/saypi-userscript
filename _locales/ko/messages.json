@@ -155,5 +155,17 @@
   "shareAnalytics": {
     "description": "분석 공유를 활성화/비활성화하는 체크박스의 라벨.",
     "message": "분석 공유"
+  },
+  "enterImmersiveModeLong": {
+    "message": "이머시브 모드에 들어가기",
+    "description": "모바일 장치에서 몰입 모드로 들어가기 위한 버튼의 aria-label과 제목."
+  },
+  "enterImmersiveModeShort": {
+    "description": "데스크톱에서 몰입 모드로 들어가기 위한 버튼의 텍스트",
+    "message": "몰입형"
+  },
+  "exitImmersiveModeLong": {
+    "description": "모바일 장치에서 몰입 모드를 종료하고 텍스트 기반의 데스크톱 모드로 돌아가는 버튼의 aria-label과 제목.",
+    "message": "이머시브 모드 종료"
   }
 }

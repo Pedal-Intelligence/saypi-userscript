@@ -155,5 +155,17 @@
   "shareAnalytics": {
     "description": "Etiqueta para la casilla de verificación para habilitar/deshabilitar el compartir análisis.",
     "message": "Compartir análisis"
+  },
+  "enterImmersiveModeLong": {
+    "description": "El aria-label y el título del botón para entrar en modo inmersivo en dispositivos móviles.",
+    "message": "Ingresa al Modo Inmersivo"
+  },
+  "enterImmersiveModeShort": {
+    "description": "El texto del botón para entrar en modo inmersivo en el escritorio.",
+    "message": "Inmersivo"
+  },
+  "exitImmersiveModeLong": {
+    "description": "El aria-label y el título del botón para salir del modo inmersivo en dispositivos móviles, de vuelta al modo de escritorio basado en texto.",
+    "message": "Salir del Modo Inmersivo"
   }
 }

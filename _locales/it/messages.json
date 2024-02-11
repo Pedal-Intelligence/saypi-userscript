@@ -155,5 +155,17 @@
   "shareAnalytics": {
     "description": "Etichetta per la casella di controllo per abilitare/disabilitare la condivisione delle analisi.",
     "message": "Condividi analisi"
+  },
+  "enterImmersiveModeLong": {
+    "message": "Entra nella Modalità Immersiva",
+    "description": "L'aria-label e il titolo del pulsante per entrare nella modalità immersiva sui dispositivi mobili."
+  },
+  "enterImmersiveModeShort": {
+    "description": "Il testo del pulsante per entrare nella modalità immersiva sul desktop.",
+    "message": "Immersivo"
+  },
+  "exitImmersiveModeLong": {
+    "description": "L'aria-label e il titolo del pulsante per uscire dalla modalità immersiva sui dispositivi mobili, tornando alla modalità desktop basata sul testo.",
+    "message": "Esci dalla Modalità Immersiva"
   }
 }

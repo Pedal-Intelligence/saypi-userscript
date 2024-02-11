@@ -155,5 +155,17 @@
   "shareAnalytics": {
     "description": "Étiquette pour la case à cocher pour activer/désactiver le partage des analyses.",
     "message": "Partager les analyses"
+  },
+  "enterImmersiveModeLong": {
+    "description": "Le aria-label et le titre du bouton pour entrer en mode immersif sur les appareils mobiles.",
+    "message": "Entrez en Mode Immersif"
+  },
+  "enterImmersiveModeShort": {
+    "description": "Le texte du bouton pour entrer en mode immersif sur le bureau.",
+    "message": "Immersif"
+  },
+  "exitImmersiveModeLong": {
+    "description": "Le aria-label et le titre du bouton pour quitter le mode immersif sur les appareils mobiles, pour revenir au mode bureau basé sur le texte.",
+    "message": "Quitter le Mode Immersif"
   }
 }

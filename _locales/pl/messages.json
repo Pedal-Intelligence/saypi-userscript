@@ -155,5 +155,17 @@
   "shareAnalytics": {
     "description": "Etykieta dla pola wyboru do włączania/wyłączania udostępniania analiz.",
     "message": "Udostępnij analitykę"
+  },
+  "enterImmersiveModeShort": {
+    "message": "Imersyjny",
+    "description": "Tekst przycisku do wejścia w tryb immersyjny na komputerze."
+  },
+  "exitImmersiveModeLong": {
+    "message": "Wyjdź z trybu immersyjnego",
+    "description": "Aria-label i tytuł przycisku do wyjścia z trybu immersyjnego na urządzeniach mobilnych, powrót do trybu tekstowego pulpitu."
+  },
+  "enterImmersiveModeLong": {
+    "message": "Wejdź w Tryb Immersyjny",
+    "description": "Aria-label i tytuł przycisku do wchodzenia w tryb pełnoekranowy na urządzeniach mobilnych."
   }
 }

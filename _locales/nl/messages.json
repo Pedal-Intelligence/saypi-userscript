@@ -155,5 +155,17 @@
   "shareAnalytics": {
     "description": "Label voor het selectievakje om het delen van analyses in/uit te schakelen.",
     "message": "Deel analyses"
+  },
+  "enterImmersiveModeLong": {
+    "description": "De aria-label en titel van de knop om de meeslepende modus op mobiele apparaten te betreden.",
+    "message": "Ga naar de meeslepende modus"
+  },
+  "enterImmersiveModeShort": {
+    "description": "De tekst van de knop om de meeslepende modus op desktop te betreden.",
+    "message": "Immersief"
+  },
+  "exitImmersiveModeLong": {
+    "description": "De aria-label en titel van de knop om de meeslepende modus op mobiele apparaten te verlaten, terug naar de tekstgebaseerde desktopmodus.",
+    "message": "Verlaat de meeslepende modus"
   }
 }

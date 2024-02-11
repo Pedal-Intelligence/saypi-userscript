@@ -155,5 +155,17 @@
   "shareAnalytics": {
     "description": "分析の共有を有効/無効にするチェックボックスのラベル。",
     "message": "分析を共有する"
+  },
+  "enterImmersiveModeLong": {
+    "description": "モバイルデバイスで没入型モードに入るためのボタンのaria-labelとタイトル。",
+    "message": "没入型モードに入る"
+  },
+  "enterImmersiveModeShort": {
+    "description": "デスクトップで没入モードに入るためのボタンのテキスト",
+    "message": "没入型"
+  },
+  "exitImmersiveModeLong": {
+    "description": "モバイルデバイスで没入型モードを終了し、テキストベースのデスクトップモードに戻るためのボタンのaria-labelとタイトル。",
+    "message": "没入モードを終了する"
   }
 }

@@ -155,5 +155,17 @@
   "shareAnalytics": {
     "description": "Nhãn cho hộp kiểm để bật/tắt chia sẻ phân tích.",
     "message": "Chia sẻ phân tích"
+  },
+  "enterImmersiveModeShort": {
+    "message": "Trải nghiệm mạnh mẽ",
+    "description": "Văn bản của nút để vào chế độ toàn màn hình trên máy tính."
+  },
+  "exitImmersiveModeLong": {
+    "message": "Thoát Chế Độ Sống Động",
+    "description": "Aria-label và tiêu đề của nút để thoát chế độ toàn màn hình trên thiết bị di động, quay lại chế độ máy tính để bàn dựa trên văn bản."
+  },
+  "enterImmersiveModeLong": {
+    "message": "Nhập Chế Độ Sống Động",
+    "description": "Nhãn aria và tiêu đề của nút để vào chế độ toàn màn hình trên thiết bị di động."
   }
 }

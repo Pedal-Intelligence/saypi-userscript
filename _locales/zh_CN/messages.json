@@ -155,5 +155,17 @@
   "shareAnalytics": {
     "description": "用于启用/禁用分享分析的复选框标签。",
     "message": "分享分析"
+  },
+  "enterImmersiveModeShort": {
+    "message": "沉浸式",
+    "description": "进入桌面沉浸模式的按钮文本"
+  },
+  "exitImmersiveModeLong": {
+    "message": "退出沉浸模式",
+    "description": "退出移动设备上的沉浸式模式，返回到基于文本的桌面模式的按钮的aria-label和标题。"
+  },
+  "enterImmersiveModeLong": {
+    "message": "进入沉浸模式",
+    "description": "进入移动设备沉浸模式按钮的aria-label和标题。"
   }
 }

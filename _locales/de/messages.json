@@ -155,5 +155,17 @@
   "shareAnalytics": {
     "description": "Beschriftung für das Kontrollkästchen zum Aktivieren/Deaktivieren der Freigabe von Analysen.",
     "message": "Teilen Sie Analysen"
+  },
+  "enterImmersiveModeLong": {
+    "description": "Das aria-label und der Titel des Buttons zum Betreten des immersiven Modus auf mobilen Geräten.",
+    "message": "Immersivmodus betreten"
+  },
+  "enterImmersiveModeShort": {
+    "description": "Der Text der Schaltfläche zum Betreten des immersiven Modus auf dem Desktop.",
+    "message": "Eindringlich"
+  },
+  "exitImmersiveModeLong": {
+    "description": "Das aria-label und der Titel des Buttons zum Verlassen des immersiven Modus auf mobilen Geräten, zurück zum textbasierten Desktop-Modus.",
+    "message": "Verlassen Sie den immersiven Modus"
   }
 }

@@ -155,5 +155,17 @@
   "shareAnalytics": {
     "description": "Címke a jelölőnégyzethez az analitikai adatok megosztásának engedélyezéséhez/letiltásához.",
     "message": "Megosztási analitika"
+  },
+  "enterImmersiveModeLong": {
+    "description": "Az aria-label és a cím gombja, hogy belépjen az immerszív módba mobil eszközökön.",
+    "message": "Lépj be az Immerszív Módba"
+  },
+  "enterImmersiveModeShort": {
+    "description": "A gomb szövege, amellyel beléphet az immerszív módba asztali gépen.",
+    "message": "Elmerülő"
+  },
+  "exitImmersiveModeLong": {
+    "description": "Az aria-címke és a gomb címe, amely kilép az immerszív módból mobil eszközökön, vissza a szövegalapú asztali módhoz.",
+    "message": "Lépjen ki az immerszív módból"
   }
 }
