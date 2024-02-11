@@ -7,14 +7,6 @@
     "message": "Konwersja mowy dla Pi, AI do rozmów. Ciesz się rozmowami w każdym języku.",
     "description": "Opis aplikacji."
   },
-  "exitMobileMode": {
-    "message": "Wyjdź z mobilnego trybu sterowanego głosem",
-    "description": "Etykieta przycisku wyjścia z mobilnego trybu sterowanego głosem, powrotu do tekstowego trybu desktopowego."
-  },
-  "enterMobileMode": {
-    "message": "Wejdź w mobilny tryb sterowany głosem",
-    "description": "Etykieta przycisku włączenia mobilnego trybu sterowanego głosem."
-  },
   "callInProgress": {
     "message": "Aktywne ciągłe słuchanie. Kliknij, aby zatrzymać.",
     "description": "Podpowiedź wyświetlana na przycisku połączenia, gdy połączenie jest w toku."

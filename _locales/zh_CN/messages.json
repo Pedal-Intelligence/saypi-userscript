@@ -7,14 +7,6 @@
     "message": "为Pi提供无缝的语音转文本增强功能，Pi是一款对话式人工智能。享受任何语言的免提、高准确度对话。",
     "description": "应用程序的描述。"
   },
-  "exitMobileMode": {
-    "message": "退出语音控制移动模式",
-    "description": "退出语音控制移动模式，返回到基于文本的桌面模式的按钮标签。"
-  },
-  "enterMobileMode": {
-    "message": "进入语音控制移动模式",
-    "description": "进入语音控制移动模式的按钮标签。"
-  },
   "callInProgress": {
     "message": "正在进行连续监听。点击停止。",
     "description": "通话进行中时，通话按钮上显示的工具提示。"

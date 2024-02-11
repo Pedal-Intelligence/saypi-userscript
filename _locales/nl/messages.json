@@ -7,14 +7,6 @@
     "message": "Spraak-naar-tekst voor Pi, de conversatie AI. Handsfree gesprekken in elke taal.",
     "description": "De beschrijving van de applicatie."
   },
-  "exitMobileMode": {
-    "message": "Verlaat Stemgestuurde Mobiele Modus",
-    "description": "Het label van de knop om de stemgestuurde mobiele modus te verlaten, terug naar de tekstgebaseerde desktopmodus."
-  },
-  "enterMobileMode": {
-    "message": "Ga naar Stemgestuurde Mobiele Modus",
-    "description": "Het label van de knop om de stemgestuurde mobiele modus te betreden."
-  },
   "callInProgress": {
     "message": "Actieve continue luistering. Klik om te stoppen.",
     "description": "De tooltip die wordt weergegeven op de oproepknop wanneer een gesprek bezig is."

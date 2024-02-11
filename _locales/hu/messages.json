@@ -7,14 +7,6 @@
     "message": "Beszéd-szöveggé alakítás a Pi-hez. Élvezze a kéz nélküli beszélgetéseket bármilyen nyelven.",
     "description": "Az alkalmazás leírása."
   },
-  "exitMobileMode": {
-    "message": "Kilépés a hangvezérelt mobil módból",
-    "description": "A gomb címkéje a hangvezérelt mobil módból való kilépéshez, vissza a szöveg alapú asztali módba."
-  },
-  "enterMobileMode": {
-    "message": "Belépés a hangvezérelt mobil módba",
-    "description": "A gomb címkéje a hangvezérelt mobil módba való belépéshez."
-  },
   "callInProgress": {
     "message": "Aktív folyamatos hallgatás. Kattintson a leállításhoz.",
     "description": "A hívásgombon megjelenő eszköztipp, amikor a hívás folyamatban van."

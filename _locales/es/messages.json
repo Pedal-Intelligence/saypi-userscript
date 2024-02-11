@@ -7,14 +7,6 @@
     "message": "Conversión de voz a texto para Pi, el AI conversacional. Disfruta charlas manos libres en cualquier idioma.",
     "description": "La descripción de la aplicación."
   },
-  "exitMobileMode": {
-    "message": "Salir del modo móvil controlado por voz",
-    "description": "Etiqueta para salir del modo móvil por voz y volver al modo de escritorio."
-  },
-  "enterMobileMode": {
-    "message": "Entrar en modo móvil controlado por voz",
-    "description": "La etiqueta del botón para entrar en el modo móvil controlado por voz."
-  },
   "callInProgress": {
     "message": "Escucha continua activa. Haz clic para detener.",
     "description": "El tooltip que se muestra en el botón de llamada cuando una llamada está en progreso."

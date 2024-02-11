@@ -7,14 +7,6 @@
     "message": "Sprach-zu-Text für Pi, den KI-Assistenten. Genießen Sie Gespräche in jeder Sprache.",
     "description": "Die Beschreibung der Anwendung."
   },
-  "exitMobileMode": {
-    "message": "Sprachgesteuerten Mobilmodus beenden",
-    "description": "Sprachmodus beenden, zu Text-Desktop zurückkehren"
-  },
-  "enterMobileMode": {
-    "message": "Sprachgesteuerten Mobilmodus aktivieren",
-    "description": "Die Bezeichnung des Buttons, um den sprachgesteuerten Mobilmodus zu betreten."
-  },
   "callInProgress": {
     "message": "Aktives kontinuierliches Zuhören. Klicken, um zu stoppen.",
     "description": "Der Tooltip, der auf dem Anrufbutton angezeigt wird, wenn ein Anruf läuft."

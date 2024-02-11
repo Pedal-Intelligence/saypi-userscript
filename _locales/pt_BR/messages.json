@@ -7,14 +7,6 @@
     "message": "Melhoria de fala para texto para Pi. Desfrute de conversas precisas em qualquer língua.",
     "description": "A descrição da aplicação."
   },
-  "exitMobileMode": {
-    "message": "Sair do Modo Móvel Controlado por Voz",
-    "description": "O rótulo do botão para sair do modo móvel controlado por voz, voltando para o modo desktop baseado em texto."
-  },
-  "enterMobileMode": {
-    "message": "Entrar no Modo Móvel Controlado por Voz",
-    "description": "O rótulo do botão para entrar no modo móvel controlado por voz."
-  },
   "callInProgress": {
     "message": "Escuta contínua ativa. Clique para parar.",
     "description": "A dica de ferramenta a ser exibida no botão de chamada quando uma chamada está em andamento."

@@ -7,14 +7,6 @@
     "message": "Cải thiện giọng nói cho Pi. Cuộc trò chuyện không tay, chính xác mọi ngôn ngữ.",
     "description": "Mô tả của ứng dụng."
   },
-  "exitMobileMode": {
-    "message": "Thoát Chế Độ Di Động Điều Khiển Bằng Giọng Nói",
-    "description": "Nhãn nút thoát chế độ di động giọng nói, quay về chế độ văn bản máy tính."
-  },
-  "enterMobileMode": {
-    "message": "Vào Chế Độ Di Động Điều Khiển Bằng Giọng Nói",
-    "description": "Nhãn của nút để vào chế độ di động điều khiển bằng giọng nói."
-  },
   "callInProgress": {
     "message": "Đang lắng nghe liên tục. Nhấp để dừng.",
     "description": "Tooltip hiển thị trên nút gọi khi một cuộc gọi đang diễn ra."

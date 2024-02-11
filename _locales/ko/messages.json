@@ -7,14 +7,6 @@
     "message": "대화형 AI인 Pi를 위한 매끄러운 음성-텍스트 전환 기능입니다. 어떤 언어로든 손쉬운 고정확도 대화를 즐기세요.",
     "description": "애플리케이션의 설명입니다."
   },
-  "exitMobileMode": {
-    "message": "음성 제어 모바일 모드 종료",
-    "description": "음성 제어 모바일 모드에서 텍스트 기반 데스크톱 모드로 돌아가는 버튼의 레이블입니다."
-  },
-  "enterMobileMode": {
-    "message": "음성 제어 모바일 모드 진입",
-    "description": "음성 제어 모바일 모드로 진입하는 버튼의 레이블입니다."
-  },
   "callInProgress": {
     "message": "활성화된 연속 듣기. 클릭하여 중지하세요.",
     "description": "통화가 진행 중일 때 통화 버튼에 표시되는 툴팁입니다."

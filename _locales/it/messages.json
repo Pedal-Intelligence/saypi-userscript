@@ -7,14 +7,6 @@
     "message": "Da voce a testo per Pi, l'AI conversazionale. Conversazioni libere in qualsiasi lingua.",
     "description": "La descrizione dell'applicazione."
   },
-  "exitMobileMode": {
-    "message": "Esci dalla Modalità Mobile Controllata Vocalmente",
-    "description": "Etichetta per uscire dalla modalità mobile vocale e tornare al desktop testuale."
-  },
-  "enterMobileMode": {
-    "message": "Entra nella Modalità Mobile Controllata Vocalmente",
-    "description": "L'etichetta del pulsante per entrare nella modalità mobile controllata vocalmente."
-  },
   "callInProgress": {
     "message": "Ascolto continuo attivo. Clicca per fermare.",
     "description": "Il tooltip da visualizzare sul pulsante di chiamata quando una chiamata è in corso."
