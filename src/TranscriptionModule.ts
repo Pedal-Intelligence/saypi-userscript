@@ -257,18 +257,20 @@ async function constructTranscriptionFormData(
 }
 
 function scrollToBottom(textarea: HTMLTextAreaElement) {
-  // Define the maximum height
+  // Define the height range for the textarea
   const maxHeight = 455;
+  const minHeight = 32;
 
   // Reset the height to get the correct scrollHeight
-  textarea.style.height = "2rem"; // (initial height) aka 32px
+  textarea.style.height = `${minHeight}px`; // (initial height) aka 2rem
 
   // Set the height of the textarea, up to the maximum height
   if (textarea.scrollHeight > maxHeight) {
     textarea.style.height = `${maxHeight}px`;
     textarea.style.overflowY = "scroll"; // Enable vertical scrollbar
   } else {
-    textarea.style.height = `${textarea.scrollHeight}px`;
+    const newHeight = Math.max(minHeight, textarea.scrollHeight);
+    textarea.style.height = `${newHeight}px`;
     textarea.style.overflowY = "hidden"; // Hide vertical scrollbar
   }
 
@@ -310,7 +312,7 @@ export function setFinalPrompt(transcript: string): void {
   const initialHeight = "2rem"; // aka 32px
   textarea.style.height = initialHeight; // Reset the height after draft preview has been dismissed
   if (ImmersionService.isViewImmersive()) {
-    // if transcript is > 1000 characters, truncate it to 999 characters plus an ellipsis
+    // if transcript is > max characters, truncate it to max-1 characters plus an ellipsis
     if (transcript.length > PROMPT_CHARACTER_LIMIT) {
       const truncatedLength = PROMPT_CHARACTER_LIMIT - 1;
       transcript = `${transcript.substring(0, truncatedLength)}…`;

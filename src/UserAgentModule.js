@@ -66,7 +66,7 @@ export class ImmersionService {
       if (immersive) {
         this.enterImmersiveMode();
       } else {
-        this.exitImmersiveMode();
+        ImmersionService.exitImmersiveMode();
       }
     });
   }
