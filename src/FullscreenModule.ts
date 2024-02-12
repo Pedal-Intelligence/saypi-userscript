@@ -1,9 +1,9 @@
-import { start } from "repl";
 import {
   machine as focusMachine,
   exitFocusMode,
 } from "./state-machines/FocusMachine";
 import { interpret } from "xstate";
+import { isMobileDevice } from "./UserAgentModule";
 
 const focusActor = interpret(focusMachine);
 const tickInterval = 1000;
@@ -40,7 +40,7 @@ export function enterFullscreen() {
     document.documentElement
       .requestFullscreen()
       .then(() => {
-        if (isMobileDevice()) {
+        if (!isMobileDevice()) {
           startFocusModeListener();
         }
       })
@@ -61,7 +61,7 @@ export function exitFullscreen() {
     document
       .exitFullscreen()
       .then(() => {
-        if (isMobileDevice()) {
+        if (!isMobileDevice()) {
           exitFocusMode();
           stopFocusModeListener();
         }
