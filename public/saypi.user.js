@@ -33168,7 +33168,7 @@ var ButtonModule = /*#__PURE__*/function () {
     key: "handleAutoSubmit",
     value: function () {
       var _handleAutoSubmit = ButtonModule_asyncToGenerator( /*#__PURE__*/ButtonModule_regeneratorRuntime().mark(function _callee() {
-        var autoSubmitEnabled;
+        var autoSubmitEnabled, isImmersive;
         return ButtonModule_regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
@@ -33176,13 +33176,14 @@ var ButtonModule = /*#__PURE__*/function () {
               return UserPreferenceModule.getAutoSubmit();
             case 2:
               autoSubmitEnabled = _context.sent;
-              if (autoSubmitEnabled) {
+              isImmersive = ImmersionService.isViewImmersive();
+              if (autoSubmitEnabled || isImmersive) {
                 this.simulateFormSubmit();
                 EventBus/* default */.Z.emit("saypi:piThinking"); // Pi is responding
               } else {
                 console.log("Autosubmit is off");
               }
-            case 4:
+            case 5:
             case "end":
               return _context.stop();
           }

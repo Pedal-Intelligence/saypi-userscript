@@ -161,7 +161,8 @@ export default class ButtonModule {
   // Function to handle auto-submit based on the user preference
   async handleAutoSubmit() {
     const autoSubmitEnabled = await UserPreferenceModule.getAutoSubmit();
-    if (autoSubmitEnabled) {
+    const isImmersive = ImmersionService.isViewImmersive(); // must auto-submit in immersive mode
+    if (autoSubmitEnabled || isImmersive) {
       this.simulateFormSubmit();
       EventBus.emit("saypi:piThinking"); // Pi is responding
     } else {
