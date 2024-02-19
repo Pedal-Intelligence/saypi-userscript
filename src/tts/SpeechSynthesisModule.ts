@@ -20,10 +20,8 @@ interface SpeechSynthesisUtteranceRemote {
   uri: string;
 }
 
-interface SpeechSynthesisVoiceRemote {
-  /* based on SpeechSynthesisVoice */
+interface SpeechSynthesisVoiceRemote extends SpeechSynthesisVoice {
   id: string;
-  name: string;
 }
 
 class SpeechSynthesisModule {

@@ -101,38 +101,3 @@ import { addChild } from "./DOMModule.ts";
     lockedText.appendChild(unlockInstruction);
   }
 })();
-function autoplaySpeech(speechSynthesis, utterance) {
-  // wait a beat, then start streaming the utterance
-  setTimeout(() => {
-    speechSynthesis
-      .speak(utterance)
-      .then(() => console.log("Reading chat message aloud")) // start streaming output
-      .catch((error) =>
-        console.error(`Error occurred reading chat message: ${error}`)
-      ); // handle any errors
-  }, 1000);
-}
-
-function addSpeechButton(speechSynthesis, utterance, node) {
-  const button = document.createElement("button");
-  button.type = "button";
-  button.classList.add(
-    "ml-2",
-    "rounded",
-    "px-2",
-    "py-3",
-    "text-center",
-    "hover:bg-neutral-300",
-    "saypi-chat-message-button"
-  );
-  button.innerHTML = "Read aloud"; // TODO: localize
-  button.addEventListener("click", () => {
-    speechSynthesis
-      .speak(utterance)
-      .then(() => console.log("Reading chat message aloud")) // start streaming output
-      .catch((error) =>
-        console.error(`Error occurred reading chat message: ${error}`)
-      ); // handle any errors
-  });
-  node.appendChild(button);
-}

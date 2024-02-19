@@ -1,6 +1,7 @@
 import { Chatbot } from "./Chatbot";
 import { buttonModule } from "../ButtonModule.js";
 import EventBus from "../EventBus.js";
+import { TextToSpeechUIManager } from "../tts/TTSUIManager";
 
 class Observation {
   constructor(
@@ -58,6 +59,9 @@ export class DOMObserver {
             const audioOutputButtonObs =
               this.findAndDecorateAudioOutputButton(addedElement);
             // ... handle other elements
+            if (audioControlsObs.found) {
+              new TextToSpeechUIManager(this.chatbot);
+            }
 
             // notify listeners that (all critical) script content has been loaded
             if (promptObs.isReady()) {
