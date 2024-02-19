@@ -41,6 +41,7 @@ class Observation {
 }
 
 export class DOMObserver {
+  ttsUiMgr: TextToSpeechUIManager | null = null;
   constructor(private chatbot: Chatbot) {}
 
   observeDOM(): void {
@@ -59,8 +60,12 @@ export class DOMObserver {
             const audioOutputButtonObs =
               this.findAndDecorateAudioOutputButton(addedElement);
             // ... handle other elements
-            if (audioControlsObs.found) {
-              new TextToSpeechUIManager(this.chatbot);
+            if (
+              audioControlsObs.found &&
+              audioControlsObs.isNew &&
+              this.ttsUiMgr === null
+            ) {
+              this.ttsUiMgr = new TextToSpeechUIManager(this.chatbot);
             }
 
             // notify listeners that (all critical) script content has been loaded

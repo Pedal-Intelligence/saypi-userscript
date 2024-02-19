@@ -1,4 +1,6 @@
 export interface Chatbot {
+  getChatHistorySelector(): any;
+  getVoiceMenuSelector(): string;
   getAudioOutputButtonSelector(): string;
   getAudioControlsSelector(): string;
   getControlPanelSelector(): string;

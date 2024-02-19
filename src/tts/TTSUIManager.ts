@@ -9,7 +9,9 @@ import { Chatbot } from "../chatbots/Chatbot";
 export class TextToSpeechUIManager {
   // Methods for DOM manipulation and element ID assignment
   addIdChatHistory(): boolean {
-    const chatHistory = document.querySelector("div.t-body-chat");
+    const chatHistory = document.querySelector(
+      this.chatbot.getChatHistorySelector()
+    );
     if (!chatHistory) {
       return false;
     } else {
@@ -35,7 +37,9 @@ export class TextToSpeechUIManager {
     if (!audioControlsContainer) {
       return false;
     }
-    const voiceMenu = audioControlsContainer.querySelector("div.t-action-m");
+    const voiceMenu = audioControlsContainer.querySelector(
+      this.chatbot.getVoiceMenuSelector()
+    );
     if (!voiceMenu) {
       return false;
     } else {
@@ -273,14 +277,14 @@ export class TextToSpeechUIManager {
   assistantChatMessageAdded(node: HTMLElement): void {
     node.classList.add("chat-message", "assistant-message");
     const speechSynthesis = SpeechSynthesisModule.getInstance();
+    const initialText = node.innerText;
     speechSynthesis.isEnabled().then((isEnabled) => {
       if (isEnabled) {
         speechSynthesis.createSpeechStream().then((utterance) => {
           node.dataset.utteranceId = utterance.id;
           console.log("Created audio stream", utterance.id);
-
-          this.addSpeechButton(speechSynthesis, utterance, node); // (Assuming you have this function elsewhere)
-
+          console.log('Streaming text began with "', initialText);
+          this.addSpeechButton(speechSynthesis, utterance, node);
           this.autoplaySpeech(speechSynthesis, utterance); // handle any errors
         });
       }
@@ -314,15 +318,17 @@ export class TextToSpeechUIManager {
               lastMessage = node;
             } else if (node.nodeName === "SPAN") {
               // streaming text initially appears as within a span node with style display: none and opacity: 0
+              const streamedText = (node as HTMLSpanElement).innerText;
               speechSynthesis.isEnabled().then((isEnabled) => {
                 if (
                   isEnabled &&
                   lastMessage &&
                   lastMessage.dataset.utteranceId
                 ) {
+                  console.log('Streaming text "', streamedText, '"');
                   speechSynthesis.addSpeechToStream(
                     lastMessage.dataset.utteranceId,
-                    (node as HTMLSpanElement).innerText
+                    streamedText
                   );
                 }
               });

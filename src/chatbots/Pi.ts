@@ -29,6 +29,14 @@ class PiAIChatbot implements Chatbot {
   getChatPath(): string {
     return "/talk";
   }
+
+  getVoiceMenuSelector(): string {
+    return "div.t-action-m";
+  }
+
+  getChatHistorySelector(): string {
+    return "div.t-body-chat";
+  }
 }
 
 export { PiAIChatbot };

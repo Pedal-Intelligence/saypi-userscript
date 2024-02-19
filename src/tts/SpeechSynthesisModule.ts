@@ -136,13 +136,40 @@ class SpeechSynthesisModule {
     return utterance;
   }
 
+  private speechBuffers: { [uuid: string]: string } = {};
+  private speechBufferTimeouts: { [uuid: string]: NodeJS.Timeout } = {};
+
   async addSpeechToStream(uuid: string, text: string): Promise<void> {
-    const data = { text: text };
+    // Add text to buffer
+    if (!this.speechBuffers[uuid]) {
+      this.speechBuffers[uuid] = "";
+    }
+    this.speechBuffers[uuid] += text;
+
+    // Send buffer if text ends with a sentence break
+    if ([".", "!", "?"].some((end) => text.endsWith(end))) {
+      await this.sendBuffer(uuid);
+    }
+
+    // Set/reset timeout to send buffer after 5 seconds
+    if (this.speechBufferTimeouts[uuid]) {
+      clearTimeout(this.speechBufferTimeouts[uuid]);
+    }
+    this.speechBufferTimeouts[uuid] = setTimeout(() => {
+      this.sendBuffer(uuid);
+    }, 5000);
+  }
+
+  private async sendBuffer(uuid: string): Promise<void> {
+    const data = { text: this.speechBuffers[uuid] };
     const uri = `${this.serviceUrl}/speak/${uuid}/stream`;
     const response = await axios.put(uri, data);
     if (response.status !== 200) {
       throw new Error("Failed to stream input text to speech");
     }
+
+    // Clear buffer
+    this.speechBuffers[uuid] = "";
 
     // Reset the timeout
     if (this.speechStreamTimeouts[uuid]) {
