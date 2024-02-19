@@ -7,13 +7,17 @@
     "message": "Speech-to-text for Pi, the conversational AI. Enjoy hands-free conversations in any language.",
     "description": "The description of the application."
   },
-  "exitMobileMode": {
-    "message": "Exit Voice-Controlled Mobile Mode",
-    "description": "The label of the button to exit voice-controlled mobile mode, back to the text-based desktop mode."
+  "exitImmersiveModeLong": {
+    "message": "Exit Immersive Mode",
+    "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode."
   },
-  "enterMobileMode": {
-    "message": "Enter Voice-Controlled Mobile Mode",
-    "description": "The label of the button to enter voice-controlled mobile mode."
+  "enterImmersiveModeLong": {
+    "message": "Enter Immersive Mode",
+    "description": "The aria-label and title of the button to enter immersive mode on mobile devices."
+  },
+  "enterImmersiveModeShort": {
+    "message": "Immersive",
+    "description": "The text of the button to enter immersive mode on desktop."
   },
   "callInProgress": {
     "message": "Active continuous listening. Click to stop.",
@@ -100,7 +104,68 @@
     }
   },
   "audioInputError": {
-    "message": "Oops, we didn't catch that. Can you try saying it again?",
-    "description": "Message displayed when audio resulted in an empty transcription - usually the result of filtering."
+    "message": "Oops, $chatbot$ didn't catch that. Can you try saying it again?",
+    "description": "Message displayed when audio resulted in an empty transcription - usually the result of filtering.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "assistantIsListening": {
+    "message": "$chatbot$ is listening...",
+    "description": "Message displayed when the assistant is listening for speech.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "toggleThemeToDarkMode": {
+    "message": "Switch to dark mode",
+    "description": "Label for the button to toggle to dark mode."
+  },
+  "toggleThemeToLightMode": {
+    "message": "Switch to light mode",
+    "description": "Label for the button to toggle to light mode."
+  },
+  "shareAnalytics": {
+    "message": "Share analytics",
+    "description": "Label for the checkbox to enable/disable sharing of analytics."
+  },
+  "consentBetterTogether": {
+    "message": "Let's improve Say, Pi together"
+  },
+  "consentSharingPurpose": {
+    "message": "Sharing your usage data will help us understand how people use Say, Pi so we can make it better for everyone."
+  },
+  "consentNoPii": {
+    "message": "We won't collect or see personal data, like messages or names."
+  },
+  "consentPrivacyParamount": {
+    "message": "Your privacy is paramount. Anything you say remains between you and Pi."
+  },
+  "consentDataDeidentified": {
+    "message": "Analytics are not tied to individuals. Any data used is de-identified."
+  },
+  "consentNoSale": {
+    "message": "We won't sell your data to third parties, or use it for advertising."
+  },
+  "consentRightToRevoke": {
+    "message": "You can change your mind at any time."
+  },
+  "consetPrivacyPolicy": {
+    "message": "Read our Privacy Policy"
+  },
+  "consentAskParticipate": {
+    "message": "Would you like to participate?"
+  },
+  "consentOptOut": {
+    "message": "No thanks"
+  },
+  "consentOptIn": {
+    "message": "I'm in!"
   }
 }

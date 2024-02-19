@@ -1,6 +1,13 @@
 {
   "configurations": [
     {
+      "name": "Python Debugger: Current File",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal"
+    },
+    {
       "type": "msedge",
       "name": "Hey Pi",
       "request": "launch",

@@ -60,9 +60,11 @@ export class TextualNotificationsModule implements INotificationsModule {
     // show new notification
     this.notificationElement!.classList.add("active");
     if (iconName) {
-      this.notificationElement!.classList.add("icon");
+      const iconElement = document.createElement("img");
+      iconElement.classList.add("icon");
       const iconImageUrl = getResourceUrl(`icons/${iconName}.svg`);
-      this.notificationElement!.style.backgroundImage = `url("${iconImageUrl}")`;
+      iconElement.src = iconImageUrl;
+      this.notificationElement?.appendChild(iconElement);
     }
     const notificationText = document.createElement("span");
     notificationText.textContent = message;
@@ -72,8 +74,6 @@ export class TextualNotificationsModule implements INotificationsModule {
   public hideNotification() {
     this.init();
     this.notificationElement!.classList.remove("active");
-    this.notificationElement!.classList.remove("icon");
-    this.notificationElement!.style.backgroundImage = "";
     // remove any child elements
     while (this.notificationElement!.firstChild) {
       this.notificationElement!.removeChild(
@@ -110,6 +110,12 @@ export class AudibleNotificationsModule implements INotificationsModule {
   private unlockSound: HTMLAudioElement = new Audio(
     getResourceUrl("audio/beep-off.mp3")
   );
+  private themeOnSound: HTMLAudioElement = new Audio(
+    getResourceUrl("audio/switch-on.mp3")
+  );
+  private themeOffSound: HTMLAudioElement = new Audio(
+    getResourceUrl("audio/switch-off.mp3")
+  );
 
   private async playSound(sound: HTMLAudioElement) {
     const soundEnabled = await UserPreferenceModule.getSoundEffects();
@@ -140,6 +146,14 @@ export class AudibleNotificationsModule implements INotificationsModule {
 
   public unlockScreen(): void {
     this.playSound(this.unlockSound);
+  }
+
+  public themeOn(): void {
+    this.playSound(this.themeOnSound);
+  }
+
+  public themeOff(): void {
+    this.playSound(this.themeOffSound);
   }
 }
 

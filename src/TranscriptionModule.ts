@@ -1,6 +1,6 @@
 import { config } from "./ConfigModule.js";
 import StateMachineService from "./StateMachineService.js";
-import { isMobileView } from "./UserAgentModule.js";
+import { ImmersionService } from "./UserAgentModule.js";
 import EventBus from "./EventBus.js";
 import EventModule from "./EventModule.js";
 import { logger } from "./LoggingModule.js";
@@ -248,7 +248,7 @@ async function constructTranscriptionFormData(
   formData.append("acceptsMerge", "true"); // always accept merge requests (since v1.4.10)
 
   // Wait for the preference to be retrieved before appending it to the FormData
-  const preference = await UserPreferenceModule.getPreferedMode();
+  const preference = await UserPreferenceModule.getTranscriptionMode();
   if (preference) {
     formData.append("prefer", preference);
   }
@@ -257,23 +257,36 @@ async function constructTranscriptionFormData(
 }
 
 function scrollToBottom(textarea: HTMLTextAreaElement) {
-  // Define the maximum height
+  // Define the height range for the textarea
   const maxHeight = 455;
+  const minHeight = 32;
 
   // Reset the height to get the correct scrollHeight
-  textarea.style.height = "2rem"; // (initial height) aka 32px
+  textarea.style.height = `${minHeight}px`; // (initial height) aka 2rem
 
   // Set the height of the textarea, up to the maximum height
   if (textarea.scrollHeight > maxHeight) {
     textarea.style.height = `${maxHeight}px`;
     textarea.style.overflowY = "scroll"; // Enable vertical scrollbar
   } else {
-    textarea.style.height = `${textarea.scrollHeight}px`;
+    const newHeight = Math.max(minHeight, textarea.scrollHeight);
+    textarea.style.height = `${newHeight}px`;
     textarea.style.overflowY = "hidden"; // Hide vertical scrollbar
   }
 
   // Scroll to the bottom
   textarea.scrollTop = textarea.scrollHeight;
+}
+
+/**
+ * Get the prompt textarea's current placeholder text
+ */
+export function getDraftPrompt(): string {
+  const textarea = document.getElementById(
+    "saypi-prompt"
+  ) as HTMLTextAreaElement;
+
+  return textarea.getAttribute("placeholder") || "";
 }
 
 /**
@@ -289,6 +302,7 @@ export function setDraftPrompt(transcript: string): void {
   scrollToBottom(textarea);
 }
 
+const PROMPT_CHARACTER_LIMIT = 4000;
 export function setFinalPrompt(transcript: string): void {
   logger.info(`Final transcript: ${transcript}`);
   const textarea = document.getElementById(
@@ -297,13 +311,14 @@ export function setFinalPrompt(transcript: string): void {
   textarea.setAttribute("placeholder", "");
   const initialHeight = "2rem"; // aka 32px
   textarea.style.height = initialHeight; // Reset the height after draft preview has been dismissed
-  if (isMobileView()) {
-    // if transcript is > 1000 characters, truncate it to 999 characters plus an ellipsis
-    if (transcript.length > 1000) {
-      transcript = `${transcript.substring(0, 999)}…`;
+  if (ImmersionService.isViewImmersive()) {
+    // if transcript is > max characters, truncate it to max-1 characters plus an ellipsis
+    if (transcript.length > PROMPT_CHARACTER_LIMIT) {
+      const truncatedLength = PROMPT_CHARACTER_LIMIT - 1;
+      transcript = `${transcript.substring(0, truncatedLength)}…`;
       console.warn(
-        `Transcript was too long for Pi. Truncated to 999 characters, losing the following text: ... ${transcript.substring(
-          999
+        `Transcript was too long for Pi. Truncated to ${truncatedLength} characters, losing the following text: ... ${transcript.substring(
+          truncatedLength
         )}`
       );
     }

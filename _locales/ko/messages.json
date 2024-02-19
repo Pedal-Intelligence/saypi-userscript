@@ -7,14 +7,6 @@
     "message": "대화형 AI인 Pi를 위한 매끄러운 음성-텍스트 전환 기능입니다. 어떤 언어로든 손쉬운 고정확도 대화를 즐기세요.",
     "description": "애플리케이션의 설명입니다."
   },
-  "exitMobileMode": {
-    "message": "음성 제어 모바일 모드 종료",
-    "description": "음성 제어 모바일 모드에서 텍스트 기반 데스크톱 모드로 돌아가는 버튼의 레이블입니다."
-  },
-  "enterMobileMode": {
-    "message": "음성 제어 모바일 모드 진입",
-    "description": "음성 제어 모바일 모드로 진입하는 버튼의 레이블입니다."
-  },
   "callInProgress": {
     "message": "활성화된 연속 듣기. 클릭하여 중지하세요.",
     "description": "통화가 진행 중일 때 통화 버튼에 표시되는 툴팁입니다."
@@ -81,7 +73,7 @@
   },
   "audioConnected": {
     "description": "마이크로폰이 연결될 때 표시되는 메시지",
-    "message": "$마이크$ 연결됨",
+    "message": "$microphone$ 연결됨",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -91,16 +83,89 @@
   },
   "audioInputError": {
     "description": "오디오가 빈 전사로 이어졌을 때 표시되는 메시지 - 보통 필터링의 결과입니다.",
-    "message": "이런, 우리가 그것을 잡지 못했습니다 - 배경 소음일 수 있습니다. 다시 말해 보거나 마이크 설정을 확인해보세요."
+    "message": "이런, $chatbot$가 그것을 이해하지 못했습니다. 다시 말해 볼 수 있을까요?",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioReconnecting": {
     "description": "새로운 마이크에 연결할 때 표시되는 메시지",
-    "message": "$마이크로폰$으로 전환 중...",
+    "message": "$microphone$으로 전환 중...",
     "placeholders": {
       "microphone": {
         "content": "$1",
         "example": "기본값 - 에어팟 프로"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "비서가 음성을 듣고 있을 때 표시되는 메시지.",
+    "message": "$chatbot$이 청취 중입니다...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "toggleThemeToDarkMode": {
+    "description": "다크 모드로 전환하는 버튼의 라벨.",
+    "message": "다크 모드로 전환하세요"
+  },
+  "toggleThemeToLightMode": {
+    "description": "라이트 모드로 전환하는 버튼의 라벨.",
+    "message": "라이트 모드로 전환하세요"
+  },
+  "consentAskParticipate": {
+    "message": "참여하시겠습니까?"
+  },
+  "consentBetterTogether": {
+    "message": "함께 Say, Pi를 개선합시다"
+  },
+  "consentDataDeidentified": {
+    "message": "분석은 개인에게 연결되어 있지 않습니다. 사용된 모든 데이터는 식별이 불가능합니다."
+  },
+  "consentNoPii": {
+    "message": "우리는 메시지나 이름과 같은 개인 데이터를 수집하거나 보지 않을 것입니다."
+  },
+  "consentNoSale": {
+    "message": "우리는 귀하의 데이터를 제3자에게 판매하지 않으며, 광고용으로 사용하지도 않을 것입니다."
+  },
+  "consentOptIn": {
+    "message": "나 들어갔어!"
+  },
+  "consentOptOut": {
+    "message": "아니요, 감사합니다."
+  },
+  "consentPrivacyParamount": {
+    "message": "당신의 개인 정보 보호는 매우 중요합니다. 당신이 말하는 모든 것은 당신과 Pi 사이에 남습니다."
+  },
+  "consentRightToRevoke": {
+    "message": "언제든지 생각을 바꿀 수 있습니다."
+  },
+  "consentSharingPurpose": {
+    "message": "사용 데이터를 공유하면 사람들이 Say, Pi를 어떻게 사용하는지 이해하는 데 도움이 되어 모든 사람을 위해 개선할 수 있습니다."
+  },
+  "consetPrivacyPolicy": {
+    "message": "우리의 개인정보 보호정책을 읽어보세요."
+  },
+  "shareAnalytics": {
+    "description": "분석 공유를 활성화/비활성화하는 체크박스의 라벨.",
+    "message": "분석 공유"
+  },
+  "enterImmersiveModeLong": {
+    "message": "이머시브 모드에 들어가기",
+    "description": "모바일 장치에서 몰입 모드로 들어가기 위한 버튼의 aria-label과 제목."
+  },
+  "enterImmersiveModeShort": {
+    "description": "데스크톱에서 몰입 모드로 들어가기 위한 버튼의 텍스트",
+    "message": "몰입형"
+  },
+  "exitImmersiveModeLong": {
+    "description": "모바일 장치에서 몰입 모드를 종료하고 텍스트 기반의 데스크톱 모드로 돌아가는 버튼의 aria-label과 제목.",
+    "message": "이머시브 모드 종료"
   }
 }

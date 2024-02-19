@@ -7,14 +7,6 @@
     "message": "Sprach-zu-Text für Pi, den KI-Assistenten. Genießen Sie Gespräche in jeder Sprache.",
     "description": "Die Beschreibung der Anwendung."
   },
-  "exitMobileMode": {
-    "message": "Sprachgesteuerten Mobilmodus beenden",
-    "description": "Sprachmodus beenden, zu Text-Desktop zurückkehren"
-  },
-  "enterMobileMode": {
-    "message": "Sprachgesteuerten Mobilmodus aktivieren",
-    "description": "Die Bezeichnung des Buttons, um den sprachgesteuerten Mobilmodus zu betreten."
-  },
   "callInProgress": {
     "message": "Aktives kontinuierliches Zuhören. Klicken, um zu stoppen.",
     "description": "Der Tooltip, der auf dem Anrufbutton angezeigt wird, wenn ein Anruf läuft."
@@ -84,23 +76,96 @@
     "message": "$microphone$ verbunden",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "Standard - MacBook Pro Mikrofon"
       }
     }
   },
   "audioInputError": {
     "description": "Nachricht angezeigt, wenn Audio in einer leeren Transkription resultiert - normalerweise das Ergebnis des Filterns.",
-    "message": "Hoppla, das haben wir nicht verstanden - es könnte Hintergrundgeräusche geben. Versuchen Sie erneut zu sprechen oder überprüfen Sie Ihre Mikrofoneinstellungen."
+    "message": "Hoppla, $chatbot$ hat das nicht verstanden. Können Sie es noch einmal sagen?",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioReconnecting": {
     "description": "Nachricht, die angezeigt wird, wenn eine Verbindung zu einem neuen Mikrofon hergestellt wird",
     "message": "Wechseln zu $microphone$...",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "Standard - AirPods Pro"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "Nachricht, die angezeigt wird, wenn der Assistent auf Sprache hört.",
+    "message": "$chatbot$ hört zu...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Beschriftung für die Schaltfläche zum Umschalten in den Dunkelmodus.",
+    "message": "Wechseln Sie in den Dunkelmodus"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Beschriftung für die Schaltfläche zum Wechseln in den Lichtmodus.",
+    "message": "Wechseln Sie in den Lichtmodus"
+  },
+  "consentAskParticipate": {
+    "message": "Möchten Sie teilnehmen?"
+  },
+  "consentBetterTogether": {
+    "message": "Lassen Sie uns Say, Pi gemeinsam verbessern"
+  },
+  "consentDataDeidentified": {
+    "message": "Analysen sind nicht an Einzelpersonen gebunden. Alle verwendeten Daten sind anonymisiert."
+  },
+  "consentNoPii": {
+    "message": "Wir werden keine persönlichen Daten wie Nachrichten oder Namen sammeln oder sehen."
+  },
+  "consentNoSale": {
+    "message": "Wir werden Ihre Daten nicht an Dritte verkaufen oder sie für Werbung verwenden."
+  },
+  "consentOptIn": {
+    "message": "Ich bin dabei!"
+  },
+  "consentOptOut": {
+    "message": "Nein danke"
+  },
+  "consentPrivacyParamount": {
+    "message": "Ihre Privatsphäre ist von größter Bedeutung. Alles, was Sie sagen, bleibt zwischen Ihnen und Pi."
+  },
+  "consentRightToRevoke": {
+    "message": "Sie können Ihre Meinung jederzeit ändern."
+  },
+  "consentSharingPurpose": {
+    "message": "Die Freigabe Ihrer Nutzungsdaten hilft uns zu verstehen, wie die Leute Say, Pi nutzen, damit wir es für alle verbessern können."
+  },
+  "consetPrivacyPolicy": {
+    "message": "Lesen Sie unsere Datenschutzrichtlinie"
+  },
+  "shareAnalytics": {
+    "description": "Beschriftung für das Kontrollkästchen zum Aktivieren/Deaktivieren der Freigabe von Analysen.",
+    "message": "Teilen Sie Analysen"
+  },
+  "enterImmersiveModeLong": {
+    "description": "Das aria-label und der Titel des Buttons zum Betreten des immersiven Modus auf mobilen Geräten.",
+    "message": "Immersivmodus betreten"
+  },
+  "enterImmersiveModeShort": {
+    "description": "Der Text der Schaltfläche zum Betreten des immersiven Modus auf dem Desktop.",
+    "message": "Eindringlich"
+  },
+  "exitImmersiveModeLong": {
+    "description": "Das aria-label und der Titel des Buttons zum Verlassen des immersiven Modus auf mobilen Geräten, zurück zum textbasierten Desktop-Modus.",
+    "message": "Verlassen Sie den immersiven Modus"
   }
 }

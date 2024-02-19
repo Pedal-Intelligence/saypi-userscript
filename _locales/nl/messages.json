@@ -7,14 +7,6 @@
     "message": "Spraak-naar-tekst voor Pi, de conversatie AI. Handsfree gesprekken in elke taal.",
     "description": "De beschrijving van de applicatie."
   },
-  "exitMobileMode": {
-    "message": "Verlaat Stemgestuurde Mobiele Modus",
-    "description": "Het label van de knop om de stemgestuurde mobiele modus te verlaten, terug naar de tekstgebaseerde desktopmodus."
-  },
-  "enterMobileMode": {
-    "message": "Ga naar Stemgestuurde Mobiele Modus",
-    "description": "Het label van de knop om de stemgestuurde mobiele modus te betreden."
-  },
   "callInProgress": {
     "message": "Actieve continue luistering. Klik om te stoppen.",
     "description": "De tooltip die wordt weergegeven op de oproepknop wanneer een gesprek bezig is."
@@ -84,23 +76,96 @@
     "message": "$microphone$ verbonden",
     "placeholders": {
       "microphone": {
-        "content": "€1",
+        "content": "$1",
         "example": "Standaard - MacBook Pro Microfoon"
       }
     }
   },
   "audioInputError": {
     "description": "Bericht weergegeven wanneer audio resulteerde in een lege transcriptie - meestal het gevolg van filteren.",
-    "message": "Oeps, we hebben dat niet opgevangen - het kan achtergrondgeluid zijn. Probeer opnieuw te spreken, of controleer je microfooninstellingen."
+    "message": "Oeps, $chatbot$ heeft dat niet opgevangen. Kun je het nog eens proberen te zeggen?",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioReconnecting": {
     "description": "Bericht weergegeven bij het verbinden met een nieuwe microfoon",
     "message": "Overschakelen naar $microphone$...",
     "placeholders": {
       "microphone": {
-        "content": "€1",
+        "content": "$1",
         "example": "Standaard - AirPods Pro"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "Bericht weergegeven wanneer de assistent luistert naar spraak.",
+    "message": "$chatbot$ luistert...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Label voor de knop om over te schakelen naar donkere modus.",
+    "message": "Schakel over naar donkere modus"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Label voor de knop om over te schakelen naar lichte modus.",
+    "message": "Schakel over naar lichte modus"
+  },
+  "consentAskParticipate": {
+    "message": "Wilt u deelnemen?"
+  },
+  "consentBetterTogether": {
+    "message": "Laten we Say, Pi samen verbeteren"
+  },
+  "consentDataDeidentified": {
+    "message": "Analyses zijn niet gekoppeld aan individuen. Alle gebruikte gegevens zijn geanonimiseerd."
+  },
+  "consentNoPii": {
+    "message": "We verzamelen of zien geen persoonlijke gegevens, zoals berichten of namen."
+  },
+  "consentNoSale": {
+    "message": "We verkopen uw gegevens niet aan derden, of gebruiken het voor reclame."
+  },
+  "consentOptIn": {
+    "message": "Ik doe mee!"
+  },
+  "consentOptOut": {
+    "message": "Nee bedankt"
+  },
+  "consentPrivacyParamount": {
+    "message": "Uw privacy is van het grootste belang. Alles wat u zegt blijft tussen u en Pi."
+  },
+  "consentRightToRevoke": {
+    "message": "Je kunt op elk moment van gedachten veranderen."
+  },
+  "consentSharingPurpose": {
+    "message": "Het delen van uw gebruiksgegevens zal ons helpen begrijpen hoe mensen Say, Pi gebruiken zodat we het voor iedereen kunnen verbeteren."
+  },
+  "consetPrivacyPolicy": {
+    "message": "Lees ons Privacybeleid"
+  },
+  "shareAnalytics": {
+    "description": "Label voor het selectievakje om het delen van analyses in/uit te schakelen.",
+    "message": "Deel analyses"
+  },
+  "enterImmersiveModeLong": {
+    "description": "De aria-label en titel van de knop om de meeslepende modus op mobiele apparaten te betreden.",
+    "message": "Ga naar de meeslepende modus"
+  },
+  "enterImmersiveModeShort": {
+    "description": "De tekst van de knop om de meeslepende modus op desktop te betreden.",
+    "message": "Immersief"
+  },
+  "exitImmersiveModeLong": {
+    "description": "De aria-label en titel van de knop om de meeslepende modus op mobiele apparaten te verlaten, terug naar de tekstgebaseerde desktopmodus.",
+    "message": "Verlaat de meeslepende modus"
   }
 }

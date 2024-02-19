@@ -7,14 +7,6 @@
     "message": "Konwersja mowy dla Pi, AI do rozmów. Ciesz się rozmowami w każdym języku.",
     "description": "Opis aplikacji."
   },
-  "exitMobileMode": {
-    "message": "Wyjdź z mobilnego trybu sterowanego głosem",
-    "description": "Etykieta przycisku wyjścia z mobilnego trybu sterowanego głosem, powrotu do tekstowego trybu desktopowego."
-  },
-  "enterMobileMode": {
-    "message": "Wejdź w mobilny tryb sterowany głosem",
-    "description": "Etykieta przycisku włączenia mobilnego trybu sterowanego głosem."
-  },
   "callInProgress": {
     "message": "Aktywne ciągłe słuchanie. Kliknij, aby zatrzymać.",
     "description": "Podpowiedź wyświetlana na przycisku połączenia, gdy połączenie jest w toku."
@@ -84,23 +76,96 @@
     "message": "Mikrofon podłączony",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "Domyślny - Mikrofon MacBook Pro"
       }
     }
   },
   "audioInputError": {
     "description": "Wiadomość wyświetlana, gdy dźwięk skutkuje pustym transkrypcją - zazwyczaj jest to wynik filtrowania.",
-    "message": "Ups, tego nie złapaliśmy - to może być szum w tle. Spróbuj mówić ponownie lub sprawdź ustawienia mikrofonu."
+    "message": "Ups, $chatbot$ tego nie złapał. Czy możesz spróbować powiedzieć to jeszcze raz?",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioReconnecting": {
     "description": "Wiadomość wyświetlana podczas łączenia z nowym mikrofonem",
     "message": "Przełączanie na $microphone$...",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "Domyślne - AirPods Pro"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "Wiadomość wyświetlana, gdy asystent nasłuchuje mowy.",
+    "message": "$chatbot$ słucha...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Etykieta dla przycisku przełączania na tryb ciemny.",
+    "message": "Przełącz na tryb ciemny"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Etykieta dla przycisku przełączania na tryb jasny.",
+    "message": "Przełącz na tryb jasny"
+  },
+  "consentAskParticipate": {
+    "message": "Czy chciałbyś uczestniczyć?"
+  },
+  "consentBetterTogether": {
+    "message": "Poprawmy razem Say, Pi"
+  },
+  "consentDataDeidentified": {
+    "message": "Analityka nie jest powiązana z osobami. Wszelkie używane dane są anonimizowane."
+  },
+  "consentNoPii": {
+    "message": "Nie będziemy zbierać ani widzieć danych osobowych, takich jak wiadomości czy imiona."
+  },
+  "consentNoSale": {
+    "message": "Nie sprzedamy Twoich danych stronom trzecim ani nie użyjemy ich do celów reklamowych."
+  },
+  "consentOptIn": {
+    "message": "Jestem w środku!"
+  },
+  "consentOptOut": {
+    "message": "Nie, dziękuję."
+  },
+  "consentPrivacyParamount": {
+    "message": "Twoja prywatność jest najważniejsza. Wszystko, co mówisz, pozostaje między tobą a Pi."
+  },
+  "consentRightToRevoke": {
+    "message": "Możesz zmienić zdanie w dowolnym momencie."
+  },
+  "consentSharingPurpose": {
+    "message": "Udostępnianie danych o Twoim użytkowaniu pomoże nam zrozumieć, jak ludzie korzystają z Say, Pi, dzięki czemu będziemy mogli ulepszyć go dla wszystkich."
+  },
+  "consetPrivacyPolicy": {
+    "message": "Przeczytaj naszą Politykę Prywatności"
+  },
+  "shareAnalytics": {
+    "description": "Etykieta dla pola wyboru do włączania/wyłączania udostępniania analiz.",
+    "message": "Udostępnij analitykę"
+  },
+  "enterImmersiveModeShort": {
+    "message": "Imersyjny",
+    "description": "Tekst przycisku do wejścia w tryb immersyjny na komputerze."
+  },
+  "exitImmersiveModeLong": {
+    "message": "Wyjdź z trybu immersyjnego",
+    "description": "Aria-label i tytuł przycisku do wyjścia z trybu immersyjnego na urządzeniach mobilnych, powrót do trybu tekstowego pulpitu."
+  },
+  "enterImmersiveModeLong": {
+    "message": "Wejdź w Tryb Immersyjny",
+    "description": "Aria-label i tytuł przycisku do wchodzenia w tryb pełnoekranowy na urządzeniach mobilnych."
   }
 }

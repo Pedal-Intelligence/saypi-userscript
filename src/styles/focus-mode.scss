@@ -1,0 +1,4 @@
+html.immersive-view:not(.mobile-device) body.focus button {
+    opacity: 0; 
+    transition: opacity 0.5s ease-out;
+}

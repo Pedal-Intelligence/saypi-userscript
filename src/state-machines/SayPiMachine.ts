@@ -13,9 +13,10 @@ import {
   TextualNotificationsModule,
   VisualNotificationsModule,
 } from "../NotificationsModule";
-import { isMobileView } from "../UserAgentModule.js";
+import { ImmersionService } from "../UserAgentModule.js";
 import {
   uploadAudioWithRetry,
+  getDraftPrompt,
   setDraftPrompt,
   setFinalPrompt,
   isTranscriptionPending,
@@ -29,6 +30,7 @@ import AudioControlsModule from "../AudioControlsModule";
 import { requestWakeLock, releaseWakeLock } from "../WakeLockModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import getMessage from "../i18n";
+import { last } from "lodash";
 
 type SayPiTranscribedEvent = {
   type: "saypi:transcribed";
@@ -82,6 +84,7 @@ interface SayPiContext {
   lastState: "inactive" | "listening";
   userIsSpeaking: boolean; // duplicate of state.matches("listening.recording.userSpeaking")
   timeUserStoppedSpeaking: number;
+  defaultPlaceholderText: string;
 }
 
 // Define the state schema
@@ -138,6 +141,10 @@ function getHighestKey(transcriptions: Record<number, string>): number {
 // used to judge whether there's time for another remote operation (i.e. merge request)
 var nextSubmissionTime = Date.now();
 
+// most recent enforced delay while waiting for additional user input
+// captured here for analytics events
+var lastSubmissionDelay = 0;
+
 const apiServerUrl = config.apiServerUrl;
 if (apiServerUrl === undefined) {
   throw new Error(
@@ -148,11 +155,6 @@ if (apiServerUrl === undefined) {
 let mergeService: TranscriptMergeService;
 UserPreferenceModule.getLanguage().then((language) => {
   mergeService = new TranscriptMergeService(apiServerUrl, language);
-});
-
-/* external actions */
-const clearTranscripts = assign({
-  transcriptions: () => ({}),
 });
 
 const audibleNotifications = new AudibleNotificationsModule();
@@ -169,6 +171,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       lastState: "inactive",
       userIsSpeaking: false,
       timeUserStoppedSpeaking: 0,
+      defaultPlaceholderText: "Talk to Pi",
     },
     id: "sayPi",
     initial: "inactive",
@@ -260,6 +263,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   animation: "glow",
                 },
               },
+              {
+                type: "listenPrompt",
+              },
             ],
             exit: [
               {
@@ -267,6 +273,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 params: {
                   animation: "glow",
                 },
+              },
+              {
+                type: "clearPrompt",
               },
             ],
             states: {
@@ -451,10 +460,22 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               },
               submitting: {
                 description: "Submitting prompt to Pi.",
-                entry: {
-                  type: "mergeAndSubmitTranscript",
-                },
-                exit: [clearTranscripts, clearPendingTranscriptions],
+                entry: [
+                  {
+                    type: "mergeAndSubmitTranscript",
+                  },
+                  {
+                    type: "notifySentMessage",
+                  },
+                ],
+                exit: [
+                  {
+                    type: "clearTranscriptsAction",
+                  },
+                  {
+                    type: "clearPendingTranscriptionsAction",
+                  },
+                ],
                 always: {
                   target: "accumulating",
                 },
@@ -552,7 +573,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     entry: {
                       type: "showNotification",
                       params: {
-                        message: getMessage("audioInputError"),
+                        message: getMessage("audioInputError", "Pi"),
                         icon: "microphone-muted",
                       },
                     },
@@ -717,6 +738,11 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             event.duration,
             context.transcriptions
           );
+          EventBus.emit("session:transcribing", {
+            audio_duration_seconds: event.duration / 1000,
+            speech_end_time: Date.now(), // bit hacky, as it assumes the audio is transcribed immediately
+            speech_start_time: Date.now() - event.duration,
+          });
         }
       },
 
@@ -738,7 +764,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       acquireMicrophone: (context, event) => {
         // warmup the microphone on idle in mobile view,
         // since there's no mouseover event to trigger it
-        if (isMobileView()) {
+        if (ImmersionService.isViewImmersive()) {
           EventBus.emit("audio:setupRecording");
         }
       },
@@ -790,6 +816,19 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         audibleNotifications.listeningStopped();
       },
 
+      listenPrompt: () => {
+        const message = getMessage("assistantIsListening", "Pi");
+        if (message) {
+          const initialText = getDraftPrompt();
+          assign({ defaultPlaceholderText: initialText });
+          setDraftPrompt(message);
+        }
+      },
+
+      clearPrompt: (context: SayPiContext) => {
+        setDraftPrompt(context.defaultPlaceholderText);
+      },
+
       draftPrompt: (context: SayPiContext) => {
         const prompt = mergeService
           .mergeTranscriptsLocal(context.transcriptions)
@@ -811,11 +850,13 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       callHasStarted: () => {
         buttonModule.callActive();
         audibleNotifications.callStarted();
+        EventBus.emit("session:started");
       },
       callHasEnded: () => {
         visualNotifications.listeningStopped();
         buttonModule.callInactive();
         audibleNotifications.callEnded();
+        EventBus.emit("session:ended");
       },
       callHasErrors: () => {
         buttonModule.callError();
@@ -841,6 +882,22 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       releaseWakeLock: () => {
         releaseWakeLock();
       },
+      notifySentMessage: (context: SayPiContext, event: SayPiEvent) => {
+        console.log("notifySentMessage", event);
+        const delay_ms = Date.now() - context.timeUserStoppedSpeaking;
+        const submission_delay_ms = lastSubmissionDelay;
+        EventBus.emit("session:message-sent", {
+          delay_ms: delay_ms,
+          wait_time_ms: submission_delay_ms,
+        });
+      },
+      clearPendingTranscriptionsAction: () => {
+        // discard in-flight transcriptions. Called after a successful submission
+        clearPendingTranscriptions();
+      },
+      clearTranscriptsAction: assign({
+        transcriptions: () => ({}),
+      }),
     },
     services: {},
     guards: {
@@ -920,6 +977,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         // Get the current time (in milliseconds)
         const currentTime = new Date().getTime();
         nextSubmissionTime = currentTime + finalDelay;
+
+        // Capture the delay for analytics events
+        lastSubmissionDelay = finalDelay;
 
         return finalDelay;
       },

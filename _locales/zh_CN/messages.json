@@ -7,14 +7,6 @@
     "message": "为Pi提供无缝的语音转文本增强功能，Pi是一款对话式人工智能。享受任何语言的免提、高准确度对话。",
     "description": "应用程序的描述。"
   },
-  "exitMobileMode": {
-    "message": "退出语音控制移动模式",
-    "description": "退出语音控制移动模式，返回到基于文本的桌面模式的按钮标签。"
-  },
-  "enterMobileMode": {
-    "message": "进入语音控制移动模式",
-    "description": "进入语音控制移动模式的按钮标签。"
-  },
   "callInProgress": {
     "message": "正在进行连续监听。点击停止。",
     "description": "通话进行中时，通话按钮上显示的工具提示。"
@@ -81,26 +73,99 @@
   },
   "audioConnected": {
     "description": "连接麦克风时显示的消息",
-    "message": "$麦克风$已连接",
+    "message": "$microphone$已连接",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "默认 - MacBook Pro 麦克风"
       }
     }
   },
   "audioInputError": {
     "description": "当音频导致空白转录时显示的消息 - 通常是过滤的结果。",
-    "message": "哎呀，我们没有捕捉到那个 - 可能是背景噪音。请再试一次说话，或者检查你的麦克风设置。"
+    "message": "哎呀，$chatbot$没有抓住那个。你能再说一遍吗？",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioReconnecting": {
     "description": "连接新麦克风时显示的消息",
-    "message": "切换到$麦克风$...",
+    "message": "切换到$microphone$...",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "默认 - AirPods Pro"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "当助手正在倾听语音时显示的消息。",
+    "message": "$chatbot$正在倾听...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "toggleThemeToDarkMode": {
+    "description": "切换至暗黑模式的按钮标签。",
+    "message": "切换到暗黑模式"
+  },
+  "toggleThemeToLightMode": {
+    "description": "切换到亮模式的按钮标签。",
+    "message": "切换到亮模式"
+  },
+  "consentAskParticipate": {
+    "message": "你想参加吗？"
+  },
+  "consentBetterTogether": {
+    "message": "让我们一起改善Say, Pi"
+  },
+  "consentDataDeidentified": {
+    "message": "分析并未与个人相关联。使用的任何数据都已进行匿名处理。"
+  },
+  "consentNoPii": {
+    "message": "我们不会收集或查看个人数据，如消息或姓名。"
+  },
+  "consentNoSale": {
+    "message": "我们不会将您的数据出售给第三方，也不会用于广告。"
+  },
+  "consentOptIn": {
+    "message": "我参加！"
+  },
+  "consentOptOut": {
+    "message": "不用谢"
+  },
+  "consentPrivacyParamount": {
+    "message": "您的隐私至关重要。您所说的任何话都只会在您和Pi之间保持。"
+  },
+  "consentRightToRevoke": {
+    "message": "您可以随时改变主意。"
+  },
+  "consentSharingPurpose": {
+    "message": "分享您的使用数据将帮助我们了解人们如何使用Say, Pi，以便我们可以使其更好地服务于所有人。"
+  },
+  "consetPrivacyPolicy": {
+    "message": "阅读我们的隐私政策"
+  },
+  "shareAnalytics": {
+    "description": "用于启用/禁用分享分析的复选框标签。",
+    "message": "分享分析"
+  },
+  "enterImmersiveModeShort": {
+    "message": "沉浸式",
+    "description": "进入桌面沉浸模式的按钮文本"
+  },
+  "exitImmersiveModeLong": {
+    "message": "退出沉浸模式",
+    "description": "退出移动设备上的沉浸式模式，返回到基于文本的桌面模式的按钮的aria-label和标题。"
+  },
+  "enterImmersiveModeLong": {
+    "message": "进入沉浸模式",
+    "description": "进入移动设备沉浸模式按钮的aria-label和标题。"
   }
 }

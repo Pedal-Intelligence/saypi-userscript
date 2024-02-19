@@ -7,14 +7,6 @@
     "message": "Pi-এর জন্য ভাষা-টেক্সট উন্নয়ন। যেকোনো ভাষায় হাত-মুক্ত আলাপ উপভোগ করুন।",
     "description": "অ্যাপ্লিকেশনের বর্ণনা।"
   },
-  "exitMobileMode": {
-    "message": "ভয়েস-নিয়ন্ত্রিত মোবাইল মোড থেকে প্রস্থান",
-    "description": "ভয়েস-নিয়ন্ত্রিত মোবাইল মোড থেকে প্রস্থান করে টেক্সট-ভিত্তিক ডেস্কটপ মোডে ফিরে আসার বোতামের লেবেল।"
-  },
-  "enterMobileMode": {
-    "message": "ভয়েস-নিয়ন্ত্রিত মোবাইল মোডে প্রবেশ",
-    "description": "ভয়েস-নিয়ন্ত্রিত মোবাইল মোডে প্রবেশের বোতামের লেবেল।"
-  },
   "callInProgress": {
     "message": "সক্রিয় অবিচ্ছিন্ন শ্রবণ। বন্ধ করতে ক্লিক করুন।",
     "description": "কল চলাকালীন কল বোতামে দেখানো টুলটিপ।"
@@ -81,26 +73,99 @@
   },
   "audioConnected": {
     "description": "মাইক্রোফোন সংযুক্ত হলে প্রদর্শিত বার্তা",
-    "message": "$মাইক্রোফোন$ সংযুক্ত হয়েছে",
+    "message": "$microphone$ সংযুক্ত হয়েছে",
     "placeholders": {
       "microphone": {
-        "content": "১ ডলার",
+        "content": "$1",
         "example": "ডিফল্ট - ম্যাকবুক প্রো মাইক্রোফোন"
       }
     }
   },
   "audioInputError": {
     "description": "অডিও ফলে খালি ট্রান্সক্রিপশনের যখন বার্তা প্রদর্শিত - সাধারণতো ফিল্টারিং-র ফল।",
-    "message": "ওহ, আমরা তা ধরে পাইনি - এটি ব্যাকগ্রাউন্ড নয়িজ হতে পারে।  আবার য়েন্দেন, োর্ার্া"
+    "message": "ওহ, $chatbot$ তা ধরতে পারেনি। আপনি কি আবার বলার চেষ্টা করতে পারেন?",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioReconnecting": {
     "description": "নতুন মাইক্রোফোনের সাথে সংযোগ করার সময় প্রদর্শিত বার্তা",
-    "message": "$মাইক্রোফোন$ এ স্থানান্তরিত হচ্ছে...",
+    "message": "$microphone$-এ স্থানান্তর হচ্ছে...",
     "placeholders": {
       "microphone": {
-        "content": "১ ডলার",
+        "content": "$1",
         "example": "ডিফল্ট - এয়ারপডস প্রো"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "যখন সহায়িকা বক্তৃতা শুনে, তখন প্রদর্শিত বার্তা।",
+    "message": "$chatbot$ শুনছে...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "toggleThemeToDarkMode": {
+    "description": "ডার্ক মোডে টগল করার বোতামের জন্য লেবেল।",
+    "message": "ডার্ক মোডে স্থানান্তর করুন"
+  },
+  "toggleThemeToLightMode": {
+    "description": "লাইট মোডে টগল করার বোতামের জন্য লেবেল।",
+    "message": "আলো মোডে স্থানান্তর করুন"
+  },
+  "consentAskParticipate": {
+    "message": "আপনি কি অংশগ্রহন করতে চান?"
+  },
+  "consentBetterTogether": {
+    "message": "আমরা একসাথে Say, Pi উন্নীত করি"
+  },
+  "consentDataDeidentified": {
+    "message": "অ্যানালিটিক্স ব্যক্তিদের সাথে জড়িত নয়। ব্যবহৃত কোনো ডেটা পরিচিতি-মুক্ত।"
+  },
+  "consentNoPii": {
+    "message": "আমরা ব্যক্তিগত ডেটা, যেমন বার্তা বা নাম, সংগ্রহ কিংবা দেখিোনি।"
+  },
+  "consentNoSale": {
+    "message": "আমরা তৃতীয় পক্ষের কাছে আপনার ডাটা বিক্রি করবো না, বা এটি বিজ্ঞাপনের জন্য ব্যবহার করবো।"
+  },
+  "consentOptIn": {
+    "message": "আমি অন্তর্ভুক্ত!"
+  },
+  "consentOptOut": {
+    "message": "কোন ধন্যবাদ নেই"
+  },
+  "consentPrivacyParamount": {
+    "message": "আপনার গোপনীয়তা সর্বোচ্চ। আপনি যা বলেন, তা Pi-র এবং আপনার মাঝেরে।"
+  },
+  "consentRightToRevoke": {
+    "message": "আপনি যে কোনো সময়ে আপনার মনের মতামত পরিবর্তন করতে পারেন।"
+  },
+  "consentSharingPurpose": {
+    "message": "আপনার ব্যবহারের ডেটা শেয়ার করা আমাদের Say, Pi-র ব্যবহারিকাড়িরা এটি কীভাবে ব্যবহার করেন, ।"
+  },
+  "consetPrivacyPolicy": {
+    "message": "আমাদের গোপনীয়তা নীতি পড়ুন"
+  },
+  "shareAnalytics": {
+    "description": "এনালিটিক্স শেয়ার করার জন্য চেকবক্সের লেবেল সক্ষম/নিষ্ক্রিয় করুন।",
+    "message": "অ্যানালিটিক্স শেয়ার করুন"
+  },
+  "enterImmersiveModeLong": {
+    "description": "মোবাইল ডিভাইসে ইমার্সিভ মোডে প্রবেশের জন্য বোতামের aria-label এবং শিরোনাম।",
+    "message": "ইমার্সিভ মোডে প্রবেশ করুন"
+  },
+  "enterImmersiveModeShort": {
+    "description": "ডেস্কটপে ইমার্সিভ মোডে প্রবেশ করার বোতামের লেখা।",
+    "message": "মগ্নাত্মক"
+  },
+  "exitImmersiveModeLong": {
+    "description": "মোবাইল ডিভাইসের উপর ইমার্সিভ মোড থেকে বেরিয়ে, টেক্সট-ভিত্তিক ডেস্ক্‌‌‌‍‍‌‍‍‌‍‍‌top mode- ।",
+    "message": "ইমার্সিভ মোড থেকে বের হন"
   }
 }

@@ -7,14 +7,6 @@
     "message": "Conversión de voz a texto para Pi, el AI conversacional. Disfruta charlas manos libres en cualquier idioma.",
     "description": "La descripción de la aplicación."
   },
-  "exitMobileMode": {
-    "message": "Salir del modo móvil controlado por voz",
-    "description": "Etiqueta para salir del modo móvil por voz y volver al modo de escritorio."
-  },
-  "enterMobileMode": {
-    "message": "Entrar en modo móvil controlado por voz",
-    "description": "La etiqueta del botón para entrar en el modo móvil controlado por voz."
-  },
   "callInProgress": {
     "message": "Escucha continua activa. Haz clic para detener.",
     "description": "El tooltip que se muestra en el botón de llamada cuando una llamada está en progreso."
@@ -91,7 +83,13 @@
   },
   "audioInputError": {
     "description": "Mensaje mostrado cuando el audio resultó en una transcripción vacía, generalmente el resultado de un filtrado.",
-    "message": "Vaya, no captamos eso, podría ser ruido de fondo. Intenta hablar de nuevo o revisa la configuración de tu micrófono."
+    "message": "Vaya, $chatbot$ no captó eso. ¿Puedes intentar decirlo de nuevo?",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioReconnecting": {
     "description": "Mensaje mostrado al conectar un nuevo micrófono",
@@ -102,5 +100,72 @@
         "example": "Predeterminado - AirPods Pro"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "Mensaje mostrado cuando el asistente está escuchando el discurso.",
+    "message": "$chatbot$ está escuchando...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Etiqueta para el botón para cambiar al modo oscuro.",
+    "message": "Cambia a modo oscuro"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Etiqueta para el botón para cambiar al modo claro.",
+    "message": "Cambia a modo claro"
+  },
+  "consentAskParticipate": {
+    "message": "¿Te gustaría participar?"
+  },
+  "consentBetterTogether": {
+    "message": "Mejoremos Say, Pi juntos"
+  },
+  "consentDataDeidentified": {
+    "message": "Las analíticas no están vinculadas a individuos. Cualquier dato utilizado está desidentificado."
+  },
+  "consentNoPii": {
+    "message": "No recogeremos ni veremos datos personales, como mensajes o nombres."
+  },
+  "consentNoSale": {
+    "message": "No venderemos tus datos a terceros, ni los usaremos para publicidad."
+  },
+  "consentOptIn": {
+    "message": "¡Estoy dentro!"
+  },
+  "consentOptOut": {
+    "message": "No, gracias"
+  },
+  "consentPrivacyParamount": {
+    "message": "Tu privacidad es primordial. Todo lo que digas permanece entre tú y Pi."
+  },
+  "consentRightToRevoke": {
+    "message": "Puedes cambiar de opinión en cualquier momento."
+  },
+  "consentSharingPurpose": {
+    "message": "Compartir tus datos de uso nos ayudará a entender cómo las personas utilizan Say, Pi para que podamos mejorarlo para todos."
+  },
+  "consetPrivacyPolicy": {
+    "message": "Lee nuestra Política de Privacidad"
+  },
+  "shareAnalytics": {
+    "description": "Etiqueta para la casilla de verificación para habilitar/deshabilitar el compartir análisis.",
+    "message": "Compartir análisis"
+  },
+  "enterImmersiveModeLong": {
+    "description": "El aria-label y el título del botón para entrar en modo inmersivo en dispositivos móviles.",
+    "message": "Ingresa al Modo Inmersivo"
+  },
+  "enterImmersiveModeShort": {
+    "description": "El texto del botón para entrar en modo inmersivo en el escritorio.",
+    "message": "Inmersivo"
+  },
+  "exitImmersiveModeLong": {
+    "description": "El aria-label y el título del botón para salir del modo inmersivo en dispositivos móviles, de vuelta al modo de escritorio basado en texto.",
+    "message": "Salir del Modo Inmersivo"
   }
 }

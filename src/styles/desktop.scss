@@ -27,7 +27,7 @@ html.desktop-view {
     padding-right: 0;
   }
 
-  #saypi-exitButton {
+  .saypi-exit-button {
     display: none;
   }
 
@@ -39,5 +39,17 @@ html.desktop-view {
   @keyframes fadeOut {
     from { opacity: 1; }
     to { opacity: 0; }
+  }
+
+  #saypi-audio-controls {
+    /* additional margin to align with control panel row */
+    margin-top: 0.35rem;
+  }
+
+  #saypi-side-panel .immersive-mode-button svg {
+    width: 30px;
+    .cls-1 {
+      stroke: #24381b;
+    }
   }
 }

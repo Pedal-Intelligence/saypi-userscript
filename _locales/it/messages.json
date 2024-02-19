@@ -7,14 +7,6 @@
     "message": "Da voce a testo per Pi, l'AI conversazionale. Conversazioni libere in qualsiasi lingua.",
     "description": "La descrizione dell'applicazione."
   },
-  "exitMobileMode": {
-    "message": "Esci dalla Modalità Mobile Controllata Vocalmente",
-    "description": "Etichetta per uscire dalla modalità mobile vocale e tornare al desktop testuale."
-  },
-  "enterMobileMode": {
-    "message": "Entra nella Modalità Mobile Controllata Vocalmente",
-    "description": "L'etichetta del pulsante per entrare nella modalità mobile controllata vocalmente."
-  },
   "callInProgress": {
     "message": "Ascolto continuo attivo. Clicca per fermare.",
     "description": "Il tooltip da visualizzare sul pulsante di chiamata quando una chiamata è in corso."
@@ -84,23 +76,96 @@
     "message": "$microphone$ connesso",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "Predefinito - Microfono MacBook Pro"
       }
     }
   },
   "audioInputError": {
     "description": "Messaggio visualizzato quando l'audio ha prodotto una trascrizione vuota - solitamente il risultato di un filtraggio.",
-    "message": "Oops, non abbiamo colto quello - potrebbe essere rumore di fondo. Prova a parlare di nuovo, o controlla le impostazioni del tuo microfono."
+    "message": "Oops, $chatbot$ non ha capito. Puoi provare a dirlo di nuovo?",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioReconnecting": {
     "description": "Messaggio visualizzato quando si collega un nuovo microfono",
     "message": "Passando a $microphone$...",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "Predefinito - AirPods Pro"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "Messaggio visualizzato quando l'assistente sta ascoltando il discorso.",
+    "message": "$chatbot$ sta ascoltando...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Etichetta per il pulsante per passare alla modalità scura.",
+    "message": "Passa alla modalità scura"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Etichetta per il pulsante per passare alla modalità luce.",
+    "message": "Passa alla modalità luce"
+  },
+  "consentAskParticipate": {
+    "message": "Ti piacerebbe partecipare?"
+  },
+  "consentBetterTogether": {
+    "message": "Miglioriamo insieme Say, Pi"
+  },
+  "consentDataDeidentified": {
+    "message": "Le analisi non sono legate a individui. Qualsiasi dato utilizzato è de-identificato."
+  },
+  "consentNoPii": {
+    "message": "Non raccoglieremo né vedremo dati personali, come messaggi o nomi."
+  },
+  "consentNoSale": {
+    "message": "Non venderemo i tuoi dati a terzi, né li useremo per la pubblicità."
+  },
+  "consentOptIn": {
+    "message": "Sono dentro!"
+  },
+  "consentOptOut": {
+    "message": "No grazie"
+  },
+  "consentPrivacyParamount": {
+    "message": "La tua privacy è fondamentale. Qualsiasi cosa tu dica rimane tra te e Pi."
+  },
+  "consentRightToRevoke": {
+    "message": "Puoi cambiare idea in qualsiasi momento."
+  },
+  "consentSharingPurpose": {
+    "message": "Condividere i tuoi dati di utilizzo ci aiuterà a capire come le persone usano Say, Pi così possiamo migliorarlo per tutti."
+  },
+  "consetPrivacyPolicy": {
+    "message": "Leggi la nostra Informativa sulla Privacy"
+  },
+  "shareAnalytics": {
+    "description": "Etichetta per la casella di controllo per abilitare/disabilitare la condivisione delle analisi.",
+    "message": "Condividi analisi"
+  },
+  "enterImmersiveModeLong": {
+    "message": "Entra nella Modalità Immersiva",
+    "description": "L'aria-label e il titolo del pulsante per entrare nella modalità immersiva sui dispositivi mobili."
+  },
+  "enterImmersiveModeShort": {
+    "description": "Il testo del pulsante per entrare nella modalità immersiva sul desktop.",
+    "message": "Immersivo"
+  },
+  "exitImmersiveModeLong": {
+    "description": "L'aria-label e il titolo del pulsante per uscire dalla modalità immersiva sui dispositivi mobili, tornando alla modalità desktop basata sul testo.",
+    "message": "Esci dalla Modalità Immersiva"
   }
 }

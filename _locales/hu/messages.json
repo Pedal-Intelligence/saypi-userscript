@@ -7,14 +7,6 @@
     "message": "Beszéd-szöveggé alakítás a Pi-hez. Élvezze a kéz nélküli beszélgetéseket bármilyen nyelven.",
     "description": "Az alkalmazás leírása."
   },
-  "exitMobileMode": {
-    "message": "Kilépés a hangvezérelt mobil módból",
-    "description": "A gomb címkéje a hangvezérelt mobil módból való kilépéshez, vissza a szöveg alapú asztali módba."
-  },
-  "enterMobileMode": {
-    "message": "Belépés a hangvezérelt mobil módba",
-    "description": "A gomb címkéje a hangvezérelt mobil módba való belépéshez."
-  },
   "callInProgress": {
     "message": "Aktív folyamatos hallgatás. Kattintson a leállításhoz.",
     "description": "A hívásgombon megjelenő eszköztipp, amikor a hívás folyamatban van."
@@ -84,23 +76,96 @@
     "message": "$microphone$ csatlakoztatva",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "Alapértelmezett - MacBook Pro Mikrofon"
       }
     }
   },
   "audioInputError": {
     "description": "Üzenet jelenik meg, amikor az audio üres átiratot eredményez - ez általában a szűrés eredménye.",
-    "message": "Hoppá, ezt nem értettük – lehet, hogy háttérzaj. Próbáljon újra beszélni, vagy ellenőrizze a mikrofon beállításait."
+    "message": "Hoppá, a $chatbot$ nem értette meg. Megpróbálhatná újra mondani?",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioReconnecting": {
     "description": "Üzenet, amely megjelenik egy új mikrofon csatlakoztatásakor",
     "message": "Váltás a $microphone$...",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "Alapértelmezett - AirPods Pro"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "Üzenet, amely akkor jelenik meg, amikor az asszisztens beszédre figyel.",
+    "message": "$chatbot$ hallgat...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Címke a sötét módra váltás gombhoz.",
+    "message": "Váltson sötét módra"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Címke a világos módra váltás gombhoz.",
+    "message": "Váltson világos módba"
+  },
+  "consentAskParticipate": {
+    "message": "Szeretne részt venni?"
+  },
+  "consentBetterTogether": {
+    "message": "Fejlesszük együtt a Say, Pi-t"
+  },
+  "consentDataDeidentified": {
+    "message": "Az analitikák nem személyekhez vannak kötve. A felhasznált adatok azonosítás nélküliek."
+  },
+  "consentNoPii": {
+    "message": "Nem gyűjtünk és nem látunk személyes adatokat, mint például üzeneteket vagy neveket."
+  },
+  "consentNoSale": {
+    "message": "Nem adjuk el az adataidat harmadik feleknek, vagy használjuk hirdetésre."
+  },
+  "consentOptIn": {
+    "message": "Benne vagyok!"
+  },
+  "consentOptOut": {
+    "message": "Köszönöm, nem."
+  },
+  "consentPrivacyParamount": {
+    "message": "Az Ön adatvédelme elsődleges. Amit mond, az Ön és a Pi között marad."
+  },
+  "consentRightToRevoke": {
+    "message": "Bármikor megváltoztathatod a véleményed."
+  },
+  "consentSharingPurpose": {
+    "message": "Az Ön használati adatainak megosztása segít nekünk megérteni, hogy az emberek hogyan használják a Say, Pi-t, így mindenki számára jobbá tehetjük."
+  },
+  "consetPrivacyPolicy": {
+    "message": "Olvasd el az Adatvédelmi Szabályzatunkat"
+  },
+  "shareAnalytics": {
+    "description": "Címke a jelölőnégyzethez az analitikai adatok megosztásának engedélyezéséhez/letiltásához.",
+    "message": "Megosztási analitika"
+  },
+  "enterImmersiveModeLong": {
+    "description": "Az aria-label és a cím gombja, hogy belépjen az immerszív módba mobil eszközökön.",
+    "message": "Lépj be az Immerszív Módba"
+  },
+  "enterImmersiveModeShort": {
+    "description": "A gomb szövege, amellyel beléphet az immerszív módba asztali gépen.",
+    "message": "Elmerülő"
+  },
+  "exitImmersiveModeLong": {
+    "description": "Az aria-címke és a gomb címe, amely kilép az immerszív módból mobil eszközökön, vissza a szövegalapú asztali módhoz.",
+    "message": "Lépjen ki az immerszív módból"
   }
 }

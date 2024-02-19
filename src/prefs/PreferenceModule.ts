@@ -17,90 +17,84 @@ export module UserPreferenceModule {
     autoSubmit?: boolean;
     language?: string; // e.g. 'en', 'en_US', 'en_GB', 'fr', 'fr_FR', 'fr_CA', etc.
     voiceId?: string; // prefered speech synthesis voice
+    theme?: string; // 'light' or 'dark'
+    shareData?: boolean; // has the user consented to data sharing?
   }
 
-  export function getPreferedMode(): Promise<Preference> {
+  /**
+   * Get the stored value from the chrome storage
+   * @param {string} key
+   * @param {any} defaultValue
+   * @returns any
+   */
+  function getStoredValue(key: string, defaultValue: any): Promise<any> {
     return new Promise((resolve) => {
-      if (
-        typeof chrome !== "undefined" &&
-        chrome.storage &&
-        chrome.storage.sync
-      ) {
-        chrome.storage.sync.get(["prefer"], (result: StorageResult) => {
-          if (result.prefer) {
-            resolve(result.prefer);
-          } else {
-            resolve(null);
-          }
-        });
-      } else {
-        // If Chrome storage API is not supported, return null
-        resolve(null);
-      }
+      chrome.storage.sync.get([key], function (result) {
+        if (result[key] === undefined) {
+          resolve(defaultValue);
+        } else {
+          resolve(result[key]);
+        }
+      });
     });
+  }
+
+  export function getTranscriptionMode(): Promise<Preference> {
+    return getStoredValue("prefer", "balanced");
   }
 
   export function getSoundEffects(): Promise<boolean> {
-    return new Promise((resolve) => {
-      if (
-        typeof chrome !== "undefined" &&
-        chrome.storage &&
-        chrome.storage.sync
-      ) {
-        chrome.storage.sync.get(["soundEffects"], (result: StorageResult) => {
-          if (result.soundEffects !== undefined) {
-            resolve(result.soundEffects);
-          } else {
-            resolve(true);
-          }
-        });
-      } else {
-        // If Chrome storage API is not supported, return true
-        resolve(true);
-      }
-    });
+    return getStoredValue("soundEffects", true);
   }
 
   export function getAutoSubmit(): Promise<boolean> {
+    return getStoredValue("autoSubmit", true);
+  }
+
+  export function getLanguage(): Promise<string> {
+    return getStoredValue("language", navigator.language);
+  }
+
+  export function getTheme(): Promise<string> {
+    return getStoredValue("theme", "light");
+  }
+
+  export function setTheme(theme: string): Promise<void> {
     return new Promise((resolve) => {
       if (
         typeof chrome !== "undefined" &&
         chrome.storage &&
         chrome.storage.sync
       ) {
-        chrome.storage.sync.get(["autoSubmit"], (result: StorageResult) => {
-          if (result.autoSubmit !== undefined) {
-            resolve(result.autoSubmit);
-          } else {
-            resolve(true);
-          }
+        chrome.storage.sync.set({ theme }, () => {
+          resolve();
         });
       } else {
-        // If Chrome storage API is not supported, return true
-        resolve(true);
+        // If Chrome storage API is not supported, do nothing
+        resolve();
       }
     });
   }
 
-  export function getLanguage(): Promise<string> {
-    return new Promise((resolve) => {
-      if (
-        typeof chrome !== "undefined" &&
-        chrome.storage &&
-        chrome.storage.sync
-      ) {
-        chrome.storage.sync.get(["language"], (result: StorageResult) => {
-          if (result.language) {
-            resolve(result.language);
-          } else {
-            resolve(navigator.language);
-          }
-        });
-      } else {
-        // If Chrome storage API is not supported, return system language
-        resolve(navigator.language);
-      }
-    });
+  export function getDataSharing(): Promise<boolean> {
+    return getStoredValue("shareData", false);
+  }
+
+  export function getPrefersImmersiveView(): Promise<boolean> {
+    let userViewPreference = null;
+
+    try {
+      // we use localStorage here because view preference is device specific
+      userViewPreference = localStorage.getItem("userViewPreference");
+    } catch (e) {
+      console.warn("Could not access localStorage: ", e);
+    }
+
+    let prefersMobile = false;
+    if (userViewPreference) {
+      prefersMobile = userViewPreference === "immersive";
+    }
+    return Promise.resolve(prefersMobile);
   }
 
   export function hasVoice(): Promise<boolean> {

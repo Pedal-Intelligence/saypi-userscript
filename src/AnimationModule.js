@@ -1,7 +1,7 @@
 export default class AnimationModule {
   static rectanglesSelector =
     ".outermost, .second, .third, .fourth, .fifth, .innermost";
-  static callButtonSelector = "#saypi-callButton";
+  static callButtonSelector = ".call-button";
   static talkButtonAnimations = [
     "piThinking",
     "piSpeaking",
@@ -18,16 +18,16 @@ export default class AnimationModule {
       rectangles.forEach((rect) => rect.classList.add(animation));
     }
     if (this.callButtonAnimations.includes(animation)) {
-      let callButton = document.querySelector(this.callButtonSelector);
-      callButton.classList.add(animation);
+      let callButtons = document.querySelectorAll(this.callButtonSelector);
+      callButtons.forEach((button) => button.classList.add(animation));
     }
   }
 
   static stopAnimation(animation) {
     let rectangles = document.querySelectorAll(this.rectanglesSelector);
     rectangles.forEach((rect) => rect.classList.remove(animation));
-    let callButton = document.querySelector(this.callButtonSelector);
-    callButton.classList.remove(animation);
+    let callButtons = document.querySelectorAll(this.callButtonSelector);
+    callButtons.forEach((button) => button.classList.remove(animation));
   }
 
   static stopAllAnimations() {

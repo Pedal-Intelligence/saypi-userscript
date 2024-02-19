@@ -1,33 +1,46 @@
-import {
-  enterMobileMode,
-  exitMobileMode,
-  isMobileView,
-} from "./UserAgentModule.js";
-import { appendChild } from "./DOMModule.ts";
+import { ImmersionService } from "./UserAgentModule.js";
+import { addChild } from "./DOMModule.ts";
 import EventBus from "./EventBus.js";
 import StateMachineService from "./StateMachineService.js";
 import { submitErrorHandler } from "./SubmitErrorHandler.ts";
 import exitIconSVG from "./icons/exit.svg";
 import maximizeIconSVG from "./icons/maximize.svg";
+import immersiveIconSVG from "./icons/immersive.svg";
 import rectanglesSVG from "./icons/rectangles.svg";
-import talkIconSVG from "./icons/waveform.svg";
+import rectanglesDarkModeSVG from "./icons/rectangles-moonlight.svg";
 import callIconSVG from "./icons/call.svg";
 import callStartingIconSVG from "./icons/call-starting.svg";
 import hangupIconSVG from "./icons/hangup.svg";
 import hangupMincedIconSVG from "./icons/hangup-minced.svg";
 import lockIconSVG from "./icons/lock.svg";
 import unlockIconSVG from "./icons/unlock.svg";
+import darkModeIconSVG from "./icons/mode-night.svg";
+import lightModeIconSVG from "./icons/mode-day.svg";
 import getMessage from "./i18n.ts";
 import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
+import AnimationModule from "./AnimationModule.js";
+import { Chatbot } from "./chatbots/Chatbot.ts";
+import { ChatbotService } from "./chatbots/ChatbotService.ts";
+
 export default class ButtonModule {
-  constructor() {
+  /**
+   * Initializes the button module with dependencies
+   * @param {Chatbot} chatbot - The chatbot instance (dependency injection)
+   */
+  constructor(chatbot) {
+    this.chatbot = chatbot;
+    this.immersionService = new ImmersionService(chatbot);
     this.sayPiActor = StateMachineService.actor; // the Say, Pi state machine
     this.screenLockActor = StateMachineService.screenLockActor;
+    this.themeToggleActor = StateMachineService.themeToggleActor;
     // Binding methods to the current instance
     this.registerOtherEvents();
 
     // track the frequency of bug #26
     this.submissionsWithoutAnError = 0;
+
+    // track whether a call is active, so that new button instances can be initialized correctly
+    this.callIsActive = false;
   }
 
   registerOtherEvents() {
@@ -60,24 +73,29 @@ export default class ButtonModule {
     }
   }
 
-  addTalkIcon(button) {
-    this.updateIconContent(button);
+  addTalkIcon(container) {
+    this.updateIconContent(container);
 
     window.matchMedia("(max-width: 768px)").addListener(() => {
-      this.updateIconContent(button);
+      this.updateIconContent(container);
     });
-    this.setupClassObserver(button);
+    this.setupViewObserver(container);
   }
 
   updateIconContent(iconContainer) {
-    if (isMobileView()) {
-      iconContainer.innerHTML = rectanglesSVG;
-    } else {
-      iconContainer.innerHTML = talkIconSVG;
+    if (ImmersionService.isViewImmersive()) {
+      iconContainer.innerHTML = this.getRectanglesSVG();
     }
+    iconContainer.classList.add("saypi-icon");
   }
 
-  setupClassObserver(button) {
+  /**
+   * Monitors an element for changes in the view class
+   * i.e. when the view mode is toggled between 'immersive' and 'desktop'
+   * and updates the icon content accordingly (why?)
+   * @param {*} container - The HTML element to hold the icon
+   */
+  setupViewObserver(container) {
     const targetNode = document.documentElement; // The <html> element
 
     const config = { attributes: true, attributeFilter: ["class"] };
@@ -86,12 +104,14 @@ export default class ButtonModule {
       for (let mutation of mutationsList) {
         if (mutation.type === "attributes") {
           if (mutation.attributeName === "class") {
-            if (document.documentElement.classList.contains("mobile-view")) {
-              // 'mobile-view' class was added
-              this.updateIconContent(button);
+            if (document.documentElement.classList.contains("immersive-view")) {
+              // view mode changed to 'immersive'
+              console.log("immersive view");
+              this.updateIconContent(container);
             } else {
-              // 'mobile-view' class was removed
-              this.updateIconContent(button);
+              // view mode changed to 'desktop'
+              console.log("desktop view");
+              this.updateIconContent(container);
             }
           }
         }
@@ -141,7 +161,8 @@ export default class ButtonModule {
   // Function to handle auto-submit based on the user preference
   async handleAutoSubmit() {
     const autoSubmitEnabled = await UserPreferenceModule.getAutoSubmit();
-    if (autoSubmitEnabled) {
+    const isImmersive = ImmersionService.isViewImmersive(); // must auto-submit in immersive mode
+    if (autoSubmitEnabled || isImmersive) {
       this.simulateFormSubmit();
       EventBus.emit("saypi:piThinking"); // Pi is responding
     } else {
@@ -149,35 +170,54 @@ export default class ButtonModule {
     }
   }
 
-  createExitButton() {
-    const label = getMessage("exitMobileMode");
+  createExitButton(container, position = 0) {
+    const label = getMessage("exitImmersiveModeLong");
     const button = this.createButton("", () => {
-      exitMobileMode();
+      ImmersionService.exitImmersiveMode();
     });
-    button.id = "saypi-exitButton";
     button.type = "button";
     button.className =
-      "exit-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      "saypi-exit-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
     button.setAttribute("aria-label", label);
     button.setAttribute("title", label);
     button.innerHTML = exitIconSVG;
-    document.body.appendChild(button);
+    addChild(container, button, position);
     return button;
   }
 
-  createEnterButton() {
-    const label = getMessage("enterMobileMode");
+  createEnterButton(container, position = 0) {
+    const label = getMessage("enterImmersiveModeLong");
     const button = this.createButton("", () => {
-      enterMobileMode();
+      this.immersionService.enterImmersiveMode();
     });
-    button.id = "saypi-enterButton";
     button.type = "button";
     button.className =
-      "enter-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      "saypi-enter-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
     button.setAttribute("aria-label", label);
     button.setAttribute("title", label);
     button.innerHTML = maximizeIconSVG;
-    document.body.appendChild(button);
+    // insert the button at the specified position
+    addChild(container, button, position);
+    return button;
+  }
+
+  createImmersiveModeButton(container, position = 0) {
+    const label = getMessage("enterImmersiveModeShort");
+    const title = getMessage("enterImmersiveModeLong");
+    const button = document.createElement("a");
+    button.onclick = () => {
+      this.immersionService.enterImmersiveMode();
+    };
+    button.className =
+      "immersive-mode-button saypi-control-button flex h-16 w-16 flex-col items-center justify-center rounded-xl text-neutral-900 hover:bg-neutral-50-hover hover:text-neutral-900-hover active:bg-neutral-50-tap active:text-neutral-900-tap gap-0.5";
+    button.setAttribute("aria-label", title);
+    button.setAttribute("title", title);
+    button.innerHTML = immersiveIconSVG;
+    const labelDiv = document.createElement("div");
+    labelDiv.textContent = label;
+    labelDiv.className = "t-label";
+    button.appendChild(labelDiv);
+    addChild(container, button, position);
     return button;
   }
 
@@ -187,9 +227,17 @@ export default class ButtonModule {
     button.type = "button";
     button.className =
       "call-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650 m-2";
-    this.callInactive(button); // mic is off by default
+    if (this.callIsActive) {
+      this.callActive(button);
+    } else {
+      this.callInactive(button);
+    }
 
-    appendChild(container, button, position);
+    addChild(container, button, position);
+    if (this.callIsActive) {
+      // if the call is active, start the glow animation once added to the DOM
+      AnimationModule.startAnimation("glow");
+    }
     return button;
   }
 
@@ -285,6 +333,7 @@ export default class ButtonModule {
       };
       callButton.classList.add("active");
     }
+    this.callIsActive = true;
   }
 
   callInactive(callButton) {
@@ -301,6 +350,7 @@ export default class ButtonModule {
       };
       callButton.classList.remove("active");
     }
+    this.callIsActive = false;
   }
 
   callError(callButton) {
@@ -340,7 +390,7 @@ export default class ButtonModule {
     button.id = "saypi-lockButton";
     button.type = "button";
     button.className =
-      "lock-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      "lock-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
     button.setAttribute("aria-label", label);
     button.setAttribute("title", label);
     button.innerHTML = lockIconSVG;
@@ -359,7 +409,7 @@ export default class ButtonModule {
     button.id = "saypi-unlockButton";
     button.type = "button";
     button.className =
-      "lock-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      "lock-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
     button.setAttribute("aria-label", label);
     button.setAttribute("title", label);
     button.innerHTML = unlockIconSVG;
@@ -370,7 +420,6 @@ export default class ButtonModule {
       const continueUnlockingMessage = getMessage("continueUnlocking");
 
       button.onmousedown = button.ontouchstart = () => {
-        console.log("unlock button pressed");
         const instruction = document.getElementById("saypi-unlock-instruction");
         if (instruction) {
           instruction.textContent = continueUnlockingMessage;
@@ -381,7 +430,6 @@ export default class ButtonModule {
       };
 
       button.onmouseup = button.ontouchend = () => {
-        console.log("unlock button released");
         // reset the message
         const instruction = document.getElementById("saypi-unlock-instruction");
         if (instruction) {
@@ -392,7 +440,63 @@ export default class ButtonModule {
     }
     return button;
   }
+
+  getRectanglesSVG(theme = "light") {
+    if (theme === "dark") {
+      return rectanglesDarkModeSVG;
+    } else {
+      return rectanglesSVG;
+    }
+  }
+
+  toggleTheme() {
+    this.themeToggleActor.send("toggle");
+  }
+
+  /**
+   * Applies the theme to the button icons
+   * @param {string} theme: "dark" | "light"
+   */
+  applyTheme(theme) {
+    const button = document.getElementById("saypi-themeToggleButton");
+    if (button) {
+      if (theme === "dark") {
+        button.innerHTML = darkModeIconSVG;
+        const label = getMessage("toggleThemeToLightMode");
+        button.setAttribute("aria-label", label);
+        button.setAttribute("title", label);
+      } else if (theme === "light") {
+        button.innerHTML = lightModeIconSVG;
+        const label = getMessage("toggleThemeToDarkMode");
+        button.setAttribute("aria-label", label);
+        button.setAttribute("title", label);
+      }
+    }
+    const iconContainer = document.querySelector(".saypi-icon");
+    if (iconContainer) {
+      iconContainer.innerHTML = this.getRectanglesSVG(theme);
+    }
+  }
+
+  createThemeToggleButton(container, position = 0) {
+    const label = getMessage("toggleThemeToDarkMode");
+    const button = document.createElement("button");
+    button.id = "saypi-themeToggleButton";
+    button.type = "button";
+    button.className =
+      "theme-toggle-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+    button.setAttribute("aria-label", label);
+    button.setAttribute("title", label);
+    button.innerHTML = lightModeIconSVG;
+    if (container) {
+      addChild(container, button, position);
+      button.onclick = () => {
+        this.toggleTheme();
+      };
+    }
+    return button;
+  }
 }
 
 // Singleton
-export const buttonModule = new ButtonModule();
+export const buttonModule = new ButtonModule(ChatbotService.getChatbot());

@@ -7,14 +7,6 @@
     "message": "Transcription vocale pour Pi, l'IA conversationnelle. Dialogues mains libres dans toutes langues.",
     "description": "La description de l'application."
   },
-  "exitMobileMode": {
-    "message": "Quitter le mode mobile contrôlé par la voix",
-    "description": "Étiquette pour quitter le mode mobile vocal vers le mode bureau texte."
-  },
-  "enterMobileMode": {
-    "message": "Activer le mode mobile contrôlé par la voix",
-    "description": "L'étiquette du bouton pour activer le mode mobile contrôlé par la voix."
-  },
   "callInProgress": {
     "message": "Écoute continue active. Cliquez pour arrêter.",
     "description": "L'infobulle à afficher sur le bouton d'appel lorsqu'un appel est en cours."
@@ -84,23 +76,96 @@
     "message": "$microphone$ connecté",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "Par défaut - Microphone MacBook Pro"
       }
     }
   },
   "audioInputError": {
     "description": "Message affiché lorsque l'audio a donné lieu à une transcription vide - généralement le résultat d'un filtrage.",
-    "message": "Oups, nous n'avons pas capté cela - cela pourrait être un bruit de fond. Essayez de parler à nouveau, ou vérifiez les paramètres de votre micro."
+    "message": "Oups, $chatbot$ n'a pas compris cela. Pouvez-vous essayer de le dire à nouveau?",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioReconnecting": {
     "description": "Message affiché lors de la connexion à un nouveau microphone",
     "message": "Passage à $microphone$...",
     "placeholders": {
       "microphone": {
-        "content": "1$",
+        "content": "$1",
         "example": "Par défaut - AirPods Pro"
       }
     }
+  },
+  "assistantIsListening": {
+    "description": "Message affiché lorsque l'assistant écoute la parole.",
+    "message": "$chatbot$ écoute...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Étiquette pour le bouton de basculement en mode sombre.",
+    "message": "Passer en mode sombre"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Étiquette pour le bouton de basculement en mode clair.",
+    "message": "Passer en mode clair"
+  },
+  "consentAskParticipate": {
+    "message": "Voulez-vous participer?"
+  },
+  "consentBetterTogether": {
+    "message": "Améliorons ensemble Say, Pi"
+  },
+  "consentDataDeidentified": {
+    "message": "Les analyses ne sont pas liées à des individus. Toutes les données utilisées sont anonymisées."
+  },
+  "consentNoPii": {
+    "message": "Nous ne collecterons ni ne verrons de données personnelles, comme des messages ou des noms."
+  },
+  "consentNoSale": {
+    "message": "Nous ne vendrons pas vos données à des tiers, ni ne les utiliserons pour de la publicité."
+  },
+  "consentOptIn": {
+    "message": "Je suis dedans !"
+  },
+  "consentOptOut": {
+    "message": "Non merci"
+  },
+  "consentPrivacyParamount": {
+    "message": "Votre confidentialité est primordiale. Tout ce que vous dites reste entre vous et Pi."
+  },
+  "consentRightToRevoke": {
+    "message": "Vous pouvez changer d'avis à tout moment."
+  },
+  "consentSharingPurpose": {
+    "message": "Le partage de vos données d'utilisation nous aidera à comprendre comment les gens utilisent Say, Pi afin que nous puissions l'améliorer pour tout le monde."
+  },
+  "consetPrivacyPolicy": {
+    "message": "Lisez notre Politique de Confidentialité"
+  },
+  "shareAnalytics": {
+    "description": "Étiquette pour la case à cocher pour activer/désactiver le partage des analyses.",
+    "message": "Partager les analyses"
+  },
+  "enterImmersiveModeLong": {
+    "description": "Le aria-label et le titre du bouton pour entrer en mode immersif sur les appareils mobiles.",
+    "message": "Entrez en Mode Immersif"
+  },
+  "enterImmersiveModeShort": {
+    "description": "Le texte du bouton pour entrer en mode immersif sur le bureau.",
+    "message": "Immersif"
+  },
+  "exitImmersiveModeLong": {
+    "description": "Le aria-label et le titre du bouton pour quitter le mode immersif sur les appareils mobiles, pour revenir au mode bureau basé sur le texte.",
+    "message": "Quitter le Mode Immersif"
   }
 }

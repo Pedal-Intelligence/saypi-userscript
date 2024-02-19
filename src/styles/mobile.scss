@@ -1,4 +1,4 @@
-html.mobile-view {
+html.immersive-view {
   #saypi-panel,
   .notification {
     width: 100%;
@@ -11,12 +11,13 @@ html.mobile-view {
   }
 
   #saypi-talkButton {
-    background-color: transparent;
+    background-color: #e9f5da;
     border-radius: 0;
     margin: 0;
     svg {
       width: 100vw;
       height: 100svh;
+      padding: 12.5svh 0;
     }
   }
 
@@ -33,18 +34,24 @@ html.mobile-view {
 
   /* Pi controls: mute/unmute */
   #saypi-audio-controls {
+    /* align the mute button with the horizontal control panel */
+    margin-top: 0.375rem;
     /* hide the voice options */
     div.p-1 {
       display: none;
     }
     /* scale the mute button */
     button.group {
-      transform: scale(2) !important;
+      transform: scale(1.5) !important;
       z-index: 50;
       /* hide the voice selector twisty */
       + button {
         display: none;
       }
+    }
+    /* make an ugly artifact transparent on pi.ai */
+    div.bg-neutral-200 {
+      background-color: transparent;
     }
   }
 
@@ -53,11 +60,7 @@ html.mobile-view {
     padding-top: 0;
   }
 
-  #saypi-enterButton {
-    display: none;
-  }
-
-  #saypi-footer {
+  .saypi-enter-button {
     display: none;
   }
 
@@ -84,83 +87,35 @@ html.mobile-view {
     z-index: 80;
   }
 
-  #saypi-lock-panel button {
-    display: block;
-    left: unset;
-    right: 10px;
-    width: 56px;
-    height: 56px;
-    z-index: 80; // same as call button
-  }
-
-  #saypi-lock-panel {
-    /* unlocked by default */
-    display: block;
-    background-color: transparent;
-    border-radius: 0;
-    margin: 0;
-  }
-
-  .unlocked #saypi-lockButton {
-    display: block !important; // show the lock button when screen is unlocked
-  }
-  .locked #saypi-lockButton {
-    display: none !important; // hide the lock button when screen is locked
-  }
-
-  .unlocked #saypi-unlockButton {
-    display: none !important; // hide the unlock button when screen is unlocked
-  }
-  .locked #saypi-unlockButton {
-    display: block !important; // show the unlock button when screen is unlocked
-    z-index: 101 !important; // above the touch absorber
-  }
-
-  .locked #saypi-touch-absorber {
-    display: block !important; // show the touch absorber when screen is locked
-    position: fixed;
-    top: 0;
-    left: 0;
-    opacity: 0.5;
-    /* semi-transparent background */
-    background-color: rgba(245, 238, 223, 0.75);
-    width: 100vw;
-    height: 100svh;
-    z-index: 100;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }  
-
-  .locked #saypi-locked-text {
-    display: block !important; // show the locked text when screen is locked
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    height: 1rem;
-    /* text */
-    animation-name: fadeIn;
-    animation-duration: 2s;
-    animation-fill-mode: forwards;
-    text-align: center;
-    font-size: xx-large;
-    font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;
-    .subtext {
-      display: block;
-      font-size: large;
-    }
-  }
-
   /* hide the scrollbar */
   .scrollbar-gutter-both-edges {
     visibility: hidden;
   }
 
-  #saypi-notification span {
-    padding-left: 20%; /* wider padding for mobile */
+  /* hide any buttons in the control panel not relevant to mobile */
+  .saypi-control-panel button:not(.saypi-control-button) {
+    display: none;
   }
+
+  /* override lg:hidden, making the control panel's buttons visible in immersive view on desktops */
+  #saypi-control-panel-main.lg\:hidden {
+    display: block;
+  }
+  /* override lg:flex-row-reverse, making the audio control button visible in immersive view on desktops */
+  div.lg\:flex-row-reverse {
+    flex-direction: unset;
+  }
+  /* hide the side panel in immersive mode */
+  #saypi-side-panel.lg\:flex {
+    display: none;
+  }
+  
+  .saypi-control-panel button.theme-toggle-button {
+    width: 4rem;
+    padding: 6px;
+  }
+
 }
+@import "dark-mode.scss";
+@import "focus-mode.scss";
+@import "lock.scss";

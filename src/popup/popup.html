@@ -26,6 +26,10 @@
         margin-left: auto; /* align right */
       }
 
+      .hidden {
+        display: none;
+      }
+
       /* Slider */
       .slider-thumb {
         width: 3rem;
@@ -49,122 +53,248 @@
       #preference-selector {
         padding: 1rem;
       }
+
+      /* consent */
+      #analytics-consent {
+        width: 580px;
+        padding: 200px 1.5rem 1.5rem 1.5rem;
+        background-image: url("data-sharing.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+      /* Mobile */
+      .mobile-device #analytics-consent {
+        width: 400px;
+      }
+      #analytics-consent.read {
+        display: none;
+      }
+      #analytics-consent h1 {
+        margin-bottom: 1rem;
+      }
+      #analytics-consent p {
+        margin-bottom: 1rem;
+      }
+      #analytics-consent ul {
+        padding: 0 1rem;
+        list-style-type: disc;
+      }
+      #analytics-consent ul li {
+        padding-bottom: 0.5rem;
+      }
+      #analytics-consent a {
+        display: block;
+        margin-bottom: 1rem;
+        text-decoration: underline;
+      }
+      #analytics-consent h2 {
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+      #analytics-consent .buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1rem;
+        padding: 0 1.5rem;
+      }
+      #analytics-consent .buttons button {
+        width: 100px;
+        border: 2px solid lightskyblue;
+        padding: 0.5rem;
+        border-radius: 10px;
+        margin: 0 auto;
+      }
+      #analytics-consent .buttons button:hover {
+        background-color: lightskyblue;
+        color: white;
+      }
     </style>
   </head>
   <body class="flex items-center justify-center">
-    <div id="preference-selector" class="w-full max-w-lg user-preference-item">
-      <!-- Slider with icons -->
-      <div class="">
-        <!-- Icons -->
-        <div class="flex justify-between mb-2">
-          <span
-            role="img"
-            class="icon text-2xl"
-            aria-label="Hare"
-            slider-value="0"
-            id="speed"
-            >🐇</span
-          >
-          <span
-            role="img"
-            class="icon text-2xl active"
-            aria-label="Deer"
-            slider-value="1"
-            id="balanced"
-            >🦌</span
-          >
-          <span
-            role="img"
-            class="icon text-2xl"
-            aria-label="Owl"
-            slider-value="2"
-            id="accuracy"
-            >🦉</span
-          >
+    <section id="preferences">
+      <div
+        id="preference-selector"
+        class="w-full max-w-lg user-preference-item"
+      >
+        <!-- Slider with icons -->
+        <div class="">
+          <!-- Icons -->
+          <div class="flex justify-between mb-2">
+            <span
+              role="img"
+              class="icon text-2xl"
+              aria-label="Hare"
+              slider-value="0"
+              id="speed"
+              >🐇</span
+            >
+            <span
+              role="img"
+              class="icon text-2xl active"
+              aria-label="Deer"
+              slider-value="1"
+              id="balanced"
+              >🦌</span
+            >
+            <span
+              role="img"
+              class="icon text-2xl"
+              aria-label="Owl"
+              slider-value="2"
+              id="accuracy"
+              >🦉</span
+            >
+          </div>
+          <!-- Slider -->
+          <input
+            type="range"
+            min="0"
+            max="2"
+            value="1"
+            class="slider w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
+            id="customRange"
+            data-i18n-attr="title:preferedModeControl"
+            title="Select your preferred mode"
+          />
         </div>
-        <!-- Slider -->
-        <input
-          type="range"
-          min="0"
-          max="2"
-          value="1"
-          class="slider w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
-          id="customRange"
-          data-i18n-attr="title:preferedModeControl"
-          title="Select your preferred mode"
-        />
-      </div>
-      <!-- Text below slider -->
-      <div
-        id="sliderValue"
-        class="mt-2 text-lg font-semibold text-gray-700"
-        data-i18n="mode_balanced"
-      >
-        balanced
-      </div>
-    </div>
-    <div class="user-preference-item w-full max-w-lg" id="language-preference">
-      <div
-        id="language-picker"
-        class="language-picker user-preference language-picker--hide-label js-language-picker"
-        data-trigger-class="li4-btn li4-btn--subtle js-tab-focus"
-      >
-        <label
-          for="language-picker-select"
-          class="label-text"
-          data-i18n="preferedLanguage"
-          >Language</label
+        <!-- Text below slider -->
+        <div
+          id="sliderValue"
+          class="mt-2 text-lg font-semibold text-gray-700"
+          data-i18n="mode_balanced"
         >
-        <form action="" class="language-picker__form">
-          <select name="language-picker-select" id="language-picker-select">
-            <!--<option lang="ar" value="arabic">العربية</option>-->
-            <option lang="bn" value="bengali">বাংলা</option>
-            <option lang="de" value="deutsch">Deutsch</option>
-            <option lang="en" value="english">English</option>
-            <option lang="es" value="espanol">Español</option>
-            <option lang="fr" value="francais">Français</option>
-            <option lang="hi" value="hindi">हिन्दी</option>
-            <option lang="hu" value="hungarian">Magyar</option>
-            <option lang="it" value="italiano">Italiano</option>
-            <option lang="nl" value="dutch">Nederlands</option>
-            <option lang="pl" value="polish">Polski</option>
-            <option lang="pt" value="portuguese">Português</option>
-            <option lang="ja" value="japanese">日本語</option>
-            <option lang="ko" value="korean">한국어</option>
-            <option lang="ru" value="russian">Русский</option>
-            <option lang="uk" value="ukrainian">Українська</option>
-            <option lang="vi" value="vietnamese">Tiếng Việt</option>
-            <option lang="zh" value="chinese">中文</option>
-            <option lang="" value="global">Auto-detect</option>
-          </select>
-        </form>
+          balanced
+        </div>
       </div>
-    </div>
-    <div
-      class="user-preference-item w-full max-w-lg"
-      id="sounds-effects-preference"
-    >
-      <label class="wraper" for="sound-effects">
-        <span class="label-text" data-i18n="soundEffects">Sound Effects</span>
-        <div class="switch-wrap control">
-          <input type="checkbox" id="sound-effects" name="soundEffects" />
-          <div class="switch"></div>
+      <div
+        class="user-preference-item w-full max-w-lg"
+        id="language-preference"
+      >
+        <div
+          id="language-picker"
+          class="language-picker user-preference language-picker--hide-label js-language-picker"
+          data-trigger-class="li4-btn li4-btn--subtle js-tab-focus"
+        >
+          <label
+            for="language-picker-select"
+            class="label-text"
+            data-i18n="preferedLanguage"
+            >Language</label
+          >
+          <form action="" class="language-picker__form">
+            <select name="language-picker-select" id="language-picker-select">
+              <!--<option lang="ar" value="arabic">العربية</option>-->
+              <option lang="bn" value="bengali">বাংলা</option>
+              <option lang="de" value="deutsch">Deutsch</option>
+              <option lang="en" value="english">English</option>
+              <option lang="es" value="espanol">Español</option>
+              <option lang="fr" value="francais">Français</option>
+              <option lang="hi" value="hindi">हिन्दी</option>
+              <option lang="hu" value="hungarian">Magyar</option>
+              <option lang="it" value="italiano">Italiano</option>
+              <option lang="nl" value="dutch">Nederlands</option>
+              <option lang="pl" value="polish">Polski</option>
+              <option lang="pt" value="portuguese">Português</option>
+              <option lang="ja" value="japanese">日本語</option>
+              <option lang="ko" value="korean">한국어</option>
+              <option lang="ru" value="russian">Русский</option>
+              <option lang="uk" value="ukrainian">Українська</option>
+              <option lang="vi" value="vietnamese">Tiếng Việt</option>
+              <option lang="zh" value="chinese">中文</option>
+              <option lang="" value="global">Auto-detect</option>
+            </select>
+          </form>
         </div>
-      </label>
-    </div>
-    <div
-      class="user-preference-item w-full max-w-lg"
-      id="auto-submit-preference"
-    >
-      <label class="wraper" for="auto-submit">
-        <span class="label-text" data-i18n="autoSubmit">Auto Submit</span>
-        <div class="switch-wrap control">
-          <input type="checkbox" id="auto-submit" name="autoSubmit" />
-          <div class="switch"></div>
-        </div>
-      </label>
-    </div>
+      </div>
+      <div
+        class="user-preference-item w-full max-w-lg"
+        id="sounds-effects-preference"
+      >
+        <label class="wraper" for="sound-effects">
+          <span class="label-text" data-i18n="soundEffects">Sound Effects</span>
+          <div class="switch-wrap control">
+            <input type="checkbox" id="sound-effects" name="soundEffects" />
+            <div class="switch"></div>
+          </div>
+        </label>
+      </div>
+      <div
+        class="user-preference-item w-full max-w-lg"
+        id="auto-submit-preference"
+      >
+        <label class="wraper" for="auto-submit">
+          <span class="label-text" data-i18n="autoSubmit">Auto Submit</span>
+          <div class="switch-wrap control">
+            <input type="checkbox" id="auto-submit" name="autoSubmit" />
+            <div class="switch"></div>
+          </div>
+        </label>
+      </div>
+      <div
+        class="user-preference-item w-full max-w-lg"
+        id="analytics-consent-preference-item"
+      >
+        <label class="wraper" for="share-data">
+          <span class="label-text" data-i18n="shareAnalytics">
+            Share analytics
+          </span>
+          <div class="switch-wrap control">
+            <input type="checkbox" id="share-data" name="shareAnalytics" />
+            <div class="switch"></div>
+          </div>
+        </label>
+      </div>
 
+      <!-- Reset button is primarily for testing -->
+      <div class="user-preference-item w-full max-w-lg hidden">
+        <button
+          type="button"
+          id="clear-preferences"
+          class="btn btn-primary"
+        >
+          Clear Preferences
+        </button>
+    </section>
+
+    <section id="analytics-consent" class="hidden">
+      <h1 data-i18n="consentBetterTogether">Let's improve Say, Pi together</h1>
+      <p data-i18n="consentSharingPurpose">
+        Sharing your usage data will help us understand how people use Say, Pi
+        so we can make it better for everyone.
+      </p>
+      <ul>
+        <li data-i18n="consentNoPii">We won't collect or see personal data, like messages or names.</li>
+        <li data-i18n="consentPrivacyParamount">
+          Your privacy is paramount. Anything you say remains between you and
+          Pi.
+        </li>
+        <li data-i18n="consentDataDeidentified">
+          Analytics are not tied to individuals. Any data used is de-identified.
+        </li>
+        <li data-i18n="consentNoSale">
+          We won't sell your data to third parties, or use it for advertising.
+        </li>
+        <li data-i18n="consentRightToRevoke">You can change your mind at any time.</li>
+      </ul>
+      <a
+        href="https://www.saypi.ai/privacy-policy"
+        target="_blank"
+        rel="noopener"
+        data-i18n="consentPrivacyPolicy"
+        >Read our Privacy Policy</a
+      >
+      <h2 data-i18n="consentAskParticipate">Would you like to participate?</h2>
+      <div class="buttons">
+        <button id="opt-out" type="button" class="btn btn-primary" data-i18n="consentOptOut">
+          No thanks
+        </button>
+        <button id="opt-in" type="button" class="btn btn-primary" data-i18n="consentOptIn">
+          I'm in!
+        </button>
+      </div>
+    </section>
+
+    <script src="simple-user-agent.js"></script>
     <script src="language-picker.js"></script>
     <script src="popup.js"></script>
   </body>
