@@ -187,6 +187,9 @@ export class TextToSpeechUIManager {
       button.innerHTML = "Say, Pi - " + voice.name; // TODO: localize
       button.addEventListener("click", () => {
         UserPreferenceModule.setVoice(voice).then(() => {
+          customVoiceButtons.forEach((button) => {
+            this.unmarkButtonAsSelectedVoice(button);
+          });
           this.markVoiceButtonAsSelected(button);
           this.introduceVoice(voice);
         });
@@ -260,6 +263,15 @@ export class TextToSpeechUIManager {
                   } else if (
                     (node as HTMLElement).dataset.voiceId === voice.id
                   ) {
+                    // unmark all other buttons and mark this one as selected
+                    const voiceButtons = Array.from(
+                      voiceMenu.querySelectorAll("button")
+                    );
+                    voiceButtons.forEach((button) => {
+                      this.unmarkButtonAsSelectedVoice(
+                        button as HTMLButtonElement
+                      );
+                    });
                     this.markButtonAsSelectedVoice(node as HTMLButtonElement);
                   }
                 }
@@ -277,13 +289,14 @@ export class TextToSpeechUIManager {
   assistantChatMessageAdded(node: HTMLElement): void {
     node.classList.add("chat-message", "assistant-message");
     const speechSynthesis = SpeechSynthesisModule.getInstance();
-    const initialText = node.innerText;
     speechSynthesis.isEnabled().then((isEnabled) => {
       if (isEnabled) {
         speechSynthesis.createSpeechStream().then((utterance) => {
           node.dataset.utteranceId = utterance.id;
           console.log("Created audio stream", utterance.id);
+          const initialText = node.innerText;
           console.log('Streaming text began with "', initialText);
+          speechSynthesis.addSpeechToStream(utterance.id, initialText);
           this.addSpeechButton(speechSynthesis, utterance, node);
           this.autoplaySpeech(speechSynthesis, utterance); // handle any errors
         });
@@ -298,7 +311,7 @@ export class TextToSpeechUIManager {
     if (!chatHistory) {
       return;
     }
-    let lastMessage: HTMLDivElement | HTMLSpanElement | null = null;
+    let latestChatMessage: HTMLDivElement | HTMLSpanElement | null = null;
     const speechSynthesis = SpeechSynthesisModule.getInstance();
 
     const observerCallback = (
@@ -315,19 +328,19 @@ export class TextToSpeechUIManager {
               !node.classList.contains("justify-end")
             ) {
               this.assistantChatMessageAdded(node);
-              lastMessage = node;
+              latestChatMessage = node;
             } else if (node.nodeName === "SPAN") {
               // streaming text initially appears as within a span node with style display: none and opacity: 0
               const streamedText = (node as HTMLSpanElement).innerText;
               speechSynthesis.isEnabled().then((isEnabled) => {
                 if (
                   isEnabled &&
-                  lastMessage &&
-                  lastMessage.dataset.utteranceId
+                  latestChatMessage &&
+                  latestChatMessage.dataset.utteranceId
                 ) {
                   console.log('Streaming text "', streamedText, '"');
                   speechSynthesis.addSpeechToStream(
-                    lastMessage.dataset.utteranceId,
+                    latestChatMessage.dataset.utteranceId,
                     streamedText
                   );
                 }
