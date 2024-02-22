@@ -29,12 +29,6 @@ test("ElementTextStream emits inner text of added nodes", async () => {
   newNode2.innerText = "world";
   element.appendChild(newNode2);
 
-  // Manually trigger the MutationObserver callback
-  //const records = stream.getObserver().takeRecords();
-
-  // Disconnect the observer to complete the stream
-  //stream.disconnect();
-
   // Wait for the Observable to complete
   await promise.then(() => {
     expect(values).toEqual(["Hello", "world"]);

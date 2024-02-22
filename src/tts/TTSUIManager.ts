@@ -5,6 +5,34 @@ import {
 } from "./SpeechSynthesisModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { Chatbot } from "../chatbots/Chatbot";
+import { ElementTextStream } from "./InputStream";
+
+class AssistantResponse {
+  private _element: HTMLElement;
+  private utteranceId: string | null = null;
+
+  constructor(element: HTMLElement) {
+    this._element = element;
+    element.classList.add("chat-message", "assistant-message");
+  }
+
+  get text(): string {
+    return this._element.innerText;
+  }
+
+  get element(): HTMLElement {
+    return this._element;
+  }
+
+  get isTTSEnabled(): boolean {
+    return this.utteranceId !== null;
+  }
+
+  enableTTS(utteranceId: string): void {
+    this.utteranceId = utteranceId;
+    this._element.dataset.utteranceId = utteranceId;
+  }
+}
 
 export class TextToSpeechUIManager {
   // Methods for DOM manipulation and element ID assignment
@@ -285,20 +313,45 @@ export class TextToSpeechUIManager {
     observer.observe(voiceMenu, { childList: true });
   }
 
+  private elementStream: ElementTextStream | null = null;
+
+  observeChatMessageElement(message: HTMLElement): void {
+    // If we're already observing an element, disconnect from it
+    if (this.elementStream) {
+      this.elementStream.disconnect();
+    }
+
+    // Start observing the new element
+    this.elementStream = new ElementTextStream(message);
+    this.elementStream.getStream().subscribe(
+      (text) => {
+        console.log(`Streamed text from element: ${text}`);
+      },
+      (error) => {
+        console.error(`Error occurred streaming text from element: ${error}`);
+      },
+      () => {
+        console.log(
+          "Element text stream complete. Please end the tts input stream."
+        );
+      }
+    );
+  }
+
   // Chat history and automatic speech functionality
-  assistantChatMessageAdded(node: HTMLElement): void {
-    node.classList.add("chat-message", "assistant-message");
+  assistantChatMessageAdded(message: AssistantResponse): void {
     const speechSynthesis = SpeechSynthesisModule.getInstance();
     speechSynthesis.isEnabled().then((isEnabled) => {
       if (isEnabled) {
         speechSynthesis.createSpeechStream().then((utterance) => {
-          node.dataset.utteranceId = utterance.id;
+          message.enableTTS(utterance.id);
           console.log("Created audio stream", utterance.id);
-          const initialText = node.innerText;
+          const initialText = message.text;
           console.log('Streaming text began with "', initialText);
           speechSynthesis.addSpeechToStream(utterance.id, initialText);
-          this.addSpeechButton(speechSynthesis, utterance, node);
-          this.autoplaySpeech(speechSynthesis, utterance); // handle any errors
+          this.addSpeechButton(speechSynthesis, utterance, message.element);
+          //this.autoplaySpeech(speechSynthesis, utterance); // handle any errors
+          this.observeChatMessageElement(message.element);
         });
       }
     });
@@ -311,8 +364,6 @@ export class TextToSpeechUIManager {
     if (!chatHistory) {
       return;
     }
-    let latestChatMessage: HTMLDivElement | HTMLSpanElement | null = null;
-    const speechSynthesis = SpeechSynthesisModule.getInstance();
 
     const observerCallback = (
       mutationsList: MutationRecord[],
@@ -327,24 +378,7 @@ export class TextToSpeechUIManager {
               node.classList.contains("break-anywhere") &&
               !node.classList.contains("justify-end")
             ) {
-              this.assistantChatMessageAdded(node);
-              latestChatMessage = node;
-            } else if (node.nodeName === "SPAN") {
-              // streaming text initially appears as within a span node with style display: none and opacity: 0
-              const streamedText = (node as HTMLSpanElement).innerText;
-              speechSynthesis.isEnabled().then((isEnabled) => {
-                if (
-                  isEnabled &&
-                  latestChatMessage &&
-                  latestChatMessage.dataset.utteranceId
-                ) {
-                  console.log('Streaming text "', streamedText, '"');
-                  speechSynthesis.addSpeechToStream(
-                    latestChatMessage.dataset.utteranceId,
-                    streamedText
-                  );
-                }
-              });
+              this.assistantChatMessageAdded(new AssistantResponse(node));
             }
           }
         }
