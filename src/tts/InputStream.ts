@@ -3,11 +3,14 @@ import { Observable, Subject } from "rxjs";
 export class ElementTextStream {
   private subject: Subject<string>;
   private observer!: MutationObserver;
+  private timeout: NodeJS.Timeout | undefined = undefined;
 
-  constructor(private element: HTMLElement, private timeout: number = 3000) {
+  constructor(
+    private element: HTMLElement,
+    private timeoutDurationMillis: number = 3000
+  ) {
     this.subject = new Subject<string>();
     this.registerObserver();
-    this.startTimeout();
   }
 
   private registerObserver(): void {
@@ -19,6 +22,13 @@ export class ElementTextStream {
             const element = node as HTMLElement; // unsafe until checked
             if (typeof element.innerText !== "undefined") {
               this.subject.next(element.innerText);
+
+              if (this.timeout) {
+                clearTimeout(this.timeout);
+              }
+              this.timeout = setTimeout(() => {
+                this.subject.complete(); // Close stream on true timeout
+              }, this.timeoutDurationMillis);
             }
           }
         }
@@ -29,18 +39,15 @@ export class ElementTextStream {
     this.observer.observe(this.element, { childList: true, subtree: true });
   }
 
-  private startTimeout(): void {
-    setTimeout(() => {
-      this.observer.disconnect();
-      this.subject.complete();
-    }, this.timeout);
-  }
-
   getStream(): Observable<string> {
     return this.subject.asObservable();
   }
 
   disconnect(): void {
+    if (this.timeout) {
+      // Clear timeout if it exists
+      clearTimeout(this.timeout);
+    }
     this.observer.disconnect();
     this.subject.complete();
   }
