@@ -11,10 +11,15 @@ test("ElementTextStream emits inner text of added nodes", async () => {
   const stream = new ElementTextStream(element);
   const values: string[] = [];
 
-  stream
-    .getStream()
-    .pipe(toArray())
-    .forEach((val: string[]) => values.push(...val));
+  const promise = new Promise<void>((resolve) => {
+    stream
+      .getStream()
+      .pipe(toArray())
+      .subscribe((val: string[]) => {
+        values.push(...val);
+        resolve();
+      });
+  });
 
   const newNode1 = dom.window.document.createElement("span");
   newNode1.innerText = "Hello";
@@ -24,8 +29,14 @@ test("ElementTextStream emits inner text of added nodes", async () => {
   newNode2.innerText = "world";
   element.appendChild(newNode2);
 
-  // Disconnect the observer to complete the stream
-  stream.disconnect();
+  // Manually trigger the MutationObserver callback
+  //const records = stream.getObserver().takeRecords();
 
-  expect(values).toEqual(["Hello", "world"]);
+  // Disconnect the observer to complete the stream
+  //stream.disconnect();
+
+  // Wait for the Observable to complete
+  await promise.then(() => {
+    expect(values).toEqual(["Hello", "world"]);
+  });
 });

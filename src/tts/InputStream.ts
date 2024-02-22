@@ -15,8 +15,10 @@ export class ElementTextStream {
       for (let mutation of mutationsList) {
         if (mutation.type === "childList") {
           for (let node of mutation.addedNodes) {
-            if (node instanceof HTMLElement) {
-              this.subject.next(node.innerText);
+            // Use duck typing to check if the node has an innerText property (standard type guard is not reliable under our tests)
+            const element = node as HTMLElement; // unsafe until checked
+            if (typeof element.innerText !== "undefined") {
+              this.subject.next(element.innerText);
             }
           }
         }
@@ -41,5 +43,10 @@ export class ElementTextStream {
   disconnect(): void {
     this.observer.disconnect();
     this.subject.complete();
+  }
+
+  // For testing purposes
+  getObserver(): MutationObserver {
+    return this.observer;
   }
 }

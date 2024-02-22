@@ -25,6 +25,13 @@
       "name": "Say, Pi (application server)",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "start"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Vitest Tests",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["vitest"]
     }
   ]
 }
