@@ -4,7 +4,7 @@ html.immersive-view body.dark {
         opacity: 1;
     }
     .call-button path.circle {
-        fill: #1C95A3;
+        fill: #107782;
     }
 
     /* The following styles are for the card flip animation in rectangles.css */
@@ -44,4 +44,13 @@ html.immersive-view body.dark {
         animation: thinkingFlip 1.5s ease-in-out;
       }
       
+      /* even darker theme when locked */
+      .locked {
+        #saypi-touch-absorber {
+          background-color: rgba(0, 0, 0, 0.75);
+        }
+        #saypi-locked-text {
+          color: white;
+        }
+      }
 }
