@@ -5,6 +5,7 @@ import { audioOutputMachine } from "../state-machines/AudioOutputMachine.js";
 import { logger, serializeStateValue } from "../LoggingModule.js";
 import EventBus from "../events/EventBus.js";
 import { machine as audioRetryMachine } from "../state-machines/AudioRetryMachine.ts";
+import { isSafari } from "../UserAgentModule.js";
 
 export default class AudioModule {
   constructor() {

@@ -1,6 +1,6 @@
 import { config } from "./ConfigModule.js";
 import StateMachineService from "./StateMachineService.js";
-import { ImmersionService } from "./UserAgentModule.js";
+import { ImmersionService } from "./ImmersionService.js";
 import EventBus from "./events/EventBus.js";
 import EventModule from "./events/EventModule.js";
 import { logger } from "./LoggingModule.js";

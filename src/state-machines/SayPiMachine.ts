@@ -13,7 +13,7 @@ import {
   TextualNotificationsModule,
   VisualNotificationsModule,
 } from "../NotificationsModule";
-import { ImmersionService } from "../UserAgentModule.js";
+import { ImmersionService } from "../ImmersionService.js";
 import {
   uploadAudioWithRetry,
   getDraftPrompt,

@@ -153,6 +153,8 @@ export const machine = createMachine({
         "The audio is paused and can be played again or reloaded if there is an error.",
     },
   },
+  predictableActionArguments: true,
+  preserveActionOrder: true,
 }).withConfig({
   actions: {
     resetRetryCounter: function (context: RetryContext, event) {

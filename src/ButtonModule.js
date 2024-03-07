@@ -1,4 +1,4 @@
-import { ImmersionService } from "./UserAgentModule.js";
+import { ImmersionService } from "./ImmersionService.js";
 import { addChild } from "./DOMModule.ts";
 import EventBus from "./events/EventBus.js";
 import StateMachineService from "./StateMachineService.js";
