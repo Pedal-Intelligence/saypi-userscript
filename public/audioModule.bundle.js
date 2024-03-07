@@ -22654,19 +22654,6 @@ var config = {
 
 /***/ }),
 
-/***/ 7635:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Z: () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var events__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7187);
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new events__WEBPACK_IMPORTED_MODULE_0__());
-
-/***/ }),
-
 /***/ 484:
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
@@ -22707,6 +22694,19 @@ var logger = {
     (_console3 = console).error.apply(_console3, ["ERROR:"].concat(args));
   }
 };
+
+/***/ }),
+
+/***/ 7476:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Z: () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var events__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7187);
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new events__WEBPACK_IMPORTED_MODULE_0__());
 
 /***/ })
 
@@ -22823,7 +22823,7 @@ function setupInterceptors() {
   redirectXMLHttpRequest(XMLHttpRequest.prototype.open);
   redirectFetch(window.fetch);
 }
-;// CONCATENATED MODULE: ./src/WavEncoder.ts
+;// CONCATENATED MODULE: ./src/audio/WavEncoder.ts
 // Most of the code here come from ricky0123/vad-web
 // Who in turn copied it from linto-ai/WebVoiceSDK
 function minFramesForTargetMS(targetDuration, frameSamples, sr = 16000) {
@@ -22912,7 +22912,7 @@ function writeString(view, offset, string) {
     }
 }
 
-;// CONCATENATED MODULE: ./src/AudioEncoder.ts
+;// CONCATENATED MODULE: ./src/audio/AudioEncoder.ts
 
 /**
  * Convert a Float32Array of audio samples to a WAV array buffer
@@ -22937,8 +22937,8 @@ function convertToWavBlob(audioData) {
 var Machine = __webpack_require__(9122);
 // EXTERNAL MODULE: ./node_modules/xstate/es/index.js
 var es = __webpack_require__(2494);
-// EXTERNAL MODULE: ./src/EventBus.js
-var src_EventBus = __webpack_require__(7635);
+// EXTERNAL MODULE: ./src/events/EventBus.js
+var events_EventBus = __webpack_require__(7476);
 // EXTERNAL MODULE: ./node_modules/lodash/lodash.js
 var lodash = __webpack_require__(6486);
 ;// CONCATENATED MODULE: ./src/state-machines/AudioInputMachine.ts
@@ -22989,7 +22989,7 @@ function monitorAudioInputDevices() {
             if (!firstTime) {
                 const deviceId = defaultDevice.deviceId;
                 const deviceLabel = defaultDevice.label;
-                src_EventBus/* default */.Z.emit("saypi:audio:reconnect", { deviceId, deviceLabel }); // instruct saypi to switch to the new default device
+                events_EventBus/* default */.Z.emit("saypi:audio:reconnect", { deviceId, deviceLabel }); // instruct saypi to switch to the new default device
             }
         }
         const currentDeviceIds = audioInputDevices.map((device) => device.deviceId);
@@ -23003,7 +23003,7 @@ function monitorAudioInputDevices() {
             const deviceLabel = (_a = audioInputDevices.find((device) => device.deviceId === deviceId)) === null || _a === void 0 ? void 0 : _a.label;
             if (deviceId && addedDevices.includes(deviceId)) {
                 console.log(`The audio input device used by MicVAD has been added: ${deviceId} (${deviceLabel}))`);
-                src_EventBus/* default */.Z.emit("saypi:audio:connected", { deviceId, deviceLabel });
+                events_EventBus/* default */.Z.emit("saypi:audio:connected", { deviceId, deviceLabel });
             }
             if (deviceId && removedDevices.includes(deviceId)) {
                 console.log("The audio input device used by MicVAD has been removed.");
@@ -23025,7 +23025,7 @@ function monitorAudioInputDevices() {
 // Call the function every 5 seconds
 setInterval(monitorAudioInputDevices, 5000);
 const debouncedOnFrameProcessed = (0,lodash.debounce)((probabilities) => {
-    src_EventBus/* default */.Z.emit("audio:frame", probabilities);
+    events_EventBus/* default */.Z.emit("audio:frame", probabilities);
 }, 1000 / 60); // 1000ms / 60 frames per second
 // Options for MicVAD
 const micVADOptions = {
@@ -23036,21 +23036,21 @@ const micVADOptions = {
     onSpeechStart: () => {
         console.log("Speech started");
         speechStartTime = Date.now();
-        src_EventBus/* default */.Z.emit("saypi:userSpeaking");
+        events_EventBus/* default */.Z.emit("saypi:userSpeaking");
     },
     onSpeechEnd: (rawAudioData) => {
         console.log("Speech ended");
         const speechStopTime = Date.now();
         const speechDuration = speechStopTime - speechStartTime;
         const audioBlob = convertToWavBlob(rawAudioData);
-        src_EventBus/* default */.Z.emit("audio:dataavailable", {
+        events_EventBus/* default */.Z.emit("audio:dataavailable", {
             blob: audioBlob,
             duration: speechDuration,
         });
     },
     onVADMisfire: () => {
         console.log("Cancelled. Audio was not speech.");
-        src_EventBus/* default */.Z.emit("saypi:userStoppedSpeaking", { duration: 0 });
+        events_EventBus/* default */.Z.emit("saypi:userStoppedSpeaking", { duration: 0 });
     },
     onFrameProcessed(probabilities) {
         debouncedOnFrameProcessed(probabilities);
@@ -23238,7 +23238,7 @@ const AudioInputMachine_audioInputMachine = (0,Machine/* createMachine */.C)({
             const speechDuration = duration;
             if (Number(sizeInKb) > 0) {
                 // Upload the audio to the server for transcription
-                src_EventBus/* default */.Z.emit("saypi:userStoppedSpeaking", {
+                events_EventBus/* default */.Z.emit("saypi:userStoppedSpeaking", {
                     duration: speechDuration,
                     blob,
                 });
@@ -23251,7 +23251,7 @@ const AudioInputMachine_audioInputMachine = (0,Machine/* createMachine */.C)({
         },
         notifyMicrophoneAcquired: (context, event) => {
             monitorAudioInputDevices();
-            src_EventBus/* default */.Z.emit("saypi:callReady");
+            events_EventBus/* default */.Z.emit("saypi:callReady");
         },
         releaseMicrophone: (context, event) => {
             tearDownRecording();
@@ -23416,11 +23416,11 @@ var AudioOutputMachine_audioOutputMachine = (0,Machine/* createMachine */.C)({
   actions: {
     emitEvent: function emitEvent(context, event, _ref) {
       var action = _ref.action;
-      src_EventBus/* default */.Z.emit(action.params.eventName);
+      events_EventBus/* default */.Z.emit(action.params.eventName);
     },
     skipCurrent: function skipCurrent(context, event) {
       // send a message back to the audio module to stop playback
-      src_EventBus/* default */.Z.emit("audio:skipCurrent");
+      events_EventBus/* default */.Z.emit("audio:skipCurrent");
     }
   },
   guards: {
@@ -23433,7 +23433,7 @@ var AudioOutputMachine_audioOutputMachine = (0,Machine/* createMachine */.C)({
 });
 // EXTERNAL MODULE: ./src/LoggingModule.js
 var LoggingModule = __webpack_require__(484);
-;// CONCATENATED MODULE: ./src/AudioModule.js
+;// CONCATENATED MODULE: ./src/audio/AudioModule.js
 function AudioModule_typeof(o) { "@babel/helpers - typeof"; return AudioModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, AudioModule_typeof(o); }
 function AudioModule_ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function AudioModule_objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? AudioModule_ownKeys(Object(t), !0).forEach(function (r) { AudioModule_defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : AudioModule_ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -23456,9 +23456,11 @@ var AudioModule = /*#__PURE__*/(/* unused pure expression or super */ null && (f
     if (!this.audioElement) {
       console.error("Audio element not found!");
     } else {
-      this.audioElement.preload = "auto"; // enable aggressive preloading of audio
+      //disable aggressive preloading of audio - may cause playback issues on Safari
+      //this.audioElement.preload = "auto"; // enable aggressive preloading of audio
+      console.log("Audio element found", this.audioElement);
+      this.safariErrorHandler = new SafariAudioErrorHandler(this.audioElement);
     }
-
     this.audioOutputActor = interpret(audioOutputMachine);
     this.audioOutputActor.onTransition(function (state) {
       if (state.changed) {
@@ -23482,10 +23484,16 @@ var AudioModule = /*#__PURE__*/(/* unused pure expression or super */ null && (f
       // audio output (Pi)
       this.audioOutputActor.start();
       this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
+      this.safariErrorHandler.startMonitoring();
 
       // audio input (user)
       this.audioInputActor.start();
       this.registerAudioCommands(this.audioInputActor, this.audioOutputActor);
+    }
+  }, {
+    key: "stop",
+    value: function stop() {
+      this.safariErrorHandler.stopMonitoring();
     }
   }, {
     key: "registerAudioPlaybackEvents",
@@ -23547,10 +23555,13 @@ var AudioModule = /*#__PURE__*/(/* unused pure expression or super */ null && (f
         outputActor.send("reload");
       });
       EventBus.on("audio:skipNext", function (e) {
+        console.log("sending signal to skip next audio track");
         outputActor.send("skipNext");
       });
       EventBus.on("audio:skipCurrent", function (e) {
+        console.log("sending signal to skip this audio track");
         _this.audioElement.pause();
+        console.log("paused audio playback on skip signal");
       });
     }
   }]);

@@ -1,9 +1,9 @@
 import { MicVAD, RealTimeVADOptions } from "@ricky0123/vad-web";
 import { config } from "../ConfigModule";
 import { setupInterceptors } from "../RequestInterceptor";
-import { convertToWavBlob } from "../AudioEncoder";
+import { convertToWavBlob } from "../audio/AudioEncoder";
 import { createMachine, assign } from "xstate";
-import EventBus from "../EventBus.js";
+import EventBus from "../events/EventBus.js";
 import { debounce } from "lodash";
 
 // Assuming config.appServerUrl is of type string.

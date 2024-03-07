@@ -3,7 +3,7 @@ import { applyDarkMode, applyNormalMode } from "../ThemeModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { AudibleNotificationsModule } from "../NotificationsModule";
 
-const audible = new AudibleNotificationsModule();
+const audible = AudibleNotificationsModule.getInstance();
 
 export const machine = createMachine(
   {

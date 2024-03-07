@@ -1,5 +1,5 @@
 import { createMachine, assign } from "xstate";
-import EventBus from "../EventBus.js";
+import EventBus from "../events/EventBus.js";
 
 export const audioOutputMachine = createMachine(
   {

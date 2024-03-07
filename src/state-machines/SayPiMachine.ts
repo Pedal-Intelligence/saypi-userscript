@@ -24,13 +24,12 @@ import {
 } from "../TranscriptionModule";
 import { TranscriptMergeService } from "../TranscriptMergeService";
 import { config } from "../ConfigModule";
-import EventBus from "../EventBus";
+import EventBus from "../events/EventBus.js";
 import { calculateDelay } from "../TimerModule";
-import AudioControlsModule from "../AudioControlsModule";
+import AudioControlsModule from "../audio/AudioControlsModule";
 import { requestWakeLock, releaseWakeLock } from "../WakeLockModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import getMessage from "../i18n";
-import { last } from "lodash";
 
 type SayPiTranscribedEvent = {
   type: "saypi:transcribed";
@@ -157,7 +156,7 @@ UserPreferenceModule.getLanguage().then((language) => {
   mergeService = new TranscriptMergeService(apiServerUrl, language);
 });
 
-const audibleNotifications = new AudibleNotificationsModule();
+const audibleNotifications = AudibleNotificationsModule.getInstance();
 const textualNotifications = new TextualNotificationsModule();
 const visualNotifications = new VisualNotificationsModule();
 const audioControls = new AudioControlsModule();

@@ -1,11 +1,11 @@
-import AudioModule from "./AudioModule.js";
+import AudioModule from "./audio/AudioModule.js";
 import { buttonModule } from "./ButtonModule.js";
-import EventModule from "./EventModule.js";
+import EventModule from "./events/EventModule.js";
 import { addUserAgentFlags, ImmersionService } from "./UserAgentModule.js";
 import { submitErrorHandler } from "./SubmitErrorHandler.ts";
 import getMessage from "./i18n.ts";
 import { DOMObserver } from "./chatbots/bootstrap.ts";
-import EventBus from "./EventBus.js";
+import EventBus from "./events/EventBus.js";
 
 import "./styles/common.scss";
 import "./styles/desktop.scss";
@@ -21,6 +21,9 @@ import { addChild } from "./DOMModule.ts";
 
   function startAudioModule() {
     const audioModule = new AudioModule();
+    window.addEventListener("unload", () => {
+      audioModule.stop();
+    });
     audioModule.start();
   }
 

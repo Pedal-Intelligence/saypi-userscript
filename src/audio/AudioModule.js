@@ -1,9 +1,10 @@
 // import state machines for audio input and output
 import { interpret } from "xstate";
-import { audioInputMachine } from "./state-machines/AudioInputMachine.ts";
-import { audioOutputMachine } from "./state-machines/AudioOutputMachine.js";
-import { logger, serializeStateValue } from "./LoggingModule.js";
-import EventBus from "./EventBus.js";
+import { audioInputMachine } from "../state-machines/AudioInputMachine.ts";
+import { audioOutputMachine } from "../state-machines/AudioOutputMachine.js";
+import { logger, serializeStateValue } from "../LoggingModule.js";
+import EventBus from "../events/EventBus.js";
+import { machine as audioRetryMachine } from "../state-machines/AudioRetryMachine.ts";
 
 export default class AudioModule {
   constructor() {
@@ -11,7 +12,7 @@ export default class AudioModule {
     if (!this.audioElement) {
       console.error("Audio element not found!");
     } else {
-      this.audioElement.preload = "auto"; // enable aggressive preloading of audio
+      console.debug("Audio element found", this.audioElement);
     }
 
     this.audioOutputActor = interpret(audioOutputMachine);
@@ -39,17 +40,44 @@ export default class AudioModule {
         );
       }
     });
+
+    // Safari audio error handling logic (known issue in at least Safari <= 17.4)
+    if (isSafari()) {
+      this.audioRetryActor = interpret(audioRetryMachine);
+      this.audioRetryActor.onTransition((state) => {
+        if (state.changed) {
+          const fromState = state.history
+            ? serializeStateValue(state.history.value)
+            : "N/A";
+          const toState = serializeStateValue(state.value);
+          logger.debug(
+            `Audio Retry Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
+          );
+        }
+      });
+    }
   }
 
   start() {
     // audio output (Pi)
     this.audioOutputActor.start();
     this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
+    //this.safariErrorHandler.startMonitoring();
 
     // audio input (user)
     this.audioInputActor.start();
     this.registerAudioCommands(this.audioInputActor, this.audioOutputActor);
+
+    if (isSafari()) {
+      // audio retry
+      console.log("Using audio retry handler for Safari.");
+      this.audioRetryActor.start();
+      this.registerAudioPlaybackEvents(this.audioElement, this.audioRetryActor);
+      this.registerSourceChangeEvents(this.audioElement, this.audioRetryActor);
+    }
   }
+
+  stop() {}
 
   registerAudioPlaybackEvents(audio, actor) {
     const events = [
@@ -61,6 +89,9 @@ export default class AudioModule {
       "ended",
       "seeked",
       "emptied",
+      "abort",
+      "stalled",
+      "error",
     ];
 
     events.forEach((event) => {
@@ -69,6 +100,16 @@ export default class AudioModule {
 
     audio.addEventListener("playing", () => {
       actor.send("play");
+    });
+  }
+
+  registerSourceChangeEvents(audio, actor) {
+    this.lastSource = audio.src;
+    audio.addEventListener("loadstart", () => {
+      if (audio.currentSrc !== this.lastSource) {
+        actor.send("sourceChanged");
+        this.lastSource = audio.currentSrc;
+      }
     });
   }
 
@@ -111,14 +152,17 @@ export default class AudioModule {
     });
 
     // audio output (playback) commands
-    EventBus.on("audio:reload", function (e) {
-      outputActor.send("reload");
+    EventBus.on("audio:reload", (e) => {
+      this.audioElement.load();
     });
-    EventBus.on("audio:skipNext", function (e) {
+    EventBus.on("audio:skipNext", (e) => {
       outputActor.send("skipNext");
     });
     EventBus.on("audio:skipCurrent", (e) => {
       this.audioElement.pause();
+    });
+    EventBus.on("audio:output:play", (e) => {
+      this.audioElement.play();
     });
   }
 }

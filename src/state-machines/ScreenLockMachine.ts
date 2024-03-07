@@ -2,7 +2,7 @@ import { createMachine } from "xstate";
 import { AudibleNotificationsModule } from "../NotificationsModule";
 import { enterFullscreen } from "../FullscreenModule";
 
-const notificationsModule = new AudibleNotificationsModule();
+const notificationsModule = AudibleNotificationsModule.getInstance();
 
 export const machine = createMachine(
   {

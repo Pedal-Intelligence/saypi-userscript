@@ -16,52 +16,52 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 4557:
+/***/ 557:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var map = {
 	"./bn/messages.json": [
-		5093,
+		93,
 		93
 	],
 	"./de/messages.json": [
-		1840,
+		840,
 		840
 	],
 	"./en/messages.json": [
-		4533,
+		51,
 		533
 	],
 	"./es/messages.json": [
-		4952,
+		952,
 		952
 	],
 	"./fr/messages.json": [
-		9657,
+		657,
 		657
 	],
 	"./hi/messages.json": [
-		2754,
+		754,
 		754
 	],
 	"./hu/messages.json": [
-		1872,
+		872,
 		872
 	],
 	"./it/messages.json": [
-		5387,
+		387,
 		387
 	],
 	"./ja/messages.json": [
-		8481,
+		481,
 		481
 	],
 	"./ko/messages.json": [
-		5499,
+		499,
 		499
 	],
 	"./nl/messages.json": [
-		3717,
+		717,
 		717
 	],
 	"./pl/messages.json": [
@@ -69,23 +69,23 @@ var map = {
 		165
 	],
 	"./pt_BR/messages.json": [
-		4214,
+		214,
 		214
 	],
 	"./ru/messages.json": [
-		3376,
+		376,
 		376
 	],
 	"./uk/messages.json": [
-		6937,
+		937,
 		937
 	],
 	"./vi/messages.json": [
-		1053,
+		53,
 		53
 	],
 	"./zh_CN/messages.json": [
-		4233,
+		233,
 		233
 	]
 };
@@ -104,12 +104,12 @@ function webpackAsyncContext(req) {
 	});
 }
 webpackAsyncContext.keys = () => (Object.keys(map));
-webpackAsyncContext.id = 4557;
+webpackAsyncContext.id = 557;
 module.exports = webpackAsyncContext;
 
 /***/ }),
 
-/***/ 2527:
+/***/ 527:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -120,8 +120,8 @@ were taken (or took inspiration) from https://github.com/snakers4/silero-vad
 */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FrameProcessor = exports.validateOptions = exports.defaultFrameProcessorOptions = void 0;
-const messages_1 = __webpack_require__(5531);
-const logging_1 = __webpack_require__(8655);
+const messages_1 = __webpack_require__(531);
+const logging_1 = __webpack_require__(655);
 const RECOMMENDED_FRAME_SAMPLES = [512, 1024, 1536];
 exports.defaultFrameProcessorOptions = {
     positiveSpeechThreshold: 0.5,
@@ -255,7 +255,7 @@ exports.FrameProcessor = FrameProcessor;
 
 /***/ }),
 
-/***/ 1978:
+/***/ 978:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -288,23 +288,23 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.utils = void 0;
-const _utils = __importStar(__webpack_require__(5818));
+const _utils = __importStar(__webpack_require__(818));
 exports.utils = {
     minFramesForTargetMS: _utils.minFramesForTargetMS,
     arrayBufferToBase64: _utils.arrayBufferToBase64,
     encodeWAV: _utils.encodeWAV,
 };
-__exportStar(__webpack_require__(4684), exports);
-__exportStar(__webpack_require__(2527), exports);
-__exportStar(__webpack_require__(5531), exports);
-__exportStar(__webpack_require__(8655), exports);
-__exportStar(__webpack_require__(2002), exports);
-__exportStar(__webpack_require__(8533), exports);
+__exportStar(__webpack_require__(684), exports);
+__exportStar(__webpack_require__(527), exports);
+__exportStar(__webpack_require__(531), exports);
+__exportStar(__webpack_require__(655), exports);
+__exportStar(__webpack_require__(2), exports);
+__exportStar(__webpack_require__(533), exports);
 //# sourceMappingURL=index.js.map
 
 /***/ }),
 
-/***/ 8655:
+/***/ 655:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -327,7 +327,7 @@ exports.log = _log;
 
 /***/ }),
 
-/***/ 5531:
+/***/ 531:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -345,7 +345,7 @@ var Message;
 
 /***/ }),
 
-/***/ 2002:
+/***/ 2:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -354,7 +354,7 @@ var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Silero = void 0;
 // @ts-ignore
-const logging_1 = __webpack_require__(8655);
+const logging_1 = __webpack_require__(655);
 class Silero {
     constructor(ort, modelFetcher) {
         this.ort = ort;
@@ -400,17 +400,17 @@ Silero.new = async (ort, modelFetcher) => {
 
 /***/ }),
 
-/***/ 4684:
+/***/ 684:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PlatformAgnosticNonRealTimeVAD = exports.defaultNonRealTimeVADOptions = void 0;
-const frame_processor_1 = __webpack_require__(2527);
-const messages_1 = __webpack_require__(5531);
-const models_1 = __webpack_require__(2002);
-const resampler_1 = __webpack_require__(8533);
+const frame_processor_1 = __webpack_require__(527);
+const messages_1 = __webpack_require__(531);
+const models_1 = __webpack_require__(2);
+const resampler_1 = __webpack_require__(533);
 exports.defaultNonRealTimeVADOptions = {
     ...frame_processor_1.defaultFrameProcessorOptions,
 };
@@ -482,14 +482,14 @@ exports.PlatformAgnosticNonRealTimeVAD = PlatformAgnosticNonRealTimeVAD;
 
 /***/ }),
 
-/***/ 8533:
+/***/ 533:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Resampler = void 0;
-const logging_1 = __webpack_require__(8655);
+const logging_1 = __webpack_require__(655);
 class Resampler {
     constructor(options) {
         this.options = options;
@@ -533,7 +533,7 @@ exports.Resampler = Resampler;
 
 /***/ }),
 
-/***/ 5818:
+/***/ 818:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -630,7 +630,7 @@ function writeString(view, offset, string) {
 
 /***/ }),
 
-/***/ 7709:
+/***/ 709:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -653,7 +653,7 @@ exports.assetPath = assetPath;
 
 /***/ }),
 
-/***/ 9762:
+/***/ 762:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -683,12 +683,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.defaultRealTimeVADOptions = exports.AudioNodeVAD = exports.MicVAD = exports.NonRealTimeVAD = exports.Message = exports.FrameProcessor = exports.utils = void 0;
-const ort = __importStar(__webpack_require__(9793));
-const _common_1 = __webpack_require__(1978);
+const ort = __importStar(__webpack_require__(793));
+const _common_1 = __webpack_require__(978);
 Object.defineProperty(exports, "FrameProcessor", ({ enumerable: true, get: function () { return _common_1.FrameProcessor; } }));
 Object.defineProperty(exports, "Message", ({ enumerable: true, get: function () { return _common_1.Message; } }));
-const model_fetcher_1 = __webpack_require__(6756);
-const utils_1 = __webpack_require__(2227);
+const model_fetcher_1 = __webpack_require__(756);
+const utils_1 = __webpack_require__(227);
 class NonRealTimeVAD extends _common_1.PlatformAgnosticNonRealTimeVAD {
     static async new(options = {}) {
         return await this._new(model_fetcher_1.modelFetcher, ort, options);
@@ -696,7 +696,7 @@ class NonRealTimeVAD extends _common_1.PlatformAgnosticNonRealTimeVAD {
 }
 exports.NonRealTimeVAD = NonRealTimeVAD;
 exports.utils = { audioFileToArray: utils_1.audioFileToArray, ..._common_1.utils };
-var real_time_vad_1 = __webpack_require__(7759);
+var real_time_vad_1 = __webpack_require__(759);
 Object.defineProperty(exports, "MicVAD", ({ enumerable: true, get: function () { return real_time_vad_1.MicVAD; } }));
 Object.defineProperty(exports, "AudioNodeVAD", ({ enumerable: true, get: function () { return real_time_vad_1.AudioNodeVAD; } }));
 Object.defineProperty(exports, "defaultRealTimeVADOptions", ({ enumerable: true, get: function () { return real_time_vad_1.defaultRealTimeVADOptions; } }));
@@ -704,14 +704,14 @@ Object.defineProperty(exports, "defaultRealTimeVADOptions", ({ enumerable: true,
 
 /***/ }),
 
-/***/ 6756:
+/***/ 756:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.modelFetcher = void 0;
-const asset_path_1 = __webpack_require__(7709);
+const asset_path_1 = __webpack_require__(709);
 const modelFetcher = async () => {
     const modelURL = (0, asset_path_1.assetPath)("silero_vad.onnx");
     return await fetch(modelURL).then((r) => r.arrayBuffer());
@@ -721,7 +721,7 @@ exports.modelFetcher = modelFetcher;
 
 /***/ }),
 
-/***/ 7759:
+/***/ 759:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -751,10 +751,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AudioNodeVAD = exports.MicVAD = exports.defaultRealTimeVADOptions = void 0;
-const ort = __importStar(__webpack_require__(9793));
-const _common_1 = __webpack_require__(1978);
-const model_fetcher_1 = __webpack_require__(6756);
-const asset_path_1 = __webpack_require__(7709);
+const ort = __importStar(__webpack_require__(793));
+const _common_1 = __webpack_require__(978);
+const model_fetcher_1 = __webpack_require__(756);
+const asset_path_1 = __webpack_require__(709);
 const _getWorkletURL = () => {
     return (0, asset_path_1.assetPath)("vad.worklet.bundle.min.js");
 };
@@ -892,7 +892,7 @@ exports.AudioNodeVAD = AudioNodeVAD;
 
 /***/ }),
 
-/***/ 2227:
+/***/ 227:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -941,16 +941,16 @@ exports.audioFileToArray = audioFileToArray;
 
 /***/ }),
 
-/***/ 9136:
+/***/ 136:
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   Z: () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7537);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(537);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3645);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(645);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
 // Imports
 
@@ -1437,16 +1437,16 @@ ___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse_outermost {
 
 /***/ }),
 
-/***/ 8580:
+/***/ 580:
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   Z: () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7537);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(537);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3645);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(645);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
 // Imports
 
@@ -1460,16 +1460,16 @@ ___CSS_LOADER_EXPORT___.push([module.id, `#saypi-callButton.disabled svg path.ci
 
 /***/ }),
 
-/***/ 1902:
+/***/ 902:
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   Z: () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7537);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(537);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3645);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(645);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
 // Imports
 
@@ -1490,9 +1490,9 @@ ___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse{0%{transform:scale(1)
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   Z: () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7537);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(537);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3645);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(645);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
 // Imports
 
@@ -1506,7 +1506,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `html.immersive-view #saypi-panel,html.
 
 /***/ }),
 
-/***/ 3645:
+/***/ 645:
 /***/ ((module) => {
 
 "use strict";
@@ -1598,7 +1598,7 @@ module.exports = function (cssWithMappingToString) {
 
 /***/ }),
 
-/***/ 7537:
+/***/ 537:
 /***/ ((module) => {
 
 "use strict";
@@ -1621,7 +1621,7 @@ module.exports = function (item) {
 
 /***/ }),
 
-/***/ 7187:
+/***/ 187:
 /***/ ((module) => {
 
 "use strict";
@@ -2126,7 +2126,7 @@ function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
 
 /***/ }),
 
-/***/ 6486:
+/***/ 486:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* module decorator */ module = __webpack_require__.nmd(module);
@@ -19335,7 +19335,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 /***/ }),
 
-/***/ 9793:
+/***/ 793:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var __dirname = "/";
@@ -19350,7 +19350,7 @@ var __filename = "/index.js";
 
 /***/ }),
 
-/***/ 3379:
+/***/ 379:
 /***/ ((module) => {
 
 "use strict";
@@ -19482,7 +19482,7 @@ module.exports = insertBySelector;
 
 /***/ }),
 
-/***/ 9216:
+/***/ 216:
 /***/ ((module) => {
 
 "use strict";
@@ -19499,7 +19499,7 @@ module.exports = insertStyleElement;
 
 /***/ }),
 
-/***/ 3565:
+/***/ 565:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -19516,7 +19516,7 @@ module.exports = setAttributesWithoutAttributes;
 
 /***/ }),
 
-/***/ 7795:
+/***/ 795:
 /***/ ((module) => {
 
 "use strict";
@@ -19584,7 +19584,7 @@ module.exports = domAPI;
 
 /***/ }),
 
-/***/ 4589:
+/***/ 589:
 /***/ ((module) => {
 
 "use strict";
@@ -19602,6781 +19602,6 @@ function styleTagTransform(css, styleElement) {
   }
 }
 module.exports = styleTagTransform;
-
-/***/ }),
-
-/***/ 879:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   v: () => (/* binding */ getResourceUrl)
-/* harmony export */ });
-/* harmony import */ var _ConfigModule_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8186);
-
-// used by browser extensions
-function getExtensionResourceUrl(filename) {
-    const web_accessible_resources_dir = "public";
-    const filepath = web_accessible_resources_dir + "/" + filename;
-    return chrome.runtime.getURL(filepath);
-}
-// used by userscripts
-function getAppServerResourceUrl(filename) {
-    return `${_ConfigModule_js__WEBPACK_IMPORTED_MODULE_0__/* .config */ .v.appServerUrl}/${filename}`;
-}
-// cross-platform way to get a resource URL
-function getResourceUrl(filename) {
-    if (chrome.runtime && chrome.runtime.id) {
-        return getExtensionResourceUrl(filename);
-    }
-    else {
-        return getAppServerResourceUrl(filename);
-    }
-}
-
-
-/***/ }),
-
-/***/ 8933:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Xg: () => (/* binding */ createDeferredActor),
-/* harmony export */   f3: () => (/* binding */ isSpawnedActor),
-/* harmony export */   mu: () => (/* binding */ createInvocableActor),
-/* harmony export */   vk: () => (/* binding */ toActorRef)
-/* harmony export */ });
-/* unused harmony exports createNullActor, isActor */
-/* harmony import */ var _virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3056);
-/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9823);
-/* harmony import */ var _serviceScope_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(797);
-
-
-
-
-function createNullActor(id) {
-  var _a;
-
-  return _a = {
-    id: id,
-    send: function () {
-      return void 0;
-    },
-    subscribe: function () {
-      return {
-        unsubscribe: function () {
-          return void 0;
-        }
-      };
-    },
-    getSnapshot: function () {
-      return undefined;
-    },
-    toJSON: function () {
-      return {
-        id: id
-      };
-    }
-  }, _a[_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .symbolObservable */ .L$] = function () {
-    return this;
-  }, _a;
-}
-/**
- * Creates a deferred actor that is able to be invoked given the provided
- * invocation information in its `.meta` value.
- *
- * @param invokeDefinition The meta information needed to invoke the actor.
- */
-
-function createInvocableActor(invokeDefinition, machine, context, _event) {
-  var _a;
-
-  var invokeSrc = (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .toInvokeSource */ .j)(invokeDefinition.src);
-  var serviceCreator = (_a = machine === null || machine === void 0 ? void 0 : machine.options.services) === null || _a === void 0 ? void 0 : _a[invokeSrc.type];
-  var resolvedData = invokeDefinition.data ? (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .mapContext */ .QX)(invokeDefinition.data, context, _event) : undefined;
-  var tempActor = serviceCreator ? createDeferredActor(serviceCreator, invokeDefinition.id, resolvedData) : createNullActor(invokeDefinition.id); // @ts-ignore
-
-  tempActor.meta = invokeDefinition;
-  return tempActor;
-}
-function createDeferredActor(entity, id, data) {
-  var tempActor = createNullActor(id); // @ts-ignore
-
-  tempActor.deferred = true;
-
-  if ((0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isMachine */ .O4)(entity)) {
-    // "mute" the existing service scope so potential spawned actors within the `.initialState` stay deferred here
-    var initialState_1 = tempActor.state = (0,_serviceScope_js__WEBPACK_IMPORTED_MODULE_1__/* .provide */ .J)(undefined, function () {
-      return (data ? entity.withContext(data) : entity).initialState;
-    });
-
-    tempActor.getSnapshot = function () {
-      return initialState_1;
-    };
-  }
-
-  return tempActor;
-}
-function isActor(item) {
-  try {
-    return typeof item.send === 'function';
-  } catch (e) {
-    return false;
-  }
-}
-function isSpawnedActor(item) {
-  return isActor(item) && 'id' in item;
-} // TODO: refactor the return type, this could be written in a better way but it's best to avoid unneccessary breaking changes now
-
-function toActorRef(actorRefLike) {
-  var _a;
-
-  return (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__assign */ .pi)((_a = {
-    subscribe: function () {
-      return {
-        unsubscribe: function () {
-          return void 0;
-        }
-      };
-    },
-    id: 'anonymous',
-    getSnapshot: function () {
-      return undefined;
-    }
-  }, _a[_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .symbolObservable */ .L$] = function () {
-    return this;
-  }, _a), actorRefLike);
-}
-
-
-
-
-/***/ }),
-
-/***/ 9122:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, {
-  C: () => (/* binding */ createMachine)
-});
-
-// UNUSED EXPORTS: Machine
-
-// EXTERNAL MODULE: ./node_modules/xstate/es/_virtual/_tslib.js
-var _tslib = __webpack_require__(3056);
-// EXTERNAL MODULE: ./node_modules/xstate/es/utils.js
-var utils = __webpack_require__(9823);
-// EXTERNAL MODULE: ./node_modules/xstate/es/State.js
-var State = __webpack_require__(4911);
-// EXTERNAL MODULE: ./node_modules/xstate/es/actionTypes.js
-var actionTypes = __webpack_require__(3884);
-// EXTERNAL MODULE: ./node_modules/xstate/es/actions.js
-var es_actions = __webpack_require__(375);
-// EXTERNAL MODULE: ./node_modules/xstate/es/environment.js
-var environment = __webpack_require__(4066);
-// EXTERNAL MODULE: ./node_modules/xstate/es/constants.js
-var constants = __webpack_require__(7353);
-// EXTERNAL MODULE: ./node_modules/xstate/es/stateUtils.js
-var stateUtils = __webpack_require__(6115);
-// EXTERNAL MODULE: ./node_modules/xstate/es/Actor.js
-var Actor = __webpack_require__(8933);
-;// CONCATENATED MODULE: ./node_modules/xstate/es/invokeUtils.js
-
-
-
-
-
-
-function toInvokeSource(src) {
-  if (typeof src === 'string') {
-    var simpleSrc = {
-      type: src
-    };
-
-    simpleSrc.toString = function () {
-      return src;
-    }; // v4 compat - TODO: remove in v5
-
-
-    return simpleSrc;
-  }
-
-  return src;
-}
-function toInvokeDefinition(invokeConfig) {
-  return (0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({
-    type: actionTypes/* invoke */.dw
-  }, invokeConfig), {
-    toJSON: function () {
-      invokeConfig.onDone;
-          invokeConfig.onError;
-          var invokeDef = (0,_tslib/* __rest */._T)(invokeConfig, ["onDone", "onError"]);
-
-      return (0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({}, invokeDef), {
-        type: actionTypes/* invoke */.dw,
-        src: toInvokeSource(invokeConfig.src)
-      });
-    }
-  });
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/xstate/es/StateNode.js
-
-
-
-
-
-
-
-
-
-
-
-var NULL_EVENT = '';
-var STATE_IDENTIFIER = '#';
-var WILDCARD = '*';
-var EMPTY_OBJECT = {};
-
-var isStateId = function (str) {
-  return str[0] === STATE_IDENTIFIER;
-};
-
-var createDefaultOptions = function () {
-  return {
-    actions: {},
-    guards: {},
-    services: {},
-    activities: {},
-    delays: {}
-  };
-};
-
-var validateArrayifiedTransitions = function (stateNode, event, transitions) {
-  var hasNonLastUnguardedTarget = transitions.slice(0, -1).some(function (transition) {
-    return !('cond' in transition) && !('in' in transition) && ((0,utils/* isString */.HD)(transition.target) || (0,utils/* isMachine */.O4)(transition.target));
-  });
-  var eventText = event === NULL_EVENT ? 'the transient event' : "event '".concat(event, "'");
-  (0,utils/* warn */.ZK)(!hasNonLastUnguardedTarget, "One or more transitions for ".concat(eventText, " on state '").concat(stateNode.id, "' are unreachable. ") + "Make sure that the default transition is the last one defined.");
-};
-
-var StateNode_StateNode =
-/*#__PURE__*/
-
-/** @class */
-function () {
-  function StateNode(
-  /**
-   * The raw config used to create the machine.
-   */
-  config, options,
-  /**
-   * The initial extended state
-   */
-  _context, // TODO: this is unsafe, but we're removing it in v5 anyway
-  _stateInfo) {
-    if (_context === void 0) {
-      _context = 'context' in config ? config.context : undefined;
-    }
-
-    var _this = this;
-
-    var _a;
-
-    this.config = config;
-    this._context = _context;
-    /**
-     * The order this state node appears. Corresponds to the implicit SCXML document order.
-     */
-
-    this.order = -1;
-    this.__xstatenode = true;
-    this.__cache = {
-      events: undefined,
-      relativeValue: new Map(),
-      initialStateValue: undefined,
-      initialState: undefined,
-      on: undefined,
-      transitions: undefined,
-      candidates: {},
-      delayedTransitions: undefined
-    };
-    this.idMap = {};
-    this.tags = [];
-    this.options = Object.assign(createDefaultOptions(), options);
-    this.parent = _stateInfo === null || _stateInfo === void 0 ? void 0 : _stateInfo.parent;
-    this.key = this.config.key || (_stateInfo === null || _stateInfo === void 0 ? void 0 : _stateInfo.key) || this.config.id || '(machine)';
-    this.machine = this.parent ? this.parent.machine : this;
-    this.path = this.parent ? this.parent.path.concat(this.key) : [];
-    this.delimiter = this.config.delimiter || (this.parent ? this.parent.delimiter : constants/* STATE_DELIMITER */.iS);
-    this.id = this.config.id || (0,_tslib/* __spreadArray */.ev)([this.machine.key], (0,_tslib/* __read */.CR)(this.path), false).join(this.delimiter);
-    this.version = this.parent ? this.parent.version : this.config.version;
-    this.type = this.config.type || (this.config.parallel ? 'parallel' : this.config.states && Object.keys(this.config.states).length ? 'compound' : this.config.history ? 'history' : 'atomic');
-    this.schema = this.parent ? this.machine.schema : (_a = this.config.schema) !== null && _a !== void 0 ? _a : {};
-    this.description = this.config.description;
-
-    if (!environment/* IS_PRODUCTION */.M) {
-      (0,utils/* warn */.ZK)(!('parallel' in this.config), "The \"parallel\" property is deprecated and will be removed in version 4.1. ".concat(this.config.parallel ? "Replace with `type: 'parallel'`" : "Use `type: '".concat(this.type, "'`"), " in the config for state node '").concat(this.id, "' instead."));
-    }
-
-    this.initial = this.config.initial;
-    this.states = this.config.states ? (0,utils/* mapValues */.Q8)(this.config.states, function (stateConfig, key) {
-      var _a;
-
-      var stateNode = new StateNode(stateConfig, {}, undefined, {
-        parent: _this,
-        key: key
-      });
-      Object.assign(_this.idMap, (0,_tslib/* __assign */.pi)((_a = {}, _a[stateNode.id] = stateNode, _a), stateNode.idMap));
-      return stateNode;
-    }) : EMPTY_OBJECT; // Document order
-
-    var order = 0;
-
-    function dfs(stateNode) {
-      var e_1, _a;
-
-      stateNode.order = order++;
-
-      try {
-        for (var _b = (0,_tslib/* __values */.XA)((0,stateUtils/* getAllChildren */.nI)(stateNode)), _c = _b.next(); !_c.done; _c = _b.next()) {
-          var child = _c.value;
-          dfs(child);
-        }
-      } catch (e_1_1) {
-        e_1 = {
-          error: e_1_1
-        };
-      } finally {
-        try {
-          if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-        } finally {
-          if (e_1) throw e_1.error;
-        }
-      }
-    }
-
-    dfs(this); // History config
-
-    this.history = this.config.history === true ? 'shallow' : this.config.history || false;
-    this._transient = !!this.config.always || (!this.config.on ? false : Array.isArray(this.config.on) ? this.config.on.some(function (_a) {
-      var event = _a.event;
-      return event === NULL_EVENT;
-    }) : NULL_EVENT in this.config.on);
-    this.strict = !!this.config.strict; // TODO: deprecate (entry)
-
-    this.onEntry = (0,utils/* toArray */.qo)(this.config.entry || this.config.onEntry).map(function (action) {
-      return (0,es_actions/* toActionObject */.Q8)(action);
-    }); // TODO: deprecate (exit)
-
-    this.onExit = (0,utils/* toArray */.qo)(this.config.exit || this.config.onExit).map(function (action) {
-      return (0,es_actions/* toActionObject */.Q8)(action);
-    });
-    this.meta = this.config.meta;
-    this.doneData = this.type === 'final' ? this.config.data : undefined;
-    this.invoke = (0,utils/* toArray */.qo)(this.config.invoke).map(function (invokeConfig, i) {
-      var _a, _b;
-
-      if ((0,utils/* isMachine */.O4)(invokeConfig)) {
-        var invokeId = (0,utils/* createInvokeId */.bx)(_this.id, i);
-        _this.machine.options.services = (0,_tslib/* __assign */.pi)((_a = {}, _a[invokeId] = invokeConfig, _a), _this.machine.options.services);
-        return toInvokeDefinition({
-          src: invokeId,
-          id: invokeId
-        });
-      } else if ((0,utils/* isString */.HD)(invokeConfig.src)) {
-        var invokeId = invokeConfig.id || (0,utils/* createInvokeId */.bx)(_this.id, i);
-        return toInvokeDefinition((0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({}, invokeConfig), {
-          id: invokeId,
-          src: invokeConfig.src
-        }));
-      } else if ((0,utils/* isMachine */.O4)(invokeConfig.src) || (0,utils/* isFunction */.mf)(invokeConfig.src)) {
-        var invokeId = invokeConfig.id || (0,utils/* createInvokeId */.bx)(_this.id, i);
-        _this.machine.options.services = (0,_tslib/* __assign */.pi)((_b = {}, _b[invokeId] = invokeConfig.src, _b), _this.machine.options.services);
-        return toInvokeDefinition((0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({
-          id: invokeId
-        }, invokeConfig), {
-          src: invokeId
-        }));
-      } else {
-        var invokeSource = invokeConfig.src;
-        return toInvokeDefinition((0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({
-          id: (0,utils/* createInvokeId */.bx)(_this.id, i)
-        }, invokeConfig), {
-          src: invokeSource
-        }));
-      }
-    });
-    this.activities = (0,utils/* toArray */.qo)(this.config.activities).concat(this.invoke).map(function (activity) {
-      return (0,es_actions/* toActivityDefinition */.XA)(activity);
-    });
-    this.transition = this.transition.bind(this);
-    this.tags = (0,utils/* toArray */.qo)(this.config.tags); // TODO: this is the real fix for initialization once
-    // state node getters are deprecated
-    // if (!this.parent) {
-    //   this._init();
-    // }
-  }
-
-  StateNode.prototype._init = function () {
-    if (this.__cache.transitions) {
-      return;
-    }
-
-    (0,stateUtils/* getAllStateNodes */.ac)(this).forEach(function (stateNode) {
-      return stateNode.on;
-    });
-  };
-  /**
-   * Clones this state machine with custom options and context.
-   *
-   * @param options Options (actions, guards, activities, services) to recursively merge with the existing options.
-   * @param context Custom context (will override predefined context)
-   */
-
-
-  StateNode.prototype.withConfig = function (options, context) {
-    var _a = this.options,
-        actions = _a.actions,
-        activities = _a.activities,
-        guards = _a.guards,
-        services = _a.services,
-        delays = _a.delays;
-    return new StateNode(this.config, {
-      actions: (0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({}, actions), options.actions),
-      activities: (0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({}, activities), options.activities),
-      guards: (0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({}, guards), options.guards),
-      services: (0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({}, services), options.services),
-      delays: (0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({}, delays), options.delays)
-    }, context !== null && context !== void 0 ? context : this.context);
-  };
-  /**
-   * Clones this state machine with custom context.
-   *
-   * @param context Custom context (will override predefined context, not recursive)
-   */
-
-
-  StateNode.prototype.withContext = function (context) {
-    return new StateNode(this.config, this.options, context);
-  };
-
-  Object.defineProperty(StateNode.prototype, "context", {
-    get: function () {
-      return (0,utils/* isFunction */.mf)(this._context) ? this._context() : this._context;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(StateNode.prototype, "definition", {
-    /**
-     * The well-structured state node definition.
-     */
-    get: function () {
-      return {
-        id: this.id,
-        key: this.key,
-        version: this.version,
-        context: this.context,
-        type: this.type,
-        initial: this.initial,
-        history: this.history,
-        states: (0,utils/* mapValues */.Q8)(this.states, function (state) {
-          return state.definition;
-        }),
-        on: this.on,
-        transitions: this.transitions,
-        entry: this.onEntry,
-        exit: this.onExit,
-        activities: this.activities || [],
-        meta: this.meta,
-        order: this.order || -1,
-        data: this.doneData,
-        invoke: this.invoke,
-        description: this.description,
-        tags: this.tags
-      };
-    },
-    enumerable: false,
-    configurable: true
-  });
-
-  StateNode.prototype.toJSON = function () {
-    return this.definition;
-  };
-
-  Object.defineProperty(StateNode.prototype, "on", {
-    /**
-     * The mapping of events to transitions.
-     */
-    get: function () {
-      if (this.__cache.on) {
-        return this.__cache.on;
-      }
-
-      var transitions = this.transitions;
-      return this.__cache.on = transitions.reduce(function (map, transition) {
-        map[transition.eventType] = map[transition.eventType] || [];
-        map[transition.eventType].push(transition);
-        return map;
-      }, {});
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(StateNode.prototype, "after", {
-    get: function () {
-      return this.__cache.delayedTransitions || (this.__cache.delayedTransitions = this.getDelayedTransitions(), this.__cache.delayedTransitions);
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(StateNode.prototype, "transitions", {
-    /**
-     * All the transitions that can be taken from this state node.
-     */
-    get: function () {
-      return this.__cache.transitions || (this.__cache.transitions = this.formatTransitions(), this.__cache.transitions);
-    },
-    enumerable: false,
-    configurable: true
-  });
-
-  StateNode.prototype.getCandidates = function (eventName) {
-    if (this.__cache.candidates[eventName]) {
-      return this.__cache.candidates[eventName];
-    }
-
-    var transient = eventName === NULL_EVENT;
-    var candidates = this.transitions.filter(function (transition) {
-      var sameEventType = transition.eventType === eventName; // null events should only match against eventless transitions
-
-      return transient ? sameEventType : sameEventType || transition.eventType === WILDCARD;
-    });
-    this.__cache.candidates[eventName] = candidates;
-    return candidates;
-  };
-  /**
-   * All delayed transitions from the config.
-   */
-
-
-  StateNode.prototype.getDelayedTransitions = function () {
-    var _this = this;
-
-    var afterConfig = this.config.after;
-
-    if (!afterConfig) {
-      return [];
-    }
-
-    var mutateEntryExit = function (delay, i) {
-      var delayRef = (0,utils/* isFunction */.mf)(delay) ? "".concat(_this.id, ":delay[").concat(i, "]") : delay;
-      var eventType = (0,es_actions/* after */.e4)(delayRef, _this.id);
-
-      _this.onEntry.push((0,es_actions/* send */.lW)(eventType, {
-        delay: delay
-      }));
-
-      _this.onExit.push((0,es_actions/* cancel */.al)(eventType));
-
-      return eventType;
-    };
-
-    var delayedTransitions = (0,utils/* isArray */.kJ)(afterConfig) ? afterConfig.map(function (transition, i) {
-      var eventType = mutateEntryExit(transition.delay, i);
-      return (0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({}, transition), {
-        event: eventType
-      });
-    }) : (0,utils/* flatten */.xH)(Object.keys(afterConfig).map(function (delay, i) {
-      var configTransition = afterConfig[delay];
-      var resolvedTransition = (0,utils/* isString */.HD)(configTransition) ? {
-        target: configTransition
-      } : configTransition;
-      var resolvedDelay = !isNaN(+delay) ? +delay : delay;
-      var eventType = mutateEntryExit(resolvedDelay, i);
-      return (0,utils/* toArray */.qo)(resolvedTransition).map(function (transition) {
-        return (0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({}, transition), {
-          event: eventType,
-          delay: resolvedDelay
-        });
-      });
-    }));
-    return delayedTransitions.map(function (delayedTransition) {
-      var delay = delayedTransition.delay;
-      return (0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({}, _this.formatTransition(delayedTransition)), {
-        delay: delay
-      });
-    });
-  };
-  /**
-   * Returns the state nodes represented by the current state value.
-   *
-   * @param state The state value or State instance
-   */
-
-
-  StateNode.prototype.getStateNodes = function (state) {
-    var _a;
-
-    var _this = this;
-
-    if (!state) {
-      return [];
-    }
-
-    var stateValue = state instanceof State/* State */.ZM ? state.value : (0,utils/* toStateValue */.WM)(state, this.delimiter);
-
-    if ((0,utils/* isString */.HD)(stateValue)) {
-      var initialStateValue = this.getStateNode(stateValue).initial;
-      return initialStateValue !== undefined ? this.getStateNodes((_a = {}, _a[stateValue] = initialStateValue, _a)) : [this, this.states[stateValue]];
-    }
-
-    var subStateKeys = Object.keys(stateValue);
-    var subStateNodes = [this];
-    subStateNodes.push.apply(subStateNodes, (0,_tslib/* __spreadArray */.ev)([], (0,_tslib/* __read */.CR)((0,utils/* flatten */.xH)(subStateKeys.map(function (subStateKey) {
-      return _this.getStateNode(subStateKey).getStateNodes(stateValue[subStateKey]);
-    }))), false));
-    return subStateNodes;
-  };
-  /**
-   * Returns `true` if this state node explicitly handles the given event.
-   *
-   * @param event The event in question
-   */
-
-
-  StateNode.prototype.handles = function (event) {
-    var eventType = (0,utils/* getEventType */.x6)(event);
-    return this.events.includes(eventType);
-  };
-  /**
-   * Resolves the given `state` to a new `State` instance relative to this machine.
-   *
-   * This ensures that `.events` and `.nextEvents` represent the correct values.
-   *
-   * @param state The state to resolve
-   */
-
-
-  StateNode.prototype.resolveState = function (state) {
-    var stateFromConfig = state instanceof State/* State */.ZM ? state : State/* State */.ZM.create(state);
-    var configuration = Array.from((0,stateUtils/* getConfiguration */.P_)([], this.getStateNodes(stateFromConfig.value)));
-    return new State/* State */.ZM((0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({}, stateFromConfig), {
-      value: this.resolve(stateFromConfig.value),
-      configuration: configuration,
-      done: (0,stateUtils/* isInFinalState */.Ij)(configuration, this),
-      tags: (0,stateUtils/* getTagsFromConfiguration */.Oe)(configuration),
-      machine: this.machine
-    }));
-  };
-
-  StateNode.prototype.transitionLeafNode = function (stateValue, state, _event) {
-    var stateNode = this.getStateNode(stateValue);
-    var next = stateNode.next(state, _event);
-
-    if (!next || !next.transitions.length) {
-      return this.next(state, _event);
-    }
-
-    return next;
-  };
-
-  StateNode.prototype.transitionCompoundNode = function (stateValue, state, _event) {
-    var subStateKeys = Object.keys(stateValue);
-    var stateNode = this.getStateNode(subStateKeys[0]);
-
-    var next = stateNode._transition(stateValue[subStateKeys[0]], state, _event);
-
-    if (!next || !next.transitions.length) {
-      return this.next(state, _event);
-    }
-
-    return next;
-  };
-
-  StateNode.prototype.transitionParallelNode = function (stateValue, state, _event) {
-    var e_2, _a;
-
-    var transitionMap = {};
-
-    try {
-      for (var _b = (0,_tslib/* __values */.XA)(Object.keys(stateValue)), _c = _b.next(); !_c.done; _c = _b.next()) {
-        var subStateKey = _c.value;
-        var subStateValue = stateValue[subStateKey];
-
-        if (!subStateValue) {
-          continue;
-        }
-
-        var subStateNode = this.getStateNode(subStateKey);
-
-        var next = subStateNode._transition(subStateValue, state, _event);
-
-        if (next) {
-          transitionMap[subStateKey] = next;
-        }
-      }
-    } catch (e_2_1) {
-      e_2 = {
-        error: e_2_1
-      };
-    } finally {
-      try {
-        if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-      } finally {
-        if (e_2) throw e_2.error;
-      }
-    }
-
-    var stateTransitions = Object.keys(transitionMap).map(function (key) {
-      return transitionMap[key];
-    });
-    var enabledTransitions = (0,utils/* flatten */.xH)(stateTransitions.map(function (st) {
-      return st.transitions;
-    }));
-    var willTransition = stateTransitions.some(function (st) {
-      return st.transitions.length > 0;
-    });
-
-    if (!willTransition) {
-      return this.next(state, _event);
-    }
-
-    var configuration = (0,utils/* flatten */.xH)(Object.keys(transitionMap).map(function (key) {
-      return transitionMap[key].configuration;
-    }));
-    return {
-      transitions: enabledTransitions,
-      exitSet: (0,utils/* flatten */.xH)(stateTransitions.map(function (t) {
-        return t.exitSet;
-      })),
-      configuration: configuration,
-      source: state,
-      actions: (0,utils/* flatten */.xH)(Object.keys(transitionMap).map(function (key) {
-        return transitionMap[key].actions;
-      }))
-    };
-  };
-
-  StateNode.prototype._transition = function (stateValue, state, _event) {
-    // leaf node
-    if ((0,utils/* isString */.HD)(stateValue)) {
-      return this.transitionLeafNode(stateValue, state, _event);
-    } // hierarchical node
-
-
-    if (Object.keys(stateValue).length === 1) {
-      return this.transitionCompoundNode(stateValue, state, _event);
-    } // orthogonal node
-
-
-    return this.transitionParallelNode(stateValue, state, _event);
-  };
-
-  StateNode.prototype.getTransitionData = function (state, event) {
-    return this._transition(state.value, state, (0,utils/* toSCXMLEvent */.g5)(event));
-  };
-
-  StateNode.prototype.next = function (state, _event) {
-    var e_3, _a;
-
-    var _this = this;
-
-    var eventName = _event.name;
-    var actions = [];
-    var nextStateNodes = [];
-    var selectedTransition;
-
-    try {
-      for (var _b = (0,_tslib/* __values */.XA)(this.getCandidates(eventName)), _c = _b.next(); !_c.done; _c = _b.next()) {
-        var candidate = _c.value;
-        var cond = candidate.cond,
-            stateIn = candidate.in;
-        var resolvedContext = state.context;
-        var isInState = stateIn ? (0,utils/* isString */.HD)(stateIn) && isStateId(stateIn) ? // Check if in state by ID
-        state.matches((0,utils/* toStateValue */.WM)(this.getStateNodeById(stateIn).path, this.delimiter)) : // Check if in state by relative grandparent
-        (0,utils/* matchesState */.W)((0,utils/* toStateValue */.WM)(stateIn, this.delimiter), (0,utils/* path */.ET)(this.path.slice(0, -2))(state.value)) : true;
-        var guardPassed = false;
-
-        try {
-          guardPassed = !cond || (0,utils/* evaluateGuard */.vx)(this.machine, cond, resolvedContext, _event, state);
-        } catch (err) {
-          throw new Error("Unable to evaluate guard '".concat(cond.name || cond.type, "' in transition for event '").concat(eventName, "' in state node '").concat(this.id, "':\n").concat(err.message));
-        }
-
-        if (guardPassed && isInState) {
-          if (candidate.target !== undefined) {
-            nextStateNodes = candidate.target;
-          }
-
-          actions.push.apply(actions, (0,_tslib/* __spreadArray */.ev)([], (0,_tslib/* __read */.CR)(candidate.actions), false));
-          selectedTransition = candidate;
-          break;
-        }
-      }
-    } catch (e_3_1) {
-      e_3 = {
-        error: e_3_1
-      };
-    } finally {
-      try {
-        if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-      } finally {
-        if (e_3) throw e_3.error;
-      }
-    }
-
-    if (!selectedTransition) {
-      return undefined;
-    }
-
-    if (!nextStateNodes.length) {
-      return {
-        transitions: [selectedTransition],
-        exitSet: [],
-        configuration: state.value ? [this] : [],
-        source: state,
-        actions: actions
-      };
-    }
-
-    var allNextStateNodes = (0,utils/* flatten */.xH)(nextStateNodes.map(function (stateNode) {
-      return _this.getRelativeStateNodes(stateNode, state.historyValue);
-    }));
-    var isInternal = !!selectedTransition.internal;
-    return {
-      transitions: [selectedTransition],
-      exitSet: isInternal ? [] : (0,utils/* flatten */.xH)(nextStateNodes.map(function (targetNode) {
-        return _this.getPotentiallyReenteringNodes(targetNode);
-      })),
-      configuration: allNextStateNodes,
-      source: state,
-      actions: actions
-    };
-  }; // even though the name of this function mentions reentry nodes
-  // we are pushing its result into `exitSet`
-  // that's because what we exit might be reentered (it's an invariant of reentrancy)
-
-
-  StateNode.prototype.getPotentiallyReenteringNodes = function (targetNode) {
-    if (this.order < targetNode.order) {
-      return [this];
-    }
-
-    var nodes = [];
-    var marker = this;
-    var possibleAncestor = targetNode;
-
-    while (marker && marker !== possibleAncestor) {
-      nodes.push(marker);
-      marker = marker.parent;
-    }
-
-    if (marker !== possibleAncestor) {
-      // we never got to `possibleAncestor`, therefore the initial `marker` "escapes" it
-      // it's in a different part of the tree so no states will be reentered for such an external transition
-      return [];
-    }
-
-    nodes.push(possibleAncestor);
-    return nodes;
-  };
-
-  StateNode.prototype.getActions = function (resolvedConfig, isDone, transition, currentContext, _event, prevState, predictableExec) {
-    var e_4, _a, e_5, _b;
-
-    var _this = this;
-
-    var prevConfig = prevState ? (0,stateUtils/* getConfiguration */.P_)([], this.getStateNodes(prevState.value)) : [];
-    var entrySet = new Set();
-
-    try {
-      for (var _c = (0,_tslib/* __values */.XA)(Array.from(resolvedConfig).sort(function (a, b) {
-        return a.order - b.order;
-      })), _d = _c.next(); !_d.done; _d = _c.next()) {
-        var sn = _d.value;
-
-        if (!(0,stateUtils/* has */.e$)(prevConfig, sn) || (0,stateUtils/* has */.e$)(transition.exitSet, sn) || sn.parent && entrySet.has(sn.parent)) {
-          entrySet.add(sn);
-        }
-      }
-    } catch (e_4_1) {
-      e_4 = {
-        error: e_4_1
-      };
-    } finally {
-      try {
-        if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
-      } finally {
-        if (e_4) throw e_4.error;
-      }
-    }
-
-    try {
-      for (var prevConfig_1 = (0,_tslib/* __values */.XA)(prevConfig), prevConfig_1_1 = prevConfig_1.next(); !prevConfig_1_1.done; prevConfig_1_1 = prevConfig_1.next()) {
-        var sn = prevConfig_1_1.value;
-
-        if (!(0,stateUtils/* has */.e$)(resolvedConfig, sn) || (0,stateUtils/* has */.e$)(transition.exitSet, sn.parent)) {
-          transition.exitSet.push(sn);
-        }
-      }
-    } catch (e_5_1) {
-      e_5 = {
-        error: e_5_1
-      };
-    } finally {
-      try {
-        if (prevConfig_1_1 && !prevConfig_1_1.done && (_b = prevConfig_1.return)) _b.call(prevConfig_1);
-      } finally {
-        if (e_5) throw e_5.error;
-      }
-    }
-
-    transition.exitSet.sort(function (a, b) {
-      return b.order - a.order;
-    });
-    var entryStates = Array.from(entrySet).sort(function (a, b) {
-      return a.order - b.order;
-    });
-    var exitStates = new Set(transition.exitSet);
-    var doneEvents = (0,utils/* flatten */.xH)(entryStates.map(function (sn) {
-      var events = [];
-
-      if (sn.type !== 'final') {
-        return events;
-      }
-
-      var parent = sn.parent;
-
-      if (!parent.parent) {
-        return events;
-      }
-
-      events.push((0,es_actions/* done */.aT)(sn.id, sn.doneData), // TODO: deprecate - final states should not emit done events for their own state.
-      (0,es_actions/* done */.aT)(parent.id, sn.doneData ? (0,utils/* mapContext */.QX)(sn.doneData, currentContext, _event) : undefined));
-      var grandparent = parent.parent;
-
-      if (grandparent.type === 'parallel') {
-        if ((0,stateUtils/* getChildren */.G)(grandparent).every(function (parentNode) {
-          return (0,stateUtils/* isInFinalState */.Ij)(transition.configuration, parentNode);
-        })) {
-          events.push((0,es_actions/* done */.aT)(grandparent.id));
-        }
-      }
-
-      return events;
-    }));
-    var entryActions = entryStates.map(function (stateNode) {
-      var entryActions = stateNode.onEntry;
-      var invokeActions = stateNode.activities.map(function (activity) {
-        return (0,es_actions/* start */.BL)(activity);
-      });
-      return {
-        type: 'entry',
-        actions: (0,es_actions/* toActionObjects */.AE)(predictableExec ? (0,_tslib/* __spreadArray */.ev)((0,_tslib/* __spreadArray */.ev)([], (0,_tslib/* __read */.CR)(entryActions), false), (0,_tslib/* __read */.CR)(invokeActions), false) : (0,_tslib/* __spreadArray */.ev)((0,_tslib/* __spreadArray */.ev)([], (0,_tslib/* __read */.CR)(invokeActions), false), (0,_tslib/* __read */.CR)(entryActions), false), _this.machine.options.actions)
-      };
-    }).concat({
-      type: 'state_done',
-      actions: doneEvents.map(function (event) {
-        return (0,es_actions/* raise */.OU)(event);
-      })
-    });
-    var exitActions = Array.from(exitStates).map(function (stateNode) {
-      return {
-        type: 'exit',
-        actions: (0,es_actions/* toActionObjects */.AE)((0,_tslib/* __spreadArray */.ev)((0,_tslib/* __spreadArray */.ev)([], (0,_tslib/* __read */.CR)(stateNode.onExit), false), (0,_tslib/* __read */.CR)(stateNode.activities.map(function (activity) {
-          return (0,es_actions/* stop */.sT)(activity);
-        })), false), _this.machine.options.actions)
-      };
-    });
-    var actions = exitActions.concat({
-      type: 'transition',
-      actions: (0,es_actions/* toActionObjects */.AE)(transition.actions, this.machine.options.actions)
-    }).concat(entryActions);
-
-    if (isDone) {
-      var stopActions = (0,es_actions/* toActionObjects */.AE)((0,utils/* flatten */.xH)((0,_tslib/* __spreadArray */.ev)([], (0,_tslib/* __read */.CR)(resolvedConfig), false).sort(function (a, b) {
-        return b.order - a.order;
-      }).map(function (stateNode) {
-        return stateNode.onExit;
-      })), this.machine.options.actions).filter(function (action) {
-        return !(0,utils/* isRaisableAction */.vK)(action);
-      });
-      return actions.concat({
-        type: 'stop',
-        actions: stopActions
-      });
-    }
-
-    return actions;
-  };
-  /**
-   * Determines the next state given the current `state` and sent `event`.
-   *
-   * @param state The current State instance or state value
-   * @param event The event that was sent at the current state
-   * @param context The current context (extended state) of the current state
-   */
-
-
-  StateNode.prototype.transition = function (state, event, context, exec) {
-    if (state === void 0) {
-      state = this.initialState;
-    }
-
-    var _event = (0,utils/* toSCXMLEvent */.g5)(event);
-
-    var currentState;
-
-    if (state instanceof State/* State */.ZM) {
-      currentState = context === undefined ? state : this.resolveState(State/* State */.ZM.from(state, context));
-    } else {
-      var resolvedStateValue = (0,utils/* isString */.HD)(state) ? this.resolve((0,utils/* pathToStateValue */.on)(this.getResolvedPath(state))) : this.resolve(state);
-      var resolvedContext = context !== null && context !== void 0 ? context : this.machine.context;
-      currentState = this.resolveState(State/* State */.ZM.from(resolvedStateValue, resolvedContext));
-    }
-
-    if (!environment/* IS_PRODUCTION */.M && _event.name === WILDCARD) {
-      throw new Error("An event cannot have the wildcard type ('".concat(WILDCARD, "')"));
-    }
-
-    if (this.strict) {
-      if (!this.events.includes(_event.name) && !(0,utils/* isBuiltInEvent */.JQ)(_event.name)) {
-        throw new Error("Machine '".concat(this.id, "' does not accept event '").concat(_event.name, "'"));
-      }
-    }
-
-    var stateTransition = this._transition(currentState.value, currentState, _event) || {
-      transitions: [],
-      configuration: [],
-      exitSet: [],
-      source: currentState,
-      actions: []
-    };
-    var prevConfig = (0,stateUtils/* getConfiguration */.P_)([], this.getStateNodes(currentState.value));
-    var resolvedConfig = stateTransition.configuration.length ? (0,stateUtils/* getConfiguration */.P_)(prevConfig, stateTransition.configuration) : prevConfig;
-    stateTransition.configuration = (0,_tslib/* __spreadArray */.ev)([], (0,_tslib/* __read */.CR)(resolvedConfig), false);
-    return this.resolveTransition(stateTransition, currentState, currentState.context, exec, _event);
-  };
-
-  StateNode.prototype.resolveRaisedTransition = function (state, _event, originalEvent, predictableExec) {
-    var _a;
-
-    var currentActions = state.actions;
-    state = this.transition(state, _event, undefined, predictableExec); // Save original event to state
-    // TODO: this should be the raised event! Delete in V5 (breaking)
-
-    state._event = originalEvent;
-    state.event = originalEvent.data;
-
-    (_a = state.actions).unshift.apply(_a, (0,_tslib/* __spreadArray */.ev)([], (0,_tslib/* __read */.CR)(currentActions), false));
-
-    return state;
-  };
-
-  StateNode.prototype.resolveTransition = function (stateTransition, currentState, context, predictableExec, _event) {
-    var e_6, _a, e_7, _b;
-
-    var _this = this;
-
-    if (_event === void 0) {
-      _event = es_actions/* initEvent */.bf;
-    }
-
-    var configuration = stateTransition.configuration; // Transition will "apply" if:
-    // - this is the initial state (there is no current state)
-    // - OR there are transitions
-
-    var willTransition = !currentState || stateTransition.transitions.length > 0;
-    var resolvedConfiguration = willTransition ? stateTransition.configuration : currentState ? currentState.configuration : [];
-    var isDone = (0,stateUtils/* isInFinalState */.Ij)(resolvedConfiguration, this);
-    var resolvedStateValue = willTransition ? (0,stateUtils/* getValue */.NA)(this.machine, configuration) : undefined;
-    var historyValue = currentState ? currentState.historyValue ? currentState.historyValue : stateTransition.source ? this.machine.historyValue(currentState.value) : undefined : undefined;
-    var actionBlocks = this.getActions(new Set(resolvedConfiguration), isDone, stateTransition, context, _event, currentState, predictableExec);
-    var activities = currentState ? (0,_tslib/* __assign */.pi)({}, currentState.activities) : {};
-
-    try {
-      for (var actionBlocks_1 = (0,_tslib/* __values */.XA)(actionBlocks), actionBlocks_1_1 = actionBlocks_1.next(); !actionBlocks_1_1.done; actionBlocks_1_1 = actionBlocks_1.next()) {
-        var block = actionBlocks_1_1.value;
-
-        try {
-          for (var _c = (e_7 = void 0, (0,_tslib/* __values */.XA)(block.actions)), _d = _c.next(); !_d.done; _d = _c.next()) {
-            var action = _d.value;
-
-            if (action.type === actionTypes/* start */.BL) {
-              activities[action.activity.id || action.activity.type] = action;
-            } else if (action.type === actionTypes/* stop */.sT) {
-              activities[action.activity.id || action.activity.type] = false;
-            }
-          }
-        } catch (e_7_1) {
-          e_7 = {
-            error: e_7_1
-          };
-        } finally {
-          try {
-            if (_d && !_d.done && (_b = _c.return)) _b.call(_c);
-          } finally {
-            if (e_7) throw e_7.error;
-          }
-        }
-      }
-    } catch (e_6_1) {
-      e_6 = {
-        error: e_6_1
-      };
-    } finally {
-      try {
-        if (actionBlocks_1_1 && !actionBlocks_1_1.done && (_a = actionBlocks_1.return)) _a.call(actionBlocks_1);
-      } finally {
-        if (e_6) throw e_6.error;
-      }
-    }
-
-    var _e = (0,_tslib/* __read */.CR)((0,es_actions/* resolveActions */.yC)(this, currentState, context, _event, actionBlocks, predictableExec, this.machine.config.predictableActionArguments || this.machine.config.preserveActionOrder), 2),
-        resolvedActions = _e[0],
-        updatedContext = _e[1];
-
-    var _f = (0,_tslib/* __read */.CR)((0,utils/* partition */.uK)(resolvedActions, utils/* isRaisableAction */.vK), 2),
-        raisedEvents = _f[0],
-        nonRaisedActions = _f[1];
-
-    var invokeActions = resolvedActions.filter(function (action) {
-      var _a;
-
-      return action.type === actionTypes/* start */.BL && ((_a = action.activity) === null || _a === void 0 ? void 0 : _a.type) === actionTypes/* invoke */.dw;
-    });
-    var children = invokeActions.reduce(function (acc, action) {
-      acc[action.activity.id] = (0,Actor/* createInvocableActor */.mu)(action.activity, _this.machine, updatedContext, _event);
-      return acc;
-    }, currentState ? (0,_tslib/* __assign */.pi)({}, currentState.children) : {});
-    var nextState = new State/* State */.ZM({
-      value: resolvedStateValue || currentState.value,
-      context: updatedContext,
-      _event: _event,
-      // Persist _sessionid between states
-      _sessionid: currentState ? currentState._sessionid : null,
-      historyValue: resolvedStateValue ? historyValue ? (0,utils/* updateHistoryValue */.yv)(historyValue, resolvedStateValue) : undefined : currentState ? currentState.historyValue : undefined,
-      history: !resolvedStateValue || stateTransition.source ? currentState : undefined,
-      actions: resolvedStateValue ? nonRaisedActions : [],
-      activities: resolvedStateValue ? activities : currentState ? currentState.activities : {},
-      events: [],
-      configuration: resolvedConfiguration,
-      transitions: stateTransition.transitions,
-      children: children,
-      done: isDone,
-      tags: (0,stateUtils/* getTagsFromConfiguration */.Oe)(resolvedConfiguration),
-      machine: this
-    });
-    var didUpdateContext = context !== updatedContext;
-    nextState.changed = _event.name === actionTypes/* update */.Vx || didUpdateContext; // Dispose of penultimate histories to prevent memory leaks
-
-    var history = nextState.history;
-
-    if (history) {
-      delete history.history;
-    } // There are transient transitions if the machine is not in a final state
-    // and if some of the state nodes have transient ("always") transitions.
-
-
-    var hasAlwaysTransitions = !isDone && (this._transient || configuration.some(function (stateNode) {
-      return stateNode._transient;
-    })); // If there are no enabled transitions, check if there are transient transitions.
-    // If there are transient transitions, continue checking for more transitions
-    // because an transient transition should be triggered even if there are no
-    // enabled transitions.
-    //
-    // If we're already working on an transient transition then stop to prevent an infinite loop.
-    //
-    // Otherwise, if there are no enabled nor transient transitions, we are done.
-
-    if (!willTransition && (!hasAlwaysTransitions || _event.name === NULL_EVENT)) {
-      return nextState;
-    }
-
-    var maybeNextState = nextState;
-
-    if (!isDone) {
-      if (hasAlwaysTransitions) {
-        maybeNextState = this.resolveRaisedTransition(maybeNextState, {
-          type: actionTypes/* nullEvent */.IA
-        }, _event, predictableExec);
-      }
-
-      while (raisedEvents.length) {
-        var raisedEvent = raisedEvents.shift();
-        maybeNextState = this.resolveRaisedTransition(maybeNextState, raisedEvent._event, _event, predictableExec);
-      }
-    } // Detect if state changed
-
-
-    var changed = maybeNextState.changed || (history ? !!maybeNextState.actions.length || didUpdateContext || typeof history.value !== typeof maybeNextState.value || !(0,State/* stateValuesEqual */.j_)(maybeNextState.value, history.value) : undefined);
-    maybeNextState.changed = changed; // Preserve original history after raised events
-
-    maybeNextState.history = history;
-    return maybeNextState;
-  };
-  /**
-   * Returns the child state node from its relative `stateKey`, or throws.
-   */
-
-
-  StateNode.prototype.getStateNode = function (stateKey) {
-    if (isStateId(stateKey)) {
-      return this.machine.getStateNodeById(stateKey);
-    }
-
-    if (!this.states) {
-      throw new Error("Unable to retrieve child state '".concat(stateKey, "' from '").concat(this.id, "'; no child states exist."));
-    }
-
-    var result = this.states[stateKey];
-
-    if (!result) {
-      throw new Error("Child state '".concat(stateKey, "' does not exist on '").concat(this.id, "'"));
-    }
-
-    return result;
-  };
-  /**
-   * Returns the state node with the given `stateId`, or throws.
-   *
-   * @param stateId The state ID. The prefix "#" is removed.
-   */
-
-
-  StateNode.prototype.getStateNodeById = function (stateId) {
-    var resolvedStateId = isStateId(stateId) ? stateId.slice(STATE_IDENTIFIER.length) : stateId;
-
-    if (resolvedStateId === this.id) {
-      return this;
-    }
-
-    var stateNode = this.machine.idMap[resolvedStateId];
-
-    if (!stateNode) {
-      throw new Error("Child state node '#".concat(resolvedStateId, "' does not exist on machine '").concat(this.id, "'"));
-    }
-
-    return stateNode;
-  };
-  /**
-   * Returns the relative state node from the given `statePath`, or throws.
-   *
-   * @param statePath The string or string array relative path to the state node.
-   */
-
-
-  StateNode.prototype.getStateNodeByPath = function (statePath) {
-    if (typeof statePath === 'string' && isStateId(statePath)) {
-      try {
-        return this.getStateNodeById(statePath.slice(1));
-      } catch (e) {// try individual paths
-        // throw e;
-      }
-    }
-
-    var arrayStatePath = (0,utils/* toStatePath */.Q9)(statePath, this.delimiter).slice();
-    var currentStateNode = this;
-
-    while (arrayStatePath.length) {
-      var key = arrayStatePath.shift();
-
-      if (!key.length) {
-        break;
-      }
-
-      currentStateNode = currentStateNode.getStateNode(key);
-    }
-
-    return currentStateNode;
-  };
-  /**
-   * Resolves a partial state value with its full representation in this machine.
-   *
-   * @param stateValue The partial state value to resolve.
-   */
-
-
-  StateNode.prototype.resolve = function (stateValue) {
-    var _a;
-
-    var _this = this;
-
-    if (!stateValue) {
-      return this.initialStateValue || EMPTY_OBJECT; // TODO: type-specific properties
-    }
-
-    switch (this.type) {
-      case 'parallel':
-        return (0,utils/* mapValues */.Q8)(this.initialStateValue, function (subStateValue, subStateKey) {
-          return subStateValue ? _this.getStateNode(subStateKey).resolve(stateValue[subStateKey] || subStateValue) : EMPTY_OBJECT;
-        });
-
-      case 'compound':
-        if ((0,utils/* isString */.HD)(stateValue)) {
-          var subStateNode = this.getStateNode(stateValue);
-
-          if (subStateNode.type === 'parallel' || subStateNode.type === 'compound') {
-            return _a = {}, _a[stateValue] = subStateNode.initialStateValue, _a;
-          }
-
-          return stateValue;
-        }
-
-        if (!Object.keys(stateValue).length) {
-          return this.initialStateValue || {};
-        }
-
-        return (0,utils/* mapValues */.Q8)(stateValue, function (subStateValue, subStateKey) {
-          return subStateValue ? _this.getStateNode(subStateKey).resolve(subStateValue) : EMPTY_OBJECT;
-        });
-
-      default:
-        return stateValue || EMPTY_OBJECT;
-    }
-  };
-
-  StateNode.prototype.getResolvedPath = function (stateIdentifier) {
-    if (isStateId(stateIdentifier)) {
-      var stateNode = this.machine.idMap[stateIdentifier.slice(STATE_IDENTIFIER.length)];
-
-      if (!stateNode) {
-        throw new Error("Unable to find state node '".concat(stateIdentifier, "'"));
-      }
-
-      return stateNode.path;
-    }
-
-    return (0,utils/* toStatePath */.Q9)(stateIdentifier, this.delimiter);
-  };
-
-  Object.defineProperty(StateNode.prototype, "initialStateValue", {
-    get: function () {
-      var _a;
-
-      if (this.__cache.initialStateValue) {
-        return this.__cache.initialStateValue;
-      }
-
-      var initialStateValue;
-
-      if (this.type === 'parallel') {
-        initialStateValue = (0,utils/* mapFilterValues */.ib)(this.states, function (state) {
-          return state.initialStateValue || EMPTY_OBJECT;
-        }, function (stateNode) {
-          return !(stateNode.type === 'history');
-        });
-      } else if (this.initial !== undefined) {
-        if (!this.states[this.initial]) {
-          throw new Error("Initial state '".concat(this.initial, "' not found on '").concat(this.key, "'"));
-        }
-
-        initialStateValue = (0,stateUtils/* isLeafNode */.N9)(this.states[this.initial]) ? this.initial : (_a = {}, _a[this.initial] = this.states[this.initial].initialStateValue, _a);
-      } else {
-        // The finite state value of a machine without child states is just an empty object
-        initialStateValue = {};
-      }
-
-      this.__cache.initialStateValue = initialStateValue;
-      return this.__cache.initialStateValue;
-    },
-    enumerable: false,
-    configurable: true
-  });
-
-  StateNode.prototype.getInitialState = function (stateValue, context) {
-    this._init(); // TODO: this should be in the constructor (see note in constructor)
-
-
-    var configuration = this.getStateNodes(stateValue);
-    return this.resolveTransition({
-      configuration: configuration,
-      exitSet: [],
-      transitions: [],
-      source: undefined,
-      actions: []
-    }, undefined, context !== null && context !== void 0 ? context : this.machine.context, undefined);
-  };
-
-  Object.defineProperty(StateNode.prototype, "initialState", {
-    /**
-     * The initial State instance, which includes all actions to be executed from
-     * entering the initial state.
-     */
-    get: function () {
-      var initialStateValue = this.initialStateValue;
-
-      if (!initialStateValue) {
-        throw new Error("Cannot retrieve initial state from simple state '".concat(this.id, "'."));
-      }
-
-      return this.getInitialState(initialStateValue);
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(StateNode.prototype, "target", {
-    /**
-     * The target state value of the history state node, if it exists. This represents the
-     * default state value to transition to if no history value exists yet.
-     */
-    get: function () {
-      var target;
-
-      if (this.type === 'history') {
-        var historyConfig = this.config;
-
-        if ((0,utils/* isString */.HD)(historyConfig.target)) {
-          target = isStateId(historyConfig.target) ? (0,utils/* pathToStateValue */.on)(this.machine.getStateNodeById(historyConfig.target).path.slice(this.path.length - 1)) : historyConfig.target;
-        } else {
-          target = historyConfig.target;
-        }
-      }
-
-      return target;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  /**
-   * Returns the leaf nodes from a state path relative to this state node.
-   *
-   * @param relativeStateId The relative state path to retrieve the state nodes
-   * @param history The previous state to retrieve history
-   * @param resolve Whether state nodes should resolve to initial child state nodes
-   */
-
-  StateNode.prototype.getRelativeStateNodes = function (relativeStateId, historyValue, resolve) {
-    if (resolve === void 0) {
-      resolve = true;
-    }
-
-    return resolve ? relativeStateId.type === 'history' ? relativeStateId.resolveHistory(historyValue) : relativeStateId.initialStateNodes : [relativeStateId];
-  };
-
-  Object.defineProperty(StateNode.prototype, "initialStateNodes", {
-    get: function () {
-      var _this = this;
-
-      if ((0,stateUtils/* isLeafNode */.N9)(this)) {
-        return [this];
-      } // Case when state node is compound but no initial state is defined
-
-
-      if (this.type === 'compound' && !this.initial) {
-        if (!environment/* IS_PRODUCTION */.M) {
-          (0,utils/* warn */.ZK)(false, "Compound state node '".concat(this.id, "' has no initial state."));
-        }
-
-        return [this];
-      }
-
-      var initialStateNodePaths = (0,utils/* toStatePaths */.SA)(this.initialStateValue);
-      return (0,utils/* flatten */.xH)(initialStateNodePaths.map(function (initialPath) {
-        return _this.getFromRelativePath(initialPath);
-      }));
-    },
-    enumerable: false,
-    configurable: true
-  });
-  /**
-   * Retrieves state nodes from a relative path to this state node.
-   *
-   * @param relativePath The relative path from this state node
-   * @param historyValue
-   */
-
-  StateNode.prototype.getFromRelativePath = function (relativePath) {
-    if (!relativePath.length) {
-      return [this];
-    }
-
-    var _a = (0,_tslib/* __read */.CR)(relativePath),
-        stateKey = _a[0],
-        childStatePath = _a.slice(1);
-
-    if (!this.states) {
-      throw new Error("Cannot retrieve subPath '".concat(stateKey, "' from node with no states"));
-    }
-
-    var childStateNode = this.getStateNode(stateKey);
-
-    if (childStateNode.type === 'history') {
-      return childStateNode.resolveHistory();
-    }
-
-    if (!this.states[stateKey]) {
-      throw new Error("Child state '".concat(stateKey, "' does not exist on '").concat(this.id, "'"));
-    }
-
-    return this.states[stateKey].getFromRelativePath(childStatePath);
-  };
-
-  StateNode.prototype.historyValue = function (relativeStateValue) {
-    if (!Object.keys(this.states).length) {
-      return undefined;
-    }
-
-    return {
-      current: relativeStateValue || this.initialStateValue,
-      states: (0,utils/* mapFilterValues */.ib)(this.states, function (stateNode, key) {
-        if (!relativeStateValue) {
-          return stateNode.historyValue();
-        }
-
-        var subStateValue = (0,utils/* isString */.HD)(relativeStateValue) ? undefined : relativeStateValue[key];
-        return stateNode.historyValue(subStateValue || stateNode.initialStateValue);
-      }, function (stateNode) {
-        return !stateNode.history;
-      })
-    };
-  };
-  /**
-   * Resolves to the historical value(s) of the parent state node,
-   * represented by state nodes.
-   *
-   * @param historyValue
-   */
-
-
-  StateNode.prototype.resolveHistory = function (historyValue) {
-    var _this = this;
-
-    if (this.type !== 'history') {
-      return [this];
-    }
-
-    var parent = this.parent;
-
-    if (!historyValue) {
-      var historyTarget = this.target;
-      return historyTarget ? (0,utils/* flatten */.xH)((0,utils/* toStatePaths */.SA)(historyTarget).map(function (relativeChildPath) {
-        return parent.getFromRelativePath(relativeChildPath);
-      })) : parent.initialStateNodes;
-    }
-
-    var subHistoryValue = (0,utils/* nestedPath */.gk)(parent.path, 'states')(historyValue).current;
-
-    if ((0,utils/* isString */.HD)(subHistoryValue)) {
-      return [parent.getStateNode(subHistoryValue)];
-    }
-
-    return (0,utils/* flatten */.xH)((0,utils/* toStatePaths */.SA)(subHistoryValue).map(function (subStatePath) {
-      return _this.history === 'deep' ? parent.getFromRelativePath(subStatePath) : [parent.states[subStatePath[0]]];
-    }));
-  };
-
-  Object.defineProperty(StateNode.prototype, "stateIds", {
-    /**
-     * All the state node IDs of this state node and its descendant state nodes.
-     */
-    get: function () {
-      var _this = this;
-
-      var childStateIds = (0,utils/* flatten */.xH)(Object.keys(this.states).map(function (stateKey) {
-        return _this.states[stateKey].stateIds;
-      }));
-      return [this.id].concat(childStateIds);
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(StateNode.prototype, "events", {
-    /**
-     * All the event types accepted by this state node and its descendants.
-     */
-    get: function () {
-      var e_8, _a, e_9, _b;
-
-      if (this.__cache.events) {
-        return this.__cache.events;
-      }
-
-      var states = this.states;
-      var events = new Set(this.ownEvents);
-
-      if (states) {
-        try {
-          for (var _c = (0,_tslib/* __values */.XA)(Object.keys(states)), _d = _c.next(); !_d.done; _d = _c.next()) {
-            var stateId = _d.value;
-            var state = states[stateId];
-
-            if (state.states) {
-              try {
-                for (var _e = (e_9 = void 0, (0,_tslib/* __values */.XA)(state.events)), _f = _e.next(); !_f.done; _f = _e.next()) {
-                  var event_1 = _f.value;
-                  events.add("".concat(event_1));
-                }
-              } catch (e_9_1) {
-                e_9 = {
-                  error: e_9_1
-                };
-              } finally {
-                try {
-                  if (_f && !_f.done && (_b = _e.return)) _b.call(_e);
-                } finally {
-                  if (e_9) throw e_9.error;
-                }
-              }
-            }
-          }
-        } catch (e_8_1) {
-          e_8 = {
-            error: e_8_1
-          };
-        } finally {
-          try {
-            if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
-          } finally {
-            if (e_8) throw e_8.error;
-          }
-        }
-      }
-
-      return this.__cache.events = Array.from(events);
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(StateNode.prototype, "ownEvents", {
-    /**
-     * All the events that have transitions directly from this state node.
-     *
-     * Excludes any inert events.
-     */
-    get: function () {
-      var events = new Set(this.transitions.filter(function (transition) {
-        return !(!transition.target && !transition.actions.length && transition.internal);
-      }).map(function (transition) {
-        return transition.eventType;
-      }));
-      return Array.from(events);
-    },
-    enumerable: false,
-    configurable: true
-  });
-
-  StateNode.prototype.resolveTarget = function (_target) {
-    var _this = this;
-
-    if (_target === undefined) {
-      // an undefined target signals that the state node should not transition from that state when receiving that event
-      return undefined;
-    }
-
-    return _target.map(function (target) {
-      if (!(0,utils/* isString */.HD)(target)) {
-        return target;
-      }
-
-      var isInternalTarget = target[0] === _this.delimiter; // If internal target is defined on machine,
-      // do not include machine key on target
-
-      if (isInternalTarget && !_this.parent) {
-        return _this.getStateNodeByPath(target.slice(1));
-      }
-
-      var resolvedTarget = isInternalTarget ? _this.key + target : target;
-
-      if (_this.parent) {
-        try {
-          var targetStateNode = _this.parent.getStateNodeByPath(resolvedTarget);
-
-          return targetStateNode;
-        } catch (err) {
-          throw new Error("Invalid transition definition for state node '".concat(_this.id, "':\n").concat(err.message));
-        }
-      } else {
-        return _this.getStateNodeByPath(resolvedTarget);
-      }
-    });
-  };
-
-  StateNode.prototype.formatTransition = function (transitionConfig) {
-    var _this = this;
-
-    var normalizedTarget = (0,utils/* normalizeTarget */.rg)(transitionConfig.target);
-    var internal = 'internal' in transitionConfig ? transitionConfig.internal : normalizedTarget ? normalizedTarget.some(function (_target) {
-      return (0,utils/* isString */.HD)(_target) && _target[0] === _this.delimiter;
-    }) : true;
-    var guards = this.machine.options.guards;
-    var target = this.resolveTarget(normalizedTarget);
-
-    var transition = (0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({}, transitionConfig), {
-      actions: (0,es_actions/* toActionObjects */.AE)((0,utils/* toArray */.qo)(transitionConfig.actions)),
-      cond: (0,utils/* toGuard */.Qi)(transitionConfig.cond, guards),
-      target: target,
-      source: this,
-      internal: internal,
-      eventType: transitionConfig.event,
-      toJSON: function () {
-        return (0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({}, transition), {
-          target: transition.target ? transition.target.map(function (t) {
-            return "#".concat(t.id);
-          }) : undefined,
-          source: "#".concat(_this.id)
-        });
-      }
-    });
-
-    return transition;
-  };
-
-  StateNode.prototype.formatTransitions = function () {
-    var e_10, _a;
-
-    var _this = this;
-
-    var onConfig;
-
-    if (!this.config.on) {
-      onConfig = [];
-    } else if (Array.isArray(this.config.on)) {
-      onConfig = this.config.on;
-    } else {
-      var _b = this.config.on,
-          _c = WILDCARD,
-          _d = _b[_c],
-          wildcardConfigs = _d === void 0 ? [] : _d,
-          strictTransitionConfigs_1 = (0,_tslib/* __rest */._T)(_b, [typeof _c === "symbol" ? _c : _c + ""]);
-
-      onConfig = (0,utils/* flatten */.xH)(Object.keys(strictTransitionConfigs_1).map(function (key) {
-        if (!environment/* IS_PRODUCTION */.M && key === NULL_EVENT) {
-          (0,utils/* warn */.ZK)(false, "Empty string transition configs (e.g., `{ on: { '': ... }}`) for transient transitions are deprecated. Specify the transition in the `{ always: ... }` property instead. " + "Please check the `on` configuration for \"#".concat(_this.id, "\"."));
-        }
-
-        var transitionConfigArray = (0,utils/* toTransitionConfigArray */.jh)(key, strictTransitionConfigs_1[key]);
-
-        if (!environment/* IS_PRODUCTION */.M) {
-          validateArrayifiedTransitions(_this, key, transitionConfigArray);
-        }
-
-        return transitionConfigArray;
-      }).concat((0,utils/* toTransitionConfigArray */.jh)(WILDCARD, wildcardConfigs)));
-    }
-
-    var eventlessConfig = this.config.always ? (0,utils/* toTransitionConfigArray */.jh)('', this.config.always) : [];
-    var doneConfig = this.config.onDone ? (0,utils/* toTransitionConfigArray */.jh)(String((0,es_actions/* done */.aT)(this.id)), this.config.onDone) : [];
-
-    if (!environment/* IS_PRODUCTION */.M) {
-      (0,utils/* warn */.ZK)(!(this.config.onDone && !this.parent), "Root nodes cannot have an \".onDone\" transition. Please check the config of \"".concat(this.id, "\"."));
-    }
-
-    var invokeConfig = (0,utils/* flatten */.xH)(this.invoke.map(function (invokeDef) {
-      var settleTransitions = [];
-
-      if (invokeDef.onDone) {
-        settleTransitions.push.apply(settleTransitions, (0,_tslib/* __spreadArray */.ev)([], (0,_tslib/* __read */.CR)((0,utils/* toTransitionConfigArray */.jh)(String((0,es_actions/* doneInvoke */.Sl)(invokeDef.id)), invokeDef.onDone)), false));
-      }
-
-      if (invokeDef.onError) {
-        settleTransitions.push.apply(settleTransitions, (0,_tslib/* __spreadArray */.ev)([], (0,_tslib/* __read */.CR)((0,utils/* toTransitionConfigArray */.jh)(String((0,es_actions/* error */.vU)(invokeDef.id)), invokeDef.onError)), false));
-      }
-
-      return settleTransitions;
-    }));
-    var delayedTransitions = this.after;
-    var formattedTransitions = (0,utils/* flatten */.xH)((0,_tslib/* __spreadArray */.ev)((0,_tslib/* __spreadArray */.ev)((0,_tslib/* __spreadArray */.ev)((0,_tslib/* __spreadArray */.ev)([], (0,_tslib/* __read */.CR)(doneConfig), false), (0,_tslib/* __read */.CR)(invokeConfig), false), (0,_tslib/* __read */.CR)(onConfig), false), (0,_tslib/* __read */.CR)(eventlessConfig), false).map(function (transitionConfig) {
-      return (0,utils/* toArray */.qo)(transitionConfig).map(function (transition) {
-        return _this.formatTransition(transition);
-      });
-    }));
-
-    try {
-      for (var delayedTransitions_1 = (0,_tslib/* __values */.XA)(delayedTransitions), delayedTransitions_1_1 = delayedTransitions_1.next(); !delayedTransitions_1_1.done; delayedTransitions_1_1 = delayedTransitions_1.next()) {
-        var delayedTransition = delayedTransitions_1_1.value;
-        formattedTransitions.push(delayedTransition);
-      }
-    } catch (e_10_1) {
-      e_10 = {
-        error: e_10_1
-      };
-    } finally {
-      try {
-        if (delayedTransitions_1_1 && !delayedTransitions_1_1.done && (_a = delayedTransitions_1.return)) _a.call(delayedTransitions_1);
-      } finally {
-        if (e_10) throw e_10.error;
-      }
-    }
-
-    return formattedTransitions;
-  };
-
-  return StateNode;
-}();
-
-
-
-;// CONCATENATED MODULE: ./node_modules/xstate/es/Machine.js
-
-
-
-var warned = false;
-function Machine(config, options, initialContext) {
-  if (initialContext === void 0) {
-    initialContext = config.context;
-  }
-
-  return new StateNode(config, options, initialContext);
-}
-function createMachine(config, options) {
-  if (!environment/* IS_PRODUCTION */.M && !('predictableActionArguments' in config) && !warned) {
-    warned = true;
-    console.warn('It is highly recommended to set `predictableActionArguments` to `true` when using `createMachine`. https://xstate.js.org/docs/guides/actions.html');
-  }
-
-  return new StateNode_StateNode(config, options);
-}
-
-
-
-
-/***/ }),
-
-/***/ 4911:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   TL: () => (/* binding */ isStateConfig),
-/* harmony export */   ZM: () => (/* binding */ State),
-/* harmony export */   j1: () => (/* binding */ bindActionToState),
-/* harmony export */   j_: () => (/* binding */ stateValuesEqual)
-/* harmony export */ });
-/* unused harmony export isState */
-/* harmony import */ var _virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3056);
-/* harmony import */ var _constants_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7353);
-/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9823);
-/* harmony import */ var _stateUtils_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6115);
-/* harmony import */ var _actions_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(375);
-/* harmony import */ var _environment_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4066);
-
-
-
-
-
-
-
-function stateValuesEqual(a, b) {
-  if (a === b) {
-    return true;
-  }
-
-  if (a === undefined || b === undefined) {
-    return false;
-  }
-
-  if ((0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isString */ .HD)(a) || (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isString */ .HD)(b)) {
-    return a === b;
-  }
-
-  var aKeys = Object.keys(a);
-  var bKeys = Object.keys(b);
-  return aKeys.length === bKeys.length && aKeys.every(function (key) {
-    return stateValuesEqual(a[key], b[key]);
-  });
-}
-function isStateConfig(state) {
-  if (typeof state !== 'object' || state === null) {
-    return false;
-  }
-
-  return 'value' in state && '_event' in state;
-}
-/**
- * @deprecated Use `isStateConfig(object)` or `state instanceof State` instead.
- */
-
-var isState = (/* unused pure expression or super */ null && (isStateConfig));
-function bindActionToState(action, state) {
-  var exec = action.exec;
-
-  var boundAction = (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__assign */ .pi)((0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__assign */ .pi)({}, action), {
-    exec: exec !== undefined ? function () {
-      return exec(state.context, state.event, {
-        action: action,
-        state: state,
-        _event: state._event
-      });
-    } : undefined
-  });
-
-  return boundAction;
-}
-
-var State =
-/*#__PURE__*/
-
-/** @class */
-function () {
-  /**
-   * Creates a new State instance.
-   * @param value The state value
-   * @param context The extended state
-   * @param historyValue The tree representing historical values of the state nodes
-   * @param history The previous state
-   * @param actions An array of action objects to execute as side-effects
-   * @param activities A mapping of activities and whether they are started (`true`) or stopped (`false`).
-   * @param meta
-   * @param events Internal event queue. Should be empty with run-to-completion semantics.
-   * @param configuration
-   */
-  function State(config) {
-    var _this = this;
-
-    var _a;
-
-    this.actions = [];
-    this.activities = _constants_js__WEBPACK_IMPORTED_MODULE_2__/* .EMPTY_ACTIVITY_MAP */ .qP;
-    this.meta = {};
-    this.events = [];
-    this.value = config.value;
-    this.context = config.context;
-    this._event = config._event;
-    this._sessionid = config._sessionid;
-    this.event = this._event.data;
-    this.historyValue = config.historyValue;
-    this.history = config.history;
-    this.actions = config.actions || [];
-    this.activities = config.activities || _constants_js__WEBPACK_IMPORTED_MODULE_2__/* .EMPTY_ACTIVITY_MAP */ .qP;
-    this.meta = (0,_stateUtils_js__WEBPACK_IMPORTED_MODULE_3__/* .getMeta */ .xZ)(config.configuration);
-    this.events = config.events || [];
-    this.matches = this.matches.bind(this);
-    this.toStrings = this.toStrings.bind(this);
-    this.configuration = config.configuration;
-    this.transitions = config.transitions;
-    this.children = config.children;
-    this.done = !!config.done;
-    this.tags = (_a = Array.isArray(config.tags) ? new Set(config.tags) : config.tags) !== null && _a !== void 0 ? _a : new Set();
-    this.machine = config.machine;
-    Object.defineProperty(this, 'nextEvents', {
-      get: function () {
-        return (0,_stateUtils_js__WEBPACK_IMPORTED_MODULE_3__/* .nextEvents */ .nJ)(_this.configuration);
-      }
-    });
-  }
-  /**
-   * Creates a new State instance for the given `stateValue` and `context`.
-   * @param stateValue
-   * @param context
-   */
-
-
-  State.from = function (stateValue, context) {
-    if (stateValue instanceof State) {
-      if (stateValue.context !== context) {
-        return new State({
-          value: stateValue.value,
-          context: context,
-          _event: stateValue._event,
-          _sessionid: null,
-          historyValue: stateValue.historyValue,
-          history: stateValue.history,
-          actions: [],
-          activities: stateValue.activities,
-          meta: {},
-          events: [],
-          configuration: [],
-          transitions: [],
-          children: {}
-        });
-      }
-
-      return stateValue;
-    }
-
-    var _event = _actions_js__WEBPACK_IMPORTED_MODULE_4__/* .initEvent */ .bf;
-    return new State({
-      value: stateValue,
-      context: context,
-      _event: _event,
-      _sessionid: null,
-      historyValue: undefined,
-      history: undefined,
-      actions: [],
-      activities: undefined,
-      meta: undefined,
-      events: [],
-      configuration: [],
-      transitions: [],
-      children: {}
-    });
-  };
-  /**
-   * Creates a new State instance for the given `config`.
-   * @param config The state config
-   */
-
-
-  State.create = function (config) {
-    return new State(config);
-  };
-  /**
-   * Creates a new `State` instance for the given `stateValue` and `context` with no actions (side-effects).
-   * @param stateValue
-   * @param context
-   */
-
-
-  State.inert = function (stateValue, context) {
-    if (stateValue instanceof State) {
-      if (!stateValue.actions.length) {
-        return stateValue;
-      }
-
-      var _event = _actions_js__WEBPACK_IMPORTED_MODULE_4__/* .initEvent */ .bf;
-      return new State({
-        value: stateValue.value,
-        context: context,
-        _event: _event,
-        _sessionid: null,
-        historyValue: stateValue.historyValue,
-        history: stateValue.history,
-        activities: stateValue.activities,
-        configuration: stateValue.configuration,
-        transitions: [],
-        children: {}
-      });
-    }
-
-    return State.from(stateValue, context);
-  };
-  /**
-   * Returns an array of all the string leaf state node paths.
-   * @param stateValue
-   * @param delimiter The character(s) that separate each subpath in the string state node path.
-   */
-
-
-  State.prototype.toStrings = function (stateValue, delimiter) {
-    var _this = this;
-
-    if (stateValue === void 0) {
-      stateValue = this.value;
-    }
-
-    if (delimiter === void 0) {
-      delimiter = '.';
-    }
-
-    if ((0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isString */ .HD)(stateValue)) {
-      return [stateValue];
-    }
-
-    var valueKeys = Object.keys(stateValue);
-    return valueKeys.concat.apply(valueKeys, (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__spreadArray */ .ev)([], (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__read */ .CR)(valueKeys.map(function (key) {
-      return _this.toStrings(stateValue[key], delimiter).map(function (s) {
-        return key + delimiter + s;
-      });
-    })), false));
-  };
-
-  State.prototype.toJSON = function () {
-    var _a = this;
-        _a.configuration;
-        _a.transitions;
-        var tags = _a.tags;
-        _a.machine;
-        var jsonValues = (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__rest */ ._T)(_a, ["configuration", "transitions", "tags", "machine"]);
-
-    return (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__assign */ .pi)((0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__assign */ .pi)({}, jsonValues), {
-      tags: Array.from(tags)
-    });
-  };
-
-  State.prototype.matches = function (parentStateValue) {
-    return (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .matchesState */ .W)(parentStateValue, this.value);
-  };
-  /**
-   * Whether the current state configuration has a state node with the specified `tag`.
-   * @param tag
-   */
-
-
-  State.prototype.hasTag = function (tag) {
-    return this.tags.has(tag);
-  };
-  /**
-   * Determines whether sending the `event` will cause a non-forbidden transition
-   * to be selected, even if the transitions have no actions nor
-   * change the state value.
-   *
-   * @param event The event to test
-   * @returns Whether the event will cause a transition
-   */
-
-
-  State.prototype.can = function (event) {
-    var _a;
-
-    if (_environment_js__WEBPACK_IMPORTED_MODULE_5__/* .IS_PRODUCTION */ .M) {
-      (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .warn */ .ZK)(!!this.machine, "state.can(...) used outside of a machine-created State object; this will always return false.");
-    }
-
-    var transitionData = (_a = this.machine) === null || _a === void 0 ? void 0 : _a.getTransitionData(this, event);
-    return !!(transitionData === null || transitionData === void 0 ? void 0 : transitionData.transitions.length) && // Check that at least one transition is not forbidden
-    transitionData.transitions.some(function (t) {
-      return t.target !== undefined || t.actions.length;
-    });
-  };
-
-  return State;
-}();
-
-
-
-
-/***/ }),
-
-/***/ 3056:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   CR: () => (/* binding */ __read),
-/* harmony export */   XA: () => (/* binding */ __values),
-/* harmony export */   _T: () => (/* binding */ __rest),
-/* harmony export */   ev: () => (/* binding */ __spreadArray),
-/* harmony export */   pi: () => (/* binding */ __assign)
-/* harmony export */ });
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-***************************************************************************** */
-
-var __assign = function() {
-    __assign = Object.assign || function __assign(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-
-function __rest(s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-}
-
-function __values(o) {
-    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
-    if (m) return m.call(o);
-    if (o && typeof o.length === "number") return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-}
-
-function __read(o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-}
-
-function __spreadArray(to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-}
-
-
-
-
-/***/ }),
-
-/***/ 3884:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   BL: () => (/* binding */ start),
-/* harmony export */   IA: () => (/* binding */ nullEvent),
-/* harmony export */   Le: () => (/* binding */ pure),
-/* harmony export */   Mg: () => (/* binding */ errorPlatform),
-/* harmony export */   OU: () => (/* binding */ raise),
-/* harmony export */   RN: () => (/* binding */ choose),
-/* harmony export */   S1: () => (/* binding */ init),
-/* harmony export */   Vx: () => (/* binding */ update),
-/* harmony export */   al: () => (/* binding */ cancel),
-/* harmony export */   cM: () => (/* binding */ log),
-/* harmony export */   dw: () => (/* binding */ invoke),
-/* harmony export */   f0: () => (/* binding */ assign),
-/* harmony export */   lW: () => (/* binding */ send),
-/* harmony export */   sT: () => (/* binding */ stop),
-/* harmony export */   vU: () => (/* binding */ error)
-/* harmony export */ });
-/* unused harmony exports after, doneState, errorExecution */
-/* harmony import */ var _types_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9043);
-
-
-var start = _types_js__WEBPACK_IMPORTED_MODULE_0__/* .ActionTypes */ .M.Start;
-var stop = _types_js__WEBPACK_IMPORTED_MODULE_0__/* .ActionTypes */ .M.Stop;
-var raise = _types_js__WEBPACK_IMPORTED_MODULE_0__/* .ActionTypes */ .M.Raise;
-var send = _types_js__WEBPACK_IMPORTED_MODULE_0__/* .ActionTypes */ .M.Send;
-var cancel = _types_js__WEBPACK_IMPORTED_MODULE_0__/* .ActionTypes */ .M.Cancel;
-var nullEvent = _types_js__WEBPACK_IMPORTED_MODULE_0__/* .ActionTypes */ .M.NullEvent;
-var assign = _types_js__WEBPACK_IMPORTED_MODULE_0__/* .ActionTypes */ .M.Assign;
-var after = _types_js__WEBPACK_IMPORTED_MODULE_0__/* .ActionTypes */ .M.After;
-var doneState = _types_js__WEBPACK_IMPORTED_MODULE_0__/* .ActionTypes */ .M.DoneState;
-var log = _types_js__WEBPACK_IMPORTED_MODULE_0__/* .ActionTypes */ .M.Log;
-var init = _types_js__WEBPACK_IMPORTED_MODULE_0__/* .ActionTypes */ .M.Init;
-var invoke = _types_js__WEBPACK_IMPORTED_MODULE_0__/* .ActionTypes */ .M.Invoke;
-var errorExecution = _types_js__WEBPACK_IMPORTED_MODULE_0__/* .ActionTypes */ .M.ErrorExecution;
-var errorPlatform = _types_js__WEBPACK_IMPORTED_MODULE_0__/* .ActionTypes */ .M.ErrorPlatform;
-var error = _types_js__WEBPACK_IMPORTED_MODULE_0__/* .ActionTypes */ .M.ErrorCustom;
-var update = _types_js__WEBPACK_IMPORTED_MODULE_0__/* .ActionTypes */ .M.Update;
-var choose = _types_js__WEBPACK_IMPORTED_MODULE_0__/* .ActionTypes */ .M.Choose;
-var pure = _types_js__WEBPACK_IMPORTED_MODULE_0__/* .ActionTypes */ .M.Pure;
-
-
-
-
-/***/ }),
-
-/***/ 375:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   AE: () => (/* binding */ toActionObjects),
-/* harmony export */   BL: () => (/* binding */ start),
-/* harmony export */   OU: () => (/* binding */ raise),
-/* harmony export */   Q8: () => (/* binding */ toActionObject),
-/* harmony export */   Sl: () => (/* binding */ doneInvoke),
-/* harmony export */   XA: () => (/* binding */ toActivityDefinition),
-/* harmony export */   aT: () => (/* binding */ done),
-/* harmony export */   al: () => (/* binding */ cancel),
-/* harmony export */   bf: () => (/* binding */ initEvent),
-/* harmony export */   cM: () => (/* binding */ log),
-/* harmony export */   e4: () => (/* binding */ after),
-/* harmony export */   f0: () => (/* binding */ assign),
-/* harmony export */   lW: () => (/* binding */ send),
-/* harmony export */   o$: () => (/* binding */ getActionFunction),
-/* harmony export */   sT: () => (/* binding */ stop),
-/* harmony export */   vU: () => (/* binding */ error),
-/* harmony export */   yC: () => (/* binding */ resolveActions)
-/* harmony export */ });
-/* unused harmony exports choose, escalate, forwardTo, isActionObject, pure, resolveLog, resolveRaise, resolveSend, resolveStop, respond, sendParent, sendTo, sendUpdate */
-/* harmony import */ var _virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3056);
-/* harmony import */ var _types_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9043);
-/* harmony import */ var _actionTypes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3884);
-/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9823);
-/* harmony import */ var _environment_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4066);
-
-
-
-
-
-
-
-
-var initEvent = /*#__PURE__*/(0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .toSCXMLEvent */ .g5)({
-  type: _actionTypes_js__WEBPACK_IMPORTED_MODULE_1__/* .init */ .S1
-});
-function getActionFunction(actionType, actionFunctionMap) {
-  return actionFunctionMap ? actionFunctionMap[actionType] || undefined : undefined;
-}
-function toActionObject(action, actionFunctionMap) {
-  var actionObject;
-
-  if ((0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isString */ .HD)(action) || typeof action === 'number') {
-    var exec = getActionFunction(action, actionFunctionMap);
-
-    if ((0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isFunction */ .mf)(exec)) {
-      actionObject = {
-        type: action,
-        exec: exec
-      };
-    } else if (exec) {
-      actionObject = exec;
-    } else {
-      actionObject = {
-        type: action,
-        exec: undefined
-      };
-    }
-  } else if ((0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isFunction */ .mf)(action)) {
-    actionObject = {
-      // Convert action to string if unnamed
-      type: action.name || action.toString(),
-      exec: action
-    };
-  } else {
-    var exec = getActionFunction(action.type, actionFunctionMap);
-
-    if ((0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isFunction */ .mf)(exec)) {
-      actionObject = (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__assign */ .pi)((0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__assign */ .pi)({}, action), {
-        exec: exec
-      });
-    } else if (exec) {
-      var actionType = exec.type || action.type;
-      actionObject = (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__assign */ .pi)((0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__assign */ .pi)((0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__assign */ .pi)({}, exec), action), {
-        type: actionType
-      });
-    } else {
-      actionObject = action;
-    }
-  }
-
-  return actionObject;
-}
-var toActionObjects = function (action, actionFunctionMap) {
-  if (!action) {
-    return [];
-  }
-
-  var actions = (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isArray */ .kJ)(action) ? action : [action];
-  return actions.map(function (subAction) {
-    return toActionObject(subAction, actionFunctionMap);
-  });
-};
-function toActivityDefinition(action) {
-  var actionObject = toActionObject(action);
-  return (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__assign */ .pi)((0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__assign */ .pi)({
-    id: (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isString */ .HD)(action) ? action : actionObject.id
-  }, actionObject), {
-    type: actionObject.type
-  });
-}
-/**
- * Raises an event. This places the event in the internal event queue, so that
- * the event is immediately consumed by the machine in the current step.
- *
- * @param eventType The event to raise.
- */
-
-function raise(event, options) {
-  return {
-    type: _actionTypes_js__WEBPACK_IMPORTED_MODULE_1__/* .raise */ .OU,
-    event: typeof event === 'function' ? event : (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .toEventObject */ ._v)(event),
-    delay: options ? options.delay : undefined,
-    id: options === null || options === void 0 ? void 0 : options.id
-  };
-}
-function resolveRaise(action, ctx, _event, delaysMap) {
-  var meta = {
-    _event: _event
-  };
-  var resolvedEvent = (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .toSCXMLEvent */ .g5)((0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isFunction */ .mf)(action.event) ? action.event(ctx, _event.data, meta) : action.event);
-  var resolvedDelay;
-
-  if ((0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isString */ .HD)(action.delay)) {
-    var configDelay = delaysMap && delaysMap[action.delay];
-    resolvedDelay = (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isFunction */ .mf)(configDelay) ? configDelay(ctx, _event.data, meta) : configDelay;
-  } else {
-    resolvedDelay = (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isFunction */ .mf)(action.delay) ? action.delay(ctx, _event.data, meta) : action.delay;
-  }
-
-  return (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__assign */ .pi)((0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__assign */ .pi)({}, action), {
-    type: _actionTypes_js__WEBPACK_IMPORTED_MODULE_1__/* .raise */ .OU,
-    _event: resolvedEvent,
-    delay: resolvedDelay
-  });
-}
-/**
- * Sends an event. This returns an action that will be read by an interpreter to
- * send the event in the next step, after the current step is finished executing.
- *
- * @deprecated Use the `sendTo(...)` action creator instead.
- *
- * @param event The event to send.
- * @param options Options to pass into the send event:
- *  - `id` - The unique send event identifier (used with `cancel()`).
- *  - `delay` - The number of milliseconds to delay the sending of the event.
- *  - `to` - The target of this event (by default, the machine the event was sent from).
- */
-
-function send(event, options) {
-  return {
-    to: options ? options.to : undefined,
-    type: _actionTypes_js__WEBPACK_IMPORTED_MODULE_1__/* .send */ .lW,
-    event: (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isFunction */ .mf)(event) ? event : (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .toEventObject */ ._v)(event),
-    delay: options ? options.delay : undefined,
-    // TODO: don't auto-generate IDs here like that
-    // there is too big chance of the ID collision
-    id: options && options.id !== undefined ? options.id : (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isFunction */ .mf)(event) ? event.name : (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .getEventType */ .x6)(event)
-  };
-}
-function resolveSend(action, ctx, _event, delaysMap) {
-  var meta = {
-    _event: _event
-  }; // TODO: helper function for resolving Expr
-
-  var resolvedEvent = (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .toSCXMLEvent */ .g5)((0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isFunction */ .mf)(action.event) ? action.event(ctx, _event.data, meta) : action.event);
-  var resolvedDelay;
-
-  if ((0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isString */ .HD)(action.delay)) {
-    var configDelay = delaysMap && delaysMap[action.delay];
-    resolvedDelay = (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isFunction */ .mf)(configDelay) ? configDelay(ctx, _event.data, meta) : configDelay;
-  } else {
-    resolvedDelay = (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isFunction */ .mf)(action.delay) ? action.delay(ctx, _event.data, meta) : action.delay;
-  }
-
-  var resolvedTarget = (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isFunction */ .mf)(action.to) ? action.to(ctx, _event.data, meta) : action.to;
-  return (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__assign */ .pi)((0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__assign */ .pi)({}, action), {
-    to: resolvedTarget,
-    _event: resolvedEvent,
-    event: resolvedEvent.data,
-    delay: resolvedDelay
-  });
-}
-/**
- * Sends an event to this machine's parent.
- *
- * @param event The event to send to the parent machine.
- * @param options Options to pass into the send event.
- */
-
-function sendParent(event, options) {
-  return send(event, __assign(__assign({}, options), {
-    to: SpecialTargets.Parent
-  }));
-}
-/**
- * Sends an event to an actor.
- *
- * @param actor The `ActorRef` to send the event to.
- * @param event The event to send, or an expression that evaluates to the event to send
- * @param options Send action options
- * @returns An XState send action object
- */
-
-function sendTo(actor, event, options) {
-  return send(event, __assign(__assign({}, options), {
-    to: actor
-  }));
-}
-/**
- * Sends an update event to this machine's parent.
- */
-
-function sendUpdate() {
-  return sendParent(update);
-}
-/**
- * Sends an event back to the sender of the original event.
- *
- * @param event The event to send back to the sender
- * @param options Options to pass into the send event
- */
-
-function respond(event, options) {
-  return send(event, __assign(__assign({}, options), {
-    to: function (_, __, _a) {
-      var _event = _a._event;
-      return _event.origin; // TODO: handle when _event.origin is undefined
-    }
-  }));
-}
-
-var defaultLogExpr = function (context, event) {
-  return {
-    context: context,
-    event: event
-  };
-};
-/**
- *
- * @param expr The expression function to evaluate which will be logged.
- *  Takes in 2 arguments:
- *  - `ctx` - the current state context
- *  - `event` - the event that caused this action to be executed.
- * @param label The label to give to the logged expression.
- */
-
-
-function log(expr, label) {
-  if (expr === void 0) {
-    expr = defaultLogExpr;
-  }
-
-  return {
-    type: _actionTypes_js__WEBPACK_IMPORTED_MODULE_1__/* .log */ .cM,
-    label: label,
-    expr: expr
-  };
-}
-var resolveLog = function (action, ctx, _event) {
-  return (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__assign */ .pi)((0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__assign */ .pi)({}, action), {
-    value: (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isString */ .HD)(action.expr) ? action.expr : action.expr(ctx, _event.data, {
-      _event: _event
-    })
-  });
-};
-/**
- * Cancels an in-flight `send(...)` action. A canceled sent action will not
- * be executed, nor will its event be sent, unless it has already been sent
- * (e.g., if `cancel(...)` is called after the `send(...)` action's `delay`).
- *
- * @param sendId The `id` of the `send(...)` action to cancel.
- */
-
-var cancel = function (sendId) {
-  return {
-    type: _actionTypes_js__WEBPACK_IMPORTED_MODULE_1__/* .cancel */ .al,
-    sendId: sendId
-  };
-};
-/**
- * Starts an activity.
- *
- * @param activity The activity to start.
- */
-
-function start(activity) {
-  var activityDef = toActivityDefinition(activity);
-  return {
-    type: _types_js__WEBPACK_IMPORTED_MODULE_3__/* .ActionTypes */ .M.Start,
-    activity: activityDef,
-    exec: undefined
-  };
-}
-/**
- * Stops an activity.
- *
- * @param actorRef The activity to stop.
- */
-
-function stop(actorRef) {
-  var activity = (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isFunction */ .mf)(actorRef) ? actorRef : toActivityDefinition(actorRef);
-  return {
-    type: _types_js__WEBPACK_IMPORTED_MODULE_3__/* .ActionTypes */ .M.Stop,
-    activity: activity,
-    exec: undefined
-  };
-}
-function resolveStop(action, context, _event) {
-  var actorRefOrString = (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isFunction */ .mf)(action.activity) ? action.activity(context, _event.data) : action.activity;
-  var resolvedActorRef = typeof actorRefOrString === 'string' ? {
-    id: actorRefOrString
-  } : actorRefOrString;
-  var actionObject = {
-    type: _types_js__WEBPACK_IMPORTED_MODULE_3__/* .ActionTypes */ .M.Stop,
-    activity: resolvedActorRef
-  };
-  return actionObject;
-}
-/**
- * Updates the current context of the machine.
- *
- * @param assignment An object that represents the partial context to update.
- */
-
-var assign = function (assignment) {
-  return {
-    type: _actionTypes_js__WEBPACK_IMPORTED_MODULE_1__/* .assign */ .f0,
-    assignment: assignment
-  };
-};
-function isActionObject(action) {
-  return typeof action === 'object' && 'type' in action;
-}
-/**
- * Returns an event type that represents an implicit event that
- * is sent after the specified `delay`.
- *
- * @param delayRef The delay in milliseconds
- * @param id The state node ID where this event is handled
- */
-
-function after(delayRef, id) {
-  var idSuffix = id ? "#".concat(id) : '';
-  return "".concat(_types_js__WEBPACK_IMPORTED_MODULE_3__/* .ActionTypes */ .M.After, "(").concat(delayRef, ")").concat(idSuffix);
-}
-/**
- * Returns an event that represents that a final state node
- * has been reached in the parent state node.
- *
- * @param id The final state node's parent state node `id`
- * @param data The data to pass into the event
- */
-
-function done(id, data) {
-  var type = "".concat(_types_js__WEBPACK_IMPORTED_MODULE_3__/* .ActionTypes */ .M.DoneState, ".").concat(id);
-  var eventObject = {
-    type: type,
-    data: data
-  };
-
-  eventObject.toString = function () {
-    return type;
-  };
-
-  return eventObject;
-}
-/**
- * Returns an event that represents that an invoked service has terminated.
- *
- * An invoked service is terminated when it has reached a top-level final state node,
- * but not when it is canceled.
- *
- * @param id The final state node ID
- * @param data The data to pass into the event
- */
-
-function doneInvoke(id, data) {
-  var type = "".concat(_types_js__WEBPACK_IMPORTED_MODULE_3__/* .ActionTypes */ .M.DoneInvoke, ".").concat(id);
-  var eventObject = {
-    type: type,
-    data: data
-  };
-
-  eventObject.toString = function () {
-    return type;
-  };
-
-  return eventObject;
-}
-function error(id, data) {
-  var type = "".concat(_types_js__WEBPACK_IMPORTED_MODULE_3__/* .ActionTypes */ .M.ErrorPlatform, ".").concat(id);
-  var eventObject = {
-    type: type,
-    data: data
-  };
-
-  eventObject.toString = function () {
-    return type;
-  };
-
-  return eventObject;
-}
-function pure(getActions) {
-  return {
-    type: ActionTypes.Pure,
-    get: getActions
-  };
-}
-/**
- * Forwards (sends) an event to a specified service.
- *
- * @param target The target service to forward the event to.
- * @param options Options to pass into the send action creator.
- */
-
-function forwardTo(target, options) {
-  if (!IS_PRODUCTION && (!target || typeof target === 'function')) {
-    var originalTarget_1 = target;
-
-    target = function () {
-      var args = [];
-
-      for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-      }
-
-      var resolvedTarget = typeof originalTarget_1 === 'function' ? originalTarget_1.apply(void 0, __spreadArray([], __read(args), false)) : originalTarget_1;
-
-      if (!resolvedTarget) {
-        throw new Error("Attempted to forward event to undefined actor. This risks an infinite loop in the sender.");
-      }
-
-      return resolvedTarget;
-    };
-  }
-
-  return send(function (_, event) {
-    return event;
-  }, __assign(__assign({}, options), {
-    to: target
-  }));
-}
-/**
- * Escalates an error by sending it as an event to this machine's parent.
- *
- * @param errorData The error data to send, or the expression function that
- * takes in the `context`, `event`, and `meta`, and returns the error data to send.
- * @param options Options to pass into the send action creator.
- */
-
-function escalate(errorData, options) {
-  return sendParent(function (context, event, meta) {
-    return {
-      type: error$1,
-      data: isFunction(errorData) ? errorData(context, event, meta) : errorData
-    };
-  }, __assign(__assign({}, options), {
-    to: SpecialTargets.Parent
-  }));
-}
-function choose(conds) {
-  return {
-    type: ActionTypes.Choose,
-    conds: conds
-  };
-}
-
-var pluckAssigns = function (actionBlocks) {
-  var e_1, _a;
-
-  var assignActions = [];
-
-  try {
-    for (var actionBlocks_1 = (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__values */ .XA)(actionBlocks), actionBlocks_1_1 = actionBlocks_1.next(); !actionBlocks_1_1.done; actionBlocks_1_1 = actionBlocks_1.next()) {
-      var block = actionBlocks_1_1.value;
-      var i = 0;
-
-      while (i < block.actions.length) {
-        if (block.actions[i].type === _actionTypes_js__WEBPACK_IMPORTED_MODULE_1__/* .assign */ .f0) {
-          assignActions.push(block.actions[i]);
-          block.actions.splice(i, 1);
-          continue;
-        }
-
-        i++;
-      }
-    }
-  } catch (e_1_1) {
-    e_1 = {
-      error: e_1_1
-    };
-  } finally {
-    try {
-      if (actionBlocks_1_1 && !actionBlocks_1_1.done && (_a = actionBlocks_1.return)) _a.call(actionBlocks_1);
-    } finally {
-      if (e_1) throw e_1.error;
-    }
-  }
-
-  return assignActions;
-};
-
-function resolveActions(machine, currentState, currentContext, _event, actionBlocks, predictableExec, preserveActionOrder) {
-  if (preserveActionOrder === void 0) {
-    preserveActionOrder = false;
-  }
-
-  var assignActions = preserveActionOrder ? [] : pluckAssigns(actionBlocks);
-  var updatedContext = assignActions.length ? (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .updateContext */ .dt)(currentContext, _event, assignActions, currentState) : currentContext;
-  var preservedContexts = preserveActionOrder ? [currentContext] : undefined;
-  var deferredToBlockEnd = [];
-
-  function handleAction(blockType, actionObject) {
-    var _a;
-
-    switch (actionObject.type) {
-      case _actionTypes_js__WEBPACK_IMPORTED_MODULE_1__/* .raise */ .OU:
-        {
-          var raisedAction = resolveRaise(actionObject, updatedContext, _event, machine.options.delays);
-
-          if (predictableExec && typeof raisedAction.delay === 'number') {
-            predictableExec(raisedAction, updatedContext, _event);
-          }
-
-          return raisedAction;
-        }
-
-      case _actionTypes_js__WEBPACK_IMPORTED_MODULE_1__/* .send */ .lW:
-        var sendAction = resolveSend(actionObject, updatedContext, _event, machine.options.delays); // TODO: fix ActionTypes.Init
-
-        if (!_environment_js__WEBPACK_IMPORTED_MODULE_4__/* .IS_PRODUCTION */ .M) {
-          var configuredDelay = actionObject.delay; // warn after resolving as we can create better contextual message here
-
-          (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .warn */ .ZK)(!(0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .isString */ .HD)(configuredDelay) || typeof sendAction.delay === 'number', // tslint:disable-next-line:max-line-length
-          "No delay reference for delay expression '".concat(configuredDelay, "' was found on machine '").concat(machine.id, "'"));
-        }
-
-        if (predictableExec && sendAction.to !== _types_js__WEBPACK_IMPORTED_MODULE_3__/* .SpecialTargets */ .K.Internal) {
-          if (blockType === 'entry') {
-            deferredToBlockEnd.push(sendAction);
-          } else {
-            predictableExec(sendAction, updatedContext, _event);
-          }
-        }
-
-        return sendAction;
-
-      case _actionTypes_js__WEBPACK_IMPORTED_MODULE_1__/* .log */ .cM:
-        {
-          var resolved = resolveLog(actionObject, updatedContext, _event);
-          predictableExec === null || predictableExec === void 0 ? void 0 : predictableExec(resolved, updatedContext, _event);
-          return resolved;
-        }
-
-      case _actionTypes_js__WEBPACK_IMPORTED_MODULE_1__/* .choose */ .RN:
-        {
-          var chooseAction = actionObject;
-          var matchedActions = (_a = chooseAction.conds.find(function (condition) {
-            var guard = (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .toGuard */ .Qi)(condition.cond, machine.options.guards);
-            return !guard || (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .evaluateGuard */ .vx)(machine, guard, updatedContext, _event, !predictableExec ? currentState : undefined);
-          })) === null || _a === void 0 ? void 0 : _a.actions;
-
-          if (!matchedActions) {
-            return [];
-          }
-
-          var _b = (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__read */ .CR)(resolveActions(machine, currentState, updatedContext, _event, [{
-            type: blockType,
-            actions: toActionObjects((0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .toArray */ .qo)(matchedActions), machine.options.actions)
-          }], predictableExec, preserveActionOrder), 2),
-              resolvedActionsFromChoose = _b[0],
-              resolvedContextFromChoose = _b[1];
-
-          updatedContext = resolvedContextFromChoose;
-          preservedContexts === null || preservedContexts === void 0 ? void 0 : preservedContexts.push(updatedContext);
-          return resolvedActionsFromChoose;
-        }
-
-      case _actionTypes_js__WEBPACK_IMPORTED_MODULE_1__/* .pure */ .Le:
-        {
-          var matchedActions = actionObject.get(updatedContext, _event.data);
-
-          if (!matchedActions) {
-            return [];
-          }
-
-          var _c = (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__read */ .CR)(resolveActions(machine, currentState, updatedContext, _event, [{
-            type: blockType,
-            actions: toActionObjects((0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .toArray */ .qo)(matchedActions), machine.options.actions)
-          }], predictableExec, preserveActionOrder), 2),
-              resolvedActionsFromPure = _c[0],
-              resolvedContext = _c[1];
-
-          updatedContext = resolvedContext;
-          preservedContexts === null || preservedContexts === void 0 ? void 0 : preservedContexts.push(updatedContext);
-          return resolvedActionsFromPure;
-        }
-
-      case _actionTypes_js__WEBPACK_IMPORTED_MODULE_1__/* .stop */ .sT:
-        {
-          var resolved = resolveStop(actionObject, updatedContext, _event);
-          predictableExec === null || predictableExec === void 0 ? void 0 : predictableExec(resolved, currentContext, _event);
-          return resolved;
-        }
-
-      case _actionTypes_js__WEBPACK_IMPORTED_MODULE_1__/* .assign */ .f0:
-        {
-          updatedContext = (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .updateContext */ .dt)(updatedContext, _event, [actionObject], !predictableExec ? currentState : undefined);
-          preservedContexts === null || preservedContexts === void 0 ? void 0 : preservedContexts.push(updatedContext);
-          break;
-        }
-
-      default:
-        var resolvedActionObject = toActionObject(actionObject, machine.options.actions);
-        var exec_1 = resolvedActionObject.exec;
-
-        if (predictableExec) {
-          predictableExec(resolvedActionObject, updatedContext, _event);
-        } else if (exec_1 && preservedContexts) {
-          var contextIndex_1 = preservedContexts.length - 1;
-
-          var wrapped = (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__assign */ .pi)((0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__assign */ .pi)({}, resolvedActionObject), {
-            exec: function (_ctx) {
-              var args = [];
-
-              for (var _i = 1; _i < arguments.length; _i++) {
-                args[_i - 1] = arguments[_i];
-              }
-
-              exec_1.apply(void 0, (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__spreadArray */ .ev)([preservedContexts[contextIndex_1]], (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__read */ .CR)(args), false));
-            }
-          });
-
-          resolvedActionObject = wrapped;
-        }
-
-        return resolvedActionObject;
-    }
-  }
-
-  function processBlock(block) {
-    var e_2, _a;
-
-    var resolvedActions = [];
-
-    try {
-      for (var _b = (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_2__/* .__values */ .XA)(block.actions), _c = _b.next(); !_c.done; _c = _b.next()) {
-        var action = _c.value;
-        var resolved = handleAction(block.type, action);
-
-        if (resolved) {
-          resolvedActions = resolvedActions.concat(resolved);
-        }
-      }
-    } catch (e_2_1) {
-      e_2 = {
-        error: e_2_1
-      };
-    } finally {
-      try {
-        if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-      } finally {
-        if (e_2) throw e_2.error;
-      }
-    }
-
-    deferredToBlockEnd.forEach(function (action) {
-      predictableExec(action, updatedContext, _event);
-    });
-    deferredToBlockEnd.length = 0;
-    return resolvedActions;
-  }
-
-  var resolvedActions = (0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .flatten */ .xH)(actionBlocks.map(processBlock));
-  return [resolvedActions, updatedContext];
-}
-
-
-
-
-/***/ }),
-
-/***/ 7353:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   TV: () => (/* binding */ DEFAULT_GUARD_TYPE),
-/* harmony export */   iS: () => (/* binding */ STATE_DELIMITER),
-/* harmony export */   qP: () => (/* binding */ EMPTY_ACTIVITY_MAP),
-/* harmony export */   rt: () => (/* binding */ TARGETLESS_KEY)
-/* harmony export */ });
-var STATE_DELIMITER = '.';
-var EMPTY_ACTIVITY_MAP = {};
-var DEFAULT_GUARD_TYPE = 'xstate.guard';
-var TARGETLESS_KEY = '';
-
-
-
-
-/***/ }),
-
-/***/ 4066:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   M: () => (/* binding */ IS_PRODUCTION)
-/* harmony export */ });
-var IS_PRODUCTION = "production" === 'production';
-
-
-
-
-/***/ }),
-
-/***/ 2494:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   cM: () => (/* binding */ log),
-/* harmony export */   f0: () => (/* binding */ assign)
-/* harmony export */ });
-/* unused harmony exports cancel, choose, doneInvoke, forwardTo, pure, raise, send, sendParent, sendTo, sendUpdate, stop */
-/* harmony import */ var _actions_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(375);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var assign = _actions_js__WEBPACK_IMPORTED_MODULE_0__/* .assign */ .f0,
-    cancel = (/* unused pure expression or super */ null && (cancel$1)),
-    send = (/* unused pure expression or super */ null && (send$1)),
-    sendTo = (/* unused pure expression or super */ null && (sendTo$1)),
-    sendParent = (/* unused pure expression or super */ null && (sendParent$1)),
-    sendUpdate = (/* unused pure expression or super */ null && (sendUpdate$1)),
-    forwardTo = (/* unused pure expression or super */ null && (forwardTo$1)),
-    doneInvoke = (/* unused pure expression or super */ null && (doneInvoke$1)),
-    raise = (/* unused pure expression or super */ null && (raise$1)),
-    log = _actions_js__WEBPACK_IMPORTED_MODULE_0__/* .log */ .cM,
-    pure = (/* unused pure expression or super */ null && (pure$1)),
-    choose = (/* unused pure expression or super */ null && (choose$1)),
-    stop = (/* unused pure expression or super */ null && (stop$1));
-
-
-
-
-/***/ }),
-
-/***/ 6029:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, {
-  kJ: () => (/* binding */ interpret)
-});
-
-// UNUSED EXPORTS: Interpreter, InterpreterStatus, spawn
-
-// EXTERNAL MODULE: ./node_modules/xstate/es/_virtual/_tslib.js
-var _tslib = __webpack_require__(3056);
-// EXTERNAL MODULE: ./node_modules/xstate/es/types.js
-var types = __webpack_require__(9043);
-// EXTERNAL MODULE: ./node_modules/xstate/es/State.js
-var State = __webpack_require__(4911);
-// EXTERNAL MODULE: ./node_modules/xstate/es/actionTypes.js
-var actionTypes = __webpack_require__(3884);
-// EXTERNAL MODULE: ./node_modules/xstate/es/actions.js
-var actions = __webpack_require__(375);
-// EXTERNAL MODULE: ./node_modules/xstate/es/environment.js
-var environment = __webpack_require__(4066);
-// EXTERNAL MODULE: ./node_modules/xstate/es/utils.js
-var utils = __webpack_require__(9823);
-;// CONCATENATED MODULE: ./node_modules/xstate/es/scheduler.js
-
-
-var defaultOptions = {
-  deferEvents: false
-};
-
-var Scheduler =
-/*#__PURE__*/
-
-/** @class */
-function () {
-  function Scheduler(options) {
-    this.processingEvent = false;
-    this.queue = [];
-    this.initialized = false;
-    this.options = (0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({}, defaultOptions), options);
-  }
-
-  Scheduler.prototype.initialize = function (callback) {
-    this.initialized = true;
-
-    if (callback) {
-      if (!this.options.deferEvents) {
-        this.schedule(callback);
-        return;
-      }
-
-      this.process(callback);
-    }
-
-    this.flushEvents();
-  };
-
-  Scheduler.prototype.schedule = function (task) {
-    if (!this.initialized || this.processingEvent) {
-      this.queue.push(task);
-      return;
-    }
-
-    if (this.queue.length !== 0) {
-      throw new Error('Event queue should be empty when it is not processing events');
-    }
-
-    this.process(task);
-    this.flushEvents();
-  };
-
-  Scheduler.prototype.clear = function () {
-    this.queue = [];
-  };
-
-  Scheduler.prototype.flushEvents = function () {
-    var nextCallback = this.queue.shift();
-
-    while (nextCallback) {
-      this.process(nextCallback);
-      nextCallback = this.queue.shift();
-    }
-  };
-
-  Scheduler.prototype.process = function (callback) {
-    this.processingEvent = true;
-
-    try {
-      callback();
-    } catch (e) {
-      // there is no use to keep the future events
-      // as the situation is not anymore the same
-      this.clear();
-      throw e;
-    } finally {
-      this.processingEvent = false;
-    }
-  };
-
-  return Scheduler;
-}();
-
-
-
-// EXTERNAL MODULE: ./node_modules/xstate/es/Actor.js
-var Actor = __webpack_require__(8933);
-;// CONCATENATED MODULE: ./node_modules/xstate/es/registry.js
-var children = /*#__PURE__*/new Map();
-var sessionIdIndex = 0;
-var registry = {
-  bookId: function () {
-    return "x:".concat(sessionIdIndex++);
-  },
-  register: function (id, actor) {
-    children.set(id, actor);
-    return id;
-  },
-  get: function (id) {
-    return children.get(id);
-  },
-  free: function (id) {
-    children.delete(id);
-  }
-};
-
-
-
-;// CONCATENATED MODULE: ./node_modules/xstate/es/devTools.js
-
-
-function getGlobal() {
-  if (typeof globalThis !== 'undefined') {
-    return globalThis;
-  }
-
-  if (typeof self !== 'undefined') {
-    return self;
-  }
-
-  if (typeof window !== 'undefined') {
-    return window;
-  }
-
-  if (typeof __webpack_require__.g !== 'undefined') {
-    return __webpack_require__.g;
-  }
-
-  if (!environment/* IS_PRODUCTION */.M) {
-    console.warn('XState could not find a global object in this environment. Please let the maintainers know and raise an issue here: https://github.com/statelyai/xstate/issues');
-  }
-}
-
-function getDevTools() {
-  var global = getGlobal();
-
-  if (global && '__xstate__' in global) {
-    return global.__xstate__;
-  }
-
-  return undefined;
-}
-
-function registerService(service) {
-  if (!getGlobal()) {
-    return;
-  }
-
-  var devTools = getDevTools();
-
-  if (devTools) {
-    devTools.register(service);
-  }
-}
-
-
-
-// EXTERNAL MODULE: ./node_modules/xstate/es/serviceScope.js
-var serviceScope = __webpack_require__(797);
-;// CONCATENATED MODULE: ./node_modules/xstate/es/behaviors.js
-
-
-
-
-/**
- * Returns an actor behavior from a reducer and its initial state.
- *
- * @param transition The pure reducer that returns the next state given the current state and event.
- * @param initialState The initial state of the reducer.
- * @returns An actor behavior
- */
-
-function fromReducer(transition, initialState) {
-  return {
-    transition: transition,
-    initialState: initialState
-  };
-}
-function fromPromise(promiseFn) {
-  var initialState = {
-    error: undefined,
-    data: undefined,
-    status: 'pending'
-  };
-  return {
-    transition: function (state, event, _a) {
-      var parent = _a.parent,
-          id = _a.id,
-          observers = _a.observers;
-
-      switch (event.type) {
-        case 'fulfill':
-          parent === null || parent === void 0 ? void 0 : parent.send(doneInvoke(id, event.data));
-          return {
-            error: undefined,
-            data: event.data,
-            status: 'fulfilled'
-          };
-
-        case 'reject':
-          parent === null || parent === void 0 ? void 0 : parent.send(error(id, event.error));
-          observers.forEach(function (observer) {
-            observer.error(event.error);
-          });
-          return {
-            error: event.error,
-            data: undefined,
-            status: 'rejected'
-          };
-
-        default:
-          return state;
-      }
-    },
-    initialState: initialState,
-    start: function (_a) {
-      var self = _a.self;
-      promiseFn().then(function (data) {
-        self.send({
-          type: 'fulfill',
-          data: data
-        });
-      }, function (reason) {
-        self.send({
-          type: 'reject',
-          error: reason
-        });
-      });
-      return initialState;
-    }
-  };
-}
-function spawnBehavior(behavior, options) {
-  if (options === void 0) {
-    options = {};
-  }
-
-  var state = behavior.initialState;
-  var observers = new Set();
-  var mailbox = [];
-  var flushing = false;
-
-  var flush = function () {
-    if (flushing) {
-      return;
-    }
-
-    flushing = true;
-
-    while (mailbox.length > 0) {
-      var event_1 = mailbox.shift();
-      state = behavior.transition(state, event_1, actorCtx);
-      observers.forEach(function (observer) {
-        return observer.next(state);
-      });
-    }
-
-    flushing = false;
-  };
-
-  var actor = (0,Actor/* toActorRef */.vk)({
-    id: options.id,
-    send: function (event) {
-      mailbox.push(event);
-      flush();
-    },
-    getSnapshot: function () {
-      return state;
-    },
-    subscribe: function (next, handleError, complete) {
-      var observer = (0,utils/* toObserver */.zM)(next, handleError, complete);
-      observers.add(observer);
-      observer.next(state);
-      return {
-        unsubscribe: function () {
-          observers.delete(observer);
-        }
-      };
-    }
-  });
-  var actorCtx = {
-    parent: options.parent,
-    self: actor,
-    id: options.id || 'anonymous',
-    observers: observers
-  };
-  state = behavior.start ? behavior.start(actorCtx) : state;
-  return actor;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/xstate/es/interpreter.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var DEFAULT_SPAWN_OPTIONS = {
-  sync: false,
-  autoForward: false
-};
-var InterpreterStatus;
-
-(function (InterpreterStatus) {
-  InterpreterStatus[InterpreterStatus["NotStarted"] = 0] = "NotStarted";
-  InterpreterStatus[InterpreterStatus["Running"] = 1] = "Running";
-  InterpreterStatus[InterpreterStatus["Stopped"] = 2] = "Stopped";
-})(InterpreterStatus || (InterpreterStatus = {}));
-
-var Interpreter =
-/*#__PURE__*/
-
-/** @class */
-function () {
-  /**
-   * Creates a new Interpreter instance (i.e., service) for the given machine with the provided options, if any.
-   *
-   * @param machine The machine to be interpreted
-   * @param options Interpreter options
-   */
-  function Interpreter(machine, options) {
-    if (options === void 0) {
-      options = Interpreter.defaultOptions;
-    }
-
-    var _this = this;
-
-    this.machine = machine;
-    this.delayedEventsMap = {};
-    this.listeners = new Set();
-    this.contextListeners = new Set();
-    this.stopListeners = new Set();
-    this.doneListeners = new Set();
-    this.eventListeners = new Set();
-    this.sendListeners = new Set();
-    /**
-     * Whether the service is started.
-     */
-
-    this.initialized = false;
-    this.status = InterpreterStatus.NotStarted;
-    this.children = new Map();
-    this.forwardTo = new Set();
-    this._outgoingQueue = [];
-    /**
-     * Alias for Interpreter.prototype.start
-     */
-
-    this.init = this.start;
-    /**
-     * Sends an event to the running interpreter to trigger a transition.
-     *
-     * An array of events (batched) can be sent as well, which will send all
-     * batched events to the running interpreter. The listeners will be
-     * notified only **once** when all events are processed.
-     *
-     * @param event The event(s) to send
-     */
-
-    this.send = function (event, payload) {
-      if ((0,utils/* isArray */.kJ)(event)) {
-        _this.batch(event);
-
-        return _this.state;
-      }
-
-      var _event = (0,utils/* toSCXMLEvent */.g5)((0,utils/* toEventObject */._v)(event, payload));
-
-      if (_this.status === InterpreterStatus.Stopped) {
-        // do nothing
-        if (!environment/* IS_PRODUCTION */.M) {
-          (0,utils/* warn */.ZK)(false, "Event \"".concat(_event.name, "\" was sent to stopped service \"").concat(_this.machine.id, "\". This service has already reached its final state, and will not transition.\nEvent: ").concat(JSON.stringify(_event.data)));
-        }
-
-        return _this.state;
-      }
-
-      if (_this.status !== InterpreterStatus.Running && !_this.options.deferEvents) {
-        throw new Error("Event \"".concat(_event.name, "\" was sent to uninitialized service \"").concat(_this.machine.id // tslint:disable-next-line:max-line-length
-        , "\". Make sure .start() is called for this service, or set { deferEvents: true } in the service options.\nEvent: ").concat(JSON.stringify(_event.data)));
-      }
-
-      _this.scheduler.schedule(function () {
-        // Forward copy of event to child actors
-        _this.forward(_event);
-
-        var nextState = _this._nextState(_event);
-
-        _this.update(nextState, _event);
-      });
-
-      return _this._state; // TODO: deprecate (should return void)
-      // tslint:disable-next-line:semicolon
-    };
-
-    this.sendTo = function (event, to, immediate) {
-      var isParent = _this.parent && (to === types/* SpecialTargets */.K.Parent || _this.parent.id === to);
-      var target = isParent ? _this.parent : (0,utils/* isString */.HD)(to) ? to === types/* SpecialTargets */.K.Internal ? _this : _this.children.get(to) || registry.get(to) : (0,utils/* isActor */.Bc)(to) ? to : undefined;
-
-      if (!target) {
-        if (!isParent) {
-          throw new Error("Unable to send event to child '".concat(to, "' from service '").concat(_this.id, "'."));
-        } // tslint:disable-next-line:no-console
-
-
-        if (!environment/* IS_PRODUCTION */.M) {
-          (0,utils/* warn */.ZK)(false, "Service '".concat(_this.id, "' has no parent: unable to send event ").concat(event.type));
-        }
-
-        return;
-      }
-
-      if ('machine' in target) {
-        // perhaps those events should be rejected in the parent
-        // but atm it doesn't have easy access to all of the information that is required to do it reliably
-        if (_this.status !== InterpreterStatus.Stopped || _this.parent !== target || // we need to send events to the parent from exit handlers of a machine that reached its final state
-        _this.state.done) {
-          // Send SCXML events to machines
-          var scxmlEvent = (0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({}, event), {
-            name: event.name === actionTypes/* error */.vU ? "".concat((0,actions/* error */.vU)(_this.id)) : event.name,
-            origin: _this.sessionId
-          });
-
-          if (!immediate && _this.machine.config.predictableActionArguments) {
-            _this._outgoingQueue.push([target, scxmlEvent]);
-          } else {
-            target.send(scxmlEvent);
-          }
-        }
-      } else {
-        // Send normal events to other targets
-        if (!immediate && _this.machine.config.predictableActionArguments) {
-          _this._outgoingQueue.push([target, event.data]);
-        } else {
-          target.send(event.data);
-        }
-      }
-    };
-
-    this._exec = function (action, context, _event, actionFunctionMap) {
-      if (actionFunctionMap === void 0) {
-        actionFunctionMap = _this.machine.options.actions;
-      }
-
-      var actionOrExec = action.exec || (0,actions/* getActionFunction */.o$)(action.type, actionFunctionMap);
-      var exec = (0,utils/* isFunction */.mf)(actionOrExec) ? actionOrExec : actionOrExec ? actionOrExec.exec : action.exec;
-
-      if (exec) {
-        try {
-          return exec(context, _event.data, !_this.machine.config.predictableActionArguments ? {
-            action: action,
-            state: _this.state,
-            _event: _event
-          } : {
-            action: action,
-            _event: _event
-          });
-        } catch (err) {
-          if (_this.parent) {
-            _this.parent.send({
-              type: 'xstate.error',
-              data: err
-            });
-          }
-
-          throw err;
-        }
-      }
-
-      switch (action.type) {
-        case actionTypes/* raise */.OU:
-          {
-            // if raise action reached the interpreter then it's a delayed one
-            var sendAction_1 = action;
-
-            _this.defer(sendAction_1);
-
-            break;
-          }
-
-        case actionTypes/* send */.lW:
-          var sendAction = action;
-
-          if (typeof sendAction.delay === 'number') {
-            _this.defer(sendAction);
-
-            return;
-          } else {
-            if (sendAction.to) {
-              _this.sendTo(sendAction._event, sendAction.to, _event === actions/* initEvent */.bf);
-            } else {
-              _this.send(sendAction._event);
-            }
-          }
-
-          break;
-
-        case actionTypes/* cancel */.al:
-          _this.cancel(action.sendId);
-
-          break;
-
-        case actionTypes/* start */.BL:
-          {
-            if (_this.status !== InterpreterStatus.Running) {
-              return;
-            }
-
-            var activity = action.activity; // If the activity will be stopped right after it's started
-            // (such as in transient states)
-            // don't bother starting the activity.
-
-            if ( // in v4 with `predictableActionArguments` invokes are called eagerly when the `this.state` still points to the previous state
-            !_this.machine.config.predictableActionArguments && !_this.state.activities[activity.id || activity.type]) {
-              break;
-            } // Invoked services
-
-
-            if (activity.type === types/* ActionTypes */.M.Invoke) {
-              var invokeSource = (0,utils/* toInvokeSource */.j)(activity.src);
-              var serviceCreator = _this.machine.options.services ? _this.machine.options.services[invokeSource.type] : undefined;
-              var id = activity.id,
-                  data = activity.data;
-
-              if (!environment/* IS_PRODUCTION */.M) {
-                (0,utils/* warn */.ZK)(!('forward' in activity), // tslint:disable-next-line:max-line-length
-                "`forward` property is deprecated (found in invocation of '".concat(activity.src, "' in in machine '").concat(_this.machine.id, "'). ") + "Please use `autoForward` instead.");
-              }
-
-              var autoForward = 'autoForward' in activity ? activity.autoForward : !!activity.forward;
-
-              if (!serviceCreator) {
-                // tslint:disable-next-line:no-console
-                if (!environment/* IS_PRODUCTION */.M) {
-                  (0,utils/* warn */.ZK)(false, "No service found for invocation '".concat(activity.src, "' in machine '").concat(_this.machine.id, "'."));
-                }
-
-                return;
-              }
-
-              var resolvedData = data ? (0,utils/* mapContext */.QX)(data, context, _event) : undefined;
-
-              if (typeof serviceCreator === 'string') {
-                // TODO: warn
-                return;
-              }
-
-              var source = (0,utils/* isFunction */.mf)(serviceCreator) ? serviceCreator(context, _event.data, {
-                data: resolvedData,
-                src: invokeSource,
-                meta: activity.meta
-              }) : serviceCreator;
-
-              if (!source) {
-                // TODO: warn?
-                return;
-              }
-
-              var options = void 0;
-
-              if ((0,utils/* isMachine */.O4)(source)) {
-                source = resolvedData ? source.withContext(resolvedData) : source;
-                options = {
-                  autoForward: autoForward
-                };
-              }
-
-              _this.spawn(source, id, options);
-            } else {
-              _this.spawnActivity(activity);
-            }
-
-            break;
-          }
-
-        case actionTypes/* stop */.sT:
-          {
-            _this.stopChild(action.activity.id);
-
-            break;
-          }
-
-        case actionTypes/* log */.cM:
-          var _a = action,
-              label = _a.label,
-              value = _a.value;
-
-          if (label) {
-            _this.logger(label, value);
-          } else {
-            _this.logger(value);
-          }
-
-          break;
-
-        default:
-          if (!environment/* IS_PRODUCTION */.M) {
-            (0,utils/* warn */.ZK)(false, "No implementation found for action type '".concat(action.type, "'"));
-          }
-
-          break;
-      }
-    };
-
-    var resolvedOptions = (0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({}, Interpreter.defaultOptions), options);
-
-    var clock = resolvedOptions.clock,
-        logger = resolvedOptions.logger,
-        parent = resolvedOptions.parent,
-        id = resolvedOptions.id;
-    var resolvedId = id !== undefined ? id : machine.id;
-    this.id = resolvedId;
-    this.logger = logger;
-    this.clock = clock;
-    this.parent = parent;
-    this.options = resolvedOptions;
-    this.scheduler = new Scheduler({
-      deferEvents: this.options.deferEvents
-    });
-    this.sessionId = registry.bookId();
-  }
-
-  Object.defineProperty(Interpreter.prototype, "initialState", {
-    get: function () {
-      var _this = this;
-
-      if (this._initialState) {
-        return this._initialState;
-      }
-
-      return (0,serviceScope/* provide */.J)(this, function () {
-        _this._initialState = _this.machine.initialState;
-        return _this._initialState;
-      });
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Interpreter.prototype, "state", {
-    /**
-     * @deprecated Use `.getSnapshot()` instead.
-     */
-    get: function () {
-      if (!environment/* IS_PRODUCTION */.M) {
-        (0,utils/* warn */.ZK)(this.status !== InterpreterStatus.NotStarted, "Attempted to read state from uninitialized service '".concat(this.id, "'. Make sure the service is started first."));
-      }
-
-      return this._state;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  /**
-   * Executes the actions of the given state, with that state's `context` and `event`.
-   *
-   * @param state The state whose actions will be executed
-   * @param actionsConfig The action implementations to use
-   */
-
-  Interpreter.prototype.execute = function (state, actionsConfig) {
-    var e_1, _a;
-
-    try {
-      for (var _b = (0,_tslib/* __values */.XA)(state.actions), _c = _b.next(); !_c.done; _c = _b.next()) {
-        var action = _c.value;
-        this.exec(action, state, actionsConfig);
-      }
-    } catch (e_1_1) {
-      e_1 = {
-        error: e_1_1
-      };
-    } finally {
-      try {
-        if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-      } finally {
-        if (e_1) throw e_1.error;
-      }
-    }
-  };
-
-  Interpreter.prototype.update = function (state, _event) {
-    var e_2, _a, e_3, _b, e_4, _c, e_5, _d;
-
-    var _this = this; // Attach session ID to state
-
-
-    state._sessionid = this.sessionId; // Update state
-
-    this._state = state; // Execute actions
-
-    if ((!this.machine.config.predictableActionArguments || // this is currently required to execute initial actions as the `initialState` gets cached
-    // we can't just recompute it (and execute actions while doing so) because we try to preserve identity of actors created within initial assigns
-    _event === actions/* initEvent */.bf) && this.options.execute) {
-      this.execute(this.state);
-    } else {
-      var item = void 0;
-
-      while (item = this._outgoingQueue.shift()) {
-        item[0].send(item[1]);
-      }
-    } // Update children
-
-
-    this.children.forEach(function (child) {
-      _this.state.children[child.id] = child;
-    }); // Dev tools
-
-    if (this.devTools) {
-      this.devTools.send(_event.data, state);
-    } // Execute listeners
-
-
-    if (state.event) {
-      try {
-        for (var _e = (0,_tslib/* __values */.XA)(this.eventListeners), _f = _e.next(); !_f.done; _f = _e.next()) {
-          var listener = _f.value;
-          listener(state.event);
-        }
-      } catch (e_2_1) {
-        e_2 = {
-          error: e_2_1
-        };
-      } finally {
-        try {
-          if (_f && !_f.done && (_a = _e.return)) _a.call(_e);
-        } finally {
-          if (e_2) throw e_2.error;
-        }
-      }
-    }
-
-    try {
-      for (var _g = (0,_tslib/* __values */.XA)(this.listeners), _h = _g.next(); !_h.done; _h = _g.next()) {
-        var listener = _h.value;
-        listener(state, state.event);
-      }
-    } catch (e_3_1) {
-      e_3 = {
-        error: e_3_1
-      };
-    } finally {
-      try {
-        if (_h && !_h.done && (_b = _g.return)) _b.call(_g);
-      } finally {
-        if (e_3) throw e_3.error;
-      }
-    }
-
-    try {
-      for (var _j = (0,_tslib/* __values */.XA)(this.contextListeners), _k = _j.next(); !_k.done; _k = _j.next()) {
-        var contextListener = _k.value;
-        contextListener(this.state.context, this.state.history ? this.state.history.context : undefined);
-      }
-    } catch (e_4_1) {
-      e_4 = {
-        error: e_4_1
-      };
-    } finally {
-      try {
-        if (_k && !_k.done && (_c = _j.return)) _c.call(_j);
-      } finally {
-        if (e_4) throw e_4.error;
-      }
-    }
-
-    if (this.state.done) {
-      // get final child state node
-      var finalChildStateNode = state.configuration.find(function (sn) {
-        return sn.type === 'final' && sn.parent === _this.machine;
-      });
-      var doneData = finalChildStateNode && finalChildStateNode.doneData ? (0,utils/* mapContext */.QX)(finalChildStateNode.doneData, state.context, _event) : undefined;
-      this._doneEvent = (0,actions/* doneInvoke */.Sl)(this.id, doneData);
-
-      try {
-        for (var _l = (0,_tslib/* __values */.XA)(this.doneListeners), _m = _l.next(); !_m.done; _m = _l.next()) {
-          var listener = _m.value;
-          listener(this._doneEvent);
-        }
-      } catch (e_5_1) {
-        e_5 = {
-          error: e_5_1
-        };
-      } finally {
-        try {
-          if (_m && !_m.done && (_d = _l.return)) _d.call(_l);
-        } finally {
-          if (e_5) throw e_5.error;
-        }
-      }
-
-      this._stop();
-
-      this._stopChildren();
-
-      registry.free(this.sessionId);
-    }
-  };
-  /*
-   * Adds a listener that is notified whenever a state transition happens. The listener is called with
-   * the next state and the event object that caused the state transition.
-   *
-   * @param listener The state listener
-   */
-
-
-  Interpreter.prototype.onTransition = function (listener) {
-    this.listeners.add(listener); // Send current state to listener
-
-    if (this.status === InterpreterStatus.Running) {
-      listener(this.state, this.state.event);
-    }
-
-    return this;
-  };
-
-  Interpreter.prototype.subscribe = function (nextListenerOrObserver, _, // TODO: error listener
-  completeListener) {
-    var _this = this;
-
-    var observer = (0,utils/* toObserver */.zM)(nextListenerOrObserver, _, completeListener);
-    this.listeners.add(observer.next); // Send current state to listener
-
-    if (this.status !== InterpreterStatus.NotStarted) {
-      observer.next(this.state);
-    }
-
-    var completeOnce = function () {
-      _this.doneListeners.delete(completeOnce);
-
-      _this.stopListeners.delete(completeOnce);
-
-      observer.complete();
-    };
-
-    if (this.status === InterpreterStatus.Stopped) {
-      observer.complete();
-    } else {
-      this.onDone(completeOnce);
-      this.onStop(completeOnce);
-    }
-
-    return {
-      unsubscribe: function () {
-        _this.listeners.delete(observer.next);
-
-        _this.doneListeners.delete(completeOnce);
-
-        _this.stopListeners.delete(completeOnce);
-      }
-    };
-  };
-  /**
-   * Adds an event listener that is notified whenever an event is sent to the running interpreter.
-   * @param listener The event listener
-   */
-
-
-  Interpreter.prototype.onEvent = function (listener) {
-    this.eventListeners.add(listener);
-    return this;
-  };
-  /**
-   * Adds an event listener that is notified whenever a `send` event occurs.
-   * @param listener The event listener
-   */
-
-
-  Interpreter.prototype.onSend = function (listener) {
-    this.sendListeners.add(listener);
-    return this;
-  };
-  /**
-   * Adds a context listener that is notified whenever the state context changes.
-   * @param listener The context listener
-   */
-
-
-  Interpreter.prototype.onChange = function (listener) {
-    this.contextListeners.add(listener);
-    return this;
-  };
-  /**
-   * Adds a listener that is notified when the machine is stopped.
-   * @param listener The listener
-   */
-
-
-  Interpreter.prototype.onStop = function (listener) {
-    this.stopListeners.add(listener);
-    return this;
-  };
-  /**
-   * Adds a state listener that is notified when the statechart has reached its final state.
-   * @param listener The state listener
-   */
-
-
-  Interpreter.prototype.onDone = function (listener) {
-    if (this.status === InterpreterStatus.Stopped && this._doneEvent) {
-      listener(this._doneEvent);
-    } else {
-      this.doneListeners.add(listener);
-    }
-
-    return this;
-  };
-  /**
-   * Removes a listener.
-   * @param listener The listener to remove
-   */
-
-
-  Interpreter.prototype.off = function (listener) {
-    this.listeners.delete(listener);
-    this.eventListeners.delete(listener);
-    this.sendListeners.delete(listener);
-    this.stopListeners.delete(listener);
-    this.doneListeners.delete(listener);
-    this.contextListeners.delete(listener);
-    return this;
-  };
-  /**
-   * Starts the interpreter from the given state, or the initial state.
-   * @param initialState The state to start the statechart from
-   */
-
-
-  Interpreter.prototype.start = function (initialState) {
-    var _this = this;
-
-    if (this.status === InterpreterStatus.Running) {
-      // Do not restart the service if it is already started
-      return this;
-    } // yes, it's a hack but we need the related cache to be populated for some things to work (like delayed transitions)
-    // this is usually called by `machine.getInitialState` but if we rehydrate from a state we might bypass this call
-    // we also don't want to call this method here as it resolves the full initial state which might involve calling assign actions
-    // and that could potentially lead to some unwanted side-effects (even such as creating some rogue actors)
-
-
-    this.machine._init();
-
-    registry.register(this.sessionId, this);
-    this.initialized = true;
-    this.status = InterpreterStatus.Running;
-    var resolvedState = initialState === undefined ? this.initialState : (0,serviceScope/* provide */.J)(this, function () {
-      return (0,State/* isStateConfig */.TL)(initialState) ? _this.machine.resolveState(initialState) : _this.machine.resolveState(State/* State */.ZM.from(initialState, _this.machine.context));
-    });
-
-    if (this.options.devTools) {
-      this.attachDev();
-    }
-
-    this.scheduler.initialize(function () {
-      _this.update(resolvedState, actions/* initEvent */.bf);
-    });
-    return this;
-  };
-
-  Interpreter.prototype._stopChildren = function () {
-    // TODO: think about converting those to actions
-    this.children.forEach(function (child) {
-      if ((0,utils/* isFunction */.mf)(child.stop)) {
-        child.stop();
-      }
-    });
-    this.children.clear();
-  };
-
-  Interpreter.prototype._stop = function () {
-    var e_6, _a, e_7, _b, e_8, _c, e_9, _d, e_10, _e;
-
-    try {
-      for (var _f = (0,_tslib/* __values */.XA)(this.listeners), _g = _f.next(); !_g.done; _g = _f.next()) {
-        var listener = _g.value;
-        this.listeners.delete(listener);
-      }
-    } catch (e_6_1) {
-      e_6 = {
-        error: e_6_1
-      };
-    } finally {
-      try {
-        if (_g && !_g.done && (_a = _f.return)) _a.call(_f);
-      } finally {
-        if (e_6) throw e_6.error;
-      }
-    }
-
-    try {
-      for (var _h = (0,_tslib/* __values */.XA)(this.stopListeners), _j = _h.next(); !_j.done; _j = _h.next()) {
-        var listener = _j.value; // call listener, then remove
-
-        listener();
-        this.stopListeners.delete(listener);
-      }
-    } catch (e_7_1) {
-      e_7 = {
-        error: e_7_1
-      };
-    } finally {
-      try {
-        if (_j && !_j.done && (_b = _h.return)) _b.call(_h);
-      } finally {
-        if (e_7) throw e_7.error;
-      }
-    }
-
-    try {
-      for (var _k = (0,_tslib/* __values */.XA)(this.contextListeners), _l = _k.next(); !_l.done; _l = _k.next()) {
-        var listener = _l.value;
-        this.contextListeners.delete(listener);
-      }
-    } catch (e_8_1) {
-      e_8 = {
-        error: e_8_1
-      };
-    } finally {
-      try {
-        if (_l && !_l.done && (_c = _k.return)) _c.call(_k);
-      } finally {
-        if (e_8) throw e_8.error;
-      }
-    }
-
-    try {
-      for (var _m = (0,_tslib/* __values */.XA)(this.doneListeners), _o = _m.next(); !_o.done; _o = _m.next()) {
-        var listener = _o.value;
-        this.doneListeners.delete(listener);
-      }
-    } catch (e_9_1) {
-      e_9 = {
-        error: e_9_1
-      };
-    } finally {
-      try {
-        if (_o && !_o.done && (_d = _m.return)) _d.call(_m);
-      } finally {
-        if (e_9) throw e_9.error;
-      }
-    }
-
-    if (!this.initialized) {
-      // Interpreter already stopped; do nothing
-      return this;
-    }
-
-    this.initialized = false;
-    this.status = InterpreterStatus.Stopped;
-    this._initialState = undefined;
-
-    try {
-      // we are going to stop within the current sync frame
-      // so we can safely just cancel this here as nothing async should be fired anyway
-      for (var _p = (0,_tslib/* __values */.XA)(Object.keys(this.delayedEventsMap)), _q = _p.next(); !_q.done; _q = _p.next()) {
-        var key = _q.value;
-        this.clock.clearTimeout(this.delayedEventsMap[key]);
-      }
-    } catch (e_10_1) {
-      e_10 = {
-        error: e_10_1
-      };
-    } finally {
-      try {
-        if (_q && !_q.done && (_e = _p.return)) _e.call(_p);
-      } finally {
-        if (e_10) throw e_10.error;
-      }
-    } // clear everything that might be enqueued
-
-
-    this.scheduler.clear();
-    this.scheduler = new Scheduler({
-      deferEvents: this.options.deferEvents
-    });
-  };
-  /**
-   * Stops the interpreter and unsubscribe all listeners.
-   *
-   * This will also notify the `onStop` listeners.
-   */
-
-
-  Interpreter.prototype.stop = function () {
-    // TODO: add warning for stopping non-root interpreters
-    var _this = this; // grab the current scheduler as it will be replaced in _stop
-
-
-    var scheduler = this.scheduler;
-
-    this._stop(); // let what is currently processed to be finished
-
-
-    scheduler.schedule(function () {
-      var _a;
-
-      if ((_a = _this._state) === null || _a === void 0 ? void 0 : _a.done) {
-        return;
-      } // it feels weird to handle this here but we need to handle this even slightly "out of band"
-
-
-      var _event = (0,utils/* toSCXMLEvent */.g5)({
-        type: 'xstate.stop'
-      });
-
-      var nextState = (0,serviceScope/* provide */.J)(_this, function () {
-        var exitActions = (0,utils/* flatten */.xH)((0,_tslib/* __spreadArray */.ev)([], (0,_tslib/* __read */.CR)(_this.state.configuration), false).sort(function (a, b) {
-          return b.order - a.order;
-        }).map(function (stateNode) {
-          return (0,actions/* toActionObjects */.AE)(stateNode.onExit, _this.machine.options.actions);
-        }));
-
-        var _a = (0,_tslib/* __read */.CR)((0,actions/* resolveActions */.yC)(_this.machine, _this.state, _this.state.context, _event, [{
-          type: 'exit',
-          actions: exitActions
-        }], _this.machine.config.predictableActionArguments ? _this._exec : undefined, _this.machine.config.predictableActionArguments || _this.machine.config.preserveActionOrder), 2),
-            resolvedActions = _a[0],
-            updatedContext = _a[1];
-
-        var newState = new State/* State */.ZM({
-          value: _this.state.value,
-          context: updatedContext,
-          _event: _event,
-          _sessionid: _this.sessionId,
-          historyValue: undefined,
-          history: _this.state,
-          actions: resolvedActions.filter(function (action) {
-            return !(0,utils/* isRaisableAction */.vK)(action);
-          }),
-          activities: {},
-          events: [],
-          configuration: [],
-          transitions: [],
-          children: {},
-          done: _this.state.done,
-          tags: _this.state.tags,
-          machine: _this.machine
-        });
-        newState.changed = true;
-        return newState;
-      });
-
-      _this.update(nextState, _event);
-
-      _this._stopChildren();
-
-      registry.free(_this.sessionId);
-    });
-    return this;
-  };
-
-  Interpreter.prototype.batch = function (events) {
-    var _this = this;
-
-    if (this.status === InterpreterStatus.NotStarted && this.options.deferEvents) {
-      // tslint:disable-next-line:no-console
-      if (!environment/* IS_PRODUCTION */.M) {
-        (0,utils/* warn */.ZK)(false, "".concat(events.length, " event(s) were sent to uninitialized service \"").concat(this.machine.id, "\" and are deferred. Make sure .start() is called for this service.\nEvent: ").concat(JSON.stringify(event)));
-      }
-    } else if (this.status !== InterpreterStatus.Running) {
-      throw new Error( // tslint:disable-next-line:max-line-length
-      "".concat(events.length, " event(s) were sent to uninitialized service \"").concat(this.machine.id, "\". Make sure .start() is called for this service, or set { deferEvents: true } in the service options."));
-    }
-
-    if (!events.length) {
-      return;
-    }
-
-    var exec = !!this.machine.config.predictableActionArguments && this._exec;
-    this.scheduler.schedule(function () {
-      var e_11, _a;
-
-      var nextState = _this.state;
-      var batchChanged = false;
-      var batchedActions = [];
-
-      var _loop_1 = function (event_1) {
-        var _event = (0,utils/* toSCXMLEvent */.g5)(event_1);
-
-        _this.forward(_event);
-
-        nextState = (0,serviceScope/* provide */.J)(_this, function () {
-          return _this.machine.transition(nextState, _event, undefined, exec || undefined);
-        });
-        batchedActions.push.apply(batchedActions, (0,_tslib/* __spreadArray */.ev)([], (0,_tslib/* __read */.CR)(_this.machine.config.predictableActionArguments ? nextState.actions : nextState.actions.map(function (a) {
-          return (0,State/* bindActionToState */.j1)(a, nextState);
-        })), false));
-        batchChanged = batchChanged || !!nextState.changed;
-      };
-
-      try {
-        for (var events_1 = (0,_tslib/* __values */.XA)(events), events_1_1 = events_1.next(); !events_1_1.done; events_1_1 = events_1.next()) {
-          var event_1 = events_1_1.value;
-
-          _loop_1(event_1);
-        }
-      } catch (e_11_1) {
-        e_11 = {
-          error: e_11_1
-        };
-      } finally {
-        try {
-          if (events_1_1 && !events_1_1.done && (_a = events_1.return)) _a.call(events_1);
-        } finally {
-          if (e_11) throw e_11.error;
-        }
-      }
-
-      nextState.changed = batchChanged;
-      nextState.actions = batchedActions;
-
-      _this.update(nextState, (0,utils/* toSCXMLEvent */.g5)(events[events.length - 1]));
-    });
-  };
-  /**
-   * Returns a send function bound to this interpreter instance.
-   *
-   * @param event The event to be sent by the sender.
-   */
-
-
-  Interpreter.prototype.sender = function (event) {
-    return this.send.bind(this, event);
-  };
-
-  Interpreter.prototype._nextState = function (event, exec) {
-    var _this = this;
-
-    if (exec === void 0) {
-      exec = !!this.machine.config.predictableActionArguments && this._exec;
-    }
-
-    var _event = (0,utils/* toSCXMLEvent */.g5)(event);
-
-    if (_event.name.indexOf(actionTypes/* errorPlatform */.Mg) === 0 && !this.state.nextEvents.some(function (nextEvent) {
-      return nextEvent.indexOf(actionTypes/* errorPlatform */.Mg) === 0;
-    })) {
-      throw _event.data.data;
-    }
-
-    var nextState = (0,serviceScope/* provide */.J)(this, function () {
-      return _this.machine.transition(_this.state, _event, undefined, exec || undefined);
-    });
-    return nextState;
-  };
-  /**
-   * Returns the next state given the interpreter's current state and the event.
-   *
-   * This is a pure method that does _not_ update the interpreter's state.
-   *
-   * @param event The event to determine the next state
-   */
-
-
-  Interpreter.prototype.nextState = function (event) {
-    return this._nextState(event, false);
-  };
-
-  Interpreter.prototype.forward = function (event) {
-    var e_12, _a;
-
-    try {
-      for (var _b = (0,_tslib/* __values */.XA)(this.forwardTo), _c = _b.next(); !_c.done; _c = _b.next()) {
-        var id = _c.value;
-        var child = this.children.get(id);
-
-        if (!child) {
-          throw new Error("Unable to forward event '".concat(event, "' from interpreter '").concat(this.id, "' to nonexistant child '").concat(id, "'."));
-        }
-
-        child.send(event);
-      }
-    } catch (e_12_1) {
-      e_12 = {
-        error: e_12_1
-      };
-    } finally {
-      try {
-        if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-      } finally {
-        if (e_12) throw e_12.error;
-      }
-    }
-  };
-
-  Interpreter.prototype.defer = function (sendAction) {
-    var _this = this;
-
-    var timerId = this.clock.setTimeout(function () {
-      if ('to' in sendAction && sendAction.to) {
-        _this.sendTo(sendAction._event, sendAction.to, true);
-      } else {
-        _this.send(sendAction._event);
-      }
-    }, sendAction.delay);
-
-    if (sendAction.id) {
-      this.delayedEventsMap[sendAction.id] = timerId;
-    }
-  };
-
-  Interpreter.prototype.cancel = function (sendId) {
-    this.clock.clearTimeout(this.delayedEventsMap[sendId]);
-    delete this.delayedEventsMap[sendId];
-  };
-
-  Interpreter.prototype.exec = function (action, state, actionFunctionMap) {
-    if (actionFunctionMap === void 0) {
-      actionFunctionMap = this.machine.options.actions;
-    }
-
-    this._exec(action, state.context, state._event, actionFunctionMap);
-  };
-
-  Interpreter.prototype.removeChild = function (childId) {
-    var _a;
-
-    this.children.delete(childId);
-    this.forwardTo.delete(childId); // this.state might not exist at the time this is called,
-    // such as when a child is added then removed while initializing the state
-
-    (_a = this.state) === null || _a === void 0 ? true : delete _a.children[childId];
-  };
-
-  Interpreter.prototype.stopChild = function (childId) {
-    var child = this.children.get(childId);
-
-    if (!child) {
-      return;
-    }
-
-    this.removeChild(childId);
-
-    if ((0,utils/* isFunction */.mf)(child.stop)) {
-      child.stop();
-    }
-  };
-
-  Interpreter.prototype.spawn = function (entity, name, options) {
-    if (this.status !== InterpreterStatus.Running) {
-      return (0,Actor/* createDeferredActor */.Xg)(entity, name);
-    }
-
-    if ((0,utils/* isPromiseLike */.y8)(entity)) {
-      return this.spawnPromise(Promise.resolve(entity), name);
-    } else if ((0,utils/* isFunction */.mf)(entity)) {
-      return this.spawnCallback(entity, name);
-    } else if ((0,Actor/* isSpawnedActor */.f3)(entity)) {
-      return this.spawnActor(entity, name);
-    } else if ((0,utils/* isObservable */.bi)(entity)) {
-      return this.spawnObservable(entity, name);
-    } else if ((0,utils/* isMachine */.O4)(entity)) {
-      return this.spawnMachine(entity, (0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({}, options), {
-        id: name
-      }));
-    } else if ((0,utils/* isBehavior */.HV)(entity)) {
-      return this.spawnBehavior(entity, name);
-    } else {
-      throw new Error("Unable to spawn entity \"".concat(name, "\" of type \"").concat(typeof entity, "\"."));
-    }
-  };
-
-  Interpreter.prototype.spawnMachine = function (machine, options) {
-    var _this = this;
-
-    if (options === void 0) {
-      options = {};
-    }
-
-    var childService = new Interpreter(machine, (0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({}, this.options), {
-      parent: this,
-      id: options.id || machine.id
-    }));
-
-    var resolvedOptions = (0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({}, DEFAULT_SPAWN_OPTIONS), options);
-
-    if (resolvedOptions.sync) {
-      childService.onTransition(function (state) {
-        _this.send(actionTypes/* update */.Vx, {
-          state: state,
-          id: childService.id
-        });
-      });
-    }
-
-    var actor = childService;
-    this.children.set(childService.id, actor);
-
-    if (resolvedOptions.autoForward) {
-      this.forwardTo.add(childService.id);
-    }
-
-    childService.onDone(function (doneEvent) {
-      _this.removeChild(childService.id);
-
-      _this.send((0,utils/* toSCXMLEvent */.g5)(doneEvent, {
-        origin: childService.id
-      }));
-    }).start();
-    return actor;
-  };
-
-  Interpreter.prototype.spawnBehavior = function (behavior, id) {
-    var actorRef = spawnBehavior(behavior, {
-      id: id,
-      parent: this
-    });
-    this.children.set(id, actorRef);
-    return actorRef;
-  };
-
-  Interpreter.prototype.spawnPromise = function (promise, id) {
-    var _a;
-
-    var _this = this;
-
-    var canceled = false;
-    var resolvedData;
-    promise.then(function (response) {
-      if (!canceled) {
-        resolvedData = response;
-
-        _this.removeChild(id);
-
-        _this.send((0,utils/* toSCXMLEvent */.g5)((0,actions/* doneInvoke */.Sl)(id, response), {
-          origin: id
-        }));
-      }
-    }, function (errorData) {
-      if (!canceled) {
-        _this.removeChild(id);
-
-        var errorEvent = (0,actions/* error */.vU)(id, errorData);
-
-        try {
-          // Send "error.platform.id" to this (parent).
-          _this.send((0,utils/* toSCXMLEvent */.g5)(errorEvent, {
-            origin: id
-          }));
-        } catch (error) {
-          (0,utils/* reportUnhandledExceptionOnInvocation */.v4)(errorData, error, id);
-
-          if (_this.devTools) {
-            _this.devTools.send(errorEvent, _this.state);
-          }
-
-          if (_this.machine.strict) {
-            // it would be better to always stop the state machine if unhandled
-            // exception/promise rejection happens but because we don't want to
-            // break existing code so enforce it on strict mode only especially so
-            // because documentation says that onError is optional
-            _this.stop();
-          }
-        }
-      }
-    });
-    var actor = (_a = {
-      id: id,
-      send: function () {
-        return void 0;
-      },
-      subscribe: function (next, handleError, complete) {
-        var observer = (0,utils/* toObserver */.zM)(next, handleError, complete);
-        var unsubscribed = false;
-        promise.then(function (response) {
-          if (unsubscribed) {
-            return;
-          }
-
-          observer.next(response);
-
-          if (unsubscribed) {
-            return;
-          }
-
-          observer.complete();
-        }, function (err) {
-          if (unsubscribed) {
-            return;
-          }
-
-          observer.error(err);
-        });
-        return {
-          unsubscribe: function () {
-            return unsubscribed = true;
-          }
-        };
-      },
-      stop: function () {
-        canceled = true;
-      },
-      toJSON: function () {
-        return {
-          id: id
-        };
-      },
-      getSnapshot: function () {
-        return resolvedData;
-      }
-    }, _a[utils/* symbolObservable */.L$] = function () {
-      return this;
-    }, _a);
-    this.children.set(id, actor);
-    return actor;
-  };
-
-  Interpreter.prototype.spawnCallback = function (callback, id) {
-    var _a;
-
-    var _this = this;
-
-    var canceled = false;
-    var receivers = new Set();
-    var listeners = new Set();
-    var emitted;
-
-    var receive = function (e) {
-      emitted = e;
-      listeners.forEach(function (listener) {
-        return listener(e);
-      });
-
-      if (canceled) {
-        return;
-      }
-
-      _this.send((0,utils/* toSCXMLEvent */.g5)(e, {
-        origin: id
-      }));
-    };
-
-    var callbackStop;
-
-    try {
-      callbackStop = callback(receive, function (newListener) {
-        receivers.add(newListener);
-      });
-    } catch (err) {
-      this.send((0,actions/* error */.vU)(id, err));
-    }
-
-    if ((0,utils/* isPromiseLike */.y8)(callbackStop)) {
-      // it turned out to be an async function, can't reliably check this before calling `callback`
-      // because transpiled async functions are not recognizable
-      return this.spawnPromise(callbackStop, id);
-    }
-
-    var actor = (_a = {
-      id: id,
-      send: function (event) {
-        return receivers.forEach(function (receiver) {
-          return receiver(event);
-        });
-      },
-      subscribe: function (next) {
-        var observer = (0,utils/* toObserver */.zM)(next);
-        listeners.add(observer.next);
-        return {
-          unsubscribe: function () {
-            listeners.delete(observer.next);
-          }
-        };
-      },
-      stop: function () {
-        canceled = true;
-
-        if ((0,utils/* isFunction */.mf)(callbackStop)) {
-          callbackStop();
-        }
-      },
-      toJSON: function () {
-        return {
-          id: id
-        };
-      },
-      getSnapshot: function () {
-        return emitted;
-      }
-    }, _a[utils/* symbolObservable */.L$] = function () {
-      return this;
-    }, _a);
-    this.children.set(id, actor);
-    return actor;
-  };
-
-  Interpreter.prototype.spawnObservable = function (source, id) {
-    var _a;
-
-    var _this = this;
-
-    var emitted;
-    var subscription = source.subscribe(function (value) {
-      emitted = value;
-
-      _this.send((0,utils/* toSCXMLEvent */.g5)(value, {
-        origin: id
-      }));
-    }, function (err) {
-      _this.removeChild(id);
-
-      _this.send((0,utils/* toSCXMLEvent */.g5)((0,actions/* error */.vU)(id, err), {
-        origin: id
-      }));
-    }, function () {
-      _this.removeChild(id);
-
-      _this.send((0,utils/* toSCXMLEvent */.g5)((0,actions/* doneInvoke */.Sl)(id), {
-        origin: id
-      }));
-    });
-    var actor = (_a = {
-      id: id,
-      send: function () {
-        return void 0;
-      },
-      subscribe: function (next, handleError, complete) {
-        return source.subscribe(next, handleError, complete);
-      },
-      stop: function () {
-        return subscription.unsubscribe();
-      },
-      getSnapshot: function () {
-        return emitted;
-      },
-      toJSON: function () {
-        return {
-          id: id
-        };
-      }
-    }, _a[utils/* symbolObservable */.L$] = function () {
-      return this;
-    }, _a);
-    this.children.set(id, actor);
-    return actor;
-  };
-
-  Interpreter.prototype.spawnActor = function (actor, name) {
-    this.children.set(name, actor);
-    return actor;
-  };
-
-  Interpreter.prototype.spawnActivity = function (activity) {
-    var implementation = this.machine.options && this.machine.options.activities ? this.machine.options.activities[activity.type] : undefined;
-
-    if (!implementation) {
-      if (!environment/* IS_PRODUCTION */.M) {
-        (0,utils/* warn */.ZK)(false, "No implementation found for activity '".concat(activity.type, "'"));
-      } // tslint:disable-next-line:no-console
-
-
-      return;
-    } // Start implementation
-
-
-    var dispose = implementation(this.state.context, activity);
-    this.spawnEffect(activity.id, dispose);
-  };
-
-  Interpreter.prototype.spawnEffect = function (id, dispose) {
-    var _a;
-
-    this.children.set(id, (_a = {
-      id: id,
-      send: function () {
-        return void 0;
-      },
-      subscribe: function () {
-        return {
-          unsubscribe: function () {
-            return void 0;
-          }
-        };
-      },
-      stop: dispose || undefined,
-      getSnapshot: function () {
-        return undefined;
-      },
-      toJSON: function () {
-        return {
-          id: id
-        };
-      }
-    }, _a[utils/* symbolObservable */.L$] = function () {
-      return this;
-    }, _a));
-  };
-
-  Interpreter.prototype.attachDev = function () {
-    var global = getGlobal();
-
-    if (this.options.devTools && global) {
-      if (global.__REDUX_DEVTOOLS_EXTENSION__) {
-        var devToolsOptions = typeof this.options.devTools === 'object' ? this.options.devTools : undefined;
-        this.devTools = global.__REDUX_DEVTOOLS_EXTENSION__.connect((0,_tslib/* __assign */.pi)((0,_tslib/* __assign */.pi)({
-          name: this.id,
-          autoPause: true,
-          stateSanitizer: function (state) {
-            return {
-              value: state.value,
-              context: state.context,
-              actions: state.actions
-            };
-          }
-        }, devToolsOptions), {
-          features: (0,_tslib/* __assign */.pi)({
-            jump: false,
-            skip: false
-          }, devToolsOptions ? devToolsOptions.features : undefined)
-        }), this.machine);
-        this.devTools.init(this.state);
-      } // add XState-specific dev tooling hook
-
-
-      registerService(this);
-    }
-  };
-
-  Interpreter.prototype.toJSON = function () {
-    return {
-      id: this.id
-    };
-  };
-
-  Interpreter.prototype[utils/* symbolObservable */.L$] = function () {
-    return this;
-  };
-
-  Interpreter.prototype.getSnapshot = function () {
-    if (this.status === InterpreterStatus.NotStarted) {
-      return this.initialState;
-    }
-
-    return this._state;
-  };
-  /**
-   * The default interpreter options:
-   *
-   * - `clock` uses the global `setTimeout` and `clearTimeout` functions
-   * - `logger` uses the global `console.log()` method
-   */
-
-
-  Interpreter.defaultOptions = {
-    execute: true,
-    deferEvents: true,
-    clock: {
-      setTimeout: function (fn, ms) {
-        return setTimeout(fn, ms);
-      },
-      clearTimeout: function (id) {
-        return clearTimeout(id);
-      }
-    },
-    logger: /*#__PURE__*/console.log.bind(console),
-    devTools: false
-  };
-  Interpreter.interpret = interpret;
-  return Interpreter;
-}();
-
-var resolveSpawnOptions = function (nameOrOptions) {
-  if (isString(nameOrOptions)) {
-    return __assign(__assign({}, DEFAULT_SPAWN_OPTIONS), {
-      name: nameOrOptions
-    });
-  }
-
-  return __assign(__assign(__assign({}, DEFAULT_SPAWN_OPTIONS), {
-    name: uniqueId()
-  }), nameOrOptions);
-};
-
-function spawn(entity, nameOrOptions) {
-  var resolvedOptions = resolveSpawnOptions(nameOrOptions);
-  return consume(function (service) {
-    if (!IS_PRODUCTION) {
-      var isLazyEntity = isMachine(entity) || isFunction(entity);
-      warn(!!service || isLazyEntity, "Attempted to spawn an Actor (ID: \"".concat(isMachine(entity) ? entity.id : 'undefined', "\") outside of a service. This will have no effect."));
-    }
-
-    if (service) {
-      return service.spawn(entity, resolvedOptions.name, resolvedOptions);
-    } else {
-      return createDeferredActor(entity, resolvedOptions.name);
-    }
-  });
-}
-/**
- * Creates a new Interpreter instance for the given machine with the provided options, if any.
- *
- * @param machine The machine to interpret
- * @param options Interpreter options
- */
-
-function interpret(machine, options) {
-  var interpreter = new Interpreter(machine, options);
-  return interpreter;
-}
-
-
-
-
-/***/ }),
-
-/***/ 797:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   J: () => (/* binding */ provide)
-/* harmony export */ });
-/* unused harmony export consume */
-/**
- * Maintains a stack of the current service in scope.
- * This is used to provide the correct service to spawn().
- */
-var serviceStack = [];
-var provide = function (service, fn) {
-  serviceStack.push(service);
-  var result = fn(service);
-  serviceStack.pop();
-  return result;
-};
-var consume = function (fn) {
-  return fn(serviceStack[serviceStack.length - 1]);
-};
-
-
-
-
-/***/ }),
-
-/***/ 6115:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   G: () => (/* binding */ getChildren),
-/* harmony export */   Ij: () => (/* binding */ isInFinalState),
-/* harmony export */   N9: () => (/* binding */ isLeafNode),
-/* harmony export */   NA: () => (/* binding */ getValue),
-/* harmony export */   Oe: () => (/* binding */ getTagsFromConfiguration),
-/* harmony export */   P_: () => (/* binding */ getConfiguration),
-/* harmony export */   ac: () => (/* binding */ getAllStateNodes),
-/* harmony export */   e$: () => (/* binding */ has),
-/* harmony export */   nI: () => (/* binding */ getAllChildren),
-/* harmony export */   nJ: () => (/* binding */ nextEvents),
-/* harmony export */   xZ: () => (/* binding */ getMeta)
-/* harmony export */ });
-/* unused harmony export getAdjList */
-/* harmony import */ var _virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3056);
-/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9823);
-
-
-
-var isLeafNode = function (stateNode) {
-  return stateNode.type === 'atomic' || stateNode.type === 'final';
-};
-function getAllChildren(stateNode) {
-  return Object.keys(stateNode.states).map(function (key) {
-    return stateNode.states[key];
-  });
-}
-function getChildren(stateNode) {
-  return getAllChildren(stateNode).filter(function (sn) {
-    return sn.type !== 'history';
-  });
-}
-function getAllStateNodes(stateNode) {
-  var stateNodes = [stateNode];
-
-  if (isLeafNode(stateNode)) {
-    return stateNodes;
-  }
-
-  return stateNodes.concat((0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .flatten */ .xH)(getChildren(stateNode).map(getAllStateNodes)));
-}
-function getConfiguration(prevStateNodes, stateNodes) {
-  var e_1, _a, e_2, _b, e_3, _c, e_4, _d;
-
-  var prevConfiguration = new Set(prevStateNodes);
-  var prevAdjList = getAdjList(prevConfiguration);
-  var configuration = new Set(stateNodes);
-
-  try {
-    // add all ancestors
-    for (var configuration_1 = (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__values */ .XA)(configuration), configuration_1_1 = configuration_1.next(); !configuration_1_1.done; configuration_1_1 = configuration_1.next()) {
-      var s = configuration_1_1.value;
-      var m = s.parent;
-
-      while (m && !configuration.has(m)) {
-        configuration.add(m);
-        m = m.parent;
-      }
-    }
-  } catch (e_1_1) {
-    e_1 = {
-      error: e_1_1
-    };
-  } finally {
-    try {
-      if (configuration_1_1 && !configuration_1_1.done && (_a = configuration_1.return)) _a.call(configuration_1);
-    } finally {
-      if (e_1) throw e_1.error;
-    }
-  }
-
-  var adjList = getAdjList(configuration);
-
-  try {
-    // add descendants
-    for (var configuration_2 = (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__values */ .XA)(configuration), configuration_2_1 = configuration_2.next(); !configuration_2_1.done; configuration_2_1 = configuration_2.next()) {
-      var s = configuration_2_1.value; // if previously active, add existing child nodes
-
-      if (s.type === 'compound' && (!adjList.get(s) || !adjList.get(s).length)) {
-        if (prevAdjList.get(s)) {
-          prevAdjList.get(s).forEach(function (sn) {
-            return configuration.add(sn);
-          });
-        } else {
-          s.initialStateNodes.forEach(function (sn) {
-            return configuration.add(sn);
-          });
-        }
-      } else {
-        if (s.type === 'parallel') {
-          try {
-            for (var _e = (e_3 = void 0, (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__values */ .XA)(getChildren(s))), _f = _e.next(); !_f.done; _f = _e.next()) {
-              var child = _f.value;
-
-              if (!configuration.has(child)) {
-                configuration.add(child);
-
-                if (prevAdjList.get(child)) {
-                  prevAdjList.get(child).forEach(function (sn) {
-                    return configuration.add(sn);
-                  });
-                } else {
-                  child.initialStateNodes.forEach(function (sn) {
-                    return configuration.add(sn);
-                  });
-                }
-              }
-            }
-          } catch (e_3_1) {
-            e_3 = {
-              error: e_3_1
-            };
-          } finally {
-            try {
-              if (_f && !_f.done && (_c = _e.return)) _c.call(_e);
-            } finally {
-              if (e_3) throw e_3.error;
-            }
-          }
-        }
-      }
-    }
-  } catch (e_2_1) {
-    e_2 = {
-      error: e_2_1
-    };
-  } finally {
-    try {
-      if (configuration_2_1 && !configuration_2_1.done && (_b = configuration_2.return)) _b.call(configuration_2);
-    } finally {
-      if (e_2) throw e_2.error;
-    }
-  }
-
-  try {
-    // add all ancestors
-    for (var configuration_3 = (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__values */ .XA)(configuration), configuration_3_1 = configuration_3.next(); !configuration_3_1.done; configuration_3_1 = configuration_3.next()) {
-      var s = configuration_3_1.value;
-      var m = s.parent;
-
-      while (m && !configuration.has(m)) {
-        configuration.add(m);
-        m = m.parent;
-      }
-    }
-  } catch (e_4_1) {
-    e_4 = {
-      error: e_4_1
-    };
-  } finally {
-    try {
-      if (configuration_3_1 && !configuration_3_1.done && (_d = configuration_3.return)) _d.call(configuration_3);
-    } finally {
-      if (e_4) throw e_4.error;
-    }
-  }
-
-  return configuration;
-}
-
-function getValueFromAdj(baseNode, adjList) {
-  var childStateNodes = adjList.get(baseNode);
-
-  if (!childStateNodes) {
-    return {}; // todo: fix?
-  }
-
-  if (baseNode.type === 'compound') {
-    var childStateNode = childStateNodes[0];
-
-    if (childStateNode) {
-      if (isLeafNode(childStateNode)) {
-        return childStateNode.key;
-      }
-    } else {
-      return {};
-    }
-  }
-
-  var stateValue = {};
-  childStateNodes.forEach(function (csn) {
-    stateValue[csn.key] = getValueFromAdj(csn, adjList);
-  });
-  return stateValue;
-}
-
-function getAdjList(configuration) {
-  var e_5, _a;
-
-  var adjList = new Map();
-
-  try {
-    for (var configuration_4 = (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__values */ .XA)(configuration), configuration_4_1 = configuration_4.next(); !configuration_4_1.done; configuration_4_1 = configuration_4.next()) {
-      var s = configuration_4_1.value;
-
-      if (!adjList.has(s)) {
-        adjList.set(s, []);
-      }
-
-      if (s.parent) {
-        if (!adjList.has(s.parent)) {
-          adjList.set(s.parent, []);
-        }
-
-        adjList.get(s.parent).push(s);
-      }
-    }
-  } catch (e_5_1) {
-    e_5 = {
-      error: e_5_1
-    };
-  } finally {
-    try {
-      if (configuration_4_1 && !configuration_4_1.done && (_a = configuration_4.return)) _a.call(configuration_4);
-    } finally {
-      if (e_5) throw e_5.error;
-    }
-  }
-
-  return adjList;
-}
-function getValue(rootNode, configuration) {
-  var config = getConfiguration([rootNode], configuration);
-  return getValueFromAdj(rootNode, getAdjList(config));
-}
-function has(iterable, item) {
-  if (Array.isArray(iterable)) {
-    return iterable.some(function (member) {
-      return member === item;
-    });
-  }
-
-  if (iterable instanceof Set) {
-    return iterable.has(item);
-  }
-
-  return false; // TODO: fix
-}
-function nextEvents(configuration) {
-  return (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__spreadArray */ .ev)([], (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__read */ .CR)(new Set((0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .flatten */ .xH)((0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__spreadArray */ .ev)([], (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__read */ .CR)(configuration.map(function (sn) {
-    return sn.ownEvents;
-  })), false)))), false);
-}
-function isInFinalState(configuration, stateNode) {
-  if (stateNode.type === 'compound') {
-    return getChildren(stateNode).some(function (s) {
-      return s.type === 'final' && has(configuration, s);
-    });
-  }
-
-  if (stateNode.type === 'parallel') {
-    return getChildren(stateNode).every(function (sn) {
-      return isInFinalState(configuration, sn);
-    });
-  }
-
-  return false;
-}
-function getMeta(configuration) {
-  if (configuration === void 0) {
-    configuration = [];
-  }
-
-  return configuration.reduce(function (acc, stateNode) {
-    if (stateNode.meta !== undefined) {
-      acc[stateNode.id] = stateNode.meta;
-    }
-
-    return acc;
-  }, {});
-}
-function getTagsFromConfiguration(configuration) {
-  return new Set((0,_utils_js__WEBPACK_IMPORTED_MODULE_0__/* .flatten */ .xH)(configuration.map(function (sn) {
-    return sn.tags;
-  })));
-}
-
-
-
-
-/***/ }),
-
-/***/ 9043:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   K: () => (/* binding */ SpecialTargets),
-/* harmony export */   M: () => (/* binding */ ActionTypes)
-/* harmony export */ });
-var ActionTypes;
-
-(function (ActionTypes) {
-  ActionTypes["Start"] = "xstate.start";
-  ActionTypes["Stop"] = "xstate.stop";
-  ActionTypes["Raise"] = "xstate.raise";
-  ActionTypes["Send"] = "xstate.send";
-  ActionTypes["Cancel"] = "xstate.cancel";
-  ActionTypes["NullEvent"] = "";
-  ActionTypes["Assign"] = "xstate.assign";
-  ActionTypes["After"] = "xstate.after";
-  ActionTypes["DoneState"] = "done.state";
-  ActionTypes["DoneInvoke"] = "done.invoke";
-  ActionTypes["Log"] = "xstate.log";
-  ActionTypes["Init"] = "xstate.init";
-  ActionTypes["Invoke"] = "xstate.invoke";
-  ActionTypes["ErrorExecution"] = "error.execution";
-  ActionTypes["ErrorCommunication"] = "error.communication";
-  ActionTypes["ErrorPlatform"] = "error.platform";
-  ActionTypes["ErrorCustom"] = "xstate.error";
-  ActionTypes["Update"] = "xstate.update";
-  ActionTypes["Pure"] = "xstate.pure";
-  ActionTypes["Choose"] = "xstate.choose";
-})(ActionTypes || (ActionTypes = {}));
-
-var SpecialTargets;
-
-(function (SpecialTargets) {
-  SpecialTargets["Parent"] = "#_parent";
-  SpecialTargets["Internal"] = "#_internal";
-})(SpecialTargets || (SpecialTargets = {}));
-
-
-
-
-/***/ }),
-
-/***/ 9823:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Bc: () => (/* binding */ isActor),
-/* harmony export */   ET: () => (/* binding */ path),
-/* harmony export */   HD: () => (/* binding */ isString),
-/* harmony export */   HV: () => (/* binding */ isBehavior),
-/* harmony export */   JQ: () => (/* binding */ isBuiltInEvent),
-/* harmony export */   L$: () => (/* binding */ symbolObservable),
-/* harmony export */   O4: () => (/* binding */ isMachine),
-/* harmony export */   Q8: () => (/* binding */ mapValues),
-/* harmony export */   Q9: () => (/* binding */ toStatePath),
-/* harmony export */   QX: () => (/* binding */ mapContext),
-/* harmony export */   Qi: () => (/* binding */ toGuard),
-/* harmony export */   SA: () => (/* binding */ toStatePaths),
-/* harmony export */   W: () => (/* binding */ matchesState),
-/* harmony export */   WM: () => (/* binding */ toStateValue),
-/* harmony export */   ZK: () => (/* binding */ warn),
-/* harmony export */   _v: () => (/* binding */ toEventObject),
-/* harmony export */   bi: () => (/* binding */ isObservable),
-/* harmony export */   bx: () => (/* binding */ createInvokeId),
-/* harmony export */   dt: () => (/* binding */ updateContext),
-/* harmony export */   g5: () => (/* binding */ toSCXMLEvent),
-/* harmony export */   gk: () => (/* binding */ nestedPath),
-/* harmony export */   ib: () => (/* binding */ mapFilterValues),
-/* harmony export */   j: () => (/* binding */ toInvokeSource),
-/* harmony export */   jh: () => (/* binding */ toTransitionConfigArray),
-/* harmony export */   kJ: () => (/* binding */ isArray),
-/* harmony export */   mf: () => (/* binding */ isFunction),
-/* harmony export */   on: () => (/* binding */ pathToStateValue),
-/* harmony export */   qo: () => (/* binding */ toArray),
-/* harmony export */   rg: () => (/* binding */ normalizeTarget),
-/* harmony export */   uK: () => (/* binding */ partition),
-/* harmony export */   v4: () => (/* binding */ reportUnhandledExceptionOnInvocation),
-/* harmony export */   vK: () => (/* binding */ isRaisableAction),
-/* harmony export */   vx: () => (/* binding */ evaluateGuard),
-/* harmony export */   x6: () => (/* binding */ getEventType),
-/* harmony export */   xH: () => (/* binding */ flatten),
-/* harmony export */   y8: () => (/* binding */ isPromiseLike),
-/* harmony export */   yv: () => (/* binding */ updateHistoryValue),
-/* harmony export */   zM: () => (/* binding */ toObserver)
-/* harmony export */ });
-/* unused harmony exports getActionType, interopSymbols, isStateLike, keys, pathsToStateValue, toArrayStrict, uniqueId, updateHistoryStates */
-/* harmony import */ var _virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3056);
-/* harmony import */ var _types_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9043);
-/* harmony import */ var _actionTypes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3884);
-/* harmony import */ var _constants_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7353);
-/* harmony import */ var _environment_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4066);
-
-
-
-
-
-
-var _a;
-function keys(value) {
-  return Object.keys(value);
-}
-function matchesState(parentStateId, childStateId, delimiter) {
-  if (delimiter === void 0) {
-    delimiter = _constants_js__WEBPACK_IMPORTED_MODULE_0__/* .STATE_DELIMITER */ .iS;
-  }
-
-  var parentStateValue = toStateValue(parentStateId, delimiter);
-  var childStateValue = toStateValue(childStateId, delimiter);
-
-  if (isString(childStateValue)) {
-    if (isString(parentStateValue)) {
-      return childStateValue === parentStateValue;
-    } // Parent more specific than child
-
-
-    return false;
-  }
-
-  if (isString(parentStateValue)) {
-    return parentStateValue in childStateValue;
-  }
-
-  return Object.keys(parentStateValue).every(function (key) {
-    if (!(key in childStateValue)) {
-      return false;
-    }
-
-    return matchesState(parentStateValue[key], childStateValue[key]);
-  });
-}
-function getEventType(event) {
-  try {
-    return isString(event) || typeof event === 'number' ? "".concat(event) : event.type;
-  } catch (e) {
-    throw new Error('Events must be strings or objects with a string event.type property.');
-  }
-}
-function getActionType(action) {
-  try {
-    return isString(action) || typeof action === 'number' ? "".concat(action) : isFunction(action) ? action.name : action.type;
-  } catch (e) {
-    throw new Error('Actions must be strings or objects with a string action.type property.');
-  }
-}
-function toStatePath(stateId, delimiter) {
-  try {
-    if (isArray(stateId)) {
-      return stateId;
-    }
-
-    return stateId.toString().split(delimiter);
-  } catch (e) {
-    throw new Error("'".concat(stateId, "' is not a valid state path."));
-  }
-}
-function isStateLike(state) {
-  return typeof state === 'object' && 'value' in state && 'context' in state && 'event' in state && '_event' in state;
-}
-function toStateValue(stateValue, delimiter) {
-  if (isStateLike(stateValue)) {
-    return stateValue.value;
-  }
-
-  if (isArray(stateValue)) {
-    return pathToStateValue(stateValue);
-  }
-
-  if (typeof stateValue !== 'string') {
-    return stateValue;
-  }
-
-  var statePath = toStatePath(stateValue, delimiter);
-  return pathToStateValue(statePath);
-}
-function pathToStateValue(statePath) {
-  if (statePath.length === 1) {
-    return statePath[0];
-  }
-
-  var value = {};
-  var marker = value;
-
-  for (var i = 0; i < statePath.length - 1; i++) {
-    if (i === statePath.length - 2) {
-      marker[statePath[i]] = statePath[i + 1];
-    } else {
-      marker[statePath[i]] = {};
-      marker = marker[statePath[i]];
-    }
-  }
-
-  return value;
-}
-function mapValues(collection, iteratee) {
-  var result = {};
-  var collectionKeys = Object.keys(collection);
-
-  for (var i = 0; i < collectionKeys.length; i++) {
-    var key = collectionKeys[i];
-    result[key] = iteratee(collection[key], key, collection, i);
-  }
-
-  return result;
-}
-function mapFilterValues(collection, iteratee, predicate) {
-  var e_1, _a;
-
-  var result = {};
-
-  try {
-    for (var _b = (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__values */ .XA)(Object.keys(collection)), _c = _b.next(); !_c.done; _c = _b.next()) {
-      var key = _c.value;
-      var item = collection[key];
-
-      if (!predicate(item)) {
-        continue;
-      }
-
-      result[key] = iteratee(item, key, collection);
-    }
-  } catch (e_1_1) {
-    e_1 = {
-      error: e_1_1
-    };
-  } finally {
-    try {
-      if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-    } finally {
-      if (e_1) throw e_1.error;
-    }
-  }
-
-  return result;
-}
-/**
- * Retrieves a value at the given path.
- * @param props The deep path to the prop of the desired value
- */
-
-var path = function (props) {
-  return function (object) {
-    var e_2, _a;
-
-    var result = object;
-
-    try {
-      for (var props_1 = (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__values */ .XA)(props), props_1_1 = props_1.next(); !props_1_1.done; props_1_1 = props_1.next()) {
-        var prop = props_1_1.value;
-        result = result[prop];
-      }
-    } catch (e_2_1) {
-      e_2 = {
-        error: e_2_1
-      };
-    } finally {
-      try {
-        if (props_1_1 && !props_1_1.done && (_a = props_1.return)) _a.call(props_1);
-      } finally {
-        if (e_2) throw e_2.error;
-      }
-    }
-
-    return result;
-  };
-};
-/**
- * Retrieves a value at the given path via the nested accessor prop.
- * @param props The deep path to the prop of the desired value
- */
-
-function nestedPath(props, accessorProp) {
-  return function (object) {
-    var e_3, _a;
-
-    var result = object;
-
-    try {
-      for (var props_2 = (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__values */ .XA)(props), props_2_1 = props_2.next(); !props_2_1.done; props_2_1 = props_2.next()) {
-        var prop = props_2_1.value;
-        result = result[accessorProp][prop];
-      }
-    } catch (e_3_1) {
-      e_3 = {
-        error: e_3_1
-      };
-    } finally {
-      try {
-        if (props_2_1 && !props_2_1.done && (_a = props_2.return)) _a.call(props_2);
-      } finally {
-        if (e_3) throw e_3.error;
-      }
-    }
-
-    return result;
-  };
-}
-function toStatePaths(stateValue) {
-  if (!stateValue) {
-    return [[]];
-  }
-
-  if (isString(stateValue)) {
-    return [[stateValue]];
-  }
-
-  var result = flatten(Object.keys(stateValue).map(function (key) {
-    var subStateValue = stateValue[key];
-
-    if (typeof subStateValue !== 'string' && (!subStateValue || !Object.keys(subStateValue).length)) {
-      return [[key]];
-    }
-
-    return toStatePaths(stateValue[key]).map(function (subPath) {
-      return [key].concat(subPath);
-    });
-  }));
-  return result;
-}
-function pathsToStateValue(paths) {
-  var e_4, _a;
-
-  var result = {};
-
-  if (paths && paths.length === 1 && paths[0].length === 1) {
-    return paths[0][0];
-  }
-
-  try {
-    for (var paths_1 = __values(paths), paths_1_1 = paths_1.next(); !paths_1_1.done; paths_1_1 = paths_1.next()) {
-      var currentPath = paths_1_1.value;
-      var marker = result; // tslint:disable-next-line:prefer-for-of
-
-      for (var i = 0; i < currentPath.length; i++) {
-        var subPath = currentPath[i];
-
-        if (i === currentPath.length - 2) {
-          marker[subPath] = currentPath[i + 1];
-          break;
-        }
-
-        marker[subPath] = marker[subPath] || {};
-        marker = marker[subPath];
-      }
-    }
-  } catch (e_4_1) {
-    e_4 = {
-      error: e_4_1
-    };
-  } finally {
-    try {
-      if (paths_1_1 && !paths_1_1.done && (_a = paths_1.return)) _a.call(paths_1);
-    } finally {
-      if (e_4) throw e_4.error;
-    }
-  }
-
-  return result;
-}
-function flatten(array) {
-  var _a;
-
-  return (_a = []).concat.apply(_a, (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__spreadArray */ .ev)([], (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__read */ .CR)(array), false));
-}
-function toArrayStrict(value) {
-  if (isArray(value)) {
-    return value;
-  }
-
-  return [value];
-}
-function toArray(value) {
-  if (value === undefined) {
-    return [];
-  }
-
-  return toArrayStrict(value);
-}
-function mapContext(mapper, context, _event) {
-  var e_5, _a;
-
-  if (isFunction(mapper)) {
-    return mapper(context, _event.data);
-  }
-
-  var result = {};
-
-  try {
-    for (var _b = (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__values */ .XA)(Object.keys(mapper)), _c = _b.next(); !_c.done; _c = _b.next()) {
-      var key = _c.value;
-      var subMapper = mapper[key];
-
-      if (isFunction(subMapper)) {
-        result[key] = subMapper(context, _event.data);
-      } else {
-        result[key] = subMapper;
-      }
-    }
-  } catch (e_5_1) {
-    e_5 = {
-      error: e_5_1
-    };
-  } finally {
-    try {
-      if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-    } finally {
-      if (e_5) throw e_5.error;
-    }
-  }
-
-  return result;
-}
-function isBuiltInEvent(eventType) {
-  return /^(done|error)\./.test(eventType);
-}
-function isPromiseLike(value) {
-  if (value instanceof Promise) {
-    return true;
-  } // Check if shape matches the Promise/A+ specification for a "thenable".
-
-
-  if (value !== null && (isFunction(value) || typeof value === 'object') && isFunction(value.then)) {
-    return true;
-  }
-
-  return false;
-}
-function isBehavior(value) {
-  return value !== null && typeof value === 'object' && 'transition' in value && typeof value.transition === 'function';
-}
-function partition(items, predicate) {
-  var e_6, _a;
-
-  var _b = (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__read */ .CR)([[], []], 2),
-      truthy = _b[0],
-      falsy = _b[1];
-
-  try {
-    for (var items_1 = (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__values */ .XA)(items), items_1_1 = items_1.next(); !items_1_1.done; items_1_1 = items_1.next()) {
-      var item = items_1_1.value;
-
-      if (predicate(item)) {
-        truthy.push(item);
-      } else {
-        falsy.push(item);
-      }
-    }
-  } catch (e_6_1) {
-    e_6 = {
-      error: e_6_1
-    };
-  } finally {
-    try {
-      if (items_1_1 && !items_1_1.done && (_a = items_1.return)) _a.call(items_1);
-    } finally {
-      if (e_6) throw e_6.error;
-    }
-  }
-
-  return [truthy, falsy];
-}
-function updateHistoryStates(hist, stateValue) {
-  return mapValues(hist.states, function (subHist, key) {
-    if (!subHist) {
-      return undefined;
-    }
-
-    var subStateValue = (isString(stateValue) ? undefined : stateValue[key]) || (subHist ? subHist.current : undefined);
-
-    if (!subStateValue) {
-      return undefined;
-    }
-
-    return {
-      current: subStateValue,
-      states: updateHistoryStates(subHist, subStateValue)
-    };
-  });
-}
-function updateHistoryValue(hist, stateValue) {
-  return {
-    current: stateValue,
-    states: updateHistoryStates(hist, stateValue)
-  };
-}
-function updateContext(context, _event, assignActions, state) {
-  if (!_environment_js__WEBPACK_IMPORTED_MODULE_2__/* .IS_PRODUCTION */ .M) {
-    warn(!!context, 'Attempting to update undefined context');
-  }
-
-  var updatedContext = context ? assignActions.reduce(function (acc, assignAction) {
-    var e_7, _a;
-
-    var assignment = assignAction.assignment;
-    var meta = {
-      state: state,
-      action: assignAction,
-      _event: _event
-    };
-    var partialUpdate = {};
-
-    if (isFunction(assignment)) {
-      partialUpdate = assignment(acc, _event.data, meta);
-    } else {
-      try {
-        for (var _b = (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__values */ .XA)(Object.keys(assignment)), _c = _b.next(); !_c.done; _c = _b.next()) {
-          var key = _c.value;
-          var propAssignment = assignment[key];
-          partialUpdate[key] = isFunction(propAssignment) ? propAssignment(acc, _event.data, meta) : propAssignment;
-        }
-      } catch (e_7_1) {
-        e_7 = {
-          error: e_7_1
-        };
-      } finally {
-        try {
-          if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-        } finally {
-          if (e_7) throw e_7.error;
-        }
-      }
-    }
-
-    return Object.assign({}, acc, partialUpdate);
-  }, context) : context;
-  return updatedContext;
-} // tslint:disable-next-line:no-empty
-
-var warn = function () {};
-
-if (!_environment_js__WEBPACK_IMPORTED_MODULE_2__/* .IS_PRODUCTION */ .M) {
-  warn = function (condition, message) {
-    var error = condition instanceof Error ? condition : undefined;
-
-    if (!error && condition) {
-      return;
-    }
-
-    if (console !== undefined) {
-      var args = ["Warning: ".concat(message)];
-
-      if (error) {
-        args.push(error);
-      } // tslint:disable-next-line:no-console
-
-
-      console.warn.apply(console, args);
-    }
-  };
-}
-function isArray(value) {
-  return Array.isArray(value);
-} // tslint:disable-next-line:ban-types
-
-function isFunction(value) {
-  return typeof value === 'function';
-}
-function isString(value) {
-  return typeof value === 'string';
-}
-function toGuard(condition, guardMap) {
-  if (!condition) {
-    return undefined;
-  }
-
-  if (isString(condition)) {
-    return {
-      type: _constants_js__WEBPACK_IMPORTED_MODULE_0__/* .DEFAULT_GUARD_TYPE */ .TV,
-      name: condition,
-      predicate: guardMap ? guardMap[condition] : undefined
-    };
-  }
-
-  if (isFunction(condition)) {
-    return {
-      type: _constants_js__WEBPACK_IMPORTED_MODULE_0__/* .DEFAULT_GUARD_TYPE */ .TV,
-      name: condition.name,
-      predicate: condition
-    };
-  }
-
-  return condition;
-}
-function isObservable(value) {
-  try {
-    return 'subscribe' in value && isFunction(value.subscribe);
-  } catch (e) {
-    return false;
-  }
-}
-var symbolObservable = /*#__PURE__*/function () {
-  return typeof Symbol === 'function' && Symbol.observable || '@@observable';
-}(); // TODO: to be removed in v5, left it out just to minimize the scope of the change and maintain compatibility with older versions of integration paackages
-
-var interopSymbols = (_a = {}, _a[symbolObservable] = function () {
-  return this;
-}, _a[Symbol.observable] = function () {
-  return this;
-}, _a);
-function isMachine(value) {
-  return !!value && '__xstatenode' in value;
-}
-function isActor(value) {
-  return !!value && typeof value.send === 'function';
-}
-var uniqueId = /*#__PURE__*/(/* unused pure expression or super */ null && (function () {
-  var currentId = 0;
-  return function () {
-    currentId++;
-    return currentId.toString(16);
-  };
-}()));
-function toEventObject(event, payload // id?: TEvent['type']
-) {
-  if (isString(event) || typeof event === 'number') {
-    return (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__assign */ .pi)({
-      type: event
-    }, payload);
-  }
-
-  return event;
-}
-function toSCXMLEvent(event, scxmlEvent) {
-  if (!isString(event) && '$$type' in event && event.$$type === 'scxml') {
-    return event;
-  }
-
-  var eventObject = toEventObject(event);
-  return (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__assign */ .pi)({
-    name: eventObject.type,
-    data: eventObject,
-    $$type: 'scxml',
-    type: 'external'
-  }, scxmlEvent);
-}
-function toTransitionConfigArray(event, configLike) {
-  var transitions = toArrayStrict(configLike).map(function (transitionLike) {
-    if (typeof transitionLike === 'undefined' || typeof transitionLike === 'string' || isMachine(transitionLike)) {
-      return {
-        target: transitionLike,
-        event: event
-      };
-    }
-
-    return (0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__assign */ .pi)((0,_virtual_tslib_js__WEBPACK_IMPORTED_MODULE_1__/* .__assign */ .pi)({}, transitionLike), {
-      event: event
-    });
-  });
-  return transitions;
-}
-function normalizeTarget(target) {
-  if (target === undefined || target === _constants_js__WEBPACK_IMPORTED_MODULE_0__/* .TARGETLESS_KEY */ .rt) {
-    return undefined;
-  }
-
-  return toArray(target);
-}
-function reportUnhandledExceptionOnInvocation(originalError, currentError, id) {
-  if (!_environment_js__WEBPACK_IMPORTED_MODULE_2__/* .IS_PRODUCTION */ .M) {
-    var originalStackTrace = originalError.stack ? " Stacktrace was '".concat(originalError.stack, "'") : '';
-
-    if (originalError === currentError) {
-      // tslint:disable-next-line:no-console
-      console.error("Missing onError handler for invocation '".concat(id, "', error was '").concat(originalError, "'.").concat(originalStackTrace));
-    } else {
-      var stackTrace = currentError.stack ? " Stacktrace was '".concat(currentError.stack, "'") : ''; // tslint:disable-next-line:no-console
-
-      console.error("Missing onError handler and/or unhandled exception/promise rejection for invocation '".concat(id, "'. ") + "Original error: '".concat(originalError, "'. ").concat(originalStackTrace, " Current error is '").concat(currentError, "'.").concat(stackTrace));
-    }
-  }
-}
-function evaluateGuard(machine, guard, context, _event, state) {
-  var guards = machine.options.guards;
-  var guardMeta = {
-    state: state,
-    cond: guard,
-    _event: _event
-  }; // TODO: do not hardcode!
-
-  if (guard.type === _constants_js__WEBPACK_IMPORTED_MODULE_0__/* .DEFAULT_GUARD_TYPE */ .TV) {
-    return ((guards === null || guards === void 0 ? void 0 : guards[guard.name]) || guard.predicate)(context, _event.data, guardMeta);
-  }
-
-  var condFn = guards === null || guards === void 0 ? void 0 : guards[guard.type];
-
-  if (!condFn) {
-    throw new Error("Guard '".concat(guard.type, "' is not implemented on machine '").concat(machine.id, "'."));
-  }
-
-  return condFn(context, _event.data, guardMeta);
-}
-function toInvokeSource(src) {
-  if (typeof src === 'string') {
-    return {
-      type: src
-    };
-  }
-
-  return src;
-}
-function toObserver(nextHandler, errorHandler, completionHandler) {
-  var noop = function () {};
-
-  var isObserver = typeof nextHandler === 'object';
-  var self = isObserver ? nextHandler : null;
-  return {
-    next: ((isObserver ? nextHandler.next : nextHandler) || noop).bind(self),
-    error: ((isObserver ? nextHandler.error : errorHandler) || noop).bind(self),
-    complete: ((isObserver ? nextHandler.complete : completionHandler) || noop).bind(self)
-  };
-}
-function createInvokeId(stateNodeId, index) {
-  return "".concat(stateNodeId, ":invocation[").concat(index, "]");
-}
-function isRaisableAction(action) {
-  return (action.type === _actionTypes_js__WEBPACK_IMPORTED_MODULE_3__/* .raise */ .OU || action.type === _actionTypes_js__WEBPACK_IMPORTED_MODULE_3__/* .send */ .lW && action.to === _types_js__WEBPACK_IMPORTED_MODULE_4__/* .SpecialTargets */ .K.Internal) && typeof action.delay !== 'number';
-}
-
-
-
-
-/***/ }),
-
-/***/ 9481:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, {
-  Z: () => (/* binding */ AudioModule)
-});
-
-// EXTERNAL MODULE: ./node_modules/xstate/es/interpreter.js + 4 modules
-var interpreter = __webpack_require__(6029);
-// EXTERNAL MODULE: ./node_modules/@ricky0123/vad-web/dist/index.js
-var dist = __webpack_require__(9762);
-// EXTERNAL MODULE: ./src/ConfigModule.js
-var ConfigModule = __webpack_require__(8186);
-// EXTERNAL MODULE: ./src/ResourceModule.ts
-var ResourceModule = __webpack_require__(879);
-;// CONCATENATED MODULE: ./src/RequestInterceptor.js
-
-var filesToRedirect = ["silero_vad.onnx", "ort-wasm-simd.wasm", "ort.min.js.map", "vad.worklet.bundle.min.js"];
-
-// Function to redirect specific XMLHttpRequests
-function redirectXMLHttpRequest(open) {
-  XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
-    var filename = url.split("/").pop();
-    if (filename && filesToRedirect.includes(filename)) {
-      arguments[1] = (0,ResourceModule/* getResourceUrl */.v)(filename);
-    }
-    open.apply(this, arguments);
-  };
-}
-
-// Function to redirect specific fetch requests
-function redirectFetch(_fetch) {
-  window.fetch = function (url, opts) {
-    var filename = url.split("/").pop();
-    if (filename && filesToRedirect.includes(filename)) {
-      arguments[0] = (0,ResourceModule/* getResourceUrl */.v)(filename);
-    }
-    return _fetch.apply(this, arguments);
-  };
-}
-
-// Function to set up the interceptors
-function setupInterceptors() {
-  redirectXMLHttpRequest(XMLHttpRequest.prototype.open);
-  redirectFetch(window.fetch);
-}
-;// CONCATENATED MODULE: ./src/WavEncoder.ts
-// Most of the code here come from ricky0123/vad-web
-// Who in turn copied it from linto-ai/WebVoiceSDK
-function minFramesForTargetMS(targetDuration, frameSamples, sr = 16000) {
-    return Math.ceil((targetDuration * sr) / 1000 / frameSamples);
-}
-function arrayBufferToBase64(buffer) {
-    var binary = "";
-    var bytes = new Uint8Array(buffer);
-    var len = bytes.byteLength;
-    for (var i = 0; i < len; i++) {
-        binary += String.fromCharCode(bytes[i]);
-    }
-    return btoa(binary);
-}
-/*
-  This rest of this was mostly copied from https://github.com/linto-ai/WebVoiceSDK
-  */
-// this function is used to encode the Float32Array audio data produced from a MicVAD
-// as a WAV file audio buffer
-function encodeWAV(samples, format = 3, sampleRate = 16000, numChannels = 1, bitDepth = 32) {
-    var bytesPerSample = bitDepth / 8;
-    var blockAlign = numChannels * bytesPerSample;
-    var buffer = new ArrayBuffer(44 + samples.length * bytesPerSample);
-    var view = new DataView(buffer);
-    /* RIFF identifier */
-    writeString(view, 0, "RIFF");
-    /* RIFF chunk length */
-    view.setUint32(4, 36 + samples.length * bytesPerSample, true);
-    /* RIFF type */
-    writeString(view, 8, "WAVE");
-    /* format chunk identifier */
-    writeString(view, 12, "fmt ");
-    /* format chunk length */
-    view.setUint32(16, 16, true);
-    /* sample format (raw) */
-    view.setUint16(20, format, true);
-    /* channel count */
-    view.setUint16(22, numChannels, true);
-    /* sample rate */
-    view.setUint32(24, sampleRate, true);
-    /* byte rate (sample rate * block align) */
-    view.setUint32(28, sampleRate * blockAlign, true);
-    /* block align (channel count * bytes per sample) */
-    view.setUint16(32, blockAlign, true);
-    /* bits per sample */
-    view.setUint16(34, bitDepth, true);
-    /* data chunk identifier */
-    writeString(view, 36, "data");
-    /* data chunk length */
-    view.setUint32(40, samples.length * bytesPerSample, true);
-    if (format === 1) {
-        // Raw PCM
-        floatTo16BitPCM(view, 44, samples);
-    }
-    else {
-        writeFloat32(view, 44, samples);
-    }
-    return buffer;
-}
-function interleave(inputL, inputR) {
-    var length = inputL.length + inputR.length;
-    var result = new Float32Array(length);
-    var index = 0;
-    var inputIndex = 0;
-    while (index < length) {
-        result[index++] = inputL[inputIndex];
-        result[index++] = inputR[inputIndex];
-        inputIndex++;
-    }
-    return result;
-}
-function writeFloat32(output, offset, input) {
-    for (var i = 0; i < input.length; i++, offset += 4) {
-        output.setFloat32(offset, input[i], true);
-    }
-}
-function floatTo16BitPCM(output, offset, input) {
-    for (var i = 0; i < input.length; i++, offset += 2) {
-        var s = Math.max(-1, Math.min(1, input[i]));
-        output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
-    }
-}
-function writeString(view, offset, string) {
-    for (var i = 0; i < string.length; i++) {
-        view.setUint8(offset + i, string.charCodeAt(i));
-    }
-}
-
-;// CONCATENATED MODULE: ./src/AudioEncoder.ts
-
-/**
- * Convert a Float32Array of audio samples to a WAV array buffer
- * @param audioData - The audio samples
- * @returns - The audio in WAV format as an ArrayBuffer
- */
-function convertToWavBuffer(audioData) {
-    const arrayBuffer = encodeWAV(audioData);
-    return arrayBuffer;
-}
-/**
- * Convert a Float32Array of audio samples to a WAV Blob
- * @param audioData - The audio samples
- * @returns - The audio in WAV format
- */
-function convertToWavBlob(audioData) {
-    const arrayBuffer = convertToWavBuffer(audioData);
-    return new Blob([arrayBuffer], { type: "audio/wav" });
-}
-
-// EXTERNAL MODULE: ./node_modules/xstate/es/Machine.js + 2 modules
-var Machine = __webpack_require__(9122);
-// EXTERNAL MODULE: ./node_modules/xstate/es/index.js
-var es = __webpack_require__(2494);
-// EXTERNAL MODULE: ./src/EventBus.js
-var EventBus = __webpack_require__(7635);
-// EXTERNAL MODULE: ./node_modules/lodash/lodash.js
-var lodash = __webpack_require__(6486);
-;// CONCATENATED MODULE: ./src/state-machines/AudioInputMachine.ts
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-
-
-
-
-
-
-// Assuming config.appServerUrl is of type string.
-const fullWorkletURL = `${ConfigModule/* config */.v.appServerUrl}/vad.worklet.bundle.min.js`;
-let audioMimeType = "audio/wav";
-let speechStartTime = 0;
-const threshold = 1000; // 1000 ms = 1 second, about the length of "Hey, Pi"
-setupInterceptors();
-// Variable to hold the microphone instance. Now has a specific type.
-let microphone = null;
-let previousDeviceIds = [];
-let previousDefaultDevice = null;
-function monitorAudioInputDevices() {
-    var _a;
-    return __awaiter(this, void 0, void 0, function* () {
-        if (microphone === null) {
-            // No microphone instance, so nothing to monitor
-            return;
-        }
-        const devices = yield navigator.mediaDevices.enumerateDevices();
-        const audioInputDevices = devices.filter((device) => device.kind === "audioinput");
-        // Get the current default device
-        const defaultDevice = audioInputDevices.find((device) => device.deviceId === "default");
-        // Check if the default device has changed
-        if (defaultDevice &&
-            (!previousDefaultDevice ||
-                defaultDevice.label !== previousDefaultDevice.label)) {
-            console.log(`The default audio input device has changed: ${defaultDevice.label}`);
-            const firstTime = previousDefaultDevice === null;
-            previousDefaultDevice = defaultDevice;
-            if (!firstTime) {
-                const deviceId = defaultDevice.deviceId;
-                const deviceLabel = defaultDevice.label;
-                EventBus/* default */.Z.emit("saypi:audio:reconnect", { deviceId, deviceLabel }); // instruct saypi to switch to the new default device
-            }
-        }
-        const currentDeviceIds = audioInputDevices.map((device) => device.deviceId);
-        const addedDevices = currentDeviceIds.filter((id) => !previousDeviceIds.includes(id));
-        const removedDevices = previousDeviceIds.filter((id) => !currentDeviceIds.includes(id));
-        if (microphone) {
-            const stream = microphone.stream;
-            const track = stream.getTracks()[0];
-            const settings = track.getSettings();
-            const deviceId = settings.deviceId;
-            const deviceLabel = (_a = audioInputDevices.find((device) => device.deviceId === deviceId)) === null || _a === void 0 ? void 0 : _a.label;
-            if (deviceId && addedDevices.includes(deviceId)) {
-                console.log(`The audio input device used by MicVAD has been added: ${deviceId} (${deviceLabel}))`);
-                EventBus/* default */.Z.emit("saypi:audio:connected", { deviceId, deviceLabel });
-            }
-            if (deviceId && removedDevices.includes(deviceId)) {
-                console.log("The audio input device used by MicVAD has been removed.");
-            }
-        }
-        addedDevices.forEach((id) => {
-            var _a;
-            const label = (_a = audioInputDevices.find((device) => device.deviceId === id)) === null || _a === void 0 ? void 0 : _a.label;
-            console.log(`An audio input device has been added: ${id} (${label})`);
-        });
-        removedDevices.forEach((id) => {
-            var _a;
-            const label = (_a = audioInputDevices.find((device) => device.deviceId === id)) === null || _a === void 0 ? void 0 : _a.label;
-            console.log(`An audio input device has been removed: ${id} (${label})`);
-        });
-        previousDeviceIds = currentDeviceIds;
-    });
-}
-// Call the function every 5 seconds
-setInterval(monitorAudioInputDevices, 5000);
-const debouncedOnFrameProcessed = (0,lodash.debounce)((probabilities) => {
-    EventBus/* default */.Z.emit("audio:frame", probabilities);
-}, 1000 / 60); // 1000ms / 60 frames per second
-// Options for MicVAD
-const micVADOptions = {
-    workletURL: fullWorkletURL,
-    positiveSpeechThreshold: 0.8,
-    minSpeechFrames: 5,
-    preSpeechPadFrames: 10,
-    onSpeechStart: () => {
-        console.log("Speech started");
-        speechStartTime = Date.now();
-        EventBus/* default */.Z.emit("saypi:userSpeaking");
-    },
-    onSpeechEnd: (rawAudioData) => {
-        console.log("Speech ended");
-        const speechStopTime = Date.now();
-        const speechDuration = speechStopTime - speechStartTime;
-        const audioBlob = convertToWavBlob(rawAudioData);
-        EventBus/* default */.Z.emit("audio:dataavailable", {
-            blob: audioBlob,
-            duration: speechDuration,
-        });
-    },
-    onVADMisfire: () => {
-        console.log("Cancelled. Audio was not speech.");
-        EventBus/* default */.Z.emit("saypi:userStoppedSpeaking", { duration: 0 });
-    },
-    onFrameProcessed(probabilities) {
-        debouncedOnFrameProcessed(probabilities);
-    },
-};
-// The callback type can be more specific based on your usage
-function setupRecording(callback) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (microphone) {
-            return;
-        }
-        try {
-            const stream = yield navigator.mediaDevices.getUserMedia({
-                audio: {
-                    channelCount: 1,
-                    echoCancellation: true,
-                    autoGainControl: true,
-                    noiseSuppression: true,
-                },
-            });
-            microphone = yield dist.MicVAD.new(Object.assign(Object.assign({}, micVADOptions), { stream }));
-            if (typeof callback === "function") {
-                callback();
-            }
-        }
-        catch (err) {
-            console.error("VAD failed to load", err);
-            console.error(`Application server at ${ConfigModule/* config */.v.appServerUrl} may be unavailable. Please make sure it is running.`);
-        }
-    });
-}
-function tearDownRecording() {
-    if (microphone) {
-        microphone.pause();
-        microphone.stream.getTracks().forEach((track) => track.stop());
-    }
-    microphone = null;
-}
-const audioInputMachine = (0,Machine/* createMachine */.C)({
-    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AkgOwAdUAXAOgCcwAbMZWSAYmQGMBHVDSgbQAYBdRKAJZYGYtjyCQAD0QBGAOwBmUgBYAnJvUAOVXvUKATADYANCACeiJYYCspY7eM9jruatsHDAX2-m0mLiEJKQs7JwYeFAMEFh4YKSRAG5YANYJAdj4RGRhHOSRUAjJWMzI4nG8fFVSwqIVkkgyiLaG5lYIcnI82g4KtqoKxqrGCiOGqr7+6FnBuWz5hQxg5ORY5KQEVOUAZusAtqEzQTmhCxFRxXgpZQ1VNU11YhJSsp3Kalo6ehpGZpaIQw2UiGHhKHhAwwKZQeIxTECZE4hPIXaKwYjIcjEB5CETPOKvQFyZykOTaJS6Yyg0YQ-4dMkKUjqWzgpSqJS2MHqVQmeGI7LI86UCAMSg0OhgHEgJ4NQmdYwqDRaXT6P7tRDaOSfTSOAzaXS2TV844C+bhYWJCA0BjozHY-i1PGyppvVQ9EGOZzaEzqUFkpTqzpyNkg-VjbTGOQsnitY2BU1nc2QS3WlHcB2PJ0vF2IDQqHjqYMstnGQtDQNyCaMnS2Aa1jmF9lx2anNPJjBWsAMKUy7OgV3ukxOHo+v3kis9XqGfXe7QskwKGPNpFm-LJyjMdaYKI24hYAgAJTA7DgxEgPazBJzCG0CnUfVB-U8E2MmorwdUof1SmZdijqm0ZcEzbCAKDATdyG3aIIHKZAAEEkmQDBtgAIxoC96j7ZoEFLQxSDnZlfVfH9K1sQMdXwjllF9TRQUAvwERNOZEzXUCCDAPAoIAZT3Ahd33DD8Uaft5A8YwmVLCENG6XRK0DfV7zdL0jDZTVySA5iQM2DjuN4mJYIQpDUPQjNcUwq8RM6MSJPUKTCx6VQ5IBBADC1JTSNs9QlDJDTWyFZN2M4woeP3BhpFtM9Qh2M9yAACk5HgeAASiYJi-KTNidOC3jBOdSz3CcGy7Jkxy2mcroTFIbzDBq-oRxcSYGP5TT-MyoKohCvjwoxSLkGilZ4sS5LUvjFqMu09qoE6rg5AETNzOE7CuiUFQvF9HonE5VQJ3ZUgwW0blWShRRfMFcb0X3diRVyrC3mJHkQR9NkRk1AD5McpkYy8TVi0jXwGLwLAIDgKRmpyR0FrlABaOlEBhvahvJBQuiMIweVsU6yDFWh6AgCGhLlHlA28z8wQqkxI0SsljExljUXxvLsJ-e8aNGLz3HZORmUDadFJcbooUMLmeQUWmQIZ27AUjUghicIFyScO85EDUZ7FszxbC5nhiW5GmmrSs7WJTMAJYspmCxlz15Y5NnlfKytVuDZGlH6aml310b0qNjct0KU3FreVw8KGlwJnZCYIQnHQv20HghkXfoFTF1qJt0-d-blboWVJOwarZO9oWJKP7BZMMnBsBKlGT87eKujPr0UQYqsrO9QTdTxb3IrzSFrQtdB0ZlIzkf7vCAA */
-    id: "audioInput",
-    initial: "released",
-    context: {
-        waitingToStop: false,
-        waitingToStart: false,
-        recordingStartTime: 0,
-    },
-    states: {
-        released: {
-            on: {
-                acquire: {
-                    target: "acquiring",
-                },
-            },
-        },
-        acquiring: {
-            description: "Acquiring the microphone. Waits until asynchronous call has completed.",
-            invoke: {
-                src: "acquireMicrophone",
-                onDone: {
-                    target: "acquired",
-                },
-                onError: {
-                    target: "released",
-                    actions: {
-                        type: "logError",
-                    },
-                },
-            },
-            on: {
-                start: {
-                    actions: (0,es/* assign */.f0)({ waitingToStart: true }),
-                    internal: true,
-                },
-            },
-        },
-        acquired: {
-            description: "Microphone acquired and ready to start recording.",
-            initial: "idle",
-            entry: [
-                {
-                    type: "notifyMicrophoneAcquired",
-                },
-            ],
-            states: {
-                idle: {
-                    on: {
-                        start: {
-                            target: "recording",
-                            cond: "microphoneAcquired",
-                        },
-                        acquire: {
-                            description: `When receiving a request to acquire a microphone (setup recording) that is already acquired, trigger notifications.`,
-                            actions: {
-                                type: "notifyMicrophoneAcquired",
-                            },
-                        },
-                    },
-                    always: {
-                        target: "recording",
-                        cond: "pendingStart",
-                    },
-                },
-                recording: {
-                    entry: ["startRecording", (0,es/* assign */.f0)({ waitingToStart: false })],
-                    on: {
-                        stopRequested: {
-                            target: "pendingStop",
-                        },
-                        dataAvailable: {
-                            actions: {
-                                type: "sendData",
-                            },
-                            internal: true,
-                        },
-                    },
-                },
-                pendingStop: {
-                    description: "Waiting for the media recording device to stop recording.",
-                    entry: {
-                        type: "prepareStop",
-                    },
-                    after: {
-                        "5000": [
-                            {
-                                target: "#audioInput.acquired.stopped",
-                                actions: ["stopIfWaiting"],
-                                description: "Stop eventually",
-                            },
-                            {
-                                internal: false,
-                            },
-                        ],
-                    },
-                    on: {
-                        stop: {
-                            target: "stopped",
-                            description: "Stop immediately",
-                        },
-                        dataAvailable: {
-                            target: "stopped",
-                            actions: ["stopIfWaiting", "sendData"],
-                            description: "Stop after final audio data collected",
-                        },
-                    },
-                },
-                stopped: {
-                    entry: (0,es/* assign */.f0)({ waitingToStop: false }),
-                    always: {
-                        target: "idle",
-                    },
-                },
-            },
-            on: {
-                release: {
-                    target: "released",
-                    actions: {
-                        type: "releaseMicrophone",
-                    },
-                },
-            },
-        },
-    },
-    predictableActionArguments: true,
-    preserveActionOrder: true,
-}, {
-    actions: {
-        startRecording: (context, event) => {
-            context.recordingStartTime = Date.now();
-            // Start recording
-            if (microphone && microphone.listening === false) {
-                microphone.start();
-            }
-        },
-        prepareStop: (context, event) => {
-            if (microphone && microphone.listening === true) {
-                context.waitingToStop = true;
-            }
-        },
-        sendData: (context, event) => {
-            const { blob, duration } = event;
-            const sizeInKb = (blob.size / 1024).toFixed(2); // Convert to kilobytes and keep 2 decimal places
-            console.log(`Uploading ${sizeInKb}kb of audio data`);
-            // Use the duration directly from the event
-            const speechDuration = duration;
-            if (Number(sizeInKb) > 0) {
-                // Upload the audio to the server for transcription
-                EventBus/* default */.Z.emit("saypi:userStoppedSpeaking", {
-                    duration: speechDuration,
-                    blob,
-                });
-            }
-        },
-        stopIfWaiting: (SayPiContext) => {
-            if (SayPiContext.waitingToStop === true) {
-                microphone === null || microphone === void 0 ? void 0 : microphone.pause();
-            }
-        },
-        notifyMicrophoneAcquired: (context, event) => {
-            monitorAudioInputDevices();
-            EventBus/* default */.Z.emit("saypi:callReady");
-        },
-        releaseMicrophone: (context, event) => {
-            tearDownRecording();
-        },
-        logError: (context, event) => {
-            console.error("Error acquiring microphone: ", event.data);
-        },
-    },
-    services: {
-        acquireMicrophone: (context, event) => {
-            return new Promise((resolve, reject) => {
-                setupRecording(() => {
-                    if (microphone) {
-                        resolve();
-                    }
-                    else {
-                        reject(new Error("Failed to acquire microphone resource."));
-                    }
-                });
-            });
-        },
-    },
-    guards: {
-        microphoneAcquired: (context, event) => {
-            return microphone !== null;
-        },
-        pendingStart: (context, event) => {
-            return context.waitingToStart === true;
-        },
-    },
-    delays: {},
-});
-
-;// CONCATENATED MODULE: ./src/state-machines/AudioOutputMachine.js
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-
-
-var audioOutputMachine = (0,Machine/* createMachine */.C)({
-  /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7A8qgLgA4EB0GEANmAMQVbISz7IBO+A2gAwC6iohWWBnzYAdnxAAPRAEYAHAFYSANmWdOygEzyALAE5NAZk4KANCACeswzpIyZehcoU6dAdmP2dAX2-m0mLgExPgkdAwYolC09BCQALZgzBDIzFy8SCACQiJY4pnSCAqa5lYIbpp6JIY1NW7KDoYylb7+6Nh4RKThcRDUYPGEIpDpEtnCYhKFMpwkcp76em5ynJqcxiWWiIZymiSaRjsKJqqax4atIAEdwd2xkCQsYAwW1IQUyBajmeO5+aCFeqzBRNM56HQyEE6XalRANZTVWquGQQzg6LSXa5BLqhHoPd6fSLRQhoWBgb78QQTPJTWTrWaOQyaOQyZzNNwyNywhDOKpaY4o+q6QwKTHtbEhML3CAkAkWIn9US9ClZKl-WkIGbGEiM5mshTszncjmzZoCoUOTicsWBTqSvEyuUKgDGyFEcvwAAsWFhUFBPSrfpMCog5NCSMsZIYGgo9Io0XpuS5bGd1FG3HGlj4-FdxXa7gx8aTIG8Pl8eGM1cGAdZ5BH1vJOLs3Ot9Ny1FUzVaHPZli4bTccVLCzKwEqS2SwABrEYVn5VmkhzX0nUgvVszQcrlbcqqEjqA+b4pMg0DiWkchUaiwKcYQgAOTAkg4c8pOWrUkQAFoUVVjDUDD0Qw3B0f9NjKTlbHsdRXAUORwWjTRlF8HNRCwOJ4EyLF83wSt30XGsEB-JZqnWQxAOA0D1nAxBZibGpN2ZNF3Dg8i3DPHCyEoMA8Opf5PwQHQaIQOQ3BIVjakUJp5CQjjblxWIiV49UlzBfYFGWepVAaOQYR3NY9hAvRjL0exmgM5Cc2w+Th16ZSP0KbQlBBZotBbeRWW5HQnAjY4TFAjloTWdirLzGyHUeZ4IDKN8+I1JDDHE0E3KtFllCTAx1IPTgOVUBR+1C21wulWUyyU+d8P4wpFCUcicqA7z5gOdKd1jKo3D81llH0ajNDkocIpJVAyQgeyCIElF7FXJl5itK1TJ0dtOXreZY1E1kmT0fr7RKsc7IquKl0mmRpuZTx5pRY11HEiEW1UeD8scFDvCAA */
-  context: {
-    autoplay: false,
-    skip: false
-  },
-  id: "audioOutput",
-  initial: "idle",
-  states: {
-    idle: {
-      on: {
-        loadstart: [{
-          target: "idle",
-          cond: "shouldSkip",
-          internal: true,
-          description: "Skip this track.",
-          actions: [(0,es/* assign */.f0)(function (context, event) {
-            return _objectSpread(_objectSpread({}, context), {}, {
-              skip: false
-            });
-          }), {
-            type: "skipCurrent"
-          }]
-        }, {
-          target: "loading"
-        }],
-        skipNext: {
-          target: "idle",
-          internal: true,
-          description: "Do not play the next track.",
-          actions: (0,es/* assign */.f0)(function (context, event) {
-            return _objectSpread(_objectSpread({}, context), {}, {
-              skip: true
-            });
-          })
-        }
-      }
-    },
-    loading: {
-      on: {
-        loadedmetadata: {
-          target: "loaded"
-        }
-      }
-    },
-    loaded: {
-      initial: "ready",
-      states: {
-        ready: {
-          description: "Audio has loaded and is ready to start playing (further buffering may be required to reach the end).",
-          entry: {
-            type: "emitEvent",
-            params: {
-              eventName: "saypi:ready"
-            }
-          },
-          on: {
-            play: {
-              target: "playing"
-            }
-          }
-        },
-        playing: {
-          entry: {
-            type: "emitEvent",
-            params: {
-              eventName: "saypi:piSpeaking"
-            }
-          },
-          exit: [{
-            type: "emitEvent",
-            params: {
-              eventName: "saypi:piStoppedSpeaking"
-            }
-          }],
-          on: {
-            pause: {
-              target: "paused"
-            },
-            ended: {
-              target: "ended"
-            },
-            canplaythrough: {
-              internal: true
-            }
-          }
-        },
-        paused: {
-          on: {
-            play: {
-              target: "playing"
-            }
-          }
-        },
-        ended: {
-          entry: {
-            type: "emitEvent",
-            params: {
-              eventName: "saypi:piFinishedSpeaking"
-            }
-          },
-          on: {
-            seeked: {
-              target: "ready",
-              description: "An ended track is seeked back to earlier in the track."
-            }
-          }
-        }
-      },
-      on: {
-        emptied: {
-          target: "idle"
-        }
-      }
-    }
-  },
-  predictableActionArguments: true,
-  preserveActionOrder: true
-}, {
-  actions: {
-    emitEvent: function emitEvent(context, event, _ref) {
-      var action = _ref.action;
-      EventBus/* default */.Z.emit(action.params.eventName);
-    },
-    skipCurrent: function skipCurrent(context, event) {
-      // send a message back to the audio module to stop playback
-      EventBus/* default */.Z.emit("audio:skipCurrent");
-    }
-  },
-  guards: {
-    shouldSkip: function shouldSkip(context) {
-      return context.skip === true;
-    }
-  },
-  services: {},
-  delays: {}
-});
-// EXTERNAL MODULE: ./src/LoggingModule.js
-var LoggingModule = __webpack_require__(484);
-;// CONCATENATED MODULE: ./src/AudioModule.js
-function AudioModule_typeof(o) { "@babel/helpers - typeof"; return AudioModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, AudioModule_typeof(o); }
-function AudioModule_ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function AudioModule_objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? AudioModule_ownKeys(Object(t), !0).forEach(function (r) { AudioModule_defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : AudioModule_ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function AudioModule_defineProperty(obj, key, value) { key = AudioModule_toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, AudioModule_toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function AudioModule_toPropertyKey(arg) { var key = AudioModule_toPrimitive(arg, "string"); return AudioModule_typeof(key) === "symbol" ? key : String(key); }
-function AudioModule_toPrimitive(input, hint) { if (AudioModule_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (AudioModule_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-// import state machines for audio input and output
-
-
-
-
-
-var AudioModule = /*#__PURE__*/function () {
-  function AudioModule() {
-    _classCallCheck(this, AudioModule);
-    this.audioElement = document.querySelector("audio");
-    if (!this.audioElement) {
-      console.error("Audio element not found!");
-    } else {
-      this.audioElement.preload = "auto"; // enable aggressive preloading of audio
-    }
-
-    this.audioOutputActor = (0,interpreter/* interpret */.kJ)(audioOutputMachine);
-    this.audioOutputActor.onTransition(function (state) {
-      if (state.changed) {
-        var fromState = state.history ? (0,LoggingModule/* serializeStateValue */.G)(state.history.value) : "N/A";
-        var toState = (0,LoggingModule/* serializeStateValue */.G)(state.value);
-        LoggingModule/* logger */.k.debug("Audio Output Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
-      }
-    });
-    this.audioInputActor = (0,interpreter/* interpret */.kJ)(audioInputMachine);
-    this.audioInputActor.onTransition(function (state) {
-      if (state.changed) {
-        var fromState = state.history ? (0,LoggingModule/* serializeStateValue */.G)(state.history.value) : "N/A";
-        var toState = (0,LoggingModule/* serializeStateValue */.G)(state.value);
-        LoggingModule/* logger */.k.debug("Audio Input Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
-      }
-    });
-  }
-  _createClass(AudioModule, [{
-    key: "start",
-    value: function start() {
-      // audio output (Pi)
-      this.audioOutputActor.start();
-      this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
-
-      // audio input (user)
-      this.audioInputActor.start();
-      this.registerAudioCommands(this.audioInputActor, this.audioOutputActor);
-    }
-  }, {
-    key: "registerAudioPlaybackEvents",
-    value: function registerAudioPlaybackEvents(audio, actor) {
-      var events = ["loadstart", "loadedmetadata", "canplaythrough", "play", "pause", "ended", "seeked", "emptied"];
-      events.forEach(function (event) {
-        audio.addEventListener(event, function () {
-          return actor.send(event);
-        });
-      });
-      audio.addEventListener("playing", function () {
-        actor.send("play");
-      });
-    }
-
-    /* These events are used to control/pass requests to the audio module from other modules */
-  }, {
-    key: "registerAudioCommands",
-    value: function registerAudioCommands(inputActor, outputActor) {
-      var _this = this;
-      // audio input (recording) commands
-      EventBus/* default */.Z.on("audio:setupRecording", function (e) {
-        inputActor.send("acquire");
-      });
-      EventBus/* default */.Z.on("audio:tearDownRecording", function (e) {
-        inputActor.send("release");
-      });
-      EventBus/* default */.Z.on("audio:startRecording", function (e) {
-        // Check if Pi is currently speaking and stop her audio
-        outputActor.send("pause");
-
-        // Check if the microphone is acquired before starting?
-        inputActor.send(["acquire", "start"]);
-      });
-      EventBus/* default */.Z.on("audio:stopRecording", function (e) {
-        inputActor.send("stopRequested");
-        /* resume or cancel Pi's audio */
-        /* TODO: reassess how to handle interruptions
-        outputActor.send("play"); // resume Pi's audio
-        outputActor.send("stop"); // cancel Pi's audio
-        */
-      });
-      // audio input (recording) events (pass media recorder events -> audio input machine actor)
-      EventBus/* default */.Z.on("audio:dataavailable", function (detail) {
-        inputActor.send(AudioModule_objectSpread({
-          type: "dataAvailable"
-        }, detail));
-      });
-      EventBus/* default */.Z.on("audio:input:stop", function (e) {
-        inputActor.send("stop");
-      });
-      EventBus/* default */.Z.on("audio:input:reconnect", function (e) {
-        inputActor.send("release");
-        inputActor.send(["acquire", "start"]);
-      });
-
-      // audio output (playback) commands
-      EventBus/* default */.Z.on("audio:reload", function (e) {
-        outputActor.send("reload");
-      });
-      EventBus/* default */.Z.on("audio:skipNext", function (e) {
-        outputActor.send("skipNext");
-      });
-      EventBus/* default */.Z.on("audio:skipCurrent", function (e) {
-        _this.audioElement.pause();
-      });
-    }
-  }]);
-  return AudioModule;
-}();
-
-
-/***/ }),
-
-/***/ 8186:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   v: () => (/* binding */ config)
-/* harmony export */ });
-var config = {
-  appServerUrl: "https://app.saypi.ai",
-  apiServerUrl: "https://api.saypi.ai",
-  GA_MEASUREMENT_ID: "G-N70M5T0ZCB",
-  GA_API_SECRET: "4HsiqPmGS7Gs3TYWOa2ddg",
-  GA_ENDPOINT: "https://www.google-analytics.com/mp/collect"
-};
-
-/***/ }),
-
-/***/ 7635:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Z: () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var events__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7187);
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new events__WEBPACK_IMPORTED_MODULE_0__());
-
-/***/ }),
-
-/***/ 484:
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   G: () => (/* binding */ serializeStateValue),
-/* harmony export */   k: () => (/* binding */ logger)
-/* harmony export */ });
-function serializeStateValue(stateValue) {
-  if (typeof stateValue === "string") {
-    return stateValue;
-  }
-  return Object.keys(stateValue).map(function (key) {
-    return "".concat(key, ":").concat(serializeStateValue(stateValue[key]));
-  }).join(",");
-}
-var DEBUG = false; // Consider using config and .env to set the DEBUG flag
-
-var logger = {
-  debug: function debug() {
-    if (DEBUG) {
-      var _console;
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-      (_console = console).log.apply(_console, ["DEBUG:"].concat(args));
-    }
-  },
-  info: function info() {
-    var _console2;
-    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-      args[_key2] = arguments[_key2];
-    }
-    (_console2 = console).log.apply(_console2, ["INFO:"].concat(args));
-  },
-  error: function error() {
-    var _console3;
-    for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-      args[_key3] = arguments[_key3];
-    }
-    (_console3 = console).error.apply(_console3, ["ERROR:"].concat(args));
-  }
-};
 
 /***/ })
 
@@ -26603,8 +19828,7 @@ var logger = {
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			179: 0,
-/******/ 			950: 0
+/******/ 			179: 0
 /******/ 		};
 /******/ 		
 /******/ 		__webpack_require__.f.j = (chunkId, promises) => {
@@ -26706,8 +19930,6649 @@ __webpack_require__.d(common_utils_namespaceObject, {
   hasStandardBrowserWebWorkerEnv: () => (hasStandardBrowserWebWorkerEnv)
 });
 
-// EXTERNAL MODULE: ./src/AudioModule.js + 5 modules
-var AudioModule = __webpack_require__(9481);
+;// CONCATENATED MODULE: ./node_modules/xstate/es/_virtual/_tslib.js
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+
+var _tslib_assign = function() {
+    _tslib_assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    };
+    return _tslib_assign.apply(this, arguments);
+};
+
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+}
+
+function _tslib_values(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+}
+
+function _tslib_read(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+}
+
+function _tslib_spreadArray(to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/xstate/es/types.js
+var types_ActionTypes;
+
+(function (ActionTypes) {
+  ActionTypes["Start"] = "xstate.start";
+  ActionTypes["Stop"] = "xstate.stop";
+  ActionTypes["Raise"] = "xstate.raise";
+  ActionTypes["Send"] = "xstate.send";
+  ActionTypes["Cancel"] = "xstate.cancel";
+  ActionTypes["NullEvent"] = "";
+  ActionTypes["Assign"] = "xstate.assign";
+  ActionTypes["After"] = "xstate.after";
+  ActionTypes["DoneState"] = "done.state";
+  ActionTypes["DoneInvoke"] = "done.invoke";
+  ActionTypes["Log"] = "xstate.log";
+  ActionTypes["Init"] = "xstate.init";
+  ActionTypes["Invoke"] = "xstate.invoke";
+  ActionTypes["ErrorExecution"] = "error.execution";
+  ActionTypes["ErrorCommunication"] = "error.communication";
+  ActionTypes["ErrorPlatform"] = "error.platform";
+  ActionTypes["ErrorCustom"] = "xstate.error";
+  ActionTypes["Update"] = "xstate.update";
+  ActionTypes["Pure"] = "xstate.pure";
+  ActionTypes["Choose"] = "xstate.choose";
+})(types_ActionTypes || (types_ActionTypes = {}));
+
+var types_SpecialTargets;
+
+(function (SpecialTargets) {
+  SpecialTargets["Parent"] = "#_parent";
+  SpecialTargets["Internal"] = "#_internal";
+})(types_SpecialTargets || (types_SpecialTargets = {}));
+
+
+
+;// CONCATENATED MODULE: ./node_modules/xstate/es/constants.js
+var STATE_DELIMITER = '.';
+var EMPTY_ACTIVITY_MAP = {};
+var DEFAULT_GUARD_TYPE = 'xstate.guard';
+var TARGETLESS_KEY = '';
+
+
+
+;// CONCATENATED MODULE: ./node_modules/xstate/es/actionTypes.js
+
+
+var start = types_ActionTypes.Start;
+var stop = types_ActionTypes.Stop;
+var raise = types_ActionTypes.Raise;
+var send = types_ActionTypes.Send;
+var cancel = types_ActionTypes.Cancel;
+var nullEvent = types_ActionTypes.NullEvent;
+var actionTypes_assign = types_ActionTypes.Assign;
+var after = types_ActionTypes.After;
+var doneState = types_ActionTypes.DoneState;
+var log = types_ActionTypes.Log;
+var init = types_ActionTypes.Init;
+var invoke = types_ActionTypes.Invoke;
+var errorExecution = types_ActionTypes.ErrorExecution;
+var errorPlatform = types_ActionTypes.ErrorPlatform;
+var actionTypes_error = types_ActionTypes.ErrorCustom;
+var actionTypes_update = types_ActionTypes.Update;
+var choose = types_ActionTypes.Choose;
+var pure = types_ActionTypes.Pure;
+
+
+
+;// CONCATENATED MODULE: ./node_modules/xstate/es/environment.js
+var environment_IS_PRODUCTION = "production" === 'production';
+
+
+
+;// CONCATENATED MODULE: ./node_modules/xstate/es/utils.js
+
+
+
+
+
+
+var _a;
+function keys(value) {
+  return Object.keys(value);
+}
+function matchesState(parentStateId, childStateId, delimiter) {
+  if (delimiter === void 0) {
+    delimiter = STATE_DELIMITER;
+  }
+
+  var parentStateValue = toStateValue(parentStateId, delimiter);
+  var childStateValue = toStateValue(childStateId, delimiter);
+
+  if (utils_isString(childStateValue)) {
+    if (utils_isString(parentStateValue)) {
+      return childStateValue === parentStateValue;
+    } // Parent more specific than child
+
+
+    return false;
+  }
+
+  if (utils_isString(parentStateValue)) {
+    return parentStateValue in childStateValue;
+  }
+
+  return Object.keys(parentStateValue).every(function (key) {
+    if (!(key in childStateValue)) {
+      return false;
+    }
+
+    return matchesState(parentStateValue[key], childStateValue[key]);
+  });
+}
+function getEventType(event) {
+  try {
+    return utils_isString(event) || typeof event === 'number' ? "".concat(event) : event.type;
+  } catch (e) {
+    throw new Error('Events must be strings or objects with a string event.type property.');
+  }
+}
+function getActionType(action) {
+  try {
+    return utils_isString(action) || typeof action === 'number' ? "".concat(action) : utils_isFunction(action) ? action.name : action.type;
+  } catch (e) {
+    throw new Error('Actions must be strings or objects with a string action.type property.');
+  }
+}
+function toStatePath(stateId, delimiter) {
+  try {
+    if (isArray(stateId)) {
+      return stateId;
+    }
+
+    return stateId.toString().split(delimiter);
+  } catch (e) {
+    throw new Error("'".concat(stateId, "' is not a valid state path."));
+  }
+}
+function isStateLike(state) {
+  return typeof state === 'object' && 'value' in state && 'context' in state && 'event' in state && '_event' in state;
+}
+function toStateValue(stateValue, delimiter) {
+  if (isStateLike(stateValue)) {
+    return stateValue.value;
+  }
+
+  if (isArray(stateValue)) {
+    return pathToStateValue(stateValue);
+  }
+
+  if (typeof stateValue !== 'string') {
+    return stateValue;
+  }
+
+  var statePath = toStatePath(stateValue, delimiter);
+  return pathToStateValue(statePath);
+}
+function pathToStateValue(statePath) {
+  if (statePath.length === 1) {
+    return statePath[0];
+  }
+
+  var value = {};
+  var marker = value;
+
+  for (var i = 0; i < statePath.length - 1; i++) {
+    if (i === statePath.length - 2) {
+      marker[statePath[i]] = statePath[i + 1];
+    } else {
+      marker[statePath[i]] = {};
+      marker = marker[statePath[i]];
+    }
+  }
+
+  return value;
+}
+function mapValues(collection, iteratee) {
+  var result = {};
+  var collectionKeys = Object.keys(collection);
+
+  for (var i = 0; i < collectionKeys.length; i++) {
+    var key = collectionKeys[i];
+    result[key] = iteratee(collection[key], key, collection, i);
+  }
+
+  return result;
+}
+function mapFilterValues(collection, iteratee, predicate) {
+  var e_1, _a;
+
+  var result = {};
+
+  try {
+    for (var _b = _tslib_values(Object.keys(collection)), _c = _b.next(); !_c.done; _c = _b.next()) {
+      var key = _c.value;
+      var item = collection[key];
+
+      if (!predicate(item)) {
+        continue;
+      }
+
+      result[key] = iteratee(item, key, collection);
+    }
+  } catch (e_1_1) {
+    e_1 = {
+      error: e_1_1
+    };
+  } finally {
+    try {
+      if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+    } finally {
+      if (e_1) throw e_1.error;
+    }
+  }
+
+  return result;
+}
+/**
+ * Retrieves a value at the given path.
+ * @param props The deep path to the prop of the desired value
+ */
+
+var path = function (props) {
+  return function (object) {
+    var e_2, _a;
+
+    var result = object;
+
+    try {
+      for (var props_1 = _tslib_values(props), props_1_1 = props_1.next(); !props_1_1.done; props_1_1 = props_1.next()) {
+        var prop = props_1_1.value;
+        result = result[prop];
+      }
+    } catch (e_2_1) {
+      e_2 = {
+        error: e_2_1
+      };
+    } finally {
+      try {
+        if (props_1_1 && !props_1_1.done && (_a = props_1.return)) _a.call(props_1);
+      } finally {
+        if (e_2) throw e_2.error;
+      }
+    }
+
+    return result;
+  };
+};
+/**
+ * Retrieves a value at the given path via the nested accessor prop.
+ * @param props The deep path to the prop of the desired value
+ */
+
+function nestedPath(props, accessorProp) {
+  return function (object) {
+    var e_3, _a;
+
+    var result = object;
+
+    try {
+      for (var props_2 = _tslib_values(props), props_2_1 = props_2.next(); !props_2_1.done; props_2_1 = props_2.next()) {
+        var prop = props_2_1.value;
+        result = result[accessorProp][prop];
+      }
+    } catch (e_3_1) {
+      e_3 = {
+        error: e_3_1
+      };
+    } finally {
+      try {
+        if (props_2_1 && !props_2_1.done && (_a = props_2.return)) _a.call(props_2);
+      } finally {
+        if (e_3) throw e_3.error;
+      }
+    }
+
+    return result;
+  };
+}
+function toStatePaths(stateValue) {
+  if (!stateValue) {
+    return [[]];
+  }
+
+  if (utils_isString(stateValue)) {
+    return [[stateValue]];
+  }
+
+  var result = flatten(Object.keys(stateValue).map(function (key) {
+    var subStateValue = stateValue[key];
+
+    if (typeof subStateValue !== 'string' && (!subStateValue || !Object.keys(subStateValue).length)) {
+      return [[key]];
+    }
+
+    return toStatePaths(stateValue[key]).map(function (subPath) {
+      return [key].concat(subPath);
+    });
+  }));
+  return result;
+}
+function pathsToStateValue(paths) {
+  var e_4, _a;
+
+  var result = {};
+
+  if (paths && paths.length === 1 && paths[0].length === 1) {
+    return paths[0][0];
+  }
+
+  try {
+    for (var paths_1 = __values(paths), paths_1_1 = paths_1.next(); !paths_1_1.done; paths_1_1 = paths_1.next()) {
+      var currentPath = paths_1_1.value;
+      var marker = result; // tslint:disable-next-line:prefer-for-of
+
+      for (var i = 0; i < currentPath.length; i++) {
+        var subPath = currentPath[i];
+
+        if (i === currentPath.length - 2) {
+          marker[subPath] = currentPath[i + 1];
+          break;
+        }
+
+        marker[subPath] = marker[subPath] || {};
+        marker = marker[subPath];
+      }
+    }
+  } catch (e_4_1) {
+    e_4 = {
+      error: e_4_1
+    };
+  } finally {
+    try {
+      if (paths_1_1 && !paths_1_1.done && (_a = paths_1.return)) _a.call(paths_1);
+    } finally {
+      if (e_4) throw e_4.error;
+    }
+  }
+
+  return result;
+}
+function flatten(array) {
+  var _a;
+
+  return (_a = []).concat.apply(_a, _tslib_spreadArray([], _tslib_read(array), false));
+}
+function toArrayStrict(value) {
+  if (isArray(value)) {
+    return value;
+  }
+
+  return [value];
+}
+function toArray(value) {
+  if (value === undefined) {
+    return [];
+  }
+
+  return toArrayStrict(value);
+}
+function mapContext(mapper, context, _event) {
+  var e_5, _a;
+
+  if (utils_isFunction(mapper)) {
+    return mapper(context, _event.data);
+  }
+
+  var result = {};
+
+  try {
+    for (var _b = _tslib_values(Object.keys(mapper)), _c = _b.next(); !_c.done; _c = _b.next()) {
+      var key = _c.value;
+      var subMapper = mapper[key];
+
+      if (utils_isFunction(subMapper)) {
+        result[key] = subMapper(context, _event.data);
+      } else {
+        result[key] = subMapper;
+      }
+    }
+  } catch (e_5_1) {
+    e_5 = {
+      error: e_5_1
+    };
+  } finally {
+    try {
+      if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+    } finally {
+      if (e_5) throw e_5.error;
+    }
+  }
+
+  return result;
+}
+function isBuiltInEvent(eventType) {
+  return /^(done|error)\./.test(eventType);
+}
+function isPromiseLike(value) {
+  if (value instanceof Promise) {
+    return true;
+  } // Check if shape matches the Promise/A+ specification for a "thenable".
+
+
+  if (value !== null && (utils_isFunction(value) || typeof value === 'object') && utils_isFunction(value.then)) {
+    return true;
+  }
+
+  return false;
+}
+function isBehavior(value) {
+  return value !== null && typeof value === 'object' && 'transition' in value && typeof value.transition === 'function';
+}
+function partition(items, predicate) {
+  var e_6, _a;
+
+  var _b = _tslib_read([[], []], 2),
+      truthy = _b[0],
+      falsy = _b[1];
+
+  try {
+    for (var items_1 = _tslib_values(items), items_1_1 = items_1.next(); !items_1_1.done; items_1_1 = items_1.next()) {
+      var item = items_1_1.value;
+
+      if (predicate(item)) {
+        truthy.push(item);
+      } else {
+        falsy.push(item);
+      }
+    }
+  } catch (e_6_1) {
+    e_6 = {
+      error: e_6_1
+    };
+  } finally {
+    try {
+      if (items_1_1 && !items_1_1.done && (_a = items_1.return)) _a.call(items_1);
+    } finally {
+      if (e_6) throw e_6.error;
+    }
+  }
+
+  return [truthy, falsy];
+}
+function updateHistoryStates(hist, stateValue) {
+  return mapValues(hist.states, function (subHist, key) {
+    if (!subHist) {
+      return undefined;
+    }
+
+    var subStateValue = (utils_isString(stateValue) ? undefined : stateValue[key]) || (subHist ? subHist.current : undefined);
+
+    if (!subStateValue) {
+      return undefined;
+    }
+
+    return {
+      current: subStateValue,
+      states: updateHistoryStates(subHist, subStateValue)
+    };
+  });
+}
+function updateHistoryValue(hist, stateValue) {
+  return {
+    current: stateValue,
+    states: updateHistoryStates(hist, stateValue)
+  };
+}
+function updateContext(context, _event, assignActions, state) {
+  if (!environment_IS_PRODUCTION) {
+    utils_warn(!!context, 'Attempting to update undefined context');
+  }
+
+  var updatedContext = context ? assignActions.reduce(function (acc, assignAction) {
+    var e_7, _a;
+
+    var assignment = assignAction.assignment;
+    var meta = {
+      state: state,
+      action: assignAction,
+      _event: _event
+    };
+    var partialUpdate = {};
+
+    if (utils_isFunction(assignment)) {
+      partialUpdate = assignment(acc, _event.data, meta);
+    } else {
+      try {
+        for (var _b = _tslib_values(Object.keys(assignment)), _c = _b.next(); !_c.done; _c = _b.next()) {
+          var key = _c.value;
+          var propAssignment = assignment[key];
+          partialUpdate[key] = utils_isFunction(propAssignment) ? propAssignment(acc, _event.data, meta) : propAssignment;
+        }
+      } catch (e_7_1) {
+        e_7 = {
+          error: e_7_1
+        };
+      } finally {
+        try {
+          if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+        } finally {
+          if (e_7) throw e_7.error;
+        }
+      }
+    }
+
+    return Object.assign({}, acc, partialUpdate);
+  }, context) : context;
+  return updatedContext;
+} // tslint:disable-next-line:no-empty
+
+var utils_warn = function () {};
+
+if (!environment_IS_PRODUCTION) {
+  utils_warn = function (condition, message) {
+    var error = condition instanceof Error ? condition : undefined;
+
+    if (!error && condition) {
+      return;
+    }
+
+    if (console !== undefined) {
+      var args = ["Warning: ".concat(message)];
+
+      if (error) {
+        args.push(error);
+      } // tslint:disable-next-line:no-console
+
+
+      console.warn.apply(console, args);
+    }
+  };
+}
+function isArray(value) {
+  return Array.isArray(value);
+} // tslint:disable-next-line:ban-types
+
+function utils_isFunction(value) {
+  return typeof value === 'function';
+}
+function utils_isString(value) {
+  return typeof value === 'string';
+}
+function toGuard(condition, guardMap) {
+  if (!condition) {
+    return undefined;
+  }
+
+  if (utils_isString(condition)) {
+    return {
+      type: DEFAULT_GUARD_TYPE,
+      name: condition,
+      predicate: guardMap ? guardMap[condition] : undefined
+    };
+  }
+
+  if (utils_isFunction(condition)) {
+    return {
+      type: DEFAULT_GUARD_TYPE,
+      name: condition.name,
+      predicate: condition
+    };
+  }
+
+  return condition;
+}
+function isObservable(value) {
+  try {
+    return 'subscribe' in value && utils_isFunction(value.subscribe);
+  } catch (e) {
+    return false;
+  }
+}
+var symbolObservable = /*#__PURE__*/function () {
+  return typeof Symbol === 'function' && Symbol.observable || '@@observable';
+}(); // TODO: to be removed in v5, left it out just to minimize the scope of the change and maintain compatibility with older versions of integration paackages
+
+var interopSymbols = (_a = {}, _a[symbolObservable] = function () {
+  return this;
+}, _a[Symbol.observable] = function () {
+  return this;
+}, _a);
+function utils_isMachine(value) {
+  return !!value && '__xstatenode' in value;
+}
+function isActor(value) {
+  return !!value && typeof value.send === 'function';
+}
+var utils_uniqueId = /*#__PURE__*/(/* unused pure expression or super */ null && (function () {
+  var currentId = 0;
+  return function () {
+    currentId++;
+    return currentId.toString(16);
+  };
+}()));
+function toEventObject(event, payload // id?: TEvent['type']
+) {
+  if (utils_isString(event) || typeof event === 'number') {
+    return _tslib_assign({
+      type: event
+    }, payload);
+  }
+
+  return event;
+}
+function toSCXMLEvent(event, scxmlEvent) {
+  if (!utils_isString(event) && '$$type' in event && event.$$type === 'scxml') {
+    return event;
+  }
+
+  var eventObject = toEventObject(event);
+  return _tslib_assign({
+    name: eventObject.type,
+    data: eventObject,
+    $$type: 'scxml',
+    type: 'external'
+  }, scxmlEvent);
+}
+function toTransitionConfigArray(event, configLike) {
+  var transitions = toArrayStrict(configLike).map(function (transitionLike) {
+    if (typeof transitionLike === 'undefined' || typeof transitionLike === 'string' || utils_isMachine(transitionLike)) {
+      return {
+        target: transitionLike,
+        event: event
+      };
+    }
+
+    return _tslib_assign(_tslib_assign({}, transitionLike), {
+      event: event
+    });
+  });
+  return transitions;
+}
+function normalizeTarget(target) {
+  if (target === undefined || target === TARGETLESS_KEY) {
+    return undefined;
+  }
+
+  return toArray(target);
+}
+function reportUnhandledExceptionOnInvocation(originalError, currentError, id) {
+  if (!environment_IS_PRODUCTION) {
+    var originalStackTrace = originalError.stack ? " Stacktrace was '".concat(originalError.stack, "'") : '';
+
+    if (originalError === currentError) {
+      // tslint:disable-next-line:no-console
+      console.error("Missing onError handler for invocation '".concat(id, "', error was '").concat(originalError, "'.").concat(originalStackTrace));
+    } else {
+      var stackTrace = currentError.stack ? " Stacktrace was '".concat(currentError.stack, "'") : ''; // tslint:disable-next-line:no-console
+
+      console.error("Missing onError handler and/or unhandled exception/promise rejection for invocation '".concat(id, "'. ") + "Original error: '".concat(originalError, "'. ").concat(originalStackTrace, " Current error is '").concat(currentError, "'.").concat(stackTrace));
+    }
+  }
+}
+function evaluateGuard(machine, guard, context, _event, state) {
+  var guards = machine.options.guards;
+  var guardMeta = {
+    state: state,
+    cond: guard,
+    _event: _event
+  }; // TODO: do not hardcode!
+
+  if (guard.type === DEFAULT_GUARD_TYPE) {
+    return ((guards === null || guards === void 0 ? void 0 : guards[guard.name]) || guard.predicate)(context, _event.data, guardMeta);
+  }
+
+  var condFn = guards === null || guards === void 0 ? void 0 : guards[guard.type];
+
+  if (!condFn) {
+    throw new Error("Guard '".concat(guard.type, "' is not implemented on machine '").concat(machine.id, "'."));
+  }
+
+  return condFn(context, _event.data, guardMeta);
+}
+function toInvokeSource(src) {
+  if (typeof src === 'string') {
+    return {
+      type: src
+    };
+  }
+
+  return src;
+}
+function toObserver(nextHandler, errorHandler, completionHandler) {
+  var noop = function () {};
+
+  var isObserver = typeof nextHandler === 'object';
+  var self = isObserver ? nextHandler : null;
+  return {
+    next: ((isObserver ? nextHandler.next : nextHandler) || noop).bind(self),
+    error: ((isObserver ? nextHandler.error : errorHandler) || noop).bind(self),
+    complete: ((isObserver ? nextHandler.complete : completionHandler) || noop).bind(self)
+  };
+}
+function createInvokeId(stateNodeId, index) {
+  return "".concat(stateNodeId, ":invocation[").concat(index, "]");
+}
+function isRaisableAction(action) {
+  return (action.type === raise || action.type === send && action.to === types_SpecialTargets.Internal) && typeof action.delay !== 'number';
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/xstate/es/stateUtils.js
+
+
+
+var isLeafNode = function (stateNode) {
+  return stateNode.type === 'atomic' || stateNode.type === 'final';
+};
+function getAllChildren(stateNode) {
+  return Object.keys(stateNode.states).map(function (key) {
+    return stateNode.states[key];
+  });
+}
+function getChildren(stateNode) {
+  return getAllChildren(stateNode).filter(function (sn) {
+    return sn.type !== 'history';
+  });
+}
+function getAllStateNodes(stateNode) {
+  var stateNodes = [stateNode];
+
+  if (isLeafNode(stateNode)) {
+    return stateNodes;
+  }
+
+  return stateNodes.concat(flatten(getChildren(stateNode).map(getAllStateNodes)));
+}
+function getConfiguration(prevStateNodes, stateNodes) {
+  var e_1, _a, e_2, _b, e_3, _c, e_4, _d;
+
+  var prevConfiguration = new Set(prevStateNodes);
+  var prevAdjList = getAdjList(prevConfiguration);
+  var configuration = new Set(stateNodes);
+
+  try {
+    // add all ancestors
+    for (var configuration_1 = _tslib_values(configuration), configuration_1_1 = configuration_1.next(); !configuration_1_1.done; configuration_1_1 = configuration_1.next()) {
+      var s = configuration_1_1.value;
+      var m = s.parent;
+
+      while (m && !configuration.has(m)) {
+        configuration.add(m);
+        m = m.parent;
+      }
+    }
+  } catch (e_1_1) {
+    e_1 = {
+      error: e_1_1
+    };
+  } finally {
+    try {
+      if (configuration_1_1 && !configuration_1_1.done && (_a = configuration_1.return)) _a.call(configuration_1);
+    } finally {
+      if (e_1) throw e_1.error;
+    }
+  }
+
+  var adjList = getAdjList(configuration);
+
+  try {
+    // add descendants
+    for (var configuration_2 = _tslib_values(configuration), configuration_2_1 = configuration_2.next(); !configuration_2_1.done; configuration_2_1 = configuration_2.next()) {
+      var s = configuration_2_1.value; // if previously active, add existing child nodes
+
+      if (s.type === 'compound' && (!adjList.get(s) || !adjList.get(s).length)) {
+        if (prevAdjList.get(s)) {
+          prevAdjList.get(s).forEach(function (sn) {
+            return configuration.add(sn);
+          });
+        } else {
+          s.initialStateNodes.forEach(function (sn) {
+            return configuration.add(sn);
+          });
+        }
+      } else {
+        if (s.type === 'parallel') {
+          try {
+            for (var _e = (e_3 = void 0, _tslib_values(getChildren(s))), _f = _e.next(); !_f.done; _f = _e.next()) {
+              var child = _f.value;
+
+              if (!configuration.has(child)) {
+                configuration.add(child);
+
+                if (prevAdjList.get(child)) {
+                  prevAdjList.get(child).forEach(function (sn) {
+                    return configuration.add(sn);
+                  });
+                } else {
+                  child.initialStateNodes.forEach(function (sn) {
+                    return configuration.add(sn);
+                  });
+                }
+              }
+            }
+          } catch (e_3_1) {
+            e_3 = {
+              error: e_3_1
+            };
+          } finally {
+            try {
+              if (_f && !_f.done && (_c = _e.return)) _c.call(_e);
+            } finally {
+              if (e_3) throw e_3.error;
+            }
+          }
+        }
+      }
+    }
+  } catch (e_2_1) {
+    e_2 = {
+      error: e_2_1
+    };
+  } finally {
+    try {
+      if (configuration_2_1 && !configuration_2_1.done && (_b = configuration_2.return)) _b.call(configuration_2);
+    } finally {
+      if (e_2) throw e_2.error;
+    }
+  }
+
+  try {
+    // add all ancestors
+    for (var configuration_3 = _tslib_values(configuration), configuration_3_1 = configuration_3.next(); !configuration_3_1.done; configuration_3_1 = configuration_3.next()) {
+      var s = configuration_3_1.value;
+      var m = s.parent;
+
+      while (m && !configuration.has(m)) {
+        configuration.add(m);
+        m = m.parent;
+      }
+    }
+  } catch (e_4_1) {
+    e_4 = {
+      error: e_4_1
+    };
+  } finally {
+    try {
+      if (configuration_3_1 && !configuration_3_1.done && (_d = configuration_3.return)) _d.call(configuration_3);
+    } finally {
+      if (e_4) throw e_4.error;
+    }
+  }
+
+  return configuration;
+}
+
+function getValueFromAdj(baseNode, adjList) {
+  var childStateNodes = adjList.get(baseNode);
+
+  if (!childStateNodes) {
+    return {}; // todo: fix?
+  }
+
+  if (baseNode.type === 'compound') {
+    var childStateNode = childStateNodes[0];
+
+    if (childStateNode) {
+      if (isLeafNode(childStateNode)) {
+        return childStateNode.key;
+      }
+    } else {
+      return {};
+    }
+  }
+
+  var stateValue = {};
+  childStateNodes.forEach(function (csn) {
+    stateValue[csn.key] = getValueFromAdj(csn, adjList);
+  });
+  return stateValue;
+}
+
+function getAdjList(configuration) {
+  var e_5, _a;
+
+  var adjList = new Map();
+
+  try {
+    for (var configuration_4 = _tslib_values(configuration), configuration_4_1 = configuration_4.next(); !configuration_4_1.done; configuration_4_1 = configuration_4.next()) {
+      var s = configuration_4_1.value;
+
+      if (!adjList.has(s)) {
+        adjList.set(s, []);
+      }
+
+      if (s.parent) {
+        if (!adjList.has(s.parent)) {
+          adjList.set(s.parent, []);
+        }
+
+        adjList.get(s.parent).push(s);
+      }
+    }
+  } catch (e_5_1) {
+    e_5 = {
+      error: e_5_1
+    };
+  } finally {
+    try {
+      if (configuration_4_1 && !configuration_4_1.done && (_a = configuration_4.return)) _a.call(configuration_4);
+    } finally {
+      if (e_5) throw e_5.error;
+    }
+  }
+
+  return adjList;
+}
+function getValue(rootNode, configuration) {
+  var config = getConfiguration([rootNode], configuration);
+  return getValueFromAdj(rootNode, getAdjList(config));
+}
+function has(iterable, item) {
+  if (Array.isArray(iterable)) {
+    return iterable.some(function (member) {
+      return member === item;
+    });
+  }
+
+  if (iterable instanceof Set) {
+    return iterable.has(item);
+  }
+
+  return false; // TODO: fix
+}
+function nextEvents(configuration) {
+  return _tslib_spreadArray([], _tslib_read(new Set(flatten(_tslib_spreadArray([], _tslib_read(configuration.map(function (sn) {
+    return sn.ownEvents;
+  })), false)))), false);
+}
+function isInFinalState(configuration, stateNode) {
+  if (stateNode.type === 'compound') {
+    return getChildren(stateNode).some(function (s) {
+      return s.type === 'final' && has(configuration, s);
+    });
+  }
+
+  if (stateNode.type === 'parallel') {
+    return getChildren(stateNode).every(function (sn) {
+      return isInFinalState(configuration, sn);
+    });
+  }
+
+  return false;
+}
+function getMeta(configuration) {
+  if (configuration === void 0) {
+    configuration = [];
+  }
+
+  return configuration.reduce(function (acc, stateNode) {
+    if (stateNode.meta !== undefined) {
+      acc[stateNode.id] = stateNode.meta;
+    }
+
+    return acc;
+  }, {});
+}
+function getTagsFromConfiguration(configuration) {
+  return new Set(flatten(configuration.map(function (sn) {
+    return sn.tags;
+  })));
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/xstate/es/actions.js
+
+
+
+
+
+
+
+
+var initEvent = /*#__PURE__*/toSCXMLEvent({
+  type: init
+});
+function getActionFunction(actionType, actionFunctionMap) {
+  return actionFunctionMap ? actionFunctionMap[actionType] || undefined : undefined;
+}
+function toActionObject(action, actionFunctionMap) {
+  var actionObject;
+
+  if (utils_isString(action) || typeof action === 'number') {
+    var exec = getActionFunction(action, actionFunctionMap);
+
+    if (utils_isFunction(exec)) {
+      actionObject = {
+        type: action,
+        exec: exec
+      };
+    } else if (exec) {
+      actionObject = exec;
+    } else {
+      actionObject = {
+        type: action,
+        exec: undefined
+      };
+    }
+  } else if (utils_isFunction(action)) {
+    actionObject = {
+      // Convert action to string if unnamed
+      type: action.name || action.toString(),
+      exec: action
+    };
+  } else {
+    var exec = getActionFunction(action.type, actionFunctionMap);
+
+    if (utils_isFunction(exec)) {
+      actionObject = _tslib_assign(_tslib_assign({}, action), {
+        exec: exec
+      });
+    } else if (exec) {
+      var actionType = exec.type || action.type;
+      actionObject = _tslib_assign(_tslib_assign(_tslib_assign({}, exec), action), {
+        type: actionType
+      });
+    } else {
+      actionObject = action;
+    }
+  }
+
+  return actionObject;
+}
+var toActionObjects = function (action, actionFunctionMap) {
+  if (!action) {
+    return [];
+  }
+
+  var actions = isArray(action) ? action : [action];
+  return actions.map(function (subAction) {
+    return toActionObject(subAction, actionFunctionMap);
+  });
+};
+function toActivityDefinition(action) {
+  var actionObject = toActionObject(action);
+  return _tslib_assign(_tslib_assign({
+    id: utils_isString(action) ? action : actionObject.id
+  }, actionObject), {
+    type: actionObject.type
+  });
+}
+/**
+ * Raises an event. This places the event in the internal event queue, so that
+ * the event is immediately consumed by the machine in the current step.
+ *
+ * @param eventType The event to raise.
+ */
+
+function actions_raise(event, options) {
+  return {
+    type: raise,
+    event: typeof event === 'function' ? event : toEventObject(event),
+    delay: options ? options.delay : undefined,
+    id: options === null || options === void 0 ? void 0 : options.id
+  };
+}
+function resolveRaise(action, ctx, _event, delaysMap) {
+  var meta = {
+    _event: _event
+  };
+  var resolvedEvent = toSCXMLEvent(utils_isFunction(action.event) ? action.event(ctx, _event.data, meta) : action.event);
+  var resolvedDelay;
+
+  if (utils_isString(action.delay)) {
+    var configDelay = delaysMap && delaysMap[action.delay];
+    resolvedDelay = utils_isFunction(configDelay) ? configDelay(ctx, _event.data, meta) : configDelay;
+  } else {
+    resolvedDelay = utils_isFunction(action.delay) ? action.delay(ctx, _event.data, meta) : action.delay;
+  }
+
+  return _tslib_assign(_tslib_assign({}, action), {
+    type: raise,
+    _event: resolvedEvent,
+    delay: resolvedDelay
+  });
+}
+/**
+ * Sends an event. This returns an action that will be read by an interpreter to
+ * send the event in the next step, after the current step is finished executing.
+ *
+ * @deprecated Use the `sendTo(...)` action creator instead.
+ *
+ * @param event The event to send.
+ * @param options Options to pass into the send event:
+ *  - `id` - The unique send event identifier (used with `cancel()`).
+ *  - `delay` - The number of milliseconds to delay the sending of the event.
+ *  - `to` - The target of this event (by default, the machine the event was sent from).
+ */
+
+function actions_send(event, options) {
+  return {
+    to: options ? options.to : undefined,
+    type: send,
+    event: utils_isFunction(event) ? event : toEventObject(event),
+    delay: options ? options.delay : undefined,
+    // TODO: don't auto-generate IDs here like that
+    // there is too big chance of the ID collision
+    id: options && options.id !== undefined ? options.id : utils_isFunction(event) ? event.name : getEventType(event)
+  };
+}
+function resolveSend(action, ctx, _event, delaysMap) {
+  var meta = {
+    _event: _event
+  }; // TODO: helper function for resolving Expr
+
+  var resolvedEvent = toSCXMLEvent(utils_isFunction(action.event) ? action.event(ctx, _event.data, meta) : action.event);
+  var resolvedDelay;
+
+  if (utils_isString(action.delay)) {
+    var configDelay = delaysMap && delaysMap[action.delay];
+    resolvedDelay = utils_isFunction(configDelay) ? configDelay(ctx, _event.data, meta) : configDelay;
+  } else {
+    resolvedDelay = utils_isFunction(action.delay) ? action.delay(ctx, _event.data, meta) : action.delay;
+  }
+
+  var resolvedTarget = utils_isFunction(action.to) ? action.to(ctx, _event.data, meta) : action.to;
+  return _tslib_assign(_tslib_assign({}, action), {
+    to: resolvedTarget,
+    _event: resolvedEvent,
+    event: resolvedEvent.data,
+    delay: resolvedDelay
+  });
+}
+/**
+ * Sends an event to this machine's parent.
+ *
+ * @param event The event to send to the parent machine.
+ * @param options Options to pass into the send event.
+ */
+
+function sendParent(event, options) {
+  return actions_send(event, __assign(__assign({}, options), {
+    to: SpecialTargets.Parent
+  }));
+}
+/**
+ * Sends an event to an actor.
+ *
+ * @param actor The `ActorRef` to send the event to.
+ * @param event The event to send, or an expression that evaluates to the event to send
+ * @param options Send action options
+ * @returns An XState send action object
+ */
+
+function sendTo(actor, event, options) {
+  return actions_send(event, __assign(__assign({}, options), {
+    to: actor
+  }));
+}
+/**
+ * Sends an update event to this machine's parent.
+ */
+
+function sendUpdate() {
+  return sendParent(update);
+}
+/**
+ * Sends an event back to the sender of the original event.
+ *
+ * @param event The event to send back to the sender
+ * @param options Options to pass into the send event
+ */
+
+function respond(event, options) {
+  return actions_send(event, __assign(__assign({}, options), {
+    to: function (_, __, _a) {
+      var _event = _a._event;
+      return _event.origin; // TODO: handle when _event.origin is undefined
+    }
+  }));
+}
+
+var defaultLogExpr = function (context, event) {
+  return {
+    context: context,
+    event: event
+  };
+};
+/**
+ *
+ * @param expr The expression function to evaluate which will be logged.
+ *  Takes in 2 arguments:
+ *  - `ctx` - the current state context
+ *  - `event` - the event that caused this action to be executed.
+ * @param label The label to give to the logged expression.
+ */
+
+
+function actions_log(expr, label) {
+  if (expr === void 0) {
+    expr = defaultLogExpr;
+  }
+
+  return {
+    type: log,
+    label: label,
+    expr: expr
+  };
+}
+var resolveLog = function (action, ctx, _event) {
+  return _tslib_assign(_tslib_assign({}, action), {
+    value: utils_isString(action.expr) ? action.expr : action.expr(ctx, _event.data, {
+      _event: _event
+    })
+  });
+};
+/**
+ * Cancels an in-flight `send(...)` action. A canceled sent action will not
+ * be executed, nor will its event be sent, unless it has already been sent
+ * (e.g., if `cancel(...)` is called after the `send(...)` action's `delay`).
+ *
+ * @param sendId The `id` of the `send(...)` action to cancel.
+ */
+
+var actions_cancel = function (sendId) {
+  return {
+    type: cancel,
+    sendId: sendId
+  };
+};
+/**
+ * Starts an activity.
+ *
+ * @param activity The activity to start.
+ */
+
+function actions_start(activity) {
+  var activityDef = toActivityDefinition(activity);
+  return {
+    type: types_ActionTypes.Start,
+    activity: activityDef,
+    exec: undefined
+  };
+}
+/**
+ * Stops an activity.
+ *
+ * @param actorRef The activity to stop.
+ */
+
+function actions_stop(actorRef) {
+  var activity = utils_isFunction(actorRef) ? actorRef : toActivityDefinition(actorRef);
+  return {
+    type: types_ActionTypes.Stop,
+    activity: activity,
+    exec: undefined
+  };
+}
+function resolveStop(action, context, _event) {
+  var actorRefOrString = utils_isFunction(action.activity) ? action.activity(context, _event.data) : action.activity;
+  var resolvedActorRef = typeof actorRefOrString === 'string' ? {
+    id: actorRefOrString
+  } : actorRefOrString;
+  var actionObject = {
+    type: types_ActionTypes.Stop,
+    activity: resolvedActorRef
+  };
+  return actionObject;
+}
+/**
+ * Updates the current context of the machine.
+ *
+ * @param assignment An object that represents the partial context to update.
+ */
+
+var actions_assign = function (assignment) {
+  return {
+    type: actionTypes_assign,
+    assignment: assignment
+  };
+};
+function isActionObject(action) {
+  return typeof action === 'object' && 'type' in action;
+}
+/**
+ * Returns an event type that represents an implicit event that
+ * is sent after the specified `delay`.
+ *
+ * @param delayRef The delay in milliseconds
+ * @param id The state node ID where this event is handled
+ */
+
+function actions_after(delayRef, id) {
+  var idSuffix = id ? "#".concat(id) : '';
+  return "".concat(types_ActionTypes.After, "(").concat(delayRef, ")").concat(idSuffix);
+}
+/**
+ * Returns an event that represents that a final state node
+ * has been reached in the parent state node.
+ *
+ * @param id The final state node's parent state node `id`
+ * @param data The data to pass into the event
+ */
+
+function done(id, data) {
+  var type = "".concat(types_ActionTypes.DoneState, ".").concat(id);
+  var eventObject = {
+    type: type,
+    data: data
+  };
+
+  eventObject.toString = function () {
+    return type;
+  };
+
+  return eventObject;
+}
+/**
+ * Returns an event that represents that an invoked service has terminated.
+ *
+ * An invoked service is terminated when it has reached a top-level final state node,
+ * but not when it is canceled.
+ *
+ * @param id The final state node ID
+ * @param data The data to pass into the event
+ */
+
+function actions_doneInvoke(id, data) {
+  var type = "".concat(types_ActionTypes.DoneInvoke, ".").concat(id);
+  var eventObject = {
+    type: type,
+    data: data
+  };
+
+  eventObject.toString = function () {
+    return type;
+  };
+
+  return eventObject;
+}
+function actions_error(id, data) {
+  var type = "".concat(types_ActionTypes.ErrorPlatform, ".").concat(id);
+  var eventObject = {
+    type: type,
+    data: data
+  };
+
+  eventObject.toString = function () {
+    return type;
+  };
+
+  return eventObject;
+}
+function actions_pure(getActions) {
+  return {
+    type: ActionTypes.Pure,
+    get: getActions
+  };
+}
+/**
+ * Forwards (sends) an event to a specified service.
+ *
+ * @param target The target service to forward the event to.
+ * @param options Options to pass into the send action creator.
+ */
+
+function forwardTo(target, options) {
+  if (!IS_PRODUCTION && (!target || typeof target === 'function')) {
+    var originalTarget_1 = target;
+
+    target = function () {
+      var args = [];
+
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+
+      var resolvedTarget = typeof originalTarget_1 === 'function' ? originalTarget_1.apply(void 0, __spreadArray([], __read(args), false)) : originalTarget_1;
+
+      if (!resolvedTarget) {
+        throw new Error("Attempted to forward event to undefined actor. This risks an infinite loop in the sender.");
+      }
+
+      return resolvedTarget;
+    };
+  }
+
+  return actions_send(function (_, event) {
+    return event;
+  }, __assign(__assign({}, options), {
+    to: target
+  }));
+}
+/**
+ * Escalates an error by sending it as an event to this machine's parent.
+ *
+ * @param errorData The error data to send, or the expression function that
+ * takes in the `context`, `event`, and `meta`, and returns the error data to send.
+ * @param options Options to pass into the send action creator.
+ */
+
+function escalate(errorData, options) {
+  return sendParent(function (context, event, meta) {
+    return {
+      type: error$1,
+      data: isFunction(errorData) ? errorData(context, event, meta) : errorData
+    };
+  }, __assign(__assign({}, options), {
+    to: SpecialTargets.Parent
+  }));
+}
+function actions_choose(conds) {
+  return {
+    type: ActionTypes.Choose,
+    conds: conds
+  };
+}
+
+var pluckAssigns = function (actionBlocks) {
+  var e_1, _a;
+
+  var assignActions = [];
+
+  try {
+    for (var actionBlocks_1 = _tslib_values(actionBlocks), actionBlocks_1_1 = actionBlocks_1.next(); !actionBlocks_1_1.done; actionBlocks_1_1 = actionBlocks_1.next()) {
+      var block = actionBlocks_1_1.value;
+      var i = 0;
+
+      while (i < block.actions.length) {
+        if (block.actions[i].type === actionTypes_assign) {
+          assignActions.push(block.actions[i]);
+          block.actions.splice(i, 1);
+          continue;
+        }
+
+        i++;
+      }
+    }
+  } catch (e_1_1) {
+    e_1 = {
+      error: e_1_1
+    };
+  } finally {
+    try {
+      if (actionBlocks_1_1 && !actionBlocks_1_1.done && (_a = actionBlocks_1.return)) _a.call(actionBlocks_1);
+    } finally {
+      if (e_1) throw e_1.error;
+    }
+  }
+
+  return assignActions;
+};
+
+function resolveActions(machine, currentState, currentContext, _event, actionBlocks, predictableExec, preserveActionOrder) {
+  if (preserveActionOrder === void 0) {
+    preserveActionOrder = false;
+  }
+
+  var assignActions = preserveActionOrder ? [] : pluckAssigns(actionBlocks);
+  var updatedContext = assignActions.length ? updateContext(currentContext, _event, assignActions, currentState) : currentContext;
+  var preservedContexts = preserveActionOrder ? [currentContext] : undefined;
+  var deferredToBlockEnd = [];
+
+  function handleAction(blockType, actionObject) {
+    var _a;
+
+    switch (actionObject.type) {
+      case raise:
+        {
+          var raisedAction = resolveRaise(actionObject, updatedContext, _event, machine.options.delays);
+
+          if (predictableExec && typeof raisedAction.delay === 'number') {
+            predictableExec(raisedAction, updatedContext, _event);
+          }
+
+          return raisedAction;
+        }
+
+      case send:
+        var sendAction = resolveSend(actionObject, updatedContext, _event, machine.options.delays); // TODO: fix ActionTypes.Init
+
+        if (!environment_IS_PRODUCTION) {
+          var configuredDelay = actionObject.delay; // warn after resolving as we can create better contextual message here
+
+          utils_warn(!utils_isString(configuredDelay) || typeof sendAction.delay === 'number', // tslint:disable-next-line:max-line-length
+          "No delay reference for delay expression '".concat(configuredDelay, "' was found on machine '").concat(machine.id, "'"));
+        }
+
+        if (predictableExec && sendAction.to !== types_SpecialTargets.Internal) {
+          if (blockType === 'entry') {
+            deferredToBlockEnd.push(sendAction);
+          } else {
+            predictableExec(sendAction, updatedContext, _event);
+          }
+        }
+
+        return sendAction;
+
+      case log:
+        {
+          var resolved = resolveLog(actionObject, updatedContext, _event);
+          predictableExec === null || predictableExec === void 0 ? void 0 : predictableExec(resolved, updatedContext, _event);
+          return resolved;
+        }
+
+      case choose:
+        {
+          var chooseAction = actionObject;
+          var matchedActions = (_a = chooseAction.conds.find(function (condition) {
+            var guard = toGuard(condition.cond, machine.options.guards);
+            return !guard || evaluateGuard(machine, guard, updatedContext, _event, !predictableExec ? currentState : undefined);
+          })) === null || _a === void 0 ? void 0 : _a.actions;
+
+          if (!matchedActions) {
+            return [];
+          }
+
+          var _b = _tslib_read(resolveActions(machine, currentState, updatedContext, _event, [{
+            type: blockType,
+            actions: toActionObjects(toArray(matchedActions), machine.options.actions)
+          }], predictableExec, preserveActionOrder), 2),
+              resolvedActionsFromChoose = _b[0],
+              resolvedContextFromChoose = _b[1];
+
+          updatedContext = resolvedContextFromChoose;
+          preservedContexts === null || preservedContexts === void 0 ? void 0 : preservedContexts.push(updatedContext);
+          return resolvedActionsFromChoose;
+        }
+
+      case pure:
+        {
+          var matchedActions = actionObject.get(updatedContext, _event.data);
+
+          if (!matchedActions) {
+            return [];
+          }
+
+          var _c = _tslib_read(resolveActions(machine, currentState, updatedContext, _event, [{
+            type: blockType,
+            actions: toActionObjects(toArray(matchedActions), machine.options.actions)
+          }], predictableExec, preserveActionOrder), 2),
+              resolvedActionsFromPure = _c[0],
+              resolvedContext = _c[1];
+
+          updatedContext = resolvedContext;
+          preservedContexts === null || preservedContexts === void 0 ? void 0 : preservedContexts.push(updatedContext);
+          return resolvedActionsFromPure;
+        }
+
+      case stop:
+        {
+          var resolved = resolveStop(actionObject, updatedContext, _event);
+          predictableExec === null || predictableExec === void 0 ? void 0 : predictableExec(resolved, currentContext, _event);
+          return resolved;
+        }
+
+      case actionTypes_assign:
+        {
+          updatedContext = updateContext(updatedContext, _event, [actionObject], !predictableExec ? currentState : undefined);
+          preservedContexts === null || preservedContexts === void 0 ? void 0 : preservedContexts.push(updatedContext);
+          break;
+        }
+
+      default:
+        var resolvedActionObject = toActionObject(actionObject, machine.options.actions);
+        var exec_1 = resolvedActionObject.exec;
+
+        if (predictableExec) {
+          predictableExec(resolvedActionObject, updatedContext, _event);
+        } else if (exec_1 && preservedContexts) {
+          var contextIndex_1 = preservedContexts.length - 1;
+
+          var wrapped = _tslib_assign(_tslib_assign({}, resolvedActionObject), {
+            exec: function (_ctx) {
+              var args = [];
+
+              for (var _i = 1; _i < arguments.length; _i++) {
+                args[_i - 1] = arguments[_i];
+              }
+
+              exec_1.apply(void 0, _tslib_spreadArray([preservedContexts[contextIndex_1]], _tslib_read(args), false));
+            }
+          });
+
+          resolvedActionObject = wrapped;
+        }
+
+        return resolvedActionObject;
+    }
+  }
+
+  function processBlock(block) {
+    var e_2, _a;
+
+    var resolvedActions = [];
+
+    try {
+      for (var _b = _tslib_values(block.actions), _c = _b.next(); !_c.done; _c = _b.next()) {
+        var action = _c.value;
+        var resolved = handleAction(block.type, action);
+
+        if (resolved) {
+          resolvedActions = resolvedActions.concat(resolved);
+        }
+      }
+    } catch (e_2_1) {
+      e_2 = {
+        error: e_2_1
+      };
+    } finally {
+      try {
+        if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+      } finally {
+        if (e_2) throw e_2.error;
+      }
+    }
+
+    deferredToBlockEnd.forEach(function (action) {
+      predictableExec(action, updatedContext, _event);
+    });
+    deferredToBlockEnd.length = 0;
+    return resolvedActions;
+  }
+
+  var resolvedActions = flatten(actionBlocks.map(processBlock));
+  return [resolvedActions, updatedContext];
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/xstate/es/State.js
+
+
+
+
+
+
+
+function stateValuesEqual(a, b) {
+  if (a === b) {
+    return true;
+  }
+
+  if (a === undefined || b === undefined) {
+    return false;
+  }
+
+  if (utils_isString(a) || utils_isString(b)) {
+    return a === b;
+  }
+
+  var aKeys = Object.keys(a);
+  var bKeys = Object.keys(b);
+  return aKeys.length === bKeys.length && aKeys.every(function (key) {
+    return stateValuesEqual(a[key], b[key]);
+  });
+}
+function isStateConfig(state) {
+  if (typeof state !== 'object' || state === null) {
+    return false;
+  }
+
+  return 'value' in state && '_event' in state;
+}
+/**
+ * @deprecated Use `isStateConfig(object)` or `state instanceof State` instead.
+ */
+
+var isState = (/* unused pure expression or super */ null && (isStateConfig));
+function bindActionToState(action, state) {
+  var exec = action.exec;
+
+  var boundAction = _tslib_assign(_tslib_assign({}, action), {
+    exec: exec !== undefined ? function () {
+      return exec(state.context, state.event, {
+        action: action,
+        state: state,
+        _event: state._event
+      });
+    } : undefined
+  });
+
+  return boundAction;
+}
+
+var State =
+/*#__PURE__*/
+
+/** @class */
+function () {
+  /**
+   * Creates a new State instance.
+   * @param value The state value
+   * @param context The extended state
+   * @param historyValue The tree representing historical values of the state nodes
+   * @param history The previous state
+   * @param actions An array of action objects to execute as side-effects
+   * @param activities A mapping of activities and whether they are started (`true`) or stopped (`false`).
+   * @param meta
+   * @param events Internal event queue. Should be empty with run-to-completion semantics.
+   * @param configuration
+   */
+  function State(config) {
+    var _this = this;
+
+    var _a;
+
+    this.actions = [];
+    this.activities = EMPTY_ACTIVITY_MAP;
+    this.meta = {};
+    this.events = [];
+    this.value = config.value;
+    this.context = config.context;
+    this._event = config._event;
+    this._sessionid = config._sessionid;
+    this.event = this._event.data;
+    this.historyValue = config.historyValue;
+    this.history = config.history;
+    this.actions = config.actions || [];
+    this.activities = config.activities || EMPTY_ACTIVITY_MAP;
+    this.meta = getMeta(config.configuration);
+    this.events = config.events || [];
+    this.matches = this.matches.bind(this);
+    this.toStrings = this.toStrings.bind(this);
+    this.configuration = config.configuration;
+    this.transitions = config.transitions;
+    this.children = config.children;
+    this.done = !!config.done;
+    this.tags = (_a = Array.isArray(config.tags) ? new Set(config.tags) : config.tags) !== null && _a !== void 0 ? _a : new Set();
+    this.machine = config.machine;
+    Object.defineProperty(this, 'nextEvents', {
+      get: function () {
+        return nextEvents(_this.configuration);
+      }
+    });
+  }
+  /**
+   * Creates a new State instance for the given `stateValue` and `context`.
+   * @param stateValue
+   * @param context
+   */
+
+
+  State.from = function (stateValue, context) {
+    if (stateValue instanceof State) {
+      if (stateValue.context !== context) {
+        return new State({
+          value: stateValue.value,
+          context: context,
+          _event: stateValue._event,
+          _sessionid: null,
+          historyValue: stateValue.historyValue,
+          history: stateValue.history,
+          actions: [],
+          activities: stateValue.activities,
+          meta: {},
+          events: [],
+          configuration: [],
+          transitions: [],
+          children: {}
+        });
+      }
+
+      return stateValue;
+    }
+
+    var _event = initEvent;
+    return new State({
+      value: stateValue,
+      context: context,
+      _event: _event,
+      _sessionid: null,
+      historyValue: undefined,
+      history: undefined,
+      actions: [],
+      activities: undefined,
+      meta: undefined,
+      events: [],
+      configuration: [],
+      transitions: [],
+      children: {}
+    });
+  };
+  /**
+   * Creates a new State instance for the given `config`.
+   * @param config The state config
+   */
+
+
+  State.create = function (config) {
+    return new State(config);
+  };
+  /**
+   * Creates a new `State` instance for the given `stateValue` and `context` with no actions (side-effects).
+   * @param stateValue
+   * @param context
+   */
+
+
+  State.inert = function (stateValue, context) {
+    if (stateValue instanceof State) {
+      if (!stateValue.actions.length) {
+        return stateValue;
+      }
+
+      var _event = initEvent;
+      return new State({
+        value: stateValue.value,
+        context: context,
+        _event: _event,
+        _sessionid: null,
+        historyValue: stateValue.historyValue,
+        history: stateValue.history,
+        activities: stateValue.activities,
+        configuration: stateValue.configuration,
+        transitions: [],
+        children: {}
+      });
+    }
+
+    return State.from(stateValue, context);
+  };
+  /**
+   * Returns an array of all the string leaf state node paths.
+   * @param stateValue
+   * @param delimiter The character(s) that separate each subpath in the string state node path.
+   */
+
+
+  State.prototype.toStrings = function (stateValue, delimiter) {
+    var _this = this;
+
+    if (stateValue === void 0) {
+      stateValue = this.value;
+    }
+
+    if (delimiter === void 0) {
+      delimiter = '.';
+    }
+
+    if (utils_isString(stateValue)) {
+      return [stateValue];
+    }
+
+    var valueKeys = Object.keys(stateValue);
+    return valueKeys.concat.apply(valueKeys, _tslib_spreadArray([], _tslib_read(valueKeys.map(function (key) {
+      return _this.toStrings(stateValue[key], delimiter).map(function (s) {
+        return key + delimiter + s;
+      });
+    })), false));
+  };
+
+  State.prototype.toJSON = function () {
+    var _a = this;
+        _a.configuration;
+        _a.transitions;
+        var tags = _a.tags;
+        _a.machine;
+        var jsonValues = __rest(_a, ["configuration", "transitions", "tags", "machine"]);
+
+    return _tslib_assign(_tslib_assign({}, jsonValues), {
+      tags: Array.from(tags)
+    });
+  };
+
+  State.prototype.matches = function (parentStateValue) {
+    return matchesState(parentStateValue, this.value);
+  };
+  /**
+   * Whether the current state configuration has a state node with the specified `tag`.
+   * @param tag
+   */
+
+
+  State.prototype.hasTag = function (tag) {
+    return this.tags.has(tag);
+  };
+  /**
+   * Determines whether sending the `event` will cause a non-forbidden transition
+   * to be selected, even if the transitions have no actions nor
+   * change the state value.
+   *
+   * @param event The event to test
+   * @returns Whether the event will cause a transition
+   */
+
+
+  State.prototype.can = function (event) {
+    var _a;
+
+    if (environment_IS_PRODUCTION) {
+      utils_warn(!!this.machine, "state.can(...) used outside of a machine-created State object; this will always return false.");
+    }
+
+    var transitionData = (_a = this.machine) === null || _a === void 0 ? void 0 : _a.getTransitionData(this, event);
+    return !!(transitionData === null || transitionData === void 0 ? void 0 : transitionData.transitions.length) && // Check that at least one transition is not forbidden
+    transitionData.transitions.some(function (t) {
+      return t.target !== undefined || t.actions.length;
+    });
+  };
+
+  return State;
+}();
+
+
+
+;// CONCATENATED MODULE: ./node_modules/xstate/es/scheduler.js
+
+
+var defaultOptions = {
+  deferEvents: false
+};
+
+var Scheduler =
+/*#__PURE__*/
+
+/** @class */
+function () {
+  function Scheduler(options) {
+    this.processingEvent = false;
+    this.queue = [];
+    this.initialized = false;
+    this.options = _tslib_assign(_tslib_assign({}, defaultOptions), options);
+  }
+
+  Scheduler.prototype.initialize = function (callback) {
+    this.initialized = true;
+
+    if (callback) {
+      if (!this.options.deferEvents) {
+        this.schedule(callback);
+        return;
+      }
+
+      this.process(callback);
+    }
+
+    this.flushEvents();
+  };
+
+  Scheduler.prototype.schedule = function (task) {
+    if (!this.initialized || this.processingEvent) {
+      this.queue.push(task);
+      return;
+    }
+
+    if (this.queue.length !== 0) {
+      throw new Error('Event queue should be empty when it is not processing events');
+    }
+
+    this.process(task);
+    this.flushEvents();
+  };
+
+  Scheduler.prototype.clear = function () {
+    this.queue = [];
+  };
+
+  Scheduler.prototype.flushEvents = function () {
+    var nextCallback = this.queue.shift();
+
+    while (nextCallback) {
+      this.process(nextCallback);
+      nextCallback = this.queue.shift();
+    }
+  };
+
+  Scheduler.prototype.process = function (callback) {
+    this.processingEvent = true;
+
+    try {
+      callback();
+    } catch (e) {
+      // there is no use to keep the future events
+      // as the situation is not anymore the same
+      this.clear();
+      throw e;
+    } finally {
+      this.processingEvent = false;
+    }
+  };
+
+  return Scheduler;
+}();
+
+
+
+;// CONCATENATED MODULE: ./node_modules/xstate/es/serviceScope.js
+/**
+ * Maintains a stack of the current service in scope.
+ * This is used to provide the correct service to spawn().
+ */
+var serviceStack = [];
+var provide = function (service, fn) {
+  serviceStack.push(service);
+  var result = fn(service);
+  serviceStack.pop();
+  return result;
+};
+var serviceScope_consume = function (fn) {
+  return fn(serviceStack[serviceStack.length - 1]);
+};
+
+
+
+;// CONCATENATED MODULE: ./node_modules/xstate/es/Actor.js
+
+
+
+
+function createNullActor(id) {
+  var _a;
+
+  return _a = {
+    id: id,
+    send: function () {
+      return void 0;
+    },
+    subscribe: function () {
+      return {
+        unsubscribe: function () {
+          return void 0;
+        }
+      };
+    },
+    getSnapshot: function () {
+      return undefined;
+    },
+    toJSON: function () {
+      return {
+        id: id
+      };
+    }
+  }, _a[symbolObservable] = function () {
+    return this;
+  }, _a;
+}
+/**
+ * Creates a deferred actor that is able to be invoked given the provided
+ * invocation information in its `.meta` value.
+ *
+ * @param invokeDefinition The meta information needed to invoke the actor.
+ */
+
+function createInvocableActor(invokeDefinition, machine, context, _event) {
+  var _a;
+
+  var invokeSrc = toInvokeSource(invokeDefinition.src);
+  var serviceCreator = (_a = machine === null || machine === void 0 ? void 0 : machine.options.services) === null || _a === void 0 ? void 0 : _a[invokeSrc.type];
+  var resolvedData = invokeDefinition.data ? mapContext(invokeDefinition.data, context, _event) : undefined;
+  var tempActor = serviceCreator ? Actor_createDeferredActor(serviceCreator, invokeDefinition.id, resolvedData) : createNullActor(invokeDefinition.id); // @ts-ignore
+
+  tempActor.meta = invokeDefinition;
+  return tempActor;
+}
+function Actor_createDeferredActor(entity, id, data) {
+  var tempActor = createNullActor(id); // @ts-ignore
+
+  tempActor.deferred = true;
+
+  if (utils_isMachine(entity)) {
+    // "mute" the existing service scope so potential spawned actors within the `.initialState` stay deferred here
+    var initialState_1 = tempActor.state = provide(undefined, function () {
+      return (data ? entity.withContext(data) : entity).initialState;
+    });
+
+    tempActor.getSnapshot = function () {
+      return initialState_1;
+    };
+  }
+
+  return tempActor;
+}
+function Actor_isActor(item) {
+  try {
+    return typeof item.send === 'function';
+  } catch (e) {
+    return false;
+  }
+}
+function isSpawnedActor(item) {
+  return Actor_isActor(item) && 'id' in item;
+} // TODO: refactor the return type, this could be written in a better way but it's best to avoid unneccessary breaking changes now
+
+function toActorRef(actorRefLike) {
+  var _a;
+
+  return _tslib_assign((_a = {
+    subscribe: function () {
+      return {
+        unsubscribe: function () {
+          return void 0;
+        }
+      };
+    },
+    id: 'anonymous',
+    getSnapshot: function () {
+      return undefined;
+    }
+  }, _a[symbolObservable] = function () {
+    return this;
+  }, _a), actorRefLike);
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/xstate/es/registry.js
+var children = /*#__PURE__*/new Map();
+var sessionIdIndex = 0;
+var registry = {
+  bookId: function () {
+    return "x:".concat(sessionIdIndex++);
+  },
+  register: function (id, actor) {
+    children.set(id, actor);
+    return id;
+  },
+  get: function (id) {
+    return children.get(id);
+  },
+  free: function (id) {
+    children.delete(id);
+  }
+};
+
+
+
+;// CONCATENATED MODULE: ./node_modules/xstate/es/devTools.js
+
+
+function getGlobal() {
+  if (typeof globalThis !== 'undefined') {
+    return globalThis;
+  }
+
+  if (typeof self !== 'undefined') {
+    return self;
+  }
+
+  if (typeof window !== 'undefined') {
+    return window;
+  }
+
+  if (typeof __webpack_require__.g !== 'undefined') {
+    return __webpack_require__.g;
+  }
+
+  if (!environment_IS_PRODUCTION) {
+    console.warn('XState could not find a global object in this environment. Please let the maintainers know and raise an issue here: https://github.com/statelyai/xstate/issues');
+  }
+}
+
+function getDevTools() {
+  var global = getGlobal();
+
+  if (global && '__xstate__' in global) {
+    return global.__xstate__;
+  }
+
+  return undefined;
+}
+
+function registerService(service) {
+  if (!getGlobal()) {
+    return;
+  }
+
+  var devTools = getDevTools();
+
+  if (devTools) {
+    devTools.register(service);
+  }
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/xstate/es/behaviors.js
+
+
+
+
+/**
+ * Returns an actor behavior from a reducer and its initial state.
+ *
+ * @param transition The pure reducer that returns the next state given the current state and event.
+ * @param initialState The initial state of the reducer.
+ * @returns An actor behavior
+ */
+
+function fromReducer(transition, initialState) {
+  return {
+    transition: transition,
+    initialState: initialState
+  };
+}
+function fromPromise(promiseFn) {
+  var initialState = {
+    error: undefined,
+    data: undefined,
+    status: 'pending'
+  };
+  return {
+    transition: function (state, event, _a) {
+      var parent = _a.parent,
+          id = _a.id,
+          observers = _a.observers;
+
+      switch (event.type) {
+        case 'fulfill':
+          parent === null || parent === void 0 ? void 0 : parent.send(doneInvoke(id, event.data));
+          return {
+            error: undefined,
+            data: event.data,
+            status: 'fulfilled'
+          };
+
+        case 'reject':
+          parent === null || parent === void 0 ? void 0 : parent.send(error(id, event.error));
+          observers.forEach(function (observer) {
+            observer.error(event.error);
+          });
+          return {
+            error: event.error,
+            data: undefined,
+            status: 'rejected'
+          };
+
+        default:
+          return state;
+      }
+    },
+    initialState: initialState,
+    start: function (_a) {
+      var self = _a.self;
+      promiseFn().then(function (data) {
+        self.send({
+          type: 'fulfill',
+          data: data
+        });
+      }, function (reason) {
+        self.send({
+          type: 'reject',
+          error: reason
+        });
+      });
+      return initialState;
+    }
+  };
+}
+function spawnBehavior(behavior, options) {
+  if (options === void 0) {
+    options = {};
+  }
+
+  var state = behavior.initialState;
+  var observers = new Set();
+  var mailbox = [];
+  var flushing = false;
+
+  var flush = function () {
+    if (flushing) {
+      return;
+    }
+
+    flushing = true;
+
+    while (mailbox.length > 0) {
+      var event_1 = mailbox.shift();
+      state = behavior.transition(state, event_1, actorCtx);
+      observers.forEach(function (observer) {
+        return observer.next(state);
+      });
+    }
+
+    flushing = false;
+  };
+
+  var actor = toActorRef({
+    id: options.id,
+    send: function (event) {
+      mailbox.push(event);
+      flush();
+    },
+    getSnapshot: function () {
+      return state;
+    },
+    subscribe: function (next, handleError, complete) {
+      var observer = toObserver(next, handleError, complete);
+      observers.add(observer);
+      observer.next(state);
+      return {
+        unsubscribe: function () {
+          observers.delete(observer);
+        }
+      };
+    }
+  });
+  var actorCtx = {
+    parent: options.parent,
+    self: actor,
+    id: options.id || 'anonymous',
+    observers: observers
+  };
+  state = behavior.start ? behavior.start(actorCtx) : state;
+  return actor;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/xstate/es/interpreter.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var DEFAULT_SPAWN_OPTIONS = {
+  sync: false,
+  autoForward: false
+};
+var InterpreterStatus;
+
+(function (InterpreterStatus) {
+  InterpreterStatus[InterpreterStatus["NotStarted"] = 0] = "NotStarted";
+  InterpreterStatus[InterpreterStatus["Running"] = 1] = "Running";
+  InterpreterStatus[InterpreterStatus["Stopped"] = 2] = "Stopped";
+})(InterpreterStatus || (InterpreterStatus = {}));
+
+var Interpreter =
+/*#__PURE__*/
+
+/** @class */
+function () {
+  /**
+   * Creates a new Interpreter instance (i.e., service) for the given machine with the provided options, if any.
+   *
+   * @param machine The machine to be interpreted
+   * @param options Interpreter options
+   */
+  function Interpreter(machine, options) {
+    if (options === void 0) {
+      options = Interpreter.defaultOptions;
+    }
+
+    var _this = this;
+
+    this.machine = machine;
+    this.delayedEventsMap = {};
+    this.listeners = new Set();
+    this.contextListeners = new Set();
+    this.stopListeners = new Set();
+    this.doneListeners = new Set();
+    this.eventListeners = new Set();
+    this.sendListeners = new Set();
+    /**
+     * Whether the service is started.
+     */
+
+    this.initialized = false;
+    this.status = InterpreterStatus.NotStarted;
+    this.children = new Map();
+    this.forwardTo = new Set();
+    this._outgoingQueue = [];
+    /**
+     * Alias for Interpreter.prototype.start
+     */
+
+    this.init = this.start;
+    /**
+     * Sends an event to the running interpreter to trigger a transition.
+     *
+     * An array of events (batched) can be sent as well, which will send all
+     * batched events to the running interpreter. The listeners will be
+     * notified only **once** when all events are processed.
+     *
+     * @param event The event(s) to send
+     */
+
+    this.send = function (event, payload) {
+      if (isArray(event)) {
+        _this.batch(event);
+
+        return _this.state;
+      }
+
+      var _event = toSCXMLEvent(toEventObject(event, payload));
+
+      if (_this.status === InterpreterStatus.Stopped) {
+        // do nothing
+        if (!environment_IS_PRODUCTION) {
+          utils_warn(false, "Event \"".concat(_event.name, "\" was sent to stopped service \"").concat(_this.machine.id, "\". This service has already reached its final state, and will not transition.\nEvent: ").concat(JSON.stringify(_event.data)));
+        }
+
+        return _this.state;
+      }
+
+      if (_this.status !== InterpreterStatus.Running && !_this.options.deferEvents) {
+        throw new Error("Event \"".concat(_event.name, "\" was sent to uninitialized service \"").concat(_this.machine.id // tslint:disable-next-line:max-line-length
+        , "\". Make sure .start() is called for this service, or set { deferEvents: true } in the service options.\nEvent: ").concat(JSON.stringify(_event.data)));
+      }
+
+      _this.scheduler.schedule(function () {
+        // Forward copy of event to child actors
+        _this.forward(_event);
+
+        var nextState = _this._nextState(_event);
+
+        _this.update(nextState, _event);
+      });
+
+      return _this._state; // TODO: deprecate (should return void)
+      // tslint:disable-next-line:semicolon
+    };
+
+    this.sendTo = function (event, to, immediate) {
+      var isParent = _this.parent && (to === types_SpecialTargets.Parent || _this.parent.id === to);
+      var target = isParent ? _this.parent : utils_isString(to) ? to === types_SpecialTargets.Internal ? _this : _this.children.get(to) || registry.get(to) : isActor(to) ? to : undefined;
+
+      if (!target) {
+        if (!isParent) {
+          throw new Error("Unable to send event to child '".concat(to, "' from service '").concat(_this.id, "'."));
+        } // tslint:disable-next-line:no-console
+
+
+        if (!environment_IS_PRODUCTION) {
+          utils_warn(false, "Service '".concat(_this.id, "' has no parent: unable to send event ").concat(event.type));
+        }
+
+        return;
+      }
+
+      if ('machine' in target) {
+        // perhaps those events should be rejected in the parent
+        // but atm it doesn't have easy access to all of the information that is required to do it reliably
+        if (_this.status !== InterpreterStatus.Stopped || _this.parent !== target || // we need to send events to the parent from exit handlers of a machine that reached its final state
+        _this.state.done) {
+          // Send SCXML events to machines
+          var scxmlEvent = _tslib_assign(_tslib_assign({}, event), {
+            name: event.name === actionTypes_error ? "".concat(actions_error(_this.id)) : event.name,
+            origin: _this.sessionId
+          });
+
+          if (!immediate && _this.machine.config.predictableActionArguments) {
+            _this._outgoingQueue.push([target, scxmlEvent]);
+          } else {
+            target.send(scxmlEvent);
+          }
+        }
+      } else {
+        // Send normal events to other targets
+        if (!immediate && _this.machine.config.predictableActionArguments) {
+          _this._outgoingQueue.push([target, event.data]);
+        } else {
+          target.send(event.data);
+        }
+      }
+    };
+
+    this._exec = function (action, context, _event, actionFunctionMap) {
+      if (actionFunctionMap === void 0) {
+        actionFunctionMap = _this.machine.options.actions;
+      }
+
+      var actionOrExec = action.exec || getActionFunction(action.type, actionFunctionMap);
+      var exec = utils_isFunction(actionOrExec) ? actionOrExec : actionOrExec ? actionOrExec.exec : action.exec;
+
+      if (exec) {
+        try {
+          return exec(context, _event.data, !_this.machine.config.predictableActionArguments ? {
+            action: action,
+            state: _this.state,
+            _event: _event
+          } : {
+            action: action,
+            _event: _event
+          });
+        } catch (err) {
+          if (_this.parent) {
+            _this.parent.send({
+              type: 'xstate.error',
+              data: err
+            });
+          }
+
+          throw err;
+        }
+      }
+
+      switch (action.type) {
+        case raise:
+          {
+            // if raise action reached the interpreter then it's a delayed one
+            var sendAction_1 = action;
+
+            _this.defer(sendAction_1);
+
+            break;
+          }
+
+        case send:
+          var sendAction = action;
+
+          if (typeof sendAction.delay === 'number') {
+            _this.defer(sendAction);
+
+            return;
+          } else {
+            if (sendAction.to) {
+              _this.sendTo(sendAction._event, sendAction.to, _event === initEvent);
+            } else {
+              _this.send(sendAction._event);
+            }
+          }
+
+          break;
+
+        case cancel:
+          _this.cancel(action.sendId);
+
+          break;
+
+        case start:
+          {
+            if (_this.status !== InterpreterStatus.Running) {
+              return;
+            }
+
+            var activity = action.activity; // If the activity will be stopped right after it's started
+            // (such as in transient states)
+            // don't bother starting the activity.
+
+            if ( // in v4 with `predictableActionArguments` invokes are called eagerly when the `this.state` still points to the previous state
+            !_this.machine.config.predictableActionArguments && !_this.state.activities[activity.id || activity.type]) {
+              break;
+            } // Invoked services
+
+
+            if (activity.type === types_ActionTypes.Invoke) {
+              var invokeSource = toInvokeSource(activity.src);
+              var serviceCreator = _this.machine.options.services ? _this.machine.options.services[invokeSource.type] : undefined;
+              var id = activity.id,
+                  data = activity.data;
+
+              if (!environment_IS_PRODUCTION) {
+                utils_warn(!('forward' in activity), // tslint:disable-next-line:max-line-length
+                "`forward` property is deprecated (found in invocation of '".concat(activity.src, "' in in machine '").concat(_this.machine.id, "'). ") + "Please use `autoForward` instead.");
+              }
+
+              var autoForward = 'autoForward' in activity ? activity.autoForward : !!activity.forward;
+
+              if (!serviceCreator) {
+                // tslint:disable-next-line:no-console
+                if (!environment_IS_PRODUCTION) {
+                  utils_warn(false, "No service found for invocation '".concat(activity.src, "' in machine '").concat(_this.machine.id, "'."));
+                }
+
+                return;
+              }
+
+              var resolvedData = data ? mapContext(data, context, _event) : undefined;
+
+              if (typeof serviceCreator === 'string') {
+                // TODO: warn
+                return;
+              }
+
+              var source = utils_isFunction(serviceCreator) ? serviceCreator(context, _event.data, {
+                data: resolvedData,
+                src: invokeSource,
+                meta: activity.meta
+              }) : serviceCreator;
+
+              if (!source) {
+                // TODO: warn?
+                return;
+              }
+
+              var options = void 0;
+
+              if (utils_isMachine(source)) {
+                source = resolvedData ? source.withContext(resolvedData) : source;
+                options = {
+                  autoForward: autoForward
+                };
+              }
+
+              _this.spawn(source, id, options);
+            } else {
+              _this.spawnActivity(activity);
+            }
+
+            break;
+          }
+
+        case stop:
+          {
+            _this.stopChild(action.activity.id);
+
+            break;
+          }
+
+        case log:
+          var _a = action,
+              label = _a.label,
+              value = _a.value;
+
+          if (label) {
+            _this.logger(label, value);
+          } else {
+            _this.logger(value);
+          }
+
+          break;
+
+        default:
+          if (!environment_IS_PRODUCTION) {
+            utils_warn(false, "No implementation found for action type '".concat(action.type, "'"));
+          }
+
+          break;
+      }
+    };
+
+    var resolvedOptions = _tslib_assign(_tslib_assign({}, Interpreter.defaultOptions), options);
+
+    var clock = resolvedOptions.clock,
+        logger = resolvedOptions.logger,
+        parent = resolvedOptions.parent,
+        id = resolvedOptions.id;
+    var resolvedId = id !== undefined ? id : machine.id;
+    this.id = resolvedId;
+    this.logger = logger;
+    this.clock = clock;
+    this.parent = parent;
+    this.options = resolvedOptions;
+    this.scheduler = new Scheduler({
+      deferEvents: this.options.deferEvents
+    });
+    this.sessionId = registry.bookId();
+  }
+
+  Object.defineProperty(Interpreter.prototype, "initialState", {
+    get: function () {
+      var _this = this;
+
+      if (this._initialState) {
+        return this._initialState;
+      }
+
+      return provide(this, function () {
+        _this._initialState = _this.machine.initialState;
+        return _this._initialState;
+      });
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Interpreter.prototype, "state", {
+    /**
+     * @deprecated Use `.getSnapshot()` instead.
+     */
+    get: function () {
+      if (!environment_IS_PRODUCTION) {
+        utils_warn(this.status !== InterpreterStatus.NotStarted, "Attempted to read state from uninitialized service '".concat(this.id, "'. Make sure the service is started first."));
+      }
+
+      return this._state;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  /**
+   * Executes the actions of the given state, with that state's `context` and `event`.
+   *
+   * @param state The state whose actions will be executed
+   * @param actionsConfig The action implementations to use
+   */
+
+  Interpreter.prototype.execute = function (state, actionsConfig) {
+    var e_1, _a;
+
+    try {
+      for (var _b = _tslib_values(state.actions), _c = _b.next(); !_c.done; _c = _b.next()) {
+        var action = _c.value;
+        this.exec(action, state, actionsConfig);
+      }
+    } catch (e_1_1) {
+      e_1 = {
+        error: e_1_1
+      };
+    } finally {
+      try {
+        if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+      } finally {
+        if (e_1) throw e_1.error;
+      }
+    }
+  };
+
+  Interpreter.prototype.update = function (state, _event) {
+    var e_2, _a, e_3, _b, e_4, _c, e_5, _d;
+
+    var _this = this; // Attach session ID to state
+
+
+    state._sessionid = this.sessionId; // Update state
+
+    this._state = state; // Execute actions
+
+    if ((!this.machine.config.predictableActionArguments || // this is currently required to execute initial actions as the `initialState` gets cached
+    // we can't just recompute it (and execute actions while doing so) because we try to preserve identity of actors created within initial assigns
+    _event === initEvent) && this.options.execute) {
+      this.execute(this.state);
+    } else {
+      var item = void 0;
+
+      while (item = this._outgoingQueue.shift()) {
+        item[0].send(item[1]);
+      }
+    } // Update children
+
+
+    this.children.forEach(function (child) {
+      _this.state.children[child.id] = child;
+    }); // Dev tools
+
+    if (this.devTools) {
+      this.devTools.send(_event.data, state);
+    } // Execute listeners
+
+
+    if (state.event) {
+      try {
+        for (var _e = _tslib_values(this.eventListeners), _f = _e.next(); !_f.done; _f = _e.next()) {
+          var listener = _f.value;
+          listener(state.event);
+        }
+      } catch (e_2_1) {
+        e_2 = {
+          error: e_2_1
+        };
+      } finally {
+        try {
+          if (_f && !_f.done && (_a = _e.return)) _a.call(_e);
+        } finally {
+          if (e_2) throw e_2.error;
+        }
+      }
+    }
+
+    try {
+      for (var _g = _tslib_values(this.listeners), _h = _g.next(); !_h.done; _h = _g.next()) {
+        var listener = _h.value;
+        listener(state, state.event);
+      }
+    } catch (e_3_1) {
+      e_3 = {
+        error: e_3_1
+      };
+    } finally {
+      try {
+        if (_h && !_h.done && (_b = _g.return)) _b.call(_g);
+      } finally {
+        if (e_3) throw e_3.error;
+      }
+    }
+
+    try {
+      for (var _j = _tslib_values(this.contextListeners), _k = _j.next(); !_k.done; _k = _j.next()) {
+        var contextListener = _k.value;
+        contextListener(this.state.context, this.state.history ? this.state.history.context : undefined);
+      }
+    } catch (e_4_1) {
+      e_4 = {
+        error: e_4_1
+      };
+    } finally {
+      try {
+        if (_k && !_k.done && (_c = _j.return)) _c.call(_j);
+      } finally {
+        if (e_4) throw e_4.error;
+      }
+    }
+
+    if (this.state.done) {
+      // get final child state node
+      var finalChildStateNode = state.configuration.find(function (sn) {
+        return sn.type === 'final' && sn.parent === _this.machine;
+      });
+      var doneData = finalChildStateNode && finalChildStateNode.doneData ? mapContext(finalChildStateNode.doneData, state.context, _event) : undefined;
+      this._doneEvent = actions_doneInvoke(this.id, doneData);
+
+      try {
+        for (var _l = _tslib_values(this.doneListeners), _m = _l.next(); !_m.done; _m = _l.next()) {
+          var listener = _m.value;
+          listener(this._doneEvent);
+        }
+      } catch (e_5_1) {
+        e_5 = {
+          error: e_5_1
+        };
+      } finally {
+        try {
+          if (_m && !_m.done && (_d = _l.return)) _d.call(_l);
+        } finally {
+          if (e_5) throw e_5.error;
+        }
+      }
+
+      this._stop();
+
+      this._stopChildren();
+
+      registry.free(this.sessionId);
+    }
+  };
+  /*
+   * Adds a listener that is notified whenever a state transition happens. The listener is called with
+   * the next state and the event object that caused the state transition.
+   *
+   * @param listener The state listener
+   */
+
+
+  Interpreter.prototype.onTransition = function (listener) {
+    this.listeners.add(listener); // Send current state to listener
+
+    if (this.status === InterpreterStatus.Running) {
+      listener(this.state, this.state.event);
+    }
+
+    return this;
+  };
+
+  Interpreter.prototype.subscribe = function (nextListenerOrObserver, _, // TODO: error listener
+  completeListener) {
+    var _this = this;
+
+    var observer = toObserver(nextListenerOrObserver, _, completeListener);
+    this.listeners.add(observer.next); // Send current state to listener
+
+    if (this.status !== InterpreterStatus.NotStarted) {
+      observer.next(this.state);
+    }
+
+    var completeOnce = function () {
+      _this.doneListeners.delete(completeOnce);
+
+      _this.stopListeners.delete(completeOnce);
+
+      observer.complete();
+    };
+
+    if (this.status === InterpreterStatus.Stopped) {
+      observer.complete();
+    } else {
+      this.onDone(completeOnce);
+      this.onStop(completeOnce);
+    }
+
+    return {
+      unsubscribe: function () {
+        _this.listeners.delete(observer.next);
+
+        _this.doneListeners.delete(completeOnce);
+
+        _this.stopListeners.delete(completeOnce);
+      }
+    };
+  };
+  /**
+   * Adds an event listener that is notified whenever an event is sent to the running interpreter.
+   * @param listener The event listener
+   */
+
+
+  Interpreter.prototype.onEvent = function (listener) {
+    this.eventListeners.add(listener);
+    return this;
+  };
+  /**
+   * Adds an event listener that is notified whenever a `send` event occurs.
+   * @param listener The event listener
+   */
+
+
+  Interpreter.prototype.onSend = function (listener) {
+    this.sendListeners.add(listener);
+    return this;
+  };
+  /**
+   * Adds a context listener that is notified whenever the state context changes.
+   * @param listener The context listener
+   */
+
+
+  Interpreter.prototype.onChange = function (listener) {
+    this.contextListeners.add(listener);
+    return this;
+  };
+  /**
+   * Adds a listener that is notified when the machine is stopped.
+   * @param listener The listener
+   */
+
+
+  Interpreter.prototype.onStop = function (listener) {
+    this.stopListeners.add(listener);
+    return this;
+  };
+  /**
+   * Adds a state listener that is notified when the statechart has reached its final state.
+   * @param listener The state listener
+   */
+
+
+  Interpreter.prototype.onDone = function (listener) {
+    if (this.status === InterpreterStatus.Stopped && this._doneEvent) {
+      listener(this._doneEvent);
+    } else {
+      this.doneListeners.add(listener);
+    }
+
+    return this;
+  };
+  /**
+   * Removes a listener.
+   * @param listener The listener to remove
+   */
+
+
+  Interpreter.prototype.off = function (listener) {
+    this.listeners.delete(listener);
+    this.eventListeners.delete(listener);
+    this.sendListeners.delete(listener);
+    this.stopListeners.delete(listener);
+    this.doneListeners.delete(listener);
+    this.contextListeners.delete(listener);
+    return this;
+  };
+  /**
+   * Starts the interpreter from the given state, or the initial state.
+   * @param initialState The state to start the statechart from
+   */
+
+
+  Interpreter.prototype.start = function (initialState) {
+    var _this = this;
+
+    if (this.status === InterpreterStatus.Running) {
+      // Do not restart the service if it is already started
+      return this;
+    } // yes, it's a hack but we need the related cache to be populated for some things to work (like delayed transitions)
+    // this is usually called by `machine.getInitialState` but if we rehydrate from a state we might bypass this call
+    // we also don't want to call this method here as it resolves the full initial state which might involve calling assign actions
+    // and that could potentially lead to some unwanted side-effects (even such as creating some rogue actors)
+
+
+    this.machine._init();
+
+    registry.register(this.sessionId, this);
+    this.initialized = true;
+    this.status = InterpreterStatus.Running;
+    var resolvedState = initialState === undefined ? this.initialState : provide(this, function () {
+      return isStateConfig(initialState) ? _this.machine.resolveState(initialState) : _this.machine.resolveState(State.from(initialState, _this.machine.context));
+    });
+
+    if (this.options.devTools) {
+      this.attachDev();
+    }
+
+    this.scheduler.initialize(function () {
+      _this.update(resolvedState, initEvent);
+    });
+    return this;
+  };
+
+  Interpreter.prototype._stopChildren = function () {
+    // TODO: think about converting those to actions
+    this.children.forEach(function (child) {
+      if (utils_isFunction(child.stop)) {
+        child.stop();
+      }
+    });
+    this.children.clear();
+  };
+
+  Interpreter.prototype._stop = function () {
+    var e_6, _a, e_7, _b, e_8, _c, e_9, _d, e_10, _e;
+
+    try {
+      for (var _f = _tslib_values(this.listeners), _g = _f.next(); !_g.done; _g = _f.next()) {
+        var listener = _g.value;
+        this.listeners.delete(listener);
+      }
+    } catch (e_6_1) {
+      e_6 = {
+        error: e_6_1
+      };
+    } finally {
+      try {
+        if (_g && !_g.done && (_a = _f.return)) _a.call(_f);
+      } finally {
+        if (e_6) throw e_6.error;
+      }
+    }
+
+    try {
+      for (var _h = _tslib_values(this.stopListeners), _j = _h.next(); !_j.done; _j = _h.next()) {
+        var listener = _j.value; // call listener, then remove
+
+        listener();
+        this.stopListeners.delete(listener);
+      }
+    } catch (e_7_1) {
+      e_7 = {
+        error: e_7_1
+      };
+    } finally {
+      try {
+        if (_j && !_j.done && (_b = _h.return)) _b.call(_h);
+      } finally {
+        if (e_7) throw e_7.error;
+      }
+    }
+
+    try {
+      for (var _k = _tslib_values(this.contextListeners), _l = _k.next(); !_l.done; _l = _k.next()) {
+        var listener = _l.value;
+        this.contextListeners.delete(listener);
+      }
+    } catch (e_8_1) {
+      e_8 = {
+        error: e_8_1
+      };
+    } finally {
+      try {
+        if (_l && !_l.done && (_c = _k.return)) _c.call(_k);
+      } finally {
+        if (e_8) throw e_8.error;
+      }
+    }
+
+    try {
+      for (var _m = _tslib_values(this.doneListeners), _o = _m.next(); !_o.done; _o = _m.next()) {
+        var listener = _o.value;
+        this.doneListeners.delete(listener);
+      }
+    } catch (e_9_1) {
+      e_9 = {
+        error: e_9_1
+      };
+    } finally {
+      try {
+        if (_o && !_o.done && (_d = _m.return)) _d.call(_m);
+      } finally {
+        if (e_9) throw e_9.error;
+      }
+    }
+
+    if (!this.initialized) {
+      // Interpreter already stopped; do nothing
+      return this;
+    }
+
+    this.initialized = false;
+    this.status = InterpreterStatus.Stopped;
+    this._initialState = undefined;
+
+    try {
+      // we are going to stop within the current sync frame
+      // so we can safely just cancel this here as nothing async should be fired anyway
+      for (var _p = _tslib_values(Object.keys(this.delayedEventsMap)), _q = _p.next(); !_q.done; _q = _p.next()) {
+        var key = _q.value;
+        this.clock.clearTimeout(this.delayedEventsMap[key]);
+      }
+    } catch (e_10_1) {
+      e_10 = {
+        error: e_10_1
+      };
+    } finally {
+      try {
+        if (_q && !_q.done && (_e = _p.return)) _e.call(_p);
+      } finally {
+        if (e_10) throw e_10.error;
+      }
+    } // clear everything that might be enqueued
+
+
+    this.scheduler.clear();
+    this.scheduler = new Scheduler({
+      deferEvents: this.options.deferEvents
+    });
+  };
+  /**
+   * Stops the interpreter and unsubscribe all listeners.
+   *
+   * This will also notify the `onStop` listeners.
+   */
+
+
+  Interpreter.prototype.stop = function () {
+    // TODO: add warning for stopping non-root interpreters
+    var _this = this; // grab the current scheduler as it will be replaced in _stop
+
+
+    var scheduler = this.scheduler;
+
+    this._stop(); // let what is currently processed to be finished
+
+
+    scheduler.schedule(function () {
+      var _a;
+
+      if ((_a = _this._state) === null || _a === void 0 ? void 0 : _a.done) {
+        return;
+      } // it feels weird to handle this here but we need to handle this even slightly "out of band"
+
+
+      var _event = toSCXMLEvent({
+        type: 'xstate.stop'
+      });
+
+      var nextState = provide(_this, function () {
+        var exitActions = flatten(_tslib_spreadArray([], _tslib_read(_this.state.configuration), false).sort(function (a, b) {
+          return b.order - a.order;
+        }).map(function (stateNode) {
+          return toActionObjects(stateNode.onExit, _this.machine.options.actions);
+        }));
+
+        var _a = _tslib_read(resolveActions(_this.machine, _this.state, _this.state.context, _event, [{
+          type: 'exit',
+          actions: exitActions
+        }], _this.machine.config.predictableActionArguments ? _this._exec : undefined, _this.machine.config.predictableActionArguments || _this.machine.config.preserveActionOrder), 2),
+            resolvedActions = _a[0],
+            updatedContext = _a[1];
+
+        var newState = new State({
+          value: _this.state.value,
+          context: updatedContext,
+          _event: _event,
+          _sessionid: _this.sessionId,
+          historyValue: undefined,
+          history: _this.state,
+          actions: resolvedActions.filter(function (action) {
+            return !isRaisableAction(action);
+          }),
+          activities: {},
+          events: [],
+          configuration: [],
+          transitions: [],
+          children: {},
+          done: _this.state.done,
+          tags: _this.state.tags,
+          machine: _this.machine
+        });
+        newState.changed = true;
+        return newState;
+      });
+
+      _this.update(nextState, _event);
+
+      _this._stopChildren();
+
+      registry.free(_this.sessionId);
+    });
+    return this;
+  };
+
+  Interpreter.prototype.batch = function (events) {
+    var _this = this;
+
+    if (this.status === InterpreterStatus.NotStarted && this.options.deferEvents) {
+      // tslint:disable-next-line:no-console
+      if (!environment_IS_PRODUCTION) {
+        utils_warn(false, "".concat(events.length, " event(s) were sent to uninitialized service \"").concat(this.machine.id, "\" and are deferred. Make sure .start() is called for this service.\nEvent: ").concat(JSON.stringify(event)));
+      }
+    } else if (this.status !== InterpreterStatus.Running) {
+      throw new Error( // tslint:disable-next-line:max-line-length
+      "".concat(events.length, " event(s) were sent to uninitialized service \"").concat(this.machine.id, "\". Make sure .start() is called for this service, or set { deferEvents: true } in the service options."));
+    }
+
+    if (!events.length) {
+      return;
+    }
+
+    var exec = !!this.machine.config.predictableActionArguments && this._exec;
+    this.scheduler.schedule(function () {
+      var e_11, _a;
+
+      var nextState = _this.state;
+      var batchChanged = false;
+      var batchedActions = [];
+
+      var _loop_1 = function (event_1) {
+        var _event = toSCXMLEvent(event_1);
+
+        _this.forward(_event);
+
+        nextState = provide(_this, function () {
+          return _this.machine.transition(nextState, _event, undefined, exec || undefined);
+        });
+        batchedActions.push.apply(batchedActions, _tslib_spreadArray([], _tslib_read(_this.machine.config.predictableActionArguments ? nextState.actions : nextState.actions.map(function (a) {
+          return bindActionToState(a, nextState);
+        })), false));
+        batchChanged = batchChanged || !!nextState.changed;
+      };
+
+      try {
+        for (var events_1 = _tslib_values(events), events_1_1 = events_1.next(); !events_1_1.done; events_1_1 = events_1.next()) {
+          var event_1 = events_1_1.value;
+
+          _loop_1(event_1);
+        }
+      } catch (e_11_1) {
+        e_11 = {
+          error: e_11_1
+        };
+      } finally {
+        try {
+          if (events_1_1 && !events_1_1.done && (_a = events_1.return)) _a.call(events_1);
+        } finally {
+          if (e_11) throw e_11.error;
+        }
+      }
+
+      nextState.changed = batchChanged;
+      nextState.actions = batchedActions;
+
+      _this.update(nextState, toSCXMLEvent(events[events.length - 1]));
+    });
+  };
+  /**
+   * Returns a send function bound to this interpreter instance.
+   *
+   * @param event The event to be sent by the sender.
+   */
+
+
+  Interpreter.prototype.sender = function (event) {
+    return this.send.bind(this, event);
+  };
+
+  Interpreter.prototype._nextState = function (event, exec) {
+    var _this = this;
+
+    if (exec === void 0) {
+      exec = !!this.machine.config.predictableActionArguments && this._exec;
+    }
+
+    var _event = toSCXMLEvent(event);
+
+    if (_event.name.indexOf(errorPlatform) === 0 && !this.state.nextEvents.some(function (nextEvent) {
+      return nextEvent.indexOf(errorPlatform) === 0;
+    })) {
+      throw _event.data.data;
+    }
+
+    var nextState = provide(this, function () {
+      return _this.machine.transition(_this.state, _event, undefined, exec || undefined);
+    });
+    return nextState;
+  };
+  /**
+   * Returns the next state given the interpreter's current state and the event.
+   *
+   * This is a pure method that does _not_ update the interpreter's state.
+   *
+   * @param event The event to determine the next state
+   */
+
+
+  Interpreter.prototype.nextState = function (event) {
+    return this._nextState(event, false);
+  };
+
+  Interpreter.prototype.forward = function (event) {
+    var e_12, _a;
+
+    try {
+      for (var _b = _tslib_values(this.forwardTo), _c = _b.next(); !_c.done; _c = _b.next()) {
+        var id = _c.value;
+        var child = this.children.get(id);
+
+        if (!child) {
+          throw new Error("Unable to forward event '".concat(event, "' from interpreter '").concat(this.id, "' to nonexistant child '").concat(id, "'."));
+        }
+
+        child.send(event);
+      }
+    } catch (e_12_1) {
+      e_12 = {
+        error: e_12_1
+      };
+    } finally {
+      try {
+        if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+      } finally {
+        if (e_12) throw e_12.error;
+      }
+    }
+  };
+
+  Interpreter.prototype.defer = function (sendAction) {
+    var _this = this;
+
+    var timerId = this.clock.setTimeout(function () {
+      if ('to' in sendAction && sendAction.to) {
+        _this.sendTo(sendAction._event, sendAction.to, true);
+      } else {
+        _this.send(sendAction._event);
+      }
+    }, sendAction.delay);
+
+    if (sendAction.id) {
+      this.delayedEventsMap[sendAction.id] = timerId;
+    }
+  };
+
+  Interpreter.prototype.cancel = function (sendId) {
+    this.clock.clearTimeout(this.delayedEventsMap[sendId]);
+    delete this.delayedEventsMap[sendId];
+  };
+
+  Interpreter.prototype.exec = function (action, state, actionFunctionMap) {
+    if (actionFunctionMap === void 0) {
+      actionFunctionMap = this.machine.options.actions;
+    }
+
+    this._exec(action, state.context, state._event, actionFunctionMap);
+  };
+
+  Interpreter.prototype.removeChild = function (childId) {
+    var _a;
+
+    this.children.delete(childId);
+    this.forwardTo.delete(childId); // this.state might not exist at the time this is called,
+    // such as when a child is added then removed while initializing the state
+
+    (_a = this.state) === null || _a === void 0 ? true : delete _a.children[childId];
+  };
+
+  Interpreter.prototype.stopChild = function (childId) {
+    var child = this.children.get(childId);
+
+    if (!child) {
+      return;
+    }
+
+    this.removeChild(childId);
+
+    if (utils_isFunction(child.stop)) {
+      child.stop();
+    }
+  };
+
+  Interpreter.prototype.spawn = function (entity, name, options) {
+    if (this.status !== InterpreterStatus.Running) {
+      return Actor_createDeferredActor(entity, name);
+    }
+
+    if (isPromiseLike(entity)) {
+      return this.spawnPromise(Promise.resolve(entity), name);
+    } else if (utils_isFunction(entity)) {
+      return this.spawnCallback(entity, name);
+    } else if (isSpawnedActor(entity)) {
+      return this.spawnActor(entity, name);
+    } else if (isObservable(entity)) {
+      return this.spawnObservable(entity, name);
+    } else if (utils_isMachine(entity)) {
+      return this.spawnMachine(entity, _tslib_assign(_tslib_assign({}, options), {
+        id: name
+      }));
+    } else if (isBehavior(entity)) {
+      return this.spawnBehavior(entity, name);
+    } else {
+      throw new Error("Unable to spawn entity \"".concat(name, "\" of type \"").concat(typeof entity, "\"."));
+    }
+  };
+
+  Interpreter.prototype.spawnMachine = function (machine, options) {
+    var _this = this;
+
+    if (options === void 0) {
+      options = {};
+    }
+
+    var childService = new Interpreter(machine, _tslib_assign(_tslib_assign({}, this.options), {
+      parent: this,
+      id: options.id || machine.id
+    }));
+
+    var resolvedOptions = _tslib_assign(_tslib_assign({}, DEFAULT_SPAWN_OPTIONS), options);
+
+    if (resolvedOptions.sync) {
+      childService.onTransition(function (state) {
+        _this.send(actionTypes_update, {
+          state: state,
+          id: childService.id
+        });
+      });
+    }
+
+    var actor = childService;
+    this.children.set(childService.id, actor);
+
+    if (resolvedOptions.autoForward) {
+      this.forwardTo.add(childService.id);
+    }
+
+    childService.onDone(function (doneEvent) {
+      _this.removeChild(childService.id);
+
+      _this.send(toSCXMLEvent(doneEvent, {
+        origin: childService.id
+      }));
+    }).start();
+    return actor;
+  };
+
+  Interpreter.prototype.spawnBehavior = function (behavior, id) {
+    var actorRef = spawnBehavior(behavior, {
+      id: id,
+      parent: this
+    });
+    this.children.set(id, actorRef);
+    return actorRef;
+  };
+
+  Interpreter.prototype.spawnPromise = function (promise, id) {
+    var _a;
+
+    var _this = this;
+
+    var canceled = false;
+    var resolvedData;
+    promise.then(function (response) {
+      if (!canceled) {
+        resolvedData = response;
+
+        _this.removeChild(id);
+
+        _this.send(toSCXMLEvent(actions_doneInvoke(id, response), {
+          origin: id
+        }));
+      }
+    }, function (errorData) {
+      if (!canceled) {
+        _this.removeChild(id);
+
+        var errorEvent = actions_error(id, errorData);
+
+        try {
+          // Send "error.platform.id" to this (parent).
+          _this.send(toSCXMLEvent(errorEvent, {
+            origin: id
+          }));
+        } catch (error) {
+          reportUnhandledExceptionOnInvocation(errorData, error, id);
+
+          if (_this.devTools) {
+            _this.devTools.send(errorEvent, _this.state);
+          }
+
+          if (_this.machine.strict) {
+            // it would be better to always stop the state machine if unhandled
+            // exception/promise rejection happens but because we don't want to
+            // break existing code so enforce it on strict mode only especially so
+            // because documentation says that onError is optional
+            _this.stop();
+          }
+        }
+      }
+    });
+    var actor = (_a = {
+      id: id,
+      send: function () {
+        return void 0;
+      },
+      subscribe: function (next, handleError, complete) {
+        var observer = toObserver(next, handleError, complete);
+        var unsubscribed = false;
+        promise.then(function (response) {
+          if (unsubscribed) {
+            return;
+          }
+
+          observer.next(response);
+
+          if (unsubscribed) {
+            return;
+          }
+
+          observer.complete();
+        }, function (err) {
+          if (unsubscribed) {
+            return;
+          }
+
+          observer.error(err);
+        });
+        return {
+          unsubscribe: function () {
+            return unsubscribed = true;
+          }
+        };
+      },
+      stop: function () {
+        canceled = true;
+      },
+      toJSON: function () {
+        return {
+          id: id
+        };
+      },
+      getSnapshot: function () {
+        return resolvedData;
+      }
+    }, _a[symbolObservable] = function () {
+      return this;
+    }, _a);
+    this.children.set(id, actor);
+    return actor;
+  };
+
+  Interpreter.prototype.spawnCallback = function (callback, id) {
+    var _a;
+
+    var _this = this;
+
+    var canceled = false;
+    var receivers = new Set();
+    var listeners = new Set();
+    var emitted;
+
+    var receive = function (e) {
+      emitted = e;
+      listeners.forEach(function (listener) {
+        return listener(e);
+      });
+
+      if (canceled) {
+        return;
+      }
+
+      _this.send(toSCXMLEvent(e, {
+        origin: id
+      }));
+    };
+
+    var callbackStop;
+
+    try {
+      callbackStop = callback(receive, function (newListener) {
+        receivers.add(newListener);
+      });
+    } catch (err) {
+      this.send(actions_error(id, err));
+    }
+
+    if (isPromiseLike(callbackStop)) {
+      // it turned out to be an async function, can't reliably check this before calling `callback`
+      // because transpiled async functions are not recognizable
+      return this.spawnPromise(callbackStop, id);
+    }
+
+    var actor = (_a = {
+      id: id,
+      send: function (event) {
+        return receivers.forEach(function (receiver) {
+          return receiver(event);
+        });
+      },
+      subscribe: function (next) {
+        var observer = toObserver(next);
+        listeners.add(observer.next);
+        return {
+          unsubscribe: function () {
+            listeners.delete(observer.next);
+          }
+        };
+      },
+      stop: function () {
+        canceled = true;
+
+        if (utils_isFunction(callbackStop)) {
+          callbackStop();
+        }
+      },
+      toJSON: function () {
+        return {
+          id: id
+        };
+      },
+      getSnapshot: function () {
+        return emitted;
+      }
+    }, _a[symbolObservable] = function () {
+      return this;
+    }, _a);
+    this.children.set(id, actor);
+    return actor;
+  };
+
+  Interpreter.prototype.spawnObservable = function (source, id) {
+    var _a;
+
+    var _this = this;
+
+    var emitted;
+    var subscription = source.subscribe(function (value) {
+      emitted = value;
+
+      _this.send(toSCXMLEvent(value, {
+        origin: id
+      }));
+    }, function (err) {
+      _this.removeChild(id);
+
+      _this.send(toSCXMLEvent(actions_error(id, err), {
+        origin: id
+      }));
+    }, function () {
+      _this.removeChild(id);
+
+      _this.send(toSCXMLEvent(actions_doneInvoke(id), {
+        origin: id
+      }));
+    });
+    var actor = (_a = {
+      id: id,
+      send: function () {
+        return void 0;
+      },
+      subscribe: function (next, handleError, complete) {
+        return source.subscribe(next, handleError, complete);
+      },
+      stop: function () {
+        return subscription.unsubscribe();
+      },
+      getSnapshot: function () {
+        return emitted;
+      },
+      toJSON: function () {
+        return {
+          id: id
+        };
+      }
+    }, _a[symbolObservable] = function () {
+      return this;
+    }, _a);
+    this.children.set(id, actor);
+    return actor;
+  };
+
+  Interpreter.prototype.spawnActor = function (actor, name) {
+    this.children.set(name, actor);
+    return actor;
+  };
+
+  Interpreter.prototype.spawnActivity = function (activity) {
+    var implementation = this.machine.options && this.machine.options.activities ? this.machine.options.activities[activity.type] : undefined;
+
+    if (!implementation) {
+      if (!environment_IS_PRODUCTION) {
+        utils_warn(false, "No implementation found for activity '".concat(activity.type, "'"));
+      } // tslint:disable-next-line:no-console
+
+
+      return;
+    } // Start implementation
+
+
+    var dispose = implementation(this.state.context, activity);
+    this.spawnEffect(activity.id, dispose);
+  };
+
+  Interpreter.prototype.spawnEffect = function (id, dispose) {
+    var _a;
+
+    this.children.set(id, (_a = {
+      id: id,
+      send: function () {
+        return void 0;
+      },
+      subscribe: function () {
+        return {
+          unsubscribe: function () {
+            return void 0;
+          }
+        };
+      },
+      stop: dispose || undefined,
+      getSnapshot: function () {
+        return undefined;
+      },
+      toJSON: function () {
+        return {
+          id: id
+        };
+      }
+    }, _a[symbolObservable] = function () {
+      return this;
+    }, _a));
+  };
+
+  Interpreter.prototype.attachDev = function () {
+    var global = getGlobal();
+
+    if (this.options.devTools && global) {
+      if (global.__REDUX_DEVTOOLS_EXTENSION__) {
+        var devToolsOptions = typeof this.options.devTools === 'object' ? this.options.devTools : undefined;
+        this.devTools = global.__REDUX_DEVTOOLS_EXTENSION__.connect(_tslib_assign(_tslib_assign({
+          name: this.id,
+          autoPause: true,
+          stateSanitizer: function (state) {
+            return {
+              value: state.value,
+              context: state.context,
+              actions: state.actions
+            };
+          }
+        }, devToolsOptions), {
+          features: _tslib_assign({
+            jump: false,
+            skip: false
+          }, devToolsOptions ? devToolsOptions.features : undefined)
+        }), this.machine);
+        this.devTools.init(this.state);
+      } // add XState-specific dev tooling hook
+
+
+      registerService(this);
+    }
+  };
+
+  Interpreter.prototype.toJSON = function () {
+    return {
+      id: this.id
+    };
+  };
+
+  Interpreter.prototype[symbolObservable] = function () {
+    return this;
+  };
+
+  Interpreter.prototype.getSnapshot = function () {
+    if (this.status === InterpreterStatus.NotStarted) {
+      return this.initialState;
+    }
+
+    return this._state;
+  };
+  /**
+   * The default interpreter options:
+   *
+   * - `clock` uses the global `setTimeout` and `clearTimeout` functions
+   * - `logger` uses the global `console.log()` method
+   */
+
+
+  Interpreter.defaultOptions = {
+    execute: true,
+    deferEvents: true,
+    clock: {
+      setTimeout: function (fn, ms) {
+        return setTimeout(fn, ms);
+      },
+      clearTimeout: function (id) {
+        return clearTimeout(id);
+      }
+    },
+    logger: /*#__PURE__*/console.log.bind(console),
+    devTools: false
+  };
+  Interpreter.interpret = interpret;
+  return Interpreter;
+}();
+
+var resolveSpawnOptions = function (nameOrOptions) {
+  if (isString(nameOrOptions)) {
+    return __assign(__assign({}, DEFAULT_SPAWN_OPTIONS), {
+      name: nameOrOptions
+    });
+  }
+
+  return __assign(__assign(__assign({}, DEFAULT_SPAWN_OPTIONS), {
+    name: uniqueId()
+  }), nameOrOptions);
+};
+
+function spawn(entity, nameOrOptions) {
+  var resolvedOptions = resolveSpawnOptions(nameOrOptions);
+  return consume(function (service) {
+    if (!IS_PRODUCTION) {
+      var isLazyEntity = isMachine(entity) || isFunction(entity);
+      warn(!!service || isLazyEntity, "Attempted to spawn an Actor (ID: \"".concat(isMachine(entity) ? entity.id : 'undefined', "\") outside of a service. This will have no effect."));
+    }
+
+    if (service) {
+      return service.spawn(entity, resolvedOptions.name, resolvedOptions);
+    } else {
+      return createDeferredActor(entity, resolvedOptions.name);
+    }
+  });
+}
+/**
+ * Creates a new Interpreter instance for the given machine with the provided options, if any.
+ *
+ * @param machine The machine to interpret
+ * @param options Interpreter options
+ */
+
+function interpret(machine, options) {
+  var interpreter = new Interpreter(machine, options);
+  return interpreter;
+}
+
+
+
+// EXTERNAL MODULE: ./node_modules/@ricky0123/vad-web/dist/index.js
+var dist = __webpack_require__(762);
+;// CONCATENATED MODULE: ./src/ConfigModule.js
+var config = {
+  appServerUrl: "https://app.saypi.ai",
+  apiServerUrl: "https://api.saypi.ai",
+  GA_MEASUREMENT_ID: "G-N70M5T0ZCB",
+  GA_API_SECRET: "4HsiqPmGS7Gs3TYWOa2ddg",
+  GA_ENDPOINT: "https://www.google-analytics.com/mp/collect"
+};
+;// CONCATENATED MODULE: ./src/ResourceModule.ts
+
+// used by browser extensions
+function getExtensionResourceUrl(filename) {
+    const web_accessible_resources_dir = "public";
+    const filepath = web_accessible_resources_dir + "/" + filename;
+    return chrome.runtime.getURL(filepath);
+}
+// used by userscripts
+function getAppServerResourceUrl(filename) {
+    return `${config.appServerUrl}/${filename}`;
+}
+// cross-platform way to get a resource URL
+function getResourceUrl(filename) {
+    if (chrome.runtime && chrome.runtime.id) {
+        return getExtensionResourceUrl(filename);
+    }
+    else {
+        return getAppServerResourceUrl(filename);
+    }
+}
+
+;// CONCATENATED MODULE: ./src/RequestInterceptor.js
+
+var filesToRedirect = ["silero_vad.onnx", "ort-wasm-simd.wasm", "ort.min.js.map", "vad.worklet.bundle.min.js"];
+
+// Function to redirect specific XMLHttpRequests
+function redirectXMLHttpRequest(open) {
+  XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
+    var filename = url.split("/").pop();
+    if (filename && filesToRedirect.includes(filename)) {
+      arguments[1] = getResourceUrl(filename);
+    }
+    open.apply(this, arguments);
+  };
+}
+
+// Function to redirect specific fetch requests
+function redirectFetch(_fetch) {
+  window.fetch = function (url, opts) {
+    var filename = url.split("/").pop();
+    if (filename && filesToRedirect.includes(filename)) {
+      arguments[0] = getResourceUrl(filename);
+    }
+    return _fetch.apply(this, arguments);
+  };
+}
+
+// Function to set up the interceptors
+function setupInterceptors() {
+  redirectXMLHttpRequest(XMLHttpRequest.prototype.open);
+  redirectFetch(window.fetch);
+}
+;// CONCATENATED MODULE: ./src/audio/WavEncoder.ts
+// Most of the code here come from ricky0123/vad-web
+// Who in turn copied it from linto-ai/WebVoiceSDK
+function minFramesForTargetMS(targetDuration, frameSamples, sr = 16000) {
+    return Math.ceil((targetDuration * sr) / 1000 / frameSamples);
+}
+function arrayBufferToBase64(buffer) {
+    var binary = "";
+    var bytes = new Uint8Array(buffer);
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+}
+/*
+  This rest of this was mostly copied from https://github.com/linto-ai/WebVoiceSDK
+  */
+// this function is used to encode the Float32Array audio data produced from a MicVAD
+// as a WAV file audio buffer
+function encodeWAV(samples, format = 3, sampleRate = 16000, numChannels = 1, bitDepth = 32) {
+    var bytesPerSample = bitDepth / 8;
+    var blockAlign = numChannels * bytesPerSample;
+    var buffer = new ArrayBuffer(44 + samples.length * bytesPerSample);
+    var view = new DataView(buffer);
+    /* RIFF identifier */
+    writeString(view, 0, "RIFF");
+    /* RIFF chunk length */
+    view.setUint32(4, 36 + samples.length * bytesPerSample, true);
+    /* RIFF type */
+    writeString(view, 8, "WAVE");
+    /* format chunk identifier */
+    writeString(view, 12, "fmt ");
+    /* format chunk length */
+    view.setUint32(16, 16, true);
+    /* sample format (raw) */
+    view.setUint16(20, format, true);
+    /* channel count */
+    view.setUint16(22, numChannels, true);
+    /* sample rate */
+    view.setUint32(24, sampleRate, true);
+    /* byte rate (sample rate * block align) */
+    view.setUint32(28, sampleRate * blockAlign, true);
+    /* block align (channel count * bytes per sample) */
+    view.setUint16(32, blockAlign, true);
+    /* bits per sample */
+    view.setUint16(34, bitDepth, true);
+    /* data chunk identifier */
+    writeString(view, 36, "data");
+    /* data chunk length */
+    view.setUint32(40, samples.length * bytesPerSample, true);
+    if (format === 1) {
+        // Raw PCM
+        floatTo16BitPCM(view, 44, samples);
+    }
+    else {
+        writeFloat32(view, 44, samples);
+    }
+    return buffer;
+}
+function interleave(inputL, inputR) {
+    var length = inputL.length + inputR.length;
+    var result = new Float32Array(length);
+    var index = 0;
+    var inputIndex = 0;
+    while (index < length) {
+        result[index++] = inputL[inputIndex];
+        result[index++] = inputR[inputIndex];
+        inputIndex++;
+    }
+    return result;
+}
+function writeFloat32(output, offset, input) {
+    for (var i = 0; i < input.length; i++, offset += 4) {
+        output.setFloat32(offset, input[i], true);
+    }
+}
+function floatTo16BitPCM(output, offset, input) {
+    for (var i = 0; i < input.length; i++, offset += 2) {
+        var s = Math.max(-1, Math.min(1, input[i]));
+        output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+    }
+}
+function writeString(view, offset, string) {
+    for (var i = 0; i < string.length; i++) {
+        view.setUint8(offset + i, string.charCodeAt(i));
+    }
+}
+
+;// CONCATENATED MODULE: ./src/audio/AudioEncoder.ts
+
+/**
+ * Convert a Float32Array of audio samples to a WAV array buffer
+ * @param audioData - The audio samples
+ * @returns - The audio in WAV format as an ArrayBuffer
+ */
+function convertToWavBuffer(audioData) {
+    const arrayBuffer = encodeWAV(audioData);
+    return arrayBuffer;
+}
+/**
+ * Convert a Float32Array of audio samples to a WAV Blob
+ * @param audioData - The audio samples
+ * @returns - The audio in WAV format
+ */
+function convertToWavBlob(audioData) {
+    const arrayBuffer = convertToWavBuffer(audioData);
+    return new Blob([arrayBuffer], { type: "audio/wav" });
+}
+
+;// CONCATENATED MODULE: ./node_modules/xstate/es/invokeUtils.js
+
+
+
+
+
+
+function invokeUtils_toInvokeSource(src) {
+  if (typeof src === 'string') {
+    var simpleSrc = {
+      type: src
+    };
+
+    simpleSrc.toString = function () {
+      return src;
+    }; // v4 compat - TODO: remove in v5
+
+
+    return simpleSrc;
+  }
+
+  return src;
+}
+function toInvokeDefinition(invokeConfig) {
+  return _tslib_assign(_tslib_assign({
+    type: invoke
+  }, invokeConfig), {
+    toJSON: function () {
+      invokeConfig.onDone;
+          invokeConfig.onError;
+          var invokeDef = __rest(invokeConfig, ["onDone", "onError"]);
+
+      return _tslib_assign(_tslib_assign({}, invokeDef), {
+        type: invoke,
+        src: invokeUtils_toInvokeSource(invokeConfig.src)
+      });
+    }
+  });
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/xstate/es/StateNode.js
+
+
+
+
+
+
+
+
+
+
+
+var NULL_EVENT = '';
+var STATE_IDENTIFIER = '#';
+var WILDCARD = '*';
+var EMPTY_OBJECT = {};
+
+var isStateId = function (str) {
+  return str[0] === STATE_IDENTIFIER;
+};
+
+var createDefaultOptions = function () {
+  return {
+    actions: {},
+    guards: {},
+    services: {},
+    activities: {},
+    delays: {}
+  };
+};
+
+var validateArrayifiedTransitions = function (stateNode, event, transitions) {
+  var hasNonLastUnguardedTarget = transitions.slice(0, -1).some(function (transition) {
+    return !('cond' in transition) && !('in' in transition) && (utils_isString(transition.target) || utils_isMachine(transition.target));
+  });
+  var eventText = event === NULL_EVENT ? 'the transient event' : "event '".concat(event, "'");
+  utils_warn(!hasNonLastUnguardedTarget, "One or more transitions for ".concat(eventText, " on state '").concat(stateNode.id, "' are unreachable. ") + "Make sure that the default transition is the last one defined.");
+};
+
+var StateNode_StateNode =
+/*#__PURE__*/
+
+/** @class */
+function () {
+  function StateNode(
+  /**
+   * The raw config used to create the machine.
+   */
+  config, options,
+  /**
+   * The initial extended state
+   */
+  _context, // TODO: this is unsafe, but we're removing it in v5 anyway
+  _stateInfo) {
+    if (_context === void 0) {
+      _context = 'context' in config ? config.context : undefined;
+    }
+
+    var _this = this;
+
+    var _a;
+
+    this.config = config;
+    this._context = _context;
+    /**
+     * The order this state node appears. Corresponds to the implicit SCXML document order.
+     */
+
+    this.order = -1;
+    this.__xstatenode = true;
+    this.__cache = {
+      events: undefined,
+      relativeValue: new Map(),
+      initialStateValue: undefined,
+      initialState: undefined,
+      on: undefined,
+      transitions: undefined,
+      candidates: {},
+      delayedTransitions: undefined
+    };
+    this.idMap = {};
+    this.tags = [];
+    this.options = Object.assign(createDefaultOptions(), options);
+    this.parent = _stateInfo === null || _stateInfo === void 0 ? void 0 : _stateInfo.parent;
+    this.key = this.config.key || (_stateInfo === null || _stateInfo === void 0 ? void 0 : _stateInfo.key) || this.config.id || '(machine)';
+    this.machine = this.parent ? this.parent.machine : this;
+    this.path = this.parent ? this.parent.path.concat(this.key) : [];
+    this.delimiter = this.config.delimiter || (this.parent ? this.parent.delimiter : STATE_DELIMITER);
+    this.id = this.config.id || _tslib_spreadArray([this.machine.key], _tslib_read(this.path), false).join(this.delimiter);
+    this.version = this.parent ? this.parent.version : this.config.version;
+    this.type = this.config.type || (this.config.parallel ? 'parallel' : this.config.states && Object.keys(this.config.states).length ? 'compound' : this.config.history ? 'history' : 'atomic');
+    this.schema = this.parent ? this.machine.schema : (_a = this.config.schema) !== null && _a !== void 0 ? _a : {};
+    this.description = this.config.description;
+
+    if (!environment_IS_PRODUCTION) {
+      utils_warn(!('parallel' in this.config), "The \"parallel\" property is deprecated and will be removed in version 4.1. ".concat(this.config.parallel ? "Replace with `type: 'parallel'`" : "Use `type: '".concat(this.type, "'`"), " in the config for state node '").concat(this.id, "' instead."));
+    }
+
+    this.initial = this.config.initial;
+    this.states = this.config.states ? mapValues(this.config.states, function (stateConfig, key) {
+      var _a;
+
+      var stateNode = new StateNode(stateConfig, {}, undefined, {
+        parent: _this,
+        key: key
+      });
+      Object.assign(_this.idMap, _tslib_assign((_a = {}, _a[stateNode.id] = stateNode, _a), stateNode.idMap));
+      return stateNode;
+    }) : EMPTY_OBJECT; // Document order
+
+    var order = 0;
+
+    function dfs(stateNode) {
+      var e_1, _a;
+
+      stateNode.order = order++;
+
+      try {
+        for (var _b = _tslib_values(getAllChildren(stateNode)), _c = _b.next(); !_c.done; _c = _b.next()) {
+          var child = _c.value;
+          dfs(child);
+        }
+      } catch (e_1_1) {
+        e_1 = {
+          error: e_1_1
+        };
+      } finally {
+        try {
+          if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+        } finally {
+          if (e_1) throw e_1.error;
+        }
+      }
+    }
+
+    dfs(this); // History config
+
+    this.history = this.config.history === true ? 'shallow' : this.config.history || false;
+    this._transient = !!this.config.always || (!this.config.on ? false : Array.isArray(this.config.on) ? this.config.on.some(function (_a) {
+      var event = _a.event;
+      return event === NULL_EVENT;
+    }) : NULL_EVENT in this.config.on);
+    this.strict = !!this.config.strict; // TODO: deprecate (entry)
+
+    this.onEntry = toArray(this.config.entry || this.config.onEntry).map(function (action) {
+      return toActionObject(action);
+    }); // TODO: deprecate (exit)
+
+    this.onExit = toArray(this.config.exit || this.config.onExit).map(function (action) {
+      return toActionObject(action);
+    });
+    this.meta = this.config.meta;
+    this.doneData = this.type === 'final' ? this.config.data : undefined;
+    this.invoke = toArray(this.config.invoke).map(function (invokeConfig, i) {
+      var _a, _b;
+
+      if (utils_isMachine(invokeConfig)) {
+        var invokeId = createInvokeId(_this.id, i);
+        _this.machine.options.services = _tslib_assign((_a = {}, _a[invokeId] = invokeConfig, _a), _this.machine.options.services);
+        return toInvokeDefinition({
+          src: invokeId,
+          id: invokeId
+        });
+      } else if (utils_isString(invokeConfig.src)) {
+        var invokeId = invokeConfig.id || createInvokeId(_this.id, i);
+        return toInvokeDefinition(_tslib_assign(_tslib_assign({}, invokeConfig), {
+          id: invokeId,
+          src: invokeConfig.src
+        }));
+      } else if (utils_isMachine(invokeConfig.src) || utils_isFunction(invokeConfig.src)) {
+        var invokeId = invokeConfig.id || createInvokeId(_this.id, i);
+        _this.machine.options.services = _tslib_assign((_b = {}, _b[invokeId] = invokeConfig.src, _b), _this.machine.options.services);
+        return toInvokeDefinition(_tslib_assign(_tslib_assign({
+          id: invokeId
+        }, invokeConfig), {
+          src: invokeId
+        }));
+      } else {
+        var invokeSource = invokeConfig.src;
+        return toInvokeDefinition(_tslib_assign(_tslib_assign({
+          id: createInvokeId(_this.id, i)
+        }, invokeConfig), {
+          src: invokeSource
+        }));
+      }
+    });
+    this.activities = toArray(this.config.activities).concat(this.invoke).map(function (activity) {
+      return toActivityDefinition(activity);
+    });
+    this.transition = this.transition.bind(this);
+    this.tags = toArray(this.config.tags); // TODO: this is the real fix for initialization once
+    // state node getters are deprecated
+    // if (!this.parent) {
+    //   this._init();
+    // }
+  }
+
+  StateNode.prototype._init = function () {
+    if (this.__cache.transitions) {
+      return;
+    }
+
+    getAllStateNodes(this).forEach(function (stateNode) {
+      return stateNode.on;
+    });
+  };
+  /**
+   * Clones this state machine with custom options and context.
+   *
+   * @param options Options (actions, guards, activities, services) to recursively merge with the existing options.
+   * @param context Custom context (will override predefined context)
+   */
+
+
+  StateNode.prototype.withConfig = function (options, context) {
+    var _a = this.options,
+        actions = _a.actions,
+        activities = _a.activities,
+        guards = _a.guards,
+        services = _a.services,
+        delays = _a.delays;
+    return new StateNode(this.config, {
+      actions: _tslib_assign(_tslib_assign({}, actions), options.actions),
+      activities: _tslib_assign(_tslib_assign({}, activities), options.activities),
+      guards: _tslib_assign(_tslib_assign({}, guards), options.guards),
+      services: _tslib_assign(_tslib_assign({}, services), options.services),
+      delays: _tslib_assign(_tslib_assign({}, delays), options.delays)
+    }, context !== null && context !== void 0 ? context : this.context);
+  };
+  /**
+   * Clones this state machine with custom context.
+   *
+   * @param context Custom context (will override predefined context, not recursive)
+   */
+
+
+  StateNode.prototype.withContext = function (context) {
+    return new StateNode(this.config, this.options, context);
+  };
+
+  Object.defineProperty(StateNode.prototype, "context", {
+    get: function () {
+      return utils_isFunction(this._context) ? this._context() : this._context;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(StateNode.prototype, "definition", {
+    /**
+     * The well-structured state node definition.
+     */
+    get: function () {
+      return {
+        id: this.id,
+        key: this.key,
+        version: this.version,
+        context: this.context,
+        type: this.type,
+        initial: this.initial,
+        history: this.history,
+        states: mapValues(this.states, function (state) {
+          return state.definition;
+        }),
+        on: this.on,
+        transitions: this.transitions,
+        entry: this.onEntry,
+        exit: this.onExit,
+        activities: this.activities || [],
+        meta: this.meta,
+        order: this.order || -1,
+        data: this.doneData,
+        invoke: this.invoke,
+        description: this.description,
+        tags: this.tags
+      };
+    },
+    enumerable: false,
+    configurable: true
+  });
+
+  StateNode.prototype.toJSON = function () {
+    return this.definition;
+  };
+
+  Object.defineProperty(StateNode.prototype, "on", {
+    /**
+     * The mapping of events to transitions.
+     */
+    get: function () {
+      if (this.__cache.on) {
+        return this.__cache.on;
+      }
+
+      var transitions = this.transitions;
+      return this.__cache.on = transitions.reduce(function (map, transition) {
+        map[transition.eventType] = map[transition.eventType] || [];
+        map[transition.eventType].push(transition);
+        return map;
+      }, {});
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(StateNode.prototype, "after", {
+    get: function () {
+      return this.__cache.delayedTransitions || (this.__cache.delayedTransitions = this.getDelayedTransitions(), this.__cache.delayedTransitions);
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(StateNode.prototype, "transitions", {
+    /**
+     * All the transitions that can be taken from this state node.
+     */
+    get: function () {
+      return this.__cache.transitions || (this.__cache.transitions = this.formatTransitions(), this.__cache.transitions);
+    },
+    enumerable: false,
+    configurable: true
+  });
+
+  StateNode.prototype.getCandidates = function (eventName) {
+    if (this.__cache.candidates[eventName]) {
+      return this.__cache.candidates[eventName];
+    }
+
+    var transient = eventName === NULL_EVENT;
+    var candidates = this.transitions.filter(function (transition) {
+      var sameEventType = transition.eventType === eventName; // null events should only match against eventless transitions
+
+      return transient ? sameEventType : sameEventType || transition.eventType === WILDCARD;
+    });
+    this.__cache.candidates[eventName] = candidates;
+    return candidates;
+  };
+  /**
+   * All delayed transitions from the config.
+   */
+
+
+  StateNode.prototype.getDelayedTransitions = function () {
+    var _this = this;
+
+    var afterConfig = this.config.after;
+
+    if (!afterConfig) {
+      return [];
+    }
+
+    var mutateEntryExit = function (delay, i) {
+      var delayRef = utils_isFunction(delay) ? "".concat(_this.id, ":delay[").concat(i, "]") : delay;
+      var eventType = actions_after(delayRef, _this.id);
+
+      _this.onEntry.push(actions_send(eventType, {
+        delay: delay
+      }));
+
+      _this.onExit.push(actions_cancel(eventType));
+
+      return eventType;
+    };
+
+    var delayedTransitions = isArray(afterConfig) ? afterConfig.map(function (transition, i) {
+      var eventType = mutateEntryExit(transition.delay, i);
+      return _tslib_assign(_tslib_assign({}, transition), {
+        event: eventType
+      });
+    }) : flatten(Object.keys(afterConfig).map(function (delay, i) {
+      var configTransition = afterConfig[delay];
+      var resolvedTransition = utils_isString(configTransition) ? {
+        target: configTransition
+      } : configTransition;
+      var resolvedDelay = !isNaN(+delay) ? +delay : delay;
+      var eventType = mutateEntryExit(resolvedDelay, i);
+      return toArray(resolvedTransition).map(function (transition) {
+        return _tslib_assign(_tslib_assign({}, transition), {
+          event: eventType,
+          delay: resolvedDelay
+        });
+      });
+    }));
+    return delayedTransitions.map(function (delayedTransition) {
+      var delay = delayedTransition.delay;
+      return _tslib_assign(_tslib_assign({}, _this.formatTransition(delayedTransition)), {
+        delay: delay
+      });
+    });
+  };
+  /**
+   * Returns the state nodes represented by the current state value.
+   *
+   * @param state The state value or State instance
+   */
+
+
+  StateNode.prototype.getStateNodes = function (state) {
+    var _a;
+
+    var _this = this;
+
+    if (!state) {
+      return [];
+    }
+
+    var stateValue = state instanceof State ? state.value : toStateValue(state, this.delimiter);
+
+    if (utils_isString(stateValue)) {
+      var initialStateValue = this.getStateNode(stateValue).initial;
+      return initialStateValue !== undefined ? this.getStateNodes((_a = {}, _a[stateValue] = initialStateValue, _a)) : [this, this.states[stateValue]];
+    }
+
+    var subStateKeys = Object.keys(stateValue);
+    var subStateNodes = [this];
+    subStateNodes.push.apply(subStateNodes, _tslib_spreadArray([], _tslib_read(flatten(subStateKeys.map(function (subStateKey) {
+      return _this.getStateNode(subStateKey).getStateNodes(stateValue[subStateKey]);
+    }))), false));
+    return subStateNodes;
+  };
+  /**
+   * Returns `true` if this state node explicitly handles the given event.
+   *
+   * @param event The event in question
+   */
+
+
+  StateNode.prototype.handles = function (event) {
+    var eventType = getEventType(event);
+    return this.events.includes(eventType);
+  };
+  /**
+   * Resolves the given `state` to a new `State` instance relative to this machine.
+   *
+   * This ensures that `.events` and `.nextEvents` represent the correct values.
+   *
+   * @param state The state to resolve
+   */
+
+
+  StateNode.prototype.resolveState = function (state) {
+    var stateFromConfig = state instanceof State ? state : State.create(state);
+    var configuration = Array.from(getConfiguration([], this.getStateNodes(stateFromConfig.value)));
+    return new State(_tslib_assign(_tslib_assign({}, stateFromConfig), {
+      value: this.resolve(stateFromConfig.value),
+      configuration: configuration,
+      done: isInFinalState(configuration, this),
+      tags: getTagsFromConfiguration(configuration),
+      machine: this.machine
+    }));
+  };
+
+  StateNode.prototype.transitionLeafNode = function (stateValue, state, _event) {
+    var stateNode = this.getStateNode(stateValue);
+    var next = stateNode.next(state, _event);
+
+    if (!next || !next.transitions.length) {
+      return this.next(state, _event);
+    }
+
+    return next;
+  };
+
+  StateNode.prototype.transitionCompoundNode = function (stateValue, state, _event) {
+    var subStateKeys = Object.keys(stateValue);
+    var stateNode = this.getStateNode(subStateKeys[0]);
+
+    var next = stateNode._transition(stateValue[subStateKeys[0]], state, _event);
+
+    if (!next || !next.transitions.length) {
+      return this.next(state, _event);
+    }
+
+    return next;
+  };
+
+  StateNode.prototype.transitionParallelNode = function (stateValue, state, _event) {
+    var e_2, _a;
+
+    var transitionMap = {};
+
+    try {
+      for (var _b = _tslib_values(Object.keys(stateValue)), _c = _b.next(); !_c.done; _c = _b.next()) {
+        var subStateKey = _c.value;
+        var subStateValue = stateValue[subStateKey];
+
+        if (!subStateValue) {
+          continue;
+        }
+
+        var subStateNode = this.getStateNode(subStateKey);
+
+        var next = subStateNode._transition(subStateValue, state, _event);
+
+        if (next) {
+          transitionMap[subStateKey] = next;
+        }
+      }
+    } catch (e_2_1) {
+      e_2 = {
+        error: e_2_1
+      };
+    } finally {
+      try {
+        if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+      } finally {
+        if (e_2) throw e_2.error;
+      }
+    }
+
+    var stateTransitions = Object.keys(transitionMap).map(function (key) {
+      return transitionMap[key];
+    });
+    var enabledTransitions = flatten(stateTransitions.map(function (st) {
+      return st.transitions;
+    }));
+    var willTransition = stateTransitions.some(function (st) {
+      return st.transitions.length > 0;
+    });
+
+    if (!willTransition) {
+      return this.next(state, _event);
+    }
+
+    var configuration = flatten(Object.keys(transitionMap).map(function (key) {
+      return transitionMap[key].configuration;
+    }));
+    return {
+      transitions: enabledTransitions,
+      exitSet: flatten(stateTransitions.map(function (t) {
+        return t.exitSet;
+      })),
+      configuration: configuration,
+      source: state,
+      actions: flatten(Object.keys(transitionMap).map(function (key) {
+        return transitionMap[key].actions;
+      }))
+    };
+  };
+
+  StateNode.prototype._transition = function (stateValue, state, _event) {
+    // leaf node
+    if (utils_isString(stateValue)) {
+      return this.transitionLeafNode(stateValue, state, _event);
+    } // hierarchical node
+
+
+    if (Object.keys(stateValue).length === 1) {
+      return this.transitionCompoundNode(stateValue, state, _event);
+    } // orthogonal node
+
+
+    return this.transitionParallelNode(stateValue, state, _event);
+  };
+
+  StateNode.prototype.getTransitionData = function (state, event) {
+    return this._transition(state.value, state, toSCXMLEvent(event));
+  };
+
+  StateNode.prototype.next = function (state, _event) {
+    var e_3, _a;
+
+    var _this = this;
+
+    var eventName = _event.name;
+    var actions = [];
+    var nextStateNodes = [];
+    var selectedTransition;
+
+    try {
+      for (var _b = _tslib_values(this.getCandidates(eventName)), _c = _b.next(); !_c.done; _c = _b.next()) {
+        var candidate = _c.value;
+        var cond = candidate.cond,
+            stateIn = candidate.in;
+        var resolvedContext = state.context;
+        var isInState = stateIn ? utils_isString(stateIn) && isStateId(stateIn) ? // Check if in state by ID
+        state.matches(toStateValue(this.getStateNodeById(stateIn).path, this.delimiter)) : // Check if in state by relative grandparent
+        matchesState(toStateValue(stateIn, this.delimiter), path(this.path.slice(0, -2))(state.value)) : true;
+        var guardPassed = false;
+
+        try {
+          guardPassed = !cond || evaluateGuard(this.machine, cond, resolvedContext, _event, state);
+        } catch (err) {
+          throw new Error("Unable to evaluate guard '".concat(cond.name || cond.type, "' in transition for event '").concat(eventName, "' in state node '").concat(this.id, "':\n").concat(err.message));
+        }
+
+        if (guardPassed && isInState) {
+          if (candidate.target !== undefined) {
+            nextStateNodes = candidate.target;
+          }
+
+          actions.push.apply(actions, _tslib_spreadArray([], _tslib_read(candidate.actions), false));
+          selectedTransition = candidate;
+          break;
+        }
+      }
+    } catch (e_3_1) {
+      e_3 = {
+        error: e_3_1
+      };
+    } finally {
+      try {
+        if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+      } finally {
+        if (e_3) throw e_3.error;
+      }
+    }
+
+    if (!selectedTransition) {
+      return undefined;
+    }
+
+    if (!nextStateNodes.length) {
+      return {
+        transitions: [selectedTransition],
+        exitSet: [],
+        configuration: state.value ? [this] : [],
+        source: state,
+        actions: actions
+      };
+    }
+
+    var allNextStateNodes = flatten(nextStateNodes.map(function (stateNode) {
+      return _this.getRelativeStateNodes(stateNode, state.historyValue);
+    }));
+    var isInternal = !!selectedTransition.internal;
+    return {
+      transitions: [selectedTransition],
+      exitSet: isInternal ? [] : flatten(nextStateNodes.map(function (targetNode) {
+        return _this.getPotentiallyReenteringNodes(targetNode);
+      })),
+      configuration: allNextStateNodes,
+      source: state,
+      actions: actions
+    };
+  }; // even though the name of this function mentions reentry nodes
+  // we are pushing its result into `exitSet`
+  // that's because what we exit might be reentered (it's an invariant of reentrancy)
+
+
+  StateNode.prototype.getPotentiallyReenteringNodes = function (targetNode) {
+    if (this.order < targetNode.order) {
+      return [this];
+    }
+
+    var nodes = [];
+    var marker = this;
+    var possibleAncestor = targetNode;
+
+    while (marker && marker !== possibleAncestor) {
+      nodes.push(marker);
+      marker = marker.parent;
+    }
+
+    if (marker !== possibleAncestor) {
+      // we never got to `possibleAncestor`, therefore the initial `marker` "escapes" it
+      // it's in a different part of the tree so no states will be reentered for such an external transition
+      return [];
+    }
+
+    nodes.push(possibleAncestor);
+    return nodes;
+  };
+
+  StateNode.prototype.getActions = function (resolvedConfig, isDone, transition, currentContext, _event, prevState, predictableExec) {
+    var e_4, _a, e_5, _b;
+
+    var _this = this;
+
+    var prevConfig = prevState ? getConfiguration([], this.getStateNodes(prevState.value)) : [];
+    var entrySet = new Set();
+
+    try {
+      for (var _c = _tslib_values(Array.from(resolvedConfig).sort(function (a, b) {
+        return a.order - b.order;
+      })), _d = _c.next(); !_d.done; _d = _c.next()) {
+        var sn = _d.value;
+
+        if (!has(prevConfig, sn) || has(transition.exitSet, sn) || sn.parent && entrySet.has(sn.parent)) {
+          entrySet.add(sn);
+        }
+      }
+    } catch (e_4_1) {
+      e_4 = {
+        error: e_4_1
+      };
+    } finally {
+      try {
+        if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
+      } finally {
+        if (e_4) throw e_4.error;
+      }
+    }
+
+    try {
+      for (var prevConfig_1 = _tslib_values(prevConfig), prevConfig_1_1 = prevConfig_1.next(); !prevConfig_1_1.done; prevConfig_1_1 = prevConfig_1.next()) {
+        var sn = prevConfig_1_1.value;
+
+        if (!has(resolvedConfig, sn) || has(transition.exitSet, sn.parent)) {
+          transition.exitSet.push(sn);
+        }
+      }
+    } catch (e_5_1) {
+      e_5 = {
+        error: e_5_1
+      };
+    } finally {
+      try {
+        if (prevConfig_1_1 && !prevConfig_1_1.done && (_b = prevConfig_1.return)) _b.call(prevConfig_1);
+      } finally {
+        if (e_5) throw e_5.error;
+      }
+    }
+
+    transition.exitSet.sort(function (a, b) {
+      return b.order - a.order;
+    });
+    var entryStates = Array.from(entrySet).sort(function (a, b) {
+      return a.order - b.order;
+    });
+    var exitStates = new Set(transition.exitSet);
+    var doneEvents = flatten(entryStates.map(function (sn) {
+      var events = [];
+
+      if (sn.type !== 'final') {
+        return events;
+      }
+
+      var parent = sn.parent;
+
+      if (!parent.parent) {
+        return events;
+      }
+
+      events.push(done(sn.id, sn.doneData), // TODO: deprecate - final states should not emit done events for their own state.
+      done(parent.id, sn.doneData ? mapContext(sn.doneData, currentContext, _event) : undefined));
+      var grandparent = parent.parent;
+
+      if (grandparent.type === 'parallel') {
+        if (getChildren(grandparent).every(function (parentNode) {
+          return isInFinalState(transition.configuration, parentNode);
+        })) {
+          events.push(done(grandparent.id));
+        }
+      }
+
+      return events;
+    }));
+    var entryActions = entryStates.map(function (stateNode) {
+      var entryActions = stateNode.onEntry;
+      var invokeActions = stateNode.activities.map(function (activity) {
+        return actions_start(activity);
+      });
+      return {
+        type: 'entry',
+        actions: toActionObjects(predictableExec ? _tslib_spreadArray(_tslib_spreadArray([], _tslib_read(entryActions), false), _tslib_read(invokeActions), false) : _tslib_spreadArray(_tslib_spreadArray([], _tslib_read(invokeActions), false), _tslib_read(entryActions), false), _this.machine.options.actions)
+      };
+    }).concat({
+      type: 'state_done',
+      actions: doneEvents.map(function (event) {
+        return actions_raise(event);
+      })
+    });
+    var exitActions = Array.from(exitStates).map(function (stateNode) {
+      return {
+        type: 'exit',
+        actions: toActionObjects(_tslib_spreadArray(_tslib_spreadArray([], _tslib_read(stateNode.onExit), false), _tslib_read(stateNode.activities.map(function (activity) {
+          return actions_stop(activity);
+        })), false), _this.machine.options.actions)
+      };
+    });
+    var actions = exitActions.concat({
+      type: 'transition',
+      actions: toActionObjects(transition.actions, this.machine.options.actions)
+    }).concat(entryActions);
+
+    if (isDone) {
+      var stopActions = toActionObjects(flatten(_tslib_spreadArray([], _tslib_read(resolvedConfig), false).sort(function (a, b) {
+        return b.order - a.order;
+      }).map(function (stateNode) {
+        return stateNode.onExit;
+      })), this.machine.options.actions).filter(function (action) {
+        return !isRaisableAction(action);
+      });
+      return actions.concat({
+        type: 'stop',
+        actions: stopActions
+      });
+    }
+
+    return actions;
+  };
+  /**
+   * Determines the next state given the current `state` and sent `event`.
+   *
+   * @param state The current State instance or state value
+   * @param event The event that was sent at the current state
+   * @param context The current context (extended state) of the current state
+   */
+
+
+  StateNode.prototype.transition = function (state, event, context, exec) {
+    if (state === void 0) {
+      state = this.initialState;
+    }
+
+    var _event = toSCXMLEvent(event);
+
+    var currentState;
+
+    if (state instanceof State) {
+      currentState = context === undefined ? state : this.resolveState(State.from(state, context));
+    } else {
+      var resolvedStateValue = utils_isString(state) ? this.resolve(pathToStateValue(this.getResolvedPath(state))) : this.resolve(state);
+      var resolvedContext = context !== null && context !== void 0 ? context : this.machine.context;
+      currentState = this.resolveState(State.from(resolvedStateValue, resolvedContext));
+    }
+
+    if (!environment_IS_PRODUCTION && _event.name === WILDCARD) {
+      throw new Error("An event cannot have the wildcard type ('".concat(WILDCARD, "')"));
+    }
+
+    if (this.strict) {
+      if (!this.events.includes(_event.name) && !isBuiltInEvent(_event.name)) {
+        throw new Error("Machine '".concat(this.id, "' does not accept event '").concat(_event.name, "'"));
+      }
+    }
+
+    var stateTransition = this._transition(currentState.value, currentState, _event) || {
+      transitions: [],
+      configuration: [],
+      exitSet: [],
+      source: currentState,
+      actions: []
+    };
+    var prevConfig = getConfiguration([], this.getStateNodes(currentState.value));
+    var resolvedConfig = stateTransition.configuration.length ? getConfiguration(prevConfig, stateTransition.configuration) : prevConfig;
+    stateTransition.configuration = _tslib_spreadArray([], _tslib_read(resolvedConfig), false);
+    return this.resolveTransition(stateTransition, currentState, currentState.context, exec, _event);
+  };
+
+  StateNode.prototype.resolveRaisedTransition = function (state, _event, originalEvent, predictableExec) {
+    var _a;
+
+    var currentActions = state.actions;
+    state = this.transition(state, _event, undefined, predictableExec); // Save original event to state
+    // TODO: this should be the raised event! Delete in V5 (breaking)
+
+    state._event = originalEvent;
+    state.event = originalEvent.data;
+
+    (_a = state.actions).unshift.apply(_a, _tslib_spreadArray([], _tslib_read(currentActions), false));
+
+    return state;
+  };
+
+  StateNode.prototype.resolveTransition = function (stateTransition, currentState, context, predictableExec, _event) {
+    var e_6, _a, e_7, _b;
+
+    var _this = this;
+
+    if (_event === void 0) {
+      _event = initEvent;
+    }
+
+    var configuration = stateTransition.configuration; // Transition will "apply" if:
+    // - this is the initial state (there is no current state)
+    // - OR there are transitions
+
+    var willTransition = !currentState || stateTransition.transitions.length > 0;
+    var resolvedConfiguration = willTransition ? stateTransition.configuration : currentState ? currentState.configuration : [];
+    var isDone = isInFinalState(resolvedConfiguration, this);
+    var resolvedStateValue = willTransition ? getValue(this.machine, configuration) : undefined;
+    var historyValue = currentState ? currentState.historyValue ? currentState.historyValue : stateTransition.source ? this.machine.historyValue(currentState.value) : undefined : undefined;
+    var actionBlocks = this.getActions(new Set(resolvedConfiguration), isDone, stateTransition, context, _event, currentState, predictableExec);
+    var activities = currentState ? _tslib_assign({}, currentState.activities) : {};
+
+    try {
+      for (var actionBlocks_1 = _tslib_values(actionBlocks), actionBlocks_1_1 = actionBlocks_1.next(); !actionBlocks_1_1.done; actionBlocks_1_1 = actionBlocks_1.next()) {
+        var block = actionBlocks_1_1.value;
+
+        try {
+          for (var _c = (e_7 = void 0, _tslib_values(block.actions)), _d = _c.next(); !_d.done; _d = _c.next()) {
+            var action = _d.value;
+
+            if (action.type === start) {
+              activities[action.activity.id || action.activity.type] = action;
+            } else if (action.type === stop) {
+              activities[action.activity.id || action.activity.type] = false;
+            }
+          }
+        } catch (e_7_1) {
+          e_7 = {
+            error: e_7_1
+          };
+        } finally {
+          try {
+            if (_d && !_d.done && (_b = _c.return)) _b.call(_c);
+          } finally {
+            if (e_7) throw e_7.error;
+          }
+        }
+      }
+    } catch (e_6_1) {
+      e_6 = {
+        error: e_6_1
+      };
+    } finally {
+      try {
+        if (actionBlocks_1_1 && !actionBlocks_1_1.done && (_a = actionBlocks_1.return)) _a.call(actionBlocks_1);
+      } finally {
+        if (e_6) throw e_6.error;
+      }
+    }
+
+    var _e = _tslib_read(resolveActions(this, currentState, context, _event, actionBlocks, predictableExec, this.machine.config.predictableActionArguments || this.machine.config.preserveActionOrder), 2),
+        resolvedActions = _e[0],
+        updatedContext = _e[1];
+
+    var _f = _tslib_read(partition(resolvedActions, isRaisableAction), 2),
+        raisedEvents = _f[0],
+        nonRaisedActions = _f[1];
+
+    var invokeActions = resolvedActions.filter(function (action) {
+      var _a;
+
+      return action.type === start && ((_a = action.activity) === null || _a === void 0 ? void 0 : _a.type) === invoke;
+    });
+    var children = invokeActions.reduce(function (acc, action) {
+      acc[action.activity.id] = createInvocableActor(action.activity, _this.machine, updatedContext, _event);
+      return acc;
+    }, currentState ? _tslib_assign({}, currentState.children) : {});
+    var nextState = new State({
+      value: resolvedStateValue || currentState.value,
+      context: updatedContext,
+      _event: _event,
+      // Persist _sessionid between states
+      _sessionid: currentState ? currentState._sessionid : null,
+      historyValue: resolvedStateValue ? historyValue ? updateHistoryValue(historyValue, resolvedStateValue) : undefined : currentState ? currentState.historyValue : undefined,
+      history: !resolvedStateValue || stateTransition.source ? currentState : undefined,
+      actions: resolvedStateValue ? nonRaisedActions : [],
+      activities: resolvedStateValue ? activities : currentState ? currentState.activities : {},
+      events: [],
+      configuration: resolvedConfiguration,
+      transitions: stateTransition.transitions,
+      children: children,
+      done: isDone,
+      tags: getTagsFromConfiguration(resolvedConfiguration),
+      machine: this
+    });
+    var didUpdateContext = context !== updatedContext;
+    nextState.changed = _event.name === actionTypes_update || didUpdateContext; // Dispose of penultimate histories to prevent memory leaks
+
+    var history = nextState.history;
+
+    if (history) {
+      delete history.history;
+    } // There are transient transitions if the machine is not in a final state
+    // and if some of the state nodes have transient ("always") transitions.
+
+
+    var hasAlwaysTransitions = !isDone && (this._transient || configuration.some(function (stateNode) {
+      return stateNode._transient;
+    })); // If there are no enabled transitions, check if there are transient transitions.
+    // If there are transient transitions, continue checking for more transitions
+    // because an transient transition should be triggered even if there are no
+    // enabled transitions.
+    //
+    // If we're already working on an transient transition then stop to prevent an infinite loop.
+    //
+    // Otherwise, if there are no enabled nor transient transitions, we are done.
+
+    if (!willTransition && (!hasAlwaysTransitions || _event.name === NULL_EVENT)) {
+      return nextState;
+    }
+
+    var maybeNextState = nextState;
+
+    if (!isDone) {
+      if (hasAlwaysTransitions) {
+        maybeNextState = this.resolveRaisedTransition(maybeNextState, {
+          type: nullEvent
+        }, _event, predictableExec);
+      }
+
+      while (raisedEvents.length) {
+        var raisedEvent = raisedEvents.shift();
+        maybeNextState = this.resolveRaisedTransition(maybeNextState, raisedEvent._event, _event, predictableExec);
+      }
+    } // Detect if state changed
+
+
+    var changed = maybeNextState.changed || (history ? !!maybeNextState.actions.length || didUpdateContext || typeof history.value !== typeof maybeNextState.value || !stateValuesEqual(maybeNextState.value, history.value) : undefined);
+    maybeNextState.changed = changed; // Preserve original history after raised events
+
+    maybeNextState.history = history;
+    return maybeNextState;
+  };
+  /**
+   * Returns the child state node from its relative `stateKey`, or throws.
+   */
+
+
+  StateNode.prototype.getStateNode = function (stateKey) {
+    if (isStateId(stateKey)) {
+      return this.machine.getStateNodeById(stateKey);
+    }
+
+    if (!this.states) {
+      throw new Error("Unable to retrieve child state '".concat(stateKey, "' from '").concat(this.id, "'; no child states exist."));
+    }
+
+    var result = this.states[stateKey];
+
+    if (!result) {
+      throw new Error("Child state '".concat(stateKey, "' does not exist on '").concat(this.id, "'"));
+    }
+
+    return result;
+  };
+  /**
+   * Returns the state node with the given `stateId`, or throws.
+   *
+   * @param stateId The state ID. The prefix "#" is removed.
+   */
+
+
+  StateNode.prototype.getStateNodeById = function (stateId) {
+    var resolvedStateId = isStateId(stateId) ? stateId.slice(STATE_IDENTIFIER.length) : stateId;
+
+    if (resolvedStateId === this.id) {
+      return this;
+    }
+
+    var stateNode = this.machine.idMap[resolvedStateId];
+
+    if (!stateNode) {
+      throw new Error("Child state node '#".concat(resolvedStateId, "' does not exist on machine '").concat(this.id, "'"));
+    }
+
+    return stateNode;
+  };
+  /**
+   * Returns the relative state node from the given `statePath`, or throws.
+   *
+   * @param statePath The string or string array relative path to the state node.
+   */
+
+
+  StateNode.prototype.getStateNodeByPath = function (statePath) {
+    if (typeof statePath === 'string' && isStateId(statePath)) {
+      try {
+        return this.getStateNodeById(statePath.slice(1));
+      } catch (e) {// try individual paths
+        // throw e;
+      }
+    }
+
+    var arrayStatePath = toStatePath(statePath, this.delimiter).slice();
+    var currentStateNode = this;
+
+    while (arrayStatePath.length) {
+      var key = arrayStatePath.shift();
+
+      if (!key.length) {
+        break;
+      }
+
+      currentStateNode = currentStateNode.getStateNode(key);
+    }
+
+    return currentStateNode;
+  };
+  /**
+   * Resolves a partial state value with its full representation in this machine.
+   *
+   * @param stateValue The partial state value to resolve.
+   */
+
+
+  StateNode.prototype.resolve = function (stateValue) {
+    var _a;
+
+    var _this = this;
+
+    if (!stateValue) {
+      return this.initialStateValue || EMPTY_OBJECT; // TODO: type-specific properties
+    }
+
+    switch (this.type) {
+      case 'parallel':
+        return mapValues(this.initialStateValue, function (subStateValue, subStateKey) {
+          return subStateValue ? _this.getStateNode(subStateKey).resolve(stateValue[subStateKey] || subStateValue) : EMPTY_OBJECT;
+        });
+
+      case 'compound':
+        if (utils_isString(stateValue)) {
+          var subStateNode = this.getStateNode(stateValue);
+
+          if (subStateNode.type === 'parallel' || subStateNode.type === 'compound') {
+            return _a = {}, _a[stateValue] = subStateNode.initialStateValue, _a;
+          }
+
+          return stateValue;
+        }
+
+        if (!Object.keys(stateValue).length) {
+          return this.initialStateValue || {};
+        }
+
+        return mapValues(stateValue, function (subStateValue, subStateKey) {
+          return subStateValue ? _this.getStateNode(subStateKey).resolve(subStateValue) : EMPTY_OBJECT;
+        });
+
+      default:
+        return stateValue || EMPTY_OBJECT;
+    }
+  };
+
+  StateNode.prototype.getResolvedPath = function (stateIdentifier) {
+    if (isStateId(stateIdentifier)) {
+      var stateNode = this.machine.idMap[stateIdentifier.slice(STATE_IDENTIFIER.length)];
+
+      if (!stateNode) {
+        throw new Error("Unable to find state node '".concat(stateIdentifier, "'"));
+      }
+
+      return stateNode.path;
+    }
+
+    return toStatePath(stateIdentifier, this.delimiter);
+  };
+
+  Object.defineProperty(StateNode.prototype, "initialStateValue", {
+    get: function () {
+      var _a;
+
+      if (this.__cache.initialStateValue) {
+        return this.__cache.initialStateValue;
+      }
+
+      var initialStateValue;
+
+      if (this.type === 'parallel') {
+        initialStateValue = mapFilterValues(this.states, function (state) {
+          return state.initialStateValue || EMPTY_OBJECT;
+        }, function (stateNode) {
+          return !(stateNode.type === 'history');
+        });
+      } else if (this.initial !== undefined) {
+        if (!this.states[this.initial]) {
+          throw new Error("Initial state '".concat(this.initial, "' not found on '").concat(this.key, "'"));
+        }
+
+        initialStateValue = isLeafNode(this.states[this.initial]) ? this.initial : (_a = {}, _a[this.initial] = this.states[this.initial].initialStateValue, _a);
+      } else {
+        // The finite state value of a machine without child states is just an empty object
+        initialStateValue = {};
+      }
+
+      this.__cache.initialStateValue = initialStateValue;
+      return this.__cache.initialStateValue;
+    },
+    enumerable: false,
+    configurable: true
+  });
+
+  StateNode.prototype.getInitialState = function (stateValue, context) {
+    this._init(); // TODO: this should be in the constructor (see note in constructor)
+
+
+    var configuration = this.getStateNodes(stateValue);
+    return this.resolveTransition({
+      configuration: configuration,
+      exitSet: [],
+      transitions: [],
+      source: undefined,
+      actions: []
+    }, undefined, context !== null && context !== void 0 ? context : this.machine.context, undefined);
+  };
+
+  Object.defineProperty(StateNode.prototype, "initialState", {
+    /**
+     * The initial State instance, which includes all actions to be executed from
+     * entering the initial state.
+     */
+    get: function () {
+      var initialStateValue = this.initialStateValue;
+
+      if (!initialStateValue) {
+        throw new Error("Cannot retrieve initial state from simple state '".concat(this.id, "'."));
+      }
+
+      return this.getInitialState(initialStateValue);
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(StateNode.prototype, "target", {
+    /**
+     * The target state value of the history state node, if it exists. This represents the
+     * default state value to transition to if no history value exists yet.
+     */
+    get: function () {
+      var target;
+
+      if (this.type === 'history') {
+        var historyConfig = this.config;
+
+        if (utils_isString(historyConfig.target)) {
+          target = isStateId(historyConfig.target) ? pathToStateValue(this.machine.getStateNodeById(historyConfig.target).path.slice(this.path.length - 1)) : historyConfig.target;
+        } else {
+          target = historyConfig.target;
+        }
+      }
+
+      return target;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  /**
+   * Returns the leaf nodes from a state path relative to this state node.
+   *
+   * @param relativeStateId The relative state path to retrieve the state nodes
+   * @param history The previous state to retrieve history
+   * @param resolve Whether state nodes should resolve to initial child state nodes
+   */
+
+  StateNode.prototype.getRelativeStateNodes = function (relativeStateId, historyValue, resolve) {
+    if (resolve === void 0) {
+      resolve = true;
+    }
+
+    return resolve ? relativeStateId.type === 'history' ? relativeStateId.resolveHistory(historyValue) : relativeStateId.initialStateNodes : [relativeStateId];
+  };
+
+  Object.defineProperty(StateNode.prototype, "initialStateNodes", {
+    get: function () {
+      var _this = this;
+
+      if (isLeafNode(this)) {
+        return [this];
+      } // Case when state node is compound but no initial state is defined
+
+
+      if (this.type === 'compound' && !this.initial) {
+        if (!environment_IS_PRODUCTION) {
+          utils_warn(false, "Compound state node '".concat(this.id, "' has no initial state."));
+        }
+
+        return [this];
+      }
+
+      var initialStateNodePaths = toStatePaths(this.initialStateValue);
+      return flatten(initialStateNodePaths.map(function (initialPath) {
+        return _this.getFromRelativePath(initialPath);
+      }));
+    },
+    enumerable: false,
+    configurable: true
+  });
+  /**
+   * Retrieves state nodes from a relative path to this state node.
+   *
+   * @param relativePath The relative path from this state node
+   * @param historyValue
+   */
+
+  StateNode.prototype.getFromRelativePath = function (relativePath) {
+    if (!relativePath.length) {
+      return [this];
+    }
+
+    var _a = _tslib_read(relativePath),
+        stateKey = _a[0],
+        childStatePath = _a.slice(1);
+
+    if (!this.states) {
+      throw new Error("Cannot retrieve subPath '".concat(stateKey, "' from node with no states"));
+    }
+
+    var childStateNode = this.getStateNode(stateKey);
+
+    if (childStateNode.type === 'history') {
+      return childStateNode.resolveHistory();
+    }
+
+    if (!this.states[stateKey]) {
+      throw new Error("Child state '".concat(stateKey, "' does not exist on '").concat(this.id, "'"));
+    }
+
+    return this.states[stateKey].getFromRelativePath(childStatePath);
+  };
+
+  StateNode.prototype.historyValue = function (relativeStateValue) {
+    if (!Object.keys(this.states).length) {
+      return undefined;
+    }
+
+    return {
+      current: relativeStateValue || this.initialStateValue,
+      states: mapFilterValues(this.states, function (stateNode, key) {
+        if (!relativeStateValue) {
+          return stateNode.historyValue();
+        }
+
+        var subStateValue = utils_isString(relativeStateValue) ? undefined : relativeStateValue[key];
+        return stateNode.historyValue(subStateValue || stateNode.initialStateValue);
+      }, function (stateNode) {
+        return !stateNode.history;
+      })
+    };
+  };
+  /**
+   * Resolves to the historical value(s) of the parent state node,
+   * represented by state nodes.
+   *
+   * @param historyValue
+   */
+
+
+  StateNode.prototype.resolveHistory = function (historyValue) {
+    var _this = this;
+
+    if (this.type !== 'history') {
+      return [this];
+    }
+
+    var parent = this.parent;
+
+    if (!historyValue) {
+      var historyTarget = this.target;
+      return historyTarget ? flatten(toStatePaths(historyTarget).map(function (relativeChildPath) {
+        return parent.getFromRelativePath(relativeChildPath);
+      })) : parent.initialStateNodes;
+    }
+
+    var subHistoryValue = nestedPath(parent.path, 'states')(historyValue).current;
+
+    if (utils_isString(subHistoryValue)) {
+      return [parent.getStateNode(subHistoryValue)];
+    }
+
+    return flatten(toStatePaths(subHistoryValue).map(function (subStatePath) {
+      return _this.history === 'deep' ? parent.getFromRelativePath(subStatePath) : [parent.states[subStatePath[0]]];
+    }));
+  };
+
+  Object.defineProperty(StateNode.prototype, "stateIds", {
+    /**
+     * All the state node IDs of this state node and its descendant state nodes.
+     */
+    get: function () {
+      var _this = this;
+
+      var childStateIds = flatten(Object.keys(this.states).map(function (stateKey) {
+        return _this.states[stateKey].stateIds;
+      }));
+      return [this.id].concat(childStateIds);
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(StateNode.prototype, "events", {
+    /**
+     * All the event types accepted by this state node and its descendants.
+     */
+    get: function () {
+      var e_8, _a, e_9, _b;
+
+      if (this.__cache.events) {
+        return this.__cache.events;
+      }
+
+      var states = this.states;
+      var events = new Set(this.ownEvents);
+
+      if (states) {
+        try {
+          for (var _c = _tslib_values(Object.keys(states)), _d = _c.next(); !_d.done; _d = _c.next()) {
+            var stateId = _d.value;
+            var state = states[stateId];
+
+            if (state.states) {
+              try {
+                for (var _e = (e_9 = void 0, _tslib_values(state.events)), _f = _e.next(); !_f.done; _f = _e.next()) {
+                  var event_1 = _f.value;
+                  events.add("".concat(event_1));
+                }
+              } catch (e_9_1) {
+                e_9 = {
+                  error: e_9_1
+                };
+              } finally {
+                try {
+                  if (_f && !_f.done && (_b = _e.return)) _b.call(_e);
+                } finally {
+                  if (e_9) throw e_9.error;
+                }
+              }
+            }
+          }
+        } catch (e_8_1) {
+          e_8 = {
+            error: e_8_1
+          };
+        } finally {
+          try {
+            if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
+          } finally {
+            if (e_8) throw e_8.error;
+          }
+        }
+      }
+
+      return this.__cache.events = Array.from(events);
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(StateNode.prototype, "ownEvents", {
+    /**
+     * All the events that have transitions directly from this state node.
+     *
+     * Excludes any inert events.
+     */
+    get: function () {
+      var events = new Set(this.transitions.filter(function (transition) {
+        return !(!transition.target && !transition.actions.length && transition.internal);
+      }).map(function (transition) {
+        return transition.eventType;
+      }));
+      return Array.from(events);
+    },
+    enumerable: false,
+    configurable: true
+  });
+
+  StateNode.prototype.resolveTarget = function (_target) {
+    var _this = this;
+
+    if (_target === undefined) {
+      // an undefined target signals that the state node should not transition from that state when receiving that event
+      return undefined;
+    }
+
+    return _target.map(function (target) {
+      if (!utils_isString(target)) {
+        return target;
+      }
+
+      var isInternalTarget = target[0] === _this.delimiter; // If internal target is defined on machine,
+      // do not include machine key on target
+
+      if (isInternalTarget && !_this.parent) {
+        return _this.getStateNodeByPath(target.slice(1));
+      }
+
+      var resolvedTarget = isInternalTarget ? _this.key + target : target;
+
+      if (_this.parent) {
+        try {
+          var targetStateNode = _this.parent.getStateNodeByPath(resolvedTarget);
+
+          return targetStateNode;
+        } catch (err) {
+          throw new Error("Invalid transition definition for state node '".concat(_this.id, "':\n").concat(err.message));
+        }
+      } else {
+        return _this.getStateNodeByPath(resolvedTarget);
+      }
+    });
+  };
+
+  StateNode.prototype.formatTransition = function (transitionConfig) {
+    var _this = this;
+
+    var normalizedTarget = normalizeTarget(transitionConfig.target);
+    var internal = 'internal' in transitionConfig ? transitionConfig.internal : normalizedTarget ? normalizedTarget.some(function (_target) {
+      return utils_isString(_target) && _target[0] === _this.delimiter;
+    }) : true;
+    var guards = this.machine.options.guards;
+    var target = this.resolveTarget(normalizedTarget);
+
+    var transition = _tslib_assign(_tslib_assign({}, transitionConfig), {
+      actions: toActionObjects(toArray(transitionConfig.actions)),
+      cond: toGuard(transitionConfig.cond, guards),
+      target: target,
+      source: this,
+      internal: internal,
+      eventType: transitionConfig.event,
+      toJSON: function () {
+        return _tslib_assign(_tslib_assign({}, transition), {
+          target: transition.target ? transition.target.map(function (t) {
+            return "#".concat(t.id);
+          }) : undefined,
+          source: "#".concat(_this.id)
+        });
+      }
+    });
+
+    return transition;
+  };
+
+  StateNode.prototype.formatTransitions = function () {
+    var e_10, _a;
+
+    var _this = this;
+
+    var onConfig;
+
+    if (!this.config.on) {
+      onConfig = [];
+    } else if (Array.isArray(this.config.on)) {
+      onConfig = this.config.on;
+    } else {
+      var _b = this.config.on,
+          _c = WILDCARD,
+          _d = _b[_c],
+          wildcardConfigs = _d === void 0 ? [] : _d,
+          strictTransitionConfigs_1 = __rest(_b, [typeof _c === "symbol" ? _c : _c + ""]);
+
+      onConfig = flatten(Object.keys(strictTransitionConfigs_1).map(function (key) {
+        if (!environment_IS_PRODUCTION && key === NULL_EVENT) {
+          utils_warn(false, "Empty string transition configs (e.g., `{ on: { '': ... }}`) for transient transitions are deprecated. Specify the transition in the `{ always: ... }` property instead. " + "Please check the `on` configuration for \"#".concat(_this.id, "\"."));
+        }
+
+        var transitionConfigArray = toTransitionConfigArray(key, strictTransitionConfigs_1[key]);
+
+        if (!environment_IS_PRODUCTION) {
+          validateArrayifiedTransitions(_this, key, transitionConfigArray);
+        }
+
+        return transitionConfigArray;
+      }).concat(toTransitionConfigArray(WILDCARD, wildcardConfigs)));
+    }
+
+    var eventlessConfig = this.config.always ? toTransitionConfigArray('', this.config.always) : [];
+    var doneConfig = this.config.onDone ? toTransitionConfigArray(String(done(this.id)), this.config.onDone) : [];
+
+    if (!environment_IS_PRODUCTION) {
+      utils_warn(!(this.config.onDone && !this.parent), "Root nodes cannot have an \".onDone\" transition. Please check the config of \"".concat(this.id, "\"."));
+    }
+
+    var invokeConfig = flatten(this.invoke.map(function (invokeDef) {
+      var settleTransitions = [];
+
+      if (invokeDef.onDone) {
+        settleTransitions.push.apply(settleTransitions, _tslib_spreadArray([], _tslib_read(toTransitionConfigArray(String(actions_doneInvoke(invokeDef.id)), invokeDef.onDone)), false));
+      }
+
+      if (invokeDef.onError) {
+        settleTransitions.push.apply(settleTransitions, _tslib_spreadArray([], _tslib_read(toTransitionConfigArray(String(actions_error(invokeDef.id)), invokeDef.onError)), false));
+      }
+
+      return settleTransitions;
+    }));
+    var delayedTransitions = this.after;
+    var formattedTransitions = flatten(_tslib_spreadArray(_tslib_spreadArray(_tslib_spreadArray(_tslib_spreadArray([], _tslib_read(doneConfig), false), _tslib_read(invokeConfig), false), _tslib_read(onConfig), false), _tslib_read(eventlessConfig), false).map(function (transitionConfig) {
+      return toArray(transitionConfig).map(function (transition) {
+        return _this.formatTransition(transition);
+      });
+    }));
+
+    try {
+      for (var delayedTransitions_1 = _tslib_values(delayedTransitions), delayedTransitions_1_1 = delayedTransitions_1.next(); !delayedTransitions_1_1.done; delayedTransitions_1_1 = delayedTransitions_1.next()) {
+        var delayedTransition = delayedTransitions_1_1.value;
+        formattedTransitions.push(delayedTransition);
+      }
+    } catch (e_10_1) {
+      e_10 = {
+        error: e_10_1
+      };
+    } finally {
+      try {
+        if (delayedTransitions_1_1 && !delayedTransitions_1_1.done && (_a = delayedTransitions_1.return)) _a.call(delayedTransitions_1);
+      } finally {
+        if (e_10) throw e_10.error;
+      }
+    }
+
+    return formattedTransitions;
+  };
+
+  return StateNode;
+}();
+
+
+
+;// CONCATENATED MODULE: ./node_modules/xstate/es/Machine.js
+
+
+
+var warned = false;
+function Machine(config, options, initialContext) {
+  if (initialContext === void 0) {
+    initialContext = config.context;
+  }
+
+  return new StateNode(config, options, initialContext);
+}
+function createMachine(config, options) {
+  if (!environment_IS_PRODUCTION && !('predictableActionArguments' in config) && !warned) {
+    warned = true;
+    console.warn('It is highly recommended to set `predictableActionArguments` to `true` when using `createMachine`. https://xstate.js.org/docs/guides/actions.html');
+  }
+
+  return new StateNode_StateNode(config, options);
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/xstate/es/index.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var es_assign = actions_assign,
+    es_cancel = (/* unused pure expression or super */ null && (cancel$1)),
+    es_send = (/* unused pure expression or super */ null && (send$1)),
+    es_sendTo = (/* unused pure expression or super */ null && (sendTo$1)),
+    es_sendParent = (/* unused pure expression or super */ null && (sendParent$1)),
+    es_sendUpdate = (/* unused pure expression or super */ null && (sendUpdate$1)),
+    es_forwardTo = (/* unused pure expression or super */ null && (forwardTo$1)),
+    es_doneInvoke = (/* unused pure expression or super */ null && (doneInvoke$1)),
+    es_raise = (/* unused pure expression or super */ null && (raise$1)),
+    es_log = actions_log,
+    es_pure = (/* unused pure expression or super */ null && (pure$1)),
+    es_choose = (/* unused pure expression or super */ null && (choose$1)),
+    es_stop = (/* unused pure expression or super */ null && (stop$1));
+
+
+
+// EXTERNAL MODULE: ./node_modules/events/events.js
+var events = __webpack_require__(187);
+;// CONCATENATED MODULE: ./src/events/EventBus.js
+
+/* harmony default export */ const EventBus = (new events());
+// EXTERNAL MODULE: ./node_modules/lodash/lodash.js
+var lodash = __webpack_require__(486);
+;// CONCATENATED MODULE: ./src/state-machines/AudioInputMachine.ts
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+
+
+
+// Assuming config.appServerUrl is of type string.
+const fullWorkletURL = `${config.appServerUrl}/vad.worklet.bundle.min.js`;
+let audioMimeType = "audio/wav";
+let speechStartTime = 0;
+const threshold = 1000; // 1000 ms = 1 second, about the length of "Hey, Pi"
+setupInterceptors();
+// Variable to hold the microphone instance. Now has a specific type.
+let microphone = null;
+let previousDeviceIds = [];
+let previousDefaultDevice = null;
+function monitorAudioInputDevices() {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        if (microphone === null) {
+            // No microphone instance, so nothing to monitor
+            return;
+        }
+        const devices = yield navigator.mediaDevices.enumerateDevices();
+        const audioInputDevices = devices.filter((device) => device.kind === "audioinput");
+        // Get the current default device
+        const defaultDevice = audioInputDevices.find((device) => device.deviceId === "default");
+        // Check if the default device has changed
+        if (defaultDevice &&
+            (!previousDefaultDevice ||
+                defaultDevice.label !== previousDefaultDevice.label)) {
+            console.log(`The default audio input device has changed: ${defaultDevice.label}`);
+            const firstTime = previousDefaultDevice === null;
+            previousDefaultDevice = defaultDevice;
+            if (!firstTime) {
+                const deviceId = defaultDevice.deviceId;
+                const deviceLabel = defaultDevice.label;
+                EventBus.emit("saypi:audio:reconnect", { deviceId, deviceLabel }); // instruct saypi to switch to the new default device
+            }
+        }
+        const currentDeviceIds = audioInputDevices.map((device) => device.deviceId);
+        const addedDevices = currentDeviceIds.filter((id) => !previousDeviceIds.includes(id));
+        const removedDevices = previousDeviceIds.filter((id) => !currentDeviceIds.includes(id));
+        if (microphone) {
+            const stream = microphone.stream;
+            const track = stream.getTracks()[0];
+            const settings = track.getSettings();
+            const deviceId = settings.deviceId;
+            const deviceLabel = (_a = audioInputDevices.find((device) => device.deviceId === deviceId)) === null || _a === void 0 ? void 0 : _a.label;
+            if (deviceId && addedDevices.includes(deviceId)) {
+                console.log(`The audio input device used by MicVAD has been added: ${deviceId} (${deviceLabel}))`);
+                EventBus.emit("saypi:audio:connected", { deviceId, deviceLabel });
+            }
+            if (deviceId && removedDevices.includes(deviceId)) {
+                console.log("The audio input device used by MicVAD has been removed.");
+            }
+        }
+        addedDevices.forEach((id) => {
+            var _a;
+            const label = (_a = audioInputDevices.find((device) => device.deviceId === id)) === null || _a === void 0 ? void 0 : _a.label;
+            console.log(`An audio input device has been added: ${id} (${label})`);
+        });
+        removedDevices.forEach((id) => {
+            var _a;
+            const label = (_a = audioInputDevices.find((device) => device.deviceId === id)) === null || _a === void 0 ? void 0 : _a.label;
+            console.log(`An audio input device has been removed: ${id} (${label})`);
+        });
+        previousDeviceIds = currentDeviceIds;
+    });
+}
+// Call the function every 5 seconds
+setInterval(monitorAudioInputDevices, 5000);
+const debouncedOnFrameProcessed = (0,lodash.debounce)((probabilities) => {
+    EventBus.emit("audio:frame", probabilities);
+}, 1000 / 60); // 1000ms / 60 frames per second
+// Options for MicVAD
+const micVADOptions = {
+    workletURL: fullWorkletURL,
+    positiveSpeechThreshold: 0.8,
+    minSpeechFrames: 5,
+    preSpeechPadFrames: 10,
+    onSpeechStart: () => {
+        console.log("Speech started");
+        speechStartTime = Date.now();
+        EventBus.emit("saypi:userSpeaking");
+    },
+    onSpeechEnd: (rawAudioData) => {
+        console.log("Speech ended");
+        const speechStopTime = Date.now();
+        const speechDuration = speechStopTime - speechStartTime;
+        const audioBlob = convertToWavBlob(rawAudioData);
+        EventBus.emit("audio:dataavailable", {
+            blob: audioBlob,
+            duration: speechDuration,
+        });
+    },
+    onVADMisfire: () => {
+        console.log("Cancelled. Audio was not speech.");
+        EventBus.emit("saypi:userStoppedSpeaking", { duration: 0 });
+    },
+    onFrameProcessed(probabilities) {
+        debouncedOnFrameProcessed(probabilities);
+    },
+};
+// The callback type can be more specific based on your usage
+function setupRecording(callback) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (microphone) {
+            return;
+        }
+        try {
+            const stream = yield navigator.mediaDevices.getUserMedia({
+                audio: {
+                    channelCount: 1,
+                    echoCancellation: true,
+                    autoGainControl: true,
+                    noiseSuppression: true,
+                },
+            });
+            microphone = yield dist.MicVAD.new(Object.assign(Object.assign({}, micVADOptions), { stream }));
+            if (typeof callback === "function") {
+                callback();
+            }
+        }
+        catch (err) {
+            console.error("VAD failed to load", err);
+            console.error(`Application server at ${config.appServerUrl} may be unavailable. Please make sure it is running.`);
+        }
+    });
+}
+function tearDownRecording() {
+    if (microphone) {
+        microphone.pause();
+        microphone.stream.getTracks().forEach((track) => track.stop());
+    }
+    microphone = null;
+}
+const audioInputMachine = createMachine({
+    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AkgOwAdUAXAOgCcwAbMZWSAYmQGMBHVDSgbQAYBdRKAJZYGYtjyCQAD0QBGAOwBmUgBYAnJvUAOVXvUKATADYANCACeiJYYCspY7eM9jruatsHDAX2-m0mLiEJKQs7JwYeFAMEFh4YKSRAG5YANYJAdj4RGRhHOSRUAjJWMzI4nG8fFVSwqIVkkgyiLaG5lYIcnI82g4KtqoKxqrGCiOGqr7+6FnBuWz5hQxg5ORY5KQEVOUAZusAtqEzQTmhCxFRxXgpZQ1VNU11YhJSsp3Kalo6ehpGZpaIQw2UiGHhKHhAwwKZQeIxTECZE4hPIXaKwYjIcjEB5CETPOKvQFyZykOTaJS6Yyg0YQ-4dMkKUjqWzgpSqJS2MHqVQmeGI7LI86UCAMSg0OhgHEgJ4NQmdYwqDRaXT6P7tRDaOSfTSOAzaXS2TV844C+bhYWJCA0BjozHY-i1PGyppvVQ9EGOZzaEzqUFkpTqzpyNkg-VjbTGOQsnitY2BU1nc2QS3WlHcB2PJ0vF2IDQqHjqYMstnGQtDQNyCaMnS2Aa1jmF9lx2anNPJjBWsAMKUy7OgV3ukxOHo+v3kis9XqGfXe7QskwKGPNpFm-LJyjMdaYKI24hYAgAJTA7DgxEgPazBJzCG0CnUfVB-U8E2MmorwdUof1SmZdijqm0ZcEzbCAKDATdyG3aIIHKZAAEEkmQDBtgAIxoC96j7ZoEFLQxSDnZlfVfH9K1sQMdXwjllF9TRQUAvwERNOZEzXUCCDAPAoIAZT3Ahd33DD8Uaft5A8YwmVLCENG6XRK0DfV7zdL0jDZTVySA5iQM2DjuN4mJYIQpDUPQjNcUwq8RM6MSJPUKTCx6VQ5IBBADC1JTSNs9QlDJDTWyFZN2M4woeP3BhpFtM9Qh2M9yAACk5HgeAASiYJi-KTNidOC3jBOdSz3CcGy7Jkxy2mcroTFIbzDBq-oRxcSYGP5TT-MyoKohCvjwoxSLkGilZ4sS5LUvjFqMu09qoE6rg5AETNzOE7CuiUFQvF9HonE5VQJ3ZUgwW0blWShRRfMFcb0X3diRVyrC3mJHkQR9NkRk1AD5McpkYy8TVi0jXwGLwLAIDgKRmpyR0FrlABaOlEBhvahvJBQuiMIweVsU6yDFWh6AgCGhLlHlA28z8wQqkxI0SsljExljUXxvLsJ-e8aNGLz3HZORmUDadFJcbooUMLmeQUWmQIZ27AUjUghicIFyScO85EDUZ7FszxbC5nhiW5GmmrSs7WJTMAJYspmCxlz15Y5NnlfKytVuDZGlH6aml310b0qNjct0KU3FreVw8KGlwJnZCYIQnHQv20HghkXfoFTF1qJt0-d-blboWVJOwarZO9oWJKP7BZMMnBsBKlGT87eKujPr0UQYqsrO9QTdTxb3IrzSFrQtdB0ZlIzkf7vCAA */
+    id: "audioInput",
+    initial: "released",
+    context: {
+        waitingToStop: false,
+        waitingToStart: false,
+        recordingStartTime: 0,
+    },
+    states: {
+        released: {
+            on: {
+                acquire: {
+                    target: "acquiring",
+                },
+            },
+        },
+        acquiring: {
+            description: "Acquiring the microphone. Waits until asynchronous call has completed.",
+            invoke: {
+                src: "acquireMicrophone",
+                onDone: {
+                    target: "acquired",
+                },
+                onError: {
+                    target: "released",
+                    actions: {
+                        type: "logError",
+                    },
+                },
+            },
+            on: {
+                start: {
+                    actions: es_assign({ waitingToStart: true }),
+                    internal: true,
+                },
+            },
+        },
+        acquired: {
+            description: "Microphone acquired and ready to start recording.",
+            initial: "idle",
+            entry: [
+                {
+                    type: "notifyMicrophoneAcquired",
+                },
+            ],
+            states: {
+                idle: {
+                    on: {
+                        start: {
+                            target: "recording",
+                            cond: "microphoneAcquired",
+                        },
+                        acquire: {
+                            description: `When receiving a request to acquire a microphone (setup recording) that is already acquired, trigger notifications.`,
+                            actions: {
+                                type: "notifyMicrophoneAcquired",
+                            },
+                        },
+                    },
+                    always: {
+                        target: "recording",
+                        cond: "pendingStart",
+                    },
+                },
+                recording: {
+                    entry: ["startRecording", es_assign({ waitingToStart: false })],
+                    on: {
+                        stopRequested: {
+                            target: "pendingStop",
+                        },
+                        dataAvailable: {
+                            actions: {
+                                type: "sendData",
+                            },
+                            internal: true,
+                        },
+                    },
+                },
+                pendingStop: {
+                    description: "Waiting for the media recording device to stop recording.",
+                    entry: {
+                        type: "prepareStop",
+                    },
+                    after: {
+                        "5000": [
+                            {
+                                target: "#audioInput.acquired.stopped",
+                                actions: ["stopIfWaiting"],
+                                description: "Stop eventually",
+                            },
+                            {
+                                internal: false,
+                            },
+                        ],
+                    },
+                    on: {
+                        stop: {
+                            target: "stopped",
+                            description: "Stop immediately",
+                        },
+                        dataAvailable: {
+                            target: "stopped",
+                            actions: ["stopIfWaiting", "sendData"],
+                            description: "Stop after final audio data collected",
+                        },
+                    },
+                },
+                stopped: {
+                    entry: es_assign({ waitingToStop: false }),
+                    always: {
+                        target: "idle",
+                    },
+                },
+            },
+            on: {
+                release: {
+                    target: "released",
+                    actions: {
+                        type: "releaseMicrophone",
+                    },
+                },
+            },
+        },
+    },
+    predictableActionArguments: true,
+    preserveActionOrder: true,
+}, {
+    actions: {
+        startRecording: (context, event) => {
+            context.recordingStartTime = Date.now();
+            // Start recording
+            if (microphone && microphone.listening === false) {
+                microphone.start();
+            }
+        },
+        prepareStop: (context, event) => {
+            if (microphone && microphone.listening === true) {
+                context.waitingToStop = true;
+            }
+        },
+        sendData: (context, event) => {
+            const { blob, duration } = event;
+            const sizeInKb = (blob.size / 1024).toFixed(2); // Convert to kilobytes and keep 2 decimal places
+            console.log(`Uploading ${sizeInKb}kb of audio data`);
+            // Use the duration directly from the event
+            const speechDuration = duration;
+            if (Number(sizeInKb) > 0) {
+                // Upload the audio to the server for transcription
+                EventBus.emit("saypi:userStoppedSpeaking", {
+                    duration: speechDuration,
+                    blob,
+                });
+            }
+        },
+        stopIfWaiting: (SayPiContext) => {
+            if (SayPiContext.waitingToStop === true) {
+                microphone === null || microphone === void 0 ? void 0 : microphone.pause();
+            }
+        },
+        notifyMicrophoneAcquired: (context, event) => {
+            monitorAudioInputDevices();
+            EventBus.emit("saypi:callReady");
+        },
+        releaseMicrophone: (context, event) => {
+            tearDownRecording();
+        },
+        logError: (context, event) => {
+            console.error("Error acquiring microphone: ", event.data);
+        },
+    },
+    services: {
+        acquireMicrophone: (context, event) => {
+            return new Promise((resolve, reject) => {
+                setupRecording(() => {
+                    if (microphone) {
+                        resolve();
+                    }
+                    else {
+                        reject(new Error("Failed to acquire microphone resource."));
+                    }
+                });
+            });
+        },
+    },
+    guards: {
+        microphoneAcquired: (context, event) => {
+            return microphone !== null;
+        },
+        pendingStart: (context, event) => {
+            return context.waitingToStart === true;
+        },
+    },
+    delays: {},
+});
+
+;// CONCATENATED MODULE: ./src/state-machines/AudioOutputMachine.js
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+
+
+var audioOutputMachine = createMachine({
+  /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7A8qgLgA4EB0GEANmAMQVbISz7IBO+A2gAwC6iohWWBnzYAdnxAAPRAEYAHAFYSANmWdOygEzyALAE5NAZk4KANCACeswzpIyZehcoU6dAdmP2dAX2-m0mLgExPgkdAwYolC09BCQALZgzBDIzFy8SCACQiJY4pnSCAqa5lYIbpp6JIY1NW7KDoYylb7+6Nh4RKThcRDUYPGEIpDpEtnCYhKFMpwkcp76em5ynJqcxiWWiIZymiSaRjsKJqqax4atIAEdwd2xkCQsYAwW1IQUyBajmeO5+aCFeqzBRNM56HQyEE6XalRANZTVWquGQQzg6LSXa5BLqhHoPd6fSLRQhoWBgb78QQTPJTWTrWaOQyaOQyZzNNwyNywhDOKpaY4o+q6QwKTHtbEhML3CAkAkWIn9US9ClZKl-WkIGbGEiM5mshTszncjmzZoCoUOTicsWBTqSvEyuUKgDGyFEcvwAAsWFhUFBPSrfpMCog5NCSMsZIYGgo9Io0XpuS5bGd1FG3HGlj4-FdxXa7gx8aTIG8Pl8eGM1cGAdZ5BH1vJOLs3Ot9Ny1FUzVaHPZli4bTccVLCzKwEqS2SwABrEYVn5VmkhzX0nUgvVszQcrlbcqqEjqA+b4pMg0DiWkchUaiwKcYQgAOTAkg4c8pOWrUkQAFoUVVjDUDD0Qw3B0f9NjKTlbHsdRXAUORwWjTRlF8HNRCwOJ4EyLF83wSt30XGsEB-JZqnWQxAOA0D1nAxBZibGpN2ZNF3Dg8i3DPHCyEoMA8Opf5PwQHQaIQOQ3BIVjakUJp5CQjjblxWIiV49UlzBfYFGWepVAaOQYR3NY9hAvRjL0exmgM5Cc2w+Th16ZSP0KbQlBBZotBbeRWW5HQnAjY4TFAjloTWdirLzGyHUeZ4IDKN8+I1JDDHE0E3KtFllCTAx1IPTgOVUBR+1C21wulWUyyU+d8P4wpFCUcicqA7z5gOdKd1jKo3D81llH0ajNDkocIpJVAyQgeyCIElF7FXJl5itK1TJ0dtOXreZY1E1kmT0fr7RKsc7IquKl0mmRpuZTx5pRY11HEiEW1UeD8scFDvCAA */
+  context: {
+    autoplay: false,
+    skip: false
+  },
+  id: "audioOutput",
+  initial: "idle",
+  states: {
+    idle: {
+      on: {
+        loadstart: [{
+          target: "idle",
+          cond: "shouldSkip",
+          internal: true,
+          description: "Skip this track.",
+          actions: [es_assign(function (context, event) {
+            return _objectSpread(_objectSpread({}, context), {}, {
+              skip: false
+            });
+          }), {
+            type: "skipCurrent"
+          }]
+        }, {
+          target: "loading"
+        }],
+        skipNext: {
+          target: "idle",
+          internal: true,
+          description: "Do not play the next track.",
+          actions: es_assign(function (context, event) {
+            return _objectSpread(_objectSpread({}, context), {}, {
+              skip: true
+            });
+          })
+        }
+      }
+    },
+    loading: {
+      on: {
+        loadedmetadata: {
+          target: "loaded"
+        }
+      }
+    },
+    loaded: {
+      initial: "ready",
+      states: {
+        ready: {
+          description: "Audio has loaded and is ready to start playing (further buffering may be required to reach the end).",
+          entry: {
+            type: "emitEvent",
+            params: {
+              eventName: "saypi:ready"
+            }
+          },
+          on: {
+            play: {
+              target: "playing"
+            }
+          }
+        },
+        playing: {
+          entry: {
+            type: "emitEvent",
+            params: {
+              eventName: "saypi:piSpeaking"
+            }
+          },
+          exit: [{
+            type: "emitEvent",
+            params: {
+              eventName: "saypi:piStoppedSpeaking"
+            }
+          }],
+          on: {
+            pause: {
+              target: "paused"
+            },
+            ended: {
+              target: "ended"
+            },
+            canplaythrough: {
+              internal: true
+            }
+          }
+        },
+        paused: {
+          on: {
+            play: {
+              target: "playing"
+            }
+          }
+        },
+        ended: {
+          entry: {
+            type: "emitEvent",
+            params: {
+              eventName: "saypi:piFinishedSpeaking"
+            }
+          },
+          on: {
+            seeked: {
+              target: "ready",
+              description: "An ended track is seeked back to earlier in the track."
+            }
+          }
+        }
+      },
+      on: {
+        emptied: {
+          target: "idle"
+        }
+      }
+    }
+  },
+  predictableActionArguments: true,
+  preserveActionOrder: true
+}, {
+  actions: {
+    emitEvent: function emitEvent(context, event, _ref) {
+      var action = _ref.action;
+      EventBus.emit(action.params.eventName);
+    },
+    skipCurrent: function skipCurrent(context, event) {
+      // send a message back to the audio module to stop playback
+      EventBus.emit("audio:skipCurrent");
+    }
+  },
+  guards: {
+    shouldSkip: function shouldSkip(context) {
+      return context.skip === true;
+    }
+  },
+  services: {},
+  delays: {}
+});
+;// CONCATENATED MODULE: ./src/LoggingModule.js
+function serializeStateValue(stateValue) {
+  if (typeof stateValue === "string") {
+    return stateValue;
+  }
+  return Object.keys(stateValue).map(function (key) {
+    return "".concat(key, ":").concat(serializeStateValue(stateValue[key]));
+  }).join(",");
+}
+var DEBUG = false; // Consider using config and .env to set the DEBUG flag
+
+var logger = {
+  debug: function debug() {
+    if (DEBUG) {
+      var _console;
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+      (_console = console).log.apply(_console, ["DEBUG:"].concat(args));
+    }
+  },
+  info: function info() {
+    var _console2;
+    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
+    }
+    (_console2 = console).log.apply(_console2, ["INFO:"].concat(args));
+  },
+  error: function error() {
+    var _console3;
+    for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+      args[_key3] = arguments[_key3];
+    }
+    (_console3 = console).error.apply(_console3, ["ERROR:"].concat(args));
+  }
+};
+;// CONCATENATED MODULE: ./src/state-machines/AudioRetryMachine.ts
+
+
+const maxRetryAttempts = 5;
+const AUDIO_RELOAD_DELAY_MS = 1000; // minimum delay in milliseconds
+const AUDIO_LOAD_TIMEOUT_MS = 4000; // time allowed for audio to load before retrying
+const machine = createMachine({
+    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AogJzyzwAlkA7CAGzDwGJKtkJYAXZPFgbQAYBdRUAAcssDC2xkBIAB6IALACYANCACeiAIzcA7BoB0ANgUK53ABw7ucgMwGAvnZVpMuAkVIVqePQEkqYWkFKZFUefiQQYVFxLEkI2QQNLW49biMDbgUATgBWI20zORV1BDNtHL0yk0zrHO5uLLMchyd0bHxCEnJ-bz9qWmQAIyIuPikosQkpBKT61PTM3PzC4sQs7QVKjbkNa20snW1alpBndrcuzxpff1oaTrDxkUnY6c1k+YUM7LyFAqK1Joano9tUNEYvtptPZHKc2q5Oh4ejd+gwmKx2KNwkJnjE4qAEmYNFk9DlrLsTNkklllIDSnISQYDDSjNYzAYNIUFCczgj3N0vHoAArBVQYMhQQJoWBgR4RCZ4t6JTkpHIKWqmXQaDZJVYIDZmPRZYlfQraGrGHnwjr8q7eEUhcWSoYjOU46JTeKaHJyCpmBRWDQBjZ7bR6uQFPR-DLWORGJI5dlWlw2y7Ih1iiV3C5uyK4z0E72+yoBnbB9VQvVqw1Q74mMlpL7J86IgXXDNO+iMZhsDi5hUFmTvOaN75LP4rOlQkk7Gl5ayZXZGZt8tOCgAy3c7AGNyEEQiwABaEVBQQ-9-OvL3KkcLH7LAElOQ7PRxjnGRTGZlNFeppEbrcs3uIgLw9K9CxvFJR0WX5-j1bISS0LI2TSHQyTJX8Ln-a5NyYTsXT7MZ5UvfEh0gz4x1gycSljRkGlsQprCyGxkMw1s7T0AAlMA0UwLNeIxQjsTzMDSJmAwcm0SocmY-Yvh9SSDD1JJnz0IN1VyMl2R+NjbWRbjeM7aQMRYMA9GQAAzUy8AACgAQQAVQAER8AB5AB9TicHXVy7Kc9ynO8uyAE0AEoBmtLC228AzAKgUCXjEos-VLIMdArMM6SJUl6m4XZJJyXZ6jMXS13baVIECUUEsVa8fRJXKrF+DluEkvUMkNcEaW0X0fQUCxuVhXk-2i4UKogAZhiEp5RKVerUly310i0Nq6V2LQSxyH1oXNAw5FK7D7XG7MHiI91ErmhkFvqJavhWzKSiXfRrAULbajqV7nwO0ahWOgTeyxGaLrqq7GtulrVpKbrKlyMxaisPb6ocWEyCwCA4CkYaortIHaoggBaJS6UJ67GrJ+ptG+ji+jAXHBwSI4DD0c1yR6woYxMPVcn0dTTEYnY42aIbIvY9NRSdOnwLI9apOhSSXu1IxWo0cNzRBGTbHVN7jVjKnkVwvioElpL9R9aTmPkuHmQUFW6X6zYJOYvLFC0T69cFWK8IlY2lRNCpmvMOQmjZGxlJsI11jKHRYy2wX3fK1AZQgH3r0ULnwS2CtGiY-qzCyZG7CAA */
+    context: {
+        delay: AUDIO_RELOAD_DELAY_MS,
+        retries: 0,
+    },
+    id: "audioErrorHandler",
+    initial: "Idle",
+    states: {
+        Idle: {
+            on: {
+                play: {
+                    target: "Playing",
+                },
+                abort: {
+                    target: "Reloading",
+                },
+                error: {
+                    target: "Reloading",
+                },
+                emptied: {
+                    target: "Idle",
+                    actions: {
+                        type: "resetRetryCounter",
+                    },
+                },
+                sourceChanged: {
+                    actions: {
+                        type: "resetRetryCounter",
+                    },
+                    description: "The audio source has changed to load a new audio file.",
+                },
+            },
+            description: "The audio element is idle and ready to play audio.",
+        },
+        Playing: {
+            on: {
+                pause: {
+                    target: "Paused",
+                },
+                abort: {
+                    target: "Reloading",
+                },
+                error: {
+                    target: "Reloading",
+                },
+                ended: {
+                    target: "Idle",
+                },
+                emptied: {
+                    target: "Idle",
+                    actions: {
+                        type: "resetRetryCounter",
+                    },
+                },
+            },
+            description: "The audio is currently playing.",
+        },
+        LoadingAfterDelay: {
+            description: "The audio element is loading the audio source after some delay to resolve the error.",
+            on: {
+                canplaythrough: {
+                    target: "Playing",
+                    actions: [
+                        {
+                            type: "resetRetryCounter",
+                        },
+                        {
+                            type: "forcePlay",
+                        },
+                    ],
+                    description: "The audio has loaded successfully and is ready to play.",
+                },
+                error: {
+                    target: "Reloading",
+                },
+                abort: {
+                    target: "Reloading",
+                },
+            },
+            after: {
+                3000: {
+                    target: "Reloading",
+                    actions: [{ type: "decreaseDelayAfterTimeout" }],
+                    description: "The audio has failed to load, usually due to a HTTP 400 error on Safari.",
+                },
+            },
+        },
+        Reloading: {
+            after: {
+                RELOAD_DELAY: [
+                    {
+                        target: "LoadingAfterDelay",
+                        cond: "retriesRemaining",
+                        actions: [
+                            { type: "forceReload" },
+                            {
+                                type: "increaseDelay",
+                            },
+                            { type: "incrementRetryCounter" },
+                        ],
+                    },
+                    {
+                        target: "Idle",
+                        cond: "maxRetriesReached",
+                    },
+                ],
+            },
+            description: "The audio element has encountered an error or abort event and is attempting to reload after a delay.",
+        },
+        Paused: {
+            on: {
+                play: {
+                    target: "Playing",
+                },
+                abort: {
+                    target: "Reloading",
+                },
+                error: {
+                    target: "Reloading",
+                },
+                emptied: {
+                    target: "Idle",
+                    actions: {
+                        type: "resetRetryCounter",
+                    },
+                },
+                sourceChanged: {
+                    target: "Idle",
+                    actions: {
+                        type: "resetRetryCounter",
+                    },
+                    description: "The audio source has changed to load a new audio file.",
+                },
+            },
+            description: "The audio is paused and can be played again or reloaded if there is an error.",
+        },
+    },
+}).withConfig({
+    actions: {
+        resetRetryCounter: function (context, event) {
+            console.log("Resetting retry counter...");
+            context.retries = 0;
+            context.delay = AUDIO_RELOAD_DELAY_MS;
+        },
+        incrementRetryCounter: function (context, event) {
+            context.retries++;
+        },
+        increaseDelay: function (context, event) {
+            context.delay = context.delay * 2;
+        },
+        decreaseDelayAfterTimeout: function (context, event) {
+            console.log("Retrying audio load after timeout...");
+            context.delay = Math.max(AUDIO_RELOAD_DELAY_MS, context.delay - AUDIO_LOAD_TIMEOUT_MS);
+        },
+        forceReload: function (context, event) {
+            console.log(`Reloading audio, attempt ${context.retries + 1} of ${maxRetryAttempts}, after ${context.delay}ms...`, event);
+            EventBus.emit("audio:reload");
+        },
+        forcePlay: function (context, event) {
+            console.log("Forcing audio to play after successful reload.", event);
+            EventBus.emit("audio:output:play");
+        },
+    },
+    guards: {
+        retriesRemaining: function (context, event) {
+            return context.retries < maxRetryAttempts;
+        },
+        maxRetriesReached: function (context, event) {
+            return context.retries >= maxRetryAttempts;
+        },
+    },
+    delays: {
+        RELOAD_DELAY: function (context, event) {
+            return context.delay;
+        },
+    },
+});
+
+;// CONCATENATED MODULE: ./src/audio/AudioModule.js
+function AudioModule_typeof(o) { "@babel/helpers - typeof"; return AudioModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, AudioModule_typeof(o); }
+function AudioModule_ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function AudioModule_objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? AudioModule_ownKeys(Object(t), !0).forEach(function (r) { AudioModule_defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : AudioModule_ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function AudioModule_defineProperty(obj, key, value) { key = AudioModule_toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, AudioModule_toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function AudioModule_toPropertyKey(arg) { var key = AudioModule_toPrimitive(arg, "string"); return AudioModule_typeof(key) === "symbol" ? key : String(key); }
+function AudioModule_toPrimitive(input, hint) { if (AudioModule_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (AudioModule_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+// import state machines for audio input and output
+
+
+
+
+
+
+
+var AudioModule = /*#__PURE__*/function () {
+  function AudioModule() {
+    _classCallCheck(this, AudioModule);
+    this.audioElement = document.querySelector("audio");
+    if (!this.audioElement) {
+      console.error("Audio element not found!");
+    } else {
+      //disable aggressive preloading of audio - may cause playback issues on Safari
+      //this.audioElement.preload = "auto"; // enable aggressive preloading of audio
+      console.log("Audio element found", this.audioElement);
+      //this.safariErrorHandler = new SafariAudioErrorHandler(this.audioElement);
+    }
+
+    this.audioOutputActor = interpret(audioOutputMachine);
+    this.audioOutputActor.onTransition(function (state) {
+      if (state.changed) {
+        var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
+        var toState = serializeStateValue(state.value);
+        logger.debug("Audio Output Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+      }
+    });
+    this.audioInputActor = interpret(audioInputMachine);
+    this.audioInputActor.onTransition(function (state) {
+      if (state.changed) {
+        var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
+        var toState = serializeStateValue(state.value);
+        logger.debug("Audio Input Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+      }
+    });
+    this.audioRetryActor = interpret(machine);
+    this.audioRetryActor.onTransition(function (state) {
+      if (state.changed) {
+        var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
+        var toState = serializeStateValue(state.value);
+        logger.info("Audio Retry Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+      }
+    });
+  }
+  _createClass(AudioModule, [{
+    key: "start",
+    value: function start() {
+      // audio output (Pi)
+      this.audioOutputActor.start();
+      this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
+      //this.safariErrorHandler.startMonitoring();
+
+      // audio input (user)
+      this.audioInputActor.start();
+      this.registerAudioCommands(this.audioInputActor, this.audioOutputActor);
+
+      // audio retry
+      this.audioRetryActor.start();
+      this.registerAudioPlaybackEvents(this.audioElement, this.audioRetryActor);
+      this.registerSourceChangeEvents(this.audioElement, this.audioRetryActor);
+    }
+  }, {
+    key: "stop",
+    value: function stop() {
+      //this.safariErrorHandler.stopMonitoring();
+    }
+  }, {
+    key: "registerAudioPlaybackEvents",
+    value: function registerAudioPlaybackEvents(audio, actor) {
+      var events = ["loadstart", "loadedmetadata", "canplaythrough", "play", "pause", "ended", "seeked", "emptied", "abort", "stalled", "error"];
+      events.forEach(function (event) {
+        audio.addEventListener(event, function () {
+          return actor.send(event);
+        });
+      });
+      audio.addEventListener("playing", function () {
+        actor.send("play");
+      });
+    }
+  }, {
+    key: "registerSourceChangeEvents",
+    value: function registerSourceChangeEvents(audio, actor) {
+      var _this = this;
+      this.lastSource = audio.src;
+      audio.addEventListener("loadstart", function () {
+        if (audio.currentSrc !== _this.lastSource) {
+          actor.send("sourceChanged");
+          _this.lastSource = audio.currentSrc;
+        }
+      });
+    }
+
+    /* These events are used to control/pass requests to the audio module from other modules */
+  }, {
+    key: "registerAudioCommands",
+    value: function registerAudioCommands(inputActor, outputActor) {
+      var _this2 = this;
+      // audio input (recording) commands
+      EventBus.on("audio:setupRecording", function (e) {
+        inputActor.send("acquire");
+      });
+      EventBus.on("audio:tearDownRecording", function (e) {
+        inputActor.send("release");
+      });
+      EventBus.on("audio:startRecording", function (e) {
+        // Check if Pi is currently speaking and stop her audio
+        outputActor.send("pause");
+
+        // Check if the microphone is acquired before starting?
+        inputActor.send(["acquire", "start"]);
+      });
+      EventBus.on("audio:stopRecording", function (e) {
+        inputActor.send("stopRequested");
+        /* resume or cancel Pi's audio */
+        /* TODO: reassess how to handle interruptions
+        outputActor.send("play"); // resume Pi's audio
+        outputActor.send("stop"); // cancel Pi's audio
+        */
+      });
+      // audio input (recording) events (pass media recorder events -> audio input machine actor)
+      EventBus.on("audio:dataavailable", function (detail) {
+        inputActor.send(AudioModule_objectSpread({
+          type: "dataAvailable"
+        }, detail));
+      });
+      EventBus.on("audio:input:stop", function (e) {
+        inputActor.send("stop");
+      });
+      EventBus.on("audio:input:reconnect", function (e) {
+        inputActor.send("release");
+        inputActor.send(["acquire", "start"]);
+      });
+
+      // audio output (playback) commands
+      EventBus.on("audio:reload", function (e) {
+        console.log("loading audio track");
+        _this2.audioElement.load();
+      });
+      EventBus.on("audio:skipNext", function (e) {
+        console.log("sending signal to skip next audio track");
+        outputActor.send("skipNext");
+      });
+      EventBus.on("audio:skipCurrent", function (e) {
+        console.log("skipping this audio track");
+        _this2.audioElement.pause();
+        console.log("paused audio playback on skip signal");
+      });
+      EventBus.on("audio:output:play", function (e) {
+        console.log("playing audio track");
+        _this2.audioElement.play();
+      });
+    }
+  }]);
+  return AudioModule;
+}();
+
 ;// CONCATENATED MODULE: ./src/DOMModule.ts
 /**
  * Append a child node to a parent node, either at a specific position or as the last child.
@@ -26742,10 +26607,6 @@ function addChild(parent, child, position = 0) {
     }
 }
 
-// EXTERNAL MODULE: ./node_modules/xstate/es/Machine.js + 2 modules
-var Machine = __webpack_require__(9122);
-// EXTERNAL MODULE: ./node_modules/xstate/es/index.js
-var es = __webpack_require__(2494);
 ;// CONCATENATED MODULE: ./src/state-machines/FocusMachine.ts
 
 function enterFocusMode() {
@@ -26757,7 +26618,7 @@ function exitFocusMode() {
     document.body.classList.remove("focus");
 }
 const THRESHOLD_INACTIVITY_TIME_MS = 10000; // Define the threshold value
-const machine = (0,Machine/* createMachine */.C)({
+const FocusMachine_machine = createMachine({
     context: {
         inactivityTime: 0,
     },
@@ -26804,10 +26665,10 @@ const machine = (0,Machine/* createMachine */.C)({
     preserveActionOrder: true,
 }, {
     actions: {
-        resetInactivityTime: (0,es/* assign */.f0)({
+        resetInactivityTime: es_assign({
             inactivityTime: 0,
         }),
-        incrementInactivityTime: (0,es/* assign */.f0)({
+        incrementInactivityTime: es_assign({
             inactivityTime: (context, event) => {
                 return (context.inactivityTime += event.time_ms);
             },
@@ -26828,13 +26689,11 @@ const machine = (0,Machine/* createMachine */.C)({
     delays: {},
 });
 
-// EXTERNAL MODULE: ./node_modules/xstate/es/interpreter.js + 4 modules
-var interpreter = __webpack_require__(6029);
 ;// CONCATENATED MODULE: ./src/FullscreenModule.ts
 
 
 
-const focusActor = (0,interpreter/* interpret */.kJ)(machine);
+const focusActor = interpret(FocusMachine_machine);
 const tickInterval = 1000;
 var ticker;
 const userInputEvents = ["mousemove", "click", "keypress"];
@@ -26978,12 +26837,12 @@ var UserPreferenceModule;
 })(UserPreferenceModule || (UserPreferenceModule = {}));
 
 ;// CONCATENATED MODULE: ./src/UserAgentModule.js
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function UserAgentModule_typeof(o) { "@babel/helpers - typeof"; return UserAgentModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, UserAgentModule_typeof(o); }
+function UserAgentModule_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function UserAgentModule_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, UserAgentModule_toPropertyKey(descriptor.key), descriptor); } }
+function UserAgentModule_createClass(Constructor, protoProps, staticProps) { if (protoProps) UserAgentModule_defineProperties(Constructor.prototype, protoProps); if (staticProps) UserAgentModule_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function UserAgentModule_toPropertyKey(arg) { var key = UserAgentModule_toPrimitive(arg, "string"); return UserAgentModule_typeof(key) === "symbol" ? key : String(key); }
+function UserAgentModule_toPrimitive(input, hint) { if (UserAgentModule_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (UserAgentModule_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
 
 
@@ -27031,14 +26890,14 @@ var ImmersionService = /*#__PURE__*/function () {
    * @param {Chatbot} chatbot
    */
   function ImmersionService(chatbot) {
-    _classCallCheck(this, ImmersionService);
+    UserAgentModule_classCallCheck(this, ImmersionService);
     this.chatbot = chatbot;
   }
 
   /**
    * Perform initial setup of the UI based on the view preferences
    */
-  _createClass(ImmersionService, [{
+  UserAgentModule_createClass(ImmersionService, [{
     key: "initMode",
     value: function initMode() {
       var _this = this;
@@ -27092,14 +26951,12 @@ var ImmersionService = /*#__PURE__*/function () {
   }]);
   return ImmersionService;
 }();
-// EXTERNAL MODULE: ./src/EventBus.js
-var EventBus = __webpack_require__(7635);
 ;// CONCATENATED MODULE: ./src/AnimationModule.js
 function AnimationModule_typeof(o) { "@babel/helpers - typeof"; return AnimationModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, AnimationModule_typeof(o); }
 function AnimationModule_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function AnimationModule_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, AnimationModule_toPropertyKey(descriptor.key), descriptor); } }
 function AnimationModule_createClass(Constructor, protoProps, staticProps) { if (protoProps) AnimationModule_defineProperties(Constructor.prototype, protoProps); if (staticProps) AnimationModule_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _defineProperty(obj, key, value) { key = AnimationModule_toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function AnimationModule_defineProperty(obj, key, value) { key = AnimationModule_toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function AnimationModule_toPropertyKey(arg) { var key = AnimationModule_toPrimitive(arg, "string"); return AnimationModule_typeof(key) === "symbol" ? key : String(key); }
 function AnimationModule_toPrimitive(input, hint) { if (AnimationModule_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (AnimationModule_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 var AnimationModule = /*#__PURE__*/function () {
@@ -27168,15 +27025,13 @@ var AnimationModule = /*#__PURE__*/function () {
   }]);
   return AnimationModule;
 }();
-_defineProperty(AnimationModule, "rectanglesSelector", ".outermost, .second, .third, .fourth, .fifth, .innermost");
-_defineProperty(AnimationModule, "callButtonSelector", ".call-button");
-_defineProperty(AnimationModule, "talkButtonAnimations", ["piThinking", "piSpeaking", "userSpeaking", "transcribing"]);
-_defineProperty(AnimationModule, "callButtonAnimations", ["glow", "glow-fade-out"]);
+AnimationModule_defineProperty(AnimationModule, "rectanglesSelector", ".outermost, .second, .third, .fourth, .fifth, .innermost");
+AnimationModule_defineProperty(AnimationModule, "callButtonSelector", ".call-button");
+AnimationModule_defineProperty(AnimationModule, "talkButtonAnimations", ["piThinking", "piSpeaking", "userSpeaking", "transcribing"]);
+AnimationModule_defineProperty(AnimationModule, "callButtonAnimations", ["glow", "glow-fade-out"]);
 
-// EXTERNAL MODULE: ./src/ResourceModule.ts
-var ResourceModule = __webpack_require__(879);
 ;// CONCATENATED MODULE: ./src/i18n.ts
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+var i18n_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -27190,9 +27045,9 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 let messages = {};
 // This function attempts to load messages for a given locale
 function loadMessages(locale) {
-    return __awaiter(this, void 0, void 0, function* () {
+    return i18n_awaiter(this, void 0, void 0, function* () {
         try {
-            messages[locale] = yield __webpack_require__(4557)(`./${locale}/messages.json`);
+            messages[locale] = yield __webpack_require__(557)(`./${locale}/messages.json`);
         }
         catch (error) {
             console.error(`Failed to load messages for locale: ${locale}`, error);
@@ -27304,7 +27159,7 @@ class TextualNotificationsModule {
         if (iconName) {
             const iconElement = document.createElement("img");
             iconElement.classList.add("icon");
-            const iconImageUrl = (0,ResourceModule/* getResourceUrl */.v)(`icons/${iconName}.svg`);
+            const iconImageUrl = getResourceUrl(`icons/${iconName}.svg`);
             iconElement.src = iconImageUrl;
             (_a = this.notificationElement) === null || _a === void 0 ? void 0 : _a.appendChild(iconElement);
         }
@@ -27329,20 +27184,33 @@ class TextualNotificationsModule {
 }
 class AudibleNotificationsModule {
     constructor() {
-        this.listeningSound = new Audio((0,ResourceModule/* getResourceUrl */.v)("audio/guitar-pluck.mp3"));
-        this.callStartedSound = new Audio((0,ResourceModule/* getResourceUrl */.v)("audio/startup-synth.mp3"));
-        this.callEndedSound = new Audio((0,ResourceModule/* getResourceUrl */.v)("audio/turn-off.mp3"));
-        this.lockSound = new Audio((0,ResourceModule/* getResourceUrl */.v)("audio/beep-on.mp3"));
-        this.unlockSound = new Audio((0,ResourceModule/* getResourceUrl */.v)("audio/beep-off.mp3"));
-        this.themeOnSound = new Audio((0,ResourceModule/* getResourceUrl */.v)("audio/switch-on.mp3"));
-        this.themeOffSound = new Audio((0,ResourceModule/* getResourceUrl */.v)("audio/switch-off.mp3"));
+        // Load audio resources in the constructor
+        this.listeningSound = new Audio(getResourceUrl("audio/guitar-pluck.mp3"));
+        this.callStartedSound = new Audio(getResourceUrl("audio/startup-synth.mp3"));
+        this.callEndedSound = new Audio(getResourceUrl("audio/turn-off.mp3"));
+        this.lockSound = new Audio(getResourceUrl("audio/beep-on.mp3"));
+        this.unlockSound = new Audio(getResourceUrl("audio/beep-off.mp3"));
+        this.themeOnSound = new Audio(getResourceUrl("audio/switch-on.mp3"));
+        this.themeOffSound = new Audio(getResourceUrl("audio/switch-off.mp3"));
+    }
+    static getInstance() {
+        if (!AudibleNotificationsModule.instance) {
+            AudibleNotificationsModule.instance = new AudibleNotificationsModule();
+        }
+        return AudibleNotificationsModule.instance;
     }
     playSound(sound) {
         return NotificationsModule_awaiter(this, void 0, void 0, function* () {
             const soundEnabled = yield UserPreferenceModule.getSoundEffects();
             if (soundEnabled) {
                 sound.play().catch((e) => {
-                    console.error("Unable to play audio notification:", e);
+                    if (e.name === "NotAllowedError") {
+                        // Inform the user to enable audio permissions or trigger from a click
+                        console.error(`Audio playback blocked on ${sound.src} notification. Please initiate audio from a user interaction.`);
+                    }
+                    else {
+                        console.error("Unable to play audio notification:", e);
+                    }
                 });
             }
             else {
@@ -27449,15 +27317,13 @@ class VisualNotificationsModule {
     }
 }
 
-// EXTERNAL MODULE: ./src/ConfigModule.js
-var ConfigModule = __webpack_require__(8186);
-;// CONCATENATED MODULE: ./src/EventModule.js
+;// CONCATENATED MODULE: ./src/events/EventModule.js
 function EventModule_typeof(o) { "@babel/helpers - typeof"; return EventModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, EventModule_typeof(o); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == EventModule_typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(EventModule_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { EventModule_defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function EventModule_ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function EventModule_objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? EventModule_ownKeys(Object(t), !0).forEach(function (r) { EventModule_defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : EventModule_ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function EventModule_defineProperty(obj, key, value) { key = EventModule_toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function EventModule_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function EventModule_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, EventModule_toPropertyKey(descriptor.key), descriptor); } }
@@ -27522,7 +27388,7 @@ var EventModule = /*#__PURE__*/function () {
           EventModule.setNativeValue(element, element.value + sentences[i++]);
           requestAnimationFrame(typeSentence);
         } else {
-          EventBus/* default */.Z.emit("saypi:autoSubmit");
+          EventBus.emit("saypi:autoSubmit");
         }
       };
       if (sentences.length > 1) {
@@ -27531,7 +27397,7 @@ var EventModule = /*#__PURE__*/function () {
       } else {
         // If text does not contain recognisable sentence terminators, type it all at once
         EventModule.setNativeValue(element, text);
-        EventBus/* default */.Z.emit("saypi:autoSubmit");
+        EventBus.emit("saypi:autoSubmit");
       }
     }
   }, {
@@ -27555,16 +27421,16 @@ var EventModule = /*#__PURE__*/function () {
   }, {
     key: "registerStateMachineEvents",
     value: function registerStateMachineEvents(actor) {
-      EventBus/* default */.Z.on(CALL_READY, function () {
+      EventBus.on(CALL_READY, function () {
         actor.send(CALL_READY);
       });
-      EventBus/* default */.Z.on(USER_SPEAKING, function () {
+      EventBus.on(USER_SPEAKING, function () {
         actor.send(USER_SPEAKING);
       });
       [USER_STOPPED_SPEAKING, USER_FINISHED_SPEAKING, AUDIO_DEVICE_CONNECTED, AUDIO_DEVICE_RECONNECT].forEach(function (eventName) {
-        EventBus/* default */.Z.on(eventName, function (detail) {
+        EventBus.on(eventName, function (detail) {
           if (detail) {
-            actor.send(_objectSpread({
+            actor.send(EventModule_objectSpread({
               type: eventName
             }, detail));
           } else {
@@ -27573,7 +27439,7 @@ var EventModule = /*#__PURE__*/function () {
         });
       });
       [PI_THINKING, PI_SPEAKING, PI_STOPPED_SPEAKING, PI_FINISHED_SPEAKING].forEach(function (eventName) {
-        EventBus/* default */.Z.on(eventName, function () {
+        EventBus.on(eventName, function () {
           actor.send(eventName);
         });
       });
@@ -27596,19 +27462,19 @@ var EventModule = /*#__PURE__*/function () {
   }, {
     key: "registerSessionEvents",
     value: function registerSessionEvents(actor) {
-      EventBus/* default */.Z.on("session:started", function () {
+      EventBus.on("session:started", function () {
         actor.send("start_session");
       });
-      EventBus/* default */.Z.on("session:ended", function () {
+      EventBus.on("session:ended", function () {
         actor.send("end_session");
       });
-      EventBus/* default */.Z.on("session:message-sent", function (detail) {
-        actor.send(_objectSpread({
+      EventBus.on("session:message-sent", function (detail) {
+        actor.send(EventModule_objectSpread({
           type: "send_message"
         }, detail));
       });
-      EventBus/* default */.Z.on("session:transcribing", function (detail) {
-        actor.send(_objectSpread({
+      EventBus.on("session:transcribing", function (detail) {
+        actor.send(EventModule_objectSpread({
           type: "transcribing"
         }, detail));
       });
@@ -27617,8 +27483,6 @@ var EventModule = /*#__PURE__*/function () {
   return EventModule;
 }();
 
-// EXTERNAL MODULE: ./src/LoggingModule.js
-var LoggingModule = __webpack_require__(484);
 ;// CONCATENATED MODULE: ./src/TranscriptionModule.ts
 var TranscriptionModule_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -27652,7 +27516,7 @@ function checkForExpiredEntries() {
     sequenceNumsPendingTranscription.forEach((entry) => {
         if (now - entry.timestamp > TIMEOUT_MS) {
             sequenceNumsPendingTranscription.delete(entry);
-            LoggingModule/* logger */.k.info(`Transcription request ${entry.seq} timed out`);
+            logger.info(`Transcription request ${entry.seq} timed out`);
         }
     });
 }
@@ -27668,7 +27532,7 @@ function transcriptionReceived(seq) {
     sequenceNumsPendingTranscription.forEach((entry) => {
         if (entry.seq === seq) {
             sequenceNumsPendingTranscription.delete(entry);
-            LoggingModule/* logger */.k.debug(`Transcription response ${seq} received after ${(Date.now() - entry.timestamp) / 1000}s`);
+            logger.debug(`Transcription response ${seq} received after ${(Date.now() - entry.timestamp) / 1000}s`);
             return;
         }
     });
@@ -27696,7 +27560,7 @@ function uploadAudioWithRetry(audioBlob, audioDurationMillis, precedingTranscrip
                 // check for timeout errors (30s on Heroku)
                 if (error instanceof TypeError &&
                     knownNetworkErrorMessages.includes(error.message)) {
-                    LoggingModule/* logger */.k.info(`Attempt ${retryCount + 1}/${maxRetries} failed. Retrying in ${delay / 1000} seconds...`);
+                    logger.info(`Attempt ${retryCount + 1}/${maxRetries} failed. Retrying in ${delay / 1000} seconds...`);
                     yield sleep(delay);
                     // Exponential backoff
                     delay *= 2;
@@ -27734,7 +27598,7 @@ function uploadAudio(audioBlob, audioDurationMillis, precedingTranscripts = {}) 
             const { signal } = controller;
             setTimeout(() => controller.abort(), TIMEOUT_MS);
             const startTime = new Date().getTime();
-            const response = yield fetch(`${ConfigModule/* config */.v.apiServerUrl}/transcribe?language=${language}`, {
+            const response = yield fetch(`${config.apiServerUrl}/transcribe?language=${language}`, {
                 method: "POST",
                 body: formData,
                 signal,
@@ -27764,7 +27628,7 @@ function uploadAudio(audioBlob, audioDurationMillis, precedingTranscripts = {}) 
             if (responseJson.hasOwnProperty("merged")) {
                 payload.merged = responseJson.merged;
             }
-            LoggingModule/* logger */.k.info(`Transcribed ${Math.round(audioDurationMillis / 1000)}s of audio into ${wc} words in ${Math.round(transcriptionDurationMillis / 1000)}s`);
+            logger.info(`Transcribed ${Math.round(audioDurationMillis / 1000)}s of audio into ${wc} words in ${Math.round(transcriptionDurationMillis / 1000)}s`);
             if (responseJson.text.length === 0) {
                 src_StateMachineService.actor.send("saypi:transcribedEmpty");
             }
@@ -27799,7 +27663,7 @@ function constructTranscriptionFormData(audioBlob, audioDurationSeconds, message
         else if (audioBlob.type === "audio/wav") {
             audioFilename = "audio.wav";
         }
-        LoggingModule/* logger */.k.info(`Transcribing audio Blob with MIME type: ${audioBlob.type}, size: ${(audioBlob.size / 1024).toFixed(2)}kb`);
+        logger.info(`Transcribing audio Blob with MIME type: ${audioBlob.type}, size: ${(audioBlob.size / 1024).toFixed(2)}kb`);
         // Add the audio and other input parameters to the FormData object
         formData.append("audio", audioBlob, audioFilename);
         formData.append("duration", audioDurationSeconds.toString());
@@ -27851,7 +27715,7 @@ function setDraftPrompt(transcript) {
 }
 const PROMPT_CHARACTER_LIMIT = 4000;
 function setFinalPrompt(transcript) {
-    LoggingModule/* logger */.k.info(`Final transcript: ${transcript}`);
+    logger.info(`Final transcript: ${transcript}`);
     const textarea = document.getElementById("saypi-prompt");
     textarea.setAttribute("placeholder", "");
     const initialHeight = "2rem"; // aka 32px
@@ -27864,7 +27728,7 @@ function setFinalPrompt(transcript) {
             console.warn(`Transcript was too long for Pi. Truncated to ${truncatedLength} characters, losing the following text: ... ${transcript.substring(truncatedLength)}`);
         }
         EventModule.setNativeValue(textarea, transcript);
-        EventBus/* default */.Z.emit("saypi:autoSubmit");
+        EventBus.emit("saypi:autoSubmit");
     }
     else {
         EventModule.simulateTyping(textarea, `${transcript} `);
@@ -27958,7 +27822,7 @@ function calculateDelay(timeUserStoppedSpeaking, probabilityFinished, tempo, max
     return finalDelay;
 }
 
-;// CONCATENATED MODULE: ./src/AudioControlsModule.ts
+;// CONCATENATED MODULE: ./src/audio/AudioControlsModule.ts
 
 class AudioControlsModule {
     activateAudioInput(enable) {
@@ -27973,14 +27837,14 @@ class AudioControlsModule {
         if (enable && !this.isAudioOutputEnabled()) {
             const audioOutputButton = document.getElementById("saypi-audio-output-button");
             if (audioOutputButton) {
-                EventBus/* default */.Z.emit("audio:skipNext");
+                EventBus.emit("audio:skipNext");
                 audioOutputButton.click();
             }
         }
     }
     isAudioOutputEnabled() {
-        const svgPathElement = document.querySelector('#saypi-audio-output-button svg path');
-        const svgPath = svgPathElement ? svgPathElement.getAttribute('d') : null;
+        const svgPathElement = document.querySelector("#saypi-audio-output-button svg path");
+        const svgPath = svgPathElement ? svgPathElement.getAttribute("d") : null;
         const activePath = "M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 001.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06zM18.584 5.106a.75.75 0 011.06 0c3.808 3.807 3.808 9.98 0 13.788a.75.75 0 11-1.06-1.06 8.25 8.25 0 000-11.668.75.75 0 010-1.06z";
         return svgPath === activePath;
     }
@@ -28056,7 +27920,7 @@ var nextSubmissionTime = Date.now();
 // most recent enforced delay while waiting for additional user input
 // captured here for analytics events
 var lastSubmissionDelay = 0;
-const apiServerUrl = ConfigModule/* config */.v.apiServerUrl;
+const apiServerUrl = config.apiServerUrl;
 if (apiServerUrl === undefined) {
     throw new Error("Configuration error: apiServerUrl is not defined. Please check your environment variables.");
 }
@@ -28064,11 +27928,11 @@ let mergeService;
 UserPreferenceModule.getLanguage().then((language) => {
     mergeService = new TranscriptMergeService(apiServerUrl, language);
 });
-const audibleNotifications = new AudibleNotificationsModule();
+const audibleNotifications = AudibleNotificationsModule.getInstance();
 const textualNotifications = new TextualNotificationsModule();
 const visualNotifications = new VisualNotificationsModule();
 const audioControls = new AudioControlsModule();
-const SayPiMachine_machine = (0,Machine/* createMachine */.C)({
+const SayPiMachine_machine = createMachine({
     /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCRKANiwNoAMAuoqHQHtYWMgPx8QAD0QAWAMwycARhkAOGQHYtnDQE4ArEoBsRgDQg0szrpwaZu3QCY5co6t1HHqjQF8f52mw8QlIKaloGBAYAZTowFABrAiguXiQQQWFRcXTpBH1Hc0sER105ThxSj05vJVU6oxk-APQg5jZokhQAJzJ8KBp0SPaWACV4iDRUiUyRLDEJPJlHRRV1LQ0dA2MzC0R9A5wHY8N9a31G5pBA3BHOnr6BiMYACxR+gFc6afTZ7MXZPpVmpNNo9IYTEVEPUcGdOPCNPpdEoDKpPFcbjg7l1eslBvRGCMAGIoLAsSA-fhCOYLXKA4HrMHbSF7BDGOQ4ewOTxGfQaJQ1GT6DGtW6sFj3XH9KiSWBdEhgHAoABmCu6AApHPD4QBKfFtcWSx6UjLU-50hAyK3KEEbLYQ3bFRyNI7HFHqVSOfnC-zXUU4FhYOVgfB455RLAAFReBCS-RNf3mOVAeSUciBOG8cP0aM0ByhCFUqn0sM8aiMdicujRIswuEDwdD0vDMTiiWSCbNSYBbPTiiz8JzjUR+gLqnTOE4Zd0dmLZyFtaCDYVTaeQ0Y5CDWAARuTO1luxbyuVlKpOEoLkZ4QpnAWHI5JxfecskQLvIv60GV8kcN0wEQBG6CAw3XBA3k+b4eBmLtaRTWRGhsXQpzPThDDkDRiwLZw6lsK8kSvMsgQ-AMvxDH8-wAoCf3wAQSFieI4zXAkEA+WAwG6IkCCDF5IHo9t4yg34YOTKR4NKI5kMHNMMNHVlHCBDRJw0cptiBZE5GI5cyP6X9-0A4CdJoui20Y-FIlY9i+MY-caREvJnHsWF4S8VCVMwuTXBLEwKwFLwzmUzTSNXXTKIMqAcAs7orJA5jIs6AQ6DiCBooEtIqQPWDRJKNMKnqZ0ZCMJQMI0MssIKowcG8z1iycL0i0CxtyL0qidLikyYvMtiopIBKkpSlIlDS00MrsxBHByzMlHywritKuSZGMZQTDRZ15JqEqGu-HSAPwSgpXC4giA+ABbD4WBQR4qAgMRFQIcgBASRVjvYmAAHk6DIY6vywIgbPNOCSmWJRKj5GanC0K0CyKlFM0RKb4WLEr319TEtOCna9seJUiCO07zsu9jukAnA6Hx5VAOOnBnu6N6PqwL65R+v7DwBlZxqOeS+TyowFEaKGeU5caHFfcbDE27Twox9iscOk6zoujrGBIbp3lgIhuh3ClBPS2ye2cCdjhkxFebqKHNFUI43HHfkMNcdxxfRsRMZ-WW8YV5tQOV1X1c1kkyS1obE0yvIXCcJytB5j1nA0KGNC1TldHsFZNDcRwvQdn8pf27Hcfly7wy9-A1Y17dIAAUWOj6pm14bdaPOQw-8kq5Cj9D+Zwhw1DsawnFBDPtqd6WXZxuX8bxWV5UVFU1XVWAPm3BnhDEAARMBzrQPVUaCzPB+z12847Gug9GkoMMUY4zzTorPFvVkUWtLm04OZwkQKfvJd3rG54XkRLuZ4PEDlCMDYfyV5xxei5FDdwikdCemsJsQq6gfQtDrCRRqA9dpDx0oXYuO5FYIBwT7UuEB-4nxRIYSccglDUKtNbOwMgoFplPPYdQ5YXCInfliT+P5CEl3wbw32pJyQkKPsJHsocHxN0jmoaOUN9CuFdF3ZONRkS6E4VnLGAjtz8JVkXIh5dK4kGroHMR9dG46Gbq3GOd9vAVDhOUZYSC5BeE4YTQC9wSCsRwG47osAZRygulPVU7F1Rwk4Jvf0aMfw+I8V4nxsBSE9mWOJDCyJPDOJ0AtWSxRjA4QWsAnQZxiyeWIn+WAgh8BhTMowNqDFD4mJGj2ahGZ5JnxyuoROqgypqEqFaROyJ6iuFKXACpVTwzgSgF8RJFpqEKBBm08oHS1BYTcMDfCBVkTOk9M4YZ5SxBhRJlGGM+BTItiwP1aZAMCqKSTlqIsF5nELTKs42wfT5JomrC4XZoyfytjqR7ZiMQeqJV4u1VK0FGkzIvIoVp6h2n2GWfNasrz7AXjWAcHQ3z9m-POWCpikQgW9VBf8gaDS64A2oSseZcLFkIq6XJM8ID7CeD5AoJEnANIo39GUn5Ok-n8XxYwBgnFQywB4slPFlyso0JhVzBatLOlYTUr0s4FY1DFmfH4X0NEIBwAkDcCF5KsoAFpHSIFNZObUVrrWYq5agggxAyCUENf9LKqqKhITjuNHmHKsxYTtkcYw44nBAPkMRbEDxkgupZllZYd4OTHA8HUIq1ZfLv2jQAtkBRFJ5TzCsRGLgobWA9UG6h9yOU7LtUubeOkKL6SjUJSFFKcwllzYifNrK5BYSDSi9wnB5B8iKpwutLVwpGX6hmk+nMSzUOUoYJCNQXDZLGg3CqaTxw+oKMLYdzUDm1IFZOppPMORtoKGoTt-qrwoqcP2-kRZULqO4f0Q9My+Stqmnm89yku13wbsDAq3hE6NAvKhVQj7MF7xHm7R4L7WZekUhfa+V55IVkYRbZxnorTyTKGiMDVbPzoI-hBr+88vokBg42o1IdjCKCRAobmC1m5QJMNejlOgVj9scOB522DdG4O0c+yjrrUzpMmisdtX7C13whktC81Zjbpg8K47oRNuoXVYrBrK6FvDhzykLe+UMMOciDVQ3mnp5HKdU7E2AOAaLdGOqwTTIdxwW38nplEBm5LjUUIx887DNBNHw2gra4UYnyjiSpwC8AhMxucxONzU19OJzNle-J44XB2zfkFqJOkwvqZs-EnAWiwB+2EU5wBRYOQJavqohhd9eQPnyUhbkN80yWfceFgrkXfFUx+mXbr5WEAt3HLpxLHnks2KKoG4BhUKz9rPHhlBQQeXYsEzrYT+w6tOmMDYBFIb5IFXWliypOLoyxgbet2LiBfL+rPIopCRYX6Lb9KglbJ2+W4pJYNkwqwswFRcLyHmZUpudzKONdMApfBaqAA */
     context: {
         transcriptions: {},
@@ -28083,7 +27947,7 @@ const SayPiMachine_machine = (0,Machine/* createMachine */.C)({
     states: {
         inactive: {
             description: "Idle state, not listening or speaking. Privacy mode.",
-            exit: (0,es/* assign */.f0)({ lastState: "inactive" }),
+            exit: es_assign({ lastState: "inactive" }),
             on: {
                 "saypi:call": {
                     target: "#sayPi.callStarting",
@@ -28149,7 +28013,7 @@ const SayPiMachine_machine = (0,Machine/* createMachine */.C)({
                     type: "acquireMicrophone",
                 },
             ],
-            exit: (0,es/* assign */.f0)({ lastState: "listening" }),
+            exit: es_assign({ lastState: "listening" }),
             states: {
                 recording: {
                     description: "Microphone is on and VAD is actively listening for user speech.",
@@ -28197,7 +28061,7 @@ const SayPiMachine_machine = (0,Machine/* createMachine */.C)({
                                         animation: "userSpeaking",
                                     },
                                 },
-                                (0,es/* assign */.f0)({ userIsSpeaking: true }),
+                                es_assign({ userIsSpeaking: true }),
                                 {
                                     type: "cancelCountdownAnimation",
                                 },
@@ -28217,7 +28081,7 @@ const SayPiMachine_machine = (0,Machine/* createMachine */.C)({
                                         ],
                                         cond: "hasAudio",
                                         actions: [
-                                            (0,es/* assign */.f0)({
+                                            es_assign({
                                                 userIsSpeaking: false,
                                                 timeUserStoppedSpeaking: () => new Date().getTime(),
                                             }),
@@ -28291,7 +28155,7 @@ const SayPiMachine_machine = (0,Machine/* createMachine */.C)({
                                     target: "accumulating",
                                     internal: true,
                                     actions: [
-                                        (0,es/* assign */.f0)({
+                                        es_assign({
                                             transcriptions: (context, event) => {
                                                 // If the event.data is empty, just return the current context.transcriptions
                                                 if (!event.data) {
@@ -28309,7 +28173,7 @@ const SayPiMachine_machine = (0,Machine/* createMachine */.C)({
                                     ],
                                 },
                                 onError: {
-                                    actions: (0,es/* log */.cM)("Merge request did not complete, and will be ignored"),
+                                    actions: es_log("Merge request did not complete, and will be ignored"),
                                 },
                             },
                             on: {
@@ -28361,7 +28225,7 @@ const SayPiMachine_machine = (0,Machine/* createMachine */.C)({
                                         animation: "transcribing",
                                     },
                                 },
-                                (0,es/* assign */.f0)({ isTranscribing: true }),
+                                es_assign({ isTranscribing: true }),
                             ],
                             exit: [
                                 {
@@ -28370,7 +28234,7 @@ const SayPiMachine_machine = (0,Machine/* createMachine */.C)({
                                         animation: "transcribing",
                                     },
                                 },
-                                (0,es/* assign */.f0)({ isTranscribing: false }),
+                                es_assign({ isTranscribing: false }),
                             ],
                             on: {
                                 "saypi:transcribed": {
@@ -28588,7 +28452,7 @@ const SayPiMachine_machine = (0,Machine/* createMachine */.C)({
             const audioBlob = event.blob;
             if (audioBlob) {
                 uploadAudioWithRetry(audioBlob, event.duration, context.transcriptions);
-                EventBus/* default */.Z.emit("session:transcribing", {
+                EventBus.emit("session:transcribing", {
                     audio_duration_seconds: event.duration / 1000,
                     speech_end_time: Date.now(),
                     speech_start_time: Date.now() - event.duration,
@@ -28610,22 +28474,22 @@ const SayPiMachine_machine = (0,Machine/* createMachine */.C)({
             // warmup the microphone on idle in mobile view,
             // since there's no mouseover event to trigger it
             if (ImmersionService.isViewImmersive()) {
-                EventBus/* default */.Z.emit("audio:setupRecording");
+                EventBus.emit("audio:setupRecording");
             }
         },
         setupRecording: (context, event) => {
             // differs from acquireMicrophone in that it's user-initiated
-            EventBus/* default */.Z.emit("audio:setupRecording");
+            EventBus.emit("audio:setupRecording");
         },
         startRecording: (context, event) => {
-            EventBus/* default */.Z.emit("audio:startRecording");
+            EventBus.emit("audio:startRecording");
         },
         stopRecording: (context, event) => {
-            EventBus/* default */.Z.emit("audio:stopRecording");
-            EventBus/* default */.Z.emit("audio:tearDownRecording");
+            EventBus.emit("audio:stopRecording");
+            EventBus.emit("audio:tearDownRecording");
         },
         reconnectAudio: (context, event) => {
-            EventBus/* default */.Z.emit("audio:input:reconnect");
+            EventBus.emit("audio:input:reconnect");
         },
         dismissNotification: () => {
             textualNotifications.hideNotification();
@@ -28655,7 +28519,7 @@ const SayPiMachine_machine = (0,Machine/* createMachine */.C)({
             const message = i18n("assistantIsListening", "Pi");
             if (message) {
                 const initialText = getDraftPrompt();
-                (0,es/* assign */.f0)({ defaultPlaceholderText: initialText });
+                es_assign({ defaultPlaceholderText: initialText });
                 setDraftPrompt(message);
             }
         },
@@ -28682,13 +28546,13 @@ const SayPiMachine_machine = (0,Machine/* createMachine */.C)({
         callHasStarted: () => {
             buttonModule.callActive();
             audibleNotifications.callStarted();
-            EventBus/* default */.Z.emit("session:started");
+            EventBus.emit("session:started");
         },
         callHasEnded: () => {
             visualNotifications.listeningStopped();
             buttonModule.callInactive();
             audibleNotifications.callEnded();
-            EventBus/* default */.Z.emit("session:ended");
+            EventBus.emit("session:ended");
         },
         callHasErrors: () => {
             buttonModule.callError();
@@ -28718,7 +28582,7 @@ const SayPiMachine_machine = (0,Machine/* createMachine */.C)({
             console.log("notifySentMessage", event);
             const delay_ms = Date.now() - context.timeUserStoppedSpeaking;
             const submission_delay_ms = lastSubmissionDelay;
-            EventBus/* default */.Z.emit("session:message-sent", {
+            EventBus.emit("session:message-sent", {
                 delay_ms: delay_ms,
                 wait_time_ms: submission_delay_ms,
             });
@@ -28727,7 +28591,7 @@ const SayPiMachine_machine = (0,Machine/* createMachine */.C)({
             // discard in-flight transcriptions. Called after a successful submission
             clearPendingTranscriptions();
         },
-        clearTranscriptsAction: (0,es/* assign */.f0)({
+        clearTranscriptsAction: es_assign({
             transcriptions: () => ({}),
         }),
     },
@@ -28815,8 +28679,8 @@ function readyToSubmit(state, context) {
 
 
 
-const notificationsModule = new AudibleNotificationsModule();
-const ScreenLockMachine_machine = (0,Machine/* createMachine */.C)({
+const notificationsModule = AudibleNotificationsModule.getInstance();
+const ScreenLockMachine_machine = createMachine({
     /** @xstate-layout N4IgpgJg5mDOIC5QGUDGAnMYB2ACAMgPaoDWAdAKrYA2xJkAxLaQNoAMAuoqAA6GwBLAC4DC2biAAeiACxsZZAJwB2AGzrlARhkAOeW2UAaEAE9EAJgCsAZiU3N5+Q8ttFmnQF8PxtJhwE6MiJSRgBXGjp2LiQQPkERMQlpBDkFFXVVLV19I1NEB1UyNmK2K0VXNk0tTS9vEGxCCDgJXyw8YJIJOOFRcRjkgFpVYzMEIa8fDDaA0koIkIgu-h7E-tlzEfzLSyU1Sx0qxXMdNwMJkFb-DqC6SCX43qTESxUyS2U2F01rVWtNFU0mwQ2h2Mj2yhOej2ilUtQ8QA */
     id: "Screen Lock",
     description: "Prevents unintentional touch interactions while locked.",
@@ -28894,8 +28758,8 @@ function applyNormalMode() {
 
 
 
-const audible = new AudibleNotificationsModule();
-const ThemeToggleMachine_machine = (0,Machine/* createMachine */.C)({
+const audible = AudibleNotificationsModule.getInstance();
+const ThemeToggleMachine_machine = createMachine({
     /** @xstate-layout N4IgpgJg5mDOIC5QBcAWYC2YAqB7KUANmAHSG4CGEAlgHZQDEA2gAwC6ioADrrNctVy1OIAB6IAzCwAsJAGwAmaQE5lAdjkTlStdICsAGhABPSdLkllLRdK1yAjHr1yAHAF83RtJhz4ipcio6RiZ7DiQQHj4BIRFxBClZG1UNLR19I1MEe3tlEjUFOScXWxYXAoU9Dy90LDwCYhIAOVwAJwwKQgACDFwIMAZkP2JWcO5efkFhCPj7FkKSBRd7BV17FVW5NUzEZZIVVVVK45dC6pBvOuHSABEKVoBrHr6BoYawUZEoydiZxDmciQShI1C4JEsZGoJHIdtk1GpLHoJCspA4tMo9NIPJ4QLQXvAIpdfO8vhMYtNQPEALQwkyIKl6SyHZks5QSc5E+r+MiUGj0UnRKZxRDSBSwuZ5JzKFwpMqg6QuKo4znXZptDrdXr9AU-Clif72Er5FjIpEKexbFjbOnZPZbZSuaTSexqB2ndzK2rE7l3R7PbURb7k4UINRWxZ6FgsewSErqGQuWEY-KFZxW5Qu3JKbFuIA */
     context: {
         theme: "light",
@@ -28910,7 +28774,7 @@ const ThemeToggleMachine_machine = (0,Machine/* createMachine */.C)({
                 src: () => UserPreferenceModule.getTheme(),
                 onDone: {
                     target: "loaded",
-                    actions: (0,es/* assign */.f0)({ theme: (context, event) => event.data }),
+                    actions: es_assign({ theme: (context, event) => event.data }),
                 },
                 onError: {
                     target: "Normal mode",
@@ -29041,7 +28905,7 @@ const typeOfTest = type => thing => typeof thing === type;
  *
  * @returns {boolean} True if value is an Array, otherwise false
  */
-const {isArray} = Array;
+const {isArray: utils_isArray} = Array;
 
 /**
  * Determine if a value is undefined
@@ -29061,7 +28925,7 @@ const isUndefined = typeOfTest('undefined');
  */
 function isBuffer(val) {
   return val !== null && !isUndefined(val) && val.constructor !== null && !isUndefined(val.constructor)
-    && isFunction(val.constructor.isBuffer) && val.constructor.isBuffer(val);
+    && lib_utils_isFunction(val.constructor.isBuffer) && val.constructor.isBuffer(val);
 }
 
 /**
@@ -29098,7 +28962,7 @@ function isArrayBufferView(val) {
  *
  * @returns {boolean} True if value is a String, otherwise false
  */
-const isString = typeOfTest('string');
+const lib_utils_isString = typeOfTest('string');
 
 /**
  * Determine if a value is a Function
@@ -29106,7 +28970,7 @@ const isString = typeOfTest('string');
  * @param {*} val The value to test
  * @returns {boolean} True if value is a Function, otherwise false
  */
-const isFunction = typeOfTest('function');
+const lib_utils_isFunction = typeOfTest('function');
 
 /**
  * Determine if a value is a Number
@@ -29193,7 +29057,7 @@ const isFileList = kindOfTest('FileList');
  *
  * @returns {boolean} True if value is a Stream, otherwise false
  */
-const isStream = (val) => isObject(val) && isFunction(val.pipe);
+const isStream = (val) => isObject(val) && lib_utils_isFunction(val.pipe);
 
 /**
  * Determine if a value is a FormData
@@ -29206,10 +29070,10 @@ const isFormData = (thing) => {
   let kind;
   return thing && (
     (typeof FormData === 'function' && thing instanceof FormData) || (
-      isFunction(thing.append) && (
+      lib_utils_isFunction(thing.append) && (
         (kind = kindOf(thing)) === 'formdata' ||
         // detect form-data instance
-        (kind === 'object' && isFunction(thing.toString) && thing.toString() === '[object FormData]')
+        (kind === 'object' && lib_utils_isFunction(thing.toString) && thing.toString() === '[object FormData]')
       )
     )
   )
@@ -29264,7 +29128,7 @@ function forEach(obj, fn, {allOwnKeys = false} = {}) {
     obj = [obj];
   }
 
-  if (isArray(obj)) {
+  if (utils_isArray(obj)) {
     // Iterate over array values
     for (i = 0, l = obj.length; i < l; i++) {
       fn.call(null, obj[i], i, obj);
@@ -29331,7 +29195,7 @@ function merge(/* obj1, obj2, obj3, ... */) {
       result[targetKey] = merge(result[targetKey], val);
     } else if (isPlainObject(val)) {
       result[targetKey] = merge({}, val);
-    } else if (isArray(val)) {
+    } else if (utils_isArray(val)) {
       result[targetKey] = val.slice();
     } else {
       result[targetKey] = val;
@@ -29356,7 +29220,7 @@ function merge(/* obj1, obj2, obj3, ... */) {
  */
 const extend = (a, b, thisArg, {allOwnKeys}= {}) => {
   forEach(b, (val, key) => {
-    if (thisArg && isFunction(val)) {
+    if (thisArg && lib_utils_isFunction(val)) {
       a[key] = bind(val, thisArg);
     } else {
       a[key] = val;
@@ -29459,9 +29323,9 @@ const endsWith = (str, searchString, position) => {
  *
  * @returns {?Array}
  */
-const toArray = (thing) => {
+const utils_toArray = (thing) => {
   if (!thing) return null;
-  if (isArray(thing)) return thing;
+  if (utils_isArray(thing)) return thing;
   let i = thing.length;
   if (!isNumber(i)) return null;
   const arr = new Array(i);
@@ -29572,13 +29436,13 @@ const reduceDescriptors = (obj, reducer) => {
 const freezeMethods = (obj) => {
   reduceDescriptors(obj, (descriptor, name) => {
     // skip restricted props in strict mode
-    if (isFunction(obj) && ['arguments', 'caller', 'callee'].indexOf(name) !== -1) {
+    if (lib_utils_isFunction(obj) && ['arguments', 'caller', 'callee'].indexOf(name) !== -1) {
       return false;
     }
 
     const value = obj[name];
 
-    if (!isFunction(value)) return;
+    if (!lib_utils_isFunction(value)) return;
 
     descriptor.enumerable = false;
 
@@ -29604,7 +29468,7 @@ const toObjectSet = (arrayOrString, delimiter) => {
     });
   }
 
-  isArray(arrayOrString) ? define(arrayOrString) : define(String(arrayOrString).split(delimiter));
+  utils_isArray(arrayOrString) ? define(arrayOrString) : define(String(arrayOrString).split(delimiter));
 
   return obj;
 }
@@ -29644,7 +29508,7 @@ const generateString = (size = 16, alphabet = ALPHABET.ALPHA_DIGIT) => {
  * @returns {boolean}
  */
 function isSpecCompliantForm(thing) {
-  return !!(thing && isFunction(thing.append) && thing[Symbol.toStringTag] === 'FormData' && thing[Symbol.iterator]);
+  return !!(thing && lib_utils_isFunction(thing.append) && thing[Symbol.toStringTag] === 'FormData' && thing[Symbol.iterator]);
 }
 
 const toJSONObject = (obj) => {
@@ -29659,7 +29523,7 @@ const toJSONObject = (obj) => {
 
       if(!('toJSON' in source)) {
         stack[i] = source;
-        const target = isArray(source) ? [] : {};
+        const target = utils_isArray(source) ? [] : {};
 
         forEach(source, (value, key) => {
           const reducedValue = visit(value, i + 1);
@@ -29681,15 +29545,15 @@ const toJSONObject = (obj) => {
 const isAsyncFn = kindOfTest('AsyncFunction');
 
 const isThenable = (thing) =>
-  thing && (isObject(thing) || isFunction(thing)) && isFunction(thing.then) && isFunction(thing.catch);
+  thing && (isObject(thing) || lib_utils_isFunction(thing)) && lib_utils_isFunction(thing.then) && lib_utils_isFunction(thing.catch);
 
 /* harmony default export */ const utils = ({
-  isArray,
+  isArray: utils_isArray,
   isArrayBuffer,
   isBuffer,
   isFormData,
   isArrayBufferView,
-  isString,
+  isString: lib_utils_isString,
   isNumber,
   isBoolean,
   isObject,
@@ -29699,7 +29563,7 @@ const isThenable = (thing) =>
   isFile,
   isBlob,
   isRegExp,
-  isFunction,
+  isFunction: lib_utils_isFunction,
   isStream,
   isURLSearchParams,
   isTypedArray,
@@ -29714,7 +29578,7 @@ const isThenable = (thing) =>
   kindOf,
   kindOfTest,
   endsWith,
-  toArray,
+  toArray: utils_toArray,
   forEachEntry,
   matchAll,
   isHTMLForm,
@@ -32593,9 +32457,9 @@ function validateConfig(config) {
         GA_ENDPOINT: config.GA_ENDPOINT,
     };
 }
-const valid_config = validateConfig(ConfigModule/* config */.v);
+const valid_config = validateConfig(config);
 const analytics = new AnalyticsModule(valid_config.GA_MEASUREMENT_ID, valid_config.GA_API_SECRET, valid_config.GA_ENDPOINT);
-const SessionAnalyticsMachine_machine = (0,Machine/* createMachine */.C)({
+const SessionAnalyticsMachine_machine = createMachine({
     /** @xstate-layout N4IgpgJg5mDOIC5SzrAlgewHYEEsEMAbATwBc0BjWAOgEkJCwBiWU-AJ1IH0VZ1sA2gAYAuolAAHDOnLZxIAB6IArAGZl1NQEYATAHYtevQDYjagDQhiiHQE4AHNVtDjO5VoAsO1Xo9bbAL4Blrz8uAQk5FTUOBTkAG7MpOz4WLAU7GgARmhYUMJiSCBSMphY8koI9kbUqvamHqqqHsZqysqW1gg6Qh5OLjrGja32tnq9QSGoZXhEZJQ0sQnMKFgQXAC2qPgwBfIlaLLlRZX2yo56o0L2qlpaqkJCynqdiPZa1B6237bqWmceG56SYgUIzCLzaJLNCJJhgNY8aaCUT7aSHMoVFReahCX5GR7nUy2DyvbpCHSfbS3ZR2HSeMZBYIgLAYCBweRg7CzSILVGlOQnRAAWmMpJFIM54TmURo9EYfPRAtAlS8pLsji0uNUtn0Dh0tI8EqRUp5ULiMLACqOmIQem8OLxvnsdls-g6VkQD2MtWUv3sXmMvR0hsZQA */
     context: {
         session_id: "",
@@ -32619,7 +32483,7 @@ const SessionAnalyticsMachine_machine = (0,Machine/* createMachine */.C)({
                 start_session: {
                     target: "Active",
                     actions: [
-                        (0,es/* assign */.f0)({
+                        es_assign({
                             session_id: () => Math.random().toString(36).substring(7),
                             session_start_time: () => Date.now(),
                             message_count: 0,
@@ -32723,7 +32587,7 @@ const SessionAnalyticsMachine_machine = (0,Machine/* createMachine */.C)({
                 language: language,
             });
         }),
-        incrementMessageCount: (0,es/* assign */.f0)({
+        incrementMessageCount: es_assign({
             message_count: (context) => {
                 return context.message_count + 1;
             },
@@ -32731,7 +32595,7 @@ const SessionAnalyticsMachine_machine = (0,Machine/* createMachine */.C)({
                 return (context.talk_time_seconds + context.last_message.talk_time_seconds);
             },
         }),
-        clearLastMessage: (0,es/* assign */.f0)({
+        clearLastMessage: es_assign({
             last_message: (context, event) => {
                 // clear last_message on submit
                 return {
@@ -32742,7 +32606,7 @@ const SessionAnalyticsMachine_machine = (0,Machine/* createMachine */.C)({
                 };
             },
         }),
-        rollupTranscription: (0,es/* assign */.f0)({
+        rollupTranscription: es_assign({
             audio_duration_seconds: (context, event) => {
                 return context.audio_duration_seconds + event.audio_duration_seconds;
             },
@@ -32789,35 +32653,35 @@ function StateMachineService_classCallCheck(instance, Constructor) { if (!(insta
  */
 var StateMachineService = /*#__PURE__*/StateMachineService_createClass(function StateMachineService() {
   StateMachineService_classCallCheck(this, StateMachineService);
-  this.actor = (0,interpreter/* interpret */.kJ)(SayPiMachine_machine).onTransition(function (state) {
+  this.actor = interpret(SayPiMachine_machine).onTransition(function (state) {
     if (state.changed) {
-      var fromState = state.history ? (0,LoggingModule/* serializeStateValue */.G)(state.history.value) : "N/A";
-      var toState = (0,LoggingModule/* serializeStateValue */.G)(state.value);
-      LoggingModule/* logger */.k.debug("Say, Pi Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+      var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
+      var toState = serializeStateValue(state.value);
+      logger.debug("Say, Pi Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
     }
   });
   this.actor.start();
-  this.screenLockActor = (0,interpreter/* interpret */.kJ)(ScreenLockMachine_machine).onTransition(function (state) {
+  this.screenLockActor = interpret(ScreenLockMachine_machine).onTransition(function (state) {
     if (state.changed) {
-      var fromState = state.history ? (0,LoggingModule/* serializeStateValue */.G)(state.history.value) : "N/A";
-      var toState = (0,LoggingModule/* serializeStateValue */.G)(state.value);
-      LoggingModule/* logger */.k.debug("Screen Lock Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+      var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
+      var toState = serializeStateValue(state.value);
+      logger.debug("Screen Lock Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
     }
   });
   this.screenLockActor.start();
-  this.themeToggleActor = (0,interpreter/* interpret */.kJ)(ThemeToggleMachine_machine).onTransition(function (state) {
+  this.themeToggleActor = interpret(ThemeToggleMachine_machine).onTransition(function (state) {
     if (state.changed) {
-      var fromState = state.history ? (0,LoggingModule/* serializeStateValue */.G)(state.history.value) : "N/A";
-      var toState = (0,LoggingModule/* serializeStateValue */.G)(state.value);
-      LoggingModule/* logger */.k.debug("Theme Toggle Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+      var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
+      var toState = serializeStateValue(state.value);
+      logger.debug("Theme Toggle Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
     }
   });
   this.themeToggleActor.start();
-  this.analyticsMachineActor = (0,interpreter/* interpret */.kJ)(SessionAnalyticsMachine_machine).onTransition(function (state) {
+  this.analyticsMachineActor = interpret(SessionAnalyticsMachine_machine).onTransition(function (state) {
     if (state.changed) {
-      var fromState = state.history ? (0,LoggingModule/* serializeStateValue */.G)(state.history.value) : "N/A";
-      var toState = (0,LoggingModule/* serializeStateValue */.G)(state.value);
-      LoggingModule/* logger */.k.debug("Session Analytics Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+      var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
+      var toState = serializeStateValue(state.value);
+      logger.debug("Session Analytics Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
     }
   });
   this.analyticsMachineActor.start();
@@ -33033,10 +32897,10 @@ var ButtonModule = /*#__PURE__*/function () {
     key: "registerOtherEvents",
     value: function registerOtherEvents() {
       var _this = this;
-      EventBus/* default */.Z.on("saypi:autoSubmit", function () {
+      EventBus.on("saypi:autoSubmit", function () {
         _this.handleAutoSubmit();
       });
-      EventBus/* default */.Z.on("audio:frame", function (probabilities) {
+      EventBus.on("audio:frame", function (probabilities) {
         _this.handleAudioFrame(probabilities);
       });
     }
@@ -33179,7 +33043,7 @@ var ButtonModule = /*#__PURE__*/function () {
               isImmersive = ImmersionService.isViewImmersive(); // must auto-submit in immersive mode
               if (autoSubmitEnabled || isImmersive) {
                 this.simulateFormSubmit();
-                EventBus/* default */.Z.emit("saypi:piThinking"); // Pi is responding
+                EventBus.emit("saypi:piThinking"); // Pi is responding
               } else {
                 console.log("Autosubmit is off");
               }
@@ -33604,7 +33468,7 @@ class DOMObserver {
                     // ... handle other elements
                     // notify listeners that (all critical) script content has been loaded
                     if (promptObs.isReady()) {
-                        EventBus/* default */.Z.emit("saypi:ui:content-loaded");
+                        EventBus.emit("saypi:ui:content-loaded");
                     }
                 });
                 [...mutation.removedNodes]
@@ -33617,7 +33481,7 @@ class DOMObserver {
                         this.findAndDecoratePromptField(document.body);
                         if (obs.found && obs.isNew && obs.decorated) {
                             // emit event to notify listeners that script content has been loaded
-                            EventBus/* default */.Z.emit("saypi:ui:content-loaded");
+                            EventBus.emit("saypi:ui:content-loaded");
                         }
                     }
                     const ctrlPanelObs = this.findControlPanel(removedElement);
@@ -33802,25 +33666,25 @@ class DOMObserver {
 }
 
 // EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js
-var injectStylesIntoStyleTag = __webpack_require__(3379);
+var injectStylesIntoStyleTag = __webpack_require__(379);
 var injectStylesIntoStyleTag_default = /*#__PURE__*/__webpack_require__.n(injectStylesIntoStyleTag);
 // EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/styleDomAPI.js
-var styleDomAPI = __webpack_require__(7795);
+var styleDomAPI = __webpack_require__(795);
 var styleDomAPI_default = /*#__PURE__*/__webpack_require__.n(styleDomAPI);
 // EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/insertBySelector.js
 var insertBySelector = __webpack_require__(569);
 var insertBySelector_default = /*#__PURE__*/__webpack_require__.n(insertBySelector);
 // EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js
-var setAttributesWithoutAttributes = __webpack_require__(3565);
+var setAttributesWithoutAttributes = __webpack_require__(565);
 var setAttributesWithoutAttributes_default = /*#__PURE__*/__webpack_require__.n(setAttributesWithoutAttributes);
 // EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/insertStyleElement.js
-var insertStyleElement = __webpack_require__(9216);
+var insertStyleElement = __webpack_require__(216);
 var insertStyleElement_default = /*#__PURE__*/__webpack_require__.n(insertStyleElement);
 // EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/styleTagTransform.js
-var styleTagTransform = __webpack_require__(4589);
+var styleTagTransform = __webpack_require__(589);
 var styleTagTransform_default = /*#__PURE__*/__webpack_require__.n(styleTagTransform);
 // EXTERNAL MODULE: ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./src/styles/common.scss
-var common = __webpack_require__(8580);
+var common = __webpack_require__(580);
 ;// CONCATENATED MODULE: ./src/styles/common.scss
 
       
@@ -33843,7 +33707,7 @@ options.setAttributes = (setAttributesWithoutAttributes_default());
 options.domAPI = (styleDomAPI_default());
 options.insertStyleElement = (insertStyleElement_default());
 
-var update = injectStylesIntoStyleTag_default()(common/* default */.Z, options);
+var common_update = injectStylesIntoStyleTag_default()(common/* default */.Z, options);
 
 
 
@@ -33851,7 +33715,7 @@ var update = injectStylesIntoStyleTag_default()(common/* default */.Z, options);
        /* harmony default export */ const styles_common = (common/* default */.Z && common/* default */.Z.locals ? common/* default */.Z.locals : undefined);
 
 // EXTERNAL MODULE: ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./src/styles/desktop.scss
-var desktop = __webpack_require__(1902);
+var desktop = __webpack_require__(902);
 ;// CONCATENATED MODULE: ./src/styles/desktop.scss
 
       
@@ -33913,7 +33777,7 @@ var mobile_update = injectStylesIntoStyleTag_default()(mobile/* default */.Z, mo
        /* harmony default export */ const styles_mobile = (mobile/* default */.Z && mobile/* default */.Z.locals ? mobile/* default */.Z.locals : undefined);
 
 // EXTERNAL MODULE: ./node_modules/css-loader/dist/cjs.js!./src/styles/rectangles.css
-var styles_rectangles = __webpack_require__(9136);
+var styles_rectangles = __webpack_require__(136);
 ;// CONCATENATED MODULE: ./src/styles/rectangles.css
 
       
@@ -34016,12 +33880,15 @@ saypi_index_asyncToGenerator( /*#__PURE__*/saypi_index_regeneratorRuntime().mark
           panel.appendChild(button);
         };
         startAudioModule = function _startAudioModule() {
-          var audioModule = new AudioModule/* default */.Z();
+          var audioModule = new AudioModule();
+          window.addEventListener("unload", function () {
+            audioModule.stop();
+          });
           audioModule.start();
         };
         chatbot = ChatbotService.getChatbot();
         isLoaded = false;
-        EventBus/* default */.Z.on("saypi:ui:content-loaded", function () {
+        EventBus.on("saypi:ui:content-loaded", function () {
           if (isLoaded) {
             return;
           }

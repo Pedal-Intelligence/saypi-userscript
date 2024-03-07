@@ -1,5 +1,5 @@
 import { setFinalPrompt } from "./TranscriptionModule";
-import AudioControlsModule from "./AudioControlsModule";
+import AudioControlsModule from "./audio/AudioControlsModule";
 
 interface RestorePoint {
   prompt: string;
