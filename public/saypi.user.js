@@ -28692,8 +28692,9 @@ const SayPiMachine_machine = createMachine({
             if (event.pFinishedSpeaking !== undefined) {
                 probabilityFinished = event.pFinishedSpeaking;
             }
-            // Incorporate the tempo into the delay, defaulting to 0.5 (average tempo) if undefined
-            let tempo = event.tempo !== undefined ? event.tempo : 0.5;
+            // Incorporate the tempo into the delay, defaulting to 1 (fast tempo) if undefined
+            // This allows us to adjust the delay based on the user's speaking speed, or to ignore it as a factor if it's not provided
+            let tempo = event.tempo !== undefined ? event.tempo : 1;
             const finalDelay = calculateDelay(context.timeUserStoppedSpeaking, probabilityFinished, tempo, maxDelay);
             console.log("Waiting for", (finalDelay / 1000).toFixed(1), "seconds before submitting");
             // ideally we would use the current state to determine if we're ready to submit,

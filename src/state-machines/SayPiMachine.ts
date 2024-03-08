@@ -950,8 +950,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           probabilityFinished = event.pFinishedSpeaking;
         }
 
-        // Incorporate the tempo into the delay, defaulting to 0.5 (average tempo) if undefined
-        let tempo = event.tempo !== undefined ? event.tempo : 0.5;
+        // Incorporate the tempo into the delay, defaulting to 1 (fast tempo) if undefined
+        // This allows us to adjust the delay based on the user's speaking speed, or to ignore it as a factor if it's not provided
+        let tempo = event.tempo !== undefined ? event.tempo : 1;
 
         const finalDelay = calculateDelay(
           context.timeUserStoppedSpeaking,
