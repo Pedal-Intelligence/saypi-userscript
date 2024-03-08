@@ -27230,7 +27230,8 @@ class TextualNotificationsModule {
 class AudibleNotificationsModule {
     constructor() {
         // Load audio resources in the constructor
-        this.listeningSound = new Audio(getResourceUrl("audio/guitar-pluck.mp3"));
+        this.listeningSound = new Audio(getResourceUrl("audio/send-round-short.mp3"));
+        this.listeningSound.preload = "auto"; // short track, so load the audio file as soon as possible
         this.callStartedSound = new Audio(getResourceUrl("audio/startup-synth.mp3"));
         this.callEndedSound = new Audio(getResourceUrl("audio/turn-off.mp3"));
         this.lockSound = new Audio(getResourceUrl("audio/beep-on.mp3"));

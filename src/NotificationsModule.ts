@@ -106,7 +106,10 @@ export class AudibleNotificationsModule implements INotificationsModule {
 
   private constructor() {
     // Load audio resources in the constructor
-    this.listeningSound = new Audio(getResourceUrl("audio/guitar-pluck.mp3"));
+    this.listeningSound = new Audio(
+      getResourceUrl("audio/send-round-short.mp3")
+    );
+    this.listeningSound.preload = "auto"; // short track, so load the audio file as soon as possible
     this.callStartedSound = new Audio(
       getResourceUrl("audio/startup-synth.mp3")
     );
