@@ -26193,17 +26193,13 @@ function serializeStateValue(stateValue) {
     return "".concat(key, ":").concat(serializeStateValue(stateValue[key]));
   }).join(",");
 }
-var DEBUG = false; // Consider using config and .env to set the DEBUG flag
-
 var logger = {
   debug: function debug() {
-    if (DEBUG) {
-      var _console;
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-      (_console = console).log.apply(_console, ["DEBUG:"].concat(args));
+    var _console;
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
     }
+    (_console = console).debug.apply(_console, ["DEBUG:"].concat(args));
   },
   info: function info() {
     var _console2;
@@ -26224,13 +26220,14 @@ var logger = {
 
 
 const maxRetryAttempts = 5;
-const AUDIO_RELOAD_DELAY_MS = 1000; // minimum delay in milliseconds
-const AUDIO_LOAD_TIMEOUT_MS = 4000; // time allowed for audio to load before retrying
+const AUDIO_RELOAD_DELAY_MS = 1500; // minimum delay in milliseconds
+const AUDIO_LOAD_TIMEOUT_MS = 4000; // time allowed for audio to load before retrying - also update in WaitingWhileLoading state
 const machine = createMachine({
     /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AogJzyzwAlkA7CAGzDwGJKtkJYAXZPFgbQAYBdRUAAcssDC2xkBIAB6IALACYANCACeiAIzcA7BoB0ANgUK53ABw7ucgMwGAvnZVpMuAkVIVqePQEkqYWkFKZFUefiQQYVFxLEkI2QQNLW49biMDbgUATgBWI20zORV1BDNtHL0yk0zrHO5uLLMchyd0bHxCEnJ-bz9qWmQAIyIuPikosQkpBKT61PTM3PzC4sQs7QVKjbkNa20snW1alpBndrcuzxpff1oaTrDxkUnY6c1k+YUM7LyFAqK1Joano9tUNEYvtptPZHKc2q5Oh4ejd+gwmKx2KNwkJnjE4qAEmYNFk9DlrLsTNkklllIDSnISQYDDSjNYzAYNIUFCczgj3N0vHoAArBVQYMhQQJoWBgR4RCZ4t6JTkpHIKWqmXQaDZJVYIDZmPRZYlfQraGrGHnwjr8q7eEUhcWSoYjOU46JTeKaHJyCpmBRWDQBjZ7bR6uQFPR-DLWORGJI5dlWlw2y7Ih1iiV3C5uyK4z0E72+yoBnbB9VQvVqw1Q74mMlpL7J86IgXXDNO+iMZhsDi5hUFmTvOaN75LP4rOlQkk7Gl5ayZXZGZt8tOCgAy3c7AGNyEEQiwABaEVBQQ-9-OvL3KkcLH7LAElOQ7PRxjnGRTGZlNFeppEbrcs3uIgLw9K9CxvFJR0WX5-j1bISS0LI2TSHQyTJX8Ln-a5NyYTsXT7MZ5UvfEh0gz4x1gycSljRkGlsQprCyGxkMw1s7T0AAlMA0UwLNeIxQjsTzMDSJmAwcm0SocmY-Yvh9SSDD1JJnz0IN1VyMl2R+NjbWRbjeM7aQMRYMA9GQAAzUy8AACgAQQAVQAER8AB5AB9TicHXVy7Kc9ynO8uyAE0AEoBmtLC228AzAKgUCXjEos-VLIMdArMM6SJUl6m4XZJJyXZ6jMXS13baVIECUUEsVa8fRJXKrF+DluEkvUMkNcEaW0X0fQUCxuVhXk-2i4UKogAZhiEp5RKVerUly310i0Nq6V2LQSxyH1oXNAw5FK7D7XG7MHiI91ErmhkFvqJavhWzKSiXfRrAULbajqV7nwO0ahWOgTeyxGaLrqq7GtulrVpKbrKlyMxaisPb6ocWEyCwCA4CkYaortIHaoggBaJS6UJ67GrJ+ptG+ji+jAXHBwSI4DD0c1yR6woYxMPVcn0dTTEYnY42aIbIvY9NRSdOnwLI9apOhSSXu1IxWo0cNzRBGTbHVN7jVjKnkVwvioElpL9R9aTmPkuHmQUFW6X6zYJOYvLFC0T69cFWK8IlY2lRNCpmvMOQmjZGxlJsI11jKHRYy2wX3fK1AZQgH3r0ULnwS2CtGiY-qzCyZG7CAA */
     context: {
         delay: AUDIO_RELOAD_DELAY_MS,
         retries: 0,
+        startTime: 0,
     },
     id: "audioErrorHandler",
     initial: "Idle",
@@ -26284,9 +26281,21 @@ const machine = createMachine({
             },
             description: "The audio is currently playing.",
         },
-        LoadingAfterDelay: {
-            description: "The audio element is loading the audio source after some delay to resolve the error.",
+        WaitingWhileLoading: {
+            description: "Following a reload command, we're waiting for the audio to load. Will finish in a successful load (partial or complete), error, or timeout event.",
             on: {
+                loadedmetadata: {
+                    target: "Playing",
+                    actions: [
+                        {
+                            type: "resetRetryCounter",
+                        },
+                        {
+                            type: "forcePlay",
+                        },
+                    ],
+                    description: "The audio has partially loaded and is ready to play.",
+                },
                 canplaythrough: {
                     target: "Playing",
                     actions: [
@@ -26307,7 +26316,7 @@ const machine = createMachine({
                 },
             },
             after: {
-                3000: {
+                4000: {
                     target: "Reloading",
                     actions: [{ type: "decreaseDelayAfterTimeout" }],
                     description: "The audio has failed to load, usually due to a HTTP 400 error on Safari.",
@@ -26315,10 +26324,36 @@ const machine = createMachine({
             },
         },
         Reloading: {
+            on: {
+                loadedmetadata: {
+                    target: "Playing",
+                    actions: [
+                        {
+                            type: "resetRetryCounter",
+                        },
+                        {
+                            type: "forcePlay",
+                        },
+                    ],
+                    description: "While waiting to reload, the audio has partially loaded and is ready to play.",
+                },
+                canplaythrough: {
+                    target: "Playing",
+                    actions: [
+                        {
+                            type: "resetRetryCounter",
+                        },
+                        {
+                            type: "forcePlay",
+                        },
+                    ],
+                    description: "While waiting to reload, the audio has loaded successfully and is ready to play.",
+                },
+            },
             after: {
                 RELOAD_DELAY: [
                     {
-                        target: "LoadingAfterDelay",
+                        target: "WaitingWhileLoading",
                         cond: "retriesRemaining",
                         actions: [
                             { type: "forceReload" },
@@ -26380,15 +26415,25 @@ const machine = createMachine({
             context.delay = context.delay * 2;
         },
         decreaseDelayAfterTimeout: function (context, event) {
-            console.debug("Retrying audio load after timeout...");
+            console.debug(`Audio load timed out after ${AUDIO_LOAD_TIMEOUT_MS}ms. Trying again...`);
             context.delay = Math.max(AUDIO_RELOAD_DELAY_MS, context.delay - AUDIO_LOAD_TIMEOUT_MS);
         },
         forceReload: function (context, event) {
-            console.debug(`Reloading audio, attempt ${context.retries + 1} of ${maxRetryAttempts}, after ${context.delay}ms...`, event);
+            console.debug(`Reloading audio, attempt ${context.retries + 1} of ${maxRetryAttempts}...`);
             EventBus.emit("audio:reload");
+            if (context.retries === 0) {
+                context.startTime = new Date().getTime();
+            }
+            const currentTime = new Date().getTime();
+            const timeElapsed = currentTime - context.startTime;
+            console.debug(`Time elapsed since first retry: ${timeElapsed / 1000}s, current delay: ${context.delay}ms`);
         },
         forcePlay: function (context, event) {
-            console.debug("Forcing audio to play after successful reload.", event);
+            console.debug("Starting audio after successful reload.", event);
+            // how long did it take to reload and play?
+            const currentTime = new Date().getTime();
+            const timeElapsed = currentTime - context.startTime;
+            console.debug(`Time taken to reload and start audio: ${timeElapsed / 1000} seconds`);
             EventBus.emit("audio:output:play");
         },
     },
@@ -27805,7 +27850,15 @@ class TranscriptMergeService {
 }
 
 ;// CONCATENATED MODULE: ./src/TimerModule.ts
-/* helper functions */
+/**
+ * Calculate the delay before submitting a message to Pi.
+ *
+ * @param timeUserStoppedSpeaking - The time the user stopped speaking.
+ * @param probabilityFinished - The probability that the user has finished speaking. Expected to be between 0 and 1.
+ * @param tempo - The tempo of the user's speech. Expected to be between 0 and 1.
+ * @param maxDelay - The maximum delay.
+ * @returns The calculated delay.
+ */
 function calculateDelay(timeUserStoppedSpeaking, probabilityFinished, tempo, maxDelay) {
     // Get the current time (in milliseconds)
     const currentTime = new Date().getTime();
