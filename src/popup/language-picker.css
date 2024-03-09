@@ -351,7 +351,7 @@ Usage: codyhouse.co/license
       }
 
       .language-picker__flag--arabic::before {
-        background-image: url("../icons/flags/sa.svg");
+        background-image: url("../icons/flags/arab.svg");
       }
 
       .language-picker__flag--bengali::before {
