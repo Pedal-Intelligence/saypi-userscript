@@ -25805,7 +25805,10 @@ var AudioModule = /*#__PURE__*/function () {
     if (!this.audioElement) {
       console.error("Audio element not found!");
     } else {
-      this.audioElement.preload = "auto"; // enable aggressive preloading of audio
+      //disable aggressive preloading of audio - may cause playback issues on Safari
+      //this.audioElement.preload = "auto"; // enable aggressive preloading of audio
+      console.log("Audio element found", this.audioElement);
+      this.safariErrorHandler = new SafariAudioErrorHandler(this.audioElement);
     }
 
     this.audioOutputActor = (0,xstate__WEBPACK_IMPORTED_MODULE_4__.interpret)(_state_machines_AudioOutputMachine_ts__WEBPACK_IMPORTED_MODULE_1__.audioOutputMachine);
@@ -25831,6 +25834,7 @@ var AudioModule = /*#__PURE__*/function () {
       // audio output (Pi)
       this.audioOutputActor.start();
       this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
+      this.safariErrorHandler.startMonitoring();
 
       // audio input (user)
       this.audioInputActor.start();
@@ -25842,6 +25846,11 @@ var AudioModule = /*#__PURE__*/function () {
      * @param {HTMLAudioElement} audio
      * @param {audioOutputMachine} actor
      */
+  }, {
+    key: "stop",
+    value: function stop() {
+      this.safariErrorHandler.stopMonitoring();
+    }
   }, {
     key: "registerAudioPlaybackEvents",
     value: function registerAudioPlaybackEvents(audio, actor) {
@@ -25920,6 +25929,7 @@ var AudioModule = /*#__PURE__*/function () {
       });
       _EventBus_js__WEBPACK_IMPORTED_MODULE_3__["default"].on("audio:skipCurrent", function (e) {
         _this.audioElement.pause();
+        console.log("paused audio playback on skip signal");
       });
     }
   }]);

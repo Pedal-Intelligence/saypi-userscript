@@ -1,5 +1,5 @@
 import EventBus from "./EventBus.js";
-import StateMachineService from "./StateMachineService.js";
+import StateMachineService from "../StateMachineService.js";
 
 const CALL_READY = "saypi:callReady";
 const USER_SPEAKING = "saypi:userSpeaking";

@@ -95,33 +95,50 @@ export class TextualNotificationsModule implements INotificationsModule {
 }
 
 export class AudibleNotificationsModule implements INotificationsModule {
-  private listeningSound: HTMLAudioElement = new Audio(
-    getResourceUrl("audio/guitar-pluck.mp3")
-  );
-  private callStartedSound: HTMLAudioElement = new Audio(
-    getResourceUrl("audio/startup-synth.mp3")
-  );
-  private callEndedSound: HTMLAudioElement = new Audio(
-    getResourceUrl("audio/turn-off.mp3")
-  );
-  private lockSound: HTMLAudioElement = new Audio(
-    getResourceUrl("audio/beep-on.mp3")
-  );
-  private unlockSound: HTMLAudioElement = new Audio(
-    getResourceUrl("audio/beep-off.mp3")
-  );
-  private themeOnSound: HTMLAudioElement = new Audio(
-    getResourceUrl("audio/switch-on.mp3")
-  );
-  private themeOffSound: HTMLAudioElement = new Audio(
-    getResourceUrl("audio/switch-off.mp3")
-  );
+  private static instance: AudibleNotificationsModule;
+  private listeningSound: HTMLAudioElement;
+  private callStartedSound: HTMLAudioElement;
+  private callEndedSound: HTMLAudioElement;
+  private lockSound: HTMLAudioElement;
+  private unlockSound: HTMLAudioElement;
+  private themeOnSound: HTMLAudioElement;
+  private themeOffSound: HTMLAudioElement;
+
+  private constructor() {
+    // Load audio resources in the constructor
+    this.listeningSound = new Audio(
+      getResourceUrl("audio/send-round-short.mp3")
+    );
+    this.listeningSound.preload = "auto"; // short track, so load the audio file as soon as possible
+    this.callStartedSound = new Audio(
+      getResourceUrl("audio/startup-synth.mp3")
+    );
+    this.callEndedSound = new Audio(getResourceUrl("audio/turn-off.mp3"));
+    this.lockSound = new Audio(getResourceUrl("audio/beep-on.mp3"));
+    this.unlockSound = new Audio(getResourceUrl("audio/beep-off.mp3"));
+    this.themeOnSound = new Audio(getResourceUrl("audio/switch-on.mp3"));
+    this.themeOffSound = new Audio(getResourceUrl("audio/switch-off.mp3"));
+  }
+
+  public static getInstance(): AudibleNotificationsModule {
+    if (!AudibleNotificationsModule.instance) {
+      AudibleNotificationsModule.instance = new AudibleNotificationsModule();
+    }
+    return AudibleNotificationsModule.instance;
+  }
 
   private async playSound(sound: HTMLAudioElement) {
     const soundEnabled = await UserPreferenceModule.getSoundEffects();
     if (soundEnabled) {
       sound.play().catch((e) => {
-        console.error("Unable to play audio notification:", e);
+        if (e.name === "NotAllowedError") {
+          // Inform the user to enable audio permissions or trigger from a click
+          console.error(
+            `Audio playback blocked on ${sound.src} notification. Please initiate audio from a user interaction.`
+          );
+        } else {
+          console.error("Unable to play audio notification:", e);
+        }
       });
     } else {
       console.debug("Sound effects disabled");

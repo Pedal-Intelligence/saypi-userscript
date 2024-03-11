@@ -1,6 +1,6 @@
-import { ImmersionService } from "./UserAgentModule.js";
+import { ImmersionService } from "./ImmersionService.js";
 import { addChild } from "./DOMModule.ts";
-import EventBus from "./EventBus.js";
+import EventBus from "./events/EventBus.js";
 import StateMachineService from "./StateMachineService.js";
 import { submitErrorHandler } from "./SubmitErrorHandler.ts";
 import exitIconSVG from "./icons/exit.svg";

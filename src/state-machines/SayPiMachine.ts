@@ -13,7 +13,7 @@ import {
   TextualNotificationsModule,
   VisualNotificationsModule,
 } from "../NotificationsModule";
-import { ImmersionService } from "../UserAgentModule.js";
+import { ImmersionService } from "../ImmersionService.js";
 import {
   uploadAudioWithRetry,
   getDraftPrompt,
@@ -24,13 +24,12 @@ import {
 } from "../TranscriptionModule";
 import { TranscriptMergeService } from "../TranscriptMergeService";
 import { config } from "../ConfigModule";
-import EventBus from "../EventBus";
+import EventBus from "../events/EventBus.js";
 import { calculateDelay } from "../TimerModule";
-import AudioControlsModule from "../AudioControlsModule";
+import AudioControlsModule from "../audio/AudioControlsModule";
 import { requestWakeLock, releaseWakeLock } from "../WakeLockModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import getMessage from "../i18n";
-import { last } from "lodash";
 
 type SayPiTranscribedEvent = {
   type: "saypi:transcribed";
@@ -157,7 +156,7 @@ UserPreferenceModule.getLanguage().then((language) => {
   mergeService = new TranscriptMergeService(apiServerUrl, language);
 });
 
-const audibleNotifications = new AudibleNotificationsModule();
+const audibleNotifications = AudibleNotificationsModule.getInstance();
 const textualNotifications = new TextualNotificationsModule();
 const visualNotifications = new VisualNotificationsModule();
 const audioControls = new AudioControlsModule();
@@ -951,8 +950,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           probabilityFinished = event.pFinishedSpeaking;
         }
 
-        // Incorporate the tempo into the delay, defaulting to 0.5 (average tempo) if undefined
-        let tempo = event.tempo !== undefined ? event.tempo : 0.5;
+        // Incorporate the tempo into the delay, defaulting to 1 (fast tempo) if undefined
+        // This allows us to adjust the delay based on the user's speaking speed, or to ignore it as a factor if it's not provided
+        let tempo = event.tempo !== undefined ? event.tempo : 1;
 
         const finalDelay = calculateDelay(
           context.timeUserStoppedSpeaking,

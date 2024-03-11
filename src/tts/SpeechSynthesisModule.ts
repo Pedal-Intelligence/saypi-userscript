@@ -1,7 +1,7 @@
 import axios from "axios";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { config } from "../ConfigModule";
-import AudioControlsModule from "../AudioControlsModule";
+import AudioControlsModule from "../audio/AudioControlsModule";
 
 function generateUUID(): string {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {

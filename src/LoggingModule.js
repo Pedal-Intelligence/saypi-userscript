@@ -8,13 +8,9 @@ export function serializeStateValue(stateValue) {
     .join(",");
 }
 
-const DEBUG = false; // Consider using config and .env to set the DEBUG flag
-
 export const logger = {
   debug: (...args) => {
-    if (DEBUG) {
-      console.log("DEBUG:", ...args);
-    }
+    console.debug("DEBUG:", ...args);
   },
   info: (...args) => {
     console.log("INFO:", ...args);

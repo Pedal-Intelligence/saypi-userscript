@@ -1,5 +1,5 @@
 import { createMachine, assign, actions } from "xstate";
-import EventBus from "../EventBus.js";
+import EventBus from "../events/EventBus.js";
 const { log } = actions;
 
 type LoadstartEvent = { type: "loadstart"; source: string };

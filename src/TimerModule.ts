@@ -1,4 +1,12 @@
-/* helper functions */
+/**
+ * Calculate the delay before submitting a message to Pi.
+ *
+ * @param timeUserStoppedSpeaking - The time the user stopped speaking.
+ * @param probabilityFinished - The probability that the user has finished speaking. Expected to be between 0 and 1.
+ * @param tempo - The tempo of the user's speech. Expected to be between 0 and 1.
+ * @param maxDelay - The maximum delay.
+ * @returns The calculated delay.
+ */
 export function calculateDelay(
   timeUserStoppedSpeaking: number,
   probabilityFinished: number,

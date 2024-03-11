@@ -1,6 +1,6 @@
 import { Chatbot } from "./Chatbot";
 import { buttonModule } from "../ButtonModule.js";
-import EventBus from "../EventBus.js";
+import EventBus from "../events/EventBus.js";
 import { TextToSpeechUIManager } from "../tts/TTSUIManager";
 
 class Observation {

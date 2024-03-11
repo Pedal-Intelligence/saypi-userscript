@@ -3,7 +3,7 @@ import {
   SpeechSynthesisModule,
   SpeechSynthesisVoiceRemote,
 } from "../tts/SpeechSynthesisModule";
-import AudioControlsModule from "../AudioControlsModule";
+import AudioControlsModule from "../audio/AudioControlsModule";
 
 type Preference = "speed" | "balanced" | "accuracy" | null;
 export type VoicePreference = SpeechSynthesisVoiceRemote | null;
