@@ -65,9 +65,28 @@ export class ImmersionService {
 
     // if not already on the talk page, navigate to it
     // this is to ensure the user is not stuck in the immersive view on a non-chat page
-    const path = this.chatbot.getChatPath();
-    if (window.location.pathname !== path) {
-      window.location = path;
+    const currentPath = window.location.pathname;
+    if (!this.chatbot.isChatablePath(currentPath)) {
+      const path = this.chatbot.getChatPath();
+      if (window.location.pathname !== path) {
+        // Get the current redirect count
+        let redirectCount = localStorage.getItem("redirectCount");
+        if (!redirectCount) {
+          redirectCount = 0;
+        }
+
+        // If the redirect count is less than the limit, attempt a redirect
+        if (redirectCount < 3) {
+          localStorage.setItem("redirectCount", ++redirectCount);
+          window.location = path;
+        } else {
+          // Reset the redirect count
+          localStorage.removeItem("redirectCount");
+          console.warn(
+            "Redirect limit reached. Unable to redirect to chat page."
+          );
+        }
+      }
     }
 
     const element = document.documentElement;
