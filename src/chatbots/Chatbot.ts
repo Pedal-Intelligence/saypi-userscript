@@ -6,5 +6,6 @@ export interface Chatbot {
   getPromptTextInputSelector(): string;
   getPromptSubmitButtonSelector(): string;
   getChatPath(): string;
+  isChatablePath(path: string): boolean; // can the chatbot chat on this URL path?
   // ... other methods for different selectors
 }

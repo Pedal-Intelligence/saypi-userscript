@@ -2,7 +2,7 @@
 // @name         Say, Pi
 // @name:zh-CN   说，Pi 
 // @namespace    http://www.saypi.ai/
-// @version      1.5.10
+// @version      1.5.11
 // @description  Seamless speech-to-text enhancement for Pi, the conversational AI. Enjoy hands-free, high-accuracy conversations in any language.
 // @description:zh-CN  为Pi聊天机器人提供无手操作的高精度语音转文字功能，支持多种语言。
 // @author       Ross Cadogan
@@ -26967,9 +26967,26 @@ var ImmersionService = /*#__PURE__*/function () {
 
       // if not already on the talk page, navigate to it
       // this is to ensure the user is not stuck in the immersive view on a non-chat page
-      var path = this.chatbot.getChatPath();
-      if (window.location.pathname !== path) {
-        window.location = path;
+      var currentPath = window.location.pathname;
+      if (!this.chatbot.isChatablePath(currentPath)) {
+        var path = this.chatbot.getChatPath();
+        if (window.location.pathname !== path) {
+          // Get the current redirect count
+          var redirectCount = localStorage.getItem("redirectCount");
+          if (!redirectCount) {
+            redirectCount = 0;
+          }
+
+          // If the redirect count is less than the limit, attempt a redirect
+          if (redirectCount < 3) {
+            localStorage.setItem("redirectCount", ++redirectCount);
+            window.location = path;
+          } else {
+            // Reset the redirect count
+            localStorage.removeItem("redirectCount");
+            console.warn("Redirect limit reached. Unable to redirect to chat page.");
+          }
+        }
       }
       var element = document.documentElement;
       element.classList.remove("desktop-view");
@@ -32878,7 +32895,11 @@ class PiAIChatbot {
         return "div.hidden.w-22.flex-col.items-center.gap-1.border-r";
     }
     getChatPath() {
-        return "/talk";
+        return "/discover";
+    }
+    isChatablePath(path) {
+        // true if path starts with /talk or /discover
+        return path.includes("/talk") || path.includes("/discover");
     }
 }
 

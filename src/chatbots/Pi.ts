@@ -27,7 +27,12 @@ class PiAIChatbot implements Chatbot {
   }
 
   getChatPath(): string {
-    return "/talk";
+    return "/discover";
+  }
+
+  isChatablePath(path: string): boolean {
+    // true if path starts with /talk or /discover
+    return path.includes("/talk") || path.includes("/discover");
   }
 }
 
