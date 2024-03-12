@@ -80,9 +80,13 @@ export default class AudioModule {
 
   stop() {}
 
+  /**
+   *
+   * @param {HTMLAudioElement} audio
+   * @param {audioOutputMachine} actor
+   */
   registerAudioPlaybackEvents(audio, actor) {
     const events = [
-      "loadstart",
       "loadedmetadata",
       "canplaythrough",
       "play",
@@ -90,10 +94,15 @@ export default class AudioModule {
       "ended",
       "seeked",
       "emptied",
-      "abort",
-      "stalled",
-      "error",
     ];
+
+    const sourcedEvents = ["loadstart"];
+    sourcedEvents.forEach((event) => {
+      audio.addEventListener(event, (e) => {
+        const detail = { source: audio.currentSrc };
+        actor.send(event, detail);
+      });
+    });
 
     events.forEach((event) => {
       audio.addEventListener(event, () => actor.send(event));
