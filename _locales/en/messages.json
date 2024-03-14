@@ -167,5 +167,25 @@
   },
   "consentOptIn": {
     "message": "I'm in!"
+  },
+  "checkingApplicationStatus": {
+    "message": "Checking application status...",
+    "description": "Message to display while the system status is being determined, e.g. during load."
+  },
+  "applicationStatusUnknown": {
+    "message": "Application status unknown",
+    "description": "Message to display when the application status cannot be determined. E.g. when the client is offline."
+  },
+  "applicationStatusIssue": {
+    "message": "System Issue Alert",
+    "description": "Message to display when the application is experiencing issues."
+  },
+  "recommendedActions": {
+    "message": "In the meantime, we recommend:",
+    "description": "Message preceding a list of recommended actions the user may take to remediate a known issue."
+  },
+  "dismissAlert": {
+    "message": "Dismiss",
+    "description": "Label for the button to dismiss a system issue alert."
   }
 }
