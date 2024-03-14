@@ -187,5 +187,9 @@
   "recommendedActions": {
     "message": "与此同时，我们建议：",
     "description": "在解决已知问题的过程中，用户可以采取以下推荐操作的消息。"
+  },
+  "extensionPopupTitle": {
+    "description": "扩展程序弹出对话框的标题。",
+    "message": "Say, Pi"
   }
 }

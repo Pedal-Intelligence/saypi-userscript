@@ -187,5 +187,9 @@
   "recommendedActions": {
     "description": "사용자가 알려진 문제를 해결하기 위해 취할 수 있는 권장 조치 목록을 선행하는 메시지.",
     "message": "그 동안에, 우리는 추천합니다:"
+  },
+  "extensionPopupTitle": {
+    "description": "확장 프로그램의 팝업 대화 상자 제목.",
+    "message": "Say, Pi"
   }
 }

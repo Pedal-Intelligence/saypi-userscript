@@ -187,5 +187,9 @@
   "recommendedActions": {
     "description": "既知の問題を解決するためにユーザーが取ることを推奨される行動のリストに先立つメッセージ。",
     "message": "その間、私たちは以下をお勧めします:"
+  },
+  "extensionPopupTitle": {
+    "description": "拡張機能のポップアップダイアログのタイトル。",
+    "message": "Say, Pi"
   }
 }

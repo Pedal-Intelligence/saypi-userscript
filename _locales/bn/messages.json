@@ -187,5 +187,9 @@
   "recommendedActions": {
     "description": "একটি পরিচিত সমস্যা ঠিক করার জন্য ব্যবহারকারীরা নেয়া উপাদেয় পর্বের ।",
     "message": "এই সময়ে, আমরা সুপারিশ করি:"
+  },
+  "extensionPopupTitle": {
+    "description": "এক্সটেনশনের পপ-আপ ডায়ালোগের শিরোনাম।",
+    "message": "Say, Pi"
   }
 }

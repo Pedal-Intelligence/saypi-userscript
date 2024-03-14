@@ -187,5 +187,9 @@
   "dismissAlert": {
     "message": "Dismiss",
     "description": "Label for the button to dismiss a system issue alert."
+  },
+  "extensionPopupTitle": {
+    "message": "Say, Pi Settings",
+    "description": "The title of the extension's popup dialog."
   }
 }

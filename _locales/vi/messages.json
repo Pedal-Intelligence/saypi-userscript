@@ -187,5 +187,9 @@
   "recommendedActions": {
     "description": "Thông điệp trước danh sách các hành động được khuyến nghị mà người dùng có thể thực hiện để khắc phục một vấn đề đã biết.",
     "message": "Trong thời gian này, chúng tôi khuyên bạn:"
+  },
+  "extensionPopupTitle": {
+    "description": "Tiêu đề của hộp thoại popup của tiện ích mở rộng.",
+    "message": "Say, Pi"
   }
 }

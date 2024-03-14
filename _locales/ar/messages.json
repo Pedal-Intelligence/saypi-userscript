@@ -187,5 +187,9 @@
   "recommendedActions": {
     "description": "رسالة تسبق قائمة بالإجراءات الموصى بها التي يمكن للمستخدم اتخاذها لإصلاح مشكلة معروفة.",
     "message": "في هذه الأثناء، نوصي ب:"
+  },
+  "extensionPopupTitle": {
+    "description": "عنوان مربع الحوار المنبثق للإضافة.",
+    "message": "Say, Pi"
   }
 }

@@ -187,5 +187,9 @@
   "recommendedActions": {
     "description": "Messaggio che precede un elenco di azioni consigliate che l'utente può intraprendere per risolvere un problema noto.",
     "message": "Nel frattempo, raccomandiamo:"
+  },
+  "extensionPopupTitle": {
+    "description": "Il titolo della finestra popup dell'estensione.",
+    "message": "Say, Pi"
   }
 }

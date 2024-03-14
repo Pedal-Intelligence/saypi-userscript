@@ -187,5 +187,9 @@
   "recommendedActions": {
     "description": "Bericht voorafgaand aan een lijst met aanbevolen acties die de gebruiker kan ondernemen om een bekend probleem te verhelpen.",
     "message": "Ondertussen raden we aan:"
+  },
+  "extensionPopupTitle": {
+    "description": "De titel van het pop-up dialoogvenster van de extensie.",
+    "message": "Say, Pi"
   }
 }

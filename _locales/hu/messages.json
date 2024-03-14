@@ -187,5 +187,9 @@
   "recommendedActions": {
     "description": "Üzenet, amely előzi meg a javasolt intézkedések listáját, amelyeket a felhasználó tehet egy ismert probléma orvoslására.",
     "message": "Ezalatt ajánljuk:"
+  },
+  "extensionPopupTitle": {
+    "description": "A bővítmény felugró párbeszédablakának címe.",
+    "message": "Say, Pi"
   }
 }
