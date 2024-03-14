@@ -167,5 +167,25 @@
   "enterImmersiveModeLong": {
     "message": "Wejdź w Tryb Immersyjny",
     "description": "Aria-label i tytuł przycisku do wchodzenia w tryb pełnoekranowy na urządzeniach mobilnych."
+  },
+  "applicationStatusIssue": {
+    "description": "Wiadomość do wyświetlenia, gdy aplikacja napotyka problemy.",
+    "message": "Alert problemu z systemem"
+  },
+  "applicationStatusUnknown": {
+    "description": "Wiadomość do wyświetlenia, gdy nie można określić statusu aplikacji. Np. kiedy klient jest offline.",
+    "message": "Status aplikacji nieznany"
+  },
+  "checkingApplicationStatus": {
+    "description": "Wiadomość do wyświetlenia podczas ustalania stanu systemu, np. podczas ładowania.",
+    "message": "Sprawdzanie statusu aplikacji..."
+  },
+  "dismissAlert": {
+    "description": "Etykieta przycisku do odrzucenia alertu problemu systemowego.",
+    "message": "Odrzuć"
+  },
+  "recommendedActions": {
+    "description": "Wiadomość poprzedzająca listę zalecanych działań, które użytkownik może podjąć w celu zaradzenia znanemu problemowi.",
+    "message": "W międzyczasie polecamy:"
   }
 }

@@ -167,5 +167,25 @@
   "enterImmersiveModeLong": {
     "message": "进入沉浸模式",
     "description": "进入移动设备沉浸模式按钮的aria-label和标题。"
+  },
+  "applicationStatusIssue": {
+    "description": "当应用程序出现问题时显示的消息。",
+    "message": "系统问题警报"
+  },
+  "applicationStatusUnknown": {
+    "description": "当无法确定应用程序状态时显示的消息。例如，当客户端离线时。",
+    "message": "应用程序状态未知"
+  },
+  "checkingApplicationStatus": {
+    "description": "在确定系统状态时显示的消息，例如在加载过程中。",
+    "message": "正在检查应用状态..."
+  },
+  "dismissAlert": {
+    "description": "用于关闭系统问题警报的按钮标签。",
+    "message": "解雇"
+  },
+  "recommendedActions": {
+    "message": "与此同时，我们建议：",
+    "description": "在解决已知问题的过程中，用户可以采取以下推荐操作的消息。"
   }
 }
