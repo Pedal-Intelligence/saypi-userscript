@@ -47,7 +47,7 @@ section#application-status {
 }
 
 .status p.issue.minor, .issue h2.minor {
-    background-color: yellow;
+    background-color: rgb(255, 225, 0);
     color: black;
 }
 

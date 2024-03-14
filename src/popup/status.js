@@ -96,7 +96,16 @@ function hideIssueDetailsListener() {
 }
 
 function getStatus() {
-  fetch("https://api.saypi.ai/status")
+  /* we cannot access the config module's environment variables from the popup
+   * so we hardcode the apiBaseUrl here
+   */
+  const config = {
+    //apiBaseUrl: "https://localhost:5001", // also add to manifest.json permissions
+    apiBaseUrl: "https://api.saypi.ai",
+  };
+
+  const statusEndpoint = `${config.apiBaseUrl}/status`;
+  fetch(statusEndpoint)
     .then((response) => response.json())
     .then((data) => {
       updateStatus(data);
