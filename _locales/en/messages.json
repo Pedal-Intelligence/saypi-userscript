@@ -24,8 +24,8 @@
     "description": "The tooltip to display on the call button when a call is in progress."
   },
   "callStarting": {
-    "message": "Starting continuous listening...",
-    "description": "The tooltip to display on the call button when a call is starting."
+    "message": "Connecting...",
+    "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting."
   },
   "callNotStarted": {
     "message": "Click to start continuous listening.",
