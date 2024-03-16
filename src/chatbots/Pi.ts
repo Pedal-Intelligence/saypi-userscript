@@ -34,6 +34,11 @@ class PiAIChatbot implements Chatbot {
     // true if path starts with /talk or /discover
     return path.includes("/talk") || path.includes("/discover");
   }
+
+  getDiscoveryPanelSelector(): any {
+    // note: depends on the side panel having already been identified
+    return "#saypi-side-panel + div";
+  }
 }
 
 export { PiAIChatbot };

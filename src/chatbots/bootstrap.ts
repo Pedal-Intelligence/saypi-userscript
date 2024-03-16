@@ -53,6 +53,11 @@ export class DOMObserver {
             const promptObs = this.findAndDecoratePromptField(addedElement);
             const ctrlPanelObs = this.findAndDecorateControlPanel(addedElement);
             const sidePanelObs = this.findAndDecorateSidePanel(addedElement);
+            if (sidePanelObs.found && sidePanelObs.decorated) {
+              // this condition is particular to pi.ai
+              const discoveryPanelObs =
+                this.findAndDecorateDiscoveryPanel(addedElement);
+            }
             const audioControlsObs =
               this.findAndDecorateAudioControls(addedElement);
             const audioOutputButtonObs =
@@ -184,6 +189,35 @@ export class DOMObserver {
     const obs = this.findSidePanel(searchRoot);
     if (obs.found && obs.isNew && !obs.decorated) {
       this.decorateSidePanel(obs.target as HTMLElement);
+    }
+    return Observation.decorated(obs);
+  }
+
+  findDiscoveryPanel(searchRoot: Element): Observation {
+    const id = "saypi-discovery-panel";
+    const existingDiscoveryPanel = document.getElementById(id);
+    if (existingDiscoveryPanel) {
+      // Discovery panel already exists, no need to search
+      return Observation.foundExisting(id, existingDiscoveryPanel);
+    }
+
+    const discoveryPanel = searchRoot.querySelector(
+      this.chatbot.getDiscoveryPanelSelector()
+    );
+    if (discoveryPanel) {
+      return Observation.notDecorated(id, discoveryPanel);
+    }
+    return Observation.notFound(id);
+  }
+
+  decorateDiscoveryPanel(discoveryPanel: HTMLElement): void {
+    discoveryPanel.id = "saypi-discovery-panel";
+  }
+
+  findAndDecorateDiscoveryPanel(searchRoot: Element): Observation {
+    const obs = this.findDiscoveryPanel(searchRoot);
+    if (obs.found && obs.isNew && !obs.decorated) {
+      this.decorateDiscoveryPanel(obs.target as HTMLElement);
     }
     return Observation.decorated(obs);
   }
