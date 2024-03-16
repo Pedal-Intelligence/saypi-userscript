@@ -65,7 +65,7 @@
   },
   "callStarting": {
     "description": "التلميح الذي سيظهر على زر المكالمة عند بدء المكالمة.",
-    "message": "بدء الاستماع المستمر..."
+    "message": "جاري الاتصال..."
   },
   "consentAskParticipate": {
     "message": "هل تود المشاركة؟"

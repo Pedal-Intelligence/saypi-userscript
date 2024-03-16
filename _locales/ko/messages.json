@@ -12,7 +12,7 @@
     "description": "통화가 진행 중일 때 통화 버튼에 표시되는 툴팁입니다."
   },
   "callStarting": {
-    "message": "연속 듣기 시작 중...",
+    "message": "연결 중...",
     "description": "통화가 시작될 때 통화 버튼에 표시되는 툴팁입니다."
   },
   "callNotStarted": {

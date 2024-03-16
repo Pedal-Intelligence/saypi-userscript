@@ -12,7 +12,7 @@
     "description": "通话进行中时，通话按钮上显示的工具提示。"
   },
   "callStarting": {
-    "message": "正在启动连续监听...",
+    "message": "正在连接...",
     "description": "通话开始时，通话按钮上显示的工具提示。"
   },
   "callNotStarted": {

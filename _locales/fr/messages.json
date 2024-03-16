@@ -12,7 +12,7 @@
     "description": "L'infobulle à afficher sur le bouton d'appel lorsqu'un appel est en cours."
   },
   "callStarting": {
-    "message": "Démarrage de l'écoute continue...",
+    "message": "Connexion...",
     "description": "L'infobulle à afficher sur le bouton d'appel lors du démarrage d'un appel."
   },
   "callNotStarted": {

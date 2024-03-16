@@ -12,7 +12,7 @@
     "description": "A dica de ferramenta a ser exibida no botão de chamada quando uma chamada está em andamento."
   },
   "callStarting": {
-    "message": "Iniciando escuta contínua...",
+    "message": "Conectando...",
     "description": "A dica de ferramenta a ser exibida no botão de chamada quando uma chamada está começando."
   },
   "callNotStarted": {

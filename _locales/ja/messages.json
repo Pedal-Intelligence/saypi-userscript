@@ -12,7 +12,7 @@
     "description": "通話中に通話ボタンに表示されるツールチップ。"
   },
   "callStarting": {
-    "message": "連続リスニングを開始しています...",
+    "message": "接続中...",
     "description": "通話開始時に通話ボタンに表示されるツールチップ。"
   },
   "callNotStarted": {

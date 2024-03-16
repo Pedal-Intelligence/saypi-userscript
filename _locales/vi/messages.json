@@ -12,7 +12,7 @@
     "description": "Tooltip hiển thị trên nút gọi khi một cuộc gọi đang diễn ra."
   },
   "callStarting": {
-    "message": "Đang bắt đầu lắng nghe liên tục...",
+    "message": "Đang kết nối...",
     "description": "Tooltip hiển thị trên nút gọi khi cuộc gọi đang bắt đầu."
   },
   "callNotStarted": {

@@ -12,7 +12,7 @@
     "description": "A hívásgombon megjelenő eszköztipp, amikor a hívás folyamatban van."
   },
   "callStarting": {
-    "message": "Folyamatos hallgatás elindítása...",
+    "message": "Csatlakozás...",
     "description": "A hívásgombon megjelenő eszköztipp, amikor a hívás elindul."
   },
   "callNotStarted": {

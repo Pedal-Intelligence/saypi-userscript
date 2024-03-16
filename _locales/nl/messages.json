@@ -12,7 +12,7 @@
     "description": "De tooltip die wordt weergegeven op de oproepknop wanneer een gesprek bezig is."
   },
   "callStarting": {
-    "message": "Continue luistering starten...",
+    "message": "Verbinden...",
     "description": "De tooltip die wordt weergegeven op de oproepknop wanneer een gesprek start."
   },
   "callNotStarted": {

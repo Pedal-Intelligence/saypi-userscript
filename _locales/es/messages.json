@@ -12,7 +12,7 @@
     "description": "El tooltip que se muestra en el botón de llamada cuando una llamada está en progreso."
   },
   "callStarting": {
-    "message": "Iniciando escucha continua...",
+    "message": "Conectando...",
     "description": "El tooltip que se muestra en el botón de llamada cuando una llamada está comenzando."
   },
   "callNotStarted": {

@@ -12,7 +12,7 @@
     "description": "Der Tooltip, der auf dem Anrufbutton angezeigt wird, wenn ein Anruf läuft."
   },
   "callStarting": {
-    "message": "Kontinuierliches Zuhören wird gestartet...",
+    "message": "Verbindung wird hergestellt...",
     "description": "Der Tooltip, der auf dem Anrufbutton angezeigt wird, wenn ein Anruf beginnt."
   },
   "callNotStarted": {

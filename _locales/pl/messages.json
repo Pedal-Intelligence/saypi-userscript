@@ -12,7 +12,7 @@
     "description": "Podpowiedź wyświetlana na przycisku połączenia, gdy połączenie jest w toku."
   },
   "callStarting": {
-    "message": "Rozpoczynanie ciągłego słuchania...",
+    "message": "Łączenie...",
     "description": "Podpowiedź wyświetlana na przycisku połączenia, gdy połączenie się rozpoczyna."
   },
   "callNotStarted": {

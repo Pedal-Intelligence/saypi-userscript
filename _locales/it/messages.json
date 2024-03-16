@@ -12,7 +12,7 @@
     "description": "Il tooltip da visualizzare sul pulsante di chiamata quando una chiamata è in corso."
   },
   "callStarting": {
-    "message": "Avviando l'ascolto continuo...",
+    "message": "Collegamento in corso...",
     "description": "Il tooltip da visualizzare sul pulsante di chiamata quando una chiamata sta iniziando."
   },
   "callNotStarted": {
