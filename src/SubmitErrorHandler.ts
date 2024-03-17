@@ -113,7 +113,9 @@ export default class SubmitErrorHandler {
       if (timeDifference <= 5) {
         console.log("Restoring application state", restorePoint);
         setFinalPrompt(restorePoint.prompt);
-        this.audioControls.activateAudioInput(restorePoint.audioInputEnabled);
+        setTimeout(() => {
+          this.audioControls.activateAudioInput(restorePoint.audioInputEnabled);
+        }, 0); // activation of the audio input needs to happen asynchronously to avoid race condition
         this.audioControls.activateAudioOutput(restorePoint.audioOutputEnabled);
         // Delete the executed restore point
         localStorage.removeItem(this.restorePointKey);

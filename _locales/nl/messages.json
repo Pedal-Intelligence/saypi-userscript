@@ -12,7 +12,7 @@
     "description": "De tooltip die wordt weergegeven op de oproepknop wanneer een gesprek bezig is."
   },
   "callStarting": {
-    "message": "Continue luistering starten...",
+    "message": "Verbinden...",
     "description": "De tooltip die wordt weergegeven op de oproepknop wanneer een gesprek start."
   },
   "callNotStarted": {
@@ -167,5 +167,29 @@
   "exitImmersiveModeLong": {
     "description": "De aria-label en titel van de knop om de meeslepende modus op mobiele apparaten te verlaten, terug naar de tekstgebaseerde desktopmodus.",
     "message": "Verlaat de meeslepende modus"
+  },
+  "applicationStatusIssue": {
+    "description": "Bericht om weer te geven wanneer de applicatie problemen ondervindt.",
+    "message": "Systeemprobleem Waarschuwing"
+  },
+  "applicationStatusUnknown": {
+    "description": "Bericht om weer te geven wanneer de status van de applicatie niet kan worden bepaald. Bijv. wanneer de klant offline is.",
+    "message": "Status van de applicatie onbekend"
+  },
+  "checkingApplicationStatus": {
+    "description": "Bericht om weer te geven terwijl de systeemstatus wordt bepaald, bijvoorbeeld tijdens het laden.",
+    "message": "Controleren van applicatiestatus..."
+  },
+  "dismissAlert": {
+    "description": "Label voor de knop om een systeemprobleemwaarschuwing te negeren.",
+    "message": "Afwijzen"
+  },
+  "recommendedActions": {
+    "description": "Bericht voorafgaand aan een lijst met aanbevolen acties die de gebruiker kan ondernemen om een bekend probleem te verhelpen.",
+    "message": "Ondertussen raden we aan:"
+  },
+  "extensionPopupTitle": {
+    "description": "De titel van het pop-up dialoogvenster van de extensie.",
+    "message": "Say, Pi"
   }
 }

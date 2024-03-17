@@ -115,6 +115,10 @@ html.immersive-view {
     padding: 6px;
   }
 
+  #saypi-discovery-panel {
+    display: none;
+  }
+
 }
 @import "dark-mode.scss";
 @import "focus-mode.scss";

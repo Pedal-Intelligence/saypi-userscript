@@ -1,0 +1,97 @@
+section#application-status {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.status {
+    font-size: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1rem 0;
+}
+
+.issue h2,
+.status p.normal,
+.status p.unknown {
+    margin: 0;
+    padding: 0.5rem 1rem;
+}
+
+.issue h2, p.issue {
+    background-image: url('../icons/alert.svg');
+    background-repeat: no-repeat;
+    background-position: calc(100% - 1rem);
+}
+
+.issue h2 {
+    background-size: 2rem;
+}
+.status p {
+    background-size: 1.5rem;
+}
+
+.status p.normal {
+    background-color: green;
+    color: white;
+}
+
+.status p.unknown {
+    background-color: #715fd1;
+    color: white;
+}
+
+.status p.issue.major, .issue h2.major {
+    background-color: orange;
+    color: white;
+}
+
+.status p.issue.minor, .issue h2.minor {
+    background-color: rgb(255, 225, 0);
+    color: black;
+}
+
+.status p.issue.critical, .issue h2.critical {
+    background-color: red;
+    color: white;
+}
+
+.issue ul {
+    list-style-type: none;
+    padding-left: 2rem;
+}
+
+.issue ul li::before {
+    content: "🥧";
+    margin-right: 10px;
+}
+
+.status p, .issue p {
+    padding: 0.5rem 1rem;
+}
+
+#application-status-detail {
+    width: 400px;
+    font-size: 1rem;
+    padding-bottom: 0.5rem;
+}
+
+.button {
+    margin: 0.5rem 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #715fd1;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #5a4aa3;
+}
+
+#dismiss-alert {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}

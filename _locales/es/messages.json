@@ -12,7 +12,7 @@
     "description": "El tooltip que se muestra en el botón de llamada cuando una llamada está en progreso."
   },
   "callStarting": {
-    "message": "Iniciando escucha continua...",
+    "message": "Conectando...",
     "description": "El tooltip que se muestra en el botón de llamada cuando una llamada está comenzando."
   },
   "callNotStarted": {
@@ -167,5 +167,29 @@
   "exitImmersiveModeLong": {
     "description": "El aria-label y el título del botón para salir del modo inmersivo en dispositivos móviles, de vuelta al modo de escritorio basado en texto.",
     "message": "Salir del Modo Inmersivo"
+  },
+  "applicationStatusIssue": {
+    "description": "Mensaje para mostrar cuando la aplicación está experimentando problemas.",
+    "message": "Alerta de Problema del Sistema"
+  },
+  "applicationStatusUnknown": {
+    "description": "Mensaje a mostrar cuando no se puede determinar el estado de la aplicación. Por ejemplo, cuando el cliente está desconectado.",
+    "message": "Estado de la aplicación desconocido"
+  },
+  "checkingApplicationStatus": {
+    "description": "Mensaje a mostrar mientras se determina el estado del sistema, por ejemplo, durante la carga.",
+    "message": "Verificando el estado de la aplicación..."
+  },
+  "dismissAlert": {
+    "description": "Etiqueta para el botón para descartar una alerta de problema del sistema.",
+    "message": "Descartar"
+  },
+  "recommendedActions": {
+    "description": "Mensaje que precede a una lista de acciones recomendadas que el usuario puede tomar para remediar un problema conocido.",
+    "message": "Mientras tanto, recomendamos:"
+  },
+  "extensionPopupTitle": {
+    "description": "El título del cuadro de diálogo emergente de la extensión.",
+    "message": "Say, Pi"
   }
 }

@@ -5,3 +5,5 @@ reviews:
     description: Placeholder argument. Do not translate.
   assistantIsListening.placeholders.chatbot.example:
     description: Product name, e.g. "Pi", "ChatGPT", "Grok", "Bard", etc. Do not translate.
+  extensionPopupTitle.message:
+    description: Title of the Say, Pi extension's popup dialog. Do not translate "Say, Pi".

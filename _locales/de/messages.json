@@ -12,7 +12,7 @@
     "description": "Der Tooltip, der auf dem Anrufbutton angezeigt wird, wenn ein Anruf läuft."
   },
   "callStarting": {
-    "message": "Kontinuierliches Zuhören wird gestartet...",
+    "message": "Verbindung wird hergestellt...",
     "description": "Der Tooltip, der auf dem Anrufbutton angezeigt wird, wenn ein Anruf beginnt."
   },
   "callNotStarted": {
@@ -167,5 +167,29 @@
   "exitImmersiveModeLong": {
     "description": "Das aria-label und der Titel des Buttons zum Verlassen des immersiven Modus auf mobilen Geräten, zurück zum textbasierten Desktop-Modus.",
     "message": "Verlassen Sie den immersiven Modus"
+  },
+  "applicationStatusIssue": {
+    "description": "Nachricht, die angezeigt wird, wenn die Anwendung Probleme hat.",
+    "message": "Systemausfall-Warnung"
+  },
+  "applicationStatusUnknown": {
+    "description": "Nachricht, die angezeigt wird, wenn der Status der Anwendung nicht bestimmt werden kann. Z.B. wenn der Client offline ist.",
+    "message": "Anwendungsstatus unbekannt"
+  },
+  "checkingApplicationStatus": {
+    "description": "Nachricht, die angezeigt wird, während der Systemstatus ermittelt wird, z.B. während des Ladens.",
+    "message": "Überprüfung des Anwendungsstatus..."
+  },
+  "dismissAlert": {
+    "description": "Beschriftung für die Schaltfläche, um eine Systemproblemwarnung zu verwerfen.",
+    "message": "Entlassen"
+  },
+  "recommendedActions": {
+    "description": "Nachricht, die einer Liste von empfohlenen Maßnahmen vorausgeht, die der Benutzer ergreifen kann, um ein bekanntes Problem zu beheben.",
+    "message": "In der Zwischenzeit empfehlen wir:"
+  },
+  "extensionPopupTitle": {
+    "description": "Der Titel des Popup-Dialogs der Erweiterung.",
+    "message": "Say, Pi"
   }
 }

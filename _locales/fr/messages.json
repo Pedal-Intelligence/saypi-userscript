@@ -12,7 +12,7 @@
     "description": "L'infobulle à afficher sur le bouton d'appel lorsqu'un appel est en cours."
   },
   "callStarting": {
-    "message": "Démarrage de l'écoute continue...",
+    "message": "Connexion...",
     "description": "L'infobulle à afficher sur le bouton d'appel lors du démarrage d'un appel."
   },
   "callNotStarted": {
@@ -167,5 +167,29 @@
   "exitImmersiveModeLong": {
     "description": "Le aria-label et le titre du bouton pour quitter le mode immersif sur les appareils mobiles, pour revenir au mode bureau basé sur le texte.",
     "message": "Quitter le Mode Immersif"
+  },
+  "applicationStatusIssue": {
+    "description": "Message à afficher lorsque l'application rencontre des problèmes.",
+    "message": "Alerte de problème système"
+  },
+  "applicationStatusUnknown": {
+    "description": "Message à afficher lorsque le statut de l'application ne peut pas être déterminé. Par exemple, lorsque le client est hors ligne.",
+    "message": "Statut de l'application inconnu"
+  },
+  "checkingApplicationStatus": {
+    "description": "Message à afficher pendant que l'état du système est en cours de détermination, par exemple pendant le chargement.",
+    "message": "Vérification du statut de l'application..."
+  },
+  "dismissAlert": {
+    "description": "Étiquette pour le bouton permettant de rejeter une alerte de problème système.",
+    "message": "Rejeter"
+  },
+  "recommendedActions": {
+    "description": "Message précédant une liste d'actions recommandées que l'utilisateur peut entreprendre pour remédier à un problème connu.",
+    "message": "Entre-temps, nous recommandons :"
+  },
+  "extensionPopupTitle": {
+    "description": "Le titre de la boîte de dialogue d'extension.",
+    "message": "Say, Pi"
   }
 }

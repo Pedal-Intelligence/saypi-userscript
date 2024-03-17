@@ -12,7 +12,7 @@
     "description": "A dica de ferramenta a ser exibida no botão de chamada quando uma chamada está em andamento."
   },
   "callStarting": {
-    "message": "Iniciando escuta contínua...",
+    "message": "Conectando...",
     "description": "A dica de ferramenta a ser exibida no botão de chamada quando uma chamada está começando."
   },
   "callNotStarted": {
@@ -167,5 +167,29 @@
   "enterImmersiveModeLong": {
     "message": "Entre no Modo Imersivo",
     "description": "O aria-label e o título do botão para entrar no modo imersivo em dispositivos móveis."
+  },
+  "applicationStatusIssue": {
+    "description": "Mensagem a ser exibida quando o aplicativo está enfrentando problemas.",
+    "message": "Alerta de Problema no Sistema"
+  },
+  "applicationStatusUnknown": {
+    "description": "Mensagem a ser exibida quando o status do aplicativo não pode ser determinado. Por exemplo, quando o cliente está offline.",
+    "message": "Status da aplicação desconhecido"
+  },
+  "checkingApplicationStatus": {
+    "description": "Mensagem a ser exibida enquanto o status do sistema está sendo determinado, por exemplo, durante o carregamento.",
+    "message": "Verificando o status da aplicação..."
+  },
+  "dismissAlert": {
+    "description": "Rótulo para o botão para descartar um alerta de problema do sistema.",
+    "message": "Demitir"
+  },
+  "recommendedActions": {
+    "description": "Mensagem precedendo uma lista de ações recomendadas que o usuário pode tomar para remediar um problema conhecido.",
+    "message": "Enquanto isso, nós recomendamos:"
+  },
+  "extensionPopupTitle": {
+    "description": "O título da caixa de diálogo pop-up da extensão.",
+    "message": "Say, Pi"
   }
 }

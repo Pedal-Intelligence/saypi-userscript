@@ -3,13 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Interactive Slider</title>
+    <title data-i18n="extensionPopupTitle">Say, Pi Settings</title>
     <link
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="toggle.css" />
     <link rel="stylesheet" href="language-picker.css" />
+    <link rel="stylesheet" href="status.css" />
     <style>
       body {
         flex-wrap: wrap;
@@ -294,8 +295,18 @@
       </div>
     </section>
 
+    <section id="application-status">
+      <div class="status-container">
+        <div class="status">
+          <p class="message unknown" data-i18n="checkingApplicationStatus">Checking on our servers...</p>
+        </div>
+      </div>
+    </section>
+    <section id="application-status-detail" class="hidden issue"/>
+
     <script src="simple-user-agent.js"></script>
     <script src="language-picker.js"></script>
     <script src="popup.js"></script>
+    <script src="status.js"></script>
   </body>
 </html>

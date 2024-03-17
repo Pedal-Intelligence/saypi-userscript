@@ -185,10 +185,14 @@ document.addEventListener("DOMContentLoaded", function () {
         dataSharingConsentSection.classList.remove("hidden");
         const preferencesSection = document.getElementById("preferences");
         preferencesSection.classList.add("hidden");
+        const statusSection = document.getElementById("application-status");
+        statusSection.classList.add("hidden");
       } else {
         dataSharingConsentSection.classList.add("hidden");
         const preferencesSection = document.getElementById("preferences");
         preferencesSection.classList.remove("hidden");
+        const statusSection = document.getElementById("application-status");
+        statusSection.classList.remove("hidden");
       }
     });
   }

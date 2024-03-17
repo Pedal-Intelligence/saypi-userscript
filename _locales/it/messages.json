@@ -12,7 +12,7 @@
     "description": "Il tooltip da visualizzare sul pulsante di chiamata quando una chiamata è in corso."
   },
   "callStarting": {
-    "message": "Avviando l'ascolto continuo...",
+    "message": "Collegamento in corso...",
     "description": "Il tooltip da visualizzare sul pulsante di chiamata quando una chiamata sta iniziando."
   },
   "callNotStarted": {
@@ -167,5 +167,29 @@
   "exitImmersiveModeLong": {
     "description": "L'aria-label e il titolo del pulsante per uscire dalla modalità immersiva sui dispositivi mobili, tornando alla modalità desktop basata sul testo.",
     "message": "Esci dalla Modalità Immersiva"
+  },
+  "applicationStatusIssue": {
+    "description": "Messaggio da visualizzare quando l'applicazione sta riscontrando problemi.",
+    "message": "Avviso di problema del sistema"
+  },
+  "applicationStatusUnknown": {
+    "description": "Messaggio da visualizzare quando lo stato dell'applicazione non può essere determinato. Ad esempio, quando il client è offline.",
+    "message": "Stato dell'applicazione sconosciuto"
+  },
+  "checkingApplicationStatus": {
+    "description": "Messaggio da visualizzare mentre lo stato del sistema viene determinato, ad esempio durante il caricamento.",
+    "message": "Verifica dello stato dell'applicazione..."
+  },
+  "dismissAlert": {
+    "description": "Etichetta per il pulsante per ignorare un avviso di problema del sistema.",
+    "message": "Congeda"
+  },
+  "recommendedActions": {
+    "description": "Messaggio che precede un elenco di azioni consigliate che l'utente può intraprendere per risolvere un problema noto.",
+    "message": "Nel frattempo, raccomandiamo:"
+  },
+  "extensionPopupTitle": {
+    "description": "Il titolo della finestra popup dell'estensione.",
+    "message": "Say, Pi"
   }
 }

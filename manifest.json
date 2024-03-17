@@ -4,6 +4,7 @@
   "version": "1.6.0",
   "description": "__MSG_appDescription__",
   "permissions": ["storage"],
+  "host_permissions": ["https://api.saypi.ai/*"],
   "content_scripts": [
     {
       "matches": ["https://pi.ai/*"],

@@ -98,6 +98,7 @@ export class AudibleNotificationsModule implements INotificationsModule {
   private static instance: AudibleNotificationsModule;
   private listeningSound: HTMLAudioElement;
   private callStartedSound: HTMLAudioElement;
+  private callFailedSound: HTMLAudioElement;
   private callEndedSound: HTMLAudioElement;
   private lockSound: HTMLAudioElement;
   private unlockSound: HTMLAudioElement;
@@ -113,6 +114,7 @@ export class AudibleNotificationsModule implements INotificationsModule {
     this.callStartedSound = new Audio(
       getResourceUrl("audio/startup-synth.mp3")
     );
+    this.callFailedSound = new Audio(getResourceUrl("audio/call-failed.mp3"));
     this.callEndedSound = new Audio(getResourceUrl("audio/turn-off.mp3"));
     this.lockSound = new Audio(getResourceUrl("audio/beep-on.mp3"));
     this.unlockSound = new Audio(getResourceUrl("audio/beep-off.mp3"));
@@ -151,6 +153,10 @@ export class AudibleNotificationsModule implements INotificationsModule {
 
   public callStarted(): void {
     this.playSound(this.callStartedSound);
+  }
+
+  public callFailed(): void {
+    this.playSound(this.callFailedSound);
   }
 
   public callEnded(): void {

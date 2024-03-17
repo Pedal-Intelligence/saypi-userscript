@@ -12,7 +12,7 @@
     "description": "A hívásgombon megjelenő eszköztipp, amikor a hívás folyamatban van."
   },
   "callStarting": {
-    "message": "Folyamatos hallgatás elindítása...",
+    "message": "Csatlakozás...",
     "description": "A hívásgombon megjelenő eszköztipp, amikor a hívás elindul."
   },
   "callNotStarted": {
@@ -167,5 +167,29 @@
   "exitImmersiveModeLong": {
     "description": "Az aria-címke és a gomb címe, amely kilép az immerszív módból mobil eszközökön, vissza a szövegalapú asztali módhoz.",
     "message": "Lépjen ki az immerszív módból"
+  },
+  "applicationStatusIssue": {
+    "description": "Üzenet, amely megjelenik, amikor az alkalmazás problémákkal küzd.",
+    "message": "Rendszerhiba figyelmeztetés"
+  },
+  "applicationStatusUnknown": {
+    "description": "Üzenet megjelenítése, amikor az alkalmazás állapota nem határozható meg. Például, amikor a kliens offline.",
+    "message": "Alkalmazás állapota ismeretlen"
+  },
+  "checkingApplicationStatus": {
+    "description": "Üzenet megjelenítése, míg a rendszer állapotát meghatározzák, például betöltés közben.",
+    "message": "Alkalmazás állapotának ellenőrzése..."
+  },
+  "dismissAlert": {
+    "description": "Címke a rendszerhiba-figyelmeztetés elutasításához szükséges gombhoz.",
+    "message": "Elutasít"
+  },
+  "recommendedActions": {
+    "description": "Üzenet, amely előzi meg a javasolt intézkedések listáját, amelyeket a felhasználó tehet egy ismert probléma orvoslására.",
+    "message": "Ezalatt ajánljuk:"
+  },
+  "extensionPopupTitle": {
+    "description": "A bővítmény felugró párbeszédablakának címe.",
+    "message": "Say, Pi"
   }
 }

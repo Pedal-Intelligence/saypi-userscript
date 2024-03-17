@@ -199,6 +199,14 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           {
             type: "setupRecording",
           },
+          {
+            type: "callStartingPrompt",
+          },
+        ],
+        exit: [
+          {
+            type: "clearPrompt",
+          },
         ],
         on: {
           "saypi:callReady": {
@@ -222,11 +230,21 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           "saypi:hangup": {
             target: "inactive",
             description: "Call was cancelled before it started.",
+            actions: [
+              {
+                type: "callFailedToStart",
+              },
+            ],
           },
           "saypi:callFailed": {
             target: "inactive",
             description:
               "VAD microphone failed to start.\nAudio device not available.",
+            actions: [
+              {
+                type: "callFailedToStart",
+              },
+            ],
           },
         },
         after: {
@@ -234,6 +252,11 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             target: "inactive",
             description:
               "Call failed to start after 20 seconds. Is the microphone available?",
+            actions: [
+              {
+                type: "callFailedToStart",
+              },
+            ],
           },
         },
       },
@@ -818,6 +841,12 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       listenPrompt: () => {
         const message = getMessage("assistantIsListening", "Pi");
         if (message) {
+          setDraftPrompt(message);
+        }
+      },
+      callStartingPrompt: () => {
+        const message = getMessage("callStarting");
+        if (message) {
           const initialText = getDraftPrompt();
           assign({ defaultPlaceholderText: initialText });
           setDraftPrompt(message);
@@ -845,7 +874,10 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       callIsStarting: () => {
         buttonModule.callStarting();
       },
-
+      callFailedToStart: () => {
+        buttonModule.callInactive();
+        audibleNotifications.callFailed();
+      },
       callHasStarted: () => {
         buttonModule.callActive();
         audibleNotifications.callStarted();

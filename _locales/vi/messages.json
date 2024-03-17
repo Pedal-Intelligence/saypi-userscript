@@ -12,7 +12,7 @@
     "description": "Tooltip hiển thị trên nút gọi khi một cuộc gọi đang diễn ra."
   },
   "callStarting": {
-    "message": "Đang bắt đầu lắng nghe liên tục...",
+    "message": "Đang kết nối...",
     "description": "Tooltip hiển thị trên nút gọi khi cuộc gọi đang bắt đầu."
   },
   "callNotStarted": {
@@ -167,5 +167,29 @@
   "enterImmersiveModeLong": {
     "message": "Nhập Chế Độ Sống Động",
     "description": "Nhãn aria và tiêu đề của nút để vào chế độ toàn màn hình trên thiết bị di động."
+  },
+  "applicationStatusIssue": {
+    "description": "Thông điệp để hiển thị khi ứng dụng gặp sự cố.",
+    "message": "Cảnh báo vấn đề hệ thống"
+  },
+  "applicationStatusUnknown": {
+    "description": "Thông điệp để hiển thị khi không thể xác định được trạng thái của ứng dụng. Ví dụ: khi máy khách đang ngoại tuyến.",
+    "message": "Trạng thái ứng dụng không rõ"
+  },
+  "checkingApplicationStatus": {
+    "description": "Thông điệp để hiển thị trong khi đang xác định trạng thái hệ thống, ví dụ: trong quá trình tải.",
+    "message": "Kiểm tra trạng thái ứng dụng..."
+  },
+  "dismissAlert": {
+    "description": "Nhãn cho nút để bỏ qua cảnh báo vấn đề hệ thống.",
+    "message": "Đuổi đi"
+  },
+  "recommendedActions": {
+    "description": "Thông điệp trước danh sách các hành động được khuyến nghị mà người dùng có thể thực hiện để khắc phục một vấn đề đã biết.",
+    "message": "Trong thời gian này, chúng tôi khuyên bạn:"
+  },
+  "extensionPopupTitle": {
+    "description": "Tiêu đề của hộp thoại popup của tiện ích mở rộng.",
+    "message": "Say, Pi"
   }
 }

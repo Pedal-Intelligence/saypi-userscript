@@ -65,7 +65,7 @@
   },
   "callStarting": {
     "description": "التلميح الذي سيظهر على زر المكالمة عند بدء المكالمة.",
-    "message": "بدء الاستماع المستمر..."
+    "message": "جاري الاتصال..."
   },
   "consentAskParticipate": {
     "message": "هل تود المشاركة؟"
@@ -167,5 +167,29 @@
   "unlockInstruction": {
     "description": "تعليمات تخبر المستخدم كيفية فتح الشاشة عندما تكون مقفلة.",
     "message": "اضغط للفتح."
+  },
+  "applicationStatusIssue": {
+    "description": "رسالة لعرضها عندما تواجه التطبيق مشكلات.",
+    "message": "تنبيه على مشكلة في النظام"
+  },
+  "applicationStatusUnknown": {
+    "description": "رسالة لعرضها عندما لا يمكن تحديد حالة التطبيق. على سبيل المثال، عندما يكون العميل غير متصل بالإنترنت.",
+    "message": "حالة التطبيق غير معروفة"
+  },
+  "checkingApplicationStatus": {
+    "description": "رسالة للعرض أثناء تحديد حالة النظام، مثلاً أثناء التحميل.",
+    "message": "جارٍ التحقق من حالة التطبيق..."
+  },
+  "dismissAlert": {
+    "description": "تسمية الزر لإغلاق تنبيه مشكلة النظام.",
+    "message": "رفض"
+  },
+  "recommendedActions": {
+    "description": "رسالة تسبق قائمة بالإجراءات الموصى بها التي يمكن للمستخدم اتخاذها لإصلاح مشكلة معروفة.",
+    "message": "في هذه الأثناء، نوصي ب:"
+  },
+  "extensionPopupTitle": {
+    "description": "عنوان مربع الحوار المنبثق للإضافة.",
+    "message": "Say, Pi"
   }
 }
