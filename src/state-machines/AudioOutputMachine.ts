@@ -1,5 +1,6 @@
 import { createMachine, assign, actions } from "xstate";
 import EventBus from "../events/EventBus.js";
+import { ConnectableObservable } from "rxjs";
 const { log } = actions;
 
 type LoadstartEvent = { type: "loadstart"; source: string };
@@ -175,15 +176,18 @@ export const audioOutputMachine = createMachine(
       skipCurrent: (context, event) => {
         // send a message back to the audio module to stop playback
         EventBus.emit("audio:skipCurrent");
+        console.log("Skipping current audio track.");
       },
     },
     guards: {
       shouldSkip: (context, event: AudioOutputEvent) => {
         if (event.type === "loadstart") {
           event = event as LoadstartEvent;
-          const domain = new URL(event.source).hostname;
-          console.log(`Audio source: ${domain}, provider: ${context.provider}`);
-          return domain !== context.provider || context.skip === true;
+
+          return (
+            !audioSourcedFromProvider(event, context.provider) ||
+            context.skip === true
+          );
         }
         return context.skip === true;
       },
@@ -192,3 +196,16 @@ export const audioOutputMachine = createMachine(
     delays: {},
   }
 );
+function audioSourcedFromProvider(
+  loadstart: LoadstartEvent,
+  audioProvider: string
+): boolean {
+  const domain = new URL(loadstart.source).hostname;
+  const match = domain === audioProvider;
+  if (!match) {
+    console.log(
+      `Audio source: ${domain}, Audio provider: ${audioProvider}, skipping.`
+    );
+  }
+  return match;
+}

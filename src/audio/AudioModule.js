@@ -162,17 +162,24 @@ export default class AudioModule {
     });
 
     // audio output (playback) commands
-    EventBus.on("audio:reload", (e) => {
-      this.audioElement.load();
+    EventBus.on("audio:changeProvider", (detail) => {
+      outputActor.send({ type: "changeProvider", ...detail });
     });
     EventBus.on("audio:skipNext", (e) => {
       outputActor.send("skipNext");
     });
     EventBus.on("audio:skipCurrent", (e) => {
+      // Pause the audio
       this.audioElement.pause();
+
+      // Skip to the end to simulate the completion of the audio, preventing it from being resumed
+      this.audioElement.currentTime = this.audioElement.duration;
     });
     EventBus.on("audio:output:play", (e) => {
       this.audioElement.play();
+    });
+    EventBus.on("audio:reload", (e) => {
+      this.audioElement.load();
     });
   }
 }
