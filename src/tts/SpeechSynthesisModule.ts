@@ -24,6 +24,10 @@ interface SpeechSynthesisVoiceRemote extends SpeechSynthesisVoice {
   id: string;
 }
 
+function getUtteranceURI(utterance: SpeechSynthesisUtteranceRemote): string {
+  return `${utterance.uri}?voice_id=${utterance.voice.id}`;
+}
+
 class SpeechSynthesisModule {
   private static instance: SpeechSynthesisModule; // singleton instance
 
@@ -111,7 +115,7 @@ class SpeechSynthesisModule {
       uri: uri,
     };
     return axios.post(uri, data).then((response) => {
-      if (response.status !== 201) {
+      if (![200, 201].includes(response.status)) {
         throw new Error("Failed to synthesize speech");
       }
       return utterance;
@@ -119,7 +123,7 @@ class SpeechSynthesisModule {
   }
 
   private speechStreamTimeouts: { [uuid: string]: NodeJS.Timeout } = {};
-  private START_OF_SPEECH_MARKER = " "; // In the first message, the text should be a space " " to indicate the start of speech
+  private START_OF_SPEECH_MARKER = "Well now."; // In the first message, the text should be a space " " to indicate the start of speech
   private END_OF_SPEECH_MARKER = ""; // In the last message, the text should be an empty string to indicate the end of speech
 
   async createSpeechStream(): Promise<SpeechSynthesisUtteranceRemote> {
@@ -240,7 +244,7 @@ class SpeechSynthesisModule {
       };
 
       // Start audio playback with utterance.uri as the audio source
-      this.audio.src = utterance.uri;
+      this.audio.src = getUtteranceURI(utterance);
       const starttime = Date.now();
       //this.audio.play().catch(reject);
     });

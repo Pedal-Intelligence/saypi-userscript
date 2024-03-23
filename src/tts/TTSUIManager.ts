@@ -315,17 +315,21 @@ export class TextToSpeechUIManager {
 
   private elementStream: ElementTextStream | null = null;
 
-  observeChatMessageElement(message: HTMLElement): void {
+  observeChatMessageElement(message: HTMLElement, utteranceId: string): void {
     // If we're already observing an element, disconnect from it
     if (this.elementStream) {
       this.elementStream.disconnect();
     }
 
+    const speechSynthesis = SpeechSynthesisModule.getInstance();
     // Start observing the new element
     this.elementStream = new ElementTextStream(message);
     this.elementStream.getStream().subscribe(
       (text) => {
-        console.log(`Streamed text from element: ${text}`);
+        if (text.trim()) {
+          console.log(`Streamed text from element: "${text}"`);
+          speechSynthesis.addSpeechToStream(utteranceId, text);
+        }
       },
       (error) => {
         console.error(`Error occurred streaming text from element: ${error}`);
@@ -334,6 +338,7 @@ export class TextToSpeechUIManager {
         console.log(
           "Element text stream complete. Please end the tts input stream."
         );
+        speechSynthesis.endSpeechStream(utteranceId);
       }
     );
   }
@@ -347,11 +352,14 @@ export class TextToSpeechUIManager {
           message.enableTTS(utterance.id);
           console.log("Created audio stream", utterance.id);
           const initialText = message.text;
-          console.log('Streaming text began with "', initialText);
-          speechSynthesis.addSpeechToStream(utterance.id, initialText);
+          // send the initial text to the stream only if it's not empty
+          if (initialText.trim()) {
+            console.log(`Streaming text began with "${initialText}"`);
+            speechSynthesis.addSpeechToStream(utterance.id, initialText);
+          }
           this.addSpeechButton(speechSynthesis, utterance, message.element);
           //this.autoplaySpeech(speechSynthesis, utterance); // handle any errors
-          this.observeChatMessageElement(message.element);
+          this.observeChatMessageElement(message.element, utterance.id);
         });
       }
     });
