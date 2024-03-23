@@ -358,7 +358,7 @@ export class TextToSpeechUIManager {
             speechSynthesis.addSpeechToStream(utterance.id, initialText);
           }
           this.addSpeechButton(speechSynthesis, utterance, message.element);
-          //this.autoplaySpeech(speechSynthesis, utterance); // handle any errors
+          this.autoplaySpeech(speechSynthesis, utterance); // handle any errors
           this.observeChatMessageElement(message.element, utterance.id);
         });
       }
@@ -433,7 +433,7 @@ export class TextToSpeechUIManager {
     setTimeout(() => {
       speechSynthesis
         .speak(utterance)
-        .then(() => console.log("Reading chat message aloud")) // start streaming output
+        .then(() => console.log("Automatically reading chat message aloud")) // start streaming output
         .catch((error) =>
           console.error(`Error occurred reading chat message: ${error}`)
         ); // handle any errors

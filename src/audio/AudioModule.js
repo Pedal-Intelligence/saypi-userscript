@@ -173,7 +173,9 @@ export default class AudioModule {
       this.audioElement.pause();
 
       // Skip to the end to simulate the completion of the audio, preventing it from being resumed
-      this.audioElement.currentTime = this.audioElement.duration;
+      if (!isNaN(this.audioElement.duration)) {
+        this.audioElement.currentTime = this.audioElement.duration;
+      }
     });
     EventBus.on("audio:output:play", (e) => {
       this.audioElement.play();
