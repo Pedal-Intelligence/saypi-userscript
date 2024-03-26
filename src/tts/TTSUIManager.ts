@@ -6,6 +6,10 @@ import {
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { Chatbot } from "../chatbots/Chatbot";
 import { ElementTextStream } from "./InputStream";
+import { buttonModule } from "../ButtonModule";
+import { getResourceUrl } from "../ResourceModule";
+import getMessage from "../i18n";
+import { get } from "lodash";
 
 class AssistantResponse {
   private _element: HTMLElement;
@@ -315,7 +319,11 @@ export class TextToSpeechUIManager {
 
   private elementStream: ElementTextStream | null = null;
 
-  observeChatMessageElement(message: HTMLElement, utteranceId: string): void {
+  observeChatMessageElement(
+    message: HTMLElement,
+    utteranceId: string,
+    hoverMenu: HTMLElement | null
+  ): void {
     // If we're already observing an element, disconnect from it
     if (this.elementStream) {
       this.elementStream.disconnect();
@@ -323,12 +331,15 @@ export class TextToSpeechUIManager {
 
     const speechSynthesis = SpeechSynthesisModule.getInstance();
     // Start observing the new element
+    let characterCount = message.innerText.length;
+    console.log(`Starting text: "${message.innerText}"`);
     this.elementStream = new ElementTextStream(message);
     this.elementStream.getStream().subscribe(
       (text) => {
         if (text.trim()) {
           console.log(`Streamed text from element: "${text}"`);
           speechSynthesis.addSpeechToStream(utteranceId, text);
+          characterCount += text.length;
         }
       },
       (error) => {
@@ -339,8 +350,44 @@ export class TextToSpeechUIManager {
           "Element text stream complete. Please end the tts input stream."
         );
         speechSynthesis.endSpeechStream(utteranceId);
+        if (hoverMenu) {
+          this.addCostBasis(hoverMenu, characterCount);
+        }
       }
     );
+  }
+  /**
+   * Add the cost of the TTS stream to the chat message
+   * @param container The menu element to add the cost basis to
+   * @param characterCount The number of characters in the message
+   */
+  addCostBasis(container: HTMLElement, characterCount: number) {
+    const pricePer1kCharacters = 0.3; // ElevenLabs pricing (high estimate) - use /voice api to get accurate pricing
+    const cost = (characterCount / 1000) * pricePer1kCharacters;
+    const currency = "USD"; // i18n
+    const costElement = document.createElement("div");
+    costElement.classList.add("text-sm", "text-neutral-500", "saypi-cost");
+    costElement.title = getMessage("ttsCostExplanation", [
+      cost.toFixed(2),
+      currency,
+    ]);
+    costElement.innerHTML = `Cost: $${cost.toFixed(2)}`;
+    container.appendChild(costElement);
+
+    const poweredByElement = document.createElement("div");
+    const ttsEngine = "ElevenLabs"; // i18n
+    const ttsLabel = getMessage("ttsPoweredBy", ttsEngine);
+    poweredByElement.classList.add(
+      "text-sm",
+      "text-neutral-500",
+      "saypi-powered-by"
+    );
+    poweredByElement.title = ttsLabel;
+    const logoImageUrl = getResourceUrl(
+      `icons/logos/${ttsEngine.toLowerCase()}.svg`
+    );
+    poweredByElement.innerHTML = `<img src="${logoImageUrl}" alt="${ttsLabel}" class="h-4 w-4 inline-block">`;
+    costElement.appendChild(poweredByElement);
   }
 
   // Chat history and automatic speech functionality
@@ -357,9 +404,27 @@ export class TextToSpeechUIManager {
             console.log(`Streaming text began with "${initialText}"`);
             speechSynthesis.addSpeechToStream(utterance.id, initialText);
           }
-          this.addSpeechButton(speechSynthesis, utterance, message.element);
+          let hoverMenu: HTMLDivElement | null = null;
+          let ttsControls: HTMLElement | null = null;
+          if (message.element.children.length > 1) {
+            hoverMenu = message.element.children[1] as HTMLDivElement;
+            hoverMenu.classList.add("message-hover-menu");
+            if (hoverMenu.children.length > 0) {
+              const createThreadButton = hoverMenu
+                .children[0] as HTMLDivElement;
+              createThreadButton.classList.add("create-thread-button");
+            }
+            ttsControls = document.createElement("div");
+            ttsControls.classList.add("saypi-tts-controls", "pt-4");
+            hoverMenu.appendChild(ttsControls);
+            this.addSpeechButton(speechSynthesis, utterance, ttsControls);
+          }
           this.autoplaySpeech(speechSynthesis, utterance); // handle any errors
-          this.observeChatMessageElement(message.element, utterance.id);
+          this.observeChatMessageElement(
+            message.element as HTMLElement,
+            utterance.id,
+            ttsControls
+          );
         });
       }
     });
@@ -400,20 +465,9 @@ export class TextToSpeechUIManager {
   addSpeechButton(
     speechSynthesis: SpeechSynthesisModule,
     utterance: SpeechSynthesisUtteranceRemote,
-    node: HTMLElement
+    container: HTMLElement
   ): void {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.classList.add(
-      "ml-2",
-      "rounded",
-      "px-2",
-      "py-3",
-      "text-center",
-      "hover:bg-neutral-300",
-      "saypi-chat-message-button"
-    );
-    button.innerHTML = "Read aloud"; // TODO: localize
+    const button = buttonModule.createSpeechButton();
     button.addEventListener("click", () => {
       speechSynthesis
         .speak(utterance)
@@ -422,7 +476,7 @@ export class TextToSpeechUIManager {
           console.error(`Error occurred reading chat message: ${error}`)
         ); // handle any errors
     });
-    node.appendChild(button);
+    container.appendChild(button);
   }
 
   autoplaySpeech(

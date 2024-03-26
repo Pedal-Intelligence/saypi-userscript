@@ -16,6 +16,7 @@ import lockIconSVG from "./icons/lock.svg";
 import unlockIconSVG from "./icons/unlock.svg";
 import darkModeIconSVG from "./icons/mode-night.svg";
 import lightModeIconSVG from "./icons/mode-day.svg";
+import volumeIconSVG from "./icons/volume-mid.svg";
 import getMessage from "./i18n.ts";
 import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
 import AnimationModule from "./AnimationModule.js";
@@ -71,6 +72,19 @@ export default class ButtonModule {
         button.style[key] = styles[key];
       }
     }
+  }
+
+  createSpeechButton() {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.classList.add(
+      "text-center",
+      "hover:bg-neutral-300",
+      "saypi-speak-button"
+    );
+    button.title = getMessage("readAloudButtonTitle");
+    button.innerHTML = volumeIconSVG;
+    return button;
   }
 
   addTalkIcon(container) {

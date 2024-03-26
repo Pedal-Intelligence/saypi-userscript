@@ -191,5 +191,33 @@
   "extensionPopupTitle": {
     "message": "Say, Pi Settings",
     "description": "The title of the extension's popup dialog."
+  },
+  "readAloudButtonTitle": {
+    "message": "Read Aloud",
+    "description": "The title of the button to read aloud the text of a message."
+  },
+  "ttsCostExplanation": {
+    "message": "The cost of listening to this message is $cost$ $currency$",
+    "description": "The message to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "ttsPoweredBy": {
+    "message": "Text-to-speech powered by $ttsEngine$",
+    "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
+    "placeholders": {
+      "ttsEngine": {
+        "content": "$1",
+        "example": "ElevenLabs"
+      }
+    }
   }
 }
