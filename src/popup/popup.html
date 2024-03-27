@@ -11,103 +11,28 @@
     <link rel="stylesheet" href="toggle.css" />
     <link rel="stylesheet" href="language-picker.css" />
     <link rel="stylesheet" href="status.css" />
+    <link rel="stylesheet" href="consent.css" />
+    <link rel="stylesheet" href="preferences.css" />
+    <link rel="stylesheet" href="usage.css" />
     <style>
       body {
         flex-wrap: wrap;
       }
-      .user-preference-item {
-        display: block;
+      .hidden {
+        display: none !important;
+      }
+      .user-preference-item,
+      .usage-charges-item {
+        /* display: flex; */
         align-items: center;
         width: 250px;
         border-bottom: 1px solid #e2e8f0;
         padding: 0.5rem 1rem;
         margin: 0;
+        align-content: space-between;
       }
       .control {
         margin-left: auto; /* align right */
-      }
-
-      .hidden {
-        display: none;
-      }
-
-      /* Slider */
-      .slider-thumb {
-        width: 3rem;
-        height: 3rem;
-        background-color: white;
-        border: 2px solid black;
-        border-radius: 50%;
-        cursor: pointer;
-      }
-      #sliderValue {
-        display: block;
-        text-align: center;
-      }
-      .icon {
-        transition: transform 0.3s ease;
-        padding: 0 0.5rem;
-      }
-      .icon.active {
-        transform: scale(1.5);
-      }
-      #preference-selector {
-        padding: 1rem;
-      }
-
-      /* consent */
-      #analytics-consent {
-        width: 580px;
-        padding: 200px 1.5rem 1.5rem 1.5rem;
-        background-image: url("data-sharing.png");
-        background-size: contain;
-        background-repeat: no-repeat;
-      }
-      /* Mobile */
-      .mobile-device #analytics-consent {
-        width: 400px;
-      }
-      #analytics-consent.read {
-        display: none;
-      }
-      #analytics-consent h1 {
-        margin-bottom: 1rem;
-      }
-      #analytics-consent p {
-        margin-bottom: 1rem;
-      }
-      #analytics-consent ul {
-        padding: 0 1rem;
-        list-style-type: disc;
-      }
-      #analytics-consent ul li {
-        padding-bottom: 0.5rem;
-      }
-      #analytics-consent a {
-        display: block;
-        margin-bottom: 1rem;
-        text-decoration: underline;
-      }
-      #analytics-consent h2 {
-        margin-bottom: 1rem;
-        text-align: center;
-      }
-      #analytics-consent .buttons {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 1rem;
-        padding: 0 1.5rem;
-      }
-      #analytics-consent .buttons button {
-        width: 100px;
-        border: 2px solid lightskyblue;
-        padding: 0.5rem;
-        border-radius: 10px;
-        margin: 0 auto;
-      }
-      #analytics-consent .buttons button:hover {
-        background-color: lightskyblue;
-        color: white;
       }
     </style>
   </head>
@@ -118,7 +43,7 @@
         class="w-full max-w-lg user-preference-item"
       >
         <!-- Slider with icons -->
-        <div class="">
+        <div>
           <!-- Icons -->
           <div class="flex justify-between mb-2">
             <span
@@ -245,16 +170,25 @@
           </div>
         </label>
       </div>
+    </section>
 
-      <!-- Reset button is primarily for testing -->
-      <div class="user-preference-item w-full max-w-lg hidden">
-        <button
-          type="button"
-          id="clear-preferences"
-          class="btn btn-primary"
-        >
+    <section id="usage">
+      <div class="usage-charges-item w-full max-w-lg">
+        <span class="label" data-i18n="currentCharges">Current charges</span>
+        <div id="current-charges" class="value balance">
+          <span class="currency">&dollar;</span
+          ><span class="value" id="current-charges-numeric">0</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Controls for testing and development -->
+    <section id="devtools">
+      <div class="user-preference-item w-full max-w-lg x-hidden">
+        <button type="button" id="clear-preferences" class="btn btn-primary">
           Clear Preferences
         </button>
+      </div>
     </section>
 
     <section id="analytics-consent" class="hidden">
@@ -264,7 +198,9 @@
         so we can make it better for everyone.
       </p>
       <ul>
-        <li data-i18n="consentNoPii">We won't collect or see personal data, like messages or names.</li>
+        <li data-i18n="consentNoPii">
+          We won't collect or see personal data, like messages or names.
+        </li>
         <li data-i18n="consentPrivacyParamount">
           Your privacy is paramount. Anything you say remains between you and
           Pi.
@@ -275,7 +211,9 @@
         <li data-i18n="consentNoSale">
           We won't sell your data to third parties, or use it for advertising.
         </li>
-        <li data-i18n="consentRightToRevoke">You can change your mind at any time.</li>
+        <li data-i18n="consentRightToRevoke">
+          You can change your mind at any time.
+        </li>
       </ul>
       <a
         href="https://www.saypi.ai/privacy-policy"
@@ -286,10 +224,20 @@
       >
       <h2 data-i18n="consentAskParticipate">Would you like to participate?</h2>
       <div class="buttons">
-        <button id="opt-out" type="button" class="btn btn-primary" data-i18n="consentOptOut">
+        <button
+          id="opt-out"
+          type="button"
+          class="btn btn-primary"
+          data-i18n="consentOptOut"
+        >
           No thanks
         </button>
-        <button id="opt-in" type="button" class="btn btn-primary" data-i18n="consentOptIn">
+        <button
+          id="opt-in"
+          type="button"
+          class="btn btn-primary"
+          data-i18n="consentOptIn"
+        >
           I'm in!
         </button>
       </div>
@@ -298,15 +246,18 @@
     <section id="application-status">
       <div class="status-container">
         <div class="status">
-          <p class="message unknown" data-i18n="checkingApplicationStatus">Checking on our servers...</p>
+          <p class="message unknown" data-i18n="checkingApplicationStatus">
+            Checking on our servers...
+          </p>
         </div>
       </div>
     </section>
-    <section id="application-status-detail" class="hidden issue"/>
+    <section id="application-status-detail" class="hidden issue" />
 
     <script src="simple-user-agent.js"></script>
     <script src="language-picker.js"></script>
     <script src="popup.js"></script>
     <script src="status.js"></script>
+    <script src="usage.js"></script>
   </body>
 </html>

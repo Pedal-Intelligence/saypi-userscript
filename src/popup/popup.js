@@ -176,23 +176,38 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  function hideAll(sections) {
+    // If sections is a string, convert it to an array
+    if (typeof sections === "string") {
+      sections = [sections];
+    }
+
+    sections.forEach((section) => {
+      document.getElementById(section).classList.add("hidden");
+    });
+  }
+
+  function showAll(sections) {
+    // If sections is a string, convert it to an array
+    if (typeof sections === "string") {
+      sections = [sections];
+    }
+
+    sections.forEach((section) => {
+      document.getElementById(section).classList.remove("hidden");
+    });
+  }
+
   function showHideConsent() {
-    const dataSharingConsentSection =
-      document.getElementById("analytics-consent");
+    const sections = ["preferences", "usage", "devtools"];
     chrome.storage.sync.get("shareData").then((result) => {
       // if the user has not made a decision yet, show the consent section
       if (!result.hasOwnProperty("shareData")) {
-        dataSharingConsentSection.classList.remove("hidden");
-        const preferencesSection = document.getElementById("preferences");
-        preferencesSection.classList.add("hidden");
-        const statusSection = document.getElementById("application-status");
-        statusSection.classList.add("hidden");
+        showAll("analytics-consent");
+        hideAll(sections);
       } else {
-        dataSharingConsentSection.classList.add("hidden");
-        const preferencesSection = document.getElementById("preferences");
-        preferencesSection.classList.remove("hidden");
-        const statusSection = document.getElementById("application-status");
-        statusSection.classList.remove("hidden");
+        hideAll("analytics-consent");
+        showAll(sections);
       }
     });
   }
@@ -214,11 +229,13 @@ document.addEventListener("DOMContentLoaded", function () {
         showHideConsent();
       });
     });
+  }
 
+  function resetButton() {
     const resetButton = document.getElementById("clear-preferences");
     resetButton.addEventListener("click", function () {
       chrome.storage.sync.clear(function () {
-        console.log("All preferences cleared");
+        console.log("All preferences have been cleared");
         location.reload();
       });
     });
@@ -229,4 +246,5 @@ document.addEventListener("DOMContentLoaded", function () {
   switchInputs();
   consentButtons();
   showHideConsent();
+  resetButton();
 });

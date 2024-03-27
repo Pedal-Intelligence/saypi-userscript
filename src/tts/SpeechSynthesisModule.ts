@@ -22,6 +22,8 @@ interface SpeechSynthesisUtteranceRemote {
 
 interface SpeechSynthesisVoiceRemote extends SpeechSynthesisVoice {
   id: string;
+  price: number; // price per 1000 characters
+  powered_by: string;
 }
 
 function getUtteranceURI(utterance: SpeechSynthesisUtteranceRemote): string {
@@ -70,25 +72,23 @@ class SpeechSynthesisModule {
 
   private voicesCache: SpeechSynthesisVoiceRemote[] = [];
 
-  getVoices(): Promise<SpeechSynthesisVoiceRemote[]> {
+  async getVoices(): Promise<SpeechSynthesisVoiceRemote[]> {
     if (this.voicesCache.length > 0) {
-      return Promise.resolve(this.voicesCache);
+      return this.voicesCache;
     } else {
-      return axios.get(`${this.serviceUrl}/voices`).then((response) => {
-        this.voicesCache = response.data;
-        return this.voicesCache;
-      });
+      const response = await axios.get(`${this.serviceUrl}/voices`);
+      this.voicesCache = response.data;
+      return this.voicesCache;
     }
   }
 
-  getVoiceById(id: string): Promise<SpeechSynthesisVoiceRemote> {
+  async getVoiceById(id: string): Promise<SpeechSynthesisVoiceRemote> {
     const cachedVoice = this.voicesCache.find((voice) => voice.id === id);
     if (cachedVoice) {
-      return Promise.resolve(cachedVoice);
+      return cachedVoice;
     } else {
-      return axios
-        .get(`${this.serviceUrl}/voices/${id}`)
-        .then((response) => response.data);
+      const response = await axios.get(`${this.serviceUrl}/voices/${id}`);
+      return response.data;
     }
   }
 

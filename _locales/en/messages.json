@@ -210,6 +210,10 @@
       }
     }
   },
+  "currencyUSDAbbreviation": {
+    "message": "USD",
+    "description": "The abbreviation for the United States Dollar."
+  },
   "ttsPoweredBy": {
     "message": "Text-to-speech powered by $ttsEngine$",
     "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
@@ -219,5 +223,9 @@
         "example": "ElevenLabs"
       }
     }
+  },
+  "currentCharges": {
+    "message": "Current charges",
+    "description": "The term used to describe the current charges (running total) accrued by the user."
   }
 }

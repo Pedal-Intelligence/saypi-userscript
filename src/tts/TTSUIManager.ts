@@ -9,7 +9,7 @@ import { ElementTextStream } from "./InputStream";
 import { buttonModule } from "../ButtonModule";
 import { getResourceUrl } from "../ResourceModule";
 import getMessage from "../i18n";
-import { get } from "lodash";
+import { BillingModule } from "../billing/BillingModule";
 
 class AssistantResponse {
   private _element: HTMLElement;
@@ -39,6 +39,8 @@ class AssistantResponse {
 }
 
 export class TextToSpeechUIManager {
+  private billingModule = BillingModule.getInstance();
+
   // Methods for DOM manipulation and element ID assignment
   addIdChatHistory(): boolean {
     const chatHistory = document.querySelector(
@@ -321,7 +323,7 @@ export class TextToSpeechUIManager {
 
   observeChatMessageElement(
     message: HTMLElement,
-    utteranceId: string,
+    utterance: SpeechSynthesisUtteranceRemote,
     hoverMenu: HTMLElement | null
   ): void {
     // If we're already observing an element, disconnect from it
@@ -331,15 +333,15 @@ export class TextToSpeechUIManager {
 
     const speechSynthesis = SpeechSynthesisModule.getInstance();
     // Start observing the new element
-    let characterCount = message.innerText.length;
+    utterance.text = message.innerText;
     console.log(`Starting text: "${message.innerText}"`);
     this.elementStream = new ElementTextStream(message);
     this.elementStream.getStream().subscribe(
       (text) => {
         if (text.trim()) {
           console.log(`Streamed text from element: "${text}"`);
-          speechSynthesis.addSpeechToStream(utteranceId, text);
-          characterCount += text.length;
+          speechSynthesis.addSpeechToStream(utterance.id, text);
+          utterance.text += text;
         }
       },
       (error) => {
@@ -349,10 +351,11 @@ export class TextToSpeechUIManager {
         console.log(
           "Element text stream complete. Please end the tts input stream."
         );
-        speechSynthesis.endSpeechStream(utteranceId);
+        speechSynthesis.endSpeechStream(utterance.id);
         if (hoverMenu) {
-          this.addCostBasis(hoverMenu, characterCount);
+          this.addCostBasis(hoverMenu, utterance.text.length, utterance.voice);
         }
+        this.billingModule.charge(utterance);
       }
     );
   }
@@ -361,10 +364,14 @@ export class TextToSpeechUIManager {
    * @param container The menu element to add the cost basis to
    * @param characterCount The number of characters in the message
    */
-  addCostBasis(container: HTMLElement, characterCount: number) {
-    const pricePer1kCharacters = 0.3; // ElevenLabs pricing (high estimate) - use /voice api to get accurate pricing
+  addCostBasis(
+    container: HTMLElement,
+    characterCount: number,
+    voice: SpeechSynthesisVoiceRemote
+  ) {
+    const pricePer1kCharacters = voice.price;
     const cost = (characterCount / 1000) * pricePer1kCharacters;
-    const currency = "USD"; // i18n
+    const currency = getMessage("currencyUSDAbbreviation");
     const costElement = document.createElement("div");
     costElement.classList.add("text-sm", "text-neutral-500", "saypi-cost");
     costElement.title = getMessage("ttsCostExplanation", [
@@ -375,7 +382,7 @@ export class TextToSpeechUIManager {
     container.appendChild(costElement);
 
     const poweredByElement = document.createElement("div");
-    const ttsEngine = "ElevenLabs"; // i18n
+    const ttsEngine = voice.powered_by;
     const ttsLabel = getMessage("ttsPoweredBy", ttsEngine);
     poweredByElement.classList.add(
       "text-sm",
@@ -422,7 +429,7 @@ export class TextToSpeechUIManager {
           this.autoplaySpeech(speechSynthesis, utterance); // handle any errors
           this.observeChatMessageElement(
             message.element as HTMLElement,
-            utterance.id,
+            utterance,
             ttsControls
           );
         });
