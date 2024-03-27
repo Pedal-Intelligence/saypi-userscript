@@ -333,8 +333,6 @@ export class TextToSpeechUIManager {
 
     const speechSynthesis = SpeechSynthesisModule.getInstance();
     // Start observing the new element
-    utterance.text = message.innerText;
-    console.log(`Starting text: "${message.innerText}"`);
     this.elementStream = new ElementTextStream(message);
     this.elementStream.getStream().subscribe(
       (text) => {
@@ -411,8 +409,13 @@ export class TextToSpeechUIManager {
             console.log(`Streaming text began with "${initialText}"`);
             speechSynthesis.addSpeechToStream(utterance.id, initialText);
           }
+          let messageContent: HTMLElement | null = null;
           let hoverMenu: HTMLDivElement | null = null;
           let ttsControls: HTMLElement | null = null;
+          if (message.element.children.length > 0) {
+            messageContent = message.element.children[0] as HTMLElement;
+            messageContent.classList.add("message-content");
+          }
           if (message.element.children.length > 1) {
             hoverMenu = message.element.children[1] as HTMLDivElement;
             hoverMenu.classList.add("message-hover-menu");
@@ -428,7 +431,7 @@ export class TextToSpeechUIManager {
           }
           this.autoplaySpeech(speechSynthesis, utterance); // handle any errors
           this.observeChatMessageElement(
-            message.element as HTMLElement,
+            messageContent || message.element,
             utterance,
             ttsControls
           );

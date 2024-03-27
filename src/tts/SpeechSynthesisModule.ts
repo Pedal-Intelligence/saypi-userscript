@@ -123,7 +123,7 @@ class SpeechSynthesisModule {
   }
 
   private speechStreamTimeouts: { [uuid: string]: NodeJS.Timeout } = {};
-  private START_OF_SPEECH_MARKER = "Well now."; // In the first message, the text should be a space " " to indicate the start of speech
+  private START_OF_SPEECH_MARKER = " "; // In the first message, the text should be a space " " to indicate the start of speech
   private END_OF_SPEECH_MARKER = ""; // In the last message, the text should be an empty string to indicate the end of speech
 
   async createSpeechStream(): Promise<SpeechSynthesisUtteranceRemote> {

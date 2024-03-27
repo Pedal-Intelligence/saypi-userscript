@@ -40,15 +40,22 @@ export class BillingModule {
     this.utterances.push(new UtteranceCharge(utterance, cost));
 
     // Save charges and utterances to storage after charging
-    try {
-      chrome.storage.sync.set({
+    chrome.storage.sync.set(
+      {
         charges: this.charges,
         utterances: this.utterances,
-      });
-    } catch (e) {
-      // If storage limit is exceeded, just store the current balance
-      chrome.storage.sync.set({ charges: this.charges });
-    }
+      },
+      () => {
+        if (chrome.runtime.lastError) {
+          // If storage limit is exceeded, remove the oldest utterance and try again
+          this.utterances.shift();
+          chrome.storage.sync.set({
+            charges: this.charges,
+            utterances: this.utterances,
+          });
+        }
+      }
+    );
   }
 
   getTotalCharges() {

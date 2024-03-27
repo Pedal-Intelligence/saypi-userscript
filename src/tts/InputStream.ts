@@ -18,17 +18,20 @@ export class ElementTextStream {
       for (let mutation of mutationsList) {
         if (mutation.type === "childList") {
           for (let node of mutation.addedNodes) {
-            // Use duck typing to check if the node has an innerText property (standard type guard is not reliable under our tests)
-            const element = node as HTMLElement; // unsafe until checked
-            if (typeof element.innerText !== "undefined") {
-              this.subject.next(element.innerText);
+            // Filter for element type nodes
+            if (node.nodeType === Node.ELEMENT_NODE) {
+              // Use text content instead of inner text to include hidden text
+              const element = node as HTMLElement;
+              if (element.textContent !== null) {
+                this.subject.next(element.textContent);
 
-              if (this.timeout) {
-                clearTimeout(this.timeout);
+                if (this.timeout) {
+                  clearTimeout(this.timeout);
+                }
+                this.timeout = setTimeout(() => {
+                  this.subject.complete(); // Close stream on true timeout
+                }, this.timeoutDurationMillis);
               }
-              this.timeout = setTimeout(() => {
-                this.subject.complete(); // Close stream on true timeout
-              }, this.timeoutDurationMillis);
             }
           }
         }
