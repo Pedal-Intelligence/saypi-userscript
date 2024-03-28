@@ -221,7 +221,7 @@ Usage: codyhouse.co/license
 
       .language-picker {
         display: flex; /* so that the label and control can be justified */
-        /* position: relative; */
+        position: relative;
         align-content: space-between;
         flex-wrap: wrap;
       }

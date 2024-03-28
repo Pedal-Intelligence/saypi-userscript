@@ -27,7 +27,7 @@ interface SpeechSynthesisVoiceRemote extends SpeechSynthesisVoice {
 }
 
 function getUtteranceURI(utterance: SpeechSynthesisUtteranceRemote): string {
-  return `${utterance.uri}?voice_id=${utterance.voice.id}`;
+  return `${utterance.uri}?voice_id=${utterance.voice.id}&lang=${utterance.lang}`;
 }
 
 class SpeechSynthesisModule {
