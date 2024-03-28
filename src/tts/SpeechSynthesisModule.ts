@@ -160,8 +160,12 @@ class SpeechSynthesisModule {
     this.speechBuffers[uuid] += text;
     console.log(`Speech buffer now stands at: "${this.speechBuffers[uuid]}"`);
 
-    // Send buffer if text ends with a sentence break
-    if ([".", "!", "?"].some((end) => text.endsWith(end))) {
+    // Send buffer if text ends with a sentence break or timeout is not set
+    if (
+      [".", "!", "?"].some((end) => text.endsWith(end)) ||
+      text === this.END_OF_SPEECH_MARKER ||
+      !this.speechBufferTimeouts[uuid]
+    ) {
       await this.sendBuffer(uuid);
     }
 
@@ -169,9 +173,9 @@ class SpeechSynthesisModule {
     if (this.speechBufferTimeouts[uuid]) {
       clearTimeout(this.speechBufferTimeouts[uuid]);
     }
-    this.speechBufferTimeouts[uuid] = setTimeout(() => {
-      this.sendBuffer(uuid);
-    }, 5000);
+    this.speechBufferTimeouts[uuid] = setTimeout(async () => {
+      await this.sendBuffer(uuid);
+    }, 5000); // should be coordinated with the timeout in InputStream.ts?
   }
 
   private async sendBuffer(uuid: string): Promise<void> {
@@ -180,16 +184,12 @@ class SpeechSynthesisModule {
     console.log(
       `Flushing buffer to speech stream: "${this.speechBuffers[uuid]}"`
     );
+    this.speechBuffers[uuid] = ""; // Clear buffer with sending (whether successful or not, since waiting for response creates a race condition)
     await axios.put(uri, data).then((response) => {
       if (response.status !== 200) {
         throw new Error("Failed to stream input text to speech");
       }
-      console.log(
-        `Flushed buffer to speech stream: "${this.speechBuffers[uuid]}"`
-      );
-
-      // Clear buffer
-      this.speechBuffers[uuid] = "";
+      console.log(`Flushed buffer to speech stream: "${data.text}"`);
 
       // Reset the timeout
       if (this.speechStreamTimeouts[uuid]) {
