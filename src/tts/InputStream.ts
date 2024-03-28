@@ -7,7 +7,7 @@ export class ElementTextStream {
 
   constructor(
     private element: HTMLElement,
-    private timeoutDurationMillis: number = 3000
+    private timeoutDurationMillis: number = 5000
   ) {
     this.subject = new Subject<string>();
     this.registerObserver();

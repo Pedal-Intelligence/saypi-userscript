@@ -27,7 +27,11 @@ interface SpeechSynthesisVoiceRemote extends SpeechSynthesisVoice {
 }
 
 function getUtteranceURI(utterance: SpeechSynthesisUtteranceRemote): string {
-  return `${utterance.uri}?voice_id=${utterance.voice.id}&lang=${utterance.lang}`;
+  if (utterance.uri.includes("?")) {
+    return utterance.uri;
+  } else {
+    return `${utterance.uri}?voice_id=${utterance.voice.id}&lang=${utterance.lang}`;
+  }
 }
 
 class SpeechSynthesisModule {
@@ -106,7 +110,11 @@ class SpeechSynthesisModule {
     // data should include the voice id and the text to be synthesized
     const data = { voice: preferedVoice.id, text: text, lang: preferedLang };
     const baseUri = `${this.serviceUrl}/speak/${uuid}`;
-    const uri = stream ? `${baseUri}/stream` : `${baseUri}`;
+    const queryParams = `voice_id=${preferedVoice.id}&lang=${preferedLang}`;
+    let uri = stream
+      ? `${baseUri}/stream?${queryParams}`
+      : `${baseUri}?${queryParams}`;
+
     const utterance: SpeechSynthesisUtteranceRemote = {
       id: uuid,
       text: text,
@@ -148,7 +156,9 @@ class SpeechSynthesisModule {
     if (!this.speechBuffers[uuid]) {
       this.speechBuffers[uuid] = "";
     }
+    console.log(`Adding text to speech buffer: "${text}"`);
     this.speechBuffers[uuid] += text;
+    console.log(`Speech buffer now stands at: "${this.speechBuffers[uuid]}"`);
 
     // Send buffer if text ends with a sentence break
     if ([".", "!", "?"].some((end) => text.endsWith(end))) {
@@ -167,21 +177,28 @@ class SpeechSynthesisModule {
   private async sendBuffer(uuid: string): Promise<void> {
     const data = { text: this.speechBuffers[uuid] };
     const uri = `${this.serviceUrl}/speak/${uuid}/stream`;
-    const response = await axios.put(uri, data);
-    if (response.status !== 200) {
-      throw new Error("Failed to stream input text to speech");
-    }
+    console.log(
+      `Flushing buffer to speech stream: "${this.speechBuffers[uuid]}"`
+    );
+    await axios.put(uri, data).then((response) => {
+      if (response.status !== 200) {
+        throw new Error("Failed to stream input text to speech");
+      }
+      console.log(
+        `Flushed buffer to speech stream: "${this.speechBuffers[uuid]}"`
+      );
 
-    // Clear buffer
-    this.speechBuffers[uuid] = "";
+      // Clear buffer
+      this.speechBuffers[uuid] = "";
 
-    // Reset the timeout
-    if (this.speechStreamTimeouts[uuid]) {
-      clearTimeout(this.speechStreamTimeouts[uuid]);
-      this.speechStreamTimeouts[uuid] = setTimeout(() => {
-        this.endSpeechStream(uuid);
-      }, 10000);
-    }
+      // Reset the timeout
+      if (this.speechStreamTimeouts[uuid]) {
+        clearTimeout(this.speechStreamTimeouts[uuid]);
+        this.speechStreamTimeouts[uuid] = setTimeout(() => {
+          this.endSpeechStream(uuid);
+        }, 10000);
+      }
+    });
   }
 
   async endSpeechStream(uuid: string): Promise<void> {
