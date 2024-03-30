@@ -7,6 +7,7 @@ class AnalyticsService {
   private readonly measurementId: string;
   private readonly apiKey: string;
   private clientId: string | null = null;
+  private readonly userPreferences: UserPreferenceModule;
 
   constructor(measurementId: string, apiKey: string, endpoint?: string) {
     this.measurementId = measurementId;
@@ -17,6 +18,7 @@ class AnalyticsService {
     if (endpoint) {
       this.endpoint = endpoint;
     }
+    this.userPreferences = UserPreferenceModule.getInstance();
   }
 
   /**
@@ -48,7 +50,7 @@ class AnalyticsService {
   }
 
   async sendEvent(eventName: string, params: Record<string, unknown>) {
-    const consented = await UserPreferenceModule.getDataSharing();
+    const consented = await this.userPreferences.getDataSharing();
     if (!consented) {
       return;
     }

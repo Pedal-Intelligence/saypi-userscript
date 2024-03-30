@@ -48,10 +48,12 @@ class SpeechSynthesisModule {
       const ttsService = new TextToSpeechService(theServiceUrl);
 
       const audioStreamManager = new AudioStreamManager(ttsService);
+      const userPreferenceModule = UserPreferenceModule.getInstance();
 
       SpeechSynthesisModule.instance = new SpeechSynthesisModule(
         ttsService,
-        audioStreamManager
+        audioStreamManager,
+        userPreferenceModule
       );
     }
     return SpeechSynthesisModule.instance;
@@ -60,6 +62,7 @@ class SpeechSynthesisModule {
   private ttsService: TextToSpeechService;
   private audio: HTMLAudioElement;
   private audioStreamManager: AudioStreamManager;
+  private userPreferenceModule: UserPreferenceModule;
 
   /**
    * This class uses the singleton pattern to ensure that only one instance is created.
@@ -69,10 +72,13 @@ class SpeechSynthesisModule {
    */
   constructor(
     ttsService: TextToSpeechService,
-    audioStreamManager: AudioStreamManager
+    audioStreamManager: AudioStreamManager,
+    userPreferenceModule: UserPreferenceModule
   ) {
     this.ttsService = ttsService;
     this.audioStreamManager = audioStreamManager;
+    this.userPreferenceModule = userPreferenceModule;
+    console.log("user preference module", this.userPreferenceModule);
 
     this.audio = document.querySelector("audio") as HTMLAudioElement;
     if (!this.audio) {
@@ -126,11 +132,11 @@ class SpeechSynthesisModule {
     stream: boolean = false
   ): Promise<SpeechSynthesisUtteranceRemote> {
     const preferedVoice: SpeechSynthesisVoiceRemote | null =
-      await UserPreferenceModule.getVoice();
+      await this.userPreferenceModule.getVoice();
     if (!preferedVoice) {
       throw new Error("No voice selected");
     }
-    const preferedLang = await UserPreferenceModule.getLanguage();
+    const preferedLang = await this.userPreferenceModule.getLanguage();
     const uuid = generateUUID();
     return this.ttsService.createSpeech(
       uuid,
@@ -143,13 +149,13 @@ class SpeechSynthesisModule {
 
   async createSpeechStream(): Promise<SpeechSynthesisUtteranceRemote> {
     const preferedVoice: SpeechSynthesisVoiceRemote | null =
-      await UserPreferenceModule.getVoice();
-    console.log("user preference module", UserPreferenceModule);
+      await this.userPreferenceModule.getVoice();
+    console.log("user preference module", this.userPreferenceModule);
     console.log("preferedVoice", preferedVoice);
     if (!preferedVoice) {
       throw new Error("No voice selected");
     }
-    const preferedLang = await UserPreferenceModule.getLanguage();
+    const preferedLang = await this.userPreferenceModule.getLanguage();
     const uuid = generateUUID();
     const utterance = this.audioStreamManager.createStream(
       uuid,
@@ -238,7 +244,11 @@ class SpeechSynthesisModule {
   }
 
   async isEnabled(): Promise<boolean> {
-    return await UserPreferenceModule.hasVoice();
+    console.log(
+      "user preference module - is enabled?",
+      this.userPreferenceModule
+    );
+    return await this.userPreferenceModule.hasVoice();
   }
 }
 

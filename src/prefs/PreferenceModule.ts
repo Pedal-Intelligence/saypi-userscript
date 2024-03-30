@@ -8,16 +8,24 @@ import AudioControlsModule from "../audio/AudioControlsModule";
 type Preference = "speed" | "balanced" | "accuracy" | null;
 type VoicePreference = SpeechSynthesisVoiceRemote | null;
 
-module UserPreferenceModule {
-  // Define an interface for the structure you expect to receive from storage.sync.get
-  interface StorageResult {
-    prefer?: Preference; // prefered mode, i.e. 'speed', 'balanced', 'accuracy'
-    soundEffects?: boolean;
-    autoSubmit?: boolean;
-    language?: string; // e.g. 'en', 'en_US', 'en_GB', 'fr', 'fr_FR', 'fr_CA', etc.
-    voiceId?: string; // prefered speech synthesis voice
-    theme?: string; // 'light' or 'dark'
-    shareData?: boolean; // has the user consented to data sharing?
+// Define an interface for the structure you expect to receive from storage.sync.get
+interface StorageResult {
+  prefer?: Preference; // prefered mode, i.e. 'speed', 'balanced', 'accuracy'
+  soundEffects?: boolean;
+  autoSubmit?: boolean;
+  language?: string; // e.g. 'en', 'en_US', 'en_GB', 'fr', 'fr_FR', 'fr_CA', etc.
+  voiceId?: string; // prefered speech synthesis voice
+  theme?: string; // 'light' or 'dark'
+  shareData?: boolean; // has the user consented to data sharing?
+}
+
+class UserPreferenceModule {
+  private static instance: UserPreferenceModule;
+  public static getInstance(): UserPreferenceModule {
+    if (!UserPreferenceModule.instance) {
+      UserPreferenceModule.instance = new UserPreferenceModule();
+    }
+    return UserPreferenceModule.instance;
   }
 
   /**
@@ -26,7 +34,7 @@ module UserPreferenceModule {
    * @param {any} defaultValue
    * @returns any
    */
-  function getStoredValue(key: string, defaultValue: any): Promise<any> {
+  private getStoredValue(key: string, defaultValue: any): Promise<any> {
     return new Promise((resolve) => {
       chrome.storage.sync.get([key], function (result) {
         if (result[key] === undefined) {
@@ -38,27 +46,27 @@ module UserPreferenceModule {
     });
   }
 
-  export function getTranscriptionMode(): Promise<Preference> {
-    return getStoredValue("prefer", "balanced");
+  public getTranscriptionMode(): Promise<Preference> {
+    return this.getStoredValue("prefer", "balanced");
   }
 
-  export function getSoundEffects(): Promise<boolean> {
-    return getStoredValue("soundEffects", true);
+  public getSoundEffects(): Promise<boolean> {
+    return this.getStoredValue("soundEffects", true);
   }
 
-  export function getAutoSubmit(): Promise<boolean> {
-    return getStoredValue("autoSubmit", true);
+  public getAutoSubmit(): Promise<boolean> {
+    return this.getStoredValue("autoSubmit", true);
   }
 
-  export function getLanguage(): Promise<string> {
-    return getStoredValue("language", navigator.language);
+  public getLanguage(): Promise<string> {
+    return this.getStoredValue("language", navigator.language);
   }
 
-  export function getTheme(): Promise<string> {
-    return getStoredValue("theme", "light");
+  public getTheme(): Promise<string> {
+    return this.getStoredValue("theme", "light");
   }
 
-  export function setTheme(theme: string): Promise<void> {
+  public setTheme(theme: string): Promise<void> {
     return new Promise((resolve) => {
       if (
         typeof chrome !== "undefined" &&
@@ -75,11 +83,11 @@ module UserPreferenceModule {
     });
   }
 
-  export function getDataSharing(): Promise<boolean> {
-    return getStoredValue("shareData", false);
+  public getDataSharing(): Promise<boolean> {
+    return this.getStoredValue("shareData", false);
   }
 
-  export function getPrefersImmersiveView(): Promise<boolean> {
+  public getPrefersImmersiveView(): Promise<boolean> {
     let userViewPreference = null;
 
     try {
@@ -96,7 +104,7 @@ module UserPreferenceModule {
     return Promise.resolve(prefersMobile);
   }
 
-  export function hasVoice(): Promise<boolean> {
+  public hasVoice(): Promise<boolean> {
     return new Promise((resolve) => {
       if (
         typeof chrome !== "undefined" &&
@@ -113,7 +121,7 @@ module UserPreferenceModule {
     });
   }
 
-  export function getVoice(): Promise<VoicePreference> {
+  public getVoice(): Promise<VoicePreference> {
     console.log("actual getVoice");
     const apiServerUrl = config.apiServerUrl;
     if (!apiServerUrl) {
@@ -141,7 +149,7 @@ module UserPreferenceModule {
     });
   }
 
-  export function setVoice(voice: SpeechSynthesisVoiceRemote): Promise<void> {
+  public setVoice(voice: SpeechSynthesisVoiceRemote): Promise<void> {
     if (
       typeof chrome !== "undefined" &&
       chrome.storage &&
@@ -154,7 +162,7 @@ module UserPreferenceModule {
     return Promise.resolve();
   }
 
-  export function unsetVoice(): Promise<void> {
+  public unsetVoice(): Promise<void> {
     if (
       typeof chrome !== "undefined" &&
       chrome.storage &&

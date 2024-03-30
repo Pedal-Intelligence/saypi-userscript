@@ -40,6 +40,7 @@ class AssistantResponse {
 
 export class TextToSpeechUIManager {
   private billingModule = BillingModule.getInstance();
+  private userPreferences = UserPreferenceModule.getInstance();
 
   // Methods for DOM manipulation and element ID assignment
   addIdChatHistory(): boolean {
@@ -123,7 +124,7 @@ export class TextToSpeechUIManager {
     );
     builtInPiVoiceButtons.forEach((button) => {
       button.addEventListener("click", () => {
-        UserPreferenceModule.unsetVoice().then(() => {
+        this.userPreferences.unsetVoice().then(() => {
           this.markVoiceButtonAsSelected(button);
         });
       });
@@ -220,7 +221,7 @@ export class TextToSpeechUIManager {
       );
       button.innerHTML = "Say, Pi - " + voice.name; // TODO: localize
       button.addEventListener("click", () => {
-        UserPreferenceModule.setVoice(voice).then(() => {
+        this.userPreferences.setVoice(voice).then(() => {
           customVoiceButtons.forEach((button) => {
             this.unmarkButtonAsSelectedVoice(button);
           });
@@ -289,7 +290,7 @@ export class TextToSpeechUIManager {
             ) {
               // a voice button was added to the menu that is not a custom voice button
               // if a voice is selected, mark the button as selected
-              UserPreferenceModule.getVoice().then((voice) => {
+              this.userPreferences.getVoice().then((voice) => {
                 const customVoiceIsSelected = voice !== null;
                 if (customVoiceIsSelected) {
                   if (this.isBuiltInVoiceButton(node as HTMLButtonElement)) {

@@ -32,6 +32,8 @@ const sequenceNumsPendingTranscription: Set<{
   timestamp: number;
 }> = new Set();
 
+const userPreferences = UserPreferenceModule.getInstance();
+
 function checkForExpiredEntries() {
   const now = Date.now();
   sequenceNumsPendingTranscription.forEach((entry) => {
@@ -147,7 +149,7 @@ async function uploadAudio(
       audioDurationMillis / 1000,
       messages
     );
-    const language = await UserPreferenceModule.getLanguage();
+    const language = await userPreferences.getLanguage();
 
     const controller = new AbortController();
     const { signal } = controller;
@@ -248,7 +250,7 @@ async function constructTranscriptionFormData(
   formData.append("acceptsMerge", "true"); // always accept merge requests (since v1.4.10)
 
   // Wait for the preference to be retrieved before appending it to the FormData
-  const preference = await UserPreferenceModule.getTranscriptionMode();
+  const preference = await userPreferences.getTranscriptionMode();
   if (preference) {
     formData.append("prefer", preference);
   }

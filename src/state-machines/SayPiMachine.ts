@@ -151,15 +151,16 @@ if (apiServerUrl === undefined) {
   );
 }
 
-let mergeService: TranscriptMergeService;
-UserPreferenceModule.getLanguage().then((language) => {
-  mergeService = new TranscriptMergeService(apiServerUrl, language);
-});
-
 const audibleNotifications = AudibleNotificationsModule.getInstance();
 const textualNotifications = new TextualNotificationsModule();
 const visualNotifications = new VisualNotificationsModule();
 const audioControls = new AudioControlsModule();
+const userPreferences = UserPreferenceModule.getInstance();
+
+let mergeService: TranscriptMergeService;
+userPreferences.getLanguage().then((language) => {
+  mergeService = new TranscriptMergeService(apiServerUrl, language);
+});
 
 export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
   {

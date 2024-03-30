@@ -9,12 +9,13 @@ import { JSDOM } from "jsdom";
 import { voices as mockVoices } from "../data/Voices";
 import * as ConfigModule from "../../src/ConfigModule";
 import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
-import { createMockUserPreferenceModule } from "../prefs/PreferenceModule.mock";
+import { UserPreferenceModuleMock } from "../prefs/PreferenceModule.mock";
 
 describe("SpeechSynthesisModule", () => {
   let speechSynthesisModule: SpeechSynthesisModule;
   let textToSpeechServiceMock: TextToSpeechService;
   let audioStreamManagerMock: AudioStreamManager;
+  let userPreferenceModuleMock: UserPreferenceModule;
 
   beforeEach(() => {
     const dom = new JSDOM();
@@ -31,10 +32,6 @@ describe("SpeechSynthesisModule", () => {
       },
     }));
 
-    vi.mock("../../src/prefs/PreferenceModule", () => ({
-      UserPreferenceModule: createMockUserPreferenceModule(),
-    }));
-
     textToSpeechServiceMock = {
       getVoiceById: vi.fn(),
       getVoices: vi.fn(),
@@ -48,16 +45,20 @@ describe("SpeechSynthesisModule", () => {
       endStream: vi.fn(),
     } as unknown as AudioStreamManager;
 
+    userPreferenceModuleMock =
+      UserPreferenceModuleMock.getInstance() as unknown as UserPreferenceModule;
+
     speechSynthesisModule = new SpeechSynthesisModule(
       textToSpeechServiceMock,
-      audioStreamManagerMock
+      audioStreamManagerMock,
+      userPreferenceModuleMock
     );
   });
 
   afterEach(() => {
-    vi.resetAllMocks();
+    //vi.resetAllMocks();
     vi.unstubAllEnvs();
-    vi.clearAllMocks();
+    //vi.clearAllMocks();
   });
 
   it("should create an instance of SpeechSynthesisModule", () => {

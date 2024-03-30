@@ -33,5 +33,6 @@ const voices: ElevenLabsVoice[] = [
   new ElevenLabsVoice("QensJGtjYFCO2iVbvCQg", "Heather"),
   new ElevenLabsVoice("pN13jTQNNynLdgaFqslM", "Jessica"),
 ];
+const voice = voices[0];
 
-export { ElevenLabsVoice, voices };
+export { ElevenLabsVoice, voices, voice };
