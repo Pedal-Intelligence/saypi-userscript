@@ -6,10 +6,9 @@ import {
 import AudioControlsModule from "../audio/AudioControlsModule";
 
 type Preference = "speed" | "balanced" | "accuracy" | null;
-export type VoicePreference = SpeechSynthesisVoiceRemote | null;
-const audioControls = new AudioControlsModule();
+type VoicePreference = SpeechSynthesisVoiceRemote | null;
 
-export module UserPreferenceModule {
+module UserPreferenceModule {
   // Define an interface for the structure you expect to receive from storage.sync.get
   interface StorageResult {
     prefer?: Preference; // prefered mode, i.e. 'speed', 'balanced', 'accuracy'
@@ -115,6 +114,7 @@ export module UserPreferenceModule {
   }
 
   export function getVoice(): Promise<VoicePreference> {
+    console.log("actual getVoice");
     const apiServerUrl = config.apiServerUrl;
     if (!apiServerUrl) {
       throw new Error("API server URL is not set");
@@ -148,6 +148,7 @@ export module UserPreferenceModule {
       chrome.storage.sync
     ) {
       chrome.storage.sync.set({ voiceId: voice.id });
+      const audioControls = new AudioControlsModule();
       audioControls.useSayPiForAudioOutput();
     }
     return Promise.resolve();
@@ -162,6 +163,7 @@ export module UserPreferenceModule {
       chrome.storage.sync.get(["voiceId"]).then((result: StorageResult) => {
         if (result.voiceId) {
           chrome.storage.sync.remove("voiceId");
+          const audioControls = new AudioControlsModule();
           audioControls.useDefaultForAudioOutput();
         }
       });
@@ -169,3 +171,5 @@ export module UserPreferenceModule {
     return Promise.resolve();
   }
 }
+
+export { UserPreferenceModule, Preference, VoicePreference };

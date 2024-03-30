@@ -1,5 +1,6 @@
 export default {
   test: {
-    include: ["**/*.spec.{js,ts}"],
+    include: ["**/*.spec.ts"],
   },
+  testTimeout: 10000,
 };

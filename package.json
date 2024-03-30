@@ -37,9 +37,6 @@
     ],
     "testMatch": [
       "**/*.test.js"
-    ],
-    "testPathIgnorePatterns": [
-      "**/*.spec.js"
     ]
   },
   "dependencies": {

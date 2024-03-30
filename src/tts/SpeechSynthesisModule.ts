@@ -1,7 +1,8 @@
-import axios from "axios";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { config } from "../ConfigModule";
 import AudioControlsModule from "../audio/AudioControlsModule";
+import { AudioStreamManager } from "./AudioStreamManager";
+import { TextToSpeechService } from "./TextToSpeechService";
 
 function generateUUID(): string {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -39,21 +40,40 @@ class SpeechSynthesisModule {
 
   public static getInstance(serviceUrl?: string): SpeechSynthesisModule {
     if (!SpeechSynthesisModule.instance) {
-      SpeechSynthesisModule.instance = new SpeechSynthesisModule(serviceUrl);
+      const apiServerUrl = config.apiServerUrl;
+      if (!apiServerUrl) {
+        throw new Error("No API server URL defined. Check app configuration.");
+      }
+      const theServiceUrl = serviceUrl || apiServerUrl;
+      const ttsService = new TextToSpeechService(theServiceUrl);
+
+      const audioStreamManager = new AudioStreamManager(ttsService);
+
+      SpeechSynthesisModule.instance = new SpeechSynthesisModule(
+        ttsService,
+        audioStreamManager
+      );
     }
     return SpeechSynthesisModule.instance;
   }
 
-  private serviceUrl: string;
+  private ttsService: TextToSpeechService;
   private audio: HTMLAudioElement;
+  private audioStreamManager: AudioStreamManager;
 
-  // private constructor to enforce singleton pattern
-  private constructor(serviceUrl?: string) {
-    const apiServerUrl = config.apiServerUrl;
-    if (!apiServerUrl) {
-      throw new Error("No API server URL defined. Check app configuration.");
-    }
-    this.serviceUrl = serviceUrl || apiServerUrl;
+  /**
+   * This class uses the singleton pattern to ensure that only one instance is created.
+   * Unless you're a unit test, you should use the static `getInstance` method to get the instance.
+   * @param ttsService
+   * @param audioStreamManager
+   */
+  constructor(
+    ttsService: TextToSpeechService,
+    audioStreamManager: AudioStreamManager
+  ) {
+    this.ttsService = ttsService;
+    this.audioStreamManager = audioStreamManager;
+
     this.audio = document.querySelector("audio") as HTMLAudioElement;
     if (!this.audio) {
       this.audio = document.createElement("audio");
@@ -75,13 +95,19 @@ class SpeechSynthesisModule {
   }
 
   private voicesCache: SpeechSynthesisVoiceRemote[] = [];
+  /**
+   * Visible only for testing
+   * @param voices
+   */
+  _cacheVoices(voices: SpeechSynthesisVoiceRemote[]) {
+    this.voicesCache = voices;
+  }
 
   async getVoices(): Promise<SpeechSynthesisVoiceRemote[]> {
     if (this.voicesCache.length > 0) {
       return this.voicesCache;
     } else {
-      const response = await axios.get(`${this.serviceUrl}/voices`);
-      this.voicesCache = response.data;
+      this.voicesCache = await this.ttsService.getVoices();
       return this.voicesCache;
     }
   }
@@ -91,8 +117,7 @@ class SpeechSynthesisModule {
     if (cachedVoice) {
       return cachedVoice;
     } else {
-      const response = await axios.get(`${this.serviceUrl}/voices/${id}`);
-      return response.data;
+      return await this.ttsService.getVoiceById(id);
     }
   }
 
@@ -107,110 +132,40 @@ class SpeechSynthesisModule {
     }
     const preferedLang = await UserPreferenceModule.getLanguage();
     const uuid = generateUUID();
-    // data should include the voice id and the text to be synthesized
-    const data = { voice: preferedVoice.id, text: text, lang: preferedLang };
-    const baseUri = `${this.serviceUrl}/speak/${uuid}`;
-    const queryParams = `voice_id=${preferedVoice.id}&lang=${preferedLang}`;
-    let uri = stream
-      ? `${baseUri}/stream?${queryParams}`
-      : `${baseUri}?${queryParams}`;
-
-    const utterance: SpeechSynthesisUtteranceRemote = {
-      id: uuid,
-      text: text,
-      lang: preferedLang,
-      voice: preferedVoice,
-      uri: uri,
-    };
-    return axios.post(uri, data).then((response) => {
-      if (![200, 201].includes(response.status)) {
-        throw new Error("Failed to synthesize speech");
-      }
-      return utterance;
-    });
+    return this.ttsService.createSpeech(
+      uuid,
+      text,
+      preferedVoice,
+      preferedLang,
+      stream
+    );
   }
 
-  private speechStreamTimeouts: { [uuid: string]: NodeJS.Timeout } = {};
-  private START_OF_SPEECH_MARKER = " "; // In the first message, the text should be a space " " to indicate the start of speech
-  private END_OF_SPEECH_MARKER = ""; // In the last message, the text should be an empty string to indicate the end of speech
-
   async createSpeechStream(): Promise<SpeechSynthesisUtteranceRemote> {
-    const utterance = await this.createSpeech(
-      this.START_OF_SPEECH_MARKER,
-      true
+    const preferedVoice: SpeechSynthesisVoiceRemote | null =
+      await UserPreferenceModule.getVoice();
+    console.log("user preference module", UserPreferenceModule);
+    console.log("preferedVoice", preferedVoice);
+    if (!preferedVoice) {
+      throw new Error("No voice selected");
+    }
+    const preferedLang = await UserPreferenceModule.getLanguage();
+    const uuid = generateUUID();
+    const utterance = this.audioStreamManager.createStream(
+      uuid,
+      preferedVoice,
+      preferedLang
     );
-
-    // Start a timeout that will end the stream if not reset in 10 seconds
-    this.speechStreamTimeouts[utterance.id] = setTimeout(() => {
-      this.endSpeechStream(utterance.id);
-    }, 10000);
 
     return utterance;
   }
 
-  private speechBuffers: { [uuid: string]: string } = {};
-  private speechBufferTimeouts: { [uuid: string]: NodeJS.Timeout } = {};
-
   async addSpeechToStream(uuid: string, text: string): Promise<void> {
-    // Add text to buffer
-    if (!this.speechBuffers[uuid]) {
-      this.speechBuffers[uuid] = "";
-    }
-    console.log(`Adding text to speech buffer: "${text}"`);
-    this.speechBuffers[uuid] += text;
-    console.log(`Speech buffer now stands at: "${this.speechBuffers[uuid]}"`);
-
-    // Send buffer if text ends with a sentence break or timeout is not set
-    if (
-      [".", "!", "?"].some((end) => text.endsWith(end)) ||
-      text === this.END_OF_SPEECH_MARKER ||
-      !this.speechBufferTimeouts[uuid]
-    ) {
-      await this.sendBuffer(uuid);
-    }
-
-    // Set/reset timeout to send buffer after 5 seconds
-    if (this.speechBufferTimeouts[uuid]) {
-      clearTimeout(this.speechBufferTimeouts[uuid]);
-    }
-    this.speechBufferTimeouts[uuid] = setTimeout(async () => {
-      await this.sendBuffer(uuid);
-    }, 5000); // should be coordinated with the timeout in InputStream.ts?
-  }
-
-  private async sendBuffer(uuid: string): Promise<void> {
-    const data = { text: this.speechBuffers[uuid] };
-    const uri = `${this.serviceUrl}/speak/${uuid}/stream`;
-    console.log(
-      `Flushing buffer to speech stream: "${this.speechBuffers[uuid]}"`
-    );
-    this.speechBuffers[uuid] = ""; // Clear buffer with sending (whether successful or not, since waiting for response creates a race condition)
-    await axios.put(uri, data).then((response) => {
-      if (response.status !== 200) {
-        throw new Error("Failed to stream input text to speech");
-      }
-      console.log(`Flushed buffer to speech stream: "${data.text}"`);
-
-      // Reset the timeout
-      if (this.speechStreamTimeouts[uuid]) {
-        clearTimeout(this.speechStreamTimeouts[uuid]);
-        this.speechStreamTimeouts[uuid] = setTimeout(() => {
-          this.endSpeechStream(uuid);
-        }, 10000);
-      }
-    });
+    return await this.audioStreamManager.addSpeechToStream(uuid, text);
   }
 
   async endSpeechStream(uuid: string): Promise<void> {
-    // Clear the timeout
-    if (this.speechStreamTimeouts[uuid]) {
-      clearTimeout(this.speechStreamTimeouts[uuid]);
-      delete this.speechStreamTimeouts[uuid];
-      console.log("Ending speech stream");
-      this.addSpeechToStream(uuid, this.END_OF_SPEECH_MARKER);
-    } else {
-      console.log("Speech stream already ended");
-    }
+    return await this.audioStreamManager.endStream(uuid);
   }
 
   speak(utterance: SpeechSynthesisUtteranceRemote): Promise<void> {
@@ -283,7 +238,6 @@ class SpeechSynthesisModule {
   }
 
   async isEnabled(): Promise<boolean> {
-    // tts is enabled only for non-English languages where a custom voice is selected
     return await UserPreferenceModule.hasVoice();
   }
 }
