@@ -28,13 +28,14 @@ export class ImmersionService {
    */
   constructor(chatbot) {
     this.chatbot = chatbot;
+    this.userPreferences = UserPreferenceModule.getInstance();
   }
 
   /**
    * Perform initial setup of the UI based on the view preferences
    */
   initMode() {
-    UserPreferenceModule.getPrefersImmersiveView().then((immersive) => {
+    this.userPreferences.getPrefersImmersiveView().then((immersive) => {
       if (immersive) {
         this.enterImmersiveMode();
       } else {
@@ -95,7 +96,7 @@ export class ImmersionService {
 
     detachCallButton();
     enterFullscreen();
-    UserPreferenceModule.getTheme().then((theme) => {
+    this.userPreferences.getTheme().then((theme) => {
       buttonModule.applyTheme(theme);
     });
   }

@@ -24,6 +24,13 @@ export class BillingModule {
       if (data.utterances) {
         this.utterances = data.utterances;
       }
+      console.log(
+        "BillingModule charges: ",
+        this.charges,
+        " for ",
+        this.utterances.length,
+        " utterances"
+      );
     });
   }
 

@@ -29,6 +29,7 @@ export default class ButtonModule {
    * @param {Chatbot} chatbot - The chatbot instance (dependency injection)
    */
   constructor(chatbot) {
+    this.userPreferences = UserPreferenceModule.getInstance();
     this.chatbot = chatbot;
     this.immersionService = new ImmersionService(chatbot);
     this.sayPiActor = StateMachineService.actor; // the Say, Pi state machine
@@ -174,7 +175,7 @@ export default class ButtonModule {
 
   // Function to handle auto-submit based on the user preference
   async handleAutoSubmit() {
-    const autoSubmitEnabled = await UserPreferenceModule.getAutoSubmit();
+    const autoSubmitEnabled = await this.userPreferences.getAutoSubmit();
     const isImmersive = ImmersionService.isViewImmersive(); // must auto-submit in immersive mode
     if (autoSubmitEnabled || isImmersive) {
       this.simulateFormSubmit();

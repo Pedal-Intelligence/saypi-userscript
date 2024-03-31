@@ -62,7 +62,7 @@ class SpeechSynthesisModule {
   private ttsService: TextToSpeechService;
   private audio: HTMLAudioElement;
   private audioStreamManager: AudioStreamManager;
-  private userPreferenceModule: UserPreferenceModule;
+  private userPreferences: UserPreferenceModule;
 
   /**
    * This class uses the singleton pattern to ensure that only one instance is created.
@@ -77,7 +77,7 @@ class SpeechSynthesisModule {
   ) {
     this.ttsService = ttsService;
     this.audioStreamManager = audioStreamManager;
-    this.userPreferenceModule = userPreferenceModule;
+    this.userPreferences = userPreferenceModule;
 
     this.audio = document.querySelector("audio") as HTMLAudioElement;
     if (!this.audio) {
@@ -131,11 +131,11 @@ class SpeechSynthesisModule {
     stream: boolean = false
   ): Promise<SpeechSynthesisUtteranceRemote> {
     const preferedVoice: SpeechSynthesisVoiceRemote | null =
-      await this.userPreferenceModule.getVoice();
+      await this.userPreferences.getVoice();
     if (!preferedVoice) {
       throw new Error("No voice selected");
     }
-    const preferedLang = await this.userPreferenceModule.getLanguage();
+    const preferedLang = await this.userPreferences.getLanguage();
     const uuid = generateUUID();
     return this.ttsService.createSpeech(
       uuid,
@@ -148,11 +148,11 @@ class SpeechSynthesisModule {
 
   async createSpeechStream(): Promise<SpeechSynthesisUtteranceRemote> {
     const preferedVoice: SpeechSynthesisVoiceRemote | null =
-      await this.userPreferenceModule.getVoice();
+      await this.userPreferences.getVoice();
     if (!preferedVoice) {
       throw new Error("No voice selected");
     }
-    const preferedLang = await this.userPreferenceModule.getLanguage();
+    const preferedLang = await this.userPreferences.getLanguage();
     const uuid = generateUUID();
     const utterance = this.audioStreamManager.createStream(
       uuid,
@@ -241,7 +241,7 @@ class SpeechSynthesisModule {
   }
 
   async isEnabled(): Promise<boolean> {
-    return await this.userPreferenceModule.hasVoice();
+    return await this.userPreferences.hasVoice();
   }
 }
 
