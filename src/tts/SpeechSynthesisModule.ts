@@ -78,7 +78,6 @@ class SpeechSynthesisModule {
     this.ttsService = ttsService;
     this.audioStreamManager = audioStreamManager;
     this.userPreferenceModule = userPreferenceModule;
-    console.log("user preference module", this.userPreferenceModule);
 
     this.audio = document.querySelector("audio") as HTMLAudioElement;
     if (!this.audio) {
@@ -150,8 +149,6 @@ class SpeechSynthesisModule {
   async createSpeechStream(): Promise<SpeechSynthesisUtteranceRemote> {
     const preferedVoice: SpeechSynthesisVoiceRemote | null =
       await this.userPreferenceModule.getVoice();
-    console.log("user preference module", this.userPreferenceModule);
-    console.log("preferedVoice", preferedVoice);
     if (!preferedVoice) {
       throw new Error("No voice selected");
     }
@@ -244,10 +241,6 @@ class SpeechSynthesisModule {
   }
 
   async isEnabled(): Promise<boolean> {
-    console.log(
-      "user preference module - is enabled?",
-      this.userPreferenceModule
-    );
     return await this.userPreferenceModule.hasVoice();
   }
 }

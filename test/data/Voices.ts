@@ -25,7 +25,7 @@ class ElevenLabsVoice extends Voice implements SpeechSynthesisVoiceRemote {
   }
   default: boolean = false;
   localService: boolean = false;
-  voiceURI: string = "https://api.saypi.ai/voices/" + this.id;
+  voiceURI: string = `https://api.saypi.ai/voices/${this.id}`;
 }
 
 const voices: ElevenLabsVoice[] = [

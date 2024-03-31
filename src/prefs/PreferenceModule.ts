@@ -122,7 +122,6 @@ class UserPreferenceModule {
   }
 
   public getVoice(): Promise<VoicePreference> {
-    console.log("actual getVoice");
     const apiServerUrl = config.apiServerUrl;
     if (!apiServerUrl) {
       throw new Error("API server URL is not set");

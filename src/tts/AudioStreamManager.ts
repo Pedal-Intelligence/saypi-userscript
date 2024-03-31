@@ -41,9 +41,7 @@ export class AudioStreamManager {
     if (!this.speechBuffers[uuid]) {
       this.speechBuffers[uuid] = "";
     }
-    console.log(`Adding text to speech buffer: "${text}"`);
     this.speechBuffers[uuid] += text;
-    console.log(`Speech buffer now stands at: "${this.speechBuffers[uuid]}"`);
 
     // Send buffer if text ends with a sentence break or timeout is not set
     if (
@@ -65,15 +63,17 @@ export class AudioStreamManager {
 
   private async sendBuffer(uuid: string): Promise<void> {
     const text = this.speechBuffers[uuid];
-    this.ttsService.addTextToSpeechStream(uuid, text).then(() => {
-      // Reset the timeout
-      if (this.speechStreamTimeouts[uuid]) {
-        clearTimeout(this.speechStreamTimeouts[uuid]);
-        this.speechStreamTimeouts[uuid] = setTimeout(() => {
-          this.endStream(uuid);
-        }, STREAM_TIMEOUT_MS);
-      }
-    });
+    // Clear the buffer with sending the text
+    this.speechBuffers[uuid] = "";
+    await this.ttsService.addTextToSpeechStream(uuid, text);
+
+    // Reset the timeout
+    if (this.speechStreamTimeouts[uuid]) {
+      clearTimeout(this.speechStreamTimeouts[uuid]);
+      this.speechStreamTimeouts[uuid] = setTimeout(() => {
+        this.endStream(uuid);
+      }, STREAM_TIMEOUT_MS);
+    }
   }
 
   async endStream(uuid: string): Promise<void> {
@@ -86,5 +86,20 @@ export class AudioStreamManager {
     } else {
       console.log("Speech stream already ended");
     }
+  }
+
+  /* the following functions are visible only for testing */
+  getPendingText(uuid: string): string {
+    return this.speechBuffers[uuid];
+  }
+  isPending(uuid: string, text: string): boolean {
+    return this.speechBuffers[uuid].includes(text);
+  }
+
+  hasSent(uuid: string, text: string): boolean {
+    return !this.speechBuffers[uuid].includes(text);
+  }
+  hasEnded(uuid: string): boolean {
+    return !this.speechStreamTimeouts[uuid];
   }
 }

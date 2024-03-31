@@ -32,6 +32,13 @@
       "name": "Vitest Tests",
       "runtimeExecutable": "npx",
       "runtimeArgs": ["vitest"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Vitest Tests (Debug)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["vitest", "--inspect-brk"]
     }
   ]
 }

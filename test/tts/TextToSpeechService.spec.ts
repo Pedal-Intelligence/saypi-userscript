@@ -1,7 +1,9 @@
+import { describe, it, beforeEach, afterEach, expect, vi } from "vitest";
 import { TextToSpeechService } from "../../src/tts/TextToSpeechService";
 import axios from "axios";
+import { voice as mockVoice, voices as mockVoices } from "../data/Voices";
 
-jest.mock("axios");
+vi.mock("axios");
 
 describe("TextToSpeechService", () => {
   let textToSpeechService: TextToSpeechService;
@@ -11,7 +13,7 @@ describe("TextToSpeechService", () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   it("should create an instance of TextToSpeechService", () => {
@@ -19,11 +21,7 @@ describe("TextToSpeechService", () => {
   });
 
   it("should get voices", async () => {
-    const mockVoices = [
-      { id: "1", name: "Voice 1" },
-      { id: "2", name: "Voice 2" },
-    ];
-    (axios.get as jest.Mock).mockResolvedValue({ data: mockVoices });
+    (axios.get as any).mockResolvedValue({ data: mockVoices });
 
     const voices = await textToSpeechService.getVoices();
 
@@ -31,5 +29,50 @@ describe("TextToSpeechService", () => {
     expect(voices).toEqual(mockVoices);
   });
 
-  // Add more test cases for other methods in TextToSpeechService
+  it("should get voice by ID", async () => {
+    (axios.get as any).mockResolvedValue({ data: mockVoice });
+
+    const voice = await textToSpeechService.getVoiceById(mockVoice.id);
+
+    expect(axios.get).toHaveBeenCalledWith(
+      `http://example.com/voices/${mockVoice.id}`
+    );
+    expect(voice).toEqual(mockVoice);
+  });
+
+  it("should create speech", async () => {
+    const mockUtterance = {
+      id: "uuid",
+      text: "Hello",
+      lang: "en-US",
+      voice: mockVoice,
+      uri: `http://example.com/speak/uuid?voice_id=${mockVoice.id}&lang=en-US`,
+    };
+    (axios.post as any).mockResolvedValue({ status: 200, data: mockUtterance });
+
+    const utterance = await textToSpeechService.createSpeech(
+      "uuid",
+      "Hello",
+      mockVoice,
+      "en-US",
+      false
+    );
+
+    expect(axios.post).toHaveBeenCalledWith(
+      `http://example.com/speak/uuid?voice_id=${mockVoice.id}&lang=en-US`,
+      { voice: mockVoice.id, text: "Hello", lang: "en-US" }
+    );
+    expect(utterance).toEqual(mockUtterance);
+  });
+
+  it("should add text to speech stream", async () => {
+    (axios.post as any).mockResolvedValue({ status: 200 });
+
+    await textToSpeechService.addTextToSpeechStream("uuid", "Hello");
+
+    expect(axios.post).toHaveBeenCalledWith(
+      "http://example.com/speak/uuid/stream",
+      { text: "Hello" }
+    );
+  });
 });

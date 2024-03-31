@@ -6,7 +6,8 @@ import {
 
 export class TextToSpeechService {
   public async getVoiceById(id: string): Promise<SpeechSynthesisVoiceRemote> {
-    return await axios.get(`${this.serviceUrl}/voices/${id}`);
+    const response = await axios.get(`${this.serviceUrl}/voices/${id}`);
+    return response.data;
   }
   public async getVoices(): Promise<SpeechSynthesisVoiceRemote[]> {
     const response = await axios.get(`${this.serviceUrl}/voices`);
