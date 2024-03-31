@@ -1,42 +1,62 @@
-import { expect, test } from "vitest";
+import { expect, test, beforeEach } from "vitest";
 import { JSDOM } from "jsdom";
 import { toArray } from "rxjs/operators";
-import { ElementTextStream } from "../../src/tts/InputStream";
+import {
+  ElementTextStream,
+  ELEMENT_TEXT_STREAM_TIMEOUT_DURATION_MILLIS,
+  getNestedText,
+} from "../../src/tts/InputStream";
 
-test("ElementTextStream emits inner text of added nodes", async () => {
-  const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
-  global.MutationObserver = dom.window.MutationObserver;
-  global.Node = dom.window.Node; // get Node from jsdom, required for ElementTextStream
-  const element = dom.window.document.querySelector("p") as HTMLElement;
-  const stream = new ElementTextStream(element);
-  const values: string[] = [];
-  const promise = new Promise<void>((resolve) => {
-    stream
-      .getStream()
-      .pipe(toArray())
-      .subscribe((val: string[]) => {
-        values.push(...val);
-        resolve();
-      });
-  });
-  const newNode1 = dom.window.document.createElement("span");
-  newNode1.innerText = "Hello";
-  element.appendChild(newNode1);
-  const newNode2 = dom.window.document.createElement("span");
-  newNode2.innerText = "world";
-  element.appendChild(newNode2);
-  // Wait for the Observable to complete
-  await promise.then(() => {
-    expect(values).toEqual(["Hello", "world"]);
-  });
-});
+let dom: JSDOM;
+let element: HTMLElement;
+let stream: ElementTextStream;
 
-test("ElementTextStream resets timeout when new input is available", async () => {
-  const dom = new JSDOM(`<!DOCTYPE html><p></p>`);
+beforeEach(() => {
+  dom = new JSDOM(`<!DOCTYPE html><p></p>`);
   global.MutationObserver = dom.window.MutationObserver;
   global.Node = dom.window.Node;
-  const element = dom.window.document.querySelector("p") as HTMLElement;
-  const stream = new ElementTextStream(element);
+  element = dom.window.document.querySelector("p") as HTMLElement;
+  stream = new ElementTextStream(element);
+});
+
+test("getNestedText returns the correct text", () => {
+  const container = dom.window.document.createElement("div");
+  container.innerHTML =
+    "<p id='greeting'>Hello, <span class='subject' style='display: none'>World!</span> \
+<span>It's nice to see you again.</span></p>";
+  const greeting = container.querySelector("#greeting") as HTMLElement;
+  const actualText = getNestedText(greeting);
+  expect(actualText).toBe("Hello, World! It's nice to see you again.");
+});
+
+test(
+  "ElementTextStream emits inner text of added nodes",
+  async () => {
+    const values: string[] = [];
+    const promise = new Promise<void>((resolve) => {
+      stream
+        .getStream()
+        .pipe(toArray())
+        .subscribe((val: string[]) => {
+          values.push(...val);
+          resolve();
+        });
+    });
+    const newNode1 = dom.window.document.createElement("span");
+    newNode1.innerText = "Hello";
+    element.appendChild(newNode1);
+    const newNode2 = dom.window.document.createElement("span");
+    newNode2.innerText = "world";
+    element.appendChild(newNode2);
+    // Wait for the Observable to complete
+    await promise.then(() => {
+      expect(values).toEqual(["Hello", "world"]);
+    });
+  },
+  ELEMENT_TEXT_STREAM_TIMEOUT_DURATION_MILLIS * 3
+);
+
+test("ElementTextStream resets timeout when new input is available", async () => {
   const values: string[] = [];
   const start = Date.now();
   const promise = new Promise<void>((resolve) => {
