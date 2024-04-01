@@ -35,6 +35,16 @@ It also works on these and other browsers, including Safari, as a userscript.
 ## Contribution
 We are not currently seeking code contributions to the repo. However, if you have ideas for improvements or bug fixes, feel free to discuss them with us on any of our social or support channels. Let's work together to enhance the voice interaction experience with Pi!
 
+## Testing
+This project uses both Jest and Vitest for testing.
+
+Jest is a JavaScript Testing Framework with a focus on simplicity.
+Vitest is a test runner designed for Vite. It's used for all ESM and TypeScript modules in this project. You can run Vitest in watch mode with the following command:
+
+```bash
+npm run test:vitest:watch
+```
+
 ## License
 This project is licensed under a proprietary commerical license. Some source code is made available in this repo for public review, but it may not be copied, modified, forked or redistributed - see the [LICENSE](LICENSE) file for details.
 
