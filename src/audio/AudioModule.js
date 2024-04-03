@@ -216,10 +216,34 @@ export default class AudioModule {
    * raise a "audio:load" event with the URL of the audio file to load.
    * @param {string} url
    */
-  loadAudio(url) {
+  loadAudio(url, play = true) {
     if (url) {
       this.audioElement.src = url;
-      this.audioElement.load();
+      if (play) {
+        this.audioElement
+          .play()
+          .then(() => {
+            console.log(`Playing audio from ${this.audioElement.currentSrc}`);
+          })
+          .catch((error) => {
+            console.error(
+              `Error playing audio from ${this.audioElement.currentSrc}`,
+              error
+            );
+          });
+      } else {
+        this.audioElement
+          .load()
+          .then(() => {
+            console.log(`Loaded audio from ${this.audioElement.currentSrc}`);
+          })
+          .catch((error) => {
+            console.error(
+              `Error loading audio from ${this.audioElement.currentSrc}`,
+              error
+            );
+          });
+      }
     }
   }
 
@@ -246,7 +270,7 @@ export default class AudioModule {
       );
     };
 
-    this.audio.oncanplay = () => {
+    this.audioElement.oncanplay = () => {
       const endtime = Date.now();
       const elapsedtime = (endtime - starttime) / 1000;
       console.log(
@@ -254,7 +278,7 @@ export default class AudioModule {
       );
     };
 
-    this.audio.oncanplaythrough = () => {
+    this.audioElement.oncanplaythrough = () => {
       const endtime = Date.now();
       const elapsedtime = (endtime - starttime) / 1000;
       console.log(
@@ -263,7 +287,7 @@ export default class AudioModule {
     };
 
     // Handle audio playback completion
-    this.audio.onended = () => {
+    this.audioElement.onended = () => {
       const endtime = Date.now();
       const elapsedtime = (endtime - starttime) / 1000;
       console.log(`Audio playback ended after ${elapsedtime}s`);
