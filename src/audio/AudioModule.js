@@ -9,10 +9,15 @@ import { isSafari } from "../UserAgentModule.js";
 
 export default class AudioModule {
   constructor() {
+    if (AudioModule.instance) {
+      return AudioModule.instance;
+    }
+
     this.audioElement = document.querySelector("audio");
     if (!this.audioElement) {
       console.error("Audio element not found!");
     } else {
+      this.audioElement.id = "saypi-audio-main";
       console.debug("Audio element found", this.audioElement);
     }
 
@@ -57,6 +62,16 @@ export default class AudioModule {
         }
       });
     }
+
+    AudioModule.instance = this;
+  }
+
+  static getInstance() {
+    if (!AudioModule.instance) {
+      AudioModule.instance = new AudioModule();
+    }
+
+    return AudioModule.instance;
   }
 
   start() {
@@ -64,6 +79,7 @@ export default class AudioModule {
     this.audioOutputActor.start();
     this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
     //this.safariErrorHandler.startMonitoring();
+    this.registerLifecycleDebug();
 
     // audio input (user)
     this.audioInputActor.start();
@@ -183,5 +199,62 @@ export default class AudioModule {
     EventBus.on("audio:reload", (e) => {
       this.audioElement.load();
     });
+  }
+
+  /**
+   * Load an audio file into the main audio element,
+   * replacing the current audio source, i.e. Pi's speech.
+   * @param {string} url
+   */
+  loadAudio(url) {
+    this.audioElement.src = url;
+    this.audioElement.load();
+  }
+
+  registerLifecycleDebug() {
+    let starttime;
+    this.audioElement.onerror = (event) => {
+      console.error(
+        `Error playing audio from ${this.audioElement.currentSrc}`,
+        event
+      );
+    };
+
+    this.audioElement.onloadstart = () => {
+      console.log(`Loading audio from ${this.audioElement.currentSrc}`);
+      starttime = Date.now();
+    };
+
+    // Handle successful loading and playing of the audio
+    this.audioElement.onloadeddata = () => {
+      const endtime = Date.now();
+      const elapsedtime = (endtime - starttime) / 1000;
+      console.log(
+        `Audio is loaded after ${elapsedtime}s from ${this.audioElement.currentSrc}`
+      );
+    };
+
+    this.audio.oncanplay = () => {
+      const endtime = Date.now();
+      const elapsedtime = (endtime - starttime) / 1000;
+      console.log(
+        `Audio is ready to play after ${elapsedtime}s from ${this.audioElement.currentSrc}`
+      );
+    };
+
+    this.audio.oncanplaythrough = () => {
+      const endtime = Date.now();
+      const elapsedtime = (endtime - starttime) / 1000;
+      console.log(
+        `Audio is ready to play through after ${elapsedtime}s from ${this.audioElement.currentSrc}`
+      );
+    };
+
+    // Handle audio playback completion
+    this.audio.onended = () => {
+      const endtime = Date.now();
+      const elapsedtime = (endtime - starttime) / 1000;
+      console.log(`Audio playback ended after ${elapsedtime}s`);
+    };
   }
 }

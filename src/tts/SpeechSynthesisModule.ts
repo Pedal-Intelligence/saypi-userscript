@@ -3,6 +3,8 @@ import { config } from "../ConfigModule";
 import AudioControlsModule from "../audio/AudioControlsModule";
 import { AudioStreamManager } from "./AudioStreamManager";
 import { TextToSpeechService } from "./TextToSpeechService";
+import EventBus from "../events/EventBus";
+import AudioModule from "../audio/AudioModule";
 
 function generateUUID(): string {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -49,18 +51,20 @@ class SpeechSynthesisModule {
 
       const audioStreamManager = new AudioStreamManager(ttsService);
       const userPreferenceModule = UserPreferenceModule.getInstance();
+      const audioModule = AudioModule.getInstance();
 
       SpeechSynthesisModule.instance = new SpeechSynthesisModule(
         ttsService,
         audioStreamManager,
-        userPreferenceModule
+        userPreferenceModule,
+        audioModule
       );
     }
     return SpeechSynthesisModule.instance;
   }
 
   private ttsService: TextToSpeechService;
-  private audio: HTMLAudioElement;
+  private audioModule: AudioModule;
   private audioStreamManager: AudioStreamManager;
   private userPreferences: UserPreferenceModule;
 
@@ -73,18 +77,13 @@ class SpeechSynthesisModule {
   constructor(
     ttsService: TextToSpeechService,
     audioStreamManager: AudioStreamManager,
-    userPreferenceModule: UserPreferenceModule
+    userPreferenceModule: UserPreferenceModule,
+    audioModule: AudioModule
   ) {
     this.ttsService = ttsService;
     this.audioStreamManager = audioStreamManager;
     this.userPreferences = userPreferenceModule;
-
-    this.audio = document.querySelector("audio") as HTMLAudioElement;
-    if (!this.audio) {
-      this.audio = document.createElement("audio");
-      this.audio.id = "saypi-audio";
-      document.body.appendChild(this.audio);
-    }
+    this.audioModule = audioModule;
     this.initProvider();
   }
 
@@ -167,62 +166,18 @@ class SpeechSynthesisModule {
     return await this.audioStreamManager.addSpeechToStream(uuid, text);
   }
 
-  async endSpeechStream(uuid: string): Promise<void> {
-    return await this.audioStreamManager.endStream(uuid);
+  async endSpeechStream(
+    utterance: SpeechSynthesisUtteranceRemote
+  ): Promise<void> {
+    await this.audioStreamManager.endStream(utterance.id);
+    // doesn't capture all stream ended cases (see audioStreamManager.endStream for more), but good enough for now
+    EventBus.emit("saypi:tts:speechStreamEnded", utterance);
   }
 
-  speak(utterance: SpeechSynthesisUtteranceRemote): Promise<void> {
-    return new Promise((resolve, reject) => {
-      // Error handling
-      this.audio.onerror = (event) => {
-        console.error("Error in audio playback", event);
-        reject(new Error(`Error playing audio from ${utterance.uri}`));
-      };
-
-      // Handle successful loading and playing of the audio
-      this.audio.onloadeddata = () => {
-        const endtime = Date.now();
-        const elapsedtime = (endtime - starttime) / 1000;
-        console.log(
-          `Audio is loaded after ${elapsedtime}s from ${utterance.uri}`
-        );
-      };
-
-      this.audio.oncanplay = () => {
-        const endtime = Date.now();
-        const elapsedtime = (endtime - starttime) / 1000;
-        console.log(
-          `Audio is ready to play after ${elapsedtime}s from ${utterance.uri}`
-        );
-        if (this.audio.paused) {
-          this.audio.play().then(resolve).catch(reject);
-        }
-      };
-
-      this.audio.oncanplaythrough = () => {
-        const endtime = Date.now();
-        const elapsedtime = (endtime - starttime) / 1000;
-        console.log(
-          `Audio is ready to play through after ${elapsedtime}s from ${utterance.uri}`
-        );
-        if (this.audio.paused) {
-          //this.audio.play().then(resolve).catch(reject);
-        }
-      };
-
-      // Handle audio playback completion
-      this.audio.onended = () => {
-        const endtime = Date.now();
-        const elapsedtime = (endtime - starttime) / 1000;
-        console.log(`Audio playback ended after ${elapsedtime}s`);
-        resolve();
-      };
-
-      // Start audio playback with utterance.uri as the audio source
-      this.audio.src = getUtteranceURI(utterance);
-      const starttime = Date.now();
-      //this.audio.play().catch(reject);
-    });
+  speak(utterance: SpeechSynthesisUtteranceRemote): void {
+    // Start audio playback with utterance.uri as the audio source
+    const audioSource = getUtteranceURI(utterance);
+    this.audioModule.loadAudio(audioSource);
   }
 
   cancel(): Promise<void> {

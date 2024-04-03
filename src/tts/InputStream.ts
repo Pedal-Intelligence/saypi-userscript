@@ -1,6 +1,6 @@
 import { Observable, Subject } from "rxjs";
 
-export const ELEMENT_TEXT_STREAM_TIMEOUT_DURATION_MILLIS: number = 5000; // visible for testing
+export const ELEMENT_TEXT_STREAM_TIMEOUT_DURATION_MILLIS: number = 10000; // visible for testing
 
 // Visible for testing
 export function getNestedText(node: HTMLElement): string {

@@ -10,6 +10,8 @@ import { buttonModule } from "../ButtonModule";
 import { getResourceUrl } from "../ResourceModule";
 import getMessage from "../i18n";
 import { BillingModule } from "../billing/BillingModule";
+import { Observation } from "../chatbots/Observation";
+import EventBus from "../events/EventBus";
 
 class AssistantResponse {
   private _element: HTMLElement;
@@ -222,6 +224,7 @@ export class TextToSpeechUIManager {
       button.innerHTML = "Say, Pi - " + voice.name; // TODO: localize
       button.addEventListener("click", () => {
         this.userPreferences.setVoice(voice).then(() => {
+          console.log(`Selected voice: ${voice.name}`);
           customVoiceButtons.forEach((button) => {
             this.unmarkButtonAsSelectedVoice(button);
           });
@@ -324,8 +327,7 @@ export class TextToSpeechUIManager {
 
   observeChatMessageElement(
     message: HTMLElement,
-    utterance: SpeechSynthesisUtteranceRemote,
-    hoverMenu: HTMLElement | null
+    utterance: SpeechSynthesisUtteranceRemote
   ): void {
     // If we're already observing an element, disconnect from it
     if (this.elementStream) {
@@ -335,10 +337,17 @@ export class TextToSpeechUIManager {
     const speechSynthesis = SpeechSynthesisModule.getInstance();
     // Start observing the new element
     this.elementStream = new ElementTextStream(message);
+    let firstChunkTime: number | null = null;
+
     this.elementStream.getStream().subscribe(
       (text) => {
         if (text.trim()) {
-          console.log(`Streamed text from element: "${text}"`);
+          const currentTime = Date.now();
+          if (firstChunkTime === null) {
+            firstChunkTime = currentTime;
+          }
+          const delay = currentTime - (firstChunkTime as number);
+          console.log(`${delay}ms, streamed text: "${text}"`);
           speechSynthesis.addSpeechToStream(utterance.id, text);
           utterance.text += text;
         }
@@ -347,17 +356,23 @@ export class TextToSpeechUIManager {
         console.error(`Error occurred streaming text from element: ${error}`);
       },
       () => {
-        console.log(
-          "Element text stream complete. Please end the tts input stream."
-        );
-        speechSynthesis.endSpeechStream(utterance.id);
-        if (hoverMenu) {
-          this.addCostBasis(hoverMenu, utterance.text.length, utterance.voice);
-        }
-        this.billingModule.charge(utterance);
+        const totalTime = Date.now() - (firstChunkTime as number);
+        console.log(`Element text stream complete after ${totalTime}ms`);
+        speechSynthesis.endSpeechStream(utterance);
       }
     );
   }
+
+  chargeForTTS(utterance: SpeechSynthesisUtteranceRemote): void {
+    const hoverMenu = document.getElementById(
+      `saypi-tts-controls-${utterance.id}`
+    );
+    if (hoverMenu) {
+      this.addCostBasis(hoverMenu, utterance.text.length, utterance.voice);
+    }
+    this.billingModule.charge(utterance);
+  }
+
   /**
    * Add the cost of the TTS stream to the chat message
    * @param container The menu element to add the cost basis to
@@ -426,6 +441,7 @@ export class TextToSpeechUIManager {
               createThreadButton.classList.add("create-thread-button");
             }
             ttsControls = document.createElement("div");
+            ttsControls.id = `saypi-tts-controls-${utterance.id}`;
             ttsControls.classList.add("saypi-tts-controls", "pt-4");
             hoverMenu.appendChild(ttsControls);
             this.addSpeechButton(speechSynthesis, utterance, ttsControls);
@@ -433,12 +449,34 @@ export class TextToSpeechUIManager {
           this.autoplaySpeech(speechSynthesis, utterance); // handle any errors
           this.observeChatMessageElement(
             messageContent || message.element,
-            utterance,
-            ttsControls
+            utterance
           );
         });
       }
     });
+  }
+
+  findAssistantResponse(searchRoot: Element): Observation {
+    const query = "div.break-anywhere:not(.justify-end)"; // TODO: -> this.chatbot.getAssistantResponseSelector();
+    const aiMessage = searchRoot.querySelector(query);
+    if (aiMessage) {
+      return Observation.notDecorated(aiMessage.id, aiMessage);
+    }
+    return Observation.notFound("");
+  }
+
+  decorateAssistantResponse(element: HTMLElement): AssistantResponse {
+    const message = new AssistantResponse(element);
+    return message;
+  }
+
+  findAndDecorateAssistantResponse(searchRoot: Element): Observation {
+    const obs = this.findAssistantResponse(searchRoot);
+    if (obs.found && obs.isNew && !obs.decorated) {
+      const message = this.decorateAssistantResponse(obs.target as HTMLElement);
+      this.assistantChatMessageAdded(message);
+    }
+    return Observation.decorated(obs);
   }
 
   async registerChatHistoryListener(): Promise<void> {
@@ -446,31 +484,40 @@ export class TextToSpeechUIManager {
       "saypi-chat-history-present-messages"
     );
     if (!chatHistory) {
+      console.warn("Chat history (present) not found");
       return;
     }
 
-    const observerCallback = (
-      mutationsList: MutationRecord[],
-      observer: MutationObserver
-    ) => {
-      for (let mutation of mutationsList) {
-        if (mutation.type === "childList") {
-          for (let node of mutation.addedNodes) {
-            if (
-              node instanceof HTMLElement &&
-              node.nodeName === "DIV" &&
-              node.classList.contains("break-anywhere") &&
-              !node.classList.contains("justify-end")
-            ) {
-              this.assistantChatMessageAdded(new AssistantResponse(node));
+    // Observe the chat history for new chat messages
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        [...mutation.addedNodes]
+          .filter((node) => node instanceof Element)
+          .forEach((node) => {
+            const addedElement = node as Element;
+            const responseObs =
+              this.findAndDecorateAssistantResponse(addedElement);
+            if (responseObs.isReady()) {
+              // only expecting new chat message at a time, so
+              // skip this mutation if the chat message is already decorated
+              return;
             }
-          }
+          });
+      });
+    });
+
+    observer.observe(chatHistory, { childList: true, subtree: true });
+  }
+
+  registerEndOfStreamListeners(): void {
+    EventBus.on(
+      "saypi:tts:speechStreamEnded",
+      (utterance: SpeechSynthesisUtteranceRemote) => {
+        if (utterance) {
+          this.chargeForTTS(utterance);
         }
       }
-    };
-
-    const observer = new MutationObserver(observerCallback);
-    observer.observe(chatHistory, { childList: true, subtree: true });
+    );
   }
 
   addSpeechButton(
@@ -480,12 +527,7 @@ export class TextToSpeechUIManager {
   ): void {
     const button = buttonModule.createSpeechButton();
     button.addEventListener("click", () => {
-      speechSynthesis
-        .speak(utterance)
-        .then(() => console.log("Reading chat message aloud")) // start streaming output
-        .catch((error) =>
-          console.error(`Error occurred reading chat message: ${error}`)
-        ); // handle any errors
+      speechSynthesis.speak(utterance);
     });
     container.appendChild(button);
   }
@@ -496,12 +538,7 @@ export class TextToSpeechUIManager {
   ) {
     // wait a beat, then start streaming the utterance
     setTimeout(() => {
-      speechSynthesis
-        .speak(utterance)
-        .then(() => console.log("Automatically reading chat message aloud")) // start streaming output
-        .catch((error) =>
-          console.error(`Error occurred reading chat message: ${error}`)
-        ); // handle any errors
+      speechSynthesis.speak(utterance);
     }, 1000);
   }
 
@@ -513,5 +550,6 @@ export class TextToSpeechUIManager {
     this.addVoiceMenuExpansionListener();
     this.addVoiceButtonAdditionListener();
     this.registerChatHistoryListener();
+    this.registerEndOfStreamListeners();
   }
 }

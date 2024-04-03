@@ -21,7 +21,7 @@ import { addChild } from "./DOMModule.ts";
   const chatbot = ChatbotService.getChatbot();
 
   function startAudioModule() {
-    const audioModule = new AudioModule();
+    const audioModule = AudioModule.getInstance();
     window.addEventListener("unload", () => {
       audioModule.stop();
     });
