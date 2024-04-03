@@ -10,14 +10,12 @@ import { voices as mockVoices } from "../data/Voices";
 import * as ConfigModule from "../../src/ConfigModule";
 import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
 import { UserPreferenceModuleMock } from "../prefs/PreferenceModule.mock";
-import AudioModule from "../../src/audio/AudioModule";
 
 describe("SpeechSynthesisModule", () => {
   let speechSynthesisModule: SpeechSynthesisModule;
   let textToSpeechServiceMock: TextToSpeechService;
   let audioStreamManagerMock: AudioStreamManager;
   let userPreferenceModuleMock: UserPreferenceModule;
-  let audioModuleMock: AudioModule;
 
   beforeEach(() => {
     const dom = new JSDOM();
@@ -50,15 +48,10 @@ describe("SpeechSynthesisModule", () => {
     userPreferenceModuleMock =
       UserPreferenceModuleMock.getInstance() as unknown as UserPreferenceModule;
 
-    audioModuleMock = {
-      loadAudio: vi.fn(),
-    } as unknown as AudioModule;
-
     speechSynthesisModule = new SpeechSynthesisModule(
       textToSpeechServiceMock,
       audioStreamManagerMock,
-      userPreferenceModuleMock,
-      audioModuleMock
+      userPreferenceModuleMock
     );
   });
 

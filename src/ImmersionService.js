@@ -1,7 +1,7 @@
 import { buttonModule } from "./ButtonModule.js";
 import { enterFullscreen, exitFullscreen } from "./FullscreenModule.ts";
 import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
-import { addChild } from "./DOMModule.ts";
+import { addChild } from "./dom/DOMModule.ts";
 
 function attachCallButton() {
   // move the call button back into the text prompt container for desktop view

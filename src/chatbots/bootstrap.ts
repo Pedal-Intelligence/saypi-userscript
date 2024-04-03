@@ -2,7 +2,7 @@ import { Chatbot } from "./Chatbot";
 import { buttonModule } from "../ButtonModule.js";
 import EventBus from "../events/EventBus.js";
 import { TextToSpeechUIManager } from "../tts/TTSUIManager";
-import { Observation } from "./Observation";
+import { Observation } from "../dom/Observation";
 
 export class DOMObserver {
   ttsUiMgr: TextToSpeechUIManager | null = null;

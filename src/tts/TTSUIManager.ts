@@ -10,35 +10,10 @@ import { buttonModule } from "../ButtonModule";
 import { getResourceUrl } from "../ResourceModule";
 import getMessage from "../i18n";
 import { BillingModule } from "../billing/BillingModule";
-import { Observation } from "../chatbots/Observation";
+import { Observation } from "../dom/Observation";
 import EventBus from "../events/EventBus";
-
-class AssistantResponse {
-  private _element: HTMLElement;
-  private utteranceId: string | null = null;
-
-  constructor(element: HTMLElement) {
-    this._element = element;
-    element.classList.add("chat-message", "assistant-message");
-  }
-
-  get text(): string {
-    return this._element.innerText;
-  }
-
-  get element(): HTMLElement {
-    return this._element;
-  }
-
-  get isTTSEnabled(): boolean {
-    return this.utteranceId !== null;
-  }
-
-  enableTTS(utteranceId: string): void {
-    this.utteranceId = utteranceId;
-    this._element.dataset.utteranceId = utteranceId;
-  }
-}
+import { TTSControlsModule } from "./TTSControlsModule";
+import { ChatHistoryObserver } from "../dom/ChatHistoryObserver";
 
 export class TextToSpeechUIManager {
   private billingModule = BillingModule.getInstance();
@@ -323,190 +298,26 @@ export class TextToSpeechUIManager {
     observer.observe(voiceMenu, { childList: true });
   }
 
-  private elementStream: ElementTextStream | null = null;
-
-  observeChatMessageElement(
-    message: HTMLElement,
-    utterance: SpeechSynthesisUtteranceRemote
-  ): void {
-    // If we're already observing an element, disconnect from it
-    if (this.elementStream) {
-      this.elementStream.disconnect();
-    }
-
-    const speechSynthesis = SpeechSynthesisModule.getInstance();
-    // Start observing the new element
-    this.elementStream = new ElementTextStream(message);
-    let firstChunkTime: number | null = null;
-
-    this.elementStream.getStream().subscribe(
-      (text) => {
-        if (text.trim()) {
-          const currentTime = Date.now();
-          if (firstChunkTime === null) {
-            firstChunkTime = currentTime;
-          }
-          const delay = currentTime - (firstChunkTime as number);
-          console.log(`${delay}ms, streamed text: "${text}"`);
-          speechSynthesis.addSpeechToStream(utterance.id, text);
-          utterance.text += text;
-        }
-      },
-      (error) => {
-        console.error(`Error occurred streaming text from element: ${error}`);
-      },
-      () => {
-        const totalTime = Date.now() - (firstChunkTime as number);
-        console.log(`Element text stream complete after ${totalTime}ms`);
-        speechSynthesis.endSpeechStream(utterance);
-      }
-    );
-  }
-
   chargeForTTS(utterance: SpeechSynthesisUtteranceRemote): void {
     const hoverMenu = document.getElementById(
       `saypi-tts-controls-${utterance.id}`
     );
     if (hoverMenu) {
-      this.addCostBasis(hoverMenu, utterance.text.length, utterance.voice);
+      TTSControlsModule.updateCostBasis(
+        hoverMenu,
+        utterance.text.length,
+        utterance.voice
+      );
     }
     this.billingModule.charge(utterance);
   }
 
-  /**
-   * Add the cost of the TTS stream to the chat message
-   * @param container The menu element to add the cost basis to
-   * @param characterCount The number of characters in the message
-   */
-  addCostBasis(
-    container: HTMLElement,
-    characterCount: number,
-    voice: SpeechSynthesisVoiceRemote
-  ) {
-    const pricePer1kCharacters = voice.price;
-    const cost = (characterCount / 1000) * pricePer1kCharacters;
-    const currency = getMessage("currencyUSDAbbreviation");
-    const costElement = document.createElement("div");
-    costElement.classList.add("text-sm", "text-neutral-500", "saypi-cost");
-    costElement.title = getMessage("ttsCostExplanation", [
-      cost.toFixed(2),
-      currency,
-    ]);
-    costElement.innerHTML = `Cost: $${cost.toFixed(2)}`;
-    container.appendChild(costElement);
-
-    const poweredByElement = document.createElement("div");
-    const ttsEngine = voice.powered_by;
-    const ttsLabel = getMessage("ttsPoweredBy", ttsEngine);
-    poweredByElement.classList.add(
-      "text-sm",
-      "text-neutral-500",
-      "saypi-powered-by"
-    );
-    poweredByElement.title = ttsLabel;
-    const logoImageUrl = getResourceUrl(
-      `icons/logos/${ttsEngine.toLowerCase()}.svg`
-    );
-    poweredByElement.innerHTML = `<img src="${logoImageUrl}" alt="${ttsLabel}" class="h-4 w-4 inline-block">`;
-    costElement.appendChild(poweredByElement);
-  }
-
-  // Chat history and automatic speech functionality
-  assistantChatMessageAdded(message: AssistantResponse): void {
-    const speechSynthesis = SpeechSynthesisModule.getInstance();
-    speechSynthesis.isEnabled().then((isEnabled) => {
-      if (isEnabled) {
-        speechSynthesis.createSpeechStream().then((utterance) => {
-          message.enableTTS(utterance.id);
-          console.log("Created audio stream", utterance.id);
-          const initialText = message.text;
-          // send the initial text to the stream only if it's not empty
-          if (initialText.trim()) {
-            console.log(`Streaming text began with "${initialText}"`);
-            speechSynthesis.addSpeechToStream(utterance.id, initialText);
-          }
-          let messageContent: HTMLElement | null = null;
-          let hoverMenu: HTMLDivElement | null = null;
-          let ttsControls: HTMLElement | null = null;
-          if (message.element.children.length > 0) {
-            messageContent = message.element.children[0] as HTMLElement;
-            messageContent.classList.add("message-content");
-          }
-          if (message.element.children.length > 1) {
-            hoverMenu = message.element.children[1] as HTMLDivElement;
-            hoverMenu.classList.add("message-hover-menu");
-            if (hoverMenu.children.length > 0) {
-              const createThreadButton = hoverMenu
-                .children[0] as HTMLDivElement;
-              createThreadButton.classList.add("create-thread-button");
-            }
-            ttsControls = document.createElement("div");
-            ttsControls.id = `saypi-tts-controls-${utterance.id}`;
-            ttsControls.classList.add("saypi-tts-controls", "pt-4");
-            hoverMenu.appendChild(ttsControls);
-            this.addSpeechButton(speechSynthesis, utterance, ttsControls);
-          }
-          this.autoplaySpeech(speechSynthesis, utterance); // handle any errors
-          this.observeChatMessageElement(
-            messageContent || message.element,
-            utterance
-          );
-        });
-      }
-    });
-  }
-
-  findAssistantResponse(searchRoot: Element): Observation {
-    const query = "div.break-anywhere:not(.justify-end)"; // TODO: -> this.chatbot.getAssistantResponseSelector();
-    const aiMessage = searchRoot.querySelector(query);
-    if (aiMessage) {
-      return Observation.notDecorated(aiMessage.id, aiMessage);
-    }
-    return Observation.notFound("");
-  }
-
-  decorateAssistantResponse(element: HTMLElement): AssistantResponse {
-    const message = new AssistantResponse(element);
-    return message;
-  }
-
-  findAndDecorateAssistantResponse(searchRoot: Element): Observation {
-    const obs = this.findAssistantResponse(searchRoot);
-    if (obs.found && obs.isNew && !obs.decorated) {
-      const message = this.decorateAssistantResponse(obs.target as HTMLElement);
-      this.assistantChatMessageAdded(message);
-    }
-    return Observation.decorated(obs);
-  }
-
   async registerChatHistoryListener(): Promise<void> {
-    const chatHistory = document.getElementById(
-      "saypi-chat-history-present-messages"
+    const chatHistoryObserver = new ChatHistoryObserver(
+      "#saypi-chat-history-present-messages",
+      SpeechSynthesisModule.getInstance()
     );
-    if (!chatHistory) {
-      console.warn("Chat history (present) not found");
-      return;
-    }
-
-    // Observe the chat history for new chat messages
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        [...mutation.addedNodes]
-          .filter((node) => node instanceof Element)
-          .forEach((node) => {
-            const addedElement = node as Element;
-            const responseObs =
-              this.findAndDecorateAssistantResponse(addedElement);
-            if (responseObs.isReady()) {
-              // only expecting new chat message at a time, so
-              // skip this mutation if the chat message is already decorated
-              return;
-            }
-          });
-      });
-    });
-
-    observer.observe(chatHistory, { childList: true, subtree: true });
+    chatHistoryObserver.observe({ childList: true });
   }
 
   registerEndOfStreamListeners(): void {
@@ -518,28 +329,6 @@ export class TextToSpeechUIManager {
         }
       }
     );
-  }
-
-  addSpeechButton(
-    speechSynthesis: SpeechSynthesisModule,
-    utterance: SpeechSynthesisUtteranceRemote,
-    container: HTMLElement
-  ): void {
-    const button = buttonModule.createSpeechButton();
-    button.addEventListener("click", () => {
-      speechSynthesis.speak(utterance);
-    });
-    container.appendChild(button);
-  }
-
-  autoplaySpeech(
-    speechSynthesis: SpeechSynthesisModule,
-    utterance: SpeechSynthesisUtteranceRemote
-  ) {
-    // wait a beat, then start streaming the utterance
-    setTimeout(() => {
-      speechSynthesis.speak(utterance);
-    }, 1000);
   }
 
   // Constructor

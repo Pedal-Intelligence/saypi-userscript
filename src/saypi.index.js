@@ -13,7 +13,7 @@ import "./styles/desktop.scss";
 import "./styles/mobile.scss";
 import "./styles/rectangles.css";
 import { ChatbotService } from "./chatbots/ChatbotService.ts";
-import { addChild } from "./DOMModule.ts";
+import { addChild } from "./dom/DOMModule.ts";
 
 (async function () {
   "use strict";
