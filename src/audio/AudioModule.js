@@ -196,6 +196,13 @@ export default class AudioModule {
     EventBus.on("audio:output:play", (e) => {
       this.audioElement.play();
     });
+    EventBus.on(
+      "audio:load",
+      (detail) => {
+        this.loadAudio(detail.url);
+      },
+      this
+    );
     EventBus.on("audio:reload", (e) => {
       this.audioElement.load();
     });
@@ -204,11 +211,16 @@ export default class AudioModule {
   /**
    * Load an audio file into the main audio element,
    * replacing the current audio source, i.e. Pi's speech.
+   *
+   * To invoke this function with loose coupling to the audio module,
+   * raise a "audio:load" event with the URL of the audio file to load.
    * @param {string} url
    */
   loadAudio(url) {
-    this.audioElement.src = url;
-    this.audioElement.load();
+    if (url) {
+      this.audioElement.src = url;
+      this.audioElement.load();
+    }
   }
 
   registerLifecycleDebug() {

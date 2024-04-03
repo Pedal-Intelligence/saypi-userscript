@@ -51,20 +51,17 @@ class SpeechSynthesisModule {
 
       const audioStreamManager = new AudioStreamManager(ttsService);
       const userPreferenceModule = UserPreferenceModule.getInstance();
-      const audioModule = AudioModule.getInstance();
 
       SpeechSynthesisModule.instance = new SpeechSynthesisModule(
         ttsService,
         audioStreamManager,
-        userPreferenceModule,
-        audioModule
+        userPreferenceModule
       );
     }
     return SpeechSynthesisModule.instance;
   }
 
   private ttsService: TextToSpeechService;
-  private audioModule: AudioModule;
   private audioStreamManager: AudioStreamManager;
   private userPreferences: UserPreferenceModule;
 
@@ -77,13 +74,11 @@ class SpeechSynthesisModule {
   constructor(
     ttsService: TextToSpeechService,
     audioStreamManager: AudioStreamManager,
-    userPreferenceModule: UserPreferenceModule,
-    audioModule: AudioModule
+    userPreferenceModule: UserPreferenceModule
   ) {
     this.ttsService = ttsService;
     this.audioStreamManager = audioStreamManager;
     this.userPreferences = userPreferenceModule;
-    this.audioModule = audioModule;
     this.initProvider();
   }
 
@@ -177,7 +172,7 @@ class SpeechSynthesisModule {
   speak(utterance: SpeechSynthesisUtteranceRemote): void {
     // Start audio playback with utterance.uri as the audio source
     const audioSource = getUtteranceURI(utterance);
-    this.audioModule.loadAudio(audioSource);
+    EventBus.emit("audio:load", { url: audioSource }); // indirectly calls AudioModule.loadAudio
   }
 
   cancel(): Promise<void> {
