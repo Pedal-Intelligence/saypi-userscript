@@ -36,6 +36,15 @@ export class ElementTextStream {
                   this.subject.complete(); // Close stream on true timeout
                 }, ELEMENT_TEXT_STREAM_TIMEOUT_DURATION_MILLIS);
               }
+            } else if (node.nodeType === Node.TEXT_NODE) {
+              // with pi.ai, if the node has a wholeText property,
+              // it means all the text is available, and we can end the stream
+              const textNode = node as Text;
+              if (textNode.wholeText) {
+                console.log("Ending stream with", textNode.wholeText);
+                this.subject.complete();
+                return; // end early
+              }
             }
           }
         }

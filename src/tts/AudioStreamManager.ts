@@ -82,7 +82,7 @@ export class AudioStreamManager {
       clearTimeout(this.speechStreamTimeouts[uuid]);
       delete this.speechStreamTimeouts[uuid];
       console.log("Ending speech stream");
-      this.addSpeechToStream(uuid, END_OF_SPEECH_MARKER);
+      this.addSpeechToStream(uuid, END_OF_SPEECH_MARKER); // adding EOS marker has the effect of flushing the stream
     } else {
       console.log("Speech stream already ended");
     }
