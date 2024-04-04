@@ -17,7 +17,7 @@ class AssistantResponse {
   }
 
   get text(): string {
-    return this._element.innerText;
+    return this._element.innerText || this._element.textContent || "";
   }
 
   get element(): HTMLElement {

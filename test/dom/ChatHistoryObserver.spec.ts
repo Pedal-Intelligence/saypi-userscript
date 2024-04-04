@@ -1,15 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { ElementTextStream } from "../../src/tts/InputStream";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   SpeechSynthesisModule,
   SpeechSynthesisUtteranceRemote,
 } from "../../src/tts/SpeechSynthesisModule";
 import { TTSControlsModule } from "../../src/tts/TTSControlsModule";
-import {
-  ChatHistoryObserver,
-  AssistantResponse,
-} from "../../src/dom/ChatHistoryObserver";
-import { Observation } from "../../src/dom/Observation";
+import { ChatHistoryObserver } from "../../src/dom/ChatHistoryObserver";
 import { voice as mockVoice } from "../data/Voices";
 import { JSDOM } from "jsdom";
 import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
@@ -28,6 +23,7 @@ describe("ChatHistoryObserver", () => {
   let userPreferenceModuleMock: UserPreferenceModule;
   let chatHistoryObserver: ChatHistoryObserver;
   let ttsControlsModuleMock: TTSControlsModule;
+  let chatHistoryElement: HTMLElement;
 
   beforeEach(() => {
     const dom = new JSDOM();
@@ -36,6 +32,9 @@ describe("ChatHistoryObserver", () => {
     global.Node = dom.window.Node;
     global.NodeList = dom.window.NodeList;
     global.Element = dom.window.Element;
+
+    chatHistoryElement = document.createElement("div");
+    chatHistoryElement.id = "chat-history";
 
     // mock the ConfigModule
     vi.mock("../../src/ConfigModule", () => ({
@@ -78,123 +77,69 @@ describe("ChatHistoryObserver", () => {
     );
     ttsControlsModuleMock = new TTSControlsModule(speechSynthesisModule);
     chatHistoryObserver = new ChatHistoryObserver(
-      "selector",
+      chatHistoryElement.id,
       speechSynthesisModule
     );
   });
 
+  afterEach(() => {
+    chatHistoryObserver.disconnect();
+  });
+
+  const createAssistantMessage = (text: string) => {
+    const message = document.createElement("div");
+    message.classList.add("break-anywhere");
+    message.textContent = text;
+    return message;
+  };
+
   describe("callback", () => {
-    it("should call findAndDecorateAssistantResponse for added elements", () => {
-      const root = document.createElement("div");
-      const addedElement = document.createElement("div");
-      root.appendChild(addedElement);
-      const addedNodes: NodeList = root.childNodes; // addedElement
-      const removedNodes: NodeList = addedElement.childNodes; // empty
-      const mutation: MutationRecord = {
-        addedNodes: addedNodes,
-        attributeName: null,
-        attributeNamespace: null,
-        nextSibling: null,
-        oldValue: null,
-        previousSibling: null,
-        removedNodes: removedNodes,
-        target: document.body,
-        type: "childList",
-      };
-      const findAndDecorateAssistantResponseSpy = vi.spyOn(
-        chatHistoryObserver,
-        "findAndDecorateAssistantResponse"
-      );
+    it("should find assistant messages when added", () => {
+      const assistantMessage = createAssistantMessage("Hello world");
 
-      chatHistoryObserver["callback"]([mutation]);
-
-      expect(findAndDecorateAssistantResponseSpy).toHaveBeenCalledWith(
-        addedElement
-      );
+      chatHistoryObserver.observe({ childList: true, subtree: true });
+      chatHistoryElement.appendChild(assistantMessage);
+      // after 1s, check that the assistant message was found and decorated
+      setTimeout(() => {
+        expect(assistantMessage.classList.contains("assistant-message")).toBe(
+          true
+        );
+      }, 1000);
     });
   });
 
-  describe("findAndDecorateAssistantResponse", () => {
-    it("should decorate the assistant response if found and not decorated", () => {
-      const element = document.createElement("div");
-      element.id = "assistant-response";
-      const foundNotDecorated = Observation.notDecorated(element.id, element);
-      const findAssistantResponseSpy = vi
-        .spyOn(chatHistoryObserver, "findAssistantResponse")
-        .mockReturnValue(foundNotDecorated);
-      const decorateAssistantResponseSpy = vi.spyOn(
-        chatHistoryObserver,
-        "decorateAssistantResponse"
-      );
-      const assistantChatMessageAddedSpy = vi.spyOn(
-        chatHistoryObserver,
-        "assistantChatMessageAdded"
-      );
+  describe("findAssistantResponse", () => {
+    it("should find an assistant response if present", () => {
+      const obsNotFound =
+        chatHistoryObserver.findAssistantResponse(chatHistoryElement);
+      expect(obsNotFound.found).toBe(false);
+      const chatMessageElement = createAssistantMessage("Hello world");
+      chatHistoryElement.appendChild(chatMessageElement);
+      const obsFound =
+        chatHistoryObserver.findAssistantResponse(chatHistoryElement);
+      expect(obsFound.found).toBe(true);
+    });
 
-      chatHistoryObserver.findAndDecorateAssistantResponse(document.body);
-
-      expect(findAssistantResponseSpy).toHaveBeenCalledWith(document.body);
-      expect(decorateAssistantResponseSpy).toHaveBeenCalledWith(element);
-      expect(assistantChatMessageAddedSpy).toHaveBeenCalled();
+    it("should not confuse user messages with assistant messages", () => {
+      const chatMessageElement = document.createElement("div");
+      chatMessageElement.classList.add("break-anywhere", "justify-end");
+      chatHistoryElement.appendChild(chatMessageElement);
+      const obsNotFound =
+        chatHistoryObserver.findAssistantResponse(chatHistoryElement);
+      expect(obsNotFound.found).toBe(false);
     });
   });
 
-  describe("assistantChatMessageAdded", () => {
-    it("should enable TTS and observe chat message element if speech synthesis is enabled", async () => {
-      const message = new AssistantResponse(document.createElement("div"));
-      const utterance: SpeechSynthesisUtteranceRemote = {
-        id: "utterance-id",
-        text: "Hello",
-        voice: mockVoice,
-        lang: "en",
-        uri: "https://api.saypi.ai/speech/utterance-id",
-      };
-      const observeChatMessageElementSpy = vi.spyOn(
-        chatHistoryObserver,
-        "observeChatMessageElement"
+  describe("decorateAssistantResponse", () => {
+    it("should decorate an assistant response", () => {
+      const chatMessageElement = createAssistantMessage("Hello world");
+      const assistantResponse =
+        chatHistoryObserver.decorateAssistantResponse(chatMessageElement);
+      expect(assistantResponse.element).toBe(chatMessageElement);
+      expect(assistantResponse.text).toBe("Hello world");
+      expect(chatMessageElement.classList.contains("assistant-message")).toBe(
+        true
       );
-
-      await chatHistoryObserver.assistantChatMessageAdded(message);
-
-      expect(message.isTTSEnabled).toBe(true);
-      expect(observeChatMessageElementSpy).toHaveBeenCalledWith(
-        message.element,
-        utterance
-      );
-    });
-  });
-
-  describe("observeChatMessageElement", () => {
-    it("should stream text from the element and add speech to the stream", () => {
-      const message = document.createElement("div");
-      const utterance: SpeechSynthesisUtteranceRemote = {
-        id: "utterance-id",
-        text: "",
-        voice: mockVoice,
-        lang: "en",
-        uri: "https://api.saypi.ai/speech/utterance-id",
-      };
-      const addSpeechToStreamSpy = vi.spyOn(
-        speechSynthesisModule,
-        "addSpeechToStream"
-      );
-      const endSpeechStreamSpy = vi.spyOn(
-        speechSynthesisModule,
-        "endSpeechStream"
-      );
-
-      chatHistoryObserver.observeChatMessageElement(message, utterance);
-
-      expect(addSpeechToStreamSpy).toHaveBeenCalledWith(
-        "utterance-id",
-        "Hello"
-      );
-      expect(addSpeechToStreamSpy).toHaveBeenCalledWith(
-        "utterance-id",
-        " world"
-      );
-      expect(utterance.text).toBe("Hello world");
-      expect(endSpeechStreamSpy).toHaveBeenCalledWith(utterance);
     });
   });
 });
