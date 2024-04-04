@@ -26,3 +26,5 @@ abstract class BaseObserver {
     this.observer.disconnect();
   }
 }
+
+export { BaseObserver };
