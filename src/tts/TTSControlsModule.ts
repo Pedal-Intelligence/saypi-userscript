@@ -79,11 +79,18 @@ export class TTSControlsModule {
     characterCount: number,
     voice: SpeechSynthesisVoiceRemote
   ) {
-    const costElement = container.querySelector(".saypi-cost .value");
+    const costElement = container.querySelector(
+      ".saypi-cost .value"
+    ) as HTMLElement | null;
     if (costElement) {
       const pricePer1kCharacters = voice.price;
       const cost = (characterCount / 1000) * pricePer1kCharacters;
       costElement.textContent = cost.toFixed(2);
+      const currency = getMessage("currencyUSDAbbreviation");
+      costElement.title = getMessage("ttsCostExplanation", [
+        cost.toFixed(2),
+        currency,
+      ]);
     }
   }
 

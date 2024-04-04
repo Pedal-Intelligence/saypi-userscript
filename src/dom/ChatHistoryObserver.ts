@@ -51,9 +51,9 @@ class ChatHistoryObserver extends BaseObserver {
             addedElement
           );
           if (responseObs.isReady()) {
-            // only expecting new chat message at a time, so
+            // only expecting one new chat message at a time, so
             // skip this mutation if the chat message is already decorated
-            return;
+            return; // break early
           }
         }
       }
@@ -106,16 +106,31 @@ class ChatHistoryObserver extends BaseObserver {
     }
   }
 
-  findAssistantResponse(searchRoot: Element): Observation {
+  static findAssistantResponse(searchRoot: Element): Observation {
     const query = "div.break-anywhere:not(.justify-end)"; // TODO: -> this.chatbot.getAssistantResponseSelector();
-    const aiMessage = searchRoot.querySelector(query);
-    if (aiMessage) {
-      return Observation.notDecorated(aiMessage.id, aiMessage);
+    const deepMatch = searchRoot.querySelector(query);
+    if (deepMatch) {
+      const found = Observation.notDecorated(deepMatch.id, deepMatch);
+      if (deepMatch.classList.contains("assistant-message")) {
+        return Observation.decorated(found);
+      }
+      return found;
+    }
+    /* I have no idea why the query selector doesn't cover the case below too, but it sometimes doesn't */
+    if (
+      searchRoot.classList.contains("break-anywhere") &&
+      !searchRoot.classList.contains("justify-end")
+    ) {
+      const found = Observation.notDecorated(searchRoot.id, searchRoot);
+      if (searchRoot.classList.contains("assistant-message")) {
+        return Observation.decorated(found);
+      }
+      return found;
     }
     return Observation.notFound("");
   }
 
-  decorateAssistantResponse(element: HTMLElement): AssistantResponse {
+  static decorateAssistantResponse(element: HTMLElement): AssistantResponse {
     const message = new AssistantResponse(element);
     return message;
   }
@@ -123,9 +138,14 @@ class ChatHistoryObserver extends BaseObserver {
   async findAndDecorateAssistantResponse(
     searchRoot: Element
   ): Promise<Observation> {
-    const obs = this.findAssistantResponse(searchRoot);
+    const obs = ChatHistoryObserver.findAssistantResponse(searchRoot);
+    if (obs.found) {
+      console.log("Found assistant message", obs.target);
+    }
     if (obs.found && obs.isNew && !obs.decorated) {
-      const message = this.decorateAssistantResponse(obs.target as HTMLElement);
+      const message = ChatHistoryObserver.decorateAssistantResponse(
+        obs.target as HTMLElement
+      );
       await this.assistantChatMessageAdded(message);
     }
     return Observation.decorated(obs);

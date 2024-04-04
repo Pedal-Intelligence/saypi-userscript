@@ -35,6 +35,7 @@ describe("ChatHistoryObserver", () => {
 
     chatHistoryElement = document.createElement("div");
     chatHistoryElement.id = "chat-history";
+    document.body.appendChild(chatHistoryElement);
 
     // mock the ConfigModule
     vi.mock("../../src/ConfigModule", () => ({
@@ -93,30 +94,66 @@ describe("ChatHistoryObserver", () => {
     return message;
   };
 
-  describe("callback", () => {
-    it("should find assistant messages when added", () => {
+  describe("observe chat history for message additions", async () => {
+    it("should find assistant messages when added", async () => {
       const assistantMessage = createAssistantMessage("Hello world");
 
-      chatHistoryObserver.observe({ childList: true, subtree: true });
+      const intermediateElement = document.createElement("div");
+      intermediateElement.appendChild(assistantMessage);
+
+      chatHistoryObserver.observe({
+        childList: true,
+        subtree: true,
+        attributes: true,
+      });
+      chatHistoryElement.appendChild(intermediateElement);
+
+      expect(
+        ChatHistoryObserver.findAssistantResponse(chatHistoryElement).found
+      ).toBe(true); // sanity check
+      // after a short delay, check that the assistant message was automatically found and decorated
+      await new Promise((resolve) => setTimeout(resolve, 3000)); // 1000 ms delay
+      const obs = ChatHistoryObserver.findAssistantResponse(chatHistoryElement);
+      expect(obs.found).toBe(true);
+      expect(obs.decorated).toBe(true);
+      expect(obs.isReady()).toBe(true);
+    });
+
+    it("should match an element where the selector class is only added afterwards", async () => {
+      const assistantMessage = createAssistantMessage("Hello world");
+      assistantMessage.classList.add("justify-end");
+
+      // initially add the element without a matching classname
+      chatHistoryObserver.observe({
+        childList: true,
+        subtree: true,
+        attributes: true,
+      });
       chatHistoryElement.appendChild(assistantMessage);
-      // after 1s, check that the assistant message was found and decorated
-      setTimeout(() => {
-        expect(assistantMessage.classList.contains("assistant-message")).toBe(
-          true
-        );
-      }, 1000);
+      await new Promise((resolve) => setTimeout(resolve, 100)); // short delay
+      expect(assistantMessage.classList.contains("assistant-message")).toBe(
+        false
+      );
+
+      // after a delay, add the matching classname
+      assistantMessage.classList.remove("justify-end");
+      // after a delay, check that the assistant message was found and decorated
+      await new Promise((resolve) => setTimeout(resolve, 100)); // short delay
+      expect(assistantMessage.classList.contains("assistant-message")).toBe(
+        true
+      );
     });
   });
 
   describe("findAssistantResponse", () => {
     it("should find an assistant response if present", () => {
       const obsNotFound =
-        chatHistoryObserver.findAssistantResponse(chatHistoryElement);
+        ChatHistoryObserver.findAssistantResponse(chatHistoryElement);
       expect(obsNotFound.found).toBe(false);
       const chatMessageElement = createAssistantMessage("Hello world");
       chatHistoryElement.appendChild(chatMessageElement);
       const obsFound =
-        chatHistoryObserver.findAssistantResponse(chatHistoryElement);
+        ChatHistoryObserver.findAssistantResponse(chatHistoryElement);
       expect(obsFound.found).toBe(true);
     });
 
@@ -125,21 +162,32 @@ describe("ChatHistoryObserver", () => {
       chatMessageElement.classList.add("break-anywhere", "justify-end");
       chatHistoryElement.appendChild(chatMessageElement);
       const obsNotFound =
-        chatHistoryObserver.findAssistantResponse(chatHistoryElement);
+        ChatHistoryObserver.findAssistantResponse(chatHistoryElement);
       expect(obsNotFound.found).toBe(false);
+    });
+
+    it("should match an element with the correct selector", () => {
+      const html =
+        '<div class="break-anywhere"><div class="flex items-center"><div class="w-full"><div class="whitespace-pre-wrap mb-4 last:mb-0">Awesome! ...</div></div></div><div style="opacity: 0; height: 0px;"></div></div>';
+      chatHistoryElement.innerHTML = html;
+      const obsFound =
+        ChatHistoryObserver.findAssistantResponse(chatHistoryElement);
+      expect(obsFound.found).toBe(true);
     });
   });
 
   describe("decorateAssistantResponse", () => {
     it("should decorate an assistant response", () => {
-      const chatMessageElement = createAssistantMessage("Hello world");
+      const chatMessageElement = createAssistantMessage("Hello there!");
       const assistantResponse =
-        chatHistoryObserver.decorateAssistantResponse(chatMessageElement);
+        ChatHistoryObserver.decorateAssistantResponse(chatMessageElement);
       expect(assistantResponse.element).toBe(chatMessageElement);
-      expect(assistantResponse.text).toBe("Hello world");
+      expect(assistantResponse.text).toBe("Hello there!");
       expect(chatMessageElement.classList.contains("assistant-message")).toBe(
         true
       );
+      const obs = ChatHistoryObserver.findAssistantResponse(chatMessageElement);
+      expect(obs.decorated).toBe(true);
     });
   });
 });

@@ -28,3 +28,12 @@
         }
     }
 }
+
+.assistant-message {
+    // these style are for debugging purposes, to make it easier to see when messages are being detected
+    // give it a subtle green background color and border
+    background-color: #f0f9f4; // rgb(240 249 244) - Pi primary background color
+    border: 1px solid #d1f0e5; // rgb(209 240 229) - Pi secondary background color
+    border-radius: 8px;
+    padding: 0.8rem;
+}

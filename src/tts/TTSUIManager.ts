@@ -317,7 +317,11 @@ export class TextToSpeechUIManager {
       "#saypi-chat-history-present-messages",
       SpeechSynthesisModule.getInstance()
     );
-    chatHistoryObserver.observe({ childList: true });
+    chatHistoryObserver.observe({
+      childList: true,
+      subtree: true,
+      attributes: true,
+    }); // would be more efficient to observe only the direct children of the chat history, but this is more robust
   }
 
   registerEndOfStreamListeners(): void {
