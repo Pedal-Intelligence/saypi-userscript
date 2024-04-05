@@ -1,6 +1,9 @@
-import { Observable, Subject } from "rxjs";
+import { time } from "console";
+import { over } from "lodash";
+import { Observable, ReplaySubject, Subject } from "rxjs";
 
-export const ELEMENT_TEXT_STREAM_TIMEOUT_DURATION_MILLIS: number = 10000; // visible for testing
+export const ELEMENT_TEXT_STREAM_TIMEOUT_DURATION_MILLIS: number = 8000; // visible for testing
+export const TEXT_STABILITY_THRESHOLD_MILLIS: number = 1500; // visible for testing
 
 // Visible for testing
 export function getNestedText(node: HTMLElement): string {
@@ -8,42 +11,103 @@ export function getNestedText(node: HTMLElement): string {
 }
 
 export class ElementTextStream {
-  private subject: Subject<string>;
-  private observer!: MutationObserver;
-  private timeout: NodeJS.Timeout | undefined = undefined;
+  protected subject: Subject<string>;
+  protected observer!: MutationObserver;
+  protected timeout: NodeJS.Timeout | undefined = undefined;
+  protected emittedValues: string[] = [];
+  protected timeOfLastTextChange: number = Date.now();
+  private timeOfLastBatch: number | null = null;
+  private intervalsBetweenBatches: number[] = [];
 
-  constructor(private element: HTMLElement) {
-    this.subject = new Subject<string>();
+  constructor(protected element: HTMLElement) {
+    this.subject = new ReplaySubject<string>(1000); // buffer should be long enough to handle the longest text (4k characters)
+    // subscribe to keep track of emitted values
+    this.subject.subscribe((value) => this.emittedValues.push(value));
+    // subscribe to keep track of timeouts
+    this.subject.subscribe({
+      next: () => {
+        this.timeOfLastTextChange = Date.now();
+        if (this.timeout) {
+          clearTimeout(this.timeout);
+        }
+        this.timeout = setTimeout(() => {
+          console.log(
+            `Ending stream on timeout, ${
+              ELEMENT_TEXT_STREAM_TIMEOUT_DURATION_MILLIS / 1000
+            }s after last text was passed`
+          );
+          this.subject.complete(); // Close stream on true timeout
+        }, ELEMENT_TEXT_STREAM_TIMEOUT_DURATION_MILLIS);
+      },
+      complete: () => {
+        console.log("Stream completed");
+        clearTimeout(this.timeout);
+      },
+    });
     this.registerObserver();
   }
 
-  private registerObserver(): void {
-    const observerCallback = (mutationsList: MutationRecord[]) => {
-      for (let mutation of mutationsList) {
-        if (mutation.type === "childList") {
-          for (let node of mutation.addedNodes) {
-            // Filter for element type nodes
-            if (node.nodeType === Node.ELEMENT_NODE) {
-              const element = node as HTMLElement;
-              const text = getNestedText(element);
-              if (text !== "") {
-                this.subject.next(text);
+  private getTextStreamedSoFar(): string {
+    return this.emittedValues.join(" ");
+  }
 
-                if (this.timeout) {
-                  clearTimeout(this.timeout);
-                }
-                this.timeout = setTimeout(() => {
-                  this.subject.complete(); // Close stream on true timeout
-                }, ELEMENT_TEXT_STREAM_TIMEOUT_DURATION_MILLIS);
-              }
-            } else if (node.nodeType === Node.TEXT_NODE) {
-              // with pi.ai, if the node has a wholeText property,
-              // it means all the text is available, and we can end the stream
+  protected getTextIsStable(): boolean {
+    const timeSinceLastTextChange = Date.now() - this.timeOfLastTextChange;
+    const textIsStable =
+      timeSinceLastTextChange > TEXT_STABILITY_THRESHOLD_MILLIS;
+    if (textIsStable) {
+      console.log(
+        `Text is stable, ${timeSinceLastTextChange}ms after last token`
+      );
+    }
+    return textIsStable;
+  }
+
+  protected registerObserver(): void {
+    const observerCallback = (mutationsList: MutationRecord[]) => {
+      const timeOfBatch = Date.now();
+      if (this.timeOfLastBatch === null) {
+        this.timeOfLastBatch = timeOfBatch;
+      }
+      const timeSinceLastBatch = timeOfBatch - this.timeOfLastBatch;
+      console.debug(
+        `Batch of ${mutationsList.length} mutations observed, ${timeSinceLastBatch}ms since last batch`
+      );
+      this.timeOfLastBatch = timeOfBatch;
+      if (timeSinceLastBatch > 0) {
+        this.intervalsBetweenBatches.push(timeSinceLastBatch);
+        const avgInterval =
+          this.intervalsBetweenBatches.reduce((a, b) => a + b, 0) /
+          this.intervalsBetweenBatches.length;
+        console.debug(
+          `Average time between batches: ${avgInterval.toFixed(0)}ms`
+        );
+      }
+      for (let m = 0; m < mutationsList.length; m++) {
+        const mutation = mutationsList[m];
+        if (mutation.type === "childList") {
+          for (let i = 0; i < mutation.addedNodes.length; i++) {
+            const node = mutation.addedNodes[i];
+            if (node.nodeType === Node.TEXT_NODE) {
               const textNode = node as Text;
-              if (textNode.wholeText) {
-                console.log("Ending stream with", textNode.wholeText);
-                this.subject.complete();
-                return; // end early
+              // with pi.ai, whole sentences are streamed as a list of text node mutations
+              const word: string | null = textNode.textContent;
+              const sentence = textNode.wholeText; // the sentence is the adjacent contigious text of the node and its siblings
+              if (word) {
+                this.subject.next(word);
+                // all nodes in the sentence end with a ' ', expect for sub-word tokens, and the final word
+                const isLastWordInSentence =
+                  i === mutation.addedNodes.length - 1 &&
+                  m === mutationsList.length - 1;
+                if (word.endsWith(" ") || !isLastWordInSentence) {
+                  continue;
+                } else {
+                  console.debug(
+                    `"${word}" is the final word in the sentence "${sentence}"`
+                  );
+                  //this.subject.complete();
+                  //return; // end early
+                }
               }
             }
           }
@@ -71,5 +135,54 @@ export class ElementTextStream {
   // For testing purposes
   getObserver(): MutationObserver {
     return this.observer;
+  }
+}
+
+export class SilentElementTextStream extends ElementTextStream {
+  private startTime: number | null = null;
+  private timeToFirstToken: number | null = null;
+  constructor(element: HTMLElement) {
+    super(element);
+  }
+
+  override registerObserver(): void {
+    // register a mutation observer that simply logs mutations
+    const observerCallback = (mutationsList: MutationRecord[]) => {
+      console.debug(mutationsList.length, "mutations observed");
+
+      const mutationTime = Date.now();
+      if (this.startTime === null) {
+        this.startTime = mutationTime;
+      }
+      console.debug(
+        `Time since start: ${
+          mutationTime - this.startTime
+        }ms, Time since first token: ${
+          this.timeToFirstToken
+            ? mutationTime - this.timeToFirstToken
+            : "not found"
+        }ms`
+      );
+      for (let mutation of mutationsList) {
+        console.debug(`Type: ${mutation.type}, Target: ${mutation.target}`);
+        if (mutation.type === "childList") {
+          for (let node of mutation.addedNodes) {
+            console.debug("Added node", node);
+            if (node.nodeType === Node.ELEMENT_NODE) {
+              const element = node as HTMLElement;
+              console.debug(element.tagName, "text", getNestedText(element));
+            } else if (node.nodeType === Node.TEXT_NODE) {
+              const textNode = node as Text;
+              console.debug("Text node", textNode.wholeText);
+              if (this.timeToFirstToken === null) {
+                this.timeToFirstToken = Date.now();
+              }
+            }
+          }
+        }
+      }
+    };
+    this.observer = new MutationObserver(observerCallback);
+    this.observer.observe(this.element, { childList: true, subtree: true });
   }
 }

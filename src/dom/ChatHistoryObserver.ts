@@ -1,4 +1,4 @@
-import { ElementTextStream } from "../tts/InputStream";
+import { ElementTextStream, SilentElementTextStream } from "../tts/InputStream";
 import {
   SpeechSynthesisModule,
   SpeechSynthesisUtteranceRemote,

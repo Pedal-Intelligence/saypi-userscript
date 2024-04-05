@@ -5,12 +5,7 @@ import {
 } from "./SpeechSynthesisModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { Chatbot } from "../chatbots/Chatbot";
-import { ElementTextStream } from "./InputStream";
-import { buttonModule } from "../ButtonModule";
-import { getResourceUrl } from "../ResourceModule";
-import getMessage from "../i18n";
 import { BillingModule } from "../billing/BillingModule";
-import { Observation } from "../dom/Observation";
 import EventBus from "../events/EventBus";
 import { TTSControlsModule } from "./TTSControlsModule";
 import { ChatHistoryObserver } from "../dom/ChatHistoryObserver";
