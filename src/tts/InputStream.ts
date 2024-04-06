@@ -18,6 +18,7 @@ export class ElementTextStream {
   protected timeOfLastTextChange: number = Date.now();
   private timeOfLastBatch: number | null = null;
   private intervalsBetweenBatches: number[] = [];
+  protected batchIntervalTimerId: NodeJS.Timeout | null = null;
 
   constructor(protected element: HTMLElement) {
     this.subject = new ReplaySubject<string>(1000); // buffer should be long enough to handle the longest text (4k characters)
@@ -65,6 +66,11 @@ export class ElementTextStream {
 
   protected registerObserver(): void {
     const observerCallback = (mutationsList: MutationRecord[]) => {
+      // Clear the timer if it's running
+      if (this.batchIntervalTimerId !== null) {
+        clearTimeout(this.batchIntervalTimerId);
+        this.batchIntervalTimerId = null;
+      }
       const timeOfBatch = Date.now();
       if (this.timeOfLastBatch === null) {
         this.timeOfLastBatch = timeOfBatch;
@@ -74,13 +80,14 @@ export class ElementTextStream {
         `Batch of ${mutationsList.length} mutations observed, ${timeSinceLastBatch}ms since last batch`
       );
       this.timeOfLastBatch = timeOfBatch;
+      let avgIntervalMs = 1000;
       if (timeSinceLastBatch > 0) {
         this.intervalsBetweenBatches.push(timeSinceLastBatch);
-        const avgInterval =
+        avgIntervalMs =
           this.intervalsBetweenBatches.reduce((a, b) => a + b, 0) /
           this.intervalsBetweenBatches.length;
         console.debug(
-          `Average time between batches: ${avgInterval.toFixed(0)}ms`
+          `Average time between batches: ${avgIntervalMs.toFixed(0)}ms`
         );
       }
       for (let m = 0; m < mutationsList.length; m++) {
@@ -105,6 +112,20 @@ export class ElementTextStream {
                   console.debug(
                     `"${word}" is the final word in the sentence "${sentence}"`
                   );
+                  if (sentence !== this.getTextStreamedSoFar()) {
+                    console.warn(
+                      `Streamed text "${this.getTextStreamedSoFar()}" does not match sentence "${sentence}"`
+                    );
+                  }
+                  this.batchIntervalTimerId = setTimeout(() => {
+                    console.debug(
+                      `Ending stream after ${(2 * avgIntervalMs).toFixed(
+                        0
+                      )}ms of inactivity`
+                    );
+                    this.subject.complete();
+                  }, 2 * avgIntervalMs);
+
                   //this.subject.complete();
                   //return; // end early
                 }
