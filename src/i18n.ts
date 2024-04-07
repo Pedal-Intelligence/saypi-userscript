@@ -1,4 +1,3 @@
-import { get } from "http";
 import { UserPreferenceModule } from "./prefs/PreferenceModule";
 
 // Define a type for our messages

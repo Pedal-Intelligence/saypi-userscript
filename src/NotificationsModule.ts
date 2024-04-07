@@ -1,6 +1,7 @@
 import { UserPreferenceModule } from "./prefs/PreferenceModule";
 import { getResourceUrl } from "./ResourceModule";
 import getMessage from "./i18n";
+import EventBus from "./events/EventBus";
 
 export interface INotificationsModule {
   listeningStopped?: () => void;
@@ -11,6 +12,7 @@ export interface INotificationsModule {
   unlockScreen?: () => void;
   autoSubmitEnabled?: () => void;
   autoSubmitDisabled?: () => void;
+  activityCheck?: (duration: number) => void;
 }
 
 export class TextualNotificationsModule implements INotificationsModule {
@@ -53,22 +55,66 @@ export class TextualNotificationsModule implements INotificationsModule {
     }
   }
 
-  private _showNotification(message: string, iconName?: string) {
+  private async loadSVG(url: string): Promise<SVGElement> {
+    try {
+      const response = await fetch(url);
+      const data = await response.text();
+      let parser = new DOMParser();
+      let svgElement = parser.parseFromString(data, "image/svg+xml")
+        .documentElement as unknown as SVGElement;
+      return svgElement;
+    } catch (err) {
+      console.error("Error loading SVG image: ", err);
+      throw err;
+    }
+  }
+
+  protected async _showNotification(
+    message: string,
+    iconName?: string,
+    embedIcon: boolean = false,
+    isDialog: boolean = false,
+    buttonText?: string
+  ): Promise<void> {
     this.init();
     // dismiss any existing notification
     this.hideNotification();
     // show new notification
     this.notificationElement!.classList.add("active");
+    if (isDialog) {
+      this.notificationElement!.classList.add("dialog");
+    } else {
+      this.notificationElement!.classList.remove("dialog");
+    }
     if (iconName) {
-      const iconElement = document.createElement("img");
-      iconElement.classList.add("icon");
       const iconImageUrl = getResourceUrl(`icons/${iconName}.svg`);
-      iconElement.src = iconImageUrl;
+      let iconElement: HTMLImageElement | SVGElement;
+      if (embedIcon) {
+        iconElement = await this.loadSVG(iconImageUrl);
+      } else {
+        iconElement = document.createElement("img");
+        iconElement.src = iconImageUrl;
+      }
+      iconElement.classList.add("icon");
       this.notificationElement?.appendChild(iconElement);
     }
+    const notificationContent = document.createElement("div");
+    notificationContent.classList.add("content");
+    this.notificationElement!.appendChild(notificationContent);
+
     const notificationText = document.createElement("span");
+    notificationText.classList.add("message");
     notificationText.textContent = message;
-    this.notificationElement!.appendChild(notificationText);
+    notificationContent.appendChild(notificationText);
+
+    if (buttonText) {
+      const button = document.createElement("button");
+      button.textContent = buttonText;
+      button.addEventListener("click", () => {
+        this.hideNotification();
+      });
+      notificationContent.appendChild(button);
+    }
   }
 
   public hideNotification() {
@@ -82,7 +128,7 @@ export class TextualNotificationsModule implements INotificationsModule {
     }
   }
 
-  private showNotificationForSeconds(
+  protected showNotificationForSeconds(
     message: string,
     seconds: number,
     iconName?: string
@@ -91,6 +137,55 @@ export class TextualNotificationsModule implements INotificationsModule {
     setTimeout(() => {
       this.hideNotification();
     }, seconds * 1000);
+  }
+}
+
+export class UserPromptModule extends TextualNotificationsModule {
+  private async showLongCallDialog(durationSeconds: number) {
+    const dialog = document.createElement("div");
+    dialog.classList.add("activity-check-dialog");
+
+    const messageText = getMessage("activityCheckMessage");
+    const buttonText = getMessage("activityCheckButton");
+
+    const iconName = "sixty-seconds";
+    await this._showNotification(messageText, iconName, true, true, buttonText);
+
+    const timer = document.getElementById(
+      "saypi-countdown-number"
+    ) as HTMLElement | null;
+    if (timer) {
+      let remainingTime = durationSeconds;
+      const countdownInterval = setInterval(() => {
+        remainingTime--;
+        timer.textContent = `${remainingTime}`;
+
+        if (remainingTime <= 0) {
+          clearInterval(countdownInterval);
+          this.hideNotification();
+          console.debug("User has been inactive for too long");
+          EventBus.emit("saypi:hangup");
+        }
+      }, 1000);
+
+      const dismissButton = document.querySelector(
+        ".dialog button"
+      ) as HTMLButtonElement | null;
+      if (dismissButton) {
+        dismissButton.addEventListener("click", () => {
+          clearInterval(countdownInterval);
+          this.hideNotification();
+          EventBus.emit("saypi:countdown-cancelled");
+          console.debug("User is still active");
+        });
+      }
+    } else {
+      console.error("Unable to find countdown timer element");
+    }
+  }
+
+  public activityCheck(durationSeconds: number) {
+    this.showLongCallDialog(durationSeconds);
   }
 }
 
@@ -104,6 +199,8 @@ export class AudibleNotificationsModule implements INotificationsModule {
   private unlockSound: HTMLAudioElement;
   private themeOnSound: HTMLAudioElement;
   private themeOffSound: HTMLAudioElement;
+  private activityCheckSound1: HTMLAudioElement;
+  private activityCheckSound2: HTMLAudioElement;
 
   private constructor() {
     // Load audio resources in the constructor
@@ -120,6 +217,12 @@ export class AudibleNotificationsModule implements INotificationsModule {
     this.unlockSound = new Audio(getResourceUrl("audio/beep-off.mp3"));
     this.themeOnSound = new Audio(getResourceUrl("audio/switch-on.mp3"));
     this.themeOffSound = new Audio(getResourceUrl("audio/switch-off.mp3"));
+    this.activityCheckSound1 = new Audio(
+      getResourceUrl("audio/attention-1.mp3")
+    );
+    this.activityCheckSound2 = new Audio(
+      getResourceUrl("audio/attention-2.mp3")
+    );
   }
 
   public static getInstance(): AudibleNotificationsModule {
@@ -177,6 +280,19 @@ export class AudibleNotificationsModule implements INotificationsModule {
 
   public themeOff(): void {
     this.playSound(this.themeOffSound);
+  }
+
+  public activityCheck(duration: number): void {
+    this.playSound(this.activityCheckSound1);
+    const secondSound = setTimeout(() => {
+      this.playSound(this.activityCheckSound2);
+    }, (duration / 2) * 1000);
+    EventBus.on("saypi:hangup", () => {
+      clearTimeout(secondSound);
+    });
+    EventBus.on("saypi:countdown-cancelled", () => {
+      clearTimeout(secondSound);
+    });
   }
 }
 

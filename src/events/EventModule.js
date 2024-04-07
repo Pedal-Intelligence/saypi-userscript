@@ -12,6 +12,7 @@ const PI_FINISHED_SPEAKING = "saypi:piFinishedSpeaking";
 const VISIBLE = "saypi:visible";
 const AUDIO_DEVICE_CONNECTED = "saypi:audio:connected";
 const AUDIO_DEVICE_RECONNECT = "saypi:audio:reconnect";
+const END_CALL = "saypi:hangup";
 
 /**
  * The EventModule translates events sent on the EventBus to StateMachine events,
@@ -111,6 +112,7 @@ export default class EventModule {
       PI_SPEAKING,
       PI_STOPPED_SPEAKING,
       PI_FINISHED_SPEAKING,
+      END_CALL,
     ].forEach((eventName) => {
       EventBus.on(eventName, () => {
         actor.send(eventName);

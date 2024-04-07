@@ -191,5 +191,13 @@
   "extensionPopupTitle": {
     "message": "Say, Pi Settings",
     "description": "The title of the extension's popup dialog."
+  },
+  "activityCheckMessage": {
+    "message": "Wow, this is a long conversation. Are you still there, or are we talking to ourselves?",
+    "description": "The message to display when the conversation has been going on unusually long."
+  },
+  "activityCheckButton": {
+    "message": "Yes, I'm still here!",
+    "description": "The text of the button to indicate that the user is still present."
   }
 }

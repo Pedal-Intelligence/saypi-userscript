@@ -28,7 +28,16 @@
   
   img.icon {
     width: 80px;
-    // Remove float as it's not needed with flexbox
+  }
+  svg.icon {
+    width: 160px;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;  
   }
   
   span {
@@ -39,5 +48,36 @@
     color: #776d6d;
     padding-left: 0.5rem;
     // Additional adjustments for alignment can be made here if necessary
+  }
+
+  button {
+    display: block;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background-color: #4ab13c;
+    color: white;
+    font-size: x-large;
+    font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.5s;
+    
+    &:hover {
+      background-color: #3a8a2d;
+    }
+  }
+
+  &.dialog {
+    background-color: rgba(222, 228, 193, 0.98);
+    border-radius: 1rem;
+    border: 5px solid #4ab13c;
+    padding: 1rem;
+    width: 80%;
+    max-width: 40rem;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
   }
 }
