@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { interpret } from "xstate";
 import { createModel } from "@xstate/test";
 import { machine as sessionAnalyticsMachine } from "../src/state-machines/SessionAnalyticsMachine";
