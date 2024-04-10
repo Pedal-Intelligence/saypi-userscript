@@ -191,5 +191,13 @@
   "extensionPopupTitle": {
     "description": "Le titre de la boîte de dialogue d'extension.",
     "message": "Say, Pi"
+  },
+  "activityCheckButton": {
+    "description": "Le texte du bouton pour indiquer que l'utilisateur est toujours présent.",
+    "message": "Oui, je suis toujours là !"
+  },
+  "activityCheckMessage": {
+    "description": "Le message à afficher lorsque la conversation dure anormalement longtemps.",
+    "message": "Wow, c'est une longue conversation. Es-tu toujours là, ou parlons-nous à nous-mêmes?"
   }
 }

@@ -191,5 +191,13 @@
   "extensionPopupTitle": {
     "description": "扩展程序弹出对话框的标题。",
     "message": "Say, Pi"
+  },
+  "activityCheckButton": {
+    "message": "是的，我还在这里！",
+    "description": "按钮的文本表示用户仍在场。"
+  },
+  "activityCheckMessage": {
+    "description": "当对话异常地持续很长时间时要显示的消息。",
+    "message": "哇，这是一段很长的对话。你还在吗，还是我们在自言自语？"
   }
 }

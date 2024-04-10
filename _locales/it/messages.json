@@ -191,5 +191,13 @@
   "extensionPopupTitle": {
     "description": "Il titolo della finestra popup dell'estensione.",
     "message": "Say, Pi"
+  },
+  "activityCheckButton": {
+    "description": "Il testo del pulsante per indicare che l'utente è ancora presente.",
+    "message": "Sì, sono ancora qui!"
+  },
+  "activityCheckMessage": {
+    "description": "Il messaggio da visualizzare quando la conversazione si protrae in modo insolitamente lungo.",
+    "message": "Wow, questa è una lunga conversazione. Sei ancora lì, o stiamo parlando da soli?"
   }
 }

@@ -191,5 +191,13 @@
   "extensionPopupTitle": {
     "description": "এক্সটেনশনের পপ-আপ ডায়ালোগের শিরোনাম।",
     "message": "Say, Pi"
+  },
+  "activityCheckButton": {
+    "description": "বোতামের লেখা যা দেখায় যে ব্যবহারকারী এখনো উপস্থিত।",
+    "message": "হ্যাঁ, আমি এখনো এখানে আছি!"
+  },
+  "activityCheckMessage": {
+    "description": "যখন কথোপকথন অস্বাভাবিক ভাবে দীর্ঘ হয়ে যায়, তখন প্রদর্শনের জন্য বার্তা।",
+    "message": "ওহ, এটা একটি দীর্ঘ আলাপ। আপনি কি এখনো সেখানে, না-ই আমরা  নিজেরাই নিজের  sathe kotha bolchi?"
   }
 }

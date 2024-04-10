@@ -191,5 +191,13 @@
   "extensionPopupTitle": {
     "description": "A bővítmény felugró párbeszédablakának címe.",
     "message": "Say, Pi"
+  },
+  "activityCheckButton": {
+    "description": "A gomb szövege, amely jelzi, hogy a felhasználó még mindig jelen van.",
+    "message": "Igen, még mindig itt vagyok!"
+  },
+  "activityCheckMessage": {
+    "description": "Az üzenet, amely megjelenik, amikor a beszélgetés szokatlanul hosszú ideig tart.",
+    "message": "Hűha, ez egy hosszú beszélgetés. Még ott vagy, vagy csak magunkhoz beszélünk?"
   }
 }

@@ -191,5 +191,13 @@
   "extensionPopupTitle": {
     "description": "拡張機能のポップアップダイアログのタイトル。",
     "message": "Say, Pi"
+  },
+  "activityCheckButton": {
+    "description": "ユーザーがまだ存在していることを示すボタンのテキスト。",
+    "message": "はい、まだここにいます！"
+  },
+  "activityCheckMessage": {
+    "description": "会話が異常に長く続いているときに表示するメッセージ。",
+    "message": "ワオ、これは長い会話ですね。まだそこにいますか、それとも私たちは自分自身に話しかけているのでしょうか？"
   }
 }

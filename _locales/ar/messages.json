@@ -191,5 +191,13 @@
   "extensionPopupTitle": {
     "description": "عنوان مربع الحوار المنبثق للإضافة.",
     "message": "Say, Pi"
+  },
+  "activityCheckButton": {
+    "description": "نص الزر للإشارة إلى أن المستخدم ما زال موجودًا.",
+    "message": "نعم، أنا ما زلت هنا!"
+  },
+  "activityCheckMessage": {
+    "description": "الرسالة التي يتم عرضها عندما تستمر المحادثة لفترة غير عادية.",
+    "message": "واو، هذه محادثة طويلة. هل أنت لا تزال هناك، أم أننا نتحدث إلى أنفسنا؟"
   }
 }

@@ -191,5 +191,13 @@
   "extensionPopupTitle": {
     "description": "Tiêu đề của hộp thoại popup của tiện ích mở rộng.",
     "message": "Say, Pi"
+  },
+  "activityCheckButton": {
+    "message": "Vâng, tôi vẫn còn ở đây!",
+    "description": "Văn bản của nút để chỉ ra rằng người dùng vẫn còn ở đó."
+  },
+  "activityCheckMessage": {
+    "description": "Thông điệp để hiển thị khi cuộc trò chuyện diễn ra quá lâu bất thường.",
+    "message": "Wow, đây là một cuộc trò chuyện dài. Bạn còn đó không, hay chúng ta đang tự nói chuyện với bản thân?"
   }
 }

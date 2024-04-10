@@ -191,5 +191,13 @@
   "extensionPopupTitle": {
     "description": "Tytuł okna dialogowego rozszerzenia.",
     "message": "Say, Pi"
+  },
+  "activityCheckButton": {
+    "message": "Tak, jestem nadal tutaj!",
+    "description": "Tekst przycisku wskazującego, że użytkownik jest nadal obecny."
+  },
+  "activityCheckMessage": {
+    "description": "Wiadomość do wyświetlenia, gdy rozmowa trwa niezwykle długo.",
+    "message": "Wow, to jest długa rozmowa. Czy ty jesteś jeszcze tam, czy rozmawiamy sami ze sobą?"
   }
 }

@@ -191,5 +191,13 @@
   "extensionPopupTitle": {
     "description": "El título del cuadro de diálogo emergente de la extensión.",
     "message": "Say, Pi"
+  },
+  "activityCheckButton": {
+    "description": "El texto del botón para indicar que el usuario aún está presente.",
+    "message": "¡Sí, todavía estoy aquí!"
+  },
+  "activityCheckMessage": {
+    "description": "El mensaje a mostrar cuando la conversación ha estado ocurriendo de manera inusualmente larga.",
+    "message": "Vaya, esta es una conversación larga. ¿Sigues ahí, o estamos hablando solos?"
   }
 }

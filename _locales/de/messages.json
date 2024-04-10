@@ -191,5 +191,13 @@
   "extensionPopupTitle": {
     "description": "Der Titel des Popup-Dialogs der Erweiterung.",
     "message": "Say, Pi"
+  },
+  "activityCheckButton": {
+    "description": "Der Text der Schaltfläche, um anzuzeigen, dass der Benutzer noch anwesend ist.",
+    "message": "Ja, ich bin noch hier!"
+  },
+  "activityCheckMessage": {
+    "description": "Die Nachricht, die angezeigt wird, wenn das Gespräch ungewöhnlich lange dauert.",
+    "message": "Wow, das ist ein langes Gespräch. Bist du noch da oder reden wir mit uns selbst?"
   }
 }

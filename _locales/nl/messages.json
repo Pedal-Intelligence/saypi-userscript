@@ -191,5 +191,13 @@
   "extensionPopupTitle": {
     "description": "De titel van het pop-up dialoogvenster van de extensie.",
     "message": "Say, Pi"
+  },
+  "activityCheckButton": {
+    "message": "Ja, ik ben er nog steeds!",
+    "description": "De tekst van de knop om aan te geven dat de gebruiker nog steeds aanwezig is."
+  },
+  "activityCheckMessage": {
+    "description": "Het bericht dat wordt weergegeven wanneer het gesprek ongewoon lang doorgaat.",
+    "message": "Wow, dit is een lang gesprek. Ben je er nog, of praten we tegen onszelf?"
   }
 }
