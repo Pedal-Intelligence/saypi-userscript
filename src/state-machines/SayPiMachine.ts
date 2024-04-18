@@ -664,21 +664,10 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
 
       responding: {
-        description:
-          "Pi is responding. Text is being generated or synthesised speech is playing or waiting to play.",
-        entry: {
-          type: "disableCallButton",
-        },
-        exit: {
-          type: "enableCallButton",
-        },
-        initial: "piSpeaking",
+        initial: "piThinking",
         on: {
-          "saypi:userSpeaking": {
-            target: "#sayPi.listening.recording.userSpeaking",
-          },
           "saypi:hangup": {
-            target: "#sayPi.inactive",
+            target: "inactive",
             actions: [
               {
                 type: "callHasEnded",
@@ -692,11 +681,25 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             ],
             description: "End call while Pi is speaking.",
           },
+          "saypi:userSpeaking": {
+            target: "#sayPi.responding.userInterrupting",
+          },
         },
+        entry: {
+          type: "disableCallButton",
+        },
+        exit: {
+          type: "enableCallButton",
+        },
+        description:
+          "Pi is responding. Text is being generated or synthesised speech is playing or waiting to play.",
         states: {
           piThinking: {
-            description:
-              "Pi is contemplating its response.\nThinking animation.",
+            on: {
+              "saypi:piSpeaking": {
+                target: "piSpeaking",
+              },
+            },
             entry: [
               {
                 type: "startAnimation",
@@ -719,15 +722,37 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 type: "clearPrompt",
               },
             ],
-            on: {
-              "saypi:piSpeaking": {
-                target: "#sayPi.responding.piSpeaking",
-              },
-            },
+            description:
+              "Pi is contemplating its response.\nThinking animation.",
           },
           piSpeaking: {
-            description:
-              "Pi's synthesised speech audio is playing.\nPlayful animation.",
+            on: {
+              "saypi:piStoppedSpeaking": [
+                {
+                  target: "#sayPi.listening",
+                  cond: {
+                    type: "wasListening",
+                  },
+                },
+                {
+                  target: "#sayPi.inactive",
+                  cond: {
+                    type: "wasInactive",
+                  },
+                },
+              ],
+              "saypi:piFinishedSpeaking": {
+                target: "#sayPi.listening",
+              },
+              "saypi:userSpeaking": {
+                target: "userInterrupting",
+                actions: {
+                  type: "pauseAudio",
+                },
+                description:
+                  "The user starting speaking while Pi was speaking.",
+              },
+            },
             entry: [
               {
                 type: "startAnimation",
@@ -750,21 +775,51 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 type: "clearPrompt",
               },
             ],
+            description:
+              "Pi's synthesised speech audio is playing.\nPlayful animation.",
+          },
+          userInterrupting: {
             on: {
-              "saypi:piStoppedSpeaking": [
+              "saypi:userStoppedSpeaking": [
                 {
-                  target: "#sayPi.listening",
-                  cond: "wasListening",
+                  target: "piSpeaking",
+                  actions: {
+                    type: "resumeAudio",
+                  },
+                  cond: {
+                    type: "hasNoAudio",
+                  },
+                  description: "User speech cancelled (i.e. was non-speech).",
                 },
                 {
-                  target: "#sayPi.inactive",
-                  cond: "wasInactive",
+                  target: [
+                    "#sayPi.listening.converting.transcribing",
+                    "#sayPi.listening.recording.notSpeaking",
+                  ],
+                  cond: {
+                    type: "hasAudio",
+                  },
+                  actions: [
+                    assign({
+                      userIsSpeaking: false,
+                      timeUserStoppedSpeaking: () => new Date().getTime(),
+                    }),
+                    {
+                      type: "transcribeAudio",
+                    },
+                  ],
+                  description: "User has spoken.",
                 },
               ],
-              "saypi:piFinishedSpeaking": {
-                target: "#sayPi.listening",
-              },
             },
+            entry: {
+              type: "interruptingPiPrompt",
+            },
+            exit: {
+              type: "clearPrompt",
+            },
+            description:
+              "The user is speaking during Pi's response, and may wish to interrupt.",
           },
         },
       },
@@ -902,6 +957,12 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           setDraftPrompt(message);
         }
       },
+      interruptingPiPrompt: () => {
+        const message = getMessage("userStartedInterrupting");
+        if (message) {
+          setDraftPrompt(message);
+        }
+      },
       clearPrompt: (context: SayPiContext) => {
         setDraftPrompt(context.defaultPlaceholderText);
       },
@@ -978,6 +1039,12 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       clearTranscriptsAction: assign({
         transcriptions: () => ({}),
       }),
+      pauseAudio: () => {
+        EventBus.emit("audio:output:pause");
+      },
+      resumeAudio: () => {
+        EventBus.emit("audio:output:resume");
+      },
     },
     services: {},
     guards: {

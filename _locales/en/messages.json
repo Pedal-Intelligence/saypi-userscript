@@ -143,6 +143,11 @@
       }
     }
   },
+  "userStartedInterrupting": {
+    "message": "You were saying?",
+    "description": "Message displayed when the user starts speaking while the assistant is speaking.",
+    "placeholders": {}
+  },
   "toggleThemeToDarkMode": {
     "message": "Switch to dark mode",
     "description": "Label for the button to toggle to dark mode."

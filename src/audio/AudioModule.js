@@ -165,5 +165,12 @@ export default class AudioModule {
     EventBus.on("audio:output:play", (e) => {
       this.audioElement.play();
     });
+
+    EventBus.on("audio:output:pause", (e) => {
+      this.audioElement.pause();
+    });
+    EventBus.on("audio:output:resume", (e) => {
+      this.audioElement.play();
+    });
   }
 }
