@@ -335,8 +335,8 @@ export function setFinalPrompt(transcript: string): void {
       );
     }
     EventModule.setNativeValue(textarea, transcript);
-    EventBus.emit("saypi:autoSubmit");
+    EventBus.emit("saypi:autoSubmit"); // submits the prompt
   } else {
-    EventModule.simulateTyping(textarea, `${transcript} `);
+    EventModule.simulateTyping(textarea, `${transcript} `); // types and submits the prompt
   }
 }

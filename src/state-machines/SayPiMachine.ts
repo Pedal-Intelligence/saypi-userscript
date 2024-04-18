@@ -538,13 +538,18 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     description: "Successfully transcribed user audio to text.",
                   },
                   "saypi:transcribeFailed": {
-                    target:
+                    target: [
+                      "accumulating",
                       "#sayPi.listening.errorStatus.errors.transcribeFailed",
+                    ],
                     description:
                       "Received an error response from the /transcribe API",
                   },
                   "saypi:transcribedEmpty": {
-                    target: "#sayPi.listening.errorStatus.errors.micError",
+                    target: [
+                      "accumulating",
+                      "#sayPi.listening.errorStatus.errors.micError",
+                    ],
                     description:
                       "Received an empty response from the /transcribe API (no speech detected)",
                   },
