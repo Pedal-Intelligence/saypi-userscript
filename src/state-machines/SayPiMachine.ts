@@ -697,18 +697,28 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           piThinking: {
             description:
               "Pi is contemplating its response.\nThinking animation.",
-            entry: {
-              type: "startAnimation",
-              params: {
-                animation: "piThinking",
+            entry: [
+              {
+                type: "startAnimation",
+                params: {
+                  animation: "piThinking",
+                },
               },
-            },
-            exit: {
-              type: "stopAnimation",
-              params: {
-                animation: "piThinking",
+              {
+                type: "thinkingPrompt",
               },
-            },
+            ],
+            exit: [
+              {
+                type: "stopAnimation",
+                params: {
+                  animation: "piThinking",
+                },
+              },
+              {
+                type: "clearPrompt",
+              },
+            ],
             on: {
               "saypi:piSpeaking": {
                 target: "#sayPi.responding.piSpeaking",
@@ -718,18 +728,28 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           piSpeaking: {
             description:
               "Pi's synthesised speech audio is playing.\nPlayful animation.",
-            entry: {
-              type: "startAnimation",
-              params: {
-                animation: "piSpeaking",
+            entry: [
+              {
+                type: "startAnimation",
+                params: {
+                  animation: "piSpeaking",
+                },
               },
-            },
-            exit: {
-              type: "stopAnimation",
-              params: {
-                animation: "piSpeaking",
+              {
+                type: "speakingPrompt",
               },
-            },
+            ],
+            exit: [
+              {
+                type: "stopAnimation",
+                params: {
+                  animation: "piSpeaking",
+                },
+              },
+              {
+                type: "clearPrompt",
+              },
+            ],
             on: {
               "saypi:piStoppedSpeaking": [
                 {
@@ -870,7 +890,18 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           setDraftPrompt(message);
         }
       },
-
+      thinkingPrompt: () => {
+        const message = getMessage("assistantIsThinking", "Pi");
+        if (message) {
+          setDraftPrompt(message);
+        }
+      },
+      speakingPrompt: () => {
+        const message = getMessage("assistantIsSpeaking", "Pi");
+        if (message) {
+          setDraftPrompt(message);
+        }
+      },
       clearPrompt: (context: SayPiContext) => {
         setDraftPrompt(context.defaultPlaceholderText);
       },

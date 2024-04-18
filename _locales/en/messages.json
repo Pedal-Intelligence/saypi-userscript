@@ -123,6 +123,26 @@
       }
     }
   },
+  "assistantIsThinking": {
+    "message": "$chatbot$ is thinking...",
+    "description": "Message displayed when the assistant is preparing its response.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "assistantIsSpeaking": {
+    "message": "$chatbot$ is speaking...",
+    "description": "Message displayed when the assistant is speaking its response.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "toggleThemeToDarkMode": {
     "message": "Switch to dark mode",
     "description": "Label for the button to toggle to dark mode."
