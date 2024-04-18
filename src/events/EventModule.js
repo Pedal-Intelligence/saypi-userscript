@@ -13,6 +13,7 @@ const VISIBLE = "saypi:visible";
 const AUDIO_DEVICE_CONNECTED = "saypi:audio:connected";
 const AUDIO_DEVICE_RECONNECT = "saypi:audio:reconnect";
 const END_CALL = "saypi:hangup";
+const SESSION_ASSIGNED = "saypi:session:assigned";
 
 /**
  * The EventModule translates events sent on the EventBus to StateMachine events,
@@ -97,6 +98,7 @@ export default class EventModule {
       USER_FINISHED_SPEAKING,
       AUDIO_DEVICE_CONNECTED,
       AUDIO_DEVICE_RECONNECT,
+      SESSION_ASSIGNED,
     ].forEach((eventName) => {
       EventBus.on(eventName, (detail) => {
         if (detail) {

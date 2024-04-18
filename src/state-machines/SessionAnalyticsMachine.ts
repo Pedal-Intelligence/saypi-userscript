@@ -7,6 +7,7 @@ import {
   UserPromptModule,
   AudibleNotificationsModule,
 } from "../NotificationsModule";
+import EventBus from "../events/EventBus";
 
 interface ValidatedConfig {
   GA_MEASUREMENT_ID: string;
@@ -238,6 +239,9 @@ export const machine = createMachine<
           engagement_time_msec: elapsed_ms,
           transcription_mode: transcriptionMode,
           language: language,
+        });
+        EventBus.emit("saypi:session:assigned", {
+          session_id: context.session_id,
         });
       },
       incrementMessageCount: assign({

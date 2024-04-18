@@ -56,6 +56,10 @@ type SayPiAudioReconnectEvent = {
   deviceId: string;
   deviceLabel: string;
 };
+type SayPiSessionAssignedEvent = {
+  type: "saypi:session:assigned";
+  session_id: string;
+};
 
 type SayPiEvent =
   | { type: "saypi:userSpeaking" }
@@ -75,7 +79,8 @@ type SayPiEvent =
   | { type: "saypi:hangup" }
   | { type: "saypi:visible" }
   | SayPiAudioConnectedEvent
-  | SayPiAudioReconnectEvent;
+  | SayPiAudioReconnectEvent
+  | SayPiSessionAssignedEvent;
 
 interface SayPiContext {
   transcriptions: Record<number, string>;
@@ -84,6 +89,7 @@ interface SayPiContext {
   userIsSpeaking: boolean; // duplicate of state.matches("listening.recording.userSpeaking")
   timeUserStoppedSpeaking: number;
   defaultPlaceholderText: string;
+  sessionId?: string;
 }
 
 // Define the state schema
@@ -642,6 +648,12 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               },
             ],
           },
+          "saypi:session:assigned": {
+            actions: assign({
+              sessionId: (context, event: SayPiSessionAssignedEvent) =>
+                event.session_id,
+            }),
+          },
         },
         type: "parallel",
       },
@@ -758,7 +770,8 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           uploadAudioWithRetry(
             audioBlob,
             event.duration,
-            context.transcriptions
+            context.transcriptions,
+            context.sessionId
           );
           EventBus.emit("session:transcribing", {
             audio_duration_seconds: event.duration / 1000,
@@ -772,9 +785,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         SayPiContext,
         event: SayPiTranscribedEvent
       ) => {
-        console.log("handleTranscriptionResponse", event);
         const transcription = event.text;
         const sequenceNumber = event.sequenceNumber;
+        console.log(`Partial transcript, ${sequenceNumber}: ${transcription}`);
         SayPiContext.transcriptions[sequenceNumber] = transcription;
         if (event.merged) {
           event.merged.forEach((mergedSequenceNumber) => {

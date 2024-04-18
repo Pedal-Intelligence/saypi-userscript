@@ -79,6 +79,7 @@ export async function uploadAudioWithRetry(
   audioBlob: Blob,
   audioDurationMillis: number,
   precedingTranscripts: Record<number, string> = {},
+  sessionId?: string,
   maxRetries: number = 3
 ): Promise<void> {
   let retryCount = 0;
@@ -90,7 +91,12 @@ export async function uploadAudioWithRetry(
   while (retryCount < maxRetries) {
     try {
       transcriptionSent();
-      await uploadAudio(audioBlob, audioDurationMillis, precedingTranscripts);
+      await uploadAudio(
+        audioBlob,
+        audioDurationMillis,
+        precedingTranscripts,
+        sessionId
+      );
       return;
     } catch (error) {
       // check for timeout errors (30s on Heroku)
@@ -128,7 +134,8 @@ export async function uploadAudioWithRetry(
 async function uploadAudio(
   audioBlob: Blob,
   audioDurationMillis: number,
-  precedingTranscripts: Record<number, string> = {}
+  precedingTranscripts: Record<number, string> = {},
+  sessionId?: string
 ): Promise<void> {
   try {
     const messages = Object.entries(precedingTranscripts).map(
@@ -145,7 +152,8 @@ async function uploadAudio(
     const formData = await constructTranscriptionFormData(
       audioBlob,
       audioDurationMillis / 1000,
-      messages
+      messages,
+      sessionId
     );
     const language = await UserPreferenceModule.getLanguage();
 
@@ -223,7 +231,8 @@ async function uploadAudio(
 async function constructTranscriptionFormData(
   audioBlob: Blob,
   audioDurationSeconds: number,
-  messages: { role: string; content: string; sequenceNumber?: number }[]
+  messages: { role: string; content: string; sequenceNumber?: number }[],
+  sessionId?: string
 ) {
   const formData = new FormData();
   let audioFilename = "audio.webm";
@@ -246,6 +255,9 @@ async function constructTranscriptionFormData(
   formData.append("sequenceNumber", sequenceNum.toString());
   formData.append("messages", JSON.stringify(messages));
   formData.append("acceptsMerge", "true"); // always accept merge requests (since v1.4.10)
+  if (sessionId) {
+    formData.append("sessionId", sessionId);
+  }
 
   // Wait for the preference to be retrieved before appending it to the FormData
   const preference = await UserPreferenceModule.getTranscriptionMode();
