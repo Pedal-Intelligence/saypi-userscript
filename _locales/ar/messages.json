@@ -201,7 +201,7 @@
     "message": "واو، هذه محادثة طويلة. هل أنت لا تزال هناك، أم أننا نتحدث إلى أنفسنا؟"
   },
   "assistantIsThinking": {
-    "message": "",
+    "message": "$chatbot$ يفكر...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
@@ -211,7 +211,7 @@
     "description": "الرسالة المعروضة عندما يقوم المساعد بإعداد رده."
   },
   "assistantIsSpeaking": {
-    "message": "",
+    "message": "$chatbot$ يتحدث...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
@@ -221,7 +221,7 @@
     "description": "الرسالة المعروضة عندما يتحدث المساعد برده."
   },
   "userStartedInterrupting": {
-    "message": "",
+    "message": "تفضل، $chatbot$ يستمع...",
     "placeholders": {
       "chatbot": {
         "content": "$1",

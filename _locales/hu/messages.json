@@ -201,30 +201,33 @@
     "message": "Hűha, ez egy hosszú beszélgetés. Még ott vagy, vagy csak magunkhoz beszélünk?"
   },
   "assistantIsThinking": {
-    "message": "",
+    "message": "$chatbot$ gondolkodik...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "Üzenet, amely akkor jelenik meg, amikor az asszisztens előkészíti a válaszát."
   },
   "assistantIsSpeaking": {
-    "message": "",
+    "message": "$chatbot$ beszél...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "Üzenet jelenik meg, amikor az asszisztens elmondja a válaszát."
   },
   "userStartedInterrupting": {
-    "message": "",
+    "message": "Folytassa, a $chatbot$ hallgat...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "Üzenet, amely akkor jelenik meg, amikor a felhasználó elkezd beszélni, miközben az asszisztens beszél."
   }
 }

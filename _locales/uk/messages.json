@@ -201,30 +201,33 @@
     "message": "Вау, це довга розмова. Ти ще тут, чи ми говоримо самі з собою?"
   },
   "assistantIsThinking": {
-    "message": "",
+    "message": "$chatbot$ думає...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "Повідомлення, що відображається, коли помічник готує свою відповідь."
   },
   "assistantIsSpeaking": {
-    "message": "",
+    "message": "$chatbot$ говорить...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "Повідомлення, що відображається, коли асистент говорить свою відповідь."
   },
   "userStartedInterrupting": {
-    "message": "",
+    "message": "Давайте, $chatbot$ слухає...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "Повідомлення, що відображається, коли користувач починає говорити, поки асистент говорить."
   }
 }

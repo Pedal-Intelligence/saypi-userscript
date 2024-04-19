@@ -201,30 +201,33 @@
     "message": "와우, 이건 정말 긴 대화네요. 아직 계신가요, 아니면 우리가 혼자서 얘기하고 있는 건가요?"
   },
   "assistantIsThinking": {
-    "message": "",
+    "message": "$chatbot$이 생각 중입니다...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "조수가 응답을 준비하는 동안 표시되는 메시지."
   },
   "assistantIsSpeaking": {
-    "message": "",
+    "message": "$chatbot$이 말하고 있습니다...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "조수가 응답을 말하고 있을 때 표시되는 메시지."
   },
   "userStartedInterrupting": {
-    "message": "",
+    "message": "계속하세요, $chatbot$이 듣고 있습니다...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "사용자가 비서가 말하는 동안 말을 시작할 때 표시되는 메시지."
   }
 }

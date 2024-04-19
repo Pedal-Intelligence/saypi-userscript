@@ -201,30 +201,33 @@
     "message": "Wow, đây là một cuộc trò chuyện dài. Bạn còn đó không, hay chúng ta đang tự nói chuyện với bản thân?"
   },
   "assistantIsThinking": {
-    "message": "",
+    "message": "$chatbot$ đang suy nghĩ...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "Thông điệp được hiển thị khi trợ lý đang chuẩn bị phản hồi của mình."
   },
   "assistantIsSpeaking": {
-    "message": "",
+    "message": "$chatbot$ đang nói...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "Thông điệp được hiển thị khi trợ lý đang phát biểu câu trả lời của mình."
   },
   "userStartedInterrupting": {
-    "message": "",
+    "message": "Hãy tiếp tục, $chatbot$ đang lắng nghe...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "Thông điệp được hiển thị khi người dùng bắt đầu nói trong khi trợ lý đang nói."
   }
 }

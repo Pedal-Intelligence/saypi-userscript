@@ -201,30 +201,33 @@
     "message": "哇，这是一段很长的对话。你还在吗，还是我们在自言自语？"
   },
   "assistantIsThinking": {
-    "message": "",
+    "message": "$chatbot$正在思考...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "当助手准备其回应时显示的消息。"
   },
   "assistantIsSpeaking": {
-    "message": "",
+    "message": "$chatbot$正在说话...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "当助手在发表其回应时显示的信息。"
   },
   "userStartedInterrupting": {
-    "message": "",
+    "message": "继续，$chatbot$正在倾听...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "当用户在助手讲话时开始说话时显示的消息。"
   }
 }

@@ -201,30 +201,33 @@
     "message": "वाह, यह तो एक लंबी बातचीत है। क्या आप अभी भी वहां हैं, या हम स्वयं से ही बात कर रहे हैं?"
   },
   "assistantIsThinking": {
-    "message": "",
+    "message": "$chatbot$ सोच रहा है...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "सहायक अपना प्रतिक्रिया तैयार कर रहा हो, ऐसे समय में प्रदर्शित संदेश।"
   },
   "assistantIsSpeaking": {
-    "message": "",
+    "message": "$chatbot$ बोल रहा है...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "संदेश जो तब प्रदर्शित होता है जब सहायक अपना उत्तर कह रहा होता है।"
   },
   "userStartedInterrupting": {
-    "message": "",
+    "message": "आगे बढ़ो, $chatbot$ सुन रहा है...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "संदेश जो प्रदर्शित होता है जब उपयोगकर्ता सहायक के बोलने के समय बोलना शुरू करता है।"
   }
 }

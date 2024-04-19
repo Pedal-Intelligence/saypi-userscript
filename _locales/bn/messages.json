@@ -201,30 +201,33 @@
     "message": "ওহ, এটা একটি দীর্ঘ আলাপ। আপনি কি এখনো সেখানে, না-ই আমরা  নিজেরাই নিজের  sathe kotha bolchi?"
   },
   "assistantIsThinking": {
-    "message": "",
+    "message": "$chatbot$ চিন্তা করছে...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "যখন সহায়িকা তার প্রতিক্রিয়া প্রস্তুত করে, তখন প্রদর্শিত বার্তা।"
   },
   "assistantIsSpeaking": {
-    "message": "",
+    "message": "$chatbot$ কথা বলছে...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "যখন সহায়িকা তার উত্তর বলে, তখন প্রদর্শিত বার্তা।"
   },
   "userStartedInterrupting": {
-    "message": "",
+    "message": "এগিয়ে যান, $chatbot$ শুনছে...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "বার্তা প্রদর্শিত হয় যখন ব্যবহারকারী, সহায়িকা কথা বলার সময়ে,  কথা শুরু করে।"
   }
 }

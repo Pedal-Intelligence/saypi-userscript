@@ -201,30 +201,33 @@
     "message": "Wow, to jest długa rozmowa. Czy ty jesteś jeszcze tam, czy rozmawiamy sami ze sobą?"
   },
   "assistantIsThinking": {
-    "message": "",
+    "message": "$chatbot$ myśli...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "Wiadomość wyświetlana, gdy asystent przygotowuje swoją odpowiedź."
   },
   "assistantIsSpeaking": {
-    "message": "",
+    "message": "$chatbot$ mówi...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "Wiadomość wyświetlana, gdy asystent przekazuje swoją odpowiedź."
   },
   "userStartedInterrupting": {
-    "message": "",
+    "message": "Dalej, $chatbot$ słucha...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "Wiadomość wyświetlana, gdy użytkownik zaczyna mówić, podczas gdy asystent mówi."
   }
 }
