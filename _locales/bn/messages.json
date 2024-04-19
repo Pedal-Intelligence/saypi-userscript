@@ -77,7 +77,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "ডিফল্ট - ম্যাকবুক প্রো মাইক্রোফোন"
+        "example": "Default - MacBook Pro Microphone"
       }
     }
   },
@@ -97,7 +97,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "ডিফল্ট - এয়ারপডস প্রো"
+        "example": "Default - AirPods Pro"
       }
     }
   },
@@ -199,5 +199,32 @@
   "activityCheckMessage": {
     "description": "যখন কথোপকথন অস্বাভাবিক ভাবে দীর্ঘ হয়ে যায়, তখন প্রদর্শনের জন্য বার্তা।",
     "message": "ওহ, এটা একটি দীর্ঘ আলাপ। আপনি কি এখনো সেখানে, না-ই আমরা  নিজেরাই নিজের  sathe kotha bolchi?"
+  },
+  "assistantIsThinking": {
+    "message": "",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "assistantIsSpeaking": {
+    "message": "",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "userStartedInterrupting": {
+    "message": "",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   }
 }

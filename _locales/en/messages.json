@@ -144,9 +144,14 @@
     }
   },
   "userStartedInterrupting": {
-    "message": "You were saying?",
+    "message": "Go ahead, $chatbot$ is listening...",
     "description": "Message displayed when the user starts speaking while the assistant is speaking.",
-    "placeholders": {}
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "toggleThemeToDarkMode": {
     "message": "Switch to dark mode",

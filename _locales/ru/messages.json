@@ -77,7 +77,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "По умолчанию - Микрофон MacBook Pro"
+        "example": "Default - MacBook Pro Microphone"
       }
     }
   },
@@ -97,7 +97,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "По умолчанию - AirPods Pro"
+        "example": "Default - AirPods Pro"
       }
     }
   },
@@ -199,5 +199,32 @@
   "activityCheckMessage": {
     "description": "Сообщение для отображения, когда разговор продолжается необычно долго.",
     "message": "Вау, это долгий разговор. Ты все еще здесь, или мы говорим сами с собой?"
+  },
+  "assistantIsThinking": {
+    "message": "",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "assistantIsSpeaking": {
+    "message": "",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "userStartedInterrupting": {
+    "message": "",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   }
 }

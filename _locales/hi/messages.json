@@ -77,7 +77,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "मूल - मैकबुक प्रो माइक्रोफ़ोन"
+        "example": "Default - MacBook Pro Microphone"
       }
     }
   },
@@ -97,7 +97,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "मूलभूत - एयरपॉड्स प्रो"
+        "example": "Default - AirPods Pro"
       }
     }
   },
@@ -199,5 +199,32 @@
   "activityCheckMessage": {
     "description": "जब वार्तालाप असामान्य रूप से लंबा होता है, तो प्रदर्शित करने के लिए संदेश।",
     "message": "वाह, यह तो एक लंबी बातचीत है। क्या आप अभी भी वहां हैं, या हम स्वयं से ही बात कर रहे हैं?"
+  },
+  "assistantIsThinking": {
+    "message": "",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "assistantIsSpeaking": {
+    "message": "",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "userStartedInterrupting": {
+    "message": "",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   }
 }

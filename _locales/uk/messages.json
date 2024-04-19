@@ -77,7 +77,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "Типовий - Мікрофон MacBook Pro"
+        "example": "Default - MacBook Pro Microphone"
       }
     }
   },
@@ -97,7 +97,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "Типово - AirPods Pro"
+        "example": "Default - AirPods Pro"
       }
     }
   },
@@ -199,5 +199,32 @@
   "activityCheckMessage": {
     "description": "Повідомлення для відображення, коли розмова триває надзвичайно довго.",
     "message": "Вау, це довга розмова. Ти ще тут, чи ми говоримо самі з собою?"
+  },
+  "assistantIsThinking": {
+    "message": "",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "assistantIsSpeaking": {
+    "message": "",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "userStartedInterrupting": {
+    "message": "",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   }
 }

@@ -77,7 +77,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "Standard - MacBook Pro Mikrofon"
+        "example": "Default - MacBook Pro Microphone"
       }
     }
   },
@@ -97,7 +97,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "Standard - AirPods Pro"
+        "example": "Default - AirPods Pro"
       }
     }
   },
@@ -199,5 +199,32 @@
   "activityCheckMessage": {
     "description": "Die Nachricht, die angezeigt wird, wenn das Gespräch ungewöhnlich lange dauert.",
     "message": "Wow, das ist ein langes Gespräch. Bist du noch da oder reden wir mit uns selbst?"
+  },
+  "assistantIsThinking": {
+    "message": "",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "assistantIsSpeaking": {
+    "message": "",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "userStartedInterrupting": {
+    "message": "",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   }
 }

@@ -23,7 +23,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "الافتراضي - ميكروفون MacBook Pro"
+        "example": "Default - MacBook Pro Microphone"
       }
     }
   },
@@ -43,7 +43,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "الإعدادات الافتراضية - AirPods Pro"
+        "example": "Default - AirPods Pro"
       }
     }
   },
@@ -199,5 +199,35 @@
   "activityCheckMessage": {
     "description": "الرسالة التي يتم عرضها عندما تستمر المحادثة لفترة غير عادية.",
     "message": "واو، هذه محادثة طويلة. هل أنت لا تزال هناك، أم أننا نتحدث إلى أنفسنا؟"
+  },
+  "assistantIsThinking": {
+    "message": "",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "الرسالة المعروضة عندما يقوم المساعد بإعداد رده."
+  },
+  "assistantIsSpeaking": {
+    "message": "",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "الرسالة المعروضة عندما يتحدث المساعد برده."
+  },
+  "userStartedInterrupting": {
+    "message": "",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "رسالة تظهر عندما يبدأ المستخدم في الكلام بينما يتحدث المساعد."
   }
 }
