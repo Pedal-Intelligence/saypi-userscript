@@ -1024,7 +1024,6 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         releaseWakeLock();
       },
       notifySentMessage: (context: SayPiContext, event: SayPiEvent) => {
-        console.log("notifySentMessage", event);
         const delay_ms = Date.now() - context.timeUserStoppedSpeaking;
         const submission_delay_ms = lastSubmissionDelay;
         EventBus.emit("session:message-sent", {
@@ -1145,7 +1144,6 @@ function readyToSubmitOnAllowedState(
 }
 function provisionallyReadyToSubmit(context: SayPiContext): boolean {
   const allowedState = !(context.userIsSpeaking || context.isTranscribing); // we don't have access to the state, so we read from a copy in the context (!DRY)
-  console.log("provisionallyReadyToSubmit", allowedState, context);
   return readyToSubmitOnAllowedState(allowedState, context);
 }
 function readyToSubmit(
