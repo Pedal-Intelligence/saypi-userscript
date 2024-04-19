@@ -958,7 +958,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         }
       },
       interruptingPiPrompt: () => {
-        const message = getMessage("userStartedInterrupting");
+        const message = getMessage("userStartedInterrupting", "Pi");
         if (message) {
           setDraftPrompt(message);
         }

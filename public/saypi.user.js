@@ -28844,7 +28844,7 @@ const SayPiMachine_machine = createMachine({
             }
         },
         interruptingPiPrompt: () => {
-            const message = i18n("userStartedInterrupting");
+            const message = i18n("userStartedInterrupting", "Pi");
             if (message) {
                 setDraftPrompt(message);
             }
