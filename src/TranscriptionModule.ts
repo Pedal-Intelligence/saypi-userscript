@@ -302,6 +302,19 @@ export function getDraftPrompt(): string {
 }
 
 /**
+ * Set a descriptive message for the user in the prompt textarea
+ * Used to inform the user of the current state of the application
+ * @param label The placeholder text to be displayed in the prompt textarea
+ */
+export function setUserMessage(label: string): void {
+  const textarea = document.getElementById(
+    "saypi-prompt"
+  ) as HTMLTextAreaElement;
+  textarea.setAttribute("placeholder", label);
+  scrollToBottom(textarea);
+}
+
+/**
  * Set the prompt textarea to the given transcript, but do not submit it
  * @param transcript The prompt to be displayed in the prompt textarea
  */
@@ -310,8 +323,17 @@ export function setDraftPrompt(transcript: string): void {
     "saypi-prompt"
   ) as HTMLTextAreaElement;
 
-  textarea.setAttribute("placeholder", `${transcript}`);
-  scrollToBottom(textarea);
+  UserPreferenceModule.getAutoSubmit().then((autoSubmit) => {
+    if (autoSubmit) {
+      textarea.setAttribute("placeholder", `${transcript}`);
+    } else {
+      textarea.setAttribute("placeholder", "");
+      // clear the text area content
+      textarea.value = "";
+      EventModule.simulateTyping(textarea, `${transcript} `);
+    }
+    scrollToBottom(textarea);
+  });
 }
 
 const PROMPT_CHARACTER_LIMIT = 4000;
@@ -320,9 +342,6 @@ export function setFinalPrompt(transcript: string): void {
   const textarea = document.getElementById(
     "saypi-prompt"
   ) as HTMLTextAreaElement;
-  textarea.setAttribute("placeholder", "");
-  const initialHeight = "2rem"; // aka 32px
-  textarea.style.height = initialHeight; // Reset the height after draft preview has been dismissed
   if (ImmersionService.isViewImmersive()) {
     // if transcript is > max characters, truncate it to max-1 characters plus an ellipsis
     if (transcript.length > PROMPT_CHARACTER_LIMIT) {

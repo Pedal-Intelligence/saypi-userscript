@@ -18,6 +18,7 @@ import {
   uploadAudioWithRetry,
   getDraftPrompt,
   setDraftPrompt,
+  setUserMessage,
   setFinalPrompt,
   isTranscriptionPending,
   clearPendingTranscriptions,
@@ -169,7 +170,7 @@ const audioControls = new AudioControlsModule();
 
 export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCRKANiwNoAMAuoqHQHtYWMgPx8QAD0QAWAMwycARhkAOGQHYtnDQE4ArEoBsRgDQg0szrpwaZu3QCY5co6t1HHqjQF8f52mw8QlIKaloGBAYAZTowFABrAiguXiQQQWFRcXTpBH1Hc0sER105ThxSj05vJVU6oxk-APQg5jZokhQAJzJ8KBp0SPaWACV4iDRUiUyRLDEJPJlHRRV1LQ0dA2MzC0R9A5wHY8N9a31G5pBA3BHOnr6BiMYACxR+gFc6afTZ7MXZPpVmpNNo9IYTEVEPUcGdOPCNPpdEoDKpPFcbjg7l1eslBvRGCMAGIoLAsSA-fhCOYLXKA4HrMHbSF7BDGOQ4ewOTxGfQaJQ1GT6DGtW6sFj3XH9KiSWBdEhgHAoABmCu6AApHPD4QBKfFtcWSx6UjLU-50hAyK3KEEbLYQ3bFRyNI7HFHqVSOfnC-zXUU4FhYOVgfB455RLAAFReBCS-RNf3mOVAeSUciBOG8cP0aM0ByhCFUqn0sM8aiMdicujRIswuEDwdD0vDMTiiWSCbNSYBbPTiiz8JzjUR+gLqnTOE4Zd0dmLZyFtaCDYVTaeQ0Y5CDWAARuTO1luxbyuVlKpOEoLkZ4QpnAWHI5JxfecskQLvIv60GV8kcN0wEQBG6CAw3XBA3k+b4eBmLtaRTWRGhsXQpzPThDDkDRiwLZw6lsK8kSvMsgQ-AMvxDH8-wAoCf3wAQSFieI4zXAkEA+WAwG6IkCCDF5IHo9t4yg34YOTKR4NKI5kMHNMMNHVlHCBDRJw0cptiBZE5GI5cyP6X9-0A4CdJoui20Y-FIlY9i+MY-caREvJnHsWF4S8VCVMwuTXBLEwKwFLwzmUzTSNXXTKIMqAcAs7orJA5jIs6AQ6DiCBooEtIqQPWDRJKNMKnqZ0ZCMJQMI0MssIKowcG8z1iycL0i0CxtyL0qidLikyYvMtiopIBKkpSlIlDS00MrsxBHByzMlHywritKuSZGMZQTDRZ15JqEqGu-HSAPwSgpXC4giA+ABbD4WBQR4qAgMRFQIcgBASRVjvYmAAHk6DIY6vywIgbPNOCSmWJRKj5GanC0K0CyKlFM0RKb4WLEr319TEtOCna9seJUiCO07zsu9jukAnA6Hx5VAOOnBnu6N6PqwL65R+v7DwBlZxqOeS+TyowFEaKGeU5caHFfcbDE27Twox9iscOk6zoujrGBIbp3lgIhuh3ClBPS2ye2cCdjhkxFebqKHNFUI43HHfkMNcdxxfRsRMZ-WW8YV5tQOV1X1c1kkyS1obE0yvIXCcJytB5j1nA0KGNC1TldHsFZNDcRwvQdn8pf27Hcfly7wy9-A1Y17dIAAUWOj6pm14bdaPOQw-8kq5Cj9D+Zwhw1DsawnFBDPtqd6WXZxuX8bxWV5UVFU1XVWAPm3BnhDEAARMBzrQPVUaCzPB+z12847Gug9GkoMMUY4zzTorPFvVkUWtLm04OZwkQKfvJd3rG54XkRLuZ4PEDlCMDYfyV5xxei5FDdwikdCemsJsQq6gfQtDrCRRqA9dpDx0oXYuO5FYIBwT7UuEB-4nxRIYSccglDUKtNbOwMgoFplPPYdQ5YXCInfliT+P5CEl3wbw32pJyQkKPsJHsocHxN0jmoaOUN9CuFdF3ZONRkS6E4VnLGAjtz8JVkXIh5dK4kGroHMR9dG46Gbq3GOd9vAVDhOUZYSC5BeE4YTQC9wSCsRwG47osAZRygulPVU7F1Rwk4Jvf0aMfw+I8V4nxsBSE9mWOJDCyJPDOJ0AtWSxRjA4QWsAnQZxiyeWIn+WAgh8BhTMowNqDFD4mJGj2ahGZ5JnxyuoROqgypqEqFaROyJ6iuFKXACpVTwzgSgF8RJFpqEKBBm08oHS1BYTcMDfCBVkTOk9M4YZ5SxBhRJlGGM+BTItiwP1aZAMCqKSTlqIsF5nELTKs42wfT5JomrC4XZoyfytjqR7ZiMQeqJV4u1VK0FGkzIvIoVp6h2n2GWfNasrz7AXjWAcHQ3z9m-POWCpikQgW9VBf8gaDS64A2oSseZcLFkIq6XJM8ID7CeD5AoJEnANIo39GUn5Ok-n8XxYwBgnFQywB4slPFlyso0JhVzBatLOlYTUr0s4FY1DFmfH4X0NEIBwAkDcCF5KsoAFpHSIFNZObUVrrWYq5agggxAyCUENf9LKqqKhITjuNHmHKsxYTtkcYw44nBAPkMRbEDxkgupZllZYd4OTHA8HUIq1ZfLv2jQAtkBRFJ5TzCsRGLgobWA9UG6h9yOU7LtUubeOkKL6SjUJSFFKcwllzYifNrK5BYSDSi9wnB5B8iKpwutLVwpGX6hmk+nMSzUOUoYJCNQXDZLGg3CqaTxw+oKMLYdzUDm1IFZOppPMORtoKGoTt-qrwoqcP2-kRZULqO4f0Q9My+Stqmnm89yku13wbsDAq3hE6NAvKhVQj7MF7xHm7R4L7WZekUhfa+V55IVkYRbZxnorTyTKGiMDVbPzoI-hBr+88vokBg42o1IdjCKCRAobmC1m5QJMNejlOgVj9scOB522DdG4O0c+yjrrUzpMmisdtX7C13whktC81Zjbpg8K47oRNuoXVYrBrK6FvDhzykLe+UMMOciDVQ3mnp5HKdU7E2AOAaLdGOqwTTIdxwW38nplEBm5LjUUIx887DNBNHw2gra4UYnyjiSpwC8AhMxucxONzU19OJzNle-J44XB2zfkFqJOkwvqZs-EnAWiwB+2EU5wBRYOQJavqohhd9eQPnyUhbkN80yWfceFgrkXfFUx+mXbr5WEAt3HLpxLHnks2KKoG4BhUKz9rPHhlBQQeXYsEzrYT+w6tOmMDYBFIb5IFXWliypOLoyxgbet2LiBfL+rPIopCRYX6Lb9KglbJ2+W4pJYNkwqwswFRcLyHmZUpudzKONdMApfBaqAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCRKANiwNoAMAuoqHQHtYWMgPx8QAD0QBOAEwAaEGkQAOAKwycc9apkA2AMw71AdgAspuQF9rS2tjyFSFarQYIGAZTpgUAawIoLl4kEEFhUXEw6QRzAEY5OW14+NN9OVNOXXVFZUREw0McTnN1M05VQ3NOU1NVW3t0R2Y2LxIUACcyfCgadA9WlgAlPwg0EIkIkSwxCVjzOXMcePNVRfMMzjl4w1N1JRU4jRxzTcMzUxkL-XLzRpAHXCH2rp6+90YACxRegFc6JMwtMovM1HkjvFONkcOpKjJODdNmYbHZHs1nqwWK9ukF+vRGEMAGIoLAsSBA-hCGZzGKIczVFZrDZbHZ7A75BDxa6wwwyfllHbyTQPJ44F4dXG9KiSWAdEhgHAoABmCs6AAo5NDoQBKfEtLE496U8LU0F0uKM1brJas3b7Q6IaqcHD8wyJOQyRbVGqGUUYnAsLBysD4PGfTxYAAqXwIgV6JpBs2ioFiRVMxU2qTkGkMVU2pkdCDZyXqboS9ShiP9mFwQZDYelEe8vgCQUTZuTYIQRSqp302dz+f0hc5WtUyRzMgnqisGeraLF9YVjY+A0Y5GDWAARuSO5Euxb4iPinzsrsfbp4kXVu7XfE4boGfsEn7FwHl6Hw+uECg-hBZiYMR8DAUgKR4KZO1pVMClueJtDkW4Jx0Ko9hkG8inUfstU4fR+XiPQzhrRxP1XfEPD-ACBAQTpQOA0CSH3GkUykWDclOdZ1GPGR1EFC4i0w1RtE0Y8igZIxNmIutgxXb8CQQWA4GEMRf1gYQoBAiAmPNGCuX0cwtGMRZVFUTgCJM7YBMQ+DTIHVI9CuWcpMDGSv16HBaKIAROgApsfx+f5AQg4EoJYtM9kzOyc3UPNqhHDCLmw6E8JkAivWc0igg8uifKy-ABBIHw-HjNd5L+RTOiJAhgy+SAirbBNgqpA9oNYntYv7QcYuHUcji1O8yysYx0jhSwMtc1dsq83L3PywrWxK8jGHKsBOnqkrtMPXSHJwfRZzWGKvTSVRr05bl6hwMsB3qHQsgscaGyyzzvN8qAcBWtaFrkjwPvaAQ6F8CB1vbJrTRasLEBHLRtWhXJuNMwwiy1K5Lr0Gc50MbZ7nfWsXMe9znpmt7fq+vyyoqv6Abq0ngniUJmuY7soZKGG4bwhGke2LQpyGzJbmyB7ZPcrz8EoKU3uIIg-gAWz+FgUHeKgIDERUCHIAR-EVaXVpgAB5OgyGlmSsCITbWtiKE1lOdJjH5Xi5EMeKx3KYp9G2IwzLOSxsaaXHMuFsQxfeJUiCl2X5cV1bOm8nA6Aj5VvOlnBtc6PWDawI25RNs2Ia5UotFWb1sjMvQeKRzYXVWHjLFMbkDAFnGSImrKRaDrLJZluWFe+xgSE6X5YCITod3A+mwcZi0DGKHZ1mMPCDJkDMkfdZI8LsixUquH30T95uA9F1bg478Pu7Jjw+4HoeR5JMlR8g8Hux2TYSgyLNSgzTYkaMfQcEx3RHeuHUE628lx7zeq3Q+7dQ6dwjj3BAF98CD2HtuSAABRaWBsJigyTObRAT8f64VtJbD++gkYZlMDgWyZlrhGAuILNy4DA6QPcsfLuitZTykVCqNU6pYB-G3JnZS+AAAiYB5ZoD1KA-GjCD7ixDmHNhIMx44NzqsRIKROJVFrrOTISNyjwSsJkT2novSL3oZNCBci+ECJEIrHO3ZuI-ysPpC48hPT6VUHosyu0+TGEwmyeI5iW5MLkQgpBO44FhKvigrS2DQrdi4ssGeWQTIoSyBCPBBllgaCWFkPYWoeJBP3m3dyUTkGRP7og6JYAb7klico+JFpEkaJSROXQ6Sv5JEodkUyZl9EMnUEUmRJS3plIiWfXulTwkxPQZg+xTTVgtMqG02clkxxZGyT0icuxyhehAR+MBOAo7eVeCQcqRzOjR06LAGUcoFZcNVKtdUcJdT6mktIi5VzTnnOOdc+ZulPQMl-gyDQCRSgVg5H1LiLpTK6GuNULI2R9DOVorAQQ+BXpLQQAFKAAJ-ltQSF0nYaQMhZByBkhAqh9A-xoVOExtkGiN1wKi9FmKIwk2Kko++E9dIMitgiO6awRyWFIWdW4FCkhwn0rsHQ50UVwFZVlBgMY4xwJbJyxqDSH5NO2FhAipQqX8gyJoG8Zxki8XUFsaopkyjyrRWIV6scsDAwmZGSmgMXXBDidq3SuQBL7CwsYUSZkrhejfL7RwLKHVKudTTLF3gSD-Q9TTdgdNuU6QJR6FIJKjHkqLCdH+4kDq3BHGYGQdrFXuXVQ1UqHgGBVTDLAWqQMU3ep5W1KwAleJaFSuUco6QCy8QrdGqtsaNW1uWhTVtWr22xEfC6PJ+FERu2nKankpR7Z8lSpwdKTLsr2oxVlD6ABJfAapOgAkVuyimiaqYtvHfiuduqVg2sNQYHQ6ExValdNOMo3JqV8kWMOw97kT1nqjpeuBv1b3JofWmkKPq2oZAEm7F0CQYqaBqHUJYb40T5QgHACQTx01bTagAWlFUcCw2hqVmChAYEaZi90EGIGQSgJHcE9gHZ1EVawcxOyOHoeCjs3bIktekfkzkJRvCCBx3OiwbwDkurR9YI4zL50ZRG95QsoBye7FStdyRHYIzqCvHZQypovVkwh2dBRqg3isFoKlNrYo0KKBZwmjq5qer00eKEp5SgSQuGUYUnMoQlD5DkhkeZNjIr3f7N6nmj1TvHb53SBEKXnWKM57IH7671As5Y94aW2q7E-X1SVKx32IkttSwrISj7QJPsVmzGbYgIiwjPMo7peJ6CKF-diSLPZ7BPHFrTeMdPiga1laxRsSAtYZm1goVwbIendJjGo3Jy6WthOUfaxhwV5nq7I4OYztzWcW6Ri2s49Fu26WW0SqxtgWd+d8+ArWrt4LhPBQhWoYo2zwkjJIMKtmLxyDu0wL3LknPlOc-KnRpasBK7EW6yRfvZBGwAgSUIf6wvfdXRI+zd4fNe7D2AnzvLvcu5xnQBkX7A-+9-creCLjJDx5kUz32odfLJxT65OAzs1NJHU5HX3F707+5jwHzszj3dMROalLjucw4Vj86H-OjZEFQer0XxZNAUPR4zrH6zwt-x4kYBEgGieRoVSO3TH3OMMmhK6WotQhUWHSDeB809zc5myIvXLwHHXKtjPgEquuK7LDdsa5CiJdAYX0pdX3FxMPpDGzvG3B7g9jprbr3ilhf6O0rFCCcdQbxcR-mo8o0JF4MiWEH5Lq1T3nsg70CPdxYRLCSHmTIehFMwm9qXc47tBm2GsEAA */
     context: {
       transcriptions: {},
       isTranscribing: false,
@@ -278,7 +279,18 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             type: "acquireMicrophone",
           },
         ],
-        exit: assign({ lastState: "listening" }),
+        exit: [
+          {
+            type: "clearTranscriptsAction",
+          },
+          {
+            type: "clearPendingTranscriptionsAction",
+          },
+          {
+            type: "clearPrompt",
+          },
+          assign({ lastState: "listening" }),
+        ],
         states: {
           recording: {
             description:
@@ -496,14 +508,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     type: "notifySentMessage",
                   },
                 ],
-                exit: [
-                  {
-                    type: "clearTranscriptsAction",
-                  },
-                  {
-                    type: "clearPendingTranscriptionsAction",
-                  },
-                ],
+                exit: [],
                 always: {
                   target: "accumulating",
                 },
@@ -934,7 +939,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       listenPrompt: () => {
         const message = getMessage("assistantIsListening", "Pi");
         if (message) {
-          setDraftPrompt(message);
+          setUserMessage(message);
         }
       },
       callStartingPrompt: () => {
@@ -942,31 +947,30 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         if (message) {
           const initialText = getDraftPrompt();
           assign({ defaultPlaceholderText: initialText });
-          setDraftPrompt(message);
+          setUserMessage(message);
         }
       },
       thinkingPrompt: () => {
         const message = getMessage("assistantIsThinking", "Pi");
         if (message) {
-          setDraftPrompt(message);
+          setUserMessage(message);
         }
       },
       speakingPrompt: () => {
         const message = getMessage("assistantIsSpeaking", "Pi");
         if (message) {
-          setDraftPrompt(message);
+          setUserMessage(message);
         }
       },
       interruptingPiPrompt: () => {
         const message = getMessage("userStartedInterrupting", "Pi");
         if (message) {
-          setDraftPrompt(message);
+          setUserMessage(message);
         }
       },
       clearPrompt: (context: SayPiContext) => {
-        setDraftPrompt(context.defaultPlaceholderText);
+        setUserMessage(context.defaultPlaceholderText);
       },
-
       draftPrompt: (context: SayPiContext) => {
         const prompt = mergeService
           .mergeTranscriptsLocal(context.transcriptions)
@@ -1071,7 +1075,8 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         meta
       ) => {
         const { state } = meta;
-        return readyToSubmit(state, context);
+        const autoSubmitEnabled = UserPreferenceModule.getCachedAutoSubmit();
+        return autoSubmitEnabled && readyToSubmit(state, context);
       },
       wasListening: (context: SayPiContext) => {
         return context.lastState === "listening";

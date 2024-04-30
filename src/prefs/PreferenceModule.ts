@@ -86,4 +86,43 @@ export module UserPreferenceModule {
     }
     return Promise.resolve(prefersMobile);
   }
+
+  // Singleton class for caching user preferences
+  class UserPreferenceCache {
+    private static instance: UserPreferenceCache;
+    private cache: Record<string, any>;
+
+    private constructor() {
+      this.cache = {}; // Initialize the cache
+    }
+
+    public static getInstance(): UserPreferenceCache {
+      if (!UserPreferenceCache.instance) {
+        UserPreferenceCache.instance = new UserPreferenceCache();
+      }
+      return UserPreferenceCache.instance;
+    }
+
+    public getCachedValue(key: string, defaultValue: any): any {
+      return this.cache.hasOwnProperty(key) ? this.cache[key] : defaultValue;
+    }
+
+    public setCachedValue(key: string, value: any): void {
+      this.cache[key] = value;
+    }
+  }
+
+  // Initialize the cache with UserPreferenceModule
+  (function initializeCache() {
+    // pre-populate the cache with necessary values
+    const cache = UserPreferenceCache.getInstance();
+    getAutoSubmit().then((value) => {
+      cache.setCachedValue("autoSubmit", value);
+    });
+  })();
+
+  export function getCachedAutoSubmit(): boolean {
+    const cache = UserPreferenceCache.getInstance();
+    return cache.getCachedValue("autoSubmit", true);
+  }
 }
