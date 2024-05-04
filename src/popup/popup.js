@@ -1,4 +1,16 @@
 document.addEventListener("DOMContentLoaded", function () {
+  /**
+   * Send a message to the content script
+   * @param {any} msg
+   */
+  function message(msg) {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      if (tabs.length > 0) {
+        chrome.tabs.sendMessage(tabs[0].id, msg);
+      }
+    });
+  }
+
   function i18nReplace() {
     // Update elements with internationalised content
     document.querySelectorAll("[data-i18n]").forEach((el) => {
@@ -143,17 +155,21 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     autoSubmitInput.addEventListener("change", function () {
-      chrome.storage.sync.set({ autoSubmit: this.checked }, function () {
-        console.log(
-          "Preference saved: Auto-submit is " +
-            (autoSubmitInput.checked ? "on" : "off")
-        );
-      });
+      chrome.storage.sync.set(
+        { autoSubmit: this.checked },
+        function () {
+          console.log(
+            "Preference saved: Auto-submit is " + (this.checked ? "on" : "off")
+          );
+        }.bind(this)
+      ); // Ensure 'this' inside the callback refers to autoSubmitInput
       if (this.checked) {
         this.parentElement.classList.add("checked");
       } else {
         this.parentElement.classList.remove("checked");
       }
+      // Use the message function to send a message to the content script
+      message({ autoSubmit: this.checked });
     });
 
     const shareDataInput = document.getElementById("share-data");

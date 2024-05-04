@@ -1,3 +1,5 @@
+import EventBus from "../events/EventBus";
+
 type Preference = "speed" | "balanced" | "accuracy" | null;
 
 export module UserPreferenceModule {
@@ -63,6 +65,7 @@ export module UserPreferenceModule {
         // If Chrome storage API is not supported, do nothing
         resolve();
       }
+      EventBus.emit("userPreferenceChanged", { theme: theme });
     });
   }
 
@@ -109,20 +112,33 @@ export module UserPreferenceModule {
 
     public setCachedValue(key: string, value: any): void {
       this.cache[key] = value;
+      console.debug("Setting cache value: ", key, value);
     }
   }
 
   // Initialize the cache with UserPreferenceModule
   (function initializeCache() {
-    // pre-populate the cache with necessary values
-    const cache = UserPreferenceCache.getInstance();
-    getAutoSubmit().then((value) => {
-      cache.setCachedValue("autoSubmit", value);
+    reloadCache();
+    // Listen for changes in autoSubmit preference (by popup or options page)
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      if ("autoSubmit" in request) {
+        const cache = UserPreferenceCache.getInstance();
+        cache.setCachedValue("autoSubmit", request.autoSubmit);
+      }
     });
   })();
 
   export function getCachedAutoSubmit(): boolean {
     const cache = UserPreferenceCache.getInstance();
-    return cache.getCachedValue("autoSubmit", true);
+    const cachedResult = cache.getCachedValue("autoSubmit", true);
+    console.debug("Cached autoSubmit value: ", cachedResult);
+    return cachedResult;
+  }
+
+  export function reloadCache(): void {
+    const cache = UserPreferenceCache.getInstance();
+    getAutoSubmit().then((value) => {
+      cache.setCachedValue("autoSubmit", value);
+    });
   }
 }
