@@ -338,7 +338,6 @@ export function setDraftPrompt(transcript: string): void {
 
 const PROMPT_CHARACTER_LIMIT = 4000;
 export function setFinalPrompt(transcript: string): void {
-  console.debug("Prompting -- Setting final prompt");
   logger.info(`Final transcript: ${transcript}`);
   const textarea = document.getElementById(
     "saypi-prompt"

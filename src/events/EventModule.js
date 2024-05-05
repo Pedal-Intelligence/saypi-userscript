@@ -36,13 +36,11 @@ export default class EventModule {
   }
 
   static typeTextAndSubmit = (element, text, submit) => {
-    console.debug("Prompting -- Submitting with final text: ", text);
     EventModule.setNativeValue(element, text);
     if (submit) EventBus.emit("saypi:autoSubmit");
   };
 
   static simulateTyping(element, text, submit = false) {
-    console.debug("Prompting -- Simulating typing text: ", text);
     element.focus();
     const sentenceRegex = /([.!?。？！]+)/g;
     const tokens = text.split(sentenceRegex).filter(Boolean);
@@ -53,12 +51,10 @@ export default class EventModule {
     }
     const typeNextSentenceOrSubmit = () => {
       if (sentences.length === 0) {
-        console.debug("Prompting -- Submitting after typing all sentences");
         if (submit) EventBus.emit("saypi:autoSubmit");
       } else {
         // Emit the event only after all sentences have been typed
         const nextSentence = sentences.shift();
-        console.debug("Prompting -- Typing next sentence", nextSentence);
         EventModule.setNativeValue(element, element.value + nextSentence);
         requestAnimationFrame(typeNextSentenceOrSubmit);
       }
