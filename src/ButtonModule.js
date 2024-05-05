@@ -164,8 +164,6 @@ export default class ButtonModule {
     const isImmersive = ImmersionService.isViewImmersive(); // must auto-submit in immersive mode
     if (autoSubmitEnabled || isImmersive) {
       this.simulateFormSubmit();
-      EventBus.emit("saypi:promptSubmitted"); // chat prompt submitted
-      EventBus.emit("saypi:piThinking"); // Pi is responding
     } else {
       console.log("Autosubmit is off");
     }
