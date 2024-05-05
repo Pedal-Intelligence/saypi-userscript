@@ -35,39 +35,38 @@ export default class EventModule {
     );
   }
 
-  static simulateTyping(element, text) {
-    element.focus();
+  static typeTextAndSubmit = (element, text, submit) => {
+    console.debug("Prompting -- Submitting with final text: ", text);
+    EventModule.setNativeValue(element, text);
+    if (submit) EventBus.emit("saypi:autoSubmit");
+  };
 
-    // Define a regular expression to match sentence terminators, capturing them
+  static simulateTyping(element, text, submit = false) {
+    console.debug("Prompting -- Simulating typing text: ", text);
+    element.focus();
     const sentenceRegex = /([.!?。？！]+)/g;
     const tokens = text.split(sentenceRegex).filter(Boolean);
-
-    // Reassemble sentences with their terminators
     const sentences = [];
     for (let i = 0; i < tokens.length; i += 2) {
       const sentence = tokens[i] + (tokens[i + 1] || "");
       sentences.push(sentence);
     }
-
-    let i = 0;
-
-    const typeSentence = () => {
-      if (i < sentences.length) {
-        // Type the sentence and its immediate following terminator
-        EventModule.setNativeValue(element, element.value + sentences[i++]);
-        requestAnimationFrame(typeSentence);
+    const typeNextSentenceOrSubmit = () => {
+      if (sentences.length === 0) {
+        console.debug("Prompting -- Submitting after typing all sentences");
+        if (submit) EventBus.emit("saypi:autoSubmit");
       } else {
-        EventBus.emit("saypi:autoSubmit");
+        // Emit the event only after all sentences have been typed
+        const nextSentence = sentences.shift();
+        console.debug("Prompting -- Typing next sentence", nextSentence);
+        EventModule.setNativeValue(element, element.value + nextSentence);
+        requestAnimationFrame(typeNextSentenceOrSubmit);
       }
     };
-
-    if (sentences.length > 1) {
-      // If there are multiple sentences, proceed with sentence-wise typing
-      typeSentence();
+    if (sentences.length === 0) {
+      typeTextAndSubmit(element, text, submit);
     } else {
-      // If text does not contain recognisable sentence terminators, type it all at once
-      EventModule.setNativeValue(element, text);
-      EventBus.emit("saypi:autoSubmit");
+      typeNextSentenceOrSubmit();
     }
   }
 

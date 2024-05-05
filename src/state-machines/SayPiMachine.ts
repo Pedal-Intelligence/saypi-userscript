@@ -979,6 +979,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
 
       mergeAndSubmitTranscript: (context: SayPiContext) => {
+        console.debug("Prompting -- Merging and submitting transcript");
         const prompt = mergeService
           .mergeTranscriptsLocal(context.transcriptions)
           .trim();

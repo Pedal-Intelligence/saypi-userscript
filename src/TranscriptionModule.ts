@@ -330,7 +330,7 @@ export function setDraftPrompt(transcript: string): void {
       textarea.setAttribute("placeholder", "");
       // clear the text area content
       textarea.value = "";
-      EventModule.simulateTyping(textarea, `${transcript} `);
+      EventModule.simulateTyping(textarea, `${transcript} `, false);
     }
     scrollToBottom(textarea);
   });
@@ -338,6 +338,7 @@ export function setDraftPrompt(transcript: string): void {
 
 const PROMPT_CHARACTER_LIMIT = 4000;
 export function setFinalPrompt(transcript: string): void {
+  console.debug("Prompting -- Setting final prompt");
   logger.info(`Final transcript: ${transcript}`);
   const textarea = document.getElementById(
     "saypi-prompt"
@@ -353,9 +354,8 @@ export function setFinalPrompt(transcript: string): void {
         )}`
       );
     }
-    EventModule.setNativeValue(textarea, transcript);
-    EventBus.emit("saypi:autoSubmit"); // submits the prompt
+    EventModule.typeTextAndSubmit(textarea, transcript, true);
   } else {
-    EventModule.simulateTyping(textarea, `${transcript} `); // types and submits the prompt
+    EventModule.simulateTyping(textarea, `${transcript} `, true); // types and submits the prompt
   }
 }
