@@ -172,6 +172,31 @@ document.addEventListener("DOMContentLoaded", function () {
       message({ autoSubmit: this.checked });
     });
 
+    const allowInterruptionsInput = document.getElementById(
+      "allow-interruptions"
+    );
+    getStoredValue("allowInterruptions", true).then((allowInterruptions) => {
+      selectInput(allowInterruptionsInput, allowInterruptions);
+    });
+
+    allowInterruptionsInput.addEventListener("change", function () {
+      chrome.storage.sync.set(
+        { allowInterruptions: this.checked },
+        function () {
+          console.log(
+            "Preference saved: Allow interruptions is " +
+              (this.checked ? "on" : "off")
+          );
+        }.bind(this)
+      ); // Ensure 'this' inside the callback refers to allowInterruptionsInput
+      if (this.checked) {
+        this.parentElement.classList.add("checked");
+      } else {
+        this.parentElement.classList.remove("checked");
+      }
+      message({ allowInterruptions: this.checked });
+    });
+
     const shareDataInput = document.getElementById("share-data");
     getStoredValue("shareData", false).then((shareData) => {
       selectInput(shareDataInput, shareData);

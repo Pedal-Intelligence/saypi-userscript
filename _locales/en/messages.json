@@ -229,5 +229,9 @@
   "activityCheckButton": {
     "message": "Yes, I'm still here!",
     "description": "The text of the button to indicate that the user is still present."
+  },
+  "allowInterruptions": {
+    "message": "Interruptible",
+    "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking."
   }
 }

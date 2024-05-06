@@ -686,6 +686,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           },
           "saypi:userSpeaking": {
             target: "#sayPi.responding.userInterrupting",
+            cond: {
+              type: "interruptionsAllowed",
+            },
           },
         },
         entry: {
@@ -749,6 +752,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               },
               "saypi:userSpeaking": {
                 target: "userInterrupting",
+                cond: {
+                  type: "interruptionsAllowed",
+                },
                 actions: {
                   type: "pauseAudio",
                 },
@@ -1081,6 +1087,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
       wasInactive: (context: SayPiContext) => {
         return context.lastState === "inactive";
+      },
+      interruptionsAllowed: (context: SayPiContext) => {
+        return UserPreferenceModule.getCachedAllowInterruptions();
       },
     },
     delays: {

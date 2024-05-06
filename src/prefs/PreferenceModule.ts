@@ -90,6 +90,10 @@ export module UserPreferenceModule {
     return Promise.resolve(prefersMobile);
   }
 
+  export function getAllowInterruptions(): Promise<boolean> {
+    return getStoredValue("allowInterruptions", true);
+  }
+
   // Singleton class for caching user preferences
   class UserPreferenceCache {
     private static instance: UserPreferenceCache;
@@ -125,13 +129,22 @@ export module UserPreferenceModule {
         const cache = UserPreferenceCache.getInstance();
         cache.setCachedValue("autoSubmit", request.autoSubmit);
       }
+      if ("allowInterruptions" in request) {
+        const cache = UserPreferenceCache.getInstance();
+        cache.setCachedValue("allowInterruptions", request.allowInterruptions);
+      }
     });
   })();
 
   export function getCachedAutoSubmit(): boolean {
     const cache = UserPreferenceCache.getInstance();
     const cachedResult = cache.getCachedValue("autoSubmit", true);
-    console.debug("Cached autoSubmit value: ", cachedResult);
+    return cachedResult;
+  }
+
+  export function getCachedAllowInterruptions(): boolean {
+    const cache = UserPreferenceCache.getInstance();
+    const cachedResult = cache.getCachedValue("allowInterruptions", true);
     return cachedResult;
   }
 
@@ -139,6 +152,9 @@ export module UserPreferenceModule {
     const cache = UserPreferenceCache.getInstance();
     getAutoSubmit().then((value) => {
       cache.setCachedValue("autoSubmit", value);
+    });
+    getAllowInterruptions().then((value) => {
+      cache.setCachedValue("allowInterruptions", value);
     });
   }
 }
