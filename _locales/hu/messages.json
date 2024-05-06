@@ -229,5 +229,9 @@
       }
     },
     "description": "Üzenet, amely akkor jelenik meg, amikor a felhasználó elkezd beszélni, miközben az asszisztens beszél."
+  },
+  "allowInterruptions": {
+    "message": "Megszakítható",
+    "description": "Címke a jelölőnégyzethez, amely engedélyezi/tiltja, hogy a felhasználó megszakíthassa Pi válaszait beszéddel."
   }
 }

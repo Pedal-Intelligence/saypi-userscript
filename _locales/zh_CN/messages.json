@@ -229,5 +229,9 @@
       }
     },
     "description": "当用户在助手讲话时开始说话时显示的消息。"
+  },
+  "allowInterruptions": {
+    "message": "可中断的",
+    "description": "用于启用/禁用允许用户通过说话中断Pi回应的复选框标签。"
   }
 }

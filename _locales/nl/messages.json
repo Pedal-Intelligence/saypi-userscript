@@ -229,5 +229,9 @@
       }
     },
     "description": "Bericht weergegeven wanneer de gebruiker begint te spreken terwijl de assistent spreekt."
+  },
+  "allowInterruptions": {
+    "message": "Onderbreekbaar",
+    "description": "Label voor het selectievakje om het toestaan/verbieden van de gebruiker te activeren/deactiveren om Pi's antwoorden te onderbreken door te spreken."
   }
 }

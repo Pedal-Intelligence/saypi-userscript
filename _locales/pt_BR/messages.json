@@ -229,5 +229,9 @@
       }
     },
     "description": "Mensagem exibida quando o usuário começa a falar enquanto o assistente está falando."
+  },
+  "allowInterruptions": {
+    "message": "Interrompível",
+    "description": "Rótulo para a caixa de seleção para ativar/desativar a permissão do usuário de interromper as respostas do Pi falando."
   }
 }

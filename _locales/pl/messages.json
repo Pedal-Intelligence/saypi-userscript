@@ -229,5 +229,9 @@
       }
     },
     "description": "Wiadomość wyświetlana, gdy użytkownik zaczyna mówić, podczas gdy asystent mówi."
+  },
+  "allowInterruptions": {
+    "message": "Przerywalny",
+    "description": "Etykieta dla pola wyboru do włączania/wyłączania możliwości przerywania odpowiedzi Pi przez użytkownika poprzez mówienie."
   }
 }

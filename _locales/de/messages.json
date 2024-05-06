@@ -229,5 +229,9 @@
       }
     },
     "description": "Nachricht, die angezeigt wird, wenn der Benutzer zu sprechen beginnt, während der Assistent spricht."
+  },
+  "allowInterruptions": {
+    "message": "Unterbrechbar",
+    "description": "Beschriftung für das Kontrollkästchen zum Aktivieren/Deaktivieren der Möglichkeit, dass der Benutzer Pi's Antworten durch Sprechen unterbrechen kann."
   }
 }

@@ -229,5 +229,9 @@
       }
     },
     "description": "Thông điệp được hiển thị khi người dùng bắt đầu nói trong khi trợ lý đang nói."
+  },
+  "allowInterruptions": {
+    "message": "Có thể gián đoạn",
+    "description": "Nhãn cho hộp kiểm để bật/tắt cho phép người dùng gián đoạn câu trả lời của Pi bằng cách nói."
   }
 }
