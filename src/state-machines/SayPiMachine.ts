@@ -1080,7 +1080,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         meta
       ) => {
         const { state } = meta;
-        const autoSubmitEnabled = UserPreferenceModule.getCachedAutoSubmit();
+        const autoSubmitEnabled = userPreferences.getCachedAutoSubmit();
         return autoSubmitEnabled && readyToSubmit(state, context);
       },
       wasListening: (context: SayPiContext) => {
@@ -1090,7 +1090,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         return context.lastState === "inactive";
       },
       interruptionsAllowed: (context: SayPiContext) => {
-        return UserPreferenceModule.getCachedAllowInterruptions();
+        return userPreferences.getCachedAllowInterruptions();
       },
     },
     delays: {

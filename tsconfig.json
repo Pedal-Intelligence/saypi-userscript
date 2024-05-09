@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
+    "strictNullChecks": true,
     "outDir": "./public",
     "target": "ES6",
     "module": "ESNext", // Changed to ESNext for ES modules

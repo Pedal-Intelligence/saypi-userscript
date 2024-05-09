@@ -325,7 +325,7 @@ export function setDraftPrompt(transcript: string): void {
     "saypi-prompt"
   ) as HTMLTextAreaElement;
 
-  UserPreferenceModule.getAutoSubmit().then((autoSubmit) => {
+  userPreferences.getAutoSubmit().then((autoSubmit) => {
     if (autoSubmit) {
       textarea.setAttribute("placeholder", `${transcript}`);
     } else {
