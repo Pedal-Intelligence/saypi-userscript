@@ -77,7 +77,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "मूल - मैकबुक प्रो माइक्रोफ़ोन"
+        "example": "Default - MacBook Pro Microphone"
       }
     }
   },
@@ -97,7 +97,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "मूलभूत - एयरपॉड्स प्रो"
+        "example": "Default - AirPods Pro"
       }
     }
   },
@@ -191,5 +191,47 @@
   "extensionPopupTitle": {
     "description": "एक्सटेंशन के पॉपअप डायलॉग का शीर्षक।",
     "message": "Say, Pi"
+  },
+  "activityCheckButton": {
+    "description": "बटन का पाठ यह संकेत देने के लिए कि उपयोगकर्ता अभी भी मौजूद हैं.",
+    "message": "हाँ, मैं अभी भी यहाँ हूँ!"
+  },
+  "activityCheckMessage": {
+    "description": "जब वार्तालाप असामान्य रूप से लंबा होता है, तो प्रदर्शित करने के लिए संदेश।",
+    "message": "वाह, यह तो एक लंबी बातचीत है। क्या आप अभी भी वहां हैं, या हम स्वयं से ही बात कर रहे हैं?"
+  },
+  "assistantIsThinking": {
+    "message": "$chatbot$ सोच रहा है...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "सहायक अपना प्रतिक्रिया तैयार कर रहा हो, ऐसे समय में प्रदर्शित संदेश।"
+  },
+  "assistantIsSpeaking": {
+    "message": "$chatbot$ बोल रहा है...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "संदेश जो तब प्रदर्शित होता है जब सहायक अपना उत्तर कह रहा होता है।"
+  },
+  "userStartedInterrupting": {
+    "message": "आगे बढ़ो, $chatbot$ सुन रहा है...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "संदेश जो प्रदर्शित होता है जब उपयोगकर्ता सहायक के बोलने के समय बोलना शुरू करता है।"
+  },
+  "allowInterruptions": {
+    "message": "विच्छेदनीय",
+    "description": "चेकबॉक्स के लिए लेबल, जो पाई के प्रतिक्रियाओं को व्यवधान करने/ना करने की सुविधा देता है, जब माइक्रोसॉफ्ट समर्थन से बात करता है."
   }
 }

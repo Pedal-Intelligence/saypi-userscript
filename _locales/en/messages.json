@@ -123,6 +123,36 @@
       }
     }
   },
+  "assistantIsThinking": {
+    "message": "$chatbot$ is thinking...",
+    "description": "Message displayed when the assistant is preparing its response.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "assistantIsSpeaking": {
+    "message": "$chatbot$ is speaking...",
+    "description": "Message displayed when the assistant is speaking its response.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "userStartedInterrupting": {
+    "message": "Go ahead, $chatbot$ is listening...",
+    "description": "Message displayed when the user starts speaking while the assistant is speaking.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "toggleThemeToDarkMode": {
     "message": "Switch to dark mode",
     "description": "Label for the button to toggle to dark mode."
@@ -227,5 +257,17 @@
   "currentCharges": {
     "message": "Current charges",
     "description": "The term used to describe the current charges (running total) accrued by the user."
+  },
+  "activityCheckMessage": {
+    "message": "Wow, this is a long conversation. Are you still there, or are we talking to ourselves?",
+    "description": "The message to display when the conversation has been going on unusually long."
+  },
+  "activityCheckButton": {
+    "message": "Yes, I'm still here!",
+    "description": "The text of the button to indicate that the user is still present."
+  },
+  "allowInterruptions": {
+    "message": "Interruptible",
+    "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking."
   }
 }

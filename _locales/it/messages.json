@@ -77,7 +77,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "Predefinito - Microfono MacBook Pro"
+        "example": "Default - MacBook Pro Microphone"
       }
     }
   },
@@ -97,7 +97,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "Predefinito - AirPods Pro"
+        "example": "Default - AirPods Pro"
       }
     }
   },
@@ -191,5 +191,47 @@
   "extensionPopupTitle": {
     "description": "Il titolo della finestra popup dell'estensione.",
     "message": "Say, Pi"
+  },
+  "activityCheckButton": {
+    "description": "Il testo del pulsante per indicare che l'utente è ancora presente.",
+    "message": "Sì, sono ancora qui!"
+  },
+  "activityCheckMessage": {
+    "description": "Il messaggio da visualizzare quando la conversazione si protrae in modo insolitamente lungo.",
+    "message": "Wow, questa è una lunga conversazione. Sei ancora lì, o stiamo parlando da soli?"
+  },
+  "assistantIsThinking": {
+    "message": "$chatbot$ sta pensando...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "Messaggio visualizzato quando l'assistente sta preparando la sua risposta."
+  },
+  "assistantIsSpeaking": {
+    "message": "$chatbot$ sta parlando...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "Messaggio visualizzato quando l'assistente sta parlando la sua risposta."
+  },
+  "userStartedInterrupting": {
+    "message": "Vai avanti, $chatbot$ sta ascoltando...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "Messaggio visualizzato quando l'utente inizia a parlare mentre l'assistente sta parlando."
+  },
+  "allowInterruptions": {
+    "message": "Interrompibile",
+    "description": "Etichetta per la casella di controllo per abilitare/disabilitare l'opzione che consente all'utente di interrompere le risposte di Pi parlando."
   }
 }

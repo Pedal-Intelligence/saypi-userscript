@@ -126,11 +126,17 @@ const debouncedOnFrameProcessed = debounce(
   1000 / 60
 ); // 1000ms / 60 frames per second
 
+/**
+ * At min speech frames of 3, vad will start to detect speech after around 1 word
+ * At min speech frames of 5, vad will start to detect speech after around 2 words
+ * At min speech frames of 10, vad will start to detect speech after around 4 words
+ **/
+
 // Options for MicVAD
 const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
   workletURL: fullWorkletURL,
   positiveSpeechThreshold: 0.8,
-  minSpeechFrames: 5,
+  minSpeechFrames: 3,
   preSpeechPadFrames: 10,
   onSpeechStart: () => {
     console.log("Speech started");

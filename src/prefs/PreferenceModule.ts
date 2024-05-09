@@ -4,6 +4,7 @@ import {
   SpeechSynthesisVoiceRemote,
 } from "../tts/SpeechSynthesisModule";
 import AudioControlsModule from "../audio/AudioControlsModule";
+import EventBus from "../events/EventBus";
 
 type Preference = "speed" | "balanced" | "accuracy" | null;
 type VoicePreference = SpeechSynthesisVoiceRemote | null;
@@ -20,6 +21,39 @@ interface StorageResult {
 }
 
 class UserPreferenceModule {
+  // constructor
+  private cache!: UserPreferenceCache; // assigned in constructor
+
+  private UserPreferenceModule() {
+    this.initializeCache();
+  }
+  // Initialize the cache with UserPreferenceModule
+  private initializeCache() {
+    this.cache = UserPreferenceCache.getInstance();
+    this.reloadCache();
+    // Listen for changes in autoSubmit preference (by popup or options page)
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      if ("autoSubmit" in request) {
+        this.cache.setCachedValue("autoSubmit", request.autoSubmit);
+      }
+      if ("allowInterruptions" in request) {
+        this.cache.setCachedValue(
+          "allowInterruptions",
+          request.allowInterruptions
+        );
+      }
+    });
+  }
+
+  private reloadCache(): void {
+    this.getAutoSubmit().then((value) => {
+      this.cache.setCachedValue("autoSubmit", value);
+    });
+    this.getAllowInterruptions().then((value) => {
+      this.cache.setCachedValue("allowInterruptions", value);
+    });
+  }
+
   private static instance: UserPreferenceModule;
   public static getInstance(): UserPreferenceModule {
     if (!UserPreferenceModule.instance) {
@@ -80,6 +114,7 @@ class UserPreferenceModule {
         // If Chrome storage API is not supported, do nothing
         resolve();
       }
+      EventBus.emit("userPreferenceChanged", { theme: theme });
     });
   }
 
@@ -176,6 +211,45 @@ class UserPreferenceModule {
       });
     }
     return Promise.resolve();
+  }
+  public getAllowInterruptions(): Promise<boolean> {
+    return this.getStoredValue("allowInterruptions", true);
+  }
+
+  public getCachedAutoSubmit(): boolean {
+    const cachedResult = this.cache.getCachedValue("autoSubmit", true);
+    return cachedResult;
+  }
+
+  public getCachedAllowInterruptions(): boolean {
+    const cachedResult = this.cache.getCachedValue("allowInterruptions", true);
+    return cachedResult;
+  }
+}
+
+// Singleton class for caching user preferences
+class UserPreferenceCache {
+  private static instance: UserPreferenceCache;
+  private cache: Record<string, any>;
+
+  private constructor() {
+    this.cache = {}; // Initialize the cache
+  }
+
+  public static getInstance(): UserPreferenceCache {
+    if (!UserPreferenceCache.instance) {
+      UserPreferenceCache.instance = new UserPreferenceCache();
+    }
+    return UserPreferenceCache.instance;
+  }
+
+  public getCachedValue(key: string, defaultValue: any): any {
+    return this.cache.hasOwnProperty(key) ? this.cache[key] : defaultValue;
+  }
+
+  public setCachedValue(key: string, value: any): void {
+    this.cache[key] = value;
+    console.debug("Setting cache value: ", key, value);
   }
 }
 

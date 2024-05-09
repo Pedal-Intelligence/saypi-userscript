@@ -3,6 +3,11 @@ import { createMachine, assign } from "xstate";
 import AnalyticsService from "../AnalyticsModule";
 import { config } from "../ConfigModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
+import {
+  UserPromptModule,
+  AudibleNotificationsModule,
+} from "../NotificationsModule";
+import EventBus from "../events/EventBus";
 
 interface ValidatedConfig {
   GA_MEASUREMENT_ID: string;
@@ -36,6 +41,10 @@ const analytics = new AnalyticsService(
   valid_config.GA_ENDPOINT
 );
 const userPreferences = UserPreferenceModule.getInstance();
+
+const MESSAGE_COUNT_THRESHOLD = 50; // number of messages to trigger the long running session prompt
+const userPrompts = new UserPromptModule();
+const audibleNotifications = AudibleNotificationsModule.getInstance();
 
 interface SessionContext {
   session_id: string;
@@ -160,6 +169,20 @@ export const machine = createMachine<
             },
           },
         },
+        after: {
+          "7200000": {
+            target: "Active",
+            cond: {
+              type: "longRunningSession",
+            },
+            description:
+              "Prompt the user to confirm that the long running session is not headless.",
+            internal: true,
+            actions: {
+              type: "promptForSessionContinuation",
+            },
+          },
+        },
       },
     },
     schema: {
@@ -216,6 +239,9 @@ export const machine = createMachine<
           transcription_mode: transcriptionMode,
           language: language,
         });
+        EventBus.emit("saypi:session:assigned", {
+          session_id: context.session_id,
+        });
       },
       incrementMessageCount: assign({
         message_count: (context: SessionContext) => {
@@ -267,9 +293,22 @@ export const machine = createMachine<
           return updated_last_message;
         },
       }),
+      promptForSessionContinuation: (context: SessionContext, event) => {
+        // Prompt the user to confirm that the long running session is not headless
+        // This action can be used to trigger a notification or a dialog
+        console.log("Prompting user to continue the session");
+        const countdown = 60; // duration in seconds
+        userPrompts.activityCheck(countdown);
+        audibleNotifications.activityCheck(countdown);
+      },
     },
     services: {},
-    guards: {},
+    guards: {
+      longRunningSession: function (context: SessionContext, event) {
+        // Add your guard condition here
+        return context.message_count > MESSAGE_COUNT_THRESHOLD;
+      },
+    },
     delays: {},
   }
 );

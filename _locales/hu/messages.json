@@ -77,7 +77,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "Alapértelmezett - MacBook Pro Mikrofon"
+        "example": "Default - MacBook Pro Microphone"
       }
     }
   },
@@ -97,7 +97,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "Alapértelmezett - AirPods Pro"
+        "example": "Default - AirPods Pro"
       }
     }
   },
@@ -191,5 +191,47 @@
   "extensionPopupTitle": {
     "description": "A bővítmény felugró párbeszédablakának címe.",
     "message": "Say, Pi"
+  },
+  "activityCheckButton": {
+    "description": "A gomb szövege, amely jelzi, hogy a felhasználó még mindig jelen van.",
+    "message": "Igen, még mindig itt vagyok!"
+  },
+  "activityCheckMessage": {
+    "description": "Az üzenet, amely megjelenik, amikor a beszélgetés szokatlanul hosszú ideig tart.",
+    "message": "Hűha, ez egy hosszú beszélgetés. Még ott vagy, vagy csak magunkhoz beszélünk?"
+  },
+  "assistantIsThinking": {
+    "message": "$chatbot$ gondolkodik...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "Üzenet, amely akkor jelenik meg, amikor az asszisztens előkészíti a válaszát."
+  },
+  "assistantIsSpeaking": {
+    "message": "$chatbot$ beszél...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "Üzenet jelenik meg, amikor az asszisztens elmondja a válaszát."
+  },
+  "userStartedInterrupting": {
+    "message": "Folytassa, a $chatbot$ hallgat...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "Üzenet, amely akkor jelenik meg, amikor a felhasználó elkezd beszélni, miközben az asszisztens beszél."
+  },
+  "allowInterruptions": {
+    "message": "Megszakítható",
+    "description": "Címke a jelölőnégyzethez, amely engedélyezi/tiltja, hogy a felhasználó megszakíthassa Pi válaszait beszéddel."
   }
 }

@@ -23,7 +23,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "الافتراضي - ميكروفون MacBook Pro"
+        "example": "Default - MacBook Pro Microphone"
       }
     }
   },
@@ -43,7 +43,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "الإعدادات الافتراضية - AirPods Pro"
+        "example": "Default - AirPods Pro"
       }
     }
   },
@@ -191,5 +191,47 @@
   "extensionPopupTitle": {
     "description": "عنوان مربع الحوار المنبثق للإضافة.",
     "message": "Say, Pi"
+  },
+  "activityCheckButton": {
+    "description": "نص الزر للإشارة إلى أن المستخدم ما زال موجودًا.",
+    "message": "نعم، أنا ما زلت هنا!"
+  },
+  "activityCheckMessage": {
+    "description": "الرسالة التي يتم عرضها عندما تستمر المحادثة لفترة غير عادية.",
+    "message": "واو، هذه محادثة طويلة. هل أنت لا تزال هناك، أم أننا نتحدث إلى أنفسنا؟"
+  },
+  "assistantIsThinking": {
+    "message": "$chatbot$ يفكر...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "الرسالة المعروضة عندما يقوم المساعد بإعداد رده."
+  },
+  "assistantIsSpeaking": {
+    "message": "$chatbot$ يتحدث...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "الرسالة المعروضة عندما يتحدث المساعد برده."
+  },
+  "userStartedInterrupting": {
+    "message": "تفضل، $chatbot$ يستمع...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "رسالة تظهر عندما يبدأ المستخدم في الكلام بينما يتحدث المساعد."
+  },
+  "allowInterruptions": {
+    "message": "قابل للمقاطعة",
+    "description": "تسمية للمربع لتمكين / تعطيل السماح للمستخدم بقاطع ردود Pi عن طريق التحدث."
   }
 }

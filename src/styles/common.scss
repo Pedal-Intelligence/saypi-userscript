@@ -5,17 +5,24 @@
 }
 
 
-  .saypi-enter-button,
-  .saypi-exit-button {
-    width: 3rem;
-    height: 3rem;
-    padding: 6px;
-    border: 0;
-    z-index: 60;
-    svg path.inner {
-      color: rgb(13 60 38); /* text-primary-700 */
-    }
+.saypi-enter-button,
+.saypi-exit-button {
+  width: 3rem;
+  height: 3rem;
+  padding: 6px;
+  border: 0;
+  z-index: 60;
+  svg path.inner {
+    color: rgb(13 60 38); /* text-primary-700 */
   }
+}
+
+/* hide the control panel buttons on non-chat pages */
+.saypi-control-panel.overflow-hidden {
+  .saypi-control-button {
+    display: none;
+  }
+}
 
 
 #saypi-lock-panel {

@@ -77,7 +77,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "기본값 - MacBook Pro 마이크"
+        "example": "Default - MacBook Pro Microphone"
       }
     }
   },
@@ -97,7 +97,7 @@
     "placeholders": {
       "microphone": {
         "content": "$1",
-        "example": "기본값 - 에어팟 프로"
+        "example": "Default - AirPods Pro"
       }
     }
   },
@@ -191,5 +191,47 @@
   "extensionPopupTitle": {
     "description": "확장 프로그램의 팝업 대화 상자 제목.",
     "message": "Say, Pi"
+  },
+  "activityCheckButton": {
+    "description": "사용자가 아직 존재함을 나타내는 버튼의 텍스트",
+    "message": "네, 저는 여전히 여기 있습니다!"
+  },
+  "activityCheckMessage": {
+    "description": "대화가 평소보다 오래 지속될 때 표시할 메시지.",
+    "message": "와우, 이건 정말 긴 대화네요. 아직 계신가요, 아니면 우리가 혼자서 얘기하고 있는 건가요?"
+  },
+  "assistantIsThinking": {
+    "message": "$chatbot$이 생각 중입니다...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "조수가 응답을 준비하는 동안 표시되는 메시지."
+  },
+  "assistantIsSpeaking": {
+    "message": "$chatbot$이 말하고 있습니다...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "조수가 응답을 말하고 있을 때 표시되는 메시지."
+  },
+  "userStartedInterrupting": {
+    "message": "계속하세요, $chatbot$이 듣고 있습니다...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "사용자가 비서가 말하는 동안 말을 시작할 때 표시되는 메시지."
+  },
+  "allowInterruptions": {
+    "message": "중단 가능한",
+    "description": "사용자가 말함으로써 Pi의 응답을 중단할 수 있게 허용/비허용하는 체크박스를 위한 라벨."
   }
 }

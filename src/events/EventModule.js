@@ -12,6 +12,8 @@ const PI_FINISHED_SPEAKING = "saypi:piFinishedSpeaking";
 const VISIBLE = "saypi:visible";
 const AUDIO_DEVICE_CONNECTED = "saypi:audio:connected";
 const AUDIO_DEVICE_RECONNECT = "saypi:audio:reconnect";
+const END_CALL = "saypi:hangup";
+const SESSION_ASSIGNED = "saypi:session:assigned";
 
 /**
  * The EventModule translates events sent on the EventBus to StateMachine events,
@@ -33,39 +35,34 @@ export default class EventModule {
     );
   }
 
-  static simulateTyping(element, text) {
-    element.focus();
+  static typeTextAndSubmit = (element, text, submit) => {
+    EventModule.setNativeValue(element, text);
+    if (submit) EventBus.emit("saypi:autoSubmit");
+  };
 
-    // Define a regular expression to match sentence terminators, capturing them
+  static simulateTyping(element, text, submit = false) {
+    element.focus();
     const sentenceRegex = /([.!?。？！]+)/g;
     const tokens = text.split(sentenceRegex).filter(Boolean);
-
-    // Reassemble sentences with their terminators
     const sentences = [];
     for (let i = 0; i < tokens.length; i += 2) {
       const sentence = tokens[i] + (tokens[i + 1] || "");
       sentences.push(sentence);
     }
-
-    let i = 0;
-
-    const typeSentence = () => {
-      if (i < sentences.length) {
-        // Type the sentence and its immediate following terminator
-        EventModule.setNativeValue(element, element.value + sentences[i++]);
-        requestAnimationFrame(typeSentence);
+    const typeNextSentenceOrSubmit = () => {
+      if (sentences.length === 0) {
+        if (submit) EventBus.emit("saypi:autoSubmit");
       } else {
-        EventBus.emit("saypi:autoSubmit");
+        // Emit the event only after all sentences have been typed
+        const nextSentence = sentences.shift();
+        EventModule.setNativeValue(element, element.value + nextSentence);
+        requestAnimationFrame(typeNextSentenceOrSubmit);
       }
     };
-
-    if (sentences.length > 1) {
-      // If there are multiple sentences, proceed with sentence-wise typing
-      typeSentence();
+    if (sentences.length === 0) {
+      typeTextAndSubmit(element, text, submit);
     } else {
-      // If text does not contain recognisable sentence terminators, type it all at once
-      EventModule.setNativeValue(element, text);
-      EventBus.emit("saypi:autoSubmit");
+      typeNextSentenceOrSubmit();
     }
   }
 
@@ -96,6 +93,7 @@ export default class EventModule {
       USER_FINISHED_SPEAKING,
       AUDIO_DEVICE_CONNECTED,
       AUDIO_DEVICE_RECONNECT,
+      SESSION_ASSIGNED,
     ].forEach((eventName) => {
       EventBus.on(eventName, (detail) => {
         if (detail) {
@@ -111,6 +109,7 @@ export default class EventModule {
       PI_SPEAKING,
       PI_STOPPED_SPEAKING,
       PI_FINISHED_SPEAKING,
+      END_CALL,
     ].forEach((eventName) => {
       EventBus.on(eventName, () => {
         actor.send(eventName);
