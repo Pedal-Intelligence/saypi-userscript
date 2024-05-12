@@ -21,15 +21,17 @@ interface StorageResult {
 }
 
 class UserPreferenceModule {
-  // constructor
-  private cache!: UserPreferenceCache; // assigned in constructor
+  private cache: UserPreferenceCache = UserPreferenceCache.getInstance();
+
+  private static instance: UserPreferenceModule;
+  public static getInstance(): UserPreferenceModule {
+    if (!UserPreferenceModule.instance) {
+      UserPreferenceModule.instance = new UserPreferenceModule();
+    }
+    return UserPreferenceModule.instance;
+  }
 
   private UserPreferenceModule() {
-    this.initializeCache();
-  }
-  // Initialize the cache with UserPreferenceModule
-  private initializeCache() {
-    this.cache = UserPreferenceCache.getInstance();
     this.reloadCache();
     // Listen for changes in autoSubmit preference (by popup or options page)
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -52,14 +54,6 @@ class UserPreferenceModule {
     this.getAllowInterruptions().then((value) => {
       this.cache.setCachedValue("allowInterruptions", value);
     });
-  }
-
-  private static instance: UserPreferenceModule;
-  public static getInstance(): UserPreferenceModule {
-    if (!UserPreferenceModule.instance) {
-      UserPreferenceModule.instance = new UserPreferenceModule();
-    }
-    return UserPreferenceModule.instance;
   }
 
   /**
