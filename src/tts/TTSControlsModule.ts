@@ -102,6 +102,6 @@ export class TTSControlsModule {
     // wait a beat, then start streaming the utterance
     setTimeout(() => {
       this.speechSynthesis.speak(utterance);
-    }, 1000);
+    }, 0);
   }
 }

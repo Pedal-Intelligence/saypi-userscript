@@ -98,10 +98,13 @@ class ChatHistoryObserver extends BaseObserver {
           utterance.voice
         );
       }
-      this.ttsControlsModule.autoplaySpeech(utterance); // handle any errors
       this.observeChatMessageElement(
         messageContent || message.element,
-        utterance
+        utterance,
+        () => this.ttsControlsModule.autoplaySpeech(utterance),
+        () => {
+          console.debug("Speech stream ended");
+        }
       );
     }
   }
@@ -155,7 +158,9 @@ class ChatHistoryObserver extends BaseObserver {
 
   observeChatMessageElement(
     message: HTMLElement,
-    utterance: SpeechSynthesisUtteranceRemote
+    utterance: SpeechSynthesisUtteranceRemote,
+    onStart: () => void,
+    onEnd: () => void
   ): void {
     // If we're already observing an element, disconnect from it
     if (this.elementStream) {
@@ -168,14 +173,22 @@ class ChatHistoryObserver extends BaseObserver {
 
     this.elementStream.getStream().subscribe(
       (text) => {
+        let start = false;
         if (text.trim()) {
           const currentTime = Date.now();
           if (firstChunkTime === null) {
             firstChunkTime = currentTime;
+            start = true;
           }
           const delay = currentTime - (firstChunkTime as number);
           console.log(`${delay}ms, streamed text: "${text}"`);
-          this.speechSynthesis.addSpeechToStream(utterance.id, text);
+          this.speechSynthesis
+            .addSpeechToStream(utterance.id, text)
+            .then(() => {
+              if (start) {
+                onStart();
+              }
+            });
           utterance.text += text;
         }
       },
@@ -186,6 +199,9 @@ class ChatHistoryObserver extends BaseObserver {
         const totalTime = Date.now() - (firstChunkTime as number);
         console.log(`Element text stream complete after ${totalTime}ms`);
         this.speechSynthesis.endSpeechStream(utterance);
+        if (onEnd) {
+          onEnd();
+        }
       }
     );
   }

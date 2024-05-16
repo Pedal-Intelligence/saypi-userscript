@@ -5,10 +5,13 @@ import {
 } from "./SpeechSynthesisModule";
 
 export class TextToSpeechService {
+  private sequenceNumbers: { [key: string]: number } = {};
+
   public async getVoiceById(id: string): Promise<SpeechSynthesisVoiceRemote> {
     const response = await axios.get(`${this.serviceUrl}/voices/${id}`);
     return response.data;
   }
+
   public async getVoices(): Promise<SpeechSynthesisVoiceRemote[]> {
     const response = await axios.get(`${this.serviceUrl}/voices`);
     return response.data;
@@ -27,7 +30,6 @@ export class TextToSpeechService {
     lang: string,
     stream: boolean
   ): Promise<SpeechSynthesisUtteranceRemote> {
-    // Change the return type here
     const voice_id = voice.id;
     const data = { voice: voice_id, text: text, lang: lang };
     const baseUri = `${this.serviceUrl}/speak/${uuid}`;
@@ -43,7 +45,7 @@ export class TextToSpeechService {
       voice: voice,
       uri: uri,
     };
-    const response = await axios.post(uri, data);
+    const response = await axios.post(uri, data); // post creates, put updates
     if (![200, 201].includes(response.status)) {
       throw new Error("Failed to synthesize speech");
     }
@@ -54,9 +56,13 @@ export class TextToSpeechService {
     uuid: string,
     text: string
   ): Promise<void> {
-    const data = { text: text };
+    if (!this.sequenceNumbers[uuid]) {
+      this.sequenceNumbers[uuid] = 0;
+    }
+    const sequenceNumber = this.sequenceNumbers[uuid]++;
+    const data = { text: text, sequenceNumber: sequenceNumber };
     const uri = `${this.serviceUrl}/speak/${uuid}/stream`;
-    const response = await axios.post(uri, data);
+    const response = await axios.put(uri, data); // post creates, put updates
     if (![200, 201].includes(response.status)) {
       throw new Error("Failed to add text to speech stream");
     }

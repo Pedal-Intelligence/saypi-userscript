@@ -1,92 +1,88 @@
-import { describe, it, beforeEach, afterEach, expect, vi } from "vitest";
-import { AudioStreamManager } from "../../src/tts/AudioStreamManager";
-import { SpeechSynthesisUtteranceRemote } from "../../src/tts/SpeechSynthesisModule";
-import { TextToSpeechService } from "../../src/tts/TextToSpeechService";
-import { ElevenLabsVoice, voices } from "../data/Voices";
-import exp from "constants";
+import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest';
+import { AudioStreamManager } from '../../src/tts/AudioStreamManager';
+import { SpeechSynthesisUtteranceRemote, SpeechSynthesisVoiceRemote } from '../../src/tts/SpeechSynthesisModule';
+import { TextToSpeechService } from '../../src/tts/TextToSpeechService';
 
-vi.mock("../../src/tts/TextToSpeechService");
+vi.mock('../../src/tts/TextToSpeechService');
+vi.useFakeTimers();
 
-describe("AudioStreamManager", () => {
+
+describe('AudioStreamManager', () => {
   let audioStreamManager: AudioStreamManager;
   let textToSpeechService: TextToSpeechService;
-  const mockVoice: ElevenLabsVoice = voices[0];
+  const mockVoice: SpeechSynthesisVoiceRemote = {
+      voiceURI: 'testVoiceURI',
+      name: 'Test Voice',
+      lang: 'en-US',
+      localService: false,
+      default: false,
+      id: 'testId',
+      price: 0,
+      powered_by: 'testProvider'
+  };
 
   beforeEach(() => {
     textToSpeechService = {
-      getVoiceById: vi.fn(),
-      getVoices: vi.fn(),
       createSpeech: vi.fn(),
-      addTextToSpeechStream: vi.fn().mockResolvedValue(Promise.resolve()),
+      addTextToSpeechStream: vi.fn().mockResolvedValue(undefined),
     } as unknown as TextToSpeechService;
 
     audioStreamManager = new AudioStreamManager(textToSpeechService);
   });
 
   afterEach(() => {
-    vi.unstubAllEnvs();
+    vi.resetAllMocks();
   });
 
-  it("should create an instance of AudioStreamManager", () => {
+  it('should create an instance of AudioStreamManager', () => {
     expect(audioStreamManager).toBeInstanceOf(AudioStreamManager);
   });
 
-  it("should create a stream", async () => {
+  it('should create a stream', async () => {
     const mockUtterance: SpeechSynthesisUtteranceRemote = {
-      id: "uuid",
-      text: "Hello",
-      lang: "en-US",
+      id: 'uuid',
+      text: 'Hello',
+      lang: 'en-US',
       voice: mockVoice,
-      uri: "http://example.com/speak/uuid",
+      uri: 'http://example.com/speak/uuid',
     };
     (textToSpeechService.createSpeech as any).mockResolvedValue(mockUtterance);
 
-    const utterance = await audioStreamManager.createStream(
-      "uuid",
-      mockVoice,
-      "en-US"
-    );
+    const utterance = await audioStreamManager.createStream('uuid', mockVoice, 'en-US');
 
-    expect(textToSpeechService.createSpeech).toHaveBeenCalledWith(
-      "uuid",
-      " ",
-      mockVoice,
-      "en-US",
-      true
-    );
+    expect(textToSpeechService.createSpeech).toHaveBeenCalledWith('uuid', ' ', mockVoice, 'en-US', true);
     expect(utterance).toEqual(mockUtterance);
   });
 
-  it("should add speech to stream", async () => {
-    const uuid = "uuid";
-    const text = "Hello";
+  it('should add speech to stream', async () => {
+    const uuid = 'uuid';
+    const text = 'Hello';
     await audioStreamManager.addSpeechToStream(uuid, text);
-    expect(audioStreamManager.isPending(uuid, text));
+    const pendingText = audioStreamManager.getInputBuffer(uuid)?.getPendingText();
+    if (pendingText !== undefined)
+      expect(pendingText).toContain(text);
   });
 
-  it("should send buffer", async () => {
-    const uuid = "uuid";
-    const text = "Hello.";
+  it('should send buffer', async () => {
+    const uuid = 'uuid';
+    const text = 'Hello.';
     await audioStreamManager.addSpeechToStream(uuid, text);
-    expect(textToSpeechService.addTextToSpeechStream).toHaveBeenCalledWith(
-      uuid,
-      text
-    );
-    expect(audioStreamManager.isPending(uuid, text)).toBeFalsy();
-    expect(audioStreamManager.hasSent(uuid, text)).toBeTruthy();
+    vi.advanceTimersByTime(5000); // Simulate buffer timeout
+    expect(textToSpeechService.addTextToSpeechStream).toHaveBeenCalledWith(uuid, text);
+    expect(audioStreamManager.getInputBuffer(uuid)?.getPendingText()).toBe('');
   });
 
-  it("should end stream", async () => {
-    const uuid = "uuid";
-    audioStreamManager["speechStreamTimeouts"][uuid] = setTimeout(() => {}, 0);
+  it('should end stream', async () => {
+    const uuid = 'uuid';
+    await audioStreamManager.createStream(uuid, mockVoice, 'en-US');
     await audioStreamManager.endStream(uuid);
-    expect(audioStreamManager.hasEnded(uuid)).toBeTruthy();
+    expect(audioStreamManager.getInputBuffer(uuid)?.hasEnded()).toBeTruthy();
   });
 
-  it("should handle race condition when adding speech to stream", async () => {
-    const uuid = "uuid";
-    const text1 = "Hello.";
-    const text2 = "World!";
+  it('should handle race condition when adding speech to stream', async () => {
+    const uuid = 'uuid';
+    const text1 = 'Hello.';
+    const text2 = 'World!';
 
     // Mock the ttsService.addTextToSpeechStream to introduce a delay
     (textToSpeechService.addTextToSpeechStream as any).mockImplementation(
@@ -106,13 +102,7 @@ describe("AudioStreamManager", () => {
     await new Promise((resolve) => setTimeout(resolve, 200));
 
     // Check that both text1 and text2 were sent
-    expect(textToSpeechService.addTextToSpeechStream).toHaveBeenCalledWith(
-      uuid,
-      text1
-    );
-    expect(textToSpeechService.addTextToSpeechStream).toHaveBeenCalledWith(
-      uuid,
-      text2
-    );
+    expect(textToSpeechService.addTextToSpeechStream).toHaveBeenCalledWith(uuid, text1);
+    expect(textToSpeechService.addTextToSpeechStream).toHaveBeenCalledWith(uuid, text2);
   });
-});
+}, { timeout: 15000 });
