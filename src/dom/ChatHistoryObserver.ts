@@ -101,7 +101,7 @@ class ChatHistoryObserver extends BaseObserver {
       this.observeChatMessageElement(
         messageContent || message.element,
         utterance,
-        () => this.ttsControlsModule.autoplaySpeech(utterance),
+        () => this.ttsControlsModule.autoplaySpeech(utterance, 200),
         () => {
           console.debug("Speech stream ended");
         }

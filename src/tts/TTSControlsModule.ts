@@ -95,13 +95,14 @@ export class TTSControlsModule {
   }
 
   /**
-   * Is this function necessary? See AudioModule.js
-   * @param utterance
+   * Start streaming the utterance's audio output immediately
+   * @param utterance The utterance to stream
+   * @param delayMs The number of milliseconds to wait before starting the stream
    */
-  autoplaySpeech(utterance: SpeechSynthesisUtteranceRemote) {
+  autoplaySpeech(utterance: SpeechSynthesisUtteranceRemote, delayMs = 0) {
     // wait a beat, then start streaming the utterance
     setTimeout(() => {
       this.speechSynthesis.speak(utterance);
-    }, 0);
+    }, delayMs);
   }
 }

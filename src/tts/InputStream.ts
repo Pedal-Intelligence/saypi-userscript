@@ -1,5 +1,3 @@
-import { time } from "console";
-import { over } from "lodash";
 import { Observable, ReplaySubject, Subject } from "rxjs";
 
 export const ELEMENT_TEXT_STREAM_TIMEOUT_DURATION_MILLIS: number = 8000; // visible for testing
