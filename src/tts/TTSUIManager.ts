@@ -130,7 +130,9 @@ export class TextToSpeechUIManager {
             ) {
               voiceMenu.classList.add("expanded");
               // mark the selected voice each time the menu is expanded (because pi.ai recreates the menu each time)
-              this.addVoicesToMenu(voiceMenu);
+              this.userPreferences.getTextToSpeechEnabled().then((enabled) => {
+                if (enabled) this.addVoicesToMenu(voiceMenu);
+              });
               this.registerVoiceChangeHandler(voiceMenu);
             }
           }

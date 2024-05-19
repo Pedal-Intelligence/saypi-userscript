@@ -269,5 +269,9 @@
   "allowInterruptions": {
     "message": "Interruptible",
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking."
+  },
+  "enableTTS": {
+    "message": "Custom voices",
+    "description": "Label for the checkbox to enable/disable text-to-speech."
   }
 }

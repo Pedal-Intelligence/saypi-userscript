@@ -157,17 +157,23 @@
         </label>
       </div>
       <div
-      class="user-preference-item w-full max-w-lg"
-      id="allow-interruptions-preference"
-    >
-      <label class="wraper" for="allow-interruptions">
-        <span class="label-text" data-i18n="allowInterruptions">Interruptible</span>
-        <div class="switch-wrap control">
-          <input type="checkbox" id="allow-interruptions" name="allowInterruptions" />
-          <div class="switch"></div>
-        </div>
-      </label>
-    </div>
+        class="user-preference-item w-full max-w-lg"
+        id="allow-interruptions-preference"
+      >
+        <label class="wraper" for="allow-interruptions">
+          <span class="label-text" data-i18n="allowInterruptions"
+            >Interruptible</span
+          >
+          <div class="switch-wrap control">
+            <input
+              type="checkbox"
+              id="allow-interruptions"
+              name="allowInterruptions"
+            />
+            <div class="switch"></div>
+          </div>
+        </label>
+      </div>
       <div
         class="user-preference-item w-full max-w-lg"
         id="analytics-consent-preference-item"
@@ -184,6 +190,24 @@
       </div>
     </section>
 
+    <!-- Controls for testing and development -->
+    <section id="devtools">
+      <div class="user-preference-item w-full max-w-lg x-hidden beta">
+        <label class="wraper" for="enable-tts">
+          <span class="label-text" data-i18n="enableTTS">Custom voices </span>
+          <div class="switch-wrap control">
+            <input type="checkbox" id="enable-tts" name="enableTTS" />
+            <div class="switch"></div>
+          </div>
+        </label>
+      </div>
+      <div class="user-preference-item w-full max-w-lg x-hidden">
+        <button type="button" id="clear-preferences" class="btn btn-primary">
+          Clear Preferences
+        </button>
+      </div>
+    </section>
+
     <section id="usage">
       <div class="usage-charges-item w-full max-w-lg">
         <span class="label" data-i18n="currentCharges">Current charges</span>
@@ -191,15 +215,6 @@
           <span class="currency">&dollar;</span
           ><span class="value" id="current-charges-numeric">0</span>
         </div>
-      </div>
-    </section>
-
-    <!-- Controls for testing and development -->
-    <section id="devtools">
-      <div class="user-preference-item w-full max-w-lg x-hidden">
-        <button type="button" id="clear-preferences" class="btn btn-primary">
-          Clear Preferences
-        </button>
       </div>
     </section>
 

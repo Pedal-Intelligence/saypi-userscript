@@ -17,3 +17,10 @@
 #language-preference {
   display: block;
 }
+
+.beta {
+  background-image: url("beta.svg");
+  background-repeat: no-repeat;
+  background-position-x: left;
+  padding-left: 2.5em !important;
+}

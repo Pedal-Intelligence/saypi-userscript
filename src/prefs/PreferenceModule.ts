@@ -210,6 +210,10 @@ class UserPreferenceModule {
     return this.getStoredValue("allowInterruptions", true);
   }
 
+  public getTextToSpeechEnabled(): Promise<boolean> {
+    return this.getStoredValue("enableTTS", true);
+  }
+
   public getCachedAutoSubmit(): boolean {
     const cachedResult = this.cache.getCachedValue("autoSubmit", true);
     return cachedResult;

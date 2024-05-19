@@ -215,6 +215,25 @@ document.addEventListener("DOMContentLoaded", function () {
         this.parentElement.classList.remove("checked");
       }
     });
+
+    const enableTTSInput = document.getElementById("enable-tts");
+    getStoredValue("enableTTS", true).then((enableTTS) => {
+      selectInput(enableTTSInput, enableTTS);
+    });
+
+    enableTTSInput.addEventListener("change", function () {
+      chrome.storage.sync.set({ enableTTS: this.checked }, function () {
+        console.log(
+          "Preference saved: Text-to-speech is " +
+            (enableTTSInput.checked ? "on" : "off")
+        );
+      });
+      if (this.checked) {
+        this.parentElement.classList.add("checked");
+      } else {
+        this.parentElement.classList.remove("checked");
+      }
+    });
   }
 
   function hideAll(sections) {
