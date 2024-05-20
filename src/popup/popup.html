@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="consent.css" />
     <link rel="stylesheet" href="preferences.css" />
     <link rel="stylesheet" href="usage.css" />
+    <link rel="stylesheet" href="beta.css" />
     <style>
       body {
         flex-wrap: wrap;
@@ -190,33 +191,38 @@
       </div>
     </section>
 
-    <!-- Controls for testing and development -->
-    <section id="devtools">
-      <div class="user-preference-item w-full max-w-lg x-hidden beta">
-        <label class="wraper" for="enable-tts">
-          <span class="label-text" data-i18n="enableTTS">Custom voices </span>
-          <div class="switch-wrap control">
-            <input type="checkbox" id="enable-tts" name="enableTTS" />
-            <div class="switch"></div>
-          </div>
-        </label>
-      </div>
-      <div class="user-preference-item w-full max-w-lg x-hidden">
-        <button type="button" id="clear-preferences" class="btn btn-primary">
-          Clear Preferences
-        </button>
-      </div>
-    </section>
-
-    <section id="usage">
-      <div class="usage-charges-item w-full max-w-lg">
-        <span class="label" data-i18n="currentCharges">Current charges</span>
-        <div id="current-charges" class="value balance">
-          <span class="currency">&dollar;</span
-          ><span class="value" id="current-charges-numeric">0</span>
+    <div class="pre-release">
+      <section id="voice">
+        <div class="user-preference-item w-full max-w-lg x-hidden beta">
+          <label class="wraper" for="enable-tts">
+            <span class="label-text" data-i18n="enableTTS">Custom voices </span>
+            <div class="switch-wrap control">
+              <input type="checkbox" id="enable-tts" name="enableTTS" />
+              <div class="switch"></div>
+            </div>
+          </label>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section id="usage">
+        <div class="usage-charges-item w-full max-w-lg">
+          <span class="label" data-i18n="currentCharges">Current charges</span>
+          <div id="current-charges" class="value balance">
+            <span class="currency">&dollar;</span
+            ><span class="value" id="current-charges-numeric">0</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Controls for testing and development -->
+      <section id="devtools">
+        <div class="user-preference-item w-full max-w-lg x-hidden">
+          <button type="button" id="clear-preferences" class="btn btn-primary">
+            Clear Preferences
+          </button>
+        </div>
+      </section>
+    </div>
 
     <section id="analytics-consent" class="hidden">
       <h1 data-i18n="consentBetterTogether">Let's improve Say, Pi together</h1>

@@ -1,0 +1,24 @@
+.pre-release {
+    /* for features that are not yet released */
+    background-image: url("sketch.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.beta {
+    background-image: url("beta.svg");
+    background-repeat: no-repeat;
+    background-position-x: left;
+    padding-left: 2.5em !important;
+  }
+
+button#clear-preferences {
+    width: 100%;
+    text-align: left;
+    background-image: url("trash.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position-x: right;
+    padding-right: 2em;
+    margin-right: 0.3em;
+}
