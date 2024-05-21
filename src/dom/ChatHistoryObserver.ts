@@ -9,7 +9,6 @@ import { Observation } from "./Observation";
 
 class AssistantResponse {
   private _element: HTMLElement;
-  private utteranceId: string | null = null;
 
   constructor(element: HTMLElement) {
     this._element = element;
@@ -24,13 +23,16 @@ class AssistantResponse {
     return this._element;
   }
 
+  get utteranceId(): string | null {
+    return this._element.dataset.utteranceId || null;
+  }
+
   get isTTSEnabled(): boolean {
     return this.utteranceId !== null;
   }
 
-  enableTTS(utteranceId: string): void {
-    this.utteranceId = utteranceId;
-    this._element.dataset.utteranceId = utteranceId;
+  enableTTS(utterance: SpeechSynthesisUtteranceRemote): void {
+    this._element.dataset.utteranceId = utterance.id;
   }
 }
 
@@ -61,11 +63,13 @@ class ChatHistoryObserver extends BaseObserver {
   }
 
   // Chat history and automatic speech functionality
-  async assistantChatMessageAdded(message: AssistantResponse): Promise<void> {
+  async streamSpeechFromNewAssistantMessage(
+    message: AssistantResponse
+  ): Promise<SpeechSynthesisUtteranceRemote | null> {
     const isEnabled = await this.speechSynthesis.isEnabled();
     if (isEnabled) {
       const utterance = await this.speechSynthesis.createSpeechStream();
-      message.enableTTS(utterance.id);
+      message.enableTTS(utterance);
       console.log("Created audio stream", utterance.id);
       const initialText = message.text;
       // send the initial text to the stream only if it's not empty
@@ -74,29 +78,9 @@ class ChatHistoryObserver extends BaseObserver {
         this.speechSynthesis.addSpeechToStream(utterance.id, initialText);
       }
       let messageContent: HTMLElement | null = null;
-      let hoverMenu: HTMLDivElement | null = null;
-      let ttsControlsElement: HTMLElement | null = null;
       if (message.element.children.length > 0) {
         messageContent = message.element.children[0] as HTMLElement;
         messageContent.classList.add("message-content");
-      }
-      if (message.element.children.length > 1) {
-        hoverMenu = message.element.children[1] as HTMLDivElement;
-        hoverMenu.classList.add("message-hover-menu");
-        if (hoverMenu.children.length > 0) {
-          const createThreadButton = hoverMenu.children[0] as HTMLDivElement;
-          createThreadButton.classList.add("create-thread-button");
-        }
-        ttsControlsElement = document.createElement("div");
-        ttsControlsElement.id = `saypi-tts-controls-${utterance.id}`;
-        ttsControlsElement.classList.add("saypi-tts-controls", "pt-4");
-        hoverMenu.appendChild(ttsControlsElement);
-        this.ttsControlsModule.addSpeechButton(utterance, ttsControlsElement);
-        this.ttsControlsModule.addCostBasis(
-          ttsControlsElement,
-          utterance.text.length,
-          utterance.voice
-        );
       }
       this.observeChatMessageElement(
         messageContent || message.element,
@@ -106,7 +90,9 @@ class ChatHistoryObserver extends BaseObserver {
           console.debug("Speech stream ended");
         }
       );
+      return utterance;
     }
+    return null;
   }
 
   static findAssistantResponse(searchRoot: Element): Observation {
@@ -133,9 +119,38 @@ class ChatHistoryObserver extends BaseObserver {
     return Observation.notFound("");
   }
 
-  static decorateAssistantResponse(element: HTMLElement): AssistantResponse {
-    const message = new AssistantResponse(element);
-    return message;
+  /**
+   * Decorates the assistant response with speech functionality
+   */
+  decorateAssistantResponseWithSpeech(
+    message: AssistantResponse,
+    utterance: SpeechSynthesisUtteranceRemote
+  ): void {
+    if (message.isTTSEnabled) {
+      return; // already decorated
+    }
+    message.enableTTS(utterance);
+
+    let hoverMenu: HTMLDivElement | null = null;
+    let ttsControlsElement: HTMLElement | null = null;
+    if (message.element.children.length > 1) {
+      hoverMenu = message.element.children[1] as HTMLDivElement;
+      hoverMenu.classList.add("message-hover-menu");
+      if (hoverMenu.children.length > 0) {
+        const createThreadButton = hoverMenu.children[0] as HTMLDivElement;
+        createThreadButton.classList.add("create-thread-button");
+      }
+      ttsControlsElement = document.createElement("div");
+      ttsControlsElement.id = `saypi-tts-controls-${utterance.id}`;
+      ttsControlsElement.classList.add("saypi-tts-controls", "pt-4");
+      hoverMenu.appendChild(ttsControlsElement);
+      this.ttsControlsModule.addSpeechButton(utterance, ttsControlsElement);
+      this.ttsControlsModule.addCostBasis(
+        ttsControlsElement,
+        utterance.text.length,
+        utterance.voice
+      );
+    }
   }
 
   async findAndDecorateAssistantResponse(
@@ -146,10 +161,11 @@ class ChatHistoryObserver extends BaseObserver {
       console.log("Found assistant message", obs.target);
     }
     if (obs.found && obs.isNew && !obs.decorated) {
-      const message = ChatHistoryObserver.decorateAssistantResponse(
-        obs.target as HTMLElement
-      );
-      await this.assistantChatMessageAdded(message);
+      const message = new AssistantResponse(obs.target as HTMLElement);
+      const utterance = await this.streamSpeechFromNewAssistantMessage(message);
+      if (utterance) {
+        this.decorateAssistantResponseWithSpeech(message, utterance);
+      }
     }
     return Observation.decorated(obs);
   }

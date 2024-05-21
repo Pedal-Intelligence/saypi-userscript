@@ -8,7 +8,10 @@ import { Chatbot } from "../chatbots/Chatbot";
 import { BillingModule } from "../billing/BillingModule";
 import EventBus from "../events/EventBus";
 import { TTSControlsModule } from "./TTSControlsModule";
-import { ChatHistoryObserver } from "../dom/ChatHistoryObserver";
+import {
+  AssistantResponse,
+  ChatHistoryObserver,
+} from "../dom/ChatHistoryObserver";
 
 export class TextToSpeechUIManager {
   private billingModule = BillingModule.getInstance();
@@ -309,7 +312,25 @@ export class TextToSpeechUIManager {
     this.billingModule.charge(utterance);
   }
 
-  async registerChatHistoryListener(): Promise<void> {
+  associateWithChatHistory(
+    chatHistoryObserver: ChatHistoryObserver,
+    utterance: SpeechSynthesisUtteranceRemote
+  ): void {
+    // get most recent message in chat history
+    const assistantMessages = document.querySelectorAll(".assistant-message");
+    if (assistantMessages.length > 0) {
+      const lastAssistantMessage = assistantMessages[
+        assistantMessages.length - 1
+      ] as HTMLElement;
+      const assistantMessage = new AssistantResponse(lastAssistantMessage);
+      chatHistoryObserver.decorateAssistantResponseWithSpeech(
+        assistantMessage,
+        utterance
+      );
+    }
+  }
+
+  registerChatHistoryListener(): ChatHistoryObserver {
     const chatHistoryObserver = new ChatHistoryObserver(
       "#saypi-chat-history-present-messages",
       SpeechSynthesisModule.getInstance()
@@ -319,9 +340,18 @@ export class TextToSpeechUIManager {
       subtree: true,
       attributes: true,
     }); // would be more efficient to observe only the direct children of the chat history, but this is more robust
+    return chatHistoryObserver;
   }
 
-  registerEndOfStreamListeners(): void {
+  registerSpeechStreamListeners(observer: ChatHistoryObserver): void {
+    EventBus.on(
+      "saypi:tts:speechStreamStarted",
+      (utterance: SpeechSynthesisUtteranceRemote) => {
+        if (utterance) {
+          this.associateWithChatHistory(observer, utterance);
+        }
+      }
+    );
     EventBus.on(
       "saypi:tts:speechStreamEnded",
       (utterance: SpeechSynthesisUtteranceRemote) => {
@@ -339,7 +369,7 @@ export class TextToSpeechUIManager {
     this.restyleVoiceMenuControls();
     this.addVoiceMenuExpansionListener();
     this.addVoiceButtonAdditionListener();
-    this.registerChatHistoryListener();
-    this.registerEndOfStreamListeners();
+    const observer = this.registerChatHistoryListener();
+    this.registerSpeechStreamListeners(observer);
   }
 }

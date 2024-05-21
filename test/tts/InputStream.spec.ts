@@ -6,7 +6,6 @@ import {
   ELEMENT_TEXT_STREAM_TIMEOUT_DURATION_MILLIS,
   getNestedText,
 } from "../../src/tts/InputStream";
-import { interval } from "rxjs";
 
 let dom: JSDOM;
 let element: HTMLElement;

@@ -1,6 +1,10 @@
 import { createMachine, assign, actions } from "xstate";
 import EventBus from "../events/EventBus.js";
-import { ConnectableObservable } from "rxjs";
+import {
+  PiSpeechSourceParser,
+  SpeechSynthesisUtteranceRemote,
+} from "../tts/SpeechSynthesisModule";
+import { UserPreferenceModule } from "../prefs/PreferenceModule";
 const { log } = actions;
 
 type LoadstartEvent = { type: "loadstart"; source: string };
@@ -79,9 +83,7 @@ export const audioOutputMachine = createMachine(
         },
       },
       loading: {
-        entry: log(
-          (context, event: LoadstartEvent) => `Loading ${event.source}`
-        ),
+        entry: [{ type: "notifySpeechStart" }],
         on: {
           loadedmetadata: {
             target: "loaded",
@@ -178,6 +180,16 @@ export const audioOutputMachine = createMachine(
         EventBus.emit("audio:skipCurrent");
         console.log("Skipping current audio track.");
       },
+      notifySpeechStart: (context, event: LoadstartEvent) => {
+        const speech = getSpeechFromAudioSource(event.source).then((speech) => {
+          if (speech) {
+            EventBus.emit("saypi:tts:speechStreamStarted", speech);
+            console.debug(
+              `Pi started speaking as ${speech.voice.name} by ${speech.voice.powered_by}`
+            );
+          }
+        });
+      },
     },
     guards: {
       shouldSkip: (context, event: AudioOutputEvent) => {
@@ -185,7 +197,7 @@ export const audioOutputMachine = createMachine(
           event = event as LoadstartEvent;
 
           return (
-            !audioSourcedFromProvider(event, context.provider) ||
+            !isAudioSourcedFromProvider(event.source, context.provider) ||
             context.skip === true
           );
         }
@@ -196,11 +208,11 @@ export const audioOutputMachine = createMachine(
     delays: {},
   }
 );
-function audioSourcedFromProvider(
-  loadstart: LoadstartEvent,
+function isAudioSourcedFromProvider(
+  source: string,
   audioProvider: string
 ): boolean {
-  const domain = new URL(loadstart.source).hostname;
+  const domain = new URL(source).hostname;
   const match = domain === audioProvider;
   if (!match) {
     console.log(
@@ -208,4 +220,20 @@ function audioSourcedFromProvider(
     );
   }
   return match;
+}
+async function getSpeechFromAudioSource(
+  source: string
+): Promise<SpeechSynthesisUtteranceRemote | null> {
+  try {
+    if (isAudioSourcedFromProvider(source, "pi.ai")) {
+      const userPreferences = UserPreferenceModule.getInstance();
+      const userLang = await userPreferences.getLanguage();
+      return new PiSpeechSourceParser(userLang).parse(source);
+    }
+  } catch (error) {
+    console.error(
+      `Failed to get speech from audio source: ${(error as Error).message}`
+    );
+  }
+  return null;
 }

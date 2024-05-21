@@ -4,7 +4,6 @@ import AudioControlsModule from "../audio/AudioControlsModule";
 import { AudioStreamManager } from "./AudioStreamManager";
 import { TextToSpeechService } from "./TextToSpeechService";
 import EventBus from "../events/EventBus";
-import AudioModule from "../audio/AudioModule";
 
 function generateUUID(): string {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -27,6 +26,54 @@ interface SpeechSynthesisVoiceRemote extends SpeechSynthesisVoice {
   id: string;
   price: number; // price per 1000 characters
   powered_by: string;
+}
+
+class PiSpeechSourceParser {
+  lang: string;
+
+  constructor(default_lang: string = "en") {
+    this.lang = default_lang;
+  }
+
+  public parse(source: string): SpeechSynthesisUtteranceRemote {
+    let url;
+    try {
+      url = new URL(source);
+    } catch (_) {
+      throw new Error(`Invalid source: ${source} is not a valid URL.`);
+    }
+
+    const params = url.searchParams;
+    const messageSid = params.get("messageSid");
+    const voiceId = params.get("voice");
+
+    if (!messageSid || !voiceId) {
+      throw new Error(
+        `Invalid source: ${source} does not contain required parameters.`
+      );
+    }
+
+    const voiceNumber = voiceId.slice(-1);
+
+    const theVoice: SpeechSynthesisVoiceRemote = {
+      id: voiceId,
+      name: `Pi ${voiceNumber}`,
+      lang: this.lang,
+      localService: false,
+      default: true,
+      price: 0,
+      powered_by: "inflection.ai",
+      voiceURI: "", // inflection.ai doesn't provide this
+    };
+
+    return {
+      id: messageSid,
+      text: "", // not available from the audio source
+      lang: this.lang,
+      uri: source,
+      voice: theVoice,
+    };
+  }
 }
 
 function getUtteranceURI(utterance: SpeechSynthesisUtteranceRemote): string {
@@ -199,4 +246,5 @@ export {
   SpeechSynthesisUtteranceRemote,
   SpeechSynthesisVoiceRemote,
   SpeechSynthesisModule,
+  PiSpeechSourceParser,
 };
