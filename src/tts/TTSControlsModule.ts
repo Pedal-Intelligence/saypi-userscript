@@ -51,10 +51,19 @@ export class TTSControlsModule {
     const currency = getMessage("currencyUSDAbbreviation");
     const costElement = document.createElement("div");
     costElement.classList.add("text-sm", "text-neutral-500", "saypi-cost");
-    costElement.title = getMessage("ttsCostExplanation", [
-      cost.toFixed(2),
-      currency,
-    ]);
+    if (cost > 0) {
+      costElement.title = getMessage("ttsCostExplanation", [
+        cost.toFixed(2),
+        currency,
+      ]);
+    } else {
+      costElement.title = getMessage(
+        "ttsCostExplanationFree",
+        voice.powered_by // should really be voice.provided_by, but I don't have that field yet
+      );
+      costElement.classList.add("cost-free");
+    }
+
     costElement.innerHTML = `Cost: $<span class="value">${cost.toFixed(
       2
     )}</span>`;

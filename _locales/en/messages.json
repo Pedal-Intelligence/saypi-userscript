@@ -228,7 +228,7 @@
   },
   "ttsCostExplanation": {
     "message": "The cost of listening to this message is $cost$ $currency$",
-    "description": "The message to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
+    "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -237,6 +237,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      }
+    }
+  },
+  "ttsCostExplanationFree": {
+    "message": "This audio was generated free of charge by $provider$.",
+    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free.",
+    "placeholders": {
+      "provider": {
+        "content": "$1",
+        "example": "Inflection AI"
       }
     }
   },
