@@ -4,13 +4,17 @@ import {
   SpeechSynthesisUtteranceRemote,
 } from "../../src/tts/SpeechSynthesisModule";
 import { TTSControlsModule } from "../../src/tts/TTSControlsModule";
-import { ChatHistoryObserver } from "../../src/dom/ChatHistoryObserver";
+import {
+  AssistantResponse,
+  ChatHistoryObserver,
+} from "../../src/dom/ChatHistoryObserver";
 import { voice as mockVoice } from "../data/Voices";
 import { JSDOM } from "jsdom";
 import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
 import { UserPreferenceModuleMock } from "../prefs/PreferenceModule.mock";
 import { TextToSpeechService } from "../../src/tts/TextToSpeechService";
 import { AudioStreamManager } from "../../src/tts/AudioStreamManager";
+import { add } from "lodash";
 
 vi.mock("../tts/InputStream");
 vi.mock("../tts/SpeechSynthesisModule");
@@ -87,61 +91,89 @@ describe("ChatHistoryObserver", () => {
     chatHistoryObserver.disconnect();
   });
 
-  const createAssistantMessage = (text: string) => {
+  const addParagraph = (paragraph: string, parent: HTMLElement) => {
+    const preWrap = document.createElement("div");
+    preWrap.classList.add("whitespace-pre-wrap", "mb-4", "last:mb-0");
+    parent.appendChild(preWrap);
+    const words = paragraph.split(" ");
+    for (const word of words) {
+      const textNode = document.createTextNode(word + " ");
+      preWrap.appendChild(textNode);
+    }
+  };
+
+  /**
+   * Create a chat message element, in the style of pi.ai assistant messages
+   * @param text
+   * @param decorated
+   * @returns
+   */
+  const createAssistantMessage = (
+    text: string | string[],
+    decorated: boolean = false
+  ) => {
+    const paragraphs = Array.isArray(text) ? text : [text];
     const message = document.createElement("div");
     message.classList.add("break-anywhere");
-    message.textContent = text;
+    const flex = document.createElement("div");
+    flex.classList.add("flex", "items-center");
+    const wFull = document.createElement("div");
+    wFull.classList.add("w-full");
+    flex.appendChild(wFull);
+    message.appendChild(flex);
+    for (const paragraph of paragraphs) {
+      addParagraph(paragraph, wFull);
+    }
+    if (decorated) {
+      ChatHistoryObserver.decorateAssistantResponse(message);
+    }
     return message;
+  };
+
+  const addTextToAssistantMessage = (message: HTMLElement, text: string) => {
+    const lastParagraph = message.querySelector(
+      ".whitespace-pre-wrap:last-child"
+    );
+    if (lastParagraph) {
+      const textNode = document.createTextNode(text);
+      lastParagraph.appendChild(textNode);
+    }
   };
 
   describe("observe chat history for message additions", async () => {
     it("should find assistant messages when added", async () => {
       const assistantMessage = createAssistantMessage("Hello world");
 
-      const intermediateElement = document.createElement("div");
-      intermediateElement.appendChild(assistantMessage);
+      const before =
+        ChatHistoryObserver.findAssistantResponse(chatHistoryElement);
+      expect(before.found).toBe(false); // not found initially
+      chatHistoryElement.appendChild(assistantMessage);
 
-      chatHistoryObserver.observe({
-        childList: true,
-        subtree: true,
-        attributes: true,
-      });
-      chatHistoryElement.appendChild(intermediateElement);
-
-      expect(
-        ChatHistoryObserver.findAssistantResponse(chatHistoryElement).found
-      ).toBe(true); // sanity check
-      // after a short delay, check that the assistant message was automatically found and decorated
-      await new Promise((resolve) => setTimeout(resolve, 3000)); // 1000 ms delay
-      const obs = ChatHistoryObserver.findAssistantResponse(chatHistoryElement);
-      expect(obs.found).toBe(true);
-      expect(obs.decorated).toBe(true);
-      expect(obs.isReady()).toBe(true);
+      const afterAddition =
+        ChatHistoryObserver.findAssistantResponse(chatHistoryElement);
+      expect(afterAddition.found).toBe(true);
+      expect(afterAddition.decorated).toBe(false);
+      ChatHistoryObserver.decorateAssistantResponse(assistantMessage);
+      const afterDecoration =
+        ChatHistoryObserver.findAssistantResponse(chatHistoryElement);
+      expect(afterDecoration.found).toBe(true);
+      expect(afterDecoration.decorated).toBe(true);
     });
 
     it("should match an element where the selector class is only added afterwards", async () => {
       const assistantMessage = createAssistantMessage("Hello world");
-      assistantMessage.classList.add("justify-end");
+      assistantMessage.classList.add("justify-end"); // elements containing this class are not assistant messages
 
-      // initially add the element without a matching classname
-      chatHistoryObserver.observe({
-        childList: true,
-        subtree: true,
-        attributes: true,
-      });
       chatHistoryElement.appendChild(assistantMessage);
-      await new Promise((resolve) => setTimeout(resolve, 100)); // short delay
-      expect(assistantMessage.classList.contains("assistant-message")).toBe(
-        false
-      );
+      const withJustifyEnd =
+        ChatHistoryObserver.findAssistantResponse(chatHistoryElement);
+      expect(withJustifyEnd.found).toBe(false); // should not match with "justify-end"
 
-      // after a delay, add the matching classname
+      // remove the prohibitive classname
       assistantMessage.classList.remove("justify-end");
-      // after a delay, check that the assistant message was found and decorated
-      await new Promise((resolve) => setTimeout(resolve, 100)); // short delay
-      expect(assistantMessage.classList.contains("assistant-message")).toBe(
-        true
-      );
+      const withoutJustifyEnd =
+        ChatHistoryObserver.findAssistantResponse(chatHistoryElement);
+      expect(withoutJustifyEnd.found).toBe(true); // should match without "justify-end"
     });
   });
 
@@ -182,12 +214,66 @@ describe("ChatHistoryObserver", () => {
       const assistantResponse =
         ChatHistoryObserver.decorateAssistantResponse(chatMessageElement);
       expect(assistantResponse.element).toBe(chatMessageElement);
-      expect(assistantResponse.text).toBe("Hello there!");
       expect(chatMessageElement.classList.contains("assistant-message")).toBe(
         true
       );
       const obs = ChatHistoryObserver.findAssistantResponse(chatMessageElement);
       expect(obs.decorated).toBe(true);
     });
+  });
+
+  describe("text operators for assistant messages", () => {
+    it("should get the text of an assistant message", () => {
+      const chatMessageElement = createAssistantMessage("Hello there!");
+      const message = new AssistantResponse(chatMessageElement);
+      expect(message.text).toBe("Hello there!");
+    });
+
+    it("should get the text of an assistant message with multiple paragraphs", () => {
+      const chatMessageElement = createAssistantMessage([
+        "Hello there!",
+        "How are you doing?",
+      ]);
+      const text = new AssistantResponse(chatMessageElement).text;
+      expect(text).toBe("Hello there! How are you doing?");
+    });
+
+    it("text and stable text should converge", async () => {
+      const chatMessageElement = createAssistantMessage([
+        "Hello there!",
+        "How are you doing?",
+      ]);
+      const message = new AssistantResponse(chatMessageElement);
+      const stableText = await message.stableText();
+      expect(message.text).toBe(stableText);
+
+      const stableHash = await message.stableHash();
+      expect(message.hash).toBe(stableHash);
+    });
+
+    it("should eventually complete stableText and stableHash", async () => {
+      const chatMessageElement = createAssistantMessage([
+        "Hello there!",
+        "How are you doing?",
+      ]);
+      chatHistoryElement.appendChild(chatMessageElement);
+      const message = new AssistantResponse(chatMessageElement);
+
+      // after a delay, add text to the message
+      setTimeout(() => {
+        addTextToAssistantMessage(chatMessageElement, "How are the kids?");
+        console.log("Added text to message");
+      }, 3000);
+      console.log("Waiting for stable text and hash...");
+      const stableText = await message.stableText();
+      console.log("Stable text:", stableText);
+      const stableHash = await message.stableHash();
+      console.log("Stable hash:", stableHash);
+
+      expect(stableText).toBe(
+        "Hello there! How are you doing? How are the kids?"
+      );
+      expect(stableHash).toBeDefined();
+    }, 20000);
   });
 });

@@ -3,6 +3,7 @@ import {
   SpeechSynthesisUtteranceRemote,
   SpeechSynthesisVoiceRemote,
 } from "./SpeechSynthesisModule";
+import { SpeechHistoryModule } from "./SpeechHistoryModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { Chatbot } from "../chatbots/Chatbot";
 import { BillingModule } from "../billing/BillingModule";
@@ -11,6 +12,7 @@ import { TTSControlsModule } from "./TTSControlsModule";
 import {
   AssistantResponse,
   ChatHistoryObserver,
+  RootChatHistoryObserver,
 } from "../dom/ChatHistoryObserver";
 
 export class TextToSpeechUIManager {
@@ -26,11 +28,14 @@ export class TextToSpeechUIManager {
       return false;
     } else {
       chatHistory.id = "saypi-chat-history";
+
+      // the past messages container will be replaced when the chat history is updated, so is monitored for changes in RootChatHistoryObserver
       const pastChatMessagesContainer =
         chatHistory.querySelector(":nth-child(2)");
       if (pastChatMessagesContainer) {
         pastChatMessagesContainer.id = "saypi-chat-history-past-messages";
       }
+
       const presentChatMessagesContainer =
         chatHistory.querySelector(":nth-child(3)");
       if (presentChatMessagesContainer) {
@@ -327,10 +332,37 @@ export class TextToSpeechUIManager {
         assistantMessage,
         utterance
       );
+      // ensure the AssistantResponse object has finished mutating before generating its hash
+      assistantMessage.stableHash().then((hash) => {
+        // debug: verify the hashes have converged
+        if (hash !== assistantMessage.hash) {
+          console.error(`Hash mismatch: ${hash} vs ${assistantMessage.hash}`);
+          assistantMessage.stableText().then((stableText) => {
+            console.debug(`Stable text: "${stableText}"`);
+            console.debug(`Assistant text: "${assistantMessage.text}"`);
+          });
+          return;
+        }
+        console.debug(`Adding speech to history with hash: ${hash}`);
+        SpeechHistoryModule.getInstance().addSpeechToHistory(hash, utterance);
+      });
     }
   }
 
-  registerChatHistoryListener(): ChatHistoryObserver {
+  registerPastChatHistoryListener(): void {
+    // this listener keeps track of the top-level chat history containers,
+    // and recursively observes the children of the past messages container
+    const rootChatHistoryObserver = new RootChatHistoryObserver(
+      "#saypi-chat-history",
+      SpeechSynthesisModule.getInstance()
+    );
+    rootChatHistoryObserver.observe({
+      childList: true,
+      subtree: false,
+    });
+  }
+
+  registerPresentChatHistoryListener(): ChatHistoryObserver {
     const chatHistoryObserver = new ChatHistoryObserver(
       "#saypi-chat-history-present-messages",
       SpeechSynthesisModule.getInstance()
@@ -369,7 +401,8 @@ export class TextToSpeechUIManager {
     this.restyleVoiceMenuControls();
     this.addVoiceMenuExpansionListener();
     this.addVoiceButtonAdditionListener();
-    const observer = this.registerChatHistoryListener();
-    this.registerSpeechStreamListeners(observer);
+    this.registerPastChatHistoryListener();
+    const observerPresent = this.registerPresentChatHistoryListener();
+    this.registerSpeechStreamListeners(observerPresent);
   }
 }

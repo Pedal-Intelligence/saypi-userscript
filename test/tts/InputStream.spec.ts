@@ -3,24 +3,32 @@ import { JSDOM } from "jsdom";
 import { toArray } from "rxjs/operators";
 import {
   ElementTextStream,
-  ELEMENT_TEXT_STREAM_TIMEOUT_DURATION_MILLIS,
+  STREAM_TIMEOUT_MS,
   getNestedText,
 } from "../../src/tts/InputStream";
 
-let dom: JSDOM;
-let element: HTMLElement;
-let stream: ElementTextStream;
+const intervalMillis = 100; // delay between adding text
+
+async function addText(element: HTMLElement, text: string) {
+  await new Promise((resolve) => setTimeout(resolve, intervalMillis));
+  element.appendChild(document.createElement("span")).textContent = text;
+}
+
+function timeoutCalc(wc: number) {
+  return wc * intervalMillis + STREAM_TIMEOUT_MS;
+}
 
 beforeEach(() => {
-  dom = new JSDOM(`<!DOCTYPE html><p></p>`);
+  const dom = new JSDOM();
+  global.document = dom.window.document;
   global.MutationObserver = dom.window.MutationObserver;
   global.Node = dom.window.Node;
-  element = dom.window.document.querySelector("p") as HTMLElement;
-  stream = new ElementTextStream(element);
+  global.NodeList = dom.window.NodeList;
+  global.Element = dom.window.Element;
 });
 
 test("getNestedText returns the correct text", () => {
-  const container = dom.window.document.createElement("div");
+  const container = document.createElement("div");
   container.innerHTML =
     "<p id='greeting'>Hello, <span class='subject' style='display: none'>World!</span> \
 <span>It's nice to see you again.</span></p>";
@@ -32,90 +40,60 @@ test("getNestedText returns the correct text", () => {
 test(
   "ElementTextStream emits inner text of added nodes",
   async () => {
-    const element = dom.window.document.createElement("div");
-    dom.window.document.body.appendChild(element);
-    stream = new ElementTextStream(element);
+    const element = document.createElement("div");
+    const stream = new ElementTextStream(element);
     const values: string[] = [];
     const promise = new Promise<void>((resolve) => {
       stream
         .getStream()
         .pipe(toArray())
-        .subscribe((val: string[]) => {
-          values.push(...val);
-          resolve();
+        .subscribe({
+          next: (val: string[]) => {
+            values.push(...val);
+          },
+          complete: () => {
+            resolve();
+          },
         });
     });
-    const hello = dom.window.document.createElement("span");
-    hello.textContent = "Hello";
-    element.appendChild(hello);
-    const world = dom.window.document.createElement("span");
-    world.textContent = "world";
-    element.appendChild(world);
-    // Wait for the Observable to complete
-    await promise.then(() => {
-      expect(values).toEqual(["Hello", "world"]);
-    });
+    await addText(element, "Hello");
+    await addText(element, "world");
+    await promise;
+    expect(values).toEqual(["Hello", "world"]);
   },
-  ELEMENT_TEXT_STREAM_TIMEOUT_DURATION_MILLIS + 1000
+  timeoutCalc(2)
 );
 
 test(
-  "ElementTextStream resets timeout when new input is available",
+  "ElementTextStream emits inner text of added nodes",
   async () => {
+    const element = document.createElement("div");
+    document.body.appendChild(element);
+    const stream = new ElementTextStream(element);
     const values: string[] = [];
-    const start = Date.now();
     const promise = new Promise<void>((resolve) => {
       stream
         .getStream()
         .pipe(toArray())
-        .subscribe((val: string[]) => {
-          values.push(...val);
-          console.log(`Received ${val} after ${Date.now() - start}ms`);
-          resolve();
+        .subscribe({
+          next: (val: string[]) => {
+            values.push(...val);
+          },
+          complete: () => {
+            resolve();
+          },
         });
     });
-    const intervalMillis = 800;
-    // Wait for a bit before adding the node
-    await new Promise((resolve) => setTimeout(resolve, intervalMillis)).then(
-      () => {
-        element.appendChild(
-          dom.window.document.createElement("span")
-        ).textContent = "Hello";
-      }
-    );
-    // Wait for a bit before adding the second node, and so on...
-    await new Promise((resolve) => setTimeout(resolve, intervalMillis)).then(
-      () => {
-        element.appendChild(
-          dom.window.document.createElement("span")
-        ).textContent = "world";
-      }
-    );
-    await new Promise((resolve) => setTimeout(resolve, intervalMillis)).then(
-      () => {
-        element.appendChild(
-          dom.window.document.createElement("span")
-        ).textContent = "you're";
-      }
-    );
-    await new Promise((resolve) => setTimeout(resolve, intervalMillis)).then(
-      () => {
-        element.appendChild(
-          dom.window.document.createElement("span")
-        ).textContent = "looking";
-      }
-    );
-    await new Promise((resolve) => setTimeout(resolve, intervalMillis)).then(
-      () => {
-        element.appendChild(
-          dom.window.document.createElement("span")
-        ).textContent = "great";
-      }
-    );
+
+    await addText(element, "Hello");
+    await addText(element, "world");
+    await addText(element, "you're");
+    await addText(element, "looking");
+    await addText(element, "great");
+
     // Wait for the Observable to complete
-    await promise.then(() => {
-      expect(values).toEqual(["Hello", "world", "you're", "looking", "great"]);
-    });
+    await promise;
+    expect(values).toEqual(["Hello", "world", "you're", "looking", "great"]);
   },
-  800 * 5 + ELEMENT_TEXT_STREAM_TIMEOUT_DURATION_MILLIS + 1000
+  timeoutCalc(5)
 );

@@ -1,6 +1,6 @@
 import { Observable, ReplaySubject, Subject } from "rxjs";
 
-export const ELEMENT_TEXT_STREAM_TIMEOUT_DURATION_MILLIS: number = 8000; // visible for testing
+export const STREAM_TIMEOUT_MS: number = 8000; // visible for testing
 export const TEXT_STABILITY_THRESHOLD_MILLIS: number = 1500; // visible for testing
 
 // Visible for testing
@@ -26,28 +26,32 @@ export class ElementTextStream {
     this.subject.subscribe({
       next: () => {
         this.timeOfLastTextChange = Date.now();
-        if (this.timeout) {
-          clearTimeout(this.timeout);
-        }
-        this.timeout = setTimeout(() => {
-          console.log(
-            `Ending stream on timeout, ${
-              ELEMENT_TEXT_STREAM_TIMEOUT_DURATION_MILLIS / 1000
-            }s after last text was passed`
-          );
-          this.subject.complete(); // Close stream on true timeout
-        }, ELEMENT_TEXT_STREAM_TIMEOUT_DURATION_MILLIS);
+        this.resetStreamTimeout();
       },
       complete: () => {
-        console.log("Stream completed");
         clearTimeout(this.timeout);
       },
     });
-    this.registerObserver();
+    this.resetStreamTimeout(); // set the initial timeout
+    this.registerObserver(); // start observing the element for additions
+  }
+
+  /**
+   * The stream will complete if no new text is streamed for a certain duration.
+   * This method resets the timeout.
+   */
+  private resetStreamTimeout(): void {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+    }
+    this.timeout = setTimeout(() => {
+      console.log(`Stream timed out after ${STREAM_TIMEOUT_MS}ms`);
+      this.subject.complete();
+    }, STREAM_TIMEOUT_MS);
   }
 
   private getTextStreamedSoFar(): string {
-    return this.emittedValues.join(" ");
+    return this.emittedValues.join("");
   }
 
   protected getTextIsStable(): boolean {
@@ -95,24 +99,24 @@ export class ElementTextStream {
             const node = mutation.addedNodes[i];
             if (node.nodeType === Node.TEXT_NODE) {
               const textNode = node as Text;
-              // with pi.ai, whole sentences are streamed as a list of text node mutations
+              // with pi.ai, whole paragraphs are streamed as a list of text node mutations
               const word: string | null = textNode.textContent;
-              const sentence = textNode.wholeText; // the sentence is the adjacent contigious text of the node and its siblings
+              const paragraph = textNode.wholeText; // the sentence is the adjacent contigious text of the node and its siblings
               if (word) {
                 this.subject.next(word);
-                // all nodes in the sentence end with a ' ', expect for sub-word tokens, and the final word
-                const isLastWordInSentence =
+                // all nodes in the paragraph end with a ' ', expect for sub-word tokens, and the final word
+                const isLastWordInParagraph =
                   i === mutation.addedNodes.length - 1 &&
                   m === mutationsList.length - 1;
-                if (word.endsWith(" ") || !isLastWordInSentence) {
+                if (word.endsWith(" ") || !isLastWordInParagraph) {
                   continue;
                 } else {
                   console.debug(
-                    `"${word}" is the final word in the sentence "${sentence}"`
+                    `"${word}" is the final word in the paragraph "${paragraph}"`
                   );
-                  if (sentence !== this.getTextStreamedSoFar()) {
+                  if (!this.getTextStreamedSoFar().endsWith(paragraph)) {
                     console.warn(
-                      `Streamed text "${this.getTextStreamedSoFar()}" does not match sentence "${sentence}"`
+                      `Streamed text "${this.getTextStreamedSoFar()}" does not match paragraph "${paragraph}"`
                     );
                   }
                   this.batchIntervalTimerId = setTimeout(() => {
