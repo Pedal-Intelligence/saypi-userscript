@@ -69,8 +69,9 @@ export class TTSControlsModule {
       "saypi-powered-by"
     );
     poweredByElement.title = ttsLabel;
+    const logoImageExt = ttsEngine === "inflection.ai" ? "png" : "svg"; // can't find a good svg for inflection.ai
     const logoImageUrl = getResourceUrl(
-      `icons/logos/${ttsEngine.toLowerCase()}.svg`
+      `icons/logos/${ttsEngine.toLowerCase()}.${logoImageExt}`
     );
     poweredByElement.innerHTML = `<img src="${logoImageUrl}" alt="${ttsLabel}" class="h-4 w-4 inline-block">`;
     costElement.appendChild(poweredByElement);

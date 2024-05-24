@@ -26,6 +26,7 @@
         "public/audio/*.mp3",
         "public/icons/*.svg",
         "public/icons/logos/*.svg",
+        "public/icons/logos/*.png",
         "src/icons/flags/*.svg"
       ],
       "matches": ["https://pi.ai/*"]
