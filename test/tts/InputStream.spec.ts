@@ -91,22 +91,29 @@ test(
   timeoutCalc(5)
 );
 
-test("Paragraphs are separated by newlines", async () => {
-  const element = document.createElement("div");
-  document.body.appendChild(element);
-  const stream = new ElementTextStream(element);
-  const values: string[] = [];
-  const promise = collectStreamValues(stream, values);
+test(
+  "Paragraphs are separated by newlines",
+  async () => {
+    const element = document.createElement("div");
+    document.body.appendChild(element);
+    const stream = new ElementTextStream(element);
+    const values: string[] = [];
+    const promise = collectStreamValues(stream, values);
 
-  const inline = false;
-  await addText(element, "Hello there!", inline);
-  await addText(element, "I have doubled in power since we last met.", inline);
+    const inline = false;
+    await addText(element, "Hello there!", inline);
+    await addText(
+      element,
+      "I have doubled in power since we last met.",
+      inline
+    );
 
-  // Wait for the Observable to complete
-  await promise;
-  expect(values).toEqual([
-    "Hello there!",
-    "\n",
-    "I have doubled in power since we last met.",
-  ]);
-});
+    // Wait for the Observable to complete
+    await promise;
+    expect(values).toEqual([
+      "Hello there!",
+      "\nI have doubled in power since we last met.",
+    ]);
+  },
+  timeoutCalc(2)
+);

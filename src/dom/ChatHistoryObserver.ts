@@ -1,5 +1,9 @@
 import { md5 } from "js-md5";
-import { ElementTextStream, SilentElementTextStream } from "../tts/InputStream";
+import {
+  ElementTextStream,
+  PARAGRAPH_BREAK,
+  SilentElementTextStream,
+} from "../tts/InputStream";
 import {
   SpeechSynthesisModule,
   SpeechSynthesisUtteranceRemote,
@@ -397,7 +401,7 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
     this.textStream.getStream().subscribe(
       (text) => {
         let start = false;
-        if (text.trim()) {
+        if (text.trim() || text === PARAGRAPH_BREAK) {
           const currentTime = Date.now();
           if (firstChunkTime === null) {
             firstChunkTime = currentTime;

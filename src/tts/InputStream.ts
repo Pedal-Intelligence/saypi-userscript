@@ -2,6 +2,7 @@ import { Observable, ReplaySubject, Subject } from "rxjs";
 
 export const STREAM_TIMEOUT_MS: number = 8000; // visible for testing
 export const TEXT_STABILITY_THRESHOLD_MILLIS: number = 1500; // visible for testing
+export const PARAGRAPH_BREAK: string = "\n";
 
 // Visible for testing
 export function getNestedText(node: HTMLElement): string {
@@ -97,13 +98,31 @@ export class ElementTextStream {
         if (mutation.type === "childList") {
           for (let i = 0; i < mutation.addedNodes.length; i++) {
             const node = mutation.addedNodes[i];
-            if (node.nodeType === Node.TEXT_NODE) {
+            if (node.nodeType === Node.ELEMENT_NODE) {
+              const element = node as HTMLElement;
+              // if element is a div, it's a new paragraph
+              if (element.tagName === "DIV" && this.emittedValues.length > 0) {
+                //this.subject.next(PARAGRAPH_BREAK);
+              }
+            } else if (node.nodeType === Node.TEXT_NODE) {
               const textNode = node as Text;
               // with pi.ai, whole paragraphs are streamed as a list of text node mutations
               const word: string | null = textNode.textContent;
               const paragraph = textNode.wholeText; // the sentence is the adjacent contigious text of the node and its siblings
               if (word) {
-                this.subject.next(word);
+                const isFirstWordInParagraph =
+                  i === 0 && paragraph.startsWith(word);
+                const isFirstParagraph = this.emittedValues.length === 0;
+                const isBlockElement = node.parentElement?.tagName === "DIV";
+                if (
+                  isFirstWordInParagraph &&
+                  !isFirstParagraph &&
+                  isBlockElement
+                ) {
+                  this.subject.next(PARAGRAPH_BREAK + word);
+                } else {
+                  this.subject.next(word);
+                }
                 // all nodes in the paragraph end with a ' ', expect for sub-word tokens, and the final word
                 const isLastWordInParagraph =
                   i === mutation.addedNodes.length - 1 &&
@@ -111,14 +130,6 @@ export class ElementTextStream {
                 if (word.endsWith(" ") || !isLastWordInParagraph) {
                   continue;
                 } else {
-                  console.debug(
-                    `"${word}" is the final word in the paragraph "${paragraph}"`
-                  );
-                  if (!this.getTextStreamedSoFar().endsWith(paragraph)) {
-                    console.warn(
-                      `Streamed text "${this.getTextStreamedSoFar()}" does not match paragraph "${paragraph}"`
-                    );
-                  }
                   this.batchIntervalTimerId = setTimeout(() => {
                     console.debug(
                       `Ending stream after ${(2 * avgIntervalMs).toFixed(
