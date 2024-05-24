@@ -11,7 +11,7 @@ export class VoiceMenu {
   chatbot: Chatbot;
   userPreferences: UserPreferenceModule;
   element: HTMLElement; // the root element of the voice menu
-  selectedVoice: SpeechSynthesisVoiceRemote | null = null;
+  selectedVoiceButton: HTMLButtonElement | null = null;
 
   constructor(
     chatbot: Chatbot,
@@ -70,8 +70,8 @@ export class VoiceMenu {
     if (!voiceButtons || voiceButtons.length === 0) {
       return false;
     }
-    const builtInPiVoiceButtons = voiceButtons.filter(
-      (button) => !button.classList.contains("saypi-voice-button")
+    const builtInPiVoiceButtons = voiceButtons.filter((button) =>
+      this.isBuiltInVoiceButton(button)
     );
     builtInPiVoiceButtons.forEach((button) => {
       button.addEventListener("click", () => {
@@ -210,6 +210,11 @@ export class VoiceMenu {
     button.disabled = true;
     button.classList.add("selected", "bg-neutral-300", "text-primary-700");
     button.classList.remove("hover:bg-neutral-300");
+
+    if (this.selectedVoiceButton) {
+      this.unmarkButtonAsSelectedVoice(this.selectedVoiceButton);
+    }
+    this.selectedVoiceButton = button;
   }
 
   addVoicesToMenu(voiceMenu: HTMLElement): void {
@@ -233,7 +238,7 @@ export class VoiceMenu {
 
   // Helper for identifying built-in Pi voice buttons
   isBuiltInVoiceButton(button: HTMLButtonElement): boolean {
-    return !button.classList.contains("saypi-voice-button");
+    return !button.classList.contains("saypi-custom-voice");
   }
 
   // Listen for additions of custom voice buttons and update selections
