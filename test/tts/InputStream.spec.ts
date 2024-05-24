@@ -9,9 +9,26 @@ import {
 
 const intervalMillis = 100; // delay between adding text
 
-async function addText(element: HTMLElement, text: string) {
+async function addText(element: HTMLElement, text: string, inline = true) {
   await new Promise((resolve) => setTimeout(resolve, intervalMillis));
-  element.appendChild(document.createElement("span")).textContent = text;
+  const container = document.createElement(inline ? "span" : "div");
+  element.appendChild(container).textContent = text;
+}
+
+async function collectStreamValues(
+  stream: ElementTextStream,
+  values: string[]
+): Promise<void> {
+  return new Promise<void>((resolve) => {
+    stream.getStream().subscribe({
+      next: (val) => {
+        values.push(val);
+      },
+      complete: () => {
+        resolve();
+      },
+    });
+  });
 }
 
 function timeoutCalc(wc: number) {
@@ -43,19 +60,7 @@ test(
     const element = document.createElement("div");
     const stream = new ElementTextStream(element);
     const values: string[] = [];
-    const promise = new Promise<void>((resolve) => {
-      stream
-        .getStream()
-        .pipe(toArray())
-        .subscribe({
-          next: (val: string[]) => {
-            values.push(...val);
-          },
-          complete: () => {
-            resolve();
-          },
-        });
-    });
+    const promise = collectStreamValues(stream, values);
     await addText(element, "Hello");
     await addText(element, "world");
     await promise;
@@ -71,19 +76,7 @@ test(
     document.body.appendChild(element);
     const stream = new ElementTextStream(element);
     const values: string[] = [];
-    const promise = new Promise<void>((resolve) => {
-      stream
-        .getStream()
-        .pipe(toArray())
-        .subscribe({
-          next: (val: string[]) => {
-            values.push(...val);
-          },
-          complete: () => {
-            resolve();
-          },
-        });
-    });
+    const promise = collectStreamValues(stream, values);
 
     await addText(element, "Hello");
     await addText(element, "world");
@@ -97,3 +90,23 @@ test(
   },
   timeoutCalc(5)
 );
+
+test("Paragraphs are separated by newlines", async () => {
+  const element = document.createElement("div");
+  document.body.appendChild(element);
+  const stream = new ElementTextStream(element);
+  const values: string[] = [];
+  const promise = collectStreamValues(stream, values);
+
+  const inline = false;
+  await addText(element, "Hello there!", inline);
+  await addText(element, "I have doubled in power since we last met.", inline);
+
+  // Wait for the Observable to complete
+  await promise;
+  expect(values).toEqual([
+    "Hello there!",
+    "\n",
+    "I have doubled in power since we last met.",
+  ]);
+});

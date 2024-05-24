@@ -11,6 +11,8 @@ import { SpeechHistoryModule } from "../tts/SpeechHistoryModule";
 
 class AssistantResponse {
   private _element: HTMLElement;
+  private stablised: boolean = false;
+  private finalText: string = "";
 
   constructor(element: HTMLElement) {
     this._element = element;
@@ -76,6 +78,9 @@ class AssistantResponse {
   }
 
   async stableText(): Promise<string> {
+    if (this.stablised) {
+      return this.finalText;
+    }
     const content = await this.decoratedContent();
     const textStream = new ElementTextStream(content);
     const textBuffer: string[] = [];
@@ -85,7 +90,9 @@ class AssistantResponse {
           textBuffer.push(text);
         },
         complete: () => {
-          resolve(textBuffer.join(""));
+          this.stablised = true;
+          this.finalText = textBuffer.join("");
+          resolve(this.finalText);
         },
       });
     });
