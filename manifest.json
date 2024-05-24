@@ -25,6 +25,7 @@
         "public/vad.worklet.bundle.min.js",
         "public/audio/*.mp3",
         "public/icons/*.svg",
+        "public/icons/*.png",
         "public/icons/logos/*.svg",
         "public/icons/logos/*.png",
         "src/icons/flags/*.svg"
