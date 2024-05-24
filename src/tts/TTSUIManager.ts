@@ -18,6 +18,7 @@ import {
 export class TextToSpeechUIManager {
   private billingModule = BillingModule.getInstance();
   private userPreferences = UserPreferenceModule.getInstance();
+  private replaying = false; // flag to indicate whether the user requested a replay of an utterance
 
   // Methods for DOM manipulation and element ID assignment
   addIdChatHistory(): boolean {
@@ -377,11 +378,18 @@ export class TextToSpeechUIManager {
 
   registerSpeechStreamListeners(observer: ChatHistoryObserver): void {
     EventBus.on(
+      "saypi:tts:replaying",
+      (utterance: SpeechSynthesisUtteranceRemote) => {
+        this.replaying = true;
+      }
+    );
+    EventBus.on(
       "saypi:tts:speechStreamStarted",
       (utterance: SpeechSynthesisUtteranceRemote) => {
-        if (utterance) {
+        if (utterance && !this.replaying) {
           this.associateWithChatHistory(observer, utterance);
         }
+        this.replaying = false;
       }
     );
     EventBus.on(

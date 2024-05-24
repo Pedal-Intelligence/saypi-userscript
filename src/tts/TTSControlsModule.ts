@@ -6,6 +6,7 @@ import {
 } from "./SpeechSynthesisModule";
 import volumeIconSVG from "../icons/volume-mid.svg";
 import { getResourceUrl } from "../ResourceModule";
+import EventBus from "../events/EventBus";
 
 export class TTSControlsModule {
   constructor(private speechSynthesis: SpeechSynthesisModule) {}
@@ -29,6 +30,7 @@ export class TTSControlsModule {
   ): void {
     const button = this.createSpeechButton();
     button.addEventListener("click", () => {
+      EventBus.emit("saypi:tts:replaying", utterance); //  notify the ui manager that the next speech it hears will be a replay
       this.speechSynthesis.speak(utterance);
     });
     container.appendChild(button);
