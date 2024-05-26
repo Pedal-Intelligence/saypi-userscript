@@ -278,30 +278,35 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
     message: AssistantResponse,
     utterance: SpeechSynthesisUtteranceRemote
   ): void {
-    if (message.isTTSEnabled) {
-      return; // already decorated
+    if (!message.isTTSEnabled) {
+      message.enableTTS(utterance);
     }
-    message.enableTTS(utterance);
 
-    let hoverMenu: HTMLDivElement | null = null;
-    let ttsControlsElement: HTMLElement | null = null;
-    if (message.element.children.length > 1) {
-      hoverMenu = message.element.children[1] as HTMLDivElement;
-      hoverMenu.classList.add("message-hover-menu");
-      if (hoverMenu.children.length > 0) {
-        const createThreadButton = hoverMenu.children[0] as HTMLDivElement;
-        createThreadButton.classList.add("create-thread-button");
+    let hoverMenu = message.element.querySelector(".message-hover-menu");
+    if (!hoverMenu) {
+      if (message.element.children.length > 1) {
+        hoverMenu = message.element.children[1] as HTMLDivElement;
+        hoverMenu.classList.add("message-hover-menu");
+        if (hoverMenu.children.length > 0) {
+          const createThreadButton = hoverMenu.children[0] as HTMLDivElement;
+          createThreadButton.classList.add("create-thread-button");
+        }
+        let ttsControlsElement = message.element.querySelector(
+          "saypi-tts-controls"
+        ) as HTMLDivElement | null;
+        if (!ttsControlsElement) {
+          ttsControlsElement = document.createElement("div");
+          ttsControlsElement.id = `saypi-tts-controls-${utterance.id}`;
+          ttsControlsElement.classList.add("saypi-tts-controls", "pt-4");
+          hoverMenu.appendChild(ttsControlsElement);
+          this.ttsControlsModule.addSpeechButton(utterance, ttsControlsElement);
+          this.ttsControlsModule.addCostBasis(
+            ttsControlsElement,
+            utterance.text.length,
+            utterance.voice
+          );
+        }
       }
-      ttsControlsElement = document.createElement("div");
-      ttsControlsElement.id = `saypi-tts-controls-${utterance.id}`;
-      ttsControlsElement.classList.add("saypi-tts-controls", "pt-4");
-      hoverMenu.appendChild(ttsControlsElement);
-      this.ttsControlsModule.addSpeechButton(utterance, ttsControlsElement);
-      this.ttsControlsModule.addCostBasis(
-        ttsControlsElement,
-        utterance.text.length,
-        utterance.voice
-      );
     }
   }
 
