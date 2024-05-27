@@ -5,6 +5,7 @@ import {
 } from "../tts/SpeechSynthesisModule";
 import AudioControlsModule from "../audio/AudioControlsModule";
 import EventBus from "../events/EventBus";
+import { audioProviders } from "../tts/SpeechModel";
 
 type Preference = "speed" | "balanced" | "accuracy" | null;
 type VoicePreference = SpeechSynthesisVoiceRemote | null;
@@ -185,7 +186,7 @@ class UserPreferenceModule {
     ) {
       chrome.storage.sync.set({ voiceId: voice.id });
       const audioControls = new AudioControlsModule();
-      audioControls.useSayPiForAudioOutput();
+      audioControls.useAudioOutputProvider(audioProviders.SayPi); // TODO: replace with voice.provided_by
     }
     return Promise.resolve();
   }
@@ -200,7 +201,7 @@ class UserPreferenceModule {
         if (result.voiceId) {
           chrome.storage.sync.remove("voiceId");
           const audioControls = new AudioControlsModule();
-          audioControls.useDefaultForAudioOutput();
+          audioControls.useAudioOutputProvider(audioProviders.Pi);
         }
       });
     }

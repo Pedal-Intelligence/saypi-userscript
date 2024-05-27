@@ -1,11 +1,5 @@
 import EventBus from "../events/EventBus";
-
-const DEFAULT_AUDIO_PROVIDER = "pi.ai";
-import { config } from "../ConfigModule.js";
-
-const CUSTOM_AUDIO_PROVIDER = config.apiServerUrl
-  ? new URL(config.apiServerUrl).hostname
-  : "api.saypi.ai";
+import { AudioProvider, audioProviders } from "../tts/SpeechModel";
 
 export default class AudioControlsModule {
   activateAudioInput(enable: boolean): void {
@@ -40,13 +34,8 @@ export default class AudioControlsModule {
     return svgPath === activePath;
   }
 
-  useSayPiForAudioOutput(): void {
-    console.log("Using Say, Pi for speech synthesis");
-    EventBus.emit("audio:changeProvider", { provider: CUSTOM_AUDIO_PROVIDER });
-  }
-
-  useDefaultForAudioOutput(): void {
-    console.log("Using Pi for speech synthesis");
-    EventBus.emit("audio:changeProvider", { provider: DEFAULT_AUDIO_PROVIDER });
+  useAudioOutputProvider(provider: AudioProvider): void {
+    console.log(`Using ${provider.name} for speech synthesis`);
+    EventBus.emit("audio:changeProvider", { provider });
   }
 }

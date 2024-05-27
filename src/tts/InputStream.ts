@@ -79,9 +79,6 @@ export class ElementTextStream {
         this.timeOfLastBatch = timeOfBatch;
       }
       const timeSinceLastBatch = timeOfBatch - this.timeOfLastBatch;
-      console.debug(
-        `Batch of ${mutationsList.length} mutations observed, ${timeSinceLastBatch}ms since last batch`
-      );
       this.timeOfLastBatch = timeOfBatch;
       let avgIntervalMs = 1000;
       if (timeSinceLastBatch > 0) {
@@ -89,9 +86,6 @@ export class ElementTextStream {
         avgIntervalMs =
           this.intervalsBetweenBatches.reduce((a, b) => a + b, 0) /
           this.intervalsBetweenBatches.length;
-        console.debug(
-          `Average time between batches: ${avgIntervalMs.toFixed(0)}ms`
-        );
       }
       for (let m = 0; m < mutationsList.length; m++) {
         const mutation = mutationsList[m];

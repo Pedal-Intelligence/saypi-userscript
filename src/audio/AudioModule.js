@@ -212,6 +212,10 @@ export default class AudioModule {
     EventBus.on("audio:reload", (e) => {
       this.audioElement.load();
     });
+    EventBus.on("saypi:tts:replaying", (e) => {
+      // notify the audio output machine that the next audio is a replay
+      outputActor.send("replaying");
+    });
   }
 
   /**
@@ -229,7 +233,7 @@ export default class AudioModule {
         this.audioElement
           .play()
           .then(() => {
-            console.log(`Playing audio from ${this.audioElement.currentSrc}`);
+            console.debug(`Playing audio from ${this.audioElement.currentSrc}`);
           })
           .catch((error) => {
             console.error(
@@ -241,7 +245,7 @@ export default class AudioModule {
         this.audioElement
           .load()
           .then(() => {
-            console.log(`Loaded audio from ${this.audioElement.currentSrc}`);
+            console.debug(`Loaded audio from ${this.audioElement.currentSrc}`);
           })
           .catch((error) => {
             console.error(
@@ -263,7 +267,7 @@ export default class AudioModule {
     };
 
     this.audioElement.onloadstart = () => {
-      console.log(`Loading audio from ${this.audioElement.currentSrc}`);
+      console.debug(`Loading audio from ${this.audioElement.currentSrc}`);
       starttime = Date.now();
     };
 
@@ -271,24 +275,30 @@ export default class AudioModule {
     this.audioElement.onloadeddata = () => {
       const endtime = Date.now();
       const elapsedtime = (endtime - starttime) / 1000;
-      console.log(
-        `Audio is loaded after ${elapsedtime}s from ${this.audioElement.currentSrc}`
+      console.debug(
+        `Audio is loaded after ${elapsedtime.toFixed(1)}s from ${
+          this.audioElement.currentSrc
+        }`
       );
     };
 
     this.audioElement.oncanplay = () => {
       const endtime = Date.now();
       const elapsedtime = (endtime - starttime) / 1000;
-      console.log(
-        `Audio is ready to play after ${elapsedtime}s from ${this.audioElement.currentSrc}`
+      console.debug(
+        `Audio is ready to play after ${elapsedtime.toFixed(1)}s from ${
+          this.audioElement.currentSrc
+        }`
       );
     };
 
     this.audioElement.oncanplaythrough = () => {
       const endtime = Date.now();
       const elapsedtime = (endtime - starttime) / 1000;
-      console.log(
-        `Audio is ready to play through after ${elapsedtime}s from ${this.audioElement.currentSrc}`
+      console.debug(
+        `Audio is ready to play through after ${elapsedtime.toFixed(1)}s from ${
+          this.audioElement.currentSrc
+        }`
       );
     };
 
@@ -296,7 +306,7 @@ export default class AudioModule {
     this.audioElement.onended = () => {
       const endtime = Date.now();
       const elapsedtime = (endtime - starttime) / 1000;
-      console.log(`Audio playback ended after ${elapsedtime}s`);
+      console.debug(`Audio playback ended after ${elapsedtime.toFixed(1)}s`);
     };
   }
 }

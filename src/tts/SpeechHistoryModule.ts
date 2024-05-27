@@ -44,7 +44,6 @@ export class SpeechHistoryModule {
       const speechHistory = (await this.getStorageData("speechHistory")) || {};
       speechHistory[hash] = utterance;
       await this.setStorageData({ speechHistory });
-      console.log(`Added utterance with hash ${hash} to speech history.`);
     } catch (error) {
       console.error(`Error adding speech to history: ${error}`);
     }

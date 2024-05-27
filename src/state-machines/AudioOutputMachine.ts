@@ -1,17 +1,23 @@
 import { createMachine, assign, actions } from "xstate";
 import EventBus from "../events/EventBus.js";
 import {
-  PiSpeechSourceParser,
   SpeechSynthesisUtteranceRemote,
+  SpeechSynthesisModule,
 } from "../tts/SpeechSynthesisModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
+import {
+  PiSpeechSourceParser,
+  SayPiSpeechSourceParser,
+} from "../tts/SpeechSourceParsers";
+import { AudioProvider, audioProviders } from "../tts/SpeechModel";
 const { log } = actions;
 
 type LoadstartEvent = { type: "loadstart"; source: string };
 type ChangeProviderEvent = {
   type: "changeProvider";
-  provider: "pi.ai" | string; // default or custom provider
+  provider: AudioProvider; // default or custom provider
 };
+type ReplayingAudioEvent = { type: "replaying" };
 type AudioOutputEvent =
   | LoadstartEvent
   | { type: "skipNext" }
@@ -22,14 +28,16 @@ type AudioOutputEvent =
   | { type: "canplaythrough" }
   | { type: "seeked" }
   | { type: "emptied" }
-  | ChangeProviderEvent;
+  | ChangeProviderEvent
+  | ReplayingAudioEvent;
 export const audioOutputMachine = createMachine(
   {
     /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7A8qgLgA4EDEAxgBbIB2MACgE5YBuGEYDA2gAwC6ioQllgZ82agJAAPRAA4ATAGYAdAHZVigCwBObZvn7Zs1QBoQAT0QBGeQF9bZtJlwFi+ZWwA2YEp6zIIWHxkBnwefiQQIRExLAlImQRZADZlXXSMzLNLBEUrbjT5ZPljG2L5KwBWSvtHdGw8IgIPCG9ff0Dg0M4rCMFhUXFJRJLtZWKdXS1NYx1NbMRNVVllTSqU+XluTUq17VqQJwbXZq8fWABrDEIAOTApML5JaMG44cRdZW5lm21Kv8q3BSigWCCsCjSGisilU2isyWS1SsByOLia7j8AQwtHaAUgAFswMEIMhguFngNYvFQIl4WNKoptNxEaoDNtZIpkqD8txKqtdEVtKpkrJNIjkQ5DvU0W5lJj2BASGB8YQxJByZEXlT3ghkqYLHI9V8FJVVNxNjZFJsUdLGrL5ZBlAwwAFzCRCJ5kOYNf0YkMEnJll8zfJtEpKqLiiCDUkw-yw0zedxdKobc47c0HRBlB6vdioO60LAwD6opT-TTrFZVJplIpKlVVPlOVUGaDtPW1EztCKDFYU7I08d0XKOo7c+Z80rqArS1qK9IqzW6w3Tc3kq3ozltCllKHk7IG7JkzYapLURmMWPsxOp2QaBP8BQmKgoBQ5+W3gGEEKxgZ0huEaMvWoIKAUaz-EUEY7qKihDjKmbXjmRaQO6nrek8mqftSi5gmK8jKPkVS6EsyScvMMZGHy+5-NC3CKECihweetonFeeLZmAM6ocWYAXOqmG+q8OG0tWtb1o266bty2wEfCyT0WGmwwqa9iStQWDsPAkQXmxFJ+l+lZ4e2fJLHkEGaIxzJnnU6ZsS03j6cJOplMolTFICViWfRpqHqCSwFBy8iVEU7K8humjwZeo5YrQTnat+xQybyaQCskQoimKDZRfZWbxQuiRMSo3z0SUwp6Ka1SghoBFwhGsJeVo7nJDlI5Zk6LoQDkQkJUZiiyFYwalcY6U7KoVWUSKqzERueoKRoNlSnZbVIbecVYQZIkfE2dZbKGwrBfRnKgeNaTEZo9ZlTBrX2qtKEQPlhm4a2fISXqJQwt8W5yB2yizGVOx-OlN2IRxyhcQqj1bWC1SvQ270cmaGjtsKajfHN6Mhsx9hAA */
     context: {
       skip: false,
       autoplay: false,
-      provider: "pi.ai",
+      replaying: false,
+      provider: audioProviders.Pi,
     },
     id: "audioOutput",
     initial: "idle",
@@ -40,6 +48,15 @@ export const audioOutputMachine = createMachine(
           return {
             ...context,
             provider: event.provider,
+          };
+        }),
+      },
+      replaying: {
+        internal: true,
+        actions: assign((context, event) => {
+          return {
+            ...context,
+            replaying: true,
           };
         }),
       },
@@ -83,7 +100,15 @@ export const audioOutputMachine = createMachine(
         },
       },
       loading: {
-        entry: [{ type: "notifySpeechStart" }],
+        entry: [
+          { type: "notifySpeechStart" },
+          assign((context, event) => {
+            return {
+              ...context,
+              replaying: false,
+            };
+          }),
+        ],
         on: {
           loadedmetadata: {
             target: "loaded",
@@ -165,7 +190,12 @@ export const audioOutputMachine = createMachine(
     },
     schema: {
       events: {} as AudioOutputEvent,
-      context: {} as { skip: boolean; autoplay: boolean; provider: string },
+      context: {} as {
+        skip: boolean;
+        autoplay: boolean;
+        replaying: boolean;
+        provider: AudioProvider;
+      },
     },
     predictableActionArguments: true,
     preserveActionOrder: true,
@@ -193,42 +223,37 @@ export const audioOutputMachine = createMachine(
     },
     guards: {
       shouldSkip: (context, event: AudioOutputEvent) => {
+        const shouldSkip = context.skip === true;
+
         if (event.type === "loadstart") {
           event = event as LoadstartEvent;
 
-          return (
-            !isAudioSourcedFromProvider(event.source, context.provider) ||
-            context.skip === true
-          );
+          const isNotReplaying = !context.replaying;
+          const isSourceMismatch = !context.provider.matches(event.source);
+
+          return (isNotReplaying && isSourceMismatch) || shouldSkip;
         }
-        return context.skip === true;
+
+        return shouldSkip;
       },
     },
     services: {},
     delays: {},
   }
 );
-function isAudioSourcedFromProvider(
-  source: string,
-  audioProvider: string
-): boolean {
-  const domain = new URL(source).hostname;
-  const match = domain === audioProvider;
-  if (!match) {
-    console.log(
-      `Audio source: ${domain}, Audio provider: ${audioProvider}, skipping.`
-    );
-  }
-  return match;
-}
+
 async function getSpeechFromAudioSource(
   source: string
 ): Promise<SpeechSynthesisUtteranceRemote | null> {
   try {
-    if (isAudioSourcedFromProvider(source, "pi.ai")) {
+    if (audioProviders.Pi.matches(source)) {
       const userPreferences = UserPreferenceModule.getInstance();
       const userLang = await userPreferences.getLanguage();
       return new PiSpeechSourceParser(userLang).parse(source);
+    } else if (audioProviders.SayPi.matches(source)) {
+      return new SayPiSpeechSourceParser(
+        SpeechSynthesisModule.getInstance()
+      ).parse(source);
     }
   } catch (error) {
     console.error(

@@ -429,7 +429,9 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
       },
       () => {
         const totalTime = Date.now() - (firstChunkTime as number);
-        console.log(`Element text stream complete after ${totalTime}ms`);
+        console.log(
+          `Text stream complete after ${(totalTime / 1000).toFixed(1)} seconds`
+        );
         this.speechSynthesis.endSpeechStream(utterance);
         if (onEnd) {
           onEnd();

@@ -2,19 +2,18 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   SpeechSynthesisModule,
   SpeechSynthesisUtteranceRemote,
+  SpeechSynthesisVoiceRemote,
 } from "../../src/tts/SpeechSynthesisModule";
 import { TTSControlsModule } from "../../src/tts/TTSControlsModule";
 import {
   AssistantResponse,
   ChatHistoryObserver,
 } from "../../src/dom/ChatHistoryObserver";
-import { voice as mockVoice } from "../data/Voices";
 import { JSDOM } from "jsdom";
 import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
 import { UserPreferenceModuleMock } from "../prefs/PreferenceModule.mock";
 import { TextToSpeechService } from "../../src/tts/TextToSpeechService";
 import { AudioStreamManager } from "../../src/tts/AudioStreamManager";
-import { add } from "lodash";
 
 vi.mock("../tts/InputStream");
 vi.mock("../tts/SpeechSynthesisModule");
@@ -28,6 +27,7 @@ describe("ChatHistoryObserver", () => {
   let chatHistoryObserver: ChatHistoryObserver;
   let ttsControlsModuleMock: TTSControlsModule;
   let chatHistoryElement: HTMLElement;
+  let mockVoice: SpeechSynthesisVoiceRemote;
 
   beforeEach(() => {
     const dom = new JSDOM();
@@ -58,6 +58,17 @@ describe("ChatHistoryObserver", () => {
       createSpeech: vi.fn(),
       addTextToSpeechStream: vi.fn(),
     } as unknown as TextToSpeechService;
+
+    mockVoice = {
+      id: "voice1",
+      name: "Samantha",
+      lang: "en",
+      localService: false,
+      default: false,
+      price: 0.3,
+      powered_by: "saypi.ai",
+      voiceURI: "",
+    };
 
     const mockUtterance: SpeechSynthesisUtteranceRemote = {
       id: "utterance-id",

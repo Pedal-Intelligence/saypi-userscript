@@ -1,5 +1,10 @@
 import { SpeechSynthesisVoiceRemote } from "../../src/tts/SpeechSynthesisModule";
 
+/*
+ * This module provides a class for a voice that can be used with the SpeechSynthesisModule.
+ * For a list of voices, or to retrieve a voice by its id, see SpeechSynthesisModule.ts
+ */
+
 class Voice {
   id: string;
   name: string;
@@ -28,11 +33,4 @@ class ElevenLabsVoice extends Voice implements SpeechSynthesisVoiceRemote {
   voiceURI: string = `https://api.saypi.ai/voices/${this.id}`;
 }
 
-const voices: ElevenLabsVoice[] = [
-  new ElevenLabsVoice("ig1TeITnnNlsJtfHxJlW", "Paola"),
-  new ElevenLabsVoice("QensJGtjYFCO2iVbvCQg", "Heather"),
-  new ElevenLabsVoice("pN13jTQNNynLdgaFqslM", "Jessica"),
-];
-const voice = voices[0];
-
-export { ElevenLabsVoice, voices, voice };
+export { ElevenLabsVoice };
