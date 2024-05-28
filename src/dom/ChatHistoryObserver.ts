@@ -156,17 +156,19 @@ class ChatHistoryRootElementObserver extends BaseObserver {
             this.chatHistoryRootElement?.querySelector(":nth-child(2)");
           if (pastMessagesContainer == addedElement) {
             // add id to the 2nd child of the element
-            addedElement.id = "saypi-chat-history-past-messages";
+            pastMessagesContainer.id = "saypi-chat-history-past-messages";
             if (this.oldMessageObserver) {
               this.oldMessageObserver.disconnect();
             }
             this.oldMessageObserver = new ChatHistoryOldMessageObserver(
-              `#${addedElement.id}`,
+              `#${pastMessagesContainer.id}`,
               this.speechSynthesis
             );
-            this.oldMessageObserver.runOnce(addedElement).then((numFound) => {
-              console.debug(`Found ${numFound} old assistant messages`);
-            });
+            this.oldMessageObserver
+              .runOnce(pastMessagesContainer)
+              .then((numFound) => {
+                console.debug(`Found ${numFound} old assistant messages`);
+              });
             this.oldMessageObserver.observe({
               childList: true,
               subtree: false,
@@ -449,6 +451,7 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
 
 export {
   AssistantResponse,
-  ChatHistoryNewMessageObserver as ChatHistoryObserver,
+  ChatHistoryMessageObserver,
+  ChatHistoryNewMessageObserver as ChatHistoryAdditionsObserver,
   ChatHistoryRootElementObserver as RootChatHistoryObserver,
 };

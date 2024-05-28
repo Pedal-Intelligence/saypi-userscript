@@ -7,7 +7,7 @@ import {
 import { TTSControlsModule } from "../../src/tts/TTSControlsModule";
 import {
   AssistantResponse,
-  ChatHistoryObserver,
+  ChatHistoryMessageObserver,
 } from "../../src/dom/ChatHistoryObserver";
 import { JSDOM } from "jsdom";
 import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
@@ -19,12 +19,11 @@ vi.mock("../tts/InputStream");
 vi.mock("../tts/SpeechSynthesisModule");
 vi.mock("../tts/TTSControlsModule");
 
-describe("ChatHistoryObserver", () => {
+describe("ChatHistoryMessageObserver", () => {
   let speechSynthesisModule: SpeechSynthesisModule;
   let textToSpeechServiceMock: TextToSpeechService;
   let audioStreamManagerMock: AudioStreamManager;
   let userPreferenceModuleMock: UserPreferenceModule;
-  let chatHistoryObserver: ChatHistoryObserver;
   let ttsControlsModuleMock: TTSControlsModule;
   let chatHistoryElement: HTMLElement;
   let mockVoice: SpeechSynthesisVoiceRemote;
@@ -92,15 +91,9 @@ describe("ChatHistoryObserver", () => {
       userPreferenceModuleMock
     );
     ttsControlsModuleMock = new TTSControlsModule(speechSynthesisModule);
-    chatHistoryObserver = new ChatHistoryObserver(
-      chatHistoryElement.id,
-      speechSynthesisModule
-    );
   });
 
-  afterEach(() => {
-    chatHistoryObserver.disconnect();
-  });
+  afterEach(() => {});
 
   const addParagraph = (paragraph: string, parent: HTMLElement) => {
     const preWrap = document.createElement("div");
@@ -136,7 +129,7 @@ describe("ChatHistoryObserver", () => {
       addParagraph(paragraph, wFull);
     }
     if (decorated) {
-      ChatHistoryObserver.decorateAssistantResponse(message);
+      ChatHistoryMessageObserver.decorateAssistantResponse(message);
     }
     return message;
   };
@@ -156,17 +149,17 @@ describe("ChatHistoryObserver", () => {
       const assistantMessage = createAssistantMessage("Hello world");
 
       const before =
-        ChatHistoryObserver.findAssistantResponse(chatHistoryElement);
+        ChatHistoryMessageObserver.findAssistantResponse(chatHistoryElement);
       expect(before.found).toBe(false); // not found initially
       chatHistoryElement.appendChild(assistantMessage);
 
       const afterAddition =
-        ChatHistoryObserver.findAssistantResponse(chatHistoryElement);
+        ChatHistoryMessageObserver.findAssistantResponse(chatHistoryElement);
       expect(afterAddition.found).toBe(true);
       expect(afterAddition.decorated).toBe(false);
-      ChatHistoryObserver.decorateAssistantResponse(assistantMessage);
+      ChatHistoryMessageObserver.decorateAssistantResponse(assistantMessage);
       const afterDecoration =
-        ChatHistoryObserver.findAssistantResponse(chatHistoryElement);
+        ChatHistoryMessageObserver.findAssistantResponse(chatHistoryElement);
       expect(afterDecoration.found).toBe(true);
       expect(afterDecoration.decorated).toBe(true);
     });
@@ -177,13 +170,13 @@ describe("ChatHistoryObserver", () => {
 
       chatHistoryElement.appendChild(assistantMessage);
       const withJustifyEnd =
-        ChatHistoryObserver.findAssistantResponse(chatHistoryElement);
+        ChatHistoryMessageObserver.findAssistantResponse(chatHistoryElement);
       expect(withJustifyEnd.found).toBe(false); // should not match with "justify-end"
 
       // remove the prohibitive classname
       assistantMessage.classList.remove("justify-end");
       const withoutJustifyEnd =
-        ChatHistoryObserver.findAssistantResponse(chatHistoryElement);
+        ChatHistoryMessageObserver.findAssistantResponse(chatHistoryElement);
       expect(withoutJustifyEnd.found).toBe(true); // should match without "justify-end"
     });
   });
@@ -191,12 +184,12 @@ describe("ChatHistoryObserver", () => {
   describe("findAssistantResponse", () => {
     it("should find an assistant response if present", () => {
       const obsNotFound =
-        ChatHistoryObserver.findAssistantResponse(chatHistoryElement);
+        ChatHistoryMessageObserver.findAssistantResponse(chatHistoryElement);
       expect(obsNotFound.found).toBe(false);
       const chatMessageElement = createAssistantMessage("Hello world");
       chatHistoryElement.appendChild(chatMessageElement);
       const obsFound =
-        ChatHistoryObserver.findAssistantResponse(chatHistoryElement);
+        ChatHistoryMessageObserver.findAssistantResponse(chatHistoryElement);
       expect(obsFound.found).toBe(true);
     });
 
@@ -205,7 +198,7 @@ describe("ChatHistoryObserver", () => {
       chatMessageElement.classList.add("break-anywhere", "justify-end");
       chatHistoryElement.appendChild(chatMessageElement);
       const obsNotFound =
-        ChatHistoryObserver.findAssistantResponse(chatHistoryElement);
+        ChatHistoryMessageObserver.findAssistantResponse(chatHistoryElement);
       expect(obsNotFound.found).toBe(false);
     });
 
@@ -214,7 +207,7 @@ describe("ChatHistoryObserver", () => {
         '<div class="break-anywhere"><div class="flex items-center"><div class="w-full"><div class="whitespace-pre-wrap mb-4 last:mb-0">Awesome! ...</div></div></div><div style="opacity: 0; height: 0px;"></div></div>';
       chatHistoryElement.innerHTML = html;
       const obsFound =
-        ChatHistoryObserver.findAssistantResponse(chatHistoryElement);
+        ChatHistoryMessageObserver.findAssistantResponse(chatHistoryElement);
       expect(obsFound.found).toBe(true);
     });
   });
@@ -223,12 +216,15 @@ describe("ChatHistoryObserver", () => {
     it("should decorate an assistant response", () => {
       const chatMessageElement = createAssistantMessage("Hello there!");
       const assistantResponse =
-        ChatHistoryObserver.decorateAssistantResponse(chatMessageElement);
+        ChatHistoryMessageObserver.decorateAssistantResponse(
+          chatMessageElement
+        );
       expect(assistantResponse.element).toBe(chatMessageElement);
       expect(chatMessageElement.classList.contains("assistant-message")).toBe(
         true
       );
-      const obs = ChatHistoryObserver.findAssistantResponse(chatMessageElement);
+      const obs =
+        ChatHistoryMessageObserver.findAssistantResponse(chatMessageElement);
       expect(obs.decorated).toBe(true);
     });
   });

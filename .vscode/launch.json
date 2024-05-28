@@ -41,7 +41,7 @@
       "runtimeArgs": [
         "vitest",
         "--inspect-brk",
-        "test/tts/SpeechSourceParsers.spec.ts"
+        "test/dom/ChatHistoryObserver.spec.ts"
       ]
     }
   ]

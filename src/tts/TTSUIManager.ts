@@ -11,7 +11,7 @@ import EventBus from "../events/EventBus";
 import { TTSControlsModule } from "./TTSControlsModule";
 import {
   AssistantResponse,
-  ChatHistoryObserver,
+  ChatHistoryAdditionsObserver,
   RootChatHistoryObserver,
 } from "../dom/ChatHistoryObserver";
 import { Observation } from "../dom/Observation";
@@ -66,7 +66,7 @@ export class TextToSpeechUIManager {
   md5OfNothing = "d41d8cd98f00b204e9800998ecf8427e";
 
   associateWithChatHistory(
-    chatHistoryObserver: ChatHistoryObserver,
+    chatHistoryObserver: ChatHistoryAdditionsObserver,
     utterance: SpeechSynthesisUtteranceRemote
   ): void {
     // get most recent message in chat history
@@ -115,11 +115,17 @@ export class TextToSpeechUIManager {
     });
   }
 
-  registerPresentChatHistoryListener(): ChatHistoryObserver {
-    const chatHistoryObserver = new ChatHistoryObserver(
-      "#saypi-chat-history-present-messages",
+  registerPresentChatHistoryListener(): ChatHistoryAdditionsObserver {
+    const selector = "#saypi-chat-history-present-messages";
+    const chatHistoryObserver = new ChatHistoryAdditionsObserver(
+      selector,
       SpeechSynthesisModule.getInstance()
     );
+    chatHistoryObserver
+      .runOnce(document.querySelector(selector) as HTMLElement)
+      .then((count) =>
+        console.debug(`Found ${count} recent assistant message(s)`)
+      ); // run on initial content, i.e. most recent message in chat history
     chatHistoryObserver.observe({
       childList: true,
       subtree: true,
@@ -128,7 +134,7 @@ export class TextToSpeechUIManager {
     return chatHistoryObserver;
   }
 
-  registerSpeechStreamListeners(observer: ChatHistoryObserver): void {
+  registerSpeechStreamListeners(observer: ChatHistoryAdditionsObserver): void {
     EventBus.on(
       "saypi:tts:replaying",
       (utterance: SpeechSynthesisUtteranceRemote) => {
