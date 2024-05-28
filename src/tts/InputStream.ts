@@ -30,6 +30,7 @@ export class ElementTextStream {
         this.resetStreamTimeout();
       },
       complete: () => {
+        console.debug("Clearing timeout on stream completion");
         clearTimeout(this.timeout);
       },
     });
@@ -46,13 +47,11 @@ export class ElementTextStream {
       clearTimeout(this.timeout);
     }
     this.timeout = setTimeout(() => {
-      console.log(`Stream timed out after ${STREAM_TIMEOUT_MS}ms`);
+      console.log(
+        `Stream ended on timeout out after ${STREAM_TIMEOUT_MS}ms since last token`
+      );
       this.subject.complete();
     }, STREAM_TIMEOUT_MS);
-  }
-
-  private getTextStreamedSoFar(): string {
-    return this.emittedValues.join("");
   }
 
   protected getTextIsStable(): boolean {
@@ -68,79 +67,96 @@ export class ElementTextStream {
   }
 
   protected registerObserver(): void {
-    const observerCallback = (mutationsList: MutationRecord[]) => {
-      // Clear the timer if it's running
+    const clearBatchIntervalTimer = () => {
       if (this.batchIntervalTimerId !== null) {
         clearTimeout(this.batchIntervalTimerId);
         this.batchIntervalTimerId = null;
       }
+    };
+
+    const updateBatchTiming = () => {
       const timeOfBatch = Date.now();
       if (this.timeOfLastBatch === null) {
         this.timeOfLastBatch = timeOfBatch;
       }
       const timeSinceLastBatch = timeOfBatch - this.timeOfLastBatch;
       this.timeOfLastBatch = timeOfBatch;
-      let avgIntervalMs = 1000;
       if (timeSinceLastBatch > 0) {
         this.intervalsBetweenBatches.push(timeSinceLastBatch);
-        avgIntervalMs =
-          this.intervalsBetweenBatches.reduce((a, b) => a + b, 0) /
-          this.intervalsBetweenBatches.length;
       }
-      for (let m = 0; m < mutationsList.length; m++) {
-        const mutation = mutationsList[m];
-        if (mutation.type === "childList") {
-          for (let i = 0; i < mutation.addedNodes.length; i++) {
-            const node = mutation.addedNodes[i];
-            if (node.nodeType === Node.ELEMENT_NODE) {
-              const element = node as HTMLElement;
-              // if element is a div, it's a new paragraph
-              if (element.tagName === "DIV" && this.emittedValues.length > 0) {
-                //this.subject.next(PARAGRAPH_BREAK);
-              }
-            } else if (node.nodeType === Node.TEXT_NODE) {
-              const textNode = node as Text;
-              // with pi.ai, whole paragraphs are streamed as a list of text node mutations
-              const word: string | null = textNode.textContent;
-              const paragraph = textNode.wholeText; // the sentence is the adjacent contigious text of the node and its siblings
-              if (word) {
-                const isFirstWordInParagraph =
-                  i === 0 && paragraph.startsWith(word);
-                const isFirstParagraph = this.emittedValues.length === 0;
-                const isBlockElement = node.parentElement?.tagName === "DIV";
-                if (
-                  isFirstWordInParagraph &&
-                  !isFirstParagraph &&
-                  isBlockElement
-                ) {
-                  this.subject.next(PARAGRAPH_BREAK + word);
-                } else {
-                  this.subject.next(word);
-                }
-                // all nodes in the paragraph end with a ' ', expect for sub-word tokens, and the final word
-                const isLastWordInParagraph =
-                  i === mutation.addedNodes.length - 1 &&
-                  m === mutationsList.length - 1;
-                if (word.endsWith(" ") || !isLastWordInParagraph) {
-                  continue;
-                } else {
-                  this.batchIntervalTimerId = setTimeout(() => {
-                    console.debug(
-                      `Ending stream after ${(2 * avgIntervalMs).toFixed(
-                        0
-                      )}ms of inactivity`
-                    );
-                    this.subject.complete();
-                  }, 2 * avgIntervalMs);
+      return (
+        this.intervalsBetweenBatches.reduce((a, b) => a + b, 0) /
+          this.intervalsBetweenBatches.length || 1000
+      );
+    };
 
-                  //this.subject.complete();
-                  //return; // end early
-                }
-              }
+    const handleTextNode = (
+      textNode: Text,
+      isFirstWordInParagraph: boolean,
+      isFirstParagraph: boolean,
+      isBlockElement: boolean,
+      isLastWordInParagraph: boolean,
+      avgIntervalMs: number
+    ) => {
+      const word: string | null = textNode.textContent;
+      if (word) {
+        if (isFirstWordInParagraph && !isFirstParagraph && isBlockElement) {
+          this.subject.next(PARAGRAPH_BREAK + word);
+        } else {
+          this.subject.next(word);
+        }
+        if (!word.endsWith(" ") && isLastWordInParagraph) {
+          this.batchIntervalTimerId = setTimeout(() => {
+            console.log(
+              `Stream ended on ${word} after ${(2 * avgIntervalMs).toFixed(
+                0
+              )}ms of inactivity`
+            );
+            this.subject.complete();
+          }, 2 * avgIntervalMs);
+        }
+      }
+    };
+
+    const handleMutation = (
+      mutation: MutationRecord,
+      avgIntervalMs: number
+    ) => {
+      if (mutation.type === "childList") {
+        for (let i = 0; i < mutation.addedNodes.length; i++) {
+          const node = mutation.addedNodes[i];
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            const element = node as HTMLElement;
+            if (element.tagName === "DIV" && this.emittedValues.length > 0) {
+              //this.subject.next(PARAGRAPH_BREAK);
             }
+          } else if (node.nodeType === Node.TEXT_NODE) {
+            const textNode = node as Text;
+            const paragraph = textNode.wholeText;
+            const isFirstWordInParagraph =
+              i === 0 && paragraph.startsWith(textNode.textContent || "");
+            const isFirstParagraph = this.emittedValues.length === 0;
+            const isBlockElement = node.parentElement?.tagName === "DIV";
+            const isLastWordInParagraph = i === mutation.addedNodes.length - 1;
+            handleTextNode(
+              textNode,
+              isFirstWordInParagraph,
+              isFirstParagraph,
+              isBlockElement,
+              isLastWordInParagraph,
+              avgIntervalMs
+            );
           }
         }
       }
+    };
+
+    const observerCallback = (mutationsList: MutationRecord[]) => {
+      clearBatchIntervalTimer();
+      const avgIntervalMs = updateBatchTiming();
+      mutationsList.forEach((mutation) =>
+        handleMutation(mutation, avgIntervalMs)
+      );
     };
 
     this.observer = new MutationObserver(observerCallback);

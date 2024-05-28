@@ -365,7 +365,7 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
     if (provider === audioProviders.SayPi) {
       const utterance = await this.speechSynthesis.createSpeechStream();
       message.enableTTS(utterance);
-      console.debug("Created audio stream", utterance.id);
+      console.debug("Opened audio input stream", utterance.id);
       const initialText = message.text;
       // send the initial text to the stream only if it's not empty
       if (initialText.trim()) {
@@ -378,7 +378,7 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
         utterance,
         () => this.ttsControlsModule.autoplaySpeech(utterance, 200),
         () => {
-          console.debug("Speech stream ended");
+          console.debug("Closed audio input stream", utterance.id);
         }
       );
       return utterance;
@@ -413,7 +413,7 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
             start = true;
           }
           const delay = currentTime - (firstChunkTime as number);
-          console.debug(`${delay}ms, streamed text: "${text}"`);
+          console.debug(`+${delay}ms, streamed text: "${text}"`);
           this.speechSynthesis
             .addSpeechToStream(utterance.id, text)
             .then(() => {
@@ -428,10 +428,16 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
         console.error(`Error occurred streaming text from element: ${error}`);
       },
       () => {
-        const totalTime = Date.now() - (firstChunkTime as number);
-        console.info(
-          `Text stream complete after ${(totalTime / 1000).toFixed(1)} seconds`
-        );
+        if (firstChunkTime) {
+          const totalTime = Date.now() - (firstChunkTime as number);
+          console.info(
+            `Text stream complete after ${(totalTime / 1000).toFixed(
+              1
+            )} seconds`
+          );
+        } else {
+          console.info("Text stream complete with no text");
+        }
         this.speechSynthesis.endSpeechStream(utterance);
         if (onEnd) {
           onEnd();
