@@ -35,7 +35,17 @@ export class ElementTextStream {
       },
     });
     this.resetStreamTimeout(); // set the initial timeout
+    this.emitInitialText(element); // emit the initial text
     this.registerObserver(); // start observing the element for additions
+  }
+
+  private emitInitialText(message: HTMLElement): void {
+    const initialText = getNestedText(message).trim();
+    // send the initial text to the stream only if it's not empty
+    if (initialText) {
+      console.debug(`Streaming text began with "${initialText}"`);
+      this.subject.next(initialText);
+    }
   }
 
   /**
@@ -98,7 +108,7 @@ export class ElementTextStream {
       isLastWordInParagraph: boolean,
       avgIntervalMs: number
     ) => {
-      const word: string | null = textNode.textContent;
+      const word: string | null = textNode.textContent?.trim() || null;
       if (word) {
         if (isFirstWordInParagraph && !isFirstParagraph && isBlockElement) {
           this.subject.next(PARAGRAPH_BREAK + word);

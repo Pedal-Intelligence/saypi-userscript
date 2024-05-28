@@ -368,12 +368,7 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
       const utterance = await this.speechSynthesis.createSpeechStream();
       message.enableTTS(utterance);
       console.debug("Opened audio input stream", utterance.id);
-      const initialText = message.text;
-      // send the initial text to the stream only if it's not empty
-      if (initialText.trim()) {
-        console.debug(`Streaming text began with "${initialText}"`);
-        this.speechSynthesis.addSpeechToStream(utterance.id, initialText);
-      }
+
       const messageContent = await message.decoratedContent();
       this.observeChatMessageElement(
         messageContent,

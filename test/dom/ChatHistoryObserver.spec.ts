@@ -14,6 +14,7 @@ import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
 import { UserPreferenceModuleMock } from "../prefs/PreferenceModule.mock";
 import { TextToSpeechService } from "../../src/tts/TextToSpeechService";
 import { AudioStreamManager } from "../../src/tts/AudioStreamManager";
+import { timeoutCalc } from "../tts/InputStream.spec";
 
 vi.mock("../tts/InputStream");
 vi.mock("../tts/SpeechSynthesisModule");
@@ -245,18 +246,22 @@ describe("ChatHistoryMessageObserver", () => {
       expect(text).toBe("Hello there! How are you doing?");
     });
 
-    it("text and stable text should converge", async () => {
-      const chatMessageElement = createAssistantMessage([
-        "Hello there!",
-        "How are you doing?",
-      ]);
-      const message = new AssistantResponse(chatMessageElement);
-      const stableText = await message.stableText();
-      expect(message.text).toBe(stableText);
+    it(
+      "text and stable text should converge",
+      async () => {
+        const chatMessageElement = createAssistantMessage([
+          "Hello there!",
+          "How are you doing?",
+        ]);
+        const message = new AssistantResponse(chatMessageElement);
+        const stableText = await message.stableText();
+        expect(message.text).toBe(stableText);
 
-      const stableHash = await message.stableHash();
-      expect(message.hash).toBe(stableHash);
-    });
+        const stableHash = await message.stableHash();
+        expect(message.hash).toBe(stableHash);
+      },
+      timeoutCalc(2)
+    );
 
     it("should eventually complete stableText and stableHash", async () => {
       const chatMessageElement = createAssistantMessage([

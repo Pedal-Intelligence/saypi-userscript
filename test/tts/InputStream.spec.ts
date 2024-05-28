@@ -31,7 +31,7 @@ async function collectStreamValues(
   });
 }
 
-function timeoutCalc(wc: number) {
+export function timeoutCalc(wc: number) {
   return wc * intervalMillis + STREAM_TIMEOUT_MS;
 }
 
@@ -116,4 +116,41 @@ test(
     ]);
   },
   timeoutCalc(2)
+);
+
+test(
+  "Preexisting text is emitted immediately",
+  async () => {
+    const element = document.createElement("div");
+    element.textContent = "Hello, world!";
+    document.body.appendChild(element);
+    const stream = new ElementTextStream(element);
+    const values: string[] = [];
+    const promise = collectStreamValues(stream, values);
+    await promise;
+    expect(values).toEqual(["Hello, world!"]);
+  },
+  timeoutCalc(1)
+);
+
+test(
+  "Text is trimmed before being emitted",
+  async () => {
+    const element = document.createElement("div");
+    document.body.appendChild(element);
+    const stream = new ElementTextStream(element);
+    const values: string[] = [];
+    const promise = collectStreamValues(stream, values);
+
+    await addText(element, "  Hello  ");
+    await addText(element, "world  ");
+    await addText(element, "you're  ");
+    await addText(element, "looking  ");
+    await addText(element, "great.  ");
+
+    // Wait for the Observable to complete
+    await promise;
+    expect(values).toEqual(["Hello", "world", "you're", "looking", "great."]);
+  },
+  timeoutCalc(5) * 2
 );
