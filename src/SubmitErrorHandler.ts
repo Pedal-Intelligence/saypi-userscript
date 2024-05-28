@@ -51,7 +51,8 @@ export default class SubmitErrorHandler {
     ) as HTMLTextAreaElement | null;
     if (submitButton && textarea) {
       if (submitButton.disabled && textarea.value.length > 0) {
-        return true;
+        console.warn("Submit error detected, but ignored.");
+        //return true; // submit error handler disabled in v1.6.0 for evaluation purposes
       }
     }
     return false;

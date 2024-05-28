@@ -4,7 +4,7 @@ import AudioControlsModule from "../audio/AudioControlsModule";
 import { AudioStreamManager } from "./AudioStreamManager";
 import { TextToSpeechService } from "./TextToSpeechService";
 import EventBus from "../events/EventBus";
-import { audioProviders } from "./SpeechModel";
+import { AudioProvider, audioProviders } from "./SpeechModel";
 
 function generateUUID(): string {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -84,12 +84,8 @@ class SpeechSynthesisModule {
 
   initProvider(): void {
     const audioControls = new AudioControlsModule();
-    this.isEnabled().then((enabled) => {
-      if (enabled) {
-        audioControls.useAudioOutputProvider(audioProviders.SayPi);
-      } else {
-        audioControls.useAudioOutputProvider(audioProviders.Pi);
-      }
+    this.getActiveAudioProvider().then((provider) => {
+      audioControls.useAudioOutputProvider(provider);
     });
   }
 
@@ -190,8 +186,16 @@ class SpeechSynthesisModule {
     return Promise.resolve();
   }
 
-  async isEnabled(): Promise<boolean> {
-    return await this.userPreferences.hasVoice();
+  /**
+   * Get the active audio provider based on user preferences
+   * @returns {Promise<AudioProvider>}
+   */
+  async getActiveAudioProvider(): Promise<AudioProvider> {
+    const customVoiceIsSelected = await this.userPreferences.hasVoice();
+    if (customVoiceIsSelected) {
+      return audioProviders.SayPi;
+    }
+    return audioProviders.Pi;
   }
 }
 

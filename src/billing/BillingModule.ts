@@ -17,20 +17,12 @@ export class BillingModule {
 
   private constructor() {
     // Load charges and utterances from storage when instantiated
-    chrome.storage.sync.get(["charges", "utterances"], (data) => {
+    chrome.storage.local.get(["charges", "utterances"], (data) => {
+      // Billing is stored locally because it won't fit in sync storage (8KB limit per item)
+      // TODO: Store billing data on the server with user accounts
       if (data.charges) {
         this.charges = data.charges;
       }
-      if (data.utterances) {
-        this.utterances = data.utterances;
-      }
-      console.log(
-        "BillingModule charges: ",
-        this.charges,
-        " for ",
-        this.utterances.length,
-        " utterances"
-      );
     });
   }
 
@@ -47,7 +39,7 @@ export class BillingModule {
     this.utterances.push(new UtteranceCharge(utterance, cost));
 
     // Save charges and utterances to storage after charging
-    chrome.storage.sync.set(
+    chrome.storage.local.set(
       {
         charges: this.charges,
         utterances: this.utterances,
@@ -56,7 +48,7 @@ export class BillingModule {
         if (chrome.runtime.lastError) {
           // If storage limit is exceeded, remove the oldest utterance and try again
           this.utterances.shift();
-          chrome.storage.sync.set({
+          chrome.storage.local.set({
             charges: this.charges,
             utterances: this.utterances,
           });

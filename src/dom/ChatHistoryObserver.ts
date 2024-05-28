@@ -12,6 +12,7 @@ import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { BaseObserver } from "./BaseObserver";
 import { Observation } from "./Observation";
 import { SpeechHistoryModule } from "../tts/SpeechHistoryModule";
+import { audioProviders } from "../tts/SpeechModel";
 
 class AssistantResponse {
   private _element: HTMLElement;
@@ -154,7 +155,6 @@ class ChatHistoryRootElementObserver extends BaseObserver {
           const pastMessagesContainer =
             this.chatHistoryRootElement?.querySelector(":nth-child(2)");
           if (pastMessagesContainer == addedElement) {
-            console.debug("Past chat history element detected");
             // add id to the 2nd child of the element
             addedElement.id = "saypi-chat-history-past-messages";
             if (this.oldMessageObserver) {
@@ -342,7 +342,7 @@ class ChatHistoryOldMessageObserver extends ChatHistoryMessageObserver {
       message.hash
     );
     if (utterance) {
-      console.debug("Found cached speech", utterance.id);
+      console.debug("Found message in speech history", utterance.id);
       return utterance;
     } else {
       // speech not cached
@@ -361,15 +361,15 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
   async streamSpeech(
     message: AssistantResponse
   ): Promise<SpeechSynthesisUtteranceRemote | null> {
-    const isEnabled = await this.speechSynthesis.isEnabled();
-    if (isEnabled) {
+    const provider = await this.speechSynthesis.getActiveAudioProvider();
+    if (provider === audioProviders.SayPi) {
       const utterance = await this.speechSynthesis.createSpeechStream();
       message.enableTTS(utterance);
-      console.log("Created audio stream", utterance.id);
+      console.debug("Created audio stream", utterance.id);
       const initialText = message.text;
       // send the initial text to the stream only if it's not empty
       if (initialText.trim()) {
-        console.log(`Streaming text began with "${initialText}"`);
+        console.debug(`Streaming text began with "${initialText}"`);
         this.speechSynthesis.addSpeechToStream(utterance.id, initialText);
       }
       const messageContent = await message.decoratedContent();
@@ -413,7 +413,7 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
             start = true;
           }
           const delay = currentTime - (firstChunkTime as number);
-          console.log(`${delay}ms, streamed text: "${text}"`);
+          console.debug(`${delay}ms, streamed text: "${text}"`);
           this.speechSynthesis
             .addSpeechToStream(utterance.id, text)
             .then(() => {
@@ -429,7 +429,7 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
       },
       () => {
         const totalTime = Date.now() - (firstChunkTime as number);
-        console.log(
+        console.info(
           `Text stream complete after ${(totalTime / 1000).toFixed(1)} seconds`
         );
         this.speechSynthesis.endSpeechStream(utterance);

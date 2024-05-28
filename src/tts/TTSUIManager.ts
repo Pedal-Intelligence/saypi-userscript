@@ -63,6 +63,8 @@ export class TextToSpeechUIManager {
     this.billingModule.charge(utterance);
   }
 
+  md5OfNothing = "d41d8cd98f00b204e9800998ecf8427e";
+
   associateWithChatHistory(
     chatHistoryObserver: ChatHistoryObserver,
     utterance: SpeechSynthesisUtteranceRemote
@@ -83,6 +85,11 @@ export class TextToSpeechUIManager {
         // debug: verify the hashes have converged
         if (hash !== assistantMessage.hash) {
           console.error(`Hash mismatch: ${hash} vs ${assistantMessage.hash}`);
+          if (hash === this.md5OfNothing) {
+            console.error(
+              "Hash is md5 of nothing - stable text failed to resolve."
+            );
+          }
           assistantMessage.stableText().then((stableText) => {
             console.debug(`Stable text: "${stableText}"`);
             console.debug(`Assistant text: "${assistantMessage.text}"`);
