@@ -1,9 +1,5 @@
 import { md5 } from "js-md5";
-import {
-  ElementTextStream,
-  PARAGRAPH_BREAK,
-  SilentElementTextStream,
-} from "../tts/InputStream";
+import { ElementTextStream } from "../tts/InputStream";
 import {
   SpeechSynthesisModule,
   SpeechSynthesisUtteranceRemote,
@@ -13,6 +9,8 @@ import { BaseObserver } from "./BaseObserver";
 import { Observation } from "./Observation";
 import { SpeechHistoryModule } from "../tts/SpeechHistoryModule";
 import { audioProviders } from "../tts/SpeechModel";
+
+const PARAGRAPH_BREAK: string = " "; // could alternatively be "" or "\n"
 
 class AssistantResponse {
   private _element: HTMLElement;
@@ -77,7 +75,7 @@ class AssistantResponse {
     if (contentNode) {
       const content = contentNode as HTMLElement;
       const textContent = content.innerText || content.textContent || "";
-      return textContent.trim();
+      return textContent.replace(/\n/g, PARAGRAPH_BREAK).trim();
     }
     return "";
   }
@@ -96,7 +94,7 @@ class AssistantResponse {
         },
         complete: () => {
           this.stablised = true;
-          this.finalText = textBuffer.join("");
+          this.finalText = textBuffer.join(PARAGRAPH_BREAK);
           resolve(this.finalText);
         },
       });

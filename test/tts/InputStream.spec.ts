@@ -92,7 +92,7 @@ test(
 );
 
 test(
-  "Paragraphs are separated by newlines",
+  "Paragraphs are separated by spaces",
   async () => {
     const element = document.createElement("div");
     document.body.appendChild(element);
@@ -112,7 +112,7 @@ test(
     await promise;
     expect(values).toEqual([
       "Hello there!",
-      "\nI have doubled in power since we last met.",
+      "I have doubled in power since we last met.",
     ]);
   },
   timeoutCalc(2)

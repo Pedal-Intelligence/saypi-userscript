@@ -2,7 +2,6 @@ import { Observable, ReplaySubject, Subject } from "rxjs";
 
 export const STREAM_TIMEOUT_MS: number = 8000; // visible for testing
 export const TEXT_STABILITY_THRESHOLD_MILLIS: number = 1500; // visible for testing
-export const PARAGRAPH_BREAK: string = "\n";
 
 // Visible for testing
 export function getNestedText(node: HTMLElement): string {
@@ -108,12 +107,13 @@ export class ElementTextStream {
       isLastWordInParagraph: boolean,
       avgIntervalMs: number
     ) => {
-      const word: string | null = textNode.textContent?.trim() || null;
-      if (word) {
+      const word: string | null = textNode.textContent || null;
+      if (word?.trim()) {
         if (isFirstWordInParagraph && !isFirstParagraph && isBlockElement) {
+          const PARAGRAPH_BREAK = ""; // no need to add a paragraph break, it's handled by the aggregating client, i.e. chat history observer
           this.subject.next(PARAGRAPH_BREAK + word);
         } else {
-          this.subject.next(word);
+          this.subject.next(word.trim());
         }
         if (!word.endsWith(" ") && isLastWordInParagraph) {
           this.batchIntervalTimerId = setTimeout(() => {
@@ -135,12 +135,7 @@ export class ElementTextStream {
       if (mutation.type === "childList") {
         for (let i = 0; i < mutation.addedNodes.length; i++) {
           const node = mutation.addedNodes[i];
-          if (node.nodeType === Node.ELEMENT_NODE) {
-            const element = node as HTMLElement;
-            if (element.tagName === "DIV" && this.emittedValues.length > 0) {
-              //this.subject.next(PARAGRAPH_BREAK);
-            }
-          } else if (node.nodeType === Node.TEXT_NODE) {
+          if (node.nodeType === Node.TEXT_NODE) {
             const textNode = node as Text;
             const paragraph = textNode.wholeText;
             const isFirstWordInParagraph =
