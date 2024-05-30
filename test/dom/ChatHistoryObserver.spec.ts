@@ -101,8 +101,10 @@ describe("ChatHistoryMessageObserver", () => {
     preWrap.classList.add("whitespace-pre-wrap", "mb-4", "last:mb-0");
     parent.appendChild(preWrap);
     const words = paragraph.split(" ");
-    for (const word of words) {
-      const textNode = document.createTextNode(word + " ");
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i];
+      const isLastWord = i === words.length - 1;
+      const textNode = document.createTextNode(isLastWord ? word : word + " ");
       preWrap.appendChild(textNode);
     }
   };
@@ -233,6 +235,7 @@ describe("ChatHistoryMessageObserver", () => {
   describe("text operators for assistant messages", () => {
     it("should get the text of an assistant message", () => {
       const chatMessageElement = createAssistantMessage("Hello there!");
+      const html = chatMessageElement.outerHTML;
       const message = new AssistantResponse(chatMessageElement);
       expect(message.text).toBe("Hello there!");
     });
@@ -243,7 +246,11 @@ describe("ChatHistoryMessageObserver", () => {
         "How are you doing?",
       ]);
       const text = new AssistantResponse(chatMessageElement).text;
-      expect(text).toBe("Hello there! How are you doing?");
+      expect(text).toBe(
+        ["Hello there!", "How are you doing?"].join(
+          AssistantResponse.PARAGRAPH_SEPARATOR
+        )
+      );
     });
 
     it(
@@ -283,7 +290,9 @@ describe("ChatHistoryMessageObserver", () => {
       console.log("Stable hash:", stableHash);
 
       expect(stableText).toBe(
-        "Hello there! How are you doing? How are the kids?"
+        ["Hello there!", "How are you doing?", "How are the kids?"].join(
+          AssistantResponse.PARAGRAPH_SEPARATOR
+        )
       );
       expect(stableHash).toBeDefined();
     }, 20000);

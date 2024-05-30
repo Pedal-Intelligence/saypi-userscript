@@ -14,7 +14,8 @@ class AssistantResponse {
   private _element: HTMLElement;
   private stablised: boolean = false;
   private finalText: string = "";
-  private static PARAGRAPH_SEPARATOR = ""; // should match ElementInputStream's delimiter argument
+  // visible for testing
+  static PARAGRAPH_SEPARATOR = ""; // should match ElementInputStream's delimiter argument
 
   constructor(element: HTMLElement) {
     this._element = element;
