@@ -33,4 +33,8 @@ class ElevenLabsVoice extends Voice implements SpeechSynthesisVoiceRemote {
   voiceURI: string = `https://api.saypi.ai/voices/${this.id}`;
 }
 
-export { ElevenLabsVoice };
+const mockVoices: ElevenLabsVoice[] = [
+  new ElevenLabsVoice("ig1TeITnnNlsJtfHxJlW", "Paola"),
+];
+
+export { ElevenLabsVoice, mockVoices };

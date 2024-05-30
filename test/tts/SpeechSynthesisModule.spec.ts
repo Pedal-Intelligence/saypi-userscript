@@ -1,15 +1,12 @@
 import { describe, it, beforeEach, afterEach, expect, vi } from "vitest";
-import {
-  SpeechSynthesisModule,
-  SpeechSynthesisVoiceRemote,
-} from "../../src/tts/SpeechSynthesisModule";
+import { SpeechSynthesisModule } from "../../src/tts/SpeechSynthesisModule";
 import { TextToSpeechService } from "../../src/tts/TextToSpeechService";
 import { AudioStreamManager } from "../../src/tts/AudioStreamManager";
 import { JSDOM } from "jsdom";
-import { voices as mockVoices } from "../data/Voices";
-import * as ConfigModule from "../../src/ConfigModule";
+import { mockVoices } from "../data/Voices";
 import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
 import { UserPreferenceModuleMock } from "../prefs/PreferenceModule.mock";
+import { mock } from "node:test";
 
 describe("SpeechSynthesisModule", () => {
   let speechSynthesisModule: SpeechSynthesisModule;
@@ -45,8 +42,13 @@ describe("SpeechSynthesisModule", () => {
       endStream: vi.fn(),
     } as unknown as AudioStreamManager;
 
-    userPreferenceModuleMock =
-      UserPreferenceModuleMock.getInstance() as unknown as UserPreferenceModule;
+    const preferredVoiceMock = mockVoices[0];
+
+    userPreferenceModuleMock = {
+      hasVoice: vi.fn().mockReturnValue(true),
+      getVoice: vi.fn().mockReturnValue(preferredVoiceMock),
+      getLanguage: vi.fn().mockReturnValue("en-US"),
+    } as unknown as UserPreferenceModule;
 
     speechSynthesisModule = new SpeechSynthesisModule(
       textToSpeechServiceMock,

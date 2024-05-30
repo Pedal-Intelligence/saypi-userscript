@@ -41,7 +41,7 @@
       "runtimeArgs": [
         "vitest",
         "--inspect-brk",
-        "test/tts/AudioStreamManager.spec.ts"
+        "test/tts/SpeechSynthesisModule.spec.ts"
       ]
     }
   ]
