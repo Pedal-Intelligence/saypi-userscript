@@ -1,12 +1,13 @@
 import { describe, it, beforeEach, afterEach, expect, vi } from "vitest";
 import { TextToSpeechService } from "../../src/tts/TextToSpeechService";
 import axios from "axios";
-import { voice as mockVoice, voices as mockVoices } from "../data/Voices";
+import { mockVoices } from "../data/Voices";
 
 vi.mock("axios");
 
 describe("TextToSpeechService", () => {
   let textToSpeechService: TextToSpeechService;
+  const mockVoice = mockVoices[0];
 
   beforeEach(() => {
     textToSpeechService = new TextToSpeechService("http://example.com");
@@ -67,12 +68,13 @@ describe("TextToSpeechService", () => {
 
   it("should add text to speech stream", async () => {
     (axios.post as any).mockResolvedValue({ status: 200 });
+    (axios.put as any).mockResolvedValue({ status: 200 });
 
     await textToSpeechService.addTextToSpeechStream("uuid", "Hello");
 
-    expect(axios.post).toHaveBeenCalledWith(
+    expect(axios.put).toHaveBeenCalledWith(
       "http://example.com/speak/uuid/stream",
-      { text: "Hello" }
+      { sequenceNumber: 0, text: "Hello" }
     );
   });
 });
