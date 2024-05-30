@@ -10,12 +10,11 @@ import { Observation } from "./Observation";
 import { SpeechHistoryModule } from "../tts/SpeechHistoryModule";
 import { audioProviders } from "../tts/SpeechModel";
 
-const PARAGRAPH_BREAK: string = " "; // could alternatively be "" or "\n"
-
 class AssistantResponse {
   private _element: HTMLElement;
   private stablised: boolean = false;
   private finalText: string = "";
+  private static PARAGRAPH_SEPARATOR = ""; // should match ElementInputStream's delimiter argument
 
   constructor(element: HTMLElement) {
     this._element = element;
@@ -75,7 +74,7 @@ class AssistantResponse {
     if (contentNode) {
       const content = contentNode as HTMLElement;
       const textContent = content.innerText || content.textContent || "";
-      return textContent.replace(/\n/g, PARAGRAPH_BREAK).trim();
+      return textContent.replace(/\n/g, AssistantResponse.PARAGRAPH_SEPARATOR);
     }
     return "";
   }
@@ -85,7 +84,8 @@ class AssistantResponse {
       return this.finalText;
     }
     const content = await this.decoratedContent();
-    const textStream = new ElementTextStream(content);
+    const includeInitialText = true; // stable text may be called on completed messages, so include the initial text
+    const textStream = new ElementTextStream(content, includeInitialText);
     const textBuffer: string[] = [];
     return new Promise((resolve) => {
       textStream.getStream().subscribe({
@@ -94,7 +94,7 @@ class AssistantResponse {
         },
         complete: () => {
           this.stablised = true;
-          this.finalText = textBuffer.join(PARAGRAPH_BREAK);
+          this.finalText = textBuffer.join("");
           resolve(this.finalText);
         },
       });
@@ -401,7 +401,7 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
     this.textStream.getStream().subscribe(
       (text) => {
         let start = false;
-        if (text.trim() || text === PARAGRAPH_BREAK) {
+        if (text) {
           const currentTime = Date.now();
           if (firstChunkTime === null) {
             firstChunkTime = currentTime;

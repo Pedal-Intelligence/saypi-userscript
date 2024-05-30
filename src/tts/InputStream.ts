@@ -18,7 +18,11 @@ export class ElementTextStream {
   private intervalsBetweenBatches: number[] = [];
   protected batchIntervalTimerId: NodeJS.Timeout | null = null;
 
-  constructor(protected element: HTMLElement) {
+  constructor(
+    protected element: HTMLElement,
+    protected includeInitialText: boolean = false,
+    protected delimiter: string = ""
+  ) {
     this.subject = new ReplaySubject<string>(1000); // buffer should be long enough to handle the longest text (4k characters)
     // subscribe to keep track of emitted values
     this.subject.subscribe((value) => this.emittedValues.push(value));
@@ -34,12 +38,14 @@ export class ElementTextStream {
       },
     });
     this.resetStreamTimeout(); // set the initial timeout
-    this.emitInitialText(element); // emit the initial text
+    if (includeInitialText) {
+      this.emitInitialText(element); // emit the initial text
+    }
     this.registerObserver(); // start observing the element for additions
   }
 
   private emitInitialText(message: HTMLElement): void {
-    const initialText = getNestedText(message).trim();
+    const initialText = getNestedText(message);
     // send the initial text to the stream only if it's not empty
     if (initialText) {
       console.debug(`Streaming text began with "${initialText}"`);
@@ -99,6 +105,28 @@ export class ElementTextStream {
       );
     };
 
+    const handleElementNode = (
+      element: HTMLElement,
+      isFirstParagraph: boolean,
+      avgIntervalMs: number
+    ) => {
+      if (this.delimiter && !isFirstParagraph) {
+        this.subject.next(this.delimiter);
+      }
+      return; // skip element content for now
+      const paragraph = getNestedText(element);
+      if (paragraph) {
+        handleText(
+          paragraph,
+          true,
+          isFirstParagraph,
+          true,
+          true,
+          avgIntervalMs
+        );
+      }
+    };
+
     const handleTextNode = (
       textNode: Text,
       isFirstWordInParagraph: boolean,
@@ -108,14 +136,30 @@ export class ElementTextStream {
       avgIntervalMs: number
     ) => {
       const word: string | null = textNode.textContent || null;
-      if (word?.trim()) {
-        if (isFirstWordInParagraph && !isFirstParagraph && isBlockElement) {
-          const PARAGRAPH_BREAK = ""; // no need to add a paragraph break, it's handled by the aggregating client, i.e. chat history observer
-          this.subject.next(PARAGRAPH_BREAK + word);
-        } else {
-          this.subject.next(word.trim());
-        }
-        if (!word.endsWith(" ") && isLastWordInParagraph) {
+      if (word) {
+        handleText(
+          word,
+          isFirstWordInParagraph,
+          isFirstParagraph,
+          isBlockElement,
+          isLastWordInParagraph,
+          avgIntervalMs
+        );
+      }
+    };
+
+    const handleText = (
+      word: string,
+      isFirstWordInParagraph: boolean,
+      isFirstParagraph: boolean,
+      isBlockElement: boolean,
+      isLastWordInParagraph: boolean,
+      avgIntervalMs: number
+    ) => {
+      if (word) {
+        this.subject.next(word);
+        if (isLastWordInParagraph && !word.endsWith(" ")) {
+          // end of paragraph increases likelihood that this is the end of the response
           this.batchIntervalTimerId = setTimeout(() => {
             console.log(
               `Stream ended on ${word} after ${(2 * avgIntervalMs).toFixed(
@@ -123,7 +167,7 @@ export class ElementTextStream {
               )}ms of inactivity`
             );
             this.subject.complete();
-          }, 2 * avgIntervalMs);
+          }, 3 * avgIntervalMs);
         }
       }
     };
@@ -134,13 +178,23 @@ export class ElementTextStream {
     ) => {
       if (mutation.type === "childList") {
         for (let i = 0; i < mutation.addedNodes.length; i++) {
+          const isFirstParagraph = this.emittedValues.length === 0;
+
           const node = mutation.addedNodes[i];
-          if (node.nodeType === Node.TEXT_NODE) {
+          if (
+            node.nodeType === Node.ELEMENT_NODE &&
+            (node as HTMLElement).tagName === "DIV"
+          ) {
+            handleElementNode(
+              node as HTMLElement,
+              isFirstParagraph,
+              avgIntervalMs
+            );
+          } else if (node.nodeType === Node.TEXT_NODE) {
             const textNode = node as Text;
             const paragraph = textNode.wholeText;
             const isFirstWordInParagraph =
               i === 0 && paragraph.startsWith(textNode.textContent || "");
-            const isFirstParagraph = this.emittedValues.length === 0;
             const isBlockElement = node.parentElement?.tagName === "DIV";
             const isLastWordInParagraph = i === mutation.addedNodes.length - 1;
             handleTextNode(

@@ -1,6 +1,5 @@
 import { expect, test, beforeEach } from "vitest";
 import { JSDOM } from "jsdom";
-import { toArray } from "rxjs/operators";
 import {
   ElementTextStream,
   STREAM_TIMEOUT_MS,
@@ -9,10 +8,16 @@ import {
 
 const intervalMillis = 100; // delay between adding text
 
-async function addText(element: HTMLElement, text: string, inline = true) {
+async function addText(element: HTMLElement, text: string) {
   await new Promise((resolve) => setTimeout(resolve, intervalMillis));
-  const container = document.createElement(inline ? "span" : "div");
-  element.appendChild(container).textContent = text;
+  element.appendChild(document.createTextNode(text));
+}
+
+async function addParagraph(element: HTMLElement, text: string) {
+  await new Promise((resolve) => setTimeout(resolve, intervalMillis));
+  const p = document.createElement("div");
+  element.appendChild(p);
+  addText(p, text);
 }
 
 async function collectStreamValues(
@@ -61,10 +66,10 @@ test(
     const stream = new ElementTextStream(element);
     const values: string[] = [];
     const promise = collectStreamValues(stream, values);
-    await addText(element, "Hello");
+    await addText(element, "Hello ");
     await addText(element, "world");
     await promise;
-    expect(values).toEqual(["Hello", "world"]);
+    expect(values).toEqual(["Hello ", "world"]);
   },
   timeoutCalc(2)
 );
@@ -78,35 +83,36 @@ test(
     const values: string[] = [];
     const promise = collectStreamValues(stream, values);
 
-    await addText(element, "Hello");
-    await addText(element, "world");
-    await addText(element, "you're");
-    await addText(element, "looking");
+    await addText(element, "Hello ");
+    await addText(element, "world ");
+    await addText(element, "you're ");
+    await addText(element, "looking ");
     await addText(element, "great");
 
     // Wait for the Observable to complete
     await promise;
-    expect(values).toEqual(["Hello", "world", "you're", "looking", "great"]);
+    expect(values).toEqual([
+      "Hello ",
+      "world ",
+      "you're ",
+      "looking ",
+      "great",
+    ]);
   },
   timeoutCalc(5)
 );
 
 test(
-  "Paragraphs are separated by spaces",
+  "Paragraphs are separated by only the specified delimiter",
   async () => {
     const element = document.createElement("div");
     document.body.appendChild(element);
-    const stream = new ElementTextStream(element);
+    const stream = new ElementTextStream(element); // no delimiter by default
     const values: string[] = [];
     const promise = collectStreamValues(stream, values);
 
-    const inline = false;
-    await addText(element, "Hello there!", inline);
-    await addText(
-      element,
-      "I have doubled in power since we last met.",
-      inline
-    );
+    await addParagraph(element, "Hello there!");
+    await addParagraph(element, "I have doubled in power since we last met.");
 
     // Wait for the Observable to complete
     await promise;
@@ -119,12 +125,13 @@ test(
 );
 
 test(
-  "Preexisting text is emitted immediately",
+  "Preexisting text is emitted immediately if requested",
   async () => {
     const element = document.createElement("div");
     element.textContent = "Hello, world!";
     document.body.appendChild(element);
-    const stream = new ElementTextStream(element);
+    const includeInitialText = true;
+    const stream = new ElementTextStream(element, includeInitialText);
     const values: string[] = [];
     const promise = collectStreamValues(stream, values);
     await promise;
@@ -133,24 +140,15 @@ test(
   timeoutCalc(1)
 );
 
-test(
-  "Text is trimmed before being emitted",
-  async () => {
-    const element = document.createElement("div");
-    document.body.appendChild(element);
-    const stream = new ElementTextStream(element);
-    const values: string[] = [];
-    const promise = collectStreamValues(stream, values);
+test("Streamed text should equal the text in the element", async () => {
+  const element = document.createElement("div");
+  document.body.appendChild(element);
+  const stream = new ElementTextStream(element);
+  const values: string[] = [];
+  const promise = collectStreamValues(stream, values);
 
-    await addText(element, "  Hello  ");
-    await addText(element, "world  ");
-    await addText(element, "you're  ");
-    await addText(element, "looking  ");
-    await addText(element, "great.  ");
-
-    // Wait for the Observable to complete
-    await promise;
-    expect(values).toEqual(["Hello", "world", "you're", "looking", "great."]);
-  },
-  timeoutCalc(5) * 2
-);
+  addText(element, "Hello ");
+  addText(element, "world.");
+  await promise;
+  expect(values.join("")).toEqual(element.textContent);
+});
