@@ -1,7 +1,7 @@
 async function loadCharges() {
   // Load charges from storage
   // charges are denominated in dollars
-  const result = await chrome.storage.sync.get("charges");
+  const result = await chrome.storage.local.get("charges");
   console.log("Charges: ", result.charges);
   return result.charges || 0;
 }

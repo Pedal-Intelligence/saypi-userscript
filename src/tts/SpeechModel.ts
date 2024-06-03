@@ -1,4 +1,6 @@
 import { config } from "../ConfigModule.js";
+import { UtteranceCharge } from "../billing/BillingModule.js";
+import { SpeechSynthesisUtteranceRemote } from "./SpeechSynthesisModule.js";
 
 const saypiAudioDomain = config.apiServerUrl
   ? new URL(config.apiServerUrl).hostname
@@ -37,4 +39,9 @@ const audioProviders = {
   // Add more providers as needed
 };
 
-export { audioProviders, AudioProvider };
+interface StreamedSpeech {
+  utterance: SpeechSynthesisUtteranceRemote;
+  charge?: UtteranceCharge;
+}
+
+export { audioProviders, AudioProvider, StreamedSpeech };

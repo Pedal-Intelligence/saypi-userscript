@@ -298,6 +298,9 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("All preferences have been cleared");
         location.reload();
       });
+      chrome.storage.local.clear().then(() => {
+        console.log("Speech history has been cleared");
+      });
     });
   }
 

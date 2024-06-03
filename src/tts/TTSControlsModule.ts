@@ -7,6 +7,7 @@ import {
 import volumeIconSVG from "../icons/volume-mid.svg";
 import { getResourceUrl } from "../ResourceModule";
 import EventBus from "../events/EventBus";
+import { UtteranceCharge } from "../billing/BillingModule";
 
 export class TTSControlsModule {
   constructor(private speechSynthesis: SpeechSynthesisModule) {}
@@ -43,15 +44,18 @@ export class TTSControlsModule {
    */
   addCostBasis(
     container: HTMLElement,
-    characterCount: number,
+    charge: UtteranceCharge,
     voice: SpeechSynthesisVoiceRemote
   ) {
-    const pricePer1kCharacters = voice.price;
-    const cost = (characterCount / 1000) * pricePer1kCharacters;
+    const cost = charge.cost;
+    if (cost === undefined) {
+      // cost should not be undefined, but just in case it is, don't display anything
+      return;
+    }
     const currency = getMessage("currencyUSDAbbreviation");
     const costElement = document.createElement("div");
     costElement.classList.add("text-sm", "text-neutral-500", "saypi-cost");
-    if (cost > 0) {
+    if (cost) {
       costElement.title = getMessage("ttsCostExplanation", [
         cost.toFixed(2),
         currency,
@@ -88,19 +92,16 @@ export class TTSControlsModule {
 
   public static updateCostBasis(
     container: HTMLElement,
-    characterCount: number,
-    voice: SpeechSynthesisVoiceRemote
+    charge: UtteranceCharge
   ) {
     const costElement = container.querySelector(
       ".saypi-cost .value"
     ) as HTMLElement | null;
     if (costElement) {
-      const pricePer1kCharacters = voice.price;
-      const cost = (characterCount / 1000) * pricePer1kCharacters;
-      costElement.textContent = cost.toFixed(2);
+      costElement.textContent = charge.cost.toFixed(2);
       const currency = getMessage("currencyUSDAbbreviation");
       costElement.title = getMessage("ttsCostExplanation", [
-        cost.toFixed(2),
+        charge.cost.toFixed(2),
         currency,
       ]);
     }

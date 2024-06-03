@@ -1,11 +1,20 @@
+import { md5 } from "js-md5";
 import { SpeechSynthesisUtteranceRemote } from "../tts/SpeechSynthesisModule";
 
-class UtteranceCharge {
-  utterance: SpeechSynthesisUtteranceRemote;
+export class UtteranceCharge {
+  utteranceId: string;
+  utteranceHash: string;
   cost: number;
 
+  static none = {
+    utteranceId: "", // empty string
+    utteranceHash: md5(""), // hash of empty string
+    cost: 0, // zero cost
+  } as UtteranceCharge;
+
   constructor(utterance: SpeechSynthesisUtteranceRemote, cost: number) {
-    this.utterance = utterance;
+    this.utteranceId = utterance.id;
+    this.utteranceHash = md5(utterance.text.trim()); // strip leading/trailing whitespace introduced by createStream
     this.cost = cost;
   }
 }
@@ -33,10 +42,11 @@ export class BillingModule {
     return BillingModule.instance;
   }
 
-  charge(utterance: SpeechSynthesisUtteranceRemote) {
+  charge(utterance: SpeechSynthesisUtteranceRemote): UtteranceCharge {
     const cost = (utterance.text.length * utterance.voice.price) / 1000; // voice price is per 1000 characters
     this.charges += cost;
-    this.utterances.push(new UtteranceCharge(utterance, cost));
+    const charge = new UtteranceCharge(utterance, cost);
+    this.utterances.push(charge);
 
     // Save charges and utterances to storage after charging
     chrome.storage.local.set(
@@ -55,9 +65,10 @@ export class BillingModule {
         }
       }
     );
+    return charge;
   }
 
-  getTotalCharges() {
+  getTotalCharges(): number {
     return this.charges;
   }
 }

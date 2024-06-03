@@ -11,11 +11,15 @@ import EventBus from "../events/EventBus";
 import { TTSControlsModule } from "./TTSControlsModule";
 import {
   AssistantResponse,
+  AssistantSpeech,
   ChatHistoryAdditionsObserver,
+  ChatHistoryOldMessageObserver,
   RootChatHistoryObserver,
 } from "../dom/ChatHistoryObserver";
 import { Observation } from "../dom/Observation";
 import { VoiceMenu } from "./VoiceMenu";
+import { Stream } from "stream";
+import { StreamedSpeech } from "./SpeechModel";
 
 export class TextToSpeechUIManager {
   private billingModule = BillingModule.getInstance();
@@ -50,26 +54,27 @@ export class TextToSpeechUIManager {
   }
 
   chargeForTTS(utterance: SpeechSynthesisUtteranceRemote): void {
+    const charge = this.billingModule.charge(utterance);
+
     const hoverMenu = document.getElementById(
       `saypi-tts-controls-${utterance.id}`
     );
     if (hoverMenu) {
-      TTSControlsModule.updateCostBasis(
-        hoverMenu,
-        utterance.text.length,
-        utterance.voice
-      );
+      TTSControlsModule.updateCostBasis(hoverMenu, charge);
     }
-    this.billingModule.charge(utterance);
+    const hash = charge.utteranceHash;
+    SpeechHistoryModule.getInstance().addChargeToHistory(hash, charge);
   }
 
   md5OfNothing = "d41d8cd98f00b204e9800998ecf8427e";
+  md5OfSpace = "7215ee9c7d9dc229d2921a40e899ec5f";
 
   associateWithChatHistory(
     chatHistoryObserver: ChatHistoryAdditionsObserver,
     utterance: SpeechSynthesisUtteranceRemote
   ): void {
     // get most recent message in chat history
+    const speech = new AssistantSpeech(utterance);
     const assistantMessages = document.querySelectorAll(".assistant-message");
     if (assistantMessages.length > 0) {
       const lastAssistantMessage = assistantMessages[
@@ -78,7 +83,7 @@ export class TextToSpeechUIManager {
       const assistantMessage = new AssistantResponse(lastAssistantMessage);
       chatHistoryObserver.decorateAssistantResponseWithSpeech(
         assistantMessage,
-        utterance
+        speech
       );
       // ensure the AssistantResponse object has finished mutating before generating its hash
       assistantMessage.stableHash().then((hash) => {
@@ -89,6 +94,8 @@ export class TextToSpeechUIManager {
             console.error(
               "Hash is md5 of nothing - stable text failed to resolve."
             );
+          } else if (hash === this.md5OfSpace) {
+            console.error("Hash is md5 of ' ' - text stream may be empty.");
           }
           assistantMessage.stableText().then((stableText) => {
             console.debug(`Stable text: "${stableText}"`);
@@ -97,7 +104,7 @@ export class TextToSpeechUIManager {
           return;
         }
         console.debug(`Adding speech to history with hash: ${hash}`);
-        SpeechHistoryModule.getInstance().addSpeechToHistory(hash, utterance);
+        SpeechHistoryModule.getInstance().addSpeechToHistory(hash, speech);
       });
     }
   }
@@ -115,23 +122,32 @@ export class TextToSpeechUIManager {
     });
   }
 
-  registerPresentChatHistoryListener(): ChatHistoryAdditionsObserver {
+  async registerPresentChatHistoryListener(): Promise<ChatHistoryAdditionsObserver> {
     const selector = "#saypi-chat-history-present-messages";
-    const chatHistoryObserver = new ChatHistoryAdditionsObserver(
+    const speechSynthesis = SpeechSynthesisModule.getInstance();
+    const existingMessagesObserver = new ChatHistoryOldMessageObserver(
       selector,
-      SpeechSynthesisModule.getInstance()
+      speechSynthesis
+    ); // this type of observer streams speech from the speech history
+    const initialMessages = await existingMessagesObserver // TODO const oldMessages = await ...
+      .runOnce(document.querySelector(selector) as HTMLElement); // run on initial content, i.e. most recent message in chat history
+    console.debug(
+      `Found ${initialMessages.length} recent assistant message(s)`
     );
-    chatHistoryObserver
-      .runOnce(document.querySelector(selector) as HTMLElement)
-      .then((count) =>
-        console.debug(`Found ${count} recent assistant message(s)`)
-      ); // run on initial content, i.e. most recent message in chat history
-    chatHistoryObserver.observe({
+    existingMessagesObserver.disconnect(); // only run once
+
+    const newMessagesObserver = new ChatHistoryAdditionsObserver(
+      selector,
+      speechSynthesis,
+      initialMessages // ignore these messages when observing new messages
+    ); // this type of observer streams speech from the TTS service
+    // continuously observe the chat history for new messages
+    newMessagesObserver.observe({
       childList: true,
       subtree: true,
       attributes: true,
     }); // would be more efficient to observe only the direct children of the chat history, but this is more robust
-    return chatHistoryObserver;
+    return newMessagesObserver;
   }
 
   registerSpeechStreamListeners(observer: ChatHistoryAdditionsObserver): void {
@@ -187,7 +203,8 @@ export class TextToSpeechUIManager {
     this.addIdChatHistory();
     this.findAndDecorateVoiceMenu();
     this.registerPastChatHistoryListener();
-    const observerPresent = this.registerPresentChatHistoryListener();
-    this.registerSpeechStreamListeners(observerPresent);
+    this.registerPresentChatHistoryListener().then((observerPresent) =>
+      this.registerSpeechStreamListeners(observerPresent)
+    );
   }
 }

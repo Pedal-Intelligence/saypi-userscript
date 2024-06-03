@@ -7,8 +7,10 @@ import {
 import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { BaseObserver } from "./BaseObserver";
 import { Observation } from "./Observation";
-import { SpeechHistoryModule } from "../tts/SpeechHistoryModule";
-import { audioProviders } from "../tts/SpeechModel";
+import { SpeechHistoryModule, SpeechRecord } from "../tts/SpeechHistoryModule";
+import { StreamedSpeech, audioProviders } from "../tts/SpeechModel";
+import { UtteranceCharge } from "../billing/BillingModule";
+import { Stream } from "stream";
 
 class AssistantResponse {
   private _element: HTMLElement;
@@ -165,8 +167,10 @@ class ChatHistoryRootElementObserver extends BaseObserver {
             );
             this.oldMessageObserver
               .runOnce(pastMessagesContainer)
-              .then((numFound) => {
-                console.debug(`Found ${numFound} old assistant messages`);
+              .then((messages) => {
+                console.debug(
+                  `Found ${messages.length} old assistant messages`
+                );
               });
             this.oldMessageObserver.observe({
               childList: true,
@@ -196,7 +200,7 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
    */
   protected abstract streamSpeech(
     message: AssistantResponse
-  ): Promise<SpeechSynthesisUtteranceRemote | null>;
+  ): Promise<StreamedSpeech | null>;
 
   protected async callback(mutations: MutationRecord[]): Promise<void> {
     for (const mutation of mutations) {
@@ -214,25 +218,6 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
         }
       }
     }
-  }
-
-  /**
-   * Run the observer once on the direct children of the root element
-   * Used for initial decoration of the chat history, before additional chat messages are loaded
-   * @param root: Element - the root of a tree of possible chat messages
-   */
-  async runOnce(root: Element): Promise<number> {
-    let numFound = 0;
-    for (const node of [...root.children]) {
-      if (node instanceof Element) {
-        const child = node as Element;
-        const responseObs = await this.findAndDecorateAssistantResponse(child);
-        if (responseObs.isReady()) {
-          numFound += 1;
-        }
-      }
-    }
-    return numFound;
   }
 
   static findAssistantResponse(searchRoot: Element): Observation {
@@ -277,10 +262,10 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
    */
   decorateAssistantResponseWithSpeech(
     message: AssistantResponse,
-    utterance: SpeechSynthesisUtteranceRemote
+    speech: StreamedSpeech
   ): void {
     if (!message.isTTSEnabled) {
-      message.enableTTS(utterance);
+      message.enableTTS(speech.utterance);
     }
 
     let hoverMenu = message.element.querySelector(".message-hover-menu");
@@ -297,14 +282,17 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
         ) as HTMLDivElement | null;
         if (!ttsControlsElement) {
           ttsControlsElement = document.createElement("div");
-          ttsControlsElement.id = `saypi-tts-controls-${utterance.id}`;
+          ttsControlsElement.id = `saypi-tts-controls-${speech.utterance.id}`;
           ttsControlsElement.classList.add("saypi-tts-controls", "pt-4");
           hoverMenu.appendChild(ttsControlsElement);
-          this.ttsControlsModule.addSpeechButton(utterance, ttsControlsElement);
+          this.ttsControlsModule.addSpeechButton(
+            speech.utterance,
+            ttsControlsElement
+          );
           this.ttsControlsModule.addCostBasis(
             ttsControlsElement,
-            utterance.text.length,
-            utterance.voice
+            speech.charge || UtteranceCharge.none,
+            speech.utterance.voice
           );
         }
       }
@@ -314,37 +302,34 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
   async findAndDecorateAssistantResponse(
     searchRoot: Element
   ): Promise<Observation> {
-    const obs = ChatHistoryNewMessageObserver.findAssistantResponse(searchRoot);
+    let obs = ChatHistoryMessageObserver.findAssistantResponse(searchRoot);
     if (obs.found) {
-      console.log("Found assistant message", obs.target);
+      console.log("Found assistant message", obs);
     }
     if (obs.found && obs.isNew && !obs.decorated) {
       const message = ChatHistoryMessageObserver.decorateAssistantResponse(
         obs.target as HTMLElement
       );
-      const utterance = await this.streamSpeech(message);
-      if (utterance) {
-        this.decorateAssistantResponseWithSpeech(message, utterance);
+      obs = Observation.decorated(obs, message);
+      const speech = await this.streamSpeech(message);
+      if (speech) {
+        this.decorateAssistantResponseWithSpeech(message, speech);
       }
     }
-    return Observation.decorated(obs);
+    return obs;
   }
-}
 
-class ChatHistoryOldMessageObserver extends ChatHistoryMessageObserver {
-  private speechHistory: SpeechHistoryModule =
-    SpeechHistoryModule.getInstance();
-
-  async streamSpeech(
+  async streamSpeechFromHistory(
+    history: SpeechHistoryModule,
     message: AssistantResponse
-  ): Promise<SpeechSynthesisUtteranceRemote | null> {
-    // query the speech history module for the utterance
-    const utterance = await this.speechHistory.getSpeechFromHistory(
-      message.hash
-    );
-    if (utterance) {
-      console.debug("Found message in speech history", utterance.id);
-      return utterance;
+  ): Promise<StreamedSpeech | null> {
+    const speechRecord = await history.getSpeechFromHistory(message.hash);
+    if (speechRecord) {
+      console.debug(
+        "Found message in speech history",
+        speechRecord.utterance.id
+      );
+      return speechRecord;
     } else {
       // speech not cached
       return null;
@@ -352,16 +337,74 @@ class ChatHistoryOldMessageObserver extends ChatHistoryMessageObserver {
   }
 }
 
+class AssistantSpeech implements StreamedSpeech {
+  utterance: SpeechSynthesisUtteranceRemote;
+  charge?: UtteranceCharge;
+  constructor(
+    utterance: SpeechSynthesisUtteranceRemote,
+    charge?: UtteranceCharge
+  ) {
+    this.utterance = utterance;
+    this.charge = charge;
+  }
+}
+
+class ChatHistoryOldMessageObserver extends ChatHistoryMessageObserver {
+  private speechHistory: SpeechHistoryModule =
+    SpeechHistoryModule.getInstance();
+
+  /**
+   * Run the observer once on the direct children of the root element
+   * Used for initial decoration of the chat history, before additional chat messages are loaded
+   * @param root: Element - the root of a tree of possible chat messages
+   */
+  async runOnce(root: Element): Promise<AssistantResponse[]> {
+    let messagesFound: AssistantResponse[] = [];
+    for (const node of [...root.children]) {
+      if (node instanceof Element) {
+        const child = node as Element;
+        const observation = await this.findAndDecorateAssistantResponse(child);
+        if (observation.isReady() && observation.decorations.length > 0) {
+          messagesFound.push(observation.decorations[0]);
+        }
+      }
+    }
+    return messagesFound;
+  }
+
+  async streamSpeech(
+    message: AssistantResponse
+  ): Promise<StreamedSpeech | null> {
+    // query the speech history module for the utterance
+    return await this.streamSpeechFromHistory(this.speechHistory, message);
+  }
+}
+
 class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
-  constructor(selector: string, speechSynthesis: SpeechSynthesisModule) {
+  private ignoreMessages: AssistantResponse[];
+  private speechHistory: SpeechHistoryModule =
+    SpeechHistoryModule.getInstance();
+  constructor(
+    selector: string,
+    speechSynthesis: SpeechSynthesisModule,
+    ignoreMessages: AssistantResponse[] = []
+  ) {
     super(selector, speechSynthesis);
     this.haltOnFirst = true; // only expecting to load one new chat message at a time
+    this.ignoreMessages = ignoreMessages;
   }
 
   // Chat history and automatic speech functionality
   async streamSpeech(
     message: AssistantResponse
-  ): Promise<SpeechSynthesisUtteranceRemote | null> {
+  ): Promise<StreamedSpeech | null> {
+    // check if the message is already in the ignore list
+    console.debug("Checking if message is in ignore list", message.text);
+    if (this.ignoreMessages.some((m) => m.hash === message.hash)) {
+      console.debug("Message is in ignore list, stream from history instead");
+      return await this.streamSpeechFromHistory(this.speechHistory, message);
+    }
+
     const provider = await this.speechSynthesis.getActiveAudioProvider();
     if (provider === audioProviders.SayPi) {
       const utterance = await this.speechSynthesis.createSpeechStream();
@@ -377,7 +420,7 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
           console.debug("Closed audio input stream", utterance.id);
         }
       );
-      return utterance;
+      return new AssistantSpeech(utterance);
     }
     return null;
   }
@@ -445,7 +488,9 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
 
 export {
   AssistantResponse,
+  AssistantSpeech,
   ChatHistoryMessageObserver,
+  ChatHistoryOldMessageObserver,
   ChatHistoryNewMessageObserver as ChatHistoryAdditionsObserver,
   ChatHistoryRootElementObserver as RootChatHistoryObserver,
 };
