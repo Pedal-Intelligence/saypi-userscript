@@ -1,14 +1,11 @@
 import {
   SpeechSynthesisModule,
   SpeechSynthesisUtteranceRemote,
-  SpeechSynthesisVoiceRemote,
 } from "./SpeechSynthesisModule";
 import { SpeechHistoryModule } from "./SpeechHistoryModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { Chatbot } from "../chatbots/Chatbot";
-import { BillingModule } from "../billing/BillingModule";
 import EventBus from "../events/EventBus";
-import { TTSControlsModule } from "./TTSControlsModule";
 import {
   AssistantResponse,
   AssistantSpeech,
@@ -18,12 +15,10 @@ import {
 } from "../dom/ChatHistoryObserver";
 import { Observation } from "../dom/Observation";
 import { VoiceMenu } from "./VoiceMenu";
-import { Stream } from "stream";
-import { StreamedSpeech } from "./SpeechModel";
 
 export class TextToSpeechUIManager {
-  private billingModule = BillingModule.getInstance();
   private userPreferences = UserPreferenceModule.getInstance();
+  private speechSynthesis = SpeechSynthesisModule.getInstance();
   private replaying = false; // flag to indicate whether the user requested a replay of an utterance
   private voiceMenu: VoiceMenu | null = null;
 
@@ -51,19 +46,6 @@ export class TextToSpeechUIManager {
       }
     }
     return true;
-  }
-
-  chargeForTTS(utterance: SpeechSynthesisUtteranceRemote): void {
-    const charge = this.billingModule.charge(utterance);
-
-    const hoverMenu = document.getElementById(
-      `saypi-tts-controls-${utterance.id}`
-    );
-    if (hoverMenu) {
-      TTSControlsModule.updateCostBasis(hoverMenu, charge);
-    }
-    const hash = charge.utteranceHash;
-    SpeechHistoryModule.getInstance().addChargeToHistory(hash, charge);
   }
 
   md5OfNothing = "d41d8cd98f00b204e9800998ecf8427e";
@@ -114,7 +96,7 @@ export class TextToSpeechUIManager {
     // and recursively observes the children of the past messages container
     const rootChatHistoryObserver = new RootChatHistoryObserver(
       "#saypi-chat-history",
-      SpeechSynthesisModule.getInstance()
+      this.speechSynthesis
     );
     rootChatHistoryObserver.observe({
       childList: true,
@@ -124,10 +106,9 @@ export class TextToSpeechUIManager {
 
   async registerPresentChatHistoryListener(): Promise<ChatHistoryAdditionsObserver> {
     const selector = "#saypi-chat-history-present-messages";
-    const speechSynthesis = SpeechSynthesisModule.getInstance();
     const existingMessagesObserver = new ChatHistoryOldMessageObserver(
       selector,
-      speechSynthesis
+      this.speechSynthesis
     ); // this type of observer streams speech from the speech history
     const initialMessages = await existingMessagesObserver // TODO const oldMessages = await ...
       .runOnce(document.querySelector(selector) as HTMLElement); // run on initial content, i.e. most recent message in chat history
@@ -138,7 +119,7 @@ export class TextToSpeechUIManager {
 
     const newMessagesObserver = new ChatHistoryAdditionsObserver(
       selector,
-      speechSynthesis,
+      this.speechSynthesis,
       initialMessages // ignore these messages when observing new messages
     ); // this type of observer streams speech from the TTS service
     // continuously observe the chat history for new messages
@@ -170,7 +151,7 @@ export class TextToSpeechUIManager {
       "saypi:tts:speechStreamEnded",
       (utterance: SpeechSynthesisUtteranceRemote) => {
         if (utterance) {
-          this.chargeForTTS(utterance);
+          this.speechSynthesis.chargeForTTS(utterance);
         }
       }
     );

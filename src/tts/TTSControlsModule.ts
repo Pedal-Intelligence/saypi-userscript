@@ -44,9 +44,8 @@ export class TTSControlsModule {
    */
   addCostBasis(
     container: HTMLElement,
-    charge: UtteranceCharge,
-    voice: SpeechSynthesisVoiceRemote
-  ) {
+    charge: UtteranceCharge
+  ): HTMLElement | void {
     const cost = charge.cost;
     if (cost === undefined) {
       // cost should not be undefined, but just in case it is, don't display anything
@@ -61,10 +60,7 @@ export class TTSControlsModule {
         currency,
       ]);
     } else {
-      costElement.title = getMessage(
-        "ttsCostExplanationFree",
-        voice.powered_by // should really be voice.provided_by, but I don't have that field yet
-      );
+      costElement.title = getMessage("ttsCostExplanationFree");
       costElement.classList.add("cost-free");
     }
 
@@ -72,7 +68,10 @@ export class TTSControlsModule {
       2
     )}</span>`;
     container.appendChild(costElement);
+    return costElement;
+  }
 
+  addPoweredBy(container: HTMLElement, voice: SpeechSynthesisVoiceRemote) {
     const poweredByElement = document.createElement("div");
     const ttsEngine = voice.powered_by;
     const ttsLabel = getMessage("ttsPoweredBy", ttsEngine);
@@ -87,7 +86,7 @@ export class TTSControlsModule {
       `icons/logos/${ttsEngine.toLowerCase()}.${logoImageExt}`
     );
     poweredByElement.innerHTML = `<img src="${logoImageUrl}" alt="${ttsLabel}" class="h-4 w-4 inline-block">`;
-    costElement.appendChild(poweredByElement);
+    container.appendChild(poweredByElement);
   }
 
   public static updateCostBasis(

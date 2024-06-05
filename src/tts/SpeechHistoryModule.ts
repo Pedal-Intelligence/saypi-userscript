@@ -1,10 +1,10 @@
 import { SpeechSynthesisUtteranceRemote } from "./SpeechSynthesisModule";
 import { UtteranceCharge } from "../billing/BillingModule";
 import { StreamedSpeech } from "./SpeechModel";
-import { merge } from "lodash";
 
 export class SpeechRecord implements StreamedSpeech {
   constructor(
+    public hash: string,
     public utterance: SpeechSynthesisUtteranceRemote,
     public charge?: UtteranceCharge
   ) {}
@@ -21,7 +21,8 @@ export class SpeechHistoryModule {
     return SpeechHistoryModule.instance;
   }
 
-  private async getStorageData(key: string): Promise<any> {
+  // visible for testing
+  public async getStorageData(key: string): Promise<any> {
     return new Promise((resolve, reject) => {
       chrome.storage.local.get([key], (result) => {
         if (chrome.runtime.lastError) {
@@ -33,7 +34,8 @@ export class SpeechHistoryModule {
     });
   }
 
-  private async setStorageData(data: any): Promise<void> {
+  // visible for testing
+  public async setStorageData(data: any): Promise<void> {
     return new Promise((resolve, reject) => {
       chrome.storage.local.set(data, () => {
         if (chrome.runtime.lastError) {
@@ -45,39 +47,24 @@ export class SpeechHistoryModule {
     });
   }
 
-  private mergeSpeechRecords(record: SpeechRecord, speech: StreamedSpeech) {
-    if (record.utterance.id !== speech.utterance.id) {
-      console.warn(`Speech records are incompatible for merging.`);
-      return record;
-    }
-    return new SpeechRecord(
-      record.utterance,
-      merge(record.charge, speech.charge)
-    );
-  }
-
-  /**
-   * Add or update speech in the history.
-   **/
   public async addSpeechToHistory(
     hash: string,
     speech: StreamedSpeech
-  ): Promise<SpeechRecord | null> {
+  ): Promise<SpeechRecord> {
     try {
       const speechHistory = (await this.getStorageData("speechHistory")) || {};
-      let record = speechHistory[hash];
-      if (record) {
-        record = this.mergeSpeechRecords(record, speech);
-      } else {
-        record = new SpeechRecord(speech.utterance, speech.charge);
+      let utterance = speechHistory[hash];
+      if (!utterance) {
+        speechHistory[hash] = speech.utterance;
+        await this.setStorageData({ speechHistory: speechHistory });
       }
-      speechHistory[hash] = record;
-      await this.setStorageData({ speechHistory });
-      return record;
+      if (speech.charge) {
+        await this.addChargeToHistory(hash, speech.charge);
+      }
     } catch (error) {
       console.error(`Error adding speech to history: ${error}`);
     }
-    return null;
+    return new SpeechRecord(hash, speech.utterance, speech.charge);
   }
 
   /**
@@ -90,11 +77,16 @@ export class SpeechHistoryModule {
   ): Promise<SpeechRecord | null> {
     try {
       const speechHistory = (await this.getStorageData("speechHistory")) || {};
-      return speechHistory[hash] || null;
+      const utterance = speechHistory[hash] || null;
+      const chargeHistory = (await this.getStorageData("chargeHistory")) || {};
+      const charge = chargeHistory[hash];
+      if (utterance) {
+        return new SpeechRecord(hash, utterance, charge);
+      }
     } catch (error) {
       console.error(`Error getting speech from history: ${error}`);
-      return null;
     }
+    return null;
   }
 
   public async getAllSpeechHistory(): Promise<{
@@ -122,6 +114,7 @@ export class SpeechHistoryModule {
   public async clearSpeechHistory(): Promise<void> {
     try {
       await this.setStorageData({ speechHistory: {} });
+      await this.setStorageData({ chargeHistory: {} });
       console.log("Cleared all speech history.");
     } catch (error) {
       console.error(`Error clearing speech history: ${error}`);
@@ -136,26 +129,15 @@ export class SpeechHistoryModule {
   public async addChargeToHistory(
     hash: string,
     charge: UtteranceCharge
-  ): Promise<void> {
+  ): Promise<UtteranceCharge> {
     try {
-      const speechHistory = (await this.getStorageData("speechHistory")) || {};
-      const record = speechHistory[hash];
-      if (record) {
-        record.charge = charge;
-        await this.setStorageData({ speechHistory });
-        console.log(`Applied charge to speech with hash ${hash}.`);
-      } else {
-        // create a new speech record with the charge
-        const minimalUtterance = {
-          id: charge.utteranceId,
-        } as SpeechSynthesisUtteranceRemote;
-        const newRecord = new SpeechRecord(minimalUtterance, charge);
-        speechHistory[hash] = newRecord;
-        await this.setStorageData({ speechHistory });
-        console.log(`Added charge to speech with hash ${hash}.`);
-      }
+      const chargeHistory = (await this.getStorageData("chargeHistory")) || {};
+      chargeHistory[hash] = charge;
+      await this.setStorageData({ chargeHistory: chargeHistory });
+      console.log(`Saved charge to history with hash ${hash}.`);
     } catch (error) {
-      console.error(`Error applying charge to speech: ${error}`);
+      console.error(`Error saving charge to history: ${error}`);
     }
+    return charge;
   }
 }

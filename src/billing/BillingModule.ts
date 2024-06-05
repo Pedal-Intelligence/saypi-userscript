@@ -12,6 +12,10 @@ export class UtteranceCharge {
     cost: 0, // zero cost
   } as UtteranceCharge;
 
+  static free(utterance: SpeechSynthesisUtteranceRemote) {
+    return new UtteranceCharge(utterance, 0);
+  }
+
   constructor(utterance: SpeechSynthesisUtteranceRemote, cost: number) {
     this.utteranceId = utterance.id;
     this.utteranceHash = md5(utterance.text.trim()); // strip leading/trailing whitespace introduced by createStream

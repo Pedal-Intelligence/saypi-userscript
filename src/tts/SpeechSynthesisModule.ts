@@ -5,6 +5,9 @@ import { AudioStreamManager } from "./AudioStreamManager";
 import { TextToSpeechService } from "./TextToSpeechService";
 import EventBus from "../events/EventBus";
 import { AudioProvider, audioProviders } from "./SpeechModel";
+import { BillingModule } from "../billing/BillingModule";
+import { TTSControlsModule } from "./TTSControlsModule";
+import { SpeechHistoryModule } from "./SpeechHistoryModule";
 
 function generateUUID(): string {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -51,11 +54,13 @@ class SpeechSynthesisModule {
 
       const audioStreamManager = new AudioStreamManager(ttsService);
       const userPreferenceModule = UserPreferenceModule.getInstance();
+      const billingModule = BillingModule.getInstance();
 
       SpeechSynthesisModule.instance = new SpeechSynthesisModule(
         ttsService,
         audioStreamManager,
-        userPreferenceModule
+        userPreferenceModule,
+        billingModule
       );
     }
     return SpeechSynthesisModule.instance;
@@ -74,7 +79,8 @@ class SpeechSynthesisModule {
   constructor(
     ttsService: TextToSpeechService,
     audioStreamManager: AudioStreamManager,
-    userPreferenceModule: UserPreferenceModule
+    userPreferenceModule: UserPreferenceModule,
+    private billingModule: BillingModule
   ) {
     this.ttsService = ttsService;
     this.audioStreamManager = audioStreamManager;
@@ -196,6 +202,19 @@ class SpeechSynthesisModule {
       return audioProviders.SayPi;
     }
     return audioProviders.Pi;
+  }
+
+  chargeForTTS(utterance: SpeechSynthesisUtteranceRemote): void {
+    const charge = this.billingModule.charge(utterance);
+
+    const hoverMenu = document.getElementById(
+      `saypi-tts-controls-${utterance.id}`
+    );
+    if (hoverMenu) {
+      TTSControlsModule.updateCostBasis(hoverMenu, charge);
+    }
+    const hash = charge.utteranceHash;
+    SpeechHistoryModule.getInstance().addChargeToHistory(hash, charge);
   }
 }
 

@@ -241,8 +241,8 @@
     }
   },
   "ttsCostExplanationFree": {
-    "message": "This audio was generated free of charge by $provider$.",
-    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free.",
+    "message": "This audio was generated free of charge.",
+    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free. Could contain the name of the provider.",
     "placeholders": {
       "provider": {
         "content": "$1",
