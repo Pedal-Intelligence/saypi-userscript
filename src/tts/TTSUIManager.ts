@@ -13,10 +13,12 @@ import { Observation } from "../dom/Observation";
 import { VoiceMenu } from "./VoiceMenu";
 import { AssistantResponse } from "../dom/MessageElements";
 import { SpeechUtterance } from "./SpeechModel";
+import { TTSControlsModule } from "./TTSControlsModule";
 
 export class TextToSpeechUIManager {
   private userPreferences = UserPreferenceModule.getInstance();
   private speechSynthesis = SpeechSynthesisModule.getInstance();
+  private ttsControls = new TTSControlsModule(this.speechSynthesis);
   private replaying = false; // flag to indicate whether the user requested a replay of an utterance
   private voiceMenu: VoiceMenu | null = null;
 
@@ -49,10 +51,12 @@ export class TextToSpeechUIManager {
   md5OfNothing = "d41d8cd98f00b204e9800998ecf8427e";
   md5OfSpace = "7215ee9c7d9dc229d2921a40e899ec5f";
 
-  associateWithChatHistory(
-    chatHistoryObserver: ChatHistoryAdditionsObserver,
-    utterance: SpeechUtterance
-  ): void {
+  /**
+   * Find the message in the chat history that corresponds to the given utterance,
+   * and associate the utterance with that message in the speech history.
+   * @param utterance A spoken reading of a chat message
+   */
+  associateWithChatHistory(utterance: SpeechUtterance): void {
     // get most recent message in chat history
     const speech = new AssistantSpeech(utterance);
     const assistantMessages = document.querySelectorAll(".assistant-message");
@@ -61,10 +65,7 @@ export class TextToSpeechUIManager {
         assistantMessages.length - 1
       ] as HTMLElement;
       const assistantMessage = new AssistantResponse(lastAssistantMessage);
-      chatHistoryObserver.decorateAssistantResponseWithSpeech(
-        assistantMessage,
-        speech
-      );
+      assistantMessage.decorateSpeech(utterance);
       // ensure the AssistantResponse object has finished mutating before generating its hash
       assistantMessage.stableHash().then((hash) => {
         // debug: verify the hashes have converged
@@ -137,16 +138,11 @@ export class TextToSpeechUIManager {
       "saypi:tts:speechStreamStarted",
       (utterance: SpeechUtterance) => {
         if (utterance && !this.replaying) {
-          this.associateWithChatHistory(observer, utterance);
+          this.associateWithChatHistory(utterance);
         }
         this.replaying = false;
       }
     );
-    EventBus.on("saypi:tts:speechStreamEnded", (utterance: SpeechUtterance) => {
-      if (utterance) {
-        this.speechSynthesis.chargeForTTS(utterance);
-      }
-    });
   }
 
   findAndDecorateVoiceMenu(): Observation {

@@ -1,6 +1,9 @@
 import { md5 } from "js-md5";
 import { ElementTextStream } from "../tts/InputStream";
 import { SpeechUtterance } from "../tts/SpeechModel";
+import { TTSControlsModule } from "../tts/TTSControlsModule";
+import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
+import { UtteranceCharge } from "../billing/BillingModule";
 
 class AssistantResponse {
   private _element: HTMLElement;
@@ -9,9 +12,14 @@ class AssistantResponse {
   // visible for testing
   static PARAGRAPH_SEPARATOR = ""; // should match ElementInputStream's delimiter argument
   protected includeInitialText = true; // stable text may be called on completed messages, so include the initial text unless streaming
+  protected ttsControlsModule: TTSControlsModule;
 
   constructor(element: HTMLElement, includeInitialText = true) {
     this._element = element;
+    this.includeInitialText = includeInitialText;
+    this.ttsControlsModule = new TTSControlsModule(
+      SpeechSynthesisModule.getInstance()
+    );
     this.decorate();
   }
 
@@ -122,9 +130,67 @@ class AssistantResponse {
     return this.utteranceId !== null;
   }
 
-  enableTTS(utterance: SpeechUtterance): void {
+  /**
+   * Apply speech to this chat message
+   * @param utterance
+   */
+  decorateSpeech(utterance: SpeechUtterance): void {
     this._element.dataset.utteranceId = utterance.id;
     this._element.classList.add("speech-enabled");
+
+    let hoverMenu = this.element.querySelector(".message-hover-menu");
+    if (!hoverMenu) {
+      if (this.element.children.length > 1) {
+        hoverMenu = this.element.children[1] as HTMLDivElement;
+        hoverMenu.classList.add("message-hover-menu");
+        if (hoverMenu.children.length > 0) {
+          const createThreadButton = hoverMenu.children[0] as HTMLDivElement;
+          createThreadButton.classList.add("create-thread-button");
+        }
+      }
+    }
+    let ttsControlsElement = this.element.querySelector(
+      ".saypi-tts-controls"
+    ) as HTMLDivElement;
+    if (!ttsControlsElement) {
+      ttsControlsElement = document.createElement("div");
+      ttsControlsElement.id = `saypi-tts-controls-${utterance.id}`;
+      ttsControlsElement.classList.add("saypi-tts-controls", "pt-4");
+      hoverMenu?.appendChild(ttsControlsElement);
+    }
+    const speechButtonElement = ttsControlsElement.querySelector(
+      ".saypi-speak-button"
+    );
+    if (!speechButtonElement) {
+      this.ttsControlsModule.addSpeechButton(utterance, ttsControlsElement);
+    }
+    this.decorateCost(UtteranceCharge.none); // cost is unknown at this point
+    const costElement = ttsControlsElement.querySelector(
+      ".saypi-cost"
+    ) as HTMLDivElement | null;
+    if (costElement && utterance.voice) {
+      this.ttsControlsModule.addPoweredBy(costElement, utterance.voice);
+    }
+  }
+
+  /**
+   * Apply a charge to this chat message
+   * Can be called multiple times to update the charge
+   * @param charge The cost of the speech
+   */
+  decorateCost(charge: UtteranceCharge): void {
+    const ttsControlsElement = this.element.querySelector(
+      ".saypi-tts-controls"
+    ) as HTMLDivElement | null;
+    const costElement = this.element.querySelector(".saypi-cost");
+    if (ttsControlsElement && !costElement) {
+      this.ttsControlsModule.addCostBasis(ttsControlsElement, charge);
+    } else if (costElement) {
+      this.ttsControlsModule.updateCostBasis(
+        ttsControlsElement as HTMLElement,
+        charge
+      );
+    }
   }
 }
 

@@ -191,19 +191,6 @@ class SpeechSynthesisModule {
     }
     return audioProviders.Pi;
   }
-
-  chargeForTTS(utterance: SpeechUtterance): void {
-    const charge = this.billingModule.charge(utterance);
-
-    const hoverMenu = document.getElementById(
-      `saypi-tts-controls-${utterance.id}`
-    );
-    if (hoverMenu) {
-      TTSControlsModule.updateCostBasis(hoverMenu, charge);
-    }
-    const hash = charge.utteranceHash;
-    SpeechHistoryModule.getInstance().addChargeToHistory(hash, charge);
-  }
 }
 
 export { SpeechSynthesisModule };

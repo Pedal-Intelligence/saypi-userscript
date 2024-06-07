@@ -66,7 +66,13 @@ export class TTSControlsModule {
   }
 
   addPoweredBy(container: HTMLElement, voice: SpeechSynthesisVoiceRemote) {
-    const poweredByElement = document.createElement("div");
+    let poweredByElement = container.querySelector(
+      ".saypi-powered-by"
+    ) as HTMLElement | null;
+    if (poweredByElement) {
+      return;
+    }
+    poweredByElement = document.createElement("div");
     const ttsEngine = voice.powered_by;
     const ttsLabel = getMessage("ttsPoweredBy", ttsEngine);
     poweredByElement.classList.add(
@@ -83,10 +89,7 @@ export class TTSControlsModule {
     container.appendChild(poweredByElement);
   }
 
-  public static updateCostBasis(
-    container: HTMLElement,
-    charge: UtteranceCharge
-  ) {
+  public updateCostBasis(container: HTMLElement, charge: UtteranceCharge) {
     const costElement = container.querySelector(
       ".saypi-cost .value"
     ) as HTMLElement | null;

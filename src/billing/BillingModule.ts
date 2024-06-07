@@ -12,13 +12,13 @@ export class UtteranceCharge {
     cost: 0, // zero cost
   } as UtteranceCharge;
 
-  static free(utterance: SpeechUtterance) {
-    return new UtteranceCharge(utterance, 0);
+  static free(utterance: SpeechUtterance, text: string) {
+    return new UtteranceCharge(utterance, 0, md5(text.trim()));
   }
 
-  constructor(utterance: SpeechUtterance, cost: number) {
+  constructor(utterance: SpeechUtterance, cost: number, hash: string) {
     this.utteranceId = utterance.id;
-    this.utteranceHash = md5(utterance.text.trim()); // strip leading/trailing whitespace introduced by createStream
+    this.utteranceHash = hash;
     this.cost = cost;
   }
 }
@@ -46,10 +46,11 @@ export class BillingModule {
     return BillingModule.instance;
   }
 
-  charge(utterance: SpeechUtterance): UtteranceCharge {
-    const cost = (utterance.text.length * utterance.voice.price) / 1000; // voice price is per 1000 characters
+  charge(utterance: SpeechUtterance, text: string): UtteranceCharge {
+    text = text.trim(); // strip leading/trailing whitespace introduced by createStream
+    const cost = (text.length * utterance.voice.price) / 1000; // voice price is per 1000 characters
     this.charges += cost;
-    const charge = new UtteranceCharge(utterance, cost);
+    const charge = new UtteranceCharge(utterance, cost, md5(text));
     this.utterances.push(charge);
 
     // Save charges and utterances to storage after charging

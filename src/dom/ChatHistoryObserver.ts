@@ -10,7 +10,7 @@ import {
   StreamedSpeech,
   audioProviders,
 } from "../tts/SpeechModel";
-import { UtteranceCharge } from "../billing/BillingModule";
+import { BillingModule, UtteranceCharge } from "../billing/BillingModule";
 import EventBus from "../events/EventBus";
 import { AssistantResponse } from "./MessageElements";
 
@@ -136,63 +136,12 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
 
   /**
    * Decorates the assistant response with speech functionality
+   * @deprecated - use AssistantResponse.decorateSpeech() instead
    */
   decorateAssistantResponseWithSpeech(
     message: AssistantResponse,
     speech: StreamedSpeech
-  ): void {
-    if (!speech.utterance) {
-      console.error("Speech missing from stream", speech);
-      return;
-    }
-    if (!message.isTTSEnabled) {
-      message.enableTTS(speech.utterance);
-    }
-
-    let hoverMenu = message.element.querySelector(".message-hover-menu");
-    if (!hoverMenu) {
-      if (message.element.children.length > 1) {
-        hoverMenu = message.element.children[1] as HTMLDivElement;
-        hoverMenu.classList.add("message-hover-menu");
-        if (hoverMenu.children.length > 0) {
-          const createThreadButton = hoverMenu.children[0] as HTMLDivElement;
-          createThreadButton.classList.add("create-thread-button");
-        }
-      }
-    }
-    let ttsControlsElement = document.getElementById(
-      `saypi-tts-controls-${speech.utterance.id}`
-    );
-    if (!ttsControlsElement) {
-      ttsControlsElement = document.createElement("div");
-      ttsControlsElement.id = `saypi-tts-controls-${speech.utterance.id}`;
-      ttsControlsElement.classList.add("saypi-tts-controls", "pt-4");
-      hoverMenu?.appendChild(ttsControlsElement);
-    }
-    const speechButtonElement = ttsControlsElement.querySelector(
-      ".saypi-speak-button"
-    );
-    if (!speechButtonElement) {
-      this.ttsControlsModule.addSpeechButton(
-        speech.utterance,
-        ttsControlsElement
-      );
-    }
-    if (speech.charge && !ttsControlsElement.querySelector(".saypi-cost")) {
-      const costElement = this.ttsControlsModule.addCostBasis(
-        ttsControlsElement,
-        speech.charge
-      );
-      if (costElement && speech.utterance.voice) {
-        this.ttsControlsModule.addPoweredBy(
-          costElement,
-          speech.utterance.voice
-        );
-      }
-    } else {
-      console.warn("Missing charge for speech", speech);
-    }
-  }
+  ): void {}
 
   async findAndDecorateAssistantResponse(
     searchRoot: Element
@@ -296,7 +245,7 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
     const provider = await this.speechSynthesis.getActiveAudioProvider();
     if (provider === audioProviders.SayPi) {
       const utterance = await this.speechSynthesis.createSpeechStream();
-      message.enableTTS(utterance);
+      message.decorateSpeech(utterance);
       console.debug("Opened audio input stream", utterance.id);
 
       const messageContent = await message.decoratedContent();
@@ -304,8 +253,12 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
         messageContent,
         utterance,
         () => this.ttsControlsModule.autoplaySpeech(utterance, 200),
-        () => {
+        (text) => {
           console.debug("Closed audio input stream", utterance.id);
+          console.debug("Streamed text:", text);
+          const charge = BillingModule.getInstance().charge(utterance, text);
+          console.debug("Charging for TTS", charge);
+          message.decorateCost(charge);
         }
       );
       return new AssistantSpeech(utterance);
@@ -314,12 +267,8 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
       EventBus.on(
         "saypi:tts:speechStreamStarted",
         (utterance: SpeechUtterance) => {
-          const speech = new AssistantSpeech(
-            utterance,
-            UtteranceCharge.free(utterance)
-          );
-          this.speechSynthesis.chargeForTTS(utterance);
-          this.decorateAssistantResponseWithSpeech(message, speech);
+          message.decorateSpeech(utterance);
+          return new AssistantSpeech(utterance);
         }
       );
       return null;
@@ -332,7 +281,7 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
     messageContent: HTMLElement,
     utterance: SpeechUtterance,
     onStart: () => void,
-    onEnd: () => void
+    onEnd: (fullText: string) => void
   ): void {
     // If we're already observing an element, disconnect from it
     if (this.textStream) {
@@ -342,11 +291,13 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
     // Start observing the new element
     this.textStream = new ElementTextStream(messageContent);
     let firstChunkTime: number | null = null;
+    let fullText = ""; // Variable to accumulate the text
 
     this.textStream.getStream().subscribe(
       (text) => {
         let start = false;
         if (text) {
+          fullText += text; // Add the text chunk to the full text
           const currentTime = Date.now();
           if (firstChunkTime === null) {
             firstChunkTime = currentTime;
@@ -379,7 +330,7 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
         }
         this.speechSynthesis.endSpeechStream(utterance);
         if (onEnd) {
-          onEnd();
+          onEnd(fullText); // Pass the full text to the onEnd callback
         }
       }
     );
