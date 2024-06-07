@@ -1,13 +1,13 @@
 import {
-  SpeechSynthesisModule,
-  SpeechSynthesisUtteranceRemote,
+  PiSpeech,
+  SayPiSpeech,
   SpeechSynthesisVoiceRemote,
-} from "./SpeechSynthesisModule";
+  SpeechUtterance,
+} from "./SpeechModel";
+import { SpeechSynthesisModule } from "./SpeechSynthesisModule";
 
 interface SpeechSourceParser {
-  parse(
-    source: string
-  ): Promise<SpeechSynthesisUtteranceRemote> | SpeechSynthesisUtteranceRemote;
+  parse(source: string): Promise<SpeechUtterance> | SpeechUtterance;
 }
 
 class PiSpeechSourceParser implements SpeechSourceParser {
@@ -17,7 +17,7 @@ class PiSpeechSourceParser implements SpeechSourceParser {
     this.lang = default_lang;
   }
 
-  public parse(source: string): SpeechSynthesisUtteranceRemote {
+  public parse(source: string): SpeechUtterance {
     let url;
     try {
       url = new URL(source);
@@ -48,13 +48,7 @@ class PiSpeechSourceParser implements SpeechSourceParser {
       voiceURI: "", // inflection.ai doesn't provide this
     };
 
-    return {
-      id: messageSid,
-      text: "", // not available from the audio source
-      lang: this.lang,
-      uri: source,
-      voice: theVoice,
-    };
+    return new PiSpeech(messageSid, this.lang, theVoice, source);
   }
 }
 
@@ -67,9 +61,9 @@ class SayPiSpeechSourceParser implements SpeechSourceParser {
   /**
    * Matches URLs like https://api.saypi.ai/speak/5dbec6ff-9ee8-43fa-a9c1-e6bd51e9dfc6/stream?voice_id=ig1TeITnnNlsJtfHxJlW&lang=en-GB
    * @param source URL of the audio source
-   * @returns SpeechSynthesisUtteranceRemote
+   * @returns SpeechUtterance
    */
-  public async parse(source: string): Promise<SpeechSynthesisUtteranceRemote> {
+  public async parse(source: string): Promise<SpeechUtterance> {
     let url;
     try {
       url = new URL(source);
@@ -105,13 +99,7 @@ class SayPiSpeechSourceParser implements SpeechSourceParser {
     const theVoice: SpeechSynthesisVoiceRemote =
       await this.voiceModule.getVoiceById(voiceId);
 
-    return {
-      id: speechId,
-      text: "", // not available from the audio source
-      lang: lang || "",
-      uri: source,
-      voice: theVoice,
-    };
+    return new SayPiSpeech(speechId, lang || "", theVoice, source);
   }
 }
 export { PiSpeechSourceParser, SayPiSpeechSourceParser };

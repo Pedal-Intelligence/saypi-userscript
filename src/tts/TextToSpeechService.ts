@@ -1,8 +1,9 @@
 import axios from "axios";
 import {
-  SpeechSynthesisUtteranceRemote,
+  SayPiSpeech,
   SpeechSynthesisVoiceRemote,
-} from "./SpeechSynthesisModule";
+  SpeechUtterance,
+} from "./SpeechModel";
 
 export class TextToSpeechService {
   private sequenceNumbers: { [key: string]: number } = {};
@@ -29,7 +30,7 @@ export class TextToSpeechService {
     voice: SpeechSynthesisVoiceRemote,
     lang: string,
     stream: boolean
-  ): Promise<SpeechSynthesisUtteranceRemote> {
+  ): Promise<SpeechUtterance> {
     const voice_id = voice.id;
     const data = { voice: voice_id, text: text, lang: lang };
     const baseUri = `${this.serviceUrl}/speak/${uuid}`;
@@ -38,13 +39,7 @@ export class TextToSpeechService {
       ? `${baseUri}/stream?${queryParams}`
       : `${baseUri}?${queryParams}`;
 
-    const utterance: SpeechSynthesisUtteranceRemote = {
-      id: uuid,
-      text: text,
-      lang: lang,
-      voice: voice,
-      uri: uri,
-    };
+    const utterance: SpeechUtterance = new SayPiSpeech(uuid, lang, voice, uri);
     const response = await axios.post(uri, data); // post creates, put updates
     if (![200, 201].includes(response.status)) {
       throw new Error("Failed to synthesize speech");

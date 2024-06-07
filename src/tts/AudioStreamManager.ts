@@ -1,9 +1,6 @@
-import {
-  SpeechSynthesisUtteranceRemote,
-  SpeechSynthesisVoiceRemote,
-} from "./SpeechSynthesisModule";
 import { TextToSpeechService } from "./TextToSpeechService";
 import { InputBuffer } from "./InputBuffer";
+import { SpeechSynthesisVoiceRemote, SpeechUtterance } from "./SpeechModel";
 
 const STREAM_TIMEOUT_MS = 15000; // end streams after prolonged inactivity
 const BUFFER_TIMEOUT_MS = 1000; // flush buffers after inactivity
@@ -18,7 +15,7 @@ export class AudioStreamManager {
     uuid: string,
     voice: SpeechSynthesisVoiceRemote,
     lang: string
-  ): Promise<SpeechSynthesisUtteranceRemote> {
+  ): Promise<SpeechUtterance> {
     const utterance = await this.ttsService.createSpeech(
       uuid,
       START_OF_SPEECH_MARKER,

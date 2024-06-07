@@ -1,11 +1,10 @@
 import { config } from "../ConfigModule";
 import {
   SpeechSynthesisModule,
-  SpeechSynthesisVoiceRemote,
 } from "../tts/SpeechSynthesisModule";
 import AudioControlsModule from "../audio/AudioControlsModule";
 import EventBus from "../events/EventBus";
-import { audioProviders } from "../tts/SpeechModel";
+import { audioProviders, SpeechSynthesisVoiceRemote } from "../tts/SpeechModel";
 
 type Preference = "speed" | "balanced" | "accuracy" | null;
 type VoicePreference = SpeechSynthesisVoiceRemote | null;

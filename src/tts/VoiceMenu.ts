@@ -2,10 +2,8 @@ import { getResourceUrl } from "../ResourceModule";
 import { Chatbot } from "../chatbots/Chatbot";
 import { Observation } from "../dom/Observation";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
-import {
-  SpeechSynthesisModule,
-  SpeechSynthesisVoiceRemote,
-} from "./SpeechSynthesisModule";
+import { SpeechSynthesisVoiceRemote } from "./SpeechModel";
+import { SpeechSynthesisModule } from "./SpeechSynthesisModule";
 
 export class VoiceMenu {
   chatbot: Chatbot;

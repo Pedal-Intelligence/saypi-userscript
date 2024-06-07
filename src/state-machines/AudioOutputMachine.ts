@@ -1,15 +1,16 @@
 import { createMachine, assign, actions } from "xstate";
 import EventBus from "../events/EventBus.js";
-import {
-  SpeechSynthesisUtteranceRemote,
-  SpeechSynthesisModule,
-} from "../tts/SpeechSynthesisModule";
+import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import {
   PiSpeechSourceParser,
   SayPiSpeechSourceParser,
 } from "../tts/SpeechSourceParsers";
-import { AudioProvider, audioProviders } from "../tts/SpeechModel";
+import {
+  AudioProvider,
+  audioProviders,
+  SpeechUtterance,
+} from "../tts/SpeechModel";
 const { log } = actions;
 
 type LoadstartEvent = { type: "loadstart"; source: string };
@@ -244,7 +245,7 @@ export const audioOutputMachine = createMachine(
 
 async function getSpeechFromAudioSource(
   source: string
-): Promise<SpeechSynthesisUtteranceRemote | null> {
+): Promise<SpeechUtterance | null> {
   try {
     if (audioProviders.Pi.matches(source)) {
       const userPreferences = UserPreferenceModule.getInstance();

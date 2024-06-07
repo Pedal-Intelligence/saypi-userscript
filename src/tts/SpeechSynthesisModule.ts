@@ -4,7 +4,12 @@ import AudioControlsModule from "../audio/AudioControlsModule";
 import { AudioStreamManager } from "./AudioStreamManager";
 import { TextToSpeechService } from "./TextToSpeechService";
 import EventBus from "../events/EventBus";
-import { AudioProvider, audioProviders } from "./SpeechModel";
+import {
+  AudioProvider,
+  SpeechUtterance,
+  SpeechSynthesisVoiceRemote,
+  audioProviders,
+} from "./SpeechModel";
 import { BillingModule } from "../billing/BillingModule";
 import { TTSControlsModule } from "./TTSControlsModule";
 import { SpeechHistoryModule } from "./SpeechHistoryModule";
@@ -17,22 +22,7 @@ function generateUUID(): string {
   });
 }
 
-interface SpeechSynthesisUtteranceRemote {
-  /* based on SpeechSynthesisUtterance */
-  id: string;
-  text: string;
-  lang: string;
-  voice: SpeechSynthesisVoiceRemote;
-  uri: string;
-}
-
-interface SpeechSynthesisVoiceRemote extends SpeechSynthesisVoice {
-  id: string;
-  price: number; // price per 1000 characters
-  powered_by: string;
-}
-
-function getUtteranceURI(utterance: SpeechSynthesisUtteranceRemote): string {
+function getUtteranceURI(utterance: SpeechUtterance): string {
   if (utterance.uri.includes("?")) {
     return utterance.uri;
   } else {
@@ -125,7 +115,7 @@ class SpeechSynthesisModule {
   async createSpeech(
     text: string,
     stream: boolean = false
-  ): Promise<SpeechSynthesisUtteranceRemote> {
+  ): Promise<SpeechUtterance> {
     const preferedVoice: SpeechSynthesisVoiceRemote | null =
       await this.userPreferences.getVoice();
     if (!preferedVoice) {
@@ -142,7 +132,7 @@ class SpeechSynthesisModule {
     );
   }
 
-  async createSpeechStream(): Promise<SpeechSynthesisUtteranceRemote> {
+  async createSpeechStream(): Promise<SpeechUtterance> {
     const preferedVoice: SpeechSynthesisVoiceRemote | null =
       await this.userPreferences.getVoice();
     if (!preferedVoice) {
@@ -163,15 +153,13 @@ class SpeechSynthesisModule {
     return await this.audioStreamManager.addSpeechToStream(uuid, text);
   }
 
-  async endSpeechStream(
-    utterance: SpeechSynthesisUtteranceRemote
-  ): Promise<void> {
+  async endSpeechStream(utterance: SpeechUtterance): Promise<void> {
     await this.audioStreamManager.endStream(utterance.id);
     // doesn't capture all stream ended cases (see audioStreamManager.endStream for more), but good enough for now
     EventBus.emit("saypi:tts:speechStreamEnded", utterance);
   }
 
-  speak(utterance: SpeechSynthesisUtteranceRemote): void {
+  speak(utterance: SpeechUtterance): void {
     // Start audio playback with utterance.uri as the audio source
     const audioSource = getUtteranceURI(utterance);
     EventBus.emit("audio:load", { url: audioSource }); // indirectly calls AudioModule.loadAudio
@@ -204,7 +192,7 @@ class SpeechSynthesisModule {
     return audioProviders.Pi;
   }
 
-  chargeForTTS(utterance: SpeechSynthesisUtteranceRemote): void {
+  chargeForTTS(utterance: SpeechUtterance): void {
     const charge = this.billingModule.charge(utterance);
 
     const hoverMenu = document.getElementById(
@@ -218,8 +206,4 @@ class SpeechSynthesisModule {
   }
 }
 
-export {
-  SpeechSynthesisUtteranceRemote,
-  SpeechSynthesisVoiceRemote,
-  SpeechSynthesisModule,
-};
+export { SpeechSynthesisModule };

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { SpeechSynthesisUtteranceRemote } from "../../src/tts/SpeechSynthesisModule";
+import { SpeechUtterance } from "../../src/tts/SpeechSynthesisModule";
 import { UtteranceCharge } from "../../src/billing/BillingModule";
 import { StreamedSpeech } from "../../src/tts/SpeechModel";
 import {
@@ -35,8 +35,7 @@ describe("SpeechHistoryModule", () => {
       const theContent = "hello world!";
       const theUtterance = {
         id: "utterance1",
-        text: theContent,
-      } as SpeechSynthesisUtteranceRemote;
+      } as SpeechUtterance;
       const theHash = md5(theContent);
       const speech = {
         utterance: theUtterance,
@@ -56,8 +55,7 @@ describe("SpeechHistoryModule", () => {
       const theContent = "hello world!";
       const theUtterance = {
         id: "utterance1",
-        text: theContent,
-      } as SpeechSynthesisUtteranceRemote;
+      } as SpeechUtterance;
       const theHash = md5(theContent);
       const initialSpeech = new SpeechRecord(theHash, theUtterance);
 
@@ -90,8 +88,7 @@ describe("SpeechHistoryModule", () => {
       const theContent = "hello world!";
       const theUtterance = {
         id: "utterance1",
-        text: theContent,
-      } as SpeechSynthesisUtteranceRemote;
+      } as SpeechUtterance;
       const theHash = md5(theContent);
       const theCharge = {
         cost: 50,
@@ -114,8 +111,7 @@ describe("SpeechHistoryModule", () => {
       const theContent = "hello world!";
       const theUtterance = {
         id: "utterance1",
-        text: theContent,
-      } as SpeechSynthesisUtteranceRemote;
+      } as SpeechUtterance;
       const theHash = md5(theContent);
       const existingRecord = new SpeechRecord(theHash, theUtterance);
       await speechHistory.addSpeechToHistory(theHash, existingRecord); // add speech first

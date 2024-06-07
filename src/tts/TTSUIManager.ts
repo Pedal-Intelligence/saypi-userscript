@@ -1,13 +1,9 @@
-import {
-  SpeechSynthesisModule,
-  SpeechSynthesisUtteranceRemote,
-} from "./SpeechSynthesisModule";
+import { SpeechSynthesisModule } from "./SpeechSynthesisModule";
 import { SpeechHistoryModule } from "./SpeechHistoryModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { Chatbot } from "../chatbots/Chatbot";
 import EventBus from "../events/EventBus";
 import {
-  AssistantResponse,
   AssistantSpeech,
   ChatHistoryAdditionsObserver,
   ChatHistoryOldMessageObserver,
@@ -15,6 +11,8 @@ import {
 } from "../dom/ChatHistoryObserver";
 import { Observation } from "../dom/Observation";
 import { VoiceMenu } from "./VoiceMenu";
+import { AssistantResponse } from "../dom/MessageElements";
+import { SpeechUtterance } from "./SpeechModel";
 
 export class TextToSpeechUIManager {
   private userPreferences = UserPreferenceModule.getInstance();
@@ -53,7 +51,7 @@ export class TextToSpeechUIManager {
 
   associateWithChatHistory(
     chatHistoryObserver: ChatHistoryAdditionsObserver,
-    utterance: SpeechSynthesisUtteranceRemote
+    utterance: SpeechUtterance
   ): void {
     // get most recent message in chat history
     const speech = new AssistantSpeech(utterance);
@@ -132,29 +130,23 @@ export class TextToSpeechUIManager {
   }
 
   registerSpeechStreamListeners(observer: ChatHistoryAdditionsObserver): void {
-    EventBus.on(
-      "saypi:tts:replaying",
-      (utterance: SpeechSynthesisUtteranceRemote) => {
-        this.replaying = true;
-      }
-    );
+    EventBus.on("saypi:tts:replaying", (utterance: SpeechUtterance) => {
+      this.replaying = true;
+    });
     EventBus.on(
       "saypi:tts:speechStreamStarted",
-      (utterance: SpeechSynthesisUtteranceRemote) => {
+      (utterance: SpeechUtterance) => {
         if (utterance && !this.replaying) {
           this.associateWithChatHistory(observer, utterance);
         }
         this.replaying = false;
       }
     );
-    EventBus.on(
-      "saypi:tts:speechStreamEnded",
-      (utterance: SpeechSynthesisUtteranceRemote) => {
-        if (utterance) {
-          this.speechSynthesis.chargeForTTS(utterance);
-        }
+    EventBus.on("saypi:tts:speechStreamEnded", (utterance: SpeechUtterance) => {
+      if (utterance) {
+        this.speechSynthesis.chargeForTTS(utterance);
       }
-    );
+    });
   }
 
   findAndDecorateVoiceMenu(): Observation {

@@ -1,11 +1,10 @@
-import { SpeechSynthesisUtteranceRemote } from "./SpeechSynthesisModule";
+import { SpeechUtterance, StreamedSpeech } from "../tts/SpeechModel";
 import { UtteranceCharge } from "../billing/BillingModule";
-import { StreamedSpeech } from "./SpeechModel";
 
 export class SpeechRecord implements StreamedSpeech {
   constructor(
     public hash: string,
-    public utterance: SpeechSynthesisUtteranceRemote,
+    public utterance: SpeechUtterance,
     public charge?: UtteranceCharge
   ) {}
 }

@@ -1,20 +1,20 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import {
-  SpeechSynthesisModule,
-  SpeechSynthesisUtteranceRemote,
-  SpeechSynthesisVoiceRemote,
-} from "../../src/tts/SpeechSynthesisModule";
+import { SpeechSynthesisModule } from "../../src/tts/SpeechSynthesisModule";
 import { TTSControlsModule } from "../../src/tts/TTSControlsModule";
-import {
-  AssistantResponse,
-  ChatHistoryMessageObserver,
-} from "../../src/dom/ChatHistoryObserver";
+import { ChatHistoryMessageObserver } from "../../src/dom/ChatHistoryObserver";
 import { JSDOM } from "jsdom";
 import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
 import { UserPreferenceModuleMock } from "../prefs/PreferenceModule.mock";
 import { TextToSpeechService } from "../../src/tts/TextToSpeechService";
 import { AudioStreamManager } from "../../src/tts/AudioStreamManager";
 import { timeoutCalc } from "../tts/InputStream.spec";
+import { AssistantResponse } from "../../src/dom/MessageElements";
+import {
+  SayPiSpeech,
+  SpeechSynthesisVoiceRemote,
+  SpeechUtterance,
+} from "../../src/tts/SpeechModel";
+import { BillingModule } from "../../src/billing/BillingModule";
 
 vi.mock("../tts/InputStream");
 vi.mock("../tts/SpeechSynthesisModule");
@@ -70,13 +70,12 @@ describe("ChatHistoryMessageObserver", () => {
       voiceURI: "",
     };
 
-    const mockUtterance: SpeechSynthesisUtteranceRemote = {
-      id: "utterance-id",
-      text: "Hello world",
-      voice: mockVoice,
-      lang: "en",
-      uri: "https://api.saypi.ai/speech/utterance-id",
-    };
+    const mockUtterance: SpeechUtterance = new SayPiSpeech(
+      "utterance-id",
+      "en",
+      mockVoice,
+      "https://api.saypi.ai/speech/utterance-id"
+    );
     audioStreamManagerMock = {
       createStream: vi.fn(() => Promise.resolve(mockUtterance)),
       addSpeechToStream: vi.fn(),
@@ -86,10 +85,13 @@ describe("ChatHistoryMessageObserver", () => {
     userPreferenceModuleMock =
       UserPreferenceModuleMock.getInstance() as unknown as UserPreferenceModule;
 
+    const billingModuleMock = BillingModule.getInstance();
+
     speechSynthesisModule = new SpeechSynthesisModule(
       textToSpeechServiceMock,
       audioStreamManagerMock,
-      userPreferenceModuleMock
+      userPreferenceModuleMock,
+      billingModuleMock
     );
     ttsControlsModuleMock = new TTSControlsModule(speechSynthesisModule);
   });
@@ -109,6 +111,10 @@ describe("ChatHistoryMessageObserver", () => {
     }
   };
 
+  const decorateAssistantResponse = (element: HTMLElement) => {
+    return new AssistantResponse(element);
+  };
+
   /**
    * Create a chat message element, in the style of pi.ai assistant messages
    * @param text
@@ -120,21 +126,21 @@ describe("ChatHistoryMessageObserver", () => {
     decorated: boolean = false
   ) => {
     const paragraphs = Array.isArray(text) ? text : [text];
-    const message = document.createElement("div");
-    message.classList.add("break-anywhere");
+    const messageElement = document.createElement("div");
+    messageElement.classList.add("break-anywhere");
     const flex = document.createElement("div");
     flex.classList.add("flex", "items-center");
     const wFull = document.createElement("div");
     wFull.classList.add("w-full");
     flex.appendChild(wFull);
-    message.appendChild(flex);
+    messageElement.appendChild(flex);
     for (const paragraph of paragraphs) {
       addParagraph(paragraph, wFull);
     }
     if (decorated) {
-      ChatHistoryMessageObserver.decorateAssistantResponse(message);
+      decorateAssistantResponse(messageElement);
     }
-    return message;
+    return messageElement;
   };
 
   const addTextToAssistantMessage = (message: HTMLElement, text: string) => {
@@ -160,7 +166,7 @@ describe("ChatHistoryMessageObserver", () => {
         ChatHistoryMessageObserver.findAssistantResponse(chatHistoryElement);
       expect(afterAddition.found).toBe(true);
       expect(afterAddition.decorated).toBe(false);
-      ChatHistoryMessageObserver.decorateAssistantResponse(assistantMessage);
+      decorateAssistantResponse(assistantMessage);
       const afterDecoration =
         ChatHistoryMessageObserver.findAssistantResponse(chatHistoryElement);
       expect(afterDecoration.found).toBe(true);
@@ -218,10 +224,7 @@ describe("ChatHistoryMessageObserver", () => {
   describe("decorateAssistantResponse", () => {
     it("should decorate an assistant response", () => {
       const chatMessageElement = createAssistantMessage("Hello there!");
-      const assistantResponse =
-        ChatHistoryMessageObserver.decorateAssistantResponse(
-          chatMessageElement
-        );
+      const assistantResponse = decorateAssistantResponse(chatMessageElement);
       expect(assistantResponse.element).toBe(chatMessageElement);
       expect(chatMessageElement.classList.contains("assistant-message")).toBe(
         true

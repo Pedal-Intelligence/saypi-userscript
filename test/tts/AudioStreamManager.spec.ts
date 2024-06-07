@@ -1,10 +1,12 @@
 import { describe, it, beforeEach, afterEach, expect, vi } from "vitest";
 import { AudioStreamManager } from "../../src/tts/AudioStreamManager";
-import {
-  SpeechSynthesisUtteranceRemote,
-  SpeechSynthesisVoiceRemote,
-} from "../../src/tts/SpeechSynthesisModule";
+import {} from "../../src/tts/SpeechSynthesisModule";
 import { TextToSpeechService } from "../../src/tts/TextToSpeechService";
+import {
+  AudioProvider,
+  SpeechSynthesisVoiceRemote,
+  SpeechUtterance,
+} from "../../src/tts/SpeechModel";
 
 vi.mock("../../src/tts/TextToSpeechService");
 vi.useFakeTimers();
@@ -30,12 +32,15 @@ describe(
         createSpeech: vi.fn(),
         addTextToSpeechStream: vi.fn().mockResolvedValue(undefined),
       } as unknown as TextToSpeechService;
-      const mockUtterance: SpeechSynthesisUtteranceRemote = {
+      const mockUtterance: SpeechUtterance = {
         id: "uuid",
-        text: " ",
         lang: "en-US",
         voice: mockVoice,
         uri: "http://example.com/speak/uuid",
+        provider: {
+          name: "testProvider",
+          domain: "example.com",
+        } as AudioProvider,
       };
       (textToSpeechService.createSpeech as any).mockResolvedValue(
         mockUtterance
@@ -53,12 +58,15 @@ describe(
     });
 
     it("should create a stream", async () => {
-      const mockUtterance: SpeechSynthesisUtteranceRemote = {
+      const mockUtterance: SpeechUtterance = {
         id: "uuid",
-        text: "Hello",
         lang: "en-US",
         voice: mockVoice,
         uri: "http://example.com/speak/uuid",
+        provider: {
+          name: "testProvider",
+          domain: "example.com",
+        } as AudioProvider,
       };
       (textToSpeechService.createSpeech as any).mockResolvedValue(
         mockUtterance

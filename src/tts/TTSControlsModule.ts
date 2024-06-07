@@ -1,13 +1,10 @@
 import getMessage from "../i18n";
-import {
-  SpeechSynthesisModule,
-  SpeechSynthesisUtteranceRemote,
-  SpeechSynthesisVoiceRemote,
-} from "./SpeechSynthesisModule";
+import { SpeechSynthesisModule } from "./SpeechSynthesisModule";
 import volumeIconSVG from "../icons/volume-mid.svg";
 import { getResourceUrl } from "../ResourceModule";
 import EventBus from "../events/EventBus";
 import { UtteranceCharge } from "../billing/BillingModule";
+import { SpeechSynthesisVoiceRemote, SpeechUtterance } from "./SpeechModel";
 
 export class TTSControlsModule {
   constructor(private speechSynthesis: SpeechSynthesisModule) {}
@@ -25,10 +22,7 @@ export class TTSControlsModule {
     return button;
   }
 
-  addSpeechButton(
-    utterance: SpeechSynthesisUtteranceRemote,
-    container: HTMLElement
-  ): void {
+  addSpeechButton(utterance: SpeechUtterance, container: HTMLElement): void {
     const button = this.createSpeechButton();
     button.addEventListener("click", () => {
       EventBus.emit("saypi:tts:replaying", utterance); //  notify the ui manager that the next speech it hears will be a replay
@@ -111,7 +105,7 @@ export class TTSControlsModule {
    * @param utterance The utterance to stream
    * @param delayMs The number of milliseconds to wait before starting the stream
    */
-  autoplaySpeech(utterance: SpeechSynthesisUtteranceRemote, delayMs = 0) {
+  autoplaySpeech(utterance: SpeechUtterance, delayMs = 0) {
     // wait a beat, then start streaming the utterance
     setTimeout(() => {
       this.speechSynthesis.speak(utterance);
