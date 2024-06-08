@@ -252,7 +252,7 @@ async function getSpeechFromAudioSource(
       const userLang = await userPreferences.getLanguage();
       return new PiSpeechSourceParser(userLang).parse(source);
     } else if (audioProviders.SayPi.matches(source)) {
-      return new SayPiSpeechSourceParser(
+      return await new SayPiSpeechSourceParser(
         SpeechSynthesisModule.getInstance()
       ).parse(source);
     }

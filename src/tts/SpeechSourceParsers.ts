@@ -81,7 +81,7 @@ class SayPiSpeechSourceParser implements SpeechSourceParser {
       streamIndex <= speakIndex + 1
     ) {
       throw new Error(
-        `Invalid source: ${source} does not contain a valid speech ID.`
+        `Invalid source: ${source} is not a streaming speech URL.`
       );
     }
 
