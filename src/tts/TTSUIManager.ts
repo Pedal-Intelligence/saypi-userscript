@@ -130,7 +130,7 @@ export class TextToSpeechUIManager {
     return newMessagesObserver;
   }
 
-  registerSpeechStreamListeners(observer: ChatHistoryAdditionsObserver): void {
+  registerSpeechStreamListeners(): void {
     EventBus.on("saypi:tts:replaying", (utterance: SpeechUtterance) => {
       this.replaying = true;
     });
@@ -172,8 +172,7 @@ export class TextToSpeechUIManager {
     this.addIdChatHistory();
     this.findAndDecorateVoiceMenu();
     this.registerPastChatHistoryListener();
-    this.registerPresentChatHistoryListener().then((observerPresent) =>
-      this.registerSpeechStreamListeners(observerPresent)
-    );
+    this.registerPresentChatHistoryListener();
+    this.registerSpeechStreamListeners();
   }
 }

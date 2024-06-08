@@ -154,8 +154,11 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
       const message = this.decorateAssistantResponse(obs.target as HTMLElement);
       obs = Observation.decorated(obs, message);
       const speech = await this.streamSpeech(message);
-      if (speech) {
-        this.decorateAssistantResponseWithSpeech(message, speech);
+      if (speech?.utterance) {
+        message.decorateSpeech(speech.utterance);
+      }
+      if (speech?.charge) {
+        message.decorateCost(speech.charge);
       }
     }
     return obs;
@@ -259,6 +262,8 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
           const charge = BillingModule.getInstance().charge(utterance, text);
           console.debug("Charging for TTS", charge);
           message.decorateCost(charge);
+          console.debug("Saving charge to history", charge);
+          this.speechHistory.addChargeToHistory(charge.utteranceHash, charge);
         }
       );
       return new AssistantSpeech(utterance);
