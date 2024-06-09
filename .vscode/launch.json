@@ -41,7 +41,7 @@
       "runtimeArgs": [
         "vitest",
         "--inspect-brk",
-        "test/tts/SpeechHistory.spec.ts"
+        "test/tts/TextToSpeechService.spec.ts"
       ]
     }
   ]

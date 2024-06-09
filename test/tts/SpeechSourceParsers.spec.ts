@@ -7,6 +7,8 @@ import {
   PiSpeechSourceParser,
   SayPiSpeechSourceParser,
 } from "../../src/tts/SpeechSourceParsers";
+import { BillingModule } from "../../src/billing/BillingModule";
+import { audioProviders } from "../../src/tts/SpeechModel";
 
 vi.mock("../../src/tts/SpeechSynthesisModule", () => {
   return {
@@ -40,7 +42,6 @@ test("PiSpeechSourceParser should parse the URL correctly", async ({
 
   expect(result).toEqual({
     id: "neBP3hiXCNapu3BYFztb6",
-    text: "",
     lang: "en",
     uri: source,
     voice: {
@@ -53,6 +54,7 @@ test("PiSpeechSourceParser should parse the URL correctly", async ({
       powered_by: "inflection.ai",
       voiceURI: "",
     },
+    provider: audioProviders.Pi,
   });
 });
 
@@ -75,13 +77,13 @@ test("SayPiSpeechSourceParser should parse the URL correctly", async ({
   const mockVoiceModule = new SpeechSynthesisModule(
     {} as TextToSpeechService,
     {} as AudioStreamManager,
-    {} as UserPreferenceModule
+    {} as UserPreferenceModule,
+    {} as BillingModule
   );
   const parser = new SayPiSpeechSourceParser(mockVoiceModule);
   const result = await parser.parse(source);
   expect(result).toEqual({
     id: "48e3c44b-ceb5-4052-a639-2e2f1466002e",
-    text: "",
     lang: "en-GB",
     uri: source,
     voice: {
@@ -94,5 +96,6 @@ test("SayPiSpeechSourceParser should parse the URL correctly", async ({
       powered_by: "saypi.ai",
       voiceURI: "",
     },
+    provider: audioProviders.SayPi,
   });
 });

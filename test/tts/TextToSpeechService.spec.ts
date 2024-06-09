@@ -2,6 +2,7 @@ import { describe, it, beforeEach, afterEach, expect, vi } from "vitest";
 import { TextToSpeechService } from "../../src/tts/TextToSpeechService";
 import axios from "axios";
 import { mockVoices } from "../data/Voices";
+import { audioProviders } from "../../src/tts/SpeechModel";
 
 vi.mock("axios");
 
@@ -42,16 +43,19 @@ describe("TextToSpeechService", () => {
   });
 
   it("should create speech", async () => {
-    const mockUtterance = {
+    const expectedSpeech = {
       id: "uuid",
-      text: "Hello",
       lang: "en-US",
       voice: mockVoice,
       uri: `http://example.com/speak/uuid?voice_id=${mockVoice.id}&lang=en-US`,
+      provider: audioProviders.SayPi,
     };
-    (axios.post as any).mockResolvedValue({ status: 200, data: mockUtterance });
+    (axios.post as any).mockResolvedValue({
+      status: 200,
+      data: expectedSpeech,
+    });
 
-    const utterance = await textToSpeechService.createSpeech(
+    const actualSpeech = await textToSpeechService.createSpeech(
       "uuid",
       "Hello",
       mockVoice,
@@ -63,7 +67,7 @@ describe("TextToSpeechService", () => {
       `http://example.com/speak/uuid?voice_id=${mockVoice.id}&lang=en-US`,
       { voice: mockVoice.id, text: "Hello", lang: "en-US" }
     );
-    expect(utterance).toEqual(mockUtterance);
+    expect(actualSpeech).toEqual(expectedSpeech);
   });
 
   it("should add text to speech stream", async () => {
