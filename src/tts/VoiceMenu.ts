@@ -74,6 +74,9 @@ export class VoiceMenu {
     builtInPiVoiceButtons.forEach((button) => {
       button.addEventListener("click", () => {
         this.userPreferences.unsetVoice().then(() => {
+          if (this.selectedVoiceButton) {
+            this.unmarkButtonAsSelectedVoice(this.selectedVoiceButton);
+          }
           this.markVoiceButtonAsSelected(button);
         });
       });
