@@ -15,12 +15,46 @@ import { AssistantResponse } from "../dom/MessageElements";
 import { SpeechUtterance } from "./SpeechModel";
 import { TTSControlsModule } from "./TTSControlsModule";
 
+type EventListener = {
+  event: string;
+  listener: (...args: any[]) => void;
+};
+type Observer = {
+  disconnect: () => void;
+};
+
 export class TextToSpeechUIManager {
   private userPreferences = UserPreferenceModule.getInstance();
   private speechSynthesis = SpeechSynthesisModule.getInstance();
   private ttsControls = new TTSControlsModule(this.speechSynthesis);
   private replaying = false; // flag to indicate whether the user requested a replay of an utterance
   private voiceMenu: VoiceMenu | null = null;
+
+  // managed resources
+  private eventListeners: EventListener[] = [];
+  private observers: Observer[] = [];
+
+  findAndDecorateVoiceMenu(): Observation {
+    const audioControlsContainer = document.getElementById(
+      "saypi-audio-controls"
+    );
+    if (!audioControlsContainer) {
+      return Observation.notFound("saypi-audio-controls");
+    }
+    const voiceMenuElement = audioControlsContainer.querySelector(
+      this.chatbot.getVoiceMenuSelector()
+    );
+    if (voiceMenuElement && voiceMenuElement instanceof HTMLElement) {
+      let obs = Observation.notDecorated("saypi-voice-menu", voiceMenuElement);
+      this.voiceMenu = new VoiceMenu(
+        this.chatbot,
+        this.userPreferences,
+        voiceMenuElement
+      );
+      return Observation.decorated(obs);
+    }
+    return Observation.notFound("saypi-voice-menu");
+  }
 
   // Methods for DOM manipulation and element ID assignment
   addIdChatHistory(chatHistory: HTMLElement): void {
@@ -93,6 +127,7 @@ export class TextToSpeechUIManager {
       childList: true,
       subtree: false,
     });
+    this.observers.push(rootChatHistoryObserver);
   }
 
   async registerPresentChatHistoryListener(): Promise<ChatHistoryAdditionsObserver> {
@@ -119,51 +154,49 @@ export class TextToSpeechUIManager {
       subtree: true,
       attributes: true,
     }); // would be more efficient to observe only the direct children of the chat history, but this is more robust
+    this.observers.push(newMessagesObserver);
     return newMessagesObserver;
   }
 
+  // Register event listeners and store them for later removal
   registerSpeechStreamListeners(): void {
-    EventBus.on("saypi:tts:replaying", (utterance: SpeechUtterance) => {
+    const replayingListener = (utterance: SpeechUtterance) => {
       this.replaying = true;
-    });
-    EventBus.on(
-      "saypi:tts:speechStreamStarted",
-      (utterance: SpeechUtterance) => {
-        if (utterance && !this.replaying) {
-          this.associateWithChatHistory(utterance);
-        }
-        this.replaying = false;
+    };
+    const speechStreamStartedListener = (utterance: SpeechUtterance) => {
+      if (utterance && !this.replaying) {
+        this.associateWithChatHistory(utterance);
+      }
+      this.replaying = false;
+    };
+
+    EventBus.on("saypi:tts:replaying", replayingListener);
+    EventBus.on("saypi:tts:speechStreamStarted", speechStreamStartedListener);
+
+    this.eventListeners.push(
+      { event: "saypi:tts:replaying", listener: replayingListener },
+      {
+        event: "saypi:tts:speechStreamStarted",
+        listener: speechStreamStartedListener,
       }
     );
   }
 
-  findAndDecorateVoiceMenu(): Observation {
-    const audioControlsContainer = document.getElementById(
-      "saypi-audio-controls"
-    );
-    if (!audioControlsContainer) {
-      return Observation.notFound("saypi-audio-controls");
-    }
-    const voiceMenuElement = audioControlsContainer.querySelector(
-      this.chatbot.getVoiceMenuSelector()
-    );
-    if (voiceMenuElement && voiceMenuElement instanceof HTMLElement) {
-      let obs = Observation.notDecorated("saypi-voice-menu", voiceMenuElement);
-      this.voiceMenu = new VoiceMenu(
-        this.chatbot,
-        this.userPreferences,
-        voiceMenuElement
-      );
-      return Observation.decorated(obs);
-    }
-    return Observation.notFound("saypi-voice-menu");
+  // Teardown method to disconnect event listeners and release resources
+  teardown(): void {
+    this.eventListeners.forEach(({ event, listener }) => {
+      EventBus.off(event, listener);
+    });
+    this.eventListeners = [];
+
+    this.observers.forEach((observer) => {
+      observer.disconnect();
+    });
+    this.observers = [];
   }
 
   // Constructor
-  constructor(
-    private chatbot: Chatbot,
-    private chatHistoryElement: HTMLElement
-  ) {
+  constructor(private chatbot: Chatbot, chatHistoryElement: HTMLElement) {
     this.addIdChatHistory(chatHistoryElement);
     this.findAndDecorateVoiceMenu();
     this.registerPastChatHistoryListener();

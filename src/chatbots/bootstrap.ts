@@ -316,6 +316,10 @@ export class DOMObserver {
   }
 
   decorateChatHistory(chatHistory: HTMLElement): void {
+    if (this.ttsUiMgr) {
+      // teardown existing TTS UI manager to release resources
+      this.ttsUiMgr.teardown();
+    }
     this.ttsUiMgr = new TextToSpeechUIManager(this.chatbot, chatHistory);
   }
 
