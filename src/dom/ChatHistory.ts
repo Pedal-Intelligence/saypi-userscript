@@ -342,10 +342,25 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
   }
 }
 
+/**
+ * Get the most recent assistant message from the chat history
+ */
+function getMostRecentAssistantMessage(): AssistantResponse | null {
+  const assistantMessages = document.querySelectorAll(".assistant-message");
+  if (assistantMessages.length > 0) {
+    const messageElement = assistantMessages[
+      assistantMessages.length - 1
+    ] as HTMLElement;
+    return new AssistantResponse(messageElement);
+  }
+  return null;
+}
+
 export {
   AssistantSpeech,
   ChatHistoryMessageObserver,
   ChatHistoryOldMessageObserver,
   ChatHistoryNewMessageObserver as ChatHistoryAdditionsObserver,
   ChatHistoryRootElementObserver as RootChatHistoryObserver,
+  getMostRecentAssistantMessage,
 };

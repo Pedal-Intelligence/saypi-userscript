@@ -8,7 +8,7 @@ import {
   ChatHistoryAdditionsObserver,
   ChatHistoryOldMessageObserver,
   RootChatHistoryObserver,
-} from "../dom/ChatHistoryObserver";
+} from "../dom/ChatHistory";
 import { Observation } from "../dom/Observation";
 import { VoiceMenu } from "./VoiceMenu";
 import { AssistantResponse } from "../dom/MessageElements";

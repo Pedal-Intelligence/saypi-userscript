@@ -1,5 +1,6 @@
 import { getResourceUrl } from "../ResourceModule";
 import { Chatbot } from "../chatbots/Chatbot";
+import { getMostRecentAssistantMessage } from "../dom/ChatHistory";
 import { Observation } from "../dom/Observation";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { SpeechSynthesisVoiceRemote } from "./SpeechModel";
@@ -140,7 +141,8 @@ export class VoiceMenu {
   }
 
   introduceVoice(voice: SpeechSynthesisVoiceRemote): void {
-    const introduction = "Hello, World!";
+    const lastMessage = getMostRecentAssistantMessage();
+    const introduction = lastMessage?.text || "Hello, I am Pi.";
     const speechSynthesis = SpeechSynthesisModule.getInstance();
     speechSynthesis.createSpeech(introduction).then((utterance) => {
       utterance.voice = voice;
@@ -185,6 +187,7 @@ export class VoiceMenu {
       const flair = document.createElement("img");
       flair.classList.add("flair");
       flair.src = getResourceUrl("icons/logos/saypi.png");
+      flair.alt = "Say, Pi logo";
       button.appendChild(flair);
       button.addEventListener("click", () => {
         this.userPreferences.setVoice(voice).then(() => {
