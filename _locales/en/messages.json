@@ -316,5 +316,9 @@
         "example": "500"
       }
     }
+  },
+  "enhancedVoice": {
+    "message": "Voice enhanced by Say, Pi",
+    "description": "Title (tooltip) for Say, Pi enhanced voices."
   }
 }

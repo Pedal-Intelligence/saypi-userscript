@@ -2,6 +2,7 @@ import { getResourceUrl } from "../ResourceModule";
 import { Chatbot } from "../chatbots/Chatbot";
 import { getMostRecentAssistantMessage } from "../dom/ChatHistory";
 import { Observation } from "../dom/Observation";
+import getMessage from "../i18n";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { SpeechSynthesisVoiceRemote } from "./SpeechModel";
 import { SpeechSynthesisModule } from "./SpeechSynthesisModule";
@@ -78,7 +79,7 @@ export class VoiceMenu {
           if (this.selectedVoiceButton) {
             this.unmarkButtonAsSelectedVoice(this.selectedVoiceButton);
           }
-          this.markVoiceButtonAsSelected(button);
+          this.markButtonAsSelectedVoice(button);
         });
       });
     });
@@ -188,6 +189,7 @@ export class VoiceMenu {
       flair.classList.add("flair");
       flair.src = getResourceUrl("icons/logos/saypi.png");
       flair.alt = "Say, Pi logo";
+      flair.title = getMessage("enhancedVoice");
       button.appendChild(flair);
       button.addEventListener("click", () => {
         this.userPreferences.setVoice(voice).then(() => {
@@ -195,7 +197,7 @@ export class VoiceMenu {
           customVoiceButtons.forEach((button) => {
             this.unmarkButtonAsSelectedVoice(button);
           });
-          this.markVoiceButtonAsSelected(button);
+          this.markButtonAsSelectedVoice(button);
           this.introduceVoice(voice);
         });
       });
@@ -210,17 +212,6 @@ export class VoiceMenu {
     return true;
   }
 
-  markVoiceButtonAsSelected(button: HTMLButtonElement): void {
-    button.disabled = true;
-    button.classList.add("selected", "bg-neutral-300", "text-primary-700");
-    button.classList.remove("hover:bg-neutral-300");
-
-    if (this.selectedVoiceButton) {
-      this.unmarkButtonAsSelectedVoice(this.selectedVoiceButton);
-    }
-    this.selectedVoiceButton = button;
-  }
-
   addVoicesToMenu(voiceMenu: HTMLElement): void {
     const speechSynthesis = SpeechSynthesisModule.getInstance();
     speechSynthesis.getVoices().then((voices) => {
@@ -232,6 +223,11 @@ export class VoiceMenu {
     button.disabled = true;
     button.classList.add("selected", "bg-neutral-300", "text-primary-700");
     button.classList.remove("hover:bg-neutral-300");
+
+    if (this.selectedVoiceButton) {
+      this.unmarkButtonAsSelectedVoice(this.selectedVoiceButton);
+    }
+    this.selectedVoiceButton = button;
   }
 
   unmarkButtonAsSelectedVoice(button: HTMLButtonElement) {
