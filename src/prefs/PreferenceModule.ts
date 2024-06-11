@@ -52,6 +52,9 @@ class UserPreferenceModule {
     this.getAllowInterruptions().then((value) => {
       this.cache.setCachedValue("allowInterruptions", value);
     });
+    this.isTTSBetaPaused().then((value) => {
+      this.cache.setCachedValue("isTTSBetaPaused", value);
+    });
   }
 
   /**
@@ -211,6 +214,7 @@ class UserPreferenceModule {
   /**
    * This function checks if the TTS beta is paused
    * It is necessary only during the beta period and should be removed after the beta period
+   * This is a fairly slow operation as it requires a network request, so use the cached value if possible
    * @returns {Promise<boolean>} - true if TTS beta is paused, false otherwise
    */
   public async isTTSBetaPaused(): Promise<boolean> {
@@ -226,10 +230,14 @@ class UserPreferenceModule {
     }
   }
 
+  public getCachedIsTTSBetaPaused(): boolean {
+    return this.cache.getCachedValue("isTTSBetaPaused", false);
+  }
+
   public getTextToSpeechEnabled(): Promise<boolean> {
     return Promise.all([
       this.getStoredValue("enableTTS", true),
-      this.isTTSBetaPaused(),
+      this.getCachedIsTTSBetaPaused(),
     ]).then(([enableTTS, ttsBetaPaused]) => enableTTS && !ttsBetaPaused);
   }
 
