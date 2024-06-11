@@ -192,8 +192,20 @@
     </section>
 
     <div class="pre-release">
+
+      <section id="preview-status">
+        <div class="preview-progress beta">
+          <div class="progress-bar">
+            <span class="share used"></span>
+            <span class="share remaining"></span>
+          </div>
+          <div class="progress-label">
+            <span class="label">Beta Active</span>
+        </div>
+      </section>
+
       <section id="voice">
-        <div class="user-preference-item w-full max-w-lg x-hidden beta">
+        <div class="user-preference-item w-full max-w-lg x-hidden">
           <label class="wraper" for="enable-tts">
             <span class="label-text" data-i18n="enableTTS">Custom voices </span>
             <div class="switch-wrap control">
@@ -291,6 +303,7 @@
     <script src="language-picker.js"></script>
     <script src="popup.js"></script>
     <script src="status.js"></script>
+    <script src="status-tts.js"></script>
     <script src="usage.js"></script>
   </body>
 </html>

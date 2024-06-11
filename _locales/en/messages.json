@@ -281,7 +281,40 @@
     "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking."
   },
   "enableTTS": {
-    "message": "Custom voices",
+    "message": "Enhanced voices",
     "description": "Label for the checkbox to enable/disable text-to-speech."
+  },
+  "previewStatusActive": {
+    "message": "Beta Active"
+  },
+  "previewStatusPaused": {
+    "message": "Beta Paused until $resetDate$",
+    "description": "The message to display when the user is previewing a feature that has been paused.",
+    "placeholders": {
+      "resetDate": {
+        "content": "$1",
+        "example": "2021-12-31"
+      }
+    }
+  },
+  "previewStatusCompleted": {
+    "message": "Beta Completed"
+  },
+  "previewStatusUnknown": {
+    "message": "Unable to connect..."
+  },
+  "previewProgress": {
+    "message": "$count$ characters used out of $limit$",
+    "description": "The message to display when the user is previewing a feature that has a character limit.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "123"
+      },
+      "limit": {
+        "content": "$2",
+        "example": "500"
+      }
+    }
   }
 }

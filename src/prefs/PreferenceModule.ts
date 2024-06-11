@@ -1,7 +1,5 @@
 import { config } from "../ConfigModule";
-import {
-  SpeechSynthesisModule,
-} from "../tts/SpeechSynthesisModule";
+import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import AudioControlsModule from "../audio/AudioControlsModule";
 import EventBus from "../events/EventBus";
 import { audioProviders, SpeechSynthesisVoiceRemote } from "../tts/SpeechModel";
@@ -210,8 +208,29 @@ class UserPreferenceModule {
     return this.getStoredValue("allowInterruptions", true);
   }
 
+  /**
+   * This function checks if the TTS beta is paused
+   * It is necessary only during the beta period and should be removed after the beta period
+   * @returns {Promise<boolean>} - true if TTS beta is paused, false otherwise
+   */
+  public async isTTSBetaPaused(): Promise<boolean> {
+    const statusEndpoint = `${config.apiServerUrl}/status/tts`;
+
+    try {
+      const response = await fetch(statusEndpoint);
+      const data = await response.json();
+      return data.beta.status === "paused";
+    } catch (error) {
+      console.error("Error:", error);
+      return false;
+    }
+  }
+
   public getTextToSpeechEnabled(): Promise<boolean> {
-    return this.getStoredValue("enableTTS", true);
+    return Promise.all([
+      this.getStoredValue("enableTTS", true),
+      this.isTTSBetaPaused(),
+    ]).then(([enableTTS, ttsBetaPaused]) => enableTTS && !ttsBetaPaused);
   }
 
   public getCachedAutoSubmit(): boolean {
