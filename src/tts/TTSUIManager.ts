@@ -23,29 +23,21 @@ export class TextToSpeechUIManager {
   private voiceMenu: VoiceMenu | null = null;
 
   // Methods for DOM manipulation and element ID assignment
-  addIdChatHistory(): boolean {
-    const chatHistory = document.querySelector(
-      this.chatbot.getChatHistorySelector()
-    );
-    if (!chatHistory) {
-      return false;
-    } else {
-      chatHistory.id = "saypi-chat-history";
+  addIdChatHistory(chatHistory: HTMLElement): void {
+    chatHistory.id = "saypi-chat-history";
 
-      // the past messages container will be replaced when the chat history is updated, so is monitored for changes in RootChatHistoryObserver
-      const pastChatMessagesContainer =
-        chatHistory.querySelector(":nth-child(2)");
-      if (pastChatMessagesContainer) {
-        pastChatMessagesContainer.id = "saypi-chat-history-past-messages";
-      }
-
-      const presentChatMessagesContainer =
-        chatHistory.querySelector(":nth-child(3)");
-      if (presentChatMessagesContainer) {
-        presentChatMessagesContainer.id = "saypi-chat-history-present-messages";
-      }
+    // the past messages container will be replaced when the chat history is updated, so is monitored for changes in RootChatHistoryObserver
+    const pastChatMessagesContainer =
+      chatHistory.querySelector(":nth-child(2)");
+    if (pastChatMessagesContainer) {
+      pastChatMessagesContainer.id = "saypi-chat-history-past-messages";
     }
-    return true;
+
+    const presentChatMessagesContainer =
+      chatHistory.querySelector(":nth-child(3)");
+    if (presentChatMessagesContainer) {
+      presentChatMessagesContainer.id = "saypi-chat-history-present-messages";
+    }
   }
 
   md5OfNothing = "d41d8cd98f00b204e9800998ecf8427e";
@@ -168,8 +160,11 @@ export class TextToSpeechUIManager {
   }
 
   // Constructor
-  constructor(private chatbot: Chatbot) {
-    this.addIdChatHistory();
+  constructor(
+    private chatbot: Chatbot,
+    private chatHistoryElement: HTMLElement
+  ) {
+    this.addIdChatHistory(chatHistoryElement);
     this.findAndDecorateVoiceMenu();
     this.registerPastChatHistoryListener();
     this.registerPresentChatHistoryListener();

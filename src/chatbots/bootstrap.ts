@@ -13,9 +13,9 @@ export class DOMObserver {
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         [...mutation.addedNodes]
-          .filter((node) => node instanceof Element)
+          .filter((node) => node instanceof HTMLElement)
           .forEach((node) => {
-            const addedElement = node as Element;
+            const addedElement = node as HTMLElement;
             const promptObs = this.findAndDecoratePromptField(addedElement);
             const ctrlPanelObs = this.findAndDecorateControlPanel(addedElement);
             const sidePanelObs = this.findAndDecorateSidePanel(addedElement);
@@ -29,13 +29,8 @@ export class DOMObserver {
             const audioOutputButtonObs =
               this.findAndDecorateAudioOutputButton(addedElement);
             // ... handle other elements
-            if (
-              audioControlsObs.found &&
-              audioControlsObs.isNew &&
-              this.ttsUiMgr === null
-            ) {
-              this.ttsUiMgr = new TextToSpeechUIManager(this.chatbot);
-            }
+            const chatHistoryObs =
+              this.findAndDecorateChatHistory(addedElement);
 
             // notify listeners that (all critical) script content has been loaded
             if (promptObs.isReady()) {
@@ -43,9 +38,9 @@ export class DOMObserver {
             }
           });
         [...mutation.removedNodes]
-          .filter((node) => node instanceof Element)
+          .filter((node) => node instanceof HTMLElement)
           .forEach((node) => {
-            const removedElement = node as Element;
+            const removedElement = node as HTMLElement;
             const obs = this.findPromptField(removedElement);
             if (obs.found) {
               // Prompt field is being removed, so search for a replacement in the main document
@@ -70,6 +65,11 @@ export class DOMObserver {
             if (audioOutputButtonObs.found) {
               // Audio output button is being removed, so search for a replacement in the main document
               this.findAndDecorateAudioOutputButton(document.body);
+            }
+            const chatHistoryObs = this.findChatHistory(removedElement);
+            if (chatHistoryObs.found) {
+              // Chat history is being removed, so search for a replacement in the main document
+              this.findAndDecorateChatHistory(document.body);
             }
           });
       });
@@ -295,6 +295,35 @@ export class DOMObserver {
     const obs = this.findAudioOutputButton(searchRoot);
     if (obs.undecorated()) {
       this.decorateAudioOutputButton(obs.target as HTMLElement);
+    }
+    return Observation.decorated(obs);
+  }
+
+  findChatHistory(searchRoot: HTMLElement): Observation {
+    const id = "saypi-chat-history";
+    const existingChatHistory = searchRoot.querySelector("#" + id);
+    if (existingChatHistory) {
+      // Chat history already exists, no need to search
+      return Observation.foundExisting(id, existingChatHistory);
+    }
+    const chatHistory = searchRoot.querySelector(
+      this.chatbot.getChatHistorySelector()
+    );
+    if (chatHistory) {
+      return Observation.notDecorated(id, chatHistory);
+    }
+    return Observation.notFound(id);
+  }
+
+  decorateChatHistory(chatHistory: HTMLElement): void {
+    this.ttsUiMgr = new TextToSpeechUIManager(this.chatbot, chatHistory);
+  }
+
+  findAndDecorateChatHistory(searchRoot: HTMLElement): Observation {
+    const obs = this.findChatHistory(searchRoot);
+    if (obs.found && obs.isNew && !obs.decorated) {
+      // decorate chat history
+      this.decorateChatHistory(obs.target as HTMLElement);
     }
     return Observation.decorated(obs);
   }

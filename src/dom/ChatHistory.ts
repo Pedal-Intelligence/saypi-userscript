@@ -10,7 +10,7 @@ import {
   StreamedSpeech,
   audioProviders,
 } from "../tts/SpeechModel";
-import { BillingModule, UtteranceCharge } from "../billing/BillingModule";
+import { BillingModule } from "../billing/BillingModule";
 import EventBus from "../events/EventBus";
 import { AssistantResponse } from "./MessageElements";
 
