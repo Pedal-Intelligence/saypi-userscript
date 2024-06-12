@@ -8,8 +8,10 @@ cp public/saypi.user.js dist/chrome-extension/public
 cp public/silero_vad.onnx dist/chrome-extension/public
 cp public/vad.worklet.bundle.min.js dist/chrome-extension/public
 cp public/audio/*.mp3 dist/chrome-extension/public/audio
-mkdir -p dist/chrome-extension/public/icons
+mkdir -p dist/chrome-extension/public/icons/logos
 cp public/icons/*.svg dist/chrome-extension/public/icons
+cp public/icons/logos/*.svg dist/chrome-extension/public/icons/logos
+cp public/icons/logos/*.png dist/chrome-extension/public/icons/logos
 mkdir -p dist/chrome-extension/src/icons/flags
 cp src/icons/bubble-*.png dist/chrome-extension/src/icons
 cp src/icons/flags/*.svg dist/chrome-extension/src/icons/flags
