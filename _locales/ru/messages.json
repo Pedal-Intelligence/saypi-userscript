@@ -233,5 +233,92 @@
   "allowInterruptions": {
     "message": "Прерываемый",
     "description": "Метка для флажка, чтобы разрешить/запретить пользователю прерывать ответы Pi говоря."
+  },
+  "currencyUSDAbbreviation": {
+    "description": "Аббревиатура для доллара Соединенных Штатов.",
+    "message": "USD"
+  },
+  "currentCharges": {
+    "description": "Термин, используемый для описания текущих сборов (итоговая сумма), накопленных пользователем.",
+    "message": "Текущие платежи"
+  },
+  "enableTTS": {
+    "description": "Метка для флажка включения/отключения функции текст-в-речь.",
+    "message": "Улучшенные голоса"
+  },
+  "enhancedVoice": {
+    "description": "Название (всплывающая подсказка) для голосов Say, Pi enhanced.",
+    "message": "Голос улучшенный Say, Pi"
+  },
+  "previewProgress": {
+    "description": "Сообщение для отображения, когда пользователь просматривает функцию с ограничением по количеству символов.",
+    "message": "Использовано $count$ символов из $limit$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "123"
+      },
+      "limit": {
+        "content": "$2",
+        "example": "500"
+      }
+    }
+  },
+  "previewStatusActive": {
+    "message": "Активная Бета"
+  },
+  "previewStatusCompleted": {
+    "message": "Бета Завершена"
+  },
+  "previewStatusPaused": {
+    "description": "Сообщение для отображения, когда пользователь просматривает функцию, которая была приостановлена.",
+    "message": "Бета приостановлена до $resetDate$",
+    "placeholders": {
+      "resetDate": {
+        "content": "$1",
+        "example": "2021-12-31"
+      }
+    }
+  },
+  "previewStatusUnknown": {
+    "message": "Не удается подключиться..."
+  },
+  "readAloudButtonTitle": {
+    "description": "Название кнопки для чтения текста сообщения вслух.",
+    "message": "Читать вслух"
+  },
+  "ttsCostExplanation": {
+    "description": "Всплывающая подсказка для отображения, когда движок текста в речь используется для озвучивания сообщения, с указанием стоимости сообщения.",
+    "message": "Стоимость прослушивания этого сообщения составляет $cost$ $currency$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "ttsCostExplanationFree": {
+    "description": "Всплывающая подсказка для отображения, когда движок текста в речь используется для чтения сообщения вслух, и сообщение бесплатно. Может содержать имя поставщика.",
+    "message": "Это аудио было сгенерировано бесплатно.",
+    "placeholders": {
+      "provider": {
+        "content": "$1",
+        "example": "Inflection AI"
+      }
+    }
+  },
+  "ttsPoweredBy": {
+    "description": "Сообщение для отображения, когда движок текста в речь используется для чтения сообщения вслух.",
+    "message": "Текст в речь, работающий на движке $ttsEngine$",
+    "placeholders": {
+      "ttsEngine": {
+        "content": "$1",
+        "example": "ElevenLabs"
+      }
+    }
   }
 }

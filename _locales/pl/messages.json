@@ -233,5 +233,92 @@
   "allowInterruptions": {
     "message": "Przerywalny",
     "description": "Etykieta dla pola wyboru do włączania/wyłączania możliwości przerywania odpowiedzi Pi przez użytkownika poprzez mówienie."
+  },
+  "currencyUSDAbbreviation": {
+    "description": "Skrót od United States Dollar.",
+    "message": "USD"
+  },
+  "currentCharges": {
+    "description": "Termin używany do opisania bieżących opłat (bieżący sumaryczny wynik) naliczanych przez użytkownika.",
+    "message": "Obecne opłaty"
+  },
+  "enableTTS": {
+    "description": "Etykieta dla pola wyboru do włączania/wyłączania tekstu na mowę.",
+    "message": "Ulepszone głosy"
+  },
+  "enhancedVoice": {
+    "description": "Tytuł (podpowiedź) dla funkcji Mów, ulepszone głosy Pi.",
+    "message": "Głos wzmocniony przez Say, Pi"
+  },
+  "previewProgress": {
+    "description": "Wiadomość do wyświetlenia, gdy użytkownik podgląda funkcję, która ma limit znaków.",
+    "message": "Użyto $count$ znaków z dostępnych $limit$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "123"
+      },
+      "limit": {
+        "content": "$2",
+        "example": "500"
+      }
+    }
+  },
+  "previewStatusActive": {
+    "message": "Aktywna Beta"
+  },
+  "previewStatusCompleted": {
+    "message": "Beta Zakończona"
+  },
+  "previewStatusPaused": {
+    "description": "Wiadomość do wyświetlenia, gdy użytkownik podgląda funkcję, która została wstrzymana.",
+    "message": "Beta Wstrzymana do $resetDate$",
+    "placeholders": {
+      "resetDate": {
+        "content": "$1",
+        "example": "2021-12-31"
+      }
+    }
+  },
+  "previewStatusUnknown": {
+    "message": "Nie można połączyć..."
+  },
+  "readAloudButtonTitle": {
+    "description": "Tytuł przycisku do odczytywania tekstu wiadomości na głos.",
+    "message": "Czytaj na głos"
+  },
+  "ttsCostExplanation": {
+    "description": "Podpowiedź do wyświetlenia, gdy silnik tekstu na mowę jest używany do odczytywania wiadomości na głos, wraz z kosztem wiadomości.",
+    "message": "Koszt odsłuchania tej wiadomości wynosi $cost$ $currency$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "ttsCostExplanationFree": {
+    "description": "Podpowiedź do wyświetlenia, gdy silnik tekstu na mowę jest używany do odczytywania wiadomości na głos, a wiadomość jest darmowa. Może zawierać nazwę dostawcy.",
+    "message": "To audio zostało wygenerowane bezpłatnie.",
+    "placeholders": {
+      "provider": {
+        "content": "$1",
+        "example": "Inflection AI"
+      }
+    }
+  },
+  "ttsPoweredBy": {
+    "description": "Wiadomość do wyświetlenia, gdy silnik tekstu na mowę jest używany do odczytywania wiadomości na głos.",
+    "message": "Synteza mowy zasilana przez $ttsEngine$",
+    "placeholders": {
+      "ttsEngine": {
+        "content": "$1",
+        "example": "ElevenLabs"
+      }
+    }
   }
 }

@@ -233,5 +233,92 @@
   "allowInterruptions": {
     "message": "Có thể gián đoạn",
     "description": "Nhãn cho hộp kiểm để bật/tắt cho phép người dùng gián đoạn câu trả lời của Pi bằng cách nói."
+  },
+  "currencyUSDAbbreviation": {
+    "description": "Viết tắt của Đô la Hoa Kỳ.",
+    "message": "USD"
+  },
+  "currentCharges": {
+    "description": "Thuật ngữ được sử dụng để mô tả các khoản phí hiện tại (tổng cộng đang chạy) mà người dùng đã tích lũy.",
+    "message": "Các khoản phí hiện tại"
+  },
+  "enableTTS": {
+    "description": "Nhãn cho hộp kiểm để bật/tắt chức năng văn bản thành giọng nói.",
+    "message": "Giọng nói nâng cao"
+  },
+  "enhancedVoice": {
+    "description": "Tiêu đề (chú giải) cho Say, Pi nâng cao giọng nói.",
+    "message": "Giọng nâng cao bởi Say, Pi"
+  },
+  "previewProgress": {
+    "description": "Thông điệp để hiển thị khi người dùng đang xem trước một tính năng có giới hạn ký tự.",
+    "message": "đã sử dụng $count$ ký tự trong tổng số $limit$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "123"
+      },
+      "limit": {
+        "content": "$2",
+        "example": "500"
+      }
+    }
+  },
+  "previewStatusActive": {
+    "message": "Hoạt động Beta"
+  },
+  "previewStatusCompleted": {
+    "message": "Beta Hoàn Thành"
+  },
+  "previewStatusPaused": {
+    "description": "Thông điệp để hiển thị khi người dùng đang xem trước một tính năng đã bị tạm dừng.",
+    "message": "Beta Tạm dừng cho đến $resetDate$",
+    "placeholders": {
+      "resetDate": {
+        "content": "$1",
+        "example": "2021-12-31"
+      }
+    }
+  },
+  "previewStatusUnknown": {
+    "message": "Không thể kết nối..."
+  },
+  "readAloudButtonTitle": {
+    "description": "Tiêu đề của nút để đọc to văn bản của một tin nhắn.",
+    "message": "Đọc To"
+  },
+  "ttsCostExplanation": {
+    "description": "Chú thích hiển thị khi sử dụng công cụ chuyển văn bản thành giọng nói để đọc to một tin nhắn, kèm theo chi phí của tin nhắn.",
+    "message": "Chi phí để nghe thông điệp này là $cost$ $currency$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "ttsCostExplanationFree": {
+    "description": "Thông báo hiển thị khi sử dụng công cụ chuyển văn bản thành giọng nói để đọc to một tin nhắn, và tin nhắn là miễn phí. Có thể chứa tên của nhà cung cấp.",
+    "message": "Âm thanh này được tạo ra miễn phí.",
+    "placeholders": {
+      "provider": {
+        "content": "$1",
+        "example": "Inflection AI"
+      }
+    }
+  },
+  "ttsPoweredBy": {
+    "description": "Thông điệp để hiển thị khi sử dụng động cơ văn bản thành giọng nói để đọc to một thông điệp.",
+    "message": "Chuyển văn bản thành giọng nói được hỗ trợ bởi $ttsEngine$",
+    "placeholders": {
+      "ttsEngine": {
+        "content": "$1",
+        "example": "ElevenLabs"
+      }
+    }
   }
 }

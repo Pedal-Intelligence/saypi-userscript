@@ -233,5 +233,92 @@
   "allowInterruptions": {
     "message": "Interrompível",
     "description": "Rótulo para a caixa de seleção para ativar/desativar a permissão do usuário de interromper as respostas do Pi falando."
+  },
+  "currencyUSDAbbreviation": {
+    "description": "A abreviação para o Dólar dos Estados Unidos.",
+    "message": "USD"
+  },
+  "currentCharges": {
+    "description": "O termo usado para descrever as cobranças atuais (total acumulado) acumuladas pelo usuário.",
+    "message": "Cobranças atuais"
+  },
+  "enableTTS": {
+    "description": "Rótulo para a caixa de seleção para ativar/desativar texto-para-fala.",
+    "message": "Vozes aprimoradas"
+  },
+  "enhancedVoice": {
+    "description": "Título (dica de ferramenta) para Dizer, vozes aprimoradas pelo Pi.",
+    "message": "Voz aprimorada por Say, Pi"
+  },
+  "previewProgress": {
+    "description": "A mensagem a ser exibida quando o usuário está visualizando um recurso que tem um limite de caracteres.",
+    "message": "$count$ caracteres usados de $limit$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "123"
+      },
+      "limit": {
+        "content": "$2",
+        "example": "500"
+      }
+    }
+  },
+  "previewStatusActive": {
+    "message": "Beta Ativo"
+  },
+  "previewStatusCompleted": {
+    "message": "Beta Concluído"
+  },
+  "previewStatusPaused": {
+    "description": "A mensagem a ser exibida quando o usuário está visualizando um recurso que foi pausado.",
+    "message": "Beta Pausado até $resetDate$",
+    "placeholders": {
+      "resetDate": {
+        "content": "$1",
+        "example": "2021-12-31"
+      }
+    }
+  },
+  "previewStatusUnknown": {
+    "message": "Incapaz de conectar..."
+  },
+  "readAloudButtonTitle": {
+    "description": "O título do botão para ler em voz alta o texto de uma mensagem.",
+    "message": "Leia em Voz Alta"
+  },
+  "ttsCostExplanation": {
+    "description": "A dica para exibir quando o motor de texto para fala é usado para ler em voz alta uma mensagem, com o custo da mensagem.",
+    "message": "O custo de ouvir esta mensagem é $cost$ $currency$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "ttsCostExplanationFree": {
+    "description": "A dica a ser exibida quando um mecanismo de texto para fala é usado para ler em voz alta uma mensagem, e a mensagem é gratuita. Pode conter o nome do provedor.",
+    "message": "Este áudio foi gerado gratuitamente.",
+    "placeholders": {
+      "provider": {
+        "content": "$1",
+        "example": "Inflection AI"
+      }
+    }
+  },
+  "ttsPoweredBy": {
+    "description": "A mensagem a ser exibida quando o mecanismo de texto para fala é usado para ler uma mensagem em voz alta.",
+    "message": "Síntese de voz alimentada por $ttsEngine$",
+    "placeholders": {
+      "ttsEngine": {
+        "content": "$1",
+        "example": "ElevenLabs"
+      }
+    }
   }
 }

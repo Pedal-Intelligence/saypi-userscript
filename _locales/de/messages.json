@@ -233,5 +233,92 @@
   "allowInterruptions": {
     "message": "Unterbrechbar",
     "description": "Beschriftung für das Kontrollkästchen zum Aktivieren/Deaktivieren der Möglichkeit, dass der Benutzer Pi's Antworten durch Sprechen unterbrechen kann."
+  },
+  "currencyUSDAbbreviation": {
+    "description": "Die Abkürzung für den US-Dollar.",
+    "message": "USD"
+  },
+  "currentCharges": {
+    "description": "Der Begriff, der verwendet wird, um die aktuellen Kosten (laufende Summe) zu beschreiben, die vom Benutzer angesammelt wurden.",
+    "message": "Aktuelle Gebühren"
+  },
+  "enableTTS": {
+    "description": "Beschriftung für das Kontrollkästchen zum Aktivieren/Deaktivieren von Text-zu-Sprache.",
+    "message": "Erweiterte Stimmen"
+  },
+  "enhancedVoice": {
+    "description": "Titel (Tooltip) für Sag, Pi verbesserte Stimmen.",
+    "message": "Von Say, Pi verbesserte Stimme"
+  },
+  "previewProgress": {
+    "description": "Die anzuzeigende Nachricht, wenn der Benutzer eine Funktion vorschaut, die ein Zeichenlimit hat.",
+    "message": "$count$ Zeichen von $limit$ verwendet",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "123"
+      },
+      "limit": {
+        "content": "$2",
+        "example": "500"
+      }
+    }
+  },
+  "previewStatusActive": {
+    "message": "Beta Aktiv"
+  },
+  "previewStatusCompleted": {
+    "message": "Beta Abgeschlossen"
+  },
+  "previewStatusPaused": {
+    "description": "Die anzuzeigende Nachricht, wenn der Benutzer eine Funktion vorschaut, die pausiert wurde.",
+    "message": "Beta pausiert bis $resetDate$",
+    "placeholders": {
+      "resetDate": {
+        "content": "$1",
+        "example": "2021-12-31"
+      }
+    }
+  },
+  "previewStatusUnknown": {
+    "message": "Verbindung nicht möglich..."
+  },
+  "readAloudButtonTitle": {
+    "description": "Der Titel des Buttons, um den Text einer Nachricht vorzulesen.",
+    "message": "Laut Vorlesen"
+  },
+  "ttsCostExplanation": {
+    "description": "Der Tooltip, der angezeigt wird, wenn die Text-zu-Sprache-Engine verwendet wird, um eine Nachricht laut vorzulesen, mit den Kosten der Nachricht.",
+    "message": "Die Kosten für das Anhören dieser Nachricht betragen $cost$ $currency$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "ttsCostExplanationFree": {
+    "description": "Der Tooltip, der angezeigt wird, wenn eine Text-zu-Sprache-Engine verwendet wird, um eine Nachricht laut vorzulesen, und die Nachricht ist kostenlos. Könnte den Namen des Anbieters enthalten.",
+    "message": "Dieses Audio wurde kostenlos erstellt.",
+    "placeholders": {
+      "provider": {
+        "content": "$1",
+        "example": "Inflection AI"
+      }
+    }
+  },
+  "ttsPoweredBy": {
+    "description": "Die anzuzeigende Nachricht, wenn die Text-zu-Sprache-Engine verwendet wird, um eine Nachricht laut vorzulesen.",
+    "message": "Text-zu-Sprache angetrieben von $ttsEngine$",
+    "placeholders": {
+      "ttsEngine": {
+        "content": "$1",
+        "example": "ElevenLabs"
+      }
+    }
   }
 }

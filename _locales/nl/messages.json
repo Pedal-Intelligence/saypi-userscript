@@ -233,5 +233,92 @@
   "allowInterruptions": {
     "message": "Onderbreekbaar",
     "description": "Label voor het selectievakje om het toestaan/verbieden van de gebruiker te activeren/deactiveren om Pi's antwoorden te onderbreken door te spreken."
+  },
+  "currencyUSDAbbreviation": {
+    "description": "De afkorting voor de Amerikaanse Dollar.",
+    "message": "USD"
+  },
+  "currentCharges": {
+    "description": "De term die wordt gebruikt om de huidige kosten (lopend totaal) te beschrijven die door de gebruiker zijn opgelopen.",
+    "message": "Huidige kosten"
+  },
+  "enableTTS": {
+    "description": "Label voor het selectievakje om tekst-naar-spraak in/uit te schakelen.",
+    "message": "Verbeterde stemmen"
+  },
+  "enhancedVoice": {
+    "description": "Titel (knopinfo) voor Zeg, Pi verbeterde stemmen.",
+    "message": "Stem verbeterd door Say, Pi"
+  },
+  "previewProgress": {
+    "description": "Het bericht dat wordt weergegeven wanneer de gebruiker een functie voorvertonen die een tekenlimiet heeft.",
+    "message": "$count$ tekens gebruikt van de $limit$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "123"
+      },
+      "limit": {
+        "content": "$2",
+        "example": "500"
+      }
+    }
+  },
+  "previewStatusActive": {
+    "message": "Beta Actief"
+  },
+  "previewStatusCompleted": {
+    "message": "Beta Voltooid"
+  },
+  "previewStatusPaused": {
+    "description": "Het bericht dat wordt weergegeven wanneer de gebruiker een functie voorvertonen die is gepauzeerd.",
+    "message": "Beta Gepauzeerd tot $resetDate$",
+    "placeholders": {
+      "resetDate": {
+        "content": "$1",
+        "example": "2021-12-31"
+      }
+    }
+  },
+  "previewStatusUnknown": {
+    "message": "Kan geen verbinding maken..."
+  },
+  "readAloudButtonTitle": {
+    "description": "De titel van de knop om de tekst van een bericht hardop voor te lezen.",
+    "message": "Hardop Lezen"
+  },
+  "ttsCostExplanation": {
+    "description": "De tooltip om weer te geven wanneer de tekst-naar-spraak engine wordt gebruikt om een bericht hardop voor te lezen, met de kosten van het bericht.",
+    "message": "De kosten voor het beluisteren van dit bericht zijn $cost$ $currency$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "ttsCostExplanationFree": {
+    "description": "De tooltip om weer te geven wanneer een tekst-naar-spraak engine wordt gebruikt om een bericht hardop voor te lezen, en het bericht is gratis. Kan de naam van de provider bevatten.",
+    "message": "Deze audio is gratis gegenereerd.",
+    "placeholders": {
+      "provider": {
+        "content": "$1",
+        "example": "Inflection AI"
+      }
+    }
+  },
+  "ttsPoweredBy": {
+    "description": "Het bericht dat wordt weergegeven wanneer de tekst-naar-spraak engine wordt gebruikt om een bericht hardop voor te lezen.",
+    "message": "Tekst-naar-spraak aangedreven door $ttsEngine$",
+    "placeholders": {
+      "ttsEngine": {
+        "content": "$1",
+        "example": "ElevenLabs"
+      }
+    }
   }
 }

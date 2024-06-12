@@ -233,5 +233,92 @@
   "allowInterruptions": {
     "message": "قابل للمقاطعة",
     "description": "تسمية للمربع لتمكين / تعطيل السماح للمستخدم بقاطع ردود Pi عن طريق التحدث."
+  },
+  "currencyUSDAbbreviation": {
+    "description": "اختصار للدولار الأمريكي.",
+    "message": "دولار أمريكي"
+  },
+  "currentCharges": {
+    "description": "المصطلح المستخدم لوصف الرسوم الحالية (الإجمالي المتراكم) التي تكبدها المستخدم.",
+    "message": "الرسوم الحالية"
+  },
+  "enableTTS": {
+    "description": "تسمية للمربع لتفعيل / تعطيل النص إلى كلام.",
+    "message": "أصوات محسنة"
+  },
+  "enhancedVoice": {
+    "description": "العنوان (تلميح) لـ قل، أصوات Pi المحسّنة.",
+    "message": "الصوت المحسن بواسطة Say, Pi"
+  },
+  "previewProgress": {
+    "description": "الرسالة التي يتم عرضها عندما يكون المستخدم يعاين ميزة تحتوي على حد للأحرف.",
+    "message": "تم استخدام $count$ حرف من أصل $limit$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "123"
+      },
+      "limit": {
+        "content": "$2",
+        "example": "500"
+      }
+    }
+  },
+  "previewStatusActive": {
+    "message": "نشط بيتا"
+  },
+  "previewStatusCompleted": {
+    "message": "اكتمل التجريب"
+  },
+  "previewStatusPaused": {
+    "description": "الرسالة التي يتم عرضها عندما يقوم المستخدم بمعاينة ميزة تم إيقافها مؤقتًا.",
+    "message": "تم إيقاف التجربة حتى $resetDate$",
+    "placeholders": {
+      "resetDate": {
+        "content": "$1",
+        "example": "2021-12-31"
+      }
+    }
+  },
+  "previewStatusUnknown": {
+    "message": "غير قادر على الاتصال..."
+  },
+  "readAloudButtonTitle": {
+    "description": "عنوان الزر لقراءة نص الرسالة بصوت عالٍ",
+    "message": "اقرأ بصوت عالي"
+  },
+  "ttsCostExplanation": {
+    "description": "التلميح الذي يظهر عند استخدام محرك التحويل من النص إلى الكلام لقراءة رسالة بصوت عالٍ، مع تكلفة الرسالة.",
+    "message": "تكلفة الاستماع إلى هذه الرسالة هي $cost$ $currency$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "ttsCostExplanationFree": {
+    "description": "التلميح الذي يظهر عند استخدام محرك النص إلى كلام لقراءة رسالة بصوت عالٍ، والرسالة مجانية. قد يحتوي على اسم المزود.",
+    "message": "تم إنشاء هذا الصوت مجانًا.",
+    "placeholders": {
+      "provider": {
+        "content": "$1",
+        "example": "Inflection AI"
+      }
+    }
+  },
+  "ttsPoweredBy": {
+    "description": "الرسالة المعروضة عند استخدام محرك النص إلى كلام لقراءة رسالة بصوت عال.",
+    "message": "التحويل من النص إلى الكلام بدعم من $ttsEngine$",
+    "placeholders": {
+      "ttsEngine": {
+        "content": "$1",
+        "example": "ElevenLabs"
+      }
+    }
   }
 }
