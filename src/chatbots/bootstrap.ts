@@ -1,11 +1,11 @@
 import { Chatbot } from "./Chatbot";
 import { buttonModule } from "../ButtonModule.js";
 import EventBus from "../events/EventBus.js";
-import { TextToSpeechUIManager } from "../tts/TTSUIManager";
+import { ChatHistorySpeechManager } from "../tts/ChatHistoryManager";
 import { Observation } from "../dom/Observation";
 
 export class DOMObserver {
-  ttsUiMgr: TextToSpeechUIManager | null = null;
+  ttsUiMgr: ChatHistorySpeechManager | null = null;
   constructor(private chatbot: Chatbot) {}
 
   observeDOM(): void {
@@ -320,7 +320,7 @@ export class DOMObserver {
       // teardown existing TTS UI manager to release resources
       this.ttsUiMgr.teardown();
     }
-    this.ttsUiMgr = new TextToSpeechUIManager(this.chatbot, chatHistory);
+    this.ttsUiMgr = new ChatHistorySpeechManager(this.chatbot, chatHistory);
   }
 
   findAndDecorateChatHistory(searchRoot: HTMLElement): Observation {

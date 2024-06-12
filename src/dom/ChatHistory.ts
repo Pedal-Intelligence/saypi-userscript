@@ -14,15 +14,69 @@ import { BillingModule } from "../billing/BillingModule";
 import EventBus from "../events/EventBus";
 import { AssistantResponse } from "./MessageElements";
 
+/**
+ * Monitors the root element of the chat history for past and present sections
+ */
 class ChatHistoryRootElementObserver extends BaseObserver {
-  chatHistoryRootElement: HTMLElement | null = null;
   speechSynthesis: SpeechSynthesisModule;
   oldMessageObserver: ChatHistoryOldMessageObserver | null = null;
   /* This class adds an id to the 2nd child of the element under observeration, whenever children are added to the element */
-  constructor(selector: string, speechSynthesis: SpeechSynthesisModule) {
-    super(selector);
-    this.chatHistoryRootElement = document.querySelector(selector);
+  constructor(
+    private chatHistoryElement: HTMLElement,
+    selector: string,
+    speechSynthesis: SpeechSynthesisModule,
+    initialRun: boolean = true
+  ) {
+    super(chatHistoryElement, selector);
     this.speechSynthesis = speechSynthesis;
+    if (initialRun) {
+      this.runOnce();
+    }
+  }
+
+  /**
+   * Check if the child element is the container for the chat history's past messages
+   * @param child - a child of the chat history root element
+   */
+  private handleChatHistoryChild(child: Element): void {
+    // error if the child is not a direct descendant of the chat history element
+    if (!this.chatHistoryElement.contains(child)) {
+      console.error("Element is not a child of the chat history", child);
+      return;
+    }
+    const pastMessagesContainer =
+      this.chatHistoryElement?.querySelector(":nth-child(2)");
+    if (pastMessagesContainer == child) {
+      // add id to the 2nd child of the element
+      pastMessagesContainer.id = "saypi-chat-history-past-messages";
+      if (this.oldMessageObserver) {
+        this.oldMessageObserver.disconnect();
+      }
+      this.oldMessageObserver = new ChatHistoryOldMessageObserver(
+        this.chatHistoryElement,
+        `#${pastMessagesContainer.id}`,
+        this.speechSynthesis
+      );
+      this.oldMessageObserver
+        .runOnce(pastMessagesContainer)
+        .then((messages) => {
+          console.debug(`Found ${messages.length} old assistant messages`);
+        });
+      this.oldMessageObserver.observe({
+        childList: true,
+        subtree: false,
+      });
+    }
+  }
+
+  public async runOnce(): Promise<void> {
+    // run once on the direct children of the root element
+    for (const node of [...this.chatHistoryElement.children]) {
+      if (node instanceof Element) {
+        const child = node as Element;
+        this.handleChatHistoryChild(child);
+      }
+    }
   }
 
   protected async callback(mutations: MutationRecord[]): Promise<void> {
@@ -30,30 +84,7 @@ class ChatHistoryRootElementObserver extends BaseObserver {
       for (const node of [...mutation.addedNodes]) {
         if (node instanceof Element) {
           const addedElement = node as Element;
-          const pastMessagesContainer =
-            this.chatHistoryRootElement?.querySelector(":nth-child(2)");
-          if (pastMessagesContainer == addedElement) {
-            // add id to the 2nd child of the element
-            pastMessagesContainer.id = "saypi-chat-history-past-messages";
-            if (this.oldMessageObserver) {
-              this.oldMessageObserver.disconnect();
-            }
-            this.oldMessageObserver = new ChatHistoryOldMessageObserver(
-              `#${pastMessagesContainer.id}`,
-              this.speechSynthesis
-            );
-            this.oldMessageObserver
-              .runOnce(pastMessagesContainer)
-              .then((messages) => {
-                console.debug(
-                  `Found ${messages.length} old assistant messages`
-                );
-              });
-            this.oldMessageObserver.observe({
-              childList: true,
-              subtree: false,
-            });
-          }
+          this.handleChatHistoryChild(addedElement);
         }
       }
     }
@@ -64,8 +95,12 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
   protected speechSynthesis: SpeechSynthesisModule;
   protected ttsControlsModule: TTSControlsModule;
   protected haltOnFirst: boolean = false; // stop searching after the first chat message is found
-  constructor(selector: string, speechSynthesis: SpeechSynthesisModule) {
-    super(selector);
+  constructor(
+    chatHistoryElement: HTMLElement,
+    selector: string,
+    speechSynthesis: SpeechSynthesisModule
+  ) {
+    super(chatHistoryElement, selector);
     this.speechSynthesis = speechSynthesis;
     this.ttsControlsModule = new TTSControlsModule(speechSynthesis);
   }
@@ -215,11 +250,12 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
   private speechHistory: SpeechHistoryModule =
     SpeechHistoryModule.getInstance();
   constructor(
+    chatHistoryElement: HTMLElement,
     selector: string,
     speechSynthesis: SpeechSynthesisModule,
     ignoreMessages: AssistantResponse[] = []
   ) {
-    super(selector, speechSynthesis);
+    super(chatHistoryElement, selector, speechSynthesis);
     this.haltOnFirst = true; // only expecting to load one new chat message at a time
     this.ignoreMessages = ignoreMessages;
   }

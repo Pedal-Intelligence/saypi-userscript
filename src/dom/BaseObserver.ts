@@ -2,8 +2,13 @@ abstract class BaseObserver {
   protected observer: MutationObserver;
   protected target: Element | null;
 
-  constructor(protected selector: string) {
-    this.target = document.querySelector(selector);
+  constructor(searchRoot: HTMLElement, protected selector: string) {
+    if (searchRoot.matches(selector)) {
+      this.target = searchRoot;
+    } else {
+      this.target = searchRoot.querySelector(selector);
+    }
+
     this.observer = new MutationObserver(this.callback.bind(this));
 
     if (!this.target) {

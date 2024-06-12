@@ -23,7 +23,7 @@ type Observer = {
   disconnect: () => void;
 };
 
-export class TextToSpeechUIManager {
+export class ChatHistorySpeechManager {
   private userPreferences = UserPreferenceModule.getInstance();
   private speechSynthesis = SpeechSynthesisModule.getInstance();
   private ttsControls = new TTSControlsModule(this.speechSynthesis);
@@ -34,9 +34,9 @@ export class TextToSpeechUIManager {
   private eventListeners: EventListener[] = [];
   private observers: Observer[] = [];
 
-  findAndDecorateVoiceMenu(): Observation {
-    const audioControlsContainer = document.getElementById(
-      "saypi-audio-controls"
+  findAndDecorateVoiceMenu(chatHistoryElement: HTMLElement): Observation {
+    const audioControlsContainer = chatHistoryElement.querySelector(
+      "#saypi-audio-controls"
     );
     if (!audioControlsContainer) {
       return Observation.notFound("saypi-audio-controls");
@@ -82,10 +82,13 @@ export class TextToSpeechUIManager {
    * and associate the utterance with that message in the speech history.
    * @param utterance A spoken reading of a chat message
    */
-  associateWithChatHistory(utterance: SpeechUtterance): void {
+  associateWithChatHistory(
+    searchRoot: HTMLElement,
+    utterance: SpeechUtterance
+  ): void {
     // get most recent message in chat history
     const speech = new AssistantSpeech(utterance);
-    const assistantMessages = document.querySelectorAll(".assistant-message");
+    const assistantMessages = searchRoot.querySelectorAll(".assistant-message");
     if (assistantMessages.length > 0) {
       const lastAssistantMessage = assistantMessages[
         assistantMessages.length - 1
@@ -116,10 +119,11 @@ export class TextToSpeechUIManager {
     }
   }
 
-  registerPastChatHistoryListener(): void {
+  registerPastChatHistoryListener(chatHistoryElement: HTMLElement): void {
     // this listener keeps track of the top-level chat history containers,
     // and recursively observes the children of the past messages container
     const rootChatHistoryObserver = new RootChatHistoryObserver(
+      chatHistoryElement,
       "#saypi-chat-history",
       this.speechSynthesis
     );
@@ -130,20 +134,24 @@ export class TextToSpeechUIManager {
     this.observers.push(rootChatHistoryObserver);
   }
 
-  async registerPresentChatHistoryListener(): Promise<ChatHistoryAdditionsObserver> {
+  async registerPresentChatHistoryListener(
+    chatHistoryElement: HTMLElement
+  ): Promise<ChatHistoryAdditionsObserver> {
     const selector = "#saypi-chat-history-present-messages";
     const existingMessagesObserver = new ChatHistoryOldMessageObserver(
+      chatHistoryElement,
       selector,
       this.speechSynthesis
     ); // this type of observer streams speech from the speech history
     const initialMessages = await existingMessagesObserver // TODO const oldMessages = await ...
-      .runOnce(document.querySelector(selector) as HTMLElement); // run on initial content, i.e. most recent message in chat history
+      .runOnce(chatHistoryElement.querySelector(selector) as HTMLElement); // run on initial content, i.e. most recent message in chat history
     console.debug(
       `Found ${initialMessages.length} recent assistant message(s)`
     );
     existingMessagesObserver.disconnect(); // only run once
 
     const newMessagesObserver = new ChatHistoryAdditionsObserver(
+      chatHistoryElement,
       selector,
       this.speechSynthesis,
       initialMessages // ignore these messages when observing new messages
@@ -159,13 +167,13 @@ export class TextToSpeechUIManager {
   }
 
   // Register event listeners and store them for later removal
-  registerSpeechStreamListeners(): void {
+  registerSpeechStreamListeners(chatHistoryElement: HTMLElement): void {
     const replayingListener = (utterance: SpeechUtterance) => {
       this.replaying = true;
     };
     const speechStreamStartedListener = (utterance: SpeechUtterance) => {
       if (utterance && !this.replaying) {
-        this.associateWithChatHistory(utterance);
+        this.associateWithChatHistory(chatHistoryElement, utterance);
       }
       this.replaying = false;
     };
@@ -198,9 +206,9 @@ export class TextToSpeechUIManager {
   // Constructor
   constructor(private chatbot: Chatbot, chatHistoryElement: HTMLElement) {
     this.addIdChatHistory(chatHistoryElement);
-    this.findAndDecorateVoiceMenu();
-    this.registerPastChatHistoryListener();
-    this.registerPresentChatHistoryListener();
-    this.registerSpeechStreamListeners();
+    this.findAndDecorateVoiceMenu(chatHistoryElement);
+    this.registerPastChatHistoryListener(chatHistoryElement);
+    this.registerPresentChatHistoryListener(chatHistoryElement);
+    this.registerSpeechStreamListeners(chatHistoryElement);
   }
 }
