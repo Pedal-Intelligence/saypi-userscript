@@ -34,8 +34,8 @@ export class ChatHistorySpeechManager {
   private eventListeners: EventListener[] = [];
   private observers: Observer[] = [];
 
-  findAndDecorateVoiceMenu(chatHistoryElement: HTMLElement): Observation {
-    const audioControlsContainer = chatHistoryElement.querySelector(
+  findAndDecorateVoiceMenu(): Observation {
+    const audioControlsContainer = document.querySelector(
       "#saypi-audio-controls"
     );
     if (!audioControlsContainer) {
@@ -67,10 +67,17 @@ export class ChatHistorySpeechManager {
       pastChatMessagesContainer.id = "saypi-chat-history-past-messages";
     }
 
-    const presentChatMessagesContainer =
-      chatHistory.querySelector(":nth-child(3)");
-    if (presentChatMessagesContainer) {
-      presentChatMessagesContainer.id = "saypi-chat-history-present-messages";
+    if (chatHistory.children.length >= 3) {
+      const presentChatMessagesContainer = chatHistory.children[2];
+      //  chatHistory.querySelector(":nth-child(3)"); // less reliable than direct access, for some reason
+      if (presentChatMessagesContainer) {
+        presentChatMessagesContainer.id = "saypi-chat-history-present-messages";
+      }
+    } else {
+      console.warn(
+        "Present messages container not found in chat history.",
+        chatHistory
+      );
     }
   }
 
@@ -206,7 +213,7 @@ export class ChatHistorySpeechManager {
   // Constructor
   constructor(private chatbot: Chatbot, chatHistoryElement: HTMLElement) {
     this.addIdChatHistory(chatHistoryElement);
-    this.findAndDecorateVoiceMenu(chatHistoryElement);
+    this.findAndDecorateVoiceMenu(); // voice menu is not within the chat history, but is a related element
     this.registerPastChatHistoryListener(chatHistoryElement);
     this.registerPresentChatHistoryListener(chatHistoryElement);
     this.registerSpeechStreamListeners(chatHistoryElement);
