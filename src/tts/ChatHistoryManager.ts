@@ -7,7 +7,10 @@ import {
   AssistantSpeech,
   ChatHistoryAdditionsObserver,
   ChatHistoryOldMessageObserver,
+  Observer,
   RootChatHistoryObserver,
+  EventListener,
+  ResourceReleasable,
 } from "../dom/ChatHistory";
 import { Observation } from "../dom/Observation";
 import { VoiceMenu } from "./VoiceMenu";
@@ -15,15 +18,7 @@ import { AssistantResponse } from "../dom/MessageElements";
 import { SpeechUtterance } from "./SpeechModel";
 import { TTSControlsModule } from "./TTSControlsModule";
 
-type EventListener = {
-  event: string;
-  listener: (...args: any[]) => void;
-};
-type Observer = {
-  disconnect: () => void;
-};
-
-export class ChatHistorySpeechManager {
+export class ChatHistorySpeechManager implements ResourceReleasable {
   private userPreferences = UserPreferenceModule.getInstance();
   private speechSynthesis = SpeechSynthesisModule.getInstance();
   private ttsControls = new TTSControlsModule(this.speechSynthesis);
