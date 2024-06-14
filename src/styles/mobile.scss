@@ -120,6 +120,10 @@ html.immersive-view {
   }
 
 }
+html.mobile-device .chat-message .message-hover-menu .saypi-tts-controls {
+  /* on mobile, tts controls are in a popup menu instead */
+  display: none;
+}
 @import "dark-mode.scss";
 @import "focus-mode.scss";
 @import "lock.scss";

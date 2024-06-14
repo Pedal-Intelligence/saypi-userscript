@@ -40,7 +40,7 @@ export class VoiceMenu {
       return obs;
     }
     voiceMenuControls.id = "saypi-voice-menu-controls";
-    obs = Observation.notDecorated(
+    obs = Observation.foundUndecorated(
       "saypi-voice-menu-controls",
       voiceMenuControls
     );
@@ -61,7 +61,7 @@ export class VoiceMenu {
       attributes: true,
       attributeFilter: ["class"],
     });
-    return Observation.decorated(obs);
+    return Observation.foundAndDecorated(obs);
   }
 
   // Voice selection management
@@ -95,7 +95,7 @@ export class VoiceMenu {
     if (!audioControlsContainer || !voiceMenu) {
       return Observation.notFound("saypi-audio-controls");
     }
-    let foundAudioCtrls = Observation.notDecorated(
+    let foundAudioCtrls = Observation.foundUndecorated(
       "saypi-audio-controls",
       audioControlsContainer
     );
@@ -138,7 +138,7 @@ export class VoiceMenu {
 
     const observer = new MutationObserver(observerCallback);
     observer.observe(audioControlsContainer, { childList: true });
-    return Observation.decorated(foundAudioCtrls); // Assuming listener doesn't require further checks
+    return Observation.foundAndDecorated(foundAudioCtrls); // Assuming listener doesn't require further checks
   }
 
   introduceVoice(voice: SpeechSynthesisVoiceRemote): void {

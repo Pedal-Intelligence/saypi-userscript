@@ -1480,7 +1480,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `#saypi-callButton.disabled svg path.ci
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(0.9)}100%{transform:scale(1)}}html.desktop-view #saypi-talkButton{display:none}html.desktop-view #saypi-callButton{width:2.25rem;position:relative;margin-right:0}html.desktop-view .saypi-prompt-container{padding-right:0}html.desktop-view .saypi-exit-button{display:none}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes fadeOut{from{opacity:1}to{opacity:0}}html.desktop-view #saypi-audio-controls{margin-top:.35rem}html.desktop-view #saypi-side-panel .immersive-mode-button svg{width:30px}html.desktop-view #saypi-side-panel .immersive-mode-button svg .cls-1{stroke:#24381b}html.desktop-view .message-hover-menu{display:flex}html.desktop-view .message-hover-menu .w-fit.pt-4{margin-left:auto}html.desktop-view .message-hover-menu .saypi-tts-controls{display:flex}html.desktop-view .message-hover-menu .saypi-tts-controls .saypi-speak-button{padding:4px;border-radius:50%;overflow:hidden}html.desktop-view .message-hover-menu .saypi-tts-controls div.saypi-cost,html.desktop-view .message-hover-menu .saypi-tts-controls div.saypi-powered-by{display:flex;align-items:center;margin-left:8px}html.desktop-view .message-hover-menu .saypi-tts-controls svg,html.desktop-view .message-hover-menu .saypi-tts-controls img{width:24px;height:24px}html.desktop-view .message-hover-menu .saypi-tts-controls svg path.speaker,html.desktop-view .message-hover-menu .saypi-tts-controls img path.speaker{fill:#24381b}`, "",{"version":3,"sources":["webpack://./src/styles/desktop.scss","webpack://./src/styles/messages.scss"],"names":[],"mappings":"AACE,iBACE,GACE,kBAAA,CAEF,IACE,oBAAA,CAEF,KACE,kBAAA,CAAA,CAIJ,oCAEE,YAAA,CAGF,oCACE,aAAA,CACA,iBAAA,CACA,cAAA,CAGF,0CAEE,eAAA,CAGF,qCACE,YAAA,CAGF,kBACE,KAAA,SAAA,CACA,GAAA,SAAA,CAAA,CAGF,mBACE,KAAA,SAAA,CACA,GAAA,SAAA,CAAA,CAGF,wCAEE,iBAAA,CAGF,+DACE,UAAA,CACA,sEACE,cAAA,CCnDN,sCACI,YAAA,CAGA,kDAEI,gBAAA,CAGJ,0DACI,YAAA,CACA,8EACI,WAAA,CACA,iBAAA,CACA,eAAA,CAEJ,wJACI,YAAA,CACA,kBAAA,CACA,eAAA,CAEJ,4HACI,UAAA,CACA,WAAA,CACA,sJACI,YAAA","sourcesContent":["html.desktop-view {\n  @keyframes pulse {\n    0% {\n      transform: scale(1);\n    }\n    50% {\n      transform: scale(0.9);\n    }\n    100% {\n      transform: scale(1);\n    }\n  }\n\n  #saypi-talkButton {\n    /* not needed on desktop with call button */\n    display: none;\n  }\n\n  #saypi-callButton {\n    width: 2.25rem;\n    position: relative;\n    margin-right: 0;\n  }\n\n  .saypi-prompt-container {\n    /* make room in the prompt text area for the call button */\n    padding-right: 0;\n  }\n\n  .saypi-exit-button {\n    display: none;\n  }\n\n  @keyframes fadeIn {\n    from { opacity: 0; }\n    to { opacity: 1; }\n  }  \n\n  @keyframes fadeOut {\n    from { opacity: 1; }\n    to { opacity: 0; }\n  }\n\n  #saypi-audio-controls {\n    /* additional margin to align with control panel row */\n    margin-top: 0.35rem;\n  }\n\n  #saypi-side-panel .immersive-mode-button svg {\n    width: 30px;\n    .cls-1 {\n      stroke: #24381b;\n    }\n  }\n\n  @import \"messages.scss\";\n}\n",".message-hover-menu {\n    display: flex;\n\n    /* If you need specific styling for .create-thread-button, add it here */\n    .w-fit.pt-4 {\n        // position to the right of its siblings\n        margin-left: auto;\n    }\n    \n    .saypi-tts-controls {\n        display: flex;\n        .saypi-speak-button {\n            padding: 4px; /* brings the total height to 32px */\n            border-radius: 50%;\n            overflow: hidden;\n        }\n        div.saypi-cost, div.saypi-powered-by {\n            display: flex;\n            align-items: center; // center the text vertically\n            margin-left: 8px; // Adds some space between the controls\n        }\n        svg, img {\n            width: 24px;\n            height: 24px;\n            path.speaker {\n                fill: #24381b; // rgb(13 60 38) - Pi primary text color\n            }\n        }\n    }\n}\n\n/*\n * these styles are for debugging purposes, to make it easier to see when messages are being detected\n.assistant-message {\n    // give it a subtle green background color and border\n    background-color: #f0f9f4; // rgb(240 249 244) - Pi primary background color\n    border: 1px solid #d1f0e5; // rgb(209 240 229) - Pi secondary background color\n    border-radius: 8px;\n    padding: 0.8rem;\n}\n.assistant-message.speech-enabled {\n    border-color:#24381b;\n}\n*/"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(0.9)}100%{transform:scale(1)}}html.desktop-view #saypi-talkButton{display:none}html.desktop-view #saypi-callButton{width:2.25rem;position:relative;margin-right:0}html.desktop-view .saypi-prompt-container{padding-right:0}html.desktop-view .saypi-exit-button{display:none}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes fadeOut{from{opacity:1}to{opacity:0}}html.desktop-view #saypi-audio-controls{margin-top:.35rem}html.desktop-view #saypi-side-panel .immersive-mode-button svg{width:30px}html.desktop-view #saypi-side-panel .immersive-mode-button svg .cls-1{stroke:#24381b}html.desktop-view .message-hover-menu{display:flex}html.desktop-view .message-hover-menu .w-fit.pt-4{margin-left:auto}html.desktop-view .message-hover-menu .saypi-tts-controls{display:flex}html.desktop-view .message-hover-menu .saypi-tts-controls .saypi-speak-button{padding:4px;border-radius:50%;overflow:hidden}html.desktop-view .message-hover-menu .saypi-tts-controls .saypi-cost,html.desktop-view .message-hover-menu .saypi-tts-controls .saypi-powered-by{display:flex;align-items:center;margin-left:8px}html.desktop-view .message-hover-menu .saypi-tts-controls svg,html.desktop-view .message-hover-menu .saypi-tts-controls img{width:24px;height:24px}html.desktop-view .message-hover-menu .saypi-tts-controls svg path.speaker,html.desktop-view .message-hover-menu .saypi-tts-controls img path.speaker{fill:#24381b}html.desktop-view .assistant-message .popup-menu .saypi-speak-button svg{width:24px;height:24px}`, "",{"version":3,"sources":["webpack://./src/styles/desktop.scss","webpack://./src/styles/messages.scss"],"names":[],"mappings":"AACE,iBACE,GACE,kBAAA,CAEF,IACE,oBAAA,CAEF,KACE,kBAAA,CAAA,CAIJ,oCAEE,YAAA,CAGF,oCACE,aAAA,CACA,iBAAA,CACA,cAAA,CAGF,0CAEE,eAAA,CAGF,qCACE,YAAA,CAGF,kBACE,KAAA,SAAA,CACA,GAAA,SAAA,CAAA,CAGF,mBACE,KAAA,SAAA,CACA,GAAA,SAAA,CAAA,CAGF,wCAEE,iBAAA,CAGF,+DACE,UAAA,CACA,sEACE,cAAA,CCnDN,sCACI,YAAA,CAGA,kDAEI,gBAAA,CAGJ,0DACI,YAAA,CACA,8EACI,WAAA,CACA,iBAAA,CACA,eAAA,CAEJ,kJACI,YAAA,CACA,kBAAA,CACA,eAAA,CAEJ,4HACI,UAAA,CACA,WAAA,CACA,sJACI,YAAA,CAMhB,yEACI,UAAA,CACA,WAAA","sourcesContent":["html.desktop-view {\n  @keyframes pulse {\n    0% {\n      transform: scale(1);\n    }\n    50% {\n      transform: scale(0.9);\n    }\n    100% {\n      transform: scale(1);\n    }\n  }\n\n  #saypi-talkButton {\n    /* not needed on desktop with call button */\n    display: none;\n  }\n\n  #saypi-callButton {\n    width: 2.25rem;\n    position: relative;\n    margin-right: 0;\n  }\n\n  .saypi-prompt-container {\n    /* make room in the prompt text area for the call button */\n    padding-right: 0;\n  }\n\n  .saypi-exit-button {\n    display: none;\n  }\n\n  @keyframes fadeIn {\n    from { opacity: 0; }\n    to { opacity: 1; }\n  }  \n\n  @keyframes fadeOut {\n    from { opacity: 1; }\n    to { opacity: 0; }\n  }\n\n  #saypi-audio-controls {\n    /* additional margin to align with control panel row */\n    margin-top: 0.35rem;\n  }\n\n  #saypi-side-panel .immersive-mode-button svg {\n    width: 30px;\n    .cls-1 {\n      stroke: #24381b;\n    }\n  }\n\n  @import \"messages.scss\";\n}\n",".message-hover-menu {\n    display: flex;\n\n    /* If you need specific styling for .create-thread-button, add it here */\n    .w-fit.pt-4 {\n        // position to the right of its siblings\n        margin-left: auto;\n    }\n    \n    .saypi-tts-controls {\n        display: flex;\n        .saypi-speak-button {\n            padding: 4px; /* brings the total height to 32px */\n            border-radius: 50%;\n            overflow: hidden;\n        }\n        .saypi-cost, .saypi-powered-by {\n            display: flex;\n            align-items: center; // center the text vertically\n            margin-left: 8px; // Adds some space between the controls\n        }\n        svg, img {\n            width: 24px;\n            height: 24px;\n            path.speaker {\n                fill: #24381b; // rgb(13 60 38) - Pi primary text color\n            }\n        }\n    }\n}\n\n.assistant-message .popup-menu .saypi-speak-button svg {\n    width: 24px;\n    height: 24px;\n}\n\n/*\n * these styles are for debugging purposes, to make it easier to see when messages are being detected\n *\n.assistant-message {\n    // give it a subtle green background color and border\n    background-color: #f0f9f4; // rgb(240 249 244) - Pi primary background color\n    border: 1px solid #d1f0e5; // rgb(209 240 229) - Pi secondary background color\n    border-radius: 8px;\n    padding: 0.8rem;\n}\n.assistant-message.speech-enabled {\n    border-color:#24381b;\n}\n.assistant-message .popup-menu {\n    background-color: #f0f9f4;\n}\n*/\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1503,7 +1503,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse{0%{transform:scale(1)
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `html.immersive-view #saypi-panel,html.immersive-view .notification{width:100%;position:fixed;left:0;background-color:rgba(245,238,223,.98);height:100svh;top:0}html.immersive-view #saypi-talkButton{background-color:#e9f5da;border-radius:0;margin:0}html.immersive-view #saypi-talkButton svg{width:100vw;height:100svh;padding:12.5svh 0}html.immersive-view #__next>main>div>div>div.fixed.top-4.right-6>button,html.immersive-view #saypi-experiences-button{transform:scale(1.5)}html.immersive-view div.bg-gradient-to-b{display:none}html.immersive-view #saypi-audio-controls{margin-top:.375rem}html.immersive-view #saypi-audio-controls div.p-1{display:none}html.immersive-view #saypi-audio-controls button.group{transform:scale(1.5) !important;z-index:50}html.immersive-view #saypi-audio-controls button.group+button{display:none}html.immersive-view #saypi-audio-controls div.bg-neutral-200{background-color:rgba(0,0,0,0)}html.immersive-view .text-body-chat-m{padding-top:0}html.immersive-view .saypi-enter-button{display:none}html.immersive-view #saypi-prompt-ancestor{display:none}html.immersive-view #saypi-submitButton{display:none}html.immersive-view #saypi-callButton{position:fixed;bottom:4rem;left:0;right:0;margin:auto;width:4.5rem;height:4.5rem;border:0;z-index:80}html.immersive-view .scrollbar-gutter-both-edges{visibility:hidden}html.immersive-view .saypi-control-panel button:not(.saypi-control-button){display:none}html.immersive-view #saypi-control-panel-main.lg\\:hidden{display:block}html.immersive-view div.lg\\:flex-row-reverse{flex-direction:unset}html.immersive-view #saypi-side-panel.lg\\:flex{display:none}html.immersive-view .saypi-control-panel button.theme-toggle-button{width:4rem;padding:6px}html.immersive-view #saypi-discovery-panel{display:none}html.immersive-view body.dark #saypi-talkButton{background-color:#bac5cc;opacity:1}html.immersive-view body.dark .call-button path.circle{fill:#107782}html.immersive-view body.dark .outermost.piThinking{--original-color: #a9b7bf;--thinking-color: #ffe4b2;animation:thinkingFlip 1s ease-in-out}html.immersive-view body.dark .second.piThinking{--original-color: #8f9ca7;--thinking-color: #ffddb4;animation:thinkingFlip 1.1s ease-in-out}html.immersive-view body.dark .third.piThinking{--original-color: #787d83;--thinking-color: #ffd5b7;animation:thinkingFlip 1.2s ease-in-out}html.immersive-view body.dark .fourth.piThinking{--original-color: #6c7378;--thinking-color: #ffcdca;animation:thinkingFlip 1.3s ease-in-out}html.immersive-view body.dark .fifth.piThinking{--original-color: #313437;--thinking-color: #ffc5dc;animation:thinkingFlip 1.4s ease-in-out}html.immersive-view body.dark .innermost.piThinking{--original-color: #1c1c1c;--thinking-color: #ffbde6;animation:thinkingFlip 1.5s ease-in-out}html.immersive-view body.dark .locked #saypi-touch-absorber{background-color:rgba(0,0,0,.75)}html.immersive-view body.dark .locked #saypi-locked-text{color:#fff}html.immersive-view:not(.mobile-device) body.focus button{opacity:0;transition:opacity .5s ease-out}html.immersive-view.mobile-device .lock-button{width:3rem;height:3rem;padding:6px;margin-left:.5rem;border:0;z-index:60}html.immersive-view.mobile-device .lock-button svg path.inner{color:#0d3c26}html.immersive-view.mobile-device #saypi-lock-panel{display:unset;background-color:rgba(0,0,0,0);border-radius:0;margin:0}html.immersive-view.mobile-device .unlocked #saypi-lockButton{display:inline-block !important}html.immersive-view.mobile-device .locked #saypi-lockButton{display:none !important}html.immersive-view.mobile-device .unlocked #saypi-unlockButton{display:none !important}html.immersive-view.mobile-device .locked #saypi-unlockButton{display:inline-block !important;position:relative;z-index:101 !important}html.immersive-view.mobile-device .locked #saypi-touch-absorber{display:block !important;position:fixed;top:0;left:0;opacity:.5;background-color:rgba(245,238,223,.75);width:100vw;height:100svh;z-index:100}@keyframes fadeIn{from{opacity:0}to{opacity:1}}html.immersive-view.mobile-device #saypi-locked-text{display:none}html.immersive-view.mobile-device .locked #saypi-locked-text{display:block !important;position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);width:80%;height:1rem;animation-name:fadeIn;animation-duration:2s;animation-fill-mode:forwards;text-align:center;font-size:xx-large;font-family:"Roboto","Open Sans","Lato","Source Sans Pro","Noto Sans",Arial,sans-serif}html.immersive-view.mobile-device .locked #saypi-locked-text .subtext{display:block;font-size:large}`, "",{"version":3,"sources":["webpack://./src/styles/mobile.scss","webpack://./src/styles/dark-mode.scss","webpack://./src/styles/focus-mode.scss","webpack://./src/styles/lock.scss"],"names":[],"mappings":"AACE,mEAEE,UAAA,CACA,cAAA,CACA,MAAA,CACA,sCAAA,CAEA,aAAA,CACA,KAAA,CAGF,sCACE,wBAAA,CACA,eAAA,CACA,QAAA,CACA,0CACE,WAAA,CACA,aAAA,CACA,iBAAA,CAKJ,sHAEE,oBAAA,CAIF,yCACE,YAAA,CAIF,0CAEE,kBAAA,CAEA,kDACE,YAAA,CAGF,uDACE,+BAAA,CACA,UAAA,CAEA,8DACE,YAAA,CAIJ,6DACE,8BAAA,CAKJ,sCACE,aAAA,CAGF,wCACE,YAAA,CAGF,2CAGE,YAAA,CAIF,wCACE,YAAA,CAGF,sCACE,cAAA,CACA,WAAA,CACA,MAAA,CACA,OAAA,CACA,WAAA,CACA,YAAA,CACA,aAAA,CACA,QAAA,CACA,UAAA,CAIF,iDACE,iBAAA,CAIF,2EACE,YAAA,CAIF,yDACE,aAAA,CAGF,6CACE,oBAAA,CAGF,+CACE,YAAA,CAGF,oEACE,UAAA,CACA,WAAA,CAGF,2CACE,YAAA,CCrHA,gDACI,wBAAA,CACA,SAAA,CAEJ,uDACI,YAAA,CAIJ,oDACI,yBAAA,CACA,yBAAA,CACA,qCAAA,CAGF,iDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,gDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,iDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,gDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,oDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAKA,4DACE,gCAAA,CAEF,yDACE,UAAA,CCpDV,0DACI,SAAA,CACA,+BAAA,CCDJ,+CACI,UAAA,CACA,WAAA,CACA,WAAA,CACA,iBAAA,CACA,QAAA,CACA,UAAA,CACA,8DACE,aAAA,CAIJ,oDAEE,aAAA,CACA,8BAAA,CACA,eAAA,CACA,QAAA,CAGF,8DACE,+BAAA,CAEF,4DACE,uBAAA,CAGF,gEACE,uBAAA,CAEF,8DACE,+BAAA,CACA,iBAAA,CACA,sBAAA,CAGF,gEACE,wBAAA,CACA,cAAA,CACA,KAAA,CACA,MAAA,CACA,UAAA,CAEA,sCAAA,CACA,WAAA,CACA,aAAA,CACA,WAAA,CAGF,kBACE,KAAA,SAAA,CACA,GAAA,SAAA,CAAA,CAGF,qDACE,YAAA,CAEF,6DACE,wBAAA,CACA,cAAA,CACA,OAAA,CACA,QAAA,CACA,+BAAA,CACA,SAAA,CACA,WAAA,CAEA,qBAAA,CACA,qBAAA,CACA,4BAAA,CACA,iBAAA,CACA,kBAAA,CACA,sFAAA,CACA,sEACE,aAAA,CACA,eAAA","sourcesContent":["html.immersive-view {\n  #saypi-panel,\n  .notification {\n    width: 100%;\n    position: fixed;\n    left: 0;\n    background-color: rgba(245, 238, 223, 0.98);\n\n    height: 100svh;\n    top: 0;\n  }\n\n  #saypi-talkButton {\n    background-color: #e9f5da;\n    border-radius: 0;\n    margin: 0;\n    svg {\n      width: 100vw;\n      height: 100svh;\n      padding: 12.5svh 0;\n    }\n  }\n\n  /* Pi controls: ellipsis, experiences */\n  #__next > main > div > div > div.fixed.top-4.right-6 > button,\n  #saypi-experiences-button {\n    transform: scale(1.5);\n  }\n\n  /* hide an ugly artifact */\n  div.bg-gradient-to-b {\n    display: none;\n  }\n\n  /* Pi controls: mute/unmute */\n  #saypi-audio-controls {\n    /* align the mute button with the horizontal control panel */\n    margin-top: 0.375rem;\n    /* hide the voice options */\n    div.p-1 {\n      display: none;\n    }\n    /* scale the mute button */\n    button.group {\n      transform: scale(1.5) !important;\n      z-index: 50;\n      /* hide the voice selector twisty */\n      + button {\n        display: none;\n      }\n    }\n    /* make an ugly artifact transparent on pi.ai */\n    div.bg-neutral-200 {\n      background-color: transparent;\n    }\n  }\n\n  /* fix an alignment issue with the \"new ui layout\" */\n  .text-body-chat-m {\n    padding-top: 0;\n  }\n\n  .saypi-enter-button {\n    display: none;\n  }\n\n  #saypi-prompt-ancestor {\n    /* hides the row containing the text area control */\n    /* important: hides virtual keyboard on android */\n    display: none;\n    /* the call button, usually nested in the prompt, is detached while in mobile view */\n  }\n\n  #saypi-submitButton {\n    display: none;\n  }\n\n  #saypi-callButton {\n    position: fixed;\n    bottom: 4rem;\n    left: 0;\n    right: 0;\n    margin: auto;\n    width: 4.5rem;\n    height: 4.5rem;\n    border: 0;\n    z-index: 80;\n  }\n\n  /* hide the scrollbar */\n  .scrollbar-gutter-both-edges {\n    visibility: hidden;\n  }\n\n  /* hide any buttons in the control panel not relevant to mobile */\n  .saypi-control-panel button:not(.saypi-control-button) {\n    display: none;\n  }\n\n  /* override lg:hidden, making the control panel's buttons visible in immersive view on desktops */\n  #saypi-control-panel-main.lg\\:hidden {\n    display: block;\n  }\n  /* override lg:flex-row-reverse, making the audio control button visible in immersive view on desktops */\n  div.lg\\:flex-row-reverse {\n    flex-direction: unset;\n  }\n  /* hide the side panel in immersive mode */\n  #saypi-side-panel.lg\\:flex {\n    display: none;\n  }\n  \n  .saypi-control-panel button.theme-toggle-button {\n    width: 4rem;\n    padding: 6px;\n  }\n\n  #saypi-discovery-panel {\n    display: none;\n  }\n\n}\n@import \"dark-mode.scss\";\n@import \"focus-mode.scss\";\n@import \"lock.scss\";\n","html.immersive-view body.dark {\n    #saypi-talkButton {\n        background-color: #bac5cc;\n        opacity: 1;\n    }\n    .call-button path.circle {\n        fill: #107782;\n    }\n\n    /* The following styles are for the card flip animation in rectangles.css */\n    .outermost.piThinking {\n        --original-color: #a9b7bf;\n        --thinking-color: #ffe4b2; /* A light orange for a soft but noticeable transition */\n        animation: thinkingFlip 1.0s ease-in-out;\n      }\n      \n      .second.piThinking {\n        --original-color: #8f9ca7;\n        --thinking-color: #ffddb4; /* A slightly different shade of light orange */\n        animation: thinkingFlip 1.1s ease-in-out;\n      }\n      \n      .third.piThinking {\n        --original-color: #787d83;\n        --thinking-color: #ffd5b7; /* A subtly warmer shade of light orange */\n        animation: thinkingFlip 1.2s ease-in-out;\n      }\n      \n      .fourth.piThinking {\n        --original-color: #6c7378;\n        --thinking-color: #ffcdca; /* A variation leaning towards pink */\n        animation: thinkingFlip 1.3s ease-in-out;\n      }\n      \n      .fifth.piThinking {\n        --original-color: #313437;\n        --thinking-color: #ffc5dc; /* A soft pink for contrast */\n        animation: thinkingFlip 1.4s ease-in-out;\n      }\n      \n      .innermost.piThinking {\n        --original-color: #1c1c1c;\n        --thinking-color: #ffbde6; /* A distinct light magenta */\n        animation: thinkingFlip 1.5s ease-in-out;\n      }\n      \n      /* even darker theme when locked */\n      .locked {\n        #saypi-touch-absorber {\n          background-color: rgba(0, 0, 0, 0.75);\n        }\n        #saypi-locked-text {\n          color: white;\n        }\n      }\n}\n","html.immersive-view:not(.mobile-device) body.focus button {\n    opacity: 0; \n    transition: opacity 0.5s ease-out;\n}","html.immersive-view.mobile-device {\n.lock-button {\n    width: 3rem;\n    height: 3rem;\n    padding: 6px;\n    margin-left: 0.5rem;\n    border: 0;\n    z-index: 60;\n    svg path.inner {\n      color: rgb(13 60 38); /* text-primary-700 */\n    }\n  }\n\n  #saypi-lock-panel {\n    /* unlocked by default */\n    display: unset;\n    background-color: transparent;\n    border-radius: 0;\n    margin: 0;\n  }\n\n  .unlocked #saypi-lockButton {\n    display: inline-block !important; // show the lock button when screen is unlocked\n  }\n  .locked #saypi-lockButton {\n    display: none !important; // hide the lock button when screen is locked\n  }\n\n  .unlocked #saypi-unlockButton {\n    display: none !important; // hide the unlock button when screen is unlocked\n  }\n  .locked #saypi-unlockButton {\n    display: inline-block !important; // show the unlock button when screen is unlocked\n    position: relative; // position (but don't move) the unlock button so that z-index works while locked\n    z-index: 101 !important; // above the touch absorber\n  }\n\n  .locked #saypi-touch-absorber {\n    display: block !important; // show the touch absorber when screen is locked\n    position: fixed;\n    top: 0;\n    left: 0;\n    opacity: 0.5;\n    /* semi-transparent background */\n    background-color: rgba(245, 238, 223, 0.75);\n    width: 100vw;\n    height: 100svh;\n    z-index: 100;\n  }\n\n  @keyframes fadeIn {\n    from { opacity: 0; }\n    to { opacity: 1; }\n  }  \n\n  #saypi-locked-text {\n    display: none; // hide the locked text when screen is unlocked\n  }\n  .locked #saypi-locked-text {\n    display: block !important; // show the locked text when screen is locked\n    position: fixed;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    width: 80%;\n    height: 1rem;\n    /* text */\n    animation-name: fadeIn;\n    animation-duration: 2s;\n    animation-fill-mode: forwards;\n    text-align: center;\n    font-size: xx-large;\n    font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;\n    .subtext {\n      display: block;\n      font-size: large;\n    }\n  }\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `html.immersive-view #saypi-panel,html.immersive-view .notification{width:100%;position:fixed;left:0;background-color:rgba(245,238,223,.98);height:100svh;top:0}html.immersive-view #saypi-talkButton{background-color:#e9f5da;border-radius:0;margin:0}html.immersive-view #saypi-talkButton svg{width:100vw;height:100svh;padding:12.5svh 0}html.immersive-view #__next>main>div>div>div.fixed.top-4.right-6>button,html.immersive-view #saypi-experiences-button{transform:scale(1.5)}html.immersive-view div.bg-gradient-to-b{display:none}html.immersive-view #saypi-audio-controls{margin-top:.375rem}html.immersive-view #saypi-audio-controls div.p-1{display:none}html.immersive-view #saypi-audio-controls button.group{transform:scale(1.5) !important;z-index:50}html.immersive-view #saypi-audio-controls button.group+button{display:none}html.immersive-view #saypi-audio-controls div.bg-neutral-200{background-color:rgba(0,0,0,0)}html.immersive-view .text-body-chat-m{padding-top:0}html.immersive-view .saypi-enter-button{display:none}html.immersive-view #saypi-prompt-ancestor{display:none}html.immersive-view #saypi-submitButton{display:none}html.immersive-view #saypi-callButton{position:fixed;bottom:4rem;left:0;right:0;margin:auto;width:4.5rem;height:4.5rem;border:0;z-index:80}html.immersive-view .scrollbar-gutter-both-edges{visibility:hidden}html.immersive-view .saypi-control-panel button:not(.saypi-control-button){display:none}html.immersive-view #saypi-control-panel-main.lg\\:hidden{display:block}html.immersive-view div.lg\\:flex-row-reverse{flex-direction:unset}html.immersive-view #saypi-side-panel.lg\\:flex{display:none}html.immersive-view .saypi-control-panel button.theme-toggle-button{width:4rem;padding:6px}html.immersive-view #saypi-discovery-panel{display:none}html.mobile-device .chat-message .message-hover-menu .saypi-tts-controls{display:none}html.immersive-view body.dark #saypi-talkButton{background-color:#bac5cc;opacity:1}html.immersive-view body.dark .call-button path.circle{fill:#107782}html.immersive-view body.dark .outermost.piThinking{--original-color: #a9b7bf;--thinking-color: #ffe4b2;animation:thinkingFlip 1s ease-in-out}html.immersive-view body.dark .second.piThinking{--original-color: #8f9ca7;--thinking-color: #ffddb4;animation:thinkingFlip 1.1s ease-in-out}html.immersive-view body.dark .third.piThinking{--original-color: #787d83;--thinking-color: #ffd5b7;animation:thinkingFlip 1.2s ease-in-out}html.immersive-view body.dark .fourth.piThinking{--original-color: #6c7378;--thinking-color: #ffcdca;animation:thinkingFlip 1.3s ease-in-out}html.immersive-view body.dark .fifth.piThinking{--original-color: #313437;--thinking-color: #ffc5dc;animation:thinkingFlip 1.4s ease-in-out}html.immersive-view body.dark .innermost.piThinking{--original-color: #1c1c1c;--thinking-color: #ffbde6;animation:thinkingFlip 1.5s ease-in-out}html.immersive-view body.dark .locked #saypi-touch-absorber{background-color:rgba(0,0,0,.75)}html.immersive-view body.dark .locked #saypi-locked-text{color:#fff}html.immersive-view:not(.mobile-device) body.focus button{opacity:0;transition:opacity .5s ease-out}html.immersive-view.mobile-device .lock-button{width:3rem;height:3rem;padding:6px;margin-left:.5rem;border:0;z-index:60}html.immersive-view.mobile-device .lock-button svg path.inner{color:#0d3c26}html.immersive-view.mobile-device #saypi-lock-panel{display:unset;background-color:rgba(0,0,0,0);border-radius:0;margin:0}html.immersive-view.mobile-device .unlocked #saypi-lockButton{display:inline-block !important}html.immersive-view.mobile-device .locked #saypi-lockButton{display:none !important}html.immersive-view.mobile-device .unlocked #saypi-unlockButton{display:none !important}html.immersive-view.mobile-device .locked #saypi-unlockButton{display:inline-block !important;position:relative;z-index:101 !important}html.immersive-view.mobile-device .locked #saypi-touch-absorber{display:block !important;position:fixed;top:0;left:0;opacity:.5;background-color:rgba(245,238,223,.75);width:100vw;height:100svh;z-index:100}@keyframes fadeIn{from{opacity:0}to{opacity:1}}html.immersive-view.mobile-device #saypi-locked-text{display:none}html.immersive-view.mobile-device .locked #saypi-locked-text{display:block !important;position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);width:80%;height:1rem;animation-name:fadeIn;animation-duration:2s;animation-fill-mode:forwards;text-align:center;font-size:xx-large;font-family:"Roboto","Open Sans","Lato","Source Sans Pro","Noto Sans",Arial,sans-serif}html.immersive-view.mobile-device .locked #saypi-locked-text .subtext{display:block;font-size:large}`, "",{"version":3,"sources":["webpack://./src/styles/mobile.scss","webpack://./src/styles/dark-mode.scss","webpack://./src/styles/focus-mode.scss","webpack://./src/styles/lock.scss"],"names":[],"mappings":"AACE,mEAEE,UAAA,CACA,cAAA,CACA,MAAA,CACA,sCAAA,CAEA,aAAA,CACA,KAAA,CAGF,sCACE,wBAAA,CACA,eAAA,CACA,QAAA,CACA,0CACE,WAAA,CACA,aAAA,CACA,iBAAA,CAKJ,sHAEE,oBAAA,CAIF,yCACE,YAAA,CAIF,0CAEE,kBAAA,CAEA,kDACE,YAAA,CAGF,uDACE,+BAAA,CACA,UAAA,CAEA,8DACE,YAAA,CAIJ,6DACE,8BAAA,CAKJ,sCACE,aAAA,CAGF,wCACE,YAAA,CAGF,2CAGE,YAAA,CAIF,wCACE,YAAA,CAGF,sCACE,cAAA,CACA,WAAA,CACA,MAAA,CACA,OAAA,CACA,WAAA,CACA,YAAA,CACA,aAAA,CACA,QAAA,CACA,UAAA,CAIF,iDACE,iBAAA,CAIF,2EACE,YAAA,CAIF,yDACE,aAAA,CAGF,6CACE,oBAAA,CAGF,+CACE,YAAA,CAGF,oEACE,UAAA,CACA,WAAA,CAGF,2CACE,YAAA,CAIJ,yEAEE,YAAA,CC3HE,gDACI,wBAAA,CACA,SAAA,CAEJ,uDACI,YAAA,CAIJ,oDACI,yBAAA,CACA,yBAAA,CACA,qCAAA,CAGF,iDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,gDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,iDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,gDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,oDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAKA,4DACE,gCAAA,CAEF,yDACE,UAAA,CCpDV,0DACI,SAAA,CACA,+BAAA,CCDJ,+CACI,UAAA,CACA,WAAA,CACA,WAAA,CACA,iBAAA,CACA,QAAA,CACA,UAAA,CACA,8DACE,aAAA,CAIJ,oDAEE,aAAA,CACA,8BAAA,CACA,eAAA,CACA,QAAA,CAGF,8DACE,+BAAA,CAEF,4DACE,uBAAA,CAGF,gEACE,uBAAA,CAEF,8DACE,+BAAA,CACA,iBAAA,CACA,sBAAA,CAGF,gEACE,wBAAA,CACA,cAAA,CACA,KAAA,CACA,MAAA,CACA,UAAA,CAEA,sCAAA,CACA,WAAA,CACA,aAAA,CACA,WAAA,CAGF,kBACE,KAAA,SAAA,CACA,GAAA,SAAA,CAAA,CAGF,qDACE,YAAA,CAEF,6DACE,wBAAA,CACA,cAAA,CACA,OAAA,CACA,QAAA,CACA,+BAAA,CACA,SAAA,CACA,WAAA,CAEA,qBAAA,CACA,qBAAA,CACA,4BAAA,CACA,iBAAA,CACA,kBAAA,CACA,sFAAA,CACA,sEACE,aAAA,CACA,eAAA","sourcesContent":["html.immersive-view {\n  #saypi-panel,\n  .notification {\n    width: 100%;\n    position: fixed;\n    left: 0;\n    background-color: rgba(245, 238, 223, 0.98);\n\n    height: 100svh;\n    top: 0;\n  }\n\n  #saypi-talkButton {\n    background-color: #e9f5da;\n    border-radius: 0;\n    margin: 0;\n    svg {\n      width: 100vw;\n      height: 100svh;\n      padding: 12.5svh 0;\n    }\n  }\n\n  /* Pi controls: ellipsis, experiences */\n  #__next > main > div > div > div.fixed.top-4.right-6 > button,\n  #saypi-experiences-button {\n    transform: scale(1.5);\n  }\n\n  /* hide an ugly artifact */\n  div.bg-gradient-to-b {\n    display: none;\n  }\n\n  /* Pi controls: mute/unmute */\n  #saypi-audio-controls {\n    /* align the mute button with the horizontal control panel */\n    margin-top: 0.375rem;\n    /* hide the voice options */\n    div.p-1 {\n      display: none;\n    }\n    /* scale the mute button */\n    button.group {\n      transform: scale(1.5) !important;\n      z-index: 50;\n      /* hide the voice selector twisty */\n      + button {\n        display: none;\n      }\n    }\n    /* make an ugly artifact transparent on pi.ai */\n    div.bg-neutral-200 {\n      background-color: transparent;\n    }\n  }\n\n  /* fix an alignment issue with the \"new ui layout\" */\n  .text-body-chat-m {\n    padding-top: 0;\n  }\n\n  .saypi-enter-button {\n    display: none;\n  }\n\n  #saypi-prompt-ancestor {\n    /* hides the row containing the text area control */\n    /* important: hides virtual keyboard on android */\n    display: none;\n    /* the call button, usually nested in the prompt, is detached while in mobile view */\n  }\n\n  #saypi-submitButton {\n    display: none;\n  }\n\n  #saypi-callButton {\n    position: fixed;\n    bottom: 4rem;\n    left: 0;\n    right: 0;\n    margin: auto;\n    width: 4.5rem;\n    height: 4.5rem;\n    border: 0;\n    z-index: 80;\n  }\n\n  /* hide the scrollbar */\n  .scrollbar-gutter-both-edges {\n    visibility: hidden;\n  }\n\n  /* hide any buttons in the control panel not relevant to mobile */\n  .saypi-control-panel button:not(.saypi-control-button) {\n    display: none;\n  }\n\n  /* override lg:hidden, making the control panel's buttons visible in immersive view on desktops */\n  #saypi-control-panel-main.lg\\:hidden {\n    display: block;\n  }\n  /* override lg:flex-row-reverse, making the audio control button visible in immersive view on desktops */\n  div.lg\\:flex-row-reverse {\n    flex-direction: unset;\n  }\n  /* hide the side panel in immersive mode */\n  #saypi-side-panel.lg\\:flex {\n    display: none;\n  }\n  \n  .saypi-control-panel button.theme-toggle-button {\n    width: 4rem;\n    padding: 6px;\n  }\n\n  #saypi-discovery-panel {\n    display: none;\n  }\n\n}\nhtml.mobile-device .chat-message .message-hover-menu .saypi-tts-controls {\n  /* on mobile, tts controls are in a popup menu instead */\n  display: none;\n}\n@import \"dark-mode.scss\";\n@import \"focus-mode.scss\";\n@import \"lock.scss\";\n","html.immersive-view body.dark {\n    #saypi-talkButton {\n        background-color: #bac5cc;\n        opacity: 1;\n    }\n    .call-button path.circle {\n        fill: #107782;\n    }\n\n    /* The following styles are for the card flip animation in rectangles.css */\n    .outermost.piThinking {\n        --original-color: #a9b7bf;\n        --thinking-color: #ffe4b2; /* A light orange for a soft but noticeable transition */\n        animation: thinkingFlip 1.0s ease-in-out;\n      }\n      \n      .second.piThinking {\n        --original-color: #8f9ca7;\n        --thinking-color: #ffddb4; /* A slightly different shade of light orange */\n        animation: thinkingFlip 1.1s ease-in-out;\n      }\n      \n      .third.piThinking {\n        --original-color: #787d83;\n        --thinking-color: #ffd5b7; /* A subtly warmer shade of light orange */\n        animation: thinkingFlip 1.2s ease-in-out;\n      }\n      \n      .fourth.piThinking {\n        --original-color: #6c7378;\n        --thinking-color: #ffcdca; /* A variation leaning towards pink */\n        animation: thinkingFlip 1.3s ease-in-out;\n      }\n      \n      .fifth.piThinking {\n        --original-color: #313437;\n        --thinking-color: #ffc5dc; /* A soft pink for contrast */\n        animation: thinkingFlip 1.4s ease-in-out;\n      }\n      \n      .innermost.piThinking {\n        --original-color: #1c1c1c;\n        --thinking-color: #ffbde6; /* A distinct light magenta */\n        animation: thinkingFlip 1.5s ease-in-out;\n      }\n      \n      /* even darker theme when locked */\n      .locked {\n        #saypi-touch-absorber {\n          background-color: rgba(0, 0, 0, 0.75);\n        }\n        #saypi-locked-text {\n          color: white;\n        }\n      }\n}\n","html.immersive-view:not(.mobile-device) body.focus button {\n    opacity: 0; \n    transition: opacity 0.5s ease-out;\n}","html.immersive-view.mobile-device {\n.lock-button {\n    width: 3rem;\n    height: 3rem;\n    padding: 6px;\n    margin-left: 0.5rem;\n    border: 0;\n    z-index: 60;\n    svg path.inner {\n      color: rgb(13 60 38); /* text-primary-700 */\n    }\n  }\n\n  #saypi-lock-panel {\n    /* unlocked by default */\n    display: unset;\n    background-color: transparent;\n    border-radius: 0;\n    margin: 0;\n  }\n\n  .unlocked #saypi-lockButton {\n    display: inline-block !important; // show the lock button when screen is unlocked\n  }\n  .locked #saypi-lockButton {\n    display: none !important; // hide the lock button when screen is locked\n  }\n\n  .unlocked #saypi-unlockButton {\n    display: none !important; // hide the unlock button when screen is unlocked\n  }\n  .locked #saypi-unlockButton {\n    display: inline-block !important; // show the unlock button when screen is unlocked\n    position: relative; // position (but don't move) the unlock button so that z-index works while locked\n    z-index: 101 !important; // above the touch absorber\n  }\n\n  .locked #saypi-touch-absorber {\n    display: block !important; // show the touch absorber when screen is locked\n    position: fixed;\n    top: 0;\n    left: 0;\n    opacity: 0.5;\n    /* semi-transparent background */\n    background-color: rgba(245, 238, 223, 0.75);\n    width: 100vw;\n    height: 100svh;\n    z-index: 100;\n  }\n\n  @keyframes fadeIn {\n    from { opacity: 0; }\n    to { opacity: 1; }\n  }  \n\n  #saypi-locked-text {\n    display: none; // hide the locked text when screen is unlocked\n  }\n  .locked #saypi-locked-text {\n    display: block !important; // show the locked text when screen is locked\n    position: fixed;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    width: 80%;\n    height: 1rem;\n    /* text */\n    animation-name: fadeIn;\n    animation-duration: 2s;\n    animation-fill-mode: forwards;\n    text-align: center;\n    font-size: xx-large;\n    font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;\n    .subtext {\n      display: block;\n      font-size: large;\n    }\n  }\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -31576,7 +31576,7 @@ const maxRetryAttempts = 5;
 const AUDIO_RELOAD_DELAY_MS = 1500; // minimum delay in milliseconds
 const AUDIO_LOAD_TIMEOUT_MS = 4000; // time allowed for audio to load before retrying - also update in WaitingWhileLoading state
 const machine = createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AogJzyzwAlkA7CAGzDwGJKtkJYAXZPFgbQAYBdRUAAcssDC2xkBIAB6IALACYANCACeiAIzcA7BoB0ANgUK53ABw7ucgMwGAvnZVpMuAkVIVqePQEkqYWkFKZFUefiQQYVFxLEkI2QQNLW49biMDbgUATgBWI20zORV1BDNtHL0yk0zrHO5uLLMchyd0bHxCEnJ-bz9qWmQAIyIuPikosQkpBKT61PTM3PzC4sQs7QVKjbkNa20snW1alpBndrcuzxpff1oaTrDxkUnY6c1k+YUM7LyFAqK1Joano9tUNEYvtptPZHKc2q5Oh4ejd+gwmKx2KNwkJnjE4qAEmYNFk9DlrLsTNkklllIDSnISQYDDSjNYzAYNIUFCczgj3N0vHoAArBVQYMhQQJoWBgR4RCZ4t6JTkpHIKWqmXQaDZJVYIDZmPRZYlfQraGrGHnwjr8q7eEUhcWSoYjOU46JTeKaHJyCpmBRWDQBjZ7bR6uQFPR-DLWORGJI5dlWlw2y7Ih1iiV3C5uyK4z0E72+yoBnbB9VQvVqw1Q74mMlpL7J86IgXXDNO+iMZhsDi5hUFmTvOaN75LP4rOlQkk7Gl5ayZXZGZt8tOCgAy3c7AGNyEEQiwABaEVBQQ-9-OvL3KkcLH7LAElOQ7PRxjnGRTGZlNFeppEbrcs3uIgLw9K9CxvFJR0WX5-j1bISS0LI2TSHQyTJX8Ln-a5NyYTsXT7MZ5UvfEh0gz4x1gycSljRkGlsQprCyGxkMw1s7T0AAlMA0UwLNeIxQjsTzMDSJmAwcm0SocmY-Yvh9SSDD1JJnz0IN1VyMl2R+NjbWRbjeM7aQMRYMA9GQAAzUy8AACgAQQAVQAER8AB5AB9TicHXVy7Kc9ynO8uyAE0AEoBmtLC228AzAKgUCXjEos-VLIMdArMM6SJUl6m4XZJJyXZ6jMXS13baVIECUUEsVa8fRJXKrF+DluEkvUMkNcEaW0X0fQUCxuVhXk-2i4UKogAZhiEp5RKVerUly310i0Nq6V2LQSxyH1oXNAw5FK7D7XG7MHiI91ErmhkFvqJavhWzKSiXfRrAULbajqV7nwO0ahWOgTeyxGaLrqq7GtulrVpKbrKlyMxaisPb6ocWEyCwCA4CkYaortIHaoggBaJS6UJ67GrJ+ptG+ji+jAXHBwSI4DD0c1yR6woYxMPVcn0dTTEYnY42aIbIvY9NRSdOnwLI9apOhSSXu1IxWo0cNzRBGTbHVN7jVjKnkVwvioElpL9R9aTmPkuHmQUFW6X6zYJOYvLFC0T69cFWK8IlY2lRNCpmvMOQmjZGxlJsI11jKHRYy2wX3fK1AZQgH3r0ULnwS2CtGiY-qzCyZG7CAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AogJzyzwAlkA7CAGzDwDoBJKsAYgAdLkBPAbQAYBdRKFZZYGAC7YyQkAA9EARgAsATgBMtXlt4AOFQFY1KpUoUAaEJ0T6FC2mt4qAbGrVKA7ArWeFAZgC+-hZomLgERKQU1HSM1MzIAEZE4nyCSCAiYpJY0unyCMrqmtp6hsamFlYIDry07qoq7iq+Or5OTr5KToHB6Nj4hCTkTDFMzDSDqTKZElIy+YUa2roGRibmlohqNvb62k1NKn46PSAh-eFDUTQMY2AAtqySkFPpM9m5oAvKGr4qOoZ9MYdO5DE5KoglI57A59K0WoYFMZ3KdzmFBpERrc4rAsKg8ABjMAAYQAFuQYBBXsJRLMcvNFLwlPo6ntHE59O4jFp9BDqk47O4nPUlGoBQZhSpUX10RFhtFaAAFDicDBkKBsNCwMDUjK0j4MgpClmgpq8PYS-QdPk6Xi+eyOfSqJQtPRHaWhAZy650ZVcNUaxLJXXvOZ5LbKJyaJ2gpyNFa8cGbBC+LnFLSuby2v68FFBM4yr1XLF+1Xq8aXEP6sNfCNdaMeK3xvSJvmijRs826epqPRKD0XDHym6lgPjCgvATTav08NGpxKWgKBdeFw6HSiwx8q2CxweeqdXxwgey4sK0flh5PDCTtI0rI1uSKJwA+zOFRHF-GNpt5SsjlHqmtgfic+ZokWmIKgA6sgszqlBpIYNQAAyWDIJg5aUGhECQPcYDiOhyAEVWD6zrWBSqEsJSrOUGxVAC9ruHuRxqAoALCqBvSepckE3DBcFQAhSFgKh6FjgS5DsFw4ikoQqBQKSJF0p8T4UUUyylGsFTJgoWg6LQApwkehiqPoLQnhBw50PxkjwYhKHYWOExEEpBpzos6YrGU6x8rYrSaK45quDYHJchZPFWbQNkBkJDlieWQZ4CkU5vDOKkLJRnmabRvlqL49qGA4tobmaoLhUOPpRbBtmCfZImOeWsiwAR4hgLQyAAGatXgAAUUJaAAlPEhYRZV0V2cJokYVArmPhl6nUd52lVF4G4Baxe7rJyUpgSNFVYgASmAWHxRqJ04RAeEERARHILNZGqax+gsts7itM9vjeCobbuPayxNB45p-L95Xeodx0NRqElkFJnAyXJCn3elEbPbsb3GZ9TR8gu7i0FCHStLwxzbKDZ43Ed51jk1LVtZ13U9QdODIQA8gAggAIgA+uzTOswAmkN4GjeDlPqkjhqsQYBlKK0OgOF4QK+L5zKCjL7RGL2RO6KTvF0BTkPMNTRG011NAM0zbNczzyH84Le1gwq+undwCh3nqpHI9UkYNrGzYqK2yY6HYDT-EiG42I4OuRYqWqQGwKri3O22ebmYpuK0ajY3LeNAqoCi-envgKFHlUx6g2oQPESRJYn5HJ8sqcuDLn2+e0Ki0EetreDLXJvZxBbcft56x5Xzl4LXqn1-9afN5nOmeO3AK2lauhHhrJcliP4yPM8VIpfeymGlP+wzxn27QiYnh6J9xh7JyG-D+Xce4viRJkhSt7Th7R9NCnXJN2fZMbQ7AfihDLK0qZ-j1ECPmMgWAcLwHSELIeNAv6HznAAWiTFULBKcG7aA-PoB+NxYhgDQW5ciukgS0E5HaDoukujmm3LpAyv1hRMgBNyfuyCHYjhVAGchc1FDX3TF4Ww2wm7uGxh0B0BhfBMjKN+Yh1lqoxTqlNARqVv5zgMCyDSrg26cikTpF09p2LqAFO4N6fgdpcUHLwvWENTqCIevkbYOgoyvTYf7UwRMs61CPOUZoC4zJ+GUUqEeLjPailbjsOhTR5FFzYu0GB-ggA */
     context: {
         delay: AUDIO_RELOAD_DELAY_MS,
         retries: 0,
@@ -31937,7 +31937,7 @@ var AudioModule = /*#__PURE__*/function () {
       if (isSafari()) {
         // audio retry
         console.log("Using audio retry handler for Safari.");
-        this.audioRetryActor.start();
+        // this.audioRetryActor.start(); // disabled for debugging
         this.registerAudioPlaybackEvents(this.audioElement, this.audioRetryActor);
         this.registerSourceChangeEvents(this.audioElement, this.audioRetryActor);
       }
@@ -37320,28 +37320,52 @@ class TTSControlsModule {
         button.innerHTML = volume_mid;
         return button;
     }
-    addSpeechButton(utterance, container) {
-        const button = this.createSpeechButton();
+    createSpeechButtonForMenu() {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.classList.add("saypi-speak-button");
+        // add pi.ai tailwind classes to the button
+        button.classList.add("flex", "h-12", "w-full", "items-center", "justify-between", "rounded", "px-2.5", "hover:bg-neutral-50-hover", "active:bg-neutral-50-tap", "active:text-primary-700");
+        button.title = i18n("readAloudButtonTitle");
+        button.innerHTML = button.title + volume_mid;
+        return button;
+    }
+    addSpeechButton(utterance, container, containerIsMenu = false) {
+        const button = containerIsMenu
+            ? this.createSpeechButtonForMenu()
+            : this.createSpeechButton();
         button.addEventListener("click", () => {
             EventBus.emit("saypi:tts:replaying", utterance); //  notify the ui manager that the next speech it hears will be a replay
             this.speechSynthesis.speak(utterance);
         });
         container.appendChild(button);
     }
+    createCostElementForMenu() {
+        const costElement = document.createElement("button");
+        costElement.classList.add("saypi-cost");
+        costElement.classList.add("flex", "h-12", "w-full", "items-center", "justify-between", "rounded", "px-2.5", "hover:bg-neutral-50-hover", "active:bg-neutral-50-tap", "active:text-primary-700");
+        return costElement;
+    }
+    createCostElementForMessage() {
+        const costElement = document.createElement("span");
+        costElement.classList.add("saypi-cost", "text-sm", "text-neutral-500");
+        return costElement;
+    }
     /**
      * Add the cost of the TTS stream to the chat message
      * @param container The menu element to add the cost basis to
      * @param characterCount The number of characters in the message
      */
-    addCostBasis(container, charge) {
+    addCostBasis(container, charge, containerIsMenu = false) {
         const cost = charge.cost;
         if (cost === undefined) {
             // cost should not be undefined, but just in case it is, don't display anything
             return;
         }
         const currency = i18n("currencyUSDAbbreviation");
-        const costElement = document.createElement("div");
-        costElement.classList.add("text-sm", "text-neutral-500", "saypi-cost");
+        const costElement = containerIsMenu
+            ? this.createCostElementForMenu()
+            : this.createCostElementForMessage();
         if (cost) {
             costElement.title = i18n("ttsCostExplanation", [
                 cost.toFixed(2),
@@ -37352,7 +37376,7 @@ class TTSControlsModule {
             costElement.title = i18n("ttsCostExplanationFree");
             costElement.classList.add("cost-free");
         }
-        costElement.innerHTML = `Cost: $<span class="value">${cost.toFixed(2)}</span>`;
+        costElement.innerHTML = `Cost: <span class="price">$<span class="value">${cost.toFixed(2)}</span></span>`;
         container.appendChild(costElement);
         return costElement;
     }
@@ -37436,7 +37460,7 @@ class Observation {
         return this.found && this.isNew && this.decorated;
     }
     // Whether the observed element has been found, but not yet decorated with the extension's enhancements
-    undecorated() {
+    isUndecorated() {
         return this.found && this.isNew && !this.decorated;
     }
     // Where the element does not exist in the DOM
@@ -37444,18 +37468,18 @@ class Observation {
         return new Observation(null, id, false, false, false);
     }
     // Where the element exists in the DOM, and has already been decorated with the extension's enhancements
-    static foundExisting(id, element) {
+    static foundAlreadyDecorated(id, element) {
         return new Observation(element, id, true, false, true);
     }
     // Where the element exists in the DOM, and has newly been decorated with the extension's enhancements
-    static decorated(obs, decoration) {
+    static foundAndDecorated(obs, decoration) {
         const decor = decoration
             ? [...obs.decorations, decoration]
             : [obs.decorations];
         return new Observation(obs.target, obs.id, obs.found, obs.isNew, true, decor);
     }
     // Where the element exists in the DOM, but has not been decorated with the extension's enhancements
-    static notDecorated(id, element) {
+    static foundUndecorated(id, element) {
         return new Observation(element, id, true, true, false);
     }
 }
@@ -37475,6 +37499,34 @@ var MessageElements_awaiter = (undefined && undefined.__awaiter) || function (th
 
 
 
+
+
+
+class PopupMenu {
+    constructor(element, speech, ttsControls) {
+        this.speech = speech;
+        this.ttsControls = ttsControls;
+        this._element = element;
+    }
+    get element() {
+        return this._element;
+    }
+    decorate() {
+        this._element.classList.add("popup-menu");
+        this.ttsControls.addSpeechButton(this.speech, this._element, true);
+    }
+    static find(chatbot, searchRoot) {
+        let popupMenu = searchRoot.querySelector(".popup-menu");
+        if (popupMenu) {
+            return Observation.foundAlreadyDecorated(".popup-menu", popupMenu);
+        }
+        popupMenu = searchRoot.querySelector(".shadow-input"); // TODO: generalize with Chatbot parameter
+        if (popupMenu) {
+            return Observation.foundUndecorated(".popup-menu", popupMenu);
+        }
+        return Observation.notFound(".popup-menu");
+    }
+}
 class AssistantResponse {
     constructor(element, includeInitialText = true) {
         this.stablised = false;
@@ -37486,8 +37538,10 @@ class AssistantResponse {
         this.decorate();
     }
     decorate() {
-        this._element.classList.add("chat-message", "assistant-message");
-        this.decoratedContent();
+        return MessageElements_awaiter(this, void 0, void 0, function* () {
+            this._element.classList.add("chat-message", "assistant-message");
+            yield this.decoratedContent();
+        });
     }
     /**
      * Waits for the content of the chat message to load and returns it
@@ -37589,6 +37643,27 @@ class AssistantResponse {
     get isTTSEnabled() {
         return this.utteranceId !== null;
     }
+    watchForPopupMenu(hoverMenu, speech) {
+        const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                for (const node of [...mutation.addedNodes]) {
+                    if (node instanceof HTMLElement) {
+                        const addedElement = node;
+                        const obs = PopupMenu.find(new PiAIChatbot(), addedElement);
+                        if (obs.found && !obs.decorated) {
+                            const popupMenu = new PopupMenu(obs.target, speech, this.ttsControlsModule);
+                            popupMenu.decorate();
+                            EventBus.emit("saypi:tts:menuPop", {
+                                utteranceId: speech.id,
+                                menu: popupMenu,
+                            });
+                        }
+                    }
+                }
+            }
+        });
+        observer.observe(hoverMenu, { childList: true, subtree: false });
+    }
     /**
      * Apply speech to this chat message
      * @param utterance
@@ -37607,6 +37682,7 @@ class AssistantResponse {
                 }
             }
         }
+        this.watchForPopupMenu(hoverMenu, utterance);
         let ttsControlsElement = this.element.querySelector(".saypi-tts-controls");
         if (!ttsControlsElement) {
             ttsControlsElement = document.createElement("div");
@@ -37638,6 +37714,23 @@ class AssistantResponse {
         else if (costElement) {
             this.ttsControlsModule.updateCostBasis(ttsControlsElement, charge);
         }
+        EventBus.on("saypi:tts:menuPop", (event) => {
+            const id = this._element.dataset.utteranceId;
+            if (!id ||
+                id !== event.utteranceId ||
+                id !== charge.utteranceId ||
+                !charge.cost) {
+                return;
+            }
+            const menuElement = event.menu.element;
+            const menuCostElement = menuElement.querySelector(".saypi-cost");
+            if (menuCostElement) {
+                this.ttsControlsModule.updateCostBasis(menuElement, charge);
+            }
+            else {
+                this.ttsControlsModule.addCostBasis(menuElement, charge, true);
+            }
+        });
     }
 }
 // visible for testing
@@ -37759,18 +37852,18 @@ class ChatHistoryMessageObserver extends BaseObserver {
         const query = "div.break-anywhere:not(.justify-end)"; // TODO: -> this.chatbot.getAssistantResponseSelector();
         const deepMatch = searchRoot.querySelector(query);
         if (deepMatch) {
-            const found = Observation.notDecorated(deepMatch.id, deepMatch);
+            const found = Observation.foundUndecorated(deepMatch.id, deepMatch);
             if (deepMatch.classList.contains("assistant-message")) {
-                return Observation.decorated(found);
+                return Observation.foundAndDecorated(found);
             }
             return found;
         }
         /* I have no idea why the query selector doesn't cover the case below too, but it sometimes doesn't */
         if (searchRoot.classList.contains("break-anywhere") &&
             !searchRoot.classList.contains("justify-end")) {
-            const found = Observation.notDecorated(searchRoot.id, searchRoot);
+            const found = Observation.foundUndecorated(searchRoot.id, searchRoot);
             if (searchRoot.classList.contains("assistant-message")) {
-                return Observation.decorated(found);
+                return Observation.foundAndDecorated(found);
             }
             return found;
         }
@@ -37799,7 +37892,7 @@ class ChatHistoryMessageObserver extends BaseObserver {
             }
             if (obs.found && obs.isNew && !obs.decorated) {
                 const message = this.decorateAssistantResponse(obs.target);
-                obs = Observation.decorated(obs, message);
+                obs = Observation.foundAndDecorated(obs, message);
                 const speech = yield this.streamSpeech(message);
                 if (speech === null || speech === void 0 ? void 0 : speech.utterance) {
                     message.decorateSpeech(speech.utterance);
@@ -38018,7 +38111,7 @@ class VoiceMenu {
             return obs;
         }
         voiceMenuControls.id = "saypi-voice-menu-controls";
-        obs = Observation.notDecorated("saypi-voice-menu-controls", voiceMenuControls);
+        obs = Observation.foundUndecorated("saypi-voice-menu-controls", voiceMenuControls);
         const observer = new MutationObserver((mutationsList) => {
             for (let mutation of mutationsList) {
                 if (mutation.type === "attributes" &&
@@ -38032,7 +38125,7 @@ class VoiceMenu {
             attributes: true,
             attributeFilter: ["class"],
         });
-        return Observation.decorated(obs);
+        return Observation.foundAndDecorated(obs);
     }
     // Voice selection management
     registerVoiceChangeHandler(menu) {
@@ -38059,7 +38152,7 @@ class VoiceMenu {
         if (!audioControlsContainer || !voiceMenu) {
             return Observation.notFound("saypi-audio-controls");
         }
-        let foundAudioCtrls = Observation.notDecorated("saypi-audio-controls", audioControlsContainer);
+        let foundAudioCtrls = Observation.foundUndecorated("saypi-audio-controls", audioControlsContainer);
         const observerCallback = (mutationsList, observer) => VoiceMenu_awaiter(this, void 0, void 0, function* () {
             for (let mutation of mutationsList) {
                 if (mutation.type === "childList") {
@@ -38091,7 +38184,7 @@ class VoiceMenu {
         });
         const observer = new MutationObserver(observerCallback);
         observer.observe(audioControlsContainer, { childList: true });
-        return Observation.decorated(foundAudioCtrls); // Assuming listener doesn't require further checks
+        return Observation.foundAndDecorated(foundAudioCtrls); // Assuming listener doesn't require further checks
     }
     introduceVoice(voice) {
         const lastMessage = getMostRecentAssistantMessage();
@@ -38233,9 +38326,9 @@ class ChatHistorySpeechManager {
         }
         const voiceMenuElement = audioControlsContainer.querySelector(this.chatbot.getVoiceMenuSelector());
         if (voiceMenuElement && voiceMenuElement instanceof HTMLElement) {
-            let obs = Observation.notDecorated("saypi-voice-menu", voiceMenuElement);
+            let obs = Observation.foundUndecorated("saypi-voice-menu", voiceMenuElement);
             this.voiceMenu = new VoiceMenu(this.chatbot, this.userPreferences, voiceMenuElement);
-            return Observation.decorated(obs);
+            return Observation.foundAndDecorated(obs);
         }
         return Observation.notFound("saypi-voice-menu");
     }
@@ -38469,7 +38562,7 @@ class DOMObserver {
         const id = "saypi-control-panel-main";
         var mainControlPanel = document.getElementById(id);
         if (mainControlPanel) {
-            return Observation.foundExisting(id, mainControlPanel);
+            return Observation.foundAlreadyDecorated(id, mainControlPanel);
         }
         mainControlPanel = searchRoot.querySelector(this.chatbot.getControlPanelSelector());
         if (!mainControlPanel) {
@@ -38491,18 +38584,18 @@ class DOMObserver {
         if (obs.found && obs.isNew && !obs.decorated) {
             this.decorateControlPanel(obs.target);
         }
-        return Observation.decorated(obs);
+        return Observation.foundAndDecorated(obs);
     }
     findSidePanel(searchRoot) {
         const id = "saypi-side-panel";
         const existingSidePanel = document.getElementById(id);
         if (existingSidePanel) {
             // Side panel already exists, no need to search
-            return Observation.foundExisting(id, existingSidePanel);
+            return Observation.foundAlreadyDecorated(id, existingSidePanel);
         }
         const sidePanel = searchRoot.querySelector(this.chatbot.getSidePanelSelector());
         if (sidePanel) {
-            return Observation.notDecorated(id, sidePanel);
+            return Observation.foundUndecorated(id, sidePanel);
         }
         return Observation.notFound(id);
     }
@@ -38517,18 +38610,18 @@ class DOMObserver {
         if (obs.found && obs.isNew && !obs.decorated) {
             this.decorateSidePanel(obs.target);
         }
-        return Observation.decorated(obs);
+        return Observation.foundAndDecorated(obs);
     }
     findDiscoveryPanel(searchRoot) {
         const id = "saypi-discovery-panel";
         const existingDiscoveryPanel = document.getElementById(id);
         if (existingDiscoveryPanel) {
             // Discovery panel already exists, no need to search
-            return Observation.foundExisting(id, existingDiscoveryPanel);
+            return Observation.foundAlreadyDecorated(id, existingDiscoveryPanel);
         }
         const discoveryPanel = searchRoot.querySelector(this.chatbot.getDiscoveryPanelSelector());
         if (discoveryPanel) {
-            return Observation.notDecorated(id, discoveryPanel);
+            return Observation.foundUndecorated(id, discoveryPanel);
         }
         return Observation.notFound(id);
     }
@@ -38540,7 +38633,7 @@ class DOMObserver {
         if (obs.found && obs.isNew && !obs.decorated) {
             this.decorateDiscoveryPanel(obs.target);
         }
-        return Observation.decorated(obs);
+        return Observation.foundAndDecorated(obs);
     }
     addIdSubmitButton(container) {
         const submitButtons = container.querySelectorAll("button[type=button]");
@@ -38566,11 +38659,11 @@ class DOMObserver {
         const existingPrompt = document.getElementById(id);
         if (existingPrompt) {
             // Prompt already exists, no need to search
-            return Observation.foundExisting(id, existingPrompt);
+            return Observation.foundAlreadyDecorated(id, existingPrompt);
         }
         const promptInput = searchRoot.querySelector(this.chatbot.getPromptTextInputSelector());
         if (promptInput) {
-            return Observation.notDecorated(id, promptInput);
+            return Observation.foundUndecorated(id, promptInput);
         }
         return Observation.notFound(id);
     }
@@ -38579,18 +38672,18 @@ class DOMObserver {
         if (obs.found && obs.isNew && !obs.decorated) {
             this.decoratePrompt(obs.target);
         }
-        return Observation.decorated(obs);
+        return Observation.foundAndDecorated(obs);
     }
     findAudioControls(searchRoot) {
         const id = "saypi-audio-controls";
         const existingAudioControls = document.getElementById(id);
         if (existingAudioControls) {
             // Audio controls already exist, no need to search
-            return Observation.foundExisting(id, existingAudioControls);
+            return Observation.foundAlreadyDecorated(id, existingAudioControls);
         }
         const audioControls = searchRoot.querySelector(this.chatbot.getAudioControlsSelector());
         if (audioControls) {
-            return Observation.notDecorated(id, audioControls);
+            return Observation.foundUndecorated(id, audioControls);
         }
         return Observation.notFound(id);
     }
@@ -38599,21 +38692,21 @@ class DOMObserver {
     }
     findAndDecorateAudioControls(searchRoot) {
         const obs = this.findAudioControls(searchRoot);
-        if (obs.undecorated()) {
+        if (obs.isUndecorated()) {
             this.decorateAudioControls(obs.target);
         }
-        return Observation.decorated(obs);
+        return Observation.foundAndDecorated(obs);
     }
     findAudioOutputButton(searchRoot) {
         const id = "saypi-audio-output-button";
         const existingAudioOutputButton = document.getElementById(id);
         if (existingAudioOutputButton) {
             // Audio output button already exists, no need to search
-            return Observation.foundExisting(id, existingAudioOutputButton);
+            return Observation.foundAlreadyDecorated(id, existingAudioOutputButton);
         }
         const audioOutputButton = searchRoot.querySelector(this.chatbot.getAudioOutputButtonSelector());
         if (audioOutputButton) {
-            return Observation.notDecorated(id, audioOutputButton);
+            return Observation.foundUndecorated(id, audioOutputButton);
         }
         return Observation.notFound(id);
     }
@@ -38622,21 +38715,21 @@ class DOMObserver {
     }
     findAndDecorateAudioOutputButton(searchRoot) {
         const obs = this.findAudioOutputButton(searchRoot);
-        if (obs.undecorated()) {
+        if (obs.isUndecorated()) {
             this.decorateAudioOutputButton(obs.target);
         }
-        return Observation.decorated(obs);
+        return Observation.foundAndDecorated(obs);
     }
     findChatHistory(searchRoot) {
         const id = "saypi-chat-history";
         const existingChatHistory = searchRoot.querySelector("#" + id);
         if (existingChatHistory) {
             // Chat history already exists, no need to search
-            return Observation.foundExisting(id, existingChatHistory);
+            return Observation.foundAlreadyDecorated(id, existingChatHistory);
         }
         const chatHistory = searchRoot.querySelector(this.chatbot.getChatHistorySelector());
         if (chatHistory) {
-            return Observation.notDecorated(id, chatHistory);
+            return Observation.foundUndecorated(id, chatHistory);
         }
         return Observation.notFound(id);
     }
@@ -38653,7 +38746,7 @@ class DOMObserver {
             // decorate chat history
             this.decorateChatHistory(obs.target);
         }
-        return Observation.decorated(obs);
+        return Observation.foundAndDecorated(obs);
     }
 }
 

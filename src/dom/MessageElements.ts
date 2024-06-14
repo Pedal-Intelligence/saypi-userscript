@@ -4,6 +4,43 @@ import { SpeechUtterance } from "../tts/SpeechModel";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import { UtteranceCharge } from "../billing/BillingModule";
+import { Observation } from "./Observation";
+import { Chatbot } from "../chatbots/Chatbot";
+import { PiAIChatbot } from "../chatbots/Pi";
+import EventBus from "../events/EventBus";
+
+class PopupMenu {
+  private _element: HTMLElement;
+
+  constructor(
+    element: HTMLElement,
+    private speech: SpeechUtterance,
+    private ttsControls: TTSControlsModule
+  ) {
+    this._element = element;
+  }
+
+  get element(): HTMLElement {
+    return this._element;
+  }
+
+  decorate(): void {
+    this._element.classList.add("popup-menu");
+    this.ttsControls.addSpeechButton(this.speech, this._element, true);
+  }
+
+  static find(chatbot: Chatbot, searchRoot: HTMLElement): Observation {
+    let popupMenu = searchRoot.querySelector(".popup-menu");
+    if (popupMenu) {
+      return Observation.foundAlreadyDecorated(".popup-menu", popupMenu);
+    }
+    popupMenu = searchRoot.querySelector(".shadow-input") as HTMLElement | null; // TODO: generalize with Chatbot parameter
+    if (popupMenu) {
+      return Observation.foundUndecorated(".popup-menu", popupMenu);
+    }
+    return Observation.notFound(".popup-menu");
+  }
+}
 
 class AssistantResponse {
   private _element: HTMLElement;
@@ -23,9 +60,9 @@ class AssistantResponse {
     this.decorate();
   }
 
-  private decorate(): void {
+  private async decorate(): Promise<void> {
     this._element.classList.add("chat-message", "assistant-message");
-    this.decoratedContent();
+    await this.decoratedContent();
   }
 
   /**
@@ -130,6 +167,35 @@ class AssistantResponse {
     return this.utteranceId !== null;
   }
 
+  private watchForPopupMenu(
+    hoverMenu: HTMLElement,
+    speech: SpeechUtterance
+  ): void {
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        for (const node of [...mutation.addedNodes]) {
+          if (node instanceof HTMLElement) {
+            const addedElement = node as HTMLElement;
+            const obs = PopupMenu.find(new PiAIChatbot(), addedElement);
+            if (obs.found && !obs.decorated) {
+              const popupMenu = new PopupMenu(
+                obs.target as HTMLElement,
+                speech,
+                this.ttsControlsModule
+              );
+              popupMenu.decorate();
+              EventBus.emit("saypi:tts:menuPop", {
+                utteranceId: speech.id,
+                menu: popupMenu,
+              });
+            }
+          }
+        }
+      }
+    });
+    observer.observe(hoverMenu, { childList: true, subtree: false });
+  }
+
   /**
    * Apply speech to this chat message
    * @param utterance
@@ -149,6 +215,7 @@ class AssistantResponse {
         }
       }
     }
+    this.watchForPopupMenu(hoverMenu as HTMLElement, utterance);
     let ttsControlsElement = this.element.querySelector(
       ".saypi-tts-controls"
     ) as HTMLDivElement;
@@ -191,6 +258,28 @@ class AssistantResponse {
         charge
       );
     }
+
+    EventBus.on(
+      "saypi:tts:menuPop",
+      (event: { utteranceId: string; menu: PopupMenu }) => {
+        const id = this._element.dataset.utteranceId;
+        if (
+          !id ||
+          id !== event.utteranceId ||
+          id !== charge.utteranceId ||
+          !charge.cost
+        ) {
+          return;
+        }
+        const menuElement = event.menu.element;
+        const menuCostElement = menuElement.querySelector(".saypi-cost");
+        if (menuCostElement) {
+          this.ttsControlsModule.updateCostBasis(menuElement, charge);
+        } else {
+          this.ttsControlsModule.addCostBasis(menuElement, charge, true);
+        }
+      }
+    );
   }
 }
 

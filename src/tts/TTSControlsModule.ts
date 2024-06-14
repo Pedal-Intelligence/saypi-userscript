@@ -22,13 +22,65 @@ export class TTSControlsModule {
     return button;
   }
 
-  addSpeechButton(utterance: SpeechUtterance, container: HTMLElement): void {
-    const button = this.createSpeechButton();
+  createSpeechButtonForMenu() {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.classList.add("saypi-speak-button");
+    // add pi.ai tailwind classes to the button
+    button.classList.add(
+      "flex",
+      "h-12",
+      "w-full",
+      "items-center",
+      "justify-between",
+      "rounded",
+      "px-2.5",
+      "hover:bg-neutral-50-hover",
+      "active:bg-neutral-50-tap",
+      "active:text-primary-700"
+    );
+    button.title = getMessage("readAloudButtonTitle");
+    button.innerHTML = button.title + volumeIconSVG;
+    return button;
+  }
+
+  addSpeechButton(
+    utterance: SpeechUtterance,
+    container: HTMLElement,
+    containerIsMenu: boolean = false
+  ): void {
+    const button = containerIsMenu
+      ? this.createSpeechButtonForMenu()
+      : this.createSpeechButton();
     button.addEventListener("click", () => {
       EventBus.emit("saypi:tts:replaying", utterance); //  notify the ui manager that the next speech it hears will be a replay
       this.speechSynthesis.speak(utterance);
     });
     container.appendChild(button);
+  }
+
+  createCostElementForMenu(): HTMLElement {
+    const costElement = document.createElement("button");
+    costElement.classList.add("saypi-cost");
+    costElement.classList.add(
+      "flex",
+      "h-12",
+      "w-full",
+      "items-center",
+      "justify-between",
+      "rounded",
+      "px-2.5",
+      "hover:bg-neutral-50-hover",
+      "active:bg-neutral-50-tap",
+      "active:text-primary-700"
+    );
+    return costElement;
+  }
+
+  createCostElementForMessage() {
+    const costElement = document.createElement("span");
+    costElement.classList.add("saypi-cost", "text-sm", "text-neutral-500");
+    return costElement;
   }
 
   /**
@@ -38,7 +90,8 @@ export class TTSControlsModule {
    */
   addCostBasis(
     container: HTMLElement,
-    charge: UtteranceCharge
+    charge: UtteranceCharge,
+    containerIsMenu: boolean = false
   ): HTMLElement | void {
     const cost = charge.cost;
     if (cost === undefined) {
@@ -46,8 +99,9 @@ export class TTSControlsModule {
       return;
     }
     const currency = getMessage("currencyUSDAbbreviation");
-    const costElement = document.createElement("div");
-    costElement.classList.add("text-sm", "text-neutral-500", "saypi-cost");
+    const costElement = containerIsMenu
+      ? this.createCostElementForMenu()
+      : this.createCostElementForMessage();
     if (cost) {
       costElement.title = getMessage("ttsCostExplanation", [
         cost.toFixed(2),
@@ -58,9 +112,9 @@ export class TTSControlsModule {
       costElement.classList.add("cost-free");
     }
 
-    costElement.innerHTML = `Cost: $<span class="value">${cost.toFixed(
+    costElement.innerHTML = `Cost: <span class="price">$<span class="value">${cost.toFixed(
       2
-    )}</span>`;
+    )}</span></span>`;
     container.appendChild(costElement);
     return costElement;
   }

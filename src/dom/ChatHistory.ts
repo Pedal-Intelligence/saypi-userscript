@@ -146,9 +146,9 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
     const query = "div.break-anywhere:not(.justify-end)"; // TODO: -> this.chatbot.getAssistantResponseSelector();
     const deepMatch = searchRoot.querySelector(query);
     if (deepMatch) {
-      const found = Observation.notDecorated(deepMatch.id, deepMatch);
+      const found = Observation.foundUndecorated(deepMatch.id, deepMatch);
       if (deepMatch.classList.contains("assistant-message")) {
-        return Observation.decorated(found);
+        return Observation.foundAndDecorated(found);
       }
       return found;
     }
@@ -157,9 +157,9 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
       searchRoot.classList.contains("break-anywhere") &&
       !searchRoot.classList.contains("justify-end")
     ) {
-      const found = Observation.notDecorated(searchRoot.id, searchRoot);
+      const found = Observation.foundUndecorated(searchRoot.id, searchRoot);
       if (searchRoot.classList.contains("assistant-message")) {
-        return Observation.decorated(found);
+        return Observation.foundAndDecorated(found);
       }
       return found;
     }
@@ -197,7 +197,7 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
     }
     if (obs.found && obs.isNew && !obs.decorated) {
       const message = this.decorateAssistantResponse(obs.target as HTMLElement);
-      obs = Observation.decorated(obs, message);
+      obs = Observation.foundAndDecorated(obs, message);
       const speech = await this.streamSpeech(message);
       if (speech?.utterance) {
         message.decorateSpeech(speech.utterance);

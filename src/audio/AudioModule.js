@@ -88,7 +88,7 @@ export default class AudioModule {
     if (isSafari()) {
       // audio retry
       console.log("Using audio retry handler for Safari.");
-      this.audioRetryActor.start();
+      // this.audioRetryActor.start(); // disabled for debugging
       this.registerAudioPlaybackEvents(this.audioElement, this.audioRetryActor);
       this.registerSourceChangeEvents(this.audioElement, this.audioRetryActor);
     }

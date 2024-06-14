@@ -14,7 +14,7 @@
             border-radius: 50%;
             overflow: hidden;
         }
-        div.saypi-cost, div.saypi-powered-by {
+        .saypi-cost, .saypi-powered-by {
             display: flex;
             align-items: center; // center the text vertically
             margin-left: 8px; // Adds some space between the controls
@@ -29,8 +29,14 @@
     }
 }
 
+.assistant-message .popup-menu .saypi-speak-button svg {
+    width: 24px;
+    height: 24px;
+}
+
 /*
  * these styles are for debugging purposes, to make it easier to see when messages are being detected
+ *
 .assistant-message {
     // give it a subtle green background color and border
     background-color: #f0f9f4; // rgb(240 249 244) - Pi primary background color
@@ -40,5 +46,8 @@
 }
 .assistant-message.speech-enabled {
     border-color:#24381b;
+}
+.assistant-message .popup-menu {
+    background-color: #f0f9f4;
 }
 */

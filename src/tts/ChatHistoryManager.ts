@@ -40,13 +40,16 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
       this.chatbot.getVoiceMenuSelector()
     );
     if (voiceMenuElement && voiceMenuElement instanceof HTMLElement) {
-      let obs = Observation.notDecorated("saypi-voice-menu", voiceMenuElement);
+      let obs = Observation.foundUndecorated(
+        "saypi-voice-menu",
+        voiceMenuElement
+      );
       this.voiceMenu = new VoiceMenu(
         this.chatbot,
         this.userPreferences,
         voiceMenuElement
       );
-      return Observation.decorated(obs);
+      return Observation.foundAndDecorated(obs);
     }
     return Observation.notFound("saypi-voice-menu");
   }

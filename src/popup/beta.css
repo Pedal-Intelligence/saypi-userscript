@@ -37,6 +37,7 @@
 }
 
 button#clear-preferences {
+    display: none; /* hide the button by default */
     width: 100%;
     text-align: left;
     background-image: url("trash.svg");

@@ -28,7 +28,8 @@
         "public/icons/*.png",
         "public/icons/logos/*.svg",
         "public/icons/logos/*.png",
-        "src/icons/flags/*.svg"
+        "src/icons/flags/*.svg",
+        "src/popup/*.svg"
       ],
       "matches": ["https://pi.ai/*"]
     }

@@ -103,7 +103,7 @@ export class DOMObserver {
     const id = "saypi-control-panel-main";
     var mainControlPanel = document.getElementById(id);
     if (mainControlPanel) {
-      return Observation.foundExisting(id, mainControlPanel);
+      return Observation.foundAlreadyDecorated(id, mainControlPanel);
     }
     mainControlPanel = searchRoot.querySelector(
       this.chatbot.getControlPanelSelector()
@@ -130,7 +130,7 @@ export class DOMObserver {
     if (obs.found && obs.isNew && !obs.decorated) {
       this.decorateControlPanel(obs.target as HTMLElement);
     }
-    return Observation.decorated(obs);
+    return Observation.foundAndDecorated(obs);
   }
 
   findSidePanel(searchRoot: Element): Observation {
@@ -138,14 +138,14 @@ export class DOMObserver {
     const existingSidePanel = document.getElementById(id);
     if (existingSidePanel) {
       // Side panel already exists, no need to search
-      return Observation.foundExisting(id, existingSidePanel);
+      return Observation.foundAlreadyDecorated(id, existingSidePanel);
     }
 
     const sidePanel = searchRoot.querySelector(
       this.chatbot.getSidePanelSelector()
     );
     if (sidePanel) {
-      return Observation.notDecorated(id, sidePanel);
+      return Observation.foundUndecorated(id, sidePanel);
     }
     return Observation.notFound(id);
   }
@@ -163,7 +163,7 @@ export class DOMObserver {
     if (obs.found && obs.isNew && !obs.decorated) {
       this.decorateSidePanel(obs.target as HTMLElement);
     }
-    return Observation.decorated(obs);
+    return Observation.foundAndDecorated(obs);
   }
 
   findDiscoveryPanel(searchRoot: Element): Observation {
@@ -171,14 +171,14 @@ export class DOMObserver {
     const existingDiscoveryPanel = document.getElementById(id);
     if (existingDiscoveryPanel) {
       // Discovery panel already exists, no need to search
-      return Observation.foundExisting(id, existingDiscoveryPanel);
+      return Observation.foundAlreadyDecorated(id, existingDiscoveryPanel);
     }
 
     const discoveryPanel = searchRoot.querySelector(
       this.chatbot.getDiscoveryPanelSelector()
     );
     if (discoveryPanel) {
-      return Observation.notDecorated(id, discoveryPanel);
+      return Observation.foundUndecorated(id, discoveryPanel);
     }
     return Observation.notFound(id);
   }
@@ -192,7 +192,7 @@ export class DOMObserver {
     if (obs.found && obs.isNew && !obs.decorated) {
       this.decorateDiscoveryPanel(obs.target as HTMLElement);
     }
-    return Observation.decorated(obs);
+    return Observation.foundAndDecorated(obs);
   }
 
   addIdSubmitButton(container: Element) {
@@ -221,14 +221,14 @@ export class DOMObserver {
     const existingPrompt = document.getElementById(id);
     if (existingPrompt) {
       // Prompt already exists, no need to search
-      return Observation.foundExisting(id, existingPrompt);
+      return Observation.foundAlreadyDecorated(id, existingPrompt);
     }
 
     const promptInput = searchRoot.querySelector(
       this.chatbot.getPromptTextInputSelector()
     );
     if (promptInput) {
-      return Observation.notDecorated(id, promptInput);
+      return Observation.foundUndecorated(id, promptInput);
     }
     return Observation.notFound(id);
   }
@@ -238,7 +238,7 @@ export class DOMObserver {
     if (obs.found && obs.isNew && !obs.decorated) {
       this.decoratePrompt(obs.target as HTMLInputElement);
     }
-    return Observation.decorated(obs);
+    return Observation.foundAndDecorated(obs);
   }
 
   findAudioControls(searchRoot: Element): Observation {
@@ -246,14 +246,14 @@ export class DOMObserver {
     const existingAudioControls = document.getElementById(id);
     if (existingAudioControls) {
       // Audio controls already exist, no need to search
-      return Observation.foundExisting(id, existingAudioControls);
+      return Observation.foundAlreadyDecorated(id, existingAudioControls);
     }
 
     const audioControls = searchRoot.querySelector(
       this.chatbot.getAudioControlsSelector()
     );
     if (audioControls) {
-      return Observation.notDecorated(id, audioControls);
+      return Observation.foundUndecorated(id, audioControls);
     }
     return Observation.notFound(id);
   }
@@ -264,10 +264,10 @@ export class DOMObserver {
 
   findAndDecorateAudioControls(searchRoot: Element): Observation {
     const obs = this.findAudioControls(searchRoot);
-    if (obs.undecorated()) {
+    if (obs.isUndecorated()) {
       this.decorateAudioControls(obs.target as HTMLElement);
     }
-    return Observation.decorated(obs);
+    return Observation.foundAndDecorated(obs);
   }
 
   findAudioOutputButton(searchRoot: Element): Observation {
@@ -275,14 +275,14 @@ export class DOMObserver {
     const existingAudioOutputButton = document.getElementById(id);
     if (existingAudioOutputButton) {
       // Audio output button already exists, no need to search
-      return Observation.foundExisting(id, existingAudioOutputButton);
+      return Observation.foundAlreadyDecorated(id, existingAudioOutputButton);
     }
 
     const audioOutputButton = searchRoot.querySelector(
       this.chatbot.getAudioOutputButtonSelector()
     );
     if (audioOutputButton) {
-      return Observation.notDecorated(id, audioOutputButton);
+      return Observation.foundUndecorated(id, audioOutputButton);
     }
     return Observation.notFound(id);
   }
@@ -293,10 +293,10 @@ export class DOMObserver {
 
   findAndDecorateAudioOutputButton(searchRoot: Element): Observation {
     const obs = this.findAudioOutputButton(searchRoot);
-    if (obs.undecorated()) {
+    if (obs.isUndecorated()) {
       this.decorateAudioOutputButton(obs.target as HTMLElement);
     }
-    return Observation.decorated(obs);
+    return Observation.foundAndDecorated(obs);
   }
 
   findChatHistory(searchRoot: HTMLElement): Observation {
@@ -304,13 +304,13 @@ export class DOMObserver {
     const existingChatHistory = searchRoot.querySelector("#" + id);
     if (existingChatHistory) {
       // Chat history already exists, no need to search
-      return Observation.foundExisting(id, existingChatHistory);
+      return Observation.foundAlreadyDecorated(id, existingChatHistory);
     }
     const chatHistory = searchRoot.querySelector(
       this.chatbot.getChatHistorySelector()
     );
     if (chatHistory) {
-      return Observation.notDecorated(id, chatHistory);
+      return Observation.foundUndecorated(id, chatHistory);
     }
     return Observation.notFound(id);
   }
@@ -329,6 +329,6 @@ export class DOMObserver {
       // decorate chat history
       this.decorateChatHistory(obs.target as HTMLElement);
     }
-    return Observation.decorated(obs);
+    return Observation.foundAndDecorated(obs);
   }
 }

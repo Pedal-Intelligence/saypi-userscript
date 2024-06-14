@@ -14,7 +14,7 @@ export class Observation {
   }
 
   // Whether the observed element has been found, but not yet decorated with the extension's enhancements
-  undecorated(): boolean {
+  isUndecorated(): boolean {
     return this.found && this.isNew && !this.decorated;
   }
 
@@ -23,11 +23,11 @@ export class Observation {
     return new Observation(null, id, false, false, false);
   }
   // Where the element exists in the DOM, and has already been decorated with the extension's enhancements
-  static foundExisting(id: string, element: Element): Observation {
+  static foundAlreadyDecorated(id: string, element: Element): Observation {
     return new Observation(element, id, true, false, true);
   }
   // Where the element exists in the DOM, and has newly been decorated with the extension's enhancements
-  static decorated(obs: Observation, decoration?: any): Observation {
+  static foundAndDecorated(obs: Observation, decoration?: any): Observation {
     const decor = decoration
       ? [...obs.decorations, decoration]
       : [obs.decorations];
@@ -41,7 +41,7 @@ export class Observation {
     );
   }
   // Where the element exists in the DOM, but has not been decorated with the extension's enhancements
-  static notDecorated(id: string, element: Element): Observation {
+  static foundUndecorated(id: string, element: Element): Observation {
     return new Observation(element, id, true, true, false);
   }
 }
