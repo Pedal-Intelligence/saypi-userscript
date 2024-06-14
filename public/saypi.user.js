@@ -31937,7 +31937,7 @@ var AudioModule = /*#__PURE__*/function () {
       if (isSafari()) {
         // audio retry
         console.log("Using audio retry handler for Safari.");
-        // this.audioRetryActor.start(); // disabled for debugging
+        this.audioRetryActor.start();
         this.registerAudioPlaybackEvents(this.audioElement, this.audioRetryActor);
         this.registerSourceChangeEvents(this.audioElement, this.audioRetryActor);
       }
