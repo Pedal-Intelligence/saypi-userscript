@@ -197,6 +197,12 @@ export class VoiceMenu {
           customVoiceButtons.forEach((button) => {
             this.unmarkButtonAsSelectedVoice(button);
           });
+          const voiceButtons = menu.querySelectorAll("button");
+          voiceButtons.forEach((button) => {
+            if (this.isBuiltInVoiceButton(button as HTMLButtonElement)) {
+              this.unmarkButtonAsSelectedVoice(button as HTMLButtonElement);
+            }
+          });
           this.markButtonAsSelectedVoice(button);
           this.introduceVoice(voice);
         });

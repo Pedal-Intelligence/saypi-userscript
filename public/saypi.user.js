@@ -38227,6 +38227,12 @@ class VoiceMenu {
                     customVoiceButtons.forEach((button) => {
                         this.unmarkButtonAsSelectedVoice(button);
                     });
+                    const voiceButtons = menu.querySelectorAll("button");
+                    voiceButtons.forEach((button) => {
+                        if (this.isBuiltInVoiceButton(button)) {
+                            this.unmarkButtonAsSelectedVoice(button);
+                        }
+                    });
                     this.markButtonAsSelectedVoice(button);
                     this.introduceVoice(voice);
                 });
