@@ -259,7 +259,13 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function showHideConsent() {
-    const sections = ["preferences", "voice", "usage", "devtools"];
+    const sections = [
+      "preferences",
+      "preview-status",
+      "voice",
+      "usage",
+      "devtools",
+    ];
     chrome.storage.sync.get("shareData").then((result) => {
       // if the user has not made a decision yet, show the consent section
       if (!result.hasOwnProperty("shareData")) {
