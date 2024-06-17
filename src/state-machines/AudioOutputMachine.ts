@@ -206,10 +206,12 @@ export const audioOutputMachine = createMachine(
       emitEvent: (context, event, { action }) => {
         EventBus.emit(action.params.eventName);
       },
-      skipCurrent: (context, event) => {
+      skipCurrent: (context, event: LoadstartEvent) => {
         // send a message back to the audio module to stop playback
         EventBus.emit("audio:skipCurrent");
-        console.log("Skipping current audio track.");
+        console.log(
+          `Audio is provided by ${context.provider.name}. Skipping current audio track ${event.source}`
+        );
       },
       notifySpeechStart: (context, event: LoadstartEvent) => {
         const speech = getSpeechFromAudioSource(event.source).then((speech) => {
