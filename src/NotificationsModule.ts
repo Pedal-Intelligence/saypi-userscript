@@ -202,7 +202,9 @@ export class AudibleNotificationsModule implements INotificationsModule {
   private activityCheckSound1: HTMLAudioElement;
   private activityCheckSound2: HTMLAudioElement;
 
-  private constructor() {
+  private userPreferences: UserPreferenceModule;
+
+  private constructor(userPreferences: UserPreferenceModule) {
     // Load audio resources in the constructor
     this.listeningSound = new Audio(
       getResourceUrl("audio/send-round-short.mp3")
@@ -217,6 +219,8 @@ export class AudibleNotificationsModule implements INotificationsModule {
     this.unlockSound = new Audio(getResourceUrl("audio/beep-off.mp3"));
     this.themeOnSound = new Audio(getResourceUrl("audio/switch-on.mp3"));
     this.themeOffSound = new Audio(getResourceUrl("audio/switch-off.mp3"));
+
+    this.userPreferences = userPreferences;
     this.activityCheckSound1 = new Audio(
       getResourceUrl("audio/attention-1.mp3")
     );
@@ -227,13 +231,15 @@ export class AudibleNotificationsModule implements INotificationsModule {
 
   public static getInstance(): AudibleNotificationsModule {
     if (!AudibleNotificationsModule.instance) {
-      AudibleNotificationsModule.instance = new AudibleNotificationsModule();
+      AudibleNotificationsModule.instance = new AudibleNotificationsModule(
+        UserPreferenceModule.getInstance()
+      );
     }
     return AudibleNotificationsModule.instance;
   }
 
   private async playSound(sound: HTMLAudioElement) {
-    const soundEnabled = await UserPreferenceModule.getSoundEffects();
+    const soundEnabled = await this.userPreferences.getSoundEffects();
     if (soundEnabled) {
       sound.play().catch((e) => {
         if (e.name === "NotAllowedError") {

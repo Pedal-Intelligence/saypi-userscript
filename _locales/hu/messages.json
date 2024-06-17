@@ -233,5 +233,92 @@
   "allowInterruptions": {
     "message": "Megszakítható",
     "description": "Címke a jelölőnégyzethez, amely engedélyezi/tiltja, hogy a felhasználó megszakíthassa Pi válaszait beszéddel."
+  },
+  "currencyUSDAbbreviation": {
+    "description": "Az Egyesült Államok dollárjának rövidítése.",
+    "message": "USD"
+  },
+  "currentCharges": {
+    "description": "A felhasználó által felhalmozott aktuális költségek (folyamatos összeg) leírására használt kifejezés.",
+    "message": "Jelenlegi díjak"
+  },
+  "enableTTS": {
+    "description": "Felirat a szöveg-felolvasás be-/kikapcsolásához használt jelölőnégyzethez.",
+    "message": "Fejlesztett hangok"
+  },
+  "enhancedVoice": {
+    "description": "Cím (eszköztipp) a Mondjuk, Pi fokozott hangokhoz.",
+    "message": "A Say, Pi által fokozott hang"
+  },
+  "previewProgress": {
+    "description": "Az üzenet, amely megjelenik, amikor a felhasználó egy karakterlimittel rendelkező funkciót tekint előzetesen.",
+    "message": "$limit$ karakterből $count$ használva",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "123"
+      },
+      "limit": {
+        "content": "$2",
+        "example": "500"
+      }
+    }
+  },
+  "previewStatusActive": {
+    "message": "Aktív Béta"
+  },
+  "previewStatusCompleted": {
+    "message": "Béta Befejezve"
+  },
+  "previewStatusPaused": {
+    "description": "Az üzenet, amely megjelenik, amikor a felhasználó egy szüneteltetett funkciót tekint meg előnézetben.",
+    "message": "Béta szünetel, amíg $resetDate$",
+    "placeholders": {
+      "resetDate": {
+        "content": "$1",
+        "example": "2021-12-31"
+      }
+    }
+  },
+  "previewStatusUnknown": {
+    "message": "Nem sikerül csatlakozni..."
+  },
+  "readAloudButtonTitle": {
+    "description": "Az üzenet szövegének felolvasására szolgáló gomb címe.",
+    "message": "Hangosan Olvasás"
+  },
+  "ttsCostExplanation": {
+    "description": "A felugró súgó megjelenítése, amikor a szövegfelolvasó motorral hangosan olvassák fel az üzenetet, az üzenet költségével együtt.",
+    "message": "Ennek az üzenetnek a meghallgatása $cost$ $currency$-ba kerül.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "ttsCostExplanationFree": {
+    "description": "A felugró szöveg, amely akkor jelenik meg, amikor a szövegfelolvasó motorral olvassák fel hangosan az üzenetet, és az üzenet ingyenes. Tartalmazhatja a szolgáltató nevét.",
+    "message": "Ezt az audiót díjmentesen generálták.",
+    "placeholders": {
+      "provider": {
+        "content": "$1",
+        "example": "Inflection AI"
+      }
+    }
+  },
+  "ttsPoweredBy": {
+    "description": "Az üzenet, amely megjelenik, amikor a szövegfelolvasó motort használják egy üzenet felolvasásához.",
+    "message": "Szövegbeszéd által működtetve: $ttsEngine$",
+    "placeholders": {
+      "ttsEngine": {
+        "content": "$1",
+        "example": "ElevenLabs"
+      }
+    }
   }
 }

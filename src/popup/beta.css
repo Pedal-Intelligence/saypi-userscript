@@ -1,0 +1,49 @@
+.pre-release {
+    /* for features that are not yet released */
+    background-image: url("sketch.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.beta {
+    background-image: url("beta.svg");
+    background-repeat: no-repeat;
+    background-position-x: left;
+    padding-left: 2.5em !important;
+    background-size: 45px;
+}
+
+.progress-bar {
+    height: 0.5em;
+    width: 100%;
+}
+.progress-bar .share {
+    display: inline-block;
+    height: 100%;
+}
+.progress-bar .share.used {
+    background-color: #FF9800;
+    float: left;
+    width: 50%;
+}
+.progress-bar .share.remaining {
+    background-color: #4CAF50;
+    float: right;
+    width: 50%;
+}
+.progress-label {
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0.25rem 1rem 0.5rem 1rem;
+}
+
+button#clear-preferences {
+    display: none; /* hide the button by default */
+    width: 100%;
+    text-align: left;
+    background-image: url("trash.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position-x: right;
+    padding-right: 2em;
+    margin-right: 0.3em;
+}

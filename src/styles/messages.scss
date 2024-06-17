@@ -1,0 +1,53 @@
+.message-hover-menu {
+    display: flex;
+
+    /* If you need specific styling for .create-thread-button, add it here */
+    .w-fit.pt-4 {
+        // position to the right of its siblings
+        margin-left: auto;
+    }
+    
+    .saypi-tts-controls {
+        display: flex;
+        .saypi-speak-button {
+            padding: 4px; /* brings the total height to 32px */
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        .saypi-cost, .saypi-powered-by {
+            display: flex;
+            align-items: center; // center the text vertically
+            margin-left: 8px; // Adds some space between the controls
+        }
+        svg, img {
+            width: 24px;
+            height: 24px;
+            path.speaker {
+                fill: #24381b; // rgb(13 60 38) - Pi primary text color
+            }
+        }
+    }
+}
+
+.assistant-message .popup-menu .saypi-speak-button svg {
+    width: 24px;
+    height: 24px;
+}
+
+/*
+ * these styles are for debugging purposes, to make it easier to see when messages are being detected
+ *
+.assistant-message {
+    // give it a subtle green background color and border
+    background-color: #f0f9f4; // rgb(240 249 244) - Pi primary background color
+    border: 1px solid #d1f0e5; // rgb(209 240 229) - Pi secondary background color
+    border-radius: 8px;
+    padding: 0.8rem;
+}
+.assistant-message.speech-enabled {
+    border-color:#24381b;
+}
+.assistant-message .popup-menu {
+    background-color: #f0f9f4;
+}
+*/

@@ -233,5 +233,92 @@
   "allowInterruptions": {
     "message": "বাধাপ্রাপ্তিসাধ্য",
     "description": "চেকবক্সের লেবেল যা পি'র উত্তর বাধা দিতে /না দিতে য়ুজারকে অনুমোনিত/নির্যান্ত্রিণী  (Enable/Disable)  करार जন্য।"
+  },
+  "currencyUSDAbbreviation": {
+    "description": "মার্কিন ডলারের সংক্ষেপ।",
+    "message": "মার্কিন ডলার"
+  },
+  "currentCharges": {
+    "description": "ব্যবহারকারীর দ্বারা সঞ্চিত বর্তমান চার্জ (রানিং টোটাল) বর্ণনা করা শব্দ।",
+    "message": "বর্তমান চার্জ"
+  },
+  "enableTTS": {
+    "description": "টেক্সট-টু-স্পিচ চালু/নিষ্ক্রিয় করার জন্য চেকবক্সের লেবেল।",
+    "message": "উন্নত কন্ঠ"
+  },
+  "enhancedVoice": {
+    "description": "শিরোনাম (টুলটিপ) বলুন, পাই উন্নত স্বর।",
+    "message": "সে, পাই দ্বারা উন্নীত করা ভয়েস"
+  },
+  "previewProgress": {
+    "description": "ব্যবহারকারী যখন একটি বৈশিষ্ট্য পরিদর্শন করে, যাতে অক্ষরের সীমা আছে, ।",
+    "message": "$limit$ এর মধ্যে $count$ অক্ষর ব্যবহার করা হয়েছে।",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "123"
+      },
+      "limit": {
+        "content": "$2",
+        "example": "500"
+      }
+    }
+  },
+  "previewStatusActive": {
+    "message": "বেটা সক্রিয়"
+  },
+  "previewStatusCompleted": {
+    "message": "বেটা সম্পন্ন হয়েছে"
+  },
+  "previewStatusPaused": {
+    "description": "ব্যবহারকারী যখন একটি ফিচার প্রিভিউ করে, যা স্থগিত করা হয়েছে, ।",
+    "message": "বেটা বন্ধ রাখা হয়েছে $resetDate$ পর্যন্ত",
+    "placeholders": {
+      "resetDate": {
+        "content": "$1",
+        "example": "2021-12-31"
+      }
+    }
+  },
+  "previewStatusUnknown": {
+    "message": "সংযোগ করতে অক্ষম..."
+  },
+  "readAloudButtonTitle": {
+    "description": "বার্তার পাঠ্যটি উচ্চরিত করার বোতামের শিরোনাম।",
+    "message": "উচ্চারণ করুন"
+  },
+  "ttsCostExplanation": {
+    "description": "যখন টেক্সট-টু-স্পিচ ইঞ্জিন বার্তা উচ্চরিত করার জন্য ব্যবহৃত হয়, এর মূল্যের সাথে, ্‌্‌্‌্‌্ারি।",
+    "message": "এই বার্তাটি শুনার খরচ $cost$ $currency$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "ttsCostExplanationFree": {
+    "description": "যখন একটি বার্তা পাঠিয়ে দেয়ার জন্য একটি লেখা-২-ভাষন (text-to-speech) ইঞ্জিন ব্যাবহার করা হয়, ।",
+    "message": "এই অডিও বিনামূল্যে উৎপন্ন করা হয়েছিল।",
+    "placeholders": {
+      "provider": {
+        "content": "$1",
+        "example": "Inflection AI"
+      }
+    }
+  },
+  "ttsPoweredBy": {
+    "description": "যখন টেক্সট-টু-স্পিচ ইঞ্জিন বার্তা উচ্চরিত করার জন্য ব্যবহৃত হয়, তারাৎির্‌্‌্‌্‌্‌্‌্‌ের ।",
+    "message": "$ttsEngine$ দ্বারা পরিচালিত টেক্সট-টু-স্পিচ",
+    "placeholders": {
+      "ttsEngine": {
+        "content": "$1",
+        "example": "ElevenLabs"
+      }
+    }
   }
 }

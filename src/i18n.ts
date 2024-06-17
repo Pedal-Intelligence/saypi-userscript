@@ -6,6 +6,8 @@ type Messages = { [key: string]: { message: string; description: string } };
 // We'll start with an empty messages object
 let messages: { [key: string]: Messages } = {};
 
+const userPreferences = UserPreferenceModule.getInstance();
+
 // This function attempts to load messages for a given locale
 async function loadMessages(locale: string) {
   try {
@@ -54,7 +56,8 @@ function getMessage(
     return chrome.i18n.getMessage(messageName, substitutions);
   } else {
     // Fallback for userscript
-    UserPreferenceModule.getLanguage()
+    userPreferences
+      .getLanguage()
       .then((lang) => {
         let locale = convertLanguageToLocale(lang);
         if (!messages[locale]) {

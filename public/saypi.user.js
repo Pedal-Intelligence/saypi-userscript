@@ -2,7 +2,7 @@
 // @name         Say, Pi
 // @name:zh-CN   说，Pi 
 // @namespace    http://www.saypi.ai/
-// @version      1.5.15
+// @version      1.6.0
 // @description  Seamless speech-to-text enhancement for Pi, the conversational AI. Enjoy hands-free, high-accuracy conversations in any language.
 // @description:zh-CN  为Pi聊天机器人提供无手操作的高精度语音转文字功能，支持多种语言。
 // @author       Ross Cadogan
@@ -16,56 +16,56 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 557:
+/***/ 4557:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var map = {
 	"./ar/messages.json": [
-		830,
+		9830,
 		830
 	],
 	"./bn/messages.json": [
-		93,
+		5093,
 		93
 	],
 	"./de/messages.json": [
-		840,
+		1840,
 		840
 	],
 	"./en/messages.json": [
-		51,
+		4533,
 		533
 	],
 	"./es/messages.json": [
-		952,
+		4952,
 		952
 	],
 	"./fr/messages.json": [
-		657,
+		9657,
 		657
 	],
 	"./hi/messages.json": [
-		754,
+		2754,
 		754
 	],
 	"./hu/messages.json": [
-		872,
+		1872,
 		872
 	],
 	"./it/messages.json": [
-		387,
+		5387,
 		387
 	],
 	"./ja/messages.json": [
-		481,
+		8481,
 		481
 	],
 	"./ko/messages.json": [
-		499,
+		5499,
 		499
 	],
 	"./nl/messages.json": [
-		717,
+		3717,
 		717
 	],
 	"./pl/messages.json": [
@@ -73,23 +73,23 @@ var map = {
 		165
 	],
 	"./pt_BR/messages.json": [
-		214,
+		4214,
 		214
 	],
 	"./ru/messages.json": [
-		376,
+		3376,
 		376
 	],
 	"./uk/messages.json": [
-		937,
+		6937,
 		937
 	],
 	"./vi/messages.json": [
-		53,
+		1053,
 		53
 	],
 	"./zh_CN/messages.json": [
-		233,
+		4233,
 		233
 	]
 };
@@ -108,12 +108,12 @@ function webpackAsyncContext(req) {
 	});
 }
 webpackAsyncContext.keys = () => (Object.keys(map));
-webpackAsyncContext.id = 557;
+webpackAsyncContext.id = 4557;
 module.exports = webpackAsyncContext;
 
 /***/ }),
 
-/***/ 527:
+/***/ 2527:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -124,8 +124,8 @@ were taken (or took inspiration) from https://github.com/snakers4/silero-vad
 */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FrameProcessor = exports.validateOptions = exports.defaultFrameProcessorOptions = void 0;
-const messages_1 = __webpack_require__(531);
-const logging_1 = __webpack_require__(655);
+const messages_1 = __webpack_require__(5531);
+const logging_1 = __webpack_require__(8655);
 const RECOMMENDED_FRAME_SAMPLES = [512, 1024, 1536];
 exports.defaultFrameProcessorOptions = {
     positiveSpeechThreshold: 0.5,
@@ -259,7 +259,7 @@ exports.FrameProcessor = FrameProcessor;
 
 /***/ }),
 
-/***/ 978:
+/***/ 1978:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -292,23 +292,23 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.utils = void 0;
-const _utils = __importStar(__webpack_require__(818));
+const _utils = __importStar(__webpack_require__(5818));
 exports.utils = {
     minFramesForTargetMS: _utils.minFramesForTargetMS,
     arrayBufferToBase64: _utils.arrayBufferToBase64,
     encodeWAV: _utils.encodeWAV,
 };
-__exportStar(__webpack_require__(684), exports);
-__exportStar(__webpack_require__(527), exports);
-__exportStar(__webpack_require__(531), exports);
-__exportStar(__webpack_require__(655), exports);
-__exportStar(__webpack_require__(2), exports);
-__exportStar(__webpack_require__(533), exports);
+__exportStar(__webpack_require__(4684), exports);
+__exportStar(__webpack_require__(2527), exports);
+__exportStar(__webpack_require__(5531), exports);
+__exportStar(__webpack_require__(8655), exports);
+__exportStar(__webpack_require__(2002), exports);
+__exportStar(__webpack_require__(8533), exports);
 //# sourceMappingURL=index.js.map
 
 /***/ }),
 
-/***/ 655:
+/***/ 8655:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -331,7 +331,7 @@ exports.log = _log;
 
 /***/ }),
 
-/***/ 531:
+/***/ 5531:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -349,7 +349,7 @@ var Message;
 
 /***/ }),
 
-/***/ 2:
+/***/ 2002:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -358,7 +358,7 @@ var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Silero = void 0;
 // @ts-ignore
-const logging_1 = __webpack_require__(655);
+const logging_1 = __webpack_require__(8655);
 class Silero {
     constructor(ort, modelFetcher) {
         this.ort = ort;
@@ -404,17 +404,17 @@ Silero.new = async (ort, modelFetcher) => {
 
 /***/ }),
 
-/***/ 684:
+/***/ 4684:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PlatformAgnosticNonRealTimeVAD = exports.defaultNonRealTimeVADOptions = void 0;
-const frame_processor_1 = __webpack_require__(527);
-const messages_1 = __webpack_require__(531);
-const models_1 = __webpack_require__(2);
-const resampler_1 = __webpack_require__(533);
+const frame_processor_1 = __webpack_require__(2527);
+const messages_1 = __webpack_require__(5531);
+const models_1 = __webpack_require__(2002);
+const resampler_1 = __webpack_require__(8533);
 exports.defaultNonRealTimeVADOptions = {
     ...frame_processor_1.defaultFrameProcessorOptions,
 };
@@ -486,14 +486,14 @@ exports.PlatformAgnosticNonRealTimeVAD = PlatformAgnosticNonRealTimeVAD;
 
 /***/ }),
 
-/***/ 533:
+/***/ 8533:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Resampler = void 0;
-const logging_1 = __webpack_require__(655);
+const logging_1 = __webpack_require__(8655);
 class Resampler {
     constructor(options) {
         this.options = options;
@@ -537,7 +537,7 @@ exports.Resampler = Resampler;
 
 /***/ }),
 
-/***/ 818:
+/***/ 5818:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -634,7 +634,7 @@ function writeString(view, offset, string) {
 
 /***/ }),
 
-/***/ 709:
+/***/ 7709:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -657,7 +657,7 @@ exports.assetPath = assetPath;
 
 /***/ }),
 
-/***/ 762:
+/***/ 9762:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -687,12 +687,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.defaultRealTimeVADOptions = exports.AudioNodeVAD = exports.MicVAD = exports.NonRealTimeVAD = exports.Message = exports.FrameProcessor = exports.utils = void 0;
-const ort = __importStar(__webpack_require__(793));
-const _common_1 = __webpack_require__(978);
+const ort = __importStar(__webpack_require__(9793));
+const _common_1 = __webpack_require__(1978);
 Object.defineProperty(exports, "FrameProcessor", ({ enumerable: true, get: function () { return _common_1.FrameProcessor; } }));
 Object.defineProperty(exports, "Message", ({ enumerable: true, get: function () { return _common_1.Message; } }));
-const model_fetcher_1 = __webpack_require__(756);
-const utils_1 = __webpack_require__(227);
+const model_fetcher_1 = __webpack_require__(6756);
+const utils_1 = __webpack_require__(2227);
 class NonRealTimeVAD extends _common_1.PlatformAgnosticNonRealTimeVAD {
     static async new(options = {}) {
         return await this._new(model_fetcher_1.modelFetcher, ort, options);
@@ -700,7 +700,7 @@ class NonRealTimeVAD extends _common_1.PlatformAgnosticNonRealTimeVAD {
 }
 exports.NonRealTimeVAD = NonRealTimeVAD;
 exports.utils = { audioFileToArray: utils_1.audioFileToArray, ..._common_1.utils };
-var real_time_vad_1 = __webpack_require__(759);
+var real_time_vad_1 = __webpack_require__(7759);
 Object.defineProperty(exports, "MicVAD", ({ enumerable: true, get: function () { return real_time_vad_1.MicVAD; } }));
 Object.defineProperty(exports, "AudioNodeVAD", ({ enumerable: true, get: function () { return real_time_vad_1.AudioNodeVAD; } }));
 Object.defineProperty(exports, "defaultRealTimeVADOptions", ({ enumerable: true, get: function () { return real_time_vad_1.defaultRealTimeVADOptions; } }));
@@ -708,14 +708,14 @@ Object.defineProperty(exports, "defaultRealTimeVADOptions", ({ enumerable: true,
 
 /***/ }),
 
-/***/ 756:
+/***/ 6756:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.modelFetcher = void 0;
-const asset_path_1 = __webpack_require__(709);
+const asset_path_1 = __webpack_require__(7709);
 const modelFetcher = async () => {
     const modelURL = (0, asset_path_1.assetPath)("silero_vad.onnx");
     return await fetch(modelURL).then((r) => r.arrayBuffer());
@@ -725,7 +725,7 @@ exports.modelFetcher = modelFetcher;
 
 /***/ }),
 
-/***/ 759:
+/***/ 7759:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
@@ -755,10 +755,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.AudioNodeVAD = exports.MicVAD = exports.defaultRealTimeVADOptions = void 0;
-const ort = __importStar(__webpack_require__(793));
-const _common_1 = __webpack_require__(978);
-const model_fetcher_1 = __webpack_require__(756);
-const asset_path_1 = __webpack_require__(709);
+const ort = __importStar(__webpack_require__(9793));
+const _common_1 = __webpack_require__(1978);
+const model_fetcher_1 = __webpack_require__(6756);
+const asset_path_1 = __webpack_require__(7709);
 const _getWorkletURL = () => {
     return (0, asset_path_1.assetPath)("vad.worklet.bundle.min.js");
 };
@@ -896,7 +896,7 @@ exports.AudioNodeVAD = AudioNodeVAD;
 
 /***/ }),
 
-/***/ 227:
+/***/ 2227:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -945,16 +945,16 @@ exports.audioFileToArray = audioFileToArray;
 
 /***/ }),
 
-/***/ 136:
+/***/ 9136:
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   Z: () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(537);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7537);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(645);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3645);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
 // Imports
 
@@ -1441,46 +1441,46 @@ ___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse_outermost {
 
 /***/ }),
 
-/***/ 580:
+/***/ 8580:
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   Z: () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(537);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7537);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(645);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3645);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
 // Imports
 
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `#saypi-callButton.disabled svg path.circle{fill:#f5eedf}.saypi-enter-button,.saypi-exit-button{width:3rem;height:3rem;padding:6px;border:0;z-index:60}.saypi-enter-button svg path.inner,.saypi-exit-button svg path.inner{color:#0d3c26}.saypi-control-panel.overflow-hidden .saypi-control-button{display:none}#saypi-lock-panel{display:none}@keyframes fillup{to{stroke-dashoffset:0}}@keyframes changeColor{0%{stroke:green}50%{stroke:#ff0}100%{stroke:red}}#progress-ring{transform:rotate(-90deg);transform-origin:50% 50%}#progress-ring.active{animation:fillup 10s linear forwards,changeColor 10s linear forwards}:root{--glow-color: #ffd1dc}.glow{border:none;box-shadow:0 0 10px var(--glow-color),0 0 20px var(--glow-color),0 0 30px var(--glow-color),0 0 40px var(--glow-color),0 0 50px var(--glow-color),0 0 60px var(--glow-color),0 0 70px var(--glow-color);animation:neon-glow-animation 1.5s ease-in-out infinite alternate}.glow-fade-out{box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc;animation:fade-out-glow-animation 3s ease-out forwards}@keyframes fade-out-glow-animation{from{box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc}to{box-shadow:0 0 1px #ffd1dc,0 0 2px #ffd1dc,0 0 3px #ffd1dc,0 0 4px #fff,0 0 5px #fff}}@keyframes neon-glow-animation{from{box-shadow:0 0 5px var(--glow-color),0 0 10px var(--glow-color),0 0 15px var(--glow-color),0 0 20px var(--glow-color),0 0 25px #fff}to{box-shadow:0 0 10px var(--glow-color),0 0 20px var(--glow-color),0 0 30px var(--glow-color),0 0 40px var(--glow-color),0 0 50px var(--glow-color),0 0 60px var(--glow-color),0 0 70px var(--glow-color)}}#saypi-notification{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);width:80%;max-width:47rem;height:auto;padding:1rem;background-color:rgba(228,216,193,.9);border-radius:1rem;align-items:center;justify-content:center}#saypi-notification.active{display:flex;animation-name:fadeIn;animation-duration:2s;animation-fill-mode:forwards;animation-delay:1s;animation-fill-mode:both;animation-timing-function:ease-in-out;animation-iteration-count:1;animation-direction:normal;z-index:100}#saypi-notification img.icon{width:80px}#saypi-notification svg.icon{width:160px}#saypi-notification .content{display:flex;flex-direction:column;align-items:center;justify-content:center}#saypi-notification span{display:block;text-align:center;font-size:x-large;font-family:"Roboto","Open Sans","Lato","Source Sans Pro","Noto Sans",Arial,sans-serif;color:#776d6d;padding-left:.5rem}#saypi-notification button{display:block;margin-top:1rem;padding:.5rem 1rem;border-radius:.5rem;background-color:#4ab13c;color:#fff;font-size:x-large;font-family:"Roboto","Open Sans","Lato","Source Sans Pro","Noto Sans",Arial,sans-serif;border:none;cursor:pointer;transition:background-color .5s}#saypi-notification button:hover{background-color:#3a8a2d}#saypi-notification.dialog{background-color:rgba(222,228,193,.98);border-radius:1rem;border:5px solid #4ab13c;padding:1rem;width:80%;max-width:40rem;height:auto;align-items:center;justify-content:center;z-index:100}`, "",{"version":3,"sources":["webpack://./src/styles/common.scss","webpack://./src/styles/progress-ring.scss","webpack://./src/styles/neon.scss","webpack://./src/styles/notifications.scss"],"names":[],"mappings":"AAEA,2CACE,YAAA,CAIF,uCAEE,UAAA,CACA,WAAA,CACA,WAAA,CACA,QAAA,CACA,UAAA,CACA,qEACE,aAAA,CAMF,2DACE,YAAA,CAKJ,kBAEE,YAAA,CC7BF,kBACI,GACE,mBAAA,CAAA,CAIJ,uBACE,GAAA,YAAA,CACA,IAAA,WAAA,CACA,KAAA,UAAA,CAAA,CAGF,eACE,wBAAA,CACA,wBAAA,CAGF,sBACE,oEAAA,CChBJ,MACI,qBAAA,CAGJ,MACI,WAAA,CAGA,uMACA,CASA,iEAAA,CAGJ,eACI,iIACA,CASA,sDAAA,CAGJ,mCACI,KACI,iIACA,CAQJ,GACI,oFACA,CAAA,CASR,+BACI,KACI,mIACA,CAMJ,GACI,uMACA,CAAA,CCtER,oBACE,YAAA,CACA,cAAA,CACA,OAAA,CACA,QAAA,CACA,+BAAA,CACA,SAAA,CACA,eAAA,CACA,WAAA,CACA,YAAA,CACA,qCAAA,CACA,kBAAA,CACA,kBAAA,CACA,sBAAA,CAEA,2BACE,YAAA,CACA,qBAAA,CACA,qBAAA,CACA,4BAAA,CACA,kBAAA,CACA,wBAAA,CACA,qCAAA,CACA,2BAAA,CACA,0BAAA,CACA,WAAA,CAGF,6BACE,UAAA,CAEF,6BACE,WAAA,CAGF,6BACE,YAAA,CACA,qBAAA,CACA,kBAAA,CACA,sBAAA,CAGF,yBACE,aAAA,CACA,iBAAA,CACA,iBAAA,CACA,sFAAA,CACA,aAAA,CACA,kBAAA,CAIF,2BACE,aAAA,CACA,eAAA,CACA,kBAAA,CACA,mBAAA,CACA,wBAAA,CACA,UAAA,CACA,iBAAA,CACA,sFAAA,CACA,WAAA,CACA,cAAA,CACA,+BAAA,CAEA,iCACE,wBAAA,CAIJ,2BACE,sCAAA,CACA,kBAAA,CACA,wBAAA,CACA,YAAA,CACA,SAAA,CACA,eAAA,CACA,WAAA,CACA,kBAAA,CACA,sBAAA,CACA,WAAA","sourcesContent":["\n\n#saypi-callButton.disabled svg path.circle {\n  fill: rgb(245 238 223); /* bg-cream-550 */\n}\n\n\n.saypi-enter-button,\n.saypi-exit-button {\n  width: 3rem;\n  height: 3rem;\n  padding: 6px;\n  border: 0;\n  z-index: 60;\n  svg path.inner {\n    color: rgb(13 60 38); /* text-primary-700 */\n  }\n}\n\n/* hide the control panel buttons on non-chat pages */\n.saypi-control-panel.overflow-hidden {\n  .saypi-control-button {\n    display: none;\n  }\n}\n\n\n#saypi-lock-panel {\n  /* lock panel is only displayed on mobile devices */\n  display: none;\n}\n\n@import \"progress-ring.scss\";\n@import \"neon.scss\";\n@import \"notifications.scss\";","@keyframes fillup {\n    to {\n      stroke-dashoffset: 0;\n    }\n  }\n  \n  @keyframes changeColor {\n    0% { stroke: green; }\n    50% { stroke: yellow; }\n    100% { stroke: red; }\n  }\n  \n  #progress-ring {\n    transform: rotate(-90deg);\n    transform-origin: 50% 50%;\n  }\n  \n  #progress-ring.active {\n    animation: fillup 10s linear forwards, changeColor 10s linear forwards;\n  }","$fade-color: #ffd1dc; // sunset-peach\n\n:root {\n    --glow-color: #ffd1dc; // sunset-peach\n}\n\n.glow {\n    border: none;\n    \n    // Multiple box shadows create the glow effect\n    box-shadow: \n    0 0 10px var(--glow-color),\n    0 0 20px var(--glow-color),\n    0 0 30px var(--glow-color),\n    0 0 40px var(--glow-color),\n    0 0 50px var(--glow-color),\n    0 0 60px var(--glow-color),\n    0 0 70px var(--glow-color);\n  \n    // Animation for the glow to appear to pulse\n    animation: neon-glow-animation 1.5s ease-in-out infinite alternate;\n}\n\n.glow-fade-out {\n    box-shadow: \n    0 0 10px $fade-color,\n    0 0 20px $fade-color,\n    0 0 30px $fade-color,\n    0 0 40px $fade-color,\n    0 0 50px $fade-color,\n    0 0 60px $fade-color,\n    0 0 70px $fade-color;\n\n    // Start the fade out animation\n    animation: fade-out-glow-animation 3s ease-out forwards;\n}\n\n@keyframes fade-out-glow-animation {\n    from {\n        box-shadow: \n        0 0 10px $fade-color,\n        0 0 20px $fade-color,\n        0 0 30px $fade-color,\n        0 0 40px $fade-color,\n        0 0 50px $fade-color,\n        0 0 60px $fade-color,\n        0 0 70px $fade-color;\n    }\n    to {\n        box-shadow:\n        0 0 1px $fade-color,\n        0 0 2px $fade-color,\n        0 0 3px $fade-color,\n        0 0 4px #fff,\n        0 0 5px #fff;\n    }\n}\n\n\n@keyframes neon-glow-animation {\n    from {\n        box-shadow: \n        0 0 5px var(--glow-color),\n        0 0 10px var(--glow-color),\n        0 0 15px var(--glow-color),\n        0 0 20px var(--glow-color),\n        0 0 25px #fff;\n    }\n    to {\n        box-shadow: \n        0 0 10px var(--glow-color),\n        0 0 20px var(--glow-color),\n        0 0 30px var(--glow-color),\n        0 0 40px var(--glow-color),\n        0 0 50px var(--glow-color),\n        0 0 60px var(--glow-color),\n        0 0 70px var(--glow-color);\n    }\n}","#saypi-notification {\n  display: none; // Hide the notification by default, flexbox when active\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  width: 80%;\n  max-width: 47rem; // to match Pi's textarea max-width\n  height: auto;\n  padding: 1rem;\n  background-color: rgba(228, 216, 193, 0.9); // semi-opaque background with rounded corners\n  border-radius: 1rem;\n  align-items: center; // Vertically center the children\n  justify-content: center; // Horizontally center the children (optional)\n  \n  &.active {\n    display: flex; // Ensure flex display is active\n    animation-name: fadeIn;\n    animation-duration: 2s;\n    animation-fill-mode: forwards;\n    animation-delay: 1s;\n    animation-fill-mode: both;\n    animation-timing-function: ease-in-out;\n    animation-iteration-count: 1;\n    animation-direction: normal;\n    z-index: 100;\n  }\n  \n  img.icon {\n    width: 80px;\n  }\n  svg.icon {\n    width: 160px;\n  }\n\n  .content {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;  \n  }\n  \n  span {\n    display: block;\n    text-align: center;\n    font-size: x-large;\n    font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;\n    color: #776d6d;\n    padding-left: 0.5rem;\n    // Additional adjustments for alignment can be made here if necessary\n  }\n\n  button {\n    display: block;\n    margin-top: 1rem;\n    padding: 0.5rem 1rem;\n    border-radius: 0.5rem;\n    background-color: #4ab13c;\n    color: white;\n    font-size: x-large;\n    font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;\n    border: none;\n    cursor: pointer;\n    transition: background-color 0.5s;\n    \n    &:hover {\n      background-color: #3a8a2d;\n    }\n  }\n\n  &.dialog {\n    background-color: rgba(222, 228, 193, 0.98);\n    border-radius: 1rem;\n    border: 5px solid #4ab13c;\n    padding: 1rem;\n    width: 80%;\n    max-width: 40rem;\n    height: auto;\n    align-items: center;\n    justify-content: center;\n    z-index: 100;\n  }\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `#saypi-callButton.disabled svg path.circle{fill:#f5eedf}.saypi-enter-button,.saypi-exit-button{width:3rem;height:3rem;padding:6px;border:0;z-index:60}.saypi-enter-button svg path.inner,.saypi-exit-button svg path.inner{color:#0d3c26}.saypi-control-panel.overflow-hidden .saypi-control-button{display:none}#saypi-lock-panel{display:none}@keyframes fillup{to{stroke-dashoffset:0}}@keyframes changeColor{0%{stroke:green}50%{stroke:#ff0}100%{stroke:red}}#progress-ring{transform:rotate(-90deg);transform-origin:50% 50%}#progress-ring.active{animation:fillup 10s linear forwards,changeColor 10s linear forwards}:root{--glow-color: #ffd1dc}.glow{border:none;box-shadow:0 0 10px var(--glow-color),0 0 20px var(--glow-color),0 0 30px var(--glow-color),0 0 40px var(--glow-color),0 0 50px var(--glow-color),0 0 60px var(--glow-color),0 0 70px var(--glow-color);animation:neon-glow-animation 1.5s ease-in-out infinite alternate}.glow-fade-out{box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc;animation:fade-out-glow-animation 3s ease-out forwards}@keyframes fade-out-glow-animation{from{box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc}to{box-shadow:0 0 1px #ffd1dc,0 0 2px #ffd1dc,0 0 3px #ffd1dc,0 0 4px #fff,0 0 5px #fff}}@keyframes neon-glow-animation{from{box-shadow:0 0 5px var(--glow-color),0 0 10px var(--glow-color),0 0 15px var(--glow-color),0 0 20px var(--glow-color),0 0 25px #fff}to{box-shadow:0 0 10px var(--glow-color),0 0 20px var(--glow-color),0 0 30px var(--glow-color),0 0 40px var(--glow-color),0 0 50px var(--glow-color),0 0 60px var(--glow-color),0 0 70px var(--glow-color)}}#saypi-notification{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);width:80%;max-width:47rem;height:auto;padding:1rem;background-color:rgba(228,216,193,.9);border-radius:1rem;align-items:center;justify-content:center}#saypi-notification.active{display:flex;animation-name:fadeIn;animation-duration:2s;animation-fill-mode:forwards;animation-delay:1s;animation-fill-mode:both;animation-timing-function:ease-in-out;animation-iteration-count:1;animation-direction:normal;z-index:100}#saypi-notification img.icon{width:80px}#saypi-notification svg.icon{width:160px}#saypi-notification .content{display:flex;flex-direction:column;align-items:center;justify-content:center}#saypi-notification span{display:block;text-align:center;font-size:x-large;font-family:"Roboto","Open Sans","Lato","Source Sans Pro","Noto Sans",Arial,sans-serif;color:#776d6d;padding-left:.5rem}#saypi-notification button{display:block;margin-top:1rem;padding:.5rem 1rem;border-radius:.5rem;background-color:#4ab13c;color:#fff;font-size:x-large;font-family:"Roboto","Open Sans","Lato","Source Sans Pro","Noto Sans",Arial,sans-serif;border:none;cursor:pointer;transition:background-color .5s}#saypi-notification button:hover{background-color:#3a8a2d}#saypi-notification.dialog{background-color:rgba(222,228,193,.98);border-radius:1rem;border:5px solid #4ab13c;padding:1rem;width:80%;max-width:40rem;height:auto;align-items:center;justify-content:center;z-index:100}#saypi-voice-menu .saypi-voice-button{display:none}#saypi-voice-menu.expanded .saypi-voice-button{display:block}.saypi-voice-button img.flair{display:inline;height:20px;padding-left:.5rem}`, "",{"version":3,"sources":["webpack://./src/styles/common.scss","webpack://./src/styles/progress-ring.scss","webpack://./src/styles/neon.scss","webpack://./src/styles/notifications.scss","webpack://./src/styles/voices.scss"],"names":[],"mappings":"AAEA,2CACE,YAAA,CAIF,uCAEE,UAAA,CACA,WAAA,CACA,WAAA,CACA,QAAA,CACA,UAAA,CACA,qEACE,aAAA,CAMF,2DACE,YAAA,CAKJ,kBAEE,YAAA,CC7BF,kBACI,GACE,mBAAA,CAAA,CAIJ,uBACE,GAAA,YAAA,CACA,IAAA,WAAA,CACA,KAAA,UAAA,CAAA,CAGF,eACE,wBAAA,CACA,wBAAA,CAGF,sBACE,oEAAA,CChBJ,MACI,qBAAA,CAGJ,MACI,WAAA,CAGA,uMACA,CASA,iEAAA,CAGJ,eACI,iIACA,CASA,sDAAA,CAGJ,mCACI,KACI,iIACA,CAQJ,GACI,oFACA,CAAA,CASR,+BACI,KACI,mIACA,CAMJ,GACI,uMACA,CAAA,CCtER,oBACE,YAAA,CACA,cAAA,CACA,OAAA,CACA,QAAA,CACA,+BAAA,CACA,SAAA,CACA,eAAA,CACA,WAAA,CACA,YAAA,CACA,qCAAA,CACA,kBAAA,CACA,kBAAA,CACA,sBAAA,CAEA,2BACE,YAAA,CACA,qBAAA,CACA,qBAAA,CACA,4BAAA,CACA,kBAAA,CACA,wBAAA,CACA,qCAAA,CACA,2BAAA,CACA,0BAAA,CACA,WAAA,CAGF,6BACE,UAAA,CAEF,6BACE,WAAA,CAGF,6BACE,YAAA,CACA,qBAAA,CACA,kBAAA,CACA,sBAAA,CAGF,yBACE,aAAA,CACA,iBAAA,CACA,iBAAA,CACA,sFAAA,CACA,aAAA,CACA,kBAAA,CAIF,2BACE,aAAA,CACA,eAAA,CACA,kBAAA,CACA,mBAAA,CACA,wBAAA,CACA,UAAA,CACA,iBAAA,CACA,sFAAA,CACA,WAAA,CACA,cAAA,CACA,+BAAA,CAEA,iCACE,wBAAA,CAIJ,2BACE,sCAAA,CACA,kBAAA,CACA,wBAAA,CACA,YAAA,CACA,SAAA,CACA,eAAA,CACA,WAAA,CACA,kBAAA,CACA,sBAAA,CACA,WAAA,CChFJ,sCACI,YAAA,CAEJ,+CACI,aAAA,CAEJ,8BACI,cAAA,CACA,WAAA,CACA,kBAAA","sourcesContent":["\n\n#saypi-callButton.disabled svg path.circle {\n  fill: rgb(245 238 223); /* bg-cream-550 */\n}\n\n\n.saypi-enter-button,\n.saypi-exit-button {\n  width: 3rem;\n  height: 3rem;\n  padding: 6px;\n  border: 0;\n  z-index: 60;\n  svg path.inner {\n    color: rgb(13 60 38); /* text-primary-700 */\n  }\n}\n\n/* hide the control panel buttons on non-chat pages */\n.saypi-control-panel.overflow-hidden {\n  .saypi-control-button {\n    display: none;\n  }\n}\n\n\n#saypi-lock-panel {\n  /* lock panel is only displayed on mobile devices */\n  display: none;\n}\n\n@import \"progress-ring.scss\";\n@import \"neon.scss\";\n@import \"notifications.scss\";\n@import \"voices.scss\";","@keyframes fillup {\n    to {\n      stroke-dashoffset: 0;\n    }\n  }\n  \n  @keyframes changeColor {\n    0% { stroke: green; }\n    50% { stroke: yellow; }\n    100% { stroke: red; }\n  }\n  \n  #progress-ring {\n    transform: rotate(-90deg);\n    transform-origin: 50% 50%;\n  }\n  \n  #progress-ring.active {\n    animation: fillup 10s linear forwards, changeColor 10s linear forwards;\n  }","$fade-color: #ffd1dc; // sunset-peach\n\n:root {\n    --glow-color: #ffd1dc; // sunset-peach\n}\n\n.glow {\n    border: none;\n    \n    // Multiple box shadows create the glow effect\n    box-shadow: \n    0 0 10px var(--glow-color),\n    0 0 20px var(--glow-color),\n    0 0 30px var(--glow-color),\n    0 0 40px var(--glow-color),\n    0 0 50px var(--glow-color),\n    0 0 60px var(--glow-color),\n    0 0 70px var(--glow-color);\n  \n    // Animation for the glow to appear to pulse\n    animation: neon-glow-animation 1.5s ease-in-out infinite alternate;\n}\n\n.glow-fade-out {\n    box-shadow: \n    0 0 10px $fade-color,\n    0 0 20px $fade-color,\n    0 0 30px $fade-color,\n    0 0 40px $fade-color,\n    0 0 50px $fade-color,\n    0 0 60px $fade-color,\n    0 0 70px $fade-color;\n\n    // Start the fade out animation\n    animation: fade-out-glow-animation 3s ease-out forwards;\n}\n\n@keyframes fade-out-glow-animation {\n    from {\n        box-shadow: \n        0 0 10px $fade-color,\n        0 0 20px $fade-color,\n        0 0 30px $fade-color,\n        0 0 40px $fade-color,\n        0 0 50px $fade-color,\n        0 0 60px $fade-color,\n        0 0 70px $fade-color;\n    }\n    to {\n        box-shadow:\n        0 0 1px $fade-color,\n        0 0 2px $fade-color,\n        0 0 3px $fade-color,\n        0 0 4px #fff,\n        0 0 5px #fff;\n    }\n}\n\n\n@keyframes neon-glow-animation {\n    from {\n        box-shadow: \n        0 0 5px var(--glow-color),\n        0 0 10px var(--glow-color),\n        0 0 15px var(--glow-color),\n        0 0 20px var(--glow-color),\n        0 0 25px #fff;\n    }\n    to {\n        box-shadow: \n        0 0 10px var(--glow-color),\n        0 0 20px var(--glow-color),\n        0 0 30px var(--glow-color),\n        0 0 40px var(--glow-color),\n        0 0 50px var(--glow-color),\n        0 0 60px var(--glow-color),\n        0 0 70px var(--glow-color);\n    }\n}","#saypi-notification {\n  display: none; // Hide the notification by default, flexbox when active\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  width: 80%;\n  max-width: 47rem; // to match Pi's textarea max-width\n  height: auto;\n  padding: 1rem;\n  background-color: rgba(228, 216, 193, 0.9); // semi-opaque background with rounded corners\n  border-radius: 1rem;\n  align-items: center; // Vertically center the children\n  justify-content: center; // Horizontally center the children (optional)\n  \n  &.active {\n    display: flex; // Ensure flex display is active\n    animation-name: fadeIn;\n    animation-duration: 2s;\n    animation-fill-mode: forwards;\n    animation-delay: 1s;\n    animation-fill-mode: both;\n    animation-timing-function: ease-in-out;\n    animation-iteration-count: 1;\n    animation-direction: normal;\n    z-index: 100;\n  }\n  \n  img.icon {\n    width: 80px;\n  }\n  svg.icon {\n    width: 160px;\n  }\n\n  .content {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;  \n  }\n  \n  span {\n    display: block;\n    text-align: center;\n    font-size: x-large;\n    font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;\n    color: #776d6d;\n    padding-left: 0.5rem;\n    // Additional adjustments for alignment can be made here if necessary\n  }\n\n  button {\n    display: block;\n    margin-top: 1rem;\n    padding: 0.5rem 1rem;\n    border-radius: 0.5rem;\n    background-color: #4ab13c;\n    color: white;\n    font-size: x-large;\n    font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;\n    border: none;\n    cursor: pointer;\n    transition: background-color 0.5s;\n    \n    &:hover {\n      background-color: #3a8a2d;\n    }\n  }\n\n  &.dialog {\n    background-color: rgba(222, 228, 193, 0.98);\n    border-radius: 1rem;\n    border: 5px solid #4ab13c;\n    padding: 1rem;\n    width: 80%;\n    max-width: 40rem;\n    height: auto;\n    align-items: center;\n    justify-content: center;\n    z-index: 100;\n  }\n}\n","#saypi-voice-menu .saypi-voice-button {\n    display: none;\n}\n#saypi-voice-menu.expanded .saypi-voice-button {\n    display: block;\n}\n.saypi-voice-button img.flair {\n    display: inline;\n    height: 20px;\n    padding-left: 0.5rem;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
 
 /***/ }),
 
-/***/ 902:
+/***/ 1902:
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   Z: () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(537);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7537);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(645);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3645);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
 // Imports
 
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(0.9)}100%{transform:scale(1)}}html.desktop-view #saypi-talkButton{display:none}html.desktop-view #saypi-callButton{width:2.25rem;position:relative;margin-right:0}html.desktop-view .saypi-prompt-container{padding-right:0}html.desktop-view .saypi-exit-button{display:none}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes fadeOut{from{opacity:1}to{opacity:0}}html.desktop-view #saypi-audio-controls{margin-top:.35rem}html.desktop-view #saypi-side-panel .immersive-mode-button svg{width:30px}html.desktop-view #saypi-side-panel .immersive-mode-button svg .cls-1{stroke:#24381b}`, "",{"version":3,"sources":["webpack://./src/styles/desktop.scss"],"names":[],"mappings":"AACE,iBACE,GACE,kBAAA,CAEF,IACE,oBAAA,CAEF,KACE,kBAAA,CAAA,CAIJ,oCAEE,YAAA,CAGF,oCACE,aAAA,CACA,iBAAA,CACA,cAAA,CAGF,0CAEE,eAAA,CAGF,qCACE,YAAA,CAGF,kBACE,KAAA,SAAA,CACA,GAAA,SAAA,CAAA,CAGF,mBACE,KAAA,SAAA,CACA,GAAA,SAAA,CAAA,CAGF,wCAEE,iBAAA,CAGF,+DACE,UAAA,CACA,sEACE,cAAA","sourcesContent":["html.desktop-view {\n  @keyframes pulse {\n    0% {\n      transform: scale(1);\n    }\n    50% {\n      transform: scale(0.9);\n    }\n    100% {\n      transform: scale(1);\n    }\n  }\n\n  #saypi-talkButton {\n    /* not needed on desktop with call button */\n    display: none;\n  }\n\n  #saypi-callButton {\n    width: 2.25rem;\n    position: relative;\n    margin-right: 0;\n  }\n\n  .saypi-prompt-container {\n    /* make room in the prompt text area for the call button */\n    padding-right: 0;\n  }\n\n  .saypi-exit-button {\n    display: none;\n  }\n\n  @keyframes fadeIn {\n    from { opacity: 0; }\n    to { opacity: 1; }\n  }  \n\n  @keyframes fadeOut {\n    from { opacity: 1; }\n    to { opacity: 0; }\n  }\n\n  #saypi-audio-controls {\n    /* additional margin to align with control panel row */\n    margin-top: 0.35rem;\n  }\n\n  #saypi-side-panel .immersive-mode-button svg {\n    width: 30px;\n    .cls-1 {\n      stroke: #24381b;\n    }\n  }\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(0.9)}100%{transform:scale(1)}}html.desktop-view #saypi-talkButton{display:none}html.desktop-view #saypi-callButton{width:2.25rem;position:relative;margin-right:0}html.desktop-view .saypi-prompt-container{padding-right:0}html.desktop-view .saypi-exit-button{display:none}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes fadeOut{from{opacity:1}to{opacity:0}}html.desktop-view #saypi-audio-controls{margin-top:.35rem}html.desktop-view #saypi-side-panel .immersive-mode-button svg{width:30px}html.desktop-view #saypi-side-panel .immersive-mode-button svg .cls-1{stroke:#24381b}html.desktop-view .message-hover-menu{display:flex}html.desktop-view .message-hover-menu .w-fit.pt-4{margin-left:auto}html.desktop-view .message-hover-menu .saypi-tts-controls{display:flex}html.desktop-view .message-hover-menu .saypi-tts-controls .saypi-speak-button{padding:4px;border-radius:50%;overflow:hidden}html.desktop-view .message-hover-menu .saypi-tts-controls .saypi-cost,html.desktop-view .message-hover-menu .saypi-tts-controls .saypi-powered-by{display:flex;align-items:center;margin-left:8px}html.desktop-view .message-hover-menu .saypi-tts-controls svg,html.desktop-view .message-hover-menu .saypi-tts-controls img{width:24px;height:24px}html.desktop-view .message-hover-menu .saypi-tts-controls svg path.speaker,html.desktop-view .message-hover-menu .saypi-tts-controls img path.speaker{fill:#24381b}html.desktop-view .assistant-message .popup-menu .saypi-speak-button svg{width:24px;height:24px}`, "",{"version":3,"sources":["webpack://./src/styles/desktop.scss","webpack://./src/styles/messages.scss"],"names":[],"mappings":"AACE,iBACE,GACE,kBAAA,CAEF,IACE,oBAAA,CAEF,KACE,kBAAA,CAAA,CAIJ,oCAEE,YAAA,CAGF,oCACE,aAAA,CACA,iBAAA,CACA,cAAA,CAGF,0CAEE,eAAA,CAGF,qCACE,YAAA,CAGF,kBACE,KAAA,SAAA,CACA,GAAA,SAAA,CAAA,CAGF,mBACE,KAAA,SAAA,CACA,GAAA,SAAA,CAAA,CAGF,wCAEE,iBAAA,CAGF,+DACE,UAAA,CACA,sEACE,cAAA,CCnDN,sCACI,YAAA,CAGA,kDAEI,gBAAA,CAGJ,0DACI,YAAA,CACA,8EACI,WAAA,CACA,iBAAA,CACA,eAAA,CAEJ,kJACI,YAAA,CACA,kBAAA,CACA,eAAA,CAEJ,4HACI,UAAA,CACA,WAAA,CACA,sJACI,YAAA,CAMhB,yEACI,UAAA,CACA,WAAA","sourcesContent":["html.desktop-view {\n  @keyframes pulse {\n    0% {\n      transform: scale(1);\n    }\n    50% {\n      transform: scale(0.9);\n    }\n    100% {\n      transform: scale(1);\n    }\n  }\n\n  #saypi-talkButton {\n    /* not needed on desktop with call button */\n    display: none;\n  }\n\n  #saypi-callButton {\n    width: 2.25rem;\n    position: relative;\n    margin-right: 0;\n  }\n\n  .saypi-prompt-container {\n    /* make room in the prompt text area for the call button */\n    padding-right: 0;\n  }\n\n  .saypi-exit-button {\n    display: none;\n  }\n\n  @keyframes fadeIn {\n    from { opacity: 0; }\n    to { opacity: 1; }\n  }  \n\n  @keyframes fadeOut {\n    from { opacity: 1; }\n    to { opacity: 0; }\n  }\n\n  #saypi-audio-controls {\n    /* additional margin to align with control panel row */\n    margin-top: 0.35rem;\n  }\n\n  #saypi-side-panel .immersive-mode-button svg {\n    width: 30px;\n    .cls-1 {\n      stroke: #24381b;\n    }\n  }\n\n  @import \"messages.scss\";\n}\n",".message-hover-menu {\n    display: flex;\n\n    /* If you need specific styling for .create-thread-button, add it here */\n    .w-fit.pt-4 {\n        // position to the right of its siblings\n        margin-left: auto;\n    }\n    \n    .saypi-tts-controls {\n        display: flex;\n        .saypi-speak-button {\n            padding: 4px; /* brings the total height to 32px */\n            border-radius: 50%;\n            overflow: hidden;\n        }\n        .saypi-cost, .saypi-powered-by {\n            display: flex;\n            align-items: center; // center the text vertically\n            margin-left: 8px; // Adds some space between the controls\n        }\n        svg, img {\n            width: 24px;\n            height: 24px;\n            path.speaker {\n                fill: #24381b; // rgb(13 60 38) - Pi primary text color\n            }\n        }\n    }\n}\n\n.assistant-message .popup-menu .saypi-speak-button svg {\n    width: 24px;\n    height: 24px;\n}\n\n/*\n * these styles are for debugging purposes, to make it easier to see when messages are being detected\n *\n.assistant-message {\n    // give it a subtle green background color and border\n    background-color: #f0f9f4; // rgb(240 249 244) - Pi primary background color\n    border: 1px solid #d1f0e5; // rgb(209 240 229) - Pi secondary background color\n    border-radius: 8px;\n    padding: 0.8rem;\n}\n.assistant-message.speech-enabled {\n    border-color:#24381b;\n}\n.assistant-message .popup-menu {\n    background-color: #f0f9f4;\n}\n*/\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1494,23 +1494,23 @@ ___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse{0%{transform:scale(1)
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   Z: () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(537);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7537);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(645);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3645);
 /* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
 // Imports
 
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `html.immersive-view #saypi-panel,html.immersive-view .notification{width:100%;position:fixed;left:0;background-color:rgba(245,238,223,.98);height:100svh;top:0}html.immersive-view #saypi-talkButton{background-color:#e9f5da;border-radius:0;margin:0}html.immersive-view #saypi-talkButton svg{width:100vw;height:100svh;padding:12.5svh 0}html.immersive-view #__next>main>div>div>div.fixed.top-4.right-6>button,html.immersive-view #saypi-experiences-button{transform:scale(1.5)}html.immersive-view div.bg-gradient-to-b{display:none}html.immersive-view #saypi-audio-controls{margin-top:.375rem}html.immersive-view #saypi-audio-controls div.p-1{display:none}html.immersive-view #saypi-audio-controls button.group{transform:scale(1.5) !important;z-index:50}html.immersive-view #saypi-audio-controls button.group+button{display:none}html.immersive-view #saypi-audio-controls div.bg-neutral-200{background-color:rgba(0,0,0,0)}html.immersive-view .text-body-chat-m{padding-top:0}html.immersive-view .saypi-enter-button{display:none}html.immersive-view #saypi-prompt-ancestor{display:none}html.immersive-view #saypi-submitButton{display:none}html.immersive-view #saypi-callButton{position:fixed;bottom:4rem;left:0;right:0;margin:auto;width:4.5rem;height:4.5rem;border:0;z-index:80}html.immersive-view .scrollbar-gutter-both-edges{visibility:hidden}html.immersive-view .saypi-control-panel button:not(.saypi-control-button){display:none}html.immersive-view #saypi-control-panel-main.lg\\:hidden{display:block}html.immersive-view div.lg\\:flex-row-reverse{flex-direction:unset}html.immersive-view #saypi-side-panel.lg\\:flex{display:none}html.immersive-view .saypi-control-panel button.theme-toggle-button{width:4rem;padding:6px}html.immersive-view #saypi-discovery-panel{display:none}html.immersive-view body.dark #saypi-talkButton{background-color:#bac5cc;opacity:1}html.immersive-view body.dark .call-button path.circle{fill:#107782}html.immersive-view body.dark .outermost.piThinking{--original-color: #a9b7bf;--thinking-color: #ffe4b2;animation:thinkingFlip 1s ease-in-out}html.immersive-view body.dark .second.piThinking{--original-color: #8f9ca7;--thinking-color: #ffddb4;animation:thinkingFlip 1.1s ease-in-out}html.immersive-view body.dark .third.piThinking{--original-color: #787d83;--thinking-color: #ffd5b7;animation:thinkingFlip 1.2s ease-in-out}html.immersive-view body.dark .fourth.piThinking{--original-color: #6c7378;--thinking-color: #ffcdca;animation:thinkingFlip 1.3s ease-in-out}html.immersive-view body.dark .fifth.piThinking{--original-color: #313437;--thinking-color: #ffc5dc;animation:thinkingFlip 1.4s ease-in-out}html.immersive-view body.dark .innermost.piThinking{--original-color: #1c1c1c;--thinking-color: #ffbde6;animation:thinkingFlip 1.5s ease-in-out}html.immersive-view body.dark .locked #saypi-touch-absorber{background-color:rgba(0,0,0,.75)}html.immersive-view body.dark .locked #saypi-locked-text{color:#fff}html.immersive-view:not(.mobile-device) body.focus button{opacity:0;transition:opacity .5s ease-out}html.immersive-view.mobile-device .lock-button{width:3rem;height:3rem;padding:6px;margin-left:.5rem;border:0;z-index:60}html.immersive-view.mobile-device .lock-button svg path.inner{color:#0d3c26}html.immersive-view.mobile-device #saypi-lock-panel{display:unset;background-color:rgba(0,0,0,0);border-radius:0;margin:0}html.immersive-view.mobile-device .unlocked #saypi-lockButton{display:inline-block !important}html.immersive-view.mobile-device .locked #saypi-lockButton{display:none !important}html.immersive-view.mobile-device .unlocked #saypi-unlockButton{display:none !important}html.immersive-view.mobile-device .locked #saypi-unlockButton{display:inline-block !important;position:relative;z-index:101 !important}html.immersive-view.mobile-device .locked #saypi-touch-absorber{display:block !important;position:fixed;top:0;left:0;opacity:.5;background-color:rgba(245,238,223,.75);width:100vw;height:100svh;z-index:100}@keyframes fadeIn{from{opacity:0}to{opacity:1}}html.immersive-view.mobile-device #saypi-locked-text{display:none}html.immersive-view.mobile-device .locked #saypi-locked-text{display:block !important;position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);width:80%;height:1rem;animation-name:fadeIn;animation-duration:2s;animation-fill-mode:forwards;text-align:center;font-size:xx-large;font-family:"Roboto","Open Sans","Lato","Source Sans Pro","Noto Sans",Arial,sans-serif}html.immersive-view.mobile-device .locked #saypi-locked-text .subtext{display:block;font-size:large}`, "",{"version":3,"sources":["webpack://./src/styles/mobile.scss","webpack://./src/styles/dark-mode.scss","webpack://./src/styles/focus-mode.scss","webpack://./src/styles/lock.scss"],"names":[],"mappings":"AACE,mEAEE,UAAA,CACA,cAAA,CACA,MAAA,CACA,sCAAA,CAEA,aAAA,CACA,KAAA,CAGF,sCACE,wBAAA,CACA,eAAA,CACA,QAAA,CACA,0CACE,WAAA,CACA,aAAA,CACA,iBAAA,CAKJ,sHAEE,oBAAA,CAIF,yCACE,YAAA,CAIF,0CAEE,kBAAA,CAEA,kDACE,YAAA,CAGF,uDACE,+BAAA,CACA,UAAA,CAEA,8DACE,YAAA,CAIJ,6DACE,8BAAA,CAKJ,sCACE,aAAA,CAGF,wCACE,YAAA,CAGF,2CAGE,YAAA,CAIF,wCACE,YAAA,CAGF,sCACE,cAAA,CACA,WAAA,CACA,MAAA,CACA,OAAA,CACA,WAAA,CACA,YAAA,CACA,aAAA,CACA,QAAA,CACA,UAAA,CAIF,iDACE,iBAAA,CAIF,2EACE,YAAA,CAIF,yDACE,aAAA,CAGF,6CACE,oBAAA,CAGF,+CACE,YAAA,CAGF,oEACE,UAAA,CACA,WAAA,CAGF,2CACE,YAAA,CCrHA,gDACI,wBAAA,CACA,SAAA,CAEJ,uDACI,YAAA,CAIJ,oDACI,yBAAA,CACA,yBAAA,CACA,qCAAA,CAGF,iDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,gDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,iDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,gDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,oDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAKA,4DACE,gCAAA,CAEF,yDACE,UAAA,CCpDV,0DACI,SAAA,CACA,+BAAA,CCDJ,+CACI,UAAA,CACA,WAAA,CACA,WAAA,CACA,iBAAA,CACA,QAAA,CACA,UAAA,CACA,8DACE,aAAA,CAIJ,oDAEE,aAAA,CACA,8BAAA,CACA,eAAA,CACA,QAAA,CAGF,8DACE,+BAAA,CAEF,4DACE,uBAAA,CAGF,gEACE,uBAAA,CAEF,8DACE,+BAAA,CACA,iBAAA,CACA,sBAAA,CAGF,gEACE,wBAAA,CACA,cAAA,CACA,KAAA,CACA,MAAA,CACA,UAAA,CAEA,sCAAA,CACA,WAAA,CACA,aAAA,CACA,WAAA,CAGF,kBACE,KAAA,SAAA,CACA,GAAA,SAAA,CAAA,CAGF,qDACE,YAAA,CAEF,6DACE,wBAAA,CACA,cAAA,CACA,OAAA,CACA,QAAA,CACA,+BAAA,CACA,SAAA,CACA,WAAA,CAEA,qBAAA,CACA,qBAAA,CACA,4BAAA,CACA,iBAAA,CACA,kBAAA,CACA,sFAAA,CACA,sEACE,aAAA,CACA,eAAA","sourcesContent":["html.immersive-view {\n  #saypi-panel,\n  .notification {\n    width: 100%;\n    position: fixed;\n    left: 0;\n    background-color: rgba(245, 238, 223, 0.98);\n\n    height: 100svh;\n    top: 0;\n  }\n\n  #saypi-talkButton {\n    background-color: #e9f5da;\n    border-radius: 0;\n    margin: 0;\n    svg {\n      width: 100vw;\n      height: 100svh;\n      padding: 12.5svh 0;\n    }\n  }\n\n  /* Pi controls: ellipsis, experiences */\n  #__next > main > div > div > div.fixed.top-4.right-6 > button,\n  #saypi-experiences-button {\n    transform: scale(1.5);\n  }\n\n  /* hide an ugly artifact */\n  div.bg-gradient-to-b {\n    display: none;\n  }\n\n  /* Pi controls: mute/unmute */\n  #saypi-audio-controls {\n    /* align the mute button with the horizontal control panel */\n    margin-top: 0.375rem;\n    /* hide the voice options */\n    div.p-1 {\n      display: none;\n    }\n    /* scale the mute button */\n    button.group {\n      transform: scale(1.5) !important;\n      z-index: 50;\n      /* hide the voice selector twisty */\n      + button {\n        display: none;\n      }\n    }\n    /* make an ugly artifact transparent on pi.ai */\n    div.bg-neutral-200 {\n      background-color: transparent;\n    }\n  }\n\n  /* fix an alignment issue with the \"new ui layout\" */\n  .text-body-chat-m {\n    padding-top: 0;\n  }\n\n  .saypi-enter-button {\n    display: none;\n  }\n\n  #saypi-prompt-ancestor {\n    /* hides the row containing the text area control */\n    /* important: hides virtual keyboard on android */\n    display: none;\n    /* the call button, usually nested in the prompt, is detached while in mobile view */\n  }\n\n  #saypi-submitButton {\n    display: none;\n  }\n\n  #saypi-callButton {\n    position: fixed;\n    bottom: 4rem;\n    left: 0;\n    right: 0;\n    margin: auto;\n    width: 4.5rem;\n    height: 4.5rem;\n    border: 0;\n    z-index: 80;\n  }\n\n  /* hide the scrollbar */\n  .scrollbar-gutter-both-edges {\n    visibility: hidden;\n  }\n\n  /* hide any buttons in the control panel not relevant to mobile */\n  .saypi-control-panel button:not(.saypi-control-button) {\n    display: none;\n  }\n\n  /* override lg:hidden, making the control panel's buttons visible in immersive view on desktops */\n  #saypi-control-panel-main.lg\\:hidden {\n    display: block;\n  }\n  /* override lg:flex-row-reverse, making the audio control button visible in immersive view on desktops */\n  div.lg\\:flex-row-reverse {\n    flex-direction: unset;\n  }\n  /* hide the side panel in immersive mode */\n  #saypi-side-panel.lg\\:flex {\n    display: none;\n  }\n  \n  .saypi-control-panel button.theme-toggle-button {\n    width: 4rem;\n    padding: 6px;\n  }\n\n  #saypi-discovery-panel {\n    display: none;\n  }\n\n}\n@import \"dark-mode.scss\";\n@import \"focus-mode.scss\";\n@import \"lock.scss\";\n","html.immersive-view body.dark {\n    #saypi-talkButton {\n        background-color: #bac5cc;\n        opacity: 1;\n    }\n    .call-button path.circle {\n        fill: #107782;\n    }\n\n    /* The following styles are for the card flip animation in rectangles.css */\n    .outermost.piThinking {\n        --original-color: #a9b7bf;\n        --thinking-color: #ffe4b2; /* A light orange for a soft but noticeable transition */\n        animation: thinkingFlip 1.0s ease-in-out;\n      }\n      \n      .second.piThinking {\n        --original-color: #8f9ca7;\n        --thinking-color: #ffddb4; /* A slightly different shade of light orange */\n        animation: thinkingFlip 1.1s ease-in-out;\n      }\n      \n      .third.piThinking {\n        --original-color: #787d83;\n        --thinking-color: #ffd5b7; /* A subtly warmer shade of light orange */\n        animation: thinkingFlip 1.2s ease-in-out;\n      }\n      \n      .fourth.piThinking {\n        --original-color: #6c7378;\n        --thinking-color: #ffcdca; /* A variation leaning towards pink */\n        animation: thinkingFlip 1.3s ease-in-out;\n      }\n      \n      .fifth.piThinking {\n        --original-color: #313437;\n        --thinking-color: #ffc5dc; /* A soft pink for contrast */\n        animation: thinkingFlip 1.4s ease-in-out;\n      }\n      \n      .innermost.piThinking {\n        --original-color: #1c1c1c;\n        --thinking-color: #ffbde6; /* A distinct light magenta */\n        animation: thinkingFlip 1.5s ease-in-out;\n      }\n      \n      /* even darker theme when locked */\n      .locked {\n        #saypi-touch-absorber {\n          background-color: rgba(0, 0, 0, 0.75);\n        }\n        #saypi-locked-text {\n          color: white;\n        }\n      }\n}\n","html.immersive-view:not(.mobile-device) body.focus button {\n    opacity: 0; \n    transition: opacity 0.5s ease-out;\n}","html.immersive-view.mobile-device {\n.lock-button {\n    width: 3rem;\n    height: 3rem;\n    padding: 6px;\n    margin-left: 0.5rem;\n    border: 0;\n    z-index: 60;\n    svg path.inner {\n      color: rgb(13 60 38); /* text-primary-700 */\n    }\n  }\n\n  #saypi-lock-panel {\n    /* unlocked by default */\n    display: unset;\n    background-color: transparent;\n    border-radius: 0;\n    margin: 0;\n  }\n\n  .unlocked #saypi-lockButton {\n    display: inline-block !important; // show the lock button when screen is unlocked\n  }\n  .locked #saypi-lockButton {\n    display: none !important; // hide the lock button when screen is locked\n  }\n\n  .unlocked #saypi-unlockButton {\n    display: none !important; // hide the unlock button when screen is unlocked\n  }\n  .locked #saypi-unlockButton {\n    display: inline-block !important; // show the unlock button when screen is unlocked\n    position: relative; // position (but don't move) the unlock button so that z-index works while locked\n    z-index: 101 !important; // above the touch absorber\n  }\n\n  .locked #saypi-touch-absorber {\n    display: block !important; // show the touch absorber when screen is locked\n    position: fixed;\n    top: 0;\n    left: 0;\n    opacity: 0.5;\n    /* semi-transparent background */\n    background-color: rgba(245, 238, 223, 0.75);\n    width: 100vw;\n    height: 100svh;\n    z-index: 100;\n  }\n\n  @keyframes fadeIn {\n    from { opacity: 0; }\n    to { opacity: 1; }\n  }  \n\n  #saypi-locked-text {\n    display: none; // hide the locked text when screen is unlocked\n  }\n  .locked #saypi-locked-text {\n    display: block !important; // show the locked text when screen is locked\n    position: fixed;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    width: 80%;\n    height: 1rem;\n    /* text */\n    animation-name: fadeIn;\n    animation-duration: 2s;\n    animation-fill-mode: forwards;\n    text-align: center;\n    font-size: xx-large;\n    font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;\n    .subtext {\n      display: block;\n      font-size: large;\n    }\n  }\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `html.immersive-view #saypi-panel,html.immersive-view .notification{width:100%;position:fixed;left:0;background-color:rgba(245,238,223,.98);height:100svh;top:0}html.immersive-view #saypi-talkButton{background-color:#e9f5da;border-radius:0;margin:0}html.immersive-view #saypi-talkButton svg{width:100vw;height:100svh;padding:12.5svh 0}html.immersive-view #__next>main>div>div>div.fixed.top-4.right-6>button,html.immersive-view #saypi-experiences-button{transform:scale(1.5)}html.immersive-view div.bg-gradient-to-b{display:none}html.immersive-view #saypi-audio-controls{margin-top:.375rem}html.immersive-view #saypi-audio-controls div.p-1{display:none}html.immersive-view #saypi-audio-controls button.group{transform:scale(1.5) !important;z-index:50}html.immersive-view #saypi-audio-controls button.group+button{display:none}html.immersive-view #saypi-audio-controls div.bg-neutral-200{background-color:rgba(0,0,0,0)}html.immersive-view .text-body-chat-m{padding-top:0}html.immersive-view .saypi-enter-button{display:none}html.immersive-view #saypi-prompt-ancestor{display:none}html.immersive-view #saypi-submitButton{display:none}html.immersive-view #saypi-callButton{position:fixed;bottom:4rem;left:0;right:0;margin:auto;width:4.5rem;height:4.5rem;border:0;z-index:80}html.immersive-view .scrollbar-gutter-both-edges{visibility:hidden}html.immersive-view .saypi-control-panel button:not(.saypi-control-button){display:none}html.immersive-view #saypi-control-panel-main.lg\\:hidden{display:block}html.immersive-view div.lg\\:flex-row-reverse{flex-direction:unset}html.immersive-view #saypi-side-panel.lg\\:flex{display:none}html.immersive-view .saypi-control-panel button.theme-toggle-button{width:4rem;padding:6px}html.immersive-view #saypi-discovery-panel{display:none}html.mobile-device .chat-message .message-hover-menu .saypi-tts-controls{display:none}html.immersive-view body.dark #saypi-talkButton{background-color:#bac5cc;opacity:1}html.immersive-view body.dark .call-button path.circle{fill:#107782}html.immersive-view body.dark .outermost.piThinking{--original-color: #a9b7bf;--thinking-color: #ffe4b2;animation:thinkingFlip 1s ease-in-out}html.immersive-view body.dark .second.piThinking{--original-color: #8f9ca7;--thinking-color: #ffddb4;animation:thinkingFlip 1.1s ease-in-out}html.immersive-view body.dark .third.piThinking{--original-color: #787d83;--thinking-color: #ffd5b7;animation:thinkingFlip 1.2s ease-in-out}html.immersive-view body.dark .fourth.piThinking{--original-color: #6c7378;--thinking-color: #ffcdca;animation:thinkingFlip 1.3s ease-in-out}html.immersive-view body.dark .fifth.piThinking{--original-color: #313437;--thinking-color: #ffc5dc;animation:thinkingFlip 1.4s ease-in-out}html.immersive-view body.dark .innermost.piThinking{--original-color: #1c1c1c;--thinking-color: #ffbde6;animation:thinkingFlip 1.5s ease-in-out}html.immersive-view body.dark .locked #saypi-touch-absorber{background-color:rgba(0,0,0,.75)}html.immersive-view body.dark .locked #saypi-locked-text{color:#fff}html.immersive-view:not(.mobile-device) body.focus button{opacity:0;transition:opacity .5s ease-out}html.immersive-view.mobile-device .lock-button{width:3rem;height:3rem;padding:6px;margin-left:.5rem;border:0;z-index:60}html.immersive-view.mobile-device .lock-button svg path.inner{color:#0d3c26}html.immersive-view.mobile-device #saypi-lock-panel{display:unset;background-color:rgba(0,0,0,0);border-radius:0;margin:0}html.immersive-view.mobile-device .unlocked #saypi-lockButton{display:inline-block !important}html.immersive-view.mobile-device .locked #saypi-lockButton{display:none !important}html.immersive-view.mobile-device .unlocked #saypi-unlockButton{display:none !important}html.immersive-view.mobile-device .locked #saypi-unlockButton{display:inline-block !important;position:relative;z-index:101 !important}html.immersive-view.mobile-device .locked #saypi-touch-absorber{display:block !important;position:fixed;top:0;left:0;opacity:.5;background-color:rgba(245,238,223,.75);width:100vw;height:100svh;z-index:100}@keyframes fadeIn{from{opacity:0}to{opacity:1}}html.immersive-view.mobile-device #saypi-locked-text{display:none}html.immersive-view.mobile-device .locked #saypi-locked-text{display:block !important;position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);width:80%;height:1rem;animation-name:fadeIn;animation-duration:2s;animation-fill-mode:forwards;text-align:center;font-size:xx-large;font-family:"Roboto","Open Sans","Lato","Source Sans Pro","Noto Sans",Arial,sans-serif}html.immersive-view.mobile-device .locked #saypi-locked-text .subtext{display:block;font-size:large}`, "",{"version":3,"sources":["webpack://./src/styles/mobile.scss","webpack://./src/styles/dark-mode.scss","webpack://./src/styles/focus-mode.scss","webpack://./src/styles/lock.scss"],"names":[],"mappings":"AACE,mEAEE,UAAA,CACA,cAAA,CACA,MAAA,CACA,sCAAA,CAEA,aAAA,CACA,KAAA,CAGF,sCACE,wBAAA,CACA,eAAA,CACA,QAAA,CACA,0CACE,WAAA,CACA,aAAA,CACA,iBAAA,CAKJ,sHAEE,oBAAA,CAIF,yCACE,YAAA,CAIF,0CAEE,kBAAA,CAEA,kDACE,YAAA,CAGF,uDACE,+BAAA,CACA,UAAA,CAEA,8DACE,YAAA,CAIJ,6DACE,8BAAA,CAKJ,sCACE,aAAA,CAGF,wCACE,YAAA,CAGF,2CAGE,YAAA,CAIF,wCACE,YAAA,CAGF,sCACE,cAAA,CACA,WAAA,CACA,MAAA,CACA,OAAA,CACA,WAAA,CACA,YAAA,CACA,aAAA,CACA,QAAA,CACA,UAAA,CAIF,iDACE,iBAAA,CAIF,2EACE,YAAA,CAIF,yDACE,aAAA,CAGF,6CACE,oBAAA,CAGF,+CACE,YAAA,CAGF,oEACE,UAAA,CACA,WAAA,CAGF,2CACE,YAAA,CAIJ,yEAEE,YAAA,CC3HE,gDACI,wBAAA,CACA,SAAA,CAEJ,uDACI,YAAA,CAIJ,oDACI,yBAAA,CACA,yBAAA,CACA,qCAAA,CAGF,iDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,gDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,iDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,gDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,oDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAKA,4DACE,gCAAA,CAEF,yDACE,UAAA,CCpDV,0DACI,SAAA,CACA,+BAAA,CCDJ,+CACI,UAAA,CACA,WAAA,CACA,WAAA,CACA,iBAAA,CACA,QAAA,CACA,UAAA,CACA,8DACE,aAAA,CAIJ,oDAEE,aAAA,CACA,8BAAA,CACA,eAAA,CACA,QAAA,CAGF,8DACE,+BAAA,CAEF,4DACE,uBAAA,CAGF,gEACE,uBAAA,CAEF,8DACE,+BAAA,CACA,iBAAA,CACA,sBAAA,CAGF,gEACE,wBAAA,CACA,cAAA,CACA,KAAA,CACA,MAAA,CACA,UAAA,CAEA,sCAAA,CACA,WAAA,CACA,aAAA,CACA,WAAA,CAGF,kBACE,KAAA,SAAA,CACA,GAAA,SAAA,CAAA,CAGF,qDACE,YAAA,CAEF,6DACE,wBAAA,CACA,cAAA,CACA,OAAA,CACA,QAAA,CACA,+BAAA,CACA,SAAA,CACA,WAAA,CAEA,qBAAA,CACA,qBAAA,CACA,4BAAA,CACA,iBAAA,CACA,kBAAA,CACA,sFAAA,CACA,sEACE,aAAA,CACA,eAAA","sourcesContent":["html.immersive-view {\n  #saypi-panel,\n  .notification {\n    width: 100%;\n    position: fixed;\n    left: 0;\n    background-color: rgba(245, 238, 223, 0.98);\n\n    height: 100svh;\n    top: 0;\n  }\n\n  #saypi-talkButton {\n    background-color: #e9f5da;\n    border-radius: 0;\n    margin: 0;\n    svg {\n      width: 100vw;\n      height: 100svh;\n      padding: 12.5svh 0;\n    }\n  }\n\n  /* Pi controls: ellipsis, experiences */\n  #__next > main > div > div > div.fixed.top-4.right-6 > button,\n  #saypi-experiences-button {\n    transform: scale(1.5);\n  }\n\n  /* hide an ugly artifact */\n  div.bg-gradient-to-b {\n    display: none;\n  }\n\n  /* Pi controls: mute/unmute */\n  #saypi-audio-controls {\n    /* align the mute button with the horizontal control panel */\n    margin-top: 0.375rem;\n    /* hide the voice options */\n    div.p-1 {\n      display: none;\n    }\n    /* scale the mute button */\n    button.group {\n      transform: scale(1.5) !important;\n      z-index: 50;\n      /* hide the voice selector twisty */\n      + button {\n        display: none;\n      }\n    }\n    /* make an ugly artifact transparent on pi.ai */\n    div.bg-neutral-200 {\n      background-color: transparent;\n    }\n  }\n\n  /* fix an alignment issue with the \"new ui layout\" */\n  .text-body-chat-m {\n    padding-top: 0;\n  }\n\n  .saypi-enter-button {\n    display: none;\n  }\n\n  #saypi-prompt-ancestor {\n    /* hides the row containing the text area control */\n    /* important: hides virtual keyboard on android */\n    display: none;\n    /* the call button, usually nested in the prompt, is detached while in mobile view */\n  }\n\n  #saypi-submitButton {\n    display: none;\n  }\n\n  #saypi-callButton {\n    position: fixed;\n    bottom: 4rem;\n    left: 0;\n    right: 0;\n    margin: auto;\n    width: 4.5rem;\n    height: 4.5rem;\n    border: 0;\n    z-index: 80;\n  }\n\n  /* hide the scrollbar */\n  .scrollbar-gutter-both-edges {\n    visibility: hidden;\n  }\n\n  /* hide any buttons in the control panel not relevant to mobile */\n  .saypi-control-panel button:not(.saypi-control-button) {\n    display: none;\n  }\n\n  /* override lg:hidden, making the control panel's buttons visible in immersive view on desktops */\n  #saypi-control-panel-main.lg\\:hidden {\n    display: block;\n  }\n  /* override lg:flex-row-reverse, making the audio control button visible in immersive view on desktops */\n  div.lg\\:flex-row-reverse {\n    flex-direction: unset;\n  }\n  /* hide the side panel in immersive mode */\n  #saypi-side-panel.lg\\:flex {\n    display: none;\n  }\n  \n  .saypi-control-panel button.theme-toggle-button {\n    width: 4rem;\n    padding: 6px;\n  }\n\n  #saypi-discovery-panel {\n    display: none;\n  }\n\n}\nhtml.mobile-device .chat-message .message-hover-menu .saypi-tts-controls {\n  /* on mobile, tts controls are in a popup menu instead */\n  display: none;\n}\n@import \"dark-mode.scss\";\n@import \"focus-mode.scss\";\n@import \"lock.scss\";\n","html.immersive-view body.dark {\n    #saypi-talkButton {\n        background-color: #bac5cc;\n        opacity: 1;\n    }\n    .call-button path.circle {\n        fill: #107782;\n    }\n\n    /* The following styles are for the card flip animation in rectangles.css */\n    .outermost.piThinking {\n        --original-color: #a9b7bf;\n        --thinking-color: #ffe4b2; /* A light orange for a soft but noticeable transition */\n        animation: thinkingFlip 1.0s ease-in-out;\n      }\n      \n      .second.piThinking {\n        --original-color: #8f9ca7;\n        --thinking-color: #ffddb4; /* A slightly different shade of light orange */\n        animation: thinkingFlip 1.1s ease-in-out;\n      }\n      \n      .third.piThinking {\n        --original-color: #787d83;\n        --thinking-color: #ffd5b7; /* A subtly warmer shade of light orange */\n        animation: thinkingFlip 1.2s ease-in-out;\n      }\n      \n      .fourth.piThinking {\n        --original-color: #6c7378;\n        --thinking-color: #ffcdca; /* A variation leaning towards pink */\n        animation: thinkingFlip 1.3s ease-in-out;\n      }\n      \n      .fifth.piThinking {\n        --original-color: #313437;\n        --thinking-color: #ffc5dc; /* A soft pink for contrast */\n        animation: thinkingFlip 1.4s ease-in-out;\n      }\n      \n      .innermost.piThinking {\n        --original-color: #1c1c1c;\n        --thinking-color: #ffbde6; /* A distinct light magenta */\n        animation: thinkingFlip 1.5s ease-in-out;\n      }\n      \n      /* even darker theme when locked */\n      .locked {\n        #saypi-touch-absorber {\n          background-color: rgba(0, 0, 0, 0.75);\n        }\n        #saypi-locked-text {\n          color: white;\n        }\n      }\n}\n","html.immersive-view:not(.mobile-device) body.focus button {\n    opacity: 0; \n    transition: opacity 0.5s ease-out;\n}","html.immersive-view.mobile-device {\n.lock-button {\n    width: 3rem;\n    height: 3rem;\n    padding: 6px;\n    margin-left: 0.5rem;\n    border: 0;\n    z-index: 60;\n    svg path.inner {\n      color: rgb(13 60 38); /* text-primary-700 */\n    }\n  }\n\n  #saypi-lock-panel {\n    /* unlocked by default */\n    display: unset;\n    background-color: transparent;\n    border-radius: 0;\n    margin: 0;\n  }\n\n  .unlocked #saypi-lockButton {\n    display: inline-block !important; // show the lock button when screen is unlocked\n  }\n  .locked #saypi-lockButton {\n    display: none !important; // hide the lock button when screen is locked\n  }\n\n  .unlocked #saypi-unlockButton {\n    display: none !important; // hide the unlock button when screen is unlocked\n  }\n  .locked #saypi-unlockButton {\n    display: inline-block !important; // show the unlock button when screen is unlocked\n    position: relative; // position (but don't move) the unlock button so that z-index works while locked\n    z-index: 101 !important; // above the touch absorber\n  }\n\n  .locked #saypi-touch-absorber {\n    display: block !important; // show the touch absorber when screen is locked\n    position: fixed;\n    top: 0;\n    left: 0;\n    opacity: 0.5;\n    /* semi-transparent background */\n    background-color: rgba(245, 238, 223, 0.75);\n    width: 100vw;\n    height: 100svh;\n    z-index: 100;\n  }\n\n  @keyframes fadeIn {\n    from { opacity: 0; }\n    to { opacity: 1; }\n  }  \n\n  #saypi-locked-text {\n    display: none; // hide the locked text when screen is unlocked\n  }\n  .locked #saypi-locked-text {\n    display: block !important; // show the locked text when screen is locked\n    position: fixed;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    width: 80%;\n    height: 1rem;\n    /* text */\n    animation-name: fadeIn;\n    animation-duration: 2s;\n    animation-fill-mode: forwards;\n    text-align: center;\n    font-size: xx-large;\n    font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;\n    .subtext {\n      display: block;\n      font-size: large;\n    }\n  }\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
 
 /***/ }),
 
-/***/ 645:
+/***/ 3645:
 /***/ ((module) => {
 
 "use strict";
@@ -1602,7 +1602,7 @@ module.exports = function (cssWithMappingToString) {
 
 /***/ }),
 
-/***/ 537:
+/***/ 7537:
 /***/ ((module) => {
 
 "use strict";
@@ -1625,7 +1625,7 @@ module.exports = function (item) {
 
 /***/ }),
 
-/***/ 187:
+/***/ 7187:
 /***/ ((module) => {
 
 "use strict";
@@ -2130,7 +2130,891 @@ function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
 
 /***/ }),
 
-/***/ 486:
+/***/ 8495:
+/***/ ((module, exports, __webpack_require__) => {
+
+var __WEBPACK_AMD_DEFINE_RESULT__;/**
+ * [js-md5]{@link https://github.com/emn178/js-md5}
+ *
+ * @namespace md5
+ * @version 0.8.3
+ * @author Chen, Yi-Cyuan [emn178@gmail.com]
+ * @copyright Chen, Yi-Cyuan 2014-2023
+ * @license MIT
+ */
+(function () {
+  'use strict';
+
+  var INPUT_ERROR = 'input is invalid type';
+  var FINALIZE_ERROR = 'finalize already called';
+  var WINDOW = typeof window === 'object';
+  var root = WINDOW ? window : {};
+  if (root.JS_MD5_NO_WINDOW) {
+    WINDOW = false;
+  }
+  var WEB_WORKER = !WINDOW && typeof self === 'object';
+  var NODE_JS = !root.JS_MD5_NO_NODE_JS && typeof process === 'object' && process.versions && process.versions.node;
+  if (NODE_JS) {
+    root = __webpack_require__.g;
+  } else if (WEB_WORKER) {
+    root = self;
+  }
+  var COMMON_JS = !root.JS_MD5_NO_COMMON_JS && "object" === 'object' && module.exports;
+  var AMD =  true && __webpack_require__.amdO;
+  var ARRAY_BUFFER = !root.JS_MD5_NO_ARRAY_BUFFER && typeof ArrayBuffer !== 'undefined';
+  var HEX_CHARS = '0123456789abcdef'.split('');
+  var EXTRA = [128, 32768, 8388608, -2147483648];
+  var SHIFT = [0, 8, 16, 24];
+  var OUTPUT_TYPES = ['hex', 'array', 'digest', 'buffer', 'arrayBuffer', 'base64'];
+  var BASE64_ENCODE_CHAR = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'.split('');
+
+  var blocks = [], buffer8;
+  if (ARRAY_BUFFER) {
+    var buffer = new ArrayBuffer(68);
+    buffer8 = new Uint8Array(buffer);
+    blocks = new Uint32Array(buffer);
+  }
+
+  var isArray = Array.isArray;
+  if (root.JS_MD5_NO_NODE_JS || !isArray) {
+    isArray = function (obj) {
+      return Object.prototype.toString.call(obj) === '[object Array]';
+    };
+  }
+
+  var isView = ArrayBuffer.isView;
+  if (ARRAY_BUFFER && (root.JS_MD5_NO_ARRAY_BUFFER_IS_VIEW || !isView)) {
+    isView = function (obj) {
+      return typeof obj === 'object' && obj.buffer && obj.buffer.constructor === ArrayBuffer;
+    };
+  }
+
+  // [message: string, isString: bool]
+  var formatMessage = function (message) {
+    var type = typeof message;
+    if (type === 'string') {
+      return [message, true];
+    }
+    if (type !== 'object' || message === null) {
+      throw new Error(INPUT_ERROR);
+    }
+    if (ARRAY_BUFFER && message.constructor === ArrayBuffer) {
+      return [new Uint8Array(message), false];
+    }
+    if (!isArray(message) && !isView(message)) {
+      throw new Error(INPUT_ERROR);
+    }
+    return [message, false];
+  }
+
+  /**
+   * @method hex
+   * @memberof md5
+   * @description Output hash as hex string
+   * @param {String|Array|Uint8Array|ArrayBuffer} message message to hash
+   * @returns {String} Hex string
+   * @example
+   * md5.hex('The quick brown fox jumps over the lazy dog');
+   * // equal to
+   * md5('The quick brown fox jumps over the lazy dog');
+   */
+  /**
+   * @method digest
+   * @memberof md5
+   * @description Output hash as bytes array
+   * @param {String|Array|Uint8Array|ArrayBuffer} message message to hash
+   * @returns {Array} Bytes array
+   * @example
+   * md5.digest('The quick brown fox jumps over the lazy dog');
+   */
+  /**
+   * @method array
+   * @memberof md5
+   * @description Output hash as bytes array
+   * @param {String|Array|Uint8Array|ArrayBuffer} message message to hash
+   * @returns {Array} Bytes array
+   * @example
+   * md5.array('The quick brown fox jumps over the lazy dog');
+   */
+  /**
+   * @method arrayBuffer
+   * @memberof md5
+   * @description Output hash as ArrayBuffer
+   * @param {String|Array|Uint8Array|ArrayBuffer} message message to hash
+   * @returns {ArrayBuffer} ArrayBuffer
+   * @example
+   * md5.arrayBuffer('The quick brown fox jumps over the lazy dog');
+   */
+  /**
+   * @method buffer
+   * @deprecated This maybe confuse with Buffer in node.js. Please use arrayBuffer instead.
+   * @memberof md5
+   * @description Output hash as ArrayBuffer
+   * @param {String|Array|Uint8Array|ArrayBuffer} message message to hash
+   * @returns {ArrayBuffer} ArrayBuffer
+   * @example
+   * md5.buffer('The quick brown fox jumps over the lazy dog');
+   */
+  /**
+   * @method base64
+   * @memberof md5
+   * @description Output hash as base64 string
+   * @param {String|Array|Uint8Array|ArrayBuffer} message message to hash
+   * @returns {String} base64 string
+   * @example
+   * md5.base64('The quick brown fox jumps over the lazy dog');
+   */
+  var createOutputMethod = function (outputType) {
+    return function (message) {
+      return new Md5(true).update(message)[outputType]();
+    };
+  };
+
+  /**
+   * @method create
+   * @memberof md5
+   * @description Create Md5 object
+   * @returns {Md5} Md5 object.
+   * @example
+   * var hash = md5.create();
+   */
+  /**
+   * @method update
+   * @memberof md5
+   * @description Create and update Md5 object
+   * @param {String|Array|Uint8Array|ArrayBuffer} message message to hash
+   * @returns {Md5} Md5 object.
+   * @example
+   * var hash = md5.update('The quick brown fox jumps over the lazy dog');
+   * // equal to
+   * var hash = md5.create();
+   * hash.update('The quick brown fox jumps over the lazy dog');
+   */
+  var createMethod = function () {
+    var method = createOutputMethod('hex');
+    if (NODE_JS) {
+      method = nodeWrap(method);
+    }
+    method.create = function () {
+      return new Md5();
+    };
+    method.update = function (message) {
+      return method.create().update(message);
+    };
+    for (var i = 0; i < OUTPUT_TYPES.length; ++i) {
+      var type = OUTPUT_TYPES[i];
+      method[type] = createOutputMethod(type);
+    }
+    return method;
+  };
+
+  var nodeWrap = function (method) {
+    var crypto = __webpack_require__(5381)
+    var Buffer = (__webpack_require__(6424).Buffer);
+    var bufferFrom;
+    if (Buffer.from && !root.JS_MD5_NO_BUFFER_FROM) {
+      bufferFrom = Buffer.from;
+    } else {
+      bufferFrom = function (message) {
+        return new Buffer(message);
+      };
+    }
+    var nodeMethod = function (message) {
+      if (typeof message === 'string') {
+        return crypto.createHash('md5').update(message, 'utf8').digest('hex');
+      } else {
+        if (message === null || message === undefined) {
+          throw new Error(INPUT_ERROR);
+        } else if (message.constructor === ArrayBuffer) {
+          message = new Uint8Array(message);
+        }
+      }
+      if (isArray(message) || isView(message) ||
+        message.constructor === Buffer) {
+        return crypto.createHash('md5').update(bufferFrom(message)).digest('hex');
+      } else {
+        return method(message);
+      }
+    };
+    return nodeMethod;
+  };
+
+  /**
+   * @namespace md5.hmac
+   */
+  /**
+   * @method hex
+   * @memberof md5.hmac
+   * @description Output hash as hex string
+   * @param {String|Array|Uint8Array|ArrayBuffer} key key
+   * @param {String|Array|Uint8Array|ArrayBuffer} message message to hash
+   * @returns {String} Hex string
+   * @example
+   * md5.hmac.hex('key', 'The quick brown fox jumps over the lazy dog');
+   * // equal to
+   * md5.hmac('key', 'The quick brown fox jumps over the lazy dog');
+   */
+
+  /**
+   * @method digest
+   * @memberof md5.hmac
+   * @description Output hash as bytes array
+   * @param {String|Array|Uint8Array|ArrayBuffer} key key
+   * @param {String|Array|Uint8Array|ArrayBuffer} message message to hash
+   * @returns {Array} Bytes array
+   * @example
+   * md5.hmac.digest('key', 'The quick brown fox jumps over the lazy dog');
+   */
+  /**
+   * @method array
+   * @memberof md5.hmac
+   * @description Output hash as bytes array
+   * @param {String|Array|Uint8Array|ArrayBuffer} key key
+   * @param {String|Array|Uint8Array|ArrayBuffer} message message to hash
+   * @returns {Array} Bytes array
+   * @example
+   * md5.hmac.array('key', 'The quick brown fox jumps over the lazy dog');
+   */
+  /**
+   * @method arrayBuffer
+   * @memberof md5.hmac
+   * @description Output hash as ArrayBuffer
+   * @param {String|Array|Uint8Array|ArrayBuffer} key key
+   * @param {String|Array|Uint8Array|ArrayBuffer} message message to hash
+   * @returns {ArrayBuffer} ArrayBuffer
+   * @example
+   * md5.hmac.arrayBuffer('key', 'The quick brown fox jumps over the lazy dog');
+   */
+  /**
+   * @method buffer
+   * @deprecated This maybe confuse with Buffer in node.js. Please use arrayBuffer instead.
+   * @memberof md5.hmac
+   * @description Output hash as ArrayBuffer
+   * @param {String|Array|Uint8Array|ArrayBuffer} key key
+   * @param {String|Array|Uint8Array|ArrayBuffer} message message to hash
+   * @returns {ArrayBuffer} ArrayBuffer
+   * @example
+   * md5.hmac.buffer('key', 'The quick brown fox jumps over the lazy dog');
+   */
+  /**
+   * @method base64
+   * @memberof md5.hmac
+   * @description Output hash as base64 string
+   * @param {String|Array|Uint8Array|ArrayBuffer} key key
+   * @param {String|Array|Uint8Array|ArrayBuffer} message message to hash
+   * @returns {String} base64 string
+   * @example
+   * md5.hmac.base64('key', 'The quick brown fox jumps over the lazy dog');
+   */
+  var createHmacOutputMethod = function (outputType) {
+    return function (key, message) {
+      return new HmacMd5(key, true).update(message)[outputType]();
+    };
+  };
+
+  /**
+   * @method create
+   * @memberof md5.hmac
+   * @description Create HmacMd5 object
+   * @param {String|Array|Uint8Array|ArrayBuffer} key key
+   * @returns {HmacMd5} HmacMd5 object.
+   * @example
+   * var hash = md5.hmac.create('key');
+   */
+  /**
+   * @method update
+   * @memberof md5.hmac
+   * @description Create and update HmacMd5 object
+   * @param {String|Array|Uint8Array|ArrayBuffer} key key
+   * @param {String|Array|Uint8Array|ArrayBuffer} message message to hash
+   * @returns {HmacMd5} HmacMd5 object.
+   * @example
+   * var hash = md5.hmac.update('key', 'The quick brown fox jumps over the lazy dog');
+   * // equal to
+   * var hash = md5.hmac.create('key');
+   * hash.update('The quick brown fox jumps over the lazy dog');
+   */
+  var createHmacMethod = function () {
+    var method = createHmacOutputMethod('hex');
+    method.create = function (key) {
+      return new HmacMd5(key);
+    };
+    method.update = function (key, message) {
+      return method.create(key).update(message);
+    };
+    for (var i = 0; i < OUTPUT_TYPES.length; ++i) {
+      var type = OUTPUT_TYPES[i];
+      method[type] = createHmacOutputMethod(type);
+    }
+    return method;
+  };
+
+  /**
+   * Md5 class
+   * @class Md5
+   * @description This is internal class.
+   * @see {@link md5.create}
+   */
+  function Md5(sharedMemory) {
+    if (sharedMemory) {
+      blocks[0] = blocks[16] = blocks[1] = blocks[2] = blocks[3] =
+      blocks[4] = blocks[5] = blocks[6] = blocks[7] =
+      blocks[8] = blocks[9] = blocks[10] = blocks[11] =
+      blocks[12] = blocks[13] = blocks[14] = blocks[15] = 0;
+      this.blocks = blocks;
+      this.buffer8 = buffer8;
+    } else {
+      if (ARRAY_BUFFER) {
+        var buffer = new ArrayBuffer(68);
+        this.buffer8 = new Uint8Array(buffer);
+        this.blocks = new Uint32Array(buffer);
+      } else {
+        this.blocks = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      }
+    }
+    this.h0 = this.h1 = this.h2 = this.h3 = this.start = this.bytes = this.hBytes = 0;
+    this.finalized = this.hashed = false;
+    this.first = true;
+  }
+
+  /**
+   * @method update
+   * @memberof Md5
+   * @instance
+   * @description Update hash
+   * @param {String|Array|Uint8Array|ArrayBuffer} message message to hash
+   * @returns {Md5} Md5 object.
+   * @see {@link md5.update}
+   */
+  Md5.prototype.update = function (message) {
+    if (this.finalized) {
+      throw new Error(FINALIZE_ERROR);
+    }
+
+    var result = formatMessage(message);
+    message = result[0];
+    var isString = result[1];
+    var code, index = 0, i, length = message.length, blocks = this.blocks;
+    var buffer8 = this.buffer8;
+
+    while (index < length) {
+      if (this.hashed) {
+        this.hashed = false;
+        blocks[0] = blocks[16];
+        blocks[16] = blocks[1] = blocks[2] = blocks[3] =
+        blocks[4] = blocks[5] = blocks[6] = blocks[7] =
+        blocks[8] = blocks[9] = blocks[10] = blocks[11] =
+        blocks[12] = blocks[13] = blocks[14] = blocks[15] = 0;
+      }
+
+      if (isString) {
+        if (ARRAY_BUFFER) {
+          for (i = this.start; index < length && i < 64; ++index) {
+            code = message.charCodeAt(index);
+            if (code < 0x80) {
+              buffer8[i++] = code;
+            } else if (code < 0x800) {
+              buffer8[i++] = 0xc0 | (code >>> 6);
+              buffer8[i++] = 0x80 | (code & 0x3f);
+            } else if (code < 0xd800 || code >= 0xe000) {
+              buffer8[i++] = 0xe0 | (code >>> 12);
+              buffer8[i++] = 0x80 | ((code >>> 6) & 0x3f);
+              buffer8[i++] = 0x80 | (code & 0x3f);
+            } else {
+              code = 0x10000 + (((code & 0x3ff) << 10) | (message.charCodeAt(++index) & 0x3ff));
+              buffer8[i++] = 0xf0 | (code >>> 18);
+              buffer8[i++] = 0x80 | ((code >>> 12) & 0x3f);
+              buffer8[i++] = 0x80 | ((code >>> 6) & 0x3f);
+              buffer8[i++] = 0x80 | (code & 0x3f);
+            }
+          }
+        } else {
+          for (i = this.start; index < length && i < 64; ++index) {
+            code = message.charCodeAt(index);
+            if (code < 0x80) {
+              blocks[i >>> 2] |= code << SHIFT[i++ & 3];
+            } else if (code < 0x800) {
+              blocks[i >>> 2] |= (0xc0 | (code >>> 6)) << SHIFT[i++ & 3];
+              blocks[i >>> 2] |= (0x80 | (code & 0x3f)) << SHIFT[i++ & 3];
+            } else if (code < 0xd800 || code >= 0xe000) {
+              blocks[i >>> 2] |= (0xe0 | (code >>> 12)) << SHIFT[i++ & 3];
+              blocks[i >>> 2] |= (0x80 | ((code >>> 6) & 0x3f)) << SHIFT[i++ & 3];
+              blocks[i >>> 2] |= (0x80 | (code & 0x3f)) << SHIFT[i++ & 3];
+            } else {
+              code = 0x10000 + (((code & 0x3ff) << 10) | (message.charCodeAt(++index) & 0x3ff));
+              blocks[i >>> 2] |= (0xf0 | (code >>> 18)) << SHIFT[i++ & 3];
+              blocks[i >>> 2] |= (0x80 | ((code >>> 12) & 0x3f)) << SHIFT[i++ & 3];
+              blocks[i >>> 2] |= (0x80 | ((code >>> 6) & 0x3f)) << SHIFT[i++ & 3];
+              blocks[i >>> 2] |= (0x80 | (code & 0x3f)) << SHIFT[i++ & 3];
+            }
+          }
+        }
+      } else {
+        if (ARRAY_BUFFER) {
+          for (i = this.start; index < length && i < 64; ++index) {
+            buffer8[i++] = message[index];
+          }
+        } else {
+          for (i = this.start; index < length && i < 64; ++index) {
+            blocks[i >>> 2] |= message[index] << SHIFT[i++ & 3];
+          }
+        }
+      }
+      this.lastByteIndex = i;
+      this.bytes += i - this.start;
+      if (i >= 64) {
+        this.start = i - 64;
+        this.hash();
+        this.hashed = true;
+      } else {
+        this.start = i;
+      }
+    }
+    if (this.bytes > 4294967295) {
+      this.hBytes += this.bytes / 4294967296 << 0;
+      this.bytes = this.bytes % 4294967296;
+    }
+    return this;
+  };
+
+  Md5.prototype.finalize = function () {
+    if (this.finalized) {
+      return;
+    }
+    this.finalized = true;
+    var blocks = this.blocks, i = this.lastByteIndex;
+    blocks[i >>> 2] |= EXTRA[i & 3];
+    if (i >= 56) {
+      if (!this.hashed) {
+        this.hash();
+      }
+      blocks[0] = blocks[16];
+      blocks[16] = blocks[1] = blocks[2] = blocks[3] =
+      blocks[4] = blocks[5] = blocks[6] = blocks[7] =
+      blocks[8] = blocks[9] = blocks[10] = blocks[11] =
+      blocks[12] = blocks[13] = blocks[14] = blocks[15] = 0;
+    }
+    blocks[14] = this.bytes << 3;
+    blocks[15] = this.hBytes << 3 | this.bytes >>> 29;
+    this.hash();
+  };
+
+  Md5.prototype.hash = function () {
+    var a, b, c, d, bc, da, blocks = this.blocks;
+
+    if (this.first) {
+      a = blocks[0] - 680876937;
+      a = (a << 7 | a >>> 25) - 271733879 << 0;
+      d = (-1732584194 ^ a & 2004318071) + blocks[1] - 117830708;
+      d = (d << 12 | d >>> 20) + a << 0;
+      c = (-271733879 ^ (d & (a ^ -271733879))) + blocks[2] - 1126478375;
+      c = (c << 17 | c >>> 15) + d << 0;
+      b = (a ^ (c & (d ^ a))) + blocks[3] - 1316259209;
+      b = (b << 22 | b >>> 10) + c << 0;
+    } else {
+      a = this.h0;
+      b = this.h1;
+      c = this.h2;
+      d = this.h3;
+      a += (d ^ (b & (c ^ d))) + blocks[0] - 680876936;
+      a = (a << 7 | a >>> 25) + b << 0;
+      d += (c ^ (a & (b ^ c))) + blocks[1] - 389564586;
+      d = (d << 12 | d >>> 20) + a << 0;
+      c += (b ^ (d & (a ^ b))) + blocks[2] + 606105819;
+      c = (c << 17 | c >>> 15) + d << 0;
+      b += (a ^ (c & (d ^ a))) + blocks[3] - 1044525330;
+      b = (b << 22 | b >>> 10) + c << 0;
+    }
+
+    a += (d ^ (b & (c ^ d))) + blocks[4] - 176418897;
+    a = (a << 7 | a >>> 25) + b << 0;
+    d += (c ^ (a & (b ^ c))) + blocks[5] + 1200080426;
+    d = (d << 12 | d >>> 20) + a << 0;
+    c += (b ^ (d & (a ^ b))) + blocks[6] - 1473231341;
+    c = (c << 17 | c >>> 15) + d << 0;
+    b += (a ^ (c & (d ^ a))) + blocks[7] - 45705983;
+    b = (b << 22 | b >>> 10) + c << 0;
+    a += (d ^ (b & (c ^ d))) + blocks[8] + 1770035416;
+    a = (a << 7 | a >>> 25) + b << 0;
+    d += (c ^ (a & (b ^ c))) + blocks[9] - 1958414417;
+    d = (d << 12 | d >>> 20) + a << 0;
+    c += (b ^ (d & (a ^ b))) + blocks[10] - 42063;
+    c = (c << 17 | c >>> 15) + d << 0;
+    b += (a ^ (c & (d ^ a))) + blocks[11] - 1990404162;
+    b = (b << 22 | b >>> 10) + c << 0;
+    a += (d ^ (b & (c ^ d))) + blocks[12] + 1804603682;
+    a = (a << 7 | a >>> 25) + b << 0;
+    d += (c ^ (a & (b ^ c))) + blocks[13] - 40341101;
+    d = (d << 12 | d >>> 20) + a << 0;
+    c += (b ^ (d & (a ^ b))) + blocks[14] - 1502002290;
+    c = (c << 17 | c >>> 15) + d << 0;
+    b += (a ^ (c & (d ^ a))) + blocks[15] + 1236535329;
+    b = (b << 22 | b >>> 10) + c << 0;
+    a += (c ^ (d & (b ^ c))) + blocks[1] - 165796510;
+    a = (a << 5 | a >>> 27) + b << 0;
+    d += (b ^ (c & (a ^ b))) + blocks[6] - 1069501632;
+    d = (d << 9 | d >>> 23) + a << 0;
+    c += (a ^ (b & (d ^ a))) + blocks[11] + 643717713;
+    c = (c << 14 | c >>> 18) + d << 0;
+    b += (d ^ (a & (c ^ d))) + blocks[0] - 373897302;
+    b = (b << 20 | b >>> 12) + c << 0;
+    a += (c ^ (d & (b ^ c))) + blocks[5] - 701558691;
+    a = (a << 5 | a >>> 27) + b << 0;
+    d += (b ^ (c & (a ^ b))) + blocks[10] + 38016083;
+    d = (d << 9 | d >>> 23) + a << 0;
+    c += (a ^ (b & (d ^ a))) + blocks[15] - 660478335;
+    c = (c << 14 | c >>> 18) + d << 0;
+    b += (d ^ (a & (c ^ d))) + blocks[4] - 405537848;
+    b = (b << 20 | b >>> 12) + c << 0;
+    a += (c ^ (d & (b ^ c))) + blocks[9] + 568446438;
+    a = (a << 5 | a >>> 27) + b << 0;
+    d += (b ^ (c & (a ^ b))) + blocks[14] - 1019803690;
+    d = (d << 9 | d >>> 23) + a << 0;
+    c += (a ^ (b & (d ^ a))) + blocks[3] - 187363961;
+    c = (c << 14 | c >>> 18) + d << 0;
+    b += (d ^ (a & (c ^ d))) + blocks[8] + 1163531501;
+    b = (b << 20 | b >>> 12) + c << 0;
+    a += (c ^ (d & (b ^ c))) + blocks[13] - 1444681467;
+    a = (a << 5 | a >>> 27) + b << 0;
+    d += (b ^ (c & (a ^ b))) + blocks[2] - 51403784;
+    d = (d << 9 | d >>> 23) + a << 0;
+    c += (a ^ (b & (d ^ a))) + blocks[7] + 1735328473;
+    c = (c << 14 | c >>> 18) + d << 0;
+    b += (d ^ (a & (c ^ d))) + blocks[12] - 1926607734;
+    b = (b << 20 | b >>> 12) + c << 0;
+    bc = b ^ c;
+    a += (bc ^ d) + blocks[5] - 378558;
+    a = (a << 4 | a >>> 28) + b << 0;
+    d += (bc ^ a) + blocks[8] - 2022574463;
+    d = (d << 11 | d >>> 21) + a << 0;
+    da = d ^ a;
+    c += (da ^ b) + blocks[11] + 1839030562;
+    c = (c << 16 | c >>> 16) + d << 0;
+    b += (da ^ c) + blocks[14] - 35309556;
+    b = (b << 23 | b >>> 9) + c << 0;
+    bc = b ^ c;
+    a += (bc ^ d) + blocks[1] - 1530992060;
+    a = (a << 4 | a >>> 28) + b << 0;
+    d += (bc ^ a) + blocks[4] + 1272893353;
+    d = (d << 11 | d >>> 21) + a << 0;
+    da = d ^ a;
+    c += (da ^ b) + blocks[7] - 155497632;
+    c = (c << 16 | c >>> 16) + d << 0;
+    b += (da ^ c) + blocks[10] - 1094730640;
+    b = (b << 23 | b >>> 9) + c << 0;
+    bc = b ^ c;
+    a += (bc ^ d) + blocks[13] + 681279174;
+    a = (a << 4 | a >>> 28) + b << 0;
+    d += (bc ^ a) + blocks[0] - 358537222;
+    d = (d << 11 | d >>> 21) + a << 0;
+    da = d ^ a;
+    c += (da ^ b) + blocks[3] - 722521979;
+    c = (c << 16 | c >>> 16) + d << 0;
+    b += (da ^ c) + blocks[6] + 76029189;
+    b = (b << 23 | b >>> 9) + c << 0;
+    bc = b ^ c;
+    a += (bc ^ d) + blocks[9] - 640364487;
+    a = (a << 4 | a >>> 28) + b << 0;
+    d += (bc ^ a) + blocks[12] - 421815835;
+    d = (d << 11 | d >>> 21) + a << 0;
+    da = d ^ a;
+    c += (da ^ b) + blocks[15] + 530742520;
+    c = (c << 16 | c >>> 16) + d << 0;
+    b += (da ^ c) + blocks[2] - 995338651;
+    b = (b << 23 | b >>> 9) + c << 0;
+    a += (c ^ (b | ~d)) + blocks[0] - 198630844;
+    a = (a << 6 | a >>> 26) + b << 0;
+    d += (b ^ (a | ~c)) + blocks[7] + 1126891415;
+    d = (d << 10 | d >>> 22) + a << 0;
+    c += (a ^ (d | ~b)) + blocks[14] - 1416354905;
+    c = (c << 15 | c >>> 17) + d << 0;
+    b += (d ^ (c | ~a)) + blocks[5] - 57434055;
+    b = (b << 21 | b >>> 11) + c << 0;
+    a += (c ^ (b | ~d)) + blocks[12] + 1700485571;
+    a = (a << 6 | a >>> 26) + b << 0;
+    d += (b ^ (a | ~c)) + blocks[3] - 1894986606;
+    d = (d << 10 | d >>> 22) + a << 0;
+    c += (a ^ (d | ~b)) + blocks[10] - 1051523;
+    c = (c << 15 | c >>> 17) + d << 0;
+    b += (d ^ (c | ~a)) + blocks[1] - 2054922799;
+    b = (b << 21 | b >>> 11) + c << 0;
+    a += (c ^ (b | ~d)) + blocks[8] + 1873313359;
+    a = (a << 6 | a >>> 26) + b << 0;
+    d += (b ^ (a | ~c)) + blocks[15] - 30611744;
+    d = (d << 10 | d >>> 22) + a << 0;
+    c += (a ^ (d | ~b)) + blocks[6] - 1560198380;
+    c = (c << 15 | c >>> 17) + d << 0;
+    b += (d ^ (c | ~a)) + blocks[13] + 1309151649;
+    b = (b << 21 | b >>> 11) + c << 0;
+    a += (c ^ (b | ~d)) + blocks[4] - 145523070;
+    a = (a << 6 | a >>> 26) + b << 0;
+    d += (b ^ (a | ~c)) + blocks[11] - 1120210379;
+    d = (d << 10 | d >>> 22) + a << 0;
+    c += (a ^ (d | ~b)) + blocks[2] + 718787259;
+    c = (c << 15 | c >>> 17) + d << 0;
+    b += (d ^ (c | ~a)) + blocks[9] - 343485551;
+    b = (b << 21 | b >>> 11) + c << 0;
+
+    if (this.first) {
+      this.h0 = a + 1732584193 << 0;
+      this.h1 = b - 271733879 << 0;
+      this.h2 = c - 1732584194 << 0;
+      this.h3 = d + 271733878 << 0;
+      this.first = false;
+    } else {
+      this.h0 = this.h0 + a << 0;
+      this.h1 = this.h1 + b << 0;
+      this.h2 = this.h2 + c << 0;
+      this.h3 = this.h3 + d << 0;
+    }
+  };
+
+  /**
+   * @method hex
+   * @memberof Md5
+   * @instance
+   * @description Output hash as hex string
+   * @returns {String} Hex string
+   * @see {@link md5.hex}
+   * @example
+   * hash.hex();
+   */
+  Md5.prototype.hex = function () {
+    this.finalize();
+
+    var h0 = this.h0, h1 = this.h1, h2 = this.h2, h3 = this.h3;
+
+    return HEX_CHARS[(h0 >>> 4) & 0x0F] + HEX_CHARS[h0 & 0x0F] +
+      HEX_CHARS[(h0 >>> 12) & 0x0F] + HEX_CHARS[(h0 >>> 8) & 0x0F] +
+      HEX_CHARS[(h0 >>> 20) & 0x0F] + HEX_CHARS[(h0 >>> 16) & 0x0F] +
+      HEX_CHARS[(h0 >>> 28) & 0x0F] + HEX_CHARS[(h0 >>> 24) & 0x0F] +
+      HEX_CHARS[(h1 >>> 4) & 0x0F] + HEX_CHARS[h1 & 0x0F] +
+      HEX_CHARS[(h1 >>> 12) & 0x0F] + HEX_CHARS[(h1 >>> 8) & 0x0F] +
+      HEX_CHARS[(h1 >>> 20) & 0x0F] + HEX_CHARS[(h1 >>> 16) & 0x0F] +
+      HEX_CHARS[(h1 >>> 28) & 0x0F] + HEX_CHARS[(h1 >>> 24) & 0x0F] +
+      HEX_CHARS[(h2 >>> 4) & 0x0F] + HEX_CHARS[h2 & 0x0F] +
+      HEX_CHARS[(h2 >>> 12) & 0x0F] + HEX_CHARS[(h2 >>> 8) & 0x0F] +
+      HEX_CHARS[(h2 >>> 20) & 0x0F] + HEX_CHARS[(h2 >>> 16) & 0x0F] +
+      HEX_CHARS[(h2 >>> 28) & 0x0F] + HEX_CHARS[(h2 >>> 24) & 0x0F] +
+      HEX_CHARS[(h3 >>> 4) & 0x0F] + HEX_CHARS[h3 & 0x0F] +
+      HEX_CHARS[(h3 >>> 12) & 0x0F] + HEX_CHARS[(h3 >>> 8) & 0x0F] +
+      HEX_CHARS[(h3 >>> 20) & 0x0F] + HEX_CHARS[(h3 >>> 16) & 0x0F] +
+      HEX_CHARS[(h3 >>> 28) & 0x0F] + HEX_CHARS[(h3 >>> 24) & 0x0F];
+  };
+
+  /**
+   * @method toString
+   * @memberof Md5
+   * @instance
+   * @description Output hash as hex string
+   * @returns {String} Hex string
+   * @see {@link md5.hex}
+   * @example
+   * hash.toString();
+   */
+  Md5.prototype.toString = Md5.prototype.hex;
+
+  /**
+   * @method digest
+   * @memberof Md5
+   * @instance
+   * @description Output hash as bytes array
+   * @returns {Array} Bytes array
+   * @see {@link md5.digest}
+   * @example
+   * hash.digest();
+   */
+  Md5.prototype.digest = function () {
+    this.finalize();
+
+    var h0 = this.h0, h1 = this.h1, h2 = this.h2, h3 = this.h3;
+    return [
+      h0 & 0xFF, (h0 >>> 8) & 0xFF, (h0 >>> 16) & 0xFF, (h0 >>> 24) & 0xFF,
+      h1 & 0xFF, (h1 >>> 8) & 0xFF, (h1 >>> 16) & 0xFF, (h1 >>> 24) & 0xFF,
+      h2 & 0xFF, (h2 >>> 8) & 0xFF, (h2 >>> 16) & 0xFF, (h2 >>> 24) & 0xFF,
+      h3 & 0xFF, (h3 >>> 8) & 0xFF, (h3 >>> 16) & 0xFF, (h3 >>> 24) & 0xFF
+    ];
+  };
+
+  /**
+   * @method array
+   * @memberof Md5
+   * @instance
+   * @description Output hash as bytes array
+   * @returns {Array} Bytes array
+   * @see {@link md5.array}
+   * @example
+   * hash.array();
+   */
+  Md5.prototype.array = Md5.prototype.digest;
+
+  /**
+   * @method arrayBuffer
+   * @memberof Md5
+   * @instance
+   * @description Output hash as ArrayBuffer
+   * @returns {ArrayBuffer} ArrayBuffer
+   * @see {@link md5.arrayBuffer}
+   * @example
+   * hash.arrayBuffer();
+   */
+  Md5.prototype.arrayBuffer = function () {
+    this.finalize();
+
+    var buffer = new ArrayBuffer(16);
+    var blocks = new Uint32Array(buffer);
+    blocks[0] = this.h0;
+    blocks[1] = this.h1;
+    blocks[2] = this.h2;
+    blocks[3] = this.h3;
+    return buffer;
+  };
+
+  /**
+   * @method buffer
+   * @deprecated This maybe confuse with Buffer in node.js. Please use arrayBuffer instead.
+   * @memberof Md5
+   * @instance
+   * @description Output hash as ArrayBuffer
+   * @returns {ArrayBuffer} ArrayBuffer
+   * @see {@link md5.buffer}
+   * @example
+   * hash.buffer();
+   */
+  Md5.prototype.buffer = Md5.prototype.arrayBuffer;
+
+  /**
+   * @method base64
+   * @memberof Md5
+   * @instance
+   * @description Output hash as base64 string
+   * @returns {String} base64 string
+   * @see {@link md5.base64}
+   * @example
+   * hash.base64();
+   */
+  Md5.prototype.base64 = function () {
+    var v1, v2, v3, base64Str = '', bytes = this.array();
+    for (var i = 0; i < 15;) {
+      v1 = bytes[i++];
+      v2 = bytes[i++];
+      v3 = bytes[i++];
+      base64Str += BASE64_ENCODE_CHAR[v1 >>> 2] +
+        BASE64_ENCODE_CHAR[(v1 << 4 | v2 >>> 4) & 63] +
+        BASE64_ENCODE_CHAR[(v2 << 2 | v3 >>> 6) & 63] +
+        BASE64_ENCODE_CHAR[v3 & 63];
+    }
+    v1 = bytes[i];
+    base64Str += BASE64_ENCODE_CHAR[v1 >>> 2] +
+      BASE64_ENCODE_CHAR[(v1 << 4) & 63] +
+      '==';
+    return base64Str;
+  };
+
+  /**
+   * HmacMd5 class
+   * @class HmacMd5
+   * @extends Md5
+   * @description This is internal class.
+   * @see {@link md5.hmac.create}
+   */
+  function HmacMd5(key, sharedMemory) {
+    var i, result = formatMessage(key);
+    key = result[0];
+    if (result[1]) {
+      var bytes = [], length = key.length, index = 0, code;
+      for (i = 0; i < length; ++i) {
+        code = key.charCodeAt(i);
+        if (code < 0x80) {
+          bytes[index++] = code;
+        } else if (code < 0x800) {
+          bytes[index++] = (0xc0 | (code >>> 6));
+          bytes[index++] = (0x80 | (code & 0x3f));
+        } else if (code < 0xd800 || code >= 0xe000) {
+          bytes[index++] = (0xe0 | (code >>> 12));
+          bytes[index++] = (0x80 | ((code >>> 6) & 0x3f));
+          bytes[index++] = (0x80 | (code & 0x3f));
+        } else {
+          code = 0x10000 + (((code & 0x3ff) << 10) | (key.charCodeAt(++i) & 0x3ff));
+          bytes[index++] = (0xf0 | (code >>> 18));
+          bytes[index++] = (0x80 | ((code >>> 12) & 0x3f));
+          bytes[index++] = (0x80 | ((code >>> 6) & 0x3f));
+          bytes[index++] = (0x80 | (code & 0x3f));
+        }
+      }
+      key = bytes;
+    }
+
+    if (key.length > 64) {
+      key = (new Md5(true)).update(key).array();
+    }
+
+    var oKeyPad = [], iKeyPad = [];
+    for (i = 0; i < 64; ++i) {
+      var b = key[i] || 0;
+      oKeyPad[i] = 0x5c ^ b;
+      iKeyPad[i] = 0x36 ^ b;
+    }
+
+    Md5.call(this, sharedMemory);
+
+    this.update(iKeyPad);
+    this.oKeyPad = oKeyPad;
+    this.inner = true;
+    this.sharedMemory = sharedMemory;
+  }
+  HmacMd5.prototype = new Md5();
+
+  HmacMd5.prototype.finalize = function () {
+    Md5.prototype.finalize.call(this);
+    if (this.inner) {
+      this.inner = false;
+      var innerHash = this.array();
+      Md5.call(this, this.sharedMemory);
+      this.update(this.oKeyPad);
+      this.update(innerHash);
+      Md5.prototype.finalize.call(this);
+    }
+  };
+
+  var exports = createMethod();
+  exports.md5 = exports;
+  exports.md5.hmac = createHmacMethod();
+
+  if (COMMON_JS) {
+    module.exports = exports;
+  } else {
+    /**
+     * @method md5
+     * @description Md5 hash function, export to global in browsers.
+     * @param {String|Array|Uint8Array|ArrayBuffer} message message to hash
+     * @returns {String} md5 hashes
+     * @example
+     * md5(''); // d41d8cd98f00b204e9800998ecf8427e
+     * md5('The quick brown fox jumps over the lazy dog'); // 9e107d9d372bb6826bd81d3542a419d6
+     * md5('The quick brown fox jumps over the lazy dog.'); // e4d909c290d0fb1ca068ffaddf22cbd0
+     *
+     * // It also supports UTF-8 encoding
+     * md5('中文'); // a7bac2239fcdcb3a067903d8077c4a07
+     *
+     * // It also supports byte `Array`, `Uint8Array`, `ArrayBuffer`
+     * md5([]); // d41d8cd98f00b204e9800998ecf8427e
+     * md5(new Uint8Array([])); // d41d8cd98f00b204e9800998ecf8427e
+     */
+    root.md5 = exports;
+    if (AMD) {
+      !(__WEBPACK_AMD_DEFINE_RESULT__ = (function () {
+        return exports;
+      }).call(exports, __webpack_require__, exports, module),
+		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+    }
+  }
+})();
+
+
+/***/ }),
+
+/***/ 6486:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* module decorator */ module = __webpack_require__.nmd(module);
@@ -19339,7 +20223,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 /***/ }),
 
-/***/ 793:
+/***/ 9793:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var __dirname = "/";
@@ -19354,7 +20238,7 @@ var __filename = "/index.js";
 
 /***/ }),
 
-/***/ 379:
+/***/ 3379:
 /***/ ((module) => {
 
 "use strict";
@@ -19486,7 +20370,7 @@ module.exports = insertBySelector;
 
 /***/ }),
 
-/***/ 216:
+/***/ 9216:
 /***/ ((module) => {
 
 "use strict";
@@ -19503,7 +20387,7 @@ module.exports = insertStyleElement;
 
 /***/ }),
 
-/***/ 565:
+/***/ 3565:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -19520,7 +20404,7 @@ module.exports = setAttributesWithoutAttributes;
 
 /***/ }),
 
-/***/ 795:
+/***/ 7795:
 /***/ ((module) => {
 
 "use strict";
@@ -19588,7 +20472,7 @@ module.exports = domAPI;
 
 /***/ }),
 
-/***/ 589:
+/***/ 4589:
 /***/ ((module) => {
 
 "use strict";
@@ -19606,6 +20490,20 @@ function styleTagTransform(css, styleElement) {
   }
 }
 module.exports = styleTagTransform;
+
+/***/ }),
+
+/***/ 6424:
+/***/ (() => {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ 5381:
+/***/ (() => {
+
+/* (ignored) */
 
 /***/ })
 
@@ -19642,6 +20540,11 @@ module.exports = styleTagTransform;
 /******/ 	__webpack_require__.m = __webpack_modules__;
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/amd options */
+/******/ 	(() => {
+/******/ 		__webpack_require__.amdO = {};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/compat get default export */
 /******/ 	(() => {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
@@ -19924,6 +20827,29 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
+
+// NAMESPACE OBJECT: ./node_modules/xstate/es/actions.js
+var actions_namespaceObject = {};
+__webpack_require__.r(actions_namespaceObject);
+__webpack_require__.d(actions_namespaceObject, {
+  e4: () => (actions_after),
+  f0: () => (actions_assign),
+  al: () => (actions_cancel),
+  aT: () => (done),
+  Sl: () => (actions_doneInvoke),
+  vU: () => (actions_error),
+  o$: () => (getActionFunction),
+  bf: () => (initEvent),
+  log: () => (actions_log),
+  OU: () => (actions_raise),
+  yC: () => (resolveActions),
+  lW: () => (actions_send),
+  BL: () => (actions_start),
+  sT: () => (actions_stop),
+  Q8: () => (toActionObject),
+  AE: () => (toActionObjects),
+  XA: () => (toActivityDefinition)
+});
 
 // NAMESPACE OBJECT: ./node_modules/axios/lib/platform/common/utils.js
 var common_utils_namespaceObject = {};
@@ -23834,7 +24760,7 @@ function interpret(machine, options) {
 
 
 // EXTERNAL MODULE: ./node_modules/@ricky0123/vad-web/dist/index.js
-var dist = __webpack_require__(762);
+var dist = __webpack_require__(9762);
 ;// CONCATENATED MODULE: ./src/ConfigModule.js
 var config = {
   appServerUrl: "https://app.saypi.ai",
@@ -25694,12 +26620,12 @@ var es_assign = actions_assign,
 
 
 // EXTERNAL MODULE: ./node_modules/events/events.js
-var events = __webpack_require__(187);
+var events = __webpack_require__(7187);
 ;// CONCATENATED MODULE: ./src/events/EventBus.js
 
 /* harmony default export */ const EventBus = (new events());
 // EXTERNAL MODULE: ./node_modules/lodash/lodash.js
-var lodash = __webpack_require__(486);
+var lodash = __webpack_require__(6486);
 ;// CONCATENATED MODULE: ./src/state-machines/AudioInputMachine.ts
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -26049,2051 +26975,6 @@ const audioInputMachine = createMachine({
     delays: {},
 });
 
-;// CONCATENATED MODULE: ./src/state-machines/AudioOutputMachine.js
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-
-
-var audioOutputMachine = createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7A8qgLgA4EB0GEANmAMQVbISz7IBO+A2gAwC6iohWWBnzYAdnxAAPRAEYAHAFYSANmWdOygEzyALAE5NAZk4KANCACeswzpIyZehcoU6dAdmP2dAX2-m0mLgExPgkdAwYolC09BCQALZgzBDIzFy8SCACQiJY4pnSCAqa5lYIbpp6JIY1NW7KDoYylb7+6Nh4RKThcRDUYPGEIpDpEtnCYhKFMpwkcp76em5ynJqcxiWWiIZymiSaRjsKJqqax4atIAEdwd2xkCQsYAwW1IQUyBajmeO5+aCFeqzBRNM56HQyEE6XalRANZTVWquGQQzg6LSXa5BLqhHoPd6fSLRQhoWBgb78QQTPJTWTrWaOQyaOQyZzNNwyNywhDOKpaY4o+q6QwKTHtbEhML3CAkAkWIn9US9ClZKl-WkIGbGEiM5mshTszncjmzZoCoUOTicsWBTqSvEyuUKgDGyFEcvwAAsWFhUFBPSrfpMCog5NCSMsZIYGgo9Io0XpuS5bGd1FG3HGlj4-FdxXa7gx8aTIG8Pl8eGM1cGAdZ5BH1vJOLs3Ot9Ny1FUzVaHPZli4bTccVLCzKwEqS2SwABrEYVn5VmkhzX0nUgvVszQcrlbcqqEjqA+b4pMg0DiWkchUaiwKcYQgAOTAkg4c8pOWrUkQAFoUVVjDUDD0Qw3B0f9NjKTlbHsdRXAUORwWjTRlF8HNRCwOJ4EyLF83wSt30XGsEB-JZqnWQxAOA0D1nAxBZibGpN2ZNF3Dg8i3DPHCyEoMA8Opf5PwQHQaIQOQ3BIVjakUJp5CQjjblxWIiV49UlzBfYFGWepVAaOQYR3NY9hAvRjL0exmgM5Cc2w+Th16ZSP0KbQlBBZotBbeRWW5HQnAjY4TFAjloTWdirLzGyHUeZ4IDKN8+I1JDDHE0E3KtFllCTAx1IPTgOVUBR+1C21wulWUyyU+d8P4wpFCUcicqA7z5gOdKd1jKo3D81llH0ajNDkocIpJVAyQgeyCIElF7FXJl5itK1TJ0dtOXreZY1E1kmT0fr7RKsc7IquKl0mmRpuZTx5pRY11HEiEW1UeD8scFDvCAA */
-  context: {
-    autoplay: false,
-    skip: false
-  },
-  id: "audioOutput",
-  initial: "idle",
-  states: {
-    idle: {
-      on: {
-        loadstart: [{
-          target: "idle",
-          cond: "shouldSkip",
-          internal: true,
-          description: "Skip this track.",
-          actions: [es_assign(function (context, event) {
-            return _objectSpread(_objectSpread({}, context), {}, {
-              skip: false
-            });
-          }), {
-            type: "skipCurrent"
-          }]
-        }, {
-          target: "loading"
-        }],
-        skipNext: {
-          target: "idle",
-          internal: true,
-          description: "Do not play the next track.",
-          actions: es_assign(function (context, event) {
-            return _objectSpread(_objectSpread({}, context), {}, {
-              skip: true
-            });
-          })
-        }
-      }
-    },
-    loading: {
-      on: {
-        loadedmetadata: {
-          target: "loaded"
-        }
-      }
-    },
-    loaded: {
-      initial: "ready",
-      states: {
-        ready: {
-          description: "Audio has loaded and is ready to start playing (further buffering may be required to reach the end).",
-          entry: {
-            type: "emitEvent",
-            params: {
-              eventName: "saypi:ready"
-            }
-          },
-          on: {
-            play: {
-              target: "playing"
-            }
-          }
-        },
-        playing: {
-          entry: {
-            type: "emitEvent",
-            params: {
-              eventName: "saypi:piSpeaking"
-            }
-          },
-          exit: [{
-            type: "emitEvent",
-            params: {
-              eventName: "saypi:piStoppedSpeaking"
-            }
-          }],
-          on: {
-            pause: {
-              target: "paused"
-            },
-            ended: {
-              target: "ended"
-            },
-            canplaythrough: {
-              internal: true
-            }
-          }
-        },
-        paused: {
-          on: {
-            play: {
-              target: "playing"
-            }
-          }
-        },
-        ended: {
-          entry: {
-            type: "emitEvent",
-            params: {
-              eventName: "saypi:piFinishedSpeaking"
-            }
-          },
-          on: {
-            seeked: {
-              target: "ready",
-              description: "An ended track is seeked back to earlier in the track."
-            }
-          }
-        }
-      },
-      on: {
-        emptied: {
-          target: "idle"
-        }
-      }
-    }
-  },
-  predictableActionArguments: true,
-  preserveActionOrder: true
-}, {
-  actions: {
-    emitEvent: function emitEvent(context, event, _ref) {
-      var action = _ref.action;
-      EventBus.emit(action.params.eventName);
-    },
-    skipCurrent: function skipCurrent(context, event) {
-      // send a message back to the audio module to stop playback
-      EventBus.emit("audio:skipCurrent");
-    }
-  },
-  guards: {
-    shouldSkip: function shouldSkip(context) {
-      return context.skip === true;
-    }
-  },
-  services: {},
-  delays: {}
-});
-;// CONCATENATED MODULE: ./src/LoggingModule.js
-function serializeStateValue(stateValue) {
-  if (typeof stateValue === "string") {
-    return stateValue;
-  }
-  return Object.keys(stateValue).map(function (key) {
-    return "".concat(key, ":").concat(serializeStateValue(stateValue[key]));
-  }).join(",");
-}
-var logger = {
-  debug: function debug() {
-    var _console;
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-    (_console = console).debug.apply(_console, ["DEBUG:"].concat(args));
-  },
-  info: function info() {
-    var _console2;
-    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-      args[_key2] = arguments[_key2];
-    }
-    (_console2 = console).log.apply(_console2, ["INFO:"].concat(args));
-  },
-  error: function error() {
-    var _console3;
-    for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-      args[_key3] = arguments[_key3];
-    }
-    (_console3 = console).error.apply(_console3, ["ERROR:"].concat(args));
-  }
-};
-;// CONCATENATED MODULE: ./src/state-machines/AudioRetryMachine.ts
-
-
-const maxRetryAttempts = 5;
-const AUDIO_RELOAD_DELAY_MS = 1500; // minimum delay in milliseconds
-const AUDIO_LOAD_TIMEOUT_MS = 4000; // time allowed for audio to load before retrying - also update in WaitingWhileLoading state
-const machine = createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AogJzyzwAlkA7CAGzDwGJKtkJYAXZPFgbQAYBdRUAAcssDC2xkBIAB6IALACYANCACeiAIzcA7BoB0ANgUK53ABw7ucgMwGAvnZVpMuAkVIVqePQEkqYWkFKZFUefiQQYVFxLEkI2QQNLW49biMDbgUATgBWI20zORV1BDNtHL0yk0zrHO5uLLMchyd0bHxCEnJ-bz9qWmQAIyIuPikosQkpBKT61PTM3PzC4sQs7QVKjbkNa20snW1alpBndrcuzxpff1oaTrDxkUnY6c1k+YUM7LyFAqK1Joano9tUNEYvtptPZHKc2q5Oh4ejd+gwmKx2KNwkJnjE4qAEmYNFk9DlrLsTNkklllIDSnISQYDDSjNYzAYNIUFCczgj3N0vHoAArBVQYMhQQJoWBgR4RCZ4t6JTkpHIKWqmXQaDZJVYIDZmPRZYlfQraGrGHnwjr8q7eEUhcWSoYjOU46JTeKaHJyCpmBRWDQBjZ7bR6uQFPR-DLWORGJI5dlWlw2y7Ih1iiV3C5uyK4z0E72+yoBnbB9VQvVqw1Q74mMlpL7J86IgXXDNO+iMZhsDi5hUFmTvOaN75LP4rOlQkk7Gl5ayZXZGZt8tOCgAy3c7AGNyEEQiwABaEVBQQ-9-OvL3KkcLH7LAElOQ7PRxjnGRTGZlNFeppEbrcs3uIgLw9K9CxvFJR0WX5-j1bISS0LI2TSHQyTJX8Ln-a5NyYTsXT7MZ5UvfEh0gz4x1gycSljRkGlsQprCyGxkMw1s7T0AAlMA0UwLNeIxQjsTzMDSJmAwcm0SocmY-Yvh9SSDD1JJnz0IN1VyMl2R+NjbWRbjeM7aQMRYMA9GQAAzUy8AACgAQQAVQAER8AB5AB9TicHXVy7Kc9ynO8uyAE0AEoBmtLC228AzAKgUCXjEos-VLIMdArMM6SJUl6m4XZJJyXZ6jMXS13baVIECUUEsVa8fRJXKrF+DluEkvUMkNcEaW0X0fQUCxuVhXk-2i4UKogAZhiEp5RKVerUly310i0Nq6V2LQSxyH1oXNAw5FK7D7XG7MHiI91ErmhkFvqJavhWzKSiXfRrAULbajqV7nwO0ahWOgTeyxGaLrqq7GtulrVpKbrKlyMxaisPb6ocWEyCwCA4CkYaortIHaoggBaJS6UJ67GrJ+ptG+ji+jAXHBwSI4DD0c1yR6woYxMPVcn0dTTEYnY42aIbIvY9NRSdOnwLI9apOhSSXu1IxWo0cNzRBGTbHVN7jVjKnkVwvioElpL9R9aTmPkuHmQUFW6X6zYJOYvLFC0T69cFWK8IlY2lRNCpmvMOQmjZGxlJsI11jKHRYy2wX3fK1AZQgH3r0ULnwS2CtGiY-qzCyZG7CAA */
-    context: {
-        delay: AUDIO_RELOAD_DELAY_MS,
-        retries: 0,
-        startTime: 0,
-    },
-    id: "audioErrorHandler",
-    initial: "Idle",
-    states: {
-        Idle: {
-            on: {
-                play: {
-                    target: "Playing",
-                },
-                abort: {
-                    target: "Reloading",
-                },
-                error: {
-                    target: "Reloading",
-                },
-                emptied: {
-                    target: "Idle",
-                    actions: {
-                        type: "resetRetryCounter",
-                    },
-                },
-                sourceChanged: {
-                    actions: {
-                        type: "resetRetryCounter",
-                    },
-                    description: "The audio source has changed to load a new audio file.",
-                },
-            },
-            description: "The audio element is idle and ready to play audio.",
-        },
-        Playing: {
-            on: {
-                pause: {
-                    target: "Paused",
-                },
-                abort: {
-                    target: "Reloading",
-                },
-                error: {
-                    target: "Reloading",
-                },
-                ended: {
-                    target: "Idle",
-                },
-                emptied: {
-                    target: "Idle",
-                    actions: {
-                        type: "resetRetryCounter",
-                    },
-                },
-            },
-            description: "The audio is currently playing.",
-        },
-        WaitingWhileLoading: {
-            description: "Following a reload command, we're waiting for the audio to load. Will finish in a successful load (partial or complete), error, or timeout event.",
-            on: {
-                loadedmetadata: {
-                    target: "Playing",
-                    actions: [
-                        {
-                            type: "resetRetryCounter",
-                        },
-                        {
-                            type: "forcePlay",
-                        },
-                    ],
-                    description: "The audio has partially loaded and is ready to play.",
-                },
-                canplaythrough: {
-                    target: "Playing",
-                    actions: [
-                        {
-                            type: "resetRetryCounter",
-                        },
-                        {
-                            type: "forcePlay",
-                        },
-                    ],
-                    description: "The audio has loaded successfully and is ready to play.",
-                },
-                error: {
-                    target: "Reloading",
-                },
-                abort: {
-                    target: "Reloading",
-                },
-            },
-            after: {
-                4000: {
-                    target: "Reloading",
-                    actions: [{ type: "decreaseDelayAfterTimeout" }],
-                    description: "The audio has failed to load, usually due to a HTTP 400 error on Safari.",
-                },
-            },
-        },
-        Reloading: {
-            on: {
-                loadedmetadata: {
-                    target: "Playing",
-                    actions: [
-                        {
-                            type: "resetRetryCounter",
-                        },
-                        {
-                            type: "forcePlay",
-                        },
-                    ],
-                    description: "While waiting to reload, the audio has partially loaded and is ready to play.",
-                },
-                canplaythrough: {
-                    target: "Playing",
-                    actions: [
-                        {
-                            type: "resetRetryCounter",
-                        },
-                        {
-                            type: "forcePlay",
-                        },
-                    ],
-                    description: "While waiting to reload, the audio has loaded successfully and is ready to play.",
-                },
-            },
-            after: {
-                RELOAD_DELAY: [
-                    {
-                        target: "WaitingWhileLoading",
-                        cond: "retriesRemaining",
-                        actions: [
-                            { type: "forceReload" },
-                            {
-                                type: "increaseDelay",
-                            },
-                            { type: "incrementRetryCounter" },
-                        ],
-                    },
-                    {
-                        target: "Idle",
-                        cond: "maxRetriesReached",
-                    },
-                ],
-            },
-            description: "The audio element has encountered an error or abort event and is attempting to reload after a delay.",
-        },
-        Paused: {
-            on: {
-                play: {
-                    target: "Playing",
-                },
-                abort: {
-                    target: "Reloading",
-                },
-                error: {
-                    target: "Reloading",
-                },
-                emptied: {
-                    target: "Idle",
-                    actions: {
-                        type: "resetRetryCounter",
-                    },
-                },
-                sourceChanged: {
-                    target: "Idle",
-                    actions: {
-                        type: "resetRetryCounter",
-                    },
-                    description: "The audio source has changed to load a new audio file.",
-                },
-            },
-            description: "The audio is paused and can be played again or reloaded if there is an error.",
-        },
-    },
-    predictableActionArguments: true,
-    preserveActionOrder: true,
-}).withConfig({
-    actions: {
-        resetRetryCounter: function (context, event) {
-            console.debug("Resetting retry counter...");
-            context.retries = 0;
-            context.delay = AUDIO_RELOAD_DELAY_MS;
-        },
-        incrementRetryCounter: function (context, event) {
-            context.retries++;
-        },
-        increaseDelay: function (context, event) {
-            context.delay = context.delay * 2;
-        },
-        decreaseDelayAfterTimeout: function (context, event) {
-            console.debug(`Audio load timed out after ${AUDIO_LOAD_TIMEOUT_MS}ms. Trying again...`);
-            context.delay = Math.max(AUDIO_RELOAD_DELAY_MS, context.delay - AUDIO_LOAD_TIMEOUT_MS);
-        },
-        forceReload: function (context, event) {
-            console.debug(`Reloading audio, attempt ${context.retries + 1} of ${maxRetryAttempts}...`);
-            EventBus.emit("audio:reload");
-            if (context.retries === 0) {
-                context.startTime = new Date().getTime();
-            }
-            const currentTime = new Date().getTime();
-            const timeElapsed = currentTime - context.startTime;
-            console.debug(`Time elapsed since first retry: ${timeElapsed / 1000}s, current delay: ${context.delay}ms`);
-        },
-        forcePlay: function (context, event) {
-            console.debug("Starting audio after successful reload.", event);
-            // how long did it take to reload and play?
-            const currentTime = new Date().getTime();
-            const timeElapsed = currentTime - context.startTime;
-            console.debug(`Time taken to reload and start audio: ${timeElapsed / 1000} seconds`);
-            EventBus.emit("audio:output:play");
-        },
-    },
-    guards: {
-        retriesRemaining: function (context, event) {
-            return context.retries < maxRetryAttempts;
-        },
-        maxRetriesReached: function (context, event) {
-            return context.retries >= maxRetryAttempts;
-        },
-    },
-    delays: {
-        RELOAD_DELAY: function (context, event) {
-            return context.delay;
-        },
-    },
-});
-
-;// CONCATENATED MODULE: ./src/UserAgentModule.js
-function isSafari() {
-  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-}
-function isMobileDevice() {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.matchMedia("(max-width: 820px)").matches // fallback for devices that don't have a recognisable mobile user agent, like iPad (Air, Pro is excluded)
-  ;
-}
-
-function addUserAgentFlags() {
-  var isFirefoxAndroid = /Firefox/.test(navigator.userAgent) && /Android/.test(navigator.userAgent);
-  var element = document.documentElement;
-  if (isFirefoxAndroid) {
-    element.classList.add("firefox-android");
-  }
-  addDeviceFlags(element);
-  //addViewFlags(element); // redundant, as this is called in initMode
-}
-
-function addDeviceFlags(element) {
-  if (isMobileDevice()) {
-    element.classList.add("mobile-device");
-  }
-}
-;// CONCATENATED MODULE: ./src/audio/AudioModule.js
-function AudioModule_typeof(o) { "@babel/helpers - typeof"; return AudioModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, AudioModule_typeof(o); }
-function AudioModule_ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function AudioModule_objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? AudioModule_ownKeys(Object(t), !0).forEach(function (r) { AudioModule_defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : AudioModule_ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function AudioModule_defineProperty(obj, key, value) { key = AudioModule_toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, AudioModule_toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function AudioModule_toPropertyKey(arg) { var key = AudioModule_toPrimitive(arg, "string"); return AudioModule_typeof(key) === "symbol" ? key : String(key); }
-function AudioModule_toPrimitive(input, hint) { if (AudioModule_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (AudioModule_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-// import state machines for audio input and output
-
-
-
-
-
-
-
-var AudioModule = /*#__PURE__*/function () {
-  function AudioModule() {
-    _classCallCheck(this, AudioModule);
-    this.audioElement = document.querySelector("audio");
-    if (!this.audioElement) {
-      console.error("Audio element not found!");
-    } else {
-      console.debug("Audio element found", this.audioElement);
-    }
-    this.audioOutputActor = interpret(audioOutputMachine);
-    this.audioOutputActor.onTransition(function (state) {
-      if (state.changed) {
-        var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
-        var toState = serializeStateValue(state.value);
-        logger.debug("Audio Output Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
-      }
-    });
-    this.audioInputActor = interpret(audioInputMachine);
-    this.audioInputActor.onTransition(function (state) {
-      if (state.changed) {
-        var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
-        var toState = serializeStateValue(state.value);
-        logger.debug("Audio Input Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
-      }
-    });
-
-    // Safari audio error handling logic (known issue in at least Safari <= 17.4)
-    if (isSafari()) {
-      this.audioRetryActor = interpret(machine);
-      this.audioRetryActor.onTransition(function (state) {
-        if (state.changed) {
-          var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
-          var toState = serializeStateValue(state.value);
-          logger.debug("Audio Retry Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
-        }
-      });
-    }
-  }
-  _createClass(AudioModule, [{
-    key: "start",
-    value: function start() {
-      // audio output (Pi)
-      this.audioOutputActor.start();
-      this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
-      //this.safariErrorHandler.startMonitoring();
-
-      // audio input (user)
-      this.audioInputActor.start();
-      this.registerAudioCommands(this.audioInputActor, this.audioOutputActor);
-      if (isSafari()) {
-        // audio retry
-        console.log("Using audio retry handler for Safari.");
-        this.audioRetryActor.start();
-        this.registerAudioPlaybackEvents(this.audioElement, this.audioRetryActor);
-        this.registerSourceChangeEvents(this.audioElement, this.audioRetryActor);
-      }
-    }
-  }, {
-    key: "stop",
-    value: function stop() {}
-  }, {
-    key: "registerAudioPlaybackEvents",
-    value: function registerAudioPlaybackEvents(audio, actor) {
-      var events = ["loadstart", "loadedmetadata", "canplaythrough", "play", "pause", "ended", "seeked", "emptied", "abort", "stalled", "error"];
-      events.forEach(function (event) {
-        audio.addEventListener(event, function () {
-          return actor.send(event);
-        });
-      });
-      audio.addEventListener("playing", function () {
-        actor.send("play");
-      });
-    }
-  }, {
-    key: "registerSourceChangeEvents",
-    value: function registerSourceChangeEvents(audio, actor) {
-      var _this = this;
-      this.lastSource = audio.src;
-      audio.addEventListener("loadstart", function () {
-        if (audio.currentSrc !== _this.lastSource) {
-          actor.send("sourceChanged");
-          _this.lastSource = audio.currentSrc;
-        }
-      });
-    }
-
-    /* These events are used to control/pass requests to the audio module from other modules */
-  }, {
-    key: "registerAudioCommands",
-    value: function registerAudioCommands(inputActor, outputActor) {
-      var _this2 = this;
-      // audio input (recording) commands
-      EventBus.on("audio:setupRecording", function (e) {
-        inputActor.send("acquire");
-      });
-      EventBus.on("audio:tearDownRecording", function (e) {
-        inputActor.send("release");
-      });
-      EventBus.on("audio:startRecording", function (e) {
-        // Check if Pi is currently speaking and stop her audio
-        outputActor.send("pause");
-
-        // Check if the microphone is acquired before starting?
-        inputActor.send(["acquire", "start"]);
-      });
-      EventBus.on("audio:stopRecording", function (e) {
-        inputActor.send("stopRequested");
-        /* resume or cancel Pi's audio */
-        /* TODO: reassess how to handle interruptions
-        outputActor.send("play"); // resume Pi's audio
-        outputActor.send("stop"); // cancel Pi's audio
-        */
-      });
-      // audio input (recording) events (pass media recorder events -> audio input machine actor)
-      EventBus.on("audio:dataavailable", function (detail) {
-        inputActor.send(AudioModule_objectSpread({
-          type: "dataAvailable"
-        }, detail));
-      });
-      EventBus.on("audio:input:stop", function (e) {
-        inputActor.send("stop");
-      });
-      EventBus.on("audio:input:reconnect", function (e) {
-        inputActor.send("release");
-        inputActor.send(["acquire", "start"]);
-      });
-
-      // audio output (playback) commands
-      EventBus.on("audio:reload", function (e) {
-        _this2.audioElement.load();
-      });
-      EventBus.on("audio:skipNext", function (e) {
-        outputActor.send("skipNext");
-      });
-      EventBus.on("audio:skipCurrent", function (e) {
-        _this2.audioElement.pause();
-      });
-      EventBus.on("audio:output:play", function (e) {
-        _this2.audioElement.play();
-      });
-      EventBus.on("audio:output:pause", function (e) {
-        _this2.audioElement.pause();
-      });
-      EventBus.on("audio:output:resume", function (e) {
-        _this2.audioElement.play();
-      });
-    }
-  }]);
-  return AudioModule;
-}();
-
-;// CONCATENATED MODULE: ./src/state-machines/FocusMachine.ts
-
-function enterFocusMode() {
-    // add focus class to the body
-    document.body.classList.add("focus");
-}
-function exitFocusMode() {
-    // remove focus class from the body
-    document.body.classList.remove("focus");
-}
-const THRESHOLD_INACTIVITY_TIME_MS = 10000; // Define the threshold value
-const FocusMachine_machine = createMachine({
-    context: {
-        inactivityTime: 0,
-    },
-    id: "focusMachine",
-    initial: "Idle",
-    states: {
-        Idle: {
-            description: "The machine is not in focus mode and is waiting for user inactivity.",
-            after: {
-                "11000": {
-                    target: "#focusMachine.Focused",
-                    cond: "isInactiveLongEnough",
-                    actions: [],
-                },
-            },
-            exit: "resetInactivityTime",
-            on: {
-                blur: {
-                    target: "Idle",
-                    actions: "resetInactivityTime",
-                },
-                tick: {
-                    actions: "incrementInactivityTime",
-                },
-            },
-        },
-        Focused: {
-            description: "The machine is in focus mode, not responding to user inputs except to exit focus mode.",
-            entry: "focusAction",
-            exit: ["blurAction"],
-            on: {
-                blur: {
-                    target: "Idle",
-                    actions: "resetInactivityTime",
-                },
-            },
-        },
-    },
-    schema: {
-        events: {},
-        context: {},
-    },
-    predictableActionArguments: true,
-    preserveActionOrder: true,
-}, {
-    actions: {
-        resetInactivityTime: es_assign({
-            inactivityTime: 0,
-        }),
-        incrementInactivityTime: es_assign({
-            inactivityTime: (context, event) => {
-                return (context.inactivityTime += event.time_ms);
-            },
-        }),
-        focusAction: () => {
-            enterFocusMode();
-        },
-        blurAction: () => {
-            exitFocusMode();
-        },
-    },
-    services: {},
-    guards: {
-        isInactiveLongEnough: (context, event) => {
-            return context.inactivityTime >= THRESHOLD_INACTIVITY_TIME_MS;
-        },
-    },
-    delays: {},
-});
-
-;// CONCATENATED MODULE: ./src/FullscreenModule.ts
-
-
-
-const focusActor = interpret(FocusMachine_machine);
-const tickInterval = 1000;
-var ticker;
-const userInputEvents = ["mousemove", "click", "keypress"];
-function handleUserInput() {
-    focusActor.send({ type: "blur" });
-}
-function startFocusModeListener() {
-    focusActor.start();
-    ticker = setInterval(() => {
-        focusActor.send({ type: "tick", time_ms: tickInterval });
-    }, tickInterval);
-    // send any click or keypress to reset the inactivity timer
-    for (const event of userInputEvents) {
-        document.addEventListener(event, handleUserInput);
-    }
-}
-function stopFocusModeListener() {
-    focusActor.stop();
-    clearInterval(ticker);
-    for (const event of userInputEvents) {
-        document.removeEventListener(event, handleUserInput);
-    }
-}
-function enterFullscreen() {
-    // Check if the API is available
-    if (document.fullscreenEnabled) {
-        // Request full-screen mode
-        document.documentElement
-            .requestFullscreen()
-            .then(() => {
-            if (!isMobileDevice()) {
-                startFocusModeListener();
-            }
-        })
-            .catch((err) => {
-            console.info(`Unable to enter full-screen mode. Maybe starting in mobile view?: ${err.message} (${err.name})`);
-        });
-    }
-    else {
-        console.log("Fullscreen API is not enabled.");
-    }
-}
-function exitFullscreen() {
-    // Check if the API is available
-    if (document.fullscreenEnabled) {
-        // Request full-screen mode
-        document
-            .exitFullscreen()
-            .then(() => {
-            if (!isMobileDevice()) {
-                exitFocusMode();
-                stopFocusModeListener();
-            }
-        })
-            .catch((err) => {
-            console.info(`Unable to exit full-screen mode. Maybe starting in desktop view?: ${err.message} (${err.name})`);
-        });
-    }
-    else {
-        console.log("Fullscreen API is not enabled.");
-    }
-}
-
-;// CONCATENATED MODULE: ./src/prefs/PreferenceModule.ts
-
-var UserPreferenceModule;
-(function (UserPreferenceModule) {
-    /**
-     * Get the stored value from the chrome storage
-     * @param {string} key
-     * @param {any} defaultValue
-     * @returns any
-     */
-    function getStoredValue(key, defaultValue) {
-        return new Promise((resolve) => {
-            chrome.storage.sync.get([key], function (result) {
-                if (result[key] === undefined) {
-                    resolve(defaultValue);
-                }
-                else {
-                    resolve(result[key]);
-                }
-            });
-        });
-    }
-    function getTranscriptionMode() {
-        return getStoredValue("prefer", "balanced");
-    }
-    UserPreferenceModule.getTranscriptionMode = getTranscriptionMode;
-    function getSoundEffects() {
-        return getStoredValue("soundEffects", true);
-    }
-    UserPreferenceModule.getSoundEffects = getSoundEffects;
-    function getAutoSubmit() {
-        return getStoredValue("autoSubmit", true);
-    }
-    UserPreferenceModule.getAutoSubmit = getAutoSubmit;
-    function getLanguage() {
-        return getStoredValue("language", navigator.language);
-    }
-    UserPreferenceModule.getLanguage = getLanguage;
-    function getTheme() {
-        return getStoredValue("theme", "light");
-    }
-    UserPreferenceModule.getTheme = getTheme;
-    function setTheme(theme) {
-        return new Promise((resolve) => {
-            if (typeof chrome !== "undefined" &&
-                chrome.storage &&
-                chrome.storage.sync) {
-                chrome.storage.sync.set({ theme }, () => {
-                    resolve();
-                });
-            }
-            else {
-                // If Chrome storage API is not supported, do nothing
-                resolve();
-            }
-            EventBus.emit("userPreferenceChanged", { theme: theme });
-        });
-    }
-    UserPreferenceModule.setTheme = setTheme;
-    function getDataSharing() {
-        return getStoredValue("shareData", false);
-    }
-    UserPreferenceModule.getDataSharing = getDataSharing;
-    function getPrefersImmersiveView() {
-        let userViewPreference = null;
-        try {
-            // we use localStorage here because view preference is device specific
-            userViewPreference = localStorage.getItem("userViewPreference");
-        }
-        catch (e) {
-            console.warn("Could not access localStorage: ", e);
-        }
-        let prefersMobile = false;
-        if (userViewPreference) {
-            prefersMobile = userViewPreference === "immersive";
-        }
-        return Promise.resolve(prefersMobile);
-    }
-    UserPreferenceModule.getPrefersImmersiveView = getPrefersImmersiveView;
-    function getAllowInterruptions() {
-        return getStoredValue("allowInterruptions", true);
-    }
-    UserPreferenceModule.getAllowInterruptions = getAllowInterruptions;
-    // Singleton class for caching user preferences
-    class UserPreferenceCache {
-        constructor() {
-            this.cache = {}; // Initialize the cache
-        }
-        static getInstance() {
-            if (!UserPreferenceCache.instance) {
-                UserPreferenceCache.instance = new UserPreferenceCache();
-            }
-            return UserPreferenceCache.instance;
-        }
-        getCachedValue(key, defaultValue) {
-            return this.cache.hasOwnProperty(key) ? this.cache[key] : defaultValue;
-        }
-        setCachedValue(key, value) {
-            this.cache[key] = value;
-            console.debug("Setting cache value: ", key, value);
-        }
-    }
-    // Initialize the cache with UserPreferenceModule
-    (function initializeCache() {
-        reloadCache();
-        // Listen for changes in autoSubmit preference (by popup or options page)
-        chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-            if ("autoSubmit" in request) {
-                const cache = UserPreferenceCache.getInstance();
-                cache.setCachedValue("autoSubmit", request.autoSubmit);
-            }
-            if ("allowInterruptions" in request) {
-                const cache = UserPreferenceCache.getInstance();
-                cache.setCachedValue("allowInterruptions", request.allowInterruptions);
-            }
-        });
-    })();
-    function getCachedAutoSubmit() {
-        const cache = UserPreferenceCache.getInstance();
-        const cachedResult = cache.getCachedValue("autoSubmit", true);
-        return cachedResult;
-    }
-    UserPreferenceModule.getCachedAutoSubmit = getCachedAutoSubmit;
-    function getCachedAllowInterruptions() {
-        const cache = UserPreferenceCache.getInstance();
-        const cachedResult = cache.getCachedValue("allowInterruptions", true);
-        return cachedResult;
-    }
-    UserPreferenceModule.getCachedAllowInterruptions = getCachedAllowInterruptions;
-    function reloadCache() {
-        const cache = UserPreferenceCache.getInstance();
-        getAutoSubmit().then((value) => {
-            cache.setCachedValue("autoSubmit", value);
-        });
-        getAllowInterruptions().then((value) => {
-            cache.setCachedValue("allowInterruptions", value);
-        });
-    }
-    UserPreferenceModule.reloadCache = reloadCache;
-})(UserPreferenceModule || (UserPreferenceModule = {}));
-
-;// CONCATENATED MODULE: ./src/DOMModule.ts
-/**
- * Append a child node to a parent node, either at a specific position or as the last child.
- * @param parent The parent node to add the child to.
- * @param child The node to add.
- * @param position If positive, indexed from the start of the parent's children. If negative, indexed from the end of the parent's children.
- */
-function addChild(parent, child, position = 0) {
-    // Check if a container is provided.
-    if (parent) {
-        // If position is 0, simply append the button as the last child.
-        if (position === 0) {
-            parent.appendChild(child);
-        }
-        else {
-            // Calculate the index of the reference node for insertBefore().
-            const referenceIndex = position > 0 ? position : parent.children.length + position;
-            const referenceNode = parent.children[referenceIndex];
-            // If a reference node exists, insert the button before it.
-            if (referenceNode) {
-                parent.insertBefore(child, referenceNode);
-            }
-            else {
-                // If not, append the button as the last child.
-                parent.appendChild(child);
-            }
-        }
-    }
-    else {
-        // If no container is provided, append the button to the body.
-        document.body.appendChild(child);
-    }
-}
-
-;// CONCATENATED MODULE: ./src/ImmersionService.js
-function ImmersionService_typeof(o) { "@babel/helpers - typeof"; return ImmersionService_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, ImmersionService_typeof(o); }
-function ImmersionService_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function ImmersionService_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, ImmersionService_toPropertyKey(descriptor.key), descriptor); } }
-function ImmersionService_createClass(Constructor, protoProps, staticProps) { if (protoProps) ImmersionService_defineProperties(Constructor.prototype, protoProps); if (staticProps) ImmersionService_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function ImmersionService_toPropertyKey(arg) { var key = ImmersionService_toPrimitive(arg, "string"); return ImmersionService_typeof(key) === "symbol" ? key : String(key); }
-function ImmersionService_toPrimitive(input, hint) { if (ImmersionService_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (ImmersionService_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-
-
-
-
-function attachCallButton() {
-  // move the call button back into the text prompt container for desktop view
-  var container = document.getElementById("saypi-prompt-controls-container");
-  var callButton = document.getElementById("saypi-callButton");
-  if (container && callButton) {
-    addChild(container, callButton, -1);
-  }
-}
-function detachCallButton() {
-  // remove the call button from the text prompt container while in mobile view
-  var callButton = document.getElementById("saypi-callButton");
-  if (callButton) {
-    addChild(document.body, callButton);
-  }
-}
-var ImmersionService = /*#__PURE__*/function () {
-  /**
-   * A service that manages the immersive view mode
-   * Uses dependency injection to access the chatbot
-   * @param {Chatbot} chatbot
-   */
-  function ImmersionService(chatbot) {
-    ImmersionService_classCallCheck(this, ImmersionService);
-    this.chatbot = chatbot;
-  }
-
-  /**
-   * Perform initial setup of the UI based on the view preferences
-   */
-  ImmersionService_createClass(ImmersionService, [{
-    key: "initMode",
-    value: function initMode() {
-      var _this = this;
-      UserPreferenceModule.getPrefersImmersiveView().then(function (immersive) {
-        if (immersive) {
-          _this.enterImmersiveMode();
-        } else {
-          ImmersionService.exitImmersiveMode();
-        }
-      });
-    }
-
-    // this function determines whether the immersive view is currently active
-  }, {
-    key: "enterImmersiveMode",
-    value: function enterImmersiveMode() {
-      localStorage.setItem("userViewPreference", "immersive"); // Save preference
-
-      // if not already on the talk page, navigate to it
-      // this is to ensure the user is not stuck in the immersive view on a non-chat page
-      var currentPath = window.location.pathname;
-      if (!this.chatbot.isChatablePath(currentPath)) {
-        var path = this.chatbot.getChatPath();
-        if (window.location.pathname !== path) {
-          // Get the current redirect count
-          var redirectCount = localStorage.getItem("redirectCount");
-          if (!redirectCount) {
-            redirectCount = 0;
-          }
-
-          // If the redirect count is less than the limit, attempt a redirect
-          if (redirectCount < 3) {
-            localStorage.setItem("redirectCount", ++redirectCount);
-            window.location = path;
-          } else {
-            // Reset the redirect count
-            localStorage.removeItem("redirectCount");
-            console.warn("Redirect limit reached. Unable to redirect to chat page.");
-          }
-        }
-      }
-      var element = document.documentElement;
-      element.classList.remove("desktop-view");
-      element.classList.add("immersive-view");
-      detachCallButton();
-      enterFullscreen();
-      UserPreferenceModule.getTheme().then(function (theme) {
-        buttonModule.applyTheme(theme);
-      });
-    }
-  }], [{
-    key: "isViewImmersive",
-    value: function isViewImmersive() {
-      var element = document.documentElement;
-      return element.classList.contains("immersive-view");
-    }
-  }, {
-    key: "exitImmersiveMode",
-    value: function exitImmersiveMode() {
-      localStorage.setItem("userViewPreference", "desktop"); // Save preference
-
-      var element = document.documentElement;
-      element.classList.remove("immersive-view");
-      element.classList.add("desktop-view");
-      attachCallButton();
-      exitFullscreen();
-    }
-  }]);
-  return ImmersionService;
-}();
-;// CONCATENATED MODULE: ./src/AnimationModule.js
-function AnimationModule_typeof(o) { "@babel/helpers - typeof"; return AnimationModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, AnimationModule_typeof(o); }
-function AnimationModule_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function AnimationModule_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, AnimationModule_toPropertyKey(descriptor.key), descriptor); } }
-function AnimationModule_createClass(Constructor, protoProps, staticProps) { if (protoProps) AnimationModule_defineProperties(Constructor.prototype, protoProps); if (staticProps) AnimationModule_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function AnimationModule_defineProperty(obj, key, value) { key = AnimationModule_toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function AnimationModule_toPropertyKey(arg) { var key = AnimationModule_toPrimitive(arg, "string"); return AnimationModule_typeof(key) === "symbol" ? key : String(key); }
-function AnimationModule_toPrimitive(input, hint) { if (AnimationModule_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (AnimationModule_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-var AnimationModule = /*#__PURE__*/function () {
-  function AnimationModule() {
-    AnimationModule_classCallCheck(this, AnimationModule);
-  }
-  AnimationModule_createClass(AnimationModule, null, [{
-    key: "startAnimation",
-    value: function startAnimation(animation) {
-      this.stopOtherAnimations(animation);
-      if (this.talkButtonAnimations.includes(animation)) {
-        var rectangles = document.querySelectorAll(this.rectanglesSelector);
-        rectangles.forEach(function (rect) {
-          return rect.classList.add(animation);
-        });
-      }
-      if (this.callButtonAnimations.includes(animation)) {
-        var callButtons = document.querySelectorAll(this.callButtonSelector);
-        callButtons.forEach(function (button) {
-          return button.classList.add(animation);
-        });
-      }
-    }
-  }, {
-    key: "stopAnimation",
-    value: function stopAnimation(animation) {
-      var rectangles = document.querySelectorAll(this.rectanglesSelector);
-      rectangles.forEach(function (rect) {
-        return rect.classList.remove(animation);
-      });
-      var callButtons = document.querySelectorAll(this.callButtonSelector);
-      callButtons.forEach(function (button) {
-        return button.classList.remove(animation);
-      });
-    }
-  }, {
-    key: "stopAllAnimations",
-    value: function stopAllAnimations() {
-      var _this = this;
-      this.talkButtonAnimations.forEach(function (animation) {
-        return _this.stopAnimation(animation);
-      });
-      this.callButtonAnimations.forEach(function (animation) {
-        return _this.stopAnimation(animation);
-      });
-    }
-  }, {
-    key: "stopOtherAnimations",
-    value: function stopOtherAnimations(keepAnimation) {
-      if (this.talkButtonAnimations.includes(keepAnimation)) {
-        this.stopOtherAnimationsByCollection(keepAnimation, this.talkButtonAnimations);
-      } else if (this.callButtonAnimations.includes(keepAnimation)) {
-        this.stopOtherAnimationsByCollection(keepAnimation, this.callButtonAnimations);
-      }
-    }
-  }, {
-    key: "stopOtherAnimationsByCollection",
-    value: function stopOtherAnimationsByCollection(keepAnimation, animationsCollection) {
-      var _this2 = this;
-      animationsCollection.forEach(function (animation) {
-        if (animation !== keepAnimation) {
-          _this2.stopAnimation(animation);
-        }
-      });
-    }
-  }]);
-  return AnimationModule;
-}();
-AnimationModule_defineProperty(AnimationModule, "rectanglesSelector", ".outermost, .second, .third, .fourth, .fifth, .innermost");
-AnimationModule_defineProperty(AnimationModule, "callButtonSelector", ".call-button");
-AnimationModule_defineProperty(AnimationModule, "talkButtonAnimations", ["piThinking", "piSpeaking", "userSpeaking", "transcribing"]);
-AnimationModule_defineProperty(AnimationModule, "callButtonAnimations", ["glow", "glow-fade-out"]);
-
-;// CONCATENATED MODULE: ./src/i18n.ts
-var i18n_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-// We'll start with an empty messages object
-let messages = {};
-// This function attempts to load messages for a given locale
-function loadMessages(locale) {
-    return i18n_awaiter(this, void 0, void 0, function* () {
-        try {
-            messages[locale] = yield __webpack_require__(557)(`./${locale}/messages.json`);
-        }
-        catch (error) {
-            console.error(`Failed to load messages for locale: ${locale}`, error);
-        }
-    });
-}
-function getLocalMessage(locale, messageName, substitutions) {
-    // if the locale is not in the messages object, default to English
-    if (!messages[locale]) {
-        locale = "en";
-    }
-    // if the message is not in the locale object, default to the message name and log an error
-    if (!messages[locale][messageName]) {
-        console.error(`Message not found for locale: ${locale} and message name: ${messageName}`);
-        return messageName;
-    }
-    else {
-        const rawMessage = messages[locale][messageName].message;
-        if (substitutions) {
-            return rawMessage.replace("$1", substitutions.toString());
-        }
-        else {
-            return rawMessage;
-        }
-    }
-}
-// Call this function to initialize the messages
-function convertLanguageToLocale(language) {
-    return language.split("_")[0];
-}
-function getMessage(messageName, substitutions) {
-    // Check if running as a Chrome extension
-    if (typeof chrome !== "undefined" && chrome.i18n) {
-        return chrome.i18n.getMessage(messageName, substitutions);
-    }
-    else {
-        // Fallback for userscript
-        UserPreferenceModule.getLanguage()
-            .then((lang) => {
-            let locale = convertLanguageToLocale(lang);
-            if (!messages[locale]) {
-                loadMessages(locale);
-            }
-            return getLocalMessage(locale, messageName);
-        })
-            .catch((error) => {
-            console.error(`Failed to get language preference`, error);
-            let locale = "en";
-            if (!messages[locale]) {
-                loadMessages(locale);
-            }
-            return getLocalMessage(locale, messageName);
-        });
-    }
-    return messageName;
-}
-/* harmony default export */ const i18n = (getMessage);
-
-;// CONCATENATED MODULE: ./src/NotificationsModule.ts
-var NotificationsModule_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-
-
-
-class TextualNotificationsModule {
-    constructor() {
-        this.notificationElement = document.getElementById("saypi-notification");
-        this.autoSubmitEnabled = () => {
-            this.showNotification(i18n("autoSubmitEnabled"));
-        };
-        this.autoSubmitDisabled = () => {
-            this.showNotification(i18n("autoSubmitDisabled"));
-        };
-    }
-    showNotification(message, iconName) {
-        this.showNotificationForSeconds(message, 5, iconName);
-    }
-    init() {
-        if (!this.notificationElement ||
-            !document.body.contains(this.notificationElement)) {
-            this.notificationElement = document.getElementById("saypi-notification");
-        }
-        if (!this.notificationElement) {
-            const notificationElement = document.createElement("p");
-            notificationElement.id = "saypi-notification";
-            notificationElement.classList.add("text-notification");
-            document.body.appendChild(notificationElement);
-            this.notificationElement = notificationElement;
-            // hide notification when clicked
-            this.notificationElement.addEventListener("click", () => {
-                this.hideNotification();
-            });
-        }
-    }
-    loadSVG(url) {
-        return NotificationsModule_awaiter(this, void 0, void 0, function* () {
-            try {
-                const response = yield fetch(url);
-                const data = yield response.text();
-                let parser = new DOMParser();
-                let svgElement = parser.parseFromString(data, "image/svg+xml")
-                    .documentElement;
-                return svgElement;
-            }
-            catch (err) {
-                console.error("Error loading SVG image: ", err);
-                throw err;
-            }
-        });
-    }
-    _showNotification(message, iconName, embedIcon = false, isDialog = false, buttonText) {
-        var _a;
-        return NotificationsModule_awaiter(this, void 0, void 0, function* () {
-            this.init();
-            // dismiss any existing notification
-            this.hideNotification();
-            // show new notification
-            this.notificationElement.classList.add("active");
-            if (isDialog) {
-                this.notificationElement.classList.add("dialog");
-            }
-            else {
-                this.notificationElement.classList.remove("dialog");
-            }
-            if (iconName) {
-                const iconImageUrl = getResourceUrl(`icons/${iconName}.svg`);
-                let iconElement;
-                if (embedIcon) {
-                    iconElement = yield this.loadSVG(iconImageUrl);
-                }
-                else {
-                    iconElement = document.createElement("img");
-                    iconElement.src = iconImageUrl;
-                }
-                iconElement.classList.add("icon");
-                (_a = this.notificationElement) === null || _a === void 0 ? void 0 : _a.appendChild(iconElement);
-            }
-            const notificationContent = document.createElement("div");
-            notificationContent.classList.add("content");
-            this.notificationElement.appendChild(notificationContent);
-            const notificationText = document.createElement("span");
-            notificationText.classList.add("message");
-            notificationText.textContent = message;
-            notificationContent.appendChild(notificationText);
-            if (buttonText) {
-                const button = document.createElement("button");
-                button.textContent = buttonText;
-                button.addEventListener("click", () => {
-                    this.hideNotification();
-                });
-                notificationContent.appendChild(button);
-            }
-        });
-    }
-    hideNotification() {
-        this.init();
-        this.notificationElement.classList.remove("active");
-        // remove any child elements
-        while (this.notificationElement.firstChild) {
-            this.notificationElement.removeChild(this.notificationElement.firstChild);
-        }
-    }
-    showNotificationForSeconds(message, seconds, iconName) {
-        this._showNotification(message, iconName);
-        setTimeout(() => {
-            this.hideNotification();
-        }, seconds * 1000);
-    }
-}
-class UserPromptModule extends TextualNotificationsModule {
-    showLongCallDialog(durationSeconds) {
-        return NotificationsModule_awaiter(this, void 0, void 0, function* () {
-            const dialog = document.createElement("div");
-            dialog.classList.add("activity-check-dialog");
-            const messageText = i18n("activityCheckMessage");
-            const buttonText = i18n("activityCheckButton");
-            const iconName = "sixty-seconds";
-            yield this._showNotification(messageText, iconName, true, true, buttonText);
-            const timer = document.getElementById("saypi-countdown-number");
-            if (timer) {
-                let remainingTime = durationSeconds;
-                const countdownInterval = setInterval(() => {
-                    remainingTime--;
-                    timer.textContent = `${remainingTime}`;
-                    if (remainingTime <= 0) {
-                        clearInterval(countdownInterval);
-                        this.hideNotification();
-                        console.debug("User has been inactive for too long");
-                        EventBus.emit("saypi:hangup");
-                    }
-                }, 1000);
-                const dismissButton = document.querySelector(".dialog button");
-                if (dismissButton) {
-                    dismissButton.addEventListener("click", () => {
-                        clearInterval(countdownInterval);
-                        this.hideNotification();
-                        EventBus.emit("saypi:countdown-cancelled");
-                        console.debug("User is still active");
-                    });
-                }
-            }
-            else {
-                console.error("Unable to find countdown timer element");
-            }
-        });
-    }
-    activityCheck(durationSeconds) {
-        this.showLongCallDialog(durationSeconds);
-    }
-}
-class AudibleNotificationsModule {
-    constructor() {
-        // Load audio resources in the constructor
-        this.listeningSound = new Audio(getResourceUrl("audio/send-round-short.mp3"));
-        this.listeningSound.preload = "auto"; // short track, so load the audio file as soon as possible
-        this.callStartedSound = new Audio(getResourceUrl("audio/startup-synth.mp3"));
-        this.callFailedSound = new Audio(getResourceUrl("audio/call-failed.mp3"));
-        this.callEndedSound = new Audio(getResourceUrl("audio/turn-off.mp3"));
-        this.lockSound = new Audio(getResourceUrl("audio/beep-on.mp3"));
-        this.unlockSound = new Audio(getResourceUrl("audio/beep-off.mp3"));
-        this.themeOnSound = new Audio(getResourceUrl("audio/switch-on.mp3"));
-        this.themeOffSound = new Audio(getResourceUrl("audio/switch-off.mp3"));
-        this.activityCheckSound1 = new Audio(getResourceUrl("audio/attention-1.mp3"));
-        this.activityCheckSound2 = new Audio(getResourceUrl("audio/attention-2.mp3"));
-    }
-    static getInstance() {
-        if (!AudibleNotificationsModule.instance) {
-            AudibleNotificationsModule.instance = new AudibleNotificationsModule();
-        }
-        return AudibleNotificationsModule.instance;
-    }
-    playSound(sound) {
-        return NotificationsModule_awaiter(this, void 0, void 0, function* () {
-            const soundEnabled = yield UserPreferenceModule.getSoundEffects();
-            if (soundEnabled) {
-                sound.play().catch((e) => {
-                    if (e.name === "NotAllowedError") {
-                        // Inform the user to enable audio permissions or trigger from a click
-                        console.error(`Audio playback blocked on ${sound.src} notification. Please initiate audio from a user interaction.`);
-                    }
-                    else {
-                        console.error("Unable to play audio notification:", e);
-                    }
-                });
-            }
-            else {
-                console.debug("Sound effects disabled");
-            }
-        });
-    }
-    listeningStopped() {
-        this.playSound(this.listeningSound);
-    }
-    callStarted() {
-        this.playSound(this.callStartedSound);
-    }
-    callFailed() {
-        this.playSound(this.callFailedSound);
-    }
-    callEnded() {
-        this.playSound(this.callEndedSound);
-    }
-    lockScreen() {
-        this.playSound(this.lockSound);
-    }
-    unlockScreen() {
-        this.playSound(this.unlockSound);
-    }
-    themeOn() {
-        this.playSound(this.themeOnSound);
-    }
-    themeOff() {
-        this.playSound(this.themeOffSound);
-    }
-    activityCheck(duration) {
-        this.playSound(this.activityCheckSound1);
-        const secondSound = setTimeout(() => {
-            this.playSound(this.activityCheckSound2);
-        }, (duration / 2) * 1000);
-        EventBus.on("saypi:hangup", () => {
-            clearTimeout(secondSound);
-        });
-        EventBus.on("saypi:countdown-cancelled", () => {
-            clearTimeout(secondSound);
-        });
-    }
-}
-class VisualNotificationsModule {
-    constructor() {
-        this.ring = document.getElementById("progress-ring");
-        this.callButton = document.getElementById("saypi-callButton");
-    }
-    /**
-     * The ring and call button elements may not be available until after the extension is loaded.
-     * This method will attempt to find them and set them if they are not already set.
-     */
-    init() {
-        if (!this.ring || !document.body.contains(this.ring)) {
-            this.ring = document.getElementById("progress-ring");
-        }
-        if (!this.callButton || !document.body.contains(this.callButton)) {
-            this.callButton = document.getElementById("saypi-callButton");
-        }
-    }
-    startCountdown(secondsRemaining) {
-        this.startRingAnimation(secondsRemaining);
-        this.startGlowFade(secondsRemaining);
-    }
-    cancelCountdown() {
-        this.stopRingAnimation();
-        this.stopGlowFade();
-    }
-    startRingAnimation(secondsRemaining) {
-        if (!this.ring) {
-            console.error("Unable to find progress ring element");
-            return;
-        }
-        const circumference = this.ring.getTotalLength();
-        this.ring.style.strokeDasharray = `${circumference} ${circumference}`;
-        this.ring.style.strokeDashoffset = `${circumference}`;
-        this.ring.style.animationDuration = `${secondsRemaining}s`;
-        //this.ring.style.animation = `fillup ${secondsRemaining}s linear forwards, changeColor ${secondsRemaining}s linear forwards`;
-        this.ring.classList.add("active");
-    }
-    stopRingAnimation() {
-        if (!this.ring) {
-            console.error("Unable to find progress ring element");
-            return;
-        }
-        this.ring.classList.remove("active");
-        //      void this.ring.style.strokeDasharray;
-        //      void this.ring.style.strokeDashoffset;
-        //      this.ring.style.animation = 'none';
-    }
-    startGlowFade(secondsRemaining) {
-        if (!this.callButton) {
-            console.error("Unable to find call button element");
-            return;
-        }
-        this.callButton.classList.remove("glow");
-        this.callButton.classList.add("glow-fade-out");
-        this.callButton.style.animationDuration = `${secondsRemaining}s`;
-        //this.callButton.style.animationTimingFunction = 'ease-out !important';
-    }
-    stopGlowFade() {
-        if (!this.callButton) {
-            console.error("Unable to find call button element");
-            return;
-        }
-        this.callButton.classList.remove("glow-fade-out");
-        this.callButton.style.animationDuration = "1.5s"; // reset to default glow duration - see neon.scss for source definition
-        //void this.callButton.style.animationTimingFunction;
-    }
-    listeningStopped() {
-        this.init();
-        this.cancelCountdown();
-    }
-    listeningTimeRemaining(timeRemaining) {
-        this.init();
-        this.cancelCountdown();
-        this.startCountdown(timeRemaining);
-    }
-}
-
-;// CONCATENATED MODULE: ./src/events/EventModule.js
-var _class;
-function EventModule_typeof(o) { "@babel/helpers - typeof"; return EventModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, EventModule_typeof(o); }
-function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == EventModule_typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(EventModule_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-function EventModule_ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function EventModule_objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? EventModule_ownKeys(Object(t), !0).forEach(function (r) { EventModule_defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : EventModule_ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function EventModule_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function EventModule_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, EventModule_toPropertyKey(descriptor.key), descriptor); } }
-function EventModule_createClass(Constructor, protoProps, staticProps) { if (protoProps) EventModule_defineProperties(Constructor.prototype, protoProps); if (staticProps) EventModule_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function EventModule_defineProperty(obj, key, value) { key = EventModule_toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function EventModule_toPropertyKey(arg) { var key = EventModule_toPrimitive(arg, "string"); return EventModule_typeof(key) === "symbol" ? key : String(key); }
-function EventModule_toPrimitive(input, hint) { if (EventModule_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (EventModule_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-
-
-var CALL_READY = "saypi:callReady";
-var USER_SPEAKING = "saypi:userSpeaking";
-var USER_STOPPED_SPEAKING = "saypi:userStoppedSpeaking";
-var USER_FINISHED_SPEAKING = "saypi:userFinishedSpeaking";
-var PI_THINKING = "saypi:piThinking";
-var PI_SPEAKING = "saypi:piSpeaking";
-var PI_STOPPED_SPEAKING = "saypi:piStoppedSpeaking";
-var PI_FINISHED_SPEAKING = "saypi:piFinishedSpeaking";
-var VISIBLE = "saypi:visible";
-var AUDIO_DEVICE_CONNECTED = "saypi:audio:connected";
-var AUDIO_DEVICE_RECONNECT = "saypi:audio:reconnect";
-var END_CALL = "saypi:hangup";
-var SESSION_ASSIGNED = "saypi:session:assigned";
-
-/**
- * The EventModule translates events sent on the EventBus to StateMachine events,
- * coordinating interactions between loosely-coupled modules.
- */
-var EventModule = /*#__PURE__*/function () {
-  function EventModule() {
-    EventModule_classCallCheck(this, EventModule);
-  }
-  EventModule_createClass(EventModule, null, [{
-    key: "init",
-    value: function init() {
-      // All the event listeners can be added here
-      this.registerStateMachineEvents(src_StateMachineService.actor);
-      this.registerSessionEvents(src_StateMachineService.analyticsMachineActor);
-      // Any other initializations...
-    }
-  }, {
-    key: "cleanup",
-    value: function cleanup() {
-      // Remove event listeners if needed, or any other cleanup operations
-      window.removeEventListener("saypi:transcribed", this.handleTranscriptionResponse);
-    }
-  }, {
-    key: "simulateTyping",
-    value: function simulateTyping(element, text) {
-      var submit = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-      element.focus();
-      var sentenceRegex = /([.!?。？！]+)/g;
-      var tokens = text.split(sentenceRegex).filter(Boolean);
-      var sentences = [];
-      for (var i = 0; i < tokens.length; i += 2) {
-        var sentence = tokens[i] + (tokens[i + 1] || "");
-        sentences.push(sentence);
-      }
-      var typeNextSentenceOrSubmit = function typeNextSentenceOrSubmit() {
-        if (sentences.length === 0) {
-          if (submit) EventBus.emit("saypi:autoSubmit");
-        } else {
-          // Emit the event only after all sentences have been typed
-          var nextSentence = sentences.shift();
-          EventModule.setNativeValue(element, element.value + nextSentence);
-          requestAnimationFrame(typeNextSentenceOrSubmit);
-        }
-      };
-      if (sentences.length === 0) {
-        typeTextAndSubmit(element, text, submit);
-      } else {
-        typeNextSentenceOrSubmit();
-      }
-    }
-  }, {
-    key: "setNativeValue",
-    value: function setNativeValue(element, value) {
-      var lastValue = element.value;
-      element.value = value;
-      var event = new Event("input", {
-        target: element,
-        bubbles: true
-      });
-      // React 15
-      event.simulated = true;
-      // React 16-17
-      var tracker = element._valueTracker;
-      if (tracker) {
-        tracker.setValue(lastValue);
-      }
-      element.dispatchEvent(event);
-    }
-  }, {
-    key: "registerStateMachineEvents",
-    value: function registerStateMachineEvents(actor) {
-      EventBus.on(CALL_READY, function () {
-        actor.send(CALL_READY);
-      });
-      EventBus.on(USER_SPEAKING, function () {
-        actor.send(USER_SPEAKING);
-      });
-      [USER_STOPPED_SPEAKING, USER_FINISHED_SPEAKING, AUDIO_DEVICE_CONNECTED, AUDIO_DEVICE_RECONNECT, SESSION_ASSIGNED].forEach(function (eventName) {
-        EventBus.on(eventName, function (detail) {
-          if (detail) {
-            actor.send(EventModule_objectSpread({
-              type: eventName
-            }, detail));
-          } else {
-            console.warn("Received ".concat(eventName, " without details."));
-          }
-        });
-      });
-      [PI_THINKING, PI_SPEAKING, PI_STOPPED_SPEAKING, PI_FINISHED_SPEAKING, END_CALL].forEach(function (eventName) {
-        EventBus.on(eventName, function () {
-          actor.send(eventName);
-        });
-      });
-
-      // notify the actor when the tab is visible
-      document.addEventListener("visibilitychange", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        return _regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) switch (_context.prev = _context.next) {
-            case 0:
-              if (document.visibilityState === "visible") {
-                actor.send(VISIBLE);
-              }
-            case 1:
-            case "end":
-              return _context.stop();
-          }
-        }, _callee);
-      })));
-    }
-  }, {
-    key: "registerSessionEvents",
-    value: function registerSessionEvents(actor) {
-      EventBus.on("session:started", function () {
-        actor.send("start_session");
-      });
-      EventBus.on("session:ended", function () {
-        actor.send("end_session");
-      });
-      EventBus.on("session:message-sent", function (detail) {
-        actor.send(EventModule_objectSpread({
-          type: "send_message"
-        }, detail));
-      });
-      EventBus.on("session:transcribing", function (detail) {
-        actor.send(EventModule_objectSpread({
-          type: "transcribing"
-        }, detail));
-      });
-    }
-  }]);
-  return EventModule;
-}();
-_class = EventModule;
-EventModule_defineProperty(EventModule, "typeTextAndSubmit", function (element, text, submit) {
-  _class.setNativeValue(element, text);
-  if (submit) EventBus.emit("saypi:autoSubmit");
-});
-
-;// CONCATENATED MODULE: ./src/TranscriptionModule.ts
-var TranscriptionModule_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-
-
-
-
-
-const knownNetworkErrorMessages = [
-    "Failed to fetch",
-    "Load failed",
-    "NetworkError when attempting to fetch resource.", // Firefox
-    // Add more known error messages here
-];
-// timeout for transcription requests
-const TIMEOUT_MS = 30000; // 30 seconds
-// track sequence numbers for in-flight transcription requests
-let sequenceNum = 0;
-const sequenceNumsPendingTranscription = new Set();
-function checkForExpiredEntries() {
-    const now = Date.now();
-    sequenceNumsPendingTranscription.forEach((entry) => {
-        if (now - entry.timestamp > TIMEOUT_MS) {
-            sequenceNumsPendingTranscription.delete(entry);
-            logger.info(`Transcription request ${entry.seq} timed out`);
-        }
-    });
-}
-function transcriptionSent() {
-    sequenceNum++;
-    sequenceNumsPendingTranscription.add({
-        seq: sequenceNum,
-        timestamp: Date.now(),
-    });
-}
-function transcriptionReceived(seq) {
-    // delete entry with matching sequence number
-    sequenceNumsPendingTranscription.forEach((entry) => {
-        if (entry.seq === seq) {
-            sequenceNumsPendingTranscription.delete(entry);
-            logger.debug(`Transcription response ${seq} received after ${(Date.now() - entry.timestamp) / 1000}s`);
-            return;
-        }
-    });
-}
-function isTranscriptionPending() {
-    checkForExpiredEntries();
-    return sequenceNumsPendingTranscription.size > 0;
-}
-// call after completed user input is submitted
-function clearPendingTranscriptions() {
-    sequenceNumsPendingTranscription.clear();
-}
-function uploadAudioWithRetry(audioBlob, audioDurationMillis, precedingTranscripts = {}, sessionId, maxRetries = 3) {
-    return TranscriptionModule_awaiter(this, void 0, void 0, function* () {
-        let retryCount = 0;
-        let delay = 1000; // initial delay of 1 second
-        const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-        while (retryCount < maxRetries) {
-            try {
-                transcriptionSent();
-                yield uploadAudio(audioBlob, audioDurationMillis, precedingTranscripts, sessionId);
-                return;
-            }
-            catch (error) {
-                // check for timeout errors (30s on Heroku)
-                if (error instanceof TypeError &&
-                    knownNetworkErrorMessages.includes(error.message)) {
-                    logger.info(`Attempt ${retryCount + 1}/${maxRetries} failed. Retrying in ${delay / 1000} seconds...`);
-                    yield sleep(delay);
-                    // Exponential backoff
-                    delay *= 2;
-                    retryCount++;
-                }
-                else {
-                    console.error("Unexpected error: ", error);
-                    src_StateMachineService.actor.send("saypi:transcribeFailed", {
-                        detail: error,
-                    });
-                    return;
-                }
-            }
-        }
-        console.error("Max retries reached. Giving up.");
-        src_StateMachineService.actor.send("saypi:transcribeFailed", {
-            detail: new Error("Max retries reached"),
-        });
-    });
-}
-function uploadAudio(audioBlob, audioDurationMillis, precedingTranscripts = {}, sessionId) {
-    return TranscriptionModule_awaiter(this, void 0, void 0, function* () {
-        try {
-            const messages = Object.entries(precedingTranscripts).map(([seq, content]) => {
-                return {
-                    role: "user",
-                    content: content,
-                    sequenceNumber: Number(seq), // Convert the string to a number
-                };
-            });
-            // Await the async function to get the formData
-            const formData = yield constructTranscriptionFormData(audioBlob, audioDurationMillis / 1000, messages, sessionId);
-            const language = yield UserPreferenceModule.getLanguage();
-            const controller = new AbortController();
-            const { signal } = controller;
-            setTimeout(() => controller.abort(), TIMEOUT_MS);
-            const startTime = new Date().getTime();
-            const response = yield fetch(`${config.apiServerUrl}/transcribe?language=${language}`, {
-                method: "POST",
-                body: formData,
-                signal,
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-            }
-            const responseJson = yield response.json();
-            const seq = responseJson.sequenceNumber;
-            if (seq !== undefined) {
-                transcriptionReceived(seq);
-            }
-            const endTime = new Date().getTime();
-            const transcriptionDurationMillis = endTime - startTime;
-            const transcript = responseJson.text;
-            const wc = transcript.split(" ").length;
-            const payload = {
-                text: transcript,
-                sequenceNumber: seq,
-            };
-            if (responseJson.hasOwnProperty("pFinishedSpeaking")) {
-                payload.pFinishedSpeaking = responseJson.pFinishedSpeaking;
-            }
-            if (responseJson.hasOwnProperty("tempo")) {
-                payload.tempo = responseJson.tempo;
-            }
-            if (responseJson.hasOwnProperty("merged")) {
-                payload.merged = responseJson.merged;
-            }
-            logger.info(`Transcribed ${Math.round(audioDurationMillis / 1000)}s of audio into ${wc} words in ${Math.round(transcriptionDurationMillis / 1000)}s`);
-            if (responseJson.text.length === 0) {
-                src_StateMachineService.actor.send("saypi:transcribedEmpty");
-            }
-            else {
-                src_StateMachineService.actor.send("saypi:transcribed", payload);
-            }
-        }
-        catch (error) {
-            if (error instanceof Error) {
-                if (error.name === "AbortError") {
-                    console.error("Fetch aborted due to timeout", error);
-                }
-                else {
-                    console.error("An unexpected error occurred:", error);
-                }
-            }
-            else {
-                console.error("Something thrown that is not an Error object:", error);
-            }
-            // re-throw the error if your logic requires it
-            throw error;
-        }
-    });
-}
-function constructTranscriptionFormData(audioBlob, audioDurationSeconds, messages, sessionId) {
-    return TranscriptionModule_awaiter(this, void 0, void 0, function* () {
-        const formData = new FormData();
-        let audioFilename = "audio.webm";
-        if (audioBlob.type === "audio/mp4") {
-            audioFilename = "audio.mp4";
-        }
-        else if (audioBlob.type === "audio/wav") {
-            audioFilename = "audio.wav";
-        }
-        logger.info(`Transcribing audio Blob with MIME type: ${audioBlob.type}, size: ${(audioBlob.size / 1024).toFixed(2)}kb`);
-        // Add the audio and other input parameters to the FormData object
-        formData.append("audio", audioBlob, audioFilename);
-        formData.append("duration", audioDurationSeconds.toString());
-        formData.append("sequenceNumber", sequenceNum.toString());
-        formData.append("messages", JSON.stringify(messages));
-        formData.append("acceptsMerge", "true"); // always accept merge requests (since v1.4.10)
-        if (sessionId) {
-            formData.append("sessionId", sessionId);
-        }
-        // Wait for the preference to be retrieved before appending it to the FormData
-        const preference = yield UserPreferenceModule.getTranscriptionMode();
-        if (preference) {
-            formData.append("prefer", preference);
-        }
-        return formData;
-    });
-}
-function scrollToBottom(textarea) {
-    // Define the height range for the textarea
-    const maxHeight = 455;
-    const minHeight = 32;
-    // Reset the height to get the correct scrollHeight
-    textarea.style.height = `${minHeight}px`; // (initial height) aka 2rem
-    // Set the height of the textarea, up to the maximum height
-    if (textarea.scrollHeight > maxHeight) {
-        textarea.style.height = `${maxHeight}px`;
-        textarea.style.overflowY = "scroll"; // Enable vertical scrollbar
-    }
-    else {
-        const newHeight = Math.max(minHeight, textarea.scrollHeight);
-        textarea.style.height = `${newHeight}px`;
-        textarea.style.overflowY = "hidden"; // Hide vertical scrollbar
-    }
-    // Scroll to the bottom
-    textarea.scrollTop = textarea.scrollHeight;
-}
-/**
- * Get the prompt textarea's current placeholder text
- */
-function getDraftPrompt() {
-    const textarea = document.getElementById("saypi-prompt");
-    return textarea.getAttribute("placeholder") || "";
-}
-/**
- * Set a descriptive message for the user in the prompt textarea
- * Used to inform the user of the current state of the application
- * @param label The placeholder text to be displayed in the prompt textarea
- */
-function setUserMessage(label) {
-    const textarea = document.getElementById("saypi-prompt");
-    textarea.setAttribute("placeholder", label);
-    scrollToBottom(textarea);
-}
-/**
- * Set the prompt textarea to the given transcript, but do not submit it
- * @param transcript The prompt to be displayed in the prompt textarea
- */
-function setDraftPrompt(transcript) {
-    const textarea = document.getElementById("saypi-prompt");
-    UserPreferenceModule.getAutoSubmit().then((autoSubmit) => {
-        if (autoSubmit) {
-            textarea.setAttribute("placeholder", `${transcript}`);
-        }
-        else {
-            textarea.setAttribute("placeholder", "");
-            // clear the text area content
-            textarea.value = "";
-            EventModule.simulateTyping(textarea, `${transcript} `, false);
-        }
-        scrollToBottom(textarea);
-    });
-}
-const PROMPT_CHARACTER_LIMIT = 4000;
-function setFinalPrompt(transcript) {
-    logger.info(`Final transcript: ${transcript}`);
-    const textarea = document.getElementById("saypi-prompt");
-    if (ImmersionService.isViewImmersive()) {
-        // if transcript is > max characters, truncate it to max-1 characters plus an ellipsis
-        if (transcript.length > PROMPT_CHARACTER_LIMIT) {
-            const truncatedLength = PROMPT_CHARACTER_LIMIT - 1;
-            transcript = `${transcript.substring(0, truncatedLength)}…`;
-            console.warn(`Transcript was too long for Pi. Truncated to ${truncatedLength} characters, losing the following text: ... ${transcript.substring(truncatedLength)}`);
-        }
-        EventModule.typeTextAndSubmit(textarea, transcript, true);
-    }
-    else {
-        EventModule.simulateTyping(textarea, `${transcript} `, true); // types and submits the prompt
-    }
-}
-
-;// CONCATENATED MODULE: ./src/TextModule.js
-function replaceEllipsisWithSpace(text) {
-  return text.replace(/\.\.\. ([A-Z])/g, function (match, p1) {
-    return " ".concat(p1.toLowerCase());
-  });
-}
-;// CONCATENATED MODULE: ./src/TranscriptMergeService.ts
-
-class TranscriptMergeService {
-    constructor(apiServerUrl, navigatorLanguage) {
-        this.apiServerUrl = apiServerUrl;
-        this.navigatorLanguage = navigatorLanguage;
-    }
-    sortTranscripts(transcripts) {
-        const sortedKeys = Object.keys(transcripts)
-            .map(Number)
-            .sort((a, b) => a - b);
-        const sortedTranscripts = [];
-        for (const key of sortedKeys) {
-            sortedTranscripts.push(transcripts[key].trim());
-        }
-        return sortedTranscripts;
-    }
-    mergeTranscriptsLocal(transcripts) {
-        const joinedTranscripts = this.sortTranscripts(transcripts).join(" ");
-        const mergedTranscript = replaceEllipsisWithSpace(joinedTranscripts);
-        return mergedTranscript;
-    }
-    mergeTranscriptsRemote(transcripts, cutoffTime) {
-        const keys = this.sortTranscripts(transcripts).map((transcript) => parseInt(transcript));
-        const isContinuous = keys.every((value, index, array) => {
-            // If it's the first element or keys are continuous
-            return index === 0 || value === array[index - 1] + 1;
-        });
-        // milliseconds until cutoff time
-        const timeRemaining = cutoffTime - Date.now();
-        const averageResponseTime = 2000; // 2 seconds
-        // Only proceed if we have a continuous sequence and more than one transcript, and there is enough time remaining
-        if (isContinuous &&
-            keys.length > 1 &&
-            timeRemaining > averageResponseTime) {
-            return fetch(`${this.apiServerUrl}/merge`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    transcripts: this.sortTranscripts(transcripts),
-                    language: this.navigatorLanguage,
-                }),
-            })
-                .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.json();
-            })
-                .then((data) => {
-                console.log(`Merged transcripts ${keys}`);
-                return data.combined_transcript; // Return the merged transcript
-            });
-        }
-        else {
-            // If the sequence is not continuous, resolve with an empty string
-            return Promise.resolve("");
-        }
-    }
-}
-
-;// CONCATENATED MODULE: ./src/TimerModule.ts
-/**
- * Calculate the delay before submitting a message to Pi.
- *
- * @param timeUserStoppedSpeaking - The time the user stopped speaking.
- * @param probabilityFinished - The probability that the user has finished speaking. Expected to be between 0 and 1.
- * @param tempo - The tempo of the user's speech. Expected to be between 0 and 1.
- * @param maxDelay - The maximum delay.
- * @returns The calculated delay.
- */
-function calculateDelay(timeUserStoppedSpeaking, probabilityFinished, tempo, maxDelay) {
-    // Get the current time (in milliseconds)
-    const currentTime = new Date().getTime();
-    // Calculate the time elapsed since the user stopped speaking (in milliseconds)
-    const timeElapsed = currentTime - timeUserStoppedSpeaking;
-    // We invert the tempo because a faster speech (tempo approaching 1) should reduce the delay
-    let tempoFactor = 1 - tempo;
-    // Calculate the combined probability factor
-    let combinedProbability = probabilityFinished * tempoFactor;
-    // The combined factor influences the initial delay
-    const initialDelay = combinedProbability * maxDelay;
-    // Calculate the final delay after accounting for the time already elapsed
-    const finalDelay = Math.max(initialDelay - timeElapsed, 0);
-    return finalDelay;
-}
-
 ;// CONCATENATED MODULE: ./src/audio/AudioControlsModule.ts
 
 class AudioControlsModule {
@@ -28117,13 +26998,70 @@ class AudioControlsModule {
     isAudioOutputEnabled() {
         const svgPathElement = document.querySelector("#saypi-audio-output-button svg path");
         const svgPath = svgPathElement ? svgPathElement.getAttribute("d") : null;
+        // TODO: validate the activePath (is it missing a character?)
         const activePath = "M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 001.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06zM18.584 5.106a.75.75 0 011.06 0c3.808 3.807 3.808 9.98 0 13.788a.75.75 0 11-1.06-1.06 8.25 8.25 0 000-11.668.75.75 0 010-1.06z";
         return svgPath === activePath;
     }
+    useAudioOutputProvider(provider) {
+        console.log(`Using ${provider.name} for speech synthesis`);
+        EventBus.emit("audio:changeProvider", { provider });
+    }
 }
 
-;// CONCATENATED MODULE: ./src/WakeLockModule.ts
-var WakeLockModule_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+;// CONCATENATED MODULE: ./src/tts/SpeechModel.ts
+
+const saypiAudioDomain = config.apiServerUrl
+    ? new URL(config.apiServerUrl).hostname
+    : "api.saypi.ai";
+class BaseAudioProvider {
+    constructor(name, domain) {
+        this.name = name;
+        this.domain = domain;
+    }
+    matches(source) {
+        let domain;
+        try {
+            domain = new URL(source).hostname;
+        }
+        catch (_) {
+            throw new Error(`Invalid source: ${source} is not a valid URL.`);
+        }
+        return domain === this.domain;
+    }
+}
+const audioProviders = {
+    SayPi: new BaseAudioProvider("Say, Pi", saypiAudioDomain),
+    Pi: new BaseAudioProvider("Pi", "pi.ai"),
+    // Add more providers as needed
+};
+class SayPiSpeech {
+    constructor(id, lang, voice, uri) {
+        this.id = id;
+        this.lang = lang;
+        this.voice = voice;
+        this.uri = uri;
+        this.provider = audioProviders.SayPi;
+    }
+}
+class PiSpeech {
+    constructor(id, lang, voice, uri) {
+        this.id = id;
+        this.lang = lang;
+        this.voice = voice;
+        this.uri = uri;
+        this.provider = audioProviders.Pi;
+    }
+}
+class AssistantSpeech {
+    constructor(utterance, charge) {
+        this.utterance = utterance;
+        this.charge = charge;
+    }
+}
+
+
+;// CONCATENATED MODULE: ./src/prefs/PreferenceModule.ts
+var PreferenceModule_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -28132,1164 +27070,437 @@ var WakeLockModule_awaiter = (undefined && undefined.__awaiter) || function (thi
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-// The wake lock sentinel.
-let wakeLock = null;
-// Function that attempts to request a screen wake lock.
-const requestWakeLock = () => WakeLockModule_awaiter(void 0, void 0, void 0, function* () {
-    if (!('wakeLock' in navigator)) {
-        console.log('Screen Wake Lock API not supported by this browser.');
-        return;
+
+
+
+
+
+class UserPreferenceModule {
+    constructor() {
+        this.cache = UserPreferenceCache.getInstance();
     }
-    if (wakeLock === null || wakeLock.released) {
+    static getInstance() {
+        if (!UserPreferenceModule.instance) {
+            UserPreferenceModule.instance = new UserPreferenceModule();
+        }
+        return UserPreferenceModule.instance;
+    }
+    UserPreferenceModule() {
+        this.reloadCache();
+        // Listen for changes in autoSubmit preference (by popup or options page)
+        chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+            if ("autoSubmit" in request) {
+                this.cache.setCachedValue("autoSubmit", request.autoSubmit);
+            }
+            if ("allowInterruptions" in request) {
+                this.cache.setCachedValue("allowInterruptions", request.allowInterruptions);
+            }
+        });
+    }
+    reloadCache() {
+        this.getAutoSubmit().then((value) => {
+            this.cache.setCachedValue("autoSubmit", value);
+        });
+        this.getAllowInterruptions().then((value) => {
+            this.cache.setCachedValue("allowInterruptions", value);
+        });
+        this.isTTSBetaPaused().then((value) => {
+            this.cache.setCachedValue("isTTSBetaPaused", value);
+        });
+    }
+    /**
+     * Get the stored value from the chrome storage
+     * @param {string} key
+     * @param {any} defaultValue
+     * @returns any
+     */
+    getStoredValue(key, defaultValue) {
+        return new Promise((resolve) => {
+            chrome.storage.sync.get([key], function (result) {
+                if (result[key] === undefined) {
+                    resolve(defaultValue);
+                }
+                else {
+                    resolve(result[key]);
+                }
+            });
+        });
+    }
+    getTranscriptionMode() {
+        return this.getStoredValue("prefer", "balanced");
+    }
+    getSoundEffects() {
+        return this.getStoredValue("soundEffects", true);
+    }
+    getAutoSubmit() {
+        return this.getStoredValue("autoSubmit", true);
+    }
+    getLanguage() {
+        return this.getStoredValue("language", navigator.language);
+    }
+    getTheme() {
+        return this.getStoredValue("theme", "light");
+    }
+    setTheme(theme) {
+        return new Promise((resolve) => {
+            if (typeof chrome !== "undefined" &&
+                chrome.storage &&
+                chrome.storage.sync) {
+                chrome.storage.sync.set({ theme }, () => {
+                    resolve();
+                });
+            }
+            else {
+                // If Chrome storage API is not supported, do nothing
+                resolve();
+            }
+            EventBus.emit("userPreferenceChanged", { theme: theme });
+        });
+    }
+    getDataSharing() {
+        return this.getStoredValue("shareData", false);
+    }
+    getPrefersImmersiveView() {
+        let userViewPreference = null;
         try {
-            wakeLock = yield navigator.wakeLock.request('screen');
-            wakeLock === null || wakeLock === void 0 ? void 0 : wakeLock.addEventListener('release', () => {
-                console.debug('Screen Wake Lock released');
-            });
-            console.debug('Screen Wake Lock acquired.');
+            // we use localStorage here because view preference is device specific
+            userViewPreference = localStorage.getItem("userViewPreference");
         }
-        catch (err) {
-            if (err instanceof DOMException && err.name === 'NotAllowedError') {
-                // Handle NotAllowedError - consider sending the state machine a battery-level error event
-                console.error(`Not allowed to keep screen awake. Check battery level? ${err.name}, ${err.message}`);
-            }
-            else {
-                console.error(`${err.name}, ${err.message}`);
-            }
+        catch (e) {
+            console.warn("Could not access localStorage: ", e);
         }
+        let prefersMobile = false;
+        if (userViewPreference) {
+            prefersMobile = userViewPreference === "immersive";
+        }
+        return Promise.resolve(prefersMobile);
     }
-});
-const releaseWakeLock = () => WakeLockModule_awaiter(void 0, void 0, void 0, function* () {
-    if (wakeLock !== null) {
-        yield wakeLock.release();
-        wakeLock = null;
-    }
-});
-
-;// CONCATENATED MODULE: ./src/state-machines/SayPiMachine.ts
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function getHighestKey(transcriptions) {
-    // Find the highest existing key in the transcriptions
-    const highestKey = Object.keys(transcriptions).reduce((max, key) => Math.max(max, parseInt(key, 10)), -1);
-    return highestKey;
-}
-// time at which the user's prompt is scheduled to be submitted
-// used to judge whether there's time for another remote operation (i.e. merge request)
-var nextSubmissionTime = Date.now();
-// most recent enforced delay while waiting for additional user input
-// captured here for analytics events
-var lastSubmissionDelay = 0;
-const apiServerUrl = config.apiServerUrl;
-if (apiServerUrl === undefined) {
-    throw new Error("Configuration error: apiServerUrl is not defined. Please check your environment variables.");
-}
-let mergeService;
-UserPreferenceModule.getLanguage().then((language) => {
-    mergeService = new TranscriptMergeService(apiServerUrl, language);
-});
-const audibleNotifications = AudibleNotificationsModule.getInstance();
-const textualNotifications = new TextualNotificationsModule();
-const visualNotifications = new VisualNotificationsModule();
-const audioControls = new AudioControlsModule();
-const SayPiMachine_machine = createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCRKANiwNoAMAuoqHQHtYWMgPx8QAD0QBOAEwAaEGkQAOAKwycc9apkA2AMw71AdgAspuQF9rS2tjyFSFarQYIGAZTpgUAawIoLl4kEEFhUXEw6QRzAEY5OW14+NN9OVNOXXVFZUREw0McTnN1M05VQ3NOU1NVW3t0R2Y2LxIUACcyfCgadA9WlgAlPwg0EIkIkSwxCVjzOXMcePNVRfMMzjl4w1N1JRU4jRxzTcMzUxkL-XLzRpAHXCH2rp6+90YACxRegFc6JMwtMovM1HkjvFONkcOpKjJODdNmYbHZHs1nqwWK9ukF+vRGEMAGIoLAsSBA-hCGZzGKIczVFZrDZbHZ7A75BDxa6wwwyfllHbyTQPJ44F4dXG9KiSWAdEhgHAoABmCs6AAo5NDoQBKfEtLE496U8LU0F0uKM1brJas3b7Q6IaqcHD8wyJOQyRbVGqGUUYnAsLBysD4PGfTxYAAqXwIgV6JpBs2ioFiRVMxU2qTkGkMVU2pkdCDZyXqboS9ShiP9mFwQZDYelEe8vgCQUTZuTYIQRSqp302dz+f0hc5WtUyRzMgnqisGeraLF9YVjY+A0Y5GDWAARuSO5Euxb4iPinzsrsfbp4kXVu7XfE4boGfsEn7FwHl6Hw+uECg-hBZiYMR8DAUgKR4KZO1pVMClueJtDkW4Jx0Ko9hkG8inUfstU4fR+XiPQzhrRxP1XfEPD-ACBAQTpQOA0CSH3GkUykWDclOdZ1GPGR1EFC4i0w1RtE0Y8igZIxNmIutgxXb8CQQWA4GEMRf1gYQoBAiAmPNGCuX0cwtGMRZVFUTgCJM7YBMQ+DTIHVI9CuWcpMDGSv16HBaKIAROgApsfx+f5AQg4EoJYtM9kzOyc3UPNqhHDCLmw6E8JkAivWc0igg8uifKy-ABBIHw-HjNd5L+RTOiJAhgy+SAirbBNgqpA9oNYntYv7QcYuHUcji1O8yysYx0jhSwMtc1dsq83L3PywrWxK8jGHKsBOnqkrtMPXSHJwfRZzWGKvTSVRr05bl6hwMsB3qHQsgscaGyyzzvN8qAcBWtaFrkjwPvaAQ6F8CB1vbJrTRasLEBHLRtWhXJuNMwwiy1K5Lr0Gc50MbZ7nfWsXMe9znpmt7fq+vyyoqv6Abq0ngniUJmuY7soZKGG4bwhGke2LQpyGzJbmyB7ZPcrz8EoKU3uIIg-gAWz+FgUHeKgIDERUCHIAR-EVaXVpgAB5OgyGlmSsCITbWtiKE1lOdJjH5Xi5EMeKx3KYp9G2IwzLOSxsaaXHMuFsQxfeJUiCl2X5cV1bOm8nA6Aj5VvOlnBtc6PWDawI25RNs2Ia5UotFWb1sjMvQeKRzYXVWHjLFMbkDAFnGSImrKRaDrLJZluWFe+xgSE6X5YCITod3A+mwcZi0DGKHZ1mMPCDJkDMkfdZI8LsixUquH30T95uA9F1bg478Pu7Jjw+4HoeR5JMlR8g8Hux2TYSgyLNSgzTYkaMfQcEx3RHeuHUE628lx7zeq3Q+7dQ6dwjj3BAF98CD2HtuSAABRaWBsJigyTObRAT8f64VtJbD++gkYZlMDgWyZlrhGAuILNy4DA6QPcsfLuitZTykVCqNU6pYB-G3JnZS+AAAiYB5ZoD1KA-GjCD7ixDmHNhIMx44NzqsRIKROJVFrrOTISNyjwSsJkT2novSL3oZNCBci+ECJEIrHO3ZuI-ysPpC48hPT6VUHosyu0+TGEwmyeI5iW5MLkQgpBO44FhKvigrS2DQrdi4ssGeWQTIoSyBCPBBllgaCWFkPYWoeJBP3m3dyUTkGRP7og6JYAb7klico+JFpEkaJSROXQ6Sv5JEodkUyZl9EMnUEUmRJS3plIiWfXulTwkxPQZg+xTTVgtMqG02clkxxZGyT0icuxyhehAR+MBOAo7eVeCQcqRzOjR06LAGUcoFZcNVKtdUcJdT6mktIi5VzTnnOOdc+ZulPQMl-gyDQCRSgVg5H1LiLpTK6GuNULI2R9DOVorAQQ+BXpLQQAFKAAJ-ltQSF0nYaQMhZByBkhAqh9A-xoVOExtkGiN1wKi9FmKIwk2Kko++E9dIMitgiO6awRyWFIWdW4FCkhwn0rsHQ50UVwFZVlBgMY4xwJbJyxqDSH5NO2FhAipQqX8gyJoG8Zxki8XUFsaopkyjyrRWIV6scsDAwmZGSmgMXXBDidq3SuQBL7CwsYUSZkrhejfL7RwLKHVKudTTLF3gSD-Q9TTdgdNuU6QJR6FIJKjHkqLCdH+4kDq3BHGYGQdrFXuXVQ1UqHgGBVTDLAWqQMU3ep5W1KwAleJaFSuUco6QCy8QrdGqtsaNW1uWhTVtWr22xEfC6PJ+FERu2nKankpR7Z8lSpwdKTLsr2oxVlD6ABJfAapOgAkVuyimiaqYtvHfiuduqVg2sNQYHQ6ExValdNOMo3JqV8kWMOw97kT1nqjpeuBv1b3JofWmkKPq2oZAEm7F0CQYqaBqHUJYb40T5QgHACQTx01bTagAWlFUcCw2hqV4WMKZL0+l9m4wIMQMglASO4J7AOzqIq1g5idkcPQ8FHZu2RJa9I-JnISjeEETjudFg3gHJdalT4RxmXzoyiN7yhZQHk92KlprFmOwnGUKw2x3RDKmi9OTCHZ0FGqDeKwWgqWmVSENYaVnCaOrmp6-TR4oSnlKBJC4ZRhScyhCUPkOSGR5k2Mivd-s3reaPVO8d-ndIEQpedYornsgfvrvUKzlj3gZbarsT9fVJUrAMGULiiE+mmGKyEo+0CT6lbsxm2ICIsIzzKO6Xiegihf3Ykiz2ewTwJe03jXT4oWtZWsUbEgHWGZdYKFcGyHp3SYxqNyculrYTlH2sYcFeZmuyODmM7ctnVukYtrOPRbtulltEqsbYVnfnfPgJ1u7eC4TwUIVqGKNs8JIySDC3CO2HYDlqB9y5Jz5TnPyp0aWrAyuxFuskQH2QJsAIElCH+sL33V0SMxpuHzPuI9gJ87y33btcZ0AZF+4Pgff0q3gi4yRbKJF4msfY6w4dfKpzT65OArs1NJHU9Hf3F7M6B7j0HzszjPdMROWjDJBcI4Vj8+HoujZEFQbr6XxZNAUOx6zvH6zIt-x4kYBEgGyfMoVSOvTP2uMMmhK6WotQhUWHSDeB808eJVB0JDvJwHHXKtjPgEqxuK7LDdsa5CiJdAYX0pdW3DtdkiqmzvSNzuQNvWrbHt3udecUKKCOE6UIJx1BvFxH+ajyjQkXgyJYEfUurVPeeyDvQ493FhEsJIeZMh6CUzCb2pdzju0GbYawQA */
-    context: {
-        transcriptions: {},
-        isTranscribing: false,
-        lastState: "inactive",
-        userIsSpeaking: false,
-        timeUserStoppedSpeaking: 0,
-        defaultPlaceholderText: "Talk to Pi",
-    },
-    id: "sayPi",
-    initial: "inactive",
-    states: {
-        inactive: {
-            description: "Idle state, not listening or speaking. Privacy mode.",
-            exit: es_assign({ lastState: "inactive" }),
-            on: {
-                "saypi:call": {
-                    target: "#sayPi.callStarting",
-                    description: 'Place a "call" to Pi.\nAttempts to start the microphone and begin active listening.',
-                },
-                "saypi:piSpeaking": {
-                    target: "#sayPi.responding.piSpeaking",
-                },
-            },
-        },
-        callStarting: {
-            description: "Call is starting. Waiting for microphone to be acquired.",
-            entry: [
-                {
-                    type: "callIsStarting",
-                },
-                {
-                    type: "setupRecording",
-                },
-                {
-                    type: "callStartingPrompt",
-                },
-            ],
-            exit: [
-                {
-                    type: "clearPrompt",
-                },
-            ],
-            on: {
-                "saypi:callReady": {
-                    target: "#sayPi.listening.recording",
-                    actions: [
-                        {
-                            type: "callHasStarted",
-                        },
-                        {
-                            type: "startRecording",
-                        },
-                        {
-                            type: "activateAudioOutput",
-                        },
-                        {
-                            type: "requestWakeLock",
-                        },
-                    ],
-                    description: "VAD microphone is ready.\nStart it recording.",
-                },
-                "saypi:hangup": {
-                    target: "inactive",
-                    description: "Call was cancelled before it started.",
-                    actions: [
-                        {
-                            type: "callFailedToStart",
-                        },
-                    ],
-                },
-                "saypi:callFailed": {
-                    target: "inactive",
-                    description: "VAD microphone failed to start.\nAudio device not available.",
-                    actions: [
-                        {
-                            type: "callFailedToStart",
-                        },
-                    ],
-                },
-            },
-            after: {
-                "20000": {
-                    target: "inactive",
-                    description: "Call failed to start after 20 seconds. Is the microphone available?",
-                    actions: [
-                        {
-                            type: "callFailedToStart",
-                        },
-                    ],
-                },
-            },
-        },
-        listening: {
-            description: "Actively listening for user input. Simultaneously recording and transcribing user speech. Gentle pulsing animation.",
-            entry: [
-                {
-                    type: "stopAllAnimations",
-                },
-                {
-                    type: "acquireMicrophone",
-                },
-            ],
-            exit: [
-                {
-                    type: "clearTranscriptsAction",
-                },
-                {
-                    type: "clearPendingTranscriptionsAction",
-                },
-                {
-                    type: "clearPrompt",
-                },
-                es_assign({ lastState: "listening" }),
-            ],
-            states: {
-                recording: {
-                    description: "Microphone is on and VAD is actively listening for user speech.",
-                    initial: "notSpeaking",
-                    entry: [
-                        {
-                            type: "startAnimation",
-                            params: {
-                                animation: "glow",
-                            },
-                        },
-                        {
-                            type: "listenPrompt",
-                        },
-                    ],
-                    exit: [
-                        {
-                            type: "stopAnimation",
-                            params: {
-                                animation: "glow",
-                            },
-                        },
-                        {
-                            type: "clearPrompt",
-                        },
-                    ],
-                    states: {
-                        notSpeaking: {
-                            description: "Microphone is recording but no speech is detected.",
-                            on: {
-                                "saypi:userFinishedSpeaking": {
-                                    target: "#sayPi.inactive",
-                                },
-                                "saypi:userSpeaking": {
-                                    target: "userSpeaking",
-                                },
-                            },
-                        },
-                        userSpeaking: {
-                            description: "User is speaking and being recorded by the microphone.\nWaveform animation.",
-                            entry: [
-                                {
-                                    type: "startAnimation",
-                                    params: {
-                                        animation: "userSpeaking",
-                                    },
-                                },
-                                es_assign({ userIsSpeaking: true }),
-                                {
-                                    type: "cancelCountdownAnimation",
-                                },
-                            ],
-                            exit: {
-                                type: "stopAnimation",
-                                params: {
-                                    animation: "userSpeaking",
-                                },
-                            },
-                            on: {
-                                "saypi:userStoppedSpeaking": [
-                                    {
-                                        target: [
-                                            "notSpeaking",
-                                            "#sayPi.listening.converting.transcribing",
-                                        ],
-                                        cond: "hasAudio",
-                                        actions: [
-                                            es_assign({
-                                                userIsSpeaking: false,
-                                                timeUserStoppedSpeaking: () => new Date().getTime(),
-                                            }),
-                                            {
-                                                type: "transcribeAudio",
-                                            },
-                                        ],
-                                    },
-                                    {
-                                        target: "notSpeaking",
-                                        cond: "hasNoAudio",
-                                    },
-                                ],
-                            },
-                        },
-                    },
-                    on: {
-                        "saypi:hangup": {
-                            target: "#sayPi.inactive",
-                            actions: [
-                                {
-                                    type: "stopRecording",
-                                },
-                                {
-                                    type: "callHasEnded",
-                                },
-                                {
-                                    type: "releaseWakeLock",
-                                },
-                            ],
-                            description: 'Disable the VAD microphone.\n    Aka "call" Pi.\n    Stops active listening.',
-                        },
-                    },
-                },
-                converting: {
-                    initial: "accumulating",
-                    states: {
-                        accumulating: {
-                            description: "Accumulating and assembling audio transcriptions into a cohesive prompt.\nSubmits a prompt when a threshold is reached.",
-                            after: {
-                                submissionDelay: {
-                                    target: "submitting",
-                                    cond: "submissionConditionsMet",
-                                    description: "Submit combined transcript to Pi.",
-                                },
-                            },
-                            entry: {
-                                type: "draftPrompt",
-                            },
-                            invoke: {
-                                id: "mergeOptimistic",
-                                src: (context, event) => {
-                                    // Check if there are two or more transcripts to merge
-                                    if (Object.keys(context.transcriptions).length > 1) {
-                                        // This function should return a Promise that resolves with the merged transcript string
-                                        return mergeService.mergeTranscriptsRemote(context.transcriptions, nextSubmissionTime);
-                                    }
-                                    else {
-                                        // If there's one or no transcripts to merge, return a resolved Promise with the existing transcript string or an empty string
-                                        const existingTranscriptKeys = Object.keys(context.transcriptions);
-                                        if (existingTranscriptKeys.length === 1) {
-                                            const key = existingTranscriptKeys[0];
-                                            return Promise.resolve(context.transcriptions[Number(key)]);
-                                        }
-                                        else {
-                                            return Promise.resolve(""); // No transcripts to merge
-                                        }
-                                    }
-                                },
-                                onDone: {
-                                    target: "accumulating",
-                                    internal: true,
-                                    actions: [
-                                        es_assign({
-                                            transcriptions: (context, event) => {
-                                                // If the event.data is empty, just return the current context.transcriptions
-                                                if (!event.data) {
-                                                    return context.transcriptions;
-                                                }
-                                                // Use the highest key for the merged transcript
-                                                const nextKey = getHighestKey(context.transcriptions);
-                                                const originalKeys = Object.keys(context.transcriptions);
-                                                if (originalKeys.length > 1) {
-                                                    console.log(`Merge accepted: ${originalKeys} into ${nextKey} - ${event.data}`);
-                                                }
-                                                return { [nextKey]: event.data };
-                                            },
-                                        }),
-                                    ],
-                                },
-                                onError: {
-                                    actions: es_log("Merge request did not complete, and will be ignored"),
-                                },
-                            },
-                            on: {
-                                "saypi:transcribed": {
-                                    target: "accumulating",
-                                    actions: {
-                                        type: "handleTranscriptionResponse",
-                                    },
-                                    description: "Transcribed speech to text (out of sequence response).",
-                                },
-                                "saypi:transcribeFailed": {
-                                    target: "#sayPi.listening.errorStatus.errors.transcribeFailed",
-                                    description: "Out of sequence error response from the /transcribe API",
-                                },
-                                "saypi:transcribedEmpty": {
-                                    target: "#sayPi.listening.errorStatus.errors.micError",
-                                    description: "Out of sequence empty response from the /transcribe API",
-                                },
-                            },
-                        },
-                        submitting: {
-                            description: "Submitting prompt to Pi.",
-                            entry: [
-                                {
-                                    type: "mergeAndSubmitTranscript",
-                                },
-                                {
-                                    type: "notifySentMessage",
-                                },
-                            ],
-                            exit: ["acknowledgeUserInput"],
-                            always: "#sayPi.responding.piThinking",
-                        },
-                        transcribing: {
-                            description: "Transcribing audio to text.\nCard flip animation.",
-                            entry: [
-                                {
-                                    type: "startAnimation",
-                                    params: {
-                                        animation: "transcribing",
-                                    },
-                                },
-                                es_assign({ isTranscribing: true }),
-                            ],
-                            exit: [
-                                {
-                                    type: "stopAnimation",
-                                    params: {
-                                        animation: "transcribing",
-                                    },
-                                },
-                                es_assign({ isTranscribing: false }),
-                            ],
-                            on: {
-                                "saypi:transcribed": {
-                                    target: "accumulating",
-                                    actions: {
-                                        type: "handleTranscriptionResponse",
-                                    },
-                                    description: "Successfully transcribed user audio to text.",
-                                },
-                                "saypi:transcribeFailed": {
-                                    target: [
-                                        "accumulating",
-                                        "#sayPi.listening.errorStatus.errors.transcribeFailed",
-                                    ],
-                                    description: "Received an error response from the /transcribe API",
-                                },
-                                "saypi:transcribedEmpty": {
-                                    target: [
-                                        "accumulating",
-                                        "#sayPi.listening.errorStatus.errors.micError",
-                                    ],
-                                    description: "Received an empty response from the /transcribe API (no speech detected)",
-                                },
-                            },
-                        },
-                    },
-                },
-                errorStatus: {
-                    description: `Handles non-fatal errors during recording and transcription.`,
-                    initial: "normal",
-                    states: {
-                        normal: {
-                            description: "The system is not exhibiting any errors.",
-                        },
-                        errors: {
-                            description: `Non-fatal transcription or recording errors.`,
-                            entry: {
-                                type: "callHasErrors",
-                            },
-                            exit: {
-                                type: "callHasNoErrors",
-                            },
-                            after: {
-                                "5000": [
-                                    {
-                                        target: "#sayPi.listening.errorStatus.normal",
-                                        actions: [],
-                                        description: "Reset to the normal state and clear errors.",
-                                    },
-                                ],
-                            },
-                            states: {
-                                transcribeFailed: {
-                                    description: "The /transcribe API responded with an error.",
-                                    entry: {
-                                        type: "startAnimation",
-                                        params: {
-                                            animation: "error",
-                                        },
-                                    },
-                                    exit: {
-                                        type: "stopAnimation",
-                                        params: {
-                                            animation: "error",
-                                        },
-                                    },
-                                    type: "final",
-                                },
-                                micError: {
-                                    description: "No audio input detected",
-                                    entry: {
-                                        type: "showNotification",
-                                        params: {
-                                            message: i18n("audioInputError", "Pi"),
-                                            icon: "microphone-muted",
-                                        },
-                                    },
-                                    exit: {
-                                        type: "dismissNotification",
-                                    },
-                                    type: "final",
-                                },
-                            },
-                            type: "parallel",
-                        },
-                    },
-                },
-            },
-            on: {
-                "saypi:piThinking": {
-                    target: "#sayPi.responding.piThinking",
-                    actions: [
-                        {
-                            type: "acknowledgeUserInput",
-                        },
-                    ],
-                },
-                "saypi:piSpeaking": {
-                    target: "#sayPi.responding.piSpeaking",
-                },
-                "saypi:visible": {
-                    actions: {
-                        type: "requestWakeLock",
-                    },
-                },
-                "saypi:audio:connected": {
-                    actions: {
-                        type: "notifyAudioConnected",
-                    },
-                },
-                "saypi:audio:reconnect": {
-                    actions: [
-                        {
-                            type: "notifyAudioReconnecting",
-                        },
-                        {
-                            type: "reconnectAudio",
-                        },
-                    ],
-                },
-                "saypi:session:assigned": {
-                    actions: es_assign({
-                        sessionId: (context, event) => event.session_id,
-                    }),
-                },
-            },
-            type: "parallel",
-        },
-        responding: {
-            initial: "piThinking",
-            on: {
-                "saypi:hangup": {
-                    target: "inactive",
-                    actions: [
-                        {
-                            type: "callHasEnded",
-                        },
-                        {
-                            type: "releaseWakeLock",
-                        },
-                        {
-                            type: "stopRecording",
-                        },
-                    ],
-                    description: "End call while Pi is speaking.",
-                },
-                "saypi:userSpeaking": {
-                    target: "#sayPi.responding.userInterrupting",
-                    cond: {
-                        type: "interruptionsAllowed",
-                    },
-                },
-            },
-            entry: {
-                type: "disableCallButton",
-            },
-            exit: {
-                type: "enableCallButton",
-            },
-            description: "Pi is responding. Text is being generated or synthesised speech is playing or waiting to play.",
-            states: {
-                piThinking: {
-                    on: {
-                        "saypi:piSpeaking": {
-                            target: "piSpeaking",
-                        },
-                    },
-                    entry: [
-                        {
-                            type: "startAnimation",
-                            params: {
-                                animation: "piThinking",
-                            },
-                        },
-                        {
-                            type: "thinkingPrompt",
-                        },
-                    ],
-                    exit: [
-                        {
-                            type: "stopAnimation",
-                            params: {
-                                animation: "piThinking",
-                            },
-                        },
-                        {
-                            type: "clearPrompt",
-                        },
-                    ],
-                    description: "Pi is contemplating its response.\nThinking animation.",
-                },
-                piSpeaking: {
-                    on: {
-                        "saypi:piStoppedSpeaking": [
-                            {
-                                target: "#sayPi.listening",
-                                cond: {
-                                    type: "wasListening",
-                                },
-                            },
-                            {
-                                target: "#sayPi.inactive",
-                                cond: {
-                                    type: "wasInactive",
-                                },
-                            },
-                        ],
-                        "saypi:piFinishedSpeaking": {
-                            target: "#sayPi.listening",
-                        },
-                        "saypi:userSpeaking": {
-                            target: "userInterrupting",
-                            cond: {
-                                type: "interruptionsAllowed",
-                            },
-                            actions: {
-                                type: "pauseAudio",
-                            },
-                            description: "The user starting speaking while Pi was speaking.",
-                        },
-                    },
-                    entry: [
-                        {
-                            type: "startAnimation",
-                            params: {
-                                animation: "piSpeaking",
-                            },
-                        },
-                        {
-                            type: "speakingPrompt",
-                        },
-                    ],
-                    exit: [
-                        {
-                            type: "stopAnimation",
-                            params: {
-                                animation: "piSpeaking",
-                            },
-                        },
-                        {
-                            type: "clearPrompt",
-                        },
-                    ],
-                    description: "Pi's synthesised speech audio is playing.\nPlayful animation.",
-                },
-                userInterrupting: {
-                    on: {
-                        "saypi:userStoppedSpeaking": [
-                            {
-                                target: "piSpeaking",
-                                actions: {
-                                    type: "resumeAudio",
-                                },
-                                cond: {
-                                    type: "hasNoAudio",
-                                },
-                                description: "User speech cancelled (i.e. was non-speech).",
-                            },
-                            {
-                                target: [
-                                    "#sayPi.listening.converting.transcribing",
-                                    "#sayPi.listening.recording.notSpeaking",
-                                ],
-                                cond: {
-                                    type: "hasAudio",
-                                },
-                                actions: [
-                                    es_assign({
-                                        userIsSpeaking: false,
-                                        timeUserStoppedSpeaking: () => new Date().getTime(),
-                                    }),
-                                    {
-                                        type: "transcribeAudio",
-                                    },
-                                ],
-                                description: "User has spoken.",
-                            },
-                        ],
-                    },
-                    entry: {
-                        type: "interruptingPiPrompt",
-                    },
-                    exit: {
-                        type: "clearPrompt",
-                    },
-                    description: "The user is speaking during Pi's response, and may wish to interrupt.",
-                },
-            },
-        },
-    },
-    predictableActionArguments: true,
-    preserveActionOrder: true,
-}, {
-    actions: {
-        stopAllAnimations: (context, event) => {
-            AnimationModule.stopAllAnimations();
-        },
-        startAnimation: (context, event, { action }) => {
-            AnimationModule.startAnimation(action.params.animation);
-        },
-        stopAnimation: (context, event, { action }) => {
-            AnimationModule.stopAnimation(action.params.animation);
-        },
-        transcribeAudio: (context, event) => {
-            const audioBlob = event.blob;
-            if (audioBlob) {
-                uploadAudioWithRetry(audioBlob, event.duration, context.transcriptions, context.sessionId);
-                EventBus.emit("session:transcribing", {
-                    audio_duration_seconds: event.duration / 1000,
-                    speech_end_time: Date.now(),
-                    speech_start_time: Date.now() - event.duration,
+    hasVoice() {
+        return new Promise((resolve) => {
+            if (typeof chrome !== "undefined" &&
+                chrome.storage &&
+                chrome.storage.sync) {
+                chrome.storage.sync.get(["voiceId"], (result) => {
+                    resolve(!!result.voiceId);
                 });
             }
-        },
-        handleTranscriptionResponse: (SayPiContext, event) => {
-            const transcription = event.text;
-            const sequenceNumber = event.sequenceNumber;
-            console.log(`Partial transcript, ${sequenceNumber}: ${transcription}`);
-            SayPiContext.transcriptions[sequenceNumber] = transcription;
-            if (event.merged) {
-                event.merged.forEach((mergedSequenceNumber) => {
-                    delete SayPiContext.transcriptions[mergedSequenceNumber];
-                });
+            else {
+                // If Chrome storage API is not supported, return false
+                resolve(false);
             }
-        },
-        acquireMicrophone: (context, event) => {
-            // warmup the microphone on idle in mobile view,
-            // since there's no mouseover event to trigger it
-            if (ImmersionService.isViewImmersive()) {
-                EventBus.emit("audio:setupRecording");
-            }
-        },
-        setupRecording: (context, event) => {
-            // differs from acquireMicrophone in that it's user-initiated
-            EventBus.emit("audio:setupRecording");
-        },
-        startRecording: (context, event) => {
-            EventBus.emit("audio:startRecording");
-        },
-        stopRecording: (context, event) => {
-            EventBus.emit("audio:stopRecording");
-            EventBus.emit("audio:tearDownRecording");
-        },
-        reconnectAudio: (context, event) => {
-            EventBus.emit("audio:input:reconnect");
-        },
-        dismissNotification: () => {
-            textualNotifications.hideNotification();
-        },
-        showNotification: (context, event, { action }) => {
-            const icon = action.params.icon;
-            const message = action.params.message;
-            textualNotifications.showNotification(message, icon);
-        },
-        notifyAudioConnected: (context, event) => {
-            const deviceId = event.deviceId;
-            const deviceLabel = event.deviceLabel;
-            const message = i18n("audioConnected", deviceLabel);
-            textualNotifications.showNotification(message, "microphone");
-        },
-        notifyAudioReconnecting: (context, event) => {
-            const deviceId = event.deviceId;
-            const deviceLabel = event.deviceLabel;
-            const message = i18n("audioReconnecting", deviceLabel);
-            textualNotifications.showNotification(message, "microphone-switch");
-        },
-        acknowledgeUserInput: () => {
-            visualNotifications.listeningStopped();
-            audibleNotifications.listeningStopped();
-        },
-        listenPrompt: () => {
-            const message = i18n("assistantIsListening", "Pi");
-            if (message) {
-                setUserMessage(message);
-            }
-        },
-        callStartingPrompt: () => {
-            const message = i18n("callStarting");
-            if (message) {
-                const initialText = getDraftPrompt();
-                es_assign({ defaultPlaceholderText: initialText });
-                setUserMessage(message);
-            }
-        },
-        thinkingPrompt: () => {
-            const message = i18n("assistantIsThinking", "Pi");
-            if (message) {
-                setUserMessage(message);
-            }
-        },
-        speakingPrompt: () => {
-            const message = i18n("assistantIsSpeaking", "Pi");
-            if (message) {
-                setUserMessage(message);
-            }
-        },
-        interruptingPiPrompt: () => {
-            const message = i18n("userStartedInterrupting", "Pi");
-            if (message) {
-                setUserMessage(message);
-            }
-        },
-        clearPrompt: (context) => {
-            setUserMessage(context.defaultPlaceholderText);
-        },
-        draftPrompt: (context) => {
-            const prompt = mergeService
-                .mergeTranscriptsLocal(context.transcriptions)
-                .trim();
-            if (prompt)
-                setDraftPrompt(prompt);
-        },
-        mergeAndSubmitTranscript: (context) => {
-            const prompt = mergeService
-                .mergeTranscriptsLocal(context.transcriptions)
-                .trim();
-            if (prompt)
-                setFinalPrompt(prompt);
-        },
-        callIsStarting: () => {
-            buttonModule.callStarting();
-        },
-        callFailedToStart: () => {
-            buttonModule.callInactive();
-            audibleNotifications.callFailed();
-        },
-        callHasStarted: () => {
-            buttonModule.callActive();
-            audibleNotifications.callStarted();
-            EventBus.emit("session:started");
-        },
-        callHasEnded: () => {
-            visualNotifications.listeningStopped();
-            buttonModule.callInactive();
-            audibleNotifications.callEnded();
-            EventBus.emit("session:ended");
-        },
-        callHasErrors: () => {
-            buttonModule.callError();
-        },
-        callHasNoErrors: () => {
-            buttonModule.callActive();
-        },
-        disableCallButton: () => {
-            buttonModule.disableCallButton();
-        },
-        enableCallButton: () => {
-            buttonModule.enableCallButton();
-        },
-        cancelCountdownAnimation: () => {
-            visualNotifications.listeningStopped();
-        },
-        activateAudioOutput: () => {
-            audioControls.activateAudioOutput(true);
-        },
-        requestWakeLock: () => {
-            requestWakeLock();
-        },
-        releaseWakeLock: () => {
-            releaseWakeLock();
-        },
-        notifySentMessage: (context, event) => {
-            const delay_ms = Date.now() - context.timeUserStoppedSpeaking;
-            const submission_delay_ms = lastSubmissionDelay;
-            EventBus.emit("session:message-sent", {
-                delay_ms: delay_ms,
-                wait_time_ms: submission_delay_ms,
-            });
-        },
-        clearPendingTranscriptionsAction: () => {
-            // discard in-flight transcriptions. Called after a successful submission
-            clearPendingTranscriptions();
-        },
-        clearTranscriptsAction: es_assign({
-            transcriptions: () => ({}),
-        }),
-        pauseAudio: () => {
-            EventBus.emit("audio:output:pause");
-        },
-        resumeAudio: () => {
-            EventBus.emit("audio:output:resume");
-        },
-    },
-    services: {},
-    guards: {
-        hasAudio: (context, event) => {
-            if (event.type === "saypi:userStoppedSpeaking") {
-                event = event;
-                return event.blob !== undefined && event.duration > 0;
-            }
-            return false;
-        },
-        hasNoAudio: (context, event) => {
-            if (event.type === "saypi:userStoppedSpeaking") {
-                event = event;
-                return (event.blob === undefined ||
-                    event.blob.size === 0 ||
-                    event.duration === 0);
-            }
-            return false;
-        },
-        submissionConditionsMet: (context, event, meta) => {
-            const { state } = meta;
-            const autoSubmitEnabled = UserPreferenceModule.getCachedAutoSubmit();
-            return autoSubmitEnabled && readyToSubmit(state, context);
-        },
-        wasListening: (context) => {
-            return context.lastState === "listening";
-        },
-        wasInactive: (context) => {
-            return context.lastState === "inactive";
-        },
-        interruptionsAllowed: (context) => {
-            return UserPreferenceModule.getCachedAllowInterruptions();
-        },
-    },
-    delays: {
-        submissionDelay: (context, event) => {
-            // check if the event is a transcription event
-            if (event.type !== "saypi:transcribed") {
-                return 0;
+        });
+    }
+    getVoice() {
+        const apiServerUrl = config.apiServerUrl;
+        if (!apiServerUrl) {
+            throw new Error("API server URL is not set");
+        }
+        const tts = SpeechSynthesisModule.getInstance(apiServerUrl);
+        return new Promise((resolve) => {
+            if (typeof chrome !== "undefined" &&
+                chrome.storage &&
+                chrome.storage.sync) {
+                chrome.storage.sync.get(["voiceId"], (result) => PreferenceModule_awaiter(this, void 0, void 0, function* () {
+                    if (result.voiceId) {
+                        const voice = yield tts.getVoiceById(result.voiceId);
+                        resolve(voice);
+                    }
+                    else {
+                        resolve(null); // user preference not set
+                    }
+                }));
             }
             else {
-                event = event;
+                // If Chrome storage API is not supported, return null
+                resolve(null);
             }
-            const maxDelay = 10000; // 10 seconds in milliseconds
-            // Calculate the initial delay based on pFinishedSpeaking
-            let probabilityFinished = 1;
-            if (event.pFinishedSpeaking !== undefined) {
-                probabilityFinished = event.pFinishedSpeaking;
+        });
+    }
+    setVoice(voice) {
+        if (typeof chrome !== "undefined" &&
+            chrome.storage &&
+            chrome.storage.sync) {
+            chrome.storage.sync.set({ voiceId: voice.id });
+            const audioControls = new AudioControlsModule();
+            audioControls.useAudioOutputProvider(audioProviders.SayPi); // TODO: replace with voice.provided_by
+        }
+        return Promise.resolve();
+    }
+    unsetVoice() {
+        if (typeof chrome !== "undefined" &&
+            chrome.storage &&
+            chrome.storage.sync) {
+            chrome.storage.sync.get(["voiceId"]).then((result) => {
+                if (result.voiceId) {
+                    chrome.storage.sync.remove("voiceId");
+                    const audioControls = new AudioControlsModule();
+                    audioControls.useAudioOutputProvider(audioProviders.Pi);
+                }
+            });
+        }
+        return Promise.resolve();
+    }
+    getAllowInterruptions() {
+        return this.getStoredValue("allowInterruptions", true);
+    }
+    /**
+     * This function checks if the TTS beta is paused
+     * It is necessary only during the beta period and should be removed after the beta period
+     * This is a fairly slow operation as it requires a network request, so use the cached value if possible
+     * @returns {Promise<boolean>} - true if TTS beta is paused, false otherwise
+     */
+    isTTSBetaPaused() {
+        return PreferenceModule_awaiter(this, void 0, void 0, function* () {
+            const statusEndpoint = `${config.apiServerUrl}/status/tts`;
+            try {
+                const response = yield fetch(statusEndpoint);
+                const data = yield response.json();
+                return data.beta.status === "paused";
             }
-            // Incorporate the tempo into the delay, defaulting to 1 (fast tempo) if undefined
-            // This allows us to adjust the delay based on the user's speaking speed, or to ignore it as a factor if it's not provided
-            let tempo = event.tempo !== undefined ? event.tempo : 1;
-            const finalDelay = calculateDelay(context.timeUserStoppedSpeaking, probabilityFinished, tempo, maxDelay);
-            console.log("Waiting for", (finalDelay / 1000).toFixed(1), "seconds before submitting");
-            // ideally we would use the current state to determine if we're ready to submit,
-            // but we don't have access to the state here, so we'll use the provisional readyToSubmit
-            const ready = provisionallyReadyToSubmit(context);
-            if (finalDelay > 0 && ready) {
-                visualNotifications.listeningTimeRemaining(finalDelay / 1000);
+            catch (error) {
+                console.error("Error:", error);
+                return false;
             }
-            // Get the current time (in milliseconds)
-            const currentTime = new Date().getTime();
-            nextSubmissionTime = currentTime + finalDelay;
-            // Capture the delay for analytics events
-            lastSubmissionDelay = finalDelay;
-            return finalDelay;
-        },
-    },
-});
-function readyToSubmitOnAllowedState(allowedState, context) {
-    const empty = Object.keys(context.transcriptions).length === 0;
-    const pending = isTranscriptionPending();
-    const ready = allowedState && !empty && !pending;
-    return ready;
+        });
+    }
+    getCachedIsTTSBetaPaused() {
+        return this.cache.getCachedValue("isTTSBetaPaused", false);
+    }
+    getTextToSpeechEnabled() {
+        return Promise.all([
+            this.getStoredValue("enableTTS", true),
+            this.getCachedIsTTSBetaPaused(),
+        ]).then(([enableTTS, ttsBetaPaused]) => enableTTS && !ttsBetaPaused);
+    }
+    getCachedAutoSubmit() {
+        const cachedResult = this.cache.getCachedValue("autoSubmit", true);
+        return cachedResult;
+    }
+    getCachedAllowInterruptions() {
+        const cachedResult = this.cache.getCachedValue("allowInterruptions", true);
+        return cachedResult;
+    }
 }
-function provisionallyReadyToSubmit(context) {
-    const allowedState = !(context.userIsSpeaking || context.isTranscribing); // we don't have access to the state, so we read from a copy in the context (!DRY)
-    return readyToSubmitOnAllowedState(allowedState, context);
-}
-function readyToSubmit(state, context) {
-    const allowedState = !(state.matches("listening.recording.userSpeaking") ||
-        state.matches("listening.converting.transcribing"));
-    return readyToSubmitOnAllowedState(allowedState, context);
-}
-
-;// CONCATENATED MODULE: ./src/state-machines/ScreenLockMachine.ts
-
-
-
-const notificationsModule = AudibleNotificationsModule.getInstance();
-const ScreenLockMachine_machine = createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5QGUDGAnMYB2ACAMgPaoDWAdAKrYA2xJkAxLaQNoAMAuoqAA6GwBLAC4DC2biAAeiACxsZZAJwB2AGzrlARhkAOeW2UAaEAE9EAJgCsAZiU3N5+Q8ttFmnQF8PxtJhwE6MiJSRgBXGjp2LiQQPkERMQlpBDkFFXVVLV19I1NEB1UyNmK2K0VXNk0tTS9vEGxCCDgJXyw8YJIJOOFRcRjkgFpVYzMEIa8fDDaA0koIkIgu-h7E-tlzEfzLSyU1Sx0qxXMdNwMJkFb-DqC6SCX43qTESxUyS2U2F01rVWtNFU0mwQ2h2Mj2yhOej2ilUtQ8QA */
-    id: "Screen Lock",
-    description: "Prevents unintentional touch interactions while locked.",
-    initial: "Unlocked",
-    states: {
-        Unlocked: {
-            description: "The button is in an unlocked state. User can lock it.",
-            on: {
-                lock: {
-                    target: "Locked",
-                    actions: ["lockScreen", "fullscreen"],
-                },
-            },
-        },
-        Locked: {
-            description: "The button is in a locked state.\\\nTouch interactions are absorbed silently,\\\nexcept for the unlock button.",
-            on: {
-                unlock: {
-                    target: "Unlocked",
-                    description: "Long press to unlock.",
-                    actions: ["unlockScreen"],
-                },
-            },
-        },
-    },
-    schema: { events: {} },
-    predictableActionArguments: true,
-    preserveActionOrder: true,
-}, {
-    actions: {
-        lockScreen: () => {
-            const lockPanel = document.getElementById("saypi-lock-panel");
-            const unlockButton = document.getElementById("saypi-unlockButton");
-            document.body.classList.add("locked"); // add class to body so that other descendants can style themselves accordingly
-            lockPanel === null || lockPanel === void 0 ? void 0 : lockPanel.classList.add("locked");
-            unlockButton === null || unlockButton === void 0 ? void 0 : unlockButton.classList.add("glow");
-            document.body.classList.remove("unlocked");
-            lockPanel === null || lockPanel === void 0 ? void 0 : lockPanel.classList.remove("unlocked");
-            notificationsModule.lockScreen();
-            console.log("Screen locked");
-        },
-        unlockScreen: () => {
-            const lockPanel = document.getElementById("saypi-lock-panel");
-            const unlockButton = document.getElementById("saypi-unlockButton");
-            document.body.classList.remove("locked");
-            lockPanel === null || lockPanel === void 0 ? void 0 : lockPanel.classList.remove("locked");
-            unlockButton === null || unlockButton === void 0 ? void 0 : unlockButton.classList.remove("glow");
-            document.body.classList.add("unlocked");
-            lockPanel === null || lockPanel === void 0 ? void 0 : lockPanel.classList.add("unlocked");
-            notificationsModule.unlockScreen();
-            console.log("Screen unlocked");
-        },
-        fullscreen: () => {
-            enterFullscreen();
-        },
-    },
-    services: {},
-    guards: {},
-    delays: {},
-});
-
-;// CONCATENATED MODULE: ./src/ThemeModule.ts
-
-function applyDarkMode() {
-    document.body.classList.add("dark");
-    buttonModule.applyTheme("dark");
-}
-function applyNormalMode() {
-    document.body.classList.remove("dark");
-    buttonModule.applyTheme("light");
+// Singleton class for caching user preferences
+class UserPreferenceCache {
+    constructor() {
+        this.cache = {}; // Initialize the cache
+    }
+    static getInstance() {
+        if (!UserPreferenceCache.instance) {
+            UserPreferenceCache.instance = new UserPreferenceCache();
+        }
+        return UserPreferenceCache.instance;
+    }
+    getCachedValue(key, defaultValue) {
+        return this.cache.hasOwnProperty(key) ? this.cache[key] : defaultValue;
+    }
+    setCachedValue(key, value) {
+        this.cache[key] = value;
+        console.debug("Setting cache value: ", key, value);
+    }
 }
 
-;// CONCATENATED MODULE: ./src/state-machines/ThemeToggleMachine.ts
 
+;// CONCATENATED MODULE: ./src/tts/InputBuffer.ts
+var InputBuffer_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+class InputBuffer {
+    /**
+     * Create a text input buffer for a input stream with {@param uuid}
+     * The buffer will flush to {@param ttsService} when certain text is added, after {@param flushAfterMs} milliseconds of inactivity, and on close
+     * If set, the buffer will close automatically after {@param closeAfterMs} milliseconds
+     * @param uuid
+     * @param ttsService
+     * @param flushAfterMs
+     * @param closeAfterMs
+     */
+    constructor(uuid, ttsService, flushAfterMs, closeAfterMs) {
+        this.buffer = "";
+        this.isClosed = false;
+        this.END_OF_SPEECH_MARKER = ""; // In the last message, the text should be an empty string to indicate the end of speech (why?)
+        this.uuid = uuid;
+        this.ttsService = ttsService;
+        this.BUFFER_TIMEOUT_MS = flushAfterMs;
+        if (closeAfterMs > 0) {
+            this.setStreamTimeout(closeAfterMs);
+        }
+    }
+    /**
+     * Add text to the buffer
+     * Raises an error if the buffer is closed
+     * Flushes the buffer if the text ends with a sentence break
+     * Closes the buffer if the text is the end of speech marker
+     * @param text
+     */
+    addText(text) {
+        if (this.isClosed) {
+            throw new Error(`Cannot add text to a closed buffer: ${this.uuid}`);
+        }
+        this.buffer += text;
+        this.resetBufferTimeout();
+        if (text === this.END_OF_SPEECH_MARKER) {
+            this.closeBuffer();
+        }
+        else if (this.shouldFlushBuffer(text)) {
+            this.flushBuffer();
+        }
+    }
+    shouldFlushBuffer(text) {
+        return ([".", "!", "?"].some((end) => text.endsWith(end)) ||
+            text === this.END_OF_SPEECH_MARKER);
+    }
+    resetBufferTimeout() {
+        if (this.bufferTimeout) {
+            clearTimeout(this.bufferTimeout);
+        }
+        this.bufferTimeout = setTimeout(() => {
+            this.flushBuffer();
+        }, this.BUFFER_TIMEOUT_MS);
+    }
+    /**
+     * Close the buffer after a certain amount of time
+     * @param closeAfterMs
+     */
+    setStreamTimeout(closeAfterMs) {
+        this.streamTimeout = setTimeout(() => {
+            this.closeBuffer();
+        }, closeAfterMs);
+    }
+    flushBuffer() {
+        return InputBuffer_awaiter(this, void 0, void 0, function* () {
+            const text = this.buffer;
+            this.buffer = "";
+            try {
+                yield this.ttsService.addTextToSpeechStream(this.uuid, text);
+                console.debug(`Buffer flushed for UUID: ${this.uuid}: "${text}"`);
+            }
+            catch (error) {
+                console.error("Error sending buffer:", error);
+            }
+        });
+    }
+    /**
+     * Flush the buffer and close it
+     */
+    closeBuffer() {
+        return InputBuffer_awaiter(this, void 0, void 0, function* () {
+            if (this.isClosed) {
+                return;
+            }
+            this.isClosed = true;
+            if (this.bufferTimeout) {
+                clearTimeout(this.bufferTimeout);
+            }
+            if (this.streamTimeout) {
+                clearTimeout(this.streamTimeout);
+            }
+            yield this.flushBuffer();
+            console.log(`Buffer closed for UUID: ${this.uuid}`);
+        });
+    }
+    endInput() {
+        if (!this.isClosed) {
+            try {
+                this.addText(this.END_OF_SPEECH_MARKER);
+            }
+            catch (error) {
+                console.error("Error ending input stream:", error);
+            }
+        }
+        else {
+            console.log("Input stream already ended or not found");
+        }
+    }
+    /* visible for testing */
+    getPendingText() {
+        return this.buffer;
+    }
+    isPending(text) {
+        return this.buffer.includes(text);
+    }
+    hasSent(text) {
+        return !this.buffer.includes(text);
+    }
+    hasEnded() {
+        return this.isClosed;
+    }
+}
 
+;// CONCATENATED MODULE: ./src/tts/AudioStreamManager.ts
+var AudioStreamManager_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 
-
-const audible = AudibleNotificationsModule.getInstance();
-const ThemeToggleMachine_machine = createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5QBcAWYC2YAqB7KUANmAHSG4CGEAlgHZQDEA2gAwC6ioADrrNctVy1OIAB6IAzCwAsJAGwAmaQE5lAdjkTlStdICsAGhABPSdLkllLRdK1yAjHr1yAHAF83RtJhz4ipcio6RiZ7DiQQHj4BIRFxBClZG1UNLR19I1MEe3tlEjUFOScXWxYXAoU9Dy90LDwCYhIAOVwAJwwKQgACDFwIMAZkP2JWcO5efkFhCPj7FkKSBRd7BV17FVW5NUzEZZIVVVVK45dC6pBvOuHSABEKVoBrHr6BoYawUZEoydiZxDmciQShI1C4JEsZGoJHIdtk1GpLHoJCspA4tMo9NIPJ4QLQXvAIpdfO8vhMYtNQPEALQwkyIKl6SyHZks5QSc5E+r+MiUGj0UnRKZxRDSBSwuZ5JzKFwpMqg6QuKo4znXZptDrdXr9AU-Clif72Er5FjIpEKexbFjbOnZPZbZSuaTSexqB2ndzK2rE7l3R7PbURb7k4UINRWxZ6FgsewSErqGQuWEY-KFZxW5Qu3JKbFuIA */
-    context: {
-        theme: "light",
-    },
-    id: "themeToggle",
-    initial: "loading",
-    states: {
-        loading: {
-            description: "Determining the initial theme mode.",
-            invoke: {
-                id: "getPreferedTheme",
-                src: () => UserPreferenceModule.getTheme(),
-                onDone: {
-                    target: "loaded",
-                    actions: es_assign({ theme: (context, event) => event.data }),
-                },
-                onError: {
-                    target: "Normal mode",
-                },
-            },
-        },
-        loaded: {
-            description: "The initial theme mode has been determined.",
-            always: [
-                {
-                    target: "Normal mode",
-                    cond: "preferLight",
-                },
-                {
-                    target: "Dark mode",
-                    cond: "preferDark",
-                },
-            ],
-        },
-        "Normal mode": {
-            description: "The UI is in normal (default) mode with a light theme.",
-            entry: "enterNormalMode",
-            on: {
-                toggle: {
-                    target: "Dark mode",
-                    actions: [
-                        {
-                            type: "saveMode",
-                            params: {
-                                theme: "dark",
-                            },
-                        },
-                        {
-                            type: "soundEffectOn",
-                        },
-                    ],
-                },
-            },
-        },
-        "Dark mode": {
-            description: "The UI is in dark mode with a dark theme.",
-            entry: "enterDarkMode",
-            on: {
-                toggle: {
-                    target: "Normal mode",
-                    actions: [
-                        {
-                            type: "saveMode",
-                            params: {
-                                theme: "light",
-                            },
-                        },
-                        {
-                            type: "soundEffectOff",
-                        },
-                    ],
-                },
-            },
-        },
-    },
-    schema: {
-        events: {},
-        context: {},
-    },
-    predictableActionArguments: true,
-    preserveActionOrder: true,
-}, {
-    actions: {
-        enterDarkMode: (context, event) => {
-            applyDarkMode();
-        },
-        enterNormalMode: (context, event) => {
-            applyNormalMode();
-        },
-        saveMode: (context, event, { action }) => {
-            UserPreferenceModule.setTheme(action.params.theme);
-        },
-        soundEffectOn: () => {
-            audible.themeOn();
-        },
-        soundEffectOff: () => {
-            audible.themeOff();
-        },
-    },
-    services: {},
-    guards: {
-        preferLight: (context) => context.theme === "light",
-        preferDark: (context) => context.theme === "dark",
-    },
-    delays: {},
-});
+const STREAM_TIMEOUT_MS = 15000; // end streams after prolonged inactivity
+const BUFFER_TIMEOUT_MS = 1000; // flush buffers after inactivity
+const START_OF_SPEECH_MARKER = " "; // In the first message, the text should be a space " " to indicate the start of speech (why?)
+class AudioStreamManager {
+    constructor(ttsService) {
+        this.ttsService = ttsService;
+        this.inputBuffers = {};
+    }
+    createStream(uuid, voice, lang) {
+        return AudioStreamManager_awaiter(this, void 0, void 0, function* () {
+            const utterance = yield this.ttsService.createSpeech(uuid, START_OF_SPEECH_MARKER, voice, lang, true);
+            this.inputBuffers[utterance.id] = new InputBuffer(utterance.id, this.ttsService, BUFFER_TIMEOUT_MS, STREAM_TIMEOUT_MS);
+            return utterance;
+        });
+    }
+    addSpeechToStream(uuid, text) {
+        return AudioStreamManager_awaiter(this, void 0, void 0, function* () {
+            if (this.inputBuffers[uuid]) {
+                this.inputBuffers[uuid].addText(text);
+            }
+            else {
+                console.error(`No input buffer found for UUID: ${uuid}`);
+            }
+        });
+    }
+    endStream(uuid) {
+        return AudioStreamManager_awaiter(this, void 0, void 0, function* () {
+            if (this.inputBuffers[uuid]) {
+                this.inputBuffers[uuid].endInput();
+            }
+            else {
+                console.log("Speech stream already ended or not found");
+            }
+        });
+    }
+    getPendingText(uuid) {
+        var _a;
+        return ((_a = this.inputBuffers[uuid]) === null || _a === void 0 ? void 0 : _a.getPendingText()) || "";
+    }
+    isPending(uuid, text) {
+        var _a;
+        return ((_a = this.inputBuffers[uuid]) === null || _a === void 0 ? void 0 : _a.isPending(text)) || false;
+    }
+    hasSent(uuid, text) {
+        var _a;
+        return ((_a = this.inputBuffers[uuid]) === null || _a === void 0 ? void 0 : _a.hasSent(text)) || false;
+    }
+    hasEnded(uuid) {
+        var _a;
+        return ((_a = this.inputBuffers[uuid]) === null || _a === void 0 ? void 0 : _a.hasEnded()) || true;
+    }
+    /* visible for testing */
+    getInputBuffer(uuid) {
+        return this.inputBuffers[uuid];
+    }
+}
 
 ;// CONCATENATED MODULE: ./node_modules/axios/lib/helpers/bind.js
 
@@ -32767,6 +30978,3646 @@ axios.default = axios;
 // this module should only have a default export
 /* harmony default export */ const lib_axios = (axios);
 
+;// CONCATENATED MODULE: ./src/tts/TextToSpeechService.ts
+var TextToSpeechService_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+class TextToSpeechService {
+    getVoiceById(id) {
+        return TextToSpeechService_awaiter(this, void 0, void 0, function* () {
+            const response = yield lib_axios.get(`${this.serviceUrl}/voices/${id}`);
+            return response.data;
+        });
+    }
+    getVoices() {
+        return TextToSpeechService_awaiter(this, void 0, void 0, function* () {
+            const response = yield lib_axios.get(`${this.serviceUrl}/voices`);
+            return response.data;
+        });
+    }
+    constructor(serviceUrl) {
+        this.sequenceNumbers = {};
+        this.serviceUrl = serviceUrl;
+    }
+    createSpeech(uuid, text, voice, lang, stream) {
+        return TextToSpeechService_awaiter(this, void 0, void 0, function* () {
+            const voice_id = voice.id;
+            const data = { voice: voice_id, text: text, lang: lang };
+            const baseUri = `${this.serviceUrl}/speak/${uuid}`;
+            const queryParams = `voice_id=${voice_id}&lang=${lang}`;
+            let uri = stream
+                ? `${baseUri}/stream?${queryParams}`
+                : `${baseUri}?${queryParams}`;
+            const utterance = new SayPiSpeech(uuid, lang, voice, uri);
+            const response = yield lib_axios.post(uri, data); // post creates, put updates
+            if (![200, 201].includes(response.status)) {
+                throw new Error("Failed to synthesize speech");
+            }
+            return utterance;
+        });
+    }
+    addTextToSpeechStream(uuid, text) {
+        return TextToSpeechService_awaiter(this, void 0, void 0, function* () {
+            if (!this.sequenceNumbers[uuid]) {
+                this.sequenceNumbers[uuid] = 0;
+            }
+            const sequenceNumber = this.sequenceNumbers[uuid]++;
+            const data = { text: text, sequenceNumber: sequenceNumber };
+            const uri = `${this.serviceUrl}/speak/${uuid}/stream`;
+            const response = yield lib_axios.put(uri, data); // post creates, put updates
+            if (![200, 201].includes(response.status)) {
+                throw new Error("Failed to add text to speech stream");
+            }
+        });
+    }
+}
+
+// EXTERNAL MODULE: ./node_modules/js-md5/src/md5.js
+var md5 = __webpack_require__(8495);
+;// CONCATENATED MODULE: ./src/billing/BillingModule.ts
+
+class UtteranceCharge {
+    static free(utterance, text) {
+        return new UtteranceCharge(utterance, 0, (0,md5.md5)(text.trim()));
+    }
+    constructor(utterance, cost, hash) {
+        this.utteranceId = utterance.id;
+        this.utteranceHash = hash;
+        this.cost = cost;
+    }
+}
+UtteranceCharge.none = {
+    utteranceId: "",
+    utteranceHash: (0,md5.md5)(""),
+    cost: 0, // zero cost
+};
+class BillingModule {
+    constructor() {
+        this.charges = 0;
+        this.utterances = [];
+        // Load charges and utterances from storage when instantiated
+        chrome.storage.local.get(["charges", "utterances"], (data) => {
+            // Billing is stored locally because it won't fit in sync storage (8KB limit per item)
+            // TODO: Store billing data on the server with user accounts
+            if (data.charges) {
+                this.charges = data.charges;
+            }
+        });
+    }
+    static getInstance() {
+        if (!BillingModule.instance) {
+            BillingModule.instance = new BillingModule();
+        }
+        return BillingModule.instance;
+    }
+    charge(utterance, text) {
+        text = text.trim(); // strip leading/trailing whitespace introduced by createStream
+        const cost = (text.length * utterance.voice.price) / 1000; // voice price is per 1000 characters
+        this.charges += cost;
+        const charge = new UtteranceCharge(utterance, cost, (0,md5.md5)(text));
+        this.utterances.push(charge);
+        // Save charges and utterances to storage after charging
+        chrome.storage.local.set({
+            charges: this.charges,
+            utterances: this.utterances,
+        }, () => {
+            if (chrome.runtime.lastError) {
+                // If storage limit is exceeded, remove the oldest utterance and try again
+                this.utterances.shift();
+                chrome.storage.local.set({
+                    charges: this.charges,
+                    utterances: this.utterances,
+                });
+            }
+        });
+        return charge;
+    }
+    getTotalCharges() {
+        return this.charges;
+    }
+}
+
+;// CONCATENATED MODULE: ./src/tts/SpeechSynthesisModule.ts
+var SpeechSynthesisModule_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+
+
+
+
+function generateUUID() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+        const r = (Math.random() * 16) | 0, v = c === "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+    });
+}
+function getUtteranceURI(utterance) {
+    if (utterance.uri.includes("?")) {
+        return utterance.uri;
+    }
+    else {
+        return `${utterance.uri}?voice_id=${utterance.voice.id}&lang=${utterance.lang}`;
+    }
+}
+class SpeechSynthesisModule {
+    static getInstance(serviceUrl) {
+        if (!SpeechSynthesisModule.instance) {
+            const apiServerUrl = config.apiServerUrl;
+            if (!apiServerUrl) {
+                throw new Error("No API server URL defined. Check app configuration.");
+            }
+            const theServiceUrl = serviceUrl || apiServerUrl;
+            const ttsService = new TextToSpeechService(theServiceUrl);
+            const audioStreamManager = new AudioStreamManager(ttsService);
+            const userPreferenceModule = UserPreferenceModule.getInstance();
+            const billingModule = BillingModule.getInstance();
+            SpeechSynthesisModule.instance = new SpeechSynthesisModule(ttsService, audioStreamManager, userPreferenceModule, billingModule);
+        }
+        return SpeechSynthesisModule.instance;
+    }
+    /**
+     * This class uses the singleton pattern to ensure that only one instance is created.
+     * Unless you're a unit test, you should use the static `getInstance` method to get the instance.
+     * @param ttsService
+     * @param audioStreamManager
+     */
+    constructor(ttsService, audioStreamManager, userPreferenceModule, billingModule) {
+        this.billingModule = billingModule;
+        this.voicesCache = [];
+        this.ttsService = ttsService;
+        this.audioStreamManager = audioStreamManager;
+        this.userPreferences = userPreferenceModule;
+        this.initProvider();
+    }
+    initProvider() {
+        const audioControls = new AudioControlsModule();
+        this.getActiveAudioProvider().then((provider) => {
+            audioControls.useAudioOutputProvider(provider);
+        });
+    }
+    /**
+     * Visible only for testing
+     * @param voices
+     */
+    _cacheVoices(voices) {
+        this.voicesCache = voices;
+    }
+    getVoices() {
+        return SpeechSynthesisModule_awaiter(this, void 0, void 0, function* () {
+            if (this.voicesCache.length > 0) {
+                return this.voicesCache;
+            }
+            else {
+                this.voicesCache = yield this.ttsService.getVoices();
+                return this.voicesCache;
+            }
+        });
+    }
+    getVoiceById(id) {
+        return SpeechSynthesisModule_awaiter(this, void 0, void 0, function* () {
+            const cachedVoice = this.voicesCache.find((voice) => voice.id === id);
+            if (cachedVoice) {
+                return cachedVoice;
+            }
+            else {
+                return yield this.ttsService.getVoiceById(id);
+            }
+        });
+    }
+    createSpeech(text, stream = false) {
+        return SpeechSynthesisModule_awaiter(this, void 0, void 0, function* () {
+            const preferedVoice = yield this.userPreferences.getVoice();
+            if (!preferedVoice) {
+                throw new Error("No voice selected");
+            }
+            const preferedLang = yield this.userPreferences.getLanguage();
+            const uuid = generateUUID();
+            return this.ttsService.createSpeech(uuid, text, preferedVoice, preferedLang, stream);
+        });
+    }
+    createSpeechStream() {
+        return SpeechSynthesisModule_awaiter(this, void 0, void 0, function* () {
+            const preferedVoice = yield this.userPreferences.getVoice();
+            if (!preferedVoice) {
+                throw new Error("No voice selected");
+            }
+            const preferedLang = yield this.userPreferences.getLanguage();
+            const uuid = generateUUID();
+            const utterance = this.audioStreamManager.createStream(uuid, preferedVoice, preferedLang);
+            return utterance;
+        });
+    }
+    addSpeechToStream(uuid, text) {
+        return SpeechSynthesisModule_awaiter(this, void 0, void 0, function* () {
+            return yield this.audioStreamManager.addSpeechToStream(uuid, text);
+        });
+    }
+    endSpeechStream(utterance) {
+        return SpeechSynthesisModule_awaiter(this, void 0, void 0, function* () {
+            yield this.audioStreamManager.endStream(utterance.id);
+            // doesn't capture all stream ended cases (see audioStreamManager.endStream for more), but good enough for now
+            EventBus.emit("saypi:tts:speechStreamEnded", utterance);
+        });
+    }
+    speak(utterance) {
+        // Start audio playback with utterance.uri as the audio source
+        const audioSource = getUtteranceURI(utterance);
+        EventBus.emit("audio:load", { url: audioSource }); // indirectly calls AudioModule.loadAudio
+    }
+    cancel() {
+        // nothing for now
+        return Promise.resolve();
+    }
+    pause() {
+        // nothing for now
+        return Promise.resolve();
+    }
+    resume() {
+        // nothing for now
+        return Promise.resolve();
+    }
+    /**
+     * Get the active audio provider based on user preferences
+     * @returns {Promise<AudioProvider>}
+     */
+    getActiveAudioProvider() {
+        return SpeechSynthesisModule_awaiter(this, void 0, void 0, function* () {
+            const customVoiceIsSelected = yield this.userPreferences.hasVoice();
+            if (customVoiceIsSelected) {
+                return audioProviders.SayPi;
+            }
+            return audioProviders.Pi;
+        });
+    }
+}
+
+
+;// CONCATENATED MODULE: ./src/tts/SpeechSourceParsers.ts
+var SpeechSourceParsers_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+class PiSpeechSourceParser {
+    constructor(default_lang = "en") {
+        this.lang = default_lang;
+    }
+    parse(source) {
+        let url;
+        try {
+            url = new URL(source);
+        }
+        catch (_) {
+            throw new Error(`Invalid source: ${source} is not a valid URL.`);
+        }
+        const params = url.searchParams;
+        const messageSid = params.get("messageSid");
+        const voiceId = params.get("voice");
+        if (!messageSid || !voiceId) {
+            throw new Error(`Invalid source: ${source} does not contain required parameters.`);
+        }
+        const voiceNumber = voiceId.slice(-1);
+        const theVoice = {
+            id: voiceId,
+            name: `Pi ${voiceNumber}`,
+            lang: this.lang,
+            localService: false,
+            default: true,
+            price: 0,
+            powered_by: "inflection.ai",
+            voiceURI: "", // inflection.ai doesn't provide this
+        };
+        return new PiSpeech(messageSid, this.lang, theVoice, source);
+    }
+}
+class SayPiSpeechSourceParser {
+    constructor(voiceModule) {
+        this.voiceModule = voiceModule;
+    }
+    /**
+     * Matches URLs like https://api.saypi.ai/speak/5dbec6ff-9ee8-43fa-a9c1-e6bd51e9dfc6/stream?voice_id=ig1TeITnnNlsJtfHxJlW&lang=en-GB
+     * @param source URL of the audio source
+     * @returns SpeechUtterance
+     */
+    parse(source) {
+        return SpeechSourceParsers_awaiter(this, void 0, void 0, function* () {
+            let url;
+            try {
+                url = new URL(source);
+            }
+            catch (_) {
+                throw new Error(`Invalid source: ${source} is not a valid URL.`);
+            }
+            const pathSegments = url.pathname.split("/");
+            const speakIndex = pathSegments.indexOf("speak");
+            const streamIndex = pathSegments.indexOf("stream");
+            if (speakIndex === -1 ||
+                streamIndex === -1 ||
+                streamIndex <= speakIndex + 1) {
+                throw new Error(`Invalid source: ${source} is not a streaming speech URL.`);
+            }
+            const speechId = pathSegments[speakIndex + 1];
+            const params = url.searchParams;
+            const voiceId = params.get("voice_id");
+            const lang = params.get("lang");
+            if (!voiceId) {
+                throw new Error(`Invalid source: ${source} does not contain required parameters: voice_id`);
+            }
+            const theVoice = yield this.voiceModule.getVoiceById(voiceId);
+            return new SayPiSpeech(speechId, lang || "", theVoice, source);
+        });
+    }
+}
+
+
+;// CONCATENATED MODULE: ./src/state-machines/AudioOutputMachine.ts
+var AudioOutputMachine_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+
+
+const { log: AudioOutputMachine_log } = actions_namespaceObject;
+const audioOutputMachine = createMachine({
+    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7A8qgLgA4EDEAxgBbIB2MACgE5YBuGEYDA2gAwC6ioQllgZ82agJAAPRAA4ATAGYAdAHZVigCwBObZvn7Zs1QBoQAT0QBGeQF9bZtJlwFi+ZWwA2YEp6zIIWHxkBnwefiQQIRExLAlImQRZADZlXXSMzLNLBEUrbjT5ZPljG2L5KwBWSvtHdGw8IgIPCG9ff0Dg0M4rCMFhUXFJRJLtZWKdXS1NYx1NbMRNVVllTSqU+XluTUq17VqQJwbXZq8fWABrDEIAOTApML5JaMG44cRdZW5lm21Kv8q3BSigWCCsCjSGisilU2isyWS1SsByOLia7j8AQwtHaAUgAFswMEIMhguFngNYvFQIl4WNKoptNxEaoDNtZIpkqD8txKqtdEVtKpkrJNIjkQ5DvU0W5lJj2BASGB8YQxJByZEXlT3ghkqYLHI9V8FJVVNxNjZFJsUdLGrL5ZBlAwwAFzCRCJ5kOYNf0YkMEnJll8zfJtEpKqLiiCDUkw-yw0zedxdKobc47c0HRBlB6vdioO60LAwD6opT-TTrFZVJplIpKlVVPlOVUGaDtPW1EztCKDFYU7I08d0XKOo7c+Z80rqArS1qK9IqzW6w3Tc3kq3ozltCllKHk7IG7JkzYapLURmMWPsxOp2QaBP8BQmKgoBQ5+W3gGEEKxgZ0huEaMvWoIKAUaz-EUEY7qKihDjKmbXjmRaQO6nrek8mqftSi5gmK8jKPkVS6EsyScvMMZGHy+5-NC3CKECihweetonFeeLZmAM6ocWYAXOqmG+q8OG0tWtb1o266bty2wEfCyT0WGmwwqa9iStQWDsPAkQXmxFJ+l+lZ4e2fJLHkEGaIxzJnnU6ZsS03j6cJOplMolTFICViWfRpqHqCSwFBy8iVEU7K8humjwZeo5YrQTnat+xQybyaQCskQoimKDZRfZWbxQuiRMSo3z0SUwp6Ka1SghoBFwhGsJeVo7nJDlI5Zk6LoQDkQkJUZiiyFYwalcY6U7KoVWUSKqzERueoKRoNlSnZbVIbecVYQZIkfE2dZbKGwrBfRnKgeNaTEZo9ZlTBrX2qtKEQPlhm4a2fISXqJQwt8W5yB2yizGVOx-OlN2IRxyhcQqj1bWC1SvQ270cmaGjtsKajfHN6Mhsx9hAA */
+    context: {
+        skip: false,
+        autoplay: false,
+        replaying: false,
+        provider: audioProviders.Pi,
+    },
+    id: "audioOutput",
+    initial: "idle",
+    on: {
+        changeProvider: {
+            internal: true,
+            actions: es_assign((context, event) => {
+                return Object.assign(Object.assign({}, context), { provider: event.provider });
+            }),
+        },
+        replaying: {
+            internal: true,
+            actions: es_assign((context, event) => {
+                return Object.assign(Object.assign({}, context), { replaying: true });
+            }),
+        },
+    },
+    states: {
+        idle: {
+            on: {
+                loadstart: [
+                    {
+                        target: "idle",
+                        cond: "shouldSkip",
+                        internal: true,
+                        description: `Skip this track.`,
+                        actions: [
+                            es_assign((context, event) => {
+                                return Object.assign(Object.assign({}, context), { skip: false });
+                            }),
+                            {
+                                type: "skipCurrent",
+                            },
+                        ],
+                    },
+                    {
+                        target: "loading",
+                    },
+                ],
+                skipNext: {
+                    target: "idle",
+                    internal: true,
+                    description: `Do not play the next track.`,
+                    actions: es_assign((context, event) => {
+                        return Object.assign(Object.assign({}, context), { skip: true });
+                    }),
+                },
+            },
+        },
+        loading: {
+            entry: [
+                { type: "notifySpeechStart" },
+                es_assign((context, event) => {
+                    return Object.assign(Object.assign({}, context), { replaying: false });
+                }),
+            ],
+            on: {
+                loadedmetadata: {
+                    target: "loaded",
+                },
+            },
+        },
+        loaded: {
+            initial: "ready",
+            states: {
+                ready: {
+                    description: "Audio has loaded and is ready to start playing (further buffering may be required to reach the end).",
+                    entry: {
+                        type: "emitEvent",
+                        params: {
+                            eventName: "saypi:ready",
+                        },
+                    },
+                    on: {
+                        play: {
+                            target: "playing",
+                        },
+                    },
+                },
+                playing: {
+                    entry: {
+                        type: "emitEvent",
+                        params: {
+                            eventName: "saypi:piSpeaking",
+                        },
+                    },
+                    exit: {
+                        type: "emitEvent",
+                        params: {
+                            eventName: "saypi:piStoppedSpeaking",
+                        },
+                    },
+                    on: {
+                        pause: {
+                            target: "paused",
+                        },
+                        ended: {
+                            target: "ended",
+                        },
+                        canplaythrough: {
+                            internal: true,
+                        },
+                    },
+                },
+                paused: {
+                    on: {
+                        play: {
+                            target: "playing",
+                        },
+                    },
+                },
+                ended: {
+                    entry: {
+                        type: "emitEvent",
+                        params: {
+                            eventName: "saypi:piFinishedSpeaking",
+                        },
+                    },
+                    on: {
+                        seeked: {
+                            target: "ready",
+                            description: "An ended track is seeked back to earlier in the track.",
+                        },
+                    },
+                },
+            },
+            on: {
+                emptied: {
+                    target: "idle",
+                },
+            },
+        },
+    },
+    schema: {
+        events: {},
+        context: {},
+    },
+    predictableActionArguments: true,
+    preserveActionOrder: true,
+}, {
+    actions: {
+        emitEvent: (context, event, { action }) => {
+            EventBus.emit(action.params.eventName);
+        },
+        skipCurrent: (context, event) => {
+            // send a message back to the audio module to stop playback
+            EventBus.emit("audio:skipCurrent");
+            console.log(`Audio is provided by ${context.provider.name}. Skipping current audio track ${event.source}`);
+        },
+        notifySpeechStart: (context, event) => {
+            const speech = getSpeechFromAudioSource(event.source).then((speech) => {
+                if (speech) {
+                    EventBus.emit("saypi:tts:speechStreamStarted", speech);
+                    console.debug(`Pi started speaking as ${speech.voice.name} by ${speech.voice.powered_by}`);
+                }
+            });
+        },
+    },
+    guards: {
+        shouldSkip: (context, event) => {
+            const shouldSkip = context.skip === true;
+            if (event.type === "loadstart") {
+                event = event;
+                const isNotReplaying = !context.replaying;
+                const isSourceMismatch = !context.provider.matches(event.source);
+                return (isNotReplaying && isSourceMismatch) || shouldSkip;
+            }
+            return shouldSkip;
+        },
+    },
+    services: {},
+    delays: {},
+});
+function getSpeechFromAudioSource(source) {
+    return AudioOutputMachine_awaiter(this, void 0, void 0, function* () {
+        try {
+            if (audioProviders.Pi.matches(source)) {
+                const userPreferences = UserPreferenceModule.getInstance();
+                const userLang = yield userPreferences.getLanguage();
+                return new PiSpeechSourceParser(userLang).parse(source);
+            }
+            else if (audioProviders.SayPi.matches(source)) {
+                return yield new SayPiSpeechSourceParser(SpeechSynthesisModule.getInstance()).parse(source);
+            }
+        }
+        catch (error) {
+            console.error(`Failed to get speech from audio source: ${error.message}`);
+        }
+        return null;
+    });
+}
+
+;// CONCATENATED MODULE: ./src/state-machines/AudioRetryMachine.ts
+
+
+const maxRetryAttempts = 5;
+const AUDIO_RELOAD_DELAY_MS = 1500; // minimum delay in milliseconds
+const AUDIO_LOAD_TIMEOUT_MS = 4000; // time allowed for audio to load before retrying - also update in WaitingWhileLoading state
+const machine = createMachine({
+    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AogJzyzwAlkA7CAGzDwDoBJKsAYgAdLkBPAbQAYBdRKFZZYGAC7YyQkAA9EARgAsATgBMtXlt4AOFQFY1KpUoUAaEJ0T6FC2mt4qAbGrVKA7ArWeFAZgC+-hZomLgERKQU1HSM1MzIAEZE4nyCSCAiYpJY0unyCMrqmtp6hsamFlYIDry07qoq7iq+Or5OTr5KToHB6Nj4hCTkTDFMzDSDqTKZElIy+YUa2roGRibmlohqNvb62k1NKn46PSAh-eFDUTQMY2AAtqySkFPpM9m5oAvKGr4qOoZ9MYdO5DE5KoglI57A59K0WoYFMZ3KdzmFBpERrc4rAsKg8ABjMAAYQAFuQYBBXsJRLMcvNFLwlPo6ntHE59O4jFp9BDqk47O4nPUlGoBQZhSpUX10RFhtFaAAFDicDBkKBsNCwMDUjK0j4MgpClmgpq8PYS-QdPk6Xi+eyOfSqJQtPRHaWhAZy650ZVcNUaxLJXXvOZ5LbKJyaJ2gpyNFa8cGbBC+LnFLSuby2v68FFBM4yr1XLF+1Xq8aXEP6sNfCNdaMeK3xvSJvmijRs826epqPRKD0XDHym6lgPjCgvATTav08NGpxKWgKBdeFw6HSiwx8q2CxweeqdXxwgey4sK0flh5PDCTtI0rI1uSKJwA+zOFRHF-GNpt5SsjlHqmtgfic+ZokWmIKgA6sgszqlBpIYNQAAyWDIJg5aUGhECQPcYDiOhyAEVWD6zrWBSqEsJSrOUGxVAC9ruHuRxqAoALCqBvSepckE3DBcFQAhSFgKh6FjgS5DsFw4ikoQqBQKSJF0p8T4UUUyylGsFTJgoWg6LQApwkehiqPoLQnhBw50PxkjwYhKHYWOExEEpBpzos6YrGU6x8rYrSaK45quDYHJchZPFWbQNkBkJDlieWQZ4CkU5vDOKkLJRnmabRvlqL49qGA4tobmaoLhUOPpRbBtmCfZImOeWsiwAR4hgLQyAAGatXgAAUUJaAAlPEhYRZV0V2cJokYVArmPhl6nUd52lVF4G4Baxe7rJyUpgSNFVYgASmAWHxRqJ04RAeEERARHILNZGqax+gsts7itM9vjeCobbuPayxNB45p-L95Xeodx0NRqElkFJnAyXJCn3elEbPbsb3GZ9TR8gu7i0FCHStLwxzbKDZ43Ed51jk1LVtZ13U9QdODIQA8gAggAIgA+uzTOswAmkN4GjeDlPqkjhqsQYBlKK0OgOF4QK+L5zKCjL7RGL2RO6KTvF0BTkPMNTRG011NAM0zbNczzyH84Le1gwq+undwCh3nqpHI9UkYNrGzYqK2yY6HYDT-EiG42I4OuRYqWqQGwKri3O22ebmYpuK0ajY3LeNAqoCi-envgKFHlUx6g2oQPESRJYn5HJ8sqcuDLn2+e0Ki0EetreDLXJvZxBbcft56x5Xzl4LXqn1-9afN5nOmeO3AK2lauhHhrJcliP4yPM8VIpfeymGlP+wzxn27QiYnh6J9xh7JyG-D+Xce4viRJkhSt7Th7R9NCnXJN2fZMbQ7AfihDLK0qZ-j1ECPmMgWAcLwHSELIeNAv6HznAAWiTFULBKcG7aA-PoB+NxYhgDQW5ciukgS0E5HaDoukujmm3LpAyv1hRMgBNyfuyCHYjhVAGchc1FDX3TF4Ww2wm7uGxh0B0BhfBMjKN+Yh1lqoxTqlNARqVv5zgMCyDSrg26cikTpF09p2LqAFO4N6fgdpcUHLwvWENTqCIevkbYOgoyvTYf7UwRMs61CPOUZoC4zJ+GUUqEeLjPailbjsOhTR5FFzYu0GB-ggA */
+    context: {
+        delay: AUDIO_RELOAD_DELAY_MS,
+        retries: 0,
+        startTime: 0,
+    },
+    id: "audioErrorHandler",
+    initial: "Idle",
+    states: {
+        Idle: {
+            on: {
+                play: {
+                    target: "Playing",
+                },
+                abort: {
+                    target: "Reloading",
+                },
+                error: {
+                    target: "Reloading",
+                },
+                emptied: {
+                    target: "Idle",
+                    actions: {
+                        type: "resetRetryCounter",
+                    },
+                },
+                sourceChanged: {
+                    actions: {
+                        type: "resetRetryCounter",
+                    },
+                    description: "The audio source has changed to load a new audio file.",
+                },
+            },
+            description: "The audio element is idle and ready to play audio.",
+        },
+        Playing: {
+            on: {
+                pause: {
+                    target: "Paused",
+                },
+                abort: {
+                    target: "Reloading",
+                },
+                error: {
+                    target: "Reloading",
+                },
+                ended: {
+                    target: "Idle",
+                },
+                emptied: {
+                    target: "Idle",
+                    actions: {
+                        type: "resetRetryCounter",
+                    },
+                },
+            },
+            description: "The audio is currently playing.",
+        },
+        WaitingWhileLoading: {
+            description: "Following a reload command, we're waiting for the audio to load. Will finish in a successful load (partial or complete), error, or timeout event.",
+            on: {
+                loadedmetadata: {
+                    target: "Playing",
+                    actions: [
+                        {
+                            type: "resetRetryCounter",
+                        },
+                        {
+                            type: "forcePlay",
+                        },
+                    ],
+                    description: "The audio has partially loaded and is ready to play.",
+                },
+                canplaythrough: {
+                    target: "Playing",
+                    actions: [
+                        {
+                            type: "resetRetryCounter",
+                        },
+                        {
+                            type: "forcePlay",
+                        },
+                    ],
+                    description: "The audio has loaded successfully and is ready to play.",
+                },
+                error: {
+                    target: "Reloading",
+                },
+                abort: {
+                    target: "Reloading",
+                },
+            },
+            after: {
+                4000: {
+                    target: "Reloading",
+                    actions: [{ type: "decreaseDelayAfterTimeout" }],
+                    description: "The audio has failed to load, usually due to a HTTP 400 error on Safari.",
+                },
+            },
+        },
+        Reloading: {
+            on: {
+                loadedmetadata: {
+                    target: "Playing",
+                    actions: [
+                        {
+                            type: "resetRetryCounter",
+                        },
+                        {
+                            type: "forcePlay",
+                        },
+                    ],
+                    description: "While waiting to reload, the audio has partially loaded and is ready to play.",
+                },
+                canplaythrough: {
+                    target: "Playing",
+                    actions: [
+                        {
+                            type: "resetRetryCounter",
+                        },
+                        {
+                            type: "forcePlay",
+                        },
+                    ],
+                    description: "While waiting to reload, the audio has loaded successfully and is ready to play.",
+                },
+            },
+            after: {
+                RELOAD_DELAY: [
+                    {
+                        target: "WaitingWhileLoading",
+                        cond: "retriesRemaining",
+                        actions: [
+                            { type: "forceReload" },
+                            {
+                                type: "increaseDelay",
+                            },
+                            { type: "incrementRetryCounter" },
+                        ],
+                    },
+                    {
+                        target: "Idle",
+                        cond: "maxRetriesReached",
+                    },
+                ],
+            },
+            description: "The audio element has encountered an error or abort event and is attempting to reload after a delay.",
+        },
+        Paused: {
+            on: {
+                play: {
+                    target: "Playing",
+                },
+                abort: {
+                    target: "Reloading",
+                },
+                error: {
+                    target: "Reloading",
+                },
+                emptied: {
+                    target: "Idle",
+                    actions: {
+                        type: "resetRetryCounter",
+                    },
+                },
+                sourceChanged: {
+                    target: "Idle",
+                    actions: {
+                        type: "resetRetryCounter",
+                    },
+                    description: "The audio source has changed to load a new audio file.",
+                },
+            },
+            description: "The audio is paused and can be played again or reloaded if there is an error.",
+        },
+    },
+    predictableActionArguments: true,
+    preserveActionOrder: true,
+}).withConfig({
+    actions: {
+        resetRetryCounter: function (context, event) {
+            console.debug("Resetting retry counter...");
+            context.retries = 0;
+            context.delay = AUDIO_RELOAD_DELAY_MS;
+        },
+        incrementRetryCounter: function (context, event) {
+            context.retries++;
+        },
+        increaseDelay: function (context, event) {
+            context.delay = context.delay * 2;
+        },
+        decreaseDelayAfterTimeout: function (context, event) {
+            console.debug(`Audio load timed out after ${AUDIO_LOAD_TIMEOUT_MS}ms. Trying again...`);
+            context.delay = Math.max(AUDIO_RELOAD_DELAY_MS, context.delay - AUDIO_LOAD_TIMEOUT_MS);
+        },
+        forceReload: function (context, event) {
+            console.debug(`Reloading audio, attempt ${context.retries + 1} of ${maxRetryAttempts}...`);
+            EventBus.emit("audio:reload");
+            if (context.retries === 0) {
+                context.startTime = new Date().getTime();
+            }
+            const currentTime = new Date().getTime();
+            const timeElapsed = currentTime - context.startTime;
+            console.debug(`Time elapsed since first retry: ${timeElapsed / 1000}s, current delay: ${context.delay}ms`);
+        },
+        forcePlay: function (context, event) {
+            console.debug("Starting audio after successful reload.", event);
+            // how long did it take to reload and play?
+            const currentTime = new Date().getTime();
+            const timeElapsed = currentTime - context.startTime;
+            console.debug(`Time taken to reload and start audio: ${timeElapsed / 1000} seconds`);
+            EventBus.emit("audio:output:play");
+        },
+    },
+    guards: {
+        retriesRemaining: function (context, event) {
+            return context.retries < maxRetryAttempts;
+        },
+        maxRetriesReached: function (context, event) {
+            return context.retries >= maxRetryAttempts;
+        },
+    },
+    delays: {
+        RELOAD_DELAY: function (context, event) {
+            return context.delay;
+        },
+    },
+});
+
+;// CONCATENATED MODULE: ./src/LoggingModule.js
+function serializeStateValue(stateValue) {
+  if (typeof stateValue === "string") {
+    return stateValue;
+  }
+  return Object.keys(stateValue).map(function (key) {
+    return "".concat(key, ":").concat(serializeStateValue(stateValue[key]));
+  }).join(",");
+}
+var logger = {
+  debug: function debug() {
+    var _console;
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+    (_console = console).debug.apply(_console, ["DEBUG:"].concat(args));
+  },
+  info: function info() {
+    var _console2;
+    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
+    }
+    (_console2 = console).log.apply(_console2, ["INFO:"].concat(args));
+  },
+  error: function error() {
+    var _console3;
+    for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+      args[_key3] = arguments[_key3];
+    }
+    (_console3 = console).error.apply(_console3, ["ERROR:"].concat(args));
+  }
+};
+;// CONCATENATED MODULE: ./src/UserAgentModule.js
+function isSafari() {
+  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+}
+function isMobileDevice() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.matchMedia("(max-width: 820px)").matches // fallback for devices that don't have a recognisable mobile user agent, like iPad (Air, Pro is excluded)
+  ;
+}
+
+function addUserAgentFlags() {
+  var isFirefoxAndroid = /Firefox/.test(navigator.userAgent) && /Android/.test(navigator.userAgent);
+  var element = document.documentElement;
+  if (isFirefoxAndroid) {
+    element.classList.add("firefox-android");
+  }
+  addDeviceFlags(element);
+  //addViewFlags(element); // redundant, as this is called in initMode
+}
+
+function addDeviceFlags(element) {
+  if (isMobileDevice()) {
+    element.classList.add("mobile-device");
+  }
+}
+;// CONCATENATED MODULE: ./src/audio/AudioModule.js
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+// import state machines for audio input and output
+
+
+
+
+
+
+
+var AudioModule = /*#__PURE__*/function () {
+  function AudioModule() {
+    _classCallCheck(this, AudioModule);
+    if (AudioModule.instance) {
+      return AudioModule.instance;
+    }
+    this.audioElement = document.querySelector("audio");
+    if (!this.audioElement) {
+      console.error("Audio element not found!");
+    } else {
+      this.audioElement.id = "saypi-audio-main";
+      console.debug("Audio element found", this.audioElement);
+    }
+    this.audioOutputActor = interpret(audioOutputMachine);
+    this.audioOutputActor.onTransition(function (state) {
+      if (state.changed) {
+        var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
+        var toState = serializeStateValue(state.value);
+        logger.debug("Audio Output Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+      }
+    });
+    this.audioInputActor = interpret(audioInputMachine);
+    this.audioInputActor.onTransition(function (state) {
+      if (state.changed) {
+        var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
+        var toState = serializeStateValue(state.value);
+        logger.debug("Audio Input Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+      }
+    });
+
+    // Safari audio error handling logic (known issue in at least Safari <= 17.4)
+    if (isSafari()) {
+      this.audioRetryActor = interpret(machine);
+      this.audioRetryActor.onTransition(function (state) {
+        if (state.changed) {
+          var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
+          var toState = serializeStateValue(state.value);
+          logger.debug("Audio Retry Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+        }
+      });
+    }
+    AudioModule.instance = this;
+  }
+  _createClass(AudioModule, [{
+    key: "start",
+    value: function start() {
+      // audio output (Pi)
+      this.audioOutputActor.start();
+      this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
+      //this.safariErrorHandler.startMonitoring();
+      this.registerLifecycleDebug();
+
+      // audio input (user)
+      this.audioInputActor.start();
+      this.registerAudioCommands(this.audioInputActor, this.audioOutputActor);
+      if (isSafari()) {
+        // audio retry
+        console.log("Using audio retry handler for Safari.");
+        this.audioRetryActor.start();
+        this.registerAudioPlaybackEvents(this.audioElement, this.audioRetryActor);
+        this.registerSourceChangeEvents(this.audioElement, this.audioRetryActor);
+      }
+    }
+  }, {
+    key: "stop",
+    value: function stop() {}
+
+    /**
+     *
+     * @param {HTMLAudioElement} audio
+     * @param {audioOutputMachine} actor
+     */
+  }, {
+    key: "registerAudioPlaybackEvents",
+    value: function registerAudioPlaybackEvents(audio, actor) {
+      var events = ["loadedmetadata", "canplaythrough", "play", "pause", "ended", "seeked", "emptied"];
+      var sourcedEvents = ["loadstart"];
+      sourcedEvents.forEach(function (event) {
+        audio.addEventListener(event, function (e) {
+          var detail = {
+            source: audio.currentSrc
+          };
+          actor.send(event, detail);
+        });
+      });
+      events.forEach(function (event) {
+        audio.addEventListener(event, function () {
+          return actor.send(event);
+        });
+      });
+      audio.addEventListener("playing", function () {
+        actor.send("play");
+      });
+    }
+  }, {
+    key: "registerSourceChangeEvents",
+    value: function registerSourceChangeEvents(audio, actor) {
+      var _this = this;
+      this.lastSource = audio.src;
+      audio.addEventListener("loadstart", function () {
+        if (audio.currentSrc !== _this.lastSource) {
+          actor.send("sourceChanged");
+          _this.lastSource = audio.currentSrc;
+        }
+      });
+    }
+
+    /* These events are used to control/pass requests to the audio module from other modules */
+  }, {
+    key: "registerAudioCommands",
+    value: function registerAudioCommands(inputActor, outputActor) {
+      var _this2 = this;
+      // audio input (recording) commands
+      EventBus.on("audio:setupRecording", function (e) {
+        inputActor.send("acquire");
+      });
+      EventBus.on("audio:tearDownRecording", function (e) {
+        inputActor.send("release");
+      });
+      EventBus.on("audio:startRecording", function (e) {
+        // Check if Pi is currently speaking and stop her audio
+        outputActor.send("pause");
+
+        // Check if the microphone is acquired before starting?
+        inputActor.send(["acquire", "start"]);
+      });
+      EventBus.on("audio:stopRecording", function (e) {
+        inputActor.send("stopRequested");
+        /* resume or cancel Pi's audio */
+        /* TODO: reassess how to handle interruptions
+        outputActor.send("play"); // resume Pi's audio
+        outputActor.send("stop"); // cancel Pi's audio
+        */
+      });
+      // audio input (recording) events (pass media recorder events -> audio input machine actor)
+      EventBus.on("audio:dataavailable", function (detail) {
+        inputActor.send(_objectSpread({
+          type: "dataAvailable"
+        }, detail));
+      });
+      EventBus.on("audio:input:stop", function (e) {
+        inputActor.send("stop");
+      });
+      EventBus.on("audio:input:reconnect", function (e) {
+        inputActor.send("release");
+        inputActor.send(["acquire", "start"]);
+      });
+
+      // audio output (playback) commands
+      EventBus.on("audio:changeProvider", function (detail) {
+        outputActor.send(_objectSpread({
+          type: "changeProvider"
+        }, detail));
+      });
+      EventBus.on("audio:skipNext", function (e) {
+        outputActor.send("skipNext");
+      });
+      EventBus.on("audio:skipCurrent", function (e) {
+        // Pause the audio
+        _this2.audioElement.pause();
+
+        // Skip to the end to simulate the completion of the audio, preventing it from being resumed
+        if (!isNaN(_this2.audioElement.duration)) {
+          _this2.audioElement.currentTime = _this2.audioElement.duration;
+        }
+      });
+      EventBus.on("audio:output:play", function (e) {
+        _this2.audioElement.play();
+      });
+      EventBus.on("audio:output:pause", function (e) {
+        _this2.audioElement.pause();
+      });
+      EventBus.on("audio:output:resume", function (e) {
+        _this2.audioElement.play();
+      });
+      EventBus.on("audio:load", function (detail) {
+        _this2.loadAudio(detail.url);
+      }, this);
+      EventBus.on("audio:reload", function (e) {
+        _this2.audioElement.load();
+      });
+      EventBus.on("saypi:tts:replaying", function (e) {
+        // notify the audio output machine that the next audio is a replay
+        outputActor.send("replaying");
+      });
+    }
+
+    /**
+     * Load an audio file into the main audio element,
+     * replacing the current audio source, i.e. Pi's speech.
+     *
+     * To invoke this function with loose coupling to the audio module,
+     * raise a "audio:load" event with the URL of the audio file to load.
+     * @param {string} url
+     */
+  }, {
+    key: "loadAudio",
+    value: function loadAudio(url) {
+      var _this3 = this;
+      var play = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+      if (url) {
+        this.audioElement.src = url;
+        if (play) {
+          this.audioElement.play().then(function () {
+            console.debug("Playing audio from ".concat(_this3.audioElement.currentSrc));
+          })["catch"](function (error) {
+            console.error("Error playing audio from ".concat(_this3.audioElement.currentSrc), error);
+          });
+        } else {
+          this.audioElement.load().then(function () {
+            console.debug("Loaded audio from ".concat(_this3.audioElement.currentSrc));
+          })["catch"](function (error) {
+            console.error("Error loading audio from ".concat(_this3.audioElement.currentSrc), error);
+          });
+        }
+      }
+    }
+  }, {
+    key: "registerLifecycleDebug",
+    value: function registerLifecycleDebug() {
+      var _this4 = this;
+      var starttime;
+      this.audioElement.onerror = function (event) {
+        console.error("Error playing audio from ".concat(_this4.audioElement.currentSrc), event);
+      };
+      this.audioElement.onloadstart = function () {
+        console.debug("Loading audio from ".concat(_this4.audioElement.currentSrc));
+        starttime = Date.now();
+      };
+
+      // Handle successful loading and playing of the audio
+      this.audioElement.onloadeddata = function () {
+        var endtime = Date.now();
+        var elapsedtime = (endtime - starttime) / 1000;
+        console.debug("Audio is loaded after ".concat(elapsedtime.toFixed(1), "s from ").concat(_this4.audioElement.currentSrc));
+      };
+      this.audioElement.oncanplay = function () {
+        var endtime = Date.now();
+        var elapsedtime = (endtime - starttime) / 1000;
+        console.debug("Audio is ready to play after ".concat(elapsedtime.toFixed(1), "s from ").concat(_this4.audioElement.currentSrc));
+      };
+      this.audioElement.oncanplaythrough = function () {
+        var endtime = Date.now();
+        var elapsedtime = (endtime - starttime) / 1000;
+        console.debug("Audio is ready to play through after ".concat(elapsedtime.toFixed(1), "s from ").concat(_this4.audioElement.currentSrc));
+      };
+
+      // Handle audio playback completion
+      this.audioElement.onended = function () {
+        var endtime = Date.now();
+        var elapsedtime = (endtime - starttime) / 1000;
+        console.debug("Audio playback ended after ".concat(elapsedtime.toFixed(1), "s"));
+      };
+    }
+  }], [{
+    key: "getInstance",
+    value: function getInstance() {
+      if (!AudioModule.instance) {
+        AudioModule.instance = new AudioModule();
+      }
+      return AudioModule.instance;
+    }
+  }]);
+  return AudioModule;
+}();
+
+;// CONCATENATED MODULE: ./src/state-machines/FocusMachine.ts
+
+function enterFocusMode() {
+    // add focus class to the body
+    document.body.classList.add("focus");
+}
+function exitFocusMode() {
+    // remove focus class from the body
+    document.body.classList.remove("focus");
+}
+const THRESHOLD_INACTIVITY_TIME_MS = 10000; // Define the threshold value
+const FocusMachine_machine = createMachine({
+    context: {
+        inactivityTime: 0,
+    },
+    id: "focusMachine",
+    initial: "Idle",
+    states: {
+        Idle: {
+            description: "The machine is not in focus mode and is waiting for user inactivity.",
+            after: {
+                "11000": {
+                    target: "#focusMachine.Focused",
+                    cond: "isInactiveLongEnough",
+                    actions: [],
+                },
+            },
+            exit: "resetInactivityTime",
+            on: {
+                blur: {
+                    target: "Idle",
+                    actions: "resetInactivityTime",
+                },
+                tick: {
+                    actions: "incrementInactivityTime",
+                },
+            },
+        },
+        Focused: {
+            description: "The machine is in focus mode, not responding to user inputs except to exit focus mode.",
+            entry: "focusAction",
+            exit: ["blurAction"],
+            on: {
+                blur: {
+                    target: "Idle",
+                    actions: "resetInactivityTime",
+                },
+            },
+        },
+    },
+    schema: {
+        events: {},
+        context: {},
+    },
+    predictableActionArguments: true,
+    preserveActionOrder: true,
+}, {
+    actions: {
+        resetInactivityTime: es_assign({
+            inactivityTime: 0,
+        }),
+        incrementInactivityTime: es_assign({
+            inactivityTime: (context, event) => {
+                return (context.inactivityTime += event.time_ms);
+            },
+        }),
+        focusAction: () => {
+            enterFocusMode();
+        },
+        blurAction: () => {
+            exitFocusMode();
+        },
+    },
+    services: {},
+    guards: {
+        isInactiveLongEnough: (context, event) => {
+            return context.inactivityTime >= THRESHOLD_INACTIVITY_TIME_MS;
+        },
+    },
+    delays: {},
+});
+
+;// CONCATENATED MODULE: ./src/FullscreenModule.ts
+
+
+
+const focusActor = interpret(FocusMachine_machine);
+const tickInterval = 1000;
+var ticker;
+const userInputEvents = ["mousemove", "click", "keypress"];
+function handleUserInput() {
+    focusActor.send({ type: "blur" });
+}
+function startFocusModeListener() {
+    focusActor.start();
+    ticker = setInterval(() => {
+        focusActor.send({ type: "tick", time_ms: tickInterval });
+    }, tickInterval);
+    // send any click or keypress to reset the inactivity timer
+    for (const event of userInputEvents) {
+        document.addEventListener(event, handleUserInput);
+    }
+}
+function stopFocusModeListener() {
+    focusActor.stop();
+    clearInterval(ticker);
+    for (const event of userInputEvents) {
+        document.removeEventListener(event, handleUserInput);
+    }
+}
+function enterFullscreen() {
+    // Check if the API is available
+    if (document.fullscreenEnabled) {
+        // Request full-screen mode
+        document.documentElement
+            .requestFullscreen()
+            .then(() => {
+            if (!isMobileDevice()) {
+                startFocusModeListener();
+            }
+        })
+            .catch((err) => {
+            console.info(`Unable to enter full-screen mode. Maybe starting in mobile view?: ${err.message} (${err.name})`);
+        });
+    }
+    else {
+        console.log("Fullscreen API is not enabled.");
+    }
+}
+function exitFullscreen() {
+    // Check if the API is available
+    if (document.fullscreenEnabled) {
+        // Request full-screen mode
+        document
+            .exitFullscreen()
+            .then(() => {
+            if (!isMobileDevice()) {
+                exitFocusMode();
+                stopFocusModeListener();
+            }
+        })
+            .catch((err) => {
+            console.info(`Unable to exit full-screen mode. Maybe starting in desktop view?: ${err.message} (${err.name})`);
+        });
+    }
+    else {
+        console.log("Fullscreen API is not enabled.");
+    }
+}
+
+;// CONCATENATED MODULE: ./src/dom/DOMModule.ts
+/**
+ * Append a child node to a parent node, either at a specific position or as the last child.
+ * @param parent The parent node to add the child to.
+ * @param child The node to add.
+ * @param position If positive, indexed from the start of the parent's children. If negative, indexed from the end of the parent's children.
+ */
+function addChild(parent, child, position = 0) {
+    // Check if a container is provided.
+    if (parent) {
+        // If position is 0, simply append the button as the last child.
+        if (position === 0) {
+            parent.appendChild(child);
+        }
+        else {
+            // Calculate the index of the reference node for insertBefore().
+            const referenceIndex = position > 0 ? position : parent.children.length + position;
+            const referenceNode = parent.children[referenceIndex];
+            // If a reference node exists, insert the button before it.
+            if (referenceNode) {
+                parent.insertBefore(child, referenceNode);
+            }
+            else {
+                // If not, append the button as the last child.
+                parent.appendChild(child);
+            }
+        }
+    }
+    else {
+        // If no container is provided, append the button to the body.
+        document.body.appendChild(child);
+    }
+}
+
+;// CONCATENATED MODULE: ./src/ImmersionService.js
+function ImmersionService_typeof(o) { "@babel/helpers - typeof"; return ImmersionService_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, ImmersionService_typeof(o); }
+function ImmersionService_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function ImmersionService_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, ImmersionService_toPropertyKey(descriptor.key), descriptor); } }
+function ImmersionService_createClass(Constructor, protoProps, staticProps) { if (protoProps) ImmersionService_defineProperties(Constructor.prototype, protoProps); if (staticProps) ImmersionService_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function ImmersionService_toPropertyKey(arg) { var key = ImmersionService_toPrimitive(arg, "string"); return ImmersionService_typeof(key) === "symbol" ? key : String(key); }
+function ImmersionService_toPrimitive(input, hint) { if (ImmersionService_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (ImmersionService_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+
+
+
+
+function attachCallButton() {
+  // move the call button back into the text prompt container for desktop view
+  var container = document.getElementById("saypi-prompt-controls-container");
+  var callButton = document.getElementById("saypi-callButton");
+  if (container && callButton) {
+    addChild(container, callButton, -1);
+  }
+}
+function detachCallButton() {
+  // remove the call button from the text prompt container while in mobile view
+  var callButton = document.getElementById("saypi-callButton");
+  if (callButton) {
+    addChild(document.body, callButton);
+  }
+}
+var ImmersionService = /*#__PURE__*/function () {
+  /**
+   * A service that manages the immersive view mode
+   * Uses dependency injection to access the chatbot
+   * @param {Chatbot} chatbot
+   */
+  function ImmersionService(chatbot) {
+    ImmersionService_classCallCheck(this, ImmersionService);
+    this.chatbot = chatbot;
+    this.userPreferences = UserPreferenceModule.getInstance();
+  }
+
+  /**
+   * Perform initial setup of the UI based on the view preferences
+   */
+  ImmersionService_createClass(ImmersionService, [{
+    key: "initMode",
+    value: function initMode() {
+      var _this = this;
+      this.userPreferences.getPrefersImmersiveView().then(function (immersive) {
+        if (immersive) {
+          _this.enterImmersiveMode();
+        } else {
+          ImmersionService.exitImmersiveMode();
+        }
+      });
+    }
+
+    // this function determines whether the immersive view is currently active
+  }, {
+    key: "enterImmersiveMode",
+    value: function enterImmersiveMode() {
+      localStorage.setItem("userViewPreference", "immersive"); // Save preference
+
+      // if not already on the talk page, navigate to it
+      // this is to ensure the user is not stuck in the immersive view on a non-chat page
+      var currentPath = window.location.pathname;
+      if (!this.chatbot.isChatablePath(currentPath)) {
+        var path = this.chatbot.getChatPath();
+        if (window.location.pathname !== path) {
+          // Get the current redirect count
+          var redirectCount = localStorage.getItem("redirectCount");
+          if (!redirectCount) {
+            redirectCount = 0;
+          }
+
+          // If the redirect count is less than the limit, attempt a redirect
+          if (redirectCount < 3) {
+            localStorage.setItem("redirectCount", ++redirectCount);
+            window.location = path;
+          } else {
+            // Reset the redirect count
+            localStorage.removeItem("redirectCount");
+            console.warn("Redirect limit reached. Unable to redirect to chat page.");
+          }
+        }
+      }
+      var element = document.documentElement;
+      element.classList.remove("desktop-view");
+      element.classList.add("immersive-view");
+      detachCallButton();
+      enterFullscreen();
+      this.userPreferences.getTheme().then(function (theme) {
+        buttonModule.applyTheme(theme);
+      });
+    }
+  }], [{
+    key: "isViewImmersive",
+    value: function isViewImmersive() {
+      var element = document.documentElement;
+      return element.classList.contains("immersive-view");
+    }
+  }, {
+    key: "exitImmersiveMode",
+    value: function exitImmersiveMode() {
+      localStorage.setItem("userViewPreference", "desktop"); // Save preference
+
+      var element = document.documentElement;
+      element.classList.remove("immersive-view");
+      element.classList.add("desktop-view");
+      attachCallButton();
+      exitFullscreen();
+    }
+  }]);
+  return ImmersionService;
+}();
+;// CONCATENATED MODULE: ./src/AnimationModule.js
+function AnimationModule_typeof(o) { "@babel/helpers - typeof"; return AnimationModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, AnimationModule_typeof(o); }
+function AnimationModule_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function AnimationModule_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, AnimationModule_toPropertyKey(descriptor.key), descriptor); } }
+function AnimationModule_createClass(Constructor, protoProps, staticProps) { if (protoProps) AnimationModule_defineProperties(Constructor.prototype, protoProps); if (staticProps) AnimationModule_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function AnimationModule_defineProperty(obj, key, value) { key = AnimationModule_toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function AnimationModule_toPropertyKey(arg) { var key = AnimationModule_toPrimitive(arg, "string"); return AnimationModule_typeof(key) === "symbol" ? key : String(key); }
+function AnimationModule_toPrimitive(input, hint) { if (AnimationModule_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (AnimationModule_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+var AnimationModule = /*#__PURE__*/function () {
+  function AnimationModule() {
+    AnimationModule_classCallCheck(this, AnimationModule);
+  }
+  AnimationModule_createClass(AnimationModule, null, [{
+    key: "startAnimation",
+    value: function startAnimation(animation) {
+      this.stopOtherAnimations(animation);
+      if (this.talkButtonAnimations.includes(animation)) {
+        var rectangles = document.querySelectorAll(this.rectanglesSelector);
+        rectangles.forEach(function (rect) {
+          return rect.classList.add(animation);
+        });
+      }
+      if (this.callButtonAnimations.includes(animation)) {
+        var callButtons = document.querySelectorAll(this.callButtonSelector);
+        callButtons.forEach(function (button) {
+          return button.classList.add(animation);
+        });
+      }
+    }
+  }, {
+    key: "stopAnimation",
+    value: function stopAnimation(animation) {
+      var rectangles = document.querySelectorAll(this.rectanglesSelector);
+      rectangles.forEach(function (rect) {
+        return rect.classList.remove(animation);
+      });
+      var callButtons = document.querySelectorAll(this.callButtonSelector);
+      callButtons.forEach(function (button) {
+        return button.classList.remove(animation);
+      });
+    }
+  }, {
+    key: "stopAllAnimations",
+    value: function stopAllAnimations() {
+      var _this = this;
+      this.talkButtonAnimations.forEach(function (animation) {
+        return _this.stopAnimation(animation);
+      });
+      this.callButtonAnimations.forEach(function (animation) {
+        return _this.stopAnimation(animation);
+      });
+    }
+  }, {
+    key: "stopOtherAnimations",
+    value: function stopOtherAnimations(keepAnimation) {
+      if (this.talkButtonAnimations.includes(keepAnimation)) {
+        this.stopOtherAnimationsByCollection(keepAnimation, this.talkButtonAnimations);
+      } else if (this.callButtonAnimations.includes(keepAnimation)) {
+        this.stopOtherAnimationsByCollection(keepAnimation, this.callButtonAnimations);
+      }
+    }
+  }, {
+    key: "stopOtherAnimationsByCollection",
+    value: function stopOtherAnimationsByCollection(keepAnimation, animationsCollection) {
+      var _this2 = this;
+      animationsCollection.forEach(function (animation) {
+        if (animation !== keepAnimation) {
+          _this2.stopAnimation(animation);
+        }
+      });
+    }
+  }]);
+  return AnimationModule;
+}();
+AnimationModule_defineProperty(AnimationModule, "rectanglesSelector", ".outermost, .second, .third, .fourth, .fifth, .innermost");
+AnimationModule_defineProperty(AnimationModule, "callButtonSelector", ".call-button");
+AnimationModule_defineProperty(AnimationModule, "talkButtonAnimations", ["piThinking", "piSpeaking", "userSpeaking", "transcribing"]);
+AnimationModule_defineProperty(AnimationModule, "callButtonAnimations", ["glow", "glow-fade-out"]);
+
+;// CONCATENATED MODULE: ./src/i18n.ts
+var i18n_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+// We'll start with an empty messages object
+let messages = {};
+const userPreferences = UserPreferenceModule.getInstance();
+// This function attempts to load messages for a given locale
+function loadMessages(locale) {
+    return i18n_awaiter(this, void 0, void 0, function* () {
+        try {
+            messages[locale] = yield __webpack_require__(4557)(`./${locale}/messages.json`);
+        }
+        catch (error) {
+            console.error(`Failed to load messages for locale: ${locale}`, error);
+        }
+    });
+}
+function getLocalMessage(locale, messageName, substitutions) {
+    // if the locale is not in the messages object, default to English
+    if (!messages[locale]) {
+        locale = "en";
+    }
+    // if the message is not in the locale object, default to the message name and log an error
+    if (!messages[locale][messageName]) {
+        console.error(`Message not found for locale: ${locale} and message name: ${messageName}`);
+        return messageName;
+    }
+    else {
+        const rawMessage = messages[locale][messageName].message;
+        if (substitutions) {
+            return rawMessage.replace("$1", substitutions.toString());
+        }
+        else {
+            return rawMessage;
+        }
+    }
+}
+// Call this function to initialize the messages
+function convertLanguageToLocale(language) {
+    return language.split("_")[0];
+}
+function getMessage(messageName, substitutions) {
+    // Check if running as a Chrome extension
+    if (typeof chrome !== "undefined" && chrome.i18n) {
+        return chrome.i18n.getMessage(messageName, substitutions);
+    }
+    else {
+        // Fallback for userscript
+        userPreferences
+            .getLanguage()
+            .then((lang) => {
+            let locale = convertLanguageToLocale(lang);
+            if (!messages[locale]) {
+                loadMessages(locale);
+            }
+            return getLocalMessage(locale, messageName);
+        })
+            .catch((error) => {
+            console.error(`Failed to get language preference`, error);
+            let locale = "en";
+            if (!messages[locale]) {
+                loadMessages(locale);
+            }
+            return getLocalMessage(locale, messageName);
+        });
+    }
+    return messageName;
+}
+/* harmony default export */ const i18n = (getMessage);
+
+;// CONCATENATED MODULE: ./src/NotificationsModule.ts
+var NotificationsModule_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+class TextualNotificationsModule {
+    constructor() {
+        this.notificationElement = document.getElementById("saypi-notification");
+        this.autoSubmitEnabled = () => {
+            this.showNotification(i18n("autoSubmitEnabled"));
+        };
+        this.autoSubmitDisabled = () => {
+            this.showNotification(i18n("autoSubmitDisabled"));
+        };
+    }
+    showNotification(message, iconName) {
+        this.showNotificationForSeconds(message, 5, iconName);
+    }
+    init() {
+        if (!this.notificationElement ||
+            !document.body.contains(this.notificationElement)) {
+            this.notificationElement = document.getElementById("saypi-notification");
+        }
+        if (!this.notificationElement) {
+            const notificationElement = document.createElement("p");
+            notificationElement.id = "saypi-notification";
+            notificationElement.classList.add("text-notification");
+            document.body.appendChild(notificationElement);
+            this.notificationElement = notificationElement;
+            // hide notification when clicked
+            this.notificationElement.addEventListener("click", () => {
+                this.hideNotification();
+            });
+        }
+    }
+    loadSVG(url) {
+        return NotificationsModule_awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield fetch(url);
+                const data = yield response.text();
+                let parser = new DOMParser();
+                let svgElement = parser.parseFromString(data, "image/svg+xml")
+                    .documentElement;
+                return svgElement;
+            }
+            catch (err) {
+                console.error("Error loading SVG image: ", err);
+                throw err;
+            }
+        });
+    }
+    _showNotification(message, iconName, embedIcon = false, isDialog = false, buttonText) {
+        var _a;
+        return NotificationsModule_awaiter(this, void 0, void 0, function* () {
+            this.init();
+            // dismiss any existing notification
+            this.hideNotification();
+            // show new notification
+            this.notificationElement.classList.add("active");
+            if (isDialog) {
+                this.notificationElement.classList.add("dialog");
+            }
+            else {
+                this.notificationElement.classList.remove("dialog");
+            }
+            if (iconName) {
+                const iconImageUrl = getResourceUrl(`icons/${iconName}.svg`);
+                let iconElement;
+                if (embedIcon) {
+                    iconElement = yield this.loadSVG(iconImageUrl);
+                }
+                else {
+                    iconElement = document.createElement("img");
+                    iconElement.src = iconImageUrl;
+                }
+                iconElement.classList.add("icon");
+                (_a = this.notificationElement) === null || _a === void 0 ? void 0 : _a.appendChild(iconElement);
+            }
+            const notificationContent = document.createElement("div");
+            notificationContent.classList.add("content");
+            this.notificationElement.appendChild(notificationContent);
+            const notificationText = document.createElement("span");
+            notificationText.classList.add("message");
+            notificationText.textContent = message;
+            notificationContent.appendChild(notificationText);
+            if (buttonText) {
+                const button = document.createElement("button");
+                button.textContent = buttonText;
+                button.addEventListener("click", () => {
+                    this.hideNotification();
+                });
+                notificationContent.appendChild(button);
+            }
+        });
+    }
+    hideNotification() {
+        this.init();
+        this.notificationElement.classList.remove("active");
+        // remove any child elements
+        while (this.notificationElement.firstChild) {
+            this.notificationElement.removeChild(this.notificationElement.firstChild);
+        }
+    }
+    showNotificationForSeconds(message, seconds, iconName) {
+        this._showNotification(message, iconName);
+        setTimeout(() => {
+            this.hideNotification();
+        }, seconds * 1000);
+    }
+}
+class UserPromptModule extends TextualNotificationsModule {
+    showLongCallDialog(durationSeconds) {
+        return NotificationsModule_awaiter(this, void 0, void 0, function* () {
+            const dialog = document.createElement("div");
+            dialog.classList.add("activity-check-dialog");
+            const messageText = i18n("activityCheckMessage");
+            const buttonText = i18n("activityCheckButton");
+            const iconName = "sixty-seconds";
+            yield this._showNotification(messageText, iconName, true, true, buttonText);
+            const timer = document.getElementById("saypi-countdown-number");
+            if (timer) {
+                let remainingTime = durationSeconds;
+                const countdownInterval = setInterval(() => {
+                    remainingTime--;
+                    timer.textContent = `${remainingTime}`;
+                    if (remainingTime <= 0) {
+                        clearInterval(countdownInterval);
+                        this.hideNotification();
+                        console.debug("User has been inactive for too long");
+                        EventBus.emit("saypi:hangup");
+                    }
+                }, 1000);
+                const dismissButton = document.querySelector(".dialog button");
+                if (dismissButton) {
+                    dismissButton.addEventListener("click", () => {
+                        clearInterval(countdownInterval);
+                        this.hideNotification();
+                        EventBus.emit("saypi:countdown-cancelled");
+                        console.debug("User is still active");
+                    });
+                }
+            }
+            else {
+                console.error("Unable to find countdown timer element");
+            }
+        });
+    }
+    activityCheck(durationSeconds) {
+        this.showLongCallDialog(durationSeconds);
+    }
+}
+class AudibleNotificationsModule {
+    constructor(userPreferences) {
+        // Load audio resources in the constructor
+        this.listeningSound = new Audio(getResourceUrl("audio/send-round-short.mp3"));
+        this.listeningSound.preload = "auto"; // short track, so load the audio file as soon as possible
+        this.callStartedSound = new Audio(getResourceUrl("audio/startup-synth.mp3"));
+        this.callFailedSound = new Audio(getResourceUrl("audio/call-failed.mp3"));
+        this.callEndedSound = new Audio(getResourceUrl("audio/turn-off.mp3"));
+        this.lockSound = new Audio(getResourceUrl("audio/beep-on.mp3"));
+        this.unlockSound = new Audio(getResourceUrl("audio/beep-off.mp3"));
+        this.themeOnSound = new Audio(getResourceUrl("audio/switch-on.mp3"));
+        this.themeOffSound = new Audio(getResourceUrl("audio/switch-off.mp3"));
+        this.userPreferences = userPreferences;
+        this.activityCheckSound1 = new Audio(getResourceUrl("audio/attention-1.mp3"));
+        this.activityCheckSound2 = new Audio(getResourceUrl("audio/attention-2.mp3"));
+    }
+    static getInstance() {
+        if (!AudibleNotificationsModule.instance) {
+            AudibleNotificationsModule.instance = new AudibleNotificationsModule(UserPreferenceModule.getInstance());
+        }
+        return AudibleNotificationsModule.instance;
+    }
+    playSound(sound) {
+        return NotificationsModule_awaiter(this, void 0, void 0, function* () {
+            const soundEnabled = yield this.userPreferences.getSoundEffects();
+            if (soundEnabled) {
+                sound.play().catch((e) => {
+                    if (e.name === "NotAllowedError") {
+                        // Inform the user to enable audio permissions or trigger from a click
+                        console.error(`Audio playback blocked on ${sound.src} notification. Please initiate audio from a user interaction.`);
+                    }
+                    else {
+                        console.error("Unable to play audio notification:", e);
+                    }
+                });
+            }
+            else {
+                console.debug("Sound effects disabled");
+            }
+        });
+    }
+    listeningStopped() {
+        this.playSound(this.listeningSound);
+    }
+    callStarted() {
+        this.playSound(this.callStartedSound);
+    }
+    callFailed() {
+        this.playSound(this.callFailedSound);
+    }
+    callEnded() {
+        this.playSound(this.callEndedSound);
+    }
+    lockScreen() {
+        this.playSound(this.lockSound);
+    }
+    unlockScreen() {
+        this.playSound(this.unlockSound);
+    }
+    themeOn() {
+        this.playSound(this.themeOnSound);
+    }
+    themeOff() {
+        this.playSound(this.themeOffSound);
+    }
+    activityCheck(duration) {
+        this.playSound(this.activityCheckSound1);
+        const secondSound = setTimeout(() => {
+            this.playSound(this.activityCheckSound2);
+        }, (duration / 2) * 1000);
+        EventBus.on("saypi:hangup", () => {
+            clearTimeout(secondSound);
+        });
+        EventBus.on("saypi:countdown-cancelled", () => {
+            clearTimeout(secondSound);
+        });
+    }
+}
+class VisualNotificationsModule {
+    constructor() {
+        this.ring = document.getElementById("progress-ring");
+        this.callButton = document.getElementById("saypi-callButton");
+    }
+    /**
+     * The ring and call button elements may not be available until after the extension is loaded.
+     * This method will attempt to find them and set them if they are not already set.
+     */
+    init() {
+        if (!this.ring || !document.body.contains(this.ring)) {
+            this.ring = document.getElementById("progress-ring");
+        }
+        if (!this.callButton || !document.body.contains(this.callButton)) {
+            this.callButton = document.getElementById("saypi-callButton");
+        }
+    }
+    startCountdown(secondsRemaining) {
+        this.startRingAnimation(secondsRemaining);
+        this.startGlowFade(secondsRemaining);
+    }
+    cancelCountdown() {
+        this.stopRingAnimation();
+        this.stopGlowFade();
+    }
+    startRingAnimation(secondsRemaining) {
+        if (!this.ring) {
+            console.error("Unable to find progress ring element");
+            return;
+        }
+        const circumference = this.ring.getTotalLength();
+        this.ring.style.strokeDasharray = `${circumference} ${circumference}`;
+        this.ring.style.strokeDashoffset = `${circumference}`;
+        this.ring.style.animationDuration = `${secondsRemaining}s`;
+        //this.ring.style.animation = `fillup ${secondsRemaining}s linear forwards, changeColor ${secondsRemaining}s linear forwards`;
+        this.ring.classList.add("active");
+    }
+    stopRingAnimation() {
+        if (!this.ring) {
+            console.error("Unable to find progress ring element");
+            return;
+        }
+        this.ring.classList.remove("active");
+        //      void this.ring.style.strokeDasharray;
+        //      void this.ring.style.strokeDashoffset;
+        //      this.ring.style.animation = 'none';
+    }
+    startGlowFade(secondsRemaining) {
+        if (!this.callButton) {
+            console.error("Unable to find call button element");
+            return;
+        }
+        this.callButton.classList.remove("glow");
+        this.callButton.classList.add("glow-fade-out");
+        this.callButton.style.animationDuration = `${secondsRemaining}s`;
+        //this.callButton.style.animationTimingFunction = 'ease-out !important';
+    }
+    stopGlowFade() {
+        if (!this.callButton) {
+            console.error("Unable to find call button element");
+            return;
+        }
+        this.callButton.classList.remove("glow-fade-out");
+        this.callButton.style.animationDuration = "1.5s"; // reset to default glow duration - see neon.scss for source definition
+        //void this.callButton.style.animationTimingFunction;
+    }
+    listeningStopped() {
+        this.init();
+        this.cancelCountdown();
+    }
+    listeningTimeRemaining(timeRemaining) {
+        this.init();
+        this.cancelCountdown();
+        this.startCountdown(timeRemaining);
+    }
+}
+
+;// CONCATENATED MODULE: ./src/events/EventModule.js
+var _class;
+function EventModule_typeof(o) { "@babel/helpers - typeof"; return EventModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, EventModule_typeof(o); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == EventModule_typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(EventModule_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+function EventModule_ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function EventModule_objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? EventModule_ownKeys(Object(t), !0).forEach(function (r) { EventModule_defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : EventModule_ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function EventModule_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function EventModule_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, EventModule_toPropertyKey(descriptor.key), descriptor); } }
+function EventModule_createClass(Constructor, protoProps, staticProps) { if (protoProps) EventModule_defineProperties(Constructor.prototype, protoProps); if (staticProps) EventModule_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function EventModule_defineProperty(obj, key, value) { key = EventModule_toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function EventModule_toPropertyKey(arg) { var key = EventModule_toPrimitive(arg, "string"); return EventModule_typeof(key) === "symbol" ? key : String(key); }
+function EventModule_toPrimitive(input, hint) { if (EventModule_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (EventModule_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+
+
+var CALL_READY = "saypi:callReady";
+var USER_SPEAKING = "saypi:userSpeaking";
+var USER_STOPPED_SPEAKING = "saypi:userStoppedSpeaking";
+var USER_FINISHED_SPEAKING = "saypi:userFinishedSpeaking";
+var PI_THINKING = "saypi:piThinking";
+var PI_SPEAKING = "saypi:piSpeaking";
+var PI_STOPPED_SPEAKING = "saypi:piStoppedSpeaking";
+var PI_FINISHED_SPEAKING = "saypi:piFinishedSpeaking";
+var VISIBLE = "saypi:visible";
+var AUDIO_DEVICE_CONNECTED = "saypi:audio:connected";
+var AUDIO_DEVICE_RECONNECT = "saypi:audio:reconnect";
+var END_CALL = "saypi:hangup";
+var SESSION_ASSIGNED = "saypi:session:assigned";
+
+/**
+ * The EventModule translates events sent on the EventBus to StateMachine events,
+ * coordinating interactions between loosely-coupled modules.
+ */
+var EventModule = /*#__PURE__*/function () {
+  function EventModule() {
+    EventModule_classCallCheck(this, EventModule);
+  }
+  EventModule_createClass(EventModule, null, [{
+    key: "init",
+    value: function init() {
+      // All the event listeners can be added here
+      this.registerStateMachineEvents(src_StateMachineService.actor);
+      this.registerSessionEvents(src_StateMachineService.analyticsMachineActor);
+      // Any other initializations...
+    }
+  }, {
+    key: "cleanup",
+    value: function cleanup() {
+      // Remove event listeners if needed, or any other cleanup operations
+      window.removeEventListener("saypi:transcribed", this.handleTranscriptionResponse);
+    }
+  }, {
+    key: "simulateTyping",
+    value: function simulateTyping(element, text) {
+      var submit = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+      element.focus();
+      var sentenceRegex = /([.!?。？！]+)/g;
+      var tokens = text.split(sentenceRegex).filter(Boolean);
+      var sentences = [];
+      for (var i = 0; i < tokens.length; i += 2) {
+        var sentence = tokens[i] + (tokens[i + 1] || "");
+        sentences.push(sentence);
+      }
+      var typeNextSentenceOrSubmit = function typeNextSentenceOrSubmit() {
+        if (sentences.length === 0) {
+          if (submit) EventBus.emit("saypi:autoSubmit");
+        } else {
+          // Emit the event only after all sentences have been typed
+          var nextSentence = sentences.shift();
+          EventModule.setNativeValue(element, element.value + nextSentence);
+          requestAnimationFrame(typeNextSentenceOrSubmit);
+        }
+      };
+      if (sentences.length === 0) {
+        typeTextAndSubmit(element, text, submit);
+      } else {
+        typeNextSentenceOrSubmit();
+      }
+    }
+  }, {
+    key: "setNativeValue",
+    value: function setNativeValue(element, value) {
+      var lastValue = element.value;
+      element.value = value;
+      var event = new Event("input", {
+        target: element,
+        bubbles: true
+      });
+      // React 15
+      event.simulated = true;
+      // React 16-17
+      var tracker = element._valueTracker;
+      if (tracker) {
+        tracker.setValue(lastValue);
+      }
+      element.dispatchEvent(event);
+    }
+  }, {
+    key: "registerStateMachineEvents",
+    value: function registerStateMachineEvents(actor) {
+      EventBus.on(CALL_READY, function () {
+        actor.send(CALL_READY);
+      });
+      EventBus.on(USER_SPEAKING, function () {
+        actor.send(USER_SPEAKING);
+      });
+      [USER_STOPPED_SPEAKING, USER_FINISHED_SPEAKING, AUDIO_DEVICE_CONNECTED, AUDIO_DEVICE_RECONNECT, SESSION_ASSIGNED].forEach(function (eventName) {
+        EventBus.on(eventName, function (detail) {
+          if (detail) {
+            actor.send(EventModule_objectSpread({
+              type: eventName
+            }, detail));
+          } else {
+            console.warn("Received ".concat(eventName, " without details."));
+          }
+        });
+      });
+      [PI_THINKING, PI_SPEAKING, PI_STOPPED_SPEAKING, PI_FINISHED_SPEAKING, END_CALL].forEach(function (eventName) {
+        EventBus.on(eventName, function () {
+          actor.send(eventName);
+        });
+      });
+
+      // notify the actor when the tab is visible
+      document.addEventListener("visibilitychange", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              if (document.visibilityState === "visible") {
+                actor.send(VISIBLE);
+              }
+            case 1:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee);
+      })));
+    }
+  }, {
+    key: "registerSessionEvents",
+    value: function registerSessionEvents(actor) {
+      EventBus.on("session:started", function () {
+        actor.send("start_session");
+      });
+      EventBus.on("session:ended", function () {
+        actor.send("end_session");
+      });
+      EventBus.on("session:message-sent", function (detail) {
+        actor.send(EventModule_objectSpread({
+          type: "send_message"
+        }, detail));
+      });
+      EventBus.on("session:transcribing", function (detail) {
+        actor.send(EventModule_objectSpread({
+          type: "transcribing"
+        }, detail));
+      });
+    }
+  }]);
+  return EventModule;
+}();
+_class = EventModule;
+EventModule_defineProperty(EventModule, "typeTextAndSubmit", function (element, text, submit) {
+  _class.setNativeValue(element, text);
+  if (submit) EventBus.emit("saypi:autoSubmit");
+});
+
+;// CONCATENATED MODULE: ./src/TranscriptionModule.ts
+var TranscriptionModule_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+
+
+const knownNetworkErrorMessages = [
+    "Failed to fetch",
+    "Load failed",
+    "NetworkError when attempting to fetch resource.", // Firefox
+    // Add more known error messages here
+];
+// timeout for transcription requests
+const TIMEOUT_MS = 30000; // 30 seconds
+// track sequence numbers for in-flight transcription requests
+let sequenceNum = 0;
+const sequenceNumsPendingTranscription = new Set();
+const TranscriptionModule_userPreferences = UserPreferenceModule.getInstance();
+function checkForExpiredEntries() {
+    const now = Date.now();
+    sequenceNumsPendingTranscription.forEach((entry) => {
+        if (now - entry.timestamp > TIMEOUT_MS) {
+            sequenceNumsPendingTranscription.delete(entry);
+            logger.info(`Transcription request ${entry.seq} timed out`);
+        }
+    });
+}
+function transcriptionSent() {
+    sequenceNum++;
+    sequenceNumsPendingTranscription.add({
+        seq: sequenceNum,
+        timestamp: Date.now(),
+    });
+}
+function transcriptionReceived(seq) {
+    // delete entry with matching sequence number
+    sequenceNumsPendingTranscription.forEach((entry) => {
+        if (entry.seq === seq) {
+            sequenceNumsPendingTranscription.delete(entry);
+            logger.debug(`Transcription response ${seq} received after ${(Date.now() - entry.timestamp) / 1000}s`);
+            return;
+        }
+    });
+}
+function isTranscriptionPending() {
+    checkForExpiredEntries();
+    return sequenceNumsPendingTranscription.size > 0;
+}
+// call after completed user input is submitted
+function clearPendingTranscriptions() {
+    sequenceNumsPendingTranscription.clear();
+}
+function uploadAudioWithRetry(audioBlob, audioDurationMillis, precedingTranscripts = {}, sessionId, maxRetries = 3) {
+    return TranscriptionModule_awaiter(this, void 0, void 0, function* () {
+        let retryCount = 0;
+        let delay = 1000; // initial delay of 1 second
+        const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+        while (retryCount < maxRetries) {
+            try {
+                transcriptionSent();
+                yield uploadAudio(audioBlob, audioDurationMillis, precedingTranscripts, sessionId);
+                return;
+            }
+            catch (error) {
+                // check for timeout errors (30s on Heroku)
+                if (error instanceof TypeError &&
+                    knownNetworkErrorMessages.includes(error.message)) {
+                    logger.info(`Attempt ${retryCount + 1}/${maxRetries} failed. Retrying in ${delay / 1000} seconds...`);
+                    yield sleep(delay);
+                    // Exponential backoff
+                    delay *= 2;
+                    retryCount++;
+                }
+                else {
+                    console.error("Unexpected error: ", error);
+                    src_StateMachineService.actor.send("saypi:transcribeFailed", {
+                        detail: error,
+                    });
+                    return;
+                }
+            }
+        }
+        console.error("Max retries reached. Giving up.");
+        src_StateMachineService.actor.send("saypi:transcribeFailed", {
+            detail: new Error("Max retries reached"),
+        });
+    });
+}
+function uploadAudio(audioBlob, audioDurationMillis, precedingTranscripts = {}, sessionId) {
+    return TranscriptionModule_awaiter(this, void 0, void 0, function* () {
+        try {
+            const messages = Object.entries(precedingTranscripts).map(([seq, content]) => {
+                return {
+                    role: "user",
+                    content: content,
+                    sequenceNumber: Number(seq), // Convert the string to a number
+                };
+            });
+            // Await the async function to get the formData
+            const formData = yield constructTranscriptionFormData(audioBlob, audioDurationMillis / 1000, messages, sessionId);
+            const language = yield TranscriptionModule_userPreferences.getLanguage();
+            const controller = new AbortController();
+            const { signal } = controller;
+            setTimeout(() => controller.abort(), TIMEOUT_MS);
+            const startTime = new Date().getTime();
+            const response = yield fetch(`${config.apiServerUrl}/transcribe?language=${language}`, {
+                method: "POST",
+                body: formData,
+                signal,
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            const responseJson = yield response.json();
+            const seq = responseJson.sequenceNumber;
+            if (seq !== undefined) {
+                transcriptionReceived(seq);
+            }
+            const endTime = new Date().getTime();
+            const transcriptionDurationMillis = endTime - startTime;
+            const transcript = responseJson.text;
+            const wc = transcript.split(" ").length;
+            const payload = {
+                text: transcript,
+                sequenceNumber: seq,
+            };
+            if (responseJson.hasOwnProperty("pFinishedSpeaking")) {
+                payload.pFinishedSpeaking = responseJson.pFinishedSpeaking;
+            }
+            if (responseJson.hasOwnProperty("tempo")) {
+                payload.tempo = responseJson.tempo;
+            }
+            if (responseJson.hasOwnProperty("merged")) {
+                payload.merged = responseJson.merged;
+            }
+            logger.info(`Transcribed ${Math.round(audioDurationMillis / 1000)}s of audio into ${wc} words in ${Math.round(transcriptionDurationMillis / 1000)}s`);
+            if (responseJson.text.length === 0) {
+                src_StateMachineService.actor.send("saypi:transcribedEmpty");
+            }
+            else {
+                src_StateMachineService.actor.send("saypi:transcribed", payload);
+            }
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                if (error.name === "AbortError") {
+                    console.error("Fetch aborted due to timeout", error);
+                }
+                else {
+                    console.error("An unexpected error occurred:", error);
+                }
+            }
+            else {
+                console.error("Something thrown that is not an Error object:", error);
+            }
+            // re-throw the error if your logic requires it
+            throw error;
+        }
+    });
+}
+function constructTranscriptionFormData(audioBlob, audioDurationSeconds, messages, sessionId) {
+    return TranscriptionModule_awaiter(this, void 0, void 0, function* () {
+        const formData = new FormData();
+        let audioFilename = "audio.webm";
+        if (audioBlob.type === "audio/mp4") {
+            audioFilename = "audio.mp4";
+        }
+        else if (audioBlob.type === "audio/wav") {
+            audioFilename = "audio.wav";
+        }
+        logger.info(`Transcribing audio Blob with MIME type: ${audioBlob.type}, size: ${(audioBlob.size / 1024).toFixed(2)}kb`);
+        // Add the audio and other input parameters to the FormData object
+        formData.append("audio", audioBlob, audioFilename);
+        formData.append("duration", audioDurationSeconds.toString());
+        formData.append("sequenceNumber", sequenceNum.toString());
+        formData.append("messages", JSON.stringify(messages));
+        formData.append("acceptsMerge", "true"); // always accept merge requests (since v1.4.10)
+        if (sessionId) {
+            formData.append("sessionId", sessionId);
+        }
+        // Wait for the preference to be retrieved before appending it to the FormData
+        const preference = yield TranscriptionModule_userPreferences.getTranscriptionMode();
+        if (preference) {
+            formData.append("prefer", preference);
+        }
+        return formData;
+    });
+}
+function scrollToBottom(textarea) {
+    // Define the height range for the textarea
+    const maxHeight = 455;
+    const minHeight = 32;
+    // Reset the height to get the correct scrollHeight
+    textarea.style.height = `${minHeight}px`; // (initial height) aka 2rem
+    // Set the height of the textarea, up to the maximum height
+    if (textarea.scrollHeight > maxHeight) {
+        textarea.style.height = `${maxHeight}px`;
+        textarea.style.overflowY = "scroll"; // Enable vertical scrollbar
+    }
+    else {
+        const newHeight = Math.max(minHeight, textarea.scrollHeight);
+        textarea.style.height = `${newHeight}px`;
+        textarea.style.overflowY = "hidden"; // Hide vertical scrollbar
+    }
+    // Scroll to the bottom
+    textarea.scrollTop = textarea.scrollHeight;
+}
+/**
+ * Get the prompt textarea's current placeholder text
+ */
+function getDraftPrompt() {
+    const textarea = document.getElementById("saypi-prompt");
+    return textarea.getAttribute("placeholder") || "";
+}
+/**
+ * Set a descriptive message for the user in the prompt textarea
+ * Used to inform the user of the current state of the application
+ * @param label The placeholder text to be displayed in the prompt textarea
+ */
+function setUserMessage(label) {
+    const textarea = document.getElementById("saypi-prompt");
+    textarea.setAttribute("placeholder", label);
+    scrollToBottom(textarea);
+}
+/**
+ * Set the prompt textarea to the given transcript, but do not submit it
+ * @param transcript The prompt to be displayed in the prompt textarea
+ */
+function setDraftPrompt(transcript) {
+    const textarea = document.getElementById("saypi-prompt");
+    TranscriptionModule_userPreferences.getAutoSubmit().then((autoSubmit) => {
+        if (autoSubmit) {
+            textarea.setAttribute("placeholder", `${transcript}`);
+        }
+        else {
+            textarea.setAttribute("placeholder", "");
+            // clear the text area content
+            textarea.value = "";
+            EventModule.simulateTyping(textarea, `${transcript} `, false);
+        }
+        scrollToBottom(textarea);
+    });
+}
+const PROMPT_CHARACTER_LIMIT = 4000;
+function setFinalPrompt(transcript) {
+    logger.info(`Final transcript: ${transcript}`);
+    const textarea = document.getElementById("saypi-prompt");
+    if (ImmersionService.isViewImmersive()) {
+        // if transcript is > max characters, truncate it to max-1 characters plus an ellipsis
+        if (transcript.length > PROMPT_CHARACTER_LIMIT) {
+            const truncatedLength = PROMPT_CHARACTER_LIMIT - 1;
+            transcript = `${transcript.substring(0, truncatedLength)}…`;
+            console.warn(`Transcript was too long for Pi. Truncated to ${truncatedLength} characters, losing the following text: ... ${transcript.substring(truncatedLength)}`);
+        }
+        EventModule.typeTextAndSubmit(textarea, transcript, true);
+    }
+    else {
+        EventModule.simulateTyping(textarea, `${transcript} `, true); // types and submits the prompt
+    }
+}
+
+;// CONCATENATED MODULE: ./src/TextModule.js
+function replaceEllipsisWithSpace(text) {
+  return text.replace(/\.\.\. ([A-Z])/g, function (match, p1) {
+    return " ".concat(p1.toLowerCase());
+  });
+}
+;// CONCATENATED MODULE: ./src/TranscriptMergeService.ts
+
+class TranscriptMergeService {
+    constructor(apiServerUrl, navigatorLanguage) {
+        this.apiServerUrl = apiServerUrl;
+        this.navigatorLanguage = navigatorLanguage;
+    }
+    sortTranscripts(transcripts) {
+        const sortedKeys = Object.keys(transcripts)
+            .map(Number)
+            .sort((a, b) => a - b);
+        const sortedTranscripts = [];
+        for (const key of sortedKeys) {
+            sortedTranscripts.push(transcripts[key].trim());
+        }
+        return sortedTranscripts;
+    }
+    mergeTranscriptsLocal(transcripts) {
+        const joinedTranscripts = this.sortTranscripts(transcripts).join(" ");
+        const mergedTranscript = replaceEllipsisWithSpace(joinedTranscripts);
+        return mergedTranscript;
+    }
+    mergeTranscriptsRemote(transcripts, cutoffTime) {
+        const keys = this.sortTranscripts(transcripts).map((transcript) => parseInt(transcript));
+        const isContinuous = keys.every((value, index, array) => {
+            // If it's the first element or keys are continuous
+            return index === 0 || value === array[index - 1] + 1;
+        });
+        // milliseconds until cutoff time
+        const timeRemaining = cutoffTime - Date.now();
+        const averageResponseTime = 2000; // 2 seconds
+        // Only proceed if we have a continuous sequence and more than one transcript, and there is enough time remaining
+        if (isContinuous &&
+            keys.length > 1 &&
+            timeRemaining > averageResponseTime) {
+            return fetch(`${this.apiServerUrl}/merge`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    transcripts: this.sortTranscripts(transcripts),
+                    language: this.navigatorLanguage,
+                }),
+            })
+                .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+                .then((data) => {
+                console.log(`Merged transcripts ${keys}`);
+                return data.combined_transcript; // Return the merged transcript
+            });
+        }
+        else {
+            // If the sequence is not continuous, resolve with an empty string
+            return Promise.resolve("");
+        }
+    }
+}
+
+;// CONCATENATED MODULE: ./src/TimerModule.ts
+/**
+ * Calculate the delay before submitting a message to Pi.
+ *
+ * @param timeUserStoppedSpeaking - The time the user stopped speaking.
+ * @param probabilityFinished - The probability that the user has finished speaking. Expected to be between 0 and 1.
+ * @param tempo - The tempo of the user's speech. Expected to be between 0 and 1.
+ * @param maxDelay - The maximum delay.
+ * @returns The calculated delay.
+ */
+function calculateDelay(timeUserStoppedSpeaking, probabilityFinished, tempo, maxDelay) {
+    // Get the current time (in milliseconds)
+    const currentTime = new Date().getTime();
+    // Calculate the time elapsed since the user stopped speaking (in milliseconds)
+    const timeElapsed = currentTime - timeUserStoppedSpeaking;
+    // We invert the tempo because a faster speech (tempo approaching 1) should reduce the delay
+    let tempoFactor = 1 - tempo;
+    // Calculate the combined probability factor
+    let combinedProbability = probabilityFinished * tempoFactor;
+    // The combined factor influences the initial delay
+    const initialDelay = combinedProbability * maxDelay;
+    // Calculate the final delay after accounting for the time already elapsed
+    const finalDelay = Math.max(initialDelay - timeElapsed, 0);
+    return finalDelay;
+}
+
+;// CONCATENATED MODULE: ./src/WakeLockModule.ts
+var WakeLockModule_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+// The wake lock sentinel.
+let wakeLock = null;
+// Function that attempts to request a screen wake lock.
+const requestWakeLock = () => WakeLockModule_awaiter(void 0, void 0, void 0, function* () {
+    if (!('wakeLock' in navigator)) {
+        console.log('Screen Wake Lock API not supported by this browser.');
+        return;
+    }
+    if (wakeLock === null || wakeLock.released) {
+        try {
+            wakeLock = yield navigator.wakeLock.request('screen');
+            wakeLock === null || wakeLock === void 0 ? void 0 : wakeLock.addEventListener('release', () => {
+                console.debug('Screen Wake Lock released');
+            });
+            console.debug('Screen Wake Lock acquired.');
+        }
+        catch (err) {
+            if (err instanceof DOMException && err.name === 'NotAllowedError') {
+                // Handle NotAllowedError - consider sending the state machine a battery-level error event
+                console.error(`Not allowed to keep screen awake. Check battery level? ${err.name}, ${err.message}`);
+            }
+            else {
+                console.error(`${err.name}, ${err.message}`);
+            }
+        }
+    }
+});
+const releaseWakeLock = () => WakeLockModule_awaiter(void 0, void 0, void 0, function* () {
+    if (wakeLock !== null) {
+        yield wakeLock.release();
+        wakeLock = null;
+    }
+});
+
+;// CONCATENATED MODULE: ./src/state-machines/SayPiMachine.ts
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function getHighestKey(transcriptions) {
+    // Find the highest existing key in the transcriptions
+    const highestKey = Object.keys(transcriptions).reduce((max, key) => Math.max(max, parseInt(key, 10)), -1);
+    return highestKey;
+}
+// time at which the user's prompt is scheduled to be submitted
+// used to judge whether there's time for another remote operation (i.e. merge request)
+var nextSubmissionTime = Date.now();
+// most recent enforced delay while waiting for additional user input
+// captured here for analytics events
+var lastSubmissionDelay = 0;
+const apiServerUrl = config.apiServerUrl;
+if (apiServerUrl === undefined) {
+    throw new Error("Configuration error: apiServerUrl is not defined. Please check your environment variables.");
+}
+const audibleNotifications = AudibleNotificationsModule.getInstance();
+const textualNotifications = new TextualNotificationsModule();
+const visualNotifications = new VisualNotificationsModule();
+const audioControls = new AudioControlsModule();
+const SayPiMachine_userPreferences = UserPreferenceModule.getInstance();
+let mergeService;
+SayPiMachine_userPreferences.getLanguage().then((language) => {
+    mergeService = new TranscriptMergeService(apiServerUrl, language);
+});
+const SayPiMachine_machine = createMachine({
+    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCRKANiwNoAMAuoqHQHtYWMgPx8QAD0QBOAEwAaEGkQAOAKwycc9apkA2AMw71AdgAspuQF9rS2tjyFSFarQYIGAZTpgUAawIoLl4kEEFhUXEw6QRzAEY5OW14+NN9OVNOXXVFZUREw0McTnN1M05VQ3NOU1NVW3t0R2Y2LxIUACcyfCgadA9WlgAlPwg0EIkIkSwxCVjzOXMcePNVRfMMzjl4w1N1JRU4jRxzTcMzUxkL-XLzRpAHXCH2rp6+90YACxRegFc6JMwtMovM1HkjvFONkcOpKjJODdNmYbHZHs1nqwWK9ukF+vRGEMAGIoLAsSBA-hCGZzGKIczVFZrDZbHZ7A75BDxa6wwwyfllHbyTQPJ44F4dXG9KiSWAdEhgHAoABmCs6AAo5NDoQBKfEtLE496U8LU0F0uKM1brJas3b7Q6IaqcHD8wyJOQyRbVGqGUUYnAsLBysD4PGfTxYAAqXwIgV6JpBs2ioFiRVMxU2qTkGkMVU2pkdCDZyXqboS9ShiP9mFwQZDYelEe8vgCQUTZuTYIQRSqp302dz+f0hc5WtUyRzMgnqisGeraLF9YVjY+A0Y5GDWAARuSO5Euxb4iPinzsrsfbp4kXVu7XfE4boGfsEn7FwHl6Hw+uECg-hBZiYMR8DAUgKR4KZO1pVMClueJtDkW4Jx0Ko9hkG8inUfstU4fR+XiPQzhrRxP1XfEPD-ACBAQTpQOA0CSH3GkUykWDclOdZ1GPGR1EFC4i0w1RtE0Y8igZIxNmIutgxXb8CQQWA4GEMRf1gYQoBAiAmPNGCuX0cwtGMRZVFUTgCJM7YBMQ+DTIHVI9CuWcpMDGSv16HBaKIAROgApsfx+f5AQg4EoJYtM9kzOyc3UPNqhHDCLmw6E8JkAivWc0igg8uifKy-ABBIHw-HjNd5L+RTOiJAhgy+SAirbBNgqpA9oNYntYv7QcYuHUcji1O8yysYx0jhSwMtc1dsq83L3PywrWxK8jGHKsBOnqkrtMPXSHJwfRZzWGKvTSVRr05bl6hwMsB3qHQsgscaGyyzzvN8qAcBWtaFrkjwPvaAQ6F8CB1vbJrTRasLEBHLRtWhXJuNMwwiy1K5Lr0Gc50MbZ7nfWsXMe9znpmt7fq+vyyoqv6Abq0ngniUJmuY7soZKGG4bwhGke2LQpyGzJbmyB7ZPcrz8EoKU3uIIg-gAWz+FgUHeKgIDERUCHIAR-EVaXVpgAB5OgyGlmSsCITbWtiKE1lOdJjH5Xi5EMeKx3KYp9G2IwzLOSxsaaXHMuFsQxfeJUiCl2X5cV1bOm8nA6Aj5VvOlnBtc6PWDawI25RNs2Ia5UotFWb1sjMvQeKRzYXVWHjLFMbkDAFnGSImrKRaDrLJZluWFe+xgSE6X5YCITod3A+mwcZi0DGKHZ1mMPCDJkDMkfdZI8LsixUquH30T95uA9F1bg478Pu7Jjw+4HoeR5JMlR8g8Hux2TYSgyLNSgzTYkaMfQcEx3RHeuHUE628lx7zeq3Q+7dQ6dwjj3BAF98CD2HtuSAABRaWBsJigyTObRAT8f64VtJbD++gkYZlMDgWyZlrhGAuILNy4DA6QPcsfLuitZTykVCqNU6pYB-G3JnZS+AAAiYB5ZoD1KA-GjCD7ixDmHNhIMx44NzqsRIKROJVFrrOTISNyjwSsJkT2novSL3oZNCBci+ECJEIrHO3ZuI-ysPpC48hPT6VUHosyu0+TGEwmyeI5iW5MLkQgpBO44FhKvigrS2DQrdi4ssGeWQTIoSyBCPBBllgaCWFkPYWoeJBP3m3dyUTkGRP7og6JYAb7klico+JFpEkaJSROXQ6Sv5JEodkUyZl9EMnUEUmRJS3plIiWfXulTwkxPQZg+xTTVgtMqG02clkxxZGyT0icuxyhehAR+MBOAo7eVeCQcqRzOjR06LAGUcoFZcNVKtdUcJdT6mktIi5VzTnnOOdc+ZulPQMl-gyDQCRSgVg5H1LiLpTK6GuNULI2R9DOVorAQQ+BXpLQQAFKAAJ-ltQSF0nYaQMhZByBkhAqh9A-xoVOExtkGiN1wKi9FmKIwk2Kko++E9dIMitgiO6awRyWFIWdW4FCkhwn0rsHQ50UVwFZVlBgMY4xwJbJyxqDSH5NO2FhAipQqX8gyJoG8Zxki8XUFsaopkyjyrRWIV6scsDAwmZGSmgMXXBDidq3SuQBL7CwsYUSZkrhejfL7RwLKHVKudTTLF3gSD-Q9TTdgdNuU6QJR6FIJKjHkqLCdH+4kDq3BHGYGQdrFXuXVQ1UqHgGBVTDLAWqQMU3ep5W1KwAleJaFSuUco6QCy8QrdGqtsaNW1uWhTVtWr22xEfC6PJ+FERu2nKankpR7Z8lSpwdKTLsr2oxVlD6ABJfAapOgAkVuyimiaqYtvHfiuduqVg2sNQYHQ6ExValdNOMo3JqV8kWMOw97kT1nqjpeuBv1b3JofWmkKPq2oZAEm7F0CQYqaBqHUJYb40T5QgHACQTx01bTagAWlFUcCw2hqV4WMKZL0+l9m4wIMQMglASO4J7AOzqIq1g5idkcPQ8FHZu2RJa9I-JnISjeEETjudFg3gHJdalT4RxmXzoyiN7yhZQHk92KlprFmOwnGUKw2x3RDKmi9OTCHZ0FGqDeKwWgqWmVSENYaVnCaOrmp6-TR4oSnlKBJC4ZRhScyhCUPkOSGR5k2Mivd-s3reaPVO8d-ndIEQpedYornsgfvrvUKzlj3gZbarsT9fVJUrAMGULiiE+mmGKyEo+0CT6lbsxm2ICIsIzzKO6Xiegihf3Ykiz2ewTwJe03jXT4oWtZWsUbEgHWGZdYKFcGyHp3SYxqNyculrYTlH2sYcFeZmuyODmM7ctnVukYtrOPRbtulltEqsbYVnfnfPgJ1u7eC4TwUIVqGKNs8JIySDC3CO2HYDlqB9y5Jz5TnPyp0aWrAyuxFuskQH2QJsAIElCH+sL33V0SMxpuHzPuI9gJ87y33btcZ0AZF+4Pgff0q3gi4yRbKJF4msfY6w4dfKpzT65OArs1NJHU9Hf3F7M6B7j0HzszjPdMROWjDJBcI4Vj8+HoujZEFQbr6XxZNAUOx6zvH6zIt-x4kYBEgGyfMoVSOvTP2uMMmhK6WotQhUWHSDeB808eJVB0JDvJwHHXKtjPgEqxuK7LDdsa5CiJdAYX0pdW3DtdkiqmzvSNzuQNvWrbHt3udecUKKCOE6UIJx1BvFxH+ajyjQkXgyJYEfUurVPeeyDvQ493FhEsJIeZMh6CUzCb2pdzju0GbYawQA */
+    context: {
+        transcriptions: {},
+        isTranscribing: false,
+        lastState: "inactive",
+        userIsSpeaking: false,
+        timeUserStoppedSpeaking: 0,
+        defaultPlaceholderText: "Talk to Pi",
+    },
+    id: "sayPi",
+    initial: "inactive",
+    states: {
+        inactive: {
+            description: "Idle state, not listening or speaking. Privacy mode.",
+            exit: es_assign({ lastState: "inactive" }),
+            on: {
+                "saypi:call": {
+                    target: "#sayPi.callStarting",
+                    description: 'Place a "call" to Pi.\nAttempts to start the microphone and begin active listening.',
+                },
+                "saypi:piSpeaking": {
+                    target: "#sayPi.responding.piSpeaking",
+                },
+            },
+        },
+        callStarting: {
+            description: "Call is starting. Waiting for microphone to be acquired.",
+            entry: [
+                {
+                    type: "callIsStarting",
+                },
+                {
+                    type: "setupRecording",
+                },
+                {
+                    type: "callStartingPrompt",
+                },
+            ],
+            exit: [
+                {
+                    type: "clearPrompt",
+                },
+            ],
+            on: {
+                "saypi:callReady": {
+                    target: "#sayPi.listening.recording",
+                    actions: [
+                        {
+                            type: "callHasStarted",
+                        },
+                        {
+                            type: "startRecording",
+                        },
+                        {
+                            type: "activateAudioOutput",
+                        },
+                        {
+                            type: "requestWakeLock",
+                        },
+                    ],
+                    description: "VAD microphone is ready.\nStart it recording.",
+                },
+                "saypi:hangup": {
+                    target: "inactive",
+                    description: "Call was cancelled before it started.",
+                    actions: [
+                        {
+                            type: "callFailedToStart",
+                        },
+                    ],
+                },
+                "saypi:callFailed": {
+                    target: "inactive",
+                    description: "VAD microphone failed to start.\nAudio device not available.",
+                    actions: [
+                        {
+                            type: "callFailedToStart",
+                        },
+                    ],
+                },
+            },
+            after: {
+                "20000": {
+                    target: "inactive",
+                    description: "Call failed to start after 20 seconds. Is the microphone available?",
+                    actions: [
+                        {
+                            type: "callFailedToStart",
+                        },
+                    ],
+                },
+            },
+        },
+        listening: {
+            description: "Actively listening for user input. Simultaneously recording and transcribing user speech. Gentle pulsing animation.",
+            entry: [
+                {
+                    type: "stopAllAnimations",
+                },
+                {
+                    type: "acquireMicrophone",
+                },
+            ],
+            exit: [
+                {
+                    type: "clearTranscriptsAction",
+                },
+                {
+                    type: "clearPendingTranscriptionsAction",
+                },
+                {
+                    type: "clearPrompt",
+                },
+                es_assign({ lastState: "listening" }),
+            ],
+            states: {
+                recording: {
+                    description: "Microphone is on and VAD is actively listening for user speech.",
+                    initial: "notSpeaking",
+                    entry: [
+                        {
+                            type: "startAnimation",
+                            params: {
+                                animation: "glow",
+                            },
+                        },
+                        {
+                            type: "listenPrompt",
+                        },
+                    ],
+                    exit: [
+                        {
+                            type: "stopAnimation",
+                            params: {
+                                animation: "glow",
+                            },
+                        },
+                        {
+                            type: "clearPrompt",
+                        },
+                    ],
+                    states: {
+                        notSpeaking: {
+                            description: "Microphone is recording but no speech is detected.",
+                            on: {
+                                "saypi:userFinishedSpeaking": {
+                                    target: "#sayPi.inactive",
+                                },
+                                "saypi:userSpeaking": {
+                                    target: "userSpeaking",
+                                },
+                            },
+                        },
+                        userSpeaking: {
+                            description: "User is speaking and being recorded by the microphone.\nWaveform animation.",
+                            entry: [
+                                {
+                                    type: "startAnimation",
+                                    params: {
+                                        animation: "userSpeaking",
+                                    },
+                                },
+                                es_assign({ userIsSpeaking: true }),
+                                {
+                                    type: "cancelCountdownAnimation",
+                                },
+                            ],
+                            exit: {
+                                type: "stopAnimation",
+                                params: {
+                                    animation: "userSpeaking",
+                                },
+                            },
+                            on: {
+                                "saypi:userStoppedSpeaking": [
+                                    {
+                                        target: [
+                                            "notSpeaking",
+                                            "#sayPi.listening.converting.transcribing",
+                                        ],
+                                        cond: "hasAudio",
+                                        actions: [
+                                            es_assign({
+                                                userIsSpeaking: false,
+                                                timeUserStoppedSpeaking: () => new Date().getTime(),
+                                            }),
+                                            {
+                                                type: "transcribeAudio",
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        target: "notSpeaking",
+                                        cond: "hasNoAudio",
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                    on: {
+                        "saypi:hangup": {
+                            target: "#sayPi.inactive",
+                            actions: [
+                                {
+                                    type: "stopRecording",
+                                },
+                                {
+                                    type: "callHasEnded",
+                                },
+                                {
+                                    type: "releaseWakeLock",
+                                },
+                            ],
+                            description: 'Disable the VAD microphone.\n    Aka "call" Pi.\n    Stops active listening.',
+                        },
+                    },
+                },
+                converting: {
+                    initial: "accumulating",
+                    states: {
+                        accumulating: {
+                            description: "Accumulating and assembling audio transcriptions into a cohesive prompt.\nSubmits a prompt when a threshold is reached.",
+                            after: {
+                                submissionDelay: {
+                                    target: "submitting",
+                                    cond: "submissionConditionsMet",
+                                    description: "Submit combined transcript to Pi.",
+                                },
+                            },
+                            entry: {
+                                type: "draftPrompt",
+                            },
+                            invoke: {
+                                id: "mergeOptimistic",
+                                src: (context, event) => {
+                                    // Check if there are two or more transcripts to merge
+                                    if (Object.keys(context.transcriptions).length > 1) {
+                                        // This function should return a Promise that resolves with the merged transcript string
+                                        return mergeService.mergeTranscriptsRemote(context.transcriptions, nextSubmissionTime);
+                                    }
+                                    else {
+                                        // If there's one or no transcripts to merge, return a resolved Promise with the existing transcript string or an empty string
+                                        const existingTranscriptKeys = Object.keys(context.transcriptions);
+                                        if (existingTranscriptKeys.length === 1) {
+                                            const key = existingTranscriptKeys[0];
+                                            return Promise.resolve(context.transcriptions[Number(key)]);
+                                        }
+                                        else {
+                                            return Promise.resolve(""); // No transcripts to merge
+                                        }
+                                    }
+                                },
+                                onDone: {
+                                    target: "accumulating",
+                                    internal: true,
+                                    actions: [
+                                        es_assign({
+                                            transcriptions: (context, event) => {
+                                                // If the event.data is empty, just return the current context.transcriptions
+                                                if (!event.data) {
+                                                    return context.transcriptions;
+                                                }
+                                                // Use the highest key for the merged transcript
+                                                const nextKey = getHighestKey(context.transcriptions);
+                                                const originalKeys = Object.keys(context.transcriptions);
+                                                if (originalKeys.length > 1) {
+                                                    console.log(`Merge accepted: ${originalKeys} into ${nextKey} - ${event.data}`);
+                                                }
+                                                return { [nextKey]: event.data };
+                                            },
+                                        }),
+                                    ],
+                                },
+                                onError: {
+                                    actions: es_log("Merge request did not complete, and will be ignored"),
+                                },
+                            },
+                            on: {
+                                "saypi:transcribed": {
+                                    target: "accumulating",
+                                    actions: {
+                                        type: "handleTranscriptionResponse",
+                                    },
+                                    description: "Transcribed speech to text (out of sequence response).",
+                                },
+                                "saypi:transcribeFailed": {
+                                    target: "#sayPi.listening.errorStatus.errors.transcribeFailed",
+                                    description: "Out of sequence error response from the /transcribe API",
+                                },
+                                "saypi:transcribedEmpty": {
+                                    target: "#sayPi.listening.errorStatus.errors.micError",
+                                    description: "Out of sequence empty response from the /transcribe API",
+                                },
+                            },
+                        },
+                        submitting: {
+                            description: "Submitting prompt to Pi.",
+                            entry: [
+                                {
+                                    type: "mergeAndSubmitTranscript",
+                                },
+                                {
+                                    type: "notifySentMessage",
+                                },
+                            ],
+                            exit: ["acknowledgeUserInput"],
+                            always: "#sayPi.responding.piThinking",
+                        },
+                        transcribing: {
+                            description: "Transcribing audio to text.\nCard flip animation.",
+                            entry: [
+                                {
+                                    type: "startAnimation",
+                                    params: {
+                                        animation: "transcribing",
+                                    },
+                                },
+                                es_assign({ isTranscribing: true }),
+                            ],
+                            exit: [
+                                {
+                                    type: "stopAnimation",
+                                    params: {
+                                        animation: "transcribing",
+                                    },
+                                },
+                                es_assign({ isTranscribing: false }),
+                            ],
+                            on: {
+                                "saypi:transcribed": {
+                                    target: "accumulating",
+                                    actions: {
+                                        type: "handleTranscriptionResponse",
+                                    },
+                                    description: "Successfully transcribed user audio to text.",
+                                },
+                                "saypi:transcribeFailed": {
+                                    target: [
+                                        "accumulating",
+                                        "#sayPi.listening.errorStatus.errors.transcribeFailed",
+                                    ],
+                                    description: "Received an error response from the /transcribe API",
+                                },
+                                "saypi:transcribedEmpty": {
+                                    target: [
+                                        "accumulating",
+                                        "#sayPi.listening.errorStatus.errors.micError",
+                                    ],
+                                    description: "Received an empty response from the /transcribe API (no speech detected)",
+                                },
+                            },
+                        },
+                    },
+                },
+                errorStatus: {
+                    description: `Handles non-fatal errors during recording and transcription.`,
+                    initial: "normal",
+                    states: {
+                        normal: {
+                            description: "The system is not exhibiting any errors.",
+                        },
+                        errors: {
+                            description: `Non-fatal transcription or recording errors.`,
+                            entry: {
+                                type: "callHasErrors",
+                            },
+                            exit: {
+                                type: "callHasNoErrors",
+                            },
+                            after: {
+                                "5000": [
+                                    {
+                                        target: "#sayPi.listening.errorStatus.normal",
+                                        actions: [],
+                                        description: "Reset to the normal state and clear errors.",
+                                    },
+                                ],
+                            },
+                            states: {
+                                transcribeFailed: {
+                                    description: "The /transcribe API responded with an error.",
+                                    entry: {
+                                        type: "startAnimation",
+                                        params: {
+                                            animation: "error",
+                                        },
+                                    },
+                                    exit: {
+                                        type: "stopAnimation",
+                                        params: {
+                                            animation: "error",
+                                        },
+                                    },
+                                    type: "final",
+                                },
+                                micError: {
+                                    description: "No audio input detected",
+                                    entry: {
+                                        type: "showNotification",
+                                        params: {
+                                            message: i18n("audioInputError", "Pi"),
+                                            icon: "microphone-muted",
+                                        },
+                                    },
+                                    exit: {
+                                        type: "dismissNotification",
+                                    },
+                                    type: "final",
+                                },
+                            },
+                            type: "parallel",
+                        },
+                    },
+                },
+            },
+            on: {
+                "saypi:piThinking": {
+                    target: "#sayPi.responding.piThinking",
+                    actions: [
+                        {
+                            type: "acknowledgeUserInput",
+                        },
+                    ],
+                },
+                "saypi:piSpeaking": {
+                    target: "#sayPi.responding.piSpeaking",
+                },
+                "saypi:visible": {
+                    actions: {
+                        type: "requestWakeLock",
+                    },
+                },
+                "saypi:audio:connected": {
+                    actions: {
+                        type: "notifyAudioConnected",
+                    },
+                },
+                "saypi:audio:reconnect": {
+                    actions: [
+                        {
+                            type: "notifyAudioReconnecting",
+                        },
+                        {
+                            type: "reconnectAudio",
+                        },
+                    ],
+                },
+                "saypi:session:assigned": {
+                    actions: es_assign({
+                        sessionId: (context, event) => event.session_id,
+                    }),
+                },
+            },
+            type: "parallel",
+        },
+        responding: {
+            initial: "piThinking",
+            on: {
+                "saypi:hangup": {
+                    target: "inactive",
+                    actions: [
+                        {
+                            type: "callHasEnded",
+                        },
+                        {
+                            type: "releaseWakeLock",
+                        },
+                        {
+                            type: "stopRecording",
+                        },
+                    ],
+                    description: "End call while Pi is speaking.",
+                },
+                "saypi:userSpeaking": {
+                    target: "#sayPi.responding.userInterrupting",
+                    cond: {
+                        type: "interruptionsAllowed",
+                    },
+                },
+            },
+            entry: {
+                type: "disableCallButton",
+            },
+            exit: {
+                type: "enableCallButton",
+            },
+            description: "Pi is responding. Text is being generated or synthesised speech is playing or waiting to play.",
+            states: {
+                piThinking: {
+                    on: {
+                        "saypi:piSpeaking": {
+                            target: "piSpeaking",
+                        },
+                    },
+                    entry: [
+                        {
+                            type: "startAnimation",
+                            params: {
+                                animation: "piThinking",
+                            },
+                        },
+                        {
+                            type: "thinkingPrompt",
+                        },
+                    ],
+                    exit: [
+                        {
+                            type: "stopAnimation",
+                            params: {
+                                animation: "piThinking",
+                            },
+                        },
+                        {
+                            type: "clearPrompt",
+                        },
+                    ],
+                    description: "Pi is contemplating its response.\nThinking animation.",
+                },
+                piSpeaking: {
+                    on: {
+                        "saypi:piStoppedSpeaking": [
+                            {
+                                target: "#sayPi.listening",
+                                cond: {
+                                    type: "wasListening",
+                                },
+                            },
+                            {
+                                target: "#sayPi.inactive",
+                                cond: {
+                                    type: "wasInactive",
+                                },
+                            },
+                        ],
+                        "saypi:piFinishedSpeaking": {
+                            target: "#sayPi.listening",
+                        },
+                        "saypi:userSpeaking": {
+                            target: "userInterrupting",
+                            cond: {
+                                type: "interruptionsAllowed",
+                            },
+                            actions: {
+                                type: "pauseAudio",
+                            },
+                            description: "The user starting speaking while Pi was speaking.",
+                        },
+                    },
+                    entry: [
+                        {
+                            type: "startAnimation",
+                            params: {
+                                animation: "piSpeaking",
+                            },
+                        },
+                        {
+                            type: "speakingPrompt",
+                        },
+                    ],
+                    exit: [
+                        {
+                            type: "stopAnimation",
+                            params: {
+                                animation: "piSpeaking",
+                            },
+                        },
+                        {
+                            type: "clearPrompt",
+                        },
+                    ],
+                    description: "Pi's synthesised speech audio is playing.\nPlayful animation.",
+                },
+                userInterrupting: {
+                    on: {
+                        "saypi:userStoppedSpeaking": [
+                            {
+                                target: "piSpeaking",
+                                actions: {
+                                    type: "resumeAudio",
+                                },
+                                cond: {
+                                    type: "hasNoAudio",
+                                },
+                                description: "User speech cancelled (i.e. was non-speech).",
+                            },
+                            {
+                                target: [
+                                    "#sayPi.listening.converting.transcribing",
+                                    "#sayPi.listening.recording.notSpeaking",
+                                ],
+                                cond: {
+                                    type: "hasAudio",
+                                },
+                                actions: [
+                                    es_assign({
+                                        userIsSpeaking: false,
+                                        timeUserStoppedSpeaking: () => new Date().getTime(),
+                                    }),
+                                    {
+                                        type: "transcribeAudio",
+                                    },
+                                ],
+                                description: "User has spoken.",
+                            },
+                        ],
+                    },
+                    entry: {
+                        type: "interruptingPiPrompt",
+                    },
+                    exit: {
+                        type: "clearPrompt",
+                    },
+                    description: "The user is speaking during Pi's response, and may wish to interrupt.",
+                },
+            },
+        },
+    },
+    predictableActionArguments: true,
+    preserveActionOrder: true,
+}, {
+    actions: {
+        stopAllAnimations: (context, event) => {
+            AnimationModule.stopAllAnimations();
+        },
+        startAnimation: (context, event, { action }) => {
+            AnimationModule.startAnimation(action.params.animation);
+        },
+        stopAnimation: (context, event, { action }) => {
+            AnimationModule.stopAnimation(action.params.animation);
+        },
+        transcribeAudio: (context, event) => {
+            const audioBlob = event.blob;
+            if (audioBlob) {
+                uploadAudioWithRetry(audioBlob, event.duration, context.transcriptions, context.sessionId);
+                EventBus.emit("session:transcribing", {
+                    audio_duration_seconds: event.duration / 1000,
+                    speech_end_time: Date.now(),
+                    speech_start_time: Date.now() - event.duration,
+                });
+            }
+        },
+        handleTranscriptionResponse: (SayPiContext, event) => {
+            const transcription = event.text;
+            const sequenceNumber = event.sequenceNumber;
+            console.log(`Partial transcript, ${sequenceNumber}: ${transcription}`);
+            SayPiContext.transcriptions[sequenceNumber] = transcription;
+            if (event.merged) {
+                event.merged.forEach((mergedSequenceNumber) => {
+                    delete SayPiContext.transcriptions[mergedSequenceNumber];
+                });
+            }
+        },
+        acquireMicrophone: (context, event) => {
+            // warmup the microphone on idle in mobile view,
+            // since there's no mouseover event to trigger it
+            if (ImmersionService.isViewImmersive()) {
+                EventBus.emit("audio:setupRecording");
+            }
+        },
+        setupRecording: (context, event) => {
+            // differs from acquireMicrophone in that it's user-initiated
+            EventBus.emit("audio:setupRecording");
+        },
+        startRecording: (context, event) => {
+            EventBus.emit("audio:startRecording");
+        },
+        stopRecording: (context, event) => {
+            EventBus.emit("audio:stopRecording");
+            EventBus.emit("audio:tearDownRecording");
+        },
+        reconnectAudio: (context, event) => {
+            EventBus.emit("audio:input:reconnect");
+        },
+        dismissNotification: () => {
+            textualNotifications.hideNotification();
+        },
+        showNotification: (context, event, { action }) => {
+            const icon = action.params.icon;
+            const message = action.params.message;
+            textualNotifications.showNotification(message, icon);
+        },
+        notifyAudioConnected: (context, event) => {
+            const deviceId = event.deviceId;
+            const deviceLabel = event.deviceLabel;
+            const message = i18n("audioConnected", deviceLabel);
+            textualNotifications.showNotification(message, "microphone");
+        },
+        notifyAudioReconnecting: (context, event) => {
+            const deviceId = event.deviceId;
+            const deviceLabel = event.deviceLabel;
+            const message = i18n("audioReconnecting", deviceLabel);
+            textualNotifications.showNotification(message, "microphone-switch");
+        },
+        acknowledgeUserInput: () => {
+            visualNotifications.listeningStopped();
+            audibleNotifications.listeningStopped();
+        },
+        listenPrompt: () => {
+            const message = i18n("assistantIsListening", "Pi");
+            if (message) {
+                setUserMessage(message);
+            }
+        },
+        callStartingPrompt: () => {
+            const message = i18n("callStarting");
+            if (message) {
+                const initialText = getDraftPrompt();
+                es_assign({ defaultPlaceholderText: initialText });
+                setUserMessage(message);
+            }
+        },
+        thinkingPrompt: () => {
+            const message = i18n("assistantIsThinking", "Pi");
+            if (message) {
+                setUserMessage(message);
+            }
+        },
+        speakingPrompt: () => {
+            const message = i18n("assistantIsSpeaking", "Pi");
+            if (message) {
+                setUserMessage(message);
+            }
+        },
+        interruptingPiPrompt: () => {
+            const message = i18n("userStartedInterrupting", "Pi");
+            if (message) {
+                setUserMessage(message);
+            }
+        },
+        clearPrompt: (context) => {
+            setUserMessage(context.defaultPlaceholderText);
+        },
+        draftPrompt: (context) => {
+            const prompt = mergeService
+                .mergeTranscriptsLocal(context.transcriptions)
+                .trim();
+            if (prompt)
+                setDraftPrompt(prompt);
+        },
+        mergeAndSubmitTranscript: (context) => {
+            const prompt = mergeService
+                .mergeTranscriptsLocal(context.transcriptions)
+                .trim();
+            if (prompt)
+                setFinalPrompt(prompt);
+        },
+        callIsStarting: () => {
+            buttonModule.callStarting();
+        },
+        callFailedToStart: () => {
+            buttonModule.callInactive();
+            audibleNotifications.callFailed();
+        },
+        callHasStarted: () => {
+            buttonModule.callActive();
+            audibleNotifications.callStarted();
+            EventBus.emit("session:started");
+        },
+        callHasEnded: () => {
+            visualNotifications.listeningStopped();
+            buttonModule.callInactive();
+            audibleNotifications.callEnded();
+            EventBus.emit("session:ended");
+        },
+        callHasErrors: () => {
+            buttonModule.callError();
+        },
+        callHasNoErrors: () => {
+            buttonModule.callActive();
+        },
+        disableCallButton: () => {
+            buttonModule.disableCallButton();
+        },
+        enableCallButton: () => {
+            buttonModule.enableCallButton();
+        },
+        cancelCountdownAnimation: () => {
+            visualNotifications.listeningStopped();
+        },
+        activateAudioOutput: () => {
+            audioControls.activateAudioOutput(true);
+        },
+        requestWakeLock: () => {
+            requestWakeLock();
+        },
+        releaseWakeLock: () => {
+            releaseWakeLock();
+        },
+        notifySentMessage: (context, event) => {
+            const delay_ms = Date.now() - context.timeUserStoppedSpeaking;
+            const submission_delay_ms = lastSubmissionDelay;
+            EventBus.emit("session:message-sent", {
+                delay_ms: delay_ms,
+                wait_time_ms: submission_delay_ms,
+            });
+        },
+        clearPendingTranscriptionsAction: () => {
+            // discard in-flight transcriptions. Called after a successful submission
+            clearPendingTranscriptions();
+        },
+        clearTranscriptsAction: es_assign({
+            transcriptions: () => ({}),
+        }),
+        pauseAudio: () => {
+            EventBus.emit("audio:output:pause");
+        },
+        resumeAudio: () => {
+            EventBus.emit("audio:output:resume");
+        },
+    },
+    services: {},
+    guards: {
+        hasAudio: (context, event) => {
+            if (event.type === "saypi:userStoppedSpeaking") {
+                event = event;
+                return event.blob !== undefined && event.duration > 0;
+            }
+            return false;
+        },
+        hasNoAudio: (context, event) => {
+            if (event.type === "saypi:userStoppedSpeaking") {
+                event = event;
+                return (event.blob === undefined ||
+                    event.blob.size === 0 ||
+                    event.duration === 0);
+            }
+            return false;
+        },
+        submissionConditionsMet: (context, event, meta) => {
+            const { state } = meta;
+            const autoSubmitEnabled = SayPiMachine_userPreferences.getCachedAutoSubmit();
+            return autoSubmitEnabled && readyToSubmit(state, context);
+        },
+        wasListening: (context) => {
+            return context.lastState === "listening";
+        },
+        wasInactive: (context) => {
+            return context.lastState === "inactive";
+        },
+        interruptionsAllowed: (context) => {
+            return SayPiMachine_userPreferences.getCachedAllowInterruptions();
+        },
+    },
+    delays: {
+        submissionDelay: (context, event) => {
+            // check if the event is a transcription event
+            if (event.type !== "saypi:transcribed") {
+                return 0;
+            }
+            else {
+                event = event;
+            }
+            const maxDelay = 8000; // 8 seconds in milliseconds (lowered from 10s in v1.5.4)
+            // Calculate the initial delay based on pFinishedSpeaking
+            let probabilityFinished = 1;
+            if (event.pFinishedSpeaking !== undefined) {
+                probabilityFinished = event.pFinishedSpeaking;
+            }
+            // Incorporate the tempo into the delay, defaulting to 1 (fast tempo) if undefined
+            // This allows us to adjust the delay based on the user's speaking speed, or to ignore it as a factor if it's not provided
+            let tempo = event.tempo !== undefined ? event.tempo : 1;
+            const finalDelay = calculateDelay(context.timeUserStoppedSpeaking, probabilityFinished, tempo, maxDelay);
+            console.log("Waiting for", (finalDelay / 1000).toFixed(1), "seconds before submitting");
+            // ideally we would use the current state to determine if we're ready to submit,
+            // but we don't have access to the state here, so we'll use the provisional readyToSubmit
+            const ready = provisionallyReadyToSubmit(context);
+            if (finalDelay > 0 && ready) {
+                visualNotifications.listeningTimeRemaining(finalDelay / 1000);
+            }
+            // Get the current time (in milliseconds)
+            const currentTime = new Date().getTime();
+            nextSubmissionTime = currentTime + finalDelay;
+            // Capture the delay for analytics events
+            lastSubmissionDelay = finalDelay;
+            return finalDelay;
+        },
+    },
+});
+function readyToSubmitOnAllowedState(allowedState, context) {
+    const empty = Object.keys(context.transcriptions).length === 0;
+    const pending = isTranscriptionPending();
+    const ready = allowedState && !empty && !pending;
+    return ready;
+}
+function provisionallyReadyToSubmit(context) {
+    const allowedState = !(context.userIsSpeaking || context.isTranscribing); // we don't have access to the state, so we read from a copy in the context (!DRY)
+    return readyToSubmitOnAllowedState(allowedState, context);
+}
+function readyToSubmit(state, context) {
+    const allowedState = !(state.matches("listening.recording.userSpeaking") ||
+        state.matches("listening.converting.transcribing"));
+    return readyToSubmitOnAllowedState(allowedState, context);
+}
+
+;// CONCATENATED MODULE: ./src/state-machines/ScreenLockMachine.ts
+
+
+
+const notificationsModule = AudibleNotificationsModule.getInstance();
+const ScreenLockMachine_machine = createMachine({
+    /** @xstate-layout N4IgpgJg5mDOIC5QGUDGAnMYB2ACAMgPaoDWAdAKrYA2xJkAxLaQNoAMAuoqAA6GwBLAC4DC2biAAeiACxsZZAJwB2AGzrlARhkAOeW2UAaEAE9EAJgCsAZiU3N5+Q8ttFmnQF8PxtJhwE6MiJSRgBXGjp2LiQQPkERMQlpBDkFFXVVLV19I1NEB1UyNmK2K0VXNk0tTS9vEGxCCDgJXyw8YJIJOOFRcRjkgFpVYzMEIa8fDDaA0koIkIgu-h7E-tlzEfzLSyU1Sx0qxXMdNwMJkFb-DqC6SCX43qTESxUyS2U2F01rVWtNFU0mwQ2h2Mj2yhOej2ilUtQ8QA */
+    id: "Screen Lock",
+    description: "Prevents unintentional touch interactions while locked.",
+    initial: "Unlocked",
+    states: {
+        Unlocked: {
+            description: "The button is in an unlocked state. User can lock it.",
+            on: {
+                lock: {
+                    target: "Locked",
+                    actions: ["lockScreen", "fullscreen"],
+                },
+            },
+        },
+        Locked: {
+            description: "The button is in a locked state.\\\nTouch interactions are absorbed silently,\\\nexcept for the unlock button.",
+            on: {
+                unlock: {
+                    target: "Unlocked",
+                    description: "Long press to unlock.",
+                    actions: ["unlockScreen"],
+                },
+            },
+        },
+    },
+    schema: { events: {} },
+    predictableActionArguments: true,
+    preserveActionOrder: true,
+}, {
+    actions: {
+        lockScreen: () => {
+            const lockPanel = document.getElementById("saypi-lock-panel");
+            const unlockButton = document.getElementById("saypi-unlockButton");
+            document.body.classList.add("locked"); // add class to body so that other descendants can style themselves accordingly
+            lockPanel === null || lockPanel === void 0 ? void 0 : lockPanel.classList.add("locked");
+            unlockButton === null || unlockButton === void 0 ? void 0 : unlockButton.classList.add("glow");
+            document.body.classList.remove("unlocked");
+            lockPanel === null || lockPanel === void 0 ? void 0 : lockPanel.classList.remove("unlocked");
+            notificationsModule.lockScreen();
+            console.log("Screen locked");
+        },
+        unlockScreen: () => {
+            const lockPanel = document.getElementById("saypi-lock-panel");
+            const unlockButton = document.getElementById("saypi-unlockButton");
+            document.body.classList.remove("locked");
+            lockPanel === null || lockPanel === void 0 ? void 0 : lockPanel.classList.remove("locked");
+            unlockButton === null || unlockButton === void 0 ? void 0 : unlockButton.classList.remove("glow");
+            document.body.classList.add("unlocked");
+            lockPanel === null || lockPanel === void 0 ? void 0 : lockPanel.classList.add("unlocked");
+            notificationsModule.unlockScreen();
+            console.log("Screen unlocked");
+        },
+        fullscreen: () => {
+            enterFullscreen();
+        },
+    },
+    services: {},
+    guards: {},
+    delays: {},
+});
+
+;// CONCATENATED MODULE: ./src/ThemeModule.ts
+
+function applyDarkMode() {
+    document.body.classList.add("dark");
+    buttonModule.applyTheme("dark");
+}
+function applyNormalMode() {
+    document.body.classList.remove("dark");
+    buttonModule.applyTheme("light");
+}
+
+;// CONCATENATED MODULE: ./src/state-machines/ThemeToggleMachine.ts
+
+
+
+
+const audible = AudibleNotificationsModule.getInstance();
+const ThemeToggleMachine_userPreferences = UserPreferenceModule.getInstance();
+const ThemeToggleMachine_machine = createMachine({
+    /** @xstate-layout N4IgpgJg5mDOIC5QBcAWYC2YAqB7KUANmAHSG4CGEAlgHZQDEA2gAwC6ioADrrNctVy1OIAB6IAzCwAsJAGwAmaQE5lAdjkTlStdICsAGhABPSdLkllLRdK1yAjHr1yAHAF83RtJhz4ipcio6RiZ7DiQQHj4BIRFxBClZG1UNLR19I1MEe3tlEjUFOScXWxYXAoU9Dy90LDwCYhIAOVwAJwwKQgACDFwIMAZkP2JWcO5efkFhCPj7FkKSBRd7BV17FVW5NUzEZZIVVVVK45dC6pBvOuHSABEKVoBrHr6BoYawUZEoydiZxDmciQShI1C4JEsZGoJHIdtk1GpLHoJCspA4tMo9NIPJ4QLQXvAIpdfO8vhMYtNQPEALQwkyIKl6SyHZks5QSc5E+r+MiUGj0UnRKZxRDSBSwuZ5JzKFwpMqg6QuKo4znXZptDrdXr9AU-Clif72Er5FjIpEKexbFjbOnZPZbZSuaTSexqB2ndzK2rE7l3R7PbURb7k4UINRWxZ6FgsewSErqGQuWEY-KFZxW5Qu3JKbFuIA */
+    context: {
+        theme: "light",
+    },
+    id: "themeToggle",
+    initial: "loading",
+    states: {
+        loading: {
+            description: "Determining the initial theme mode.",
+            invoke: {
+                id: "getPreferedTheme",
+                src: () => ThemeToggleMachine_userPreferences.getTheme(),
+                onDone: {
+                    target: "loaded",
+                    actions: es_assign({ theme: (context, event) => event.data }),
+                },
+                onError: {
+                    target: "Normal mode",
+                },
+            },
+        },
+        loaded: {
+            description: "The initial theme mode has been determined.",
+            always: [
+                {
+                    target: "Normal mode",
+                    cond: "preferLight",
+                },
+                {
+                    target: "Dark mode",
+                    cond: "preferDark",
+                },
+            ],
+        },
+        "Normal mode": {
+            description: "The UI is in normal (default) mode with a light theme.",
+            entry: "enterNormalMode",
+            on: {
+                toggle: {
+                    target: "Dark mode",
+                    actions: [
+                        {
+                            type: "saveMode",
+                            params: {
+                                theme: "dark",
+                            },
+                        },
+                        {
+                            type: "soundEffectOn",
+                        },
+                    ],
+                },
+            },
+        },
+        "Dark mode": {
+            description: "The UI is in dark mode with a dark theme.",
+            entry: "enterDarkMode",
+            on: {
+                toggle: {
+                    target: "Normal mode",
+                    actions: [
+                        {
+                            type: "saveMode",
+                            params: {
+                                theme: "light",
+                            },
+                        },
+                        {
+                            type: "soundEffectOff",
+                        },
+                    ],
+                },
+            },
+        },
+    },
+    schema: {
+        events: {},
+        context: {},
+    },
+    predictableActionArguments: true,
+    preserveActionOrder: true,
+}, {
+    actions: {
+        enterDarkMode: (context, event) => {
+            applyDarkMode();
+        },
+        enterNormalMode: (context, event) => {
+            applyNormalMode();
+        },
+        saveMode: (context, event, { action }) => {
+            ThemeToggleMachine_userPreferences.setTheme(action.params.theme);
+        },
+        soundEffectOn: () => {
+            audible.themeOn();
+        },
+        soundEffectOff: () => {
+            audible.themeOff();
+        },
+    },
+    services: {},
+    guards: {
+        preferLight: (context) => context.theme === "light",
+        preferDark: (context) => context.theme === "dark",
+    },
+    delays: {},
+});
+
 ;// CONCATENATED MODULE: ./src/AnalyticsModule.ts
 var AnalyticsModule_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -32791,6 +34642,7 @@ class AnalyticsService {
         if (endpoint) {
             this.endpoint = endpoint;
         }
+        this.userPreferences = UserPreferenceModule.getInstance();
     }
     /**
      * Get or create a client ID for the user
@@ -32822,7 +34674,7 @@ class AnalyticsService {
     }
     sendEvent(eventName, params) {
         return AnalyticsModule_awaiter(this, void 0, void 0, function* () {
-            const consented = yield UserPreferenceModule.getDataSharing();
+            const consented = yield this.userPreferences.getDataSharing();
             if (!consented) {
                 return;
             }
@@ -32885,6 +34737,7 @@ function validateConfig(config) {
 }
 const valid_config = validateConfig(config);
 const analytics = new AnalyticsModule(valid_config.GA_MEASUREMENT_ID, valid_config.GA_API_SECRET, valid_config.GA_ENDPOINT);
+const SessionAnalyticsMachine_userPreferences = UserPreferenceModule.getInstance();
 const MESSAGE_COUNT_THRESHOLD = 50; // number of messages to trigger the long running session prompt
 const userPrompts = new UserPromptModule();
 const SessionAnalyticsMachine_audibleNotifications = AudibleNotificationsModule.getInstance();
@@ -33002,7 +34855,7 @@ const SessionAnalyticsMachine_machine = createMachine({
             });
         },
         notifySendMessage: (context, event) => SessionAnalyticsMachine_awaiter(void 0, void 0, void 0, function* () {
-            const transcriptionMode = yield UserPreferenceModule.getTranscriptionMode();
+            const transcriptionMode = yield SessionAnalyticsMachine_userPreferences.getTranscriptionMode();
             // calculate the real-time factor (RTF)
             const processing_time_ms = event.delay_ms;
             const speech_duration_ms = context.last_message.talk_time_seconds * 1000;
@@ -33019,8 +34872,8 @@ const SessionAnalyticsMachine_machine = createMachine({
             });
         }),
         notifyStartSession: (context, event) => SessionAnalyticsMachine_awaiter(void 0, void 0, void 0, function* () {
-            const transcriptionMode = yield UserPreferenceModule.getTranscriptionMode();
-            const language = yield UserPreferenceModule.getLanguage();
+            const transcriptionMode = yield SessionAnalyticsMachine_userPreferences.getTranscriptionMode();
+            const language = yield SessionAnalyticsMachine_userPreferences.getLanguage();
             const elapsed_ms = 0;
             analytics.sendEvent("session_started", {
                 session_id: context.session_id,
@@ -33171,7 +35024,8 @@ class SubmitErrorHandler {
         const textarea = document.getElementById("saypi-prompt");
         if (submitButton && textarea) {
             if (submitButton.disabled && textarea.value.length > 0) {
-                return true;
+                console.warn("Submit error detected, but ignored.");
+                //return true; // submit error handler disabled in v1.6.0 for evaluation purposes
             }
         }
         return false;
@@ -33285,6 +35139,12 @@ class PiAIChatbot {
         // true if path starts with /talk or /discover
         return path.includes("/talk") || path.includes("/discover");
     }
+    getVoiceMenuSelector() {
+        return "div.t-action-m";
+    }
+    getChatHistorySelector() {
+        return "div.t-body-chat";
+    }
     getDiscoveryPanelSelector() {
         // note: depends on the side panel having already been identified
         return "#saypi-side-panel + div";
@@ -33347,6 +35207,7 @@ var ButtonModule = /*#__PURE__*/function () {
    */
   function ButtonModule(chatbot) {
     ButtonModule_classCallCheck(this, ButtonModule);
+    this.userPreferences = UserPreferenceModule.getInstance();
     this.chatbot = chatbot;
     this.immersionService = new ImmersionService(chatbot);
     this.sayPiActor = src_StateMachineService.actor; // the Say, Pi state machine
@@ -33505,7 +35366,7 @@ var ButtonModule = /*#__PURE__*/function () {
           while (1) switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return UserPreferenceModule.getAutoSubmit();
+              return this.userPreferences.getAutoSubmit();
             case 2:
               autoSubmitEnabled = _context.sent;
               isImmersive = ImmersionService.isViewImmersive(); // must auto-submit in immersive mode
@@ -33879,23 +35740,1727 @@ var ButtonModule = /*#__PURE__*/function () {
 }(); // Singleton
 
 var buttonModule = new ButtonModule(ChatbotService.getChatbot());
-;// CONCATENATED MODULE: ./src/chatbots/bootstrap.ts
+;// CONCATENATED MODULE: ./src/tts/SpeechHistoryModule.ts
+var SpeechHistoryModule_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+class SpeechRecord {
+    constructor(hash, utterance, charge) {
+        this.hash = hash;
+        this.utterance = utterance;
+        this.charge = charge;
+    }
+}
+class SpeechHistoryModule {
+    constructor() { }
+    static getInstance() {
+        if (!SpeechHistoryModule.instance) {
+            SpeechHistoryModule.instance = new SpeechHistoryModule();
+        }
+        return SpeechHistoryModule.instance;
+    }
+    // visible for testing
+    getStorageData(key) {
+        return SpeechHistoryModule_awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => {
+                chrome.storage.local.get([key], (result) => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    }
+                    else {
+                        resolve(result[key]);
+                    }
+                });
+            });
+        });
+    }
+    // visible for testing
+    setStorageData(data) {
+        return SpeechHistoryModule_awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => {
+                chrome.storage.local.set(data, () => {
+                    if (chrome.runtime.lastError) {
+                        reject(chrome.runtime.lastError);
+                    }
+                    else {
+                        resolve();
+                    }
+                });
+            });
+        });
+    }
+    addSpeechToHistory(hash, speech) {
+        return SpeechHistoryModule_awaiter(this, void 0, void 0, function* () {
+            try {
+                const speechHistory = (yield this.getStorageData("speechHistory")) || {};
+                let utterance = speechHistory[hash];
+                if (!utterance) {
+                    speechHistory[hash] = speech.utterance;
+                    yield this.setStorageData({ speechHistory: speechHistory });
+                }
+                if (speech.charge) {
+                    yield this.addChargeToHistory(hash, speech.charge);
+                }
+            }
+            catch (error) {
+                console.error(`Error adding speech to history: ${error}`);
+            }
+            return new SpeechRecord(hash, speech.utterance, speech.charge);
+        });
+    }
+    /**
+     * Get a speech record from the history.
+     * @param hash A hash of the message text.
+     * @returns The speech record with the given hash, or null if not found.
+     */
+    getSpeechFromHistory(hash) {
+        return SpeechHistoryModule_awaiter(this, void 0, void 0, function* () {
+            try {
+                const speechHistory = (yield this.getStorageData("speechHistory")) || {};
+                const utterance = speechHistory[hash] || null;
+                const chargeHistory = (yield this.getStorageData("chargeHistory")) || {};
+                const charge = chargeHistory[hash];
+                if (utterance) {
+                    return new SpeechRecord(hash, utterance, charge);
+                }
+            }
+            catch (error) {
+                console.error(`Error getting speech from history: ${error}`);
+            }
+            return null;
+        });
+    }
+    getAllSpeechHistory() {
+        return SpeechHistoryModule_awaiter(this, void 0, void 0, function* () {
+            try {
+                return (yield this.getStorageData("speechHistory")) || {};
+            }
+            catch (error) {
+                console.error(`Error getting all speech history: ${error}`);
+                return {};
+            }
+        });
+    }
+    removeSpeechFromHistory(hash) {
+        return SpeechHistoryModule_awaiter(this, void 0, void 0, function* () {
+            try {
+                const speechHistory = (yield this.getStorageData("speechHistory")) || {};
+                delete speechHistory[hash];
+                yield this.setStorageData({ speechHistory });
+                console.log(`Removed utterance with hash ${hash} from speech history.`);
+            }
+            catch (error) {
+                console.error(`Error removing speech from history: ${error}`);
+            }
+        });
+    }
+    clearSpeechHistory() {
+        return SpeechHistoryModule_awaiter(this, void 0, void 0, function* () {
+            try {
+                yield this.setStorageData({ speechHistory: {} });
+                yield this.setStorageData({ chargeHistory: {} });
+                console.log("Cleared all speech history.");
+            }
+            catch (error) {
+                console.error(`Error clearing speech history: ${error}`);
+            }
+        });
+    }
+    /**
+     * Add or update the charge for a speech in the history.
+     * @param hash
+     * @param charge
+     */
+    addChargeToHistory(hash, charge) {
+        return SpeechHistoryModule_awaiter(this, void 0, void 0, function* () {
+            try {
+                const chargeHistory = (yield this.getStorageData("chargeHistory")) || {};
+                chargeHistory[hash] = charge;
+                yield this.setStorageData({ chargeHistory: chargeHistory });
+                console.log(`Saved charge to history with hash ${hash}.`);
+            }
+            catch (error) {
+                console.error(`Error saving charge to history: ${error}`);
+            }
+            return charge;
+        });
+    }
+}
+
+;// CONCATENATED MODULE: ./node_modules/tslib/tslib.es6.mjs
+/******************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise, SuppressedError, Symbol */
+
+var extendStatics = function(d, b) {
+  extendStatics = Object.setPrototypeOf ||
+      ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+      function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+  return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+  if (typeof b !== "function" && b !== null)
+      throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+  extendStatics(d, b);
+  function __() { this.constructor = d; }
+  d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+var tslib_es6_assign = function() {
+  tslib_es6_assign = Object.assign || function __assign(t) {
+      for (var s, i = 1, n = arguments.length; i < n; i++) {
+          s = arguments[i];
+          for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+      return t;
+  }
+  return tslib_es6_assign.apply(this, arguments);
+}
+
+function tslib_es6_rest(s, e) {
+  var t = {};
+  for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+      t[p] = s[p];
+  if (s != null && typeof Object.getOwnPropertySymbols === "function")
+      for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+          if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+              t[p[i]] = s[p[i]];
+      }
+  return t;
+}
+
+function __decorate(decorators, target, key, desc) {
+  var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+  if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+  else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+  return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
+function __param(paramIndex, decorator) {
+  return function (target, key) { decorator(target, key, paramIndex); }
+}
+
+function __esDecorate(ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
+  function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
+  var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
+  var target = !descriptorIn && ctor ? contextIn["static"] ? ctor : ctor.prototype : null;
+  var descriptor = descriptorIn || (target ? Object.getOwnPropertyDescriptor(target, contextIn.name) : {});
+  var _, done = false;
+  for (var i = decorators.length - 1; i >= 0; i--) {
+      var context = {};
+      for (var p in contextIn) context[p] = p === "access" ? {} : contextIn[p];
+      for (var p in contextIn.access) context.access[p] = contextIn.access[p];
+      context.addInitializer = function (f) { if (done) throw new TypeError("Cannot add initializers after decoration has completed"); extraInitializers.push(accept(f || null)); };
+      var result = (0, decorators[i])(kind === "accessor" ? { get: descriptor.get, set: descriptor.set } : descriptor[key], context);
+      if (kind === "accessor") {
+          if (result === void 0) continue;
+          if (result === null || typeof result !== "object") throw new TypeError("Object expected");
+          if (_ = accept(result.get)) descriptor.get = _;
+          if (_ = accept(result.set)) descriptor.set = _;
+          if (_ = accept(result.init)) initializers.unshift(_);
+      }
+      else if (_ = accept(result)) {
+          if (kind === "field") initializers.unshift(_);
+          else descriptor[key] = _;
+      }
+  }
+  if (target) Object.defineProperty(target, contextIn.name, descriptor);
+  done = true;
+};
+
+function __runInitializers(thisArg, initializers, value) {
+  var useValue = arguments.length > 2;
+  for (var i = 0; i < initializers.length; i++) {
+      value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
+  }
+  return useValue ? value : void 0;
+};
+
+function __propKey(x) {
+  return typeof x === "symbol" ? x : "".concat(x);
+};
+
+function __setFunctionName(f, name, prefix) {
+  if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+  return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
+
+function __metadata(metadataKey, metadataValue) {
+  if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+}
+
+function tslib_es6_awaiter(thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+      function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+      function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+      function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+      step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+}
+
+function __generator(thisArg, body) {
+  var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+  return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+  function verb(n) { return function (v) { return step([n, v]); }; }
+  function step(op) {
+      if (f) throw new TypeError("Generator is already executing.");
+      while (g && (g = 0, op[0] && (_ = 0)), _) try {
+          if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+          if (y = 0, t) op = [op[0] & 2, t.value];
+          switch (op[0]) {
+              case 0: case 1: t = op; break;
+              case 4: _.label++; return { value: op[1], done: false };
+              case 5: _.label++; y = op[1]; op = [0]; continue;
+              case 7: op = _.ops.pop(); _.trys.pop(); continue;
+              default:
+                  if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                  if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                  if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                  if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                  if (t[2]) _.ops.pop();
+                  _.trys.pop(); continue;
+          }
+          op = body.call(thisArg, _);
+      } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+      if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+  }
+}
+
+var __createBinding = Object.create ? (function(o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  var desc = Object.getOwnPropertyDescriptor(m, k);
+  if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+  }
+  Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+function __exportStar(m, o) {
+  for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(o, p)) __createBinding(o, m, p);
+}
+
+function tslib_es6_values(o) {
+  var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+  if (m) return m.call(o);
+  if (o && typeof o.length === "number") return {
+      next: function () {
+          if (o && i >= o.length) o = void 0;
+          return { value: o && o[i++], done: !o };
+      }
+  };
+  throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+}
+
+function tslib_es6_read(o, n) {
+  var m = typeof Symbol === "function" && o[Symbol.iterator];
+  if (!m) return o;
+  var i = m.call(o), r, ar = [], e;
+  try {
+      while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+  }
+  catch (error) { e = { error: error }; }
+  finally {
+      try {
+          if (r && !r.done && (m = i["return"])) m.call(i);
+      }
+      finally { if (e) throw e.error; }
+  }
+  return ar;
+}
+
+/** @deprecated */
+function __spread() {
+  for (var ar = [], i = 0; i < arguments.length; i++)
+      ar = ar.concat(tslib_es6_read(arguments[i]));
+  return ar;
+}
+
+/** @deprecated */
+function __spreadArrays() {
+  for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+  for (var r = Array(s), k = 0, i = 0; i < il; i++)
+      for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+          r[k] = a[j];
+  return r;
+}
+
+function tslib_es6_spreadArray(to, from, pack) {
+  if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+      if (ar || !(i in from)) {
+          if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+          ar[i] = from[i];
+      }
+  }
+  return to.concat(ar || Array.prototype.slice.call(from));
+}
+
+function __await(v) {
+  return this instanceof __await ? (this.v = v, this) : new __await(v);
+}
+
+function __asyncGenerator(thisArg, _arguments, generator) {
+  if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+  var g = generator.apply(thisArg, _arguments || []), i, q = [];
+  return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+  function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+  function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+  function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+  function fulfill(value) { resume("next", value); }
+  function reject(value) { resume("throw", value); }
+  function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+}
+
+function __asyncDelegator(o) {
+  var i, p;
+  return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+  function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: false } : f ? f(v) : v; } : f; }
+}
+
+function __asyncValues(o) {
+  if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+  var m = o[Symbol.asyncIterator], i;
+  return m ? m.call(o) : (o = typeof tslib_es6_values === "function" ? tslib_es6_values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+  function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+  function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+}
+
+function __makeTemplateObject(cooked, raw) {
+  if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+  return cooked;
+};
+
+var __setModuleDefault = Object.create ? (function(o, v) {
+  Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+  o["default"] = v;
+};
+
+function __importStar(mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  __setModuleDefault(result, mod);
+  return result;
+}
+
+function __importDefault(mod) {
+  return (mod && mod.__esModule) ? mod : { default: mod };
+}
+
+function __classPrivateFieldGet(receiver, state, kind, f) {
+  if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+  return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+}
+
+function __classPrivateFieldSet(receiver, state, value, kind, f) {
+  if (kind === "m") throw new TypeError("Private method is not writable");
+  if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+  return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+}
+
+function __classPrivateFieldIn(state, receiver) {
+  if (receiver === null || (typeof receiver !== "object" && typeof receiver !== "function")) throw new TypeError("Cannot use 'in' operator on non-object");
+  return typeof state === "function" ? receiver === state : state.has(receiver);
+}
+
+function __addDisposableResource(env, value, async) {
+  if (value !== null && value !== void 0) {
+    if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
+    var dispose;
+    if (async) {
+        if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
+        dispose = value[Symbol.asyncDispose];
+    }
+    if (dispose === void 0) {
+        if (!Symbol.dispose) throw new TypeError("Symbol.dispose is not defined.");
+        dispose = value[Symbol.dispose];
+    }
+    if (typeof dispose !== "function") throw new TypeError("Object not disposable.");
+    env.stack.push({ value: value, dispose: dispose, async: async });
+  }
+  else if (async) {
+    env.stack.push({ async: true });
+  }
+  return value;
+}
+
+var _SuppressedError = typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+  var e = new Error(message);
+  return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+};
+
+function __disposeResources(env) {
+  function fail(e) {
+    env.error = env.hasError ? new _SuppressedError(e, env.error, "An error was suppressed during disposal.") : e;
+    env.hasError = true;
+  }
+  function next() {
+    while (env.stack.length) {
+      var rec = env.stack.pop();
+      try {
+        var result = rec.dispose && rec.dispose.call(rec.value);
+        if (rec.async) return Promise.resolve(result).then(next, function(e) { fail(e); return next(); });
+      }
+      catch (e) {
+          fail(e);
+      }
+    }
+    if (env.hasError) throw env.error;
+  }
+  return next();
+}
+
+/* harmony default export */ const tslib_es6 = ({
+  __extends,
+  __assign: tslib_es6_assign,
+  __rest: tslib_es6_rest,
+  __decorate,
+  __param,
+  __metadata,
+  __awaiter: tslib_es6_awaiter,
+  __generator,
+  __createBinding,
+  __exportStar,
+  __values: tslib_es6_values,
+  __read: tslib_es6_read,
+  __spread,
+  __spreadArrays,
+  __spreadArray: tslib_es6_spreadArray,
+  __await,
+  __asyncGenerator,
+  __asyncDelegator,
+  __asyncValues,
+  __makeTemplateObject,
+  __importStar,
+  __importDefault,
+  __classPrivateFieldGet,
+  __classPrivateFieldSet,
+  __classPrivateFieldIn,
+  __addDisposableResource,
+  __disposeResources,
+});
+
+;// CONCATENATED MODULE: ./node_modules/rxjs/dist/esm5/internal/util/isFunction.js
+function isFunction_isFunction(value) {
+    return typeof value === 'function';
+}
+//# sourceMappingURL=isFunction.js.map
+;// CONCATENATED MODULE: ./node_modules/rxjs/dist/esm5/internal/util/createErrorClass.js
+function createErrorClass(createImpl) {
+    var _super = function (instance) {
+        Error.call(instance);
+        instance.stack = new Error().stack;
+    };
+    var ctorFunc = createImpl(_super);
+    ctorFunc.prototype = Object.create(Error.prototype);
+    ctorFunc.prototype.constructor = ctorFunc;
+    return ctorFunc;
+}
+//# sourceMappingURL=createErrorClass.js.map
+;// CONCATENATED MODULE: ./node_modules/rxjs/dist/esm5/internal/util/UnsubscriptionError.js
+
+var UnsubscriptionError = createErrorClass(function (_super) {
+    return function UnsubscriptionErrorImpl(errors) {
+        _super(this);
+        this.message = errors
+            ? errors.length + " errors occurred during unsubscription:\n" + errors.map(function (err, i) { return i + 1 + ") " + err.toString(); }).join('\n  ')
+            : '';
+        this.name = 'UnsubscriptionError';
+        this.errors = errors;
+    };
+});
+//# sourceMappingURL=UnsubscriptionError.js.map
+;// CONCATENATED MODULE: ./node_modules/rxjs/dist/esm5/internal/util/arrRemove.js
+function arrRemove(arr, item) {
+    if (arr) {
+        var index = arr.indexOf(item);
+        0 <= index && arr.splice(index, 1);
+    }
+}
+//# sourceMappingURL=arrRemove.js.map
+;// CONCATENATED MODULE: ./node_modules/rxjs/dist/esm5/internal/Subscription.js
 
 
+
+
+var Subscription = (function () {
+    function Subscription(initialTeardown) {
+        this.initialTeardown = initialTeardown;
+        this.closed = false;
+        this._parentage = null;
+        this._finalizers = null;
+    }
+    Subscription.prototype.unsubscribe = function () {
+        var e_1, _a, e_2, _b;
+        var errors;
+        if (!this.closed) {
+            this.closed = true;
+            var _parentage = this._parentage;
+            if (_parentage) {
+                this._parentage = null;
+                if (Array.isArray(_parentage)) {
+                    try {
+                        for (var _parentage_1 = tslib_es6_values(_parentage), _parentage_1_1 = _parentage_1.next(); !_parentage_1_1.done; _parentage_1_1 = _parentage_1.next()) {
+                            var parent_1 = _parentage_1_1.value;
+                            parent_1.remove(this);
+                        }
+                    }
+                    catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                    finally {
+                        try {
+                            if (_parentage_1_1 && !_parentage_1_1.done && (_a = _parentage_1.return)) _a.call(_parentage_1);
+                        }
+                        finally { if (e_1) throw e_1.error; }
+                    }
+                }
+                else {
+                    _parentage.remove(this);
+                }
+            }
+            var initialFinalizer = this.initialTeardown;
+            if (isFunction_isFunction(initialFinalizer)) {
+                try {
+                    initialFinalizer();
+                }
+                catch (e) {
+                    errors = e instanceof UnsubscriptionError ? e.errors : [e];
+                }
+            }
+            var _finalizers = this._finalizers;
+            if (_finalizers) {
+                this._finalizers = null;
+                try {
+                    for (var _finalizers_1 = tslib_es6_values(_finalizers), _finalizers_1_1 = _finalizers_1.next(); !_finalizers_1_1.done; _finalizers_1_1 = _finalizers_1.next()) {
+                        var finalizer = _finalizers_1_1.value;
+                        try {
+                            execFinalizer(finalizer);
+                        }
+                        catch (err) {
+                            errors = errors !== null && errors !== void 0 ? errors : [];
+                            if (err instanceof UnsubscriptionError) {
+                                errors = tslib_es6_spreadArray(tslib_es6_spreadArray([], tslib_es6_read(errors)), tslib_es6_read(err.errors));
+                            }
+                            else {
+                                errors.push(err);
+                            }
+                        }
+                    }
+                }
+                catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                finally {
+                    try {
+                        if (_finalizers_1_1 && !_finalizers_1_1.done && (_b = _finalizers_1.return)) _b.call(_finalizers_1);
+                    }
+                    finally { if (e_2) throw e_2.error; }
+                }
+            }
+            if (errors) {
+                throw new UnsubscriptionError(errors);
+            }
+        }
+    };
+    Subscription.prototype.add = function (teardown) {
+        var _a;
+        if (teardown && teardown !== this) {
+            if (this.closed) {
+                execFinalizer(teardown);
+            }
+            else {
+                if (teardown instanceof Subscription) {
+                    if (teardown.closed || teardown._hasParent(this)) {
+                        return;
+                    }
+                    teardown._addParent(this);
+                }
+                (this._finalizers = (_a = this._finalizers) !== null && _a !== void 0 ? _a : []).push(teardown);
+            }
+        }
+    };
+    Subscription.prototype._hasParent = function (parent) {
+        var _parentage = this._parentage;
+        return _parentage === parent || (Array.isArray(_parentage) && _parentage.includes(parent));
+    };
+    Subscription.prototype._addParent = function (parent) {
+        var _parentage = this._parentage;
+        this._parentage = Array.isArray(_parentage) ? (_parentage.push(parent), _parentage) : _parentage ? [_parentage, parent] : parent;
+    };
+    Subscription.prototype._removeParent = function (parent) {
+        var _parentage = this._parentage;
+        if (_parentage === parent) {
+            this._parentage = null;
+        }
+        else if (Array.isArray(_parentage)) {
+            arrRemove(_parentage, parent);
+        }
+    };
+    Subscription.prototype.remove = function (teardown) {
+        var _finalizers = this._finalizers;
+        _finalizers && arrRemove(_finalizers, teardown);
+        if (teardown instanceof Subscription) {
+            teardown._removeParent(this);
+        }
+    };
+    Subscription.EMPTY = (function () {
+        var empty = new Subscription();
+        empty.closed = true;
+        return empty;
+    })();
+    return Subscription;
+}());
+
+var EMPTY_SUBSCRIPTION = Subscription.EMPTY;
+function isSubscription(value) {
+    return (value instanceof Subscription ||
+        (value && 'closed' in value && isFunction_isFunction(value.remove) && isFunction_isFunction(value.add) && isFunction_isFunction(value.unsubscribe)));
+}
+function execFinalizer(finalizer) {
+    if (isFunction_isFunction(finalizer)) {
+        finalizer();
+    }
+    else {
+        finalizer.unsubscribe();
+    }
+}
+//# sourceMappingURL=Subscription.js.map
+;// CONCATENATED MODULE: ./node_modules/rxjs/dist/esm5/internal/config.js
+var config_config = {
+    onUnhandledError: null,
+    onStoppedNotification: null,
+    Promise: undefined,
+    useDeprecatedSynchronousErrorHandling: false,
+    useDeprecatedNextContext: false,
+};
+//# sourceMappingURL=config.js.map
+;// CONCATENATED MODULE: ./node_modules/rxjs/dist/esm5/internal/scheduler/timeoutProvider.js
+
+var timeoutProvider = {
+    setTimeout: function (handler, timeout) {
+        var args = [];
+        for (var _i = 2; _i < arguments.length; _i++) {
+            args[_i - 2] = arguments[_i];
+        }
+        var delegate = timeoutProvider.delegate;
+        if (delegate === null || delegate === void 0 ? void 0 : delegate.setTimeout) {
+            return delegate.setTimeout.apply(delegate, tslib_es6_spreadArray([handler, timeout], tslib_es6_read(args)));
+        }
+        return setTimeout.apply(void 0, tslib_es6_spreadArray([handler, timeout], tslib_es6_read(args)));
+    },
+    clearTimeout: function (handle) {
+        var delegate = timeoutProvider.delegate;
+        return ((delegate === null || delegate === void 0 ? void 0 : delegate.clearTimeout) || clearTimeout)(handle);
+    },
+    delegate: undefined,
+};
+//# sourceMappingURL=timeoutProvider.js.map
+;// CONCATENATED MODULE: ./node_modules/rxjs/dist/esm5/internal/util/reportUnhandledError.js
+
+
+function reportUnhandledError(err) {
+    timeoutProvider.setTimeout(function () {
+        var onUnhandledError = config_config.onUnhandledError;
+        if (onUnhandledError) {
+            onUnhandledError(err);
+        }
+        else {
+            throw err;
+        }
+    });
+}
+//# sourceMappingURL=reportUnhandledError.js.map
+;// CONCATENATED MODULE: ./node_modules/rxjs/dist/esm5/internal/util/noop.js
+function noop_noop() { }
+//# sourceMappingURL=noop.js.map
+;// CONCATENATED MODULE: ./node_modules/rxjs/dist/esm5/internal/NotificationFactories.js
+var COMPLETE_NOTIFICATION = (function () { return createNotification('C', undefined, undefined); })();
+function errorNotification(error) {
+    return createNotification('E', undefined, error);
+}
+function nextNotification(value) {
+    return createNotification('N', value, undefined);
+}
+function createNotification(kind, value, error) {
+    return {
+        kind: kind,
+        value: value,
+        error: error,
+    };
+}
+//# sourceMappingURL=NotificationFactories.js.map
+;// CONCATENATED MODULE: ./node_modules/rxjs/dist/esm5/internal/util/errorContext.js
+
+var context = null;
+function errorContext(cb) {
+    if (config_config.useDeprecatedSynchronousErrorHandling) {
+        var isRoot = !context;
+        if (isRoot) {
+            context = { errorThrown: false, error: null };
+        }
+        cb();
+        if (isRoot) {
+            var _a = context, errorThrown = _a.errorThrown, error = _a.error;
+            context = null;
+            if (errorThrown) {
+                throw error;
+            }
+        }
+    }
+    else {
+        cb();
+    }
+}
+function captureError(err) {
+    if (config_config.useDeprecatedSynchronousErrorHandling && context) {
+        context.errorThrown = true;
+        context.error = err;
+    }
+}
+//# sourceMappingURL=errorContext.js.map
+;// CONCATENATED MODULE: ./node_modules/rxjs/dist/esm5/internal/Subscriber.js
+
+
+
+
+
+
+
+
+
+var Subscriber = (function (_super) {
+    __extends(Subscriber, _super);
+    function Subscriber(destination) {
+        var _this = _super.call(this) || this;
+        _this.isStopped = false;
+        if (destination) {
+            _this.destination = destination;
+            if (isSubscription(destination)) {
+                destination.add(_this);
+            }
+        }
+        else {
+            _this.destination = EMPTY_OBSERVER;
+        }
+        return _this;
+    }
+    Subscriber.create = function (next, error, complete) {
+        return new SafeSubscriber(next, error, complete);
+    };
+    Subscriber.prototype.next = function (value) {
+        if (this.isStopped) {
+            handleStoppedNotification(nextNotification(value), this);
+        }
+        else {
+            this._next(value);
+        }
+    };
+    Subscriber.prototype.error = function (err) {
+        if (this.isStopped) {
+            handleStoppedNotification(errorNotification(err), this);
+        }
+        else {
+            this.isStopped = true;
+            this._error(err);
+        }
+    };
+    Subscriber.prototype.complete = function () {
+        if (this.isStopped) {
+            handleStoppedNotification(COMPLETE_NOTIFICATION, this);
+        }
+        else {
+            this.isStopped = true;
+            this._complete();
+        }
+    };
+    Subscriber.prototype.unsubscribe = function () {
+        if (!this.closed) {
+            this.isStopped = true;
+            _super.prototype.unsubscribe.call(this);
+            this.destination = null;
+        }
+    };
+    Subscriber.prototype._next = function (value) {
+        this.destination.next(value);
+    };
+    Subscriber.prototype._error = function (err) {
+        try {
+            this.destination.error(err);
+        }
+        finally {
+            this.unsubscribe();
+        }
+    };
+    Subscriber.prototype._complete = function () {
+        try {
+            this.destination.complete();
+        }
+        finally {
+            this.unsubscribe();
+        }
+    };
+    return Subscriber;
+}(Subscription));
+
+var _bind = Function.prototype.bind;
+function Subscriber_bind(fn, thisArg) {
+    return _bind.call(fn, thisArg);
+}
+var ConsumerObserver = (function () {
+    function ConsumerObserver(partialObserver) {
+        this.partialObserver = partialObserver;
+    }
+    ConsumerObserver.prototype.next = function (value) {
+        var partialObserver = this.partialObserver;
+        if (partialObserver.next) {
+            try {
+                partialObserver.next(value);
+            }
+            catch (error) {
+                handleUnhandledError(error);
+            }
+        }
+    };
+    ConsumerObserver.prototype.error = function (err) {
+        var partialObserver = this.partialObserver;
+        if (partialObserver.error) {
+            try {
+                partialObserver.error(err);
+            }
+            catch (error) {
+                handleUnhandledError(error);
+            }
+        }
+        else {
+            handleUnhandledError(err);
+        }
+    };
+    ConsumerObserver.prototype.complete = function () {
+        var partialObserver = this.partialObserver;
+        if (partialObserver.complete) {
+            try {
+                partialObserver.complete();
+            }
+            catch (error) {
+                handleUnhandledError(error);
+            }
+        }
+    };
+    return ConsumerObserver;
+}());
+var SafeSubscriber = (function (_super) {
+    __extends(SafeSubscriber, _super);
+    function SafeSubscriber(observerOrNext, error, complete) {
+        var _this = _super.call(this) || this;
+        var partialObserver;
+        if (isFunction_isFunction(observerOrNext) || !observerOrNext) {
+            partialObserver = {
+                next: (observerOrNext !== null && observerOrNext !== void 0 ? observerOrNext : undefined),
+                error: error !== null && error !== void 0 ? error : undefined,
+                complete: complete !== null && complete !== void 0 ? complete : undefined,
+            };
+        }
+        else {
+            var context_1;
+            if (_this && config_config.useDeprecatedNextContext) {
+                context_1 = Object.create(observerOrNext);
+                context_1.unsubscribe = function () { return _this.unsubscribe(); };
+                partialObserver = {
+                    next: observerOrNext.next && Subscriber_bind(observerOrNext.next, context_1),
+                    error: observerOrNext.error && Subscriber_bind(observerOrNext.error, context_1),
+                    complete: observerOrNext.complete && Subscriber_bind(observerOrNext.complete, context_1),
+                };
+            }
+            else {
+                partialObserver = observerOrNext;
+            }
+        }
+        _this.destination = new ConsumerObserver(partialObserver);
+        return _this;
+    }
+    return SafeSubscriber;
+}(Subscriber));
+
+function handleUnhandledError(error) {
+    if (config_config.useDeprecatedSynchronousErrorHandling) {
+        captureError(error);
+    }
+    else {
+        reportUnhandledError(error);
+    }
+}
+function defaultErrorHandler(err) {
+    throw err;
+}
+function handleStoppedNotification(notification, subscriber) {
+    var onStoppedNotification = config_config.onStoppedNotification;
+    onStoppedNotification && timeoutProvider.setTimeout(function () { return onStoppedNotification(notification, subscriber); });
+}
+var EMPTY_OBSERVER = {
+    closed: true,
+    next: noop_noop,
+    error: defaultErrorHandler,
+    complete: noop_noop,
+};
+//# sourceMappingURL=Subscriber.js.map
+;// CONCATENATED MODULE: ./node_modules/rxjs/dist/esm5/internal/symbol/observable.js
+var observable = (function () { return (typeof Symbol === 'function' && Symbol.observable) || '@@observable'; })();
+//# sourceMappingURL=observable.js.map
+;// CONCATENATED MODULE: ./node_modules/rxjs/dist/esm5/internal/util/identity.js
+function identity(x) {
+    return x;
+}
+//# sourceMappingURL=identity.js.map
+;// CONCATENATED MODULE: ./node_modules/rxjs/dist/esm5/internal/util/pipe.js
+
+function pipe() {
+    var fns = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        fns[_i] = arguments[_i];
+    }
+    return pipeFromArray(fns);
+}
+function pipeFromArray(fns) {
+    if (fns.length === 0) {
+        return identity;
+    }
+    if (fns.length === 1) {
+        return fns[0];
+    }
+    return function piped(input) {
+        return fns.reduce(function (prev, fn) { return fn(prev); }, input);
+    };
+}
+//# sourceMappingURL=pipe.js.map
+;// CONCATENATED MODULE: ./node_modules/rxjs/dist/esm5/internal/Observable.js
+
+
+
+
+
+
+
+var Observable = (function () {
+    function Observable(subscribe) {
+        if (subscribe) {
+            this._subscribe = subscribe;
+        }
+    }
+    Observable.prototype.lift = function (operator) {
+        var observable = new Observable();
+        observable.source = this;
+        observable.operator = operator;
+        return observable;
+    };
+    Observable.prototype.subscribe = function (observerOrNext, error, complete) {
+        var _this = this;
+        var subscriber = isSubscriber(observerOrNext) ? observerOrNext : new SafeSubscriber(observerOrNext, error, complete);
+        errorContext(function () {
+            var _a = _this, operator = _a.operator, source = _a.source;
+            subscriber.add(operator
+                ?
+                    operator.call(subscriber, source)
+                : source
+                    ?
+                        _this._subscribe(subscriber)
+                    :
+                        _this._trySubscribe(subscriber));
+        });
+        return subscriber;
+    };
+    Observable.prototype._trySubscribe = function (sink) {
+        try {
+            return this._subscribe(sink);
+        }
+        catch (err) {
+            sink.error(err);
+        }
+    };
+    Observable.prototype.forEach = function (next, promiseCtor) {
+        var _this = this;
+        promiseCtor = getPromiseCtor(promiseCtor);
+        return new promiseCtor(function (resolve, reject) {
+            var subscriber = new SafeSubscriber({
+                next: function (value) {
+                    try {
+                        next(value);
+                    }
+                    catch (err) {
+                        reject(err);
+                        subscriber.unsubscribe();
+                    }
+                },
+                error: reject,
+                complete: resolve,
+            });
+            _this.subscribe(subscriber);
+        });
+    };
+    Observable.prototype._subscribe = function (subscriber) {
+        var _a;
+        return (_a = this.source) === null || _a === void 0 ? void 0 : _a.subscribe(subscriber);
+    };
+    Observable.prototype[observable] = function () {
+        return this;
+    };
+    Observable.prototype.pipe = function () {
+        var operations = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            operations[_i] = arguments[_i];
+        }
+        return pipeFromArray(operations)(this);
+    };
+    Observable.prototype.toPromise = function (promiseCtor) {
+        var _this = this;
+        promiseCtor = getPromiseCtor(promiseCtor);
+        return new promiseCtor(function (resolve, reject) {
+            var value;
+            _this.subscribe(function (x) { return (value = x); }, function (err) { return reject(err); }, function () { return resolve(value); });
+        });
+    };
+    Observable.create = function (subscribe) {
+        return new Observable(subscribe);
+    };
+    return Observable;
+}());
+
+function getPromiseCtor(promiseCtor) {
+    var _a;
+    return (_a = promiseCtor !== null && promiseCtor !== void 0 ? promiseCtor : config_config.Promise) !== null && _a !== void 0 ? _a : Promise;
+}
+function isObserver(value) {
+    return value && isFunction_isFunction(value.next) && isFunction_isFunction(value.error) && isFunction_isFunction(value.complete);
+}
+function isSubscriber(value) {
+    return (value && value instanceof Subscriber) || (isObserver(value) && isSubscription(value));
+}
+//# sourceMappingURL=Observable.js.map
+;// CONCATENATED MODULE: ./node_modules/rxjs/dist/esm5/internal/util/ObjectUnsubscribedError.js
+
+var ObjectUnsubscribedError = createErrorClass(function (_super) {
+    return function ObjectUnsubscribedErrorImpl() {
+        _super(this);
+        this.name = 'ObjectUnsubscribedError';
+        this.message = 'object unsubscribed';
+    };
+});
+//# sourceMappingURL=ObjectUnsubscribedError.js.map
+;// CONCATENATED MODULE: ./node_modules/rxjs/dist/esm5/internal/Subject.js
+
+
+
+
+
+
+var Subject = (function (_super) {
+    __extends(Subject, _super);
+    function Subject() {
+        var _this = _super.call(this) || this;
+        _this.closed = false;
+        _this.currentObservers = null;
+        _this.observers = [];
+        _this.isStopped = false;
+        _this.hasError = false;
+        _this.thrownError = null;
+        return _this;
+    }
+    Subject.prototype.lift = function (operator) {
+        var subject = new AnonymousSubject(this, this);
+        subject.operator = operator;
+        return subject;
+    };
+    Subject.prototype._throwIfClosed = function () {
+        if (this.closed) {
+            throw new ObjectUnsubscribedError();
+        }
+    };
+    Subject.prototype.next = function (value) {
+        var _this = this;
+        errorContext(function () {
+            var e_1, _a;
+            _this._throwIfClosed();
+            if (!_this.isStopped) {
+                if (!_this.currentObservers) {
+                    _this.currentObservers = Array.from(_this.observers);
+                }
+                try {
+                    for (var _b = tslib_es6_values(_this.currentObservers), _c = _b.next(); !_c.done; _c = _b.next()) {
+                        var observer = _c.value;
+                        observer.next(value);
+                    }
+                }
+                catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                finally {
+                    try {
+                        if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+                    }
+                    finally { if (e_1) throw e_1.error; }
+                }
+            }
+        });
+    };
+    Subject.prototype.error = function (err) {
+        var _this = this;
+        errorContext(function () {
+            _this._throwIfClosed();
+            if (!_this.isStopped) {
+                _this.hasError = _this.isStopped = true;
+                _this.thrownError = err;
+                var observers = _this.observers;
+                while (observers.length) {
+                    observers.shift().error(err);
+                }
+            }
+        });
+    };
+    Subject.prototype.complete = function () {
+        var _this = this;
+        errorContext(function () {
+            _this._throwIfClosed();
+            if (!_this.isStopped) {
+                _this.isStopped = true;
+                var observers = _this.observers;
+                while (observers.length) {
+                    observers.shift().complete();
+                }
+            }
+        });
+    };
+    Subject.prototype.unsubscribe = function () {
+        this.isStopped = this.closed = true;
+        this.observers = this.currentObservers = null;
+    };
+    Object.defineProperty(Subject.prototype, "observed", {
+        get: function () {
+            var _a;
+            return ((_a = this.observers) === null || _a === void 0 ? void 0 : _a.length) > 0;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Subject.prototype._trySubscribe = function (subscriber) {
+        this._throwIfClosed();
+        return _super.prototype._trySubscribe.call(this, subscriber);
+    };
+    Subject.prototype._subscribe = function (subscriber) {
+        this._throwIfClosed();
+        this._checkFinalizedStatuses(subscriber);
+        return this._innerSubscribe(subscriber);
+    };
+    Subject.prototype._innerSubscribe = function (subscriber) {
+        var _this = this;
+        var _a = this, hasError = _a.hasError, isStopped = _a.isStopped, observers = _a.observers;
+        if (hasError || isStopped) {
+            return EMPTY_SUBSCRIPTION;
+        }
+        this.currentObservers = null;
+        observers.push(subscriber);
+        return new Subscription(function () {
+            _this.currentObservers = null;
+            arrRemove(observers, subscriber);
+        });
+    };
+    Subject.prototype._checkFinalizedStatuses = function (subscriber) {
+        var _a = this, hasError = _a.hasError, thrownError = _a.thrownError, isStopped = _a.isStopped;
+        if (hasError) {
+            subscriber.error(thrownError);
+        }
+        else if (isStopped) {
+            subscriber.complete();
+        }
+    };
+    Subject.prototype.asObservable = function () {
+        var observable = new Observable();
+        observable.source = this;
+        return observable;
+    };
+    Subject.create = function (destination, source) {
+        return new AnonymousSubject(destination, source);
+    };
+    return Subject;
+}(Observable));
+
+var AnonymousSubject = (function (_super) {
+    __extends(AnonymousSubject, _super);
+    function AnonymousSubject(destination, source) {
+        var _this = _super.call(this) || this;
+        _this.destination = destination;
+        _this.source = source;
+        return _this;
+    }
+    AnonymousSubject.prototype.next = function (value) {
+        var _a, _b;
+        (_b = (_a = this.destination) === null || _a === void 0 ? void 0 : _a.next) === null || _b === void 0 ? void 0 : _b.call(_a, value);
+    };
+    AnonymousSubject.prototype.error = function (err) {
+        var _a, _b;
+        (_b = (_a = this.destination) === null || _a === void 0 ? void 0 : _a.error) === null || _b === void 0 ? void 0 : _b.call(_a, err);
+    };
+    AnonymousSubject.prototype.complete = function () {
+        var _a, _b;
+        (_b = (_a = this.destination) === null || _a === void 0 ? void 0 : _a.complete) === null || _b === void 0 ? void 0 : _b.call(_a);
+    };
+    AnonymousSubject.prototype._subscribe = function (subscriber) {
+        var _a, _b;
+        return (_b = (_a = this.source) === null || _a === void 0 ? void 0 : _a.subscribe(subscriber)) !== null && _b !== void 0 ? _b : EMPTY_SUBSCRIPTION;
+    };
+    return AnonymousSubject;
+}(Subject));
+
+//# sourceMappingURL=Subject.js.map
+;// CONCATENATED MODULE: ./node_modules/rxjs/dist/esm5/internal/scheduler/dateTimestampProvider.js
+var dateTimestampProvider = {
+    now: function () {
+        return (dateTimestampProvider.delegate || Date).now();
+    },
+    delegate: undefined,
+};
+//# sourceMappingURL=dateTimestampProvider.js.map
+;// CONCATENATED MODULE: ./node_modules/rxjs/dist/esm5/internal/ReplaySubject.js
+
+
+
+var ReplaySubject = (function (_super) {
+    __extends(ReplaySubject, _super);
+    function ReplaySubject(_bufferSize, _windowTime, _timestampProvider) {
+        if (_bufferSize === void 0) { _bufferSize = Infinity; }
+        if (_windowTime === void 0) { _windowTime = Infinity; }
+        if (_timestampProvider === void 0) { _timestampProvider = dateTimestampProvider; }
+        var _this = _super.call(this) || this;
+        _this._bufferSize = _bufferSize;
+        _this._windowTime = _windowTime;
+        _this._timestampProvider = _timestampProvider;
+        _this._buffer = [];
+        _this._infiniteTimeWindow = true;
+        _this._infiniteTimeWindow = _windowTime === Infinity;
+        _this._bufferSize = Math.max(1, _bufferSize);
+        _this._windowTime = Math.max(1, _windowTime);
+        return _this;
+    }
+    ReplaySubject.prototype.next = function (value) {
+        var _a = this, isStopped = _a.isStopped, _buffer = _a._buffer, _infiniteTimeWindow = _a._infiniteTimeWindow, _timestampProvider = _a._timestampProvider, _windowTime = _a._windowTime;
+        if (!isStopped) {
+            _buffer.push(value);
+            !_infiniteTimeWindow && _buffer.push(_timestampProvider.now() + _windowTime);
+        }
+        this._trimBuffer();
+        _super.prototype.next.call(this, value);
+    };
+    ReplaySubject.prototype._subscribe = function (subscriber) {
+        this._throwIfClosed();
+        this._trimBuffer();
+        var subscription = this._innerSubscribe(subscriber);
+        var _a = this, _infiniteTimeWindow = _a._infiniteTimeWindow, _buffer = _a._buffer;
+        var copy = _buffer.slice();
+        for (var i = 0; i < copy.length && !subscriber.closed; i += _infiniteTimeWindow ? 1 : 2) {
+            subscriber.next(copy[i]);
+        }
+        this._checkFinalizedStatuses(subscriber);
+        return subscription;
+    };
+    ReplaySubject.prototype._trimBuffer = function () {
+        var _a = this, _bufferSize = _a._bufferSize, _timestampProvider = _a._timestampProvider, _buffer = _a._buffer, _infiniteTimeWindow = _a._infiniteTimeWindow;
+        var adjustedBufferSize = (_infiniteTimeWindow ? 1 : 2) * _bufferSize;
+        _bufferSize < Infinity && adjustedBufferSize < _buffer.length && _buffer.splice(0, _buffer.length - adjustedBufferSize);
+        if (!_infiniteTimeWindow) {
+            var now = _timestampProvider.now();
+            var last = 0;
+            for (var i = 1; i < _buffer.length && _buffer[i] <= now; i += 2) {
+                last = i;
+            }
+            last && _buffer.splice(0, last + 1);
+        }
+    };
+    return ReplaySubject;
+}(Subject));
+
+//# sourceMappingURL=ReplaySubject.js.map
+;// CONCATENATED MODULE: ./src/tts/InputStream.ts
+
+const InputStream_STREAM_TIMEOUT_MS = 8000; // visible for testing
+const TEXT_STABILITY_THRESHOLD_MILLIS = 1500; // visible for testing
+// Visible for testing
+function getNestedText(node) {
+    var _a, _b;
+    return (_b = (_a = node.textContent) !== null && _a !== void 0 ? _a : node.innerText) !== null && _b !== void 0 ? _b : "";
+}
+class ElementTextStream {
+    constructor(element, includeInitialText = false, delimiter = "") {
+        this.element = element;
+        this.includeInitialText = includeInitialText;
+        this.delimiter = delimiter;
+        this.timeout = undefined;
+        this.emittedValues = [];
+        this.timeOfLastTextChange = Date.now();
+        this.timeOfLastBatch = null;
+        this.intervalsBetweenBatches = [];
+        this.batchIntervalTimerId = null;
+        this.subject = new ReplaySubject(1000); // buffer should be long enough to handle the longest text (4k characters)
+        // subscribe to keep track of emitted values
+        this.subject.subscribe((value) => this.emittedValues.push(value));
+        // subscribe to keep track of timeouts
+        this.subject.subscribe({
+            next: () => {
+                this.timeOfLastTextChange = Date.now();
+                this.resetStreamTimeout();
+            },
+            complete: () => {
+                console.debug("Clearing timeout on stream completion");
+                clearTimeout(this.timeout);
+            },
+        });
+        this.resetStreamTimeout(); // set the initial timeout
+        if (includeInitialText) {
+            this.emitInitialText(element); // emit the initial text
+        }
+        this.registerObserver(); // start observing the element for additions
+    }
+    emitInitialText(message) {
+        const initialText = getNestedText(message);
+        // send the initial text to the stream only if it's not empty
+        if (initialText) {
+            console.debug(`Streaming text began with "${initialText}"`);
+            this.subject.next(initialText);
+        }
+    }
+    /**
+     * The stream will complete if no new text is streamed for a certain duration.
+     * This method resets the timeout.
+     */
+    resetStreamTimeout() {
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+        }
+        this.timeout = setTimeout(() => {
+            console.log(`Stream ended on timeout out after ${InputStream_STREAM_TIMEOUT_MS}ms since last token`);
+            this.subject.complete();
+        }, InputStream_STREAM_TIMEOUT_MS);
+    }
+    getTextIsStable() {
+        const timeSinceLastTextChange = Date.now() - this.timeOfLastTextChange;
+        const textIsStable = timeSinceLastTextChange > TEXT_STABILITY_THRESHOLD_MILLIS;
+        if (textIsStable) {
+            console.log(`Text is stable, ${timeSinceLastTextChange}ms after last token`);
+        }
+        return textIsStable;
+    }
+    registerObserver() {
+        const clearBatchIntervalTimer = () => {
+            if (this.batchIntervalTimerId !== null) {
+                clearTimeout(this.batchIntervalTimerId);
+                this.batchIntervalTimerId = null;
+            }
+        };
+        const updateBatchTiming = () => {
+            const timeOfBatch = Date.now();
+            if (this.timeOfLastBatch === null) {
+                this.timeOfLastBatch = timeOfBatch;
+            }
+            const timeSinceLastBatch = timeOfBatch - this.timeOfLastBatch;
+            this.timeOfLastBatch = timeOfBatch;
+            if (timeSinceLastBatch > 0) {
+                this.intervalsBetweenBatches.push(timeSinceLastBatch);
+            }
+            return (this.intervalsBetweenBatches.reduce((a, b) => a + b, 0) /
+                this.intervalsBetweenBatches.length || 1000);
+        };
+        const handleElementNode = (element, isFirstParagraph, avgIntervalMs) => {
+            if (this.delimiter && !isFirstParagraph) {
+                this.subject.next(this.delimiter);
+            }
+            return; // skip element content for now
+            const paragraph = getNestedText(element);
+            if (paragraph) {
+                handleText(paragraph, true, isFirstParagraph, true, true, avgIntervalMs);
+            }
+        };
+        const handleTextNode = (textNode, isFirstWordInParagraph, isFirstParagraph, isBlockElement, isLastWordInParagraph, avgIntervalMs) => {
+            const word = textNode.textContent || null;
+            if (word) {
+                handleText(word, isFirstWordInParagraph, isFirstParagraph, isBlockElement, isLastWordInParagraph, avgIntervalMs);
+            }
+        };
+        const handleText = (word, isFirstWordInParagraph, isFirstParagraph, isBlockElement, isLastWordInParagraph, avgIntervalMs) => {
+            if (word) {
+                this.subject.next(word);
+                if (isLastWordInParagraph && !word.endsWith(" ")) {
+                    // end of paragraph increases likelihood that this is the end of the response
+                    this.batchIntervalTimerId = setTimeout(() => {
+                        console.log(`Stream ended on ${word} after ${(2 * avgIntervalMs).toFixed(0)}ms of inactivity`);
+                        this.subject.complete();
+                    }, 3 * avgIntervalMs);
+                }
+            }
+        };
+        const handleMutation = (mutation, avgIntervalMs) => {
+            var _a;
+            if (mutation.type === "childList") {
+                for (let i = 0; i < mutation.addedNodes.length; i++) {
+                    const isFirstParagraph = this.emittedValues.length === 0;
+                    const node = mutation.addedNodes[i];
+                    if (node.nodeType === Node.ELEMENT_NODE &&
+                        node.tagName === "DIV") {
+                        handleElementNode(node, isFirstParagraph, avgIntervalMs);
+                    }
+                    else if (node.nodeType === Node.TEXT_NODE) {
+                        const textNode = node;
+                        const paragraph = textNode.wholeText;
+                        const isFirstWordInParagraph = i === 0 && paragraph.startsWith(textNode.textContent || "");
+                        const isBlockElement = ((_a = node.parentElement) === null || _a === void 0 ? void 0 : _a.tagName) === "DIV";
+                        const isLastWordInParagraph = i === mutation.addedNodes.length - 1;
+                        handleTextNode(textNode, isFirstWordInParagraph, isFirstParagraph, isBlockElement, isLastWordInParagraph, avgIntervalMs);
+                    }
+                }
+            }
+        };
+        const observerCallback = (mutationsList) => {
+            clearBatchIntervalTimer();
+            const avgIntervalMs = updateBatchTiming();
+            mutationsList.forEach((mutation) => handleMutation(mutation, avgIntervalMs));
+        };
+        this.observer = new MutationObserver(observerCallback);
+        this.observer.observe(this.element, { childList: true, subtree: true });
+    }
+    getStream() {
+        return this.subject.asObservable();
+    }
+    disconnect() {
+        if (this.timeout) {
+            // Clear timeout if it exists
+            clearTimeout(this.timeout);
+        }
+        this.observer.disconnect();
+        this.subject.complete();
+    }
+    // For testing purposes
+    getObserver() {
+        return this.observer;
+    }
+}
+class SilentElementTextStream extends (/* unused pure expression or super */ null && (ElementTextStream)) {
+    constructor(element) {
+        super(element);
+        this.startTime = null;
+        this.timeToFirstToken = null;
+    }
+    registerObserver() {
+        // register a mutation observer that simply logs mutations
+        const observerCallback = (mutationsList) => {
+            console.debug(mutationsList.length, "mutations observed");
+            const mutationTime = Date.now();
+            if (this.startTime === null) {
+                this.startTime = mutationTime;
+            }
+            console.debug(`Time since start: ${mutationTime - this.startTime}ms, Time since first token: ${this.timeToFirstToken
+                ? mutationTime - this.timeToFirstToken
+                : "not found"}ms`);
+            for (let mutation of mutationsList) {
+                console.debug(`Type: ${mutation.type}, Target: ${mutation.target}`);
+                if (mutation.type === "childList") {
+                    for (let node of mutation.addedNodes) {
+                        console.debug("Added node", node);
+                        if (node.nodeType === Node.ELEMENT_NODE) {
+                            const element = node;
+                            console.debug(element.tagName, "text", getNestedText(element));
+                        }
+                        else if (node.nodeType === Node.TEXT_NODE) {
+                            const textNode = node;
+                            console.debug("Text node", textNode.wholeText);
+                            if (this.timeToFirstToken === null) {
+                                this.timeToFirstToken = Date.now();
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        this.observer = new MutationObserver(observerCallback);
+        this.observer.observe(this.element, { childList: true, subtree: true });
+    }
+}
+
+;// CONCATENATED MODULE: ./src/icons/volume-mid.svg
+/* harmony default export */ const volume_mid = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"Layer_2\" data-name=\"Layer 2\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 21 18.88\">\n    <defs>\n        <style>\n            .speaker {\n            fill: #000;\n            stroke-width: 0px;\n            }\n        </style>\n    </defs>\n    <g id=\"Layer_1-2\" data-name=\"Layer 1\">\n        <path class=\"speaker\"\n            d=\"M12,1.5c0-1.34-1.62-2.01-2.56-1.06l-4.5,4.5h-1.93c-1.14,0-2.32.66-2.66,1.9C.12,7.69,0,8.57,0,9.44,0,10.34.12,11.21.35,12.04c.34,1.24,1.52,1.9,2.66,1.9h1.93l4.5,4.5c.94.94,2.56.28,2.56-1.06,0,0,0-15.88,0-15.88ZM17.08,2.55c.29-.29.77-.29,1.06,0,3.81,3.81,3.81,9.98,0,13.79-.28.3-.76.32-1.06.04s-.32-.76-.04-1.06c.01-.01.02-.03.04-.04,3.22-3.22,3.22-8.45,0-11.67h0c-.29-.29-.29-.77,0-1.06Z\" />\n        <path class=\"speaker\"\n            d=\"M14.43,5.2c.29-.29.77-.29,1.06,0,0,0,0,0,0,0,2.34,2.34,2.34,6.14,0,8.49h0c-.3.29-.77.28-1.06-.02-.28-.29-.28-.75,0-1.04,1.76-1.76,1.76-4.61,0-6.36h0c-.29-.29-.29-.77,0-1.06h0Z\" />\n    </g>\n</svg>");
+;// CONCATENATED MODULE: ./src/tts/TTSControlsModule.ts
+
+
+
+
+class TTSControlsModule {
+    constructor(speechSynthesis) {
+        this.speechSynthesis = speechSynthesis;
+    }
+    createSpeechButton() {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.classList.add("text-center", "hover:bg-neutral-300", "saypi-speak-button");
+        button.title = i18n("readAloudButtonTitle");
+        button.innerHTML = volume_mid;
+        return button;
+    }
+    createSpeechButtonForMenu() {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.classList.add("saypi-speak-button");
+        // add pi.ai tailwind classes to the button
+        button.classList.add("flex", "h-12", "w-full", "items-center", "justify-between", "rounded", "px-2.5", "hover:bg-neutral-50-hover", "active:bg-neutral-50-tap", "active:text-primary-700");
+        button.title = i18n("readAloudButtonTitle");
+        button.innerHTML = button.title + volume_mid;
+        return button;
+    }
+    addSpeechButton(utterance, container, containerIsMenu = false) {
+        const button = containerIsMenu
+            ? this.createSpeechButtonForMenu()
+            : this.createSpeechButton();
+        button.addEventListener("click", () => {
+            EventBus.emit("saypi:tts:replaying", utterance); //  notify the ui manager that the next speech it hears will be a replay
+            this.speechSynthesis.speak(utterance);
+        });
+        container.appendChild(button);
+    }
+    createCostElementForMenu() {
+        const costElement = document.createElement("button");
+        costElement.classList.add("saypi-cost");
+        costElement.classList.add("flex", "h-12", "w-full", "items-center", "justify-between", "rounded", "px-2.5", "hover:bg-neutral-50-hover", "active:bg-neutral-50-tap", "active:text-primary-700");
+        return costElement;
+    }
+    createCostElementForMessage() {
+        const costElement = document.createElement("span");
+        costElement.classList.add("saypi-cost", "text-sm", "text-neutral-500");
+        return costElement;
+    }
+    /**
+     * Add the cost of the TTS stream to the chat message
+     * @param container The menu element to add the cost basis to
+     * @param characterCount The number of characters in the message
+     */
+    addCostBasis(container, charge, containerIsMenu = false) {
+        const cost = charge.cost;
+        if (cost === undefined) {
+            // cost should not be undefined, but just in case it is, don't display anything
+            return;
+        }
+        const currency = i18n("currencyUSDAbbreviation");
+        const costElement = containerIsMenu
+            ? this.createCostElementForMenu()
+            : this.createCostElementForMessage();
+        if (cost) {
+            costElement.title = i18n("ttsCostExplanation", [
+                cost.toFixed(2),
+                currency,
+            ]);
+        }
+        else {
+            costElement.title = i18n("ttsCostExplanationFree");
+            costElement.classList.add("cost-free");
+        }
+        costElement.innerHTML = `Cost: <span class="price">$<span class="value">${cost.toFixed(2)}</span></span>`;
+        container.appendChild(costElement);
+        return costElement;
+    }
+    addPoweredBy(container, voice) {
+        let poweredByElement = container.querySelector(".saypi-powered-by");
+        if (poweredByElement) {
+            return;
+        }
+        poweredByElement = document.createElement("div");
+        const ttsEngine = voice.powered_by;
+        const ttsLabel = i18n("ttsPoweredBy", ttsEngine);
+        poweredByElement.classList.add("text-sm", "text-neutral-500", "saypi-powered-by");
+        poweredByElement.title = ttsLabel;
+        const logoImageExt = ttsEngine === "inflection.ai" ? "png" : "svg"; // can't find a good svg for inflection.ai
+        const logoImageUrl = getResourceUrl(`icons/logos/${ttsEngine.toLowerCase()}.${logoImageExt}`);
+        poweredByElement.innerHTML = `<img src="${logoImageUrl}" alt="${ttsLabel}" class="h-4 w-4 inline-block">`;
+        container.appendChild(poweredByElement);
+    }
+    updateCostBasis(container, charge) {
+        const costElement = container.querySelector(".saypi-cost .value");
+        if (costElement) {
+            costElement.textContent = charge.cost.toFixed(2);
+            const currency = i18n("currencyUSDAbbreviation");
+            costElement.title = i18n("ttsCostExplanation", [
+                charge.cost.toFixed(2),
+                currency,
+            ]);
+        }
+    }
+    /**
+     * Start streaming the utterance's audio output immediately
+     * @param utterance The utterance to stream
+     * @param delayMs The number of milliseconds to wait before starting the stream
+     */
+    autoplaySpeech(utterance, delayMs = 0) {
+        // wait a beat, then start streaming the utterance
+        setTimeout(() => {
+            this.speechSynthesis.speak(utterance);
+        }, delayMs);
+    }
+}
+
+;// CONCATENATED MODULE: ./src/dom/BaseObserver.ts
+class BaseObserver {
+    constructor(searchRoot, selector) {
+        this.selector = selector;
+        if (searchRoot.matches(selector)) {
+            this.target = searchRoot;
+        }
+        else {
+            this.target = searchRoot.querySelector(selector);
+        }
+        this.observer = new MutationObserver(this.callback.bind(this));
+        if (!this.target) {
+            console.warn(`Element with selector ${selector} not found.`);
+        }
+    }
+    observe(options) {
+        if (this.target) {
+            this.observer.observe(this.target, options);
+        }
+    }
+    disconnect() {
+        this.observer.disconnect();
+    }
+}
+
+
+;// CONCATENATED MODULE: ./src/dom/Observation.ts
 class Observation {
-    constructor(target, id, found, isNew, decorated) {
+    constructor(target, id, found, isNew, decorated, decorations = []) {
         this.target = target;
         this.id = id;
         this.found = found;
         this.isNew = isNew;
         this.decorated = decorated;
+        this.decorations = decorations;
     }
     // Whether the observed element is fully loaded and ready to be used
     isReady() {
         return this.found && this.isNew && this.decorated;
     }
     // Whether the observed element has been found, but not yet decorated with the extension's enhancements
-    undecorated() {
+    isUndecorated() {
         return this.found && this.isNew && !this.decorated;
     }
     // Where the element does not exist in the DOM
@@ -33903,28 +37468,1026 @@ class Observation {
         return new Observation(null, id, false, false, false);
     }
     // Where the element exists in the DOM, and has already been decorated with the extension's enhancements
-    static foundExisting(id, element) {
+    static foundAlreadyDecorated(id, element) {
         return new Observation(element, id, true, false, true);
     }
     // Where the element exists in the DOM, and has newly been decorated with the extension's enhancements
-    static decorated(obs) {
-        return new Observation(obs.target, obs.id, obs.found, obs.isNew, true);
+    static foundAndDecorated(obs, decoration) {
+        const decor = decoration
+            ? [...obs.decorations, decoration]
+            : [obs.decorations];
+        return new Observation(obs.target, obs.id, obs.found, obs.isNew, true, decor);
     }
     // Where the element exists in the DOM, but has not been decorated with the extension's enhancements
-    static notDecorated(id, element) {
+    static foundUndecorated(id, element) {
         return new Observation(element, id, true, true, false);
     }
 }
+
+;// CONCATENATED MODULE: ./src/dom/MessageElements.ts
+var MessageElements_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+
+
+
+
+class PopupMenu {
+    constructor(element, speech, ttsControls) {
+        this.speech = speech;
+        this.ttsControls = ttsControls;
+        this._element = element;
+    }
+    get element() {
+        return this._element;
+    }
+    decorate() {
+        this._element.classList.add("popup-menu");
+        this.ttsControls.addSpeechButton(this.speech, this._element, true);
+    }
+    static find(chatbot, searchRoot) {
+        let popupMenu = searchRoot.querySelector(".popup-menu");
+        if (popupMenu) {
+            return Observation.foundAlreadyDecorated(".popup-menu", popupMenu);
+        }
+        popupMenu = searchRoot.querySelector(".shadow-input"); // TODO: generalize with Chatbot parameter
+        if (popupMenu) {
+            return Observation.foundUndecorated(".popup-menu", popupMenu);
+        }
+        return Observation.notFound(".popup-menu");
+    }
+}
+class AssistantResponse {
+    constructor(element, includeInitialText = true) {
+        this.stablised = false;
+        this.finalText = "";
+        this.includeInitialText = true; // stable text may be called on completed messages, so include the initial text unless streaming
+        this._element = element;
+        this.includeInitialText = includeInitialText;
+        this.ttsControlsModule = new TTSControlsModule(SpeechSynthesisModule.getInstance());
+        this.decorate();
+    }
+    decorate() {
+        return MessageElements_awaiter(this, void 0, void 0, function* () {
+            this._element.classList.add("chat-message", "assistant-message");
+            yield this.decoratedContent();
+        });
+    }
+    /**
+     * Waits for the content of the chat message to load and returns it
+     * The content is the main text of the chat message, excluding any metadata or buttons
+     * @returns Promise<HTMLElement> - the content of the chat message
+     */
+    decoratedContent() {
+        return MessageElements_awaiter(this, void 0, void 0, function* () {
+            const content = this._element.querySelector(".content");
+            if (content) {
+                // content already found and decorated
+                return content;
+            }
+            const wfull = this._element.querySelector(".w-full");
+            if (wfull) {
+                // content found but not decorated yet
+                wfull.classList.add("content");
+                return wfull;
+            }
+            // content not found, wait for it to load
+            return new Promise((resolve) => {
+                const observer = new MutationObserver((mutations) => {
+                    for (const mutation of mutations) {
+                        for (const node of [...mutation.addedNodes]) {
+                            if (node instanceof HTMLElement) {
+                                const addedElement = node;
+                                // TODO: w-full is specific to Pi.ai, should be generalized with Chatbot parameter
+                                if (addedElement.classList.contains("w-full")) {
+                                    addedElement.classList.add("content");
+                                    observer.disconnect();
+                                    resolve(addedElement);
+                                }
+                            }
+                        }
+                    }
+                });
+                observer.observe(this._element, { childList: true, subtree: true });
+            });
+        });
+    }
+    /**
+     * Get the text content of the chat message,
+     * as it is at the time of calling this method, which may not be completely loaded if the response is still streaming
+     * Get stableText() to get the finished text content of the chat message
+     */
+    get text() {
+        const contentNode = this._element.querySelector(".content");
+        if (contentNode) {
+            const content = contentNode;
+            const textContent = content.innerText || content.textContent || "";
+            return textContent.replace(/\n/g, AssistantResponse.PARAGRAPH_SEPARATOR);
+        }
+        return "";
+    }
+    stableText() {
+        return MessageElements_awaiter(this, void 0, void 0, function* () {
+            if (this.stablised) {
+                return this.finalText;
+            }
+            const content = yield this.decoratedContent();
+            const textStream = new ElementTextStream(content, this.includeInitialText);
+            const textBuffer = [];
+            return new Promise((resolve) => {
+                textStream.getStream().subscribe({
+                    next: (text) => {
+                        textBuffer.push(text);
+                    },
+                    complete: () => {
+                        this.stablised = true;
+                        this.finalText = textBuffer.join("");
+                        resolve(this.finalText);
+                    },
+                });
+            });
+        });
+    }
+    /**
+     * Get the md5 hash of the text content of the chat message
+     * Use this function only if you know the text content is already stable,
+     * otherwise get stableHash() to get the hash of the final text content
+     */
+    get hash() {
+        // return a md5 hash of the text content
+        return (0,md5.md5)(this.text);
+    }
+    stableHash() {
+        return MessageElements_awaiter(this, void 0, void 0, function* () {
+            // return a md5 hash of the text content
+            const stableText = yield this.stableText();
+            return (0,md5.md5)(stableText);
+        });
+    }
+    get element() {
+        return this._element;
+    }
+    get utteranceId() {
+        return this._element.dataset.utteranceId || null;
+    }
+    get isTTSEnabled() {
+        return this.utteranceId !== null;
+    }
+    watchForPopupMenu(hoverMenu, speech) {
+        const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                for (const node of [...mutation.addedNodes]) {
+                    if (node instanceof HTMLElement) {
+                        const addedElement = node;
+                        const obs = PopupMenu.find(new PiAIChatbot(), addedElement);
+                        if (obs.found && !obs.decorated) {
+                            const popupMenu = new PopupMenu(obs.target, speech, this.ttsControlsModule);
+                            popupMenu.decorate();
+                            EventBus.emit("saypi:tts:menuPop", {
+                                utteranceId: speech.id,
+                                menu: popupMenu,
+                            });
+                        }
+                    }
+                }
+            }
+        });
+        observer.observe(hoverMenu, { childList: true, subtree: false });
+    }
+    /**
+     * Apply speech to this chat message
+     * @param utterance
+     */
+    decorateSpeech(utterance) {
+        this._element.dataset.utteranceId = utterance.id;
+        this._element.classList.add("speech-enabled");
+        let hoverMenu = this.element.querySelector(".message-hover-menu");
+        if (!hoverMenu) {
+            if (this.element.children.length > 1) {
+                hoverMenu = this.element.children[1];
+                hoverMenu.classList.add("message-hover-menu");
+                if (hoverMenu.children.length > 0) {
+                    const createThreadButton = hoverMenu.children[0];
+                    createThreadButton.classList.add("create-thread-button");
+                }
+            }
+        }
+        this.watchForPopupMenu(hoverMenu, utterance);
+        let ttsControlsElement = this.element.querySelector(".saypi-tts-controls");
+        if (!ttsControlsElement) {
+            ttsControlsElement = document.createElement("div");
+            ttsControlsElement.id = `saypi-tts-controls-${utterance.id}`;
+            ttsControlsElement.classList.add("saypi-tts-controls", "pt-4");
+            hoverMenu === null || hoverMenu === void 0 ? void 0 : hoverMenu.appendChild(ttsControlsElement);
+        }
+        const speechButtonElement = ttsControlsElement.querySelector(".saypi-speak-button");
+        if (!speechButtonElement) {
+            this.ttsControlsModule.addSpeechButton(utterance, ttsControlsElement);
+        }
+        this.decorateCost(UtteranceCharge.none); // cost is unknown at this point
+        const costElement = ttsControlsElement.querySelector(".saypi-cost");
+        if (costElement && utterance.voice) {
+            this.ttsControlsModule.addPoweredBy(costElement, utterance.voice);
+        }
+    }
+    /**
+     * Apply a charge to this chat message
+     * Can be called multiple times to update the charge
+     * @param charge The cost of the speech
+     */
+    decorateCost(charge) {
+        const ttsControlsElement = this.element.querySelector(".saypi-tts-controls");
+        const costElement = this.element.querySelector(".saypi-cost");
+        if (ttsControlsElement && !costElement) {
+            this.ttsControlsModule.addCostBasis(ttsControlsElement, charge);
+        }
+        else if (costElement) {
+            this.ttsControlsModule.updateCostBasis(ttsControlsElement, charge);
+        }
+        EventBus.on("saypi:tts:menuPop", (event) => {
+            const id = this._element.dataset.utteranceId;
+            if (!id ||
+                id !== event.utteranceId ||
+                id !== charge.utteranceId ||
+                !charge.cost) {
+                return;
+            }
+            const menuElement = event.menu.element;
+            const menuCostElement = menuElement.querySelector(".saypi-cost");
+            if (menuCostElement) {
+                this.ttsControlsModule.updateCostBasis(menuElement, charge);
+            }
+            else {
+                this.ttsControlsModule.addCostBasis(menuElement, charge, true);
+            }
+        });
+    }
+}
+// visible for testing
+AssistantResponse.PARAGRAPH_SEPARATOR = ""; // should match ElementInputStream's delimiter argument
+
+
+;// CONCATENATED MODULE: ./src/dom/ChatHistory.ts
+var ChatHistory_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+
+
+
+
+
+/**
+ * Monitors the root element of the chat history for past and present sections
+ */
+class ChatHistoryRootElementObserver extends BaseObserver {
+    /* This class adds an id to the 2nd child of the element under observeration, whenever children are added to the element */
+    constructor(chatHistoryElement, selector, speechSynthesis, initialRun = true) {
+        super(chatHistoryElement, selector);
+        this.chatHistoryElement = chatHistoryElement;
+        this.oldMessageObserver = null;
+        this.speechSynthesis = speechSynthesis;
+        if (initialRun) {
+            this.runOnce();
+        }
+    }
+    /**
+     * Check if the child element is the container for the chat history's past messages
+     * @param child - a child of the chat history root element
+     */
+    handleChatHistoryChild(child) {
+        var _a;
+        // error if the child is not a direct descendant of the chat history element
+        if (!this.chatHistoryElement.contains(child)) {
+            console.error("Element is not a child of the chat history", child);
+            return;
+        }
+        const pastMessagesContainer = (_a = this.chatHistoryElement) === null || _a === void 0 ? void 0 : _a.querySelector(":nth-child(2)");
+        if (pastMessagesContainer == child) {
+            // add id to the 2nd child of the element
+            pastMessagesContainer.id = "saypi-chat-history-past-messages";
+            if (this.oldMessageObserver) {
+                this.oldMessageObserver.disconnect();
+            }
+            this.oldMessageObserver = new ChatHistoryOldMessageObserver(this.chatHistoryElement, `#${pastMessagesContainer.id}`, this.speechSynthesis);
+            this.oldMessageObserver
+                .runOnce(pastMessagesContainer)
+                .then((messages) => {
+                console.debug(`Found ${messages.length} old assistant messages`);
+            });
+            this.oldMessageObserver.observe({
+                childList: true,
+                subtree: false,
+            });
+        }
+    }
+    runOnce() {
+        return ChatHistory_awaiter(this, void 0, void 0, function* () {
+            // run once on the direct children of the root element
+            for (const node of [...this.chatHistoryElement.children]) {
+                if (node instanceof Element) {
+                    const child = node;
+                    this.handleChatHistoryChild(child);
+                }
+            }
+        });
+    }
+    callback(mutations) {
+        return ChatHistory_awaiter(this, void 0, void 0, function* () {
+            for (const mutation of mutations) {
+                for (const node of [...mutation.addedNodes]) {
+                    if (node instanceof Element) {
+                        const addedElement = node;
+                        this.handleChatHistoryChild(addedElement);
+                    }
+                }
+            }
+        });
+    }
+}
+class ChatHistoryMessageObserver extends BaseObserver {
+    constructor(chatHistoryElement, selector, speechSynthesis) {
+        super(chatHistoryElement, selector);
+        this.haltOnFirst = false; // stop searching after the first chat message is found
+        this.speechSynthesis = speechSynthesis;
+        this.ttsControlsModule = new TTSControlsModule(speechSynthesis);
+    }
+    callback(mutations) {
+        return ChatHistory_awaiter(this, void 0, void 0, function* () {
+            for (const mutation of mutations) {
+                for (const node of [...mutation.addedNodes]) {
+                    if (node instanceof Element) {
+                        const addedElement = node;
+                        const responseObs = yield this.findAndDecorateAssistantResponse(addedElement);
+                        if (this.haltOnFirst && responseObs.isReady()) {
+                            // only expecting one new chat message at a time, so
+                            // skip this mutation if the chat message is already decorated
+                            return; // break early
+                        }
+                    }
+                }
+            }
+        });
+    }
+    static findAssistantResponse(searchRoot) {
+        const query = "div.break-anywhere:not(.justify-end)"; // TODO: -> this.chatbot.getAssistantResponseSelector();
+        const deepMatch = searchRoot.querySelector(query);
+        if (deepMatch) {
+            const found = Observation.foundUndecorated(deepMatch.id, deepMatch);
+            if (deepMatch.classList.contains("assistant-message")) {
+                return Observation.foundAndDecorated(found);
+            }
+            return found;
+        }
+        /* I have no idea why the query selector doesn't cover the case below too, but it sometimes doesn't */
+        if (searchRoot.classList.contains("break-anywhere") &&
+            !searchRoot.classList.contains("justify-end")) {
+            const found = Observation.foundUndecorated(searchRoot.id, searchRoot);
+            if (searchRoot.classList.contains("assistant-message")) {
+                return Observation.foundAndDecorated(found);
+            }
+            return found;
+        }
+        return Observation.notFound("");
+    }
+    /**
+     * Decorates the assistant response with the necessary classes and attributes,
+     * but does not add any additional functionality, i.e. speech
+     * @param messageElement - the chat message to decorate
+     * @returns AssistantResponse - the decorated chat message
+     */
+    decorateAssistantResponse(messageElement) {
+        const message = new AssistantResponse(messageElement);
+        return message;
+    }
+    /**
+     * Decorates the assistant response with speech functionality
+     * @deprecated - use AssistantResponse.decorateSpeech() instead
+     */
+    decorateAssistantResponseWithSpeech(message, speech) { }
+    findAndDecorateAssistantResponse(searchRoot) {
+        return ChatHistory_awaiter(this, void 0, void 0, function* () {
+            let obs = ChatHistoryMessageObserver.findAssistantResponse(searchRoot);
+            if (obs.found) {
+                console.log("Found assistant message", obs);
+            }
+            if (obs.found && obs.isNew && !obs.decorated) {
+                const message = this.decorateAssistantResponse(obs.target);
+                obs = Observation.foundAndDecorated(obs, message);
+                const speech = yield this.streamSpeech(message);
+                if (speech === null || speech === void 0 ? void 0 : speech.utterance) {
+                    message.decorateSpeech(speech.utterance);
+                }
+                if (speech === null || speech === void 0 ? void 0 : speech.charge) {
+                    message.decorateCost(speech.charge);
+                }
+            }
+            return obs;
+        });
+    }
+    streamSpeechFromHistory(history, message) {
+        return ChatHistory_awaiter(this, void 0, void 0, function* () {
+            const speechRecord = yield history.getSpeechFromHistory(message.hash);
+            if (speechRecord) {
+                console.debug("Found message in speech history", speechRecord);
+                return speechRecord;
+            }
+            else {
+                // speech not cached
+                return null;
+            }
+        });
+    }
+}
+class ChatHistoryOldMessageObserver extends ChatHistoryMessageObserver {
+    constructor() {
+        super(...arguments);
+        this.speechHistory = SpeechHistoryModule.getInstance();
+    }
+    /**
+     * Run the observer once on the direct children of the root element
+     * Used for initial decoration of the chat history, before additional chat messages are loaded
+     * @param root: Element - the root of a tree of possible chat messages
+     */
+    runOnce(root) {
+        return ChatHistory_awaiter(this, void 0, void 0, function* () {
+            let messagesFound = [];
+            for (const node of [...root.children]) {
+                if (node instanceof Element) {
+                    const child = node;
+                    const observation = yield this.findAndDecorateAssistantResponse(child);
+                    if (observation.isReady() && observation.decorations.length > 0) {
+                        messagesFound.push(observation.decorations[0]);
+                    }
+                }
+            }
+            return messagesFound;
+        });
+    }
+    streamSpeech(message) {
+        return ChatHistory_awaiter(this, void 0, void 0, function* () {
+            // query the speech history module for the utterance
+            return yield this.streamSpeechFromHistory(this.speechHistory, message);
+        });
+    }
+}
+class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
+    constructor(chatHistoryElement, selector, speechSynthesis, ignoreMessages = []) {
+        super(chatHistoryElement, selector, speechSynthesis);
+        this.speechHistory = SpeechHistoryModule.getInstance();
+        this.EventListeners = [];
+        this.textStream = null;
+        this.haltOnFirst = true; // only expecting to load one new chat message at a time
+        this.ignoreMessages = ignoreMessages;
+    }
+    /**
+     * Override the default decoration method to account for the behaviour of new messages
+     */
+    decorateAssistantResponse(messageElement) {
+        const message = new AssistantResponse(messageElement, false); // streaming assistant messages should not include initial text
+        return message;
+    }
+    // Chat history and automatic speech functionality
+    streamSpeech(message) {
+        return ChatHistory_awaiter(this, void 0, void 0, function* () {
+            // check if the message is already in the ignore list
+            console.debug("Checking if message is in ignore list", message.text);
+            if (this.ignoreMessages.some((m) => m.hash === message.hash)) {
+                console.debug("Message is in ignore list, stream from history instead");
+                return yield this.streamSpeechFromHistory(this.speechHistory, message);
+            }
+            const provider = yield this.speechSynthesis.getActiveAudioProvider();
+            if (provider === audioProviders.SayPi) {
+                const utterance = yield this.speechSynthesis.createSpeechStream();
+                message.decorateSpeech(utterance);
+                console.debug("Opened audio input stream", utterance.id);
+                const messageContent = yield message.decoratedContent();
+                this.observeChatMessageElement(messageContent, utterance, () => this.ttsControlsModule.autoplaySpeech(utterance, 200), (text) => {
+                    console.debug("Closed audio input stream", utterance.id);
+                    console.debug("Streamed text:", text);
+                    const charge = BillingModule.getInstance().charge(utterance, text);
+                    console.debug("Charging for TTS", charge);
+                    message.decorateCost(charge);
+                    console.debug("Saving charge to history", charge);
+                    this.speechHistory.addChargeToHistory(charge.utteranceHash, charge);
+                });
+                return new AssistantSpeech(utterance);
+            }
+            else {
+                // speech will be generated by Pi.ai, stream details not available yet
+                const streamStartedListener = (utterance) => {
+                    message.decorateSpeech(utterance);
+                    return new AssistantSpeech(utterance);
+                };
+                EventBus.on("saypi:tts:speechStreamStarted", streamStartedListener);
+                this.EventListeners.push({
+                    event: "saypi:tts:speechStreamStarted",
+                    listener: streamStartedListener,
+                });
+                return null;
+            }
+        });
+    }
+    teardown() {
+        for (const listener of this.EventListeners) {
+            EventBus.off(listener.event, listener.listener);
+        }
+    }
+    disconnect() {
+        super.disconnect();
+        this.teardown();
+    }
+    observeChatMessageElement(messageContent, utterance, onStart, onEnd) {
+        // If we're already observing an element, disconnect from it
+        if (this.textStream) {
+            this.textStream.disconnect();
+        }
+        // Start observing the new element
+        this.textStream = new ElementTextStream(messageContent);
+        let firstChunkTime = null;
+        let fullText = ""; // Variable to accumulate the text
+        this.textStream.getStream().subscribe((text) => {
+            let start = false;
+            if (text) {
+                fullText += text; // Add the text chunk to the full text
+                const currentTime = Date.now();
+                if (firstChunkTime === null) {
+                    firstChunkTime = currentTime;
+                    start = true;
+                }
+                const delay = currentTime - firstChunkTime;
+                console.debug(`+${delay}ms, streamed text: "${text}"`);
+                this.speechSynthesis
+                    .addSpeechToStream(utterance.id, text)
+                    .then(() => {
+                    if (start) {
+                        onStart();
+                    }
+                });
+            }
+        }, (error) => {
+            console.error(`Error occurred streaming text from element: ${error}`);
+        }, () => {
+            if (firstChunkTime) {
+                const totalTime = Date.now() - firstChunkTime;
+                console.info(`Text stream complete after ${(totalTime / 1000).toFixed(1)} seconds`);
+            }
+            else {
+                console.info("Text stream complete with no text");
+            }
+            this.speechSynthesis.endSpeechStream(utterance);
+            if (onEnd) {
+                onEnd(fullText); // Pass the full text to the onEnd callback
+            }
+        });
+    }
+}
+/**
+ * Get the most recent assistant message from the chat history
+ */
+function getMostRecentAssistantMessage() {
+    const assistantMessages = document.querySelectorAll(".assistant-message");
+    if (assistantMessages.length > 0) {
+        const messageElement = assistantMessages[assistantMessages.length - 1];
+        return new AssistantResponse(messageElement);
+    }
+    return null;
+}
+
+
+;// CONCATENATED MODULE: ./src/tts/VoiceMenu.ts
+var VoiceMenu_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+
+class VoiceMenu {
+    constructor(chatbot, userPreferences, element) {
+        this.selectedVoiceButton = null;
+        this.chatbot = chatbot;
+        this.userPreferences = userPreferences;
+        this.element = element;
+        this.addIdVoiceMenu(element);
+        this.restyleVoiceMenuControls(element);
+        this.addVoiceMenuExpansionListener();
+        this.addVoiceButtonAdditionListener(element);
+    }
+    addIdVoiceMenu(element) {
+        element.id = "saypi-voice-menu";
+    }
+    restyleVoiceMenuControls(voiceMenu) {
+        let obs;
+        const voiceMenuControls = voiceMenu.nextSibling;
+        if (!voiceMenuControls || !(voiceMenuControls instanceof HTMLElement)) {
+            obs = Observation.notFound("saypi-voice-menu-controls");
+            return obs;
+        }
+        voiceMenuControls.id = "saypi-voice-menu-controls";
+        obs = Observation.foundUndecorated("saypi-voice-menu-controls", voiceMenuControls);
+        const observer = new MutationObserver((mutationsList) => {
+            for (let mutation of mutationsList) {
+                if (mutation.type === "attributes" &&
+                    mutation.attributeName === "class" &&
+                    voiceMenuControls.classList.contains("self-end")) {
+                    voiceMenuControls.classList.remove("self-end");
+                }
+            }
+        });
+        observer.observe(voiceMenuControls, {
+            attributes: true,
+            attributeFilter: ["class"],
+        });
+        return Observation.foundAndDecorated(obs);
+    }
+    // Voice selection management
+    registerVoiceChangeHandler(menu) {
+        const voiceButtons = Array.from(menu.querySelectorAll("button"));
+        if (!voiceButtons || voiceButtons.length === 0) {
+            return false;
+        }
+        const builtInPiVoiceButtons = voiceButtons.filter((button) => this.isBuiltInVoiceButton(button));
+        builtInPiVoiceButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                this.userPreferences.unsetVoice().then(() => {
+                    if (this.selectedVoiceButton) {
+                        this.unmarkButtonAsSelectedVoice(this.selectedVoiceButton);
+                    }
+                    this.markButtonAsSelectedVoice(button);
+                });
+            });
+        });
+        return true;
+    }
+    addVoiceMenuExpansionListener() {
+        const audioControlsContainer = document.getElementById("saypi-audio-controls");
+        const voiceMenu = document.getElementById("saypi-voice-menu");
+        if (!audioControlsContainer || !voiceMenu) {
+            return Observation.notFound("saypi-audio-controls");
+        }
+        let foundAudioCtrls = Observation.foundUndecorated("saypi-audio-controls", audioControlsContainer);
+        const observerCallback = (mutationsList, observer) => VoiceMenu_awaiter(this, void 0, void 0, function* () {
+            for (let mutation of mutationsList) {
+                if (mutation.type === "childList") {
+                    for (let node of mutation.addedNodes) {
+                        // the addition of a button with an aria-label giving instructions to "close the menu", indicates the voice menu is expanded
+                        if (node instanceof HTMLElement &&
+                            node.nodeName === "BUTTON" &&
+                            node.getAttribute("aria-label") &&
+                            node === audioControlsContainer.firstChild) {
+                            voiceMenu.classList.add("expanded");
+                            // mark the selected voice each time the menu is expanded (because pi.ai recreates the menu each time)
+                            this.userPreferences.getTextToSpeechEnabled().then((enabled) => {
+                                if (enabled)
+                                    this.addVoicesToMenu(voiceMenu);
+                            });
+                            this.registerVoiceChangeHandler(voiceMenu);
+                        }
+                    }
+                    for (let node of mutation.removedNodes) {
+                        if (node instanceof HTMLElement &&
+                            node.nodeName === "BUTTON" &&
+                            node.getAttribute("aria-label")) {
+                            voiceMenu.classList.remove("expanded");
+                            return;
+                        }
+                    }
+                }
+            }
+        });
+        const observer = new MutationObserver(observerCallback);
+        observer.observe(audioControlsContainer, { childList: true });
+        return Observation.foundAndDecorated(foundAudioCtrls); // Assuming listener doesn't require further checks
+    }
+    introduceVoice(voice) {
+        const lastMessage = getMostRecentAssistantMessage();
+        const introduction = (lastMessage === null || lastMessage === void 0 ? void 0 : lastMessage.text) || "Hello, I am Pi.";
+        const speechSynthesis = SpeechSynthesisModule.getInstance();
+        speechSynthesis.createSpeech(introduction).then((utterance) => {
+            utterance.voice = voice;
+            speechSynthesis.speak(utterance);
+        });
+    }
+    populateVoices(voices, menu) {
+        if (!voices || voices.length === 0) {
+            console.log("No voices found");
+            return false;
+        }
+        const customVoiceButtons = Array(voices.length);
+        voices.forEach((voice) => {
+            // if not already in the menu, add the voice
+            if (menu.querySelector(`button[data-voice-id="${voice.id}"]`)) {
+                // voice already in menu, skip to next voice
+                return;
+            }
+            const button = document.createElement("button");
+            // template: <button type="button" class="mb-1 rounded px-2 py-3 text-center hover:bg-neutral-300">Pi 6</button>
+            button.type = "button";
+            button.classList.add("mb-1", "rounded", "px-2", "py-3", "text-center", "hover:bg-neutral-300", "saypi-voice-button", "saypi-custom-voice");
+            const name = document.createElement("span");
+            name.classList.add("voice-name");
+            name.innerText = voice.name;
+            button.appendChild(name);
+            const flair = document.createElement("img");
+            flair.classList.add("flair");
+            flair.src = getResourceUrl("icons/logos/saypi.png");
+            flair.alt = "Say, Pi logo";
+            flair.title = i18n("enhancedVoice");
+            button.appendChild(flair);
+            button.addEventListener("click", () => {
+                this.userPreferences.setVoice(voice).then(() => {
+                    console.log(`Selected voice: ${voice.name}`);
+                    customVoiceButtons.forEach((button) => {
+                        this.unmarkButtonAsSelectedVoice(button);
+                    });
+                    const voiceButtons = menu.querySelectorAll("button");
+                    voiceButtons.forEach((button) => {
+                        if (this.isBuiltInVoiceButton(button)) {
+                            this.unmarkButtonAsSelectedVoice(button);
+                        }
+                    });
+                    this.markButtonAsSelectedVoice(button);
+                    this.introduceVoice(voice);
+                });
+            });
+            button.dataset.voiceId = voice.id;
+            customVoiceButtons.push(button);
+        });
+        customVoiceButtons.reverse().forEach((button) => {
+            menu.insertBefore(button, menu.firstChild);
+        });
+        return true;
+    }
+    addVoicesToMenu(voiceMenu) {
+        const speechSynthesis = SpeechSynthesisModule.getInstance();
+        speechSynthesis.getVoices().then((voices) => {
+            this.populateVoices(voices, voiceMenu);
+        });
+    }
+    markButtonAsSelectedVoice(button) {
+        button.disabled = true;
+        button.classList.add("selected", "bg-neutral-300", "text-primary-700");
+        button.classList.remove("hover:bg-neutral-300");
+        if (this.selectedVoiceButton) {
+            this.unmarkButtonAsSelectedVoice(this.selectedVoiceButton);
+        }
+        this.selectedVoiceButton = button;
+    }
+    unmarkButtonAsSelectedVoice(button) {
+        button.disabled = false;
+        button.classList.remove("selected", "bg-neutral-300", "text-primary-700");
+        button.classList.add("hover:bg-neutral-300");
+    }
+    // Helper for identifying built-in Pi voice buttons
+    isBuiltInVoiceButton(button) {
+        return !button.classList.contains("saypi-custom-voice");
+    }
+    // Listen for additions of custom voice buttons and update selections
+    addVoiceButtonAdditionListener(voiceMenu) {
+        const observerCallback = (mutationsList, observer) => {
+            for (let mutation of mutationsList) {
+                if (mutation.type === "childList") {
+                    for (let node of mutation.addedNodes) {
+                        if (node.nodeName === "BUTTON" &&
+                            node instanceof HTMLButtonElement) {
+                            // a voice button was added to the menu that is not a custom voice button
+                            // if a voice is selected, mark the button as selected
+                            this.userPreferences.getVoice().then((voice) => {
+                                const customVoiceIsSelected = voice !== null;
+                                if (customVoiceIsSelected) {
+                                    if (this.isBuiltInVoiceButton(node)) {
+                                        this.unmarkButtonAsSelectedVoice(node);
+                                    }
+                                    else if (node.dataset.voiceId === voice.id) {
+                                        // unmark all other buttons and mark this one as selected
+                                        const voiceButtons = Array.from(voiceMenu.querySelectorAll("button"));
+                                        voiceButtons.forEach((button) => {
+                                            this.unmarkButtonAsSelectedVoice(button);
+                                        });
+                                        this.markButtonAsSelectedVoice(node);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        };
+        const observer = new MutationObserver(observerCallback);
+        observer.observe(voiceMenu, { childList: true });
+    }
+}
+
+;// CONCATENATED MODULE: ./src/tts/ChatHistoryManager.ts
+var ChatHistoryManager_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+
+
+
+
+
+class ChatHistorySpeechManager {
+    findAndDecorateVoiceMenu() {
+        const audioControlsContainer = document.querySelector("#saypi-audio-controls");
+        if (!audioControlsContainer) {
+            return Observation.notFound("saypi-audio-controls");
+        }
+        const voiceMenuElement = audioControlsContainer.querySelector(this.chatbot.getVoiceMenuSelector());
+        if (voiceMenuElement && voiceMenuElement instanceof HTMLElement) {
+            let obs = Observation.foundUndecorated("saypi-voice-menu", voiceMenuElement);
+            this.voiceMenu = new VoiceMenu(this.chatbot, this.userPreferences, voiceMenuElement);
+            return Observation.foundAndDecorated(obs);
+        }
+        return Observation.notFound("saypi-voice-menu");
+    }
+    // Methods for DOM manipulation and element ID assignment
+    addIdChatHistory(chatHistory) {
+        chatHistory.id = "saypi-chat-history";
+        // the past messages container will be replaced when the chat history is updated, so is monitored for changes in RootChatHistoryObserver
+        const pastChatMessagesContainer = chatHistory.querySelector(":nth-child(2)");
+        if (pastChatMessagesContainer) {
+            pastChatMessagesContainer.id = "saypi-chat-history-past-messages";
+        }
+        if (chatHistory.children.length >= 3) {
+            const presentChatMessagesContainer = chatHistory.children[2];
+            //  chatHistory.querySelector(":nth-child(3)"); // less reliable than direct access, for some reason
+            if (presentChatMessagesContainer) {
+                presentChatMessagesContainer.id = "saypi-chat-history-present-messages";
+            }
+        }
+        else {
+            console.warn("Present messages container not found in chat history.", chatHistory);
+        }
+    }
+    /**
+     * Find the message in the chat history that corresponds to the given utterance,
+     * and associate the utterance with that message in the speech history.
+     * @param utterance A spoken reading of a chat message
+     */
+    associateWithChatHistory(searchRoot, utterance) {
+        // get most recent message in chat history
+        const speech = new AssistantSpeech(utterance);
+        const assistantMessages = searchRoot.querySelectorAll(".assistant-message");
+        if (assistantMessages.length > 0) {
+            const lastAssistantMessage = assistantMessages[assistantMessages.length - 1];
+            const assistantMessage = new AssistantResponse(lastAssistantMessage);
+            assistantMessage.decorateSpeech(utterance);
+            // ensure the AssistantResponse object has finished mutating before generating its hash
+            assistantMessage.stableHash().then((hash) => {
+                // debug: verify the hashes have converged
+                if (hash !== assistantMessage.hash) {
+                    console.error(`Hash mismatch: ${hash} vs ${assistantMessage.hash}`);
+                    if (hash === this.md5OfNothing) {
+                        console.error("Hash is md5 of nothing - stable text failed to resolve.");
+                    }
+                    else if (hash === this.md5OfSpace) {
+                        console.error("Hash is md5 of ' ' - text stream may be empty.");
+                    }
+                    assistantMessage.stableText().then((stableText) => {
+                        console.debug(`Stable text: "${stableText}"`);
+                        console.debug(`Assistant text: "${assistantMessage.text}"`);
+                    });
+                    return;
+                }
+                console.debug(`Adding speech to history with hash: ${hash}`);
+                SpeechHistoryModule.getInstance().addSpeechToHistory(hash, speech);
+            });
+        }
+    }
+    registerPastChatHistoryListener(chatHistoryElement) {
+        // this listener keeps track of the top-level chat history containers,
+        // and recursively observes the children of the past messages container
+        const rootChatHistoryObserver = new ChatHistoryRootElementObserver(chatHistoryElement, "#saypi-chat-history", this.speechSynthesis);
+        rootChatHistoryObserver.observe({
+            childList: true,
+            subtree: false,
+        });
+        this.observers.push(rootChatHistoryObserver);
+    }
+    registerPresentChatHistoryListener(chatHistoryElement) {
+        return ChatHistoryManager_awaiter(this, void 0, void 0, function* () {
+            const selector = "#saypi-chat-history-present-messages";
+            const existingMessagesObserver = new ChatHistoryOldMessageObserver(chatHistoryElement, selector, this.speechSynthesis); // this type of observer streams speech from the speech history
+            const initialMessages = yield existingMessagesObserver // TODO const oldMessages = await ...
+                .runOnce(chatHistoryElement.querySelector(selector)); // run on initial content, i.e. most recent message in chat history
+            console.debug(`Found ${initialMessages.length} recent assistant message(s)`);
+            existingMessagesObserver.disconnect(); // only run once
+            const newMessagesObserver = new ChatHistoryNewMessageObserver(chatHistoryElement, selector, this.speechSynthesis, initialMessages // ignore these messages when observing new messages
+            ); // this type of observer streams speech from the TTS service
+            // continuously observe the chat history for new messages
+            newMessagesObserver.observe({
+                childList: true,
+                subtree: true,
+                attributes: true,
+            }); // would be more efficient to observe only the direct children of the chat history, but this is more robust
+            this.observers.push(newMessagesObserver);
+            return newMessagesObserver;
+        });
+    }
+    // Register event listeners and store them for later removal
+    registerSpeechStreamListeners(chatHistoryElement) {
+        const replayingListener = (utterance) => {
+            this.replaying = true;
+        };
+        const speechStreamStartedListener = (utterance) => {
+            if (utterance && !this.replaying) {
+                this.associateWithChatHistory(chatHistoryElement, utterance);
+            }
+            this.replaying = false;
+        };
+        EventBus.on("saypi:tts:replaying", replayingListener);
+        EventBus.on("saypi:tts:speechStreamStarted", speechStreamStartedListener);
+        this.eventListeners.push({ event: "saypi:tts:replaying", listener: replayingListener }, {
+            event: "saypi:tts:speechStreamStarted",
+            listener: speechStreamStartedListener,
+        });
+    }
+    // Teardown method to disconnect event listeners and release resources
+    teardown() {
+        this.eventListeners.forEach(({ event, listener }) => {
+            EventBus.off(event, listener);
+        });
+        this.eventListeners = [];
+        this.observers.forEach((observer) => {
+            observer.disconnect();
+        });
+        this.observers = [];
+    }
+    // Constructor
+    constructor(chatbot, chatHistoryElement) {
+        this.chatbot = chatbot;
+        this.userPreferences = UserPreferenceModule.getInstance();
+        this.speechSynthesis = SpeechSynthesisModule.getInstance();
+        this.ttsControls = new TTSControlsModule(this.speechSynthesis);
+        this.replaying = false; // flag to indicate whether the user requested a replay of an utterance
+        this.voiceMenu = null;
+        // managed resources
+        this.eventListeners = [];
+        this.observers = [];
+        this.md5OfNothing = "d41d8cd98f00b204e9800998ecf8427e";
+        this.md5OfSpace = "7215ee9c7d9dc229d2921a40e899ec5f";
+        this.addIdChatHistory(chatHistoryElement);
+        this.findAndDecorateVoiceMenu(); // voice menu is not within the chat history, but is a related element
+        this.registerPastChatHistoryListener(chatHistoryElement);
+        this.registerPresentChatHistoryListener(chatHistoryElement);
+        this.registerSpeechStreamListeners(chatHistoryElement);
+    }
+}
+
+;// CONCATENATED MODULE: ./src/chatbots/bootstrap.ts
+
+
+
+
 class DOMObserver {
     constructor(chatbot) {
         this.chatbot = chatbot;
+        this.ttsUiMgr = null;
     }
     observeDOM() {
         // MutationObserver setup in a separate file or the same file where you start observing
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 [...mutation.addedNodes]
-                    .filter((node) => node instanceof Element)
+                    .filter((node) => node instanceof HTMLElement)
                     .forEach((node) => {
                     const addedElement = node;
                     const promptObs = this.findAndDecoratePromptField(addedElement);
@@ -33937,13 +38500,14 @@ class DOMObserver {
                     const audioControlsObs = this.findAndDecorateAudioControls(addedElement);
                     const audioOutputButtonObs = this.findAndDecorateAudioOutputButton(addedElement);
                     // ... handle other elements
+                    const chatHistoryObs = this.findAndDecorateChatHistory(addedElement);
                     // notify listeners that (all critical) script content has been loaded
                     if (promptObs.isReady()) {
                         EventBus.emit("saypi:ui:content-loaded");
                     }
                 });
                 [...mutation.removedNodes]
-                    .filter((node) => node instanceof Element)
+                    .filter((node) => node instanceof HTMLElement)
                     .forEach((node) => {
                     const removedElement = node;
                     const obs = this.findPromptField(removedElement);
@@ -33969,6 +38533,11 @@ class DOMObserver {
                     if (audioOutputButtonObs.found) {
                         // Audio output button is being removed, so search for a replacement in the main document
                         this.findAndDecorateAudioOutputButton(document.body);
+                    }
+                    const chatHistoryObs = this.findChatHistory(removedElement);
+                    if (chatHistoryObs.found) {
+                        // Chat history is being removed, so search for a replacement in the main document
+                        this.findAndDecorateChatHistory(document.body);
                     }
                 });
             });
@@ -33999,7 +38568,7 @@ class DOMObserver {
         const id = "saypi-control-panel-main";
         var mainControlPanel = document.getElementById(id);
         if (mainControlPanel) {
-            return Observation.foundExisting(id, mainControlPanel);
+            return Observation.foundAlreadyDecorated(id, mainControlPanel);
         }
         mainControlPanel = searchRoot.querySelector(this.chatbot.getControlPanelSelector());
         if (!mainControlPanel) {
@@ -34021,18 +38590,18 @@ class DOMObserver {
         if (obs.found && obs.isNew && !obs.decorated) {
             this.decorateControlPanel(obs.target);
         }
-        return Observation.decorated(obs);
+        return Observation.foundAndDecorated(obs);
     }
     findSidePanel(searchRoot) {
         const id = "saypi-side-panel";
         const existingSidePanel = document.getElementById(id);
         if (existingSidePanel) {
             // Side panel already exists, no need to search
-            return Observation.foundExisting(id, existingSidePanel);
+            return Observation.foundAlreadyDecorated(id, existingSidePanel);
         }
         const sidePanel = searchRoot.querySelector(this.chatbot.getSidePanelSelector());
         if (sidePanel) {
-            return Observation.notDecorated(id, sidePanel);
+            return Observation.foundUndecorated(id, sidePanel);
         }
         return Observation.notFound(id);
     }
@@ -34047,18 +38616,18 @@ class DOMObserver {
         if (obs.found && obs.isNew && !obs.decorated) {
             this.decorateSidePanel(obs.target);
         }
-        return Observation.decorated(obs);
+        return Observation.foundAndDecorated(obs);
     }
     findDiscoveryPanel(searchRoot) {
         const id = "saypi-discovery-panel";
         const existingDiscoveryPanel = document.getElementById(id);
         if (existingDiscoveryPanel) {
             // Discovery panel already exists, no need to search
-            return Observation.foundExisting(id, existingDiscoveryPanel);
+            return Observation.foundAlreadyDecorated(id, existingDiscoveryPanel);
         }
         const discoveryPanel = searchRoot.querySelector(this.chatbot.getDiscoveryPanelSelector());
         if (discoveryPanel) {
-            return Observation.notDecorated(id, discoveryPanel);
+            return Observation.foundUndecorated(id, discoveryPanel);
         }
         return Observation.notFound(id);
     }
@@ -34070,7 +38639,7 @@ class DOMObserver {
         if (obs.found && obs.isNew && !obs.decorated) {
             this.decorateDiscoveryPanel(obs.target);
         }
-        return Observation.decorated(obs);
+        return Observation.foundAndDecorated(obs);
     }
     addIdSubmitButton(container) {
         const submitButtons = container.querySelectorAll("button[type=button]");
@@ -34096,11 +38665,11 @@ class DOMObserver {
         const existingPrompt = document.getElementById(id);
         if (existingPrompt) {
             // Prompt already exists, no need to search
-            return Observation.foundExisting(id, existingPrompt);
+            return Observation.foundAlreadyDecorated(id, existingPrompt);
         }
         const promptInput = searchRoot.querySelector(this.chatbot.getPromptTextInputSelector());
         if (promptInput) {
-            return Observation.notDecorated(id, promptInput);
+            return Observation.foundUndecorated(id, promptInput);
         }
         return Observation.notFound(id);
     }
@@ -34109,18 +38678,18 @@ class DOMObserver {
         if (obs.found && obs.isNew && !obs.decorated) {
             this.decoratePrompt(obs.target);
         }
-        return Observation.decorated(obs);
+        return Observation.foundAndDecorated(obs);
     }
     findAudioControls(searchRoot) {
         const id = "saypi-audio-controls";
         const existingAudioControls = document.getElementById(id);
         if (existingAudioControls) {
             // Audio controls already exist, no need to search
-            return Observation.foundExisting(id, existingAudioControls);
+            return Observation.foundAlreadyDecorated(id, existingAudioControls);
         }
         const audioControls = searchRoot.querySelector(this.chatbot.getAudioControlsSelector());
         if (audioControls) {
-            return Observation.notDecorated(id, audioControls);
+            return Observation.foundUndecorated(id, audioControls);
         }
         return Observation.notFound(id);
     }
@@ -34129,21 +38698,21 @@ class DOMObserver {
     }
     findAndDecorateAudioControls(searchRoot) {
         const obs = this.findAudioControls(searchRoot);
-        if (obs.undecorated()) {
+        if (obs.isUndecorated()) {
             this.decorateAudioControls(obs.target);
         }
-        return Observation.decorated(obs);
+        return Observation.foundAndDecorated(obs);
     }
     findAudioOutputButton(searchRoot) {
         const id = "saypi-audio-output-button";
         const existingAudioOutputButton = document.getElementById(id);
         if (existingAudioOutputButton) {
             // Audio output button already exists, no need to search
-            return Observation.foundExisting(id, existingAudioOutputButton);
+            return Observation.foundAlreadyDecorated(id, existingAudioOutputButton);
         }
         const audioOutputButton = searchRoot.querySelector(this.chatbot.getAudioOutputButtonSelector());
         if (audioOutputButton) {
-            return Observation.notDecorated(id, audioOutputButton);
+            return Observation.foundUndecorated(id, audioOutputButton);
         }
         return Observation.notFound(id);
     }
@@ -34152,33 +38721,61 @@ class DOMObserver {
     }
     findAndDecorateAudioOutputButton(searchRoot) {
         const obs = this.findAudioOutputButton(searchRoot);
-        if (obs.undecorated()) {
+        if (obs.isUndecorated()) {
             this.decorateAudioOutputButton(obs.target);
         }
-        return Observation.decorated(obs);
+        return Observation.foundAndDecorated(obs);
+    }
+    findChatHistory(searchRoot) {
+        const id = "saypi-chat-history";
+        const existingChatHistory = searchRoot.querySelector("#" + id);
+        if (existingChatHistory) {
+            // Chat history already exists, no need to search
+            return Observation.foundAlreadyDecorated(id, existingChatHistory);
+        }
+        const chatHistory = searchRoot.querySelector(this.chatbot.getChatHistorySelector());
+        if (chatHistory) {
+            return Observation.foundUndecorated(id, chatHistory);
+        }
+        return Observation.notFound(id);
+    }
+    decorateChatHistory(chatHistory) {
+        if (this.ttsUiMgr) {
+            // teardown existing TTS UI manager to release resources
+            this.ttsUiMgr.teardown();
+        }
+        this.ttsUiMgr = new ChatHistorySpeechManager(this.chatbot, chatHistory);
+    }
+    findAndDecorateChatHistory(searchRoot) {
+        const obs = this.findChatHistory(searchRoot);
+        if (obs.found && obs.isNew && !obs.decorated) {
+            // decorate chat history
+            this.decorateChatHistory(obs.target);
+        }
+        return Observation.foundAndDecorated(obs);
     }
 }
 
 // EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js
-var injectStylesIntoStyleTag = __webpack_require__(379);
+var injectStylesIntoStyleTag = __webpack_require__(3379);
 var injectStylesIntoStyleTag_default = /*#__PURE__*/__webpack_require__.n(injectStylesIntoStyleTag);
 // EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/styleDomAPI.js
-var styleDomAPI = __webpack_require__(795);
+var styleDomAPI = __webpack_require__(7795);
 var styleDomAPI_default = /*#__PURE__*/__webpack_require__.n(styleDomAPI);
 // EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/insertBySelector.js
 var insertBySelector = __webpack_require__(569);
 var insertBySelector_default = /*#__PURE__*/__webpack_require__.n(insertBySelector);
 // EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js
-var setAttributesWithoutAttributes = __webpack_require__(565);
+var setAttributesWithoutAttributes = __webpack_require__(3565);
 var setAttributesWithoutAttributes_default = /*#__PURE__*/__webpack_require__.n(setAttributesWithoutAttributes);
 // EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/insertStyleElement.js
-var insertStyleElement = __webpack_require__(216);
+var insertStyleElement = __webpack_require__(9216);
 var insertStyleElement_default = /*#__PURE__*/__webpack_require__.n(insertStyleElement);
 // EXTERNAL MODULE: ./node_modules/style-loader/dist/runtime/styleTagTransform.js
-var styleTagTransform = __webpack_require__(589);
+var styleTagTransform = __webpack_require__(4589);
 var styleTagTransform_default = /*#__PURE__*/__webpack_require__.n(styleTagTransform);
 // EXTERNAL MODULE: ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./src/styles/common.scss
-var common = __webpack_require__(580);
+var common = __webpack_require__(8580);
 ;// CONCATENATED MODULE: ./src/styles/common.scss
 
       
@@ -34209,7 +38806,7 @@ var common_update = injectStylesIntoStyleTag_default()(common/* default */.Z, op
        /* harmony default export */ const styles_common = (common/* default */.Z && common/* default */.Z.locals ? common/* default */.Z.locals : undefined);
 
 // EXTERNAL MODULE: ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./src/styles/desktop.scss
-var desktop = __webpack_require__(902);
+var desktop = __webpack_require__(1902);
 ;// CONCATENATED MODULE: ./src/styles/desktop.scss
 
       
@@ -34271,7 +38868,7 @@ var mobile_update = injectStylesIntoStyleTag_default()(mobile/* default */.Z, mo
        /* harmony default export */ const styles_mobile = (mobile/* default */.Z && mobile/* default */.Z.locals ? mobile/* default */.Z.locals : undefined);
 
 // EXTERNAL MODULE: ./node_modules/css-loader/dist/cjs.js!./src/styles/rectangles.css
-var styles_rectangles = __webpack_require__(136);
+var styles_rectangles = __webpack_require__(9136);
 ;// CONCATENATED MODULE: ./src/styles/rectangles.css
 
       
@@ -34375,7 +38972,7 @@ saypi_index_asyncToGenerator( /*#__PURE__*/saypi_index_regeneratorRuntime().mark
           panel.appendChild(button);
         };
         startAudioModule = function _startAudioModule() {
-          var audioModule = new AudioModule();
+          var audioModule = AudioModule.getInstance();
           window.addEventListener("unload", function () {
             audioModule.stop();
           });

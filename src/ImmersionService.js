@@ -1,7 +1,7 @@
 import { buttonModule } from "./ButtonModule.js";
 import { enterFullscreen, exitFullscreen } from "./FullscreenModule.ts";
 import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
-import { addChild } from "./DOMModule.ts";
+import { addChild } from "./dom/DOMModule.ts";
 
 function attachCallButton() {
   // move the call button back into the text prompt container for desktop view
@@ -28,13 +28,14 @@ export class ImmersionService {
    */
   constructor(chatbot) {
     this.chatbot = chatbot;
+    this.userPreferences = UserPreferenceModule.getInstance();
   }
 
   /**
    * Perform initial setup of the UI based on the view preferences
    */
   initMode() {
-    UserPreferenceModule.getPrefersImmersiveView().then((immersive) => {
+    this.userPreferences.getPrefersImmersiveView().then((immersive) => {
       if (immersive) {
         this.enterImmersiveMode();
       } else {
@@ -95,7 +96,7 @@ export class ImmersionService {
 
     detachCallButton();
     enterFullscreen();
-    UserPreferenceModule.getTheme().then((theme) => {
+    this.userPreferences.getTheme().then((theme) => {
       buttonModule.applyTheme(theme);
     });
   }

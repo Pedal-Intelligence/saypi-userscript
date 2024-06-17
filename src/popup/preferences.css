@@ -1,0 +1,19 @@
+/* Slider */
+#sliderValue {
+  display: block;
+  text-align: center;
+}
+.icon {
+  transition: transform 0.3s ease;
+  padding: 0 0.5rem;
+}
+.icon.active {
+  transform: scale(1.5);
+}
+#preferences #preference-selector {
+  padding: 1rem;
+  display: block;
+}
+#language-preference {
+  display: block;
+}

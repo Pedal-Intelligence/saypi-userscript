@@ -13,7 +13,7 @@ import "./styles/desktop.scss";
 import "./styles/mobile.scss";
 import "./styles/rectangles.css";
 import { ChatbotService } from "./chatbots/ChatbotService.ts";
-import { addChild } from "./DOMModule.ts";
+import { addChild } from "./dom/DOMModule.ts";
 
 (async function () {
   "use strict";
@@ -21,7 +21,7 @@ import { addChild } from "./DOMModule.ts";
   const chatbot = ChatbotService.getChatbot();
 
   function startAudioModule() {
-    const audioModule = new AudioModule();
+    const audioModule = AudioModule.getInstance();
     window.addEventListener("unload", () => {
       audioModule.stop();
     });

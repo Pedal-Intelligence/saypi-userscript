@@ -32,6 +32,8 @@ const sequenceNumsPendingTranscription: Set<{
   timestamp: number;
 }> = new Set();
 
+const userPreferences = UserPreferenceModule.getInstance();
+
 function checkForExpiredEntries() {
   const now = Date.now();
   sequenceNumsPendingTranscription.forEach((entry) => {
@@ -155,7 +157,7 @@ async function uploadAudio(
       messages,
       sessionId
     );
-    const language = await UserPreferenceModule.getLanguage();
+    const language = await userPreferences.getLanguage();
 
     const controller = new AbortController();
     const { signal } = controller;
@@ -260,7 +262,7 @@ async function constructTranscriptionFormData(
   }
 
   // Wait for the preference to be retrieved before appending it to the FormData
-  const preference = await UserPreferenceModule.getTranscriptionMode();
+  const preference = await userPreferences.getTranscriptionMode();
   if (preference) {
     formData.append("prefer", preference);
   }
@@ -323,7 +325,7 @@ export function setDraftPrompt(transcript: string): void {
     "saypi-prompt"
   ) as HTMLTextAreaElement;
 
-  UserPreferenceModule.getAutoSubmit().then((autoSubmit) => {
+  userPreferences.getAutoSubmit().then((autoSubmit) => {
     if (autoSubmit) {
       textarea.setAttribute("placeholder", `${transcript}`);
     } else {

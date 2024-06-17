@@ -158,15 +158,16 @@ if (apiServerUrl === undefined) {
   );
 }
 
-let mergeService: TranscriptMergeService;
-UserPreferenceModule.getLanguage().then((language) => {
-  mergeService = new TranscriptMergeService(apiServerUrl, language);
-});
-
 const audibleNotifications = AudibleNotificationsModule.getInstance();
 const textualNotifications = new TextualNotificationsModule();
 const visualNotifications = new VisualNotificationsModule();
 const audioControls = new AudioControlsModule();
+const userPreferences = UserPreferenceModule.getInstance();
+
+let mergeService: TranscriptMergeService;
+userPreferences.getLanguage().then((language) => {
+  mergeService = new TranscriptMergeService(apiServerUrl, language);
+});
 
 export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
   {
@@ -1079,7 +1080,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         meta
       ) => {
         const { state } = meta;
-        const autoSubmitEnabled = UserPreferenceModule.getCachedAutoSubmit();
+        const autoSubmitEnabled = userPreferences.getCachedAutoSubmit();
         return autoSubmitEnabled && readyToSubmit(state, context);
       },
       wasListening: (context: SayPiContext) => {
@@ -1089,7 +1090,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         return context.lastState === "inactive";
       },
       interruptionsAllowed: (context: SayPiContext) => {
-        return UserPreferenceModule.getCachedAllowInterruptions();
+        return userPreferences.getCachedAllowInterruptions();
       },
     },
     delays: {
@@ -1101,7 +1102,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           event = event as SayPiTranscribedEvent;
         }
 
-        const maxDelay = 10000; // 10 seconds in milliseconds
+        const maxDelay = 8000; // 8 seconds in milliseconds (lowered from 10s in v1.5.4)
 
         // Calculate the initial delay based on pFinishedSpeaking
         let probabilityFinished = 1;

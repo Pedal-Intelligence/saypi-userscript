@@ -40,6 +40,7 @@ const analytics = new AnalyticsService(
   valid_config.GA_API_SECRET,
   valid_config.GA_ENDPOINT
 );
+const userPreferences = UserPreferenceModule.getInstance();
 
 const MESSAGE_COUNT_THRESHOLD = 50; // number of messages to trigger the long running session prompt
 const userPrompts = new UserPromptModule();
@@ -209,8 +210,7 @@ export const machine = createMachine<
         context: SessionContext,
         event: SendMessageEvent
       ) => {
-        const transcriptionMode =
-          await UserPreferenceModule.getTranscriptionMode();
+        const transcriptionMode = await userPreferences.getTranscriptionMode();
 
         // calculate the real-time factor (RTF)
         const processing_time_ms = event.delay_ms;
@@ -230,9 +230,8 @@ export const machine = createMachine<
         });
       },
       notifyStartSession: async (context, event: StartSessionEvent) => {
-        const transcriptionMode =
-          await UserPreferenceModule.getTranscriptionMode();
-        const language = await UserPreferenceModule.getLanguage();
+        const transcriptionMode = await userPreferences.getTranscriptionMode();
+        const language = await userPreferences.getLanguage();
         const elapsed_ms = 0;
         analytics.sendEvent("session_started", {
           session_id: context.session_id,

@@ -233,5 +233,92 @@
   "allowInterruptions": {
     "message": "中断可能な",
     "description": "Piの応答を話すことで中断することを許可/不許可するためのチェックボックスのラベル。"
+  },
+  "currencyUSDAbbreviation": {
+    "description": "アメリカ合衆国ドルの略称。",
+    "message": "USD"
+  },
+  "currentCharges": {
+    "description": "ユーザーが蓄積した現在の料金（累計）を表す用語。",
+    "message": "現在の料金"
+  },
+  "enableTTS": {
+    "description": "テキスト読み上げを有効/無効にするチェックボックスのラベル。",
+    "message": "強化された音声"
+  },
+  "enhancedVoice": {
+    "description": "タイトル（ツールチップ）：「Say、Piエンハンスドボイス」",
+    "message": "Say、Piによって強化された音声"
+  },
+  "previewProgress": {
+    "description": "ユーザーが文字数制限のある機能をプレビューしているときに表示するメッセージ。",
+    "message": "$limit$のうち$count$文字が使用されました",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "123"
+      },
+      "limit": {
+        "content": "$2",
+        "example": "500"
+      }
+    }
+  },
+  "previewStatusActive": {
+    "message": "ベータアクティブ"
+  },
+  "previewStatusCompleted": {
+    "message": "ベータ完了"
+  },
+  "previewStatusPaused": {
+    "description": "ユーザーが一時停止された機能をプレビューしているときに表示するメッセージ。",
+    "message": "ベータ版は$resetDate$まで一時停止中",
+    "placeholders": {
+      "resetDate": {
+        "content": "$1",
+        "example": "2021-12-31"
+      }
+    }
+  },
+  "previewStatusUnknown": {
+    "message": "接続できません..."
+  },
+  "readAloudButtonTitle": {
+    "description": "メッセージのテキストを音声で読み上げるボタンのタイトル",
+    "message": "音読する"
+  },
+  "ttsCostExplanation": {
+    "description": "テキストを音声で読み上げるためにテキストツースピーチエンジンが使用されるときに表示するツールチップ、メッセージのコストと共に。",
+    "message": "このメッセージを聞く費用は$cost$ $currency$です",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "ttsCostExplanationFree": {
+    "description": "テキスト読み上げエンジンがメッセージを音声で読み上げる際に表示するツールチップ、そしてそのメッセージは無料です。プロバイダーの名前を含むこともあります。",
+    "message": "このオーディオは無料で生成されました。",
+    "placeholders": {
+      "provider": {
+        "content": "$1",
+        "example": "Inflection AI"
+      }
+    }
+  },
+  "ttsPoweredBy": {
+    "description": "テキストを音声で読み上げるためにテキストツーコンピュータスピーチエンジンが使用されるときに表示するメッセージ。",
+    "message": "$ttsEngine$によって駆動されるテキスト読み上げ",
+    "placeholders": {
+      "ttsEngine": {
+        "content": "$1",
+        "example": "ElevenLabs"
+      }
+    }
   }
 }

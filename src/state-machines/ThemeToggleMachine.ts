@@ -4,6 +4,7 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { AudibleNotificationsModule } from "../NotificationsModule";
 
 const audible = AudibleNotificationsModule.getInstance();
+const userPreferences = UserPreferenceModule.getInstance();
 
 export const machine = createMachine(
   {
@@ -18,7 +19,7 @@ export const machine = createMachine(
         description: "Determining the initial theme mode.",
         invoke: {
           id: "getPreferedTheme",
-          src: () => UserPreferenceModule.getTheme(),
+          src: () => userPreferences.getTheme(),
           onDone: {
             target: "loaded",
             actions: assign({ theme: (context, event) => event.data }),
@@ -98,7 +99,7 @@ export const machine = createMachine(
         applyNormalMode();
       },
       saveMode: (context, event, { action }) => {
-        UserPreferenceModule.setTheme(action.params.theme);
+        userPreferences.setTheme(action.params.theme);
       },
       soundEffectOn: () => {
         audible.themeOn();

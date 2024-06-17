@@ -233,5 +233,92 @@
   "allowInterruptions": {
     "message": "विच्छेदनीय",
     "description": "चेकबॉक्स के लिए लेबल, जो पाई के प्रतिक्रियाओं को व्यवधान करने/ना करने की सुविधा देता है, जब माइक्रोसॉफ्ट समर्थन से बात करता है."
+  },
+  "currencyUSDAbbreviation": {
+    "description": "संयुक्त राज्य डॉलर का संक्षिप्ति.",
+    "message": "यूएसडी"
+  },
+  "currentCharges": {
+    "description": "उपयोगकर्ता द्वारा संचित की गई वर्तमान शुल्क (क्रमिक कुल) को वर्णन करने के लिए प्रयुक्त शब्द।",
+    "message": "वर्तमान शुल्क"
+  },
+  "enableTTS": {
+    "description": "टेक्स्ट-टू-स्पीच को सक्रिय/निष्क्रिय करने के लिए चेकबॉक्स का लेबल।",
+    "message": "उन्नत स्वर"
+  },
+  "enhancedVoice": {
+    "description": "कहें, पाई उन्नत स्वरों के लिए शीर्षक (टूलटिप)।",
+    "message": "से बढ़ाई गई आवाज, पाई"
+  },
+  "previewProgress": {
+    "description": "जब उपयोगकर्ता एक सुविधा का पूर्वावलोकन कर रहा होता है, जिसमें अक्षर सीमा होती है, तो प्रदर्शित करने के लिए संदेश।",
+    "message": "$limit$ में से $count$ वर्ण उपयोग किए गए",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "123"
+      },
+      "limit": {
+        "content": "$2",
+        "example": "500"
+      }
+    }
+  },
+  "previewStatusActive": {
+    "message": "बीटा सक्रिय"
+  },
+  "previewStatusCompleted": {
+    "message": "बीटा पूरा हुआ"
+  },
+  "previewStatusPaused": {
+    "description": "जब उपयोगकर्ता एक सुविधा का पूर्वावलोकन कर रहा होता है, जिसे रोक दिया गया है, तो प्रदर्शित करने के लिए संदेश।",
+    "message": "बीटा $resetDate$ तक रोके गए हैं",
+    "placeholders": {
+      "resetDate": {
+        "content": "$1",
+        "example": "2021-12-31"
+      }
+    }
+  },
+  "previewStatusUnknown": {
+    "message": "संपर्क करने में असमर्थ..."
+  },
+  "readAloudButtonTitle": {
+    "description": "संदेश के पाठ को उच्चारित करने के लिए बटन का शीर्षक।",
+    "message": "उच्चारण करके पढ़ें"
+  },
+  "ttsCostExplanation": {
+    "description": "जब पाठ-से-वाणी इंजन का उपयोग संदेश को उच्चरित करने के लिए किया जाता है, तो संदेश की लागत के साथ प्रदर्शित होने वाला टूलटिप।",
+    "message": "इस संदेश को सुनने का खर्च $cost$ $currency$ है।",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "ttsCostExplanationFree": {
+    "description": "जब एक पाठ-से-वाणी इंजन का उपयोग संदेश को जोर से पढ़ने के लिए किया जाता है, और संदेश मुक्त है, तो प्रदर्शित करने के लिए tooltip। प्रदायक का नाम हो सकता है।",
+    "message": "यह ऑडियो मुफ्त में उत्पन्न किया गया था।",
+    "placeholders": {
+      "provider": {
+        "content": "$1",
+        "example": "Inflection AI"
+      }
+    }
+  },
+  "ttsPoweredBy": {
+    "description": "जब पाठ-से-वाणी इंजन का उपयोग संदेश को जोर से पढ़ने के लिए किया जाता है, तो प्रदर्शित करने के लिए संदेश।",
+    "message": "टेक्स्ट-टू-स्पीच $ttsEngine$ द्वारा संचालित",
+    "placeholders": {
+      "ttsEngine": {
+        "content": "$1",
+        "example": "ElevenLabs"
+      }
+    }
   }
 }

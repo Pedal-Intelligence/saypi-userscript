@@ -233,5 +233,92 @@
   "allowInterruptions": {
     "message": "可中断的",
     "description": "用于启用/禁用允许用户通过说话中断Pi回应的复选框标签。"
+  },
+  "currencyUSDAbbreviation": {
+    "description": "美元的缩写。",
+    "message": "美元"
+  },
+  "currentCharges": {
+    "description": "用于描述用户累积的当前费用（运行总计）的术语。",
+    "message": "当前费用"
+  },
+  "enableTTS": {
+    "description": "启用/禁用语音合成的复选框标签。",
+    "message": "增强的语音"
+  },
+  "enhancedVoice": {
+    "description": "标题（工具提示）为“说，派增强语音”。",
+    "message": "由Say, Pi增强的声音"
+  },
+  "previewProgress": {
+    "description": "当用户预览具有字符限制的功能时显示的消息。",
+    "message": "已使用 $count$ 个字符，总计 $limit$ 个字符",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "123"
+      },
+      "limit": {
+        "content": "$2",
+        "example": "500"
+      }
+    }
+  },
+  "previewStatusActive": {
+    "message": "Beta活跃"
+  },
+  "previewStatusCompleted": {
+    "message": "测试版已完成"
+  },
+  "previewStatusPaused": {
+    "description": "当用户正在预览已暂停的功能时显示的消息。",
+    "message": "Beta 暂停，直到 $resetDate$",
+    "placeholders": {
+      "resetDate": {
+        "content": "$1",
+        "example": "2021-12-31"
+      }
+    }
+  },
+  "previewStatusUnknown": {
+    "message": "无法连接..."
+  },
+  "readAloudButtonTitle": {
+    "description": "阅读消息文本的按钮标题",
+    "message": "朗读"
+  },
+  "ttsCostExplanation": {
+    "description": "当使用文本到语音引擎大声朗读消息时，显示的工具提示，包括消息的费用。",
+    "message": "收听此消息的费用是$cost$ $currency$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "ttsCostExplanationFree": {
+    "description": "当使用文本到语音引擎大声朗读一条信息，并且该信息是免费的时，要显示的工具提示。可能包含提供商的名称。",
+    "message": "这个音频是免费生成的。",
+    "placeholders": {
+      "provider": {
+        "content": "$1",
+        "example": "Inflection AI"
+      }
+    }
+  },
+  "ttsPoweredBy": {
+    "description": "当使用文本到语音引擎大声朗读消息时要显示的信息。",
+    "message": "由$ttsEngine$驱动的文字转语音",
+    "placeholders": {
+      "ttsEngine": {
+        "content": "$1",
+        "example": "ElevenLabs"
+      }
+    }
   }
 }

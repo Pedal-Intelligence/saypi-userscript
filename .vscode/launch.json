@@ -25,6 +25,24 @@
       "name": "Say, Pi (application server)",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "start"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Vitest Tests",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["vitest"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Vitest Tests (Debug)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "vitest",
+        "--inspect-brk",
+        "test/tts/TextToSpeechService.spec.ts"
+      ]
     }
   ]
 }

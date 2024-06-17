@@ -1,45 +1,11 @@
 import { Chatbot } from "./Chatbot";
 import { buttonModule } from "../ButtonModule.js";
 import EventBus from "../events/EventBus.js";
-
-class Observation {
-  constructor(
-    public readonly target: Element | null,
-    public readonly id: string,
-    public readonly found: boolean,
-    public readonly isNew: boolean,
-    public readonly decorated: boolean
-  ) {}
-
-  // Whether the observed element is fully loaded and ready to be used
-  isReady(): boolean {
-    return this.found && this.isNew && this.decorated;
-  }
-
-  // Whether the observed element has been found, but not yet decorated with the extension's enhancements
-  undecorated(): boolean {
-    return this.found && this.isNew && !this.decorated;
-  }
-
-  // Where the element does not exist in the DOM
-  static notFound(id: string): Observation {
-    return new Observation(null, id, false, false, false);
-  }
-  // Where the element exists in the DOM, and has already been decorated with the extension's enhancements
-  static foundExisting(id: string, element: Element): Observation {
-    return new Observation(element, id, true, false, true);
-  }
-  // Where the element exists in the DOM, and has newly been decorated with the extension's enhancements
-  static decorated(obs: Observation): Observation {
-    return new Observation(obs.target, obs.id, obs.found, obs.isNew, true);
-  }
-  // Where the element exists in the DOM, but has not been decorated with the extension's enhancements
-  static notDecorated(id: string, element: Element): Observation {
-    return new Observation(element, id, true, true, false);
-  }
-}
+import { ChatHistorySpeechManager } from "../tts/ChatHistoryManager";
+import { Observation } from "../dom/Observation";
 
 export class DOMObserver {
+  ttsUiMgr: ChatHistorySpeechManager | null = null;
   constructor(private chatbot: Chatbot) {}
 
   observeDOM(): void {
@@ -47,9 +13,9 @@ export class DOMObserver {
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         [...mutation.addedNodes]
-          .filter((node) => node instanceof Element)
+          .filter((node) => node instanceof HTMLElement)
           .forEach((node) => {
-            const addedElement = node as Element;
+            const addedElement = node as HTMLElement;
             const promptObs = this.findAndDecoratePromptField(addedElement);
             const ctrlPanelObs = this.findAndDecorateControlPanel(addedElement);
             const sidePanelObs = this.findAndDecorateSidePanel(addedElement);
@@ -63,6 +29,8 @@ export class DOMObserver {
             const audioOutputButtonObs =
               this.findAndDecorateAudioOutputButton(addedElement);
             // ... handle other elements
+            const chatHistoryObs =
+              this.findAndDecorateChatHistory(addedElement);
 
             // notify listeners that (all critical) script content has been loaded
             if (promptObs.isReady()) {
@@ -70,9 +38,9 @@ export class DOMObserver {
             }
           });
         [...mutation.removedNodes]
-          .filter((node) => node instanceof Element)
+          .filter((node) => node instanceof HTMLElement)
           .forEach((node) => {
-            const removedElement = node as Element;
+            const removedElement = node as HTMLElement;
             const obs = this.findPromptField(removedElement);
             if (obs.found) {
               // Prompt field is being removed, so search for a replacement in the main document
@@ -97,6 +65,11 @@ export class DOMObserver {
             if (audioOutputButtonObs.found) {
               // Audio output button is being removed, so search for a replacement in the main document
               this.findAndDecorateAudioOutputButton(document.body);
+            }
+            const chatHistoryObs = this.findChatHistory(removedElement);
+            if (chatHistoryObs.found) {
+              // Chat history is being removed, so search for a replacement in the main document
+              this.findAndDecorateChatHistory(document.body);
             }
           });
       });
@@ -130,7 +103,7 @@ export class DOMObserver {
     const id = "saypi-control-panel-main";
     var mainControlPanel = document.getElementById(id);
     if (mainControlPanel) {
-      return Observation.foundExisting(id, mainControlPanel);
+      return Observation.foundAlreadyDecorated(id, mainControlPanel);
     }
     mainControlPanel = searchRoot.querySelector(
       this.chatbot.getControlPanelSelector()
@@ -157,7 +130,7 @@ export class DOMObserver {
     if (obs.found && obs.isNew && !obs.decorated) {
       this.decorateControlPanel(obs.target as HTMLElement);
     }
-    return Observation.decorated(obs);
+    return Observation.foundAndDecorated(obs);
   }
 
   findSidePanel(searchRoot: Element): Observation {
@@ -165,14 +138,14 @@ export class DOMObserver {
     const existingSidePanel = document.getElementById(id);
     if (existingSidePanel) {
       // Side panel already exists, no need to search
-      return Observation.foundExisting(id, existingSidePanel);
+      return Observation.foundAlreadyDecorated(id, existingSidePanel);
     }
 
     const sidePanel = searchRoot.querySelector(
       this.chatbot.getSidePanelSelector()
     );
     if (sidePanel) {
-      return Observation.notDecorated(id, sidePanel);
+      return Observation.foundUndecorated(id, sidePanel);
     }
     return Observation.notFound(id);
   }
@@ -190,7 +163,7 @@ export class DOMObserver {
     if (obs.found && obs.isNew && !obs.decorated) {
       this.decorateSidePanel(obs.target as HTMLElement);
     }
-    return Observation.decorated(obs);
+    return Observation.foundAndDecorated(obs);
   }
 
   findDiscoveryPanel(searchRoot: Element): Observation {
@@ -198,14 +171,14 @@ export class DOMObserver {
     const existingDiscoveryPanel = document.getElementById(id);
     if (existingDiscoveryPanel) {
       // Discovery panel already exists, no need to search
-      return Observation.foundExisting(id, existingDiscoveryPanel);
+      return Observation.foundAlreadyDecorated(id, existingDiscoveryPanel);
     }
 
     const discoveryPanel = searchRoot.querySelector(
       this.chatbot.getDiscoveryPanelSelector()
     );
     if (discoveryPanel) {
-      return Observation.notDecorated(id, discoveryPanel);
+      return Observation.foundUndecorated(id, discoveryPanel);
     }
     return Observation.notFound(id);
   }
@@ -219,7 +192,7 @@ export class DOMObserver {
     if (obs.found && obs.isNew && !obs.decorated) {
       this.decorateDiscoveryPanel(obs.target as HTMLElement);
     }
-    return Observation.decorated(obs);
+    return Observation.foundAndDecorated(obs);
   }
 
   addIdSubmitButton(container: Element) {
@@ -248,14 +221,14 @@ export class DOMObserver {
     const existingPrompt = document.getElementById(id);
     if (existingPrompt) {
       // Prompt already exists, no need to search
-      return Observation.foundExisting(id, existingPrompt);
+      return Observation.foundAlreadyDecorated(id, existingPrompt);
     }
 
     const promptInput = searchRoot.querySelector(
       this.chatbot.getPromptTextInputSelector()
     );
     if (promptInput) {
-      return Observation.notDecorated(id, promptInput);
+      return Observation.foundUndecorated(id, promptInput);
     }
     return Observation.notFound(id);
   }
@@ -265,7 +238,7 @@ export class DOMObserver {
     if (obs.found && obs.isNew && !obs.decorated) {
       this.decoratePrompt(obs.target as HTMLInputElement);
     }
-    return Observation.decorated(obs);
+    return Observation.foundAndDecorated(obs);
   }
 
   findAudioControls(searchRoot: Element): Observation {
@@ -273,14 +246,14 @@ export class DOMObserver {
     const existingAudioControls = document.getElementById(id);
     if (existingAudioControls) {
       // Audio controls already exist, no need to search
-      return Observation.foundExisting(id, existingAudioControls);
+      return Observation.foundAlreadyDecorated(id, existingAudioControls);
     }
 
     const audioControls = searchRoot.querySelector(
       this.chatbot.getAudioControlsSelector()
     );
     if (audioControls) {
-      return Observation.notDecorated(id, audioControls);
+      return Observation.foundUndecorated(id, audioControls);
     }
     return Observation.notFound(id);
   }
@@ -291,10 +264,10 @@ export class DOMObserver {
 
   findAndDecorateAudioControls(searchRoot: Element): Observation {
     const obs = this.findAudioControls(searchRoot);
-    if (obs.undecorated()) {
+    if (obs.isUndecorated()) {
       this.decorateAudioControls(obs.target as HTMLElement);
     }
-    return Observation.decorated(obs);
+    return Observation.foundAndDecorated(obs);
   }
 
   findAudioOutputButton(searchRoot: Element): Observation {
@@ -302,14 +275,14 @@ export class DOMObserver {
     const existingAudioOutputButton = document.getElementById(id);
     if (existingAudioOutputButton) {
       // Audio output button already exists, no need to search
-      return Observation.foundExisting(id, existingAudioOutputButton);
+      return Observation.foundAlreadyDecorated(id, existingAudioOutputButton);
     }
 
     const audioOutputButton = searchRoot.querySelector(
       this.chatbot.getAudioOutputButtonSelector()
     );
     if (audioOutputButton) {
-      return Observation.notDecorated(id, audioOutputButton);
+      return Observation.foundUndecorated(id, audioOutputButton);
     }
     return Observation.notFound(id);
   }
@@ -320,9 +293,42 @@ export class DOMObserver {
 
   findAndDecorateAudioOutputButton(searchRoot: Element): Observation {
     const obs = this.findAudioOutputButton(searchRoot);
-    if (obs.undecorated()) {
+    if (obs.isUndecorated()) {
       this.decorateAudioOutputButton(obs.target as HTMLElement);
     }
-    return Observation.decorated(obs);
+    return Observation.foundAndDecorated(obs);
+  }
+
+  findChatHistory(searchRoot: HTMLElement): Observation {
+    const id = "saypi-chat-history";
+    const existingChatHistory = searchRoot.querySelector("#" + id);
+    if (existingChatHistory) {
+      // Chat history already exists, no need to search
+      return Observation.foundAlreadyDecorated(id, existingChatHistory);
+    }
+    const chatHistory = searchRoot.querySelector(
+      this.chatbot.getChatHistorySelector()
+    );
+    if (chatHistory) {
+      return Observation.foundUndecorated(id, chatHistory);
+    }
+    return Observation.notFound(id);
+  }
+
+  decorateChatHistory(chatHistory: HTMLElement): void {
+    if (this.ttsUiMgr) {
+      // teardown existing TTS UI manager to release resources
+      this.ttsUiMgr.teardown();
+    }
+    this.ttsUiMgr = new ChatHistorySpeechManager(this.chatbot, chatHistory);
+  }
+
+  findAndDecorateChatHistory(searchRoot: HTMLElement): Observation {
+    const obs = this.findChatHistory(searchRoot);
+    if (obs.found && obs.isNew && !obs.decorated) {
+      // decorate chat history
+      this.decorateChatHistory(obs.target as HTMLElement);
+    }
+    return Observation.foundAndDecorated(obs);
   }
 }

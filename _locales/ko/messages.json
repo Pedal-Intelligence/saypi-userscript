@@ -233,5 +233,92 @@
   "allowInterruptions": {
     "message": "중단 가능한",
     "description": "사용자가 말함으로써 Pi의 응답을 중단할 수 있게 허용/비허용하는 체크박스를 위한 라벨."
+  },
+  "currencyUSDAbbreviation": {
+    "description": "미국 달러의 약자.",
+    "message": "USD"
+  },
+  "currentCharges": {
+    "description": "사용자가 누적한 현재 요금(누적 합계)을 설명하는 용어.",
+    "message": "현재 요금"
+  },
+  "enableTTS": {
+    "description": "텍스트 음성 변환을 활성화/비활성화하는 체크박스의 레이블.",
+    "message": "향상된 목소리"
+  },
+  "enhancedVoice": {
+    "description": "제목 (툴팁) : Say, Pi 향상된 음성.",
+    "message": "Say, Pi에 의해 향상된 목소리"
+  },
+  "previewProgress": {
+    "description": "사용자가 문자 제한이 있는 기능을 미리보는 경우에 표시할 메시지.",
+    "message": "$limit$ 중 $count$ 문자 사용됨",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "123"
+      },
+      "limit": {
+        "content": "$2",
+        "example": "500"
+      }
+    }
+  },
+  "previewStatusActive": {
+    "message": "베타 활성"
+  },
+  "previewStatusCompleted": {
+    "message": "베타 완료"
+  },
+  "previewStatusPaused": {
+    "description": "사용자가 일시 중지된 기능을 미리보는 경우에 표시할 메시지.",
+    "message": "베타 일시 중지, $resetDate$까지",
+    "placeholders": {
+      "resetDate": {
+        "content": "$1",
+        "example": "2021-12-31"
+      }
+    }
+  },
+  "previewStatusUnknown": {
+    "message": "연결할 수 없습니다..."
+  },
+  "readAloudButtonTitle": {
+    "description": "메시지 텍스트를 읽어주는 버튼의 제목",
+    "message": "읽어주기"
+  },
+  "ttsCostExplanation": {
+    "description": "텍스트를 음성으로 변환하여 메시지를 읽어주는 엔진을 사용할 때 표시되는 툴팁, 그리고 메시지의 비용.",
+    "message": "이 메시지를 듣는 데 드는 비용은 $cost$ $currency$입니다.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "ttsCostExplanationFree": {
+    "description": "텍스트를 음성으로 변환하여 메시지를 대신 읽어주는 엔진이 사용될 때 표시되는 툴팁, 그리고 메시지가 무료인 경우. 공급자의 이름을 포함할 수 있습니다.",
+    "message": "이 오디오는 무료로 생성되었습니다.",
+    "placeholders": {
+      "provider": {
+        "content": "$1",
+        "example": "Inflection AI"
+      }
+    }
+  },
+  "ttsPoweredBy": {
+    "description": "텍스트를 음성으로 변환하여 메시지를 읽어줄 때 표시할 메시지.",
+    "message": "$ttsEngine$에 의해 구동되는 텍스트-투-스피치",
+    "placeholders": {
+      "ttsEngine": {
+        "content": "$1",
+        "example": "ElevenLabs"
+      }
+    }
   }
 }

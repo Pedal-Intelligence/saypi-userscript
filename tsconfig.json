@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
+    "strictNullChecks": true,
     "outDir": "./public",
     "target": "ES6",
     "module": "ESNext", // Changed to ESNext for ES modules
@@ -12,5 +13,5 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*.ts", "src/**/*.js"]
+  "include": ["src/**/*.ts", "src/**/*.js", "src/*.d.ts"]
 }

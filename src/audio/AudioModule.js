@@ -1,18 +1,23 @@
 // import state machines for audio input and output
 import { interpret } from "xstate";
 import { audioInputMachine } from "../state-machines/AudioInputMachine.ts";
-import { audioOutputMachine } from "../state-machines/AudioOutputMachine.js";
+import { audioOutputMachine } from "../state-machines/AudioOutputMachine.ts";
+import { machine as audioRetryMachine } from "../state-machines/AudioRetryMachine.ts";
 import { logger, serializeStateValue } from "../LoggingModule.js";
 import EventBus from "../events/EventBus.js";
-import { machine as audioRetryMachine } from "../state-machines/AudioRetryMachine.ts";
 import { isSafari } from "../UserAgentModule.js";
 
 export default class AudioModule {
   constructor() {
+    if (AudioModule.instance) {
+      return AudioModule.instance;
+    }
+
     this.audioElement = document.querySelector("audio");
     if (!this.audioElement) {
       console.error("Audio element not found!");
     } else {
+      this.audioElement.id = "saypi-audio-main";
       console.debug("Audio element found", this.audioElement);
     }
 
@@ -57,6 +62,16 @@ export default class AudioModule {
         }
       });
     }
+
+    AudioModule.instance = this;
+  }
+
+  static getInstance() {
+    if (!AudioModule.instance) {
+      AudioModule.instance = new AudioModule();
+    }
+
+    return AudioModule.instance;
   }
 
   start() {
@@ -64,6 +79,7 @@ export default class AudioModule {
     this.audioOutputActor.start();
     this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
     //this.safariErrorHandler.startMonitoring();
+    this.registerLifecycleDebug();
 
     // audio input (user)
     this.audioInputActor.start();
@@ -80,9 +96,13 @@ export default class AudioModule {
 
   stop() {}
 
+  /**
+   *
+   * @param {HTMLAudioElement} audio
+   * @param {audioOutputMachine} actor
+   */
   registerAudioPlaybackEvents(audio, actor) {
     const events = [
-      "loadstart",
       "loadedmetadata",
       "canplaythrough",
       "play",
@@ -90,10 +110,15 @@ export default class AudioModule {
       "ended",
       "seeked",
       "emptied",
-      "abort",
-      "stalled",
-      "error",
     ];
+
+    const sourcedEvents = ["loadstart"];
+    sourcedEvents.forEach((event) => {
+      audio.addEventListener(event, (e) => {
+        const detail = { source: audio.currentSrc };
+        actor.send(event, detail);
+      });
+    });
 
     events.forEach((event) => {
       audio.addEventListener(event, () => actor.send(event));
@@ -153,24 +178,135 @@ export default class AudioModule {
     });
 
     // audio output (playback) commands
-    EventBus.on("audio:reload", (e) => {
-      this.audioElement.load();
+    EventBus.on("audio:changeProvider", (detail) => {
+      outputActor.send({ type: "changeProvider", ...detail });
     });
     EventBus.on("audio:skipNext", (e) => {
       outputActor.send("skipNext");
     });
     EventBus.on("audio:skipCurrent", (e) => {
+      // Pause the audio
       this.audioElement.pause();
+
+      // Skip to the end to simulate the completion of the audio, preventing it from being resumed
+      if (!isNaN(this.audioElement.duration)) {
+        this.audioElement.currentTime = this.audioElement.duration;
+      }
     });
     EventBus.on("audio:output:play", (e) => {
       this.audioElement.play();
     });
-
     EventBus.on("audio:output:pause", (e) => {
       this.audioElement.pause();
     });
     EventBus.on("audio:output:resume", (e) => {
       this.audioElement.play();
     });
+    EventBus.on(
+      "audio:load",
+      (detail) => {
+        this.loadAudio(detail.url);
+      },
+      this
+    );
+    EventBus.on("audio:reload", (e) => {
+      this.audioElement.load();
+    });
+    EventBus.on("saypi:tts:replaying", (e) => {
+      // notify the audio output machine that the next audio is a replay
+      outputActor.send("replaying");
+    });
+  }
+
+  /**
+   * Load an audio file into the main audio element,
+   * replacing the current audio source, i.e. Pi's speech.
+   *
+   * To invoke this function with loose coupling to the audio module,
+   * raise a "audio:load" event with the URL of the audio file to load.
+   * @param {string} url
+   */
+  loadAudio(url, play = true) {
+    if (url) {
+      this.audioElement.src = url;
+      if (play) {
+        this.audioElement
+          .play()
+          .then(() => {
+            console.debug(`Playing audio from ${this.audioElement.currentSrc}`);
+          })
+          .catch((error) => {
+            console.error(
+              `Error playing audio from ${this.audioElement.currentSrc}`,
+              error
+            );
+          });
+      } else {
+        this.audioElement
+          .load()
+          .then(() => {
+            console.debug(`Loaded audio from ${this.audioElement.currentSrc}`);
+          })
+          .catch((error) => {
+            console.error(
+              `Error loading audio from ${this.audioElement.currentSrc}`,
+              error
+            );
+          });
+      }
+    }
+  }
+
+  registerLifecycleDebug() {
+    let starttime;
+    this.audioElement.onerror = (event) => {
+      console.error(
+        `Error playing audio from ${this.audioElement.currentSrc}`,
+        event
+      );
+    };
+
+    this.audioElement.onloadstart = () => {
+      console.debug(`Loading audio from ${this.audioElement.currentSrc}`);
+      starttime = Date.now();
+    };
+
+    // Handle successful loading and playing of the audio
+    this.audioElement.onloadeddata = () => {
+      const endtime = Date.now();
+      const elapsedtime = (endtime - starttime) / 1000;
+      console.debug(
+        `Audio is loaded after ${elapsedtime.toFixed(1)}s from ${
+          this.audioElement.currentSrc
+        }`
+      );
+    };
+
+    this.audioElement.oncanplay = () => {
+      const endtime = Date.now();
+      const elapsedtime = (endtime - starttime) / 1000;
+      console.debug(
+        `Audio is ready to play after ${elapsedtime.toFixed(1)}s from ${
+          this.audioElement.currentSrc
+        }`
+      );
+    };
+
+    this.audioElement.oncanplaythrough = () => {
+      const endtime = Date.now();
+      const elapsedtime = (endtime - starttime) / 1000;
+      console.debug(
+        `Audio is ready to play through after ${elapsedtime.toFixed(1)}s from ${
+          this.audioElement.currentSrc
+        }`
+      );
+    };
+
+    // Handle audio playback completion
+    this.audioElement.onended = () => {
+      const endtime = Date.now();
+      const elapsedtime = (endtime - starttime) / 1000;
+      console.debug(`Audio playback ended after ${elapsedtime.toFixed(1)}s`);
+    };
   }
 }

@@ -35,7 +35,15 @@ class PiAIChatbot implements Chatbot {
     return path.includes("/talk") || path.includes("/discover");
   }
 
-  getDiscoveryPanelSelector(): any {
+  getVoiceMenuSelector(): string {
+    return "div.t-action-m";
+  }
+
+  getChatHistorySelector(): string {
+    return "div.t-body-chat";
+  }
+
+  getDiscoveryPanelSelector(): string {
     // note: depends on the side panel having already been identified
     return "#saypi-side-panel + div";
   }

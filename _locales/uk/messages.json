@@ -233,5 +233,92 @@
   "allowInterruptions": {
     "message": "Переривний",
     "description": "Мітка для прапорця, що дозволяє/забороняє користувачеві переривати відповідь Pi, говорячи."
+  },
+  "currencyUSDAbbreviation": {
+    "description": "Абревіатура для Долара Сполучених Штатів.",
+    "message": "USD"
+  },
+  "currentCharges": {
+    "description": "Термін, що використовується для опису поточних зборів (поточна сума), накопичених користувачем.",
+    "message": "Поточні збори"
+  },
+  "enableTTS": {
+    "description": "Мітка для прапорця, що вмикає/вимикає текст до мовлення.",
+    "message": "Покращені голоси"
+  },
+  "enhancedVoice": {
+    "description": "Назва (підказка) для голосів Say, Pi покращені.",
+    "message": "Голос покращено за допомогою Say, Pi"
+  },
+  "previewProgress": {
+    "description": "Повідомлення для відображення, коли користувач переглядає функцію, яка має обмеження за кількістю символів.",
+    "message": "$count$ символів використано з $limit$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "123"
+      },
+      "limit": {
+        "content": "$2",
+        "example": "500"
+      }
+    }
+  },
+  "previewStatusActive": {
+    "message": "Бета Активна"
+  },
+  "previewStatusCompleted": {
+    "message": "Бета Завершено"
+  },
+  "previewStatusPaused": {
+    "description": "Повідомлення для відображення, коли користувач переглядає функцію, яка була призупинена.",
+    "message": "Бета призупинена до $resetDate$",
+    "placeholders": {
+      "resetDate": {
+        "content": "$1",
+        "example": "2021-12-31"
+      }
+    }
+  },
+  "previewStatusUnknown": {
+    "message": "Не вдається підключитися..."
+  },
+  "readAloudButtonTitle": {
+    "description": "Назва кнопки для читання тексту повідомлення вголос.",
+    "message": "Читати вголос"
+  },
+  "ttsCostExplanation": {
+    "description": "Підказка для відображення, коли двигун тексту-до-мови використовується для гучного читання повідомлення, з урахуванням вартості повідомлення.",
+    "message": "Вартість прослуховування цього повідомлення становить $cost$ $currency$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "ttsCostExplanationFree": {
+    "description": "Підказка для відображення, коли двигун тексту-до-мови використовується для голосового проголошення повідомлення, і повідомлення є безкоштовним. Може містити назву провайдера.",
+    "message": "Це аудіо було створено безкоштовно.",
+    "placeholders": {
+      "provider": {
+        "content": "$1",
+        "example": "Inflection AI"
+      }
+    }
+  },
+  "ttsPoweredBy": {
+    "description": "Повідомлення для відображення, коли двигун тексту до мови використовується для голосового проголошення повідомлення.",
+    "message": "Текст до мови підтримується $ttsEngine$",
+    "placeholders": {
+      "ttsEngine": {
+        "content": "$1",
+        "example": "ElevenLabs"
+      }
+    }
   }
 }

@@ -233,5 +233,92 @@
   "allowInterruptions": {
     "message": "Interruptible",
     "description": "Étiquette pour la case à cocher pour activer/désactiver l'autorisation de l'utilisateur d'interrompre les réponses de Pi en parlant."
+  },
+  "currencyUSDAbbreviation": {
+    "description": "L'abréviation pour le Dollar des États-Unis.",
+    "message": "USD"
+  },
+  "currentCharges": {
+    "description": "Le terme utilisé pour décrire les frais actuels (total cumulé) accumulés par l'utilisateur.",
+    "message": "Frais actuels"
+  },
+  "enableTTS": {
+    "description": "Étiquette pour la case à cocher pour activer/désactiver la synthèse vocale.",
+    "message": "Voix améliorées"
+  },
+  "enhancedVoice": {
+    "description": "Titre (infobulle) pour Dire, voix améliorées de Pi.",
+    "message": "Voix améliorée par Say, Pi"
+  },
+  "previewProgress": {
+    "description": "Le message à afficher lorsque l'utilisateur prévisualise une fonctionnalité qui a une limite de caractères.",
+    "message": "$count$ caractères utilisés sur $limit$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "123"
+      },
+      "limit": {
+        "content": "$2",
+        "example": "500"
+      }
+    }
+  },
+  "previewStatusActive": {
+    "message": "Beta Actif"
+  },
+  "previewStatusCompleted": {
+    "message": "Beta Terminée"
+  },
+  "previewStatusPaused": {
+    "description": "Le message à afficher lorsque l'utilisateur prévisualise une fonctionnalité qui a été mise en pause.",
+    "message": "Beta en pause jusqu'à $resetDate$",
+    "placeholders": {
+      "resetDate": {
+        "content": "$1",
+        "example": "2021-12-31"
+      }
+    }
+  },
+  "previewStatusUnknown": {
+    "message": "Impossible de se connecter..."
+  },
+  "readAloudButtonTitle": {
+    "description": "Le titre du bouton pour lire à haute voix le texte d'un message.",
+    "message": "Lire à haute voix"
+  },
+  "ttsCostExplanation": {
+    "description": "L'infobulle à afficher lorsque le moteur de synthèse vocale est utilisé pour lire à haute voix un message, avec le coût du message.",
+    "message": "Le coût d'écoute de ce message est de $cost$ $currency$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "ttsCostExplanationFree": {
+    "description": "L'infobulle à afficher lorsqu'un moteur de synthèse vocale est utilisé pour lire à haute voix un message, et que le message est gratuit. Pourrait contenir le nom du fournisseur.",
+    "message": "Cet audio a été généré gratuitement.",
+    "placeholders": {
+      "provider": {
+        "content": "$1",
+        "example": "Inflection AI"
+      }
+    }
+  },
+  "ttsPoweredBy": {
+    "description": "Le message à afficher lorsque le moteur de synthèse vocale est utilisé pour lire à haute voix un message.",
+    "message": "Synthèse vocale alimentée par $ttsEngine$",
+    "placeholders": {
+      "ttsEngine": {
+        "content": "$1",
+        "example": "ElevenLabs"
+      }
+    }
   }
 }

@@ -39,7 +39,9 @@ function validateI18nFiles(dir) {
             `Missing placeholder "${placeholder}" in key "${key}" in file ${file}`
           );
           process.exit(1);
-        } else if (messageObj.placeholders[placeholder].content !== "$1") {
+        } else if (
+          !/^\$\d+$/.test(messageObj.placeholders[placeholder].content)
+        ) {
           console.error(
             `Invalid content for placeholder "${placeholder}" in key "${key}" in file ${file}`
           );
