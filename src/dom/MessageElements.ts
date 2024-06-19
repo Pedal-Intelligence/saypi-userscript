@@ -123,7 +123,8 @@ class AssistantResponse {
       return this.finalText;
     }
     const content = await this.decoratedContent();
-    const textStream = new ElementTextStream(content, this.includeInitialText);
+    const options = { includeInitialText: this.includeInitialText };
+    const textStream = new ElementTextStream(content, options);
     const textBuffer: string[] = [];
     return new Promise((resolve) => {
       textStream.getStream().subscribe({

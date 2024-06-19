@@ -7,6 +7,11 @@ export const TEXT_STABILITY_THRESHOLD_MILLIS: number = 1500; // visible for test
 export function getNestedText(node: HTMLElement): string {
   return node.textContent ?? node.innerText ?? "";
 }
+export interface InputStreamOptions {
+  includeInitialText?: boolean;
+  delimiter?: string;
+  inactivityFactor?: number;
+}
 
 export class ElementTextStream {
   protected subject: Subject<string>;
@@ -17,12 +22,19 @@ export class ElementTextStream {
   private timeOfLastBatch: number | null = null;
   private intervalsBetweenBatches: number[] = [];
   protected batchIntervalTimerId: NodeJS.Timeout | null = null;
+  protected inactivityFactor: number = 3;
+  protected delimiter: string = "";
 
   constructor(
     protected element: HTMLElement,
-    protected includeInitialText: boolean = false,
-    protected delimiter: string = ""
+    {
+      includeInitialText = false,
+      delimiter = "",
+      inactivityFactor = 3,
+    }: InputStreamOptions = {}
   ) {
+    this.delimiter = delimiter;
+    this.inactivityFactor = inactivityFactor;
     this.subject = new ReplaySubject<string>(1000); // buffer should be long enough to handle the longest text (4k characters)
     // subscribe to keep track of emitted values
     this.subject.subscribe((value) => this.emittedValues.push(value));
@@ -162,12 +174,12 @@ export class ElementTextStream {
           // end of paragraph increases likelihood that this is the end of the response
           this.batchIntervalTimerId = setTimeout(() => {
             console.log(
-              `Stream ended on ${word} after ${(2 * avgIntervalMs).toFixed(
-                0
-              )}ms of inactivity`
+              `Stream ended on ${word} after ${(
+                this.inactivityFactor * avgIntervalMs
+              ).toFixed(0)}ms of inactivity`
             );
             this.subject.complete();
-          }, 3 * avgIntervalMs);
+          }, this.inactivityFactor * avgIntervalMs);
         }
       }
     };
