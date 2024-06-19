@@ -19,7 +19,7 @@ section#application-status {
 }
 
 .issue h2, p.issue {
-    background-image: url('../icons/alert.svg');
+    background-image: url('alert.svg');
     background-repeat: no-repeat;
     background-position: calc(100% - 1rem);
 }
