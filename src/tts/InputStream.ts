@@ -99,16 +99,16 @@ export class ElementTextStream {
             const element = node as HTMLElement;
             if (element.tagName === "SPAN") {
               spansAdded++;
-              console.debug("framer: span added", element.textContent);
+              console.debug("span added", element.textContent);
             } else if (element.tagName === "DIV") {
               const paragraph = element as HTMLDivElement;
               lastParagraphAdded = paragraph;
-              console.debug("framer: paragraph added", paragraph.textContent);
+              console.debug("paragraph added", paragraph.textContent);
             }
           } else if (node.nodeType === Node.TEXT_NODE) {
             const textNode = node as Text;
             const content = textNode.textContent;
-            console.debug("framer: plain text added", textNode.textContent);
+            console.debug("text node added", textNode.textContent);
             this.subject.next(content || "");
             spansReplaced++;
             // we're finished when the paragraph has no more preliminary content
@@ -133,6 +133,12 @@ export class ElementTextStream {
             }
           }
         }
+      } else if (mutation.type === "characterData") {
+        const textNode = mutation.target as Text;
+        const content = textNode.textContent;
+        console.debug(
+          `text node content changed from "${mutation.oldValue}" to "${content}"`
+        );
       }
     };
 
@@ -141,7 +147,12 @@ export class ElementTextStream {
     };
 
     this.observer = new MutationObserver(framerCallback);
-    this.observer.observe(this.element, { childList: true, subtree: true });
+    this.observer.observe(this.element, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+      characterDataOldValue: true,
+    });
   }
 
   getStream(): Observable<string> {

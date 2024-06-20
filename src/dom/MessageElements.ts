@@ -134,10 +134,20 @@ class AssistantResponse {
         complete: () => {
           this.stablised = true;
           this.finalText = textBuffer.join("");
+          this.consistencyCheck(this.finalText, this.text);
           resolve(this.finalText);
         },
       });
     });
+  }
+
+  private consistencyCheck(stableText: string, currentText: string): void {
+    if (stableText !== currentText) {
+      console.warn(
+        `Stable text does not match current text: ${stableText} !== ${currentText}`
+      );
+      this._element.classList.add("inconsistent-text");
+    }
   }
 
   /**
