@@ -1,5 +1,5 @@
 import { md5 } from "js-md5";
-import { ElementTextStream } from "../tts/InputStream";
+import { ElementTextStream, TextContent } from "../tts/InputStream";
 import { SpeechUtterance } from "../tts/SpeechModel";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
@@ -118,24 +118,21 @@ class AssistantResponse {
     return "";
   }
 
+  /**
+   * Get the final text content of the chat message
+   * This method waits for the text content to be completely loaded
+   */
   async stableText(): Promise<string> {
     if (this.stablised) {
-      return this.finalText;
+      return this.text;
     }
     const content = await this.decoratedContent();
     const options = { includeInitialText: this.includeInitialText };
     const textStream = new ElementTextStream(content, options);
-    const textBuffer: string[] = [];
     return new Promise((resolve) => {
       textStream.getStream().subscribe({
-        next: (text) => {
-          textBuffer.push(text);
-        },
         complete: () => {
-          this.stablised = true;
-          this.finalText = textBuffer.join("");
-          this.consistencyCheck(this.finalText, this.text);
-          resolve(this.finalText);
+          resolve(this.text);
         },
       });
     });

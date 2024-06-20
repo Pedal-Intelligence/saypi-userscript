@@ -42,6 +42,26 @@ export class AudioStreamManager {
     }
   }
 
+  async replaceSpeechInStream(
+    uuid: string,
+    from: string,
+    to: string
+  ): Promise<boolean> {
+    if (this.inputBuffers[uuid]) {
+      const buffer = this.inputBuffers[uuid];
+      if (buffer.isPending(from)) {
+        buffer.replaceText(from, to);
+        return true;
+      } else {
+        console.error(`Text not found in buffer: ${from}`);
+        return false;
+      }
+    } else {
+      console.error(`No input buffer found for UUID: ${uuid}`);
+      return false;
+    }
+  }
+
   async endStream(uuid: string): Promise<void> {
     if (this.inputBuffers[uuid]) {
       this.inputBuffers[uuid].endInput();

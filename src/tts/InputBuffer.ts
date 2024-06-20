@@ -143,4 +143,8 @@ export class InputBuffer {
   hasEnded(): boolean {
     return this.isClosed;
   }
+
+  replaceText(from: string, to: string): void {
+    this.buffer = this.buffer.replace(from, to);
+  }
 }

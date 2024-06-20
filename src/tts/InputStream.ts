@@ -11,12 +11,37 @@ export interface InputStreamOptions {
   includeInitialText?: boolean;
   delimiter?: string;
 }
+export interface TextContent {
+  text: string;
+  changed: boolean;
+  changedFrom: string | null;
+}
+
+class TextItem implements TextContent {
+  constructor(
+    public text: string,
+    public changed: boolean = false,
+    public changedFrom: string | null = null
+  ) {}
+}
+
+class NewText extends TextItem {
+  constructor(public text: string) {
+    super(text, false, null);
+  }
+}
+
+class ChangedText extends TextItem {
+  constructor(public text: string, public changedFrom: string) {
+    super(text, true, changedFrom);
+  }
+}
 
 export class ElementTextStream {
-  protected subject: Subject<string>;
+  protected subject: Subject<TextContent>;
   protected observer!: MutationObserver;
   protected timeout: NodeJS.Timeout | undefined = undefined;
-  protected emittedValues: string[] = [];
+  protected emittedValues: TextContent[] = [];
   protected timeOfLastTextChange: number = Date.now();
   protected batchIntervalTimerId: NodeJS.Timeout | null = null;
   protected delimiter: string = "";
@@ -26,7 +51,7 @@ export class ElementTextStream {
     { includeInitialText = false, delimiter = "" }: InputStreamOptions = {}
   ) {
     this.delimiter = delimiter;
-    this.subject = new ReplaySubject<string>(1000); // buffer should be long enough to handle the longest text (4k characters)
+    this.subject = new ReplaySubject<TextContent>(1000); // buffer should be long enough to handle the longest text (4k characters)
     // subscribe to keep track of emitted values
     this.subject.subscribe((value) => this.emittedValues.push(value));
     // subscribe to keep track of timeouts
@@ -50,7 +75,7 @@ export class ElementTextStream {
     const initialText = getNestedText(message);
     // send the initial text to the stream only if it's not empty
     if (initialText) {
-      this.subject.next(initialText);
+      this.subject.next(new NewText(initialText));
     }
   }
 
@@ -109,7 +134,7 @@ export class ElementTextStream {
             const textNode = node as Text;
             const content = textNode.textContent;
             console.debug("text node added", textNode.textContent);
-            this.subject.next(content || "");
+            this.subject.next(new NewText(content || ""));
             spansReplaced++;
             // we're finished when the paragraph has no more preliminary content
             const paragraph = textNode.parentElement;
@@ -136,9 +161,19 @@ export class ElementTextStream {
       } else if (mutation.type === "characterData") {
         const textNode = mutation.target as Text;
         const content = textNode.textContent;
-        console.debug(
-          `text node content changed from "${mutation.oldValue}" to "${content}"`
+        // text node content changed from "${mutation.oldValue}" to "${content}"`
+        // emit a change event only if the old value is present in the already emitted values
+        const oldValue = mutation.oldValue || "";
+        const alreadyEmitted = this.emittedValues.some(
+          (value) => value.text === oldValue
         );
+        if (alreadyEmitted) {
+          this.subject.next(new ChangedText(content || "", oldValue));
+        } else {
+          console.debug(
+            `Skipping change event for "${content}" because the old value "${oldValue}" was not emitted`
+          );
+        }
       }
     };
 
@@ -155,7 +190,7 @@ export class ElementTextStream {
     });
   }
 
-  getStream(): Observable<string> {
+  getStream(): Observable<TextContent> {
     return this.subject.asObservable();
   }
 

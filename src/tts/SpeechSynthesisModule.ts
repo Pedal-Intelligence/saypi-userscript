@@ -153,6 +153,14 @@ class SpeechSynthesisModule {
     return await this.audioStreamManager.addSpeechToStream(uuid, text);
   }
 
+  async replaceSpeechInStream(
+    uuid: string,
+    from: string,
+    to: string
+  ): Promise<boolean> {
+    return await this.audioStreamManager.replaceSpeechInStream(uuid, from, to);
+  }
+
   async endSpeechStream(utterance: SpeechUtterance): Promise<void> {
     await this.audioStreamManager.endStream(utterance.id);
     // doesn't capture all stream ended cases (see audioStreamManager.endStream for more), but good enough for now
