@@ -1,5 +1,7 @@
 import { TextToSpeechService } from "./TextToSpeechService";
 
+type FlushEvent = "eos" | "timeout" | "close";
+
 export class InputBuffer {
   private buffer: string = "";
   private bufferTimeout?: NodeJS.Timeout;
@@ -51,7 +53,7 @@ export class InputBuffer {
     if (text === this.END_OF_SPEECH_MARKER) {
       this.closeBuffer();
     } else if (this.shouldFlushBuffer(text)) {
-      this.flushBuffer();
+      this.flushBuffer("eos");
     }
   }
 
@@ -67,7 +69,7 @@ export class InputBuffer {
       clearTimeout(this.bufferTimeout);
     }
     this.bufferTimeout = setTimeout(() => {
-      this.flushBuffer();
+      this.flushBuffer("timeout");
     }, this.BUFFER_TIMEOUT_MS);
   }
 
@@ -81,13 +83,15 @@ export class InputBuffer {
     }, closeAfterMs);
   }
 
-  private async flushBuffer(): Promise<void> {
+  private async flushBuffer(event: FlushEvent): Promise<void> {
     const text = this.buffer;
     this.buffer = "";
 
     try {
       await this.ttsService.addTextToSpeechStream(this.uuid, text);
-      console.debug(`Buffer flushed for UUID: ${this.uuid}: "${text}"`);
+      console.debug(
+        `Buffer flushed on ${event} for UUID: ${this.uuid}: "${text}"`
+      );
     } catch (error) {
       console.error("Error sending buffer:", error);
     }
@@ -111,7 +115,7 @@ export class InputBuffer {
       clearTimeout(this.streamTimeout);
     }
 
-    await this.flushBuffer();
+    await this.flushBuffer("close");
     console.log(`Buffer closed for UUID: ${this.uuid}`);
   }
 

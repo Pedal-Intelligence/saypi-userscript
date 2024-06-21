@@ -44,8 +44,7 @@ class PopupMenu {
 
 class AssistantResponse {
   private _element: HTMLElement;
-  private stablised: boolean = false;
-  private finalText: string = "";
+  private stable: boolean = false;
   // visible for testing
   static PARAGRAPH_SEPARATOR = ""; // should match ElementInputStream's delimiter argument
   protected includeInitialText = true; // stable text may be called on completed messages, so include the initial text unless streaming
@@ -123,7 +122,7 @@ class AssistantResponse {
    * This method waits for the text content to be completely loaded
    */
   async stableText(): Promise<string> {
-    if (this.stablised) {
+    if (this.stable) {
       return this.text;
     }
     const content = await this.decoratedContent();
@@ -132,19 +131,11 @@ class AssistantResponse {
     return new Promise((resolve) => {
       textStream.getStream().subscribe({
         complete: () => {
+          this.stable = true;
           resolve(this.text);
         },
       });
     });
-  }
-
-  private consistencyCheck(stableText: string, currentText: string): void {
-    if (stableText !== currentText) {
-      console.warn(
-        `Stable text does not match current text: ${stableText} !== ${currentText}`
-      );
-      this._element.classList.add("inconsistent-text");
-    }
   }
 
   /**
@@ -265,6 +256,11 @@ class AssistantResponse {
         ttsControlsElement as HTMLElement,
         charge
       );
+    }
+
+    const messageContentElement = this.element.querySelector(".content");
+    if (messageContentElement) {
+      messageContentElement.id = `saypi-message-content-${this.utteranceId}`;
     }
 
     EventBus.on(

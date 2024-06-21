@@ -1,7 +1,8 @@
 import { Observable, ReplaySubject, Subject } from "rxjs";
+import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
-export const STREAM_TIMEOUT_MS: number = 10000; // visible for testing
-const graceForAdditionalChanges = 1000;
+export const STREAM_TIMEOUT: number = 10000; // visible for testing
+const DATA_TIMEOUT = 1000;
 
 // Visible for testing
 export function getNestedText(node: HTMLElement): string {
@@ -25,7 +26,7 @@ class TextItem implements TextContent {
   ) {}
 }
 
-class NewText extends TextItem {
+class AddedText extends TextItem {
   constructor(public text: string) {
     super(text, false, null);
   }
@@ -37,6 +38,11 @@ class ChangedText extends TextItem {
   }
 }
 
+type Completion = {
+  type: "eod" | "timeout" | "disconnect";
+  time: number;
+};
+
 export class ElementTextStream {
   protected subject: Subject<TextContent>;
   protected observer!: MutationObserver;
@@ -45,13 +51,15 @@ export class ElementTextStream {
   protected timeOfLastTextChange: number = Date.now();
   protected batchIntervalTimerId: NodeJS.Timeout | null = null;
   protected delimiter: string = "";
+  private completionReason: Completion | null = null;
+  private completed = false; // whether the stream has completed (reduntant check for subject.closed)
 
   constructor(
     protected element: HTMLElement,
     { includeInitialText = false, delimiter = "" }: InputStreamOptions = {}
   ) {
     this.delimiter = delimiter;
-    this.subject = new ReplaySubject<TextContent>(1000); // buffer should be long enough to handle the longest text (4k characters)
+    this.subject = new Subject<TextContent>(); // buffer should be long enough to handle the longest text (4k characters)
     // subscribe to keep track of emitted values
     this.subject.subscribe((value) => this.emittedValues.push(value));
     // subscribe to keep track of timeouts
@@ -71,11 +79,55 @@ export class ElementTextStream {
     this.registerObserver(); // start observing the element for additions
   }
 
+  protected next(value: TextContent): void {
+    if (this.closed()) {
+      if (this.completionReason) {
+        const timeElapsed = Date.now() - this.completionReason.time;
+        console.debug(
+          `Skipping next event for "${value.text}" because the stream has already completed on ${this.completionReason.type} ${timeElapsed}ms ago`
+        );
+      } else {
+        console.debug(
+          `Skipping next event for "${value.text}" because the stream was closed for no reason`
+        );
+      }
+    } else {
+      this.subject.next(value);
+    }
+  }
+
+  protected complete(reason: Completion): void {
+    if (this.closed()) {
+      console.debug(
+        `Cannot complete the stream on ${reason.type} because the stream has already been completed on ${this.completionReason?.type}`
+      );
+      return;
+    }
+    this.completionReason = reason;
+    console.debug(
+      `Completing stream on ${reason.type}`,
+      this.element.id ? this.element.id : this.element
+    );
+    this.subject.complete();
+    this.completed = true;
+    //this.disconnect(); // stop observing the element - leave open for debugging
+  }
+
+  /**
+   * Redundant check for the closed property of the subject
+   * For some reason, the subject is not closed immediately after calling subject.complete(),
+   * so we need to use our own flag to check if the stream is closed.
+   * @returns true if the stream is closed, false otherwise
+   */
+  protected closed(): boolean {
+    return this.subject.closed || this.completed;
+  }
+
   private emitInitialText(message: HTMLElement): void {
     const initialText = getNestedText(message);
     // send the initial text to the stream only if it's not empty
     if (initialText) {
-      this.subject.next(new NewText(initialText));
+      this.next(new AddedText(initialText));
     }
   }
 
@@ -88,15 +140,12 @@ export class ElementTextStream {
       clearTimeout(this.timeout);
     }
     this.timeout = setTimeout(() => {
-      console.debug(
-        `Stream ended on timeout out after ${STREAM_TIMEOUT_MS}ms since last token`
-      );
-      this.subject.complete();
-    }, STREAM_TIMEOUT_MS);
+      this.complete({ type: "timeout", time: Date.now() });
+    }, STREAM_TIMEOUT);
   }
 
   protected getTextIsStable(): boolean {
-    return this.subject.closed;
+    return this.closed();
   }
 
   protected registerObserver(): void {
@@ -124,17 +173,14 @@ export class ElementTextStream {
             const element = node as HTMLElement;
             if (element.tagName === "SPAN") {
               spansAdded++;
-              console.debug("span added", element.textContent);
             } else if (element.tagName === "DIV") {
               const paragraph = element as HTMLDivElement;
               lastParagraphAdded = paragraph;
-              console.debug("paragraph added", paragraph.textContent);
             }
           } else if (node.nodeType === Node.TEXT_NODE) {
             const textNode = node as Text;
             const content = textNode.textContent;
-            console.debug("text node added", textNode.textContent);
-            this.subject.next(new NewText(content || ""));
+            this.next(new AddedText(content || ""));
             spansReplaced++;
             // we're finished when the paragraph has no more preliminary content
             const paragraph = textNode.parentElement;
@@ -150,11 +196,21 @@ export class ElementTextStream {
             ) {
               stillChanging = false;
               // complete soon if not still changing
+              const startTime = Date.now();
+              const additionsRemaining = mutation.addedNodes.length - i - 1;
+              console.debug(
+                `${startTime}: Possible end of stream detected on ${content}, ${additionsRemaining} additions remaining.`
+              );
               setTimeout(() => {
                 if (!stillChanging) {
-                  this.subject.complete();
+                  const timeElapsed = Date.now() - startTime;
+                  const lastContent = this.emittedValues.slice(-1)[0]?.text;
+                  console.debug(
+                    `${Date.now()}: end of stream confirmed on "${lastContent}" after +${timeElapsed}ms`
+                  );
+                  this.complete({ type: "eod", time: Date.now() });
                 }
-              }, graceForAdditionalChanges);
+              }, DATA_TIMEOUT);
             }
           }
         }
@@ -168,7 +224,8 @@ export class ElementTextStream {
           (value) => value.text === oldValue
         );
         if (alreadyEmitted) {
-          this.subject.next(new ChangedText(content || "", oldValue));
+          stillChanging = true;
+          this.next(new ChangedText(content || "", oldValue));
         } else {
           console.debug(
             `Skipping change event for "${content}" because the old value "${oldValue}" was not emitted`
@@ -177,7 +234,18 @@ export class ElementTextStream {
       }
     };
 
+    const preferences = UserPreferenceModule.getInstance(); // for access to the language preference - this is not the most reliable way to get the language of the assistant, but it's the best we have for now
     const framerCallback = (mutationsList: MutationRecord[]) => {
+      if (this.closed()) {
+        const timeSinceCompletion = Date.now() - this.completionReason!.time;
+        preferences.getLanguage().then((lang) => {
+          console.warn(
+            `Content changed after the stream has closed. Try increasing the data timeout by at least ${timeSinceCompletion}ms for ${lang}.`
+          );
+        });
+        this.disconnect();
+        return;
+      }
       mutationsList.forEach((mutation) => framerMutation(mutation));
     };
 
@@ -200,9 +268,6 @@ export class ElementTextStream {
       clearTimeout(this.timeout);
     }
     this.observer.disconnect();
-    if (!this.subject.closed) {
-      this.subject.complete();
-    }
   }
 
   // For testing purposes

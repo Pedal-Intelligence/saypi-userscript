@@ -1,5 +1,5 @@
 {
   "i18n-ally.localesPaths": ["_locales"],
   "i18n-ally.keystyle": "nested",
-  "CodeGPT.apiKey": "Anthropic"
+  "CodeGPT.apiKey": "CodeGPT Plus Beta"
 }
