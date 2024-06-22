@@ -1,8 +1,35 @@
-import { Observable, ReplaySubject, Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
 export const STREAM_TIMEOUT: number = 10000; // visible for testing
 const DATA_TIMEOUT = 1000;
+// Timeout values above base for different languages - derived from empirical testing on pi.ai
+const LANGUAGE_TIMEOUTS: { [key: string]: number } = {
+  en: 0,
+  ar: 1250,
+  de: 250,
+  es: 250,
+  fr: 1500,
+  hi: 1250,
+  it: 0,
+  nl: 0,
+  pl: 750,
+  pt: 1000,
+  ja: 1000,
+  ko: 1250,
+  ru: 2500,
+  uk: 2250,
+  zh: 0,
+};
+
+function calculateDataTimeout(text: string, lang: string): number {
+  const additionalTimeout = LANGUAGE_TIMEOUTS[lang] ?? 1000;
+  const totalTime = DATA_TIMEOUT + additionalTimeout;
+  console.debug(
+    `Timeout for "${text}" in ${lang} is ${totalTime}ms (${DATA_TIMEOUT} + ${additionalTimeout})`
+  );
+  return totalTime;
+}
 
 // Visible for testing
 export function getNestedText(node: HTMLElement): string {
@@ -51,6 +78,7 @@ export class ElementTextStream {
   protected timeOfLastTextChange: number = Date.now();
   protected batchIntervalTimerId: NodeJS.Timeout | null = null;
   protected delimiter: string = "";
+  protected languageGuess: string = ""; // the language of the content in the element - guessed from user preferences
   private completionReason: Completion | null = null;
   private completed = false; // whether the stream has completed (reduntant check for subject.closed)
 
@@ -59,6 +87,11 @@ export class ElementTextStream {
     { includeInitialText = false, delimiter = "" }: InputStreamOptions = {}
   ) {
     this.delimiter = delimiter;
+    UserPreferenceModule.getInstance()
+      .getLanguage()
+      .then((lang) => {
+        this.languageGuess = lang;
+      });
     this.subject = new Subject<TextContent>(); // buffer should be long enough to handle the longest text (4k characters)
     // subscribe to keep track of emitted values
     this.subject.subscribe((value) => this.emittedValues.push(value));
@@ -155,7 +188,7 @@ export class ElementTextStream {
     let spansReplaced = 0;
     let stillChanging = false;
 
-    const framerMutation = (mutation: MutationRecord) => {
+    const handleMutationEvent = (mutation: MutationRecord) => {
       if (this.closed()) {
         console.debug(
           `Skipping change event on ${mutation.target} because the stream has already been completed`,
@@ -187,7 +220,7 @@ export class ElementTextStream {
             }
           } else if (node.nodeType === Node.TEXT_NODE) {
             const textNode = node as Text;
-            const content = textNode.textContent;
+            const content = textNode.textContent || "";
             this.next(new AddedText(content || ""));
             spansReplaced++;
             // we're finished when the paragraph has no more preliminary content
@@ -218,7 +251,7 @@ export class ElementTextStream {
                   );
                   this.complete({ type: "eod", time: Date.now() });
                 }
-              }, DATA_TIMEOUT);
+              }, calculateDataTimeout(content, this.languageGuess));
             }
           }
         }
@@ -242,22 +275,19 @@ export class ElementTextStream {
       }
     };
 
-    const preferences = UserPreferenceModule.getInstance(); // for access to the language preference - this is not the most reliable way to get the language of the assistant, but it's the best we have for now
-    const framerCallback = (mutationsList: MutationRecord[]) => {
+    const contentMutationHandler = (mutationsList: MutationRecord[]) => {
       if (this.closed()) {
         const timeSinceCompletion = Date.now() - this.completionReason!.time;
-        preferences.getLanguage().then((lang) => {
-          console.warn(
-            `Content changed after the stream has closed. Try increasing the data timeout by at least ${timeSinceCompletion}ms for ${lang}.`
-          );
-        });
+        console.warn(
+          `Content changed after the stream has closed. Try increasing the data timeout by at least ${timeSinceCompletion}ms for ${this.languageGuess}.`
+        );
         this.disconnect();
         return;
       }
-      mutationsList.forEach((mutation) => framerMutation(mutation));
+      mutationsList.forEach((mutation) => handleMutationEvent(mutation));
     };
 
-    this.observer = new MutationObserver(framerCallback);
+    this.observer = new MutationObserver(contentMutationHandler);
     this.observer.observe(this.element, {
       childList: true,
       subtree: true,
