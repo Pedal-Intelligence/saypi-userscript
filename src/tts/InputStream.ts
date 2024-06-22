@@ -156,6 +156,14 @@ export class ElementTextStream {
     let stillChanging = false;
 
     const framerMutation = (mutation: MutationRecord) => {
+      if (this.closed()) {
+        console.debug(
+          `Skipping change event on ${mutation.target} because the stream has already been completed`,
+          mutation
+        );
+        return;
+      }
+
       if (mutation.type === "childList") {
         for (let i = 0; i < mutation.removedNodes.length; i++) {
           const node = mutation.removedNodes[i];
