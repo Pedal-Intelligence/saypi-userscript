@@ -8,6 +8,7 @@ import { Observation } from "./Observation";
 import { Chatbot } from "../chatbots/Chatbot";
 import { PiAIChatbot } from "../chatbots/Pi";
 import EventBus from "../events/EventBus";
+import { isMobileDevice } from "../UserAgentModule";
 
 class PopupMenu {
   private _element: HTMLElement;
@@ -214,7 +215,9 @@ class AssistantResponse {
         }
       }
     }
-    this.watchForPopupMenu(hoverMenu as HTMLElement, utterance);
+    if (isMobileDevice() && hoverMenu) {
+      this.watchForPopupMenu(hoverMenu as HTMLElement, utterance);
+    }
     let ttsControlsElement = this.element.querySelector(
       ".saypi-tts-controls"
     ) as HTMLDivElement;
@@ -263,27 +266,30 @@ class AssistantResponse {
       messageContentElement.id = `saypi-message-content-${this.utteranceId}`;
     }
 
-    EventBus.on(
-      "saypi:tts:menuPop",
-      (event: { utteranceId: string; menu: PopupMenu }) => {
-        const id = this._element.dataset.utteranceId;
-        if (
-          !id ||
-          id !== event.utteranceId ||
-          id !== charge.utteranceId ||
-          !charge.cost
-        ) {
-          return;
+    if (isMobileDevice()) {
+      // TODO: we need a way to deregister this listener when the message is removed - perhaps a teardown method?
+      EventBus.on(
+        "saypi:tts:menuPop",
+        (event: { utteranceId: string; menu: PopupMenu }) => {
+          const id = this._element.dataset.utteranceId;
+          if (
+            !id ||
+            id !== event.utteranceId ||
+            id !== charge.utteranceId ||
+            !charge.cost
+          ) {
+            return;
+          }
+          const menuElement = event.menu.element;
+          const menuCostElement = menuElement.querySelector(".saypi-cost");
+          if (menuCostElement) {
+            this.ttsControlsModule.updateCostBasis(menuElement, charge);
+          } else {
+            this.ttsControlsModule.addCostBasis(menuElement, charge, true);
+          }
         }
-        const menuElement = event.menu.element;
-        const menuCostElement = menuElement.querySelector(".saypi-cost");
-        if (menuCostElement) {
-          this.ttsControlsModule.updateCostBasis(menuElement, charge);
-        } else {
-          this.ttsControlsModule.addCostBasis(menuElement, charge, true);
-        }
-      }
-    );
+      );
+    }
   }
 }
 

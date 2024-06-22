@@ -59,8 +59,18 @@ export class InputBuffer {
 
   private shouldFlushBuffer(text: string): boolean {
     return (
-      [".", "!", "?"].some((end) => text.endsWith(end)) ||
-      text === this.END_OF_SPEECH_MARKER
+      [
+        ".",
+        "!",
+        "?",
+        "。", // chinese period/japanese maru
+        "……", // chinese ellipsis
+        "。。。", // chinese - ideographic full stop
+        "～", // chinese wave dash,
+        "・・・", // japanese - kanten
+        "―", // japanese dash
+        "~", // tilde (used in some Korean and some other languages as a sentence break)
+      ].some((end) => text.endsWith(end)) || text === this.END_OF_SPEECH_MARKER
     );
   }
 
