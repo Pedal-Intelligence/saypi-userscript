@@ -3,6 +3,7 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
 export const STREAM_TIMEOUT: number = 10000; // visible for testing
 const DATA_TIMEOUT = 1000;
+const DEFAULT_ADDITIONAL_TIMEOUT = 0;
 // Timeout values above base for different languages - derived from empirical testing on pi.ai
 const LANGUAGE_TIMEOUTS: { [key: string]: number } = {
   en: 0,
@@ -23,7 +24,8 @@ const LANGUAGE_TIMEOUTS: { [key: string]: number } = {
 };
 
 function calculateDataTimeout(text: string, lang: string): number {
-  const additionalTimeout = LANGUAGE_TIMEOUTS[lang] ?? 1000;
+  const additionalTimeout =
+    LANGUAGE_TIMEOUTS[lang] ?? DEFAULT_ADDITIONAL_TIMEOUT;
   const totalTime = DATA_TIMEOUT + additionalTimeout;
   console.debug(
     `Timeout for "${text}" in ${lang} is ${totalTime}ms (${DATA_TIMEOUT} + ${additionalTimeout})`
