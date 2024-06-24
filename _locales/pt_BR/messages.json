@@ -244,7 +244,7 @@
   },
   "enableTTS": {
     "description": "Rótulo para a caixa de seleção para ativar/desativar texto-para-fala.",
-    "message": "Vozes aprimoradas"
+    "message": "Vozes multilíngues"
   },
   "enhancedVoice": {
     "description": "Título (dica de ferramenta) para Dizer, vozes aprimoradas pelo Pi.",

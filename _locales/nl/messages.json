@@ -244,7 +244,7 @@
   },
   "enableTTS": {
     "description": "Label voor het selectievakje om tekst-naar-spraak in/uit te schakelen.",
-    "message": "Verbeterde stemmen"
+    "message": "Meertalige stemmen"
   },
   "enhancedVoice": {
     "description": "Titel (knopinfo) voor Zeg, Pi verbeterde stemmen.",

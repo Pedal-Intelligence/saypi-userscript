@@ -244,7 +244,7 @@
   },
   "enableTTS": {
     "description": "Nhãn cho hộp kiểm để bật/tắt chức năng văn bản thành giọng nói.",
-    "message": "Giọng nói nâng cao"
+    "message": "Các giọng đa ngôn ngữ"
   },
   "enhancedVoice": {
     "description": "Tiêu đề (chú giải) cho Say, Pi nâng cao giọng nói.",

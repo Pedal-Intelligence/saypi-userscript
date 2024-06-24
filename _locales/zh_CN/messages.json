@@ -244,7 +244,7 @@
   },
   "enableTTS": {
     "description": "启用/禁用语音合成的复选框标签。",
-    "message": "增强的语音"
+    "message": "多语言的声音"
   },
   "enhancedVoice": {
     "description": "标题（工具提示）为“说，派增强语音”。",

@@ -244,7 +244,7 @@
   },
   "enableTTS": {
     "description": "텍스트 음성 변환을 활성화/비활성화하는 체크박스의 레이블.",
-    "message": "향상된 목소리"
+    "message": "다국어 음성"
   },
   "enhancedVoice": {
     "description": "제목 (툴팁) : Say, Pi 향상된 음성.",
