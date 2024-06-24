@@ -59,7 +59,7 @@
   },
   "audioConnected": {
     "description": "Mikrofon bağlandığında gösterilen mesaj",
-    "message": "$mikrofon$ bağlandı",
+    "message": "$microphone$ bağlandı",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -79,7 +79,7 @@
   },
   "audioReconnecting": {
     "description": "Yeni bir mikrofona bağlanırken görüntülenen mesaj",
-    "message": "$Mikrofona$ geçiliyor...",
+    "message": "$microphone$ geçiliyor...",
     "placeholders": {
       "microphone": {
         "content": "$1",

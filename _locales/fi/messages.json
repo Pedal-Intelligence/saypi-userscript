@@ -59,7 +59,7 @@
   },
   "audioConnected": {
     "description": "Viesti näytetään, kun mikrofoni on kytketty",
-    "message": "$Mikrofoni$ kytketty",
+    "message": "$microphone$ kytketty",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -79,7 +79,7 @@
   },
   "audioReconnecting": {
     "description": "Viesti näytetään, kun yhdistetään uuteen mikrofoniin",
-    "message": "Vaihdetaan $mikrofoniin$...",
+    "message": "Vaihdetaan $microphone$...",
     "placeholders": {
       "microphone": {
         "content": "$1",

@@ -13,7 +13,7 @@
   },
   "appDescription": {
     "description": "Ang paglalarawan ng aplikasyon.",
-    "message": "Pagsasalita-sa-teksto para sa Pi, ang makipag-usap na AI. Tangkilikin ang mga walang kamay na pag-uusap sa anumang wika."
+    "message": "Speech-to-text para sa Pi, ang conversational AI. Mag-enjoy ng hands-free na usapan sa anumang wika."
   },
   "appName": {
     "description": "Ang pangalan ng aplikasyon.",
@@ -79,7 +79,7 @@
   },
   "audioReconnecting": {
     "description": "Mensahe na ipinapakita kapag kumokonekta sa isang bagong mikropono",
-    "message": "Paglipat sa $mikropono$...",
+    "message": "Paglipat sa $microphone$...",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -214,7 +214,7 @@
   },
   "previewProgress": {
     "description": "Ang mensahe na ipapakita kapag ang gumagamit ay nagpi-preview ng isang tampok na may limitasyon sa karakter.",
-    "message": "$ginamit na count$ na mga karakter mula sa $limit$",
+    "message": "$count$ na mga karakter mula sa $limit$",
     "placeholders": {
       "count": {
         "content": "$1",

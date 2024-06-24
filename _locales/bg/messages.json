@@ -59,7 +59,7 @@
   },
   "audioConnected": {
     "description": "Съобщение, показващо се, когато микрофонът е свързан",
-    "message": "$микрофонът$ е свързан",
+    "message": "$microphone$ е свързан",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -79,7 +79,7 @@
   },
   "audioReconnecting": {
     "description": "Съобщение, показващо се при свързване на нов микрофон",
-    "message": "Превключване към $микрофон$...",
+    "message": "Превключване към $microphone$...",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -214,7 +214,7 @@
   },
   "previewProgress": {
     "description": "Съобщението, което да се показва, когато потребителят преглежда функция, която има ограничение на символите.",
-    "message": "$сount$ символа използвани от $limit$",
+    "message": "$count$ символа използвани от $limit$",
     "placeholders": {
       "count": {
         "content": "$1",

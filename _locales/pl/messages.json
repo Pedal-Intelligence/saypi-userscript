@@ -73,7 +73,7 @@
   },
   "audioConnected": {
     "description": "Wiadomość wyświetlana, gdy mikrofon jest podłączony",
-    "message": "Mikrofon podłączony",
+    "message": "$microphone$ podłączony",
     "placeholders": {
       "microphone": {
         "content": "$1",

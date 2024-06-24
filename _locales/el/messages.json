@@ -13,7 +13,7 @@
   },
   "appDescription": {
     "description": "Η περιγραφή της εφαρμογής.",
-    "message": "Μετατροπή ομιλίας σε κείμενο για το Pi, τη συνομιλητική AI. Απολαύστε ελεύθερες συνομιλίες σε οποιαδήποτε γλώσσα."
+    "message": "Φωνή σε κείμενο για Pi AI. Hands-free συνομιλίες σε όλες τις γλώσσες."
   },
   "appName": {
     "description": "Το όνομα της εφαρμογής.",
@@ -59,7 +59,7 @@
   },
   "audioConnected": {
     "description": "Μήνυμα που εμφανίζεται όταν συνδέεται ένα μικρόφωνο",
-    "message": "$μικρόφωνο$ συνδεδεμένο",
+    "message": "$microphone$ συνδεδεμένο",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -79,7 +79,7 @@
   },
   "audioReconnecting": {
     "description": "Μήνυμα που εμφανίζεται όταν συνδέεστε σε ένα νέο μικρόφωνο",
-    "message": "Μετάβαση στο $μικρόφωνο$...",
+    "message": "Μετάβαση στο $microphone$...",
     "placeholders": {
       "microphone": {
         "content": "$1",

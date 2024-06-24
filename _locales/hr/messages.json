@@ -59,7 +59,7 @@
   },
   "audioConnected": {
     "description": "Poruka prikazana kada je mikrofon povezan",
-    "message": "$mikrofon$ povezan",
+    "message": "$microphone$ povezan",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -79,7 +79,7 @@
   },
   "audioReconnecting": {
     "description": "Poruka prikazana prilikom povezivanja s novim mikrofonom",
-    "message": "Prelazak na $mikrofon$...",
+    "message": "Prelazak na $microphone$...",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -214,7 +214,7 @@
   },
   "previewProgress": {
     "description": "Poruka za prikaz kada korisnik pregledava značajku koja ima ograničenje broja znakova.",
-    "message": "$broj_znakova$ znakova iskorišteno od $limita$",
+    "message": "$count$ znakova iskorišteno od $limit$",
     "placeholders": {
       "count": {
         "content": "$1",

@@ -13,7 +13,7 @@
   },
   "appDescription": {
     "description": "Descrierea aplicației.",
-    "message": "Conversație prin voce-către-text pentru Pi, inteligența artificială conversațională. Bucurați-vă de conversații fără mâini în orice limbă."
+    "message": "Voce-în-text pentru Pi, AI conversațional. Conversații hands-free în orice limbă."
   },
   "appName": {
     "description": "Numele aplicației.",
@@ -59,7 +59,7 @@
   },
   "audioConnected": {
     "description": "Mesaj afișat când un microfon este conectat",
-    "message": "$microfon$ conectat",
+    "message": "$microphone$ conectat",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -79,7 +79,7 @@
   },
   "audioReconnecting": {
     "description": "Mesaj afișat atunci când se conectează un nou microfon",
-    "message": "Comutare la $microfon$...",
+    "message": "Comutare la $microphone$...",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -214,7 +214,7 @@
   },
   "previewProgress": {
     "description": "Mesajul de afișat când utilizatorul previzualizează o funcție care are un limită de caractere.",
-    "message": "$s-au folosit $count$ caractere din $limit$",
+    "message": "$count$ caractere utilizate din $limit$",
     "placeholders": {
       "count": {
         "content": "$1",

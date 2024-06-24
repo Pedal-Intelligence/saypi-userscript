@@ -59,7 +59,7 @@
   },
   "audioConnected": {
     "description": "Meddelande som visas när en mikrofon är ansluten",
-    "message": "$mikrofon$ ansluten",
+    "message": "$microphone$ ansluten",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -79,7 +79,7 @@
   },
   "audioReconnecting": {
     "description": "Meddelande som visas när du ansluter till en ny mikrofon",
-    "message": "Byter till $mikrofon$...",
+    "message": "Byter till $microphone$...",
     "placeholders": {
       "microphone": {
         "content": "$1",

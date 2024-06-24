@@ -79,7 +79,7 @@
   },
   "audioReconnecting": {
     "description": "Zpráva zobrazená při připojení nového mikrofonu",
-    "message": "Přepínání na $mikrofon$...",
+    "message": "Přepínání na $microphone$...",
     "placeholders": {
       "microphone": {
         "content": "$1",

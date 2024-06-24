@@ -59,7 +59,7 @@
   },
   "audioConnected": {
     "description": "Besked vises, når en mikrofon er tilsluttet",
-    "message": "$mikrofon$ tilsluttet",
+    "message": "$microphone$ tilsluttet",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -79,7 +79,7 @@
   },
   "audioReconnecting": {
     "description": "Besked vist, når du tilslutter en ny mikrofon",
-    "message": "Skifter til $mikrofon$...",
+    "message": "Skifter til $microphone$...",
     "placeholders": {
       "microphone": {
         "content": "$1",

@@ -13,7 +13,7 @@
   },
   "appDescription": {
     "description": "பயன்பாட்டின் விளக்கம்.",
-    "message": "Pi என்ற உரையை-உரை முக்கிய செய்தி, உரை அல்லு. எந்த மொழியில்  hands-free (or) free-hand (or) without using hands conversations -ai  enjoy pannunga."
+    "message": "பேச்சு-உரை Pi AI. கைகளற்ற உரையாடல்கள்."
   },
   "appName": {
     "description": "பயன்பாட்டின் பெயர்.",
@@ -59,7 +59,7 @@
   },
   "audioConnected": {
     "description": "ஒரு மைக்ரோபோன் இணைக்கப்பட்டு விட்டால் காண்பிக்கும் செய்தி",
-    "message": "$மைக்ரோபோன்$ இணைக்கப்பட்டுள்ளது",
+    "message": "$microphone$ இணைக்கப்பட்டுள்ளது",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -79,7 +79,7 @@
   },
   "audioReconnecting": {
     "description": "புதிய மைக்ரோபோனுக்கு இணைந்து விடும் செய்தி",
-    "message": "$மைக்ரோபோனுக்கு$ மாறுவதில்...",
+    "message": "$microphone$ மாறுவதில்...",
     "placeholders": {
       "microphone": {
         "content": "$1",

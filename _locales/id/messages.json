@@ -59,7 +59,7 @@
   },
   "audioConnected": {
     "description": "Pesan yang ditampilkan ketika mikrofon terhubung",
-    "message": "$mikrofon$ terhubung",
+    "message": "$microphone$ terhubung",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -79,7 +79,7 @@
   },
   "audioReconnecting": {
     "description": "Pesan yang ditampilkan saat terhubung ke mikrofon baru",
-    "message": "Beralih ke $mikrofon$...",
+    "message": "Beralih ke $microphone$...",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -214,7 +214,7 @@
   },
   "previewProgress": {
     "description": "Pesan yang ditampilkan ketika pengguna sedang melihat pratinjau fitur yang memiliki batas karakter.",
-    "message": "$jumlah$ karakter digunakan dari $batas$",
+    "message": "$count$ karakter digunakan dari $limit$",
     "placeholders": {
       "count": {
         "content": "$1",

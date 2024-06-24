@@ -59,7 +59,7 @@
   },
   "audioConnected": {
     "description": "Správa zobrazená pri pripojení mikrofónu",
-    "message": "$mikrofón$ pripojený",
+    "message": "$microphone$ pripojený",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -79,7 +79,7 @@
   },
   "audioReconnecting": {
     "description": "Správa zobrazená pri pripojení k novému mikrofónu",
-    "message": "Prepínanie na $mikrofón$...",
+    "message": "Prepínanie na $microphone$...",
     "placeholders": {
       "microphone": {
         "content": "$1",
