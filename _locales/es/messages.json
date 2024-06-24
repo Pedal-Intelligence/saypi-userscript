@@ -244,7 +244,7 @@
   },
   "enableTTS": {
     "description": "Etiqueta para la casilla de verificación para habilitar/deshabilitar el texto a voz.",
-    "message": "Voces mejoradas"
+    "message": "Voces multilingües"
   },
   "enhancedVoice": {
     "description": "Título (información sobre herramientas) para Decir, voces mejoradas de Pi.",

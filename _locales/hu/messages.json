@@ -244,7 +244,7 @@
   },
   "enableTTS": {
     "description": "Felirat a szöveg-felolvasás be-/kikapcsolásához használt jelölőnégyzethez.",
-    "message": "Fejlesztett hangok"
+    "message": "Többnyelvű hangok"
   },
   "enhancedVoice": {
     "description": "Cím (eszköztipp) a Mondjuk, Pi fokozott hangokhoz.",

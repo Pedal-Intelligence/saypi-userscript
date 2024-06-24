@@ -351,79 +351,134 @@ Usage: codyhouse.co/license
       .language-picker--flags .language-picker__button .li4-icon:first-of-type {
         display: none;
       }
-
       .language-picker__flag--arabic::before {
         background-image: url("../icons/flags/arab.svg");
       }
-
+      
       .language-picker__flag--bengali::before {
         background-image: url("../icons/flags/bd.svg");
       }
-
-      .language-picker__flag--deutsch::before {
-        background-image: url("../icons/flags/de.svg");
+      
+      .language-picker__flag--bulgarian::before {
+        background-image: url("../icons/flags/bg.svg");
       }
-
-      .language-picker__flag--english::before {
-        background-image: url("../icons/flags/us.svg");
-      }
-
-      .language-picker__flag--espanol::before {
-        background-image: url("../icons/flags/es.svg");
-      }
-
-      .language-picker__flag--francais::before {
-        background-image: url("../icons/flags/fr.svg");
-      }
-
-      .language-picker__flag--hindi::before {
-        background-image: url("../icons/flags/in.svg");
-      }
-
-      .language-picker__flag--hungarian::before {
-        background-image: url("../icons/flags/hu.svg");
-      }
-
-      .language-picker__flag--italiano::before {
-        background-image: url("../icons/flags/it.svg");
-      }
-
-      .language-picker__flag--dutch::before {
-        background-image: url("../icons/flags/nl.svg");
-      }
-
-      .language-picker__flag--polish::before {
-        background-image: url("../icons/flags/pl.svg");
-      }
-
-      .language-picker__flag--portuguese::before {
-        background-image: url("../icons/flags/br.svg");
-      }
-
-      .language-picker__flag--japanese::before {
-        background-image: url("../icons/flags/jp.svg");
-      }
-
-      .language-picker__flag--korean::before {
-        background-image: url("../icons/flags/kr.svg");
-      }
-
-      .language-picker__flag--russian::before {
-        background-image: url("../icons/flags/ru.svg");
-      }
-
-      .language-picker__flag--ukrainian::before {
-        background-image: url("../icons/flags/ua.svg");
-      }
-
-      .language-picker__flag--vietnamese::before {
-        background-image: url("../icons/flags/vn.svg");
-      }
-
+      
       .language-picker__flag--chinese::before {
         background-image: url("../icons/flags/cn.svg");
       }
-
+      
+      .language-picker__flag--croatian::before {
+        background-image: url("../icons/flags/hr.svg");
+      }
+      
+      .language-picker__flag--czech::before {
+        background-image: url("../icons/flags/cz.svg");
+      }
+      
+      .language-picker__flag--danish::before {
+        background-image: url("../icons/flags/dk.svg");
+      }
+      
+      .language-picker__flag--deutsch::before {
+        background-image: url("../icons/flags/de.svg");
+      }
+      
+      .language-picker__flag--dutch::before {
+        background-image: url("../icons/flags/nl.svg");
+      }
+      
+      .language-picker__flag--english::before {
+        background-image: url("../icons/flags/us.svg");
+      }
+      
+      .language-picker__flag--espanol::before {
+        background-image: url("../icons/flags/es.svg");
+      }
+      
+      .language-picker__flag--filipino::before {
+        background-image: url("../icons/flags/ph.svg");
+      }
+      
+      .language-picker__flag--finnish::before {
+        background-image: url("../icons/flags/fi.svg");
+      }
+      
+      .language-picker__flag--francais::before {
+        background-image: url("../icons/flags/fr.svg");
+      }
+      
+      .language-picker__flag--greek::before {
+        background-image: url("../icons/flags/gr.svg");
+      }
+      
+      .language-picker__flag--hindi::before {
+        background-image: url("../icons/flags/in.svg");
+      }
+      
+      .language-picker__flag--hungarian::before {
+        background-image: url("../icons/flags/hu.svg");
+      }
+      
+      .language-picker__flag--indonesian::before {
+        background-image: url("../icons/flags/id.svg");
+      }
+      
+      .language-picker__flag--italiano::before {
+        background-image: url("../icons/flags/it.svg");
+      }
+      
+      .language-picker__flag--japanese::before {
+        background-image: url("../icons/flags/jp.svg");
+      }
+      
+      .language-picker__flag--korean::before {
+        background-image: url("../icons/flags/kr.svg");
+      }
+      
+      .language-picker__flag--malay::before {
+        background-image: url("../icons/flags/my.svg");
+      }
+      
+      .language-picker__flag--polish::before {
+        background-image: url("../icons/flags/pl.svg");
+      }
+      
+      .language-picker__flag--portuguese::before {
+        background-image: url("../icons/flags/br.svg");
+      }
+      
+      .language-picker__flag--romanian::before {
+        background-image: url("../icons/flags/ro.svg");
+      }
+      
+      .language-picker__flag--russian::before {
+        background-image: url("../icons/flags/ru.svg");
+      }
+      
+      .language-picker__flag--slovak::before {
+        background-image: url("../icons/flags/sk.svg");
+      }
+      
+      .language-picker__flag--swedish::before {
+        background-image: url("../icons/flags/se.svg");
+      }
+      
+      .language-picker__flag--tamil::before {
+        background-image: url("../icons/flags/lk.svg");
+      }
+      
+      .language-picker__flag--turkish::before {
+        background-image: url("../icons/flags/tr.svg");
+      }
+      
+      .language-picker__flag--ukrainian::before {
+        background-image: url("../icons/flags/ua.svg");
+      }
+      
+      .language-picker__flag--vietnamese::before {
+        background-image: url("../icons/flags/vn.svg");
+      }
+      
       .language-picker__flag--global::before {
         background-image: url("../icons/flags/global.svg");
       }

@@ -1,5 +1,5 @@
 import { md5 } from "js-md5";
-import { ElementTextStream } from "../tts/InputStream";
+import { ElementTextStream, TextContent } from "../tts/InputStream";
 import { SpeechUtterance } from "../tts/SpeechModel";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
@@ -8,6 +8,7 @@ import { Observation } from "./Observation";
 import { Chatbot } from "../chatbots/Chatbot";
 import { PiAIChatbot } from "../chatbots/Pi";
 import EventBus from "../events/EventBus";
+import { isMobileDevice } from "../UserAgentModule";
 
 class PopupMenu {
   private _element: HTMLElement;
@@ -44,8 +45,7 @@ class PopupMenu {
 
 class AssistantResponse {
   private _element: HTMLElement;
-  private stablised: boolean = false;
-  private finalText: string = "";
+  private stable: boolean = false;
   // visible for testing
   static PARAGRAPH_SEPARATOR = ""; // should match ElementInputStream's delimiter argument
   protected includeInitialText = true; // stable text may be called on completed messages, so include the initial text unless streaming
@@ -118,22 +118,22 @@ class AssistantResponse {
     return "";
   }
 
+  /**
+   * Get the final text content of the chat message
+   * This method waits for the text content to be completely loaded
+   */
   async stableText(): Promise<string> {
-    if (this.stablised) {
-      return this.finalText;
+    if (this.stable) {
+      return this.text;
     }
     const content = await this.decoratedContent();
-    const textStream = new ElementTextStream(content, this.includeInitialText);
-    const textBuffer: string[] = [];
+    const options = { includeInitialText: this.includeInitialText };
+    const textStream = new ElementTextStream(content, options);
     return new Promise((resolve) => {
       textStream.getStream().subscribe({
-        next: (text) => {
-          textBuffer.push(text);
-        },
         complete: () => {
-          this.stablised = true;
-          this.finalText = textBuffer.join("");
-          resolve(this.finalText);
+          this.stable = true;
+          resolve(this.text);
         },
       });
     });
@@ -215,7 +215,9 @@ class AssistantResponse {
         }
       }
     }
-    this.watchForPopupMenu(hoverMenu as HTMLElement, utterance);
+    if (isMobileDevice() && hoverMenu) {
+      this.watchForPopupMenu(hoverMenu as HTMLElement, utterance);
+    }
     let ttsControlsElement = this.element.querySelector(
       ".saypi-tts-controls"
     ) as HTMLDivElement;
@@ -259,27 +261,35 @@ class AssistantResponse {
       );
     }
 
-    EventBus.on(
-      "saypi:tts:menuPop",
-      (event: { utteranceId: string; menu: PopupMenu }) => {
-        const id = this._element.dataset.utteranceId;
-        if (
-          !id ||
-          id !== event.utteranceId ||
-          id !== charge.utteranceId ||
-          !charge.cost
-        ) {
-          return;
+    const messageContentElement = this.element.querySelector(".content");
+    if (messageContentElement) {
+      messageContentElement.id = `saypi-message-content-${this.utteranceId}`;
+    }
+
+    if (isMobileDevice()) {
+      // TODO: we need a way to deregister this listener when the message is removed - perhaps a teardown method?
+      EventBus.on(
+        "saypi:tts:menuPop",
+        (event: { utteranceId: string; menu: PopupMenu }) => {
+          const id = this._element.dataset.utteranceId;
+          if (
+            !id ||
+            id !== event.utteranceId ||
+            id !== charge.utteranceId ||
+            !charge.cost
+          ) {
+            return;
+          }
+          const menuElement = event.menu.element;
+          const menuCostElement = menuElement.querySelector(".saypi-cost");
+          if (menuCostElement) {
+            this.ttsControlsModule.updateCostBasis(menuElement, charge);
+          } else {
+            this.ttsControlsModule.addCostBasis(menuElement, charge, true);
+          }
         }
-        const menuElement = event.menu.element;
-        const menuCostElement = menuElement.querySelector(".saypi-cost");
-        if (menuCostElement) {
-          this.ttsControlsModule.updateCostBasis(menuElement, charge);
-        } else {
-          this.ttsControlsModule.addCostBasis(menuElement, charge, true);
-        }
-      }
-    );
+      );
+    }
   }
 }
 

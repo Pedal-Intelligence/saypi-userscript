@@ -51,14 +51,7 @@ function updatePreviewProgress(status) {
 }
 
 function getTTSStatus() {
-  /* we cannot access the config module's environment variables from the popup
-   * so we hardcode the apiBaseUrl here
-   */
-  const config = {
-    apiBaseUrl: "https://localhost:5001", // also add to manifest.json permissions
-    //apiBaseUrl: "https://api.saypi.ai",
-  };
-
+  // config.apiBaseUrl is defined in src/popup/status.js
   const statusEndpoint = `${config.apiBaseUrl}/status/tts`;
   fetch(statusEndpoint)
     .then((response) => response.json())

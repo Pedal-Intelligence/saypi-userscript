@@ -131,7 +131,8 @@ test(
     element.textContent = "Hello, world!";
     document.body.appendChild(element);
     const includeInitialText = true;
-    const stream = new ElementTextStream(element, includeInitialText);
+    const options = { includeInitialText };
+    const stream = new ElementTextStream(element, options);
     const values: string[] = [];
     const promise = collectStreamValues(stream, values);
     await promise;

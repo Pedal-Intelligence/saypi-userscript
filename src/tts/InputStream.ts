@@ -1,29 +1,114 @@
-import { Observable, ReplaySubject, Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
+import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
-export const STREAM_TIMEOUT_MS: number = 8000; // visible for testing
-export const TEXT_STABILITY_THRESHOLD_MILLIS: number = 1500; // visible for testing
+export const STREAM_TIMEOUT: number = 10000; // visible for testing
+const DATA_TIMEOUT = 1000;
+const DEFAULT_ADDITIONAL_TIMEOUT = 0;
+// Timeout values above base for different languages - derived from empirical testing on pi.ai
+const LANGUAGE_TIMEOUTS: { [key: string]: number } = {
+  en: 0,
+  ar: 1250,
+  de: 250,
+  es: 250,
+  fr: 1500,
+  hi: 1500,
+  it: 0,
+  nl: 0,
+  pl: 750,
+  pt: 1000,
+  ja: 1000,
+  ko: 1250,
+  ru: 2500,
+  uk: 2250,
+  zh: 0,
+  bg: 1500,
+  hr: 250,
+  cs: 750,
+  da: 1500,
+  tl: 250,
+  fi: 250,
+  el: 500,
+  id: 0,
+  ms: 1000,
+  ro: 750,
+  sk: 1000,
+  sv: 1250,
+  ta: 500,
+  tr: 750,
+};
+
+function calculateDataTimeout(text: string, lang: string): number {
+  const additionalTimeout =
+    LANGUAGE_TIMEOUTS[lang] ?? DEFAULT_ADDITIONAL_TIMEOUT;
+  const totalTime = DATA_TIMEOUT + additionalTimeout;
+  console.debug(
+    `Timeout for "${text}" in ${lang} is ${totalTime}ms (${DATA_TIMEOUT} + ${additionalTimeout})`
+  );
+  return totalTime;
+}
 
 // Visible for testing
 export function getNestedText(node: HTMLElement): string {
   return node.textContent ?? node.innerText ?? "";
 }
+export interface InputStreamOptions {
+  includeInitialText?: boolean;
+  delimiter?: string;
+}
+export interface TextContent {
+  text: string;
+  changed: boolean;
+  changedFrom: string | null;
+}
+
+class TextItem implements TextContent {
+  constructor(
+    public text: string,
+    public changed: boolean = false,
+    public changedFrom: string | null = null
+  ) {}
+}
+
+class AddedText extends TextItem {
+  constructor(public text: string) {
+    super(text, false, null);
+  }
+}
+
+class ChangedText extends TextItem {
+  constructor(public text: string, public changedFrom: string) {
+    super(text, true, changedFrom);
+  }
+}
+
+type Completion = {
+  type: "eod" | "timeout" | "disconnect";
+  time: number;
+};
 
 export class ElementTextStream {
-  protected subject: Subject<string>;
+  protected subject: Subject<TextContent>;
   protected observer!: MutationObserver;
   protected timeout: NodeJS.Timeout | undefined = undefined;
-  protected emittedValues: string[] = [];
+  protected emittedValues: TextContent[] = [];
   protected timeOfLastTextChange: number = Date.now();
-  private timeOfLastBatch: number | null = null;
-  private intervalsBetweenBatches: number[] = [];
   protected batchIntervalTimerId: NodeJS.Timeout | null = null;
+  protected delimiter: string = "";
+  protected languageGuess: string = ""; // the language of the content in the element - guessed from user preferences
+  private completionReason: Completion | null = null;
+  private completed = false; // whether the stream has completed (reduntant check for subject.closed)
 
   constructor(
     protected element: HTMLElement,
-    protected includeInitialText: boolean = false,
-    protected delimiter: string = ""
+    { includeInitialText = false, delimiter = "" }: InputStreamOptions = {}
   ) {
-    this.subject = new ReplaySubject<string>(1000); // buffer should be long enough to handle the longest text (4k characters)
+    this.delimiter = delimiter;
+    UserPreferenceModule.getInstance()
+      .getLanguage()
+      .then((lang) => {
+        this.languageGuess = lang;
+      });
+    this.subject = new Subject<TextContent>(); // buffer should be long enough to handle the longest text (4k characters)
     // subscribe to keep track of emitted values
     this.subject.subscribe((value) => this.emittedValues.push(value));
     // subscribe to keep track of timeouts
@@ -33,7 +118,6 @@ export class ElementTextStream {
         this.resetStreamTimeout();
       },
       complete: () => {
-        console.debug("Clearing timeout on stream completion");
         clearTimeout(this.timeout);
       },
     });
@@ -44,12 +128,55 @@ export class ElementTextStream {
     this.registerObserver(); // start observing the element for additions
   }
 
+  protected next(value: TextContent): void {
+    if (this.closed()) {
+      if (this.completionReason) {
+        const timeElapsed = Date.now() - this.completionReason.time;
+        console.debug(
+          `Skipping next event for "${value.text}" because the stream has already completed on ${this.completionReason.type} ${timeElapsed}ms ago`
+        );
+      } else {
+        console.debug(
+          `Skipping next event for "${value.text}" because the stream was closed for no reason`
+        );
+      }
+    } else {
+      this.subject.next(value);
+    }
+  }
+
+  protected complete(reason: Completion): void {
+    if (this.closed()) {
+      console.debug(
+        `Cannot complete the stream on ${reason.type} because the stream has already been completed on ${this.completionReason?.type}`
+      );
+      return;
+    }
+    this.completionReason = reason;
+    console.debug(
+      `Completing stream on ${reason.type}`,
+      this.element.id ? this.element.id : this.element
+    );
+    this.subject.complete();
+    this.completed = true;
+    //this.disconnect(); // stop observing the element - leave open for debugging
+  }
+
+  /**
+   * Redundant check for the closed property of the subject
+   * For some reason, the subject is not closed immediately after calling subject.complete(),
+   * so we need to use our own flag to check if the stream is closed.
+   * @returns true if the stream is closed, false otherwise
+   */
+  protected closed(): boolean {
+    return this.subject.closed || this.completed;
+  }
+
   private emitInitialText(message: HTMLElement): void {
     const initialText = getNestedText(message);
     // send the initial text to the stream only if it's not empty
     if (initialText) {
-      console.debug(`Streaming text began with "${initialText}"`);
-      this.subject.next(initialText);
+      this.next(new AddedText(initialText));
     }
   }
 
@@ -62,167 +189,130 @@ export class ElementTextStream {
       clearTimeout(this.timeout);
     }
     this.timeout = setTimeout(() => {
-      console.log(
-        `Stream ended on timeout out after ${STREAM_TIMEOUT_MS}ms since last token`
-      );
-      this.subject.complete();
-    }, STREAM_TIMEOUT_MS);
+      this.complete({ type: "timeout", time: Date.now() });
+    }, STREAM_TIMEOUT);
   }
 
   protected getTextIsStable(): boolean {
-    const timeSinceLastTextChange = Date.now() - this.timeOfLastTextChange;
-    const textIsStable =
-      timeSinceLastTextChange > TEXT_STABILITY_THRESHOLD_MILLIS;
-    if (textIsStable) {
-      console.log(
-        `Text is stable, ${timeSinceLastTextChange}ms after last token`
-      );
-    }
-    return textIsStable;
+    return this.closed();
   }
 
   protected registerObserver(): void {
-    const clearBatchIntervalTimer = () => {
-      if (this.batchIntervalTimerId !== null) {
-        clearTimeout(this.batchIntervalTimerId);
-        this.batchIntervalTimerId = null;
-      }
-    };
+    let lastParagraphAdded = this.element.querySelectorAll("div")?.item(0);
+    let spansAdded = 0;
+    let spansRemoved = 0;
+    let spansReplaced = 0;
+    let stillChanging = false;
 
-    const updateBatchTiming = () => {
-      const timeOfBatch = Date.now();
-      if (this.timeOfLastBatch === null) {
-        this.timeOfLastBatch = timeOfBatch;
-      }
-      const timeSinceLastBatch = timeOfBatch - this.timeOfLastBatch;
-      this.timeOfLastBatch = timeOfBatch;
-      if (timeSinceLastBatch > 0) {
-        this.intervalsBetweenBatches.push(timeSinceLastBatch);
-      }
-      return (
-        this.intervalsBetweenBatches.reduce((a, b) => a + b, 0) /
-          this.intervalsBetweenBatches.length || 1000
-      );
-    };
-
-    const handleElementNode = (
-      element: HTMLElement,
-      isFirstParagraph: boolean,
-      avgIntervalMs: number
-    ) => {
-      if (this.delimiter && !isFirstParagraph) {
-        this.subject.next(this.delimiter);
-      }
-      return; // skip element content for now
-      const paragraph = getNestedText(element);
-      if (paragraph) {
-        handleText(
-          paragraph,
-          true,
-          isFirstParagraph,
-          true,
-          true,
-          avgIntervalMs
+    const handleMutationEvent = (mutation: MutationRecord) => {
+      if (this.closed()) {
+        console.debug(
+          `Skipping change event on ${mutation.target} because the stream has already been completed`,
+          mutation
         );
+        return;
       }
-    };
 
-    const handleTextNode = (
-      textNode: Text,
-      isFirstWordInParagraph: boolean,
-      isFirstParagraph: boolean,
-      isBlockElement: boolean,
-      isLastWordInParagraph: boolean,
-      avgIntervalMs: number
-    ) => {
-      const word: string | null = textNode.textContent || null;
-      if (word) {
-        handleText(
-          word,
-          isFirstWordInParagraph,
-          isFirstParagraph,
-          isBlockElement,
-          isLastWordInParagraph,
-          avgIntervalMs
-        );
-      }
-    };
-
-    const handleText = (
-      word: string,
-      isFirstWordInParagraph: boolean,
-      isFirstParagraph: boolean,
-      isBlockElement: boolean,
-      isLastWordInParagraph: boolean,
-      avgIntervalMs: number
-    ) => {
-      if (word) {
-        this.subject.next(word);
-        if (isLastWordInParagraph && !word.endsWith(" ")) {
-          // end of paragraph increases likelihood that this is the end of the response
-          this.batchIntervalTimerId = setTimeout(() => {
-            console.log(
-              `Stream ended on ${word} after ${(2 * avgIntervalMs).toFixed(
-                0
-              )}ms of inactivity`
-            );
-            this.subject.complete();
-          }, 3 * avgIntervalMs);
-        }
-      }
-    };
-
-    const handleMutation = (
-      mutation: MutationRecord,
-      avgIntervalMs: number
-    ) => {
       if (mutation.type === "childList") {
-        for (let i = 0; i < mutation.addedNodes.length; i++) {
-          const isFirstParagraph = this.emittedValues.length === 0;
-
-          const node = mutation.addedNodes[i];
-          if (
-            node.nodeType === Node.ELEMENT_NODE &&
-            (node as HTMLElement).tagName === "DIV"
-          ) {
-            handleElementNode(
-              node as HTMLElement,
-              isFirstParagraph,
-              avgIntervalMs
-            );
-          } else if (node.nodeType === Node.TEXT_NODE) {
-            const textNode = node as Text;
-            const paragraph = textNode.wholeText;
-            const isFirstWordInParagraph =
-              i === 0 && paragraph.startsWith(textNode.textContent || "");
-            const isBlockElement = node.parentElement?.tagName === "DIV";
-            const isLastWordInParagraph = i === mutation.addedNodes.length - 1;
-            handleTextNode(
-              textNode,
-              isFirstWordInParagraph,
-              isFirstParagraph,
-              isBlockElement,
-              isLastWordInParagraph,
-              avgIntervalMs
-            );
+        for (let i = 0; i < mutation.removedNodes.length; i++) {
+          const node = mutation.removedNodes[i];
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            const element = node as HTMLElement;
+            if (element.tagName === "SPAN") {
+              spansRemoved++;
+            }
           }
         }
+        for (let i = 0; i < mutation.addedNodes.length; i++) {
+          stillChanging = true;
+          const node = mutation.addedNodes[i];
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            const element = node as HTMLElement;
+            if (element.tagName === "SPAN") {
+              spansAdded++;
+            } else if (element.tagName === "DIV") {
+              const paragraph = element as HTMLDivElement;
+              lastParagraphAdded = paragraph;
+            }
+          } else if (node.nodeType === Node.TEXT_NODE) {
+            const textNode = node as Text;
+            const content = textNode.textContent || "";
+            this.next(new AddedText(content || ""));
+            spansReplaced++;
+            // we're finished when the paragraph has no more preliminary content
+            const paragraph = textNode.parentElement;
+            const spansRemaining =
+              paragraph?.querySelectorAll("span")?.length || 0;
+            const isFinalParagraph = paragraph === lastParagraphAdded;
+
+            if (
+              spansReplaced >= spansRemoved &&
+              spansReplaced >= spansAdded &&
+              spansRemaining === 0 &&
+              isFinalParagraph
+            ) {
+              stillChanging = false;
+              // complete soon if not still changing
+              const startTime = Date.now();
+              const additionsRemaining = mutation.addedNodes.length - i - 1;
+              console.debug(
+                `${startTime}: Possible end of stream detected on ${content}, ${additionsRemaining} additions remaining.`
+              );
+              setTimeout(() => {
+                if (!stillChanging) {
+                  const timeElapsed = Date.now() - startTime;
+                  const lastContent = this.emittedValues.slice(-1)[0]?.text;
+                  console.debug(
+                    `${Date.now()}: end of stream confirmed on "${lastContent}" after +${timeElapsed}ms`
+                  );
+                  this.complete({ type: "eod", time: Date.now() });
+                }
+              }, calculateDataTimeout(content, this.languageGuess));
+            }
+          }
+        }
+      } else if (mutation.type === "characterData") {
+        const textNode = mutation.target as Text;
+        const content = textNode.textContent;
+        // text node content changed from "${mutation.oldValue}" to "${content}"`
+        // emit a change event only if the old value is present in the already emitted values
+        const oldValue = mutation.oldValue || "";
+        const alreadyEmitted = this.emittedValues.some(
+          (value) => value.text === oldValue
+        );
+        if (alreadyEmitted) {
+          stillChanging = true;
+          this.next(new ChangedText(content || "", oldValue));
+        } else {
+          console.debug(
+            `Skipping change event for "${content}" because the old value "${oldValue}" was not emitted`
+          );
+        }
       }
     };
 
-    const observerCallback = (mutationsList: MutationRecord[]) => {
-      clearBatchIntervalTimer();
-      const avgIntervalMs = updateBatchTiming();
-      mutationsList.forEach((mutation) =>
-        handleMutation(mutation, avgIntervalMs)
-      );
+    const contentMutationHandler = (mutationsList: MutationRecord[]) => {
+      if (this.closed()) {
+        const timeSinceCompletion = Date.now() - this.completionReason!.time;
+        console.warn(
+          `Content changed after the stream has closed. Try increasing the data timeout by at least ${timeSinceCompletion}ms for ${this.languageGuess}.`
+        );
+        this.disconnect();
+        return;
+      }
+      mutationsList.forEach((mutation) => handleMutationEvent(mutation));
     };
 
-    this.observer = new MutationObserver(observerCallback);
-    this.observer.observe(this.element, { childList: true, subtree: true });
+    this.observer = new MutationObserver(contentMutationHandler);
+    this.observer.observe(this.element, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+      characterDataOldValue: true,
+    });
   }
 
-  getStream(): Observable<string> {
+  getStream(): Observable<TextContent> {
     return this.subject.asObservable();
   }
 
@@ -232,60 +322,10 @@ export class ElementTextStream {
       clearTimeout(this.timeout);
     }
     this.observer.disconnect();
-    this.subject.complete();
   }
 
   // For testing purposes
   getObserver(): MutationObserver {
     return this.observer;
-  }
-}
-
-export class SilentElementTextStream extends ElementTextStream {
-  private startTime: number | null = null;
-  private timeToFirstToken: number | null = null;
-  constructor(element: HTMLElement) {
-    super(element);
-  }
-
-  override registerObserver(): void {
-    // register a mutation observer that simply logs mutations
-    const observerCallback = (mutationsList: MutationRecord[]) => {
-      console.debug(mutationsList.length, "mutations observed");
-
-      const mutationTime = Date.now();
-      if (this.startTime === null) {
-        this.startTime = mutationTime;
-      }
-      console.debug(
-        `Time since start: ${
-          mutationTime - this.startTime
-        }ms, Time since first token: ${
-          this.timeToFirstToken
-            ? mutationTime - this.timeToFirstToken
-            : "not found"
-        }ms`
-      );
-      for (let mutation of mutationsList) {
-        console.debug(`Type: ${mutation.type}, Target: ${mutation.target}`);
-        if (mutation.type === "childList") {
-          for (let node of mutation.addedNodes) {
-            console.debug("Added node", node);
-            if (node.nodeType === Node.ELEMENT_NODE) {
-              const element = node as HTMLElement;
-              console.debug(element.tagName, "text", getNestedText(element));
-            } else if (node.nodeType === Node.TEXT_NODE) {
-              const textNode = node as Text;
-              console.debug("Text node", textNode.wholeText);
-              if (this.timeToFirstToken === null) {
-                this.timeToFirstToken = Date.now();
-              }
-            }
-          }
-        }
-      }
-    };
-    this.observer = new MutationObserver(observerCallback);
-    this.observer.observe(this.element, { childList: true, subtree: true });
   }
 }

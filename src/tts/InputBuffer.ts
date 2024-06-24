@@ -1,5 +1,7 @@
 import { TextToSpeechService } from "./TextToSpeechService";
 
+type FlushEvent = "eos" | "timeout" | "close";
+
 export class InputBuffer {
   private buffer: string = "";
   private bufferTimeout?: NodeJS.Timeout;
@@ -51,14 +53,24 @@ export class InputBuffer {
     if (text === this.END_OF_SPEECH_MARKER) {
       this.closeBuffer();
     } else if (this.shouldFlushBuffer(text)) {
-      this.flushBuffer();
+      this.flushBuffer("eos");
     }
   }
 
   private shouldFlushBuffer(text: string): boolean {
     return (
-      [".", "!", "?"].some((end) => text.endsWith(end)) ||
-      text === this.END_OF_SPEECH_MARKER
+      [
+        ".",
+        "!",
+        "?",
+        "。", // chinese period/japanese maru
+        "……", // chinese ellipsis
+        "。。。", // chinese - ideographic full stop
+        "～", // chinese wave dash,
+        "・・・", // japanese - kanten
+        "―", // japanese dash
+        "~", // tilde (used in some Korean and some other languages as a sentence break)
+      ].some((end) => text.endsWith(end)) || text === this.END_OF_SPEECH_MARKER
     );
   }
 
@@ -67,7 +79,7 @@ export class InputBuffer {
       clearTimeout(this.bufferTimeout);
     }
     this.bufferTimeout = setTimeout(() => {
-      this.flushBuffer();
+      this.flushBuffer("timeout");
     }, this.BUFFER_TIMEOUT_MS);
   }
 
@@ -81,13 +93,15 @@ export class InputBuffer {
     }, closeAfterMs);
   }
 
-  private async flushBuffer(): Promise<void> {
+  private async flushBuffer(event: FlushEvent): Promise<void> {
     const text = this.buffer;
     this.buffer = "";
 
     try {
       await this.ttsService.addTextToSpeechStream(this.uuid, text);
-      console.debug(`Buffer flushed for UUID: ${this.uuid}: "${text}"`);
+      console.debug(
+        `Buffer flushed on ${event} for UUID: ${this.uuid}: "${text}"`
+      );
     } catch (error) {
       console.error("Error sending buffer:", error);
     }
@@ -111,7 +125,7 @@ export class InputBuffer {
       clearTimeout(this.streamTimeout);
     }
 
-    await this.flushBuffer();
+    await this.flushBuffer("close");
     console.log(`Buffer closed for UUID: ${this.uuid}`);
   }
 
@@ -142,5 +156,9 @@ export class InputBuffer {
 
   hasEnded(): boolean {
     return this.isClosed;
+  }
+
+  replaceText(from: string, to: string): void {
+    this.buffer = this.buffer.replace(from, to);
   }
 }

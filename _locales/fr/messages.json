@@ -244,7 +244,7 @@
   },
   "enableTTS": {
     "description": "Étiquette pour la case à cocher pour activer/désactiver la synthèse vocale.",
-    "message": "Voix améliorées"
+    "message": "Voix multilingues"
   },
   "enhancedVoice": {
     "description": "Titre (infobulle) pour Dire, voix améliorées de Pi.",

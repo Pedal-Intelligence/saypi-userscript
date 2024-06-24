@@ -244,7 +244,7 @@
   },
   "enableTTS": {
     "description": "Etichetta per la casella di controllo per abilitare/disabilitare il testo al discorso.",
-    "message": "Voci Migliorate"
+    "message": "Voci multilingue"
   },
   "enhancedVoice": {
     "description": "Titolo (suggerimento) per Dire, voci potenziate da Pi.",

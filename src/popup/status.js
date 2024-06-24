@@ -58,6 +58,8 @@ function showIssueDetails(applicationStatusDetail) {
   preferencesSection.classList.add("hidden");
   const statusSection = document.getElementById("application-status");
   statusSection.classList.add("hidden");
+  const preReleaseSection = document.querySelector(".pre-release");
+  preReleaseSection.classList.add("hidden");
 }
 
 function showIssueDetailsListener() {
@@ -80,6 +82,8 @@ function hideIssueDetails(applicationStatusDetail) {
   preferencesSection.classList.remove("hidden");
   const statusSection = document.getElementById("application-status");
   statusSection.classList.remove("hidden");
+  const preReleaseSection = document.querySelector(".pre-release");
+  preReleaseSection.classList.remove("hidden");
 }
 
 function hideIssueDetailsListener() {
@@ -95,15 +99,17 @@ function hideIssueDetailsListener() {
   }
 }
 
-function getStatus() {
-  /* we cannot access the config module's environment variables from the popup
-   * so we hardcode the apiBaseUrl here
-   */
-  const config = {
-    //apiBaseUrl: "https://localhost:5001", // also add to manifest.json permissions
-    apiBaseUrl: "https://api.saypi.ai",
-  };
+/**
+ * We cannot access the config module's environment variables from the popup
+ * so we hardcode the apiBaseUrl here.
+ * The config variable defined below is also used by status-tts.js
+ */
+const config = {
+  //apiBaseUrl: "https://localhost:5001", // also add to manifest.json permissions
+  apiBaseUrl: "https://api.saypi.ai", // always change to production URL before publishing
+};
 
+function getStatus() {
   const statusEndpoint = `${config.apiBaseUrl}/status`;
   fetch(statusEndpoint)
     .then((response) => response.json())

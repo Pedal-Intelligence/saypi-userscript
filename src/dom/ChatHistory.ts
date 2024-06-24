@@ -1,4 +1,4 @@
-import { ElementTextStream } from "../tts/InputStream";
+import { ElementTextStream, TextContent } from "../tts/InputStream";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { BaseObserver } from "./BaseObserver";
@@ -310,11 +310,8 @@ class ChatHistoryNewMessageObserver
         () => this.ttsControlsModule.autoplaySpeech(utterance, 200),
         (text) => {
           console.debug("Closed audio input stream", utterance.id);
-          console.debug("Streamed text:", text);
           const charge = BillingModule.getInstance().charge(utterance, text);
-          console.debug("Charging for TTS", charge);
           message.decorateCost(charge);
-          console.debug("Saving charge to history", charge);
           this.speechHistory.addChargeToHistory(charge.utteranceHash, charge);
         }
       );
@@ -364,24 +361,42 @@ class ChatHistoryNewMessageObserver
     let fullText = ""; // Variable to accumulate the text
 
     this.textStream.getStream().subscribe(
-      (text) => {
+      (text: TextContent) => {
         let start = false;
-        if (text) {
-          fullText += text; // Add the text chunk to the full text
+        if (text.changed) {
+          console.debug(
+            `Text changed from "${text.changedFrom}" to "${text.text}"`
+          );
+          fullText = fullText.replace(text.changedFrom!, text.text);
+          this.speechSynthesis
+            .replaceSpeechInStream(utterance.id, text.changedFrom!, text.text)
+            .then((replaced) => {
+              if (replaced) {
+                console.debug(
+                  `Replaced text in stream: "${text.changedFrom}" -> "${text.text}"`
+                );
+              } else {
+                console.error(
+                  `Failed to replace text in stream before being flushed: "${text.changedFrom}" -> "${text.text}"`
+                );
+                messageContent.classList.add("inconsistent-text");
+              }
+            });
+        } else {
+          const txt = text.text;
+          fullText += txt; // Add the text chunk to the full text
           const currentTime = Date.now();
           if (firstChunkTime === null) {
             firstChunkTime = currentTime;
             start = true;
           }
           const delay = currentTime - (firstChunkTime as number);
-          console.debug(`+${delay}ms, streamed text: "${text}"`);
-          this.speechSynthesis
-            .addSpeechToStream(utterance.id, text)
-            .then(() => {
-              if (start) {
-                onStart();
-              }
-            });
+          console.debug(`+${delay}ms, streamed text: "${txt}"`);
+          this.speechSynthesis.addSpeechToStream(utterance.id, txt).then(() => {
+            if (start) {
+              onStart();
+            }
+          });
         }
       },
       (error) => {
@@ -390,13 +405,14 @@ class ChatHistoryNewMessageObserver
       () => {
         if (firstChunkTime) {
           const totalTime = Date.now() - (firstChunkTime as number);
-          console.info(
-            `Text stream complete after ${(totalTime / 1000).toFixed(
-              1
-            )} seconds`
+          console.debug(
+            `Text stream completed ${(totalTime / 1000).toFixed(
+              2
+            )} seconds after first chunk`,
+            utterance.id
           );
         } else {
-          console.info("Text stream complete with no text");
+          console.info("Text stream completed without text");
         }
         this.speechSynthesis.endSpeechStream(utterance);
         if (onEnd) {
