@@ -2,9 +2,11 @@ import { expect, test, beforeEach } from "vitest";
 import { JSDOM } from "jsdom";
 import {
   ElementTextStream,
-  STREAM_TIMEOUT_MS,
+  STREAM_TIMEOUT,
+  TextContent,
   getNestedText,
 } from "../../src/tts/InputStream";
+import { max } from "lodash";
 
 const intervalMillis = 100; // delay between adding text
 
@@ -26,8 +28,8 @@ async function collectStreamValues(
 ): Promise<void> {
   return new Promise<void>((resolve) => {
     stream.getStream().subscribe({
-      next: (val) => {
-        values.push(val);
+      next: (val: TextContent) => {
+        values.push(val.text);
       },
       complete: () => {
         resolve();
@@ -37,7 +39,8 @@ async function collectStreamValues(
 }
 
 export function timeoutCalc(wc: number) {
-  return wc * intervalMillis + STREAM_TIMEOUT_MS;
+  const maxLanguageDelay = 3000;
+  return wc * intervalMillis + STREAM_TIMEOUT + maxLanguageDelay;
 }
 
 beforeEach(() => {
@@ -141,15 +144,19 @@ test(
   timeoutCalc(1)
 );
 
-test("Streamed text should equal the text in the element", async () => {
-  const element = document.createElement("div");
-  document.body.appendChild(element);
-  const stream = new ElementTextStream(element);
-  const values: string[] = [];
-  const promise = collectStreamValues(stream, values);
+test(
+  "Streamed text should equal the text in the element",
+  async () => {
+    const element = document.createElement("div");
+    document.body.appendChild(element);
+    const stream = new ElementTextStream(element);
+    const values: string[] = [];
+    const promise = collectStreamValues(stream, values);
 
-  addText(element, "Hello ");
-  addText(element, "world.");
-  await promise;
-  expect(values.join("")).toEqual(element.textContent);
-});
+    addText(element, "Hello ");
+    addText(element, "world.");
+    await promise;
+    expect(values.join("")).toEqual(element.textContent);
+  },
+  timeoutCalc(2)
+);

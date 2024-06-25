@@ -1,7 +1,7 @@
 import { Preference, VoicePreference } from "../../src/prefs/PreferenceModule";
-import { SpeechSynthesisVoiceRemote } from "../../src/tts/SpeechSynthesisModule";
+import { SpeechSynthesisVoiceRemote } from "../../src/tts/SpeechModel";
 import { vi } from "vitest";
-import { voice as mockVoice } from "../data/Voices";
+import { mockVoices } from "../data/Voices";
 
 export class UserPreferenceModuleMock {
   public static getInstance = vi.fn(() => new UserPreferenceModuleMock());
@@ -18,7 +18,7 @@ export class UserPreferenceModuleMock {
   public getPrefersImmersiveView = vi.fn(() => Promise.resolve(false));
   public hasVoice = vi.fn(() => Promise.resolve(true));
   public getVoice = vi.fn(() =>
-    Promise.resolve(mockVoice as SpeechSynthesisVoiceRemote)
+    Promise.resolve(mockVoices[0] as SpeechSynthesisVoiceRemote)
   );
   public setVoice = vi.fn(() => Promise.resolve());
   public unsetVoice = vi.fn(() => Promise.resolve());

@@ -38,11 +38,7 @@
       "request": "launch",
       "name": "Vitest Tests (Debug)",
       "runtimeExecutable": "npx",
-      "runtimeArgs": [
-        "vitest",
-        "--inspect-brk",
-        "test/tts/TextToSpeechService.spec.ts"
-      ]
+      "runtimeArgs": ["vitest", "--inspect-brk", "test/tts/InputStream.spec.ts"]
     }
   ]
 }

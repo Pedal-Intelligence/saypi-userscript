@@ -1,4 +1,4 @@
-import { SpeechSynthesisVoiceRemote } from "../../src/tts/SpeechSynthesisModule";
+import { SpeechSynthesisVoiceRemote } from "../../src/tts/SpeechModel";
 
 /*
  * This module provides a class for a voice that can be used with the SpeechSynthesisModule.

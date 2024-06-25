@@ -1,4 +1,4 @@
-import { Observable, Subject } from "rxjs";
+import { Observable, ReplaySubject, Subject } from "rxjs";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
 export const STREAM_TIMEOUT: number = 10000; // visible for testing
@@ -38,11 +38,14 @@ const LANGUAGE_TIMEOUTS: { [key: string]: number } = {
 };
 
 function calculateDataTimeout(text: string, lang: string): number {
+  // Extract the base language code (e.g., 'en' from 'en-US')
+  const baseLanguage = lang.split("-")[0];
+
   const additionalTimeout =
-    LANGUAGE_TIMEOUTS[lang] ?? DEFAULT_ADDITIONAL_TIMEOUT;
+    LANGUAGE_TIMEOUTS[baseLanguage] ?? DEFAULT_ADDITIONAL_TIMEOUT;
   const totalTime = DATA_TIMEOUT + additionalTimeout;
   console.debug(
-    `Timeout for "${text}" in ${lang} is ${totalTime}ms (${DATA_TIMEOUT} + ${additionalTimeout})`
+    `Timeout for "${text}" in ${lang} (base: ${baseLanguage}) is ${totalTime}ms (${DATA_TIMEOUT} + ${additionalTimeout})`
   );
   return totalTime;
 }
@@ -108,7 +111,7 @@ export class ElementTextStream {
       .then((lang) => {
         this.languageGuess = lang;
       });
-    this.subject = new Subject<TextContent>(); // buffer should be long enough to handle the longest text (4k characters)
+    this.subject = new ReplaySubject<TextContent>(); // replay the last value to new subscribers (for initial text)
     // subscribe to keep track of emitted values
     this.subject.subscribe((value) => this.emittedValues.push(value));
     // subscribe to keep track of timeouts

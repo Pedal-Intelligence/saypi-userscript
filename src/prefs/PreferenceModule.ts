@@ -65,13 +65,22 @@ class UserPreferenceModule {
    */
   private getStoredValue(key: string, defaultValue: any): Promise<any> {
     return new Promise((resolve) => {
-      chrome.storage.sync.get([key], function (result) {
-        if (result[key] === undefined) {
-          resolve(defaultValue);
-        } else {
-          resolve(result[key]);
-        }
-      });
+      if (
+        typeof chrome !== "undefined" &&
+        chrome.storage &&
+        chrome.storage.sync
+      ) {
+        chrome.storage.sync.get([key], function (result) {
+          if (result[key] === undefined) {
+            resolve(defaultValue);
+          } else {
+            resolve(result[key]);
+          }
+        });
+      } else {
+        // If Chrome storage API is not supported, return the default value
+        resolve(defaultValue);
+      }
     });
   }
 
