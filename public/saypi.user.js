@@ -27132,16 +27132,14 @@ var PreferenceModule_awaiter = (undefined && undefined.__awaiter) || function (t
 
 
 class UserPreferenceModule {
-    constructor() {
-        this.cache = UserPreferenceCache.getInstance();
-    }
     static getInstance() {
         if (!UserPreferenceModule.instance) {
             UserPreferenceModule.instance = new UserPreferenceModule();
         }
         return UserPreferenceModule.instance;
     }
-    UserPreferenceModule() {
+    constructor() {
+        this.cache = UserPreferenceCache.getInstance();
         this.reloadCache();
         // Listen for changes in autoSubmit preference (by popup or options page)
         chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -34472,7 +34470,8 @@ const SayPiMachine_machine = createMachine({
             return context.lastState === "inactive";
         },
         interruptionsAllowed: (context) => {
-            return SayPiMachine_userPreferences.getCachedAllowInterruptions();
+            const allowInterrupt = SayPiMachine_userPreferences.getCachedAllowInterruptions();
+            return allowInterrupt;
         },
     },
     delays: {
@@ -37227,7 +37226,7 @@ const LANGUAGE_TIMEOUTS = {
     da: 1500,
     tl: 250,
     fi: 250,
-    el: 500,
+    el: 1250,
     id: 0,
     ms: 1000,
     ro: 750,

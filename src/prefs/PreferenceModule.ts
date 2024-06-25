@@ -29,7 +29,7 @@ class UserPreferenceModule {
     return UserPreferenceModule.instance;
   }
 
-  private UserPreferenceModule() {
+  private constructor() {
     this.reloadCache();
     // Listen for changes in autoSubmit preference (by popup or options page)
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {

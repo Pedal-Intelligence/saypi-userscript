@@ -1090,7 +1090,8 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         return context.lastState === "inactive";
       },
       interruptionsAllowed: (context: SayPiContext) => {
-        return userPreferences.getCachedAllowInterruptions();
+        const allowInterrupt = userPreferences.getCachedAllowInterruptions();
+        return allowInterrupt;
       },
     },
     delays: {

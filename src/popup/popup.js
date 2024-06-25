@@ -1,12 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
-  /**
-   * Send a message to the content script
-   * @param {any} msg
-   */
   function message(msg) {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       if (tabs.length > 0) {
-        chrome.tabs.sendMessage(tabs[0].id, msg);
+        const activeTab = tabs[0]; // no additional permissions are needed to message the active tab
+        chrome.tabs.sendMessage(activeTab.id, msg, function (response) {
+          if (chrome.runtime.lastError) {
+            console.warn(
+              "Error sending message to active tab. Check that content script is listening. Error message:",
+              chrome.runtime.lastError.message
+            );
+            // Handle the error (e.g., retry, notify user, etc.)
+          }
+        });
       }
     });
   }
