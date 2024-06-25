@@ -1,0 +1,20 @@
+Transformirajte svoje razgovore s Pi, revolucionarnim AI chatbotom iz Inflection AI. Recite, Pi je vaš ključni proširivač preglednika, omogućujući vam komunikaciju s Pi-jem pomoću vašeg glasa, bez napora i na više jezika.
+
+Ključne Značajke:
+
+- Razgovori Bez Ruku: Razgovarajte s Pi-jem koristeći samo svoj glas, idealno za multitasking ili kada tipkanje nije praktično.
+- Neusporediva Točnost i Brzina: Koristeći najbržu implementaciju OpenAI-ove Whisper tehnologije na svijetu, Say, Pi pruža neusporedivo prepoznavanje govora i nevjerojatno brze transkripcije.
+- Višejezična Snaga: Komunicirajte besprijekorno na 29 jezika, s realističnim, poboljšanim glasovima poput Paole i Joeyja.
+- Pametno Otkrivanje Kraja Govora: Say, Pi zna kada ste završili s govorom, osiguravajući da su vaše misli potpuno zabilježene.
+- Imersivni i Desktop Načini: Birajte kako želite komunicirati – gledajte svoj razgovor u tekstu ili uronite u iskustvo bez ometanja.
+- Tamni Način: Zaštitite svoje oči ugodnom tamnom temom.
+- Globalna Dostupnost: Koristite Say, Pi na macOS-u, Windowsu, Androidu i iOS-u.
+
+Zašto Odabrati Say, Pi:
+
+- Povećajte Pristupačnost: Omogućite korisnicima s vizualnim ili motoričkim oštećenjima da bez napora komuniciraju s Pi-jem.
+- Povećajte Produktivnost: Multitaskajte, bilježite ili smišljajte ideje držeći ruke slobodnima.
+- Proširite Pi-jeve Sposobnosti: Otključajte višejezične razgovore i istražite razne realistične glasove.
+- Pridružite se Zajednici: Budite dio aktivne i podržavajuće korisničke baze koja oblikuje budućnost Say, Pi.
+
+Iskusite budućnost interakcije s AI omogućenom glasom. Preuzmite Say, Pi danas!

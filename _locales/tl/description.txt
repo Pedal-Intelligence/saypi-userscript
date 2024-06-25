@@ -1,0 +1,20 @@
+Baguhin ang iyong mga pag-uusap gamit ang Pi, ang rebolusyonaryong AI chatbot mula sa Inflection AI. Sabihin, ang Pi ay iyong mahalagang browser extension, na nagbibigay kakayahan sa iyo na makipag-komunikasyon sa Pi gamit ang iyong boses, nang walang kahirap-hirap at sa iba't ibang wika.
+
+Pangunahing Tampok:
+
+- Mga Pag-uusap na Walang Kamay: Makipag-chat sa Pi gamit lamang ang iyong boses, perpekto para sa multitasking o kapag hindi maginhawa ang pag-type.
+- Walang Kapantay na Katumpakan at Bilis: Gamit ang pinakamabilis na implementasyon ng OpenAI's Whisper technology sa mundo, nagbibigay ang Say, Pi ng walang kapantay na pagkilala ng pagsasalita at mabilis na mga transkripsyon.
+- Multilingual na Kapangyarihan: Makipag-komunikasyon nang walang putol sa 29 na wika, na may mga realistic at pinahusay na mga boses tulad nina Paola at Joey.
+- Matalinong Pagtukoy ng Pagtatapos ng Pagsasalita: Alam ng Say, Pi kung kailan ka natapos magsalita, siguradong nakakapture ang iyong mga ideya nang buo.
+- Nakaka-immersibong at Desktop na mga Mode: Pumili ng paano mo gustong makipag-ugnayan – makita ang iyong usapan sa teksto o mag-dive sa isang karanasang walang distraksyon.
+- Dark Mode: Protektahan ang iyong mga mata gamit ang komportableng dark theme.
+- Pangkalahatang Pagkakaroon: Gamitin ang Say, Pi sa macOS, Windows, Android, at iOS.
+
+Bakit Pumili ng Say, Pi:
+
+- Pahusayin ang Aksesibilidad: Bigyan ng kapangyarihan ang mga gumagamit na may visual o motor impairments na makipag-ugnayan sa Pi nang walang kahirap-hirap.
+- Palakasin ang Produktibidad: Magsabay-sabay sa gawain, gumawa ng mga tala, o mag-brainstorm ng mga ideya habang nananatiling malaya ang iyong mga kamay.
+- Palawakin ang mga Kakayahan ng Pi: I-unlock ang mga multilingual na pag-uusap at tuklasin ang iba't ibang realistic na boses.
+- Sumali sa Komunidad: Maging bahagi ng aktibo at suportadong user base na humuhubog sa hinaharap ng Say, Pi.
+
+Maranasan ang hinaharap ng voice-enabled AI interaction. I-download ang Say, Pi ngayon!

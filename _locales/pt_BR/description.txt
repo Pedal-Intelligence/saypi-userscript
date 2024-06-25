@@ -1,0 +1,20 @@
+Transforme suas conversas com o Pi, o revolucionário chatbot de IA da Inflection AI. Diga, Pi é sua extensão de navegador essencial, capacitando você a se comunicar com Pi usando sua voz, de forma simples e em vários idiomas.
+
+Principais Recursos:
+
+- Conversas sem Uso das Mãos: Converse com o Pi usando apenas sua voz, perfeito para multitarefas ou quando digitar não é conveniente.
+- Precisão e Velocidade Incomparáveis: Aproveitando a implementação mais rápida do mundo da tecnologia Whisper da OpenAI, Diga, Pi oferece reconhecimento de fala inigualável e transcrições super-rápidas.
+- Potência Multilíngue: Comunique-se sem problemas em 29 idiomas, com vozes realistas e aprimoradas como Paola e Joey.
+- Detecção Inteligente do Fim da Fala: Diga, Pi sabe quando você terminou de falar, garantindo que seus pensamentos sejam capturados completamente.
+- Modos Imersivo e Desktop: Escolha como deseja interagir – veja sua conversa em texto ou mergulhe em uma experiência sem distrações.
+- Modo Escuro: Proteja seus olhos com um tema escuro confortável.
+- Disponibilidade Global: Use Diga, Pi no macOS, Windows, Android e iOS.
+
+Por Que Escolher Diga, Pi:
+
+- Melhore a Acessibilidade: Capacite usuários com deficiências visuais ou motoras a interagir com Pi sem dificuldades.
+- Aumente a Produtividade: Multitarefa, tome notas ou faça brainstorming de ideias mantendo suas mãos livres.
+- Expanda as Capacidades do Pi: Desbloqueie conversas multilíngues e explore uma variedade de vozes realistas.
+- Junte-se à Comunidade: Faça parte de uma base de usuários ativa e solidária que está moldando o futuro de Diga, Pi.
+
+Experimente o futuro da interação com IA habilitada por voz. Baixe o Diga, Pi hoje mesmo!

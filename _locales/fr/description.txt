@@ -1,0 +1,20 @@
+Transformez vos conversations avec Pi, le chatbot révolutionnaire d'Inflection AI. Dites, Pi est votre extension de navigateur essentielle, vous permettant de communiquer avec Pi en utilisant votre voix, sans effort et en plusieurs langues.
+
+Caractéristiques principales :
+
+- Conversations mains libres : Discutez avec Pi en utilisant uniquement votre voix, idéal pour le multitâche ou lorsque taper n'est pas pratique.
+- Précision et vitesse inégalées : Exploitant la mise en œuvre la plus rapide au monde de la technologie Whisper d'OpenAI, Say, Pi offre une reconnaissance vocale inégalée et des transcriptions ultra-rapides.
+- Puissance multilingue : Communiquez aisément dans 29 langues, avec des voix réalistes et améliorées comme Paola et Joey.
+- Détection intelligente de fin de parole : Say, Pi sait quand vous avez fini de parler, garantissant que vos pensées soient capturées entièrement.
+- Modes immersif et bureau : Choisissez comment vous voulez interagir – voyez votre conversation en texte ou plongez dans une expérience sans distractions.
+- Mode sombre : Protégez vos yeux avec un thème sombre confortable.
+- Disponibilité mondiale : Utilisez Say, Pi sur macOS, Windows, Android et iOS.
+
+Pourquoi choisir Say, Pi :
+
+- Améliorer l'accessibilité : Permettre aux utilisateurs avec des déficiences visuelles ou motrices d'interagir facilement avec Pi.
+- Augmenter la productivité : Multitâchez, prenez des notes ou élaborez des idées tout en gardant vos mains libres.
+- Développez les capacités de Pi : Débloquez des conversations multilingues et explorez une variété de voix réalistes.
+- Rejoignez la communauté : Faites partie d'une base d'utilisateurs active et solidaire façonnant l'avenir de Say, Pi.
+
+Découvrez l'avenir de l'interaction avec l'IA activée par la voix. Téléchargez Say, Pi aujourd'hui !

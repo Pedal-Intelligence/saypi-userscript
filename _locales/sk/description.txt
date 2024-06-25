@@ -1,0 +1,20 @@
+Transformujte svoje rozhovory s Pi, revolučným AI chatbotom od Inflection AI.  Say, Pi je váš nevyhnutný rozšírenie prehliadača, ktoré vás oprávňuje komunikovať s Pi pomocou hlasu, bez námahy a v mnohých jazykoch.
+
+Kľúčové vlastnosti:
+
+- Rozhovory bez rúk: Chat s Pi pomocou iba vášho hlasu, ideálne pre multitasking alebo keď písanie nie je pohodlné.
+- Neporovnateľná presnosť a rýchlosť: Využívajúc najrýchlejšie implementáciu technológie OpenAI Whisper na svete, Say, Pi poskytuje bezkonkurenčné rozpoznávanie reči a bleskurýchle prepísanie.
+- Viacjazyčná sila: Komunikujte plynule v 29 jazykoch s realistickými, vylepšenými hlasmi ako Paola a Joey.
+- Inteligentná detekcia konca reči: Say, Pi vie, kedy ste dokončili hovoriť, čím zabezpečuje, že vaše myšlienky sú zachytené úplne.
+- Ponorené a desktopové režimy: Vyberte si, ako chcete komunikovať – vidieť svoj rozhovor v texte alebo sa ponoriť do nerušenej skúsenosti.
+- Tmavý režim: Chráňte svoje oči pohodlnou tmavou témou.
+- Celosvetová dostupnosť: Používajte Say, Pi na macOS, Windows, Android a iOS.
+
+Prečo si vybrať Say, Pi:
+
+- Zvýšte prístupnosť: Umožnite používateľom so zrakovým alebo motorickým postihnutím jednoducho komunikovať s Pi.
+- Zvýšte produktivitu: Multitaskujte, robte si poznámky alebo premýšľajte o nápadoch, pričom máte voľné ruky.
+- Rozšírte schopnosti Pi: Odomknite viacjazyčné rozhovory a preskúmajte rôzne realistické hlasy.
+- Pridajte sa do komunity: Buďte súčasťou aktívnej a podporujúcej používateľskej základne, ktorá formuje budúcnosť Say, Pi.
+
+Zažite budúcnosť hlasom ovládanej AI interakcie. Stiahnite si Say, Pi dnes!

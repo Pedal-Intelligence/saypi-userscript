@@ -1,0 +1,20 @@
+Transformă-ți conversațiile cu Pi, chatbot-ul revoluționar AI de la Inflection AI. Spune, Pi este extensia de browser esențială pentru tine, care îți permite să comunici cu Pi folosindu-ți vocea, fără efort și în mai multe limbi.
+
+Caracteristici Cheie:
+
+- Conversații Fără Mâini: Chat cu Pi folosind doar vocea ta, perfect pentru multitasking sau atunci când tastarea nu este convenabilă.
+- Acuratețe și Viteză Fără Egal: Folosind cea mai rapidă implementare din lume a tehnologiei Whisper de la OpenAI, Spune, Pi oferă recunoaștere vocală de neegalat și transcrieri de mare viteză.
+- Multilingv Puternic: Comunică fără întreruperi în 29 de limbi, cu voci realiste și îmbunătățite, cum ar fi Paola și Joey.
+- Detectare Inteligentă a Sfârșitului de Vorbire: Spune, Pi știe când ai terminat de vorbit, asigurând capturarea completă a gândurilor tale.
+- Moduri Imersive și Desktop: Alege cum vrei să interacționezi – vezi conversația ta în text sau lasă-te absorbit de o experiență fără distrageri.
+- Mod Întunecat: Protejează-ți ochii cu o temă întunecată confortabilă.
+- Disponibilitate Globală: Folosește Spune, Pi pe macOS, Windows, Android și iOS.
+
+De Ce Să Alegi Spune, Pi:
+
+- Creșterea Accesibilității: Oferă utilizatorilor cu deficiențe vizuale sau motorii posibilitatea de a interacționa cu Pi fără efort.
+- Sporește Productivitatea: Multitask, ia notițe sau generează idei în timp ce îți eliberezi mâinile.
+- Extinde Capacitățile lui Pi: Deblochează conversațiile multilingve și explorează o varietate de voci realiste.
+- Alătură-te Comunității: Fii parte a unei baze de utilizatori active și susținătoare, care dă formă viitorului lui Spune, Pi.
+
+Experimentează viitorul interacțiunii AI activată vocal. Descarcă Spune, Pi astăzi!
