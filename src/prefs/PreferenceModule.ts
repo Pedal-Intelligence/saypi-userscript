@@ -31,18 +31,7 @@ class UserPreferenceModule {
 
   private constructor() {
     this.reloadCache();
-    // Listen for changes in autoSubmit preference (by popup or options page)
-    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-      if ("autoSubmit" in request) {
-        this.cache.setCachedValue("autoSubmit", request.autoSubmit);
-      }
-      if ("allowInterruptions" in request) {
-        this.cache.setCachedValue(
-          "allowInterruptions",
-          request.allowInterruptions
-        );
-      }
-    });
+    this.registerMessageListeners();
   }
 
   private reloadCache(): void {
@@ -55,6 +44,60 @@ class UserPreferenceModule {
     this.isTTSBetaPaused().then((value) => {
       this.cache.setCachedValue("isTTSBetaPaused", value);
     });
+  }
+
+  /**
+   * Register message listeners for changes in user preferences (autoSubmit, allowInterruptions, etc.) by popup or options page
+   */
+  private registerMessageListeners(): void {
+    if (
+      typeof chrome !== "undefined" &&
+      chrome.runtime &&
+      chrome.runtime.onMessage
+    ) {
+      // Listen for changes in autoSubmit preference (by popup or options page)
+      chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        if ("autoSubmit" in request) {
+          this.cache.setCachedValue("autoSubmit", request.autoSubmit);
+        }
+        if ("allowInterruptions" in request) {
+          this.cache.setCachedValue(
+            "allowInterruptions",
+            request.allowInterruptions
+          );
+        }
+      });
+    }
+
+    return;
+    // the following code is not used in the current implementation
+    // but may be a more efficient way to listen for changes in user preferences
+    if (
+      typeof chrome !== "undefined" &&
+      chrome.storage &&
+      chrome.storage.onChanged
+    ) {
+      chrome.storage.onChanged.addListener((changes, namespace) => {
+        if (namespace === "sync") {
+          for (const key in changes) {
+            if (changes.hasOwnProperty(key)) {
+              if (key === "autoSubmit") {
+                this.cache.setCachedValue("autoSubmit", changes[key].newValue);
+              } else if (key === "allowInterruptions") {
+                this.cache.setCachedValue(
+                  "allowInterruptions",
+                  changes[key].newValue
+                );
+              } else if (key === "voiceId") {
+                EventBus.emit("userPreferenceChanged", {
+                  voiceId: changes[key].newValue,
+                });
+              }
+            }
+          }
+        }
+      });
+    }
   }
 
   /**
