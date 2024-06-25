@@ -4,7 +4,7 @@
     "description": "アプリケーションの名前。"
   },
   "appDescription": {
-    "message": "Pi用のシームレスな音声からテキストへの強化機能、会話型AIをお楽しみください。どの言語でもハンズフリーで高精度な会話が可能です。",
+    "message": "あなたの声操作型Pi AIコンパニオン",
     "description": "アプリケーションの説明。"
   },
   "callInProgress": {

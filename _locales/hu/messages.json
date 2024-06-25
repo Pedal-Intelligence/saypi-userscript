@@ -4,7 +4,7 @@
     "description": "Az alkalmazás neve."
   },
   "appDescription": {
-    "message": "Beszéd-szöveggé alakítás a Pi-hez. Élvezze a kéz nélküli beszélgetéseket bármilyen nyelven.",
+    "message": "A Hangvezérelt Társad a Pi AI számára",
     "description": "Az alkalmazás leírása."
   },
   "callInProgress": {

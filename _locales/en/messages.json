@@ -4,7 +4,7 @@
     "description": "The name of the application."
   },
   "appDescription": {
-    "message": "Speech-to-text for Pi, the conversational AI. Enjoy hands-free conversations in any language.",
+    "message": "Your Voice-Powered Companion for Pi AI",
     "description": "The description of the application."
   },
   "exitImmersiveModeLong": {

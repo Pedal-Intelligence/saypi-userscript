@@ -4,7 +4,7 @@
     "description": "应用程序的名称。"
   },
   "appDescription": {
-    "message": "为Pi提供无缝的语音转文本增强功能，Pi是一款对话式人工智能。享受任何语言的免提、高准确度对话。",
+    "message": "您的Pi AI语音助手",
     "description": "应用程序的描述。"
   },
   "callInProgress": {

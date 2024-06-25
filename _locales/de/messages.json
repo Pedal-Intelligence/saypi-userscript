@@ -4,7 +4,7 @@
     "description": "Der Name der Anwendung."
   },
   "appDescription": {
-    "message": "Sprach-zu-Text für Pi, den KI-Assistenten. Genießen Sie Gespräche in jeder Sprache.",
+    "message": "Ihr sprachgesteuerter Begleiter für Pi AI",
     "description": "Die Beschreibung der Anwendung."
   },
   "callInProgress": {

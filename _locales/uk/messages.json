@@ -4,7 +4,7 @@
     "description": "Назва програми."
   },
   "appDescription": {
-    "message": "Перетворення мови для Pi, розмовного ШІ. Вільні розмови будь-якою мовою.",
+    "message": "Ваш голосовий супутник для Pi AI",
     "description": "Опис програми."
   },
   "callInProgress": {

@@ -4,7 +4,7 @@
     "description": "애플리케이션의 이름입니다."
   },
   "appDescription": {
-    "message": "대화형 AI인 Pi를 위한 매끄러운 음성-텍스트 전환 기능입니다. 어떤 언어로든 손쉬운 고정확도 대화를 즐기세요.",
+    "message": "당신의 Pi AI를 위한 음성 제어 동반자",
     "description": "애플리케이션의 설명입니다."
   },
   "callInProgress": {

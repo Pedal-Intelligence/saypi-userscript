@@ -4,7 +4,7 @@
     "description": "El nombre de la aplicación."
   },
   "appDescription": {
-    "message": "Conversión de voz a texto para Pi, el AI conversacional. Disfruta charlas manos libres en cualquier idioma.",
+    "message": "Tu Compañero Controlado por Voz para Pi AI",
     "description": "La descripción de la aplicación."
   },
   "callInProgress": {

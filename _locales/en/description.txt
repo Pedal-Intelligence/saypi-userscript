@@ -1,0 +1,22 @@
+Say, Pi: Your Voice-Powered Companion for Pi AI
+
+Transform your conversations with Pi, the revolutionary AI chatbot from Inflection AI.  Say, Pi is your essential browser extension, empowering you to communicate with Pi using your voice, effortlessly and in multiple languages. 
+
+Key Features:
+
+- Hands-Free Conversations: Activate Pi with your voice, perfect for multitasking or when typing isn't convenient.
+- Unmatched Accuracy & Speed:  Leveraging the world's fastest implementation of OpenAI's Whisper technology, Say, Pi delivers unparalleled speech recognition and lightning-fast transcriptions. 
+- Multilingual Powerhouse: Communicate seamlessly in 29 languages, with realistic, enhanced voices like Paola and Joey.
+- Smart End-of-Speech Detection: Say, Pi knows when you've finished speaking, ensuring your thoughts are captured completely.
+- Immersive & Desktop Modes: Choose how you want to interact – see your conversation in text or dive into a distraction-free experience. 
+- Dark Mode: Protect your eyes with a comfortable dark theme.
+- Global Availability:  Use Say, Pi on macOS, Windows, Android, and iOS.
+
+Why Choose Say, Pi:
+
+- Enhance Accessibility: Empower users with visual or motor impairments to interact with Pi effortlessly.
+- Boost Productivity:  Multitask, take notes, or brainstorm ideas while keeping your hands free.
+- Expand Pi's Capabilities:  Unlock multilingual conversations and explore a variety of realistic voices.
+- Join the Community: Be part of an active and supportive user base shaping the future of Say, Pi. 
+
+Experience the future of voice-enabled AI interaction. Download Say, Pi today!

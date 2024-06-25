@@ -4,7 +4,7 @@
     "description": "Le nom de l'application."
   },
   "appDescription": {
-    "message": "Transcription vocale pour Pi, l'IA conversationnelle. Dialogues mains libres dans toutes langues.",
+    "message": "Votre Compagnon à Commande Vocale pour Pi IA",
     "description": "La description de l'application."
   },
   "callInProgress": {
