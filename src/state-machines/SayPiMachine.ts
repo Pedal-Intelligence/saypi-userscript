@@ -1103,7 +1103,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           event = event as SayPiTranscribedEvent;
         }
 
-        const maxDelay = 8000; // 8 seconds in milliseconds (lowered from 10s in v1.5.4)
+        const maxDelay = 7000; // 7 second max submission delay (lowered from 8s in v1.6.0)
 
         // Calculate the initial delay based on pFinishedSpeaking
         let probabilityFinished = 1;
