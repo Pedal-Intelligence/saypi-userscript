@@ -27,7 +27,7 @@ const LANGUAGE_TIMEOUTS: { [key: string]: number } = {
   da: 1500,
   tl: 250,
   fi: 250,
-  el: 500,
+  el: 1250,
   id: 0,
   ms: 1000,
   ro: 750,
