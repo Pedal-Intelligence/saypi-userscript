@@ -1,32 +1,56 @@
 import getMessage from "../i18n";
 import { SpeechSynthesisModule } from "./SpeechSynthesisModule";
 import volumeIconSVG from "../icons/volume-mid.svg";
+import copyIconSVG from "../icons/copy.svg";
+import copiedIconSVG from "../icons/copied.svg";
 import { getResourceUrl } from "../ResourceModule";
 import EventBus from "../events/EventBus";
 import { UtteranceCharge } from "../billing/BillingModule";
 import { SpeechSynthesisVoiceRemote, SpeechUtterance } from "./SpeechModel";
+import { AssistantResponse } from "../dom/MessageElements";
 
 export class TTSControlsModule {
   constructor(private speechSynthesis: SpeechSynthesisModule) {}
 
-  createSpeechButton() {
+  constructTextToSpeechControl(classname: string, title: string, icon: string) {
     const button = document.createElement("button");
     button.type = "button";
-    button.classList.add(
-      "text-center",
-      "hover:bg-neutral-300",
-      "saypi-speak-button"
-    );
-    button.title = getMessage("readAloudButtonTitle");
-    button.innerHTML = volumeIconSVG;
+    button.classList.add("text-center", classname);
+    button.setAttribute("aria-label", title);
+    button.innerHTML = icon;
     return button;
   }
 
-  createSpeechButtonForMenu() {
+  /**
+   * A speech button that can be used among chat message controls
+   * @returns A button element that can be used to replay the last utterance
+   */
+  createSpeechButton() {
+    // use createTTSCtrlButton to create a button with the correct classes
+    const button = this.constructTextToSpeechControl(
+      "saypi-speak-button",
+      getMessage("readAloudButtonTitle"),
+      volumeIconSVG
+    );
+    return button;
+  }
+
+  createCopyButton() {
+    const button = this.constructTextToSpeechControl(
+      "saypi-copy-button",
+      getMessage("copyButtonTitle"),
+      copyIconSVG
+    );
+    return button;
+  }
+
+  constructTextToSpeechControlForMenu(
+    classname: string,
+    title: string,
+    icon: string
+  ) {
     const button = document.createElement("button");
     button.type = "button";
-    button.classList.add("saypi-speak-button");
-    // add pi.ai tailwind classes to the button
     button.classList.add(
       "flex",
       "h-12",
@@ -37,10 +61,34 @@ export class TTSControlsModule {
       "px-2.5",
       "hover:bg-neutral-50-hover",
       "active:bg-neutral-50-tap",
-      "active:text-primary-700"
+      "active:text-primary-700",
+      classname
     );
-    button.title = getMessage("readAloudButtonTitle");
-    button.innerHTML = button.title + volumeIconSVG;
+    button.setAttribute("title", title);
+    button.innerHTML = title + icon;
+    return button;
+  }
+
+  /**
+   * A speech button that can be used in a menu on a mobile device
+   * @returns A button element that can be used to replay the last utterance
+   */
+  createSpeechButtonForMenu() {
+    // use createTTSCtrlButton to create a button with the correct classes
+    const button = this.constructTextToSpeechControlForMenu(
+      "saypi-speak-button",
+      getMessage("readAloudButtonTitle"),
+      volumeIconSVG
+    );
+    return button;
+  }
+
+  createCopyButtonForMenu() {
+    const button = this.constructTextToSpeechControlForMenu(
+      "saypi-copy-button",
+      getMessage("copyButtonTitle"),
+      copyIconSVG
+    );
     return button;
   }
 
@@ -55,6 +103,34 @@ export class TTSControlsModule {
     button.addEventListener("click", () => {
       EventBus.emit("saypi:tts:replaying", utterance); //  notify the ui manager that the next speech it hears will be a replay
       this.speechSynthesis.speak(utterance);
+    });
+    container.appendChild(button);
+  }
+
+  addCopyButton(
+    message: AssistantResponse,
+    container: HTMLElement,
+    containerIsMenu: boolean = false
+  ): void {
+    const button = containerIsMenu
+      ? this.createCopyButtonForMenu()
+      : this.createCopyButton();
+    button.addEventListener("click", () => {
+      navigator.clipboard.writeText(message.text);
+      if (!containerIsMenu) {
+        const originalAriaLabel =
+          button.getAttribute("ariaLabel") || getMessage("copyButtonTitle");
+        const originalInnerHtml = button.innerHTML;
+        button.setAttribute("aria-label", getMessage("copiedButtonTitle"));
+        button.innerHTML = copiedIconSVG;
+        button.disabled = true;
+        // reset after a few seconds
+        setTimeout(() => {
+          button.setAttribute("aria-label", originalAriaLabel);
+          button.innerHTML = originalInnerHtml;
+          button.disabled = false;
+        }, 2500);
+      }
     });
     container.appendChild(button);
   }

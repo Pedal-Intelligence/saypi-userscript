@@ -12,7 +12,6 @@
         .saypi-speak-button {
             padding: 4px; /* brings the total height to 32px */
             border-radius: 50%;
-            overflow: hidden;
         }
         .saypi-cost, .saypi-powered-by {
             display: flex;
@@ -32,6 +31,34 @@
 .assistant-message .popup-menu .saypi-speak-button svg {
     width: 24px;
     height: 24px;
+}
+
+.saypi-tts-controls {
+    button {
+        position: relative;
+        overflow: visible;
+      }
+      
+      button::after {
+        content: attr(aria-label);
+        position: absolute;
+        top: 120%;
+        transform: translateX(-70%); // center the tooltip below the button
+        white-space: nowrap;
+        background: #24381b; // Pi primary text color (dark green)
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        margin-left: 10px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+        font-size: smaller;
+      }
+      
+      button:hover::after {
+        opacity: 1;
+      }
 }
 
 /*

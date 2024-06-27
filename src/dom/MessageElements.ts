@@ -14,8 +14,9 @@ class PopupMenu {
   private _element: HTMLElement;
 
   constructor(
+    private message: AssistantResponse,
     element: HTMLElement,
-    private speech: SpeechUtterance,
+    private speech: SpeechUtterance | null,
     private ttsControls: TTSControlsModule
   ) {
     this._element = element;
@@ -27,7 +28,13 @@ class PopupMenu {
 
   decorate(): void {
     this._element.classList.add("popup-menu");
-    this.ttsControls.addSpeechButton(this.speech, this._element, true);
+    this.ttsControls.addCopyButton(this.message, this._element, true);
+    if (this.speech) {
+      this.decorateSpeech(this.speech);
+    }
+  }
+  decorateSpeech(speech: SpeechUtterance) {
+    this.ttsControls.addSpeechButton(speech, this._element, true);
   }
 
   static find(chatbot: Chatbot, searchRoot: HTMLElement): Observation {
@@ -179,6 +186,7 @@ class AssistantResponse {
             const obs = PopupMenu.find(new PiAIChatbot(), addedElement);
             if (obs.found && !obs.decorated) {
               const popupMenu = new PopupMenu(
+                this,
                 obs.target as HTMLElement,
                 speech,
                 this.ttsControlsModule
@@ -196,14 +204,7 @@ class AssistantResponse {
     observer.observe(hoverMenu, { childList: true, subtree: false });
   }
 
-  /**
-   * Apply speech to this chat message
-   * @param utterance
-   */
-  decorateSpeech(utterance: SpeechUtterance): void {
-    this._element.dataset.utteranceId = utterance.id;
-    this._element.classList.add("speech-enabled");
-
+  decorateControls(): void {
     let hoverMenu = this.element.querySelector(".message-hover-menu");
     if (!hoverMenu) {
       if (this.element.children.length > 1) {
@@ -215,26 +216,52 @@ class AssistantResponse {
         }
       }
     }
+    let messageControlsElement = this.element.querySelector(
+      ".saypi-tts-controls"
+    ) as HTMLDivElement;
+    if (!messageControlsElement) {
+      messageControlsElement = document.createElement("div");
+      messageControlsElement.classList.add("saypi-tts-controls", "pt-4");
+      hoverMenu?.appendChild(messageControlsElement);
+    }
+
+    const copyButtonElement =
+      messageControlsElement.querySelector(".saypi-copy-button");
+    if (!copyButtonElement) {
+      this.ttsControlsModule.addCopyButton(this, messageControlsElement);
+    }
+  }
+
+  /**
+   * Apply speech to this chat message
+   * @param utterance
+   */
+  decorateSpeech(utterance: SpeechUtterance): void {
+    this._element.dataset.utteranceId = utterance.id;
+    this._element.classList.add("speech-enabled");
+
+    const hoverMenu = this.element.querySelector(".message-hover-menu");
+    const messageControlsElement = this.element.querySelector(
+      ".saypi-tts-controls"
+    ) as HTMLDivElement | null;
+    if (!messageControlsElement) {
+      console.error(
+        "Message controls element not found, please call decorateControls() before decorateSpeech()"
+      );
+      return;
+    }
+
     if (isMobileDevice() && hoverMenu) {
       this.watchForPopupMenu(hoverMenu as HTMLElement, utterance);
     }
-    let ttsControlsElement = this.element.querySelector(
-      ".saypi-tts-controls"
-    ) as HTMLDivElement;
-    if (!ttsControlsElement) {
-      ttsControlsElement = document.createElement("div");
-      ttsControlsElement.id = `saypi-tts-controls-${utterance.id}`;
-      ttsControlsElement.classList.add("saypi-tts-controls", "pt-4");
-      hoverMenu?.appendChild(ttsControlsElement);
-    }
-    const speechButtonElement = ttsControlsElement.querySelector(
+    const speechButtonElement = messageControlsElement.querySelector(
       ".saypi-speak-button"
     );
     if (!speechButtonElement) {
-      this.ttsControlsModule.addSpeechButton(utterance, ttsControlsElement);
+      this.ttsControlsModule.addSpeechButton(utterance, messageControlsElement);
     }
     this.decorateCost(UtteranceCharge.none); // cost is unknown at this point
-    const costElement = ttsControlsElement.querySelector(
+    const costElement = messageControlsElement.querySelector(
       ".saypi-cost"
     ) as HTMLDivElement | null;
     if (costElement && utterance.voice) {

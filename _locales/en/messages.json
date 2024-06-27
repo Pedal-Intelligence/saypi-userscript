@@ -320,5 +320,13 @@
   "enhancedVoice": {
     "message": "Voice enhanced by Say, Pi",
     "description": "Title (tooltip) for Say, Pi enhanced voices."
+  },
+  "copyButtonTitle": {
+    "message": "Copy",
+    "description": "The title of the button to copy the text of a message to the clipboard."
+  },
+  "copiedButtonTitle": {
+    "message": "Copied!",
+    "description": "The title of the button to indicate that the text of a message has been copied to the clipboard."
   }
 }
