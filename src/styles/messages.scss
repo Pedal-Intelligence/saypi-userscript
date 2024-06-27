@@ -21,22 +21,26 @@
         svg, img {
             width: 24px;
             height: 24px;
-            path.speaker {
-                fill: #24381b; // rgb(13 60 38) - Pi primary text color
+            path {
+                fill: #6b6255; // Pi light brown text color
             }
         }
     }
 }
 
-.assistant-message .popup-menu button svg {
+.assistant-message .popup-menu button.saypi-button svg {
     width: 24px;
     height: 24px;
+    path {
+        fill: #6b6255; // Pi light brown text color
+    }
 }
 
 .saypi-tts-controls {
     button {
         position: relative;
         overflow: visible;
+        margin: 0 0.15rem;
       }
       
       button::after {
