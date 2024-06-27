@@ -320,5 +320,13 @@
         "example": "Pi"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "Disalin!",
+    "description": "Judul tombol untuk menunjukkan bahwa teks pesan telah disalin ke papan klip."
+  },
+  "copyButtonTitle": {
+    "message": "Salin",
+    "description": "Judul tombol untuk menyalin teks pesan ke papan klip."
   }
 }

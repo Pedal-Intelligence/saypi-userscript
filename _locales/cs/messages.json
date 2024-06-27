@@ -320,5 +320,13 @@
         "example": "Pi"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "Zkopírováno!",
+    "description": "Název tlačítka pro označení, že text zprávy byl zkopírován do schránky."
+  },
+  "copyButtonTitle": {
+    "message": "Kopírovat",
+    "description": "Název tlačítka pro kopírování textu zprávy do schránky."
   }
 }

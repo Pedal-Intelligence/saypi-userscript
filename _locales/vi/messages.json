@@ -320,5 +320,13 @@
         "example": "ElevenLabs"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "Đã sao chép!",
+    "description": "Tiêu đề của nút để chỉ ra rằng văn bản của một tin nhắn đã được sao chép vào bảng tạm."
+  },
+  "copyButtonTitle": {
+    "message": "Sao chép",
+    "description": "Tiêu đề của nút để sao chép văn bản của một tin nhắn vào bộ nhớ tạm."
   }
 }

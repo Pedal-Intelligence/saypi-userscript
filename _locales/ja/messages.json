@@ -320,5 +320,13 @@
         "example": "ElevenLabs"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "コピーしました！",
+    "description": "メッセージのテキストがクリップボードにコピーされたことを示すボタンのタイトル。"
+  },
+  "copyButtonTitle": {
+    "message": "コピー",
+    "description": "メッセージのテキストをクリップボードにコピーするためのボタンのタイトル。"
   }
 }

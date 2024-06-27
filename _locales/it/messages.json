@@ -320,5 +320,13 @@
         "example": "ElevenLabs"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "Copiato!",
+    "description": "Il titolo del pulsante per indicare che il testo di un messaggio è stato copiato negli appunti."
+  },
+  "copyButtonTitle": {
+    "message": "Copia",
+    "description": "Il titolo del pulsante per copiare il testo di un messaggio negli appunti."
   }
 }

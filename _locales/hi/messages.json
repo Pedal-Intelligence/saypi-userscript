@@ -320,5 +320,13 @@
         "example": "ElevenLabs"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "प्रतिलिपि बनाई गई!",
+    "description": "संदेश का पाठ क्लिपबोर्ड में प्रतिलिपि बनाने के लिए बटन का शीर्षक।"
+  },
+  "copyButtonTitle": {
+    "message": "प्रतिलिपि",
+    "description": "संदेश के पाठ को क्लिपबोर्ड में कॉपी करने के लिए बटन का शीर्षक।"
   }
 }

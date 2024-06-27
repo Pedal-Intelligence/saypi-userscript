@@ -320,5 +320,13 @@
         "example": "ElevenLabs"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "تم النسخ!",
+    "description": "عنوان الزر للإشارة إلى أن نص الرسالة تم نسخه إلى الحافظة."
+  },
+  "copyButtonTitle": {
+    "message": "نسخ",
+    "description": "عنوان الزر لنسخ نص الرسالة إلى الحافظة."
   }
 }

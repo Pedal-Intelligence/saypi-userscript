@@ -320,5 +320,13 @@
         "example": "Pi"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "Kinopya!",
+    "description": "Ang pamagat ng pindutan upang ipahiwatig na ang teksto ng mensahe ay nakopya na sa clipboard."
+  },
+  "copyButtonTitle": {
+    "message": "Kopya",
+    "description": "Ang pamagat ng pindutan para kopyahin ang teksto ng mensahe sa clipboard."
   }
 }

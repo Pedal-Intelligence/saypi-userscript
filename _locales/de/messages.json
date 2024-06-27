@@ -320,5 +320,13 @@
         "example": "ElevenLabs"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "Kopiert!",
+    "description": "Der Titel des Buttons, um anzuzeigen, dass der Text einer Nachricht in die Zwischenablage kopiert wurde."
+  },
+  "copyButtonTitle": {
+    "message": "Kopieren",
+    "description": "Der Titel des Buttons, um den Text einer Nachricht in die Zwischenablage zu kopieren."
   }
 }

@@ -320,5 +320,13 @@
         "example": "Pi"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "Kopyalandı!",
+    "description": "Bir mesajın metninin panoya kopyalandığını belirtmek için düğmenin başlığı."
+  },
+  "copyButtonTitle": {
+    "message": "Kopyala",
+    "description": "Bir mesajın metnini panoya kopyalamak için düğmenin başlığı."
   }
 }

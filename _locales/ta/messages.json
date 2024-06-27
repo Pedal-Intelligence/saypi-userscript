@@ -319,5 +319,12 @@
         "example": "Pi"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "நகல் செய்துவிட்டேன்!",
+    "description": "ஒரு செய்தியின் உரை கிளிப்போர்டுக்கு நகல் எடுக்கப்பட்டு விட்டதை குறிப்பிடுvendha button- in peyar."
+  },
+  "copyButtonTitle": {
+    "message": "நகல்"
   }
 }

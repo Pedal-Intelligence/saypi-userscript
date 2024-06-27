@@ -320,5 +320,13 @@
         "example": "Pi"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "Kopioitu!",
+    "description": "Painikkeen otsikko, joka ilmaisee, että viestin teksti on kopioitu leikepöydälle."
+  },
+  "copyButtonTitle": {
+    "message": "Kopioi",
+    "description": "Painikkeen otsikko, jolla kopioidaan viestin teksti leikepöydälle."
   }
 }

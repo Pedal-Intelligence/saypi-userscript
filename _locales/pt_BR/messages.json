@@ -320,5 +320,13 @@
         "example": "ElevenLabs"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "Copiado!",
+    "description": "O título do botão para indicar que o texto de uma mensagem foi copiado para a área de transferência."
+  },
+  "copyButtonTitle": {
+    "message": "Cópia",
+    "description": "O título do botão para copiar o texto de uma mensagem para a área de transferência."
   }
 }

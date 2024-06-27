@@ -320,5 +320,13 @@
         "example": "ElevenLabs"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "복사됨!",
+    "description": "메시지의 텍스트가 클립보드에 복사되었음을 나타내는 버튼의 제목."
+  },
+  "copyButtonTitle": {
+    "message": "복사",
+    "description": "메시지의 텍스트를 클립보드에 복사하는 버튼의 제목."
   }
 }

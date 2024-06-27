@@ -320,5 +320,13 @@
         "example": "ElevenLabs"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "Gekopieerd!",
+    "description": "De titel van de knop om aan te geven dat de tekst van een bericht is gekopieerd naar het klembord."
+  },
+  "copyButtonTitle": {
+    "message": "Kopiëren",
+    "description": "De titel van de knop om de tekst van een bericht naar het klembord te kopiëren."
   }
 }

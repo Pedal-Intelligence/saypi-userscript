@@ -320,5 +320,13 @@
         "example": "Pi"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "Disalin!",
+    "description": "Tajuk butang untuk menunjukkan bahawa teks mesej telah disalin ke papan keratan."
+  },
+  "copyButtonTitle": {
+    "message": "Salin",
+    "description": "Tajuk butang untuk menyalin teks mesej ke papan keratan."
   }
 }

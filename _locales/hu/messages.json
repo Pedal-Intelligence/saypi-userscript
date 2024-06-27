@@ -320,5 +320,13 @@
         "example": "ElevenLabs"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "Másolva!",
+    "description": "A gomb címe, amely jelzi, hogy az üzenet szövege másolva lett a vágólapra."
+  },
+  "copyButtonTitle": {
+    "message": "Másolat",
+    "description": "A gomb címe, amely másolja az üzenet szövegét a vágólapra."
   }
 }

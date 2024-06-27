@@ -320,5 +320,12 @@
         "example": "ElevenLabs"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "已复制！"
+  },
+  "copyButtonTitle": {
+    "message": "复制",
+    "description": "将消息文本复制到剪贴板的按钮标题。"
   }
 }

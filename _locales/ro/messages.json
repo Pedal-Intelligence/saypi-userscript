@@ -320,5 +320,13 @@
         "example": "Pi"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "Copiat!",
+    "description": "Titlul butonului pentru a indica faptul că textul unui mesaj a fost copiat în clipboard."
+  },
+  "copyButtonTitle": {
+    "message": "Copiază",
+    "description": "Titlul butonului pentru a copia textul unui mesaj în clipboard."
   }
 }

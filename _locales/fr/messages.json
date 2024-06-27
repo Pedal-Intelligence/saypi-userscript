@@ -320,5 +320,13 @@
         "example": "ElevenLabs"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "Copié !",
+    "description": "Le titre du bouton pour indiquer que le texte d'un message a été copié dans le presse-papiers."
+  },
+  "copyButtonTitle": {
+    "message": "Copier",
+    "description": "Le titre du bouton pour copier le texte d'un message dans le presse-papiers."
   }
 }

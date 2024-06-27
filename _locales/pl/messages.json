@@ -320,5 +320,13 @@
         "example": "ElevenLabs"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "Skopiowane!",
+    "description": "Tytuł przycisku wskazującego, że tekst wiadomości został skopiowany do schowka."
+  },
+  "copyButtonTitle": {
+    "message": "Kopiuj",
+    "description": "Tytuł przycisku do kopiowania tekstu wiadomości do schowka."
   }
 }

@@ -320,5 +320,13 @@
         "example": "Pi"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "Kopirano!",
+    "description": "Naslov gumba koji označava da je tekst poruke kopiran u međuspremnik."
+  },
+  "copyButtonTitle": {
+    "message": "Kopiraj",
+    "description": "Naslov gumba za kopiranje teksta poruke u međuspremnik."
   }
 }

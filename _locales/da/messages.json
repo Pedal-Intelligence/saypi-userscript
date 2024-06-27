@@ -320,5 +320,13 @@
         "example": "Pi"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "Kopieret!",
+    "description": "Titlen på knappen for at indikere, at teksten i en besked er blevet kopieret til udklipsholderen."
+  },
+  "copyButtonTitle": {
+    "message": "Kopier",
+    "description": "Titlen på knappen til at kopiere teksten af en besked til udklipsholderen."
   }
 }

@@ -320,5 +320,13 @@
         "example": "Pi"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "Kopierat!",
+    "description": "Titeln på knappen för att indikera att texten i ett meddelande har kopierats till urklipp."
+  },
+  "copyButtonTitle": {
+    "message": "Kopiera",
+    "description": "Titeln på knappen för att kopiera texten av ett meddelande till urklipp."
   }
 }

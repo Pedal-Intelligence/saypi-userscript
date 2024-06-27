@@ -320,5 +320,13 @@
         "example": "ElevenLabs"
       }
     }
+  },
+  "copiedButtonTitle": {
+    "message": "কপি করা হয়েছে!",
+    "description": "বার্তার টেক্সট ক্লিপবোর্ডে অনুলিপি হয়েছে এর ইঙ্গিত দেয়া button-er title."
+  },
+  "copyButtonTitle": {
+    "message": "কপি",
+    "description": "বার্তার পাঠ্যটি ক্লিপবোর্ডে অনুলিপি করার জন্য বোতামের শিরোনাম।"
   }
 }
