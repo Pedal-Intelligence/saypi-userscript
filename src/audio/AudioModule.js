@@ -13,6 +13,10 @@ export default class AudioModule {
       return AudioModule.instance;
     }
 
+    this.AUDIO_ELEMENT_ID = "saypi-audio-main";
+    this.audioElement = null;
+    this.mutationObserver = null;
+
     this.audioOutputActor = interpret(audioOutputMachine);
     this.audioOutputActor.onTransition((state) => {
       if (state.changed) {
@@ -87,21 +91,90 @@ export default class AudioModule {
       this.registerAudioPlaybackEvents(this.audioElement, this.audioRetryActor);
       this.registerSourceChangeEvents(this.audioElement, this.audioRetryActor);
     }
+
+    this.listenForAudioElementSwap();
   }
 
   stop() {}
 
-  // the audio element is a global singleton
-  // the audio module cannot start without it
-  // but offline commands can be registered before the audio module starts
-  findAndDecorateAudioElement() {
-    this.audioElement = document.querySelector("audio");
-    if (!this.audioElement) {
-      console.error("Audio element not found!");
-    } else {
-      this.audioElement.id = "saypi-audio-main";
-      console.debug("Audio element found", this.audioElement);
+  findAudioElement(searchRoot) {
+    let audioElement = searchRoot.querySelector(`#${this.AUDIO_ELEMENT_ID}`);
+    if (!audioElement) {
+      audioElement = searchRoot.querySelector("audio");
     }
+    return audioElement;
+  }
+
+  decorateAudioElement(audioElement) {
+    if (audioElement) {
+      audioElement.id = this.AUDIO_ELEMENT_ID;
+    }
+  }
+
+  findAndDecorateAudioElement(searchRoot = document) {
+    this.audioElement = this.findAudioElement(searchRoot);
+    this.decorateAudioElement(this.audioElement);
+    this.registerRemovalListener();
+  }
+
+  swapAudioElement(newAudioElement) {
+    this.audioElement = newAudioElement;
+    this.decorateAudioElement(this.audioElement);
+    this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
+    if (isSafari()) {
+      this.registerAudioPlaybackEvents(this.audioElement, this.audioRetryActor);
+      this.registerSourceChangeEvents(this.audioElement, this.audioRetryActor);
+    }
+    this.registerRemovalListener();
+  }
+
+  registerRemovalListener() {
+    if (this.audioElement) {
+      const config = { childList: true, subtree: false };
+
+      this.mutationObserver = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+          if (mutation.type === "childList") {
+            for (const removedNode of mutation.removedNodes) {
+              if (removedNode === this.audioElement) {
+                console.debug("Audio element removed from the document");
+                this.audioElement = null;
+                this.listenForAudioElementSwap();
+                return;
+              }
+            }
+          }
+        }
+      });
+
+      // Use optional chaining and nullish coalescing for safer access
+      const observeTarget = this.audioElement.parentNode ?? document.body;
+      this.mutationObserver.observe(observeTarget, config);
+    }
+  }
+
+  listenForAudioElementSwap() {
+    const config = { childList: true, subtree: true };
+
+    const swapObserver = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === "childList") {
+          for (const addedNode of mutation.addedNodes) {
+            if (addedNode.nodeType === Node.ELEMENT_NODE) {
+              const newAudioElement = this.findAudioElement(addedNode);
+              if (newAudioElement) {
+                console.debug("New audio element found", newAudioElement);
+                this.swapAudioElement(newAudioElement);
+                swapObserver.disconnect();
+                return;
+              }
+            }
+          }
+        }
+      }
+    });
+
+    swapObserver.observe(document.body, config);
   }
 
   /**
