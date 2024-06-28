@@ -39,6 +39,10 @@ class PiAIChatbot implements Chatbot {
     return "div.t-action-m";
   }
 
+  getVoiceSettingsSelector(): string {
+    return "div.mx-auto.w-full.px-6.py-10 > div.grid.grid-cols-2.gap-4";
+  }
+
   getChatHistorySelector(): string {
     return "div.t-body-chat";
   }

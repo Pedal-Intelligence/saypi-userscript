@@ -328,5 +328,13 @@
   "copyButtonTitle": {
     "message": "Sao chép",
     "description": "Tiêu đề của nút để sao chép văn bản của một tin nhắn vào bộ nhớ tạm."
+  },
+  "voiceIntroduction_joey": {
+    "message": "Hola! Привет! 你好! Tôi là Pi, trợ lý AI đa ngôn ngữ của bạn. Với 29 ngôn ngữ trong tầm tay, chúng ta có thể khám phá ý tưởng và văn hóa từ khắp nơi trên thế giới. Bạn nghĩ gì về giọng nói này?",
+    "description": "Giới thiệu về giọng nói của Joey."
+  },
+  "voiceIntroduction_paola": {
+    "message": "Chào! Bonjour! Xin chào! Tôi là Pi, và tôi có thể nói trôi chảy ở 29 ngôn ngữ. Từ tiếng Ả Rập đến tiếng Ukraina, tôi ở đây để phá vỡ rào cản ngôn ngữ. Giọng của tôi nghe như thế nào với bạn?",
+    "description": "Giới thiệu về giọng của Paola."
   }
 }

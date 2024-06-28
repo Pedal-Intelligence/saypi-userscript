@@ -328,5 +328,13 @@
   "copyButtonTitle": {
     "message": "Salin",
     "description": "Tajuk butang untuk menyalin teks mesej ke papan keratan."
+  },
+  "voiceIntroduction_joey": {
+    "message": "Hola! Привет! 你好! Saya Pi, pembantu AI poliglot anda. Dengan 29 bahasa yang saya kuasai, kita boleh meneroka idea dan budaya dari seluruh dunia. Apa pendapat anda tentang suara ini?",
+    "description": "Pengenalan untuk suara Joey."
+  },
+  "voiceIntroduction_paola": {
+    "message": "Ciao! Bonjour! Hello! Saya Pi, dan saya boleh berbual dengan lancar dalam 29 bahasa. Dari Bahasa Arab hingga Ukraine, saya di sini untuk meruntuhkan halangan bahasa. Bagaimana suara ini kedengaran kepada anda?",
+    "description": "Pengenalan untuk suara Paola."
   }
 }

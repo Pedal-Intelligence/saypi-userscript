@@ -328,5 +328,13 @@
   "copyButtonTitle": {
     "message": "Kopieren",
     "description": "Der Titel des Buttons, um den Text einer Nachricht in die Zwischenablage zu kopieren."
+  },
+  "voiceIntroduction_joey": {
+    "message": "Hallo! Привет! 你好! Ich bin Pi, dein mehrsprachiger KI-Assistent. Mit 29 Sprachen zu meiner Verfügung können wir Ideen und Kulturen aus der ganzen Welt erkunden. Was hältst du von dieser Stimme?",
+    "description": "Einführung für die Joey-Stimme."
+  },
+  "voiceIntroduction_paola": {
+    "message": "Ciao! Bonjour! Hallo! Ich bin Pi und ich kann fließend in 29 Sprachen kommunizieren. Von Arabisch bis Ukrainisch, ich bin hier, um Sprachbarrieren abzubauen. Wie klingt diese Stimme für Sie?",
+    "description": "Einführung für die Paola-Stimme."
   }
 }

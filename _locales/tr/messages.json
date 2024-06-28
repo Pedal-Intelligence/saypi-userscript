@@ -328,5 +328,13 @@
   "copyButtonTitle": {
     "message": "Kopyala",
     "description": "Bir mesajın metnini panoya kopyalamak için düğmenin başlığı."
+  },
+  "voiceIntroduction_joey": {
+    "message": "Merhaba! Привет! 你好! Ben Pi, çok dilli AI asistanınız. Emrimde 29 dil ile dünyanın dört bir yanındaki fikirleri ve kültürleri keşfedebiliriz. Bu ses hakkında ne düşünüyorsunuz?",
+    "description": "Joey sesi için giriş."
+  },
+  "voiceIntroduction_paola": {
+    "message": "Ciao! Bonjour! Merhaba! Ben Pi, ve 29 dilde akıcı bir şekilde konuşabilirim. Arapça'dan Ukraynaca'ya kadar, dil engellerini aşmak için buradayım. Bu ses size nasıl geliyor?",
+    "description": "Paola sesi için giriş."
   }
 }

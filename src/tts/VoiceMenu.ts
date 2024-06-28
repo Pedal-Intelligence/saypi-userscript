@@ -64,23 +64,24 @@ export abstract class VoiceSelector {
   protected unmarkButtonAsSelectedVoice(button: HTMLButtonElement): void {
     button.disabled = false;
     button.classList.remove("selected", "bg-neutral-300", "text-primary-700");
-    button.classList.add("hover:bg-neutral-300");
+    button.classList.add("hover:bg-neutral-300", "border-neutral-500");
+    button.setAttribute("style", ""); // remove inline styles from builtin voice buttons on voice settings page
   }
 
   protected isBuiltInVoiceButton(button: HTMLButtonElement): boolean {
     return !button.classList.contains("saypi-custom-voice");
   }
 
-  addVoicesToMenu(voiceMenu: HTMLElement): void {
+  addVoicesToSelector(voiceSelector: HTMLElement): void {
     const speechSynthesis = SpeechSynthesisModule.getInstance();
     speechSynthesis.getVoices().then((voices) => {
-      this.populateVoices(voices, voiceMenu);
+      this.populateVoices(voices, voiceSelector);
     });
   }
 
   populateVoices(
     voices: SpeechSynthesisVoiceRemote[],
-    menu: HTMLElement
+    voiceSelector: HTMLElement
   ): boolean {
     if (!voices || voices.length === 0) {
       console.log("No voices found");
@@ -91,7 +92,7 @@ export abstract class VoiceSelector {
 
     voices.forEach((voice) => {
       // if not already in the menu, add the voice
-      if (menu.querySelector(`button[data-voice-id="${voice.id}"]`)) {
+      if (voiceSelector.querySelector(`button[data-voice-id="${voice.id}"]`)) {
         // voice already in menu, skip to next voice
         return;
       }
@@ -102,6 +103,7 @@ export abstract class VoiceSelector {
       const combinedClasses = [
         ...this.getButtonClasses(),
         ...additionalClasses,
+        voice.name.toLowerCase().replace(" ", "-"),
       ];
       button.classList.add(...combinedClasses);
       const name = document.createElement("span");
@@ -120,7 +122,7 @@ export abstract class VoiceSelector {
           customVoiceButtons.forEach((button) => {
             this.unmarkButtonAsSelectedVoice(button);
           });
-          const voiceButtons = menu.querySelectorAll("button");
+          const voiceButtons = voiceSelector.querySelectorAll("button");
           voiceButtons.forEach((button) => {
             if (this.isBuiltInVoiceButton(button as HTMLButtonElement)) {
               this.unmarkButtonAsSelectedVoice(button as HTMLButtonElement);
@@ -135,7 +137,7 @@ export abstract class VoiceSelector {
     });
 
     customVoiceButtons.reverse().forEach((button) => {
-      menu.insertBefore(button, menu.firstChild);
+      voiceSelector.insertBefore(button, voiceSelector.firstChild);
     });
 
     return true;
@@ -143,12 +145,17 @@ export abstract class VoiceSelector {
 
   introduceVoice(voice: SpeechSynthesisVoiceRemote): void {
     const lastMessage = getMostRecentAssistantMessage();
-    const introduction = lastMessage?.text || "Hello, I am Pi.";
+    const name = voice.name.toLowerCase().replace(" ", "_");
+    const introduction =
+      lastMessage?.text || getMessage(`voiceIntroduction_${name}`);
     const speechSynthesis = SpeechSynthesisModule.getInstance();
-    speechSynthesis.createSpeech(introduction).then((utterance) => {
-      utterance.voice = voice;
-      speechSynthesis.speak(utterance);
-    });
+    const notEnglish = "";
+    speechSynthesis
+      .createSpeech(introduction, false, notEnglish)
+      .then((utterance) => {
+        utterance.voice = voice;
+        speechSynthesis.speak(utterance);
+      });
   }
 
   // Listen for additions of custom voice buttons and update selections
@@ -164,29 +171,8 @@ export abstract class VoiceSelector {
               node.nodeName === "BUTTON" &&
               node instanceof HTMLButtonElement
             ) {
-              // a voice button was added to the menu that is not a custom voice button
-              // if a voice is selected, mark the button as selected
-              this.userPreferences.getVoice().then((voice) => {
-                const customVoiceIsSelected = voice !== null;
-                if (customVoiceIsSelected) {
-                  if (this.isBuiltInVoiceButton(node as HTMLButtonElement)) {
-                    this.unmarkButtonAsSelectedVoice(node as HTMLButtonElement);
-                  } else if (
-                    (node as HTMLElement).dataset.voiceId === voice.id
-                  ) {
-                    // unmark all other buttons and mark this one as selected
-                    const voiceButtons = Array.from(
-                      voiceMenu.querySelectorAll("button")
-                    );
-                    voiceButtons.forEach((button) => {
-                      this.unmarkButtonAsSelectedVoice(
-                        button as HTMLButtonElement
-                      );
-                    });
-                    this.markButtonAsSelectedVoice(node as HTMLButtonElement);
-                  }
-                }
-              });
+              const button = node as HTMLButtonElement;
+              this.handleButtonAddition(button);
             }
           }
         }
@@ -194,6 +180,28 @@ export abstract class VoiceSelector {
     };
     const observer = new MutationObserver(observerCallback);
     observer.observe(voiceMenu, { childList: true });
+  }
+
+  handleButtonAddition(button: HTMLButtonElement): void {
+    // a voice button was added to the menu that is not a custom voice button
+    // if a voice is selected, mark the button as selected
+    this.userPreferences.getVoice().then((voice) => {
+      const customVoiceIsSelected = voice !== null;
+      if (customVoiceIsSelected) {
+        if (this.isBuiltInVoiceButton(button)) {
+          this.unmarkButtonAsSelectedVoice(button);
+        } else if (button.dataset.voiceId === voice.id) {
+          // unmark all other buttons and mark this one as selected
+          const voiceButtons = Array.from(
+            this.element.querySelectorAll("button")
+          );
+          voiceButtons.forEach((btn) => {
+            this.unmarkButtonAsSelectedVoice(btn as HTMLButtonElement);
+          });
+          this.markButtonAsSelectedVoice(button);
+        }
+      }
+    });
   }
 }
 
@@ -289,7 +297,7 @@ export class VoiceMenu extends VoiceSelector {
               voiceMenu.classList.add("expanded");
               // mark the selected voice each time the menu is expanded (because pi.ai recreates the menu each time)
               this.userPreferences.getTextToSpeechEnabled().then((enabled) => {
-                if (enabled) this.addVoicesToMenu(voiceMenu);
+                if (enabled) this.addVoicesToSelector(voiceMenu);
               });
               this.registerVoiceChangeHandler(voiceMenu);
             }
@@ -322,7 +330,13 @@ export class VoiceSettings extends VoiceSelector {
   ) {
     super(chatbot, userPreferences, element);
     this.addIdVoiceMenu(element);
-    this.addVoiceButtonAdditionListener(element);
+    SpeechSynthesisModule.getInstance()
+      .getVoices()
+      .then((voices) => {
+        this.populateVoices(voices, element);
+        this.handleExistingVoiceButtons(element);
+        this.registerVoiceChangeHandler(element);
+      });
   }
 
   getId(): string {
@@ -343,5 +357,15 @@ export class VoiceSettings extends VoiceSelector {
       "text-primary-700",
       "border-neutral-500",
     ];
+  }
+
+  handleExistingVoiceButtons(voiceMenu: HTMLElement): void {
+    const voiceButtons = Array.from(voiceMenu.querySelectorAll("button"));
+    if (!voiceButtons || voiceButtons.length === 0) {
+      return;
+    }
+    voiceButtons.forEach((button) => {
+      this.handleButtonAddition(button as HTMLButtonElement);
+    });
   }
 }

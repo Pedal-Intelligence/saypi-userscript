@@ -328,5 +328,13 @@
   "copyButtonTitle": {
     "message": "Kopírovat",
     "description": "Název tlačítka pro kopírování textu zprávy do schránky."
+  },
+  "voiceIntroduction_joey": {
+    "message": "Ahoj! Привет! 你好! Jsem Pi, tvůj polyglotní AI asistent. S 29 jazyky, které ovládám, můžeme prozkoumávat nápady a kultury z celého světa. Co si myslíte o tomto hlasu?",
+    "description": "Úvod pro hlas Joey."
+  },
+  "voiceIntroduction_paola": {
+    "message": "Ciao! Bonjour! Ahoj! Jsem Pi a mohu se plynule bavit ve 29 jazycích. Od arabštiny po ukrajinštinu, jsem tady, abych strhal bariéry mezi jazyky. Jak na vás zní tento hlas?",
+    "description": "Úvod pro hlas Paola."
   }
 }

@@ -19,9 +19,9 @@ import { addChild } from "./dom/DOMModule.ts";
   "use strict";
 
   const chatbot = ChatbotService.getChatbot();
+  const audioModule = AudioModule.getInstance(); // inits the audio module's offline functions
 
   function startAudioModule() {
-    const audioModule = AudioModule.getInstance();
     window.addEventListener("unload", () => {
       audioModule.stop();
     });

@@ -328,5 +328,13 @@
   "copyButtonTitle": {
     "message": "Kopiuj",
     "description": "Tytuł przycisku do kopiowania tekstu wiadomości do schowka."
+  },
+  "voiceIntroduction_joey": {
+    "message": "¡Hola! Привет! 你好! Jestem Pi, twoim wielojęzycznym asystentem AI. Z 29 językami pod ręką możemy odkrywać pomysły i kultury z całego świata. Co myślisz o tym głosie?",
+    "description": "Wprowadzenie dla głosu Joey."
+  },
+  "voiceIntroduction_paola": {
+    "message": "Cześć! Bonjour! Witaj! Jestem Pi i mogę płynnie rozmawiać w 29 językach. Od arabskiego do ukraińskiego, jestem tutaj, aby przełamać bariery językowe. Jak brzmi dla ciebie ten głos?",
+    "description": "Wprowadzenie dla głosu Paola."
   }
 }

@@ -328,5 +328,13 @@
   "copyButtonTitle": {
     "message": "Kopiëren",
     "description": "De titel van de knop om de tekst van een bericht naar het klembord te kopiëren."
+  },
+  "voiceIntroduction_joey": {
+    "message": "Hola! Привет! 你好! Ik ben Pi, je meertalige AI-assistent. Met 29 talen tot mijn beschikking kunnen we ideeën en culturen van over de hele wereld verkennen. Wat vind je van deze stem?",
+    "description": "Inleiding voor de Joey stem."
+  },
+  "voiceIntroduction_paola": {
+    "message": "Ciao! Bonjour! Hallo! Ik ben Pi en ik kan vloeiend converseren in 29 talen. Van Arabisch tot Oekraïens, ik ben hier om taalbarrières te doorbreken. Hoe klinkt deze stem voor jou?",
+    "description": "Introductie voor de Paola stem."
   }
 }

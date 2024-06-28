@@ -3,6 +3,8 @@ import { buttonModule } from "../ButtonModule.js";
 import EventBus from "../events/EventBus.js";
 import { ChatHistorySpeechManager } from "../tts/ChatHistoryManager";
 import { Observation } from "../dom/Observation";
+import { VoiceSettings } from "../tts/VoiceMenu";
+import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
 export class DOMObserver {
   ttsUiMgr: ChatHistorySpeechManager | null = null;
@@ -23,6 +25,8 @@ export class DOMObserver {
               // this condition is particular to pi.ai
               const discoveryPanelObs =
                 this.findAndDecorateDiscoveryPanel(addedElement);
+              const voiceSettingsObs =
+                this.findAndDecorateVoiceSettings(addedElement);
             }
             const audioControlsObs =
               this.findAndDecorateAudioControls(addedElement);
@@ -193,6 +197,40 @@ export class DOMObserver {
       this.decorateDiscoveryPanel(obs.target as HTMLElement);
     }
     return Observation.foundAndDecorated(obs);
+  }
+
+  findAndDecorateVoiceSettings(searchRoot: Element): Observation {
+    const obs = this.findVoiceSettings(searchRoot);
+    if (obs.isUndecorated()) {
+      // decorate voice settings
+      this.decorateVoiceSettings(obs.target as HTMLElement);
+    }
+    return Observation.foundAndDecorated(obs);
+  }
+
+  findVoiceSettings(searchRoot: Element): Observation {
+    const id = "saypi-voice-settings";
+    const existingVoiceSettings = document.getElementById(id);
+    if (existingVoiceSettings) {
+      // Voice settings already exist, no need to search
+      return Observation.foundAlreadyDecorated(id, existingVoiceSettings);
+    }
+
+    const voiceSettings = searchRoot.querySelector(
+      this.chatbot.getVoiceSettingsSelector()
+    );
+    if (voiceSettings) {
+      return Observation.foundUndecorated(id, voiceSettings);
+    }
+    return Observation.notFound(id);
+  }
+
+  decorateVoiceSettings(voiceSettingsElement: HTMLElement): void {
+    const voiceSettings = new VoiceSettings(
+      this.chatbot,
+      UserPreferenceModule.getInstance(),
+      voiceSettingsElement
+    );
   }
 
   addIdSubmitButton(container: Element) {

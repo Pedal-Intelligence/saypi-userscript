@@ -328,5 +328,13 @@
   "copyButtonTitle": {
     "message": "복사",
     "description": "메시지의 텍스트를 클립보드에 복사하는 버튼의 제목."
+  },
+  "voiceIntroduction_joey": {
+    "message": "안녕하세요! Привет! 你好! 저는 당신의 다국어 AI 비서, Pi입니다. 제가 사용할 수 있는 언어는 총 29개이며, 이를 통해 전 세계의 아이디어와 문화를 탐색할 수 있습니다. 이 목소리에 대해 어떻게 생각하십니까?",
+    "description": "Joey 음성에 대한 소개."
+  },
+  "voiceIntroduction_paola": {
+    "message": "Ciao! Bonjour! 안녕하세요! 저는 Pi입니다, 그리고 저는 29개 국어로 능숙하게 대화할 수 있습니다. 아랍어에서 우크라이나어까지, 저는 여기서 언어의 장벽을 허물려고 합니다. 이 목소리가 어떻게 들리나요?",
+    "description": "Paola 음성에 대한 소개."
   }
 }

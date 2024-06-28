@@ -328,5 +328,13 @@
   "copiedButtonTitle": {
     "message": "Copied!",
     "description": "The title of the button to indicate that the text of a message has been copied to the clipboard."
+  },
+  "voiceIntroduction_paola": {
+    "message": "Ciao! Bonjour! Hello! I'm Pi, and I can converse fluently in 29 languages. From Arabic to Ukrainian, I'm here to break down language barriers. How does this voice sound to you?",
+    "description": "Introduction for the Paola voice."
+  },
+  "voiceIntroduction_joey": {
+    "message": "Hola! Привет! 你好! I'm Pi, your polyglot AI assistant. With 29 languages at my command, we can explore ideas and cultures from around the world. What do you think of this voice?",
+    "description": "Introduction for the Joey voice."
   }
 }

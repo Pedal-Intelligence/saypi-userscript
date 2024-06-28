@@ -114,14 +114,15 @@ class SpeechSynthesisModule {
 
   async createSpeech(
     text: string,
-    stream: boolean = false
+    stream: boolean = false,
+    lang?: string
   ): Promise<SpeechUtterance> {
     const preferedVoice: SpeechSynthesisVoiceRemote | null =
       await this.userPreferences.getVoice();
     if (!preferedVoice) {
       throw new Error("No voice selected");
     }
-    const preferedLang = await this.userPreferences.getLanguage();
+    const preferedLang = lang || (await this.userPreferences.getLanguage());
     const uuid = generateUUID();
     return this.ttsService.createSpeech(
       uuid,

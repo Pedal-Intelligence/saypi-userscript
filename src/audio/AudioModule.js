@@ -13,14 +13,6 @@ export default class AudioModule {
       return AudioModule.instance;
     }
 
-    this.audioElement = document.querySelector("audio");
-    if (!this.audioElement) {
-      console.error("Audio element not found!");
-    } else {
-      this.audioElement.id = "saypi-audio-main";
-      console.debug("Audio element found", this.audioElement);
-    }
-
     this.audioOutputActor = interpret(audioOutputMachine);
     this.audioOutputActor.onTransition((state) => {
       if (state.changed) {
@@ -63,6 +55,8 @@ export default class AudioModule {
       });
     }
 
+    this.registerOfflineAudioCommands();
+
     AudioModule.instance = this;
   }
 
@@ -75,6 +69,7 @@ export default class AudioModule {
   }
 
   start() {
+    this.findAndDecorateAudioElement();
     // audio output (Pi)
     this.audioOutputActor.start();
     this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
@@ -95,6 +90,19 @@ export default class AudioModule {
   }
 
   stop() {}
+
+  // the audio element is a global singleton
+  // the audio module cannot start without it
+  // but offline commands can be registered before the audio module starts
+  findAndDecorateAudioElement() {
+    this.audioElement = document.querySelector("audio");
+    if (!this.audioElement) {
+      console.error("Audio element not found!");
+    } else {
+      this.audioElement.id = "saypi-audio-main";
+      console.debug("Audio element found", this.audioElement);
+    }
+  }
 
   /**
    *
@@ -136,6 +144,27 @@ export default class AudioModule {
         actor.send("sourceChanged");
         this.lastSource = audio.currentSrc;
       }
+    });
+  }
+
+  /* These are events that can be passed to the audio module before start() is called,
+   * without the state machines being running, or an audio element being found.
+   * When a load event is received, a temporary audio element is created if needed, and the audio file is loaded.
+   */
+  registerOfflineAudioCommands() {
+    let audio = this.audioElement;
+    // audio output (playback) commands
+    EventBus.on(
+      "audio:load",
+      (detail) => {
+        audio = audio || new Audio();
+        this.loadAudio(audio, detail.url);
+      },
+      this
+    );
+    EventBus.on("audio:reload", (e) => {
+      audio = audio || new Audio();
+      audio.load();
     });
   }
 
@@ -202,16 +231,7 @@ export default class AudioModule {
     EventBus.on("audio:output:resume", (e) => {
       this.audioElement.play();
     });
-    EventBus.on(
-      "audio:load",
-      (detail) => {
-        this.loadAudio(detail.url);
-      },
-      this
-    );
-    EventBus.on("audio:reload", (e) => {
-      this.audioElement.load();
-    });
+
     EventBus.on("saypi:tts:replaying", (e) => {
       // notify the audio output machine that the next audio is a replay
       outputActor.send("replaying");
@@ -226,30 +246,30 @@ export default class AudioModule {
    * raise a "audio:load" event with the URL of the audio file to load.
    * @param {string} url
    */
-  loadAudio(url, play = true) {
+  loadAudio(audioElement, url, play = true) {
     if (url) {
-      this.audioElement.src = url;
+      audioElement.src = url;
       if (play) {
-        this.audioElement
+        audioElement
           .play()
           .then(() => {
-            console.debug(`Playing audio from ${this.audioElement.currentSrc}`);
+            console.debug(`Playing audio from ${audioElement.currentSrc}`);
           })
           .catch((error) => {
             console.error(
-              `Error playing audio from ${this.audioElement.currentSrc}`,
+              `Error playing audio from ${audioElement.currentSrc}`,
               error
             );
           });
       } else {
-        this.audioElement
+        audioElement
           .load()
           .then(() => {
-            console.debug(`Loaded audio from ${this.audioElement.currentSrc}`);
+            console.debug(`Loaded audio from ${audioElement.currentSrc}`);
           })
           .catch((error) => {
             console.error(
-              `Error loading audio from ${this.audioElement.currentSrc}`,
+              `Error loading audio from ${audioElement.currentSrc}`,
               error
             );
           });

@@ -328,5 +328,13 @@
   "copyButtonTitle": {
     "message": "Kopiera",
     "description": "Titeln på knappen för att kopiera texten av ett meddelande till urklipp."
+  },
+  "voiceIntroduction_joey": {
+    "message": "Hej! Привет! 你好! Jag är Pi, din flerspråkiga AI-assistent. Med 29 språk till mitt förfogande kan vi utforska idéer och kulturer från hela världen. Vad tycker du om den här rösten?",
+    "description": "Introduktion för Joey-rösten."
+  },
+  "voiceIntroduction_paola": {
+    "message": "Hej! Bonjour! Hej! Jag är Pi, och jag kan konversera flytande på 29 språk. Från arabiska till ukrainska, jag är här för att bryta ner språkbarriärer. Hur låter denna röst för dig?",
+    "description": "Introduktion för Paola-rösten."
   }
 }

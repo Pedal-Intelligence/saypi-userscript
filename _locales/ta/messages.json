@@ -300,7 +300,8 @@
         "content": "$1",
         "example": "ElevenLabs"
       }
-    }
+    },
+    "description": "உரையை கேட்கும் போது உரை-க்கு-பேச்சு இயினி பயன்பாட்டில் ஒरு செய்தியை aloud விளிம்பு."
   },
   "unlockButton": {
     "description": "திரையை திறக்க பொத்தனின் தலைப்பு (tooltip).",
@@ -325,6 +326,14 @@
     "description": "ஒரு செய்தியின் உரை கிளிப்போர்டுக்கு நகல் எடுக்கப்பட்டு விட்டதை குறிப்பிடுvendha button- in peyar."
   },
   "copyButtonTitle": {
-    "message": "நகல்"
+    "message": "நகல்",
+    "description": "ஒரு செய்தியின் உரையை கிளிப்போர்டுக்கு நகல் எடுக்க பொத்தானின் தலைப்பு."
+  },
+  "voiceIntroduction_joey": {
+    "message": "ஹோலா! Привет! 你好! நான் Pi, உங்கள் பொது மொழி AI உதவியின். 29 மொழிக்கு என்னுடைய ஆणை, நிர்வு, we can explore ideas and cultures from around the world. What do you think of this voice?",
+    "description": "ஜோய் குரலுக்கான அ introduction."
+  },
+  "voiceIntroduction_paola": {
+    "message": "வணக்கம்! பொன் ஜூர்! ஹலோ! நான் Pi, நான் 29 மொழிக்கு திட்டு-תַּטּו תַּטוב. ארביקிலிருν்து אוקראנி-вари, я здесь, чтобы разрушить барьеры языка. Как вам звучит этот голос?"
   }
 }

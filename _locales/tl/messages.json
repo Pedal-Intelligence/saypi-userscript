@@ -328,5 +328,13 @@
   "copyButtonTitle": {
     "message": "Kopya",
     "description": "Ang pamagat ng pindutan para kopyahin ang teksto ng mensahe sa clipboard."
+  },
+  "voiceIntroduction_joey": {
+    "message": "Hola! Привет! 你好! Ako si Pi, ang iyong polyglot AI assistant. Mayroon akong kakayahang magamit ang 29 na mga wika, maaari tayong mag-explore ng mga ideya at kultura mula sa buong mundo. Ano ang palagay mo sa boses na ito?",
+    "description": "Panimula para sa boses ni Joey."
+  },
+  "voiceIntroduction_paola": {
+    "message": "Ciao! Bonjour! Hello! Ako si Pi, at kayang-kaya kong makipag-usap nang malinaw sa 29 na wika. Mula Arabic hanggang Ukrainian, narito ako para wasakin ang mga hadlang ng wika. Ano ang tingin mo sa boses na ito?",
+    "description": "Panimula para sa boses ni Paola."
   }
 }
