@@ -312,8 +312,13 @@ export function setUserMessage(label: string): void {
   const textarea = document.getElementById(
     "saypi-prompt"
   ) as HTMLTextAreaElement;
-  textarea.setAttribute("placeholder", label);
-  scrollToBottom(textarea);
+  if (textarea) {
+    textarea.setAttribute("placeholder", label);
+    scrollToBottom(textarea);
+  } else {
+    // this can happen if the user navigates away from the page without ending the conversation
+    console.warn("Prompt textarea not found");
+  }
 }
 
 /**
