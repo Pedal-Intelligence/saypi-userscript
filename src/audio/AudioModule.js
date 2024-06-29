@@ -16,6 +16,7 @@ export default class AudioModule {
     this.AUDIO_ELEMENT_ID = "saypi-audio-main";
     this.audioElement = null;
     this.mutationObserver = null;
+    this.swapObserver = null;
 
     this.audioOutputActor = interpret(audioOutputMachine);
     this.audioOutputActor.onTransition((state) => {
@@ -118,6 +119,10 @@ export default class AudioModule {
   }
 
   swapAudioElement(newAudioElement) {
+    if (this.audioElement) {
+      this.cleanupAudioElement(this.audioElement);
+    }
+
     this.audioElement = newAudioElement;
     this.decorateAudioElement(this.audioElement);
     this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
@@ -126,6 +131,7 @@ export default class AudioModule {
       this.registerSourceChangeEvents(this.audioElement, this.audioRetryActor);
     }
     this.registerRemovalListener();
+    this.registerLifecycleDebug();
   }
 
   registerRemovalListener() {
@@ -136,8 +142,10 @@ export default class AudioModule {
         for (const mutation of mutations) {
           if (mutation.type === "childList") {
             for (const removedNode of mutation.removedNodes) {
-              if (removedNode === this.audioElement) {
+              const removedAudioElement = this.findAudioElement(removedNode);
+              if (removedAudioElement === this.audioElement) {
                 console.debug("Audio element removed from the document");
+                this.cleanupAudioElement(this.audioElement);
                 this.audioElement = null;
                 this.listenForAudioElementSwap();
                 return;
@@ -153,19 +161,66 @@ export default class AudioModule {
     }
   }
 
+  cleanupAudioElement(audioElement) {
+    // Deregister all event listeners
+    const events = [
+      "loadedmetadata",
+      "canplaythrough",
+      "play",
+      "pause",
+      "ended",
+      "seeked",
+      "emptied",
+      "playing",
+      "loadstart",
+      "error",
+      "loadeddata",
+      "canplay",
+      "canplaythrough",
+    ];
+
+    events.forEach((event) => {
+      audioElement.removeEventListener(event, this[`on${event}`]);
+    });
+
+    // Remove source change listener if it exists
+    audioElement.removeEventListener("loadstart", this.onSourceChange);
+
+    // Stop any ongoing playback
+    audioElement.pause();
+    audioElement.currentTime = 0;
+
+    // Remove src attribute
+    audioElement.removeAttribute("src");
+
+    // Empty the source elements if any
+    while (audioElement.firstChild) {
+      audioElement.removeChild(audioElement.firstChild);
+    }
+
+    // Nullify references in the AudioModule
+    this.lastSource = null;
+
+    console.debug("Cleaned up audio element");
+  }
+
   listenForAudioElementSwap() {
+    if (this.swapObserver) {
+      this.swapObserver.disconnect();
+    }
+
     const config = { childList: true, subtree: true };
 
-    const swapObserver = new MutationObserver((mutations) => {
+    this.swapObserver = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         if (mutation.type === "childList") {
           for (const addedNode of mutation.addedNodes) {
             if (addedNode.nodeType === Node.ELEMENT_NODE) {
               const newAudioElement = this.findAudioElement(addedNode);
-              if (newAudioElement) {
+              if (newAudioElement && newAudioElement !== this.audioElement) {
                 console.debug("New audio element found", newAudioElement);
                 this.swapAudioElement(newAudioElement);
-                swapObserver.disconnect();
+                // Don't disconnect the observer, keep listening for future swaps
                 return;
               }
             }
@@ -174,7 +229,7 @@ export default class AudioModule {
       }
     });
 
-    swapObserver.observe(document.body, config);
+    this.swapObserver.observe(document.body, config);
   }
 
   /**
