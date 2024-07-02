@@ -336,5 +336,23 @@
   "voiceIntroduction_paola": {
     "message": "Ciao! Bonjour! Hallo! Ik ben Pi en ik kan vloeiend converseren in 29 talen. Van Arabisch tot Oekraïens, ik ben hier om taalbarrières te doorbreken. Hoe klinkt deze stem voor jou?",
     "description": "Introductie voor de Paola stem."
+  },
+  "regenerateButtonTitle": {
+    "message": "Genereer Audio voor $cost$ $currency$",
+    "description": "De titel van de knop om de audio van een bericht opnieuw te genereren. Kan een geschatte kosten met zich meebrengen.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "message": "Genereer Audio",
+    "description": "De titel van de knop om de audio van een bericht opnieuw te genereren. Kan een onbepaalde kosten met zich meebrengen."
   }
 }

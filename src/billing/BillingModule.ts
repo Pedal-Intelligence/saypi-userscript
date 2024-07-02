@@ -1,5 +1,8 @@
 import { md5 } from "js-md5";
-import { SpeechUtterance } from "../tts/SpeechModel";
+import {
+  SpeechSynthesisVoiceRemote,
+  SpeechUtterance,
+} from "../tts/SpeechModel";
 
 export class UtteranceCharge {
   utteranceId: string;
@@ -46,9 +49,13 @@ export class BillingModule {
     return BillingModule.instance;
   }
 
+  quote(voice: SpeechSynthesisVoiceRemote, text: string): number {
+    return (text.length * voice.price) / 1000;
+  }
+
   charge(utterance: SpeechUtterance, text: string): UtteranceCharge {
     text = text.trim(); // strip leading/trailing whitespace introduced by createStream
-    const cost = (text.length * utterance.voice.price) / 1000; // voice price is per 1000 characters
+    const cost = this.quote(utterance.voice, text);
     this.charges += cost;
     const charge = new UtteranceCharge(utterance, cost, md5(text));
     this.utterances.push(charge);

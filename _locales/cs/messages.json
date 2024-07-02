@@ -336,5 +336,23 @@
   "voiceIntroduction_paola": {
     "message": "Ciao! Bonjour! Ahoj! Jsem Pi a mohu se plynule bavit ve 29 jazycích. Od arabštiny po ukrajinštinu, jsem tady, abych strhal bariéry mezi jazyky. Jak na vás zní tento hlas?",
     "description": "Úvod pro hlas Paola."
+  },
+  "regenerateButtonTitle": {
+    "message": "Generujte zvuk za $cost$ $currency$",
+    "description": "Název tlačítka pro regeneraci zvuku zprávy. Může přinést odhadované náklady.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "message": "Generovat zvuk",
+    "description": "Název tlačítka pro regeneraci zvuku zprávy. Může přinést neurčitý náklad."
   }
 }

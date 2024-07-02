@@ -1,5 +1,6 @@
 import { Observable, ReplaySubject, Subject } from "rxjs";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
+import { time } from "console";
 
 export const STREAM_TIMEOUT: number = 10000; // visible for testing
 const DATA_TIMEOUT = 1000;
@@ -84,6 +85,14 @@ class ChangedText extends TextItem {
   }
 }
 
+export class LateChangeEvent {
+  constructor(
+    public msAfterClose: number,
+    public completion: Completion,
+    public lang: string
+  ) {}
+}
+
 type Completion = {
   type: "eod" | "timeout" | "disconnect";
   time: number;
@@ -91,6 +100,7 @@ type Completion = {
 
 export class ElementTextStream {
   protected subject: Subject<TextContent>;
+  private lateChangeSubject = new Subject<LateChangeEvent>();
   protected observer!: MutationObserver;
   protected timeout: NodeJS.Timeout | undefined = undefined;
   protected emittedValues: TextContent[] = [];
@@ -297,9 +307,14 @@ export class ElementTextStream {
     const contentMutationHandler = (mutationsList: MutationRecord[]) => {
       if (this.closed()) {
         const timeSinceCompletion = Date.now() - this.completionReason!.time;
-        console.warn(
-          `Content changed after the stream has closed. Try increasing the data timeout by at least ${timeSinceCompletion}ms for ${this.languageGuess}.`
+        const warningMessage = `Content changed after the stream has closed. Try increasing the data timeout by at least ${timeSinceCompletion}ms for ${this.languageGuess}.`;
+        console.warn(warningMessage);
+        const lateChange = new LateChangeEvent(
+          timeSinceCompletion,
+          this.completionReason!,
+          this.languageGuess
         );
+        this.lateChangeSubject.next(lateChange);
         this.disconnect();
         return;
       }
@@ -319,12 +334,16 @@ export class ElementTextStream {
     return this.subject.asObservable();
   }
 
+  getLateChangeStream(): Observable<LateChangeEvent> {
+    return this.lateChangeSubject.asObservable();
+  }
+
   disconnect(): void {
     if (this.timeout) {
-      // Clear timeout if it exists
       clearTimeout(this.timeout);
     }
     this.observer.disconnect();
+    this.lateChangeSubject.complete();
   }
 
   // For testing purposes

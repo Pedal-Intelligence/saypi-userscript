@@ -336,5 +336,23 @@
   "voiceIntroduction_paola": {
     "message": "مرحبا! بونجور! مرحبا! أنا Pi، وأستطيع التحدث بطلاقة في 29 لغة. من العربية إلى الأوكرانية، أنا هنا لكسر حواجز اللغة. كيف يبدو لك هذا الصوت؟",
     "description": "مقدمة لصوت باولا."
+  },
+  "regenerateButtonTitle": {
+    "message": "توليد الصوت مقابل $cost$ $currency$",
+    "description": "عنوان الزر لإعادة توليد الصوت للرسالة. قد يترتب على ذلك تكلفة مقدرة.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "message": "توليد الصوت",
+    "description": "عنوان الزر لإعادة توليد الصوت للرسالة. قد يتحمل تكلفة غير محددة."
   }
 }

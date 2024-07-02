@@ -336,5 +336,23 @@
   "voiceIntroduction_paola": {
     "message": "Ciao! Bonjour! Hello! Ako si Pi, at kayang-kaya kong makipag-usap nang malinaw sa 29 na wika. Mula Arabic hanggang Ukrainian, narito ako para wasakin ang mga hadlang ng wika. Ano ang tingin mo sa boses na ito?",
     "description": "Panimula para sa boses ni Paola."
+  },
+  "regenerateButtonTitle": {
+    "message": "Lumikha ng Audio para sa $cost$ $currency$",
+    "description": "Ang pamagat ng pindutan para muling likhain ang audio ng isang mensahe. Maaaring magdulot ito ng tinatayang gastos.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "message": "Lumikha ng Audio",
+    "description": "Ang pamagat ng pindutan para muling makabuo ng audio ng isang mensahe. Maaaring magdulot ito ng hindi matukoy na gastos."
   }
 }

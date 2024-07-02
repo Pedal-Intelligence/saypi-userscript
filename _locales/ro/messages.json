@@ -336,5 +336,23 @@
   "voiceIntroduction_paola": {
     "message": "Ciao! Bonjour! Salut! Sunt Pi și pot conversa fluent în 29 de limbi. De la arabă la ucraineană, sunt aici pentru a elimina barierele lingvistice. Cum îți sună această voce?",
     "description": "Introducere pentru vocea Paola."
+  },
+  "regenerateButtonTitle": {
+    "message": "Generează audio pentru $cost$ $currency$",
+    "description": "Titlul butonului pentru a regenera audio al unui mesaj. Poate implica un cost estimat.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "message": "Generați Audio",
+    "description": "Titlul butonului pentru a regenera audio al unui mesaj. Poate implica un cost nedeterminat."
   }
 }

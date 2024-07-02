@@ -1,4 +1,8 @@
-import { ElementTextStream, TextContent } from "../tts/InputStream";
+import {
+  ElementTextStream,
+  LateChangeEvent,
+  TextContent,
+} from "../tts/InputStream";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { BaseObserver } from "./BaseObserver";
@@ -199,13 +203,20 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
       const message = this.decorateAssistantResponse(obs.target as HTMLElement);
       obs = Observation.foundAndDecorated(obs, message);
       message.decorateControls();
-      
+
       const speech = await this.streamSpeech(message);
-      if (speech?.utterance) {
-        message.decorateSpeech(speech.utterance);
-      }
-      if (speech?.charge) {
-        message.decorateCost(speech.charge);
+      if (speech) {
+        if (speech.utterance) {
+          message.decorateSpeech(speech.utterance);
+        }
+        if (speech.charge) {
+          message.decorateCost(speech.charge);
+        }
+      } else {
+        const provider = await this.speechSynthesis.getActiveAudioProvider();
+        if (provider === audioProviders.SayPi) {
+          message.decorateIncompleteSpeech();
+        }
       }
     }
     return obs;
@@ -315,6 +326,9 @@ class ChatHistoryNewMessageObserver
           const charge = BillingModule.getInstance().charge(utterance, text);
           message.decorateCost(charge);
           this.speechHistory.addChargeToHistory(charge.utteranceHash, charge);
+        },
+        (lateChange) => {
+          message.decorateIncompleteSpeech(true);
         }
       );
       return new AssistantSpeech(utterance);
@@ -350,7 +364,8 @@ class ChatHistoryNewMessageObserver
     messageContent: HTMLElement,
     utterance: SpeechUtterance,
     onStart: () => void,
-    onEnd: (fullText: string) => void
+    onEnd: (fullText: string) => void,
+    onError?: (lateChange: LateChangeEvent) => void
   ): void {
     // If we're already observing an element, disconnect from it
     if (this.textStream) {
@@ -422,6 +437,15 @@ class ChatHistoryNewMessageObserver
         }
       }
     );
+
+    // watch for changes to the text content of the element after the stream has closed
+    // these changes mean the audio stream will be incomplete
+    this.textStream.getLateChangeStream().subscribe((lateChange) => {
+      console.warn("Late change detected:", lateChange);
+      if (onError) {
+        onError(lateChange);
+      }
+    });
   }
 }
 

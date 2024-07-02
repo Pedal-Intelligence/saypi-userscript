@@ -336,5 +336,23 @@
   "voiceIntroduction_paola": {
     "message": "Ciao! Bonjour! Hei! Olen Pi ja pystyn keskustelemaan sujuvasti 29 kielellä. Arabiasta ukrainaan, olen täällä murtamassa kielimuureja. Miltä tämä ääni kuulostaa sinusta?",
     "description": "Johdanto Paola-äänelle."
+  },
+  "regenerateButtonTitle": {
+    "message": "Luo ääntä $cost$ $currency$ hintaan",
+    "description": "Painikkeen otsikko, jolla uudistetaan viestin ääni. Saattaa aiheuttaa arvioidun kustannuksen.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "message": "Luo ääntä",
+    "description": "Painikkeen otsikko, jolla uudistetaan viestin ääni. Saattaa aiheuttaa määrittelemättömän kustannuksen."
   }
 }

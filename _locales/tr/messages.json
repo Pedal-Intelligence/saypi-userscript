@@ -336,5 +336,23 @@
   "voiceIntroduction_paola": {
     "message": "Ciao! Bonjour! Merhaba! Ben Pi, ve 29 dilde akıcı bir şekilde konuşabilirim. Arapça'dan Ukraynaca'ya kadar, dil engellerini aşmak için buradayım. Bu ses size nasıl geliyor?",
     "description": "Paola sesi için giriş."
+  },
+  "regenerateButtonTitle": {
+    "message": "$cost$ $currency$ için Ses Oluşturun",
+    "description": "Bir mesajın sesini yeniden oluşturmak için düğmenin başlığı. Tahmini bir maliyeti olabilir.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "message": "Ses Oluştur",
+    "description": "Bir mesajın sesini yeniden oluşturmak için düğmenin başlığı. Belirsiz bir maliyeti olabilir."
   }
 }

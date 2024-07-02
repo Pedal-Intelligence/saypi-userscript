@@ -336,5 +336,23 @@
   "voiceIntroduction_paola": {
     "message": "Ciao! Bonjour! Hej! Jeg er Pi, og jeg kan tale flydende på 29 sprog. Fra arabisk til ukrainsk, jeg er her for at nedbryde sprogbarrierer. Hvordan lyder denne stemme for dig?",
     "description": "Introduktion til Paola stemmen."
+  },
+  "regenerateButtonTitle": {
+    "message": "Generer lyd for $cost$ $currency$",
+    "description": "Titlen på knappen til at regenerere lyden af en besked. Kan medføre en estimeret omkostning.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "message": "Generer Lyd",
+    "description": "Titlen på knappen til at regenerere lyden af en besked. Kan medføre en ubestemt omkostning."
   }
 }

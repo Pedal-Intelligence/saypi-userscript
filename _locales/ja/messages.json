@@ -336,5 +336,23 @@
   "voiceIntroduction_paola": {
     "message": "チャオ！ボンジュール！ハロー！私はパイです、そして私は29の言語で流暢に会話することができます。アラビア語からウクライナ語まで、私は言葉の壁を取り払うためにここにいます。この声はあなたにどう聞こえますか？",
     "description": "Paolaの声の紹介。"
+  },
+  "regenerateButtonTitle": {
+    "message": "$cost$ $currency$のオーディオを生成します",
+    "description": "メッセージのオーディオを再生成するためのボタンのタイトル。推定費用が発生する可能性があります。",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "message": "オーディオを生成する",
+    "description": "メッセージのオーディオを再生成するためのボタンのタイトル。不確定な費用が発生する可能性があります。"
   }
 }

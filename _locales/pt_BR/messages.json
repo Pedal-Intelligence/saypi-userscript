@@ -336,5 +336,23 @@
   "voiceIntroduction_paola": {
     "message": "Ciao! Bonjour! Olá! Eu sou Pi, e consigo conversar fluentemente em 29 idiomas. Do árabe ao ucraniano, estou aqui para derrubar as barreiras linguísticas. Como soa esta voz para você?",
     "description": "Introdução para a voz de Paola."
+  },
+  "regenerateButtonTitle": {
+    "message": "Gerar Áudio por $cost$ $currency$",
+    "description": "O título do botão para regenerar o áudio de uma mensagem. Pode incorrer em um custo estimado.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "message": "Gerar Áudio",
+    "description": "O título do botão para regenerar o áudio de uma mensagem. Pode incorrer em um custo indeterminado."
   }
 }

@@ -336,5 +336,23 @@
   "voiceIntroduction_paola": {
     "message": "你好！Bonjour！Hello！我是Pi，我可以流利地使用29种语言进行对话。从阿拉伯语到乌克兰语，我在这里打破语言障碍。这个声音对你来说怎么样？",
     "description": "为Paola语音的介绍。"
+  },
+  "regenerateButtonTitle": {
+    "message": "为$cost$ $currency$生成音频",
+    "description": "重新生成消息音频的按钮标题。可能会产生预计费用。",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "message": "生成音频",
+    "description": "重新生成消息音频的按钮标题。可能会产生不确定的费用。"
   }
 }

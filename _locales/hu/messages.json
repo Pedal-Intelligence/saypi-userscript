@@ -336,5 +336,23 @@
   "voiceIntroduction_paola": {
     "message": "Ciao! Bonjour! Helló! Én vagyok Pi, és 29 nyelven beszélek folyékonyan. Arabtól az ukránig, itt vagyok, hogy lebontsam a nyelvi korlátokat. Hogy hangzik ez a hang neked?",
     "description": "Bevezetés a Paola hanghoz."
+  },
+  "regenerateButtonTitle": {
+    "message": "Generáljon hangot $cost$ $currency$-ért",
+    "description": "A gomb címe, amely újragenerálja az üzenet hangját. Bekövetkezhet egy becsült költség.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "message": "Hangot generál",
+    "description": "A gomb címe, amely újragenerálja az üzenet hangját. Meghatározatlan költséggel járhat."
   }
 }

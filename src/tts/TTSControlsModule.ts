@@ -3,6 +3,7 @@ import { SpeechSynthesisModule } from "./SpeechSynthesisModule";
 import volumeIconSVG from "../icons/volume-mid.svg";
 import copyIconSVG from "../icons/copy.svg";
 import copiedIconSVG from "../icons/copied.svg";
+import regenerateIconSVG from "../icons/regenerate.svg";
 import { getResourceUrl } from "../ResourceModule";
 import EventBus from "../events/EventBus";
 import { UtteranceCharge } from "../billing/BillingModule";
@@ -31,6 +32,18 @@ export class TTSControlsModule {
       "saypi-speak-button",
       getMessage("readAloudButtonTitle"),
       volumeIconSVG
+    );
+    return button;
+  }
+
+  createGenerateSpeechButton(price?: number, currency = "USD") {
+    const message = price
+      ? getMessage("regenerateButtonTitle", [price.toFixed(2), currency])
+      : getMessage("regenerateButtonTitleFree");
+    const button = this.constructTextToSpeechControl(
+      "saypi-regenerate-button",
+      message,
+      regenerateIconSVG
     );
     return button;
   }

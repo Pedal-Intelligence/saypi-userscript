@@ -336,5 +336,23 @@
   "voiceIntroduction_paola": {
     "message": "Ciao! Bonjour! Halo! Saya Pi, dan saya bisa berbicara dengan lancar dalam 29 bahasa. Dari Arab hingga Ukraina, saya di sini untuk meruntuhkan batasan bahasa. Bagaimana suara ini menurut Anda?",
     "description": "Pengenalan untuk suara Paola."
+  },
+  "regenerateButtonTitle": {
+    "message": "Hasilkan Audio seharga $cost$ $currency$",
+    "description": "Judul tombol untuk menghasilkan kembali audio dari pesan. Mungkin menimbulkan biaya perkiraan.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "message": "Hasilkan Audio",
+    "description": "Judul tombol untuk menghasilkan kembali audio dari pesan. Mungkin menimbulkan biaya yang tidak ditentukan."
   }
 }

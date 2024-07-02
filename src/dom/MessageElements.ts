@@ -1,14 +1,20 @@
 import { md5 } from "js-md5";
-import { ElementTextStream, TextContent } from "../tts/InputStream";
-import { SpeechUtterance } from "../tts/SpeechModel";
+import {
+  ElementTextStream,
+  LateChangeEvent,
+  TextContent,
+} from "../tts/InputStream";
+import { AssistantSpeech, SpeechUtterance } from "../tts/SpeechModel";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
-import { UtteranceCharge } from "../billing/BillingModule";
+import { BillingModule, UtteranceCharge } from "../billing/BillingModule";
 import { Observation } from "./Observation";
 import { Chatbot } from "../chatbots/Chatbot";
 import { PiAIChatbot } from "../chatbots/Pi";
 import EventBus from "../events/EventBus";
 import { isMobileDevice } from "../UserAgentModule";
+import { UserPreferenceModule } from "../prefs/PreferenceModule";
+import { SpeechHistoryModule } from "../tts/SpeechHistoryModule";
 
 class PopupMenu {
   private _element: HTMLElement;
@@ -267,6 +273,47 @@ class AssistantResponse {
     if (costElement && utterance.voice) {
       this.ttsControlsModule.addPoweredBy(costElement, utterance.voice);
     }
+  }
+
+  async decorateIncompleteSpeech(replace: boolean = false): Promise<void> {
+    this._element.classList.add("speech-incomplete");
+
+    const price = await UserPreferenceModule.getInstance()
+      .getVoice()
+      .then((voice) => {
+        return BillingModule.getInstance().quote(voice!, this.text);
+      });
+    const regenButton =
+      this.ttsControlsModule.createGenerateSpeechButton(price);
+
+    const readAloudButton = this._element.querySelector(".saypi-speak-button");
+    if (readAloudButton && replace) {
+      readAloudButton.replaceWith(regenButton);
+    } else {
+      const messageControlsElement = this._element.querySelector(
+        ".saypi-tts-controls"
+      ) as HTMLDivElement | null;
+      if (messageControlsElement) {
+        messageControlsElement.appendChild(regenButton);
+      }
+    }
+
+    // add event listener to regenerate speech
+    regenButton.addEventListener("click", async () => {
+      regenButton.disabled = true;
+      const speechSynthesis = SpeechSynthesisModule.getInstance();
+      const speechHistory = SpeechHistoryModule.getInstance();
+      speechSynthesis.createSpeech(this.text, false).then((utterance) => {
+        speechSynthesis.speak(utterance);
+        this.decorateSpeech(utterance);
+        const charge = BillingModule.getInstance().charge(utterance, this.text);
+        this.decorateCost(charge);
+        const speech = new AssistantSpeech(utterance, charge);
+        speechHistory.addSpeechToHistory(charge.utteranceHash, speech);
+        regenButton.remove();
+        this._element.classList.remove("speech-incomplete");
+      });
+    });
   }
 
   /**

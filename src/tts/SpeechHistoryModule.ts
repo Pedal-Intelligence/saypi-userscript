@@ -80,6 +80,10 @@ export class SpeechHistoryModule {
       const chargeHistory = (await this.getStorageData("chargeHistory")) || {};
       const charge = chargeHistory[hash];
       if (utterance) {
+        console.debug(
+          `Found utterance with hash ${hash} in speech history.`,
+          utterance
+        );
         return new SpeechRecord(hash, utterance, charge);
       }
     } catch (error) {

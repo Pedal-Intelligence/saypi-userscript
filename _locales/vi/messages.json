@@ -336,5 +336,23 @@
   "voiceIntroduction_paola": {
     "message": "Chào! Bonjour! Xin chào! Tôi là Pi, và tôi có thể nói trôi chảy ở 29 ngôn ngữ. Từ tiếng Ả Rập đến tiếng Ukraina, tôi ở đây để phá vỡ rào cản ngôn ngữ. Giọng của tôi nghe như thế nào với bạn?",
     "description": "Giới thiệu về giọng của Paola."
+  },
+  "regenerateButtonTitle": {
+    "message": "Tạo Âm thanh cho $cost$ $currency$",
+    "description": "Tiêu đề của nút để tái tạo âm thanh của một tin nhắn. Có thể phát sinh chi phí dự kiến.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "message": "Tạo Âm thanh",
+    "description": "Tiêu đề của nút để tái tạo âm thanh của một tin nhắn. Có thể phát sinh chi phí không xác định."
   }
 }

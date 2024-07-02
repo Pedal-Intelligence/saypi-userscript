@@ -226,6 +226,24 @@
     "message": "Read Aloud",
     "description": "The title of the button to read aloud the text of a message."
   },
+  "regenerateButtonTitle": {
+    "message": "Generate Audio for $cost$ $currency$",
+    "description": "The title of the button to regenerate the audio of a message. May incur an estimated cost.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "message": "Generate Audio",
+    "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost."
+  },
   "ttsCostExplanation": {
     "message": "The cost of listening to this message is $cost$ $currency$",
     "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",

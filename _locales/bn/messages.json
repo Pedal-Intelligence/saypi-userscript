@@ -336,5 +336,23 @@
   "voiceIntroduction_paola": {
     "message": "চাও! বনজুর! হ্যালো! আমি পাই, এবং আমি 29টি ভাষায় দক্ষतার সাথে কথা-বিনিময়ের ক্ষেত্রে।  عربي (Arabic) थेकে Українська (Ukrainian),  নিশ্চিতরূপে,  \n \n \n \n \n \n  \n  \n  \n\n   \n\n    \n\n\n    \n\n\n\n       \n\n\n\n\n        \n\n\n\n\n\n\n        \n\n\n\n\n\n        \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n        \n\n\n\n\n\n\n\n\nI'm here to break down language barriers. How does this voice sound to you?",
     "description": "পাওলা ভোইসের জন্য ভূমিকা।"
+  },
+  "regenerateButtonTitle": {
+    "message": "$cost$ $currency$ জন্য অডিও তৈরি করুন",
+    "description": "বার্তার অডিও পুনরুত্পাদনের জন্য বোতামের শিরোনাম। এটি আনুমানিক খরচের সম্ভাবনা।",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "message": "অডিও তৈরি করুন",
+    "description": "বার্তার অডিও পুনরুত্পাদনের জন্য বোতামের শিরোনাম। এটি নির্ধারিত না-খরচের সম্ভাবনা।"
   }
 }
