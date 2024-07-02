@@ -67,7 +67,7 @@
 
 /*
  * these styles are for debugging purposes, to make it easier to see when messages are being detected
- */
+ *
 .assistant-message {
     // give it a subtle green background color and border
     background-color: #f0f9f4; // rgb(240 249 244) - Pi primary background color
@@ -87,3 +87,4 @@
 .assistant-message.speech-incomplete {
     border-color: rgb(255, 183, 0);
 }
+    */
