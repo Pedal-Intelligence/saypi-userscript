@@ -26816,10 +26816,7 @@ function setupRecording(callback) {
                     noiseSuppression: true,
                 },
             });
-            const partialVADOptions = {
-                workletURL: fullWorkletURL,
-                stream,
-            };
+            const partialVADOptions = Object.assign(Object.assign({}, micVADOptions), { stream });
             console.debug("Permission granted for microphone access");
             microphone = yield dist.MicVAD.new(partialVADOptions);
             console.debug("VAD microphone loaded");

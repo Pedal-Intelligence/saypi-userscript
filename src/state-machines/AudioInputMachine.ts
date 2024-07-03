@@ -178,7 +178,7 @@ async function setupRecording(callback?: () => void): Promise<void> {
     });
 
     const partialVADOptions = {
-      workletURL: fullWorkletURL,
+      ...micVADOptions,
       stream,
     };
 
