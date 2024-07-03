@@ -1,13 +1,12 @@
 import { MicVAD, RealTimeVADOptions } from "@ricky0123/vad-web";
-import { config } from "../ConfigModule";
 import { setupInterceptors } from "../RequestInterceptor";
 import { convertToWavBlob } from "../audio/AudioEncoder";
 import { createMachine, assign } from "xstate";
 import EventBus from "../events/EventBus.js";
 import { debounce } from "lodash";
+import { getResourceUrl } from "../ResourceModule";
 
-// Assuming config.appServerUrl is of type string.
-const fullWorkletURL: string = `${config.appServerUrl}/vad.worklet.bundle.min.js`;
+const fullWorkletURL: string = getResourceUrl("vad.worklet.bundle.min.js");
 
 // Assuming EventBus is a property of Window and is of type any
 // You might want to provide a more specific type if available
@@ -178,19 +177,20 @@ async function setupRecording(callback?: () => void): Promise<void> {
       },
     });
 
-    microphone = await MicVAD.new({
-      ...micVADOptions,
+    const partialVADOptions = {
+      workletURL: fullWorkletURL,
       stream,
-    });
+    };
+
+    console.debug("Permission granted for microphone access");
+    microphone = await MicVAD.new(partialVADOptions);
+    console.debug("VAD microphone loaded");
 
     if (typeof callback === "function") {
       callback();
     }
   } catch (err) {
-    console.error("VAD failed to load", err);
-    console.error(
-      `Application server at ${config.appServerUrl} may be unavailable. Please make sure it is running.`
-    );
+    console.error("VAD microphone failed to load", err);
   }
 }
 

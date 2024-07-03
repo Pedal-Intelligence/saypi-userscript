@@ -34,12 +34,15 @@
       "matches": ["https://pi.ai/*"]
     }
   ],
-  "author": {
-    "email": "ross.cadogan@gmail.com"
-  },
+  "author": "Ross Cadogan",
   "homepage_url": "https://www.saypi.ai",
   "action": {
     "default_popup": "src/popup/popup.html"
   },
-  "default_locale": "en"
+  "default_locale": "en",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "gecko@saypi.ai"
+    }
+  }
 }

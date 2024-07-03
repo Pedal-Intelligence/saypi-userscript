@@ -26699,8 +26699,7 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 
 
 
-// Assuming config.appServerUrl is of type string.
-const fullWorkletURL = `${config.appServerUrl}/vad.worklet.bundle.min.js`;
+const fullWorkletURL = getResourceUrl("vad.worklet.bundle.min.js");
 let audioMimeType = "audio/wav";
 let speechStartTime = 0;
 const threshold = 1000; // 1000 ms = 1 second, about the length of "Hey, Pi"
@@ -26817,14 +26816,19 @@ function setupRecording(callback) {
                     noiseSuppression: true,
                 },
             });
-            microphone = yield dist.MicVAD.new(Object.assign(Object.assign({}, micVADOptions), { stream }));
+            const partialVADOptions = {
+                workletURL: fullWorkletURL,
+                stream,
+            };
+            console.debug("Permission granted for microphone access");
+            microphone = yield dist.MicVAD.new(partialVADOptions);
+            console.debug("VAD microphone loaded");
             if (typeof callback === "function") {
                 callback();
             }
         }
         catch (err) {
-            console.error("VAD failed to load", err);
-            console.error(`Application server at ${config.appServerUrl} may be unavailable. Please make sure it is running.`);
+            console.error("VAD microphone failed to load", err);
         }
     });
 }
