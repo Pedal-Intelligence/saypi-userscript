@@ -1,13 +1,13 @@
 {
   "manifest_version": 3,
   "name": "__MSG_appName__",
-  "version": "1.6.2",
+  "version": "1.7.0",
   "description": "__MSG_appDescription__",
   "permissions": ["storage"],
   "host_permissions": ["https://api.saypi.ai/*"],
   "content_scripts": [
     {
-      "matches": ["https://pi.ai/*"],
+      "matches": ["https://pi.ai/*", "https://claude.ai/chat/*"],
       "js": ["public/saypi.user.js"]
     }
   ],
@@ -31,9 +31,10 @@
         "src/icons/flags/*.svg",
         "src/popup/*.svg"
       ],
-      "matches": ["https://pi.ai/*"]
+      "matches": ["https://pi.ai/*", "https://claude.ai/*"]
     }
   ],
+
   "author": "Ross Cadogan",
   "homepage_url": "https://www.saypi.ai",
   "action": {
