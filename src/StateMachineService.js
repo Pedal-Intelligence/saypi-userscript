@@ -1,16 +1,19 @@
 import { interpret } from "xstate";
-import { machine } from "./state-machines/SayPiMachine.ts";
+import { createSayPiMachine } from "./state-machines/SayPiMachine.ts";
 import { machine as screenLockMachine } from "./state-machines/ScreenLockMachine.ts";
 import { machine as themeToggleMachine } from "./state-machines/ThemeToggleMachine.ts";
 import { machine as analyticsMachine } from "./state-machines/SessionAnalyticsMachine.ts";
 import { logger, serializeStateValue } from "./LoggingModule.js";
+import { ChatbotService } from "./chatbots/ChatbotService.ts";
+import { Chatbot } from "./chatbots/Chatbot.ts";
 
 /**
  * A singleton service that manages the state machine.
  */
 class StateMachineService {
-  constructor() {
-    this.actor = interpret(machine).onTransition((state) => {
+  constructor(chatbot) {
+    const conversationMachine = createSayPiMachine(chatbot);
+    this.actor = interpret(conversationMachine).onTransition((state) => {
       if (state.changed) {
         const fromState = state.history
           ? serializeStateValue(state.history.value)
@@ -71,4 +74,5 @@ class StateMachineService {
 }
 
 // Singleton
-export default new StateMachineService();
+const chatbot = ChatbotService.getChatbot();
+export default new StateMachineService(chatbot);

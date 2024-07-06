@@ -35,51 +35,6 @@ export default class EventModule {
     );
   }
 
-  static typeTextAndSubmit = (element, text, submit) => {
-    EventModule.setNativeValue(element, text);
-    if (submit) EventBus.emit("saypi:autoSubmit");
-  };
-
-  static simulateTyping(element, text, submit = false) {
-    element.focus();
-    const sentenceRegex = /([.!?。？！]+)/g;
-    const tokens = text.split(sentenceRegex).filter(Boolean);
-    const sentences = [];
-    for (let i = 0; i < tokens.length; i += 2) {
-      const sentence = tokens[i] + (tokens[i + 1] || "");
-      sentences.push(sentence);
-    }
-    const typeNextSentenceOrSubmit = () => {
-      if (sentences.length === 0) {
-        if (submit) EventBus.emit("saypi:autoSubmit");
-      } else {
-        // Emit the event only after all sentences have been typed
-        const nextSentence = sentences.shift();
-        EventModule.setNativeValue(element, element.value + nextSentence);
-        requestAnimationFrame(typeNextSentenceOrSubmit);
-      }
-    };
-    if (sentences.length === 0) {
-      typeTextAndSubmit(element, text, submit);
-    } else {
-      typeNextSentenceOrSubmit();
-    }
-  }
-
-  static setNativeValue(element, value) {
-    let lastValue = element.value;
-    element.value = value;
-    let event = new Event("input", { target: element, bubbles: true });
-    // React 15
-    event.simulated = true;
-    // React 16-17
-    let tracker = element._valueTracker;
-    if (tracker) {
-      tracker.setValue(lastValue);
-    }
-    element.dispatchEvent(event);
-  }
-
   static registerStateMachineEvents(actor) {
     EventBus.on(CALL_READY, () => {
       actor.send(CALL_READY);

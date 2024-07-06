@@ -18,7 +18,7 @@ export class DOMObserver {
           .filter((node) => node instanceof HTMLElement)
           .forEach((node) => {
             const addedElement = node as HTMLElement;
-            const promptObs = this.findAndDecoratePromptField(addedElement);
+            const promptObs = this.findAndDecoratePrompt(addedElement);
             const ctrlPanelObs = this.findAndDecorateControlPanel(addedElement);
             const sidePanelObs = this.findAndDecorateSidePanel(addedElement);
             if (sidePanelObs.found && sidePanelObs.decorated) {
@@ -45,10 +45,10 @@ export class DOMObserver {
           .filter((node) => node instanceof HTMLElement)
           .forEach((node) => {
             const removedElement = node as HTMLElement;
-            const obs = this.findPromptField(removedElement);
+            const obs = this.findPrompt(removedElement);
             if (obs.found) {
               // Prompt field is being removed, so search for a replacement in the main document
-              this.findAndDecoratePromptField(document.body);
+              this.findAndDecoratePrompt(document.body);
               if (obs.found && obs.isNew && obs.decorated) {
                 // emit event to notify listeners that script content has been loaded
                 EventBus.emit("saypi:ui:content-loaded");
@@ -84,7 +84,7 @@ export class DOMObserver {
   }
 
   // Function to decorate the prompt input element, and other elements that depend on it
-  decoratePrompt(prompt: HTMLInputElement): void {
+  decoratePrompt(prompt: HTMLElement): void {
     prompt.id = "saypi-prompt";
     const promptParent = prompt.parentElement;
     if (promptParent) {
@@ -254,7 +254,7 @@ export class DOMObserver {
     return false;
   }
 
-  findPromptField(searchRoot: Element): Observation {
+  findPrompt(searchRoot: Element): Observation {
     const id = "saypi-prompt";
     const existingPrompt = document.getElementById(id);
     if (existingPrompt) {
@@ -271,10 +271,10 @@ export class DOMObserver {
     return Observation.notFound(id);
   }
 
-  findAndDecoratePromptField(searchRoot: Element): Observation {
-    const obs = this.findPromptField(searchRoot);
+  findAndDecoratePrompt(searchRoot: Element): Observation {
+    const obs = this.findPrompt(searchRoot);
     if (obs.found && obs.isNew && !obs.decorated) {
-      this.decoratePrompt(obs.target as HTMLInputElement);
+      this.decoratePrompt(obs.target as HTMLElement);
     }
     return Observation.foundAndDecorated(obs);
   }

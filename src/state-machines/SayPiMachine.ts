@@ -16,10 +16,6 @@ import {
 import { ImmersionService } from "../ImmersionService.js";
 import {
   uploadAudioWithRetry,
-  getDraftPrompt,
-  setDraftPrompt,
-  setUserMessage,
-  setFinalPrompt,
   isTranscriptionPending,
   clearPendingTranscriptions,
 } from "../TranscriptionModule";
@@ -31,6 +27,7 @@ import AudioControlsModule from "../audio/AudioControlsModule";
 import { requestWakeLock, releaseWakeLock } from "../WakeLockModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import getMessage from "../i18n";
+import { Chatbot, UserPrompt } from "../chatbots/Chatbot.js";
 
 type SayPiTranscribedEvent = {
   type: "saypi:transcribed";
@@ -169,7 +166,19 @@ userPreferences.getLanguage().then((language) => {
   mergeService = new TranscriptMergeService(apiServerUrl, language);
 });
 
-export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
+let chatbot: Chatbot;
+function getPromptOrNull(): UserPrompt | null {
+  if (!chatbot) {
+    console.error("Chatbot not initialized when requested by state machine.");
+  }
+  const promptElement = document.getElementById("saypi-prompt");
+  if (chatbot && promptElement) {
+    return chatbot.getPrompt(promptElement);
+  }
+  console.warn("Prompt element not found when requested by state machine.");
+  return null;
+}
+const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
   {
     /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCRKANiwNoAMAuoqHQHtYWMgPx8QAD0QBOAEwAaEGkQAOAKwycc9apkA2AMw71AdgAspuQF9rS2tjyFSFarQYIGAZTpgUAawIoLl4kEEFhUXEw6QRzAEY5OW14+NN9OVNOXXVFZUREw0McTnN1M05VQ3NOU1NVW3t0R2Y2LxIUACcyfCgadA9WlgAlPwg0EIkIkSwxCVjzOXMcePNVRfMMzjl4w1N1JRU4jRxzTcMzUxkL-XLzRpAHXCH2rp6+90YACxRegFc6JMwtMovM1HkjvFONkcOpKjJODdNmYbHZHs1nqwWK9ukF+vRGEMAGIoLAsSBA-hCGZzGKIczVFZrDZbHZ7A75BDxa6wwwyfllHbyTQPJ44F4dXG9KiSWAdEhgHAoABmCs6AAo5NDoQBKfEtLE496U8LU0F0uKM1brJas3b7Q6IaqcHD8wyJOQyRbVGqGUUYnAsLBysD4PGfTxYAAqXwIgV6JpBs2ioFiRVMxU2qTkGkMVU2pkdCDZyXqboS9ShiP9mFwQZDYelEe8vgCQUTZuTYIQRSqp302dz+f0hc5WtUyRzMgnqisGeraLF9YVjY+A0Y5GDWAARuSO5Euxb4iPinzsrsfbp4kXVu7XfE4boGfsEn7FwHl6Hw+uECg-hBZiYMR8DAUgKR4KZO1pVMClueJtDkW4Jx0Ko9hkG8inUfstU4fR+XiPQzhrRxP1XfEPD-ACBAQTpQOA0CSH3GkUykWDclOdZ1GPGR1EFC4i0w1RtE0Y8igZIxNmIutgxXb8CQQWA4GEMRf1gYQoBAiAmPNGCuX0cwtGMRZVFUTgCJM7YBMQ+DTIHVI9CuWcpMDGSv16HBaKIAROgApsfx+f5AQg4EoJYtM9kzOyc3UPNqhHDCLmw6E8JkAivWc0igg8uifKy-ABBIHw-HjNd5L+RTOiJAhgy+SAirbBNgqpA9oNYntYv7QcYuHUcji1O8yysYx0jhSwMtc1dsq83L3PywrWxK8jGHKsBOnqkrtMPXSHJwfRZzWGKvTSVRr05bl6hwMsB3qHQsgscaGyyzzvN8qAcBWtaFrkjwPvaAQ6F8CB1vbJrTRasLEBHLRtWhXJuNMwwiy1K5Lr0Gc50MbZ7nfWsXMe9znpmt7fq+vyyoqv6Abq0ngniUJmuY7soZKGG4bwhGke2LQpyGzJbmyB7ZPcrz8EoKU3uIIg-gAWz+FgUHeKgIDERUCHIAR-EVaXVpgAB5OgyGlmSsCITbWtiKE1lOdJjH5Xi5EMeKx3KYp9G2IwzLOSxsaaXHMuFsQxfeJUiCl2X5cV1bOm8nA6Aj5VvOlnBtc6PWDawI25RNs2Ia5UotFWb1sjMvQeKRzYXVWHjLFMbkDAFnGSImrKRaDrLJZluWFe+xgSE6X5YCITod3A+mwcZi0DGKHZ1mMPCDJkDMkfdZI8LsixUquH30T95uA9F1bg478Pu7Jjw+4HoeR5JMlR8g8Hux2TYSgyLNSgzTYkaMfQcEx3RHeuHUE628lx7zeq3Q+7dQ6dwjj3BAF98CD2HtuSAABRaWBsJigyTObRAT8f64VtJbD++gkYZlMDgWyZlrhGAuILNy4DA6QPcsfLuitZTykVCqNU6pYB-G3JnZS+AAAiYB5ZoD1KA-GjCD7ixDmHNhIMx44NzqsRIKROJVFrrOTISNyjwSsJkT2novSL3oZNCBci+ECJEIrHO3ZuI-ysPpC48hPT6VUHosyu0+TGEwmyeI5iW5MLkQgpBO44FhKvigrS2DQrdi4ssGeWQTIoSyBCPBBllgaCWFkPYWoeJBP3m3dyUTkGRP7og6JYAb7klico+JFpEkaJSROXQ6Sv5JEodkUyZl9EMnUEUmRJS3plIiWfXulTwkxPQZg+xTTVgtMqG02clkxxZGyT0icuxyhehAR+MBOAo7eVeCQcqRzOjR06LAGUcoFZcNVKtdUcJdT6mktIi5VzTnnOOdc+ZulPQMl-gyDQCRSgVg5H1LiLpTK6GuNULI2R9DOVorAQQ+BXpLQQAFKAAJ-ltQSF0nYaQMhZByBkhAqh9A-xoVOExtkGiN1wKi9FmKIwk2Kko++E9dIMitgiO6awRyWFIWdW4FCkhwn0rsHQ50UVwFZVlBgMY4xwJbJyxqDSH5NO2FhAipQqX8gyJoG8Zxki8XUFsaopkyjyrRWIV6scsDAwmZGSmgMXXBDidq3SuQBL7CwsYUSZkrhejfL7RwLKHVKudTTLF3gSD-Q9TTdgdNuU6QJR6FIJKjHkqLCdH+4kDq3BHGYGQdrFXuXVQ1UqHgGBVTDLAWqQMU3ep5W1KwAleJaFSuUco6QCy8QrdGqtsaNW1uWhTVtWr22xEfC6PJ+FERu2nKankpR7Z8lSpwdKTLsr2oxVlD6ABJfAapOgAkVuyimiaqYtvHfiuduqVg2sNQYHQ6ExValdNOMo3JqV8kWMOw97kT1nqjpeuBv1b3JofWmkKPq2oZAEm7F0CQYqaBqHUJYb40T5QgHACQTx01bTagAWlFUcCw2hqV4WMKZL0+l9m4wIMQMglASO4J7AOzqIq1g5idkcPQ8FHZu2RJa9I-JnISjeEETjudFg3gHJdalT4RxmXzoyiN7yhZQHk92KlprFmOwnGUKw2x3RDKmi9OTCHZ0FGqDeKwWgqWmVSENYaVnCaOrmp6-TR4oSnlKBJC4ZRhScyhCUPkOSGR5k2Mivd-s3reaPVO8d-ndIEQpedYornsgfvrvUKzlj3gZbarsT9fVJUrAMGULiiE+mmGKyEo+0CT6lbsxm2ICIsIzzKO6Xiegihf3Ykiz2ewTwJe03jXT4oWtZWsUbEgHWGZdYKFcGyHp3SYxqNyculrYTlH2sYcFeZmuyODmM7ctnVukYtrOPRbtulltEqsbYVnfnfPgJ1u7eC4TwUIVqGKNs8JIySDC3CO2HYDlqB9y5Jz5TnPyp0aWrAyuxFuskQH2QJsAIElCH+sL33V0SMxpuHzPuI9gJ87y33btcZ0AZF+4Pgff0q3gi4yRbKJF4msfY6w4dfKpzT65OArs1NJHU9Hf3F7M6B7j0HzszjPdMROWjDJBcI4Vj8+HoujZEFQbr6XxZNAUOx6zvH6zIt-x4kYBEgGyfMoVSOvTP2uMMmhK6WotQhUWHSDeB808eJVB0JDvJwHHXKtjPgEqxuK7LDdsa5CiJdAYX0pdW3DtdkiqmzvSNzuQNvWrbHt3udecUKKCOE6UIJx1BvFxH+ajyjQkXgyJYEfUurVPeeyDvQ493FhEsJIeZMh6CUzCb2pdzju0GbYawQA */
     context: {
@@ -944,50 +953,50 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       listenPrompt: () => {
         const message = getMessage("assistantIsListening", "Pi");
         if (message) {
-          setUserMessage(message);
+          getPromptOrNull()?.setMessage(message);
         }
       },
       callStartingPrompt: () => {
         const message = getMessage("callStarting");
         if (message) {
-          const initialText = getDraftPrompt();
+          const initialText = getPromptOrNull()?.getDraft();
           assign({ defaultPlaceholderText: initialText });
-          setUserMessage(message);
+          getPromptOrNull()?.setMessage(message);
         }
       },
       thinkingPrompt: () => {
         const message = getMessage("assistantIsThinking", "Pi");
         if (message) {
-          setUserMessage(message);
+          getPromptOrNull()?.setMessage(message);
         }
       },
       speakingPrompt: () => {
         const message = getMessage("assistantIsSpeaking", "Pi");
         if (message) {
-          setUserMessage(message);
+          getPromptOrNull()?.setMessage(message);
         }
       },
       interruptingPiPrompt: () => {
         const message = getMessage("userStartedInterrupting", "Pi");
         if (message) {
-          setUserMessage(message);
+          getPromptOrNull()?.setMessage(message);
         }
       },
       clearPrompt: (context: SayPiContext) => {
-        setUserMessage(context.defaultPlaceholderText);
+        getPromptOrNull()?.setMessage(context.defaultPlaceholderText);
       },
       draftPrompt: (context: SayPiContext) => {
-        const prompt = mergeService
+        const text = mergeService
           .mergeTranscriptsLocal(context.transcriptions)
           .trim();
-        if (prompt) setDraftPrompt(prompt);
+        if (text) getPromptOrNull()?.setDraft(text);
       },
 
       mergeAndSubmitTranscript: (context: SayPiContext) => {
-        const prompt = mergeService
+        const text = mergeService
           .mergeTranscriptsLocal(context.transcriptions)
           .trim();
-        if (prompt) setFinalPrompt(prompt);
+        if (text) getPromptOrNull()?.setFinal(text);
       },
 
       callIsStarting: () => {
@@ -1169,4 +1178,9 @@ function readyToSubmit(
     state.matches("listening.converting.transcribing")
   );
   return readyToSubmitOnAllowedState(allowedState, context);
+}
+
+export function createSayPiMachine(bot: Chatbot) {
+  chatbot = bot;
+  return machine;
 }

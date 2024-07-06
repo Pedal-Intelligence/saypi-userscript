@@ -1,4 +1,4 @@
-import { Chatbot } from "./Chatbot";
+import { Chatbot, UserPrompt } from "./Chatbot";
 
 class PiAIChatbot implements Chatbot {
   getPromptTextInputSelector(): string {
@@ -51,6 +51,66 @@ class PiAIChatbot implements Chatbot {
     // note: depends on the side panel having already been identified
     return "#saypi-side-panel + div";
   }
+
+  getPrompt(element: HTMLElement): UserPrompt {
+    return new PiPrompt(element);
+  }
 }
 
-export { PiAIChatbot };
+class PiPrompt extends UserPrompt {
+  private textArea: HTMLTextAreaElement = this.element as HTMLTextAreaElement;
+  readonly PROMPT_CHARACTER_LIMIT = 4000;
+
+  setText(text: string): void {
+    this.setNativeValue(this.textArea, text);
+    this.scrollToBottom(this.textArea);
+  }
+  getText(): string {
+    return this.textArea.value;
+  }
+  setPlaceholderText(text: string): void {
+    this.textArea.placeholder = text;
+    this.scrollToBottom(this.textArea);
+  }
+  getPlaceholderText(): string {
+    return this.textArea.placeholder;
+  }
+
+  setNativeValue(element: HTMLTextAreaElement, value: string) {
+    let lastValue = element.value;
+    element.value = value;
+    let event = new InputEvent("input", { bubbles: true });
+    // React 15
+    (event as any).simulated = true; // React internal flag
+    // React 16-17
+    let tracker = (element as any)._valueTracker; // React internal state
+    if (tracker) {
+      tracker.setValue(lastValue);
+    }
+    element.dispatchEvent(event);
+  }
+
+  scrollToBottom(textarea: HTMLTextAreaElement) {
+    // Define the height range for the textarea
+    const maxHeight = 455;
+    const minHeight = 32;
+
+    // Reset the height to get the correct scrollHeight
+    textarea.style.height = `${minHeight}px`; // (initial height) aka 2rem
+
+    // Set the height of the textarea, up to the maximum height
+    if (textarea.scrollHeight > maxHeight) {
+      textarea.style.height = `${maxHeight}px`;
+      textarea.style.overflowY = "scroll"; // Enable vertical scrollbar
+    } else {
+      const newHeight = Math.max(minHeight, textarea.scrollHeight);
+      textarea.style.height = `${newHeight}px`;
+      textarea.style.overflowY = "hidden"; // Hide vertical scrollbar
+    }
+
+    // Scroll to the bottom
+    textarea.scrollTop = textarea.scrollHeight;
+  }
+}
+
+export { PiAIChatbot, PiPrompt };

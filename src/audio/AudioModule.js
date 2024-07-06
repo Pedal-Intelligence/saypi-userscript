@@ -114,6 +114,10 @@ export default class AudioModule {
 
   findAndDecorateAudioElement(searchRoot = document) {
     this.audioElement = this.findAudioElement(searchRoot);
+    if (!this.audioElement) {
+      // an audio element is required for audio input/output, so create one if it doesn't exist
+      this.audioElement = new Audio();
+    }
     this.decorateAudioElement(this.audioElement);
     this.registerRemovalListener();
   }

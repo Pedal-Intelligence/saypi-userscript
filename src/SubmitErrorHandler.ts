@@ -1,5 +1,6 @@
-import { setFinalPrompt } from "./TranscriptionModule";
 import AudioControlsModule from "./audio/AudioControlsModule";
+import { UserPrompt } from "./chatbots/Chatbot";
+import { PiAIChatbot } from "./chatbots/Pi";
 
 interface RestorePoint {
   prompt: string;
@@ -100,6 +101,14 @@ export default class SubmitErrorHandler {
     this.reloadPage();
   }
 
+  getPiPrompt(): UserPrompt {
+    const promptElement = document.getElementById(
+      "saypi-prompt"
+    ) as HTMLTextAreaElement;
+    // this error handler is specific to the Pi chatbot
+    return new PiAIChatbot().getPrompt(promptElement);
+  }
+
   // 4. On load, check for a restore point
   checkForRestorePoint(): void {
     const storedData = localStorage.getItem(this.restorePointKey);
@@ -113,7 +122,7 @@ export default class SubmitErrorHandler {
 
       if (timeDifference <= 5) {
         console.log("Restoring application state", restorePoint);
-        setFinalPrompt(restorePoint.prompt);
+        this.getPiPrompt().setFinal(restorePoint.prompt);
         setTimeout(() => {
           this.audioControls.activateAudioInput(restorePoint.audioInputEnabled);
         }, 0); // activation of the audio input needs to happen asynchronously to avoid race condition
