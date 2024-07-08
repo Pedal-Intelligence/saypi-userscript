@@ -83,6 +83,27 @@ export class DOMObserver {
     observer.observe(document.body, { childList: true, subtree: true });
   }
 
+  monitorForSubmitButton(ancestor: HTMLElement, runInitial = true): void {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        [...mutation.addedNodes]
+          .filter((node) => node instanceof HTMLElement)
+          .forEach((node) => {
+            const addedElement = node as HTMLElement;
+            const submitButtonObs =
+              this.findAndDecorateSubmitButton(addedElement);
+          });
+      });
+    });
+
+    if (runInitial) {
+      this.findAndDecorateSubmitButton(ancestor);
+    }
+
+    // Start observing
+    observer.observe(ancestor, { childList: true, subtree: true });
+  }
+
   // Function to decorate the prompt input element, and other elements that depend on it
   decoratePrompt(prompt: HTMLElement): void {
     prompt.id = "saypi-prompt";
@@ -93,7 +114,7 @@ export class DOMObserver {
       if (promptGrandparent) {
         promptGrandparent.id = "saypi-prompt-controls-container";
         const ancestor = this.addIdPromptAncestor(promptGrandparent);
-        if (ancestor) this.findAndDecorateSubmitButton(ancestor);
+        if (ancestor) this.monitorForSubmitButton(ancestor);
         buttonModule.createCallButton(promptGrandparent, -1);
       }
     }
@@ -246,13 +267,6 @@ export class DOMObserver {
     );
     if (submitButton) {
       return Observation.foundUndecorated(id, submitButton);
-    } else {
-      // Pi-specific fallback search for submit button, should selector fail
-      const submitButtons = searchRoot.querySelectorAll("button[type=button]");
-      if (submitButtons.length > 0) {
-        const lastSubmitButton = submitButtons[submitButtons.length - 1];
-        return Observation.foundUndecorated(id, lastSubmitButton);
-      }
     }
     return Observation.notFound(id);
   }
