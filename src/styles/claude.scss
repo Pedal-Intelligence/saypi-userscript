@@ -1,0 +1,12 @@
+/**
+ * This file contains styles specific to claude.ai,
+ * until I can figure out how to make the styles more
+ * modular.
+ */
+
+html body.claude {
+    #saypi-callButton {
+        width: 38px; /* for an effective width of 32px - idk why */
+        height: 32px;
+    }
+}

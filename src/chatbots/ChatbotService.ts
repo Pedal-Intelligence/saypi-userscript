@@ -15,4 +15,10 @@ export class ChatbotService {
       return new PiAIChatbot();
     }
   }
+
+  static addChatbotFlags(): void {
+    const chatbot = ChatbotService.getChatbot();
+    // add flags to the body to indicate which chatbot is being used
+    document.body.classList.add(chatbot.getName().toLowerCase());
+  }
 }

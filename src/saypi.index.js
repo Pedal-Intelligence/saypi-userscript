@@ -12,6 +12,7 @@ import "./styles/common.scss";
 import "./styles/desktop.scss";
 import "./styles/mobile.scss";
 import "./styles/rectangles.css";
+import "./styles/claude.scss"; // scoped by chatbot flags, i.e. <body class="claude">
 import { ChatbotService } from "./chatbots/ChatbotService.ts";
 import { addChild } from "./dom/DOMModule.ts";
 
@@ -48,6 +49,7 @@ import { addChild } from "./dom/DOMModule.ts";
   });
 
   addUserAgentFlags();
+  ChatbotService.addChatbotFlags(chatbot);
   EventModule.init();
   new DOMObserver(chatbot).observeDOM();
 

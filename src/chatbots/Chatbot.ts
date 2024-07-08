@@ -16,8 +16,10 @@ export interface Chatbot {
   getChatPath(): string;
   isChatablePath(path: string): boolean; // can the chatbot chat on this URL path?
   // ... other methods for different selectors
+  getExtraCallButtonClasses(): string[];
 
   getPrompt(element: HTMLElement): UserPrompt;
+  getName(): string;
 }
 
 export abstract class UserPrompt {

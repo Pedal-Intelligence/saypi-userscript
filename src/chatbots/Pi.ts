@@ -1,12 +1,20 @@
 import { Chatbot, UserPrompt } from "./Chatbot";
 
 class PiAIChatbot implements Chatbot {
+  getName(): string {
+    return "Pi";
+  }
+
+  getPrompt(element: HTMLElement): UserPrompt {
+    return new PiPrompt(element);
+  }
+
   getPromptTextInputSelector(): string {
     return "textarea[enterkeyhint]";
   }
 
   getPromptSubmitButtonSelector(): string {
-    return ".pi-submit-button"; // replace with actual submit button selector for pi.ai
+    return "#saypi-prompt-controls-container button.rounded-full.transition-colors.duration-300"; // falls back to use JS instead if unsuccessful (see bootstrap.ts)
   }
 
   getAudioControlsSelector(): string {
@@ -52,8 +60,14 @@ class PiAIChatbot implements Chatbot {
     return "#saypi-side-panel + div";
   }
 
-  getPrompt(element: HTMLElement): UserPrompt {
-    return new PiPrompt(element);
+  getExtraCallButtonClasses(): string[] {
+    return [
+      "fixed",
+      "rounded-full",
+      "bg-cream-550",
+      "enabled:hover:bg-cream-650",
+      "m-2",
+    ];
   }
 }
 

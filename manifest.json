@@ -7,7 +7,7 @@
   "host_permissions": ["https://api.saypi.ai/*"],
   "content_scripts": [
     {
-      "matches": ["https://pi.ai/*", "https://claude.ai/chat/*"],
+      "matches": ["https://pi.ai/*", "https://claude.ai/*"],
       "js": ["public/saypi.user.js"]
     }
   ],

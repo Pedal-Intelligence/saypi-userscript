@@ -225,8 +225,9 @@ export default class ButtonModule {
     const button = this.createButton();
     button.id = "saypi-callButton";
     button.type = "button";
-    button.className =
-      "call-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650 m-2";
+    button.className = "call-button";
+    // add all classes in chatbot.getExtraCallButtonClasses() to the button
+    button.classList.add(...this.chatbot.getExtraCallButtonClasses());
     if (this.callIsActive) {
       this.callActive(button);
     } else {

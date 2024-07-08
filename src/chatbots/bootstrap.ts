@@ -92,8 +92,8 @@ export class DOMObserver {
       const promptGrandparent = promptParent.parentElement;
       if (promptGrandparent) {
         promptGrandparent.id = "saypi-prompt-controls-container";
-        this.addIdPromptAncestor(promptGrandparent);
-        this.addIdSubmitButton(promptGrandparent);
+        const ancestor = this.addIdPromptAncestor(promptGrandparent);
+        if (ancestor) this.findAndDecorateSubmitButton(ancestor);
         buttonModule.createCallButton(promptGrandparent, -1);
       }
     }
@@ -233,25 +233,53 @@ export class DOMObserver {
     );
   }
 
-  addIdSubmitButton(container: Element) {
-    const submitButtons = container.querySelectorAll("button[type=button]");
-    if (submitButtons.length > 0) {
-      const lastSubmitButton = submitButtons[submitButtons.length - 1];
-      lastSubmitButton.id = "saypi-submitButton";
+  findSubmitButton(searchRoot: Element): Observation {
+    const id = "saypi-submitButton";
+    const existingSubmitButton = document.getElementById(id);
+    if (existingSubmitButton) {
+      // Submit button already exists, no need to search
+      return Observation.foundAlreadyDecorated(id, existingSubmitButton);
     }
+
+    const submitButton = searchRoot.querySelector(
+      this.chatbot.getPromptSubmitButtonSelector()
+    );
+    if (submitButton) {
+      return Observation.foundUndecorated(id, submitButton);
+    } else {
+      // Pi-specific fallback search for submit button, should selector fail
+      const submitButtons = searchRoot.querySelectorAll("button[type=button]");
+      if (submitButtons.length > 0) {
+        const lastSubmitButton = submitButtons[submitButtons.length - 1];
+        return Observation.foundUndecorated(id, lastSubmitButton);
+      }
+    }
+    return Observation.notFound(id);
   }
 
-  addIdPromptAncestor(container: Element) {
+  decorateSubmitButton(submitButton: HTMLElement): void {
+    submitButton.id = "saypi-submitButton";
+  }
+
+  findAndDecorateSubmitButton(searchRoot: Element): Observation {
+    const obs = this.findSubmitButton(searchRoot);
+    if (obs.isUndecorated()) {
+      this.decorateSubmitButton(obs.target as HTMLElement);
+    }
+    return Observation.foundAndDecorated(obs);
+  }
+
+  addIdPromptAncestor(container: Element): HTMLElement | null {
     // climb up the DOM tree until we find a div with class 'w-full'
     let parent = container.parentElement;
     while (parent) {
       if (parent.classList.contains("w-full")) {
         parent.id = "saypi-prompt-ancestor";
-        return true;
+        return parent as HTMLElement;
       }
       parent = parent.parentElement;
     }
-    return false;
+    return null;
   }
 
   findPrompt(searchRoot: Element): Observation {

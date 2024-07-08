@@ -1,6 +1,10 @@
 import { Chatbot, UserPrompt } from "./Chatbot";
 
 class ClaudeChatbot implements Chatbot {
+  getName(): string {
+    return "Claude";
+  }
+
   getPrompt(element: HTMLElement): UserPrompt {
     return new ClaudePrompt(element);
   }
@@ -9,7 +13,7 @@ class ClaudeChatbot implements Chatbot {
   }
 
   getPromptSubmitButtonSelector(): string {
-    return ".pi-submit-button"; // replace with actual submit button selector for pi.ai
+    return "#saypi-prompt-controls-container button:last-of-type:not(:has(~ * button))";
   }
 
   getAudioControlsSelector(): string {
@@ -30,12 +34,12 @@ class ClaudeChatbot implements Chatbot {
   }
 
   getChatPath(): string {
-    return "/discover";
+    return "/chat";
   }
 
   isChatablePath(path: string): boolean {
-    // true if path starts with /talk or /discover
-    return path.includes("/talk") || path.includes("/discover");
+    // routes on which Claude can chat
+    return path.includes("/new") || path.includes("/chat");
   }
 
   getVoiceMenuSelector(): string {
@@ -54,6 +58,10 @@ class ClaudeChatbot implements Chatbot {
     // note: depends on the side panel having already been identified
     return "#saypi-side-panel + div";
   }
+
+  getExtraCallButtonClasses(): string[] {
+    return ["rounded-full"];
+  }
 }
 
 class ClaudePrompt extends UserPrompt {
@@ -66,17 +74,39 @@ class ClaudePrompt extends UserPrompt {
   getText(): string {
     return this.promptElement.innerText;
   }
+
+  /**
+   * Set the placeholder text for the prompt element, which is displayed when the prompt is empty
+   * @param text
+   */
   setPlaceholderText(text: string): void {
     const placeholder = this.promptElement.querySelector(
       "p[data-placeholder]"
     ) as HTMLParagraphElement;
-    placeholder.innerText = text;
+    placeholder?.setAttribute("data-placeholder", text);
   }
+
+  /**
+   * Get the placeholder text for the prompt element, which is displayed when the prompt is empty
+   * @returns placeholder text or empty string if the prompt is not empty
+   */
   getPlaceholderText(): string {
     const placeholder = this.promptElement.querySelector(
       "p[data-placeholder]"
     ) as HTMLParagraphElement;
-    return placeholder.innerText;
+    return placeholder?.getAttribute("data-placeholder") || "";
+  }
+
+  /**
+   * Clear the prompt element
+   */
+  clear(): void {
+    const promptParagraphs = this.promptElement.querySelectorAll(
+      "p[!data-placeholder]"
+    );
+    promptParagraphs.forEach((p) => {
+      p.remove();
+    });
   }
 }
 
