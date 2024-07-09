@@ -13,7 +13,7 @@ class ClaudeChatbot implements Chatbot {
   }
 
   getPromptSubmitButtonSelector(): string {
-    return "#saypi-prompt-controls-container button:last-of-type:not(:has(~ * button))";
+    return "#saypi-prompt-controls-container button.bg-accent-main-100:last-of-type:not(:has(~ * button))";
   }
 
   getAudioControlsSelector(): string {
