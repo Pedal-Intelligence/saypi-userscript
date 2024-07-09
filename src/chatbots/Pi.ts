@@ -89,6 +89,9 @@ class PiPrompt extends UserPrompt {
   getPlaceholderText(): string {
     return this.textArea.placeholder;
   }
+  getDefaultPlaceholderText(): string {
+    return this.textArea.placeholder;
+  }
 
   setNativeValue(element: HTMLTextAreaElement, value: string) {
     let lastValue = element.value;

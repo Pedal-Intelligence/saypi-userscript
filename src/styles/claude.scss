@@ -13,4 +13,14 @@ html body.claude {
     #saypi-submitButton {
         background-color: #840f7c; /* just for debugging */
     }
+
+    /* hide Claude's original placeholder when custom placeholder is present and non-empty */
+    #saypi-prompt:has(+ .custom-placeholder:not(:empty)) p[data-placeholder].is-empty {
+        display: none;
+    }
+    /* move custom placeholder up to Claude's original placeholder position */
+    p.custom-placeholder {
+        position: relative;
+        top: -24px;
+    }
 }

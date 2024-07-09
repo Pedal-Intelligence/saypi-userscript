@@ -65,6 +65,7 @@ export abstract class UserPrompt {
   abstract getText(): string;
   abstract setPlaceholderText(text: string): void;
   abstract getPlaceholderText(): string;
+  abstract getDefaultPlaceholderText(): string;
   abstract PROMPT_CHARACTER_LIMIT: number;
 
   /**
