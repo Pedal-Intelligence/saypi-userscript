@@ -66,7 +66,16 @@ class ClaudeChatbot implements Chatbot {
 
 class ClaudePrompt extends UserPrompt {
   private promptElement: HTMLDivElement = this.element as HTMLDivElement;
+  private placeholderManager: PlaceholderManager;
   readonly PROMPT_CHARACTER_LIMIT = 200000; // max prompt length is the same as context window length, 200k tokens
+
+  constructor(element: HTMLElement) {
+    super(element);
+    this.placeholderManager = new PlaceholderManager(
+      element,
+      "Type a message..."
+    );
+  }
 
   setText(text: string): void {
     this.promptElement.innerText = text;
@@ -80,10 +89,7 @@ class ClaudePrompt extends UserPrompt {
    * @param text
    */
   setPlaceholderText(text: string): void {
-    const placeholder = this.promptElement.querySelector(
-      "p[data-placeholder]"
-    ) as HTMLParagraphElement;
-    placeholder?.setAttribute("data-placeholder", text);
+    this.placeholderManager.setPlaceholder(text);
   }
 
   /**
@@ -94,19 +100,80 @@ class ClaudePrompt extends UserPrompt {
     const placeholder = this.promptElement.querySelector(
       "p[data-placeholder]"
     ) as HTMLParagraphElement;
-    return placeholder?.getAttribute("data-placeholder") || "";
+    return (
+      this.placeholderManager.getPlaceholder() ||
+      placeholder?.getAttribute("data-placeholder") ||
+      ""
+    );
   }
 
   /**
    * Clear the prompt element
    */
   clear(): void {
+    this.placeholderManager.setPlaceholder("");
+    this.placeholderManager.removeEventListeners();
     const promptParagraphs = this.promptElement.querySelectorAll(
       "p[!data-placeholder]"
     );
     promptParagraphs.forEach((p) => {
       p.remove();
     });
+  }
+}
+
+class PlaceholderManager {
+  private input: HTMLElement;
+  private placeholderText: string;
+  private focusHandler: EventListener;
+  private blurHandler: EventListener;
+
+  constructor(inputElement: HTMLElement, initialPlaceholder: string) {
+    this.input = inputElement;
+    this.placeholderText = initialPlaceholder;
+    this.focusHandler = this.handleFocus.bind(this);
+    this.blurHandler = this.handleBlur.bind(this);
+    this.initializePlaceholder();
+  }
+
+  initializePlaceholder() {
+    this.addEventListeners();
+    if (this.input.textContent?.trim() === "") {
+      this.input.textContent = this.placeholderText;
+    }
+  }
+
+  addEventListeners() {
+    this.input.addEventListener("focus", this.focusHandler);
+    this.input.addEventListener("blur", this.blurHandler);
+  }
+
+  removeEventListeners() {
+    this.input.removeEventListener("focus", this.focusHandler);
+    this.input.removeEventListener("blur", this.blurHandler);
+  }
+
+  handleFocus() {
+    if (this.input.textContent?.trim() === this.placeholderText) {
+      this.input.textContent = "";
+    }
+  }
+
+  handleBlur() {
+    if (this.input.textContent?.trim() === "") {
+      this.input.textContent = this.placeholderText;
+    }
+  }
+
+  setPlaceholder(newPlaceholder: string) {
+    this.removeEventListeners();
+    this.placeholderText = newPlaceholder;
+    this.input.textContent = this.placeholderText;
+    this.addEventListeners();
+  }
+
+  getPlaceholder(): string {
+    return this.placeholderText;
   }
 }
 
