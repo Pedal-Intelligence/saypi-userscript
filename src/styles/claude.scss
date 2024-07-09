@@ -18,9 +18,10 @@ html body.claude {
     #saypi-prompt:has(+ .custom-placeholder:not(:empty)) p[data-placeholder].is-empty {
         display: none;
     }
-    /* move custom placeholder up to Claude's original placeholder position */
-    p.custom-placeholder {
-        position: relative;
-        top: -24px;
+
+    /* reduce the height of the prompt input area, which somehow grew by 24px when we added the custom placeholder
+     * and shift the custom placeholder up to Claude's standard placeholder position */
+    #saypi-prompt:has(+ .custom-placeholder:not(:empty)) {
+        margin-bottom: -24px;
     }
 }

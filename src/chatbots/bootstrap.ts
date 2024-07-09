@@ -115,7 +115,9 @@ export class DOMObserver {
         promptGrandparent.id = "saypi-prompt-controls-container";
         const ancestor = this.addIdPromptAncestor(promptGrandparent);
         if (ancestor) this.monitorForSubmitButton(ancestor);
-        buttonModule.createCallButton(promptGrandparent, -1);
+        const submitButtonSearch = this.findSubmitButton(promptGrandparent);
+        const insertionPosition = submitButtonSearch.found ? -1 : 0;
+        buttonModule.createCallButton(promptGrandparent, insertionPosition);
       }
     }
   }
