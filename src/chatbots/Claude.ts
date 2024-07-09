@@ -178,10 +178,10 @@ class PlaceholderManager {
   updatePlaceholderVisibility() {
     if (this.input.textContent?.trim() === "") {
       this.placeholder.style.display = "block";
-      this.hideClaudePlaceholder();
+      this.hideStandardPlaceholder();
     } else {
       this.placeholder.style.display = "none";
-      this.showClaudePlaceholder();
+      this.showStandardPlaceholder();
     }
   }
 
@@ -195,17 +195,20 @@ class PlaceholderManager {
     return this.placeholderText;
   }
 
-  private getClaudePlaceholder(): HTMLParagraphElement | null {
+  /**
+   * Get Claude's own placeholder element, which is hidden when the prompt is not empty
+   */
+  private getStandardPlaceholder(): HTMLParagraphElement | null {
     return this.input.querySelector("p[data-placeholder]");
   }
-  private showClaudePlaceholder() {
-    const placeholder = this.getClaudePlaceholder();
+  private showStandardPlaceholder() {
+    const placeholder = this.getStandardPlaceholder();
     if (placeholder) {
       placeholder.style.display = "block";
     }
   }
-  private hideClaudePlaceholder() {
-    const placeholder = this.getClaudePlaceholder();
+  private hideStandardPlaceholder() {
+    const placeholder = this.getStandardPlaceholder();
     if (placeholder) {
       placeholder.style.display = "none";
     }
