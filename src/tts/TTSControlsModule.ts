@@ -16,7 +16,7 @@ export class TTSControlsModule {
   constructTextToSpeechControl(classname: string, title: string, icon: string) {
     const button = document.createElement("button");
     button.type = "button";
-    button.classList.add("text-center", "saypi-button", classname);
+    button.classList.add("text-center", "saypi-button", "tooltip", classname);
     button.setAttribute("aria-label", title);
     button.innerHTML = icon;
     return button;
@@ -76,6 +76,7 @@ export class TTSControlsModule {
       "active:bg-neutral-50-tap",
       "active:text-primary-700",
       "saypi-button",
+      "tooltip",
       classname
     );
     button.setAttribute("title", title);

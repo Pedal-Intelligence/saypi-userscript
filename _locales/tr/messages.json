@@ -97,11 +97,17 @@
   },
   "callInProgress": {
     "description": "Aramanın devam ettiği sırada arama düğmesinde görüntülenecek ipucu.",
-    "message": "Aktif sürekli dinleme. Durdurmak için tıklayın."
+    "message": "Eller serbest konuşmayı sonlandırın"
   },
   "callNotStarted": {
     "description": "Aramanın başlamasından önce arama düğmesinde görüntülenecek ipucu.",
-    "message": "Sürekli dinlemeyi başlatmak için tıklayın."
+    "message": "$chatbot$ ile eller serbest bir konuşma başlatın",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callStarting": {
     "description": "Aramanın başladığı zaman arama düğmesinin araç ipucunda ve istem alanında görüntülenecek metin.",

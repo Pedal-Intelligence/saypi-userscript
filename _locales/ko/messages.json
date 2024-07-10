@@ -8,7 +8,7 @@
     "description": "애플리케이션의 설명입니다."
   },
   "callInProgress": {
-    "message": "활성화된 연속 듣기. 클릭하여 중지하세요.",
+    "message": "핸즈프리 대화 종료",
     "description": "통화가 진행 중일 때 통화 버튼에 표시되는 툴팁입니다."
   },
   "callStarting": {
@@ -16,8 +16,14 @@
     "description": "통화가 시작될 때 통화 버튼에 표시되는 툴팁입니다."
   },
   "callNotStarted": {
-    "message": "연속 듣기를 시작하려면 클릭하세요.",
-    "description": "통화가 시작되기 전에 통화 버튼에 표시되는 툴팁입니다."
+    "message": "$chatbot$와 핸즈프리 대화를 시작하세요.",
+    "description": "통화가 시작되기 전에 통화 버튼에 표시되는 툴팁입니다.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callError": {
     "message": "치명적이지 않은 오류 발생. 걱정마세요, 계속 듣고 있습니다.",

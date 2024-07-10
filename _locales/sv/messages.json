@@ -97,11 +97,17 @@
   },
   "callInProgress": {
     "description": "Den tooltip som ska visas på samtalsknappen när ett samtal pågår.",
-    "message": "Aktiv kontinuerlig lyssning. Klicka för att stoppa."
+    "message": "Avsluta handsfree-samtal"
   },
   "callNotStarted": {
     "description": "Den tooltip som ska visas på samtalsknappen innan ett samtal startas.",
-    "message": "Klicka för att starta kontinuerlig lyssning."
+    "message": "Starta en handsfree-konversation med $chatbot$",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callStarting": {
     "description": "Texten som ska visas på samtalsknappens verktygstips och i promptområdet när ett samtal startar.",

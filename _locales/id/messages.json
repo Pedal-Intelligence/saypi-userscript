@@ -97,11 +97,17 @@
   },
   "callInProgress": {
     "description": "Tooltip yang ditampilkan pada tombol panggilan ketika panggilan sedang berlangsung.",
-    "message": "Mendengarkan secara aktif dan terus menerus. Klik untuk berhenti."
+    "message": "Akhiri percakapan tanpa tangan"
   },
   "callNotStarted": {
     "description": "Tooltip yang ditampilkan pada tombol panggilan sebelum panggilan dimulai.",
-    "message": "Klik untuk memulai mendengarkan secara terus menerus."
+    "message": "Mulai percakapan tanpa tangan dengan $chatbot$",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callStarting": {
     "description": "Teks yang ditampilkan pada tooltip tombol panggilan dan di area prompt saat panggilan dimulai.",

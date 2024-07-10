@@ -20,7 +20,7 @@
     "description": "The text of the button to enter immersive mode on desktop."
   },
   "callInProgress": {
-    "message": "Active continuous listening. Click to stop.",
+    "message": "End hands-free conversation",
     "description": "The tooltip to display on the call button when a call is in progress."
   },
   "callStarting": {
@@ -28,8 +28,14 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting."
   },
   "callNotStarted": {
-    "message": "Click to start continuous listening.",
-    "description": "The tooltip to display on the call button before a call is started."
+    "message": "Start a hands-free conversation with $chatbot$",
+    "description": "The tooltip to display on the call button before a call is started.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callError": {
     "message": "Non-fatal error encountered. Don't panic, we're still listening.",

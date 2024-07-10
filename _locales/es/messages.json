@@ -8,7 +8,7 @@
     "description": "La descripción de la aplicación."
   },
   "callInProgress": {
-    "message": "Escucha continua activa. Haz clic para detener.",
+    "message": "Finalizar conversación manos libres",
     "description": "El tooltip que se muestra en el botón de llamada cuando una llamada está en progreso."
   },
   "callStarting": {
@@ -16,8 +16,14 @@
     "description": "El tooltip que se muestra en el botón de llamada cuando una llamada está comenzando."
   },
   "callNotStarted": {
-    "message": "Haz clic para iniciar la escucha continua.",
-    "description": "El tooltip que se muestra en el botón de llamada antes de que comience una llamada."
+    "message": "Inicia una conversación manos libres con $chatbot$",
+    "description": "El tooltip que se muestra en el botón de llamada antes de que comience una llamada.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callError": {
     "message": "Error no fatal encontrado. No te preocupes, todavía estamos escuchando.",

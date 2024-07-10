@@ -8,7 +8,7 @@
     "description": "A descrição da aplicação."
   },
   "callInProgress": {
-    "message": "Escuta contínua ativa. Clique para parar.",
+    "message": "Encerre a conversa em modo mãos livres",
     "description": "A dica de ferramenta a ser exibida no botão de chamada quando uma chamada está em andamento."
   },
   "callStarting": {
@@ -16,8 +16,14 @@
     "description": "A dica de ferramenta a ser exibida no botão de chamada quando uma chamada está começando."
   },
   "callNotStarted": {
-    "message": "Clique para iniciar a escuta contínua.",
-    "description": "A dica de ferramenta a ser exibida no botão de chamada antes de uma chamada ser iniciada."
+    "message": "Inicie uma conversa mãos-livres com $chatbot$",
+    "description": "A dica de ferramenta a ser exibida no botão de chamada antes de uma chamada ser iniciada.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callError": {
     "message": "Erro não fatal encontrado. Não entre em pânico, ainda estamos ouvindo.",

@@ -8,7 +8,7 @@
     "description": "Az alkalmazás leírása."
   },
   "callInProgress": {
-    "message": "Aktív folyamatos hallgatás. Kattintson a leállításhoz.",
+    "message": "Befejezni a kihangosított beszélgetést",
     "description": "A hívásgombon megjelenő eszköztipp, amikor a hívás folyamatban van."
   },
   "callStarting": {
@@ -16,8 +16,14 @@
     "description": "A hívásgombon megjelenő eszköztipp, amikor a hívás elindul."
   },
   "callNotStarted": {
-    "message": "Kattintson a folyamatos hallgatás elindításához.",
-    "description": "A hívásgombon megjelenő eszköztipp, mielőtt a hívás elindulna."
+    "message": "Indíts egy kihangosított beszélgetést a $chatbot$-tal",
+    "description": "A hívásgombon megjelenő eszköztipp, mielőtt a hívás elindulna.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callError": {
     "message": "Nem végzetes hiba történt. Ne aggódjon, még hallgatunk.",

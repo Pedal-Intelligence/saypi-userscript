@@ -42,32 +42,11 @@
         overflow: visible;
         margin: 0 0.15rem;
       }
-      
-      button::after {
-        content: attr(aria-label);
-        position: absolute;
-        top: 120%;
-        transform: translateX(-70%); // center the tooltip below the button
-        white-space: nowrap;
-        background: #24381b; // Pi primary text color (dark green)
-        color: white;
-        padding: 5px 10px;
-        border-radius: 4px;
-        margin-left: 10px;
-        opacity: 0;
-        transition: opacity 0.3s;
-        pointer-events: none;
-        font-size: smaller;
-      }
-      
-      button:hover::after {
-        opacity: 1;
-      }
 }
 
 /*
  * these styles are for debugging purposes, to make it easier to see when messages are being detected
- *
+ */
 .assistant-message {
     // give it a subtle green background color and border
     background-color: #f0f9f4; // rgb(240 249 244) - Pi primary background color
@@ -87,4 +66,4 @@
 .assistant-message.speech-incomplete {
     border-color: rgb(255, 183, 0);
 }
-    */
+    /**/

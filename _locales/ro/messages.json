@@ -97,11 +97,17 @@
   },
   "callInProgress": {
     "description": "Sugestia de afișare pe butonul de apel când un apel este în desfășurare.",
-    "message": "Ascultare continuă activă. Faceți clic pentru a opri."
+    "message": "Încheie conversația fără mâini"
   },
   "callNotStarted": {
     "description": "Sfatul care se afișează pe butonul de apel înainte de a începe un apel.",
-    "message": "Faceți clic pentru a începe ascultarea continuă."
+    "message": "Începeți o conversație fără mâini cu $chatbot$",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callStarting": {
     "description": "Textul de afișat pe tooltip-ul butonului de apel și în zona de prompt atunci când începe un apel.",

@@ -97,11 +97,17 @@
   },
   "callInProgress": {
     "description": "Ang tooltip na ipapakita sa call button kapag may isinasagawang tawag.",
-    "message": "Aktibong patuloy na pakikinig. I-click upang itigil."
+    "message": "Tapusin ang walang-kamay na pag-uusap"
   },
   "callNotStarted": {
     "description": "Ang tooltip na ipapakita sa pindutan ng tawag bago simulan ang tawag.",
-    "message": "I-click para simulan ang patuloy na pakikinig."
+    "message": "Simulan ang isang hands-free na pag-uusap kasama ng $chatbot$",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callStarting": {
     "description": "Ang teksto na ipapakita sa tooltip ng pindutan ng tawag at sa lugar ng prompt kapag nagsisimula na ang tawag.",

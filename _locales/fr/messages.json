@@ -8,7 +8,7 @@
     "description": "La description de l'application."
   },
   "callInProgress": {
-    "message": "Écoute continue active. Cliquez pour arrêter.",
+    "message": "Terminer la conversation en mains libres",
     "description": "L'infobulle à afficher sur le bouton d'appel lorsqu'un appel est en cours."
   },
   "callStarting": {
@@ -16,8 +16,14 @@
     "description": "L'infobulle à afficher sur le bouton d'appel lors du démarrage d'un appel."
   },
   "callNotStarted": {
-    "message": "Cliquez pour démarrer l'écoute continue.",
-    "description": "L'infobulle à afficher sur le bouton d'appel avant le début d'un appel."
+    "message": "Commencez une conversation mains libres avec $chatbot$",
+    "description": "L'infobulle à afficher sur le bouton d'appel avant le début d'un appel.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callError": {
     "message": "Erreur non fatale rencontrée. Ne paniquez pas, nous continuons à écouter.",

@@ -8,7 +8,7 @@
     "description": "De beschrijving van de applicatie."
   },
   "callInProgress": {
-    "message": "Actieve continue luistering. Klik om te stoppen.",
+    "message": "Einde handsfree gesprek",
     "description": "De tooltip die wordt weergegeven op de oproepknop wanneer een gesprek bezig is."
   },
   "callStarting": {
@@ -16,8 +16,14 @@
     "description": "De tooltip die wordt weergegeven op de oproepknop wanneer een gesprek start."
   },
   "callNotStarted": {
-    "message": "Klik om continue luistering te starten.",
-    "description": "De tooltip die wordt weergegeven op de oproepknop voordat een gesprek is gestart."
+    "message": "Start een handsfree gesprek met $chatbot$",
+    "description": "De tooltip die wordt weergegeven op de oproepknop voordat een gesprek is gestart.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callError": {
     "message": "Niet-fatale fout opgetreden. Geen paniek, we luisteren nog steeds.",

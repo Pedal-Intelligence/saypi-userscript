@@ -8,7 +8,7 @@
     "description": "Mô tả của ứng dụng."
   },
   "callInProgress": {
-    "message": "Đang lắng nghe liên tục. Nhấp để dừng.",
+    "message": "Kết thúc cuộc trò chuyện không cần tay",
     "description": "Tooltip hiển thị trên nút gọi khi một cuộc gọi đang diễn ra."
   },
   "callStarting": {
@@ -16,8 +16,14 @@
     "description": "Tooltip hiển thị trên nút gọi khi cuộc gọi đang bắt đầu."
   },
   "callNotStarted": {
-    "message": "Nhấp để bắt đầu lắng nghe liên tục.",
-    "description": "Tooltip hiển thị trên nút gọi trước khi cuộc gọi được bắt đầu."
+    "message": "Bắt đầu một cuộc trò chuyện không cần tay với $chatbot$",
+    "description": "Tooltip hiển thị trên nút gọi trước khi cuộc gọi được bắt đầu.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callError": {
     "message": "Gặp lỗi không nghiêm trọng. Đừng hoảng sợ, chúng tôi vẫn đang lắng nghe.",

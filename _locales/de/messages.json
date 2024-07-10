@@ -8,7 +8,7 @@
     "description": "Die Beschreibung der Anwendung."
   },
   "callInProgress": {
-    "message": "Aktives kontinuierliches Zuhören. Klicken, um zu stoppen.",
+    "message": "Beenden Sie das Freisprechgespräch",
     "description": "Der Tooltip, der auf dem Anrufbutton angezeigt wird, wenn ein Anruf läuft."
   },
   "callStarting": {
@@ -16,8 +16,14 @@
     "description": "Der Tooltip, der auf dem Anrufbutton angezeigt wird, wenn ein Anruf beginnt."
   },
   "callNotStarted": {
-    "message": "Klicken, um kontinuierliches Zuhören zu starten.",
-    "description": "Der Tooltip, der auf dem Anrufbutton angezeigt wird, bevor ein Anruf gestartet wird."
+    "message": "Beginnen Sie ein freihändiges Gespräch mit $chatbot$",
+    "description": "Der Tooltip, der auf dem Anrufbutton angezeigt wird, bevor ein Anruf gestartet wird.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callError": {
     "message": "Nicht schwerwiegender Fehler aufgetreten. Keine Panik, wir hören weiterhin zu.",

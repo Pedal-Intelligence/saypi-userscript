@@ -8,7 +8,7 @@
     "description": "Opis aplikacji."
   },
   "callInProgress": {
-    "message": "Aktywne ciągłe słuchanie. Kliknij, aby zatrzymać.",
+    "message": "Zakończ rozmowę przez zestaw głośnomówiący",
     "description": "Podpowiedź wyświetlana na przycisku połączenia, gdy połączenie jest w toku."
   },
   "callStarting": {
@@ -16,8 +16,14 @@
     "description": "Podpowiedź wyświetlana na przycisku połączenia, gdy połączenie się rozpoczyna."
   },
   "callNotStarted": {
-    "message": "Kliknij, aby rozpocząć ciągłe słuchanie.",
-    "description": "Podpowiedź wyświetlana na przycisku połączenia, zanim połączenie zostanie rozpoczęte."
+    "message": "Rozpocznij rozmowę bez użycia rąk z $chatbot$",
+    "description": "Podpowiedź wyświetlana na przycisku połączenia, zanim połączenie zostanie rozpoczęte.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callError": {
     "message": "Napotkano niekrytyczny błąd. Nie panikuj, nadal słuchamy.",

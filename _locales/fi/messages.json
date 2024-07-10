@@ -97,11 +97,17 @@
   },
   "callInProgress": {
     "description": "Näytettävä työkaluvihje soittonapissa, kun puhelu on käynnissä.",
-    "message": "Aktiivinen jatkuva kuuntelu. Klikkaa lopettaaksesi."
+    "message": "Lopeta handsfree-keskustelu"
   },
   "callNotStarted": {
     "description": "Näytettävä työkaluvihje soittonapissa ennen puhelun aloittamista.",
-    "message": "Klikkaa aloittaaksesi jatkuvan kuuntelun."
+    "message": "Aloita kädet vapaa keskustelu $chatbot$ kanssa",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callStarting": {
     "description": "Teksti, joka näkyy puhelunappulan työkaluvihjeessä ja kehotusalueella, kun puhelu alkaa.",

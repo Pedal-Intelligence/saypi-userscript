@@ -177,9 +177,8 @@ export default class ButtonModule {
     });
     button.type = "button";
     button.className =
-      "saypi-exit-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      "saypi-exit-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
     button.setAttribute("aria-label", label);
-    button.setAttribute("title", label);
     button.innerHTML = exitIconSVG;
     addChild(container, button, position);
     return button;
@@ -192,9 +191,8 @@ export default class ButtonModule {
     });
     button.type = "button";
     button.className =
-      "saypi-enter-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      "saypi-enter-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
     button.setAttribute("aria-label", label);
-    button.setAttribute("title", label);
     button.innerHTML = maximizeIconSVG;
     // insert the button at the specified position
     addChild(container, button, position);
@@ -209,9 +207,8 @@ export default class ButtonModule {
       this.immersionService.enterImmersiveMode();
     };
     button.className =
-      "immersive-mode-button saypi-control-button flex h-16 w-16 flex-col items-center justify-center rounded-xl text-neutral-900 hover:bg-neutral-50-hover hover:text-neutral-900-hover active:bg-neutral-50-tap active:text-neutral-900-tap gap-0.5";
+      "immersive-mode-button saypi-control-button tooltip flex h-16 w-16 flex-col items-center justify-center rounded-xl text-neutral-900 hover:bg-neutral-50-hover hover:text-neutral-900-hover active:bg-neutral-50-tap active:text-neutral-900-tap gap-0.5";
     button.setAttribute("aria-label", title);
-    button.setAttribute("title", title);
     button.innerHTML = immersiveIconSVG;
     const labelDiv = document.createElement("div");
     labelDiv.textContent = label;
@@ -225,7 +222,7 @@ export default class ButtonModule {
     const button = this.createButton();
     button.id = "saypi-callButton";
     button.type = "button";
-    button.className = "call-button";
+    button.classList.add("call-button", "saypi-button", "tooltip");
     // add all classes in chatbot.getExtraCallButtonClasses() to the button
     button.classList.add(...this.chatbot.getExtraCallButtonClasses());
     if (this.callIsActive) {
@@ -313,7 +310,6 @@ export default class ButtonModule {
       callButton.innerHTML = callStartingIconSVG;
       const label = getMessage("callStarting");
       callButton.setAttribute("aria-label", label);
-      callButton.setAttribute("title", label);
       callButton.onclick = () => {
         this.sayPiActor.send("saypi:hangup");
       };
@@ -328,7 +324,6 @@ export default class ButtonModule {
       const label = getMessage("callInProgress");
       callButton.innerHTML = hangupIconSVG;
       callButton.setAttribute("aria-label", label);
-      callButton.setAttribute("title", label);
       callButton.onclick = () => {
         this.sayPiActor.send("saypi:hangup");
       };
@@ -343,9 +338,8 @@ export default class ButtonModule {
     }
     if (callButton) {
       callButton.innerHTML = callIconSVG;
-      const label = getMessage("callNotStarted");
+      const label = getMessage("callNotStarted", this.chatbot.getName());
       callButton.setAttribute("aria-label", label);
-      callButton.setAttribute("title", label);
       callButton.onclick = () => {
         this.sayPiActor.send("saypi:call");
       };
@@ -362,7 +356,6 @@ export default class ButtonModule {
       const label = getMessage("callError");
       callButton.innerHTML = hangupMincedIconSVG;
       callButton.setAttribute("aria-label", label);
-      callButton.setAttribute("title", label);
     }
   }
 
@@ -391,9 +384,8 @@ export default class ButtonModule {
     button.id = "saypi-lockButton";
     button.type = "button";
     button.className =
-      "lock-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      "lock-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
     button.setAttribute("aria-label", label);
-    button.setAttribute("title", label);
     button.innerHTML = lockIconSVG;
     if (container) {
       container.appendChild(button);
@@ -410,9 +402,8 @@ export default class ButtonModule {
     button.id = "saypi-unlockButton";
     button.type = "button";
     button.className =
-      "lock-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      "lock-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
     button.setAttribute("aria-label", label);
-    button.setAttribute("title", label);
     button.innerHTML = unlockIconSVG;
     if (container) {
       container.appendChild(button);
@@ -465,12 +456,10 @@ export default class ButtonModule {
         button.innerHTML = darkModeIconSVG;
         const label = getMessage("toggleThemeToLightMode");
         button.setAttribute("aria-label", label);
-        button.setAttribute("title", label);
       } else if (theme === "light") {
         button.innerHTML = lightModeIconSVG;
         const label = getMessage("toggleThemeToDarkMode");
         button.setAttribute("aria-label", label);
-        button.setAttribute("title", label);
       }
     }
     const iconContainer = document.querySelector(".saypi-icon");
@@ -485,9 +474,8 @@ export default class ButtonModule {
     button.id = "saypi-themeToggleButton";
     button.type = "button";
     button.className =
-      "theme-toggle-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
+      "theme-toggle-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
     button.setAttribute("aria-label", label);
-    button.setAttribute("title", label);
     button.innerHTML = lightModeIconSVG;
     if (container) {
       addChild(container, button, position);

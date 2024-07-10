@@ -24,4 +24,9 @@ html body.claude {
     #saypi-prompt:has(+ .custom-placeholder:not(:empty)) {
         margin-bottom: -24px;
     }
+
+    button.tooltip[aria-label]::after {
+        font-size: 0.75rem; /* text-xs */
+        background-color: hsl(var(--black)/.8); /* bg-black/80 */
+    }
 }

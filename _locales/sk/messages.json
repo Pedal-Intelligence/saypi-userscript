@@ -97,11 +97,17 @@
   },
   "callInProgress": {
     "description": "Text, ktorý sa zobrazí na tlačidle volania, keď prebieha hovor.",
-    "message": "Aktívne nepretržité počúvanie. Kliknite pre zastavenie."
+    "message": "Ukončiť hovor bez použitia rúk"
   },
   "callNotStarted": {
     "description": "Text, ktorý sa má zobraziť na tlačidle volania pred začiatkom hovoru.",
-    "message": "Kliknite pre spustenie nepretržitého počúvania."
+    "message": "Začnite konverzáciu bez použitia rúk s $chatbot$",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callStarting": {
     "description": "Text na zobrazenie v nápovede tlačidla volania a v oblasti výzvy pri začiatku hovoru.",

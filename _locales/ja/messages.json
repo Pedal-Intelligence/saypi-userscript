@@ -8,7 +8,7 @@
     "description": "アプリケーションの説明。"
   },
   "callInProgress": {
-    "message": "アクティブな連続リスニング中。クリックして停止。",
+    "message": "ハンズフリー会話を終了する",
     "description": "通話中に通話ボタンに表示されるツールチップ。"
   },
   "callStarting": {
@@ -16,8 +16,14 @@
     "description": "通話開始時に通話ボタンに表示されるツールチップ。"
   },
   "callNotStarted": {
-    "message": "連続リスニングを開始するにはクリックしてください。",
-    "description": "通話が開始される前に通話ボタンに表示されるツールチップ。"
+    "message": "$chatbot$とハンズフリーで会話を開始してください",
+    "description": "通話が開始される前に通話ボタンに表示されるツールチップ。",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callError": {
     "message": "致命的でないエラーが発生しました。心配しないで、まだ聞いています。",

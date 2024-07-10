@@ -97,11 +97,17 @@
   },
   "callInProgress": {
     "description": "Værktøjstip til at vise på opkaldsknappen, når et opkald er i gang.",
-    "message": "Aktiv kontinuerlig lytning. Klik for at stoppe."
+    "message": "Afslut håndfri samtale"
   },
   "callNotStarted": {
     "description": "Værktøjstip til visning på opkaldsknappen, før et opkald startes.",
-    "message": "Klik for at starte kontinuerlig lytning."
+    "message": "Start en håndfri samtale med $chatbot$",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callStarting": {
     "description": "Teksten der skal vises på opkaldsknappens værktøjstip og i promptområdet, når et opkald starter.",

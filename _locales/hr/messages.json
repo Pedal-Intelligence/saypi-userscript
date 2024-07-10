@@ -97,11 +97,17 @@
   },
   "callInProgress": {
     "description": "Opis alata za prikaz na gumbu za poziv kada je poziv u tijeku.",
-    "message": "Aktivno kontinuirano slušanje. Kliknite za zaustavljanje."
+    "message": "Završi razgovor bez upotrebe ruku"
   },
   "callNotStarted": {
     "description": "Opis alata za prikaz na gumbu za poziv prije nego što se poziv pokrene.",
-    "message": "Kliknite za pokretanje kontinuiranog slušanja."
+    "message": "Pokrenite razgovor bez upotrebe ruku s $chatbot$",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callStarting": {
     "description": "Tekst za prikaz na alatnoj traci gumba za poziv i u području upita kada se poziv pokreće.",

@@ -8,7 +8,7 @@
     "description": "应用程序的描述。"
   },
   "callInProgress": {
-    "message": "正在进行连续监听。点击停止。",
+    "message": "结束免提对话",
     "description": "通话进行中时，通话按钮上显示的工具提示。"
   },
   "callStarting": {
@@ -16,8 +16,14 @@
     "description": "通话开始时，通话按钮上显示的工具提示。"
   },
   "callNotStarted": {
-    "message": "点击开始连续监听。",
-    "description": "通话未开始时，通话按钮上显示的工具提示。"
+    "message": "开始与$chatbot$进行免提对话",
+    "description": "通话未开始时，通话按钮上显示的工具提示。",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callError": {
     "message": "遇到非致命错误。别担心，我们仍在监听。",
