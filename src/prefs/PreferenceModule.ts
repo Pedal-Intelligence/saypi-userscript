@@ -270,6 +270,7 @@ class UserPreferenceModule {
    * @returns {Promise<boolean>} - true if TTS beta is paused, false otherwise
    */
   public async isTTSBetaPaused(): Promise<boolean> {
+    const defaultStatus = false;
     const statusEndpoint = `${config.apiServerUrl}/status/tts`;
 
     try {
@@ -277,8 +278,11 @@ class UserPreferenceModule {
       const data = await response.json();
       return data.beta.status === "paused";
     } catch (error) {
-      console.error("Error:", error);
-      return false;
+      console.warn(
+        "Unable to check TTS beta status. API server may be unavailable.",
+        error
+      );
+      return defaultStatus;
     }
   }
 

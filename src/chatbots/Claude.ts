@@ -52,7 +52,7 @@ class ClaudeChatbot implements Chatbot {
   }
 
   getChatHistorySelector(): string {
-    return "div.t-body-chat";
+    return ".flex-1.flex.flex-col.gap-3.px-4.max-w-3xl.mx-auto.w-full.pt-1";
   }
 
   getDiscoveryPanelSelector(): string {

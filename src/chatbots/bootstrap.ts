@@ -182,7 +182,6 @@ export class DOMObserver {
   decorateSidePanel(sidePanel: HTMLElement): void {
     sidePanel.id = "saypi-side-panel";
     sidePanel.classList.add("saypi-control-panel"); // the side panel is a secondary control panel for larger screens
-
     const immersiveModeBtnPos = 1;
     buttonModule.createImmersiveModeButton(sidePanel, immersiveModeBtnPos);
   }
@@ -412,6 +411,14 @@ export class DOMObserver {
     if (obs.found && obs.isNew && !obs.decorated) {
       // decorate chat history
       this.decorateChatHistory(obs.target as HTMLElement);
+    } else if (obs.found && obs.decorated) {
+      return Observation.foundAlreadyDecorated(
+        obs.id,
+        obs.target as HTMLElement
+      );
+    }
+    if (!obs.found) {
+      return Observation.notFound("saypi-chat-history");
     }
     return Observation.foundAndDecorated(obs);
   }

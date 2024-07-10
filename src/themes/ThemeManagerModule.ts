@@ -1,10 +1,9 @@
 import { addChild } from "../dom/DOMModule";
+import EventBus from "../events/EventBus";
 import getMessage from "../i18n";
 import { IconModule } from "../icons/IconModule";
-import StateMachineService from "../StateMachineService";
 
 export class ThemeManager {
-  private themeToggleActor;
   private icons;
 
   // singleton
@@ -17,12 +16,11 @@ export class ThemeManager {
   }
 
   constructor() {
-    this.themeToggleActor = StateMachineService.themeToggleActor;
     this.icons = new IconModule();
   }
 
   private toggleTheme() {
-    this.themeToggleActor.send("toggle");
+    EventBus.emit("saypi:theme:toggle");
   }
 
   /**
