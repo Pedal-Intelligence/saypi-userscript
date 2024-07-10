@@ -1,10 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { SpeechSynthesisModule } from "../../src/tts/SpeechSynthesisModule";
 import { TTSControlsModule } from "../../src/tts/TTSControlsModule";
-import {
-  ChatHistoryAdditionsObserver,
-  ChatHistoryMessageObserver,
-} from "../../src/dom/ChatHistory";
+import { ChatHistoryMessageObserver } from "../../src/dom/ChatHistory";
 import { JSDOM } from "jsdom";
 import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
 import { UserPreferenceModuleMock } from "../prefs/PreferenceModule.mock";

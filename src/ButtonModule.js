@@ -22,7 +22,7 @@ import AnimationModule from "./AnimationModule.js";
 import { Chatbot } from "./chatbots/Chatbot.ts";
 import { ChatbotService } from "./chatbots/ChatbotService.ts";
 
-export default class ButtonModule {
+class ButtonModule {
   /**
    * Initializes the button module with dependencies
    * @param {Chatbot} chatbot - The chatbot instance (dependency injection)
@@ -488,4 +488,5 @@ export default class ButtonModule {
 }
 
 // Singleton
-export const buttonModule = new ButtonModule(ChatbotService.getChatbot());
+const chatbot = ChatbotService.getChatbot();
+export const buttonModule = new ButtonModule(chatbot);

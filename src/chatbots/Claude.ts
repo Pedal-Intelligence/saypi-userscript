@@ -70,12 +70,13 @@ class ClaudeChatbot implements Chatbot {
 }
 
 class ClaudePrompt extends UserPrompt {
-  private promptElement: HTMLDivElement = this.element as HTMLDivElement;
+  private promptElement: HTMLDivElement;
   private placeholderManager: PlaceholderManager;
   readonly PROMPT_CHARACTER_LIMIT = 200000; // max prompt length is the same as context window length, 200k tokens
 
   constructor(element: HTMLElement) {
     super(element);
+    this.promptElement = element as HTMLDivElement;
     const observation = this.findAndDecorateCustomPlaceholderElement(element);
     this.placeholderManager = new PlaceholderManager(
       element,
@@ -219,4 +220,4 @@ class PlaceholderManager {
   }
 }
 
-export { ClaudeChatbot };
+export { ClaudeChatbot, ClaudePrompt };
