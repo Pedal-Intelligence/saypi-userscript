@@ -1,6 +1,6 @@
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
-import { ImmersionService } from "../ImmersionService.js";
 import EventBus from "../events/EventBus";
+import { ImmersionStateChecker } from "../ImmersionServiceLite";
 
 export interface Chatbot {
   getChatHistorySelector(): string;
@@ -86,7 +86,7 @@ export abstract class UserPrompt {
     const textarea = document.getElementById(
       "saypi-prompt"
     ) as HTMLTextAreaElement;
-    if (ImmersionService.isViewImmersive()) {
+    if (ImmersionStateChecker.isViewImmersive()) {
       // if transcript is > max characters, truncate it to max-1 characters plus an ellipsis
       if (transcript.length > this.PROMPT_CHARACTER_LIMIT) {
         const truncatedLength = this.PROMPT_CHARACTER_LIMIT - 1;

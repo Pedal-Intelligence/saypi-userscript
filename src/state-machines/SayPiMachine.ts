@@ -13,7 +13,6 @@ import {
   TextualNotificationsModule,
   VisualNotificationsModule,
 } from "../NotificationsModule";
-import { ImmersionService } from "../ImmersionService.js";
 import {
   uploadAudioWithRetry,
   isTranscriptionPending,
@@ -27,7 +26,8 @@ import AudioControlsModule from "../audio/AudioControlsModule";
 import { requestWakeLock, releaseWakeLock } from "../WakeLockModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import getMessage from "../i18n";
-import { Chatbot, UserPrompt } from "../chatbots/Chatbot.js";
+import { Chatbot, UserPrompt } from "../chatbots/Chatbot";
+import { ImmersionStateChecker } from "../ImmersionServiceLite";
 
 type SayPiTranscribedEvent = {
   type: "saypi:transcribed";
@@ -909,7 +909,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       acquireMicrophone: (context, event) => {
         // warmup the microphone on idle in mobile view,
         // since there's no mouseover event to trigger it
-        if (ImmersionService.isViewImmersive()) {
+        if (ImmersionStateChecker.isViewImmersive()) {
           EventBus.emit("audio:setupRecording");
         }
       },

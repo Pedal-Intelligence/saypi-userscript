@@ -1,10 +1,11 @@
 import { assign, createMachine } from "xstate";
-import { applyDarkMode, applyNormalMode } from "../ThemeModule";
+import { ThemeManager } from "../themes/ThemeManagerModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { AudibleNotificationsModule } from "../NotificationsModule";
 
 const audible = AudibleNotificationsModule.getInstance();
 const userPreferences = UserPreferenceModule.getInstance();
+const themes = ThemeManager.getInstance();
 
 export const machine = createMachine(
   {
@@ -93,10 +94,10 @@ export const machine = createMachine(
   {
     actions: {
       enterDarkMode: (context, event) => {
-        applyDarkMode();
+        themes.applyDarkMode();
       },
       enterNormalMode: (context, event) => {
-        applyNormalMode();
+        themes.applyNormalMode();
       },
       saveMode: (context, event, { action }) => {
         userPreferences.setTheme(action.params.theme);

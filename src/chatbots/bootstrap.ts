@@ -5,6 +5,7 @@ import { ChatHistorySpeechManager } from "../tts/ChatHistoryManager";
 import { Observation } from "../dom/Observation";
 import { VoiceSettings } from "../tts/VoiceMenu";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
+import { ThemeManager } from "../themes/ThemeManagerModule";
 
 export class DOMObserver {
   ttsUiMgr: ChatHistorySpeechManager | null = null;
@@ -149,7 +150,8 @@ export class DOMObserver {
     const toggleModeBtnPos = 1;
     buttonModule.createEnterButton(controlPanel, toggleModeBtnPos);
     buttonModule.createExitButton(controlPanel, toggleModeBtnPos);
-    buttonModule.createThemeToggleButton(controlPanel, toggleModeBtnPos + 2);
+    const themeManager = ThemeManager.getInstance();
+    themeManager.createThemeToggleButton(controlPanel, toggleModeBtnPos + 2);
   }
 
   findAndDecorateControlPanel(searchRoot: Element): Observation {

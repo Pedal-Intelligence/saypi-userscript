@@ -6,21 +6,19 @@ import { submitErrorHandler } from "./SubmitErrorHandler.ts";
 import exitIconSVG from "./icons/exit.svg";
 import maximizeIconSVG from "./icons/maximize.svg";
 import immersiveIconSVG from "./icons/immersive.svg";
-import rectanglesSVG from "./icons/rectangles.svg";
-import rectanglesDarkModeSVG from "./icons/rectangles-moonlight.svg";
 import callIconSVG from "./icons/call.svg";
 import callStartingIconSVG from "./icons/call-starting.svg";
 import hangupIconSVG from "./icons/hangup.svg";
 import hangupMincedIconSVG from "./icons/hangup-minced.svg";
 import lockIconSVG from "./icons/lock.svg";
 import unlockIconSVG from "./icons/unlock.svg";
-import darkModeIconSVG from "./icons/mode-night.svg";
-import lightModeIconSVG from "./icons/mode-day.svg";
 import getMessage from "./i18n.ts";
 import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
 import AnimationModule from "./AnimationModule.js";
 import { Chatbot } from "./chatbots/Chatbot.ts";
 import { ChatbotService } from "./chatbots/ChatbotService.ts";
+import { IconModule } from "./icons/IconModule.ts";
+import { ImmersionStateChecker } from "./ImmersionServiceLite.ts";
 
 class ButtonModule {
   /**
@@ -28,12 +26,12 @@ class ButtonModule {
    * @param {Chatbot} chatbot - The chatbot instance (dependency injection)
    */
   constructor(chatbot) {
+    this.icons = new IconModule();
     this.userPreferences = UserPreferenceModule.getInstance();
     this.chatbot = chatbot;
     this.immersionService = new ImmersionService(chatbot);
     this.sayPiActor = StateMachineService.actor; // the Say, Pi state machine
     this.screenLockActor = StateMachineService.screenLockActor;
-    this.themeToggleActor = StateMachineService.themeToggleActor;
     // Binding methods to the current instance
     this.registerOtherEvents();
 
@@ -84,8 +82,8 @@ class ButtonModule {
   }
 
   updateIconContent(iconContainer) {
-    if (ImmersionService.isViewImmersive()) {
-      iconContainer.innerHTML = this.getRectanglesSVG();
+    if (ImmersionStateChecker.isViewImmersive()) {
+      iconContainer.innerHTML = this.icons.rectangles();
     }
     iconContainer.classList.add("saypi-icon");
   }
@@ -162,7 +160,7 @@ class ButtonModule {
   // Function to handle auto-submit based on the user preference
   async handleAutoSubmit() {
     const autoSubmitEnabled = await this.userPreferences.getAutoSubmit();
-    const isImmersive = ImmersionService.isViewImmersive(); // must auto-submit in immersive mode
+    const isImmersive = ImmersionStateChecker.isViewImmersive(); // must auto-submit in immersive mode
     if (autoSubmitEnabled || isImmersive) {
       this.simulateFormSubmit();
     } else {
@@ -428,59 +426,6 @@ class ButtonModule {
           instruction.textContent = originalMessage;
         }
         clearTimeout(pressTimer);
-      };
-    }
-    return button;
-  }
-
-  getRectanglesSVG(theme = "light") {
-    if (theme === "dark") {
-      return rectanglesDarkModeSVG;
-    } else {
-      return rectanglesSVG;
-    }
-  }
-
-  toggleTheme() {
-    this.themeToggleActor.send("toggle");
-  }
-
-  /**
-   * Applies the theme to the button icons
-   * @param {string} theme: "dark" | "light"
-   */
-  applyTheme(theme) {
-    const button = document.getElementById("saypi-themeToggleButton");
-    if (button) {
-      if (theme === "dark") {
-        button.innerHTML = darkModeIconSVG;
-        const label = getMessage("toggleThemeToLightMode");
-        button.setAttribute("aria-label", label);
-      } else if (theme === "light") {
-        button.innerHTML = lightModeIconSVG;
-        const label = getMessage("toggleThemeToDarkMode");
-        button.setAttribute("aria-label", label);
-      }
-    }
-    const iconContainer = document.querySelector(".saypi-icon");
-    if (iconContainer) {
-      iconContainer.innerHTML = this.getRectanglesSVG(theme);
-    }
-  }
-
-  createThemeToggleButton(container, position = 0) {
-    const label = getMessage("toggleThemeToDarkMode");
-    const button = document.createElement("button");
-    button.id = "saypi-themeToggleButton";
-    button.type = "button";
-    button.className =
-      "theme-toggle-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
-    button.setAttribute("aria-label", label);
-    button.innerHTML = lightModeIconSVG;
-    if (container) {
-      addChild(container, button, position);
-      button.onclick = () => {
-        this.toggleTheme();
       };
     }
     return button;

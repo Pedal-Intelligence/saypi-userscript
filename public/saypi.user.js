@@ -32678,118 +32678,110 @@ function addChild(parent, child, position = 0) {
     }
 }
 
-;// CONCATENATED MODULE: ./src/ImmersionService.js
-function ImmersionService_typeof(o) { "@babel/helpers - typeof"; return ImmersionService_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, ImmersionService_typeof(o); }
-function ImmersionService_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function ImmersionService_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, ImmersionService_toPropertyKey(descriptor.key), descriptor); } }
-function ImmersionService_createClass(Constructor, protoProps, staticProps) { if (protoProps) ImmersionService_defineProperties(Constructor.prototype, protoProps); if (staticProps) ImmersionService_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function ImmersionService_toPropertyKey(arg) { var key = ImmersionService_toPrimitive(arg, "string"); return ImmersionService_typeof(key) === "symbol" ? key : String(key); }
-function ImmersionService_toPrimitive(input, hint) { if (ImmersionService_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (ImmersionService_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+;// CONCATENATED MODULE: ./src/i18n.ts
+var i18n_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 
-
-
-
-function attachCallButton() {
-  // move the call button back into the text prompt container for desktop view
-  var container = document.getElementById("saypi-prompt-controls-container");
-  var callButton = document.getElementById("saypi-callButton");
-  if (container && callButton) {
-    addChild(container, callButton, -1);
-  }
-}
-function detachCallButton() {
-  // remove the call button from the text prompt container while in mobile view
-  var callButton = document.getElementById("saypi-callButton");
-  if (callButton) {
-    addChild(document.body, callButton);
-  }
-}
-var ImmersionService = /*#__PURE__*/function () {
-  /**
-   * A service that manages the immersive view mode
-   * Uses dependency injection to access the chatbot
-   * @param {Chatbot} chatbot
-   */
-  function ImmersionService(chatbot) {
-    ImmersionService_classCallCheck(this, ImmersionService);
-    this.chatbot = chatbot;
-    this.userPreferences = UserPreferenceModule.getInstance();
-  }
-
-  /**
-   * Perform initial setup of the UI based on the view preferences
-   */
-  ImmersionService_createClass(ImmersionService, [{
-    key: "initMode",
-    value: function initMode() {
-      var _this = this;
-      this.userPreferences.getPrefersImmersiveView().then(function (immersive) {
-        if (immersive) {
-          _this.enterImmersiveMode();
-        } else {
-          ImmersionService.exitImmersiveMode();
+// We'll start with an empty messages object
+let messages = {};
+const userPreferences = UserPreferenceModule.getInstance();
+// This function attempts to load messages for a given locale
+function loadMessages(locale) {
+    return i18n_awaiter(this, void 0, void 0, function* () {
+        try {
+            messages[locale] = yield __webpack_require__(4557)(`./${locale}/messages.json`);
         }
-      });
-    }
-
-    // this function determines whether the immersive view is currently active
-  }, {
-    key: "enterImmersiveMode",
-    value: function enterImmersiveMode() {
-      localStorage.setItem("userViewPreference", "immersive"); // Save preference
-
-      // if not already on the talk page, navigate to it
-      // this is to ensure the user is not stuck in the immersive view on a non-chat page
-      var currentPath = window.location.pathname;
-      if (!this.chatbot.isChatablePath(currentPath)) {
-        var path = this.chatbot.getChatPath();
-        if (window.location.pathname !== path) {
-          // Get the current redirect count
-          var redirectCount = localStorage.getItem("redirectCount");
-          if (!redirectCount) {
-            redirectCount = 0;
-          }
-
-          // If the redirect count is less than the limit, attempt a redirect
-          if (redirectCount < 3) {
-            localStorage.setItem("redirectCount", ++redirectCount);
-            window.location = path;
-          } else {
-            // Reset the redirect count
-            localStorage.removeItem("redirectCount");
-            console.warn("Redirect limit reached. Unable to redirect to chat page.");
-          }
+        catch (error) {
+            console.error(`Failed to load messages for locale: ${locale}`, error);
         }
-      }
-      var element = document.documentElement;
-      element.classList.remove("desktop-view");
-      element.classList.add("immersive-view");
-      detachCallButton();
-      enterFullscreen();
-      this.userPreferences.getTheme().then(function (theme) {
-        buttonModule.applyTheme(theme);
-      });
+    });
+}
+function getLocalMessage(locale, messageName, substitutions) {
+    // if the locale is not in the messages object, default to English
+    if (!messages[locale]) {
+        locale = "en";
     }
-  }], [{
-    key: "isViewImmersive",
-    value: function isViewImmersive() {
-      var element = document.documentElement;
-      return element.classList.contains("immersive-view");
+    // if the message is not in the locale object, default to the message name and log an error
+    if (!messages[locale] || !messages[locale][messageName]) {
+        console.error(`Message not found for locale: ${locale} and message name: ${messageName}`);
+        return messageName;
     }
-  }, {
-    key: "exitImmersiveMode",
-    value: function exitImmersiveMode() {
-      localStorage.setItem("userViewPreference", "desktop"); // Save preference
+    else {
+        const rawMessage = messages[locale][messageName].message;
+        if (substitutions) {
+            return rawMessage.replace("$1", substitutions.toString());
+        }
+        else {
+            return rawMessage;
+        }
+    }
+}
+// Call this function to initialize the messages
+function convertLanguageToLocale(language) {
+    return language.split("_")[0];
+}
+function getMessage(messageName, substitutions) {
+    // Check if running as a Chrome extension
+    if (typeof chrome !== "undefined" && chrome.i18n) {
+        return chrome.i18n.getMessage(messageName, substitutions);
+    }
+    else {
+        // Fallback for userscript
+        userPreferences
+            .getLanguage()
+            .then((lang) => {
+            let locale = convertLanguageToLocale(lang);
+            if (!messages[locale]) {
+                loadMessages(locale);
+            }
+            return getLocalMessage(locale, messageName);
+        })
+            .catch((error) => {
+            console.error(`Failed to get language preference`, error);
+            let locale = "en";
+            if (!messages[locale]) {
+                loadMessages(locale);
+            }
+            return getLocalMessage(locale, messageName);
+        });
+    }
+    return messageName;
+}
+/* harmony default export */ const i18n = (getMessage);
 
-      var element = document.documentElement;
-      element.classList.remove("immersive-view");
-      element.classList.add("desktop-view");
-      attachCallButton();
-      exitFullscreen();
+;// CONCATENATED MODULE: ./src/icons/mode-night.svg
+/* harmony default export */ const mode_night = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"Layer_2\" data-name=\"Layer 2\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 616 420.11\">\n  <defs>\n    <style>\n      .cls-1 {\n        clip-path: url(#clippath);\n      }\n\n      .cls-2 {\n        fill: none;\n      }\n\n      .cls-2, .cls-3, .cls-4 {\n        stroke-width: 0px;\n      }\n\n      .cls-3 {\n        fill: #1b447a;\n      }\n\n      .cls-4 {\n        fill: #fff;\n      }\n    </style>\n    <clipPath id=\"clippath\">\n      <rect class=\"cls-2\" x=\"-1\" y=\"-.04\" width=\"1024\" height=\"420\"/>\n    </clipPath>\n  </defs>\n  <g class=\"cls-1\">\n    <path class=\"cls-3\" d=\"M404.52,419.8h-194.73C93.88,419.8-.09,325.78-.09,209.82S93.88-.15,209.79-.15h194.73c115.92,0,210.88,94.01,210.88,209.97s-94.97,209.97-210.88,209.97Z\"/>\n  </g>\n  <path class=\"cls-4\" d=\"M404.19,209.82c0,3.05-.07,6.09-.23,9.15s-.37,6.09-.67,9.12c-.31,3.04-.67,6.07-1.12,9.08s-.97,6.01-1.56,9.01c-.6,2.99-1.27,5.96-2,8.92-.73,2.96-1.55,5.89-2.44,8.81s-1.84,5.81-2.87,8.68c-1.03,2.87-2.12,5.72-3.29,8.53s-2.4,5.6-3.71,8.36c-1.31,2.76-2.67,5.48-4.11,8.17s-2.93,5.33-4.51,7.95-3.2,5.19-4.89,7.73c-1.69,2.53-3.45,5.03-5.27,7.48-1.81,2.45-3.69,4.85-5.61,7.21-1.93,2.36-3.93,4.67-5.97,6.93-2.05,2.25-4.15,4.47-6.31,6.61-2.16,2.15-4.36,4.27-6.61,6.31-2.27,2.05-4.57,4.04-6.92,5.97-2.36,1.93-4.76,3.81-7.21,5.63s-4.93,3.57-7.48,5.27c-2.53,1.69-5.11,3.32-7.72,4.89s-5.27,3.07-7.95,4.51-5.41,2.81-8.16,4.11-5.55,2.55-8.36,3.71c-2.81,1.17-5.67,2.27-8.53,3.29s-5.76,1.97-8.68,2.87-5.85,1.69-8.81,2.44c-2.96.73-5.93,1.4-8.92,2-2.99.6-6,1.12-9,1.56-3.01.45-6.04.83-9.07,1.12-3.04.31-6.07.52-9.12.68-3.04.15-6.09.23-9.13.23s-6.09-.08-9.15-.23c-3.04-.15-6.08-.37-9.12-.68-3.03-.29-6.05-.67-9.07-1.12-3.01-.44-6.01-.97-9-1.56s-5.96-1.27-8.92-2c-2.96-.75-5.89-1.56-8.81-2.44s-5.81-1.84-8.68-2.87c-2.87-1.03-5.72-2.12-8.53-3.29s-5.6-2.4-8.36-3.71c-2.76-1.31-5.48-2.67-8.16-4.11s-5.33-2.95-7.95-4.51-5.19-3.2-7.72-4.89c-2.53-1.69-5.03-3.45-7.48-5.27s-4.85-3.69-7.2-5.63c-2.36-1.93-4.67-3.93-6.92-5.97-2.27-2.05-4.47-4.15-6.61-6.31s-4.25-4.36-6.31-6.61c-2.05-2.27-4.04-4.57-5.97-6.93s-3.81-4.76-5.61-7.21c-1.81-2.45-3.57-4.95-5.27-7.48s-3.32-5.12-4.89-7.73-3.07-5.27-4.51-7.95c-1.44-2.69-2.81-5.41-4.11-8.17s-2.53-5.55-3.71-8.36-2.27-5.67-3.29-8.53-1.99-5.76-2.87-8.68c-.88-2.92-1.69-5.85-2.44-8.81-.73-2.96-1.4-5.93-2-8.92-.6-3-1.12-6-1.56-9.01s-.83-6.04-1.12-9.08c-.29-3.03-.52-6.07-.67-9.12s-.23-6.09-.23-9.15.07-6.09.23-9.15c.15-3.05.37-6.09.67-9.12.29-3.04.67-6.07,1.12-9.08s.97-6.03,1.56-9.01,1.27-5.96,2-8.92c.75-2.96,1.56-5.89,2.44-8.81s1.84-5.81,2.87-8.68,2.12-5.72,3.29-8.53,2.4-5.6,3.71-8.36,2.67-5.48,4.11-8.16,2.93-5.33,4.51-7.95,3.2-5.19,4.89-7.73,3.45-5.03,5.27-7.48c1.81-2.45,3.69-4.85,5.63-7.21s3.93-4.67,5.97-6.93,4.15-4.47,6.31-6.63,4.36-4.25,6.61-6.31,4.56-4.04,6.92-5.97c2.36-1.93,4.76-3.81,7.2-5.63,2.45-1.81,4.95-3.57,7.48-5.27s5.11-3.33,7.72-4.89,5.27-3.07,7.95-4.51,5.41-2.81,8.16-4.11c2.76-1.31,5.55-2.55,8.36-3.71,2.81-1.17,5.67-2.27,8.53-3.29s5.76-1.99,8.68-2.87,5.85-1.69,8.81-2.44c2.95-.73,5.93-1.4,8.92-2s5.99-1.12,9-1.56,6.04-.81,9.07-1.12c3.03-.29,6.07-.52,9.12-.67s6.09-.23,9.15-.23,6.09.07,9.13.23c3.05.15,6.08.37,9.12.67,3.03.31,6.05.67,9.07,1.12,3.01.45,6.01.97,9,1.56,2.99.6,5.96,1.27,8.92,2s5.89,1.55,8.81,2.44,5.81,1.84,8.68,2.87,5.72,2.12,8.53,3.29,5.6,2.4,8.36,3.71,5.48,2.67,8.16,4.11,5.33,2.93,7.95,4.51,5.19,3.2,7.72,4.89c2.53,1.69,5.03,3.45,7.48,5.27s4.85,3.69,7.21,5.63,4.67,3.93,6.92,5.97c2.25,2.05,4.47,4.15,6.61,6.31s4.25,4.36,6.31,6.63,4.04,4.57,5.97,6.93c1.93,2.36,3.81,4.76,5.61,7.21,1.81,2.45,3.57,4.93,5.27,7.48s3.32,5.11,4.89,7.73c1.57,2.61,3.07,5.27,4.51,7.95s2.81,5.41,4.11,8.16c1.31,2.76,2.53,5.55,3.71,8.36,1.17,2.81,2.27,5.67,3.29,8.53,1.03,2.87,1.97,5.76,2.87,8.68s1.69,5.85,2.44,8.81c.75,2.96,1.41,5.93,2,8.92.59,2.99,1.12,6,1.56,9.01.44,3.01.81,6.04,1.12,9.08.29,3.03.52,6.07.67,9.12.15,3.04.23,6.09.23,9.15h-.01Z\"/>\n  <path class=\"cls-3\" d=\"M147.16,222.56c-13.33-34.91-5.97-72.67,16.07-99.69-3.72.88-7.41,2.01-11.08,3.43-45.43,17.37-68.2,68.33-50.8,113.79,17.36,45.45,68.31,68.23,113.73,50.83,3.67-1.4,7.17-3.04,10.53-4.83-34.43-5.4-65.08-28.6-78.45-63.51h0Z\"/>\n  <path class=\"cls-3\" d=\"M261.45,169.01l23.6,7.47-23.6,7.48-7.48,23.57-7.44-23.57-23.6-7.48,23.6-7.47,7.44-23.59,7.48,23.59Z\"/>\n  <path class=\"cls-3\" d=\"M324.71,192.12l15.67,4.96-15.67,4.96-4.93,15.64-4.96-15.64-15.63-4.96,15.63-4.96,4.96-15.64,4.93,15.64Z\"/>\n  <path class=\"cls-3\" d=\"M288.52,221.9l11.03,3.48-11.03,3.51-3.48,11-3.49-11-11-3.51,11-3.48,3.49-11.03,3.48,11.03Z\"/>\n</svg>");
+;// CONCATENATED MODULE: ./src/icons/mode-day.svg
+/* harmony default export */ const mode_day = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"Layer_1\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 616 420\">\n  <defs>\n    <style>\n      .cls-1 {\n        clip-path: url(#clippath);\n      }\n\n      .cls-2 {\n        fill: none;\n      }\n\n      .cls-2, .cls-3, .cls-4 {\n        stroke-width: 0px;\n      }\n\n      .cls-3 {\n        fill: #fff;\n      }\n\n      .cls-4 {\n        fill: #ffc107;\n      }\n    </style>\n    <clipPath id=\"clippath\">\n      <rect class=\"cls-2\" x=\"-408\" y=\"0\" width=\"1024\" height=\"420\"/>\n    </clipPath>\n  </defs>\n  <g class=\"cls-1\">\n    <path class=\"cls-4\" d=\"M405.6,420.18h-195.6C94.05,420.18,0,326.13,0,210.13S94.05.08,210,.08h195.63c115.95,0,209.96,94.06,209.96,210.05-.03,116-94.02,210.05-209.99,210.05Z\"/>\n  </g>\n  <path class=\"cls-3\" d=\"M587.98,210.13c0,3.05-.08,6.1-.22,9.15-.15,3.05-.38,6.09-.67,9.13-.3,3.03-.68,6.06-1.12,9.08-.45,3.02-.97,6.02-1.57,9.01-.59,2.99-1.26,5.97-2,8.93s-1.56,5.9-2.44,8.82c-.88,2.92-1.84,5.81-2.86,8.68-1.03,2.88-2.13,5.72-3.29,8.54s-2.4,5.6-3.71,8.36c-1.3,2.76-2.67,5.48-4.11,8.17-1.44,2.69-2.94,5.34-4.51,7.96s-3.2,5.19-4.9,7.73c-1.69,2.54-3.45,5.03-5.26,7.48-1.82,2.45-3.69,4.85-5.63,7.21-1.93,2.36-3.92,4.67-5.97,6.93-2.05,2.26-4.15,4.47-6.31,6.63-2.16,2.16-4.36,4.26-6.63,6.31-2.26,2.05-4.56,4.04-6.92,5.97-2.35,1.93-4.76,3.81-7.21,5.63-2.45,1.82-4.94,3.57-7.47,5.27-2.54,1.69-5.11,3.32-7.73,4.89s-5.27,3.07-7.95,4.51c-2.69,1.44-5.41,2.81-8.17,4.11-2.76,1.3-5.55,2.54-8.36,3.71-2.82,1.17-5.66,2.26-8.54,3.29-2.87,1.03-5.76,1.98-8.68,2.87-2.92.89-5.85,1.7-8.81,2.44-2.95.74-5.93,1.41-8.92,2.01s-5.99,1.11-9.01,1.56c-3.02.45-6.04.82-9.08,1.12-3.03.3-6.07.53-9.12.67-3.05.15-6.09.22-9.14.22s-6.09-.07-9.14-.22c-3.05-.15-6.08-.37-9.12-.67-3.04-.3-6.06-.67-9.07-1.12-3.02-.45-6.02-.97-9.01-1.56s-5.96-1.27-8.92-2.01-5.9-1.55-8.81-2.44-5.81-1.84-8.68-2.87c-2.88-1.03-5.72-2.13-8.53-3.29-2.82-1.17-5.6-2.41-8.36-3.71-2.76-1.31-5.48-2.68-8.17-4.11-2.69-1.44-5.34-2.94-7.95-4.51s-5.19-3.2-7.73-4.89c-2.53-1.7-5.03-3.45-7.47-5.27-2.45-1.81-4.85-3.69-7.21-5.63-2.35-1.94-4.67-3.93-6.92-5.97-2.26-2.05-4.47-4.15-6.63-6.31-2.16-2.16-4.26-4.36-6.3-6.63-2.05-2.26-4.04-4.57-5.97-6.93-1.94-2.35-3.81-4.76-5.63-7.21-1.82-2.45-3.57-4.94-5.27-7.48-1.7-2.54-3.33-5.11-4.9-7.73s-3.07-5.27-4.51-7.96c-1.44-2.69-2.81-5.42-4.11-8.17-1.31-2.76-2.54-5.55-3.71-8.36s-2.26-5.66-3.29-8.54c-1.03-2.87-1.98-5.77-2.86-8.68-.89-2.92-1.7-5.86-2.44-8.82-.74-2.96-1.41-5.93-2-8.93-.6-2.99-1.12-5.99-1.56-9.01-.45-3.02-.82-6.05-1.12-9.08-.3-3.04-.53-6.08-.67-9.13-.15-3.05-.23-6.09-.23-9.15s.08-6.1.22-9.15c.15-3.05.38-6.08.68-9.12.3-3.04.67-6.06,1.12-9.08.44-3.02.96-6.03,1.56-9.02.59-2.99,1.26-5.97,2-8.93.74-2.96,1.56-5.9,2.44-8.81.89-2.92,1.84-5.82,2.86-8.69,1.03-2.88,2.13-5.72,3.29-8.54s2.4-5.6,3.71-8.36c1.3-2.76,2.67-5.48,4.11-8.17,1.44-2.69,2.94-5.34,4.51-7.96,1.57-2.61,3.2-5.19,4.9-7.73,1.69-2.53,3.45-5.03,5.27-7.48,1.81-2.45,3.69-4.85,5.63-7.21,1.93-2.36,3.92-4.67,5.97-6.93,2.05-2.26,4.15-4.47,6.3-6.63s4.36-4.26,6.63-6.31c2.26-2.05,4.57-4.04,6.92-5.97,2.36-1.94,4.76-3.81,7.21-5.63s4.94-3.57,7.47-5.27c2.54-1.7,5.11-3.33,7.73-4.9s5.27-3.07,7.95-4.51c2.69-1.44,5.41-2.81,8.17-4.11,2.76-1.31,5.54-2.54,8.36-3.71,2.81-1.17,5.66-2.27,8.53-3.29,2.87-1.03,5.77-1.98,8.68-2.87s5.85-1.7,8.81-2.44c2.96-.74,5.93-1.41,8.92-2.01,2.99-.59,5.99-1.11,9.01-1.56s6.04-.82,9.07-1.12c3.04-.3,6.07-.52,9.12-.67s6.09-.22,9.14-.22,6.09.07,9.14.22,6.09.38,9.12.67c3.04.3,6.06.67,9.08,1.12s6.02.97,9.01,1.56c2.99.6,5.97,1.27,8.92,2.01,2.96.74,5.9,1.56,8.81,2.44,2.92.89,5.81,1.84,8.68,2.87,2.88,1.03,5.72,2.13,8.54,3.29,2.81,1.17,5.6,2.4,8.36,3.71,2.76,1.3,5.47,2.67,8.17,4.11,2.69,1.44,5.34,2.94,7.95,4.51s5.19,3.2,7.73,4.9c2.53,1.69,5.03,3.45,7.47,5.27s4.85,3.69,7.21,5.63c2.36,1.93,4.67,3.92,6.92,5.97,2.26,2.05,4.47,4.15,6.63,6.31s4.26,4.36,6.31,6.63,4.04,4.57,5.97,6.93c1.94,2.36,3.81,4.76,5.63,7.21,1.81,2.45,3.57,4.95,5.26,7.48,1.7,2.54,3.33,5.11,4.9,7.73,1.57,2.62,3.07,5.27,4.51,7.96,1.44,2.69,2.81,5.41,4.11,8.17,1.31,2.76,2.54,5.55,3.71,8.36s2.27,5.66,3.29,8.54c1.03,2.87,1.98,5.77,2.87,8.69.88,2.92,1.7,5.85,2.44,8.81s1.41,5.94,2,8.93c.6,2.99,1.12,5.99,1.57,9.02.44,3.02.82,6.04,1.12,9.08.3,3.04.52,6.07.67,9.12.15,3.05.22,6.1.22,9.15Z\"/>\n  <path class=\"cls-4\" d=\"M460.12,213.31c0,1.91-.09,3.82-.28,5.72-.19,1.9-.47,3.79-.84,5.67-.37,1.88-.84,3.73-1.39,5.56-.56,1.83-1.2,3.63-1.93,5.4-.73,1.77-1.55,3.49-2.45,5.18s-1.89,3.33-2.95,4.92c-1.06,1.59-2.2,3.13-3.41,4.6s-2.49,2.9-3.85,4.25-2.77,2.64-4.24,3.85-3.01,2.35-4.6,3.42c-1.59,1.06-3.23,2.04-4.91,2.94-1.69.91-3.42,1.72-5.18,2.45s-3.56,1.38-5.4,1.93c-1.83.55-3.68,1.02-5.56,1.39-1.88.38-3.77.66-5.67.84-1.91.19-3.81.28-5.72.28s-3.82-.09-5.72-.28c-1.9-.19-3.79-.47-5.67-.84-1.88-.37-3.73-.84-5.56-1.39-1.83-.56-3.63-1.2-5.4-1.93s-3.49-1.55-5.18-2.45c-1.68-.9-3.32-1.88-4.91-2.94-1.59-1.06-3.13-2.2-4.6-3.42s-2.89-2.49-4.24-3.85-2.64-2.77-3.85-4.25-2.35-3.01-3.41-4.6c-1.06-1.59-2.05-3.23-2.95-4.92s-1.72-3.41-2.45-5.18c-.73-1.77-1.38-3.56-1.93-5.4-.55-1.83-1.02-3.68-1.39-5.56-.38-1.88-.66-3.77-.84-5.67-.19-1.91-.28-3.81-.28-5.72s.09-3.82.28-5.73c.19-1.9.47-3.79.84-5.67.37-1.88.84-3.73,1.39-5.56.56-1.83,1.2-3.63,1.93-5.4.73-1.77,1.55-3.49,2.45-5.18s1.89-3.33,2.95-4.92c1.06-1.59,2.2-3.13,3.41-4.6s2.49-2.9,3.85-4.25,2.77-2.64,4.24-3.85,3.01-2.35,4.6-3.42c1.59-1.06,3.23-2.04,4.91-2.94,1.69-.9,3.42-1.72,5.18-2.45,1.77-.73,3.56-1.38,5.4-1.93,1.83-.55,3.68-1.02,5.56-1.39s3.77-.66,5.67-.84c1.91-.19,3.81-.28,5.72-.28s3.82.09,5.72.28c1.9.19,3.79.47,5.67.84s3.73.84,5.56,1.39c1.83.56,3.63,1.2,5.4,1.93,1.77.73,3.49,1.55,5.18,2.45,1.68.9,3.32,1.88,4.91,2.94,1.59,1.07,3.13,2.2,4.6,3.42s2.89,2.49,4.24,3.85,2.64,2.77,3.85,4.25,2.35,3.01,3.41,4.6c1.06,1.59,2.05,3.23,2.95,4.92s1.72,3.41,2.45,5.18c.73,1.77,1.38,3.56,1.93,5.4.55,1.83,1.02,3.68,1.39,5.56.38,1.88.66,3.77.84,5.67.19,1.91.28,3.81.28,5.73Z\"/>\n  <path class=\"cls-4\" d=\"M398.04,85.53h7.36v44.92h-7.36v-44.92Z\"/>\n  <path class=\"cls-4\" d=\"M316.77,117.9l5.64-4.74,28.88,34.4-5.64,4.74-28.88-34.4Z\"/>\n  <path class=\"cls-4\" d=\"M275.23,194.81l1.27-7.26,44.23,7.76-1.27,7.26-44.23-7.76Z\"/>\n  <path class=\"cls-4\" d=\"M289.33,274.16l38.85-22.52,3.69,6.38-38.86,22.52-3.69-6.38Z\"/>\n  <path class=\"cls-4\" d=\"M354.77,332.22l15.28-42.24,6.92,2.51-15.28,42.24-6.92-2.51Z\"/>\n  <path class=\"cls-4\" d=\"M426.77,292.35l6.92-2.54,15.45,42.18-6.92,2.53-15.45-42.17Z\"/>\n  <path class=\"cls-4\" d=\"M471.7,257.73l3.67-6.39,38.95,22.35-3.67,6.39-38.95-22.35Z\"/>\n  <path class=\"cls-4\" d=\"M482.57,195.06l44.19-7.94,1.3,7.25-44.19,7.94-1.3-7.25Z\"/>\n  <path class=\"cls-4\" d=\"M451.9,147.28l28.74-34.52,5.66,4.71-28.73,34.52-5.66-4.71Z\"/>\n</svg>");
+;// CONCATENATED MODULE: ./src/icons/rectangles.svg
+/* harmony default export */ const rectangles = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"background-layer\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\"\n  viewBox=\"0 0 307 640\">\n  <defs>\n    <style>\n      .innermost, .second, .third, .fourth, .fifth, .outermost {\n      stroke-width: 0px;\n      }\n\n      .outermost {\n      fill: #e4f2d1;\n      }\n\n      .second {\n      fill: #cce8b5;\n      }\n\n      .third {\n      fill: #b3db95;\n      }\n\n      .fourth {\n      fill: #9bd078;\n      }\n\n      .fifth {\n      fill: #83c55c;\n      }\n\n      .innermost {\n      fill: #428a2f;\n      }\n    </style>\n  </defs>\n  <path class=\"outermost\"\n    d=\"m306.9,320c0,105.3-.02,210.6.1,315.91,0,3.42-.67,4.1-4.09,4.09-99.6-.12-199.21-.12-298.81,0C.67,640,0,639.33,0,635.91.11,425.3.11,214.7,0,4.09,0,.67.67,0,4.09,0,103.7.12,203.3.12,302.91,0c3.42,0,4.1.67,4.09,4.09-.12,105.3-.1,210.6-.1,315.91Z\" />\n  <path class=\"second\"\n    d=\"m275.92,323c0,87.63,0,175.27,0,262.9,0,7.24-.55,7.93-7.86,7.98-14.66.09-29.31.03-43.97.03-60.96,0-121.92,0-182.88,0q-7.13,0-7.14-7.24c0-176.1,0-352.21,0-528.31q0-7.26,7.12-7.26c75.78,0,151.56,0,227.35,0q7.38,0,7.38,7.5c0,88.13,0,176.27,0,264.4Z\" />\n  <path class=\"third\"\n    d=\"m68.06,322.24c0-69.47,0-138.94,0-208.41,0-8.99,1.33-10.13,10.49-9.12,1.98.22,3.98.32,5.97.32,46.13.02,92.26.02,138.39,0,3.48,0,6.92-.23,10.41-.67,5.5-.7,8.74.46,8.73,7.25-.18,138.94-.13,277.88-.13,416.81,0,.33,0,.67,0,1q-.14,10.51-10.39,10.51c-52.13,0-104.25,0-156.38,0q-7.09,0-7.09-7.28c0-70.14,0-140.27,0-210.41Z\" />\n  <path class=\"fourth\"\n    d=\"m103.02,322.5c0-52.46,0-104.91,0-157.37,0-6.68.36-7.06,7.07-7.06,30.3-.01,60.6.07,90.9-.09,4.54-.02,6.08,1.33,6.07,5.98-.1,105.58-.1,211.16,0,316.74,0,4.18-1.27,5.37-5.38,5.35-29.3-.15-58.6-.08-87.9-.08q-10.76,0-10.76-11.09c0-50.79,0-101.58,0-152.37Z\" />\n  <path class=\"fifth\"\n    d=\"m173,322.2c0,35.29,0,70.58,0,105.88q0,6.89-6.99,6.9c-8.15,0-16.31-.13-24.46.06-3.47.08-4.68-1.09-4.61-4.59.18-9.65.06-19.31.06-28.96,0-58.26-.01-116.53.02-174.79,0-4.76-1.12-9.46-.14-14.3.51-2.54,1.39-3.38,3.8-3.36,8.82.06,17.64.14,26.46-.02,4.59-.09,5.95,1.85,5.94,6.33-.14,35.62-.08,71.25-.08,106.87Z\" />\n  <path class=\"innermost\"\n    d=\"m151.04,322.01c0-9.99.07-19.97-.05-29.96-.04-2.93.83-4.18,3.95-4.18,3.06,0,4.03,1.12,4.02,4.11-.09,19.97-.08,39.94.01,59.91.01,2.96-.84,4.16-3.96,4.14-3.03-.01-4.08-1.04-4.03-4.08.14-9.98.05-19.97.05-29.96Z\" />\n</svg>");
+;// CONCATENATED MODULE: ./src/icons/rectangles-moonlight.svg
+/* harmony default export */ const rectangles_moonlight = ("<svg xmlns=\"http://www.w3.org/2000/svg\" id=\"background-layer\" data-name=\"Layer 1\"\n  viewBox=\"0 0 307 640\"\n  width=\"307px\" height=\"640px\">\n  <defs>\n    <style>.innermost, .second, .third, .fourth, .fifth, .outermost { stroke-width: 0px; }\n      .outermost { fill: #a9b7bf; }\n      .second { fill: #8f9ca7; }\n      .third { fill: #787d83; }\n      .fourth { fill: #6c7378; }\n      .fifth { fill: #313437; }\n      .innermost { fill: #1c1c1c; }\n</style>\n  </defs>\n  <path class=\"outermost\"\n    d=\"m306.9,320c0,105.3-.02,210.6.1,315.91,0,3.42-.67,4.1-4.09,4.09-99.6-.12-199.21-.12-298.81,0C.67,640,0,639.33,0,635.91.11,425.3.11,214.7,0,4.09,0,.67.67,0,4.09,0,103.7.12,203.3.12,302.91,0c3.42,0,4.1.67,4.09,4.09-.12,105.3-.1,210.6-.1,315.91Z\" />\n  <path class=\"second\"\n    d=\"m275.92,323c0,87.63,0,175.27,0,262.9,0,7.24-.55,7.93-7.86,7.98-14.66.09-29.31.03-43.97.03-60.96,0-121.92,0-182.88,0q-7.13,0-7.14-7.24c0-176.1,0-352.21,0-528.31q0-7.26,7.12-7.26c75.78,0,151.56,0,227.35,0q7.38,0,7.38,7.5c0,88.13,0,176.27,0,264.4Z\" />\n  <path class=\"third\"\n    d=\"m68.06,322.24c0-69.47,0-138.94,0-208.41,0-8.99,1.33-10.13,10.49-9.12,1.98.22,3.98.32,5.97.32,46.13.02,92.26.02,138.39,0,3.48,0,6.92-.23,10.41-.67,5.5-.7,8.74.46,8.73,7.25-.18,138.94-.13,277.88-.13,416.81,0,.33,0,.67,0,1q-.14,10.51-10.39,10.51c-52.13,0-104.25,0-156.38,0q-7.09,0-7.09-7.28c0-70.14,0-140.27,0-210.41Z\" />\n  <path class=\"fourth\"\n    d=\"m103.02,322.5c0-52.46,0-104.91,0-157.37,0-6.68.36-7.06,7.07-7.06,30.3-.01,60.6.07,90.9-.09,4.54-.02,6.08,1.33,6.07,5.98-.1,105.58-.1,211.16,0,316.74,0,4.18-1.27,5.37-5.38,5.35-29.3-.15-58.6-.08-87.9-.08q-10.76,0-10.76-11.09c0-50.79,0-101.58,0-152.37Z\" />\n  <path class=\"fifth\"\n    d=\"m173,322.2c0,35.29,0,70.58,0,105.88q0,6.89-6.99,6.9c-8.15,0-16.31-.13-24.46.06-3.47.08-4.68-1.09-4.61-4.59.18-9.65.06-19.31.06-28.96,0-58.26-.01-116.53.02-174.79,0-4.76-1.12-9.46-.14-14.3.51-2.54,1.39-3.38,3.8-3.36,8.82.06,17.64.14,26.46-.02,4.59-.09,5.95,1.85,5.94,6.33-.14,35.62-.08,71.25-.08,106.87Z\" />\n  <path class=\"innermost\"\n    d=\"m151.04,322.01c0-9.99.07-19.97-.05-29.96-.04-2.93.83-4.18,3.95-4.18,3.06,0,4.03,1.12,4.02,4.11-.09,19.97-.08,39.94.01,59.91.01,2.96-.84,4.16-3.96,4.14-3.03-.01-4.08-1.04-4.03-4.08.14-9.98.05-19.97.05-29.96Z\" />\n</svg>");
+;// CONCATENATED MODULE: ./src/icons/IconModule.ts
+
+
+
+
+class IconModule {
+    rectangles(theme = "light") {
+        if (theme === "dark") {
+            return rectangles_moonlight;
+        }
+        else {
+            return rectangles;
+        }
     }
-  }]);
-  return ImmersionService;
-}();
+}
+IconModule.darkMode = mode_night;
+IconModule.lightMode = mode_day;
+
 ;// CONCATENATED MODULE: ./src/AnimationModule.js
 function AnimationModule_typeof(o) { "@babel/helpers - typeof"; return AnimationModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, AnimationModule_typeof(o); }
 function AnimationModule_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -32868,84 +32860,6 @@ AnimationModule_defineProperty(AnimationModule, "rectanglesSelector", ".outermos
 AnimationModule_defineProperty(AnimationModule, "callButtonSelector", ".call-button");
 AnimationModule_defineProperty(AnimationModule, "talkButtonAnimations", ["piThinking", "piSpeaking", "userSpeaking", "transcribing"]);
 AnimationModule_defineProperty(AnimationModule, "callButtonAnimations", ["glow", "glow-fade-out"]);
-
-;// CONCATENATED MODULE: ./src/i18n.ts
-var i18n_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-// We'll start with an empty messages object
-let messages = {};
-const userPreferences = UserPreferenceModule.getInstance();
-// This function attempts to load messages for a given locale
-function loadMessages(locale) {
-    return i18n_awaiter(this, void 0, void 0, function* () {
-        try {
-            messages[locale] = yield __webpack_require__(4557)(`./${locale}/messages.json`);
-        }
-        catch (error) {
-            console.error(`Failed to load messages for locale: ${locale}`, error);
-        }
-    });
-}
-function getLocalMessage(locale, messageName, substitutions) {
-    // if the locale is not in the messages object, default to English
-    if (!messages[locale]) {
-        locale = "en";
-    }
-    // if the message is not in the locale object, default to the message name and log an error
-    if (!messages[locale] || !messages[locale][messageName]) {
-        console.error(`Message not found for locale: ${locale} and message name: ${messageName}`);
-        return messageName;
-    }
-    else {
-        const rawMessage = messages[locale][messageName].message;
-        if (substitutions) {
-            return rawMessage.replace("$1", substitutions.toString());
-        }
-        else {
-            return rawMessage;
-        }
-    }
-}
-// Call this function to initialize the messages
-function convertLanguageToLocale(language) {
-    return language.split("_")[0];
-}
-function getMessage(messageName, substitutions) {
-    // Check if running as a Chrome extension
-    if (typeof chrome !== "undefined" && chrome.i18n) {
-        return chrome.i18n.getMessage(messageName, substitutions);
-    }
-    else {
-        // Fallback for userscript
-        userPreferences
-            .getLanguage()
-            .then((lang) => {
-            let locale = convertLanguageToLocale(lang);
-            if (!messages[locale]) {
-                loadMessages(locale);
-            }
-            return getLocalMessage(locale, messageName);
-        })
-            .catch((error) => {
-            console.error(`Failed to get language preference`, error);
-            let locale = "en";
-            if (!messages[locale]) {
-                loadMessages(locale);
-            }
-            return getLocalMessage(locale, messageName);
-        });
-    }
-    return messageName;
-}
-/* harmony default export */ const i18n = (getMessage);
 
 ;// CONCATENATED MODULE: ./src/NotificationsModule.ts
 var NotificationsModule_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -33597,6 +33511,20 @@ const releaseWakeLock = () => WakeLockModule_awaiter(void 0, void 0, void 0, fun
         wakeLock = null;
     }
 });
+
+;// CONCATENATED MODULE: ./src/ImmersionServiceLite.ts
+/**
+ * This class is a simplified version of the Immersion Service class,
+ * with fewer dependencies and a more focused purpose,
+ * for client who only need to check the state of the immersive view.
+ */
+class ImmersionStateChecker {
+    // this function determines whether the immersive view is currently active
+    static isViewImmersive() {
+        const element = document.documentElement;
+        return element.classList.contains("immersive-view");
+    }
+}
 
 ;// CONCATENATED MODULE: ./src/state-machines/SayPiMachine.ts
 
@@ -34316,7 +34244,7 @@ const SayPiMachine_machine = createMachine({
         acquireMicrophone: (context, event) => {
             // warmup the microphone on idle in mobile view,
             // since there's no mouseover event to trigger it
-            if (ImmersionService.isViewImmersive()) {
+            if (ImmersionStateChecker.isViewImmersive()) {
                 EventBus.emit("audio:setupRecording");
             }
         },
@@ -34635,17 +34563,6 @@ const ScreenLockMachine_machine = createMachine({
     delays: {},
 });
 
-;// CONCATENATED MODULE: ./src/ThemeModule.ts
-
-function applyDarkMode() {
-    document.body.classList.add("dark");
-    buttonModule.applyTheme("dark");
-}
-function applyNormalMode() {
-    document.body.classList.remove("dark");
-    buttonModule.applyTheme("light");
-}
-
 ;// CONCATENATED MODULE: ./src/state-machines/ThemeToggleMachine.ts
 
 
@@ -34653,6 +34570,7 @@ function applyNormalMode() {
 
 const audible = AudibleNotificationsModule.getInstance();
 const ThemeToggleMachine_userPreferences = UserPreferenceModule.getInstance();
+const themes = ThemeManager.getInstance();
 const ThemeToggleMachine_machine = createMachine({
     /** @xstate-layout N4IgpgJg5mDOIC5QBcAWYC2YAqB7KUANmAHSG4CGEAlgHZQDEA2gAwC6ioADrrNctVy1OIAB6IAzCwAsJAGwAmaQE5lAdjkTlStdICsAGhABPSdLkllLRdK1yAjHr1yAHAF83RtJhz4ipcio6RiZ7DiQQHj4BIRFxBClZG1UNLR19I1MEe3tlEjUFOScXWxYXAoU9Dy90LDwCYhIAOVwAJwwKQgACDFwIMAZkP2JWcO5efkFhCPj7FkKSBRd7BV17FVW5NUzEZZIVVVVK45dC6pBvOuHSABEKVoBrHr6BoYawUZEoydiZxDmciQShI1C4JEsZGoJHIdtk1GpLHoJCspA4tMo9NIPJ4QLQXvAIpdfO8vhMYtNQPEALQwkyIKl6SyHZks5QSc5E+r+MiUGj0UnRKZxRDSBSwuZ5JzKFwpMqg6QuKo4znXZptDrdXr9AU-Clif72Er5FjIpEKexbFjbOnZPZbZSuaTSexqB2ndzK2rE7l3R7PbURb7k4UINRWxZ6FgsewSErqGQuWEY-KFZxW5Qu3JKbFuIA */
     context: {
@@ -34738,10 +34656,10 @@ const ThemeToggleMachine_machine = createMachine({
 }, {
     actions: {
         enterDarkMode: (context, event) => {
-            applyDarkMode();
+            themes.applyDarkMode();
         },
         enterNormalMode: (context, event) => {
-            applyNormalMode();
+            themes.applyNormalMode();
         },
         saveMode: (context, event, { action }) => {
             ThemeToggleMachine_userPreferences.setTheme(action.params.theme);
@@ -35140,7 +35058,7 @@ class UserPrompt {
      */
     setFinal(transcript) {
         const textarea = document.getElementById("saypi-prompt");
-        if (ImmersionService.isViewImmersive()) {
+        if (ImmersionStateChecker.isViewImmersive()) {
             // if transcript is > max characters, truncate it to max-1 characters plus an ellipsis
             if (transcript.length > this.PROMPT_CHARACTER_LIMIT) {
                 const truncatedLength = this.PROMPT_CHARACTER_LIMIT - 1;
@@ -35600,6 +35518,190 @@ var StateMachineService = /*#__PURE__*/StateMachineService_createClass(function 
 }); // Singleton
 var StateMachineService_chatbot = ChatbotService.getChatbot();
 /* harmony default export */ const src_StateMachineService = (new StateMachineService(StateMachineService_chatbot));
+;// CONCATENATED MODULE: ./src/themes/ThemeManagerModule.ts
+
+
+
+
+class ThemeManager {
+    static getInstance() {
+        if (!ThemeManager.instance) {
+            ThemeManager.instance = new ThemeManager();
+        }
+        return ThemeManager.instance;
+    }
+    constructor() {
+        this.themeToggleActor = src_StateMachineService.themeToggleActor;
+        this.icons = new IconModule();
+    }
+    toggleTheme() {
+        this.themeToggleActor.send("toggle");
+    }
+    /**
+     * Applies the theme to the button icons
+     * @param {string} theme: "dark" | "light"
+     */
+    applyTheme(theme) {
+        const button = document.getElementById("saypi-themeToggleButton");
+        if (button) {
+            if (theme === "dark") {
+                button.innerHTML = IconModule.darkMode;
+                const label = i18n("toggleThemeToLightMode");
+                button.setAttribute("aria-label", label);
+            }
+            else if (theme === "light") {
+                button.innerHTML = IconModule.lightMode;
+                const label = i18n("toggleThemeToDarkMode");
+                button.setAttribute("aria-label", label);
+            }
+        }
+        const iconContainer = document.querySelector(".saypi-icon");
+        if (iconContainer) {
+            iconContainer.innerHTML = this.icons.rectangles(theme);
+        }
+    }
+    createThemeToggleButton(container, position = 0) {
+        const label = i18n("toggleThemeToDarkMode");
+        const button = document.createElement("button");
+        button.id = "saypi-themeToggleButton";
+        button.type = "button";
+        button.className =
+            "theme-toggle-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
+        button.setAttribute("aria-label", label);
+        button.innerHTML = IconModule.lightMode;
+        if (container) {
+            addChild(container, button, position);
+            button.onclick = () => {
+                this.toggleTheme();
+            };
+        }
+        return button;
+    }
+    applyDarkMode() {
+        document.body.classList.add("dark");
+        this.applyTheme("dark");
+    }
+    applyNormalMode() {
+        document.body.classList.remove("dark");
+        this.applyTheme("light");
+    }
+}
+
+;// CONCATENATED MODULE: ./src/ImmersionService.js
+function ImmersionService_typeof(o) { "@babel/helpers - typeof"; return ImmersionService_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, ImmersionService_typeof(o); }
+function ImmersionService_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function ImmersionService_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, ImmersionService_toPropertyKey(descriptor.key), descriptor); } }
+function ImmersionService_createClass(Constructor, protoProps, staticProps) { if (protoProps) ImmersionService_defineProperties(Constructor.prototype, protoProps); if (staticProps) ImmersionService_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function ImmersionService_toPropertyKey(arg) { var key = ImmersionService_toPrimitive(arg, "string"); return ImmersionService_typeof(key) === "symbol" ? key : String(key); }
+function ImmersionService_toPrimitive(input, hint) { if (ImmersionService_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (ImmersionService_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+
+
+
+
+
+function attachCallButton() {
+  // move the call button back into the text prompt container for desktop view
+  var container = document.getElementById("saypi-prompt-controls-container");
+  var callButton = document.getElementById("saypi-callButton");
+  if (container && callButton) {
+    addChild(container, callButton, -1);
+  }
+}
+function detachCallButton() {
+  // remove the call button from the text prompt container while in mobile view
+  var callButton = document.getElementById("saypi-callButton");
+  if (callButton) {
+    addChild(document.body, callButton);
+  }
+}
+var ImmersionService = /*#__PURE__*/function () {
+  /**
+   * A service that manages the immersive view mode
+   * Uses dependency injection to access the chatbot
+   * @param {Chatbot} chatbot
+   */
+  function ImmersionService(chatbot) {
+    ImmersionService_classCallCheck(this, ImmersionService);
+    this.chatbot = chatbot;
+    this.userPreferences = UserPreferenceModule.getInstance();
+    this.themeManager = ThemeManager.getInstance();
+  }
+
+  /**
+   * Perform initial setup of the UI based on the view preferences
+   */
+  ImmersionService_createClass(ImmersionService, [{
+    key: "initMode",
+    value: function initMode() {
+      var _this = this;
+      this.userPreferences.getPrefersImmersiveView().then(function (immersive) {
+        if (immersive) {
+          _this.enterImmersiveMode();
+        } else {
+          ImmersionService.exitImmersiveMode();
+        }
+      });
+    }
+
+    // this function determines whether the immersive view is currently active
+    //@deprecated use ImmersionStateChecker.isViewImmersive() instead
+  }, {
+    key: "enterImmersiveMode",
+    value: function enterImmersiveMode() {
+      var _this2 = this;
+      localStorage.setItem("userViewPreference", "immersive"); // Save preference
+
+      // if not already on the talk page, navigate to it
+      // this is to ensure the user is not stuck in the immersive view on a non-chat page
+      var currentPath = window.location.pathname;
+      if (!this.chatbot.isChatablePath(currentPath)) {
+        var path = this.chatbot.getChatPath();
+        if (window.location.pathname !== path) {
+          // Get the current redirect count
+          var redirectCount = localStorage.getItem("redirectCount");
+          if (!redirectCount) {
+            redirectCount = 0;
+          }
+
+          // If the redirect count is less than the limit, attempt a redirect
+          if (redirectCount < 3) {
+            localStorage.setItem("redirectCount", ++redirectCount);
+            window.location = path;
+          } else {
+            // Reset the redirect count
+            localStorage.removeItem("redirectCount");
+            console.warn("Redirect limit reached. Unable to redirect to chat page.");
+          }
+        }
+      }
+      var element = document.documentElement;
+      element.classList.remove("desktop-view");
+      element.classList.add("immersive-view");
+      detachCallButton();
+      enterFullscreen();
+      this.userPreferences.getTheme().then(function (theme) {
+        _this2.themeManager.applyTheme(theme);
+      });
+    }
+  }], [{
+    key: "isViewImmersive",
+    value: function isViewImmersive() {
+      return ImmersionStateChecker.isViewImmersive();
+    }
+  }, {
+    key: "exitImmersiveMode",
+    value: function exitImmersiveMode() {
+      localStorage.setItem("userViewPreference", "desktop"); // Save preference
+
+      var element = document.documentElement;
+      element.classList.remove("immersive-view");
+      element.classList.add("desktop-view");
+      attachCallButton();
+      exitFullscreen();
+    }
+  }]);
+  return ImmersionService;
+}();
 ;// CONCATENATED MODULE: ./src/SubmitErrorHandler.ts
 
 
@@ -35698,10 +35800,6 @@ const submitErrorHandler = new SubmitErrorHandler();
 /* harmony default export */ const maximize = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 768 767.999994\" preserveAspectRatio=\"xMidYMid meet\"\n    version=\"1.0\">\n    <path fill=\"#e4d8c1\" class=\"outer\"\n        d=\"M 768.132812 379.535156 C 768.132812 169.089844 597.523438 -1.496094 387.050781 -1.496094 C 176.609375 -1.496094 5.996094 169.089844 5.996094 379.535156 C 5.996094 589.949219 176.609375 760.539062 387.050781 760.539062 C 597.523438 760.539062 768.132812 589.949219 768.132812 379.535156 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n    <path fill=\"#776d6d\" class=\"inner\"\n        d=\"M 538.996094 223.152344 L 306.535156 229.855469 L 538.996094 455.695312 Z M 538.996094 223.152344 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n    <path fill=\"#776d6d\" class=\"inner\"\n        d=\"M 235.105469 535.890625 L 467.597656 529.1875 L 235.105469 303.34375 Z M 235.105469 535.890625 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n</svg>");
 ;// CONCATENATED MODULE: ./src/icons/immersive.svg
 /* harmony default export */ const immersive = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"Layer_1\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\">\n  <defs>\n    <style>\n      .cls-1 {\n        fill: none;\n        stroke: #000;\n        stroke-linecap: round;\n        stroke-linejoin: round;\n        stroke-width: 2px;\n      }\n    </style>\n  </defs>\n  <rect class=\"cls-1\" x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\" ry=\"2\"/>\n  <line class=\"cls-1\" x1=\"8\" y1=\"3\" x2=\"8\" y2=\"8\"/>\n  <line class=\"cls-1\" x1=\"3\" y1=\"8\" x2=\"8\" y2=\"8\"/>\n  <line class=\"cls-1\" x1=\"16\" y1=\"3\" x2=\"16\" y2=\"8\"/>\n  <line class=\"cls-1\" x1=\"16\" y1=\"8\" x2=\"21\" y2=\"8\"/>\n  <line class=\"cls-1\" x1=\"8\" y1=\"21\" x2=\"8\" y2=\"16\"/>\n  <line class=\"cls-1\" x1=\"3\" y1=\"16\" x2=\"8\" y2=\"16\"/>\n  <line class=\"cls-1\" x1=\"16\" y1=\"21\" x2=\"16\" y2=\"16\"/>\n  <line class=\"cls-1\" x1=\"16\" y1=\"16\" x2=\"21\" y2=\"16\"/>\n</svg>");
-;// CONCATENATED MODULE: ./src/icons/rectangles.svg
-/* harmony default export */ const rectangles = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"background-layer\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\"\n  viewBox=\"0 0 307 640\">\n  <defs>\n    <style>\n      .innermost, .second, .third, .fourth, .fifth, .outermost {\n      stroke-width: 0px;\n      }\n\n      .outermost {\n      fill: #e4f2d1;\n      }\n\n      .second {\n      fill: #cce8b5;\n      }\n\n      .third {\n      fill: #b3db95;\n      }\n\n      .fourth {\n      fill: #9bd078;\n      }\n\n      .fifth {\n      fill: #83c55c;\n      }\n\n      .innermost {\n      fill: #428a2f;\n      }\n    </style>\n  </defs>\n  <path class=\"outermost\"\n    d=\"m306.9,320c0,105.3-.02,210.6.1,315.91,0,3.42-.67,4.1-4.09,4.09-99.6-.12-199.21-.12-298.81,0C.67,640,0,639.33,0,635.91.11,425.3.11,214.7,0,4.09,0,.67.67,0,4.09,0,103.7.12,203.3.12,302.91,0c3.42,0,4.1.67,4.09,4.09-.12,105.3-.1,210.6-.1,315.91Z\" />\n  <path class=\"second\"\n    d=\"m275.92,323c0,87.63,0,175.27,0,262.9,0,7.24-.55,7.93-7.86,7.98-14.66.09-29.31.03-43.97.03-60.96,0-121.92,0-182.88,0q-7.13,0-7.14-7.24c0-176.1,0-352.21,0-528.31q0-7.26,7.12-7.26c75.78,0,151.56,0,227.35,0q7.38,0,7.38,7.5c0,88.13,0,176.27,0,264.4Z\" />\n  <path class=\"third\"\n    d=\"m68.06,322.24c0-69.47,0-138.94,0-208.41,0-8.99,1.33-10.13,10.49-9.12,1.98.22,3.98.32,5.97.32,46.13.02,92.26.02,138.39,0,3.48,0,6.92-.23,10.41-.67,5.5-.7,8.74.46,8.73,7.25-.18,138.94-.13,277.88-.13,416.81,0,.33,0,.67,0,1q-.14,10.51-10.39,10.51c-52.13,0-104.25,0-156.38,0q-7.09,0-7.09-7.28c0-70.14,0-140.27,0-210.41Z\" />\n  <path class=\"fourth\"\n    d=\"m103.02,322.5c0-52.46,0-104.91,0-157.37,0-6.68.36-7.06,7.07-7.06,30.3-.01,60.6.07,90.9-.09,4.54-.02,6.08,1.33,6.07,5.98-.1,105.58-.1,211.16,0,316.74,0,4.18-1.27,5.37-5.38,5.35-29.3-.15-58.6-.08-87.9-.08q-10.76,0-10.76-11.09c0-50.79,0-101.58,0-152.37Z\" />\n  <path class=\"fifth\"\n    d=\"m173,322.2c0,35.29,0,70.58,0,105.88q0,6.89-6.99,6.9c-8.15,0-16.31-.13-24.46.06-3.47.08-4.68-1.09-4.61-4.59.18-9.65.06-19.31.06-28.96,0-58.26-.01-116.53.02-174.79,0-4.76-1.12-9.46-.14-14.3.51-2.54,1.39-3.38,3.8-3.36,8.82.06,17.64.14,26.46-.02,4.59-.09,5.95,1.85,5.94,6.33-.14,35.62-.08,71.25-.08,106.87Z\" />\n  <path class=\"innermost\"\n    d=\"m151.04,322.01c0-9.99.07-19.97-.05-29.96-.04-2.93.83-4.18,3.95-4.18,3.06,0,4.03,1.12,4.02,4.11-.09,19.97-.08,39.94.01,59.91.01,2.96-.84,4.16-3.96,4.14-3.03-.01-4.08-1.04-4.03-4.08.14-9.98.05-19.97.05-29.96Z\" />\n</svg>");
-;// CONCATENATED MODULE: ./src/icons/rectangles-moonlight.svg
-/* harmony default export */ const rectangles_moonlight = ("<svg xmlns=\"http://www.w3.org/2000/svg\" id=\"background-layer\" data-name=\"Layer 1\"\n  viewBox=\"0 0 307 640\"\n  width=\"307px\" height=\"640px\">\n  <defs>\n    <style>.innermost, .second, .third, .fourth, .fifth, .outermost { stroke-width: 0px; }\n      .outermost { fill: #a9b7bf; }\n      .second { fill: #8f9ca7; }\n      .third { fill: #787d83; }\n      .fourth { fill: #6c7378; }\n      .fifth { fill: #313437; }\n      .innermost { fill: #1c1c1c; }\n</style>\n  </defs>\n  <path class=\"outermost\"\n    d=\"m306.9,320c0,105.3-.02,210.6.1,315.91,0,3.42-.67,4.1-4.09,4.09-99.6-.12-199.21-.12-298.81,0C.67,640,0,639.33,0,635.91.11,425.3.11,214.7,0,4.09,0,.67.67,0,4.09,0,103.7.12,203.3.12,302.91,0c3.42,0,4.1.67,4.09,4.09-.12,105.3-.1,210.6-.1,315.91Z\" />\n  <path class=\"second\"\n    d=\"m275.92,323c0,87.63,0,175.27,0,262.9,0,7.24-.55,7.93-7.86,7.98-14.66.09-29.31.03-43.97.03-60.96,0-121.92,0-182.88,0q-7.13,0-7.14-7.24c0-176.1,0-352.21,0-528.31q0-7.26,7.12-7.26c75.78,0,151.56,0,227.35,0q7.38,0,7.38,7.5c0,88.13,0,176.27,0,264.4Z\" />\n  <path class=\"third\"\n    d=\"m68.06,322.24c0-69.47,0-138.94,0-208.41,0-8.99,1.33-10.13,10.49-9.12,1.98.22,3.98.32,5.97.32,46.13.02,92.26.02,138.39,0,3.48,0,6.92-.23,10.41-.67,5.5-.7,8.74.46,8.73,7.25-.18,138.94-.13,277.88-.13,416.81,0,.33,0,.67,0,1q-.14,10.51-10.39,10.51c-52.13,0-104.25,0-156.38,0q-7.09,0-7.09-7.28c0-70.14,0-140.27,0-210.41Z\" />\n  <path class=\"fourth\"\n    d=\"m103.02,322.5c0-52.46,0-104.91,0-157.37,0-6.68.36-7.06,7.07-7.06,30.3-.01,60.6.07,90.9-.09,4.54-.02,6.08,1.33,6.07,5.98-.1,105.58-.1,211.16,0,316.74,0,4.18-1.27,5.37-5.38,5.35-29.3-.15-58.6-.08-87.9-.08q-10.76,0-10.76-11.09c0-50.79,0-101.58,0-152.37Z\" />\n  <path class=\"fifth\"\n    d=\"m173,322.2c0,35.29,0,70.58,0,105.88q0,6.89-6.99,6.9c-8.15,0-16.31-.13-24.46.06-3.47.08-4.68-1.09-4.61-4.59.18-9.65.06-19.31.06-28.96,0-58.26-.01-116.53.02-174.79,0-4.76-1.12-9.46-.14-14.3.51-2.54,1.39-3.38,3.8-3.36,8.82.06,17.64.14,26.46-.02,4.59-.09,5.95,1.85,5.94,6.33-.14,35.62-.08,71.25-.08,106.87Z\" />\n  <path class=\"innermost\"\n    d=\"m151.04,322.01c0-9.99.07-19.97-.05-29.96-.04-2.93.83-4.18,3.95-4.18,3.06,0,4.03,1.12,4.02,4.11-.09,19.97-.08,39.94.01,59.91.01,2.96-.84,4.16-3.96,4.14-3.03-.01-4.08-1.04-4.03-4.08.14-9.98.05-19.97.05-29.96Z\" />\n</svg>");
 ;// CONCATENATED MODULE: ./src/icons/call.svg
 /* harmony default export */ const call = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 768 767.999994\"\n    preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n    <path class=\"circle\" fill=\"#418a2f\"\n        d=\"M 767.988281 383.984375 C 767.988281 596.058594 596.066406 767.980469 383.996094 767.980469 C 171.921875 767.980469 0 596.058594 0 383.984375 C 0 171.910156 171.921875 -0.0078125 383.996094 -0.0078125 C 596.066406 -0.0078125 767.988281 171.910156 767.988281 383.984375 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n    <path class=\"phone-receiver\" fill=\"#ffffff\"\n        d=\"M 215.726562 199.773438 C 219.746094 194.835938 230.023438 183.625 243.644531 183.769531 C 244.40625 183.777344 245.300781 183.808594 246.34375 183.914062 C 246.34375 183.914062 248.492188 184.144531 250.613281 184.703125 C 268.292969 189.410156 299.921875 224.304688 299.921875 224.304688 C 326.925781 254.09375 334.722656 255.53125 334.636719 266.5 C 334.550781 276.777344 328.140625 284.71875 316.253906 296.566406 C 284.566406 328.148438 277.808594 330.53125 275.351562 340.421875 C 273.902344 346.234375 269.539062 357.511719 289.105469 379.355469 C 318.289062 411.929688 388.1875 478.4375 394.300781 482.515625 C 400.402344 486.585938 422.121094 500.832031 451.300781 474.371094 C 471.226562 456.304688 480.714844 435.066406 494.875 433.785156 C 502.363281 433.089844 507.878906 437.613281 519.167969 447.222656 C 585.886719 503.976562 586.871094 513.933594 586.3125 519.824219 C 585.355469 530.011719 580.75 539.210938 565.316406 550.382812 C 525.953125 578.878906 508.3125 603.992188 428.234375 570.742188 C 348.152344 537.484375 263.996094 453.335938 240.242188 417.359375 C 216.488281 381.390625 179.160156 326.421875 181.878906 288.414062 C 183.769531 261.980469 191.867188 238.863281 191.867188 238.863281 C 199.097656 220.882812 208.71875 207.878906 215.726562 199.773438 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n</svg>");
 ;// CONCATENATED MODULE: ./src/icons/call-starting.svg
@@ -35714,10 +35812,6 @@ const submitErrorHandler = new SubmitErrorHandler();
 /* harmony default export */ const lock = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 768 767.999994\"\n    preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n    <path fill=\"#0d3c26\"\n        d=\"M 520.59375 325.066406 L 520.59375 296.34375 C 520.59375 221.027344 459.316406 159.75 384 159.75 C 308.683594 159.75 247.40625 221.027344 247.40625 296.34375 L 247.40625 325.066406 C 215.605469 328.226562 190.6875 355.132812 190.6875 387.75 L 190.6875 466.5 C 190.6875 544.660156 254.277344 608.25 332.4375 608.25 L 435.558594 608.25 C 513.71875 608.25 577.308594 544.660156 577.308594 466.5 L 577.308594 387.75 C 577.3125 355.132812 552.394531 328.226562 520.59375 325.066406 Z M 384 195.75 C 439.46875 195.75 484.59375 240.875 484.59375 296.34375 L 484.59375 324.75 L 283.40625 324.75 L 283.40625 296.34375 C 283.40625 240.875 328.53125 195.75 384 195.75 Z M 541.3125 466.5 C 541.3125 524.8125 493.871094 572.25 435.5625 572.25 L 332.4375 572.25 C 274.128906 572.25 226.6875 524.8125 226.6875 466.5 L 226.6875 387.75 C 226.6875 372.863281 238.800781 360.75 253.6875 360.75 L 514.3125 360.75 C 529.199219 360.75 541.3125 372.863281 541.3125 387.75 Z M 384 0 C 172.261719 0 0 172.261719 0 384 C 0 595.738281 172.261719 768 384 768 C 595.738281 768 768 595.738281 768 384 C 768 172.261719 595.738281 0 384 0 Z M 384 732 C 192.113281 732 36 575.886719 36 384 C 36 192.113281 192.113281 36 384 36 C 575.886719 36 732 192.113281 732 384 C 732 575.886719 575.886719 732 384 732 Z M 384 732 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n</svg>");
 ;// CONCATENATED MODULE: ./src/icons/unlock.svg
 /* harmony default export */ const unlock = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 768 767.999994\"\n    preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n    <path fill=\"#0d3c26\"\n        d=\"M 514.3125 324.75 L 283.40625 324.75 L 283.40625 296.34375 C 283.40625 240.875 328.53125 195.75 384 195.75 C 428.832031 195.75 468.660156 225.976562 480.855469 269.257812 C 483.554688 278.824219 493.492188 284.394531 503.0625 281.699219 C 512.632812 279 518.203125 269.058594 515.507812 259.488281 C 498.953125 200.765625 444.875 159.75 384 159.75 C 308.683594 159.75 247.40625 221.027344 247.40625 296.34375 L 247.40625 325.066406 C 215.605469 328.226562 190.6875 355.132812 190.6875 387.75 L 190.6875 466.5 C 190.6875 544.660156 254.277344 608.25 332.4375 608.25 L 435.558594 608.25 C 513.71875 608.25 577.308594 544.660156 577.308594 466.5 L 577.308594 387.75 C 577.3125 353.011719 549.050781 324.75 514.3125 324.75 Z M 541.3125 466.5 C 541.3125 524.8125 493.871094 572.25 435.5625 572.25 L 332.4375 572.25 C 274.128906 572.25 226.6875 524.8125 226.6875 466.5 L 226.6875 387.75 C 226.6875 372.863281 238.800781 360.75 253.6875 360.75 L 514.3125 360.75 C 529.199219 360.75 541.3125 372.863281 541.3125 387.75 Z M 384 0 C 172.261719 0 0 172.261719 0 384 C 0 595.738281 172.261719 768 384 768 C 595.738281 768 768 595.738281 768 384 C 768 172.261719 595.738281 0 384 0 Z M 384 732 C 192.113281 732 36 575.886719 36 384 C 36 192.113281 192.113281 36 384 36 C 575.886719 36 732 192.113281 732 384 C 732 575.886719 575.886719 732 384 732 Z M 384 732 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n</svg>");
-;// CONCATENATED MODULE: ./src/icons/mode-night.svg
-/* harmony default export */ const mode_night = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"Layer_2\" data-name=\"Layer 2\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 616 420.11\">\n  <defs>\n    <style>\n      .cls-1 {\n        clip-path: url(#clippath);\n      }\n\n      .cls-2 {\n        fill: none;\n      }\n\n      .cls-2, .cls-3, .cls-4 {\n        stroke-width: 0px;\n      }\n\n      .cls-3 {\n        fill: #1b447a;\n      }\n\n      .cls-4 {\n        fill: #fff;\n      }\n    </style>\n    <clipPath id=\"clippath\">\n      <rect class=\"cls-2\" x=\"-1\" y=\"-.04\" width=\"1024\" height=\"420\"/>\n    </clipPath>\n  </defs>\n  <g class=\"cls-1\">\n    <path class=\"cls-3\" d=\"M404.52,419.8h-194.73C93.88,419.8-.09,325.78-.09,209.82S93.88-.15,209.79-.15h194.73c115.92,0,210.88,94.01,210.88,209.97s-94.97,209.97-210.88,209.97Z\"/>\n  </g>\n  <path class=\"cls-4\" d=\"M404.19,209.82c0,3.05-.07,6.09-.23,9.15s-.37,6.09-.67,9.12c-.31,3.04-.67,6.07-1.12,9.08s-.97,6.01-1.56,9.01c-.6,2.99-1.27,5.96-2,8.92-.73,2.96-1.55,5.89-2.44,8.81s-1.84,5.81-2.87,8.68c-1.03,2.87-2.12,5.72-3.29,8.53s-2.4,5.6-3.71,8.36c-1.31,2.76-2.67,5.48-4.11,8.17s-2.93,5.33-4.51,7.95-3.2,5.19-4.89,7.73c-1.69,2.53-3.45,5.03-5.27,7.48-1.81,2.45-3.69,4.85-5.61,7.21-1.93,2.36-3.93,4.67-5.97,6.93-2.05,2.25-4.15,4.47-6.31,6.61-2.16,2.15-4.36,4.27-6.61,6.31-2.27,2.05-4.57,4.04-6.92,5.97-2.36,1.93-4.76,3.81-7.21,5.63s-4.93,3.57-7.48,5.27c-2.53,1.69-5.11,3.32-7.72,4.89s-5.27,3.07-7.95,4.51-5.41,2.81-8.16,4.11-5.55,2.55-8.36,3.71c-2.81,1.17-5.67,2.27-8.53,3.29s-5.76,1.97-8.68,2.87-5.85,1.69-8.81,2.44c-2.96.73-5.93,1.4-8.92,2-2.99.6-6,1.12-9,1.56-3.01.45-6.04.83-9.07,1.12-3.04.31-6.07.52-9.12.68-3.04.15-6.09.23-9.13.23s-6.09-.08-9.15-.23c-3.04-.15-6.08-.37-9.12-.68-3.03-.29-6.05-.67-9.07-1.12-3.01-.44-6.01-.97-9-1.56s-5.96-1.27-8.92-2c-2.96-.75-5.89-1.56-8.81-2.44s-5.81-1.84-8.68-2.87c-2.87-1.03-5.72-2.12-8.53-3.29s-5.6-2.4-8.36-3.71c-2.76-1.31-5.48-2.67-8.16-4.11s-5.33-2.95-7.95-4.51-5.19-3.2-7.72-4.89c-2.53-1.69-5.03-3.45-7.48-5.27s-4.85-3.69-7.2-5.63c-2.36-1.93-4.67-3.93-6.92-5.97-2.27-2.05-4.47-4.15-6.61-6.31s-4.25-4.36-6.31-6.61c-2.05-2.27-4.04-4.57-5.97-6.93s-3.81-4.76-5.61-7.21c-1.81-2.45-3.57-4.95-5.27-7.48s-3.32-5.12-4.89-7.73-3.07-5.27-4.51-7.95c-1.44-2.69-2.81-5.41-4.11-8.17s-2.53-5.55-3.71-8.36-2.27-5.67-3.29-8.53-1.99-5.76-2.87-8.68c-.88-2.92-1.69-5.85-2.44-8.81-.73-2.96-1.4-5.93-2-8.92-.6-3-1.12-6-1.56-9.01s-.83-6.04-1.12-9.08c-.29-3.03-.52-6.07-.67-9.12s-.23-6.09-.23-9.15.07-6.09.23-9.15c.15-3.05.37-6.09.67-9.12.29-3.04.67-6.07,1.12-9.08s.97-6.03,1.56-9.01,1.27-5.96,2-8.92c.75-2.96,1.56-5.89,2.44-8.81s1.84-5.81,2.87-8.68,2.12-5.72,3.29-8.53,2.4-5.6,3.71-8.36,2.67-5.48,4.11-8.16,2.93-5.33,4.51-7.95,3.2-5.19,4.89-7.73,3.45-5.03,5.27-7.48c1.81-2.45,3.69-4.85,5.63-7.21s3.93-4.67,5.97-6.93,4.15-4.47,6.31-6.63,4.36-4.25,6.61-6.31,4.56-4.04,6.92-5.97c2.36-1.93,4.76-3.81,7.2-5.63,2.45-1.81,4.95-3.57,7.48-5.27s5.11-3.33,7.72-4.89,5.27-3.07,7.95-4.51,5.41-2.81,8.16-4.11c2.76-1.31,5.55-2.55,8.36-3.71,2.81-1.17,5.67-2.27,8.53-3.29s5.76-1.99,8.68-2.87,5.85-1.69,8.81-2.44c2.95-.73,5.93-1.4,8.92-2s5.99-1.12,9-1.56,6.04-.81,9.07-1.12c3.03-.29,6.07-.52,9.12-.67s6.09-.23,9.15-.23,6.09.07,9.13.23c3.05.15,6.08.37,9.12.67,3.03.31,6.05.67,9.07,1.12,3.01.45,6.01.97,9,1.56,2.99.6,5.96,1.27,8.92,2s5.89,1.55,8.81,2.44,5.81,1.84,8.68,2.87,5.72,2.12,8.53,3.29,5.6,2.4,8.36,3.71,5.48,2.67,8.16,4.11,5.33,2.93,7.95,4.51,5.19,3.2,7.72,4.89c2.53,1.69,5.03,3.45,7.48,5.27s4.85,3.69,7.21,5.63,4.67,3.93,6.92,5.97c2.25,2.05,4.47,4.15,6.61,6.31s4.25,4.36,6.31,6.63,4.04,4.57,5.97,6.93c1.93,2.36,3.81,4.76,5.61,7.21,1.81,2.45,3.57,4.93,5.27,7.48s3.32,5.11,4.89,7.73c1.57,2.61,3.07,5.27,4.51,7.95s2.81,5.41,4.11,8.16c1.31,2.76,2.53,5.55,3.71,8.36,1.17,2.81,2.27,5.67,3.29,8.53,1.03,2.87,1.97,5.76,2.87,8.68s1.69,5.85,2.44,8.81c.75,2.96,1.41,5.93,2,8.92.59,2.99,1.12,6,1.56,9.01.44,3.01.81,6.04,1.12,9.08.29,3.03.52,6.07.67,9.12.15,3.04.23,6.09.23,9.15h-.01Z\"/>\n  <path class=\"cls-3\" d=\"M147.16,222.56c-13.33-34.91-5.97-72.67,16.07-99.69-3.72.88-7.41,2.01-11.08,3.43-45.43,17.37-68.2,68.33-50.8,113.79,17.36,45.45,68.31,68.23,113.73,50.83,3.67-1.4,7.17-3.04,10.53-4.83-34.43-5.4-65.08-28.6-78.45-63.51h0Z\"/>\n  <path class=\"cls-3\" d=\"M261.45,169.01l23.6,7.47-23.6,7.48-7.48,23.57-7.44-23.57-23.6-7.48,23.6-7.47,7.44-23.59,7.48,23.59Z\"/>\n  <path class=\"cls-3\" d=\"M324.71,192.12l15.67,4.96-15.67,4.96-4.93,15.64-4.96-15.64-15.63-4.96,15.63-4.96,4.96-15.64,4.93,15.64Z\"/>\n  <path class=\"cls-3\" d=\"M288.52,221.9l11.03,3.48-11.03,3.51-3.48,11-3.49-11-11-3.51,11-3.48,3.49-11.03,3.48,11.03Z\"/>\n</svg>");
-;// CONCATENATED MODULE: ./src/icons/mode-day.svg
-/* harmony default export */ const mode_day = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"Layer_1\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 616 420\">\n  <defs>\n    <style>\n      .cls-1 {\n        clip-path: url(#clippath);\n      }\n\n      .cls-2 {\n        fill: none;\n      }\n\n      .cls-2, .cls-3, .cls-4 {\n        stroke-width: 0px;\n      }\n\n      .cls-3 {\n        fill: #fff;\n      }\n\n      .cls-4 {\n        fill: #ffc107;\n      }\n    </style>\n    <clipPath id=\"clippath\">\n      <rect class=\"cls-2\" x=\"-408\" y=\"0\" width=\"1024\" height=\"420\"/>\n    </clipPath>\n  </defs>\n  <g class=\"cls-1\">\n    <path class=\"cls-4\" d=\"M405.6,420.18h-195.6C94.05,420.18,0,326.13,0,210.13S94.05.08,210,.08h195.63c115.95,0,209.96,94.06,209.96,210.05-.03,116-94.02,210.05-209.99,210.05Z\"/>\n  </g>\n  <path class=\"cls-3\" d=\"M587.98,210.13c0,3.05-.08,6.1-.22,9.15-.15,3.05-.38,6.09-.67,9.13-.3,3.03-.68,6.06-1.12,9.08-.45,3.02-.97,6.02-1.57,9.01-.59,2.99-1.26,5.97-2,8.93s-1.56,5.9-2.44,8.82c-.88,2.92-1.84,5.81-2.86,8.68-1.03,2.88-2.13,5.72-3.29,8.54s-2.4,5.6-3.71,8.36c-1.3,2.76-2.67,5.48-4.11,8.17-1.44,2.69-2.94,5.34-4.51,7.96s-3.2,5.19-4.9,7.73c-1.69,2.54-3.45,5.03-5.26,7.48-1.82,2.45-3.69,4.85-5.63,7.21-1.93,2.36-3.92,4.67-5.97,6.93-2.05,2.26-4.15,4.47-6.31,6.63-2.16,2.16-4.36,4.26-6.63,6.31-2.26,2.05-4.56,4.04-6.92,5.97-2.35,1.93-4.76,3.81-7.21,5.63-2.45,1.82-4.94,3.57-7.47,5.27-2.54,1.69-5.11,3.32-7.73,4.89s-5.27,3.07-7.95,4.51c-2.69,1.44-5.41,2.81-8.17,4.11-2.76,1.3-5.55,2.54-8.36,3.71-2.82,1.17-5.66,2.26-8.54,3.29-2.87,1.03-5.76,1.98-8.68,2.87-2.92.89-5.85,1.7-8.81,2.44-2.95.74-5.93,1.41-8.92,2.01s-5.99,1.11-9.01,1.56c-3.02.45-6.04.82-9.08,1.12-3.03.3-6.07.53-9.12.67-3.05.15-6.09.22-9.14.22s-6.09-.07-9.14-.22c-3.05-.15-6.08-.37-9.12-.67-3.04-.3-6.06-.67-9.07-1.12-3.02-.45-6.02-.97-9.01-1.56s-5.96-1.27-8.92-2.01-5.9-1.55-8.81-2.44-5.81-1.84-8.68-2.87c-2.88-1.03-5.72-2.13-8.53-3.29-2.82-1.17-5.6-2.41-8.36-3.71-2.76-1.31-5.48-2.68-8.17-4.11-2.69-1.44-5.34-2.94-7.95-4.51s-5.19-3.2-7.73-4.89c-2.53-1.7-5.03-3.45-7.47-5.27-2.45-1.81-4.85-3.69-7.21-5.63-2.35-1.94-4.67-3.93-6.92-5.97-2.26-2.05-4.47-4.15-6.63-6.31-2.16-2.16-4.26-4.36-6.3-6.63-2.05-2.26-4.04-4.57-5.97-6.93-1.94-2.35-3.81-4.76-5.63-7.21-1.82-2.45-3.57-4.94-5.27-7.48-1.7-2.54-3.33-5.11-4.9-7.73s-3.07-5.27-4.51-7.96c-1.44-2.69-2.81-5.42-4.11-8.17-1.31-2.76-2.54-5.55-3.71-8.36s-2.26-5.66-3.29-8.54c-1.03-2.87-1.98-5.77-2.86-8.68-.89-2.92-1.7-5.86-2.44-8.82-.74-2.96-1.41-5.93-2-8.93-.6-2.99-1.12-5.99-1.56-9.01-.45-3.02-.82-6.05-1.12-9.08-.3-3.04-.53-6.08-.67-9.13-.15-3.05-.23-6.09-.23-9.15s.08-6.1.22-9.15c.15-3.05.38-6.08.68-9.12.3-3.04.67-6.06,1.12-9.08.44-3.02.96-6.03,1.56-9.02.59-2.99,1.26-5.97,2-8.93.74-2.96,1.56-5.9,2.44-8.81.89-2.92,1.84-5.82,2.86-8.69,1.03-2.88,2.13-5.72,3.29-8.54s2.4-5.6,3.71-8.36c1.3-2.76,2.67-5.48,4.11-8.17,1.44-2.69,2.94-5.34,4.51-7.96,1.57-2.61,3.2-5.19,4.9-7.73,1.69-2.53,3.45-5.03,5.27-7.48,1.81-2.45,3.69-4.85,5.63-7.21,1.93-2.36,3.92-4.67,5.97-6.93,2.05-2.26,4.15-4.47,6.3-6.63s4.36-4.26,6.63-6.31c2.26-2.05,4.57-4.04,6.92-5.97,2.36-1.94,4.76-3.81,7.21-5.63s4.94-3.57,7.47-5.27c2.54-1.7,5.11-3.33,7.73-4.9s5.27-3.07,7.95-4.51c2.69-1.44,5.41-2.81,8.17-4.11,2.76-1.31,5.54-2.54,8.36-3.71,2.81-1.17,5.66-2.27,8.53-3.29,2.87-1.03,5.77-1.98,8.68-2.87s5.85-1.7,8.81-2.44c2.96-.74,5.93-1.41,8.92-2.01,2.99-.59,5.99-1.11,9.01-1.56s6.04-.82,9.07-1.12c3.04-.3,6.07-.52,9.12-.67s6.09-.22,9.14-.22,6.09.07,9.14.22,6.09.38,9.12.67c3.04.3,6.06.67,9.08,1.12s6.02.97,9.01,1.56c2.99.6,5.97,1.27,8.92,2.01,2.96.74,5.9,1.56,8.81,2.44,2.92.89,5.81,1.84,8.68,2.87,2.88,1.03,5.72,2.13,8.54,3.29,2.81,1.17,5.6,2.4,8.36,3.71,2.76,1.3,5.47,2.67,8.17,4.11,2.69,1.44,5.34,2.94,7.95,4.51s5.19,3.2,7.73,4.9c2.53,1.69,5.03,3.45,7.47,5.27s4.85,3.69,7.21,5.63c2.36,1.93,4.67,3.92,6.92,5.97,2.26,2.05,4.47,4.15,6.63,6.31s4.26,4.36,6.31,6.63,4.04,4.57,5.97,6.93c1.94,2.36,3.81,4.76,5.63,7.21,1.81,2.45,3.57,4.95,5.26,7.48,1.7,2.54,3.33,5.11,4.9,7.73,1.57,2.62,3.07,5.27,4.51,7.96,1.44,2.69,2.81,5.41,4.11,8.17,1.31,2.76,2.54,5.55,3.71,8.36s2.27,5.66,3.29,8.54c1.03,2.87,1.98,5.77,2.87,8.69.88,2.92,1.7,5.85,2.44,8.81s1.41,5.94,2,8.93c.6,2.99,1.12,5.99,1.57,9.02.44,3.02.82,6.04,1.12,9.08.3,3.04.52,6.07.67,9.12.15,3.05.22,6.1.22,9.15Z\"/>\n  <path class=\"cls-4\" d=\"M460.12,213.31c0,1.91-.09,3.82-.28,5.72-.19,1.9-.47,3.79-.84,5.67-.37,1.88-.84,3.73-1.39,5.56-.56,1.83-1.2,3.63-1.93,5.4-.73,1.77-1.55,3.49-2.45,5.18s-1.89,3.33-2.95,4.92c-1.06,1.59-2.2,3.13-3.41,4.6s-2.49,2.9-3.85,4.25-2.77,2.64-4.24,3.85-3.01,2.35-4.6,3.42c-1.59,1.06-3.23,2.04-4.91,2.94-1.69.91-3.42,1.72-5.18,2.45s-3.56,1.38-5.4,1.93c-1.83.55-3.68,1.02-5.56,1.39-1.88.38-3.77.66-5.67.84-1.91.19-3.81.28-5.72.28s-3.82-.09-5.72-.28c-1.9-.19-3.79-.47-5.67-.84-1.88-.37-3.73-.84-5.56-1.39-1.83-.56-3.63-1.2-5.4-1.93s-3.49-1.55-5.18-2.45c-1.68-.9-3.32-1.88-4.91-2.94-1.59-1.06-3.13-2.2-4.6-3.42s-2.89-2.49-4.24-3.85-2.64-2.77-3.85-4.25-2.35-3.01-3.41-4.6c-1.06-1.59-2.05-3.23-2.95-4.92s-1.72-3.41-2.45-5.18c-.73-1.77-1.38-3.56-1.93-5.4-.55-1.83-1.02-3.68-1.39-5.56-.38-1.88-.66-3.77-.84-5.67-.19-1.91-.28-3.81-.28-5.72s.09-3.82.28-5.73c.19-1.9.47-3.79.84-5.67.37-1.88.84-3.73,1.39-5.56.56-1.83,1.2-3.63,1.93-5.4.73-1.77,1.55-3.49,2.45-5.18s1.89-3.33,2.95-4.92c1.06-1.59,2.2-3.13,3.41-4.6s2.49-2.9,3.85-4.25,2.77-2.64,4.24-3.85,3.01-2.35,4.6-3.42c1.59-1.06,3.23-2.04,4.91-2.94,1.69-.9,3.42-1.72,5.18-2.45,1.77-.73,3.56-1.38,5.4-1.93,1.83-.55,3.68-1.02,5.56-1.39s3.77-.66,5.67-.84c1.91-.19,3.81-.28,5.72-.28s3.82.09,5.72.28c1.9.19,3.79.47,5.67.84s3.73.84,5.56,1.39c1.83.56,3.63,1.2,5.4,1.93,1.77.73,3.49,1.55,5.18,2.45,1.68.9,3.32,1.88,4.91,2.94,1.59,1.07,3.13,2.2,4.6,3.42s2.89,2.49,4.24,3.85,2.64,2.77,3.85,4.25,2.35,3.01,3.41,4.6c1.06,1.59,2.05,3.23,2.95,4.92s1.72,3.41,2.45,5.18c.73,1.77,1.38,3.56,1.93,5.4.55,1.83,1.02,3.68,1.39,5.56.38,1.88.66,3.77.84,5.67.19,1.91.28,3.81.28,5.73Z\"/>\n  <path class=\"cls-4\" d=\"M398.04,85.53h7.36v44.92h-7.36v-44.92Z\"/>\n  <path class=\"cls-4\" d=\"M316.77,117.9l5.64-4.74,28.88,34.4-5.64,4.74-28.88-34.4Z\"/>\n  <path class=\"cls-4\" d=\"M275.23,194.81l1.27-7.26,44.23,7.76-1.27,7.26-44.23-7.76Z\"/>\n  <path class=\"cls-4\" d=\"M289.33,274.16l38.85-22.52,3.69,6.38-38.86,22.52-3.69-6.38Z\"/>\n  <path class=\"cls-4\" d=\"M354.77,332.22l15.28-42.24,6.92,2.51-15.28,42.24-6.92-2.51Z\"/>\n  <path class=\"cls-4\" d=\"M426.77,292.35l6.92-2.54,15.45,42.18-6.92,2.53-15.45-42.17Z\"/>\n  <path class=\"cls-4\" d=\"M471.7,257.73l3.67-6.39,38.95,22.35-3.67,6.39-38.95-22.35Z\"/>\n  <path class=\"cls-4\" d=\"M482.57,195.06l44.19-7.94,1.3,7.25-44.19,7.94-1.3-7.25Z\"/>\n  <path class=\"cls-4\" d=\"M451.9,147.28l28.74-34.52,5.66,4.71-28.73,34.52-5.66-4.71Z\"/>\n</svg>");
 ;// CONCATENATED MODULE: ./src/ButtonModule.js
 function ButtonModule_typeof(o) { "@babel/helpers - typeof"; return ButtonModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, ButtonModule_typeof(o); }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || ButtonModule_unsupportedIterableToArray(arr) || _nonIterableSpread(); }
@@ -35756,8 +35850,6 @@ function ButtonModule_toPrimitive(input, hint) { if (ButtonModule_typeof(input) 
 
 
 
-
-
 var ButtonModule = /*#__PURE__*/function () {
   /**
    * Initializes the button module with dependencies
@@ -35765,12 +35857,12 @@ var ButtonModule = /*#__PURE__*/function () {
    */
   function ButtonModule(chatbot) {
     ButtonModule_classCallCheck(this, ButtonModule);
+    this.icons = new IconModule();
     this.userPreferences = UserPreferenceModule.getInstance();
     this.chatbot = chatbot;
     this.immersionService = new ImmersionService(chatbot);
     this.sayPiActor = src_StateMachineService.actor; // the Say, Pi state machine
     this.screenLockActor = src_StateMachineService.screenLockActor;
-    this.themeToggleActor = src_StateMachineService.themeToggleActor;
     // Binding methods to the current instance
     this.registerOtherEvents();
 
@@ -35829,8 +35921,8 @@ var ButtonModule = /*#__PURE__*/function () {
   }, {
     key: "updateIconContent",
     value: function updateIconContent(iconContainer) {
-      if (ImmersionService.isViewImmersive()) {
-        iconContainer.innerHTML = this.getRectanglesSVG();
+      if (ImmersionStateChecker.isViewImmersive()) {
+        iconContainer.innerHTML = this.icons.rectangles();
       }
       iconContainer.classList.add("saypi-icon");
     }
@@ -35927,7 +36019,7 @@ var ButtonModule = /*#__PURE__*/function () {
               return this.userPreferences.getAutoSubmit();
             case 2:
               autoSubmitEnabled = _context.sent;
-              isImmersive = ImmersionService.isViewImmersive(); // must auto-submit in immersive mode
+              isImmersive = ImmersionStateChecker.isViewImmersive(); // must auto-submit in immersive mode
               if (autoSubmitEnabled || isImmersive) {
                 this.simulateFormSubmit();
               } else {
@@ -36220,66 +36312,6 @@ var ButtonModule = /*#__PURE__*/function () {
             instruction.textContent = originalMessage;
           }
           clearTimeout(pressTimer);
-        };
-      }
-      return button;
-    }
-  }, {
-    key: "getRectanglesSVG",
-    value: function getRectanglesSVG() {
-      var theme = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "light";
-      if (theme === "dark") {
-        return rectangles_moonlight;
-      } else {
-        return rectangles;
-      }
-    }
-  }, {
-    key: "toggleTheme",
-    value: function toggleTheme() {
-      this.themeToggleActor.send("toggle");
-    }
-
-    /**
-     * Applies the theme to the button icons
-     * @param {string} theme: "dark" | "light"
-     */
-  }, {
-    key: "applyTheme",
-    value: function applyTheme(theme) {
-      var button = document.getElementById("saypi-themeToggleButton");
-      if (button) {
-        if (theme === "dark") {
-          button.innerHTML = mode_night;
-          var label = i18n("toggleThemeToLightMode");
-          button.setAttribute("aria-label", label);
-        } else if (theme === "light") {
-          button.innerHTML = mode_day;
-          var _label = i18n("toggleThemeToDarkMode");
-          button.setAttribute("aria-label", _label);
-        }
-      }
-      var iconContainer = document.querySelector(".saypi-icon");
-      if (iconContainer) {
-        iconContainer.innerHTML = this.getRectanglesSVG(theme);
-      }
-    }
-  }, {
-    key: "createThemeToggleButton",
-    value: function createThemeToggleButton(container) {
-      var _this11 = this;
-      var position = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-      var label = i18n("toggleThemeToDarkMode");
-      var button = document.createElement("button");
-      button.id = "saypi-themeToggleButton";
-      button.type = "button";
-      button.className = "theme-toggle-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
-      button.setAttribute("aria-label", label);
-      button.innerHTML = mode_day;
-      if (container) {
-        addChild(container, button, position);
-        button.onclick = function () {
-          _this11.toggleTheme();
         };
       }
       return button;
@@ -39428,6 +39460,7 @@ class ChatHistorySpeechManager {
 
 
 
+
 class DOMObserver {
     constructor(chatbot) {
         this.chatbot = chatbot;
@@ -39555,7 +39588,8 @@ class DOMObserver {
         const toggleModeBtnPos = 1;
         buttonModule.createEnterButton(controlPanel, toggleModeBtnPos);
         buttonModule.createExitButton(controlPanel, toggleModeBtnPos);
-        buttonModule.createThemeToggleButton(controlPanel, toggleModeBtnPos + 2);
+        const themeManager = ThemeManager.getInstance();
+        themeManager.createThemeToggleButton(controlPanel, toggleModeBtnPos + 2);
     }
     findAndDecorateControlPanel(searchRoot) {
         const obs = this.findControlPanel(searchRoot);
