@@ -130,7 +130,8 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     const rootChatHistoryObserver = new RootChatHistoryObserver(
       chatHistoryElement,
       "#saypi-chat-history",
-      this.speechSynthesis
+      this.speechSynthesis,
+      this.chatbot
     );
     rootChatHistoryObserver.observe({
       childList: true,
@@ -146,7 +147,8 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     const existingMessagesObserver = new ChatHistoryOldMessageObserver(
       chatHistoryElement,
       selector,
-      this.speechSynthesis
+      this.speechSynthesis,
+      this.chatbot
     ); // this type of observer streams speech from the speech history
     const initialMessages = await existingMessagesObserver // TODO const oldMessages = await ...
       .runOnce(chatHistoryElement.querySelector(selector) as HTMLElement); // run on initial content, i.e. most recent message in chat history
@@ -159,6 +161,7 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
       chatHistoryElement,
       selector,
       this.speechSynthesis,
+      this.chatbot,
       initialMessages // ignore these messages when observing new messages
     ); // this type of observer streams speech from the TTS service
     // continuously observe the chat history for new messages

@@ -17,6 +17,7 @@ import {
 import { BillingModule } from "../billing/BillingModule";
 import EventBus from "../events/EventBus";
 import { AssistantResponse } from "./MessageElements";
+import { Chatbot } from "../chatbots/Chatbot";
 interface ResourceReleasable {
   teardown(): void;
 }
@@ -39,6 +40,7 @@ class ChatHistoryRootElementObserver extends BaseObserver {
     private chatHistoryElement: HTMLElement,
     selector: string,
     speechSynthesis: SpeechSynthesisModule,
+    private chatbot: Chatbot,
     initialRun: boolean = true
   ) {
     super(chatHistoryElement, selector);
@@ -69,7 +71,8 @@ class ChatHistoryRootElementObserver extends BaseObserver {
       this.oldMessageObserver = new ChatHistoryOldMessageObserver(
         this.chatHistoryElement,
         `#${pastMessagesContainer.id}`,
-        this.speechSynthesis
+        this.speechSynthesis,
+        this.chatbot
       );
       this.oldMessageObserver
         .runOnce(pastMessagesContainer)
@@ -112,7 +115,8 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
   constructor(
     chatHistoryElement: HTMLElement,
     selector: string,
-    speechSynthesis: SpeechSynthesisModule
+    speechSynthesis: SpeechSynthesisModule,
+    protected chatbot: Chatbot
   ) {
     super(chatHistoryElement, selector);
     this.speechSynthesis = speechSynthesis;
@@ -146,9 +150,11 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
     }
   }
 
-  static findAssistantResponse(searchRoot: Element): Observation {
-    const query = "div.break-anywhere:not(.justify-end)"; // TODO: -> this.chatbot.getAssistantResponseSelector();
-    const deepMatch = searchRoot.querySelector(query);
+  static findAssistantResponse(
+    searchRoot: Element,
+    querySelector: string
+  ): Observation {
+    const deepMatch = searchRoot.querySelector(querySelector);
     if (deepMatch) {
       const found = Observation.foundUndecorated(deepMatch.id, deepMatch);
       if (deepMatch.classList.contains("assistant-message")) {
@@ -170,6 +176,11 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
     return Observation.notFound("");
   }
 
+  findAssistantResponse(searchRoot: Element): Observation {
+    const query = this.chatbot.getAssistantResponseSelector();
+    return ChatHistoryMessageObserver.findAssistantResponse(searchRoot, query);
+  }
+
   /**
    * Decorates the assistant response with the necessary classes and attributes,
    * but does not add any additional functionality, i.e. speech
@@ -183,19 +194,10 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
     return message;
   }
 
-  /**
-   * Decorates the assistant response with speech functionality
-   * @deprecated - use AssistantResponse.decorateSpeech() instead
-   */
-  decorateAssistantResponseWithSpeech(
-    message: AssistantResponse,
-    speech: StreamedSpeech
-  ): void {}
-
   async findAndDecorateAssistantResponse(
     searchRoot: Element
   ): Promise<Observation> {
-    let obs = ChatHistoryMessageObserver.findAssistantResponse(searchRoot);
+    let obs = this.findAssistantResponse(searchRoot);
     if (obs.found) {
       console.log("Found assistant message", obs);
     }
@@ -282,9 +284,10 @@ class ChatHistoryNewMessageObserver
     chatHistoryElement: HTMLElement,
     selector: string,
     speechSynthesis: SpeechSynthesisModule,
+    chatbot: Chatbot,
     ignoreMessages: AssistantResponse[] = []
   ) {
-    super(chatHistoryElement, selector, speechSynthesis);
+    super(chatHistoryElement, selector, speechSynthesis, chatbot);
     this.haltOnFirst = true; // only expecting to load one new chat message at a time
     this.ignoreMessages = ignoreMessages;
   }

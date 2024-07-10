@@ -60,6 +60,10 @@ class ClaudeChatbot implements Chatbot {
     return "#saypi-side-panel + div";
   }
 
+  getAssistantResponseSelector(): string {
+    return 'div[data-test-render-count]:has(div[class*="font-claude-message"])';
+  }
+
   getExtraCallButtonClasses(): string[] {
     return ["rounded-full"];
   }

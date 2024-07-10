@@ -60,6 +60,10 @@ class PiAIChatbot implements Chatbot {
     return "#saypi-side-panel + div";
   }
 
+  getAssistantResponseSelector(): string {
+    return "div.break-anywhere:not(.justify-end)";
+  }
+
   getExtraCallButtonClasses(): string[] {
     return [
       "fixed",
