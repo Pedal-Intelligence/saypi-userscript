@@ -147,10 +147,9 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
       for (const node of [...mutation.addedNodes]) {
         if (node instanceof Element) {
           const addedElement = node as Element;
-          const responseObs = await this.findAndDecorateAssistantResponse(
-            addedElement
-          );
-          if (this.haltOnFirst && responseObs.isReady()) {
+          const responseObservations =
+            await this.findAndDecorateAssistantResponses(addedElement);
+          if (this.haltOnFirst && responseObservations[0]?.isReady()) {
             // only expecting one new chat message at a time, so
             // skip this mutation if the chat message is already decorated
             return; // break early
@@ -162,12 +161,11 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
 
   static findAssistantResponse(
     searchRoot: Element,
-    querySelector: string
+    match: Element
   ): Observation {
-    const deepMatch = searchRoot.querySelector(querySelector);
-    if (deepMatch) {
-      const found = Observation.foundUndecorated(deepMatch.id, deepMatch);
-      if (deepMatch.classList.contains("assistant-message")) {
+    if (match) {
+      const found = Observation.foundUndecorated(match.id, match);
+      if (match.classList.contains("assistant-message")) {
         return Observation.foundAndDecorated(found);
       }
       return found;
@@ -186,9 +184,25 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
     return Observation.notFound("");
   }
 
-  findAssistantResponse(searchRoot: Element): Observation {
+  static findAssistantResponses(
+    searchRoot: Element,
+    querySelector: string
+  ): Observation[] {
+    const deepMatches = searchRoot.querySelectorAll(querySelector);
+    const observations: Observation[] = [];
+    for (const match of deepMatches) {
+      const observation = ChatHistoryMessageObserver.findAssistantResponse(
+        searchRoot,
+        match
+      );
+      observations.push(observation);
+    }
+    return observations;
+  }
+
+  findAssistantResponses(searchRoot: Element): Observation[] {
     const query = this.chatbot.getAssistantResponseSelector();
-    return ChatHistoryMessageObserver.findAssistantResponse(searchRoot, query);
+    return ChatHistoryMessageObserver.findAssistantResponses(searchRoot, query);
   }
 
   /**
@@ -204,34 +218,38 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
     return message;
   }
 
-  async findAndDecorateAssistantResponse(
+  async findAndDecorateAssistantResponses(
     searchRoot: Element
-  ): Promise<Observation> {
-    let obs = this.findAssistantResponse(searchRoot);
-    if (obs.found) {
-      console.log("Found assistant message", obs);
-    }
-    if (obs.found && obs.isNew && !obs.decorated) {
-      const message = this.decorateAssistantResponse(obs.target as HTMLElement);
-      obs = Observation.foundAndDecorated(obs, message);
-      message.decorateControls();
+  ): Promise<Observation[]> {
+    let observations: Observation[] = this.findAssistantResponses(searchRoot);
+    for (let obs of observations) {
+      if (obs.found) {
+        console.log("Found assistant message", obs);
+      }
+      if (obs.found && obs.isNew && !obs.decorated) {
+        const message = this.decorateAssistantResponse(
+          obs.target as HTMLElement
+        );
+        obs = Observation.foundAndDecorated(obs, message);
+        message.decorateControls();
 
-      const speech = await this.streamSpeech(message);
-      if (speech) {
-        if (speech.utterance) {
-          message.decorateSpeech(speech.utterance);
-        }
-        if (speech.charge) {
-          message.decorateCost(speech.charge);
-        }
-      } else {
-        const provider = await this.speechSynthesis.getActiveAudioProvider();
-        if (provider === audioProviders.SayPi) {
-          message.decorateIncompleteSpeech();
+        const speech = await this.streamSpeech(message);
+        if (speech) {
+          if (speech.utterance) {
+            message.decorateSpeech(speech.utterance);
+          }
+          if (speech.charge) {
+            message.decorateCost(speech.charge);
+          }
+        } else {
+          const provider = await this.speechSynthesis.getActiveAudioProvider();
+          if (provider === audioProviders.SayPi) {
+            message.decorateIncompleteSpeech();
+          }
         }
       }
     }
-    return obs;
+    return observations;
   }
 
   async streamSpeechFromHistory(
@@ -260,15 +278,14 @@ class ChatHistoryOldMessageObserver extends ChatHistoryMessageObserver {
    */
   async runOnce(root: Element): Promise<AssistantResponse[]> {
     let messagesFound: AssistantResponse[] = [];
-    for (const node of [...root.children]) {
-      if (node instanceof Element) {
-        const child = node as Element;
-        const observation = await this.findAndDecorateAssistantResponse(child);
-        if (observation.isReady() && observation.decorations.length > 0) {
-          messagesFound.push(observation.decorations[0]);
-        }
+
+    const observations = await this.findAndDecorateAssistantResponses(root);
+    for (const observation of observations) {
+      if (observation.isReady() && observation.decorations.length > 0) {
+        messagesFound.push(observation.decorations[0]);
       }
     }
+
     return messagesFound;
   }
 

@@ -56,11 +56,11 @@ class ClaudeChatbot implements Chatbot {
   }
 
   getPastChatHistorySelector(): string {
-    return "#saypi-chat-history";
+    return "#saypi-chat-history"; // identical to chat history
   }
 
   getRecentChatHistorySelector(): string {
-    return "#saypi-chat-history";
+    return "#saypi-chat-history"; // identical to chat history
   }
 
   getDiscoveryPanelSelector(): string {
