@@ -4,6 +4,8 @@ import { ImmersionStateChecker } from "../ImmersionServiceLite";
 
 export interface Chatbot {
   getChatHistorySelector(): string;
+  getPastChatHistorySelector(): string; // can be identical to chat history
+  getRecentChatHistorySelector(): string; // can be identical to chat history
   getVoiceMenuSelector(): string;
   getVoiceSettingsSelector(): string;
   getDiscoveryPanelSelector(): string;

@@ -55,6 +55,14 @@ class ClaudeChatbot implements Chatbot {
     return ".flex-1.flex.flex-col.gap-3.px-4.max-w-3xl.mx-auto.w-full.pt-1";
   }
 
+  getPastChatHistorySelector(): string {
+    return "#saypi-chat-history";
+  }
+
+  getRecentChatHistorySelector(): string {
+    return "#saypi-chat-history";
+  }
+
   getDiscoveryPanelSelector(): string {
     // note: depends on the side panel having already been identified
     return "#saypi-side-panel + div";

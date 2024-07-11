@@ -55,6 +55,14 @@ class PiAIChatbot implements Chatbot {
     return "div.t-body-chat";
   }
 
+  getPastChatHistorySelector(): string {
+    return "#saypi-chat-history :nth-child(2)"; // second child of the chat history container
+  }
+
+  getRecentChatHistorySelector(): string {
+    return "#saypi-chat-history :nth-child(3)"; // third child of the chat history container
+  }
+
   getDiscoveryPanelSelector(): string {
     // note: depends on the side panel having already been identified
     return "#saypi-side-panel + div";

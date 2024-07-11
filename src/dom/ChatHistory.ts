@@ -18,6 +18,7 @@ import { BillingModule } from "../billing/BillingModule";
 import EventBus from "../events/EventBus";
 import { AssistantResponse } from "./MessageElements";
 import { Chatbot } from "../chatbots/Chatbot";
+import { findRootAncestor } from "./DOMModule";
 interface ResourceReleasable {
   teardown(): void;
 }
@@ -60,17 +61,26 @@ class ChatHistoryRootElementObserver extends BaseObserver {
       console.error("Element is not a child of the chat history", child);
       return;
     }
-    const pastMessagesContainer =
-      this.chatHistoryElement?.querySelector(":nth-child(2)");
-    if (pastMessagesContainer == child) {
-      // add id to the 2nd child of the element
-      pastMessagesContainer.id = "saypi-chat-history-past-messages";
+
+    const pastMessagesSelector = this.chatbot.getPastChatHistorySelector();
+    const rootAncestor = findRootAncestor(child);
+
+    // Use querySelector on the root ancestor
+    const pastMessagesContainer = rootAncestor.querySelector(
+      pastMessagesSelector
+    ) as Element | null;
+
+    if (pastMessagesContainer === child) {
+      // add classes to the container
+      pastMessagesContainer.classList.add("chat-history", "past-messages");
       if (this.oldMessageObserver) {
         this.oldMessageObserver.disconnect();
       }
       this.oldMessageObserver = new ChatHistoryOldMessageObserver(
         this.chatHistoryElement,
-        `#${pastMessagesContainer.id}`,
+        `${pastMessagesContainer.tagName}.${Array.from(
+          pastMessagesContainer.classList
+        ).join(".")}`,
         this.speechSynthesis,
         this.chatbot
       );

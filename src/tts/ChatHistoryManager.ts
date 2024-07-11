@@ -17,6 +17,8 @@ import { VoiceMenu } from "./VoiceMenu";
 import { AssistantResponse } from "../dom/MessageElements";
 import { SpeechUtterance } from "./SpeechModel";
 import { TTSControlsModule } from "./TTSControlsModule";
+import { findRootAncestor } from "../dom/DOMModule";
+import { root } from "cheerio/lib/static";
 
 export class ChatHistorySpeechManager implements ResourceReleasable {
   private userPreferences = UserPreferenceModule.getInstance();
@@ -57,24 +59,26 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
   // Methods for DOM manipulation and element ID assignment
   addIdChatHistory(chatHistory: HTMLElement): void {
     chatHistory.id = "saypi-chat-history";
+    chatHistory.classList.add("chat-history");
+    const rootAncestor = findRootAncestor(chatHistory);
 
-    // the past messages container will be replaced when the chat history is updated, so is monitored for changes in RootChatHistoryObserver
-    const pastChatMessagesContainer =
-      chatHistory.querySelector(":nth-child(2)");
+    // for pi.ai, the past messages container will be replaced when the chat history is updated, so is monitored for changes in RootChatHistoryObserver
+    const pastHistorySelector = this.chatbot.getPastChatHistorySelector();
+    const pastChatMessagesContainer = pastHistorySelector
+      ? rootAncestor.querySelector(pastHistorySelector)
+      : chatHistory;
     if (pastChatMessagesContainer) {
-      pastChatMessagesContainer.id = "saypi-chat-history-past-messages";
+      pastChatMessagesContainer.classList.add("chat-history", "past-messages");
     }
 
-    if (chatHistory.children.length >= 3) {
-      const presentChatMessagesContainer = chatHistory.children[2];
-      //  chatHistory.querySelector(":nth-child(3)"); // less reliable than direct access, for some reason
-      if (presentChatMessagesContainer) {
-        presentChatMessagesContainer.id = "saypi-chat-history-present-messages";
-      }
-    } else {
-      console.warn(
-        "Present messages container not found in chat history.",
-        chatHistory
+    const presentHistorySelector = this.chatbot.getRecentChatHistorySelector();
+    const presentChatMessagesContainer = presentHistorySelector
+      ? rootAncestor.querySelector(presentHistorySelector)
+      : chatHistory;
+    if (presentChatMessagesContainer) {
+      presentChatMessagesContainer.classList.add(
+        "chat-history",
+        "present-messages"
       );
     }
   }
@@ -143,7 +147,7 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
   async registerPresentChatHistoryListener(
     chatHistoryElement: HTMLElement
   ): Promise<ChatHistoryAdditionsObserver> {
-    const selector = "#saypi-chat-history-present-messages";
+    const selector = ".chat-history.present-messages";
     const existingMessagesObserver = new ChatHistoryOldMessageObserver(
       chatHistoryElement,
       selector,
@@ -151,7 +155,11 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
       this.chatbot
     ); // this type of observer streams speech from the speech history
     const initialMessages = await existingMessagesObserver // TODO const oldMessages = await ...
-      .runOnce(chatHistoryElement.querySelector(selector) as HTMLElement); // run on initial content, i.e. most recent message in chat history
+      .runOnce(
+        findRootAncestor(chatHistoryElement).querySelector(
+          selector
+        ) as HTMLElement
+      ); // run on initial content, i.e. most recent message in chat history
     console.debug(
       `Found ${initialMessages.length} recent assistant message(s)`
     );
