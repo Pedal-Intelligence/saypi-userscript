@@ -56,13 +56,15 @@ class PopupMenu {
   }
 }
 
-class AssistantResponse {
+abstract class AssistantResponse {
   private _element: HTMLElement;
   private stable: boolean = false;
   // visible for testing
   static PARAGRAPH_SEPARATOR = ""; // should match ElementInputStream's delimiter argument
   protected includeInitialText = true; // stable text may be called on completed messages, so include the initial text unless streaming
   protected ttsControlsModule: TTSControlsModule;
+
+  abstract get contentSelector(): string;
 
   constructor(element: HTMLElement, includeInitialText = true) {
     this._element = element;
@@ -89,7 +91,7 @@ class AssistantResponse {
       // content already found and decorated
       return content as HTMLElement;
     }
-    const wfull = this._element.querySelector(".w-full");
+    const wfull = this._element.querySelector(this.contentSelector);
     if (wfull) {
       // content found but not decorated yet
       wfull.classList.add("content");
@@ -102,8 +104,11 @@ class AssistantResponse {
           for (const node of [...mutation.addedNodes]) {
             if (node instanceof HTMLElement) {
               const addedElement = node as HTMLElement;
-              // TODO: w-full is specific to Pi.ai, should be generalized with Chatbot parameter
-              if (addedElement.classList.contains("w-full")) {
+              const classNameFromContentSelector =
+                this.contentSelector.split(".")[1];
+              if (
+                addedElement.classList.contains(classNameFromContentSelector)
+              ) {
                 addedElement.classList.add("content");
                 observer.disconnect();
                 resolve(addedElement);

@@ -144,7 +144,7 @@ export abstract class VoiceSelector {
   }
 
   introduceVoice(voice: SpeechSynthesisVoiceRemote): void {
-    const lastMessage = getMostRecentAssistantMessage();
+    const lastMessage = getMostRecentAssistantMessage(this.chatbot);
     const name = voice.name.toLowerCase().replace(" ", "_");
     const introduction =
       lastMessage?.text || getMessage(`voiceIntroduction_${name}`);

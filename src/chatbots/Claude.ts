@@ -1,3 +1,4 @@
+import { AssistantResponse } from "../dom/MessageElements";
 import { Observation } from "../dom/Observation";
 import { Chatbot, UserPrompt } from "./Chatbot";
 
@@ -40,7 +41,11 @@ class ClaudeChatbot implements Chatbot {
 
   isChatablePath(path: string): boolean {
     // routes on which Claude can chat
-    return path.includes("/new") || path.includes("/chat");
+    return (
+      path.includes("/new") ||
+      path.includes("/chat") ||
+      path.includes("/project")
+    );
   }
 
   getVoiceMenuSelector(): string {
@@ -69,11 +74,32 @@ class ClaudeChatbot implements Chatbot {
   }
 
   getAssistantResponseSelector(): string {
-    return 'div[data-test-render-count]:has(div[class*="font-claude-message"])';
+    return 'div[data-is-streaming]:has(div[class*="font-claude-message"])';
+  }
+
+  getAssistantResponseContentSelector(): string {
+    return "div[class*='font-claude-message']";
+  }
+
+  getAssistantResponse(
+    element: HTMLElement,
+    includeInitialText?: boolean
+  ): AssistantResponse {
+    return new ClaudeResponse(element, includeInitialText);
   }
 
   getExtraCallButtonClasses(): string[] {
     return ["rounded-full"];
+  }
+}
+
+class ClaudeResponse extends AssistantResponse {
+  constructor(element: HTMLElement, includeInitialText?: boolean) {
+    super(element, includeInitialText);
+  }
+
+  get contentSelector(): string {
+    return "div[class*='font-claude-message']";
   }
 }
 

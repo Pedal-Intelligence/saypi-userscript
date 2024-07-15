@@ -102,7 +102,8 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
       const lastAssistantMessage = assistantMessages[
         assistantMessages.length - 1
       ] as HTMLElement;
-      const assistantMessage = new AssistantResponse(lastAssistantMessage);
+      const assistantMessage =
+        this.chatbot.getAssistantResponse(lastAssistantMessage);
       assistantMessage.decorateSpeech(utterance);
       // ensure the AssistantResponse object has finished mutating before generating its hash
       assistantMessage.stableHash().then((hash) => {

@@ -214,7 +214,7 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
   public decorateAssistantResponse(
     messageElement: HTMLElement
   ): AssistantResponse {
-    const message = new AssistantResponse(messageElement);
+    const message = this.chatbot.getAssistantResponse(messageElement);
     return message;
   }
 
@@ -325,7 +325,7 @@ class ChatHistoryNewMessageObserver
   public decorateAssistantResponse(
     messageElement: HTMLElement
   ): AssistantResponse {
-    const message = new AssistantResponse(messageElement, false); // streaming assistant messages should not include initial text
+    const message = this.chatbot.getAssistantResponse(messageElement, false); // streaming assistant messages should not include initial text
     return message;
   }
 
@@ -482,13 +482,15 @@ class ChatHistoryNewMessageObserver
 /**
  * Get the most recent assistant message from the chat history
  */
-function getMostRecentAssistantMessage(): AssistantResponse | null {
+function getMostRecentAssistantMessage(
+  chatbot: Chatbot
+): AssistantResponse | null {
   const assistantMessages = document.querySelectorAll(".assistant-message");
   if (assistantMessages.length > 0) {
     const messageElement = assistantMessages[
       assistantMessages.length - 1
     ] as HTMLElement;
-    return new AssistantResponse(messageElement);
+    return chatbot.getAssistantResponse(messageElement);
   }
   return null;
 }

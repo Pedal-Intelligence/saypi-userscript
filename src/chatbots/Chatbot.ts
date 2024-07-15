@@ -1,6 +1,7 @@
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import EventBus from "../events/EventBus";
 import { ImmersionStateChecker } from "../ImmersionServiceLite";
+import { AssistantResponse } from "../dom/MessageElements";
 
 export interface Chatbot {
   getChatHistorySelector(): string;
@@ -16,12 +17,17 @@ export interface Chatbot {
   getPromptTextInputSelector(): string;
   getPromptSubmitButtonSelector(): string;
   getAssistantResponseSelector(): string;
+  getAssistantResponseContentSelector(): string;
   getChatPath(): string;
   isChatablePath(path: string): boolean; // can the chatbot chat on this URL path?
   // ... other methods for different selectors
   getExtraCallButtonClasses(): string[];
 
   getPrompt(element: HTMLElement): UserPrompt;
+  getAssistantResponse(
+    element: HTMLElement,
+    includeInitialText?: boolean
+  ): AssistantResponse;
   getName(): string;
 }
 

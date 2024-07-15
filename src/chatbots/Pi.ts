@@ -1,3 +1,4 @@
+import { AssistantResponse } from "../dom/MessageElements";
 import { Chatbot, UserPrompt } from "./Chatbot";
 
 class PiAIChatbot implements Chatbot {
@@ -72,6 +73,14 @@ class PiAIChatbot implements Chatbot {
     return "div.break-anywhere:not(.justify-end)";
   }
 
+  getAssistantResponseContentSelector(): string {
+    return "div.w-full";
+  }
+
+  getAssistantResponse(element: HTMLElement): AssistantResponse {
+    return new PiResponse(element);
+  }
+
   getExtraCallButtonClasses(): string[] {
     return [
       "fixed",
@@ -80,6 +89,16 @@ class PiAIChatbot implements Chatbot {
       "enabled:hover:bg-cream-650",
       "m-2",
     ];
+  }
+}
+
+class PiResponse extends AssistantResponse {
+  constructor(element: HTMLElement, includeInitialText?: boolean) {
+    super(element, includeInitialText);
+  }
+
+  get contentSelector(): string {
+    return "div.w-full";
   }
 }
 
