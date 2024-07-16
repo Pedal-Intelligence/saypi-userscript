@@ -348,6 +348,7 @@ class ChatHistoryNewMessageObserver
 
       const messageContent = await message.decoratedContent();
       this.observeChatMessageElement(
+        message,
         messageContent,
         utterance,
         () => this.ttsControlsModule.autoplaySpeech(utterance, 200),
@@ -391,6 +392,7 @@ class ChatHistoryNewMessageObserver
   private textStream: ElementTextStream | null = null;
 
   observeChatMessageElement(
+    message: AssistantResponse,
     messageContent: HTMLElement,
     utterance: SpeechUtterance,
     onStart: () => void,
@@ -403,7 +405,7 @@ class ChatHistoryNewMessageObserver
     }
 
     // Start observing the new element
-    this.textStream = new ElementTextStream(messageContent);
+    this.textStream = message.createTextStream(messageContent);
     let firstChunkTime: number | null = null;
     let fullText = ""; // Variable to accumulate the text
 

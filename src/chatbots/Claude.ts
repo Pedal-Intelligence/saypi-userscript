@@ -1,5 +1,11 @@
 import { AssistantResponse } from "../dom/MessageElements";
 import { Observation } from "../dom/Observation";
+import {
+  AddedText,
+  ChangedText,
+  ElementTextStream,
+  InputStreamOptions,
+} from "../tts/InputStream";
 import { Chatbot, UserPrompt } from "./Chatbot";
 
 class ClaudeChatbot implements Chatbot {
@@ -100,6 +106,148 @@ class ClaudeResponse extends AssistantResponse {
 
   get contentSelector(): string {
     return "div[class*='font-claude-message']";
+  }
+
+  createTextStream(
+    content: HTMLElement,
+    options: InputStreamOptions
+  ): ElementTextStream {
+    return new ClaudeTextBlockCapture(content, options);
+  }
+}
+
+/**
+ * A ClaudeTextBlockCapture is a simplified ElementTextStream that captures Claude's response
+ * as a single block of text, rather than as individual paragraphs or list items.
+ * This approach is slower than the ClaudeTextStream, but is more reliable and straightforward.
+ */
+class ClaudeTextBlockCapture extends ElementTextStream {
+  handleMutationEvent(mutation: MutationRecord): void {
+    // no-op
+  }
+  constructor(
+    element: HTMLElement,
+    options: InputStreamOptions = { includeInitialText: true }
+  ) {
+    super(element, options);
+
+    const messageElement = element.parentElement;
+    if (messageElement && messageElement.hasAttribute("data-is-streaming")) {
+      const messageObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.attributeName === "data-is-streaming") {
+            const isStreaming =
+              messageElement.getAttribute("data-is-streaming");
+            if (isStreaming === "false") {
+              const text = this.getNestedText(element);
+              this.subject.next(new AddedText(text));
+              this.subject.complete();
+            }
+          }
+        });
+      });
+      messageObserver.observe(messageElement, {
+        childList: false,
+        subtree: false,
+        characterData: false,
+        attributes: true,
+      });
+    }
+  }
+
+  getNestedText(node: HTMLElement): string {
+    return node.textContent ?? node.innerText ?? "";
+  }
+}
+
+class ClaudeTextStream extends ElementTextStream {
+  private lastContentBlock: HTMLElement | null = null; // this will be a "block" element, like a paragraph or list item
+  private blockElements = [
+    "P",
+    "OL",
+    "UL",
+    "DIV",
+    "H1",
+    "H2",
+    "H3",
+    "H4",
+    "H5",
+    "H6",
+  ];
+  constructor(
+    element: HTMLElement,
+    options: InputStreamOptions = { includeInitialText: true }
+  ) {
+    super(element, options);
+
+    const messageElement = element.parentElement;
+    if (messageElement && messageElement.hasAttribute("data-is-streaming")) {
+      const messageObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.attributeName === "data-is-streaming") {
+            const isStreaming =
+              messageElement.getAttribute("data-is-streaming");
+            if (isStreaming === "false") {
+              const finalParagraph = this.element.querySelector("p:last-child");
+              const text = this.getNestedText(finalParagraph as HTMLElement);
+              console.log("Claude says: ", text);
+              this.subject.next(new AddedText(text));
+              this.subject.complete();
+            }
+          }
+        });
+      });
+      messageObserver.observe(messageElement, {
+        childList: false,
+        subtree: false,
+        characterData: false,
+        attributes: true,
+      });
+    }
+
+    throw new Error("Text stream not implemented. Use block capture instead."); // use the block capture approach instead, for now
+  }
+
+  getNestedText(node: HTMLElement): string {
+    return node.textContent ?? node.innerText ?? "";
+  }
+
+  handleMutationEvent(mutation: MutationRecord): void {
+    // auto generated method stub
+    if (mutation.type === "childList") {
+      const addedNodes = Array.from(mutation.addedNodes) as HTMLElement[];
+
+      for (const node of addedNodes) {
+        if (
+          node.nodeType === Node.ELEMENT_NODE &&
+          this.blockElements.includes(node.tagName)
+        ) {
+          if (node.tagName === "OL" || node.tagName === "UL") {
+            const lastListItem = node.querySelector(
+              "li:last-child"
+            ) as HTMLElement;
+            if (lastListItem && lastListItem.tagName === "LI") {
+              const listItemText = this.getNestedText(lastListItem);
+              console.log("Claude says: ", listItemText);
+              this.subject.next(new AddedText(listItemText));
+              this.lastContentBlock = null; // prevent the final list item from being emitted twice
+            }
+          } else {
+            this.lastContentBlock = node as HTMLElement;
+          }
+        } else if (
+          node.nodeType === Node.TEXT_NODE &&
+          node.textContent === "\n" &&
+          this.lastContentBlock
+        ) {
+          // paragraph separator reached, emit the text of the last paragraph
+          const text = this.getNestedText(this.lastContentBlock);
+          console.log("Claude says: ", text);
+          this.subject.next(new AddedText(text));
+          // this approach omits the final paragraph of the stream, since it is not followed by a paragraph separator
+        }
+      }
+    }
   }
 }
 

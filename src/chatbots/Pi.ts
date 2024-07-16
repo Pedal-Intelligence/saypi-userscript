@@ -1,4 +1,10 @@
 import { AssistantResponse } from "../dom/MessageElements";
+import {
+  AddedText,
+  ChangedText,
+  ElementTextStream,
+  InputStreamOptions,
+} from "../tts/InputStream";
 import { Chatbot, UserPrompt } from "./Chatbot";
 
 class PiAIChatbot implements Chatbot {
@@ -100,6 +106,166 @@ class PiResponse extends AssistantResponse {
   get contentSelector(): string {
     return "div.w-full";
   }
+
+  createTextStream(
+    content: HTMLElement,
+    options: InputStreamOptions
+  ): ElementTextStream {
+    return new PiTextStream(content, options);
+  }
+}
+
+class PiTextStream extends ElementTextStream {
+  static DATA_TIMEOUT = 1000;
+  static DEFAULT_ADDITIONAL_TIMEOUT = 0;
+  // Timeout values above base for different languages - derived from empirical testing on pi.ai
+  static LANGUAGE_TIMEOUTS: { [key: string]: number } = {
+    en: 0,
+    ar: 1250,
+    de: 250,
+    es: 250,
+    fr: 1500,
+    hi: 1500,
+    it: 0,
+    nl: 0,
+    pl: 750,
+    pt: 1000,
+    ja: 1000,
+    ko: 1250,
+    ru: 2500,
+    uk: 2250,
+    zh: 0,
+    bg: 1500,
+    hr: 250,
+    cs: 750,
+    da: 1500,
+    tl: 250,
+    fi: 250,
+    el: 1250,
+    id: 0,
+    ms: 1000,
+    ro: 750,
+    sk: 1000,
+    sv: 1250,
+    ta: 500,
+    tr: 750,
+  };
+  lastParagraphAdded: HTMLDivElement;
+  spansAdded: number;
+  spansRemoved: number;
+  spansReplaced: number;
+  stillChanging: boolean;
+
+  constructor(element: HTMLElement, options?: InputStreamOptions) {
+    super(element, options);
+
+    this.lastParagraphAdded = this.element.querySelectorAll("div")?.item(0);
+    this.spansAdded = 0;
+    this.spansRemoved = 0;
+    this.spansReplaced = 0;
+    this.stillChanging = false;
+  }
+
+  calculateDataTimeout(text: string, lang: string): number {
+    // Extract the base language code (e.g., 'en' from 'en-US')
+    const baseLanguage = lang.split("-")[0];
+
+    const additionalTimeout =
+      PiTextStream.LANGUAGE_TIMEOUTS[baseLanguage] ??
+      PiTextStream.DEFAULT_ADDITIONAL_TIMEOUT;
+    const totalTime = PiTextStream.DATA_TIMEOUT + additionalTimeout;
+    console.debug(
+      `Timeout for "${text}" in ${lang} (base: ${baseLanguage}) is ${totalTime}ms (${PiTextStream.DATA_TIMEOUT} + ${additionalTimeout})`
+    );
+    return totalTime;
+  }
+
+  handleMutationEvent = (mutation: MutationRecord) => {
+    if (this.closed()) {
+      console.debug(
+        `Skipping change event on ${mutation.target} because the stream has already been completed`,
+        mutation
+      );
+      return;
+    }
+
+    if (mutation.type === "childList") {
+      for (let i = 0; i < mutation.removedNodes.length; i++) {
+        const node = mutation.removedNodes[i];
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          const element = node as HTMLElement;
+          if (element.tagName === "SPAN") {
+            this.spansRemoved++;
+          }
+        }
+      }
+      for (let i = 0; i < mutation.addedNodes.length; i++) {
+        this.stillChanging = true;
+        const node = mutation.addedNodes[i];
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          const element = node as HTMLElement;
+          if (element.tagName === "SPAN") {
+            this.spansAdded++;
+          } else if (element.tagName === "DIV") {
+            const paragraph = element as HTMLDivElement;
+            this.lastParagraphAdded = paragraph;
+          }
+        } else if (node.nodeType === Node.TEXT_NODE) {
+          const textNode = node as Text;
+          const content = textNode.textContent || "";
+          this.next(new AddedText(content || ""));
+          this.spansReplaced++;
+          // we're finished when the paragraph has no more preliminary content
+          const paragraph = textNode.parentElement;
+          const spansRemaining =
+            paragraph?.querySelectorAll("span")?.length || 0;
+          const isFinalParagraph = paragraph === this.lastParagraphAdded;
+
+          if (
+            this.spansReplaced >= this.spansRemoved &&
+            this.spansReplaced >= this.spansAdded &&
+            spansRemaining === 0 &&
+            isFinalParagraph
+          ) {
+            this.stillChanging = false;
+            // complete soon if not still changing
+            const startTime = Date.now();
+            const additionsRemaining = mutation.addedNodes.length - i - 1;
+            console.debug(
+              `${startTime}: Possible end of stream detected on ${content}, ${additionsRemaining} additions remaining.`
+            );
+            setTimeout(() => {
+              if (!this.stillChanging) {
+                const timeElapsed = Date.now() - startTime;
+                const lastContent = this.emittedValues.slice(-1)[0]?.text;
+                console.debug(
+                  `${Date.now()}: end of stream confirmed on "${lastContent}" after +${timeElapsed}ms`
+                );
+                this.complete({ type: "eod", time: Date.now() });
+              }
+            }, this.calculateDataTimeout(content, this.languageGuess));
+          }
+        }
+      }
+    } else if (mutation.type === "characterData") {
+      const textNode = mutation.target as Text;
+      const content = textNode.textContent;
+      // text node content changed from "${mutation.oldValue}" to "${content}"`
+      // emit a change event only if the old value is present in the already emitted values
+      const oldValue = mutation.oldValue || "";
+      const alreadyEmitted = this.emittedValues.some(
+        (value) => value.text === oldValue
+      );
+      if (alreadyEmitted) {
+        this.stillChanging = true;
+        this.next(new ChangedText(content || "", oldValue));
+      } else {
+        console.debug(
+          `Skipping change event for "${content}" because the old value "${oldValue}" was not emitted`
+        );
+      }
+    }
+  };
 }
 
 class PiPrompt extends UserPrompt {

@@ -1,6 +1,7 @@
 import { md5 } from "js-md5";
 import {
   ElementTextStream,
+  InputStreamOptions,
   LateChangeEvent,
   TextContent,
 } from "../tts/InputStream";
@@ -65,6 +66,10 @@ abstract class AssistantResponse {
   protected ttsControlsModule: TTSControlsModule;
 
   abstract get contentSelector(): string;
+  abstract createTextStream(
+    content: HTMLElement,
+    options?: InputStreamOptions
+  ): ElementTextStream;
 
   constructor(element: HTMLElement, includeInitialText = true) {
     this._element = element;
@@ -146,7 +151,7 @@ abstract class AssistantResponse {
     }
     const content = await this.decoratedContent();
     const options = { includeInitialText: this.includeInitialText };
-    const textStream = new ElementTextStream(content, options);
+    const textStream = this.createTextStream(content, options);
     return new Promise((resolve) => {
       textStream.getStream().subscribe({
         complete: () => {
