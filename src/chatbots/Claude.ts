@@ -127,7 +127,7 @@ class ClaudeTextBlockCapture extends ElementTextStream {
   }
   constructor(
     element: HTMLElement,
-    options: InputStreamOptions = { includeInitialText: true }
+    options: InputStreamOptions = { includeInitialText: false }
   ) {
     super(element, options);
 

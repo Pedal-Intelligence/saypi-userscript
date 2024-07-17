@@ -60,6 +60,7 @@ export default class AudioModule {
       });
     }
 
+    this.findAndDecorateAudioElement(); // need to ensure an audio element exists before registering event listeners
     this.registerOfflineAudioCommands();
 
     AudioModule.instance = this;
@@ -74,7 +75,6 @@ export default class AudioModule {
   }
 
   start() {
-    this.findAndDecorateAudioElement();
     // audio output (Pi)
     this.audioOutputActor.start();
     this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
@@ -117,6 +117,7 @@ export default class AudioModule {
     if (!this.audioElement) {
       // an audio element is required for audio input/output, so create one if it doesn't exist
       this.audioElement = new Audio();
+      document.body.appendChild(this.audioElement);
     }
     this.decorateAudioElement(this.audioElement);
     this.registerRemovalListener();
