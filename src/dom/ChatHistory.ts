@@ -231,7 +231,6 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
           obs.target as HTMLElement
         );
         obs = Observation.foundAndDecorated(obs, message);
-        message.decorateControls();
 
         const speech = await this.streamSpeech(message);
         if (speech) {

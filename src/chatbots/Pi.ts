@@ -1,10 +1,11 @@
-import { AssistantResponse } from "../dom/MessageElements";
+import { AssistantResponse, MessageControls } from "../dom/MessageElements";
 import {
   AddedText,
   ChangedText,
   ElementTextStream,
   InputStreamOptions,
 } from "../tts/InputStream";
+import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { Chatbot, UserPrompt } from "./Chatbot";
 
 class PiAIChatbot implements Chatbot {
@@ -112,6 +113,24 @@ class PiResponse extends AssistantResponse {
     options: InputStreamOptions
   ): ElementTextStream {
     return new PiTextStream(content, options);
+  }
+
+  decorateControls(): MessageControls {
+    return new PiMessageControls(this, this.ttsControlsModule);
+  }
+}
+
+class PiMessageControls extends MessageControls {
+  constructor(message: AssistantResponse, ttsControls: TTSControlsModule) {
+    super(message, ttsControls);
+  }
+
+  protected getExtraControlClasses(): string[] {
+    return ["pt-4", "text-neutral-500", "text-sm"];
+  }
+
+  getHoverMenuSelector(): string {
+    return ":nth-child(2)"; // second (i.e. last) child of the message element
   }
 }
 

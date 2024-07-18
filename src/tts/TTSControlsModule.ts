@@ -170,7 +170,7 @@ export class TTSControlsModule {
 
   createCostElementForMessage() {
     const costElement = document.createElement("span");
-    costElement.classList.add("saypi-cost", "text-sm", "text-neutral-500");
+    costElement.classList.add("saypi-cost");
     return costElement;
   }
 
@@ -220,17 +220,13 @@ export class TTSControlsModule {
     poweredByElement = document.createElement("div");
     const ttsEngine = voice.powered_by;
     const ttsLabel = getMessage("ttsPoweredBy", ttsEngine);
-    poweredByElement.classList.add(
-      "text-sm",
-      "text-neutral-500",
-      "saypi-powered-by"
-    );
-    poweredByElement.title = ttsLabel;
+    poweredByElement.classList.add("saypi-powered-by", "tooltip");
+    poweredByElement.setAttribute("aria-label", ttsLabel);
     const logoImageExt = ttsEngine === "inflection.ai" ? "png" : "svg"; // can't find a good svg for inflection.ai
     const logoImageUrl = getResourceUrl(
       `icons/logos/${ttsEngine.toLowerCase()}.${logoImageExt}`
     );
-    poweredByElement.innerHTML = `<img src="${logoImageUrl}" alt="${ttsLabel}" class="h-4 w-4 inline-block">`;
+    poweredByElement.innerHTML = `<img src="${logoImageUrl}" class="h-4 w-4 inline-block">`;
     container.appendChild(poweredByElement);
   }
 

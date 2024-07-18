@@ -1,4 +1,4 @@
-import { AssistantResponse } from "../dom/MessageElements";
+import { AssistantResponse, MessageControls } from "../dom/MessageElements";
 import { Observation } from "../dom/Observation";
 import {
   AddedText,
@@ -6,6 +6,7 @@ import {
   ElementTextStream,
   InputStreamOptions,
 } from "../tts/InputStream";
+import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { Chatbot, UserPrompt } from "./Chatbot";
 
 class ClaudeChatbot implements Chatbot {
@@ -113,6 +114,24 @@ class ClaudeResponse extends AssistantResponse {
     options: InputStreamOptions
   ): ElementTextStream {
     return new ClaudeTextBlockCapture(content, options);
+  }
+
+  decorateControls(): MessageControls {
+    return new ClaudeMessageControls(this, this.ttsControlsModule);
+  }
+}
+
+class ClaudeMessageControls extends MessageControls {
+  constructor(message: AssistantResponse, ttsControls: TTSControlsModule) {
+    super(message, ttsControls);
+  }
+
+  protected getExtraControlClasses(): string[] {
+    return ["text-xs"];
+  }
+
+  getHoverMenuSelector(): string {
+    return "div.flex.items-stretch";
   }
 }
 
