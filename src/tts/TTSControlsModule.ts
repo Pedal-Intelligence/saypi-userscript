@@ -152,7 +152,7 @@ export class TTSControlsModule {
 
   createCostElementForMenu(): HTMLElement {
     const costElement = document.createElement("button");
-    costElement.classList.add("saypi-cost");
+    costElement.classList.add("saypi-cost", "tooltip");
     costElement.classList.add(
       "flex",
       "h-12",
@@ -170,7 +170,7 @@ export class TTSControlsModule {
 
   createCostElementForMessage() {
     const costElement = document.createElement("span");
-    costElement.classList.add("saypi-cost");
+    costElement.classList.add("saypi-cost", "tooltip");
     return costElement;
   }
 
@@ -193,15 +193,17 @@ export class TTSControlsModule {
     const costElement = containerIsMenu
       ? this.createCostElementForMenu()
       : this.createCostElementForMessage();
+    let chargeExplanation;
     if (cost) {
-      costElement.title = getMessage("ttsCostExplanation", [
+      chargeExplanation = getMessage("ttsCostExplanation", [
         cost.toFixed(2),
         currency,
       ]);
     } else {
-      costElement.title = getMessage("ttsCostExplanationFree");
+      chargeExplanation = getMessage("ttsCostExplanationFree");
       costElement.classList.add("cost-free");
     }
+    costElement.setAttribute("aria-label", chargeExplanation);
 
     costElement.innerHTML = `Cost: <span class="price">$<span class="value">${cost.toFixed(
       2
@@ -232,15 +234,25 @@ export class TTSControlsModule {
 
   public updateCostBasis(container: HTMLElement, charge: UtteranceCharge) {
     const costElement = container.querySelector(
-      ".saypi-cost .value"
+      ".saypi-cost"
     ) as HTMLElement | null;
     if (costElement) {
-      costElement.textContent = charge.cost.toFixed(2);
-      const currency = getMessage("currencyUSDAbbreviation");
-      costElement.title = getMessage("ttsCostExplanation", [
-        charge.cost.toFixed(2),
-        currency,
-      ]);
+      const valueElement = costElement.querySelector(".value") as HTMLElement;
+      valueElement.textContent = charge.cost.toFixed(2);
+      if (charge.cost) {
+        const currency = getMessage("currencyUSDAbbreviation");
+        costElement.setAttribute(
+          "aria-label",
+          getMessage("ttsCostExplanation", [charge.cost.toFixed(2), currency])
+        );
+        costElement.classList.remove("cost-free");
+      } else {
+        costElement.setAttribute(
+          "aria-label",
+          getMessage("ttsCostExplanationFree")
+        );
+        costElement.classList.add("cost-free");
+      }
     }
   }
 

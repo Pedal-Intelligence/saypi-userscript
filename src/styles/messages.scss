@@ -26,6 +26,16 @@
             }
         }
     }
+
+    .saypi-cost.tooltip[aria-label]::after {
+        top: 101%; // position the tooltip below the charge
+        transform: translateX(-35%); // center the tooltip relative to the charge
+    }
+    .saypi-powered-by.tooltip[aria-label]::after {
+        top: 80%; // position the powered-by tooltip above the charge
+        transform: translateX(-68%); // center the powered-by tooltip below the charge tooltip
+    }
+
 }
 
 .assistant-message .popup-menu button.saypi-button svg {
