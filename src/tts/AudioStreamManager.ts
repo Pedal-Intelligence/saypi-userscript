@@ -86,6 +86,10 @@ export class AudioStreamManager {
     return this.inputBuffers[uuid]?.hasEnded() || true;
   }
 
+  isOpen(uuid: string): boolean {
+    return this.inputBuffers[uuid]?.isOpen() || false;
+  }
+
   /* visible for testing */
   getInputBuffer(uuid: string): InputBuffer | undefined {
     return this.inputBuffers[uuid];

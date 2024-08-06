@@ -11,19 +11,18 @@ import {
   RootChatHistoryObserver,
   EventListener,
   ResourceReleasable,
+  getAssistantMessageByUtterance as getAssistantMessageByUtteranceId,
 } from "../dom/ChatHistory";
 import { Observation } from "../dom/Observation";
 import { VoiceMenu } from "./VoiceMenu";
-import { AssistantResponse } from "../dom/MessageElements";
 import { SpeechUtterance } from "./SpeechModel";
-import { TTSControlsModule } from "./TTSControlsModule";
 import { findRootAncestor } from "../dom/DOMModule";
-import { root } from "cheerio/lib/static";
+import { UtteranceCharge } from "../billing/BillingModule";
 
 export class ChatHistorySpeechManager implements ResourceReleasable {
   private userPreferences = UserPreferenceModule.getInstance();
   private speechSynthesis = SpeechSynthesisModule.getInstance();
-  private ttsControls = new TTSControlsModule(this.speechSynthesis);
+  private speechHistory = SpeechHistoryModule.getInstance();
   private replaying = false; // flag to indicate whether the user requested a replay of an utterance
   private voiceMenu: VoiceMenu | null = null;
 
@@ -207,6 +206,57 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     );
   }
 
+  registerMessageErrorListeners(): void {
+    const speechErrorListener = (error: any, utterance: SpeechUtterance) => {
+      console.warn(`Speech error for utterance: ${utterance.id}`, error);
+      if (utterance) {
+        // find the message in the chat history that corresponds to the given utterance
+        // and mark it as having an error
+        const message = getAssistantMessageByUtteranceId(
+          this.chatbot,
+          utterance.id
+        );
+        if (message) {
+          message.decoratedContent().then((content) => {
+            content.classList.add("inconsistent-text"); // redundant with incomplete speech?
+          });
+          message.decorateIncompleteSpeech();
+        }
+      }
+    };
+
+    EventBus.on("saypi:tts:text:error", speechErrorListener);
+
+    this.eventListeners.push({
+      event: "saypi:tts:text:error",
+      listener: speechErrorListener,
+    });
+  }
+
+  registerMessageChargeListeners(): void {
+    const speechChargeListener = (charge: UtteranceCharge) => {
+      if (charge.utteranceId) {
+        // find the message in the chat history that corresponds to the given utterance
+        // and mark it as having a charge
+        const message = getAssistantMessageByUtteranceId(
+          this.chatbot,
+          charge.utteranceId
+        );
+        if (message) {
+          message.decorateCost(charge);
+          this.speechHistory.addChargeToHistory(charge.utteranceHash, charge);
+        }
+      }
+    };
+
+    EventBus.on("saypi:billing:utteranceCharged", speechChargeListener);
+
+    this.eventListeners.push({
+      event: "saypi:tts:text:charged",
+      listener: speechChargeListener,
+    });
+  }
+
   // Teardown method to disconnect event listeners and release resources
   teardown(): void {
     this.eventListeners.forEach(({ event, listener }) => {
@@ -227,5 +277,7 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     this.registerPastChatHistoryListener(chatHistoryElement);
     this.registerPresentChatHistoryListener(chatHistoryElement);
     this.registerSpeechStreamListeners(chatHistoryElement);
+    this.registerMessageErrorListeners();
+    this.registerMessageChargeListeners();
   }
 }

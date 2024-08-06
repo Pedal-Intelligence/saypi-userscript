@@ -11,7 +11,25 @@ import { SpeechSynthesisVoiceRemote, SpeechUtterance } from "./SpeechModel";
 import { AssistantResponse } from "../dom/MessageElements";
 
 export class TTSControlsModule {
-  constructor(private speechSynthesis: SpeechSynthesisModule) {}
+  private constructor(private speechSynthesis: SpeechSynthesisModule) {
+    this.registerEventListeners();
+  }
+
+  private static instance: TTSControlsModule;
+  static getInstance(): TTSControlsModule {
+    if (!TTSControlsModule.instance) {
+      TTSControlsModule.instance = new TTSControlsModule(
+        SpeechSynthesisModule.getInstance()
+      );
+    }
+    return TTSControlsModule.instance;
+  }
+
+  private registerEventListeners() {
+    EventBus.on("saypi:writing", (utterance: SpeechUtterance) => {
+      this.autoplaySpeech(utterance, 200); // wait a beat after starting the input stream before starting the output stream
+    });
+  }
 
   constructTextToSpeechControl(classname: string, title: string, icon: string) {
     const button = document.createElement("button");

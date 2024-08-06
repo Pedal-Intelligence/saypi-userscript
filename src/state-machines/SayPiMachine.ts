@@ -78,7 +78,9 @@ type SayPiEvent =
   | { type: "saypi:visible" }
   | SayPiAudioConnectedEvent
   | SayPiAudioReconnectEvent
-  | SayPiSessionAssignedEvent;
+  | SayPiSessionAssignedEvent
+  | { type: "saypi:piWriting" }
+  | { type: "saypi:piStoppedWriting" };
 
 interface SayPiContext {
   transcriptions: Record<number, string>;
@@ -121,6 +123,7 @@ type SayPiStateSchema = {
     responding: {
       states: {
         piThinking: {};
+        piWriting: {};
         piSpeaking: {};
       };
     };
@@ -726,6 +729,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               "saypi:piSpeaking": {
                 target: "piSpeaking",
               },
+              "saypi:piWriting": {
+                target: "piWriting",
+              },
             },
             entry: [
               {
@@ -807,6 +813,23 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             ],
             description:
               "Pi's synthesised speech audio is playing.\nPlayful animation.",
+          },
+          piWriting: {
+            on: {
+              "saypi:piSpeaking": {
+                target: "piSpeaking",
+              },
+              "saypi:piStoppedWriting": {
+                target: "#sayPi.listening",
+              },
+            },
+            entry: {
+              type: "writingPrompt",
+            },
+            exit: {
+              type: "clearPrompt",
+            },
+            description: "Pi's text response is being streamed to the page.",
           },
           userInterrupting: {
             on: {
@@ -977,6 +1000,12 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
       thinkingPrompt: () => {
         const message = getMessage("assistantIsThinking", chatbot.getName());
+        if (message) {
+          getPromptOrNull()?.setMessage(message);
+        }
+      },
+      writingPrompt: () => {
+        const message = getMessage("assistantIsWriting", chatbot.getName());
         if (message) {
           getPromptOrNull()?.setMessage(message);
         }

@@ -76,9 +76,7 @@ abstract class AssistantResponse {
   constructor(element: HTMLElement, includeInitialText = true) {
     this._element = element;
     this.includeInitialText = includeInitialText;
-    this.ttsControlsModule = new TTSControlsModule(
-      SpeechSynthesisModule.getInstance()
-    );
+    this.ttsControlsModule = TTSControlsModule.getInstance();
     this.decorate();
     this.messageControls = this.decorateControls();
   }

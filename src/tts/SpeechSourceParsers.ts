@@ -17,6 +17,30 @@ class PiSpeechSourceParser implements SpeechSourceParser {
     this.lang = default_lang;
   }
 
+  public static getVoice(
+    voiceId: string,
+    lang: string
+  ): SpeechSynthesisVoiceRemote {
+    const voiceNumber = voiceId.slice(-1);
+
+    const theVoice: SpeechSynthesisVoiceRemote = {
+      id: voiceId,
+      name: `Pi ${voiceNumber}`,
+      lang: lang,
+      localService: false,
+      default: true,
+      price: 0,
+      powered_by: "inflection.ai",
+      voiceURI: "", // inflection.ai doesn't provide this
+    };
+    return theVoice;
+  }
+
+  /**
+   * Parse a Pi speech URL into a SpeechUtterance
+   * @param source URL of the audio source, e.g. https://pi.ai/api/chat/voice?mode=eager&voice=voice1&messageSid=Wv8mqegpQDbfMNP9hDJGw
+   * @returns
+   */
   public parse(source: string): SpeechUtterance {
     let url;
     try {
@@ -34,19 +58,10 @@ class PiSpeechSourceParser implements SpeechSourceParser {
         `Invalid source: ${source} does not contain required parameters.`
       );
     }
-
-    const voiceNumber = voiceId.slice(-1);
-
-    const theVoice: SpeechSynthesisVoiceRemote = {
-      id: voiceId,
-      name: `Pi ${voiceNumber}`,
-      lang: this.lang,
-      localService: false,
-      default: true,
-      price: 0,
-      powered_by: "inflection.ai",
-      voiceURI: "", // inflection.ai doesn't provide this
-    };
+    const theVoice: SpeechSynthesisVoiceRemote = PiSpeechSourceParser.getVoice(
+      voiceId,
+      this.lang
+    );
 
     return new PiSpeech(messageSid, this.lang, theVoice, source);
   }

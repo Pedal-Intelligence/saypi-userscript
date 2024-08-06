@@ -6,6 +6,8 @@ const USER_SPEAKING = "saypi:userSpeaking";
 const USER_STOPPED_SPEAKING = "saypi:userStoppedSpeaking";
 const USER_FINISHED_SPEAKING = "saypi:userFinishedSpeaking";
 const PI_THINKING = "saypi:piThinking";
+const PI_WRITING = "saypi:piWriting";
+const PI_STOPPED_WRITING = "saypi:piStoppedWriting";
 const PI_SPEAKING = "saypi:piSpeaking";
 const PI_STOPPED_SPEAKING = "saypi:piStoppedSpeaking";
 const PI_FINISHED_SPEAKING = "saypi:piFinishedSpeaking";
@@ -61,6 +63,8 @@ export default class EventModule {
 
     [
       PI_THINKING,
+      PI_WRITING,
+      PI_STOPPED_WRITING,
       PI_SPEAKING,
       PI_STOPPED_SPEAKING,
       PI_FINISHED_SPEAKING,

@@ -139,6 +139,16 @@
       }
     }
   },
+  "assistantIsWriting": {
+    "message": "$chatbot$ is writing...",
+    "description": "Message displayed when the assistant is typing its response.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "assistantIsSpeaking": {
     "message": "$chatbot$ is speaking...",
     "description": "Message displayed when the assistant is speaking its response.",

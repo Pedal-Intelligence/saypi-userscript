@@ -9,10 +9,10 @@ import {
   SpeechUtterance,
   SpeechSynthesisVoiceRemote,
   audioProviders,
+  PiSpeech,
 } from "./SpeechModel";
 import { BillingModule } from "../billing/BillingModule";
-import { TTSControlsModule } from "./TTSControlsModule";
-import { SpeechHistoryModule } from "./SpeechHistoryModule";
+import { PiSpeechSourceParser } from "./SpeechSourceParsers";
 
 function generateUUID(): string {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -133,6 +133,38 @@ class SpeechSynthesisModule {
     );
   }
 
+  async createSpeechPlaceholder(
+    provider: AudioProvider
+  ): Promise<SpeechUtterance> {
+    const preferedLang = await this.userPreferences.getLanguage();
+    const uuid = generateUUID();
+    const placeholderVoiceId = "voice4";
+    const placeholderVoice = PiSpeechSourceParser.getVoice(
+      placeholderVoiceId,
+      preferedLang
+    );
+    if (provider === audioProviders.Pi) {
+      return new PiSpeech(
+        uuid,
+        preferedLang,
+        placeholderVoice,
+        "https://pi.ai/speak"
+      );
+    }
+    // error condition - should be unreachable
+    throw new Error("Invalid audio provider: " + provider);
+  }
+
+  async createSpeechStreamOrPlaceholder(
+    provider: AudioProvider
+  ): Promise<SpeechUtterance> {
+    if (provider === audioProviders.SayPi) {
+      return this.createSpeechStream();
+    } else {
+      return this.createSpeechPlaceholder(provider);
+    }
+  }
+
   async createSpeechStream(): Promise<SpeechUtterance> {
     const preferedVoice: SpeechSynthesisVoiceRemote | null =
       await this.userPreferences.getVoice();
@@ -200,6 +232,87 @@ class SpeechSynthesisModule {
     }
     return audioProviders.Pi;
   }
+
+  private isStreamOpen(utteranceId: string): boolean {
+    return this.audioStreamManager.isOpen(utteranceId);
+  }
+
+  private addSpeechToStreamIfOpen(utteranceId: string, text: string): void {
+    if (this.isStreamOpen(utteranceId)) {
+      this.addSpeechToStream(utteranceId, text);
+    }
+  }
+
+  private replaceSpeechInStreamIfOpen(
+    utteranceId: string,
+    from: string,
+    to: string
+  ): Promise<boolean> {
+    if (this.isStreamOpen(utteranceId)) {
+      return this.replaceSpeechInStream(utteranceId, from, to);
+    }
+    return Promise.resolve(false);
+  }
+
+  private endSpeechStreamIfOpen(utterance: SpeechUtterance): void {
+    if (this.isStreamOpen(utterance.id)) {
+      this.endSpeechStream(utterance);
+    }
+  }
+
+  registerEventListeners(): void {
+    EventBus.on("saypi:tts:text:added", (text: TextAddedEvent) => {
+      this.addSpeechToStreamIfOpen(text.utterance.id, text.text);
+    });
+    EventBus.on("saypi:tts:text:changed", (text: TextChangedEvent) => {
+      this.replaceSpeechInStreamIfOpen(
+        text.utterance.id,
+        text.changedFrom!,
+        text.text
+      ).then((replaced) => {
+        if (replaced) {
+          console.debug(
+            `Replaced text in stream: "${text.changedFrom}" -> "${text.text}"`
+          );
+        } else {
+          console.warn(
+            `Failed to replace text in stream before being flushed: "${text.changedFrom}" -> "${text.text}"`
+          );
+          EventBus.emit("saypi:tts:text:error", {
+            text: text.text,
+            utterance: text.utterance,
+          });
+        }
+      });
+    });
+    EventBus.on("saypi:tts:text:completed", (text: TextCompletedEvent) => {
+      this.endSpeechStreamIfOpen(text.utterance);
+    });
+  }
 }
 
-export { SpeechSynthesisModule };
+type TextAddedEvent = {
+  text: string;
+  utterance: SpeechUtterance;
+};
+type TextChangedEvent = {
+  changedFrom: string;
+  text: string;
+  utterance: SpeechUtterance;
+};
+type TextCompletedEvent = {
+  text: string;
+  utterance: SpeechUtterance;
+};
+type TextErrorEvent = {
+  error: any;
+  utterance: SpeechUtterance;
+};
+
+export {
+  SpeechSynthesisModule,
+  TextAddedEvent,
+  TextChangedEvent,
+  TextCompletedEvent,
+  TextErrorEvent,
+};
