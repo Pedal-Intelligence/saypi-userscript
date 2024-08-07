@@ -89,6 +89,10 @@ export abstract class ElementTextStream {
       },
     });
     this.resetStreamTimeout(); // set the initial timeout
+    console.debug(
+      "Starting stream on",
+      this.element.id ? this.element.id : this.element
+    );
     if (includeInitialText) {
       this.emitInitialText(element); // emit the initial text
     }
