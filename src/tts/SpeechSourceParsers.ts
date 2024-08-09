@@ -8,6 +8,7 @@ import { SpeechSynthesisModule } from "./SpeechSynthesisModule";
 
 interface SpeechSourceParser {
   parse(source: string): Promise<SpeechUtterance> | SpeechUtterance;
+  matches(source: string): Promise<boolean> | boolean;
 }
 
 class PiSpeechSourceParser implements SpeechSourceParser {
@@ -49,6 +50,13 @@ class PiSpeechSourceParser implements SpeechSourceParser {
       throw new Error(`Invalid source: ${source} is not a valid URL.`);
     }
 
+    // verify the domain is pi.ai
+    if (url.hostname !== "pi.ai") {
+      throw new Error(
+        `Invalid source: ${source} is not from the pi.ai domain.`
+      );
+    }
+
     const params = url.searchParams;
     const messageSid = params.get("messageSid");
     const voiceId = params.get("voice");
@@ -64,6 +72,20 @@ class PiSpeechSourceParser implements SpeechSourceParser {
     );
 
     return new PiSpeech(messageSid, this.lang, theVoice, source);
+  }
+
+  /**
+   * Check if the source URL is a Pi speech URL
+   * @param source URL of the audio source
+   * @returns boolean
+   */
+  public matches(source: string): boolean {
+    try {
+      this.parse(source);
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 }
 
@@ -116,5 +138,19 @@ class SayPiSpeechSourceParser implements SpeechSourceParser {
 
     return new SayPiSpeech(speechId, lang || "", theVoice, source);
   }
+
+  /**
+   * Check if the source URL is a SayPi speech URL
+   * @param source URL of the audio source
+   * @returns boolean
+   */
+  public async matches(source: string): Promise<boolean> {
+    try {
+      await this.parse(source);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
 }
-export { PiSpeechSourceParser, SayPiSpeechSourceParser };
+export { SpeechSourceParser, PiSpeechSourceParser, SayPiSpeechSourceParser };

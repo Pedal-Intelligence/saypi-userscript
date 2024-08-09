@@ -1,4 +1,4 @@
-import { SpeechSynthesisModule } from "./SpeechSynthesisModule";
+import { SpeechSynthesisModule, TextErrorEvent } from "./SpeechSynthesisModule";
 import { SpeechHistoryModule } from "./SpeechHistoryModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { Chatbot } from "../chatbots/Chatbot";
@@ -207,14 +207,17 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
   }
 
   registerMessageErrorListeners(): void {
-    const speechErrorListener = (error: any, utterance: SpeechUtterance) => {
-      console.warn(`Speech error for utterance: ${utterance.id}`, error);
-      if (utterance) {
+    const speechErrorListener = (event: TextErrorEvent) => {
+      console.warn(
+        `Speech error for utterance: ${event.utterance.id}`,
+        event.error
+      );
+      if (event.utterance) {
         // find the message in the chat history that corresponds to the given utterance
         // and mark it as having an error
         const message = getAssistantMessageByUtteranceId(
           this.chatbot,
-          utterance.id
+          event.utterance.id
         );
         if (message) {
           message.decoratedContent().then((content) => {

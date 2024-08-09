@@ -99,3 +99,32 @@ test("SayPiSpeechSourceParser should parse the URL correctly", async ({
     provider: audioProviders.SayPi,
   });
 });
+
+test("Pi speech source parsers should match valid Pi AI speech URLs", () => {
+  const source =
+    "https://pi.ai/api/chat/voice?mode=eager&voice=voice1&messageSid=neBP3hiXCNapu3BYFztb6";
+  expect(new PiSpeechSourceParser().matches(source)).toBe(true);
+});
+
+test("Pi speech source parsers should not match non-Pi AI URLs", () => {
+  const source =
+    "https://invalid.url/api/chat/voice?mode=eager&voice=voice1&messageSid=neBP3hiXCNapu3BYFztb6";
+  expect(new PiSpeechSourceParser().matches(source)).toBe(false);
+});
+
+test("Say, Pi speech source parsers should match only valid saypi speech urls", async () => {
+  const localhost =
+    "https://localhost:5001/speak/48e3c44b-ceb5-4052-a639-2e2f1466002e/stream?voice_id=ig1TeITnnNlsJtfHxJlW&lang=en-GB";
+  const piai =
+    "https://pi.ai/api/chat/voice?mode=eager&voice=voice1&messageSid=neBP3hiXCNapu3BYFztb6";
+  const mockVoiceModule = new SpeechSynthesisModule(
+    {} as TextToSpeechService,
+    {} as AudioStreamManager,
+    {} as UserPreferenceModule,
+    {} as BillingModule
+  );
+  const sayPiParser = new SayPiSpeechSourceParser(mockVoiceModule);
+
+  await expect(sayPiParser.matches(localhost)).resolves.toBe(true);
+  await expect(sayPiParser.matches(piai)).resolves.toBe(false);
+});

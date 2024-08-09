@@ -47,7 +47,7 @@ export class LateChangeEvent {
   ) {}
 }
 
-type Completion = {
+export type Completion = {
   type: "eod" | "timeout" | "disconnect";
   time: number;
 };
@@ -64,6 +64,7 @@ export abstract class ElementTextStream {
   protected languageGuess: string = ""; // the language of the content in the element - guessed from user preferences
   private completionReason: Completion | null = null;
   private completed = false; // whether the stream has completed (reduntant check for subject.closed)
+  private streamStartTime: number;
 
   constructor(
     protected element: HTMLElement,
@@ -89,6 +90,7 @@ export abstract class ElementTextStream {
       },
     });
     this.resetStreamTimeout(); // set the initial timeout
+    this.streamStartTime = Date.now();
     console.debug(
       "Starting stream on",
       this.element.id ? this.element.id : this.element
@@ -124,8 +126,9 @@ export abstract class ElementTextStream {
       return;
     }
     this.completionReason = reason;
+    const streamDuration = Date.now() - this.streamStartTime;
     console.debug(
-      `Completing stream on ${reason.type}`,
+      `Completing stream on ${reason.type}, ${streamDuration}ms after starting.`,
       this.element.id ? this.element.id : this.element
     );
     this.subject.complete();
@@ -151,17 +154,21 @@ export abstract class ElementTextStream {
     }
   }
 
+  protected calculateStreamTimeout(): number {
+    return STREAM_TIMEOUT;
+  }
+
   /**
    * The stream will complete if no new text is streamed for a certain duration.
    * This method resets the timeout.
    */
-  private resetStreamTimeout(): void {
+  protected resetStreamTimeout(): void {
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
     this.timeout = setTimeout(() => {
       this.complete({ type: "timeout", time: Date.now() });
-    }, STREAM_TIMEOUT);
+    }, this.calculateStreamTimeout());
   }
 
   protected getTextIsStable(): boolean {

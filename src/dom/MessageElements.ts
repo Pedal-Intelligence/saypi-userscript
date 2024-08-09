@@ -369,6 +369,9 @@ abstract class MessageControls {
     const price = await UserPreferenceModule.getInstance()
       .getVoice()
       .then((voice) => {
+        if (!voice) {
+          return 0;
+        }
         return BillingModule.getInstance().quote(voice!, this.message.text);
       });
     const regenButton = this.ttsControls.createGenerateSpeechButton(price);

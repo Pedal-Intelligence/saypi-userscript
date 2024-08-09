@@ -1,7 +1,9 @@
 import { AssistantResponse, MessageControls } from "../dom/MessageElements";
+import EventBus from "../events/EventBus";
 import {
   AddedText,
   ChangedText,
+  Completion,
   ElementTextStream,
   InputStreamOptions,
 } from "../tts/InputStream";
@@ -174,6 +176,7 @@ class PiTextStream extends ElementTextStream {
   spansRemoved: number;
   spansReplaced: number;
   stillChanging: boolean;
+  additionalDelay: number = 0;
 
   constructor(element: HTMLElement, options?: InputStreamOptions) {
     super(element, options);
@@ -183,8 +186,26 @@ class PiTextStream extends ElementTextStream {
     this.spansRemoved = 0;
     this.spansReplaced = 0;
     this.stillChanging = false;
+    this.additionalDelay = 0;
+
+    EventBus.on("saypi:tts:text:delay", this.handleDelayEvent);
   }
 
+  // override
+  // visible for testing
+  calculateStreamTimeout(): number {
+    const baseDelay = super.calculateStreamTimeout();
+    const additionalDelay = this.additionalDelay || 0; // default to 0 if additionalDelay is undefined or NaN
+    const totalTimeout = baseDelay + additionalDelay;
+    return totalTimeout;
+  }
+
+  /**
+   * The data timeout is the time to wait after the last change event before
+   * considering the stream to be complete.
+   * This differs from the stream timeout, which is the time to wait after the
+   * start of the stream before considering it to be complete.
+   */
   calculateDataTimeout(text: string, lang: string): number {
     // Extract the base language code (e.g., 'en' from 'en-US')
     const baseLanguage = lang.split("-")[0];
@@ -198,6 +219,19 @@ class PiTextStream extends ElementTextStream {
     );
     return totalTime;
   }
+
+  /**
+   * Extend the stream timeout when a delay event is received.
+   */
+  handleDelayEvent = (event: Event) => {
+    const customEvent = event as CustomEvent;
+    const delay = Number(customEvent.detail?.delay) || 1500;
+    this.additionalDelay += delay;
+    console.debug(
+      `Received delay event. Adding ${delay}ms to timeout. Total additional delay: ${this.additionalDelay}ms`
+    );
+    this.resetStreamTimeout();
+  };
 
   handleMutationEvent = (mutation: MutationRecord) => {
     if (this.closed()) {
@@ -285,6 +319,12 @@ class PiTextStream extends ElementTextStream {
       }
     }
   };
+
+  // clean up the event listener when the stream is closed
+  complete(reason: Completion): void {
+    super.complete(reason);
+    EventBus.off("saypi:tts:text:delay", this.handleDelayEvent);
+  }
 }
 
 class PiPrompt extends UserPrompt {
@@ -346,4 +386,4 @@ class PiPrompt extends UserPrompt {
   }
 }
 
-export { PiAIChatbot, PiPrompt };
+export { PiAIChatbot, PiTextStream, PiPrompt };
