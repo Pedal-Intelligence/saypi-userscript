@@ -7,6 +7,7 @@ import { logger, serializeStateValue } from "../LoggingModule.js";
 import EventBus from "../events/EventBus.js";
 import { isSafari } from "../UserAgentModule.js";
 import SlowResponseHandler from "../SlowResponseHandler.ts";
+import { CacheBuster } from "../CacheBuster.ts";
 
 export default class AudioModule {
   constructor() {
@@ -291,19 +292,25 @@ export default class AudioModule {
    * When a load event is received, a temporary audio element is created if needed, and the audio file is loaded.
    */
   registerOfflineAudioCommands() {
-    let audio = this.audioElement;
     // audio output (playback) commands
     EventBus.on(
       "audio:load",
       (detail) => {
-        audio = audio || new Audio();
+        const audio = this.findAudioElement(document) || new Audio();
         this.loadAudio(audio, detail.url);
       },
       this
     );
-    EventBus.on("audio:reload", (e) => {
-      audio = audio || new Audio();
+    EventBus.on("audio:reload", (reloadAudioRequest) => {
+      const audio = this.findAudioElement(document) || new Audio();
+      if (reloadAudioRequest?.bypassCache) {
+        const url = audio.src;
+        audio.src = CacheBuster.addCacheBuster(url);
+      }
       audio.load();
+      if (reloadAudioRequest?.playImmediately) {
+        audio.play();
+      }
     });
   }
 

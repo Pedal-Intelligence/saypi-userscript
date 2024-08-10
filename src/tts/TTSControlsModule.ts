@@ -240,7 +240,7 @@ export class TTSControlsModule {
     poweredByElement = document.createElement("div");
     const ttsEngine = voice.powered_by;
     const ttsLabel = getMessage("ttsPoweredBy", ttsEngine);
-    poweredByElement.classList.add("saypi-powered-by", "tooltip");
+    poweredByElement.classList.add("saypi-powered-by");
     poweredByElement.setAttribute("aria-label", ttsLabel);
     const logoImageExt = ttsEngine === "inflection.ai" ? "png" : "svg"; // can't find a good svg for inflection.ai
     const logoImageUrl = getResourceUrl(

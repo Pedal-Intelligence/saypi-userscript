@@ -1,4 +1,8 @@
-import { SpeechUtterance, StreamedSpeech } from "../tts/SpeechModel";
+import {
+  isPlaceholderUtterance,
+  SpeechUtterance,
+  StreamedSpeech,
+} from "../tts/SpeechModel";
 import { UtteranceCharge } from "../billing/BillingModule";
 
 export class SpeechRecord implements StreamedSpeech {
@@ -53,7 +57,7 @@ export class SpeechHistoryModule {
     try {
       const speechHistory = (await this.getStorageData("speechHistory")) || {};
       let utterance = speechHistory[hash];
-      if (!utterance) {
+      if (!utterance && !isPlaceholderUtterance(speech.utterance)) {
         speechHistory[hash] = speech.utterance;
         await this.setStorageData({ speechHistory: speechHistory });
       }
@@ -79,7 +83,7 @@ export class SpeechHistoryModule {
       const utterance = speechHistory[hash] || null;
       const chargeHistory = (await this.getStorageData("chargeHistory")) || {};
       const charge = chargeHistory[hash];
-      if (utterance) {
+      if (utterance && !isPlaceholderUtterance(utterance) && charge) {
         console.debug(
           `Found utterance with hash ${hash} in speech history.`,
           utterance

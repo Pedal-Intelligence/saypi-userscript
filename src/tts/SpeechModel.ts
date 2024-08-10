@@ -47,6 +47,34 @@ interface SpeechUtterance {
   provider: AudioProvider;
 }
 
+const placeholderVoice: SpeechSynthesisVoiceRemote = {
+  id: "unassigned",
+  lang: "en",
+  price: 0,
+  powered_by: "unassigned",
+  default: false,
+  localService: false,
+  name: "Placeholder Voice",
+  voiceURI: "",
+};
+
+function isPlaceholderUtterance(utterance: SpeechUtterance): boolean {
+  return utterance instanceof SpeechPlaceholder;
+}
+
+class SpeechPlaceholder implements SpeechUtterance {
+  id: string = "";
+  lang: string;
+  voice: SpeechSynthesisVoiceRemote = placeholderVoice;
+  uri: string = "";
+  provider: AudioProvider;
+
+  constructor(lang: string, provider: AudioProvider) {
+    this.lang = lang;
+    this.provider = provider;
+  }
+}
+
 class SayPiSpeech implements SpeechUtterance {
   id: string;
   lang: string;
@@ -116,6 +144,8 @@ export {
   AssistantSpeech,
   SpeechUtterance,
   SpeechSynthesisVoiceRemote,
+  SpeechPlaceholder,
   SayPiSpeech,
   PiSpeech,
+  isPlaceholderUtterance,
 };

@@ -5,7 +5,11 @@ import {
   LateChangeEvent,
   TextContent,
 } from "../tts/InputStream";
-import { AssistantSpeech, SpeechUtterance } from "../tts/SpeechModel";
+import {
+  AssistantSpeech,
+  SpeechPlaceholder,
+  SpeechUtterance,
+} from "../tts/SpeechModel";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import { BillingModule, UtteranceCharge } from "../billing/BillingModule";
@@ -192,6 +196,9 @@ abstract class AssistantResponse {
   }
 
   async decorateSpeech(utterance: SpeechUtterance): Promise<void> {
+    if (utterance instanceof SpeechPlaceholder) {
+      return;
+    }
     this.messageControls.decorateSpeech(utterance);
   }
 

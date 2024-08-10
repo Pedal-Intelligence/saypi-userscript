@@ -10,6 +10,7 @@ import {
   SpeechSynthesisVoiceRemote,
   audioProviders,
   PiSpeech,
+  SpeechPlaceholder,
 } from "./SpeechModel";
 import { BillingModule } from "../billing/BillingModule";
 import { PiSpeechSourceParser } from "./SpeechSourceParsers";
@@ -137,22 +138,7 @@ class SpeechSynthesisModule {
     provider: AudioProvider
   ): Promise<SpeechUtterance> {
     const preferedLang = await this.userPreferences.getLanguage();
-    const uuid = generateUUID();
-    const placeholderVoiceId = "voice4";
-    const placeholderVoice = PiSpeechSourceParser.getVoice(
-      placeholderVoiceId,
-      preferedLang
-    );
-    if (provider === audioProviders.Pi) {
-      return new PiSpeech(
-        uuid,
-        preferedLang,
-        placeholderVoice,
-        "https://pi.ai/speak"
-      );
-    }
-    // error condition - should be unreachable
-    throw new Error("Invalid audio provider: " + provider);
+    return new SpeechPlaceholder(preferedLang, provider);
   }
 
   async createSpeechStreamOrPlaceholder(

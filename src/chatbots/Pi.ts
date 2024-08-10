@@ -223,9 +223,8 @@ class PiTextStream extends ElementTextStream {
   /**
    * Extend the stream timeout when a delay event is received.
    */
-  handleDelayEvent = (event: Event) => {
-    const customEvent = event as CustomEvent;
-    const delay = Number(customEvent.detail?.delay) || 1500;
+  handleDelayEvent = () => {
+    const delay = 1500;
     this.additionalDelay += delay;
     console.debug(
       `Received delay event. Adding ${delay}ms to timeout. Total additional delay: ${this.additionalDelay}ms`
@@ -285,14 +284,14 @@ class PiTextStream extends ElementTextStream {
             const startTime = Date.now();
             const additionsRemaining = mutation.addedNodes.length - i - 1;
             console.debug(
-              `${startTime}: Possible end of stream detected on ${content}, ${additionsRemaining} additions remaining.`
+              `Possible end of stream detected on ${content}, ${additionsRemaining} additions remaining.`
             );
             setTimeout(() => {
               if (!this.stillChanging) {
                 const timeElapsed = Date.now() - startTime;
                 const lastContent = this.emittedValues.slice(-1)[0]?.text;
                 console.debug(
-                  `${Date.now()}: end of stream confirmed on "${lastContent}" after +${timeElapsed}ms`
+                  `end of stream confirmed as "${lastContent}", +${timeElapsed}ms after last change event`
                 );
                 this.complete({ type: "eod", time: Date.now() });
               }
