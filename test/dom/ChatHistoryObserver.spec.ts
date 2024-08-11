@@ -15,7 +15,7 @@ import {
   SpeechUtterance,
 } from "../../src/tts/SpeechModel";
 import { BillingModule } from "../../src/billing/BillingModule";
-import { PiAIChatbot } from "../../src/chatbots/Pi";
+import { PiAIChatbot, PiResponse } from "../../src/chatbots/Pi";
 
 vi.mock("../tts/InputStream");
 vi.mock("../tts/SpeechSynthesisModule");
@@ -95,7 +95,7 @@ describe("ChatHistoryMessageObserver", () => {
       userPreferenceModuleMock,
       billingModuleMock
     );
-    ttsControlsModuleMock = new TTSControlsModule(speechSynthesisModule);
+    ttsControlsModuleMock = TTSControlsModule.getInstance();
 
     assistantResponseSelector =
       new PiAIChatbot().getAssistantResponseSelector();
@@ -117,7 +117,7 @@ describe("ChatHistoryMessageObserver", () => {
   };
 
   const decorateAssistantResponse = (element: HTMLElement) => {
-    return new AssistantResponse(element);
+    return new PiResponse(element);
   };
 
   /**

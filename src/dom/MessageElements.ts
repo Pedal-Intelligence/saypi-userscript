@@ -1,10 +1,5 @@
 import { md5 } from "js-md5";
-import {
-  ElementTextStream,
-  InputStreamOptions,
-  LateChangeEvent,
-  TextContent,
-} from "../tts/InputStream";
+import { ElementTextStream, InputStreamOptions } from "../tts/InputStream";
 import {
   AssistantSpeech,
   SpeechPlaceholder,

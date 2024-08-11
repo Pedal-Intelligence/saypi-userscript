@@ -112,7 +112,7 @@ class PiResponse extends AssistantResponse {
 
   createTextStream(
     content: HTMLElement,
-    options: InputStreamOptions
+    options?: InputStreamOptions
   ): ElementTextStream {
     return new PiTextStream(content, options);
   }
@@ -385,4 +385,4 @@ class PiPrompt extends UserPrompt {
   }
 }
 
-export { PiAIChatbot, PiTextStream, PiPrompt };
+export { PiAIChatbot, PiResponse, PiTextStream, PiPrompt };
