@@ -1,6 +1,6 @@
 import { config } from "../ConfigModule.js";
-import { UtteranceCharge } from "../billing/BillingModule.js";
-import { PiSpeechSourceParser } from "./SpeechSourceParsers.js";
+import { UtteranceCharge } from "../billing/BillingModule";
+import { PiSpeechSourceParser } from "./SpeechSourceParsers";
 
 const saypiAudioDomain = config.apiServerUrl
   ? new URL(config.apiServerUrl).hostname

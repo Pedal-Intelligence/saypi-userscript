@@ -59,10 +59,13 @@ describe("SpeechHistoryModule", () => {
     });
 
     it("should update an existing speech record if it exists", async () => {
-      const theContent = "hello world!";
-      const theUtterance = {
-        id: "utterance1",
-      } as SpeechUtterance;
+      const theContent = "hello springfield!";
+      const theUtterance = new PiSpeech(
+        "utterance2",
+        "en-GB",
+        PiSpeech.voice1,
+        "https://pi.ai/api/chat/voice?mode=eager&voice=voice1&messageSid=utterance2"
+      );
       const theHash = md5(theContent);
       const initialSpeech = new SpeechRecord(theHash, theUtterance);
 
@@ -92,16 +95,15 @@ describe("SpeechHistoryModule", () => {
 
   describe("addChargeToHistory", () => {
     it("should create a new speech record with the charge if it does not exist", async () => {
-      const theContent = "hello world!";
-      const theUtterance = {
-        id: "utterance1",
-      } as SpeechUtterance;
+      const theContent = "hello everyone!";
+      const theUtterance = new PiSpeech(
+        "utterance3",
+        "en-GB",
+        PiSpeech.voice1,
+        "https://pi.ai/api/chat/voice?mode=eager&voice=voice1&messageSid=utterance3"
+      );
       const theHash = md5(theContent);
-      const theCharge = {
-        cost: 50,
-        utteranceId: theUtterance.id,
-        utteranceHash: theHash,
-      } as UtteranceCharge;
+      const theCharge = new UtteranceCharge(theUtterance, 50, theHash);
       await speechHistory.addChargeToHistory(theHash, theCharge);
 
       await speechHistory.addSpeechToHistory(
@@ -115,10 +117,13 @@ describe("SpeechHistoryModule", () => {
     });
 
     it("should update the charge of an existing speech record", async () => {
-      const theContent = "hello world!";
-      const theUtterance = {
-        id: "utterance1",
-      } as SpeechUtterance;
+      const theContent = "hello my friends!";
+      const theUtterance = new PiSpeech(
+        "utterance4",
+        "en-GB",
+        PiSpeech.voice1,
+        "https://pi.ai/api/chat/voice?mode=eager&voice=voice1&messageSid=utterance4"
+      );
       const theHash = md5(theContent);
       const existingRecord = new SpeechRecord(theHash, theUtterance);
       await speechHistory.addSpeechToHistory(theHash, existingRecord); // add speech first
