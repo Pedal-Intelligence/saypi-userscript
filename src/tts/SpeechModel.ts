@@ -63,7 +63,7 @@ function isPlaceholderUtterance(utterance: SpeechUtterance): boolean {
 }
 
 class SpeechPlaceholder implements SpeechUtterance {
-  id: string = "";
+  id: string = "placeholder-" + Math.random().toString(36).substr(2, 9);
   lang: string;
   voice: SpeechSynthesisVoiceRemote = placeholderVoice;
   uri: string = "";

@@ -19,7 +19,6 @@ import {
   StreamedSpeech,
   audioProviders,
 } from "../tts/SpeechModel";
-import { BillingModule } from "../billing/BillingModule";
 import EventBus from "../events/EventBus";
 import { AssistantResponse } from "./MessageElements";
 import { Chatbot } from "../chatbots/Chatbot";
@@ -422,7 +421,9 @@ class ChatHistoryNewMessageObserver
 
     // Start observing the new element
     this.textStream = message.createTextStream(messageContent);
+    let streamStartTime: number = Date.now();
     let firstChunkTime: number | null = null;
+    let lastChunkTime: number | null = null;
     let fullText = ""; // Variable to accumulate the text
 
     this.textStream.getStream().subscribe(
@@ -439,6 +440,7 @@ class ChatHistoryNewMessageObserver
             utterance: utterance,
           };
           EventBus.emit("saypi:tts:text:changed", textChangedEvent);
+          lastChunkTime = Date.now();
         } else {
           const txt = text.text;
           fullText += txt; // Add the text chunk to the full text
@@ -447,6 +449,7 @@ class ChatHistoryNewMessageObserver
             firstChunkTime = currentTime;
             start = true;
           }
+          lastChunkTime = currentTime;
           const delay = currentTime - (firstChunkTime as number);
           console.debug(`+${delay}ms, streamed text: "${txt}"`);
           const textAddedEvent: TextAddedEvent = {
@@ -463,17 +466,22 @@ class ChatHistoryNewMessageObserver
         console.error(`Error occurred streaming text from element: ${error}`);
       },
       () => {
+        console.debug(`Stream info (${utterance.id}):`);
+
+        console.debug(`- Streamed ${fullText.length} characters`);
         if (firstChunkTime) {
-          const totalTime = Date.now() - (firstChunkTime as number);
           console.debug(
-            `Text stream completed ${(totalTime / 1000).toFixed(
-              2
-            )} seconds after first chunk`,
-            utterance.id
+            `- Time to first token: ${firstChunkTime - streamStartTime}ms`
           );
-        } else {
-          console.info("Text stream completed without text");
+          const chunkingElapsedTime =
+            lastChunkTime! - (firstChunkTime as number);
+          console.debug(
+            `- Time from first to last token: ${chunkingElapsedTime}ms`
+          );
         }
+        console.debug(
+          `- Time to completion: ${Date.now() - streamStartTime}ms`
+        );
         const textCompletedEvent: TextCompletedEvent = {
           text: fullText,
           utterance: utterance,

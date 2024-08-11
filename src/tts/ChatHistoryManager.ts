@@ -212,18 +212,25 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
         `Speech error for utterance: ${event.utterance.id}`,
         event.error
       );
-      if (event.utterance) {
+      if (event.utterance?.id) {
         // find the message in the chat history that corresponds to the given utterance
         // and mark it as having an error
-        const message = getAssistantMessageByUtteranceId(
-          this.chatbot,
-          event.utterance.id
-        );
-        if (message) {
-          message.decoratedContent().then((content) => {
-            content.classList.add("inconsistent-text"); // redundant with incomplete speech?
-          });
-          message.decorateIncompleteSpeech();
+        try {
+          const message = getAssistantMessageByUtteranceId(
+            this.chatbot,
+            event.utterance.id
+          );
+          if (message) {
+            message.decoratedContent().then((content) => {
+              content.classList.add("inconsistent-text"); // redundant with incomplete speech?
+            });
+            message.decorateIncompleteSpeech();
+          }
+        } catch (e) {
+          // message not found - non-fatal error
+          console.debug(
+            `Could not find message for utterance ${event.utterance.id}. Won't be able to decorate with speech error.`
+          );
         }
       }
     };
@@ -238,16 +245,23 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
 
   registerMessageChargeListeners(): void {
     const speechChargeListener = (charge: UtteranceCharge) => {
-      if (charge.utteranceId) {
+      if (charge.utteranceId && charge.cost > 0) {
         // find the message in the chat history that corresponds to the given utterance
         // and mark it as having a charge
-        const message = getAssistantMessageByUtteranceId(
-          this.chatbot,
-          charge.utteranceId
-        );
-        if (message) {
-          message.decorateCost(charge);
-          this.speechHistory.addChargeToHistory(charge.utteranceHash, charge);
+        try {
+          const message = getAssistantMessageByUtteranceId(
+            this.chatbot,
+            charge.utteranceId
+          );
+          if (message) {
+            message.decorateCost(charge);
+            this.speechHistory.addChargeToHistory(charge.utteranceHash, charge);
+          }
+        } catch (e) {
+          // message not found - non-fatal error
+          console.debug(
+            `Could not find message for utterance ${charge.utteranceId}. Won't be able to decorate with charge.`
+          );
         }
       }
     };
