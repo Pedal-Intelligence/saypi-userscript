@@ -9,11 +9,9 @@ import {
   SpeechUtterance,
   SpeechSynthesisVoiceRemote,
   audioProviders,
-  PiSpeech,
   SpeechPlaceholder,
 } from "./SpeechModel";
 import { BillingModule } from "../billing/BillingModule";
-import { PiSpeechSourceParser } from "./SpeechSourceParsers";
 
 function generateUUID(): string {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {

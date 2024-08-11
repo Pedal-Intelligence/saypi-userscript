@@ -82,13 +82,17 @@ export class SpeechHistoryModule {
       const speechHistory = (await this.getStorageData("speechHistory")) || {};
       const utterance = speechHistory[hash] || null;
       const chargeHistory = (await this.getStorageData("chargeHistory")) || {};
-      const charge = chargeHistory[hash];
-      if (utterance && !isPlaceholderUtterance(utterance) && charge) {
+      if (utterance && !isPlaceholderUtterance(utterance)) {
         console.debug(
           `Found utterance with hash ${hash} in speech history.`,
           utterance
         );
-        return new SpeechRecord(hash, utterance, charge);
+        const charge = chargeHistory[hash]; // the charge is optional for a speech record
+        if (charge) {
+          console.debug(`Found charge with hash ${hash} in charge history.`);
+          return new SpeechRecord(hash, utterance, charge);
+        }
+        return new SpeechRecord(hash, utterance);
       }
     } catch (error) {
       console.error(`Error getting speech from history: ${error}`);

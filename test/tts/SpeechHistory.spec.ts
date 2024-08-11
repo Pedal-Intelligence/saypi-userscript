@@ -1,7 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { SpeechUtterance } from "../../src/tts/SpeechSynthesisModule";
 import { UtteranceCharge } from "../../src/billing/BillingModule";
-import { StreamedSpeech } from "../../src/tts/SpeechModel";
+import {
+  PiSpeech,
+  SpeechUtterance,
+  StreamedSpeech,
+} from "../../src/tts/SpeechModel";
 import {
   SpeechHistoryModule,
   SpeechRecord,
@@ -33,13 +36,17 @@ describe("SpeechHistoryModule", () => {
   describe("addSpeechToHistory", () => {
     it("should create a new speech record if it does not exist", async () => {
       const theContent = "hello world!";
-      const theUtterance = {
-        id: "utterance1",
-      } as SpeechUtterance;
+      const theUtterance = new PiSpeech(
+        "utterance1",
+        "en-GB",
+        PiSpeech.voice1,
+        "https://pi.ai/api/chat/voice?mode=eager&voice=voice1&messageSid=utterance1"
+      );
+
       const theHash = md5(theContent);
-      const speech = {
+      const speech: StreamedSpeech = {
         utterance: theUtterance,
-      } as StreamedSpeech;
+      };
 
       const createdRecord = await speechHistory.addSpeechToHistory(
         theHash,
@@ -69,7 +76,7 @@ describe("SpeechHistoryModule", () => {
       expect(retrievedRecord).toEqual(createdRecord);
 
       // later update speech with charge
-      const theCharge = new UtteranceCharge(theUtterance, 50);
+      const theCharge = new UtteranceCharge(theUtterance, 50, theHash);
       const chargedSpeech = new SpeechRecord(theHash, theUtterance, theCharge);
       const updatedRecord = await speechHistory.addSpeechToHistory(
         theHash,
@@ -116,7 +123,7 @@ describe("SpeechHistoryModule", () => {
       const existingRecord = new SpeechRecord(theHash, theUtterance);
       await speechHistory.addSpeechToHistory(theHash, existingRecord); // add speech first
 
-      const theCharge = new UtteranceCharge(theUtterance, 50);
+      const theCharge = new UtteranceCharge(theUtterance, 50, theHash);
       await speechHistory.addChargeToHistory(theHash, theCharge); // then add charge
 
       // Check that the charge was added to the existing record

@@ -1,5 +1,6 @@
 import { config } from "../ConfigModule.js";
 import { UtteranceCharge } from "../billing/BillingModule.js";
+import { PiSpeechSourceParser } from "./SpeechSourceParsers.js";
 
 const saypiAudioDomain = config.apiServerUrl
   ? new URL(config.apiServerUrl).hostname
@@ -102,6 +103,32 @@ class PiSpeech implements SpeechUtterance {
   voice: SpeechSynthesisVoiceRemote;
   uri: string;
   provider: AudioProvider;
+
+  // Pi's original voices, english only
+  static voice1: SpeechSynthesisVoiceRemote = PiSpeechSourceParser.getVoice(
+    "voice1",
+    "en"
+  );
+  static voice2: SpeechSynthesisVoiceRemote = PiSpeechSourceParser.getVoice(
+    "voice2",
+    "en"
+  );
+  static voice3: SpeechSynthesisVoiceRemote = PiSpeechSourceParser.getVoice(
+    "voice3",
+    "en"
+  );
+  static voice4: SpeechSynthesisVoiceRemote = PiSpeechSourceParser.getVoice(
+    "voice4",
+    "en"
+  );
+  static voice5: SpeechSynthesisVoiceRemote = PiSpeechSourceParser.getVoice(
+    "voice5",
+    "en"
+  );
+  static voice6: SpeechSynthesisVoiceRemote = PiSpeechSourceParser.getVoice(
+    "voice6",
+    "en"
+  );
 
   constructor(
     id: string,
