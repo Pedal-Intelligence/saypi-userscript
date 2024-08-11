@@ -121,11 +121,28 @@ describe("ChatHistoryMessageObserver", () => {
   };
 
   /**
-   * Create a chat message element, in the style of pi.ai assistant messages
-   * @param text
-   * @param decorated
-   * @returns
+   * Creates a chat message element in the style of pi.ai assistant messages.
+   *
+   * The function generates a structured HTML element for displaying chat messages.
+   * It creates a nested structure of divs with specific classes for styling and layout.
+   * Each paragraph of the message is wrapped in a div with pre-wrap whitespace handling.
+   * An invisible hover menu is also added to each message.
+   *
+   * Sample output structure:
+   * <div class="break-anywhere">
+   *   <div class="flex items-center">
+   *     <div class="w-full">
+   *       <div class="whitespace-pre-wrap mb-4 last:mb-0">Message text...</div>
+   *     </div>
+   *   </div>
+   *   <div style="opacity: 0; height: 0px;"></div>
+   * </div>
+   *
+   * @param {string | string[]} text - The message content, either as a single string or an array of strings for multiple paragraphs.
+   * @param {boolean} [decorated=false] - Whether to apply additional decoration to the message element.
+   * @returns {HTMLElement} The created message element.
    */
+
   const createAssistantMessage = (
     text: string | string[],
     decorated: boolean = false
@@ -142,10 +159,22 @@ describe("ChatHistoryMessageObserver", () => {
     for (const paragraph of paragraphs) {
       addParagraph(paragraph, wFull);
     }
+    addOnHoverMenu(messageElement);
     if (decorated) {
       decorateAssistantResponse(messageElement);
     }
     return messageElement;
+  };
+
+  /**
+   * Add a (bare, undecorated) hover menu to a message element
+   * For Pi, this is a div with opacity 0 and height 0, which expands on hover to show thread options
+   * @param message The message element to add the hover menu to
+   */
+  const addOnHoverMenu = (message: HTMLElement) => {
+    const menu = document.createElement("div");
+    menu.setAttribute("style", "opacity: 0; height: 0px;");
+    message.appendChild(menu);
   };
 
   const addTextToAssistantMessage = (message: HTMLElement, text: string) => {
@@ -162,24 +191,26 @@ describe("ChatHistoryMessageObserver", () => {
     it("should find assistant messages when added", async () => {
       const assistantMessage = createAssistantMessage("Hello world");
 
-      const before = ChatHistoryMessageObserver.findAssistantResponse(
+      const before = ChatHistoryMessageObserver.findFirstAssistantResponse(
         chatHistoryElement,
         assistantResponseSelector
       );
       expect(before.found).toBe(false); // not found initially
       chatHistoryElement.appendChild(assistantMessage);
 
-      const afterAddition = ChatHistoryMessageObserver.findAssistantResponse(
-        chatHistoryElement,
-        assistantResponseSelector
-      );
+      const afterAddition =
+        ChatHistoryMessageObserver.findFirstAssistantResponse(
+          chatHistoryElement,
+          assistantResponseSelector
+        );
       expect(afterAddition.found).toBe(true);
       expect(afterAddition.decorated).toBe(false);
       decorateAssistantResponse(assistantMessage);
-      const afterDecoration = ChatHistoryMessageObserver.findAssistantResponse(
-        chatHistoryElement,
-        assistantResponseSelector
-      );
+      const afterDecoration =
+        ChatHistoryMessageObserver.findFirstAssistantResponse(
+          chatHistoryElement,
+          assistantResponseSelector
+        );
       expect(afterDecoration.found).toBe(true);
       expect(afterDecoration.decorated).toBe(true);
     });
@@ -189,16 +220,17 @@ describe("ChatHistoryMessageObserver", () => {
       assistantMessage.classList.add("justify-end"); // elements containing this class are not assistant messages
 
       chatHistoryElement.appendChild(assistantMessage);
-      const withJustifyEnd = ChatHistoryMessageObserver.findAssistantResponse(
-        chatHistoryElement,
-        assistantResponseSelector
-      );
+      const withJustifyEnd =
+        ChatHistoryMessageObserver.findFirstAssistantResponse(
+          chatHistoryElement,
+          assistantResponseSelector
+        );
       expect(withJustifyEnd.found).toBe(false); // should not match with "justify-end"
 
       // remove the prohibitive classname
       assistantMessage.classList.remove("justify-end");
       const withoutJustifyEnd =
-        ChatHistoryMessageObserver.findAssistantResponse(
+        ChatHistoryMessageObserver.findFirstAssistantResponse(
           chatHistoryElement,
           assistantResponseSelector
         );
@@ -208,14 +240,14 @@ describe("ChatHistoryMessageObserver", () => {
 
   describe("findAssistantResponse", () => {
     it("should find an assistant response if present", () => {
-      const obsNotFound = ChatHistoryMessageObserver.findAssistantResponse(
+      const obsNotFound = ChatHistoryMessageObserver.findFirstAssistantResponse(
         chatHistoryElement,
         assistantResponseSelector
       );
       expect(obsNotFound.found).toBe(false);
       const chatMessageElement = createAssistantMessage("Hello world");
       chatHistoryElement.appendChild(chatMessageElement);
-      const obsFound = ChatHistoryMessageObserver.findAssistantResponse(
+      const obsFound = ChatHistoryMessageObserver.findFirstAssistantResponse(
         chatHistoryElement,
         assistantResponseSelector
       );
@@ -226,7 +258,7 @@ describe("ChatHistoryMessageObserver", () => {
       const chatMessageElement = document.createElement("div");
       chatMessageElement.classList.add("break-anywhere", "justify-end");
       chatHistoryElement.appendChild(chatMessageElement);
-      const obsNotFound = ChatHistoryMessageObserver.findAssistantResponse(
+      const obsNotFound = ChatHistoryMessageObserver.findFirstAssistantResponse(
         chatHistoryElement,
         assistantResponseSelector
       );
@@ -237,7 +269,7 @@ describe("ChatHistoryMessageObserver", () => {
       const html =
         '<div class="break-anywhere"><div class="flex items-center"><div class="w-full"><div class="whitespace-pre-wrap mb-4 last:mb-0">Awesome! ...</div></div></div><div style="opacity: 0; height: 0px;"></div></div>';
       chatHistoryElement.innerHTML = html;
-      const obsFound = ChatHistoryMessageObserver.findAssistantResponse(
+      const obsFound = ChatHistoryMessageObserver.findFirstAssistantResponse(
         chatHistoryElement,
         assistantResponseSelector
       );
@@ -248,13 +280,14 @@ describe("ChatHistoryMessageObserver", () => {
   describe("decorateAssistantResponse", () => {
     it("should decorate an assistant response", () => {
       const chatMessageElement = createAssistantMessage("Hello there!");
+      chatHistoryElement.appendChild(chatMessageElement);
       const assistantResponse = decorateAssistantResponse(chatMessageElement);
       expect(assistantResponse.element).toBe(chatMessageElement);
       expect(chatMessageElement.classList.contains("assistant-message")).toBe(
         true
       );
-      const obs = ChatHistoryMessageObserver.findAssistantResponse(
-        chatMessageElement,
+      const obs = ChatHistoryMessageObserver.findFirstAssistantResponse(
+        chatHistoryElement,
         assistantResponseSelector
       );
       expect(obs.decorated).toBe(true);
@@ -265,7 +298,7 @@ describe("ChatHistoryMessageObserver", () => {
     it("should get the text of an assistant message", () => {
       const chatMessageElement = createAssistantMessage("Hello there!");
       const html = chatMessageElement.outerHTML;
-      const message = new AssistantResponse(chatMessageElement);
+      const message = new PiResponse(chatMessageElement);
       expect(message.text).toBe("Hello there!");
     });
 
@@ -274,7 +307,7 @@ describe("ChatHistoryMessageObserver", () => {
         "Hello there!",
         "How are you doing?",
       ]);
-      const text = new AssistantResponse(chatMessageElement).text;
+      const text = new PiResponse(chatMessageElement).text;
       expect(text).toBe(
         ["Hello there!", "How are you doing?"].join(
           AssistantResponse.PARAGRAPH_SEPARATOR
@@ -289,7 +322,7 @@ describe("ChatHistoryMessageObserver", () => {
           "Hello there!",
           "How are you doing?",
         ]);
-        const message = new AssistantResponse(chatMessageElement);
+        const message = new PiResponse(chatMessageElement);
         const stableText = await message.stableText();
         expect(message.text).toBe(stableText);
 
@@ -305,7 +338,7 @@ describe("ChatHistoryMessageObserver", () => {
         "How are you doing?",
       ]);
       chatHistoryElement.appendChild(chatMessageElement);
-      const message = new AssistantResponse(chatMessageElement);
+      const message = new PiResponse(chatMessageElement);
 
       // after a delay, add text to the message
       setTimeout(() => {

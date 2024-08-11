@@ -215,6 +215,20 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
     return observations;
   }
 
+  static findFirstAssistantResponse(
+    searchRoot: Element,
+    querySelector: string
+  ): Observation {
+    const allResponses = ChatHistoryMessageObserver.findAssistantResponses(
+      searchRoot,
+      querySelector
+    );
+    if (allResponses.length > 0) {
+      return allResponses[0];
+    }
+    return Observation.notFound("");
+  }
+
   findAssistantResponses(searchRoot: Element): Observation[] {
     const query = this.chatbot.getAssistantResponseSelector();
     return ChatHistoryMessageObserver.findAssistantResponses(searchRoot, query);

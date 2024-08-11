@@ -132,7 +132,7 @@ class PiMessageControls extends MessageControls {
   }
 
   getHoverMenuSelector(): string {
-    return ":nth-child(2)"; // second (i.e. last) child of the message element
+    return "div[style]:last-of-type"; // last div child of the message element (usually the second child)
   }
 }
 
