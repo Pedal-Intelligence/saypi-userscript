@@ -142,7 +142,7 @@ class PiTextStream extends ElementTextStream {
   // Timeout values above base for different languages - derived from empirical testing on pi.ai
   static LANGUAGE_TIMEOUTS: { [key: string]: number } = {
     en: 0,
-    ar: 1250,
+    ar: 3000,
     de: 250,
     es: 250,
     fr: 1500,

@@ -204,6 +204,13 @@ abstract class AssistantResponse {
   async decorateCost(charge: UtteranceCharge): Promise<void> {
     this.messageControls.decorateCost(charge);
   }
+
+  toString(): string {
+    const text = this.text
+      ? `"${this.text.substring(0, 9)}..."` // show first 9 characters
+      : `AssistantResponse: { id: ${this.element.id}, utteranceId: ${this.utteranceId}, hash: ${this.hash} }`;
+    return text;
+  }
 }
 
 abstract class MessageControls {

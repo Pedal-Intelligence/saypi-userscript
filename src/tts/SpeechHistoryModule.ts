@@ -2,6 +2,7 @@ import {
   isPlaceholderUtterance,
   SpeechUtterance,
   StreamedSpeech,
+  UtteranceFactory,
 } from "../tts/SpeechModel";
 import { UtteranceCharge } from "../billing/BillingModule";
 
@@ -80,13 +81,17 @@ export class SpeechHistoryModule {
   ): Promise<SpeechRecord | null> {
     try {
       const speechHistory = (await this.getStorageData("speechHistory")) || {};
-      const utterance = speechHistory[hash] || null;
+      const utteranceObj = speechHistory[hash] || null;
       const chargeHistory = (await this.getStorageData("chargeHistory")) || {};
-      if (utterance && !isPlaceholderUtterance(utterance)) {
+      if (utteranceObj && !isPlaceholderUtterance(utteranceObj)) {
         console.debug(
           `Found utterance with hash ${hash} in speech history.`,
-          utterance
+          utteranceObj
         );
+
+        // Use the factory to create an instance of the appropriate class
+        const utterance = UtteranceFactory.createUtterance(utteranceObj);
+
         const charge = chargeHistory[hash]; // the charge is optional for a speech record
         if (charge) {
           console.debug(`Found charge with hash ${hash} in charge history.`);

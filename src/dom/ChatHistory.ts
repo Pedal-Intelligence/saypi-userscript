@@ -284,10 +284,18 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
   ): Promise<StreamedSpeech | null> {
     const speechRecord = await history.getSpeechFromHistory(message.hash);
     if (speechRecord) {
-      console.debug("Found message in speech history", speechRecord);
+      console.debug(
+        "Speech found in history for message",
+        message.toString(),
+        speechRecord.utterance?.toString()
+      );
       return speechRecord;
     } else {
       // speech not cached
+      console.debug(
+        "Speech not found in history for message",
+        message.toString()
+      );
       return null;
     }
   }

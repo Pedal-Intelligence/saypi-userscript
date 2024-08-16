@@ -1,3 +1,4 @@
+import { from } from "rxjs";
 import { config } from "../ConfigModule.js";
 import { UtteranceCharge } from "../billing/BillingModule";
 import { PiSpeechSourceParser } from "./SpeechSourceParsers";
@@ -46,6 +47,43 @@ interface SpeechUtterance {
   voice: SpeechSynthesisVoiceRemote;
   uri: string;
   provider: AudioProvider;
+  toString(): string;
+}
+
+class BaseSpeechUtterance implements SpeechUtterance {
+  id: string;
+  lang: string;
+  voice: SpeechSynthesisVoiceRemote;
+  uri: string;
+  provider: AudioProvider;
+
+  constructor(
+    id: string,
+    lang: string,
+    voice: SpeechSynthesisVoiceRemote,
+    uri: string,
+    provider: AudioProvider
+  ) {
+    this.id = id;
+    this.lang = lang;
+    this.voice = voice;
+    this.uri = uri;
+    this.provider = provider;
+  }
+
+  toString(): string {
+    return `Voice: ${this.voice.name}, ID: ${this.id}`;
+  }
+
+  static fromPlainObject(obj: any): BaseSpeechUtterance {
+    return new BaseSpeechUtterance(
+      obj.id,
+      obj.lang,
+      obj.voice,
+      obj.uri,
+      obj.provider
+    );
+  }
 }
 
 const placeholderVoice: SpeechSynthesisVoiceRemote = {
@@ -63,47 +101,38 @@ function isPlaceholderUtterance(utterance: SpeechUtterance): boolean {
   return utterance instanceof SpeechPlaceholder;
 }
 
-class SpeechPlaceholder implements SpeechUtterance {
-  id: string = "placeholder-" + Math.random().toString(36).substr(2, 9);
-  lang: string;
-  voice: SpeechSynthesisVoiceRemote = placeholderVoice;
-  uri: string = "";
-  provider: AudioProvider;
-
+class SpeechPlaceholder extends BaseSpeechUtterance {
   constructor(lang: string, provider: AudioProvider) {
-    this.lang = lang;
-    this.provider = provider;
+    super(
+      "placeholder-" + Math.random().toString(36).substr(2, 9),
+      lang,
+      placeholderVoice,
+      "",
+      provider
+    );
+  }
+
+  fromPlainObject(obj: any): SpeechPlaceholder {
+    return new SpeechPlaceholder(obj.lang, obj.provider);
   }
 }
 
-class SayPiSpeech implements SpeechUtterance {
-  id: string;
-  lang: string;
-  voice: SpeechSynthesisVoiceRemote;
-  uri: string;
-  provider: AudioProvider;
-
+class SayPiSpeech extends BaseSpeechUtterance {
   constructor(
     id: string,
     lang: string,
     voice: SpeechSynthesisVoiceRemote,
     uri: string
   ) {
-    this.id = id;
-    this.lang = lang;
-    this.voice = voice;
-    this.uri = uri;
-    this.provider = audioProviders.SayPi;
+    super(id, lang, voice, uri, audioProviders.SayPi);
+  }
+
+  fromPlainObject(obj: any): SayPiSpeech {
+    return new SayPiSpeech(obj.id, obj.lang, obj.voice, obj.uri);
   }
 }
 
-class PiSpeech implements SpeechUtterance {
-  id: string;
-  lang: string;
-  voice: SpeechSynthesisVoiceRemote;
-  uri: string;
-  provider: AudioProvider;
-
+class PiSpeech extends BaseSpeechUtterance {
   // Pi's original voices, english only
   static voice1: SpeechSynthesisVoiceRemote = PiSpeechSourceParser.getVoice(
     "voice1",
@@ -136,11 +165,24 @@ class PiSpeech implements SpeechUtterance {
     voice: SpeechSynthesisVoiceRemote,
     uri: string
   ) {
-    this.id = id;
-    this.lang = lang;
-    this.voice = voice;
-    this.uri = uri;
-    this.provider = audioProviders.Pi;
+    super(id, lang, voice, uri, audioProviders.Pi);
+  }
+
+  fromPlainObject(obj: any): PiSpeech {
+    return new PiSpeech(obj.id, obj.lang, obj.voice, obj.uri);
+  }
+}
+
+class UtteranceFactory {
+  static createUtterance(obj: any): BaseSpeechUtterance {
+    switch (obj.provider.name) {
+      case "Say, Pi":
+        return SayPiSpeech.fromPlainObject(obj);
+      case "Pi":
+        return PiSpeech.fromPlainObject(obj);
+      default:
+        return BaseSpeechUtterance.fromPlainObject(obj);
+    }
   }
 }
 
@@ -175,4 +217,5 @@ export {
   SayPiSpeech,
   PiSpeech,
   isPlaceholderUtterance,
+  UtteranceFactory,
 };
