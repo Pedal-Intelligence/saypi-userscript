@@ -30,6 +30,8 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
   private eventListeners: EventListener[] = [];
   private observers: Observer[] = [];
 
+  private newMessageObserver: ChatHistoryAdditionsObserver | null = null;
+
   findAndDecorateVoiceMenu(): Observation {
     const audioControlsContainer = document.querySelector(
       "#saypi-audio-controls"
@@ -90,12 +92,15 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
    * and associate the utterance with that message in the speech history.
    * @param utterance A spoken reading of a chat message
    */
-  associateWithChatHistory(
+  async associateWithChatHistory(
     searchRoot: HTMLElement,
     utterance: SpeechUtterance
-  ): void {
+  ): Promise<void> {
     // get most recent message in chat history
     const speech = new AssistantSpeech(utterance);
+    await this.newMessageObserver?.findAndDecorateAssistantResponses(
+      searchRoot
+    ); // ensure decorators have run before searching for the message
     const assistantMessages = searchRoot.querySelectorAll(".assistant-message");
     if (assistantMessages.length > 0) {
       const lastAssistantMessage = assistantMessages[
@@ -122,7 +127,9 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
           });
           return;
         }
-        console.debug(`Adding speech to history with hash: ${hash}`);
+        console.debug(
+          `Saving speech for ${assistantMessage.toString()} with hash: ${hash}`
+        );
         SpeechHistoryModule.getInstance().addSpeechToHistory(hash, speech);
       });
     }
@@ -292,7 +299,11 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     this.addIdChatHistory(chatHistoryElement);
     this.findAndDecorateVoiceMenu(); // voice menu is not within the chat history, but is a related element
     this.registerPastChatHistoryListener(chatHistoryElement);
-    this.registerPresentChatHistoryListener(chatHistoryElement);
+    this.registerPresentChatHistoryListener(chatHistoryElement).then(
+      (observer) => {
+        this.newMessageObserver = observer;
+      }
+    );
     this.registerSpeechStreamListeners(chatHistoryElement);
     this.registerMessageErrorListeners();
     this.registerMessageChargeListeners();

@@ -61,9 +61,17 @@ export class SpeechHistoryModule {
       if (!utterance && !isPlaceholderUtterance(speech.utterance)) {
         speechHistory[hash] = speech.utterance;
         await this.setStorageData({ speechHistory: speechHistory });
+        console.debug(
+          `Saved speech with hash ${hash} to history.`,
+          speech.utterance.toString()
+        );
       }
       if (speech.charge) {
         await this.addChargeToHistory(hash, speech.charge);
+        console.debug(
+          `Saved charge with hash ${hash} to history.`,
+          speech.charge.cost
+        );
       }
     } catch (error) {
       console.error(`Error adding speech to history: ${error}`);
