@@ -250,14 +250,27 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
   async findAndDecorateAssistantResponses(
     searchRoot: Element
   ): Promise<Observation[]> {
-    let observations: Observation[] = this.findAssistantResponses(searchRoot);
-    for (let obs of observations) {
-      if (obs.found && obs.isNew && !obs.decorated) {
-        console.debug("Decorating assistant response", obs.target);
-        const message = this.decorateAssistantResponse(
-          obs.target as HTMLElement
+    const initialObservations: Observation[] =
+      this.findAssistantResponses(searchRoot);
+    const decoratedObservations: Observation[] = [];
+    for (const initialObservation of initialObservations) {
+      if (
+        initialObservation.found &&
+        initialObservation.isNew &&
+        !initialObservation.decorated
+      ) {
+        console.debug(
+          "Decorating assistant response",
+          initialObservation.target
         );
-        obs = Observation.foundAndDecorated(obs, message);
+        const message = this.decorateAssistantResponse(
+          initialObservation.target as HTMLElement
+        );
+        const decoratedObservation = Observation.foundAndDecorated(
+          initialObservation,
+          message
+        );
+        decoratedObservations.push(decoratedObservation);
 
         const speech = await this.streamSpeech(message);
         if (speech) {
@@ -275,7 +288,7 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
         }
       }
     }
-    return observations;
+    return decoratedObservations;
   }
 
   async streamSpeechFromHistory(
@@ -382,7 +395,7 @@ class ChatHistoryNewMessageObserver
         message.decorateSpeech(utterance);
         return new AssistantSpeech(utterance);
       };
-      EventBus.on("saypi:tts:speechStreamStarted", streamStartedListener);
+      //EventBus.on("saypi:tts:speechStreamStarted", streamStartedListener); // redunandant with ChatHistoryManager?
       this.EventListeners.push({
         event: "saypi:tts:speechStreamStarted",
         listener: streamStartedListener,
