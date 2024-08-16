@@ -72,7 +72,7 @@ class BaseSpeechUtterance implements SpeechUtterance {
   }
 
   toString(): string {
-    return `Voice: ${this.voice.name}, ID: ${this.id}`;
+    return `Speech: { Voice: ${this.voice.name}, ID: ${this.id} }`;
   }
 
   static fromPlainObject(obj: any): BaseSpeechUtterance {
