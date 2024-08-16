@@ -116,6 +116,40 @@ describe("SpeechHistoryModule", () => {
       );
     });
 
+    describe("getSpeechFromHistory", () => {
+      it("should return a speech record if it exists in the history", async () => {
+        const hash = "testHash";
+        const expectedUtterance = new PiSpeech(
+          "utterance1",
+          "en-GB",
+          PiSpeech.voice1,
+          "https://pi.ai/api/chat/voice?mode=eager&voice=voice1&messageSid=utterance1"
+        );
+        const expectedCharge = new UtteranceCharge(expectedUtterance, 50, hash);
+        await speechHistory.addChargeToHistory(hash, expectedCharge);
+        await speechHistory.addSpeechToHistory(
+          hash,
+          new SpeechRecord(hash, expectedUtterance)
+        );
+
+        const retrievedRecord = await speechHistory.getSpeechFromHistory(hash);
+
+        const expectedRecord = new SpeechRecord(
+          hash,
+          expectedUtterance,
+          expectedCharge
+        );
+
+        expect(retrievedRecord).toEqual(expectedRecord);
+      });
+
+      it("should return null if the speech record does not exist", async () => {
+        const hash = "nonExistentHash";
+        const retrievedRecord = await speechHistory.getSpeechFromHistory(hash);
+        expect(retrievedRecord).toBeNull();
+      });
+    });
+
     it("should update the charge of an existing speech record", async () => {
       const theContent = "hello my friends!";
       const theUtterance = new PiSpeech(
