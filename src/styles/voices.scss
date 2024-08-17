@@ -1,19 +1,25 @@
 #saypi-voice-menu .saypi-voice-button {
-    display: none;
+  display: none;
 }
 #saypi-voice-menu.expanded .saypi-voice-button {
-    display: block;
+  display: block;
 }
 .saypi-voice-button img.flair {
-    display: inline;
-    height: 20px;
-    padding-left: 0.5rem;
+  display: inline;
+  height: 20px;
+  padding-left: 0.5rem;
 }
 #saypi-voice-settings button.selected.paola {
-    background-color: rgb(200, 200, 200);
-    border-color: rgb(200, 200, 200);
+  background-color: rgb(200, 200, 200);
+  border-color: rgb(200, 200, 200);
 }
 #saypi-voice-settings button.selected.joey {
-    background-color: rgb(255, 255, 200);
-    border-color: rgb(255, 255, 200);
+  background-color: rgb(255, 255, 200);
+  border-color: rgb(255, 255, 200);
+}
+#saypi-voice-menu-controls.saypi-provided-voice {
+  //background-color: #418a2f; // need a button color that indicates the voice is provided by SayPi, but not too jarring
+  button {
+    background-color: inherit;
+  }
 }

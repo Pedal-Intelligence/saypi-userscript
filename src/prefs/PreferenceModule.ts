@@ -240,6 +240,11 @@ class UserPreferenceModule {
       const audioControls = new AudioControlsModule();
       audioControls.useAudioOutputProvider(audioProviders.SayPi); // TODO: replace with voice.provided_by
     }
+    EventBus.emit("userPreferenceChanged", {
+      voiceId: voice.id,
+      voice: voice,
+      audioProvider: audioProviders.SayPi,
+    });
     return Promise.resolve();
   }
 
@@ -257,6 +262,11 @@ class UserPreferenceModule {
         }
       });
     }
+    EventBus.emit("userPreferenceChanged", {
+      voiceId: null,
+      voice: null,
+      audioProvider: audioProviders.Pi,
+    });
     return Promise.resolve();
   }
   public getAllowInterruptions(): Promise<boolean> {

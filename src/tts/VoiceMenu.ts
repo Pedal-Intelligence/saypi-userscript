@@ -2,9 +2,10 @@ import { getResourceUrl } from "../ResourceModule";
 import { Chatbot } from "../chatbots/Chatbot";
 import { getMostRecentAssistantMessage } from "../dom/ChatHistory";
 import { Observation } from "../dom/Observation";
+import EventBus from "../events/EventBus";
 import getMessage from "../i18n";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
-import { SpeechSynthesisVoiceRemote } from "./SpeechModel";
+import { audioProviders, SpeechSynthesisVoiceRemote } from "./SpeechModel";
 import { SpeechSynthesisModule } from "./SpeechSynthesisModule";
 
 export abstract class VoiceSelector {
@@ -247,6 +248,26 @@ export class VoiceMenu extends VoiceSelector {
       voiceMenuControls
     );
 
+    // add a class to the voice menu controls if the user has selected a SayPi voice
+    let voiceProvidedBySayPi = false;
+    this.userPreferences.hasVoice().then((hasVoice) => {
+      if (hasVoice) {
+        voiceMenuControls.classList.add("saypi-provided-voice");
+        voiceProvidedBySayPi = true;
+      }
+    });
+    EventBus.on("userPreferenceChanged", (detail) => {
+      if (detail.audioProvider) {
+        if (detail.audioProvider === audioProviders.SayPi) {
+          voiceMenuControls.classList.add("saypi-provided-voice");
+          voiceProvidedBySayPi = true;
+        } else {
+          voiceMenuControls.classList.remove("saypi-provided-voice");
+          voiceProvidedBySayPi = false;
+        }
+      }
+    });
+
     const observer = new MutationObserver((mutationsList) => {
       for (let mutation of mutationsList) {
         if (
@@ -256,12 +277,21 @@ export class VoiceMenu extends VoiceSelector {
         ) {
           voiceMenuControls.classList.remove("self-end");
         }
+        if (
+          mutation.type === "attributes" &&
+          mutation.attributeName === "style"
+        ) {
+          // menu has changed between a circle and a rectangle (border-radius style), as happens when audio is toggled on pi.ai
+          if (voiceProvidedBySayPi) {
+            voiceMenuControls.classList.add("saypi-provided-voice");
+          }
+        }
       }
     });
 
     observer.observe(voiceMenuControls, {
       attributes: true,
-      attributeFilter: ["class"],
+      attributeFilter: ["class", "style"],
     });
     return Observation.foundAndDecorated(obs);
   }
