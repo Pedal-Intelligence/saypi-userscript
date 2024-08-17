@@ -333,13 +333,13 @@ abstract class MessageControls {
     if (!speechButtonElement) {
       this.ttsControls.addSpeechButton(utterance, this.messageControlsElement);
     }
-    this.decorateCost(UtteranceCharge.none); // cost is unknown at this point
-    const costElement = this.messageControlsElement.querySelector(
-      ".saypi-cost"
-    ) as HTMLDivElement | null;
-    if (costElement && utterance.voice) {
-      this.ttsControls.addPoweredBy(costElement, utterance.voice);
+    if (utterance.voice) {
+      this.ttsControls.addPoweredBy(
+        this.messageControlsElement,
+        utterance.voice
+      );
     }
+    this.decorateCost(UtteranceCharge.none); // cost is unknown at this point
   }
 
   private watchForPopupMenu(

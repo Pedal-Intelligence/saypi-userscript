@@ -34,7 +34,13 @@ export class TTSControlsModule {
   constructTextToSpeechControl(classname: string, title: string, icon: string) {
     const button = document.createElement("button");
     button.type = "button";
-    button.classList.add("text-center", "saypi-button", "tooltip", classname);
+    button.classList.add(
+      "text-center",
+      "saypi-button",
+      "tooltip",
+      "tts-item",
+      classname
+    );
     button.setAttribute("aria-label", title);
     button.innerHTML = icon;
     return button;
@@ -95,6 +101,7 @@ export class TTSControlsModule {
       "active:text-primary-700",
       "saypi-button",
       "tooltip",
+      "tts-item",
       classname
     );
     button.setAttribute("title", title);
@@ -170,7 +177,7 @@ export class TTSControlsModule {
 
   createCostElementForMenu(): HTMLElement {
     const costElement = document.createElement("button");
-    costElement.classList.add("saypi-cost", "tooltip");
+    costElement.classList.add("saypi-cost", "tooltip", "tts-item");
     costElement.classList.add(
       "flex",
       "h-12",
@@ -188,7 +195,12 @@ export class TTSControlsModule {
 
   createCostElementForMessage() {
     const costElement = document.createElement("span");
-    costElement.classList.add("saypi-cost", "tooltip");
+    costElement.classList.add(
+      "saypi-cost",
+      "tooltip",
+      "tts-item",
+      "tooltip-wide"
+    );
     return costElement;
   }
 
@@ -240,7 +252,12 @@ export class TTSControlsModule {
     poweredByElement = document.createElement("div");
     const ttsEngine = voice.powered_by;
     const ttsLabel = getMessage("ttsPoweredBy", ttsEngine);
-    poweredByElement.classList.add("saypi-powered-by");
+    poweredByElement.classList.add(
+      "saypi-powered-by",
+      "tooltip",
+      "tts-item",
+      "tooltip-wide"
+    );
     poweredByElement.setAttribute("aria-label", ttsLabel);
     const logoImageExt = ttsEngine === "inflection.ai" ? "png" : "svg"; // can't find a good svg for inflection.ai
     const logoImageUrl = getResourceUrl(
