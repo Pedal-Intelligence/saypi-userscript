@@ -21,11 +21,11 @@ function generateUUID(): string {
   });
 }
 
-function getUtteranceURI(utterance: SpeechUtterance): string {
-  if (utterance.uri.includes("?")) {
-    return utterance.uri;
+function getUtteranceURI(speech: SpeechUtterance): string {
+  if (speech.uri.includes("?")) {
+    return speech.uri;
   } else {
-    return `${utterance.uri}?voice_id=${utterance.voice.id}&lang=${utterance.lang}`;
+    return `${speech.uri}?voice_id=${speech.voice.id}&lang=${speech.lang}`;
   }
 }
 
@@ -74,6 +74,7 @@ class SpeechSynthesisModule {
     this.ttsService = ttsService;
     this.audioStreamManager = audioStreamManager;
     this.userPreferences = userPreferenceModule;
+    this.registerEventListeners();
     this.initProvider();
   }
 
@@ -184,9 +185,14 @@ class SpeechSynthesisModule {
     EventBus.emit("saypi:tts:speechStreamEnded", utterance);
   }
 
-  speak(utterance: SpeechUtterance): void {
+  speak(speech: SpeechUtterance): void {
+    if (speech instanceof SpeechPlaceholder) {
+      console.warn("Cannot speak a placeholder");
+      return;
+    }
+    console.debug(`Speaking: ${speech.toString()}`);
     // Start audio playback with utterance.uri as the audio source
-    const audioSource = getUtteranceURI(utterance);
+    const audioSource = getUtteranceURI(speech);
     EventBus.emit("audio:load", { url: audioSource }); // indirectly calls AudioModule.loadAudio
   }
 

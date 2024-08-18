@@ -9,6 +9,7 @@ import EventBus from "../events/EventBus";
 import { UtteranceCharge } from "../billing/BillingModule";
 import { SpeechSynthesisVoiceRemote, SpeechUtterance } from "./SpeechModel";
 import { AssistantResponse } from "../dom/MessageElements";
+import { AssistantWritingEvent } from "../dom/MessageEvents";
 
 export class TTSControlsModule {
   private constructor(private speechSynthesis: SpeechSynthesisModule) {
@@ -26,8 +27,8 @@ export class TTSControlsModule {
   }
 
   private registerEventListeners() {
-    EventBus.on("saypi:writing", (utterance: SpeechUtterance) => {
-      this.autoplaySpeech(utterance, 200); // wait a beat after starting the input stream before starting the output stream
+    EventBus.on("saypi:piWriting", (event: AssistantWritingEvent) => {
+      this.autoplaySpeech(event.utterance, 200); // wait a beat after starting the input stream before starting the output stream
     });
   }
 

@@ -21,6 +21,7 @@ import {
 } from "../tts/SpeechModel";
 import EventBus from "../events/EventBus";
 import { AssistantResponse } from "./MessageElements";
+import { AssistantWritingEvent } from "./MessageEvents";
 import { Chatbot } from "../chatbots/Chatbot";
 import { findRootAncestor } from "./DOMModule";
 interface ResourceReleasable {
@@ -259,10 +260,6 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
         initialObservation.isNew &&
         !initialObservation.decorated
       ) {
-        console.debug(
-          "Decorating assistant response",
-          initialObservation.target
-        );
         const message = this.decorateAssistantResponse(
           initialObservation.target as HTMLElement
         );
@@ -412,7 +409,10 @@ class ChatHistoryNewMessageObserver
       messageContent,
       utterance,
       () => {
-        EventBus.emit("saypi:piWriting", { utterance: utterance });
+        const writingEvent: AssistantWritingEvent = {
+          utterance: utterance,
+        };
+        EventBus.emit("saypi:piWriting", writingEvent);
       },
       (text) => {
         EventBus.emit("saypi:piStoppedWriting", {
