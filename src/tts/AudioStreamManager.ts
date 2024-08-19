@@ -2,7 +2,7 @@ import { TextToSpeechService } from "./TextToSpeechService";
 import { InputBuffer } from "./InputBuffer";
 import { SpeechSynthesisVoiceRemote, SpeechUtterance } from "./SpeechModel";
 
-const STREAM_TIMEOUT_MS = 15000; // end streams after prolonged inactivity
+const STREAM_TIMEOUT_MS = 19000; // end streams after prolonged inactivity (<= 20s)
 const BUFFER_TIMEOUT_MS = 1000; // flush buffers after inactivity
 const START_OF_SPEECH_MARKER = " "; // In the first message, the text should be a space " " to indicate the start of speech (why?)
 
@@ -24,22 +24,24 @@ export class AudioStreamManager {
       true
     );
 
-    this.inputBuffers[utterance.id] = new InputBuffer(
-      utterance.id,
+    return utterance;
+  }
+
+  createInputBuffer(uuid: string): InputBuffer {
+    this.inputBuffers[uuid] = new InputBuffer(
+      uuid,
       this.ttsService,
       BUFFER_TIMEOUT_MS,
       STREAM_TIMEOUT_MS
     );
-
-    return utterance;
+    return this.inputBuffers[uuid];
   }
 
   async addSpeechToStream(uuid: string, text: string): Promise<void> {
-    if (this.inputBuffers[uuid]) {
-      this.inputBuffers[uuid].addText(text);
-    } else {
-      console.error(`No input buffer found for UUID: ${uuid}`);
+    if (!this.hasInputBuffer(uuid)) {
+      this.createInputBuffer(uuid);
     }
+    this.getInputBuffer(uuid).addText(text);
   }
 
   async replaceSpeechInStream(
@@ -63,35 +65,35 @@ export class AudioStreamManager {
   }
 
   async endStream(uuid: string): Promise<void> {
-    if (this.inputBuffers[uuid]) {
-      this.inputBuffers[uuid].endInput();
-    } else {
-      console.log("Speech stream already ended or not found");
-    }
+    this.getInputBuffer(uuid).endInput();
   }
 
   getPendingText(uuid: string): string {
-    return this.inputBuffers[uuid]?.getPendingText() || "";
+    return this.getInputBuffer(uuid)?.getPendingText() || "";
   }
 
   isPending(uuid: string, text: string): boolean {
-    return this.inputBuffers[uuid]?.isPending(text) || false;
+    return this.getInputBuffer(uuid)?.isPending(text) || false;
   }
 
   hasSent(uuid: string, text: string): boolean {
-    return this.inputBuffers[uuid]?.hasSent(text) || false;
+    return this.getInputBuffer(uuid)?.hasSent(text) || false;
   }
 
   hasEnded(uuid: string): boolean {
-    return this.inputBuffers[uuid]?.hasEnded() || true;
+    return this.getInputBuffer(uuid)?.hasEnded() || true;
   }
 
   isOpen(uuid: string): boolean {
-    return this.inputBuffers[uuid]?.isOpen() || false;
+    return this.getInputBuffer(uuid)?.isOpen() || false;
   }
 
   /* visible for testing */
-  getInputBuffer(uuid: string): InputBuffer | undefined {
-    return this.inputBuffers[uuid];
+  getInputBuffer(uuid: string): InputBuffer {
+    return this.inputBuffers[uuid] || this.createInputBuffer(uuid);
+  }
+
+  hasInputBuffer(uuid: string): boolean {
+    return !!this.inputBuffers[uuid];
   }
 }
