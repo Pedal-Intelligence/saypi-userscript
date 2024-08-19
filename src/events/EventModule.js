@@ -1,6 +1,7 @@
 import EventBus from "./EventBus.js";
 import StateMachineService from "../StateMachineService.js";
 
+const PROMPT_READY = "saypi:promptReady";
 const CALL_READY = "saypi:callReady";
 const USER_SPEAKING = "saypi:userSpeaking";
 const USER_STOPPED_SPEAKING = "saypi:userStoppedSpeaking";
@@ -38,6 +39,9 @@ export default class EventModule {
   }
 
   static registerStateMachineEvents(actor) {
+    EventBus.on("saypi:ui:content-loaded", () => {
+      actor.send(PROMPT_READY);
+    });
     EventBus.on(CALL_READY, () => {
       actor.send(CALL_READY);
     });
