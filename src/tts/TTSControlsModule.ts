@@ -136,6 +136,7 @@ export class TTSControlsModule {
   addSpeechButton(
     utterance: SpeechUtterance,
     container: HTMLElement,
+    insertBefore?: Element | null,
     containerIsMenu: boolean = false
   ): void {
     const button = containerIsMenu
@@ -145,7 +146,11 @@ export class TTSControlsModule {
       EventBus.emit("saypi:tts:replaying", utterance); //  notify the ui manager that the next speech it hears will be a replay
       this.speechSynthesis.speak(utterance);
     });
-    container.appendChild(button);
+    if (insertBefore) {
+      container.insertBefore(button, insertBefore);
+    } else {
+      container.appendChild(button);
+    }
   }
 
   addCopyButton(
@@ -178,7 +183,7 @@ export class TTSControlsModule {
 
   createCostElementForMenu(): HTMLElement {
     const costElement = document.createElement("button");
-    costElement.classList.add("saypi-cost", "tooltip", "tts-item");
+    costElement.classList.add("saypi-cost", "tooltip");
     costElement.classList.add(
       "flex",
       "h-12",
@@ -196,12 +201,7 @@ export class TTSControlsModule {
 
   createCostElementForMessage() {
     const costElement = document.createElement("span");
-    costElement.classList.add(
-      "saypi-cost",
-      "tooltip",
-      "tts-item",
-      "tooltip-wide"
-    );
+    costElement.classList.add("saypi-cost", "tooltip", "tooltip-wide");
     return costElement;
   }
 
@@ -221,7 +221,7 @@ export class TTSControlsModule {
       return;
     }
     const costBasisContainer = document.createElement("div");
-    costBasisContainer.classList.add("saypi-cost-container");
+    costBasisContainer.classList.add("saypi-cost-container", "tts-item");
 
     const currency = getMessage("currencyUSDAbbreviation");
     const costElement = containerIsMenu
@@ -266,7 +266,11 @@ export class TTSControlsModule {
     return costBasisContainer;
   }
 
-  addPoweredBy(container: HTMLElement, voice: SpeechSynthesisVoiceRemote) {
+  addPoweredBy(
+    container: HTMLElement,
+    voice: SpeechSynthesisVoiceRemote,
+    insertBefore?: Element | null
+  ) {
     let poweredByElement = container.querySelector(
       ".saypi-powered-by"
     ) as HTMLElement | null;
@@ -288,7 +292,11 @@ export class TTSControlsModule {
       `icons/logos/${ttsEngine.toLowerCase()}.${logoImageExt}`
     );
     poweredByElement.innerHTML = `<img src="${logoImageUrl}" class="h-4 w-4 inline-block">`;
-    container.appendChild(poweredByElement);
+    if (insertBefore) {
+      container.insertBefore(poweredByElement, insertBefore);
+    } else {
+      container.appendChild(poweredByElement);
+    }
   }
 
   public updateCostBasis(container: HTMLElement, charge: UtteranceCharge) {

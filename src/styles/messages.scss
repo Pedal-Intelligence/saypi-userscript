@@ -9,8 +9,9 @@
 
   .saypi-tts-controls {
     display: flex;
+    align-items: center;
+    height: 32px;
     .saypi-speak-button {
-      padding: 4px; /* brings the total height to 32px */
       border-radius: 50%;
     }
     .saypi-cost,
@@ -25,6 +26,7 @@
       path {
         fill: #6b6255; // Pi light brown text color
       }
+      display: inline-block;
     }
     .cost-free {
       display: none; // hide the price when it's free
@@ -55,7 +57,7 @@
     position: relative;
     overflow: visible;
     margin: 0 0.15rem;
-    padding: 4px;
+    padding: 0 4px;
   }
 
   .saypi-cost-container {

@@ -40,7 +40,7 @@ class PopupMenu {
     }
   }
   decorateSpeech(speech: SpeechUtterance) {
-    this.ttsControls.addSpeechButton(speech, this._element, true);
+    this.ttsControls.addSpeechButton(speech, this._element, null, true);
   }
 
   static find(chatbot: Chatbot, searchRoot: HTMLElement): Observation {
@@ -330,16 +330,23 @@ abstract class MessageControls {
     const speechButtonElement = this.messageControlsElement.querySelector(
       ".saypi-speak-button"
     );
+    const costElement = this.messageControlsElement.querySelector(
+      ".saypi-cost-container"
+    );
     if (!speechButtonElement) {
-      this.ttsControls.addSpeechButton(utterance, this.messageControlsElement);
+      this.ttsControls.addSpeechButton(
+        utterance,
+        this.messageControlsElement,
+        costElement
+      );
     }
     if (utterance.voice) {
       this.ttsControls.addPoweredBy(
         this.messageControlsElement,
-        utterance.voice
+        utterance.voice,
+        costElement
       );
     }
-    this.decorateCost(UtteranceCharge.none); // cost is unknown at this point
   }
 
   private watchForPopupMenu(
