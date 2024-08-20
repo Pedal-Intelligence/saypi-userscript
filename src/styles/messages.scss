@@ -33,9 +33,13 @@
     }
   }
 
-  .tts-item.tooltip-wide[aria-label]::after {
+  .tooltip-wide[aria-label]::after {
     top: 120%; // position the tooltip below the charge
     transform: translateX(-35%); // center the tooltip relative to the charge
+    white-space: normal; // allow the tooltip to wrap
+    min-width: 350px; // set a min width for the tooltip
+    max-width: 600px; // set a max width for the tooltip
+    text-align: center; // center the text in the tooltip
   }
 }
 
