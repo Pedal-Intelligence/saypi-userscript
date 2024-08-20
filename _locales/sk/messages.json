@@ -277,7 +277,7 @@
   },
   "ttsCostExplanation": {
     "description": "Nápoveda na zobrazenie, keď sa text-na-rečový motor používa na nahlas čítanie správy, s nákladmi na správu.",
-    "message": "Cena za počúvanie tejto správy je $cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -291,7 +291,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "Nápoveda na zobrazenie, keď sa na nahlas čítanie správy používa nástroj text-na-reč a správa je zadarmo. Môže obsahovať meno poskytovateľa.",
-    "message": "Toto audio bolo vygenerované bezplatne.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

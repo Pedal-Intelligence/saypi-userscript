@@ -277,7 +277,7 @@
   },
   "ttsCostExplanation": {
     "description": "Tooltip untuk dipaparkan apabila enjin teks-ke-ucapan digunakan untuk membaca pesanan secara kuat, dengan kos pesanan tersebut.",
-    "message": "Kos mendengar mesej ini adalah $cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -291,7 +291,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "Tooltip untuk dipaparkan apabila enjin teks-ke-ucapan digunakan untuk membaca pesanan secara lantang, dan pesanan itu adalah percuma. Mungkin mengandungi nama penyedia.",
-    "message": "Audio ini dihasilkan secara percuma.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

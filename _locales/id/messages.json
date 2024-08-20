@@ -277,7 +277,7 @@
   },
   "ttsCostExplanation": {
     "description": "Tooltip yang ditampilkan ketika mesin teks-ke-pidato digunakan untuk membacakan pesan, dengan biaya dari pesan tersebut.",
-    "message": "Biaya mendengarkan pesan ini adalah $cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -291,7 +291,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "Tooltip yang ditampilkan ketika mesin teks-ke-pidato digunakan untuk membacakan pesan, dan pesan tersebut gratis. Bisa berisi nama penyedia.",
-    "message": "Audio ini dihasilkan secara gratis.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

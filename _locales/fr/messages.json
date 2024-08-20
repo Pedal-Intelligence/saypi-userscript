@@ -295,7 +295,7 @@
   },
   "ttsCostExplanation": {
     "description": "L'infobulle à afficher lorsque le moteur de synthèse vocale est utilisé pour lire à haute voix un message, avec le coût du message.",
-    "message": "Le coût d'écoute de ce message est de $cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -309,7 +309,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "L'infobulle à afficher lorsqu'un moteur de synthèse vocale est utilisé pour lire à haute voix un message, et que le message est gratuit. Pourrait contenir le nom du fournisseur.",
-    "message": "Cet audio a été généré gratuitement.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

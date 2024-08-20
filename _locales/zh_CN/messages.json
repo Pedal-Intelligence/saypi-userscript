@@ -295,7 +295,7 @@
   },
   "ttsCostExplanation": {
     "description": "当使用文本到语音引擎大声朗读消息时，显示的工具提示，包括消息的费用。",
-    "message": "收听此消息的费用是$cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -309,7 +309,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "当使用文本到语音引擎大声朗读一条信息，并且该信息是免费的时，要显示的工具提示。可能包含提供商的名称。",
-    "message": "这个音频是免费生成的。",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

@@ -220,6 +220,9 @@ export class TTSControlsModule {
       // cost should not be undefined, but just in case it is, don't display anything
       return;
     }
+    const costBasisContainer = document.createElement("div");
+    costBasisContainer.classList.add("saypi-cost-container");
+
     const currency = getMessage("currencyUSDAbbreviation");
     const costElement = containerIsMenu
       ? this.createCostElementForMenu()
@@ -239,8 +242,28 @@ export class TTSControlsModule {
     costElement.innerHTML = `Cost: <span class="price">$<span class="value">${cost.toFixed(
       2
     )}</span></span>`;
-    container.appendChild(costElement);
-    return costElement;
+    const verticalSpacer = document.createElement("div");
+    verticalSpacer.classList.add("vertical-separator");
+    // insert as first child of cost element
+    costElement.insertBefore(verticalSpacer, costElement.firstChild);
+    costBasisContainer.appendChild(costElement);
+    container.appendChild(costBasisContainer);
+
+    // add a link to the pricing page
+    const pricingLink = document.createElement("a");
+    pricingLink.href = "https://www.saypi.ai/pricing";
+    pricingLink.target = "_blank";
+    pricingLink.classList.add("saypi-pricing-link", "tooltip", "tts-item");
+    const tooltipText = getMessage("ttsCostExplanationSayPi");
+    pricingLink.setAttribute("aria-label", tooltipText);
+    const providerLogo = document.createElement("img");
+    providerLogo.classList.add("flair", "audio-provider", "saypi-logo");
+    providerLogo.src = getResourceUrl("icons/logos/saypi.png");
+    providerLogo.alt = "Say, Pi logo";
+    pricingLink.appendChild(providerLogo);
+    costBasisContainer.appendChild(pricingLink);
+
+    return costBasisContainer;
   }
 
   addPoweredBy(container: HTMLElement, voice: SpeechSynthesisVoiceRemote) {

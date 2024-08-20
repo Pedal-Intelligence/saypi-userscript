@@ -295,7 +295,7 @@
   },
   "ttsCostExplanation": {
     "description": "텍스트를 음성으로 변환하여 메시지를 읽어주는 엔진을 사용할 때 표시되는 툴팁, 그리고 메시지의 비용.",
-    "message": "이 메시지를 듣는 데 드는 비용은 $cost$ $currency$입니다.",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -309,7 +309,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "텍스트를 음성으로 변환하여 메시지를 대신 읽어주는 엔진이 사용될 때 표시되는 툴팁, 그리고 메시지가 무료인 경우. 공급자의 이름을 포함할 수 있습니다.",
-    "message": "이 오디오는 무료로 생성되었습니다.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

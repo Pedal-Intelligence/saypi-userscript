@@ -277,7 +277,7 @@
   },
   "ttsCostExplanation": {
     "description": "Popisek k zobrazení, když se pro přečtení zprávy nahlas používá nástroj na převod textu na řeč, s cenou zprávy.",
-    "message": "Cena za poslech této zprávy je $cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -291,7 +291,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "Popisek k zobrazení, když se používá motor pro převod textu na řeč k nahlas přečtení zprávy a zpráva je zdarma. Může obsahovat jméno poskytovatele.",
-    "message": "Toto audio bylo vytvořeno zdarma.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

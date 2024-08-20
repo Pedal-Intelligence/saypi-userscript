@@ -295,7 +295,7 @@
   },
   "ttsCostExplanation": {
     "description": "A felugró súgó megjelenítése, amikor a szövegfelolvasó motorral hangosan olvassák fel az üzenetet, az üzenet költségével együtt.",
-    "message": "Ennek az üzenetnek a meghallgatása $cost$ $currency$-ba kerül.",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -309,7 +309,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "A felugró szöveg, amely akkor jelenik meg, amikor a szövegfelolvasó motorral olvassák fel hangosan az üzenetet, és az üzenet ingyenes. Tartalmazhatja a szolgáltató nevét.",
-    "message": "Ezt az audiót díjmentesen generálták.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

@@ -277,7 +277,7 @@
   },
   "ttsCostExplanation": {
     "description": "Informația suplimentară de afișat atunci când motorul de text-cu-vorbire este folosit pentru a citi cu voce tare un mesaj, împreună cu costul mesajului.",
-    "message": "Costul ascultării acestui mesaj este de $cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -291,7 +291,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "Sugestia de afișare atunci când se utilizează un motor de text-pentru-vorbire pentru a citi cu voce tare un mesaj, iar mesajul este gratuit. Ar putea conține numele furnizorului.",
-    "message": "Acest audio a fost generat gratuit.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

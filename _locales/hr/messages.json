@@ -277,7 +277,7 @@
   },
   "ttsCostExplanation": {
     "description": "Opis alata za prikaz kada se motor za pretvorbu teksta u govor koristi za čitanje poruke naglas, s troškom poruke.",
-    "message": "Trošak slušanja ove poruke je $cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -291,7 +291,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "Opis alata za prikaz kada se koristi motor za pretvaranje teksta u govor kako bi se pročitala poruka, a poruka je besplatna. Može sadržavati ime pružatelja usluge.",
-    "message": "Ovaj audio je generiran besplatno.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

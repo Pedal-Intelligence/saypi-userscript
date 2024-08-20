@@ -295,7 +295,7 @@
   },
   "ttsCostExplanation": {
     "description": "テキストを音声で読み上げるためにテキストツースピーチエンジンが使用されるときに表示するツールチップ、メッセージのコストと共に。",
-    "message": "このメッセージを聞く費用は$cost$ $currency$です",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -309,7 +309,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "テキスト読み上げエンジンがメッセージを音声で読み上げる際に表示するツールチップ、そしてそのメッセージは無料です。プロバイダーの名前を含むこともあります。",
-    "message": "このオーディオは無料で生成されました。",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

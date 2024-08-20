@@ -277,7 +277,7 @@
   },
   "ttsCostExplanation": {
     "description": "உரையை கேட்கும் போது உரை-கு-பேச்சு இயின்றில் பிரிவு, செய்தி, முழு விலை.",
-    "message": "இந்த செய்தியை கேட்பதின் விலை $cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -291,7 +291,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "ஒரு உரை-க்கு-பேச்சு இயந்திரம் ஒரு செய்தியை கூறி விடுమ் போது, அல்லது,  the message is free. Could contain the name of the provider.",
-    "message": "இந்த ஆடியோ இலவசமாக உருவாக்கப்பட்டு.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

@@ -277,7 +277,7 @@
   },
   "ttsCostExplanation": {
     "description": "Kuvakevihje, joka näytetään kun tekstistä puheeksi -moottoria käytetään viestin lukemiseen ääneen, viestin kustannuksella.",
-    "message": "Tämän viestin kuuntelemisen hinta on $cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -291,7 +291,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "Tooltipin näyttäminen, kun tekstistä puheeksi -moottoria käytetään viestin lukemiseen ääneen, ja viesti on ilmainen. Saattaa sisältää palveluntarjoajan nimen.",
-    "message": "Tämä äänite tuotettiin ilmaiseksi.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

@@ -295,7 +295,7 @@
   },
   "ttsCostExplanation": {
     "description": "De tooltip om weer te geven wanneer de tekst-naar-spraak engine wordt gebruikt om een bericht hardop voor te lezen, met de kosten van het bericht.",
-    "message": "De kosten voor het beluisteren van dit bericht zijn $cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -309,7 +309,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "De tooltip om weer te geven wanneer een tekst-naar-spraak engine wordt gebruikt om een bericht hardop voor te lezen, en het bericht is gratis. Kan de naam van de provider bevatten.",
-    "message": "Deze audio is gratis gegenereerd.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

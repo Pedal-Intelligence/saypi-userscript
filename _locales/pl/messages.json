@@ -295,7 +295,7 @@
   },
   "ttsCostExplanation": {
     "description": "Podpowiedź do wyświetlenia, gdy silnik tekstu na mowę jest używany do odczytywania wiadomości na głos, wraz z kosztem wiadomości.",
-    "message": "Koszt odsłuchania tej wiadomości wynosi $cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -309,7 +309,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "Podpowiedź do wyświetlenia, gdy silnik tekstu na mowę jest używany do odczytywania wiadomości na głos, a wiadomość jest darmowa. Może zawierać nazwę dostawcy.",
-    "message": "To audio zostało wygenerowane bezpłatnie.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

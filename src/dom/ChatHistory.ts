@@ -272,10 +272,10 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
         const speech = await this.streamSpeech(message);
         if (speech) {
           if (speech.utterance) {
-            message.decorateSpeech(speech.utterance);
+            //await message.decorateSpeech(speech.utterance);
           }
           if (speech.charge) {
-            message.decorateCost(speech.charge);
+            await message.decorateCost(speech.charge);
           }
         } else {
           const provider = await this.speechSynthesis.getActiveAudioProvider();

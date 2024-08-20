@@ -295,7 +295,7 @@
   },
   "ttsCostExplanation": {
     "description": "التلميح الذي يظهر عند استخدام محرك التحويل من النص إلى الكلام لقراءة رسالة بصوت عالٍ، مع تكلفة الرسالة.",
-    "message": "تكلفة الاستماع إلى هذه الرسالة هي $cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -309,7 +309,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "التلميح الذي يظهر عند استخدام محرك النص إلى كلام لقراءة رسالة بصوت عالٍ، والرسالة مجانية. قد يحتوي على اسم المزود.",
-    "message": "تم إنشاء هذا الصوت مجانًا.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

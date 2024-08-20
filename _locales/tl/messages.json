@@ -277,7 +277,7 @@
   },
   "ttsCostExplanation": {
     "description": "Ang tooltip na ipapakita kapag ginamit ang engine ng text-to-speech upang basahin nang malakas ang isang mensahe, kasama ang halaga ng mensahe.",
-    "message": "Ang halaga ng pakikinig sa mensaheng ito ay $cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -291,7 +291,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "Ang tooltip na ipapakita kapag ginamit ang isang text-to-speech engine upang basahin nang malakas ang isang mensahe, at libre ang mensahe. Maaaring maglaman ng pangalan ng provider.",
-    "message": "Ang audio na ito ay nilikha nang libre.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

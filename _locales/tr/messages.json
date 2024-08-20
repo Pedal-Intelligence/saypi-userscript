@@ -277,7 +277,7 @@
   },
   "ttsCostExplanation": {
     "description": "Metni yüksek sesle okumak için metin-konuşma motoru kullanıldığında gösterilecek araç ipucu, mesajın maliyetiyle birlikte.",
-    "message": "Bu mesajı dinlemenin maliyeti $cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -291,7 +291,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "Bir metin-okuma motoru kullanılarak bir mesaj yüksek sesle okunduğunda ve mesaj ücretsiz olduğunda görüntülenecek araç ipucu. Sağlayıcının adını içerebilir.",
-    "message": "Bu ses ücretsiz olarak oluşturuldu.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

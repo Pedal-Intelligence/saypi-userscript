@@ -295,7 +295,7 @@
   },
   "ttsCostExplanation": {
     "description": "Chú thích hiển thị khi sử dụng công cụ chuyển văn bản thành giọng nói để đọc to một tin nhắn, kèm theo chi phí của tin nhắn.",
-    "message": "Chi phí để nghe thông điệp này là $cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -309,7 +309,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "Thông báo hiển thị khi sử dụng công cụ chuyển văn bản thành giọng nói để đọc to một tin nhắn, và tin nhắn là miễn phí. Có thể chứa tên của nhà cung cấp.",
-    "message": "Âm thanh này được tạo ra miễn phí.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

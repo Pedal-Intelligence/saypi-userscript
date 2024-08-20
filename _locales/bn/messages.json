@@ -295,7 +295,7 @@
   },
   "ttsCostExplanation": {
     "description": "যখন টেক্সট-টু-স্পিচ ইঞ্জিন বার্তা উচ্চরিত করার জন্য ব্যবহৃত হয়, এর মূল্যের সাথে, ্‌্‌্‌্‌্ারি।",
-    "message": "এই বার্তাটি শুনার খরচ $cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -309,7 +309,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "যখন একটি বার্তা পাঠিয়ে দেয়ার জন্য একটি লেখা-২-ভাষন (text-to-speech) ইঞ্জিন ব্যাবহার করা হয়, ।",
-    "message": "এই অডিও বিনামূল্যে উৎপন্ন করা হয়েছিল।",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

@@ -295,7 +295,7 @@
   },
   "ttsCostExplanation": {
     "description": "Der Tooltip, der angezeigt wird, wenn die Text-zu-Sprache-Engine verwendet wird, um eine Nachricht laut vorzulesen, mit den Kosten der Nachricht.",
-    "message": "Die Kosten für das Anhören dieser Nachricht betragen $cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -309,7 +309,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "Der Tooltip, der angezeigt wird, wenn eine Text-zu-Sprache-Engine verwendet wird, um eine Nachricht laut vorzulesen, und die Nachricht ist kostenlos. Könnte den Namen des Anbieters enthalten.",
-    "message": "Dieses Audio wurde kostenlos erstellt.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

@@ -46,11 +46,25 @@
 }
 
 .saypi-tts-controls {
+  padding: 0 0.25rem;
+  margin-top: 1rem;
+  background-color: rgb(245 234 220); // bg-neutral-200
+  border-radius: 10px;
+
   .tts-item {
     position: relative;
     overflow: visible;
     margin: 0 0.15rem;
     padding: 4px;
+  }
+
+  .saypi-cost-container {
+    display: flex;
+    div.vertical-separator {
+      height: 1.5rem;
+      border-left: 1px solid;
+      margin-right: 0.5rem;
+    }
   }
 }
 

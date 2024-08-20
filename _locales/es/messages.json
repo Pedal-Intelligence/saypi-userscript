@@ -295,7 +295,7 @@
   },
   "ttsCostExplanation": {
     "description": "La información sobre herramientas para mostrar cuando se utiliza el motor de texto a voz para leer en voz alta un mensaje, con el costo del mensaje.",
-    "message": "El costo de escuchar este mensaje es de $cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -309,7 +309,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "La información sobre herramientas para mostrar cuando se utiliza un motor de texto a voz para leer en voz alta un mensaje, y el mensaje es gratuito. Podría contener el nombre del proveedor.",
-    "message": "Este audio fue generado de forma gratuita.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

@@ -277,7 +277,7 @@
   },
   "ttsCostExplanation": {
     "description": "Den tooltip som ska visas när text-till-tal-motorn används för att läsa upp ett meddelande, med kostnaden för meddelandet.",
-    "message": "Kostnaden för att lyssna på detta meddelande är $cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -291,7 +291,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "Verktygstipset som visas när en text-till-tal-motor används för att läsa upp ett meddelande, och meddelandet är gratis. Kan innehålla namnet på leverantören.",
-    "message": "Detta ljud genererades gratis.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",

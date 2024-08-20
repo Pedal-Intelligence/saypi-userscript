@@ -277,7 +277,7 @@
   },
   "ttsCostExplanation": {
     "description": "Værktøjstip til visning, når tekst-til-tale-motoren bruges til at læse en besked højt, med omkostningerne ved beskeden.",
-    "message": "Omkostningerne ved at lytte til denne besked er $cost$ $currency$",
+    "message": "",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -291,7 +291,7 @@
   },
   "ttsCostExplanationFree": {
     "description": "Værktøjstip der vises, når en tekst-til-tale motor bruges til at læse en besked højt, og beskeden er gratis. Kan indeholde navnet på udbyderen.",
-    "message": "Denne lyd blev genereret gratis.",
+    "message": "",
     "placeholders": {
       "provider": {
         "content": "$1",
