@@ -234,16 +234,21 @@ abstract class MessageControls {
    */
   abstract getHoverMenuSelector(): string;
 
+  findHoverMenu(): HTMLElement | null {
+    return this.message.element.querySelector(".message-hover-menu");
+  }
+
   protected async decorateControls(message: AssistantResponse): Promise<void> {
     return new Promise((resolve) => {
       const findAndDecorateHoverMenu = () => {
-        let hoverMenu = message.element.querySelector(".message-hover-menu");
+        let hoverMenu = this.findHoverMenu();
         if (!hoverMenu) {
           hoverMenu = message.element.querySelector(
             this.getHoverMenuSelector()
           );
           if (hoverMenu) {
             hoverMenu.classList.add("message-hover-menu");
+            this.hoverMenu = hoverMenu;
             // pi-specific thread button (TODO: move to PiAIChatbot)
             if (hoverMenu.children.length > 0) {
               const createThreadButton = hoverMenu
@@ -324,8 +329,10 @@ abstract class MessageControls {
       return;
     }
 
-    if (isMobileDevice() && this.hoverMenu) {
-      this.watchForPopupMenu(this.hoverMenu as HTMLElement, utterance);
+    const mobile = isMobileDevice();
+    const hoverMenu = this.findHoverMenu();
+    if (mobile && hoverMenu) {
+      this.watchForPopupMenu(hoverMenu as HTMLElement, utterance);
     }
     const speechButtonElement = this.messageControlsElement.querySelector(
       ".saypi-speak-button"

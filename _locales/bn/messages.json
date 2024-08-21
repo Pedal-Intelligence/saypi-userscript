@@ -336,11 +336,11 @@
     "description": "বার্তার পাঠ্যটি ক্লিপবোর্ডে অনুলিপি করার জন্য বোতামের শিরোনাম।"
   },
   "voiceIntroduction_joey": {
-    "message": "হোলা! Привет! 你好! আমি পাই, আপনার বহুভাষিক AI সহায়িকা। 29 ভাষায়ের নিয়ন্ত্রনের সাথে, আমরা বিশ্বের 4-5-6-7-8-9-10-11-12-13-14 -15 -16 -17 -18 -19 -20 -21 -22 -23",
+    "message": "",
     "description": "জোয়ি ভোইসের পরিচয়।"
   },
   "voiceIntroduction_paola": {
-    "message": "চাও! বনজুর! হ্যালো! আমি পাই, এবং আমি 29টি ভাষায় দক্ষतার সাথে কথা-বিনিময়ের ক্ষেত্রে।  عربي (Arabic) थेकে Українська (Ukrainian),  নিশ্চিতরূপে,  \n \n \n \n \n \n  \n  \n  \n\n   \n\n    \n\n\n    \n\n\n\n       \n\n\n\n\n        \n\n\n\n\n\n\n        \n\n\n\n\n\n        \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n        \n\n\n\n\n\n\n\n\nI'm here to break down language barriers. How does this voice sound to you?",
+    "message": "",
     "description": "পাওলা ভোইসের জন্য ভূমিকা।"
   },
   "regenerateButtonTitle": {

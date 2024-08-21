@@ -336,11 +336,11 @@
     "description": "Il titolo del pulsante per copiare il testo di un messaggio negli appunti."
   },
   "voiceIntroduction_joey": {
-    "message": "Ciao! Привет! 你好! Sono Pi, il tuo assistente AI poliglotta. Con 29 lingue al mio comando, possiamo esplorare idee e culture da tutto il mondo. Cosa ne pensi di questa voce?",
+    "message": "",
     "description": "Introduzione per la voce di Joey."
   },
   "voiceIntroduction_paola": {
-    "message": "Ciao! Bonjour! Ciao! Sono Pi, e posso conversare fluentemente in 29 lingue. Dall'arabo all'ucraino, sono qui per abbattere le barriere linguistiche. Come ti sembra questa voce?",
+    "message": "",
     "description": "Introduzione per la voce di Paola."
   },
   "regenerateButtonTitle": {

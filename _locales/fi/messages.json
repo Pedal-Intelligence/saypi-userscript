@@ -336,11 +336,11 @@
     "description": "Painikkeen otsikko, jolla kopioidaan viestin teksti leikepöydälle."
   },
   "voiceIntroduction_joey": {
-    "message": "Hei! Привет! 你好! Olen Pi, monikielinen tekoälyavustajasi. Hallitsen 29 kieltä, joten voimme tutkia ideoita ja kulttuureja ympäri maailmaa. Mitä mieltä olet tästä äänestä?",
+    "message": "",
     "description": "Joey-äänen esittely."
   },
   "voiceIntroduction_paola": {
-    "message": "Ciao! Bonjour! Hei! Olen Pi ja pystyn keskustelemaan sujuvasti 29 kielellä. Arabiasta ukrainaan, olen täällä murtamassa kielimuureja. Miltä tämä ääni kuulostaa sinusta?",
+    "message": "",
     "description": "Johdanto Paola-äänelle."
   },
   "regenerateButtonTitle": {

@@ -336,11 +336,11 @@
     "description": "Le titre du bouton pour copier le texte d'un message dans le presse-papiers."
   },
   "voiceIntroduction_joey": {
-    "message": "Salut! Привет! 你好! Je suis Pi, votre assistant IA polyglotte. Avec 29 langues à ma disposition, nous pouvons explorer des idées et des cultures du monde entier. Que pensez-vous de cette voix?",
+    "message": "",
     "description": "Introduction pour la voix de Joey."
   },
   "voiceIntroduction_paola": {
-    "message": "Ciao! Bonjour! Salut! Je suis Pi, et je peux converser couramment dans 29 langues. De l'arabe à l'ukrainien, je suis ici pour briser les barrières linguistiques. Comment trouvez-vous cette voix?",
+    "message": "",
     "description": "Introduction pour la voix de Paola."
   },
   "regenerateButtonTitle": {

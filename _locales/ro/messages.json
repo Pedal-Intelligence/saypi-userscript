@@ -336,11 +336,11 @@
     "description": "Titlul butonului pentru a copia textul unui mesaj în clipboard."
   },
   "voiceIntroduction_joey": {
-    "message": "Hola! Привет! 你好! Sunt Pi, asistentul tău AI poliglot. Cu 29 de limbi la dispoziția mea, putem explora idei și culturi din întreaga lume. Ce părere ai despre această voce?",
+    "message": "",
     "description": "Introducere pentru vocea lui Joey."
   },
   "voiceIntroduction_paola": {
-    "message": "Ciao! Bonjour! Salut! Sunt Pi și pot conversa fluent în 29 de limbi. De la arabă la ucraineană, sunt aici pentru a elimina barierele lingvistice. Cum îți sună această voce?",
+    "message": "",
     "description": "Introducere pentru vocea Paola."
   },
   "regenerateButtonTitle": {

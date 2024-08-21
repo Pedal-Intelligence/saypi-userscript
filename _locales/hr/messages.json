@@ -336,11 +336,11 @@
     "description": "Naslov gumba za kopiranje teksta poruke u međuspremnik."
   },
   "voiceIntroduction_joey": {
-    "message": "Bok! Привет! 你好! Ja sam Pi, tvoj poliglotski AI asistent. S 29 jezika na mojoj zapovijedi, možemo istraživati ideje i kulture iz cijelog svijeta. Što misliš o ovom glasu?",
+    "message": "",
     "description": "Uvod za Joeyjev glas."
   },
   "voiceIntroduction_paola": {
-    "message": "Ciao! Bonjour! Pozdrav! Ja sam Pi i mogu tečno razgovarati na 29 jezika. Od arapskog do ukrajinskog, ovdje sam da srušim jezične barijere. Kako vam zvuči ovaj glas?",
+    "message": "",
     "description": "Uvod za Paolin glas."
   },
   "regenerateButtonTitle": {

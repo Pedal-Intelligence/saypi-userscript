@@ -336,11 +336,11 @@
     "description": "Titlen på knappen til at kopiere teksten af en besked til udklipsholderen."
   },
   "voiceIntroduction_joey": {
-    "message": "Hej! Привет! 你好! Jeg er Pi, din polyglot AI-assistent. Med 29 sprog til min rådighed kan vi udforske ideer og kulturer fra hele verden. Hvad synes du om denne stemme?",
+    "message": "",
     "description": "Introduktion til Joey stemmen."
   },
   "voiceIntroduction_paola": {
-    "message": "Ciao! Bonjour! Hej! Jeg er Pi, og jeg kan tale flydende på 29 sprog. Fra arabisk til ukrainsk, jeg er her for at nedbryde sprogbarrierer. Hvordan lyder denne stemme for dig?",
+    "message": "",
     "description": "Introduktion til Paola stemmen."
   },
   "regenerateButtonTitle": {

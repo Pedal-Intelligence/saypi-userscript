@@ -336,11 +336,11 @@
     "description": "Názov tlačidla na kopírovanie textu správy do schránky."
   },
   "voiceIntroduction_joey": {
-    "message": "Hola! Привет! 你好! Som Pi, tvoj polyglot AI asistent. S 29 jazykmi na mojom príkaze môžeme skúmať nápady a kultúry z celého sveta. Čo si myslíš o tomto hlasu?",
+    "message": "",
     "description": "Úvod pre hlas Joey."
   },
   "voiceIntroduction_paola": {
-    "message": "Ciao! Bonjour! Ahoj! Som Pi a dokážem hovoriť plynule v 29 jazykoch. Od arabčiny po ukrajinčinu, som tu na to, aby som zrušil jazykové bariéry. Ako na vás znie tento hlas?",
+    "message": "",
     "description": "Úvod pre hlas Paola."
   },
   "regenerateButtonTitle": {

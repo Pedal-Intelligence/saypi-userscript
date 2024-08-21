@@ -336,11 +336,11 @@
     "description": "メッセージのテキストをクリップボードにコピーするためのボタンのタイトル。"
   },
   "voiceIntroduction_joey": {
-    "message": "ホラ！Привет！你好！私はPi、あなたの多言語AIアシスタントです。29の言語を使いこなす私と一緒に、世界中のアイデアや文化を探索しましょう。この声についてどう思いますか？",
+    "message": "",
     "description": "Joey音声の紹介。"
   },
   "voiceIntroduction_paola": {
-    "message": "チャオ！ボンジュール！ハロー！私はパイです、そして私は29の言語で流暢に会話することができます。アラビア語からウクライナ語まで、私は言葉の壁を取り払うためにここにいます。この声はあなたにどう聞こえますか？",
+    "message": "",
     "description": "Paolaの声の紹介。"
   },
   "regenerateButtonTitle": {

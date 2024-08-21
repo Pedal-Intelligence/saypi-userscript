@@ -336,11 +336,11 @@
     "description": "A gomb címe, amely másolja az üzenet szövegét a vágólapra."
   },
   "voiceIntroduction_joey": {
-    "message": "Szia! Привет! 你好! Én vagyok Pi, a te poliglott AI asszisztensed. 29 nyelvvel a rendelkezésemre, felfedezhetjük az ötleteket és kultúrákat a világ körül. Mit gondolsz erről a hangról?",
+    "message": "",
     "description": "Bevezetés a Joey hanghoz."
   },
   "voiceIntroduction_paola": {
-    "message": "Ciao! Bonjour! Helló! Én vagyok Pi, és 29 nyelven beszélek folyékonyan. Arabtól az ukránig, itt vagyok, hogy lebontsam a nyelvi korlátokat. Hogy hangzik ez a hang neked?",
+    "message": "",
     "description": "Bevezetés a Paola hanghoz."
   },
   "regenerateButtonTitle": {
