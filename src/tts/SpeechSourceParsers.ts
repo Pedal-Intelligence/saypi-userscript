@@ -18,16 +18,13 @@ class PiSpeechSourceParser implements SpeechSourceParser {
     this.lang = default_lang;
   }
 
-  public static getVoice(
-    voiceId: string,
-    lang: string
-  ): SpeechSynthesisVoiceRemote {
+  public getVoice(voiceId: string): SpeechSynthesisVoiceRemote {
     const voiceNumber = voiceId.slice(-1);
 
     const theVoice: SpeechSynthesisVoiceRemote = {
       id: voiceId,
       name: `Pi ${voiceNumber}`,
-      lang: lang,
+      lang: this.lang,
       localService: false,
       default: true,
       price: 0,
@@ -66,10 +63,7 @@ class PiSpeechSourceParser implements SpeechSourceParser {
         `Invalid source: ${source} does not contain required parameters.`
       );
     }
-    const theVoice: SpeechSynthesisVoiceRemote = PiSpeechSourceParser.getVoice(
-      voiceId,
-      this.lang
-    );
+    const theVoice: SpeechSynthesisVoiceRemote = this.getVoice(voiceId);
 
     return new PiSpeech(messageSid, this.lang, theVoice, source);
   }

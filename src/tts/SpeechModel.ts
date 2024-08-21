@@ -132,31 +132,8 @@ class SayPiSpeech extends BaseSpeechUtterance {
 }
 
 class PiSpeech extends BaseSpeechUtterance {
-  // Pi's original voices, english only
-  static voice1: SpeechSynthesisVoiceRemote = PiSpeechSourceParser.getVoice(
-    "voice1",
-    "en"
-  );
-  static voice2: SpeechSynthesisVoiceRemote = PiSpeechSourceParser.getVoice(
-    "voice2",
-    "en"
-  );
-  static voice3: SpeechSynthesisVoiceRemote = PiSpeechSourceParser.getVoice(
-    "voice3",
-    "en"
-  );
-  static voice4: SpeechSynthesisVoiceRemote = PiSpeechSourceParser.getVoice(
-    "voice4",
-    "en"
-  );
-  static voice5: SpeechSynthesisVoiceRemote = PiSpeechSourceParser.getVoice(
-    "voice5",
-    "en"
-  );
-  static voice6: SpeechSynthesisVoiceRemote = PiSpeechSourceParser.getVoice(
-    "voice6",
-    "en"
-  );
+  // contains all the original voices available for Pi
+  static voices: { [key: string]: SpeechSynthesisVoiceRemote } = {};
 
   constructor(
     id: string,
@@ -165,6 +142,15 @@ class PiSpeech extends BaseSpeechUtterance {
     uri: string
   ) {
     super(id, lang, voice, uri, audioProviders.Pi);
+  }
+
+  static initializeVoices(parser: PiSpeechSourceParser) {
+    PiSpeech.voices.voice1 = parser.getVoice("voice1");
+    PiSpeech.voices.voice2 = parser.getVoice("voice2");
+    PiSpeech.voices.voice3 = parser.getVoice("voice3");
+    PiSpeech.voices.voice4 = parser.getVoice("voice4");
+    PiSpeech.voices.voice5 = parser.getVoice("voice5");
+    PiSpeech.voices.voice6 = parser.getVoice("voice6");
   }
 
   fromPlainObject(obj: any): PiSpeech {
