@@ -254,7 +254,13 @@
   },
   "enhancedVoice": {
     "description": "Titre (infobulle) pour Dire, voix améliorées de Pi.",
-    "message": "Voix améliorée par Say, Pi"
+    "message": "Voix améliorée par $product$",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "previewProgress": {
     "description": "Le message à afficher lorsque l'utilisateur prévisualise une fonctionnalité qui a une limite de caractères.",
@@ -295,7 +301,7 @@
   },
   "ttsCostExplanation": {
     "description": "L'infobulle à afficher lorsque le moteur de synthèse vocale est utilisé pour lire à haute voix un message, avec le coût du message.",
-    "message": "",
+    "message": "$product$ facturera $cost$ $currency$ pour écouter ce message",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -304,12 +310,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "L'infobulle à afficher lorsqu'un moteur de synthèse vocale est utilisé pour lire à haute voix un message, et que le message est gratuit. Pourrait contenir le nom du fournisseur.",
-    "message": "",
+    "message": "Cet audio est généré gratuitement par Inflection AI",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -336,11 +346,11 @@
     "description": "Le titre du bouton pour copier le texte d'un message dans le presse-papiers."
   },
   "voiceIntroduction_joey": {
-    "message": "",
+    "message": "Holà ! \nPrivé! \nEh bien! \nJe m'appelle Pi, votre assistant IA polyglotte. \nAvec 32 langues à ma disposition, nous pouvons explorer des idées et des cultures du monde entier. \nQue pensez-vous de cette voix ?",
     "description": "Introduction pour la voix de Joey."
   },
   "voiceIntroduction_paola": {
-    "message": "",
+    "message": "Ciao ! \nBonjour! \nBonjour! \nJe m'appelle Pi et je peux converser couramment dans 32 langues. \nDe l'arabe à l'ukrainien, je suis là pour briser les barrières linguistiques. \nQue pensez-vous de cette voix ?",
     "description": "Introduction pour la voix de Paola."
   },
   "regenerateButtonTitle": {
@@ -360,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "Générer de l'audio",
     "description": "Le titre du bouton pour régénérer l'audio d'un message. Peut entraîner un coût indéterminé."
+  },
+  "assistantIsWriting": {
+    "description": "Message affiché lorsque l'assistant tape sa réponse.",
+    "message": "$chatbot$ est en train d'écrire...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "L'info-bulle à afficher lorsque l'utilisateur survole le lien d'explication des coûts.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "Découvrez comment $product$ facture l'audio"
   }
 }

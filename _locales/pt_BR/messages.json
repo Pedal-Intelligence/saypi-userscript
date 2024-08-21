@@ -254,7 +254,13 @@
   },
   "enhancedVoice": {
     "description": "Título (dica de ferramenta) para Dizer, vozes aprimoradas pelo Pi.",
-    "message": "Voz aprimorada por Say, Pi"
+    "message": "Voz aprimorada por $product$",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "previewProgress": {
     "description": "A mensagem a ser exibida quando o usuário está visualizando um recurso que tem um limite de caracteres.",
@@ -295,7 +301,7 @@
   },
   "ttsCostExplanation": {
     "description": "A dica para exibir quando o motor de texto para fala é usado para ler em voz alta uma mensagem, com o custo da mensagem.",
-    "message": "",
+    "message": "$product$ cobrará $cost$ $currency$ por ouvir esta mensagem",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -304,12 +310,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "A dica a ser exibida quando um mecanismo de texto para fala é usado para ler em voz alta uma mensagem, e a mensagem é gratuita. Pode conter o nome do provedor.",
-    "message": "",
+    "message": "Este áudio é gerado gratuitamente pelo Inflection AI",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -336,11 +346,11 @@
     "description": "O título do botão para copiar o texto de uma mensagem para a área de transferência."
   },
   "voiceIntroduction_joey": {
-    "message": "",
+    "message": "Olá! \nPrivado! \nVocê! \nSou Pi, seu assistente poliglota de IA. \nCom 32 idiomas sob meu comando, podemos explorar ideias e culturas de todo o mundo. \nO que você acha dessa voz?",
     "description": "Introdução para a voz do Joey."
   },
   "voiceIntroduction_paola": {
-    "message": "",
+    "message": "Ciao! \nBom dia! \nOlá! \nMeu nome é Pi e posso conversar fluentemente em 32 idiomas. \nDo árabe ao ucraniano, estou aqui para quebrar as barreiras linguísticas. \nComo essa voz soa para você?",
     "description": "Introdução para a voz de Paola."
   },
   "regenerateButtonTitle": {
@@ -360,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "Gerar Áudio",
     "description": "O título do botão para regenerar o áudio de uma mensagem. Pode incorrer em um custo indeterminado."
+  },
+  "assistantIsWriting": {
+    "description": "Mensagem exibida quando o assistente digita sua resposta.",
+    "message": "$chatbot$ está escrevendo...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "A dica de ferramenta a ser exibida quando o usuário passa o mouse sobre o link de explicação de custo.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "Saiba como $product$ cobra pelo áudio"
   }
 }

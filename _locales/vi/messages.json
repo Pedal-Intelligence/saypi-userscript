@@ -254,7 +254,13 @@
   },
   "enhancedVoice": {
     "description": "Tiêu đề (chú giải) cho Say, Pi nâng cao giọng nói.",
-    "message": "Giọng nâng cao bởi Say, Pi"
+    "message": "Giọng nói được tăng cường bởi $product$",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "previewProgress": {
     "description": "Thông điệp để hiển thị khi người dùng đang xem trước một tính năng có giới hạn ký tự.",
@@ -295,7 +301,7 @@
   },
   "ttsCostExplanation": {
     "description": "Chú thích hiển thị khi sử dụng công cụ chuyển văn bản thành giọng nói để đọc to một tin nhắn, kèm theo chi phí của tin nhắn.",
-    "message": "",
+    "message": "$product$ sẽ tính phí $cost$ $currency$ khi nghe tin nhắn này",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -304,12 +310,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "Thông báo hiển thị khi sử dụng công cụ chuyển văn bản thành giọng nói để đọc to một tin nhắn, và tin nhắn là miễn phí. Có thể chứa tên của nhà cung cấp.",
-    "message": "",
+    "message": "Âm thanh này được tạo miễn phí bởi Inflection AI",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -336,11 +346,11 @@
     "description": "Tiêu đề của nút để sao chép văn bản của một tin nhắn vào bộ nhớ tạm."
   },
   "voiceIntroduction_joey": {
-    "message": "",
+    "message": "Hoan hô! \nXin chào! \nbạn ơi! \nTôi là Pi, trợ lý AI đa ngôn ngữ của bạn. \nVới 32 ngôn ngữ trong tầm tay của tôi, chúng ta có thể khám phá các ý tưởng và nền văn hóa từ khắp nơi trên thế giới. \nBạn nghĩ gì về giọng nói này?",
     "description": "Giới thiệu về giọng nói của Joey."
   },
   "voiceIntroduction_paola": {
-    "message": "",
+    "message": "Chào! \nChúc mừng! \nXin chào! \nTôi là Pi và tôi có thể giao tiếp thành thạo 32 ngôn ngữ. \nTừ tiếng Ả Rập đến tiếng Ukraina, tôi ở đây để phá bỏ rào cản ngôn ngữ. \nGiọng nói này nghe như thế nào đối với bạn?",
     "description": "Giới thiệu về giọng của Paola."
   },
   "regenerateButtonTitle": {
@@ -360,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "Tạo Âm thanh",
     "description": "Tiêu đề của nút để tái tạo âm thanh của một tin nhắn. Có thể phát sinh chi phí không xác định."
+  },
+  "assistantIsWriting": {
+    "description": "Thông báo hiển thị khi trợ lý đang nhập câu trả lời.",
+    "message": "$chatbot$ đang viết...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "Chú giải công cụ sẽ hiển thị khi người dùng di chuột qua liên kết giải thích chi phí.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "Tìm hiểu cách $product$ tính phí âm thanh"
   }
 }

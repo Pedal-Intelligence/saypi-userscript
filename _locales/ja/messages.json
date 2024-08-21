@@ -254,7 +254,13 @@
   },
   "enhancedVoice": {
     "description": "タイトル（ツールチップ）：「Say、Piエンハンスドボイス」",
-    "message": "Say、Piによって強化された音声"
+    "message": "$product$ による音声強化",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "previewProgress": {
     "description": "ユーザーが文字数制限のある機能をプレビューしているときに表示するメッセージ。",
@@ -295,7 +301,7 @@
   },
   "ttsCostExplanation": {
     "description": "テキストを音声で読み上げるためにテキストツースピーチエンジンが使用されるときに表示するツールチップ、メッセージのコストと共に。",
-    "message": "",
+    "message": "$product$ は、このメッセージを聞くために $cost$ $currency$ を請求します",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -304,12 +310,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "テキスト読み上げエンジンがメッセージを音声で読み上げる際に表示するツールチップ、そしてそのメッセージは無料です。プロバイダーの名前を含むこともあります。",
-    "message": "",
+    "message": "この音声は Inflection AI によって無料で生成されています",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -336,11 +346,11 @@
     "description": "メッセージのテキストをクリップボードにコピーするためのボタンのタイトル。"
   },
   "voiceIntroduction_joey": {
-    "message": "",
+    "message": "やあ！ \nПривет! \n你好！\n私は Pi です。多言語 AI アシスタントです。 \n32 の言語を自由に操ることができ、世界中のアイデアや文化を探求できます。\nこの声についてどう思いますか？",
     "description": "Joey音声の紹介。"
   },
   "voiceIntroduction_paola": {
-    "message": "",
+    "message": "ちゃお！\nボンジュール！\nこんにちは！\n私は Pi です。32 か国語で流暢に会話できます。\nアラビア語からウクライナ語まで、言語の壁を打ち破るために私はここにいます。\nこの声はあなたにはどう聞こえますか？",
     "description": "Paolaの声の紹介。"
   },
   "regenerateButtonTitle": {
@@ -360,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "オーディオを生成する",
     "description": "メッセージのオーディオを再生成するためのボタンのタイトル。不確定な費用が発生する可能性があります。"
+  },
+  "assistantIsWriting": {
+    "description": "アシスタントが応答を入力しているときに表示されるメッセージ。",
+    "message": "$chatbot$ が書いています...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "ユーザーがコストの説明リンクの上にマウスを移動したときに表示されるツールヒント。",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "$product$ がオーディオに対してどのように請求するかをご覧ください"
   }
 }

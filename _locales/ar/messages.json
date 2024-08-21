@@ -254,7 +254,13 @@
   },
   "enhancedVoice": {
     "description": "العنوان (تلميح) لـ قل، أصوات Pi المحسّنة.",
-    "message": "الصوت المحسن بواسطة Say, Pi"
+    "message": "تم تحسين الصوت بواسطة $product$",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "previewProgress": {
     "description": "الرسالة التي يتم عرضها عندما يكون المستخدم يعاين ميزة تحتوي على حد للأحرف.",
@@ -295,7 +301,7 @@
   },
   "ttsCostExplanation": {
     "description": "التلميح الذي يظهر عند استخدام محرك التحويل من النص إلى الكلام لقراءة رسالة بصوت عالٍ، مع تكلفة الرسالة.",
-    "message": "",
+    "message": "سيتم فرض رسوم على $product$ $cost$ $currency$ مقابل الاستماع إلى هذه الرسالة",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -304,12 +310,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "التلميح الذي يظهر عند استخدام محرك النص إلى كلام لقراءة رسالة بصوت عالٍ، والرسالة مجانية. قد يحتوي على اسم المزود.",
-    "message": "",
+    "message": "يتم إنشاء هذا الصوت مجانًا بواسطة Inflection AI",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -336,11 +346,11 @@
     "description": "عنوان الزر لنسخ نص الرسالة إلى الحافظة."
   },
   "voiceIntroduction_joey": {
-    "message": "",
+    "message": "مرحبا! \nخاص! \n你好! \nأنا باي، مساعد الذكاء الاصطناعي متعدد اللغات الخاص بك. \nومع وجود 32 لغة تحت تصرفي، يمكننا استكشاف الأفكار والثقافات من جميع أنحاء العالم. \nما رأيك في هذا الصوت؟",
     "description": "مقدمة لصوت جوي."
   },
   "voiceIntroduction_paola": {
-    "message": "",
+    "message": "تشاو! \nصباح الخير! \nمرحبًا! \nأنا باي، وأستطيع التحدث بـ 32 لغة بطلاقة. \nمن العربية إلى الأوكرانية، أنا هنا لكسر حواجز اللغة. \nكيف يبدو لك هذا الصوت؟",
     "description": "مقدمة لصوت باولا."
   },
   "regenerateButtonTitle": {
@@ -360,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "توليد الصوت",
     "description": "عنوان الزر لإعادة توليد الصوت للرسالة. قد يتحمل تكلفة غير محددة."
+  },
+  "assistantIsWriting": {
+    "description": "يتم عرض الرسالة عندما يقوم المساعد بكتابة رده.",
+    "message": "$chatbot$ يكتب...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "تلميح الأداة الذي سيتم عرضه عندما يقوم المستخدم بالتمرير فوق رابط شرح التكلفة.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "تعرف على كيفية تحصيل $product$ مقابل الصوت"
   }
 }

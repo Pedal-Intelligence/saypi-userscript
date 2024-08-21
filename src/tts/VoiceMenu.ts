@@ -115,7 +115,7 @@ export abstract class VoiceSelector {
       flair.classList.add("flair");
       flair.src = getResourceUrl("icons/logos/saypi.png");
       flair.alt = "Say, Pi logo";
-      flair.title = getMessage("enhancedVoice");
+      flair.title = getMessage("enhancedVoice", ["Say, Pi"]);
       button.appendChild(flair);
       button.addEventListener("click", () => {
         this.userPreferences.setVoice(voice).then(() => {

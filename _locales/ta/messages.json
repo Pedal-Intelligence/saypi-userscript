@@ -172,7 +172,13 @@
   },
   "enhancedVoice": {
     "description": "சொல்லு, பை மேம்படுத்திய குரல்கள் என்ற தலைப்பு (tooltip).",
-    "message": "சே, பை மூலம் மேம்படுத்திய குரல்"
+    "message": "$product$ ஆல் குரல் மேம்படுத்தப்பட்டது",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "enterImmersiveModeLong": {
     "description": "மொபைல் சாத்நரிக்கு ஆழ்வியுறு முறை (immersive mode) - இணை/enter-  பொத்தனின் aria-label மூल, title.",
@@ -277,7 +283,7 @@
   },
   "ttsCostExplanation": {
     "description": "உரையை கேட்கும் போது உரை-கு-பேச்சு இயின்றில் பிரிவு, செய்தி, முழு விலை.",
-    "message": "",
+    "message": "இந்தச் செய்தியைக் கேட்பதற்கு $product$ $cost$ $currency$ வசூலிக்கப்படும்",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -286,12 +292,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "ஒரு உரை-க்கு-பேச்சு இயந்திரம் ஒரு செய்தியை கூறி விடுమ் போது, அல்லது,  the message is free. Could contain the name of the provider.",
-    "message": "",
+    "message": "இந்த ஆடியோ Inflection AI மூலம் இலவசமாக உருவாக்கப்படுகிறது",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -336,11 +346,11 @@
     "description": "ஒரு செய்தியின் உரையை கிளிப்போர்டுக்கு நகல் எடுக்க பொத்தானின் தலைப்பு."
   },
   "voiceIntroduction_joey": {
-    "message": "",
+    "message": "ஹலோ! \nநடைமுறை! \nநீங்கள்! \nநான் பை, உங்கள் பாலிகிளாட் AI உதவியாளர். \nஎனது கட்டளையில் 32 மொழிகளைக் கொண்டு, உலகெங்கிலும் உள்ள கருத்துக்களையும் கலாச்சாரங்களையும் நாம் ஆராயலாம். \nஇந்தக் குரலைப் பற்றி நீங்கள் என்ன நினைக்கிறீர்கள்?",
     "description": "ஜோய் குரலுக்கான அ introduction."
   },
   "voiceIntroduction_paola": {
-    "message": ""
+    "message": "Ciao! \nபோன்ஜர்! \nவணக்கம்! \nநான் பை, என்னால் 32 மொழிகளில் சரளமாகப் பேச முடியும். \nஅரபு முதல் உக்ரேனிய மொழி வரை, மொழி தடைகளை உடைக்க நான் இங்கு வந்துள்ளேன். \nஇந்தக் குரல் உங்களுக்கு எப்படி ஒலிக்கிறது?"
   },
   "regenerateButtonTitle": {
     "message": "$cost$ $currency$ ஆடியோ உருவாக்கு",
@@ -359,5 +369,25 @@
   "regenerateButtonTitleFree": {
     "message": "ஆடியோ உருவாக்கு",
     "description": "ஒரு செய்தியின் ஆடியோவை மீண்டும் உருவாக்குவதற்கு பொ, utton- in த, alai. ேி അനിശ്ചിത ഖുദ്‌ എർ‌ പേ‌ ."
+  },
+  "assistantIsWriting": {
+    "description": "உதவியாளர் அதன் பதிலைத் தட்டச்சு செய்யும் போது செய்தி காட்டப்படும்.",
+    "message": "$chatbot$ எழுதுகிறார்...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "கட்டண விளக்க இணைப்பின் மீது பயனர் வட்டமிடும்போது காண்பிக்க வேண்டிய உதவிக்குறிப்பு.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "ஆடியோவிற்கு $product$ எப்படி கட்டணம் விதிக்கிறது என்பதை அறிக"
   }
 }

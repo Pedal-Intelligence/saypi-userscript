@@ -1,23 +1,39 @@
 {
-  "appName": {
-    "message": "Say, Pi",
-    "description": "Nazwa aplikacji."
+  "ttsCostExplanation": {
+    "message": "$product$ pobierze opłatę w wysokości $cost$ $currency$ za odsłuchanie tej wiadomości",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
+      }
+    }
   },
-  "appDescription": {
-    "message": "Twój Głosowy Towarzysz dla Pi AI",
-    "description": "Opis aplikacji."
+  "ttsCostExplanationFree": {
+    "message": "Ten dźwięk jest generowany bezpłatnie przez Inflection AI",
+    "placeholders": {
+      "provider": {
+        "content": "$1",
+        "example": "Inflection AI"
+      }
+    }
   },
-  "callInProgress": {
-    "message": "Zakończ rozmowę przez zestaw głośnomówiący",
-    "description": "Podpowiedź wyświetlana na przycisku połączenia, gdy połączenie jest w toku."
+  "voiceIntroduction_joey": {
+    "message": "Hola! \nPokaż! \n你好! \nJestem Pi, twój poliglota AI asystent. \nDysponując 32 językami, możemy poznawać idee i kultury z całego świata. \nCo sądzisz o tym głosie?"
   },
-  "callStarting": {
-    "message": "Łączenie...",
-    "description": "Podpowiedź wyświetlana na przycisku połączenia, gdy połączenie się rozpoczyna."
+  "voiceIntroduction_paola": {
+    "message": "Ciao! \nBonjour! \nCześć! \nJestem Pi i potrafię płynnie rozmawiać w 32 językach. \nOd arabskiego po ukraiński, jestem tutaj, aby przełamać bariery językowe. \nJak brzmi dla Ciebie ten głos?"
   },
-  "callNotStarted": {
-    "message": "Rozpocznij rozmowę bez użycia rąk z $chatbot$",
-    "description": "Podpowiedź wyświetlana na przycisku połączenia, zanim połączenie zostanie rozpoczęte.",
+  "assistantIsWriting": {
+    "description": "Komunikat wyświetlany, gdy asystent wpisuje odpowiedź.",
+    "message": "$chatbot$ pisze...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
@@ -25,61 +41,15 @@
       }
     }
   },
-  "callError": {
-    "message": "Napotkano niekrytyczny błąd. Nie panikuj, nadal słuchamy.",
-    "description": "Podpowiedź wyświetlana na przycisku połączenia, gdy wystąpi błąd niekrytyczny."
-  },
-  "mode_speed": {
-    "message": "szybkość",
-    "description": "Najszybszy tryb transkrypcji."
-  },
-  "mode_balanced": {
-    "message": "zrównoważony",
-    "description": "Domyślny tryb transkrypcji."
-  },
-  "mode_accuracy": {
-    "message": "dokładność",
-    "description": "Tryb transkrypcji o najwyższej dokładności."
-  },
-  "preferedModeControl": {
-    "message": "Wybierz preferowany tryb transkrypcji",
-    "description": "Tytuł (podpowiedź) kontrolki do wyboru preferowanego trybu transkrypcji."
-  },
-  "autoSubmit": {
-    "description": "Etykieta dla pola wyboru do włączania/wyłączania automatycznego wysyłania komunikatów.",
-    "message": "Automatyczne wysyłanie"
-  },
-  "continueUnlocking": {
-    "description": "Instrukcje informujące użytkownika, jak kontynuować, gdy zacznie naciskać przycisk odblokowania.",
-    "message": "Kontynuuj przytrzymywanie, aby odblokować..."
-  },
-  "lockButton": {
-    "description": "Tytuł (podpowiedź) przycisku do blokowania ekranu przed przypadkowymi dotknięciami.",
-    "message": "Naciśnij, aby zablokować ekran"
-  },
-  "lockedScreen": {
-    "description": "Wiadomość do wyświetlenia na pierwszym planie, gdy ekran jest zablokowany.",
-    "message": "Ekran jest zablokowany."
-  },
-  "soundEffects": {
-    "description": "Etykieta dla pola wyboru do włączania/wyłączania efektów dźwiękowych.",
-    "message": "Efekty dźwiękowe"
-  },
-  "unlockButton": {
-    "description": "Tytuł (podpowiedź) przycisku do odblokowania ekranu.",
-    "message": "Naciśnij, aby odblokować ekran"
-  },
-  "unlockInstruction": {
-    "description": "Instrukcje informujące użytkownika, jak odblokować ekran, gdy jest zablokowany.",
-    "message": "Przytrzymaj, aby odblokować."
-  },
-  "preferedLanguage": {
-    "message": "Język",
-    "description": "Etykieta do wyboru preferowanego języka transkrypcji."
+  "callNotStarted": {
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioConnected": {
-    "description": "Wiadomość wyświetlana, gdy mikrofon jest podłączony",
-    "message": "$microphone$ podłączony",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -87,19 +57,7 @@
       }
     }
   },
-  "audioInputError": {
-    "description": "Wiadomość wyświetlana, gdy dźwięk skutkuje pustym transkrypcją - zazwyczaj jest to wynik filtrowania.",
-    "message": "Ups, $chatbot$ tego nie złapał. Czy możesz spróbować powiedzieć to jeszcze raz?",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
   "audioReconnecting": {
-    "description": "Wiadomość wyświetlana podczas łączenia z nowym mikrofonem",
-    "message": "Przełączanie na $microphone$...",
     "placeholders": {
       "microphone": {
         "content": "$1",
@@ -107,9 +65,7 @@
       }
     }
   },
-  "assistantIsListening": {
-    "description": "Wiadomość wyświetlana, gdy asystent nasłuchuje mowy.",
-    "message": "$chatbot$ słucha...",
+  "audioInputError": {
     "placeholders": {
       "chatbot": {
         "content": "$1",
@@ -117,148 +73,67 @@
       }
     }
   },
-  "toggleThemeToDarkMode": {
-    "description": "Etykieta dla przycisku przełączania na tryb ciemny.",
-    "message": "Przełącz na tryb ciemny"
-  },
-  "toggleThemeToLightMode": {
-    "description": "Etykieta dla przycisku przełączania na tryb jasny.",
-    "message": "Przełącz na tryb jasny"
-  },
-  "consentAskParticipate": {
-    "message": "Czy chciałbyś uczestniczyć?"
-  },
-  "consentBetterTogether": {
-    "message": "Poprawmy razem Say, Pi"
-  },
-  "consentDataDeidentified": {
-    "message": "Analityka nie jest powiązana z osobami. Wszelkie używane dane są anonimizowane."
-  },
-  "consentNoPii": {
-    "message": "Nie będziemy zbierać ani widzieć danych osobowych, takich jak wiadomości czy imiona."
-  },
-  "consentNoSale": {
-    "message": "Nie sprzedamy Twoich danych stronom trzecim ani nie użyjemy ich do celów reklamowych."
-  },
-  "consentOptIn": {
-    "message": "Jestem w środku!"
-  },
-  "consentOptOut": {
-    "message": "Nie, dziękuję."
-  },
-  "consentPrivacyParamount": {
-    "message": "Twoja prywatność jest najważniejsza. Wszystko, co mówisz, pozostaje między tobą a Pi."
-  },
-  "consentRightToRevoke": {
-    "message": "Możesz zmienić zdanie w dowolnym momencie."
-  },
-  "consentSharingPurpose": {
-    "message": "Udostępnianie danych o Twoim użytkowaniu pomoże nam zrozumieć, jak ludzie korzystają z Say, Pi, dzięki czemu będziemy mogli ulepszyć go dla wszystkich."
-  },
-  "consetPrivacyPolicy": {
-    "message": "Przeczytaj naszą Politykę Prywatności"
-  },
-  "shareAnalytics": {
-    "description": "Etykieta dla pola wyboru do włączania/wyłączania udostępniania analiz.",
-    "message": "Udostępnij analitykę"
-  },
-  "enterImmersiveModeShort": {
-    "message": "Imersyjny",
-    "description": "Tekst przycisku do wejścia w tryb immersyjny na komputerze."
-  },
-  "exitImmersiveModeLong": {
-    "message": "Wyjdź z trybu immersyjnego",
-    "description": "Aria-label i tytuł przycisku do wyjścia z trybu immersyjnego na urządzeniach mobilnych, powrót do trybu tekstowego pulpitu."
-  },
-  "enterImmersiveModeLong": {
-    "message": "Wejdź w Tryb Immersyjny",
-    "description": "Aria-label i tytuł przycisku do wchodzenia w tryb pełnoekranowy na urządzeniach mobilnych."
-  },
-  "applicationStatusIssue": {
-    "description": "Wiadomość do wyświetlenia, gdy aplikacja napotyka problemy.",
-    "message": "Alert problemu z systemem"
-  },
-  "applicationStatusUnknown": {
-    "description": "Wiadomość do wyświetlenia, gdy nie można określić statusu aplikacji. Np. kiedy klient jest offline.",
-    "message": "Status aplikacji nieznany"
-  },
-  "checkingApplicationStatus": {
-    "description": "Wiadomość do wyświetlenia podczas ustalania stanu systemu, np. podczas ładowania.",
-    "message": "Sprawdzanie statusu aplikacji..."
-  },
-  "dismissAlert": {
-    "description": "Etykieta przycisku do odrzucenia alertu problemu systemowego.",
-    "message": "Odrzuć"
-  },
-  "recommendedActions": {
-    "description": "Wiadomość poprzedzająca listę zalecanych działań, które użytkownik może podjąć w celu zaradzenia znanemu problemowi.",
-    "message": "W międzyczasie polecamy:"
-  },
-  "extensionPopupTitle": {
-    "description": "Tytuł okna dialogowego rozszerzenia.",
-    "message": "Say, Pi"
-  },
-  "activityCheckButton": {
-    "message": "Tak, jestem nadal tutaj!",
-    "description": "Tekst przycisku wskazującego, że użytkownik jest nadal obecny."
-  },
-  "activityCheckMessage": {
-    "description": "Wiadomość do wyświetlenia, gdy rozmowa trwa niezwykle długo.",
-    "message": "Wow, to jest długa rozmowa. Czy ty jesteś jeszcze tam, czy rozmawiamy sami ze sobą?"
+  "assistantIsListening": {
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "assistantIsThinking": {
-    "message": "$chatbot$ myśli...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    },
-    "description": "Wiadomość wyświetlana, gdy asystent przygotowuje swoją odpowiedź."
+    }
   },
   "assistantIsSpeaking": {
-    "message": "$chatbot$ mówi...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    },
-    "description": "Wiadomość wyświetlana, gdy asystent przekazuje swoją odpowiedź."
+    }
   },
   "userStartedInterrupting": {
-    "message": "Dalej, $chatbot$ słucha...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
         "example": "Pi"
       }
-    },
-    "description": "Wiadomość wyświetlana, gdy użytkownik zaczyna mówić, podczas gdy asystent mówi."
+    }
   },
-  "allowInterruptions": {
-    "message": "Przerywalny",
-    "description": "Etykieta dla pola wyboru do włączania/wyłączania możliwości przerywania odpowiedzi Pi przez użytkownika poprzez mówienie."
+  "regenerateButtonTitle": {
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
   },
-  "currencyUSDAbbreviation": {
-    "description": "Skrót od United States Dollar.",
-    "message": "USD"
+  "ttsPoweredBy": {
+    "placeholders": {
+      "ttsEngine": {
+        "content": "$1",
+        "example": "ElevenLabs"
+      }
+    }
   },
-  "currentCharges": {
-    "description": "Termin używany do opisania bieżących opłat (bieżący sumaryczny wynik) naliczanych przez użytkownika.",
-    "message": "Obecne opłaty"
-  },
-  "enableTTS": {
-    "description": "Etykieta dla pola wyboru do włączania/wyłączania tekstu na mowę.",
-    "message": "Wielojęzyczne głosy"
-  },
-  "enhancedVoice": {
-    "description": "Tytuł (podpowiedź) dla funkcji Mów, ulepszone głosy Pi.",
-    "message": "Głos wzmocniony przez Say, Pi"
+  "previewStatusPaused": {
+    "placeholders": {
+      "resetDate": {
+        "content": "$1",
+        "example": "2021-12-31"
+      }
+    }
   },
   "previewProgress": {
-    "description": "Wiadomość do wyświetlenia, gdy użytkownik podgląda funkcję, która ma limit znaków.",
-    "message": "Użyto $count$ znaków z dostępnych $limit$",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -270,95 +145,23 @@
       }
     }
   },
-  "previewStatusActive": {
-    "message": "Aktywna Beta"
-  },
-  "previewStatusCompleted": {
-    "message": "Beta Zakończona"
-  },
-  "previewStatusPaused": {
-    "description": "Wiadomość do wyświetlenia, gdy użytkownik podgląda funkcję, która została wstrzymana.",
-    "message": "Beta Wstrzymana do $resetDate$",
+  "ttsCostExplanationSayPi": {
+    "description": "Etykietka wyświetlana, gdy użytkownik najedzie kursorem na link z wyjaśnieniem kosztów.",
     "placeholders": {
-      "resetDate": {
+      "product": {
         "content": "$1",
-        "example": "2021-12-31"
+        "example": "Say, Pi"
       }
-    }
+    },
+    "message": "Dowiedz się, jak $product$ pobiera opłaty za dźwięk"
   },
-  "previewStatusUnknown": {
-    "message": "Nie można połączyć..."
-  },
-  "readAloudButtonTitle": {
-    "description": "Tytuł przycisku do odczytywania tekstu wiadomości na głos.",
-    "message": "Czytaj na głos"
-  },
-  "ttsCostExplanation": {
-    "description": "Podpowiedź do wyświetlenia, gdy silnik tekstu na mowę jest używany do odczytywania wiadomości na głos, wraz z kosztem wiadomości.",
-    "message": "",
+  "enhancedVoice": {
     "placeholders": {
-      "cost": {
+      "product": {
         "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
+        "example": "Say, Pi"
       }
-    }
-  },
-  "ttsCostExplanationFree": {
-    "description": "Podpowiedź do wyświetlenia, gdy silnik tekstu na mowę jest używany do odczytywania wiadomości na głos, a wiadomość jest darmowa. Może zawierać nazwę dostawcy.",
-    "message": "",
-    "placeholders": {
-      "provider": {
-        "content": "$1",
-        "example": "Inflection AI"
-      }
-    }
-  },
-  "ttsPoweredBy": {
-    "description": "Wiadomość do wyświetlenia, gdy silnik tekstu na mowę jest używany do odczytywania wiadomości na głos.",
-    "message": "Synteza mowy zasilana przez $ttsEngine$",
-    "placeholders": {
-      "ttsEngine": {
-        "content": "$1",
-        "example": "ElevenLabs"
-      }
-    }
-  },
-  "copiedButtonTitle": {
-    "message": "Skopiowane!",
-    "description": "Tytuł przycisku wskazującego, że tekst wiadomości został skopiowany do schowka."
-  },
-  "copyButtonTitle": {
-    "message": "Kopiuj",
-    "description": "Tytuł przycisku do kopiowania tekstu wiadomości do schowka."
-  },
-  "voiceIntroduction_joey": {
-    "message": "",
-    "description": "Wprowadzenie dla głosu Joey."
-  },
-  "voiceIntroduction_paola": {
-    "message": "",
-    "description": "Wprowadzenie dla głosu Paola."
-  },
-  "regenerateButtonTitle": {
-    "message": "Generuj audio za $cost$ $currency$",
-    "description": "Tytuł przycisku do regeneracji dźwięku wiadomości. Może wiązać się z szacowanymi kosztami.",
-    "placeholders": {
-      "cost": {
-        "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
-      }
-    }
-  },
-  "regenerateButtonTitleFree": {
-    "message": "Generuj Audio",
-    "description": "Tytuł przycisku do regeneracji dźwięku wiadomości. Może wiązać się z nieokreślonym kosztem."
+    },
+    "message": "Głos wzmocniony przez $product$"
   }
 }

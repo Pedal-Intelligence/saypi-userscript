@@ -172,7 +172,13 @@
   },
   "enhancedVoice": {
     "description": "Diyelim ki, Pi geliştirilmiş sesler için başlık (araç ipucu).",
-    "message": "Say, Pi tarafından geliştirilmiş ses"
+    "message": "$product$ ile geliştirilen ses",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "enterImmersiveModeLong": {
     "description": "Mobil cihazlarda sürükleyici moda giriş yapmak için düğmenin aria-etiketi ve başlığı.",
@@ -277,7 +283,7 @@
   },
   "ttsCostExplanation": {
     "description": "Metni yüksek sesle okumak için metin-konuşma motoru kullanıldığında gösterilecek araç ipucu, mesajın maliyetiyle birlikte.",
-    "message": "",
+    "message": "$product$, bu mesajı dinlemek için $cost$ $currency$ tutarında ücret alacaktır",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -286,12 +292,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "Bir metin-okuma motoru kullanılarak bir mesaj yüksek sesle okunduğunda ve mesaj ücretsiz olduğunda görüntülenecek araç ipucu. Sağlayıcının adını içerebilir.",
-    "message": "",
+    "message": "Bu ses Inflection AI tarafından ücretsiz olarak oluşturulmuştur",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -336,11 +346,11 @@
     "description": "Bir mesajın metnini panoya kopyalamak için düğmenin başlığı."
   },
   "voiceIntroduction_joey": {
-    "message": "",
+    "message": "Selam! \nПривет! \nişte! \nBen Pi, çok dilli yapay zeka asistanınım. \nEmrimdeki 32 dil sayesinde dünyanın dört bir yanından fikirleri ve kültürleri keşfedebiliyoruz. \nBu ses hakkında ne düşünüyorsunuz?",
     "description": "Joey sesi için giriş."
   },
   "voiceIntroduction_paola": {
-    "message": "",
+    "message": "Merhaba! \nGünaydın! \nMerhaba! \nBen Pi ve 32 dilde akıcı bir şekilde konuşabiliyorum. \nArapça'dan Ukraynaca'ya kadar dil engellerini aşmak için buradayım. \nBu ses size nasıl geliyor?",
     "description": "Paola sesi için giriş."
   },
   "regenerateButtonTitle": {
@@ -360,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "Ses Oluştur",
     "description": "Bir mesajın sesini yeniden oluşturmak için düğmenin başlığı. Belirsiz bir maliyeti olabilir."
+  },
+  "assistantIsWriting": {
+    "description": "Asistan yanıtını yazarken görüntülenen mesaj.",
+    "message": "$chatbot$ yazıyor...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "Kullanıcı maliyet açıklaması bağlantısının üzerine geldiğinde görüntülenecek araç ipucu.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "$product$'ın ses için nasıl ücretlendirildiğini öğrenin"
   }
 }

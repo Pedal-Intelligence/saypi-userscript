@@ -172,7 +172,13 @@
   },
   "enhancedVoice": {
     "description": "Názov (popis) pre Povedať, Pi vylepšené hlasy.",
-    "message": "Hlas vylepšený pomocou Say, Pi"
+    "message": "Hlas vylepšený o $product$",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "enterImmersiveModeLong": {
     "description": "Aria-label a názov tlačidla pre vstup do pohlcujúceho režimu na mobilných zariadeniach.",
@@ -277,7 +283,7 @@
   },
   "ttsCostExplanation": {
     "description": "Nápoveda na zobrazenie, keď sa text-na-rečový motor používa na nahlas čítanie správy, s nákladmi na správu.",
-    "message": "",
+    "message": "$product$ si za vypočutie tejto správy bude účtovať $cost$ $currency$",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -286,12 +292,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "Nápoveda na zobrazenie, keď sa na nahlas čítanie správy používa nástroj text-na-reč a správa je zadarmo. Môže obsahovať meno poskytovateľa.",
-    "message": "",
+    "message": "Tento zvuk generuje bezplatne Inflection AI",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -336,11 +346,11 @@
     "description": "Názov tlačidla na kopírovanie textu správy do schránky."
   },
   "voiceIntroduction_joey": {
-    "message": "",
+    "message": "Ahoj! \nПривет! \n你好! \nSom Pi, váš polyglot AI asistent. \nS 32 jazykmi, ktoré ovládam, môžeme skúmať myšlienky a kultúry z celého sveta. \nČo si myslíte o tomto hlase?",
     "description": "Úvod pre hlas Joey."
   },
   "voiceIntroduction_paola": {
-    "message": "",
+    "message": "Čau! \nDobrý deň! \nDobrý deň! \nVolám sa Pi a plynule hovorím v 32 jazykoch. \nOd arabčiny po ukrajinčinu, som tu, aby som prelomil jazykové bariéry. \nAko vám znie tento hlas?",
     "description": "Úvod pre hlas Paola."
   },
   "regenerateButtonTitle": {
@@ -360,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "Generovať zvuk",
     "description": "Názov tlačidla na obnovenie zvuku správy. Môže spôsobiť neurčitý náklad."
+  },
+  "assistantIsWriting": {
+    "description": "Správa zobrazená, keď asistent píše svoju odpoveď.",
+    "message": "$chatbot$ píše...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "Popis, ktorý sa zobrazí, keď používateľ umiestni kurzor myši na odkaz na vysvetlenie nákladov.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "Zistite, ako $product$ účtuje za zvuk"
   }
 }

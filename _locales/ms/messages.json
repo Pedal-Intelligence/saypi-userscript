@@ -172,7 +172,13 @@
   },
   "enhancedVoice": {
     "description": "Tajuk (tooltip) untuk Suara Ditingkatkan Say, Pi.",
-    "message": "Suara ditingkatkan oleh Say, Pi"
+    "message": "Suara dipertingkatkan oleh $product$",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "enterImmersiveModeLong": {
     "description": "Aria-label dan tajuk butang untuk memasuki mod celupan pada peranti mudah alih.",
@@ -277,7 +283,7 @@
   },
   "ttsCostExplanation": {
     "description": "Tooltip untuk dipaparkan apabila enjin teks-ke-ucapan digunakan untuk membaca pesanan secara kuat, dengan kos pesanan tersebut.",
-    "message": "",
+    "message": "$product$ akan mengenakan bayaran $cost$ $currency$ untuk mendengar mesej ini",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -286,12 +292,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "Tooltip untuk dipaparkan apabila enjin teks-ke-ucapan digunakan untuk membaca pesanan secara lantang, dan pesanan itu adalah percuma. Mungkin mengandungi nama penyedia.",
-    "message": "",
+    "message": "Audio ini dijana secara percuma oleh Inflection AI",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -336,11 +346,11 @@
     "description": "Tajuk butang untuk menyalin teks mesej ke papan keratan."
   },
   "voiceIntroduction_joey": {
-    "message": "",
+    "message": "Hola! \nПривет! \n你好! \nSaya Pi, pembantu AI poliglot anda. \nDengan 32 bahasa di bawah arahan saya, kami boleh meneroka idea dan budaya dari seluruh dunia. \nApa pendapat anda tentang suara ini?",
     "description": "Pengenalan untuk suara Joey."
   },
   "voiceIntroduction_paola": {
-    "message": "",
+    "message": "Ciao! \nBonjour! \nhelo! \nSaya Pi, dan saya boleh bercakap dengan fasih dalam 32 bahasa. \nDari bahasa Arab ke Bahasa Ukraine, saya di sini untuk memecahkan halangan bahasa. \nBagaimanakah suara ini terdengar kepada anda?",
     "description": "Pengenalan untuk suara Paola."
   },
   "regenerateButtonTitle": {
@@ -360,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "Hasilkan Audio",
     "description": "Tajuk butang untuk menjana semula audio mesej. Mungkin menimbulkan kos yang tidak ditentukan."
+  },
+  "assistantIsWriting": {
+    "description": "Mesej dipaparkan semasa pembantu menaip responsnya.",
+    "message": "$chatbot$ sedang menulis...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "Petua alat untuk dipaparkan apabila pengguna menuding pada pautan penjelasan kos.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "Ketahui cara $product$ mengenakan bayaran untuk audio"
   }
 }

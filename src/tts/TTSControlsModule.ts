@@ -232,6 +232,7 @@ export class TTSControlsModule {
       chargeExplanation = getMessage("ttsCostExplanation", [
         cost.toFixed(2),
         currency,
+        "Say, Pi", // provider name
       ]);
     } else {
       chargeExplanation = getMessage("ttsCostExplanationFree");
@@ -254,7 +255,7 @@ export class TTSControlsModule {
     pricingLink.href = "https://www.saypi.ai/pricing";
     pricingLink.target = "_blank";
     pricingLink.classList.add("saypi-pricing-link", "tooltip", "tts-item");
-    const tooltipText = getMessage("ttsCostExplanationSayPi");
+    const tooltipText = getMessage("ttsCostExplanationSayPi", ["Say, Pi"]);
     pricingLink.setAttribute("aria-label", tooltipText);
     const providerLogo = document.createElement("img");
     providerLogo.classList.add("flair", "audio-provider", "saypi-logo");

@@ -172,7 +172,13 @@
   },
   "enhancedVoice": {
     "description": "Otsikko (työkaluvihje) kohdalle Sano, Pi parannetut äänet.",
-    "message": "Ääni parannettu Say, Pi:n toimesta"
+    "message": "Ääntä paransi $product$",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "enterImmersiveModeLong": {
     "description": "Aria-label ja painikkeen otsikko, jolla siirrytään immersiiviseen tilaan mobiililaitteissa.",
@@ -277,7 +283,7 @@
   },
   "ttsCostExplanation": {
     "description": "Kuvakevihje, joka näytetään kun tekstistä puheeksi -moottoria käytetään viestin lukemiseen ääneen, viestin kustannuksella.",
-    "message": "",
+    "message": "$product$ veloittaa $cost$ $currency$ tämän viestin kuuntelemisesta",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -286,12 +292,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "Tooltipin näyttäminen, kun tekstistä puheeksi -moottoria käytetään viestin lukemiseen ääneen, ja viesti on ilmainen. Saattaa sisältää palveluntarjoajan nimen.",
-    "message": "",
+    "message": "Inflection AI tuottaa tämän äänen ilmaiseksi",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -336,11 +346,11 @@
     "description": "Painikkeen otsikko, jolla kopioidaan viestin teksti leikepöydälle."
   },
   "voiceIntroduction_joey": {
-    "message": "",
+    "message": "Hei! \nПривет! \n你好! \nOlen Pi, polyglotti tekoälyavustajasi. \nHallitsemani 32 kielellä voimme tutustua ideoihin ja kulttuureihin ympäri maailmaa. \nMitä mieltä olet tästä äänestä?",
     "description": "Joey-äänen esittely."
   },
   "voiceIntroduction_paola": {
-    "message": "",
+    "message": "Ciao! \nBonjour! \nHei! \nOlen Pi, ja voin keskustella sujuvasti 32 kielellä. \nArabiasta ukrainaan olen täällä murtaakseni kielimuurit. \nMiltä tämä ääni sinusta kuulostaa?",
     "description": "Johdanto Paola-äänelle."
   },
   "regenerateButtonTitle": {
@@ -360,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "Luo ääntä",
     "description": "Painikkeen otsikko, jolla uudistetaan viestin ääni. Saattaa aiheuttaa määrittelemättömän kustannuksen."
+  },
+  "assistantIsWriting": {
+    "description": "Viesti näytetään, kun avustaja kirjoittaa vastaustaan.",
+    "message": "$chatbot$ kirjoittaa...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "Työkaluvinkki, joka näytetään, kun käyttäjä vie hiiren osoittimen kustannusselityslinkin päälle.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "Lue, miten $product$ veloittaa äänestä"
   }
 }

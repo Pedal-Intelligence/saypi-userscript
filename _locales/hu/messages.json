@@ -254,7 +254,13 @@
   },
   "enhancedVoice": {
     "description": "Cím (eszköztipp) a Mondjuk, Pi fokozott hangokhoz.",
-    "message": "A Say, Pi által fokozott hang"
+    "message": "A hangot a $product$ javította",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "previewProgress": {
     "description": "Az üzenet, amely megjelenik, amikor a felhasználó egy karakterlimittel rendelkező funkciót tekint előzetesen.",
@@ -295,7 +301,7 @@
   },
   "ttsCostExplanation": {
     "description": "A felugró súgó megjelenítése, amikor a szövegfelolvasó motorral hangosan olvassák fel az üzenetet, az üzenet költségével együtt.",
-    "message": "",
+    "message": "A $product$ $cost$ $currency$-t számol fel az üzenet meghallgatásáért",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -304,12 +310,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "A felugró szöveg, amely akkor jelenik meg, amikor a szövegfelolvasó motorral olvassák fel hangosan az üzenetet, és az üzenet ingyenes. Tartalmazhatja a szolgáltató nevét.",
-    "message": "",
+    "message": "Ezt a hangot az Inflection AI ingyenesen generálja",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -336,11 +346,11 @@
     "description": "A gomb címe, amely másolja az üzenet szövegét a vágólapra."
   },
   "voiceIntroduction_joey": {
-    "message": "",
+    "message": "Hola! \nПривет! \n你好! \nPi vagyok, a poliglott mesterséges intelligencia asszisztense. \nA rendelkezésemre álló 32 nyelv segítségével felfedezhetünk ötleteket és kultúrákat a világ minden tájáról. \nmit gondolsz erről a hangról?",
     "description": "Bevezetés a Joey hanghoz."
   },
   "voiceIntroduction_paola": {
-    "message": "",
+    "message": "Ciao! \nBonjour! \nHelló! \nPi vagyok, és 32 nyelven tudok folyékonyan társalogni. \nAz arabtól az ukránig azért vagyok itt, hogy letörjem a nyelvi akadályokat. \nHogy hangzik neked ez a hang?",
     "description": "Bevezetés a Paola hanghoz."
   },
   "regenerateButtonTitle": {
@@ -360,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "Hangot generál",
     "description": "A gomb címe, amely újragenerálja az üzenet hangját. Meghatározatlan költséggel járhat."
+  },
+  "assistantIsWriting": {
+    "description": "Üzenet jelenik meg, amikor az asszisztens beírja a választ.",
+    "message": "$chatbot$ ír...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "Az elemleírás, amely akkor jelenik meg, amikor a felhasználó a költségmagyarázat link fölé viszi az egérmutatót.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "Ismerje meg, hogyan számít fel a $product$ hangdíjat"
   }
 }

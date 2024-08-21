@@ -172,7 +172,13 @@
   },
   "enhancedVoice": {
     "description": "Pamagat (tooltip) para sa Sabihin, mga pinalakas na boses ni Pi.",
-    "message": "Tinimbang na boses ni Say, Pi"
+    "message": "Pinahusay ng $product$ ang boses",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "enterImmersiveModeLong": {
     "description": "Ang aria-label at pamagat ng pindutan para pumasok sa immersive mode sa mga mobile device.",
@@ -277,7 +283,7 @@
   },
   "ttsCostExplanation": {
     "description": "Ang tooltip na ipapakita kapag ginamit ang engine ng text-to-speech upang basahin nang malakas ang isang mensahe, kasama ang halaga ng mensahe.",
-    "message": "",
+    "message": "Ang $product$ ay maniningil ng $cost$ $currency$ para sa pakikinig sa mensaheng ito",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -286,12 +292,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "Ang tooltip na ipapakita kapag ginamit ang isang text-to-speech engine upang basahin nang malakas ang isang mensahe, at libre ang mensahe. Maaaring maglaman ng pangalan ng provider.",
-    "message": "",
+    "message": "Ang audio na ito ay nabuo nang walang bayad ng Inflection AI",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -336,11 +346,11 @@
     "description": "Ang pamagat ng pindutan para kopyahin ang teksto ng mensahe sa clipboard."
   },
   "voiceIntroduction_joey": {
-    "message": "",
+    "message": "Hola! \nПривет! \n你好! \nAko si Pi, ang iyong polyglot AI assistant. \nSa 32 wika sa aking utos, maaari nating tuklasin ang mga ideya at kultura mula sa buong mundo. \nAno sa tingin mo ang boses na ito?",
     "description": "Panimula para sa boses ni Joey."
   },
   "voiceIntroduction_paola": {
-    "message": "",
+    "message": "Ciao! \nBonjour! \nHello! \nAko si Pi, at marunong akong makipag-usap sa 32 wika. \nMula sa Arabic hanggang Ukrainian, narito ako upang sirain ang mga hadlang sa wika. \nAno ang pakiramdam ng boses na ito sa iyo?",
     "description": "Panimula para sa boses ni Paola."
   },
   "regenerateButtonTitle": {
@@ -360,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "Lumikha ng Audio",
     "description": "Ang pamagat ng pindutan para muling makabuo ng audio ng isang mensahe. Maaaring magdulot ito ng hindi matukoy na gastos."
+  },
+  "assistantIsWriting": {
+    "description": "Ipinapakita ang mensahe kapag tina-type ng assistant ang tugon nito.",
+    "message": "Sumulat si $chatbot$...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "Ang tooltip na ipapakita kapag nag-hover ang user sa link ng paliwanag sa gastos.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "Alamin kung paano naniningil ang $product$ para sa audio"
   }
 }

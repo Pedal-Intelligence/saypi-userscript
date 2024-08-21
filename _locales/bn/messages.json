@@ -254,7 +254,13 @@
   },
   "enhancedVoice": {
     "description": "শিরোনাম (টুলটিপ) বলুন, পাই উন্নত স্বর।",
-    "message": "সে, পাই দ্বারা উন্নীত করা ভয়েস"
+    "message": "ভয়েস $product$ দ্বারা উন্নত",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "previewProgress": {
     "description": "ব্যবহারকারী যখন একটি বৈশিষ্ট্য পরিদর্শন করে, যাতে অক্ষরের সীমা আছে, ।",
@@ -295,7 +301,7 @@
   },
   "ttsCostExplanation": {
     "description": "যখন টেক্সট-টু-স্পিচ ইঞ্জিন বার্তা উচ্চরিত করার জন্য ব্যবহৃত হয়, এর মূল্যের সাথে, ্‌্‌্‌্‌্ারি।",
-    "message": "",
+    "message": "এই বার্তাটি শোনার জন্য $product$ $cost$ $currency$ চার্জ করবে",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -304,12 +310,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "যখন একটি বার্তা পাঠিয়ে দেয়ার জন্য একটি লেখা-২-ভাষন (text-to-speech) ইঞ্জিন ব্যাবহার করা হয়, ।",
-    "message": "",
+    "message": "এই অডিওটি ইনফ্লেকশন এআই দ্বারা বিনামূল্যে তৈরি করা হয়েছে",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -336,11 +346,11 @@
     "description": "বার্তার পাঠ্যটি ক্লিপবোর্ডে অনুলিপি করার জন্য বোতামের শিরোনাম।"
   },
   "voiceIntroduction_joey": {
-    "message": "",
+    "message": "হোলা! \nপ্রিভেট! \n你好! \nআমি পাই, আপনার পলিগ্লট এআই সহকারী। \nআমার নির্দেশে 32টি ভাষার সাথে, আমরা সারা বিশ্ব থেকে ধারণা এবং সংস্কৃতি অন্বেষণ করতে পারি। \nআপনি এই ভয়েস কি মনে করেন?",
     "description": "জোয়ি ভোইসের পরিচয়।"
   },
   "voiceIntroduction_paola": {
-    "message": "",
+    "message": "সিয়াও ! \nবনজোর ! \nনমস্কার! \nআমি পাই, এবং আমি 32টি ভাষায় অনর্গল কথা বলতে পারি। \nআরবি থেকে ইউক্রেনীয়, আমি এখানে ভাষার বাধা ভাঙতে এসেছি। \nএই ভয়েসটি আপনার কাছে কেমন শোনাচ্ছে?",
     "description": "পাওলা ভোইসের জন্য ভূমিকা।"
   },
   "regenerateButtonTitle": {
@@ -360,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "অডিও তৈরি করুন",
     "description": "বার্তার অডিও পুনরুত্পাদনের জন্য বোতামের শিরোনাম। এটি নির্ধারিত না-খরচের সম্ভাবনা।"
+  },
+  "assistantIsWriting": {
+    "description": "সহকারী যখন তার প্রতিক্রিয়া টাইপ করে তখন বার্তাটি প্রদর্শিত হয়।",
+    "message": "$chatbot$ লিখছে...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "ব্যবহারকারী যখন খরচের ব্যাখ্যা লিঙ্কের উপর ঘোরায় তখন প্রদর্শনের টুলটিপ।",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "অডিওর জন্য $product$ কিভাবে চার্জ করে তা জানুন"
   }
 }

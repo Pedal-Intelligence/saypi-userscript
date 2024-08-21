@@ -261,7 +261,7 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost."
   },
   "ttsCostExplanation": {
-    "message": "Say, Pi will charge $cost$ $currency$ for listening to this message",
+    "message": "$product$ will charge $cost$ $currency$ for listening to this message",
     "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
     "placeholders": {
       "cost": {
@@ -271,6 +271,10 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
@@ -285,8 +289,14 @@
     }
   },
   "ttsCostExplanationSayPi": {
-    "message": "Learn how Say, Pi charges for audio",
-    "description": "The tooltip to display when the user hovers over the cost explanation link."
+    "message": "Learn how $product$ charges for audio",
+    "description": "The tooltip to display when the user hovers over the cost explanation link.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "currencyUSDAbbreviation": {
     "message": "USD",
@@ -356,8 +366,14 @@
     }
   },
   "enhancedVoice": {
-    "message": "Voice enhanced by Say, Pi",
-    "description": "Title (tooltip) for Say, Pi enhanced voices."
+    "message": "Voice enhanced by $product$",
+    "description": "Title (tooltip) for Say, Pi enhanced voices.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "copyButtonTitle": {
     "message": "Copy",
