@@ -14,7 +14,8 @@
         "content": "$3",
         "example": "Say, Pi"
       }
-    }
+    },
+    "description": "La información sobre herramientas que se muestra cuando se utiliza el motor de texto a voz para leer un mensaje en voz alta, con el costo del mensaje."
   },
   "callNotStarted": {
     "placeholders": {
@@ -22,7 +23,9 @@
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "La información sobre herramientas que se mostrará en el botón de llamada antes de iniciar una llamada.",
+    "message": "Inicie una conversación con manos libres con $chatbot$"
   },
   "audioConnected": {
     "placeholders": {
@@ -30,7 +33,9 @@
         "content": "$1",
         "example": "Default - MacBook Pro Microphone"
       }
-    }
+    },
+    "description": "Mensaje mostrado cuando hay un micrófono conectado",
+    "message": "$microphone$ conectado"
   },
   "audioReconnecting": {
     "placeholders": {
@@ -38,7 +43,9 @@
         "content": "$1",
         "example": "Default - AirPods Pro"
       }
-    }
+    },
+    "description": "Mensaje mostrado al conectarse a un nuevo micrófono",
+    "message": "Cambiando a $microphone$..."
   },
   "audioInputError": {
     "placeholders": {
@@ -46,7 +53,9 @@
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "Mensaje que se muestra cuando el audio da como resultado una transcripción vacía, generalmente como resultado del filtrado.",
+    "message": "Vaya, $chatbot$ no captó eso. \n¿Puedes intentar decirlo de nuevo?"
   },
   "assistantIsListening": {
     "placeholders": {
@@ -54,7 +63,9 @@
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "Mensaje que se muestra cuando el asistente está escuchando la voz.",
+    "message": "$chatbot$ está escuchando..."
   },
   "assistantIsThinking": {
     "placeholders": {
@@ -62,7 +73,9 @@
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "Mensaje que se muestra cuando el asistente está preparando su respuesta.",
+    "message": "$chatbot$ está pensando..."
   },
   "assistantIsWriting": {
     "placeholders": {
@@ -70,7 +83,9 @@
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "Mensaje que se muestra cuando el asistente escribe su respuesta.",
+    "message": "$chatbot$ está escribiendo..."
   },
   "assistantIsSpeaking": {
     "placeholders": {
@@ -78,7 +93,9 @@
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "Mensaje que se muestra cuando el asistente dice su respuesta.",
+    "message": "$chatbot$ está hablando..."
   },
   "userStartedInterrupting": {
     "placeholders": {
@@ -86,7 +103,9 @@
         "content": "$1",
         "example": "Pi"
       }
-    }
+    },
+    "description": "Mensaje que se muestra cuando el usuario comienza a hablar mientras el asistente habla.",
+    "message": "Adelante, $chatbot$ está escuchando..."
   },
   "regenerateButtonTitle": {
     "placeholders": {
@@ -98,7 +117,9 @@
         "content": "$2",
         "example": "credits"
       }
-    }
+    },
+    "description": "El título del botón para regenerar el audio de un mensaje. \nPuede incurrir en un costo estimado.",
+    "message": "Genera audio por $cost$ $currency$"
   },
   "ttsCostExplanationFree": {
     "placeholders": {
@@ -106,7 +127,9 @@
         "content": "$1",
         "example": "Inflection AI"
       }
-    }
+    },
+    "description": "La información sobre herramientas que se muestra cuando se utiliza un motor de texto a voz para leer un mensaje en voz alta y el mensaje es gratuito. \nSe supone que el proveedor es Inflection AI.",
+    "message": "Este audio es generado de forma gratuita por Inflection AI."
   },
   "ttsCostExplanationSayPi": {
     "placeholders": {
@@ -115,7 +138,8 @@
         "example": "Say, Pi"
       }
     },
-    "message": "Descubra cómo $product$ cobra por el audio"
+    "message": "Descubra cómo $product$ cobra por el audio",
+    "description": "La información sobre herramientas que se muestra cuando el usuario pasa el cursor sobre el enlace de explicación de costos."
   },
   "ttsPoweredBy": {
     "placeholders": {
@@ -123,7 +147,9 @@
         "content": "$1",
         "example": "ElevenLabs"
       }
-    }
+    },
+    "description": "El mensaje que se mostrará cuando se utilice el motor de texto a voz para leer un mensaje en voz alta.",
+    "message": "Conversión de texto a voz con tecnología de $ttsEngine$"
   },
   "previewStatusPaused": {
     "placeholders": {
@@ -131,7 +157,9 @@
         "content": "$1",
         "example": "2021-12-31"
       }
-    }
+    },
+    "description": "El mensaje que se mostrará cuando el usuario esté obteniendo una vista previa de una función que se ha pausado.",
+    "message": "Beta pausada hasta $resetDate$"
   },
   "previewProgress": {
     "placeholders": {
@@ -143,7 +171,9 @@
         "content": "$2",
         "example": "500"
       }
-    }
+    },
+    "description": "El mensaje que se mostrará cuando el usuario esté obteniendo una vista previa de una función que tiene un límite de caracteres.",
+    "message": "$count$ caracteres usados ​​fuera del $limit$"
   },
   "enhancedVoice": {
     "placeholders": {
@@ -152,6 +182,213 @@
         "example": "Say, Pi"
       }
     },
-    "message": "Voz mejorada por $product$"
+    "message": "Voz mejorada por $product$",
+    "description": "Título (información sobre herramientas) para las voces mejoradas de Say, Pi."
+  },
+  "activityCheckButton": {
+    "description": "El texto del botón para indicar que el usuario todavía está presente.",
+    "message": "¡Sí, todavía estoy aquí!"
+  },
+  "activityCheckMessage": {
+    "description": "El mensaje que se muestra cuando la conversación se ha prolongado inusualmente.",
+    "message": "Vaya, esta es una larga conversación. \n¿Sigues ahí o estamos hablando solos?"
+  },
+  "allowInterruptions": {
+    "description": "Etiqueta de la casilla de verificación para habilitar/deshabilitar lo que permite al usuario interrumpir las respuestas de Pi hablando.",
+    "message": "interrumpible"
+  },
+  "appDescription": {
+    "description": "La descripción de la aplicación.",
+    "message": "Su compañero impulsado por voz para Pi AI"
+  },
+  "appName": {
+    "description": "El nombre de la aplicación.",
+    "message": "Di, pi"
+  },
+  "applicationStatusIssue": {
+    "description": "Mensaje que se mostrará cuando la aplicación tenga problemas.",
+    "message": "Alerta de problema del sistema"
+  },
+  "applicationStatusUnknown": {
+    "description": "Mensaje que se mostrará cuando no se pueda determinar el estado de la solicitud. \nP.ej. \ncuando el cliente está desconectado.",
+    "message": "Estado de la solicitud desconocido"
+  },
+  "autoSubmit": {
+    "description": "Etiqueta de la casilla de verificación para habilitar/deshabilitar el envío automático de mensajes.",
+    "message": "Envío automático"
+  },
+  "callError": {
+    "description": "La información sobre herramientas que se mostrará en el botón de llamada cuando se produzca un error no grave.",
+    "message": "Se encontró un error no fatal. \nQue no cunda el pánico, todavía estamos escuchando."
+  },
+  "callInProgress": {
+    "description": "La información sobre herramientas que se mostrará en el botón de llamada cuando hay una llamada en curso.",
+    "message": "Finalizar conversación manos libres"
+  },
+  "callStarting": {
+    "description": "El texto que se mostrará en la información sobre herramientas del botón de llamada y en el área de aviso cuando se inicia una llamada.",
+    "message": "Conectando..."
+  },
+  "checkingApplicationStatus": {
+    "description": "Mensaje que se mostrará mientras se determina el estado del sistema, p.e. \ndurante la carga.",
+    "message": "Comprobando el estado de la solicitud..."
+  },
+  "consentAskParticipate": {
+    "message": "¿Quieres participar?"
+  },
+  "consentBetterTogether": {
+    "message": "Mejoremos juntos Say, Pi"
+  },
+  "consentDataDeidentified": {
+    "message": "Los análisis no están vinculados a individuos. \nTodos los datos utilizados no están identificados."
+  },
+  "consentNoPii": {
+    "message": "No recopilaremos ni veremos datos personales, como mensajes o nombres."
+  },
+  "consentNoSale": {
+    "message": "No venderemos tus datos a terceros, ni los utilizaremos para publicidad."
+  },
+  "consentOptIn": {
+    "message": "¡Estoy dentro!"
+  },
+  "consentOptOut": {
+    "message": "No, gracias"
+  },
+  "consentPrivacyParamount": {
+    "message": "Tu privacidad es primordial. \nTodo lo que digas quedará entre tú y Pi."
+  },
+  "consentRightToRevoke": {
+    "message": "Puedes cambiar de opinión en cualquier momento."
+  },
+  "consentSharingPurpose": {
+    "message": "Compartir sus datos de uso nos ayudará a comprender cómo la gente usa Say, Pi para que podamos mejorarlo para todos."
+  },
+  "consetPrivacyPolicy": {
+    "message": "Lea nuestra Política de Privacidad"
+  },
+  "continueUnlocking": {
+    "description": "Instrucciones que indican al usuario cómo continuar una vez que ha comenzado a presionar el botón de desbloqueo.",
+    "message": "Continúe presionando para desbloquear..."
+  },
+  "copiedButtonTitle": {
+    "description": "El título del botón para indicar que el texto de un mensaje se ha copiado al portapapeles.",
+    "message": "¡Copiado!"
+  },
+  "copyButtonTitle": {
+    "description": "El título del botón para copiar el texto de un mensaje al portapapeles.",
+    "message": "Copiar"
+  },
+  "currencyUSDAbbreviation": {
+    "description": "La abreviatura del dólar estadounidense.",
+    "message": "Dólar estadounidense"
+  },
+  "currentCharges": {
+    "description": "El término utilizado para describir los cargos actuales (total acumulado) acumulados por el usuario.",
+    "message": "Cargos actuales"
+  },
+  "dismissAlert": {
+    "description": "Etiqueta del botón para descartar una alerta de problema del sistema.",
+    "message": "Despedir"
+  },
+  "enableTTS": {
+    "description": "Etiqueta de la casilla de verificación para habilitar/deshabilitar la conversión de texto a voz.",
+    "message": "Voces multilingües"
+  },
+  "enterImmersiveModeLong": {
+    "description": "La etiqueta aria y el título del botón para ingresar al modo inmersivo en dispositivos móviles.",
+    "message": "Ingrese al modo inmersivo"
+  },
+  "enterImmersiveModeShort": {
+    "description": "El texto del botón para ingresar al modo inmersivo en el escritorio.",
+    "message": "inmersivo"
+  },
+  "exitImmersiveModeLong": {
+    "description": "La etiqueta aria y el título del botón para salir del modo inmersivo en dispositivos móviles y volver al modo de escritorio basado en texto.",
+    "message": "Salir del modo inmersivo"
+  },
+  "extensionPopupTitle": {
+    "description": "El título del cuadro de diálogo emergente de la extensión.",
+    "message": "Digamos, configuración de Pi"
+  },
+  "lockButton": {
+    "description": "El título (información sobre herramientas) del botón para bloquear la pantalla contra toques accidentales.",
+    "message": "Presione para bloquear la pantalla"
+  },
+  "lockedScreen": {
+    "description": "Un mensaje que se mostrará de forma destacada cuando la pantalla esté bloqueada.",
+    "message": "La pantalla está bloqueada."
+  },
+  "mode_accuracy": {
+    "description": "Modo de máxima precisión.",
+    "message": "exactitud"
+  },
+  "mode_balanced": {
+    "description": "Modo de transcripción predeterminado.",
+    "message": "equilibrado"
+  },
+  "mode_speed": {
+    "description": "Modo de transcripción más rápido.",
+    "message": "velocidad"
+  },
+  "preferedLanguage": {
+    "description": "Etiqueta de un control para seleccionar el idioma de transcripción preferido.",
+    "message": "Idioma"
+  },
+  "preferedModeControl": {
+    "description": "El título (información sobre herramientas) del control para seleccionar el modo de transcripción preferido.",
+    "message": "Seleccione su modo de transcripción preferido"
+  },
+  "previewStatusActive": {
+    "message": "Beta activa"
+  },
+  "previewStatusCompleted": {
+    "message": "Beta completada"
+  },
+  "previewStatusUnknown": {
+    "message": "No se puede conectar..."
+  },
+  "readAloudButtonTitle": {
+    "description": "El título del botón para leer en voz alta el texto de un mensaje.",
+    "message": "Leer en voz alta"
+  },
+  "recommendedActions": {
+    "description": "Mensaje que precede a una lista de acciones recomendadas que el usuario puede realizar para solucionar un problema conocido.",
+    "message": "Mientras tanto, te recomendamos:"
+  },
+  "regenerateButtonTitleFree": {
+    "description": "El título del botón para regenerar el audio de un mensaje. \nPuede incurrir en un costo indeterminado.",
+    "message": "Generar audio"
+  },
+  "shareAnalytics": {
+    "description": "Etiqueta de la casilla de verificación para habilitar/deshabilitar el uso compartido de análisis.",
+    "message": "Compartir análisis"
+  },
+  "soundEffects": {
+    "description": "Etiqueta de la casilla de verificación para habilitar/deshabilitar efectos de sonido.",
+    "message": "Efectos sonoros"
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Etiqueta del botón para cambiar al modo oscuro.",
+    "message": "Cambiar al modo oscuro"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Etiqueta del botón para cambiar al modo de luz.",
+    "message": "Cambiar al modo de luz"
+  },
+  "unlockButton": {
+    "description": "El título (información sobre herramientas) del botón para desbloquear la pantalla.",
+    "message": "Presione para desbloquear la pantalla."
+  },
+  "unlockInstruction": {
+    "description": "Instrucciones que indican al usuario cómo desbloquear la pantalla cuando está bloqueada.",
+    "message": "Mantenga presionado para desbloquear."
+  },
+  "voiceIntroduction_joey": {
+    "description": "Introducción para la voz de Joey.",
+    "message": "¡Hola! \n¡Привет! \n¡你好! \nSoy Pi, tu asistente de IA políglota. \nCon 32 idiomas a mi disposición, podemos explorar ideas y culturas de todo el mundo. \n¿Qué opinas de esta voz?"
+  },
+  "voiceIntroduction_paola": {
+    "description": "Introducción para la voz de Paola.",
+    "message": "¡Chao! \n¡Buen día! \n¡Hola! \nSoy Pi y puedo conversar con fluidez en 32 idiomas. \nDel árabe al ucraniano, estoy aquí para derribar las barreras del idioma. \n¿Cómo te suena esta voz?"
   }
 }
