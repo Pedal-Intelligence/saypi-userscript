@@ -97,11 +97,17 @@
   },
   "callInProgress": {
     "description": "Den tooltip som ska visas på samtalsknappen när ett samtal pågår.",
-    "message": "Aktiv kontinuerlig lyssning. Klicka för att stoppa."
+    "message": "Avsluta handsfree-samtal"
   },
   "callNotStarted": {
     "description": "Den tooltip som ska visas på samtalsknappen innan ett samtal startas.",
-    "message": "Klicka för att starta kontinuerlig lyssning."
+    "message": "Starta en handsfree-konversation med $chatbot$",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callStarting": {
     "description": "Texten som ska visas på samtalsknappens verktygstips och i promptområdet när ett samtal startar.",
@@ -166,7 +172,13 @@
   },
   "enhancedVoice": {
     "description": "Titel (verktygstips) för Say, Pi förbättrade röster.",
-    "message": "Röst förbättrad av Say, Pi"
+    "message": "Röst förstärkt med $product$",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "enterImmersiveModeLong": {
     "description": "Aria-label och titel på knappen för att gå in i omslutande läge på mobila enheter.",
@@ -271,7 +283,7 @@
   },
   "ttsCostExplanation": {
     "description": "Den tooltip som ska visas när text-till-tal-motorn används för att läsa upp ett meddelande, med kostnaden för meddelandet.",
-    "message": "Kostnaden för att lyssna på detta meddelande är $cost$ $currency$",
+    "message": "$product$ kommer att debitera $cost$ $currency$ för att lyssna på detta meddelande",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -280,12 +292,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "Verktygstipset som visas när en text-till-tal-motor används för att läsa upp ett meddelande, och meddelandet är gratis. Kan innehålla namnet på leverantören.",
-    "message": "Detta ljud genererades gratis.",
+    "message": "Detta ljud genereras gratis av Inflection AI",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -330,11 +346,11 @@
     "description": "Titeln på knappen för att kopiera texten av ett meddelande till urklipp."
   },
   "voiceIntroduction_joey": {
-    "message": "Hej! Привет! 你好! Jag är Pi, din flerspråkiga AI-assistent. Med 29 språk till mitt förfogande kan vi utforska idéer och kulturer från hela världen. Vad tycker du om den här rösten?",
+    "message": "Hej! \nПривет! \n你好! \nJag är Pi, din polyglot AI-assistent. \nMed 32 språk på mitt kommando kan vi utforska idéer och kulturer från hela världen. \nVad tycker du om den här rösten?",
     "description": "Introduktion för Joey-rösten."
   },
   "voiceIntroduction_paola": {
-    "message": "Hej! Bonjour! Hej! Jag är Pi, och jag kan konversera flytande på 29 språk. Från arabiska till ukrainska, jag är här för att bryta ner språkbarriärer. Hur låter denna röst för dig?",
+    "message": "Ciao! \nBonjour! \nHej! \nJag är Pi och jag kan prata flytande på 32 språk. \nFrån arabiska till ukrainska, jag är här för att bryta språkbarriärer. \nHur låter den här rösten för dig?",
     "description": "Introduktion för Paola-rösten."
   },
   "regenerateButtonTitle": {
@@ -354,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "Generera Ljud",
     "description": "Titeln på knappen för att återskapa ljudet av ett meddelande. Kan medföra en obestämd kostnad."
+  },
+  "assistantIsWriting": {
+    "description": "Meddelande som visas när assistenten skriver sitt svar.",
+    "message": "$chatbot$ skriver...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "Verktygstipset som visas när användaren håller muspekaren över kostnadsförklaringslänken.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "Läs om hur $product$ tar betalt för ljud"
   }
 }

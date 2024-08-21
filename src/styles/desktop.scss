@@ -53,5 +53,27 @@ html.desktop-view {
     }
   }
 
+  .tooltip[aria-label]::after {
+    content: attr(aria-label);
+    position: absolute;
+    top: 120%; // position the tooltip below the button
+    transform: translateX(-70%); // center the tooltip relative to the button
+    white-space: nowrap;
+    background: #24381b; // Pi primary text color (dark green)
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-left: 10px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    font-size: 1.2rem;
+  }
+  
+  .tooltip[aria-label]:hover::after {
+    opacity: 1;
+    z-index: 101; // ensure tooltip is on top of other elements
+  }
+
   @import "messages.scss";
 }

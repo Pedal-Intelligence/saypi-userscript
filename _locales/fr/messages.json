@@ -8,7 +8,7 @@
     "description": "La description de l'application."
   },
   "callInProgress": {
-    "message": "Écoute continue active. Cliquez pour arrêter.",
+    "message": "Terminer la conversation en mains libres",
     "description": "L'infobulle à afficher sur le bouton d'appel lorsqu'un appel est en cours."
   },
   "callStarting": {
@@ -16,8 +16,14 @@
     "description": "L'infobulle à afficher sur le bouton d'appel lors du démarrage d'un appel."
   },
   "callNotStarted": {
-    "message": "Cliquez pour démarrer l'écoute continue.",
-    "description": "L'infobulle à afficher sur le bouton d'appel avant le début d'un appel."
+    "message": "Commencez une conversation mains libres avec $chatbot$",
+    "description": "L'infobulle à afficher sur le bouton d'appel avant le début d'un appel.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callError": {
     "message": "Erreur non fatale rencontrée. Ne paniquez pas, nous continuons à écouter.",
@@ -248,7 +254,13 @@
   },
   "enhancedVoice": {
     "description": "Titre (infobulle) pour Dire, voix améliorées de Pi.",
-    "message": "Voix améliorée par Say, Pi"
+    "message": "Voix améliorée par $product$",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "previewProgress": {
     "description": "Le message à afficher lorsque l'utilisateur prévisualise une fonctionnalité qui a une limite de caractères.",
@@ -289,7 +301,7 @@
   },
   "ttsCostExplanation": {
     "description": "L'infobulle à afficher lorsque le moteur de synthèse vocale est utilisé pour lire à haute voix un message, avec le coût du message.",
-    "message": "Le coût d'écoute de ce message est de $cost$ $currency$",
+    "message": "$product$ facturera $cost$ $currency$ pour écouter ce message",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -298,12 +310,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "L'infobulle à afficher lorsqu'un moteur de synthèse vocale est utilisé pour lire à haute voix un message, et que le message est gratuit. Pourrait contenir le nom du fournisseur.",
-    "message": "Cet audio a été généré gratuitement.",
+    "message": "Cet audio est généré gratuitement par Inflection AI",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -330,11 +346,11 @@
     "description": "Le titre du bouton pour copier le texte d'un message dans le presse-papiers."
   },
   "voiceIntroduction_joey": {
-    "message": "Salut! Привет! 你好! Je suis Pi, votre assistant IA polyglotte. Avec 29 langues à ma disposition, nous pouvons explorer des idées et des cultures du monde entier. Que pensez-vous de cette voix?",
+    "message": "Holà ! \nPrivé! \nEh bien! \nJe m'appelle Pi, votre assistant IA polyglotte. \nAvec 32 langues à ma disposition, nous pouvons explorer des idées et des cultures du monde entier. \nQue pensez-vous de cette voix ?",
     "description": "Introduction pour la voix de Joey."
   },
   "voiceIntroduction_paola": {
-    "message": "Ciao! Bonjour! Salut! Je suis Pi, et je peux converser couramment dans 29 langues. De l'arabe à l'ukrainien, je suis ici pour briser les barrières linguistiques. Comment trouvez-vous cette voix?",
+    "message": "Ciao ! \nBonjour! \nBonjour! \nJe m'appelle Pi et je peux converser couramment dans 32 langues. \nDe l'arabe à l'ukrainien, je suis là pour briser les barrières linguistiques. \nQue pensez-vous de cette voix ?",
     "description": "Introduction pour la voix de Paola."
   },
   "regenerateButtonTitle": {
@@ -354,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "Générer de l'audio",
     "description": "Le titre du bouton pour régénérer l'audio d'un message. Peut entraîner un coût indéterminé."
+  },
+  "assistantIsWriting": {
+    "description": "Message affiché lorsque l'assistant tape sa réponse.",
+    "message": "$chatbot$ est en train d'écrire...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "L'info-bulle à afficher lorsque l'utilisateur survole le lien d'explication des coûts.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "Découvrez comment $product$ facture l'audio"
   }
 }

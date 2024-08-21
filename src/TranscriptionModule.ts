@@ -1,8 +1,5 @@
 import { config } from "./ConfigModule.js";
 import StateMachineService from "./StateMachineService.js";
-import { ImmersionService } from "./ImmersionService.js";
-import EventBus from "./events/EventBus.js";
-import EventModule from "./events/EventModule.js";
 import { logger } from "./LoggingModule.js";
 import { UserPreferenceModule } from "./prefs/PreferenceModule";
 
@@ -268,100 +265,4 @@ async function constructTranscriptionFormData(
   }
 
   return formData;
-}
-
-function scrollToBottom(textarea: HTMLTextAreaElement) {
-  // Define the height range for the textarea
-  const maxHeight = 455;
-  const minHeight = 32;
-
-  // Reset the height to get the correct scrollHeight
-  textarea.style.height = `${minHeight}px`; // (initial height) aka 2rem
-
-  // Set the height of the textarea, up to the maximum height
-  if (textarea.scrollHeight > maxHeight) {
-    textarea.style.height = `${maxHeight}px`;
-    textarea.style.overflowY = "scroll"; // Enable vertical scrollbar
-  } else {
-    const newHeight = Math.max(minHeight, textarea.scrollHeight);
-    textarea.style.height = `${newHeight}px`;
-    textarea.style.overflowY = "hidden"; // Hide vertical scrollbar
-  }
-
-  // Scroll to the bottom
-  textarea.scrollTop = textarea.scrollHeight;
-}
-
-/**
- * Get the prompt textarea's current placeholder text
- */
-export function getDraftPrompt(): string {
-  const textarea = document.getElementById(
-    "saypi-prompt"
-  ) as HTMLTextAreaElement;
-
-  return textarea.getAttribute("placeholder") || "";
-}
-
-/**
- * Set a descriptive message for the user in the prompt textarea
- * Used to inform the user of the current state of the application
- * @param label The placeholder text to be displayed in the prompt textarea
- */
-export function setUserMessage(label: string): void {
-  const textarea = document.getElementById(
-    "saypi-prompt"
-  ) as HTMLTextAreaElement;
-  if (textarea) {
-    textarea.setAttribute("placeholder", label);
-    scrollToBottom(textarea);
-  } else {
-    // this can happen if the user navigates away from the page without ending the conversation
-    console.warn("Prompt textarea not found");
-  }
-}
-
-/**
- * Set the prompt textarea to the given transcript, but do not submit it
- * @param transcript The prompt to be displayed in the prompt textarea
- */
-export function setDraftPrompt(transcript: string): void {
-  const textarea = document.getElementById(
-    "saypi-prompt"
-  ) as HTMLTextAreaElement;
-
-  userPreferences.getAutoSubmit().then((autoSubmit) => {
-    if (autoSubmit) {
-      textarea.setAttribute("placeholder", `${transcript}`);
-    } else {
-      textarea.setAttribute("placeholder", "");
-      // clear the text area content
-      textarea.value = "";
-      EventModule.simulateTyping(textarea, `${transcript} `, false);
-    }
-    scrollToBottom(textarea);
-  });
-}
-
-const PROMPT_CHARACTER_LIMIT = 4000;
-export function setFinalPrompt(transcript: string): void {
-  logger.info(`Final transcript: ${transcript}`);
-  const textarea = document.getElementById(
-    "saypi-prompt"
-  ) as HTMLTextAreaElement;
-  if (ImmersionService.isViewImmersive()) {
-    // if transcript is > max characters, truncate it to max-1 characters plus an ellipsis
-    if (transcript.length > PROMPT_CHARACTER_LIMIT) {
-      const truncatedLength = PROMPT_CHARACTER_LIMIT - 1;
-      transcript = `${transcript.substring(0, truncatedLength)}…`;
-      console.warn(
-        `Transcript was too long for Pi. Truncated to ${truncatedLength} characters, losing the following text: ... ${transcript.substring(
-          truncatedLength
-        )}`
-      );
-    }
-    EventModule.typeTextAndSubmit(textarea, transcript, true);
-  } else {
-    EventModule.simulateTyping(textarea, `${transcript} `, true); // types and submits the prompt
-  }
 }

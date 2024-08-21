@@ -1,68 +1,77 @@
 .message-hover-menu {
-    display: flex;
+  display: flex;
 
-    /* If you need specific styling for .create-thread-button, add it here */
-    .w-fit.pt-4 {
-        // position to the right of its siblings
-        margin-left: auto;
+  /* If you need specific styling for .create-thread-button, add it here */
+  .w-fit.pt-4 {
+    // position to the right of its siblings
+    margin-left: auto;
+  }
+
+  .saypi-tts-controls {
+    display: flex;
+    align-items: center;
+    height: 32px;
+    .saypi-speak-button {
+      border-radius: 50%;
     }
-    
-    .saypi-tts-controls {
-        display: flex;
-        .saypi-speak-button {
-            padding: 4px; /* brings the total height to 32px */
-            border-radius: 50%;
-        }
-        .saypi-cost, .saypi-powered-by {
-            display: flex;
-            align-items: center; // center the text vertically
-            margin-left: 8px; // Adds some space between the controls
-        }
-        svg, img {
-            width: 24px;
-            height: 24px;
-            path {
-                fill: #6b6255; // Pi light brown text color
-            }
-        }
+    .saypi-cost,
+    .saypi-powered-by {
+      display: flex;
+      align-items: center; // center the text vertically
     }
+    svg,
+    img {
+      width: 24px;
+      height: 24px;
+      path {
+        fill: #6b6255; // Pi light brown text color
+      }
+      display: inline-block;
+    }
+    .cost-free {
+      display: none; // hide the price when it's free
+    }
+  }
+
+  .tooltip-wide[aria-label]::after {
+    top: 120%; // position the tooltip below the charge
+    transform: translateX(-35%); // center the tooltip relative to the charge
+    white-space: normal; // allow the tooltip to wrap
+    min-width: 350px; // set a min width for the tooltip
+    max-width: 600px; // set a max width for the tooltip
+    text-align: center; // center the text in the tooltip
+  }
 }
 
 .assistant-message .popup-menu button.saypi-button svg {
-    width: 24px;
-    height: 24px;
-    path {
-        fill: #6b6255; // Pi light brown text color
-    }
+  width: 24px;
+  height: 24px;
+  path {
+    fill: #6b6255; // Pi light brown text color
+  }
 }
 
 .saypi-tts-controls {
-    button {
-        position: relative;
-        overflow: visible;
-        margin: 0 0.15rem;
-      }
-      
-      button::after {
-        content: attr(aria-label);
-        position: absolute;
-        top: 120%;
-        transform: translateX(-70%); // center the tooltip below the button
-        white-space: nowrap;
-        background: #24381b; // Pi primary text color (dark green)
-        color: white;
-        padding: 5px 10px;
-        border-radius: 4px;
-        margin-left: 10px;
-        opacity: 0;
-        transition: opacity 0.3s;
-        pointer-events: none;
-        font-size: smaller;
-      }
-      
-      button:hover::after {
-        opacity: 1;
-      }
+  padding: 0 0.25rem;
+  margin-top: 1rem;
+  background-color: rgb(245 234 220); // bg-neutral-200
+  border-radius: 10px;
+
+  .tts-item {
+    position: relative;
+    overflow: visible;
+    margin: 0 0.15rem;
+    padding: 0 4px;
+  }
+
+  .saypi-cost-container {
+    display: flex;
+    div.vertical-separator {
+      height: 1.5rem;
+      border-left: 1px solid;
+      margin-right: 0.5rem;
+    }
+  }
 }
 
 /*
@@ -87,4 +96,4 @@
 .assistant-message.speech-incomplete {
     border-color: rgb(255, 183, 0);
 }
-    */
+*/

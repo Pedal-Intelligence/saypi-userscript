@@ -158,6 +158,10 @@ export class InputBuffer {
     return this.isClosed;
   }
 
+  isOpen(): boolean {
+    return !this.isClosed;
+  }
+
   replaceText(from: string, to: string): void {
     this.buffer = this.buffer.replace(from, to);
   }

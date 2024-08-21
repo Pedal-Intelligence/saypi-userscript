@@ -8,7 +8,7 @@
     "description": "应用程序的描述。"
   },
   "callInProgress": {
-    "message": "正在进行连续监听。点击停止。",
+    "message": "结束免提对话",
     "description": "通话进行中时，通话按钮上显示的工具提示。"
   },
   "callStarting": {
@@ -16,8 +16,14 @@
     "description": "通话开始时，通话按钮上显示的工具提示。"
   },
   "callNotStarted": {
-    "message": "点击开始连续监听。",
-    "description": "通话未开始时，通话按钮上显示的工具提示。"
+    "message": "开始与$chatbot$进行免提对话",
+    "description": "通话未开始时，通话按钮上显示的工具提示。",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callError": {
     "message": "遇到非致命错误。别担心，我们仍在监听。",
@@ -248,7 +254,13 @@
   },
   "enhancedVoice": {
     "description": "标题（工具提示）为“说，派增强语音”。",
-    "message": "由Say, Pi增强的声音"
+    "message": "$product$ 增强语音",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "previewProgress": {
     "description": "当用户预览具有字符限制的功能时显示的消息。",
@@ -289,7 +301,7 @@
   },
   "ttsCostExplanation": {
     "description": "当使用文本到语音引擎大声朗读消息时，显示的工具提示，包括消息的费用。",
-    "message": "收听此消息的费用是$cost$ $currency$",
+    "message": "$product$ 将收取 $cost$ $currency$ 收听此消息的费用",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -298,12 +310,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "当使用文本到语音引擎大声朗读一条信息，并且该信息是免费的时，要显示的工具提示。可能包含提供商的名称。",
-    "message": "这个音频是免费生成的。",
+    "message": "该音频由 Inflection AI 免费生成",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -330,11 +346,11 @@
     "description": "将消息文本复制到剪贴板的按钮标题。"
   },
   "voiceIntroduction_joey": {
-    "message": "Hola! Привет! 你好！我是Pi，你的多语种AI助手。我可以使用29种语言，我们可以探索来自世界各地的思想和文化。你觉得这个声音怎么样？",
+    "message": "你好！\n请注意！ \n嗨好！\n我是 Pi，您的多语言人工智能助手。\n通过我掌握的 32 种语言，我们可以探索世界各地的思想和文化。\n你觉得这个声音怎么样？",
     "description": "乔伊语音的介绍。"
   },
   "voiceIntroduction_paola": {
-    "message": "你好！Bonjour！Hello！我是Pi，我可以流利地使用29种语言进行对话。从阿拉伯语到乌克兰语，我在这里打破语言障碍。这个声音对你来说怎么样？",
+    "message": "再见！\n你好！\n你好！\n我是 Pi，我能流利地说 32 种语言。\n从阿拉伯语到乌克兰语，我来这里是为了打破语言障碍。\n你觉得这个声音怎么样？",
     "description": "为Paola语音的介绍。"
   },
   "regenerateButtonTitle": {
@@ -354,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "生成音频",
     "description": "重新生成消息音频的按钮标题。可能会产生不确定的费用。"
+  },
+  "assistantIsWriting": {
+    "description": "助理键入响应时显示的消息。",
+    "message": "$chatbot$ 正在写入...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "当用户将鼠标悬停在成本说明链接上时显示的工具提示。",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "了解 $product$ 如何对音频收费"
   }
 }

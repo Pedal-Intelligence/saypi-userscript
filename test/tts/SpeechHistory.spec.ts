@@ -1,7 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { SpeechUtterance } from "../../src/tts/SpeechSynthesisModule";
 import { UtteranceCharge } from "../../src/billing/BillingModule";
-import { StreamedSpeech } from "../../src/tts/SpeechModel";
+import {
+  PiSpeech,
+  SpeechUtterance,
+  StreamedSpeech,
+} from "../../src/tts/SpeechModel";
 import {
   SpeechHistoryModule,
   SpeechRecord,
@@ -33,13 +36,17 @@ describe("SpeechHistoryModule", () => {
   describe("addSpeechToHistory", () => {
     it("should create a new speech record if it does not exist", async () => {
       const theContent = "hello world!";
-      const theUtterance = {
-        id: "utterance1",
-      } as SpeechUtterance;
+      const theUtterance = new PiSpeech(
+        "utterance1",
+        "en-GB",
+        PiSpeech.voice1,
+        "https://pi.ai/api/chat/voice?mode=eager&voice=voice1&messageSid=utterance1"
+      );
+
       const theHash = md5(theContent);
-      const speech = {
+      const speech: StreamedSpeech = {
         utterance: theUtterance,
-      } as StreamedSpeech;
+      };
 
       const createdRecord = await speechHistory.addSpeechToHistory(
         theHash,
@@ -52,10 +59,13 @@ describe("SpeechHistoryModule", () => {
     });
 
     it("should update an existing speech record if it exists", async () => {
-      const theContent = "hello world!";
-      const theUtterance = {
-        id: "utterance1",
-      } as SpeechUtterance;
+      const theContent = "hello springfield!";
+      const theUtterance = new PiSpeech(
+        "utterance2",
+        "en-GB",
+        PiSpeech.voice1,
+        "https://pi.ai/api/chat/voice?mode=eager&voice=voice1&messageSid=utterance2"
+      );
       const theHash = md5(theContent);
       const initialSpeech = new SpeechRecord(theHash, theUtterance);
 
@@ -69,7 +79,7 @@ describe("SpeechHistoryModule", () => {
       expect(retrievedRecord).toEqual(createdRecord);
 
       // later update speech with charge
-      const theCharge = new UtteranceCharge(theUtterance, 50);
+      const theCharge = new UtteranceCharge(theUtterance, 50, theHash);
       const chargedSpeech = new SpeechRecord(theHash, theUtterance, theCharge);
       const updatedRecord = await speechHistory.addSpeechToHistory(
         theHash,
@@ -85,16 +95,15 @@ describe("SpeechHistoryModule", () => {
 
   describe("addChargeToHistory", () => {
     it("should create a new speech record with the charge if it does not exist", async () => {
-      const theContent = "hello world!";
-      const theUtterance = {
-        id: "utterance1",
-      } as SpeechUtterance;
+      const theContent = "hello everyone!";
+      const theUtterance = new PiSpeech(
+        "utterance3",
+        "en-GB",
+        PiSpeech.voice1,
+        "https://pi.ai/api/chat/voice?mode=eager&voice=voice1&messageSid=utterance3"
+      );
       const theHash = md5(theContent);
-      const theCharge = {
-        cost: 50,
-        utteranceId: theUtterance.id,
-        utteranceHash: theHash,
-      } as UtteranceCharge;
+      const theCharge = new UtteranceCharge(theUtterance, 50, theHash);
       await speechHistory.addChargeToHistory(theHash, theCharge);
 
       await speechHistory.addSpeechToHistory(
@@ -107,16 +116,53 @@ describe("SpeechHistoryModule", () => {
       );
     });
 
+    describe("getSpeechFromHistory", () => {
+      it("should return a speech record if it exists in the history", async () => {
+        const hash = "testHash";
+        const expectedUtterance = new PiSpeech(
+          "utterance1",
+          "en-GB",
+          PiSpeech.voice1,
+          "https://pi.ai/api/chat/voice?mode=eager&voice=voice1&messageSid=utterance1"
+        );
+        const expectedCharge = new UtteranceCharge(expectedUtterance, 50, hash);
+        await speechHistory.addChargeToHistory(hash, expectedCharge);
+        await speechHistory.addSpeechToHistory(
+          hash,
+          new SpeechRecord(hash, expectedUtterance)
+        );
+
+        const retrievedRecord = await speechHistory.getSpeechFromHistory(hash);
+
+        const expectedRecord = new SpeechRecord(
+          hash,
+          expectedUtterance,
+          expectedCharge
+        );
+
+        expect(retrievedRecord).toEqual(expectedRecord);
+      });
+
+      it("should return null if the speech record does not exist", async () => {
+        const hash = "nonExistentHash";
+        const retrievedRecord = await speechHistory.getSpeechFromHistory(hash);
+        expect(retrievedRecord).toBeNull();
+      });
+    });
+
     it("should update the charge of an existing speech record", async () => {
-      const theContent = "hello world!";
-      const theUtterance = {
-        id: "utterance1",
-      } as SpeechUtterance;
+      const theContent = "hello my friends!";
+      const theUtterance = new PiSpeech(
+        "utterance4",
+        "en-GB",
+        PiSpeech.voice1,
+        "https://pi.ai/api/chat/voice?mode=eager&voice=voice1&messageSid=utterance4"
+      );
       const theHash = md5(theContent);
       const existingRecord = new SpeechRecord(theHash, theUtterance);
       await speechHistory.addSpeechToHistory(theHash, existingRecord); // add speech first
 
-      const theCharge = new UtteranceCharge(theUtterance, 50);
+      const theCharge = new UtteranceCharge(theUtterance, 50, theHash);
       await speechHistory.addChargeToHistory(theHash, theCharge); // then add charge
 
       // Check that the charge was added to the existing record

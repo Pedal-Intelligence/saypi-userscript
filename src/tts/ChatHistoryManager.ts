@@ -1,4 +1,4 @@
-import { SpeechSynthesisModule } from "./SpeechSynthesisModule";
+import { SpeechSynthesisModule, TextErrorEvent } from "./SpeechSynthesisModule";
 import { SpeechHistoryModule } from "./SpeechHistoryModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { Chatbot } from "../chatbots/Chatbot";
@@ -11,23 +11,26 @@ import {
   RootChatHistoryObserver,
   EventListener,
   ResourceReleasable,
+  getAssistantMessageByUtterance as getAssistantMessageByUtteranceId,
 } from "../dom/ChatHistory";
 import { Observation } from "../dom/Observation";
 import { VoiceMenu } from "./VoiceMenu";
-import { AssistantResponse } from "../dom/MessageElements";
 import { SpeechUtterance } from "./SpeechModel";
-import { TTSControlsModule } from "./TTSControlsModule";
+import { findRootAncestor } from "../dom/DOMModule";
+import { UtteranceCharge } from "../billing/BillingModule";
 
 export class ChatHistorySpeechManager implements ResourceReleasable {
   private userPreferences = UserPreferenceModule.getInstance();
   private speechSynthesis = SpeechSynthesisModule.getInstance();
-  private ttsControls = new TTSControlsModule(this.speechSynthesis);
+  private speechHistory = SpeechHistoryModule.getInstance();
   private replaying = false; // flag to indicate whether the user requested a replay of an utterance
   private voiceMenu: VoiceMenu | null = null;
 
   // managed resources
   private eventListeners: EventListener[] = [];
   private observers: Observer[] = [];
+
+  private newMessageObserver: ChatHistoryAdditionsObserver | null = null;
 
   findAndDecorateVoiceMenu(): Observation {
     const audioControlsContainer = document.querySelector(
@@ -57,24 +60,26 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
   // Methods for DOM manipulation and element ID assignment
   addIdChatHistory(chatHistory: HTMLElement): void {
     chatHistory.id = "saypi-chat-history";
+    chatHistory.classList.add("chat-history");
+    const rootAncestor = findRootAncestor(chatHistory);
 
-    // the past messages container will be replaced when the chat history is updated, so is monitored for changes in RootChatHistoryObserver
-    const pastChatMessagesContainer =
-      chatHistory.querySelector(":nth-child(2)");
+    // for pi.ai, the past messages container will be replaced when the chat history is updated, so is monitored for changes in RootChatHistoryObserver
+    const pastHistorySelector = this.chatbot.getPastChatHistorySelector();
+    const pastChatMessagesContainer = pastHistorySelector
+      ? rootAncestor.querySelector(pastHistorySelector)
+      : chatHistory;
     if (pastChatMessagesContainer) {
-      pastChatMessagesContainer.id = "saypi-chat-history-past-messages";
+      pastChatMessagesContainer.classList.add("chat-history", "past-messages");
     }
 
-    if (chatHistory.children.length >= 3) {
-      const presentChatMessagesContainer = chatHistory.children[2];
-      //  chatHistory.querySelector(":nth-child(3)"); // less reliable than direct access, for some reason
-      if (presentChatMessagesContainer) {
-        presentChatMessagesContainer.id = "saypi-chat-history-present-messages";
-      }
-    } else {
-      console.warn(
-        "Present messages container not found in chat history.",
-        chatHistory
+    const presentHistorySelector = this.chatbot.getRecentChatHistorySelector();
+    const presentChatMessagesContainer = presentHistorySelector
+      ? rootAncestor.querySelector(presentHistorySelector)
+      : chatHistory;
+    if (presentChatMessagesContainer) {
+      presentChatMessagesContainer.classList.add(
+        "chat-history",
+        "present-messages"
       );
     }
   }
@@ -87,18 +92,22 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
    * and associate the utterance with that message in the speech history.
    * @param utterance A spoken reading of a chat message
    */
-  associateWithChatHistory(
+  async associateWithChatHistory(
     searchRoot: HTMLElement,
     utterance: SpeechUtterance
-  ): void {
+  ): Promise<void> {
     // get most recent message in chat history
     const speech = new AssistantSpeech(utterance);
+    await this.newMessageObserver?.findAndDecorateAssistantResponses(
+      searchRoot
+    ); // ensure decorators have run before searching for the message
     const assistantMessages = searchRoot.querySelectorAll(".assistant-message");
     if (assistantMessages.length > 0) {
       const lastAssistantMessage = assistantMessages[
         assistantMessages.length - 1
       ] as HTMLElement;
-      const assistantMessage = new AssistantResponse(lastAssistantMessage);
+      const assistantMessage =
+        this.chatbot.getAssistantResponse(lastAssistantMessage);
       assistantMessage.decorateSpeech(utterance);
       // ensure the AssistantResponse object has finished mutating before generating its hash
       assistantMessage.stableHash().then((hash) => {
@@ -118,7 +127,9 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
           });
           return;
         }
-        console.debug(`Adding speech to history with hash: ${hash}`);
+        console.debug(
+          `Saving speech for ${assistantMessage.toString()} with hash: ${hash}`
+        );
         SpeechHistoryModule.getInstance().addSpeechToHistory(hash, speech);
       });
     }
@@ -130,7 +141,8 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     const rootChatHistoryObserver = new RootChatHistoryObserver(
       chatHistoryElement,
       "#saypi-chat-history",
-      this.speechSynthesis
+      this.speechSynthesis,
+      this.chatbot
     );
     rootChatHistoryObserver.observe({
       childList: true,
@@ -142,14 +154,19 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
   async registerPresentChatHistoryListener(
     chatHistoryElement: HTMLElement
   ): Promise<ChatHistoryAdditionsObserver> {
-    const selector = "#saypi-chat-history-present-messages";
+    const selector = ".chat-history.present-messages";
     const existingMessagesObserver = new ChatHistoryOldMessageObserver(
       chatHistoryElement,
       selector,
-      this.speechSynthesis
+      this.speechSynthesis,
+      this.chatbot
     ); // this type of observer streams speech from the speech history
     const initialMessages = await existingMessagesObserver // TODO const oldMessages = await ...
-      .runOnce(chatHistoryElement.querySelector(selector) as HTMLElement); // run on initial content, i.e. most recent message in chat history
+      .runOnce(
+        findRootAncestor(chatHistoryElement).querySelector(
+          selector
+        ) as HTMLElement
+      ); // run on initial content, i.e. most recent message in chat history
     console.debug(
       `Found ${initialMessages.length} recent assistant message(s)`
     );
@@ -159,6 +176,7 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
       chatHistoryElement,
       selector,
       this.speechSynthesis,
+      this.chatbot,
       initialMessages // ignore these messages when observing new messages
     ); // this type of observer streams speech from the TTS service
     // continuously observe the chat history for new messages
@@ -195,6 +213,74 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     );
   }
 
+  registerMessageErrorListeners(): void {
+    const speechErrorListener = (event: TextErrorEvent) => {
+      console.warn(
+        `Speech error for utterance: ${event.utterance.id}`,
+        event.error
+      );
+      if (event.utterance?.id) {
+        // find the message in the chat history that corresponds to the given utterance
+        // and mark it as having an error
+        try {
+          const message = getAssistantMessageByUtteranceId(
+            this.chatbot,
+            event.utterance.id
+          );
+          if (message) {
+            message.decoratedContent().then((content) => {
+              content.classList.add("inconsistent-text"); // redundant with incomplete speech?
+            });
+            message.decorateIncompleteSpeech();
+          }
+        } catch (e) {
+          // message not found - non-fatal error
+          console.debug(
+            `Could not find message for utterance ${event.utterance.id}. Won't be able to decorate with speech error.`
+          );
+        }
+      }
+    };
+
+    EventBus.on("saypi:tts:text:error", speechErrorListener);
+
+    this.eventListeners.push({
+      event: "saypi:tts:text:error",
+      listener: speechErrorListener,
+    });
+  }
+
+  registerMessageChargeListeners(): void {
+    const speechChargeListener = (charge: UtteranceCharge) => {
+      if (charge.utteranceId && charge.cost > 0) {
+        // find the message in the chat history that corresponds to the given utterance
+        // and mark it as having a charge
+        try {
+          const message = getAssistantMessageByUtteranceId(
+            this.chatbot,
+            charge.utteranceId
+          );
+          if (message) {
+            message.decorateCost(charge);
+            this.speechHistory.addChargeToHistory(charge.utteranceHash, charge);
+          }
+        } catch (e) {
+          // message not found - non-fatal error
+          console.debug(
+            `Could not find message for utterance ${charge.utteranceId}. Won't be able to decorate with charge.`
+          );
+        }
+      }
+    };
+
+    EventBus.on("saypi:billing:utteranceCharged", speechChargeListener);
+
+    this.eventListeners.push({
+      event: "saypi:tts:text:charged",
+      listener: speechChargeListener,
+    });
+  }
+
   // Teardown method to disconnect event listeners and release resources
   teardown(): void {
     this.eventListeners.forEach(({ event, listener }) => {
@@ -213,7 +299,13 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     this.addIdChatHistory(chatHistoryElement);
     this.findAndDecorateVoiceMenu(); // voice menu is not within the chat history, but is a related element
     this.registerPastChatHistoryListener(chatHistoryElement);
-    this.registerPresentChatHistoryListener(chatHistoryElement);
+    this.registerPresentChatHistoryListener(chatHistoryElement).then(
+      (observer) => {
+        this.newMessageObserver = observer;
+      }
+    );
     this.registerSpeechStreamListeners(chatHistoryElement);
+    this.registerMessageErrorListeners();
+    this.registerMessageChargeListeners();
   }
 }

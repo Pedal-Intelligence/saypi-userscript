@@ -1,4 +1,9 @@
-import { SpeechUtterance, StreamedSpeech } from "../tts/SpeechModel";
+import {
+  isPlaceholderUtterance,
+  SpeechUtterance,
+  StreamedSpeech,
+  UtteranceFactory,
+} from "../tts/SpeechModel";
 import { UtteranceCharge } from "../billing/BillingModule";
 
 export class SpeechRecord implements StreamedSpeech {
@@ -53,12 +58,20 @@ export class SpeechHistoryModule {
     try {
       const speechHistory = (await this.getStorageData("speechHistory")) || {};
       let utterance = speechHistory[hash];
-      if (!utterance) {
+      if (!utterance && !isPlaceholderUtterance(speech.utterance)) {
         speechHistory[hash] = speech.utterance;
         await this.setStorageData({ speechHistory: speechHistory });
+        console.debug(
+          `Saved speech with hash ${hash} to history.`,
+          speech.utterance.toString()
+        );
       }
       if (speech.charge) {
         await this.addChargeToHistory(hash, speech.charge);
+        console.debug(
+          `Saved charge with hash ${hash} to history.`,
+          speech.charge.cost
+        );
       }
     } catch (error) {
       console.error(`Error adding speech to history: ${error}`);
@@ -76,15 +89,23 @@ export class SpeechHistoryModule {
   ): Promise<SpeechRecord | null> {
     try {
       const speechHistory = (await this.getStorageData("speechHistory")) || {};
-      const utterance = speechHistory[hash] || null;
+      const utteranceObj = speechHistory[hash] || null;
       const chargeHistory = (await this.getStorageData("chargeHistory")) || {};
-      const charge = chargeHistory[hash];
-      if (utterance) {
+      if (utteranceObj && !isPlaceholderUtterance(utteranceObj)) {
         console.debug(
           `Found utterance with hash ${hash} in speech history.`,
-          utterance
+          utteranceObj
         );
-        return new SpeechRecord(hash, utterance, charge);
+
+        // Use the factory to create an instance of the appropriate class
+        const utterance = UtteranceFactory.createUtterance(utteranceObj);
+
+        const charge = chargeHistory[hash]; // the charge is optional for a speech record
+        if (charge) {
+          console.debug(`Found charge with hash ${hash} in charge history.`);
+          return new SpeechRecord(hash, utterance, charge);
+        }
+        return new SpeechRecord(hash, utterance);
       }
     } catch (error) {
       console.error(`Error getting speech from history: ${error}`);

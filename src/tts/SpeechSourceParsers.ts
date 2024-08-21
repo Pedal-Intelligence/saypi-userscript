@@ -8,6 +8,7 @@ import { SpeechSynthesisModule } from "./SpeechSynthesisModule";
 
 interface SpeechSourceParser {
   parse(source: string): Promise<SpeechUtterance> | SpeechUtterance;
+  matches(source: string): Promise<boolean> | boolean;
 }
 
 class PiSpeechSourceParser implements SpeechSourceParser {
@@ -17,24 +18,7 @@ class PiSpeechSourceParser implements SpeechSourceParser {
     this.lang = default_lang;
   }
 
-  public parse(source: string): SpeechUtterance {
-    let url;
-    try {
-      url = new URL(source);
-    } catch (_) {
-      throw new Error(`Invalid source: ${source} is not a valid URL.`);
-    }
-
-    const params = url.searchParams;
-    const messageSid = params.get("messageSid");
-    const voiceId = params.get("voice");
-
-    if (!messageSid || !voiceId) {
-      throw new Error(
-        `Invalid source: ${source} does not contain required parameters.`
-      );
-    }
-
+  public getVoice(voiceId: string): SpeechSynthesisVoiceRemote {
     const voiceNumber = voiceId.slice(-1);
 
     const theVoice: SpeechSynthesisVoiceRemote = {
@@ -47,8 +31,55 @@ class PiSpeechSourceParser implements SpeechSourceParser {
       powered_by: "inflection.ai",
       voiceURI: "", // inflection.ai doesn't provide this
     };
+    return theVoice;
+  }
+
+  /**
+   * Parse a Pi speech URL into a SpeechUtterance
+   * @param source URL of the audio source, e.g. https://pi.ai/api/chat/voice?mode=eager&voice=voice1&messageSid=Wv8mqegpQDbfMNP9hDJGw
+   * @returns
+   */
+  public parse(source: string): SpeechUtterance {
+    let url;
+    try {
+      url = new URL(source);
+    } catch (_) {
+      throw new Error(`Invalid source: ${source} is not a valid URL.`);
+    }
+
+    // verify the domain is pi.ai
+    if (url.hostname !== "pi.ai") {
+      throw new Error(
+        `Invalid source: ${source} is not from the pi.ai domain.`
+      );
+    }
+
+    const params = url.searchParams;
+    const messageSid = params.get("messageSid");
+    const voiceId = params.get("voice");
+
+    if (!messageSid || !voiceId) {
+      throw new Error(
+        `Invalid source: ${source} does not contain required parameters.`
+      );
+    }
+    const theVoice: SpeechSynthesisVoiceRemote = this.getVoice(voiceId);
 
     return new PiSpeech(messageSid, this.lang, theVoice, source);
+  }
+
+  /**
+   * Check if the source URL is a Pi speech URL
+   * @param source URL of the audio source
+   * @returns boolean
+   */
+  public matches(source: string): boolean {
+    try {
+      this.parse(source);
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 }
 
@@ -101,5 +132,19 @@ class SayPiSpeechSourceParser implements SpeechSourceParser {
 
     return new SayPiSpeech(speechId, lang || "", theVoice, source);
   }
+
+  /**
+   * Check if the source URL is a SayPi speech URL
+   * @param source URL of the audio source
+   * @returns boolean
+   */
+  public async matches(source: string): Promise<boolean> {
+    try {
+      await this.parse(source);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
 }
-export { PiSpeechSourceParser, SayPiSpeechSourceParser };
+export { SpeechSourceParser, PiSpeechSourceParser, SayPiSpeechSourceParser };

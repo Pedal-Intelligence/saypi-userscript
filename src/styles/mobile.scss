@@ -109,7 +109,7 @@ html.immersive-view {
   #saypi-side-panel.lg\:flex {
     display: none;
   }
-  
+
   .saypi-control-panel button.theme-toggle-button {
     width: 4rem;
     padding: 6px;
@@ -118,12 +118,31 @@ html.immersive-view {
   #saypi-discovery-panel {
     display: none;
   }
-
 }
 html.mobile-device .chat-message .message-hover-menu .saypi-tts-controls {
-  /* on mobile, tts controls are in a popup menu instead */
+  /* on mobile, speech controls are in a popup menu instead */
   display: none;
 }
+/* styling for the speech controls in the popup menu */
+html.mobile-device .chat-message .message-hover-menu .saypi-cost-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  .saypi-cost {
+    order: 2;
+    flex-grow: 1;
+    .vertical-separator {
+      display: none;
+    }
+  }
+
+  .saypi-pricing-link {
+    order: 1;
+    margin-left: 10px;
+  }
+}
+
 @import "dark-mode.scss";
 @import "focus-mode.scss";
 @import "lock.scss";

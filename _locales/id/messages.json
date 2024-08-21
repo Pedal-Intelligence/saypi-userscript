@@ -1,19 +1,213 @@
 {
+  "ttsCostExplanation": {
+    "message": "$product$ akan mengenakan biaya $cost$ $currency$ untuk mendengarkan pesan ini",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
+      }
+    },
+    "description": "Tooltip untuk ditampilkan saat mesin text-to-speech digunakan untuk membacakan pesan dengan lantang, beserta biaya pesannya."
+  },
+  "ttsCostExplanationFree": {
+    "message": "Audio ini dihasilkan secara gratis oleh Inflection AI",
+    "placeholders": {
+      "provider": {
+        "content": "$1",
+        "example": "Inflection AI"
+      }
+    },
+    "description": "Tooltip untuk ditampilkan ketika mesin text-to-speech digunakan untuk membacakan pesan, dan pesan tersebut gratis. \nDiasumsikan penyedianya adalah Infleksi AI."
+  },
+  "voiceIntroduction_joey": {
+    "message": "Halo! \nTerima kasih! \ntidak! \nSaya Pi, asisten AI poliglot Anda. \nDengan 32 bahasa yang saya kuasai, kita dapat mengeksplorasi ide dan budaya dari seluruh dunia. \nApa pendapat Anda tentang suara ini?",
+    "description": "Pengantar suara Joey."
+  },
+  "voiceIntroduction_paola": {
+    "message": "ciao! \nSelamat datang! \nHalo! \nSaya Pi, dan saya dapat berkomunikasi dengan lancar dalam 32 bahasa. \nDari bahasa Arab hingga bahasa Ukraina, saya di sini untuk mendobrak hambatan bahasa. \nBagaimana suara ini terdengar bagi Anda?",
+    "description": "Pengantar suara Paola."
+  },
+  "assistantIsWriting": {
+    "description": "Pesan ditampilkan saat asisten mengetik tanggapannya.",
+    "message": "$chatbot$ sedang menulis...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "callNotStarted": {
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "Tooltip untuk ditampilkan pada tombol panggil sebelum panggilan dimulai.",
+    "message": "Mulai percakapan bebas genggam dengan $chatbot$"
+  },
+  "audioConnected": {
+    "placeholders": {
+      "microphone": {
+        "content": "$1",
+        "example": "Default - MacBook Pro Microphone"
+      }
+    },
+    "description": "Pesan ditampilkan saat mikrofon terhubung",
+    "message": "$microphone$ terhubung"
+  },
+  "audioReconnecting": {
+    "placeholders": {
+      "microphone": {
+        "content": "$1",
+        "example": "Default - AirPods Pro"
+      }
+    },
+    "description": "Pesan ditampilkan saat menghubungkan ke mikrofon baru",
+    "message": "Beralih ke $microphone$..."
+  },
+  "audioInputError": {
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "Pesan yang ditampilkan ketika audio menghasilkan transkripsi kosong - biasanya merupakan hasil pemfilteran.",
+    "message": "Ups, $chatbot$ tidak mengerti. \nBisakah kamu mencoba mengatakannya lagi?"
+  },
+  "assistantIsListening": {
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "Pesan ditampilkan saat asisten mendengarkan pidato.",
+    "message": "$chatbot$ mendengarkan..."
+  },
+  "assistantIsThinking": {
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "Pesan ditampilkan saat asisten sedang mempersiapkan responsnya.",
+    "message": "$chatbot$ sedang berpikir..."
+  },
+  "assistantIsSpeaking": {
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "Pesan ditampilkan saat asisten mengucapkan tanggapannya.",
+    "message": "$chatbot$ sedang berbicara..."
+  },
+  "userStartedInterrupting": {
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "description": "Pesan ditampilkan saat pengguna mulai berbicara saat asisten berbicara.",
+    "message": "Silakan, $chatbot$ sedang mendengarkan..."
+  },
+  "regenerateButtonTitle": {
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    },
+    "description": "Judul tombol untuk membuat ulang audio pesan. \nMungkin dikenakan perkiraan biaya.",
+    "message": "Hasilkan Audio untuk $cost$ $currency$"
+  },
+  "ttsPoweredBy": {
+    "placeholders": {
+      "ttsEngine": {
+        "content": "$1",
+        "example": "ElevenLabs"
+      }
+    },
+    "description": "Pesan yang akan ditampilkan ketika mesin text-to-speech digunakan untuk membacakan pesan dengan lantang.",
+    "message": "Teks-ke-ucapan didukung oleh $ttsEngine$"
+  },
+  "previewStatusPaused": {
+    "placeholders": {
+      "resetDate": {
+        "content": "$1",
+        "example": "2021-12-31"
+      }
+    },
+    "description": "Pesan yang akan ditampilkan saat pengguna melihat pratinjau fitur yang telah dijeda.",
+    "message": "Beta Dijeda hingga $resetDate$"
+  },
+  "previewProgress": {
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "123"
+      },
+      "limit": {
+        "content": "$2",
+        "example": "500"
+      }
+    },
+    "description": "Pesan yang ditampilkan saat pengguna melihat pratinjau fitur yang memiliki batas karakter.",
+    "message": "$count$ karakter yang digunakan melebihi $limit$"
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "Tooltip yang akan ditampilkan saat pengguna mengarahkan kursor ke link penjelasan biaya.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "Pelajari bagaimana $product$ mengenakan biaya untuk audio"
+  },
+  "enhancedVoice": {
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "Suara ditingkatkan oleh $product$",
+    "description": "Judul (keterangan alat) untuk suara Say, Pi yang disempurnakan."
+  },
   "activityCheckButton": {
     "description": "Teks tombol untuk menunjukkan bahwa pengguna masih ada.",
     "message": "Ya, saya masih di sini!"
   },
   "activityCheckMessage": {
-    "description": "Pesan yang ditampilkan ketika percakapan berlangsung terlalu lama.",
-    "message": "Wow, ini adalah percakapan yang panjang. Apakah kamu masih di sana, atau kita sedang berbicara sendiri?"
+    "description": "Pesan yang ditampilkan saat percakapan berlangsung sangat lama.",
+    "message": "Wah, ini percakapan yang panjang. \nApakah Anda masih di sana, atau kita sedang berbicara sendiri?"
   },
   "allowInterruptions": {
-    "description": "Label untuk kotak centang untuk mengaktifkan/menonaktifkan izin pengguna untuk menginterupsi respons Pi dengan berbicara.",
-    "message": "Dapat Dihentikan"
+    "description": "Beri label pada kotak centang untuk mengaktifkan/menonaktifkan yang memungkinkan pengguna mengganggu respons Pi dengan berbicara.",
+    "message": "Dapat diinterupsi"
   },
   "appDescription": {
-    "description": "Deskripsi dari aplikasi.",
-    "message": "Teman Bantuan Suara Anda untuk Pi AI"
+    "description": "Deskripsi aplikasi.",
+    "message": "Pendamping Bertenaga Suara Anda untuk Pi AI"
   },
   "appName": {
     "description": "Nama aplikasi.",
@@ -24,92 +218,28 @@
     "message": "Peringatan Masalah Sistem"
   },
   "applicationStatusUnknown": {
-    "description": "Pesan untuk ditampilkan ketika status aplikasi tidak dapat ditentukan. Misalnya, ketika klien sedang offline.",
-    "message": "Status aplikasi tidak diketahui"
-  },
-  "assistantIsListening": {
-    "description": "Pesan yang ditampilkan ketika asisten sedang mendengarkan ucapan.",
-    "message": "$chatbot$ sedang mendengarkan...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "assistantIsSpeaking": {
-    "description": "Pesan yang ditampilkan ketika asisten sedang menyampaikan responsnya.",
-    "message": "$chatbot$ sedang berbicara...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "assistantIsThinking": {
-    "description": "Pesan yang ditampilkan ketika asisten sedang mempersiapkan responsnya.",
-    "message": "$chatbot$ sedang berpikir...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "audioConnected": {
-    "description": "Pesan yang ditampilkan ketika mikrofon terhubung",
-    "message": "$microphone$ terhubung",
-    "placeholders": {
-      "microphone": {
-        "content": "$1",
-        "example": "Default - MacBook Pro Microphone"
-      }
-    }
-  },
-  "audioInputError": {
-    "description": "Pesan yang ditampilkan ketika audio menghasilkan transkripsi kosong - biasanya hasil dari penyaringan.",
-    "message": "Ups, $chatbot$ tidak mengerti itu. Bisakah Anda mencobanya lagi?",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "audioReconnecting": {
-    "description": "Pesan yang ditampilkan saat terhubung ke mikrofon baru",
-    "message": "Beralih ke $microphone$...",
-    "placeholders": {
-      "microphone": {
-        "content": "$1",
-        "example": "Default - AirPods Pro"
-      }
-    }
+    "description": "Pesan untuk ditampilkan ketika status aplikasi tidak dapat ditentukan. \nMisalnya. \nketika klien sedang offline.",
+    "message": "Status permohonan tidak diketahui"
   },
   "autoSubmit": {
-    "description": "Label untuk kotak centang untuk mengaktifkan/menonaktifkan pengiriman prompt otomatis.",
-    "message": "Kirim-otomatis"
+    "description": "Labeli kotak centang untuk mengaktifkan/menonaktifkan pengiriman cepat otomatis.",
+    "message": "Kirim otomatis"
   },
   "callError": {
-    "description": "Tooltip yang ditampilkan pada tombol panggilan ketika terjadi kesalahan non-fatal.",
-    "message": "Kesalahan non-fatal dijumpai. Jangan panik, kami masih mendengarkan."
+    "description": "Tooltip untuk ditampilkan pada tombol panggil ketika terjadi kesalahan non-fatal.",
+    "message": "Terjadi kesalahan non-fatal. \nJangan panik, kami masih mendengarkan."
   },
   "callInProgress": {
-    "description": "Tooltip yang ditampilkan pada tombol panggilan ketika panggilan sedang berlangsung.",
-    "message": "Mendengarkan secara aktif dan terus menerus. Klik untuk berhenti."
-  },
-  "callNotStarted": {
-    "description": "Tooltip yang ditampilkan pada tombol panggilan sebelum panggilan dimulai.",
-    "message": "Klik untuk memulai mendengarkan secara terus menerus."
+    "description": "Tooltip untuk ditampilkan pada tombol panggil saat panggilan sedang berlangsung.",
+    "message": "Akhiri percakapan bebas genggam"
   },
   "callStarting": {
-    "description": "Teks yang ditampilkan pada tooltip tombol panggilan dan di area prompt saat panggilan dimulai.",
+    "description": "Teks yang akan ditampilkan pada tooltip tombol panggilan dan di area prompt saat panggilan dimulai.",
     "message": "Menghubungkan..."
   },
   "checkingApplicationStatus": {
-    "description": "Pesan untuk ditampilkan saat status sistem sedang ditentukan, misalnya selama pemuatan.",
-    "message": "Memeriksa status aplikasi..."
+    "description": "Pesan untuk ditampilkan saat status sistem ditentukan, mis. \nselama memuat.",
+    "message": "Memeriksa status permohonan..."
   },
   "consentAskParticipate": {
     "message": "Apakah Anda ingin berpartisipasi?"
@@ -118,7 +248,7 @@
     "message": "Mari kita tingkatkan Say, Pi bersama-sama"
   },
   "consentDataDeidentified": {
-    "message": "Analitik tidak terkait dengan individu. Data apa pun yang digunakan adalah data yang telah dihilangkan identitasnya."
+    "message": "Analytics tidak terikat pada individu. \nSetiap data yang digunakan tidak teridentifikasi."
   },
   "consentNoPii": {
     "message": "Kami tidak akan mengumpulkan atau melihat data pribadi, seperti pesan atau nama."
@@ -127,69 +257,73 @@
     "message": "Kami tidak akan menjual data Anda kepada pihak ketiga, atau menggunakannya untuk iklan."
   },
   "consentOptIn": {
-    "message": "Saya ikut!"
+    "message": "saya ikut!"
   },
   "consentOptOut": {
     "message": "Tidak, terima kasih"
   },
   "consentPrivacyParamount": {
-    "message": "Privasi Anda sangat penting. Apapun yang Anda katakan tetap antara Anda dan Pi."
+    "message": "Privasi Anda adalah yang terpenting. \nApa pun yang Anda katakan tetap menjadi urusan Anda dan Pi."
   },
   "consentRightToRevoke": {
-    "message": "Anda dapat mengubah pikiran Anda kapan saja."
+    "message": "Anda dapat berubah pikiran kapan saja."
   },
   "consentSharingPurpose": {
-    "message": "Berbagi data penggunaan Anda akan membantu kami memahami bagaimana orang menggunakan Say, Pi sehingga kami dapat membuatnya lebih baik untuk semua orang."
+    "message": "Membagikan data penggunaan Anda akan membantu kami memahami cara orang menggunakan Say, Pi sehingga kami dapat menjadikannya lebih baik untuk semua orang."
   },
   "consetPrivacyPolicy": {
     "message": "Baca Kebijakan Privasi kami"
   },
   "continueUnlocking": {
-    "description": "Instruksi yang memberitahu pengguna bagaimana melanjutkan setelah mereka mulai menekan tombol buka kunci.",
-    "message": "Tetap tahan untuk membuka kunci..."
+    "description": "Petunjuk yang memberi tahu pengguna cara melanjutkan setelah mereka mulai menekan tombol buka kunci.",
+    "message": "Lanjutkan menahan untuk membuka kunci..."
+  },
+  "copiedButtonTitle": {
+    "description": "Judul tombol untuk menunjukkan bahwa teks pesan telah disalin ke clipboard.",
+    "message": "Disalin!"
+  },
+  "copyButtonTitle": {
+    "description": "Judul tombol untuk menyalin teks pesan ke clipboard.",
+    "message": "Menyalin"
   },
   "currencyUSDAbbreviation": {
-    "description": "Singkatan untuk Dolar Amerika Serikat.",
-    "message": "USD"
+    "description": "Singkatan dari Dolar Amerika Serikat.",
+    "message": "Rp"
   },
   "currentCharges": {
-    "description": "Istilah yang digunakan untuk menggambarkan biaya saat ini (total berjalan) yang diperoleh oleh pengguna.",
+    "description": "Istilah yang digunakan untuk menggambarkan biaya saat ini (total berjalan) yang dikenakan oleh pengguna.",
     "message": "Biaya saat ini"
   },
   "dismissAlert": {
-    "description": "Label untuk tombol menutup peringatan masalah sistem.",
-    "message": "Pecat"
+    "description": "Label untuk tombol untuk mengabaikan peringatan masalah sistem.",
+    "message": "Membubarkan"
   },
   "enableTTS": {
-    "description": "Label untuk kotak centang untuk mengaktifkan/menonaktifkan teks-ke-pidato.",
+    "description": "Labeli kotak centang untuk mengaktifkan/menonaktifkan text-to-speech.",
     "message": "Suara multibahasa"
   },
-  "enhancedVoice": {
-    "description": "Judul (tooltip) untuk Katakan, Suara yang Ditingkatkan Pi.",
-    "message": "Suara ditingkatkan oleh Say, Pi"
-  },
   "enterImmersiveModeLong": {
-    "description": "Label-aria dan judul tombol untuk memasuki mode mendalam pada perangkat seluler.",
-    "message": "Masuk Mode Mendalam"
+    "description": "Label aria dan judul tombol untuk masuk ke mode imersif di perangkat seluler.",
+    "message": "Masuk ke Mode Imersif"
   },
   "enterImmersiveModeShort": {
-    "description": "Teks tombol untuk masuk mode mendalam di desktop.",
-    "message": "Merasa Terlibat"
+    "description": "Teks tombol untuk masuk ke mode imersif di desktop.",
+    "message": "Melingkupi"
   },
   "exitImmersiveModeLong": {
-    "description": "Aria-label dan judul tombol untuk keluar dari mode immersive pada perangkat mobile, kembali ke mode desktop berbasis teks.",
-    "message": "Keluar dari Mode Menyeluruh"
+    "description": "Label aria dan judul tombol untuk keluar dari mode imersif di perangkat seluler, kembali ke mode desktop berbasis teks.",
+    "message": "Keluar dari Mode Imersif"
   },
   "extensionPopupTitle": {
     "description": "Judul dialog popup ekstensi.",
-    "message": "Katakan, Pengaturan Pi"
+    "message": "Katakanlah, Pengaturan Pi"
   },
   "lockButton": {
-    "description": "Judul (tooltip) dari tombol untuk mengunci layar agar terhindar dari sentuhan tidak sengaja.",
+    "description": "Judul (keterangan alat) tombol untuk mengunci layar dari sentuhan yang tidak disengaja.",
     "message": "Tekan untuk mengunci layar"
   },
   "lockedScreen": {
-    "description": "Pesan untuk ditampilkan secara menonjol ketika layar dikunci.",
+    "description": "Pesan yang akan ditampilkan secara jelas ketika layar terkunci.",
     "message": "Layar terkunci."
   },
   "mode_accuracy": {
@@ -205,26 +339,12 @@
     "message": "kecepatan"
   },
   "preferedLanguage": {
-    "description": "Label untuk kontrol pemilihan bahasa transkripsi yang disukai.",
+    "description": "Labeli kontrol untuk memilih bahasa transkripsi yang diinginkan.",
     "message": "Bahasa"
   },
   "preferedModeControl": {
-    "description": "Judul (tooltip) dari kontrol untuk memilih mode transkripsi yang disukai.",
-    "message": "Pilih mode transkripsi yang Anda inginkan"
-  },
-  "previewProgress": {
-    "description": "Pesan yang ditampilkan ketika pengguna sedang melihat pratinjau fitur yang memiliki batas karakter.",
-    "message": "$count$ karakter digunakan dari $limit$",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "123"
-      },
-      "limit": {
-        "content": "$2",
-        "example": "500"
-      }
-    }
+    "description": "Judul (keterangan alat) kontrol untuk memilih mode transkripsi yang diinginkan.",
+    "message": "Pilih mode transkripsi pilihan Anda"
   },
   "previewStatusActive": {
     "message": "Beta Aktif"
@@ -232,127 +352,43 @@
   "previewStatusCompleted": {
     "message": "Beta Selesai"
   },
-  "previewStatusPaused": {
-    "description": "Pesan yang ditampilkan ketika pengguna sedang melihat pratinjau fitur yang telah dihentikan sementara.",
-    "message": "Beta Dijeda sampai $resetDate$",
-    "placeholders": {
-      "resetDate": {
-        "content": "$1",
-        "example": "2021-12-31"
-      }
-    }
-  },
   "previewStatusUnknown": {
     "message": "Tidak dapat terhubung..."
   },
   "readAloudButtonTitle": {
     "description": "Judul tombol untuk membacakan teks pesan.",
-    "message": "Bacakan"
+    "message": "Membacakan"
   },
   "recommendedActions": {
-    "description": "Pesan yang mendahului daftar tindakan yang direkomendasikan yang dapat pengguna ambil untuk memperbaiki masalah yang diketahui.",
+    "description": "Pesan sebelum daftar rekomendasi tindakan yang mungkin dilakukan pengguna untuk mengatasi masalah umum.",
     "message": "Sementara itu, kami merekomendasikan:"
   },
+  "regenerateButtonTitleFree": {
+    "description": "Judul tombol untuk membuat ulang audio pesan. \nMungkin menimbulkan biaya yang tidak dapat ditentukan.",
+    "message": "Hasilkan Audio"
+  },
   "shareAnalytics": {
-    "description": "Label untuk kotak centang untuk mengaktifkan/menonaktifkan berbagi analitik.",
+    "description": "Beri label pada kotak centang untuk mengaktifkan/menonaktifkan berbagi analitik.",
     "message": "Bagikan analitik"
   },
   "soundEffects": {
-    "description": "Label untuk kotak centang untuk mengaktifkan/menonaktifkan efek suara.",
+    "description": "Labeli kotak centang untuk mengaktifkan/menonaktifkan efek suara.",
     "message": "Efek suara"
   },
   "toggleThemeToDarkMode": {
-    "description": "Label untuk tombol untuk beralih ke mode gelap.",
+    "description": "Label tombol untuk beralih ke mode gelap.",
     "message": "Beralih ke mode gelap"
   },
   "toggleThemeToLightMode": {
     "description": "Label untuk tombol untuk beralih ke mode terang.",
     "message": "Beralih ke mode terang"
   },
-  "ttsCostExplanation": {
-    "description": "Tooltip yang ditampilkan ketika mesin teks-ke-pidato digunakan untuk membacakan pesan, dengan biaya dari pesan tersebut.",
-    "message": "Biaya mendengarkan pesan ini adalah $cost$ $currency$",
-    "placeholders": {
-      "cost": {
-        "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
-      }
-    }
-  },
-  "ttsCostExplanationFree": {
-    "description": "Tooltip yang ditampilkan ketika mesin teks-ke-pidato digunakan untuk membacakan pesan, dan pesan tersebut gratis. Bisa berisi nama penyedia.",
-    "message": "Audio ini dihasilkan secara gratis.",
-    "placeholders": {
-      "provider": {
-        "content": "$1",
-        "example": "Inflection AI"
-      }
-    }
-  },
-  "ttsPoweredBy": {
-    "description": "Pesan yang ditampilkan ketika mesin teks-ke-pidato digunakan untuk membacakan pesan dengan suara keras.",
-    "message": "Teks-ke-pidato didukung oleh $ttsEngine$",
-    "placeholders": {
-      "ttsEngine": {
-        "content": "$1",
-        "example": "ElevenLabs"
-      }
-    }
-  },
   "unlockButton": {
-    "description": "Judul (tooltip) dari tombol untuk membuka kunci layar.",
+    "description": "Judul (keterangan alat) tombol untuk membuka kunci layar.",
     "message": "Tekan untuk membuka kunci layar"
   },
   "unlockInstruction": {
-    "description": "Instruksi yang memberitahu pengguna cara membuka kunci layar saat terkunci.",
+    "description": "Petunjuk memberi tahu pengguna cara membuka kunci layar saat terkunci.",
     "message": "Tahan untuk membuka kunci."
-  },
-  "userStartedInterrupting": {
-    "description": "Pesan yang ditampilkan ketika pengguna mulai berbicara saat asisten sedang berbicara.",
-    "message": "Silakan, $chatbot$ sedang mendengarkan...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "copiedButtonTitle": {
-    "message": "Disalin!",
-    "description": "Judul tombol untuk menunjukkan bahwa teks pesan telah disalin ke papan klip."
-  },
-  "copyButtonTitle": {
-    "message": "Salin",
-    "description": "Judul tombol untuk menyalin teks pesan ke papan klip."
-  },
-  "voiceIntroduction_joey": {
-    "message": "Hola! Привет! 你好! Saya Pi, asisten AI poliglot Anda. Dengan 29 bahasa yang saya kuasai, kita dapat menjelajahi ide dan budaya dari seluruh dunia. Apa pendapat Anda tentang suara ini?",
-    "description": "Pengenalan untuk suara Joey."
-  },
-  "voiceIntroduction_paola": {
-    "message": "Ciao! Bonjour! Halo! Saya Pi, dan saya bisa berbicara dengan lancar dalam 29 bahasa. Dari Arab hingga Ukraina, saya di sini untuk meruntuhkan batasan bahasa. Bagaimana suara ini menurut Anda?",
-    "description": "Pengenalan untuk suara Paola."
-  },
-  "regenerateButtonTitle": {
-    "message": "Hasilkan Audio seharga $cost$ $currency$",
-    "description": "Judul tombol untuk menghasilkan kembali audio dari pesan. Mungkin menimbulkan biaya perkiraan.",
-    "placeholders": {
-      "cost": {
-        "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
-      }
-    }
-  },
-  "regenerateButtonTitleFree": {
-    "message": "Hasilkan Audio",
-    "description": "Judul tombol untuk menghasilkan kembali audio dari pesan. Mungkin menimbulkan biaya yang tidak ditentukan."
   }
 }

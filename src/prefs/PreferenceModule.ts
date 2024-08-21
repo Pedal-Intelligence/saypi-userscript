@@ -240,6 +240,11 @@ class UserPreferenceModule {
       const audioControls = new AudioControlsModule();
       audioControls.useAudioOutputProvider(audioProviders.SayPi); // TODO: replace with voice.provided_by
     }
+    EventBus.emit("userPreferenceChanged", {
+      voiceId: voice.id,
+      voice: voice,
+      audioProvider: audioProviders.SayPi,
+    });
     return Promise.resolve();
   }
 
@@ -257,6 +262,11 @@ class UserPreferenceModule {
         }
       });
     }
+    EventBus.emit("userPreferenceChanged", {
+      voiceId: null,
+      voice: null,
+      audioProvider: audioProviders.Pi,
+    });
     return Promise.resolve();
   }
   public getAllowInterruptions(): Promise<boolean> {
@@ -270,6 +280,7 @@ class UserPreferenceModule {
    * @returns {Promise<boolean>} - true if TTS beta is paused, false otherwise
    */
   public async isTTSBetaPaused(): Promise<boolean> {
+    const defaultStatus = false;
     const statusEndpoint = `${config.apiServerUrl}/status/tts`;
 
     try {
@@ -277,8 +288,11 @@ class UserPreferenceModule {
       const data = await response.json();
       return data.beta.status === "paused";
     } catch (error) {
-      console.error("Error:", error);
-      return false;
+      console.warn(
+        "Unable to check TTS beta status. API server may be unavailable.",
+        error
+      );
+      return defaultStatus;
     }
   }
 

@@ -97,11 +97,17 @@
   },
   "callInProgress": {
     "description": "Opis alata za prikaz na gumbu za poziv kada je poziv u tijeku.",
-    "message": "Aktivno kontinuirano slušanje. Kliknite za zaustavljanje."
+    "message": "Završi razgovor bez upotrebe ruku"
   },
   "callNotStarted": {
     "description": "Opis alata za prikaz na gumbu za poziv prije nego što se poziv pokrene.",
-    "message": "Kliknite za pokretanje kontinuiranog slušanja."
+    "message": "Pokrenite razgovor bez upotrebe ruku s $chatbot$",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callStarting": {
     "description": "Tekst za prikaz na alatnoj traci gumba za poziv i u području upita kada se poziv pokreće.",
@@ -166,7 +172,13 @@
   },
   "enhancedVoice": {
     "description": "Naslov (opis alata) za Say, Pi poboljšane glasove.",
-    "message": "Glas poboljšan s Say, Pi"
+    "message": "Glas poboljšan $product$",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "enterImmersiveModeLong": {
     "description": "Aria-label i naslov gumba za ulazak u uronjeni način na mobilnim uređajima.",
@@ -271,7 +283,7 @@
   },
   "ttsCostExplanation": {
     "description": "Opis alata za prikaz kada se motor za pretvorbu teksta u govor koristi za čitanje poruke naglas, s troškom poruke.",
-    "message": "Trošak slušanja ove poruke je $cost$ $currency$",
+    "message": "$product$ će naplatiti $cost$ $currency$ za slušanje ove poruke",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -280,12 +292,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "Opis alata za prikaz kada se koristi motor za pretvaranje teksta u govor kako bi se pročitala poruka, a poruka je besplatna. Može sadržavati ime pružatelja usluge.",
-    "message": "Ovaj audio je generiran besplatno.",
+    "message": "Ovaj zvuk besplatno generira Inflection AI",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -330,11 +346,11 @@
     "description": "Naslov gumba za kopiranje teksta poruke u međuspremnik."
   },
   "voiceIntroduction_joey": {
-    "message": "Bok! Привет! 你好! Ja sam Pi, tvoj poliglotski AI asistent. S 29 jezika na mojoj zapovijedi, možemo istraživati ideje i kulture iz cijelog svijeta. Što misliš o ovom glasu?",
+    "message": "Zdravo! \nPrivet! \n你好! \nJa sam Pi, vaš poliglot AI pomoćnik. \nS 32 jezika kojima upravljam, možemo istraživati ​​ideje i kulture iz cijelog svijeta. \nŠto mislite o ovom glasu?",
     "description": "Uvod za Joeyjev glas."
   },
   "voiceIntroduction_paola": {
-    "message": "Ciao! Bonjour! Pozdrav! Ja sam Pi i mogu tečno razgovarati na 29 jezika. Od arapskog do ukrajinskog, ovdje sam da srušim jezične barijere. Kako vam zvuči ovaj glas?",
+    "message": "Ćao! \nBonjour! \nZdravo! \nJa sam Pi i mogu tečno razgovarati na 32 jezika. \nOd arapskog do ukrajinskog, ovdje sam da razbijem jezične barijere. \nKako vam zvuči ovaj glas?",
     "description": "Uvod za Paolin glas."
   },
   "regenerateButtonTitle": {
@@ -354,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "Generiraj Audio",
     "description": "Naslov gumba za regeneraciju zvuka poruke. Može uzrokovati neodređene troškove."
+  },
+  "assistantIsWriting": {
+    "description": "Poruka se prikazuje dok pomoćnik upisuje svoj odgovor.",
+    "message": "$chatbot$ piše...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "Opis alata koji se prikazuje kada korisnik prijeđe pokazivačem iznad veze s objašnjenjem troškova.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "Saznajte kako $product$ naplaćuje zvuk"
   }
 }

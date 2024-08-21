@@ -1,10 +1,10 @@
 import { md5 } from "js-md5";
+import { ElementTextStream, InputStreamOptions } from "../tts/InputStream";
 import {
-  ElementTextStream,
-  LateChangeEvent,
-  TextContent,
-} from "../tts/InputStream";
-import { AssistantSpeech, SpeechUtterance } from "../tts/SpeechModel";
+  AssistantSpeech,
+  SpeechPlaceholder,
+  SpeechUtterance,
+} from "../tts/SpeechModel";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import { BillingModule, UtteranceCharge } from "../billing/BillingModule";
@@ -40,7 +40,7 @@ class PopupMenu {
     }
   }
   decorateSpeech(speech: SpeechUtterance) {
-    this.ttsControls.addSpeechButton(speech, this._element, true);
+    this.ttsControls.addSpeechButton(speech, this._element, null, true);
   }
 
   static find(chatbot: Chatbot, searchRoot: HTMLElement): Observation {
@@ -56,21 +56,28 @@ class PopupMenu {
   }
 }
 
-class AssistantResponse {
+abstract class AssistantResponse {
   private _element: HTMLElement;
   private stable: boolean = false;
   // visible for testing
   static PARAGRAPH_SEPARATOR = ""; // should match ElementInputStream's delimiter argument
   protected includeInitialText = true; // stable text may be called on completed messages, so include the initial text unless streaming
   protected ttsControlsModule: TTSControlsModule;
+  protected messageControls: MessageControls;
+
+  abstract get contentSelector(): string;
+  abstract createTextStream(
+    content: HTMLElement,
+    options?: InputStreamOptions
+  ): ElementTextStream;
+  abstract decorateControls(): MessageControls;
 
   constructor(element: HTMLElement, includeInitialText = true) {
     this._element = element;
     this.includeInitialText = includeInitialText;
-    this.ttsControlsModule = new TTSControlsModule(
-      SpeechSynthesisModule.getInstance()
-    );
+    this.ttsControlsModule = TTSControlsModule.getInstance();
     this.decorate();
+    this.messageControls = this.decorateControls();
   }
 
   private async decorate(): Promise<void> {
@@ -89,7 +96,7 @@ class AssistantResponse {
       // content already found and decorated
       return content as HTMLElement;
     }
-    const wfull = this._element.querySelector(".w-full");
+    const wfull = this._element.querySelector(this.contentSelector);
     if (wfull) {
       // content found but not decorated yet
       wfull.classList.add("content");
@@ -102,8 +109,11 @@ class AssistantResponse {
           for (const node of [...mutation.addedNodes]) {
             if (node instanceof HTMLElement) {
               const addedElement = node as HTMLElement;
-              // TODO: w-full is specific to Pi.ai, should be generalized with Chatbot parameter
-              if (addedElement.classList.contains("w-full")) {
+              const classNameFromContentSelector =
+                this.contentSelector.split(".")[1];
+              if (
+                addedElement.classList.contains(classNameFromContentSelector)
+              ) {
                 addedElement.classList.add("content");
                 observer.disconnect();
                 resolve(addedElement);
@@ -141,7 +151,7 @@ class AssistantResponse {
     }
     const content = await this.decoratedContent();
     const options = { includeInitialText: this.includeInitialText };
-    const textStream = new ElementTextStream(content, options);
+    const textStream = this.createTextStream(content, options);
     return new Promise((resolve) => {
       textStream.getStream().subscribe({
         complete: () => {
@@ -180,6 +190,172 @@ class AssistantResponse {
     return this.utteranceId !== null;
   }
 
+  async decorateSpeech(utterance: SpeechUtterance): Promise<void> {
+    if (utterance instanceof SpeechPlaceholder) {
+      return;
+    }
+    this.messageControls.decorateSpeech(utterance);
+  }
+
+  async decorateIncompleteSpeech(replace: boolean = false): Promise<void> {
+    this.messageControls.decorateIncompleteSpeech(replace);
+  }
+
+  async decorateCost(charge: UtteranceCharge): Promise<void> {
+    this.messageControls.decorateCost(charge);
+  }
+
+  toString(): string {
+    const text = this.text
+      ? `"${this.text.substring(0, 9)}..."` // show first 9 characters
+      : `AssistantResponse: { id: ${this.element.id}, utteranceId: ${this.utteranceId}, hash: ${this.hash} }`;
+    return text;
+  }
+}
+
+abstract class MessageControls {
+  protected hoverMenu: HTMLElement | null; // hover menu is the container for the message controls
+  protected messageControlsElement: HTMLElement | null; // message controls is the container for Say, Pi buttons etc.
+
+  constructor(
+    protected message: AssistantResponse,
+    protected ttsControls: TTSControlsModule
+  ) {
+    this.hoverMenu = this.messageControlsElement = null; // will be initialized in decorateControls()
+    this.decorateControls(message);
+  }
+
+  protected getExtraControlClasses(): string[] {
+    return [];
+  }
+
+  /**
+   * Get a CSS selector for the hover menu element, relative to the message element
+   */
+  abstract getHoverMenuSelector(): string;
+
+  findHoverMenu(): HTMLElement | null {
+    return this.message.element.querySelector(".message-hover-menu");
+  }
+
+  protected async decorateControls(message: AssistantResponse): Promise<void> {
+    return new Promise((resolve) => {
+      const findAndDecorateHoverMenu = () => {
+        let hoverMenu = this.findHoverMenu();
+        if (!hoverMenu) {
+          hoverMenu = message.element.querySelector(
+            this.getHoverMenuSelector()
+          );
+          if (hoverMenu) {
+            hoverMenu.classList.add("message-hover-menu");
+            this.hoverMenu = hoverMenu;
+            // pi-specific thread button (TODO: move to PiAIChatbot)
+            if (hoverMenu.children.length > 0) {
+              const createThreadButton = hoverMenu
+                .children[0] as HTMLDivElement;
+              createThreadButton.classList.add("create-thread-button");
+            }
+          } else {
+            console.debug(
+              "Hover menu not ready, wait until the message is fully loaded"
+            );
+            this.watchForHoverMenu(message, findAndDecorateHoverMenu);
+            return;
+          }
+        }
+
+        let msgCtrlsElement = message.element.querySelector(
+          ".saypi-tts-controls"
+        ) as HTMLDivElement;
+        if (!msgCtrlsElement) {
+          msgCtrlsElement = document.createElement("div");
+          msgCtrlsElement.classList.add(
+            "saypi-tts-controls",
+            ...this.getExtraControlClasses()
+          );
+          hoverMenu?.appendChild(msgCtrlsElement);
+        }
+        this.messageControlsElement = msgCtrlsElement;
+
+        const copyButtonElement =
+          msgCtrlsElement.querySelector(".saypi-copy-button");
+        if (!copyButtonElement) {
+          this.ttsControls.addCopyButton(this.message, msgCtrlsElement);
+        }
+
+        resolve();
+      };
+
+      findAndDecorateHoverMenu();
+    });
+  }
+
+  private watchForHoverMenu(
+    message: AssistantResponse,
+    callback: () => void
+  ): void {
+    // setup an observer to wait for the hover menu to load
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        for (const node of [...mutation.addedNodes]) {
+          if (node instanceof HTMLElement) {
+            const addedElement = node as HTMLElement;
+            if (addedElement.querySelector(this.getHoverMenuSelector())) {
+              observer.disconnect();
+              callback();
+              return;
+            }
+          }
+        }
+      }
+    });
+    observer.observe(message.element, { childList: true, subtree: true });
+  }
+
+  /**
+   * Apply speech to this chat message
+   * @param utterance
+   */
+  async decorateSpeech(utterance: SpeechUtterance): Promise<void> {
+    await this.decorateControls(this.message); // ensure message controls are ready
+
+    this.message.element.dataset.utteranceId = utterance.id;
+    this.message.element.classList.add("speech-enabled");
+
+    if (!this.messageControlsElement) {
+      console.error(
+        "Message controls element not found, please call decorateControls() before decorateSpeech()"
+      );
+      return;
+    }
+
+    const mobile = isMobileDevice();
+    const hoverMenu = this.findHoverMenu();
+    if (mobile && hoverMenu) {
+      this.watchForPopupMenu(hoverMenu as HTMLElement, utterance);
+    }
+    const speechButtonElement = this.messageControlsElement.querySelector(
+      ".saypi-speak-button"
+    );
+    const costElement = this.messageControlsElement.querySelector(
+      ".saypi-cost-container"
+    );
+    if (!speechButtonElement) {
+      this.ttsControls.addSpeechButton(
+        utterance,
+        this.messageControlsElement,
+        costElement
+      );
+    }
+    if (utterance.voice) {
+      this.ttsControls.addPoweredBy(
+        this.messageControlsElement,
+        utterance.voice,
+        costElement
+      );
+    }
+  }
+
   private watchForPopupMenu(
     hoverMenu: HTMLElement,
     speech: SpeechUtterance
@@ -192,10 +368,10 @@ class AssistantResponse {
             const obs = PopupMenu.find(new PiAIChatbot(), addedElement);
             if (obs.found && !obs.decorated) {
               const popupMenu = new PopupMenu(
-                this,
+                this.message,
                 obs.target as HTMLElement,
                 speech,
-                this.ttsControlsModule
+                this.ttsControls
               );
               popupMenu.decorate();
               EventBus.emit("saypi:tts:menuPop", {
@@ -210,87 +386,26 @@ class AssistantResponse {
     observer.observe(hoverMenu, { childList: true, subtree: false });
   }
 
-  decorateControls(): void {
-    let hoverMenu = this.element.querySelector(".message-hover-menu");
-    if (!hoverMenu) {
-      if (this.element.children.length > 1) {
-        hoverMenu = this.element.children[1] as HTMLDivElement;
-        hoverMenu.classList.add("message-hover-menu");
-        if (hoverMenu.children.length > 0) {
-          const createThreadButton = hoverMenu.children[0] as HTMLDivElement;
-          createThreadButton.classList.add("create-thread-button");
-        }
-      }
-    }
-    let messageControlsElement = this.element.querySelector(
-      ".saypi-tts-controls"
-    ) as HTMLDivElement;
-    if (!messageControlsElement) {
-      messageControlsElement = document.createElement("div");
-      messageControlsElement.classList.add("saypi-tts-controls", "pt-4");
-      hoverMenu?.appendChild(messageControlsElement);
-    }
-
-    const copyButtonElement =
-      messageControlsElement.querySelector(".saypi-copy-button");
-    if (!copyButtonElement) {
-      this.ttsControlsModule.addCopyButton(this, messageControlsElement);
-    }
-  }
-
-  /**
-   * Apply speech to this chat message
-   * @param utterance
-   */
-  decorateSpeech(utterance: SpeechUtterance): void {
-    this._element.dataset.utteranceId = utterance.id;
-    this._element.classList.add("speech-enabled");
-
-    const hoverMenu = this.element.querySelector(".message-hover-menu");
-    const messageControlsElement = this.element.querySelector(
-      ".saypi-tts-controls"
-    ) as HTMLDivElement | null;
-    if (!messageControlsElement) {
-      console.error(
-        "Message controls element not found, please call decorateControls() before decorateSpeech()"
-      );
-      return;
-    }
-
-    if (isMobileDevice() && hoverMenu) {
-      this.watchForPopupMenu(hoverMenu as HTMLElement, utterance);
-    }
-    const speechButtonElement = messageControlsElement.querySelector(
-      ".saypi-speak-button"
-    );
-    if (!speechButtonElement) {
-      this.ttsControlsModule.addSpeechButton(utterance, messageControlsElement);
-    }
-    this.decorateCost(UtteranceCharge.none); // cost is unknown at this point
-    const costElement = messageControlsElement.querySelector(
-      ".saypi-cost"
-    ) as HTMLDivElement | null;
-    if (costElement && utterance.voice) {
-      this.ttsControlsModule.addPoweredBy(costElement, utterance.voice);
-    }
-  }
-
   async decorateIncompleteSpeech(replace: boolean = false): Promise<void> {
-    this._element.classList.add("speech-incomplete");
+    this.message.element.classList.add("speech-incomplete");
 
     const price = await UserPreferenceModule.getInstance()
       .getVoice()
       .then((voice) => {
-        return BillingModule.getInstance().quote(voice!, this.text);
+        if (!voice) {
+          return 0;
+        }
+        return BillingModule.getInstance().quote(voice!, this.message.text);
       });
-    const regenButton =
-      this.ttsControlsModule.createGenerateSpeechButton(price);
+    const regenButton = this.ttsControls.createGenerateSpeechButton(price);
 
-    const readAloudButton = this._element.querySelector(".saypi-speak-button");
+    const readAloudButton = this.message.element.querySelector(
+      ".saypi-speak-button"
+    );
     if (readAloudButton && replace) {
       readAloudButton.replaceWith(regenButton);
     } else {
-      const messageControlsElement = this._element.querySelector(
+      const messageControlsElement = this.message.element.querySelector(
         ".saypi-tts-controls"
       ) as HTMLDivElement | null;
       if (messageControlsElement) {
@@ -303,16 +418,21 @@ class AssistantResponse {
       regenButton.disabled = true;
       const speechSynthesis = SpeechSynthesisModule.getInstance();
       const speechHistory = SpeechHistoryModule.getInstance();
-      speechSynthesis.createSpeech(this.text, false).then((utterance) => {
-        speechSynthesis.speak(utterance);
-        this.decorateSpeech(utterance);
-        const charge = BillingModule.getInstance().charge(utterance, this.text);
-        this.decorateCost(charge);
-        const speech = new AssistantSpeech(utterance, charge);
-        speechHistory.addSpeechToHistory(charge.utteranceHash, speech);
-        regenButton.remove();
-        this._element.classList.remove("speech-incomplete");
-      });
+      speechSynthesis
+        .createSpeech(this.message.text, false)
+        .then((utterance) => {
+          speechSynthesis.speak(utterance);
+          this.decorateSpeech(utterance);
+          const charge = BillingModule.getInstance().charge(
+            utterance,
+            this.message.text
+          );
+          this.decorateCost(charge);
+          const speech = new AssistantSpeech(utterance, charge);
+          speechHistory.addSpeechToHistory(charge.utteranceHash, speech);
+          regenButton.remove();
+          this.message.element.classList.remove("speech-incomplete");
+        });
     });
   }
 
@@ -322,22 +442,23 @@ class AssistantResponse {
    * @param charge The cost of the speech
    */
   decorateCost(charge: UtteranceCharge): void {
-    const ttsControlsElement = this.element.querySelector(
+    const ttsControlsElement = this.message.element.querySelector(
       ".saypi-tts-controls"
     ) as HTMLDivElement | null;
-    const costElement = this.element.querySelector(".saypi-cost");
+    const costElement = this.message.element.querySelector(".saypi-cost");
     if (ttsControlsElement && !costElement) {
-      this.ttsControlsModule.addCostBasis(ttsControlsElement, charge);
+      this.ttsControls.addCostBasis(ttsControlsElement, charge);
     } else if (costElement) {
-      this.ttsControlsModule.updateCostBasis(
+      this.ttsControls.updateCostBasis(
         ttsControlsElement as HTMLElement,
         charge
       );
     }
 
-    const messageContentElement = this.element.querySelector(".content");
+    const messageContentElement =
+      this.message.element.querySelector(".content");
     if (messageContentElement) {
-      messageContentElement.id = `saypi-message-content-${this.utteranceId}`;
+      messageContentElement.id = `saypi-message-content-${this.message.utteranceId}`;
     }
 
     if (isMobileDevice()) {
@@ -345,7 +466,7 @@ class AssistantResponse {
       EventBus.on(
         "saypi:tts:menuPop",
         (event: { utteranceId: string; menu: PopupMenu }) => {
-          const id = this._element.dataset.utteranceId;
+          const id = this.message.element.dataset.utteranceId;
           if (
             !id ||
             id !== event.utteranceId ||
@@ -357,9 +478,9 @@ class AssistantResponse {
           const menuElement = event.menu.element;
           const menuCostElement = menuElement.querySelector(".saypi-cost");
           if (menuCostElement) {
-            this.ttsControlsModule.updateCostBasis(menuElement, charge);
+            this.ttsControls.updateCostBasis(menuElement, charge);
           } else {
-            this.ttsControlsModule.addCostBasis(menuElement, charge, true);
+            this.ttsControls.addCostBasis(menuElement, charge, true);
           }
         }
       );
@@ -367,4 +488,4 @@ class AssistantResponse {
   }
 }
 
-export { AssistantResponse };
+export { AssistantResponse, MessageControls, PopupMenu };

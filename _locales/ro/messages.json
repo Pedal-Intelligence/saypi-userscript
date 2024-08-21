@@ -97,11 +97,17 @@
   },
   "callInProgress": {
     "description": "Sugestia de afișare pe butonul de apel când un apel este în desfășurare.",
-    "message": "Ascultare continuă activă. Faceți clic pentru a opri."
+    "message": "Încheie conversația fără mâini"
   },
   "callNotStarted": {
     "description": "Sfatul care se afișează pe butonul de apel înainte de a începe un apel.",
-    "message": "Faceți clic pentru a începe ascultarea continuă."
+    "message": "Începeți o conversație fără mâini cu $chatbot$",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callStarting": {
     "description": "Textul de afișat pe tooltip-ul butonului de apel și în zona de prompt atunci când începe un apel.",
@@ -166,7 +172,13 @@
   },
   "enhancedVoice": {
     "description": "Titlu (informație suplimentară) pentru Spune, voci îmbunătățite Pi.",
-    "message": "Voce îmbunătățită de Say, Pi"
+    "message": "Voce îmbunătățită de $product$",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "enterImmersiveModeLong": {
     "description": "Eticheta-aria și titlul butonului pentru a intra în modul imersiv pe dispozitivele mobile.",
@@ -271,7 +283,7 @@
   },
   "ttsCostExplanation": {
     "description": "Informația suplimentară de afișat atunci când motorul de text-cu-vorbire este folosit pentru a citi cu voce tare un mesaj, împreună cu costul mesajului.",
-    "message": "Costul ascultării acestui mesaj este de $cost$ $currency$",
+    "message": "$product$ va percepe $cost$ $currency$ pentru ascultarea acestui mesaj",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -280,12 +292,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "Sugestia de afișare atunci când se utilizează un motor de text-pentru-vorbire pentru a citi cu voce tare un mesaj, iar mesajul este gratuit. Ar putea conține numele furnizorului.",
-    "message": "Acest audio a fost generat gratuit.",
+    "message": "Acest sunet este generat gratuit de Inflection AI",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -330,11 +346,11 @@
     "description": "Titlul butonului pentru a copia textul unui mesaj în clipboard."
   },
   "voiceIntroduction_joey": {
-    "message": "Hola! Привет! 你好! Sunt Pi, asistentul tău AI poliglot. Cu 29 de limbi la dispoziția mea, putem explora idei și culturi din întreaga lume. Ce părere ai despre această voce?",
+    "message": "Hola! \nПривет! \n你好! \nEu sunt Pi, asistentul tău poliglot AI. \nCu 32 de limbi la comandă, putem explora idei și culturi din întreaga lume. \nCe părere ai de această voce?",
     "description": "Introducere pentru vocea lui Joey."
   },
   "voiceIntroduction_paola": {
-    "message": "Ciao! Bonjour! Salut! Sunt Pi și pot conversa fluent în 29 de limbi. De la arabă la ucraineană, sunt aici pentru a elimina barierele lingvistice. Cum îți sună această voce?",
+    "message": "Ciao! \nBun ziua! \nBuna ziua! \nSunt Pi și pot conversa fluent în 32 de limbi. \nDe la arabă la ucraineană, sunt aici pentru a distruge barierele lingvistice. \nCum îți sună această voce?",
     "description": "Introducere pentru vocea Paola."
   },
   "regenerateButtonTitle": {
@@ -354,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "Generați Audio",
     "description": "Titlul butonului pentru a regenera audio al unui mesaj. Poate implica un cost nedeterminat."
+  },
+  "assistantIsWriting": {
+    "description": "Mesaj afișat când asistentul își tastează răspunsul.",
+    "message": "$chatbot$ scrie...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "Indicatorul explicativ care se va afișa atunci când utilizatorul trece cu mouse-ul peste linkul de explicație a costurilor.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "Aflați cum costă $product$ pentru sunet"
   }
 }
