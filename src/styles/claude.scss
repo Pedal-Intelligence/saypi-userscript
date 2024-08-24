@@ -5,39 +5,42 @@
  */
 
 html body.claude {
-    #saypi-callButton {
-        width: 38px; /* for an effective width of 32px - idk why */
-        height: 32px;
-    }
+  #saypi-callButton {
+    width: 38px; /* for an effective width of 32px - idk why */
+    height: 32px;
+  }
 
-    #saypi-submitButton {
-        background-color: #840f7c; /* just for debugging */
-    }
+  #saypi-submitButton {
+    background-color: #840f7c; /* just for debugging */
+  }
 
-    /* hide Claude's original placeholder when custom placeholder is present and non-empty */
-    #saypi-prompt:has(+ .custom-placeholder:not(:empty)) p[data-placeholder].is-empty {
-        display: none;
+  /* hide Claude's original placeholder when custom placeholder is present and non-empty */
+  #saypi-prompt-container:has(+ .custom-placeholder) #saypi-prompt {
+    // this selector may not be working?
+    p[data-placeholder].is-empty {
+      visibility: hidden; // display: none doesn't work, causes it to reappear
     }
+  }
 
-    /* reduce the height of the prompt input area, which somehow grew by 24px when we added the custom placeholder
-     * and shift the custom placeholder up to Claude's standard placeholder position */
-    #saypi-prompt:has(+ .custom-placeholder:not(:empty)) {
-        margin-bottom: -24px;
-    }
+  /* shift the custom placeholder up to Claude's standard placeholder position */
+  #claude-placeholder {
+    margin-top: -24px;
+  }
 
-    .tooltip[aria-label]::after {
-        font-size: 0.75rem; /* text-xs */
-        background-color: hsl(var(--black)/.8); /* bg-black/80 */
-        top: -130%; /* position the tooltip above the button */
-    }
+  .tooltip[aria-label]::after {
+    font-size: 0.75rem; /* text-xs */
+    background-color: hsl(var(--black) / 0.8); /* bg-black/80 */
+    top: -130%; /* position the tooltip above the button */
+  }
 
-    .message-hover-menu .saypi-tts-controls {
-        button svg, img {
-            width: 12px;
-            height: 12px;
-        }
-        .saypi-copy-button {
-            display: none;
-        }
+  .message-hover-menu .saypi-tts-controls {
+    button svg,
+    img {
+      width: 12px;
+      height: 12px;
     }
+    .saypi-copy-button {
+      display: none;
+    }
+  }
 }

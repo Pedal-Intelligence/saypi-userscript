@@ -1,3 +1,4 @@
+import { find } from "lodash";
 import { AssistantResponse, MessageControls } from "../dom/MessageElements";
 import { Observation } from "../dom/Observation";
 import {
@@ -270,6 +271,27 @@ class ClaudeTextStream extends ElementTextStream {
   }
 }
 
+function findAndDecorateCustomPlaceholderElement(
+  prompt: HTMLElement
+): Observation {
+  const existing = prompt.parentElement?.querySelector("p.custom-placeholder");
+  if (existing) {
+    return Observation.foundAlreadyDecorated("claude-placeholder", existing);
+  } else {
+    // find and copy the existing placeholder element
+    const originalPlaceholder = prompt.querySelector("p[data-placeholder]");
+    if (originalPlaceholder) {
+      const placeholder = originalPlaceholder.cloneNode(true) as HTMLElement;
+      placeholder.classList.add("custom-placeholder");
+      placeholder.id = "claude-placeholder";
+      // add custom placeholder element as a sibling to the prompt element (sic)
+      prompt.insertAdjacentElement("afterend", placeholder);
+      return new Observation(placeholder, placeholder.id, true, true, true);
+    }
+    return Observation.notFound("claude-placeholder");
+  }
+}
+
 class ClaudePrompt extends UserPrompt {
   private promptElement: HTMLDivElement;
   private placeholderManager: PlaceholderManager;
@@ -278,7 +300,7 @@ class ClaudePrompt extends UserPrompt {
   constructor(element: HTMLElement) {
     super(element);
     this.promptElement = element as HTMLDivElement;
-    const observation = this.findAndDecorateCustomPlaceholderElement(element);
+    const observation = findAndDecorateCustomPlaceholderElement(element);
     if (!observation.found) {
       // not expected to happen
       console.error(
@@ -290,27 +312,6 @@ class ClaudePrompt extends UserPrompt {
       observation.target as HTMLElement,
       this.getDefaultPlaceholderText()
     );
-  }
-
-  findAndDecorateCustomPlaceholderElement(prompt: HTMLElement): Observation {
-    const existing = prompt.parentElement?.querySelector(
-      "p.custom-placeholder"
-    );
-    if (existing) {
-      return Observation.foundAlreadyDecorated("claude-placeholder", existing);
-    } else {
-      // find and copy the existing placeholder element
-      const originalPlaceholder = prompt.querySelector("p[data-placeholder]");
-      if (originalPlaceholder) {
-        const placeholder = originalPlaceholder.cloneNode(true) as HTMLElement;
-        placeholder.classList.add("custom-placeholder");
-        placeholder.id = "claude-placeholder";
-        // add custom placeholder element as a sibling to the prompt element (sic)
-        prompt.insertAdjacentElement("afterend", placeholder);
-        return new Observation(placeholder, placeholder.id, true, true, true);
-      }
-      return Observation.notFound("claude-placeholder");
-    }
   }
 
   setText(text: string): void {
@@ -366,7 +367,7 @@ class ClaudePrompt extends UserPrompt {
 
 class PlaceholderManager {
   private input: HTMLElement;
-  private placeholder: HTMLElement;
+  private customPlaceholder: HTMLElement | null;
   private placeholderText: string;
   private inputHandler: EventListener;
 
@@ -376,7 +377,7 @@ class PlaceholderManager {
     initialPlaceholder: string
   ) {
     this.input = inputElement;
-    this.placeholder = placeholderElement;
+    this.customPlaceholder = placeholderElement;
     this.placeholderText = initialPlaceholder;
     this.inputHandler = this.handleInput.bind(this);
     this.initializePlaceholder();
@@ -392,19 +393,26 @@ class PlaceholderManager {
     this.updatePlaceholderVisibility();
   }
 
+  promptEmptied() {
+    this.showCustomPlaceholder();
+    this.hideStandardPlaceholder();
+  }
+
+  promptFilled() {
+    this.hideCustomPlaceholder();
+  }
+
   updatePlaceholderVisibility() {
-    if (this.input.textContent?.trim() === "") {
-      this.placeholder.style.display = "block";
-      this.hideStandardPlaceholder();
+    if (this.input.textContent === "") {
+      this.promptEmptied();
     } else {
-      this.placeholder.style.display = "none";
-      this.showStandardPlaceholder();
+      this.promptFilled();
     }
   }
 
   setPlaceholder(newPlaceholder: string) {
     this.placeholderText = newPlaceholder;
-    this.placeholder.textContent = this.placeholderText;
+    this.getOrCreateCustomPlaceholder().textContent = this.placeholderText;
     this.updatePlaceholderVisibility();
   }
 
@@ -421,13 +429,37 @@ class PlaceholderManager {
   private showStandardPlaceholder() {
     const placeholder = this.getStandardPlaceholder();
     if (placeholder) {
-      placeholder.style.display = "block";
+      placeholder.style.visibility = "visible";
     }
   }
   private hideStandardPlaceholder() {
     const placeholder = this.getStandardPlaceholder();
     if (placeholder) {
-      placeholder.style.display = "none";
+      placeholder.style.visibility = "hidden";
+    }
+  }
+
+  private getOrCreateCustomPlaceholder(): HTMLElement {
+    if (this.customPlaceholder) {
+      return this.customPlaceholder;
+    }
+    const placeholder = findAndDecorateCustomPlaceholderElement(this.input);
+    if (placeholder.found) {
+      this.customPlaceholder = placeholder.target as HTMLElement;
+      return this.customPlaceholder;
+    }
+    throw new Error("Failed to find or create the custom placeholder element.");
+  }
+
+  private showCustomPlaceholder() {
+    this.customPlaceholder = this.getOrCreateCustomPlaceholder();
+  }
+
+  private hideCustomPlaceholder() {
+    if (this.customPlaceholder) {
+      // remove the custom placeholder element from the DOM
+      this.customPlaceholder.parentNode?.removeChild(this.customPlaceholder);
+      this.customPlaceholder = null;
     }
   }
 }
