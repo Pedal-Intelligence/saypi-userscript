@@ -279,6 +279,12 @@ class ClaudePrompt extends UserPrompt {
     super(element);
     this.promptElement = element as HTMLDivElement;
     const observation = this.findAndDecorateCustomPlaceholderElement(element);
+    if (!observation.found) {
+      // not expected to happen
+      console.error(
+        "Failed to find or decorate the custom placeholder element for Claude's prompt."
+      );
+    }
     this.placeholderManager = new PlaceholderManager(
       element,
       observation.target as HTMLElement,
@@ -293,12 +299,17 @@ class ClaudePrompt extends UserPrompt {
     if (existing) {
       return Observation.foundAlreadyDecorated("claude-placeholder", existing);
     } else {
-      const placeholder = document.createElement("p");
-      placeholder.classList.add("custom-placeholder", "text-text-500");
-      placeholder.id = "claude-placeholder";
-      // add placeholder element as a sibling to the prompt element
-      prompt.insertAdjacentElement("afterend", placeholder);
-      return new Observation(placeholder, placeholder.id, true, true, true);
+      // find and copy the existing placeholder element
+      const originalPlaceholder = prompt.querySelector("p[data-placeholder]");
+      if (originalPlaceholder) {
+        const placeholder = originalPlaceholder.cloneNode(true) as HTMLElement;
+        placeholder.classList.add("custom-placeholder");
+        placeholder.id = "claude-placeholder";
+        // add custom placeholder element as a sibling to the prompt element (sic)
+        prompt.insertAdjacentElement("afterend", placeholder);
+        return new Observation(placeholder, placeholder.id, true, true, true);
+      }
+      return Observation.notFound("claude-placeholder");
     }
   }
 
