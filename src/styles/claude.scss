@@ -22,7 +22,7 @@ html body.claude {
     }
   }
 
-  #saypi-prompt p.is-empty.is-editor-empty.whitespace-nowrap::before {
+  #saypi-prompt p.is-empty.is-editor-empty::before {
     // hide Claude's original placeholder, but somehow keep the caret visible
     // display: none doesn't work, and causes the placeholder to reappear
     // visibility: hidden doesn't work, and causes the caret to disappear
