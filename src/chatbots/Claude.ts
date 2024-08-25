@@ -357,7 +357,7 @@ class ClaudePrompt extends UserPrompt {
   clear(): void {
     this.placeholderManager.setPlaceholder("");
     const promptParagraphs = this.promptElement.querySelectorAll(
-      "p[!data-placeholder]"
+      "p:not([data-placeholder])"
     );
     promptParagraphs.forEach((p) => {
       p.remove();
