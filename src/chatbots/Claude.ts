@@ -1,4 +1,3 @@
-import { find } from "lodash";
 import { AssistantResponse, MessageControls } from "../dom/MessageElements";
 import { Observation } from "../dom/Observation";
 import {
@@ -11,13 +10,19 @@ import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { Chatbot, UserPrompt } from "./Chatbot";
 
 class ClaudeChatbot implements Chatbot {
+  private promptCache: Map<HTMLElement, ClaudePrompt> = new Map();
+
   getName(): string {
     return "Claude";
   }
 
   getPrompt(element: HTMLElement): UserPrompt {
-    return new ClaudePrompt(element);
+    if (!this.promptCache.has(element)) {
+      this.promptCache.set(element, new ClaudePrompt(element));
+    }
+    return this.promptCache.get(element) as ClaudePrompt;
   }
+
   getPromptTextInputSelector(): string {
     return "div[enterkeyhint]";
   }
@@ -393,6 +398,10 @@ class PlaceholderManager {
     this.updatePlaceholderVisibility();
   }
 
+  isPromptEmpty() {
+    return this.input.textContent === "";
+  }
+
   promptEmptied() {
     this.showCustomPlaceholder();
     this.hideStandardPlaceholder();
@@ -403,7 +412,7 @@ class PlaceholderManager {
   }
 
   updatePlaceholderVisibility() {
-    if (this.input.textContent === "") {
+    if (this.isPromptEmpty()) {
       this.promptEmptied();
     } else {
       this.promptFilled();
@@ -412,8 +421,11 @@ class PlaceholderManager {
 
   setPlaceholder(newPlaceholder: string) {
     this.placeholderText = newPlaceholder;
-    this.getOrCreateCustomPlaceholder().textContent = this.placeholderText;
-    this.updatePlaceholderVisibility();
+    // only set the placeholder text if the prompt is empty
+    if (this.isPromptEmpty()) {
+      this.getOrCreateCustomPlaceholder().textContent = this.placeholderText;
+      this.updatePlaceholderVisibility();
+    }
   }
 
   getPlaceholder() {
@@ -448,7 +460,9 @@ class PlaceholderManager {
       this.customPlaceholder = placeholder.target as HTMLElement;
       return this.customPlaceholder;
     }
-    throw new Error("Failed to find or create the custom placeholder element.");
+    throw new Error(
+      "Failed to find or create the custom placeholder element. Ensure the prompt is empty."
+    );
   }
 
   private showCustomPlaceholder() {

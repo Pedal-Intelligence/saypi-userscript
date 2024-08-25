@@ -22,9 +22,11 @@ html body.claude {
     }
   }
 
-  #saypi-prompt p[data-placeholder].is-empty {
+  #saypi-prompt p.is-empty.is-editor-empty.whitespace-nowrap::before {
     // hide Claude's original placeholder, but somehow keep the caret visible
-    color: green; // display: none doesn't work, causes it to reappear
+    // display: none doesn't work, and causes the placeholder to reappear
+    // visibility: hidden doesn't work, and causes the caret to disappear
+    --tw-text-opacity: 0 !important; // hide the text while keeping the caret visible
   }
 
   /* shift the custom placeholder up to Claude's standard placeholder position */
