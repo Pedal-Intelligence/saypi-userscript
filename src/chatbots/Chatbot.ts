@@ -29,8 +29,12 @@ export interface Chatbot {
     element: HTMLElement,
     includeInitialText?: boolean
   ): AssistantResponse;
-  getVoiceMenu(preferences: UserPreferenceModule, element: HTMLElement): VoiceSelector;
-  getName(): string;
+  getVoiceMenu(
+    preferences: UserPreferenceModule,
+    element: HTMLElement
+  ): VoiceSelector;
+  getName(): string; // the display name of the chatbot, e.g. "Pi", "Claude"
+  getID(): string; // the name of the chatbot as it appears in URLs, etc., e.g. "pi", "claude"
 }
 
 export abstract class UserPrompt {

@@ -17,6 +17,10 @@ class PiAIChatbot implements Chatbot {
     return "Pi";
   }
 
+  getID(): string {
+    return "pi";
+  }
+
   getVoiceMenu(
     preferences: UserPreferenceModule,
     element: HTMLElement

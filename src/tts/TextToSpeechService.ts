@@ -4,6 +4,7 @@ import {
   SpeechSynthesisVoiceRemote,
   SpeechUtterance,
 } from "./SpeechModel";
+import { Chatbot } from "../chatbots/Chatbot";
 
 export class TextToSpeechService {
   private sequenceNumbers: { [key: string]: number } = {};
@@ -13,8 +14,13 @@ export class TextToSpeechService {
     return response.data;
   }
 
-  public async getVoices(): Promise<SpeechSynthesisVoiceRemote[]> {
-    const response = await axios.get(`${this.serviceUrl}/voices`);
+  public async getVoices(
+    chatbot?: Chatbot
+  ): Promise<SpeechSynthesisVoiceRemote[]> {
+    const endpoint = chatbot
+      ? `${this.serviceUrl}/voices?app=${chatbot.getID()}`
+      : `${this.serviceUrl}/voices`;
+    const response = await axios.get(endpoint);
     return response.data;
   }
 

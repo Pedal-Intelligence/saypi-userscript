@@ -18,6 +18,10 @@ class ClaudeChatbot implements Chatbot {
     return "Claude";
   }
 
+  getID(): string {
+    return "claude";
+  }
+
   getVoiceMenu(
     preferences: UserPreferenceModule,
     element: HTMLElement

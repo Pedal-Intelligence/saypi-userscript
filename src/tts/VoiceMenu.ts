@@ -411,7 +411,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
   ) {
     super(chatbot, userPreferences, element);
     this.addIdVoiceMenu(element);
-    this.initializeVoiceSelector();
+    this.initializeVoiceSelector(chatbot);
   }
 
   getId(): string {
@@ -515,9 +515,9 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     return true;
   }
 
-  private initializeVoiceSelector(): void {
+  private initializeVoiceSelector(chatbot: Chatbot): void {
     const speechSynthesis = SpeechSynthesisModule.getInstance();
-    speechSynthesis.getVoices().then((voices) => {
+    speechSynthesis.getVoices(chatbot).then((voices) => {
       this.populateVoices(voices, this.element);
       this.registerVoiceChangeHandler(this.element);
     });
