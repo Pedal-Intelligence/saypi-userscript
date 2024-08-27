@@ -1,5 +1,6 @@
 import { AssistantResponse, MessageControls } from "../dom/MessageElements";
 import EventBus from "../events/EventBus";
+import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import {
   AddedText,
   ChangedText,
@@ -8,11 +9,19 @@ import {
   InputStreamOptions,
 } from "../tts/InputStream";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
+import { PiVoiceMenu, VoiceSelector } from "../tts/VoiceMenu";
 import { Chatbot, UserPrompt } from "./Chatbot";
 
 class PiAIChatbot implements Chatbot {
   getName(): string {
     return "Pi";
+  }
+
+  getVoiceMenu(
+    preferences: UserPreferenceModule,
+    element: HTMLElement
+  ): VoiceSelector {
+    return new PiVoiceMenu(this, preferences, element);
   }
 
   getPrompt(element: HTMLElement): UserPrompt {

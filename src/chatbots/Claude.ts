@@ -1,5 +1,6 @@
 import { AssistantResponse, MessageControls } from "../dom/MessageElements";
 import { Observation } from "../dom/Observation";
+import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import {
   AddedText,
   ChangedText,
@@ -7,6 +8,7 @@ import {
   InputStreamOptions,
 } from "../tts/InputStream";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
+import { ClaudeVoiceMenu, VoiceSelector } from "../tts/VoiceMenu";
 import { Chatbot, UserPrompt } from "./Chatbot";
 
 class ClaudeChatbot implements Chatbot {
@@ -14,6 +16,13 @@ class ClaudeChatbot implements Chatbot {
 
   getName(): string {
     return "Claude";
+  }
+
+  getVoiceMenu(
+    preferences: UserPreferenceModule,
+    element: HTMLElement
+  ): VoiceSelector {
+    return new ClaudeVoiceMenu(this, preferences, element);
   }
 
   getPrompt(element: HTMLElement): UserPrompt {
@@ -32,7 +41,7 @@ class ClaudeChatbot implements Chatbot {
   }
 
   getAudioControlsSelector(): string {
-    return "audio + div";
+    return "#saypi-prompt-ancestor div.min-h-4.flex-1.items-center"; // for Claude, the audio controls are in the prompt editor
   }
 
   getAudioOutputButtonSelector(): string {
@@ -62,7 +71,7 @@ class ClaudeChatbot implements Chatbot {
   }
 
   getVoiceMenuSelector(): string {
-    return "div.t-action-m";
+    return ".voice-menu"; // we define our own voice menu for Claude
   }
 
   getVoiceSettingsSelector(): string {
@@ -159,15 +168,22 @@ class ClaudeTextBlockCapture extends ElementTextStream {
     const messageElement = element.parentElement;
     if (messageElement && messageElement.hasAttribute("data-is-streaming")) {
       const messageObserver = new MutationObserver((mutations) => {
+        const isStreaming = messageElement.getAttribute("data-is-streaming");
+        const streamingInProgress = isStreaming === "true";
+        if (streamingInProgress) {
+          console.log("Claude is streaming...");
+        }
         mutations.forEach((mutation) => {
-          if (mutation.attributeName === "data-is-streaming") {
-            const isStreaming =
-              messageElement.getAttribute("data-is-streaming");
-            if (isStreaming === "false") {
-              const text = this.getNestedText(element);
-              this.subject.next(new AddedText(text));
-              this.subject.complete();
-            }
+          const streamingChanged =
+            mutation.attributeName === "data-is-streaming";
+          const streamingStarted = streamingChanged && isStreaming === "true";
+          const streamingStopped = streamingChanged && isStreaming === "false";
+          if (streamingStarted) {
+            console.log("Claude started streaming...");
+          } else if (streamingStopped) {
+            const text = this.getNestedText(element);
+            this.subject.next(new AddedText(text));
+            this.subject.complete();
           }
         });
       });

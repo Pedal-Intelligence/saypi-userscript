@@ -14,7 +14,7 @@ import {
   getAssistantMessageByUtterance as getAssistantMessageByUtteranceId,
 } from "../dom/ChatHistory";
 import { Observation } from "../dom/Observation";
-import { VoiceMenu } from "./VoiceMenu";
+import { VoiceSelector } from "./VoiceMenu";
 import { SpeechUtterance } from "./SpeechModel";
 import { findRootAncestor } from "../dom/DOMModule";
 import { UtteranceCharge } from "../billing/BillingModule";
@@ -24,7 +24,7 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
   private speechSynthesis = SpeechSynthesisModule.getInstance();
   private speechHistory = SpeechHistoryModule.getInstance();
   private replaying = false; // flag to indicate whether the user requested a replay of an utterance
-  private voiceMenu: VoiceMenu | null = null;
+  private voiceMenu: VoiceSelector | null = null;
 
   // managed resources
   private eventListeners: EventListener[] = [];
@@ -39,22 +39,33 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     if (!audioControlsContainer) {
       return Observation.notFound("saypi-audio-controls");
     }
-    const voiceMenuElement = audioControlsContainer.querySelector(
+    let voiceMenuElement = audioControlsContainer.querySelector(
       this.chatbot.getVoiceMenuSelector()
-    );
+    ) as HTMLElement | null;
     if (voiceMenuElement && voiceMenuElement instanceof HTMLElement) {
-      let obs = Observation.foundUndecorated(
+      const obs = Observation.foundUndecorated(
         "saypi-voice-menu",
         voiceMenuElement
       );
-      this.voiceMenu = new VoiceMenu(
-        this.chatbot,
+      this.voiceMenu = this.chatbot.getVoiceMenu(
         this.userPreferences,
         voiceMenuElement
       );
       return Observation.foundAndDecorated(obs);
     }
-    return Observation.notFound("saypi-voice-menu");
+    // create a div under the container to hold the voice menu
+    voiceMenuElement = document.createElement("div");
+    voiceMenuElement.id = "saypi-voice-menu";
+    audioControlsContainer.appendChild(voiceMenuElement);
+    this.voiceMenu = this.chatbot.getVoiceMenu(
+      this.userPreferences,
+      voiceMenuElement
+    );
+    const obs = Observation.foundUndecorated(
+      "saypi-voice-menu",
+      voiceMenuElement
+    );
+    return Observation.foundAndDecorated(obs);
   }
 
   // Methods for DOM manipulation and element ID assignment

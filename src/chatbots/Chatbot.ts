@@ -2,6 +2,7 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import EventBus from "../events/EventBus";
 import { ImmersionStateChecker } from "../ImmersionServiceLite";
 import { AssistantResponse } from "../dom/MessageElements";
+import { VoiceSelector } from "../tts/VoiceMenu";
 
 export interface Chatbot {
   getChatHistorySelector(): string;
@@ -28,6 +29,7 @@ export interface Chatbot {
     element: HTMLElement,
     includeInitialText?: boolean
   ): AssistantResponse;
+  getVoiceMenu(preferences: UserPreferenceModule, element: HTMLElement): VoiceSelector;
   getName(): string;
 }
 
