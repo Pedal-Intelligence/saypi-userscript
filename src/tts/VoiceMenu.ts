@@ -519,7 +519,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     const speechSynthesis = SpeechSynthesisModule.getInstance();
     speechSynthesis.getVoices(chatbot).then((voices) => {
       this.populateVoices(voices, this.element);
-      this.registerVoiceChangeHandler(this.element);
+      //this.registerVoiceChangeHandler(this.element); // references Pi actions, not needed for Claude?
     });
   }
 
