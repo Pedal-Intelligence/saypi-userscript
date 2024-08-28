@@ -35582,8 +35582,9 @@ class TTSControlsModule {
         return TTSControlsModule.instance;
     }
     registerEventListeners() {
-        EventBus.on("saypi:piWriting", (event) => {
-            this.autoplaySpeech(event.utterance, 200); // wait a beat after starting the input stream before starting the output stream
+        EventBus.on("saypi:piStoppedWriting", (event) => {
+            // wait until all text is available before starting the audio output stream (downgraded for Claude's block capture, but works ok)
+            this.autoplaySpeech(event.utterance, 100); // wait a beat after starting the input stream before starting the output stream
         });
     }
     constructTextToSpeechControl(classname, title, icon) {

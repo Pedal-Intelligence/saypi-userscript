@@ -27,8 +27,9 @@ export class TTSControlsModule {
   }
 
   private registerEventListeners() {
-    EventBus.on("saypi:piWriting", (event: AssistantWritingEvent) => {
-      this.autoplaySpeech(event.utterance, 200); // wait a beat after starting the input stream before starting the output stream
+    EventBus.on("saypi:piStoppedWriting", (event: AssistantWritingEvent) => {
+      // wait until all text is available before starting the audio output stream (downgraded for Claude's block capture, but works ok)
+      this.autoplaySpeech(event.utterance, 100); // wait a beat after starting the input stream before starting the output stream
     });
   }
 
