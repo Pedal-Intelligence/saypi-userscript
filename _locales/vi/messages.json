@@ -8,7 +8,7 @@
     "description": "Mô tả của ứng dụng."
   },
   "callInProgress": {
-    "message": "Đang lắng nghe liên tục. Nhấp để dừng.",
+    "message": "Kết thúc cuộc trò chuyện không cần tay",
     "description": "Tooltip hiển thị trên nút gọi khi một cuộc gọi đang diễn ra."
   },
   "callStarting": {
@@ -16,8 +16,14 @@
     "description": "Tooltip hiển thị trên nút gọi khi cuộc gọi đang bắt đầu."
   },
   "callNotStarted": {
-    "message": "Nhấp để bắt đầu lắng nghe liên tục.",
-    "description": "Tooltip hiển thị trên nút gọi trước khi cuộc gọi được bắt đầu."
+    "message": "Bắt đầu một cuộc trò chuyện không cần tay với $chatbot$",
+    "description": "Tooltip hiển thị trên nút gọi trước khi cuộc gọi được bắt đầu.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callError": {
     "message": "Gặp lỗi không nghiêm trọng. Đừng hoảng sợ, chúng tôi vẫn đang lắng nghe.",
@@ -248,7 +254,13 @@
   },
   "enhancedVoice": {
     "description": "Tiêu đề (chú giải) cho Say, Pi nâng cao giọng nói.",
-    "message": "Giọng nâng cao bởi Say, Pi"
+    "message": "Giọng nói được tăng cường bởi $product$",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "previewProgress": {
     "description": "Thông điệp để hiển thị khi người dùng đang xem trước một tính năng có giới hạn ký tự.",
@@ -289,7 +301,7 @@
   },
   "ttsCostExplanation": {
     "description": "Chú thích hiển thị khi sử dụng công cụ chuyển văn bản thành giọng nói để đọc to một tin nhắn, kèm theo chi phí của tin nhắn.",
-    "message": "Chi phí để nghe thông điệp này là $cost$ $currency$",
+    "message": "$product$ sẽ tính phí $cost$ $currency$ khi nghe tin nhắn này",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -298,12 +310,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "Thông báo hiển thị khi sử dụng công cụ chuyển văn bản thành giọng nói để đọc to một tin nhắn, và tin nhắn là miễn phí. Có thể chứa tên của nhà cung cấp.",
-    "message": "Âm thanh này được tạo ra miễn phí.",
+    "message": "Âm thanh này được tạo miễn phí bởi Inflection AI",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -330,11 +346,11 @@
     "description": "Tiêu đề của nút để sao chép văn bản của một tin nhắn vào bộ nhớ tạm."
   },
   "voiceIntroduction_joey": {
-    "message": "Hola! Привет! 你好! Tôi là Pi, trợ lý AI đa ngôn ngữ của bạn. Với 29 ngôn ngữ trong tầm tay, chúng ta có thể khám phá ý tưởng và văn hóa từ khắp nơi trên thế giới. Bạn nghĩ gì về giọng nói này?",
+    "message": "Hoan hô! \nXin chào! \nbạn ơi! \nTôi là Pi, trợ lý AI đa ngôn ngữ của bạn. \nVới 32 ngôn ngữ trong tầm tay của tôi, chúng ta có thể khám phá các ý tưởng và nền văn hóa từ khắp nơi trên thế giới. \nBạn nghĩ gì về giọng nói này?",
     "description": "Giới thiệu về giọng nói của Joey."
   },
   "voiceIntroduction_paola": {
-    "message": "Chào! Bonjour! Xin chào! Tôi là Pi, và tôi có thể nói trôi chảy ở 29 ngôn ngữ. Từ tiếng Ả Rập đến tiếng Ukraina, tôi ở đây để phá vỡ rào cản ngôn ngữ. Giọng của tôi nghe như thế nào với bạn?",
+    "message": "Chào! \nChúc mừng! \nXin chào! \nTôi là Pi và tôi có thể giao tiếp thành thạo 32 ngôn ngữ. \nTừ tiếng Ả Rập đến tiếng Ukraina, tôi ở đây để phá bỏ rào cản ngôn ngữ. \nGiọng nói này nghe như thế nào đối với bạn?",
     "description": "Giới thiệu về giọng của Paola."
   },
   "regenerateButtonTitle": {
@@ -354,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "Tạo Âm thanh",
     "description": "Tiêu đề của nút để tái tạo âm thanh của một tin nhắn. Có thể phát sinh chi phí không xác định."
+  },
+  "assistantIsWriting": {
+    "description": "Thông báo hiển thị khi trợ lý đang nhập câu trả lời.",
+    "message": "$chatbot$ đang viết...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "Chú giải công cụ sẽ hiển thị khi người dùng di chuột qua liên kết giải thích chi phí.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "Tìm hiểu cách $product$ tính phí âm thanh"
   }
 }

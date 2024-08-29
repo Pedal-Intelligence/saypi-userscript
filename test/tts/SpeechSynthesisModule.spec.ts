@@ -5,14 +5,15 @@ import { AudioStreamManager } from "../../src/tts/AudioStreamManager";
 import { JSDOM } from "jsdom";
 import { mockVoices } from "../data/Voices";
 import { UserPreferenceModule } from "../../src/prefs/PreferenceModule";
-import { UserPreferenceModuleMock } from "../prefs/PreferenceModule.mock";
-import { mock } from "node:test";
+import { BillingModule } from "../../src/billing/BillingModule";
+import { audioProviders } from "../../src/tts/SpeechModel";
 
 describe("SpeechSynthesisModule", () => {
   let speechSynthesisModule: SpeechSynthesisModule;
   let textToSpeechServiceMock: TextToSpeechService;
   let audioStreamManagerMock: AudioStreamManager;
   let userPreferenceModuleMock: UserPreferenceModule;
+  let billingModuleMock: BillingModule;
 
   beforeEach(() => {
     const dom = new JSDOM();
@@ -50,10 +51,15 @@ describe("SpeechSynthesisModule", () => {
       getLanguage: vi.fn().mockReturnValue("en-US"),
     } as unknown as UserPreferenceModule;
 
+    billingModuleMock = {
+      getChargeForUtterance: vi.fn(),
+    } as unknown as BillingModule;
+
     speechSynthesisModule = new SpeechSynthesisModule(
       textToSpeechServiceMock,
       audioStreamManagerMock,
-      userPreferenceModuleMock
+      userPreferenceModuleMock,
+      billingModuleMock
     );
   });
 
@@ -127,6 +133,7 @@ describe("SpeechSynthesisModule", () => {
       lang: "en-US",
       voice: mockVoice,
       uri: "https://api.saypi.ai/speak/uuid",
+      provider: audioProviders.SayPi,
     };
     audioStreamManagerMock.createStream = vi.fn(() =>
       Promise.resolve(mockUtterance)

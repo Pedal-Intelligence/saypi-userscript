@@ -97,11 +97,17 @@
   },
   "callInProgress": {
     "description": "Værktøjstip til at vise på opkaldsknappen, når et opkald er i gang.",
-    "message": "Aktiv kontinuerlig lytning. Klik for at stoppe."
+    "message": "Afslut håndfri samtale"
   },
   "callNotStarted": {
     "description": "Værktøjstip til visning på opkaldsknappen, før et opkald startes.",
-    "message": "Klik for at starte kontinuerlig lytning."
+    "message": "Start en håndfri samtale med $chatbot$",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callStarting": {
     "description": "Teksten der skal vises på opkaldsknappens værktøjstip og i promptområdet, når et opkald starter.",
@@ -166,7 +172,13 @@
   },
   "enhancedVoice": {
     "description": "Titel (tooltip) for Sig, Pi forbedrede stemmer.",
-    "message": "Stemme forbedret af Say, Pi"
+    "message": "Stemme forbedret af $product$",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "enterImmersiveModeLong": {
     "description": "Aria-label og titlen på knappen for at indtaste immersiv tilstand på mobile enheder.",
@@ -271,7 +283,7 @@
   },
   "ttsCostExplanation": {
     "description": "Værktøjstip til visning, når tekst-til-tale-motoren bruges til at læse en besked højt, med omkostningerne ved beskeden.",
-    "message": "Omkostningerne ved at lytte til denne besked er $cost$ $currency$",
+    "message": "$product$ vil opkræve $cost$ $currency$ for at lytte til denne besked",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -280,12 +292,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "Værktøjstip der vises, når en tekst-til-tale motor bruges til at læse en besked højt, og beskeden er gratis. Kan indeholde navnet på udbyderen.",
-    "message": "Denne lyd blev genereret gratis.",
+    "message": "Denne lyd genereres gratis af Inflection AI",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -330,11 +346,11 @@
     "description": "Titlen på knappen til at kopiere teksten af en besked til udklipsholderen."
   },
   "voiceIntroduction_joey": {
-    "message": "Hej! Привет! 你好! Jeg er Pi, din polyglot AI-assistent. Med 29 sprog til min rådighed kan vi udforske ideer og kulturer fra hele verden. Hvad synes du om denne stemme?",
+    "message": "Hej! \nПривет! \n你好! \nJeg er Pi, din polyglot AI-assistent. \nMed 32 sprog på min kommando, kan vi udforske ideer og kulturer fra hele verden. \nHvad synes du om denne stemme?",
     "description": "Introduktion til Joey stemmen."
   },
   "voiceIntroduction_paola": {
-    "message": "Ciao! Bonjour! Hej! Jeg er Pi, og jeg kan tale flydende på 29 sprog. Fra arabisk til ukrainsk, jeg er her for at nedbryde sprogbarrierer. Hvordan lyder denne stemme for dig?",
+    "message": "Ciao! \nBonjour! \nHej! \nJeg er Pi, og jeg kan tale flydende på 32 sprog. \nFra arabisk til ukrainsk, jeg er her for at nedbryde sprogbarrierer. \nHvordan lyder denne stemme for dig?",
     "description": "Introduktion til Paola stemmen."
   },
   "regenerateButtonTitle": {
@@ -354,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "Generer Lyd",
     "description": "Titlen på knappen til at regenerere lyden af en besked. Kan medføre en ubestemt omkostning."
+  },
+  "assistantIsWriting": {
+    "description": "Meddelelse vises, når assistenten skriver sit svar.",
+    "message": "$chatbot$ skriver...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "Værktøjstip, der vises, når brugeren holder markøren over linket til omkostningsforklaring.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "Lær, hvordan $product$ opkræver for lyd"
   }
 }

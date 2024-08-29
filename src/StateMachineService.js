@@ -1,16 +1,20 @@
 import { interpret } from "xstate";
-import { machine } from "./state-machines/SayPiMachine.ts";
+import { createSayPiMachine } from "./state-machines/SayPiMachine.ts";
 import { machine as screenLockMachine } from "./state-machines/ScreenLockMachine.ts";
-import { machine as themeToggleMachine } from "./state-machines/ThemeToggleMachine.ts";
+import { createThemeToggleMachine } from "./state-machines/ThemeToggleMachine.ts";
 import { machine as analyticsMachine } from "./state-machines/SessionAnalyticsMachine.ts";
 import { logger, serializeStateValue } from "./LoggingModule.js";
+import { ChatbotService } from "./chatbots/ChatbotService.ts";
+import { ThemeManager } from "./themes/ThemeManagerModule.ts";
+import EventBus from "./events/EventBus.js";
 
 /**
  * A singleton service that manages the state machine.
  */
 class StateMachineService {
-  constructor() {
-    this.actor = interpret(machine).onTransition((state) => {
+  constructor(chatbot) {
+    const conversationMachine = createSayPiMachine(chatbot);
+    this.actor = interpret(conversationMachine).onTransition((state) => {
       if (state.changed) {
         const fromState = state.history
           ? serializeStateValue(state.history.value)
@@ -38,6 +42,8 @@ class StateMachineService {
     );
     this.screenLockActor.start();
 
+    const themeManager = ThemeManager.getInstance();
+    const themeToggleMachine = createThemeToggleMachine(themeManager);
     this.themeToggleActor = interpret(themeToggleMachine).onTransition(
       (state) => {
         if (state.changed) {
@@ -52,6 +58,10 @@ class StateMachineService {
       }
     );
     this.themeToggleActor.start();
+    // low-coupling link between theme toggle machine and theme manager
+    EventBus.on("saypi:theme:toggle", (event) => {
+      this.themeToggleActor.send("toggle");
+    });
 
     this.analyticsMachineActor = interpret(analyticsMachine).onTransition(
       (state) => {
@@ -71,4 +81,5 @@ class StateMachineService {
 }
 
 // Singleton
-export default new StateMachineService();
+const chatbot = ChatbotService.getChatbot();
+export default new StateMachineService(chatbot);

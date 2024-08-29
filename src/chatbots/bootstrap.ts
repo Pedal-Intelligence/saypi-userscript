@@ -5,6 +5,7 @@ import { ChatHistorySpeechManager } from "../tts/ChatHistoryManager";
 import { Observation } from "../dom/Observation";
 import { VoiceSettings } from "../tts/VoiceMenu";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
+import { ThemeManager } from "../themes/ThemeManagerModule";
 
 export class DOMObserver {
   ttsUiMgr: ChatHistorySpeechManager | null = null;
@@ -18,7 +19,7 @@ export class DOMObserver {
           .filter((node) => node instanceof HTMLElement)
           .forEach((node) => {
             const addedElement = node as HTMLElement;
-            const promptObs = this.findAndDecoratePromptField(addedElement);
+            const promptObs = this.findAndDecoratePrompt(addedElement);
             const ctrlPanelObs = this.findAndDecorateControlPanel(addedElement);
             const sidePanelObs = this.findAndDecorateSidePanel(addedElement);
             if (sidePanelObs.found && sidePanelObs.decorated) {
@@ -45,10 +46,10 @@ export class DOMObserver {
           .filter((node) => node instanceof HTMLElement)
           .forEach((node) => {
             const removedElement = node as HTMLElement;
-            const obs = this.findPromptField(removedElement);
+            const obs = this.findPrompt(removedElement);
             if (obs.found) {
               // Prompt field is being removed, so search for a replacement in the main document
-              this.findAndDecoratePromptField(document.body);
+              this.findAndDecoratePrompt(document.body);
               if (obs.found && obs.isNew && obs.decorated) {
                 // emit event to notify listeners that script content has been loaded
                 EventBus.emit("saypi:ui:content-loaded");
@@ -83,8 +84,29 @@ export class DOMObserver {
     observer.observe(document.body, { childList: true, subtree: true });
   }
 
+  monitorForSubmitButton(ancestor: HTMLElement, runInitial = true): void {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        [...mutation.addedNodes]
+          .filter((node) => node instanceof HTMLElement)
+          .forEach((node) => {
+            const addedElement = node as HTMLElement;
+            const submitButtonObs =
+              this.findAndDecorateSubmitButton(addedElement);
+          });
+      });
+    });
+
+    if (runInitial) {
+      this.findAndDecorateSubmitButton(ancestor);
+    }
+
+    // Start observing
+    observer.observe(ancestor, { childList: true, subtree: true });
+  }
+
   // Function to decorate the prompt input element, and other elements that depend on it
-  decoratePrompt(prompt: HTMLInputElement): void {
+  decoratePrompt(prompt: HTMLElement): void {
     prompt.id = "saypi-prompt";
     const promptParent = prompt.parentElement;
     if (promptParent) {
@@ -92,9 +114,11 @@ export class DOMObserver {
       const promptGrandparent = promptParent.parentElement;
       if (promptGrandparent) {
         promptGrandparent.id = "saypi-prompt-controls-container";
-        this.addIdPromptAncestor(promptGrandparent);
-        this.addIdSubmitButton(promptGrandparent);
-        buttonModule.createCallButton(promptGrandparent, -1);
+        const ancestor = this.addIdPromptAncestor(promptGrandparent);
+        if (ancestor) this.monitorForSubmitButton(ancestor);
+        const submitButtonSearch = this.findSubmitButton(promptGrandparent);
+        const insertionPosition = submitButtonSearch.found ? -1 : 0;
+        buttonModule.createCallButton(promptGrandparent, insertionPosition);
       }
     }
   }
@@ -126,7 +150,8 @@ export class DOMObserver {
     const toggleModeBtnPos = 1;
     buttonModule.createEnterButton(controlPanel, toggleModeBtnPos);
     buttonModule.createExitButton(controlPanel, toggleModeBtnPos);
-    buttonModule.createThemeToggleButton(controlPanel, toggleModeBtnPos + 2);
+    const themeManager = ThemeManager.getInstance();
+    themeManager.createThemeToggleButton(controlPanel, toggleModeBtnPos + 2);
   }
 
   findAndDecorateControlPanel(searchRoot: Element): Observation {
@@ -157,7 +182,6 @@ export class DOMObserver {
   decorateSidePanel(sidePanel: HTMLElement): void {
     sidePanel.id = "saypi-side-panel";
     sidePanel.classList.add("saypi-control-panel"); // the side panel is a secondary control panel for larger screens
-
     const immersiveModeBtnPos = 1;
     buttonModule.createImmersiveModeButton(sidePanel, immersiveModeBtnPos);
   }
@@ -233,28 +257,49 @@ export class DOMObserver {
     );
   }
 
-  addIdSubmitButton(container: Element) {
-    const submitButtons = container.querySelectorAll("button[type=button]");
-    if (submitButtons.length > 0) {
-      const lastSubmitButton = submitButtons[submitButtons.length - 1];
-      lastSubmitButton.id = "saypi-submitButton";
+  findSubmitButton(searchRoot: Element): Observation {
+    const id = "saypi-submitButton";
+    const existingSubmitButton = document.getElementById(id);
+    if (existingSubmitButton) {
+      // Submit button already exists, no need to search
+      return Observation.foundAlreadyDecorated(id, existingSubmitButton);
     }
+
+    const submitButton = searchRoot.querySelector(
+      this.chatbot.getPromptSubmitButtonSelector()
+    );
+    if (submitButton) {
+      return Observation.foundUndecorated(id, submitButton);
+    }
+    return Observation.notFound(id);
   }
 
-  addIdPromptAncestor(container: Element) {
+  decorateSubmitButton(submitButton: HTMLElement): void {
+    submitButton.id = "saypi-submitButton";
+  }
+
+  findAndDecorateSubmitButton(searchRoot: Element): Observation {
+    const obs = this.findSubmitButton(searchRoot);
+    if (obs.isUndecorated()) {
+      this.decorateSubmitButton(obs.target as HTMLElement);
+    }
+    return Observation.foundAndDecorated(obs);
+  }
+
+  addIdPromptAncestor(container: Element): HTMLElement | null {
     // climb up the DOM tree until we find a div with class 'w-full'
     let parent = container.parentElement;
     while (parent) {
       if (parent.classList.contains("w-full")) {
         parent.id = "saypi-prompt-ancestor";
-        return true;
+        return parent as HTMLElement;
       }
       parent = parent.parentElement;
     }
-    return false;
+    return null;
   }
 
-  findPromptField(searchRoot: Element): Observation {
+  findPrompt(searchRoot: Element): Observation {
     const id = "saypi-prompt";
     const existingPrompt = document.getElementById(id);
     if (existingPrompt) {
@@ -271,10 +316,10 @@ export class DOMObserver {
     return Observation.notFound(id);
   }
 
-  findAndDecoratePromptField(searchRoot: Element): Observation {
-    const obs = this.findPromptField(searchRoot);
+  findAndDecoratePrompt(searchRoot: Element): Observation {
+    const obs = this.findPrompt(searchRoot);
     if (obs.found && obs.isNew && !obs.decorated) {
-      this.decoratePrompt(obs.target as HTMLInputElement);
+      this.decoratePrompt(obs.target as HTMLElement);
     }
     return Observation.foundAndDecorated(obs);
   }
@@ -366,6 +411,14 @@ export class DOMObserver {
     if (obs.found && obs.isNew && !obs.decorated) {
       // decorate chat history
       this.decorateChatHistory(obs.target as HTMLElement);
+    } else if (obs.found && obs.decorated) {
+      return Observation.foundAlreadyDecorated(
+        obs.id,
+        obs.target as HTMLElement
+      );
+    }
+    if (!obs.found) {
+      return Observation.notFound("saypi-chat-history");
     }
     return Observation.foundAndDecorated(obs);
   }

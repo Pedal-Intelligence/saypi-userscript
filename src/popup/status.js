@@ -105,8 +105,8 @@ function hideIssueDetailsListener() {
  * The config variable defined below is also used by status-tts.js
  */
 const config = {
-  //apiBaseUrl: "https://localhost:5001", // also add to manifest.json permissions
-  apiBaseUrl: "https://api.saypi.ai", // always change to production URL before publishing
+  // apiBaseUrl: "https://localhost:5001", // DANGER! DEBUGGING ONLY: Also add this URL to host_permissions entry in manifest.json. Remove before publishing.
+  apiBaseUrl: "https://api.saypi.ai", // Always change back to production URL before publishing
 };
 
 function getStatus() {

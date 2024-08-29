@@ -6,6 +6,8 @@ import { machine as audioRetryMachine } from "../state-machines/AudioRetryMachin
 import { logger, serializeStateValue } from "../LoggingModule.js";
 import EventBus from "../events/EventBus.js";
 import { isSafari } from "../UserAgentModule.js";
+import SlowResponseHandler from "../SlowResponseHandler.ts";
+import { CacheBuster } from "../CacheBuster.ts";
 
 export default class AudioModule {
   constructor() {
@@ -74,10 +76,13 @@ export default class AudioModule {
   }
 
   start() {
-    this.findAndDecorateAudioElement();
+    this.findAndDecorateAudioElement(); // need to ensure an audio element exists before registering event listeners
     // audio output (Pi)
     this.audioOutputActor.start();
     this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
+    // handle slow responses from pi.ai - since 2024-07
+    const slowResponseHandler = SlowResponseHandler.getInstance();
+    this.registerAudioErrorEvents(this.audioElement, slowResponseHandler);
     //this.safariErrorHandler.startMonitoring();
     this.registerLifecycleDebug();
 
@@ -114,6 +119,11 @@ export default class AudioModule {
 
   findAndDecorateAudioElement(searchRoot = document) {
     this.audioElement = this.findAudioElement(searchRoot);
+    if (!this.audioElement) {
+      // an audio element is required for audio input/output, so create one if it doesn't exist
+      this.audioElement = new Audio();
+      document.body.appendChild(this.audioElement); // <- this happens too soon for pi.ai, before it loads its own audio element
+    }
     this.decorateAudioElement(this.audioElement);
     this.registerRemovalListener();
   }
@@ -126,6 +136,8 @@ export default class AudioModule {
     this.audioElement = newAudioElement;
     this.decorateAudioElement(this.audioElement);
     this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
+    const slowResponseHandler = SlowResponseHandler.getInstance();
+    this.registerAudioErrorEvents(this.audioElement, slowResponseHandler);
     if (isSafari()) {
       this.registerAudioPlaybackEvents(this.audioElement, this.audioRetryActor);
       this.registerSourceChangeEvents(this.audioElement, this.audioRetryActor);
@@ -280,19 +292,25 @@ export default class AudioModule {
    * When a load event is received, a temporary audio element is created if needed, and the audio file is loaded.
    */
   registerOfflineAudioCommands() {
-    let audio = this.audioElement;
     // audio output (playback) commands
     EventBus.on(
       "audio:load",
       (detail) => {
-        audio = audio || new Audio();
+        const audio = this.findAudioElement(document) || new Audio();
         this.loadAudio(audio, detail.url);
       },
       this
     );
-    EventBus.on("audio:reload", (e) => {
-      audio = audio || new Audio();
+    EventBus.on("audio:reload", (reloadAudioRequest) => {
+      const audio = this.findAudioElement(document) || new Audio();
+      if (reloadAudioRequest?.bypassCache) {
+        const url = audio.src;
+        audio.src = CacheBuster.addCacheBuster(url);
+      }
       audio.load();
+      if (reloadAudioRequest?.playImmediately) {
+        audio.play();
+      }
     });
   }
 
@@ -456,5 +474,20 @@ export default class AudioModule {
       const elapsedtime = (endtime - starttime) / 1000;
       console.debug(`Audio playback ended after ${elapsedtime.toFixed(1)}s`);
     };
+  }
+
+  /**
+   * Register error events on the audio element to handle slow responses from pi.ai
+   * @param {HTMLAudioElement} audioElement
+   * @param {SlowResponseHandler} slowResponseHandler
+   */
+  registerAudioErrorEvents(audioElement, slowResponseHandler) {
+    audioElement.addEventListener("error", (event) => {
+      console.error(
+        `Error playing audio from ${audioElement.currentSrc}`,
+        event
+      );
+      slowResponseHandler.handleAudioError(event);
+    });
   }
 }

@@ -27,7 +27,7 @@ function getLocalMessage(
     locale = "en";
   }
   // if the message is not in the locale object, default to the message name and log an error
-  if (!messages[locale][messageName]) {
+  if (!messages[locale] || !messages[locale][messageName]) {
     console.error(
       `Message not found for locale: ${locale} and message name: ${messageName}`
     );

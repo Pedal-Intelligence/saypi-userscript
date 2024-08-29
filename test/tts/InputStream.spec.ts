@@ -6,7 +6,7 @@ import {
   TextContent,
   getNestedText,
 } from "../../src/tts/InputStream";
-import { max } from "lodash";
+import { PiTextStream } from "../../src/chatbots/Pi";
 
 const intervalMillis = 100; // delay between adding text
 
@@ -66,7 +66,7 @@ test(
   "ElementTextStream emits inner text of added nodes",
   async () => {
     const element = document.createElement("div");
-    const stream = new ElementTextStream(element);
+    const stream = new PiTextStream(element);
     const values: string[] = [];
     const promise = collectStreamValues(stream, values);
     await addText(element, "Hello ");
@@ -82,7 +82,7 @@ test(
   async () => {
     const element = document.createElement("div");
     document.body.appendChild(element);
-    const stream = new ElementTextStream(element);
+    const stream = new PiTextStream(element);
     const values: string[] = [];
     const promise = collectStreamValues(stream, values);
 
@@ -110,7 +110,7 @@ test(
   async () => {
     const element = document.createElement("div");
     document.body.appendChild(element);
-    const stream = new ElementTextStream(element); // no delimiter by default
+    const stream = new PiTextStream(element); // no delimiter by default
     const values: string[] = [];
     const promise = collectStreamValues(stream, values);
 
@@ -135,7 +135,7 @@ test(
     document.body.appendChild(element);
     const includeInitialText = true;
     const options = { includeInitialText };
-    const stream = new ElementTextStream(element, options);
+    const stream = new PiTextStream(element, options);
     const values: string[] = [];
     const promise = collectStreamValues(stream, values);
     await promise;
@@ -149,7 +149,7 @@ test(
   async () => {
     const element = document.createElement("div");
     document.body.appendChild(element);
-    const stream = new ElementTextStream(element);
+    const stream = new PiTextStream(element);
     const values: string[] = [];
     const promise = collectStreamValues(stream, values);
 

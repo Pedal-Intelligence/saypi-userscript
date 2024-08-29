@@ -8,7 +8,7 @@
     "description": "Die Beschreibung der Anwendung."
   },
   "callInProgress": {
-    "message": "Aktives kontinuierliches Zuhören. Klicken, um zu stoppen.",
+    "message": "Beenden Sie das Freisprechgespräch",
     "description": "Der Tooltip, der auf dem Anrufbutton angezeigt wird, wenn ein Anruf läuft."
   },
   "callStarting": {
@@ -16,8 +16,14 @@
     "description": "Der Tooltip, der auf dem Anrufbutton angezeigt wird, wenn ein Anruf beginnt."
   },
   "callNotStarted": {
-    "message": "Klicken, um kontinuierliches Zuhören zu starten.",
-    "description": "Der Tooltip, der auf dem Anrufbutton angezeigt wird, bevor ein Anruf gestartet wird."
+    "message": "Beginnen Sie ein freihändiges Gespräch mit $chatbot$",
+    "description": "Der Tooltip, der auf dem Anrufbutton angezeigt wird, bevor ein Anruf gestartet wird.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callError": {
     "message": "Nicht schwerwiegender Fehler aufgetreten. Keine Panik, wir hören weiterhin zu.",
@@ -248,7 +254,13 @@
   },
   "enhancedVoice": {
     "description": "Titel (Tooltip) für Sag, Pi verbesserte Stimmen.",
-    "message": "Von Say, Pi verbesserte Stimme"
+    "message": "Stimme verbessert durch $product$",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "previewProgress": {
     "description": "Die anzuzeigende Nachricht, wenn der Benutzer eine Funktion vorschaut, die ein Zeichenlimit hat.",
@@ -289,7 +301,7 @@
   },
   "ttsCostExplanation": {
     "description": "Der Tooltip, der angezeigt wird, wenn die Text-zu-Sprache-Engine verwendet wird, um eine Nachricht laut vorzulesen, mit den Kosten der Nachricht.",
-    "message": "Die Kosten für das Anhören dieser Nachricht betragen $cost$ $currency$",
+    "message": "Für das Abhören dieser Nachricht berechnet $product$ $cost$ $currency$",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -298,12 +310,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "Der Tooltip, der angezeigt wird, wenn eine Text-zu-Sprache-Engine verwendet wird, um eine Nachricht laut vorzulesen, und die Nachricht ist kostenlos. Könnte den Namen des Anbieters enthalten.",
-    "message": "Dieses Audio wurde kostenlos erstellt.",
+    "message": "Dieses Audio wird kostenlos von Inflection AI generiert",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -330,11 +346,11 @@
     "description": "Der Titel des Buttons, um den Text einer Nachricht in die Zwischenablage zu kopieren."
   },
   "voiceIntroduction_joey": {
-    "message": "Hallo! Привет! 你好! Ich bin Pi, dein mehrsprachiger KI-Assistent. Mit 29 Sprachen zu meiner Verfügung können wir Ideen und Kulturen aus der ganzen Welt erkunden. Was hältst du von dieser Stimme?",
+    "message": "Hola! \nBitte! \nJa! \nIch bin Pi, Ihr polyglotter KI-Assistent. \nDa ich 32 Sprachen beherrsche, können wir Ideen und Kulturen aus der ganzen Welt erkunden. \nWas halten Sie von dieser Stimme?",
     "description": "Einführung für die Joey-Stimme."
   },
   "voiceIntroduction_paola": {
-    "message": "Ciao! Bonjour! Hallo! Ich bin Pi und ich kann fließend in 29 Sprachen kommunizieren. Von Arabisch bis Ukrainisch, ich bin hier, um Sprachbarrieren abzubauen. Wie klingt diese Stimme für Sie?",
+    "message": "Ciao! \nBonjour! \nHallo! \nIch bin Pi und kann mich fließend in 32 Sprachen unterhalten. \nVon Arabisch bis Ukrainisch bin ich hier, um Sprachbarrieren abzubauen. \nWie klingt diese Stimme für Sie?",
     "description": "Einführung für die Paola-Stimme."
   },
   "regenerateButtonTitle": {
@@ -354,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "Audio generieren",
     "description": "Der Titel des Buttons zur Regenerierung der Audio eines Nachricht. Kann unbestimmte Kosten verursachen."
+  },
+  "assistantIsWriting": {
+    "description": "Meldung, die angezeigt wird, wenn der Assistent seine Antwort eingibt.",
+    "message": "$chatbot$ schreibt...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "Der Tooltip, der angezeigt wird, wenn der Benutzer mit der Maus über den Link zur Kostenerklärung fährt.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "Erfahren Sie, wie $product$ Audiogebühren berechnet"
   }
 }

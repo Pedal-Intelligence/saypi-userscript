@@ -1,55 +1,7 @@
 import { Observable, ReplaySubject, Subject } from "rxjs";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
-import { time } from "console";
 
 export const STREAM_TIMEOUT: number = 10000; // visible for testing
-const DATA_TIMEOUT = 1000;
-const DEFAULT_ADDITIONAL_TIMEOUT = 0;
-// Timeout values above base for different languages - derived from empirical testing on pi.ai
-const LANGUAGE_TIMEOUTS: { [key: string]: number } = {
-  en: 0,
-  ar: 1250,
-  de: 250,
-  es: 250,
-  fr: 1500,
-  hi: 1500,
-  it: 0,
-  nl: 0,
-  pl: 750,
-  pt: 1000,
-  ja: 1000,
-  ko: 1250,
-  ru: 2500,
-  uk: 2250,
-  zh: 0,
-  bg: 1500,
-  hr: 250,
-  cs: 750,
-  da: 1500,
-  tl: 250,
-  fi: 250,
-  el: 1250,
-  id: 0,
-  ms: 1000,
-  ro: 750,
-  sk: 1000,
-  sv: 1250,
-  ta: 500,
-  tr: 750,
-};
-
-function calculateDataTimeout(text: string, lang: string): number {
-  // Extract the base language code (e.g., 'en' from 'en-US')
-  const baseLanguage = lang.split("-")[0];
-
-  const additionalTimeout =
-    LANGUAGE_TIMEOUTS[baseLanguage] ?? DEFAULT_ADDITIONAL_TIMEOUT;
-  const totalTime = DATA_TIMEOUT + additionalTimeout;
-  console.debug(
-    `Timeout for "${text}" in ${lang} (base: ${baseLanguage}) is ${totalTime}ms (${DATA_TIMEOUT} + ${additionalTimeout})`
-  );
-  return totalTime;
-}
 
 // Visible for testing
 export function getNestedText(node: HTMLElement): string {
@@ -59,7 +11,7 @@ export interface InputStreamOptions {
   includeInitialText?: boolean;
   delimiter?: string;
 }
-export interface TextContent {
+interface TextContent {
   text: string;
   changed: boolean;
   changedFrom: string | null;
@@ -85,6 +37,8 @@ class ChangedText extends TextItem {
   }
 }
 
+export { TextContent, TextItem, AddedText, ChangedText };
+
 export class LateChangeEvent {
   constructor(
     public msAfterClose: number,
@@ -93,12 +47,12 @@ export class LateChangeEvent {
   ) {}
 }
 
-type Completion = {
+export type Completion = {
   type: "eod" | "timeout" | "disconnect";
   time: number;
 };
 
-export class ElementTextStream {
+export abstract class ElementTextStream {
   protected subject: Subject<TextContent>;
   private lateChangeSubject = new Subject<LateChangeEvent>();
   protected observer!: MutationObserver;
@@ -110,6 +64,7 @@ export class ElementTextStream {
   protected languageGuess: string = ""; // the language of the content in the element - guessed from user preferences
   private completionReason: Completion | null = null;
   private completed = false; // whether the stream has completed (reduntant check for subject.closed)
+  private streamStartTime: number;
 
   constructor(
     protected element: HTMLElement,
@@ -135,6 +90,11 @@ export class ElementTextStream {
       },
     });
     this.resetStreamTimeout(); // set the initial timeout
+    this.streamStartTime = Date.now();
+    console.debug(
+      "Starting stream on",
+      this.element.id ? this.element.id : this.element
+    );
     if (includeInitialText) {
       this.emitInitialText(element); // emit the initial text
     }
@@ -166,13 +126,14 @@ export class ElementTextStream {
       return;
     }
     this.completionReason = reason;
+    const streamDuration = Date.now() - this.streamStartTime;
     console.debug(
-      `Completing stream on ${reason.type}`,
+      `Completing stream on ${reason.type}, ${streamDuration}ms after starting.`,
       this.element.id ? this.element.id : this.element
     );
     this.subject.complete();
     this.completed = true;
-    //this.disconnect(); // stop observing the element - leave open for debugging
+    //this.disconnect(); // stop observing the element - leave open for debugging to see if the stream is still active
   }
 
   /**
@@ -193,17 +154,21 @@ export class ElementTextStream {
     }
   }
 
+  protected calculateStreamTimeout(): number {
+    return STREAM_TIMEOUT;
+  }
+
   /**
    * The stream will complete if no new text is streamed for a certain duration.
    * This method resets the timeout.
    */
-  private resetStreamTimeout(): void {
+  protected resetStreamTimeout(): void {
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
     this.timeout = setTimeout(() => {
       this.complete({ type: "timeout", time: Date.now() });
-    }, STREAM_TIMEOUT);
+    }, this.calculateStreamTimeout());
   }
 
   protected getTextIsStable(): boolean {
@@ -211,99 +176,6 @@ export class ElementTextStream {
   }
 
   protected registerObserver(): void {
-    let lastParagraphAdded = this.element.querySelectorAll("div")?.item(0);
-    let spansAdded = 0;
-    let spansRemoved = 0;
-    let spansReplaced = 0;
-    let stillChanging = false;
-
-    const handleMutationEvent = (mutation: MutationRecord) => {
-      if (this.closed()) {
-        console.debug(
-          `Skipping change event on ${mutation.target} because the stream has already been completed`,
-          mutation
-        );
-        return;
-      }
-
-      if (mutation.type === "childList") {
-        for (let i = 0; i < mutation.removedNodes.length; i++) {
-          const node = mutation.removedNodes[i];
-          if (node.nodeType === Node.ELEMENT_NODE) {
-            const element = node as HTMLElement;
-            if (element.tagName === "SPAN") {
-              spansRemoved++;
-            }
-          }
-        }
-        for (let i = 0; i < mutation.addedNodes.length; i++) {
-          stillChanging = true;
-          const node = mutation.addedNodes[i];
-          if (node.nodeType === Node.ELEMENT_NODE) {
-            const element = node as HTMLElement;
-            if (element.tagName === "SPAN") {
-              spansAdded++;
-            } else if (element.tagName === "DIV") {
-              const paragraph = element as HTMLDivElement;
-              lastParagraphAdded = paragraph;
-            }
-          } else if (node.nodeType === Node.TEXT_NODE) {
-            const textNode = node as Text;
-            const content = textNode.textContent || "";
-            this.next(new AddedText(content || ""));
-            spansReplaced++;
-            // we're finished when the paragraph has no more preliminary content
-            const paragraph = textNode.parentElement;
-            const spansRemaining =
-              paragraph?.querySelectorAll("span")?.length || 0;
-            const isFinalParagraph = paragraph === lastParagraphAdded;
-
-            if (
-              spansReplaced >= spansRemoved &&
-              spansReplaced >= spansAdded &&
-              spansRemaining === 0 &&
-              isFinalParagraph
-            ) {
-              stillChanging = false;
-              // complete soon if not still changing
-              const startTime = Date.now();
-              const additionsRemaining = mutation.addedNodes.length - i - 1;
-              console.debug(
-                `${startTime}: Possible end of stream detected on ${content}, ${additionsRemaining} additions remaining.`
-              );
-              setTimeout(() => {
-                if (!stillChanging) {
-                  const timeElapsed = Date.now() - startTime;
-                  const lastContent = this.emittedValues.slice(-1)[0]?.text;
-                  console.debug(
-                    `${Date.now()}: end of stream confirmed on "${lastContent}" after +${timeElapsed}ms`
-                  );
-                  this.complete({ type: "eod", time: Date.now() });
-                }
-              }, calculateDataTimeout(content, this.languageGuess));
-            }
-          }
-        }
-      } else if (mutation.type === "characterData") {
-        const textNode = mutation.target as Text;
-        const content = textNode.textContent;
-        // text node content changed from "${mutation.oldValue}" to "${content}"`
-        // emit a change event only if the old value is present in the already emitted values
-        const oldValue = mutation.oldValue || "";
-        const alreadyEmitted = this.emittedValues.some(
-          (value) => value.text === oldValue
-        );
-        if (alreadyEmitted) {
-          stillChanging = true;
-          this.next(new ChangedText(content || "", oldValue));
-        } else {
-          console.debug(
-            `Skipping change event for "${content}" because the old value "${oldValue}" was not emitted`
-          );
-        }
-      }
-    };
-
     const contentMutationHandler = (mutationsList: MutationRecord[]) => {
       if (this.closed()) {
         const timeSinceCompletion = Date.now() - this.completionReason!.time;
@@ -318,7 +190,7 @@ export class ElementTextStream {
         this.disconnect();
         return;
       }
-      mutationsList.forEach((mutation) => handleMutationEvent(mutation));
+      mutationsList.forEach((mutation) => this.handleMutationEvent(mutation));
     };
 
     this.observer = new MutationObserver(contentMutationHandler);
@@ -350,4 +222,6 @@ export class ElementTextStream {
   getObserver(): MutationObserver {
     return this.observer;
   }
+
+  abstract handleMutationEvent(mutation: MutationRecord): void;
 }

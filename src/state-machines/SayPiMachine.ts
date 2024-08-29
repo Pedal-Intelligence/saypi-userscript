@@ -13,13 +13,8 @@ import {
   TextualNotificationsModule,
   VisualNotificationsModule,
 } from "../NotificationsModule";
-import { ImmersionService } from "../ImmersionService.js";
 import {
   uploadAudioWithRetry,
-  getDraftPrompt,
-  setDraftPrompt,
-  setUserMessage,
-  setFinalPrompt,
   isTranscriptionPending,
   clearPendingTranscriptions,
 } from "../TranscriptionModule";
@@ -31,6 +26,8 @@ import AudioControlsModule from "../audio/AudioControlsModule";
 import { requestWakeLock, releaseWakeLock } from "../WakeLockModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import getMessage from "../i18n";
+import { Chatbot, UserPrompt } from "../chatbots/Chatbot";
+import { ImmersionStateChecker } from "../ImmersionServiceLite";
 
 type SayPiTranscribedEvent = {
   type: "saypi:transcribed";
@@ -74,6 +71,7 @@ type SayPiEvent =
   | { type: "saypi:piStoppedSpeaking" }
   | { type: "saypi:piFinishedSpeaking" }
   | { type: "saypi:submit" }
+  | { type: "saypi:promptReady" }
   | { type: "saypi:call" }
   | { type: "saypi:callReady" }
   | { type: "saypi:callFailed" }
@@ -81,7 +79,9 @@ type SayPiEvent =
   | { type: "saypi:visible" }
   | SayPiAudioConnectedEvent
   | SayPiAudioReconnectEvent
-  | SayPiSessionAssignedEvent;
+  | SayPiSessionAssignedEvent
+  | { type: "saypi:piWriting" }
+  | { type: "saypi:piStoppedWriting" };
 
 interface SayPiContext {
   transcriptions: Record<number, string>;
@@ -124,6 +124,7 @@ type SayPiStateSchema = {
     responding: {
       states: {
         piThinking: {};
+        piWriting: {};
         piSpeaking: {};
       };
     };
@@ -169,24 +170,64 @@ userPreferences.getLanguage().then((language) => {
   mergeService = new TranscriptMergeService(apiServerUrl, language);
 });
 
-export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
+let chatbot: Chatbot;
+function getPromptOrNull(): UserPrompt | null {
+  if (!chatbot) {
+    console.error("Chatbot not initialized when requested by state machine.");
+  }
+  const promptElement = document.getElementById("saypi-prompt");
+  if (chatbot && promptElement) {
+    return chatbot.getPrompt(promptElement);
+  }
+  console.warn("Prompt element not found when requested by state machine.");
+  return null;
+}
+function getChatbotDefaultPlaceholder(): string {
+  if (!chatbot) {
+    console.error("Chatbot not initialized when requested by state machine.");
+  }
+  const promptElement = document.getElementById("saypi-prompt");
+  if (chatbot && promptElement) {
+    return chatbot.getPrompt(promptElement).getDefaultPlaceholderText();
+  }
+  console.warn("Prompt element not found when requested by state machine.");
+  // TODO assign the default placeholder text on "saypi:ui:content-loaded" event
+  // 1. EventModule handles "saypi:ui:content-loaded" event (checkmark)
+  // 2. Sends "saypi:prompt-ready" event to the state machine (checkmark)
+  // 3. State machine assigns the default placeholder text to the context, as an internal state transition from "inactive" to "inactive" (checkmark)
+  return "";
+}
+const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCRKANiwNoAMAuoqHQHtYWMgPx8QAD0QBOAEwAaEGkQAOAKwycc9apkA2AMw71AdgAspuQF9rS2tjyFSFarQYIGAZTpgUAawIoLl4kEEFhUXEw6QRzAEY5OW14+NN9OVNOXXVFZUREw0McTnN1M05VQ3NOU1NVW3t0R2Y2LxIUACcyfCgadA9WlgAlPwg0EIkIkSwxCVjzOXMcePNVRfMMzjl4w1N1JRU4jRxzTcMzUxkL-XLzRpAHXCH2rp6+90YACxRegFc6JMwtMovM1HkjvFONkcOpKjJODdNmYbHZHs1nqwWK9ukF+vRGEMAGIoLAsSBA-hCGZzGKIczVFZrDZbHZ7A75BDxa6wwwyfllHbyTQPJ44F4dXG9KiSWAdEhgHAoABmCs6AAo5NDoQBKfEtLE496U8LU0F0uKM1brJas3b7Q6IaqcHD8wyJOQyRbVGqGUUYnAsLBysD4PGfTxYAAqXwIgV6JpBs2ioFiRVMxU2qTkGkMVU2pkdCDZyXqboS9ShiP9mFwQZDYelEe8vgCQUTZuTYIQRSqp302dz+f0hc5WtUyRzMgnqisGeraLF9YVjY+A0Y5GDWAARuSO5Euxb4iPinzsrsfbp4kXVu7XfE4boGfsEn7FwHl6Hw+uECg-hBZiYMR8DAUgKR4KZO1pVMClueJtDkW4Jx0Ko9hkG8inUfstU4fR+XiPQzhrRxP1XfEPD-ACBAQTpQOA0CSH3GkUykWDclOdZ1GPGR1EFC4i0w1RtE0Y8igZIxNmIutgxXb8CQQWA4GEMRf1gYQoBAiAmPNGCuX0cwtGMRZVFUTgCJM7YBMQ+DTIHVI9CuWcpMDGSv16HBaKIAROgApsfx+f5AQg4EoJYtM9kzOyc3UPNqhHDCLmw6E8JkAivWc0igg8uifKy-ABBIHw-HjNd5L+RTOiJAhgy+SAirbBNgqpA9oNYntYv7QcYuHUcji1O8yysYx0jhSwMtc1dsq83L3PywrWxK8jGHKsBOnqkrtMPXSHJwfRZzWGKvTSVRr05bl6hwMsB3qHQsgscaGyyzzvN8qAcBWtaFrkjwPvaAQ6F8CB1vbJrTRasLEBHLRtWhXJuNMwwiy1K5Lr0Gc50MbZ7nfWsXMe9znpmt7fq+vyyoqv6Abq0ngniUJmuY7soZKGG4bwhGke2LQpyGzJbmyB7ZPcrz8EoKU3uIIg-gAWz+FgUHeKgIDERUCHIAR-EVaXVpgAB5OgyGlmSsCITbWtiKE1lOdJjH5Xi5EMeKx3KYp9G2IwzLOSxsaaXHMuFsQxfeJUiCl2X5cV1bOm8nA6Aj5VvOlnBtc6PWDawI25RNs2Ia5UotFWb1sjMvQeKRzYXVWHjLFMbkDAFnGSImrKRaDrLJZluWFe+xgSE6X5YCITod3A+mwcZi0DGKHZ1mMPCDJkDMkfdZI8LsixUquH30T95uA9F1bg478Pu7Jjw+4HoeR5JMlR8g8Hux2TYSgyLNSgzTYkaMfQcEx3RHeuHUE628lx7zeq3Q+7dQ6dwjj3BAF98CD2HtuSAABRaWBsJigyTObRAT8f64VtJbD++gkYZlMDgWyZlrhGAuILNy4DA6QPcsfLuitZTykVCqNU6pYB-G3JnZS+AAAiYB5ZoD1KA-GjCD7ixDmHNhIMx44NzqsRIKROJVFrrOTISNyjwSsJkT2novSL3oZNCBci+ECJEIrHO3ZuI-ysPpC48hPT6VUHosyu0+TGEwmyeI5iW5MLkQgpBO44FhKvigrS2DQrdi4ssGeWQTIoSyBCPBBllgaCWFkPYWoeJBP3m3dyUTkGRP7og6JYAb7klico+JFpEkaJSROXQ6Sv5JEodkUyZl9EMnUEUmRJS3plIiWfXulTwkxPQZg+xTTVgtMqG02clkxxZGyT0icuxyhehAR+MBOAo7eVeCQcqRzOjR06LAGUcoFZcNVKtdUcJdT6mktIi5VzTnnOOdc+ZulPQMl-gyDQCRSgVg5H1LiLpTK6GuNULI2R9DOVorAQQ+BXpLQQAFKAAJ-ltQSF0nYaQMhZByBkhAqh9A-xoVOExtkGiN1wKi9FmKIwk2Kko++E9dIMitgiO6awRyWFIWdW4FCkhwn0rsHQ50UVwFZVlBgMY4xwJbJyxqDSH5NO2FhAipQqX8gyJoG8Zxki8XUFsaopkyjyrRWIV6scsDAwmZGSmgMXXBDidq3SuQBL7CwsYUSZkrhejfL7RwLKHVKudTTLF3gSD-Q9TTdgdNuU6QJR6FIJKjHkqLCdH+4kDq3BHGYGQdrFXuXVQ1UqHgGBVTDLAWqQMU3ep5W1KwAleJaFSuUco6QCy8QrdGqtsaNW1uWhTVtWr22xEfC6PJ+FERu2nKankpR7Z8lSpwdKTLsr2oxVlD6ABJfAapOgAkVuyimiaqYtvHfiuduqVg2sNQYHQ6ExValdNOMo3JqV8kWMOw97kT1nqjpeuBv1b3JofWmkKPq2oZAEm7F0CQYqaBqHUJYb40T5QgHACQTx01bTagAWlFUcCw2hqV4WMKZL0+l9m4wIMQMglASO4J7AOzqIq1g5idkcPQ8FHZu2RJa9I-JnISjeEETjudFg3gHJdalT4RxmXzoyiN7yhZQHk92KlprFmOwnGUKw2x3RDKmi9OTCHZ0FGqDeKwWgqWmVSENYaVnCaOrmp6-TR4oSnlKBJC4ZRhScyhCUPkOSGR5k2Mivd-s3reaPVO8d-ndIEQpedYornsgfvrvUKzlj3gZbarsT9fVJUrAMGULiiE+mmGKyEo+0CT6lbsxm2ICIsIzzKO6Xiegihf3Ykiz2ewTwJe03jXT4oWtZWsUbEgHWGZdYKFcGyHp3SYxqNyculrYTlH2sYcFeZmuyODmM7ctnVukYtrOPRbtulltEqsbYVnfnfPgJ1u7eC4TwUIVqGKNs8JIySDC3CO2HYDlqB9y5Jz5TnPyp0aWrAyuxFuskQH2QJsAIElCH+sL33V0SMxpuHzPuI9gJ87y33btcZ0AZF+4Pgff0q3gi4yRbKJF4msfY6w4dfKpzT65OArs1NJHU9Hf3F7M6B7j0HzszjPdMROWjDJBcI4Vj8+HoujZEFQbr6XxZNAUOx6zvH6zIt-x4kYBEgGyfMoVSOvTP2uMMmhK6WotQhUWHSDeB808eJVB0JDvJwHHXKtjPgEqxuK7LDdsa5CiJdAYX0pdW3DtdkiqmzvSNzuQNvWrbHt3udecUKKCOE6UIJx1BvFxH+ajyjQkXgyJYEfUurVPeeyDvQ493FhEsJIeZMh6CUzCb2pdzju0GbYawQA */
+    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCdATgPYC2dJASmChGgDaABgC6iUHVawsZVvgkgAHogAsAJgCMAZhzDhADm0BWTaoPqDANgDsxgDQg0idcPXqcZzceP6AnDaq2uqqAL6hjrTYeISkFNS0DAhEKAA2qSLiSCBSMnIK2SoIfuqOzggGxn446sYGflbBPoE26uGR6NEExGSUNOhJDADKdHwA1gRQmYq5sljyikWqmu41mpo2Vuo2wnXGpU6IK9q6wqrNhtqqwjY2Bu0gUbgp6UMkKMxk+FD99IwvqV4-CEYhm0jmC0KahCnnMGlUWzcOjsZTUlRwqgRJlufhMVh8YQij06zzSqTeHy+P0SjAAFihvgBXOjTbKzfKLRAWVEITT6Yw4Xz1YR4hHGVoPJ44AEUz6TX5JAEAMRQWFSkFZknBHKhCCCqlhBnhiK02hRh15uMF2j8tvOWhKVUlJOlZNlVKoSlg7xIYBwKAAZr7mAAKVz6YQASl+0Rl7zl301OW18wKoCWV0NxtcpvN5Suwhwtu0K3Ufg0V2u2mdmFwqSw3rA+HlNKYWAAKrSCBNE6C2SnIenECcbLoEetLMZtEYETYeaaPHdi8s7nyRTXovXG83vgrGMNRige1M+1q8qnOQgTkYMVYJ5Vp1dbPPDB5LH4LAZWqP10SpVvfR3akBkYcgGywAAjdUk3ZC9dU0WxdBtXYdErOpNB5MwSyLbxdiNM1jGWas-xdACmxbECEBQRkIHmZJ5HwMBSA1U9k3PQdlCOfFNBqdR8QsWojDNPxMJOAUEXDKxbU0epMQ3OsG0Aii-iomi6OYJiGKYkgYIHNNON5fEPDhUwpMI-YTB5MSDBqKoEJOIJGgReScDIoC9wQWA4BkeQqNgGQoEYiBdPY-SigQ1RqmCDQDAMYQZNitwrL4ni4rvdZ6hsD8bBctzJhwDSiFYZhaN3Vt6SZFlWNgjiihHMd0snR9Z1Ekxb0k6TZNyxTyO+ArNJK-L8FYEgRnGZSkkZLzmCVAgG1pSAxqPSYQohMLh0fW97ynGdnwtVxsKXVpgk2XxVBykja1cnqgP6orBr64bRsPY8PKmsBmCW49Vp1IcKgCHArC-cwp3LDYDAwi1NACGylzvO5ah2QJuu3fLCuK0qoBwd7PpeibGBxt5WDoUYIC+lbqr0y9bGqCN+S0KS4u0F8spwJdP2-bQ3EJDorryvr0YerHCbxsrKMJkhidJ8nE00LIzzW6nWbp3YGY-EUXzLGpMvUE78V2FGlL6or8EoBMseIIhGXYRlUhQD0IHkP0CHIVgxj9dgPpgAB5LgsHYRSsCIH64L+vlzAxTZgltQjdb28painQG3EaeLMXOnniT5m78pNs2qX9IgrZtu2PQ+thmBwOhS4DYr2BwT3mB9v2A+9IOQ9qo4zmqMwK12eL6j8Bx9oRQszCH86bGhhoDcuzcc+N+R8-yy3rdt+38YQEhmAZWAiGYSCWPltjFd1BpdC0fC+PLW1R3nEsPCk9LAj8DZy0N3qsbzj6C9XkuN7Fipbeu996HxVGqI+YJQqXi0AiPQWxxxnFHAiecjQrA4C5nUbQUkzSrkzv+BeX8l4-xXkXNepdN7APwHvA+EFIAAFFOAkBBMfGq60ECwPQcIBBd4kFPnnKOGwOA0rxVxI0EwH9brf3NoXYu68PReh9H6QMwYQywEZBBVuPl8AABEwB2zQNGAhqNF6mxIX1P+8iKasKpvBZYb4ZLnCMFPL82x5w+B4q0bYacyw3wurzeeJiiFmJkeozRsgPQd3YQhBobM+JBCqO4Bo5h3HxUBjaYIYlTSaEkbnYhMiqE0MgpQne1DQF0OCpTaBupTAGkvjsWKgkdgHATpFA0lQQg7DNK4IeuTTHLz6oU8pJSQG0LAOA9UlSbHVL+rUtYX5DAWDqM01Bqw4p1H0N4WpEi54KSCdKfJBchm0JGWUsZEBGFcBYVA0+syzDzIaUshZLSXA7HaXhCwOgfDlnwaRQhOBy7FQpCQKaALmAV1gJ6b09tlFBg+iGXw+gjF-P2YCz6PpQVotgFEmB5YkJBEqMsM4K5h4J1MIWdZ9QHI7F2FYFyGlYBSHwJjDyFUoDMhxbqexDiNhbB2HsF5FQrDoLEe+XxaV7i7P6oy+QLLWwi3Gr2aZtyDL6hsn4G4NxzC2HOlYTC+IhHuF8FYIitRob+KztEBlTLMZVw7F2fAr1WwHkVSeZVv0DK+FqJ4OK2rbRbCqJhTEHhzKIiuL64w9K4A2vygwTs3ZN4MAAOoHypJy2Z3D0F3muEjA6dRRLlkFOcMN5gziRqlda2VsasAy2AipYYksSaLVFm6m5Hqij7CsnYAUwR7LxSyniqNMrmXVtrR5BtUtm2usEHLNtodVWljWLy7xAqeQQ3QY5EG+JbDij8EOmNfUXXLUAYMLAs1mywAWmTFt6aDKtCsoRaor8fDNBNTu35V1K0jsPTWltb1pq1tvR2-ubMRTSRFFYYQH4g1WjLRWcD78K3RqrT+lNcwT37l-dOqpKrygyRuLCLZ-hAjRUcBmKKQQ7D7pQ1jZNqbE01sbaTNDaacPtrUDaDBlHSVHDsD3ZYPhiNBBCNR79wtpoAEl8DBmYMyD08qANMance1t-YZmercAKfDfqGi1BElDRERYPznGhsKm0GhRO2pxlJmTcnN4S0nde6ds61MqqKFsKykHCwCZMOWG4rQgjhCJMNCAcBFBPDnZ3BAABaBoPJAg1GFV5k4NpcRUald0OIlBIvsLNCaraurzCWHjlyV+GDhVnHxMYWwUk91SrjJSSYOXLwaH1Z44VdRZzxW7pKgJeyjZQGa7qawQb7nYKZraSoGr9h9KxoLTGQ2w5XEwq0ao1g4pTdqBkulUr+ZzYGrap6tbFsGXWCKDBlWrgmHOI6F8fI9A2g6UEacCIdt9euvs+b+UFUqZO+FbkUMAi6HW6rKoM87izYOSEqkf2jg2nnEazwM8h4im4SKD9gSBtQ4GRbMh-8YeufY8UXY8zzglkIlS5m+0jJ6Gq2nPLo43uWv65-bH5isZhIDiQAnCsidv1SqWEsXNrjQ3nMWwUPhgbBGJdOSH0ijmlKKRBJrhP53-bnPtOnwjdhZXsmYNwkO0XAqmrDjhvgeLcPcLsPL2D9MJyt9rxJTkjC2EN+CoFGLYA4GGswdgaRTeIw8Jb1wU4o5SSsnydB6zdMTxWBjlnt0jee7BRCgPj74FW9D2gu3LgTAeGj7aVw9Q+JM+MVjpP9tMXu+YF745YDVSTLTwDYP1uw857N5iR3N8LBJcC7t-5FeQVe6xQ3IO9Dq9N6ES3rPtuBH3cwUPRoGrzPx+lQewbquovRZSVDbwF9F9TaMFBgIlnq3xsdSr3nau1CQYNJBgNAkRT5qhtgg0WVqu62+bq0vLov22qPceKboROdBgtgquHyBYLcJhKZIRoJlBiRiJkhsOv-lgCxpfifETsIJhHFEIl4HAQEMJqvn-t9pJtJuXHZt8KbucIRIKCEO4NONsPUPqiThnIPFiCnOWuEEAA */
     context: {
       transcriptions: {},
       isTranscribing: false,
       lastState: "inactive",
       userIsSpeaking: false,
       timeUserStoppedSpeaking: 0,
-      defaultPlaceholderText: "Talk to Pi",
+      defaultPlaceholderText: "",
     },
     id: "sayPi",
     initial: "inactive",
     states: {
       inactive: {
         description: "Idle state, not listening or speaking. Privacy mode.",
-        exit: assign({ lastState: "inactive" }),
+        exit: assign({
+          lastState: "inactive",
+        }),
         on: {
+          "saypi:promptReady": {
+            target: "inactive",
+            internal: true,
+            actions: [
+              assign({
+                defaultPlaceholderText: (context, event) =>
+                  getChatbotDefaultPlaceholder(),
+              }),
+            ],
+            description: `Update the context when the prompt area has been loaded in the UI.`,
+          },
           "saypi:call": {
             target: "#sayPi.callStarting",
             description:
@@ -610,7 +651,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     entry: {
                       type: "showNotification",
                       params: {
-                        message: getMessage("audioInputError", "Pi"),
+                        message: getMessage("audioInputError", "Say, Pi"),
                         icon: "microphone-muted",
                       },
                     },
@@ -706,6 +747,9 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               "saypi:piSpeaking": {
                 target: "piSpeaking",
               },
+              "saypi:piWriting": {
+                target: "piWriting",
+              },
             },
             entry: [
               {
@@ -787,6 +831,23 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             ],
             description:
               "Pi's synthesised speech audio is playing.\nPlayful animation.",
+          },
+          piWriting: {
+            on: {
+              "saypi:piSpeaking": {
+                target: "piSpeaking",
+              },
+              "saypi:piStoppedWriting": {
+                target: "#sayPi.listening",
+              },
+            },
+            entry: {
+              type: "writingPrompt",
+            },
+            exit: {
+              type: "clearPrompt",
+            },
+            description: "Pi's text response is being streamed to the page.",
           },
           userInterrupting: {
             on: {
@@ -889,7 +950,7 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       acquireMicrophone: (context, event) => {
         // warmup the microphone on idle in mobile view,
         // since there's no mouseover event to trigger it
-        if (ImmersionService.isViewImmersive()) {
+        if (ImmersionStateChecker.isViewImmersive()) {
           EventBus.emit("audio:setupRecording");
         }
       },
@@ -942,52 +1003,61 @@ export const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
 
       listenPrompt: () => {
-        const message = getMessage("assistantIsListening", "Pi");
+        const message = getMessage("assistantIsListening", chatbot.getName());
         if (message) {
-          setUserMessage(message);
+          getPromptOrNull()?.setMessage(message);
         }
       },
       callStartingPrompt: () => {
         const message = getMessage("callStarting");
         if (message) {
-          const initialText = getDraftPrompt();
+          const initialText = getPromptOrNull()?.getDraft();
           assign({ defaultPlaceholderText: initialText });
-          setUserMessage(message);
+          getPromptOrNull()?.setMessage(message);
         }
       },
       thinkingPrompt: () => {
-        const message = getMessage("assistantIsThinking", "Pi");
+        const message = getMessage("assistantIsThinking", chatbot.getName());
         if (message) {
-          setUserMessage(message);
+          getPromptOrNull()?.setMessage(message);
+        }
+      },
+      writingPrompt: () => {
+        const message = getMessage("assistantIsWriting", chatbot.getName());
+        if (message) {
+          getPromptOrNull()?.setMessage(message);
         }
       },
       speakingPrompt: () => {
-        const message = getMessage("assistantIsSpeaking", "Pi");
+        const message = getMessage("assistantIsSpeaking", chatbot.getName());
         if (message) {
-          setUserMessage(message);
+          getPromptOrNull()?.setMessage(message);
         }
       },
       interruptingPiPrompt: () => {
-        const message = getMessage("userStartedInterrupting", "Pi");
+        const message = getMessage(
+          "userStartedInterrupting",
+          chatbot.getName()
+        );
         if (message) {
-          setUserMessage(message);
+          getPromptOrNull()?.setMessage(message);
         }
       },
       clearPrompt: (context: SayPiContext) => {
-        setUserMessage(context.defaultPlaceholderText);
+        getPromptOrNull()?.setMessage(context.defaultPlaceholderText);
       },
       draftPrompt: (context: SayPiContext) => {
-        const prompt = mergeService
+        const text = mergeService
           .mergeTranscriptsLocal(context.transcriptions)
           .trim();
-        if (prompt) setDraftPrompt(prompt);
+        if (text) getPromptOrNull()?.setDraft(text);
       },
 
       mergeAndSubmitTranscript: (context: SayPiContext) => {
-        const prompt = mergeService
+        const text = mergeService
           .mergeTranscriptsLocal(context.transcriptions)
           .trim();
-        if (prompt) setFinalPrompt(prompt);
+        if (text) getPromptOrNull()?.setFinal(text);
       },
 
       callIsStarting: () => {
@@ -1169,4 +1239,9 @@ function readyToSubmit(
     state.matches("listening.converting.transcribing")
   );
   return readyToSubmitOnAllowedState(allowedState, context);
+}
+
+export function createSayPiMachine(bot: Chatbot) {
+  chatbot = bot;
+  return machine;
 }

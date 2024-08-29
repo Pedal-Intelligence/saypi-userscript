@@ -9,14 +9,39 @@ import EventBus from "../events/EventBus";
 import { UtteranceCharge } from "../billing/BillingModule";
 import { SpeechSynthesisVoiceRemote, SpeechUtterance } from "./SpeechModel";
 import { AssistantResponse } from "../dom/MessageElements";
+import { AssistantWritingEvent } from "../dom/MessageEvents";
 
 export class TTSControlsModule {
-  constructor(private speechSynthesis: SpeechSynthesisModule) {}
+  private constructor(private speechSynthesis: SpeechSynthesisModule) {
+    this.registerEventListeners();
+  }
+
+  private static instance: TTSControlsModule;
+  static getInstance(): TTSControlsModule {
+    if (!TTSControlsModule.instance) {
+      TTSControlsModule.instance = new TTSControlsModule(
+        SpeechSynthesisModule.getInstance()
+      );
+    }
+    return TTSControlsModule.instance;
+  }
+
+  private registerEventListeners() {
+    EventBus.on("saypi:piWriting", (event: AssistantWritingEvent) => {
+      this.autoplaySpeech(event.utterance, 200); // wait a beat after starting the input stream before starting the output stream
+    });
+  }
 
   constructTextToSpeechControl(classname: string, title: string, icon: string) {
     const button = document.createElement("button");
     button.type = "button";
-    button.classList.add("text-center", "saypi-button", classname);
+    button.classList.add(
+      "text-center",
+      "saypi-button",
+      "tooltip",
+      "tts-item",
+      classname
+    );
     button.setAttribute("aria-label", title);
     button.innerHTML = icon;
     return button;
@@ -76,6 +101,8 @@ export class TTSControlsModule {
       "active:bg-neutral-50-tap",
       "active:text-primary-700",
       "saypi-button",
+      "tooltip",
+      "tts-item",
       classname
     );
     button.setAttribute("title", title);
@@ -109,6 +136,7 @@ export class TTSControlsModule {
   addSpeechButton(
     utterance: SpeechUtterance,
     container: HTMLElement,
+    insertBefore?: Element | null,
     containerIsMenu: boolean = false
   ): void {
     const button = containerIsMenu
@@ -118,7 +146,11 @@ export class TTSControlsModule {
       EventBus.emit("saypi:tts:replaying", utterance); //  notify the ui manager that the next speech it hears will be a replay
       this.speechSynthesis.speak(utterance);
     });
-    container.appendChild(button);
+    if (insertBefore) {
+      container.insertBefore(button, insertBefore);
+    } else {
+      container.appendChild(button);
+    }
   }
 
   addCopyButton(
@@ -151,7 +183,7 @@ export class TTSControlsModule {
 
   createCostElementForMenu(): HTMLElement {
     const costElement = document.createElement("button");
-    costElement.classList.add("saypi-cost");
+    costElement.classList.add("saypi-cost", "tooltip");
     costElement.classList.add(
       "flex",
       "h-12",
@@ -169,7 +201,7 @@ export class TTSControlsModule {
 
   createCostElementForMessage() {
     const costElement = document.createElement("span");
-    costElement.classList.add("saypi-cost", "text-sm", "text-neutral-500");
+    costElement.classList.add("saypi-cost", "tooltip", "tooltip-wide");
     return costElement;
   }
 
@@ -188,28 +220,58 @@ export class TTSControlsModule {
       // cost should not be undefined, but just in case it is, don't display anything
       return;
     }
+    const costBasisContainer = document.createElement("div");
+    costBasisContainer.classList.add("saypi-cost-container", "tts-item");
+
     const currency = getMessage("currencyUSDAbbreviation");
     const costElement = containerIsMenu
       ? this.createCostElementForMenu()
       : this.createCostElementForMessage();
+    let chargeExplanation;
     if (cost) {
-      costElement.title = getMessage("ttsCostExplanation", [
+      chargeExplanation = getMessage("ttsCostExplanation", [
         cost.toFixed(2),
         currency,
+        "Say, Pi", // provider name
       ]);
     } else {
-      costElement.title = getMessage("ttsCostExplanationFree");
+      chargeExplanation = getMessage("ttsCostExplanationFree");
       costElement.classList.add("cost-free");
     }
+    costElement.setAttribute("aria-label", chargeExplanation);
 
     costElement.innerHTML = `Cost: <span class="price">$<span class="value">${cost.toFixed(
       2
     )}</span></span>`;
-    container.appendChild(costElement);
-    return costElement;
+    const verticalSpacer = document.createElement("div");
+    verticalSpacer.classList.add("vertical-separator");
+    // insert as first child of cost element
+    costElement.insertBefore(verticalSpacer, costElement.firstChild);
+    costBasisContainer.appendChild(costElement);
+    container.appendChild(costBasisContainer);
+
+    // add a link to the pricing page
+    const pricingLink = document.createElement("a");
+    pricingLink.href = "https://www.saypi.ai/pricing";
+    pricingLink.target = "_blank";
+    pricingLink.classList.add("saypi-pricing-link", "tooltip", "tts-item");
+    const tooltipText = getMessage("ttsCostExplanationSayPi", ["Say, Pi"]);
+    pricingLink.setAttribute("aria-label", tooltipText);
+    const providerLogo = document.createElement("img");
+    providerLogo.classList.add("flair", "audio-provider", "saypi-logo");
+    providerLogo.src = getResourceUrl("icons/logos/saypi.png");
+    providerLogo.alt = "Say, Pi logo";
+    pricingLink.appendChild(providerLogo);
+    costBasisContainer.appendChild(pricingLink);
+
+    return costBasisContainer;
   }
 
-  addPoweredBy(container: HTMLElement, voice: SpeechSynthesisVoiceRemote) {
+  addPoweredBy(
+    container: HTMLElement,
+    voice: SpeechSynthesisVoiceRemote,
+    insertBefore?: Element | null
+  ) {
     let poweredByElement = container.querySelector(
       ".saypi-powered-by"
     ) as HTMLElement | null;
@@ -220,30 +282,45 @@ export class TTSControlsModule {
     const ttsEngine = voice.powered_by;
     const ttsLabel = getMessage("ttsPoweredBy", ttsEngine);
     poweredByElement.classList.add(
-      "text-sm",
-      "text-neutral-500",
-      "saypi-powered-by"
+      "saypi-powered-by",
+      "tooltip",
+      "tts-item",
+      "tooltip-wide"
     );
-    poweredByElement.title = ttsLabel;
+    poweredByElement.setAttribute("aria-label", ttsLabel);
     const logoImageExt = ttsEngine === "inflection.ai" ? "png" : "svg"; // can't find a good svg for inflection.ai
     const logoImageUrl = getResourceUrl(
       `icons/logos/${ttsEngine.toLowerCase()}.${logoImageExt}`
     );
-    poweredByElement.innerHTML = `<img src="${logoImageUrl}" alt="${ttsLabel}" class="h-4 w-4 inline-block">`;
-    container.appendChild(poweredByElement);
+    poweredByElement.innerHTML = `<img src="${logoImageUrl}" class="h-4 w-4 inline-block">`;
+    if (insertBefore) {
+      container.insertBefore(poweredByElement, insertBefore);
+    } else {
+      container.appendChild(poweredByElement);
+    }
   }
 
   public updateCostBasis(container: HTMLElement, charge: UtteranceCharge) {
     const costElement = container.querySelector(
-      ".saypi-cost .value"
+      ".saypi-cost"
     ) as HTMLElement | null;
     if (costElement) {
-      costElement.textContent = charge.cost.toFixed(2);
-      const currency = getMessage("currencyUSDAbbreviation");
-      costElement.title = getMessage("ttsCostExplanation", [
-        charge.cost.toFixed(2),
-        currency,
-      ]);
+      const valueElement = costElement.querySelector(".value") as HTMLElement;
+      valueElement.textContent = charge.cost.toFixed(2);
+      if (charge.cost) {
+        const currency = getMessage("currencyUSDAbbreviation");
+        costElement.setAttribute(
+          "aria-label",
+          getMessage("ttsCostExplanation", [charge.cost.toFixed(2), currency])
+        );
+        costElement.classList.remove("cost-free");
+      } else {
+        costElement.setAttribute(
+          "aria-label",
+          getMessage("ttsCostExplanationFree")
+        );
+        costElement.classList.add("cost-free");
+      }
     }
   }
 

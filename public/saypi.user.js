@@ -2,7 +2,7 @@
 // @name         Say, Pi
 // @name:zh-CN   说，Pi 
 // @namespace    http://www.saypi.ai/
-// @version      1.6.2
+// @version      1.6.3
 // @description  Seamless speech-to-text enhancement for Pi, the conversational AI. Enjoy hands-free, high-accuracy conversations in any language.
 // @description:zh-CN  为Pi聊天机器人提供无手操作的高精度语音转文字功能，支持多种语言。
 // @author       Ross Cadogan
@@ -1497,6 +1497,29 @@ ___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse_outermost {
 
 /***/ }),
 
+/***/ 8959:
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Z: () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7537);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3645);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, `html body.claude #saypi-callButton{width:38px;height:32px}html body.claude #saypi-submitButton{background-color:#840f7c}html body.claude #saypi-prompt:has(+.custom-placeholder:not(:empty)) p[data-placeholder].is-empty{display:none}html body.claude #saypi-prompt:has(+.custom-placeholder:not(:empty)){margin-bottom:-24px}html body.claude .tooltip[aria-label]::after{font-size:.75rem;background-color:hsl(var(--black)/0.8);top:-130%}html body.claude .message-hover-menu .saypi-tts-controls button svg,html body.claude .message-hover-menu .saypi-tts-controls img{width:12px;height:12px}html body.claude .message-hover-menu .saypi-tts-controls .saypi-copy-button{display:none}`, "",{"version":3,"sources":["webpack://./src/styles/claude.scss"],"names":[],"mappings":"AAOI,mCACI,UAAA,CACA,WAAA,CAGJ,qCACI,wBAAA,CAIJ,kGACI,YAAA,CAKJ,qEACI,mBAAA,CAGJ,6CACI,gBAAA,CACA,sCAAA,CACA,SAAA,CAIA,iIACI,UAAA,CACA,WAAA,CAEJ,4EACI,YAAA","sourcesContent":["/**\n * This file contains styles specific to claude.ai,\n * until I can figure out how to make the styles more\n * modular.\n */\n\nhtml body.claude {\n    #saypi-callButton {\n        width: 38px; /* for an effective width of 32px - idk why */\n        height: 32px;\n    }\n\n    #saypi-submitButton {\n        background-color: #840f7c; /* just for debugging */\n    }\n\n    /* hide Claude's original placeholder when custom placeholder is present and non-empty */\n    #saypi-prompt:has(+ .custom-placeholder:not(:empty)) p[data-placeholder].is-empty {\n        display: none;\n    }\n\n    /* reduce the height of the prompt input area, which somehow grew by 24px when we added the custom placeholder\n     * and shift the custom placeholder up to Claude's standard placeholder position */\n    #saypi-prompt:has(+ .custom-placeholder:not(:empty)) {\n        margin-bottom: -24px;\n    }\n\n    .tooltip[aria-label]::after {\n        font-size: 0.75rem; /* text-xs */\n        background-color: hsl(var(--black)/.8); /* bg-black/80 */\n        top: -130%; /* position the tooltip above the button */\n    }\n\n    .message-hover-menu .saypi-tts-controls {\n        button svg, img {\n            width: 12px;\n            height: 12px;\n        }\n        .saypi-copy-button {\n            display: none;\n        }\n    }\n}"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
 /***/ 8580:
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
@@ -1513,7 +1536,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse_outermost {
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `#saypi-callButton.disabled svg path.circle{fill:#f5eedf}.saypi-enter-button,.saypi-exit-button{width:3rem;height:3rem;padding:6px;border:0;z-index:60}.saypi-enter-button svg path.inner,.saypi-exit-button svg path.inner{color:#0d3c26}.saypi-control-panel.overflow-hidden .saypi-control-button{display:none}#saypi-lock-panel{display:none}@keyframes fillup{to{stroke-dashoffset:0}}@keyframes changeColor{0%{stroke:green}50%{stroke:#ff0}100%{stroke:red}}#progress-ring{transform:rotate(-90deg);transform-origin:50% 50%}#progress-ring.active{animation:fillup 10s linear forwards,changeColor 10s linear forwards}:root{--glow-color: #ffd1dc}.glow{border:none;box-shadow:0 0 10px var(--glow-color),0 0 20px var(--glow-color),0 0 30px var(--glow-color),0 0 40px var(--glow-color),0 0 50px var(--glow-color),0 0 60px var(--glow-color),0 0 70px var(--glow-color);animation:neon-glow-animation 1.5s ease-in-out infinite alternate}.glow-fade-out{box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc;animation:fade-out-glow-animation 3s ease-out forwards}@keyframes fade-out-glow-animation{from{box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc}to{box-shadow:0 0 1px #ffd1dc,0 0 2px #ffd1dc,0 0 3px #ffd1dc,0 0 4px #fff,0 0 5px #fff}}@keyframes neon-glow-animation{from{box-shadow:0 0 5px var(--glow-color),0 0 10px var(--glow-color),0 0 15px var(--glow-color),0 0 20px var(--glow-color),0 0 25px #fff}to{box-shadow:0 0 10px var(--glow-color),0 0 20px var(--glow-color),0 0 30px var(--glow-color),0 0 40px var(--glow-color),0 0 50px var(--glow-color),0 0 60px var(--glow-color),0 0 70px var(--glow-color)}}#saypi-notification{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);width:80%;max-width:47rem;height:auto;padding:1rem;background-color:rgba(228,216,193,.9);border-radius:1rem;align-items:center;justify-content:center}#saypi-notification.active{display:flex;animation-name:fadeIn;animation-duration:2s;animation-fill-mode:forwards;animation-delay:1s;animation-fill-mode:both;animation-timing-function:ease-in-out;animation-iteration-count:1;animation-direction:normal;z-index:100}#saypi-notification img.icon{width:80px}#saypi-notification svg.icon{width:160px}#saypi-notification .content{display:flex;flex-direction:column;align-items:center;justify-content:center}#saypi-notification span{display:block;text-align:center;font-size:x-large;font-family:"Roboto","Open Sans","Lato","Source Sans Pro","Noto Sans",Arial,sans-serif;color:#776d6d;padding-left:.5rem}#saypi-notification button{display:block;margin-top:1rem;padding:.5rem 1rem;border-radius:.5rem;background-color:#4ab13c;color:#fff;font-size:x-large;font-family:"Roboto","Open Sans","Lato","Source Sans Pro","Noto Sans",Arial,sans-serif;border:none;cursor:pointer;transition:background-color .5s}#saypi-notification button:hover{background-color:#3a8a2d}#saypi-notification.dialog{background-color:rgba(222,228,193,.98);border-radius:1rem;border:5px solid #4ab13c;padding:1rem;width:80%;max-width:40rem;height:auto;align-items:center;justify-content:center;z-index:100}#saypi-voice-menu .saypi-voice-button{display:none}#saypi-voice-menu.expanded .saypi-voice-button{display:block}.saypi-voice-button img.flair{display:inline;height:20px;padding-left:.5rem}#saypi-voice-settings button.selected.paola{background-color:#c8c8c8;border-color:#c8c8c8}#saypi-voice-settings button.selected.joey{background-color:#ffffc8;border-color:#ffffc8}`, "",{"version":3,"sources":["webpack://./src/styles/common.scss","webpack://./src/styles/progress-ring.scss","webpack://./src/styles/neon.scss","webpack://./src/styles/notifications.scss","webpack://./src/styles/voices.scss"],"names":[],"mappings":"AAEA,2CACE,YAAA,CAIF,uCAEE,UAAA,CACA,WAAA,CACA,WAAA,CACA,QAAA,CACA,UAAA,CACA,qEACE,aAAA,CAMF,2DACE,YAAA,CAKJ,kBAEE,YAAA,CC7BF,kBACI,GACE,mBAAA,CAAA,CAIJ,uBACE,GAAA,YAAA,CACA,IAAA,WAAA,CACA,KAAA,UAAA,CAAA,CAGF,eACE,wBAAA,CACA,wBAAA,CAGF,sBACE,oEAAA,CChBJ,MACI,qBAAA,CAGJ,MACI,WAAA,CAGA,uMACA,CASA,iEAAA,CAGJ,eACI,iIACA,CASA,sDAAA,CAGJ,mCACI,KACI,iIACA,CAQJ,GACI,oFACA,CAAA,CASR,+BACI,KACI,mIACA,CAMJ,GACI,uMACA,CAAA,CCtER,oBACE,YAAA,CACA,cAAA,CACA,OAAA,CACA,QAAA,CACA,+BAAA,CACA,SAAA,CACA,eAAA,CACA,WAAA,CACA,YAAA,CACA,qCAAA,CACA,kBAAA,CACA,kBAAA,CACA,sBAAA,CAEA,2BACE,YAAA,CACA,qBAAA,CACA,qBAAA,CACA,4BAAA,CACA,kBAAA,CACA,wBAAA,CACA,qCAAA,CACA,2BAAA,CACA,0BAAA,CACA,WAAA,CAGF,6BACE,UAAA,CAEF,6BACE,WAAA,CAGF,6BACE,YAAA,CACA,qBAAA,CACA,kBAAA,CACA,sBAAA,CAGF,yBACE,aAAA,CACA,iBAAA,CACA,iBAAA,CACA,sFAAA,CACA,aAAA,CACA,kBAAA,CAIF,2BACE,aAAA,CACA,eAAA,CACA,kBAAA,CACA,mBAAA,CACA,wBAAA,CACA,UAAA,CACA,iBAAA,CACA,sFAAA,CACA,WAAA,CACA,cAAA,CACA,+BAAA,CAEA,iCACE,wBAAA,CAIJ,2BACE,sCAAA,CACA,kBAAA,CACA,wBAAA,CACA,YAAA,CACA,SAAA,CACA,eAAA,CACA,WAAA,CACA,kBAAA,CACA,sBAAA,CACA,WAAA,CChFJ,sCACI,YAAA,CAEJ,+CACI,aAAA,CAEJ,8BACI,cAAA,CACA,WAAA,CACA,kBAAA,CAEJ,4CACI,wBAAA,CACA,oBAAA,CAEJ,2CACI,wBAAA,CACA,oBAAA","sourcesContent":["\n\n#saypi-callButton.disabled svg path.circle {\n  fill: rgb(245 238 223); /* bg-cream-550 */\n}\n\n\n.saypi-enter-button,\n.saypi-exit-button {\n  width: 3rem;\n  height: 3rem;\n  padding: 6px;\n  border: 0;\n  z-index: 60;\n  svg path.inner {\n    color: rgb(13 60 38); /* text-primary-700 */\n  }\n}\n\n/* hide the control panel buttons on non-chat pages */\n.saypi-control-panel.overflow-hidden {\n  .saypi-control-button {\n    display: none;\n  }\n}\n\n\n#saypi-lock-panel {\n  /* lock panel is only displayed on mobile devices */\n  display: none;\n}\n\n@import \"progress-ring.scss\";\n@import \"neon.scss\";\n@import \"notifications.scss\";\n@import \"voices.scss\";","@keyframes fillup {\n    to {\n      stroke-dashoffset: 0;\n    }\n  }\n  \n  @keyframes changeColor {\n    0% { stroke: green; }\n    50% { stroke: yellow; }\n    100% { stroke: red; }\n  }\n  \n  #progress-ring {\n    transform: rotate(-90deg);\n    transform-origin: 50% 50%;\n  }\n  \n  #progress-ring.active {\n    animation: fillup 10s linear forwards, changeColor 10s linear forwards;\n  }","$fade-color: #ffd1dc; // sunset-peach\n\n:root {\n    --glow-color: #ffd1dc; // sunset-peach\n}\n\n.glow {\n    border: none;\n    \n    // Multiple box shadows create the glow effect\n    box-shadow: \n    0 0 10px var(--glow-color),\n    0 0 20px var(--glow-color),\n    0 0 30px var(--glow-color),\n    0 0 40px var(--glow-color),\n    0 0 50px var(--glow-color),\n    0 0 60px var(--glow-color),\n    0 0 70px var(--glow-color);\n  \n    // Animation for the glow to appear to pulse\n    animation: neon-glow-animation 1.5s ease-in-out infinite alternate;\n}\n\n.glow-fade-out {\n    box-shadow: \n    0 0 10px $fade-color,\n    0 0 20px $fade-color,\n    0 0 30px $fade-color,\n    0 0 40px $fade-color,\n    0 0 50px $fade-color,\n    0 0 60px $fade-color,\n    0 0 70px $fade-color;\n\n    // Start the fade out animation\n    animation: fade-out-glow-animation 3s ease-out forwards;\n}\n\n@keyframes fade-out-glow-animation {\n    from {\n        box-shadow: \n        0 0 10px $fade-color,\n        0 0 20px $fade-color,\n        0 0 30px $fade-color,\n        0 0 40px $fade-color,\n        0 0 50px $fade-color,\n        0 0 60px $fade-color,\n        0 0 70px $fade-color;\n    }\n    to {\n        box-shadow:\n        0 0 1px $fade-color,\n        0 0 2px $fade-color,\n        0 0 3px $fade-color,\n        0 0 4px #fff,\n        0 0 5px #fff;\n    }\n}\n\n\n@keyframes neon-glow-animation {\n    from {\n        box-shadow: \n        0 0 5px var(--glow-color),\n        0 0 10px var(--glow-color),\n        0 0 15px var(--glow-color),\n        0 0 20px var(--glow-color),\n        0 0 25px #fff;\n    }\n    to {\n        box-shadow: \n        0 0 10px var(--glow-color),\n        0 0 20px var(--glow-color),\n        0 0 30px var(--glow-color),\n        0 0 40px var(--glow-color),\n        0 0 50px var(--glow-color),\n        0 0 60px var(--glow-color),\n        0 0 70px var(--glow-color);\n    }\n}","#saypi-notification {\n  display: none; // Hide the notification by default, flexbox when active\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  width: 80%;\n  max-width: 47rem; // to match Pi's textarea max-width\n  height: auto;\n  padding: 1rem;\n  background-color: rgba(228, 216, 193, 0.9); // semi-opaque background with rounded corners\n  border-radius: 1rem;\n  align-items: center; // Vertically center the children\n  justify-content: center; // Horizontally center the children (optional)\n  \n  &.active {\n    display: flex; // Ensure flex display is active\n    animation-name: fadeIn;\n    animation-duration: 2s;\n    animation-fill-mode: forwards;\n    animation-delay: 1s;\n    animation-fill-mode: both;\n    animation-timing-function: ease-in-out;\n    animation-iteration-count: 1;\n    animation-direction: normal;\n    z-index: 100;\n  }\n  \n  img.icon {\n    width: 80px;\n  }\n  svg.icon {\n    width: 160px;\n  }\n\n  .content {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;  \n  }\n  \n  span {\n    display: block;\n    text-align: center;\n    font-size: x-large;\n    font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;\n    color: #776d6d;\n    padding-left: 0.5rem;\n    // Additional adjustments for alignment can be made here if necessary\n  }\n\n  button {\n    display: block;\n    margin-top: 1rem;\n    padding: 0.5rem 1rem;\n    border-radius: 0.5rem;\n    background-color: #4ab13c;\n    color: white;\n    font-size: x-large;\n    font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;\n    border: none;\n    cursor: pointer;\n    transition: background-color 0.5s;\n    \n    &:hover {\n      background-color: #3a8a2d;\n    }\n  }\n\n  &.dialog {\n    background-color: rgba(222, 228, 193, 0.98);\n    border-radius: 1rem;\n    border: 5px solid #4ab13c;\n    padding: 1rem;\n    width: 80%;\n    max-width: 40rem;\n    height: auto;\n    align-items: center;\n    justify-content: center;\n    z-index: 100;\n  }\n}\n","#saypi-voice-menu .saypi-voice-button {\n    display: none;\n}\n#saypi-voice-menu.expanded .saypi-voice-button {\n    display: block;\n}\n.saypi-voice-button img.flair {\n    display: inline;\n    height: 20px;\n    padding-left: 0.5rem;\n}\n#saypi-voice-settings button.selected.paola {\n    background-color: rgb(200, 200, 200);\n    border-color: rgb(200, 200, 200);\n}\n#saypi-voice-settings button.selected.joey {\n    background-color: rgb(255, 255, 200);\n    border-color: rgb(255, 255, 200);\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `#saypi-callButton.disabled svg path.circle{fill:#f5eedf}.saypi-enter-button,.saypi-exit-button{width:3rem;height:3rem;padding:6px;border:0;z-index:60}.saypi-enter-button svg path.inner,.saypi-exit-button svg path.inner{color:#0d3c26}.saypi-control-panel.overflow-hidden .saypi-control-button{display:none}#saypi-lock-panel{display:none}@keyframes fillup{to{stroke-dashoffset:0}}@keyframes changeColor{0%{stroke:green}50%{stroke:#ff0}100%{stroke:red}}#progress-ring{transform:rotate(-90deg);transform-origin:50% 50%}#progress-ring.active{animation:fillup 10s linear forwards,changeColor 10s linear forwards}:root{--glow-color: #ffd1dc}.glow{border:none;box-shadow:0 0 10px var(--glow-color),0 0 20px var(--glow-color),0 0 30px var(--glow-color),0 0 40px var(--glow-color),0 0 50px var(--glow-color),0 0 60px var(--glow-color),0 0 70px var(--glow-color);animation:neon-glow-animation 1.5s ease-in-out infinite alternate}.glow-fade-out{box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc;animation:fade-out-glow-animation 3s ease-out forwards}@keyframes fade-out-glow-animation{from{box-shadow:0 0 10px #ffd1dc,0 0 20px #ffd1dc,0 0 30px #ffd1dc,0 0 40px #ffd1dc,0 0 50px #ffd1dc,0 0 60px #ffd1dc,0 0 70px #ffd1dc}to{box-shadow:0 0 1px #ffd1dc,0 0 2px #ffd1dc,0 0 3px #ffd1dc,0 0 4px #fff,0 0 5px #fff}}@keyframes neon-glow-animation{from{box-shadow:0 0 5px var(--glow-color),0 0 10px var(--glow-color),0 0 15px var(--glow-color),0 0 20px var(--glow-color),0 0 25px #fff}to{box-shadow:0 0 10px var(--glow-color),0 0 20px var(--glow-color),0 0 30px var(--glow-color),0 0 40px var(--glow-color),0 0 50px var(--glow-color),0 0 60px var(--glow-color),0 0 70px var(--glow-color)}}#saypi-notification{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);width:80%;max-width:47rem;height:auto;padding:1rem;background-color:rgba(228,216,193,.9);border-radius:1rem;align-items:center;justify-content:center}#saypi-notification.active{display:flex;animation-name:fadeIn;animation-duration:2s;animation-fill-mode:forwards;animation-delay:1s;animation-fill-mode:both;animation-timing-function:ease-in-out;animation-iteration-count:1;animation-direction:normal;z-index:100}#saypi-notification img.icon{width:80px}#saypi-notification svg.icon{width:160px}#saypi-notification .content{display:flex;flex-direction:column;align-items:center;justify-content:center}#saypi-notification span{display:block;text-align:center;font-size:x-large;font-family:"Roboto","Open Sans","Lato","Source Sans Pro","Noto Sans",Arial,sans-serif;color:#776d6d;padding-left:.5rem}#saypi-notification button{display:block;margin-top:1rem;padding:.5rem 1rem;border-radius:.5rem;background-color:#4ab13c;color:#fff;font-size:x-large;font-family:"Roboto","Open Sans","Lato","Source Sans Pro","Noto Sans",Arial,sans-serif;border:none;cursor:pointer;transition:background-color .5s}#saypi-notification button:hover{background-color:#3a8a2d}#saypi-notification.dialog{background-color:rgba(222,228,193,.98);border-radius:1rem;border:5px solid #4ab13c;padding:1rem;width:80%;max-width:40rem;height:auto;align-items:center;justify-content:center;z-index:100}#saypi-voice-menu .saypi-voice-button{display:none}#saypi-voice-menu.expanded .saypi-voice-button{display:block}.saypi-voice-button img.flair{display:inline;height:20px;padding-left:.5rem}#saypi-voice-settings button.selected.paola{background-color:#c8c8c8;border-color:#c8c8c8}#saypi-voice-settings button.selected.joey{background-color:#ffffc8;border-color:#ffffc8}#saypi-voice-menu-controls.saypi-provided-voice button{background-color:inherit}`, "",{"version":3,"sources":["webpack://./src/styles/common.scss","webpack://./src/styles/progress-ring.scss","webpack://./src/styles/neon.scss","webpack://./src/styles/notifications.scss","webpack://./src/styles/voices.scss"],"names":[],"mappings":"AAEA,2CACE,YAAA,CAIF,uCAEE,UAAA,CACA,WAAA,CACA,WAAA,CACA,QAAA,CACA,UAAA,CACA,qEACE,aAAA,CAMF,2DACE,YAAA,CAKJ,kBAEE,YAAA,CC7BF,kBACI,GACE,mBAAA,CAAA,CAIJ,uBACE,GAAA,YAAA,CACA,IAAA,WAAA,CACA,KAAA,UAAA,CAAA,CAGF,eACE,wBAAA,CACA,wBAAA,CAGF,sBACE,oEAAA,CChBJ,MACI,qBAAA,CAGJ,MACI,WAAA,CAGA,uMACA,CASA,iEAAA,CAGJ,eACI,iIACA,CASA,sDAAA,CAGJ,mCACI,KACI,iIACA,CAQJ,GACI,oFACA,CAAA,CASR,+BACI,KACI,mIACA,CAMJ,GACI,uMACA,CAAA,CCtER,oBACE,YAAA,CACA,cAAA,CACA,OAAA,CACA,QAAA,CACA,+BAAA,CACA,SAAA,CACA,eAAA,CACA,WAAA,CACA,YAAA,CACA,qCAAA,CACA,kBAAA,CACA,kBAAA,CACA,sBAAA,CAEA,2BACE,YAAA,CACA,qBAAA,CACA,qBAAA,CACA,4BAAA,CACA,kBAAA,CACA,wBAAA,CACA,qCAAA,CACA,2BAAA,CACA,0BAAA,CACA,WAAA,CAGF,6BACE,UAAA,CAEF,6BACE,WAAA,CAGF,6BACE,YAAA,CACA,qBAAA,CACA,kBAAA,CACA,sBAAA,CAGF,yBACE,aAAA,CACA,iBAAA,CACA,iBAAA,CACA,sFAAA,CACA,aAAA,CACA,kBAAA,CAIF,2BACE,aAAA,CACA,eAAA,CACA,kBAAA,CACA,mBAAA,CACA,wBAAA,CACA,UAAA,CACA,iBAAA,CACA,sFAAA,CACA,WAAA,CACA,cAAA,CACA,+BAAA,CAEA,iCACE,wBAAA,CAIJ,2BACE,sCAAA,CACA,kBAAA,CACA,wBAAA,CACA,YAAA,CACA,SAAA,CACA,eAAA,CACA,WAAA,CACA,kBAAA,CACA,sBAAA,CACA,WAAA,CChFJ,sCACE,YAAA,CAEF,+CACE,aAAA,CAEF,8BACE,cAAA,CACA,WAAA,CACA,kBAAA,CAEF,4CACE,wBAAA,CACA,oBAAA,CAEF,2CACE,wBAAA,CACA,oBAAA,CAIA,uDACE,wBAAA","sourcesContent":["\n\n#saypi-callButton.disabled svg path.circle {\n  fill: rgb(245 238 223); /* bg-cream-550 */\n}\n\n\n.saypi-enter-button,\n.saypi-exit-button {\n  width: 3rem;\n  height: 3rem;\n  padding: 6px;\n  border: 0;\n  z-index: 60;\n  svg path.inner {\n    color: rgb(13 60 38); /* text-primary-700 */\n  }\n}\n\n/* hide the control panel buttons on non-chat pages */\n.saypi-control-panel.overflow-hidden {\n  .saypi-control-button {\n    display: none;\n  }\n}\n\n\n#saypi-lock-panel {\n  /* lock panel is only displayed on mobile devices */\n  display: none;\n}\n\n@import \"progress-ring.scss\";\n@import \"neon.scss\";\n@import \"notifications.scss\";\n@import \"voices.scss\";","@keyframes fillup {\n    to {\n      stroke-dashoffset: 0;\n    }\n  }\n  \n  @keyframes changeColor {\n    0% { stroke: green; }\n    50% { stroke: yellow; }\n    100% { stroke: red; }\n  }\n  \n  #progress-ring {\n    transform: rotate(-90deg);\n    transform-origin: 50% 50%;\n  }\n  \n  #progress-ring.active {\n    animation: fillup 10s linear forwards, changeColor 10s linear forwards;\n  }","$fade-color: #ffd1dc; // sunset-peach\n\n:root {\n    --glow-color: #ffd1dc; // sunset-peach\n}\n\n.glow {\n    border: none;\n    \n    // Multiple box shadows create the glow effect\n    box-shadow: \n    0 0 10px var(--glow-color),\n    0 0 20px var(--glow-color),\n    0 0 30px var(--glow-color),\n    0 0 40px var(--glow-color),\n    0 0 50px var(--glow-color),\n    0 0 60px var(--glow-color),\n    0 0 70px var(--glow-color);\n  \n    // Animation for the glow to appear to pulse\n    animation: neon-glow-animation 1.5s ease-in-out infinite alternate;\n}\n\n.glow-fade-out {\n    box-shadow: \n    0 0 10px $fade-color,\n    0 0 20px $fade-color,\n    0 0 30px $fade-color,\n    0 0 40px $fade-color,\n    0 0 50px $fade-color,\n    0 0 60px $fade-color,\n    0 0 70px $fade-color;\n\n    // Start the fade out animation\n    animation: fade-out-glow-animation 3s ease-out forwards;\n}\n\n@keyframes fade-out-glow-animation {\n    from {\n        box-shadow: \n        0 0 10px $fade-color,\n        0 0 20px $fade-color,\n        0 0 30px $fade-color,\n        0 0 40px $fade-color,\n        0 0 50px $fade-color,\n        0 0 60px $fade-color,\n        0 0 70px $fade-color;\n    }\n    to {\n        box-shadow:\n        0 0 1px $fade-color,\n        0 0 2px $fade-color,\n        0 0 3px $fade-color,\n        0 0 4px #fff,\n        0 0 5px #fff;\n    }\n}\n\n\n@keyframes neon-glow-animation {\n    from {\n        box-shadow: \n        0 0 5px var(--glow-color),\n        0 0 10px var(--glow-color),\n        0 0 15px var(--glow-color),\n        0 0 20px var(--glow-color),\n        0 0 25px #fff;\n    }\n    to {\n        box-shadow: \n        0 0 10px var(--glow-color),\n        0 0 20px var(--glow-color),\n        0 0 30px var(--glow-color),\n        0 0 40px var(--glow-color),\n        0 0 50px var(--glow-color),\n        0 0 60px var(--glow-color),\n        0 0 70px var(--glow-color);\n    }\n}","#saypi-notification {\n  display: none; // Hide the notification by default, flexbox when active\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  width: 80%;\n  max-width: 47rem; // to match Pi's textarea max-width\n  height: auto;\n  padding: 1rem;\n  background-color: rgba(228, 216, 193, 0.9); // semi-opaque background with rounded corners\n  border-radius: 1rem;\n  align-items: center; // Vertically center the children\n  justify-content: center; // Horizontally center the children (optional)\n  \n  &.active {\n    display: flex; // Ensure flex display is active\n    animation-name: fadeIn;\n    animation-duration: 2s;\n    animation-fill-mode: forwards;\n    animation-delay: 1s;\n    animation-fill-mode: both;\n    animation-timing-function: ease-in-out;\n    animation-iteration-count: 1;\n    animation-direction: normal;\n    z-index: 100;\n  }\n  \n  img.icon {\n    width: 80px;\n  }\n  svg.icon {\n    width: 160px;\n  }\n\n  .content {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;  \n  }\n  \n  span {\n    display: block;\n    text-align: center;\n    font-size: x-large;\n    font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;\n    color: #776d6d;\n    padding-left: 0.5rem;\n    // Additional adjustments for alignment can be made here if necessary\n  }\n\n  button {\n    display: block;\n    margin-top: 1rem;\n    padding: 0.5rem 1rem;\n    border-radius: 0.5rem;\n    background-color: #4ab13c;\n    color: white;\n    font-size: x-large;\n    font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;\n    border: none;\n    cursor: pointer;\n    transition: background-color 0.5s;\n    \n    &:hover {\n      background-color: #3a8a2d;\n    }\n  }\n\n  &.dialog {\n    background-color: rgba(222, 228, 193, 0.98);\n    border-radius: 1rem;\n    border: 5px solid #4ab13c;\n    padding: 1rem;\n    width: 80%;\n    max-width: 40rem;\n    height: auto;\n    align-items: center;\n    justify-content: center;\n    z-index: 100;\n  }\n}\n","#saypi-voice-menu .saypi-voice-button {\n  display: none;\n}\n#saypi-voice-menu.expanded .saypi-voice-button {\n  display: block;\n}\n.saypi-voice-button img.flair {\n  display: inline;\n  height: 20px;\n  padding-left: 0.5rem;\n}\n#saypi-voice-settings button.selected.paola {\n  background-color: rgb(200, 200, 200);\n  border-color: rgb(200, 200, 200);\n}\n#saypi-voice-settings button.selected.joey {\n  background-color: rgb(255, 255, 200);\n  border-color: rgb(255, 255, 200);\n}\n#saypi-voice-menu-controls.saypi-provided-voice {\n  //background-color: #418a2f; // need a button color that indicates the voice is provided by SayPi, but not too jarring\n  button {\n    background-color: inherit;\n  }\n}\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1536,7 +1559,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `#saypi-callButton.disabled svg path.ci
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(0.9)}100%{transform:scale(1)}}html.desktop-view #saypi-talkButton{display:none}html.desktop-view #saypi-callButton{width:2.25rem;position:relative;margin-right:0}html.desktop-view .saypi-prompt-container{padding-right:0}html.desktop-view .saypi-exit-button{display:none}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes fadeOut{from{opacity:1}to{opacity:0}}html.desktop-view #saypi-audio-controls{margin-top:.35rem}html.desktop-view #saypi-side-panel .immersive-mode-button svg{width:30px}html.desktop-view #saypi-side-panel .immersive-mode-button svg .cls-1{stroke:#24381b}html.desktop-view .message-hover-menu{display:flex}html.desktop-view .message-hover-menu .w-fit.pt-4{margin-left:auto}html.desktop-view .message-hover-menu .saypi-tts-controls{display:flex}html.desktop-view .message-hover-menu .saypi-tts-controls .saypi-speak-button{padding:4px;border-radius:50%}html.desktop-view .message-hover-menu .saypi-tts-controls .saypi-cost,html.desktop-view .message-hover-menu .saypi-tts-controls .saypi-powered-by{display:flex;align-items:center;margin-left:8px}html.desktop-view .message-hover-menu .saypi-tts-controls svg,html.desktop-view .message-hover-menu .saypi-tts-controls img{width:24px;height:24px}html.desktop-view .message-hover-menu .saypi-tts-controls svg path,html.desktop-view .message-hover-menu .saypi-tts-controls img path{fill:#6b6255}html.desktop-view .assistant-message .popup-menu button.saypi-button svg{width:24px;height:24px}html.desktop-view .assistant-message .popup-menu button.saypi-button svg path{fill:#6b6255}html.desktop-view .saypi-tts-controls button{position:relative;overflow:visible;margin:0 .15rem}html.desktop-view .saypi-tts-controls button::after{content:attr(aria-label);position:absolute;top:120%;transform:translateX(-70%);white-space:nowrap;background:#24381b;color:#fff;padding:5px 10px;border-radius:4px;margin-left:10px;opacity:0;transition:opacity .3s;pointer-events:none;font-size:smaller}html.desktop-view .saypi-tts-controls button:hover::after{opacity:1}`, "",{"version":3,"sources":["webpack://./src/styles/desktop.scss","webpack://./src/styles/messages.scss"],"names":[],"mappings":"AACE,iBACE,GACE,kBAAA,CAEF,IACE,oBAAA,CAEF,KACE,kBAAA,CAAA,CAIJ,oCAEE,YAAA,CAGF,oCACE,aAAA,CACA,iBAAA,CACA,cAAA,CAGF,0CAEE,eAAA,CAGF,qCACE,YAAA,CAGF,kBACE,KAAA,SAAA,CACA,GAAA,SAAA,CAAA,CAGF,mBACE,KAAA,SAAA,CACA,GAAA,SAAA,CAAA,CAGF,wCAEE,iBAAA,CAGF,+DACE,UAAA,CACA,sEACE,cAAA,CCnDN,sCACI,YAAA,CAGA,kDAEI,gBAAA,CAGJ,0DACI,YAAA,CACA,8EACI,WAAA,CACA,iBAAA,CAEJ,kJACI,YAAA,CACA,kBAAA,CACA,eAAA,CAEJ,4HACI,UAAA,CACA,WAAA,CACA,sIACI,YAAA,CAMhB,yEACI,UAAA,CACA,WAAA,CACA,8EACI,YAAA,CAKJ,6CACI,iBAAA,CACA,gBAAA,CACA,eAAA,CAGF,oDACE,wBAAA,CACA,iBAAA,CACA,QAAA,CACA,0BAAA,CACA,kBAAA,CACA,kBAAA,CACA,UAAA,CACA,gBAAA,CACA,iBAAA,CACA,gBAAA,CACA,SAAA,CACA,sBAAA,CACA,mBAAA,CACA,iBAAA,CAGF,0DACE,SAAA","sourcesContent":["html.desktop-view {\n  @keyframes pulse {\n    0% {\n      transform: scale(1);\n    }\n    50% {\n      transform: scale(0.9);\n    }\n    100% {\n      transform: scale(1);\n    }\n  }\n\n  #saypi-talkButton {\n    /* not needed on desktop with call button */\n    display: none;\n  }\n\n  #saypi-callButton {\n    width: 2.25rem;\n    position: relative;\n    margin-right: 0;\n  }\n\n  .saypi-prompt-container {\n    /* make room in the prompt text area for the call button */\n    padding-right: 0;\n  }\n\n  .saypi-exit-button {\n    display: none;\n  }\n\n  @keyframes fadeIn {\n    from { opacity: 0; }\n    to { opacity: 1; }\n  }  \n\n  @keyframes fadeOut {\n    from { opacity: 1; }\n    to { opacity: 0; }\n  }\n\n  #saypi-audio-controls {\n    /* additional margin to align with control panel row */\n    margin-top: 0.35rem;\n  }\n\n  #saypi-side-panel .immersive-mode-button svg {\n    width: 30px;\n    .cls-1 {\n      stroke: #24381b;\n    }\n  }\n\n  @import \"messages.scss\";\n}\n",".message-hover-menu {\n    display: flex;\n\n    /* If you need specific styling for .create-thread-button, add it here */\n    .w-fit.pt-4 {\n        // position to the right of its siblings\n        margin-left: auto;\n    }\n    \n    .saypi-tts-controls {\n        display: flex;\n        .saypi-speak-button {\n            padding: 4px; /* brings the total height to 32px */\n            border-radius: 50%;\n        }\n        .saypi-cost, .saypi-powered-by {\n            display: flex;\n            align-items: center; // center the text vertically\n            margin-left: 8px; // Adds some space between the controls\n        }\n        svg, img {\n            width: 24px;\n            height: 24px;\n            path {\n                fill: #6b6255; // Pi light brown text color\n            }\n        }\n    }\n}\n\n.assistant-message .popup-menu button.saypi-button svg {\n    width: 24px;\n    height: 24px;\n    path {\n        fill: #6b6255; // Pi light brown text color\n    }\n}\n\n.saypi-tts-controls {\n    button {\n        position: relative;\n        overflow: visible;\n        margin: 0 0.15rem;\n      }\n      \n      button::after {\n        content: attr(aria-label);\n        position: absolute;\n        top: 120%;\n        transform: translateX(-70%); // center the tooltip below the button\n        white-space: nowrap;\n        background: #24381b; // Pi primary text color (dark green)\n        color: white;\n        padding: 5px 10px;\n        border-radius: 4px;\n        margin-left: 10px;\n        opacity: 0;\n        transition: opacity 0.3s;\n        pointer-events: none;\n        font-size: smaller;\n      }\n      \n      button:hover::after {\n        opacity: 1;\n      }\n}\n\n/*\n * these styles are for debugging purposes, to make it easier to see when messages are being detected\n *\n.assistant-message {\n    // give it a subtle green background color and border\n    background-color: #f0f9f4; // rgb(240 249 244) - Pi primary background color\n    border: 1px solid #d1f0e5; // rgb(209 240 229) - Pi secondary background color\n    border-radius: 8px;\n    padding: 0.8rem;\n}\n.assistant-message.speech-enabled {\n    border-color:#24381b;\n}\n.assistant-message .popup-menu {\n    background-color: #f0f9f4;\n}\n.assistant-message .inconsistent-text {\n    border-color: #f00;\n}\n.assistant-message.speech-incomplete {\n    border-color: rgb(255, 183, 0);\n}\n    */"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(0.9)}100%{transform:scale(1)}}html.desktop-view #saypi-talkButton{display:none}html.desktop-view #saypi-callButton{width:2.25rem;position:relative;margin-right:0}html.desktop-view .saypi-prompt-container{padding-right:0}html.desktop-view .saypi-exit-button{display:none}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes fadeOut{from{opacity:1}to{opacity:0}}html.desktop-view #saypi-audio-controls{margin-top:.35rem}html.desktop-view #saypi-side-panel .immersive-mode-button svg{width:30px}html.desktop-view #saypi-side-panel .immersive-mode-button svg .cls-1{stroke:#24381b}html.desktop-view .tooltip[aria-label]::after{content:attr(aria-label);position:absolute;top:120%;transform:translateX(-70%);white-space:nowrap;background:#24381b;color:#fff;padding:5px 10px;border-radius:4px;margin-left:10px;opacity:0;transition:opacity .3s;pointer-events:none;font-size:1.2rem}html.desktop-view .tooltip[aria-label]:hover::after{opacity:1;z-index:101}html.desktop-view .message-hover-menu{display:flex}html.desktop-view .message-hover-menu .w-fit.pt-4{margin-left:auto}html.desktop-view .message-hover-menu .saypi-tts-controls{display:flex;align-items:center;height:32px}html.desktop-view .message-hover-menu .saypi-tts-controls .saypi-speak-button{border-radius:50%}html.desktop-view .message-hover-menu .saypi-tts-controls .saypi-cost,html.desktop-view .message-hover-menu .saypi-tts-controls .saypi-powered-by{display:flex;align-items:center}html.desktop-view .message-hover-menu .saypi-tts-controls svg,html.desktop-view .message-hover-menu .saypi-tts-controls img{width:24px;height:24px;display:inline-block}html.desktop-view .message-hover-menu .saypi-tts-controls svg path,html.desktop-view .message-hover-menu .saypi-tts-controls img path{fill:#6b6255}html.desktop-view .message-hover-menu .saypi-tts-controls .cost-free{display:none}html.desktop-view .message-hover-menu .tooltip-wide[aria-label]::after{top:120%;transform:translateX(-35%);white-space:normal;min-width:350px;max-width:600px;text-align:center}html.desktop-view .assistant-message .popup-menu button.saypi-button svg{width:24px;height:24px}html.desktop-view .assistant-message .popup-menu button.saypi-button svg path{fill:#6b6255}html.desktop-view .saypi-tts-controls{padding:0 .25rem;margin-top:1rem;background-color:#f5eadc;border-radius:10px}html.desktop-view .saypi-tts-controls .tts-item{position:relative;overflow:visible;margin:0 .15rem;padding:0 4px}html.desktop-view .saypi-tts-controls .saypi-cost-container{display:flex}html.desktop-view .saypi-tts-controls .saypi-cost-container div.vertical-separator{height:1.5rem;border-left:1px solid;margin-right:.5rem}`, "",{"version":3,"sources":["webpack://./src/styles/desktop.scss","webpack://./src/styles/messages.scss"],"names":[],"mappings":"AACE,iBACE,GACE,kBAAA,CAEF,IACE,oBAAA,CAEF,KACE,kBAAA,CAAA,CAIJ,oCAEE,YAAA,CAGF,oCACE,aAAA,CACA,iBAAA,CACA,cAAA,CAGF,0CAEE,eAAA,CAGF,qCACE,YAAA,CAGF,kBACE,KAAA,SAAA,CACA,GAAA,SAAA,CAAA,CAGF,mBACE,KAAA,SAAA,CACA,GAAA,SAAA,CAAA,CAGF,wCAEE,iBAAA,CAGF,+DACE,UAAA,CACA,sEACE,cAAA,CAIJ,8CACE,wBAAA,CACA,iBAAA,CACA,QAAA,CACA,0BAAA,CACA,kBAAA,CACA,kBAAA,CACA,UAAA,CACA,gBAAA,CACA,iBAAA,CACA,gBAAA,CACA,SAAA,CACA,sBAAA,CACA,mBAAA,CACA,gBAAA,CAGF,oDACE,SAAA,CACA,WAAA,CC1EJ,sCACE,YAAA,CAGA,kDAEE,gBAAA,CAGF,0DACE,YAAA,CACA,kBAAA,CACA,WAAA,CACA,8EACE,iBAAA,CAEF,kJAEE,YAAA,CACA,kBAAA,CAEF,4HAEE,UAAA,CACA,WAAA,CAIA,oBAAA,CAHA,sIACE,YAAA,CAIJ,qEACE,YAAA,CAIJ,uEACE,QAAA,CACA,0BAAA,CACA,kBAAA,CACA,eAAA,CACA,eAAA,CACA,iBAAA,CAIJ,yEACE,UAAA,CACA,WAAA,CACA,8EACE,YAAA,CAIJ,sCACE,gBAAA,CACA,eAAA,CACA,wBAAA,CACA,kBAAA,CAEA,gDACE,iBAAA,CACA,gBAAA,CACA,eAAA,CACA,aAAA,CAGF,4DACE,YAAA,CACA,mFACE,aAAA,CACA,qBAAA,CACA,kBAAA","sourcesContent":["html.desktop-view {\n  @keyframes pulse {\n    0% {\n      transform: scale(1);\n    }\n    50% {\n      transform: scale(0.9);\n    }\n    100% {\n      transform: scale(1);\n    }\n  }\n\n  #saypi-talkButton {\n    /* not needed on desktop with call button */\n    display: none;\n  }\n\n  #saypi-callButton {\n    width: 2.25rem;\n    position: relative;\n    margin-right: 0;\n  }\n\n  .saypi-prompt-container {\n    /* make room in the prompt text area for the call button */\n    padding-right: 0;\n  }\n\n  .saypi-exit-button {\n    display: none;\n  }\n\n  @keyframes fadeIn {\n    from { opacity: 0; }\n    to { opacity: 1; }\n  }  \n\n  @keyframes fadeOut {\n    from { opacity: 1; }\n    to { opacity: 0; }\n  }\n\n  #saypi-audio-controls {\n    /* additional margin to align with control panel row */\n    margin-top: 0.35rem;\n  }\n\n  #saypi-side-panel .immersive-mode-button svg {\n    width: 30px;\n    .cls-1 {\n      stroke: #24381b;\n    }\n  }\n\n  .tooltip[aria-label]::after {\n    content: attr(aria-label);\n    position: absolute;\n    top: 120%; // position the tooltip below the button\n    transform: translateX(-70%); // center the tooltip relative to the button\n    white-space: nowrap;\n    background: #24381b; // Pi primary text color (dark green)\n    color: white;\n    padding: 5px 10px;\n    border-radius: 4px;\n    margin-left: 10px;\n    opacity: 0;\n    transition: opacity 0.3s;\n    pointer-events: none;\n    font-size: 1.2rem;\n  }\n  \n  .tooltip[aria-label]:hover::after {\n    opacity: 1;\n    z-index: 101; // ensure tooltip is on top of other elements\n  }\n\n  @import \"messages.scss\";\n}\n",".message-hover-menu {\n  display: flex;\n\n  /* If you need specific styling for .create-thread-button, add it here */\n  .w-fit.pt-4 {\n    // position to the right of its siblings\n    margin-left: auto;\n  }\n\n  .saypi-tts-controls {\n    display: flex;\n    align-items: center;\n    height: 32px;\n    .saypi-speak-button {\n      border-radius: 50%;\n    }\n    .saypi-cost,\n    .saypi-powered-by {\n      display: flex;\n      align-items: center; // center the text vertically\n    }\n    svg,\n    img {\n      width: 24px;\n      height: 24px;\n      path {\n        fill: #6b6255; // Pi light brown text color\n      }\n      display: inline-block;\n    }\n    .cost-free {\n      display: none; // hide the price when it's free\n    }\n  }\n\n  .tooltip-wide[aria-label]::after {\n    top: 120%; // position the tooltip below the charge\n    transform: translateX(-35%); // center the tooltip relative to the charge\n    white-space: normal; // allow the tooltip to wrap\n    min-width: 350px; // set a min width for the tooltip\n    max-width: 600px; // set a max width for the tooltip\n    text-align: center; // center the text in the tooltip\n  }\n}\n\n.assistant-message .popup-menu button.saypi-button svg {\n  width: 24px;\n  height: 24px;\n  path {\n    fill: #6b6255; // Pi light brown text color\n  }\n}\n\n.saypi-tts-controls {\n  padding: 0 0.25rem;\n  margin-top: 1rem;\n  background-color: rgb(245 234 220); // bg-neutral-200\n  border-radius: 10px;\n\n  .tts-item {\n    position: relative;\n    overflow: visible;\n    margin: 0 0.15rem;\n    padding: 0 4px;\n  }\n\n  .saypi-cost-container {\n    display: flex;\n    div.vertical-separator {\n      height: 1.5rem;\n      border-left: 1px solid;\n      margin-right: 0.5rem;\n    }\n  }\n}\n\n/*\n * these styles are for debugging purposes, to make it easier to see when messages are being detected\n *\n.assistant-message {\n    // give it a subtle green background color and border\n    background-color: #f0f9f4; // rgb(240 249 244) - Pi primary background color\n    border: 1px solid #d1f0e5; // rgb(209 240 229) - Pi secondary background color\n    border-radius: 8px;\n    padding: 0.8rem;\n}\n.assistant-message.speech-enabled {\n    border-color:#24381b;\n}\n.assistant-message .popup-menu {\n    background-color: #f0f9f4;\n}\n.assistant-message .inconsistent-text {\n    border-color: #f00;\n}\n.assistant-message.speech-incomplete {\n    border-color: rgb(255, 183, 0);\n}\n*/\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1559,7 +1582,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `@keyframes pulse{0%{transform:scale(1)
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `html.immersive-view #saypi-panel,html.immersive-view .notification{width:100%;position:fixed;left:0;background-color:rgba(245,238,223,.98);height:100svh;top:0}html.immersive-view #saypi-talkButton{background-color:#e9f5da;border-radius:0;margin:0}html.immersive-view #saypi-talkButton svg{width:100vw;height:100svh;padding:12.5svh 0}html.immersive-view #__next>main>div>div>div.fixed.top-4.right-6>button,html.immersive-view #saypi-experiences-button{transform:scale(1.5)}html.immersive-view div.bg-gradient-to-b{display:none}html.immersive-view #saypi-audio-controls{margin-top:.375rem}html.immersive-view #saypi-audio-controls div.p-1{display:none}html.immersive-view #saypi-audio-controls button.group{transform:scale(1.5) !important;z-index:50}html.immersive-view #saypi-audio-controls button.group+button{display:none}html.immersive-view #saypi-audio-controls div.bg-neutral-200{background-color:rgba(0,0,0,0)}html.immersive-view .text-body-chat-m{padding-top:0}html.immersive-view .saypi-enter-button{display:none}html.immersive-view #saypi-prompt-ancestor{display:none}html.immersive-view #saypi-submitButton{display:none}html.immersive-view #saypi-callButton{position:fixed;bottom:4rem;left:0;right:0;margin:auto;width:4.5rem;height:4.5rem;border:0;z-index:80}html.immersive-view .scrollbar-gutter-both-edges{visibility:hidden}html.immersive-view .saypi-control-panel button:not(.saypi-control-button){display:none}html.immersive-view #saypi-control-panel-main.lg\\:hidden{display:block}html.immersive-view div.lg\\:flex-row-reverse{flex-direction:unset}html.immersive-view #saypi-side-panel.lg\\:flex{display:none}html.immersive-view .saypi-control-panel button.theme-toggle-button{width:4rem;padding:6px}html.immersive-view #saypi-discovery-panel{display:none}html.mobile-device .chat-message .message-hover-menu .saypi-tts-controls{display:none}html.immersive-view body.dark #saypi-talkButton{background-color:#bac5cc;opacity:1}html.immersive-view body.dark .call-button path.circle{fill:#107782}html.immersive-view body.dark .outermost.piThinking{--original-color: #a9b7bf;--thinking-color: #ffe4b2;animation:thinkingFlip 1s ease-in-out}html.immersive-view body.dark .second.piThinking{--original-color: #8f9ca7;--thinking-color: #ffddb4;animation:thinkingFlip 1.1s ease-in-out}html.immersive-view body.dark .third.piThinking{--original-color: #787d83;--thinking-color: #ffd5b7;animation:thinkingFlip 1.2s ease-in-out}html.immersive-view body.dark .fourth.piThinking{--original-color: #6c7378;--thinking-color: #ffcdca;animation:thinkingFlip 1.3s ease-in-out}html.immersive-view body.dark .fifth.piThinking{--original-color: #313437;--thinking-color: #ffc5dc;animation:thinkingFlip 1.4s ease-in-out}html.immersive-view body.dark .innermost.piThinking{--original-color: #1c1c1c;--thinking-color: #ffbde6;animation:thinkingFlip 1.5s ease-in-out}html.immersive-view body.dark .locked #saypi-touch-absorber{background-color:rgba(0,0,0,.75)}html.immersive-view body.dark .locked #saypi-locked-text{color:#fff}html.immersive-view:not(.mobile-device) body.focus button{opacity:0;transition:opacity .5s ease-out}html.immersive-view.mobile-device .lock-button{width:3rem;height:3rem;padding:6px;margin-left:.5rem;border:0;z-index:60}html.immersive-view.mobile-device .lock-button svg path.inner{color:#0d3c26}html.immersive-view.mobile-device #saypi-lock-panel{display:unset;background-color:rgba(0,0,0,0);border-radius:0;margin:0}html.immersive-view.mobile-device .unlocked #saypi-lockButton{display:inline-block !important}html.immersive-view.mobile-device .locked #saypi-lockButton{display:none !important}html.immersive-view.mobile-device .unlocked #saypi-unlockButton{display:none !important}html.immersive-view.mobile-device .locked #saypi-unlockButton{display:inline-block !important;position:relative;z-index:101 !important}html.immersive-view.mobile-device .locked #saypi-touch-absorber{display:block !important;position:fixed;top:0;left:0;opacity:.5;background-color:rgba(245,238,223,.75);width:100vw;height:100svh;z-index:100}@keyframes fadeIn{from{opacity:0}to{opacity:1}}html.immersive-view.mobile-device #saypi-locked-text{display:none}html.immersive-view.mobile-device .locked #saypi-locked-text{display:block !important;position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);width:80%;height:1rem;animation-name:fadeIn;animation-duration:2s;animation-fill-mode:forwards;text-align:center;font-size:xx-large;font-family:"Roboto","Open Sans","Lato","Source Sans Pro","Noto Sans",Arial,sans-serif}html.immersive-view.mobile-device .locked #saypi-locked-text .subtext{display:block;font-size:large}`, "",{"version":3,"sources":["webpack://./src/styles/mobile.scss","webpack://./src/styles/dark-mode.scss","webpack://./src/styles/focus-mode.scss","webpack://./src/styles/lock.scss"],"names":[],"mappings":"AACE,mEAEE,UAAA,CACA,cAAA,CACA,MAAA,CACA,sCAAA,CAEA,aAAA,CACA,KAAA,CAGF,sCACE,wBAAA,CACA,eAAA,CACA,QAAA,CACA,0CACE,WAAA,CACA,aAAA,CACA,iBAAA,CAKJ,sHAEE,oBAAA,CAIF,yCACE,YAAA,CAIF,0CAEE,kBAAA,CAEA,kDACE,YAAA,CAGF,uDACE,+BAAA,CACA,UAAA,CAEA,8DACE,YAAA,CAIJ,6DACE,8BAAA,CAKJ,sCACE,aAAA,CAGF,wCACE,YAAA,CAGF,2CAGE,YAAA,CAIF,wCACE,YAAA,CAGF,sCACE,cAAA,CACA,WAAA,CACA,MAAA,CACA,OAAA,CACA,WAAA,CACA,YAAA,CACA,aAAA,CACA,QAAA,CACA,UAAA,CAIF,iDACE,iBAAA,CAIF,2EACE,YAAA,CAIF,yDACE,aAAA,CAGF,6CACE,oBAAA,CAGF,+CACE,YAAA,CAGF,oEACE,UAAA,CACA,WAAA,CAGF,2CACE,YAAA,CAIJ,yEAEE,YAAA,CC3HE,gDACI,wBAAA,CACA,SAAA,CAEJ,uDACI,YAAA,CAIJ,oDACI,yBAAA,CACA,yBAAA,CACA,qCAAA,CAGF,iDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,gDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,iDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,gDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,oDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAKA,4DACE,gCAAA,CAEF,yDACE,UAAA,CCpDV,0DACI,SAAA,CACA,+BAAA,CCDJ,+CACI,UAAA,CACA,WAAA,CACA,WAAA,CACA,iBAAA,CACA,QAAA,CACA,UAAA,CACA,8DACE,aAAA,CAIJ,oDAEE,aAAA,CACA,8BAAA,CACA,eAAA,CACA,QAAA,CAGF,8DACE,+BAAA,CAEF,4DACE,uBAAA,CAGF,gEACE,uBAAA,CAEF,8DACE,+BAAA,CACA,iBAAA,CACA,sBAAA,CAGF,gEACE,wBAAA,CACA,cAAA,CACA,KAAA,CACA,MAAA,CACA,UAAA,CAEA,sCAAA,CACA,WAAA,CACA,aAAA,CACA,WAAA,CAGF,kBACE,KAAA,SAAA,CACA,GAAA,SAAA,CAAA,CAGF,qDACE,YAAA,CAEF,6DACE,wBAAA,CACA,cAAA,CACA,OAAA,CACA,QAAA,CACA,+BAAA,CACA,SAAA,CACA,WAAA,CAEA,qBAAA,CACA,qBAAA,CACA,4BAAA,CACA,iBAAA,CACA,kBAAA,CACA,sFAAA,CACA,sEACE,aAAA,CACA,eAAA","sourcesContent":["html.immersive-view {\n  #saypi-panel,\n  .notification {\n    width: 100%;\n    position: fixed;\n    left: 0;\n    background-color: rgba(245, 238, 223, 0.98);\n\n    height: 100svh;\n    top: 0;\n  }\n\n  #saypi-talkButton {\n    background-color: #e9f5da;\n    border-radius: 0;\n    margin: 0;\n    svg {\n      width: 100vw;\n      height: 100svh;\n      padding: 12.5svh 0;\n    }\n  }\n\n  /* Pi controls: ellipsis, experiences */\n  #__next > main > div > div > div.fixed.top-4.right-6 > button,\n  #saypi-experiences-button {\n    transform: scale(1.5);\n  }\n\n  /* hide an ugly artifact */\n  div.bg-gradient-to-b {\n    display: none;\n  }\n\n  /* Pi controls: mute/unmute */\n  #saypi-audio-controls {\n    /* align the mute button with the horizontal control panel */\n    margin-top: 0.375rem;\n    /* hide the voice options */\n    div.p-1 {\n      display: none;\n    }\n    /* scale the mute button */\n    button.group {\n      transform: scale(1.5) !important;\n      z-index: 50;\n      /* hide the voice selector twisty */\n      + button {\n        display: none;\n      }\n    }\n    /* make an ugly artifact transparent on pi.ai */\n    div.bg-neutral-200 {\n      background-color: transparent;\n    }\n  }\n\n  /* fix an alignment issue with the \"new ui layout\" */\n  .text-body-chat-m {\n    padding-top: 0;\n  }\n\n  .saypi-enter-button {\n    display: none;\n  }\n\n  #saypi-prompt-ancestor {\n    /* hides the row containing the text area control */\n    /* important: hides virtual keyboard on android */\n    display: none;\n    /* the call button, usually nested in the prompt, is detached while in mobile view */\n  }\n\n  #saypi-submitButton {\n    display: none;\n  }\n\n  #saypi-callButton {\n    position: fixed;\n    bottom: 4rem;\n    left: 0;\n    right: 0;\n    margin: auto;\n    width: 4.5rem;\n    height: 4.5rem;\n    border: 0;\n    z-index: 80;\n  }\n\n  /* hide the scrollbar */\n  .scrollbar-gutter-both-edges {\n    visibility: hidden;\n  }\n\n  /* hide any buttons in the control panel not relevant to mobile */\n  .saypi-control-panel button:not(.saypi-control-button) {\n    display: none;\n  }\n\n  /* override lg:hidden, making the control panel's buttons visible in immersive view on desktops */\n  #saypi-control-panel-main.lg\\:hidden {\n    display: block;\n  }\n  /* override lg:flex-row-reverse, making the audio control button visible in immersive view on desktops */\n  div.lg\\:flex-row-reverse {\n    flex-direction: unset;\n  }\n  /* hide the side panel in immersive mode */\n  #saypi-side-panel.lg\\:flex {\n    display: none;\n  }\n  \n  .saypi-control-panel button.theme-toggle-button {\n    width: 4rem;\n    padding: 6px;\n  }\n\n  #saypi-discovery-panel {\n    display: none;\n  }\n\n}\nhtml.mobile-device .chat-message .message-hover-menu .saypi-tts-controls {\n  /* on mobile, tts controls are in a popup menu instead */\n  display: none;\n}\n@import \"dark-mode.scss\";\n@import \"focus-mode.scss\";\n@import \"lock.scss\";\n","html.immersive-view body.dark {\n    #saypi-talkButton {\n        background-color: #bac5cc;\n        opacity: 1;\n    }\n    .call-button path.circle {\n        fill: #107782;\n    }\n\n    /* The following styles are for the card flip animation in rectangles.css */\n    .outermost.piThinking {\n        --original-color: #a9b7bf;\n        --thinking-color: #ffe4b2; /* A light orange for a soft but noticeable transition */\n        animation: thinkingFlip 1.0s ease-in-out;\n      }\n      \n      .second.piThinking {\n        --original-color: #8f9ca7;\n        --thinking-color: #ffddb4; /* A slightly different shade of light orange */\n        animation: thinkingFlip 1.1s ease-in-out;\n      }\n      \n      .third.piThinking {\n        --original-color: #787d83;\n        --thinking-color: #ffd5b7; /* A subtly warmer shade of light orange */\n        animation: thinkingFlip 1.2s ease-in-out;\n      }\n      \n      .fourth.piThinking {\n        --original-color: #6c7378;\n        --thinking-color: #ffcdca; /* A variation leaning towards pink */\n        animation: thinkingFlip 1.3s ease-in-out;\n      }\n      \n      .fifth.piThinking {\n        --original-color: #313437;\n        --thinking-color: #ffc5dc; /* A soft pink for contrast */\n        animation: thinkingFlip 1.4s ease-in-out;\n      }\n      \n      .innermost.piThinking {\n        --original-color: #1c1c1c;\n        --thinking-color: #ffbde6; /* A distinct light magenta */\n        animation: thinkingFlip 1.5s ease-in-out;\n      }\n      \n      /* even darker theme when locked */\n      .locked {\n        #saypi-touch-absorber {\n          background-color: rgba(0, 0, 0, 0.75);\n        }\n        #saypi-locked-text {\n          color: white;\n        }\n      }\n}\n","html.immersive-view:not(.mobile-device) body.focus button {\n    opacity: 0; \n    transition: opacity 0.5s ease-out;\n}","html.immersive-view.mobile-device {\n.lock-button {\n    width: 3rem;\n    height: 3rem;\n    padding: 6px;\n    margin-left: 0.5rem;\n    border: 0;\n    z-index: 60;\n    svg path.inner {\n      color: rgb(13 60 38); /* text-primary-700 */\n    }\n  }\n\n  #saypi-lock-panel {\n    /* unlocked by default */\n    display: unset;\n    background-color: transparent;\n    border-radius: 0;\n    margin: 0;\n  }\n\n  .unlocked #saypi-lockButton {\n    display: inline-block !important; // show the lock button when screen is unlocked\n  }\n  .locked #saypi-lockButton {\n    display: none !important; // hide the lock button when screen is locked\n  }\n\n  .unlocked #saypi-unlockButton {\n    display: none !important; // hide the unlock button when screen is unlocked\n  }\n  .locked #saypi-unlockButton {\n    display: inline-block !important; // show the unlock button when screen is unlocked\n    position: relative; // position (but don't move) the unlock button so that z-index works while locked\n    z-index: 101 !important; // above the touch absorber\n  }\n\n  .locked #saypi-touch-absorber {\n    display: block !important; // show the touch absorber when screen is locked\n    position: fixed;\n    top: 0;\n    left: 0;\n    opacity: 0.5;\n    /* semi-transparent background */\n    background-color: rgba(245, 238, 223, 0.75);\n    width: 100vw;\n    height: 100svh;\n    z-index: 100;\n  }\n\n  @keyframes fadeIn {\n    from { opacity: 0; }\n    to { opacity: 1; }\n  }  \n\n  #saypi-locked-text {\n    display: none; // hide the locked text when screen is unlocked\n  }\n  .locked #saypi-locked-text {\n    display: block !important; // show the locked text when screen is locked\n    position: fixed;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    width: 80%;\n    height: 1rem;\n    /* text */\n    animation-name: fadeIn;\n    animation-duration: 2s;\n    animation-fill-mode: forwards;\n    text-align: center;\n    font-size: xx-large;\n    font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;\n    .subtext {\n      display: block;\n      font-size: large;\n    }\n  }\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `html.immersive-view #saypi-panel,html.immersive-view .notification{width:100%;position:fixed;left:0;background-color:rgba(245,238,223,.98);height:100svh;top:0}html.immersive-view #saypi-talkButton{background-color:#e9f5da;border-radius:0;margin:0}html.immersive-view #saypi-talkButton svg{width:100vw;height:100svh;padding:12.5svh 0}html.immersive-view #__next>main>div>div>div.fixed.top-4.right-6>button,html.immersive-view #saypi-experiences-button{transform:scale(1.5)}html.immersive-view div.bg-gradient-to-b{display:none}html.immersive-view #saypi-audio-controls{margin-top:.375rem}html.immersive-view #saypi-audio-controls div.p-1{display:none}html.immersive-view #saypi-audio-controls button.group{transform:scale(1.5) !important;z-index:50}html.immersive-view #saypi-audio-controls button.group+button{display:none}html.immersive-view #saypi-audio-controls div.bg-neutral-200{background-color:rgba(0,0,0,0)}html.immersive-view .text-body-chat-m{padding-top:0}html.immersive-view .saypi-enter-button{display:none}html.immersive-view #saypi-prompt-ancestor{display:none}html.immersive-view #saypi-submitButton{display:none}html.immersive-view #saypi-callButton{position:fixed;bottom:4rem;left:0;right:0;margin:auto;width:4.5rem;height:4.5rem;border:0;z-index:80}html.immersive-view .scrollbar-gutter-both-edges{visibility:hidden}html.immersive-view .saypi-control-panel button:not(.saypi-control-button){display:none}html.immersive-view #saypi-control-panel-main.lg\\:hidden{display:block}html.immersive-view div.lg\\:flex-row-reverse{flex-direction:unset}html.immersive-view #saypi-side-panel.lg\\:flex{display:none}html.immersive-view .saypi-control-panel button.theme-toggle-button{width:4rem;padding:6px}html.immersive-view #saypi-discovery-panel{display:none}html.mobile-device .chat-message .message-hover-menu .saypi-tts-controls{display:none}html.mobile-device .chat-message .message-hover-menu .saypi-cost-container{display:flex;align-items:center;justify-content:flex-end}html.mobile-device .chat-message .message-hover-menu .saypi-cost-container .saypi-cost{order:2;flex-grow:1}html.mobile-device .chat-message .message-hover-menu .saypi-cost-container .saypi-cost .vertical-separator{display:none}html.mobile-device .chat-message .message-hover-menu .saypi-cost-container .saypi-pricing-link{order:1;margin-left:10px}html.immersive-view body.dark #saypi-talkButton{background-color:#bac5cc;opacity:1}html.immersive-view body.dark .call-button path.circle{fill:#107782}html.immersive-view body.dark .outermost.piThinking{--original-color: #a9b7bf;--thinking-color: #ffe4b2;animation:thinkingFlip 1s ease-in-out}html.immersive-view body.dark .second.piThinking{--original-color: #8f9ca7;--thinking-color: #ffddb4;animation:thinkingFlip 1.1s ease-in-out}html.immersive-view body.dark .third.piThinking{--original-color: #787d83;--thinking-color: #ffd5b7;animation:thinkingFlip 1.2s ease-in-out}html.immersive-view body.dark .fourth.piThinking{--original-color: #6c7378;--thinking-color: #ffcdca;animation:thinkingFlip 1.3s ease-in-out}html.immersive-view body.dark .fifth.piThinking{--original-color: #313437;--thinking-color: #ffc5dc;animation:thinkingFlip 1.4s ease-in-out}html.immersive-view body.dark .innermost.piThinking{--original-color: #1c1c1c;--thinking-color: #ffbde6;animation:thinkingFlip 1.5s ease-in-out}html.immersive-view body.dark .locked #saypi-touch-absorber{background-color:rgba(0,0,0,.75)}html.immersive-view body.dark .locked #saypi-locked-text{color:#fff}html.immersive-view:not(.mobile-device) body.focus button{opacity:0;transition:opacity .5s ease-out}html.immersive-view.mobile-device .lock-button{width:3rem;height:3rem;padding:6px;margin-left:.5rem;border:0;z-index:60}html.immersive-view.mobile-device .lock-button svg path.inner{color:#0d3c26}html.immersive-view.mobile-device #saypi-lock-panel{display:unset;background-color:rgba(0,0,0,0);border-radius:0;margin:0}html.immersive-view.mobile-device .unlocked #saypi-lockButton{display:inline-block !important}html.immersive-view.mobile-device .locked #saypi-lockButton{display:none !important}html.immersive-view.mobile-device .unlocked #saypi-unlockButton{display:none !important}html.immersive-view.mobile-device .locked #saypi-unlockButton{display:inline-block !important;position:relative;z-index:101 !important}html.immersive-view.mobile-device .locked #saypi-touch-absorber{display:block !important;position:fixed;top:0;left:0;opacity:.5;background-color:rgba(245,238,223,.75);width:100vw;height:100svh;z-index:100}@keyframes fadeIn{from{opacity:0}to{opacity:1}}html.immersive-view.mobile-device #saypi-locked-text{display:none}html.immersive-view.mobile-device .locked #saypi-locked-text{display:block !important;position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);width:80%;height:1rem;animation-name:fadeIn;animation-duration:2s;animation-fill-mode:forwards;text-align:center;font-size:xx-large;font-family:"Roboto","Open Sans","Lato","Source Sans Pro","Noto Sans",Arial,sans-serif}html.immersive-view.mobile-device .locked #saypi-locked-text .subtext{display:block;font-size:large}`, "",{"version":3,"sources":["webpack://./src/styles/mobile.scss","webpack://./src/styles/dark-mode.scss","webpack://./src/styles/focus-mode.scss","webpack://./src/styles/lock.scss"],"names":[],"mappings":"AACE,mEAEE,UAAA,CACA,cAAA,CACA,MAAA,CACA,sCAAA,CAEA,aAAA,CACA,KAAA,CAGF,sCACE,wBAAA,CACA,eAAA,CACA,QAAA,CACA,0CACE,WAAA,CACA,aAAA,CACA,iBAAA,CAKJ,sHAEE,oBAAA,CAIF,yCACE,YAAA,CAIF,0CAEE,kBAAA,CAEA,kDACE,YAAA,CAGF,uDACE,+BAAA,CACA,UAAA,CAEA,8DACE,YAAA,CAIJ,6DACE,8BAAA,CAKJ,sCACE,aAAA,CAGF,wCACE,YAAA,CAGF,2CAGE,YAAA,CAIF,wCACE,YAAA,CAGF,sCACE,cAAA,CACA,WAAA,CACA,MAAA,CACA,OAAA,CACA,WAAA,CACA,YAAA,CACA,aAAA,CACA,QAAA,CACA,UAAA,CAIF,iDACE,iBAAA,CAIF,2EACE,YAAA,CAIF,yDACE,aAAA,CAGF,6CACE,oBAAA,CAGF,+CACE,YAAA,CAGF,oEACE,UAAA,CACA,WAAA,CAGF,2CACE,YAAA,CAGJ,yEAEE,YAAA,CAGF,2EACE,YAAA,CACA,kBAAA,CACA,wBAAA,CAEA,uFACE,OAAA,CACA,WAAA,CACA,2GACE,YAAA,CAIJ,+FACE,OAAA,CACA,gBAAA,CC5IA,gDACI,wBAAA,CACA,SAAA,CAEJ,uDACI,YAAA,CAIJ,oDACI,yBAAA,CACA,yBAAA,CACA,qCAAA,CAGF,iDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,gDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,iDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,gDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAGF,oDACE,yBAAA,CACA,yBAAA,CACA,uCAAA,CAKA,4DACE,gCAAA,CAEF,yDACE,UAAA,CCpDV,0DACI,SAAA,CACA,+BAAA,CCDJ,+CACI,UAAA,CACA,WAAA,CACA,WAAA,CACA,iBAAA,CACA,QAAA,CACA,UAAA,CACA,8DACE,aAAA,CAIJ,oDAEE,aAAA,CACA,8BAAA,CACA,eAAA,CACA,QAAA,CAGF,8DACE,+BAAA,CAEF,4DACE,uBAAA,CAGF,gEACE,uBAAA,CAEF,8DACE,+BAAA,CACA,iBAAA,CACA,sBAAA,CAGF,gEACE,wBAAA,CACA,cAAA,CACA,KAAA,CACA,MAAA,CACA,UAAA,CAEA,sCAAA,CACA,WAAA,CACA,aAAA,CACA,WAAA,CAGF,kBACE,KAAA,SAAA,CACA,GAAA,SAAA,CAAA,CAGF,qDACE,YAAA,CAEF,6DACE,wBAAA,CACA,cAAA,CACA,OAAA,CACA,QAAA,CACA,+BAAA,CACA,SAAA,CACA,WAAA,CAEA,qBAAA,CACA,qBAAA,CACA,4BAAA,CACA,iBAAA,CACA,kBAAA,CACA,sFAAA,CACA,sEACE,aAAA,CACA,eAAA","sourcesContent":["html.immersive-view {\n  #saypi-panel,\n  .notification {\n    width: 100%;\n    position: fixed;\n    left: 0;\n    background-color: rgba(245, 238, 223, 0.98);\n\n    height: 100svh;\n    top: 0;\n  }\n\n  #saypi-talkButton {\n    background-color: #e9f5da;\n    border-radius: 0;\n    margin: 0;\n    svg {\n      width: 100vw;\n      height: 100svh;\n      padding: 12.5svh 0;\n    }\n  }\n\n  /* Pi controls: ellipsis, experiences */\n  #__next > main > div > div > div.fixed.top-4.right-6 > button,\n  #saypi-experiences-button {\n    transform: scale(1.5);\n  }\n\n  /* hide an ugly artifact */\n  div.bg-gradient-to-b {\n    display: none;\n  }\n\n  /* Pi controls: mute/unmute */\n  #saypi-audio-controls {\n    /* align the mute button with the horizontal control panel */\n    margin-top: 0.375rem;\n    /* hide the voice options */\n    div.p-1 {\n      display: none;\n    }\n    /* scale the mute button */\n    button.group {\n      transform: scale(1.5) !important;\n      z-index: 50;\n      /* hide the voice selector twisty */\n      + button {\n        display: none;\n      }\n    }\n    /* make an ugly artifact transparent on pi.ai */\n    div.bg-neutral-200 {\n      background-color: transparent;\n    }\n  }\n\n  /* fix an alignment issue with the \"new ui layout\" */\n  .text-body-chat-m {\n    padding-top: 0;\n  }\n\n  .saypi-enter-button {\n    display: none;\n  }\n\n  #saypi-prompt-ancestor {\n    /* hides the row containing the text area control */\n    /* important: hides virtual keyboard on android */\n    display: none;\n    /* the call button, usually nested in the prompt, is detached while in mobile view */\n  }\n\n  #saypi-submitButton {\n    display: none;\n  }\n\n  #saypi-callButton {\n    position: fixed;\n    bottom: 4rem;\n    left: 0;\n    right: 0;\n    margin: auto;\n    width: 4.5rem;\n    height: 4.5rem;\n    border: 0;\n    z-index: 80;\n  }\n\n  /* hide the scrollbar */\n  .scrollbar-gutter-both-edges {\n    visibility: hidden;\n  }\n\n  /* hide any buttons in the control panel not relevant to mobile */\n  .saypi-control-panel button:not(.saypi-control-button) {\n    display: none;\n  }\n\n  /* override lg:hidden, making the control panel's buttons visible in immersive view on desktops */\n  #saypi-control-panel-main.lg\\:hidden {\n    display: block;\n  }\n  /* override lg:flex-row-reverse, making the audio control button visible in immersive view on desktops */\n  div.lg\\:flex-row-reverse {\n    flex-direction: unset;\n  }\n  /* hide the side panel in immersive mode */\n  #saypi-side-panel.lg\\:flex {\n    display: none;\n  }\n\n  .saypi-control-panel button.theme-toggle-button {\n    width: 4rem;\n    padding: 6px;\n  }\n\n  #saypi-discovery-panel {\n    display: none;\n  }\n}\nhtml.mobile-device .chat-message .message-hover-menu .saypi-tts-controls {\n  /* on mobile, speech controls are in a popup menu instead */\n  display: none;\n}\n/* styling for the speech controls in the popup menu */\nhtml.mobile-device .chat-message .message-hover-menu .saypi-cost-container {\n  display: flex;\n  align-items: center;\n  justify-content: flex-end;\n\n  .saypi-cost {\n    order: 2;\n    flex-grow: 1;\n    .vertical-separator {\n      display: none;\n    }\n  }\n\n  .saypi-pricing-link {\n    order: 1;\n    margin-left: 10px;\n  }\n}\n\n@import \"dark-mode.scss\";\n@import \"focus-mode.scss\";\n@import \"lock.scss\";\n","html.immersive-view body.dark {\n    #saypi-talkButton {\n        background-color: #bac5cc;\n        opacity: 1;\n    }\n    .call-button path.circle {\n        fill: #107782;\n    }\n\n    /* The following styles are for the card flip animation in rectangles.css */\n    .outermost.piThinking {\n        --original-color: #a9b7bf;\n        --thinking-color: #ffe4b2; /* A light orange for a soft but noticeable transition */\n        animation: thinkingFlip 1.0s ease-in-out;\n      }\n      \n      .second.piThinking {\n        --original-color: #8f9ca7;\n        --thinking-color: #ffddb4; /* A slightly different shade of light orange */\n        animation: thinkingFlip 1.1s ease-in-out;\n      }\n      \n      .third.piThinking {\n        --original-color: #787d83;\n        --thinking-color: #ffd5b7; /* A subtly warmer shade of light orange */\n        animation: thinkingFlip 1.2s ease-in-out;\n      }\n      \n      .fourth.piThinking {\n        --original-color: #6c7378;\n        --thinking-color: #ffcdca; /* A variation leaning towards pink */\n        animation: thinkingFlip 1.3s ease-in-out;\n      }\n      \n      .fifth.piThinking {\n        --original-color: #313437;\n        --thinking-color: #ffc5dc; /* A soft pink for contrast */\n        animation: thinkingFlip 1.4s ease-in-out;\n      }\n      \n      .innermost.piThinking {\n        --original-color: #1c1c1c;\n        --thinking-color: #ffbde6; /* A distinct light magenta */\n        animation: thinkingFlip 1.5s ease-in-out;\n      }\n      \n      /* even darker theme when locked */\n      .locked {\n        #saypi-touch-absorber {\n          background-color: rgba(0, 0, 0, 0.75);\n        }\n        #saypi-locked-text {\n          color: white;\n        }\n      }\n}\n","html.immersive-view:not(.mobile-device) body.focus button {\n    opacity: 0; \n    transition: opacity 0.5s ease-out;\n}","html.immersive-view.mobile-device {\n.lock-button {\n    width: 3rem;\n    height: 3rem;\n    padding: 6px;\n    margin-left: 0.5rem;\n    border: 0;\n    z-index: 60;\n    svg path.inner {\n      color: rgb(13 60 38); /* text-primary-700 */\n    }\n  }\n\n  #saypi-lock-panel {\n    /* unlocked by default */\n    display: unset;\n    background-color: transparent;\n    border-radius: 0;\n    margin: 0;\n  }\n\n  .unlocked #saypi-lockButton {\n    display: inline-block !important; // show the lock button when screen is unlocked\n  }\n  .locked #saypi-lockButton {\n    display: none !important; // hide the lock button when screen is locked\n  }\n\n  .unlocked #saypi-unlockButton {\n    display: none !important; // hide the unlock button when screen is unlocked\n  }\n  .locked #saypi-unlockButton {\n    display: inline-block !important; // show the unlock button when screen is unlocked\n    position: relative; // position (but don't move) the unlock button so that z-index works while locked\n    z-index: 101 !important; // above the touch absorber\n  }\n\n  .locked #saypi-touch-absorber {\n    display: block !important; // show the touch absorber when screen is locked\n    position: fixed;\n    top: 0;\n    left: 0;\n    opacity: 0.5;\n    /* semi-transparent background */\n    background-color: rgba(245, 238, 223, 0.75);\n    width: 100vw;\n    height: 100svh;\n    z-index: 100;\n  }\n\n  @keyframes fadeIn {\n    from { opacity: 0; }\n    to { opacity: 1; }\n  }  \n\n  #saypi-locked-text {\n    display: none; // hide the locked text when screen is unlocked\n  }\n  .locked #saypi-locked-text {\n    display: block !important; // show the locked text when screen is locked\n    position: fixed;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    width: 80%;\n    height: 1rem;\n    /* text */\n    animation-name: fadeIn;\n    animation-duration: 2s;\n    animation-fill-mode: forwards;\n    text-align: center;\n    font-size: xx-large;\n    font-family: 'Roboto', 'Open Sans', 'Lato', 'Source Sans Pro', 'Noto Sans', Arial, sans-serif;\n    .subtext {\n      display: block;\n      font-size: large;\n    }\n  }\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -27091,22 +27114,78 @@ const audioProviders = {
     Pi: new BaseAudioProvider("Pi", "pi.ai"),
     // Add more providers as needed
 };
-class SayPiSpeech {
-    constructor(id, lang, voice, uri) {
+class BaseSpeechUtterance {
+    constructor(id, lang, voice, uri, provider) {
         this.id = id;
         this.lang = lang;
         this.voice = voice;
         this.uri = uri;
-        this.provider = audioProviders.SayPi;
+        this.provider = provider;
+    }
+    toString() {
+        return `Speech: { Voice: ${this.voice.name}, ID: ${this.id} }`;
+    }
+    static fromPlainObject(obj) {
+        return new BaseSpeechUtterance(obj.id, obj.lang, obj.voice, obj.uri, obj.provider);
     }
 }
-class PiSpeech {
+const placeholderVoice = {
+    id: "unassigned",
+    lang: "en",
+    price: 0,
+    powered_by: "unassigned",
+    default: false,
+    localService: false,
+    name: "Placeholder Voice",
+    voiceURI: "",
+};
+function isPlaceholderUtterance(utterance) {
+    return utterance instanceof SpeechPlaceholder;
+}
+class SpeechPlaceholder extends BaseSpeechUtterance {
+    constructor(lang, provider) {
+        super("placeholder-" + Math.random().toString(36).substr(2, 9), lang, placeholderVoice, "", provider);
+    }
+    fromPlainObject(obj) {
+        return new SpeechPlaceholder(obj.lang, obj.provider);
+    }
+}
+class SayPiSpeech extends BaseSpeechUtterance {
     constructor(id, lang, voice, uri) {
-        this.id = id;
-        this.lang = lang;
-        this.voice = voice;
-        this.uri = uri;
-        this.provider = audioProviders.Pi;
+        super(id, lang, voice, uri, audioProviders.SayPi);
+    }
+    fromPlainObject(obj) {
+        return new SayPiSpeech(obj.id, obj.lang, obj.voice, obj.uri);
+    }
+}
+class PiSpeech extends BaseSpeechUtterance {
+    constructor(id, lang, voice, uri) {
+        super(id, lang, voice, uri, audioProviders.Pi);
+    }
+    static initializeVoices(parser) {
+        PiSpeech.voices.voice1 = parser.getVoice("voice1");
+        PiSpeech.voices.voice2 = parser.getVoice("voice2");
+        PiSpeech.voices.voice3 = parser.getVoice("voice3");
+        PiSpeech.voices.voice4 = parser.getVoice("voice4");
+        PiSpeech.voices.voice5 = parser.getVoice("voice5");
+        PiSpeech.voices.voice6 = parser.getVoice("voice6");
+    }
+    fromPlainObject(obj) {
+        return new PiSpeech(obj.id, obj.lang, obj.voice, obj.uri);
+    }
+}
+// contains all the original voices available for Pi
+PiSpeech.voices = {};
+class UtteranceFactory {
+    static createUtterance(obj) {
+        switch (obj.provider.name) {
+            case "Say, Pi":
+                return SayPiSpeech.fromPlainObject(obj);
+            case "Pi":
+                return PiSpeech.fromPlainObject(obj);
+            default:
+                return BaseSpeechUtterance.fromPlainObject(obj);
+        }
     }
 }
 class AssistantSpeech {
@@ -27323,6 +27402,11 @@ class UserPreferenceModule {
             const audioControls = new AudioControlsModule();
             audioControls.useAudioOutputProvider(audioProviders.SayPi); // TODO: replace with voice.provided_by
         }
+        EventBus.emit("userPreferenceChanged", {
+            voiceId: voice.id,
+            voice: voice,
+            audioProvider: audioProviders.SayPi,
+        });
         return Promise.resolve();
     }
     unsetVoice() {
@@ -27337,6 +27421,11 @@ class UserPreferenceModule {
                 }
             });
         }
+        EventBus.emit("userPreferenceChanged", {
+            voiceId: null,
+            voice: null,
+            audioProvider: audioProviders.Pi,
+        });
         return Promise.resolve();
     }
     getAllowInterruptions() {
@@ -27350,6 +27439,7 @@ class UserPreferenceModule {
      */
     isTTSBetaPaused() {
         return PreferenceModule_awaiter(this, void 0, void 0, function* () {
+            const defaultStatus = false;
             const statusEndpoint = `${config.apiServerUrl}/status/tts`;
             try {
                 const response = yield fetch(statusEndpoint);
@@ -27357,8 +27447,8 @@ class UserPreferenceModule {
                 return data.beta.status === "paused";
             }
             catch (error) {
-                console.error("Error:", error);
-                return false;
+                console.warn("Unable to check TTS beta status. API server may be unavailable.", error);
+                return defaultStatus;
             }
         });
     }
@@ -27541,6 +27631,9 @@ class InputBuffer {
     hasEnded() {
         return this.isClosed;
     }
+    isOpen() {
+        return !this.isClosed;
+    }
     replaceText(from, to) {
         this.buffer = this.buffer.replace(from, to);
     }
@@ -27557,7 +27650,7 @@ var AudioStreamManager_awaiter = (undefined && undefined.__awaiter) || function 
     });
 };
 
-const STREAM_TIMEOUT_MS = 15000; // end streams after prolonged inactivity
+const STREAM_TIMEOUT_MS = 19000; // end streams after prolonged inactivity (<= 20s)
 const BUFFER_TIMEOUT_MS = 1000; // flush buffers after inactivity
 const START_OF_SPEECH_MARKER = " "; // In the first message, the text should be a space " " to indicate the start of speech (why?)
 class AudioStreamManager {
@@ -27568,18 +27661,19 @@ class AudioStreamManager {
     createStream(uuid, voice, lang) {
         return AudioStreamManager_awaiter(this, void 0, void 0, function* () {
             const utterance = yield this.ttsService.createSpeech(uuid, START_OF_SPEECH_MARKER, voice, lang, true);
-            this.inputBuffers[utterance.id] = new InputBuffer(utterance.id, this.ttsService, BUFFER_TIMEOUT_MS, STREAM_TIMEOUT_MS);
             return utterance;
         });
     }
+    createInputBuffer(uuid) {
+        this.inputBuffers[uuid] = new InputBuffer(uuid, this.ttsService, BUFFER_TIMEOUT_MS, STREAM_TIMEOUT_MS);
+        return this.inputBuffers[uuid];
+    }
     addSpeechToStream(uuid, text) {
         return AudioStreamManager_awaiter(this, void 0, void 0, function* () {
-            if (this.inputBuffers[uuid]) {
-                this.inputBuffers[uuid].addText(text);
+            if (!this.hasInputBuffer(uuid)) {
+                this.createInputBuffer(uuid);
             }
-            else {
-                console.error(`No input buffer found for UUID: ${uuid}`);
-            }
+            this.getInputBuffer(uuid).addText(text);
         });
     }
     replaceSpeechInStream(uuid, from, to) {
@@ -27603,33 +27697,35 @@ class AudioStreamManager {
     }
     endStream(uuid) {
         return AudioStreamManager_awaiter(this, void 0, void 0, function* () {
-            if (this.inputBuffers[uuid]) {
-                this.inputBuffers[uuid].endInput();
-            }
-            else {
-                console.log("Speech stream already ended or not found");
-            }
+            this.getInputBuffer(uuid).endInput();
         });
     }
     getPendingText(uuid) {
         var _a;
-        return ((_a = this.inputBuffers[uuid]) === null || _a === void 0 ? void 0 : _a.getPendingText()) || "";
+        return ((_a = this.getInputBuffer(uuid)) === null || _a === void 0 ? void 0 : _a.getPendingText()) || "";
     }
     isPending(uuid, text) {
         var _a;
-        return ((_a = this.inputBuffers[uuid]) === null || _a === void 0 ? void 0 : _a.isPending(text)) || false;
+        return ((_a = this.getInputBuffer(uuid)) === null || _a === void 0 ? void 0 : _a.isPending(text)) || false;
     }
     hasSent(uuid, text) {
         var _a;
-        return ((_a = this.inputBuffers[uuid]) === null || _a === void 0 ? void 0 : _a.hasSent(text)) || false;
+        return ((_a = this.getInputBuffer(uuid)) === null || _a === void 0 ? void 0 : _a.hasSent(text)) || false;
     }
     hasEnded(uuid) {
         var _a;
-        return ((_a = this.inputBuffers[uuid]) === null || _a === void 0 ? void 0 : _a.hasEnded()) || true;
+        return ((_a = this.getInputBuffer(uuid)) === null || _a === void 0 ? void 0 : _a.hasEnded()) || true;
+    }
+    isOpen(uuid) {
+        var _a;
+        return ((_a = this.getInputBuffer(uuid)) === null || _a === void 0 ? void 0 : _a.isOpen()) || false;
     }
     /* visible for testing */
     getInputBuffer(uuid) {
-        return this.inputBuffers[uuid];
+        return this.inputBuffers[uuid] || this.createInputBuffer(uuid);
+    }
+    hasInputBuffer(uuid) {
+        return !!this.inputBuffers[uuid];
     }
 }
 
@@ -31175,6 +31271,7 @@ class TextToSpeechService {
 var md5 = __webpack_require__(8495);
 ;// CONCATENATED MODULE: ./src/billing/BillingModule.ts
 
+
 class UtteranceCharge {
     static free(utterance, text) {
         return new UtteranceCharge(utterance, 0, (0,md5.md5)(text.trim()));
@@ -31202,12 +31299,19 @@ class BillingModule {
                 this.charges = data.charges;
             }
         });
+        this.registerEventListeners();
     }
     static getInstance() {
         if (!BillingModule.instance) {
             BillingModule.instance = new BillingModule();
         }
         return BillingModule.instance;
+    }
+    registerEventListeners() {
+        EventBus.on("saypi:piStoppedWriting", ({ utterance, text }) => {
+            const charge = this.charge(utterance, text);
+            EventBus.emit("saypi:billing:utteranceCharged", charge);
+        });
     }
     quote(voice, text) {
         return (text.length * voice.price) / 1000;
@@ -31263,12 +31367,12 @@ function generateUUID() {
         return v.toString(16);
     });
 }
-function getUtteranceURI(utterance) {
-    if (utterance.uri.includes("?")) {
-        return utterance.uri;
+function getUtteranceURI(speech) {
+    if (speech.uri.includes("?")) {
+        return speech.uri;
     }
     else {
-        return `${utterance.uri}?voice_id=${utterance.voice.id}&lang=${utterance.lang}`;
+        return `${speech.uri}?voice_id=${speech.voice.id}&lang=${speech.lang}`;
     }
 }
 class SpeechSynthesisModule {
@@ -31299,6 +31403,7 @@ class SpeechSynthesisModule {
         this.ttsService = ttsService;
         this.audioStreamManager = audioStreamManager;
         this.userPreferences = userPreferenceModule;
+        this.registerEventListeners();
         this.initProvider();
     }
     initProvider() {
@@ -31347,6 +31452,22 @@ class SpeechSynthesisModule {
             return this.ttsService.createSpeech(uuid, text, preferedVoice, preferedLang, stream);
         });
     }
+    createSpeechPlaceholder(provider) {
+        return SpeechSynthesisModule_awaiter(this, void 0, void 0, function* () {
+            const preferedLang = yield this.userPreferences.getLanguage();
+            return new SpeechPlaceholder(preferedLang, provider);
+        });
+    }
+    createSpeechStreamOrPlaceholder(provider) {
+        return SpeechSynthesisModule_awaiter(this, void 0, void 0, function* () {
+            if (provider === audioProviders.SayPi) {
+                return this.createSpeechStream();
+            }
+            else {
+                return this.createSpeechPlaceholder(provider);
+            }
+        });
+    }
     createSpeechStream() {
         return SpeechSynthesisModule_awaiter(this, void 0, void 0, function* () {
             const preferedVoice = yield this.userPreferences.getVoice();
@@ -31376,9 +31497,14 @@ class SpeechSynthesisModule {
             EventBus.emit("saypi:tts:speechStreamEnded", utterance);
         });
     }
-    speak(utterance) {
+    speak(speech) {
+        if (speech instanceof SpeechPlaceholder) {
+            console.warn("Cannot speak a placeholder");
+            return;
+        }
+        console.debug(`Speaking: ${speech.toString()}`);
         // Start audio playback with utterance.uri as the audio source
-        const audioSource = getUtteranceURI(utterance);
+        const audioSource = getUtteranceURI(speech);
         EventBus.emit("audio:load", { url: audioSource }); // indirectly calls AudioModule.loadAudio
     }
     cancel() {
@@ -31406,6 +31532,47 @@ class SpeechSynthesisModule {
             return audioProviders.Pi;
         });
     }
+    isStreamOpen(utteranceId) {
+        return this.audioStreamManager.isOpen(utteranceId);
+    }
+    addSpeechToStreamIfOpen(utteranceId, text) {
+        if (this.isStreamOpen(utteranceId)) {
+            this.addSpeechToStream(utteranceId, text);
+        }
+    }
+    replaceSpeechInStreamIfOpen(utteranceId, from, to) {
+        if (this.isStreamOpen(utteranceId)) {
+            return this.replaceSpeechInStream(utteranceId, from, to);
+        }
+        return Promise.resolve(false);
+    }
+    endSpeechStreamIfOpen(utterance) {
+        if (this.isStreamOpen(utterance.id)) {
+            this.endSpeechStream(utterance);
+        }
+    }
+    registerEventListeners() {
+        EventBus.on("saypi:tts:text:added", (text) => {
+            this.addSpeechToStreamIfOpen(text.utterance.id, text.text);
+        });
+        EventBus.on("saypi:tts:text:changed", (text) => {
+            this.replaceSpeechInStreamIfOpen(text.utterance.id, text.changedFrom, text.text).then((replaced) => {
+                if (replaced) {
+                    console.debug(`Replaced text in stream: "${text.changedFrom}" -> "${text.text}"`);
+                }
+                else {
+                    console.warn(`Failed to replace text in stream before being flushed: "${text.changedFrom}" -> "${text.text}"`);
+                    EventBus.emit("saypi:tts:text:error", {
+                        text: text.text,
+                        utterance: text.utterance,
+                    });
+                }
+            });
+        });
+        EventBus.on("saypi:tts:text:completed", (text) => {
+            this.endSpeechStreamIfOpen(text.utterance);
+        });
+    }
 }
 
 
@@ -31424,20 +31591,7 @@ class PiSpeechSourceParser {
     constructor(default_lang = "en") {
         this.lang = default_lang;
     }
-    parse(source) {
-        let url;
-        try {
-            url = new URL(source);
-        }
-        catch (_) {
-            throw new Error(`Invalid source: ${source} is not a valid URL.`);
-        }
-        const params = url.searchParams;
-        const messageSid = params.get("messageSid");
-        const voiceId = params.get("voice");
-        if (!messageSid || !voiceId) {
-            throw new Error(`Invalid source: ${source} does not contain required parameters.`);
-        }
+    getVoice(voiceId) {
         const voiceNumber = voiceId.slice(-1);
         const theVoice = {
             id: voiceId,
@@ -31449,7 +31603,47 @@ class PiSpeechSourceParser {
             powered_by: "inflection.ai",
             voiceURI: "", // inflection.ai doesn't provide this
         };
+        return theVoice;
+    }
+    /**
+     * Parse a Pi speech URL into a SpeechUtterance
+     * @param source URL of the audio source, e.g. https://pi.ai/api/chat/voice?mode=eager&voice=voice1&messageSid=Wv8mqegpQDbfMNP9hDJGw
+     * @returns
+     */
+    parse(source) {
+        let url;
+        try {
+            url = new URL(source);
+        }
+        catch (_) {
+            throw new Error(`Invalid source: ${source} is not a valid URL.`);
+        }
+        // verify the domain is pi.ai
+        if (url.hostname !== "pi.ai") {
+            throw new Error(`Invalid source: ${source} is not from the pi.ai domain.`);
+        }
+        const params = url.searchParams;
+        const messageSid = params.get("messageSid");
+        const voiceId = params.get("voice");
+        if (!messageSid || !voiceId) {
+            throw new Error(`Invalid source: ${source} does not contain required parameters.`);
+        }
+        const theVoice = this.getVoice(voiceId);
         return new PiSpeech(messageSid, this.lang, theVoice, source);
+    }
+    /**
+     * Check if the source URL is a Pi speech URL
+     * @param source URL of the audio source
+     * @returns boolean
+     */
+    matches(source) {
+        try {
+            this.parse(source);
+            return true;
+        }
+        catch (_) {
+            return false;
+        }
     }
 }
 class SayPiSpeechSourceParser {
@@ -31487,6 +31681,22 @@ class SayPiSpeechSourceParser {
             }
             const theVoice = yield this.voiceModule.getVoiceById(voiceId);
             return new SayPiSpeech(speechId, lang || "", theVoice, source);
+        });
+    }
+    /**
+     * Check if the source URL is a SayPi speech URL
+     * @param source URL of the audio source
+     * @returns boolean
+     */
+    matches(source) {
+        return SpeechSourceParsers_awaiter(this, void 0, void 0, function* () {
+            try {
+                yield this.parse(source);
+                return true;
+            }
+            catch (_) {
+                return false;
+            }
         });
     }
 }
@@ -32000,6 +32210,96 @@ function addDeviceFlags(element) {
     element.classList.add("mobile-device");
   }
 }
+;// CONCATENATED MODULE: ./src/SlowResponseHandler.ts
+
+
+
+class SlowResponseHandler {
+    constructor(speechModule) {
+        this.speechModule = speechModule;
+        // Private constructor to prevent instantiation
+    }
+    static getInstance() {
+        if (!SlowResponseHandler.instance) {
+            const voiceModule = SpeechSynthesisModule.getInstance();
+            SlowResponseHandler.instance = new SlowResponseHandler(voiceModule);
+        }
+        return SlowResponseHandler.instance;
+    }
+    // Function to handle audio errors
+    handleAudioError(event) {
+        const audioElement = event.target;
+        const error = audioElement.error;
+        const src = audioElement.currentSrc;
+        if (error instanceof MediaError) {
+            if (error.code === 4) {
+                console.error("Detected potential slow response. MediaError code 4:", error.message);
+                this.handleSlowResponseForTextStream();
+                this.speechModule.getActiveAudioProvider().then((audioProvider) => {
+                    if (audioProvider === audioProviders.Pi) {
+                        this.handleSlowResponseForAudioStream(src);
+                    }
+                });
+            }
+            else {
+                console.error(`Other media error (code ${error.code}):`, error.message);
+            }
+        }
+        else {
+            console.error("Unknown error type:", error);
+        }
+    }
+    // Function to handle slow response
+    handleSlowResponseForTextStream() {
+        console.log("Detected slow response, increasing timeout");
+        // Dispatch a custom event that your extension can listen for
+        EventBus.emit("saypi:tts:text:delay");
+    }
+    handleSlowResponseForAudioStream(src) {
+        console.log("Detected slow response, reloading audio from", src);
+        // sleep for 1500ms before reloading the audio
+        setTimeout(() => {
+            const details = {
+                bypassCache: true,
+                playImmediately: true,
+            };
+            EventBus.emit("audio:reload", details);
+        }, 1500 * 2);
+    }
+}
+/* harmony default export */ const src_SlowResponseHandler = (SlowResponseHandler);
+
+;// CONCATENATED MODULE: ./src/CacheBuster.ts
+class CacheBuster {
+    /**
+     * Adds or increments an 'attempt' parameter to the given URL for cache busting.
+     * @param url The URL to modify
+     * @returns A new URL with an updated 'attempt' parameter
+     */
+    static addCacheBuster(url) {
+        const urlObj = new URL(url);
+        const currentAttempt = this.getAttempt(url);
+        urlObj.searchParams.set(this.ATTEMPT_PARAM, (currentAttempt + 1).toString());
+        return urlObj.toString();
+    }
+    /**
+     * Retrieves the value of the 'attempt' parameter from the given URL.
+     * @param url The URL to check
+     * @returns The numeric value of the 'attempt' parameter, or 0 if not present or invalid
+     */
+    static getAttempt(url) {
+        const urlObj = new URL(url);
+        const attemptParam = urlObj.searchParams.get(this.ATTEMPT_PARAM);
+        if (attemptParam === null) {
+            return 0;
+        }
+        const parsedAttempt = parseInt(attemptParam, 10);
+        return isNaN(parsedAttempt) ? 0 : parsedAttempt;
+    }
+}
+CacheBuster.ATTEMPT_PARAM = "attempt";
+
+
 ;// CONCATENATED MODULE: ./src/audio/AudioModule.js
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -32014,6 +32314,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 // import state machines for audio input and output
+
+
 
 
 
@@ -32065,10 +32367,13 @@ var AudioModule = /*#__PURE__*/function () {
   _createClass(AudioModule, [{
     key: "start",
     value: function start() {
-      this.findAndDecorateAudioElement();
+      this.findAndDecorateAudioElement(); // need to ensure an audio element exists before registering event listeners
       // audio output (Pi)
       this.audioOutputActor.start();
       this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
+      // handle slow responses from pi.ai - since 2024-07
+      var slowResponseHandler = src_SlowResponseHandler.getInstance();
+      this.registerAudioErrorEvents(this.audioElement, slowResponseHandler);
       //this.safariErrorHandler.startMonitoring();
       this.registerLifecycleDebug();
 
@@ -32108,6 +32413,12 @@ var AudioModule = /*#__PURE__*/function () {
     value: function findAndDecorateAudioElement() {
       var searchRoot = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
       this.audioElement = this.findAudioElement(searchRoot);
+      if (!this.audioElement) {
+        // an audio element is required for audio input/output, so create one if it doesn't exist
+        this.audioElement = new Audio();
+        document.body.appendChild(this.audioElement); // <- this happens too soon for pi.ai, before it loads its own audio element
+      }
+
       this.decorateAudioElement(this.audioElement);
       this.registerRemovalListener();
     }
@@ -32120,6 +32431,8 @@ var AudioModule = /*#__PURE__*/function () {
       this.audioElement = newAudioElement;
       this.decorateAudioElement(this.audioElement);
       this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
+      var slowResponseHandler = src_SlowResponseHandler.getInstance();
+      this.registerAudioErrorEvents(this.audioElement, slowResponseHandler);
       if (isSafari()) {
         this.registerAudioPlaybackEvents(this.audioElement, this.audioRetryActor);
         this.registerSourceChangeEvents(this.audioElement, this.audioRetryActor);
@@ -32303,15 +32616,21 @@ var AudioModule = /*#__PURE__*/function () {
     key: "registerOfflineAudioCommands",
     value: function registerOfflineAudioCommands() {
       var _this5 = this;
-      var audio = this.audioElement;
       // audio output (playback) commands
       EventBus.on("audio:load", function (detail) {
-        audio = audio || new Audio();
+        var audio = _this5.findAudioElement(document) || new Audio();
         _this5.loadAudio(audio, detail.url);
       }, this);
-      EventBus.on("audio:reload", function (e) {
-        audio = audio || new Audio();
+      EventBus.on("audio:reload", function (reloadAudioRequest) {
+        var audio = _this5.findAudioElement(document) || new Audio();
+        if (reloadAudioRequest !== null && reloadAudioRequest !== void 0 && reloadAudioRequest.bypassCache) {
+          var url = audio.src;
+          audio.src = CacheBuster.addCacheBuster(url);
+        }
         audio.load();
+        if (reloadAudioRequest !== null && reloadAudioRequest !== void 0 && reloadAudioRequest.playImmediately) {
+          audio.play();
+        }
       });
     }
 
@@ -32454,6 +32773,20 @@ var AudioModule = /*#__PURE__*/function () {
         var elapsedtime = (endtime - starttime) / 1000;
         console.debug("Audio playback ended after ".concat(elapsedtime.toFixed(1), "s"));
       };
+    }
+
+    /**
+     * Register error events on the audio element to handle slow responses from pi.ai
+     * @param {HTMLAudioElement} audioElement
+     * @param {SlowResponseHandler} slowResponseHandler
+     */
+  }, {
+    key: "registerAudioErrorEvents",
+    value: function registerAudioErrorEvents(audioElement, slowResponseHandler) {
+      audioElement.addEventListener("error", function (event) {
+        console.error("Error playing audio from ".concat(audioElement.currentSrc), event);
+        slowResponseHandler.handleAudioError(event);
+      });
     }
   }], [{
     key: "getInstance",
@@ -32650,6 +32983,203 @@ function addChild(parent, child, position = 0) {
         document.body.appendChild(child);
     }
 }
+/**
+ * Finds the root ancestor of an element.
+ * @param element - The starting element.
+ * @returns The root ancestor element or document.
+ */
+function findRootAncestor(element) {
+    if (!element.parentElement || element.parentNode instanceof Document) {
+        return element;
+    }
+    return findRootAncestor(element.parentElement);
+}
+
+;// CONCATENATED MODULE: ./src/i18n.ts
+var i18n_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+// We'll start with an empty messages object
+let messages = {};
+const userPreferences = UserPreferenceModule.getInstance();
+// This function attempts to load messages for a given locale
+function loadMessages(locale) {
+    return i18n_awaiter(this, void 0, void 0, function* () {
+        try {
+            messages[locale] = yield __webpack_require__(4557)(`./${locale}/messages.json`);
+        }
+        catch (error) {
+            console.error(`Failed to load messages for locale: ${locale}`, error);
+        }
+    });
+}
+function getLocalMessage(locale, messageName, substitutions) {
+    // if the locale is not in the messages object, default to English
+    if (!messages[locale]) {
+        locale = "en";
+    }
+    // if the message is not in the locale object, default to the message name and log an error
+    if (!messages[locale] || !messages[locale][messageName]) {
+        console.error(`Message not found for locale: ${locale} and message name: ${messageName}`);
+        return messageName;
+    }
+    else {
+        const rawMessage = messages[locale][messageName].message;
+        if (substitutions) {
+            return rawMessage.replace("$1", substitutions.toString());
+        }
+        else {
+            return rawMessage;
+        }
+    }
+}
+// Call this function to initialize the messages
+function convertLanguageToLocale(language) {
+    return language.split("_")[0];
+}
+function getMessage(messageName, substitutions) {
+    // Check if running as a Chrome extension
+    if (typeof chrome !== "undefined" && chrome.i18n) {
+        return chrome.i18n.getMessage(messageName, substitutions);
+    }
+    else {
+        // Fallback for userscript
+        userPreferences
+            .getLanguage()
+            .then((lang) => {
+            let locale = convertLanguageToLocale(lang);
+            if (!messages[locale]) {
+                loadMessages(locale);
+            }
+            return getLocalMessage(locale, messageName);
+        })
+            .catch((error) => {
+            console.error(`Failed to get language preference`, error);
+            let locale = "en";
+            if (!messages[locale]) {
+                loadMessages(locale);
+            }
+            return getLocalMessage(locale, messageName);
+        });
+    }
+    return messageName;
+}
+/* harmony default export */ const i18n = (getMessage);
+
+;// CONCATENATED MODULE: ./src/icons/mode-night.svg
+/* harmony default export */ const mode_night = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"Layer_2\" data-name=\"Layer 2\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 616 420.11\">\n  <defs>\n    <style>\n      .cls-1 {\n        clip-path: url(#clippath);\n      }\n\n      .cls-2 {\n        fill: none;\n      }\n\n      .cls-2, .cls-3, .cls-4 {\n        stroke-width: 0px;\n      }\n\n      .cls-3 {\n        fill: #1b447a;\n      }\n\n      .cls-4 {\n        fill: #fff;\n      }\n    </style>\n    <clipPath id=\"clippath\">\n      <rect class=\"cls-2\" x=\"-1\" y=\"-.04\" width=\"1024\" height=\"420\"/>\n    </clipPath>\n  </defs>\n  <g class=\"cls-1\">\n    <path class=\"cls-3\" d=\"M404.52,419.8h-194.73C93.88,419.8-.09,325.78-.09,209.82S93.88-.15,209.79-.15h194.73c115.92,0,210.88,94.01,210.88,209.97s-94.97,209.97-210.88,209.97Z\"/>\n  </g>\n  <path class=\"cls-4\" d=\"M404.19,209.82c0,3.05-.07,6.09-.23,9.15s-.37,6.09-.67,9.12c-.31,3.04-.67,6.07-1.12,9.08s-.97,6.01-1.56,9.01c-.6,2.99-1.27,5.96-2,8.92-.73,2.96-1.55,5.89-2.44,8.81s-1.84,5.81-2.87,8.68c-1.03,2.87-2.12,5.72-3.29,8.53s-2.4,5.6-3.71,8.36c-1.31,2.76-2.67,5.48-4.11,8.17s-2.93,5.33-4.51,7.95-3.2,5.19-4.89,7.73c-1.69,2.53-3.45,5.03-5.27,7.48-1.81,2.45-3.69,4.85-5.61,7.21-1.93,2.36-3.93,4.67-5.97,6.93-2.05,2.25-4.15,4.47-6.31,6.61-2.16,2.15-4.36,4.27-6.61,6.31-2.27,2.05-4.57,4.04-6.92,5.97-2.36,1.93-4.76,3.81-7.21,5.63s-4.93,3.57-7.48,5.27c-2.53,1.69-5.11,3.32-7.72,4.89s-5.27,3.07-7.95,4.51-5.41,2.81-8.16,4.11-5.55,2.55-8.36,3.71c-2.81,1.17-5.67,2.27-8.53,3.29s-5.76,1.97-8.68,2.87-5.85,1.69-8.81,2.44c-2.96.73-5.93,1.4-8.92,2-2.99.6-6,1.12-9,1.56-3.01.45-6.04.83-9.07,1.12-3.04.31-6.07.52-9.12.68-3.04.15-6.09.23-9.13.23s-6.09-.08-9.15-.23c-3.04-.15-6.08-.37-9.12-.68-3.03-.29-6.05-.67-9.07-1.12-3.01-.44-6.01-.97-9-1.56s-5.96-1.27-8.92-2c-2.96-.75-5.89-1.56-8.81-2.44s-5.81-1.84-8.68-2.87c-2.87-1.03-5.72-2.12-8.53-3.29s-5.6-2.4-8.36-3.71c-2.76-1.31-5.48-2.67-8.16-4.11s-5.33-2.95-7.95-4.51-5.19-3.2-7.72-4.89c-2.53-1.69-5.03-3.45-7.48-5.27s-4.85-3.69-7.2-5.63c-2.36-1.93-4.67-3.93-6.92-5.97-2.27-2.05-4.47-4.15-6.61-6.31s-4.25-4.36-6.31-6.61c-2.05-2.27-4.04-4.57-5.97-6.93s-3.81-4.76-5.61-7.21c-1.81-2.45-3.57-4.95-5.27-7.48s-3.32-5.12-4.89-7.73-3.07-5.27-4.51-7.95c-1.44-2.69-2.81-5.41-4.11-8.17s-2.53-5.55-3.71-8.36-2.27-5.67-3.29-8.53-1.99-5.76-2.87-8.68c-.88-2.92-1.69-5.85-2.44-8.81-.73-2.96-1.4-5.93-2-8.92-.6-3-1.12-6-1.56-9.01s-.83-6.04-1.12-9.08c-.29-3.03-.52-6.07-.67-9.12s-.23-6.09-.23-9.15.07-6.09.23-9.15c.15-3.05.37-6.09.67-9.12.29-3.04.67-6.07,1.12-9.08s.97-6.03,1.56-9.01,1.27-5.96,2-8.92c.75-2.96,1.56-5.89,2.44-8.81s1.84-5.81,2.87-8.68,2.12-5.72,3.29-8.53,2.4-5.6,3.71-8.36,2.67-5.48,4.11-8.16,2.93-5.33,4.51-7.95,3.2-5.19,4.89-7.73,3.45-5.03,5.27-7.48c1.81-2.45,3.69-4.85,5.63-7.21s3.93-4.67,5.97-6.93,4.15-4.47,6.31-6.63,4.36-4.25,6.61-6.31,4.56-4.04,6.92-5.97c2.36-1.93,4.76-3.81,7.2-5.63,2.45-1.81,4.95-3.57,7.48-5.27s5.11-3.33,7.72-4.89,5.27-3.07,7.95-4.51,5.41-2.81,8.16-4.11c2.76-1.31,5.55-2.55,8.36-3.71,2.81-1.17,5.67-2.27,8.53-3.29s5.76-1.99,8.68-2.87,5.85-1.69,8.81-2.44c2.95-.73,5.93-1.4,8.92-2s5.99-1.12,9-1.56,6.04-.81,9.07-1.12c3.03-.29,6.07-.52,9.12-.67s6.09-.23,9.15-.23,6.09.07,9.13.23c3.05.15,6.08.37,9.12.67,3.03.31,6.05.67,9.07,1.12,3.01.45,6.01.97,9,1.56,2.99.6,5.96,1.27,8.92,2s5.89,1.55,8.81,2.44,5.81,1.84,8.68,2.87,5.72,2.12,8.53,3.29,5.6,2.4,8.36,3.71,5.48,2.67,8.16,4.11,5.33,2.93,7.95,4.51,5.19,3.2,7.72,4.89c2.53,1.69,5.03,3.45,7.48,5.27s4.85,3.69,7.21,5.63,4.67,3.93,6.92,5.97c2.25,2.05,4.47,4.15,6.61,6.31s4.25,4.36,6.31,6.63,4.04,4.57,5.97,6.93c1.93,2.36,3.81,4.76,5.61,7.21,1.81,2.45,3.57,4.93,5.27,7.48s3.32,5.11,4.89,7.73c1.57,2.61,3.07,5.27,4.51,7.95s2.81,5.41,4.11,8.16c1.31,2.76,2.53,5.55,3.71,8.36,1.17,2.81,2.27,5.67,3.29,8.53,1.03,2.87,1.97,5.76,2.87,8.68s1.69,5.85,2.44,8.81c.75,2.96,1.41,5.93,2,8.92.59,2.99,1.12,6,1.56,9.01.44,3.01.81,6.04,1.12,9.08.29,3.03.52,6.07.67,9.12.15,3.04.23,6.09.23,9.15h-.01Z\"/>\n  <path class=\"cls-3\" d=\"M147.16,222.56c-13.33-34.91-5.97-72.67,16.07-99.69-3.72.88-7.41,2.01-11.08,3.43-45.43,17.37-68.2,68.33-50.8,113.79,17.36,45.45,68.31,68.23,113.73,50.83,3.67-1.4,7.17-3.04,10.53-4.83-34.43-5.4-65.08-28.6-78.45-63.51h0Z\"/>\n  <path class=\"cls-3\" d=\"M261.45,169.01l23.6,7.47-23.6,7.48-7.48,23.57-7.44-23.57-23.6-7.48,23.6-7.47,7.44-23.59,7.48,23.59Z\"/>\n  <path class=\"cls-3\" d=\"M324.71,192.12l15.67,4.96-15.67,4.96-4.93,15.64-4.96-15.64-15.63-4.96,15.63-4.96,4.96-15.64,4.93,15.64Z\"/>\n  <path class=\"cls-3\" d=\"M288.52,221.9l11.03,3.48-11.03,3.51-3.48,11-3.49-11-11-3.51,11-3.48,3.49-11.03,3.48,11.03Z\"/>\n</svg>");
+;// CONCATENATED MODULE: ./src/icons/mode-day.svg
+/* harmony default export */ const mode_day = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"Layer_1\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 616 420\">\n  <defs>\n    <style>\n      .cls-1 {\n        clip-path: url(#clippath);\n      }\n\n      .cls-2 {\n        fill: none;\n      }\n\n      .cls-2, .cls-3, .cls-4 {\n        stroke-width: 0px;\n      }\n\n      .cls-3 {\n        fill: #fff;\n      }\n\n      .cls-4 {\n        fill: #ffc107;\n      }\n    </style>\n    <clipPath id=\"clippath\">\n      <rect class=\"cls-2\" x=\"-408\" y=\"0\" width=\"1024\" height=\"420\"/>\n    </clipPath>\n  </defs>\n  <g class=\"cls-1\">\n    <path class=\"cls-4\" d=\"M405.6,420.18h-195.6C94.05,420.18,0,326.13,0,210.13S94.05.08,210,.08h195.63c115.95,0,209.96,94.06,209.96,210.05-.03,116-94.02,210.05-209.99,210.05Z\"/>\n  </g>\n  <path class=\"cls-3\" d=\"M587.98,210.13c0,3.05-.08,6.1-.22,9.15-.15,3.05-.38,6.09-.67,9.13-.3,3.03-.68,6.06-1.12,9.08-.45,3.02-.97,6.02-1.57,9.01-.59,2.99-1.26,5.97-2,8.93s-1.56,5.9-2.44,8.82c-.88,2.92-1.84,5.81-2.86,8.68-1.03,2.88-2.13,5.72-3.29,8.54s-2.4,5.6-3.71,8.36c-1.3,2.76-2.67,5.48-4.11,8.17-1.44,2.69-2.94,5.34-4.51,7.96s-3.2,5.19-4.9,7.73c-1.69,2.54-3.45,5.03-5.26,7.48-1.82,2.45-3.69,4.85-5.63,7.21-1.93,2.36-3.92,4.67-5.97,6.93-2.05,2.26-4.15,4.47-6.31,6.63-2.16,2.16-4.36,4.26-6.63,6.31-2.26,2.05-4.56,4.04-6.92,5.97-2.35,1.93-4.76,3.81-7.21,5.63-2.45,1.82-4.94,3.57-7.47,5.27-2.54,1.69-5.11,3.32-7.73,4.89s-5.27,3.07-7.95,4.51c-2.69,1.44-5.41,2.81-8.17,4.11-2.76,1.3-5.55,2.54-8.36,3.71-2.82,1.17-5.66,2.26-8.54,3.29-2.87,1.03-5.76,1.98-8.68,2.87-2.92.89-5.85,1.7-8.81,2.44-2.95.74-5.93,1.41-8.92,2.01s-5.99,1.11-9.01,1.56c-3.02.45-6.04.82-9.08,1.12-3.03.3-6.07.53-9.12.67-3.05.15-6.09.22-9.14.22s-6.09-.07-9.14-.22c-3.05-.15-6.08-.37-9.12-.67-3.04-.3-6.06-.67-9.07-1.12-3.02-.45-6.02-.97-9.01-1.56s-5.96-1.27-8.92-2.01-5.9-1.55-8.81-2.44-5.81-1.84-8.68-2.87c-2.88-1.03-5.72-2.13-8.53-3.29-2.82-1.17-5.6-2.41-8.36-3.71-2.76-1.31-5.48-2.68-8.17-4.11-2.69-1.44-5.34-2.94-7.95-4.51s-5.19-3.2-7.73-4.89c-2.53-1.7-5.03-3.45-7.47-5.27-2.45-1.81-4.85-3.69-7.21-5.63-2.35-1.94-4.67-3.93-6.92-5.97-2.26-2.05-4.47-4.15-6.63-6.31-2.16-2.16-4.26-4.36-6.3-6.63-2.05-2.26-4.04-4.57-5.97-6.93-1.94-2.35-3.81-4.76-5.63-7.21-1.82-2.45-3.57-4.94-5.27-7.48-1.7-2.54-3.33-5.11-4.9-7.73s-3.07-5.27-4.51-7.96c-1.44-2.69-2.81-5.42-4.11-8.17-1.31-2.76-2.54-5.55-3.71-8.36s-2.26-5.66-3.29-8.54c-1.03-2.87-1.98-5.77-2.86-8.68-.89-2.92-1.7-5.86-2.44-8.82-.74-2.96-1.41-5.93-2-8.93-.6-2.99-1.12-5.99-1.56-9.01-.45-3.02-.82-6.05-1.12-9.08-.3-3.04-.53-6.08-.67-9.13-.15-3.05-.23-6.09-.23-9.15s.08-6.1.22-9.15c.15-3.05.38-6.08.68-9.12.3-3.04.67-6.06,1.12-9.08.44-3.02.96-6.03,1.56-9.02.59-2.99,1.26-5.97,2-8.93.74-2.96,1.56-5.9,2.44-8.81.89-2.92,1.84-5.82,2.86-8.69,1.03-2.88,2.13-5.72,3.29-8.54s2.4-5.6,3.71-8.36c1.3-2.76,2.67-5.48,4.11-8.17,1.44-2.69,2.94-5.34,4.51-7.96,1.57-2.61,3.2-5.19,4.9-7.73,1.69-2.53,3.45-5.03,5.27-7.48,1.81-2.45,3.69-4.85,5.63-7.21,1.93-2.36,3.92-4.67,5.97-6.93,2.05-2.26,4.15-4.47,6.3-6.63s4.36-4.26,6.63-6.31c2.26-2.05,4.57-4.04,6.92-5.97,2.36-1.94,4.76-3.81,7.21-5.63s4.94-3.57,7.47-5.27c2.54-1.7,5.11-3.33,7.73-4.9s5.27-3.07,7.95-4.51c2.69-1.44,5.41-2.81,8.17-4.11,2.76-1.31,5.54-2.54,8.36-3.71,2.81-1.17,5.66-2.27,8.53-3.29,2.87-1.03,5.77-1.98,8.68-2.87s5.85-1.7,8.81-2.44c2.96-.74,5.93-1.41,8.92-2.01,2.99-.59,5.99-1.11,9.01-1.56s6.04-.82,9.07-1.12c3.04-.3,6.07-.52,9.12-.67s6.09-.22,9.14-.22,6.09.07,9.14.22,6.09.38,9.12.67c3.04.3,6.06.67,9.08,1.12s6.02.97,9.01,1.56c2.99.6,5.97,1.27,8.92,2.01,2.96.74,5.9,1.56,8.81,2.44,2.92.89,5.81,1.84,8.68,2.87,2.88,1.03,5.72,2.13,8.54,3.29,2.81,1.17,5.6,2.4,8.36,3.71,2.76,1.3,5.47,2.67,8.17,4.11,2.69,1.44,5.34,2.94,7.95,4.51s5.19,3.2,7.73,4.9c2.53,1.69,5.03,3.45,7.47,5.27s4.85,3.69,7.21,5.63c2.36,1.93,4.67,3.92,6.92,5.97,2.26,2.05,4.47,4.15,6.63,6.31s4.26,4.36,6.31,6.63,4.04,4.57,5.97,6.93c1.94,2.36,3.81,4.76,5.63,7.21,1.81,2.45,3.57,4.95,5.26,7.48,1.7,2.54,3.33,5.11,4.9,7.73,1.57,2.62,3.07,5.27,4.51,7.96,1.44,2.69,2.81,5.41,4.11,8.17,1.31,2.76,2.54,5.55,3.71,8.36s2.27,5.66,3.29,8.54c1.03,2.87,1.98,5.77,2.87,8.69.88,2.92,1.7,5.85,2.44,8.81s1.41,5.94,2,8.93c.6,2.99,1.12,5.99,1.57,9.02.44,3.02.82,6.04,1.12,9.08.3,3.04.52,6.07.67,9.12.15,3.05.22,6.1.22,9.15Z\"/>\n  <path class=\"cls-4\" d=\"M460.12,213.31c0,1.91-.09,3.82-.28,5.72-.19,1.9-.47,3.79-.84,5.67-.37,1.88-.84,3.73-1.39,5.56-.56,1.83-1.2,3.63-1.93,5.4-.73,1.77-1.55,3.49-2.45,5.18s-1.89,3.33-2.95,4.92c-1.06,1.59-2.2,3.13-3.41,4.6s-2.49,2.9-3.85,4.25-2.77,2.64-4.24,3.85-3.01,2.35-4.6,3.42c-1.59,1.06-3.23,2.04-4.91,2.94-1.69.91-3.42,1.72-5.18,2.45s-3.56,1.38-5.4,1.93c-1.83.55-3.68,1.02-5.56,1.39-1.88.38-3.77.66-5.67.84-1.91.19-3.81.28-5.72.28s-3.82-.09-5.72-.28c-1.9-.19-3.79-.47-5.67-.84-1.88-.37-3.73-.84-5.56-1.39-1.83-.56-3.63-1.2-5.4-1.93s-3.49-1.55-5.18-2.45c-1.68-.9-3.32-1.88-4.91-2.94-1.59-1.06-3.13-2.2-4.6-3.42s-2.89-2.49-4.24-3.85-2.64-2.77-3.85-4.25-2.35-3.01-3.41-4.6c-1.06-1.59-2.05-3.23-2.95-4.92s-1.72-3.41-2.45-5.18c-.73-1.77-1.38-3.56-1.93-5.4-.55-1.83-1.02-3.68-1.39-5.56-.38-1.88-.66-3.77-.84-5.67-.19-1.91-.28-3.81-.28-5.72s.09-3.82.28-5.73c.19-1.9.47-3.79.84-5.67.37-1.88.84-3.73,1.39-5.56.56-1.83,1.2-3.63,1.93-5.4.73-1.77,1.55-3.49,2.45-5.18s1.89-3.33,2.95-4.92c1.06-1.59,2.2-3.13,3.41-4.6s2.49-2.9,3.85-4.25,2.77-2.64,4.24-3.85,3.01-2.35,4.6-3.42c1.59-1.06,3.23-2.04,4.91-2.94,1.69-.9,3.42-1.72,5.18-2.45,1.77-.73,3.56-1.38,5.4-1.93,1.83-.55,3.68-1.02,5.56-1.39s3.77-.66,5.67-.84c1.91-.19,3.81-.28,5.72-.28s3.82.09,5.72.28c1.9.19,3.79.47,5.67.84s3.73.84,5.56,1.39c1.83.56,3.63,1.2,5.4,1.93,1.77.73,3.49,1.55,5.18,2.45,1.68.9,3.32,1.88,4.91,2.94,1.59,1.07,3.13,2.2,4.6,3.42s2.89,2.49,4.24,3.85,2.64,2.77,3.85,4.25,2.35,3.01,3.41,4.6c1.06,1.59,2.05,3.23,2.95,4.92s1.72,3.41,2.45,5.18c.73,1.77,1.38,3.56,1.93,5.4.55,1.83,1.02,3.68,1.39,5.56.38,1.88.66,3.77.84,5.67.19,1.91.28,3.81.28,5.73Z\"/>\n  <path class=\"cls-4\" d=\"M398.04,85.53h7.36v44.92h-7.36v-44.92Z\"/>\n  <path class=\"cls-4\" d=\"M316.77,117.9l5.64-4.74,28.88,34.4-5.64,4.74-28.88-34.4Z\"/>\n  <path class=\"cls-4\" d=\"M275.23,194.81l1.27-7.26,44.23,7.76-1.27,7.26-44.23-7.76Z\"/>\n  <path class=\"cls-4\" d=\"M289.33,274.16l38.85-22.52,3.69,6.38-38.86,22.52-3.69-6.38Z\"/>\n  <path class=\"cls-4\" d=\"M354.77,332.22l15.28-42.24,6.92,2.51-15.28,42.24-6.92-2.51Z\"/>\n  <path class=\"cls-4\" d=\"M426.77,292.35l6.92-2.54,15.45,42.18-6.92,2.53-15.45-42.17Z\"/>\n  <path class=\"cls-4\" d=\"M471.7,257.73l3.67-6.39,38.95,22.35-3.67,6.39-38.95-22.35Z\"/>\n  <path class=\"cls-4\" d=\"M482.57,195.06l44.19-7.94,1.3,7.25-44.19,7.94-1.3-7.25Z\"/>\n  <path class=\"cls-4\" d=\"M451.9,147.28l28.74-34.52,5.66,4.71-28.73,34.52-5.66-4.71Z\"/>\n</svg>");
+;// CONCATENATED MODULE: ./src/icons/rectangles.svg
+/* harmony default export */ const rectangles = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"background-layer\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\"\n  viewBox=\"0 0 307 640\">\n  <defs>\n    <style>\n      .innermost, .second, .third, .fourth, .fifth, .outermost {\n      stroke-width: 0px;\n      }\n\n      .outermost {\n      fill: #e4f2d1;\n      }\n\n      .second {\n      fill: #cce8b5;\n      }\n\n      .third {\n      fill: #b3db95;\n      }\n\n      .fourth {\n      fill: #9bd078;\n      }\n\n      .fifth {\n      fill: #83c55c;\n      }\n\n      .innermost {\n      fill: #428a2f;\n      }\n    </style>\n  </defs>\n  <path class=\"outermost\"\n    d=\"m306.9,320c0,105.3-.02,210.6.1,315.91,0,3.42-.67,4.1-4.09,4.09-99.6-.12-199.21-.12-298.81,0C.67,640,0,639.33,0,635.91.11,425.3.11,214.7,0,4.09,0,.67.67,0,4.09,0,103.7.12,203.3.12,302.91,0c3.42,0,4.1.67,4.09,4.09-.12,105.3-.1,210.6-.1,315.91Z\" />\n  <path class=\"second\"\n    d=\"m275.92,323c0,87.63,0,175.27,0,262.9,0,7.24-.55,7.93-7.86,7.98-14.66.09-29.31.03-43.97.03-60.96,0-121.92,0-182.88,0q-7.13,0-7.14-7.24c0-176.1,0-352.21,0-528.31q0-7.26,7.12-7.26c75.78,0,151.56,0,227.35,0q7.38,0,7.38,7.5c0,88.13,0,176.27,0,264.4Z\" />\n  <path class=\"third\"\n    d=\"m68.06,322.24c0-69.47,0-138.94,0-208.41,0-8.99,1.33-10.13,10.49-9.12,1.98.22,3.98.32,5.97.32,46.13.02,92.26.02,138.39,0,3.48,0,6.92-.23,10.41-.67,5.5-.7,8.74.46,8.73,7.25-.18,138.94-.13,277.88-.13,416.81,0,.33,0,.67,0,1q-.14,10.51-10.39,10.51c-52.13,0-104.25,0-156.38,0q-7.09,0-7.09-7.28c0-70.14,0-140.27,0-210.41Z\" />\n  <path class=\"fourth\"\n    d=\"m103.02,322.5c0-52.46,0-104.91,0-157.37,0-6.68.36-7.06,7.07-7.06,30.3-.01,60.6.07,90.9-.09,4.54-.02,6.08,1.33,6.07,5.98-.1,105.58-.1,211.16,0,316.74,0,4.18-1.27,5.37-5.38,5.35-29.3-.15-58.6-.08-87.9-.08q-10.76,0-10.76-11.09c0-50.79,0-101.58,0-152.37Z\" />\n  <path class=\"fifth\"\n    d=\"m173,322.2c0,35.29,0,70.58,0,105.88q0,6.89-6.99,6.9c-8.15,0-16.31-.13-24.46.06-3.47.08-4.68-1.09-4.61-4.59.18-9.65.06-19.31.06-28.96,0-58.26-.01-116.53.02-174.79,0-4.76-1.12-9.46-.14-14.3.51-2.54,1.39-3.38,3.8-3.36,8.82.06,17.64.14,26.46-.02,4.59-.09,5.95,1.85,5.94,6.33-.14,35.62-.08,71.25-.08,106.87Z\" />\n  <path class=\"innermost\"\n    d=\"m151.04,322.01c0-9.99.07-19.97-.05-29.96-.04-2.93.83-4.18,3.95-4.18,3.06,0,4.03,1.12,4.02,4.11-.09,19.97-.08,39.94.01,59.91.01,2.96-.84,4.16-3.96,4.14-3.03-.01-4.08-1.04-4.03-4.08.14-9.98.05-19.97.05-29.96Z\" />\n</svg>");
+;// CONCATENATED MODULE: ./src/icons/rectangles-moonlight.svg
+/* harmony default export */ const rectangles_moonlight = ("<svg xmlns=\"http://www.w3.org/2000/svg\" id=\"background-layer\" data-name=\"Layer 1\"\n  viewBox=\"0 0 307 640\"\n  width=\"307px\" height=\"640px\">\n  <defs>\n    <style>.innermost, .second, .third, .fourth, .fifth, .outermost { stroke-width: 0px; }\n      .outermost { fill: #a9b7bf; }\n      .second { fill: #8f9ca7; }\n      .third { fill: #787d83; }\n      .fourth { fill: #6c7378; }\n      .fifth { fill: #313437; }\n      .innermost { fill: #1c1c1c; }\n</style>\n  </defs>\n  <path class=\"outermost\"\n    d=\"m306.9,320c0,105.3-.02,210.6.1,315.91,0,3.42-.67,4.1-4.09,4.09-99.6-.12-199.21-.12-298.81,0C.67,640,0,639.33,0,635.91.11,425.3.11,214.7,0,4.09,0,.67.67,0,4.09,0,103.7.12,203.3.12,302.91,0c3.42,0,4.1.67,4.09,4.09-.12,105.3-.1,210.6-.1,315.91Z\" />\n  <path class=\"second\"\n    d=\"m275.92,323c0,87.63,0,175.27,0,262.9,0,7.24-.55,7.93-7.86,7.98-14.66.09-29.31.03-43.97.03-60.96,0-121.92,0-182.88,0q-7.13,0-7.14-7.24c0-176.1,0-352.21,0-528.31q0-7.26,7.12-7.26c75.78,0,151.56,0,227.35,0q7.38,0,7.38,7.5c0,88.13,0,176.27,0,264.4Z\" />\n  <path class=\"third\"\n    d=\"m68.06,322.24c0-69.47,0-138.94,0-208.41,0-8.99,1.33-10.13,10.49-9.12,1.98.22,3.98.32,5.97.32,46.13.02,92.26.02,138.39,0,3.48,0,6.92-.23,10.41-.67,5.5-.7,8.74.46,8.73,7.25-.18,138.94-.13,277.88-.13,416.81,0,.33,0,.67,0,1q-.14,10.51-10.39,10.51c-52.13,0-104.25,0-156.38,0q-7.09,0-7.09-7.28c0-70.14,0-140.27,0-210.41Z\" />\n  <path class=\"fourth\"\n    d=\"m103.02,322.5c0-52.46,0-104.91,0-157.37,0-6.68.36-7.06,7.07-7.06,30.3-.01,60.6.07,90.9-.09,4.54-.02,6.08,1.33,6.07,5.98-.1,105.58-.1,211.16,0,316.74,0,4.18-1.27,5.37-5.38,5.35-29.3-.15-58.6-.08-87.9-.08q-10.76,0-10.76-11.09c0-50.79,0-101.58,0-152.37Z\" />\n  <path class=\"fifth\"\n    d=\"m173,322.2c0,35.29,0,70.58,0,105.88q0,6.89-6.99,6.9c-8.15,0-16.31-.13-24.46.06-3.47.08-4.68-1.09-4.61-4.59.18-9.65.06-19.31.06-28.96,0-58.26-.01-116.53.02-174.79,0-4.76-1.12-9.46-.14-14.3.51-2.54,1.39-3.38,3.8-3.36,8.82.06,17.64.14,26.46-.02,4.59-.09,5.95,1.85,5.94,6.33-.14,35.62-.08,71.25-.08,106.87Z\" />\n  <path class=\"innermost\"\n    d=\"m151.04,322.01c0-9.99.07-19.97-.05-29.96-.04-2.93.83-4.18,3.95-4.18,3.06,0,4.03,1.12,4.02,4.11-.09,19.97-.08,39.94.01,59.91.01,2.96-.84,4.16-3.96,4.14-3.03-.01-4.08-1.04-4.03-4.08.14-9.98.05-19.97.05-29.96Z\" />\n</svg>");
+;// CONCATENATED MODULE: ./src/icons/IconModule.ts
+
+
+
+
+class IconModule {
+    rectangles(theme = "light") {
+        if (theme === "dark") {
+            return rectangles_moonlight;
+        }
+        else {
+            return rectangles;
+        }
+    }
+}
+IconModule.darkMode = mode_night;
+IconModule.lightMode = mode_day;
+
+;// CONCATENATED MODULE: ./src/themes/ThemeManagerModule.ts
+
+
+
+
+class ThemeManager {
+    static getInstance() {
+        if (!ThemeManager.instance) {
+            ThemeManager.instance = new ThemeManager();
+        }
+        return ThemeManager.instance;
+    }
+    constructor() {
+        this.icons = new IconModule();
+    }
+    toggleTheme() {
+        EventBus.emit("saypi:theme:toggle");
+    }
+    /**
+     * Applies the theme to the button icons
+     * @param {string} theme: "dark" | "light"
+     */
+    applyTheme(theme) {
+        const button = document.getElementById("saypi-themeToggleButton");
+        if (button) {
+            if (theme === "dark") {
+                button.innerHTML = IconModule.darkMode;
+                const label = i18n("toggleThemeToLightMode");
+                button.setAttribute("aria-label", label);
+            }
+            else if (theme === "light") {
+                button.innerHTML = IconModule.lightMode;
+                const label = i18n("toggleThemeToDarkMode");
+                button.setAttribute("aria-label", label);
+            }
+        }
+        const iconContainer = document.querySelector(".saypi-icon");
+        if (iconContainer) {
+            iconContainer.innerHTML = this.icons.rectangles(theme);
+        }
+    }
+    createThemeToggleButton(container, position = 0) {
+        const label = i18n("toggleThemeToDarkMode");
+        const button = document.createElement("button");
+        button.id = "saypi-themeToggleButton";
+        button.type = "button";
+        button.className =
+            "theme-toggle-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
+        button.setAttribute("aria-label", label);
+        button.innerHTML = IconModule.lightMode;
+        if (container) {
+            addChild(container, button, position);
+            button.onclick = () => {
+                this.toggleTheme();
+            };
+        }
+        return button;
+    }
+    applyDarkMode() {
+        document.body.classList.add("dark");
+        this.applyTheme("dark");
+    }
+    applyNormalMode() {
+        document.body.classList.remove("dark");
+        this.applyTheme("light");
+    }
+}
+
+;// CONCATENATED MODULE: ./src/ImmersionServiceLite.ts
+/**
+ * This class is a simplified version of the Immersion Service class,
+ * with fewer dependencies and a more focused purpose,
+ * for client who only need to check the state of the immersive view.
+ */
+class ImmersionStateChecker {
+    // this function determines whether the immersive view is currently active
+    static isViewImmersive() {
+        const element = document.documentElement;
+        return element.classList.contains("immersive-view");
+    }
+}
 
 ;// CONCATENATED MODULE: ./src/ImmersionService.js
 function ImmersionService_typeof(o) { "@babel/helpers - typeof"; return ImmersionService_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, ImmersionService_typeof(o); }
@@ -32658,6 +33188,7 @@ function ImmersionService_defineProperties(target, props) { for (var i = 0; i < 
 function ImmersionService_createClass(Constructor, protoProps, staticProps) { if (protoProps) ImmersionService_defineProperties(Constructor.prototype, protoProps); if (staticProps) ImmersionService_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 function ImmersionService_toPropertyKey(arg) { var key = ImmersionService_toPrimitive(arg, "string"); return ImmersionService_typeof(key) === "symbol" ? key : String(key); }
 function ImmersionService_toPrimitive(input, hint) { if (ImmersionService_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (ImmersionService_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+
 
 
 
@@ -32687,6 +33218,7 @@ var ImmersionService = /*#__PURE__*/function () {
     ImmersionService_classCallCheck(this, ImmersionService);
     this.chatbot = chatbot;
     this.userPreferences = UserPreferenceModule.getInstance();
+    this.themeManager = ThemeManager.getInstance();
   }
 
   /**
@@ -32706,9 +33238,11 @@ var ImmersionService = /*#__PURE__*/function () {
     }
 
     // this function determines whether the immersive view is currently active
+    //@deprecated use ImmersionStateChecker.isViewImmersive() instead
   }, {
     key: "enterImmersiveMode",
     value: function enterImmersiveMode() {
+      var _this2 = this;
       localStorage.setItem("userViewPreference", "immersive"); // Save preference
 
       // if not already on the talk page, navigate to it
@@ -32740,14 +33274,13 @@ var ImmersionService = /*#__PURE__*/function () {
       detachCallButton();
       enterFullscreen();
       this.userPreferences.getTheme().then(function (theme) {
-        buttonModule.applyTheme(theme);
+        _this2.themeManager.applyTheme(theme);
       });
     }
   }], [{
     key: "isViewImmersive",
     value: function isViewImmersive() {
-      var element = document.documentElement;
-      return element.classList.contains("immersive-view");
+      return ImmersionStateChecker.isViewImmersive();
     }
   }, {
     key: "exitImmersiveMode",
@@ -32841,84 +33374,6 @@ AnimationModule_defineProperty(AnimationModule, "rectanglesSelector", ".outermos
 AnimationModule_defineProperty(AnimationModule, "callButtonSelector", ".call-button");
 AnimationModule_defineProperty(AnimationModule, "talkButtonAnimations", ["piThinking", "piSpeaking", "userSpeaking", "transcribing"]);
 AnimationModule_defineProperty(AnimationModule, "callButtonAnimations", ["glow", "glow-fade-out"]);
-
-;// CONCATENATED MODULE: ./src/i18n.ts
-var i18n_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-// We'll start with an empty messages object
-let messages = {};
-const userPreferences = UserPreferenceModule.getInstance();
-// This function attempts to load messages for a given locale
-function loadMessages(locale) {
-    return i18n_awaiter(this, void 0, void 0, function* () {
-        try {
-            messages[locale] = yield __webpack_require__(4557)(`./${locale}/messages.json`);
-        }
-        catch (error) {
-            console.error(`Failed to load messages for locale: ${locale}`, error);
-        }
-    });
-}
-function getLocalMessage(locale, messageName, substitutions) {
-    // if the locale is not in the messages object, default to English
-    if (!messages[locale]) {
-        locale = "en";
-    }
-    // if the message is not in the locale object, default to the message name and log an error
-    if (!messages[locale][messageName]) {
-        console.error(`Message not found for locale: ${locale} and message name: ${messageName}`);
-        return messageName;
-    }
-    else {
-        const rawMessage = messages[locale][messageName].message;
-        if (substitutions) {
-            return rawMessage.replace("$1", substitutions.toString());
-        }
-        else {
-            return rawMessage;
-        }
-    }
-}
-// Call this function to initialize the messages
-function convertLanguageToLocale(language) {
-    return language.split("_")[0];
-}
-function getMessage(messageName, substitutions) {
-    // Check if running as a Chrome extension
-    if (typeof chrome !== "undefined" && chrome.i18n) {
-        return chrome.i18n.getMessage(messageName, substitutions);
-    }
-    else {
-        // Fallback for userscript
-        userPreferences
-            .getLanguage()
-            .then((lang) => {
-            let locale = convertLanguageToLocale(lang);
-            if (!messages[locale]) {
-                loadMessages(locale);
-            }
-            return getLocalMessage(locale, messageName);
-        })
-            .catch((error) => {
-            console.error(`Failed to get language preference`, error);
-            let locale = "en";
-            if (!messages[locale]) {
-                loadMessages(locale);
-            }
-            return getLocalMessage(locale, messageName);
-        });
-    }
-    return messageName;
-}
-/* harmony default export */ const i18n = (getMessage);
 
 ;// CONCATENATED MODULE: ./src/NotificationsModule.ts
 var NotificationsModule_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -33235,174 +33690,6 @@ class VisualNotificationsModule {
     }
 }
 
-;// CONCATENATED MODULE: ./src/events/EventModule.js
-var _class;
-function EventModule_typeof(o) { "@babel/helpers - typeof"; return EventModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, EventModule_typeof(o); }
-function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == EventModule_typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(EventModule_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-function EventModule_ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function EventModule_objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? EventModule_ownKeys(Object(t), !0).forEach(function (r) { EventModule_defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : EventModule_ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function EventModule_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function EventModule_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, EventModule_toPropertyKey(descriptor.key), descriptor); } }
-function EventModule_createClass(Constructor, protoProps, staticProps) { if (protoProps) EventModule_defineProperties(Constructor.prototype, protoProps); if (staticProps) EventModule_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function EventModule_defineProperty(obj, key, value) { key = EventModule_toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function EventModule_toPropertyKey(arg) { var key = EventModule_toPrimitive(arg, "string"); return EventModule_typeof(key) === "symbol" ? key : String(key); }
-function EventModule_toPrimitive(input, hint) { if (EventModule_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (EventModule_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-
-
-var CALL_READY = "saypi:callReady";
-var USER_SPEAKING = "saypi:userSpeaking";
-var USER_STOPPED_SPEAKING = "saypi:userStoppedSpeaking";
-var USER_FINISHED_SPEAKING = "saypi:userFinishedSpeaking";
-var PI_THINKING = "saypi:piThinking";
-var PI_SPEAKING = "saypi:piSpeaking";
-var PI_STOPPED_SPEAKING = "saypi:piStoppedSpeaking";
-var PI_FINISHED_SPEAKING = "saypi:piFinishedSpeaking";
-var VISIBLE = "saypi:visible";
-var AUDIO_DEVICE_CONNECTED = "saypi:audio:connected";
-var AUDIO_DEVICE_RECONNECT = "saypi:audio:reconnect";
-var END_CALL = "saypi:hangup";
-var SESSION_ASSIGNED = "saypi:session:assigned";
-
-/**
- * The EventModule translates events sent on the EventBus to StateMachine events,
- * coordinating interactions between loosely-coupled modules.
- */
-var EventModule = /*#__PURE__*/function () {
-  function EventModule() {
-    EventModule_classCallCheck(this, EventModule);
-  }
-  EventModule_createClass(EventModule, null, [{
-    key: "init",
-    value: function init() {
-      // All the event listeners can be added here
-      this.registerStateMachineEvents(src_StateMachineService.actor);
-      this.registerSessionEvents(src_StateMachineService.analyticsMachineActor);
-      // Any other initializations...
-    }
-  }, {
-    key: "cleanup",
-    value: function cleanup() {
-      // Remove event listeners if needed, or any other cleanup operations
-      window.removeEventListener("saypi:transcribed", this.handleTranscriptionResponse);
-    }
-  }, {
-    key: "simulateTyping",
-    value: function simulateTyping(element, text) {
-      var submit = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-      element.focus();
-      var sentenceRegex = /([.!?。？！]+)/g;
-      var tokens = text.split(sentenceRegex).filter(Boolean);
-      var sentences = [];
-      for (var i = 0; i < tokens.length; i += 2) {
-        var sentence = tokens[i] + (tokens[i + 1] || "");
-        sentences.push(sentence);
-      }
-      var typeNextSentenceOrSubmit = function typeNextSentenceOrSubmit() {
-        if (sentences.length === 0) {
-          if (submit) EventBus.emit("saypi:autoSubmit");
-        } else {
-          // Emit the event only after all sentences have been typed
-          var nextSentence = sentences.shift();
-          EventModule.setNativeValue(element, element.value + nextSentence);
-          requestAnimationFrame(typeNextSentenceOrSubmit);
-        }
-      };
-      if (sentences.length === 0) {
-        typeTextAndSubmit(element, text, submit);
-      } else {
-        typeNextSentenceOrSubmit();
-      }
-    }
-  }, {
-    key: "setNativeValue",
-    value: function setNativeValue(element, value) {
-      var lastValue = element.value;
-      element.value = value;
-      var event = new Event("input", {
-        target: element,
-        bubbles: true
-      });
-      // React 15
-      event.simulated = true;
-      // React 16-17
-      var tracker = element._valueTracker;
-      if (tracker) {
-        tracker.setValue(lastValue);
-      }
-      element.dispatchEvent(event);
-    }
-  }, {
-    key: "registerStateMachineEvents",
-    value: function registerStateMachineEvents(actor) {
-      EventBus.on(CALL_READY, function () {
-        actor.send(CALL_READY);
-      });
-      EventBus.on(USER_SPEAKING, function () {
-        actor.send(USER_SPEAKING);
-      });
-      [USER_STOPPED_SPEAKING, USER_FINISHED_SPEAKING, AUDIO_DEVICE_CONNECTED, AUDIO_DEVICE_RECONNECT, SESSION_ASSIGNED].forEach(function (eventName) {
-        EventBus.on(eventName, function (detail) {
-          if (detail) {
-            actor.send(EventModule_objectSpread({
-              type: eventName
-            }, detail));
-          } else {
-            console.warn("Received ".concat(eventName, " without details."));
-          }
-        });
-      });
-      [PI_THINKING, PI_SPEAKING, PI_STOPPED_SPEAKING, PI_FINISHED_SPEAKING, END_CALL].forEach(function (eventName) {
-        EventBus.on(eventName, function () {
-          actor.send(eventName);
-        });
-      });
-
-      // notify the actor when the tab is visible
-      document.addEventListener("visibilitychange", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        return _regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) switch (_context.prev = _context.next) {
-            case 0:
-              if (document.visibilityState === "visible") {
-                actor.send(VISIBLE);
-              }
-            case 1:
-            case "end":
-              return _context.stop();
-          }
-        }, _callee);
-      })));
-    }
-  }, {
-    key: "registerSessionEvents",
-    value: function registerSessionEvents(actor) {
-      EventBus.on("session:started", function () {
-        actor.send("start_session");
-      });
-      EventBus.on("session:ended", function () {
-        actor.send("end_session");
-      });
-      EventBus.on("session:message-sent", function (detail) {
-        actor.send(EventModule_objectSpread({
-          type: "send_message"
-        }, detail));
-      });
-      EventBus.on("session:transcribing", function (detail) {
-        actor.send(EventModule_objectSpread({
-          type: "transcribing"
-        }, detail));
-      });
-    }
-  }]);
-  return EventModule;
-}();
-_class = EventModule;
-EventModule_defineProperty(EventModule, "typeTextAndSubmit", function (element, text, submit) {
-  _class.setNativeValue(element, text);
-  if (submit) EventBus.emit("saypi:autoSubmit");
-});
-
 ;// CONCATENATED MODULE: ./src/TranscriptionModule.ts
 var TranscriptionModule_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -33413,8 +33700,6 @@ var TranscriptionModule_awaiter = (undefined && undefined.__awaiter) || function
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-
-
 
 
 
@@ -33601,84 +33886,6 @@ function constructTranscriptionFormData(audioBlob, audioDurationSeconds, message
         return formData;
     });
 }
-function scrollToBottom(textarea) {
-    // Define the height range for the textarea
-    const maxHeight = 455;
-    const minHeight = 32;
-    // Reset the height to get the correct scrollHeight
-    textarea.style.height = `${minHeight}px`; // (initial height) aka 2rem
-    // Set the height of the textarea, up to the maximum height
-    if (textarea.scrollHeight > maxHeight) {
-        textarea.style.height = `${maxHeight}px`;
-        textarea.style.overflowY = "scroll"; // Enable vertical scrollbar
-    }
-    else {
-        const newHeight = Math.max(minHeight, textarea.scrollHeight);
-        textarea.style.height = `${newHeight}px`;
-        textarea.style.overflowY = "hidden"; // Hide vertical scrollbar
-    }
-    // Scroll to the bottom
-    textarea.scrollTop = textarea.scrollHeight;
-}
-/**
- * Get the prompt textarea's current placeholder text
- */
-function getDraftPrompt() {
-    const textarea = document.getElementById("saypi-prompt");
-    return textarea.getAttribute("placeholder") || "";
-}
-/**
- * Set a descriptive message for the user in the prompt textarea
- * Used to inform the user of the current state of the application
- * @param label The placeholder text to be displayed in the prompt textarea
- */
-function setUserMessage(label) {
-    const textarea = document.getElementById("saypi-prompt");
-    if (textarea) {
-        textarea.setAttribute("placeholder", label);
-        scrollToBottom(textarea);
-    }
-    else {
-        // this can happen if the user navigates away from the page without ending the conversation
-        console.warn("Prompt textarea not found");
-    }
-}
-/**
- * Set the prompt textarea to the given transcript, but do not submit it
- * @param transcript The prompt to be displayed in the prompt textarea
- */
-function setDraftPrompt(transcript) {
-    const textarea = document.getElementById("saypi-prompt");
-    TranscriptionModule_userPreferences.getAutoSubmit().then((autoSubmit) => {
-        if (autoSubmit) {
-            textarea.setAttribute("placeholder", `${transcript}`);
-        }
-        else {
-            textarea.setAttribute("placeholder", "");
-            // clear the text area content
-            textarea.value = "";
-            EventModule.simulateTyping(textarea, `${transcript} `, false);
-        }
-        scrollToBottom(textarea);
-    });
-}
-const PROMPT_CHARACTER_LIMIT = 4000;
-function setFinalPrompt(transcript) {
-    logger.info(`Final transcript: ${transcript}`);
-    const textarea = document.getElementById("saypi-prompt");
-    if (ImmersionService.isViewImmersive()) {
-        // if transcript is > max characters, truncate it to max-1 characters plus an ellipsis
-        if (transcript.length > PROMPT_CHARACTER_LIMIT) {
-            const truncatedLength = PROMPT_CHARACTER_LIMIT - 1;
-            transcript = `${transcript.substring(0, truncatedLength)}…`;
-            console.warn(`Transcript was too long for Pi. Truncated to ${truncatedLength} characters, losing the following text: ... ${transcript.substring(truncatedLength)}`);
-        }
-        EventModule.typeTextAndSubmit(textarea, transcript, true);
-    }
-    else {
-        EventModule.simulateTyping(textarea, `${transcript} `, true); // types and submits the prompt
-    }
-}
 
 ;// CONCATENATED MODULE: ./src/TextModule.js
 function replaceEllipsisWithSpace(text) {
@@ -33858,23 +34065,62 @@ let mergeService;
 SayPiMachine_userPreferences.getLanguage().then((language) => {
     mergeService = new TranscriptMergeService(apiServerUrl, language);
 });
+let chatbot;
+function getPromptOrNull() {
+    if (!chatbot) {
+        console.error("Chatbot not initialized when requested by state machine.");
+    }
+    const promptElement = document.getElementById("saypi-prompt");
+    if (chatbot && promptElement) {
+        return chatbot.getPrompt(promptElement);
+    }
+    console.warn("Prompt element not found when requested by state machine.");
+    return null;
+}
+function getChatbotDefaultPlaceholder() {
+    if (!chatbot) {
+        console.error("Chatbot not initialized when requested by state machine.");
+    }
+    const promptElement = document.getElementById("saypi-prompt");
+    if (chatbot && promptElement) {
+        return chatbot.getPrompt(promptElement).getDefaultPlaceholderText();
+    }
+    console.warn("Prompt element not found when requested by state machine.");
+    // TODO assign the default placeholder text on "saypi:ui:content-loaded" event
+    // 1. EventModule handles "saypi:ui:content-loaded" event (checkmark)
+    // 2. Sends "saypi:prompt-ready" event to the state machine (checkmark)
+    // 3. State machine assigns the default placeholder text to the context, as an internal state transition from "inactive" to "inactive" (checkmark)
+    return "";
+}
 const SayPiMachine_machine = createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCRKANiwNoAMAuoqHQHtYWMgPx8QAD0QBOAEwAaEGkQAOAKwycc9apkA2AMw71AdgAspuQF9rS2tjyFSFarQYIGAZTpgUAawIoLl4kEEFhUXEw6QRzAEY5OW14+NN9OVNOXXVFZUREw0McTnN1M05VQ3NOU1NVW3t0R2Y2LxIUACcyfCgadA9WlgAlPwg0EIkIkSwxCVjzOXMcePNVRfMMzjl4w1N1JRU4jRxzTcMzUxkL-XLzRpAHXCH2rp6+90YACxRegFc6JMwtMovM1HkjvFONkcOpKjJODdNmYbHZHs1nqwWK9ukF+vRGEMAGIoLAsSBA-hCGZzGKIczVFZrDZbHZ7A75BDxa6wwwyfllHbyTQPJ44F4dXG9KiSWAdEhgHAoABmCs6AAo5NDoQBKfEtLE496U8LU0F0uKM1brJas3b7Q6IaqcHD8wyJOQyRbVGqGUUYnAsLBysD4PGfTxYAAqXwIgV6JpBs2ioFiRVMxU2qTkGkMVU2pkdCDZyXqboS9ShiP9mFwQZDYelEe8vgCQUTZuTYIQRSqp302dz+f0hc5WtUyRzMgnqisGeraLF9YVjY+A0Y5GDWAARuSO5Euxb4iPinzsrsfbp4kXVu7XfE4boGfsEn7FwHl6Hw+uECg-hBZiYMR8DAUgKR4KZO1pVMClueJtDkW4Jx0Ko9hkG8inUfstU4fR+XiPQzhrRxP1XfEPD-ACBAQTpQOA0CSH3GkUykWDclOdZ1GPGR1EFC4i0w1RtE0Y8igZIxNmIutgxXb8CQQWA4GEMRf1gYQoBAiAmPNGCuX0cwtGMRZVFUTgCJM7YBMQ+DTIHVI9CuWcpMDGSv16HBaKIAROgApsfx+f5AQg4EoJYtM9kzOyc3UPNqhHDCLmw6E8JkAivWc0igg8uifKy-ABBIHw-HjNd5L+RTOiJAhgy+SAirbBNgqpA9oNYntYv7QcYuHUcji1O8yysYx0jhSwMtc1dsq83L3PywrWxK8jGHKsBOnqkrtMPXSHJwfRZzWGKvTSVRr05bl6hwMsB3qHQsgscaGyyzzvN8qAcBWtaFrkjwPvaAQ6F8CB1vbJrTRasLEBHLRtWhXJuNMwwiy1K5Lr0Gc50MbZ7nfWsXMe9znpmt7fq+vyyoqv6Abq0ngniUJmuY7soZKGG4bwhGke2LQpyGzJbmyB7ZPcrz8EoKU3uIIg-gAWz+FgUHeKgIDERUCHIAR-EVaXVpgAB5OgyGlmSsCITbWtiKE1lOdJjH5Xi5EMeKx3KYp9G2IwzLOSxsaaXHMuFsQxfeJUiCl2X5cV1bOm8nA6Aj5VvOlnBtc6PWDawI25RNs2Ia5UotFWb1sjMvQeKRzYXVWHjLFMbkDAFnGSImrKRaDrLJZluWFe+xgSE6X5YCITod3A+mwcZi0DGKHZ1mMPCDJkDMkfdZI8LsixUquH30T95uA9F1bg478Pu7Jjw+4HoeR5JMlR8g8Hux2TYSgyLNSgzTYkaMfQcEx3RHeuHUE628lx7zeq3Q+7dQ6dwjj3BAF98CD2HtuSAABRaWBsJigyTObRAT8f64VtJbD++gkYZlMDgWyZlrhGAuILNy4DA6QPcsfLuitZTykVCqNU6pYB-G3JnZS+AAAiYB5ZoD1KA-GjCD7ixDmHNhIMx44NzqsRIKROJVFrrOTISNyjwSsJkT2novSL3oZNCBci+ECJEIrHO3ZuI-ysPpC48hPT6VUHosyu0+TGEwmyeI5iW5MLkQgpBO44FhKvigrS2DQrdi4ssGeWQTIoSyBCPBBllgaCWFkPYWoeJBP3m3dyUTkGRP7og6JYAb7klico+JFpEkaJSROXQ6Sv5JEodkUyZl9EMnUEUmRJS3plIiWfXulTwkxPQZg+xTTVgtMqG02clkxxZGyT0icuxyhehAR+MBOAo7eVeCQcqRzOjR06LAGUcoFZcNVKtdUcJdT6mktIi5VzTnnOOdc+ZulPQMl-gyDQCRSgVg5H1LiLpTK6GuNULI2R9DOVorAQQ+BXpLQQAFKAAJ-ltQSF0nYaQMhZByBkhAqh9A-xoVOExtkGiN1wKi9FmKIwk2Kko++E9dIMitgiO6awRyWFIWdW4FCkhwn0rsHQ50UVwFZVlBgMY4xwJbJyxqDSH5NO2FhAipQqX8gyJoG8Zxki8XUFsaopkyjyrRWIV6scsDAwmZGSmgMXXBDidq3SuQBL7CwsYUSZkrhejfL7RwLKHVKudTTLF3gSD-Q9TTdgdNuU6QJR6FIJKjHkqLCdH+4kDq3BHGYGQdrFXuXVQ1UqHgGBVTDLAWqQMU3ep5W1KwAleJaFSuUco6QCy8QrdGqtsaNW1uWhTVtWr22xEfC6PJ+FERu2nKankpR7Z8lSpwdKTLsr2oxVlD6ABJfAapOgAkVuyimiaqYtvHfiuduqVg2sNQYHQ6ExValdNOMo3JqV8kWMOw97kT1nqjpeuBv1b3JofWmkKPq2oZAEm7F0CQYqaBqHUJYb40T5QgHACQTx01bTagAWlFUcCw2hqV4WMKZL0+l9m4wIMQMglASO4J7AOzqIq1g5idkcPQ8FHZu2RJa9I-JnISjeEETjudFg3gHJdalT4RxmXzoyiN7yhZQHk92KlprFmOwnGUKw2x3RDKmi9OTCHZ0FGqDeKwWgqWmVSENYaVnCaOrmp6-TR4oSnlKBJC4ZRhScyhCUPkOSGR5k2Mivd-s3reaPVO8d-ndIEQpedYornsgfvrvUKzlj3gZbarsT9fVJUrAMGULiiE+mmGKyEo+0CT6lbsxm2ICIsIzzKO6Xiegihf3Ykiz2ewTwJe03jXT4oWtZWsUbEgHWGZdYKFcGyHp3SYxqNyculrYTlH2sYcFeZmuyODmM7ctnVukYtrOPRbtulltEqsbYVnfnfPgJ1u7eC4TwUIVqGKNs8JIySDC3CO2HYDlqB9y5Jz5TnPyp0aWrAyuxFuskQH2QJsAIElCH+sL33V0SMxpuHzPuI9gJ87y33btcZ0AZF+4Pgff0q3gi4yRbKJF4msfY6w4dfKpzT65OArs1NJHU9Hf3F7M6B7j0HzszjPdMROWjDJBcI4Vj8+HoujZEFQbr6XxZNAUOx6zvH6zIt-x4kYBEgGyfMoVSOvTP2uMMmhK6WotQhUWHSDeB808eJVB0JDvJwHHXKtjPgEqxuK7LDdsa5CiJdAYX0pdW3DtdkiqmzvSNzuQNvWrbHt3udecUKKCOE6UIJx1BvFxH+ajyjQkXgyJYEfUurVPeeyDvQ493FhEsJIeZMh6CUzCb2pdzju0GbYawQA */
+    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCdATgPYC2dJASmChGgDaABgC6iUHVawsZVvgkgAHogAsAJgCMAZhzDhADm0BWTaoPqDANgDsxgDQg0idcPXqcZzceP6AnDaq2uqqAL6hjrTYeISkFNS0DAhEKAA2qSLiSCBSMnIK2SoIfuqOzggGxn446sYGflbBPoE26uGR6NEExGSUNOhJDADKdHwA1gRQmYq5sljyikWqmu41mpo2Vuo2wnXGpU6IK9q6wqrNhtqqwjY2Bu0gUbgp6UMkKMxk+FD99IwvqV4-CEYhm0jmC0KahCnnMGlUWzcOjsZTUlRwqgRJlufhMVh8YQij06zzSqTeHy+P0SjAAFihvgBXOjTbKzfKLRAWVEITT6Yw4Xz1YR4hHGVoPJ44AEUz6TX5JAEAMRQWFSkFZknBHKhCCCqlhBnhiK02hRh15uMF2j8tvOWhKVUlJOlZNlVKoSlg7xIYBwKAAZr7mAAKVz6YQASl+0Rl7zl301OW18wKoCWV0NxtcpvN5Suwhwtu0K3Ufg0V2u2mdmFwqSw3rA+HlNKYWAAKrSCBNE6C2SnIenECcbLoEetLMZtEYETYeaaPHdi8s7nyRTXovXG83vgrGMNRige1M+1q8qnOQgTkYMVYJ5Vp1dbPPDB5LH4LAZWqP10SpVvfR3akBkYcgGywAAjdUk3ZC9dU0WxdBtXYdErOpNB5MwSyLbxdiNM1jGWas-xdACmxbECEBQRkIHmZJ5HwMBSA1U9k3PQdlCOfFNBqdR8QsWojDNPxMJOAUEXDKxbU0epMQ3OsG0Aii-iomi6OYJiGKYkgYIHNNON5fEPDhUwpMI-YTB5MSDBqKoEJOIJGgReScDIoC9wQWA4BkeQqNgGQoEYiBdPY-SigQ1RqmCDQDAMYQZNitwrL4ni4rvdZ6hsD8bBctzJhwDSiFYZhaN3Vt6SZFlWNgjiihHMd0snR9Z1Ekxb0k6TZNyxTyO+ArNJK-L8FYEgRnGZSkkZLzmCVAgG1pSAxqPSYQohMLh0fW97ynGdnwtVxsKXVpgk2XxVBykja1cnqgP6orBr64bRsPY8PKmsBmCW49Vp1IcKgCHArC-cwp3LDYDAwi1NACGylzvO5ah2QJuu3fLCuK0qoBwd7PpeibGBxt5WDoUYIC+lbqr0y9bGqCN+S0KS4u0F8spwJdP2-bQ3EJDorryvr0YerHCbxsrKMJkhidJ8nE00LIzzW6nWbp3YGY-EUXzLGpMvUE78V2FGlL6or8EoBMseIIhGXYRlUhQD0IHkP0CHIVgxj9dgPpgAB5LgsHYRSsCIH64L+vlzAxTZgltQjdb28painQG3EaeLMXOnniT5m78pNs2qX9IgrZtu2PQ+thmBwOhS4DYr2BwT3mB9v2A+9IOQ9qo4zmqMwK12eL6j8Bx9oRQszCH86bGhhoDcuzcc+N+R8-yy3rdt+38YQEhmAZWAiGYSCWPltjFd1BpdC0fC+PLW1R3nEsPCk9LAj8DZy0N3qsbzj6C9XkuN7Fipbeu996HxVGqI+YJQqXi0AiPQWxxxnFHAiecjQrA4C5nUbQUkzSrkzv+BeX8l4-xXkXNepdN7APwHvA+EFIAAFFOAkBBMfGq60ECwPQcIBBd4kFPnnKOGwOA0rxVxI0EwH9brf3NoXYu68PReh9H6QMwYQywEZBBVuPl8AABEwB2zQNGAhqNF6mxIX1P+8iKasKpvBZYb4ZLnCMFPL82x5w+B4q0bYacyw3wurzeeJiiFmJkeozRsgPQd3YQhBobM+JBCqO4Bo5h3HxUBjaYIYlTSaEkbnYhMiqE0MgpQne1DQF0OCpTaBupTAGkvjsWKgkdgHATpFA0lQQg7DNK4IeuTTHLz6oU8pJSQG0LAOA9UlSbHVL+rUtYX5DAWDqM01Bqw4p1H0N4WpEi54KSCdKfJBchm0JGWUsZEBGFcBYVA0+syzDzIaUshZLSXA7HaXhCwOgfDlnwaRQhOBy7FQpCQKaALmAV1gJ6b09tlFBg+iGXw+gjF-P2YCz6PpQVotgFEmB5YkJBEqMsM4K5h4J1MIWdZ9QHI7F2FYFyGlYBSHwJjDyFUoDMhxbqexDiNhbB2HsF5FQrDoLEe+XxaV7i7P6oy+QLLWwi3Gr2aZtyDL6hsn4G4NxzC2HOlYTC+IhHuF8FYIitRob+KztEBlTLMZVw7F2fAr1WwHkVSeZVv0DK+FqJ4OK2rbRbCqJhTEHhzKIiuL64w9K4A2vygwTs3ZN4MAAOoHypJy2Z3D0F3muEjA6dRRLlkFOcMN5gziRqlda2VsasAy2AipYYksSaLVFm6m5Hqij7CsnYAUwR7LxSyniqNMrmXVtrR5BtUtm2usEHLNtodVWljWLy7xAqeQQ3QY5EG+JbDij8EOmNfUXXLUAYMLAs1mywAWmTFt6aDKtCsoRaor8fDNBNTu35V1K0jsPTWltb1pq1tvR2-ubMRTSRFFYYQH4g1WjLRWcD78K3RqrT+lNcwT37l-dOqpKrygyRuLCLZ-hAjRUcBmKKQQ7D7pQ1jZNqbE01sbaTNDaacPtrUDaDBlHSVHDsD3ZYPhiNBBCNR79wtpoAEl8DBmYMyD08qANMance1t-YZmercAKfDfqGi1BElDRERYPznGhsKm0GhRO2pxlJmTcnN4S0nde6ds61MqqKFsKykHCwCZMOWG4rQgjhCJMNCAcBFBPDnZ3BAABaBoPJAg1GFV5k4NpcRUald0OIlBIvsLNCaraurzCWHjlyV+GDhVnHxMYWwUk91SrjJSSYOXLwaH1Z44VdRZzxW7pKgJeyjZQGa7qawQb7nYKZraSoGr9h9KxoLTGQ2w5XEwq0ao1g4pTdqBkulUr+ZzYGrap6tbFsGXWCKDBlWrgmHOI6F8fI9A2g6UEacCIdt9euvs+b+UFUqZO+FbkUMAi6HW6rKoM87izYOSEqkf2jg2nnEazwM8h4im4SKD9gSBtQ4GRbMh-8YeufY8UXY8zzglkIlS5m+0jJ6Gq2nPLo43uWv65-bH5isZhIDiQAnCsidv1SqWEsXNrjQ3nMWwUPhgbBGJdOSH0ijmlKKRBJrhP53-bnPtOnwjdhZXsmYNwkO0XAqmrDjhvgeLcPcLsPL2D9MJyt9rxJTkjC2EN+CoFGLYA4GGswdgaRTeIw8Jb1wU4o5SSsnydB6zdMTxWBjlnt0jee7BRCgPj74FW9D2gu3LgTAeGj7aVw9Q+JM+MVjpP9tMXu+YF745YDVSTLTwDYP1uw857N5iR3N8LBJcC7t-5FeQVe6xQ3IO9Dq9N6ES3rPtuBH3cwUPRoGrzPx+lQewbquovRZSVDbwF9F9TaMFBgIlnq3xsdSr3nau1CQYNJBgNAkRT5qhtgg0WVqu62+bq0vLov22qPceKboROdBgtgquHyBYLcJhKZIRoJlBiRiJkhsOv-lgCxpfifETsIJhHFEIl4HAQEMJqvn-t9pJtJuXHZt8KbucIRIKCEO4NONsPUPqiThnIPFiCnOWuEEAA */
     context: {
         transcriptions: {},
         isTranscribing: false,
         lastState: "inactive",
         userIsSpeaking: false,
         timeUserStoppedSpeaking: 0,
-        defaultPlaceholderText: "Talk to Pi",
+        defaultPlaceholderText: "",
     },
     id: "sayPi",
     initial: "inactive",
     states: {
         inactive: {
             description: "Idle state, not listening or speaking. Privacy mode.",
-            exit: es_assign({ lastState: "inactive" }),
+            exit: es_assign({
+                lastState: "inactive",
+            }),
             on: {
+                "saypi:promptReady": {
+                    target: "inactive",
+                    internal: true,
+                    actions: [
+                        es_assign({
+                            defaultPlaceholderText: (context, event) => getChatbotDefaultPlaceholder(),
+                        }),
+                    ],
+                    description: `Update the context when the prompt area has been loaded in the UI.`,
+                },
                 "saypi:call": {
                     target: "#sayPi.callStarting",
                     description: 'Place a "call" to Pi.\nAttempts to start the microphone and begin active listening.',
@@ -34259,7 +34505,7 @@ const SayPiMachine_machine = createMachine({
                                     entry: {
                                         type: "showNotification",
                                         params: {
-                                            message: i18n("audioInputError", "Pi"),
+                                            message: i18n("audioInputError", "Say, Pi"),
                                             icon: "microphone-muted",
                                         },
                                     },
@@ -34352,6 +34598,9 @@ const SayPiMachine_machine = createMachine({
                         "saypi:piSpeaking": {
                             target: "piSpeaking",
                         },
+                        "saypi:piWriting": {
+                            target: "piWriting",
+                        },
                     },
                     entry: [
                         {
@@ -34430,6 +34679,23 @@ const SayPiMachine_machine = createMachine({
                         },
                     ],
                     description: "Pi's synthesised speech audio is playing.\nPlayful animation.",
+                },
+                piWriting: {
+                    on: {
+                        "saypi:piSpeaking": {
+                            target: "piSpeaking",
+                        },
+                        "saypi:piStoppedWriting": {
+                            target: "#sayPi.listening",
+                        },
+                    },
+                    entry: {
+                        type: "writingPrompt",
+                    },
+                    exit: {
+                        type: "clearPrompt",
+                    },
+                    description: "Pi's text response is being streamed to the page.",
                 },
                 userInterrupting: {
                     on: {
@@ -34514,7 +34780,7 @@ const SayPiMachine_machine = createMachine({
         acquireMicrophone: (context, event) => {
             // warmup the microphone on idle in mobile view,
             // since there's no mouseover event to trigger it
-            if (ImmersionService.isViewImmersive()) {
+            if (ImmersionStateChecker.isViewImmersive()) {
                 EventBus.emit("audio:setupRecording");
             }
         },
@@ -34557,53 +34823,68 @@ const SayPiMachine_machine = createMachine({
             audibleNotifications.listeningStopped();
         },
         listenPrompt: () => {
-            const message = i18n("assistantIsListening", "Pi");
+            var _a;
+            const message = i18n("assistantIsListening", chatbot.getName());
             if (message) {
-                setUserMessage(message);
+                (_a = getPromptOrNull()) === null || _a === void 0 ? void 0 : _a.setMessage(message);
             }
         },
         callStartingPrompt: () => {
+            var _a, _b;
             const message = i18n("callStarting");
             if (message) {
-                const initialText = getDraftPrompt();
+                const initialText = (_a = getPromptOrNull()) === null || _a === void 0 ? void 0 : _a.getDraft();
                 es_assign({ defaultPlaceholderText: initialText });
-                setUserMessage(message);
+                (_b = getPromptOrNull()) === null || _b === void 0 ? void 0 : _b.setMessage(message);
             }
         },
         thinkingPrompt: () => {
-            const message = i18n("assistantIsThinking", "Pi");
+            var _a;
+            const message = i18n("assistantIsThinking", chatbot.getName());
             if (message) {
-                setUserMessage(message);
+                (_a = getPromptOrNull()) === null || _a === void 0 ? void 0 : _a.setMessage(message);
+            }
+        },
+        writingPrompt: () => {
+            var _a;
+            const message = i18n("assistantIsWriting", chatbot.getName());
+            if (message) {
+                (_a = getPromptOrNull()) === null || _a === void 0 ? void 0 : _a.setMessage(message);
             }
         },
         speakingPrompt: () => {
-            const message = i18n("assistantIsSpeaking", "Pi");
+            var _a;
+            const message = i18n("assistantIsSpeaking", chatbot.getName());
             if (message) {
-                setUserMessage(message);
+                (_a = getPromptOrNull()) === null || _a === void 0 ? void 0 : _a.setMessage(message);
             }
         },
         interruptingPiPrompt: () => {
-            const message = i18n("userStartedInterrupting", "Pi");
+            var _a;
+            const message = i18n("userStartedInterrupting", chatbot.getName());
             if (message) {
-                setUserMessage(message);
+                (_a = getPromptOrNull()) === null || _a === void 0 ? void 0 : _a.setMessage(message);
             }
         },
         clearPrompt: (context) => {
-            setUserMessage(context.defaultPlaceholderText);
+            var _a;
+            (_a = getPromptOrNull()) === null || _a === void 0 ? void 0 : _a.setMessage(context.defaultPlaceholderText);
         },
         draftPrompt: (context) => {
-            const prompt = mergeService
+            var _a;
+            const text = mergeService
                 .mergeTranscriptsLocal(context.transcriptions)
                 .trim();
-            if (prompt)
-                setDraftPrompt(prompt);
+            if (text)
+                (_a = getPromptOrNull()) === null || _a === void 0 ? void 0 : _a.setDraft(text);
         },
         mergeAndSubmitTranscript: (context) => {
-            const prompt = mergeService
+            var _a;
+            const text = mergeService
                 .mergeTranscriptsLocal(context.transcriptions)
                 .trim();
-            if (prompt)
-                setFinalPrompt(prompt);
+            if (text)
+                (_a = getPromptOrNull()) === null || _a === void 0 ? void 0 : _a.setFinal(text);
         },
         callIsStarting: () => {
             buttonModule.callStarting();
@@ -34753,6 +35034,10 @@ function readyToSubmit(state, context) {
         state.matches("listening.converting.transcribing"));
     return readyToSubmitOnAllowedState(allowedState, context);
 }
+function createSayPiMachine(bot) {
+    chatbot = bot;
+    return SayPiMachine_machine;
+}
 
 ;// CONCATENATED MODULE: ./src/state-machines/ScreenLockMachine.ts
 
@@ -34821,131 +35106,122 @@ const ScreenLockMachine_machine = createMachine({
     delays: {},
 });
 
-;// CONCATENATED MODULE: ./src/ThemeModule.ts
-
-function applyDarkMode() {
-    document.body.classList.add("dark");
-    buttonModule.applyTheme("dark");
-}
-function applyNormalMode() {
-    document.body.classList.remove("dark");
-    buttonModule.applyTheme("light");
-}
-
 ;// CONCATENATED MODULE: ./src/state-machines/ThemeToggleMachine.ts
 
 
 
-
-const audible = AudibleNotificationsModule.getInstance();
-const ThemeToggleMachine_userPreferences = UserPreferenceModule.getInstance();
-const ThemeToggleMachine_machine = createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5QBcAWYC2YAqB7KUANmAHSG4CGEAlgHZQDEA2gAwC6ioADrrNctVy1OIAB6IAzCwAsJAGwAmaQE5lAdjkTlStdICsAGhABPSdLkllLRdK1yAjHr1yAHAF83RtJhz4ipcio6RiZ7DiQQHj4BIRFxBClZG1UNLR19I1MEe3tlEjUFOScXWxYXAoU9Dy90LDwCYhIAOVwAJwwKQgACDFwIMAZkP2JWcO5efkFhCPj7FkKSBRd7BV17FVW5NUzEZZIVVVVK45dC6pBvOuHSABEKVoBrHr6BoYawUZEoydiZxDmciQShI1C4JEsZGoJHIdtk1GpLHoJCspA4tMo9NIPJ4QLQXvAIpdfO8vhMYtNQPEALQwkyIKl6SyHZks5QSc5E+r+MiUGj0UnRKZxRDSBSwuZ5JzKFwpMqg6QuKo4znXZptDrdXr9AU-Clif72Er5FjIpEKexbFjbOnZPZbZSuaTSexqB2ndzK2rE7l3R7PbURb7k4UINRWxZ6FgsewSErqGQuWEY-KFZxW5Qu3JKbFuIA */
-    context: {
-        theme: "light",
-    },
-    id: "themeToggle",
-    initial: "loading",
-    states: {
-        loading: {
-            description: "Determining the initial theme mode.",
-            invoke: {
-                id: "getPreferedTheme",
-                src: () => ThemeToggleMachine_userPreferences.getTheme(),
-                onDone: {
-                    target: "loaded",
-                    actions: es_assign({ theme: (context, event) => event.data }),
-                },
-                onError: {
-                    target: "Normal mode",
+function createThemeToggleMachine(themeManager) {
+    const audible = AudibleNotificationsModule.getInstance();
+    const userPreferences = UserPreferenceModule.getInstance();
+    const machine = createMachine({
+        /** @xstate-layout N4IgpgJg5mDOIC5QBcAWYC2YAqB7KUANmAHSG4CGEAlgHZQDEA2gAwC6ioADrrNctVy1OIAB6IAzCwAsJAGwAmaQE5lAdjkTlStdICsAGhABPSdLkllLRdK1yAjHr1yAHAF83RtJhz4ipcio6RiZ7DiQQHj4BIRFxBClZG1UNLR19I1MEe3tlEjUFOScXWxYXAoU9Dy90LDwCYhIAOVwAJwwKQgACDFwIMAZkP2JWcO5efkFhCPj7FkKSBRd7BV17FVW5NUzEZZIVVVVK45dC6pBvOuHSABEKVoBrHr6BoYawUZEoydiZxDmciQShI1C4JEsZGoJHIdtk1GpLHoJCspA4tMo9NIPJ4QLQXvAIpdfO8vhMYtNQPEALQwkyIKl6SyHZks5QSc5E+r+MiUGj0UnRKZxRDSBSwuZ5JzKFwpMqg6QuKo4znXZptDrdXr9AU-Clif72Er5FjIpEKexbFjbOnZPZbZSuaTSexqB2ndzK2rE7l3R7PbURb7k4UINRWxZ6FgsewSErqGQuWEY-KFZxW5Qu3JKbFuIA */
+        context: {
+            theme: "light",
+        },
+        id: "themeToggle",
+        initial: "loading",
+        states: {
+            loading: {
+                description: "Determining the initial theme mode.",
+                invoke: {
+                    id: "getPreferedTheme",
+                    src: () => userPreferences.getTheme(),
+                    onDone: {
+                        target: "loaded",
+                        actions: es_assign({ theme: (context, event) => event.data }),
+                    },
+                    onError: {
+                        target: "Normal mode",
+                    },
                 },
             },
-        },
-        loaded: {
-            description: "The initial theme mode has been determined.",
-            always: [
-                {
-                    target: "Normal mode",
-                    cond: "preferLight",
-                },
-                {
-                    target: "Dark mode",
-                    cond: "preferDark",
-                },
-            ],
-        },
-        "Normal mode": {
-            description: "The UI is in normal (default) mode with a light theme.",
-            entry: "enterNormalMode",
-            on: {
-                toggle: {
-                    target: "Dark mode",
-                    actions: [
-                        {
-                            type: "saveMode",
-                            params: {
-                                theme: "dark",
+            loaded: {
+                description: "The initial theme mode has been determined.",
+                always: [
+                    {
+                        target: "Normal mode",
+                        cond: "preferLight",
+                    },
+                    {
+                        target: "Dark mode",
+                        cond: "preferDark",
+                    },
+                ],
+            },
+            "Normal mode": {
+                description: "The UI is in normal (default) mode with a light theme.",
+                entry: "enterNormalMode",
+                on: {
+                    toggle: {
+                        target: "Dark mode",
+                        actions: [
+                            {
+                                type: "saveMode",
+                                params: {
+                                    theme: "dark",
+                                },
                             },
-                        },
-                        {
-                            type: "soundEffectOn",
-                        },
-                    ],
-                },
-            },
-        },
-        "Dark mode": {
-            description: "The UI is in dark mode with a dark theme.",
-            entry: "enterDarkMode",
-            on: {
-                toggle: {
-                    target: "Normal mode",
-                    actions: [
-                        {
-                            type: "saveMode",
-                            params: {
-                                theme: "light",
+                            {
+                                type: "soundEffectOn",
                             },
-                        },
-                        {
-                            type: "soundEffectOff",
-                        },
-                    ],
+                        ],
+                    },
+                },
+            },
+            "Dark mode": {
+                description: "The UI is in dark mode with a dark theme.",
+                entry: "enterDarkMode",
+                on: {
+                    toggle: {
+                        target: "Normal mode",
+                        actions: [
+                            {
+                                type: "saveMode",
+                                params: {
+                                    theme: "light",
+                                },
+                            },
+                            {
+                                type: "soundEffectOff",
+                            },
+                        ],
+                    },
                 },
             },
         },
-    },
-    schema: {
-        events: {},
-        context: {},
-    },
-    predictableActionArguments: true,
-    preserveActionOrder: true,
-}, {
-    actions: {
-        enterDarkMode: (context, event) => {
-            applyDarkMode();
+        schema: {
+            events: {},
+            context: {},
         },
-        enterNormalMode: (context, event) => {
-            applyNormalMode();
+        predictableActionArguments: true,
+        preserveActionOrder: true,
+    }, {
+        actions: {
+            enterDarkMode: (context, event) => {
+                themeManager.applyDarkMode();
+            },
+            enterNormalMode: (context, event) => {
+                themeManager.applyNormalMode();
+            },
+            saveMode: (context, event, { action }) => {
+                userPreferences.setTheme(action.params.theme);
+            },
+            soundEffectOn: () => {
+                audible.themeOn();
+            },
+            soundEffectOff: () => {
+                audible.themeOff();
+            },
         },
-        saveMode: (context, event, { action }) => {
-            ThemeToggleMachine_userPreferences.setTheme(action.params.theme);
+        services: {},
+        guards: {
+            preferLight: (context) => context.theme === "light",
+            preferDark: (context) => context.theme === "dark",
         },
-        soundEffectOn: () => {
-            audible.themeOn();
-        },
-        soundEffectOff: () => {
-            audible.themeOff();
-        },
-    },
-    services: {},
-    guards: {
-        preferLight: (context) => context.theme === "light",
-        preferDark: (context) => context.theme === "dark",
-    },
-    delays: {},
-});
+        delays: {},
+    });
+    return machine;
+}
 
 ;// CONCATENATED MODULE: ./src/AnalyticsModule.ts
 var AnalyticsModule_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -35274,13 +35550,15 @@ const SessionAnalyticsMachine_machine = createMachine({
     delays: {},
 });
 
-;// CONCATENATED MODULE: ./src/StateMachineService.js
-function StateMachineService_typeof(o) { "@babel/helpers - typeof"; return StateMachineService_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, StateMachineService_typeof(o); }
-function StateMachineService_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, StateMachineService_toPropertyKey(descriptor.key), descriptor); } }
-function StateMachineService_createClass(Constructor, protoProps, staticProps) { if (protoProps) StateMachineService_defineProperties(Constructor.prototype, protoProps); if (staticProps) StateMachineService_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function StateMachineService_toPropertyKey(arg) { var key = StateMachineService_toPrimitive(arg, "string"); return StateMachineService_typeof(key) === "symbol" ? key : String(key); }
-function StateMachineService_toPrimitive(input, hint) { if (StateMachineService_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (StateMachineService_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-function StateMachineService_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+;// CONCATENATED MODULE: ./src/icons/volume-mid.svg
+/* harmony default export */ const volume_mid = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"Layer_2\" data-name=\"Layer 2\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 21 18.88\">\n    <defs>\n        <style>\n            .speaker {\n            fill: #000;\n            stroke-width: 0px;\n            }\n        </style>\n    </defs>\n    <g id=\"Layer_1-2\" data-name=\"Layer 1\">\n        <path class=\"speaker\"\n            d=\"M12,1.5c0-1.34-1.62-2.01-2.56-1.06l-4.5,4.5h-1.93c-1.14,0-2.32.66-2.66,1.9C.12,7.69,0,8.57,0,9.44,0,10.34.12,11.21.35,12.04c.34,1.24,1.52,1.9,2.66,1.9h1.93l4.5,4.5c.94.94,2.56.28,2.56-1.06,0,0,0-15.88,0-15.88ZM17.08,2.55c.29-.29.77-.29,1.06,0,3.81,3.81,3.81,9.98,0,13.79-.28.3-.76.32-1.06.04s-.32-.76-.04-1.06c.01-.01.02-.03.04-.04,3.22-3.22,3.22-8.45,0-11.67h0c-.29-.29-.29-.77,0-1.06Z\" />\n        <path class=\"speaker\"\n            d=\"M14.43,5.2c.29-.29.77-.29,1.06,0,0,0,0,0,0,0,2.34,2.34,2.34,6.14,0,8.49h0c-.3.29-.77.28-1.06-.02-.28-.29-.28-.75,0-1.04,1.76-1.76,1.76-4.61,0-6.36h0c-.29-.29-.29-.77,0-1.06h0Z\" />\n    </g>\n</svg>");
+;// CONCATENATED MODULE: ./src/icons/copy.svg
+/* harmony default export */ const copy = ("<?xml version='1.0' encoding='UTF-8'?>\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" zoomAndPan=\"magnify\" viewBox=\"0 0 375 374.999991\" preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n  <defs>\n    <clipPath id=\"b2c3a52ba4\">\n      <path d=\"M 0 0.703125 L 375 0.703125 L 375 374.203125 L 0 374.203125 Z M 0 0.703125 \" clip-rule=\"nonzero\"/>\n    </clipPath>\n  </defs>\n  <g clip-path=\"url(#b2c3a52ba4)\">\n    <path fill=\"#24381b\" d=\"M 347.425781 248.875 C 347.425781 268.046875 331.894531 283.578125 312.71875 283.578125 L 310.449219 283.578125 L 310.449219 126.195312 C 310.449219 91.835938 282.546875 63.929688 248.253906 63.929688 L 92.039062 63.929688 L 92.039062 62.96875 C 92.039062 43.792969 107.640625 28.195312 126.816406 28.195312 L 312.71875 28.195312 C 331.894531 28.195312 347.425781 43.792969 347.425781 62.96875 Z M 282.960938 312.101562 C 282.960938 331.207031 267.359375 346.808594 248.253906 346.808594 L 62.351562 346.808594 C 43.175781 346.808594 27.574219 331.207031 27.574219 312.101562 L 27.574219 126.195312 C 27.574219 107.023438 43.175781 91.421875 62.351562 91.421875 L 248.253906 91.421875 C 267.359375 91.421875 282.960938 107.023438 282.960938 126.195312 Z M 312.71875 0.703125 L 126.816406 0.703125 C 92.519531 0.703125 64.550781 28.675781 64.550781 62.96875 L 64.550781 63.929688 L 62.351562 63.929688 C 27.988281 63.929688 0.0859375 91.835938 0.0859375 126.195312 L 0.0859375 312.101562 C 0.0859375 346.394531 27.988281 374.296875 62.351562 374.296875 L 248.253906 374.296875 C 282.546875 374.296875 310.449219 346.394531 310.449219 312.101562 L 310.449219 311.070312 L 312.71875 311.070312 C 347.015625 311.070312 374.914062 283.167969 374.914062 248.875 L 374.914062 62.96875 C 374.914062 28.675781 347.015625 0.703125 312.71875 0.703125 \" fill-opacity=\"1\" fill-rule=\"nonzero\"/>\n  </g>\n</svg>\n");
+;// CONCATENATED MODULE: ./src/icons/copied.svg
+/* harmony default export */ const copied = ("<?xml version='1.0' encoding='UTF-8'?>\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" zoomAndPan=\"magnify\" viewBox=\"0 0 375 374.999991\" preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n  <path fill=\"#24381b\" d=\"M 308.800781 21.765625 C 333.300781 21.765625 353.234375 41.699219 353.234375 66.199219 L 353.234375 308.800781 C 353.234375 333.300781 333.300781 353.234375 308.800781 353.234375 L 66.203125 353.234375 C 41.699219 353.234375 21.765625 333.300781 21.765625 308.800781 L 21.765625 66.199219 C 21.765625 41.699219 41.699219 21.765625 66.203125 21.765625 Z M 374.996094 308.800781 L 374.996094 66.199219 C 374.996094 29.699219 345.300781 0.00390625 308.800781 0.00390625 L 66.203125 0.00390625 C 29.699219 0.00390625 0.00390625 29.699219 0.00390625 66.199219 L 0.00390625 308.800781 C 0.00390625 345.300781 29.699219 374.996094 66.203125 374.996094 L 308.800781 374.996094 C 345.300781 374.996094 374.996094 345.300781 374.996094 308.800781 Z M 74.550781 164.703125 C 86.011719 153.242188 104.585938 153.242188 116.042969 164.703125 L 153.945312 202.605469 C 156.253906 204.914062 160 204.914062 162.308594 202.605469 L 258.957031 105.953125 C 270.414062 94.5 288.988281 94.5 300.449219 105.953125 C 311.902344 117.410156 311.902344 135.984375 300.449219 147.441406 L 174.152344 273.761719 C 165.304688 282.613281 150.953125 282.613281 142.101562 273.761719 L 74.550781 206.191406 C 63.097656 194.730469 63.097656 176.15625 74.550781 164.703125 \" fill-opacity=\"1\" fill-rule=\"nonzero\"/>\n</svg>\n");
+;// CONCATENATED MODULE: ./src/icons/regenerate.svg
+/* harmony default export */ const regenerate = ("<?xml version='1.0' encoding='UTF-8'?>\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" zoomAndPan=\"magnify\" viewBox=\"0 0 375 374.999991\" preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n  <path fill=\"#24381b\" d=\"M 206.046875 31.148438 L 213.988281 26.121094 C 220.125 22.234375 221.957031 14.101562 218.066406 7.957031 C 214.175781 1.820312 206.039062 -0.0117188 199.898438 3.882812 L 156.027344 31.667969 C 152.378906 33.980469 150.082031 37.945312 149.910156 42.269531 C 149.757812 46.589844 151.710938 50.722656 155.171875 53.320312 L 199.042969 86.21875 C 201.410156 87.996094 204.183594 88.851562 206.925781 88.851562 C 210.9375 88.851562 214.878906 87.035156 217.464844 83.585938 C 221.835938 77.773438 220.65625 69.519531 214.84375 65.160156 L 204.601562 57.480469 C 277.128906 65.972656 333.59375 127.796875 333.59375 202.570312 C 333.59375 283.125 268.058594 348.660156 187.492188 348.660156 C 106.945312 348.660156 41.410156 283.125 41.410156 202.570312 C 41.410156 170.234375 51.746094 139.605469 71.316406 113.984375 C 75.722656 108.207031 74.625 99.945312 68.832031 95.53125 C 63.074219 91.117188 54.796875 92.230469 50.390625 98.007812 C 27.292969 128.257812 15.089844 164.410156 15.089844 202.570312 C 15.089844 297.640625 92.429688 374.980469 187.492188 374.980469 C 282.570312 374.980469 359.914062 297.640625 359.914062 202.570312 C 359.914062 113.761719 292.433594 40.433594 206.046875 31.148438 \" fill-opacity=\"1\" fill-rule=\"nonzero\"/>\n</svg>\n");
+;// CONCATENATED MODULE: ./src/tts/TTSControlsModule.ts
 
 
 
@@ -35288,790 +35566,260 @@ function StateMachineService_classCallCheck(instance, Constructor) { if (!(insta
 
 
 
-/**
- * A singleton service that manages the state machine.
- */
-var StateMachineService = /*#__PURE__*/StateMachineService_createClass(function StateMachineService() {
-  StateMachineService_classCallCheck(this, StateMachineService);
-  this.actor = interpret(SayPiMachine_machine).onTransition(function (state) {
-    if (state.changed) {
-      var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
-      var toState = serializeStateValue(state.value);
-      logger.debug("Say, Pi Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+
+class TTSControlsModule {
+    constructor(speechSynthesis) {
+        this.speechSynthesis = speechSynthesis;
+        this.registerEventListeners();
     }
-  });
-  this.actor.start();
-  this.screenLockActor = interpret(ScreenLockMachine_machine).onTransition(function (state) {
-    if (state.changed) {
-      var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
-      var toState = serializeStateValue(state.value);
-      logger.debug("Screen Lock Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
-    }
-  });
-  this.screenLockActor.start();
-  this.themeToggleActor = interpret(ThemeToggleMachine_machine).onTransition(function (state) {
-    if (state.changed) {
-      var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
-      var toState = serializeStateValue(state.value);
-      logger.debug("Theme Toggle Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
-    }
-  });
-  this.themeToggleActor.start();
-  this.analyticsMachineActor = interpret(SessionAnalyticsMachine_machine).onTransition(function (state) {
-    if (state.changed) {
-      var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
-      var toState = serializeStateValue(state.value);
-      logger.debug("Session Analytics Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
-    }
-  });
-  this.analyticsMachineActor.start();
-}); // Singleton
-/* harmony default export */ const src_StateMachineService = (new StateMachineService());
-;// CONCATENATED MODULE: ./src/SubmitErrorHandler.ts
-
-
-class SubmitErrorHandler {
-    constructor() {
-        this.audioOutputStatus = false;
-        this.audioControls = new AudioControlsModule();
-        // Initialise properties if needed
-        this.restorePointKey = "restorePoint";
-    }
-    initAudioOutputListener() {
-        const audioOutputButton = document.getElementById("saypi-audio-output-button");
-        if (audioOutputButton) {
-            audioOutputButton.addEventListener("click", this.handleAudioOutputClick.bind(this));
+    static getInstance() {
+        if (!TTSControlsModule.instance) {
+            TTSControlsModule.instance = new TTSControlsModule(SpeechSynthesisModule.getInstance());
         }
+        return TTSControlsModule.instance;
     }
-    // Event handler
-    handleAudioOutputClick() {
-        this.audioOutputStatus = !this.audioOutputStatus; // Toggle the state
-    }
-    // 1. Detect when a submit error occurs
-    detectSubmitError() {
-        const submitButton = document.getElementById("saypi-submitButton");
-        const textarea = document.getElementById("saypi-prompt");
-        if (submitButton && textarea) {
-            if (submitButton.disabled && textarea.value.length > 0) {
-                console.warn("Submit error detected, but ignored.");
-                //return true; // submit error handler disabled in v1.6.0 for evaluation purposes
-            }
-        }
-        return false;
-    }
-    // 2. Create a "restore point" capturing application state
-    createRestorePoint({ prompt: message, audioInputEnabled: audioInputStatus, audioOutputEnabled: audioOutputStatus, }) {
-        const restorePoint = {
-            prompt: message,
-            audioInputEnabled: audioInputStatus,
-            audioOutputEnabled: audioOutputStatus,
-            creationTime: new Date().toISOString(),
-        };
-        localStorage.setItem(this.restorePointKey, JSON.stringify(restorePoint));
-    }
-    // 3. Programmatically reload the page
-    reloadPage() {
-        window.location.reload();
-    }
-    handleSubmitError() {
-        const textarea = document.getElementById("saypi-prompt");
-        const prompt = textarea ? textarea.value : "";
-        let audioInputStatus = true;
-        const callButton = document.getElementById("saypi-callButton");
-        if (callButton) {
-            audioInputStatus = callButton.classList.contains("active");
-        }
-        console.log("Creating restore point");
-        this.createRestorePoint({
-            prompt: prompt,
-            audioInputEnabled: audioInputStatus,
-            audioOutputEnabled: this.audioOutputStatus,
+    registerEventListeners() {
+        EventBus.on("saypi:piWriting", (event) => {
+            this.autoplaySpeech(event.utterance, 200); // wait a beat after starting the input stream before starting the output stream
         });
-        console.log("Reloading page");
-        this.reloadPage();
     }
-    // 4. On load, check for a restore point
-    checkForRestorePoint() {
-        const storedData = localStorage.getItem(this.restorePointKey);
-        if (storedData) {
-            const restorePoint = JSON.parse(storedData);
-            const currentTime = new Date();
-            const restoreTime = new Date(restorePoint.creationTime);
-            const timeDifference = (currentTime.getTime() - restoreTime.getTime()) / (1000 * 60); // in minutes
-            if (timeDifference <= 5) {
-                console.log("Restoring application state", restorePoint);
-                setFinalPrompt(restorePoint.prompt);
+    constructTextToSpeechControl(classname, title, icon) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.classList.add("text-center", "saypi-button", "tooltip", "tts-item", classname);
+        button.setAttribute("aria-label", title);
+        button.innerHTML = icon;
+        return button;
+    }
+    /**
+     * A speech button that can be used among chat message controls
+     * @returns A button element that can be used to replay the last utterance
+     */
+    createSpeechButton() {
+        // use createTTSCtrlButton to create a button with the correct classes
+        const button = this.constructTextToSpeechControl("saypi-speak-button", i18n("readAloudButtonTitle"), volume_mid);
+        return button;
+    }
+    createGenerateSpeechButton(price, currency = "USD") {
+        const message = price
+            ? i18n("regenerateButtonTitle", [price.toFixed(2), currency])
+            : i18n("regenerateButtonTitleFree");
+        const button = this.constructTextToSpeechControl("saypi-regenerate-button", message, regenerate);
+        return button;
+    }
+    createCopyButton() {
+        const button = this.constructTextToSpeechControl("saypi-copy-button", i18n("copyButtonTitle"), copy);
+        return button;
+    }
+    constructTextToSpeechControlForMenu(classname, title, icon) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.classList.add("flex", "h-12", "w-full", "items-center", "justify-between", "rounded", "px-2.5", "hover:bg-neutral-50-hover", "active:bg-neutral-50-tap", "active:text-primary-700", "saypi-button", "tooltip", "tts-item", classname);
+        button.setAttribute("title", title);
+        button.innerHTML = title + icon;
+        return button;
+    }
+    /**
+     * A speech button that can be used in a menu on a mobile device
+     * @returns A button element that can be used to replay the last utterance
+     */
+    createSpeechButtonForMenu() {
+        // use createTTSCtrlButton to create a button with the correct classes
+        const button = this.constructTextToSpeechControlForMenu("saypi-speak-button", i18n("readAloudButtonTitle"), volume_mid);
+        return button;
+    }
+    createCopyButtonForMenu() {
+        const button = this.constructTextToSpeechControlForMenu("saypi-copy-button", i18n("copyButtonTitle"), copy);
+        return button;
+    }
+    addSpeechButton(utterance, container, insertBefore, containerIsMenu = false) {
+        const button = containerIsMenu
+            ? this.createSpeechButtonForMenu()
+            : this.createSpeechButton();
+        button.addEventListener("click", () => {
+            EventBus.emit("saypi:tts:replaying", utterance); //  notify the ui manager that the next speech it hears will be a replay
+            this.speechSynthesis.speak(utterance);
+        });
+        if (insertBefore) {
+            container.insertBefore(button, insertBefore);
+        }
+        else {
+            container.appendChild(button);
+        }
+    }
+    addCopyButton(message, container, containerIsMenu = false) {
+        const button = containerIsMenu
+            ? this.createCopyButtonForMenu()
+            : this.createCopyButton();
+        button.addEventListener("click", () => {
+            navigator.clipboard.writeText(message.text);
+            if (!containerIsMenu) {
+                const originalAriaLabel = button.getAttribute("ariaLabel") || i18n("copyButtonTitle");
+                const originalInnerHtml = button.innerHTML;
+                button.setAttribute("aria-label", i18n("copiedButtonTitle"));
+                button.innerHTML = copied;
+                button.disabled = true;
+                // reset after a few seconds
                 setTimeout(() => {
-                    this.audioControls.activateAudioInput(restorePoint.audioInputEnabled);
-                }, 0); // activation of the audio input needs to happen asynchronously to avoid race condition
-                this.audioControls.activateAudioOutput(restorePoint.audioOutputEnabled);
-                // Delete the executed restore point
-                localStorage.removeItem(this.restorePointKey);
+                    button.setAttribute("aria-label", originalAriaLabel);
+                    button.innerHTML = originalInnerHtml;
+                    button.disabled = false;
+                }, 2500);
             }
-        }
-    }
-}
-// Singleton
-const submitErrorHandler = new SubmitErrorHandler();
-
-;// CONCATENATED MODULE: ./src/icons/exit.svg
-/* harmony default export */ const exit = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"Layer_1\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 64.06 64.33\">\n  <defs>\n    <style>\n      .inner {\n        fill: #24381b;\n      }\n\n      .inner, .outer {\n        stroke-width: 0px;\n      }\n\n      .outer {\n        fill: #dfd7c2;\n      }\n    </style>\n  </defs>\n  <path class=\"outer\" d=\"m31.71,64.32C14.77,64.46-.44,49.93,0,31.33.41,14.47,14.29-.32,32.7,0c16.91.3,31.8,14.32,31.36,33.14-.39,16.76-14.49,31.55-32.34,31.18Zm10.67-23.19c.06-.7-.41-1.12-.84-1.55-2-2-3.94-4.07-6.02-5.97-1.14-1.04-1.32-1.68-.06-2.82,2.13-1.93,4.07-4.08,6.1-6.12.78-.79,1.31-1.64.34-2.56-.92-.87-1.72-.28-2.43.45-2.17,2.21-4.39,4.39-6.52,6.65-.72.77-1.16.7-1.84-.02-2.06-2.17-4.19-4.28-6.29-6.41-.76-.77-1.59-1.68-2.66-.63-1.14,1.12-.19,1.98.62,2.79,2.07,2.09,4.09,4.22,6.2,6.26.77.75.82,1.2.02,1.97-2.21,2.1-4.33,4.3-6.49,6.45-.79.78-1.3,1.65-.32,2.56.92.85,1.71.26,2.43-.47,2.11-2.12,4.28-4.19,6.33-6.38.88-.94,1.37-.86,2.21.03,2.13,2.26,4.37,4.41,6.57,6.6.51.51,1.09.78,1.8.48.56-.24.85-.68.87-1.3Z\"/>\n  <path class=\"inner\" d=\"m42.47,41.27c-.02.62-.32,1.06-.87,1.3-.71.31-1.29.03-1.8-.48-2.2-2.2-4.44-4.35-6.57-6.6-.84-.89-1.33-.96-2.21-.03-2.04,2.19-4.22,4.25-6.33,6.38-.72.72-1.51,1.32-2.43.47-.98-.91-.47-1.78.32-2.56,2.16-2.15,4.28-4.35,6.49-6.45.81-.77.76-1.22-.02-1.97-2.11-2.04-4.13-4.17-6.2-6.26-.8-.81-1.75-1.67-.62-2.79,1.07-1.05,1.9-.14,2.66.63,2.1,2.13,4.23,4.24,6.29,6.41.69.73,1.12.79,1.84.02,2.13-2.26,4.35-4.43,6.52-6.65.72-.73,1.51-1.31,2.43-.45.97.92.44,1.78-.34,2.56-2.03,2.04-3.97,4.19-6.1,6.12-1.25,1.14-1.08,1.78.06,2.82,2.09,1.91,4.02,3.97,6.02,5.97.43.43.9.85.84,1.55Z\"/>\n</svg>");
-;// CONCATENATED MODULE: ./src/icons/maximize.svg
-/* harmony default export */ const maximize = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 768 767.999994\" preserveAspectRatio=\"xMidYMid meet\"\n    version=\"1.0\">\n    <path fill=\"#e4d8c1\" class=\"outer\"\n        d=\"M 768.132812 379.535156 C 768.132812 169.089844 597.523438 -1.496094 387.050781 -1.496094 C 176.609375 -1.496094 5.996094 169.089844 5.996094 379.535156 C 5.996094 589.949219 176.609375 760.539062 387.050781 760.539062 C 597.523438 760.539062 768.132812 589.949219 768.132812 379.535156 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n    <path fill=\"#776d6d\" class=\"inner\"\n        d=\"M 538.996094 223.152344 L 306.535156 229.855469 L 538.996094 455.695312 Z M 538.996094 223.152344 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n    <path fill=\"#776d6d\" class=\"inner\"\n        d=\"M 235.105469 535.890625 L 467.597656 529.1875 L 235.105469 303.34375 Z M 235.105469 535.890625 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n</svg>");
-;// CONCATENATED MODULE: ./src/icons/immersive.svg
-/* harmony default export */ const immersive = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"Layer_1\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\">\n  <defs>\n    <style>\n      .cls-1 {\n        fill: none;\n        stroke: #000;\n        stroke-linecap: round;\n        stroke-linejoin: round;\n        stroke-width: 2px;\n      }\n    </style>\n  </defs>\n  <rect class=\"cls-1\" x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\" ry=\"2\"/>\n  <line class=\"cls-1\" x1=\"8\" y1=\"3\" x2=\"8\" y2=\"8\"/>\n  <line class=\"cls-1\" x1=\"3\" y1=\"8\" x2=\"8\" y2=\"8\"/>\n  <line class=\"cls-1\" x1=\"16\" y1=\"3\" x2=\"16\" y2=\"8\"/>\n  <line class=\"cls-1\" x1=\"16\" y1=\"8\" x2=\"21\" y2=\"8\"/>\n  <line class=\"cls-1\" x1=\"8\" y1=\"21\" x2=\"8\" y2=\"16\"/>\n  <line class=\"cls-1\" x1=\"3\" y1=\"16\" x2=\"8\" y2=\"16\"/>\n  <line class=\"cls-1\" x1=\"16\" y1=\"21\" x2=\"16\" y2=\"16\"/>\n  <line class=\"cls-1\" x1=\"16\" y1=\"16\" x2=\"21\" y2=\"16\"/>\n</svg>");
-;// CONCATENATED MODULE: ./src/icons/rectangles.svg
-/* harmony default export */ const rectangles = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"background-layer\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\"\n  viewBox=\"0 0 307 640\">\n  <defs>\n    <style>\n      .innermost, .second, .third, .fourth, .fifth, .outermost {\n      stroke-width: 0px;\n      }\n\n      .outermost {\n      fill: #e4f2d1;\n      }\n\n      .second {\n      fill: #cce8b5;\n      }\n\n      .third {\n      fill: #b3db95;\n      }\n\n      .fourth {\n      fill: #9bd078;\n      }\n\n      .fifth {\n      fill: #83c55c;\n      }\n\n      .innermost {\n      fill: #428a2f;\n      }\n    </style>\n  </defs>\n  <path class=\"outermost\"\n    d=\"m306.9,320c0,105.3-.02,210.6.1,315.91,0,3.42-.67,4.1-4.09,4.09-99.6-.12-199.21-.12-298.81,0C.67,640,0,639.33,0,635.91.11,425.3.11,214.7,0,4.09,0,.67.67,0,4.09,0,103.7.12,203.3.12,302.91,0c3.42,0,4.1.67,4.09,4.09-.12,105.3-.1,210.6-.1,315.91Z\" />\n  <path class=\"second\"\n    d=\"m275.92,323c0,87.63,0,175.27,0,262.9,0,7.24-.55,7.93-7.86,7.98-14.66.09-29.31.03-43.97.03-60.96,0-121.92,0-182.88,0q-7.13,0-7.14-7.24c0-176.1,0-352.21,0-528.31q0-7.26,7.12-7.26c75.78,0,151.56,0,227.35,0q7.38,0,7.38,7.5c0,88.13,0,176.27,0,264.4Z\" />\n  <path class=\"third\"\n    d=\"m68.06,322.24c0-69.47,0-138.94,0-208.41,0-8.99,1.33-10.13,10.49-9.12,1.98.22,3.98.32,5.97.32,46.13.02,92.26.02,138.39,0,3.48,0,6.92-.23,10.41-.67,5.5-.7,8.74.46,8.73,7.25-.18,138.94-.13,277.88-.13,416.81,0,.33,0,.67,0,1q-.14,10.51-10.39,10.51c-52.13,0-104.25,0-156.38,0q-7.09,0-7.09-7.28c0-70.14,0-140.27,0-210.41Z\" />\n  <path class=\"fourth\"\n    d=\"m103.02,322.5c0-52.46,0-104.91,0-157.37,0-6.68.36-7.06,7.07-7.06,30.3-.01,60.6.07,90.9-.09,4.54-.02,6.08,1.33,6.07,5.98-.1,105.58-.1,211.16,0,316.74,0,4.18-1.27,5.37-5.38,5.35-29.3-.15-58.6-.08-87.9-.08q-10.76,0-10.76-11.09c0-50.79,0-101.58,0-152.37Z\" />\n  <path class=\"fifth\"\n    d=\"m173,322.2c0,35.29,0,70.58,0,105.88q0,6.89-6.99,6.9c-8.15,0-16.31-.13-24.46.06-3.47.08-4.68-1.09-4.61-4.59.18-9.65.06-19.31.06-28.96,0-58.26-.01-116.53.02-174.79,0-4.76-1.12-9.46-.14-14.3.51-2.54,1.39-3.38,3.8-3.36,8.82.06,17.64.14,26.46-.02,4.59-.09,5.95,1.85,5.94,6.33-.14,35.62-.08,71.25-.08,106.87Z\" />\n  <path class=\"innermost\"\n    d=\"m151.04,322.01c0-9.99.07-19.97-.05-29.96-.04-2.93.83-4.18,3.95-4.18,3.06,0,4.03,1.12,4.02,4.11-.09,19.97-.08,39.94.01,59.91.01,2.96-.84,4.16-3.96,4.14-3.03-.01-4.08-1.04-4.03-4.08.14-9.98.05-19.97.05-29.96Z\" />\n</svg>");
-;// CONCATENATED MODULE: ./src/icons/rectangles-moonlight.svg
-/* harmony default export */ const rectangles_moonlight = ("<svg xmlns=\"http://www.w3.org/2000/svg\" id=\"background-layer\" data-name=\"Layer 1\"\n  viewBox=\"0 0 307 640\"\n  width=\"307px\" height=\"640px\">\n  <defs>\n    <style>.innermost, .second, .third, .fourth, .fifth, .outermost { stroke-width: 0px; }\n      .outermost { fill: #a9b7bf; }\n      .second { fill: #8f9ca7; }\n      .third { fill: #787d83; }\n      .fourth { fill: #6c7378; }\n      .fifth { fill: #313437; }\n      .innermost { fill: #1c1c1c; }\n</style>\n  </defs>\n  <path class=\"outermost\"\n    d=\"m306.9,320c0,105.3-.02,210.6.1,315.91,0,3.42-.67,4.1-4.09,4.09-99.6-.12-199.21-.12-298.81,0C.67,640,0,639.33,0,635.91.11,425.3.11,214.7,0,4.09,0,.67.67,0,4.09,0,103.7.12,203.3.12,302.91,0c3.42,0,4.1.67,4.09,4.09-.12,105.3-.1,210.6-.1,315.91Z\" />\n  <path class=\"second\"\n    d=\"m275.92,323c0,87.63,0,175.27,0,262.9,0,7.24-.55,7.93-7.86,7.98-14.66.09-29.31.03-43.97.03-60.96,0-121.92,0-182.88,0q-7.13,0-7.14-7.24c0-176.1,0-352.21,0-528.31q0-7.26,7.12-7.26c75.78,0,151.56,0,227.35,0q7.38,0,7.38,7.5c0,88.13,0,176.27,0,264.4Z\" />\n  <path class=\"third\"\n    d=\"m68.06,322.24c0-69.47,0-138.94,0-208.41,0-8.99,1.33-10.13,10.49-9.12,1.98.22,3.98.32,5.97.32,46.13.02,92.26.02,138.39,0,3.48,0,6.92-.23,10.41-.67,5.5-.7,8.74.46,8.73,7.25-.18,138.94-.13,277.88-.13,416.81,0,.33,0,.67,0,1q-.14,10.51-10.39,10.51c-52.13,0-104.25,0-156.38,0q-7.09,0-7.09-7.28c0-70.14,0-140.27,0-210.41Z\" />\n  <path class=\"fourth\"\n    d=\"m103.02,322.5c0-52.46,0-104.91,0-157.37,0-6.68.36-7.06,7.07-7.06,30.3-.01,60.6.07,90.9-.09,4.54-.02,6.08,1.33,6.07,5.98-.1,105.58-.1,211.16,0,316.74,0,4.18-1.27,5.37-5.38,5.35-29.3-.15-58.6-.08-87.9-.08q-10.76,0-10.76-11.09c0-50.79,0-101.58,0-152.37Z\" />\n  <path class=\"fifth\"\n    d=\"m173,322.2c0,35.29,0,70.58,0,105.88q0,6.89-6.99,6.9c-8.15,0-16.31-.13-24.46.06-3.47.08-4.68-1.09-4.61-4.59.18-9.65.06-19.31.06-28.96,0-58.26-.01-116.53.02-174.79,0-4.76-1.12-9.46-.14-14.3.51-2.54,1.39-3.38,3.8-3.36,8.82.06,17.64.14,26.46-.02,4.59-.09,5.95,1.85,5.94,6.33-.14,35.62-.08,71.25-.08,106.87Z\" />\n  <path class=\"innermost\"\n    d=\"m151.04,322.01c0-9.99.07-19.97-.05-29.96-.04-2.93.83-4.18,3.95-4.18,3.06,0,4.03,1.12,4.02,4.11-.09,19.97-.08,39.94.01,59.91.01,2.96-.84,4.16-3.96,4.14-3.03-.01-4.08-1.04-4.03-4.08.14-9.98.05-19.97.05-29.96Z\" />\n</svg>");
-;// CONCATENATED MODULE: ./src/icons/call.svg
-/* harmony default export */ const call = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 768 767.999994\"\n    preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n    <path class=\"circle\" fill=\"#418a2f\"\n        d=\"M 767.988281 383.984375 C 767.988281 596.058594 596.066406 767.980469 383.996094 767.980469 C 171.921875 767.980469 0 596.058594 0 383.984375 C 0 171.910156 171.921875 -0.0078125 383.996094 -0.0078125 C 596.066406 -0.0078125 767.988281 171.910156 767.988281 383.984375 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n    <path class=\"phone-receiver\" fill=\"#ffffff\"\n        d=\"M 215.726562 199.773438 C 219.746094 194.835938 230.023438 183.625 243.644531 183.769531 C 244.40625 183.777344 245.300781 183.808594 246.34375 183.914062 C 246.34375 183.914062 248.492188 184.144531 250.613281 184.703125 C 268.292969 189.410156 299.921875 224.304688 299.921875 224.304688 C 326.925781 254.09375 334.722656 255.53125 334.636719 266.5 C 334.550781 276.777344 328.140625 284.71875 316.253906 296.566406 C 284.566406 328.148438 277.808594 330.53125 275.351562 340.421875 C 273.902344 346.234375 269.539062 357.511719 289.105469 379.355469 C 318.289062 411.929688 388.1875 478.4375 394.300781 482.515625 C 400.402344 486.585938 422.121094 500.832031 451.300781 474.371094 C 471.226562 456.304688 480.714844 435.066406 494.875 433.785156 C 502.363281 433.089844 507.878906 437.613281 519.167969 447.222656 C 585.886719 503.976562 586.871094 513.933594 586.3125 519.824219 C 585.355469 530.011719 580.75 539.210938 565.316406 550.382812 C 525.953125 578.878906 508.3125 603.992188 428.234375 570.742188 C 348.152344 537.484375 263.996094 453.335938 240.242188 417.359375 C 216.488281 381.390625 179.160156 326.421875 181.878906 288.414062 C 183.769531 261.980469 191.867188 238.863281 191.867188 238.863281 C 199.097656 220.882812 208.71875 207.878906 215.726562 199.773438 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n</svg>");
-;// CONCATENATED MODULE: ./src/icons/call-starting.svg
-/* harmony default export */ const call_starting = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 768 767.999994\" preserveAspectRatio=\"xMidYMid meet\"\n    version=\"1.0\">\n    <style>\n        .receiver {\n        animation: receiver-move 1s ease-in-out infinite alternate;\n        }\n        @keyframes receiver-move {\n        0% { transform: translate(0, 0); }\n        100% { transform: translate(10px, -20px); }\n        }\n    </style>\n    <path fill=\"#4e84be\"\n        d=\"M 767.988281 383.984375 C 767.988281 596.058594 596.066406 767.980469 383.996094 767.980469 C 171.921875 767.980469 0 596.058594 0 383.984375 C 0 171.910156 171.921875 -0.0078125 383.996094 -0.0078125 C 596.066406 -0.0078125 767.988281 171.910156 767.988281 383.984375 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n    <path fill=\"#ffffff\"\n        class=\"receiver\"\n        d=\"M 215.726562 199.773438 C 219.746094 194.835938 230.023438 183.625 243.644531 183.769531 C 244.40625 183.777344 245.300781 183.808594 246.34375 183.914062 C 246.34375 183.914062 248.492188 184.144531 250.613281 184.703125 C 268.292969 189.410156 299.921875 224.304688 299.921875 224.304688 C 326.925781 254.09375 334.722656 255.53125 334.636719 266.5 C 334.550781 276.777344 328.140625 284.71875 316.253906 296.566406 C 284.566406 328.148438 277.808594 330.53125 275.351562 340.421875 C 273.902344 346.234375 269.539062 357.511719 289.105469 379.355469 C 318.289062 411.929688 388.1875 478.4375 394.300781 482.515625 C 400.402344 486.585938 422.121094 500.832031 451.300781 474.371094 C 471.226562 456.304688 480.714844 435.066406 494.875 433.785156 C 502.363281 433.089844 507.878906 437.613281 519.167969 447.222656 C 585.886719 503.976562 586.871094 513.933594 586.3125 519.824219 C 585.355469 530.011719 580.75 539.210938 565.316406 550.382812 C 525.953125 578.878906 508.3125 603.992188 428.234375 570.742188 C 348.152344 537.484375 263.996094 453.335938 240.242188 417.359375 C 216.488281 381.390625 179.160156 326.421875 181.878906 288.414062 C 183.769531 261.980469 191.867188 238.863281 191.867188 238.863281 C 199.097656 220.882812 208.71875 207.878906 215.726562 199.773438 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n</svg>");
-;// CONCATENATED MODULE: ./src/icons/hangup.svg
-/* harmony default export */ const hangup = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    viewBox=\"0 0 64 64\" preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n    <path fill=\"#776d6d\"\n        d=\"M 63.75 31.875 C 63.75 49.29395 49.29395 63.75 31.875 63.75 C 14.45605 63.75 0 49.29395 0 31.875 C 0 14.45605 14.45605 0 31.875 0 C 49.29395 0 63.75 14.45605 63.75 31.875 \"\n        fill-opacity=\"0.8\" fill-rule=\"nonzero\" />\n    <path fill=\"#ffffff\"\n        d=\"M 12.727539 34.74707 C 12.728027 34.747314 13.897949 37.758789 15.219788 38.542328 C 16.077148 39.048828 16.793945 38.776855 17.71875 38.340332 C 19.519531 37.490723 21.362305 36.74707 23.290039 36.246094 C 24.087891 36.012695 24.193359 35.574219 24.022461 35.060547 C 23.783203 34.224121 23.540039 33.388672 23.292969 32.553711 C 23.146484 32.042969 23.460938 31.490234 24.179688 31.196289 C 26.69043 30.344238 29.179688 30.243164 31.669922 30.230469 C 31.779297 30.230469 32.053711 30.230469 32.163086 30.230469 C 34.65332 30.243164 37.142578 30.344238 39.65332 31.196289 C 40.37207 31.490234 40.686523 32.042969 40.540039 32.553711 C 40.292969 33.388672 40.049805 34.224121 39.810547 35.060547 C 39.639648 35.574219 39.745117 36.012695 40.542969 36.246094 C 43.470703 36.74707 45.313477 37.490723 47.114258 38.340332 C 47.976562 38.776855 48.693359 39.048828 49.550781 38.542328 C 50.872559 37.758789 52.04248 34.747314 52.042969 34.74707 C 52.222656 32.560547 51.503906 29.84375 48.347656 28.462891 C 43.330078 26.236328 37.943359 25.053711 32.178711 25.016602 C 32.063477 25.016602 31.697266 25.016602 31.571289 25.016602 C 25.806641 25.053711 20.419922 26.236328 15.402344 28.462891 C 12.246094 29.84375 11.527344 32.560547 11.707031 34.74707 \"\n        fill-opacity=\"0.9\" fill-rule=\"nonzero\" />\n    <circle id=\"progress-ring\" cx=\"32\" cy=\"32\" r=\"30\" stroke-width=\"4\" stroke=\"red\"\n        fill=\"transparent\" stroke-dasharray=\"188.4\" stroke-dashoffset=\"188.4\"></circle>\n</svg>");
-;// CONCATENATED MODULE: ./src/icons/hangup-minced.svg
-/* harmony default export */ const hangup_minced = ("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!-- Generator: Adobe Illustrator 28.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->\n<svg version=\"1.1\" id=\"Layer_2_00000052807000332147576670000017844573372086964400_\"\n\t xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0 0 768 768\"\n\t style=\"enable-background:new 0 0 768 768;\" xml:space=\"preserve\"><metadata><c2pa:manifest xmlns:c2pa=\"http://c2pa.org/manifest\">AAAsaGp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAACxCanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46dXVpZDo4Y2FkNmI2NC1mZTc3LTRhNTUtODM2NS01Njg4ZjNjM2E3YTcAAAABqGp1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAAMpqdW1iAAAAJmp1bWRjYm9yABEAEIAAAKoAOJtxA2MycGEuYWN0aW9ucwAAAACcY2JvcqFnYWN0aW9uc4GjZmFjdGlvbmtjMnBhLmVkaXRlZG1zb2Z0d2FyZUFnZW50bUFkb2JlIEZpcmVmbHlxZGlnaXRhbFNvdXJjZVR5cGV4Rmh0dHA6Ly9jdi5pcHRjLm9yZy9uZXdzY29kZXMvZGlnaXRhbHNvdXJjZXR5cGUvdHJhaW5lZEFsZ29yaXRobWljTWVkaWEAAACtanVtYgAAAChqdW1kY2JvcgARABCAAACqADibcQNjMnBhLmhhc2guZGF0YQAAAAB9Y2JvcqVqZXhjbHVzaW9uc4GiZXN0YXJ0GQHRZmxlbmd0aBk7OGRuYW1lbmp1bWJmIG1hbmlmZXN0Y2FsZ2ZzaGEyNTZkaGFzaFggCMNPCTa5QR5ZSOAVeP4CmbLHHNfk+N2S7kLeQUa5jJBjcGFkSQAAAAAAAAAAAAAAAgtqdW1iAAAAJGp1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0AAAAB32Nib3KoaGRjOnRpdGxlb0dlbmVyYXRlZCBJbWFnZWlkYzpmb3JtYXRtaW1hZ2Uvc3ZnK3htbGppbnN0YW5jZUlEeCx4bXA6aWlkOjNlM2E0MzA4LTMyZTItNGUxYS1iYmI0LWZlMDMyYWRkYmUzYm9jbGFpbV9nZW5lcmF0b3J4NkFkb2JlX0lsbHVzdHJhdG9yLzI4LjAgYWRvYmVfYzJwYS8wLjcuNiBjMnBhLXJzLzAuMjUuMnRjbGFpbV9nZW5lcmF0b3JfaW5mb4G/ZG5hbWVxQWRvYmUgSWxsdXN0cmF0b3JndmVyc2lvbmQyOC4w/2lzaWduYXR1cmV4GXNlbGYjanVtYmY9YzJwYS5zaWduYXR1cmVqYXNzZXJ0aW9uc4KiY3VybHgnc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5hY3Rpb25zZGhhc2hYIOusZuFqg598YJzpOfX+1iNBgqddK8SSEhBG9CJk0CvBomN1cmx4KXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaGFzaC5kYXRhZGhhc2hYIMBRDXHSCuAF5ulhy2cwcY/MaDARV3rxYA6FjD99VdiKY2FsZ2ZzaGEyNTYAAChAanVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAACgQY2JvctKERKEBOCSjZnNpZ1RzdKFpdHN0VG9rZW5zgaFjdmFsWQ41MIIOMTADAgEAMIIOKAYJKoZIhvcNAQcCoIIOGTCCDhUCAQMxDzANBglghkgBZQMEAgEFADCBgQYLKoZIhvcNAQkQAQSgcgRwMG4CAQEGCWCGSAGG/WwHATAxMA0GCWCGSAFlAwQCAQUABCCfoYg/hRMBjOQb9QOJ365SiRXzl0nq84JYJmF+yAbHbgIQNGXnPXpaVXxxtccxhd6XMBgPMjAyMzEyMTExNTE2MjRaAggvMa2An+lNtKCCC70wggUHMIIC76ADAgECAhAFHp6R1x6RCrvkPVzt0N3ZMA0GCSqGSIb3DQEBCwUAMGMxCzAJBgNVBAYTAlVTMRcwFQYDVQQKEw5EaWdpQ2VydCwgSW5jLjE7MDkGA1UEAxMyRGlnaUNlcnQgVHJ1c3RlZCBHNCBSU0E0MDk2IFNIQTI1NiBUaW1lU3RhbXBpbmcgQ0EwHhcNMjMwOTA4MDAwMDAwWhcNMzQxMjA3MjM1OTU5WjBYMQswCQYDVQQGEwJVUzEXMBUGA1UEChMORGlnaUNlcnQsIEluYy4xMDAuBgNVBAMTJ0RpZ2lDZXJ0IEFkb2JlIEFBVEwgVGltZXN0YW1wIFJlc3BvbmRlcjBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABE0srlH5A/+15/MFl1asNh8Q8TubOsEVfu0qlJrF0smjtwL1IeHZ/AB7J59u1Trpho1BDN85lfTY30rNBsfT+myjggGLMIIBhzAOBgNVHQ8BAf8EBAMCB4AwDAYDVR0TAQH/BAIwADAWBgNVHSUBAf8EDDAKBggrBgEFBQcDCDAgBgNVHSAEGTAXMAgGBmeBDAEEAjALBglghkgBhv1sBwEwHwYDVR0jBBgwFoAUuhbZbU2FL3MpdpovdYxqII+eyG8wHQYDVR0OBBYEFLA1qlbDIamLztO4vIsWJVed7zThMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydFRydXN0ZWRHNFJTQTQwOTZTSEEyNTZUaW1lU3RhbXBpbmdDQS5jcmwwgZAGCCsGAQUFBwEBBIGDMIGAMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wWAYIKwYBBQUHMAKGTGh0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydFRydXN0ZWRHNFJTQTQwOTZTSEEyNTZUaW1lU3RhbXBpbmdDQS5jcnQwDQYJKoZIhvcNAQELBQADggIBAHgrjELHhBCEWJSCyRX7lsL0C9LJgbX1ryVYySNRxHkMR2LqC7PQZRJgDNR+kJop8P5v2Bzp/jMrzw4U4pY6rYv3I8HpFlJa4uBwUTIUgHWpi8Xxd1JEEX94POODi7HySekX60A055BozFb7GGVaxb0LreQTRXnkr6ggPNUPX9Gh+2ScOxlTdQQLgZbkdYvxo3Ap6cy9riZijRxOZqiOyWSxMUhgKxeKzwrFW6Xbe0awNhOUXZzIxc4ixpKzWSItpPJ30ZiBQn49U3ADYTnshbN9ZkTA1pHf/Nov2ZUvvddkZ8UYvwo9vBvLTDvnmABnRMBKaXYAs3ZCvw9CkDPOWTeUJMFRAtmUx52ohaA3nD8bCJ6UfpQ2pFfOdShwpb6GKv0g+BgcdIG2LHPJ0Ufmr+XmpgZgq/HIge0hjcCADpjDgq2z4B0L4xtAA1M8MrUx02hxb7104nFKqMuv5zJTQl3sgwqXUyP+9zHQP9y/Z5Fx/AQWrOXCW56dV7P4cFBJl8zHqinlhkOStZ1m22+9Hlq+eC0hJ2lkF1LuzRdJJb/51LXoPKRnopFDng6XpoD7eG6w4YpAx9+P00JuUoBsYSrdsuFiyWyQQGBAnjI69ggbSLcW+hJytuinaxawVlItJkS2eV5Z4XsxPg7f82uRkdtN0hTHeI93CN3OWeRebnK7MIIGrjCCBJagAwIBAgIQBzY3tyRUfNhHrP0oZipeWzANBgkqhkiG9w0BAQsFADBiMQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3d3cuZGlnaWNlcnQuY29tMSEwHwYDVQQDExhEaWdpQ2VydCBUcnVzdGVkIFJvb3QgRzQwHhcNMjIwMzIzMDAwMDAwWhcNMzcwMzIyMjM1OTU5WjBjMQswCQYDVQQGEwJVUzEXMBUGA1UEChMORGlnaUNlcnQsIEluYy4xOzA5BgNVBAMTMkRpZ2lDZXJ0IFRydXN0ZWQgRzQgUlNBNDA5NiBTSEEyNTYgVGltZVN0YW1waW5nIENBMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAxoY1BkmzwT1ySVFVxyUDxPKRN6mXUaHW0oPRnkyibaCwzIP5WvYRoUQVQl+kiPNo+n3znIkLf50fng8zH1ATCyZzlm34V6gCff1DtITaEfFzsbPuK4CEiiIY3+vaPcQXf6sZKz5C3GeO6lE98NZW1OcoLevTsbV15x8GZY2UKdPZ7Gnf2ZCHRgB720RBidx8ald68Dd5n12sy+iEZLRS8nZH92GDGd1ftFQLIWhuNyG7QKxfst5Kfc71ORJn7w6lY2zkpsUdzTYNXNXmG6jBZHRAp8ByxbpOH7G1WE15/tePc5OsLDnipUjW8LAxE6lXKZYnLvWHpo9OdhVVJnCYJn+gGkcgQ+NDY4B7dW4nJZCYOjgRs/b2nuY7W+yB3iIU2YIqx5K/oN7jPqJz+ucfWmyU8lKVEStYdEAoq3NDzt9KoRxrOMUp88qqlnNCaJ+2RrOdOqPVA+C/8KI8ykLcGEh/FDTP0kyr75s9/g64ZCr6dSgkQe1CvwWcZklSUPRR8zZJTYsg0ixXNXkrqPNFYLwjjVj33GHek/45wPmyMKVM1+mYSlg+0wOI/rOP015LdhJRk8mMDDtbiiKowSYI+RQQEgN9XyO7ZONj4KbhPvbCdLI/Hgl27KtdRnXiYKNYCQEoAA6EVO7O6V3IXjASvUaetdN2udIOa5kM0jO0zbECAwEAAaOCAV0wggFZMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFLoW2W1NhS9zKXaaL3WMaiCPnshvMB8GA1UdIwQYMBaAFOzX44LScV1kTN8uZz/nupiuHA9PMA4GA1UdDwEB/wQEAwIBhjATBgNVHSUEDDAKBggrBgEFBQcDCDB3BggrBgEFBQcBAQRrMGkwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBBBggrBgEFBQcwAoY1aHR0cDovL2NhY2VydHMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0VHJ1c3RlZFJvb3RHNC5jcnQwQwYDVR0fBDwwOjA4oDagNIYyaHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0VHJ1c3RlZFJvb3RHNC5jcmwwIAYDVR0gBBkwFzAIBgZngQwBBAIwCwYJYIZIAYb9bAcBMA0GCSqGSIb3DQEBCwUAA4ICAQB9WY7Ak7ZvmKlEIgF+ZtbYIULhsBguEE0TzzBTzr8Y+8dQXeJLKftwig2qKWn8acHPHQfpPmDI2AvlXFvXbYf6hCAlNDFnzbYSlm/EUExiHQwIgqgWvalWzxVzjQEiJc6VaT9Hd/tydBTX/6tPiix6q4XNQ1/tYLaqT5Fmniye4Iqs5f2MvGQmh2ySvZ180HAKfO+ovHVPulr3qRCyXen/KFSJ8NWKcXZl2szwcqMj+sAngkSumScbqyQeJsG33irr9p6xeZmBo1aGqwpFyd/EjaDnmPv7pp1yr8THwcFqcdnGE4AJxLafzYeHJLtPo0m5d2aR8XKc6UsCUqc3fpNTrDsdCEkPlM05et3/JWOZJyw9P2un8WbDQc1PtkCbISFA0LcTJM3cHXg65J6t5TRxktcma+Q4c6umAU+9Pzt4rUyt+8SVe+0KXzM5h0F4ejjpnOHdI/0dKNPH+ejxmF/7K9h+8kaddSweJywm228Vex4Ziza4k9Tm8heZWcpw8De/mADfIBZPJ/tgZxahZrrdVcA6KYawmKAr7ZVBtzrVFZgxtGIJDwq9gdkT/r+k0fNX2bwE+oLeMt8EifAAzV3C+dAjfwAL5HYCJtnwZXZCpimHCUcr5n8apIUP/JiW9lVUKx+A+sDyDivl1vupL0QVSucTDh3bNzgaoSv27dZ8/DGCAbgwggG0AgEBMHcwYzELMAkGA1UEBhMCVVMxFzAVBgNVBAoTDkRpZ2lDZXJ0LCBJbmMuMTswOQYDVQQDEzJEaWdpQ2VydCBUcnVzdGVkIEc0IFJTQTQwOTYgU0hBMjU2IFRpbWVTdGFtcGluZyBDQQIQBR6ekdcekQq75D1c7dDd2TANBglghkgBZQMEAgEFAKCB0TAaBgkqhkiG9w0BCQMxDQYLKoZIhvcNAQkQAQQwHAYJKoZIhvcNAQkFMQ8XDTIzMTIxMTE1MTYyNFowKwYLKoZIhvcNAQkQAgwxHDAaMBgwFgQU2Rq5M/4XremCHqYT9aQ6cU4+fn0wLwYJKoZIhvcNAQkEMSIEIL2EgCL8tP9UxBHcGmM8yEy4YHl30aFv+nASifE52hWRMDcGCyqGSIb3DQEJEAIvMSgwJjAkMCIEIILa8ZSVezaEAkWP1ScAaf5ixxRW+p4Lhqv4J+hTICfZMAoGCCqGSM49BAMCBEcwRQIhANtOfrKJph9J3j2KR0wF4V7oC5MC3Uf+0UZLP4r4HaMzAiAdJYYc50LeaRfvzNS2yMpT5tAyrXAIln8T3qMp9cMfZmd4NWNoYWluglkGMzCCBi8wggQXoAMCAQICEBtbCzvasORd8vMNnlTR2tIwDQYJKoZIhvcNAQELBQAwdTELMAkGA1UEBhMCVVMxIzAhBgNVBAoTGkFkb2JlIFN5c3RlbXMgSW5jb3Jwb3JhdGVkMR0wGwYDVQQLExRBZG9iZSBUcnVzdCBTZXJ2aWNlczEiMCAGA1UEAxMZQWRvYmUgUHJvZHVjdCBTZXJ2aWNlcyBHMzAeFw0yMzAyMDEwMDAwMDBaFw0yNDAyMDEyMzU5NTlaMIGhMREwDwYDVQQDDAhjYWktcHJvZDEcMBoGA1UECwwTQ29udGVudCBDcmVkZW50aWFsczETMBEGA1UECgwKQWRvYmUgSW5jLjERMA8GA1UEBwwIU2FuIEpvc2UxEzARBgNVBAgMCkNhbGlmb3JuaWExCzAJBgNVBAYTAlVTMSQwIgYJKoZIhvcNAQkBFhVncnAtY2FpLW9wc0BhZG9iZS5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDv0wCnfYY9lkHDsykrTG7FYlnYHBcyualuD5u9ULjzv+FsTWOLg8Nhrz9RTxI9EeBbu3Wm7f4vqPsQYfxkEp0wIa6DVmEOZhbAeRfbhybWQ/D4Wvvck4mEZR+QZmTpIn7HX61gbtMFHlJUxkYBctIoAt9TBAFbz9d5Ig2WG0bsH39b6/8USXnIIk4FB6dtBRT1xeEwSDtwOd1YBpXXNBJmRWHXNJZZ85of2tBTesg/kMvTrOJJxYDZ97U416wcvbVomlees+NXUY3/ZB4xH+NsZils7m1bL2v2hSnHiLoqZeUKklbHUmT4ZpjrZCdtuIsWm5j2PPXKr7HKUuCbZSXBAgMBAAWjggGMMIIBiDAMBgNVHRMBAf8EAjAAMA4GA1UdDwEB/wQEAwIHgDAeBgNVHSUEFzAVBgkqhkiG9y8BAQwGCCsGAQUFBwMEMIGOBgNVHSAEgYYwgYMwgYAGCSqGSIb3LwECAzBzMHEGCCsGAQUFBwICMGUMY1lvdSBhcmUgbm90IHBlcm1pdHRlZCB0byB1c2UgdGhpcyBMaWNlbnNlIENlcnRpZmljYXRlIGV4Y2VwdCBhcyBwZXJtaXR0ZWQgYnkgdGhlIGxpY2Vuc2UgYWdyZWVtZW50LjBdBgNVHR8EVjBUMFKgUKBOhkxodHRwOi8vcGtpLWNybC5zeW1hdXRoLmNvbS9jYV83YTVjM2EwYzczMTE3NDA2YWRkMTkzMTJiYzFiYzIzZi9MYXRlc3RDUkwuY3JsMDcGCCsGAQUFBwEBBCswKTAnBggrBgEFBQcwAYYbaHR0cDovL3BraS1vY3NwLnN5bWF1dGguY29tMB8GA1UdIwQYMBaAFFcpejJNzP7kNU7AHyRzznNTq99qMA0GCSqGSIb3DQEBCwUAA4ICAQBXjlGa3yAK/Gijn6n/JNU9FZm72MP6vc5czrWe9y0T+EawuRvhpD5Edi1TnXkrpe8sMkgSjTGdbY+yGhq8zlCWQeXN1/aWo3L9Xr1uNxY/oVpLn0uWWfnfJ7yR9gKl/yoMfhjydT4t1fXHi/MhfhrWSVRHqX2U31UFGz/e298P2kv+vqhzpIUo1bj+jibtoPLMMQcCOTtKiJOTh4o3VSZpwQDERCzo91NkF+LnZjwYl6fE5USIkg/oCoomXxSPpowybDrcRJ9ilbtJcER48/LGgwzv/c7OYdron4PnEXm1FkOaVj+QRf7OwiNTizonhIzLR5Vfp0QHOWv/bPzvCjPQd+Xr0Q4032WlSxQwostNTAPtoVAU4OCwVH3Ech38emJ00/6fkDCdr7MN8/4n2LSNrMUvaBEZdmLqDCBnO02dbFrmpg3pTc0FqRQ4GL/88pjRNSMy5tU9SoQnSCGYqIsjfL8AzgPEGiXXRgABYc1uXecf4/eayb3K2MPs7hnWTbUKpHHJIwxpdN3vTGdZNWpz9Oxfuo3eELQlkTvACHgqkaXi/FAanHe5PChn6fr1/4cNF8goD0buPApgS3zzwqjRhxrH8ISwPfJn8JqzurMaLDMnnc18tHzUiMtX73jf6oXh7voCxX/T4D3nFPlxU3om2cpcLQ1Wd4026x18rlSGR1kGpTCCBqEwggSJoAMCAQICEAyotlR7iebSBol1zYubieIwDQYJKoZIhvcNAQELBQAwbDELMAkGA1UEBhMCVVMxIzAhBgNVBAoTGkFkb2JlIFN5c3RlbXMgSW5jb3Jwb3JhdGVkMR0wGwYDVQQLExRBZG9iZSBUcnVzdCBTZXJ2aWNlczEZMBcGA1UEAxMQQWRvYmUgUm9vdCBDQSBHMjAeFw0xNjExMjkwMDAwMDBaFw00MTExMjgyMzU5NTlaMHUxCzAJBgNVBAYTAlVTMSMwIQYDVQQKExpBZG9iZSBTeXN0ZW1zIEluY29ycG9yYXRlZDEdMBsGA1UECxMUQWRvYmUgVHJ1c3QgU2VydmljZXMxIjAgBgNVBAMTGUFkb2JlIFByb2R1Y3QgU2VydmljZXMgRzMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQC3Hy69vQmzXEhs/gyDrmwB6lF4JaSAPomnsbKIZNr2iXaB+fkd85X8eJiNmI7P5O4cVT4Nc1p3zrESqBV4ZUyW8gcZ78QdwoHG8QNd2VNcHnMgSR+XT9Iafsnq9Nfww3Jt9KL3l5ANQ5n1+MJqr48EWNLll942bOL/JH4ywDSMoqhZqtJEIUUUGlQVBZ8CAvJc7LE6ddA5C52PE2Ppa7RfQgHXf4gfXVZwpxYRZcziPiOHqEvLb0J3cShUbejFxV6cwX8QyAPa1ePHg1RtM0HX+D34xHo3DkyGnmT+Ddq00TEDGG26AL5PdINKFIQl+zaq6KJFQe1fdGE5wrWzU4mBPmzaz3EbLn+7FWlwAhorYqIMldbfHE3ydc+aTU1JW7+bG19qmvhO9IluGtTtQDeqFBj2fg6faxsfVfVPD7stN6TwoIDlkOCE4RE+Iin8m3z3eqi/VsTmsmRqBxWDRaqOHz02EJoEDxXJG3ei+UbIIp01XZQvdufm90WxOTuqqan2ZqTPX9K5VdjEh/ovr7xFc5q1dZo+Sa5y4sTVM854/tLU3klOgUKzzSXYPYS3GhBcYJHjwr9xNRHnNX99D6F0g7OijScWfvtjxh13aTv/H0ETvymah4yfDpVdh9cK5YSCPqnuOlsujFAyhYwJXOWDvZZU2EkWVLDhoPx9zp7N4QIDAQABo4IBNDCCATAwEgYDVR0TAQH/BAgwBgEB/wIBADA1BgNVHR8ELjAsMCqgKKAmhiRodHRwOi8vY3JsLmFkb2JlLmNvbS9hZG9iZXJvb3RnMi5jcmwwDgYDVR0PAQH/BAQDAgEGMBQGA1UdJQQNMAsGCSqGSIb3LwEBBzBXBgNVHSAEUDBOMEwGCSqGSIb3LwECAzA/MD0GCCsGAQUFBwIBFjFodHRwczovL3d3dy5hZG9iZS5jb20vbWlzYy9wa2kvcHJvZF9zdmNlX2Nwcy5odG1sMCQGA1UdEQQdMBukGTAXMRUwEwYDVQQDEwxTWU1DLTQwOTYtMzMwHQYDVR0OBBYEFFcpejJNzP7kNU7AHyRzznNTq99qMB8GA1UdIwQYMBaAFKYc4W1UJEyoj0hyv26pjNXk7DHUMA0GCSqGSIb3DQEBCwUAA4ICAQBxzuUHjKbcLdzI4DtlXgCSgZXrlSAkr59pOF3JfPG42qVNAGU7JcEYXJ6+WbfcGwY7WYMl+jO7IvJPb7shXFYW9bnJgxX7lLU14KExchmcLNY1ee6IhBJ2Y8PzZMRUKSd5CkURPg0PBLGjz/KR/DofHx+G4rPTCOGORYxeYrd01lci5hVxvKccvIk7MD69ZTewfZPSM+0WnsU3f0Zmd7hgbRpUyWceG0eHFpdUKK/ZFWhHjDVC28odCnN885tHncKXviItK0ZUUo/AIthFKlhEXsnq9VL9fFbgvO83ZvpUQo5y8mY3cuGnEVGXdhjNb53CfC1u4dbpYmWaN99subUzEsUaUb3loLPfVfzDOpg2y9v37kBdy/wuXr20teY7U62xj/fAgs1QSnhUtlMTfCqbefyEycKVmKIrJkJLsvgTSYKVvH4FFIwfd5WjqOC97jX98rcVAzhAI0iSkazsWOMvL6m0L4nLJapx+85GsVX8Y6AHmEP4bmCElwil6KAP+UewJFiw5rmwV2pESHAhYuZJa03B8tl0nd2QJzvJGmbeBqXqpF9ORinFM3HErK8puRokOjFH2+1asLeI2tB31W/ELdNe27Ogduq6Z6qBwCp59YX27qydDhD0WRfN64kCs25K88iGAGNW2CAfTDS+b+WYJBiIL9jXYZ4LF+BiUvfdu2NwYWRZC74AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2WQEAdKFoa0QRGITC73KKBuLviuGlo1jOrQQqEhxZ/WWydxLGWAu2BdYUSe56c2ziK2swBjQHkQ8SBUFDj/6VSAz4bzVzG2jR98GJ6Sppfue9H0gbx3SCmOACv5eGwRjjaI+/apPzNQSfEoIl3baURT3WjC7VijM+ZNHxALUdqSLtb+zonrnImcEakDKbD07+2y4s/jKdPI25MExsaZzNJnDUeC9zYwcQd8AUUs7O8jq+ASMRRCKy41eBFpqkS+0DVXhs1asD/2UmD0GuC9pr1B15dP/aS2svhU+52+EihNfAI8EM1CsPBCLwEVlb7tiXDBwYtZtoGUXFpCzvhgknfCxidA==</c2pa:manifest></metadata>\n<style type=\"text/css\">\n\t.st0{fill:#766E72;}\n\t.st1{fill:#B2FFF5;}\n\t.st2{fill:#E2E5CC;}\n\t.st3{fill:#94898F;}\n\t.st4{fill:#B9CCCB;}\n\t.st5{fill:#C3C89C;}\n\t.st6{fill:#A5B5B5;}\n\t.st7{fill:#C0C698;}\n\t.st8{fill:#AE9CA6;}\n\t.st9{fill:#E1C292;}\n\t.st10{fill:#DBB77F;}\n\t.st11{fill:#00DCD3;}\n</style>\n<g id=\"Layer_1-2\">\n\t<g>\n\t\t<path class=\"st0\" d=\"M0.1,414.8c0-2.5,0-5,0-7.5c2.7,0,5.5-0.1,8.2-0.1c2.3,0,3.2-1.1,3-3.2c-0.2-2.1,0.3-4.4-3-4.5\n\t\t\tc-2.7-0.1-5.5,0.3-8.2-0.4c0-10.8,0-21.5,0-32.2c1.7-0.1,3.5-0.2,5.2-0.2c5.9,0,5.9-0.1,6.2-5.9c0.1-2.5-0.8-3.4-3.2-3.3\n\t\t\tc-2.7,0-5.4-0.2-8.1-0.3c0-2.5,0-5,0-7.5c1.9-0.6,4.7,1.3,5.6-2c1.4-5.3,0.5-6.8-4.9-7.4c-0.2,0-0.4-0.2-0.7-0.3\n\t\t\tc0-2.8,0-5.5,0-8.2c2.7-0.1,5.5-0.2,8.2-0.2c1.2,0,2.2-0.1,2.4-1.7c0.2-1.6,0.5-3.2,0.8-4.8c0.3-1.6-0.4-2.2-2.1-2.2\n\t\t\tc-3.1,0-6.2,0-9.4-0.1c0-20.2,0-40.5,0-60.7c3-7.8,6-15.5,9-23.3c0.4-0.9,0.9-2.1-0.8-2.2c-3.2-0.3-1.7-2.1-1.1-3.4\n\t\t\tc4.2-9.7,8.9-19.3,13.8-28.7c1.3-2.5,2.9-3.6,5.8-3.5c7.9,0.2,15.7,0,23.6,0.1c1.9,0,3.2-0.5,4.3-2.3c3.2-5.6,6.5-11.2,9.9-16.8\n\t\t\tc1.4-2.3,1.3-3.2-1.7-3.1c-6.5,0.1-13,0-19.5,0.1c-2.8,0-3.1-0.9-1.6-3c3.1-4.5,6.3-9,9.3-13.6c1.2-1.8,2.6-2.4,4.7-2.4\n\t\t\tc5.9,0.1,11.7,0,17.6,0c1.2,0,2.6,0.2,3.5-0.9c4-5.2,7.9-10.5,12.1-16c-3.4-1.1-6.5-0.4-9.6-0.6c-0.8-0.1-1.9,0.3-2.4-0.6\n\t\t\tc-0.6-1,0.4-1.6,0.9-2.2c5.3-6.3,10.7-12.6,16.4-18.5c1.4-1.5,3-2.4,4.9-2.1c8.3,1.6,14.4-1.8,19.2-8.3c0.2-0.2,0.4-0.3,0.5-0.5\n\t\t\tc0.4-0.6,1.2-1.3,1.1-1.8c-0.2-1.1-1.4-0.8-2.2-0.8c-5.1,0-10.2,0-15.4-0.1c-0.9,0-2.2,0.4-2.6-0.8c-0.3-0.9,0.7-1.5,1.4-2.1\n\t\t\tc2.3-2.1,4.7-4.2,6.8-6.4c2.1-2.1,4.4-3,7.3-2.9c6.5,0.2,13,0.1,19.5,0.1c1.1,0,2.4,0.3,3.3-0.5c3.9-3.2,7.7-6.5,11.6-9.8\n\t\t\tc-0.1-0.4-0.2-0.7-0.3-1.1h-26.9c-0.1-0.4-0.2-0.9-0.3-1.3c6.1-3.2,9.8-10.1,17.7-10.6c0.8-0.1,1.6-0.7,2.3-1.2\n\t\t\tc5.5-3.7,11-7.4,16.5-11.1c0.6-0.4,1.8-1.1,1.7-1.3c-1.3-3.4,2-3.2,3.4-4.3c6.7-5.5,14.4-6.9,22.8-6.1c3.7,0.3,7.5-0.3,11.2,0.1\n\t\t\tc8.6,1,14.4-4.9,21.5-7.8c-0.1-0.4-0.1-0.7-0.1-1.1h-21.7c-0.1-0.4-0.1-0.8-0.2-1.2c8.1-2.8,14.9-9.3,24.2-8.2\n\t\t\tc14.7,1.8,27.6-3.4,41-9.5c-3.3-0.2-6-0.3-9.4-0.5c2.8-1.9,5.4-2.5,7.9-3.1c10.7-2.9,21.1-7.2,32.5-6.3c3.8,0.3,7.7-0.2,11.6-0.3\n\t\t\tc0.9,0.2,1.6-0.1,2.3-0.6c0.5-0.1,1-0.1,1.4-0.2c1.1,0.3,2.1,0,3-0.7c0.5-0.1,1-0.2,1.4-0.3c1.8,0.4,3.5-0.4,5.1-0.8\n\t\t\tC324.6,6.2,331,6.2,337,4c0.4,0,0.8-0.1,1.2-0.1c3.8,0.6,7.4-1.2,11.1-0.9c2.4,0.3,4.4,0.1,4.6-2.9h1.5c0.5,0.8,1,0.7,1.5,0h28.5\n\t\t\tc2,0.9,4.2,0.6,6.3,0.8c19,1.8,38.2-0.5,57.2,2.9c10.6,1.9,21.3,3.5,31.8,6.9h-13c7.4,2.9,14.9,4.8,22.2,7.2\n\t\t\tc4.6,1.5,9.1,2.6,13.9,2.3c10.9-0.7,19.9,4.8,29.4,8.6c0.1,0,0,0.4-0.1,1.2h-18.3c10.9,6.4,21.5,10.7,33.7,9.1\n\t\t\tc1.8-0.2,3.8,0.1,5.6-0.1c8.4-0.7,14.1,5,21,8c-0.1,0.4-0.2,0.8-0.2,1.1h-27.6c1.6,1.1,2.2,1.5,2.8,1.9c5.8,3,11.2,6.4,17.6,8.6\n\t\t\tc6.5,2.2,12,7.5,17.9,11.4c0.5,0.3,1.3,1.2,1.2,1.2c-2.5,2.8,1,3,2,3.9c2.3,2.1,5,3.8,7.3,5.8c2.2,1.9,4.6,2.6,7.5,2.6\n\t\t\tc7.6-0.2,15.2,0,22.9-0.1c1.8,0,3.5,0,4.9,1.3c3.1,2.7,6.4,5.2,9.5,7.9c0.7,0.6,1.9,1.2,1.3,2.3c-0.5,0.9-1.6,0.6-2.4,0.6\n\t\t\tc-6,0-12,0-18,0c-0.7,0-1.6-0.2-2,0.5c-0.5,0.8,0.4,1.3,0.8,1.8c5.3,6,11.1,10.7,19.9,8.8c0.4-0.1,0.8,0,1.1,0\n\t\t\tc8.3,0,15.2,3,20.8,9.1c0.1,0.1,0.2,0.2,0.3,0.3c0.5,0.7,1.6,1.2,1.2,2.1c-0.4,1-1.5,0.6-2.3,0.7c-3,0.3-6.1-0.5-9.4,0.6\n\t\t\tc4.5,5.1,9.4,9.5,12.9,14.7c4.4,6.5,9.8,9.1,17.3,7.8c2.3-0.4,4,0.6,5.5,2.4c3,4.1,6.2,8.1,9.3,12.2c0.6,0.8,1.6,1.5,0.9,2.6\n\t\t\tc-0.6,1-1.8,0.7-2.8,0.7c-5.2,0-10.5,0.1-15.8,0c-2.5,0-2.8,0.9-1.4,2.8c3,4.3,6,8.6,8.8,13c1.2,1.9,2.7,2.6,4.9,2.6\n\t\t\tc6.8-0.1,13.5,0,20.2-0.1c2,0,3.3,0.6,4.3,2.3c3.2,5.5,6.4,11,9.8,16.4c1.8,2.9,0.8,3.6-2.2,3.5c-7.6-0.1-15.2,0-22.9-0.1\n\t\t\tc-2.5,0-3.2,0.7-2,3.1c5.3,9.9,10.2,20.1,14.6,30.4c0.5,1.1,1,2.2,2.4,2c2.5-0.3,3.2,1.3,3.9,3.1c5.4,13.4,10.2,27.1,14,41.1\n\t\t\tc0.5,1.8,1.7,3.7-1.7,4c-1.5,0.1-0.9,1.6-0.7,2.5c2.7,10.9,5.3,21.8,7,32.9c0.3,2.1,1.3,2.9,3.5,2.9c8.5-0.1,17-0.1,25.5-0.1v8.2\n\t\t\tc-1.3,0.8-2.7,0.4-4,0.5c-5.3,0-10.7,0.1-16,0c-2.3,0-3.3,0.6-2.6,3c0.3,0.9,0.3,2,0.3,3c0,2.1,1,2.8,3,2.8\n\t\t\tc6.5-0.1,12.9-0.1,19.4-0.2v9.8c-3.1,0-6.2-0.1-9.3-0.1c-1.2,0-2.1,0.2-2.3,1.8c-0.5,5,0.7,6.5,5.6,6.5c2,0,4,0.1,6,0.1v9\n\t\t\tc-5.6,0-11.2,0-16.8-0.1c-2,0-3.5,0.5-3.2,3c-0.2,4.8,0.2,5.3,4.7,5.3c5.1,0,10.2,0,15.3,0v16.5c-5.5,0-10.9,0-16.4,0.1\n\t\t\tc-3.2,0-3.8,2.2-3.8,4.8c-0.1,2.8,1.5,3.3,3.8,3.3c5.5,0,10.9,0,16.4,0v6.8c-2.8,0.7-5.6,0.3-8.4,0.3c-2.5,0-3.3,1.1-2.5,3.5\n\t\t\tc0,0.8,0,1.6,0.1,2.5c-0.6,0.8-0.9,1.4,0.4,1.7c3.2,0,6.5,0.1,9.7,0.1c0.3,0,0.5,0.1,0.8,0.1v7.5c-6.1,0-12.2,0.1-18.3,0\n\t\t\tc-4.7-0.1-3.2,3.7-3.6,5.9c-0.6,2.8,2,1.9,3.3,2c6.2,0.3,12.4-0.5,18.6,0.5v6.8c-8.1,0.1-16.2,0.3-24.3,0.2\n\t\t\tc-2.9,0-3.2,1.5-3.5,3.6c-0.2,1.8-0.8,3.6,2.1,3.5c1,0,1.9,0.6,1.3,1.6c-1.3,2.5,0.9,7.1-4.5,7.1c-1.2,0-1.3,1.4-1.4,2.3\n\t\t\tc-0.4,2.1-0.5,4.2-1.2,6.2c-0.8,2.6,0.1,3.3,2.6,3.3c6-0.1,12,0,18,0c9.3,0,9.2,0,7.1,9c-0.5,2.3-1.5,3.1-3.8,3\n\t\t\tc-4.6-0.1-9.2,0-13.9,0c-9.7,0-9.6,0-12,9.4c-0.7,2.5,0.2,3.1,2.5,3c3.7-0.1,7.5,0,11.2,0c9,0,9,0,6.3,8.7\n\t\t\tc-0.8,2.5-1.9,3.6-4.7,3.6c-10.7,0-10.6,0.1-14,10.3c-1,2.9-0.1,3.4,2.6,3.3c4.4-0.1,8.7,0,13.1-0.1c2.6-0.1,3.4,0.8,2.3,3.3\n\t\t\tc-2.6,6.2-5.2,12.4-7.6,18.7c-0.9,2.2-2.2,3-4.5,3c-7.6-0.1-15.2,0-22.8-0.1c-2.2,0-3.4,0.7-4.3,2.7c-3,6.4-6.2,12.8-9.4,19.1\n\t\t\tc-1.2,2.4-1,3.2,1.9,3.2c7.5-0.1,15,0,22.5,0c4.3,0,4.3,0,2.3,3.6c-2,3.5-4.2,6.8-5.9,10.4c-1.3,2.7-3.1,3.3-6,3.3\n\t\t\tc-8.5-0.1-17,0-25.5,0.1c-1.5,0-2,1-2.2,2.2c-0.2,0.1-0.2,0.3-0.2,0.5c-2.7,3-4.8,6.4-6.4,10c-0.2,0.1-0.3,0.3-0.3,0.5\n\t\t\tc-1.3,0.8-2.3,1.8-2.1,3.4c0.1,0.6,0.9,0.5,1.5,0.4c8.5,0,17,0,25.5,0c0.6,1.3-0.3,2.2-0.9,3c-2.6,3.7-5.3,7.3-7.8,11\n\t\t\tc-1.4,2-3.2,2.5-5.5,2.5c-4.6-0.1-9.2,0-13.8,0c-1.5,0-3,0-4.1,1.4c-3.7,4.7-7.5,9.3-11.3,13.9c-0.7,0.9-1.1,1.8,0.7,1.9\n\t\t\tc3.7,0.1,7.5,0.2,11.2,0.2c-0.5,0.7-0.9,1.4-1.5,2.1c-4.7,5.4-9.4,10.7-14.2,16c-0.6,0.6-1.2,1.3-1.8,1.9\n\t\t\tc-1.4,0.6-2.5,1.6-3.1,3.1c-1.1,1.1-2.3,2.2-3.4,3.3c-3.9,2.8-7.3,6-10.4,9.7l-0.1,0.1c-2,0.9-3.6,2.3-4.8,4.2\n\t\t\tc-0.7,0.6-1.3,1.2-2,1.8c-1.5,0.4-2.6,1.3-3.2,2.7c-0.4,0.3-0.8,0.7-1.3,1c-2.3,1.3-4.5,2.8-6.1,5.1c-0.7,0.5-1.4,1.1-2.1,1.7\n\t\t\tc-6.6,4.3-12.9,9-19,14c-0.2,0-0.4,0.1-0.5,0.3c-0.8,0-1.4,0.5-1.7,1.2c-0.2,0-0.4,0.1-0.5,0.3c-4.3,1.7-7.6,5-11.7,7\n\t\t\tc-4.1,0-8.2,0.1-12.4,0.1c-2.1-0.2-3.4,1-4.7,2.3c-0.2,0-0.4,0.2-0.5,0.3c-0.8,0.1-1.4,0.3-1.8,1.1c-0.2,0-0.4,0.1-0.5,0.3\n\t\t\tc-1.9,0.4-3.5,1.2-4.7,2.7c-0.2,0-0.4,0.1-0.6,0.3c-1.4,0.4-2.7,0.9-3.6,2.1c1,0.9,2,0.7,2.9,0.5c4.7,0,9.5,0.1,14.2,0.1\n\t\t\tc-0.7,2.4-3.6,2-4.7,3.8c-0.2,0-0.4,0.1-0.6,0.2c-8.9,6-18.9,5.9-29,5.5c-3-0.1-6,0-9,0c-1.1,0-2.3,0-3.3,0.5\n\t\t\tc-6.1,2.7-12.1,5.5-18.3,8.3c0.8,1.1,1.7,0.9,2.5,0.6c7.4,0,14.9,0,22.3,0c0.5,2.4-1.7,2.2-2.9,2.6c-6.9,2.7-13.9,5.3-20.9,7.9\n\t\t\tc-13,0.1-25.9,0.2-38.9,0.3c-10.1,2.8-20.3,5.7-30.5,8.5c0,0.3,0.1,0.6,0.1,0.8h46.2c-3,2.1-6.1,1.5-8.4,3.1c-0.5,0-1,0.1-1.5,0.1\n\t\t\tc-7.6,0.9-15.1,2-22.5,3.6c-1,0.1-2,0.1-2.9,0.2c-5,0.4-10.1,0.8-15.1,1.2c-0.6-0.5-1.1-0.4-1.6,0.2c-3,0.2-5.9,0.3-8.9,0.5\n\t\t\tc-2.6-0.7-5.2-1.6-7.5,0.8h-27.7c-7.5-2-15.1-1.7-22.8-1.8c-0.7,0-1.3-0.1-2-0.1c-1.7-1.1-3.5-1.2-5.4-0.8\n\t\t\tc-0.9-0.1-1.9-0.1-2.8-0.2c-1.9-1-3.9-1.6-6-0.9c-0.7,0-1.4-0.1-2.1-0.1c-2.9-1.7-6.2-1.7-9.4-1.7c-0.7,0-1.3-0.1-2-0.1\n\t\t\tc-2.9-1.3-5.8-2.1-9-1.8c-0.4-0.1-0.9-0.1-1.3-0.2c-0.7-0.9-1.6-1.1-2.7-0.8c-0.4-0.1-0.8-0.1-1.2-0.2c-0.9-0.8-2-1.1-3.2-0.7\n\t\t\tc-0.7,0-1.4-0.1-2.1-0.1c-0.8-0.2-1.7-0.6-2.5-0.6c-19.4-0.4-38.9,1.2-58.2-1.2l-1.3-0.2c-5.2-2.5-10.9-3.4-16.3-5.2\n\t\t\tc-1.2-0.4-2.9-0.2-4.2-2.5H273l0.1-1.1c-8.6-3.1-17.3-6.2-25.9-9.2c-10.2-0.1-20.3-0.1-30.5-0.2c-3.3-2.2-6.8-3.6-10.6-4.5\n\t\t\tc-0.2-0.1-0.4-0.1-0.6-0.2c-1.4-2.4-5.1-1.7-6.1-4.7c7.4,0,14.9,0,22.3,0c0.8,0.2,1.9,0.7,2-0.5c0.1-0.8-0.9-0.8-1.6-0.8l-0.1,0\n\t\t\tc-1.7-1.9-3.9-2.9-6.3-3.3l-2.6-1.3c-2-1.8-4.1-3.5-6.9-3.5c-6.7-0.1-13.4-0.2-20.1-0.3c-0.9-1.1-2-1.6-3.4-1.7\n\t\t\tc-0.2-0.1-0.4-0.2-0.5-0.3c-2.4-3.3-7.2-3.6-10.1-7.8c3.1,0,5.5,0,8,0c0.6,0,1.4-0.2,1.6-0.5c0.5-0.9-0.4-1.3-1-1.7\n\t\t\tc-3-2-5.8-4.3-9.2-5.5c-0.2-0.1-0.3-0.2-0.5-0.3c-1.8-2.5-4.3-3.8-7-4.9c-0.4-0.3-0.9-0.7-1.3-1c-2.1-2.5-4.7-4.4-7.7-5.7\n\t\t\tc-0.2-0.1-0.3-0.2-0.5-0.3c-0.9-2.3-3.1-3.2-4.9-4.5c-5.3-4-9.9-9-15.7-12.5c-0.2-0.1-0.3-0.2-0.5-0.3c-1.8-2.7-4.1-5-7-6.4\n\t\t\tc-0.9-0.9-1.8-1.7-2.7-2.6c-4.5-5.5-9.5-10.5-15-15c-0.6-0.7-1.2-1.3-1.8-2c-1.7-3.2-4.2-5.7-7.1-7.8c-0.3-0.4-0.7-0.8-1.1-1.2\n\t\t\tc-0.6-1.8-1.4-3.3-3.6-3.2c-4.5-0.4-9.1,0.5-13.7-0.5c-2.6-4.3-5.6-8.3-9.5-11.5c-0.1-0.2-0.2-0.3-0.3-0.5c0-1.9-2.2-2.8-2-4.8\n\t\t\tc5.7,0,11.5,0,17.2-0.1c2.5-0.5,0.9-1.6,0.3-2.4c-2.2-3.1-4.4-6.3-6.8-9.3c-1.2-1.6-1.8-3.9-4.2-4.5c-7.8-0.1-15.6-0.1-23.4-0.2\n\t\t\tc-1.9,0-4,0.6-5.8-0.6c-1.3-3.3-3.1-6.2-5.7-8.5c-0.1-0.2-0.2-0.3-0.3-0.5c-0.5-2.2-1.3-4.3-3.4-5.5c-0.1-0.2-0.2-0.3-0.3-0.5\n\t\t\tc0-0.5,0.1-1,0.2-1.6c8.4,0,16.7-0.2,25.1,0c3.4,0,3.6-1,1.9-3.6c-2.2-3.6-4.4-7.3-6.3-11c-1.1-2-2.4-2.8-4.7-2.8\n\t\t\tc-7.9,0.1-15.7-0.1-23.6,0.1c-2.6,0.1-4.1-0.8-5.2-3.2c-2.9-6.2-6-12.3-9.1-18.5c-1.4-2.8-0.5-3.4,2.3-3.4\n\t\t\tc7.2,0.1,14.5-0.1,21.7,0.1c3.1,0.1,3.3-1.1,2.2-3.6c-1.8-4-3.4-8-5-12.1c-3.7-9-3.7-8.9-13.4-9.1c-12.7-0.2-9.6,2.4-14-10\n\t\t\tc-1.5-4.1-1.2-4.4,3.2-4.5c9.8-0.1,9.8-0.1,6.7-9.3c-0.6-1.9-1.6-2.5-3.5-2.5c-5.2,0.1-10.5,0.1-15.7,0.2c0-4.2,0-8.5,0-12.8\n\t\t\tc3.1,0,6.2,0.1,9.3,0.1c6,0,8.2-2.9,6.8-8.7c-0.1-0.4-0.2-0.7-0.3-1.1c-0.3-1.3-1.1-1.8-2.4-1.8c-4.5,0.1-9,0.1-13.4,0.2\n\t\t\tc0-9.5,0-19,0-28.5c2.5,0,4.9-0.1,7.4-0.1c2.1,0.1,3-0.4,2.8-2.9c-0.3-3.5-1.6-4.8-5-4.3c-1.7,0.2-3.4-0.1-5.2-0.2\n\t\t\tc0-2.5,0-5,0-7.5c1.7-1.3,5.6,1.5,5.5-3.4C5.5,414.7,3.3,414.3,0.1,414.8L0.1,414.8z M414.5,366.7c0,0.2-0.1,0.4-0.1,0.6\n\t\t\tc6.5,0.9,13.2,1.5,19.6,2.8c17.8,3.6,35.6,6.4,53.9,5.2c5-0.3,8.2,2.6,10.2,6.9c2.8,5.9,0.5,9.5-5.9,9.5c-7.4,0-14.8,0-22.1,0\n\t\t\tc-4.2,0-3.5,3.9-3.8,6.1c-0.5,2.7,2.3,1.5,3.6,1.5c7.1,0.1,14.2,0,21.4,0.1c1,0,2.4-0.4,3,0.9c1,2.2-1.7,6.5-4.2,6.5\n\t\t\tc-4.2,0.1-8.5,0-12.8,0c-5.1,0-5.2,0.2-6.3,5.3c-0.5,2.1,0.3,2.7,2.2,2.6c2.9-0.1,5.8,0,8.6,0c0.8,0,1.8-0.2,2.1,1\n\t\t\tc0.7,2.6-1.9,6.3-4.5,6.3c-5.4,0-10.8,0-16.1,0c-2,0-4.5-0.6-4.4,2.9c0.1,3.8,1.2,5,4.8,5.1c5.2,0,10.6,0.7,15.7-0.1\n\t\t\tc6.9-1.1,10.2,3.9,15,6.6c0,0.3-0.1,0.7-0.1,1h-21.7c0.7,1.1,1.5,1.5,2.3,1.8c6.7,2.2,13.5,4.2,20.3,6.1c6.7,1.9,13,5.1,19.3,8.7\n\t\t\tc11.2,6.5,22.9,12.9,37.2,11.6c6.6-0.6,11.8-2.2,16-7.1c0.9-1,1.9-2,2.7-3.1c1.1-1.5,2.3-2.5,4.3-2.4c1.7,0,6.6-5.9,6.5-7.5\n\t\t\tc0-0.6-0.4-0.9-0.9-1c-2.4-0.4-1.3-1.7-0.8-3c1.3-3.3,3.5-4.8,7.2-4.4c2.7,0.3,5.5,0.1,8.2,0.1c5.1,0,10.2,0,15.4,0\n\t\t\tc3.7-0.1,4.4-3.5,4.7-5.8c0.3-2.4-2.6-1.2-4.1-1.3c-6-0.2-12,0-18-0.1c-0.9,0-2.5,0.6-2.5-1.2c-0.2-3,3.4-6.6,6.5-6.7\n\t\t\tc5.1,0,10.3-0.2,15.4,0.1c3.6,0.2,5.2-1.2,6.2-4.4c0.8-2.3,0.7-3.2-2-3.1c-2.6,0.1-5.2,0-7.9,0c-0.8,0-1.8,0.3-2.2-0.8\n\t\t\tc-0.9-2.2,2.3-7,4.8-7c5,0,10,0,15-0.1c3.6-0.1,3-3.2,3.3-5.3c0.5-2.7-1.8-2.2-3.3-2.2c-7,0-14-0.1-21,0c-2.6,0-4.5,0.1-4.5-3.6\n\t\t\tc0-3.6,1.4-4.4,4.7-4.3c7.5,0.2,15,0,22.5,0.1c2.8,0.1,3.5-1,3.1-3.6c-0.5-3.2-1.2-6.4-2-9.5c-0.7-2.7-2.2-3.5-4.9-3.4\n\t\t\tc-7,0.1-14-0.2-21,0.2c-4.3,0.2-6.5-1.2-8.2-5.1c-1.3-3-1-3.6,2.2-3.5c7.2,0.1,14.5,0.1,21.7,0c0.8,0,1.9,0.5,2.3-0.6\n\t\t\tc0.3-0.8-0.4-1.4-0.8-2c-2.8-4.3-6.1-7.5-11.9-6.5c-2.3,0.4-4.8-0.3-7.1,0.1c-7.2,1.3-11-3.7-16.3-8.3h11.5c0-1.2-0.6-1.5-1.1-1.8\n\t\t\tc-7.7-4.5-15.4-8.9-24.9-7.6c-2.2,0.3-4.5-0.1-6.7,0.1c-9.8,1-17.3-5.3-26-7.7c0-0.4,0.1-0.8,0.2-1.2h20.5c0-0.4,0.1-0.7,0.1-1.1\n\t\t\tc-9.3-2.7-17.9-7.9-28.2-7.6c-13.5,0.5-27,0.8-39.8-4.6c-2.3-1-4.8-1.5-7.2-2.1c-29.8-7.8-60.1-12.7-90.9-14.6\n\t\t\tc-51.4-3.2-102.1,0.9-152,13.8c-7.9,2-15.7,4.4-23.5,6.6c0.1,0.4,0.1,0.8,0.2,1.1h24.2c-10.5,4-20.2,10-31.9,8.5\n\t\t\tc-2.9-0.4-6,0.1-9-0.1c-9.8-0.8-17.5,5-26.1,7.8c0,0.4,0.1,0.8,0.1,1.2h17.1c0.1,0.5,0.1,0.9,0.2,1.4c-7.5,2.4-13.1,9.4-22.1,7.8\n\t\t\tc-5.9-1-10.1,1.9-13.9,5.6c-0.6,0.6-1.7,1-1.2,2c0.4,1,1.6,0.6,2.4,0.6c4.2,0,8.5,0,12.8,0.1c0.9,0,2.2-0.2,2,1.4\n\t\t\tc-0.4,2.4-6.7,7.6-9.2,7.6c-7,0-14,0.3-21-0.1c-4-0.2-5.9,1.4-7.4,4.7c-1.6,3.7-1.6,3.9,2.5,3.9c7.4,0,14.8,0.1,22.1,0\n\t\t\tc3.1-0.1,3.6,0.9,2.7,3.7c-1,2.9-1.7,6.1-1.9,9.1c-0.2,3.1-1.6,3.6-4.3,3.6c-7.6-0.1-15.2,0.1-22.9-0.1c-2.9-0.1-3.5,1-3.6,3.7\n\t\t\tc-0.1,3.3,1.1,4.3,4.3,4.2c7.5-0.2,15,0,22.5-0.1c3.9,0,2.9,3.1,3.3,5.1c0.6,2.6-1.6,2.3-3.1,2.4c-4.5,0-9,0-13.5,0\n\t\t\tc-1,0-2.1-0.2-2.6,0.9c-0.9,2,2.2,6.9,4.5,6.9c3.1,0.1,6.2,0,9.4,0c2,0,4.9,3.7,4.5,5.9c-0.4,2.5-2.6,1.3-4,1.4\n\t\t\tc-5.1,0.1-10.2,0-15.4,0.1c-1,0-2.4-0.5-2.5,1.4c-0.1,3.2,3.2,6.6,6.5,6.6c6.8,0,13.5,0,20.2,0c2.2,0,5.6,3.8,5.1,5.9\n\t\t\tc-0.7,2.4-2.9,1.2-4.4,1.2c-7,0.1-14,0-21,0.1c-1.1,0-3.3-0.5-2.9,1.2c0.5,2.4,1.3,5.2,4.4,6c2.4,0.6,7.1,5.2,7.5,7.4\n\t\t\tc0.1,0.6,0.1,1-0.5,1.1c-3.3,0.7-0.9,2.2-0.3,3c4.9,6.1,10.3,10.8,19,9.5c5.2-0.8,10.7,0.7,15.9-1.4c10-4,19.3-9.5,30.1-12.1\n\t\t\tc6.5-1.6,13-4.8,19.1-8.4c6.5-3.8,14.1-6.4,22.1-6.3c7.6,0.1,15.2,0.1,22.9,0c4.6,0,8.9-1,12.5-4.2c0.7-0.6,1.9-1.2,1.4-2.4\n\t\t\tc-0.4-0.9-1.5-0.6-2.4-0.6c-6.1,0-12.2,0.1-18.4-0.1c-1.2,0-4.1,1.2-3.5-1.6c0.5-2.2-1.5-6.4,3.6-6.3c5.2,0.1,10.5,0.1,15.7,0\n\t\t\tc1.4,0,4,0.9,3.6-1.7c-0.3-2.2,0.4-5.7-3.8-5.6c-3.1,0.1-6.3,0.2-9.4,0c-3.9-0.3-3-3.8-3.4-6.1c-0.5-2.4,2-1.6,3.2-1.7\n\t\t\tc3.7-0.1,7.5,0,11.2,0c5.1,0,5.6-0.8,3.7-5.6c-0.8-2.1-2.4-1.9-4-1.9c-7.8,0-15.5,0-23.2,0c-2.3,0-4.2-3-4-6\n\t\t\tc0.2-2.7,2.4-1.6,3.8-1.6c7.1-0.1,14.2-0.2,21.4,0c3,0.1,4.6-0.2,3.8-4c-0.9-3.8,0.8-7.1,3.6-9.7c0.7-0.7,2-1,2.1-2.9h-23.4\n\t\t\tc0.3-0.9,0.7-1.2,1.2-1.3c18.8-3.5,37.5-7.3,56.8-7c12.8,0.2,25.5-0.5,38.2-1.4c19.1-1.2,38.2-1,57.2,1.3L414.5,366.7L414.5,366.7\n\t\t\tz M210.8,465.9c-3.8-1.2-14.4-1.1-16.8,0.2C199.8,468.7,204.7,468.6,210.8,465.9z M570.9,465.8c5.6,2.4,11.2,3.1,16.8-0.1\n\t\t\tC582.1,465.1,576.5,465,570.9,465.8z\"/>\n\t\t<path class=\"st1\" d=\"M767.9,339.8c-6.5,0.1-12.9,0.1-19.4,0.2c-2,0-3-0.6-3-2.8c0-1,0-2-0.3-3c-0.7-2.4,0.3-3.1,2.6-3\n\t\t\tc5.3,0.1,10.7,0,16,0c1.3,0,2.7,0.3,4-0.5V339.8L767.9,339.8z\"/>\n\t\t<path class=\"st1\" d=\"M0.1,465.7c4.5-0.1,9-0.1,13.4-0.2c1.3,0,2.1,0.5,2.4,1.8c0.1,0.4,0.2,0.7,0.3,1.1c1.4,5.8-0.8,8.7-6.8,8.7\n\t\t\tc-3.1,0-6.2-0.1-9.3-0.1C0.1,473.2,0.1,469.5,0.1,465.7z\"/>\n\t\t<path class=\"st2\" d=\"M767.9,430.5c-6.2-0.9-12.4-0.1-18.6-0.5c-1.4-0.1-3.9,0.8-3.3-2c0.5-2.2-1.1-6,3.6-5.9\n\t\t\tc6.1,0.1,12.2,0,18.3,0V430.5z\"/>\n\t\t<path class=\"st3\" d=\"M767.9,399.8c-5.5,0-10.9,0-16.4,0c-2.3,0-3.9-0.5-3.8-3.3c0.1-2.6,0.7-4.8,3.8-4.8\n\t\t\tc5.5-0.1,10.9-0.1,16.4-0.1V399.8z\"/>\n\t\t<path class=\"st4\" d=\"M0.1,357c2.7,0.1,5.4,0.3,8.1,0.3c2.4,0,3.3,0.9,3.2,3.3c-0.2,5.8-0.2,5.9-6.2,5.9c-1.7,0-3.5,0.1-5.2,0.2\n\t\t\tC0.1,363.5,0.1,360.3,0.1,357L0.1,357z\"/>\n\t\t<path class=\"st5\" d=\"M0.1,322.5c3.1,0,6.2,0.1,9.4,0.1c1.6,0,2.3,0.6,2.1,2.2c-0.3,1.6-0.6,3.2-0.8,4.8c-0.2,1.5-1.2,1.6-2.4,1.7\n\t\t\tc-2.7,0.1-5.5,0.2-8.2,0.2C0.1,331.5,0.1,322.5,0.1,322.5z\"/>\n\t\t<path class=\"st5\" d=\"M767.9,357.8c-2,0-4-0.1-6-0.1c-4.9,0-6.2-1.5-5.6-6.5c0.2-1.6,1.1-1.8,2.3-1.8c3.1,0,6.2,0.1,9.3,0.1\n\t\t\tL767.9,357.8L767.9,357.8z\"/>\n\t\t<path class=\"st6\" d=\"M0.1,399c2.7,0.7,5.5,0.3,8.2,0.4c3.3,0.1,2.8,2.5,3,4.5c0.2,2.2-0.7,3.3-3,3.2c-2.7,0-5.5,0.1-8.2,0.1\n\t\t\tC0.1,404.5,0.1,401.7,0.1,399L0.1,399z\"/>\n\t\t<path class=\"st3\" d=\"M767.9,375c-5.1,0-10.2,0-15.3,0c-4.6,0-5-0.5-4.7-5.3c6.6,1.8,13.3,0.5,20,0.9L767.9,375L767.9,375z\"/>\n\t\t<path class=\"st7\" d=\"M0.1,429.8c1.7,0.1,3.5,0.4,5.2,0.2c3.5-0.5,4.7,0.8,5,4.3c0.2,2.6-0.6,3-2.8,2.9c-2.5-0.1-4.9,0-7.4,0.1\n\t\t\tC0.1,434.7,0.1,432.2,0.1,429.8L0.1,429.8z\"/>\n\t\t<path class=\"st8\" d=\"M767.9,370.5c-6.7-0.4-13.4,0.9-20-0.9c-0.3-2.4,1.1-3,3.2-3c5.6,0,11.2,0,16.8,0.1L767.9,370.5L767.9,370.5z\n\t\t\t\"/>\n\t\t<path class=\"st7\" d=\"M0.1,339.8c0.2,0.1,0.4,0.3,0.7,0.3c5.4,0.6,6.3,2.1,4.9,7.4c-0.9,3.3-3.7,1.4-5.6,2\n\t\t\tC0.1,346.3,0.1,343,0.1,339.8z\"/>\n\t\t<path class=\"st1\" d=\"M767.2,414.6c-3.2,0-6.5-0.1-9.7-0.1c-0.1-0.6-0.3-1.1-0.4-1.7c0-0.8,0-1.6-0.1-2.5c3.6-1.4,7.3-0.7,10.9-0.8\n\t\t\tv4.5C767.7,414.2,767.4,414.4,767.2,414.6L767.2,414.6z\"/>\n\t\t<path class=\"st5\" d=\"M0.1,414.8c3.2-0.4,5.4,0,5.5,4.1c0.1,4.9-3.8,2-5.5,3.4C0.1,422.2,0.1,414.8,0.1,414.8z\"/>\n\t\t<path class=\"st8\" d=\"M342,2.3c-2.4-0.1-4.8-0.1-7.3-0.2c0.9-1.5,2.4-1.1,3.7-1.2c2-0.1,4,0,5.8-0.8h9.8c-0.3,3-2.3,3.2-4.6,2.9\n\t\t\tC347,1.9,344.6,1.6,342,2.3z\"/>\n\t\t<path class=\"st6\" d=\"M374.2,767.9c0.5-0.7,0-1.2-0.3-1.8c7.6,0.2,15.3-0.2,22.8,1.8H381c-1-0.8-2-1-3,0H374.2z\"/>\n\t\t<path class=\"st9\" d=\"M767.9,409.5c-3.7,0.1-7.4-0.6-10.9,0.8c-0.9-2.4-0.1-3.4,2.5-3.5c2.8-0.1,5.7,0.4,8.4-0.3V409.5L767.9,409.5\n\t\t\tz\"/>\n\t\t<path class=\"st10\" d=\"M457.6,765.2c-1.2,2-4.3,0.3-5.3,2.7H432c0-0.3,0-0.5,0-0.8c3-0.2,5.9-0.3,8.9-0.5c0.5-0.1,1.1-0.1,1.6-0.2\n\t\t\tC447.5,766,452.6,765.6,457.6,765.2L457.6,765.2z\"/>\n\t\t<path class=\"st10\" d=\"M344.2,0.1c-1.9,0.8-3.9,0.7-5.8,0.8c-1.3,0.1-2.8-0.3-3.7,1.2c-2.3,0-5,1.3-6.3-2L344.2,0.1L344.2,0.1z\"/>\n\t\t<path class=\"st3\" d=\"M432,767.1c0,0.3,0,0.5,0,0.8h-7.5C426.7,765.5,429.4,766.4,432,767.1z\"/>\n\t\t<path class=\"st8\" d=\"M357,0.1c-0.5,0.7-1,0.8-1.5,0H357z\"/>\n\t\t<path class=\"st11\" d=\"M378,767.9c1-1,2-0.8,3,0H378z\"/>\n\t\t<path class=\"st9\" d=\"M767.2,414.6c0.3-0.2,0.5-0.4,0.8-0.6v0.8C767.7,414.7,767.4,414.7,767.2,414.6z\"/>\n\t\t<path class=\"st1\" d=\"M414.5,366.7h13c-19-2.3-38.1-2.5-57.2-1.3c-12.7,0.8-25.4,1.6-38.2,1.4c-19.2-0.3-38,3.5-56.8,7\n\t\t\tc-0.4,0.1-0.8,0.4-1.2,1.3h23.4c-0.1,1.9-1.4,2.2-2.1,2.9c-2.8,2.7-4.5,5.9-3.6,9.7c0.9,3.8-0.7,4.1-3.8,4\n\t\t\tc-7.1-0.2-14.2-0.1-21.4,0c-1.3,0-3.5-1.1-3.8,1.6c-0.3,3.1,1.6,6,4,6c7.8,0.1,15.5,0,23.2,0c1.6,0,3.1-0.2,4,1.9\n\t\t\tc1.9,4.8,1.4,5.6-3.7,5.6c-3.8,0-7.5-0.1-11.2,0c-1.3,0-3.7-0.7-3.2,1.7c0.4,2.2-0.5,5.8,3.4,6.1c3.1,0.2,6.2,0.1,9.4,0\n\t\t\tc4.2-0.1,3.5,3.4,3.8,5.6c0.4,2.6-2.2,1.7-3.6,1.7c-5.2,0.1-10.5,0.1-15.7,0c-5.1-0.1-3,4.1-3.6,6.3c-0.6,2.8,2.2,1.6,3.5,1.6\n\t\t\tc6.1,0.2,12.2,0.1,18.4,0.1c0.9,0,2-0.3,2.4,0.6c0.5,1.1-0.7,1.8-1.4,2.4c-3.6,3.1-7.9,4.1-12.5,4.2c-7.6,0.1-15.2,0.1-22.9,0\n\t\t\tc-8-0.1-15.6,2.5-22.1,6.3c-6.2,3.6-12.6,6.8-19.1,8.4c-10.7,2.6-20.1,8.1-30.1,12.1c-5.2,2.1-10.7,0.6-15.9,1.4\n\t\t\tc-8.7,1.3-14.2-3.4-19-9.5c-0.7-0.8-3-2.3,0.3-3c0.6-0.1,0.6-0.5,0.5-1.1c-0.4-2.2-5.1-6.8-7.5-7.4c-3-0.8-3.8-3.6-4.4-6\n\t\t\tc-0.4-1.7,1.8-1.2,2.9-1.2c7-0.1,14,0,21-0.1c1.5,0,3.8,1.2,4.4-1.2c0.6-2-2.9-5.8-5.1-5.9c-6.8,0-13.5,0-20.2,0\n\t\t\tc-3.3,0-6.6-3.4-6.5-6.6c0.1-1.9,1.5-1.4,2.5-1.4c5.1-0.1,10.2,0.1,15.4-0.1c1.4,0,3.6,1.2,4-1.4c0.4-2.2-2.6-5.9-4.5-5.9\n\t\t\tc-3.1-0.1-6.2,0-9.4,0c-2.3,0-5.4-4.9-4.5-6.9c0.5-1.1,1.7-0.9,2.6-0.9c4.5,0,9,0,13.5,0c1.6,0,3.7,0.2,3.1-2.4\n\t\t\tc-0.4-2,0.6-5.1-3.3-5.1c-7.5,0.1-15-0.1-22.5,0.1c-3.3,0.1-4.4-0.9-4.3-4.2c0.1-2.7,0.7-3.8,3.6-3.7c7.6,0.2,15.2,0,22.9,0.1\n\t\t\tc2.7,0,4.1-0.5,4.3-3.6c0.2-3.1,0.9-6.2,1.9-9.1c1-2.9,0.4-3.8-2.7-3.7c-7.4,0.1-14.7,0.1-22.1,0c-4.1,0-4.1-0.2-2.5-3.9\n\t\t\tc1.4-3.3,3.4-4.9,7.4-4.7c7,0.4,14,0.1,21,0.1c2.5,0,8.8-5.2,9.2-7.6c0.2-1.6-1.1-1.4-2-1.4c-4.2-0.1-8.5,0-12.8-0.1\n\t\t\tc-0.8,0-1.9,0.4-2.4-0.6c-0.5-1,0.7-1.5,1.2-2c3.9-3.8,8.1-6.6,13.9-5.6c8.9,1.6,14.6-5.4,22.1-7.8c-0.1-0.5-0.1-0.9-0.2-1.4\n\t\t\th-17.1c0-0.4-0.1-0.8-0.1-1.2c8.6-2.8,16.3-8.5,26.1-7.8c3,0.2,6-0.3,9,0.1c11.7,1.4,21.5-4.6,31.9-8.5h-24.2\n\t\t\tc-0.1-0.4-0.1-0.8-0.2-1.1c7.9-2.2,15.6-4.6,23.5-6.6c49.9-12.9,100.6-16.9,152-13.8c30.8,1.9,61,6.8,90.9,14.6\n\t\t\tc2.4,0.6,4.9,1.1,7.2,2.1c12.8,5.4,26.3,5.1,39.8,4.6c10.3-0.4,18.9,4.8,28.2,7.6c0,0.4-0.1,0.7-0.1,1.1h-20.5\n\t\t\tc0,0.4-0.1,0.8-0.2,1.2c8.7,2.4,16.2,8.7,26,7.7c2.2-0.2,4.5,0.2,6.7-0.1c9.5-1.3,17.2,3.1,24.9,7.6c0.5,0.3,1.1,0.6,1.1,1.8\n\t\t\th-11.5c5.3,4.6,9.1,9.6,16.3,8.3c2.3-0.4,4.8,0.3,7.1-0.1c5.8-1,9.1,2.2,11.9,6.5c0.4,0.6,1.1,1.2,0.8,2c-0.4,1.1-1.5,0.6-2.3,0.6\n\t\t\tc-7.2,0-14.5,0.1-21.7,0c-3.2-0.1-3.4,0.5-2.2,3.5c1.7,3.9,4,5.3,8.2,5.1c7-0.4,14,0,21-0.2c2.7-0.1,4.2,0.7,4.9,3.4\n\t\t\tc0.8,3.1,1.5,6.3,2,9.5c0.4,2.6-0.3,3.6-3.1,3.6c-7.5-0.1-15,0.1-22.5-0.1c-3.2-0.1-4.6,0.6-4.7,4.3c0,3.7,1.9,3.6,4.5,3.6\n\t\t\tc7-0.1,14,0,21,0c1.5,0,3.7-0.5,3.3,2.2c-0.3,2.1,0.3,5.2-3.3,5.3c-5,0.1-10,0-15,0.1c-2.5,0-5.7,4.8-4.8,7\n\t\t\tc0.4,1.1,1.4,0.8,2.2,0.8c2.6,0,5.2,0.1,7.9,0c2.7-0.1,2.8,0.8,2,3.1c-1.1,3.2-2.7,4.6-6.2,4.4c-5.1-0.3-10.2-0.1-15.4-0.1\n\t\t\tc-3.1,0-6.7,3.7-6.5,6.7c0.1,1.9,1.6,1.2,2.5,1.2c6,0.1,12,0,18,0.1c1.5,0,4.4-1.1,4.1,1.3c-0.3,2.3-1,5.8-4.7,5.8\n\t\t\tc-5.1,0.1-10.2,0-15.4,0c-2.8,0-5.5,0.2-8.2-0.1c-3.7-0.4-5.9,1.1-7.2,4.4c-0.5,1.3-1.7,2.5,0.8,3c0.5,0.1,0.9,0.3,0.9,1\n\t\t\tc0.1,1.6-4.8,7.5-6.5,7.5c-2,0-3.2,1-4.3,2.4c-0.8,1.1-1.8,2.1-2.7,3.1c-4.2,5-9.4,6.5-16,7.1c-14.3,1.3-26-5.1-37.2-11.6\n\t\t\tc-6.3-3.7-12.6-6.9-19.3-8.7c-6.8-1.9-13.6-4-20.3-6.1c-0.8-0.3-1.6-0.6-2.3-1.8h21.7c0-0.3,0.1-0.7,0.1-1\n\t\t\tc-4.7-2.7-8.1-7.7-15-6.6c-5.1,0.8-10.5,0.2-15.7,0.1c-3.6,0-4.6-1.3-4.8-5.1c-0.1-3.5,2.3-2.9,4.4-2.9c5.4,0,10.8,0,16.1,0\n\t\t\tc2.6,0,5.2-3.7,4.5-6.3c-0.3-1.2-1.3-1-2.1-1c-2.9,0-5.8-0.1-8.6,0c-2,0-2.7-0.5-2.2-2.6c1-5,1.2-5.2,6.3-5.3c4.2,0,8.5,0,12.8,0\n\t\t\tc2.5,0,5.3-4.3,4.2-6.5c-0.6-1.3-1.9-0.9-3-0.9c-7.1,0-14.2,0-21.4-0.1c-1.3,0-4,1.2-3.6-1.5c0.4-2.3-0.4-6.1,3.8-6.1\n\t\t\tc7.4-0.1,14.8,0,22.1,0c6.4,0,8.6-3.6,5.9-9.5c-2-4.2-5.1-7.2-10.2-6.9c-18.2,1.2-36.1-1.6-53.9-5.2c-6.5-1.3-13.1-1.9-19.6-2.8\n\t\t\tC414.5,367,414.5,366.8,414.5,366.7L414.5,366.7z\"/>\n\t\t<path class=\"st10\" d=\"M477.1,748.9c-3.2,2.6-7.2,3.1-11,4.2c-2.8,0.8-5.8,1-9.3,3.4c14.6,1,28.2-0.5,41.7,1.5\n\t\t\tc-4.5,1.8-9.1,3.3-14,3.3c2.3-1.6,5.4-0.9,8.4-3.1h-46.2c0-0.3-0.1-0.6-0.1-0.8C456.8,754.6,467,751.7,477.1,748.9L477.1,748.9z\"\n\t\t\t/>\n\t\t<path class=\"st6\" d=\"M262.7,756.4c-8.4-1.5-16.5-3.9-24.5-6.8c0.1-0.5,0.1-0.9,0.1-1.4h29c0-0.4,0.1-0.7,0.1-1.1\n\t\t\tc-3.2-1.8-6.7-2.9-10.1-4.2c-3.5-1.3-7.2-2.2-10.1-4.6c8.6,3.1,17.3,6.2,25.9,9.2l-0.1,1.1h-30.9c1.3,2.3,3,2.1,4.2,2.5\n\t\t\tC251.8,753,257.5,753.8,262.7,756.4L262.7,756.4z\"/>\n\t\t<path class=\"st10\" d=\"M710.2,599.8c2.2-0.3,2.1,0.9,1.2,2.1c-3.2,4.6-6.5,9.1-9.9,13.5c-1.2,1.6-3.2,1.7-5.1,1.7\n\t\t\tc-4.4,0-8.7,0-13.1,0c-1.4,0-2.9,0-3.8,1.1c-4.2,4.9-8.4,9.7-11.9,15.2c-1.8-0.1-1.4-1-0.7-1.9c3.8-4.7,7.5-9.3,11.3-13.9\n\t\t\tc1.1-1.4,2.5-1.4,4.1-1.4c4.6,0,9.2-0.1,13.8,0c2.3,0.1,4.1-0.5,5.5-2.5c2.5-3.7,5.2-7.3,7.8-11\n\t\t\tC709.9,602,710.8,601.1,710.2,599.8L710.2,599.8z\"/>\n\t\t<path class=\"st10\" d=\"M574.5,723.1c-4.1,3.9-9,6.2-14.5,6.5c-5.7,0.3-11.5,0.5-17.2,0c-9.8-0.8-17.3,4.3-25.3,8.4\n\t\t\tc-0.8,0.3-1.7,0.5-2.5-0.6c6.2-2.8,12.2-5.6,18.3-8.3c1-0.4,2.2-0.4,3.3-0.5c3-0.1,6-0.1,9,0C555.6,729,565.6,729.1,574.5,723.1\n\t\t\tL574.5,723.1z\"/>\n\t\t<path class=\"st6\" d=\"M324.8,758.3c-9.3,0.1-18.6,0.2-27.9,0.2c-8,0-15.9,0-23.9,0c-3.1,0-6.2-0.2-8.9-2\n\t\t\tc19.4,2.4,38.8,0.8,58.2,1.2C323.1,757.7,323.9,758.1,324.8,758.3L324.8,758.3z\"/>\n\t\t<path class=\"st6\" d=\"M182.3,716.9c-4.3-1.1-7.6-4.2-11.4-6.2c-0.5-0.3-1.1-0.7-1-1.4c0.2-0.9,1.1-0.9,1.8-1\n\t\t\tc1.7-0.1,3.5-0.1,5.2-0.1c0.6,0,1.4,0,1.6-0.7c0.3-0.9-0.5-1.3-1.1-1.7c-2.1-1.3-4.5-2.2-5.8-4.5c3.4,1.2,6.2,3.5,9.2,5.5\n\t\t\tc0.6,0.4,1.5,0.8,1,1.7c-0.2,0.4-1.1,0.5-1.6,0.5c-2.4,0.1-4.9,0-8,0C175.1,713.3,179.9,713.5,182.3,716.9L182.3,716.9z\"/>\n\t\t<path class=\"st9\" d=\"M210.8,465.9c-6.1,2.7-11.1,2.8-16.8,0.2C196.5,464.9,207.1,464.7,210.8,465.9z\"/>\n\t\t<path class=\"st9\" d=\"M570.9,465.8c5.6-0.9,11.2-0.7,16.8-0.1C582.1,468.9,576.5,468.2,570.9,465.8z\"/>\n\t\t<path class=\"st10\" d=\"M539.8,738.1c1.1-0.3,2.2-0.4,3.1,0.5c-0.6,1.5-1.9,1.8-3,2.2c-7.1,2.7-14.2,5.2-21.4,7.8\n\t\t\tc-0.8,0.3-1.7,0.5-2.5,0c7-2.6,14-5.2,20.9-7.9C538.1,740.2,540.2,740.4,539.8,738.1L539.8,738.1z\"/>\n\t\t<path class=\"st6\" d=\"M154.6,689.1c-7.5-4.8-14.5-10.2-20.5-16.9c5.8,3.5,10.3,8.5,15.7,12.5C151.5,685.9,153.8,686.8,154.6,689.1\n\t\t\tL154.6,689.1z\"/>\n\t\t<path class=\"st10\" d=\"M678.8,633.7c0.7,0.4,0.7,1.1,0.3,1.6c-5,5.8-9.6,12-15.9,16.5c4.7-5.3,9.5-10.7,14.2-16\n\t\t\tC677.8,635.1,678.3,634.4,678.8,633.7L678.8,633.7z\"/>\n\t\t<path class=\"st10\" d=\"M624.8,686.3c-1.2,3.2-4.4,4.2-6.8,6c-3.9,2.9-7.3,6.7-12.2,8C611.9,695.3,618.1,690.6,624.8,686.3\n\t\t\tL624.8,686.3z\"/>\n\t\t<path class=\"st10\" d=\"M313.4,8.5c7.6-3.1,15.5-4.5,23.7-4.5c-6,2.1-12.4,2.1-18.6,3.7C316.8,8.1,315.2,8.9,313.4,8.5z\"/>\n\t\t<path class=\"st10\" d=\"M483,761.4c-1.7,2-4.3,1.8-6.5,2c-5.4,0.5-10.6,2.2-16,1.6C467.9,763.4,475.5,762.3,483,761.4L483,761.4z\"/>\n\t\t<path class=\"st6\" d=\"M87,616.3c-2.1-4.7-5.9-8.3-8.5-12.7c-0.7-1.2-1.4-2.3-2.1-3.5c2.3,0.6,2.9,2.8,4.2,4.5\n\t\t\tc2.3,3,4.6,6.2,6.8,9.3C87.9,614.7,89.5,615.9,87,616.3L87,616.3z\"/>\n\t\t<path class=\"st6\" d=\"M123.9,662.8c-5.8-4.2-10.8-9.2-15-15C114.4,652.3,119.4,657.3,123.9,662.8z\"/>\n\t\t<path class=\"st6\" d=\"M81.7,633.1c-4-3.1-7.1-7-9.5-11.5C76.1,624.8,79,628.8,81.7,633.1z\"/>\n\t\t<path class=\"st10\" d=\"M654.8,660.1c-2.8,4-5.9,7.5-10.4,9.7C647.4,666.1,650.9,662.9,654.8,660.1z\"/>\n\t\t<path class=\"st10\" d=\"M603,702.1c-3.2,3.5-6.7,6.5-11.7,7C595.5,707.2,598.8,703.9,603,702.1z\"/>\n\t\t<path class=\"st10\" d=\"M692,585.5c-1,4.1-3.1,7.4-6.4,10C687.3,591.9,689.3,588.5,692,585.5z\"/>\n\t\t<path class=\"st6\" d=\"M205.6,733.4c-2.7-0.3-4.9-1.8-7.3-2.9c-0.6-0.3-1.6-0.7-1.1-1.6s1.5-0.7,2.3-0.2\n\t\t\tC200.4,731.7,204.2,731,205.6,733.4L205.6,733.4z\"/>\n\t\t<path class=\"st6\" d=\"M107.1,645.9c-3-2-5.5-4.5-7.1-7.8C102.9,640.2,105.4,642.7,107.1,645.9z\"/>\n\t\t<path class=\"st6\" d=\"M216.8,738.1c-3.9-0.6-7.5-1.9-10.6-4.5C210,734.5,213.5,735.9,216.8,738.1z\"/>\n\t\t<path class=\"st10\" d=\"M342,2.3c2.5-0.6,5-0.4,7.3,0.7c-3.8-0.2-7.3,1.5-11.1,0.9C339.5,3.4,340.8,2.8,342,2.3z\"/>\n\t\t<path class=\"st6\" d=\"M133.7,671.8c-3-1.4-5.3-3.6-7-6.4C129.6,666.8,131.9,669.1,133.7,671.8z\"/>\n\t\t<path class=\"st6\" d=\"M47.2,599.3c-2.7-2.3-4.5-5.2-5.7-8.5C44.1,593.2,45.9,596.1,47.2,599.3z\"/>\n\t\t<path class=\"st6\" d=\"M162.9,695.1c-3.2-1-5.7-3.1-7.7-5.7C158.1,690.7,160.8,692.6,162.9,695.1z\"/>\n\t\t<path class=\"st6\" d=\"M344.3,762.2c-3.2,0.3-6.1-0.5-9-1.8C338.4,760.1,341.4,760.8,344.3,762.2z\"/>\n\t\t<path class=\"st6\" d=\"M355.6,764c-3.2,0-6.5,0.1-9.4-1.7C349.5,762.3,352.7,762.2,355.6,764z\"/>\n\t\t<path class=\"st10\" d=\"M579.7,719c0.5,0,1.1-0.2,1.4,0c0.8,0.8,0,1.4-0.5,1.7c-1.7,1.1-3.4,2.2-5.5,2.1\n\t\t\tC576.1,721,579.1,721.4,579.7,719L579.7,719z\"/>\n\t\t<path class=\"st6\" d=\"M171.2,701c-2.8-1-5.3-2.4-7-4.9C166.9,697.2,169.4,698.5,171.2,701z\"/>\n\t\t<path class=\"st10\" d=\"M633,679.6c-1.2,2.7-3.3,4.4-6.1,5.1C628.5,682.4,630.7,680.9,633,679.6z\"/>\n\t\t<path class=\"st6\" d=\"M213.2,722.7c-2.7-0.4-4.9-1.8-6.9-3.5C209.1,719.2,211.2,720.9,213.2,722.7z\"/>\n\t\t<path class=\"st6\" d=\"M222.1,727.3c-2.4-0.5-4.8-1.2-6.3-3.3C218.3,724.4,220.4,725.4,222.1,727.3z\"/>\n\t\t<path class=\"st6\" d=\"M71.8,621.2c-1.6-0.7-2.5-2-3.2-3.4c-0.5-1.1,0-1.7,1.2-1.4C69.7,618.3,71.8,619.3,71.8,621.2L71.8,621.2z\"/>\n\t\t<path class=\"st10\" d=\"M566.3,716.4c-0.2,0.8-0.5,1.7-0.7,2.5c-0.9,0.2-1.9,0.4-2.9-0.5C563.6,717.3,564.9,716.8,566.3,716.4\n\t\t\tL566.3,716.4z\"/>\n\t\t<path class=\"st6\" d=\"M41.2,590.4c-1.8-1.4-3-3.2-3.4-5.5C39.8,586.1,40.6,588.2,41.2,590.4z\"/>\n\t\t<path class=\"st10\" d=\"M644.3,669.9c-0.9,2.2-2.5,3.6-4.8,4.2C640.7,672.2,642.3,670.8,644.3,669.9z\"/>\n\t\t<path class=\"st6\" d=\"M363.8,765c-2.1,0.5-4.1,0-6-0.9C359.9,763.4,361.9,764,363.8,765z\"/>\n\t\t<path class=\"st10\" d=\"M571.5,713.4c-0.9,2.1-2.7,2.6-4.7,2.7C568,714.6,569.7,713.8,571.5,713.4z\"/>\n\t\t<path class=\"st6\" d=\"M372,766c-1.9,0.5-3.8,0.5-5.4-0.8C368.5,764.8,370.3,764.9,372,766z\"/>\n\t\t<path class=\"st10\" d=\"M579,709.2c-1.3,1.3-2.7,2.4-4.7,2.3C575.6,710.2,576.9,709,579,709.2z\"/>\n\t\t<path class=\"st10\" d=\"M685.3,596.1c-0.2,1.2-0.4,2.5-0.6,3.7c-0.6,0.2-1.5,0.3-1.5-0.4C683.1,597.9,684.1,596.8,685.3,596.1\n\t\t\tL685.3,596.1z\"/>\n\t\t<path class=\"st6\" d=\"M98.9,636.8c-1.7-0.5-2.4-2.1-3.6-3.2C97.5,633.5,98.3,635.1,98.9,636.8z\"/>\n\t\t<path class=\"st10\" d=\"M637.5,675.9c-0.5,1.7-1.6,2.5-3.2,2.7C634.9,677.2,636,676.3,637.5,675.9z\"/>\n\t\t<path class=\"st10\" d=\"M661.3,653.7c-0.2,1.8-1.2,2.9-3.1,3.1C658.8,655.4,659.8,654.3,661.3,653.7z\"/>\n\t\t<path class=\"st6\" d=\"M186.2,718.8c-1.5,0.1-2.6-0.4-3.4-1.7C184.2,717.2,185.4,717.8,186.2,718.8z\"/>\n\t\t<path class=\"st6\" d=\"M221.8,728.7c0.1-0.4,0.2-0.9,0.4-1.3c0.7,0,1.8,0,1.6,0.8C223.7,729.3,222.6,728.9,221.8,728.7L221.8,728.7z\n\t\t\t\"/>\n\t\t<path class=\"st10\" d=\"M308.9,9.5c0.8-1.1,1.8-1.3,3-0.7C311,9.5,310.1,9.8,308.9,9.5z\"/>\n\t\t<path class=\"st6\" d=\"M330,759.2c-1.2,0.5-2.3,0.3-3.2-0.7C328,758.1,329.1,758.4,330,759.2z\"/>\n\t\t<path class=\"st10\" d=\"M694.5,582.8c-0.4,1.1-1,2-2.2,2.2C692.5,583.8,693,582.8,694.5,582.8z\"/>\n\t\t<path class=\"st10\" d=\"M305.2,10.3c0.5-1,1.3-1.2,2.3-0.6C306.8,10.2,306.1,10.5,305.2,10.3z\"/>\n\t\t<path class=\"st6\" d=\"M333.9,760.2c-1.1,0.3-2,0-2.7-0.8C332.3,759,333.2,759.3,333.9,760.2z\"/>\n\t\t<path class=\"st10\" d=\"M573.8,711.9c-0.3,0.8-1,1.1-1.8,1.1C572.3,712.3,573,712,573.8,711.9z\"/>\n\t\t<path class=\"st6\" d=\"M37.4,584.3c-0.9-0.6-1.6-1.2,0.2-1.6C37.5,583.3,37.5,583.8,37.4,584.3z\"/>\n\t\t<path class=\"st9\" d=\"M757.1,412.8c0.1,0.6,0.3,1.1,0.4,1.7C756.2,414.2,756.4,413.6,757.1,412.8z\"/>\n\t\t<path class=\"st10\" d=\"M605.3,700.6c-0.3,0.8-0.8,1.2-1.7,1.2C603.9,701.1,604.4,700.6,605.3,700.6z\"/>\n\t\t<path class=\"st3\" d=\"M442.5,766.4c-0.5,0.1-1.1,0.1-1.6,0.2C441.3,766,441.9,765.9,442.5,766.4z\"/>\n\t</g>\n</g>\n</svg>\n");
-;// CONCATENATED MODULE: ./src/icons/lock.svg
-/* harmony default export */ const lock = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 768 767.999994\"\n    preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n    <path fill=\"#0d3c26\"\n        d=\"M 520.59375 325.066406 L 520.59375 296.34375 C 520.59375 221.027344 459.316406 159.75 384 159.75 C 308.683594 159.75 247.40625 221.027344 247.40625 296.34375 L 247.40625 325.066406 C 215.605469 328.226562 190.6875 355.132812 190.6875 387.75 L 190.6875 466.5 C 190.6875 544.660156 254.277344 608.25 332.4375 608.25 L 435.558594 608.25 C 513.71875 608.25 577.308594 544.660156 577.308594 466.5 L 577.308594 387.75 C 577.3125 355.132812 552.394531 328.226562 520.59375 325.066406 Z M 384 195.75 C 439.46875 195.75 484.59375 240.875 484.59375 296.34375 L 484.59375 324.75 L 283.40625 324.75 L 283.40625 296.34375 C 283.40625 240.875 328.53125 195.75 384 195.75 Z M 541.3125 466.5 C 541.3125 524.8125 493.871094 572.25 435.5625 572.25 L 332.4375 572.25 C 274.128906 572.25 226.6875 524.8125 226.6875 466.5 L 226.6875 387.75 C 226.6875 372.863281 238.800781 360.75 253.6875 360.75 L 514.3125 360.75 C 529.199219 360.75 541.3125 372.863281 541.3125 387.75 Z M 384 0 C 172.261719 0 0 172.261719 0 384 C 0 595.738281 172.261719 768 384 768 C 595.738281 768 768 595.738281 768 384 C 768 172.261719 595.738281 0 384 0 Z M 384 732 C 192.113281 732 36 575.886719 36 384 C 36 192.113281 192.113281 36 384 36 C 575.886719 36 732 192.113281 732 384 C 732 575.886719 575.886719 732 384 732 Z M 384 732 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n</svg>");
-;// CONCATENATED MODULE: ./src/icons/unlock.svg
-/* harmony default export */ const unlock = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 768 767.999994\"\n    preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n    <path fill=\"#0d3c26\"\n        d=\"M 514.3125 324.75 L 283.40625 324.75 L 283.40625 296.34375 C 283.40625 240.875 328.53125 195.75 384 195.75 C 428.832031 195.75 468.660156 225.976562 480.855469 269.257812 C 483.554688 278.824219 493.492188 284.394531 503.0625 281.699219 C 512.632812 279 518.203125 269.058594 515.507812 259.488281 C 498.953125 200.765625 444.875 159.75 384 159.75 C 308.683594 159.75 247.40625 221.027344 247.40625 296.34375 L 247.40625 325.066406 C 215.605469 328.226562 190.6875 355.132812 190.6875 387.75 L 190.6875 466.5 C 190.6875 544.660156 254.277344 608.25 332.4375 608.25 L 435.558594 608.25 C 513.71875 608.25 577.308594 544.660156 577.308594 466.5 L 577.308594 387.75 C 577.3125 353.011719 549.050781 324.75 514.3125 324.75 Z M 541.3125 466.5 C 541.3125 524.8125 493.871094 572.25 435.5625 572.25 L 332.4375 572.25 C 274.128906 572.25 226.6875 524.8125 226.6875 466.5 L 226.6875 387.75 C 226.6875 372.863281 238.800781 360.75 253.6875 360.75 L 514.3125 360.75 C 529.199219 360.75 541.3125 372.863281 541.3125 387.75 Z M 384 0 C 172.261719 0 0 172.261719 0 384 C 0 595.738281 172.261719 768 384 768 C 595.738281 768 768 595.738281 768 384 C 768 172.261719 595.738281 0 384 0 Z M 384 732 C 192.113281 732 36 575.886719 36 384 C 36 192.113281 192.113281 36 384 36 C 575.886719 36 732 192.113281 732 384 C 732 575.886719 575.886719 732 384 732 Z M 384 732 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n</svg>");
-;// CONCATENATED MODULE: ./src/icons/mode-night.svg
-/* harmony default export */ const mode_night = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"Layer_2\" data-name=\"Layer 2\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 616 420.11\">\n  <defs>\n    <style>\n      .cls-1 {\n        clip-path: url(#clippath);\n      }\n\n      .cls-2 {\n        fill: none;\n      }\n\n      .cls-2, .cls-3, .cls-4 {\n        stroke-width: 0px;\n      }\n\n      .cls-3 {\n        fill: #1b447a;\n      }\n\n      .cls-4 {\n        fill: #fff;\n      }\n    </style>\n    <clipPath id=\"clippath\">\n      <rect class=\"cls-2\" x=\"-1\" y=\"-.04\" width=\"1024\" height=\"420\"/>\n    </clipPath>\n  </defs>\n  <g class=\"cls-1\">\n    <path class=\"cls-3\" d=\"M404.52,419.8h-194.73C93.88,419.8-.09,325.78-.09,209.82S93.88-.15,209.79-.15h194.73c115.92,0,210.88,94.01,210.88,209.97s-94.97,209.97-210.88,209.97Z\"/>\n  </g>\n  <path class=\"cls-4\" d=\"M404.19,209.82c0,3.05-.07,6.09-.23,9.15s-.37,6.09-.67,9.12c-.31,3.04-.67,6.07-1.12,9.08s-.97,6.01-1.56,9.01c-.6,2.99-1.27,5.96-2,8.92-.73,2.96-1.55,5.89-2.44,8.81s-1.84,5.81-2.87,8.68c-1.03,2.87-2.12,5.72-3.29,8.53s-2.4,5.6-3.71,8.36c-1.31,2.76-2.67,5.48-4.11,8.17s-2.93,5.33-4.51,7.95-3.2,5.19-4.89,7.73c-1.69,2.53-3.45,5.03-5.27,7.48-1.81,2.45-3.69,4.85-5.61,7.21-1.93,2.36-3.93,4.67-5.97,6.93-2.05,2.25-4.15,4.47-6.31,6.61-2.16,2.15-4.36,4.27-6.61,6.31-2.27,2.05-4.57,4.04-6.92,5.97-2.36,1.93-4.76,3.81-7.21,5.63s-4.93,3.57-7.48,5.27c-2.53,1.69-5.11,3.32-7.72,4.89s-5.27,3.07-7.95,4.51-5.41,2.81-8.16,4.11-5.55,2.55-8.36,3.71c-2.81,1.17-5.67,2.27-8.53,3.29s-5.76,1.97-8.68,2.87-5.85,1.69-8.81,2.44c-2.96.73-5.93,1.4-8.92,2-2.99.6-6,1.12-9,1.56-3.01.45-6.04.83-9.07,1.12-3.04.31-6.07.52-9.12.68-3.04.15-6.09.23-9.13.23s-6.09-.08-9.15-.23c-3.04-.15-6.08-.37-9.12-.68-3.03-.29-6.05-.67-9.07-1.12-3.01-.44-6.01-.97-9-1.56s-5.96-1.27-8.92-2c-2.96-.75-5.89-1.56-8.81-2.44s-5.81-1.84-8.68-2.87c-2.87-1.03-5.72-2.12-8.53-3.29s-5.6-2.4-8.36-3.71c-2.76-1.31-5.48-2.67-8.16-4.11s-5.33-2.95-7.95-4.51-5.19-3.2-7.72-4.89c-2.53-1.69-5.03-3.45-7.48-5.27s-4.85-3.69-7.2-5.63c-2.36-1.93-4.67-3.93-6.92-5.97-2.27-2.05-4.47-4.15-6.61-6.31s-4.25-4.36-6.31-6.61c-2.05-2.27-4.04-4.57-5.97-6.93s-3.81-4.76-5.61-7.21c-1.81-2.45-3.57-4.95-5.27-7.48s-3.32-5.12-4.89-7.73-3.07-5.27-4.51-7.95c-1.44-2.69-2.81-5.41-4.11-8.17s-2.53-5.55-3.71-8.36-2.27-5.67-3.29-8.53-1.99-5.76-2.87-8.68c-.88-2.92-1.69-5.85-2.44-8.81-.73-2.96-1.4-5.93-2-8.92-.6-3-1.12-6-1.56-9.01s-.83-6.04-1.12-9.08c-.29-3.03-.52-6.07-.67-9.12s-.23-6.09-.23-9.15.07-6.09.23-9.15c.15-3.05.37-6.09.67-9.12.29-3.04.67-6.07,1.12-9.08s.97-6.03,1.56-9.01,1.27-5.96,2-8.92c.75-2.96,1.56-5.89,2.44-8.81s1.84-5.81,2.87-8.68,2.12-5.72,3.29-8.53,2.4-5.6,3.71-8.36,2.67-5.48,4.11-8.16,2.93-5.33,4.51-7.95,3.2-5.19,4.89-7.73,3.45-5.03,5.27-7.48c1.81-2.45,3.69-4.85,5.63-7.21s3.93-4.67,5.97-6.93,4.15-4.47,6.31-6.63,4.36-4.25,6.61-6.31,4.56-4.04,6.92-5.97c2.36-1.93,4.76-3.81,7.2-5.63,2.45-1.81,4.95-3.57,7.48-5.27s5.11-3.33,7.72-4.89,5.27-3.07,7.95-4.51,5.41-2.81,8.16-4.11c2.76-1.31,5.55-2.55,8.36-3.71,2.81-1.17,5.67-2.27,8.53-3.29s5.76-1.99,8.68-2.87,5.85-1.69,8.81-2.44c2.95-.73,5.93-1.4,8.92-2s5.99-1.12,9-1.56,6.04-.81,9.07-1.12c3.03-.29,6.07-.52,9.12-.67s6.09-.23,9.15-.23,6.09.07,9.13.23c3.05.15,6.08.37,9.12.67,3.03.31,6.05.67,9.07,1.12,3.01.45,6.01.97,9,1.56,2.99.6,5.96,1.27,8.92,2s5.89,1.55,8.81,2.44,5.81,1.84,8.68,2.87,5.72,2.12,8.53,3.29,5.6,2.4,8.36,3.71,5.48,2.67,8.16,4.11,5.33,2.93,7.95,4.51,5.19,3.2,7.72,4.89c2.53,1.69,5.03,3.45,7.48,5.27s4.85,3.69,7.21,5.63,4.67,3.93,6.92,5.97c2.25,2.05,4.47,4.15,6.61,6.31s4.25,4.36,6.31,6.63,4.04,4.57,5.97,6.93c1.93,2.36,3.81,4.76,5.61,7.21,1.81,2.45,3.57,4.93,5.27,7.48s3.32,5.11,4.89,7.73c1.57,2.61,3.07,5.27,4.51,7.95s2.81,5.41,4.11,8.16c1.31,2.76,2.53,5.55,3.71,8.36,1.17,2.81,2.27,5.67,3.29,8.53,1.03,2.87,1.97,5.76,2.87,8.68s1.69,5.85,2.44,8.81c.75,2.96,1.41,5.93,2,8.92.59,2.99,1.12,6,1.56,9.01.44,3.01.81,6.04,1.12,9.08.29,3.03.52,6.07.67,9.12.15,3.04.23,6.09.23,9.15h-.01Z\"/>\n  <path class=\"cls-3\" d=\"M147.16,222.56c-13.33-34.91-5.97-72.67,16.07-99.69-3.72.88-7.41,2.01-11.08,3.43-45.43,17.37-68.2,68.33-50.8,113.79,17.36,45.45,68.31,68.23,113.73,50.83,3.67-1.4,7.17-3.04,10.53-4.83-34.43-5.4-65.08-28.6-78.45-63.51h0Z\"/>\n  <path class=\"cls-3\" d=\"M261.45,169.01l23.6,7.47-23.6,7.48-7.48,23.57-7.44-23.57-23.6-7.48,23.6-7.47,7.44-23.59,7.48,23.59Z\"/>\n  <path class=\"cls-3\" d=\"M324.71,192.12l15.67,4.96-15.67,4.96-4.93,15.64-4.96-15.64-15.63-4.96,15.63-4.96,4.96-15.64,4.93,15.64Z\"/>\n  <path class=\"cls-3\" d=\"M288.52,221.9l11.03,3.48-11.03,3.51-3.48,11-3.49-11-11-3.51,11-3.48,3.49-11.03,3.48,11.03Z\"/>\n</svg>");
-;// CONCATENATED MODULE: ./src/icons/mode-day.svg
-/* harmony default export */ const mode_day = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"Layer_1\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" viewBox=\"0 0 616 420\">\n  <defs>\n    <style>\n      .cls-1 {\n        clip-path: url(#clippath);\n      }\n\n      .cls-2 {\n        fill: none;\n      }\n\n      .cls-2, .cls-3, .cls-4 {\n        stroke-width: 0px;\n      }\n\n      .cls-3 {\n        fill: #fff;\n      }\n\n      .cls-4 {\n        fill: #ffc107;\n      }\n    </style>\n    <clipPath id=\"clippath\">\n      <rect class=\"cls-2\" x=\"-408\" y=\"0\" width=\"1024\" height=\"420\"/>\n    </clipPath>\n  </defs>\n  <g class=\"cls-1\">\n    <path class=\"cls-4\" d=\"M405.6,420.18h-195.6C94.05,420.18,0,326.13,0,210.13S94.05.08,210,.08h195.63c115.95,0,209.96,94.06,209.96,210.05-.03,116-94.02,210.05-209.99,210.05Z\"/>\n  </g>\n  <path class=\"cls-3\" d=\"M587.98,210.13c0,3.05-.08,6.1-.22,9.15-.15,3.05-.38,6.09-.67,9.13-.3,3.03-.68,6.06-1.12,9.08-.45,3.02-.97,6.02-1.57,9.01-.59,2.99-1.26,5.97-2,8.93s-1.56,5.9-2.44,8.82c-.88,2.92-1.84,5.81-2.86,8.68-1.03,2.88-2.13,5.72-3.29,8.54s-2.4,5.6-3.71,8.36c-1.3,2.76-2.67,5.48-4.11,8.17-1.44,2.69-2.94,5.34-4.51,7.96s-3.2,5.19-4.9,7.73c-1.69,2.54-3.45,5.03-5.26,7.48-1.82,2.45-3.69,4.85-5.63,7.21-1.93,2.36-3.92,4.67-5.97,6.93-2.05,2.26-4.15,4.47-6.31,6.63-2.16,2.16-4.36,4.26-6.63,6.31-2.26,2.05-4.56,4.04-6.92,5.97-2.35,1.93-4.76,3.81-7.21,5.63-2.45,1.82-4.94,3.57-7.47,5.27-2.54,1.69-5.11,3.32-7.73,4.89s-5.27,3.07-7.95,4.51c-2.69,1.44-5.41,2.81-8.17,4.11-2.76,1.3-5.55,2.54-8.36,3.71-2.82,1.17-5.66,2.26-8.54,3.29-2.87,1.03-5.76,1.98-8.68,2.87-2.92.89-5.85,1.7-8.81,2.44-2.95.74-5.93,1.41-8.92,2.01s-5.99,1.11-9.01,1.56c-3.02.45-6.04.82-9.08,1.12-3.03.3-6.07.53-9.12.67-3.05.15-6.09.22-9.14.22s-6.09-.07-9.14-.22c-3.05-.15-6.08-.37-9.12-.67-3.04-.3-6.06-.67-9.07-1.12-3.02-.45-6.02-.97-9.01-1.56s-5.96-1.27-8.92-2.01-5.9-1.55-8.81-2.44-5.81-1.84-8.68-2.87c-2.88-1.03-5.72-2.13-8.53-3.29-2.82-1.17-5.6-2.41-8.36-3.71-2.76-1.31-5.48-2.68-8.17-4.11-2.69-1.44-5.34-2.94-7.95-4.51s-5.19-3.2-7.73-4.89c-2.53-1.7-5.03-3.45-7.47-5.27-2.45-1.81-4.85-3.69-7.21-5.63-2.35-1.94-4.67-3.93-6.92-5.97-2.26-2.05-4.47-4.15-6.63-6.31-2.16-2.16-4.26-4.36-6.3-6.63-2.05-2.26-4.04-4.57-5.97-6.93-1.94-2.35-3.81-4.76-5.63-7.21-1.82-2.45-3.57-4.94-5.27-7.48-1.7-2.54-3.33-5.11-4.9-7.73s-3.07-5.27-4.51-7.96c-1.44-2.69-2.81-5.42-4.11-8.17-1.31-2.76-2.54-5.55-3.71-8.36s-2.26-5.66-3.29-8.54c-1.03-2.87-1.98-5.77-2.86-8.68-.89-2.92-1.7-5.86-2.44-8.82-.74-2.96-1.41-5.93-2-8.93-.6-2.99-1.12-5.99-1.56-9.01-.45-3.02-.82-6.05-1.12-9.08-.3-3.04-.53-6.08-.67-9.13-.15-3.05-.23-6.09-.23-9.15s.08-6.1.22-9.15c.15-3.05.38-6.08.68-9.12.3-3.04.67-6.06,1.12-9.08.44-3.02.96-6.03,1.56-9.02.59-2.99,1.26-5.97,2-8.93.74-2.96,1.56-5.9,2.44-8.81.89-2.92,1.84-5.82,2.86-8.69,1.03-2.88,2.13-5.72,3.29-8.54s2.4-5.6,3.71-8.36c1.3-2.76,2.67-5.48,4.11-8.17,1.44-2.69,2.94-5.34,4.51-7.96,1.57-2.61,3.2-5.19,4.9-7.73,1.69-2.53,3.45-5.03,5.27-7.48,1.81-2.45,3.69-4.85,5.63-7.21,1.93-2.36,3.92-4.67,5.97-6.93,2.05-2.26,4.15-4.47,6.3-6.63s4.36-4.26,6.63-6.31c2.26-2.05,4.57-4.04,6.92-5.97,2.36-1.94,4.76-3.81,7.21-5.63s4.94-3.57,7.47-5.27c2.54-1.7,5.11-3.33,7.73-4.9s5.27-3.07,7.95-4.51c2.69-1.44,5.41-2.81,8.17-4.11,2.76-1.31,5.54-2.54,8.36-3.71,2.81-1.17,5.66-2.27,8.53-3.29,2.87-1.03,5.77-1.98,8.68-2.87s5.85-1.7,8.81-2.44c2.96-.74,5.93-1.41,8.92-2.01,2.99-.59,5.99-1.11,9.01-1.56s6.04-.82,9.07-1.12c3.04-.3,6.07-.52,9.12-.67s6.09-.22,9.14-.22,6.09.07,9.14.22,6.09.38,9.12.67c3.04.3,6.06.67,9.08,1.12s6.02.97,9.01,1.56c2.99.6,5.97,1.27,8.92,2.01,2.96.74,5.9,1.56,8.81,2.44,2.92.89,5.81,1.84,8.68,2.87,2.88,1.03,5.72,2.13,8.54,3.29,2.81,1.17,5.6,2.4,8.36,3.71,2.76,1.3,5.47,2.67,8.17,4.11,2.69,1.44,5.34,2.94,7.95,4.51s5.19,3.2,7.73,4.9c2.53,1.69,5.03,3.45,7.47,5.27s4.85,3.69,7.21,5.63c2.36,1.93,4.67,3.92,6.92,5.97,2.26,2.05,4.47,4.15,6.63,6.31s4.26,4.36,6.31,6.63,4.04,4.57,5.97,6.93c1.94,2.36,3.81,4.76,5.63,7.21,1.81,2.45,3.57,4.95,5.26,7.48,1.7,2.54,3.33,5.11,4.9,7.73,1.57,2.62,3.07,5.27,4.51,7.96,1.44,2.69,2.81,5.41,4.11,8.17,1.31,2.76,2.54,5.55,3.71,8.36s2.27,5.66,3.29,8.54c1.03,2.87,1.98,5.77,2.87,8.69.88,2.92,1.7,5.85,2.44,8.81s1.41,5.94,2,8.93c.6,2.99,1.12,5.99,1.57,9.02.44,3.02.82,6.04,1.12,9.08.3,3.04.52,6.07.67,9.12.15,3.05.22,6.1.22,9.15Z\"/>\n  <path class=\"cls-4\" d=\"M460.12,213.31c0,1.91-.09,3.82-.28,5.72-.19,1.9-.47,3.79-.84,5.67-.37,1.88-.84,3.73-1.39,5.56-.56,1.83-1.2,3.63-1.93,5.4-.73,1.77-1.55,3.49-2.45,5.18s-1.89,3.33-2.95,4.92c-1.06,1.59-2.2,3.13-3.41,4.6s-2.49,2.9-3.85,4.25-2.77,2.64-4.24,3.85-3.01,2.35-4.6,3.42c-1.59,1.06-3.23,2.04-4.91,2.94-1.69.91-3.42,1.72-5.18,2.45s-3.56,1.38-5.4,1.93c-1.83.55-3.68,1.02-5.56,1.39-1.88.38-3.77.66-5.67.84-1.91.19-3.81.28-5.72.28s-3.82-.09-5.72-.28c-1.9-.19-3.79-.47-5.67-.84-1.88-.37-3.73-.84-5.56-1.39-1.83-.56-3.63-1.2-5.4-1.93s-3.49-1.55-5.18-2.45c-1.68-.9-3.32-1.88-4.91-2.94-1.59-1.06-3.13-2.2-4.6-3.42s-2.89-2.49-4.24-3.85-2.64-2.77-3.85-4.25-2.35-3.01-3.41-4.6c-1.06-1.59-2.05-3.23-2.95-4.92s-1.72-3.41-2.45-5.18c-.73-1.77-1.38-3.56-1.93-5.4-.55-1.83-1.02-3.68-1.39-5.56-.38-1.88-.66-3.77-.84-5.67-.19-1.91-.28-3.81-.28-5.72s.09-3.82.28-5.73c.19-1.9.47-3.79.84-5.67.37-1.88.84-3.73,1.39-5.56.56-1.83,1.2-3.63,1.93-5.4.73-1.77,1.55-3.49,2.45-5.18s1.89-3.33,2.95-4.92c1.06-1.59,2.2-3.13,3.41-4.6s2.49-2.9,3.85-4.25,2.77-2.64,4.24-3.85,3.01-2.35,4.6-3.42c1.59-1.06,3.23-2.04,4.91-2.94,1.69-.9,3.42-1.72,5.18-2.45,1.77-.73,3.56-1.38,5.4-1.93,1.83-.55,3.68-1.02,5.56-1.39s3.77-.66,5.67-.84c1.91-.19,3.81-.28,5.72-.28s3.82.09,5.72.28c1.9.19,3.79.47,5.67.84s3.73.84,5.56,1.39c1.83.56,3.63,1.2,5.4,1.93,1.77.73,3.49,1.55,5.18,2.45,1.68.9,3.32,1.88,4.91,2.94,1.59,1.07,3.13,2.2,4.6,3.42s2.89,2.49,4.24,3.85,2.64,2.77,3.85,4.25,2.35,3.01,3.41,4.6c1.06,1.59,2.05,3.23,2.95,4.92s1.72,3.41,2.45,5.18c.73,1.77,1.38,3.56,1.93,5.4.55,1.83,1.02,3.68,1.39,5.56.38,1.88.66,3.77.84,5.67.19,1.91.28,3.81.28,5.73Z\"/>\n  <path class=\"cls-4\" d=\"M398.04,85.53h7.36v44.92h-7.36v-44.92Z\"/>\n  <path class=\"cls-4\" d=\"M316.77,117.9l5.64-4.74,28.88,34.4-5.64,4.74-28.88-34.4Z\"/>\n  <path class=\"cls-4\" d=\"M275.23,194.81l1.27-7.26,44.23,7.76-1.27,7.26-44.23-7.76Z\"/>\n  <path class=\"cls-4\" d=\"M289.33,274.16l38.85-22.52,3.69,6.38-38.86,22.52-3.69-6.38Z\"/>\n  <path class=\"cls-4\" d=\"M354.77,332.22l15.28-42.24,6.92,2.51-15.28,42.24-6.92-2.51Z\"/>\n  <path class=\"cls-4\" d=\"M426.77,292.35l6.92-2.54,15.45,42.18-6.92,2.53-15.45-42.17Z\"/>\n  <path class=\"cls-4\" d=\"M471.7,257.73l3.67-6.39,38.95,22.35-3.67,6.39-38.95-22.35Z\"/>\n  <path class=\"cls-4\" d=\"M482.57,195.06l44.19-7.94,1.3,7.25-44.19,7.94-1.3-7.25Z\"/>\n  <path class=\"cls-4\" d=\"M451.9,147.28l28.74-34.52,5.66,4.71-28.73,34.52-5.66-4.71Z\"/>\n</svg>");
-;// CONCATENATED MODULE: ./src/chatbots/Pi.ts
-class PiAIChatbot {
-    getPromptTextInputSelector() {
-        return "textarea[enterkeyhint]";
-    }
-    getPromptSubmitButtonSelector() {
-        return ".pi-submit-button"; // replace with actual submit button selector for pi.ai
-    }
-    getAudioControlsSelector() {
-        return "audio + div";
-    }
-    getAudioOutputButtonSelector() {
-        // audio button is the last button element in the audio controls container
-        return "#saypi-audio-controls > div > div.relative.flex.items-center.justify-end.self-end.p-2 > button";
-    }
-    getControlPanelSelector() {
-        return ".flex.items-center.grow";
-    }
-    getSidePanelSelector() {
-        return "div.hidden.w-22.flex-col.items-center.gap-1.border-r";
-    }
-    getChatPath() {
-        return "/discover";
-    }
-    isChatablePath(path) {
-        // true if path starts with /talk or /discover
-        return path.includes("/talk") || path.includes("/discover");
-    }
-    getVoiceMenuSelector() {
-        return "div.t-action-m";
-    }
-    getVoiceSettingsSelector() {
-        return "div.mx-auto.w-full.px-6.py-10 > div.grid.grid-cols-2.gap-4";
-    }
-    getChatHistorySelector() {
-        return "div.t-body-chat";
-    }
-    getDiscoveryPanelSelector() {
-        // note: depends on the side panel having already been identified
-        return "#saypi-side-panel + div";
-    }
-}
-
-
-;// CONCATENATED MODULE: ./src/chatbots/ChatbotService.ts
-
-/**
- * This is the single place a concrete chatbot is created.
- * All other parts of the application should use this service to get a chatbot.
- */
-class ChatbotService {
-    static getChatbot() {
-        return new PiAIChatbot();
-    }
-}
-
-;// CONCATENATED MODULE: ./src/ButtonModule.js
-function ButtonModule_typeof(o) { "@babel/helpers - typeof"; return ButtonModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, ButtonModule_typeof(o); }
-function ButtonModule_regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ ButtonModule_regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == ButtonModule_typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(ButtonModule_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
-function ButtonModule_asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-function ButtonModule_asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { ButtonModule_asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { ButtonModule_asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-function ButtonModule_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = ButtonModule_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-function ButtonModule_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return ButtonModule_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return ButtonModule_arrayLikeToArray(o, minLen); }
-function ButtonModule_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-function ButtonModule_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function ButtonModule_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, ButtonModule_toPropertyKey(descriptor.key), descriptor); } }
-function ButtonModule_createClass(Constructor, protoProps, staticProps) { if (protoProps) ButtonModule_defineProperties(Constructor.prototype, protoProps); if (staticProps) ButtonModule_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function ButtonModule_toPropertyKey(arg) { var key = ButtonModule_toPrimitive(arg, "string"); return ButtonModule_typeof(key) === "symbol" ? key : String(key); }
-function ButtonModule_toPrimitive(input, hint) { if (ButtonModule_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (ButtonModule_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var ButtonModule = /*#__PURE__*/function () {
-  /**
-   * Initializes the button module with dependencies
-   * @param {Chatbot} chatbot - The chatbot instance (dependency injection)
-   */
-  function ButtonModule(chatbot) {
-    ButtonModule_classCallCheck(this, ButtonModule);
-    this.userPreferences = UserPreferenceModule.getInstance();
-    this.chatbot = chatbot;
-    this.immersionService = new ImmersionService(chatbot);
-    this.sayPiActor = src_StateMachineService.actor; // the Say, Pi state machine
-    this.screenLockActor = src_StateMachineService.screenLockActor;
-    this.themeToggleActor = src_StateMachineService.themeToggleActor;
-    // Binding methods to the current instance
-    this.registerOtherEvents();
-
-    // track the frequency of bug #26
-    this.submissionsWithoutAnError = 0;
-
-    // track whether a call is active, so that new button instances can be initialized correctly
-    this.callIsActive = false;
-  }
-  ButtonModule_createClass(ButtonModule, [{
-    key: "registerOtherEvents",
-    value: function registerOtherEvents() {
-      var _this = this;
-      EventBus.on("saypi:autoSubmit", function () {
-        _this.handleAutoSubmit();
-      });
-      EventBus.on("audio:frame", function (probabilities) {
-        _this.handleAudioFrame(probabilities);
-      });
-    }
-
-    // Function to create a new button
-  }, {
-    key: "createButton",
-    value: function createButton(textLabel, onClickCallback) {
-      var button = document.createElement("button");
-      if (textLabel) {
-        button.textContent = textLabel;
-      }
-      if (onClickCallback) {
-        button.onclick = onClickCallback;
-      }
-      return button;
-    }
-
-    // Function to style a given button
-  }, {
-    key: "styleButton",
-    value: function styleButton(button, styles) {
-      for (var key in styles) {
-        if (styles.hasOwnProperty(key)) {
-          button.style[key] = styles[key];
-        }
-      }
-    }
-  }, {
-    key: "addTalkIcon",
-    value: function addTalkIcon(container) {
-      var _this2 = this;
-      this.updateIconContent(container);
-      window.matchMedia("(max-width: 768px)").addListener(function () {
-        _this2.updateIconContent(container);
-      });
-      this.setupViewObserver(container);
-    }
-  }, {
-    key: "updateIconContent",
-    value: function updateIconContent(iconContainer) {
-      if (ImmersionService.isViewImmersive()) {
-        iconContainer.innerHTML = this.getRectanglesSVG();
-      }
-      iconContainer.classList.add("saypi-icon");
-    }
-
-    /**
-     * Monitors an element for changes in the view class
-     * i.e. when the view mode is toggled between 'immersive' and 'desktop'
-     * and updates the icon content accordingly (why?)
-     * @param {*} container - The HTML element to hold the icon
-     */
-  }, {
-    key: "setupViewObserver",
-    value: function setupViewObserver(container) {
-      var _this3 = this;
-      var targetNode = document.documentElement; // The <html> element
-
-      var config = {
-        attributes: true,
-        attributeFilter: ["class"]
-      };
-      var callback = function callback(mutationsList, observer) {
-        var _iterator = ButtonModule_createForOfIteratorHelper(mutationsList),
-          _step;
-        try {
-          for (_iterator.s(); !(_step = _iterator.n()).done;) {
-            var mutation = _step.value;
-            if (mutation.type === "attributes") {
-              if (mutation.attributeName === "class") {
-                if (document.documentElement.classList.contains("immersive-view")) {
-                  // view mode changed to 'immersive'
-                  console.log("immersive view");
-                  _this3.updateIconContent(container);
-                } else {
-                  // view mode changed to 'desktop'
-                  console.log("desktop view");
-                  _this3.updateIconContent(container);
-                }
-              }
-            }
-          }
-        } catch (err) {
-          _iterator.e(err);
-        } finally {
-          _iterator.f();
-        }
-      };
-      var observer = new MutationObserver(callback);
-
-      // Start observing the target node for configured mutations
-      observer.observe(targetNode, config);
-
-      // Later, you can stop observing by calling:
-      // observer.disconnect();
-    }
-
-    // Simulate an "Enter" keypress event on a form
-  }, {
-    key: "simulateFormSubmit",
-    value: function simulateFormSubmit() {
-      var submitButton = document.getElementById("saypi-submitButton");
-      if (submitButton) {
-        if (submitErrorHandler.detectSubmitError()) {
-          // track how often this happens
-          console.error("Autosubmit failed after ".concat(this.submissionsWithoutAnError, " turns."));
-          this.submissionsWithoutAnError = 0;
-          submitErrorHandler.handleSubmitError();
-        } else {
-          this.submissionsWithoutAnError++;
-          submitButton.click();
-        }
-      } else {
-        /* hit enter key in the prompt textarea, might not work as expected on "new ui layout" */
-        var textarea = document.getElementById("saypi-prompt");
-        var enterEvent = new KeyboardEvent("keydown", {
-          bubbles: true,
-          key: "Enter",
-          keyCode: 13,
-          which: 13
         });
-        textarea.dispatchEvent(enterEvent);
-      }
-    }
-
-    // Function to handle auto-submit based on the user preference
-  }, {
-    key: "handleAutoSubmit",
-    value: function () {
-      var _handleAutoSubmit = ButtonModule_asyncToGenerator( /*#__PURE__*/ButtonModule_regeneratorRuntime().mark(function _callee() {
-        var autoSubmitEnabled, isImmersive;
-        return ButtonModule_regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) switch (_context.prev = _context.next) {
-            case 0:
-              _context.next = 2;
-              return this.userPreferences.getAutoSubmit();
-            case 2:
-              autoSubmitEnabled = _context.sent;
-              isImmersive = ImmersionService.isViewImmersive(); // must auto-submit in immersive mode
-              if (autoSubmitEnabled || isImmersive) {
-                this.simulateFormSubmit();
-              } else {
-                console.log("Autosubmit is off");
-              }
-            case 5:
-            case "end":
-              return _context.stop();
-          }
-        }, _callee, this);
-      }));
-      function handleAutoSubmit() {
-        return _handleAutoSubmit.apply(this, arguments);
-      }
-      return handleAutoSubmit;
-    }()
-  }, {
-    key: "createExitButton",
-    value: function createExitButton(container) {
-      var position = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-      var label = i18n("exitImmersiveModeLong");
-      var button = this.createButton("", function () {
-        ImmersionService.exitImmersiveMode();
-      });
-      button.type = "button";
-      button.className = "saypi-exit-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
-      button.setAttribute("aria-label", label);
-      button.setAttribute("title", label);
-      button.innerHTML = exit;
-      addChild(container, button, position);
-      return button;
-    }
-  }, {
-    key: "createEnterButton",
-    value: function createEnterButton(container) {
-      var _this4 = this;
-      var position = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-      var label = i18n("enterImmersiveModeLong");
-      var button = this.createButton("", function () {
-        _this4.immersionService.enterImmersiveMode();
-      });
-      button.type = "button";
-      button.className = "saypi-enter-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
-      button.setAttribute("aria-label", label);
-      button.setAttribute("title", label);
-      button.innerHTML = maximize;
-      // insert the button at the specified position
-      addChild(container, button, position);
-      return button;
-    }
-  }, {
-    key: "createImmersiveModeButton",
-    value: function createImmersiveModeButton(container) {
-      var _this5 = this;
-      var position = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-      var label = i18n("enterImmersiveModeShort");
-      var title = i18n("enterImmersiveModeLong");
-      var button = document.createElement("a");
-      button.onclick = function () {
-        _this5.immersionService.enterImmersiveMode();
-      };
-      button.className = "immersive-mode-button saypi-control-button flex h-16 w-16 flex-col items-center justify-center rounded-xl text-neutral-900 hover:bg-neutral-50-hover hover:text-neutral-900-hover active:bg-neutral-50-tap active:text-neutral-900-tap gap-0.5";
-      button.setAttribute("aria-label", title);
-      button.setAttribute("title", title);
-      button.innerHTML = immersive;
-      var labelDiv = document.createElement("div");
-      labelDiv.textContent = label;
-      labelDiv.className = "t-label";
-      button.appendChild(labelDiv);
-      addChild(container, button, position);
-      return button;
-    }
-  }, {
-    key: "createCallButton",
-    value: function createCallButton(container) {
-      var position = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-      var button = this.createButton();
-      button.id = "saypi-callButton";
-      button.type = "button";
-      button.className = "call-button fixed rounded-full bg-cream-550 enabled:hover:bg-cream-650 m-2";
-      if (this.callIsActive) {
-        this.callActive(button);
-      } else {
-        this.callInactive(button);
-      }
-      addChild(container, button, position);
-      if (this.callIsActive) {
-        // if the call is active, start the glow animation once added to the DOM
-        AnimationModule.startAnimation("glow");
-      }
-      return button;
-    }
-  }, {
-    key: "updateCallButtonColor",
-    value: function updateCallButtonColor(color) {
-      var callButton = document.getElementById("saypi-callButton");
-      // find first path element descendant of the call button's svg element child
-      var path = callButton === null || callButton === void 0 ? void 0 : callButton.querySelector("svg path");
-      if (path) {
-        // set the fill color of the path element
-        path.style.fill = color;
-      }
-    }
-  }, {
-    key: "updateCallButtonGlowColor",
-    value: function updateCallButtonGlowColor(color) {
-      // set the `--glow-color` CSS variable on the call button
-      var callButton = document.getElementById("saypi-callButton");
-      if (callButton) {
-        callButton.style.setProperty("--glow-color", color);
-      }
-    }
-    /**
-     * Interpolates between a base colour and a peak colour based on intensity.
-     *
-     * @param {string} baseColor - The base colour in hexadecimal format.
-     * @param {string} peakColor - The peak colour in hexadecimal format.
-     * @param {number} intensity - The intensity factor (0.0 to 1.0).
-     * @returns {string} The interpolated colour in hexadecimal format.
-     */
-  }, {
-    key: "interpolateColor",
-    value: function interpolateColor(baseColor, peakColor, intensity) {
-      // Ensure intensity is within the range of 0.0 to 1.0
-      intensity = Math.max(0, Math.min(1, intensity));
-
-      // Convert the base and peak colours from hexadecimal to RGB
-      var baseRed = parseInt(baseColor.substring(1, 3), 16);
-      var baseGreen = parseInt(baseColor.substring(3, 5), 16);
-      var baseBlue = parseInt(baseColor.substring(5, 7), 16);
-      var peakRed = parseInt(peakColor.substring(1, 3), 16);
-      var peakGreen = parseInt(peakColor.substring(3, 5), 16);
-      var peakBlue = parseInt(peakColor.substring(5, 7), 16);
-
-      // Interpolate each colour component
-      var newRed = Math.round(baseRed + (peakRed - baseRed) * intensity);
-      var newGreen = Math.round(baseGreen + (peakGreen - baseGreen) * intensity);
-      var newBlue = Math.round(baseBlue + (peakBlue - baseBlue) * intensity);
-
-      // Convert the interpolated RGB back to hexadecimal
-      return "#".concat(newRed.toString(16).padStart(2, "0")).concat(newGreen.toString(16).padStart(2, "0")).concat(newBlue.toString(16).padStart(2, "0"));
-    }
-
-    /**
-     *
-     * @param { isSpeech: number; notSpeech: number } probabilities
-     */
-  }, {
-    key: "handleAudioFrame",
-    value: function handleAudioFrame(probabilities) {
-      var baseColor = "#ffd1dc"; // sunset-peach
-      var peakColor = "#FF7F50"; // coral
-      var updatedColor = this.interpolateColor(baseColor, peakColor, probabilities.isSpeech);
-      this.updateCallButtonGlowColor(updatedColor);
-    }
-  }, {
-    key: "callStarting",
-    value: function callStarting(callButton) {
-      var _this6 = this;
-      if (!callButton) {
-        callButton = document.getElementById("saypi-callButton");
-      }
-      if (callButton) {
-        callButton.innerHTML = call_starting;
-        var label = i18n("callStarting");
-        callButton.setAttribute("aria-label", label);
-        callButton.setAttribute("title", label);
-        callButton.onclick = function () {
-          _this6.sayPiActor.send("saypi:hangup");
-        };
-      }
-    }
-  }, {
-    key: "callActive",
-    value: function callActive(callButton) {
-      var _this7 = this;
-      if (!callButton) {
-        callButton = document.getElementById("saypi-callButton");
-      }
-      if (callButton) {
-        var label = i18n("callInProgress");
-        callButton.innerHTML = hangup;
-        callButton.setAttribute("aria-label", label);
-        callButton.setAttribute("title", label);
-        callButton.onclick = function () {
-          _this7.sayPiActor.send("saypi:hangup");
-        };
-        callButton.classList.add("active");
-      }
-      this.callIsActive = true;
-    }
-  }, {
-    key: "callInactive",
-    value: function callInactive(callButton) {
-      var _this8 = this;
-      if (!callButton) {
-        callButton = document.getElementById("saypi-callButton");
-      }
-      if (callButton) {
-        callButton.innerHTML = call;
-        var label = i18n("callNotStarted");
-        callButton.setAttribute("aria-label", label);
-        callButton.setAttribute("title", label);
-        callButton.onclick = function () {
-          _this8.sayPiActor.send("saypi:call");
-        };
-        callButton.classList.remove("active");
-      }
-      this.callIsActive = false;
-    }
-  }, {
-    key: "callError",
-    value: function callError(callButton) {
-      if (!callButton) {
-        callButton = document.getElementById("saypi-callButton");
-      }
-      if (callButton) {
-        var label = i18n("callError");
-        callButton.innerHTML = hangup_minced;
-        callButton.setAttribute("aria-label", label);
-        callButton.setAttribute("title", label);
-      }
-    }
-  }, {
-    key: "disableCallButton",
-    value: function disableCallButton() {
-      var callButton = document.getElementById("saypi-callButton");
-      if (callButton) {
-        callButton.classList.add("disabled");
-        // disable the call action, but always allow hangup
-        if (!callButton.classList.contains("active")) {
-          callButton.disabled = true;
-        }
-      }
-    }
-  }, {
-    key: "enableCallButton",
-    value: function enableCallButton() {
-      var callButton = document.getElementById("saypi-callButton");
-      if (callButton) {
-        callButton.classList.remove("disabled");
-        callButton.disabled = false;
-      }
-    }
-  }, {
-    key: "createLockButton",
-    value: function createLockButton(container) {
-      var _this9 = this;
-      var label = i18n("lockButton");
-      var button = document.createElement("button");
-      button.id = "saypi-lockButton";
-      button.type = "button";
-      button.className = "lock-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
-      button.setAttribute("aria-label", label);
-      button.setAttribute("title", label);
-      button.innerHTML = lock;
-      if (container) {
         container.appendChild(button);
-        button.onclick = function () {
-          _this9.screenLockActor.send("lock");
-        };
-      }
-      return button;
     }
-  }, {
-    key: "createUnlockButton",
-    value: function createUnlockButton(container) {
-      var _this10 = this;
-      var label = i18n("unlockButton");
-      var button = document.createElement("button");
-      button.id = "saypi-unlockButton";
-      button.type = "button";
-      button.className = "lock-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
-      button.setAttribute("aria-label", label);
-      button.setAttribute("title", label);
-      button.innerHTML = unlock;
-      if (container) {
-        container.appendChild(button);
-        var pressTimer;
-        var originalMessage = i18n("unlockInstruction");
-        var continueUnlockingMessage = i18n("continueUnlocking");
-        button.onmousedown = button.ontouchstart = function () {
-          var instruction = document.getElementById("saypi-unlock-instruction");
-          if (instruction) {
-            instruction.textContent = continueUnlockingMessage;
-          }
-          pressTimer = setTimeout(function () {
-            _this10.screenLockActor.send("unlock");
-          }, 1500); // Adjust the duration (in milliseconds) for a long-press
-        };
-
-        button.onmouseup = button.ontouchend = function () {
-          // reset the message
-          var instruction = document.getElementById("saypi-unlock-instruction");
-          if (instruction) {
-            instruction.textContent = originalMessage;
-          }
-          clearTimeout(pressTimer);
-        };
-      }
-      return button;
+    createCostElementForMenu() {
+        const costElement = document.createElement("button");
+        costElement.classList.add("saypi-cost", "tooltip");
+        costElement.classList.add("flex", "h-12", "w-full", "items-center", "justify-between", "rounded", "px-2.5", "hover:bg-neutral-50-hover", "active:bg-neutral-50-tap", "active:text-primary-700");
+        return costElement;
     }
-  }, {
-    key: "getRectanglesSVG",
-    value: function getRectanglesSVG() {
-      var theme = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "light";
-      if (theme === "dark") {
-        return rectangles_moonlight;
-      } else {
-        return rectangles;
-      }
+    createCostElementForMessage() {
+        const costElement = document.createElement("span");
+        costElement.classList.add("saypi-cost", "tooltip", "tooltip-wide");
+        return costElement;
     }
-  }, {
-    key: "toggleTheme",
-    value: function toggleTheme() {
-      this.themeToggleActor.send("toggle");
-    }
-
     /**
-     * Applies the theme to the button icons
-     * @param {string} theme: "dark" | "light"
+     * Add the cost of the TTS stream to the chat message
+     * @param container The menu element to add the cost basis to
+     * @param characterCount The number of characters in the message
      */
-  }, {
-    key: "applyTheme",
-    value: function applyTheme(theme) {
-      var button = document.getElementById("saypi-themeToggleButton");
-      if (button) {
-        if (theme === "dark") {
-          button.innerHTML = mode_night;
-          var label = i18n("toggleThemeToLightMode");
-          button.setAttribute("aria-label", label);
-          button.setAttribute("title", label);
-        } else if (theme === "light") {
-          button.innerHTML = mode_day;
-          var _label = i18n("toggleThemeToDarkMode");
-          button.setAttribute("aria-label", _label);
-          button.setAttribute("title", _label);
+    addCostBasis(container, charge, containerIsMenu = false) {
+        const cost = charge.cost;
+        if (cost === undefined) {
+            // cost should not be undefined, but just in case it is, don't display anything
+            return;
         }
-      }
-      var iconContainer = document.querySelector(".saypi-icon");
-      if (iconContainer) {
-        iconContainer.innerHTML = this.getRectanglesSVG(theme);
-      }
+        const costBasisContainer = document.createElement("div");
+        costBasisContainer.classList.add("saypi-cost-container", "tts-item");
+        const currency = i18n("currencyUSDAbbreviation");
+        const costElement = containerIsMenu
+            ? this.createCostElementForMenu()
+            : this.createCostElementForMessage();
+        let chargeExplanation;
+        if (cost) {
+            chargeExplanation = i18n("ttsCostExplanation", [
+                cost.toFixed(2),
+                currency,
+                "Say, Pi", // provider name
+            ]);
+        }
+        else {
+            chargeExplanation = i18n("ttsCostExplanationFree");
+            costElement.classList.add("cost-free");
+        }
+        costElement.setAttribute("aria-label", chargeExplanation);
+        costElement.innerHTML = `Cost: <span class="price">$<span class="value">${cost.toFixed(2)}</span></span>`;
+        const verticalSpacer = document.createElement("div");
+        verticalSpacer.classList.add("vertical-separator");
+        // insert as first child of cost element
+        costElement.insertBefore(verticalSpacer, costElement.firstChild);
+        costBasisContainer.appendChild(costElement);
+        container.appendChild(costBasisContainer);
+        // add a link to the pricing page
+        const pricingLink = document.createElement("a");
+        pricingLink.href = "https://www.saypi.ai/pricing";
+        pricingLink.target = "_blank";
+        pricingLink.classList.add("saypi-pricing-link", "tooltip", "tts-item");
+        const tooltipText = i18n("ttsCostExplanationSayPi", ["Say, Pi"]);
+        pricingLink.setAttribute("aria-label", tooltipText);
+        const providerLogo = document.createElement("img");
+        providerLogo.classList.add("flair", "audio-provider", "saypi-logo");
+        providerLogo.src = getResourceUrl("icons/logos/saypi.png");
+        providerLogo.alt = "Say, Pi logo";
+        pricingLink.appendChild(providerLogo);
+        costBasisContainer.appendChild(pricingLink);
+        return costBasisContainer;
     }
-  }, {
-    key: "createThemeToggleButton",
-    value: function createThemeToggleButton(container) {
-      var _this11 = this;
-      var position = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-      var label = i18n("toggleThemeToDarkMode");
-      var button = document.createElement("button");
-      button.id = "saypi-themeToggleButton";
-      button.type = "button";
-      button.className = "theme-toggle-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650";
-      button.setAttribute("aria-label", label);
-      button.setAttribute("title", label);
-      button.innerHTML = mode_day;
-      if (container) {
-        addChild(container, button, position);
-        button.onclick = function () {
-          _this11.toggleTheme();
-        };
-      }
-      return button;
+    addPoweredBy(container, voice, insertBefore) {
+        let poweredByElement = container.querySelector(".saypi-powered-by");
+        if (poweredByElement) {
+            return;
+        }
+        poweredByElement = document.createElement("div");
+        const ttsEngine = voice.powered_by;
+        const ttsLabel = i18n("ttsPoweredBy", ttsEngine);
+        poweredByElement.classList.add("saypi-powered-by", "tooltip", "tts-item", "tooltip-wide");
+        poweredByElement.setAttribute("aria-label", ttsLabel);
+        const logoImageExt = ttsEngine === "inflection.ai" ? "png" : "svg"; // can't find a good svg for inflection.ai
+        const logoImageUrl = getResourceUrl(`icons/logos/${ttsEngine.toLowerCase()}.${logoImageExt}`);
+        poweredByElement.innerHTML = `<img src="${logoImageUrl}" class="h-4 w-4 inline-block">`;
+        if (insertBefore) {
+            container.insertBefore(poweredByElement, insertBefore);
+        }
+        else {
+            container.appendChild(poweredByElement);
+        }
     }
-  }]);
-  return ButtonModule;
-}(); // Singleton
+    updateCostBasis(container, charge) {
+        const costElement = container.querySelector(".saypi-cost");
+        if (costElement) {
+            const valueElement = costElement.querySelector(".value");
+            valueElement.textContent = charge.cost.toFixed(2);
+            if (charge.cost) {
+                const currency = i18n("currencyUSDAbbreviation");
+                costElement.setAttribute("aria-label", i18n("ttsCostExplanation", [charge.cost.toFixed(2), currency]));
+                costElement.classList.remove("cost-free");
+            }
+            else {
+                costElement.setAttribute("aria-label", i18n("ttsCostExplanationFree"));
+                costElement.classList.add("cost-free");
+            }
+        }
+    }
+    /**
+     * Start streaming the utterance's audio output immediately
+     * @param utterance The utterance to stream
+     * @param delayMs The number of milliseconds to wait before starting the stream
+     */
+    autoplaySpeech(utterance, delayMs = 0) {
+        // wait a beat, then start streaming the utterance
+        setTimeout(() => {
+            this.speechSynthesis.speak(utterance);
+        }, delayMs);
+    }
+}
 
-var buttonModule = new ButtonModule(ChatbotService.getChatbot());
+;// CONCATENATED MODULE: ./src/dom/Observation.ts
+class Observation {
+    constructor(target, id, found, isNew, decorated, decorations = []) {
+        this.target = target;
+        this.id = id;
+        this.found = found;
+        this.isNew = isNew;
+        this.decorated = decorated;
+        this.decorations = decorations;
+    }
+    // Whether the observed element is fully loaded and ready to be used
+    isReady() {
+        return this.found && this.isNew && this.decorated;
+    }
+    // Whether the observed element has been found, but not yet decorated with the extension's enhancements
+    isUndecorated() {
+        return this.found && this.isNew && !this.decorated;
+    }
+    // Where the element does not exist in the DOM
+    static notFound(id) {
+        return new Observation(null, id, false, false, false);
+    }
+    // Where the element exists in the DOM, and has already been decorated with the extension's enhancements
+    static foundAlreadyDecorated(id, element) {
+        return new Observation(element, id, true, false, true);
+    }
+    // Where the element exists in the DOM, and has newly been decorated with the extension's enhancements
+    static foundAndDecorated(obs, decoration) {
+        const decor = decoration
+            ? [...obs.decorations, decoration]
+            : [obs.decorations];
+        return new Observation(obs.target, obs.id, obs.found, obs.isNew, true, decor);
+    }
+    // Where the element exists in the DOM, but has not been decorated with the extension's enhancements
+    static foundUndecorated(id, element) {
+        return new Observation(element, id, true, true, false);
+    }
+}
+
 ;// CONCATENATED MODULE: ./src/tts/SpeechHistoryModule.ts
 var SpeechHistoryModule_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -36082,6 +35830,7 @@ var SpeechHistoryModule_awaiter = (undefined && undefined.__awaiter) || function
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+
 class SpeechRecord {
     constructor(hash, utterance, charge) {
         this.hash = hash;
@@ -36132,12 +35881,14 @@ class SpeechHistoryModule {
             try {
                 const speechHistory = (yield this.getStorageData("speechHistory")) || {};
                 let utterance = speechHistory[hash];
-                if (!utterance) {
+                if (!utterance && !isPlaceholderUtterance(speech.utterance)) {
                     speechHistory[hash] = speech.utterance;
                     yield this.setStorageData({ speechHistory: speechHistory });
+                    console.debug(`Saved speech with hash ${hash} to history.`, speech.utterance.toString());
                 }
                 if (speech.charge) {
                     yield this.addChargeToHistory(hash, speech.charge);
+                    console.debug(`Saved charge with hash ${hash} to history.`, speech.charge.cost);
                 }
             }
             catch (error) {
@@ -36155,12 +35906,18 @@ class SpeechHistoryModule {
         return SpeechHistoryModule_awaiter(this, void 0, void 0, function* () {
             try {
                 const speechHistory = (yield this.getStorageData("speechHistory")) || {};
-                const utterance = speechHistory[hash] || null;
+                const utteranceObj = speechHistory[hash] || null;
                 const chargeHistory = (yield this.getStorageData("chargeHistory")) || {};
-                const charge = chargeHistory[hash];
-                if (utterance) {
-                    console.debug(`Found utterance with hash ${hash} in speech history.`, utterance);
-                    return new SpeechRecord(hash, utterance, charge);
+                if (utteranceObj && !isPlaceholderUtterance(utteranceObj)) {
+                    console.debug(`Found utterance with hash ${hash} in speech history.`, utteranceObj);
+                    // Use the factory to create an instance of the appropriate class
+                    const utterance = UtteranceFactory.createUtterance(utteranceObj);
+                    const charge = chargeHistory[hash]; // the charge is optional for a speech record
+                    if (charge) {
+                        console.debug(`Found charge with hash ${hash} in charge history.`);
+                        return new SpeechRecord(hash, utterance, charge);
+                    }
+                    return new SpeechRecord(hash, utterance);
                 }
             }
             catch (error) {
@@ -36225,6 +35982,406 @@ class SpeechHistoryModule {
         });
     }
 }
+
+;// CONCATENATED MODULE: ./src/dom/MessageElements.ts
+var MessageElements_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+
+
+
+
+
+
+
+
+
+class PopupMenu {
+    constructor(message, element, speech, ttsControls) {
+        this.message = message;
+        this.speech = speech;
+        this.ttsControls = ttsControls;
+        this._element = element;
+    }
+    get element() {
+        return this._element;
+    }
+    decorate() {
+        this._element.classList.add("popup-menu");
+        this.ttsControls.addCopyButton(this.message, this._element, true);
+        if (this.speech) {
+            this.decorateSpeech(this.speech);
+        }
+    }
+    decorateSpeech(speech) {
+        this.ttsControls.addSpeechButton(speech, this._element, null, true);
+    }
+    static find(chatbot, searchRoot) {
+        let popupMenu = searchRoot.querySelector(".popup-menu");
+        if (popupMenu) {
+            return Observation.foundAlreadyDecorated(".popup-menu", popupMenu);
+        }
+        popupMenu = searchRoot.querySelector(".shadow-input"); // TODO: generalize with Chatbot parameter
+        if (popupMenu) {
+            return Observation.foundUndecorated(".popup-menu", popupMenu);
+        }
+        return Observation.notFound(".popup-menu");
+    }
+}
+class AssistantResponse {
+    constructor(element, includeInitialText = true) {
+        this.stable = false;
+        this.includeInitialText = true; // stable text may be called on completed messages, so include the initial text unless streaming
+        this._element = element;
+        this.includeInitialText = includeInitialText;
+        this.ttsControlsModule = TTSControlsModule.getInstance();
+        this.decorate();
+        this.messageControls = this.decorateControls();
+    }
+    decorate() {
+        return MessageElements_awaiter(this, void 0, void 0, function* () {
+            this._element.classList.add("chat-message", "assistant-message");
+            yield this.decoratedContent();
+        });
+    }
+    /**
+     * Waits for the content of the chat message to load and returns it
+     * The content is the main text of the chat message, excluding any metadata or buttons
+     * @returns Promise<HTMLElement> - the content of the chat message
+     */
+    decoratedContent() {
+        return MessageElements_awaiter(this, void 0, void 0, function* () {
+            const content = this._element.querySelector(".content");
+            if (content) {
+                // content already found and decorated
+                return content;
+            }
+            const wfull = this._element.querySelector(this.contentSelector);
+            if (wfull) {
+                // content found but not decorated yet
+                wfull.classList.add("content");
+                return wfull;
+            }
+            // content not found, wait for it to load
+            return new Promise((resolve) => {
+                const observer = new MutationObserver((mutations) => {
+                    for (const mutation of mutations) {
+                        for (const node of [...mutation.addedNodes]) {
+                            if (node instanceof HTMLElement) {
+                                const addedElement = node;
+                                const classNameFromContentSelector = this.contentSelector.split(".")[1];
+                                if (addedElement.classList.contains(classNameFromContentSelector)) {
+                                    addedElement.classList.add("content");
+                                    observer.disconnect();
+                                    resolve(addedElement);
+                                }
+                            }
+                        }
+                    }
+                });
+                observer.observe(this._element, { childList: true, subtree: true });
+            });
+        });
+    }
+    /**
+     * Get the text content of the chat message,
+     * as it is at the time of calling this method, which may not be completely loaded if the response is still streaming
+     * Get stableText() to get the finished text content of the chat message
+     */
+    get text() {
+        const contentNode = this._element.querySelector(".content");
+        if (contentNode) {
+            const content = contentNode;
+            const textContent = content.innerText || content.textContent || "";
+            return textContent.replace(/\n/g, AssistantResponse.PARAGRAPH_SEPARATOR);
+        }
+        return "";
+    }
+    /**
+     * Get the final text content of the chat message
+     * This method waits for the text content to be completely loaded
+     */
+    stableText() {
+        return MessageElements_awaiter(this, void 0, void 0, function* () {
+            if (this.stable) {
+                return this.text;
+            }
+            const content = yield this.decoratedContent();
+            const options = { includeInitialText: this.includeInitialText };
+            const textStream = this.createTextStream(content, options);
+            return new Promise((resolve) => {
+                textStream.getStream().subscribe({
+                    complete: () => {
+                        this.stable = true;
+                        resolve(this.text);
+                    },
+                });
+            });
+        });
+    }
+    /**
+     * Get the md5 hash of the text content of the chat message
+     * Use this function only if you know the text content is already stable,
+     * otherwise get stableHash() to get the hash of the final text content
+     */
+    get hash() {
+        // return a md5 hash of the text content
+        return (0,md5.md5)(this.text);
+    }
+    stableHash() {
+        return MessageElements_awaiter(this, void 0, void 0, function* () {
+            // return a md5 hash of the text content
+            const stableText = yield this.stableText();
+            return (0,md5.md5)(stableText);
+        });
+    }
+    get element() {
+        return this._element;
+    }
+    get utteranceId() {
+        return this._element.dataset.utteranceId || null;
+    }
+    get isTTSEnabled() {
+        return this.utteranceId !== null;
+    }
+    decorateSpeech(utterance) {
+        return MessageElements_awaiter(this, void 0, void 0, function* () {
+            if (utterance instanceof SpeechPlaceholder) {
+                return;
+            }
+            this.messageControls.decorateSpeech(utterance);
+        });
+    }
+    decorateIncompleteSpeech(replace = false) {
+        return MessageElements_awaiter(this, void 0, void 0, function* () {
+            this.messageControls.decorateIncompleteSpeech(replace);
+        });
+    }
+    decorateCost(charge) {
+        return MessageElements_awaiter(this, void 0, void 0, function* () {
+            this.messageControls.decorateCost(charge);
+        });
+    }
+    toString() {
+        const text = this.text
+            ? `"${this.text.substring(0, 9)}..."` // show first 9 characters
+            : `AssistantResponse: { id: ${this.element.id}, utteranceId: ${this.utteranceId}, hash: ${this.hash} }`;
+        return text;
+    }
+}
+// visible for testing
+AssistantResponse.PARAGRAPH_SEPARATOR = ""; // should match ElementInputStream's delimiter argument
+class MessageControls {
+    constructor(message, ttsControls) {
+        this.message = message;
+        this.ttsControls = ttsControls;
+        this.hoverMenu = this.messageControlsElement = null; // will be initialized in decorateControls()
+        this.decorateControls(message);
+    }
+    getExtraControlClasses() {
+        return [];
+    }
+    findHoverMenu() {
+        return this.message.element.querySelector(".message-hover-menu");
+    }
+    decorateControls(message) {
+        return MessageElements_awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve) => {
+                const findAndDecorateHoverMenu = () => {
+                    let hoverMenu = this.findHoverMenu();
+                    if (!hoverMenu) {
+                        hoverMenu = message.element.querySelector(this.getHoverMenuSelector());
+                        if (hoverMenu) {
+                            hoverMenu.classList.add("message-hover-menu");
+                            this.hoverMenu = hoverMenu;
+                            // pi-specific thread button (TODO: move to PiAIChatbot)
+                            if (hoverMenu.children.length > 0) {
+                                const createThreadButton = hoverMenu
+                                    .children[0];
+                                createThreadButton.classList.add("create-thread-button");
+                            }
+                        }
+                        else {
+                            console.debug("Hover menu not ready, wait until the message is fully loaded");
+                            this.watchForHoverMenu(message, findAndDecorateHoverMenu);
+                            return;
+                        }
+                    }
+                    let msgCtrlsElement = message.element.querySelector(".saypi-tts-controls");
+                    if (!msgCtrlsElement) {
+                        msgCtrlsElement = document.createElement("div");
+                        msgCtrlsElement.classList.add("saypi-tts-controls", ...this.getExtraControlClasses());
+                        hoverMenu === null || hoverMenu === void 0 ? void 0 : hoverMenu.appendChild(msgCtrlsElement);
+                    }
+                    this.messageControlsElement = msgCtrlsElement;
+                    const copyButtonElement = msgCtrlsElement.querySelector(".saypi-copy-button");
+                    if (!copyButtonElement) {
+                        this.ttsControls.addCopyButton(this.message, msgCtrlsElement);
+                    }
+                    resolve();
+                };
+                findAndDecorateHoverMenu();
+            });
+        });
+    }
+    watchForHoverMenu(message, callback) {
+        // setup an observer to wait for the hover menu to load
+        const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                for (const node of [...mutation.addedNodes]) {
+                    if (node instanceof HTMLElement) {
+                        const addedElement = node;
+                        if (addedElement.querySelector(this.getHoverMenuSelector())) {
+                            observer.disconnect();
+                            callback();
+                            return;
+                        }
+                    }
+                }
+            }
+        });
+        observer.observe(message.element, { childList: true, subtree: true });
+    }
+    /**
+     * Apply speech to this chat message
+     * @param utterance
+     */
+    decorateSpeech(utterance) {
+        return MessageElements_awaiter(this, void 0, void 0, function* () {
+            yield this.decorateControls(this.message); // ensure message controls are ready
+            this.message.element.dataset.utteranceId = utterance.id;
+            this.message.element.classList.add("speech-enabled");
+            if (!this.messageControlsElement) {
+                console.error("Message controls element not found, please call decorateControls() before decorateSpeech()");
+                return;
+            }
+            const mobile = isMobileDevice();
+            const hoverMenu = this.findHoverMenu();
+            if (mobile && hoverMenu) {
+                this.watchForPopupMenu(hoverMenu, utterance);
+            }
+            const speechButtonElement = this.messageControlsElement.querySelector(".saypi-speak-button");
+            const costElement = this.messageControlsElement.querySelector(".saypi-cost-container");
+            if (!speechButtonElement) {
+                this.ttsControls.addSpeechButton(utterance, this.messageControlsElement, costElement);
+            }
+            if (utterance.voice) {
+                this.ttsControls.addPoweredBy(this.messageControlsElement, utterance.voice, costElement);
+            }
+        });
+    }
+    watchForPopupMenu(hoverMenu, speech) {
+        const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                for (const node of [...mutation.addedNodes]) {
+                    if (node instanceof HTMLElement) {
+                        const addedElement = node;
+                        const obs = PopupMenu.find(new PiAIChatbot(), addedElement);
+                        if (obs.found && !obs.decorated) {
+                            const popupMenu = new PopupMenu(this.message, obs.target, speech, this.ttsControls);
+                            popupMenu.decorate();
+                            EventBus.emit("saypi:tts:menuPop", {
+                                utteranceId: speech.id,
+                                menu: popupMenu,
+                            });
+                        }
+                    }
+                }
+            }
+        });
+        observer.observe(hoverMenu, { childList: true, subtree: false });
+    }
+    decorateIncompleteSpeech(replace = false) {
+        return MessageElements_awaiter(this, void 0, void 0, function* () {
+            this.message.element.classList.add("speech-incomplete");
+            const price = yield UserPreferenceModule.getInstance()
+                .getVoice()
+                .then((voice) => {
+                if (!voice) {
+                    return 0;
+                }
+                return BillingModule.getInstance().quote(voice, this.message.text);
+            });
+            const regenButton = this.ttsControls.createGenerateSpeechButton(price);
+            const readAloudButton = this.message.element.querySelector(".saypi-speak-button");
+            if (readAloudButton && replace) {
+                readAloudButton.replaceWith(regenButton);
+            }
+            else {
+                const messageControlsElement = this.message.element.querySelector(".saypi-tts-controls");
+                if (messageControlsElement) {
+                    messageControlsElement.appendChild(regenButton);
+                }
+            }
+            // add event listener to regenerate speech
+            regenButton.addEventListener("click", () => MessageElements_awaiter(this, void 0, void 0, function* () {
+                regenButton.disabled = true;
+                const speechSynthesis = SpeechSynthesisModule.getInstance();
+                const speechHistory = SpeechHistoryModule.getInstance();
+                speechSynthesis
+                    .createSpeech(this.message.text, false)
+                    .then((utterance) => {
+                    speechSynthesis.speak(utterance);
+                    this.decorateSpeech(utterance);
+                    const charge = BillingModule.getInstance().charge(utterance, this.message.text);
+                    this.decorateCost(charge);
+                    const speech = new AssistantSpeech(utterance, charge);
+                    speechHistory.addSpeechToHistory(charge.utteranceHash, speech);
+                    regenButton.remove();
+                    this.message.element.classList.remove("speech-incomplete");
+                });
+            }));
+        });
+    }
+    /**
+     * Apply a charge to this chat message
+     * Can be called multiple times to update the charge
+     * @param charge The cost of the speech
+     */
+    decorateCost(charge) {
+        const ttsControlsElement = this.message.element.querySelector(".saypi-tts-controls");
+        const costElement = this.message.element.querySelector(".saypi-cost");
+        if (ttsControlsElement && !costElement) {
+            this.ttsControls.addCostBasis(ttsControlsElement, charge);
+        }
+        else if (costElement) {
+            this.ttsControls.updateCostBasis(ttsControlsElement, charge);
+        }
+        const messageContentElement = this.message.element.querySelector(".content");
+        if (messageContentElement) {
+            messageContentElement.id = `saypi-message-content-${this.message.utteranceId}`;
+        }
+        if (isMobileDevice()) {
+            // TODO: we need a way to deregister this listener when the message is removed - perhaps a teardown method?
+            EventBus.on("saypi:tts:menuPop", (event) => {
+                const id = this.message.element.dataset.utteranceId;
+                if (!id ||
+                    id !== event.utteranceId ||
+                    id !== charge.utteranceId ||
+                    !charge.cost) {
+                    return;
+                }
+                const menuElement = event.menu.element;
+                const menuCostElement = menuElement.querySelector(".saypi-cost");
+                if (menuCostElement) {
+                    this.ttsControls.updateCostBasis(menuElement, charge);
+                }
+                else {
+                    this.ttsControls.addCostBasis(menuElement, charge, true);
+                }
+            });
+        }
+    }
+}
+
 
 ;// CONCATENATED MODULE: ./node_modules/tslib/tslib.es6.mjs
 /******************************************************************************
@@ -37434,49 +37591,6 @@ var ReplaySubject = (function (_super) {
 
 
 const STREAM_TIMEOUT = 10000; // visible for testing
-const DATA_TIMEOUT = 1000;
-const DEFAULT_ADDITIONAL_TIMEOUT = 0;
-// Timeout values above base for different languages - derived from empirical testing on pi.ai
-const LANGUAGE_TIMEOUTS = {
-    en: 0,
-    ar: 1250,
-    de: 250,
-    es: 250,
-    fr: 1500,
-    hi: 1500,
-    it: 0,
-    nl: 0,
-    pl: 750,
-    pt: 1000,
-    ja: 1000,
-    ko: 1250,
-    ru: 2500,
-    uk: 2250,
-    zh: 0,
-    bg: 1500,
-    hr: 250,
-    cs: 750,
-    da: 1500,
-    tl: 250,
-    fi: 250,
-    el: 1250,
-    id: 0,
-    ms: 1000,
-    ro: 750,
-    sk: 1000,
-    sv: 1250,
-    ta: 500,
-    tr: 750,
-};
-function calculateDataTimeout(text, lang) {
-    var _a;
-    // Extract the base language code (e.g., 'en' from 'en-US')
-    const baseLanguage = lang.split("-")[0];
-    const additionalTimeout = (_a = LANGUAGE_TIMEOUTS[baseLanguage]) !== null && _a !== void 0 ? _a : DEFAULT_ADDITIONAL_TIMEOUT;
-    const totalTime = DATA_TIMEOUT + additionalTimeout;
-    console.debug(`Timeout for "${text}" in ${lang} (base: ${baseLanguage}) is ${totalTime}ms (${DATA_TIMEOUT} + ${additionalTimeout})`);
-    return totalTime;
-}
 // Visible for testing
 function getNestedText(node) {
     var _a, _b;
@@ -37489,7 +37603,7 @@ class TextItem {
         this.changedFrom = changedFrom;
     }
 }
-class AddedText extends TextItem {
+class InputStream_AddedText extends TextItem {
     constructor(text) {
         super(text, false, null);
         this.text = text;
@@ -37502,6 +37616,7 @@ class ChangedText extends TextItem {
         this.changedFrom = changedFrom;
     }
 }
+
 class LateChangeEvent {
     constructor(msAfterClose, completion, lang) {
         this.msAfterClose = msAfterClose;
@@ -37509,7 +37624,7 @@ class LateChangeEvent {
         this.lang = lang;
     }
 }
-class ElementTextStream {
+class InputStream_ElementTextStream {
     constructor(element, { includeInitialText = false, delimiter = "" } = {}) {
         this.element = element;
         this.lateChangeSubject = new Subject();
@@ -37541,6 +37656,8 @@ class ElementTextStream {
             },
         });
         this.resetStreamTimeout(); // set the initial timeout
+        this.streamStartTime = Date.now();
+        console.debug("Starting stream on", this.element.id ? this.element.id : this.element);
         if (includeInitialText) {
             this.emitInitialText(element); // emit the initial text
         }
@@ -37567,10 +37684,11 @@ class ElementTextStream {
             return;
         }
         this.completionReason = reason;
-        console.debug(`Completing stream on ${reason.type}`, this.element.id ? this.element.id : this.element);
+        const streamDuration = Date.now() - this.streamStartTime;
+        console.debug(`Completing stream on ${reason.type}, ${streamDuration}ms after starting.`, this.element.id ? this.element.id : this.element);
         this.subject.complete();
         this.completed = true;
-        //this.disconnect(); // stop observing the element - leave open for debugging
+        //this.disconnect(); // stop observing the element - leave open for debugging to see if the stream is still active
     }
     /**
      * Redundant check for the closed property of the subject
@@ -37585,8 +37703,11 @@ class ElementTextStream {
         const initialText = getNestedText(message);
         // send the initial text to the stream only if it's not empty
         if (initialText) {
-            this.next(new AddedText(initialText));
+            this.next(new InputStream_AddedText(initialText));
         }
+    }
+    calculateStreamTimeout() {
+        return STREAM_TIMEOUT;
     }
     /**
      * The stream will complete if no new text is streamed for a certain duration.
@@ -37598,94 +37719,12 @@ class ElementTextStream {
         }
         this.timeout = setTimeout(() => {
             this.complete({ type: "timeout", time: Date.now() });
-        }, STREAM_TIMEOUT);
+        }, this.calculateStreamTimeout());
     }
     getTextIsStable() {
         return this.closed();
     }
     registerObserver() {
-        var _a;
-        let lastParagraphAdded = (_a = this.element.querySelectorAll("div")) === null || _a === void 0 ? void 0 : _a.item(0);
-        let spansAdded = 0;
-        let spansRemoved = 0;
-        let spansReplaced = 0;
-        let stillChanging = false;
-        const handleMutationEvent = (mutation) => {
-            var _a;
-            if (this.closed()) {
-                console.debug(`Skipping change event on ${mutation.target} because the stream has already been completed`, mutation);
-                return;
-            }
-            if (mutation.type === "childList") {
-                for (let i = 0; i < mutation.removedNodes.length; i++) {
-                    const node = mutation.removedNodes[i];
-                    if (node.nodeType === Node.ELEMENT_NODE) {
-                        const element = node;
-                        if (element.tagName === "SPAN") {
-                            spansRemoved++;
-                        }
-                    }
-                }
-                for (let i = 0; i < mutation.addedNodes.length; i++) {
-                    stillChanging = true;
-                    const node = mutation.addedNodes[i];
-                    if (node.nodeType === Node.ELEMENT_NODE) {
-                        const element = node;
-                        if (element.tagName === "SPAN") {
-                            spansAdded++;
-                        }
-                        else if (element.tagName === "DIV") {
-                            const paragraph = element;
-                            lastParagraphAdded = paragraph;
-                        }
-                    }
-                    else if (node.nodeType === Node.TEXT_NODE) {
-                        const textNode = node;
-                        const content = textNode.textContent || "";
-                        this.next(new AddedText(content || ""));
-                        spansReplaced++;
-                        // we're finished when the paragraph has no more preliminary content
-                        const paragraph = textNode.parentElement;
-                        const spansRemaining = ((_a = paragraph === null || paragraph === void 0 ? void 0 : paragraph.querySelectorAll("span")) === null || _a === void 0 ? void 0 : _a.length) || 0;
-                        const isFinalParagraph = paragraph === lastParagraphAdded;
-                        if (spansReplaced >= spansRemoved &&
-                            spansReplaced >= spansAdded &&
-                            spansRemaining === 0 &&
-                            isFinalParagraph) {
-                            stillChanging = false;
-                            // complete soon if not still changing
-                            const startTime = Date.now();
-                            const additionsRemaining = mutation.addedNodes.length - i - 1;
-                            console.debug(`${startTime}: Possible end of stream detected on ${content}, ${additionsRemaining} additions remaining.`);
-                            setTimeout(() => {
-                                var _a;
-                                if (!stillChanging) {
-                                    const timeElapsed = Date.now() - startTime;
-                                    const lastContent = (_a = this.emittedValues.slice(-1)[0]) === null || _a === void 0 ? void 0 : _a.text;
-                                    console.debug(`${Date.now()}: end of stream confirmed on "${lastContent}" after +${timeElapsed}ms`);
-                                    this.complete({ type: "eod", time: Date.now() });
-                                }
-                            }, calculateDataTimeout(content, this.languageGuess));
-                        }
-                    }
-                }
-            }
-            else if (mutation.type === "characterData") {
-                const textNode = mutation.target;
-                const content = textNode.textContent;
-                // text node content changed from "${mutation.oldValue}" to "${content}"`
-                // emit a change event only if the old value is present in the already emitted values
-                const oldValue = mutation.oldValue || "";
-                const alreadyEmitted = this.emittedValues.some((value) => value.text === oldValue);
-                if (alreadyEmitted) {
-                    stillChanging = true;
-                    this.next(new ChangedText(content || "", oldValue));
-                }
-                else {
-                    console.debug(`Skipping change event for "${content}" because the old value "${oldValue}" was not emitted`);
-                }
-            }
-        };
         const contentMutationHandler = (mutationsList) => {
             if (this.closed()) {
                 const timeSinceCompletion = Date.now() - this.completionReason.time;
@@ -37696,7 +37735,7 @@ class ElementTextStream {
                 this.disconnect();
                 return;
             }
-            mutationsList.forEach((mutation) => handleMutationEvent(mutation));
+            mutationsList.forEach((mutation) => this.handleMutationEvent(mutation));
         };
         this.observer = new MutationObserver(contentMutationHandler);
         this.observer.observe(this.element, {
@@ -37725,185 +37764,1585 @@ class ElementTextStream {
     }
 }
 
-;// CONCATENATED MODULE: ./src/icons/volume-mid.svg
-/* harmony default export */ const volume_mid = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"Layer_2\" data-name=\"Layer 2\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 21 18.88\">\n    <defs>\n        <style>\n            .speaker {\n            fill: #000;\n            stroke-width: 0px;\n            }\n        </style>\n    </defs>\n    <g id=\"Layer_1-2\" data-name=\"Layer 1\">\n        <path class=\"speaker\"\n            d=\"M12,1.5c0-1.34-1.62-2.01-2.56-1.06l-4.5,4.5h-1.93c-1.14,0-2.32.66-2.66,1.9C.12,7.69,0,8.57,0,9.44,0,10.34.12,11.21.35,12.04c.34,1.24,1.52,1.9,2.66,1.9h1.93l4.5,4.5c.94.94,2.56.28,2.56-1.06,0,0,0-15.88,0-15.88ZM17.08,2.55c.29-.29.77-.29,1.06,0,3.81,3.81,3.81,9.98,0,13.79-.28.3-.76.32-1.06.04s-.32-.76-.04-1.06c.01-.01.02-.03.04-.04,3.22-3.22,3.22-8.45,0-11.67h0c-.29-.29-.29-.77,0-1.06Z\" />\n        <path class=\"speaker\"\n            d=\"M14.43,5.2c.29-.29.77-.29,1.06,0,0,0,0,0,0,0,2.34,2.34,2.34,6.14,0,8.49h0c-.3.29-.77.28-1.06-.02-.28-.29-.28-.75,0-1.04,1.76-1.76,1.76-4.61,0-6.36h0c-.29-.29-.29-.77,0-1.06h0Z\" />\n    </g>\n</svg>");
-;// CONCATENATED MODULE: ./src/icons/copy.svg
-/* harmony default export */ const copy = ("<?xml version='1.0' encoding='UTF-8'?>\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" zoomAndPan=\"magnify\" viewBox=\"0 0 375 374.999991\" preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n  <defs>\n    <clipPath id=\"b2c3a52ba4\">\n      <path d=\"M 0 0.703125 L 375 0.703125 L 375 374.203125 L 0 374.203125 Z M 0 0.703125 \" clip-rule=\"nonzero\"/>\n    </clipPath>\n  </defs>\n  <g clip-path=\"url(#b2c3a52ba4)\">\n    <path fill=\"#24381b\" d=\"M 347.425781 248.875 C 347.425781 268.046875 331.894531 283.578125 312.71875 283.578125 L 310.449219 283.578125 L 310.449219 126.195312 C 310.449219 91.835938 282.546875 63.929688 248.253906 63.929688 L 92.039062 63.929688 L 92.039062 62.96875 C 92.039062 43.792969 107.640625 28.195312 126.816406 28.195312 L 312.71875 28.195312 C 331.894531 28.195312 347.425781 43.792969 347.425781 62.96875 Z M 282.960938 312.101562 C 282.960938 331.207031 267.359375 346.808594 248.253906 346.808594 L 62.351562 346.808594 C 43.175781 346.808594 27.574219 331.207031 27.574219 312.101562 L 27.574219 126.195312 C 27.574219 107.023438 43.175781 91.421875 62.351562 91.421875 L 248.253906 91.421875 C 267.359375 91.421875 282.960938 107.023438 282.960938 126.195312 Z M 312.71875 0.703125 L 126.816406 0.703125 C 92.519531 0.703125 64.550781 28.675781 64.550781 62.96875 L 64.550781 63.929688 L 62.351562 63.929688 C 27.988281 63.929688 0.0859375 91.835938 0.0859375 126.195312 L 0.0859375 312.101562 C 0.0859375 346.394531 27.988281 374.296875 62.351562 374.296875 L 248.253906 374.296875 C 282.546875 374.296875 310.449219 346.394531 310.449219 312.101562 L 310.449219 311.070312 L 312.71875 311.070312 C 347.015625 311.070312 374.914062 283.167969 374.914062 248.875 L 374.914062 62.96875 C 374.914062 28.675781 347.015625 0.703125 312.71875 0.703125 \" fill-opacity=\"1\" fill-rule=\"nonzero\"/>\n  </g>\n</svg>\n");
-;// CONCATENATED MODULE: ./src/icons/copied.svg
-/* harmony default export */ const copied = ("<?xml version='1.0' encoding='UTF-8'?>\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" zoomAndPan=\"magnify\" viewBox=\"0 0 375 374.999991\" preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n  <path fill=\"#24381b\" d=\"M 308.800781 21.765625 C 333.300781 21.765625 353.234375 41.699219 353.234375 66.199219 L 353.234375 308.800781 C 353.234375 333.300781 333.300781 353.234375 308.800781 353.234375 L 66.203125 353.234375 C 41.699219 353.234375 21.765625 333.300781 21.765625 308.800781 L 21.765625 66.199219 C 21.765625 41.699219 41.699219 21.765625 66.203125 21.765625 Z M 374.996094 308.800781 L 374.996094 66.199219 C 374.996094 29.699219 345.300781 0.00390625 308.800781 0.00390625 L 66.203125 0.00390625 C 29.699219 0.00390625 0.00390625 29.699219 0.00390625 66.199219 L 0.00390625 308.800781 C 0.00390625 345.300781 29.699219 374.996094 66.203125 374.996094 L 308.800781 374.996094 C 345.300781 374.996094 374.996094 345.300781 374.996094 308.800781 Z M 74.550781 164.703125 C 86.011719 153.242188 104.585938 153.242188 116.042969 164.703125 L 153.945312 202.605469 C 156.253906 204.914062 160 204.914062 162.308594 202.605469 L 258.957031 105.953125 C 270.414062 94.5 288.988281 94.5 300.449219 105.953125 C 311.902344 117.410156 311.902344 135.984375 300.449219 147.441406 L 174.152344 273.761719 C 165.304688 282.613281 150.953125 282.613281 142.101562 273.761719 L 74.550781 206.191406 C 63.097656 194.730469 63.097656 176.15625 74.550781 164.703125 \" fill-opacity=\"1\" fill-rule=\"nonzero\"/>\n</svg>\n");
-;// CONCATENATED MODULE: ./src/icons/regenerate.svg
-/* harmony default export */ const regenerate = ("<?xml version='1.0' encoding='UTF-8'?>\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" zoomAndPan=\"magnify\" viewBox=\"0 0 375 374.999991\" preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n  <path fill=\"#24381b\" d=\"M 206.046875 31.148438 L 213.988281 26.121094 C 220.125 22.234375 221.957031 14.101562 218.066406 7.957031 C 214.175781 1.820312 206.039062 -0.0117188 199.898438 3.882812 L 156.027344 31.667969 C 152.378906 33.980469 150.082031 37.945312 149.910156 42.269531 C 149.757812 46.589844 151.710938 50.722656 155.171875 53.320312 L 199.042969 86.21875 C 201.410156 87.996094 204.183594 88.851562 206.925781 88.851562 C 210.9375 88.851562 214.878906 87.035156 217.464844 83.585938 C 221.835938 77.773438 220.65625 69.519531 214.84375 65.160156 L 204.601562 57.480469 C 277.128906 65.972656 333.59375 127.796875 333.59375 202.570312 C 333.59375 283.125 268.058594 348.660156 187.492188 348.660156 C 106.945312 348.660156 41.410156 283.125 41.410156 202.570312 C 41.410156 170.234375 51.746094 139.605469 71.316406 113.984375 C 75.722656 108.207031 74.625 99.945312 68.832031 95.53125 C 63.074219 91.117188 54.796875 92.230469 50.390625 98.007812 C 27.292969 128.257812 15.089844 164.410156 15.089844 202.570312 C 15.089844 297.640625 92.429688 374.980469 187.492188 374.980469 C 282.570312 374.980469 359.914062 297.640625 359.914062 202.570312 C 359.914062 113.761719 292.433594 40.433594 206.046875 31.148438 \" fill-opacity=\"1\" fill-rule=\"nonzero\"/>\n</svg>\n");
-;// CONCATENATED MODULE: ./src/tts/TTSControlsModule.ts
+;// CONCATENATED MODULE: ./src/chatbots/Chatbot.ts
 
 
 
-
-
-
-
-class TTSControlsModule {
-    constructor(speechSynthesis) {
-        this.speechSynthesis = speechSynthesis;
-    }
-    constructTextToSpeechControl(classname, title, icon) {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.classList.add("text-center", "saypi-button", classname);
-        button.setAttribute("aria-label", title);
-        button.innerHTML = icon;
-        return button;
+class UserPrompt {
+    constructor(element) {
+        this.preferences = UserPreferenceModule.getInstance();
+        this.element = element;
     }
     /**
-     * A speech button that can be used among chat message controls
-     * @returns A button element that can be used to replay the last utterance
+     * Get the prompt textarea's current placeholder text
      */
-    createSpeechButton() {
-        // use createTTSCtrlButton to create a button with the correct classes
-        const button = this.constructTextToSpeechControl("saypi-speak-button", i18n("readAloudButtonTitle"), volume_mid);
-        return button;
-    }
-    createGenerateSpeechButton(price, currency = "USD") {
-        const message = price
-            ? i18n("regenerateButtonTitle", [price.toFixed(2), currency])
-            : i18n("regenerateButtonTitleFree");
-        const button = this.constructTextToSpeechControl("saypi-regenerate-button", message, regenerate);
-        return button;
-    }
-    createCopyButton() {
-        const button = this.constructTextToSpeechControl("saypi-copy-button", i18n("copyButtonTitle"), copy);
-        return button;
-    }
-    constructTextToSpeechControlForMenu(classname, title, icon) {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.classList.add("flex", "h-12", "w-full", "items-center", "justify-between", "rounded", "px-2.5", "hover:bg-neutral-50-hover", "active:bg-neutral-50-tap", "active:text-primary-700", "saypi-button", classname);
-        button.setAttribute("title", title);
-        button.innerHTML = title + icon;
-        return button;
+    getDraft() {
+        return this.getPlaceholderText() || "";
     }
     /**
-     * A speech button that can be used in a menu on a mobile device
-     * @returns A button element that can be used to replay the last utterance
+     * Set the prompt textarea to the given transcript, but do not submit it
+     * @param transcript The prompt to be displayed in the prompt textarea
      */
-    createSpeechButtonForMenu() {
-        // use createTTSCtrlButton to create a button with the correct classes
-        const button = this.constructTextToSpeechControlForMenu("saypi-speak-button", i18n("readAloudButtonTitle"), volume_mid);
-        return button;
-    }
-    createCopyButtonForMenu() {
-        const button = this.constructTextToSpeechControlForMenu("saypi-copy-button", i18n("copyButtonTitle"), copy);
-        return button;
-    }
-    addSpeechButton(utterance, container, containerIsMenu = false) {
-        const button = containerIsMenu
-            ? this.createSpeechButtonForMenu()
-            : this.createSpeechButton();
-        button.addEventListener("click", () => {
-            EventBus.emit("saypi:tts:replaying", utterance); //  notify the ui manager that the next speech it hears will be a replay
-            this.speechSynthesis.speak(utterance);
-        });
-        container.appendChild(button);
-    }
-    addCopyButton(message, container, containerIsMenu = false) {
-        const button = containerIsMenu
-            ? this.createCopyButtonForMenu()
-            : this.createCopyButton();
-        button.addEventListener("click", () => {
-            navigator.clipboard.writeText(message.text);
-            if (!containerIsMenu) {
-                const originalAriaLabel = button.getAttribute("ariaLabel") || i18n("copyButtonTitle");
-                const originalInnerHtml = button.innerHTML;
-                button.setAttribute("aria-label", i18n("copiedButtonTitle"));
-                button.innerHTML = copied;
-                button.disabled = true;
-                // reset after a few seconds
-                setTimeout(() => {
-                    button.setAttribute("aria-label", originalAriaLabel);
-                    button.innerHTML = originalInnerHtml;
-                    button.disabled = false;
-                }, 2500);
+    setDraft(transcript) {
+        this.preferences.getAutoSubmit().then((autoSubmit) => {
+            if (autoSubmit) {
+                this.setPlaceholderText(`${transcript}`);
+            }
+            else {
+                this.setPlaceholderText("");
+                this.clear();
+                this.typeText(`${transcript} `, false);
             }
         });
-        container.appendChild(button);
-    }
-    createCostElementForMenu() {
-        const costElement = document.createElement("button");
-        costElement.classList.add("saypi-cost");
-        costElement.classList.add("flex", "h-12", "w-full", "items-center", "justify-between", "rounded", "px-2.5", "hover:bg-neutral-50-hover", "active:bg-neutral-50-tap", "active:text-primary-700");
-        return costElement;
-    }
-    createCostElementForMessage() {
-        const costElement = document.createElement("span");
-        costElement.classList.add("saypi-cost", "text-sm", "text-neutral-500");
-        return costElement;
     }
     /**
-     * Add the cost of the TTS stream to the chat message
-     * @param container The menu element to add the cost basis to
-     * @param characterCount The number of characters in the message
+     * Clear the prompt textarea
      */
-    addCostBasis(container, charge, containerIsMenu = false) {
-        const cost = charge.cost;
-        if (cost === undefined) {
-            // cost should not be undefined, but just in case it is, don't display anything
-            return;
-        }
-        const currency = i18n("currencyUSDAbbreviation");
-        const costElement = containerIsMenu
-            ? this.createCostElementForMenu()
-            : this.createCostElementForMessage();
-        if (cost) {
-            costElement.title = i18n("ttsCostExplanation", [
-                cost.toFixed(2),
-                currency,
-            ]);
+    clear() {
+        this.setText("");
+        this.setPlaceholderText("");
+    }
+    /**
+     * Set a descriptive message for the user in the prompt textarea
+     * Used to inform the user of the current state of the application
+     * @param label The placeholder text to be displayed in the prompt textarea
+     */
+    setMessage(label) {
+        this.setPlaceholderText(label);
+    }
+    /**
+     * Enter the given transcript into the prompt field and submit it if so configured
+     * @param transcript The completed transcript. If autoSubmit is enabled, the transcript will be submitted
+     */
+    setFinal(transcript) {
+        const textarea = document.getElementById("saypi-prompt");
+        if (ImmersionStateChecker.isViewImmersive()) {
+            // if transcript is > max characters, truncate it to max-1 characters plus an ellipsis
+            if (transcript.length > this.PROMPT_CHARACTER_LIMIT) {
+                const truncatedLength = this.PROMPT_CHARACTER_LIMIT - 1;
+                transcript = `${transcript.substring(0, truncatedLength)}…`;
+                console.warn(`Transcript was too long for Pi. Truncated to ${truncatedLength} characters, losing the following text: ... ${transcript.substring(truncatedLength)}`);
+            }
+            this.enterTextAndSubmit(transcript, true);
         }
         else {
-            costElement.title = i18n("ttsCostExplanationFree");
-            costElement.classList.add("cost-free");
-        }
-        costElement.innerHTML = `Cost: <span class="price">$<span class="value">${cost.toFixed(2)}</span></span>`;
-        container.appendChild(costElement);
-        return costElement;
-    }
-    addPoweredBy(container, voice) {
-        let poweredByElement = container.querySelector(".saypi-powered-by");
-        if (poweredByElement) {
-            return;
-        }
-        poweredByElement = document.createElement("div");
-        const ttsEngine = voice.powered_by;
-        const ttsLabel = i18n("ttsPoweredBy", ttsEngine);
-        poweredByElement.classList.add("text-sm", "text-neutral-500", "saypi-powered-by");
-        poweredByElement.title = ttsLabel;
-        const logoImageExt = ttsEngine === "inflection.ai" ? "png" : "svg"; // can't find a good svg for inflection.ai
-        const logoImageUrl = getResourceUrl(`icons/logos/${ttsEngine.toLowerCase()}.${logoImageExt}`);
-        poweredByElement.innerHTML = `<img src="${logoImageUrl}" alt="${ttsLabel}" class="h-4 w-4 inline-block">`;
-        container.appendChild(poweredByElement);
-    }
-    updateCostBasis(container, charge) {
-        const costElement = container.querySelector(".saypi-cost .value");
-        if (costElement) {
-            costElement.textContent = charge.cost.toFixed(2);
-            const currency = i18n("currencyUSDAbbreviation");
-            costElement.title = i18n("ttsCostExplanation", [
-                charge.cost.toFixed(2),
-                currency,
-            ]);
+            this.typeText(`${transcript} `, true); // types and submits the prompt
         }
     }
-    /**
-     * Start streaming the utterance's audio output immediately
-     * @param utterance The utterance to stream
-     * @param delayMs The number of milliseconds to wait before starting the stream
-     */
-    autoplaySpeech(utterance, delayMs = 0) {
-        // wait a beat, then start streaming the utterance
-        setTimeout(() => {
-            this.speechSynthesis.speak(utterance);
-        }, delayMs);
+    enterTextAndSubmit(text, submit) {
+        this.setText(text);
+        if (submit)
+            EventBus.emit("saypi:autoSubmit");
+    }
+    typeText(text, submit = false) {
+        this.element.focus();
+        const sentenceRegex = /([.!?。？！]+)/g;
+        const tokens = text.split(sentenceRegex).filter(Boolean);
+        const sentences = [];
+        for (let i = 0; i < tokens.length; i += 2) {
+            const sentence = tokens[i] + (tokens[i + 1] || "");
+            sentences.push(sentence);
+        }
+        const typeNextSentenceOrSubmit = () => {
+            if (sentences.length === 0) {
+                if (submit)
+                    EventBus.emit("saypi:autoSubmit");
+            }
+            else {
+                // Emit the event only after all sentences have been typed
+                const nextSentence = sentences.shift();
+                this.setText(this.getText() + nextSentence);
+                requestAnimationFrame(typeNextSentenceOrSubmit);
+            }
+        };
+        if (sentences.length === 0) {
+            this.enterTextAndSubmit(text, submit);
+        }
+        else {
+            typeNextSentenceOrSubmit();
+        }
     }
 }
+
+;// CONCATENATED MODULE: ./src/chatbots/Pi.ts
+
+
+
+
+class PiAIChatbot {
+    getName() {
+        return "Pi";
+    }
+    getPrompt(element) {
+        return new PiPrompt(element);
+    }
+    getPromptTextInputSelector() {
+        return "textarea[enterkeyhint]";
+    }
+    getPromptSubmitButtonSelector() {
+        return "#saypi-prompt-controls-container button.rounded-full.transition-colors.duration-300"; // falls back to use JS instead if unsuccessful (see bootstrap.ts)
+    }
+    getAudioControlsSelector() {
+        return "audio + div";
+    }
+    getAudioOutputButtonSelector() {
+        // audio button is the last button element in the audio controls container
+        return "#saypi-audio-controls > div > div.relative.flex.items-center.justify-end.self-end.p-2 > button";
+    }
+    getControlPanelSelector() {
+        return ".flex.items-center.grow";
+    }
+    getSidePanelSelector() {
+        return "div.hidden.w-22.flex-col.items-center.gap-1.border-r";
+    }
+    getChatPath() {
+        return "/discover";
+    }
+    isChatablePath(path) {
+        // true if path starts with /talk or /discover
+        return path.includes("/talk") || path.includes("/discover");
+    }
+    getVoiceMenuSelector() {
+        return "div.t-action-m";
+    }
+    getVoiceSettingsSelector() {
+        return "div.mx-auto.w-full.px-6.py-10 > div.grid.grid-cols-2.gap-4";
+    }
+    getChatHistorySelector() {
+        return "div.t-body-chat";
+    }
+    getPastChatHistorySelector() {
+        return "#saypi-chat-history :nth-child(2)"; // second child of the chat history container
+    }
+    getRecentChatHistorySelector() {
+        return "#saypi-chat-history :nth-child(3)"; // third child of the chat history container
+    }
+    getDiscoveryPanelSelector() {
+        // note: depends on the side panel having already been identified
+        return "#saypi-side-panel + div";
+    }
+    getAssistantResponseSelector() {
+        return "div.break-anywhere:not(.justify-end)";
+    }
+    getAssistantResponseContentSelector() {
+        return "div.w-full";
+    }
+    getAssistantResponse(element) {
+        return new PiResponse(element);
+    }
+    getExtraCallButtonClasses() {
+        return [
+            "fixed",
+            "rounded-full",
+            "bg-cream-550",
+            "enabled:hover:bg-cream-650",
+            "m-2",
+        ];
+    }
+}
+class PiResponse extends AssistantResponse {
+    constructor(element, includeInitialText) {
+        super(element, includeInitialText);
+    }
+    get contentSelector() {
+        return "div.w-full";
+    }
+    createTextStream(content, options) {
+        return new PiTextStream(content, options);
+    }
+    decorateControls() {
+        return new PiMessageControls(this, this.ttsControlsModule);
+    }
+}
+class PiMessageControls extends MessageControls {
+    constructor(message, ttsControls) {
+        super(message, ttsControls);
+    }
+    getExtraControlClasses() {
+        return ["pt-4", "text-neutral-500", "text-sm"];
+    }
+    getHoverMenuSelector() {
+        return "div[style]:last-of-type"; // last div child of the message element (usually the second child)
+    }
+}
+class PiTextStream extends InputStream_ElementTextStream {
+    constructor(element, options) {
+        var _a;
+        super(element, options);
+        this.additionalDelay = 0;
+        /**
+         * Extend the stream timeout when a delay event is received.
+         */
+        this.handleDelayEvent = () => {
+            const delay = 1500;
+            this.additionalDelay += delay;
+            console.debug(`Received delay event. Adding ${delay}ms to timeout. Total additional delay: ${this.additionalDelay}ms`);
+            this.resetStreamTimeout();
+        };
+        this.handleMutationEvent = (mutation) => {
+            var _a;
+            if (this.closed()) {
+                console.debug(`Skipping change event on ${mutation.target} because the stream has already been completed`, mutation);
+                return;
+            }
+            if (mutation.type === "childList") {
+                for (let i = 0; i < mutation.removedNodes.length; i++) {
+                    const node = mutation.removedNodes[i];
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                        const element = node;
+                        if (element.tagName === "SPAN") {
+                            this.spansRemoved++;
+                        }
+                    }
+                }
+                for (let i = 0; i < mutation.addedNodes.length; i++) {
+                    this.stillChanging = true;
+                    const node = mutation.addedNodes[i];
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                        const element = node;
+                        if (element.tagName === "SPAN") {
+                            this.spansAdded++;
+                        }
+                        else if (element.tagName === "DIV") {
+                            const paragraph = element;
+                            this.lastParagraphAdded = paragraph;
+                        }
+                    }
+                    else if (node.nodeType === Node.TEXT_NODE) {
+                        const textNode = node;
+                        const content = textNode.textContent || "";
+                        this.next(new InputStream_AddedText(content || ""));
+                        this.spansReplaced++;
+                        // we're finished when the paragraph has no more preliminary content
+                        const paragraph = textNode.parentElement;
+                        const spansRemaining = ((_a = paragraph === null || paragraph === void 0 ? void 0 : paragraph.querySelectorAll("span")) === null || _a === void 0 ? void 0 : _a.length) || 0;
+                        const isFinalParagraph = paragraph === this.lastParagraphAdded;
+                        if (this.spansReplaced >= this.spansRemoved &&
+                            this.spansReplaced >= this.spansAdded &&
+                            spansRemaining === 0 &&
+                            isFinalParagraph) {
+                            this.stillChanging = false;
+                            // complete soon if not still changing
+                            const startTime = Date.now();
+                            const additionsRemaining = mutation.addedNodes.length - i - 1;
+                            console.debug(`Possible end of stream detected on ${content}, ${additionsRemaining} additions remaining.`);
+                            setTimeout(() => {
+                                var _a;
+                                if (!this.stillChanging) {
+                                    const timeElapsed = Date.now() - startTime;
+                                    const lastContent = (_a = this.emittedValues.slice(-1)[0]) === null || _a === void 0 ? void 0 : _a.text;
+                                    console.debug(`end of stream confirmed as "${lastContent}", +${timeElapsed}ms after last change event`);
+                                    this.complete({ type: "eod", time: Date.now() });
+                                }
+                            }, this.calculateDataTimeout(content, this.languageGuess));
+                        }
+                    }
+                }
+            }
+            else if (mutation.type === "characterData") {
+                const textNode = mutation.target;
+                const content = textNode.textContent;
+                // text node content changed from "${mutation.oldValue}" to "${content}"`
+                // emit a change event only if the old value is present in the already emitted values
+                const oldValue = mutation.oldValue || "";
+                const alreadyEmitted = this.emittedValues.some((value) => value.text === oldValue);
+                if (alreadyEmitted) {
+                    this.stillChanging = true;
+                    this.next(new ChangedText(content || "", oldValue));
+                }
+                else {
+                    console.debug(`Skipping change event for "${content}" because the old value "${oldValue}" was not emitted`);
+                }
+            }
+        };
+        this.lastParagraphAdded = (_a = this.element.querySelectorAll("div")) === null || _a === void 0 ? void 0 : _a.item(0);
+        this.spansAdded = 0;
+        this.spansRemoved = 0;
+        this.spansReplaced = 0;
+        this.stillChanging = false;
+        this.additionalDelay = 0;
+        EventBus.on("saypi:tts:text:delay", this.handleDelayEvent);
+    }
+    // override
+    // visible for testing
+    calculateStreamTimeout() {
+        const baseDelay = super.calculateStreamTimeout();
+        const additionalDelay = this.additionalDelay || 0; // default to 0 if additionalDelay is undefined or NaN
+        const totalTimeout = baseDelay + additionalDelay;
+        return totalTimeout;
+    }
+    /**
+     * The data timeout is the time to wait after the last change event before
+     * considering the stream to be complete.
+     * This differs from the stream timeout, which is the time to wait after the
+     * start of the stream before considering it to be complete.
+     */
+    calculateDataTimeout(text, lang) {
+        var _a;
+        // Extract the base language code (e.g., 'en' from 'en-US')
+        const baseLanguage = lang.split("-")[0];
+        const additionalTimeout = (_a = PiTextStream.LANGUAGE_TIMEOUTS[baseLanguage]) !== null && _a !== void 0 ? _a : PiTextStream.DEFAULT_ADDITIONAL_TIMEOUT;
+        const totalTime = PiTextStream.DATA_TIMEOUT + additionalTimeout;
+        console.debug(`Timeout for "${text}" in ${lang} (base: ${baseLanguage}) is ${totalTime}ms (${PiTextStream.DATA_TIMEOUT} + ${additionalTimeout})`);
+        return totalTime;
+    }
+    // clean up the event listener when the stream is closed
+    complete(reason) {
+        super.complete(reason);
+        EventBus.off("saypi:tts:text:delay", this.handleDelayEvent);
+    }
+}
+PiTextStream.DATA_TIMEOUT = 1000;
+PiTextStream.DEFAULT_ADDITIONAL_TIMEOUT = 0;
+// Timeout values above base for different languages - derived from empirical testing on pi.ai
+PiTextStream.LANGUAGE_TIMEOUTS = {
+    en: 0,
+    ar: 3000,
+    de: 250,
+    es: 250,
+    fr: 1500,
+    hi: 1500,
+    it: 0,
+    nl: 0,
+    pl: 750,
+    pt: 1000,
+    ja: 1000,
+    ko: 1250,
+    ru: 2500,
+    uk: 2250,
+    zh: 0,
+    bg: 1500,
+    hr: 250,
+    cs: 750,
+    da: 1500,
+    tl: 250,
+    fi: 250,
+    el: 1250,
+    id: 0,
+    ms: 1000,
+    ro: 750,
+    sk: 1000,
+    sv: 1250,
+    ta: 500,
+    tr: 750,
+};
+class PiPrompt extends UserPrompt {
+    constructor() {
+        super(...arguments);
+        this.textArea = this.element;
+        this.PROMPT_CHARACTER_LIMIT = 4000;
+    }
+    setText(text) {
+        this.setNativeValue(this.textArea, text);
+        this.scrollToBottom(this.textArea);
+    }
+    getText() {
+        return this.textArea.value;
+    }
+    setPlaceholderText(text) {
+        this.textArea.placeholder = text;
+        this.scrollToBottom(this.textArea);
+    }
+    getPlaceholderText() {
+        return this.textArea.placeholder;
+    }
+    getDefaultPlaceholderText() {
+        return this.textArea.placeholder;
+    }
+    setNativeValue(element, value) {
+        let lastValue = element.value;
+        element.value = value;
+        let event = new InputEvent("input", { bubbles: true });
+        // React 15
+        event.simulated = true; // React internal flag
+        // React 16-17
+        let tracker = element._valueTracker; // React internal state
+        if (tracker) {
+            tracker.setValue(lastValue);
+        }
+        element.dispatchEvent(event);
+    }
+    scrollToBottom(textarea) {
+        // Define the height range for the textarea
+        const maxHeight = 455;
+        const minHeight = 32;
+        // Reset the height to get the correct scrollHeight
+        textarea.style.height = `${minHeight}px`; // (initial height) aka 2rem
+        // Set the height of the textarea, up to the maximum height
+        if (textarea.scrollHeight > maxHeight) {
+            textarea.style.height = `${maxHeight}px`;
+            textarea.style.overflowY = "scroll"; // Enable vertical scrollbar
+        }
+        else {
+            const newHeight = Math.max(minHeight, textarea.scrollHeight);
+            textarea.style.height = `${newHeight}px`;
+            textarea.style.overflowY = "hidden"; // Hide vertical scrollbar
+        }
+        // Scroll to the bottom
+        textarea.scrollTop = textarea.scrollHeight;
+    }
+}
+
+
+;// CONCATENATED MODULE: ./src/chatbots/Claude.ts
+
+
+
+
+class ClaudeChatbot {
+    getName() {
+        return "Claude";
+    }
+    getPrompt(element) {
+        return new ClaudePrompt(element);
+    }
+    getPromptTextInputSelector() {
+        return "div[enterkeyhint]";
+    }
+    getPromptSubmitButtonSelector() {
+        return "#saypi-prompt-controls-container button.bg-accent-main-100:last-of-type:not(:has(~ * button))";
+    }
+    getAudioControlsSelector() {
+        return "audio + div";
+    }
+    getAudioOutputButtonSelector() {
+        // audio button is the last button element in the audio controls container
+        return "#saypi-audio-controls > div > div.relative.flex.items-center.justify-end.self-end.p-2 > button";
+    }
+    getControlPanelSelector() {
+        return ".flex.items-center.grow";
+    }
+    getSidePanelSelector() {
+        return "div.hidden.w-22.flex-col.items-center.gap-1.border-r";
+    }
+    getChatPath() {
+        return "/chat";
+    }
+    isChatablePath(path) {
+        // routes on which Claude can chat
+        return (path.includes("/new") ||
+            path.includes("/chat") ||
+            path.includes("/project"));
+    }
+    getVoiceMenuSelector() {
+        return "div.t-action-m";
+    }
+    getVoiceSettingsSelector() {
+        return "div.mx-auto.w-full.px-6.py-10 > div.grid.grid-cols-2.gap-4";
+    }
+    getChatHistorySelector() {
+        return ".flex-1.flex.flex-col.gap-3.px-4.max-w-3xl.mx-auto.w-full.pt-1";
+    }
+    getPastChatHistorySelector() {
+        return "#saypi-chat-history"; // identical to chat history
+    }
+    getRecentChatHistorySelector() {
+        return "#saypi-chat-history"; // identical to chat history
+    }
+    getDiscoveryPanelSelector() {
+        // note: depends on the side panel having already been identified
+        return "#saypi-side-panel + div";
+    }
+    getAssistantResponseSelector() {
+        return 'div[data-is-streaming]:has(div[class*="font-claude-message"])';
+    }
+    getAssistantResponseContentSelector() {
+        return "div[class*='font-claude-message']";
+    }
+    getAssistantResponse(element, includeInitialText) {
+        return new ClaudeResponse(element, includeInitialText);
+    }
+    getExtraCallButtonClasses() {
+        return ["rounded-full"];
+    }
+}
+class ClaudeResponse extends AssistantResponse {
+    constructor(element, includeInitialText) {
+        super(element, includeInitialText);
+    }
+    get contentSelector() {
+        return "div[class*='font-claude-message']";
+    }
+    createTextStream(content, options) {
+        return new ClaudeTextBlockCapture(content, options);
+    }
+    decorateControls() {
+        return new ClaudeMessageControls(this, this.ttsControlsModule);
+    }
+}
+class ClaudeMessageControls extends MessageControls {
+    constructor(message, ttsControls) {
+        super(message, ttsControls);
+    }
+    getExtraControlClasses() {
+        return ["text-xs"];
+    }
+    getHoverMenuSelector() {
+        return "div.flex.items-stretch";
+    }
+}
+/**
+ * A ClaudeTextBlockCapture is a simplified ElementTextStream that captures Claude's response
+ * as a single block of text, rather than as individual paragraphs or list items.
+ * This approach is slower than the ClaudeTextStream, but is more reliable and straightforward.
+ */
+class ClaudeTextBlockCapture extends InputStream_ElementTextStream {
+    handleMutationEvent(mutation) {
+        // no-op
+    }
+    constructor(element, options = { includeInitialText: false }) {
+        super(element, options);
+        const messageElement = element.parentElement;
+        if (messageElement && messageElement.hasAttribute("data-is-streaming")) {
+            const messageObserver = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.attributeName === "data-is-streaming") {
+                        const isStreaming = messageElement.getAttribute("data-is-streaming");
+                        if (isStreaming === "false") {
+                            const text = this.getNestedText(element);
+                            this.subject.next(new InputStream_AddedText(text));
+                            this.subject.complete();
+                        }
+                    }
+                });
+            });
+            messageObserver.observe(messageElement, {
+                childList: false,
+                subtree: false,
+                characterData: false,
+                attributes: true,
+            });
+        }
+    }
+    getNestedText(node) {
+        var _a, _b;
+        return (_b = (_a = node.textContent) !== null && _a !== void 0 ? _a : node.innerText) !== null && _b !== void 0 ? _b : "";
+    }
+}
+class ClaudeTextStream extends (/* unused pure expression or super */ null && (ElementTextStream)) {
+    constructor(element, options = { includeInitialText: true }) {
+        super(element, options);
+        this.lastContentBlock = null; // this will be a "block" element, like a paragraph or list item
+        this.blockElements = [
+            "P",
+            "OL",
+            "UL",
+            "DIV",
+            "H1",
+            "H2",
+            "H3",
+            "H4",
+            "H5",
+            "H6",
+        ];
+        const messageElement = element.parentElement;
+        if (messageElement && messageElement.hasAttribute("data-is-streaming")) {
+            const messageObserver = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.attributeName === "data-is-streaming") {
+                        const isStreaming = messageElement.getAttribute("data-is-streaming");
+                        if (isStreaming === "false") {
+                            const finalParagraph = this.element.querySelector("p:last-child");
+                            const text = this.getNestedText(finalParagraph);
+                            console.log("Claude says: ", text);
+                            this.subject.next(new AddedText(text));
+                            this.subject.complete();
+                        }
+                    }
+                });
+            });
+            messageObserver.observe(messageElement, {
+                childList: false,
+                subtree: false,
+                characterData: false,
+                attributes: true,
+            });
+        }
+        throw new Error("Text stream not implemented. Use block capture instead."); // use the block capture approach instead, for now
+    }
+    getNestedText(node) {
+        var _a, _b;
+        return (_b = (_a = node.textContent) !== null && _a !== void 0 ? _a : node.innerText) !== null && _b !== void 0 ? _b : "";
+    }
+    handleMutationEvent(mutation) {
+        // auto generated method stub
+        if (mutation.type === "childList") {
+            const addedNodes = Array.from(mutation.addedNodes);
+            for (const node of addedNodes) {
+                if (node.nodeType === Node.ELEMENT_NODE &&
+                    this.blockElements.includes(node.tagName)) {
+                    if (node.tagName === "OL" || node.tagName === "UL") {
+                        const lastListItem = node.querySelector("li:last-child");
+                        if (lastListItem && lastListItem.tagName === "LI") {
+                            const listItemText = this.getNestedText(lastListItem);
+                            console.log("Claude says: ", listItemText);
+                            this.subject.next(new AddedText(listItemText));
+                            this.lastContentBlock = null; // prevent the final list item from being emitted twice
+                        }
+                    }
+                    else {
+                        this.lastContentBlock = node;
+                    }
+                }
+                else if (node.nodeType === Node.TEXT_NODE &&
+                    node.textContent === "\n" &&
+                    this.lastContentBlock) {
+                    // paragraph separator reached, emit the text of the last paragraph
+                    const text = this.getNestedText(this.lastContentBlock);
+                    console.log("Claude says: ", text);
+                    this.subject.next(new AddedText(text));
+                    // this approach omits the final paragraph of the stream, since it is not followed by a paragraph separator
+                }
+            }
+        }
+    }
+}
+class ClaudePrompt extends UserPrompt {
+    constructor(element) {
+        super(element);
+        this.PROMPT_CHARACTER_LIMIT = 200000; // max prompt length is the same as context window length, 200k tokens
+        this.promptElement = element;
+        const observation = this.findAndDecorateCustomPlaceholderElement(element);
+        this.placeholderManager = new PlaceholderManager(element, observation.target, this.getDefaultPlaceholderText());
+    }
+    findAndDecorateCustomPlaceholderElement(prompt) {
+        var _a;
+        const existing = (_a = prompt.parentElement) === null || _a === void 0 ? void 0 : _a.querySelector("p.custom-placeholder");
+        if (existing) {
+            return Observation.foundAlreadyDecorated("claude-placeholder", existing);
+        }
+        else {
+            const placeholder = document.createElement("p");
+            placeholder.classList.add("custom-placeholder", "text-text-500");
+            placeholder.id = "claude-placeholder";
+            // add placeholder element as a sibling to the prompt element
+            prompt.insertAdjacentElement("afterend", placeholder);
+            return new Observation(placeholder, placeholder.id, true, true, true);
+        }
+    }
+    setText(text) {
+        this.promptElement.innerText = text;
+    }
+    getText() {
+        return this.promptElement.innerText;
+    }
+    /**
+     * Set the placeholder text for the prompt element, which is displayed when the prompt is empty
+     * @param text
+     */
+    setPlaceholderText(text) {
+        this.placeholderManager.setPlaceholder(text);
+    }
+    /**
+     * Get the placeholder text for the prompt element, which is displayed when the prompt is empty
+     * @returns placeholder text or empty string if the prompt is not empty
+     */
+    getPlaceholderText() {
+        const placeholder = this.promptElement.querySelector("p[data-placeholder]");
+        return (this.placeholderManager.getPlaceholder() ||
+            (placeholder === null || placeholder === void 0 ? void 0 : placeholder.getAttribute("data-placeholder")) ||
+            "");
+    }
+    getDefaultPlaceholderText() {
+        const placeholder = this.promptElement.querySelector("p[data-placeholder]");
+        return (placeholder === null || placeholder === void 0 ? void 0 : placeholder.getAttribute("data-placeholder")) || "Talk to Claude...";
+    }
+    /**
+     * Clear the prompt element
+     */
+    clear() {
+        this.placeholderManager.setPlaceholder("");
+        const promptParagraphs = this.promptElement.querySelectorAll("p[!data-placeholder]");
+        promptParagraphs.forEach((p) => {
+            p.remove();
+        });
+    }
+}
+class PlaceholderManager {
+    constructor(inputElement, placeholderElement, initialPlaceholder) {
+        this.input = inputElement;
+        this.placeholder = placeholderElement;
+        this.placeholderText = initialPlaceholder;
+        this.inputHandler = this.handleInput.bind(this);
+        this.initializePlaceholder();
+    }
+    initializePlaceholder() {
+        this.setPlaceholder(this.placeholderText);
+        this.input.addEventListener("input", this.inputHandler);
+        this.updatePlaceholderVisibility();
+    }
+    handleInput() {
+        this.updatePlaceholderVisibility();
+    }
+    updatePlaceholderVisibility() {
+        var _a;
+        if (((_a = this.input.textContent) === null || _a === void 0 ? void 0 : _a.trim()) === "") {
+            this.placeholder.style.display = "block";
+            this.hideStandardPlaceholder();
+        }
+        else {
+            this.placeholder.style.display = "none";
+            this.showStandardPlaceholder();
+        }
+    }
+    setPlaceholder(newPlaceholder) {
+        this.placeholderText = newPlaceholder;
+        this.placeholder.textContent = this.placeholderText;
+        this.updatePlaceholderVisibility();
+    }
+    getPlaceholder() {
+        return this.placeholderText;
+    }
+    /**
+     * Get Claude's own placeholder element, which is hidden when the prompt is not empty
+     */
+    getStandardPlaceholder() {
+        return this.input.querySelector("p[data-placeholder]");
+    }
+    showStandardPlaceholder() {
+        const placeholder = this.getStandardPlaceholder();
+        if (placeholder) {
+            placeholder.style.display = "block";
+        }
+    }
+    hideStandardPlaceholder() {
+        const placeholder = this.getStandardPlaceholder();
+        if (placeholder) {
+            placeholder.style.display = "none";
+        }
+    }
+}
+
+
+;// CONCATENATED MODULE: ./src/chatbots/ChatbotService.ts
+
+
+/**
+ * This is the single place a concrete chatbot is created.
+ * All other parts of the application should use this service to get a chatbot.
+ */
+class ChatbotService {
+    static getChatbot() {
+        // return chatbot depending on the location
+        if (window.location.hostname.includes("claude")) {
+            return new ClaudeChatbot();
+        }
+        else {
+            return new PiAIChatbot();
+        }
+    }
+    static addChatbotFlags() {
+        const chatbot = ChatbotService.getChatbot();
+        // add flags to the body to indicate which chatbot is being used
+        document.body.classList.add(chatbot.getName().toLowerCase());
+    }
+}
+
+;// CONCATENATED MODULE: ./src/StateMachineService.js
+function StateMachineService_typeof(o) { "@babel/helpers - typeof"; return StateMachineService_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, StateMachineService_typeof(o); }
+function StateMachineService_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, StateMachineService_toPropertyKey(descriptor.key), descriptor); } }
+function StateMachineService_createClass(Constructor, protoProps, staticProps) { if (protoProps) StateMachineService_defineProperties(Constructor.prototype, protoProps); if (staticProps) StateMachineService_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function StateMachineService_toPropertyKey(arg) { var key = StateMachineService_toPrimitive(arg, "string"); return StateMachineService_typeof(key) === "symbol" ? key : String(key); }
+function StateMachineService_toPrimitive(input, hint) { if (StateMachineService_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (StateMachineService_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function StateMachineService_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+
+
+
+
+
+
+
+/**
+ * A singleton service that manages the state machine.
+ */
+var StateMachineService = /*#__PURE__*/StateMachineService_createClass(function StateMachineService(chatbot) {
+  var _this = this;
+  StateMachineService_classCallCheck(this, StateMachineService);
+  var conversationMachine = createSayPiMachine(chatbot);
+  this.actor = interpret(conversationMachine).onTransition(function (state) {
+    if (state.changed) {
+      var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
+      var toState = serializeStateValue(state.value);
+      logger.debug("Say, Pi Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+    }
+  });
+  this.actor.start();
+  this.screenLockActor = interpret(ScreenLockMachine_machine).onTransition(function (state) {
+    if (state.changed) {
+      var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
+      var toState = serializeStateValue(state.value);
+      logger.debug("Screen Lock Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+    }
+  });
+  this.screenLockActor.start();
+  var themeManager = ThemeManager.getInstance();
+  var themeToggleMachine = createThemeToggleMachine(themeManager);
+  this.themeToggleActor = interpret(themeToggleMachine).onTransition(function (state) {
+    if (state.changed) {
+      var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
+      var toState = serializeStateValue(state.value);
+      logger.debug("Theme Toggle Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+    }
+  });
+  this.themeToggleActor.start();
+  // low-coupling link between theme toggle machine and theme manager
+  EventBus.on("saypi:theme:toggle", function (event) {
+    _this.themeToggleActor.send("toggle");
+  });
+  this.analyticsMachineActor = interpret(SessionAnalyticsMachine_machine).onTransition(function (state) {
+    if (state.changed) {
+      var fromState = state.history ? serializeStateValue(state.history.value) : "N/A";
+      var toState = serializeStateValue(state.value);
+      logger.debug("Session Analytics Machine transitioned from ".concat(fromState, " to ").concat(toState, " with ").concat(state.event.type));
+    }
+  });
+  this.analyticsMachineActor.start();
+}); // Singleton
+var StateMachineService_chatbot = ChatbotService.getChatbot();
+/* harmony default export */ const src_StateMachineService = (new StateMachineService(StateMachineService_chatbot));
+;// CONCATENATED MODULE: ./src/SubmitErrorHandler.ts
+
+
+class SubmitErrorHandler {
+    constructor() {
+        this.audioOutputStatus = false;
+        this.audioControls = new AudioControlsModule();
+        // Initialise properties if needed
+        this.restorePointKey = "restorePoint";
+    }
+    initAudioOutputListener() {
+        const audioOutputButton = document.getElementById("saypi-audio-output-button");
+        if (audioOutputButton) {
+            audioOutputButton.addEventListener("click", this.handleAudioOutputClick.bind(this));
+        }
+    }
+    // Event handler
+    handleAudioOutputClick() {
+        this.audioOutputStatus = !this.audioOutputStatus; // Toggle the state
+    }
+    // 1. Detect when a submit error occurs
+    detectSubmitError() {
+        const submitButton = document.getElementById("saypi-submitButton");
+        const textarea = document.getElementById("saypi-prompt");
+        if (submitButton && textarea) {
+            if (submitButton.disabled && textarea.value.length > 0) {
+                console.warn("Submit error detected, but ignored.");
+                //return true; // submit error handler disabled in v1.6.0 for evaluation purposes
+            }
+        }
+        return false;
+    }
+    // 2. Create a "restore point" capturing application state
+    createRestorePoint({ prompt: message, audioInputEnabled: audioInputStatus, audioOutputEnabled: audioOutputStatus, }) {
+        const restorePoint = {
+            prompt: message,
+            audioInputEnabled: audioInputStatus,
+            audioOutputEnabled: audioOutputStatus,
+            creationTime: new Date().toISOString(),
+        };
+        localStorage.setItem(this.restorePointKey, JSON.stringify(restorePoint));
+    }
+    // 3. Programmatically reload the page
+    reloadPage() {
+        window.location.reload();
+    }
+    handleSubmitError() {
+        const textarea = document.getElementById("saypi-prompt");
+        const prompt = textarea ? textarea.value : "";
+        let audioInputStatus = true;
+        const callButton = document.getElementById("saypi-callButton");
+        if (callButton) {
+            audioInputStatus = callButton.classList.contains("active");
+        }
+        console.log("Creating restore point");
+        this.createRestorePoint({
+            prompt: prompt,
+            audioInputEnabled: audioInputStatus,
+            audioOutputEnabled: this.audioOutputStatus,
+        });
+        console.log("Reloading page");
+        this.reloadPage();
+    }
+    getPiPrompt() {
+        const promptElement = document.getElementById("saypi-prompt");
+        // this error handler is specific to the Pi chatbot
+        return new PiAIChatbot().getPrompt(promptElement);
+    }
+    // 4. On load, check for a restore point
+    checkForRestorePoint() {
+        const storedData = localStorage.getItem(this.restorePointKey);
+        if (storedData) {
+            const restorePoint = JSON.parse(storedData);
+            const currentTime = new Date();
+            const restoreTime = new Date(restorePoint.creationTime);
+            const timeDifference = (currentTime.getTime() - restoreTime.getTime()) / (1000 * 60); // in minutes
+            if (timeDifference <= 5) {
+                console.log("Restoring application state", restorePoint);
+                this.getPiPrompt().setFinal(restorePoint.prompt);
+                setTimeout(() => {
+                    this.audioControls.activateAudioInput(restorePoint.audioInputEnabled);
+                }, 0); // activation of the audio input needs to happen asynchronously to avoid race condition
+                this.audioControls.activateAudioOutput(restorePoint.audioOutputEnabled);
+                // Delete the executed restore point
+                localStorage.removeItem(this.restorePointKey);
+            }
+        }
+    }
+}
+// Singleton
+const submitErrorHandler = new SubmitErrorHandler();
+
+;// CONCATENATED MODULE: ./src/icons/exit.svg
+/* harmony default export */ const exit = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"Layer_1\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 64.06 64.33\">\n  <defs>\n    <style>\n      .inner {\n        fill: #24381b;\n      }\n\n      .inner, .outer {\n        stroke-width: 0px;\n      }\n\n      .outer {\n        fill: #dfd7c2;\n      }\n    </style>\n  </defs>\n  <path class=\"outer\" d=\"m31.71,64.32C14.77,64.46-.44,49.93,0,31.33.41,14.47,14.29-.32,32.7,0c16.91.3,31.8,14.32,31.36,33.14-.39,16.76-14.49,31.55-32.34,31.18Zm10.67-23.19c.06-.7-.41-1.12-.84-1.55-2-2-3.94-4.07-6.02-5.97-1.14-1.04-1.32-1.68-.06-2.82,2.13-1.93,4.07-4.08,6.1-6.12.78-.79,1.31-1.64.34-2.56-.92-.87-1.72-.28-2.43.45-2.17,2.21-4.39,4.39-6.52,6.65-.72.77-1.16.7-1.84-.02-2.06-2.17-4.19-4.28-6.29-6.41-.76-.77-1.59-1.68-2.66-.63-1.14,1.12-.19,1.98.62,2.79,2.07,2.09,4.09,4.22,6.2,6.26.77.75.82,1.2.02,1.97-2.21,2.1-4.33,4.3-6.49,6.45-.79.78-1.3,1.65-.32,2.56.92.85,1.71.26,2.43-.47,2.11-2.12,4.28-4.19,6.33-6.38.88-.94,1.37-.86,2.21.03,2.13,2.26,4.37,4.41,6.57,6.6.51.51,1.09.78,1.8.48.56-.24.85-.68.87-1.3Z\"/>\n  <path class=\"inner\" d=\"m42.47,41.27c-.02.62-.32,1.06-.87,1.3-.71.31-1.29.03-1.8-.48-2.2-2.2-4.44-4.35-6.57-6.6-.84-.89-1.33-.96-2.21-.03-2.04,2.19-4.22,4.25-6.33,6.38-.72.72-1.51,1.32-2.43.47-.98-.91-.47-1.78.32-2.56,2.16-2.15,4.28-4.35,6.49-6.45.81-.77.76-1.22-.02-1.97-2.11-2.04-4.13-4.17-6.2-6.26-.8-.81-1.75-1.67-.62-2.79,1.07-1.05,1.9-.14,2.66.63,2.1,2.13,4.23,4.24,6.29,6.41.69.73,1.12.79,1.84.02,2.13-2.26,4.35-4.43,6.52-6.65.72-.73,1.51-1.31,2.43-.45.97.92.44,1.78-.34,2.56-2.03,2.04-3.97,4.19-6.1,6.12-1.25,1.14-1.08,1.78.06,2.82,2.09,1.91,4.02,3.97,6.02,5.97.43.43.9.85.84,1.55Z\"/>\n</svg>");
+;// CONCATENATED MODULE: ./src/icons/maximize.svg
+/* harmony default export */ const maximize = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 768 767.999994\" preserveAspectRatio=\"xMidYMid meet\"\n    version=\"1.0\">\n    <path fill=\"#e4d8c1\" class=\"outer\"\n        d=\"M 768.132812 379.535156 C 768.132812 169.089844 597.523438 -1.496094 387.050781 -1.496094 C 176.609375 -1.496094 5.996094 169.089844 5.996094 379.535156 C 5.996094 589.949219 176.609375 760.539062 387.050781 760.539062 C 597.523438 760.539062 768.132812 589.949219 768.132812 379.535156 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n    <path fill=\"#776d6d\" class=\"inner\"\n        d=\"M 538.996094 223.152344 L 306.535156 229.855469 L 538.996094 455.695312 Z M 538.996094 223.152344 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n    <path fill=\"#776d6d\" class=\"inner\"\n        d=\"M 235.105469 535.890625 L 467.597656 529.1875 L 235.105469 303.34375 Z M 235.105469 535.890625 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n</svg>");
+;// CONCATENATED MODULE: ./src/icons/immersive.svg
+/* harmony default export */ const immersive = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg id=\"Layer_1\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\">\n  <defs>\n    <style>\n      .cls-1 {\n        fill: none;\n        stroke: #000;\n        stroke-linecap: round;\n        stroke-linejoin: round;\n        stroke-width: 2px;\n      }\n    </style>\n  </defs>\n  <rect class=\"cls-1\" x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\" ry=\"2\"/>\n  <line class=\"cls-1\" x1=\"8\" y1=\"3\" x2=\"8\" y2=\"8\"/>\n  <line class=\"cls-1\" x1=\"3\" y1=\"8\" x2=\"8\" y2=\"8\"/>\n  <line class=\"cls-1\" x1=\"16\" y1=\"3\" x2=\"16\" y2=\"8\"/>\n  <line class=\"cls-1\" x1=\"16\" y1=\"8\" x2=\"21\" y2=\"8\"/>\n  <line class=\"cls-1\" x1=\"8\" y1=\"21\" x2=\"8\" y2=\"16\"/>\n  <line class=\"cls-1\" x1=\"3\" y1=\"16\" x2=\"8\" y2=\"16\"/>\n  <line class=\"cls-1\" x1=\"16\" y1=\"21\" x2=\"16\" y2=\"16\"/>\n  <line class=\"cls-1\" x1=\"16\" y1=\"16\" x2=\"21\" y2=\"16\"/>\n</svg>");
+;// CONCATENATED MODULE: ./src/icons/call.svg
+/* harmony default export */ const call = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 768 767.999994\"\n    preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n    <path class=\"circle\" fill=\"#418a2f\"\n        d=\"M 767.988281 383.984375 C 767.988281 596.058594 596.066406 767.980469 383.996094 767.980469 C 171.921875 767.980469 0 596.058594 0 383.984375 C 0 171.910156 171.921875 -0.0078125 383.996094 -0.0078125 C 596.066406 -0.0078125 767.988281 171.910156 767.988281 383.984375 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n    <path class=\"phone-receiver\" fill=\"#ffffff\"\n        d=\"M 215.726562 199.773438 C 219.746094 194.835938 230.023438 183.625 243.644531 183.769531 C 244.40625 183.777344 245.300781 183.808594 246.34375 183.914062 C 246.34375 183.914062 248.492188 184.144531 250.613281 184.703125 C 268.292969 189.410156 299.921875 224.304688 299.921875 224.304688 C 326.925781 254.09375 334.722656 255.53125 334.636719 266.5 C 334.550781 276.777344 328.140625 284.71875 316.253906 296.566406 C 284.566406 328.148438 277.808594 330.53125 275.351562 340.421875 C 273.902344 346.234375 269.539062 357.511719 289.105469 379.355469 C 318.289062 411.929688 388.1875 478.4375 394.300781 482.515625 C 400.402344 486.585938 422.121094 500.832031 451.300781 474.371094 C 471.226562 456.304688 480.714844 435.066406 494.875 433.785156 C 502.363281 433.089844 507.878906 437.613281 519.167969 447.222656 C 585.886719 503.976562 586.871094 513.933594 586.3125 519.824219 C 585.355469 530.011719 580.75 539.210938 565.316406 550.382812 C 525.953125 578.878906 508.3125 603.992188 428.234375 570.742188 C 348.152344 537.484375 263.996094 453.335938 240.242188 417.359375 C 216.488281 381.390625 179.160156 326.421875 181.878906 288.414062 C 183.769531 261.980469 191.867188 238.863281 191.867188 238.863281 C 199.097656 220.882812 208.71875 207.878906 215.726562 199.773438 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n</svg>");
+;// CONCATENATED MODULE: ./src/icons/call-starting.svg
+/* harmony default export */ const call_starting = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 768 767.999994\" preserveAspectRatio=\"xMidYMid meet\"\n    version=\"1.0\">\n    <style>\n        .receiver {\n        animation: receiver-move 1s ease-in-out infinite alternate;\n        }\n        @keyframes receiver-move {\n        0% { transform: translate(0, 0); }\n        100% { transform: translate(10px, -20px); }\n        }\n    </style>\n    <path fill=\"#4e84be\"\n        d=\"M 767.988281 383.984375 C 767.988281 596.058594 596.066406 767.980469 383.996094 767.980469 C 171.921875 767.980469 0 596.058594 0 383.984375 C 0 171.910156 171.921875 -0.0078125 383.996094 -0.0078125 C 596.066406 -0.0078125 767.988281 171.910156 767.988281 383.984375 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n    <path fill=\"#ffffff\"\n        class=\"receiver\"\n        d=\"M 215.726562 199.773438 C 219.746094 194.835938 230.023438 183.625 243.644531 183.769531 C 244.40625 183.777344 245.300781 183.808594 246.34375 183.914062 C 246.34375 183.914062 248.492188 184.144531 250.613281 184.703125 C 268.292969 189.410156 299.921875 224.304688 299.921875 224.304688 C 326.925781 254.09375 334.722656 255.53125 334.636719 266.5 C 334.550781 276.777344 328.140625 284.71875 316.253906 296.566406 C 284.566406 328.148438 277.808594 330.53125 275.351562 340.421875 C 273.902344 346.234375 269.539062 357.511719 289.105469 379.355469 C 318.289062 411.929688 388.1875 478.4375 394.300781 482.515625 C 400.402344 486.585938 422.121094 500.832031 451.300781 474.371094 C 471.226562 456.304688 480.714844 435.066406 494.875 433.785156 C 502.363281 433.089844 507.878906 437.613281 519.167969 447.222656 C 585.886719 503.976562 586.871094 513.933594 586.3125 519.824219 C 585.355469 530.011719 580.75 539.210938 565.316406 550.382812 C 525.953125 578.878906 508.3125 603.992188 428.234375 570.742188 C 348.152344 537.484375 263.996094 453.335938 240.242188 417.359375 C 216.488281 381.390625 179.160156 326.421875 181.878906 288.414062 C 183.769531 261.980469 191.867188 238.863281 191.867188 238.863281 C 199.097656 220.882812 208.71875 207.878906 215.726562 199.773438 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n</svg>");
+;// CONCATENATED MODULE: ./src/icons/hangup.svg
+/* harmony default export */ const hangup = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    viewBox=\"0 0 64 64\" preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n    <path fill=\"#776d6d\"\n        d=\"M 63.75 31.875 C 63.75 49.29395 49.29395 63.75 31.875 63.75 C 14.45605 63.75 0 49.29395 0 31.875 C 0 14.45605 14.45605 0 31.875 0 C 49.29395 0 63.75 14.45605 63.75 31.875 \"\n        fill-opacity=\"0.8\" fill-rule=\"nonzero\" />\n    <path fill=\"#ffffff\"\n        d=\"M 12.727539 34.74707 C 12.728027 34.747314 13.897949 37.758789 15.219788 38.542328 C 16.077148 39.048828 16.793945 38.776855 17.71875 38.340332 C 19.519531 37.490723 21.362305 36.74707 23.290039 36.246094 C 24.087891 36.012695 24.193359 35.574219 24.022461 35.060547 C 23.783203 34.224121 23.540039 33.388672 23.292969 32.553711 C 23.146484 32.042969 23.460938 31.490234 24.179688 31.196289 C 26.69043 30.344238 29.179688 30.243164 31.669922 30.230469 C 31.779297 30.230469 32.053711 30.230469 32.163086 30.230469 C 34.65332 30.243164 37.142578 30.344238 39.65332 31.196289 C 40.37207 31.490234 40.686523 32.042969 40.540039 32.553711 C 40.292969 33.388672 40.049805 34.224121 39.810547 35.060547 C 39.639648 35.574219 39.745117 36.012695 40.542969 36.246094 C 43.470703 36.74707 45.313477 37.490723 47.114258 38.340332 C 47.976562 38.776855 48.693359 39.048828 49.550781 38.542328 C 50.872559 37.758789 52.04248 34.747314 52.042969 34.74707 C 52.222656 32.560547 51.503906 29.84375 48.347656 28.462891 C 43.330078 26.236328 37.943359 25.053711 32.178711 25.016602 C 32.063477 25.016602 31.697266 25.016602 31.571289 25.016602 C 25.806641 25.053711 20.419922 26.236328 15.402344 28.462891 C 12.246094 29.84375 11.527344 32.560547 11.707031 34.74707 \"\n        fill-opacity=\"0.9\" fill-rule=\"nonzero\" />\n    <circle id=\"progress-ring\" cx=\"32\" cy=\"32\" r=\"30\" stroke-width=\"4\" stroke=\"red\"\n        fill=\"transparent\" stroke-dasharray=\"188.4\" stroke-dashoffset=\"188.4\"></circle>\n</svg>");
+;// CONCATENATED MODULE: ./src/icons/hangup-minced.svg
+/* harmony default export */ const hangup_minced = ("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!-- Generator: Adobe Illustrator 28.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->\n<svg version=\"1.1\" id=\"Layer_2_00000052807000332147576670000017844573372086964400_\"\n\t xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0 0 768 768\"\n\t style=\"enable-background:new 0 0 768 768;\" xml:space=\"preserve\"><metadata><c2pa:manifest xmlns:c2pa=\"http://c2pa.org/manifest\">AAAsaGp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAACxCanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46dXVpZDo4Y2FkNmI2NC1mZTc3LTRhNTUtODM2NS01Njg4ZjNjM2E3YTcAAAABqGp1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAAMpqdW1iAAAAJmp1bWRjYm9yABEAEIAAAKoAOJtxA2MycGEuYWN0aW9ucwAAAACcY2JvcqFnYWN0aW9uc4GjZmFjdGlvbmtjMnBhLmVkaXRlZG1zb2Z0d2FyZUFnZW50bUFkb2JlIEZpcmVmbHlxZGlnaXRhbFNvdXJjZVR5cGV4Rmh0dHA6Ly9jdi5pcHRjLm9yZy9uZXdzY29kZXMvZGlnaXRhbHNvdXJjZXR5cGUvdHJhaW5lZEFsZ29yaXRobWljTWVkaWEAAACtanVtYgAAAChqdW1kY2JvcgARABCAAACqADibcQNjMnBhLmhhc2guZGF0YQAAAAB9Y2JvcqVqZXhjbHVzaW9uc4GiZXN0YXJ0GQHRZmxlbmd0aBk7OGRuYW1lbmp1bWJmIG1hbmlmZXN0Y2FsZ2ZzaGEyNTZkaGFzaFggCMNPCTa5QR5ZSOAVeP4CmbLHHNfk+N2S7kLeQUa5jJBjcGFkSQAAAAAAAAAAAAAAAgtqdW1iAAAAJGp1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0AAAAB32Nib3KoaGRjOnRpdGxlb0dlbmVyYXRlZCBJbWFnZWlkYzpmb3JtYXRtaW1hZ2Uvc3ZnK3htbGppbnN0YW5jZUlEeCx4bXA6aWlkOjNlM2E0MzA4LTMyZTItNGUxYS1iYmI0LWZlMDMyYWRkYmUzYm9jbGFpbV9nZW5lcmF0b3J4NkFkb2JlX0lsbHVzdHJhdG9yLzI4LjAgYWRvYmVfYzJwYS8wLjcuNiBjMnBhLXJzLzAuMjUuMnRjbGFpbV9nZW5lcmF0b3JfaW5mb4G/ZG5hbWVxQWRvYmUgSWxsdXN0cmF0b3JndmVyc2lvbmQyOC4w/2lzaWduYXR1cmV4GXNlbGYjanVtYmY9YzJwYS5zaWduYXR1cmVqYXNzZXJ0aW9uc4KiY3VybHgnc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5hY3Rpb25zZGhhc2hYIOusZuFqg598YJzpOfX+1iNBgqddK8SSEhBG9CJk0CvBomN1cmx4KXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaGFzaC5kYXRhZGhhc2hYIMBRDXHSCuAF5ulhy2cwcY/MaDARV3rxYA6FjD99VdiKY2FsZ2ZzaGEyNTYAAChAanVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAACgQY2JvctKERKEBOCSjZnNpZ1RzdKFpdHN0VG9rZW5zgaFjdmFsWQ41MIIOMTADAgEAMIIOKAYJKoZIhvcNAQcCoIIOGTCCDhUCAQMxDzANBglghkgBZQMEAgEFADCBgQYLKoZIhvcNAQkQAQSgcgRwMG4CAQEGCWCGSAGG/WwHATAxMA0GCWCGSAFlAwQCAQUABCCfoYg/hRMBjOQb9QOJ365SiRXzl0nq84JYJmF+yAbHbgIQNGXnPXpaVXxxtccxhd6XMBgPMjAyMzEyMTExNTE2MjRaAggvMa2An+lNtKCCC70wggUHMIIC76ADAgECAhAFHp6R1x6RCrvkPVzt0N3ZMA0GCSqGSIb3DQEBCwUAMGMxCzAJBgNVBAYTAlVTMRcwFQYDVQQKEw5EaWdpQ2VydCwgSW5jLjE7MDkGA1UEAxMyRGlnaUNlcnQgVHJ1c3RlZCBHNCBSU0E0MDk2IFNIQTI1NiBUaW1lU3RhbXBpbmcgQ0EwHhcNMjMwOTA4MDAwMDAwWhcNMzQxMjA3MjM1OTU5WjBYMQswCQYDVQQGEwJVUzEXMBUGA1UEChMORGlnaUNlcnQsIEluYy4xMDAuBgNVBAMTJ0RpZ2lDZXJ0IEFkb2JlIEFBVEwgVGltZXN0YW1wIFJlc3BvbmRlcjBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABE0srlH5A/+15/MFl1asNh8Q8TubOsEVfu0qlJrF0smjtwL1IeHZ/AB7J59u1Trpho1BDN85lfTY30rNBsfT+myjggGLMIIBhzAOBgNVHQ8BAf8EBAMCB4AwDAYDVR0TAQH/BAIwADAWBgNVHSUBAf8EDDAKBggrBgEFBQcDCDAgBgNVHSAEGTAXMAgGBmeBDAEEAjALBglghkgBhv1sBwEwHwYDVR0jBBgwFoAUuhbZbU2FL3MpdpovdYxqII+eyG8wHQYDVR0OBBYEFLA1qlbDIamLztO4vIsWJVed7zThMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydFRydXN0ZWRHNFJTQTQwOTZTSEEyNTZUaW1lU3RhbXBpbmdDQS5jcmwwgZAGCCsGAQUFBwEBBIGDMIGAMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wWAYIKwYBBQUHMAKGTGh0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydFRydXN0ZWRHNFJTQTQwOTZTSEEyNTZUaW1lU3RhbXBpbmdDQS5jcnQwDQYJKoZIhvcNAQELBQADggIBAHgrjELHhBCEWJSCyRX7lsL0C9LJgbX1ryVYySNRxHkMR2LqC7PQZRJgDNR+kJop8P5v2Bzp/jMrzw4U4pY6rYv3I8HpFlJa4uBwUTIUgHWpi8Xxd1JEEX94POODi7HySekX60A055BozFb7GGVaxb0LreQTRXnkr6ggPNUPX9Gh+2ScOxlTdQQLgZbkdYvxo3Ap6cy9riZijRxOZqiOyWSxMUhgKxeKzwrFW6Xbe0awNhOUXZzIxc4ixpKzWSItpPJ30ZiBQn49U3ADYTnshbN9ZkTA1pHf/Nov2ZUvvddkZ8UYvwo9vBvLTDvnmABnRMBKaXYAs3ZCvw9CkDPOWTeUJMFRAtmUx52ohaA3nD8bCJ6UfpQ2pFfOdShwpb6GKv0g+BgcdIG2LHPJ0Ufmr+XmpgZgq/HIge0hjcCADpjDgq2z4B0L4xtAA1M8MrUx02hxb7104nFKqMuv5zJTQl3sgwqXUyP+9zHQP9y/Z5Fx/AQWrOXCW56dV7P4cFBJl8zHqinlhkOStZ1m22+9Hlq+eC0hJ2lkF1LuzRdJJb/51LXoPKRnopFDng6XpoD7eG6w4YpAx9+P00JuUoBsYSrdsuFiyWyQQGBAnjI69ggbSLcW+hJytuinaxawVlItJkS2eV5Z4XsxPg7f82uRkdtN0hTHeI93CN3OWeRebnK7MIIGrjCCBJagAwIBAgIQBzY3tyRUfNhHrP0oZipeWzANBgkqhkiG9w0BAQsFADBiMQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3d3cuZGlnaWNlcnQuY29tMSEwHwYDVQQDExhEaWdpQ2VydCBUcnVzdGVkIFJvb3QgRzQwHhcNMjIwMzIzMDAwMDAwWhcNMzcwMzIyMjM1OTU5WjBjMQswCQYDVQQGEwJVUzEXMBUGA1UEChMORGlnaUNlcnQsIEluYy4xOzA5BgNVBAMTMkRpZ2lDZXJ0IFRydXN0ZWQgRzQgUlNBNDA5NiBTSEEyNTYgVGltZVN0YW1waW5nIENBMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAxoY1BkmzwT1ySVFVxyUDxPKRN6mXUaHW0oPRnkyibaCwzIP5WvYRoUQVQl+kiPNo+n3znIkLf50fng8zH1ATCyZzlm34V6gCff1DtITaEfFzsbPuK4CEiiIY3+vaPcQXf6sZKz5C3GeO6lE98NZW1OcoLevTsbV15x8GZY2UKdPZ7Gnf2ZCHRgB720RBidx8ald68Dd5n12sy+iEZLRS8nZH92GDGd1ftFQLIWhuNyG7QKxfst5Kfc71ORJn7w6lY2zkpsUdzTYNXNXmG6jBZHRAp8ByxbpOH7G1WE15/tePc5OsLDnipUjW8LAxE6lXKZYnLvWHpo9OdhVVJnCYJn+gGkcgQ+NDY4B7dW4nJZCYOjgRs/b2nuY7W+yB3iIU2YIqx5K/oN7jPqJz+ucfWmyU8lKVEStYdEAoq3NDzt9KoRxrOMUp88qqlnNCaJ+2RrOdOqPVA+C/8KI8ykLcGEh/FDTP0kyr75s9/g64ZCr6dSgkQe1CvwWcZklSUPRR8zZJTYsg0ixXNXkrqPNFYLwjjVj33GHek/45wPmyMKVM1+mYSlg+0wOI/rOP015LdhJRk8mMDDtbiiKowSYI+RQQEgN9XyO7ZONj4KbhPvbCdLI/Hgl27KtdRnXiYKNYCQEoAA6EVO7O6V3IXjASvUaetdN2udIOa5kM0jO0zbECAwEAAaOCAV0wggFZMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFLoW2W1NhS9zKXaaL3WMaiCPnshvMB8GA1UdIwQYMBaAFOzX44LScV1kTN8uZz/nupiuHA9PMA4GA1UdDwEB/wQEAwIBhjATBgNVHSUEDDAKBggrBgEFBQcDCDB3BggrBgEFBQcBAQRrMGkwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBBBggrBgEFBQcwAoY1aHR0cDovL2NhY2VydHMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0VHJ1c3RlZFJvb3RHNC5jcnQwQwYDVR0fBDwwOjA4oDagNIYyaHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0VHJ1c3RlZFJvb3RHNC5jcmwwIAYDVR0gBBkwFzAIBgZngQwBBAIwCwYJYIZIAYb9bAcBMA0GCSqGSIb3DQEBCwUAA4ICAQB9WY7Ak7ZvmKlEIgF+ZtbYIULhsBguEE0TzzBTzr8Y+8dQXeJLKftwig2qKWn8acHPHQfpPmDI2AvlXFvXbYf6hCAlNDFnzbYSlm/EUExiHQwIgqgWvalWzxVzjQEiJc6VaT9Hd/tydBTX/6tPiix6q4XNQ1/tYLaqT5Fmniye4Iqs5f2MvGQmh2ySvZ180HAKfO+ovHVPulr3qRCyXen/KFSJ8NWKcXZl2szwcqMj+sAngkSumScbqyQeJsG33irr9p6xeZmBo1aGqwpFyd/EjaDnmPv7pp1yr8THwcFqcdnGE4AJxLafzYeHJLtPo0m5d2aR8XKc6UsCUqc3fpNTrDsdCEkPlM05et3/JWOZJyw9P2un8WbDQc1PtkCbISFA0LcTJM3cHXg65J6t5TRxktcma+Q4c6umAU+9Pzt4rUyt+8SVe+0KXzM5h0F4ejjpnOHdI/0dKNPH+ejxmF/7K9h+8kaddSweJywm228Vex4Ziza4k9Tm8heZWcpw8De/mADfIBZPJ/tgZxahZrrdVcA6KYawmKAr7ZVBtzrVFZgxtGIJDwq9gdkT/r+k0fNX2bwE+oLeMt8EifAAzV3C+dAjfwAL5HYCJtnwZXZCpimHCUcr5n8apIUP/JiW9lVUKx+A+sDyDivl1vupL0QVSucTDh3bNzgaoSv27dZ8/DGCAbgwggG0AgEBMHcwYzELMAkGA1UEBhMCVVMxFzAVBgNVBAoTDkRpZ2lDZXJ0LCBJbmMuMTswOQYDVQQDEzJEaWdpQ2VydCBUcnVzdGVkIEc0IFJTQTQwOTYgU0hBMjU2IFRpbWVTdGFtcGluZyBDQQIQBR6ekdcekQq75D1c7dDd2TANBglghkgBZQMEAgEFAKCB0TAaBgkqhkiG9w0BCQMxDQYLKoZIhvcNAQkQAQQwHAYJKoZIhvcNAQkFMQ8XDTIzMTIxMTE1MTYyNFowKwYLKoZIhvcNAQkQAgwxHDAaMBgwFgQU2Rq5M/4XremCHqYT9aQ6cU4+fn0wLwYJKoZIhvcNAQkEMSIEIL2EgCL8tP9UxBHcGmM8yEy4YHl30aFv+nASifE52hWRMDcGCyqGSIb3DQEJEAIvMSgwJjAkMCIEIILa8ZSVezaEAkWP1ScAaf5ixxRW+p4Lhqv4J+hTICfZMAoGCCqGSM49BAMCBEcwRQIhANtOfrKJph9J3j2KR0wF4V7oC5MC3Uf+0UZLP4r4HaMzAiAdJYYc50LeaRfvzNS2yMpT5tAyrXAIln8T3qMp9cMfZmd4NWNoYWluglkGMzCCBi8wggQXoAMCAQICEBtbCzvasORd8vMNnlTR2tIwDQYJKoZIhvcNAQELBQAwdTELMAkGA1UEBhMCVVMxIzAhBgNVBAoTGkFkb2JlIFN5c3RlbXMgSW5jb3Jwb3JhdGVkMR0wGwYDVQQLExRBZG9iZSBUcnVzdCBTZXJ2aWNlczEiMCAGA1UEAxMZQWRvYmUgUHJvZHVjdCBTZXJ2aWNlcyBHMzAeFw0yMzAyMDEwMDAwMDBaFw0yNDAyMDEyMzU5NTlaMIGhMREwDwYDVQQDDAhjYWktcHJvZDEcMBoGA1UECwwTQ29udGVudCBDcmVkZW50aWFsczETMBEGA1UECgwKQWRvYmUgSW5jLjERMA8GA1UEBwwIU2FuIEpvc2UxEzARBgNVBAgMCkNhbGlmb3JuaWExCzAJBgNVBAYTAlVTMSQwIgYJKoZIhvcNAQkBFhVncnAtY2FpLW9wc0BhZG9iZS5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDv0wCnfYY9lkHDsykrTG7FYlnYHBcyualuD5u9ULjzv+FsTWOLg8Nhrz9RTxI9EeBbu3Wm7f4vqPsQYfxkEp0wIa6DVmEOZhbAeRfbhybWQ/D4Wvvck4mEZR+QZmTpIn7HX61gbtMFHlJUxkYBctIoAt9TBAFbz9d5Ig2WG0bsH39b6/8USXnIIk4FB6dtBRT1xeEwSDtwOd1YBpXXNBJmRWHXNJZZ85of2tBTesg/kMvTrOJJxYDZ97U416wcvbVomlees+NXUY3/ZB4xH+NsZils7m1bL2v2hSnHiLoqZeUKklbHUmT4ZpjrZCdtuIsWm5j2PPXKr7HKUuCbZSXBAgMBAAWjggGMMIIBiDAMBgNVHRMBAf8EAjAAMA4GA1UdDwEB/wQEAwIHgDAeBgNVHSUEFzAVBgkqhkiG9y8BAQwGCCsGAQUFBwMEMIGOBgNVHSAEgYYwgYMwgYAGCSqGSIb3LwECAzBzMHEGCCsGAQUFBwICMGUMY1lvdSBhcmUgbm90IHBlcm1pdHRlZCB0byB1c2UgdGhpcyBMaWNlbnNlIENlcnRpZmljYXRlIGV4Y2VwdCBhcyBwZXJtaXR0ZWQgYnkgdGhlIGxpY2Vuc2UgYWdyZWVtZW50LjBdBgNVHR8EVjBUMFKgUKBOhkxodHRwOi8vcGtpLWNybC5zeW1hdXRoLmNvbS9jYV83YTVjM2EwYzczMTE3NDA2YWRkMTkzMTJiYzFiYzIzZi9MYXRlc3RDUkwuY3JsMDcGCCsGAQUFBwEBBCswKTAnBggrBgEFBQcwAYYbaHR0cDovL3BraS1vY3NwLnN5bWF1dGguY29tMB8GA1UdIwQYMBaAFFcpejJNzP7kNU7AHyRzznNTq99qMA0GCSqGSIb3DQEBCwUAA4ICAQBXjlGa3yAK/Gijn6n/JNU9FZm72MP6vc5czrWe9y0T+EawuRvhpD5Edi1TnXkrpe8sMkgSjTGdbY+yGhq8zlCWQeXN1/aWo3L9Xr1uNxY/oVpLn0uWWfnfJ7yR9gKl/yoMfhjydT4t1fXHi/MhfhrWSVRHqX2U31UFGz/e298P2kv+vqhzpIUo1bj+jibtoPLMMQcCOTtKiJOTh4o3VSZpwQDERCzo91NkF+LnZjwYl6fE5USIkg/oCoomXxSPpowybDrcRJ9ilbtJcER48/LGgwzv/c7OYdron4PnEXm1FkOaVj+QRf7OwiNTizonhIzLR5Vfp0QHOWv/bPzvCjPQd+Xr0Q4032WlSxQwostNTAPtoVAU4OCwVH3Ech38emJ00/6fkDCdr7MN8/4n2LSNrMUvaBEZdmLqDCBnO02dbFrmpg3pTc0FqRQ4GL/88pjRNSMy5tU9SoQnSCGYqIsjfL8AzgPEGiXXRgABYc1uXecf4/eayb3K2MPs7hnWTbUKpHHJIwxpdN3vTGdZNWpz9Oxfuo3eELQlkTvACHgqkaXi/FAanHe5PChn6fr1/4cNF8goD0buPApgS3zzwqjRhxrH8ISwPfJn8JqzurMaLDMnnc18tHzUiMtX73jf6oXh7voCxX/T4D3nFPlxU3om2cpcLQ1Wd4026x18rlSGR1kGpTCCBqEwggSJoAMCAQICEAyotlR7iebSBol1zYubieIwDQYJKoZIhvcNAQELBQAwbDELMAkGA1UEBhMCVVMxIzAhBgNVBAoTGkFkb2JlIFN5c3RlbXMgSW5jb3Jwb3JhdGVkMR0wGwYDVQQLExRBZG9iZSBUcnVzdCBTZXJ2aWNlczEZMBcGA1UEAxMQQWRvYmUgUm9vdCBDQSBHMjAeFw0xNjExMjkwMDAwMDBaFw00MTExMjgyMzU5NTlaMHUxCzAJBgNVBAYTAlVTMSMwIQYDVQQKExpBZG9iZSBTeXN0ZW1zIEluY29ycG9yYXRlZDEdMBsGA1UECxMUQWRvYmUgVHJ1c3QgU2VydmljZXMxIjAgBgNVBAMTGUFkb2JlIFByb2R1Y3QgU2VydmljZXMgRzMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQC3Hy69vQmzXEhs/gyDrmwB6lF4JaSAPomnsbKIZNr2iXaB+fkd85X8eJiNmI7P5O4cVT4Nc1p3zrESqBV4ZUyW8gcZ78QdwoHG8QNd2VNcHnMgSR+XT9Iafsnq9Nfww3Jt9KL3l5ANQ5n1+MJqr48EWNLll942bOL/JH4ywDSMoqhZqtJEIUUUGlQVBZ8CAvJc7LE6ddA5C52PE2Ppa7RfQgHXf4gfXVZwpxYRZcziPiOHqEvLb0J3cShUbejFxV6cwX8QyAPa1ePHg1RtM0HX+D34xHo3DkyGnmT+Ddq00TEDGG26AL5PdINKFIQl+zaq6KJFQe1fdGE5wrWzU4mBPmzaz3EbLn+7FWlwAhorYqIMldbfHE3ydc+aTU1JW7+bG19qmvhO9IluGtTtQDeqFBj2fg6faxsfVfVPD7stN6TwoIDlkOCE4RE+Iin8m3z3eqi/VsTmsmRqBxWDRaqOHz02EJoEDxXJG3ei+UbIIp01XZQvdufm90WxOTuqqan2ZqTPX9K5VdjEh/ovr7xFc5q1dZo+Sa5y4sTVM854/tLU3klOgUKzzSXYPYS3GhBcYJHjwr9xNRHnNX99D6F0g7OijScWfvtjxh13aTv/H0ETvymah4yfDpVdh9cK5YSCPqnuOlsujFAyhYwJXOWDvZZU2EkWVLDhoPx9zp7N4QIDAQABo4IBNDCCATAwEgYDVR0TAQH/BAgwBgEB/wIBADA1BgNVHR8ELjAsMCqgKKAmhiRodHRwOi8vY3JsLmFkb2JlLmNvbS9hZG9iZXJvb3RnMi5jcmwwDgYDVR0PAQH/BAQDAgEGMBQGA1UdJQQNMAsGCSqGSIb3LwEBBzBXBgNVHSAEUDBOMEwGCSqGSIb3LwECAzA/MD0GCCsGAQUFBwIBFjFodHRwczovL3d3dy5hZG9iZS5jb20vbWlzYy9wa2kvcHJvZF9zdmNlX2Nwcy5odG1sMCQGA1UdEQQdMBukGTAXMRUwEwYDVQQDEwxTWU1DLTQwOTYtMzMwHQYDVR0OBBYEFFcpejJNzP7kNU7AHyRzznNTq99qMB8GA1UdIwQYMBaAFKYc4W1UJEyoj0hyv26pjNXk7DHUMA0GCSqGSIb3DQEBCwUAA4ICAQBxzuUHjKbcLdzI4DtlXgCSgZXrlSAkr59pOF3JfPG42qVNAGU7JcEYXJ6+WbfcGwY7WYMl+jO7IvJPb7shXFYW9bnJgxX7lLU14KExchmcLNY1ee6IhBJ2Y8PzZMRUKSd5CkURPg0PBLGjz/KR/DofHx+G4rPTCOGORYxeYrd01lci5hVxvKccvIk7MD69ZTewfZPSM+0WnsU3f0Zmd7hgbRpUyWceG0eHFpdUKK/ZFWhHjDVC28odCnN885tHncKXviItK0ZUUo/AIthFKlhEXsnq9VL9fFbgvO83ZvpUQo5y8mY3cuGnEVGXdhjNb53CfC1u4dbpYmWaN99subUzEsUaUb3loLPfVfzDOpg2y9v37kBdy/wuXr20teY7U62xj/fAgs1QSnhUtlMTfCqbefyEycKVmKIrJkJLsvgTSYKVvH4FFIwfd5WjqOC97jX98rcVAzhAI0iSkazsWOMvL6m0L4nLJapx+85GsVX8Y6AHmEP4bmCElwil6KAP+UewJFiw5rmwV2pESHAhYuZJa03B8tl0nd2QJzvJGmbeBqXqpF9ORinFM3HErK8puRokOjFH2+1asLeI2tB31W/ELdNe27Ogduq6Z6qBwCp59YX27qydDhD0WRfN64kCs25K88iGAGNW2CAfTDS+b+WYJBiIL9jXYZ4LF+BiUvfdu2NwYWRZC74AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2WQEAdKFoa0QRGITC73KKBuLviuGlo1jOrQQqEhxZ/WWydxLGWAu2BdYUSe56c2ziK2swBjQHkQ8SBUFDj/6VSAz4bzVzG2jR98GJ6Sppfue9H0gbx3SCmOACv5eGwRjjaI+/apPzNQSfEoIl3baURT3WjC7VijM+ZNHxALUdqSLtb+zonrnImcEakDKbD07+2y4s/jKdPI25MExsaZzNJnDUeC9zYwcQd8AUUs7O8jq+ASMRRCKy41eBFpqkS+0DVXhs1asD/2UmD0GuC9pr1B15dP/aS2svhU+52+EihNfAI8EM1CsPBCLwEVlb7tiXDBwYtZtoGUXFpCzvhgknfCxidA==</c2pa:manifest></metadata>\n<style type=\"text/css\">\n\t.st0{fill:#766E72;}\n\t.st1{fill:#B2FFF5;}\n\t.st2{fill:#E2E5CC;}\n\t.st3{fill:#94898F;}\n\t.st4{fill:#B9CCCB;}\n\t.st5{fill:#C3C89C;}\n\t.st6{fill:#A5B5B5;}\n\t.st7{fill:#C0C698;}\n\t.st8{fill:#AE9CA6;}\n\t.st9{fill:#E1C292;}\n\t.st10{fill:#DBB77F;}\n\t.st11{fill:#00DCD3;}\n</style>\n<g id=\"Layer_1-2\">\n\t<g>\n\t\t<path class=\"st0\" d=\"M0.1,414.8c0-2.5,0-5,0-7.5c2.7,0,5.5-0.1,8.2-0.1c2.3,0,3.2-1.1,3-3.2c-0.2-2.1,0.3-4.4-3-4.5\n\t\t\tc-2.7-0.1-5.5,0.3-8.2-0.4c0-10.8,0-21.5,0-32.2c1.7-0.1,3.5-0.2,5.2-0.2c5.9,0,5.9-0.1,6.2-5.9c0.1-2.5-0.8-3.4-3.2-3.3\n\t\t\tc-2.7,0-5.4-0.2-8.1-0.3c0-2.5,0-5,0-7.5c1.9-0.6,4.7,1.3,5.6-2c1.4-5.3,0.5-6.8-4.9-7.4c-0.2,0-0.4-0.2-0.7-0.3\n\t\t\tc0-2.8,0-5.5,0-8.2c2.7-0.1,5.5-0.2,8.2-0.2c1.2,0,2.2-0.1,2.4-1.7c0.2-1.6,0.5-3.2,0.8-4.8c0.3-1.6-0.4-2.2-2.1-2.2\n\t\t\tc-3.1,0-6.2,0-9.4-0.1c0-20.2,0-40.5,0-60.7c3-7.8,6-15.5,9-23.3c0.4-0.9,0.9-2.1-0.8-2.2c-3.2-0.3-1.7-2.1-1.1-3.4\n\t\t\tc4.2-9.7,8.9-19.3,13.8-28.7c1.3-2.5,2.9-3.6,5.8-3.5c7.9,0.2,15.7,0,23.6,0.1c1.9,0,3.2-0.5,4.3-2.3c3.2-5.6,6.5-11.2,9.9-16.8\n\t\t\tc1.4-2.3,1.3-3.2-1.7-3.1c-6.5,0.1-13,0-19.5,0.1c-2.8,0-3.1-0.9-1.6-3c3.1-4.5,6.3-9,9.3-13.6c1.2-1.8,2.6-2.4,4.7-2.4\n\t\t\tc5.9,0.1,11.7,0,17.6,0c1.2,0,2.6,0.2,3.5-0.9c4-5.2,7.9-10.5,12.1-16c-3.4-1.1-6.5-0.4-9.6-0.6c-0.8-0.1-1.9,0.3-2.4-0.6\n\t\t\tc-0.6-1,0.4-1.6,0.9-2.2c5.3-6.3,10.7-12.6,16.4-18.5c1.4-1.5,3-2.4,4.9-2.1c8.3,1.6,14.4-1.8,19.2-8.3c0.2-0.2,0.4-0.3,0.5-0.5\n\t\t\tc0.4-0.6,1.2-1.3,1.1-1.8c-0.2-1.1-1.4-0.8-2.2-0.8c-5.1,0-10.2,0-15.4-0.1c-0.9,0-2.2,0.4-2.6-0.8c-0.3-0.9,0.7-1.5,1.4-2.1\n\t\t\tc2.3-2.1,4.7-4.2,6.8-6.4c2.1-2.1,4.4-3,7.3-2.9c6.5,0.2,13,0.1,19.5,0.1c1.1,0,2.4,0.3,3.3-0.5c3.9-3.2,7.7-6.5,11.6-9.8\n\t\t\tc-0.1-0.4-0.2-0.7-0.3-1.1h-26.9c-0.1-0.4-0.2-0.9-0.3-1.3c6.1-3.2,9.8-10.1,17.7-10.6c0.8-0.1,1.6-0.7,2.3-1.2\n\t\t\tc5.5-3.7,11-7.4,16.5-11.1c0.6-0.4,1.8-1.1,1.7-1.3c-1.3-3.4,2-3.2,3.4-4.3c6.7-5.5,14.4-6.9,22.8-6.1c3.7,0.3,7.5-0.3,11.2,0.1\n\t\t\tc8.6,1,14.4-4.9,21.5-7.8c-0.1-0.4-0.1-0.7-0.1-1.1h-21.7c-0.1-0.4-0.1-0.8-0.2-1.2c8.1-2.8,14.9-9.3,24.2-8.2\n\t\t\tc14.7,1.8,27.6-3.4,41-9.5c-3.3-0.2-6-0.3-9.4-0.5c2.8-1.9,5.4-2.5,7.9-3.1c10.7-2.9,21.1-7.2,32.5-6.3c3.8,0.3,7.7-0.2,11.6-0.3\n\t\t\tc0.9,0.2,1.6-0.1,2.3-0.6c0.5-0.1,1-0.1,1.4-0.2c1.1,0.3,2.1,0,3-0.7c0.5-0.1,1-0.2,1.4-0.3c1.8,0.4,3.5-0.4,5.1-0.8\n\t\t\tC324.6,6.2,331,6.2,337,4c0.4,0,0.8-0.1,1.2-0.1c3.8,0.6,7.4-1.2,11.1-0.9c2.4,0.3,4.4,0.1,4.6-2.9h1.5c0.5,0.8,1,0.7,1.5,0h28.5\n\t\t\tc2,0.9,4.2,0.6,6.3,0.8c19,1.8,38.2-0.5,57.2,2.9c10.6,1.9,21.3,3.5,31.8,6.9h-13c7.4,2.9,14.9,4.8,22.2,7.2\n\t\t\tc4.6,1.5,9.1,2.6,13.9,2.3c10.9-0.7,19.9,4.8,29.4,8.6c0.1,0,0,0.4-0.1,1.2h-18.3c10.9,6.4,21.5,10.7,33.7,9.1\n\t\t\tc1.8-0.2,3.8,0.1,5.6-0.1c8.4-0.7,14.1,5,21,8c-0.1,0.4-0.2,0.8-0.2,1.1h-27.6c1.6,1.1,2.2,1.5,2.8,1.9c5.8,3,11.2,6.4,17.6,8.6\n\t\t\tc6.5,2.2,12,7.5,17.9,11.4c0.5,0.3,1.3,1.2,1.2,1.2c-2.5,2.8,1,3,2,3.9c2.3,2.1,5,3.8,7.3,5.8c2.2,1.9,4.6,2.6,7.5,2.6\n\t\t\tc7.6-0.2,15.2,0,22.9-0.1c1.8,0,3.5,0,4.9,1.3c3.1,2.7,6.4,5.2,9.5,7.9c0.7,0.6,1.9,1.2,1.3,2.3c-0.5,0.9-1.6,0.6-2.4,0.6\n\t\t\tc-6,0-12,0-18,0c-0.7,0-1.6-0.2-2,0.5c-0.5,0.8,0.4,1.3,0.8,1.8c5.3,6,11.1,10.7,19.9,8.8c0.4-0.1,0.8,0,1.1,0\n\t\t\tc8.3,0,15.2,3,20.8,9.1c0.1,0.1,0.2,0.2,0.3,0.3c0.5,0.7,1.6,1.2,1.2,2.1c-0.4,1-1.5,0.6-2.3,0.7c-3,0.3-6.1-0.5-9.4,0.6\n\t\t\tc4.5,5.1,9.4,9.5,12.9,14.7c4.4,6.5,9.8,9.1,17.3,7.8c2.3-0.4,4,0.6,5.5,2.4c3,4.1,6.2,8.1,9.3,12.2c0.6,0.8,1.6,1.5,0.9,2.6\n\t\t\tc-0.6,1-1.8,0.7-2.8,0.7c-5.2,0-10.5,0.1-15.8,0c-2.5,0-2.8,0.9-1.4,2.8c3,4.3,6,8.6,8.8,13c1.2,1.9,2.7,2.6,4.9,2.6\n\t\t\tc6.8-0.1,13.5,0,20.2-0.1c2,0,3.3,0.6,4.3,2.3c3.2,5.5,6.4,11,9.8,16.4c1.8,2.9,0.8,3.6-2.2,3.5c-7.6-0.1-15.2,0-22.9-0.1\n\t\t\tc-2.5,0-3.2,0.7-2,3.1c5.3,9.9,10.2,20.1,14.6,30.4c0.5,1.1,1,2.2,2.4,2c2.5-0.3,3.2,1.3,3.9,3.1c5.4,13.4,10.2,27.1,14,41.1\n\t\t\tc0.5,1.8,1.7,3.7-1.7,4c-1.5,0.1-0.9,1.6-0.7,2.5c2.7,10.9,5.3,21.8,7,32.9c0.3,2.1,1.3,2.9,3.5,2.9c8.5-0.1,17-0.1,25.5-0.1v8.2\n\t\t\tc-1.3,0.8-2.7,0.4-4,0.5c-5.3,0-10.7,0.1-16,0c-2.3,0-3.3,0.6-2.6,3c0.3,0.9,0.3,2,0.3,3c0,2.1,1,2.8,3,2.8\n\t\t\tc6.5-0.1,12.9-0.1,19.4-0.2v9.8c-3.1,0-6.2-0.1-9.3-0.1c-1.2,0-2.1,0.2-2.3,1.8c-0.5,5,0.7,6.5,5.6,6.5c2,0,4,0.1,6,0.1v9\n\t\t\tc-5.6,0-11.2,0-16.8-0.1c-2,0-3.5,0.5-3.2,3c-0.2,4.8,0.2,5.3,4.7,5.3c5.1,0,10.2,0,15.3,0v16.5c-5.5,0-10.9,0-16.4,0.1\n\t\t\tc-3.2,0-3.8,2.2-3.8,4.8c-0.1,2.8,1.5,3.3,3.8,3.3c5.5,0,10.9,0,16.4,0v6.8c-2.8,0.7-5.6,0.3-8.4,0.3c-2.5,0-3.3,1.1-2.5,3.5\n\t\t\tc0,0.8,0,1.6,0.1,2.5c-0.6,0.8-0.9,1.4,0.4,1.7c3.2,0,6.5,0.1,9.7,0.1c0.3,0,0.5,0.1,0.8,0.1v7.5c-6.1,0-12.2,0.1-18.3,0\n\t\t\tc-4.7-0.1-3.2,3.7-3.6,5.9c-0.6,2.8,2,1.9,3.3,2c6.2,0.3,12.4-0.5,18.6,0.5v6.8c-8.1,0.1-16.2,0.3-24.3,0.2\n\t\t\tc-2.9,0-3.2,1.5-3.5,3.6c-0.2,1.8-0.8,3.6,2.1,3.5c1,0,1.9,0.6,1.3,1.6c-1.3,2.5,0.9,7.1-4.5,7.1c-1.2,0-1.3,1.4-1.4,2.3\n\t\t\tc-0.4,2.1-0.5,4.2-1.2,6.2c-0.8,2.6,0.1,3.3,2.6,3.3c6-0.1,12,0,18,0c9.3,0,9.2,0,7.1,9c-0.5,2.3-1.5,3.1-3.8,3\n\t\t\tc-4.6-0.1-9.2,0-13.9,0c-9.7,0-9.6,0-12,9.4c-0.7,2.5,0.2,3.1,2.5,3c3.7-0.1,7.5,0,11.2,0c9,0,9,0,6.3,8.7\n\t\t\tc-0.8,2.5-1.9,3.6-4.7,3.6c-10.7,0-10.6,0.1-14,10.3c-1,2.9-0.1,3.4,2.6,3.3c4.4-0.1,8.7,0,13.1-0.1c2.6-0.1,3.4,0.8,2.3,3.3\n\t\t\tc-2.6,6.2-5.2,12.4-7.6,18.7c-0.9,2.2-2.2,3-4.5,3c-7.6-0.1-15.2,0-22.8-0.1c-2.2,0-3.4,0.7-4.3,2.7c-3,6.4-6.2,12.8-9.4,19.1\n\t\t\tc-1.2,2.4-1,3.2,1.9,3.2c7.5-0.1,15,0,22.5,0c4.3,0,4.3,0,2.3,3.6c-2,3.5-4.2,6.8-5.9,10.4c-1.3,2.7-3.1,3.3-6,3.3\n\t\t\tc-8.5-0.1-17,0-25.5,0.1c-1.5,0-2,1-2.2,2.2c-0.2,0.1-0.2,0.3-0.2,0.5c-2.7,3-4.8,6.4-6.4,10c-0.2,0.1-0.3,0.3-0.3,0.5\n\t\t\tc-1.3,0.8-2.3,1.8-2.1,3.4c0.1,0.6,0.9,0.5,1.5,0.4c8.5,0,17,0,25.5,0c0.6,1.3-0.3,2.2-0.9,3c-2.6,3.7-5.3,7.3-7.8,11\n\t\t\tc-1.4,2-3.2,2.5-5.5,2.5c-4.6-0.1-9.2,0-13.8,0c-1.5,0-3,0-4.1,1.4c-3.7,4.7-7.5,9.3-11.3,13.9c-0.7,0.9-1.1,1.8,0.7,1.9\n\t\t\tc3.7,0.1,7.5,0.2,11.2,0.2c-0.5,0.7-0.9,1.4-1.5,2.1c-4.7,5.4-9.4,10.7-14.2,16c-0.6,0.6-1.2,1.3-1.8,1.9\n\t\t\tc-1.4,0.6-2.5,1.6-3.1,3.1c-1.1,1.1-2.3,2.2-3.4,3.3c-3.9,2.8-7.3,6-10.4,9.7l-0.1,0.1c-2,0.9-3.6,2.3-4.8,4.2\n\t\t\tc-0.7,0.6-1.3,1.2-2,1.8c-1.5,0.4-2.6,1.3-3.2,2.7c-0.4,0.3-0.8,0.7-1.3,1c-2.3,1.3-4.5,2.8-6.1,5.1c-0.7,0.5-1.4,1.1-2.1,1.7\n\t\t\tc-6.6,4.3-12.9,9-19,14c-0.2,0-0.4,0.1-0.5,0.3c-0.8,0-1.4,0.5-1.7,1.2c-0.2,0-0.4,0.1-0.5,0.3c-4.3,1.7-7.6,5-11.7,7\n\t\t\tc-4.1,0-8.2,0.1-12.4,0.1c-2.1-0.2-3.4,1-4.7,2.3c-0.2,0-0.4,0.2-0.5,0.3c-0.8,0.1-1.4,0.3-1.8,1.1c-0.2,0-0.4,0.1-0.5,0.3\n\t\t\tc-1.9,0.4-3.5,1.2-4.7,2.7c-0.2,0-0.4,0.1-0.6,0.3c-1.4,0.4-2.7,0.9-3.6,2.1c1,0.9,2,0.7,2.9,0.5c4.7,0,9.5,0.1,14.2,0.1\n\t\t\tc-0.7,2.4-3.6,2-4.7,3.8c-0.2,0-0.4,0.1-0.6,0.2c-8.9,6-18.9,5.9-29,5.5c-3-0.1-6,0-9,0c-1.1,0-2.3,0-3.3,0.5\n\t\t\tc-6.1,2.7-12.1,5.5-18.3,8.3c0.8,1.1,1.7,0.9,2.5,0.6c7.4,0,14.9,0,22.3,0c0.5,2.4-1.7,2.2-2.9,2.6c-6.9,2.7-13.9,5.3-20.9,7.9\n\t\t\tc-13,0.1-25.9,0.2-38.9,0.3c-10.1,2.8-20.3,5.7-30.5,8.5c0,0.3,0.1,0.6,0.1,0.8h46.2c-3,2.1-6.1,1.5-8.4,3.1c-0.5,0-1,0.1-1.5,0.1\n\t\t\tc-7.6,0.9-15.1,2-22.5,3.6c-1,0.1-2,0.1-2.9,0.2c-5,0.4-10.1,0.8-15.1,1.2c-0.6-0.5-1.1-0.4-1.6,0.2c-3,0.2-5.9,0.3-8.9,0.5\n\t\t\tc-2.6-0.7-5.2-1.6-7.5,0.8h-27.7c-7.5-2-15.1-1.7-22.8-1.8c-0.7,0-1.3-0.1-2-0.1c-1.7-1.1-3.5-1.2-5.4-0.8\n\t\t\tc-0.9-0.1-1.9-0.1-2.8-0.2c-1.9-1-3.9-1.6-6-0.9c-0.7,0-1.4-0.1-2.1-0.1c-2.9-1.7-6.2-1.7-9.4-1.7c-0.7,0-1.3-0.1-2-0.1\n\t\t\tc-2.9-1.3-5.8-2.1-9-1.8c-0.4-0.1-0.9-0.1-1.3-0.2c-0.7-0.9-1.6-1.1-2.7-0.8c-0.4-0.1-0.8-0.1-1.2-0.2c-0.9-0.8-2-1.1-3.2-0.7\n\t\t\tc-0.7,0-1.4-0.1-2.1-0.1c-0.8-0.2-1.7-0.6-2.5-0.6c-19.4-0.4-38.9,1.2-58.2-1.2l-1.3-0.2c-5.2-2.5-10.9-3.4-16.3-5.2\n\t\t\tc-1.2-0.4-2.9-0.2-4.2-2.5H273l0.1-1.1c-8.6-3.1-17.3-6.2-25.9-9.2c-10.2-0.1-20.3-0.1-30.5-0.2c-3.3-2.2-6.8-3.6-10.6-4.5\n\t\t\tc-0.2-0.1-0.4-0.1-0.6-0.2c-1.4-2.4-5.1-1.7-6.1-4.7c7.4,0,14.9,0,22.3,0c0.8,0.2,1.9,0.7,2-0.5c0.1-0.8-0.9-0.8-1.6-0.8l-0.1,0\n\t\t\tc-1.7-1.9-3.9-2.9-6.3-3.3l-2.6-1.3c-2-1.8-4.1-3.5-6.9-3.5c-6.7-0.1-13.4-0.2-20.1-0.3c-0.9-1.1-2-1.6-3.4-1.7\n\t\t\tc-0.2-0.1-0.4-0.2-0.5-0.3c-2.4-3.3-7.2-3.6-10.1-7.8c3.1,0,5.5,0,8,0c0.6,0,1.4-0.2,1.6-0.5c0.5-0.9-0.4-1.3-1-1.7\n\t\t\tc-3-2-5.8-4.3-9.2-5.5c-0.2-0.1-0.3-0.2-0.5-0.3c-1.8-2.5-4.3-3.8-7-4.9c-0.4-0.3-0.9-0.7-1.3-1c-2.1-2.5-4.7-4.4-7.7-5.7\n\t\t\tc-0.2-0.1-0.3-0.2-0.5-0.3c-0.9-2.3-3.1-3.2-4.9-4.5c-5.3-4-9.9-9-15.7-12.5c-0.2-0.1-0.3-0.2-0.5-0.3c-1.8-2.7-4.1-5-7-6.4\n\t\t\tc-0.9-0.9-1.8-1.7-2.7-2.6c-4.5-5.5-9.5-10.5-15-15c-0.6-0.7-1.2-1.3-1.8-2c-1.7-3.2-4.2-5.7-7.1-7.8c-0.3-0.4-0.7-0.8-1.1-1.2\n\t\t\tc-0.6-1.8-1.4-3.3-3.6-3.2c-4.5-0.4-9.1,0.5-13.7-0.5c-2.6-4.3-5.6-8.3-9.5-11.5c-0.1-0.2-0.2-0.3-0.3-0.5c0-1.9-2.2-2.8-2-4.8\n\t\t\tc5.7,0,11.5,0,17.2-0.1c2.5-0.5,0.9-1.6,0.3-2.4c-2.2-3.1-4.4-6.3-6.8-9.3c-1.2-1.6-1.8-3.9-4.2-4.5c-7.8-0.1-15.6-0.1-23.4-0.2\n\t\t\tc-1.9,0-4,0.6-5.8-0.6c-1.3-3.3-3.1-6.2-5.7-8.5c-0.1-0.2-0.2-0.3-0.3-0.5c-0.5-2.2-1.3-4.3-3.4-5.5c-0.1-0.2-0.2-0.3-0.3-0.5\n\t\t\tc0-0.5,0.1-1,0.2-1.6c8.4,0,16.7-0.2,25.1,0c3.4,0,3.6-1,1.9-3.6c-2.2-3.6-4.4-7.3-6.3-11c-1.1-2-2.4-2.8-4.7-2.8\n\t\t\tc-7.9,0.1-15.7-0.1-23.6,0.1c-2.6,0.1-4.1-0.8-5.2-3.2c-2.9-6.2-6-12.3-9.1-18.5c-1.4-2.8-0.5-3.4,2.3-3.4\n\t\t\tc7.2,0.1,14.5-0.1,21.7,0.1c3.1,0.1,3.3-1.1,2.2-3.6c-1.8-4-3.4-8-5-12.1c-3.7-9-3.7-8.9-13.4-9.1c-12.7-0.2-9.6,2.4-14-10\n\t\t\tc-1.5-4.1-1.2-4.4,3.2-4.5c9.8-0.1,9.8-0.1,6.7-9.3c-0.6-1.9-1.6-2.5-3.5-2.5c-5.2,0.1-10.5,0.1-15.7,0.2c0-4.2,0-8.5,0-12.8\n\t\t\tc3.1,0,6.2,0.1,9.3,0.1c6,0,8.2-2.9,6.8-8.7c-0.1-0.4-0.2-0.7-0.3-1.1c-0.3-1.3-1.1-1.8-2.4-1.8c-4.5,0.1-9,0.1-13.4,0.2\n\t\t\tc0-9.5,0-19,0-28.5c2.5,0,4.9-0.1,7.4-0.1c2.1,0.1,3-0.4,2.8-2.9c-0.3-3.5-1.6-4.8-5-4.3c-1.7,0.2-3.4-0.1-5.2-0.2\n\t\t\tc0-2.5,0-5,0-7.5c1.7-1.3,5.6,1.5,5.5-3.4C5.5,414.7,3.3,414.3,0.1,414.8L0.1,414.8z M414.5,366.7c0,0.2-0.1,0.4-0.1,0.6\n\t\t\tc6.5,0.9,13.2,1.5,19.6,2.8c17.8,3.6,35.6,6.4,53.9,5.2c5-0.3,8.2,2.6,10.2,6.9c2.8,5.9,0.5,9.5-5.9,9.5c-7.4,0-14.8,0-22.1,0\n\t\t\tc-4.2,0-3.5,3.9-3.8,6.1c-0.5,2.7,2.3,1.5,3.6,1.5c7.1,0.1,14.2,0,21.4,0.1c1,0,2.4-0.4,3,0.9c1,2.2-1.7,6.5-4.2,6.5\n\t\t\tc-4.2,0.1-8.5,0-12.8,0c-5.1,0-5.2,0.2-6.3,5.3c-0.5,2.1,0.3,2.7,2.2,2.6c2.9-0.1,5.8,0,8.6,0c0.8,0,1.8-0.2,2.1,1\n\t\t\tc0.7,2.6-1.9,6.3-4.5,6.3c-5.4,0-10.8,0-16.1,0c-2,0-4.5-0.6-4.4,2.9c0.1,3.8,1.2,5,4.8,5.1c5.2,0,10.6,0.7,15.7-0.1\n\t\t\tc6.9-1.1,10.2,3.9,15,6.6c0,0.3-0.1,0.7-0.1,1h-21.7c0.7,1.1,1.5,1.5,2.3,1.8c6.7,2.2,13.5,4.2,20.3,6.1c6.7,1.9,13,5.1,19.3,8.7\n\t\t\tc11.2,6.5,22.9,12.9,37.2,11.6c6.6-0.6,11.8-2.2,16-7.1c0.9-1,1.9-2,2.7-3.1c1.1-1.5,2.3-2.5,4.3-2.4c1.7,0,6.6-5.9,6.5-7.5\n\t\t\tc0-0.6-0.4-0.9-0.9-1c-2.4-0.4-1.3-1.7-0.8-3c1.3-3.3,3.5-4.8,7.2-4.4c2.7,0.3,5.5,0.1,8.2,0.1c5.1,0,10.2,0,15.4,0\n\t\t\tc3.7-0.1,4.4-3.5,4.7-5.8c0.3-2.4-2.6-1.2-4.1-1.3c-6-0.2-12,0-18-0.1c-0.9,0-2.5,0.6-2.5-1.2c-0.2-3,3.4-6.6,6.5-6.7\n\t\t\tc5.1,0,10.3-0.2,15.4,0.1c3.6,0.2,5.2-1.2,6.2-4.4c0.8-2.3,0.7-3.2-2-3.1c-2.6,0.1-5.2,0-7.9,0c-0.8,0-1.8,0.3-2.2-0.8\n\t\t\tc-0.9-2.2,2.3-7,4.8-7c5,0,10,0,15-0.1c3.6-0.1,3-3.2,3.3-5.3c0.5-2.7-1.8-2.2-3.3-2.2c-7,0-14-0.1-21,0c-2.6,0-4.5,0.1-4.5-3.6\n\t\t\tc0-3.6,1.4-4.4,4.7-4.3c7.5,0.2,15,0,22.5,0.1c2.8,0.1,3.5-1,3.1-3.6c-0.5-3.2-1.2-6.4-2-9.5c-0.7-2.7-2.2-3.5-4.9-3.4\n\t\t\tc-7,0.1-14-0.2-21,0.2c-4.3,0.2-6.5-1.2-8.2-5.1c-1.3-3-1-3.6,2.2-3.5c7.2,0.1,14.5,0.1,21.7,0c0.8,0,1.9,0.5,2.3-0.6\n\t\t\tc0.3-0.8-0.4-1.4-0.8-2c-2.8-4.3-6.1-7.5-11.9-6.5c-2.3,0.4-4.8-0.3-7.1,0.1c-7.2,1.3-11-3.7-16.3-8.3h11.5c0-1.2-0.6-1.5-1.1-1.8\n\t\t\tc-7.7-4.5-15.4-8.9-24.9-7.6c-2.2,0.3-4.5-0.1-6.7,0.1c-9.8,1-17.3-5.3-26-7.7c0-0.4,0.1-0.8,0.2-1.2h20.5c0-0.4,0.1-0.7,0.1-1.1\n\t\t\tc-9.3-2.7-17.9-7.9-28.2-7.6c-13.5,0.5-27,0.8-39.8-4.6c-2.3-1-4.8-1.5-7.2-2.1c-29.8-7.8-60.1-12.7-90.9-14.6\n\t\t\tc-51.4-3.2-102.1,0.9-152,13.8c-7.9,2-15.7,4.4-23.5,6.6c0.1,0.4,0.1,0.8,0.2,1.1h24.2c-10.5,4-20.2,10-31.9,8.5\n\t\t\tc-2.9-0.4-6,0.1-9-0.1c-9.8-0.8-17.5,5-26.1,7.8c0,0.4,0.1,0.8,0.1,1.2h17.1c0.1,0.5,0.1,0.9,0.2,1.4c-7.5,2.4-13.1,9.4-22.1,7.8\n\t\t\tc-5.9-1-10.1,1.9-13.9,5.6c-0.6,0.6-1.7,1-1.2,2c0.4,1,1.6,0.6,2.4,0.6c4.2,0,8.5,0,12.8,0.1c0.9,0,2.2-0.2,2,1.4\n\t\t\tc-0.4,2.4-6.7,7.6-9.2,7.6c-7,0-14,0.3-21-0.1c-4-0.2-5.9,1.4-7.4,4.7c-1.6,3.7-1.6,3.9,2.5,3.9c7.4,0,14.8,0.1,22.1,0\n\t\t\tc3.1-0.1,3.6,0.9,2.7,3.7c-1,2.9-1.7,6.1-1.9,9.1c-0.2,3.1-1.6,3.6-4.3,3.6c-7.6-0.1-15.2,0.1-22.9-0.1c-2.9-0.1-3.5,1-3.6,3.7\n\t\t\tc-0.1,3.3,1.1,4.3,4.3,4.2c7.5-0.2,15,0,22.5-0.1c3.9,0,2.9,3.1,3.3,5.1c0.6,2.6-1.6,2.3-3.1,2.4c-4.5,0-9,0-13.5,0\n\t\t\tc-1,0-2.1-0.2-2.6,0.9c-0.9,2,2.2,6.9,4.5,6.9c3.1,0.1,6.2,0,9.4,0c2,0,4.9,3.7,4.5,5.9c-0.4,2.5-2.6,1.3-4,1.4\n\t\t\tc-5.1,0.1-10.2,0-15.4,0.1c-1,0-2.4-0.5-2.5,1.4c-0.1,3.2,3.2,6.6,6.5,6.6c6.8,0,13.5,0,20.2,0c2.2,0,5.6,3.8,5.1,5.9\n\t\t\tc-0.7,2.4-2.9,1.2-4.4,1.2c-7,0.1-14,0-21,0.1c-1.1,0-3.3-0.5-2.9,1.2c0.5,2.4,1.3,5.2,4.4,6c2.4,0.6,7.1,5.2,7.5,7.4\n\t\t\tc0.1,0.6,0.1,1-0.5,1.1c-3.3,0.7-0.9,2.2-0.3,3c4.9,6.1,10.3,10.8,19,9.5c5.2-0.8,10.7,0.7,15.9-1.4c10-4,19.3-9.5,30.1-12.1\n\t\t\tc6.5-1.6,13-4.8,19.1-8.4c6.5-3.8,14.1-6.4,22.1-6.3c7.6,0.1,15.2,0.1,22.9,0c4.6,0,8.9-1,12.5-4.2c0.7-0.6,1.9-1.2,1.4-2.4\n\t\t\tc-0.4-0.9-1.5-0.6-2.4-0.6c-6.1,0-12.2,0.1-18.4-0.1c-1.2,0-4.1,1.2-3.5-1.6c0.5-2.2-1.5-6.4,3.6-6.3c5.2,0.1,10.5,0.1,15.7,0\n\t\t\tc1.4,0,4,0.9,3.6-1.7c-0.3-2.2,0.4-5.7-3.8-5.6c-3.1,0.1-6.3,0.2-9.4,0c-3.9-0.3-3-3.8-3.4-6.1c-0.5-2.4,2-1.6,3.2-1.7\n\t\t\tc3.7-0.1,7.5,0,11.2,0c5.1,0,5.6-0.8,3.7-5.6c-0.8-2.1-2.4-1.9-4-1.9c-7.8,0-15.5,0-23.2,0c-2.3,0-4.2-3-4-6\n\t\t\tc0.2-2.7,2.4-1.6,3.8-1.6c7.1-0.1,14.2-0.2,21.4,0c3,0.1,4.6-0.2,3.8-4c-0.9-3.8,0.8-7.1,3.6-9.7c0.7-0.7,2-1,2.1-2.9h-23.4\n\t\t\tc0.3-0.9,0.7-1.2,1.2-1.3c18.8-3.5,37.5-7.3,56.8-7c12.8,0.2,25.5-0.5,38.2-1.4c19.1-1.2,38.2-1,57.2,1.3L414.5,366.7L414.5,366.7\n\t\t\tz M210.8,465.9c-3.8-1.2-14.4-1.1-16.8,0.2C199.8,468.7,204.7,468.6,210.8,465.9z M570.9,465.8c5.6,2.4,11.2,3.1,16.8-0.1\n\t\t\tC582.1,465.1,576.5,465,570.9,465.8z\"/>\n\t\t<path class=\"st1\" d=\"M767.9,339.8c-6.5,0.1-12.9,0.1-19.4,0.2c-2,0-3-0.6-3-2.8c0-1,0-2-0.3-3c-0.7-2.4,0.3-3.1,2.6-3\n\t\t\tc5.3,0.1,10.7,0,16,0c1.3,0,2.7,0.3,4-0.5V339.8L767.9,339.8z\"/>\n\t\t<path class=\"st1\" d=\"M0.1,465.7c4.5-0.1,9-0.1,13.4-0.2c1.3,0,2.1,0.5,2.4,1.8c0.1,0.4,0.2,0.7,0.3,1.1c1.4,5.8-0.8,8.7-6.8,8.7\n\t\t\tc-3.1,0-6.2-0.1-9.3-0.1C0.1,473.2,0.1,469.5,0.1,465.7z\"/>\n\t\t<path class=\"st2\" d=\"M767.9,430.5c-6.2-0.9-12.4-0.1-18.6-0.5c-1.4-0.1-3.9,0.8-3.3-2c0.5-2.2-1.1-6,3.6-5.9\n\t\t\tc6.1,0.1,12.2,0,18.3,0V430.5z\"/>\n\t\t<path class=\"st3\" d=\"M767.9,399.8c-5.5,0-10.9,0-16.4,0c-2.3,0-3.9-0.5-3.8-3.3c0.1-2.6,0.7-4.8,3.8-4.8\n\t\t\tc5.5-0.1,10.9-0.1,16.4-0.1V399.8z\"/>\n\t\t<path class=\"st4\" d=\"M0.1,357c2.7,0.1,5.4,0.3,8.1,0.3c2.4,0,3.3,0.9,3.2,3.3c-0.2,5.8-0.2,5.9-6.2,5.9c-1.7,0-3.5,0.1-5.2,0.2\n\t\t\tC0.1,363.5,0.1,360.3,0.1,357L0.1,357z\"/>\n\t\t<path class=\"st5\" d=\"M0.1,322.5c3.1,0,6.2,0.1,9.4,0.1c1.6,0,2.3,0.6,2.1,2.2c-0.3,1.6-0.6,3.2-0.8,4.8c-0.2,1.5-1.2,1.6-2.4,1.7\n\t\t\tc-2.7,0.1-5.5,0.2-8.2,0.2C0.1,331.5,0.1,322.5,0.1,322.5z\"/>\n\t\t<path class=\"st5\" d=\"M767.9,357.8c-2,0-4-0.1-6-0.1c-4.9,0-6.2-1.5-5.6-6.5c0.2-1.6,1.1-1.8,2.3-1.8c3.1,0,6.2,0.1,9.3,0.1\n\t\t\tL767.9,357.8L767.9,357.8z\"/>\n\t\t<path class=\"st6\" d=\"M0.1,399c2.7,0.7,5.5,0.3,8.2,0.4c3.3,0.1,2.8,2.5,3,4.5c0.2,2.2-0.7,3.3-3,3.2c-2.7,0-5.5,0.1-8.2,0.1\n\t\t\tC0.1,404.5,0.1,401.7,0.1,399L0.1,399z\"/>\n\t\t<path class=\"st3\" d=\"M767.9,375c-5.1,0-10.2,0-15.3,0c-4.6,0-5-0.5-4.7-5.3c6.6,1.8,13.3,0.5,20,0.9L767.9,375L767.9,375z\"/>\n\t\t<path class=\"st7\" d=\"M0.1,429.8c1.7,0.1,3.5,0.4,5.2,0.2c3.5-0.5,4.7,0.8,5,4.3c0.2,2.6-0.6,3-2.8,2.9c-2.5-0.1-4.9,0-7.4,0.1\n\t\t\tC0.1,434.7,0.1,432.2,0.1,429.8L0.1,429.8z\"/>\n\t\t<path class=\"st8\" d=\"M767.9,370.5c-6.7-0.4-13.4,0.9-20-0.9c-0.3-2.4,1.1-3,3.2-3c5.6,0,11.2,0,16.8,0.1L767.9,370.5L767.9,370.5z\n\t\t\t\"/>\n\t\t<path class=\"st7\" d=\"M0.1,339.8c0.2,0.1,0.4,0.3,0.7,0.3c5.4,0.6,6.3,2.1,4.9,7.4c-0.9,3.3-3.7,1.4-5.6,2\n\t\t\tC0.1,346.3,0.1,343,0.1,339.8z\"/>\n\t\t<path class=\"st1\" d=\"M767.2,414.6c-3.2,0-6.5-0.1-9.7-0.1c-0.1-0.6-0.3-1.1-0.4-1.7c0-0.8,0-1.6-0.1-2.5c3.6-1.4,7.3-0.7,10.9-0.8\n\t\t\tv4.5C767.7,414.2,767.4,414.4,767.2,414.6L767.2,414.6z\"/>\n\t\t<path class=\"st5\" d=\"M0.1,414.8c3.2-0.4,5.4,0,5.5,4.1c0.1,4.9-3.8,2-5.5,3.4C0.1,422.2,0.1,414.8,0.1,414.8z\"/>\n\t\t<path class=\"st8\" d=\"M342,2.3c-2.4-0.1-4.8-0.1-7.3-0.2c0.9-1.5,2.4-1.1,3.7-1.2c2-0.1,4,0,5.8-0.8h9.8c-0.3,3-2.3,3.2-4.6,2.9\n\t\t\tC347,1.9,344.6,1.6,342,2.3z\"/>\n\t\t<path class=\"st6\" d=\"M374.2,767.9c0.5-0.7,0-1.2-0.3-1.8c7.6,0.2,15.3-0.2,22.8,1.8H381c-1-0.8-2-1-3,0H374.2z\"/>\n\t\t<path class=\"st9\" d=\"M767.9,409.5c-3.7,0.1-7.4-0.6-10.9,0.8c-0.9-2.4-0.1-3.4,2.5-3.5c2.8-0.1,5.7,0.4,8.4-0.3V409.5L767.9,409.5\n\t\t\tz\"/>\n\t\t<path class=\"st10\" d=\"M457.6,765.2c-1.2,2-4.3,0.3-5.3,2.7H432c0-0.3,0-0.5,0-0.8c3-0.2,5.9-0.3,8.9-0.5c0.5-0.1,1.1-0.1,1.6-0.2\n\t\t\tC447.5,766,452.6,765.6,457.6,765.2L457.6,765.2z\"/>\n\t\t<path class=\"st10\" d=\"M344.2,0.1c-1.9,0.8-3.9,0.7-5.8,0.8c-1.3,0.1-2.8-0.3-3.7,1.2c-2.3,0-5,1.3-6.3-2L344.2,0.1L344.2,0.1z\"/>\n\t\t<path class=\"st3\" d=\"M432,767.1c0,0.3,0,0.5,0,0.8h-7.5C426.7,765.5,429.4,766.4,432,767.1z\"/>\n\t\t<path class=\"st8\" d=\"M357,0.1c-0.5,0.7-1,0.8-1.5,0H357z\"/>\n\t\t<path class=\"st11\" d=\"M378,767.9c1-1,2-0.8,3,0H378z\"/>\n\t\t<path class=\"st9\" d=\"M767.2,414.6c0.3-0.2,0.5-0.4,0.8-0.6v0.8C767.7,414.7,767.4,414.7,767.2,414.6z\"/>\n\t\t<path class=\"st1\" d=\"M414.5,366.7h13c-19-2.3-38.1-2.5-57.2-1.3c-12.7,0.8-25.4,1.6-38.2,1.4c-19.2-0.3-38,3.5-56.8,7\n\t\t\tc-0.4,0.1-0.8,0.4-1.2,1.3h23.4c-0.1,1.9-1.4,2.2-2.1,2.9c-2.8,2.7-4.5,5.9-3.6,9.7c0.9,3.8-0.7,4.1-3.8,4\n\t\t\tc-7.1-0.2-14.2-0.1-21.4,0c-1.3,0-3.5-1.1-3.8,1.6c-0.3,3.1,1.6,6,4,6c7.8,0.1,15.5,0,23.2,0c1.6,0,3.1-0.2,4,1.9\n\t\t\tc1.9,4.8,1.4,5.6-3.7,5.6c-3.8,0-7.5-0.1-11.2,0c-1.3,0-3.7-0.7-3.2,1.7c0.4,2.2-0.5,5.8,3.4,6.1c3.1,0.2,6.2,0.1,9.4,0\n\t\t\tc4.2-0.1,3.5,3.4,3.8,5.6c0.4,2.6-2.2,1.7-3.6,1.7c-5.2,0.1-10.5,0.1-15.7,0c-5.1-0.1-3,4.1-3.6,6.3c-0.6,2.8,2.2,1.6,3.5,1.6\n\t\t\tc6.1,0.2,12.2,0.1,18.4,0.1c0.9,0,2-0.3,2.4,0.6c0.5,1.1-0.7,1.8-1.4,2.4c-3.6,3.1-7.9,4.1-12.5,4.2c-7.6,0.1-15.2,0.1-22.9,0\n\t\t\tc-8-0.1-15.6,2.5-22.1,6.3c-6.2,3.6-12.6,6.8-19.1,8.4c-10.7,2.6-20.1,8.1-30.1,12.1c-5.2,2.1-10.7,0.6-15.9,1.4\n\t\t\tc-8.7,1.3-14.2-3.4-19-9.5c-0.7-0.8-3-2.3,0.3-3c0.6-0.1,0.6-0.5,0.5-1.1c-0.4-2.2-5.1-6.8-7.5-7.4c-3-0.8-3.8-3.6-4.4-6\n\t\t\tc-0.4-1.7,1.8-1.2,2.9-1.2c7-0.1,14,0,21-0.1c1.5,0,3.8,1.2,4.4-1.2c0.6-2-2.9-5.8-5.1-5.9c-6.8,0-13.5,0-20.2,0\n\t\t\tc-3.3,0-6.6-3.4-6.5-6.6c0.1-1.9,1.5-1.4,2.5-1.4c5.1-0.1,10.2,0.1,15.4-0.1c1.4,0,3.6,1.2,4-1.4c0.4-2.2-2.6-5.9-4.5-5.9\n\t\t\tc-3.1-0.1-6.2,0-9.4,0c-2.3,0-5.4-4.9-4.5-6.9c0.5-1.1,1.7-0.9,2.6-0.9c4.5,0,9,0,13.5,0c1.6,0,3.7,0.2,3.1-2.4\n\t\t\tc-0.4-2,0.6-5.1-3.3-5.1c-7.5,0.1-15-0.1-22.5,0.1c-3.3,0.1-4.4-0.9-4.3-4.2c0.1-2.7,0.7-3.8,3.6-3.7c7.6,0.2,15.2,0,22.9,0.1\n\t\t\tc2.7,0,4.1-0.5,4.3-3.6c0.2-3.1,0.9-6.2,1.9-9.1c1-2.9,0.4-3.8-2.7-3.7c-7.4,0.1-14.7,0.1-22.1,0c-4.1,0-4.1-0.2-2.5-3.9\n\t\t\tc1.4-3.3,3.4-4.9,7.4-4.7c7,0.4,14,0.1,21,0.1c2.5,0,8.8-5.2,9.2-7.6c0.2-1.6-1.1-1.4-2-1.4c-4.2-0.1-8.5,0-12.8-0.1\n\t\t\tc-0.8,0-1.9,0.4-2.4-0.6c-0.5-1,0.7-1.5,1.2-2c3.9-3.8,8.1-6.6,13.9-5.6c8.9,1.6,14.6-5.4,22.1-7.8c-0.1-0.5-0.1-0.9-0.2-1.4\n\t\t\th-17.1c0-0.4-0.1-0.8-0.1-1.2c8.6-2.8,16.3-8.5,26.1-7.8c3,0.2,6-0.3,9,0.1c11.7,1.4,21.5-4.6,31.9-8.5h-24.2\n\t\t\tc-0.1-0.4-0.1-0.8-0.2-1.1c7.9-2.2,15.6-4.6,23.5-6.6c49.9-12.9,100.6-16.9,152-13.8c30.8,1.9,61,6.8,90.9,14.6\n\t\t\tc2.4,0.6,4.9,1.1,7.2,2.1c12.8,5.4,26.3,5.1,39.8,4.6c10.3-0.4,18.9,4.8,28.2,7.6c0,0.4-0.1,0.7-0.1,1.1h-20.5\n\t\t\tc0,0.4-0.1,0.8-0.2,1.2c8.7,2.4,16.2,8.7,26,7.7c2.2-0.2,4.5,0.2,6.7-0.1c9.5-1.3,17.2,3.1,24.9,7.6c0.5,0.3,1.1,0.6,1.1,1.8\n\t\t\th-11.5c5.3,4.6,9.1,9.6,16.3,8.3c2.3-0.4,4.8,0.3,7.1-0.1c5.8-1,9.1,2.2,11.9,6.5c0.4,0.6,1.1,1.2,0.8,2c-0.4,1.1-1.5,0.6-2.3,0.6\n\t\t\tc-7.2,0-14.5,0.1-21.7,0c-3.2-0.1-3.4,0.5-2.2,3.5c1.7,3.9,4,5.3,8.2,5.1c7-0.4,14,0,21-0.2c2.7-0.1,4.2,0.7,4.9,3.4\n\t\t\tc0.8,3.1,1.5,6.3,2,9.5c0.4,2.6-0.3,3.6-3.1,3.6c-7.5-0.1-15,0.1-22.5-0.1c-3.2-0.1-4.6,0.6-4.7,4.3c0,3.7,1.9,3.6,4.5,3.6\n\t\t\tc7-0.1,14,0,21,0c1.5,0,3.7-0.5,3.3,2.2c-0.3,2.1,0.3,5.2-3.3,5.3c-5,0.1-10,0-15,0.1c-2.5,0-5.7,4.8-4.8,7\n\t\t\tc0.4,1.1,1.4,0.8,2.2,0.8c2.6,0,5.2,0.1,7.9,0c2.7-0.1,2.8,0.8,2,3.1c-1.1,3.2-2.7,4.6-6.2,4.4c-5.1-0.3-10.2-0.1-15.4-0.1\n\t\t\tc-3.1,0-6.7,3.7-6.5,6.7c0.1,1.9,1.6,1.2,2.5,1.2c6,0.1,12,0,18,0.1c1.5,0,4.4-1.1,4.1,1.3c-0.3,2.3-1,5.8-4.7,5.8\n\t\t\tc-5.1,0.1-10.2,0-15.4,0c-2.8,0-5.5,0.2-8.2-0.1c-3.7-0.4-5.9,1.1-7.2,4.4c-0.5,1.3-1.7,2.5,0.8,3c0.5,0.1,0.9,0.3,0.9,1\n\t\t\tc0.1,1.6-4.8,7.5-6.5,7.5c-2,0-3.2,1-4.3,2.4c-0.8,1.1-1.8,2.1-2.7,3.1c-4.2,5-9.4,6.5-16,7.1c-14.3,1.3-26-5.1-37.2-11.6\n\t\t\tc-6.3-3.7-12.6-6.9-19.3-8.7c-6.8-1.9-13.6-4-20.3-6.1c-0.8-0.3-1.6-0.6-2.3-1.8h21.7c0-0.3,0.1-0.7,0.1-1\n\t\t\tc-4.7-2.7-8.1-7.7-15-6.6c-5.1,0.8-10.5,0.2-15.7,0.1c-3.6,0-4.6-1.3-4.8-5.1c-0.1-3.5,2.3-2.9,4.4-2.9c5.4,0,10.8,0,16.1,0\n\t\t\tc2.6,0,5.2-3.7,4.5-6.3c-0.3-1.2-1.3-1-2.1-1c-2.9,0-5.8-0.1-8.6,0c-2,0-2.7-0.5-2.2-2.6c1-5,1.2-5.2,6.3-5.3c4.2,0,8.5,0,12.8,0\n\t\t\tc2.5,0,5.3-4.3,4.2-6.5c-0.6-1.3-1.9-0.9-3-0.9c-7.1,0-14.2,0-21.4-0.1c-1.3,0-4,1.2-3.6-1.5c0.4-2.3-0.4-6.1,3.8-6.1\n\t\t\tc7.4-0.1,14.8,0,22.1,0c6.4,0,8.6-3.6,5.9-9.5c-2-4.2-5.1-7.2-10.2-6.9c-18.2,1.2-36.1-1.6-53.9-5.2c-6.5-1.3-13.1-1.9-19.6-2.8\n\t\t\tC414.5,367,414.5,366.8,414.5,366.7L414.5,366.7z\"/>\n\t\t<path class=\"st10\" d=\"M477.1,748.9c-3.2,2.6-7.2,3.1-11,4.2c-2.8,0.8-5.8,1-9.3,3.4c14.6,1,28.2-0.5,41.7,1.5\n\t\t\tc-4.5,1.8-9.1,3.3-14,3.3c2.3-1.6,5.4-0.9,8.4-3.1h-46.2c0-0.3-0.1-0.6-0.1-0.8C456.8,754.6,467,751.7,477.1,748.9L477.1,748.9z\"\n\t\t\t/>\n\t\t<path class=\"st6\" d=\"M262.7,756.4c-8.4-1.5-16.5-3.9-24.5-6.8c0.1-0.5,0.1-0.9,0.1-1.4h29c0-0.4,0.1-0.7,0.1-1.1\n\t\t\tc-3.2-1.8-6.7-2.9-10.1-4.2c-3.5-1.3-7.2-2.2-10.1-4.6c8.6,3.1,17.3,6.2,25.9,9.2l-0.1,1.1h-30.9c1.3,2.3,3,2.1,4.2,2.5\n\t\t\tC251.8,753,257.5,753.8,262.7,756.4L262.7,756.4z\"/>\n\t\t<path class=\"st10\" d=\"M710.2,599.8c2.2-0.3,2.1,0.9,1.2,2.1c-3.2,4.6-6.5,9.1-9.9,13.5c-1.2,1.6-3.2,1.7-5.1,1.7\n\t\t\tc-4.4,0-8.7,0-13.1,0c-1.4,0-2.9,0-3.8,1.1c-4.2,4.9-8.4,9.7-11.9,15.2c-1.8-0.1-1.4-1-0.7-1.9c3.8-4.7,7.5-9.3,11.3-13.9\n\t\t\tc1.1-1.4,2.5-1.4,4.1-1.4c4.6,0,9.2-0.1,13.8,0c2.3,0.1,4.1-0.5,5.5-2.5c2.5-3.7,5.2-7.3,7.8-11\n\t\t\tC709.9,602,710.8,601.1,710.2,599.8L710.2,599.8z\"/>\n\t\t<path class=\"st10\" d=\"M574.5,723.1c-4.1,3.9-9,6.2-14.5,6.5c-5.7,0.3-11.5,0.5-17.2,0c-9.8-0.8-17.3,4.3-25.3,8.4\n\t\t\tc-0.8,0.3-1.7,0.5-2.5-0.6c6.2-2.8,12.2-5.6,18.3-8.3c1-0.4,2.2-0.4,3.3-0.5c3-0.1,6-0.1,9,0C555.6,729,565.6,729.1,574.5,723.1\n\t\t\tL574.5,723.1z\"/>\n\t\t<path class=\"st6\" d=\"M324.8,758.3c-9.3,0.1-18.6,0.2-27.9,0.2c-8,0-15.9,0-23.9,0c-3.1,0-6.2-0.2-8.9-2\n\t\t\tc19.4,2.4,38.8,0.8,58.2,1.2C323.1,757.7,323.9,758.1,324.8,758.3L324.8,758.3z\"/>\n\t\t<path class=\"st6\" d=\"M182.3,716.9c-4.3-1.1-7.6-4.2-11.4-6.2c-0.5-0.3-1.1-0.7-1-1.4c0.2-0.9,1.1-0.9,1.8-1\n\t\t\tc1.7-0.1,3.5-0.1,5.2-0.1c0.6,0,1.4,0,1.6-0.7c0.3-0.9-0.5-1.3-1.1-1.7c-2.1-1.3-4.5-2.2-5.8-4.5c3.4,1.2,6.2,3.5,9.2,5.5\n\t\t\tc0.6,0.4,1.5,0.8,1,1.7c-0.2,0.4-1.1,0.5-1.6,0.5c-2.4,0.1-4.9,0-8,0C175.1,713.3,179.9,713.5,182.3,716.9L182.3,716.9z\"/>\n\t\t<path class=\"st9\" d=\"M210.8,465.9c-6.1,2.7-11.1,2.8-16.8,0.2C196.5,464.9,207.1,464.7,210.8,465.9z\"/>\n\t\t<path class=\"st9\" d=\"M570.9,465.8c5.6-0.9,11.2-0.7,16.8-0.1C582.1,468.9,576.5,468.2,570.9,465.8z\"/>\n\t\t<path class=\"st10\" d=\"M539.8,738.1c1.1-0.3,2.2-0.4,3.1,0.5c-0.6,1.5-1.9,1.8-3,2.2c-7.1,2.7-14.2,5.2-21.4,7.8\n\t\t\tc-0.8,0.3-1.7,0.5-2.5,0c7-2.6,14-5.2,20.9-7.9C538.1,740.2,540.2,740.4,539.8,738.1L539.8,738.1z\"/>\n\t\t<path class=\"st6\" d=\"M154.6,689.1c-7.5-4.8-14.5-10.2-20.5-16.9c5.8,3.5,10.3,8.5,15.7,12.5C151.5,685.9,153.8,686.8,154.6,689.1\n\t\t\tL154.6,689.1z\"/>\n\t\t<path class=\"st10\" d=\"M678.8,633.7c0.7,0.4,0.7,1.1,0.3,1.6c-5,5.8-9.6,12-15.9,16.5c4.7-5.3,9.5-10.7,14.2-16\n\t\t\tC677.8,635.1,678.3,634.4,678.8,633.7L678.8,633.7z\"/>\n\t\t<path class=\"st10\" d=\"M624.8,686.3c-1.2,3.2-4.4,4.2-6.8,6c-3.9,2.9-7.3,6.7-12.2,8C611.9,695.3,618.1,690.6,624.8,686.3\n\t\t\tL624.8,686.3z\"/>\n\t\t<path class=\"st10\" d=\"M313.4,8.5c7.6-3.1,15.5-4.5,23.7-4.5c-6,2.1-12.4,2.1-18.6,3.7C316.8,8.1,315.2,8.9,313.4,8.5z\"/>\n\t\t<path class=\"st10\" d=\"M483,761.4c-1.7,2-4.3,1.8-6.5,2c-5.4,0.5-10.6,2.2-16,1.6C467.9,763.4,475.5,762.3,483,761.4L483,761.4z\"/>\n\t\t<path class=\"st6\" d=\"M87,616.3c-2.1-4.7-5.9-8.3-8.5-12.7c-0.7-1.2-1.4-2.3-2.1-3.5c2.3,0.6,2.9,2.8,4.2,4.5\n\t\t\tc2.3,3,4.6,6.2,6.8,9.3C87.9,614.7,89.5,615.9,87,616.3L87,616.3z\"/>\n\t\t<path class=\"st6\" d=\"M123.9,662.8c-5.8-4.2-10.8-9.2-15-15C114.4,652.3,119.4,657.3,123.9,662.8z\"/>\n\t\t<path class=\"st6\" d=\"M81.7,633.1c-4-3.1-7.1-7-9.5-11.5C76.1,624.8,79,628.8,81.7,633.1z\"/>\n\t\t<path class=\"st10\" d=\"M654.8,660.1c-2.8,4-5.9,7.5-10.4,9.7C647.4,666.1,650.9,662.9,654.8,660.1z\"/>\n\t\t<path class=\"st10\" d=\"M603,702.1c-3.2,3.5-6.7,6.5-11.7,7C595.5,707.2,598.8,703.9,603,702.1z\"/>\n\t\t<path class=\"st10\" d=\"M692,585.5c-1,4.1-3.1,7.4-6.4,10C687.3,591.9,689.3,588.5,692,585.5z\"/>\n\t\t<path class=\"st6\" d=\"M205.6,733.4c-2.7-0.3-4.9-1.8-7.3-2.9c-0.6-0.3-1.6-0.7-1.1-1.6s1.5-0.7,2.3-0.2\n\t\t\tC200.4,731.7,204.2,731,205.6,733.4L205.6,733.4z\"/>\n\t\t<path class=\"st6\" d=\"M107.1,645.9c-3-2-5.5-4.5-7.1-7.8C102.9,640.2,105.4,642.7,107.1,645.9z\"/>\n\t\t<path class=\"st6\" d=\"M216.8,738.1c-3.9-0.6-7.5-1.9-10.6-4.5C210,734.5,213.5,735.9,216.8,738.1z\"/>\n\t\t<path class=\"st10\" d=\"M342,2.3c2.5-0.6,5-0.4,7.3,0.7c-3.8-0.2-7.3,1.5-11.1,0.9C339.5,3.4,340.8,2.8,342,2.3z\"/>\n\t\t<path class=\"st6\" d=\"M133.7,671.8c-3-1.4-5.3-3.6-7-6.4C129.6,666.8,131.9,669.1,133.7,671.8z\"/>\n\t\t<path class=\"st6\" d=\"M47.2,599.3c-2.7-2.3-4.5-5.2-5.7-8.5C44.1,593.2,45.9,596.1,47.2,599.3z\"/>\n\t\t<path class=\"st6\" d=\"M162.9,695.1c-3.2-1-5.7-3.1-7.7-5.7C158.1,690.7,160.8,692.6,162.9,695.1z\"/>\n\t\t<path class=\"st6\" d=\"M344.3,762.2c-3.2,0.3-6.1-0.5-9-1.8C338.4,760.1,341.4,760.8,344.3,762.2z\"/>\n\t\t<path class=\"st6\" d=\"M355.6,764c-3.2,0-6.5,0.1-9.4-1.7C349.5,762.3,352.7,762.2,355.6,764z\"/>\n\t\t<path class=\"st10\" d=\"M579.7,719c0.5,0,1.1-0.2,1.4,0c0.8,0.8,0,1.4-0.5,1.7c-1.7,1.1-3.4,2.2-5.5,2.1\n\t\t\tC576.1,721,579.1,721.4,579.7,719L579.7,719z\"/>\n\t\t<path class=\"st6\" d=\"M171.2,701c-2.8-1-5.3-2.4-7-4.9C166.9,697.2,169.4,698.5,171.2,701z\"/>\n\t\t<path class=\"st10\" d=\"M633,679.6c-1.2,2.7-3.3,4.4-6.1,5.1C628.5,682.4,630.7,680.9,633,679.6z\"/>\n\t\t<path class=\"st6\" d=\"M213.2,722.7c-2.7-0.4-4.9-1.8-6.9-3.5C209.1,719.2,211.2,720.9,213.2,722.7z\"/>\n\t\t<path class=\"st6\" d=\"M222.1,727.3c-2.4-0.5-4.8-1.2-6.3-3.3C218.3,724.4,220.4,725.4,222.1,727.3z\"/>\n\t\t<path class=\"st6\" d=\"M71.8,621.2c-1.6-0.7-2.5-2-3.2-3.4c-0.5-1.1,0-1.7,1.2-1.4C69.7,618.3,71.8,619.3,71.8,621.2L71.8,621.2z\"/>\n\t\t<path class=\"st10\" d=\"M566.3,716.4c-0.2,0.8-0.5,1.7-0.7,2.5c-0.9,0.2-1.9,0.4-2.9-0.5C563.6,717.3,564.9,716.8,566.3,716.4\n\t\t\tL566.3,716.4z\"/>\n\t\t<path class=\"st6\" d=\"M41.2,590.4c-1.8-1.4-3-3.2-3.4-5.5C39.8,586.1,40.6,588.2,41.2,590.4z\"/>\n\t\t<path class=\"st10\" d=\"M644.3,669.9c-0.9,2.2-2.5,3.6-4.8,4.2C640.7,672.2,642.3,670.8,644.3,669.9z\"/>\n\t\t<path class=\"st6\" d=\"M363.8,765c-2.1,0.5-4.1,0-6-0.9C359.9,763.4,361.9,764,363.8,765z\"/>\n\t\t<path class=\"st10\" d=\"M571.5,713.4c-0.9,2.1-2.7,2.6-4.7,2.7C568,714.6,569.7,713.8,571.5,713.4z\"/>\n\t\t<path class=\"st6\" d=\"M372,766c-1.9,0.5-3.8,0.5-5.4-0.8C368.5,764.8,370.3,764.9,372,766z\"/>\n\t\t<path class=\"st10\" d=\"M579,709.2c-1.3,1.3-2.7,2.4-4.7,2.3C575.6,710.2,576.9,709,579,709.2z\"/>\n\t\t<path class=\"st10\" d=\"M685.3,596.1c-0.2,1.2-0.4,2.5-0.6,3.7c-0.6,0.2-1.5,0.3-1.5-0.4C683.1,597.9,684.1,596.8,685.3,596.1\n\t\t\tL685.3,596.1z\"/>\n\t\t<path class=\"st6\" d=\"M98.9,636.8c-1.7-0.5-2.4-2.1-3.6-3.2C97.5,633.5,98.3,635.1,98.9,636.8z\"/>\n\t\t<path class=\"st10\" d=\"M637.5,675.9c-0.5,1.7-1.6,2.5-3.2,2.7C634.9,677.2,636,676.3,637.5,675.9z\"/>\n\t\t<path class=\"st10\" d=\"M661.3,653.7c-0.2,1.8-1.2,2.9-3.1,3.1C658.8,655.4,659.8,654.3,661.3,653.7z\"/>\n\t\t<path class=\"st6\" d=\"M186.2,718.8c-1.5,0.1-2.6-0.4-3.4-1.7C184.2,717.2,185.4,717.8,186.2,718.8z\"/>\n\t\t<path class=\"st6\" d=\"M221.8,728.7c0.1-0.4,0.2-0.9,0.4-1.3c0.7,0,1.8,0,1.6,0.8C223.7,729.3,222.6,728.9,221.8,728.7L221.8,728.7z\n\t\t\t\"/>\n\t\t<path class=\"st10\" d=\"M308.9,9.5c0.8-1.1,1.8-1.3,3-0.7C311,9.5,310.1,9.8,308.9,9.5z\"/>\n\t\t<path class=\"st6\" d=\"M330,759.2c-1.2,0.5-2.3,0.3-3.2-0.7C328,758.1,329.1,758.4,330,759.2z\"/>\n\t\t<path class=\"st10\" d=\"M694.5,582.8c-0.4,1.1-1,2-2.2,2.2C692.5,583.8,693,582.8,694.5,582.8z\"/>\n\t\t<path class=\"st10\" d=\"M305.2,10.3c0.5-1,1.3-1.2,2.3-0.6C306.8,10.2,306.1,10.5,305.2,10.3z\"/>\n\t\t<path class=\"st6\" d=\"M333.9,760.2c-1.1,0.3-2,0-2.7-0.8C332.3,759,333.2,759.3,333.9,760.2z\"/>\n\t\t<path class=\"st10\" d=\"M573.8,711.9c-0.3,0.8-1,1.1-1.8,1.1C572.3,712.3,573,712,573.8,711.9z\"/>\n\t\t<path class=\"st6\" d=\"M37.4,584.3c-0.9-0.6-1.6-1.2,0.2-1.6C37.5,583.3,37.5,583.8,37.4,584.3z\"/>\n\t\t<path class=\"st9\" d=\"M757.1,412.8c0.1,0.6,0.3,1.1,0.4,1.7C756.2,414.2,756.4,413.6,757.1,412.8z\"/>\n\t\t<path class=\"st10\" d=\"M605.3,700.6c-0.3,0.8-0.8,1.2-1.7,1.2C603.9,701.1,604.4,700.6,605.3,700.6z\"/>\n\t\t<path class=\"st3\" d=\"M442.5,766.4c-0.5,0.1-1.1,0.1-1.6,0.2C441.3,766,441.9,765.9,442.5,766.4z\"/>\n\t</g>\n</g>\n</svg>\n");
+;// CONCATENATED MODULE: ./src/icons/lock.svg
+/* harmony default export */ const lock = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 768 767.999994\"\n    preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n    <path fill=\"#0d3c26\"\n        d=\"M 520.59375 325.066406 L 520.59375 296.34375 C 520.59375 221.027344 459.316406 159.75 384 159.75 C 308.683594 159.75 247.40625 221.027344 247.40625 296.34375 L 247.40625 325.066406 C 215.605469 328.226562 190.6875 355.132812 190.6875 387.75 L 190.6875 466.5 C 190.6875 544.660156 254.277344 608.25 332.4375 608.25 L 435.558594 608.25 C 513.71875 608.25 577.308594 544.660156 577.308594 466.5 L 577.308594 387.75 C 577.3125 355.132812 552.394531 328.226562 520.59375 325.066406 Z M 384 195.75 C 439.46875 195.75 484.59375 240.875 484.59375 296.34375 L 484.59375 324.75 L 283.40625 324.75 L 283.40625 296.34375 C 283.40625 240.875 328.53125 195.75 384 195.75 Z M 541.3125 466.5 C 541.3125 524.8125 493.871094 572.25 435.5625 572.25 L 332.4375 572.25 C 274.128906 572.25 226.6875 524.8125 226.6875 466.5 L 226.6875 387.75 C 226.6875 372.863281 238.800781 360.75 253.6875 360.75 L 514.3125 360.75 C 529.199219 360.75 541.3125 372.863281 541.3125 387.75 Z M 384 0 C 172.261719 0 0 172.261719 0 384 C 0 595.738281 172.261719 768 384 768 C 595.738281 768 768 595.738281 768 384 C 768 172.261719 595.738281 0 384 0 Z M 384 732 C 192.113281 732 36 575.886719 36 384 C 36 192.113281 192.113281 36 384 36 C 575.886719 36 732 192.113281 732 384 C 732 575.886719 575.886719 732 384 732 Z M 384 732 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n</svg>");
+;// CONCATENATED MODULE: ./src/icons/unlock.svg
+/* harmony default export */ const unlock = ("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n    zoomAndPan=\"magnify\" viewBox=\"0 0 768 767.999994\"\n    preserveAspectRatio=\"xMidYMid meet\" version=\"1.0\">\n    <path fill=\"#0d3c26\"\n        d=\"M 514.3125 324.75 L 283.40625 324.75 L 283.40625 296.34375 C 283.40625 240.875 328.53125 195.75 384 195.75 C 428.832031 195.75 468.660156 225.976562 480.855469 269.257812 C 483.554688 278.824219 493.492188 284.394531 503.0625 281.699219 C 512.632812 279 518.203125 269.058594 515.507812 259.488281 C 498.953125 200.765625 444.875 159.75 384 159.75 C 308.683594 159.75 247.40625 221.027344 247.40625 296.34375 L 247.40625 325.066406 C 215.605469 328.226562 190.6875 355.132812 190.6875 387.75 L 190.6875 466.5 C 190.6875 544.660156 254.277344 608.25 332.4375 608.25 L 435.558594 608.25 C 513.71875 608.25 577.308594 544.660156 577.308594 466.5 L 577.308594 387.75 C 577.3125 353.011719 549.050781 324.75 514.3125 324.75 Z M 541.3125 466.5 C 541.3125 524.8125 493.871094 572.25 435.5625 572.25 L 332.4375 572.25 C 274.128906 572.25 226.6875 524.8125 226.6875 466.5 L 226.6875 387.75 C 226.6875 372.863281 238.800781 360.75 253.6875 360.75 L 514.3125 360.75 C 529.199219 360.75 541.3125 372.863281 541.3125 387.75 Z M 384 0 C 172.261719 0 0 172.261719 0 384 C 0 595.738281 172.261719 768 384 768 C 595.738281 768 768 595.738281 768 384 C 768 172.261719 595.738281 0 384 0 Z M 384 732 C 192.113281 732 36 575.886719 36 384 C 36 192.113281 192.113281 36 384 36 C 575.886719 36 732 192.113281 732 384 C 732 575.886719 575.886719 732 384 732 Z M 384 732 \"\n        fill-opacity=\"1\" fill-rule=\"nonzero\" />\n</svg>");
+;// CONCATENATED MODULE: ./src/ButtonModule.js
+function ButtonModule_typeof(o) { "@babel/helpers - typeof"; return ButtonModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, ButtonModule_typeof(o); }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || ButtonModule_unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return ButtonModule_arrayLikeToArray(arr); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == ButtonModule_typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(ButtonModule_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+function ButtonModule_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = ButtonModule_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function ButtonModule_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return ButtonModule_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return ButtonModule_arrayLikeToArray(o, minLen); }
+function ButtonModule_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function ButtonModule_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function ButtonModule_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, ButtonModule_toPropertyKey(descriptor.key), descriptor); } }
+function ButtonModule_createClass(Constructor, protoProps, staticProps) { if (protoProps) ButtonModule_defineProperties(Constructor.prototype, protoProps); if (staticProps) ButtonModule_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function ButtonModule_toPropertyKey(arg) { var key = ButtonModule_toPrimitive(arg, "string"); return ButtonModule_typeof(key) === "symbol" ? key : String(key); }
+function ButtonModule_toPrimitive(input, hint) { if (ButtonModule_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (ButtonModule_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var ButtonModule = /*#__PURE__*/function () {
+  /**
+   * Initializes the button module with dependencies
+   * @param {Chatbot} chatbot - The chatbot instance (dependency injection)
+   */
+  function ButtonModule(chatbot) {
+    ButtonModule_classCallCheck(this, ButtonModule);
+    this.icons = new IconModule();
+    this.userPreferences = UserPreferenceModule.getInstance();
+    this.chatbot = chatbot;
+    this.immersionService = new ImmersionService(chatbot);
+    this.sayPiActor = src_StateMachineService.actor; // the Say, Pi state machine
+    this.screenLockActor = src_StateMachineService.screenLockActor;
+    // Binding methods to the current instance
+    this.registerOtherEvents();
+
+    // track the frequency of bug #26
+    this.submissionsWithoutAnError = 0;
+
+    // track whether a call is active, so that new button instances can be initialized correctly
+    this.callIsActive = false;
+  }
+  ButtonModule_createClass(ButtonModule, [{
+    key: "registerOtherEvents",
+    value: function registerOtherEvents() {
+      var _this = this;
+      EventBus.on("saypi:autoSubmit", function () {
+        _this.handleAutoSubmit();
+      });
+      EventBus.on("audio:frame", function (probabilities) {
+        _this.handleAudioFrame(probabilities);
+      });
+    }
+
+    // Function to create a new button
+  }, {
+    key: "createButton",
+    value: function createButton(textLabel, onClickCallback) {
+      var button = document.createElement("button");
+      if (textLabel) {
+        button.textContent = textLabel;
+      }
+      if (onClickCallback) {
+        button.onclick = onClickCallback;
+      }
+      return button;
+    }
+
+    // Function to style a given button
+  }, {
+    key: "styleButton",
+    value: function styleButton(button, styles) {
+      for (var key in styles) {
+        if (styles.hasOwnProperty(key)) {
+          button.style[key] = styles[key];
+        }
+      }
+    }
+  }, {
+    key: "addTalkIcon",
+    value: function addTalkIcon(container) {
+      var _this2 = this;
+      this.updateIconContent(container);
+      window.matchMedia("(max-width: 768px)").addListener(function () {
+        _this2.updateIconContent(container);
+      });
+      this.setupViewObserver(container);
+    }
+  }, {
+    key: "updateIconContent",
+    value: function updateIconContent(iconContainer) {
+      if (ImmersionStateChecker.isViewImmersive()) {
+        iconContainer.innerHTML = this.icons.rectangles();
+      }
+      iconContainer.classList.add("saypi-icon");
+    }
+
+    /**
+     * Monitors an element for changes in the view class
+     * i.e. when the view mode is toggled between 'immersive' and 'desktop'
+     * and updates the icon content accordingly (why?)
+     * @param {*} container - The HTML element to hold the icon
+     */
+  }, {
+    key: "setupViewObserver",
+    value: function setupViewObserver(container) {
+      var _this3 = this;
+      var targetNode = document.documentElement; // The <html> element
+
+      var config = {
+        attributes: true,
+        attributeFilter: ["class"]
+      };
+      var callback = function callback(mutationsList, observer) {
+        var _iterator = ButtonModule_createForOfIteratorHelper(mutationsList),
+          _step;
+        try {
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            var mutation = _step.value;
+            if (mutation.type === "attributes") {
+              if (mutation.attributeName === "class") {
+                if (document.documentElement.classList.contains("immersive-view")) {
+                  // view mode changed to 'immersive'
+                  console.log("immersive view");
+                  _this3.updateIconContent(container);
+                } else {
+                  // view mode changed to 'desktop'
+                  console.log("desktop view");
+                  _this3.updateIconContent(container);
+                }
+              }
+            }
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
+        }
+      };
+      var observer = new MutationObserver(callback);
+
+      // Start observing the target node for configured mutations
+      observer.observe(targetNode, config);
+
+      // Later, you can stop observing by calling:
+      // observer.disconnect();
+    }
+
+    // Simulate an "Enter" keypress event on a form
+  }, {
+    key: "simulateFormSubmit",
+    value: function simulateFormSubmit() {
+      var submitButton = document.getElementById("saypi-submitButton");
+      if (submitButton) {
+        if (submitErrorHandler.detectSubmitError()) {
+          // track how often this happens
+          console.error("Autosubmit failed after ".concat(this.submissionsWithoutAnError, " turns."));
+          this.submissionsWithoutAnError = 0;
+          submitErrorHandler.handleSubmitError();
+        } else {
+          this.submissionsWithoutAnError++;
+          submitButton.click();
+        }
+      } else {
+        /* hit enter key in the prompt textarea, might not work as expected on "new ui layout" */
+        var textarea = document.getElementById("saypi-prompt");
+        var enterEvent = new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "Enter",
+          keyCode: 13,
+          which: 13
+        });
+        textarea.dispatchEvent(enterEvent);
+      }
+    }
+
+    // Function to handle auto-submit based on the user preference
+  }, {
+    key: "handleAutoSubmit",
+    value: function () {
+      var _handleAutoSubmit = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        var autoSubmitEnabled, isImmersive;
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return this.userPreferences.getAutoSubmit();
+            case 2:
+              autoSubmitEnabled = _context.sent;
+              isImmersive = ImmersionStateChecker.isViewImmersive(); // must auto-submit in immersive mode
+              if (autoSubmitEnabled || isImmersive) {
+                this.simulateFormSubmit();
+              } else {
+                console.log("Autosubmit is off");
+              }
+            case 5:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee, this);
+      }));
+      function handleAutoSubmit() {
+        return _handleAutoSubmit.apply(this, arguments);
+      }
+      return handleAutoSubmit;
+    }()
+  }, {
+    key: "createExitButton",
+    value: function createExitButton(container) {
+      var position = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+      var label = i18n("exitImmersiveModeLong");
+      var button = this.createButton("", function () {
+        ImmersionService.exitImmersiveMode();
+      });
+      button.type = "button";
+      button.className = "saypi-exit-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
+      button.setAttribute("aria-label", label);
+      button.innerHTML = exit;
+      addChild(container, button, position);
+      return button;
+    }
+  }, {
+    key: "createEnterButton",
+    value: function createEnterButton(container) {
+      var _this4 = this;
+      var position = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+      var label = i18n("enterImmersiveModeLong");
+      var button = this.createButton("", function () {
+        _this4.immersionService.enterImmersiveMode();
+      });
+      button.type = "button";
+      button.className = "saypi-enter-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
+      button.setAttribute("aria-label", label);
+      button.innerHTML = maximize;
+      // insert the button at the specified position
+      addChild(container, button, position);
+      return button;
+    }
+  }, {
+    key: "createImmersiveModeButton",
+    value: function createImmersiveModeButton(container) {
+      var _this5 = this;
+      var position = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+      var label = i18n("enterImmersiveModeShort");
+      var title = i18n("enterImmersiveModeLong");
+      var button = document.createElement("a");
+      button.onclick = function () {
+        _this5.immersionService.enterImmersiveMode();
+      };
+      button.className = "immersive-mode-button saypi-control-button tooltip flex h-16 w-16 flex-col items-center justify-center rounded-xl text-neutral-900 hover:bg-neutral-50-hover hover:text-neutral-900-hover active:bg-neutral-50-tap active:text-neutral-900-tap gap-0.5";
+      button.setAttribute("aria-label", title);
+      button.innerHTML = immersive;
+      var labelDiv = document.createElement("div");
+      labelDiv.textContent = label;
+      labelDiv.className = "t-label";
+      button.appendChild(labelDiv);
+      addChild(container, button, position);
+      return button;
+    }
+  }, {
+    key: "createCallButton",
+    value: function createCallButton(container) {
+      var _button$classList;
+      var position = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+      var button = this.createButton();
+      button.id = "saypi-callButton";
+      button.type = "button";
+      button.classList.add("call-button", "saypi-button", "tooltip");
+      // add all classes in chatbot.getExtraCallButtonClasses() to the button
+      (_button$classList = button.classList).add.apply(_button$classList, _toConsumableArray(this.chatbot.getExtraCallButtonClasses()));
+      if (this.callIsActive) {
+        this.callActive(button);
+      } else {
+        this.callInactive(button);
+      }
+      addChild(container, button, position);
+      if (this.callIsActive) {
+        // if the call is active, start the glow animation once added to the DOM
+        AnimationModule.startAnimation("glow");
+      }
+      return button;
+    }
+  }, {
+    key: "updateCallButtonColor",
+    value: function updateCallButtonColor(color) {
+      var callButton = document.getElementById("saypi-callButton");
+      // find first path element descendant of the call button's svg element child
+      var path = callButton === null || callButton === void 0 ? void 0 : callButton.querySelector("svg path");
+      if (path) {
+        // set the fill color of the path element
+        path.style.fill = color;
+      }
+    }
+  }, {
+    key: "updateCallButtonGlowColor",
+    value: function updateCallButtonGlowColor(color) {
+      // set the `--glow-color` CSS variable on the call button
+      var callButton = document.getElementById("saypi-callButton");
+      if (callButton) {
+        callButton.style.setProperty("--glow-color", color);
+      }
+    }
+    /**
+     * Interpolates between a base colour and a peak colour based on intensity.
+     *
+     * @param {string} baseColor - The base colour in hexadecimal format.
+     * @param {string} peakColor - The peak colour in hexadecimal format.
+     * @param {number} intensity - The intensity factor (0.0 to 1.0).
+     * @returns {string} The interpolated colour in hexadecimal format.
+     */
+  }, {
+    key: "interpolateColor",
+    value: function interpolateColor(baseColor, peakColor, intensity) {
+      // Ensure intensity is within the range of 0.0 to 1.0
+      intensity = Math.max(0, Math.min(1, intensity));
+
+      // Convert the base and peak colours from hexadecimal to RGB
+      var baseRed = parseInt(baseColor.substring(1, 3), 16);
+      var baseGreen = parseInt(baseColor.substring(3, 5), 16);
+      var baseBlue = parseInt(baseColor.substring(5, 7), 16);
+      var peakRed = parseInt(peakColor.substring(1, 3), 16);
+      var peakGreen = parseInt(peakColor.substring(3, 5), 16);
+      var peakBlue = parseInt(peakColor.substring(5, 7), 16);
+
+      // Interpolate each colour component
+      var newRed = Math.round(baseRed + (peakRed - baseRed) * intensity);
+      var newGreen = Math.round(baseGreen + (peakGreen - baseGreen) * intensity);
+      var newBlue = Math.round(baseBlue + (peakBlue - baseBlue) * intensity);
+
+      // Convert the interpolated RGB back to hexadecimal
+      return "#".concat(newRed.toString(16).padStart(2, "0")).concat(newGreen.toString(16).padStart(2, "0")).concat(newBlue.toString(16).padStart(2, "0"));
+    }
+
+    /**
+     *
+     * @param { isSpeech: number; notSpeech: number } probabilities
+     */
+  }, {
+    key: "handleAudioFrame",
+    value: function handleAudioFrame(probabilities) {
+      var baseColor = "#ffd1dc"; // sunset-peach
+      var peakColor = "#FF7F50"; // coral
+      var updatedColor = this.interpolateColor(baseColor, peakColor, probabilities.isSpeech);
+      this.updateCallButtonGlowColor(updatedColor);
+    }
+  }, {
+    key: "callStarting",
+    value: function callStarting(callButton) {
+      var _this6 = this;
+      if (!callButton) {
+        callButton = document.getElementById("saypi-callButton");
+      }
+      if (callButton) {
+        callButton.innerHTML = call_starting;
+        var label = i18n("callStarting");
+        callButton.setAttribute("aria-label", label);
+        callButton.onclick = function () {
+          _this6.sayPiActor.send("saypi:hangup");
+        };
+      }
+    }
+  }, {
+    key: "callActive",
+    value: function callActive(callButton) {
+      var _this7 = this;
+      if (!callButton) {
+        callButton = document.getElementById("saypi-callButton");
+      }
+      if (callButton) {
+        var label = i18n("callInProgress");
+        callButton.innerHTML = hangup;
+        callButton.setAttribute("aria-label", label);
+        callButton.onclick = function () {
+          _this7.sayPiActor.send("saypi:hangup");
+        };
+        callButton.classList.add("active");
+      }
+      this.callIsActive = true;
+    }
+  }, {
+    key: "callInactive",
+    value: function callInactive(callButton) {
+      var _this8 = this;
+      if (!callButton) {
+        callButton = document.getElementById("saypi-callButton");
+      }
+      if (callButton) {
+        callButton.innerHTML = call;
+        var label = i18n("callNotStarted", this.chatbot.getName());
+        callButton.setAttribute("aria-label", label);
+        callButton.onclick = function () {
+          _this8.sayPiActor.send("saypi:call");
+        };
+        callButton.classList.remove("active");
+      }
+      this.callIsActive = false;
+    }
+  }, {
+    key: "callError",
+    value: function callError(callButton) {
+      if (!callButton) {
+        callButton = document.getElementById("saypi-callButton");
+      }
+      if (callButton) {
+        var label = i18n("callError");
+        callButton.innerHTML = hangup_minced;
+        callButton.setAttribute("aria-label", label);
+      }
+    }
+  }, {
+    key: "disableCallButton",
+    value: function disableCallButton() {
+      var callButton = document.getElementById("saypi-callButton");
+      if (callButton) {
+        callButton.classList.add("disabled");
+        // disable the call action, but always allow hangup
+        if (!callButton.classList.contains("active")) {
+          callButton.disabled = true;
+        }
+      }
+    }
+  }, {
+    key: "enableCallButton",
+    value: function enableCallButton() {
+      var callButton = document.getElementById("saypi-callButton");
+      if (callButton) {
+        callButton.classList.remove("disabled");
+        callButton.disabled = false;
+      }
+    }
+  }, {
+    key: "createLockButton",
+    value: function createLockButton(container) {
+      var _this9 = this;
+      var label = i18n("lockButton");
+      var button = document.createElement("button");
+      button.id = "saypi-lockButton";
+      button.type = "button";
+      button.className = "lock-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
+      button.setAttribute("aria-label", label);
+      button.innerHTML = lock;
+      if (container) {
+        container.appendChild(button);
+        button.onclick = function () {
+          _this9.screenLockActor.send("lock");
+        };
+      }
+      return button;
+    }
+  }, {
+    key: "createUnlockButton",
+    value: function createUnlockButton(container) {
+      var _this10 = this;
+      var label = i18n("unlockButton");
+      var button = document.createElement("button");
+      button.id = "saypi-unlockButton";
+      button.type = "button";
+      button.className = "lock-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
+      button.setAttribute("aria-label", label);
+      button.innerHTML = unlock;
+      if (container) {
+        container.appendChild(button);
+        var pressTimer;
+        var originalMessage = i18n("unlockInstruction");
+        var continueUnlockingMessage = i18n("continueUnlocking");
+        button.onmousedown = button.ontouchstart = function () {
+          var instruction = document.getElementById("saypi-unlock-instruction");
+          if (instruction) {
+            instruction.textContent = continueUnlockingMessage;
+          }
+          pressTimer = setTimeout(function () {
+            _this10.screenLockActor.send("unlock");
+          }, 1500); // Adjust the duration (in milliseconds) for a long-press
+        };
+
+        button.onmouseup = button.ontouchend = function () {
+          // reset the message
+          var instruction = document.getElementById("saypi-unlock-instruction");
+          if (instruction) {
+            instruction.textContent = originalMessage;
+          }
+          clearTimeout(pressTimer);
+        };
+      }
+      return button;
+    }
+  }]);
+  return ButtonModule;
+}(); // Singleton
+var ButtonModule_chatbot = ChatbotService.getChatbot();
+var buttonModule = new ButtonModule(ButtonModule_chatbot);
+;// CONCATENATED MODULE: ./src/events/EventModule.js
+function EventModule_typeof(o) { "@babel/helpers - typeof"; return EventModule_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, EventModule_typeof(o); }
+function EventModule_regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ EventModule_regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == EventModule_typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(EventModule_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function EventModule_asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function EventModule_asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { EventModule_asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { EventModule_asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+function EventModule_ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function EventModule_objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? EventModule_ownKeys(Object(t), !0).forEach(function (r) { EventModule_defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : EventModule_ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function EventModule_defineProperty(obj, key, value) { key = EventModule_toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function EventModule_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function EventModule_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, EventModule_toPropertyKey(descriptor.key), descriptor); } }
+function EventModule_createClass(Constructor, protoProps, staticProps) { if (protoProps) EventModule_defineProperties(Constructor.prototype, protoProps); if (staticProps) EventModule_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function EventModule_toPropertyKey(arg) { var key = EventModule_toPrimitive(arg, "string"); return EventModule_typeof(key) === "symbol" ? key : String(key); }
+function EventModule_toPrimitive(input, hint) { if (EventModule_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (EventModule_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+
+
+var PROMPT_READY = "saypi:promptReady";
+var CALL_READY = "saypi:callReady";
+var USER_SPEAKING = "saypi:userSpeaking";
+var USER_STOPPED_SPEAKING = "saypi:userStoppedSpeaking";
+var USER_FINISHED_SPEAKING = "saypi:userFinishedSpeaking";
+var PI_THINKING = "saypi:piThinking";
+var PI_WRITING = "saypi:piWriting";
+var PI_STOPPED_WRITING = "saypi:piStoppedWriting";
+var PI_SPEAKING = "saypi:piSpeaking";
+var PI_STOPPED_SPEAKING = "saypi:piStoppedSpeaking";
+var PI_FINISHED_SPEAKING = "saypi:piFinishedSpeaking";
+var VISIBLE = "saypi:visible";
+var AUDIO_DEVICE_CONNECTED = "saypi:audio:connected";
+var AUDIO_DEVICE_RECONNECT = "saypi:audio:reconnect";
+var END_CALL = "saypi:hangup";
+var SESSION_ASSIGNED = "saypi:session:assigned";
+
+/**
+ * The EventModule translates events sent on the EventBus to StateMachine events,
+ * coordinating interactions between loosely-coupled modules.
+ */
+var EventModule = /*#__PURE__*/function () {
+  function EventModule() {
+    EventModule_classCallCheck(this, EventModule);
+  }
+  EventModule_createClass(EventModule, null, [{
+    key: "init",
+    value: function init() {
+      // All the event listeners can be added here
+      this.registerStateMachineEvents(src_StateMachineService.actor);
+      this.registerSessionEvents(src_StateMachineService.analyticsMachineActor);
+      // Any other initializations...
+    }
+  }, {
+    key: "cleanup",
+    value: function cleanup() {
+      // Remove event listeners if needed, or any other cleanup operations
+      window.removeEventListener("saypi:transcribed", this.handleTranscriptionResponse);
+    }
+  }, {
+    key: "registerStateMachineEvents",
+    value: function registerStateMachineEvents(actor) {
+      EventBus.on("saypi:ui:content-loaded", function () {
+        actor.send(PROMPT_READY);
+      });
+      EventBus.on(CALL_READY, function () {
+        actor.send(CALL_READY);
+      });
+      EventBus.on(USER_SPEAKING, function () {
+        actor.send(USER_SPEAKING);
+      });
+      [USER_STOPPED_SPEAKING, USER_FINISHED_SPEAKING, AUDIO_DEVICE_CONNECTED, AUDIO_DEVICE_RECONNECT, SESSION_ASSIGNED].forEach(function (eventName) {
+        EventBus.on(eventName, function (detail) {
+          if (detail) {
+            actor.send(EventModule_objectSpread({
+              type: eventName
+            }, detail));
+          } else {
+            console.warn("Received ".concat(eventName, " without details."));
+          }
+        });
+      });
+      [PI_THINKING, PI_WRITING, PI_STOPPED_WRITING, PI_SPEAKING, PI_STOPPED_SPEAKING, PI_FINISHED_SPEAKING, END_CALL].forEach(function (eventName) {
+        EventBus.on(eventName, function () {
+          actor.send(eventName);
+        });
+      });
+
+      // notify the actor when the tab is visible
+      document.addEventListener("visibilitychange", /*#__PURE__*/EventModule_asyncToGenerator( /*#__PURE__*/EventModule_regeneratorRuntime().mark(function _callee() {
+        return EventModule_regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              if (document.visibilityState === "visible") {
+                actor.send(VISIBLE);
+              }
+            case 1:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee);
+      })));
+    }
+  }, {
+    key: "registerSessionEvents",
+    value: function registerSessionEvents(actor) {
+      EventBus.on("session:started", function () {
+        actor.send("start_session");
+      });
+      EventBus.on("session:ended", function () {
+        actor.send("end_session");
+      });
+      EventBus.on("session:message-sent", function (detail) {
+        actor.send(EventModule_objectSpread({
+          type: "send_message"
+        }, detail));
+      });
+      EventBus.on("session:transcribing", function (detail) {
+        actor.send(EventModule_objectSpread({
+          type: "transcribing"
+        }, detail));
+      });
+    }
+  }]);
+  return EventModule;
+}();
 
 ;// CONCATENATED MODULE: ./src/dom/BaseObserver.ts
 class BaseObserver {
@@ -37931,365 +39370,6 @@ class BaseObserver {
 }
 
 
-;// CONCATENATED MODULE: ./src/dom/Observation.ts
-class Observation {
-    constructor(target, id, found, isNew, decorated, decorations = []) {
-        this.target = target;
-        this.id = id;
-        this.found = found;
-        this.isNew = isNew;
-        this.decorated = decorated;
-        this.decorations = decorations;
-    }
-    // Whether the observed element is fully loaded and ready to be used
-    isReady() {
-        return this.found && this.isNew && this.decorated;
-    }
-    // Whether the observed element has been found, but not yet decorated with the extension's enhancements
-    isUndecorated() {
-        return this.found && this.isNew && !this.decorated;
-    }
-    // Where the element does not exist in the DOM
-    static notFound(id) {
-        return new Observation(null, id, false, false, false);
-    }
-    // Where the element exists in the DOM, and has already been decorated with the extension's enhancements
-    static foundAlreadyDecorated(id, element) {
-        return new Observation(element, id, true, false, true);
-    }
-    // Where the element exists in the DOM, and has newly been decorated with the extension's enhancements
-    static foundAndDecorated(obs, decoration) {
-        const decor = decoration
-            ? [...obs.decorations, decoration]
-            : [obs.decorations];
-        return new Observation(obs.target, obs.id, obs.found, obs.isNew, true, decor);
-    }
-    // Where the element exists in the DOM, but has not been decorated with the extension's enhancements
-    static foundUndecorated(id, element) {
-        return new Observation(element, id, true, true, false);
-    }
-}
-
-;// CONCATENATED MODULE: ./src/dom/MessageElements.ts
-var MessageElements_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-
-
-
-
-
-
-
-
-
-
-
-class PopupMenu {
-    constructor(message, element, speech, ttsControls) {
-        this.message = message;
-        this.speech = speech;
-        this.ttsControls = ttsControls;
-        this._element = element;
-    }
-    get element() {
-        return this._element;
-    }
-    decorate() {
-        this._element.classList.add("popup-menu");
-        this.ttsControls.addCopyButton(this.message, this._element, true);
-        if (this.speech) {
-            this.decorateSpeech(this.speech);
-        }
-    }
-    decorateSpeech(speech) {
-        this.ttsControls.addSpeechButton(speech, this._element, true);
-    }
-    static find(chatbot, searchRoot) {
-        let popupMenu = searchRoot.querySelector(".popup-menu");
-        if (popupMenu) {
-            return Observation.foundAlreadyDecorated(".popup-menu", popupMenu);
-        }
-        popupMenu = searchRoot.querySelector(".shadow-input"); // TODO: generalize with Chatbot parameter
-        if (popupMenu) {
-            return Observation.foundUndecorated(".popup-menu", popupMenu);
-        }
-        return Observation.notFound(".popup-menu");
-    }
-}
-class AssistantResponse {
-    constructor(element, includeInitialText = true) {
-        this.stable = false;
-        this.includeInitialText = true; // stable text may be called on completed messages, so include the initial text unless streaming
-        this._element = element;
-        this.includeInitialText = includeInitialText;
-        this.ttsControlsModule = new TTSControlsModule(SpeechSynthesisModule.getInstance());
-        this.decorate();
-    }
-    decorate() {
-        return MessageElements_awaiter(this, void 0, void 0, function* () {
-            this._element.classList.add("chat-message", "assistant-message");
-            yield this.decoratedContent();
-        });
-    }
-    /**
-     * Waits for the content of the chat message to load and returns it
-     * The content is the main text of the chat message, excluding any metadata or buttons
-     * @returns Promise<HTMLElement> - the content of the chat message
-     */
-    decoratedContent() {
-        return MessageElements_awaiter(this, void 0, void 0, function* () {
-            const content = this._element.querySelector(".content");
-            if (content) {
-                // content already found and decorated
-                return content;
-            }
-            const wfull = this._element.querySelector(".w-full");
-            if (wfull) {
-                // content found but not decorated yet
-                wfull.classList.add("content");
-                return wfull;
-            }
-            // content not found, wait for it to load
-            return new Promise((resolve) => {
-                const observer = new MutationObserver((mutations) => {
-                    for (const mutation of mutations) {
-                        for (const node of [...mutation.addedNodes]) {
-                            if (node instanceof HTMLElement) {
-                                const addedElement = node;
-                                // TODO: w-full is specific to Pi.ai, should be generalized with Chatbot parameter
-                                if (addedElement.classList.contains("w-full")) {
-                                    addedElement.classList.add("content");
-                                    observer.disconnect();
-                                    resolve(addedElement);
-                                }
-                            }
-                        }
-                    }
-                });
-                observer.observe(this._element, { childList: true, subtree: true });
-            });
-        });
-    }
-    /**
-     * Get the text content of the chat message,
-     * as it is at the time of calling this method, which may not be completely loaded if the response is still streaming
-     * Get stableText() to get the finished text content of the chat message
-     */
-    get text() {
-        const contentNode = this._element.querySelector(".content");
-        if (contentNode) {
-            const content = contentNode;
-            const textContent = content.innerText || content.textContent || "";
-            return textContent.replace(/\n/g, AssistantResponse.PARAGRAPH_SEPARATOR);
-        }
-        return "";
-    }
-    /**
-     * Get the final text content of the chat message
-     * This method waits for the text content to be completely loaded
-     */
-    stableText() {
-        return MessageElements_awaiter(this, void 0, void 0, function* () {
-            if (this.stable) {
-                return this.text;
-            }
-            const content = yield this.decoratedContent();
-            const options = { includeInitialText: this.includeInitialText };
-            const textStream = new ElementTextStream(content, options);
-            return new Promise((resolve) => {
-                textStream.getStream().subscribe({
-                    complete: () => {
-                        this.stable = true;
-                        resolve(this.text);
-                    },
-                });
-            });
-        });
-    }
-    /**
-     * Get the md5 hash of the text content of the chat message
-     * Use this function only if you know the text content is already stable,
-     * otherwise get stableHash() to get the hash of the final text content
-     */
-    get hash() {
-        // return a md5 hash of the text content
-        return (0,md5.md5)(this.text);
-    }
-    stableHash() {
-        return MessageElements_awaiter(this, void 0, void 0, function* () {
-            // return a md5 hash of the text content
-            const stableText = yield this.stableText();
-            return (0,md5.md5)(stableText);
-        });
-    }
-    get element() {
-        return this._element;
-    }
-    get utteranceId() {
-        return this._element.dataset.utteranceId || null;
-    }
-    get isTTSEnabled() {
-        return this.utteranceId !== null;
-    }
-    watchForPopupMenu(hoverMenu, speech) {
-        const observer = new MutationObserver((mutations) => {
-            for (const mutation of mutations) {
-                for (const node of [...mutation.addedNodes]) {
-                    if (node instanceof HTMLElement) {
-                        const addedElement = node;
-                        const obs = PopupMenu.find(new PiAIChatbot(), addedElement);
-                        if (obs.found && !obs.decorated) {
-                            const popupMenu = new PopupMenu(this, obs.target, speech, this.ttsControlsModule);
-                            popupMenu.decorate();
-                            EventBus.emit("saypi:tts:menuPop", {
-                                utteranceId: speech.id,
-                                menu: popupMenu,
-                            });
-                        }
-                    }
-                }
-            }
-        });
-        observer.observe(hoverMenu, { childList: true, subtree: false });
-    }
-    decorateControls() {
-        let hoverMenu = this.element.querySelector(".message-hover-menu");
-        if (!hoverMenu) {
-            if (this.element.children.length > 1) {
-                hoverMenu = this.element.children[1];
-                hoverMenu.classList.add("message-hover-menu");
-                if (hoverMenu.children.length > 0) {
-                    const createThreadButton = hoverMenu.children[0];
-                    createThreadButton.classList.add("create-thread-button");
-                }
-            }
-        }
-        let messageControlsElement = this.element.querySelector(".saypi-tts-controls");
-        if (!messageControlsElement) {
-            messageControlsElement = document.createElement("div");
-            messageControlsElement.classList.add("saypi-tts-controls", "pt-4");
-            hoverMenu === null || hoverMenu === void 0 ? void 0 : hoverMenu.appendChild(messageControlsElement);
-        }
-        const copyButtonElement = messageControlsElement.querySelector(".saypi-copy-button");
-        if (!copyButtonElement) {
-            this.ttsControlsModule.addCopyButton(this, messageControlsElement);
-        }
-    }
-    /**
-     * Apply speech to this chat message
-     * @param utterance
-     */
-    decorateSpeech(utterance) {
-        this._element.dataset.utteranceId = utterance.id;
-        this._element.classList.add("speech-enabled");
-        const hoverMenu = this.element.querySelector(".message-hover-menu");
-        const messageControlsElement = this.element.querySelector(".saypi-tts-controls");
-        if (!messageControlsElement) {
-            console.error("Message controls element not found, please call decorateControls() before decorateSpeech()");
-            return;
-        }
-        if (isMobileDevice() && hoverMenu) {
-            this.watchForPopupMenu(hoverMenu, utterance);
-        }
-        const speechButtonElement = messageControlsElement.querySelector(".saypi-speak-button");
-        if (!speechButtonElement) {
-            this.ttsControlsModule.addSpeechButton(utterance, messageControlsElement);
-        }
-        this.decorateCost(UtteranceCharge.none); // cost is unknown at this point
-        const costElement = messageControlsElement.querySelector(".saypi-cost");
-        if (costElement && utterance.voice) {
-            this.ttsControlsModule.addPoweredBy(costElement, utterance.voice);
-        }
-    }
-    decorateIncompleteSpeech(replace = false) {
-        return MessageElements_awaiter(this, void 0, void 0, function* () {
-            this._element.classList.add("speech-incomplete");
-            const price = yield UserPreferenceModule.getInstance()
-                .getVoice()
-                .then((voice) => {
-                return BillingModule.getInstance().quote(voice, this.text);
-            });
-            const regenButton = this.ttsControlsModule.createGenerateSpeechButton(price);
-            const readAloudButton = this._element.querySelector(".saypi-speak-button");
-            if (readAloudButton && replace) {
-                readAloudButton.replaceWith(regenButton);
-            }
-            else {
-                const messageControlsElement = this._element.querySelector(".saypi-tts-controls");
-                if (messageControlsElement) {
-                    messageControlsElement.appendChild(regenButton);
-                }
-            }
-            // add event listener to regenerate speech
-            regenButton.addEventListener("click", () => MessageElements_awaiter(this, void 0, void 0, function* () {
-                regenButton.disabled = true;
-                const speechSynthesis = SpeechSynthesisModule.getInstance();
-                const speechHistory = SpeechHistoryModule.getInstance();
-                speechSynthesis.createSpeech(this.text, false).then((utterance) => {
-                    speechSynthesis.speak(utterance);
-                    this.decorateSpeech(utterance);
-                    const charge = BillingModule.getInstance().charge(utterance, this.text);
-                    this.decorateCost(charge);
-                    const speech = new AssistantSpeech(utterance, charge);
-                    speechHistory.addSpeechToHistory(charge.utteranceHash, speech);
-                    regenButton.remove();
-                    this._element.classList.remove("speech-incomplete");
-                });
-            }));
-        });
-    }
-    /**
-     * Apply a charge to this chat message
-     * Can be called multiple times to update the charge
-     * @param charge The cost of the speech
-     */
-    decorateCost(charge) {
-        const ttsControlsElement = this.element.querySelector(".saypi-tts-controls");
-        const costElement = this.element.querySelector(".saypi-cost");
-        if (ttsControlsElement && !costElement) {
-            this.ttsControlsModule.addCostBasis(ttsControlsElement, charge);
-        }
-        else if (costElement) {
-            this.ttsControlsModule.updateCostBasis(ttsControlsElement, charge);
-        }
-        const messageContentElement = this.element.querySelector(".content");
-        if (messageContentElement) {
-            messageContentElement.id = `saypi-message-content-${this.utteranceId}`;
-        }
-        if (isMobileDevice()) {
-            // TODO: we need a way to deregister this listener when the message is removed - perhaps a teardown method?
-            EventBus.on("saypi:tts:menuPop", (event) => {
-                const id = this._element.dataset.utteranceId;
-                if (!id ||
-                    id !== event.utteranceId ||
-                    id !== charge.utteranceId ||
-                    !charge.cost) {
-                    return;
-                }
-                const menuElement = event.menu.element;
-                const menuCostElement = menuElement.querySelector(".saypi-cost");
-                if (menuCostElement) {
-                    this.ttsControlsModule.updateCostBasis(menuElement, charge);
-                }
-                else {
-                    this.ttsControlsModule.addCostBasis(menuElement, charge, true);
-                }
-            });
-        }
-    }
-}
-// visible for testing
-AssistantResponse.PARAGRAPH_SEPARATOR = ""; // should match ElementInputStream's delimiter argument
-
-
 ;// CONCATENATED MODULE: ./src/dom/ChatHistory.ts
 var ChatHistory_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -38307,16 +39387,15 @@ var ChatHistory_awaiter = (undefined && undefined.__awaiter) || function (thisAr
 
 
 
-
-
 /**
  * Monitors the root element of the chat history for past and present sections
  */
 class ChatHistoryRootElementObserver extends BaseObserver {
     /* This class adds an id to the 2nd child of the element under observeration, whenever children are added to the element */
-    constructor(chatHistoryElement, selector, speechSynthesis, initialRun = true) {
+    constructor(chatHistoryElement, selector, speechSynthesis, chatbot, initialRun = true) {
         super(chatHistoryElement, selector);
         this.chatHistoryElement = chatHistoryElement;
+        this.chatbot = chatbot;
         this.oldMessageObserver = null;
         this.speechSynthesis = speechSynthesis;
         if (initialRun) {
@@ -38328,20 +39407,22 @@ class ChatHistoryRootElementObserver extends BaseObserver {
      * @param child - a child of the chat history root element
      */
     handleChatHistoryChild(child) {
-        var _a;
         // error if the child is not a direct descendant of the chat history element
         if (!this.chatHistoryElement.contains(child)) {
             console.error("Element is not a child of the chat history", child);
             return;
         }
-        const pastMessagesContainer = (_a = this.chatHistoryElement) === null || _a === void 0 ? void 0 : _a.querySelector(":nth-child(2)");
-        if (pastMessagesContainer == child) {
-            // add id to the 2nd child of the element
-            pastMessagesContainer.id = "saypi-chat-history-past-messages";
+        const pastMessagesSelector = this.chatbot.getPastChatHistorySelector();
+        const rootAncestor = findRootAncestor(child);
+        // Use querySelector on the root ancestor
+        const pastMessagesContainer = rootAncestor.querySelector(pastMessagesSelector);
+        if (pastMessagesContainer === child) {
+            // add classes to the container
+            pastMessagesContainer.classList.add("chat-history", "past-messages");
             if (this.oldMessageObserver) {
                 this.oldMessageObserver.disconnect();
             }
-            this.oldMessageObserver = new ChatHistoryOldMessageObserver(this.chatHistoryElement, `#${pastMessagesContainer.id}`, this.speechSynthesis);
+            this.oldMessageObserver = new ChatHistoryOldMessageObserver(this.chatHistoryElement, `${pastMessagesContainer.tagName}.${Array.from(pastMessagesContainer.classList).join(".")}`, this.speechSynthesis, this.chatbot);
             this.oldMessageObserver
                 .runOnce(pastMessagesContainer)
                 .then((messages) => {
@@ -38378,35 +39459,43 @@ class ChatHistoryRootElementObserver extends BaseObserver {
     }
 }
 class ChatHistoryMessageObserver extends BaseObserver {
-    constructor(chatHistoryElement, selector, speechSynthesis) {
+    constructor(chatHistoryElement, selector, speechSynthesis, chatbot) {
         super(chatHistoryElement, selector);
+        this.chatbot = chatbot;
         this.haltOnFirst = false; // stop searching after the first chat message is found
         this.speechSynthesis = speechSynthesis;
-        this.ttsControlsModule = new TTSControlsModule(speechSynthesis);
+        this.ttsControlsModule = TTSControlsModule.getInstance();
     }
     callback(mutations) {
+        var _a;
         return ChatHistory_awaiter(this, void 0, void 0, function* () {
             for (const mutation of mutations) {
+                // Iterate over added nodes
                 for (const node of [...mutation.addedNodes]) {
                     if (node instanceof Element) {
                         const addedElement = node;
-                        const responseObs = yield this.findAndDecorateAssistantResponse(addedElement);
-                        if (this.haltOnFirst && responseObs.isReady()) {
+                        const responseObservations = yield this.findAndDecorateAssistantResponses(addedElement);
+                        if (this.haltOnFirst && ((_a = responseObservations[0]) === null || _a === void 0 ? void 0 : _a.isReady())) {
                             // only expecting one new chat message at a time, so
                             // skip this mutation if the chat message is already decorated
                             return; // break early
                         }
                     }
                 }
+                // Iterate over nodes with changed attributes
+                // e.g. when a message element becomes matchable during streaming
+                if (mutation.type === "attributes" &&
+                    mutation.target instanceof Element) {
+                    const mutatedElement = mutation.target;
+                    this.findAndDecorateAssistantResponses(mutatedElement);
+                }
             }
         });
     }
-    static findAssistantResponse(searchRoot) {
-        const query = "div.break-anywhere:not(.justify-end)"; // TODO: -> this.chatbot.getAssistantResponseSelector();
-        const deepMatch = searchRoot.querySelector(query);
-        if (deepMatch) {
-            const found = Observation.foundUndecorated(deepMatch.id, deepMatch);
-            if (deepMatch.classList.contains("assistant-message")) {
+    static findAssistantResponse(searchRoot, match) {
+        if (match) {
+            const found = Observation.foundUndecorated(match.id, match);
+            if (match.classList.contains("assistant-message")) {
                 return Observation.foundAndDecorated(found);
             }
             return found;
@@ -38422,6 +39511,26 @@ class ChatHistoryMessageObserver extends BaseObserver {
         }
         return Observation.notFound("");
     }
+    static findAssistantResponses(searchRoot, querySelector) {
+        const deepMatches = searchRoot.querySelectorAll(querySelector);
+        const observations = [];
+        for (const match of deepMatches) {
+            const observation = ChatHistoryMessageObserver.findAssistantResponse(searchRoot, match);
+            observations.push(observation);
+        }
+        return observations;
+    }
+    static findFirstAssistantResponse(searchRoot, querySelector) {
+        const allResponses = ChatHistoryMessageObserver.findAssistantResponses(searchRoot, querySelector);
+        if (allResponses.length > 0) {
+            return allResponses[0];
+        }
+        return Observation.notFound("");
+    }
+    findAssistantResponses(searchRoot) {
+        const query = this.chatbot.getAssistantResponseSelector();
+        return ChatHistoryMessageObserver.findAssistantResponses(searchRoot, query);
+    }
     /**
      * Decorates the assistant response with the necessary classes and attributes,
      * but does not add any additional functionality, i.e. speech
@@ -38429,52 +39538,51 @@ class ChatHistoryMessageObserver extends BaseObserver {
      * @returns AssistantResponse - the decorated chat message
      */
     decorateAssistantResponse(messageElement) {
-        const message = new AssistantResponse(messageElement);
+        const message = this.chatbot.getAssistantResponse(messageElement);
         return message;
     }
-    /**
-     * Decorates the assistant response with speech functionality
-     * @deprecated - use AssistantResponse.decorateSpeech() instead
-     */
-    decorateAssistantResponseWithSpeech(message, speech) { }
-    findAndDecorateAssistantResponse(searchRoot) {
+    findAndDecorateAssistantResponses(searchRoot) {
         return ChatHistory_awaiter(this, void 0, void 0, function* () {
-            let obs = ChatHistoryMessageObserver.findAssistantResponse(searchRoot);
-            if (obs.found) {
-                console.log("Found assistant message", obs);
-            }
-            if (obs.found && obs.isNew && !obs.decorated) {
-                const message = this.decorateAssistantResponse(obs.target);
-                obs = Observation.foundAndDecorated(obs, message);
-                message.decorateControls();
-                const speech = yield this.streamSpeech(message);
-                if (speech) {
-                    if (speech.utterance) {
-                        message.decorateSpeech(speech.utterance);
+            const initialObservations = this.findAssistantResponses(searchRoot);
+            const decoratedObservations = [];
+            for (const initialObservation of initialObservations) {
+                if (initialObservation.found &&
+                    initialObservation.isNew &&
+                    !initialObservation.decorated) {
+                    const message = this.decorateAssistantResponse(initialObservation.target);
+                    const decoratedObservation = Observation.foundAndDecorated(initialObservation, message);
+                    decoratedObservations.push(decoratedObservation);
+                    const speech = yield this.streamSpeech(message);
+                    if (speech) {
+                        if (speech.utterance) {
+                            yield message.decorateSpeech(speech.utterance);
+                        }
+                        if (speech.charge) {
+                            yield message.decorateCost(speech.charge);
+                        }
                     }
-                    if (speech.charge) {
-                        message.decorateCost(speech.charge);
+                    else {
+                        const provider = yield this.speechSynthesis.getActiveAudioProvider();
+                        if (provider === audioProviders.SayPi) {
+                            message.decorateIncompleteSpeech();
+                        }
                     }
                 }
-                else {
-                    const provider = yield this.speechSynthesis.getActiveAudioProvider();
-                    if (provider === audioProviders.SayPi) {
-                        message.decorateIncompleteSpeech();
-                    }
-                }
             }
-            return obs;
+            return decoratedObservations;
         });
     }
     streamSpeechFromHistory(history, message) {
+        var _a;
         return ChatHistory_awaiter(this, void 0, void 0, function* () {
             const speechRecord = yield history.getSpeechFromHistory(message.hash);
             if (speechRecord) {
-                console.debug("Found message in speech history", speechRecord);
+                console.debug("Speech found in history for message", message.toString(), (_a = speechRecord.utterance) === null || _a === void 0 ? void 0 : _a.toString());
                 return speechRecord;
             }
             else {
                 // speech not cached
+                console.debug("Speech not found in history for message", message.toString());
                 return null;
             }
         });
@@ -38493,13 +39601,10 @@ class ChatHistoryOldMessageObserver extends ChatHistoryMessageObserver {
     runOnce(root) {
         return ChatHistory_awaiter(this, void 0, void 0, function* () {
             let messagesFound = [];
-            for (const node of [...root.children]) {
-                if (node instanceof Element) {
-                    const child = node;
-                    const observation = yield this.findAndDecorateAssistantResponse(child);
-                    if (observation.isReady() && observation.decorations.length > 0) {
-                        messagesFound.push(observation.decorations[0]);
-                    }
+            const observations = yield this.findAndDecorateAssistantResponses(root);
+            for (const observation of observations) {
+                if (observation.isReady() && observation.decorations.length > 0) {
+                    messagesFound.push(observation.decorations[0]);
                 }
             }
             return messagesFound;
@@ -38513,8 +39618,8 @@ class ChatHistoryOldMessageObserver extends ChatHistoryMessageObserver {
     }
 }
 class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
-    constructor(chatHistoryElement, selector, speechSynthesis, ignoreMessages = []) {
-        super(chatHistoryElement, selector, speechSynthesis);
+    constructor(chatHistoryElement, selector, speechSynthesis, chatbot, ignoreMessages = []) {
+        super(chatHistoryElement, selector, speechSynthesis, chatbot);
         this.speechHistory = SpeechHistoryModule.getInstance();
         this.EventListeners = [];
         this.textStream = null;
@@ -38525,7 +39630,7 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
      * Override the default decoration method to account for the behaviour of new messages
      */
     decorateAssistantResponse(messageElement) {
-        const message = new AssistantResponse(messageElement, false); // streaming assistant messages should not include initial text
+        const message = this.chatbot.getAssistantResponse(messageElement, false); // streaming assistant messages should not include initial text
         return message;
     }
     // Chat history and automatic speech functionality
@@ -38538,34 +39643,36 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
                 return yield this.streamSpeechFromHistory(this.speechHistory, message);
             }
             const provider = yield this.speechSynthesis.getActiveAudioProvider();
-            if (provider === audioProviders.SayPi) {
-                const utterance = yield this.speechSynthesis.createSpeechStream();
-                message.decorateSpeech(utterance);
-                console.debug("Opened audio input stream", utterance.id);
-                const messageContent = yield message.decoratedContent();
-                this.observeChatMessageElement(messageContent, utterance, () => this.ttsControlsModule.autoplaySpeech(utterance, 200), (text) => {
-                    console.debug("Closed audio input stream", utterance.id);
-                    const charge = BillingModule.getInstance().charge(utterance, text);
-                    message.decorateCost(charge);
-                    this.speechHistory.addChargeToHistory(charge.utteranceHash, charge);
-                }, (lateChange) => {
-                    message.decorateIncompleteSpeech(true);
-                });
-                return new AssistantSpeech(utterance);
-            }
-            else {
+            if (provider === audioProviders.Pi) {
                 // speech will be generated by Pi.ai, stream details not available yet
                 const streamStartedListener = (utterance) => {
                     message.decorateSpeech(utterance);
                     return new AssistantSpeech(utterance);
                 };
-                EventBus.on("saypi:tts:speechStreamStarted", streamStartedListener);
+                //EventBus.on("saypi:tts:speechStreamStarted", streamStartedListener); // redunandant with ChatHistoryManager?
                 this.EventListeners.push({
                     event: "saypi:tts:speechStreamStarted",
                     listener: streamStartedListener,
                 });
-                return null;
             }
+            const utterance = yield this.speechSynthesis.createSpeechStreamOrPlaceholder(provider);
+            message.decorateSpeech(utterance);
+            const messageContent = yield message.decoratedContent();
+            this.observeChatMessageElement(message, messageContent, utterance, () => {
+                const writingEvent = {
+                    utterance: utterance,
+                };
+                EventBus.emit("saypi:piWriting", writingEvent);
+            }, (text) => {
+                EventBus.emit("saypi:piStoppedWriting", {
+                    utterance: utterance,
+                    text,
+                });
+                console.debug("Closed audio input stream", utterance.id);
+            }, (lateChange) => {
+                message.decorateIncompleteSpeech(true);
+            });
+            return new AssistantSpeech(utterance);
         });
     }
     teardown() {
@@ -38577,31 +39684,29 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
         super.disconnect();
         this.teardown();
     }
-    observeChatMessageElement(messageContent, utterance, onStart, onEnd, onError) {
+    observeChatMessageElement(message, messageContent, utterance, onStart, onEnd, onError) {
         // If we're already observing an element, disconnect from it
         if (this.textStream) {
             this.textStream.disconnect();
         }
         // Start observing the new element
-        this.textStream = new ElementTextStream(messageContent);
+        this.textStream = message.createTextStream(messageContent);
+        let streamStartTime = Date.now();
         let firstChunkTime = null;
+        let lastChunkTime = null;
         let fullText = ""; // Variable to accumulate the text
         this.textStream.getStream().subscribe((text) => {
             let start = false;
             if (text.changed) {
                 console.debug(`Text changed from "${text.changedFrom}" to "${text.text}"`);
                 fullText = fullText.replace(text.changedFrom, text.text);
-                this.speechSynthesis
-                    .replaceSpeechInStream(utterance.id, text.changedFrom, text.text)
-                    .then((replaced) => {
-                    if (replaced) {
-                        console.debug(`Replaced text in stream: "${text.changedFrom}" -> "${text.text}"`);
-                    }
-                    else {
-                        console.error(`Failed to replace text in stream before being flushed: "${text.changedFrom}" -> "${text.text}"`);
-                        messageContent.classList.add("inconsistent-text");
-                    }
-                });
+                const textChangedEvent = {
+                    text: text.text,
+                    changedFrom: text.changedFrom,
+                    utterance: utterance,
+                };
+                EventBus.emit("saypi:tts:text:changed", textChangedEvent);
+                lastChunkTime = Date.now();
             }
             else {
                 const txt = text.text;
@@ -38611,25 +39716,34 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
                     firstChunkTime = currentTime;
                     start = true;
                 }
+                lastChunkTime = currentTime;
                 const delay = currentTime - firstChunkTime;
                 console.debug(`+${delay}ms, streamed text: "${txt}"`);
-                this.speechSynthesis.addSpeechToStream(utterance.id, txt).then(() => {
-                    if (start) {
-                        onStart();
-                    }
-                });
+                const textAddedEvent = {
+                    text: txt,
+                    utterance: utterance,
+                };
+                EventBus.emit("saypi:tts:text:added", textAddedEvent);
+                if (start) {
+                    onStart();
+                }
             }
         }, (error) => {
             console.error(`Error occurred streaming text from element: ${error}`);
         }, () => {
+            console.debug(`Stream info (${utterance.id}):`);
+            console.debug(`- Streamed ${fullText.length} characters`);
             if (firstChunkTime) {
-                const totalTime = Date.now() - firstChunkTime;
-                console.debug(`Text stream completed ${(totalTime / 1000).toFixed(2)} seconds after first chunk`, utterance.id);
+                console.debug(`- Time to first token: ${firstChunkTime - streamStartTime}ms`);
+                const chunkingElapsedTime = lastChunkTime - firstChunkTime;
+                console.debug(`- Time from first to last token: ${chunkingElapsedTime}ms`);
             }
-            else {
-                console.info("Text stream completed without text");
-            }
-            this.speechSynthesis.endSpeechStream(utterance);
+            console.debug(`- Time to completion: ${Date.now() - streamStartTime}ms`);
+            const textCompletedEvent = {
+                text: fullText,
+                utterance: utterance,
+            };
+            EventBus.emit("saypi:tts:text:completed", textCompletedEvent);
             if (onEnd) {
                 onEnd(fullText); // Pass the full text to the onEnd callback
             }
@@ -38638,6 +39752,10 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
         // these changes mean the audio stream will be incomplete
         this.textStream.getLateChangeStream().subscribe((lateChange) => {
             console.warn("Late change detected:", lateChange);
+            EventBus.emit("saypi:tts:text:error", {
+                error: lateChange,
+                utterance: utterance,
+            });
             if (onError) {
                 onError(lateChange);
             }
@@ -38647,13 +39765,26 @@ class ChatHistoryNewMessageObserver extends ChatHistoryMessageObserver {
 /**
  * Get the most recent assistant message from the chat history
  */
-function getMostRecentAssistantMessage() {
+function getMostRecentAssistantMessage(chatbot) {
     const assistantMessages = document.querySelectorAll(".assistant-message");
     if (assistantMessages.length > 0) {
         const messageElement = assistantMessages[assistantMessages.length - 1];
-        return new AssistantResponse(messageElement);
+        return chatbot.getAssistantResponse(messageElement);
     }
     return null;
+}
+function getAssistantMessageByUtterance(chatbot, utteranceId) {
+    const chatHistory = document.getElementById("saypi-chat-history");
+    if (chatHistory) {
+        const assistantMessageElements = chatHistory.querySelectorAll(".assistant-message");
+        for (const messageElement of assistantMessageElements) {
+            const assistantMessage = chatbot.getAssistantResponse(messageElement);
+            if (assistantMessage.utteranceId === utteranceId) {
+                return assistantMessage;
+            }
+        }
+    }
+    throw new Error(`Assistant message not found for utterance ${utteranceId}`);
 }
 
 
@@ -38667,6 +39798,8 @@ var VoiceMenu_awaiter = (undefined && undefined.__awaiter) || function (thisArg,
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+
+
 
 
 
@@ -38755,7 +39888,7 @@ class VoiceSelector {
             flair.classList.add("flair");
             flair.src = getResourceUrl("icons/logos/saypi.png");
             flair.alt = "Say, Pi logo";
-            flair.title = i18n("enhancedVoice");
+            flair.title = i18n("enhancedVoice", ["Say, Pi"]);
             button.appendChild(flair);
             button.addEventListener("click", () => {
                 this.userPreferences.setVoice(voice).then(() => {
@@ -38782,7 +39915,7 @@ class VoiceSelector {
         return true;
     }
     introduceVoice(voice) {
-        const lastMessage = getMostRecentAssistantMessage();
+        const lastMessage = getMostRecentAssistantMessage(this.chatbot);
         const name = voice.name.toLowerCase().replace(" ", "_");
         const introduction = (lastMessage === null || lastMessage === void 0 ? void 0 : lastMessage.text) || i18n(`voiceIntroduction_${name}`);
         const speechSynthesis = SpeechSynthesisModule.getInstance();
@@ -38863,6 +39996,26 @@ class VoiceMenu extends VoiceSelector {
         }
         voiceMenuControls.id = "saypi-voice-menu-controls";
         obs = Observation.foundUndecorated("saypi-voice-menu-controls", voiceMenuControls);
+        // add a class to the voice menu controls if the user has selected a SayPi voice
+        let voiceProvidedBySayPi = false;
+        this.userPreferences.hasVoice().then((hasVoice) => {
+            if (hasVoice) {
+                voiceMenuControls.classList.add("saypi-provided-voice");
+                voiceProvidedBySayPi = true;
+            }
+        });
+        EventBus.on("userPreferenceChanged", (detail) => {
+            if (detail.audioProvider) {
+                if (detail.audioProvider === audioProviders.SayPi) {
+                    voiceMenuControls.classList.add("saypi-provided-voice");
+                    voiceProvidedBySayPi = true;
+                }
+                else {
+                    voiceMenuControls.classList.remove("saypi-provided-voice");
+                    voiceProvidedBySayPi = false;
+                }
+            }
+        });
         const observer = new MutationObserver((mutationsList) => {
             for (let mutation of mutationsList) {
                 if (mutation.type === "attributes" &&
@@ -38870,11 +40023,18 @@ class VoiceMenu extends VoiceSelector {
                     voiceMenuControls.classList.contains("self-end")) {
                     voiceMenuControls.classList.remove("self-end");
                 }
+                if (mutation.type === "attributes" &&
+                    mutation.attributeName === "style") {
+                    // menu has changed between a circle and a rectangle (border-radius style), as happens when audio is toggled on pi.ai
+                    if (voiceProvidedBySayPi) {
+                        voiceMenuControls.classList.add("saypi-provided-voice");
+                    }
+                }
             }
         });
         observer.observe(voiceMenuControls, {
             attributes: true,
-            attributeFilter: ["class"],
+            attributeFilter: ["class", "style"],
         });
         return Observation.foundAndDecorated(obs);
     }
@@ -38978,7 +40138,6 @@ var ChatHistoryManager_awaiter = (undefined && undefined.__awaiter) || function 
 
 
 
-
 class ChatHistorySpeechManager {
     findAndDecorateVoiceMenu() {
         const audioControlsContainer = document.querySelector("#saypi-audio-controls");
@@ -38996,20 +40155,22 @@ class ChatHistorySpeechManager {
     // Methods for DOM manipulation and element ID assignment
     addIdChatHistory(chatHistory) {
         chatHistory.id = "saypi-chat-history";
-        // the past messages container will be replaced when the chat history is updated, so is monitored for changes in RootChatHistoryObserver
-        const pastChatMessagesContainer = chatHistory.querySelector(":nth-child(2)");
+        chatHistory.classList.add("chat-history");
+        const rootAncestor = findRootAncestor(chatHistory);
+        // for pi.ai, the past messages container will be replaced when the chat history is updated, so is monitored for changes in RootChatHistoryObserver
+        const pastHistorySelector = this.chatbot.getPastChatHistorySelector();
+        const pastChatMessagesContainer = pastHistorySelector
+            ? rootAncestor.querySelector(pastHistorySelector)
+            : chatHistory;
         if (pastChatMessagesContainer) {
-            pastChatMessagesContainer.id = "saypi-chat-history-past-messages";
+            pastChatMessagesContainer.classList.add("chat-history", "past-messages");
         }
-        if (chatHistory.children.length >= 3) {
-            const presentChatMessagesContainer = chatHistory.children[2];
-            //  chatHistory.querySelector(":nth-child(3)"); // less reliable than direct access, for some reason
-            if (presentChatMessagesContainer) {
-                presentChatMessagesContainer.id = "saypi-chat-history-present-messages";
-            }
-        }
-        else {
-            console.warn("Present messages container not found in chat history.", chatHistory);
+        const presentHistorySelector = this.chatbot.getRecentChatHistorySelector();
+        const presentChatMessagesContainer = presentHistorySelector
+            ? rootAncestor.querySelector(presentHistorySelector)
+            : chatHistory;
+        if (presentChatMessagesContainer) {
+            presentChatMessagesContainer.classList.add("chat-history", "present-messages");
         }
     }
     /**
@@ -39018,39 +40179,43 @@ class ChatHistorySpeechManager {
      * @param utterance A spoken reading of a chat message
      */
     associateWithChatHistory(searchRoot, utterance) {
-        // get most recent message in chat history
-        const speech = new AssistantSpeech(utterance);
-        const assistantMessages = searchRoot.querySelectorAll(".assistant-message");
-        if (assistantMessages.length > 0) {
-            const lastAssistantMessage = assistantMessages[assistantMessages.length - 1];
-            const assistantMessage = new AssistantResponse(lastAssistantMessage);
-            assistantMessage.decorateSpeech(utterance);
-            // ensure the AssistantResponse object has finished mutating before generating its hash
-            assistantMessage.stableHash().then((hash) => {
-                // debug: verify the hashes have converged
-                if (hash !== assistantMessage.hash) {
-                    console.error(`Hash mismatch: ${hash} vs ${assistantMessage.hash}`);
-                    if (hash === this.md5OfNothing) {
-                        console.error("Hash is md5 of nothing - stable text failed to resolve.");
+        var _a;
+        return ChatHistoryManager_awaiter(this, void 0, void 0, function* () {
+            // get most recent message in chat history
+            const speech = new AssistantSpeech(utterance);
+            yield ((_a = this.newMessageObserver) === null || _a === void 0 ? void 0 : _a.findAndDecorateAssistantResponses(searchRoot)); // ensure decorators have run before searching for the message
+            const assistantMessages = searchRoot.querySelectorAll(".assistant-message");
+            if (assistantMessages.length > 0) {
+                const lastAssistantMessage = assistantMessages[assistantMessages.length - 1];
+                const assistantMessage = this.chatbot.getAssistantResponse(lastAssistantMessage);
+                assistantMessage.decorateSpeech(utterance);
+                // ensure the AssistantResponse object has finished mutating before generating its hash
+                assistantMessage.stableHash().then((hash) => {
+                    // debug: verify the hashes have converged
+                    if (hash !== assistantMessage.hash) {
+                        console.error(`Hash mismatch: ${hash} vs ${assistantMessage.hash}`);
+                        if (hash === this.md5OfNothing) {
+                            console.error("Hash is md5 of nothing - stable text failed to resolve.");
+                        }
+                        else if (hash === this.md5OfSpace) {
+                            console.error("Hash is md5 of ' ' - text stream may be empty.");
+                        }
+                        assistantMessage.stableText().then((stableText) => {
+                            console.debug(`Stable text: "${stableText}"`);
+                            console.debug(`Assistant text: "${assistantMessage.text}"`);
+                        });
+                        return;
                     }
-                    else if (hash === this.md5OfSpace) {
-                        console.error("Hash is md5 of ' ' - text stream may be empty.");
-                    }
-                    assistantMessage.stableText().then((stableText) => {
-                        console.debug(`Stable text: "${stableText}"`);
-                        console.debug(`Assistant text: "${assistantMessage.text}"`);
-                    });
-                    return;
-                }
-                console.debug(`Adding speech to history with hash: ${hash}`);
-                SpeechHistoryModule.getInstance().addSpeechToHistory(hash, speech);
-            });
-        }
+                    console.debug(`Saving speech for ${assistantMessage.toString()} with hash: ${hash}`);
+                    SpeechHistoryModule.getInstance().addSpeechToHistory(hash, speech);
+                });
+            }
+        });
     }
     registerPastChatHistoryListener(chatHistoryElement) {
         // this listener keeps track of the top-level chat history containers,
         // and recursively observes the children of the past messages container
-        const rootChatHistoryObserver = new ChatHistoryRootElementObserver(chatHistoryElement, "#saypi-chat-history", this.speechSynthesis);
+        const rootChatHistoryObserver = new ChatHistoryRootElementObserver(chatHistoryElement, "#saypi-chat-history", this.speechSynthesis, this.chatbot);
         rootChatHistoryObserver.observe({
             childList: true,
             subtree: false,
@@ -39059,13 +40224,13 @@ class ChatHistorySpeechManager {
     }
     registerPresentChatHistoryListener(chatHistoryElement) {
         return ChatHistoryManager_awaiter(this, void 0, void 0, function* () {
-            const selector = "#saypi-chat-history-present-messages";
-            const existingMessagesObserver = new ChatHistoryOldMessageObserver(chatHistoryElement, selector, this.speechSynthesis); // this type of observer streams speech from the speech history
+            const selector = ".chat-history.present-messages";
+            const existingMessagesObserver = new ChatHistoryOldMessageObserver(chatHistoryElement, selector, this.speechSynthesis, this.chatbot); // this type of observer streams speech from the speech history
             const initialMessages = yield existingMessagesObserver // TODO const oldMessages = await ...
-                .runOnce(chatHistoryElement.querySelector(selector)); // run on initial content, i.e. most recent message in chat history
+                .runOnce(findRootAncestor(chatHistoryElement).querySelector(selector)); // run on initial content, i.e. most recent message in chat history
             console.debug(`Found ${initialMessages.length} recent assistant message(s)`);
             existingMessagesObserver.disconnect(); // only run once
-            const newMessagesObserver = new ChatHistoryNewMessageObserver(chatHistoryElement, selector, this.speechSynthesis, initialMessages // ignore these messages when observing new messages
+            const newMessagesObserver = new ChatHistoryNewMessageObserver(chatHistoryElement, selector, this.speechSynthesis, this.chatbot, initialMessages // ignore these messages when observing new messages
             ); // this type of observer streams speech from the TTS service
             // continuously observe the chat history for new messages
             newMessagesObserver.observe({
@@ -39095,6 +40260,58 @@ class ChatHistorySpeechManager {
             listener: speechStreamStartedListener,
         });
     }
+    registerMessageErrorListeners() {
+        const speechErrorListener = (event) => {
+            var _a;
+            console.warn(`Speech error for utterance: ${event.utterance.id}`, event.error);
+            if ((_a = event.utterance) === null || _a === void 0 ? void 0 : _a.id) {
+                // find the message in the chat history that corresponds to the given utterance
+                // and mark it as having an error
+                try {
+                    const message = getAssistantMessageByUtterance(this.chatbot, event.utterance.id);
+                    if (message) {
+                        message.decoratedContent().then((content) => {
+                            content.classList.add("inconsistent-text"); // redundant with incomplete speech?
+                        });
+                        message.decorateIncompleteSpeech();
+                    }
+                }
+                catch (e) {
+                    // message not found - non-fatal error
+                    console.debug(`Could not find message for utterance ${event.utterance.id}. Won't be able to decorate with speech error.`);
+                }
+            }
+        };
+        EventBus.on("saypi:tts:text:error", speechErrorListener);
+        this.eventListeners.push({
+            event: "saypi:tts:text:error",
+            listener: speechErrorListener,
+        });
+    }
+    registerMessageChargeListeners() {
+        const speechChargeListener = (charge) => {
+            if (charge.utteranceId && charge.cost > 0) {
+                // find the message in the chat history that corresponds to the given utterance
+                // and mark it as having a charge
+                try {
+                    const message = getAssistantMessageByUtterance(this.chatbot, charge.utteranceId);
+                    if (message) {
+                        message.decorateCost(charge);
+                        this.speechHistory.addChargeToHistory(charge.utteranceHash, charge);
+                    }
+                }
+                catch (e) {
+                    // message not found - non-fatal error
+                    console.debug(`Could not find message for utterance ${charge.utteranceId}. Won't be able to decorate with charge.`);
+                }
+            }
+        };
+        EventBus.on("saypi:billing:utteranceCharged", speechChargeListener);
+        this.eventListeners.push({
+            event: "saypi:tts:text:charged",
+            listener: speechChargeListener,
+        });
+    }
     // Teardown method to disconnect event listeners and release resources
     teardown() {
         this.eventListeners.forEach(({ event, listener }) => {
@@ -39111,23 +40328,29 @@ class ChatHistorySpeechManager {
         this.chatbot = chatbot;
         this.userPreferences = UserPreferenceModule.getInstance();
         this.speechSynthesis = SpeechSynthesisModule.getInstance();
-        this.ttsControls = new TTSControlsModule(this.speechSynthesis);
+        this.speechHistory = SpeechHistoryModule.getInstance();
         this.replaying = false; // flag to indicate whether the user requested a replay of an utterance
         this.voiceMenu = null;
         // managed resources
         this.eventListeners = [];
         this.observers = [];
+        this.newMessageObserver = null;
         this.md5OfNothing = "d41d8cd98f00b204e9800998ecf8427e";
         this.md5OfSpace = "7215ee9c7d9dc229d2921a40e899ec5f";
         this.addIdChatHistory(chatHistoryElement);
         this.findAndDecorateVoiceMenu(); // voice menu is not within the chat history, but is a related element
         this.registerPastChatHistoryListener(chatHistoryElement);
-        this.registerPresentChatHistoryListener(chatHistoryElement);
+        this.registerPresentChatHistoryListener(chatHistoryElement).then((observer) => {
+            this.newMessageObserver = observer;
+        });
         this.registerSpeechStreamListeners(chatHistoryElement);
+        this.registerMessageErrorListeners();
+        this.registerMessageChargeListeners();
     }
 }
 
 ;// CONCATENATED MODULE: ./src/chatbots/bootstrap.ts
+
 
 
 
@@ -39147,7 +40370,7 @@ class DOMObserver {
                     .filter((node) => node instanceof HTMLElement)
                     .forEach((node) => {
                     const addedElement = node;
-                    const promptObs = this.findAndDecoratePromptField(addedElement);
+                    const promptObs = this.findAndDecoratePrompt(addedElement);
                     const ctrlPanelObs = this.findAndDecorateControlPanel(addedElement);
                     const sidePanelObs = this.findAndDecorateSidePanel(addedElement);
                     if (sidePanelObs.found && sidePanelObs.decorated) {
@@ -39168,10 +40391,10 @@ class DOMObserver {
                     .filter((node) => node instanceof HTMLElement)
                     .forEach((node) => {
                     const removedElement = node;
-                    const obs = this.findPromptField(removedElement);
+                    const obs = this.findPrompt(removedElement);
                     if (obs.found) {
                         // Prompt field is being removed, so search for a replacement in the main document
-                        this.findAndDecoratePromptField(document.body);
+                        this.findAndDecoratePrompt(document.body);
                         if (obs.found && obs.isNew && obs.decorated) {
                             // emit event to notify listeners that script content has been loaded
                             EventBus.emit("saypi:ui:content-loaded");
@@ -39203,6 +40426,23 @@ class DOMObserver {
         // Start observing
         observer.observe(document.body, { childList: true, subtree: true });
     }
+    monitorForSubmitButton(ancestor, runInitial = true) {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                [...mutation.addedNodes]
+                    .filter((node) => node instanceof HTMLElement)
+                    .forEach((node) => {
+                    const addedElement = node;
+                    const submitButtonObs = this.findAndDecorateSubmitButton(addedElement);
+                });
+            });
+        });
+        if (runInitial) {
+            this.findAndDecorateSubmitButton(ancestor);
+        }
+        // Start observing
+        observer.observe(ancestor, { childList: true, subtree: true });
+    }
     // Function to decorate the prompt input element, and other elements that depend on it
     decoratePrompt(prompt) {
         prompt.id = "saypi-prompt";
@@ -39212,9 +40452,12 @@ class DOMObserver {
             const promptGrandparent = promptParent.parentElement;
             if (promptGrandparent) {
                 promptGrandparent.id = "saypi-prompt-controls-container";
-                this.addIdPromptAncestor(promptGrandparent);
-                this.addIdSubmitButton(promptGrandparent);
-                buttonModule.createCallButton(promptGrandparent, -1);
+                const ancestor = this.addIdPromptAncestor(promptGrandparent);
+                if (ancestor)
+                    this.monitorForSubmitButton(ancestor);
+                const submitButtonSearch = this.findSubmitButton(promptGrandparent);
+                const insertionPosition = submitButtonSearch.found ? -1 : 0;
+                buttonModule.createCallButton(promptGrandparent, insertionPosition);
             }
         }
     }
@@ -39241,7 +40484,8 @@ class DOMObserver {
         const toggleModeBtnPos = 1;
         buttonModule.createEnterButton(controlPanel, toggleModeBtnPos);
         buttonModule.createExitButton(controlPanel, toggleModeBtnPos);
-        buttonModule.createThemeToggleButton(controlPanel, toggleModeBtnPos + 2);
+        const themeManager = ThemeManager.getInstance();
+        themeManager.createThemeToggleButton(controlPanel, toggleModeBtnPos + 2);
     }
     findAndDecorateControlPanel(searchRoot) {
         const obs = this.findControlPanel(searchRoot);
@@ -39323,12 +40567,28 @@ class DOMObserver {
     decorateVoiceSettings(voiceSettingsElement) {
         const voiceSettings = new VoiceSettings(this.chatbot, UserPreferenceModule.getInstance(), voiceSettingsElement);
     }
-    addIdSubmitButton(container) {
-        const submitButtons = container.querySelectorAll("button[type=button]");
-        if (submitButtons.length > 0) {
-            const lastSubmitButton = submitButtons[submitButtons.length - 1];
-            lastSubmitButton.id = "saypi-submitButton";
+    findSubmitButton(searchRoot) {
+        const id = "saypi-submitButton";
+        const existingSubmitButton = document.getElementById(id);
+        if (existingSubmitButton) {
+            // Submit button already exists, no need to search
+            return Observation.foundAlreadyDecorated(id, existingSubmitButton);
         }
+        const submitButton = searchRoot.querySelector(this.chatbot.getPromptSubmitButtonSelector());
+        if (submitButton) {
+            return Observation.foundUndecorated(id, submitButton);
+        }
+        return Observation.notFound(id);
+    }
+    decorateSubmitButton(submitButton) {
+        submitButton.id = "saypi-submitButton";
+    }
+    findAndDecorateSubmitButton(searchRoot) {
+        const obs = this.findSubmitButton(searchRoot);
+        if (obs.isUndecorated()) {
+            this.decorateSubmitButton(obs.target);
+        }
+        return Observation.foundAndDecorated(obs);
     }
     addIdPromptAncestor(container) {
         // climb up the DOM tree until we find a div with class 'w-full'
@@ -39336,13 +40596,13 @@ class DOMObserver {
         while (parent) {
             if (parent.classList.contains("w-full")) {
                 parent.id = "saypi-prompt-ancestor";
-                return true;
+                return parent;
             }
             parent = parent.parentElement;
         }
-        return false;
+        return null;
     }
-    findPromptField(searchRoot) {
+    findPrompt(searchRoot) {
         const id = "saypi-prompt";
         const existingPrompt = document.getElementById(id);
         if (existingPrompt) {
@@ -39355,8 +40615,8 @@ class DOMObserver {
         }
         return Observation.notFound(id);
     }
-    findAndDecoratePromptField(searchRoot) {
-        const obs = this.findPromptField(searchRoot);
+    findAndDecoratePrompt(searchRoot) {
+        const obs = this.findPrompt(searchRoot);
         if (obs.found && obs.isNew && !obs.decorated) {
             this.decoratePrompt(obs.target);
         }
@@ -39433,6 +40693,12 @@ class DOMObserver {
         if (obs.found && obs.isNew && !obs.decorated) {
             // decorate chat history
             this.decorateChatHistory(obs.target);
+        }
+        else if (obs.found && obs.decorated) {
+            return Observation.foundAlreadyDecorated(obs.id, obs.target);
+        }
+        if (!obs.found) {
+            return Observation.notFound("saypi-chat-history");
         }
         return Observation.foundAndDecorated(obs);
     }
@@ -39580,6 +40846,37 @@ var rectangles_update = injectStylesIntoStyleTag_default()(styles_rectangles/* d
 
        /* harmony default export */ const src_styles_rectangles = (styles_rectangles/* default */.Z && styles_rectangles/* default */.Z.locals ? styles_rectangles/* default */.Z.locals : undefined);
 
+// EXTERNAL MODULE: ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./src/styles/claude.scss
+var claude = __webpack_require__(8959);
+;// CONCATENATED MODULE: ./src/styles/claude.scss
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+var claude_options = {};
+
+claude_options.styleTagTransform = (styleTagTransform_default());
+claude_options.setAttributes = (setAttributesWithoutAttributes_default());
+
+      claude_options.insert = insertBySelector_default().bind(null, "head");
+    
+claude_options.domAPI = (styleDomAPI_default());
+claude_options.insertStyleElement = (insertStyleElement_default());
+
+var claude_update = injectStylesIntoStyleTag_default()(claude/* default */.Z, claude_options);
+
+
+
+
+       /* harmony default export */ const styles_claude = (claude/* default */.Z && claude/* default */.Z.locals ? claude/* default */.Z.locals : undefined);
+
 ;// CONCATENATED MODULE: ./src/saypi.index.js
 function saypi_index_typeof(o) { "@babel/helpers - typeof"; return saypi_index_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, saypi_index_typeof(o); }
 function saypi_index_regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ saypi_index_regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == saypi_index_typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(saypi_index_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
@@ -39597,6 +40894,8 @@ function saypi_index_asyncToGenerator(fn) { return function () { var self = this
 
 
 
+
+ // scoped by chatbot flags, i.e. <body class="claude">
 
 
 
@@ -39679,9 +40978,10 @@ saypi_index_asyncToGenerator( /*#__PURE__*/saypi_index_regeneratorRuntime().mark
           isLoaded = true;
         });
         addUserAgentFlags();
+        ChatbotService.addChatbotFlags(chatbot);
         EventModule.init();
         new DOMObserver(chatbot).observeDOM();
-      case 10:
+      case 11:
       case "end":
         return _context.stop();
     }

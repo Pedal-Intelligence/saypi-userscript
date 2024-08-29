@@ -33,3 +33,15 @@ export function addChild(
     document.body.appendChild(child);
   }
 }
+
+/**
+ * Finds the root ancestor of an element.
+ * @param element - The starting element.
+ * @returns The root ancestor element or document.
+ */
+export function findRootAncestor(element: Element): Element {
+  if (!element.parentElement || element.parentNode instanceof Document) {
+    return element;
+  }
+  return findRootAncestor(element.parentElement);
+}

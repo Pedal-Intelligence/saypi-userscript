@@ -3,6 +3,7 @@ import {
   SpeechSynthesisVoiceRemote,
   SpeechUtterance,
 } from "../tts/SpeechModel";
+import EventBus from "../events/EventBus";
 
 export class UtteranceCharge {
   utteranceId: string;
@@ -40,6 +41,8 @@ export class BillingModule {
         this.charges = data.charges;
       }
     });
+
+    this.registerEventListeners();
   }
 
   static getInstance() {
@@ -47,6 +50,13 @@ export class BillingModule {
       BillingModule.instance = new BillingModule();
     }
     return BillingModule.instance;
+  }
+
+  registerEventListeners() {
+    EventBus.on("saypi:piStoppedWriting", ({ utterance, text }) => {
+      const charge = this.charge(utterance, text);
+      EventBus.emit("saypi:billing:utteranceCharged", charge);
+    });
   }
 
   quote(voice: SpeechSynthesisVoiceRemote, text: string): number {

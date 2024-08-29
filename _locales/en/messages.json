@@ -20,7 +20,7 @@
     "description": "The text of the button to enter immersive mode on desktop."
   },
   "callInProgress": {
-    "message": "Active continuous listening. Click to stop.",
+    "message": "End hands-free conversation",
     "description": "The tooltip to display on the call button when a call is in progress."
   },
   "callStarting": {
@@ -28,8 +28,14 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting."
   },
   "callNotStarted": {
-    "message": "Click to start continuous listening.",
-    "description": "The tooltip to display on the call button before a call is started."
+    "message": "Start a hands-free conversation with $chatbot$",
+    "description": "The tooltip to display on the call button before a call is started.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callError": {
     "message": "Non-fatal error encountered. Don't panic, we're still listening.",
@@ -126,6 +132,16 @@
   "assistantIsThinking": {
     "message": "$chatbot$ is thinking...",
     "description": "Message displayed when the assistant is preparing its response.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "assistantIsWriting": {
+    "message": "$chatbot$ is writing...",
+    "description": "Message displayed when the assistant is typing its response.",
     "placeholders": {
       "chatbot": {
         "content": "$1",
@@ -245,7 +261,7 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost."
   },
   "ttsCostExplanation": {
-    "message": "The cost of listening to this message is $cost$ $currency$",
+    "message": "$product$ will charge $cost$ $currency$ for listening to this message",
     "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
     "placeholders": {
       "cost": {
@@ -255,16 +271,30 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
-    "message": "This audio was generated free of charge.",
-    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free. Could contain the name of the provider.",
+    "message": "This audio is generated free of charge by Inflection AI",
+    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free. Assumes the provider is Inflection AI.",
     "placeholders": {
       "provider": {
         "content": "$1",
         "example": "Inflection AI"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "message": "Learn how $product$ charges for audio",
+    "description": "The tooltip to display when the user hovers over the cost explanation link.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
       }
     }
   },
@@ -336,8 +366,14 @@
     }
   },
   "enhancedVoice": {
-    "message": "Voice enhanced by Say, Pi",
-    "description": "Title (tooltip) for Say, Pi enhanced voices."
+    "message": "Voice enhanced by $product$",
+    "description": "Title (tooltip) for Say, Pi enhanced voices.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "copyButtonTitle": {
     "message": "Copy",
@@ -348,11 +384,11 @@
     "description": "The title of the button to indicate that the text of a message has been copied to the clipboard."
   },
   "voiceIntroduction_paola": {
-    "message": "Ciao! Bonjour! Hello! I'm Pi, and I can converse fluently in 29 languages. From Arabic to Ukrainian, I'm here to break down language barriers. How does this voice sound to you?",
+    "message": "Ciao! Bonjour! Hello! I'm Pi, and I can converse fluently in 32 languages. From Arabic to Ukrainian, I'm here to break down language barriers. How does this voice sound to you?",
     "description": "Introduction for the Paola voice."
   },
   "voiceIntroduction_joey": {
-    "message": "Hola! Привет! 你好! I'm Pi, your polyglot AI assistant. With 29 languages at my command, we can explore ideas and cultures from around the world. What do you think of this voice?",
+    "message": "Hola! Привет! 你好! I'm Pi, your polyglot AI assistant. With 32 languages at my command, we can explore ideas and cultures from around the world. What do you think of this voice?",
     "description": "Introduction for the Joey voice."
   }
 }

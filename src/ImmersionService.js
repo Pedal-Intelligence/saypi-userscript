@@ -1,7 +1,8 @@
-import { buttonModule } from "./ButtonModule.js";
 import { enterFullscreen, exitFullscreen } from "./FullscreenModule.ts";
 import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
 import { addChild } from "./dom/DOMModule.ts";
+import { ThemeManager } from "./themes/ThemeManagerModule.ts";
+import { ImmersionStateChecker } from "./ImmersionServiceLite.ts";
 
 function attachCallButton() {
   // move the call button back into the text prompt container for desktop view
@@ -29,6 +30,7 @@ export class ImmersionService {
   constructor(chatbot) {
     this.chatbot = chatbot;
     this.userPreferences = UserPreferenceModule.getInstance();
+    this.themeManager = ThemeManager.getInstance();
   }
 
   /**
@@ -45,9 +47,9 @@ export class ImmersionService {
   }
 
   // this function determines whether the immersive view is currently active
+  //@deprecated use ImmersionStateChecker.isViewImmersive() instead
   static isViewImmersive() {
-    const element = document.documentElement;
-    return element.classList.contains("immersive-view");
+    return ImmersionStateChecker.isViewImmersive();
   }
 
   static exitImmersiveMode() {
@@ -97,7 +99,7 @@ export class ImmersionService {
     detachCallButton();
     enterFullscreen();
     this.userPreferences.getTheme().then((theme) => {
-      buttonModule.applyTheme(theme);
+      this.themeManager.applyTheme(theme);
     });
   }
 }

@@ -8,7 +8,7 @@
     "description": "De beschrijving van de applicatie."
   },
   "callInProgress": {
-    "message": "Actieve continue luistering. Klik om te stoppen.",
+    "message": "Einde handsfree gesprek",
     "description": "De tooltip die wordt weergegeven op de oproepknop wanneer een gesprek bezig is."
   },
   "callStarting": {
@@ -16,8 +16,14 @@
     "description": "De tooltip die wordt weergegeven op de oproepknop wanneer een gesprek start."
   },
   "callNotStarted": {
-    "message": "Klik om continue luistering te starten.",
-    "description": "De tooltip die wordt weergegeven op de oproepknop voordat een gesprek is gestart."
+    "message": "Start een handsfree gesprek met $chatbot$",
+    "description": "De tooltip die wordt weergegeven op de oproepknop voordat een gesprek is gestart.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "callError": {
     "message": "Niet-fatale fout opgetreden. Geen paniek, we luisteren nog steeds.",
@@ -248,7 +254,13 @@
   },
   "enhancedVoice": {
     "description": "Titel (knopinfo) voor Zeg, Pi verbeterde stemmen.",
-    "message": "Stem verbeterd door Say, Pi"
+    "message": "Stem verbeterd door $product$",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   },
   "previewProgress": {
     "description": "Het bericht dat wordt weergegeven wanneer de gebruiker een functie voorvertonen die een tekenlimiet heeft.",
@@ -289,7 +301,7 @@
   },
   "ttsCostExplanation": {
     "description": "De tooltip om weer te geven wanneer de tekst-naar-spraak engine wordt gebruikt om een bericht hardop voor te lezen, met de kosten van het bericht.",
-    "message": "De kosten voor het beluisteren van dit bericht zijn $cost$ $currency$",
+    "message": "$product$ brengt $cost$ $currency$ in rekening voor het beluisteren van dit bericht",
     "placeholders": {
       "cost": {
         "content": "$1",
@@ -298,12 +310,16 @@
       "currency": {
         "content": "$2",
         "example": "credits"
+      },
+      "product": {
+        "content": "$3",
+        "example": "Say, Pi"
       }
     }
   },
   "ttsCostExplanationFree": {
     "description": "De tooltip om weer te geven wanneer een tekst-naar-spraak engine wordt gebruikt om een bericht hardop voor te lezen, en het bericht is gratis. Kan de naam van de provider bevatten.",
-    "message": "Deze audio is gratis gegenereerd.",
+    "message": "Deze audio wordt gratis gegenereerd door Inflection AI",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -330,11 +346,11 @@
     "description": "De titel van de knop om de tekst van een bericht naar het klembord te kopiëren."
   },
   "voiceIntroduction_joey": {
-    "message": "Hola! Привет! 你好! Ik ben Pi, je meertalige AI-assistent. Met 29 talen tot mijn beschikking kunnen we ideeën en culturen van over de hele wereld verkennen. Wat vind je van deze stem?",
+    "message": "Hallo! \nGoed! \nJa! \nIk ben Pi, je meertalige AI-assistent. \nMet 32 ​​talen tot mijn beschikking kunnen we ideeën en culturen van over de hele wereld verkennen. \nWat vind jij van deze stem?",
     "description": "Inleiding voor de Joey stem."
   },
   "voiceIntroduction_paola": {
-    "message": "Ciao! Bonjour! Hallo! Ik ben Pi en ik kan vloeiend converseren in 29 talen. Van Arabisch tot Oekraïens, ik ben hier om taalbarrières te doorbreken. Hoe klinkt deze stem voor jou?",
+    "message": "Ciao! \nBonjour! \nHallo! \nIk ben Pi en ik kan vloeiend converseren in 32 talen. \nVan Arabisch tot Oekraïens, ik ben hier om taalbarrières te doorbreken. \nHoe klinkt deze stem voor jou?",
     "description": "Introductie voor de Paola stem."
   },
   "regenerateButtonTitle": {
@@ -354,5 +370,25 @@
   "regenerateButtonTitleFree": {
     "message": "Genereer Audio",
     "description": "De titel van de knop om de audio van een bericht opnieuw te genereren. Kan een onbepaalde kosten met zich meebrengen."
+  },
+  "assistantIsWriting": {
+    "description": "Bericht dat wordt weergegeven wanneer de assistent zijn antwoord typt.",
+    "message": "$chatbot$ schrijft...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "ttsCostExplanationSayPi": {
+    "description": "De tooltip die wordt weergegeven wanneer de gebruiker de muisaanwijzer op de link met kostenverklaring houdt.",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    },
+    "message": "Ontdek hoe $product$ audio in rekening brengt"
   }
 }

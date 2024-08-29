@@ -3,7 +3,12 @@ import {
   LateChangeEvent,
   TextContent,
 } from "../tts/InputStream";
-import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
+import {
+  SpeechSynthesisModule,
+  TextAddedEvent,
+  TextChangedEvent,
+  TextCompletedEvent,
+} from "../tts/SpeechSynthesisModule";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { BaseObserver } from "./BaseObserver";
 import { Observation } from "./Observation";
@@ -14,9 +19,11 @@ import {
   StreamedSpeech,
   audioProviders,
 } from "../tts/SpeechModel";
-import { BillingModule } from "../billing/BillingModule";
 import EventBus from "../events/EventBus";
 import { AssistantResponse } from "./MessageElements";
+import { AssistantWritingEvent } from "./MessageEvents";
+import { Chatbot } from "../chatbots/Chatbot";
+import { findRootAncestor } from "./DOMModule";
 interface ResourceReleasable {
   teardown(): void;
 }
@@ -39,6 +46,7 @@ class ChatHistoryRootElementObserver extends BaseObserver {
     private chatHistoryElement: HTMLElement,
     selector: string,
     speechSynthesis: SpeechSynthesisModule,
+    private chatbot: Chatbot,
     initialRun: boolean = true
   ) {
     super(chatHistoryElement, selector);
@@ -58,18 +66,28 @@ class ChatHistoryRootElementObserver extends BaseObserver {
       console.error("Element is not a child of the chat history", child);
       return;
     }
-    const pastMessagesContainer =
-      this.chatHistoryElement?.querySelector(":nth-child(2)");
-    if (pastMessagesContainer == child) {
-      // add id to the 2nd child of the element
-      pastMessagesContainer.id = "saypi-chat-history-past-messages";
+
+    const pastMessagesSelector = this.chatbot.getPastChatHistorySelector();
+    const rootAncestor = findRootAncestor(child);
+
+    // Use querySelector on the root ancestor
+    const pastMessagesContainer = rootAncestor.querySelector(
+      pastMessagesSelector
+    ) as Element | null;
+
+    if (pastMessagesContainer === child) {
+      // add classes to the container
+      pastMessagesContainer.classList.add("chat-history", "past-messages");
       if (this.oldMessageObserver) {
         this.oldMessageObserver.disconnect();
       }
       this.oldMessageObserver = new ChatHistoryOldMessageObserver(
         this.chatHistoryElement,
-        `#${pastMessagesContainer.id}`,
-        this.speechSynthesis
+        `${pastMessagesContainer.tagName}.${Array.from(
+          pastMessagesContainer.classList
+        ).join(".")}`,
+        this.speechSynthesis,
+        this.chatbot
       );
       this.oldMessageObserver
         .runOnce(pastMessagesContainer)
@@ -112,11 +130,12 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
   constructor(
     chatHistoryElement: HTMLElement,
     selector: string,
-    speechSynthesis: SpeechSynthesisModule
+    speechSynthesis: SpeechSynthesisModule,
+    protected chatbot: Chatbot
   ) {
     super(chatHistoryElement, selector);
     this.speechSynthesis = speechSynthesis;
-    this.ttsControlsModule = new TTSControlsModule(speechSynthesis);
+    this.ttsControlsModule = TTSControlsModule.getInstance();
   }
 
   /**
@@ -130,28 +149,39 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
 
   protected async callback(mutations: MutationRecord[]): Promise<void> {
     for (const mutation of mutations) {
+      // Iterate over added nodes
       for (const node of [...mutation.addedNodes]) {
         if (node instanceof Element) {
           const addedElement = node as Element;
-          const responseObs = await this.findAndDecorateAssistantResponse(
-            addedElement
-          );
-          if (this.haltOnFirst && responseObs.isReady()) {
+          const responseObservations =
+            await this.findAndDecorateAssistantResponses(addedElement);
+          if (this.haltOnFirst && responseObservations[0]?.isReady()) {
             // only expecting one new chat message at a time, so
             // skip this mutation if the chat message is already decorated
             return; // break early
           }
         }
       }
+
+      // Iterate over nodes with changed attributes
+      // e.g. when a message element becomes matchable during streaming
+      if (
+        mutation.type === "attributes" &&
+        mutation.target instanceof Element
+      ) {
+        const mutatedElement = mutation.target as Element;
+        this.findAndDecorateAssistantResponses(mutatedElement);
+      }
     }
   }
 
-  static findAssistantResponse(searchRoot: Element): Observation {
-    const query = "div.break-anywhere:not(.justify-end)"; // TODO: -> this.chatbot.getAssistantResponseSelector();
-    const deepMatch = searchRoot.querySelector(query);
-    if (deepMatch) {
-      const found = Observation.foundUndecorated(deepMatch.id, deepMatch);
-      if (deepMatch.classList.contains("assistant-message")) {
+  static findAssistantResponse(
+    searchRoot: Element,
+    match: Element
+  ): Observation {
+    if (match) {
+      const found = Observation.foundUndecorated(match.id, match);
+      if (match.classList.contains("assistant-message")) {
         return Observation.foundAndDecorated(found);
       }
       return found;
@@ -170,6 +200,41 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
     return Observation.notFound("");
   }
 
+  static findAssistantResponses(
+    searchRoot: Element,
+    querySelector: string
+  ): Observation[] {
+    const deepMatches = searchRoot.querySelectorAll(querySelector);
+    const observations: Observation[] = [];
+    for (const match of deepMatches) {
+      const observation = ChatHistoryMessageObserver.findAssistantResponse(
+        searchRoot,
+        match
+      );
+      observations.push(observation);
+    }
+    return observations;
+  }
+
+  static findFirstAssistantResponse(
+    searchRoot: Element,
+    querySelector: string
+  ): Observation {
+    const allResponses = ChatHistoryMessageObserver.findAssistantResponses(
+      searchRoot,
+      querySelector
+    );
+    if (allResponses.length > 0) {
+      return allResponses[0];
+    }
+    return Observation.notFound("");
+  }
+
+  findAssistantResponses(searchRoot: Element): Observation[] {
+    const query = this.chatbot.getAssistantResponseSelector();
+    return ChatHistoryMessageObserver.findAssistantResponses(searchRoot, query);
+  }
+
   /**
    * Decorates the assistant response with the necessary classes and attributes,
    * but does not add any additional functionality, i.e. speech
@@ -179,47 +244,48 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
   public decorateAssistantResponse(
     messageElement: HTMLElement
   ): AssistantResponse {
-    const message = new AssistantResponse(messageElement);
+    const message = this.chatbot.getAssistantResponse(messageElement);
     return message;
   }
 
-  /**
-   * Decorates the assistant response with speech functionality
-   * @deprecated - use AssistantResponse.decorateSpeech() instead
-   */
-  decorateAssistantResponseWithSpeech(
-    message: AssistantResponse,
-    speech: StreamedSpeech
-  ): void {}
-
-  async findAndDecorateAssistantResponse(
+  async findAndDecorateAssistantResponses(
     searchRoot: Element
-  ): Promise<Observation> {
-    let obs = ChatHistoryMessageObserver.findAssistantResponse(searchRoot);
-    if (obs.found) {
-      console.log("Found assistant message", obs);
-    }
-    if (obs.found && obs.isNew && !obs.decorated) {
-      const message = this.decorateAssistantResponse(obs.target as HTMLElement);
-      obs = Observation.foundAndDecorated(obs, message);
-      message.decorateControls();
+  ): Promise<Observation[]> {
+    const initialObservations: Observation[] =
+      this.findAssistantResponses(searchRoot);
+    const decoratedObservations: Observation[] = [];
+    for (const initialObservation of initialObservations) {
+      if (
+        initialObservation.found &&
+        initialObservation.isNew &&
+        !initialObservation.decorated
+      ) {
+        const message = this.decorateAssistantResponse(
+          initialObservation.target as HTMLElement
+        );
+        const decoratedObservation = Observation.foundAndDecorated(
+          initialObservation,
+          message
+        );
+        decoratedObservations.push(decoratedObservation);
 
-      const speech = await this.streamSpeech(message);
-      if (speech) {
-        if (speech.utterance) {
-          message.decorateSpeech(speech.utterance);
-        }
-        if (speech.charge) {
-          message.decorateCost(speech.charge);
-        }
-      } else {
-        const provider = await this.speechSynthesis.getActiveAudioProvider();
-        if (provider === audioProviders.SayPi) {
-          message.decorateIncompleteSpeech();
+        const speech = await this.streamSpeech(message);
+        if (speech) {
+          if (speech.utterance) {
+            await message.decorateSpeech(speech.utterance);
+          }
+          if (speech.charge) {
+            await message.decorateCost(speech.charge);
+          }
+        } else {
+          const provider = await this.speechSynthesis.getActiveAudioProvider();
+          if (provider === audioProviders.SayPi) {
+            message.decorateIncompleteSpeech();
+          }
         }
       }
     }
-    return obs;
+    return decoratedObservations;
   }
 
   async streamSpeechFromHistory(
@@ -228,10 +294,18 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
   ): Promise<StreamedSpeech | null> {
     const speechRecord = await history.getSpeechFromHistory(message.hash);
     if (speechRecord) {
-      console.debug("Found message in speech history", speechRecord);
+      console.debug(
+        "Speech found in history for message",
+        message.toString(),
+        speechRecord.utterance?.toString()
+      );
       return speechRecord;
     } else {
       // speech not cached
+      console.debug(
+        "Speech not found in history for message",
+        message.toString()
+      );
       return null;
     }
   }
@@ -248,15 +322,14 @@ class ChatHistoryOldMessageObserver extends ChatHistoryMessageObserver {
    */
   async runOnce(root: Element): Promise<AssistantResponse[]> {
     let messagesFound: AssistantResponse[] = [];
-    for (const node of [...root.children]) {
-      if (node instanceof Element) {
-        const child = node as Element;
-        const observation = await this.findAndDecorateAssistantResponse(child);
-        if (observation.isReady() && observation.decorations.length > 0) {
-          messagesFound.push(observation.decorations[0]);
-        }
+
+    const observations = await this.findAndDecorateAssistantResponses(root);
+    for (const observation of observations) {
+      if (observation.isReady() && observation.decorations.length > 0) {
+        messagesFound.push(observation.decorations[0]);
       }
     }
+
     return messagesFound;
   }
 
@@ -282,9 +355,10 @@ class ChatHistoryNewMessageObserver
     chatHistoryElement: HTMLElement,
     selector: string,
     speechSynthesis: SpeechSynthesisModule,
+    chatbot: Chatbot,
     ignoreMessages: AssistantResponse[] = []
   ) {
-    super(chatHistoryElement, selector, speechSynthesis);
+    super(chatHistoryElement, selector, speechSynthesis, chatbot);
     this.haltOnFirst = true; // only expecting to load one new chat message at a time
     this.ignoreMessages = ignoreMessages;
   }
@@ -295,7 +369,7 @@ class ChatHistoryNewMessageObserver
   public decorateAssistantResponse(
     messageElement: HTMLElement
   ): AssistantResponse {
-    const message = new AssistantResponse(messageElement, false); // streaming assistant messages should not include initial text
+    const message = this.chatbot.getAssistantResponse(messageElement, false); // streaming assistant messages should not include initial text
     return message;
   }
 
@@ -311,40 +385,47 @@ class ChatHistoryNewMessageObserver
     }
 
     const provider = await this.speechSynthesis.getActiveAudioProvider();
-    if (provider === audioProviders.SayPi) {
-      const utterance = await this.speechSynthesis.createSpeechStream();
-      message.decorateSpeech(utterance);
-      console.debug("Opened audio input stream", utterance.id);
 
-      const messageContent = await message.decoratedContent();
-      this.observeChatMessageElement(
-        messageContent,
-        utterance,
-        () => this.ttsControlsModule.autoplaySpeech(utterance, 200),
-        (text) => {
-          console.debug("Closed audio input stream", utterance.id);
-          const charge = BillingModule.getInstance().charge(utterance, text);
-          message.decorateCost(charge);
-          this.speechHistory.addChargeToHistory(charge.utteranceHash, charge);
-        },
-        (lateChange) => {
-          message.decorateIncompleteSpeech(true);
-        }
-      );
-      return new AssistantSpeech(utterance);
-    } else {
+    if (provider === audioProviders.Pi) {
       // speech will be generated by Pi.ai, stream details not available yet
       const streamStartedListener = (utterance: SpeechUtterance) => {
         message.decorateSpeech(utterance);
         return new AssistantSpeech(utterance);
       };
-      EventBus.on("saypi:tts:speechStreamStarted", streamStartedListener);
+      //EventBus.on("saypi:tts:speechStreamStarted", streamStartedListener); // redunandant with ChatHistoryManager?
       this.EventListeners.push({
         event: "saypi:tts:speechStreamStarted",
         listener: streamStartedListener,
       });
-      return null;
     }
+
+    const utterance =
+      await this.speechSynthesis.createSpeechStreamOrPlaceholder(provider);
+    message.decorateSpeech(utterance);
+
+    const messageContent = await message.decoratedContent();
+    this.observeChatMessageElement(
+      message,
+      messageContent,
+      utterance,
+      () => {
+        const writingEvent: AssistantWritingEvent = {
+          utterance: utterance,
+        };
+        EventBus.emit("saypi:piWriting", writingEvent);
+      },
+      (text) => {
+        EventBus.emit("saypi:piStoppedWriting", {
+          utterance: utterance,
+          text,
+        });
+        console.debug("Closed audio input stream", utterance.id);
+      },
+      (lateChange) => {
+        message.decorateIncompleteSpeech(true);
+      }
+    );
+    return new AssistantSpeech(utterance);
   }
 
   teardown(): void {
@@ -361,6 +442,7 @@ class ChatHistoryNewMessageObserver
   private textStream: ElementTextStream | null = null;
 
   observeChatMessageElement(
+    message: AssistantResponse,
     messageContent: HTMLElement,
     utterance: SpeechUtterance,
     onStart: () => void,
@@ -373,8 +455,10 @@ class ChatHistoryNewMessageObserver
     }
 
     // Start observing the new element
-    this.textStream = new ElementTextStream(messageContent);
+    this.textStream = message.createTextStream(messageContent);
+    let streamStartTime: number = Date.now();
     let firstChunkTime: number | null = null;
+    let lastChunkTime: number | null = null;
     let fullText = ""; // Variable to accumulate the text
 
     this.textStream.getStream().subscribe(
@@ -385,20 +469,13 @@ class ChatHistoryNewMessageObserver
             `Text changed from "${text.changedFrom}" to "${text.text}"`
           );
           fullText = fullText.replace(text.changedFrom!, text.text);
-          this.speechSynthesis
-            .replaceSpeechInStream(utterance.id, text.changedFrom!, text.text)
-            .then((replaced) => {
-              if (replaced) {
-                console.debug(
-                  `Replaced text in stream: "${text.changedFrom}" -> "${text.text}"`
-                );
-              } else {
-                console.error(
-                  `Failed to replace text in stream before being flushed: "${text.changedFrom}" -> "${text.text}"`
-                );
-                messageContent.classList.add("inconsistent-text");
-              }
-            });
+          const textChangedEvent: TextChangedEvent = {
+            text: text.text,
+            changedFrom: text.changedFrom!,
+            utterance: utterance,
+          };
+          EventBus.emit("saypi:tts:text:changed", textChangedEvent);
+          lastChunkTime = Date.now();
         } else {
           const txt = text.text;
           fullText += txt; // Add the text chunk to the full text
@@ -407,31 +484,44 @@ class ChatHistoryNewMessageObserver
             firstChunkTime = currentTime;
             start = true;
           }
+          lastChunkTime = currentTime;
           const delay = currentTime - (firstChunkTime as number);
           console.debug(`+${delay}ms, streamed text: "${txt}"`);
-          this.speechSynthesis.addSpeechToStream(utterance.id, txt).then(() => {
-            if (start) {
-              onStart();
-            }
-          });
+          const textAddedEvent: TextAddedEvent = {
+            text: txt,
+            utterance: utterance,
+          };
+          EventBus.emit("saypi:tts:text:added", textAddedEvent);
+          if (start) {
+            onStart();
+          }
         }
       },
       (error) => {
         console.error(`Error occurred streaming text from element: ${error}`);
       },
       () => {
+        console.debug(`Stream info (${utterance.id}):`);
+
+        console.debug(`- Streamed ${fullText.length} characters`);
         if (firstChunkTime) {
-          const totalTime = Date.now() - (firstChunkTime as number);
           console.debug(
-            `Text stream completed ${(totalTime / 1000).toFixed(
-              2
-            )} seconds after first chunk`,
-            utterance.id
+            `- Time to first token: ${firstChunkTime - streamStartTime}ms`
           );
-        } else {
-          console.info("Text stream completed without text");
+          const chunkingElapsedTime =
+            lastChunkTime! - (firstChunkTime as number);
+          console.debug(
+            `- Time from first to last token: ${chunkingElapsedTime}ms`
+          );
         }
-        this.speechSynthesis.endSpeechStream(utterance);
+        console.debug(
+          `- Time to completion: ${Date.now() - streamStartTime}ms`
+        );
+        const textCompletedEvent: TextCompletedEvent = {
+          text: fullText,
+          utterance: utterance,
+        };
+        EventBus.emit("saypi:tts:text:completed", textCompletedEvent);
         if (onEnd) {
           onEnd(fullText); // Pass the full text to the onEnd callback
         }
@@ -442,6 +532,10 @@ class ChatHistoryNewMessageObserver
     // these changes mean the audio stream will be incomplete
     this.textStream.getLateChangeStream().subscribe((lateChange) => {
       console.warn("Late change detected:", lateChange);
+      EventBus.emit("saypi:tts:text:error", {
+        error: lateChange,
+        utterance: utterance,
+      });
       if (onError) {
         onError(lateChange);
       }
@@ -452,15 +546,37 @@ class ChatHistoryNewMessageObserver
 /**
  * Get the most recent assistant message from the chat history
  */
-function getMostRecentAssistantMessage(): AssistantResponse | null {
+function getMostRecentAssistantMessage(
+  chatbot: Chatbot
+): AssistantResponse | null {
   const assistantMessages = document.querySelectorAll(".assistant-message");
   if (assistantMessages.length > 0) {
     const messageElement = assistantMessages[
       assistantMessages.length - 1
     ] as HTMLElement;
-    return new AssistantResponse(messageElement);
+    return chatbot.getAssistantResponse(messageElement);
   }
   return null;
+}
+
+function getAssistantMessageByUtterance(
+  chatbot: Chatbot,
+  utteranceId: string
+): AssistantResponse {
+  const chatHistory = document.getElementById("saypi-chat-history");
+  if (chatHistory) {
+    const assistantMessageElements =
+      chatHistory.querySelectorAll(".assistant-message");
+    for (const messageElement of assistantMessageElements) {
+      const assistantMessage = chatbot.getAssistantResponse(
+        messageElement as HTMLElement
+      );
+      if (assistantMessage.utteranceId === utteranceId) {
+        return assistantMessage;
+      }
+    }
+  }
+  throw new Error(`Assistant message not found for utterance ${utteranceId}`);
 }
 
 export {
@@ -470,6 +586,7 @@ export {
   ChatHistoryNewMessageObserver as ChatHistoryAdditionsObserver,
   ChatHistoryRootElementObserver as RootChatHistoryObserver,
   getMostRecentAssistantMessage,
+  getAssistantMessageByUtterance,
   ResourceReleasable,
   EventListener,
   Observer,
