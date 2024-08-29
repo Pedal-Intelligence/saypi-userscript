@@ -7,9 +7,7 @@ import getMessage from "../i18n";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { audioProviders, SpeechSynthesisVoiceRemote } from "./SpeechModel";
 import { SpeechSynthesisModule } from "./SpeechSynthesisModule";
-import waveformSvgContent from "../icons/wave.svg";
-import chevronSvgContent from "../icons/claude-chevron.svg";
-import { add } from "lodash";
+
 
 export abstract class VoiceSelector {
   protected chatbot: Chatbot;
@@ -403,129 +401,6 @@ export class VoiceSettings extends VoiceSelector {
   }
 }
 
-export class ClaudeVoiceMenu extends VoiceSelector {
-  constructor(
-    chatbot: Chatbot,
-    userPreferences: UserPreferenceModule,
-    element: HTMLElement
-  ) {
-    super(chatbot, userPreferences, element);
-    this.addIdVoiceMenu(element);
-    this.initializeVoiceSelector(chatbot);
-  }
-
-  getId(): string {
-    return "claude-voice-selector";
-  }
-
-  getButtonClasses(): string[] {
-    return [
-      "font-tiempos",
-      "inline-flex",
-      "gap-[4px]",
-      "text-[14px]",
-      "leading-none",
-      "items-center",
-      "text-text-100",
-    ];
-  }
-
-  protected createVoiceButton(
-    voice: SpeechSynthesisVoiceRemote
-  ): HTMLButtonElement {
-    const button = document.createElement("button");
-    button.classList.add(...this.getButtonClasses());
-    button.dataset.voiceId = voice.id;
-
-    addSvgToButton(
-      button,
-      waveformSvgContent,
-      "voiced-by",
-      "block",
-      "translate-y-[1.5px]",
-      "fill-current"
-    );
-
-    const voiceName = document.createElement("span");
-    voiceName.classList.add(
-      "voice-name",
-      "whitespace-nowrap",
-      "tracking-tight"
-    );
-    voiceName.innerText = voice.name;
-    button.appendChild(voiceName);
-
-    addSvgToButton(
-      button,
-      chevronSvgContent,
-      "chevron",
-      "text-text-500",
-      "ml-px",
-      "shrink-0",
-      "translate-y-px",
-      "fill-current"
-    );
-
-    button.addEventListener("click", () => this.handleVoiceSelection(voice));
-    return button;
-  }
-
-  protected handleVoiceSelection(voice: SpeechSynthesisVoiceRemote): void {
-    this.userPreferences.setVoice(voice).then(() => {
-      console.log(`Selected voice: ${voice.name}`);
-      this.updateSelectedVoice(voice);
-      this.introduceVoice(voice);
-    });
-  }
-
-  protected updateSelectedVoice(
-    selectedVoice: SpeechSynthesisVoiceRemote
-  ): void {
-    const buttons = this.element.querySelectorAll("button[data-voice-id]");
-    buttons.forEach((button) => {
-      if (button instanceof HTMLButtonElement) {
-        if (button.dataset.voiceId === selectedVoice.id) {
-          this.markButtonAsSelectedVoice(button);
-        } else {
-          this.unmarkButtonAsSelectedVoice(button);
-        }
-      }
-    });
-  }
-
-  populateVoices(
-    voices: SpeechSynthesisVoiceRemote[],
-    voiceSelector: HTMLElement
-  ): boolean {
-    if (!voices || voices.length === 0) {
-      console.log("No voices found");
-      return false;
-    }
-
-    // For now, only show the first voice
-    const firstVoice = voices[0];
-    if (
-      firstVoice &&
-      !voiceSelector.querySelector(`button[data-voice-id="${firstVoice.id}"]`)
-    ) {
-      const button = this.createVoiceButton(firstVoice);
-      voiceSelector.appendChild(button);
-    }
-
-    return true;
-  }
-
-  private initializeVoiceSelector(chatbot: Chatbot): void {
-    const speechSynthesis = SpeechSynthesisModule.getInstance();
-    speechSynthesis.getVoices(chatbot).then((voices) => {
-      this.populateVoices(voices, this.element);
-      //this.registerVoiceChangeHandler(this.element); // references Pi actions, not needed for Claude?
-    });
-  }
-
-  // Override other methods as needed to fit Claude AI's specific requirements
-}
-
 function innerContent(svgContent: string): string {
   const parser = new DOMParser();
   const svgDoc = parser.parseFromString(svgContent, "image/svg+xml");
@@ -538,7 +413,7 @@ function viewbox(svgContent: string): string {
   return svgDoc.documentElement.getAttribute("viewBox") || "0 0 256 256";
 }
 
-function addSvgToButton(
+export function addSvgToButton(
   button: HTMLElement,
   svgContent: string,
   ...classNames: string[]

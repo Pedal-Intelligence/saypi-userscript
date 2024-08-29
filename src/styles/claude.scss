@@ -71,7 +71,7 @@ html body.claude {
     justify-content: space-between;
   }
 
-  #claude-voice-selector {
+  #saypi-voice-menu {
     svg.voiced-by {
       height: 11.5px;
       width: 25.4px;
@@ -79,6 +79,10 @@ html body.claude {
     svg.chevron {
       height: 12px;
       width: 12px;
+    }
+    .voice-menu-content {
+      position: absolute;
+      z-index: 1000;
     }
   }
 }

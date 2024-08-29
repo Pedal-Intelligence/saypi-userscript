@@ -8,8 +8,9 @@ import {
   InputStreamOptions,
 } from "../tts/InputStream";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
-import { ClaudeVoiceMenu, VoiceSelector } from "../tts/VoiceMenu";
+import { VoiceSelector } from "../tts/VoiceMenu";
 import { Chatbot, UserPrompt } from "./Chatbot";
+import { ClaudeVoiceMenu } from "./ClaudeVoiceMenu";
 
 class ClaudeChatbot implements Chatbot {
   private promptCache: Map<HTMLElement, ClaudePrompt> = new Map();
