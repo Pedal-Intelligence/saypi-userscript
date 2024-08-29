@@ -8,6 +8,12 @@ Enhance your voice interactions with Inflection AI's Pi chatbot with the _Say, P
 
 `saypi-userscript` is a powerful content script that enhances the voice dictation capabilities of Inflection AI's conversational AI chatbot, Pi. By installing and enabling this script in your web browser, you can have an immersive and interactive spoken dialogue with Pi, on the web at https://pi.ai.
 
+## Important Notice
+
+**This project is proprietary software and is not open source.** While the source code is publicly viewable for transparency and security review purposes, it is not licensed for modification, distribution, or use beyond the terms specified in the [LICENSE](LICENSE) file.
+
+We are not accepting external contributions to the codebase at this time. Please see the [CONTRIBUTING.md](CONTRIBUTING.md) file for more information.
+
 ## Assembly
 
 The content script is assembled using Webpack with `npm run build` from the command line in the project directory. This will generate a `saypi.user.js` file in the `/public` directory, bundling together all necessary JavaScript modules and assets.
@@ -50,15 +56,15 @@ npm run test:vitest:watch
 
 ## License
 
-This project is licensed under a proprietary commerical license. Some source code is made available in this repo for public review, but it may not be copied, modified, forked or redistributed - see the [LICENSE](LICENSE) file for details.
+This project is licensed under a proprietary commercial license. The source code is made available for public review, but it may not be copied, modified, forked, or redistributed - see the [LICENSE](LICENSE) file for details.
 
 ## Disclaimer
 
-The "_Say, Pi_ is an unofficial enhancement for Pi.ai. Use it responsibly and respect the terms of service of Pi as provided by Inflection AI. We cannot guarantee its compatibility with future updates or changes to Pi platform.
+The "_Say, Pi_" is an unofficial enhancement for Pi.ai. Use it responsibly and respect the terms of service of Pi as provided by Inflection AI. We cannot guarantee its compatibility with future updates or changes to Pi platform.
 
 ## Contact Us
 
-If you have any questions or comments, we'd love to hear from you! Drop us a message any of the channels below, or find us on the [Pi Party](https://pi.ai/discord) Discord server. 🥧
+If you have any questions or comments, we'd love to hear from you! Drop us a message on any of the channels below, or find us on the [Pi Party](https://pi.ai/discord) Discord server. 🥧
 
 - Email: info@saypi.ai
 - Twitter/X: @saypi_ai
