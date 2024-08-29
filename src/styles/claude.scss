@@ -72,6 +72,8 @@ html body.claude {
   }
 
   #saypi-voice-menu {
+    position: relative; // so that menu can be positioned relative to this
+
     svg.voiced-by {
       height: 11.5px;
       width: 25.4px;

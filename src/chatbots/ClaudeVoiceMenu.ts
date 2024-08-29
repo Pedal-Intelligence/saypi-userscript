@@ -149,10 +149,29 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     return item;
   }
 
+  private positionMenuAboveButton(): void {
+    const buttonRect = this.menuButton.getBoundingClientRect();
+    const menuRect = this.menuContent.getBoundingClientRect();
+
+    this.menuContent.style.position = "absolute";
+    this.menuContent.style.bottom = `${window.innerHeight - buttonRect.top}px`;
+    this.menuContent.style.left = "0"; // Align with nearest positioned ancestor
+    this.menuContent.style.width = `${Math.max(
+      buttonRect.width,
+      menuRect.width
+    )}px`;
+  }
+
   private toggleMenu(): void {
     const isExpanded = this.menuButton.getAttribute("aria-expanded") === "true";
     this.menuButton.setAttribute("aria-expanded", (!isExpanded).toString());
-    this.menuContent.style.display = isExpanded ? "none" : "block";
+
+    if (!isExpanded) {
+      this.menuContent.style.display = "block";
+      this.positionMenuAboveButton();
+    } else {
+      this.menuContent.style.display = "none";
+    }
   }
 
   private handleVoiceSelection(voice: SpeechSynthesisVoiceRemote | null): void {
