@@ -35,6 +35,11 @@
       .control {
         margin-left: auto; /* align right */
       }
+      .description {
+        font-size: 0.875rem; /* Smaller font size for descriptions */
+        color: #4a5568; /* Gray color for descriptions */
+        margin-top: 0.25rem; /* Small margin above the description */
+      }
     </style>
   </head>
   <body class="flex items-center justify-center">
@@ -91,6 +96,16 @@
           data-i18n="mode_balanced"
         >
           balanced
+        </div>
+        <!-- Descriptions below each icon -->
+        <div class="description" data-i18n="mode_speed_description">
+          Fastest response, but less accurate and may interrupt speech
+        </div>
+        <div class="description" data-i18n="mode_balanced_description">
+          Good balance of speed and accuracy for most uses
+        </div>
+        <div class="description" data-i18n="mode_accuracy_description">
+          Highest accuracy, but slower transcription speed
         </div>
       </div>
       <div
