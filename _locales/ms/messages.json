@@ -390,5 +390,17 @@
       }
     },
     "message": "Ketahui cara $product$ mengenakan bayaran untuk audio"
+  },
+  "mode_accuracy_description": {
+    "description": "Penerangan untuk mod transkripsi ketepatan.",
+    "message": "Ketepatan tertinggi, tetapi kelajuan transkripsi lebih perlahan. \nTerdedah kepada halusinasi."
+  },
+  "mode_balanced_description": {
+    "description": "Penerangan untuk mod transkripsi seimbang.",
+    "message": "Keseimbangan kelajuan dan ketepatan yang baik untuk kebanyakan kegunaan."
+  },
+  "mode_speed_description": {
+    "description": "Penerangan untuk mod transkripsi kelajuan.",
+    "message": "Respons terpantas, tetapi kurang tepat. \nTerdedah kepada gangguan."
   }
 }

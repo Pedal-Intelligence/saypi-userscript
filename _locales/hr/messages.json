@@ -390,5 +390,17 @@
       }
     },
     "message": "Saznajte kako $product$ naplaćuje zvuk"
+  },
+  "mode_accuracy_description": {
+    "description": "Opis za način preciznog prijepisa.",
+    "message": "Najveća točnost, ali sporija brzina transkripcije. \nSklon halucinacijama."
+  },
+  "mode_balanced_description": {
+    "description": "Opis uravnoteženog načina transkripcije.",
+    "message": "Dobar omjer brzine i točnosti za većinu namjena."
+  },
+  "mode_speed_description": {
+    "description": "Opis načina brze transkripcije.",
+    "message": "Najbrži odgovor, ali manje točan. \nSklon prekidanju."
   }
 }

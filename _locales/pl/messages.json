@@ -390,5 +390,17 @@
   "unlockInstruction": {
     "description": "Instrukcje informujące użytkownika, jak odblokować zablokowany ekran.",
     "message": "Przytrzymaj, aby odblokować."
+  },
+  "mode_accuracy_description": {
+    "description": "Opis trybu transkrypcji dokładności.",
+    "message": "Najwyższa dokładność, ale mniejsza prędkość transkrypcji. \nSkłonny do halucynacji."
+  },
+  "mode_balanced_description": {
+    "description": "Opis trybu transkrypcji zrównoważonej.",
+    "message": "Dobra równowaga szybkości i dokładności w większości zastosowań."
+  },
+  "mode_speed_description": {
+    "description": "Opis trybu szybkiej transkrypcji.",
+    "message": "Najszybsza reakcja, ale mniej dokładna. \nSkłonny do przerywania."
   }
 }

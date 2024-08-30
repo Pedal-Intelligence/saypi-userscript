@@ -390,5 +390,17 @@
       }
     },
     "message": "Erfahren Sie, wie $product$ Audiogebühren berechnet"
+  },
+  "mode_accuracy_description": {
+    "description": "Beschreibung für den Genauigkeitstranskriptionsmodus.",
+    "message": "Höchste Genauigkeit, aber langsamere Transkriptionsgeschwindigkeit. \nAnfällig für Halluzinationen."
+  },
+  "mode_balanced_description": {
+    "description": "Beschreibung für den ausgeglichenen Transkriptionsmodus.",
+    "message": "Gute Balance zwischen Geschwindigkeit und Genauigkeit für die meisten Anwendungen."
+  },
+  "mode_speed_description": {
+    "description": "Beschreibung für den Geschwindigkeitstranskriptionsmodus.",
+    "message": "Schnellste Antwort, aber weniger genau. \nNeigt dazu, zu unterbrechen."
   }
 }

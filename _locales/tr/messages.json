@@ -390,5 +390,17 @@
       }
     },
     "message": "$product$'ın ses için nasıl ücretlendirildiğini öğrenin"
+  },
+  "mode_accuracy_description": {
+    "description": "Doğruluk transkripsiyon modunun açıklaması.",
+    "message": "En yüksek doğruluk, ancak daha yavaş transkripsiyon hızı. \nHalüsinasyonlara eğilimli."
+  },
+  "mode_balanced_description": {
+    "description": "Dengeli transkripsiyon modunun açıklaması.",
+    "message": "Çoğu kullanım için iyi bir hız ve doğruluk dengesi."
+  },
+  "mode_speed_description": {
+    "description": "Hızlı transkripsiyon modunun açıklaması.",
+    "message": "En hızlı yanıt, ancak daha az doğru. \nBölmeye eğilimli."
   }
 }

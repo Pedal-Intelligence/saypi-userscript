@@ -390,5 +390,17 @@
       }
     },
     "message": "Lue, miten $product$ veloittaa äänestä"
+  },
+  "mode_accuracy_description": {
+    "description": "Tarkkuustranskriptiotilan kuvaus.",
+    "message": "Suurin tarkkuus, mutta hitaampi transkriptionopeus. \nAltis hallusinaatioille."
+  },
+  "mode_balanced_description": {
+    "description": "Kuvaus tasapainotetusta transkriptiotilasta.",
+    "message": "Hyvä tasapaino nopeuden ja tarkkuuden välillä useimpiin käyttötarkoituksiin."
+  },
+  "mode_speed_description": {
+    "description": "Kuvaus nopeustranskriptiotilasta.",
+    "message": "Nopein vastaus, mutta vähemmän tarkka. \nTaipuvainen keskeyttämään."
   }
 }

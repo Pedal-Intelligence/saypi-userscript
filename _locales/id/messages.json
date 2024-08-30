@@ -390,5 +390,17 @@
   "unlockInstruction": {
     "description": "Petunjuk memberi tahu pengguna cara membuka kunci layar saat terkunci.",
     "message": "Tahan untuk membuka kunci."
+  },
+  "mode_accuracy_description": {
+    "description": "Deskripsi untuk mode transkripsi akurasi.",
+    "message": "Akurasi tertinggi, tetapi kecepatan transkripsi lebih lambat. \nRawan halusinasi."
+  },
+  "mode_balanced_description": {
+    "description": "Deskripsi untuk mode transkripsi seimbang.",
+    "message": "Keseimbangan kecepatan dan akurasi yang baik untuk sebagian besar penggunaan."
+  },
+  "mode_speed_description": {
+    "description": "Deskripsi untuk mode transkripsi kecepatan.",
+    "message": "Respon tercepat, namun kurang akurat. \nCenderung mengganggu."
   }
 }

@@ -390,5 +390,17 @@
       }
     },
     "message": "Découvrez comment $product$ facture l'audio"
+  },
+  "mode_accuracy_description": {
+    "description": "Description du mode de transcription de précision.",
+    "message": "Précision la plus élevée, mais vitesse de transcription plus lente. \nSujet aux hallucinations."
+  },
+  "mode_balanced_description": {
+    "description": "Description du mode de transcription équilibrée.",
+    "message": "Bon équilibre entre vitesse et précision pour la plupart des utilisations."
+  },
+  "mode_speed_description": {
+    "description": "Description du mode de transcription rapide.",
+    "message": "Réponse la plus rapide, mais moins précise. \nEnclin à interrompre."
   }
 }

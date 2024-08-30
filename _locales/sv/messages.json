@@ -390,5 +390,17 @@
       }
     },
     "message": "Läs om hur $product$ tar betalt för ljud"
+  },
+  "mode_accuracy_description": {
+    "description": "Beskrivning för noggrannhetstranskriptionsläget.",
+    "message": "Högsta noggrannhet, men långsammare transkriptionshastighet. \nBenägen till hallucinationer."
+  },
+  "mode_balanced_description": {
+    "description": "Beskrivning för det balanserade transkriptionsläget.",
+    "message": "Bra balans mellan hastighet och noggrannhet för de flesta användningsområden."
+  },
+  "mode_speed_description": {
+    "description": "Beskrivning för hastighetstranskriptionsläget.",
+    "message": "Snabbast svar, men mindre exakt. \nBenägna att avbryta."
   }
 }

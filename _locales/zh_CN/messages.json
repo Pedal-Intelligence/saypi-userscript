@@ -390,5 +390,17 @@
       }
     },
     "message": "了解 $product$ 如何对音频收费"
+  },
+  "mode_accuracy_description": {
+    "description": "准确度转录模式的说明。",
+    "message": "准确度最高，但转录速度较慢。\n容易产生幻觉。"
+  },
+  "mode_balanced_description": {
+    "description": "平衡转录模式的描述。",
+    "message": "对于大多数用途来说，速度和准确性之间取得了良好的平衡。"
+  },
+  "mode_speed_description": {
+    "description": "速度转录模式的说明。",
+    "message": "响应速度最快，但准确性较差。\n容易打断。"
   }
 }

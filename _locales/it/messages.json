@@ -390,5 +390,17 @@
   "unlockInstruction": {
     "description": "Istruzioni che indicano all'utente come sbloccare lo schermo quando è bloccato.",
     "message": "Tieni premuto per sbloccare."
+  },
+  "mode_accuracy_description": {
+    "description": "Descrizione per la modalità di trascrizione accurata.",
+    "message": "Massima precisione, ma velocità di trascrizione più lenta. \nIncline alle allucinazioni."
+  },
+  "mode_balanced_description": {
+    "description": "Descrizione della modalità di trascrizione bilanciata.",
+    "message": "Buon equilibrio tra velocità e precisione per la maggior parte degli usi."
+  },
+  "mode_speed_description": {
+    "description": "Descrizione per la modalità di trascrizione veloce.",
+    "message": "Risposta più rapida, ma meno precisa. \nIncline a interrompere."
   }
 }

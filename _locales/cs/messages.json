@@ -390,5 +390,17 @@
       }
     },
     "message": "Přečtěte si, jak $product$ účtuje za zvuk"
+  },
+  "mode_accuracy_description": {
+    "description": "Popis režimu přesnosti přepisu.",
+    "message": "Nejvyšší přesnost, ale nižší rychlost přepisu. \nSklon k halucinacím."
+  },
+  "mode_balanced_description": {
+    "description": "Popis vyváženého transkripčního režimu.",
+    "message": "Dobrá rovnováha mezi rychlostí a přesností pro většinu použití."
+  },
+  "mode_speed_description": {
+    "description": "Popis režimu přepisu rychlosti.",
+    "message": "Nejrychlejší odezva, ale méně přesná. \nNáchylné k vyrušování."
   }
 }

@@ -390,5 +390,17 @@
       }
     },
     "message": "Tìm hiểu cách $product$ tính phí âm thanh"
+  },
+  "mode_accuracy_description": {
+    "description": "Mô tả cho chế độ sao chép chính xác.",
+    "message": "Độ chính xác cao nhất nhưng tốc độ sao chép chậm hơn. \nDễ bị ảo giác."
+  },
+  "mode_balanced_description": {
+    "description": "Mô tả cho chế độ sao chép cân bằng.",
+    "message": "Cân bằng tốt về tốc độ và độ chính xác cho hầu hết các mục đích sử dụng."
+  },
+  "mode_speed_description": {
+    "description": "Mô tả chế độ sao chép tốc độ.",
+    "message": "Phản hồi nhanh nhất nhưng kém chính xác hơn. \nDễ bị gián đoạn."
   }
 }
