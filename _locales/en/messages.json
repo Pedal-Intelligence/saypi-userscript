@@ -57,6 +57,18 @@
     "message": "Select your prefered transcription mode",
     "description": "The title (tooltip) of the control to select the prefered transcription mode."
   },
+  "mode_speed_description": {
+    "message": "Fastest response, but less accurate. Prone to interrupting.",
+    "description": "Description for the speed transcription mode."
+  },
+  "mode_balanced_description": {
+    "message": "Good balance of speed and accuracy for most uses.",
+    "description": "Description for the balanced transcription mode."
+  },
+  "mode_accuracy_description": {
+    "message": "Highest accuracy, but slower transcription speed. Prone to hallucinations.",
+    "description": "Description for the accuracy transcription mode."
+  },
   "lockButton": {
     "message": "Press to lock the screen",
     "description": "The title (tooltip) of the button to lock the screen against accidental touches."

@@ -67,6 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const messageKey = "mode_" + prefer;
     output.textContent = chrome.i18n.getMessage(messageKey);
     setActiveIcon(prefer);
+    showDescription(prefer);
   });
 
   // Update the current slider value (each time you drag the slider handle)
@@ -75,6 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const messageKey = "mode_" + preference;
     output.textContent = chrome.i18n.getMessage(messageKey);
     setActiveIcon(preference);
+    showDescription(preference);
 
     // Save the preference
     chrome.storage.sync.set({ prefer: preference }, function () {
@@ -91,6 +93,17 @@ document.addEventListener("DOMContentLoaded", function () {
         iconElement.classList.add("active");
       } else {
         iconElement.classList.remove("active");
+      }
+    });
+  }
+
+  function showDescription(preference) {
+    const descriptions = document.querySelectorAll(".description");
+    descriptions.forEach((description) => {
+      if (description.getAttribute("data-i18n") === `mode_${preference}_description`) {
+        description.classList.add("selected");
+      } else {
+        description.classList.remove("selected");
       }
     });
   }

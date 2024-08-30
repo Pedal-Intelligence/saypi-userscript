@@ -17,3 +17,20 @@
 #language-preference {
   display: block;
 }
+
+/* Descriptions */
+.description {
+  display: none;
+}
+.user-preference-item:hover .description,
+.user-preference-item:focus-within .description {
+  display: block;
+}
+/* hide the slider description unless it describes the selected preset */
+#preference-selector .description {
+  display: none;
+}
+#preference-selector.user-preference-item:hover .description.selected,
+#preference-selector.user-preference-item:focus-within .description.selected {
+  display: block;
+}
