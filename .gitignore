@@ -4,3 +4,6 @@ certificates/*.pem
 _locales_*_messages_json.js
 .DS_Store
 public/*.js
+public/*.js.LICENSE.txt
+public/*.js.map
+public/*.wasm
