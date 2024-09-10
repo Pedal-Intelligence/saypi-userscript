@@ -1,6 +1,6 @@
 {
   "name": "saypi-userscript",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "type": "module",
   "scripts": {
     "prebuild": "node i18n-validate.cjs",
@@ -42,7 +42,7 @@
     ]
   },
   "dependencies": {
-    "@ricky0123/vad-web": "^0.0.12",
+    "@ricky0123/vad-web": "^0.0.18",
     "@xstate/fsm": "^2.1.0",
     "@xstate/test": "^0.5.1",
     "axios": "^1.4.0",
