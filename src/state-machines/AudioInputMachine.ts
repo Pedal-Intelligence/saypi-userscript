@@ -7,6 +7,7 @@ import { debounce } from "lodash";
 import { getResourceUrl } from "../ResourceModule";
 
 const fullWorkletURL: string = getResourceUrl("vad.worklet.bundle.min.js");
+let stream: MediaStream;
 
 // Assuming EventBus is a property of Window and is of type any
 // You might want to provide a more specific type if available
@@ -19,6 +20,7 @@ declare global {
 let audioMimeType: string = "audio/wav";
 let speechStartTime: number = 0;
 const threshold: number = 1000; // 1000 ms = 1 second, about the length of "Hey, Pi"
+let listening: boolean = false;
 
 setupInterceptors();
 
@@ -29,6 +31,7 @@ let previousDeviceIds: string[] = [];
 let previousDefaultDevice: MediaDeviceInfo | null = null;
 
 async function monitorAudioInputDevices() {
+  
   if (microphone === null) {
     // No microphone instance, so nothing to monitor
     return;
@@ -71,8 +74,9 @@ async function monitorAudioInputDevices() {
     (id) => !currentDeviceIds.includes(id)
   );
 
+  
   if (microphone) {
-    const stream = microphone.stream;
+  
     const track = stream.getTracks()[0];
     const settings = track.getSettings();
     const deviceId = settings.deviceId;
@@ -104,6 +108,7 @@ async function monitorAudioInputDevices() {
     )?.label;
     console.log(`An audio input device has been removed: ${id} (${label})`);
   });
+  
 
   previousDeviceIds = currentDeviceIds;
 }
@@ -131,6 +136,25 @@ const debouncedOnFrameProcessed = debounce(
  * At min speech frames of 10, vad will start to detect speech after around 4 words
  **/
 
+function speechStarted(){
+
+  console.log("Speech started");
+  speechStartTime = Date.now();
+  EventBus.emit("saypi:userSpeaking");
+
+}
+ 
+
+function speechEnded(rawAudioData: Float32Array){
+  console.log("Speech ended");
+  const speechStopTime = Date.now();
+  const speechDuration = speechStopTime - speechStartTime;
+  const audioBlob = convertToWavBlob(rawAudioData);
+  EventBus.emit("audio:dataavailable", {
+    blob: audioBlob,
+    duration: speechDuration,
+  });
+}
 // Options for MicVAD
 const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
   workletURL: fullWorkletURL,
@@ -168,7 +192,7 @@ async function setupRecording(callback?: () => void): Promise<void> {
   }
 
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({
+     stream = await navigator.mediaDevices.getUserMedia({
       audio: {
         channelCount: 1,
         echoCancellation: true,
@@ -176,14 +200,38 @@ async function setupRecording(callback?: () => void): Promise<void> {
         noiseSuppression: true,
       },
     });
-
+    console.log("setupRecording() got user media");
     const partialVADOptions = {
       ...micVADOptions,
       stream,
     };
+    
+    console.log("setupRecording() created VAD Options");
 
-    console.debug("Permission granted for microphone access");
-    microphone = await MicVAD.new(partialVADOptions);
+    console.debug("Permission granted for microphone access");  
+    //microphone = await MicVAD.new(partialVADOptions);
+    console.log("about to init MicVAD without any real args, fullworkletUrl:" + fullWorkletURL);
+    try {
+      microphone = await MicVAD.new(partialVADOptions);
+      /*
+      microphone = await MicVAD.new({
+        workletURL: fullWorkletURL,
+      });  
+      */ 
+      /*
+      microphone = await MicVAD.new({
+        workletURL: fullWorkletURL,
+        onFrameProcessed: (probabilities) => { },
+        onSpeechStart: () => { },
+        onVADMisfire: () => { },
+        onSpeechEnd: (audio) => { },
+      });
+      */
+    } catch (error) {
+      console.log("error: " + error);
+      console.log("error: " + JSON.stringify(error));
+    }
+ 
     console.debug("VAD microphone loaded");
 
     if (typeof callback === "function") {
@@ -197,7 +245,8 @@ async function setupRecording(callback?: () => void): Promise<void> {
 function tearDownRecording(): void {
   if (microphone) {
     microphone.pause();
-    microphone.stream.getTracks().forEach((track) => track.stop());
+    listening = false;
+    stream.getTracks().forEach((track: { stop: () => any; }) => track.stop());
   }
   microphone = null;
 }
@@ -357,15 +406,26 @@ export const audioInputMachine = createMachine<
         context.recordingStartTime = Date.now();
 
         // Start recording
-        if (microphone && microphone.listening === false) {
+        if(microphone){
+          microphone.start();
+          listening = true;
+        }
+        
+        if (microphone && listening === false) {
           microphone.start();
         }
+        
       },
 
       prepareStop: (context, event) => {
-        if (microphone && microphone.listening === true) {
+        if(microphone){
           context.waitingToStop = true;
         }
+        
+        if (microphone && listening === true) {
+          context.waitingToStop = true;
+        }
+          
       },
 
       sendData: (
@@ -390,7 +450,10 @@ export const audioInputMachine = createMachine<
 
       stopIfWaiting: (SayPiContext) => {
         if (SayPiContext.waitingToStop === true) {
-          microphone?.pause();
+          if(microphone){
+            microphone.pause();
+            listening = false;
+          }
         }
       },
 
@@ -422,7 +485,7 @@ export const audioInputMachine = createMachine<
     },
     guards: {
       microphoneAcquired: (context, event) => {
-        return microphone !== null;
+       return microphone !== null;
       },
       pendingStart: (context, event) => {
         return context.waitingToStart === true;
