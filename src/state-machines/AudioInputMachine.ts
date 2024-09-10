@@ -7,6 +7,8 @@ import { debounce } from "lodash";
 import { getResourceUrl } from "../ResourceModule";
 
 const fullWorkletURL: string = getResourceUrl("vad.worklet.bundle.min.js");
+let listening : boolean = false;
+let stream : MediaStream;
 
 // Assuming EventBus is a property of Window and is of type any
 // You might want to provide a more specific type if available
@@ -72,7 +74,6 @@ async function monitorAudioInputDevices() {
   );
 
   if (microphone) {
-    const stream = microphone.stream;
     const track = stream.getTracks()[0];
     const settings = track.getSettings();
     const deviceId = settings.deviceId;
@@ -168,7 +169,7 @@ async function setupRecording(callback?: () => void): Promise<void> {
   }
 
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({
+    stream = await navigator.mediaDevices.getUserMedia({
       audio: {
         channelCount: 1,
         echoCancellation: true,
@@ -197,7 +198,8 @@ async function setupRecording(callback?: () => void): Promise<void> {
 function tearDownRecording(): void {
   if (microphone) {
     microphone.pause();
-    microphone.stream.getTracks().forEach((track) => track.stop());
+    listening = false;
+    stream.getTracks().forEach((track) => track.stop());
   }
   microphone = null;
 }
@@ -357,13 +359,14 @@ export const audioInputMachine = createMachine<
         context.recordingStartTime = Date.now();
 
         // Start recording
-        if (microphone && microphone.listening === false) {
+        if (microphone && listening === false) {
           microphone.start();
+          listening = true;
         }
       },
 
       prepareStop: (context, event) => {
-        if (microphone && microphone.listening === true) {
+        if (microphone && listening === true) {
           context.waitingToStop = true;
         }
       },
@@ -390,7 +393,10 @@ export const audioInputMachine = createMachine<
 
       stopIfWaiting: (SayPiContext) => {
         if (SayPiContext.waitingToStop === true) {
-          microphone?.pause();
+          if(microphone){
+            microphone.pause();
+            listening = false;
+          }
         }
       },
 
