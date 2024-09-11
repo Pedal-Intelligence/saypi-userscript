@@ -96,7 +96,10 @@ const placeholderVoice: SpeechSynthesisVoiceRemote = {
   voiceURI: "",
 };
 
-function isPlaceholderUtterance(utterance: SpeechUtterance): boolean {
+function isPlaceholderUtterance(utterance: SpeechUtterance | string): boolean {
+  if (typeof utterance === "string") {
+    return utterance.startsWith("placeholder-");
+  }
   return utterance instanceof SpeechPlaceholder;
 }
 
