@@ -1,5 +1,6 @@
 import { getResourceUrl } from "../ResourceModule";
 import { Chatbot } from "../chatbots/Chatbot";
+import { PiAIChatbot } from "../chatbots/Pi";
 import { getMostRecentAssistantMessage } from "../dom/ChatHistory";
 import { Observation } from "../dom/Observation";
 import EventBus from "../events/EventBus";
@@ -89,9 +90,71 @@ export abstract class VoiceSelector {
       return false;
     }
 
-    const customVoiceButtons = Array(voices.length);
+    // filter voices into default and custom voices based on the voice.default property
+    const defaultVoices = voices.filter((voice) => voice.default);
+    const customVoices = voices.filter((voice) => !voice.default);
 
-    voices.forEach((voice) => {
+    this.populateDefaultVoices(defaultVoices, voiceSelector);
+    this.populateCustomVoices(customVoices, voiceSelector);
+
+    return true;
+  }
+
+  populateDefaultVoices(
+    defaultVoices: SpeechSynthesisVoiceRemote[],
+    voiceSelector: HTMLElement
+  ): void {
+    const defaultVoiceButtons = Array(defaultVoices.length);
+
+    defaultVoices.forEach((voice) => {
+      // if not already in the menu, add the voice
+      if (voiceSelector.querySelector(`button[data-voice-id="${voice.id}"]`)) {
+        // voice already in menu, skip to next voice
+        return;
+      }
+      const button = document.createElement("button");
+      // template: <button type="button" class="mb-1 rounded px-2 py-3 text-center hover:bg-neutral-300">Pi 6</button>
+      button.type = "button";
+      const additionalClasses = ["saypi-voice-button"];
+      const combinedClasses = [
+        ...this.getButtonClasses(),
+        ...additionalClasses,
+        voice.name.toLowerCase().replace(" ", "-"),
+      ];
+      button.classList.add(...combinedClasses);
+      button.innerText = voice.name;
+      button.addEventListener("click", () => {
+        this.userPreferences.setVoice(voice).then(() => {
+          console.log(`Selected voice: ${voice.name}`);
+          defaultVoiceButtons.forEach((button) => {
+            this.unmarkButtonAsSelectedVoice(button);
+          });
+          const voiceButtons = voiceSelector.querySelectorAll("button");
+          voiceButtons.forEach((button) => {
+            if (!this.isBuiltInVoiceButton(button as HTMLButtonElement)) {
+              this.unmarkButtonAsSelectedVoice(button as HTMLButtonElement);
+            }
+          });
+          this.markButtonAsSelectedVoice(button);
+          this.introduceVoice(voice);
+        });
+      });
+      button.dataset.voiceId = voice.id;
+      defaultVoiceButtons.push(button);
+    });
+
+    defaultVoiceButtons.forEach((button) => {
+      voiceSelector.appendChild(button);
+    });
+  }
+
+  populateCustomVoices(
+    customVoices: SpeechSynthesisVoiceRemote[],
+    voiceSelector: HTMLElement
+  ): void {
+    const customVoiceButtons = Array(customVoices.length);
+
+    customVoices.forEach((voice) => {
       // if not already in the menu, add the voice
       if (voiceSelector.querySelector(`button[data-voice-id="${voice.id}"]`)) {
         // voice already in menu, skip to next voice
@@ -140,8 +203,6 @@ export abstract class VoiceSelector {
     customVoiceButtons.reverse().forEach((button) => {
       voiceSelector.insertBefore(button, voiceSelector.firstChild);
     });
-
-    return true;
   }
 
   introduceVoice(voice: SpeechSynthesisVoiceRemote): void {
@@ -149,14 +210,24 @@ export abstract class VoiceSelector {
     const name = voice.name.toLowerCase().replace(" ", "_");
     const introduction =
       lastMessage?.text || getMessage(`voiceIntroduction_${name}`);
-    const speechSynthesis = SpeechSynthesisModule.getInstance();
-    const notEnglish = "";
-    speechSynthesis
-      .createSpeech(introduction, false, notEnglish)
-      .then((utterance) => {
-        utterance.voice = voice;
-        speechSynthesis.speak(utterance);
-      });
+    if (voice.default && this.chatbot instanceof PiAIChatbot) {
+      const pi = this.chatbot as PiAIChatbot;
+      const introductionUrl = pi.getVoiceIntroductionUrl(voice.id);
+      if (introductionUrl) {
+        // play the introduction audio
+        EventBus.emit("audio:load", { url: introductionUrl });
+      }
+    } else {
+      // introduce the custom voice
+      const speechSynthesis = SpeechSynthesisModule.getInstance();
+      const notEnglish = "";
+      speechSynthesis
+        .createSpeech(introduction, false, notEnglish)
+        .then((utterance) => {
+          utterance.voice = voice;
+          speechSynthesis.speak(utterance);
+        });
+    }
   }
 
   // Listen for additions of custom voice buttons and update selections
@@ -329,6 +400,7 @@ export class VoiceMenu extends VoiceSelector {
               this.userPreferences.getTextToSpeechEnabled().then((enabled) => {
                 if (enabled) this.addVoicesToSelector(voiceMenu);
               });
+              this.addMissingPiVoices(voiceMenu);
               this.registerVoiceChangeHandler(voiceMenu);
             }
           }
@@ -349,6 +421,26 @@ export class VoiceMenu extends VoiceSelector {
     const observer = new MutationObserver(observerCallback);
     observer.observe(audioControlsContainer, { childList: true });
     return Observation.foundAndDecorated(foundAudioCtrls); // Assuming listener doesn't require further checks
+  }
+
+  addMissingPiVoices(voiceMenu: HTMLElement) {
+    // only for Pi.ai
+    if (!(this.chatbot instanceof PiAIChatbot)) {
+      return;
+    }
+    const pi = this.chatbot as PiAIChatbot;
+    // count the number of original Pi voices in the menu
+    let piVoices = 0;
+    const voiceButtons = Array.from(voiceMenu.querySelectorAll("button"));
+    voiceButtons.forEach((button) => {
+      if (this.isBuiltInVoiceButton(button as HTMLButtonElement)) {
+        piVoices++;
+      }
+    });
+    // if fewer than 8 Pi voices, add the missing Pi voices to the menu
+    if (piVoices < 8) {
+      this.populateVoices(pi.getExtraVoices(), voiceMenu);
+    }
   }
 }
 

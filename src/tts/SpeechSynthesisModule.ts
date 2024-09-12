@@ -81,7 +81,7 @@ class SpeechSynthesisModule {
   initProvider(): void {
     const audioControls = new AudioControlsModule();
     this.getActiveAudioProvider().then((provider) => {
-      audioControls.useAudioOutputProvider(provider);
+      audioControls.notifyAudioProviderSelection(provider);
     });
   }
 
@@ -218,7 +218,9 @@ class SpeechSynthesisModule {
   async getActiveAudioProvider(): Promise<AudioProvider> {
     const customVoiceIsSelected = await this.userPreferences.hasVoice();
     if (customVoiceIsSelected) {
-      return audioProviders.SayPi;
+      // custom voice can be a multi-language voice by SayPi (e.g. Paola and Joey), or an "extra" voice by Pi (i.e. Pi 7 and Pi 8)
+      const voice = await this.userPreferences.getVoice();
+      return audioProviders.retreiveProviderByVoice(voice!); // voice is not null if customVoiceIsSelected is true
     }
     return audioProviders.Pi;
   }

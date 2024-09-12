@@ -356,6 +356,9 @@ export default class AudioModule {
     EventBus.on("audio:changeProvider", (detail) => {
       outputActor.send({ type: "changeProvider", ...detail });
     });
+    EventBus.on("audio:changeVoice", (detail) => {
+      outputActor.send({ type: "changeVoice", ...detail });
+    });
     EventBus.on("audio:skipNext", (e) => {
       outputActor.send("skipNext");
     });

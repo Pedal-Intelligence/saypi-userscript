@@ -9,6 +9,8 @@ import {
 import {
   AudioProvider,
   audioProviders,
+  SourceMatchableVoice,
+  SpeechSynthesisVoiceRemote,
   SpeechUtterance,
 } from "../tts/SpeechModel";
 const { log } = actions;
@@ -17,6 +19,10 @@ type LoadstartEvent = { type: "loadstart"; source: string };
 type ChangeProviderEvent = {
   type: "changeProvider";
   provider: AudioProvider; // default or custom provider
+};
+type ChangeVoiceEvent = {
+  type: "changeVoice";
+  voice: SourceMatchableVoice | null;
 };
 type ReplayingAudioEvent = { type: "replaying" };
 type AudioOutputEvent =
@@ -30,6 +36,7 @@ type AudioOutputEvent =
   | { type: "seeked" }
   | { type: "emptied" }
   | ChangeProviderEvent
+  | ChangeVoiceEvent
   | ReplayingAudioEvent;
 export const audioOutputMachine = createMachine(
   {
@@ -39,6 +46,7 @@ export const audioOutputMachine = createMachine(
       autoplay: false,
       replaying: false,
       provider: audioProviders.Pi,
+      voice: null,
     },
     id: "audioOutput",
     initial: "idle",
@@ -196,6 +204,7 @@ export const audioOutputMachine = createMachine(
         autoplay: boolean;
         replaying: boolean;
         provider: AudioProvider;
+        voice: SourceMatchableVoice | null;
       },
     },
     predictableActionArguments: true,
@@ -232,6 +241,8 @@ export const audioOutputMachine = createMachine(
           event = event as LoadstartEvent;
 
           const isNotReplaying = !context.replaying;
+          const isVoiceMismatch =
+            context.voice && !context.voice.matches(event.source);
           const isSourceMismatch = !context.provider.matches(event.source);
 
           return (isNotReplaying && isSourceMismatch) || shouldSkip;

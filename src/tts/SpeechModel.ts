@@ -37,6 +37,23 @@ const audioProviders = {
   SayPi: new BaseAudioProvider("Say, Pi", saypiAudioDomain),
   Pi: new BaseAudioProvider("Pi", "pi.ai"),
   // Add more providers as needed
+
+  // function to get the provider from the text to speech engine name
+  retrieveProviderByEngine: (powered_by: string): AudioProvider => {
+    switch (powered_by) {
+      case "ElevenLabs":
+        return audioProviders.SayPi;
+      case "inflection.ai":
+        return audioProviders.Pi;
+      default:
+        throw new Error(`Provider powered by ${powered_by} not found.`);
+    }
+  },
+  retreiveProviderByVoice: (
+    voice: SpeechSynthesisVoiceRemote
+  ): AudioProvider => {
+    return audioProviders.retrieveProviderByEngine(voice.powered_by);
+  },
 };
 
 interface SpeechUtterance {
@@ -180,6 +197,113 @@ interface SpeechSynthesisVoiceRemote extends SpeechSynthesisVoice {
   powered_by: string;
 }
 
+interface SourceMatchableVoice {
+  matches(source: string): boolean;
+}
+
+class VoiceFactory {
+  static from(v: SpeechSynthesisVoiceRemote): SourceMatchableVoice {
+    const provider = audioProviders.retrieveProviderByEngine(v.powered_by);
+    switch (provider) {
+      case audioProviders.SayPi:
+        return new SayPiVoice(v.id, v.lang, v, v.voiceURI);
+      case audioProviders.Pi:
+        return new PiAIVoice(v.id);
+      default:
+        throw new Error(`Provider ${provider.name} not found.`);
+    }
+  }
+}
+
+abstract class AIVoice
+  implements SpeechSynthesisVoiceRemote, SourceMatchableVoice
+{
+  id: string;
+  price: number;
+  powered_by: string;
+  default: boolean;
+  lang: string;
+  localService: boolean;
+  name: string;
+  voiceURI: string;
+  constructor(
+    id: string,
+    name: string,
+    lang: string,
+    price: number,
+    powered_by: string,
+    defaultVoice: boolean,
+    localService: boolean,
+    voiceURI: string
+  ) {
+    this.id = id;
+    this.name = name;
+    this.lang = lang;
+    this.price = price;
+    this.powered_by = powered_by;
+    this.default = defaultVoice;
+    this.localService = localService;
+    this.voiceURI = voiceURI;
+  }
+  matches(source: string): boolean {
+    throw new Error("Method not implemented.");
+  }
+}
+
+class PiAIVoice extends AIVoice {
+  constructor(voice: SpeechSynthesisVoiceRemote) {
+    super(
+      voice.id,
+      voice.name,
+      voice.lang,
+      voice.price,
+      voice.powered_by,
+      voice.default,
+      voice.localService,
+      voice.voiceURI
+    );
+  }
+
+  matches(source: string): boolean {
+    const url = new URL(source);
+    const voiceId = url.searchParams.get("voice");
+    return voiceId === this.id;
+  }
+}
+
+class SayPiVoice extends AIVoice {
+  constructor(
+    id: string,
+    lang: string,
+    voice: SpeechSynthesisVoiceRemote,
+    uri: string
+  ) {
+    super(
+      id,
+      voice.name,
+      lang,
+      voice.price,
+      voice.powered_by,
+      voice.default,
+      voice.localService,
+      uri
+    );
+  }
+
+  matches(source: string): boolean {
+    return source === this.voiceURI;
+  }
+}
+
+class ChangeVoiceEvent {
+  type: string = "audio:changeVoice";
+  voice: SourceMatchableVoice | null;
+
+  constructor(voice: SourceMatchableVoice | null) {
+    this.voice = voice;
+  }
+}
+
 interface StreamedSpeech {
   utterance: SpeechUtterance;
   charge?: UtteranceCharge;
@@ -201,6 +325,10 @@ export {
   AssistantSpeech,
   SpeechUtterance,
   SpeechSynthesisVoiceRemote,
+  SourceMatchableVoice,
+  AIVoice,
+  PiAIVoice,
+  ChangeVoiceEvent,
   SpeechPlaceholder,
   SayPiSpeech,
   PiSpeech,

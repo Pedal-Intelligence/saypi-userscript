@@ -231,6 +231,7 @@ class UserPreferenceModule {
   }
 
   public setVoice(voice: SpeechSynthesisVoiceRemote): Promise<void> {
+    const provider = audioProviders.retrieveProviderByEngine(voice.powered_by); // should powered_by be distinct from provided_by?
     if (
       typeof chrome !== "undefined" &&
       chrome.storage &&
@@ -238,12 +239,12 @@ class UserPreferenceModule {
     ) {
       chrome.storage.sync.set({ voiceId: voice.id });
       const audioControls = new AudioControlsModule();
-      audioControls.useAudioOutputProvider(audioProviders.SayPi); // TODO: replace with voice.provided_by
+      audioControls.notifyAudioVoiceSelection(voice);
     }
     EventBus.emit("userPreferenceChanged", {
       voiceId: voice.id,
       voice: voice,
-      audioProvider: audioProviders.SayPi,
+      audioProvider: provider,
     });
     return Promise.resolve();
   }
@@ -258,7 +259,7 @@ class UserPreferenceModule {
         if (result.voiceId) {
           chrome.storage.sync.remove("voiceId");
           const audioControls = new AudioControlsModule();
-          audioControls.useAudioOutputProvider(audioProviders.Pi);
+          audioControls.notifyAudioVoiceDeselection();
         }
       });
     }
