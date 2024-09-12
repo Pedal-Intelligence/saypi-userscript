@@ -23,6 +23,7 @@
         "public/silero_vad.onnx",
         "public/*.wasm",
         "public/vad.worklet.bundle.min.js",
+        "public/ort-wasm-simd-threaded.mjs",
         "public/audio/*.mp3",
         "public/icons/*.svg",
         "public/icons/*.png",

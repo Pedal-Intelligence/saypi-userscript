@@ -6,6 +6,7 @@ mkdir -p dist/chrome-extension/public/audio
 cp public/*.wasm dist/chrome-extension/public
 cp public/saypi.user.js dist/chrome-extension/public
 cp public/silero_vad.onnx dist/chrome-extension/public
+cp public/ort-wasm-simd-threaded.mjs dist/chrome-extension/public
 cp public/vad.worklet.bundle.min.js dist/chrome-extension/public
 cp public/audio/*.mp3 dist/chrome-extension/public/audio
 mkdir -p dist/chrome-extension/public/icons/logos
