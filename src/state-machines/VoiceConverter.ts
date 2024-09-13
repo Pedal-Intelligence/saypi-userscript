@@ -42,9 +42,7 @@ export const voiceConverterMachine = createMachine({
       on: {
         changeVoice: {
           target: "voiceSelected",
-          actions: assign({
-            // ...
-          }),
+          actions: "assignVoice",
           cond: {
             type: "restoredVoice",
           },
@@ -99,9 +97,9 @@ export const voiceConverterMachine = createMachine({
               speech.id,
               speech.lang,
               voice,
-              speech.uri
+              speech.uri.replace(speech.voice.id, voice.id)
             );
-            EventBus.emit("audio:load", { source: newSpeech.uri });
+            EventBus.emit("audio:load", { url: newSpeech.uri });
           }
         });
       }
