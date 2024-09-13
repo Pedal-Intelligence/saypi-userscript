@@ -277,14 +277,13 @@ export default class AudioModule {
     const events = [
       "loadedmetadata",
       "canplaythrough",
-      "play",
       "pause",
       "ended",
       "seeked",
       "emptied",
     ];
 
-    const sourcedEvents = ["loadstart"];
+    const sourcedEvents = ["loadstart", "play"];
     sourcedEvents.forEach((event) => {
       audio.addEventListener(event, (e) => {
         const detail = { source: audio.currentSrc };
@@ -293,11 +292,13 @@ export default class AudioModule {
     });
 
     events.forEach((event) => {
-      audio.addEventListener(event, () => actor.send(event));
+      audio.addEventListener(event, () => {
+        actor.send(event);
+      });
     });
 
     audio.addEventListener("playing", () => {
-      actor.send("play");
+      actor.send("play", { source: audio.currentSrc });
     });
   }
 
@@ -392,7 +393,10 @@ export default class AudioModule {
       this.audioElement.pause();
 
       // Skip to the end to simulate the completion of the audio, preventing it from being resumed
-      if (!isNaN(this.audioElement.duration)) {
+      if (
+        Number.isFinite(this.audioElement.duration) &&
+        !isNaN(this.audioElement.duration)
+      ) {
         this.audioElement.currentTime = this.audioElement.duration;
       }
     });

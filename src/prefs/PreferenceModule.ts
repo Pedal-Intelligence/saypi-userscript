@@ -267,9 +267,9 @@ class UserPreferenceModule {
       chrome.storage.sync.get(["voiceId"]).then((result: StorageResult) => {
         if (result.voiceId) {
           chrome.storage.sync.remove("voiceId");
-          const audioControls = new AudioControlsModule();
-          audioControls.notifyAudioVoiceDeselection();
         }
+        const audioControls = new AudioControlsModule();
+        audioControls.notifyAudioVoiceDeselection();
       });
     }
     EventBus.emit("userPreferenceChanged", {

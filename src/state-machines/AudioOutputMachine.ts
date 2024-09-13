@@ -16,6 +16,8 @@ import {
 const { log } = actions;
 
 type LoadstartEvent = { type: "loadstart"; source: string };
+type PlayEvent = { type: "play"; source: string };
+type SourcedPlaybackEvent = LoadstartEvent | PlayEvent; // { type: string; source: string };
 type ChangeProviderEvent = {
   type: "changeProvider";
   provider: AudioProvider; // default or custom provider
@@ -29,7 +31,7 @@ type AudioOutputEvent =
   | LoadstartEvent
   | { type: "skipNext" }
   | { type: "loadedmetadata" }
-  | { type: "play" }
+  | PlayEvent
   | { type: "pause" }
   | { type: "ended" }
   | { type: "canplaythrough" }
@@ -88,6 +90,28 @@ export const audioOutputMachine = createMachine(
               cond: "shouldSkip",
               internal: true,
               description: `Skip this track.`,
+              actions: [
+                assign((context, event) => {
+                  return {
+                    ...context,
+                    skip: false,
+                  };
+                }),
+                {
+                  type: "skipCurrent",
+                },
+              ],
+            },
+            {
+              target: "loading",
+            },
+          ],
+          play: [
+            {
+              target: "idle",
+              cond: "shouldSkip",
+              internal: true,
+              description: `Skip this track when play is requested of an already loaded track. (navigation from another page to talk page)`,
               actions: [
                 assign((context, event) => {
                   return {
@@ -178,9 +202,26 @@ export const audioOutputMachine = createMachine(
           },
           paused: {
             on: {
-              play: {
-                target: "playing",
-              },
+              play: [
+                {
+                  target: "paused",
+                  cond: "shouldSkip",
+                  actions: [
+                    assign((context, event) => {
+                      return {
+                        ...context,
+                        skip: false,
+                      };
+                    }),
+                    {
+                      type: "skipCurrent",
+                    },
+                  ],
+                },
+                {
+                  target: "playing",
+                },
+              ],
             },
           },
           ended: {
@@ -246,13 +287,14 @@ export const audioOutputMachine = createMachine(
       shouldSkip: (context, event: AudioOutputEvent) => {
         const shouldSkip = context.skip === true;
 
-        if (event.type === "loadstart") {
-          event = event as LoadstartEvent;
+        if (event.type === "loadstart" || event.type === "play") {
+          const sourcedEvent = event as SourcedPlaybackEvent;
+          const src = sourcedEvent.source;
 
           const isNotReplaying = !context.replaying;
           const isVoiceMismatch =
-            context.voice && !context.voice.matchesSource(event.source);
-          const isProviderMismatch = !context.provider.matches(event.source);
+            context.voice && !context.voice.matchesSource(src);
+          const isProviderMismatch = !context.provider.matches(src);
           const isSourceMismatch = isVoiceMismatch || isProviderMismatch;
 
           return (isNotReplaying && isSourceMismatch) || shouldSkip;

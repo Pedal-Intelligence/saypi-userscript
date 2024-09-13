@@ -119,10 +119,10 @@ export const voiceConverterMachine = createMachine({
       event: VoiceConverterEvent
     ) {
       if (event.type === "changeVoice") {
-        const selectedVoice = event.voice;
+        const selectedVoice = event.voice; // The voice selected by the user - may be null if the user has selected a default voice
         const restoredVoices = pi.getExtraVoices();
         for (let i = 0; i < restoredVoices.length; i++) {
-          if (selectedVoice.matchesId(restoredVoices[i].id)) {
+          if (selectedVoice?.matchesId(restoredVoices[i].id)) {
             return true;
           }
         }
