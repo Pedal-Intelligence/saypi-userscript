@@ -13,6 +13,7 @@ import {
   SpeechSynthesisVoiceRemote,
   SpeechUtterance,
 } from "../tts/SpeechModel";
+import { is } from "cheerio/lib/api/traversing.js";
 const { log } = actions;
 
 type LoadstartEvent = { type: "loadstart"; source: string };
@@ -57,6 +58,15 @@ export const audioOutputMachine = createMachine(
           return {
             ...context,
             provider: event.provider,
+          };
+        }),
+      },
+      changeVoice: {
+        internal: true,
+        actions: assign((context, event) => {
+          return {
+            ...context,
+            voice: event.voice,
           };
         }),
       },
@@ -243,7 +253,8 @@ export const audioOutputMachine = createMachine(
           const isNotReplaying = !context.replaying;
           const isVoiceMismatch =
             context.voice && !context.voice.matches(event.source);
-          const isSourceMismatch = !context.provider.matches(event.source);
+          const isProviderMismatch = !context.provider.matches(event.source);
+          const isSourceMismatch = isVoiceMismatch || isProviderMismatch;
 
           return (isNotReplaying && isSourceMismatch) || shouldSkip;
         }

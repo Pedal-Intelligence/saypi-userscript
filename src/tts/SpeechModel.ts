@@ -202,13 +202,15 @@ interface SourceMatchableVoice {
 }
 
 class VoiceFactory {
-  static from(v: SpeechSynthesisVoiceRemote): SourceMatchableVoice {
+  static matchableFromVoiceRemote(
+    v: SpeechSynthesisVoiceRemote
+  ): SourceMatchableVoice {
     const provider = audioProviders.retrieveProviderByEngine(v.powered_by);
     switch (provider) {
       case audioProviders.SayPi:
         return new SayPiVoice(v.id, v.lang, v, v.voiceURI);
       case audioProviders.Pi:
-        return new PiAIVoice(v.id);
+        return PiAIVoice.fromVoice(v);
       default:
         throw new Error(`Provider ${provider.name} not found.`);
     }
@@ -251,23 +253,34 @@ abstract class AIVoice
 }
 
 class PiAIVoice extends AIVoice {
-  constructor(voice: SpeechSynthesisVoiceRemote) {
+  constructor(voiceNumber: number) {
     super(
-      voice.id,
-      voice.name,
-      voice.lang,
-      voice.price,
-      voice.powered_by,
-      voice.default,
-      voice.localService,
-      voice.voiceURI
+      `voice${voiceNumber}`,
+      `Pi ${voiceNumber}`,
+      "en",
+      0,
+      "inflection.ai",
+      true,
+      false,
+      ""
     );
   }
 
   matches(source: string): boolean {
     const url = new URL(source);
     const voiceId = url.searchParams.get("voice");
-    return voiceId === this.id;
+    const matchingSpeechRequest = voiceId === this.id;
+
+    // or source is an introduction speech of the type https://pi.ai/public/media/voice-previews/voice-8.mp3
+    const voiceNumber = Number(this.id.slice(-1));
+    const matchingIntroSpeech = source.endsWith(`voice-${voiceNumber}.mp3`);
+
+    return matchingSpeechRequest || matchingIntroSpeech;
+  }
+
+  static fromVoice(v: SpeechSynthesisVoiceRemote): PiAIVoice {
+    const voiceNumber = Number(v.id.slice(-1));
+    return new PiAIVoice(voiceNumber);
   }
 }
 
@@ -291,12 +304,14 @@ class SayPiVoice extends AIVoice {
   }
 
   matches(source: string): boolean {
-    return source === this.voiceURI;
+    // voice_id query parameter in the URL should match the voice id
+    const url = new URL(source);
+    const voiceId = url.searchParams.get("voice_id");
+    return voiceId === this.id;
   }
 }
 
 class ChangeVoiceEvent {
-  type: string = "audio:changeVoice";
   voice: SourceMatchableVoice | null;
 
   constructor(voice: SourceMatchableVoice | null) {
@@ -326,6 +341,7 @@ export {
   SpeechUtterance,
   SpeechSynthesisVoiceRemote,
   SourceMatchableVoice,
+  VoiceFactory,
   AIVoice,
   PiAIVoice,
   ChangeVoiceEvent,

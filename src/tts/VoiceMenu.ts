@@ -71,7 +71,10 @@ export abstract class VoiceSelector {
   }
 
   protected isBuiltInVoiceButton(button: HTMLButtonElement): boolean {
-    return !button.classList.contains("saypi-custom-voice");
+    return !(
+      button.classList.contains("saypi-custom-voice") ||
+      button.classList.contains("saypi-restored-voice")
+    );
   }
 
   addVoicesToSelector(voiceSelector: HTMLElement): void {
@@ -109,13 +112,18 @@ export abstract class VoiceSelector {
     defaultVoices.forEach((voice) => {
       // if not already in the menu, add the voice
       if (voiceSelector.querySelector(`button[data-voice-id="${voice.id}"]`)) {
-        // voice already in menu, skip to next voice
+        // voice already in menu, move voice to end of menu and skip to next voice
+        const button = voiceSelector.querySelector(
+          `button[data-voice-id="${voice.id}"]`
+        );
+        voiceSelector.appendChild(button as HTMLElement);
+
         return;
       }
       const button = document.createElement("button");
       // template: <button type="button" class="mb-1 rounded px-2 py-3 text-center hover:bg-neutral-300">Pi 6</button>
       button.type = "button";
-      const additionalClasses = ["saypi-voice-button"];
+      const additionalClasses = ["saypi-voice-button", "saypi-restored-voice"];
       const combinedClasses = [
         ...this.getButtonClasses(),
         ...additionalClasses,
@@ -131,9 +139,7 @@ export abstract class VoiceSelector {
           });
           const voiceButtons = voiceSelector.querySelectorAll("button");
           voiceButtons.forEach((button) => {
-            if (!this.isBuiltInVoiceButton(button as HTMLButtonElement)) {
-              this.unmarkButtonAsSelectedVoice(button as HTMLButtonElement);
-            }
+            this.unmarkButtonAsSelectedVoice(button as HTMLButtonElement);
           });
           this.markButtonAsSelectedVoice(button);
           this.introduceVoice(voice);
@@ -274,6 +280,26 @@ export abstract class VoiceSelector {
         }
       }
     });
+  }
+
+  addMissingPiVoices(voiceSelector: HTMLElement) {
+    // only for Pi.ai
+    if (!(this.chatbot instanceof PiAIChatbot)) {
+      return;
+    }
+    const pi = this.chatbot as PiAIChatbot;
+    // count the number of original Pi voices in the menu
+    let piVoices = 0;
+    const voiceButtons = Array.from(voiceSelector.querySelectorAll("button"));
+    voiceButtons.forEach((button) => {
+      if (this.isBuiltInVoiceButton(button as HTMLButtonElement)) {
+        piVoices++;
+      }
+    });
+    // if fewer than 8 Pi voices, add the missing Pi voices to the menu
+    if (piVoices < 8) {
+      this.populateVoices(pi.getExtraVoices(), voiceSelector);
+    }
   }
 }
 
@@ -422,26 +448,6 @@ export class VoiceMenu extends VoiceSelector {
     observer.observe(audioControlsContainer, { childList: true });
     return Observation.foundAndDecorated(foundAudioCtrls); // Assuming listener doesn't require further checks
   }
-
-  addMissingPiVoices(voiceMenu: HTMLElement) {
-    // only for Pi.ai
-    if (!(this.chatbot instanceof PiAIChatbot)) {
-      return;
-    }
-    const pi = this.chatbot as PiAIChatbot;
-    // count the number of original Pi voices in the menu
-    let piVoices = 0;
-    const voiceButtons = Array.from(voiceMenu.querySelectorAll("button"));
-    voiceButtons.forEach((button) => {
-      if (this.isBuiltInVoiceButton(button as HTMLButtonElement)) {
-        piVoices++;
-      }
-    });
-    // if fewer than 8 Pi voices, add the missing Pi voices to the menu
-    if (piVoices < 8) {
-      this.populateVoices(pi.getExtraVoices(), voiceMenu);
-    }
-  }
 }
 
 export class VoiceSettings extends VoiceSelector {
@@ -454,8 +460,9 @@ export class VoiceSettings extends VoiceSelector {
     this.addIdVoiceMenu(element);
     SpeechSynthesisModule.getInstance()
       .getVoices()
-      .then((voices) => {
-        this.populateVoices(voices, element);
+      .then((multilingualVoices) => {
+        this.populateVoices(multilingualVoices, element);
+        this.addMissingPiVoices(element);
         this.handleExistingVoiceButtons(element);
         this.registerVoiceChangeHandler(element);
       });
