@@ -9,11 +9,10 @@ import {
 import {
   AudioProvider,
   audioProviders,
-  SourceMatchableVoice,
+  MatchableVoice,
   SpeechSynthesisVoiceRemote,
   SpeechUtterance,
 } from "../tts/SpeechModel";
-import { is } from "cheerio/lib/api/traversing.js";
 const { log } = actions;
 
 type LoadstartEvent = { type: "loadstart"; source: string };
@@ -23,7 +22,7 @@ type ChangeProviderEvent = {
 };
 type ChangeVoiceEvent = {
   type: "changeVoice";
-  voice: SourceMatchableVoice | null;
+  voice: MatchableVoice | null;
 };
 type ReplayingAudioEvent = { type: "replaying" };
 type AudioOutputEvent =
@@ -214,7 +213,7 @@ export const audioOutputMachine = createMachine(
         autoplay: boolean;
         replaying: boolean;
         provider: AudioProvider;
-        voice: SourceMatchableVoice | null;
+        voice: MatchableVoice | null;
       },
     },
     predictableActionArguments: true,
@@ -252,7 +251,7 @@ export const audioOutputMachine = createMachine(
 
           const isNotReplaying = !context.replaying;
           const isVoiceMismatch =
-            context.voice && !context.voice.matches(event.source);
+            context.voice && !context.voice.matchesSource(event.source);
           const isProviderMismatch = !context.provider.matches(event.source);
           const isSourceMismatch = isVoiceMismatch || isProviderMismatch;
 

@@ -2,6 +2,7 @@
 import { interpret } from "xstate";
 import { audioInputMachine } from "../state-machines/AudioInputMachine.ts";
 import { audioOutputMachine } from "../state-machines/AudioOutputMachine.ts";
+import { voiceConverterMachine } from "../state-machines/VoiceConverter.ts";
 import { machine as audioRetryMachine } from "../state-machines/AudioRetryMachine.ts";
 import { logger, serializeStateValue } from "../LoggingModule.js";
 import EventBus from "../events/EventBus.js";
@@ -46,6 +47,19 @@ export default class AudioModule {
       }
     });
 
+    this.voiceConverter = interpret(voiceConverterMachine);
+    this.voiceConverter.onTransition((state) => {
+      if (state.changed) {
+        const fromState = state.history
+          ? serializeStateValue(state.history.value)
+          : "N/A";
+        const toState = serializeStateValue(state.value);
+        logger.debug(
+          `Voice Converter Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
+        );
+      }
+    });
+
     // Safari audio error handling logic (known issue in at least Safari <= 17.4)
     if (isSafari()) {
       this.audioRetryActor = interpret(audioRetryMachine);
@@ -80,6 +94,8 @@ export default class AudioModule {
     // audio output (Pi)
     this.audioOutputActor.start();
     this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
+    // convert voice for Pi's missing voices - since 2024-09
+    this.registerAudioPlaybackEvents(this.audioElement, this.voiceConverter);
     // handle slow responses from pi.ai - since 2024-07
     const slowResponseHandler = SlowResponseHandler.getInstance();
     this.registerAudioErrorEvents(this.audioElement, slowResponseHandler);
@@ -88,7 +104,14 @@ export default class AudioModule {
 
     // audio input (user)
     this.audioInputActor.start();
-    this.registerAudioCommands(this.audioInputActor, this.audioOutputActor);
+    this.registerAudioCommands(
+      this.audioInputActor,
+      this.audioOutputActor,
+      this.voiceConverter
+    );
+
+    // voice converter
+    this.voiceConverter.start();
 
     if (isSafari()) {
       // audio retry
@@ -136,6 +159,7 @@ export default class AudioModule {
     this.audioElement = newAudioElement;
     this.decorateAudioElement(this.audioElement);
     this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
+    this.registerAudioPlaybackEvents(this.audioElement, this.voiceConverter);
     const slowResponseHandler = SlowResponseHandler.getInstance();
     this.registerAudioErrorEvents(this.audioElement, slowResponseHandler);
     if (isSafari()) {
@@ -247,7 +271,7 @@ export default class AudioModule {
   /**
    *
    * @param {HTMLAudioElement} audio
-   * @param {audioOutputMachine} actor
+   * @param {some interpreted state machine} actor
    */
   registerAudioPlaybackEvents(audio, actor) {
     const events = [
@@ -315,7 +339,7 @@ export default class AudioModule {
   }
 
   /* These events are used to control/pass requests to the audio module from other modules */
-  registerAudioCommands(inputActor, outputActor) {
+  registerAudioCommands(inputActor, outputActor, voiceConverter) {
     // audio input (recording) commands
     EventBus.on("audio:setupRecording", function (e) {
       inputActor.send("acquire");
@@ -358,6 +382,7 @@ export default class AudioModule {
     });
     EventBus.on("audio:changeVoice", (detail) => {
       outputActor.send({ type: "changeVoice", ...detail });
+      voiceConverter.send({ type: "changeVoice", ...detail });
     });
     EventBus.on("audio:skipNext", (e) => {
       outputActor.send("skipNext");

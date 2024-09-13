@@ -197,14 +197,15 @@ interface SpeechSynthesisVoiceRemote extends SpeechSynthesisVoice {
   powered_by: string;
 }
 
-interface SourceMatchableVoice {
-  matches(source: string): boolean;
+interface MatchableVoice {
+  matchesSource(source: string): boolean;
+  matchesId(id: string): boolean;
 }
 
 class VoiceFactory {
   static matchableFromVoiceRemote(
     v: SpeechSynthesisVoiceRemote
-  ): SourceMatchableVoice {
+  ): MatchableVoice {
     const provider = audioProviders.retrieveProviderByEngine(v.powered_by);
     switch (provider) {
       case audioProviders.SayPi:
@@ -217,9 +218,7 @@ class VoiceFactory {
   }
 }
 
-abstract class AIVoice
-  implements SpeechSynthesisVoiceRemote, SourceMatchableVoice
-{
+abstract class AIVoice implements SpeechSynthesisVoiceRemote, MatchableVoice {
   id: string;
   price: number;
   powered_by: string;
@@ -247,8 +246,11 @@ abstract class AIVoice
     this.localService = localService;
     this.voiceURI = voiceURI;
   }
-  matches(source: string): boolean {
+  matchesSource(source: string): boolean {
     throw new Error("Method not implemented.");
+  }
+  matchesId(id: string): boolean {
+    return id === this.id;
   }
 }
 
@@ -266,7 +268,7 @@ class PiAIVoice extends AIVoice {
     );
   }
 
-  matches(source: string): boolean {
+  matchesSource(source: string): boolean {
     const url = new URL(source);
     const voiceId = url.searchParams.get("voice");
     const matchingSpeechRequest = voiceId === this.id;
@@ -280,6 +282,17 @@ class PiAIVoice extends AIVoice {
 
   static fromVoice(v: SpeechSynthesisVoiceRemote): PiAIVoice {
     const voiceNumber = Number(v.id.slice(-1));
+    return new PiAIVoice(voiceNumber);
+  }
+  static isPiVoiceId(voiceId: string): boolean {
+    return voiceId.startsWith("voice");
+  }
+  static fromVoiceId(voiceId: string): PiAIVoice {
+    // defense against invalid voiceId
+    if (!PiAIVoice.isPiVoiceId(voiceId)) {
+      throw new Error(`Invalid voice id: ${voiceId}`);
+    }
+    const voiceNumber = Number(voiceId.slice(-1));
     return new PiAIVoice(voiceNumber);
   }
 }
@@ -303,7 +316,7 @@ class SayPiVoice extends AIVoice {
     );
   }
 
-  matches(source: string): boolean {
+  matchesSource(source: string): boolean {
     // voice_id query parameter in the URL should match the voice id
     const url = new URL(source);
     const voiceId = url.searchParams.get("voice_id");
@@ -312,9 +325,9 @@ class SayPiVoice extends AIVoice {
 }
 
 class ChangeVoiceEvent {
-  voice: SourceMatchableVoice | null;
+  voice: MatchableVoice | null;
 
-  constructor(voice: SourceMatchableVoice | null) {
+  constructor(voice: MatchableVoice | null) {
     this.voice = voice;
   }
 }
@@ -340,7 +353,7 @@ export {
   AssistantSpeech,
   SpeechUtterance,
   SpeechSynthesisVoiceRemote,
-  SourceMatchableVoice,
+  MatchableVoice,
   VoiceFactory,
   AIVoice,
   PiAIVoice,

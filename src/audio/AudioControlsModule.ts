@@ -5,7 +5,7 @@ import {
   AudioProvider,
   audioProviders,
   ChangeVoiceEvent,
-  SourceMatchableVoice,
+  MatchableVoice,
   SpeechSynthesisVoiceRemote,
   VoiceFactory,
 } from "../tts/SpeechModel";
@@ -50,11 +50,14 @@ export default class AudioControlsModule {
 
   notifyAudioVoiceSelection(voice: AIVoice | SpeechSynthesisVoiceRemote): void {
     console.log(`Using ${voice.name} voice for speech`);
-    const matchableVoice = VoiceFactory.matchableFromVoiceRemote(voice);
+    const matchableVoice =
+      voice instanceof AIVoice
+        ? voice
+        : VoiceFactory.matchableFromVoiceRemote(voice);
     const event = new ChangeVoiceEvent(matchableVoice);
     EventBus.emit(
       "audio:changeVoice",
-      event as { voice: SourceMatchableVoice | null }
+      event as { voice: MatchableVoice | null }
     );
     this.notifyAudioProviderSelection(
       audioProviders.retreiveProviderByVoice(voice)

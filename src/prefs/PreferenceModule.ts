@@ -2,7 +2,11 @@ import { config } from "../ConfigModule";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import AudioControlsModule from "../audio/AudioControlsModule";
 import EventBus from "../events/EventBus";
-import { audioProviders, SpeechSynthesisVoiceRemote } from "../tts/SpeechModel";
+import {
+  audioProviders,
+  PiAIVoice,
+  SpeechSynthesisVoiceRemote,
+} from "../tts/SpeechModel";
 
 type Preference = "speed" | "balanced" | "accuracy" | null;
 type VoicePreference = SpeechSynthesisVoiceRemote | null;
@@ -216,8 +220,13 @@ class UserPreferenceModule {
         chrome.storage.sync
       ) {
         chrome.storage.sync.get(["voiceId"], async (result: StorageResult) => {
+          let voice;
           if (result.voiceId) {
-            const voice = await tts.getVoiceById(result.voiceId);
+            if (PiAIVoice.isPiVoiceId(result.voiceId)) {
+              voice = PiAIVoice.fromVoiceId(result.voiceId);
+            } else {
+              voice = await tts.getVoiceById(result.voiceId);
+            }
             resolve(voice);
           } else {
             resolve(null); // user preference not set
