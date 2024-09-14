@@ -7,6 +7,8 @@ import {
   ElementTextStream,
   InputStreamOptions,
 } from "../tts/InputStream";
+import { SpeechSynthesisVoiceRemote } from "../tts/SpeechModel";
+import { PiSpeechSourceParser } from "../tts/SpeechSourceParsers";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { Chatbot, UserPrompt } from "./Chatbot";
 
@@ -98,6 +100,26 @@ class PiAIChatbot implements Chatbot {
       "enabled:hover:bg-cream-650",
       "m-2",
     ];
+  }
+
+  /**
+   * Returns an array of extra voices available on the Pi chatbot, that not everyone has access to, depending on when the account was created
+   * @returns {SpeechSynthesisVoiceRemote[]} - an array of extra voices available on the Pi chatbot, that not everyone has access to
+   */
+  getExtraVoices(): SpeechSynthesisVoiceRemote[] {
+    const parser = new PiSpeechSourceParser();
+    return [parser.getVoice("voice7"), parser.getVoice("voice8")];
+  }
+
+  /**
+   * Returns the URL of the voice introduction audio file for the given voice id
+   * @param voiceId - the id of the voice to get the introduction for, e.g. "voice1"
+   * @returns {string} - the URL of the voice introduction audio file, e.g. "https://pi.ai/public/media/voice-previews/voice-1.mp3"
+   */
+  getVoiceIntroductionUrl(voiceId: string): string {
+    return `https://pi.ai/public/media/voice-previews/voice-${voiceId.slice(
+      -1
+    )}.mp3`;
   }
 }
 

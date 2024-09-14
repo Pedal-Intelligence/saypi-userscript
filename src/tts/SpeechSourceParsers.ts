@@ -1,4 +1,5 @@
 import {
+  PiAIVoice,
   PiSpeech,
   SayPiSpeech,
   SpeechSynthesisVoiceRemote,
@@ -19,18 +20,10 @@ class PiSpeechSourceParser implements SpeechSourceParser {
   }
 
   public getVoice(voiceId: string): SpeechSynthesisVoiceRemote {
-    const voiceNumber = voiceId.slice(-1);
+    const voiceNumber: number = Number(voiceId.slice(-1));
 
-    const theVoice: SpeechSynthesisVoiceRemote = {
-      id: voiceId,
-      name: `Pi ${voiceNumber}`,
-      lang: this.lang,
-      localService: false,
-      default: true,
-      price: 0,
-      powered_by: "inflection.ai",
-      voiceURI: "", // inflection.ai doesn't provide this
-    };
+    const theVoice: SpeechSynthesisVoiceRemote = new PiAIVoice(voiceNumber);
+
     return theVoice;
   }
 

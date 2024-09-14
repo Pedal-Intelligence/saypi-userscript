@@ -111,20 +111,6 @@ describe("SpeechSynthesisModule", () => {
     expect(textToSpeechServiceMock.getVoiceById).not.toHaveBeenCalled();
   });
 
-  it("should get voice by ID from the TextToSpeechService if not in cache", async () => {
-    const mockVoice = mockVoices[0];
-    textToSpeechServiceMock.getVoiceById = vi.fn(() =>
-      Promise.resolve(mockVoice)
-    );
-
-    const voice = await speechSynthesisModule.getVoiceById(mockVoice.id);
-
-    expect(voice).toEqual(mockVoice);
-    expect(textToSpeechServiceMock.getVoiceById).toHaveBeenCalledWith(
-      mockVoice.id
-    );
-  });
-
   it("should create a speech stream", async () => {
     const mockVoice = mockVoices[0];
     const mockUtterance = {

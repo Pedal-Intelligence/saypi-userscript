@@ -81,35 +81,43 @@ class SpeechSynthesisModule {
   initProvider(): void {
     const audioControls = new AudioControlsModule();
     this.getActiveAudioProvider().then((provider) => {
-      audioControls.useAudioOutputProvider(provider);
+      audioControls.notifyAudioProviderSelection(provider);
     });
   }
 
   private voicesCache: SpeechSynthesisVoiceRemote[] = [];
+  private voicesLoading: Promise<void> | null = null;
+
+  async getVoices(): Promise<SpeechSynthesisVoiceRemote[]> {
+    if (this.voicesCache.length > 0) {
+      return this.voicesCache;
+    }
+    if (!this.voicesLoading) {
+      this.voicesLoading = this.ttsService.getVoices().then((voices) => {
+        this.voicesCache = voices;
+        this.voicesLoading = null;
+      });
+    }
+    await this.voicesLoading;
+    return this.voicesCache;
+  }
+
+  async getVoiceById(id: string): Promise<SpeechSynthesisVoiceRemote> {
+    const voices = await this.getVoices(); // populate cache
+
+    const foundVoice = voices.find((voice) => voice.id === id);
+    if (!foundVoice) {
+      throw new Error(`Voice with id ${id} not found`);
+    }
+    return foundVoice;
+  }
+
   /**
    * Visible only for testing
    * @param voices
    */
   _cacheVoices(voices: SpeechSynthesisVoiceRemote[]) {
     this.voicesCache = voices;
-  }
-
-  async getVoices(): Promise<SpeechSynthesisVoiceRemote[]> {
-    if (this.voicesCache.length > 0) {
-      return this.voicesCache;
-    } else {
-      this.voicesCache = await this.ttsService.getVoices();
-      return this.voicesCache;
-    }
-  }
-
-  async getVoiceById(id: string): Promise<SpeechSynthesisVoiceRemote> {
-    const cachedVoice = this.voicesCache.find((voice) => voice.id === id);
-    if (cachedVoice) {
-      return cachedVoice;
-    } else {
-      return await this.ttsService.getVoiceById(id);
-    }
   }
 
   async createSpeech(
@@ -218,7 +226,9 @@ class SpeechSynthesisModule {
   async getActiveAudioProvider(): Promise<AudioProvider> {
     const customVoiceIsSelected = await this.userPreferences.hasVoice();
     if (customVoiceIsSelected) {
-      return audioProviders.SayPi;
+      // custom voice can be a multi-language voice by SayPi (e.g. Paola and Joey), or an "extra" voice by Pi (i.e. Pi 7 and Pi 8)
+      const voice = await this.userPreferences.getVoice();
+      return audioProviders.retreiveProviderByVoice(voice!); // voice is not null if customVoiceIsSelected is true
     }
     return audioProviders.Pi;
   }

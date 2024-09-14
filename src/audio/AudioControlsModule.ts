@@ -1,5 +1,14 @@
+import { match } from "assert";
 import EventBus from "../events/EventBus";
-import { AudioProvider, audioProviders } from "../tts/SpeechModel";
+import {
+  AIVoice,
+  AudioProvider,
+  audioProviders,
+  ChangeVoiceEvent,
+  MatchableVoice,
+  SpeechSynthesisVoiceRemote,
+  VoiceFactory,
+} from "../tts/SpeechModel";
 
 export default class AudioControlsModule {
   activateAudioInput(enable: boolean): void {
@@ -34,8 +43,30 @@ export default class AudioControlsModule {
     return svgPath === activePath;
   }
 
-  useAudioOutputProvider(provider: AudioProvider): void {
-    console.log(`Using ${provider.name} for speech synthesis`);
+  notifyAudioProviderSelection(provider: AudioProvider): void {
+    console.log(`Speech provided by ${provider.name}`);
     EventBus.emit("audio:changeProvider", { provider });
+  }
+
+  notifyAudioVoiceSelection(voice: AIVoice | SpeechSynthesisVoiceRemote): void {
+    console.log(`Using ${voice.name} voice for speech`);
+    const matchableVoice =
+      voice instanceof AIVoice
+        ? voice
+        : VoiceFactory.matchableFromVoiceRemote(voice);
+    const event = new ChangeVoiceEvent(matchableVoice);
+    EventBus.emit(
+      "audio:changeVoice",
+      event as { voice: MatchableVoice | null }
+    );
+    this.notifyAudioProviderSelection(
+      audioProviders.retreiveProviderByVoice(voice)
+    );
+  }
+
+  notifyAudioVoiceDeselection(): void {
+    console.log("Using default voice for speech");
+    EventBus.emit("audio:changeVoice", { voice: null });
+    this.notifyAudioProviderSelection(audioProviders.Pi);
   }
 }

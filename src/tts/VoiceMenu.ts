@@ -1,5 +1,6 @@
 import { getResourceUrl } from "../ResourceModule";
 import { Chatbot } from "../chatbots/Chatbot";
+import { PiAIChatbot } from "../chatbots/Pi";
 import { getMostRecentAssistantMessage } from "../dom/ChatHistory";
 import { Observation } from "../dom/Observation";
 import EventBus from "../events/EventBus";
@@ -70,7 +71,10 @@ export abstract class VoiceSelector {
   }
 
   protected isBuiltInVoiceButton(button: HTMLButtonElement): boolean {
-    return !button.classList.contains("saypi-custom-voice");
+    return !(
+      button.classList.contains("saypi-custom-voice") ||
+      button.classList.contains("saypi-restored-voice")
+    );
   }
 
   addVoicesToSelector(voiceSelector: HTMLElement): void {
@@ -89,9 +93,74 @@ export abstract class VoiceSelector {
       return false;
     }
 
-    const customVoiceButtons = Array(voices.length);
+    // filter voices into default and custom voices based on the voice.default property
+    const defaultVoices = voices.filter((voice) => voice.default);
+    const customVoices = voices.filter((voice) => !voice.default);
 
-    voices.forEach((voice) => {
+    this.populateDefaultVoices(defaultVoices, voiceSelector);
+    this.populateCustomVoices(customVoices, voiceSelector);
+
+    return true;
+  }
+
+  populateDefaultVoices(
+    defaultVoices: SpeechSynthesisVoiceRemote[],
+    voiceSelector: HTMLElement
+  ): void {
+    const defaultVoiceButtons = Array(defaultVoices.length);
+
+    defaultVoices.forEach((voice) => {
+      // if not already in the menu, add the voice
+      if (voiceSelector.querySelector(`button[data-voice-id="${voice.id}"]`)) {
+        // voice already in menu, move voice to end of menu and skip to next voice
+        const button = voiceSelector.querySelector(
+          `button[data-voice-id="${voice.id}"]`
+        );
+        voiceSelector.appendChild(button as HTMLElement);
+
+        return;
+      }
+      const button = document.createElement("button");
+      // template: <button type="button" class="mb-1 rounded px-2 py-3 text-center hover:bg-neutral-300">Pi 6</button>
+      button.type = "button";
+      const additionalClasses = ["saypi-voice-button", "saypi-restored-voice"];
+      const combinedClasses = [
+        ...this.getButtonClasses(),
+        ...additionalClasses,
+        voice.name.toLowerCase().replace(" ", "-"),
+      ];
+      button.classList.add(...combinedClasses);
+      button.innerText = voice.name;
+      button.addEventListener("click", () => {
+        this.userPreferences.setVoice(voice).then(() => {
+          console.log(`Selected voice: ${voice.name}`);
+          defaultVoiceButtons.forEach((button) => {
+            this.unmarkButtonAsSelectedVoice(button);
+          });
+          const voiceButtons = voiceSelector.querySelectorAll("button");
+          voiceButtons.forEach((button) => {
+            this.unmarkButtonAsSelectedVoice(button as HTMLButtonElement);
+          });
+          this.markButtonAsSelectedVoice(button);
+          this.introduceVoice(voice);
+        });
+      });
+      button.dataset.voiceId = voice.id;
+      defaultVoiceButtons.push(button);
+    });
+
+    defaultVoiceButtons.forEach((button) => {
+      voiceSelector.appendChild(button);
+    });
+  }
+
+  populateCustomVoices(
+    customVoices: SpeechSynthesisVoiceRemote[],
+    voiceSelector: HTMLElement
+  ): void {
+    const customVoiceButtons = Array(customVoices.length);
+
+    customVoices.forEach((voice) => {
       // if not already in the menu, add the voice
       if (voiceSelector.querySelector(`button[data-voice-id="${voice.id}"]`)) {
         // voice already in menu, skip to next voice
@@ -140,8 +209,6 @@ export abstract class VoiceSelector {
     customVoiceButtons.reverse().forEach((button) => {
       voiceSelector.insertBefore(button, voiceSelector.firstChild);
     });
-
-    return true;
   }
 
   introduceVoice(voice: SpeechSynthesisVoiceRemote): void {
@@ -149,14 +216,24 @@ export abstract class VoiceSelector {
     const name = voice.name.toLowerCase().replace(" ", "_");
     const introduction =
       lastMessage?.text || getMessage(`voiceIntroduction_${name}`);
-    const speechSynthesis = SpeechSynthesisModule.getInstance();
-    const notEnglish = "";
-    speechSynthesis
-      .createSpeech(introduction, false, notEnglish)
-      .then((utterance) => {
-        utterance.voice = voice;
-        speechSynthesis.speak(utterance);
-      });
+    if (voice.default && this.chatbot instanceof PiAIChatbot) {
+      const pi = this.chatbot as PiAIChatbot;
+      const introductionUrl = pi.getVoiceIntroductionUrl(voice.id);
+      if (introductionUrl) {
+        // play the introduction audio
+        EventBus.emit("audio:load", { url: introductionUrl });
+      }
+    } else {
+      // introduce the custom voice
+      const speechSynthesis = SpeechSynthesisModule.getInstance();
+      const notEnglish = "";
+      speechSynthesis
+        .createSpeech(introduction, false, notEnglish)
+        .then((utterance) => {
+          utterance.voice = voice;
+          speechSynthesis.speak(utterance);
+        });
+    }
   }
 
   // Listen for additions of custom voice buttons and update selections
@@ -203,6 +280,26 @@ export abstract class VoiceSelector {
         }
       }
     });
+  }
+
+  addMissingPiVoices(voiceSelector: HTMLElement) {
+    // only for Pi.ai
+    if (!(this.chatbot instanceof PiAIChatbot)) {
+      return;
+    }
+    const pi = this.chatbot as PiAIChatbot;
+    // count the number of original Pi voices in the menu
+    let piVoices = 0;
+    const voiceButtons = Array.from(voiceSelector.querySelectorAll("button"));
+    voiceButtons.forEach((button) => {
+      if (this.isBuiltInVoiceButton(button as HTMLButtonElement)) {
+        piVoices++;
+      }
+    });
+    // if fewer than 8 Pi voices, add the missing Pi voices to the menu
+    if (piVoices < 8) {
+      this.populateVoices(pi.getExtraVoices(), voiceSelector);
+    }
   }
 }
 
@@ -329,6 +426,7 @@ export class VoiceMenu extends VoiceSelector {
               this.userPreferences.getTextToSpeechEnabled().then((enabled) => {
                 if (enabled) this.addVoicesToSelector(voiceMenu);
               });
+              this.addMissingPiVoices(voiceMenu);
               this.registerVoiceChangeHandler(voiceMenu);
             }
           }
@@ -362,8 +460,9 @@ export class VoiceSettings extends VoiceSelector {
     this.addIdVoiceMenu(element);
     SpeechSynthesisModule.getInstance()
       .getVoices()
-      .then((voices) => {
-        this.populateVoices(voices, element);
+      .then((multilingualVoices) => {
+        this.populateVoices(multilingualVoices, element);
+        this.addMissingPiVoices(element);
         this.handleExistingVoiceButtons(element);
         this.registerVoiceChangeHandler(element);
       });
