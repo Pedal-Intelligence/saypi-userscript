@@ -8,7 +8,10 @@ import {
 } from "../tts/SpeechModel";
 import { PiAIChatbot } from "../chatbots/Pi";
 import { PiSpeechSourceParser } from "../tts/SpeechSourceParsers";
-import { UserPreferenceModule } from "../prefs/PreferenceModule";
+import {
+  UserPreferenceModule,
+  VoicePreference,
+} from "../prefs/PreferenceModule";
 
 type ConversionContext = {
   voice: MatchableVoice | null;

@@ -9,6 +9,7 @@ import EventBus from "../events/EventBus.js";
 import { isSafari } from "../UserAgentModule.js";
 import SlowResponseHandler from "../SlowResponseHandler.ts";
 import { CacheBuster } from "../CacheBuster.ts";
+import { UserPreferenceModule } from "../prefs/PreferenceModule.ts";
 
 export default class AudioModule {
   constructor() {
@@ -112,6 +113,7 @@ export default class AudioModule {
 
     // voice converter
     this.voiceConverter.start();
+    this.initializeVoiceConverter();
 
     if (isSafari()) {
       // audio retry
@@ -125,6 +127,18 @@ export default class AudioModule {
   }
 
   stop() {}
+
+  initializeVoiceConverter() {
+    const prefs = UserPreferenceModule.getInstance();
+    prefs.getVoice().then((voice) => {
+      if (voice) {
+        console.log("Preferred voice is", voice);
+        this.voiceConverter.send({ type: "changeVoice", voice });
+      } else {
+        console.log("Default voice is preferred");
+      }
+    });
+  }
 
   findAudioElement(searchRoot) {
     let audioElement = searchRoot.querySelector(`#${this.AUDIO_ELEMENT_ID}`);

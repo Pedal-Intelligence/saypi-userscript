@@ -86,30 +86,38 @@ class SpeechSynthesisModule {
   }
 
   private voicesCache: SpeechSynthesisVoiceRemote[] = [];
+  private voicesLoading: Promise<void> | null = null;
+
+  async getVoices(): Promise<SpeechSynthesisVoiceRemote[]> {
+    if (this.voicesCache.length > 0) {
+      return this.voicesCache;
+    }
+    if (!this.voicesLoading) {
+      this.voicesLoading = this.ttsService.getVoices().then((voices) => {
+        this.voicesCache = voices;
+        this.voicesLoading = null;
+      });
+    }
+    await this.voicesLoading;
+    return this.voicesCache;
+  }
+
+  async getVoiceById(id: string): Promise<SpeechSynthesisVoiceRemote> {
+    const voices = await this.getVoices(); // populate cache
+
+    const foundVoice = voices.find((voice) => voice.id === id);
+    if (!foundVoice) {
+      throw new Error(`Voice with id ${id} not found`);
+    }
+    return foundVoice;
+  }
+
   /**
    * Visible only for testing
    * @param voices
    */
   _cacheVoices(voices: SpeechSynthesisVoiceRemote[]) {
     this.voicesCache = voices;
-  }
-
-  async getVoices(): Promise<SpeechSynthesisVoiceRemote[]> {
-    if (this.voicesCache.length > 0) {
-      return this.voicesCache;
-    } else {
-      this.voicesCache = await this.ttsService.getVoices();
-      return this.voicesCache;
-    }
-  }
-
-  async getVoiceById(id: string): Promise<SpeechSynthesisVoiceRemote> {
-    const cachedVoice = this.voicesCache.find((voice) => voice.id === id);
-    if (cachedVoice) {
-      return cachedVoice;
-    } else {
-      return await this.ttsService.getVoiceById(id);
-    }
   }
 
   async createSpeech(
