@@ -42,7 +42,7 @@
     ]
   },
   "dependencies": {
-    "@ricky0123/vad-web": "^0.0.12",
+    "@ricky0123/vad-web": "^0.0.18",
     "@xstate/fsm": "^2.1.0",
     "@xstate/test": "^0.5.1",
     "axios": "^1.4.0",
@@ -54,7 +54,7 @@
     "http-proxy-middleware": "^2.0.6",
     "js-md5": "^0.8.3",
     "lodash": "^4.17.21",
-    "onnxruntime-web": "^1.15.1",
+    "onnxruntime-web": "^1.19.2",
     "rxjs": "^7.8.1",
     "serve-handler": "^6.1.5",
     "xstate": "^4.38.2"
