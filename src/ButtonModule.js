@@ -237,6 +237,65 @@ class ButtonModule {
     return button;
   }
 
+  createCallButton2(container, position = 0) {
+    console.log("ButtonModule Entered createCallButton()");
+    const button = this.createButton();
+    button.id = "saypi-callButton";
+    button.type = "button";
+    button.classList.add("call-button", "saypi-button", "tooltip");
+    // add all classes in chatbot.getExtraCallButtonClasses() to the button
+    button.classList.add(...this.chatbot.getExtraCallButtonClasses());
+    
+    if (!button) {
+      button = document.getElementById("saypi-callButton");
+    }
+    if(button){
+      if (this.callIsActive) {
+        button.setAttribute("aria-label", getMessage("callInProgress"));
+        button.innerHTML = hangupIconSVG;
+        button.classList.add("active");
+      } else {
+        button.setAttribute("aria-label",  getMessage("callNotStarted", this.chatbot.getName()));
+        button.innerHTML = callIconSVG;
+        button.classList.remove("active");
+      }
+    }
+          
+    /*
+    button.onmousedown = ()=>{ 
+      console.log("mouse down on call button!"); 
+      this.isMouseDown = true; 
+      this.pressTimer = window.setTimeout( ()=> {
+        this.isMomentaryModeEnabled = true;
+        this.startCallMomentary();},1100);
+      return false; 
+    };
+  
+    button.onmouseup = ()=>{ 
+      console.log("mouse up on call button!");
+      this.isMouseDown = false;
+      if(this.isMomentaryModeEnabled){
+        this.isMomentaryModeEnabled = false;
+        this.hangup();
+      }else{
+        if (this.callIsActive) {
+          this.hangup();
+        } else {
+          this.startCall();
+        }
+      }
+    };
+    */
+    //button.addEventListener("click", () => this.foo());
+
+    addChild(container, button, position);
+    if (this.callIsActive) {
+      // if the call is active, start the glow animation once added to the DOM
+      AnimationModule.startAnimation("glow");
+    }
+    return button;
+  }
+
   updateCallButtonColor(color) {
     const callButton = document.getElementById("saypi-callButton");
     // find first path element descendant of the call button's svg element child
@@ -324,6 +383,47 @@ class ButtonModule {
       callButton.setAttribute("aria-label", label);
       callButton.onclick = () => {
         this.sayPiActor.send("saypi:hangup");
+      };
+      callButton.classList.add("active");
+    }
+    this.callIsActive = true;
+  }
+
+  isMomentaryModeEnabled = false;
+
+  callActive2(callButton) {
+    if (!callButton) {
+      callButton = document.getElementById("saypi-callButton");
+    }
+    if (callButton) {
+      const label = getMessage("callInProgress");
+      callButton.innerHTML = hangupIconSVG;
+      callButton.setAttribute("aria-label", label);
+      callButton.onclick = () => {
+        this.sayPiActor.send("saypi:hangup");
+      };
+      button.onmousedown = ()=>{ 
+        console.log("mouse down on call button!"); 
+        this.isMouseDown = true; 
+        this.pressTimer = window.setTimeout( ()=> {
+          this.isMomentaryModeEnabled = true;
+          this.startCallMomentary();},1100);
+        return false; 
+      };
+    
+      button.onmouseup = ()=>{ 
+        console.log("mouse up on call button!");
+        this.isMouseDown = false;
+        if(this.isMomentaryModeEnabled){
+          this.isMomentaryModeEnabled = false;
+          this.hangup();
+        }else{
+          if (this.callIsActive) {
+            this.hangup();
+          } else {
+            this.startCall();
+          }
+        }
       };
       callButton.classList.add("active");
     }
