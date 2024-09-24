@@ -1110,8 +1110,8 @@ var ort = (() => {
             } else if (typeof arg1 !== "undefined") {
               throw new TypeError("'options' must be an object.");
             }
-         // } else if (arg0 instanceof ArrayBuffer || typeof SharedArrayBuffer !== "undefined" && arg0 instanceof SharedArrayBuffer) {
-          } else if (true) {
+          } else if (arg0 instanceof ArrayBuffer || typeof SharedArrayBuffer !== "undefined" && arg0 instanceof SharedArrayBuffer) {
+         // } else if (true) {
             // JAC edit
             const buffer = arg0;
             let byteOffset = 0;

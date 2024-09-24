@@ -7,6 +7,7 @@ class Processor extends AudioWorkletProcessor {
         this._initialized = false;
         this._stopProcessing = false;
         this.init = async () => {
+            console.log("initializing firefox worklet");
             _common_1.log.debug("initializing worklet");
             this.resampler = new _common_1.Resampler({
                 nativeSampleRate: sampleRate,
