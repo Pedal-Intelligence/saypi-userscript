@@ -168,7 +168,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Der Text der Schaltfläche zum Betreten des immersiven Modus auf dem Desktop.",
-    "message": "Eindringlich"
+    "message": "Immersiv"
   },
   "exitImmersiveModeLong": {
     "description": "Das aria-label und der Titel des Buttons zum Verlassen des immersiven Modus auf mobilen Geräten, zurück zum textbasierten Desktop-Modus.",
