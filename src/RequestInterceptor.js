@@ -5,6 +5,7 @@ const filesToRedirect = [
   "ort-wasm-simd.wasm",
   "ort.min.js.map",
   "vad.worklet.bundle.min.js",
+  "ort-wasm.wasm",
 ];
 
 // Function to redirect specific XMLHttpRequests
