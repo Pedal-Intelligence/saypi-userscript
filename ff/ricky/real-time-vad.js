@@ -46,6 +46,9 @@ exports.defaultRealTimeVADOptions = {
     modelFetcher: default_model_fetcher_1.defaultModelFetcher,
     stream: undefined,
     ortConfig: undefined,
+    vadNodeOnMessage: undefined,
+    audioWorkletNodeOptions: undefined,
+
 };
 class MicVAD {
     static async new(options = {}) {
@@ -116,7 +119,6 @@ class AudioNodeVAD {
             fullOptions.ortConfig(exports.ort);
         }
         try {
-            console.log("adding module to audioContext: url: " + fullOptions.workletURL);
             await ctx.audioWorklet.addModule(fullOptions.workletURL);
         }
         catch (e) {
@@ -125,7 +127,13 @@ class AudioNodeVAD {
         If need be, you can customize the worklet file location using the \`workletURL\` option.`);
             throw e;
         }
-        const vadNode = createVadNode(ctx, fullOptions);
+        let workletOptions = options.workletOptions !== undefined ? options.workletOptions : {
+                processorOptions: {
+                    frameSamples: fullOptions.frameSamples,
+                },
+            };
+        const vadNode = new AudioWorkletNode(ctx, "vad-helper-worklet", workletOptions);   
+
         let model;
         try {
             model = await _common_1.Silero.new(exports.ort, () => fullOptions.modelFetcher(fullOptions.modelURL));
@@ -147,10 +155,15 @@ class AudioNodeVAD {
             submitUserSpeechOnPause: fullOptions.submitUserSpeechOnPause,
         });
         const audioNodeVAD = new AudioNodeVAD(ctx, fullOptions, frameProcessor, vadNode);
+
         vadNode.port.onmessage = async (ev) => {
             switch (ev.data?.message) {
                 case _common_1.Message.AudioFrame:
-                    const buffer = ev.data.data;
+                    let buffer = ev.data.data;
+                    if(!(buffer instanceof ArrayBuffer)){
+                        buffer = new ArrayBuffer(ev.data.data.byteLength);
+                        new Uint8Array(buffer).set(new Uint8Array(ev.data.data));
+                    }
                     const frame = new Float32Array(buffer);
                     await audioNodeVAD.processFrame(frame);
                     break;
@@ -160,28 +173,7 @@ class AudioNodeVAD {
         };
         return audioNodeVAD;
     }
-
-    createVadNode2(ctx, fullOptions){
-        let workletOptions = fullOptions.workletURL.startsWith('moz-extension') ? {} : {
-            processorOptions: {
-                frameSamples: fullOptions.frameSamples,
-            },
-        };
-        return new AudioWorkletNode(ctx, "vad-helper-worklet", workletOptions );
-    }
-
-
-    createVadNode(ctx, fullOptions){
-        let isFirefoxAddon = fullOptions.workletURL.startsWith('moz-extension')
-        let workletOptions = isFirefoxAddon? {} : {
-            processorOptions: {
-                frameSamples: fullOptions.frameSamples,
-            },
-        };
-        let workletName = isFirefoxAddon ? "vad-firefox-helper-worklet" : "vad-helper-worklet";
-        return new AudioWorkletNode(ctx, workletName, workletOptions );
-    }
-
+    
     constructor(ctx, options, frameProcessor, entryNode) {
         this.ctx = ctx;
         this.options = options;
