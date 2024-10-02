@@ -9,7 +9,6 @@ import { CustomModelFetcher } from "./input-utils/custom-model-fetcher";
 import { ONNXRuntimeAPI } from "@ricky0123/vad-web/dist/_common";
 
 const fullWorkletURL: string = getResourceUrl("vad.worklet.bundle.min.js");
-const fullFirefoxWorkletURL: string = getResourceUrl("firefox_vad.worklet.bundle.min.js");
 let listening : boolean = false;
 let stream : MediaStream;
 
@@ -173,7 +172,6 @@ const firefoxMicVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks
     ort.env.wasm.wasmPaths = chrome.runtime.getURL('public/');
   },
   modelFetcher: CustomModelFetcher,
-  workletURL: fullFirefoxWorkletURL,
 }
 
 // The callback type can be more specific based on your usage
