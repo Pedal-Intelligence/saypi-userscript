@@ -107,7 +107,7 @@ export default (env, argv) => {
             to: "[name][ext]",
           },
           {
-            from: "node_modules/@ricky0123/vad-web/dist/*.onnx",
+            from: "node_modules/@jcrawley_dev/firevad/dist/*.onnx",
             to: "[name][ext]",
           },
           {

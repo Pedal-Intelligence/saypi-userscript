@@ -20,6 +20,7 @@ declare global {
   }
 }
 
+let audioMimeType: string = "audio/wav";
 let speechStartTime: number = 0;
 const threshold: number = 1000; // 1000 ms = 1 second, about the length of "Hey, Pi"
 

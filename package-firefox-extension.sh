@@ -7,16 +7,18 @@ dest_src=$ext_dir/src/
 zip_name=saypi.firefox.zip
 firefox_dir=ff
 node_dir=node_modules
+dest_audio=$dest_public/audio
 
 mkdir -p $ext_dir
 cp manifest.json $ext_dir
-mkdir -p $dest_public/audio
+mkdir -p $dest_audio
 cp public/*.wasm $dest_public
 cp public/saypi.user.js $dest_public
 cp public/silero_vad.onnx $dest_public
 cp public/ort-wasm-simd-threaded.mjs $dest_public
 cp public/vad.worklet.bundle.min.js $dest_public/vad.worklet.bundle.min.js
-cp public/audio/*.mp3 $dest_public
+cp public/audio/*.mp3 $dest_audio
+cp public/audio/*.wav $dest_audio
 mkdir -p $dest_icons/logos
 cp public/icons/*.svg $dest_icons
 cp public/icons/logos/*.svg $dest_icons/logos

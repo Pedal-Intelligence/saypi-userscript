@@ -206,6 +206,7 @@ export class AudibleNotificationsModule implements INotificationsModule {
 
   private constructor(userPreferences: UserPreferenceModule) {
     // Load audio resources in the constructor
+    /*
     this.listeningSound = new Audio(
       getResourceUrl("audio/send-round-short.mp3")
     );
@@ -213,20 +214,43 @@ export class AudibleNotificationsModule implements INotificationsModule {
     this.callStartedSound = new Audio(
       getResourceUrl("audio/startup-synth.mp3")
     );
+    
     this.callFailedSound = new Audio(getResourceUrl("audio/call-failed.mp3"));
     this.callEndedSound = new Audio(getResourceUrl("audio/turn-off.mp3"));
     this.lockSound = new Audio(getResourceUrl("audio/beep-on.mp3"));
     this.unlockSound = new Audio(getResourceUrl("audio/beep-off.mp3"));
     this.themeOnSound = new Audio(getResourceUrl("audio/switch-on.mp3"));
     this.themeOffSound = new Audio(getResourceUrl("audio/switch-off.mp3"));
-
-    this.userPreferences = userPreferences;
-    this.activityCheckSound1 = new Audio(
+      this.activityCheckSound1 = new Audio(
       getResourceUrl("audio/attention-1.mp3")
     );
     this.activityCheckSound2 = new Audio(
       getResourceUrl("audio/attention-2.mp3")
     );
+    */
+    this.listeningSound = this.getAudioFrom("send-round-short.mp3")
+    this.callStartedSound = this.getAudioFrom("startup-synth.mp3")
+    this.callStartedSound = this.getAudioFrom("test1.wav")
+    this.callFailedSound = this.getAudioFrom("call-failed.mp3");
+    this.callEndedSound = this.getAudioFrom(("turn-off.mp3"));
+    this.lockSound = this.getAudioFrom(("beep-on.mp3"));
+    this.unlockSound = this.getAudioFrom(("beep-off.mp3"));
+    this.themeOnSound = this.getAudioFrom(("switch-on.mp3"));
+    this.themeOffSound = this.getAudioFrom(("switch-off.mp3"));
+    this.activityCheckSound1 = this.getAudioFrom(("attention-1.mp3"));
+    this.activityCheckSound2 = this.getAudioFrom(("attention-2.mp3"));
+
+    this.userPreferences = userPreferences;
+  
+  }
+
+  getAudioFrom = (filename: string): HTMLAudioElement =>{
+    return new Audio(this.getAudioUrl(filename));
+  }
+
+  getAudioUrl = (filename: string): string =>{
+    console.log("audio url: " +getResourceUrl("audio/" + filename) );
+    return getResourceUrl("public/audio" + filename);
   }
 
   public static getInstance(): AudibleNotificationsModule {
@@ -241,6 +265,10 @@ export class AudibleNotificationsModule implements INotificationsModule {
   private async playSound(sound: HTMLAudioElement) {
     const soundEnabled = await this.userPreferences.getSoundEffects();
     if (soundEnabled) {
+      let player = document.createElement("audio");
+      player.src = chrome.runtime.getURL("public/audio/test1.wav");
+      player.play();
+
       sound.play().catch((e) => {
         if (e.name === "NotAllowedError") {
           // Inform the user to enable audio permissions or trigger from a click
