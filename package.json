@@ -42,7 +42,7 @@
     ]
   },
   "dependencies": {
-    "@ricky0123/vad-web": "^0.0.18",
+    "@jcrawley_dev/firevad": "^0.9.1",
     "@xstate/fsm": "^2.1.0",
     "@xstate/test": "^0.5.1",
     "axios": "^1.4.0",

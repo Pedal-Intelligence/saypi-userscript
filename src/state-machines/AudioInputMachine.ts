@@ -1,4 +1,5 @@
-import { MicVAD, RealTimeVADOptions } from "@ricky0123/vad-web";
+import { MicVAD, RealTimeVADOptions } from "@jcrawley_dev/firevad"
+import { ONNXRuntimeAPI } from "@jcrawley_dev/firevad/dist/_common";
 import { setupInterceptors } from "../RequestInterceptor";
 import { convertToWavBlob } from "../audio/AudioEncoder";
 import { createMachine, assign } from "xstate";
@@ -10,6 +11,7 @@ const fullWorkletURL: string = getResourceUrl("vad.worklet.bundle.min.js");
 let listening : boolean = false;
 let stream : MediaStream;
 
+
 // Assuming EventBus is a property of Window and is of type any
 // You might want to provide a more specific type if available
 declare global {
@@ -18,7 +20,6 @@ declare global {
   }
 }
 
-let audioMimeType: string = "audio/wav";
 let speechStartTime: number = 0;
 const threshold: number = 1000; // 1000 ms = 1 second, about the length of "Hey, Pi"
 
@@ -135,6 +136,9 @@ const debouncedOnFrameProcessed = debounce(
 // Options for MicVAD
 const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
   workletURL: fullWorkletURL,
+  ortConfig: (ort: ONNXRuntimeAPI) => { 
+    ort.env.wasm.wasmPaths = chrome.runtime.getURL('public/');
+  },
   positiveSpeechThreshold: 0.8,
   minSpeechFrames: 3,
   preSpeechPadFrames: 10,
@@ -161,6 +165,7 @@ const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
     debouncedOnFrameProcessed(probabilities);
   },
 };
+
 
 // The callback type can be more specific based on your usage
 async function setupRecording(callback?: () => void): Promise<void> {
@@ -195,11 +200,21 @@ async function setupRecording(callback?: () => void): Promise<void> {
   }
 }
 
+function isRunningUnderFirefox(): boolean {
+  return fullWorkletURL.startsWith('moz-extension');
+}
+
 function tearDownRecording(): void {
+  console.log("Entered tearDownRecording()");
   if (microphone) {
+    console.log("microphone exists, so pausing mic, and setting listening to false, and stopping all tracks!");
     microphone.pause();
     listening = false;
     stream.getTracks().forEach((track) => track.stop());
+    microphone.destroy(); //added by JAC
+  }
+  else{
+    console.log("microphone does not exist!");
   }
   microphone = null;
 }
