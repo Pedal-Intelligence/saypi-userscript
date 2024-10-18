@@ -14,10 +14,15 @@ Enhance your voice interactions with Inflection AI's Pi chatbot with the _Say, P
 
 We are not accepting external contributions to the codebase at this time. Please see the [CONTRIBUTING.md](CONTRIBUTING.md) file for more information.
 
-## Assembly
+## Firefox Add-On Build Machine Details
+ - Operating System: Linux Mint 21.3, Kernel: Linux 5.15.0-122-generic
+ - shell: GNU bash, version 5.1.16(1)-release (x86_64-pc-linux-gnu)
+ - node version: v20.17.0
+ - npm version: 10.8.2
 
-The content script is assembled using Webpack with `npm run build` from the command line in the project directory. This will generate a `saypi.user.js` file in the `/public` directory, bundling together all necessary JavaScript modules and assets.
-This `user.js` file is what get packaged as a userscript (with `metadata.txt`) and Chrome extension (with `manifest.json`).
+ ## Assembly
+  - from the terminal navivate to the source root directory, and run `npm run build && ./package-firefox-extension.sh`
+  - the generated add-on package is called 'saypi.firefox.zip', and is located in the 'dist' directory
 
 ## Demo
 
