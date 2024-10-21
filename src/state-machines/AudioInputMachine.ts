@@ -1,11 +1,11 @@
-import { MicVAD, RealTimeVADOptions } from "@jcrawley_dev/firevad"
-import { ONNXRuntimeAPI } from "@jcrawley_dev/firevad/dist/_common";
+import { MicVAD, RealTimeVADOptions } from "@ricky0123/vad-web"
 import { setupInterceptors } from "../RequestInterceptor";
 import { convertToWavBlob } from "../audio/AudioEncoder";
 import { createMachine, assign } from "xstate";
 import EventBus from "../events/EventBus.js";
 import { debounce } from "lodash";
 import { getResourceUrl } from "../ResourceModule";
+import { customModelFetcher } from "../vad/custom-model-fetcher";
 
 const fullWorkletURL: string = getResourceUrl("vad.worklet.bundle.min.js");
 let listening : boolean = false;
@@ -137,7 +137,7 @@ const debouncedOnFrameProcessed = debounce(
 // Options for MicVAD
 const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
   workletURL: fullWorkletURL,
-  ortConfig: (ort: ONNXRuntimeAPI) => { 
+  ortConfig: (ort: any) => { 
     ort.env.wasm.wasmPaths = chrome.runtime.getURL('public/');
   },
   positiveSpeechThreshold: 0.8,
@@ -167,6 +167,14 @@ const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
   },
 };
 
+const firefoxMicVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
+  ...micVADOptions,
+  workletOptions: {},
+  ortConfig: (ort: any) => { 
+    ort.env.wasm.wasmPaths = chrome.runtime.getURL('public/');
+  },
+  modelFetcher: customModelFetcher,
+}
 
 // The callback type can be more specific based on your usage
 async function setupRecording(callback?: () => void): Promise<void> {
@@ -185,7 +193,7 @@ async function setupRecording(callback?: () => void): Promise<void> {
     });
 
     const partialVADOptions = {
-      ...micVADOptions,
+      ... isRunningUnderFirefox() ? firefoxMicVADOptions : micVADOptions,
       stream,
     };
 

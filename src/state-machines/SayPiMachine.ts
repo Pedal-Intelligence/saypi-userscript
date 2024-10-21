@@ -76,8 +76,6 @@ type SayPiEvent =
   | { type: "saypi:callReady" }
   | { type: "saypi:callFailed" }
   | { type: "saypi:hangup" }
-  | { type: "saypi:momentaryModeEnabled" }
-  | { type: "saypi:momentaryModeDisabled" }
   | { type: "saypi:visible" }
   | SayPiAudioConnectedEvent
   | SayPiAudioReconnectEvent
