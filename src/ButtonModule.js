@@ -220,7 +220,10 @@ class ButtonModule {
     const button = this.createButton();
     button.id = "saypi-callButton";
     button.type = "button";
-    button.classList.add("call-button", "saypi-button", "tooltip");
+    button.classList.add("call-button", "saypi-button");
+    if(!this.isBrowserFirefoxAndroid()){
+      button.classList.add("tooltip");
+    }
     // add all classes in chatbot.getExtraCallButtonClasses() to the button
     button.classList.add(...this.chatbot.getExtraCallButtonClasses());
     if (this.callIsActive) {
@@ -235,6 +238,11 @@ class ButtonModule {
       AnimationModule.startAnimation("glow");
     }
     return button;
+  }
+
+  isBrowserFirefoxAndroid() {
+    return navigator.userAgent.includes('Android') 
+      && navigator.userAgent.includes('Firefox');
   }
 
   updateCallButtonColor(color) {
@@ -322,6 +330,7 @@ class ButtonModule {
       const label = getMessage("callInProgress");
       callButton.innerHTML = hangupIconSVG;
       callButton.setAttribute("aria-label", label);
+     // callButton.setAttribute("aria-label", "");
       callButton.onclick = () => {
         this.sayPiActor.send("saypi:hangup");
       };
@@ -382,7 +391,7 @@ class ButtonModule {
     button.id = "saypi-lockButton";
     button.type = "button";
     button.className =
-      "lock-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
+    "lock-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
     button.setAttribute("aria-label", label);
     button.innerHTML = lockIconSVG;
     if (container) {
