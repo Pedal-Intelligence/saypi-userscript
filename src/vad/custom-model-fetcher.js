@@ -12,5 +12,3 @@ const copyArrayBuffer = (original) => {
     return arrayBuffer;
 };
 export const customModelFetcher = CustomModelFetcher;
-
-//# sourceMappingURL=custom-model-fetcher.js.map
