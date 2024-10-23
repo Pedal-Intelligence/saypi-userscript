@@ -137,9 +137,6 @@ const debouncedOnFrameProcessed = debounce(
 // Options for MicVAD
 const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
   workletURL: fullWorkletURL,
-  ortConfig: (ort: any) => { 
-    ort.env.wasm.wasmPaths = chrome.runtime.getURL('public/');
-  },
   positiveSpeechThreshold: 0.8,
   minSpeechFrames: 3,
   preSpeechPadFrames: 10,
