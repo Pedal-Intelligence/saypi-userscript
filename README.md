@@ -31,7 +31,7 @@ This `user.js` file is what get packaged as a userscript (with `metadata.txt`) a
  - open a terminal and navigate to that directory
  - run `npx webpack` and enter 'y' when prompted
  - run `npm run build && ./package-firefox-extension.sh`
- - the generated add-on package is called 'saypi.firefox.zip', and is located in the 'dist' directory
+ - the generated add-on package is called 'saypi.firefox.xpi', and is located in the 'dist' directory
 
 ## Demo
 

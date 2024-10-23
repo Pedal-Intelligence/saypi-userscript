@@ -4,8 +4,7 @@ ext_dir=dist/firefox-extension
 dest_public=$ext_dir/public
 dest_icons=$dest_public/icons
 dest_src=$ext_dir/src/
-zip_name=saypi.firefox.zip
-firefox_dir=ff
+zip_name=saypi.firefox.xpi
 node_dir=node_modules
 dest_audio=$dest_public/audio
 
