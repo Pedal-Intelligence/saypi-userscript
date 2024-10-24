@@ -206,27 +206,20 @@ export class AudibleNotificationsModule implements INotificationsModule {
 
   private constructor(userPreferences: UserPreferenceModule) {
     // Load audio resources in the constructor
-    this.listeningSound = new Audio(
-      getResourceUrl("audio/send-round-short.mp3")
-    );
+    
+    this.listeningSound = new Audio(getResourceUrl("audio/send-round-short.mp3"));
     this.listeningSound.preload = "auto"; // short track, so load the audio file as soon as possible
-    this.callStartedSound = new Audio(
-      getResourceUrl("audio/startup-synth.mp3")
-    );
+    this.callStartedSound = new Audio(getResourceUrl("audio/startup-synth.mp3"));   
     this.callFailedSound = new Audio(getResourceUrl("audio/call-failed.mp3"));
     this.callEndedSound = new Audio(getResourceUrl("audio/turn-off.mp3"));
     this.lockSound = new Audio(getResourceUrl("audio/beep-on.mp3"));
     this.unlockSound = new Audio(getResourceUrl("audio/beep-off.mp3"));
     this.themeOnSound = new Audio(getResourceUrl("audio/switch-on.mp3"));
     this.themeOffSound = new Audio(getResourceUrl("audio/switch-off.mp3"));
-
+    this.activityCheckSound1 = new Audio(getResourceUrl("audio/attention-1.mp3"));
+    this.activityCheckSound2 = new Audio( getResourceUrl("audio/attention-2.mp3"));
+    
     this.userPreferences = userPreferences;
-    this.activityCheckSound1 = new Audio(
-      getResourceUrl("audio/attention-1.mp3")
-    );
-    this.activityCheckSound2 = new Audio(
-      getResourceUrl("audio/attention-2.mp3")
-    );
   }
 
   public static getInstance(): AudibleNotificationsModule {

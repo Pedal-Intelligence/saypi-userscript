@@ -19,6 +19,20 @@ We are not accepting external contributions to the codebase at this time. Please
 The content script is assembled using Webpack with `npm run build` from the command line in the project directory. This will generate a `saypi.user.js` file in the `/public` directory, bundling together all necessary JavaScript modules and assets.
 This `user.js` file is what get packaged as a userscript (with `metadata.txt`) and Chrome extension (with `manifest.json`).
 
+## Firefox Add-On Instructions
+
+ - build machine details:
+   - operating system: Linux Mint 21.3, Kernel: Linux 5.15.0-122-generic
+   - shell: GNU bash, version 5.1.16(1)-release (x86_64-pc-linux-gnu)
+   - node version: v20.17.0
+   - npm version: 10.8.2
+
+ - unzip the source code into a directory of your choosing
+ - open a terminal and navigate to that directory
+ - run `npx webpack` and enter 'y' when prompted
+ - run `npm run build && ./package-firefox-extension.sh`
+ - the generated add-on package is called 'saypi.firefox.xpi', and is located in the 'dist' directory
+
 ## Demo
 
 [Watch the demo video on YouTube](https://youtu.be/siJAj879ii4)
