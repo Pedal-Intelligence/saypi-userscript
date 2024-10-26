@@ -5,7 +5,7 @@ import { audioOutputMachine } from "../state-machines/AudioOutputMachine.ts";
 import { machine as audioRetryMachine } from "../state-machines/AudioRetryMachine.ts";
 import { logger, serializeStateValue } from "../LoggingModule.js";
 import EventBus from "../events/EventBus.js";
-import { isSafari } from "../UserAgentModule.js";
+import { isSafari } from "../UserAgentModule.ts";
 import SlowResponseHandler from "../SlowResponseHandler.ts";
 import { CacheBuster } from "../CacheBuster.ts";
 

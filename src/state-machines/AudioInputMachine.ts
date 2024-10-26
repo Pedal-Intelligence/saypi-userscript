@@ -1,4 +1,4 @@
-import { MicVAD, RealTimeVADOptions } from "@ricky0123/vad-web"
+import { MicVAD, RealTimeVADOptions } from "@ricky0123/vad-web";
 import { setupInterceptors } from "../RequestInterceptor";
 import { convertToWavBlob } from "../audio/AudioEncoder";
 import { createMachine, assign } from "xstate";
@@ -6,11 +6,13 @@ import EventBus from "../events/EventBus.js";
 import { debounce } from "lodash";
 import { getResourceUrl } from "../ResourceModule";
 import { customModelFetcher } from "../vad/custom-model-fetcher";
+import { isFirefox } from "../UserAgentModule";
 
-const fullWorkletURL: string = getResourceUrl("vad.worklet.bundle.min.js");
-let listening : boolean = false;
-let stream : MediaStream;
-
+const fullWorkletURL: string = isFirefox()
+  ? getResourceUrl("vad.worklet.bundle.js")
+  : getResourceUrl("vad.worklet.bundle.min.js");
+let listening: boolean = false;
+let stream: MediaStream;
 
 // Assuming EventBus is a property of Window and is of type any
 // You might want to provide a more specific type if available
@@ -164,14 +166,15 @@ const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
   },
 };
 
-const firefoxMicVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
+const firefoxMicVADOptions: Partial<RealTimeVADOptions> &
+  MyRealTimeVADCallbacks = {
   ...micVADOptions,
   workletOptions: {},
-  ortConfig: (ort: any) => { 
-    ort.env.wasm.wasmPaths = chrome.runtime.getURL('public/');
+  ortConfig: (ort: any) => {
+    ort.env.wasm.wasmPaths = chrome.runtime.getURL("public/");
   },
   modelFetcher: customModelFetcher,
-}
+};
 
 // The callback type can be more specific based on your usage
 async function setupRecording(callback?: () => void): Promise<void> {
@@ -190,7 +193,7 @@ async function setupRecording(callback?: () => void): Promise<void> {
     });
 
     const partialVADOptions = {
-      ... isRunningUnderFirefox() ? firefoxMicVADOptions : micVADOptions,
+      ...(isFirefox() ? firefoxMicVADOptions : micVADOptions),
       stream,
     };
 
@@ -206,20 +209,17 @@ async function setupRecording(callback?: () => void): Promise<void> {
   }
 }
 
-function isRunningUnderFirefox(): boolean {
-  return fullWorkletURL.startsWith('moz-extension');
-}
-
 function tearDownRecording(): void {
   console.log("Entered tearDownRecording()");
   if (microphone) {
-    console.log("microphone exists, so pausing mic, and setting listening to false, and stopping all tracks!");
+    console.log(
+      "microphone exists, so pausing mic, and setting listening to false, and stopping all tracks!"
+    );
     microphone.pause();
     listening = false;
     stream.getTracks().forEach((track) => track.stop());
     microphone.destroy(); //added by JAC
-  }
-  else{
+  } else {
     console.log("microphone does not exist!");
   }
   microphone = null;
@@ -414,7 +414,7 @@ export const audioInputMachine = createMachine<
 
       stopIfWaiting: (SayPiContext) => {
         if (SayPiContext.waitingToStop === true) {
-          if(microphone){
+          if (microphone) {
             microphone.pause();
             listening = false;
           }

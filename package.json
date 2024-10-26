@@ -60,6 +60,7 @@
     "xstate": "^4.38.2"
   },
   "devDependencies": {
+    "web-ext": "^8.3.0",
     "@babel/core": "^7.22.9",
     "@babel/preset-env": "^7.22.9",
     "@types/chai": "^4.3.9",

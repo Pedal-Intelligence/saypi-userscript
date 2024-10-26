@@ -1,7 +1,7 @@
 import AudioModule from "./audio/AudioModule.js";
 import { buttonModule } from "./ButtonModule.js";
 import EventModule from "./events/EventModule.js";
-import { addUserAgentFlags } from "./UserAgentModule.js";
+import { addUserAgentFlags } from "./UserAgentModule.ts";
 import { ImmersionService } from "./ImmersionService.js";
 import { submitErrorHandler } from "./SubmitErrorHandler.ts";
 import getMessage from "./i18n.ts";
