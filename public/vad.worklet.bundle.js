@@ -165,14 +165,17 @@
         this._initialized = false;
         this._stopProcessing = false;
         this.init = async () => {
-          logging_1.log.debug("initializing worklet");
+          logging_1.log.debug("Initializing SayPi VAD worklet");
           this.resampler = new resampler_1.Resampler({
-            nativeSampleRate: 16000,
+            nativeSampleRate: sampleRate,
             targetSampleRate: 16000,
             targetFrameSize: 1536,
           });
           this._initialized = true;
-          logging_1.log.debug("initialized worklet");
+          logging_1.log.debug(
+            "Initialized SayPi VAD worklet with sample rate",
+            sampleRate
+          );
         };
         this.options = options.processorOptions;
         this.port.onmessage = (ev) => {
