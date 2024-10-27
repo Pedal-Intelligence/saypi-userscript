@@ -185,11 +185,11 @@ async function checkAudioCapabilities() {
   });
 
   if (config.enableInterruptions) {
-    console.log("Enabling interruptions");
+    console.log("Enabling interruptions", config);
   }
 
   if (config.showQualityWarning) {
-    console.warn("Showing quality warning");
+    console.warn("Showing quality warning", config);
   }
 }
 

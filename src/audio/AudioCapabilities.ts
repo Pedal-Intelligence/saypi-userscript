@@ -1,3 +1,5 @@
+import { getResourceUrl } from "../ResourceModule";
+
 // Types for capability detection results
 export interface BasicAudioSupport {
   echoCancellation: boolean;
@@ -16,6 +18,14 @@ export interface EchoCancellationQuality {
   browser: string;
   audioContextSampleRate: number;
   testTimestamp: string;
+  details?: {
+    echoFrequency: number;
+    maxAmplitude: number;
+    samplesAnalyzed: number;
+    echoDetections: number;
+    audioPlaybackVerified: boolean;
+    signalDetected: boolean;
+  };
 }
 
 export interface BrowserSpecificNotes {
@@ -84,41 +94,67 @@ export class AudioCapabilityDetector {
   }
 
   private async testEchoCancellation(): Promise<EchoCancellationQuality | null> {
-    // Type guard for AudioContext
     const AudioContext =
       (window as any).AudioContext || (window as any).webkitAudioContext;
     const audioContext = new AudioContext();
-    let qualityScore = 0;
+    let qualityScore = 1.0;
 
     try {
+      // Get microphone stream with forced mono
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
           autoGainControl: true,
           noiseSuppression: true,
+          channelCount: 1,
         },
       });
 
+      // Set up analyzer
       const source = audioContext.createMediaStreamSource(stream);
       const analyzer = audioContext.createAnalyser();
       analyzer.fftSize = 2048;
-
       source.connect(analyzer);
 
-      // Create test tone
-      const oscillator = audioContext.createOscillator();
-      oscillator.type = "sine";
-      oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+      // Load and play test audio
+      const audioElement = new Audio();
+      audioElement.src = getResourceUrl("audio/test-tone.mp3");
+      audioElement.loop = true;
 
+      const audioSource = audioContext.createMediaElementSource(audioElement);
       const gainNode = audioContext.createGain();
-      gainNode.gain.value = 0.2; // Adjusted for audibility
-      oscillator.connect(gainNode);
+      gainNode.gain.value = 0.5;
+
+      audioSource.connect(gainNode);
       gainNode.connect(audioContext.destination);
 
-      oscillator.start();
+      // Verify audio playback starts
+      let audioIsPlaying = false;
+      const playbackPromise = new Promise<void>((resolve, reject) => {
+        audioElement.addEventListener("playing", () => {
+          audioIsPlaying = true;
+          resolve();
+        });
+        audioElement.addEventListener("error", (e) => {
+          reject(new Error(`Audio playback failed: ${e.message}`));
+        });
+
+        // Timeout if audio doesn't start
+        setTimeout(() => {
+          if (!audioIsPlaying) {
+            reject(new Error("Audio playback failed to start"));
+          }
+        }, 1000);
+      });
+
+      await audioElement.play();
+      await playbackPromise;
 
       const dataArray = new Float32Array(analyzer.frequencyBinCount);
-      let echoDetected = false;
+      let echoSamples = 0;
+      let totalSamples = 0;
+      let maxRms = 0;
+      let hasValidSignal = false;
 
       // Monitor for 3 seconds
       await new Promise<void>((resolve) => {
@@ -129,9 +165,15 @@ export class AudioCapabilityDetector {
               dataArray.length
           );
 
+          // Check if we're getting any signal
+          if (rms > 0.01) {
+            hasValidSignal = true;
+          }
+
+          totalSamples++;
           if (rms > 0.05) {
-            // Adjusted threshold
-            echoDetected = true;
+            echoSamples++;
+            maxRms = Math.max(maxRms, rms);
           }
         };
 
@@ -139,21 +181,46 @@ export class AudioCapabilityDetector {
         setTimeout(() => {
           clearInterval(interval);
           resolve();
-        }, 3000); // Increased test duration
+        }, 3000);
       });
 
       // Cleanup
-      oscillator.stop();
+      audioElement.pause();
+      audioElement.remove();
       stream.getTracks().forEach((track) => track.stop());
       await audioContext.close();
 
-      qualityScore = echoDetected ? 0 : 1;
+      // Validate test results
+      if (!hasValidSignal || maxRms < 0.01) {
+        console.warn(
+          "Echo cancellation test invalid: No audio signal detected"
+        );
+        return null;
+      }
+
+      // Compute quality score based on multiple factors
+      const echoFrequency = echoSamples / totalSamples;
+      const amplitudePenalty = Math.min(maxRms, 1);
+
+      // Calculate final score (0 to 1)
+      qualityScore = Math.max(
+        0,
+        1 - (echoFrequency * 0.7 + amplitudePenalty * 0.3)
+      );
 
       return {
         echoCancellationQuality: qualityScore,
         browser: navigator.userAgent,
         audioContextSampleRate: audioContext.sampleRate,
         testTimestamp: new Date().toISOString(),
+        details: {
+          echoFrequency,
+          maxAmplitude: maxRms,
+          samplesAnalyzed: totalSamples,
+          echoDetections: echoSamples,
+          audioPlaybackVerified: audioIsPlaying,
+          signalDetected: hasValidSignal,
+        },
       };
     } catch (err) {
       console.error("Echo cancellation test failed:", err);
