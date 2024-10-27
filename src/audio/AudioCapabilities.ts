@@ -117,16 +117,7 @@ export class AudioCapabilityDetector {
       source.connect(analyzer);
 
       // Load and play test audio
-      const testToneUrl = getResourceUrl("audio/test-tone.mp3");
-      console.log("Test tone URL:", testToneUrl);
-      const audioElement = new Audio(testToneUrl);
-
-      const audioSource = audioContext.createMediaElementSource(audioElement);
-      const gainNode = audioContext.createGain();
-      gainNode.gain.value = 0.5;
-
-      audioSource.connect(gainNode);
-      gainNode.connect(audioContext.destination);
+      const audioElement = new Audio(getResourceUrl("audio/test-tone.mp3"));
 
       // Verify audio playback starts
       let audioIsPlaying = false;
@@ -340,20 +331,3 @@ export class AudioCapabilityDetector {
     };
   }
 }
-
-// Usage example:
-/*
-const detector = new AudioCapabilityDetector();
-const config = await detector.configureAudioFeatures({
-  minimumEchoQuality: 0.5,
-  preferredEchoQuality: 0.8
-});
-
-if (config.enableInterruptions) {
-  // Enable interruption feature
-}
-
-if (config.showQualityWarning) {
-  // Show warning to user about audio quality
-}
-*/

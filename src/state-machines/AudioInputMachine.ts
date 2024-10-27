@@ -179,17 +179,30 @@ const firefoxMicVADOptions: Partial<RealTimeVADOptions> &
 
 async function checkAudioCapabilities() {
   const detector = new AudioCapabilityDetector();
-  const config = await detector.configureAudioFeatures({
+  const thresholds = {
     minimumEchoQuality: 0.5,
     preferredEchoQuality: 0.8,
-  });
+  };
+  const config = await detector.configureAudioFeatures(thresholds);
 
   if (config.enableInterruptions) {
     console.log("Enabling interruptions", config);
   }
 
   if (config.showQualityWarning) {
-    console.warn("Showing quality warning", config);
+    console.warn(
+      "Echo cancellation quality is low. Consider disabling the interruption feature."
+    );
+    const actualScore =
+      config.audioQualityDetails.echoCancellationQuality
+        ?.echoCancellationQuality;
+    console.debug(
+      `Echo cancellation test score of ${actualScore?.toFixed(
+        2
+      )} is lower than the preferred quality of ${
+        thresholds.preferredEchoQuality
+      }`
+    );
   }
 }
 
