@@ -7,6 +7,7 @@ import { debounce } from "lodash";
 import { getResourceUrl } from "../ResourceModule";
 import { customModelFetcher } from "../vad/custom-model-fetcher";
 import { isFirefox } from "../UserAgentModule";
+import { AudioCapabilityDetector } from "../audio/AudioCapabilities";
 
 const fullWorkletURL: string = isFirefox()
   ? getResourceUrl("vad.worklet.bundle.js")
@@ -176,6 +177,22 @@ const firefoxMicVADOptions: Partial<RealTimeVADOptions> &
   modelFetcher: customModelFetcher,
 };
 
+async function checkAudioCapabilities() {
+  const detector = new AudioCapabilityDetector();
+  const config = await detector.configureAudioFeatures({
+    minimumEchoQuality: 0.5,
+    preferredEchoQuality: 0.8,
+  });
+
+  if (config.enableInterruptions) {
+    console.log("Enabling interruptions");
+  }
+
+  if (config.showQualityWarning) {
+    console.warn("Showing quality warning");
+  }
+}
+
 // The callback type can be more specific based on your usage
 async function setupRecording(callback?: () => void): Promise<void> {
   if (microphone) {
@@ -183,10 +200,11 @@ async function setupRecording(callback?: () => void): Promise<void> {
   }
 
   try {
+    await checkAudioCapabilities(); // debugging only
     stream = await navigator.mediaDevices.getUserMedia({
       audio: {
         channelCount: 1,
-        echoCancellation: true,
+        echoCancellation: true, // critical for interruptions
         autoGainControl: true,
         noiseSuppression: true,
       },

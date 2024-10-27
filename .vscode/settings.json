@@ -1,5 +1,8 @@
 {
   "i18n-ally.localesPaths": ["_locales"],
   "i18n-ally.keystyle": "nested",
-  "CodeGPT.apiKey": "CodeGPT Plus Beta"
+  "CodeGPT.apiKey": "CodeGPT Plus Beta",
+  "files.watcherExclude": {
+    "**/target": true
+  }
 }
