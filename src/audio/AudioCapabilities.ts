@@ -117,9 +117,9 @@ export class AudioCapabilityDetector {
       source.connect(analyzer);
 
       // Load and play test audio
-      const audioElement = new Audio();
-      audioElement.src = getResourceUrl("audio/test-tone.mp3");
-      audioElement.loop = true;
+      const testToneUrl = getResourceUrl("audio/test-tone.mp3");
+      console.log("Test tone URL:", testToneUrl);
+      const audioElement = new Audio(testToneUrl);
 
       const audioSource = audioContext.createMediaElementSource(audioElement);
       const gainNode = audioContext.createGain();
@@ -135,20 +135,57 @@ export class AudioCapabilityDetector {
           audioIsPlaying = true;
           resolve();
         });
+
         audioElement.addEventListener("error", (e) => {
-          reject(new Error(`Audio playback failed: ${e.message}`));
+          const error = audioElement.error;
+          if (error) {
+            switch (error.code) {
+              case MediaError.MEDIA_ERR_ABORTED:
+                reject(new Error("Audio playback aborted"));
+                break;
+              case MediaError.MEDIA_ERR_NETWORK:
+                reject(new Error("Network error while loading audio"));
+                break;
+              case MediaError.MEDIA_ERR_DECODE:
+                reject(new Error("Audio decode failed"));
+                break;
+              case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
+                reject(new Error("Audio format not supported"));
+                break;
+              default:
+                reject(new Error(`Audio error: ${error.message}`));
+            }
+          } else {
+            reject(new Error("Unknown audio error occurred"));
+          }
         });
 
-        // Timeout if audio doesn't start
         setTimeout(() => {
           if (!audioIsPlaying) {
-            reject(new Error("Audio playback failed to start"));
+            reject(new Error("Audio playback failed to start (timeout)"));
           }
         }, 1000);
       });
 
-      await audioElement.play();
-      await playbackPromise;
+      try {
+        await audioElement.play().catch((e) => {
+          if (e.name === "NotAllowedError") {
+            throw new Error(
+              "Audio playback blocked. Please initiate test from a user interaction."
+            );
+          } else if (e.name === "AbortError") {
+            throw new Error(
+              "Audio playback aborted. The browser may be blocking autoplay."
+            );
+          } else {
+            throw new Error(`Unable to play test audio: ${e.message}`);
+          }
+        });
+        await playbackPromise;
+      } catch (playError) {
+        console.error("Echo test audio playback failed:", playError);
+        throw playError; // Re-throw to be caught by outer try-catch
+      }
 
       const dataArray = new Float32Array(analyzer.frequencyBinCount);
       let echoSamples = 0;
@@ -224,6 +261,25 @@ export class AudioCapabilityDetector {
       };
     } catch (err) {
       console.error("Echo cancellation test failed:", err);
+
+      // Specific error handling
+      if (err instanceof DOMException) {
+        switch (err.name) {
+          case "NotAllowedError":
+            console.error("Microphone access denied by user");
+            break;
+          case "NotFoundError":
+            console.error("No microphone found");
+            break;
+          case "NotReadableError":
+            console.error("Microphone is already in use");
+            break;
+          default:
+            console.error(`Device error: ${err.message}`);
+        }
+      }
+
+      // Cleanup
       if (audioContext.state === "running") {
         await audioContext.close();
       }
