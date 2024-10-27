@@ -7,3 +7,4 @@ public/*.js
 public/*.js.LICENSE.txt
 public/*.js.map
 public/*.wasm
+src/audio/vad-configs.json
