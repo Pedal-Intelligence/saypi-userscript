@@ -390,5 +390,23 @@
       }
     },
     "message": "Ontdek hoe $product$ audio in rekening brengt"
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Onderbrekingen worden momenteel niet ondersteund in Firefox."
+  },
+  "mode_accuracy_description": {
+    "description": "Beschrijving voor de nauwkeurigheidstranscriptiemodus.",
+    "message": "Hoogste nauwkeurigheid, maar langzamere transcriptiesnelheid. \nGevoelig voor hallucinaties."
+  },
+  "mode_balanced_description": {
+    "description": "Beschrijving voor de gebalanceerde transcriptiemodus.",
+    "message": "Goede balans tussen snelheid en nauwkeurigheid voor de meeste toepassingen."
+  },
+  "mode_speed_description": {
+    "description": "Beschrijving voor de snelheidstranscriptiemodus.",
+    "message": "Snelste reactie, maar minder nauwkeurig. \nGevoelig voor onderbrekingen."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Geluidseffecten zijn uitgeschakeld in Firefox om problemen met audiofeedback te voorkomen."
   }
 }

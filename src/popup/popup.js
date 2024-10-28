@@ -156,17 +156,13 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // Check if Firefox
     if (/Firefox/.test(navigator.userAgent)) {
-      // Disable the input
       soundEffectsInput.disabled = true;
-      // Add visual indication that it's disabled
       soundEffectsLabel.classList.add('disabled');
-      // Add tooltip explaining why
+      // Use i18n message for tooltip
       soundEffectsLabel.setAttribute('title', 
-        'Sound effects are disabled in Firefox to prevent audio feedback issues.');
-      // Force the toggle to off position
+        chrome.i18n.getMessage('soundEffectsFirefoxDisabled'));
       selectInput(soundEffectsInput, false);
     } else {
-      // Normal behavior for other browsers
       getStoredValue("soundEffects", true).then((soundEffects) => {
         selectInput(soundEffectsInput, soundEffects);
       });
@@ -216,19 +212,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Check if Firefox
     if (/Firefox/.test(navigator.userAgent)) {
-      // Disable the input (because Firefox doesn't support echo cancellation with MicVAD)
       allowInterruptionsInput.disabled = true;
-      // Add visual indication that it's disabled
       allowInterruptionsLabel.classList.add("disabled");
-      // Add tooltip explaining why
+      // Use i18n message for tooltip
       allowInterruptionsLabel.setAttribute(
         "title",
-        "Interruptions are not currently supported in Firefox."
+        chrome.i18n.getMessage('interruptionsFirefoxDisabled')
       );
-      // Force the toggle to off position
       selectInput(allowInterruptionsInput, false);
     } else {
-      // Normal behavior for other browsers
       getStoredValue("allowInterruptions", true).then((allowInterruptions) => {
         selectInput(allowInterruptionsInput, allowInterruptions);
       });

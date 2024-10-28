@@ -390,5 +390,23 @@
       }
     },
     "message": "Alamin kung paano naniningil ang $product$ para sa audio"
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Kasalukuyang hindi sinusuportahan sa Firefox ang mga pagkaantala."
+  },
+  "mode_accuracy_description": {
+    "description": "Paglalarawan para sa accuracy transcription mode.",
+    "message": "Pinakamataas na katumpakan, ngunit mas mabagal na bilis ng transkripsyon. \nMahilig sa guni-guni."
+  },
+  "mode_balanced_description": {
+    "description": "Paglalarawan para sa balanseng transcription mode.",
+    "message": "Magandang balanse ng bilis at katumpakan para sa karamihan ng mga gamit."
+  },
+  "mode_speed_description": {
+    "description": "Paglalarawan para sa speed transcription mode.",
+    "message": "Pinakamabilis na tugon, ngunit hindi gaanong tumpak. \nMahilig makagambala."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Ang mga sound effect ay hindi pinagana sa Firefox upang maiwasan ang mga isyu sa audio feedback."
   }
 }

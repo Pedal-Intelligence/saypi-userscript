@@ -390,5 +390,23 @@
       }
     },
     "message": "Aflați cum costă $product$ pentru sunet"
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "În prezent, întreruperile nu sunt acceptate în Firefox."
+  },
+  "mode_accuracy_description": {
+    "description": "Descrierea modului de transcriere cu acuratețe.",
+    "message": "Cea mai mare precizie, dar viteza de transcriere mai mică. \nPredispus la halucinații."
+  },
+  "mode_balanced_description": {
+    "description": "Descrierea modului de transcriere echilibrată.",
+    "message": "Echilibrul bun de viteză și precizie pentru majoritatea utilizărilor."
+  },
+  "mode_speed_description": {
+    "description": "Descrierea modului de transcriere rapidă.",
+    "message": "Cel mai rapid răspuns, dar mai puțin precis. \nPredispus la întrerupere."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Efectele sonore sunt dezactivate în Firefox pentru a preveni problemele de feedback audio."
   }
 }

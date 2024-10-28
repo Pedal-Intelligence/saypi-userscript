@@ -390,5 +390,23 @@
       }
     },
     "message": "تعرف على كيفية تحصيل $product$ مقابل الصوت"
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "المقاطعات غير مدعومة حاليًا في Firefox."
+  },
+  "mode_accuracy_description": {
+    "description": "وصف لوضع النسخ الدقة.",
+    "message": "أعلى دقة، ولكن سرعة النسخ أبطأ. \nعرضة للهلوسة."
+  },
+  "mode_balanced_description": {
+    "description": "وصف لوضع النسخ المتوازن.",
+    "message": "توازن جيد بين السرعة والدقة لمعظم الاستخدامات."
+  },
+  "mode_speed_description": {
+    "description": "وصف لوضع النسخ السريع.",
+    "message": "أسرع استجابة، ولكن أقل دقة. \nعرضة للمقاطعة."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "تم تعطيل المؤثرات الصوتية في Firefox لمنع حدوث مشكلات في التعليقات الصوتية."
   }
 }

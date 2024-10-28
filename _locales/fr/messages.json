@@ -390,5 +390,23 @@
       }
     },
     "message": "Découvrez comment $product$ facture l'audio"
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Les interruptions ne sont actuellement pas prises en charge dans Firefox."
+  },
+  "mode_accuracy_description": {
+    "description": "Description du mode de transcription de précision.",
+    "message": "Précision la plus élevée, mais vitesse de transcription plus lente. \nSujet aux hallucinations."
+  },
+  "mode_balanced_description": {
+    "description": "Description du mode de transcription équilibrée.",
+    "message": "Bon équilibre entre vitesse et précision pour la plupart des utilisations."
+  },
+  "mode_speed_description": {
+    "description": "Description du mode de transcription rapide.",
+    "message": "Réponse la plus rapide, mais moins précise. \nEnclin à interrompre."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Les effets sonores sont désactivés dans Firefox pour éviter les problèmes de retour audio."
   }
 }

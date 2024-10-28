@@ -402,5 +402,11 @@
   "voiceIntroduction_joey": {
     "message": "Hola! Привет! 你好! I'm Pi, your polyglot AI assistant. With 32 languages at my command, we can explore ideas and cultures from around the world. What do you think of this voice?",
     "description": "Introduction for the Joey voice."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Sound effects are disabled in Firefox to prevent audio feedback issues."
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Interruptions are not currently supported in Firefox."
   }
 }

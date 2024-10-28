@@ -390,5 +390,23 @@
       }
     },
     "message": "Lær, hvordan $product$ opkræver for lyd"
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Afbrydelser understøttes i øjeblikket ikke i Firefox."
+  },
+  "mode_accuracy_description": {
+    "description": "Beskrivelse af nøjagtighedstransskriptionstilstanden.",
+    "message": "Højeste nøjagtighed, men langsommere transskriptionshastighed. \nTilbøjelig til hallucinationer."
+  },
+  "mode_balanced_description": {
+    "description": "Beskrivelse af den balancerede transskriptionstilstand.",
+    "message": "God balance mellem hastighed og nøjagtighed til de fleste anvendelser."
+  },
+  "mode_speed_description": {
+    "description": "Beskrivelse af hastighedstransskriptionstilstanden.",
+    "message": "Hurtigste respons, men mindre præcis. \nTilbøjelig til at afbryde."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Lydeffekter er deaktiveret i Firefox for at forhindre problemer med lydfeedback."
   }
 }
