@@ -203,7 +203,7 @@
   },
   "appName": {
     "description": "El nombre de la aplicación.",
-    "message": "Di, pi"
+    "message": "Say, Pi"
   },
   "applicationStatusIssue": {
     "description": "Mensaje que se mostrará cuando la aplicación tenga problemas.",

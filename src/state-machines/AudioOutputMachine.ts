@@ -9,27 +9,36 @@ import {
 import {
   AudioProvider,
   audioProviders,
+  MatchableVoice,
+  SpeechSynthesisVoiceRemote,
   SpeechUtterance,
 } from "../tts/SpeechModel";
 const { log } = actions;
 
 type LoadstartEvent = { type: "loadstart"; source: string };
+type PlayEvent = { type: "play"; source: string };
+type SourcedPlaybackEvent = LoadstartEvent | PlayEvent; // { type: string; source: string };
 type ChangeProviderEvent = {
   type: "changeProvider";
   provider: AudioProvider; // default or custom provider
+};
+type ChangeVoiceEvent = {
+  type: "changeVoice";
+  voice: MatchableVoice | null;
 };
 type ReplayingAudioEvent = { type: "replaying" };
 type AudioOutputEvent =
   | LoadstartEvent
   | { type: "skipNext" }
   | { type: "loadedmetadata" }
-  | { type: "play" }
+  | PlayEvent
   | { type: "pause" }
   | { type: "ended" }
   | { type: "canplaythrough" }
   | { type: "seeked" }
   | { type: "emptied" }
   | ChangeProviderEvent
+  | ChangeVoiceEvent
   | ReplayingAudioEvent;
 export const audioOutputMachine = createMachine(
   {
@@ -39,6 +48,7 @@ export const audioOutputMachine = createMachine(
       autoplay: false,
       replaying: false,
       provider: audioProviders.Pi,
+      voice: null,
     },
     id: "audioOutput",
     initial: "idle",
@@ -49,6 +59,15 @@ export const audioOutputMachine = createMachine(
           return {
             ...context,
             provider: event.provider,
+          };
+        }),
+      },
+      changeVoice: {
+        internal: true,
+        actions: assign((context, event) => {
+          return {
+            ...context,
+            voice: event.voice,
           };
         }),
       },
@@ -71,6 +90,28 @@ export const audioOutputMachine = createMachine(
               cond: "shouldSkip",
               internal: true,
               description: `Skip this track.`,
+              actions: [
+                assign((context, event) => {
+                  return {
+                    ...context,
+                    skip: false,
+                  };
+                }),
+                {
+                  type: "skipCurrent",
+                },
+              ],
+            },
+            {
+              target: "loading",
+            },
+          ],
+          play: [
+            {
+              target: "idle",
+              cond: "shouldSkip",
+              internal: true,
+              description: `Skip this track when play is requested of an already loaded track. (navigation from another page to talk page)`,
               actions: [
                 assign((context, event) => {
                   return {
@@ -161,9 +202,26 @@ export const audioOutputMachine = createMachine(
           },
           paused: {
             on: {
-              play: {
-                target: "playing",
-              },
+              play: [
+                {
+                  target: "paused",
+                  cond: "shouldSkip",
+                  actions: [
+                    assign((context, event) => {
+                      return {
+                        ...context,
+                        skip: false,
+                      };
+                    }),
+                    {
+                      type: "skipCurrent",
+                    },
+                  ],
+                },
+                {
+                  target: "playing",
+                },
+              ],
             },
           },
           ended: {
@@ -196,6 +254,7 @@ export const audioOutputMachine = createMachine(
         autoplay: boolean;
         replaying: boolean;
         provider: AudioProvider;
+        voice: MatchableVoice | null;
       },
     },
     predictableActionArguments: true,
@@ -228,11 +287,15 @@ export const audioOutputMachine = createMachine(
       shouldSkip: (context, event: AudioOutputEvent) => {
         const shouldSkip = context.skip === true;
 
-        if (event.type === "loadstart") {
-          event = event as LoadstartEvent;
+        if (event.type === "loadstart" || event.type === "play") {
+          const sourcedEvent = event as SourcedPlaybackEvent;
+          const src = sourcedEvent.source;
 
           const isNotReplaying = !context.replaying;
-          const isSourceMismatch = !context.provider.matches(event.source);
+          const isVoiceMismatch =
+            context.voice && !context.voice.matchesSource(src);
+          const isProviderMismatch = !context.provider.matches(src);
+          const isSourceMismatch = isVoiceMismatch || isProviderMismatch;
 
           return (isNotReplaying && isSourceMismatch) || shouldSkip;
         }

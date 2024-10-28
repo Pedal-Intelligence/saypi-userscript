@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  isPlaceholderUtterance,
   SayPiSpeech,
   SpeechSynthesisVoiceRemote,
   SpeechUtterance,
@@ -31,6 +32,9 @@ export class TextToSpeechService {
     lang: string,
     stream: boolean
   ): Promise<SpeechUtterance> {
+    if (isPlaceholderUtterance(uuid)) {
+      throw new Error("Cannot create speech from placeholder");
+    }
     const voice_id = voice.id;
     const data = { voice: voice_id, text: text, lang: lang };
     const baseUri = `${this.serviceUrl}/speak/${uuid}`;
@@ -51,6 +55,12 @@ export class TextToSpeechService {
     uuid: string,
     text: string
   ): Promise<void> {
+    if (isPlaceholderUtterance(uuid)) {
+      console.info(
+        `Cannot add text to placeholder. Skipping ${text.length} characters.`
+      );
+      return;
+    }
     if (!this.sequenceNumbers[uuid]) {
       this.sequenceNumbers[uuid] = 0;
     }

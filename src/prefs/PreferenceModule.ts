@@ -2,7 +2,11 @@ import { config } from "../ConfigModule";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import AudioControlsModule from "../audio/AudioControlsModule";
 import EventBus from "../events/EventBus";
-import { audioProviders, SpeechSynthesisVoiceRemote } from "../tts/SpeechModel";
+import {
+  audioProviders,
+  PiAIVoice,
+  SpeechSynthesisVoiceRemote,
+} from "../tts/SpeechModel";
 import { isFirefox } from "../UserAgentModule";
 
 type Preference = "speed" | "balanced" | "accuracy" | null;
@@ -221,8 +225,13 @@ class UserPreferenceModule {
         chrome.storage.sync
       ) {
         chrome.storage.sync.get(["voiceId"], async (result: StorageResult) => {
+          let voice;
           if (result.voiceId) {
-            const voice = await tts.getVoiceById(result.voiceId);
+            if (PiAIVoice.isPiVoiceId(result.voiceId)) {
+              voice = PiAIVoice.fromVoiceId(result.voiceId);
+            } else {
+              voice = await tts.getVoiceById(result.voiceId);
+            }
             resolve(voice);
           } else {
             resolve(null); // user preference not set
@@ -236,6 +245,7 @@ class UserPreferenceModule {
   }
 
   public setVoice(voice: SpeechSynthesisVoiceRemote): Promise<void> {
+    const provider = audioProviders.retrieveProviderByEngine(voice.powered_by); // should powered_by be distinct from provided_by?
     if (
       typeof chrome !== "undefined" &&
       chrome.storage &&
@@ -243,12 +253,12 @@ class UserPreferenceModule {
     ) {
       chrome.storage.sync.set({ voiceId: voice.id });
       const audioControls = new AudioControlsModule();
-      audioControls.useAudioOutputProvider(audioProviders.SayPi); // TODO: replace with voice.provided_by
+      audioControls.notifyAudioVoiceSelection(voice);
     }
     EventBus.emit("userPreferenceChanged", {
       voiceId: voice.id,
       voice: voice,
-      audioProvider: audioProviders.SayPi,
+      audioProvider: provider,
     });
     return Promise.resolve();
   }
@@ -262,9 +272,9 @@ class UserPreferenceModule {
       chrome.storage.sync.get(["voiceId"]).then((result: StorageResult) => {
         if (result.voiceId) {
           chrome.storage.sync.remove("voiceId");
-          const audioControls = new AudioControlsModule();
-          audioControls.useAudioOutputProvider(audioProviders.Pi);
         }
+        const audioControls = new AudioControlsModule();
+        audioControls.notifyAudioVoiceDeselection();
       });
     }
     EventBus.emit("userPreferenceChanged", {
