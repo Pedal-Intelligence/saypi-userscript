@@ -144,12 +144,12 @@ const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
   minSpeechFrames: 3,
   preSpeechPadFrames: 10,
   onSpeechStart: () => {
-    console.log("Speech started");
+    console.debug("User speech started");
     speechStartTime = Date.now();
     EventBus.emit("saypi:userSpeaking");
   },
   onSpeechEnd: (rawAudioData: Float32Array) => {
-    console.log("Speech ended");
+    console.debug("User speech ended");
     const speechStopTime = Date.now();
     const speechDuration = speechStopTime - speechStartTime;
     const audioBlob = convertToWavBlob(rawAudioData);
@@ -159,7 +159,7 @@ const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
     });
   },
   onVADMisfire: () => {
-    console.log("Cancelled. Audio was not speech.");
+    console.debug("Cancelled. Audio was not speech.");
     EventBus.emit("saypi:userStoppedSpeaking", { duration: 0 });
   },
   onFrameProcessed(probabilities: { isSpeech: number; notSpeech: number }) {
