@@ -181,17 +181,17 @@ async function checkAudioCapabilities() {
   const detector = new AudioCapabilityDetector();
   const thresholds = {
     minimumEchoQuality: 0.5,
-    preferredEchoQuality: 0.8,
+    preferredEchoQuality: 0.75,
   };
   const config = await detector.configureAudioFeatures(thresholds);
 
   if (config.enableInterruptions) {
-    console.log("Enabling interruptions", config);
+    console.debug("The interrupt feature can be enabled", config);
   }
 
   if (config.showQualityWarning) {
     console.warn(
-      "Echo cancellation quality is low. Consider disabling the interruption feature."
+      "Echo cancellation quality is low. Consider disabling the interrupt feature."
     );
     const actualScore =
       config.audioQualityDetails.echoCancellationQuality
@@ -213,7 +213,6 @@ async function setupRecording(callback?: () => void): Promise<void> {
   }
 
   try {
-    await checkAudioCapabilities(); // debugging only
     stream = await navigator.mediaDevices.getUserMedia({
       audio: {
         channelCount: 1,

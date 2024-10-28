@@ -100,7 +100,10 @@ document.addEventListener("DOMContentLoaded", function () {
   function showDescription(preference) {
     const descriptions = document.querySelectorAll(".description");
     descriptions.forEach((description) => {
-      if (description.getAttribute("data-i18n") === `mode_${preference}_description`) {
+      if (
+        description.getAttribute("data-i18n") ===
+        `mode_${preference}_description`
+      ) {
         description.classList.add("selected");
       } else {
         description.classList.remove("selected");
@@ -149,9 +152,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function switchInputs() {
     const soundEffectsInput = document.getElementById("sound-effects");
-    getStoredValue("soundEffects", true).then((soundEffects) => {
-      selectInput(soundEffectsInput, soundEffects);
-    });
+    const soundEffectsLabel = soundEffectsInput.closest('.wraper');
+    
+    // Check if Firefox
+    if (/Firefox/.test(navigator.userAgent)) {
+      // Disable the input
+      soundEffectsInput.disabled = true;
+      // Add visual indication that it's disabled
+      soundEffectsLabel.classList.add('disabled');
+      // Add tooltip explaining why
+      soundEffectsLabel.setAttribute('title', 
+        'Sound effects are disabled in Firefox to prevent audio feedback issues.');
+      // Force the toggle to off position
+      selectInput(soundEffectsInput, false);
+    } else {
+      // Normal behavior for other browsers
+      getStoredValue("soundEffects", true).then((soundEffects) => {
+        selectInput(soundEffectsInput, soundEffects);
+      });
+    }
 
     soundEffectsInput.addEventListener("change", function () {
       chrome.storage.sync.set({ soundEffects: this.checked }, function () {
@@ -193,9 +212,27 @@ document.addEventListener("DOMContentLoaded", function () {
     const allowInterruptionsInput = document.getElementById(
       "allow-interruptions"
     );
-    getStoredValue("allowInterruptions", true).then((allowInterruptions) => {
-      selectInput(allowInterruptionsInput, allowInterruptions);
-    });
+    const allowInterruptionsLabel = allowInterruptionsInput.closest(".wraper");
+
+    // Check if Firefox
+    if (/Firefox/.test(navigator.userAgent)) {
+      // Disable the input (because Firefox doesn't support echo cancellation with MicVAD)
+      allowInterruptionsInput.disabled = true;
+      // Add visual indication that it's disabled
+      allowInterruptionsLabel.classList.add("disabled");
+      // Add tooltip explaining why
+      allowInterruptionsLabel.setAttribute(
+        "title",
+        "Interruptions are not currently supported in Firefox."
+      );
+      // Force the toggle to off position
+      selectInput(allowInterruptionsInput, false);
+    } else {
+      // Normal behavior for other browsers
+      getStoredValue("allowInterruptions", true).then((allowInterruptions) => {
+        selectInput(allowInterruptionsInput, allowInterruptions);
+      });
+    }
 
     allowInterruptionsInput.addEventListener("change", function () {
       chrome.storage.sync.set(
