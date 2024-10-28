@@ -8,3 +8,4 @@ public/*.js.LICENSE.txt
 public/*.js.map
 public/*.wasm
 src/audio/vad-configs.json
+src/audio/capabilities-test.json

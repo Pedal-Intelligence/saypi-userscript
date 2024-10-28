@@ -70,6 +70,7 @@ export class AudioCapabilityDetector {
           echoCancellation: true,
           autoGainControl: true,
           noiseSuppression: true,
+          channelCount: 1,
         },
       });
 
