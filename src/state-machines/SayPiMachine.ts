@@ -199,7 +199,7 @@ function getChatbotDefaultPlaceholder(): string {
 }
 const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCdATgPYC2dJASmChGgDaABgC6iUHVawsZVvgkgAHogAsAJgCMAZhzDhADm0BWTaoPqDANgDsxgDQg0idcPXqcZzceP6AnDaq2uqqAL6hjrTYeISkFNS0DAhEKAA2qSLiSCBSMnIK2SoIfuqOzggGxn446sYGflbBPoE26uGR6NEExGSUNOhJDADKdHwA1gRQmYq5sljyikWqmu41mpo2Vuo2wnXGpU6IK9q6wqrNhtqqwjY2Bu0gUbgp6UMkKMxk+FD99IwvqV4-CEYhm0jmC0KahCnnMGlUWzcOjsZTUlRwqgRJlufhMVh8YQij06zzSqTeHy+P0SjAAFihvgBXOjTbKzfKLRAWVEITT6Yw4Xz1YR4hHGVoPJ44AEUz6TX5JAEAMRQWFSkFZknBHKhCCCqlhBnhiK02hRh15uMF2j8tvOWhKVUlJOlZNlVKoSlg7xIYBwKAAZr7mAAKVz6YQASl+0Rl7zl301OW18wKoCWV0NxtcpvN5Suwhwtu0K3Ufg0V2u2mdmFwqSw3rA+HlNKYWAAKrSCBNE6C2SnIenECcbLoEetLMZtEYETYeaaPHdi8s7nyRTXovXG83vgrGMNRige1M+1q8qnOQgTkYMVYJ5Vp1dbPPDB5LH4LAZWqP10SpVvfR3akBkYcgGywAAjdUk3ZC9dU0WxdBtXYdErOpNB5MwSyLbxdiNM1jGWas-xdACmxbECEBQRkIHmZJ5HwMBSA1U9k3PQdlCOfFNBqdR8QsWojDNPxMJOAUEXDKxbU0epMQ3OsG0Aii-iomi6OYJiGKYkgYIHNNON5fEPDhUwpMI-YTB5MSDBqKoEJOIJGgReScDIoC9wQWA4BkeQqNgGQoEYiBdPY-SigQ1RqmCDQDAMYQZNitwrL4ni4rvdZ6hsD8bBctzJhwDSiFYZhaN3Vt6SZFlWNgjiihHMd0snR9Z1Ekxb0k6TZNyxTyO+ArNJK-L8FYEgRnGZSkkZLzmCVAgG1pSAxqPSYQohMLh0fW97ynGdnwtVxsKXVpgk2XxVBykja1cnqgP6orBr64bRsPY8PKmsBmCW49Vp1IcKgCHArC-cwp3LDYDAwi1NACGylzvO5ah2QJuu3fLCuK0qoBwd7PpeibGBxt5WDoUYIC+lbqr0y9bGqCN+S0KS4u0F8spwJdP2-bQ3EJDorryvr0YerHCbxsrKMJkhidJ8nE00LIzzW6nWbp3YGY-EUXzLGpMvUE78V2FGlL6or8EoBMseIIhGXYRlUhQD0IHkP0CHIVgxj9dgPpgAB5LgsHYRSsCIH64L+vlzAxTZgltQjdb28painQG3EaeLMXOnniT5m78pNs2qX9IgrZtu2PQ+thmBwOhS4DYr2BwT3mB9v2A+9IOQ9qo4zmqMwK12eL6j8Bx9oRQszCH86bGhhoDcuzcc+N+R8-yy3rdt+38YQEhmAZWAiGYSCWPltjFd1BpdC0fC+PLW1R3nEsPCk9LAj8DZy0N3qsbzj6C9XkuN7Fipbeu996HxVGqI+YJQqXi0AiPQWxxxnFHAiecjQrA4C5nUbQUkzSrkzv+BeX8l4-xXkXNepdN7APwHvA+EFIAAFFOAkBBMfGq60ECwPQcIBBd4kFPnnKOGwOA0rxVxI0EwH9brf3NoXYu68PReh9H6QMwYQywEZBBVuPl8AABEwB2zQNGAhqNF6mxIX1P+8iKasKpvBZYb4ZLnCMFPL82x5w+B4q0bYacyw3wurzeeJiiFmJkeozRsgPQd3YQhBobM+JBCqO4Bo5h3HxUBjaYIYlTSaEkbnYhMiqE0MgpQne1DQF0OCpTaBupTAGkvjsWKgkdgHATpFA0lQQg7DNK4IeuTTHLz6oU8pJSQG0LAOA9UlSbHVL+rUtYX5DAWDqM01Bqw4p1H0N4WpEi54KSCdKfJBchm0JGWUsZEBGFcBYVA0+syzDzIaUshZLSXA7HaXhCwOgfDlnwaRQhOBy7FQpCQKaALmAV1gJ6b09tlFBg+iGXw+gjF-P2YCz6PpQVotgFEmB5YkJBEqMsM4K5h4J1MIWdZ9QHI7F2FYFyGlYBSHwJjDyFUoDMhxbqexDiNhbB2HsF5FQrDoLEe+XxaV7i7P6oy+QLLWwi3Gr2aZtyDL6hsn4G4NxzC2HOlYTC+IhHuF8FYIitRob+KztEBlTLMZVw7F2fAr1WwHkVSeZVv0DK+FqJ4OK2rbRbCqJhTEHhzKIiuL64w9K4A2vygwTs3ZN4MAAOoHypJy2Z3D0F3muEjA6dRRLlkFOcMN5gziRqlda2VsasAy2AipYYksSaLVFm6m5Hqij7CsnYAUwR7LxSyniqNMrmXVtrR5BtUtm2usEHLNtodVWljWLy7xAqeQQ3QY5EG+JbDij8EOmNfUXXLUAYMLAs1mywAWmTFt6aDKtCsoRaor8fDNBNTu35V1K0jsPTWltb1pq1tvR2-ubMRTSRFFYYQH4g1WjLRWcD78K3RqrT+lNcwT37l-dOqpKrygyRuLCLZ-hAjRUcBmKKQQ7D7pQ1jZNqbE01sbaTNDaacPtrUDaDBlHSVHDsD3ZYPhiNBBCNR79wtpoAEl8DBmYMyD08qANMance1t-YZmercAKfDfqGi1BElDRERYPznGhsKm0GhRO2pxlJmTcnN4S0nde6ds61MqqKFsKykHCwCZMOWG4rQgjhCJMNCAcBFBPDnZ3BAABaBoPJAg1GFV5k4NpcRUald0OIlBIvsLNCaraurzCWHjlyV+GDhVnHxMYWwUk91SrjJSSYOXLwaH1Z44VdRZzxW7pKgJeyjZQGa7qawQb7nYKZraSoGr9h9KxoLTGQ2w5XEwq0ao1g4pTdqBkulUr+ZzYGrap6tbFsGXWCKDBlWrgmHOI6F8fI9A2g6UEacCIdt9euvs+b+UFUqZO+FbkUMAi6HW6rKoM87izYOSEqkf2jg2nnEazwM8h4im4SKD9gSBtQ4GRbMh-8YeufY8UXY8zzglkIlS5m+0jJ6Gq2nPLo43uWv65-bH5isZhIDiQAnCsidv1SqWEsXNrjQ3nMWwUPhgbBGJdOSH0ijmlKKRBJrhP53-bnPtOnwjdhZXsmYNwkO0XAqmrDjhvgeLcPcLsPL2D9MJyt9rxJTkjC2EN+CoFGLYA4GGswdgaRTeIw8Jb1wU4o5SSsnydB6zdMTxWBjlnt0jee7BRCgPj74FW9D2gu3LgTAeGj7aVw9Q+JM+MVjpP9tMXu+YF745YDVSTLTwDYP1uw857N5iR3N8LBJcC7t-5FeQVe6xQ3IO9Dq9N6ES3rPtuBH3cwUPRoGrzPx+lQewbquovRZSVDbwF9F9TaMFBgIlnq3xsdSr3nau1CQYNJBgNAkRT5qhtgg0WVqu62+bq0vLov22qPceKboROdBgtgquHyBYLcJhKZIRoJlBiRiJkhsOv-lgCxpfifETsIJhHFEIl4HAQEMJqvn-t9pJtJuXHZt8KbucIRIKCEO4NONsPUPqiThnIPFiCnOWuEEAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCdATgPYC2dJASmChGgDaABgC6iUHVawsZVvgkgAHogDMAdgAcAThzrt64aoAsAJgBsAVk3HLlgDQg0iAIwvTwnJs0ntmt34uBgC+wY602HiEpBTUtAwIRCgANski4kggUjJyCpkqCNqmjs6Fxrqm1uqm6naVmsLqoeHokQTEZJQ06AkMAMp0fADWBFDpitmyWPKKBcZulnra5tqWRqqW7g5OriaqXqrm6i6ax8KW6hrNIBG4Sal9JCjMZPhQ3fSM98m8-EJiE2kUxm+UQtmMOBcxhs1m8xn0+m2pWhi2MxnMphq2hc5hcwmMh2utxw30ez1e73ijAAFig3gBXOjjTKTXKzRCaYo7BB41Y4NanDaXczmYQuSxE1p3FLJMkvUYfBLfABiKCwyUgzMkQLZoIQaIhUJh3hsCNWJVc2n2llU2jtm3x-ltksw0oeT3lbyoSlgTxIYBwKAAZv7mAAKDzCKMASg+kVJHopWqyOumeVAc0shuhthN8IM5u5Jk8dtUWxqVisErCNylOGSWF9YHwCqpTCwABVqQQRm9k6y0+yEKpDvsEVHrCtzMZzhbhxtzJDvEc3KcjsYXZEG02W162-1Bihe2MASzUyCM2oNmODBPNFOZ0i1O51Dh5mtqqtTD4fJvcNv-V3SkekYchGywAAjDV+3PdNlFcEVNH5Sd-CsTEbFUOdxQsPQdGWdRDEqLY-3rRtANbECEBQekIGmRJ5HwMBSE1U9tRyQc9RxdEcFtdEHytfQsIJTwR3XXiNHRFwSIA5sKM+KiaLo5gmIYpiSBg9iL3gnlp1fNDbHxKMcRMOdr1fQ5UL8Az0WksjZL3SjYDgGR5Co2AZCgRiIA04E4IKLiIXKTE0RXe8DFMtES3FFxDHUGcXDLasWldUid1GHBlKIVhmFohz5NpBkmVYlNNL8q8bSWQxzjC6dZ25SN9lUc46ltW1Kg3GtiRkoCMpUnL0vwVgSAGYY5ISeknOYZUCEbalIBGo9Rh83VL3nCrx2qh86tKTF8RwEVyg2TQs05VRbLSt5eqy-rLsG4bD2PRVGAmsBmAW49lo41btEafbTmhb97xRdQ51MaL9unbwPHMVRMW0c7yMuzLstyqAcBet6HrG57JseVg6EGCB3qW4qBy0gpzG8HA7TtOELD8ZZQcqUwIfKHRp2ncUktrFLuvS5GbrRjHiby8bcZIfHCZFsYXAyNjfKHSmkJpvwbHp9mmeEFmuKtawTsxbmursnqsvwShPTR4giHpdh6WSFAKSoCB5ADAhyFYIYA3YV6YAAeS4LB2DIrAiE+8nXGqt91Csco3DMZnQdQg4lcMMsak0BH7LR03zYpQMiGt237cd162GYHA6GLoNsvYHBveYP2A6D30Q7DsqeXOXQoVsC4THFKNMPq6pGp8FZhAaeFTHhTOTfkXP0qtm27Yd7GEBIZg6VgIhmEgli5ZKhW9QMfYwdOHw4rtI4Qfqi5FitfFoSa0V4TOzq6z5y6c9evPF6LlfRcYOvTe29d6qnVHvQEpUhxgxwraGwVY1h+EHjtWq1MoR2kaGYZYr9kpbmNulL+Ft86F2Xo7NsQD8Bbx3hBSAABRTgJB-j7zJu3GBi44HojsIgnwidhCLnmOULQCUwYiiaG-Xm+DP5z2-gvAuS9i4Kh9H6AMwZQxhlgPSCCzcXL4AACJgHtmgWMRsLrZ2kUQ3+pCSbMNgkOKEMUcCn0uJYWmeIwamQHpCKw6wEpaCaobd+kizFmxkZdDRWjZCOzbkOUSN4qqTmWI+UyMVXzYnKFrYQP1rAzwIeYvOFCqGQVXgUkBNDvKk1sXqG0EInG1BHOffEiccQ8Q0I0Iw95-D4hyVIkJRCSnUOKRvShpSwBgI1OUmxUCqkmEcScAiNpVANOMKDbQaJHE-QSm1XE5wxG4P-EEkkeT0r9KKQAteQzCllPoVwJhkDD6rWqbM04dTFmtOWUWLWi5TA-S1hfTk34AkSNMTgUu2UyQkAmiC5gZdYDel9A7FRIZXphjWDGOM+zgWgren6SFWLYDRL1N80w+wjgFntBcBoyDECVH0G+dBpx8LEsJOIyIylYBSHwKjJ6CACpQEZAS1a8xxRLBWGsEcmxKhYXFEhGcqdMRQgxDFEibKOVcrbMLLGfYKlTMFSOV8QVcyWG-LrJ8w4CT7EyZPUUp1yjKrgKq9KDAuw9lXgeUaWrJn3O0vCLW1MbBFHHqfQ4HiVh6GhEEVZ6JVZ2vZfIVGFdOzdnwI9fcWAADqO8kzaq9XMQifqgqBpOMGosU8WZT05EENwYMCQxodZdN1i0zn9AlgTeamqTyepWtpDEpkoaOIrAYMGhwzAdT2b1WNnLHVYGlty5tks23uplp2r63qFgitWOsCVpq3C-R+qnXM05sTmFrXGqdM7U3TRbLAOaRN20Cu0ka0yVoWbVHmXic4xKswnsnfW6d7buUasXfegoNo+THVcRcY4dhTIWGVugkcYobSbFHTzVl9rT2-ozVMJtf6gPZq7SB1pLSRSBr4YemDJw6XQn0JiDQ2SWW4BVRhtGDAsNkMonO1tEA2PWLuQRxA1Re1lj0BWAk8d8SrO-fGjGABJfAoZmCMnY-JYWLapZ3vwyuwjhhiPWuhuRostpFwdPlR4f1GcGPjrrULSacmFNKdXqp+dt6gOyz41pjkXJSiHGjl4GBpp4T6A2KEGsg0IBwEULcdz4cEAAFpzBYT4TgQyUZUtpeqCRdoMRKDRfbnRlwb4wZHu+VaFJWEaiNR8zOXE-rdmobdLKRMoxctDjMHOMwBWxTYg-FYHEOhulQBa0fBL3JpWvinmWNJuJ06mAG1dFGzWzw6u0t3LCP0X0EkqGKTJ4p5hzYFvGu60shurTcAlHi+JKYw2qB4eEoMTgszSaWOplx7z7b6tJ3G7aTsraKPd7icUyzR2juUcox7LMf2CfPN4P3-LlFBtCGVTV0RaxEUcObhCf5yL-hSWHiButPMpZcWwdSVnCu+VGHwNKfBSQhwczH6VwlBxILjpbObXD6GM+4ajaICI4hGztL8EM1hQltPoE44Ox2Q8Ob0-JFzSmLflvxnk4V6pFEWMa1YxxdJ2jm1i8FE08cIHLQVjhGg-HVFNehXQAjlg1DWLieGdPMXQrBTi2AOBBrMHYCkI3lQjU8Ssub8+kqiwxVRP3cemTmZ69d9ih2uK4-wDZ8r5mugzcERD1bjrdK1guJWHiGKkv6upURmjfX7uoUwpwCcmhYzIB+8g4HjCmeNCh5Qed986wyxCpQyYsvVe3cJ493iuuIdaFx8bwRZvBJW+W9BpntBawPCpyB1JxXB9ldmB0G+IohrjUbCt8dJC5aajRVHrTsdTGf0scTS6mHKePP6j1bvqeesD-QbD8J2mRFMlFCvuvr+sdo-jFtYL6kFDoG0rtIWN5t+K+AlPiK9pksdDgiXtfvGqxpmhviwq1gYJ1usI0HASvskj9Lvv8jDGYFoDZJZugelLJvJqXA5g-krk-ojroJTPiBTuKLpKZIsqbrziOGnBgmIqEEAA */
     context: {
       transcriptions: {},
       isTranscribing: false,
@@ -817,6 +817,10 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               {
                 type: "speakingPrompt",
               },
+              {
+                type: "pauseRecording",
+                cond: "interruptionsNotAllowed",
+              },
             ],
             exit: [
               {
@@ -827,6 +831,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               },
               {
                 type: "clearPrompt",
+              },
+              {
+                type: "resumeRecording",
               },
             ],
             description:
@@ -961,6 +968,14 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
 
       startRecording: (context, event) => {
+        EventBus.emit("audio:startRecording");
+      },
+
+      pauseRecording: (context, event) => {
+        EventBus.emit("audio:input:stop");
+      },
+
+      resumeRecording: (context, event) => {
         EventBus.emit("audio:startRecording");
       },
 
@@ -1162,6 +1177,10 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       interruptionsAllowed: (context: SayPiContext) => {
         const allowInterrupt = userPreferences.getCachedAllowInterruptions();
         return allowInterrupt;
+      },
+      interruptionsNotAllowed: (context: SayPiContext) => {
+        const allowInterrupt = userPreferences.getCachedAllowInterruptions();
+        return !allowInterrupt;
       },
     },
     delays: {
