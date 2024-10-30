@@ -821,6 +821,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 type: "pauseRecording",
                 cond: "interruptionsNotAllowed",
               },
+              {
+                type: "callInterruptible",
+              },
             ],
             exit: [
               {
@@ -834,6 +837,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               },
               {
                 type: "resumeRecording",
+              },
+              {
+                type: "callContinues",
               },
             ],
             description:
@@ -1086,6 +1092,12 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         buttonModule.callActive();
         audibleNotifications.callStarted();
         EventBus.emit("session:started");
+      },
+      callInterruptible: () => {
+        buttonModule.callInterruptible();
+      },
+      callContinues: () => {
+        buttonModule.callActive();
       },
       callHasEnded: () => {
         visualNotifications.listeningStopped();
