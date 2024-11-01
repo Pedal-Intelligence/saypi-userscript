@@ -70,6 +70,7 @@ type SayPiEvent =
   | { type: "saypi:piSpeaking" }
   | { type: "saypi:piStoppedSpeaking" }
   | { type: "saypi:piFinishedSpeaking" }
+  | { type: "saypi:interrupt" }
   | { type: "saypi:submit" }
   | { type: "saypi:promptReady" }
   | { type: "saypi:call" }
@@ -199,7 +200,7 @@ function getChatbotDefaultPlaceholder(): string {
 }
 const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCdATgPYC2dJASmChGgDaABgC6iUHVawsZVvgkgAHogDMAdgAcAThzrt64aoAsAJgBsAVk3HLlgDQg0iAIwvTwnJs0ntmt34uBgC+wY602HiEpBTUtAwIRCgANski4kggUjJyCpkqCNqmjs6Fxrqm1uqm6naVmsLqoeHokQTEZJQ06AkMAMp0fADWBFDpitmyWPKKBcZulnra5tqWRqqW7g5OriaqXqrm6i6ax8KW6hrNIBG4Sal9JCjMZPhQ3fSM98m8-EJiE2kUxm+UQtmMOBcxhs1m8xn0+m2pWhi2MxnMphq2hc5hcwmMh2utxw30ez1e73ijAAFig3gBXOjjTKTXKzRCaYo7BB41Y4NanDaXczmYQuSxE1p3FLJMkvUYfBLfABiKCwyUgzMkQLZoIQaIhUJh3hsCNWJVc2n2llU2jtm3x-ltksw0oeT3lbyoSlgTxIYBwKAAZv7mAAKDzCKMASg+kVJHopWqyOumeVAc0shuhthN8IM5u5Jk8dtUWxqVisErCNylOGSWF9YHwCqpTCwABVqQQRm9k6y0+yEKpDvsEVHrCtzMZzhbhxtzJDvEc3KcjsYXZEG02W162-1Bihe2MASzUyCM2oNmODBPNFOZ0i1O51Dh5mtqqtTD4fJvcNv-V3SkekYchGywAAjDV+3PdNlFcEVNH5Sd-CsTEbFUOdxQsPQdGWdRDEqLY-3rRtANbECEBQekIGmRJ5HwMBSE1U9tRyQc9RxdEcFtdEHytfQsIJTwR3XXiNHRFwSIA5sKM+KiaLo5gmIYpiSBg9iL3gnlp1fNDbHxKMcRMOdr1fQ5UL8Az0WksjZL3SjYDgGR5Co2AZCgRiIA04E4IKLiIXKTE0RXe8DFMtES3FFxDHUGcXDLasWldUid1GHBlKIVhmFohz5NpBkmVYlNNL8q8bSWQxzjC6dZ25SN9lUc46ltW1Kg3GtiRkoCMpUnL0vwVgSAGYY5ISeknOYZUCEbalIBGo9Rh83VL3nCrx2qh86tKTF8RwEVyg2TQs05VRbLSt5eqy-rLsG4bD2PRVGAmsBmAW49lo41btEafbTmhb97xRdQ51MaL9unbwPHMVRMW0c7yMuzLstyqAcBet6HrG57JseVg6EGCB3qW4qBy0gpzG8HA7TtOELD8ZZQcqUwIfKHRp2ncUktrFLuvS5GbrRjHiby8bcZIfHCZFsYXAyNjfKHSmkJpvwbHp9mmeEFmuKtawTsxbmursnqsvwShPTR4giHpdh6WSFAKSoCB5ADAhyFYIYA3YV6YAAeS4LB2DIrAiE+8nXGqt91Csco3DMZnQdQg4lcMMsak0BH7LR03zYpQMiGt237cd162GYHA6GLoNsvYHBveYP2A6D30Q7DsqeXOXQoVsC4THFKNMPq6pGp8FZhAaeFTHhTOTfkXP0qtm27Yd7GEBIZg6VgIhmEgli5ZKhW9QMfYwdOHw4rtI4Qfqi5FitfFoSa0V4TOzq6z5y6c9evPF6LlfRcYOvTe29d6qnVHvQEpUhxgxwraGwVY1h+EHjtWq1MoR2kaGYZYr9kpbmNulL+Ft86F2Xo7NsQD8Bbx3hBSAABRTgJB-j7zJu3GBi44HojsIgnwidhCLnmOULQCUwYiiaG-Xm+DP5z2-gvAuS9i4Kh9H6AMwZQxhlgPSCCzcXL4AACJgHtmgWMRsLrZ2kUQ3+pCSbMNgkOKEMUcCn0uJYWmeIwamQHpCKw6wEpaCaobd+kizFmxkZdDRWjZCOzbkOUSN4qqTmWI+UyMVXzYnKFrYQP1rAzwIeYvOFCqGQVXgUkBNDvKk1sXqG0EInG1BHOffEiccQ8Q0I0Iw95-D4hyVIkJRCSnUOKRvShpSwBgI1OUmxUCqkmEcScAiNpVANOMKDbQaJHE-QSm1XE5wxG4P-EEkkeT0r9KKQAteQzCllPoVwJhkDD6rWqbM04dTFmtOWUWLWi5TA-S1hfTk34AkSNMTgUu2UyQkAmiC5gZdYDel9A7FRIZXphjWDGOM+zgWgren6SFWLYDRL1N80w+wjgFntBcBoyDECVH0G+dBpx8LEsJOIyIylYBSHwKjJ6CACpQEZAS1a8xxRLBWGsEcmxKhYXFEhGcqdMRQgxDFEibKOVcrbMLLGfYKlTMFSOV8QVcyWG-LrJ8w4CT7EyZPUUp1yjKrgKq9KDAuw9lXgeUaWrJn3O0vCLW1MbBFHHqfQ4HiVh6GhEEVZ6JVZ2vZfIVGFdOzdnwI9fcWAADqO8kzaq9XMQifqgqBpOMGosU8WZT05EENwYMCQxodZdN1i0zn9AlgTeamqTyepWtpDEpkoaOIrAYMGhwzAdT2b1WNnLHVYGlty5tks23uplp2r63qFgitWOsCVpq3C-R+qnXM05sTmFrXGqdM7U3TRbLAOaRN20Cu0ka0yVoWbVHmXic4xKswnsnfW6d7buUasXfegoNo+THVcRcY4dhTIWGVugkcYobSbFHTzVl9rT2-ozVMJtf6gPZq7SB1pLSRSBr4YemDJw6XQn0JiDQ2SWW4BVRhtGDAsNkMonO1tEA2PWLuQRxA1Re1lj0BWAk8d8SrO-fGjGABJfAoZmCMnY-JYWLapZ3vwyuwjhhiPWuhuRostpFwdPlR4f1GcGPjrrULSacmFNKdXqp+dt6gOyz41pjkXJSiHGjl4GBpp4T6A2KEGsg0IBwEULcdz4cEAAFpzBYT4TgQyUZUtpeqCRdoMRKDRfbnRlwb4wZHu+VaFJWEaiNR8zOXE-rdmobdLKRMoxctDjMHOMwBWxTYg-FYHEOhulQBa0fBL3JpWvinmWNJuJ06mAG1dFGzWzw6u0t3LCP0X0EkqGKTJ4p5hzYFvGu60shurTcAlHi+JKYw2qB4eEoMTgszSaWOplx7z7b6tJ3G7aTsraKPd7icUyzR2juUcox7LMf2CfPN4P3-LlFBtCGVTV0RaxEUcObhCf5yL-hSWHiButPMpZcWwdSVnCu+VGHwNKfBSQhwczH6VwlBxILjpbObXD6GM+4ajaICI4hGztL8EM1hQltPoE44Ox2Q8Ob0-JFzSmLflvxnk4V6pFEWMa1YxxdJ2jm1i8FE08cIHLQVjhGg-HVFNehXQAjlg1DWLieGdPMXQrBTi2AOBBrMHYCkI3lQjU8Ssub8+kqiwxVRP3cemTmZ69d9ih2uK4-wDZ8r5mugzcERD1bjrdK1guJWHiGKkv6upURmjfX7uoUwpwCcmhYzIB+8g4HjCmeNCh5Qed986wyxCpQyYsvVe3cJ493iuuIdaFx8bwRZvBJW+W9BpntBawPCpyB1JxXB9ldmB0G+IohrjUbCt8dJC5aajRVHrTsdTGf0scTS6mHKePP6j1bvqeesD-QbD8J2mRFMlFCvuvr+sdo-jFtYL6kFDoG0rtIWN5t+K+AlPiK9pksdDgiXtfvGqxpmhviwq1gYJ1usI0HASvskj9Lvv8jDGYFoDZJZugelLJvJqXA5g-krk-ojroJTPiBTuKLpKZIsqbrziOGnBgmIqEEAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCdATgPYC2dJASmChGgDaABgC6iUHVawsZVvgkgAHogDMAdgAcAThzrt64aoAsAJgBsAVk3HLlgDQg0iAIwvTwnJs0ntmt34uBgC+wY602HiEpBTUtAwIRCgANski4kggUjJyCpkqCNqmjs6Fxrqm1uqm6naVmsLqoeHokQTEZJQ06AkMAMp0fADWBFDpitmyWPKKBcZulnra5tqWRqqW7g5OriaqXqrm6i6ax8KW6hrNIBG4Sal9JCjMZPhQ3fSM98m8-EJiE2kUxm+UQtmMOBcxhs1m8xn0+m2pWhi2MxnMphq2hc5hcwmMh2utxw30ez1e73ijAAFig3gBXOjjTKTXKzRCaYo7BB41Y4NanDaXczmYQuSxE1p3FLJMkvUYfBLfABiKCwyUgzMkQLZoIQaIhUJh3hsCNWJVc2n2llU2jtm3x-ltksw0oeT3lbyoSlgTxIYBwKAAZv7mAAKDzCKMASg+kVJHopWqyOumeVAc0shuhthN8IM5u5Jk8dtUWxqVisErCNylOGSWF9YHwCqpTCwABVqQQRm9k6y0+yEKpDvsEVHrCtzMZzhbhxtzJDvEc3KcjsYXZEG02W162-1Bihe2MASzUyCM2oNmODBPNFOZ0i1O51Dh5mtqqtTD4fJvcNv-V3SkekYchGywAAjDV+3PdNlFcEVNH5Sd-CsTEbFUOdxQsPQdGWdRDEqLY-3rRtANbECEBQekIGmRJ5HwMBSE1U9tRyQc9RxdEcFtdEHytfQsIJTwR3XXiNHRFwSIA5sKM+KiaLo5gmIYpiSBg9iL3gnlp1fNDbHxKMcRMOdr1fQ5UL8Az0WksjZL3SjYDgGR5Co2AZCgRiIA04E4IKLiIXKTE0RXe8DFMtES3FFxDHUGcXDLasWldUid1GHBlKIVhmFohz5NpBkmVYlNNL8q8bSWQxzjC6dZ25SN9lUc46ltW1Kg3GtiRkoCMpUnL0vwVgSAGYY5ISeknOYZUCEbalIBGo9Rh83VL3nCrx2qh86tKTF8RwEVyg2TQs05VRbLSt5eqy-rLsG4bD2PRVGAmsBmAW49lo41btEafbTmhb97xRdQ51MaL9unbwPHMVRMW0c7yMuzLstyqAcBet6HrG57JseVg6EGCB3qW4qBy0gpzG8HA7TtOELD8ZZQcqUwIfKHRp2ncUktrFLuvS5GbrRjHiby8bcZIfHCZFsYXAyNjfKHSmkJpvwbHp9mmeEFmuKtawTsxbmursnqsvwShPTR4giHpdh6WSFAKSoCB5ADAhyFYIYA3YV6YAAeS4LB2DIrAiE+8nXGqt91Csco3DMZnQdQg4lcMMsak0BH7LR03zYpQMiGt237cd162GYHA6GLoNsvYHBveYP2A6D30Q7DsqeXOXQoVsC4THFKNMPq6pGp8FZhAaeFTHhTOTfkXP0qtm27Yd7GEBIZg6VgIhmEgli5ZKhW9QMfYwdOHw4rtI4Qfqi5FitfFoSa0V4TOzq6z5y6c9evPF6LlfRcYOvTe29d6qnVHvQEpUhxgxwraGwVY1h+EHjtWq1MoR2kaGYZYr9kpbmNulL+Ft86F2Xo7NsQD8Bbx3hBSAABRTgJB-j7zJu3GBi44HojsIgnwidhCLnmOULQCUwYiiaG-Xm+DP5z2-gvAuS9i4Kh9H6AMwZQxhlgPSCCzcXL4AACJgHtmgWMRsLrZ2kUQ3+pCSbMNgkOKEMUcCn0uJYWmeIwamQHpCKw6wEpaCaobd+kizFmxkZdDRWjZCOzbkOUSN4qqTmWI+UyMVXzYnKFrYQP1rAzwIeYvOFCqGQVXgUkBNDvKk1sXqG0EInG1BHOffEiccQ8Q0I0Iw95-D4hyVIkJRCSnUOKRvShpSwBgI1OUmxUCqkmEcScAiNpVANOMKDbQaJHE-QSm1XE5wxG4P-EEkkeT0r9KKQAteQzCllPoVwJhkDD6rWqbM04dTFmtOWUWLWi5TA-S1hfTk34AkSNMTgUu2UyQkAmiC5gZdYDel9A7FRIZXphjWDGOM+zgWgren6SFWLYDRL1N80w+wjgFntBcBoyDECVH0G+dBpx8LEsJOIyIylYBSHwKjJ6CACpQEZAS1a8xxRLBWGsEcmxKhYXFEhGcqdMRQgxDFEibKOVcrbMLLGfYKlTMFSOV8QVcyWG-LrJ8w4CT7EyZPUUp1yjKrgKq9KDAuw9lXgeUaWrJn3O0vCLW1MbBFHHqfQ4HiVh6GhEEVZ6JVZ2vZfIVGFdOzdnwI9fcWAADqO8kzaq9XMQifqgqBpOMGosU8WZT05EENwYMCQxodZdN1i0zn9AlgTeamqTyepWtpDEpkoaOIrAYMGhwzAdT2b1WNnLHVYGlty5tks23uplp2r63qFgitWOsCVpq3C-R+qnXM05sTmFrXGqdM7U3TRbLAOaRN20Cu0ka0yVoWbVHmXic4xKswnsnfW6d7buUasXfegoNo+THVcRcY4dhTIWGVugkcYobSbFHTzVl9rT2-ozVMJtf6gPZq7SB1pLSRSBr4YemDJw6XQn0JiDQ2SWW4BVRhtGDAsNkMonO1tEA2PWLuQRxA1Re1lj0BWAk8d8SrO-fGjGABJfAoZmCMnY-JYWLapZ3vwyuwjhhiPWuhuRostpFwdPlR4f1GcGPjrrULSacmFNKdXqp+dt6gOyz41pjkXJSiHGjl4GBpp4T6A2FJs9-62wEHs1wYDiAXHwhwFrTkdh-DWC1qZbZkImrGu8JcEKIXf3nsohF0uSnBBubPDq7tYMXD8hhhiTJ3zbSmo2GsDLCXVY5ZstcQaEA4CKFuO58OCAAC05gsJ8PizOcemwYawhMCRdoMRKADfbnR6rZhK0YlLCkrCNRGo+ZnLif1uzUNullImUYy2hxmDnOt+LlaPxWBxDobpUBLtH1G9yaVr4p5pwIlrWEL2roowu+VnNrg0RYR+i+4SsJJyxcBwLeNd1pZvdWm4BKPF8SUxhtUDw8JQYnBZmk0sdTLj3gR31aTuN22o+0kELz1KFVhrLNHaO5RyjHssx-YJ883i0-8uUUG0IZX+IIscHQdhAeEJ-nIv+FJ+eIGxIsU+lKcu3ypQgb5wrvlRh8DSnwUkucHOl+lcJQcSDy9B-xnk+hjPuGo2iAiOIPs7S-BDNYUJbT6BOJzsd3PDm9PyRc0pIP5bW6CNfV3lRHF4QuFxfQ8MjeYuhWCnF8Arcec1+GniVkNB+OqKa9Cuh3xohOCOm0gOsXgshYNZg7AUgK813UHPGECLn0lUWGKqJ+7j3q0ayvKfsUO1xYP9PYfM-M10BwvP7fC+3YEf84lUa0QD7LtX2AUKYU4BOTQsZkBG80vMrntvGgO8oIx++dYZYhUoZMYjNGVe0+b+yhvoORBaGD4P5BlvBIT8F9Bm3mgmsB4KnCznlq9hnoNmYDoG+EUIasas1onNYI4gDM1HAbUOAQms6smqHgfNbuavqnAXrAgdBp3sJrTERJkkUFfJgQ2seI3ilizEFDoG0rtIWN5t+K+AlPiGTpksdDgidlZsxgmjxnzpAe3IItVgPE1NUKcCAckj9LAf8jDGYFoJ1mOkxj+jZq9HZsVgHGIePlAd4LoJTPiDruKLpKZIstViYC-COO4BgmIqEEAA */
     context: {
       transcriptions: {},
       isTranscribing: false,
@@ -213,6 +214,11 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
     states: {
       inactive: {
         description: "Idle state, not listening or speaking. Privacy mode.",
+        entry: [
+          {
+            type: "callNotStarted",
+          },
+        ],
         exit: assign({
           lastState: "inactive",
         }),
@@ -806,6 +812,19 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 description:
                   "The user starting speaking while Pi was speaking.",
               },
+              "saypi:interrupt": [
+                {
+                  target: "userInterrupting",
+                  description: `The user has forced an interruption, i.e. tapped to interrupt Pi, during a call.`,
+                  actions: "pauseAudio",
+                  cond: "wasListening",
+                },
+                {
+                  target: "#sayPi.inactive",
+                  description: `The user forced an interruption, i.e. tapped to interrupt Pi, outside of a call.`,
+                  actions: "pauseAudio",
+                },
+              ],
             },
             entry: [
               {
@@ -1087,6 +1106,12 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       callFailedToStart: () => {
         buttonModule.callInactive();
         audibleNotifications.callFailed();
+      },
+      callNotStarted: () => {
+        if (buttonModule) {
+          // buttonModule may not be available on initial load
+          buttonModule.callInactive();
+        }
       },
       callHasStarted: () => {
         buttonModule.callActive();
