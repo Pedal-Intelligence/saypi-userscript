@@ -915,12 +915,28 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 },
               ],
             },
-            entry: {
-              type: "interruptingPiPrompt",
-            },
-            exit: {
-              type: "clearPrompt",
-            },
+            entry: [
+              {
+                type: "interruptingPiPrompt",
+              },
+              {
+                type: "startAnimation",
+                params: {
+                  animation: "glow",
+                },
+              },
+            ],
+            exit: [
+              {
+                type: "clearPrompt",
+              },
+              {
+                type: "stopAnimation",
+                params: {
+                  animation: "glow",
+                },
+              },
+            ],
             description:
               "The user is speaking during Pi's response, and may wish to interrupt.",
           },
