@@ -358,7 +358,9 @@ class ButtonModule {
         callButton,
         interruptIconSVG,
         label,
-        () => this.sayPiActor.send("saypi:interrupt"),
+        () => {
+          this.sayPiActor.send("saypi:interrupt");
+        },
         true
       );
     }

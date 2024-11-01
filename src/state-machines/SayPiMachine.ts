@@ -828,6 +828,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             },
             entry: [
               {
+                type: "callInterruptibleIfListening",
+              },
+              {
                 type: "startAnimation",
                 params: {
                   animation: "piSpeaking",
@@ -839,9 +842,6 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               {
                 type: "pauseRecording",
                 cond: "interruptionsNotAllowed",
-              },
-              {
-                type: "callInterruptible",
               },
             ],
             exit: [
@@ -1000,8 +1000,11 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         EventBus.emit("audio:input:stop");
       },
 
-      resumeRecording: (context, event) => {
-        EventBus.emit("audio:startRecording");
+      resumeRecording: (context: SayPiContext, event) => {
+        if (context.lastState === "listening") {
+          // only resume recording if we were already listening
+          EventBus.emit("audio:startRecording");
+        }
       },
 
       stopRecording: (context, event) => {
@@ -1120,6 +1123,11 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
       callInterruptible: () => {
         buttonModule.callInterruptible();
+      },
+      callInterruptibleIfListening: (context: SayPiContext) => {
+        if (context.lastState === "listening") {
+          buttonModule.callInterruptible();
+        }
       },
       callContinues: () => {
         buttonModule.callActive();
