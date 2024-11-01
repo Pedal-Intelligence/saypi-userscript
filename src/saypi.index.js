@@ -100,12 +100,12 @@ import SlowResponseHandler from "./SlowResponseHandler.ts";
 
     var lockedText = document.createElement("p");
     lockedText.id = "saypi-locked-text";
-    lockedText.innerHTML = getMessage("lockedScreen");
+    lockedText.innerText = getMessage("lockedScreen");
     lockPanel.appendChild(lockedText);
     var unlockInstruction = document.createElement("span");
     unlockInstruction.id = "saypi-unlock-instruction";
     unlockInstruction.classList.add("subtext");
-    unlockInstruction.innerHTML = getMessage("unlockInstruction");
+    unlockInstruction.innerText = getMessage("unlockInstruction");
     lockedText.appendChild(unlockInstruction);
   }
 })();

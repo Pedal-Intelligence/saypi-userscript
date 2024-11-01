@@ -84,7 +84,7 @@ class ButtonModule {
 
   updateIconContent(iconContainer) {
     if (ImmersionStateChecker.isViewImmersive()) {
-      iconContainer.innerHTML = this.icons.rectangles();
+      iconContainer.appendChild(this.icons.rectangles());
     }
     iconContainer.classList.add("saypi-icon");
   }
@@ -425,7 +425,7 @@ class ButtonModule {
     button.className =
       "lock-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
     button.setAttribute("aria-label", label);
-    button.innerHTML = unlockIconSVG;
+    button.appendChild(createSVGElement(unlockIconSVG));
     if (container) {
       container.appendChild(button);
       let pressTimer;
