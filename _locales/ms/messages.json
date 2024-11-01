@@ -408,5 +408,19 @@
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Kesan bunyi dilumpuhkan dalam Firefox untuk mengelakkan isu maklum balas audio."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Mesej dipaparkan apabila pembantu bercakap responsnya dan gangguan manual mungkin berlaku.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ sedang bercakap, ketik untuk mengganggu..."
+  },
+  "callInterruptible": {
+    "description": "Petua alat untuk dipaparkan pada butang panggilan apabila panggilan sedang dijalankan dan gangguan manual mungkin berlaku.",
+    "message": "Ketik untuk mengganggu"
   }
 }

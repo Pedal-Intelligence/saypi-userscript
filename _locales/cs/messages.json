@@ -408,5 +408,19 @@
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Zvukové efekty jsou ve Firefoxu zakázány, aby se předešlo problémům se zvukovou zpětnou vazbou."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Zpráva zobrazená, když asistent mluví svou odpověď a je možné ruční přerušení.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ mluví, klepnutím přerušíte..."
+  },
+  "callInterruptible": {
+    "description": "Popisek, který se zobrazí na tlačítku volání, když probíhá hovor a je možné ruční přerušení.",
+    "message": "Klepnutím přerušíte"
   }
 }

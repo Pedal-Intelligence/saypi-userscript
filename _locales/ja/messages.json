@@ -408,5 +408,19 @@
   },
   "soundEffectsFirefoxDisabled": {
     "message": "音声フィードバックの問題を防ぐために、Firefox ではサウンド効果が無効になっています。"
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "アシスタントが応答を話しているときにメッセージが表示され、手動で中断することができます。",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ が話しています。タップして中断します..."
+  },
+  "callInterruptible": {
+    "description": "通話中に手動で中断できるときに通話ボタンに表示されるツールチップ。",
+    "message": "タップして中断"
   }
 }

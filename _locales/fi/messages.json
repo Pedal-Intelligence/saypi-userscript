@@ -408,5 +408,19 @@
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Äänitehosteet on poistettu käytöstä Firefoxissa äänipalauteongelmien estämiseksi."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Viesti näytetään, kun avustaja puhuu vastauksensa, ja manuaalinen keskeytys on mahdollista.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ puhuu, keskeytä napauttamalla..."
+  },
+  "callInterruptible": {
+    "description": "Työkaluvinkki, joka näytetään soittopainikkeessa puhelun ollessa käynnissä ja manuaalinen keskeytys on mahdollista.",
+    "message": "Napauta keskeyttääksesi"
   }
 }

@@ -408,5 +408,19 @@
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Hiệu ứng âm thanh bị tắt trong Firefox để ngăn sự cố phản hồi âm thanh."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Thông báo hiển thị khi trợ lý đang nói phản hồi và có thể ngắt thủ công.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ đang nói, nhấn để ngắt lời..."
+  },
+  "callInterruptible": {
+    "description": "Chú giải công cụ hiển thị trên nút gọi khi cuộc gọi đang diễn ra và có thể bị gián đoạn thủ công.",
+    "message": "Nhấn để làm gián đoạn"
   }
 }

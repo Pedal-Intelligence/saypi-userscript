@@ -408,5 +408,19 @@
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Efekty dźwiękowe są wyłączone w przeglądarce Firefox, aby zapobiec problemom ze sprzężeniem zwrotnym dźwięku."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Komunikat wyświetlany podczas mówienia asystenta, jego odpowiedź i możliwe jest ręczne przerwanie.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ mówi, dotknij, aby przerwać..."
+  },
+  "callInterruptible": {
+    "description": "Etykietka wyświetlana na przycisku połączenia, gdy połączenie jest w toku i istnieje możliwość ręcznego przerwania.",
+    "message": "Kliknij, aby przerwać"
   }
 }

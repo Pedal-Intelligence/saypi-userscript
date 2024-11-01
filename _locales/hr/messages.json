@@ -408,5 +408,19 @@
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Zvučni efekti su onemogućeni u Firefoxu kako bi se spriječili problemi sa zvučnim povratnim informacijama."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Poruka se prikazuje kada pomoćnik izgovara svoj odgovor i moguće je ručno prekidanje.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ govori, dodirnite za prekidanje..."
+  },
+  "callInterruptible": {
+    "description": "Opis alata koji se prikazuje na gumbu za pozivanje kada je poziv u tijeku i moguće je ručno prekidanje.",
+    "message": "Dodirnite za prekid"
   }
 }

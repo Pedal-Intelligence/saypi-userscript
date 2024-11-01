@@ -408,5 +408,19 @@
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Efek suara dinonaktifkan di Firefox untuk mencegah masalah umpan balik audio."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Pesan ditampilkan saat asisten menyampaikan tanggapannya dan interupsi manual dimungkinkan.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ sedang berbicara, ketuk untuk menyela..."
+  },
+  "callInterruptible": {
+    "description": "Keterangan alat untuk ditampilkan pada tombol panggilan saat panggilan sedang berlangsung dan interupsi manual dimungkinkan.",
+    "message": "Ketuk untuk menyela"
   }
 }

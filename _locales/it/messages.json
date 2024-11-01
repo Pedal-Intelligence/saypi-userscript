@@ -408,5 +408,19 @@
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Gli effetti sonori sono disabilitati in Firefox per evitare problemi di feedback audio."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Messaggio visualizzato quando l'assistente pronuncia la sua risposta ed è possibile l'interruzione manuale.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ sta parlando, tocca per interrompere..."
+  },
+  "callInterruptible": {
+    "description": "La descrizione comando da visualizzare sul pulsante di chiamata quando una chiamata è in corso ed è possibile l'interruzione manuale.",
+    "message": "Tocca per interrompere"
   }
 }

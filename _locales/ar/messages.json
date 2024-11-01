@@ -408,5 +408,19 @@
   },
   "soundEffectsFirefoxDisabled": {
     "message": "تم تعطيل المؤثرات الصوتية في Firefox لمنع حدوث مشكلات في التعليقات الصوتية."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "يتم عرض الرسالة عندما يتحدث المساعد بإجابته ومن الممكن المقاطعة اليدوية.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ يتحدث، انقر للمقاطعة..."
+  },
+  "callInterruptible": {
+    "description": "تلميح الأداة الذي سيتم عرضه على زر الاتصال عندما تكون المكالمة جارية ويكون انقطاعها يدويًا ممكنًا.",
+    "message": "انقر للمقاطعة"
   }
 }

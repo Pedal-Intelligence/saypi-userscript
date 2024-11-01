@@ -408,5 +408,19 @@
   },
   "soundEffectsFirefoxDisabled": {
     "message": "অডিও প্রতিক্রিয়া সমস্যা প্রতিরোধ করতে ফায়ারফক্সে সাউন্ড এফেক্ট নিষ্ক্রিয় করা হয়েছে।"
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "সহকারী যখন তার প্রতিক্রিয়া বলছে তখন বার্তা প্রদর্শিত হবে এবং ম্যানুয়াল বাধা সম্ভব।",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ কথা বলছে, বাধা দিতে আলতো চাপুন..."
+  },
+  "callInterruptible": {
+    "description": "কল বোতামে প্রদর্শিত টুলটিপ যখন একটি কল চলছে এবং ম্যানুয়াল বাধা সম্ভব।",
+    "message": "বাধা দিতে আলতো চাপুন"
   }
 }

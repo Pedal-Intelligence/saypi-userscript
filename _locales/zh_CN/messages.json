@@ -408,5 +408,19 @@
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Firefox 中禁用声音效果以防止出现音频反馈问题。"
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "助手说话时显示的消息其响应和手动中断是可能的。",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ 正在说话，点击即可打断..."
+  },
+  "callInterruptible": {
+    "description": "当通话正在进行并且可以手动中断时，通话按钮上显示的工具提示。",
+    "message": "点击即可中断"
   }
 }

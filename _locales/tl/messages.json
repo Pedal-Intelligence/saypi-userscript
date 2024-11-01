@@ -408,5 +408,19 @@
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Ang mga sound effect ay hindi pinagana sa Firefox upang maiwasan ang mga isyu sa audio feedback."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Ipinapakita ang mensahe kapag nagsasalita ang assistant ng tugon nito at posible ang manual interruption.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "Nagsasalita si $chatbot$, i-tap para matakpan..."
+  },
+  "callInterruptible": {
+    "description": "Ang tooltip na ipapakita sa pindutan ng tawag kapag ang isang tawag ay isinasagawa at ang manu-manong pagkaantala ay posible.",
+    "message": "I-tap para matakpan"
   }
 }

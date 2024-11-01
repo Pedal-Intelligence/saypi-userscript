@@ -408,5 +408,19 @@
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Geluidseffecten zijn uitgeschakeld in Firefox om problemen met audiofeedback te voorkomen."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Bericht dat wordt weergegeven wanneer de assistent spreekt, zijn reactie en handmatige onderbreking is mogelijk.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ spreekt, tik om te onderbreken..."
+  },
+  "callInterruptible": {
+    "description": "De tooltip die op de belknop wordt weergegeven wanneer een gesprek gaande is en handmatige onderbreking mogelijk is.",
+    "message": "Tik om te onderbreken"
   }
 }

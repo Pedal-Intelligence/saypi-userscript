@@ -408,5 +408,19 @@
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Lydeffekter er deaktiveret i Firefox for at forhindre problemer med lydfeedback."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Meddelelse vises, når assistenten taler sit svar, og manuel afbrydelse er mulig.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ taler, tryk for at afbryde..."
+  },
+  "callInterruptible": {
+    "description": "Værktøjstip, der vises på opkaldsknappen, når et opkald er i gang, og manuel afbrydelse er mulig.",
+    "message": "Tryk for at afbryde"
   }
 }

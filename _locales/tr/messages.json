@@ -408,5 +408,19 @@
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Sesli geri bildirim sorunlarını önlemek için Firefox'ta ses efektleri devre dışı bırakıldı."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Asistan konuşurken görüntülenen mesaj yanıt verir ve manuel olarak kesinti mümkündür.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ konuşuyor, sözünü kesmek için dokunun..."
+  },
+  "callInterruptible": {
+    "description": "Bir arama devam ederken ve manuel kesinti mümkün olduğunda, arama düğmesinde görüntülenecek araç ipucu.",
+    "message": "Ara vermek için dokunun"
   }
 }

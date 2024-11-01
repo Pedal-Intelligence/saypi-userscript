@@ -408,5 +408,19 @@
   },
   "soundEffectsFirefoxDisabled": {
     "message": "ऑडियो फीडबैक समस्याओं को रोकने के लिए फ़ायरफ़ॉक्स में ध्वनि प्रभाव अक्षम हैं।"
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "जब सहायक अपनी प्रतिक्रिया बोल रहा होता है तो संदेश प्रदर्शित होता है और मैन्युअल रुकावट संभव है।",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ बोल रहा है, बीच में बोलने के लिए टैप करें..."
+  },
+  "callInterruptible": {
+    "description": "जब कॉल चालू हो और मैन्युअल रुकावट संभव हो तो कॉल बटन पर प्रदर्शित होने वाला टूलटिप।",
+    "message": "बीच में रोकने के लिए टैप करें"
   }
 }

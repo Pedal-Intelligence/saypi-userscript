@@ -408,5 +408,19 @@
   },
   "soundEffectsFirefoxDisabled": {
     "message": "Звуковые эффекты отключены в Firefox, чтобы предотвратить проблемы со звуком."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Сообщение отображается, когда помощник говорит свой ответ, и возможно прерывание вручную.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ говорит, нажмите, чтобы прервать..."
+  },
+  "callInterruptible": {
+    "description": "Всплывающая подсказка, отображаемая на кнопке вызова во время выполнения вызова и возможности прерывания вручную.",
+    "message": "Нажмите, чтобы прервать"
   }
 }

@@ -408,5 +408,19 @@
   },
   "soundEffectsFirefoxDisabled": {
     "message": "오디오 피드백 문제를 방지하기 위해 Firefox에서는 사운드 효과가 비활성화되어 있습니다."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "보조자가 응답을 말할 때 표시되는 메시지이며 수동 중단이 가능합니다.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$이 말하고 있습니다. 중단하려면 탭하세요..."
+  },
+  "callInterruptible": {
+    "description": "통화 중일 때, 수동 중단이 가능할 때 통화 버튼에 표시되는 툴팁입니다.",
+    "message": "중단하려면 탭하세요."
   }
 }
