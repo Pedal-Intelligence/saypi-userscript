@@ -1071,8 +1071,15 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           getPromptOrNull()?.setMessage(message);
         }
       },
-      speakingPrompt: () => {
-        const message = getMessage("assistantIsSpeaking", chatbot.getName());
+      speakingPrompt: (context: SayPiContext) => {
+        const handsFreeInterrupt =
+          userPreferences.getCachedAllowInterruptions();
+        const message = handsFreeInterrupt
+          ? getMessage("assistantIsSpeaking", chatbot.getName())
+          : getMessage(
+              "assistantIsSpeakingWithManualInterrupt",
+              chatbot.getName()
+            );
         if (message) {
           getPromptOrNull()?.setMessage(message);
         }

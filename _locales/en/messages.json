@@ -175,6 +175,16 @@
       }
     }
   },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "message": "$chatbot$ is speaking, tap to interrupt...",
+    "description": "Message displayed when the assistant is speaking its response and manual interruption is possible.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "userStartedInterrupting": {
     "message": "Go ahead, $chatbot$ is listening...",
     "description": "Message displayed when the user starts speaking while the assistant is speaking.",
