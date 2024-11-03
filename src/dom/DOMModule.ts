@@ -46,12 +46,15 @@ export function findRootAncestor(element: Element): Element {
   return findRootAncestor(element.parentElement);
 }
 
-export function createElement(tag: string, attributes: Record<string, any> = {}): HTMLElement {
+export function createElement(
+  tag: string,
+  attributes: Record<string, any> = {}
+): HTMLElement {
   const element = document.createElement(tag);
   Object.entries(attributes).forEach(([key, value]) => {
-    if (key === 'className') {
+    if (key === "className") {
       element.className = value;
-    } else if (key.startsWith('on')) {
+    } else if (key.startsWith("on")) {
       element.addEventListener(key.slice(2).toLowerCase(), value);
     } else {
       element.setAttribute(key, value);
@@ -62,10 +65,12 @@ export function createElement(tag: string, attributes: Record<string, any> = {})
 
 export function createSVGElement(svgString: string): SVGElement {
   const parser = new DOMParser();
-  const svgDoc = parser.parseFromString(svgString, 'image/svg+xml');
+  const svgDoc = parser.parseFromString(svgString, "image/svg+xml");
   const svgElement = svgDoc.documentElement;
-  if (svgElement instanceof SVGElement) {
-    return svgElement;
+
+  // Check if it's an SVG element by tag name, not just instance type
+  if (svgElement.tagName.toLowerCase() === "svg") {
+    return svgElement as unknown as SVGElement;
   }
-  throw new Error('Failed to create SVGElement');
+  throw new Error("Failed to create SVGElement");
 }

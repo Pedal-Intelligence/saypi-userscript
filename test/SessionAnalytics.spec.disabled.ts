@@ -1,9 +1,15 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import { interpret } from "xstate";
 import { createModel } from "@xstate/test";
-import { machine as sessionAnalyticsMachine } from "../src/state-machines/SessionAnalyticsMachine";
+import {
+  EndSessionEvent,
+  SendMessageEvent,
+  machine as sessionAnalyticsMachine,
+  StartSessionEvent,
+  TranscriptionEvent,
+} from "../src/state-machines/SessionAnalyticsMachine";
 
 const testMachine = sessionAnalyticsMachine.withConfig({
   actions: {
@@ -14,16 +20,16 @@ const testMachine = sessionAnalyticsMachine.withConfig({
 });
 
 const sessionAnalyticsModel = createModel(testMachine).withEvents({
-  start_session: {},
+  start_session: {} as StartSessionEvent,
   transcribing: {
     audio_duration_seconds: 10,
     speech_start_time: Date.now() - 10000,
     speech_end_time: Date.now(),
-  },
+  } as TranscriptionEvent,
   send_message: {
     delay_ms: 5000,
-  },
-  end_session: {},
+  } as SendMessageEvent,
+  end_session: {} as EndSessionEvent,
 });
 
 describe("session analytics machine", () => {
