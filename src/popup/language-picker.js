@@ -258,13 +258,22 @@ Util.getIndexInArray = function (array, el) {
     span.classList.add("language-picker__label");
     span.classList.add("language-picker__flag");
     span.classList.add("language-picker__flag--" + selectedOption.value);
-    span.innerHTML =
-      picker.globeSvgPath + "<em>" + selectedOption.text + "</em>";
+
+    span.appendChild(createSvgElement(picker.globeSvgPath));
+
+    const optionText = document.createElement("em");
+    optionText.innerText = selectedOption.text;
+    span.appendChild(optionText);
 
     button.appendChild(span);
-    button.innerHTML += picker.arrowSvgPath;
-
+    button.appendChild(createSvgElement(picker.arrowSvgPath));
     return button;
+  }
+
+  function createSvgElement(svgString) {
+    const parser = new DOMParser();
+    const svgDoc = parser.parseFromString(svgString, 'image/svg+xml');
+    return svgDoc.documentElement;
   }
 
   function saveLanguagePreference(language) {
@@ -302,7 +311,11 @@ Util.getIndexInArray = function (array, el) {
         "language-picker__flag--" + option.value
       );
       link.setAttribute("role", "option");
-      link.innerHTML = "<span>" + option.text + "</span>";
+      
+      const optionTextSpan = document.createElement("span");
+      optionTextSpan.innerText = option.text;
+      link.appendChild(optionTextSpan);
+    
       link.addEventListener("click", function () {
         saveLanguagePreference(option.lang);
       });
