@@ -72,5 +72,8 @@ export function createSVGElement(svgString: string): SVGElement {
   if (svgElement.tagName.toLowerCase() === "svg") {
     return svgElement as unknown as SVGElement;
   }
-  throw new Error("Failed to create SVGElement");
+  throw new Error(
+    "Failed to create SVGElement. Invalid SVG string: " +
+      svgString.slice(0, 100)
+  );
 }

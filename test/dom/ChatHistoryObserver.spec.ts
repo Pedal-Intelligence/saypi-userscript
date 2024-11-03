@@ -16,6 +16,7 @@ import {
 } from "../../src/tts/SpeechModel";
 import { BillingModule } from "../../src/billing/BillingModule";
 import { PiAIChatbot, PiResponse } from "../../src/chatbots/Pi";
+import { setupTestDOM } from "../utils/dom";
 
 vi.mock("../tts/InputStream");
 vi.mock("../tts/SpeechSynthesisModule");
@@ -32,6 +33,7 @@ describe("ChatHistoryMessageObserver", () => {
   let assistantResponseSelector: string;
 
   beforeEach(() => {
+    setupTestDOM();
     chatHistoryElement = document.createElement("div");
     chatHistoryElement.id = "chat-history";
     document.body.appendChild(chatHistoryElement);
