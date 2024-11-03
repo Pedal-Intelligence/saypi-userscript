@@ -1,18 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { createSVGElement } from "../../src/dom/DOMModule";
-import { JSDOM } from "jsdom";
 
 describe("createSVGElement", () => {
-  beforeEach(() => {
-    const dom = new JSDOM("<!DOCTYPE html>", {
-      url: "http://localhost",
-      pretendToBeVisual: true,
-    });
-    global.document = dom.window.document;
-    global.DOMParser = dom.window.DOMParser;
-    global.SVGElement = dom.window.SVGElement;
-  });
-
   it("should create an SVG element from valid SVG string", () => {
     const svgString =
       '<svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2z"/></svg>';

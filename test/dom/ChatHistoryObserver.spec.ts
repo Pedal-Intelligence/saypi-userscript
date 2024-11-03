@@ -32,13 +32,6 @@ describe("ChatHistoryMessageObserver", () => {
   let assistantResponseSelector: string;
 
   beforeEach(() => {
-    const dom = new JSDOM();
-    global.document = dom.window.document;
-    global.MutationObserver = dom.window.MutationObserver;
-    global.Node = dom.window.Node;
-    global.NodeList = dom.window.NodeList;
-    global.Element = dom.window.Element;
-
     chatHistoryElement = document.createElement("div");
     chatHistoryElement.id = "chat-history";
     document.body.appendChild(chatHistoryElement);
