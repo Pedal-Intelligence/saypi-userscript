@@ -16,9 +16,6 @@ describe("SpeechSynthesisModule", () => {
   let billingModuleMock: BillingModule;
 
   beforeEach(() => {
-    const dom = new JSDOM();
-    global.document = dom.window.document;
-
     // mock the ConfigModule
     vi.mock("../../src/ConfigModule", () => ({
       config: {

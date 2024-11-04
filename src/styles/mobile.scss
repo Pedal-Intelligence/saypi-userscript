@@ -143,6 +143,12 @@ html.mobile-device .chat-message .message-hover-menu .saypi-cost-container {
   }
 }
 
+html.firefox-android {
+  .tooltip[aria-label]::after {
+    display: none;
+  }
+}
+
 @import "dark-mode.scss";
 @import "focus-mode.scss";
 @import "lock.scss";

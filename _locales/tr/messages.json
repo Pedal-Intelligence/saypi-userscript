@@ -391,6 +391,9 @@
     },
     "message": "$product$'ın ses için nasıl ücretlendirildiğini öğrenin"
   },
+  "interruptionsFirefoxDisabled": {
+    "message": "Kesintiler şu anda Firefox'ta desteklenmemektedir."
+  },
   "mode_accuracy_description": {
     "description": "Doğruluk transkripsiyon modunun açıklaması.",
     "message": "En yüksek doğruluk, ancak daha yavaş transkripsiyon hızı. \nHalüsinasyonlara eğilimli."
@@ -402,5 +405,22 @@
   "mode_speed_description": {
     "description": "Hızlı transkripsiyon modunun açıklaması.",
     "message": "En hızlı yanıt, ancak daha az doğru. \nBölmeye eğilimli."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Sesli geri bildirim sorunlarını önlemek için Firefox'ta ses efektleri devre dışı bırakıldı."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Asistan konuşurken görüntülenen mesaj yanıt verir ve manuel olarak kesinti mümkündür.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ konuşuyor, sözünü kesmek için dokunun..."
+  },
+  "callInterruptible": {
+    "description": "Bir arama devam ederken ve manuel kesinti mümkün olduğunda, arama düğmesinde görüntülenecek araç ipucu.",
+    "message": "Ara vermek için dokunun"
   }
 }

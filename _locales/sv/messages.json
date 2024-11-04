@@ -391,6 +391,9 @@
     },
     "message": "Läs om hur $product$ tar betalt för ljud"
   },
+  "interruptionsFirefoxDisabled": {
+    "message": "Avbrott stöds för närvarande inte i Firefox."
+  },
   "mode_accuracy_description": {
     "description": "Beskrivning för noggrannhetstranskriptionsläget.",
     "message": "Högsta noggrannhet, men långsammare transkriptionshastighet. \nBenägen till hallucinationer."
@@ -402,5 +405,22 @@
   "mode_speed_description": {
     "description": "Beskrivning för hastighetstranskriptionsläget.",
     "message": "Snabbast svar, men mindre exakt. \nBenägna att avbryta."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Ljudeffekter är inaktiverade i Firefox för att förhindra problem med ljudåterkoppling."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Meddelande som visas när assistenten säger sitt svar och manuellt avbrott är möjligt.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ talar, tryck för att avbryta..."
+  },
+  "callInterruptible": {
+    "description": "Verktygstipset som visas på samtalsknappen när ett samtal pågår och manuellt avbrott är möjligt.",
+    "message": "Tryck för att avbryta"
   }
 }

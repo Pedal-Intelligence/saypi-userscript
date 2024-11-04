@@ -391,16 +391,36 @@
     },
     "message": "Lue, miten $product$ veloittaa äänestä"
   },
+  "interruptionsFirefoxDisabled": {
+    "message": "Firefox ei tällä hetkellä tue keskeytyksiä."
+  },
   "mode_accuracy_description": {
     "description": "Tarkkuustranskriptiotilan kuvaus.",
     "message": "Suurin tarkkuus, mutta hitaampi transkriptionopeus. \nAltis hallusinaatioille."
   },
   "mode_balanced_description": {
     "description": "Kuvaus tasapainotetusta transkriptiotilasta.",
-    "message": "Hyvä tasapaino nopeuden ja tarkkuuden välillä useimpiin käyttötarkoituksiin."
+    "message": "Hyvä nopeuden ja tarkkuuden tasapaino useimpiin käyttötarkoituksiin."
   },
   "mode_speed_description": {
     "description": "Kuvaus nopeustranskriptiotilasta.",
     "message": "Nopein vastaus, mutta vähemmän tarkka. \nTaipuvainen keskeyttämään."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Äänitehosteet on poistettu käytöstä Firefoxissa äänipalauteongelmien estämiseksi."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Viesti näytetään, kun avustaja puhuu vastauksensa, ja manuaalinen keskeytys on mahdollista.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ puhuu, keskeytä napauttamalla..."
+  },
+  "callInterruptible": {
+    "description": "Työkaluvinkki, joka näytetään soittopainikkeessa puhelun ollessa käynnissä ja manuaalinen keskeytys on mahdollista.",
+    "message": "Napauta keskeyttääksesi"
   }
 }

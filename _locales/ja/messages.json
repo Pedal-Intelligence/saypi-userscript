@@ -391,6 +391,9 @@
     },
     "message": "$product$ がオーディオに対してどのように請求するかをご覧ください"
   },
+  "interruptionsFirefoxDisabled": {
+    "message": "現在、Firefox では中断はサポートされていません。"
+  },
   "mode_accuracy_description": {
     "description": "精度転写モードの説明。",
     "message": "精度は最高ですが、転写速度は遅くなります。\n幻覚が起こりやすい。"
@@ -402,5 +405,22 @@
   "mode_speed_description": {
     "description": "高速転写モードの説明。",
     "message": "応答は最速ですが、精度は低くなります。\n中断しがち。"
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "音声フィードバックの問題を防ぐために、Firefox ではサウンド効果が無効になっています。"
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "アシスタントが応答を話しているときにメッセージが表示され、手動で中断することができます。",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ が話しています。タップして中断します..."
+  },
+  "callInterruptible": {
+    "description": "通話中に手動で中断できるときに通話ボタンに表示されるツールチップ。",
+    "message": "タップして中断"
   }
 }

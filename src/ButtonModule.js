@@ -1,5 +1,5 @@
 import { ImmersionService } from "./ImmersionService.js";
-import { addChild } from "./dom/DOMModule.ts";
+import { addChild, createElement, createSVGElement } from "./dom/DOMModule.ts";
 import EventBus from "./events/EventBus.js";
 import StateMachineService from "./StateMachineService.js";
 import { submitErrorHandler } from "./SubmitErrorHandler.ts";
@@ -9,6 +9,7 @@ import immersiveIconSVG from "./icons/immersive.svg";
 import callIconSVG from "./icons/call.svg";
 import callStartingIconSVG from "./icons/call-starting.svg";
 import hangupIconSVG from "./icons/hangup.svg";
+import interruptIconSVG from "./icons/interrupt.svg";
 import hangupMincedIconSVG from "./icons/hangup-minced.svg";
 import lockIconSVG from "./icons/lock.svg";
 import unlockIconSVG from "./icons/unlock.svg";
@@ -83,7 +84,7 @@ class ButtonModule {
 
   updateIconContent(iconContainer) {
     if (ImmersionStateChecker.isViewImmersive()) {
-      iconContainer.innerHTML = this.icons.rectangles();
+      iconContainer.appendChild(this.icons.rectangles());
     }
     iconContainer.classList.add("saypi-icon");
   }
@@ -177,7 +178,10 @@ class ButtonModule {
     button.className =
       "saypi-exit-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
     button.setAttribute("aria-label", label);
-    button.innerHTML = exitIconSVG;
+
+    const svgElement = createSVGElement(exitIconSVG);
+    button.appendChild(svgElement);
+
     addChild(container, button, position);
     return button;
   }
@@ -191,8 +195,10 @@ class ButtonModule {
     button.className =
       "saypi-enter-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
     button.setAttribute("aria-label", label);
-    button.innerHTML = maximizeIconSVG;
-    // insert the button at the specified position
+
+    const svgElement = createSVGElement(maximizeIconSVG);
+    button.appendChild(svgElement);
+
     addChild(container, button, position);
     return button;
   }
@@ -200,18 +206,22 @@ class ButtonModule {
   createImmersiveModeButton(container, position = 0) {
     const label = getMessage("enterImmersiveModeShort");
     const title = getMessage("enterImmersiveModeLong");
-    const button = document.createElement("a");
-    button.onclick = () => {
-      this.immersionService.enterImmersiveMode();
-    };
-    button.className =
-      "immersive-mode-button saypi-control-button tooltip flex h-16 w-16 flex-col items-center justify-center rounded-xl text-neutral-900 hover:bg-neutral-50-hover hover:text-neutral-900-hover active:bg-neutral-50-tap active:text-neutral-900-tap gap-0.5";
-    button.setAttribute("aria-label", title);
-    button.innerHTML = immersiveIconSVG;
-    const labelDiv = document.createElement("div");
-    labelDiv.textContent = label;
-    labelDiv.className = "t-label";
+    const button = createElement("a", {
+      className:
+        "immersive-mode-button saypi-control-button tooltip flex h-16 w-16 flex-col items-center justify-center rounded-xl text-neutral-900 hover:bg-neutral-50-hover hover:text-neutral-900-hover active:bg-neutral-50-tap active:text-neutral-900-tap gap-0.5",
+      ariaLabel: title,
+      onclick: () => this.immersionService.enterImmersiveMode(),
+    });
+
+    const svgElement = createSVGElement(immersiveIconSVG);
+    button.appendChild(svgElement);
+
+    const labelDiv = createElement("div", {
+      className: "t-label",
+      textContent: label,
+    });
     button.appendChild(labelDiv);
+
     addChild(container, button, position);
     return button;
   }
@@ -221,6 +231,7 @@ class ButtonModule {
     button.id = "saypi-callButton";
     button.type = "button";
     button.classList.add("call-button", "saypi-button", "tooltip");
+
     // add all classes in chatbot.getExtraCallButtonClasses() to the button
     button.classList.add(...this.chatbot.getExtraCallButtonClasses());
     if (this.callIsActive) {
@@ -300,61 +311,71 @@ class ButtonModule {
     this.updateCallButtonGlowColor(updatedColor);
   }
 
-  callStarting(callButton) {
+  updateCallButton(callButton, svgIcon, label, onClick, isActive = false) {
     if (!callButton) {
       callButton = document.getElementById("saypi-callButton");
     }
     if (callButton) {
-      callButton.innerHTML = callStartingIconSVG;
-      const label = getMessage("callStarting");
+      // Remove all existing child nodes
+      while (callButton.firstChild) {
+        callButton.removeChild(callButton.firstChild);
+      }
+
+      const svgElement = createSVGElement(svgIcon);
+      callButton.appendChild(svgElement);
+
       callButton.setAttribute("aria-label", label);
-      callButton.onclick = () => {
-        this.sayPiActor.send("saypi:hangup");
-      };
+      callButton.onclick = onClick;
+      callButton.classList.toggle("active", isActive);
     }
+    this.callIsActive = isActive;
+  }
+
+  callStarting(callButton) {
+    const label = getMessage("callStarting");
+    this.updateCallButton(callButton, callStartingIconSVG, label, () =>
+      this.sayPiActor.send("saypi:hangup")
+    );
   }
 
   callActive(callButton) {
-    if (!callButton) {
-      callButton = document.getElementById("saypi-callButton");
+    const label = getMessage("callInProgress");
+    this.updateCallButton(
+      callButton,
+      hangupIconSVG,
+      label,
+      () => this.sayPiActor.send("saypi:hangup"),
+      true
+    );
+  }
+
+  callInterruptible(callButton) {
+    const handsFreeInterruptEnabled =
+      this.userPreferences.getCachedAllowInterruptions();
+    if (!handsFreeInterruptEnabled) {
+      const label = getMessage("callInterruptible");
+      this.updateCallButton(
+        callButton,
+        interruptIconSVG,
+        label,
+        () => {
+          this.sayPiActor.send("saypi:interrupt");
+        },
+        true
+      );
     }
-    if (callButton) {
-      const label = getMessage("callInProgress");
-      callButton.innerHTML = hangupIconSVG;
-      callButton.setAttribute("aria-label", label);
-      callButton.onclick = () => {
-        this.sayPiActor.send("saypi:hangup");
-      };
-      callButton.classList.add("active");
-    }
-    this.callIsActive = true;
   }
 
   callInactive(callButton) {
-    if (!callButton) {
-      callButton = document.getElementById("saypi-callButton");
-    }
-    if (callButton) {
-      callButton.innerHTML = callIconSVG;
-      const label = getMessage("callNotStarted", this.chatbot.getName());
-      callButton.setAttribute("aria-label", label);
-      callButton.onclick = () => {
-        this.sayPiActor.send("saypi:call");
-      };
-      callButton.classList.remove("active");
-    }
-    this.callIsActive = false;
+    const label = getMessage("callNotStarted", this.chatbot.getName());
+    this.updateCallButton(callButton, callIconSVG, label, () =>
+      this.sayPiActor.send("saypi:call")
+    );
   }
 
   callError(callButton) {
-    if (!callButton) {
-      callButton = document.getElementById("saypi-callButton");
-    }
-    if (callButton) {
-      const label = getMessage("callError");
-      callButton.innerHTML = hangupMincedIconSVG;
-      callButton.setAttribute("aria-label", label);
-    }
+    const label = getMessage("callError");
+    this.updateCallButton(callButton, hangupMincedIconSVG, label, null);
   }
 
   disableCallButton() {
@@ -378,18 +399,20 @@ class ButtonModule {
 
   createLockButton(container) {
     const label = getMessage("lockButton");
-    const button = document.createElement("button");
-    button.id = "saypi-lockButton";
-    button.type = "button";
-    button.className =
-      "lock-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
-    button.setAttribute("aria-label", label);
-    button.innerHTML = lockIconSVG;
+    const button = createElement("button", {
+      id: "saypi-lockButton",
+      type: "button",
+      className:
+        "lock-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip",
+      ariaLabel: label,
+      onclick: () => this.screenLockActor.send("lock"),
+    });
+
+    const svgElement = createSVGElement(lockIconSVG);
+    button.appendChild(svgElement);
+
     if (container) {
       container.appendChild(button);
-      button.onclick = () => {
-        this.screenLockActor.send("lock");
-      };
     }
     return button;
   }
@@ -402,7 +425,7 @@ class ButtonModule {
     button.className =
       "lock-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
     button.setAttribute("aria-label", label);
-    button.innerHTML = unlockIconSVG;
+    button.appendChild(createSVGElement(unlockIconSVG));
     if (container) {
       container.appendChild(button);
       let pressTimer;

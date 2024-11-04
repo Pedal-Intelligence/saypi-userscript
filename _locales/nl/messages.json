@@ -391,6 +391,9 @@
     },
     "message": "Ontdek hoe $product$ audio in rekening brengt"
   },
+  "interruptionsFirefoxDisabled": {
+    "message": "Onderbrekingen worden momenteel niet ondersteund in Firefox."
+  },
   "mode_accuracy_description": {
     "description": "Beschrijving voor de nauwkeurigheidstranscriptiemodus.",
     "message": "Hoogste nauwkeurigheid, maar langzamere transcriptiesnelheid. \nGevoelig voor hallucinaties."
@@ -402,5 +405,22 @@
   "mode_speed_description": {
     "description": "Beschrijving voor de snelheidstranscriptiemodus.",
     "message": "Snelste reactie, maar minder nauwkeurig. \nGevoelig voor onderbrekingen."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Geluidseffecten zijn uitgeschakeld in Firefox om problemen met audiofeedback te voorkomen."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Bericht dat wordt weergegeven wanneer de assistent spreekt, zijn reactie en handmatige onderbreking is mogelijk.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ spreekt, tik om te onderbreken..."
+  },
+  "callInterruptible": {
+    "description": "De tooltip die op de belknop wordt weergegeven wanneer een gesprek gaande is en handmatige onderbreking mogelijk is.",
+    "message": "Tik om te onderbreken"
   }
 }

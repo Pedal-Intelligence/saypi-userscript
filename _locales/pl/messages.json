@@ -391,6 +391,9 @@
     "description": "Instrukcje informujące użytkownika, jak odblokować zablokowany ekran.",
     "message": "Przytrzymaj, aby odblokować."
   },
+  "interruptionsFirefoxDisabled": {
+    "message": "Przerwania nie są obecnie obsługiwane w przeglądarce Firefox."
+  },
   "mode_accuracy_description": {
     "description": "Opis trybu transkrypcji dokładności.",
     "message": "Najwyższa dokładność, ale mniejsza prędkość transkrypcji. \nSkłonny do halucynacji."
@@ -402,5 +405,22 @@
   "mode_speed_description": {
     "description": "Opis trybu szybkiej transkrypcji.",
     "message": "Najszybsza reakcja, ale mniej dokładna. \nSkłonny do przerywania."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Efekty dźwiękowe są wyłączone w przeglądarce Firefox, aby zapobiec problemom ze sprzężeniem zwrotnym dźwięku."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Komunikat wyświetlany podczas mówienia asystenta, jego odpowiedź i możliwe jest ręczne przerwanie.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ mówi, dotknij, aby przerwać..."
+  },
+  "callInterruptible": {
+    "description": "Etykietka wyświetlana na przycisku połączenia, gdy połączenie jest w toku i istnieje możliwość ręcznego przerwania.",
+    "message": "Kliknij, aby przerwać"
   }
 }

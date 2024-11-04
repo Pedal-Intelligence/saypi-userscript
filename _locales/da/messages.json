@@ -391,6 +391,9 @@
     },
     "message": "Lær, hvordan $product$ opkræver for lyd"
   },
+  "interruptionsFirefoxDisabled": {
+    "message": "Afbrydelser understøttes i øjeblikket ikke i Firefox."
+  },
   "mode_accuracy_description": {
     "description": "Beskrivelse af nøjagtighedstransskriptionstilstanden.",
     "message": "Højeste nøjagtighed, men langsommere transskriptionshastighed. \nTilbøjelig til hallucinationer."
@@ -402,5 +405,22 @@
   "mode_speed_description": {
     "description": "Beskrivelse af hastighedstransskriptionstilstanden.",
     "message": "Hurtigste respons, men mindre præcis. \nTilbøjelig til at afbryde."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Lydeffekter er deaktiveret i Firefox for at forhindre problemer med lydfeedback."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Meddelelse vises, når assistenten taler sit svar, og manuel afbrydelse er mulig.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ taler, tryk for at afbryde..."
+  },
+  "callInterruptible": {
+    "description": "Værktøjstip, der vises på opkaldsknappen, når et opkald er i gang, og manuel afbrydelse er mulig.",
+    "message": "Tryk for at afbryde"
   }
 }

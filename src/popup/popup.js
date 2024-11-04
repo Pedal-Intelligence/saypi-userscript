@@ -100,7 +100,10 @@ document.addEventListener("DOMContentLoaded", function () {
   function showDescription(preference) {
     const descriptions = document.querySelectorAll(".description");
     descriptions.forEach((description) => {
-      if (description.getAttribute("data-i18n") === `mode_${preference}_description`) {
+      if (
+        description.getAttribute("data-i18n") ===
+        `mode_${preference}_description`
+      ) {
         description.classList.add("selected");
       } else {
         description.classList.remove("selected");
@@ -149,9 +152,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function switchInputs() {
     const soundEffectsInput = document.getElementById("sound-effects");
-    getStoredValue("soundEffects", true).then((soundEffects) => {
-      selectInput(soundEffectsInput, soundEffects);
-    });
+    const soundEffectsLabel = soundEffectsInput.closest('.wraper');
+    
+    // Check if Firefox
+    if (/Firefox/.test(navigator.userAgent)) {
+      soundEffectsInput.disabled = true;
+      soundEffectsLabel.classList.add('disabled');
+      // Use i18n message for tooltip
+      soundEffectsLabel.setAttribute('title', 
+        chrome.i18n.getMessage('soundEffectsFirefoxDisabled'));
+      selectInput(soundEffectsInput, false);
+    } else {
+      getStoredValue("soundEffects", true).then((soundEffects) => {
+        selectInput(soundEffectsInput, soundEffects);
+      });
+    }
 
     soundEffectsInput.addEventListener("change", function () {
       chrome.storage.sync.set({ soundEffects: this.checked }, function () {
@@ -193,9 +208,23 @@ document.addEventListener("DOMContentLoaded", function () {
     const allowInterruptionsInput = document.getElementById(
       "allow-interruptions"
     );
-    getStoredValue("allowInterruptions", true).then((allowInterruptions) => {
-      selectInput(allowInterruptionsInput, allowInterruptions);
-    });
+    const allowInterruptionsLabel = allowInterruptionsInput.closest(".wraper");
+
+    // Check if Firefox
+    if (/Firefox/.test(navigator.userAgent)) {
+      allowInterruptionsInput.disabled = true;
+      allowInterruptionsLabel.classList.add("disabled");
+      // Use i18n message for tooltip
+      allowInterruptionsLabel.setAttribute(
+        "title",
+        chrome.i18n.getMessage('interruptionsFirefoxDisabled')
+      );
+      selectInput(allowInterruptionsInput, false);
+    } else {
+      getStoredValue("allowInterruptions", true).then((allowInterruptions) => {
+        selectInput(allowInterruptionsInput, allowInterruptions);
+      });
+    }
 
     allowInterruptionsInput.addEventListener("change", function () {
       chrome.storage.sync.set(

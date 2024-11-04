@@ -23,6 +23,10 @@
     "message": "End hands-free conversation",
     "description": "The tooltip to display on the call button when a call is in progress."
   },
+  "callInterruptible": {
+    "message": "Tap to interrupt",
+    "description": "The tooltip to display on the call button when a call is in progress and manual interruption is possible."
+  },
   "callStarting": {
     "message": "Connecting...",
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting."
@@ -164,6 +168,16 @@
   "assistantIsSpeaking": {
     "message": "$chatbot$ is speaking...",
     "description": "Message displayed when the assistant is speaking its response.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "message": "$chatbot$ is speaking, tap to interrupt...",
+    "description": "Message displayed when the assistant is speaking its response and manual interruption is possible.",
     "placeholders": {
       "chatbot": {
         "content": "$1",
@@ -402,5 +416,11 @@
   "voiceIntroduction_joey": {
     "message": "Hola! Привет! 你好! I'm Pi, your polyglot AI assistant. With 32 languages at my command, we can explore ideas and cultures from around the world. What do you think of this voice?",
     "description": "Introduction for the Joey voice."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Sound effects are disabled in Firefox to prevent audio feedback issues."
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Interruptions are not currently supported in Firefox."
   }
 }

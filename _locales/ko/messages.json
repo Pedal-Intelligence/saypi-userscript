@@ -391,6 +391,9 @@
     },
     "message": "$product$에 오디오 요금이 청구되는 방식 알아보기"
   },
+  "interruptionsFirefoxDisabled": {
+    "message": "현재 Firefox에서는 중단 기능이 지원되지 않습니다."
+  },
   "mode_accuracy_description": {
     "description": "정확도 표기 모드에 대한 설명입니다.",
     "message": "정확도는 가장 높지만 전사 속도는 느립니다. \n환각에 걸리기 쉽습니다."
@@ -402,5 +405,22 @@
   "mode_speed_description": {
     "description": "속도 전사 모드에 대한 설명입니다.",
     "message": "응답은 가장 빠르지만 정확도는 떨어집니다. \n방해하는 경향이 있습니다."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "오디오 피드백 문제를 방지하기 위해 Firefox에서는 사운드 효과가 비활성화되어 있습니다."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "보조자가 응답을 말할 때 표시되는 메시지이며 수동 중단이 가능합니다.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$이 말하고 있습니다. 중단하려면 탭하세요..."
+  },
+  "callInterruptible": {
+    "description": "통화 중일 때, 수동 중단이 가능할 때 통화 버튼에 표시되는 툴팁입니다.",
+    "message": "중단하려면 탭하세요."
   }
 }

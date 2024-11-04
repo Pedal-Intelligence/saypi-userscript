@@ -391,6 +391,9 @@
     },
     "message": "تعرف على كيفية تحصيل $product$ مقابل الصوت"
   },
+  "interruptionsFirefoxDisabled": {
+    "message": "المقاطعات غير مدعومة حاليًا في Firefox."
+  },
   "mode_accuracy_description": {
     "description": "وصف لوضع النسخ الدقة.",
     "message": "أعلى دقة، ولكن سرعة النسخ أبطأ. \nعرضة للهلوسة."
@@ -402,5 +405,22 @@
   "mode_speed_description": {
     "description": "وصف لوضع النسخ السريع.",
     "message": "أسرع استجابة، ولكن أقل دقة. \nعرضة للمقاطعة."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "تم تعطيل المؤثرات الصوتية في Firefox لمنع حدوث مشكلات في التعليقات الصوتية."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "يتم عرض الرسالة عندما يتحدث المساعد بإجابته ومن الممكن المقاطعة اليدوية.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ يتحدث، انقر للمقاطعة..."
+  },
+  "callInterruptible": {
+    "description": "تلميح الأداة الذي سيتم عرضه على زر الاتصال عندما تكون المكالمة جارية ويكون انقطاعها يدويًا ممكنًا.",
+    "message": "انقر للمقاطعة"
   }
 }

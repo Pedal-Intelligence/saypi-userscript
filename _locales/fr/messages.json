@@ -391,6 +391,9 @@
     },
     "message": "Découvrez comment $product$ facture l'audio"
   },
+  "interruptionsFirefoxDisabled": {
+    "message": "Les interruptions ne sont actuellement pas prises en charge dans Firefox."
+  },
   "mode_accuracy_description": {
     "description": "Description du mode de transcription de précision.",
     "message": "Précision la plus élevée, mais vitesse de transcription plus lente. \nSujet aux hallucinations."
@@ -402,5 +405,22 @@
   "mode_speed_description": {
     "description": "Description du mode de transcription rapide.",
     "message": "Réponse la plus rapide, mais moins précise. \nEnclin à interrompre."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Les effets sonores sont désactivés dans Firefox pour éviter les problèmes de retour audio."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Message affiché lorsque l'assistant prononce sa réponse et une interruption manuelle est possible.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ parle, appuyez pour l'interrompre..."
+  },
+  "callInterruptible": {
+    "description": "L'info-bulle à afficher sur le bouton d'appel lorsqu'un appel est en cours et qu'une interruption manuelle est possible.",
+    "message": "Appuyez pour interrompre"
   }
 }

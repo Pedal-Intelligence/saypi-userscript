@@ -5,10 +5,15 @@ import { createMachine, assign } from "xstate";
 import EventBus from "../events/EventBus.js";
 import { debounce } from "lodash";
 import { getResourceUrl } from "../ResourceModule";
+import { customModelFetcher } from "../vad/custom-model-fetcher";
+import { isFirefox } from "../UserAgentModule";
+import { AudioCapabilityDetector } from "../audio/AudioCapabilities";
 
-const fullWorkletURL: string = getResourceUrl("vad.worklet.bundle.min.js");
-let listening : boolean = false;
-let stream : MediaStream;
+const fullWorkletURL: string = isFirefox()
+  ? getResourceUrl("vad.worklet.bundle.js")
+  : getResourceUrl("vad.worklet.bundle.min.js");
+let listening: boolean = false;
+let stream: MediaStream;
 
 // Assuming EventBus is a property of Window and is of type any
 // You might want to provide a more specific type if available
@@ -139,12 +144,12 @@ const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
   minSpeechFrames: 3,
   preSpeechPadFrames: 10,
   onSpeechStart: () => {
-    console.log("Speech started");
+    console.debug("User speech started");
     speechStartTime = Date.now();
     EventBus.emit("saypi:userSpeaking");
   },
   onSpeechEnd: (rawAudioData: Float32Array) => {
-    console.log("Speech ended");
+    console.debug("User speech ended");
     const speechStopTime = Date.now();
     const speechDuration = speechStopTime - speechStartTime;
     const audioBlob = convertToWavBlob(rawAudioData);
@@ -154,13 +159,52 @@ const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
     });
   },
   onVADMisfire: () => {
-    console.log("Cancelled. Audio was not speech.");
+    console.debug("Cancelled. Audio was not speech.");
     EventBus.emit("saypi:userStoppedSpeaking", { duration: 0 });
   },
   onFrameProcessed(probabilities: { isSpeech: number; notSpeech: number }) {
     debouncedOnFrameProcessed(probabilities);
   },
 };
+
+const firefoxMicVADOptions: Partial<RealTimeVADOptions> &
+  MyRealTimeVADCallbacks = {
+  ...micVADOptions,
+  workletOptions: {},
+  ortConfig: (ort: any) => {
+    ort.env.wasm.wasmPaths = chrome.runtime.getURL("public/");
+  },
+  modelFetcher: customModelFetcher,
+};
+
+async function checkAudioCapabilities() {
+  const detector = new AudioCapabilityDetector();
+  const thresholds = {
+    minimumEchoQuality: 0.5,
+    preferredEchoQuality: 0.75,
+  };
+  const config = await detector.configureAudioFeatures(thresholds);
+
+  if (config.enableInterruptions) {
+    console.debug("The interrupt feature can be enabled", config);
+  }
+
+  if (config.showQualityWarning) {
+    console.warn(
+      "Echo cancellation quality is low. Consider disabling the interrupt feature."
+    );
+    const actualScore =
+      config.audioQualityDetails.echoCancellationQuality
+        ?.echoCancellationQuality;
+    console.debug(
+      `Echo cancellation test score of ${actualScore?.toFixed(
+        2
+      )} is lower than the preferred quality of ${
+        thresholds.preferredEchoQuality
+      }`
+    );
+  }
+}
 
 // The callback type can be more specific based on your usage
 async function setupRecording(callback?: () => void): Promise<void> {
@@ -172,14 +216,14 @@ async function setupRecording(callback?: () => void): Promise<void> {
     stream = await navigator.mediaDevices.getUserMedia({
       audio: {
         channelCount: 1,
-        echoCancellation: true,
+        echoCancellation: true, // critical for interruptions
         autoGainControl: true,
         noiseSuppression: true,
       },
     });
 
     const partialVADOptions = {
-      ...micVADOptions,
+      ...(isFirefox() ? firefoxMicVADOptions : micVADOptions),
       stream,
     };
 
@@ -196,10 +240,17 @@ async function setupRecording(callback?: () => void): Promise<void> {
 }
 
 function tearDownRecording(): void {
+  console.log("Entered tearDownRecording()");
   if (microphone) {
+    console.log(
+      "microphone exists, so pausing mic, and setting listening to false, and stopping all tracks!"
+    );
     microphone.pause();
     listening = false;
     stream.getTracks().forEach((track) => track.stop());
+    microphone.destroy(); //added by JAC
+  } else {
+    console.log("microphone does not exist!");
   }
   microphone = null;
 }
@@ -224,7 +275,7 @@ export const audioInputMachine = createMachine<
   AudioInputEvent
 >(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AkgOwAdUAXAOgCcwAbMZWSAYmQGMBHVDSgbQAYBdRKAJZYGYtjyCQAD0QBGAOwBmUgBYAnJvUAOVXvUKATADYANCACeiJYYCspY7eM9jruatsHDAX2-m0mLiEJKQs7JwYeFAMEFh4YKSRAG5YANYJAdj4RGRhHOSRUAjJWMzI4nG8fFVSwqIVkkgyiLaG5lYIcnI82g4KtqoKxqrGCiOGqr7+6FnBuWz5hQxg5ORY5KQEVOUAZusAtqEzQTmhCxFRxXgpZQ1VNU11YhJSsp3Kalo6ehpGZpaIQw2UiGHhKHhAwwKZQeIxTECZE4hPIXaKwYjIcjEB5CETPOKvQFyZykOTaJS6Yyg0YQ-4dMkKUjqWzgpSqJS2MHqVQmeGI7LI86UCAMSg0OhgHEgJ4NQmdYwqDRaXT6P7tRDaOSfTSOAzaXS2TV844C+bhYWJCA0BjozHY-i1PGyppvVQ9EGOZzaEzqUFkpTqzpyNkg-VjbTGOQsnitY2BU1nc2QS3WlHcB2PJ0vF2IDQqHjqYMstnGQtDQNyCaMnS2Aa1jmF9lx2anNPJjBWsAMKUy7OgV3ukxOHo+v3kis9XqGfXe7QskwKGPNpFm-LJyjMdaYKI24hYAgAJTA7DgxEgPazBJzCG0CnUfVB-U8E2MmorwdUof1SmZdijqm0ZcEzbCAKDATdyG3aIIHKZAAEEkmQDBtgAIxoC96j7ZoEFLQxSDnZlfVfH9K1sQMdXwjllF9TRQUAvwERNOZEzXUCCDAPAoIAZT3Ahd33DD8Uaft5A8YwmVLCENG6XRK0DfV7zdL0jDZTVySA5iQM2DjuN4mJYIQpDUPQjNcUwq8RM6MSJPUKTCx6VQ5IBBADC1JTSNs9QlDJDTWyFZN2M4woeP3BhpFtM9Qh2M9yAACk5HgeAASiYJi-KTNidOC3jBOdSz3CcGy7Jkxy2mcroTFIbzDBq-oRxcSYGP5TT-MyoKohCvjwoxSLkGilZ4sS5LUvjFqMu09qoE6rg5AETNzOE7CuiUFQvF9HonE5VQJ3ZUgwW0blWShRRfMFcb0X3diRVyrC3mJHkQR9NkRk1AD5McpkYy8TVi0jXwGLwLAIDgKRmpyR0FrlABaOlEBhvahvJBQuiMIweVsU6yDFWh6AgCGhLlHlA28z8wQqkxI0SsljExljUXxvLsJ-e8aNGLz3HZORmUDadFJcbooUMLmeQUWmQIZ27AUjUghicIFyScO85EDUZ7FszxbC5nhiW5GmmrSs7WJTMAJYspmCxlz15Y5NnlfKytVuDZGlH6aml310b0qNjct0KU3FreVw8KGlwJnZCYIQnHQv20HghkXfoFTF1qJt0-d-blboWVJOwarZO9oWJKP7BZMMnBsBKlGT87eKujPr0UQYqsrO9QTdTxb3IrzSFrQtdB0ZlIzkf7vCAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QEMCuECWB7AkgOwAdUAXAOgCcwAbMZWSAYmQGMBHVDSgbQAYBdRKAJZYGYtjyCQAD0QBGAOwBmUgBYAnJvUAOVXvUKATADYANCACeiJYYCspY7eM9jruatsHDAX2-m0mLiEJKQs7JwYeFAMEFh4YKSRAG5YANYJAdj4RGRhHOSRUAjJWMzI4nG8fFVSwqIVkkgyiLaG5lYIcnI82g4KtqoKxqrGCiOGqr7+6FnBuWz5hQxg5ORY5KQEVOUAZusAtqEzQTmhCxFRxXgpZQ1VNU11YhJSsp3Kalo6ehpGZpaIQw2UiGHhKHhAwwKZQeIxTECZE4hPIXaKwYjIcjEB5CETPOKvQFyZykOTaJS6Yyg0YQ-4dMkKUjqWzgpSqJS2MHqVQmeGI7LI86UCAMSg0OhgHEgJ4NQmdYwqDRaXT6P7tRDaOSfTSOAzaXS2TV844C+bhYWJCA0BjozHY-i1PGyppvVQ9EGOZzaEzqUFkpTqzpyNkg-VjbTGOQsnitY2BU1nc2QS3WlHcB2PJ0vF2IDQqHjqYMstnGQtDQNyCaMnS2Aa1jmF9lx2anNPJjBWsAMKUy7OgV3ukxOHo+v3kis9XqGfXe7QskwKGPNpFm-LJyjMdaYKI24hYAgAJTA7DgxEgPazBJzCG0CnUfVB-U8E2MmorwdUof1SmZdijqm0ZcEzbCAKDATdyG3aIIHKZAAEEkmQDBtgAIxoC96j7ZoEFLQxSDnZlfVfH9K1sQMdXwjllF9TRQUAvwERNOZEzXUCCDAPAoIAZT3Ahd33DD8Uaft5A8YwmVLCENG6XRK0DfV7zdL0jDZTVySA5iQM2DjuN4mJYIQpDUPQjNcUwq8RM6MSJPUKTCx6VQ5IBBADC1JTSNs9QlDJDTWyFZN2M4woeP3BhpFtM9Qh2M9yAACk5HgeAASiYJi-KTNidOC3jBOdSz3CcGy7Jkxy2mcroTFIbzDBq-oRxcSYGP5TT-MyoKohCvjwoxSLkGilZ4sS5LUvjFqMu09qoE6rg5AETNzOE7CuiUFQvF9HonE5VQJ3ZUgwW0blWShRRfMFcb0X3diRVyrC3mJHkQR9NkRk1AD5McpkYy8TVi0jU7V04ddwK3JYLoIG6LOwiNxKhTRDVsStS31Csaq1BRK0S5kfwO9RjF8Bi8CwCA4CkZqckdBa5QAWjpRAab2oaVuhA6Ebcf6wPFegIApoS5R5QNvM-MEKpMSNErJPGmrSs7FiiHm8uwn97xo0YvPcdk5GZQNp0UlxuihQxNZ5BR2ZA+XbsBSNSCGJwgXJJw7zkQNRnsWznErIxYWGU3WpTMBzcht5wXvG2qQpDlVad8rK1W4N0aUfoJaXKXRvS1iwIgqCA8Wt5XDwoaXAmdkJghCcdC-bQeCGRd+gVH3xsC3T92zuVuhZUk7Bqtk72hYky-sFkwycGwEqUev07Bq6W+vRRBiqj31rdTxb3IrzSFrQtdB0ZlIzkfHvCAA */
     id: "audioInput",
     initial: "released",
     context: {
@@ -289,12 +340,21 @@ export const audioInputMachine = createMachine<
               cond: "pendingStart",
             },
           },
+
           recording: {
             entry: ["startRecording", assign({ waitingToStart: false })],
             on: {
               stopRequested: {
                 target: "pendingStop",
+                description: "Stop gracefully.",
               },
+
+              stop: {
+                target: "#audioInput.acquired.stopped",
+                description: "Stop immediately",
+                actions: ["prepareStop", "stopIfWaiting"],
+              },
+
               dataAvailable: {
                 actions: {
                   type: "sendData",
@@ -303,6 +363,7 @@ export const audioInputMachine = createMachine<
               },
             },
           },
+
           pendingStop: {
             description:
               "Waiting for the media recording device to stop recording.",
@@ -333,6 +394,7 @@ export const audioInputMachine = createMachine<
               },
             },
           },
+
           stopped: {
             entry: assign({ waitingToStop: false }),
             always: {
@@ -393,7 +455,7 @@ export const audioInputMachine = createMachine<
 
       stopIfWaiting: (SayPiContext) => {
         if (SayPiContext.waitingToStop === true) {
-          if(microphone){
+          if (microphone) {
             microphone.pause();
             listening = false;
           }
