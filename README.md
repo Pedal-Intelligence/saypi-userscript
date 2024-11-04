@@ -51,7 +51,7 @@ The extension can be built for different browsers using our packaging script:
 - unzip the source code into a directory of your choosing
 - open a terminal and navigate to that directory
 - run `npx webpack` and enter 'y' when prompted
-- run `npm run build && ./package-firefox-extension.sh`
+- run `npm run build && ./package-extension.sh firefox`
 - the generated add-on package is called 'saypi.firefox.xpi', and is located in the 'dist' directory
 
 ## Demo
