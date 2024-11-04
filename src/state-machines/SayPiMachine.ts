@@ -840,8 +840,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 type: "speakingPrompt",
               },
               {
-                type: "pauseRecording",
-                cond: "interruptionsNotAllowed",
+                type: "pauseRecordingIfInterruptionsNotAllowed",
               },
             ],
             exit: [
@@ -1014,6 +1013,14 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
 
       pauseRecording: (context, event) => {
         EventBus.emit("audio:input:stop");
+      },
+
+      pauseRecordingIfInterruptionsNotAllowed: (context, event) => {
+        const handsFreeInterrupt =
+          userPreferences.getCachedAllowInterruptions();
+        if (!handsFreeInterrupt) {
+          EventBus.emit("audio:input:stop");
+        }
       },
 
       resumeRecording: (context: SayPiContext, event) => {
