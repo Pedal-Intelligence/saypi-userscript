@@ -75,5 +75,22 @@ html.desktop-view {
     z-index: 101; // ensure tooltip is on top of other elements
   }
 
+  @media only screen and (max-width:1200px){ // media query 
+    @-moz-document url-prefix() { // target FF
+         
+      #saypi-callButton {
+        width: 2.5rem;
+        position: relative;
+        margin-right: 0.25rem;
+      }
+
+      #saypi-submitButton {
+        width: 2.5rem;
+        height: 2.5rem;
+      }
+
+    }
+}
+
   @import "messages.scss";
 }

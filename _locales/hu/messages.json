@@ -390,5 +390,37 @@
       }
     },
     "message": "Ismerje meg, hogyan számít fel a $product$ hangdíjat"
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "A Firefox jelenleg nem támogatja a megszakításokat."
+  },
+  "mode_accuracy_description": {
+    "description": "A pontos átírási mód leírása.",
+    "message": "A legnagyobb pontosság, de lassabb az átírási sebesség. \nHajlamos a hallucinációkra."
+  },
+  "mode_balanced_description": {
+    "description": "A kiegyensúlyozott átírási mód leírása.",
+    "message": "Jó egyensúly a sebesség és a pontosság között a legtöbb felhasználáshoz."
+  },
+  "mode_speed_description": {
+    "description": "A gyorsátírási mód leírása.",
+    "message": "A leggyorsabb válasz, de kevésbé pontos. \nHajlamos a megszakításra."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "A hangeffektusok le vannak tiltva a Firefoxban a hangvisszajelzéssel kapcsolatos problémák elkerülése érdekében."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Üzenet jelenik meg, amikor az asszisztens elmondja a választ, és kézi megszakítás lehetséges.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ beszél, érintse meg a megszakításához..."
+  },
+  "callInterruptible": {
+    "description": "A hívásgombon megjelenítendő eszköztipp hívás közben, és kézi megszakítás lehetséges.",
+    "message": "Érintse meg a megszakításhoz"
   }
 }

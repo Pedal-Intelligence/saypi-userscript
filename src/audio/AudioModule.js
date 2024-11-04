@@ -6,7 +6,7 @@ import { voiceConverterMachine } from "../state-machines/VoiceConverter.ts";
 import { machine as audioRetryMachine } from "../state-machines/AudioRetryMachine.ts";
 import { logger, serializeStateValue } from "../LoggingModule.js";
 import EventBus from "../events/EventBus.js";
-import { isSafari } from "../UserAgentModule.js";
+import { isSafari } from "../UserAgentModule.ts";
 import SlowResponseHandler from "../SlowResponseHandler.ts";
 import { CacheBuster } from "../CacheBuster.ts";
 import { UserPreferenceModule } from "../prefs/PreferenceModule.ts";
@@ -372,18 +372,15 @@ export default class AudioModule {
       inputActor.send(["acquire", "start"]);
     });
     EventBus.on("audio:stopRecording", function (e) {
+      // soft stop recording
       inputActor.send("stopRequested");
-      /* resume or cancel Pi's audio */
-      /* TODO: reassess how to handle interruptions
-      outputActor.send("play"); // resume Pi's audio
-      outputActor.send("stop"); // cancel Pi's audio
-      */
     });
     // audio input (recording) events (pass media recorder events -> audio input machine actor)
     EventBus.on("audio:dataavailable", (detail) => {
       inputActor.send({ type: "dataAvailable", ...detail });
     });
     EventBus.on("audio:input:stop", function (e) {
+      // hard stop recording
       inputActor.send("stop");
     });
     EventBus.on("audio:input:reconnect", function (e) {

@@ -390,5 +390,37 @@
   "voiceIntroduction_paola": {
     "description": "Introducción para la voz de Paola.",
     "message": "¡Chao! \n¡Buen día! \n¡Hola! \nSoy Pi y puedo conversar con fluidez en 32 idiomas. \nDel árabe al ucraniano, estoy aquí para derribar las barreras del idioma. \n¿Cómo te suena esta voz?"
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Actualmente, Firefox no admite interrupciones."
+  },
+  "mode_accuracy_description": {
+    "description": "Descripción del modo de transcripción de precisión.",
+    "message": "Mayor precisión, pero velocidad de transcripción más lenta. \nPropenso a alucinaciones."
+  },
+  "mode_balanced_description": {
+    "description": "Descripción del modo de transcripción equilibrada.",
+    "message": "Buen equilibrio entre velocidad y precisión para la mayoría de los usos."
+  },
+  "mode_speed_description": {
+    "description": "Descripción del modo de transcripción rápida.",
+    "message": "Respuesta más rápida, pero menos precisa. \nPropenso a interrumpir."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Los efectos de sonido están deshabilitados en Firefox para evitar problemas de respuesta de audio."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Mensaje que se muestra cuando el asistente está pronunciando su respuesta y es posible la interrupción manual.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ está hablando, toca para interrumpir..."
+  },
+  "callInterruptible": {
+    "description": "La información sobre herramientas que se muestra en el botón de llamada cuando hay una llamada en curso y es posible la interrupción manual.",
+    "message": "Toca para interrumpir"
   }
 }

@@ -390,5 +390,37 @@
       }
     },
     "message": "Erfahren Sie, wie $product$ Audiogebühren berechnet"
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Unterbrechungen werden derzeit in Firefox nicht unterstützt."
+  },
+  "mode_accuracy_description": {
+    "description": "Beschreibung für den Genauigkeitstranskriptionsmodus.",
+    "message": "Höchste Genauigkeit, aber langsamere Transkriptionsgeschwindigkeit. \nAnfällig für Halluzinationen."
+  },
+  "mode_balanced_description": {
+    "description": "Beschreibung für den ausgewogenen Transkriptionsmodus.",
+    "message": "Gute Balance zwischen Geschwindigkeit und Genauigkeit für die meisten Anwendungen."
+  },
+  "mode_speed_description": {
+    "description": "Beschreibung für den Geschwindigkeitstranskriptionsmodus.",
+    "message": "Schnellste Antwort, aber weniger genau. \nNeigt dazu, zu unterbrechen."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Soundeffekte sind in Firefox deaktiviert, um Audio-Feedback-Probleme zu vermeiden."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Meldung wird angezeigt, wenn der Assistent seine Antwort spricht und eine manuelle Unterbrechung möglich ist.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ spricht, tippen Sie, um zu unterbrechen ..."
+  },
+  "callInterruptible": {
+    "description": "Der Tooltip wird auf der Anrufschaltfläche angezeigt, wenn ein Anruf läuft und eine manuelle Unterbrechung möglich ist.",
+    "message": "Zum Unterbrechen tippen"
   }
 }

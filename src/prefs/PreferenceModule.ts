@@ -7,6 +7,7 @@ import {
   PiAIVoice,
   SpeechSynthesisVoiceRemote,
 } from "../tts/SpeechModel";
+import { isFirefox } from "../UserAgentModule";
 
 type Preference = "speed" | "balanced" | "accuracy" | null;
 type VoicePreference = SpeechSynthesisVoiceRemote | null;
@@ -136,6 +137,10 @@ class UserPreferenceModule {
   }
 
   public getSoundEffects(): Promise<boolean> {
+    // If Firefox, always return false regardless of user preference
+    if (isFirefox()) {
+      return Promise.resolve(false);
+    }
     return this.getStoredValue("soundEffects", true);
   }
 
@@ -280,6 +285,10 @@ class UserPreferenceModule {
     return Promise.resolve();
   }
   public getAllowInterruptions(): Promise<boolean> {
+    // If Firefox, always return false regardless of user preference
+    if (isFirefox()) {
+      return Promise.resolve(false);
+    }
     return this.getStoredValue("allowInterruptions", true);
   }
 
@@ -323,6 +332,9 @@ class UserPreferenceModule {
   }
 
   public getCachedAllowInterruptions(): boolean {
+    if (isFirefox()) {
+      return false;
+    }
     const cachedResult = this.cache.getCachedValue("allowInterruptions", true);
     return cachedResult;
   }

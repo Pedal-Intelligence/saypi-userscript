@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_appName__",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "description": "__MSG_appDescription__",
   "permissions": ["storage"],
   "host_permissions": ["https://api.saypi.ai/*"],
@@ -22,6 +22,7 @@
       "resources": [
         "public/silero_vad.onnx",
         "public/*.wasm",
+        "public/vad.worklet.bundle.js",
         "public/vad.worklet.bundle.min.js",
         "public/ort-wasm-simd-threaded.mjs",
         "public/audio/*.mp3",

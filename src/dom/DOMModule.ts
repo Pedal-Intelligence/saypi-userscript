@@ -45,3 +45,35 @@ export function findRootAncestor(element: Element): Element {
   }
   return findRootAncestor(element.parentElement);
 }
+
+export function createElement(
+  tag: string,
+  attributes: Record<string, any> = {}
+): HTMLElement {
+  const element = document.createElement(tag);
+  Object.entries(attributes).forEach(([key, value]) => {
+    if (key === "className") {
+      element.className = value;
+    } else if (key.startsWith("on")) {
+      element.addEventListener(key.slice(2).toLowerCase(), value);
+    } else {
+      element.setAttribute(key, value);
+    }
+  });
+  return element;
+}
+
+export function createSVGElement(svgString: string): SVGElement {
+  const parser = new DOMParser();
+  const svgDoc = parser.parseFromString(svgString, "image/svg+xml");
+  const svgElement = svgDoc.documentElement;
+
+  // Check if it's an SVG element by tag name, not just instance type
+  if (svgElement.tagName.toLowerCase() === "svg") {
+    return svgElement as unknown as SVGElement;
+  }
+  throw new Error(
+    "Failed to create SVGElement. Invalid SVG string: " +
+      svgString.slice(0, 100)
+  );
+}

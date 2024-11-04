@@ -390,5 +390,37 @@
       }
     },
     "message": "Ketahui cara $product$ mengenakan bayaran untuk audio"
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Gangguan tidak disokong dalam Firefox pada masa ini."
+  },
+  "mode_accuracy_description": {
+    "description": "Penerangan untuk mod transkripsi ketepatan.",
+    "message": "Ketepatan tertinggi, tetapi kelajuan transkripsi lebih perlahan. \nTerdedah kepada halusinasi."
+  },
+  "mode_balanced_description": {
+    "description": "Penerangan untuk mod transkripsi seimbang.",
+    "message": "Keseimbangan kelajuan dan ketepatan yang baik untuk kebanyakan kegunaan."
+  },
+  "mode_speed_description": {
+    "description": "Penerangan untuk mod transkripsi kelajuan.",
+    "message": "Respons terpantas, tetapi kurang tepat. \nTerdedah kepada gangguan."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Kesan bunyi dilumpuhkan dalam Firefox untuk mengelakkan isu maklum balas audio."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Mesej dipaparkan apabila pembantu bercakap responsnya dan gangguan manual mungkin berlaku.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ sedang bercakap, ketik untuk mengganggu..."
+  },
+  "callInterruptible": {
+    "description": "Petua alat untuk dipaparkan pada butang panggilan apabila panggilan sedang dijalankan dan gangguan manual mungkin berlaku.",
+    "message": "Ketik untuk mengganggu"
   }
 }

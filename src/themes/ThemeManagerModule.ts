@@ -30,19 +30,13 @@ export class ThemeManager {
   private applyTheme(theme: "dark" | "light") {
     const button = document.getElementById("saypi-themeToggleButton");
     if (button) {
-      if (theme === "dark") {
-        button.innerHTML = IconModule.darkMode;
-        const label = getMessage("toggleThemeToLightMode");
-        button.setAttribute("aria-label", label);
-      } else if (theme === "light") {
-        button.innerHTML = IconModule.lightMode;
-        const label = getMessage("toggleThemeToDarkMode");
-        button.setAttribute("aria-label", label);
-      }
+      button.replaceChildren(theme === "dark" ? IconModule.darkMode : IconModule.lightMode);
+      const labelName = theme === "dark" ? "toggleThemeToLightMode" : "toggleThemeToDarkMode";
+      button.setAttribute("aria-label", getMessage(labelName));
     }
     const iconContainer = document.querySelector(".saypi-icon");
     if (iconContainer) {
-      iconContainer.innerHTML = this.icons.rectangles(theme);
+      iconContainer.replaceChildren(this.icons.rectangles(theme));
     }
   }
 
@@ -57,7 +51,7 @@ export class ThemeManager {
     button.className =
       "theme-toggle-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
     button.setAttribute("aria-label", label);
-    button.innerHTML = IconModule.lightMode;
+    button.replaceChildren(IconModule.lightMode);
     if (container) {
       addChild(container, button, position);
       button.onclick = () => {

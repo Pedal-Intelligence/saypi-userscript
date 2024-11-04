@@ -1,0 +1,79 @@
+{
+  "chrome": {
+    "enableInterruptions": true,
+    "showQualityWarning": true,
+    "requiresManualConfig": false,
+    "audioQualityDetails": {
+      "basicSupport": {
+        "echoCancellation": true,
+        "autoGainControl": true,
+        "noiseSuppression": true
+      },
+      "appliedConstraints": {
+        "echoCancellation": true,
+        "autoGainControl": true,
+        "noiseSuppression": true,
+        "deviceId": "default",
+        "channelCount": 1,
+        "sampleRate": 48000
+      },
+      "echoCancellationQuality": {
+        "echoCancellationQuality": 0.5356262307553493,
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+        "audioContextSampleRate": 48000,
+        "testTimestamp": "2024-10-27T22:52:32.157Z",
+        "details": {
+          "echoFrequency": 0.5,
+          "maxAmplitude": 0.3812458974821691,
+          "samplesAnalyzed": 30,
+          "echoDetections": 15,
+          "audioPlaybackVerified": true,
+          "signalDetected": true
+        }
+      },
+      "browserSpecificNotes": {}
+    }
+  },
+  "firefox": {
+    "enableInterruptions": true,
+    "showQualityWarning": false,
+    "requiresManualConfig": true,
+    "audioQualityDetails": {
+      "basicSupport": {
+        "echoCancellation": true,
+        "autoGainControl": true,
+        "noiseSuppression": true
+      },
+      "appliedConstraints": {
+        "echoCancellation": true,
+        "autoGainControl": true,
+        "noiseSuppression": true,
+        "deviceId": "z3bRMNK10z27QztiyhaQxp04svsGFpKVIXmEsgLIPcY=",
+        "channelCount": 1
+      },
+      "echoCancellationQuality": {
+        "echoCancellationQuality": 0.9268943657143517,
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:131.0) Gecko/20100101 Firefox/131.0",
+        "audioContextSampleRate": 48000,
+        "testTimestamp": "2024-10-27T23:04:51.262Z",
+        "details": {
+          "echoFrequency": 0.06896551724137931,
+          "maxAmplitude": 0.08276590738894266,
+          "samplesAnalyzed": 29,
+          "echoDetections": 2,
+          "audioPlaybackVerified": true,
+          "signalDetected": true
+        }
+      },
+      "browserSpecificNotes": {
+        "message": "Firefox's echo cancellation implementation may vary. Consider testing in real conditions.",
+        "recommendation": "Users may need to manually enable echo cancellation in about:config",
+        "relevantSettings": [
+          "media.getusermedia.aec_enabled",
+          "media.getusermedia.agc_enabled",
+          "media.getusermedia.noise_enabled"
+        ]
+      }
+    }
+  }
+}

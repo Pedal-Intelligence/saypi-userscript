@@ -14,10 +14,45 @@ Enhance your voice interactions with Inflection AI's Pi chatbot with the _Say, P
 
 We are not accepting external contributions to the codebase at this time. Please see the [CONTRIBUTING.md](CONTRIBUTING.md) file for more information.
 
-## Assembly
+## Assembly & Installation
 
-The content script is assembled using Webpack with `npm run build` from the command line in the project directory. This will generate a `saypi.user.js` file in the `/public` directory, bundling together all necessary JavaScript modules and assets.
-This `user.js` file is what get packaged as a userscript (with `metadata.txt`) and Chrome extension (with `manifest.json`).
+### Prerequisites
+
+- Node.js v20.17.0 or later
+- npm v10.8.2 or later
+- bash shell (Linux/Mac) or Git Bash (Windows)
+
+### Building from Source
+
+1. Unzip or clone the source code into a directory of your choosing
+2. Open a terminal and navigate to that directory
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+4. Build the content script:
+   ```bash
+   npm run build
+   ```
+
+### Packaging Browser Extensions
+
+The extension can be built for different browsers using our packaging script:
+
+## Firefox Add-On Instructions
+
+- build machine details:
+
+  - operating system: Linux Mint 21.3, Kernel: Linux 5.15.0-122-generic
+  - shell: GNU bash, version 5.1.16(1)-release (x86_64-pc-linux-gnu)
+  - node version: v20.17.0
+  - npm version: 10.8.2
+
+- unzip the source code into a directory of your choosing
+- open a terminal and navigate to that directory
+- run `npx webpack` and enter 'y' when prompted
+- run `npm run build && ./package-firefox-extension.sh`
+- the generated add-on package is called 'saypi.firefox.xpi', and is located in the 'dist' directory
 
 ## Demo
 
@@ -34,10 +69,42 @@ This `user.js` file is what get packaged as a userscript (with `metadata.txt`) a
 
 _Say, Pi_ is a browser extension. Install it from the [Chrome Web Store](https://chromewebstore.google.com/detail/say-pi/glhhgglpalmjjkoiigojligncepccdei?hl=en) or unpacked from this repo.
 
+### Installing the Extension
+
+#### Chrome/Edge
+
+- Option 1: Install from Web Store
+  - Chrome: [Chrome Web Store](https://chromewebstore.google.com/detail/say-pi/glhhgglpalmjjkoiigojligncepccdei?hl=en)
+  - Edge: [Edge Add-ons](https://microsoftedge.microsoft.com/addons/)
+- Option 2: Load unpacked
+  1. Go to chrome://extensions or edge://extensions
+  2. Enable "Developer mode"
+  3. Click "Load unpacked"
+  4. Select the unzipped extension directory
+
+#### Firefox
+
+- Option 1: Install from [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/)
+- Option 2: Load unsigned/development build
+  1. Set `xpinstall.signatures.required` to `false` in about:config
+     - Type `about:config` in the address bar
+     - Accept the warning
+     - Search for `xpinstall.signatures.required`
+     - Toggle it to `false`
+  2. Go to about:debugging
+  3. Click "This Firefox"
+  4. Click "Load Temporary Add-on"
+  5. Select the .xpi file
+
+> **Note**: Disabling signature verification is only possible in Firefox Developer Edition and Firefox Nightly. Regular Firefox Release and Beta versions require signed extensions for security reasons.
+
 ## Compatibility
 
-The _Say, Pi_ works best on Chromium browsers such as Google Chrome, Microsoft Edge, Arc, and Kiwi Browser.
-It also works on Safari on iOS.
+The _Say, Pi_ extension works on:
+
+- Chromium-based browsers (Chrome, Edge, Arc, Kiwi Browser)
+- Firefox
+- Safari on iOS
 
 ## License
 

@@ -390,5 +390,37 @@
       }
     },
     "message": "অডিওর জন্য $product$ কিভাবে চার্জ করে তা জানুন"
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "বাধাগুলি বর্তমানে ফায়ারফক্সে সমর্থিত নয়।"
+  },
+  "mode_accuracy_description": {
+    "description": "নির্ভুলতা ট্রান্সক্রিপশন মোডের জন্য বর্ণনা।",
+    "message": "সর্বোচ্চ নির্ভুলতা, কিন্তু ধীর প্রতিলিপি গতি। \nহ্যালুসিনেশন প্রবণ."
+  },
+  "mode_balanced_description": {
+    "description": "সুষম প্রতিলিপি মোডের জন্য বর্ণনা।",
+    "message": "বেশিরভাগ ব্যবহারের জন্য গতি এবং নির্ভুলতার ভাল ভারসাম্য।"
+  },
+  "mode_speed_description": {
+    "description": "গতি প্রতিলিপি মোড জন্য বর্ণনা.",
+    "message": "দ্রুততম প্রতিক্রিয়া, কিন্তু কম সঠিক। \nবাধা প্রবণ."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "অডিও প্রতিক্রিয়া সমস্যা প্রতিরোধ করতে ফায়ারফক্সে সাউন্ড এফেক্ট নিষ্ক্রিয় করা হয়েছে।"
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "সহকারী যখন তার প্রতিক্রিয়া বলছে তখন বার্তা প্রদর্শিত হবে এবং ম্যানুয়াল বাধা সম্ভব।",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ কথা বলছে, বাধা দিতে আলতো চাপুন..."
+  },
+  "callInterruptible": {
+    "description": "কল বোতামে প্রদর্শিত টুলটিপ যখন একটি কল চলছে এবং ম্যানুয়াল বাধা সম্ভব।",
+    "message": "বাধা দিতে আলতো চাপুন"
   }
 }

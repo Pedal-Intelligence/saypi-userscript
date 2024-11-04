@@ -1,4 +1,4 @@
-import { expect, test, beforeEach } from "vitest";
+import { expect, test } from "vitest";
 import { JSDOM } from "jsdom";
 import {
   ElementTextStream,
@@ -42,15 +42,6 @@ export function timeoutCalc(wc: number) {
   const maxLanguageDelay = 3000;
   return wc * intervalMillis + STREAM_TIMEOUT + maxLanguageDelay;
 }
-
-beforeEach(() => {
-  const dom = new JSDOM();
-  global.document = dom.window.document;
-  global.MutationObserver = dom.window.MutationObserver;
-  global.Node = dom.window.Node;
-  global.NodeList = dom.window.NodeList;
-  global.Element = dom.window.Element;
-});
 
 test("getNestedText returns the correct text", () => {
   const container = document.createElement("div");

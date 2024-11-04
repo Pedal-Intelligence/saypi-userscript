@@ -10,6 +10,7 @@ import { UtteranceCharge } from "../billing/BillingModule";
 import { SpeechSynthesisVoiceRemote, SpeechUtterance } from "./SpeechModel";
 import { AssistantResponse } from "../dom/MessageElements";
 import { AssistantWritingEvent } from "../dom/MessageEvents";
+import { createSVGElement } from "../dom/DOMModule";
 
 export class TTSControlsModule {
   private constructor(private speechSynthesis: SpeechSynthesisModule) {
@@ -43,7 +44,7 @@ export class TTSControlsModule {
       classname
     );
     button.setAttribute("aria-label", title);
-    button.innerHTML = icon;
+    button.appendChild(createSVGElement(icon));
     return button;
   }
 
@@ -106,7 +107,8 @@ export class TTSControlsModule {
       classname
     );
     button.setAttribute("title", title);
-    button.innerHTML = title + icon;
+    button.innerText = title;
+    button.appendChild(createSVGElement(icon));
     return button;
   }
 
@@ -164,16 +166,14 @@ export class TTSControlsModule {
     button.addEventListener("click", () => {
       navigator.clipboard.writeText(message.text);
       if (!containerIsMenu) {
-        const originalAriaLabel =
-          button.getAttribute("ariaLabel") || getMessage("copyButtonTitle");
-        const originalInnerHtml = button.innerHTML;
+        const originalAriaLabel = button.getAttribute("ariaLabel") || getMessage("copyButtonTitle");
         button.setAttribute("aria-label", getMessage("copiedButtonTitle"));
-        button.innerHTML = copiedIconSVG;
+        button.replaceChild( createSVGElement(copiedIconSVG), button.childNodes[0]);
         button.disabled = true;
         // reset after a few seconds
         setTimeout(() => {
           button.setAttribute("aria-label", originalAriaLabel);
-          button.innerHTML = originalInnerHtml;
+          button.replaceChild( createSVGElement(copyIconSVG), button.childNodes[0]);
           button.disabled = false;
         }, 2500);
       }
@@ -239,10 +239,7 @@ export class TTSControlsModule {
       costElement.classList.add("cost-free");
     }
     costElement.setAttribute("aria-label", chargeExplanation);
-
-    costElement.innerHTML = `Cost: <span class="price">$<span class="value">${cost.toFixed(
-      2
-    )}</span></span>`;
+    costElement.replaceChildren(this.createPriceSpan(cost));
     const verticalSpacer = document.createElement("div");
     verticalSpacer.classList.add("vertical-separator");
     // insert as first child of cost element
@@ -267,6 +264,16 @@ export class TTSControlsModule {
     return costBasisContainer;
   }
 
+  createPriceSpan(cost: number): HTMLSpanElement {
+    const priceSpan = document.createElement("span");
+    priceSpan.classList.add("price");
+    const valueSpan = document.createElement("span");
+    valueSpan.classList.add("value");
+    valueSpan.innerText = cost.toFixed(2);
+    priceSpan.appendChild(valueSpan);
+    return priceSpan;
+  }
+
   addPoweredBy(
     container: HTMLElement,
     voice: SpeechSynthesisVoiceRemote,
@@ -288,16 +295,23 @@ export class TTSControlsModule {
       "tooltip-wide"
     );
     poweredByElement.setAttribute("aria-label", ttsLabel);
-    const logoImageExt = ttsEngine === "inflection.ai" ? "png" : "svg"; // can't find a good svg for inflection.ai
-    const logoImageUrl = getResourceUrl(
-      `icons/logos/${ttsEngine.toLowerCase()}.${logoImageExt}`
-    );
-    poweredByElement.innerHTML = `<img src="${logoImageUrl}" class="h-4 w-4 inline-block">`;
+    poweredByElement.appendChild(this.createTtsLogo(ttsEngine));
     if (insertBefore) {
       container.insertBefore(poweredByElement, insertBefore);
     } else {
       container.appendChild(poweredByElement);
     }
+  }
+
+  createTtsLogo(ttsEngine : string) {
+    const logo = document.createElement("img");
+    const logoImageExt = ttsEngine === "inflection.ai" ? "png" : "svg"; // can't find a good svg for inflection.ai
+    const logoImageUrl = getResourceUrl(
+      `icons/logos/${ttsEngine.toLowerCase()}.${logoImageExt}`
+    );
+    logo.setAttribute("src", logoImageUrl);
+    logo.classList.add("h-4", "w-4", "inline-block");
+    return logo;
   }
 
   public updateCostBasis(container: HTMLElement, charge: UtteranceCharge) {

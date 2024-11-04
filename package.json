@@ -1,6 +1,6 @@
 {
   "name": "saypi-userscript",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "type": "module",
   "scripts": {
     "prebuild": "node i18n-validate.cjs",
@@ -8,8 +8,8 @@
     "dev": "webpack --mode development --watch",
     "start": "node server.js",
     "test:jest": "NODE_OPTIONS=--experimental-vm-modules npx jest --detectOpenHandles --forceExit",
-    "test:vitest": "vitest --run",
-    "test:vitest:watch": "vitest --watch",
+    "test:vitest": "vitest run --config vitest.config.js",
+    "test:vitest:watch": "vitest --watch --config vitest.config.js",
     "test": "npm-run-all -s test:jest test:vitest"
   },
   "jest": {
@@ -42,7 +42,7 @@
     ]
   },
   "dependencies": {
-    "@ricky0123/vad-web": "^0.0.18",
+    "@ricky0123/vad-web": "^0.0.19",
     "@xstate/fsm": "^2.1.0",
     "@xstate/test": "^0.5.1",
     "axios": "^1.4.0",
@@ -89,7 +89,8 @@
     "ts-loader": "^9.4.4",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2",
-    "vitest": "^2.0.5",
+    "vitest": "^2.1.4",
+    "web-ext": "^8.3.0",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4"
   }

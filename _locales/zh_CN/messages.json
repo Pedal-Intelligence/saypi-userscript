@@ -390,5 +390,37 @@
       }
     },
     "message": "了解 $product$ 如何对音频收费"
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Firefox 目前不支持中断。"
+  },
+  "mode_accuracy_description": {
+    "description": "准确度转录模式的说明。",
+    "message": "准确度最高，但转录速度较慢。\n容易产生幻觉。"
+  },
+  "mode_balanced_description": {
+    "description": "平衡转录模式的描述。",
+    "message": "对于大多数用途来说，速度和准确性之间具有良好的平衡。"
+  },
+  "mode_speed_description": {
+    "description": "速度转录模式的说明。",
+    "message": "响应速度最快，但准确性较差。\n容易打断。"
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Firefox 中禁用声音效果以防止出现音频反馈问题。"
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "助手说话时显示的消息其响应和手动中断是可能的。",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "$chatbot$ 正在说话，点击即可打断..."
+  },
+  "callInterruptible": {
+    "description": "当通话正在进行并且可以手动中断时，通话按钮上显示的工具提示。",
+    "message": "点击即可中断"
   }
 }

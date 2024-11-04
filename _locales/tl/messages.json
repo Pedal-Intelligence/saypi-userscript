@@ -390,5 +390,37 @@
       }
     },
     "message": "Alamin kung paano naniningil ang $product$ para sa audio"
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Kasalukuyang hindi sinusuportahan sa Firefox ang mga pagkaantala."
+  },
+  "mode_accuracy_description": {
+    "description": "Paglalarawan para sa accuracy transcription mode.",
+    "message": "Pinakamataas na katumpakan, ngunit mas mabagal na bilis ng transkripsyon. \nMahilig sa guni-guni."
+  },
+  "mode_balanced_description": {
+    "description": "Paglalarawan para sa balanseng transcription mode.",
+    "message": "Magandang balanse ng bilis at katumpakan para sa karamihan ng mga gamit."
+  },
+  "mode_speed_description": {
+    "description": "Paglalarawan para sa speed transcription mode.",
+    "message": "Pinakamabilis na tugon, ngunit hindi gaanong tumpak. \nMahilig makagambala."
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Ang mga sound effect ay hindi pinagana sa Firefox upang maiwasan ang mga isyu sa audio feedback."
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Ipinapakita ang mensahe kapag nagsasalita ang assistant ng tugon nito at posible ang manual interruption.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    },
+    "message": "Nagsasalita si $chatbot$, i-tap para matakpan..."
+  },
+  "callInterruptible": {
+    "description": "Ang tooltip na ipapakita sa pindutan ng tawag kapag ang isang tawag ay isinasagawa at ang manu-manong pagkaantala ay posible.",
+    "message": "I-tap para matakpan"
   }
 }

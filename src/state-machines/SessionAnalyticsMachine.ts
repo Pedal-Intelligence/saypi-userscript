@@ -84,11 +84,7 @@ type SessionEvent =
   | TranscriptionEvent
   | StartSessionEvent;
 
-export const machine = createMachine<
-  SessionContext,
-  SessionEvent,
-  SessionTypestate
->(
+const machine = createMachine<SessionContext, SessionEvent, SessionTypestate>(
   {
     /** @xstate-layout N4IgpgJg5mDOIC5SzrAlgewHYEEsEMAbATwBc0BjWAOgEkJCwBiWU-AJ1IH0VZ1sA2gAYAuolAAHDOnLZxIAB6IArAGZl1NQEYATAHYtevQDYjagDQhiiHQE4AHNVtDjO5VoAsO1Xo9bbAL4Blrz8uAQk5FTUOBTkAG7MpOz4WLAU7GgARmhYUMJiSCBSMphY8koI9kbUqvamHqqqHsZqysqW1gg6Qh5OLjrGja32tnq9QSGoZXhEZJQ0sQnMKFgQXAC2qPgwBfIlaLLlRZX2yo56o0L2qlpaqkJCynqdiPZa1B6237bqWmceG56SYgUIzCLzaJLNCJJhgNY8aaCUT7aSHMoVFReahCX5GR7nUy2DyvbpCHSfbS3ZR2HSeMZBYIgLAYCBweRg7CzSILVGlOQnRAAWmMpJFIM54TmURo9EYfPRAtAlS8pLsji0uNUtn0Dh0tI8EqRUp5ULiMLACqOmIQem8OLxvnsdls-g6VkQD2MtWUv3sXmMvR0hsZQA */
     context: {
@@ -257,7 +253,7 @@ export const machine = createMachine<
         },
       }),
       clearLastMessage: assign({
-        last_message: (context: SessionContext, event: SendMessageEvent) => {
+        last_message: () => {
           // clear last_message on submit
           return {
             speech_start_time: 0,
@@ -312,3 +308,12 @@ export const machine = createMachine<
     delays: {},
   }
 );
+
+export {
+  machine,
+  SessionEvent,
+  StartSessionEvent,
+  TranscriptionEvent,
+  SendMessageEvent,
+  EndSessionEvent,
+};

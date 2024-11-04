@@ -94,6 +94,10 @@ export abstract class UserPrompt {
     const textarea = document.getElementById(
       "saypi-prompt"
     ) as HTMLTextAreaElement;
+    let isFocused = (document.activeElement === textarea);
+    if(!isFocused){
+      textarea.readOnly = true;
+    }
     if (ImmersionStateChecker.isViewImmersive()) {
       // if transcript is > max characters, truncate it to max-1 characters plus an ellipsis
       if (transcript.length > this.PROMPT_CHARACTER_LIMIT) {
@@ -108,6 +112,10 @@ export abstract class UserPrompt {
       this.enterTextAndSubmit(transcript, true);
     } else {
       this.typeText(`${transcript} `, true); // types and submits the prompt
+    }
+    if(!isFocused){
+      textarea.blur();
+      textarea.readOnly = false;
     }
   }
 

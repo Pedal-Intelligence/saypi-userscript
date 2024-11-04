@@ -1,7 +1,7 @@
 import AudioModule from "./audio/AudioModule.js";
 import { buttonModule } from "./ButtonModule.js";
 import EventModule from "./events/EventModule.js";
-import { addUserAgentFlags } from "./UserAgentModule.js";
+import { addUserAgentFlags } from "./UserAgentModule.ts";
 import { ImmersionService } from "./ImmersionService.js";
 import { submitErrorHandler } from "./SubmitErrorHandler.ts";
 import getMessage from "./i18n.ts";
@@ -100,12 +100,12 @@ import SlowResponseHandler from "./SlowResponseHandler.ts";
 
     var lockedText = document.createElement("p");
     lockedText.id = "saypi-locked-text";
-    lockedText.innerHTML = getMessage("lockedScreen");
+    lockedText.innerText = getMessage("lockedScreen");
     lockPanel.appendChild(lockedText);
     var unlockInstruction = document.createElement("span");
     unlockInstruction.id = "saypi-unlock-instruction";
     unlockInstruction.classList.add("subtext");
-    unlockInstruction.innerHTML = getMessage("unlockInstruction");
+    unlockInstruction.innerText = getMessage("unlockInstruction");
     lockedText.appendChild(unlockInstruction);
   }
 })();
