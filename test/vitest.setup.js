@@ -11,6 +11,15 @@ const dom = new JSDOM("<!DOCTYPE html>", {
 Object.defineProperties(global, {
   document: { value: dom.window.document },
   window: { value: dom.window },
+  navigator: {
+    value: {
+      userAgent: "Mozilla/5.0",
+      platform: "Win32",
+      ...dom.window.navigator
+    },
+    writable: true,
+    configurable: true
+  },
   MutationObserver: { value: dom.window.MutationObserver },
   Node: { value: dom.window.Node },
   NodeList: { value: dom.window.NodeList },
