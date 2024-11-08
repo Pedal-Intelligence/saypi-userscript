@@ -8,6 +8,7 @@ import { getResourceUrl } from "../ResourceModule";
 import { customModelFetcher } from "../vad/custom-model-fetcher";
 import { isFirefox } from "../UserAgentModule";
 import { AudioCapabilityDetector } from "../audio/AudioCapabilities";
+import getMessage from "../i18n";
 
 const fullWorkletURL: string = isFirefox()
   ? getResourceUrl("vad.worklet.bundle.js")
@@ -478,39 +479,39 @@ export const audioInputMachine = createMachine<
           data: any;
         }
       ) => {
-        let errorMessage =
-          "An unknown error occurred while acquiring the microphone.";
+        let messageKey = "microphoneErrorUnknown";
+        let detail = "";
 
         if (isOverconstrainedError(event.data)) {
-          errorMessage = `Microphone constraints could not be satisfied: ${event.data.constraint}. Please adjust your microphone settings.`;
+          messageKey = "microphoneErrorConstraints";
         } else if (event.data instanceof DOMException) {
           switch (event.data.name) {
             case "NotAllowedError":
-              errorMessage =
-                "Microphone access was denied. Please allow microphone access in your browser settings and ensure that a microphone is connected.";
+              messageKey = "microphoneErrorPermissionDenied";
               break;
             case "NotFoundError":
-              errorMessage =
-                "No microphone device found. Please connect a microphone and try again.";
+              messageKey = "microphoneErrorNotFound";
               break;
             case "NotReadableError":
-              errorMessage =
-                "Microphone is currently in use by another application or is not readable. Please check your device settings.";
+              messageKey = "microphoneErrorInUse";
               break;
             default:
-              errorMessage = `An unexpected microphone error occurred: ${event.data.message}`;
+              messageKey = "microphoneErrorUnexpected";
+              detail = event.data.message;
           }
         } else if (event.data instanceof Error) {
-          errorMessage = `An error occurred while acquiring the microphone: ${event.data.message}`;
+          messageKey = "microphoneErrorGeneric";
+          detail = event.data.message;
         }
 
-        console.error(errorMessage);
+        const message = getMessage(messageKey, detail);
 
-        // Optionally, notify the user through the UI
+        console.error(`Microphone error: ${message}`, event.data);
+
         EventBus.emit("saypi:ui:show-notification", {
-          message: errorMessage,
+          message: message,
           type: "text",
-          seconds: 20, // corresponds to the duration of the microphone acquisition timeout
+          seconds: 20,
           icon: "microphone-muted",
         });
       },

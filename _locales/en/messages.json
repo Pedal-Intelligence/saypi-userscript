@@ -422,5 +422,45 @@
   },
   "interruptionsFirefoxDisabled": {
     "message": "Interruptions are not currently supported in Firefox."
+  },
+  "microphoneErrorUnknown": {
+    "message": "Unable to access the microphone. Please check your device settings and try again.",
+    "description": "Generic error message when microphone access fails for unknown reasons."
+  },
+  "microphoneErrorConstraints": {
+    "message": "Your microphone settings don't meet the required specifications. Try using a different microphone or adjusting your audio settings.",
+    "description": "Error message when microphone constraints cannot be satisfied."
+  },
+  "microphoneErrorPermissionDenied": {
+    "message": "Microphone access is required. Please allow microphone access in your browser settings to continue.",
+    "description": "Error message when microphone permission is denied by the user or system."
+  },
+  "microphoneErrorNotFound": {
+    "message": "No microphone detected. Please connect a microphone and try again.",
+    "description": "Error message when no microphone device is found."
+  },
+  "microphoneErrorInUse": {
+    "message": "Cannot access microphone because it's being used by another application. Please close other apps that might be using your microphone.",
+    "description": "Error message when microphone is already in use by another application."
+  },
+  "microphoneErrorUnexpected": {
+    "message": "An unexpected error occurred with your microphone: $message$",
+    "description": "Error message for unexpected microphone errors with details.",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorGeneric": {
+    "message": "Failed to access microphone: $message$",
+    "description": "Generic error message with details when microphone access fails.",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
   }
 }
