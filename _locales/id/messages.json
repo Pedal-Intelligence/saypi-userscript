@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "Keterangan alat untuk ditampilkan pada tombol panggilan saat panggilan sedang berlangsung dan interupsi manual dimungkinkan.",
     "message": "Ketuk untuk menyela"
+  },
+  "microphoneErrorConstraints": {
+    "description": "Pesan kesalahan ketika batasan mikrofon tidak dapat dipenuhi.",
+    "message": "Setelan mikrofon Anda tidak memenuhi spesifikasi yang diperlukan. \nCoba gunakan mikrofon lain atau sesuaikan pengaturan audio Anda."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Pesan kesalahan umum dengan detail ketika akses mikrofon gagal.",
+    "message": "Gagal mengakses mikrofon: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Pesan kesalahan saat mikrofon sedang digunakan oleh aplikasi lain.",
+    "message": "Tidak dapat mengakses mikrofon karena sedang digunakan oleh aplikasi lain. \nHarap tutup aplikasi lain yang mungkin menggunakan mikrofon Anda."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Pesan kesalahan ketika tidak ada perangkat mikrofon yang ditemukan.",
+    "message": "Tidak ada mikrofon yang terdeteksi. \nSilakan sambungkan mikrofon dan coba lagi."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Pesan kesalahan ketika izin mikrofon ditolak oleh pengguna atau sistem.",
+    "message": "Akses mikrofon diperlukan. \nHarap izinkan akses mikrofon di pengaturan browser Anda untuk melanjutkan."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Pesan kesalahan untuk kesalahan mikrofon yang tidak terduga beserta detailnya.",
+    "message": "Terjadi kesalahan tak terduga pada mikrofon Anda: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Pesan kesalahan umum ketika akses mikrofon gagal karena alasan yang tidak diketahui.",
+    "message": "Tidak dapat mengakses mikrofon. \nSilakan periksa pengaturan perangkat Anda dan coba lagi."
   }
 }

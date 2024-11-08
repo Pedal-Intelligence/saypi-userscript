@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "Työkaluvinkki, joka näytetään soittopainikkeessa puhelun ollessa käynnissä ja manuaalinen keskeytys on mahdollista.",
     "message": "Napauta keskeyttääksesi"
+  },
+  "microphoneErrorConstraints": {
+    "description": "Virheilmoitus, kun mikrofonin rajoituksia ei voida täyttää.",
+    "message": "Mikrofoniasetukset eivät täytä vaadittuja määrityksiä. \nKokeile käyttää toista mikrofonia tai säätää ääniasetuksiasi."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Yleinen virheilmoitus, jossa on tiedot, kun mikrofonin käyttö epäonnistuu.",
+    "message": "Mikrofonin käyttö epäonnistui: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Virheilmoitus, kun mikrofoni on jo toisen sovelluksen käytössä.",
+    "message": "Mikrofonia ei voi käyttää, koska toinen sovellus käyttää sitä. \nSulje muut sovellukset, jotka saattavat käyttää mikrofoniasi."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Virheilmoitus, kun mikrofonilaitetta ei löydy.",
+    "message": "Mikrofonia ei havaittu. \nLiitä mikrofoni ja yritä uudelleen."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Virheilmoitus, kun käyttäjä tai järjestelmä on evännyt mikrofonin luvan.",
+    "message": "Mikrofonin käyttö vaaditaan. \nSalli mikrofonin käyttö selaimesi asetuksista jatkaaksesi."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Virheilmoitus odottamattomista mikrofonivirheistä ja yksityiskohdista.",
+    "message": "Mikrofonissasi tapahtui odottamaton virhe: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Yleinen virheilmoitus, kun mikrofonin käyttö epäonnistuu tuntemattomista syistä.",
+    "message": "Mikrofonia ei voi käyttää. \nTarkista laitteesi asetukset ja yritä uudelleen."
   }
 }

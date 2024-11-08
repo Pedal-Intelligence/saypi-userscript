@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "Popis, ktorý sa zobrazí na tlačidle hovoru, keď prebieha hovor a je možné manuálne prerušenie.",
     "message": "Klepnutím prerušíte"
+  },
+  "microphoneErrorConstraints": {
+    "description": "Chybové hlásenie, keď nemožno uspokojiť obmedzenia mikrofónu.",
+    "message": "Nastavenia mikrofónu nespĺňajú požadované špecifikácie. \nSkúste použiť iný mikrofón alebo upravte nastavenia zvuku."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Všeobecné chybové hlásenie s podrobnosťami, keď zlyhá prístup k mikrofónu.",
+    "message": "Nepodarilo sa získať prístup k mikrofónu: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Chybové hlásenie, keď mikrofón už používa iná aplikácia.",
+    "message": "Nedá sa získať prístup k mikrofónu, pretože ho používa iná aplikácia. \nZatvorte ostatné aplikácie, ktoré môžu používať váš mikrofón."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Chybové hlásenie, keď sa nenájde žiadne mikrofónové zariadenie.",
+    "message": "Nezistil sa žiadny mikrofón. \nPripojte mikrofón a skúste to znova."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Chybové hlásenie, keď používateľ alebo systém zamietne povolenie mikrofónu.",
+    "message": "Vyžaduje sa prístup k mikrofónu. \nAk chcete pokračovať, povoľte prístup k mikrofónu v nastaveniach prehliadača."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Chybové hlásenie pre neočakávané chyby mikrofónu s podrobnosťami.",
+    "message": "Vo vašom mikrofóne sa vyskytla neočakávaná chyba: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Všeobecné chybové hlásenie, keď z neznámych dôvodov zlyhá prístup k mikrofónu.",
+    "message": "Nedá sa získať prístup k mikrofónu. \nSkontrolujte nastavenia zariadenia a skúste to znova."
   }
 }

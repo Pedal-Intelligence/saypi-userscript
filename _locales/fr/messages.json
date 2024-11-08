@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "L'info-bulle à afficher sur le bouton d'appel lorsqu'un appel est en cours et qu'une interruption manuelle est possible.",
     "message": "Appuyez pour interrompre"
+  },
+  "microphoneErrorConstraints": {
+    "description": "Message d'erreur lorsque les contraintes du microphone ne peuvent pas être satisfaites.",
+    "message": "Les paramètres de votre microphone ne répondent pas aux spécifications requises. \nEssayez d'utiliser un autre microphone ou d'ajuster vos paramètres audio."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Message d'erreur générique avec des détails en cas d'échec de l'accès au microphone.",
+    "message": "Échec de l'accès au microphone : $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Message d'erreur lorsque le microphone est déjà utilisé par une autre application.",
+    "message": "Impossible d'accéder au microphone car il est utilisé par une autre application. \nVeuillez fermer les autres applications susceptibles d'utiliser votre microphone."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Message d'erreur lorsqu'aucun périphérique microphone n'est trouvé.",
+    "message": "Aucun microphone détecté. \nVeuillez connecter un microphone et réessayer."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Message d'erreur lorsque l'autorisation du microphone est refusée par l'utilisateur ou le système.",
+    "message": "L’accès au microphone est requis. \nVeuillez autoriser l'accès au microphone dans les paramètres de votre navigateur pour continuer."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Message d'erreur pour les erreurs inattendues du microphone avec des détails.",
+    "message": "Une erreur inattendue s'est produite avec votre microphone : $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Message d'erreur générique lorsque l'accès au microphone échoue pour des raisons inconnues.",
+    "message": "Impossible d'accéder au micro. \nVeuillez vérifier les paramètres de votre appareil et réessayer."
   }
 }

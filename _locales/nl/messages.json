@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "De tooltip die op de belknop wordt weergegeven wanneer een gesprek gaande is en handmatige onderbreking mogelijk is.",
     "message": "Tik om te onderbreken"
+  },
+  "microphoneErrorConstraints": {
+    "description": "Foutmelding wanneer niet aan de microfoonbeperkingen kan worden voldaan.",
+    "message": "Je microfooninstellingen voldoen niet aan de vereiste specificaties. \nProbeer een andere microfoon te gebruiken of pas uw audio-instellingen aan."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generiek foutbericht met details wanneer toegang tot de microfoon mislukt.",
+    "message": "Kan geen toegang krijgen tot de microfoon: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Foutmelding wanneer de microfoon al in gebruik is door een andere applicatie.",
+    "message": "Geen toegang tot de microfoon omdat deze door een andere applicatie wordt gebruikt. \nSluit andere apps die mogelijk uw microfoon gebruiken."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Foutmelding wanneer er geen microfoonapparaat wordt gevonden.",
+    "message": "Geen microfoon gedetecteerd. \nSluit een microfoon aan en probeer het opnieuw."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Foutmelding wanneer microfoontoestemming wordt geweigerd door de gebruiker of het systeem.",
+    "message": "Microfoontoegang is vereist. \nSta microfoontoegang toe in uw browserinstellingen om door te gaan."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Foutmelding voor onverwachte microfoonfouten met details.",
+    "message": "Er is een onverwachte fout opgetreden met uw microfoon: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generieke foutmelding wanneer toegang tot de microfoon om onbekende redenen mislukt.",
+    "message": "Kan geen toegang krijgen tot de microfoon. \nControleer uw apparaatinstellingen en probeer het opnieuw."
   }
 }

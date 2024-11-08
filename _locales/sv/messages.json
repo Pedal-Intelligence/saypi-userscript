@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "Verktygstipset som visas på samtalsknappen när ett samtal pågår och manuellt avbrott är möjligt.",
     "message": "Tryck för att avbryta"
+  },
+  "microphoneErrorConstraints": {
+    "description": "Felmeddelande när mikrofonbegränsningar inte kan uppfyllas.",
+    "message": "Dina mikrofoninställningar uppfyller inte de obligatoriska specifikationerna. \nProva att använda en annan mikrofon eller justera dina ljudinställningar."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generiskt felmeddelande med detaljer när mikrofonåtkomst misslyckas.",
+    "message": "Det gick inte att komma åt mikrofonen: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Felmeddelande när mikrofonen redan används av en annan applikation.",
+    "message": "Kan inte komma åt mikrofonen eftersom den används av en annan app. \nStäng andra appar som kanske använder din mikrofon."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Felmeddelande när ingen mikrofonenhet hittas.",
+    "message": "Ingen mikrofon upptäckt. \nAnslut en mikrofon och försök igen."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Felmeddelande när mikrofonbehörighet nekas av användaren eller systemet.",
+    "message": "Mikrofonåtkomst krävs. \nTillåt mikrofonåtkomst i webbläsarinställningarna för att fortsätta."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Felmeddelande för oväntade mikrofonfel med detaljer.",
+    "message": "Ett oväntat fel uppstod med din mikrofon: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generiskt felmeddelande när mikrofonåtkomst misslyckas av okänd anledning.",
+    "message": "Det går inte att komma åt mikrofonen. \nKontrollera dina enhetsinställningar och försök igen."
   }
 }

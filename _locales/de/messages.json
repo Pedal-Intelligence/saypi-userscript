@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "Der Tooltip wird auf der Anrufschaltfläche angezeigt, wenn ein Anruf läuft und eine manuelle Unterbrechung möglich ist.",
     "message": "Zum Unterbrechen tippen"
+  },
+  "microphoneErrorConstraints": {
+    "description": "Fehlermeldung, wenn Mikrofonbeschränkungen nicht erfüllt werden können.",
+    "message": "Ihre Mikrofoneinstellungen entsprechen nicht den erforderlichen Spezifikationen. \nVersuchen Sie, ein anderes Mikrofon zu verwenden oder Ihre Audioeinstellungen anzupassen."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Allgemeine Fehlermeldung mit Details, wenn der Mikrofonzugriff fehlschlägt.",
+    "message": "Zugriff auf das Mikrofon fehlgeschlagen: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Fehlermeldung, wenn das Mikrofon bereits von einer anderen Anwendung verwendet wird.",
+    "message": "Auf das Mikrofon kann nicht zugegriffen werden, da es von einer anderen Anwendung verwendet wird. \nBitte schließen Sie andere Apps, die möglicherweise Ihr Mikrofon verwenden."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Fehlermeldung, wenn kein Mikrofongerät gefunden wird.",
+    "message": "Kein Mikrofon erkannt. \nBitte schließen Sie ein Mikrofon an und versuchen Sie es erneut."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Fehlermeldung, wenn die Mikrofonberechtigung vom Benutzer oder System verweigert wird.",
+    "message": "Mikrofonzugriff ist erforderlich. \nBitte erlauben Sie den Mikrofonzugriff in Ihren Browsereinstellungen, um fortzufahren."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Fehlermeldung für unerwartete Mikrofonfehler mit Details.",
+    "message": "Bei Ihrem Mikrofon ist ein unerwarteter Fehler aufgetreten: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Allgemeine Fehlermeldung, wenn der Mikrofonzugriff aus unbekannten Gründen fehlschlägt.",
+    "message": "Auf das Mikrofon kann nicht zugegriffen werden. \nBitte überprüfen Sie Ihre Geräteeinstellungen und versuchen Sie es erneut."
   }
 }

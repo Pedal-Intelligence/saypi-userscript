@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "通話中に手動で中断できるときに通話ボタンに表示されるツールチップ。",
     "message": "タップして中断"
+  },
+  "microphoneErrorConstraints": {
+    "description": "マイクの制約を満たせない場合のエラー メッセージ。",
+    "message": "マイクの設定が必要な仕様を満たしていません。\n別のマイクを使用するか、オーディオ設定を調整してみてください。"
+  },
+  "microphoneErrorGeneric": {
+    "description": "マイクへのアクセスが失敗した場合の詳細を含む一般的なエラー メッセージ。",
+    "message": "マイクにアクセスできませんでした: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "マイクが別のアプリケーションによってすでに使用されている場合のエラー メッセージ。",
+    "message": "マイクは別のアプリケーションによって使用されているため、アクセスできません。\nマイクを使用している可能性のある他のアプリを閉じてください。"
+  },
+  "microphoneErrorNotFound": {
+    "description": "マイクデバイスが見つからない場合のエラーメッセージ。",
+    "message": "マイクが検出されませんでした。\nマイクを接続して再試行してください。"
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "マイクの許可がユーザーまたはシステムによって拒否された場合のエラー メッセージ。",
+    "message": "マイクへのアクセスが必要です。\n続行するには、ブラウザ設定でマイクへのアクセスを許可してください。"
+  },
+  "microphoneErrorUnexpected": {
+    "description": "予期しないマイクエラーに関するエラーメッセージと詳細。",
+    "message": "マイクで予期しないエラーが発生しました: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "不明な理由でマイクへのアクセスが失敗した場合の一般的なエラー メッセージ。",
+    "message": "マイクにアクセスできません。\nデバイスの設定を確認して、もう一度試してください。"
   }
 }

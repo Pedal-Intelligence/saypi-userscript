@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "当通话正在进行并且可以手动中断时，通话按钮上显示的工具提示。",
     "message": "点击即可中断"
+  },
+  "microphoneErrorConstraints": {
+    "description": "无法满足麦克风限制时的错误消息。",
+    "message": "您的麦克风设置不符合所需的规格。\n尝试使用不同的麦克风或调整音频设置。"
+  },
+  "microphoneErrorGeneric": {
+    "description": "麦克风访问失败时包含详细信息的一般错误消息。",
+    "message": "无法访问麦克风：$message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "当麦克风已被其他应用程序使用时出现错误消息。",
+    "message": "无法访问麦克风，因为它正在被其他应用程序使用。\n请关闭可能正在使用您的麦克风的其他应用程序。"
+  },
+  "microphoneErrorNotFound": {
+    "description": "未找到麦克风设备时出现错误消息。",
+    "message": "未检测到麦克风。\n请连接麦克风并重试。"
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "用户或系统拒绝麦克风权限时出现错误消息。",
+    "message": "需要麦克风访问。\n请在浏览器设置中允许麦克风访问才能继续。"
+  },
+  "microphoneErrorUnexpected": {
+    "description": "意外麦克风错误的错误消息及其详细信息。",
+    "message": "您的麦克风出现意外错误：$message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "当麦克风访问由于未知原因而失败时出现一般错误消息。",
+    "message": "无法访问麦克风。\n请检查您的设备设置并重试。"
   }
 }

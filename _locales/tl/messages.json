@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "Ang tooltip na ipapakita sa pindutan ng tawag kapag ang isang tawag ay isinasagawa at ang manu-manong pagkaantala ay posible.",
     "message": "I-tap para matakpan"
+  },
+  "microphoneErrorConstraints": {
+    "description": "Mensahe ng error kapag hindi matugunan ang mga hadlang sa mikropono.",
+    "message": "Ang iyong mga setting ng mikropono ay hindi nakakatugon sa mga kinakailangang detalye. \nSubukang gumamit ng ibang mikropono o ayusin ang iyong mga setting ng audio."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generic na mensahe ng error na may mga detalye kapag nabigo ang pag-access sa mikropono.",
+    "message": "Nabigong ma-access ang mikropono: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Mensahe ng error kapag ang mikropono ay ginagamit na ng isa pang application.",
+    "message": "Hindi ma-access ang mikropono dahil ginagamit ito ng ibang application. \nPakisara ang iba pang mga app na maaaring gumagamit ng iyong mikropono."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Mensahe ng error kapag walang nakitang microphone device.",
+    "message": "Walang nakitang mikropono. \nMangyaring magkonekta ng mikropono at subukang muli."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Mensahe ng error kapag ang pahintulot ng mikropono ay tinanggihan ng user o system.",
+    "message": "Kinakailangan ang access sa mikropono. \nMangyaring payagan ang pag-access sa mikropono sa iyong mga setting ng browser upang magpatuloy."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Mensahe ng error para sa hindi inaasahang mga error sa mikropono na may mga detalye.",
+    "message": "Isang hindi inaasahang error ang naganap sa iyong mikropono: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generic na mensahe ng error kapag nabigo ang pag-access sa mikropono sa hindi malamang dahilan.",
+    "message": "Hindi ma-access ang mikropono. \nPakisuri ang mga setting ng iyong device at subukang muli."
   }
 }

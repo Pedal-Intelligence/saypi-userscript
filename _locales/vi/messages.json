@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "Chú giải công cụ hiển thị trên nút gọi khi cuộc gọi đang diễn ra và có thể bị gián đoạn thủ công.",
     "message": "Nhấn để làm gián đoạn"
+  },
+  "microphoneErrorConstraints": {
+    "description": "Thông báo lỗi khi không thể đáp ứng được các hạn chế về micrô.",
+    "message": "Cài đặt micrô của bạn không đáp ứng các thông số kỹ thuật bắt buộc. \nHãy thử sử dụng micrô khác hoặc điều chỉnh cài đặt âm thanh của bạn."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Thông báo lỗi chung kèm theo thông tin chi tiết khi truy cập micrô không thành công.",
+    "message": "Không truy cập được micrô: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Thông báo lỗi khi micrô đã được ứng dụng khác sử dụng.",
+    "message": "Không thể truy cập micrô vì micrô đang được ứng dụng khác sử dụng. \nVui lòng đóng các ứng dụng khác có thể đang sử dụng micrô của bạn."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Thông báo lỗi khi không tìm thấy thiết bị micrô.",
+    "message": "Không phát hiện thấy micrô. \nVui lòng kết nối micrô và thử lại."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Thông báo lỗi khi người dùng hoặc hệ thống từ chối quyền sử dụng micrô.",
+    "message": "Cần có quyền truy cập micrô. \nVui lòng cho phép truy cập micrô trong cài đặt trình duyệt của bạn để tiếp tục."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Thông báo lỗi về lỗi micrô không mong muốn kèm theo thông tin chi tiết.",
+    "message": "Đã xảy ra lỗi không mong muốn với micrô của bạn: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Thông báo lỗi chung khi truy cập micrô không thành công vì lý do không xác định.",
+    "message": "Không thể truy cập micrô. \nVui lòng kiểm tra cài đặt thiết bị của bạn và thử lại."
   }
 }

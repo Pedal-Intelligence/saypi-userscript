@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "통화 중일 때, 수동 중단이 가능할 때 통화 버튼에 표시되는 툴팁입니다.",
     "message": "중단하려면 탭하세요."
+  },
+  "microphoneErrorConstraints": {
+    "description": "마이크 제약 조건을 충족할 수 없는 경우 오류 메시지가 나타납니다.",
+    "message": "마이크 설정이 필수 사양을 충족하지 않습니다. \n다른 마이크를 사용하거나 오디오 설정을 조정해 보세요."
+  },
+  "microphoneErrorGeneric": {
+    "description": "마이크 액세스 실패 시 세부정보가 포함된 일반 오류 메시지입니다.",
+    "message": "마이크 액세스 실패: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "다른 응용 프로그램에서 마이크를 이미 사용 중일 때 오류 메시지가 나타납니다.",
+    "message": "다른 애플리케이션에서 마이크를 사용하고 있기 때문에 마이크에 액세스할 수 없습니다. \n마이크를 사용하고 있을 수 있는 다른 앱을 종료하세요."
+  },
+  "microphoneErrorNotFound": {
+    "description": "마이크 장치를 찾을 수 없을 때 나타나는 오류 메시지입니다.",
+    "message": "마이크가 감지되지 않았습니다. \n마이크를 연결하고 다시 시도해 주세요."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "사용자 또는 시스템에서 마이크 권한을 거부하면 오류 메시지가 나타납니다.",
+    "message": "마이크 액세스가 필요합니다. \n계속하려면 브라우저 설정에서 마이크 액세스를 허용하세요."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "세부정보가 포함된 예기치 않은 마이크 오류에 대한 오류 메시지입니다.",
+    "message": "마이크에 예상치 못한 오류가 발생했습니다: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "알 수 없는 이유로 마이크 액세스에 실패할 때 발생하는 일반 오류 메시지입니다.",
+    "message": "마이크에 액세스할 수 없습니다. \n기기 설정을 확인하고 다시 시도해 주세요."
   }
 }
