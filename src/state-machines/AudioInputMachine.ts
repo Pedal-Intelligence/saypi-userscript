@@ -206,8 +206,7 @@ async function checkAudioCapabilities() {
   }
 }
 
-// The callback type can be more specific based on your usage
-async function setupRecording(callback?: () => void): Promise<void> {
+async function setupRecording(completion_callback?: () => void): Promise<void> {
   if (microphone) {
     return;
   }
@@ -231,11 +230,12 @@ async function setupRecording(callback?: () => void): Promise<void> {
     microphone = await MicVAD.new(partialVADOptions);
     console.debug("VAD microphone loaded");
 
-    if (typeof callback === "function") {
-      callback();
+    if (typeof completion_callback === "function") {
+      completion_callback();
     }
   } catch (err) {
-    console.error("VAD microphone failed to load", err);
+    console.error("VAD microphone failed to load.", err);
+    throw err; // reject the promise
   }
 }
 
@@ -302,7 +302,7 @@ export const audioInputMachine = createMachine<
           onError: {
             target: "released",
             actions: {
-              type: "logError",
+              type: "logMicrophoneAcquisitionError",
             },
           },
         },
@@ -471,19 +471,67 @@ export const audioInputMachine = createMachine<
         tearDownRecording();
       },
 
-      logError: (context, event: { type: "error.platform"; data: any }) => {
-        console.error("Error acquiring microphone: ", event.data);
+      logMicrophoneAcquisitionError: (
+        context,
+        event: {
+          type: "error.platform";
+          data: any;
+        }
+      ) => {
+        let errorMessage =
+          "An unknown error occurred while acquiring the microphone.";
+
+        if (isOverconstrainedError(event.data)) {
+          errorMessage = `Microphone constraints could not be satisfied: ${event.data.constraint}. Please adjust your microphone settings.`;
+        } else if (event.data instanceof DOMException) {
+          switch (event.data.name) {
+            case "NotAllowedError":
+              errorMessage =
+                "Microphone access was denied. Please allow microphone access in your browser settings and ensure that a microphone is connected.";
+              break;
+            case "NotFoundError":
+              errorMessage =
+                "No microphone device found. Please connect a microphone and try again.";
+              break;
+            case "NotReadableError":
+              errorMessage =
+                "Microphone is currently in use by another application or is not readable. Please check your device settings.";
+              break;
+            default:
+              errorMessage = `An unexpected microphone error occurred: ${event.data.message}`;
+          }
+        } else if (event.data instanceof Error) {
+          errorMessage = `An error occurred while acquiring the microphone: ${event.data.message}`;
+        }
+
+        console.error(errorMessage);
+
+        // Optionally, notify the user through the UI
+        EventBus.emit("saypi:ui:show-notification", {
+          message: errorMessage,
+          type: "text",
+          seconds: 20, // corresponds to the duration of the microphone acquisition timeout
+          icon: "microphone-muted",
+        });
       },
     },
     services: {
       acquireMicrophone: (context, event) => {
         return new Promise<void>((resolve, reject) => {
           setupRecording(() => {
+            // called when setupRecording completes - whether successful or not
             if (microphone) {
               resolve();
             } else {
-              reject(new Error("Failed to acquire microphone resource."));
+              reject(
+                new Error(
+                  "Failed to acquire microphone resource for unknown reason."
+                )
+              );
             }
+          }).catch((err) => {
+            // called if setupRecording throws an error - reject the promise
+            reject(err);
           });
         });
       },
@@ -499,3 +547,14 @@ export const audioInputMachine = createMachine<
     delays: {},
   }
 );
+interface OverconstrainedError extends DOMException {
+  constraint: string;
+  message: string;
+}
+function isOverconstrainedError(error: any): error is OverconstrainedError {
+  return (
+    error instanceof DOMException &&
+    (error.name === "OverconstrainedError" ||
+      error.name === "ConstraintNotSatisfiedError")
+  );
+}
