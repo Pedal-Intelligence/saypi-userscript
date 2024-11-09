@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "Indicatorul explicativ care se va afișa pe butonul de apel atunci când un apel este în desfășurare și este posibilă întreruperea manuală.",
     "message": "Atingeți pentru a întrerupe"
+  },
+  "microphoneErrorConstraints": {
+    "description": "Mesaj de eroare când constrângerile microfonului nu pot fi îndeplinite.",
+    "message": "Setările microfonului nu îndeplinesc specificațiile necesare. \nÎncercați să utilizați un alt microfon sau să ajustați setările audio."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Mesaj de eroare generic cu detalii când accesul la microfon eșuează.",
+    "message": "Nu s-a putut accesa microfonul: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Mesaj de eroare când microfonul este deja utilizat de o altă aplicație.",
+    "message": "Nu se poate accesa microfonul deoarece este folosit de o altă aplicație. \nÎnchideți alte aplicații care ar putea folosi microfonul dvs."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Mesaj de eroare când nu este găsit niciun dispozitiv de microfon.",
+    "message": "Nu a fost detectat niciun microfon. \nConectați un microfon și încercați din nou."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Mesaj de eroare când permisiunea microfonului este refuzată de către utilizator sau sistem.",
+    "message": "Este necesar accesul la microfon. \nVă rugăm să permiteți accesul la microfon în setările browserului pentru a continua."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Mesaj de eroare pentru erori neașteptate ale microfonului cu detalii.",
+    "message": "A apărut o eroare neașteptată la microfonul dvs.: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Mesaj de eroare generic atunci când accesul la microfon eșuează din motive necunoscute.",
+    "message": "Nu se poate accesa microfonul. \nVerificați setările dispozitivului și încercați din nou."
   }
 }

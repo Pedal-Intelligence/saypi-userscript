@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "Bir arama devam ederken ve manuel kesinti mümkün olduğunda, arama düğmesinde görüntülenecek araç ipucu.",
     "message": "Ara vermek için dokunun"
+  },
+  "microphoneErrorConstraints": {
+    "description": "Mikrofon kısıtlamaları karşılanamadığında hata mesajı.",
+    "message": "Mikrofon ayarlarınız gerekli özellikleri karşılamıyor. \nFarklı bir mikrofon kullanmayı veya ses ayarlarınızı değiştirmeyi deneyin."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Mikrofon erişimi başarısız olduğunda ayrıntıları içeren genel hata mesajı.",
+    "message": "Mikrofona erişilemedi: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Mikrofon zaten başka bir uygulama tarafından kullanıldığında oluşan hata mesajı.",
+    "message": "Başka bir uygulama tarafından kullanıldığı için mikrofona erişilemiyor. \nLütfen mikrofonunuzu kullanıyor olabilecek diğer uygulamaları kapatın."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Mikrofon aygıtı bulunamadığında hata mesajı.",
+    "message": "Mikrofon algılanmadı. \nLütfen bir mikrofon bağlayın ve tekrar deneyin."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Mikrofon izni kullanıcı veya sistem tarafından reddedildiğinde oluşan hata mesajı.",
+    "message": "Mikrofon erişimi gereklidir. \nDevam etmek için lütfen tarayıcı ayarlarınızdan mikrofon erişimine izin verin."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Beklenmeyen mikrofon hatalarına ilişkin ayrıntıları içeren hata mesajı.",
+    "message": "Mikrofonunuzda beklenmeyen bir hata oluştu: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Bilinmeyen nedenlerden dolayı mikrofon erişimi başarısız olduğunda genel hata mesajı.",
+    "message": "Mikrofona erişilemiyor. \nLütfen cihaz ayarlarınızı kontrol edip tekrar deneyin."
   }
 }

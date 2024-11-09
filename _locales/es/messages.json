@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "La información sobre herramientas que se muestra en el botón de llamada cuando hay una llamada en curso y es posible la interrupción manual.",
     "message": "Toca para interrumpir"
+  },
+  "microphoneErrorConstraints": {
+    "description": "Mensaje de error cuando no se pueden satisfacer las limitaciones del micrófono.",
+    "message": "La configuración de su micrófono no cumple con las especificaciones requeridas. \nIntente usar un micrófono diferente o ajustar la configuración de audio."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Mensaje de error genérico con detalles cuando falla el acceso al micrófono.",
+    "message": "No se pudo acceder al micrófono: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Mensaje de error cuando otra aplicación ya está utilizando el micrófono.",
+    "message": "No puedo acceder al micrófono porque está siendo utilizado por otra aplicación. \nCierra otras aplicaciones que puedan estar usando tu micrófono."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Mensaje de error cuando no se encuentra ningún dispositivo de micrófono.",
+    "message": "No se detectó ningún micrófono. \nConecte un micrófono e inténtelo de nuevo."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Mensaje de error cuando el usuario o el sistema deniegan el permiso del micrófono.",
+    "message": "Se requiere acceso al micrófono. \nPara continuar, permita el acceso al micrófono en la configuración de su navegador."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Mensaje de error para errores inesperados del micrófono con detalles.",
+    "message": "Se produjo un error inesperado con tu micrófono: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Mensaje de error genérico cuando falla el acceso al micrófono por motivos desconocidos.",
+    "message": "No se puede acceder al micrófono. \nVerifique la configuración de su dispositivo e inténtelo nuevamente."
   }
 }

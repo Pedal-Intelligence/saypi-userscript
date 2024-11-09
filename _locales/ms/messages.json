@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "Petua alat untuk dipaparkan pada butang panggilan apabila panggilan sedang dijalankan dan gangguan manual mungkin berlaku.",
     "message": "Ketik untuk mengganggu"
+  },
+  "microphoneErrorConstraints": {
+    "description": "Mesej ralat apabila kekangan mikrofon tidak dapat dipenuhi.",
+    "message": "Tetapan mikrofon anda tidak memenuhi spesifikasi yang diperlukan. \nCuba gunakan mikrofon lain atau laraskan tetapan audio anda."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Mesej ralat generik dengan butiran apabila akses mikrofon gagal.",
+    "message": "Gagal mengakses mikrofon: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Mesej ralat apabila mikrofon sudah digunakan oleh aplikasi lain.",
+    "message": "Tidak dapat mengakses mikrofon kerana ia digunakan oleh aplikasi lain. \nSila tutup apl lain yang mungkin menggunakan mikrofon anda."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Mesej ralat apabila tiada peranti mikrofon ditemui.",
+    "message": "Tiada mikrofon dikesan. \nSila sambungkan mikrofon dan cuba lagi."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Mesej ralat apabila kebenaran mikrofon dinafikan oleh pengguna atau sistem.",
+    "message": "Akses mikrofon diperlukan. \nSila benarkan akses mikrofon dalam tetapan penyemak imbas anda untuk diteruskan."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Mesej ralat untuk ralat mikrofon yang tidak dijangka dengan butiran.",
+    "message": "Ralat yang tidak dijangka berlaku dengan mikrofon anda: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Mesej ralat generik apabila capaian mikrofon gagal atas sebab yang tidak diketahui.",
+    "message": "Tidak dapat mengakses mikrofon. \nSila semak tetapan peranti anda dan cuba lagi."
   }
 }

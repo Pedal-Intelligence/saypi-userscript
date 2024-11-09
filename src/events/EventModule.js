@@ -1,5 +1,6 @@
 import EventBus from "./EventBus.js";
 import StateMachineService from "../StateMachineService.js";
+import { TextualNotificationsModule } from "../NotificationsModule.ts";
 
 const PROMPT_READY = "saypi:promptReady";
 const CALL_READY = "saypi:callReady";
@@ -17,6 +18,7 @@ const AUDIO_DEVICE_CONNECTED = "saypi:audio:connected";
 const AUDIO_DEVICE_RECONNECT = "saypi:audio:reconnect";
 const END_CALL = "saypi:hangup";
 const SESSION_ASSIGNED = "saypi:session:assigned";
+const UI_SHOW_NOTIFICATION = "saypi:ui:show-notification";
 
 /**
  * The EventModule translates events sent on the EventBus to StateMachine events,
@@ -27,6 +29,7 @@ export default class EventModule {
     // All the event listeners can be added here
     this.registerStateMachineEvents(StateMachineService.actor);
     this.registerSessionEvents(StateMachineService.analyticsMachineActor);
+    this.registerNotifications();
     // Any other initializations...
   }
 
@@ -99,6 +102,21 @@ export default class EventModule {
     });
     EventBus.on("session:transcribing", (detail) => {
       actor.send({ type: "transcribing", ...detail });
+    });
+  }
+
+  static registerNotifications() {
+    const textualNotifications = new TextualNotificationsModule();
+    EventBus.on(UI_SHOW_NOTIFICATION, (detail) => {
+      // detail is a Notification object with a type property
+      if (detail.type === "text" && detail.message) {
+        // textual notifications have a message property, and an optional icon property
+        textualNotifications.showNotification(
+          detail.message,
+          detail.icon,
+          detail.seconds
+        );
+      }
     });
   }
 }

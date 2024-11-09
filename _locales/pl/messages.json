@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "Etykietka wyświetlana na przycisku połączenia, gdy połączenie jest w toku i istnieje możliwość ręcznego przerwania.",
     "message": "Kliknij, aby przerwać"
+  },
+  "microphoneErrorConstraints": {
+    "description": "Komunikat o błędzie, gdy nie można spełnić ograniczeń mikrofonu.",
+    "message": "Ustawienia mikrofonu nie spełniają wymaganych specyfikacji. \nSpróbuj użyć innego mikrofonu lub dostosować ustawienia dźwięku."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Ogólny komunikat o błędzie ze szczegółami w przypadku braku dostępu do mikrofonu.",
+    "message": "Nie udało się uzyskać dostępu do mikrofonu: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Komunikat o błędzie, gdy mikrofon jest już używany przez inną aplikację.",
+    "message": "Nie można uzyskać dostępu do mikrofonu, ponieważ jest on używany przez inną aplikację. \nZamknij inne aplikacje, które mogą używać Twojego mikrofonu."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Komunikat o błędzie, gdy nie znaleziono urządzenia mikrofonowego.",
+    "message": "Nie wykryto mikrofonu. \nPodłącz mikrofon i spróbuj ponownie."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Komunikat o błędzie, gdy użytkownik lub system odmówi dostępu do mikrofonu.",
+    "message": "Wymagany jest dostęp do mikrofonu. \nAby kontynuować, zezwól na dostęp do mikrofonu w ustawieniach przeglądarki."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Komunikat o nieoczekiwanych błędach mikrofonu ze szczegółami.",
+    "message": "Wystąpił nieoczekiwany błąd związany z mikrofonem: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Ogólny komunikat o błędzie, gdy dostęp do mikrofonu nie powiedzie się z nieznanych przyczyn.",
+    "message": "Nie można uzyskać dostępu do mikrofonu. \nSprawdź ustawienia urządzenia i spróbuj ponownie."
   }
 }

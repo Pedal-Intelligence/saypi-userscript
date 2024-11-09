@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "Værktøjstip, der vises på opkaldsknappen, når et opkald er i gang, og manuel afbrydelse er mulig.",
     "message": "Tryk for at afbryde"
+  },
+  "microphoneErrorConstraints": {
+    "description": "Fejlmeddelelse, når mikrofonens begrænsninger ikke kan opfyldes.",
+    "message": "Dine mikrofonindstillinger opfylder ikke de påkrævede specifikationer. \nPrøv at bruge en anden mikrofon eller juster dine lydindstillinger."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generisk fejlmeddelelse med detaljer, når mikrofonadgang mislykkes.",
+    "message": "Kunne ikke få adgang til mikrofonen: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Fejlmeddelelse, når mikrofonen allerede er i brug af en anden applikation.",
+    "message": "Kan ikke få adgang til mikrofonen, fordi den bruges af en anden applikation. \nLuk venligst andre apps, der muligvis bruger din mikrofon."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Fejlmeddelelse, når der ikke findes nogen mikrofonenhed.",
+    "message": "Ingen mikrofon fundet. \nTilslut en mikrofon, og prøv igen."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Fejlmeddelelse, når mikrofontilladelse nægtes af brugeren eller systemet.",
+    "message": "Mikrofonadgang er påkrævet. \nTillad mikrofonadgang i dine browserindstillinger for at fortsætte."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Fejlmeddelelse for uventede mikrofonfejl med detaljer.",
+    "message": "Der opstod en uventet fejl med din mikrofon: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generisk fejlmeddelelse, når mikrofonadgang mislykkes af ukendte årsager.",
+    "message": "Kan ikke få adgang til mikrofonen. \nTjek venligst dine enhedsindstillinger og prøv igen."
   }
 }

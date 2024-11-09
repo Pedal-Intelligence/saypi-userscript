@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "Opis alata koji se prikazuje na gumbu za pozivanje kada je poziv u tijeku i moguće je ručno prekidanje.",
     "message": "Dodirnite za prekid"
+  },
+  "microphoneErrorConstraints": {
+    "description": "Poruka o pogrešci kada se ograničenja mikrofona ne mogu zadovoljiti.",
+    "message": "Vaše postavke mikrofona ne zadovoljavaju potrebne specifikacije. \nPokušajte upotrijebiti drugi mikrofon ili prilagoditi postavke zvuka."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generička poruka o pogrešci s detaljima kada pristup mikrofonu ne uspije.",
+    "message": "Pristup mikrofonu nije uspio: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Poruka o pogrešci kada drugu aplikaciju već koristi mikrofon.",
+    "message": "Nije moguće pristupiti mikrofonu jer ga koristi druga aplikacija. \nZatvorite druge aplikacije koje možda koriste vaš mikrofon."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Poruka o pogrešci kada nije pronađen mikrofon.",
+    "message": "Nije otkriven mikrofon. \nSpojite mikrofon i pokušajte ponovno."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Poruka o pogrešci kada korisnik ili sustav odbije pristup mikrofonu.",
+    "message": "Potreban je pristup mikrofonu. \nZa nastavak dopustite pristup mikrofonu u postavkama preglednika."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Poruka pogreške za neočekivane pogreške mikrofona s detaljima.",
+    "message": "Došlo je do neočekivane pogreške s vašim mikrofonom: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generička poruka o pogrešci kada pristup mikrofonu ne uspije iz nepoznatih razloga.",
+    "message": "Nije moguće pristupiti mikrofonu. \nProvjerite postavke uređaja i pokušajte ponovno."
   }
 }

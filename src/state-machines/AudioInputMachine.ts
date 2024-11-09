@@ -8,6 +8,7 @@ import { getResourceUrl } from "../ResourceModule";
 import { customModelFetcher } from "../vad/custom-model-fetcher";
 import { isFirefox } from "../UserAgentModule";
 import { AudioCapabilityDetector } from "../audio/AudioCapabilities";
+import getMessage from "../i18n";
 
 const fullWorkletURL: string = isFirefox()
   ? getResourceUrl("vad.worklet.bundle.js")
@@ -206,8 +207,7 @@ async function checkAudioCapabilities() {
   }
 }
 
-// The callback type can be more specific based on your usage
-async function setupRecording(callback?: () => void): Promise<void> {
+async function setupRecording(completion_callback?: () => void): Promise<void> {
   if (microphone) {
     return;
   }
@@ -231,11 +231,12 @@ async function setupRecording(callback?: () => void): Promise<void> {
     microphone = await MicVAD.new(partialVADOptions);
     console.debug("VAD microphone loaded");
 
-    if (typeof callback === "function") {
-      callback();
+    if (typeof completion_callback === "function") {
+      completion_callback();
     }
   } catch (err) {
-    console.error("VAD microphone failed to load", err);
+    console.error("VAD microphone failed to load.", err);
+    throw err; // reject the promise
   }
 }
 
@@ -302,7 +303,7 @@ export const audioInputMachine = createMachine<
           onError: {
             target: "released",
             actions: {
-              type: "logError",
+              type: "logMicrophoneAcquisitionError",
             },
           },
         },
@@ -471,19 +472,67 @@ export const audioInputMachine = createMachine<
         tearDownRecording();
       },
 
-      logError: (context, event: { type: "error.platform"; data: any }) => {
-        console.error("Error acquiring microphone: ", event.data);
+      logMicrophoneAcquisitionError: (
+        context,
+        event: {
+          type: "error.platform";
+          data: any;
+        }
+      ) => {
+        let messageKey = "microphoneErrorUnknown";
+        let detail = "";
+
+        if (isOverconstrainedError(event.data)) {
+          messageKey = "microphoneErrorConstraints";
+        } else if (event.data instanceof DOMException) {
+          switch (event.data.name) {
+            case "NotAllowedError":
+              messageKey = "microphoneErrorPermissionDenied";
+              break;
+            case "NotFoundError":
+              messageKey = "microphoneErrorNotFound";
+              break;
+            case "NotReadableError":
+              messageKey = "microphoneErrorInUse";
+              break;
+            default:
+              messageKey = "microphoneErrorUnexpected";
+              detail = event.data.message;
+          }
+        } else if (event.data instanceof Error) {
+          messageKey = "microphoneErrorGeneric";
+          detail = event.data.message;
+        }
+
+        const message = getMessage(messageKey, detail);
+
+        console.error(`Microphone error: ${message}`, event.data);
+
+        EventBus.emit("saypi:ui:show-notification", {
+          message: message,
+          type: "text",
+          seconds: 20,
+          icon: "microphone-muted",
+        });
       },
     },
     services: {
       acquireMicrophone: (context, event) => {
         return new Promise<void>((resolve, reject) => {
           setupRecording(() => {
+            // called when setupRecording completes - whether successful or not
             if (microphone) {
               resolve();
             } else {
-              reject(new Error("Failed to acquire microphone resource."));
+              reject(
+                new Error(
+                  "Failed to acquire microphone resource for unknown reason."
+                )
+              );
             }
+          }).catch((err) => {
+            // called if setupRecording throws an error - reject the promise
+            reject(err);
           });
         });
       },
@@ -499,3 +548,14 @@ export const audioInputMachine = createMachine<
     delays: {},
   }
 );
+interface OverconstrainedError extends DOMException {
+  constraint: string;
+  message: string;
+}
+function isOverconstrainedError(error: any): error is OverconstrainedError {
+  return (
+    error instanceof DOMException &&
+    (error.name === "OverconstrainedError" ||
+      error.name === "ConstraintNotSatisfiedError")
+  );
+}

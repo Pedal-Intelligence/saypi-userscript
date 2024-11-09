@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "Popisek, který se zobrazí na tlačítku volání, když probíhá hovor a je možné ruční přerušení.",
     "message": "Klepnutím přerušíte"
+  },
+  "microphoneErrorConstraints": {
+    "description": "Chybová zpráva, když nelze splnit omezení mikrofonu.",
+    "message": "Vaše nastavení mikrofonu nesplňuje požadované specifikace. \nZkuste použít jiný mikrofon nebo upravit nastavení zvuku."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Obecná chybová zpráva s podrobnostmi, když selže přístup k mikrofonu.",
+    "message": "Nepodařilo se získat přístup k mikrofonu: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Chybová zpráva, když mikrofon již používá jiná aplikace.",
+    "message": "Nelze získat přístup k mikrofonu, protože jej používá jiná aplikace. \nUkončete prosím ostatní aplikace, které mohou používat váš mikrofon."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Chybová zpráva, když nebylo nalezeno žádné zařízení s mikrofonem.",
+    "message": "Nebyl zjištěn žádný mikrofon. \nPřipojte prosím mikrofon a zkuste to znovu."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Chybová zpráva, když uživatel nebo systém zamítne oprávnění k mikrofonu.",
+    "message": "Je vyžadován přístup k mikrofonu. \nChcete-li pokračovat, povolte v nastavení prohlížeče přístup k mikrofonu."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Chybová zpráva pro neočekávané chyby mikrofonu s podrobnostmi.",
+    "message": "U vašeho mikrofonu došlo k neočekávané chybě: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Obecná chybová zpráva, když z neznámých důvodů selže přístup k mikrofonu.",
+    "message": "Nelze získat přístup k mikrofonu. \nZkontrolujte nastavení zařízení a zkuste to znovu."
   }
 }

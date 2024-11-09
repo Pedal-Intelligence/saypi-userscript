@@ -422,5 +422,45 @@
   "callInterruptible": {
     "description": "A hívásgombon megjelenítendő eszköztipp hívás közben, és kézi megszakítás lehetséges.",
     "message": "Érintse meg a megszakításhoz"
+  },
+  "microphoneErrorConstraints": {
+    "description": "Hibaüzenet, ha a mikrofonkorlátozás nem teljesíthető.",
+    "message": "A mikrofon beállításai nem felelnek meg a szükséges előírásoknak. \nPróbáljon meg másik mikrofont használni, vagy módosítsa a hangbeállításokat."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Általános hibaüzenet részletekkel, ha a mikrofon-hozzáférés sikertelen.",
+    "message": "Nem sikerült elérni a mikrofont: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Hibaüzenet, ha a mikrofont egy másik alkalmazás már használja.",
+    "message": "Nem lehet hozzáférni a mikrofonhoz, mert egy másik alkalmazás használja. \nKérjük, zárja be a többi alkalmazást, amely esetleg használja a mikrofonját."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Hibaüzenet, ha nem található mikrofoneszköz.",
+    "message": "Nem észlelhető mikrofon. \nCsatlakoztasson mikrofont, és próbálja újra."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Hibaüzenet, ha a felhasználó vagy a rendszer megtagadja a mikrofon engedélyét.",
+    "message": "Mikrofon hozzáférés szükséges. \nA folytatáshoz engedélyezze a mikrofonhoz való hozzáférést a böngésző beállításaiban."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Hibaüzenet váratlan mikrofonhibák esetén részletekkel.",
+    "message": "Váratlan hiba történt a mikrofonnal: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Általános hibaüzenet, ha a mikrofonhoz való hozzáférés ismeretlen okból meghiúsul.",
+    "message": "Nem lehet hozzáférni a mikrofonhoz. \nKérjük, ellenőrizze az eszköz beállításait, és próbálja újra."
   }
 }
