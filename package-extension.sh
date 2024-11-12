@@ -30,16 +30,19 @@ for BROWSER in "$@"; do
             EXT_DIR="dist/firefox-extension"
             ZIP_NAME="saypi.firefox.xpi"
             STORE_URL="https://addons.mozilla.org/en-US/firefox/"
+            WORKLET_FILE="public/vad.worklet.bundle.js"
             ;;
         chrome)
             EXT_DIR="dist/chrome-extension"
             ZIP_NAME="saypi.chrome.zip"
             STORE_URL="https://chrome.google.com/webstore/developer/dashboard"
+            WORKLET_FILE="public/vad.worklet.bundle.min.js"
             ;;
         edge)
             EXT_DIR="dist/chrome-extension"
             ZIP_NAME="saypi.edge.zip"
             STORE_URL="https://partner.microsoft.com/en-us/dashboard/microsoftedge/overview"
+            WORKLET_FILE="public/vad.worklet.bundle.min.js"
             ;;
     esac
 
@@ -62,7 +65,7 @@ for BROWSER in "$@"; do
     cp public/saypi.user.js "$PUBLIC_DIR"
     cp public/silero_vad.onnx "$PUBLIC_DIR"
     cp public/ort-wasm-simd-threaded.mjs "$PUBLIC_DIR"
-    cp public/vad.worklet.bundle*.js "$PUBLIC_DIR"
+    cp "$WORKLET_FILE" "$PUBLIC_DIR"
     cp public/audio/*.mp3 "$AUDIO_DIR"
 
     mkdir -p "$LOGOS_DIR"
