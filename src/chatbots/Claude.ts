@@ -300,44 +300,87 @@ class ClaudeTextStream extends ElementTextStream {
 function findAndDecorateCustomPlaceholderElement(
   prompt: HTMLElement
 ): Observation {
-  const existing = prompt.parentElement?.querySelector("p.custom-placeholder");
+  const existing = prompt.parentElement?.querySelector("#claude-placeholder");
   if (existing) {
     return Observation.foundAlreadyDecorated("claude-placeholder", existing);
   } else {
     // find and copy the existing placeholder element
     const originalPlaceholder = prompt.querySelector("p[data-placeholder]");
-    if (originalPlaceholder) {
-      const placeholder = originalPlaceholder.cloneNode(true) as HTMLElement;
-      placeholder.classList.add("custom-placeholder");
-      placeholder.id = "claude-placeholder";
-      // add custom placeholder element as a sibling to the prompt element (sic)
-      prompt.insertAdjacentElement("afterend", placeholder);
-      return new Observation(placeholder, placeholder.id, true, true, true);
-    }
-    return Observation.notFound("claude-placeholder");
+    const placeholder = originalPlaceholder
+      ? (originalPlaceholder.cloneNode(true) as HTMLElement)
+      : document.createElement("p");
+    placeholder.classList.add("custom-placeholder");
+    placeholder.id = "claude-placeholder";
+    // add custom placeholder element as a sibling to the prompt element (sic)
+    prompt.insertAdjacentElement("afterend", placeholder);
+    return new Observation(placeholder, placeholder.id, true, true, true);
   }
 }
 
 class ClaudePrompt extends UserPrompt {
   private promptElement: HTMLDivElement;
-  private placeholderManager: PlaceholderManager;
+  private placeholderManager!: PlaceholderManager; // initialized from the constructor
   readonly PROMPT_CHARACTER_LIMIT = 200000; // max prompt length is the same as context window length, 200k tokens
 
   constructor(element: HTMLElement) {
     super(element);
     this.promptElement = element as HTMLDivElement;
-    const observation = findAndDecorateCustomPlaceholderElement(element);
+    this.initializePlaceholderManager(this.promptElement);
+  }
+
+  /**
+   * Initialize the placeholder manager for the prompt element
+   * This method is self-healing, in that it will reinitialize the placeholder manager
+   * if the custom placeholder element is removed from the DOM for any reason.
+   */
+  initializePlaceholderManager(promptElement: HTMLElement): void {
+    const observation = findAndDecorateCustomPlaceholderElement(promptElement);
     if (!observation.found) {
-      // not expected to happen
       console.error(
         "Failed to find or decorate the custom placeholder element for Claude's prompt."
       );
+      return;
     }
+
+    // Create new placeholder manager
     this.placeholderManager = new PlaceholderManager(
-      element,
+      promptElement,
       observation.target as HTMLElement,
       this.getDefaultPlaceholderText()
     );
+    console.debug("Placeholder manager initialized");
+
+    // Add mutation observer to detect when target is removed
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === "childList") {
+          const removedNodes = Array.from(mutation.removedNodes);
+          if (removedNodes.includes(observation.target as Node)) {
+            console.debug(
+              "Custom placeholder element removed, reinitializing..."
+            );
+            // Target was removed, reinitialize
+            observer.disconnect();
+            this.initializePlaceholderManager(promptElement);
+          }
+        }
+      });
+    });
+
+    // Observe the parent element for child removals (can be null if removed from DOM)
+    const promptContainer = promptElement.parentElement
+      ? promptElement.parentElement
+      : document.getElementsByClassName("saypi-prompt-container")[0];
+    if (promptContainer) {
+      observer.observe(promptContainer as Node, {
+        childList: true,
+        subtree: false,
+      });
+    } else {
+      console.error(
+        "Prompt element parent element not found, cannot observe for placeholder removals."
+      );
+    }
   }
 
   setText(text: string): void {
@@ -456,7 +499,7 @@ class PlaceholderManager {
   /**
    * Get Claude's own placeholder element, which is hidden when the prompt is not empty
    */
-  private getStandardPlaceholder(): HTMLParagraphElement | null {
+  protected getStandardPlaceholder(): HTMLParagraphElement | null {
     return this.input.querySelector("p[data-placeholder]");
   }
   private showStandardPlaceholder() {
