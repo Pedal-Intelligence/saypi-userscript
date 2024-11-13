@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Usage: ./package-extension.sh [firefox] [chrome] [edge]
+# Usage: ./package-extension.sh [firefox] [chrome] [edge] [safari]
 
 set -e
 
 # Validate input
 if [ $# -eq 0 ]; then
-    echo "Usage: $0 [firefox] [chrome] [edge]"
-    echo "Example: $0 firefox chrome edge"
+    echo "Usage: $0 [firefox] [chrome] [edge] [safari]"
+    echo "Example: $0 firefox chrome edge safari"
     exit 1
 fi
 
@@ -15,12 +15,37 @@ fi
 for BROWSER in "$@"; do
     # Validate browser argument
     case $BROWSER in
-        firefox|chrome|edge) ;;
+        firefox|chrome|edge|safari) ;;
         *)
             echo "Invalid browser: $BROWSER. Skipping..."
             continue
             ;;
     esac
+
+    if [ "$BROWSER" = "safari" ]; then
+        echo "Building $BROWSER extension..."
+
+        # Package the Chrome extension by calling the script itself with 'chrome'
+        ./package-extension.sh chrome
+
+        SAFARI_BASE_DIR="../saypi-safari"
+        if [ -d "$SAFARI_BASE_DIR/Say, Pi" ]; then
+            SAFARI_DIR="$SAFARI_BASE_DIR/Say, Pi"
+        else
+            SAFARI_DIR="$SAFARI_BASE_DIR"
+        fi
+
+        if [ ! -d "$SAFARI_DIR" ]; then
+            echo "Error: Safari directory not found. Please clone the saypi-safari repo first."
+            exit 1
+        fi
+
+        SAFARI_RESOURCES_DIR="$SAFARI_DIR/Shared (Extension)/Resources/"
+        unzip -o -d "$SAFARI_RESOURCES_DIR" dist/saypi.chrome.zip
+        echo "Safari repo updated. Now use Xcode to build and archive the Safari extension."
+        echo "----------------------------------------"
+        continue
+    fi
 
     echo "Building $BROWSER extension..."
 
