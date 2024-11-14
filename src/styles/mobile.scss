@@ -146,7 +146,54 @@ html.mobile-device .chat-message .message-hover-menu .saypi-cost-container {
 html.firefox-android {
   .tooltip[aria-label]::after {
     display: none;
+  }  
+  @media only screen and (max-width: 730px) {   
+      #saypi-callButton {
+        width: 2.4rem;
+        height: 2.4rem;
+        position: relative;
+        margin-right: .2rem;
+        margin-top: .3rem;
+        margin-bottom: .3rem;
+        padding-bottom: 2.6rem;
+      }
+  
+      #saypi-submitButton {
+        width: 2.4rem;
+        height: 2.48rem;
+        margin-top: .3rem;
+        margin-bottom: .5rem;
+      }
+  
+      .py-3 {
+        padding-top: .5rem;
+        padding-bottom: .5rem;
+      }
   }
+  
+  @media only screen and (min-width: 730px) and (max-width: 1080px) {
+      #saypi-callButton {
+        width: 2.4rem;
+        width: 2.4rem;
+        position: relative;
+        margin-right: .1rem;
+        margin-top: .3rem;
+        margin-bottom: .3rem;
+      }
+  
+      #saypi-submitButton {
+        width: 2.5rem;
+        height: 2.5rem;
+        margin-top: .3rem;
+        margin-bottom: .3rem;
+      }
+  
+      .py-3 {
+        padding-top: .5rem;
+        padding-bottom: .5rem;
+      }
+  }
+
 }
 
 @import "dark-mode.scss";
