@@ -143,9 +143,11 @@ html.mobile-device .chat-message .message-hover-menu .saypi-cost-container {
   }
 }
 
-html.firefox-android {
-  .tooltip[aria-label]::after {
-    display: none;
+// Hide tooltip on touch devices after touch ends
+@media (hover: none) {
+  .tooltip[aria-label]:active::after {
+      opacity: 1;
+      z-index: 101;
   }
 }
 
