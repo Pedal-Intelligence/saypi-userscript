@@ -358,6 +358,10 @@
     "message": "Multilingual voices",
     "description": "Label for the checkbox to enable/disable text-to-speech."
   },
+  "ttsDisabledSafari": {
+    "message": "Multilingual voices are currently not supported in Safari.",
+    "description": "Message shown when TTS is disabled in Safari"
+  },
   "previewStatusActive": {
     "message": "Beta Active"
   },

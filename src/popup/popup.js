@@ -264,9 +264,26 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     const enableTTSInput = document.getElementById("enable-tts");
-    getStoredValue("enableTTS", true).then((enableTTS) => {
-      selectInput(enableTTSInput, enableTTS);
-    });
+    const enableTTSLabel = enableTTSInput.closest('.wraper');
+    
+    function isSafari() {
+      // copied from UserAgentModule.ts
+      return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    }
+
+    // Check if Safari
+    if (isSafari()) {
+      enableTTSInput.disabled = true;
+      enableTTSLabel.classList.add('disabled');
+      // Use i18n message for tooltip
+      enableTTSLabel.setAttribute('title', 
+        chrome.i18n.getMessage('ttsDisabledSafari'));
+      selectInput(enableTTSInput, false);
+    } else {
+      getStoredValue("enableTTS", true).then((enableTTS) => {
+        selectInput(enableTTSInput, enableTTS);
+      });
+    }
 
     enableTTSInput.addEventListener("change", function () {
       chrome.storage.sync.set({ enableTTS: this.checked }, function () {
