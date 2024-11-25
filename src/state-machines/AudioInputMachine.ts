@@ -185,16 +185,8 @@ const safariMicVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks 
   modelFetcher: customModelFetcher,
   ortConfig: (ort: any) => {
     // Basic configuration
-    ort.env.wasm.numThreads = 1;
-    ort.env.wasm.simd = true;
-    
-    // Additional settings that might help Safari
-    ort.env.wasm.proxy = false;  // Disable proxy (sometimes helps with Safari)
-    ort.env.wasm.wasmPaths = chrome.runtime.getURL("public/"); // Ensure WASM files are loaded from correct path
-    ort.env.wasm.initTimeout = 30000; // Increase timeout for initialization
-    
-    // Force CPU execution provider
-    ort.env.wasm.executionProviders = ['wasm'];
+    ort.env.wasm.numThreads = 1; // Disable threading (default is 2)
+    ort.env.wasm.simd = true; // Enable SIMD
   },
 };
 
@@ -262,7 +254,7 @@ async function setupRecording(completion_callback?: () => void): Promise<void> {
   }
 
   try {
-    const capabilities = await checkAudioCapabilities();
+    //const capabilities = await checkAudioCapabilities();
     
     stream = await navigator.mediaDevices.getUserMedia({
       audio: {
@@ -275,7 +267,7 @@ async function setupRecording(completion_callback?: () => void): Promise<void> {
 
     // Configure VAD options based on capabilities
     const baseOptions = isFirefox() ? firefoxMicVADOptions : 
-                       isSafari() ? safariMicVADOptions : 
+                       isSafari() ? safariMicVADOptions :
                        micVADOptions;
 
     // Adjust options based on capabilities
@@ -285,25 +277,6 @@ async function setupRecording(completion_callback?: () => void): Promise<void> {
       ortConfig: (ort: any) => {
         // Call the original ortConfig if it exists
         baseOptions.ortConfig?.(ort);
-
-        // Apply memory-specific settings
-        const { webAssembly } = capabilities.audioQualityDetails;
-        
-        // Set initial memory size based on detected capabilities
-        ort.env.wasm.initialMemorySize = Math.min(
-          webAssembly.memory.maximumSize, 
-          512  // Default to 32MB if possible
-        );
-
-        // Disable features not supported by the browser
-        if (!webAssembly.threads) {
-          ort.env.wasm.numThreads = 1;
-        }
-        
-        if (!webAssembly.memory.growth) {
-          // Allocate maximum memory upfront if growth isn't supported
-          ort.env.wasm.maximumMemorySize = ort.env.wasm.initialMemorySize;
-        }
       }
     };
 
