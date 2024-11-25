@@ -6,7 +6,7 @@ import EventBus from "../events/EventBus.js";
 import { debounce } from "lodash";
 import { getResourceUrl } from "../ResourceModule";
 import { customModelFetcher } from "../vad/custom-model-fetcher";
-import { isFirefox } from "../UserAgentModule";
+import { isFirefox, isSafari } from "../UserAgentModule";
 import { AudioCapabilityDetector } from "../audio/AudioCapabilities";
 import getMessage from "../i18n";
 
@@ -178,6 +178,13 @@ const firefoxMicVADOptions: Partial<RealTimeVADOptions> &
   modelFetcher: customModelFetcher,
 };
 
+// Safari-specific options
+const safariMicVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
+  ...micVADOptions,
+  workletOptions: {},
+  modelFetcher: customModelFetcher, // Use the custom fetcher for Safari
+};
+
 async function checkAudioCapabilities() {
   const detector = new AudioCapabilityDetector();
   const thresholds = {
@@ -230,7 +237,9 @@ async function setupRecording(completion_callback?: () => void): Promise<void> {
     });
 
     const partialVADOptions = {
-      ...(isFirefox() ? firefoxMicVADOptions : micVADOptions),
+      ...(isFirefox() ? firefoxMicVADOptions : 
+          isSafari() ? safariMicVADOptions : 
+          micVADOptions),
       stream,
     };
 
