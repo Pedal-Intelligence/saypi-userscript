@@ -86,7 +86,7 @@ for BROWSER in "$@"; do
     cp public/*.wasm "$PUBLIC_DIR"
     cp public/saypi.user.js "$PUBLIC_DIR"
     cp public/silero_vad.onnx "$PUBLIC_DIR"
-    cp public/ort-wasm-simd-threaded.mjs "$PUBLIC_DIR"
+    cp public/ort-wasm* "$PUBLIC_DIR"
     cp public/vad.worklet.bundle*.js "$PUBLIC_DIR"
     cp public/audio/*.mp3 "$AUDIO_DIR"
 

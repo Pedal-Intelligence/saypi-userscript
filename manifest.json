@@ -24,7 +24,7 @@
         "public/*.wasm",
         "public/vad.worklet.bundle.js",
         "public/vad.worklet.bundle.min.js",
-        "public/ort-wasm-simd-threaded.mjs",
+        "public/ort-wasm*",
         "public/audio/*.mp3",
         "public/icons/*.svg",
         "public/icons/*.png",
