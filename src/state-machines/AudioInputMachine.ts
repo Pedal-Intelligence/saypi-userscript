@@ -10,7 +10,7 @@ import { isFirefox, isSafari } from "../UserAgentModule";
 import { AudioCapabilityDetector } from "../audio/AudioCapabilities";
 import getMessage from "../i18n";
 
-const fullWorkletURL: string = isFirefox()
+const fullWorkletURL: string = isFirefox() || isSafari()
   ? getResourceUrl("vad.worklet.bundle.js")
   : getResourceUrl("vad.worklet.bundle.min.js");
 let listening: boolean = false;
