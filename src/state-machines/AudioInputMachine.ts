@@ -217,6 +217,11 @@ async function checkAudioCapabilities() {
     console.warn("WebAssembly SIMD is not supported. VAD may not function optimally.");
     // Optionally, disable VAD features or provide fallback
   }
+
+  if (!config.audioQualityDetails.threadsSupported) {
+    console.warn("WebAssembly Threading is not supported. VAD may not function optimally.");
+    // Optionally, disable VAD features or fallback to single-threaded mode
+  }
 }
 
 async function setupRecording(completion_callback?: () => void): Promise<void> {
@@ -224,7 +229,7 @@ async function setupRecording(completion_callback?: () => void): Promise<void> {
     return;
   }
 
-  // await checkAudioCapabilities();
+  await checkAudioCapabilities();
 
   try {
     stream = await navigator.mediaDevices.getUserMedia({

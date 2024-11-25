@@ -1,5 +1,5 @@
 import { getResourceUrl } from "../ResourceModule";
-import { simd } from "wasm-feature-detect";
+import { simd, threads } from "wasm-feature-detect";
 
 // Types for capability detection results
 export interface BasicAudioSupport {
@@ -40,6 +40,7 @@ export interface AudioCapabilityResults {
   appliedConstraints: AppliedAudioConstraints | null;
   echoCancellationQuality: EchoCancellationQuality | null;
   simdSupported: boolean;
+  threadsSupported: boolean;
   browserSpecificNotes: BrowserSpecificNotes;
 }
 
@@ -294,18 +295,33 @@ export class AudioCapabilityDetector {
     }
   }
 
+  private async checkThreadingSupport(): Promise<boolean> {
+    try {
+      const isThreadingSupported = await threads();
+      console.log(
+        `WebAssembly Threading support: ${isThreadingSupported ? "Enabled" : "Disabled"}`
+      );
+      return isThreadingSupported;
+    } catch (error) {
+      console.error("Error detecting threading support:", error);
+      return false;
+    }
+  }
+
   async assessAudioCapabilities(): Promise<AudioCapabilityResults> {
     const isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
 
     const basicSupport = await this.checkBasicAudioSupport();
     const appliedConstraints = await this.testAudioConstraints();
     const simdSupported = await this.checkSimdSupport();
+    const threadsSupported = await this.checkThreadingSupport();
 
     const results: AudioCapabilityResults = {
       basicSupport,
       appliedConstraints,
       echoCancellationQuality: null,
       simdSupported,
+      threadsSupported,
       browserSpecificNotes: {},
     };
 
