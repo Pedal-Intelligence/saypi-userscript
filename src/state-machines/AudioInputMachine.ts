@@ -222,7 +222,7 @@ async function checkAudioCapabilities() {
   }
 
   if (!webAssembly.threads) {
-    console.warn("WebAssembly Threading is not supported. VAD may not function optimally.");
+    console.info("WebAssembly Threading is not supported, but probably won't affect performance.");
   }
 
   if (config.enableInterruptions) {
