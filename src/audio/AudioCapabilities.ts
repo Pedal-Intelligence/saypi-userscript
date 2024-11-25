@@ -1,4 +1,5 @@
 import { getResourceUrl } from "../ResourceModule";
+import { simd } from "wasm-feature-detect";
 
 // Types for capability detection results
 export interface BasicAudioSupport {
@@ -38,6 +39,7 @@ export interface AudioCapabilityResults {
   basicSupport: BasicAudioSupport;
   appliedConstraints: AppliedAudioConstraints | null;
   echoCancellationQuality: EchoCancellationQuality | null;
+  simdSupported: boolean;
   browserSpecificNotes: BrowserSpecificNotes;
 }
 
@@ -279,13 +281,31 @@ export class AudioCapabilityDetector {
     }
   }
 
+  private async checkSimdSupport(): Promise<boolean> {
+    try {
+      const isSimdSupported = await simd();
+      console.log(
+        `WebAssembly SIMD support: ${isSimdSupported ? "Enabled" : "Disabled"}`
+      );
+      return isSimdSupported;
+    } catch (error) {
+      console.error("Error detecting SIMD support:", error);
+      return false;
+    }
+  }
+
   async assessAudioCapabilities(): Promise<AudioCapabilityResults> {
     const isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
 
+    const basicSupport = await this.checkBasicAudioSupport();
+    const appliedConstraints = await this.testAudioConstraints();
+    const simdSupported = await this.checkSimdSupport();
+
     const results: AudioCapabilityResults = {
-      basicSupport: await this.checkBasicAudioSupport(),
-      appliedConstraints: await this.testAudioConstraints(),
+      basicSupport,
+      appliedConstraints,
       echoCancellationQuality: null,
+      simdSupported,
       browserSpecificNotes: {},
     };
 
@@ -305,8 +325,8 @@ export class AudioCapabilityDetector {
 
     // Only run echo test if basic support checks pass
     if (
-      results.basicSupport.echoCancellation &&
-      results.appliedConstraints?.echoCancellation
+      basicSupport.echoCancellation &&
+      appliedConstraints?.echoCancellation
     ) {
       results.echoCancellationQuality = await this.testEchoCancellation();
     }

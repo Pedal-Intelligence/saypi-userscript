@@ -205,12 +205,19 @@ async function checkAudioCapabilities() {
       }`
     );
   }
+
+  if (!config.audioQualityDetails.simdSupported) {
+    console.warn("WebAssembly SIMD is not supported. VAD may not function optimally.");
+    // Optionally, disable VAD features or provide fallback
+  }
 }
 
 async function setupRecording(completion_callback?: () => void): Promise<void> {
   if (microphone) {
     return;
   }
+
+  // await checkAudioCapabilities();
 
   try {
     stream = await navigator.mediaDevices.getUserMedia({
