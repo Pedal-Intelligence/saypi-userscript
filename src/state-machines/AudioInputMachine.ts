@@ -182,7 +182,20 @@ const firefoxMicVADOptions: Partial<RealTimeVADOptions> &
 const safariMicVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
   ...micVADOptions,
   workletOptions: {},
-  modelFetcher: customModelFetcher, // Use the custom fetcher for Safari
+  modelFetcher: customModelFetcher,
+  ortConfig: (ort: any) => {
+    // Basic configuration
+    ort.env.wasm.numThreads = 1;
+    ort.env.wasm.simd = true;
+    
+    // Additional settings that might help Safari
+    ort.env.wasm.proxy = false;  // Disable proxy (sometimes helps with Safari)
+    ort.env.wasm.wasmPaths = chrome.runtime.getURL("public/"); // Ensure WASM files are loaded from correct path
+    ort.env.wasm.initTimeout = 30000; // Increase timeout for initialization
+    
+    // Force CPU execution provider
+    ort.env.wasm.executionProviders = ['wasm'];
+  },
 };
 
 async function checkAudioCapabilities() {
@@ -192,6 +205,33 @@ async function checkAudioCapabilities() {
     preferredEchoQuality: 0.75,
   };
   const config = await detector.configureAudioFeatures(thresholds);
+
+  // Check WebAssembly capabilities
+  const { webAssembly } = config.audioQualityDetails;
+  
+  // Required memory for ONNX model (approximately 32MB)
+  const requiredPages = 512; // 32MB = 512 pages * 64KB
+  
+  if (!webAssembly.memory.initial) {
+    throw new Error(getMessage("webAssemblyMemoryUnavailable"));
+  }
+  
+  if (webAssembly.memory.maximumSize < requiredPages) {
+    throw new Error(getMessage("webAssemblyInsufficientMemory", 
+      `Required: ${requiredPages * 64}KB, Available: ${webAssembly.memory.maximumSize * 64}KB`));
+  }
+
+  if (!webAssembly.memory.growth) {
+    console.warn("WebAssembly memory growth is not supported. VAD may be unstable.");
+  }
+
+  if (!webAssembly.simd) {
+    console.warn("WebAssembly SIMD is not supported. VAD may not function optimally.");
+  }
+
+  if (!webAssembly.threads) {
+    console.warn("WebAssembly Threading is not supported. VAD may not function optimally.");
+  }
 
   if (config.enableInterruptions) {
     console.debug("The interrupt feature can be enabled", config);
@@ -213,15 +253,7 @@ async function checkAudioCapabilities() {
     );
   }
 
-  if (!config.audioQualityDetails.simdSupported) {
-    console.warn("WebAssembly SIMD is not supported. VAD may not function optimally.");
-    // Optionally, disable VAD features or provide fallback
-  }
-
-  if (!config.audioQualityDetails.threadsSupported) {
-    console.warn("WebAssembly Threading is not supported. VAD may not function optimally.");
-    // Optionally, disable VAD features or fallback to single-threaded mode
-  }
+  return config;
 }
 
 async function setupRecording(completion_callback?: () => void): Promise<void> {
@@ -229,23 +261,50 @@ async function setupRecording(completion_callback?: () => void): Promise<void> {
     return;
   }
 
-  await checkAudioCapabilities();
-
   try {
+    const capabilities = await checkAudioCapabilities();
+    
     stream = await navigator.mediaDevices.getUserMedia({
       audio: {
         channelCount: 1,
-        echoCancellation: true, // critical for interruptions
+        echoCancellation: true,
         autoGainControl: true,
         noiseSuppression: true,
       },
     });
 
+    // Configure VAD options based on capabilities
+    const baseOptions = isFirefox() ? firefoxMicVADOptions : 
+                       isSafari() ? safariMicVADOptions : 
+                       micVADOptions;
+
+    // Adjust options based on capabilities
     const partialVADOptions = {
-      ...(isFirefox() ? firefoxMicVADOptions : 
-          isSafari() ? safariMicVADOptions : 
-          micVADOptions),
+      ...baseOptions,
       stream,
+      ortConfig: (ort: any) => {
+        // Call the original ortConfig if it exists
+        baseOptions.ortConfig?.(ort);
+
+        // Apply memory-specific settings
+        const { webAssembly } = capabilities.audioQualityDetails;
+        
+        // Set initial memory size based on detected capabilities
+        ort.env.wasm.initialMemorySize = Math.min(
+          webAssembly.memory.maximumSize, 
+          512  // Default to 32MB if possible
+        );
+
+        // Disable features not supported by the browser
+        if (!webAssembly.threads) {
+          ort.env.wasm.numThreads = 1;
+        }
+        
+        if (!webAssembly.memory.growth) {
+          // Allocate maximum memory upfront if growth isn't supported
+          ort.env.wasm.maximumMemorySize = ort.env.wasm.initialMemorySize;
+        }
+      }
     };
 
     console.debug("Permission granted for microphone access");
@@ -257,7 +316,18 @@ async function setupRecording(completion_callback?: () => void): Promise<void> {
     }
   } catch (err) {
     console.error("VAD microphone failed to load.", err);
-    throw err; // reject the promise
+    
+    // Emit a user-friendly error notification
+    if (err instanceof Error) {
+      EventBus.emit("saypi:ui:show-notification", {
+        message: err.message,
+        type: "text",
+        seconds: 20,
+        icon: "microphone-muted",
+      });
+    }
+    
+    throw err;
   }
 }
 
