@@ -100,7 +100,6 @@ export default class AudioModule {
     // handle slow responses from pi.ai - since 2024-07
     const slowResponseHandler = SlowResponseHandler.getInstance();
     this.registerAudioErrorEvents(this.audioElement, slowResponseHandler);
-    //this.safariErrorHandler.startMonitoring();
     this.registerLifecycleDebug();
 
     // audio input (user)
@@ -121,6 +120,7 @@ export default class AudioModule {
       this.audioRetryActor.start();
       this.registerAudioPlaybackEvents(this.audioElement, this.audioRetryActor);
       this.registerSourceChangeEvents(this.audioElement, this.audioRetryActor);
+      this.registerAudioErrorEvents(this.audioElement, this.audioRetryActor);
     }
 
     this.listenForAudioElementSwap();
@@ -297,7 +297,7 @@ export default class AudioModule {
       "emptied",
     ];
 
-    const sourcedEvents = ["loadstart", "play"];
+    const sourcedEvents = ["loadstart", "play", "error"];
     sourcedEvents.forEach((event) => {
       audio.addEventListener(event, (e) => {
         const detail = { source: audio.currentSrc };
@@ -466,17 +466,21 @@ export default class AudioModule {
     }
   }
 
+  /**
+   * Register debug events on the audio element to track the audio lifecycle
+   * This function is only informational, it does not handle any errors.
+   */
   registerLifecycleDebug() {
     let starttime;
     this.audioElement.onerror = (event) => {
       console.error(
-        `Error playing audio from ${this.audioElement.currentSrc}`,
+        `[audio lifecycle] Error playing audio from ${this.audioElement.currentSrc}`,
         event
       );
     };
 
     this.audioElement.onloadstart = () => {
-      console.debug(`Loading audio from ${this.audioElement.currentSrc}`);
+      console.debug(`[audio lifecycle] Loading audio from ${this.audioElement.currentSrc}`);
       starttime = Date.now();
     };
 
@@ -485,7 +489,7 @@ export default class AudioModule {
       const endtime = Date.now();
       const elapsedtime = (endtime - starttime) / 1000;
       console.debug(
-        `Audio is loaded after ${elapsedtime.toFixed(1)}s from ${
+        `[audio lifecycle] Audio is loaded after ${elapsedtime.toFixed(1)}s from ${
           this.audioElement.currentSrc
         }`
       );
@@ -495,7 +499,7 @@ export default class AudioModule {
       const endtime = Date.now();
       const elapsedtime = (endtime - starttime) / 1000;
       console.debug(
-        `Audio is ready to play after ${elapsedtime.toFixed(1)}s from ${
+        `[audio lifecycle] Audio is ready to play after ${elapsedtime.toFixed(1)}s from ${
           this.audioElement.currentSrc
         }`
       );
@@ -505,17 +509,82 @@ export default class AudioModule {
       const endtime = Date.now();
       const elapsedtime = (endtime - starttime) / 1000;
       console.debug(
-        `Audio is ready to play through after ${elapsedtime.toFixed(1)}s from ${
+        `[audio lifecycle] Audio is ready to play through after ${elapsedtime.toFixed(1)}s from ${
           this.audioElement.currentSrc
         }`
       );
+    };
+
+    this.audioElement.onpause = () => {
+      const endtime = Date.now();
+      const elapsedtime = (endtime - starttime) / 1000;
+      console.debug(`[audio lifecycle] Audio playback paused after ${elapsedtime.toFixed(1)}s`);
+    };
+
+    this.audioElement.onabort = () => {
+      console.debug(`[audio lifecycle] Audio playback aborted for ${this.audioElement.currentSrc}`);
+    };
+
+    this.audioElement.onstalled = (event) => {
+      const isPotentialRangeRequestFailure = 
+        this.audioElement.networkState === 2 && // NETWORK_LOADING
+        this.audioElement.readyState === 1 &&   // HAVE_METADATA
+        this.audioElement.buffered.length === 0 &&
+        this.audioElement.duration === Infinity;
+
+      if (isPotentialRangeRequestFailure && isSafari()) {
+        console.debug('[audio lifecycle] Detected potential Safari range request failure');
+        // Could potentially trigger retry here instead of waiting for error
+      }
+      
+      const networkStates = {
+        0: 'NETWORK_EMPTY',
+        1: 'NETWORK_IDLE',
+        2: 'NETWORK_LOADING',
+        3: 'NETWORK_NO_SOURCE'
+      };
+      
+      const bufferedRanges = Array.from(this.audioElement.buffered).map(i => ({
+        start: this.audioElement.buffered.start(i),
+        end: this.audioElement.buffered.end(i)
+      }));
+      
+      console.debug(
+        `[audio lifecycle] Audio playback stalled for ${this.audioElement.currentSrc}`,
+        {
+          networkState: `${this.audioElement.networkState} (${networkStates[this.audioElement.networkState]})`,
+          bufferedRanges,
+          bufferedAhead: bufferedRanges.length > 0 ? 
+            bufferedRanges[0].end - this.audioElement.currentTime : 
+            0,
+          readyState: this.audioElement.readyState,
+          networkState: this.audioElement.networkState,
+          error: this.audioElement.error?.code,
+          errorMessage: this.audioElement.error?.message,
+          timestamp: event.timeStamp,
+          buffered: Array.from(this.audioElement.buffered).map(i => ({
+            start: this.audioElement.buffered.start(i),
+            end: this.audioElement.buffered.end(i)
+          })),
+          currentTime: this.audioElement.currentTime,
+          duration: this.audioElement.duration
+        }
+      );
+    };
+
+    this.audioElement.onsuspend = () => {
+      console.debug(`[audio lifecycle] Audio loading suspended for ${this.audioElement.currentSrc}`);
+    };
+
+    this.audioElement.onemptied = () => {
+      console.debug(`[audio lifecycle] Audio element emptied`);
     };
 
     // Handle audio playback completion
     this.audioElement.onended = () => {
       const endtime = Date.now();
       const elapsedtime = (endtime - starttime) / 1000;
-      console.debug(`Audio playback ended after ${elapsedtime.toFixed(1)}s`);
+      console.debug(`[audio lifecycle] Audio playback ended after ${elapsedtime.toFixed(1)}s`);
     };
   }
 
@@ -524,13 +593,27 @@ export default class AudioModule {
    * @param {HTMLAudioElement} audioElement
    * @param {SlowResponseHandler} slowResponseHandler
    */
-  registerAudioErrorEvents(audioElement, slowResponseHandler) {
-    audioElement.addEventListener("error", (event) => {
-      console.error(
-        `Error playing audio from ${audioElement.currentSrc}`,
-        event
-      );
-      slowResponseHandler.handleAudioError(event);
+  registerAudioErrorEvents(audio, actor) {
+    // Handle explicit errors
+    audio.addEventListener("error", (event) => {
+      actor.send("error", { source: audio.currentSrc });
+    });
+
+    // Handle Safari range request failures
+    audio.addEventListener("stalled", (event) => {
+      const isPotentialRangeRequestFailure = 
+        audio.networkState === 2 && // NETWORK_LOADING
+        audio.readyState === 1 &&   // HAVE_METADATA
+        audio.buffered.length === 0 &&
+        audio.duration === Infinity;
+
+      if (isPotentialRangeRequestFailure && isSafari()) {
+        console.debug('[audio lifecycle] Detected Safari range request failure, triggering retry');
+        actor.send("error", { 
+          source: audio.currentSrc,
+          detail: "Safari range request failure detected"
+        });
+      }
     });
   }
 }
