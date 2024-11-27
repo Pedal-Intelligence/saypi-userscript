@@ -462,5 +462,9 @@
   "microphoneErrorUnknown": {
     "description": "Allgemeine Fehlermeldung, wenn der Mikrofonzugriff aus unbekannten Gründen fehlschlägt.",
     "message": "Auf das Mikrofon kann nicht zugegriffen werden. \nBitte überprüfen Sie Ihre Geräteeinstellungen und versuchen Sie es erneut."
+  },
+  "ttsDisabledSafari": {
+    "message": "Mehrsprachige Stimmen werden derzeit in Safari nicht unterstützt.",
+    "description": "Meldung wird angezeigt, wenn TTS in Safari deaktiviert ist"
   }
 }

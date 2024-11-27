@@ -462,5 +462,9 @@
   "microphoneErrorUnknown": {
     "description": "Yleinen virheilmoitus, kun mikrofonin käyttö epäonnistuu tuntemattomista syistä.",
     "message": "Mikrofonia ei voi käyttää. \nTarkista laitteesi asetukset ja yritä uudelleen."
+  },
+  "ttsDisabledSafari": {
+    "message": "Monikielisiä ääniä ei tällä hetkellä tueta Safarissa.",
+    "description": "Viesti näytetään, kun TTS on poistettu käytöstä Safarissa"
   }
 }

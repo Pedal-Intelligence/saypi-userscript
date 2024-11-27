@@ -462,5 +462,9 @@
   "microphoneErrorUnknown": {
     "description": "不明な理由でマイクへのアクセスが失敗した場合の一般的なエラー メッセージ。",
     "message": "マイクにアクセスできません。\nデバイスの設定を確認して、もう一度試してください。"
+  },
+  "ttsDisabledSafari": {
+    "message": "現在、Safari では多言語音声はサポートされていません。",
+    "description": "Safari で TTS が無効になっているときに表示されるメッセージ"
   }
 }

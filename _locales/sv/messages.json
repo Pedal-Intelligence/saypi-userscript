@@ -462,5 +462,9 @@
   "microphoneErrorUnknown": {
     "description": "Generiskt felmeddelande när mikrofonåtkomst misslyckas av okänd anledning.",
     "message": "Det går inte att komma åt mikrofonen. \nKontrollera dina enhetsinställningar och försök igen."
+  },
+  "ttsDisabledSafari": {
+    "message": "Flerspråkiga röster stöds för närvarande inte i Safari.",
+    "description": "Meddelande visas när TTS är inaktiverat i Safari"
   }
 }

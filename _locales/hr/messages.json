@@ -462,5 +462,9 @@
   "microphoneErrorUnknown": {
     "description": "Generička poruka o pogrešci kada pristup mikrofonu ne uspije iz nepoznatih razloga.",
     "message": "Nije moguće pristupiti mikrofonu. \nProvjerite postavke uređaja i pokušajte ponovno."
+  },
+  "ttsDisabledSafari": {
+    "message": "Višejezični glasovi trenutno nisu podržani u Safariju.",
+    "description": "Poruka se prikazuje kada je TTS onemogućen u Safariju"
   }
 }

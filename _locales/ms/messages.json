@@ -462,5 +462,9 @@
   "microphoneErrorUnknown": {
     "description": "Mesej ralat generik apabila capaian mikrofon gagal atas sebab yang tidak diketahui.",
     "message": "Tidak dapat mengakses mikrofon. \nSila semak tetapan peranti anda dan cuba lagi."
+  },
+  "ttsDisabledSafari": {
+    "message": "Suara berbilang bahasa pada masa ini tidak disokong dalam Safari.",
+    "description": "Mesej ditunjukkan apabila TTS dilumpuhkan dalam Safari"
   }
 }

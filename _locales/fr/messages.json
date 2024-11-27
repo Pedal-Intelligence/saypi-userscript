@@ -462,5 +462,9 @@
   "microphoneErrorUnknown": {
     "description": "Message d'erreur générique lorsque l'accès au microphone échoue pour des raisons inconnues.",
     "message": "Impossible d'accéder au micro. \nVeuillez vérifier les paramètres de votre appareil et réessayer."
+  },
+  "ttsDisabledSafari": {
+    "message": "Les voix multilingues ne sont actuellement pas prises en charge dans Safari.",
+    "description": "Message affiché lorsque TTS est désactivé dans Safari"
   }
 }

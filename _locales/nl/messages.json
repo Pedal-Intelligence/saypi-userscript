@@ -462,5 +462,9 @@
   "microphoneErrorUnknown": {
     "description": "Generieke foutmelding wanneer toegang tot de microfoon om onbekende redenen mislukt.",
     "message": "Kan geen toegang krijgen tot de microfoon. \nControleer uw apparaatinstellingen en probeer het opnieuw."
+  },
+  "ttsDisabledSafari": {
+    "message": "Meertalige stemmen worden momenteel niet ondersteund in Safari.",
+    "description": "Bericht dat wordt weergegeven wanneer TTS is uitgeschakeld in Safari"
   }
 }

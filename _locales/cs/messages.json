@@ -462,5 +462,9 @@
   "microphoneErrorUnknown": {
     "description": "Obecná chybová zpráva, když z neznámých důvodů selže přístup k mikrofonu.",
     "message": "Nelze získat přístup k mikrofonu. \nZkontrolujte nastavení zařízení a zkuste to znovu."
+  },
+  "ttsDisabledSafari": {
+    "message": "V Safari momentálně nejsou podporovány vícejazyčné hlasy.",
+    "description": "Zpráva zobrazená, když je TTS zakázáno v Safari"
   }
 }

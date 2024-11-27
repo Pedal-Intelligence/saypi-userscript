@@ -462,5 +462,9 @@
   "microphoneErrorUnknown": {
     "description": "Generic na mensahe ng error kapag nabigo ang pag-access sa mikropono sa hindi malamang dahilan.",
     "message": "Hindi ma-access ang mikropono. \nPakisuri ang mga setting ng iyong device at subukang muli."
+  },
+  "ttsDisabledSafari": {
+    "message": "Kasalukuyang hindi sinusuportahan sa Safari ang mga multilingguwal na boses.",
+    "description": "Ipinapakita ang mensahe kapag hindi pinagana ang TTS sa Safari"
   }
 }

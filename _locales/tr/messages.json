@@ -462,5 +462,9 @@
   "microphoneErrorUnknown": {
     "description": "Bilinmeyen nedenlerden dolayı mikrofon erişimi başarısız olduğunda genel hata mesajı.",
     "message": "Mikrofona erişilemiyor. \nLütfen cihaz ayarlarınızı kontrol edip tekrar deneyin."
+  },
+  "ttsDisabledSafari": {
+    "message": "Çok dilli sesler şu anda Safari'de desteklenmemektedir.",
+    "description": "Safari'de TTS devre dışı bırakıldığında gösterilen mesaj"
   }
 }

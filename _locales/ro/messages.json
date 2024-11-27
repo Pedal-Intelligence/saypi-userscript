@@ -462,5 +462,9 @@
   "microphoneErrorUnknown": {
     "description": "Mesaj de eroare generic atunci când accesul la microfon eșuează din motive necunoscute.",
     "message": "Nu se poate accesa microfonul. \nVerificați setările dispozitivului și încercați din nou."
+  },
+  "ttsDisabledSafari": {
+    "message": "Vocile multilingve nu sunt acceptate momentan în Safari.",
+    "description": "Mesaj afișat când TTS este dezactivat în Safari"
   }
 }

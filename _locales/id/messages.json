@@ -462,5 +462,9 @@
   "microphoneErrorUnknown": {
     "description": "Pesan kesalahan umum ketika akses mikrofon gagal karena alasan yang tidak diketahui.",
     "message": "Tidak dapat mengakses mikrofon. \nSilakan periksa pengaturan perangkat Anda dan coba lagi."
+  },
+  "ttsDisabledSafari": {
+    "message": "Suara multibahasa saat ini tidak didukung di Safari.",
+    "description": "Pesan ditampilkan ketika TTS dinonaktifkan di Safari"
   }
 }

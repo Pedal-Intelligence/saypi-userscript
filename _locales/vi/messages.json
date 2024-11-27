@@ -462,5 +462,9 @@
   "microphoneErrorUnknown": {
     "description": "Thông báo lỗi chung khi truy cập micrô không thành công vì lý do không xác định.",
     "message": "Không thể truy cập micrô. \nVui lòng kiểm tra cài đặt thiết bị của bạn và thử lại."
+  },
+  "ttsDisabledSafari": {
+    "message": "Giọng nói đa ngôn ngữ hiện không được hỗ trợ trong Safari.",
+    "description": "Thông báo hiển thị khi TTS bị tắt trong Safari"
   }
 }
