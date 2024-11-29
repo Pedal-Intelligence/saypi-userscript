@@ -111,7 +111,7 @@ export default (env, argv) => {
             to: "[name][ext]",
           },
           {
-            from: "node_modules/onnxruntime-web/dist/*.wasm",
+            from: "node_modules/onnxruntime-web/dist/ort-wasm*.wasm",
             to: "[name][ext]",
           },
         ],
