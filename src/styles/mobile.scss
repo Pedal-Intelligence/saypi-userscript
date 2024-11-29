@@ -99,7 +99,7 @@ html.immersive-view {
 
   /* override lg:hidden, making the control panel's buttons visible in immersive view on desktops */
   #saypi-control-panel-main.lg\:hidden {
-    display: block;
+    display: flex;
   }
   /* override lg:flex-row-reverse, making the audio control button visible in immersive view on desktops */
   div.lg\:flex-row-reverse {

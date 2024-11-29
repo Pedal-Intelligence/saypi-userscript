@@ -17,6 +17,23 @@
   }
 }
 
+
+#saypi-control-panel-main a.saypi-control-button {
+  display: inline-block;
+  width: unset;
+  height: unset;
+  padding: 6px;
+  svg {
+    width: 36px;
+    height: 36px;
+    background: rgb(237 225 209/var(--tw-bg-opacity));
+    border-radius: 9999px; // make the svg element round
+  }
+  .t-label {
+    display: none;
+  }
+}
+
 /* hide the control panel buttons on non-chat pages */
 .saypi-control-panel.overflow-hidden {
   .saypi-control-button {
