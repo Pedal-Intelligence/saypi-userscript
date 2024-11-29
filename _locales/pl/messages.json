@@ -308,7 +308,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Tekst przycisku umożliwiającego przejście do trybu immersyjnego na komputerze.",
-    "message": "Pochłaniający"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "Etykieta i tytuł przycisku umożliwiającego wyjście z trybu immersyjnego na urządzeniach mobilnych i powrót do tekstowego trybu pulpitu.",

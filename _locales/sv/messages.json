@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Texten på knappen för att gå in i omslutande läge på skrivbordet.",
-    "message": "Uppslukande"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "Aria-label och titeln på knappen för att avsluta det inlevelsefulla läget på mobila enheter, tillbaka till textbaserat skrivbordsläge.",

@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Napin teksti, jolla siirrytään immersiiviseen tilaan työpöydällä.",
-    "message": "Immersiivinen"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "Aria-labelin ja napin otsikon käännös, jolla poistutaan immersiivisestä tilasta mobiililaitteissa takaisin tekstipohjaiseen työpöytätilaan.",

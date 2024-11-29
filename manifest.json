@@ -11,6 +11,9 @@
       "js": ["public/saypi.user.js"]
     }
   ],
+  "background": {
+    "service_worker": "public/background.js"
+  },
   "icons": {
     "16": "src/icons/bubble-16px.png",
     "32": "src/icons/bubble-32px.png",

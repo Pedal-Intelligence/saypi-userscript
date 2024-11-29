@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Tekst gumba za ulazak u uronjeni način na stolnom računalu.",
-    "message": "Imersivno"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "Aria-label i naslov gumba za izlazak iz uronjenog načina rada na mobilnim uređajima, natrag u tekstualni radni način.",

@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Ang teksto ng pindutan para pumasok sa immersive mode sa desktop.",
-    "message": "Nakakalibang"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "Ang aria-label at pamagat ng pindutan para umalis sa immersive mode sa mga mobile device, bumalik sa text-based desktop mode.",

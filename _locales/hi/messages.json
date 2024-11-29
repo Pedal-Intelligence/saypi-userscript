@@ -168,7 +168,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "डेस्कटॉप पर इमर्सिव मोड में प्रवेश करने के लिए बटन का पाठ।",
-    "message": "इमर्सिव"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "मोबाइल उपकरणों पर संपूर्णता मोड से बाहर निकलने के लिए बटन का aria-label और शीर्षक, पाठ-आधारित डेस्कटॉप मोड पर वापस.",

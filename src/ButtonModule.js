@@ -6,6 +6,7 @@ import { submitErrorHandler } from "./SubmitErrorHandler.ts";
 import exitIconSVG from "./icons/exit.svg";
 import maximizeIconSVG from "./icons/maximize.svg";
 import immersiveIconSVG from "./icons/immersive.svg";
+import settingsIconSVG from "./icons/settings.svg";
 import callIconSVG from "./icons/call.svg";
 import callStartingIconSVG from "./icons/call-starting.svg";
 import hangupIconSVG from "./icons/hangup.svg";
@@ -20,6 +21,7 @@ import { Chatbot } from "./chatbots/Chatbot.ts";
 import { ChatbotService } from "./chatbots/ChatbotService.ts";
 import { IconModule } from "./icons/IconModule.ts";
 import { ImmersionStateChecker } from "./ImmersionServiceLite.ts";
+import { openSettings } from "./popup/popupopener.ts";
 
 class ButtonModule {
   /**
@@ -203,24 +205,47 @@ class ButtonModule {
     return button;
   }
 
-  createImmersiveModeButton(container, position = 0) {
-    const label = getMessage("enterImmersiveModeShort");
-    const title = getMessage("enterImmersiveModeLong");
+  createControlButton(options) {
+    const { shortLabel, longLabel = shortLabel, icon, onClick, className = '' } = options;
     const button = createElement("a", {
-      className:
-        "immersive-mode-button saypi-control-button tooltip flex h-16 w-16 flex-col items-center justify-center rounded-xl text-neutral-900 hover:bg-neutral-50-hover hover:text-neutral-900-hover active:bg-neutral-50-tap active:text-neutral-900-tap gap-0.5",
-      ariaLabel: title,
-      onclick: () => this.immersionService.enterImmersiveMode(),
+      className: `${className} saypi-control-button tooltip flex h-16 w-16 flex-col items-center justify-center rounded-xl text-neutral-900 hover:bg-neutral-50-hover hover:text-neutral-900-hover active:bg-neutral-50-tap active:text-neutral-900-tap gap-0.5`,
+      ariaLabel: longLabel,
+      onclick: onClick,
     });
 
-    const svgElement = createSVGElement(immersiveIconSVG);
+    const svgElement = createSVGElement(icon);
     button.appendChild(svgElement);
 
     const labelDiv = createElement("div", {
       className: "t-label",
-      textContent: label,
-    });
+      textContent: shortLabel,
+    }, );
     button.appendChild(labelDiv);
+
+    return button;
+  }
+
+  createImmersiveModeButton(container, position = 0) {
+    const button = this.createControlButton({
+      shortLabel: getMessage("enterImmersiveModeShort"),
+      longLabel: getMessage("enterImmersiveModeLong"),
+      icon: immersiveIconSVG,
+      onClick: () => this.immersionService.enterImmersiveMode(),
+      className: 'immersive-mode-button'
+    });
+
+    addChild(container, button, position);
+    return button;
+  }
+
+  createSettingsButton(container, position = 0) {
+    const label = getMessage("extensionSettings");
+    const button = this.createControlButton({
+      shortLabel: label,
+      icon: settingsIconSVG,
+      onClick: () => openSettings(),
+      className: 'settings-button'
+    });
 
     addChild(container, button, position);
     return button;

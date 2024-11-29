@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Teks butang untuk memasuki mod celupan pada desktop.",
-    "message": "Menyeluruh"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "Aria-label dan tajuk butang untuk keluar dari mod meresap pada peranti mudah alih, kembali ke mod desktop berasaskan teks.",

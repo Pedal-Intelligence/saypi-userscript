@@ -54,6 +54,8 @@ export function createElement(
   Object.entries(attributes).forEach(([key, value]) => {
     if (key === "className") {
       element.className = value;
+    } else if (key === "textContent") {
+      element.textContent = value;
     } else if (key.startsWith("on")) {
       element.addEventListener(key.slice(2).toLowerCase(), value);
     } else {

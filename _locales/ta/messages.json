@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "டெஸ்க்டாப்பில் முழு மோடு நுழைவு பொத்தானின் உரை.",
-    "message": "ஆழ்ந்து ஈர்க்கும்"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "மொபைல் சாத்நரிக்கு இருந்து வெளியே செல்வது, உரை-based desktop mode-ku return seyyum button-in aria-label and title.",

@@ -163,7 +163,7 @@
     "message": "Compartilhar análises"
   },
   "enterImmersiveModeShort": {
-    "message": "Imersivo",
+    "message": "",
     "description": "O texto do botão para entrar no modo imersivo no desktop."
   },
   "exitImmersiveModeLong": {

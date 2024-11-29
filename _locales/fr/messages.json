@@ -168,7 +168,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Le texte du bouton pour entrer en mode immersif sur le bureau.",
-    "message": "Immersif"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "Le aria-label et le titre du bouton pour quitter le mode immersif sur les appareils mobiles, pour revenir au mode bureau basé sur le texte.",

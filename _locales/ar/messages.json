@@ -116,7 +116,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "نص الزر للدخول إلى الوضع المغمور على سطح المكتب.",
-    "message": "غامر"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "تسمية الأغنية وعنوان الزر للخروج من الوضع المُحاكي على أجهزة الموبايل، إلى الوضع المكتبي بنص.",

@@ -168,7 +168,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "ডেস্কটপে ইমার্সিভ মোডে প্রবেশ করার বোতামের লেখা।",
-    "message": "মগ্নাত্মক"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "মোবাইল ডিভাইসের উপর ইমার্সিভ মোড থেকে বেরিয়ে, টেক্সট-ভিত্তিক ডেস্ক্‌‌‌‍‍‌‍‍‌‍‍‌top mode- ।",

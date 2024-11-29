@@ -300,7 +300,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "El texto del botón para ingresar al modo inmersivo en el escritorio.",
-    "message": "inmersivo"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "La etiqueta aria y el título del botón para salir del modo inmersivo en dispositivos móviles y volver al modo de escritorio basado en texto.",

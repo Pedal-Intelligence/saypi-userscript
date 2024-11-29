@@ -308,7 +308,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Il testo del pulsante per accedere alla modalità immersiva sul desktop.",
-    "message": "Immersivo"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "L'etichetta aria e il titolo del pulsante per uscire dalla modalità immersiva sui dispositivi mobili e tornare alla modalità desktop basata su testo.",

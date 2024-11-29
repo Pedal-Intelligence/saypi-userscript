@@ -168,7 +168,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "De tekst van de knop om de meeslepende modus op desktop te betreden.",
-    "message": "Immersief"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "De aria-label en titel van de knop om de meeslepende modus op mobiele apparaten te verlaten, terug naar de tekstgebaseerde desktopmodus.",

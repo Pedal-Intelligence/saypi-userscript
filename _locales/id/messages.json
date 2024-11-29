@@ -308,7 +308,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Teks tombol untuk masuk ke mode imersif di desktop.",
-    "message": "Melingkupi"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "Label aria dan judul tombol untuk keluar dari mode imersif di perangkat seluler, kembali ke mode desktop berbasis teks.",

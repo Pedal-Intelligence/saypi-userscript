@@ -168,7 +168,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "데스크톱에서 몰입 모드로 들어가기 위한 버튼의 텍스트",
-    "message": "몰입형"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "모바일 장치에서 몰입 모드를 종료하고 텍스트 기반의 데스크톱 모드로 돌아가는 버튼의 aria-label과 제목.",

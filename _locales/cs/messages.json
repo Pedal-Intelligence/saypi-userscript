@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Text tlačítka pro vstup do ponořovacího režimu na stolním počítači.",
-    "message": "Pohlcující"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "Aria-label a název tlačítka pro ukončení ponořeného režimu na mobilních zařízeních, zpět do textového režimu pro stolní počítače.",

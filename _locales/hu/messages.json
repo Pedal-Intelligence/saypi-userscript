@@ -168,7 +168,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "A gomb szövege, amellyel beléphet az immerszív módba asztali gépen.",
-    "message": "Elmerülő"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "Az aria-címke és a gomb címe, amely kilép az immerszív módból mobil eszközökön, vissza a szövegalapú asztali módhoz.",

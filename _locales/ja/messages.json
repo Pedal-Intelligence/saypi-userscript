@@ -168,7 +168,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "デスクトップで没入モードに入るためのボタンのテキスト",
-    "message": "没入型"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "モバイルデバイスで没入型モードを終了し、テキストベースのデスクトップモードに戻るためのボタンのaria-labelとタイトル。",

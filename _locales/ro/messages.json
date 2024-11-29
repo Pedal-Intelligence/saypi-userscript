@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Textul butonului pentru a intra în modul imersiv pe desktop.",
-    "message": "Imersiv"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "Eticheta-aria și titlul butonului pentru a ieși din modul imersiv pe dispozitivele mobile, înapoi la modul desktop bazat pe text.",

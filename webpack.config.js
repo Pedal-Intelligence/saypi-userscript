@@ -33,12 +33,18 @@ export default (env, argv) => {
     devtool: isProduction ? "source-map" : "inline-source-map",
     entry: {
       main: "./src/saypi.index.js",
+      background: "./src/svc/background.ts"
     },
     output: {
       filename: (chunkData) => {
-        return chunkData.chunk.name === "main"
-          ? "saypi.user.js"
-          : "[name].bundle.js";
+        switch (chunkData.chunk.name) {
+          case "main":
+            return "saypi.user.js";
+          case "background":
+            return "background.js";
+          default:
+            return "[name].bundle.js";
+        }
       },
       path: path.resolve(__dirname, "public"),
     },

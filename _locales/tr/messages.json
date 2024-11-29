@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Masaüstünde sürükleyici moda giriş yapmak için düğmenin metni.",
-    "message": "Sürükleyici"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "Mobil cihazlarda sürükleyici moddan çıkmak için düğmenin aria-etiketi ve başlığı, metin tabanlı masaüstü moda geri dönün.",

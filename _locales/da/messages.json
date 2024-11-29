@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Teksten på knappen for at indtaste nedsænkningstilstand på skrivebordet.",
-    "message": "Immersiv"
+    "message": ""
   },
   "exitImmersiveModeLong": {
     "description": "Aria-label og titlen på knappen til at afslutte den immersive tilstand på mobile enheder, tilbage til tekstbaseret skrivebordstilstand.",

@@ -184,6 +184,7 @@ export class DOMObserver {
     sidePanel.classList.add("saypi-control-panel"); // the side panel is a secondary control panel for larger screens
     const immersiveModeBtnPos = 1;
     buttonModule.createImmersiveModeButton(sidePanel, immersiveModeBtnPos);
+    buttonModule.createSettingsButton(sidePanel, immersiveModeBtnPos + 1);
   }
 
   findAndDecorateSidePanel(searchRoot: Element): Observation {

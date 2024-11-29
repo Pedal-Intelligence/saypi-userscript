@@ -163,7 +163,7 @@
     "message": "Поділитися аналітикою"
   },
   "enterImmersiveModeShort": {
-    "message": "Занурювальний",
+    "message": "",
     "description": "Текст кнопки для входу в іммерсивний режим на комп'ютері."
   },
   "exitImmersiveModeLong": {
