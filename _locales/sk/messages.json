@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Text tlačidla pre vstup do ponorového režimu na stolnom počítači.",
-    "message": ""
+    "message": "Ponorenie"
   },
   "exitImmersiveModeLong": {
     "description": "Aria-label a názov tlačidla na ukončenie pohlcujúceho režimu na mobilných zariadeniach, späť do textového režimu pre stolné počítače.",
@@ -466,5 +466,9 @@
   "ttsDisabledSafari": {
     "message": "V Safari momentálne nie sú podporované viacjazyčné hlasy.",
     "description": "Správa sa zobrazí, keď je TTS zakázaný v Safari"
+  },
+  "extensionSettings": {
+    "message": "Nastavenia",
+    "description": "Text tlačidla na otvorenie nastavení rozšírenia."
   }
 }

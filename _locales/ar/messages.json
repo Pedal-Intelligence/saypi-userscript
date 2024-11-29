@@ -116,7 +116,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "نص الزر للدخول إلى الوضع المغمور على سطح المكتب.",
-    "message": ""
+    "message": "غمر"
   },
   "exitImmersiveModeLong": {
     "description": "تسمية الأغنية وعنوان الزر للخروج من الوضع المُحاكي على أجهزة الموبايل، إلى الوضع المكتبي بنص.",
@@ -466,5 +466,9 @@
   "ttsDisabledSafari": {
     "message": "الأصوات متعددة اللغات غير مدعومة حاليًا في Safari.",
     "description": "تظهر الرسالة عند تعطيل تحويل النص إلى كلام (TTS) في Safari"
+  },
+  "extensionSettings": {
+    "message": "إعدادات",
+    "description": "نص الزر لفتح إعدادات الامتداد."
   }
 }

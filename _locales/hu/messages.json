@@ -168,7 +168,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "A gomb szövege, amellyel beléphet az immerszív módba asztali gépen.",
-    "message": ""
+    "message": "Merítés"
   },
   "exitImmersiveModeLong": {
     "description": "Az aria-címke és a gomb címe, amely kilép az immerszív módból mobil eszközökön, vissza a szövegalapú asztali módhoz.",
@@ -466,5 +466,9 @@
   "ttsDisabledSafari": {
     "message": "A Safari jelenleg nem támogatja a többnyelvű hangokat.",
     "description": "Üzenet jelenik meg, amikor a TTS le van tiltva a Safariban"
+  },
+  "extensionSettings": {
+    "message": "Beállítások elemre",
+    "description": "A bővítmény beállításainak megnyitására szolgáló gomb szövege."
   }
 }

@@ -168,7 +168,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "デスクトップで没入モードに入るためのボタンのテキスト",
-    "message": ""
+    "message": "浸漬"
   },
   "exitImmersiveModeLong": {
     "description": "モバイルデバイスで没入型モードを終了し、テキストベースのデスクトップモードに戻るためのボタンのaria-labelとタイトル。",
@@ -466,5 +466,9 @@
   "ttsDisabledSafari": {
     "message": "現在、Safari では多言語音声はサポートされていません。",
     "description": "Safari で TTS が無効になっているときに表示されるメッセージ"
+  },
+  "extensionSettings": {
+    "message": "設定",
+    "description": "拡張機能の設定を開くボタンのテキスト。"
   }
 }

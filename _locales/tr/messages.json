@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Masaüstünde sürükleyici moda giriş yapmak için düğmenin metni.",
-    "message": ""
+    "message": "Daldırma"
   },
   "exitImmersiveModeLong": {
     "description": "Mobil cihazlarda sürükleyici moddan çıkmak için düğmenin aria-etiketi ve başlığı, metin tabanlı masaüstü moda geri dönün.",
@@ -466,5 +466,9 @@
   "ttsDisabledSafari": {
     "message": "Çok dilli sesler şu anda Safari'de desteklenmemektedir.",
     "description": "Safari'de TTS devre dışı bırakıldığında gösterilen mesaj"
+  },
+  "extensionSettings": {
+    "message": "Ayarlar",
+    "description": "Uzantının ayarlarını açmaya yarayan düğmenin metni."
   }
 }

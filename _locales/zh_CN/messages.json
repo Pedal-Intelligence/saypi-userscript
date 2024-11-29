@@ -163,7 +163,7 @@
     "message": "分享分析"
   },
   "enterImmersiveModeShort": {
-    "message": "",
+    "message": "浸没",
     "description": "进入桌面沉浸模式的按钮文本"
   },
   "exitImmersiveModeLong": {
@@ -466,5 +466,9 @@
   "ttsDisabledSafari": {
     "message": "Safari 目前不支持多语言语音。",
     "description": "在 Safari 中禁用 TTS 时显示的消息"
+  },
+  "extensionSettings": {
+    "message": "设置",
+    "description": "用于打开扩展程序设置的按钮的文本。"
   }
 }

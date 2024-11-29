@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Napin teksti, jolla siirrytään immersiiviseen tilaan työpöydällä.",
-    "message": ""
+    "message": "Upotus"
   },
   "exitImmersiveModeLong": {
     "description": "Aria-labelin ja napin otsikon käännös, jolla poistutaan immersiivisestä tilasta mobiililaitteissa takaisin tekstipohjaiseen työpöytätilaan.",
@@ -466,5 +466,9 @@
   "ttsDisabledSafari": {
     "message": "Monikielisiä ääniä ei tällä hetkellä tueta Safarissa.",
     "description": "Viesti näytetään, kun TTS on poistettu käytöstä Safarissa"
+  },
+  "extensionSettings": {
+    "message": "Asetukset",
+    "description": "Laajennuksen asetusten avaamispainikkeen teksti."
   }
 }

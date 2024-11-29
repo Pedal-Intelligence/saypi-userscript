@@ -308,7 +308,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Tekst przycisku umożliwiającego przejście do trybu immersyjnego na komputerze.",
-    "message": ""
+    "message": "Zanurzenie"
   },
   "exitImmersiveModeLong": {
     "description": "Etykieta i tytuł przycisku umożliwiającego wyjście z trybu immersyjnego na urządzeniach mobilnych i powrót do tekstowego trybu pulpitu.",
@@ -466,5 +466,9 @@
   "ttsDisabledSafari": {
     "message": "Głosy wielojęzyczne nie są obecnie obsługiwane w przeglądarce Safari.",
     "description": "Komunikat wyświetlany, gdy funkcja TTS jest wyłączona w przeglądarce Safari"
+  },
+  "extensionSettings": {
+    "message": "Ustawienia",
+    "description": "Tekst przycisku otwierającego ustawienia rozszerzenia."
   }
 }

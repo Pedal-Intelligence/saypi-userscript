@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Textul butonului pentru a intra în modul imersiv pe desktop.",
-    "message": ""
+    "message": "Imersiune"
   },
   "exitImmersiveModeLong": {
     "description": "Eticheta-aria și titlul butonului pentru a ieși din modul imersiv pe dispozitivele mobile, înapoi la modul desktop bazat pe text.",
@@ -466,5 +466,9 @@
   "ttsDisabledSafari": {
     "message": "Vocile multilingve nu sunt acceptate momentan în Safari.",
     "description": "Mesaj afișat când TTS este dezactivat în Safari"
+  },
+  "extensionSettings": {
+    "message": "Setări",
+    "description": "Textul butonului pentru a deschide setările extensiei."
   }
 }

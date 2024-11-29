@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Texten på knappen för att gå in i omslutande läge på skrivbordet.",
-    "message": ""
+    "message": "Nedsänkning"
   },
   "exitImmersiveModeLong": {
     "description": "Aria-label och titeln på knappen för att avsluta det inlevelsefulla läget på mobila enheter, tillbaka till textbaserat skrivbordsläge.",
@@ -466,5 +466,9 @@
   "ttsDisabledSafari": {
     "message": "Flerspråkiga röster stöds för närvarande inte i Safari.",
     "description": "Meddelande visas när TTS är inaktiverat i Safari"
+  },
+  "extensionSettings": {
+    "message": "Inställningar",
+    "description": "Texten på knappen för att öppna tilläggets inställningar."
   }
 }

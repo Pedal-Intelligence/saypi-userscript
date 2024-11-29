@@ -163,7 +163,7 @@
     "message": "Chia sẻ phân tích"
   },
   "enterImmersiveModeShort": {
-    "message": "",
+    "message": "Ngâm",
     "description": "Văn bản của nút để vào chế độ toàn màn hình trên máy tính."
   },
   "exitImmersiveModeLong": {
@@ -466,5 +466,9 @@
   "ttsDisabledSafari": {
     "message": "Giọng nói đa ngôn ngữ hiện không được hỗ trợ trong Safari.",
     "description": "Thông báo hiển thị khi TTS bị tắt trong Safari"
+  },
+  "extensionSettings": {
+    "message": "Cài đặt",
+    "description": "Văn bản của nút để mở cài đặt của tiện ích mở rộng."
   }
 }

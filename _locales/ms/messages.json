@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Teks butang untuk memasuki mod celupan pada desktop.",
-    "message": ""
+    "message": "Rendaman"
   },
   "exitImmersiveModeLong": {
     "description": "Aria-label dan tajuk butang untuk keluar dari mod meresap pada peranti mudah alih, kembali ke mod desktop berasaskan teks.",
@@ -466,5 +466,9 @@
   "ttsDisabledSafari": {
     "message": "Suara berbilang bahasa pada masa ini tidak disokong dalam Safari.",
     "description": "Mesej ditunjukkan apabila TTS dilumpuhkan dalam Safari"
+  },
+  "extensionSettings": {
+    "message": "tetapan",
+    "description": "Teks butang untuk membuka tetapan sambungan."
   }
 }

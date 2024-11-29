@@ -308,7 +308,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Teks tombol untuk masuk ke mode imersif di desktop.",
-    "message": ""
+    "message": "Pencelupan"
   },
   "exitImmersiveModeLong": {
     "description": "Label aria dan judul tombol untuk keluar dari mode imersif di perangkat seluler, kembali ke mode desktop berbasis teks.",
@@ -466,5 +466,9 @@
   "ttsDisabledSafari": {
     "message": "Suara multibahasa saat ini tidak didukung di Safari.",
     "description": "Pesan ditampilkan ketika TTS dinonaktifkan di Safari"
+  },
+  "extensionSettings": {
+    "message": "Pengaturan",
+    "description": "Teks tombol untuk membuka pengaturan ekstensi."
   }
 }

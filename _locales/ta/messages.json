@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "டெஸ்க்டாப்பில் முழு மோடு நுழைவு பொத்தானின் உரை.",
-    "message": ""
+    "message": "மூழ்குதல்"
   },
   "exitImmersiveModeLong": {
     "description": "மொபைல் சாத்நரிக்கு இருந்து வெளியே செல்வது, உரை-based desktop mode-ku return seyyum button-in aria-label and title.",
@@ -466,5 +466,9 @@
   "ttsDisabledSafari": {
     "message": "சஃபாரியில் தற்போது பன்மொழி குரல்கள் ஆதரிக்கப்படவில்லை.",
     "description": "சஃபாரியில் TTS முடக்கப்பட்டிருக்கும் போது செய்தி காட்டப்படும்"
+  },
+  "extensionSettings": {
+    "message": "அமைப்புகள்",
+    "description": "நீட்டிப்பின் அமைப்புகளைத் திறப்பதற்கான பொத்தானின் உரை."
   }
 }

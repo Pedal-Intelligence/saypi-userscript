@@ -168,7 +168,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Der Text der Schaltfläche zum Betreten des immersiven Modus auf dem Desktop.",
-    "message": ""
+    "message": "Eintauchen"
   },
   "exitImmersiveModeLong": {
     "description": "Das aria-label und der Titel des Buttons zum Verlassen des immersiven Modus auf mobilen Geräten, zurück zum textbasierten Desktop-Modus.",
@@ -466,5 +466,9 @@
   "ttsDisabledSafari": {
     "message": "Mehrsprachige Stimmen werden derzeit in Safari nicht unterstützt.",
     "description": "Meldung wird angezeigt, wenn TTS in Safari deaktiviert ist"
+  },
+  "extensionSettings": {
+    "message": "Einstellungen",
+    "description": "Der Text der Schaltfläche zum Öffnen der Einstellungen der Erweiterung."
   }
 }

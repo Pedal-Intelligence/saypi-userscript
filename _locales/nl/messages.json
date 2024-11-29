@@ -168,7 +168,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "De tekst van de knop om de meeslepende modus op desktop te betreden.",
-    "message": ""
+    "message": "Onderdompeling"
   },
   "exitImmersiveModeLong": {
     "description": "De aria-label en titel van de knop om de meeslepende modus op mobiele apparaten te verlaten, terug naar de tekstgebaseerde desktopmodus.",
@@ -466,5 +466,9 @@
   "ttsDisabledSafari": {
     "message": "Meertalige stemmen worden momenteel niet ondersteund in Safari.",
     "description": "Bericht dat wordt weergegeven wanneer TTS is uitgeschakeld in Safari"
+  },
+  "extensionSettings": {
+    "message": "Instellingen",
+    "description": "De tekst van de knop om de instellingen van de extensie te openen."
   }
 }

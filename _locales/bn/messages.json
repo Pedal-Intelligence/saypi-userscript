@@ -168,7 +168,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "ডেস্কটপে ইমার্সিভ মোডে প্রবেশ করার বোতামের লেখা।",
-    "message": ""
+    "message": "নিমজ্জন"
   },
   "exitImmersiveModeLong": {
     "description": "মোবাইল ডিভাইসের উপর ইমার্সিভ মোড থেকে বেরিয়ে, টেক্সট-ভিত্তিক ডেস্ক্‌‌‌‍‍‌‍‍‌‍‍‌top mode- ।",
@@ -466,5 +466,9 @@
   "ttsDisabledSafari": {
     "message": "বহুভাষিক ভয়েস বর্তমানে সাফারিতে সমর্থিত নয়।",
     "description": "সাফারিতে TTS নিষ্ক্রিয় হলে বার্তা দেখানো হয়"
+  },
+  "extensionSettings": {
+    "message": "সেটিংস",
+    "description": "এক্সটেনশনের সেটিংস খুলতে বোতামের পাঠ্য।"
   }
 }

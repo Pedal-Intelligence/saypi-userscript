@@ -168,7 +168,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "데스크톱에서 몰입 모드로 들어가기 위한 버튼의 텍스트",
-    "message": ""
+    "message": "담금"
   },
   "exitImmersiveModeLong": {
     "description": "모바일 장치에서 몰입 모드를 종료하고 텍스트 기반의 데스크톱 모드로 돌아가는 버튼의 aria-label과 제목.",
@@ -466,5 +466,9 @@
   "ttsDisabledSafari": {
     "message": "현재 Safari에서는 다국어 음성이 지원되지 않습니다.",
     "description": "Safari에서 TTS가 비활성화되었을 때 표시되는 메시지"
+  },
+  "extensionSettings": {
+    "message": "설정",
+    "description": "확장 프로그램의 설정을 여는 버튼의 텍스트입니다."
   }
 }

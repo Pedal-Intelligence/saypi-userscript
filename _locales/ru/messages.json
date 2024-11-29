@@ -163,7 +163,7 @@
     "message": "Поделиться аналитикой"
   },
   "enterImmersiveModeShort": {
-    "message": "",
+    "message": "Погружение",
     "description": "Текст кнопки для входа в погружающий режим на компьютере."
   },
   "exitImmersiveModeLong": {
@@ -466,5 +466,9 @@
   "ttsDisabledSafari": {
     "message": "Многоязычная речь в настоящее время не поддерживается в Safari.",
     "description": "Сообщение, отображаемое, когда TTS отключен в Safari"
+  },
+  "extensionSettings": {
+    "message": "Настройки",
+    "description": "Текст кнопки открытия настроек расширения."
   }
 }

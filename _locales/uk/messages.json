@@ -163,7 +163,7 @@
     "message": "Поділитися аналітикою"
   },
   "enterImmersiveModeShort": {
-    "message": "",
+    "message": "занурення",
     "description": "Текст кнопки для входу в іммерсивний режим на комп'ютері."
   },
   "exitImmersiveModeLong": {
@@ -466,5 +466,9 @@
   "ttsDisabledSafari": {
     "message": "Багатомовні голоси наразі не підтримуються в Safari.",
     "description": "Повідомлення відображається, коли в Safari вимкнено TTS"
+  },
+  "extensionSettings": {
+    "message": "Налаштування",
+    "description": "Текст кнопки для відкриття налаштувань розширення."
   }
 }
