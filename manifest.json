@@ -12,9 +12,6 @@
     }
   ],
   "background": {
-    "scripts": ["public/background.js"],
-    "type": "module",
-    "persistent": false,
     "service_worker": "public/background.js"
   },
   "icons": {

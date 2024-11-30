@@ -11,6 +11,25 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
+check_jq_installed() {
+    if ! command -v jq &> /dev/null; then
+        echo "Error: jq is required but not installed."
+        echo "Please install jq:"
+        echo "  - Ubuntu/Debian: sudo apt-get install jq"
+        echo "  - macOS: brew install jq"
+        echo "  - Windows: choco install jq"
+        exit 1
+    fi
+}
+
+modify_firefox_manifest() {
+    local manifest_file="$1"
+    jq '.background += {"scripts": ["public/background.js"], "type": "module", "persistent": false}' "$manifest_file" > "$manifest_file.tmp" && mv "$manifest_file.tmp" "$manifest_file"
+}
+
+# Check dependencies before processing
+check_jq_installed
+
 # Process each browser argument
 for BROWSER in "$@"; do
     # Validate browser argument
@@ -81,6 +100,11 @@ for BROWSER in "$@"; do
     # Create necessary directories
     mkdir -p "$EXT_DIR"
     cp manifest.json "$EXT_DIR"
+
+    # Add Firefox-specific background properties if building for Firefox
+    if [ "$BROWSER" = "firefox" ]; then
+        modify_firefox_manifest "$EXT_DIR/manifest.json"
+    fi
 
     mkdir -p "$AUDIO_DIR"
     cp public/saypi.user.js "$PUBLIC_DIR"

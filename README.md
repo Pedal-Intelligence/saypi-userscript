@@ -21,6 +21,10 @@ We are not accepting external contributions to the codebase at this time. Please
 - Node.js v20.17.0 or later
 - npm v10.8.2 or later
 - bash shell (Linux/Mac) or Git Bash (Windows)
+- `jq` - Required for building Firefox extensions
+  - Ubuntu/Debian: `sudo apt-get install jq`
+  - macOS: `brew install jq`
+  - Windows: `choco install jq`
 
 ### Building from Source
 
