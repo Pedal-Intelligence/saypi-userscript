@@ -84,6 +84,7 @@ for BROWSER in "$@"; do
 
     mkdir -p "$AUDIO_DIR"
     cp public/saypi.user.js "$PUBLIC_DIR"
+    cp public/background.js "$PUBLIC_DIR"
     cp public/silero_vad.onnx "$PUBLIC_DIR"
     cp public/ort-wasm*.wasm "$PUBLIC_DIR"
     cp public/vad.worklet.bundle*.js "$PUBLIC_DIR"
