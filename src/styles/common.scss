@@ -17,12 +17,13 @@
   }
 }
 
-
+// the settings-button is a control button with an anchor tag
 #saypi-control-panel-main a.saypi-control-button {
   display: inline-block;
   width: unset;
   height: unset;
   padding: 6px;
+  background: transparent;
   svg {
     width: 36px;
     height: 36px;

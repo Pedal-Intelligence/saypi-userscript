@@ -101,6 +101,14 @@ html.immersive-view {
   #saypi-control-panel-main.lg\:hidden {
     display: flex;
   }
+
+  #saypi-control-panel-main a.saypi-control-button {
+    // make the svg background transparent for the settings button in immersive view
+    svg {
+      background: transparent;
+    }
+  }
+
   /* override lg:flex-row-reverse, making the audio control button visible in immersive view on desktops */
   div.lg\:flex-row-reverse {
     flex-direction: unset;
