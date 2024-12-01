@@ -12,8 +12,13 @@
   padding: 6px;
   border: 0;
   z-index: 60;
-  svg path.inner {
-    color: rgb(13 60 38); /* text-primary-700 */
+  svg {
+    path.outer {
+      fill: rgb(237 225 209); /* bg-cream-550 */
+    }
+    path.inner {
+      color: rgb(13 60 38); /* text-primary-700 */
+    }
   }
 }
 
