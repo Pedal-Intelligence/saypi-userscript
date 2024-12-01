@@ -46,10 +46,13 @@ html.desktop-view {
     margin-top: 0.35rem;
   }
 
-  #saypi-side-panel .saypi-control-button svg {
-    width: 30px;
-    .cls-1 {
-      stroke: #24381b;
+  #saypi-side-panel .saypi-control-button {
+    cursor: pointer;
+    svg {
+      width: 30px;
+      .cls-1 {
+        stroke: #24381b;
+      }
     }
   }
 
