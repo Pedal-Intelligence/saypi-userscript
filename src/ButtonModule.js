@@ -21,6 +21,7 @@ import { Chatbot } from "./chatbots/Chatbot.ts";
 import { ChatbotService } from "./chatbots/ChatbotService.ts";
 import { IconModule } from "./icons/IconModule.ts";
 import { ImmersionStateChecker } from "./ImmersionServiceLite.ts";
+import { GlowColorUpdater } from "./buttons/GlowColorUpdater.js";
 import { openSettings } from "./popup/popupopener.ts";
 
 class ButtonModule {
@@ -33,6 +34,7 @@ class ButtonModule {
     this.userPreferences = UserPreferenceModule.getInstance();
     this.chatbot = chatbot;
     this.immersionService = new ImmersionService(chatbot);
+    this.glowColorUpdater = new GlowColorUpdater();
     this.sayPiActor = StateMachineService.actor; // the Say, Pi state machine
     this.screenLockActor = StateMachineService.screenLockActor;
     // Binding methods to the current instance
@@ -256,8 +258,6 @@ class ButtonModule {
     button.id = "saypi-callButton";
     button.type = "button";
     button.classList.add("call-button", "saypi-button", "tooltip");
-
-    // add all classes in chatbot.getExtraCallButtonClasses() to the button
     button.classList.add(...this.chatbot.getExtraCallButtonClasses());
     if (this.callIsActive) {
       this.callActive(button);
@@ -283,57 +283,12 @@ class ButtonModule {
     }
   }
 
-  updateCallButtonGlowColor(color) {
-    // set the `--glow-color` CSS variable on the call button
-    const callButton = document.getElementById("saypi-callButton");
-    if (callButton) {
-      callButton.style.setProperty("--glow-color", color);
-    }
-  }
-  /**
-   * Interpolates between a base colour and a peak colour based on intensity.
-   *
-   * @param {string} baseColor - The base colour in hexadecimal format.
-   * @param {string} peakColor - The peak colour in hexadecimal format.
-   * @param {number} intensity - The intensity factor (0.0 to 1.0).
-   * @returns {string} The interpolated colour in hexadecimal format.
-   */
-  interpolateColor(baseColor, peakColor, intensity) {
-    // Ensure intensity is within the range of 0.0 to 1.0
-    intensity = Math.max(0, Math.min(1, intensity));
-
-    // Convert the base and peak colours from hexadecimal to RGB
-    let baseRed = parseInt(baseColor.substring(1, 3), 16);
-    let baseGreen = parseInt(baseColor.substring(3, 5), 16);
-    let baseBlue = parseInt(baseColor.substring(5, 7), 16);
-    let peakRed = parseInt(peakColor.substring(1, 3), 16);
-    let peakGreen = parseInt(peakColor.substring(3, 5), 16);
-    let peakBlue = parseInt(peakColor.substring(5, 7), 16);
-
-    // Interpolate each colour component
-    let newRed = Math.round(baseRed + (peakRed - baseRed) * intensity);
-    let newGreen = Math.round(baseGreen + (peakGreen - baseGreen) * intensity);
-    let newBlue = Math.round(baseBlue + (peakBlue - baseBlue) * intensity);
-
-    // Convert the interpolated RGB back to hexadecimal
-    return `#${newRed.toString(16).padStart(2, "0")}${newGreen
-      .toString(16)
-      .padStart(2, "0")}${newBlue.toString(16).padStart(2, "0")}`;
-  }
-
   /**
    *
    * @param { isSpeech: number; notSpeech: number } probabilities
    */
   handleAudioFrame(probabilities) {
-    var baseColor = "#ffd1dc"; // sunset-peach
-    const peakColor = "#FF7F50"; // coral
-    const updatedColor = this.interpolateColor(
-      baseColor,
-      peakColor,
-      probabilities.isSpeech
-    );
-    this.updateCallButtonGlowColor(updatedColor);
+    this.glowColorUpdater.updateGlowColor(probabilities.isSpeech);
   }
 
   updateCallButton(callButton, svgIcon, label, onClick, isActive = false) {
