@@ -814,7 +814,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               },
               "saypi:interrupt": [
                 {
-                  target: "userInterrupting",
+                  target: "userButtonInterrupting",
                   description: `The user has forced an interruption, i.e. tapped to interrupt Pi, during a call.`,
                   actions: "pauseAudio",
                   cond: "wasListening",
@@ -938,6 +938,17 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             ],
             description:
               "The user is speaking during Pi's response, and may wish to interrupt.",
+          },
+          userButtonInterrupting: {
+            after: {
+              "500": {
+                target: "#sayPi.listening",
+                description:
+                  "The user's speech will be picked up after a short delay",
+              },
+            },
+            description:
+              "The user has pressed an interrupt during Pi's response, and wants to speak or stop the response.",
           },
         },
       },
