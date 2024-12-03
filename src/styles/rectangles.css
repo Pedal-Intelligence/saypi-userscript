@@ -472,7 +472,7 @@
   fill-opacity: 0.7;
 }
 
-html.firefox-android.immersive-view {
+html.immersive-view {
   .outermost, .fifth, .fourth, .third, .second, .innermost {
     will-change: transform;
   }
