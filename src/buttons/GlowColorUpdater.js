@@ -78,13 +78,17 @@ class GlowHelper {
   
       constructor() {
           this.glowHelper = new GlowHelper();
+          this.callButton = null;
       }
   
       updateGlowColor(probabilityOfSpeech) {
-        const callButton = document.getElementById("saypi-callButton");
-        if (callButton) {
-          const color = this.glowHelper.interpolateColor(probabilityOfSpeech);
-          callButton.style.setProperty("--glow-color", color);
+        if (!this.callButton) {
+            this.callButton = document.getElementById("saypi-callButton");
+        }
+        
+        if (this.callButton) {
+            const color = this.glowHelper.interpolateColor(probabilityOfSpeech);
+            this.callButton.style.setProperty("--glow-color", color);
         }
       }
   }
