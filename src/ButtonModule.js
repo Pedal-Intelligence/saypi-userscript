@@ -253,6 +253,25 @@ class ButtonModule {
     return button;
   }
 
+  createImmersiveSettingsButton(container, position = 0 ) {
+    const label = getMessage("extensionSettings");
+    const button = document.createElement("button");
+    button.id = "saypi-settingsButton";
+    button.type = "button";
+    button.className =
+    "saypi-settings-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
+    button.setAttribute("aria-label", label);
+    const svgElement = createSVGElement(settingsIconSVG);
+    button.replaceChildren(svgElement);
+    if (container) {
+      addChild(container, button, position);
+      button.onclick = () => {
+        openSettings();
+      };
+    }
+    return button;
+  }
+
   createCallButton(container, position = 0) {
     const button = this.createButton();
     button.id = "saypi-callButton";

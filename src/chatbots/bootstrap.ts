@@ -152,7 +152,7 @@ export class DOMObserver {
     buttonModule.createExitButton(controlPanel, toggleModeBtnPos);
     const themeManager = ThemeManager.getInstance();
     themeManager.createThemeToggleButton(controlPanel, toggleModeBtnPos + 2);
-    buttonModule.createSettingsButton(controlPanel, toggleModeBtnPos + 3);
+    buttonModule.createImmersiveSettingsButton(controlPanel, toggleModeBtnPos + 3);
   }
 
   findAndDecorateControlPanel(searchRoot: Element): Observation {
