@@ -886,6 +886,12 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 target: "userInterrupting",
               },
             },
+            after: {
+              500: {
+                target: "userInterrupting",
+                description: "Fallback transition after 500ms if piStoppedSpeaking event does not fire.",
+              },
+            },
             description: "Interrupt requested. Waiting for Pi to stop speaking before recording.",
           },
           userInterrupting: {
