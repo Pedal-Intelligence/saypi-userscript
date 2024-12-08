@@ -142,7 +142,7 @@ export class DOMObserver {
     return new Observation(mainControlPanel, id, true, true, false);
   }
 
-  decorateControlPanel(controlPanel: HTMLElement): void {
+  decorateMainControlPanel(controlPanel: HTMLElement): void {
     const id = "saypi-control-panel-main";
     controlPanel.id = id;
     controlPanel.classList.add("saypi-control-panel");
@@ -152,13 +152,13 @@ export class DOMObserver {
     buttonModule.createExitButton(controlPanel, toggleModeBtnPos);
     const themeManager = ThemeManager.getInstance();
     themeManager.createThemeToggleButton(controlPanel, toggleModeBtnPos + 2);
-    buttonModule.createImmersiveSettingsButton(controlPanel, toggleModeBtnPos + 3);
+    buttonModule.createMiniSettingsButton(controlPanel, toggleModeBtnPos + 3);
   }
 
   findAndDecorateControlPanel(searchRoot: Element): Observation {
     const obs = this.findControlPanel(searchRoot);
     if (obs.found && obs.isNew && !obs.decorated) {
-      this.decorateControlPanel(obs.target as HTMLElement);
+      this.decorateMainControlPanel(obs.target as HTMLElement);
     }
     return Observation.foundAndDecorated(obs);
   }

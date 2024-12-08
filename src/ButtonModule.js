@@ -253,7 +253,7 @@ class ButtonModule {
     return button;
   }
 
-  createImmersiveSettingsButton(container, position = 0 ) {
+  createMiniSettingsButton(container, position = 0 ) {
     const label = getMessage("extensionSettings");
     const button = document.createElement("button");
     button.id = "saypi-settingsButton";
