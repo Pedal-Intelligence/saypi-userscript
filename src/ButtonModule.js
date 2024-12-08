@@ -173,40 +173,65 @@ class ButtonModule {
     }
   }
 
-  createExitButton(container, position = 0) {
-    const label = getMessage("exitImmersiveModeLong");
-    const button = this.createButton("", () => {
-      ImmersionService.exitImmersiveMode();
-    });
+  /**
+   * Creates a control button for the main (i.e. horizontal) control panel with an icon and tooltip
+   * @param {Object} options Button configuration options
+   * @param {string} options.id Button ID
+   * @param {string} options.label Tooltip/aria label
+   * @param {string} options.icon SVG icon content
+   * @param {Function} options.onClick Click handler
+   * @param {string} [options.className=''] Additional CSS classes
+   * @returns {HTMLButtonElement} The created button
+   */
+  createIconButton(options) {
+    const { id, label, icon, onClick, className = '' } = options;
+    const button = document.createElement("button");
+    button.id = id;
     button.type = "button";
-    button.className =
-      "saypi-exit-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
+    button.className = `saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip ${className}`;
     button.setAttribute("aria-label", label);
 
-    const svgElement = createSVGElement(exitIconSVG);
+    const svgElement = createSVGElement(icon);
     button.appendChild(svgElement);
+
+    if (onClick) {
+      button.onclick = onClick;
+    }
+
+    return button;
+  }
+
+  createExitButton(container, position = 0) {
+    const button = this.createIconButton({
+      id: 'saypi-exit-button',
+      label: getMessage("exitImmersiveModeLong"),
+      icon: exitIconSVG,
+      onClick: () => ImmersionService.exitImmersiveMode(),
+      className: 'saypi-exit-button'
+    });
 
     addChild(container, button, position);
     return button;
   }
 
   createEnterButton(container, position = 0) {
-    const label = getMessage("enterImmersiveModeLong");
-    const button = this.createButton("", () => {
-      this.immersionService.enterImmersiveMode();
+    const button = this.createIconButton({
+      id: 'saypi-enter-button', 
+      label: getMessage("enterImmersiveModeLong"),
+      icon: maximizeIconSVG,
+      onClick: () => this.immersionService.enterImmersiveMode(),
+      className: 'saypi-enter-button'
     });
-    button.type = "button";
-    button.className =
-      "saypi-enter-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
-    button.setAttribute("aria-label", label);
-
-    const svgElement = createSVGElement(maximizeIconSVG);
-    button.appendChild(svgElement);
 
     addChild(container, button, position);
     return button;
   }
 
+  /**
+   * Create a control button for Pi's side panel with a short label, long label, icon, and click handler
+   * @param {*} options 
+   * @returns 
+   */
   createControlButton(options) {
     const { shortLabel, longLabel = shortLabel, icon, onClick, className = '' } = options;
     const button = createElement("a", {
@@ -253,22 +278,16 @@ class ButtonModule {
     return button;
   }
 
-  createMiniSettingsButton(container, position = 0 ) {
-    const label = getMessage("extensionSettings");
-    const button = document.createElement("button");
-    button.id = "saypi-settingsButton";
-    button.type = "button";
-    button.className =
-    "saypi-settings-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
-    button.setAttribute("aria-label", label);
-    const svgElement = createSVGElement(settingsIconSVG);
-    button.replaceChildren(svgElement);
-    if (container) {
-      addChild(container, button, position);
-      button.onclick = () => {
-        openSettings();
-      };
-    }
+  createMiniSettingsButton(container, position = 0) {
+    const button = this.createIconButton({
+      id: 'saypi-settingsButton',
+      label: getMessage("extensionSettings"),
+      icon: settingsIconSVG,
+      onClick: () => openSettings(),
+      className: 'saypi-settings-button'
+    });
+
+    addChild(container, button, position);
     return button;
   }
 
