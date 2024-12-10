@@ -20,9 +20,15 @@
     path.inner {
       color: rgb(13 60 38); /* text-primary-700 */
     }
+    circle.outer-circle-bg {
+      fill: rgb(237 225 209); /* bg-cream-550 */
+    }
   }
 }
-
+.settings-button.maxi svg circle.outer-circle-bg {
+  /* make the settings button transparent in side panel */
+  display: none;
+}
 
 /* hide the control panel buttons on non-chat pages */
 .saypi-control-panel.overflow-hidden {

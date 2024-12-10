@@ -2,3 +2,7 @@ html.immersive-view:not(.mobile-device) body.focus button {
     opacity: 0; 
     transition: opacity 0.5s ease-out;
 }
+html.immersive-view button.settings-button.mini svg circle.outer-circle-bg {
+    /* make the settings button transparent in focus mode */
+    display: none;
+}
