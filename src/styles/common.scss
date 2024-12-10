@@ -7,7 +7,7 @@
 
 .saypi-enter-button,
 .saypi-exit-button,
-.saypi-settings-button {
+.settings-button.mini {
   width: 3rem;
   height: 3rem;
   padding: 6px;
@@ -23,23 +23,6 @@
   }
 }
 
-// the settings-button is a control button with an anchor tag
-#saypi-control-panel-main a.saypi-control-button {
-  display: inline-block;
-  width: unset;
-  height: unset;
-  padding: 6px;
-  background: transparent;
-  svg {
-    width: 36px;
-    height: 36px;
-    background: rgb(237 225 209/var(--tw-bg-opacity));
-    border-radius: 9999px; // make the svg element round
-  }
-  .t-label {
-    display: none;
-  }
-}
 
 /* hide the control panel buttons on non-chat pages */
 .saypi-control-panel.overflow-hidden {

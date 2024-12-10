@@ -188,7 +188,7 @@ class ButtonModule {
     const button = document.createElement("button");
     button.id = id;
     button.type = "button";
-    button.className = `saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip ${className}`;
+    button.className = `saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip mini ${className}`;
     button.setAttribute("aria-label", label);
 
     const svgElement = createSVGElement(icon);
@@ -235,7 +235,7 @@ class ButtonModule {
   createControlButton(options) {
     const { shortLabel, longLabel = shortLabel, icon, onClick, className = '' } = options;
     const button = createElement("a", {
-      className: `${className} saypi-control-button tooltip flex h-16 w-16 flex-col items-center justify-center rounded-xl text-neutral-900 hover:bg-neutral-50-hover hover:text-neutral-900-hover active:bg-neutral-50-tap active:text-neutral-900-tap gap-0.5`,
+      className: `${className} maxi saypi-control-button tooltip flex h-16 w-16 flex-col items-center justify-center rounded-xl text-neutral-900 hover:bg-neutral-50-hover hover:text-neutral-900-hover active:bg-neutral-50-tap active:text-neutral-900-tap gap-0.5`,
       ariaLabel: longLabel,
       onclick: onClick,
     });
@@ -284,7 +284,7 @@ class ButtonModule {
       label: getMessage("extensionSettings"),
       icon: settingsIconSVG,
       onClick: () => openSettings(),
-      className: 'saypi-settings-button'
+      className: 'settings-button'
     });
 
     addChild(container, button, position);

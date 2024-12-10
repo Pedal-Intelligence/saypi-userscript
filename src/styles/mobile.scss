@@ -152,7 +152,7 @@ html.mobile-device .chat-message .message-hover-menu .saypi-cost-container {
 }
 
 /* hide the settings button on Firefox Android because the popup is not supported */
-html.firefox-android .saypi-control-panel a.settings-button {
+html.firefox-android .saypi-control-panel .settings-button.mini {
   display: none !important;
 }
 
