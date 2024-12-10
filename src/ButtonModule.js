@@ -349,6 +349,36 @@ class ButtonModule {
     this.callIsActive = isActive;
   }
 
+  updateCallButtonNEW(callButton, svgIcon, label, onClick, isActive = false) {
+    if (!callButton) {
+      callButton = document.getElementById("saypi-callButton");
+    }
+    if (callButton) {
+      this.removeChildNodesFrom(callButton);
+      this.addIconTo(callButton, svgIcon);
+      callButton.onmousedown = null;
+      callButton.onmouseup = null;
+      callButton.onClick = onClick;
+      this.toggleActiveState(callButton, isActive);
+    }
+    this.callIsActive = isActive;
+  }
+
+  updateLongClickCallButton(callButton, svgIcon, label, onClick, onLongPressDown, onLongPressUp, isActive = false) {
+    if (!callButton) {
+      callButton = document.getElementById("saypi-callButton");
+    }
+    if (callButton) {
+      this.removeChildNodesFrom(callButton);
+      this.addIconTo(callButton, svgIcon);
+      callButton.onclick = ()=> {};
+      callButton.setAttribute("aria-label", label);
+      this.handleLongClick(callButton, onClick, onLongPressDown, onLongPressUp);
+      this.toggleActiveState(callButton, isActive);
+    }
+    this.callIsActive = isActive;
+  }
+
   callStarting(callButton) {
     const label = getMessage("callStarting");
     this.updateCallButton(callButton, callStartingIconSVG, label, () =>
@@ -358,15 +388,63 @@ class ButtonModule {
 
   callActive(callButton) {
     const label = getMessage("callInProgress");
-    this.updateCallButton(
+    this.updateLongClickCallButton(
       callButton,
       hangupIconSVG,
       label,
-      () => this.sayPiActor.send("saypi:hangup"),
+      () => {
+        console.log("saypi:hangup sent from callActive()");
+        this.sayPiActor.send("saypi:hangup"); },
+      () => this.sayPiActor.send("saypi:momentaryListen"),
+      () => this.sayPiActor.send("saypi:momentaryPause"),
       true
-    );
+    ); 
   }
 
+  callMomentary(callButton) {
+    // const label = getMessage("callInProgress");
+ 
+     const label = "momentary mode listening";
+     this.updateLongClickCallButton(
+       callButton,
+       momentaryEnableIconSvg,
+       label,
+       () => this.sayPiActor.send("saypi:hangup"),
+       () => this.sayPiActor.send("saypi:momentaryListen"),
+       () => this.sayPiActor.send("saypi:momentaryPause"),
+       true
+     );
+   }
+ 
+   pauseMomentary(callButton) {
+   //  const label = getMessage("callInProgress");
+     const label = "momentary paused";
+     this.updateLongClickCallButton(
+       callButton,
+       momentarySpeakingIconSvg,
+       label,
+       () => this.sayPiActor.send("saypi:momentaryStop"),
+       () => this.sayPiActor.send("saypi:momentaryListen"),
+       () => this.sayPiActor.send("saypi:momentaryPause"),
+       true
+     );
+   }
+ 
+   callInterruptible(callButton) {
+     const handsFreeInterruptEnabled =
+       this.userPreferences.getCachedAllowInterruptions();
+     if (!handsFreeInterruptEnabled) {
+       const label = getMessage("callInterruptible");
+       this.updateLongClickCallButton(
+         callButton,
+         interruptIconSVG,
+         label,
+         () => this.sayPiActor.send("saypi:interrupt"),
+         true
+       );
+     }
+   }
+ 
   callInterruptible(callButton) {
     const handsFreeInterruptEnabled =
       this.userPreferences.getCachedAllowInterruptions();
@@ -381,6 +459,35 @@ class ButtonModule {
         },
         true
       );
+    }
+  }
+
+  handleLongClick(button, onClick, onLongPressDown, onLongPressUp ) {
+    const longPressMinimumMilliseconds = 500;
+    var clickStartTime = 0;
+    var isMouseUpDetected = false;
+    
+    if(onLongPressDown) {
+      button.onmousedown = () => {
+        isMouseUpDetected = false;
+        clickStartTime = Date.now();
+        window.setTimeout( () => {
+          if(!isMouseUpDetected) {
+            onLongPressDown();
+          }
+        }, longPressMinimumMilliseconds);
+      }
+      button.onmouseup = () => {
+        isMouseUpDetected = true;
+        let isShortClick = (Date.now() - clickStartTime) < longPressMinimumMilliseconds;
+        if(isShortClick) {
+          onClick();
+        } else {
+          onLongPressUp();
+        }
+      }
+    } else if (onClick) {
+      onClick();
     }
   }
 
