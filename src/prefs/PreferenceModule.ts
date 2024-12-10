@@ -21,6 +21,7 @@ interface StorageResult {
   voiceId?: string; // prefered speech synthesis voice
   theme?: string; // 'light' or 'dark'
   shareData?: boolean; // has the user consented to data sharing?
+  discretionaryMode?: boolean; // new beta feature for discretionary responses
 }
 
 class UserPreferenceModule {
@@ -49,6 +50,9 @@ class UserPreferenceModule {
     this.isTTSBetaPaused().then((value) => {
       this.cache.setCachedValue("isTTSBetaPaused", value);
     });
+    this.getDiscretionaryMode().then((value) => {
+      this.cache.setCachedValue("discretionaryMode", value);
+    });
   }
 
   /**
@@ -70,6 +74,9 @@ class UserPreferenceModule {
             "allowInterruptions",
             request.allowInterruptions
           );
+        }
+        if ("discretionaryMode" in request) {
+          this.cache.setCachedValue("discretionaryMode", request.discretionaryMode);
         }
       });
     }
@@ -340,6 +347,14 @@ class UserPreferenceModule {
     }
     const cachedResult = this.cache.getCachedValue("allowInterruptions", true);
     return cachedResult;
+  }
+
+  public getDiscretionaryMode(): Promise<boolean> {
+    return this.getStoredValue("discretionaryMode", false);
+  }
+
+  public getCachedDiscretionaryMode(): boolean {
+    return this.cache.getCachedValue("discretionaryMode", false);
   }
 }
 
