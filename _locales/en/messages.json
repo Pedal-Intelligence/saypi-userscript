@@ -476,7 +476,7 @@
     "description": "Label for the checkbox to enable/disable discretionary response mode."
   },
   "discretionaryModeDescription": {
-    "message": "Pi will listen continuously and only respond when directly addressed.",
-    "description": "Description of what discretionary response mode does."
+    "message": "Pi will decide whether to respond based on the context of the conversation.",
+    "description": "Description of what the discretionary response mode setting does."
   }
 }

@@ -25,6 +25,11 @@
 .user-preference-item:hover .description,
 .user-preference-item:focus-within .description {
   display: block;
+  width: 125%;
+  /* background: white; */
+  /* color: white; */
+  /* background: lightgrey; */
+  /* opacity: 0.5; */
 }
 /* hide the slider description unless it describes the selected preset */
 #preference-selector .description {
