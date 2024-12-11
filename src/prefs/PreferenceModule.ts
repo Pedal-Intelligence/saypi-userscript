@@ -56,6 +56,7 @@ class UserPreferenceModule {
     });
     this.getDiscretionaryMode().then((value) => {
       this.cache.setCachedValue("discretionaryMode", value);
+      EventBus.emit("userPreferenceChanged", { discretionaryMode: value }); // propagate the change to other modules - this is a bit of a hack for the cache not being ready immediately after construction
     });
   }
 
@@ -81,6 +82,7 @@ class UserPreferenceModule {
         }
         if ("discretionaryMode" in request) {
           this.cache.setCachedValue("discretionaryMode", request.discretionaryMode);
+          EventBus.emit("userPreferenceChanged", { discretionaryMode: request.discretionaryMode }); // propagate the change to other modules
         }
       });
     }

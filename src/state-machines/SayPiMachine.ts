@@ -62,6 +62,13 @@ type SayPiSessionAssignedEvent = {
   session_id: string;
 };
 
+type SayPiUserPreferenceChangedEvent = {
+  type: "userPreferenceChanged";
+  discretionaryMode?: boolean;
+  voiceId?: string;
+  audioProvider?: string;
+};
+
 type SayPiEvent =
   | { type: "saypi:userSpeaking" }
   | SayPiSpeechStoppedEvent
@@ -85,7 +92,8 @@ type SayPiEvent =
   | SayPiAudioReconnectEvent
   | SayPiSessionAssignedEvent
   | { type: "saypi:piWriting" }
-  | { type: "saypi:piStoppedWriting" };
+  | { type: "saypi:piStoppedWriting" }
+  | SayPiUserPreferenceChangedEvent;
 
 interface SayPiContext {
   transcriptions: Record<number, string>;
@@ -192,6 +200,7 @@ userPreferences.getDiscretionaryMode().then((discretionaryModeEnabled) => {
 
 function shouldAlwaysRespond(): boolean {
   const discretionaryModeEnabled = userPreferences.getCachedDiscretionaryMode();
+  console.debug("Assigning default shouldRespond to", !discretionaryModeEnabled);
   return !discretionaryModeEnabled;
 }
 
@@ -281,15 +290,15 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           },
           {
             type: "callStartingPrompt",
-          },
-          {
-            type: "updatePreferences",
           }
         ],
         exit: [
           {
             type: "clearPrompt",
           },
+          {
+            type: "updatePreferences",
+          }
         ],
         on: {
           "saypi:callReady": {
@@ -306,7 +315,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               },
               {
                 type: "requestWakeLock",
-              },
+              }
             ],
             description: "VAD microphone is ready.\nStart it recording.",
           },
@@ -984,6 +993,20 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         },
       },
     },
+    on: {
+      "userPreferenceChanged": {
+        actions: assign({
+          shouldRespond: (context, event: SayPiUserPreferenceChangedEvent) => {
+            // Update shouldRespond based on discretionary mode if it was changed
+            console.debug("userPreferenceChanged", event);
+            if (event.discretionaryMode !== undefined) {
+              return !event.discretionaryMode; // shouldRespond is true when discretionary mode is false
+            }
+            return context.shouldRespond; // keep existing value if discretionary mode wasn't changed
+          }
+        })
+      }
+    },
     predictableActionArguments: true,
     preserveActionOrder: true,
   },
@@ -1254,10 +1277,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         transcriptions: () => ({}),
         shouldRespond: () => shouldAlwaysRespond(), // reset response trigger for next message
       }),
-      updatePreferences: (context, event) => {
-        // update the context with the current discretionary mode - this is a bit of a hack for the cache not being ready immediately after construction
-        assign({ shouldRespond: () => shouldAlwaysRespond() });
-      },
+      updatePreferences: assign({ shouldRespond: () => shouldAlwaysRespond() }),
       pauseAudio: () => {
         EventBus.emit("audio:output:pause");
       },
