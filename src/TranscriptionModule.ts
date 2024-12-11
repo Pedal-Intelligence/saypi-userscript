@@ -199,6 +199,9 @@ async function uploadAudio(
     if (responseJson.hasOwnProperty("merged")) {
       payload.merged = responseJson.merged;
     }
+    if (responseJson.hasOwnProperty("responseAnalysis")) {
+      payload.responseAnalysis = responseJson.responseAnalysis;
+    }
 
     logger.info(
       `Transcribed ${Math.round(

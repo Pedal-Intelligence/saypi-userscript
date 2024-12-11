@@ -36,6 +36,9 @@ type SayPiTranscribedEvent = {
   pFinishedSpeaking?: number;
   tempo?: number;
   merged?: number[];
+  responseAnalysis?: {
+    shouldRespond: boolean;
+  };
 };
 
 type SayPiSpeechStoppedEvent = {
@@ -92,6 +95,7 @@ interface SayPiContext {
   timeUserStoppedSpeaking: number;
   defaultPlaceholderText: string;
   sessionId?: string;
+  shouldRespond?: boolean; // should Pi respond the next time the user finishes speaking?
 }
 
 // Define the state schema
@@ -145,6 +149,15 @@ function getHighestKey(transcriptions: Record<number, string>): number {
   );
   return highestKey;
 }
+
+function isContextWindowApproachingCapacity(transcriptions: Record<number, string>): boolean {
+  // Calculate total length of all transcriptions
+  const totalLength = Object.values(transcriptions).reduce((sum, text) => sum + text.length, 0);
+  // Consider capacity approaching if total length exceeds 90% of the context window
+  const CAPACITY_THRESHOLD = chatbot.getContextWindowCapacityCharacters() * 0.9;
+  return totalLength > CAPACITY_THRESHOLD;
+}
+
 // time at which the user's prompt is scheduled to be submitted
 // used to judge whether there's time for another remote operation (i.e. merge request)
 var nextSubmissionTime = Date.now();
@@ -170,6 +183,17 @@ let mergeService: TranscriptMergeService;
 userPreferences.getLanguage().then((language) => {
   mergeService = new TranscriptMergeService(apiServerUrl, language);
 });
+userPreferences.getDiscretionaryMode().then((discretionaryModeEnabled) => {
+  const cachedValue = userPreferences.getCachedDiscretionaryMode();
+  if (cachedValue !== discretionaryModeEnabled) {
+    console.warn("Cache is not ready yet. Wait a moment before querying preferences.");
+  }
+});
+
+function shouldAlwaysRespond(): boolean {
+  const discretionaryModeEnabled = userPreferences.getCachedDiscretionaryMode();
+  return !discretionaryModeEnabled;
+}
 
 let chatbot: Chatbot;
 function getPromptOrNull(): UserPrompt | null {
@@ -208,6 +232,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       userIsSpeaking: false,
       timeUserStoppedSpeaking: 0,
       defaultPlaceholderText: "",
+      shouldRespond: shouldAlwaysRespond(),
     },
     id: "sayPi",
     initial: "inactive",
@@ -257,6 +282,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           {
             type: "callStartingPrompt",
           },
+          {
+            type: "updatePreferences",
+          }
         ],
         exit: [
           {
@@ -999,12 +1027,16 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       ) => {
         const transcription = event.text;
         const sequenceNumber = event.sequenceNumber;
-        console.log(`Partial transcript, ${sequenceNumber}: ${transcription}`);
+        const shouldRespondToThis = event.responseAnalysis?.shouldRespond;
+        console.debug(`Partial transcript [${sequenceNumber}]: ${transcription} [${shouldRespondToThis ? "respond" : "don't respond"}]`);
         SayPiContext.transcriptions[sequenceNumber] = transcription;
         if (event.merged) {
           event.merged.forEach((mergedSequenceNumber) => {
             delete SayPiContext.transcriptions[mergedSequenceNumber];
           });
+        }
+        if (shouldRespondToThis) {
+          SayPiContext.shouldRespond = true;
         }
       },
 
@@ -1220,7 +1252,12 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
       clearTranscriptsAction: assign({
         transcriptions: () => ({}),
+        shouldRespond: () => shouldAlwaysRespond(), // reset response trigger for next message
       }),
+      updatePreferences: (context, event) => {
+        // update the context with the current discretionary mode - this is a bit of a hack for the cache not being ready immediately after construction
+        assign({ shouldRespond: () => shouldAlwaysRespond() });
+      },
       pauseAudio: () => {
         EventBus.emit("audio:output:pause");
       },
@@ -1255,7 +1292,17 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       ) => {
         const { state } = meta;
         const autoSubmitEnabled = userPreferences.getCachedAutoSubmit();
-        return autoSubmitEnabled && readyToSubmit(state, context);
+        const mustRespond = context.shouldRespond || isContextWindowApproachingCapacity(context.transcriptions);
+        console.debug(
+          "Must respond?",
+          mustRespond,
+          `(${context.shouldRespond ? "response triggered" : "no response trigger"}, ${
+            isContextWindowApproachingCapacity(context.transcriptions)
+              ? "context window near capacity"
+              : "context window has space"
+          })`
+        );
+        return mustRespond && autoSubmitEnabled && readyToSubmit(state, context);
       },
       wasListening: (context: SayPiContext) => {
         return context.lastState === "listening";

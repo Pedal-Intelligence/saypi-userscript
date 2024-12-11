@@ -35,6 +35,10 @@ class UserPreferenceModule {
     return UserPreferenceModule.instance;
   }
 
+  /**
+   * Constructor for UserPreferenceModule
+   * Note: cache may not be fully populated immediately after construction (takes a few milliseconds)
+   */
   private constructor() {
     this.reloadCache();
     this.registerMessageListeners();
