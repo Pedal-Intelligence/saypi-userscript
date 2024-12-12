@@ -10,6 +10,9 @@ interface TranscriptionResponse {
   pFinishedSpeaking?: number;
   tempo?: number;
   merged?: number[];
+  responseAnalysis?: {
+    shouldRespond: boolean;
+  };
 }
 
 const knownNetworkErrorMessages = [
@@ -142,12 +145,11 @@ async function uploadAudio(
         return {
           role: "user",
           content: content,
-          sequenceNumber: Number(seq), // Convert the string to a number
+          sequenceNumber: Number(seq),
         };
       }
     );
 
-    // Await the async function to get the formData
     const formData = await constructTranscriptionFormData(
       audioBlob,
       audioDurationMillis / 1000,
@@ -196,6 +198,9 @@ async function uploadAudio(
     }
     if (responseJson.hasOwnProperty("merged")) {
       payload.merged = responseJson.merged;
+    }
+    if (responseJson.hasOwnProperty("responseAnalysis")) {
+      payload.responseAnalysis = responseJson.responseAnalysis;
     }
 
     logger.info(
@@ -258,10 +263,15 @@ async function constructTranscriptionFormData(
     formData.append("sessionId", sessionId);
   }
 
-  // Wait for the preference to be retrieved before appending it to the FormData
+  // Wait for preferences to be retrieved before appending them to the FormData
   const preference = await userPreferences.getTranscriptionMode();
   if (preference) {
     formData.append("prefer", preference);
+  }
+
+  const discretionaryMode = await userPreferences.getDiscretionaryMode();
+  if (discretionaryMode) {
+    formData.append("analyzeForResponse", "true");
   }
 
   return formData;

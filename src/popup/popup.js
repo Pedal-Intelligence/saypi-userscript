@@ -298,6 +298,26 @@ document.addEventListener("DOMContentLoaded", function () {
         this.parentElement.classList.remove("checked");
       }
     });
+
+    const discretionaryModeInput = document.getElementById("discretionary-mode");
+    getStoredValue("discretionaryMode", false).then((discretionaryMode) => {
+      selectInput(discretionaryModeInput, discretionaryMode);
+    });
+
+    discretionaryModeInput.addEventListener("change", function () {
+      chrome.storage.sync.set({ discretionaryMode: this.checked }, function () {
+        console.log(
+          "Preference saved: Discretionary mode is " +
+            (discretionaryModeInput.checked ? "on" : "off")
+        );
+      });
+      if (this.checked) {
+        this.parentElement.classList.add("checked");
+      } else {
+        this.parentElement.classList.remove("checked");
+      }
+      message({ discretionaryMode: this.checked });
+    });
   }
 
   function hideAll(sections) {

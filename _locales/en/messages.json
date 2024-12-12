@@ -470,5 +470,13 @@
         "example": "Permission denied"
       }
     }
+  },
+  "discretionaryMode": {
+    "message": "Patient Listening",
+    "description": "Label for the checkbox to enable/disable discretionary response mode."
+  },
+  "discretionaryModeDescription": {
+    "message": "Pi will decide whether to respond based on the context of the conversation.",
+    "description": "Description of what the discretionary response mode setting does."
   }
 }
