@@ -104,6 +104,7 @@ interface SayPiContext {
   defaultPlaceholderText: string;
   sessionId?: string;
   shouldRespond?: boolean; // should Pi respond the next time the user finishes speaking?
+  isMaintainanceMessage?: boolean; // is the current message a maintainance message?
 }
 
 // Define the state schema
@@ -242,6 +243,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       timeUserStoppedSpeaking: 0,
       defaultPlaceholderText: "",
       shouldRespond: shouldAlwaysRespond(),
+      isMaintainanceMessage: false,
     },
     id: "sayPi",
     initial: "inactive",
@@ -592,6 +594,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   {
                     type: "notifySentMessage",
                   },
+                  {
+                    type: "setMaintainanceFlag",
+                  }
                 ],
                 exit: ["acknowledgeUserInput"],
                 always: "#sayPi.responding.piThinking",
@@ -776,12 +781,19 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             },
           },
         },
-        entry: {
-          type: "disableCallButton",
-        },
-        exit: {
-          type: "enableCallButton",
-        },
+        entry: [
+          {
+            type: "disableCallButton",
+          }
+        ],
+        exit: [
+          {
+            type: "enableCallButton",
+          },
+          {
+            type: "clearMaintainanceFlag",
+          }
+        ],
         description:
           "Pi is responding. Text is being generated or synthesised speech is playing or waiting to play.",
         states: {
@@ -878,6 +890,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               },
               {
                 type: "pauseRecordingIfInterruptionsNotAllowed",
+              },
+              {
+                type: "suppressResponseWhenMaintainance",
               },
             ],
             exit: [
@@ -1278,6 +1293,29 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         shouldRespond: () => shouldAlwaysRespond(), // reset response trigger for next message
       }),
       updatePreferences: assign({ shouldRespond: () => shouldAlwaysRespond() }),
+      setMaintainanceFlag: assign((context: SayPiContext, event) => {
+        // set maintainance flag when we don't want to respond, but we have to respond due to context window approaching capacity
+        const mustRespond = isContextWindowApproachingCapacity(context.transcriptions);
+        const shouldSetFlag = mustRespond && !(shouldAlwaysRespond() || context.shouldRespond);
+        console.debug(shouldSetFlag 
+          ? "Setting maintainance flag due to context window approaching capacity"
+          : "Clearing maintainance flag due to context window not approaching capacity"
+        );
+        return { 
+          isMaintainanceMessage: shouldSetFlag 
+        };
+      }),
+      suppressResponseWhenMaintainance: (context: SayPiContext, event) => {
+        if (context.isMaintainanceMessage) {
+          EventBus.emit("audio:skipCurrent");
+          console.debug("Suppressing response due to this being a maintainance message");
+        } else {
+          console.debug("Allowing response due to this being a requested message, not a maintainance message", context);
+        }
+      },
+      clearMaintainanceFlag: (SayPiContext, event) => {
+        assign({ isMaintainanceMessage: () => false });
+      },
       pauseAudio: () => {
         EventBus.emit("audio:output:pause");
       },
