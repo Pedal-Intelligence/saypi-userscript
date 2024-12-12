@@ -313,7 +313,7 @@ function tearDownRecording(): void {
     microphone.pause();
     listening = false;
     stream.getTracks().forEach((track) => track.stop());
-    microphone.destroy(); //added by JAC
+    microphone.destroy();
   } else {
     console.log("microphone does not exist!");
   }

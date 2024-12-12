@@ -74,6 +74,9 @@ type SayPiEvent =
   | { type: "saypi:submit" }
   | { type: "saypi:promptReady" }
   | { type: "saypi:call" }
+  | { type: "saypi:momentaryListen" }
+  | { type: "saypi:momentaryPause" }
+  | { type: "saypi:momentaryStop" }
   | { type: "saypi:callReady" }
   | { type: "saypi:callFailed" }
   | { type: "saypi:hangup" }
@@ -92,6 +95,7 @@ interface SayPiContext {
   timeUserStoppedSpeaking: number;
   defaultPlaceholderText: string;
   sessionId?: string;
+  isMomentaryEnabled: boolean;
 }
 
 // Define the state schema
@@ -204,6 +208,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
     context: {
       transcriptions: {},
       isTranscribing: false,
+      isMomentaryEnabled: false,
       lastState: "inactive",
       userIsSpeaking: false,
       timeUserStoppedSpeaking: 0,
@@ -257,6 +262,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           {
             type: "callStartingPrompt",
           },
+          assign({ isMomentaryEnabled: false }),
         ],
         exit: [
           {
@@ -443,9 +449,148 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 description:
                   'Disable the VAD microphone.\n    Aka "call" Pi.\n    Stops active listening.',
               },
+              "saypi:momentaryListen": {
+                actions: [
+                  assign({
+                    isMomentaryEnabled: true,
+                  }),
+                  {
+                    type: "momentaryHasStarted",
+                  },
+                ], 
+                 target: [
+                  "#sayPi.listening.momentaryRecording",
+                ],
+                description:
+                  'Enable Momentary Mode. Now recording will only stop if the user releases the button.',
+              },
             },
           },
 
+          momentaryRecording: {
+            description:
+              "Momentary button is depressed, the microphone is on and VAD is actively listening for user speech.",
+            initial: "notSpeaking",
+            entry: [
+              {
+                type: "startAnimation",
+                params: {
+                  animation: "glow",
+                },
+              },
+              {
+                type: "listenPrompt",
+              },
+              {
+                type: "justForFun"
+              },
+            ],
+            exit: [
+              {
+                type: "stopAnimation",
+                params: {
+                  animation: "glow",
+                },
+              },
+              {
+                type: "clearPrompt",
+              },
+            ],
+            states: {
+              notSpeaking: {
+                description:
+                  "Microphone is recording but no speech is detected.",
+                on: {
+                  "saypi:userSpeaking": {
+                    target: "userSpeaking",
+                  },
+                },
+              },
+              userSpeaking: {
+                description:
+                  "User is speaking and being recorded by the microphone.\nWaveform animation.",
+                entry: [
+                  {
+                    type: "startAnimation",
+                    params: {
+                      animation: "userSpeaking",
+                    },
+                  },
+                  assign({ userIsSpeaking: true }),
+                  {
+                    type: "cancelCountdownAnimation",
+                  },
+                ],
+                exit: {
+                  type: "stopAnimation",
+                  params: {
+                    animation: "userSpeaking",
+                  },
+                },
+              },   
+            },
+            on: {
+              "saypi:momentaryPause": [
+                {
+                  target: [
+                    "#sayPi.listening.converting.transcribing",
+                  ],
+                  cond: "hasAudio",
+                  actions: [
+                    assign({
+                      userIsSpeaking: false,
+                      timeUserStoppedSpeaking: () => new Date().getTime(),
+                    }),
+                    {
+                      type: "transcribeAudio",
+                    },
+                  ],
+                },
+                {
+                  target: "#sayPi.listening.momentaryPaused",
+                  cond: "hasNoAudio",
+                  description: 'Pause Momentary Mode. Now recording will be ignored.',
+                  actions: [
+                    { 
+                      type: "momentaryHasPaused",
+                    },
+                  ]
+                },
+                {
+                  actions: [
+                    { 
+                      type: "justForFun2",
+                    },
+                  ]
+                },
+              ],
+            },
+          },
+          
+          momentaryPaused: {
+            description:
+              "In momentary mode and the button has been released, so the microphone is ignoring input",
+              entry: {
+                type: "justForFun",
+              },
+            on: {
+              "saypi:momentaryStop": {
+                actions: [
+                  assign({ isMomentaryEnabled: false }), 
+                  {
+                    type: "momentaryHasStopped"
+                  },
+                ], 
+                target: "#sayPi.listening.recording",
+                description: 'Returning to the standard recording mode.',
+              },
+              "saypi:momentaryListen": {               
+                target: "#sayPi.listening.momentaryRecording",
+                description: 'Return to recording in momentary mode.',
+              },
+            },
+          },
+          
           converting: {
             initial: "accumulating",
             states: {
@@ -1028,6 +1173,12 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       pauseRecording: (context, event) => {
         EventBus.emit("audio:input:stop");
       },
+      justForFun : () => {
+        console.log("Entered just for fun!");
+      },
+      justForFun2 : () => {
+        console.log("Entered just for fun 2!");
+      },
 
       pauseRecordingIfInterruptionsNotAllowed: (context, event) => {
         const handsFreeInterrupt =
@@ -1153,6 +1304,19 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       callFailedToStart: () => {
         buttonModule.callInactive();
         audibleNotifications.callFailed();
+      },     
+      momentaryHasStarted: () => {
+        console.log("SayPiMachine entered momentaryHasStarted()");
+        buttonModule.callMomentary();
+       // TODO: fix this sayPi.isMomentaryEnabled = true;
+      },
+      momentaryHasPaused: () => {
+        console.log("SayPiMachine entered momentaryHasPaused()");
+        buttonModule.pauseMomentary();
+      },
+      momentaryHasStopped: () => {
+        console.log("SayPiMachine entered momentaryHasStopped()");
+        buttonModule.callActive();
       },
       callNotStarted: () => {
         if (buttonModule) {
