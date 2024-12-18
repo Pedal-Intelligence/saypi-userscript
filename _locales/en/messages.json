@@ -478,5 +478,33 @@
   "discretionaryModeDescription": {
     "message": "Pi will decide whether to respond based on the context of the conversation.",
     "description": "Description of what the discretionary response mode setting does."
+  },
+  "submitModeControl": {
+    "message": "Select when to submit your messages",
+    "description": "The title (tooltip) of the control to select when messages should be submitted."
+  },
+  "submit_mode_auto": {
+    "message": "auto",
+    "description": "Automatic submission mode."
+  },
+  "submit_mode_agent": {
+    "message": "agent",
+    "description": "AI-driven submission mode."
+  },
+  "submit_mode_off": {
+    "message": "manual",
+    "description": "Manual submission mode."
+  },
+  "submit_mode_auto_description": {
+    "message": "Automatically submit when you stop speaking",
+    "description": "Description for the automatic submission mode."
+  },
+  "submit_mode_agent_description": {
+    "message": "Pi decides when to respond based on context",
+    "description": "Description for the AI-driven submission mode."
+  },
+  "submit_mode_off_description": {
+    "message": "Only submit when you press the button",
+    "description": "Description for the manual submission mode."
   }
 }

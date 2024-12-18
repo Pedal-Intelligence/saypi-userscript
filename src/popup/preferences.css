@@ -1,5 +1,5 @@
 /* Slider */
-#sliderValue {
+#sliderValue, #submitModeValue {
   display: block;
   text-align: center;
 }
@@ -10,9 +10,10 @@
 .icon.active {
   transform: scale(1.5);
 }
-#preferences #preference-selector {
+#preferences .mode-selector {
   padding: 1rem;
   display: block;
+  position: relative;
 }
 #language-preference {
   display: block;
@@ -24,18 +25,17 @@
 }
 .user-preference-item:hover .description,
 .user-preference-item:focus-within .description {
-  display: block;
-  width: 125%;
-  /* background: white; */
-  /* color: white; */
-  /* background: lightgrey; */
-  /* opacity: 0.5; */
-}
-/* hide the slider description unless it describes the selected preset */
-#preference-selector .description {
   display: none;
 }
-#preference-selector.user-preference-item:hover .description.selected,
-#preference-selector.user-preference-item:focus-within .description.selected {
+/* hide the slider description unless it describes the selected preset */
+.mode-selector .description {
+  display: none;
+}
+.mode-selector.user-preference-item:hover .description.selected,
+.mode-selector.user-preference-item:focus-within .description.selected {
   display: block;
+  text-align: center;
+  margin-top: 0.5rem;
+  width: 100%;
+  color: #4a5568;
 }
