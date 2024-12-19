@@ -96,6 +96,7 @@ interface SayPiContext {
   defaultPlaceholderText: string;
   sessionId?: string;
   isMomentaryEnabled: boolean;
+  isMomentaryActive: boolean;
 }
 
 // Define the state schema
@@ -204,11 +205,12 @@ function getChatbotDefaultPlaceholder(): string {
 }
 const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCdATgPYC2dJASmChGgDaABgC6iUHVawsZVvgkgAHogDMAdgAcAThzrt64aoAsAJgBsAVk3HLlgDQg0iAIwvTwnJs0ntmt34uBgC+wY602HiEpBTUtAwIRCgANski4kggUjJyCpkqCNqmjs6Fxrqm1uqm6naVmsLqoeHokQTEZJQ06AkMAMp0fADWBFDpitmyWPKKBcZulnra5tqWRqqW7g5OriaqXqrm6i6ax8KW6hrNIBG4Sal9JCjMZPhQ3fSM98m8-EJiE2kUxm+UQtmMOBcxhs1m8xn0+m2pWhi2MxnMphq2hc5hcwmMh2utxw30ez1e73ijAAFig3gBXOjjTKTXKzRCaYo7BB41Y4NanDaXczmYQuSxE1p3FLJMkvUYfBLfABiKCwyUgzMkQLZoIQaIhUJh3hsCNWJVc2n2llU2jtm3x-ltksw0oeT3lbyoSlgTxIYBwKAAZv7mAAKDzCKMASg+kVJHopWqyOumeVAc0shuhthN8IM5u5Jk8dtUWxqVisErCNylOGSWF9YHwCqpTCwABVqQQRm9k6y0+yEKpDvsEVHrCtzMZzhbhxtzJDvEc3KcjsYXZEG02W162-1Bihe2MASzUyCM2oNmODBPNFOZ0i1O51Dh5mtqqtTD4fJvcNv-V3SkekYchGywAAjDV+3PdNlFcEVNH5Sd-CsTEbFUOdxQsPQdGWdRDEqLY-3rRtANbECEBQekIGmRJ5HwMBSE1U9tRyQc9RxdEcFtdEHytfQsIJTwR3XXiNHRFwSIA5sKM+KiaLo5gmIYpiSBg9iL3gnlp1fNDbHxKMcRMOdr1fQ5UL8Az0WksjZL3SjYDgGR5Co2AZCgRiIA04E4IKLiIXKTE0RXe8DFMtES3FFxDHUGcXDLasWldUid1GHBlKIVhmFohz5NpBkmVYlNNL8q8bSWQxzjC6dZ25SN9lUc46ltW1Kg3GtiRkoCMpUnL0vwVgSAGYY5ISeknOYZUCEbalIBGo9Rh83VL3nCrx2qh86tKTF8RwEVyg2TQs05VRbLSt5eqy-rLsG4bD2PRVGAmsBmAW49lo41btEafbTmhb97xRdQ51MaL9unbwPHMVRMW0c7yMuzLstyqAcBet6HrG57JseVg6EGCB3qW4qBy0gpzG8HA7TtOELD8ZZQcqUwIfKHRp2ncUktrFLuvS5GbrRjHiby8bcZIfHCZFsYXAyNjfKHSmkJpvwbHp9mmeEFmuKtawTsxbmursnqsvwShPTR4giHpdh6WSFAKSoCB5ADAhyFYIYA3YV6YAAeS4LB2DIrAiE+8nXGqt91Csco3DMZnQdQg4lcMMsak0BH7LR03zYpQMiGt237cd162GYHA6GLoNsvYHBveYP2A6D30Q7DsqeXOXQoVsC4THFKNMPq6pGp8FZhAaeFTHhTOTfkXP0qtm27Yd7GEBIZg6VgIhmEgli5ZKhW9QMfYwdOHw4rtI4Qfqi5FitfFoSa0V4TOzq6z5y6c9evPF6LlfRcYOvTe29d6qnVHvQEpUhxgxwraGwVY1h+EHjtWq1MoR2kaGYZYr9kpbmNulL+Ft86F2Xo7NsQD8Bbx3hBSAABRTgJB-j7zJu3GBi44HojsIgnwidhCLnmOULQCUwYiiaG-Xm+DP5z2-gvAuS9i4Kh9H6AMwZQxhlgPSCCzcXL4AACJgHtmgWMRsLrZ2kUQ3+pCSbMNgkOKEMUcCn0uJYWmeIwamQHpCKw6wEpaCaobd+kizFmxkZdDRWjZCOzbkOUSN4qqTmWI+UyMVXzYnKFrYQP1rAzwIeYvOFCqGQVXgUkBNDvKk1sXqG0EInG1BHOffEiccQ8Q0I0Iw95-D4hyVIkJRCSnUOKRvShpSwBgI1OUmxUCqkmEcScAiNpVANOMKDbQaJHE-QSm1XE5wxG4P-EEkkeT0r9KKQAteQzCllPoVwJhkDD6rWqbM04dTFmtOWUWLWi5TA-S1hfTk34AkSNMTgUu2UyQkAmiC5gZdYDel9A7FRIZXphjWDGOM+zgWgren6SFWLYDRL1N80w+wjgFntBcBoyDECVH0G+dBpx8LEsJOIyIylYBSHwKjJ6CACpQEZAS1a8xxRLBWGsEcmxKhYXFEhGcqdMRQgxDFEibKOVcrbMLLGfYKlTMFSOV8QVcyWG-LrJ8w4CT7EyZPUUp1yjKrgKq9KDAuw9lXgeUaWrJn3O0vCLW1MbBFHHqfQ4HiVh6GhEEVZ6JVZ2vZfIVGFdOzdnwI9fcWAADqO8kzaq9XMQifqgqBpOMGosU8WZT05EENwYMCQxodZdN1i0zn9AlgTeamqTyepWtpDEpkoaOIrAYMGhwzAdT2b1WNnLHVYGlty5tks23uplp2r63qFgitWOsCVpq3C-R+qnXM05sTmFrXGqdM7U3TRbLAOaRN20Cu0ka0yVoWbVHmXic4xKswnsnfW6d7buUasXfegoNo+THVcRcY4dhTIWGVugkcYobSbFHTzVl9rT2-ozVMJtf6gPZq7SB1pLSRSBr4YemDJw6XQn0JiDQ2SWW4BVRhtGDAsNkMonO1tEA2PWLuQRxA1Re1lj0BWAk8d8SrO-fGjGABJfAoZmCMnY-JYWLapZ3vwyuwjhhiPWuhuRostpFwdPlR4f1GcGPjrrULSacmFNKdXqp+dt6gOyz41pjkXJSiHGjl4GBpp4T6A2FJs9-62wEHs1wYDiAXHwhwFrTkdh-DWC1qZbZkImrGu8JcEKIXf3nsohF0uSnBBubPDq7tYMXD8hhhiTJ3zbSmo2GsDLCXVY5ZstcQaEA4CKFuO58OCAAC05gsJ8PizOcemwYawhMCRdoMRKADfbnR6rZhK0YlLCkrCNRGo+ZnLif1uzUNullImUYy2hxmDnOt+LlaPxWBxDobpUBLtH1G9yaVr4p5pwIlrWEL2roowu+VnNrg0RYR+i+4SsJJyxcBwLeNd1pZvdWm4BKPF8SUxhtUDw8JQYnBZmk0sdTLj3gR31aTuN22o+0kELz1KFVhrLNHaO5RyjHssx-YJ883i0-8uUUG0IZX+IIscHQdhAeEJ-nIv+FJ+eIGxIsU+lKcu3ypQgb5wrvlRh8DSnwUkucHOl+lcJQcSDy9B-xnk+hjPuGo2iAiOIPs7S-BDNYUJbT6BOJzsd3PDm9PyRc0pIP5bW6CNfV3lRHF4QuFxfQ8MjeYuhWCnF8Arcec1+GniVkNB+OqKa9Cuh3xohOCOm0gOsXgshYNZg7AUgK813UHPGECLn0lUWGKqJ+7j3q0ayvKfsUO1xYP9PYfM-M10BwvP7fC+3YEf84lUa0QD7LtX2AUKYU4BOTQsZkBG80vMrntvGgO8oIx++dYZYhUoZMYjNGVe0+b+yhvoORBaGD4P5BlvBIT8F9Bm3mgmsB4KnCznlq9hnoNmYDoG+EUIasas1onNYI4gDM1HAbUOAQms6smqHgfNbuavqnAXrAgdBp3sJrTERJkkUFfJgQ2seI3ilizEFDoG0rtIWN5t+K+AlPiGTpksdDgidlZsxgmjxnzpAe3IItVgPE1NUKcCAckj9LAf8jDGYFoJ1mOkxj+jZq9HZsVgHGIePlAd4LoJTPiDruKLpKZIstViYC-COO4BgmIqEEAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAdFgdigMYAuWAbmAMSpoAOWCdATgPYC2dJASmChGgDaABgC6iUHVawsZVvgkgAHogDMAdgAcAThzrt64aoAsAJgBsAVk3HLlgDQg0iAIwvTwnJs0ntmt34uBgC+wY602HiEpBTUtAwIRCgANski4kggUjJyCpkqCNqmjs6Fxrqm1uqm6naVmsLqoeHokQTEZJQ06AkMAMp0fADWBFDpitmyWPKKBcZulnra5tqWRqqW7g5OriaqXqrm6i6ax8KW6hrNIBG4Sal9JCjMZPhQ3fSM98m8-EJiE2kUxm+UQtmMOBcxhs1m8xn0+m2pWhi2MxnMphq2hc5hcwmMh2utxw30ez1e73ijAAFig3gBXOjjTKTXKzRCaYo7BB41Y4NanDaXczmYQuSxE1p3FLJMkvUYfBLfABiKCwyUgzMkQLZoIQaIhUJh3hsCNWJVc2n2llU2jtm3x-ltksw0oeT3lbyoSlgTxIYBwKAAZv7mAAKDzCKMASg+kVJHopWqyOumeVAc0shuhthN8IM5u5Jk8dtUWxqVisErCNylOGSWF9YHwCqpTCwABVqQQRm9k6y0+yEKpDvsEVHrCtzMZzhbhxtzJDvEc3KcjsYXZEG02W162-1Bihe2MASzUyCM2oNmODBPNFOZ0i1O51Dh5mtqqtTD4fJvcNv-V3SkekYchGywAAjDV+3PdNlFcEVNH5Sd-CsTEbFUOdxQsPQdGWdRDEqLY-3rRtANbECEBQekIGmRJ5HwMBSE1U9tRyQc9RxdEcFtdEHytfQsIJTwR3XXiNHRFwSIA5sKM+KiaLo5gmIYpiSBg9iL3gnlp1fNDbHxKMcRMOdr1fQ5UL8Az0WksjZL3SjYDgGR5Co2AZCgRiIA04E4IKLiIXKTE0RXe8DFMtES3FFxDHUGcXDLasWldUid1GHBlKIVhmFohz5NpBkmVYlNNL8q8bSWQxzjC6dZ25SN9lUc46ltW1Kg3GtiRkoCMpUnK5ISdgOGbD00AAGTs-AfN1S8eUsO031MZZ7w0TF8XUOdTEit8mrRHxhFFeFVFstK3l6rL+rO-BWBIAZhgGxh6Sc5hlQIRtqUgO6j1GaaONmkcKvHaqHzq0o1ohEVyg2TQs05Y7Orrbr0sy7LcqgHBrtuw9j0VR7nq+49fq0gptEaHBzFOaFv3vFENvq6LyenbwPHMVRMW0E7yLOlHLvRp6wGYAmHoQfnBZIVg6EGCAhb7YqB2JxAKaQu07ThCw-GWTbKlMRnyh0adp3FJLaxSpHub6tGcFFmXgPk63xclz7sZ+lwMjY3yhyVnAVb8Gx1f1rXhB1rirWsWHMWNrrJvSob2BG540F4C60dxhBY-j5hMGopyibKhBatMoJ9hFNYoVtfQTnMTn7PR9P8FGpPUeFuvRowbOwEEV3AVKz2Z1MtmkKWoyCQLSvq56luE8b3nU8nzO2-5wRTDdkqPb1Aui2hczLCIkeK-vceY+G+up4t9LMZt1Pred2WV-lvP0MXLZNrxTwtrLGpCNhQ+zrnrP+YgLPY+o1HgS1zkOLMxhC5WkZqXPe2ID4I1NtHX+wCE4LycoAtsf8Jo7nAXqSB-d5pLGHuXBBVckFbhQejLK+BKCenRsQIg9J2D0mSCgCkVAIDyADAQcgrAhgBjjswGAAB5LgWB2BkSwEQfBs08TWDfOoKw5Q3BmG1ptVCBwlaGA-loH+ND5D0IpIGIgzDWHsM4QLNgzAcB0EsUGbK7AcDCLERIqRvoZFyO0go3QUJbAXBMOKKMmF6rVEaj4FYwgGjwi2k0Sh-5qEkiMQLExTCWFsI4cLEgzA6SwCIMwSCLE76wSHAYfYpgThaAknaI4dMwYXEWFafE0ImqHUuAY5JdDUnpXSRYrJeUEg5LyQUopqp1TFO7mvWalScK2hsFWNYfhQlg1qt7KEdpGhmGWPDZKVDTqGO6Qw0x5jMmcLbMM-A+TCkQUgAAUU4CQf4JSe56lmYueZ6I7BLJ8Jog6b4NlaASpUkU8S9mJIOV04xvSzEZMsQqH0foAzBlDGGWA9IIIeJcvgAAImAdhaBYxR0hbQ6FZ0+lnJ+nLUpnF5ivkqYKeagQg4uFMiEyEVh1gJWqecTppKelnXRZi2QnDvEFFEjeKqk5liPkLgRdZ5Qg7CFJtYPlKTjmXOuZBbJuSrmjNud5alrzZo2ghAygiNpVA+EMFA+qWiRyxSMPefw+I1VHJMZq-VOqRk3LAOMjUhqXnTO0qanA5ragjmtfiTa2g0RhtJglNquJzhgpNvsrmhyyXo09Tc71erfUQAeVwZ5UyZohpMGGqpEarUaGjUWIOi4h5Bzin4dCkdEZJOsdlMkJAno4C7cwWA3pfQcORSGAWYY1gxjjBCjN-bmA2J7X2gdsAxVqCMjgMUZYNjKtxFoTadgkLRJxFmBKNo7SpuJMpWAUh8ApzbAVKAjI136gWEsFYawAbP25AsJCM5dGYihBiGKJFr23vvZRa+91b6lr+tpAkGg3xFFzDvHQGwnzDgQ5u2N1RRRw3KKBuA4H0oMC7D2YWB5oMniDWWuYhFvY2CKNEhlhw2UrD0NCIIsb0S+0Ize+QltSPdnwDjfcWAADqhSkxGuDXRoODGgrMZOKxosW0dZbU5EENwlSCR8eI2dSj31BmMH6A7KWNsX0YlMszMNFYDCVMOGYDq4Ler8bvSRrAl8xOgMdtLG+Ywu5nmNfBt9+gP3rE2JULCeJXyk10bmac2IKEubAwJjzXnKIMFei2WAH0-NUZfTvUyVodbVAta-HeGxnNptwKl9zBnPP+avvjfzhXbSLBhqrcUBEjamQsMrDZI4xQ2k2NVq9RG0sNYy-JAgoZmCMnUjJ2jiB5rwk3d+So1hxQNC5KUQ4eJIRNW-L7S4IU9OTfRoZ0TlFZvWIW53GjcGCjAZcPyVmGJlVLXa6ZOwngEpBx0N4U7NkEmuf05diTUmKONYK0tp7K3a08UOHhlmiW+snABVvIopgNCqtB3VwTkOpjGfbD5qWknifUdgwrBA1RrNlj0BWAk6j8SxvO-V9GAB3NUFJlTZWwB2VgPnpu9E82Zp2sPHtaT24YJ+R3AeChCo4AoNoj1AsqOzy23PKd8+YALoXDtL6ItHYGcd4Yp1ErrAT9K2vef887AbiWFm4c09V5u9XGHDiKP+8doHJgQcpYmxzq2z0ACS9c7sSJJ-bCW5nWsu7zjaQwSORTMYOmjostpFzOsAx4RjmhNfpVFuHubC3hYx98xZwL7tlsIE5KZI42fZmmnhPoDYoQazXQgHARQtxqd5wALT+Kwv8wyUIjCJYwu2lK7QYiUH70OXHr2zBaYxKWGK9TXA1EaocOKB0TjlEvXWBM5JRgL71GYOcK-N1aY-FYHEOgDHn9mgPzWP7HNhoJERMUAOpKg7NujDzGjM-j4miFhKTKVl-ueisLGkYJ0kAefDdDbCAf5G4I1PiBTKzNUB4PCC-JyAqqWBGpcIgi5gAedE3GdFBkZlACgZaLtogDpouHFGWMosouUOUMljVqlHOn-NPMAUFrJq4A0MIFhEcLoMwZULhniH-qQUkrwWfFdEgf5rQTyDYJoOAexu-C+F-N4J0vIcnEXi1lRioQfuofTNCJ-nojoQXv-nIWgvPO3BACoQPtCP3EEAClOg0EUDvG6lmiYeUJtNCH+ktM6vFloGNh2iSuqmkrCv0hSCodiIsAyg0BoCYI0isgwYkfGlGD4JIT4DIVwWQfysckKlIiQPEQIbXjFMsF4O4FvGiD1iKDGjvLAmKPAmPLYVEe6ulDmtqm8CYeFPVN4WGnhBcFxPoBzJ0XOgOkuvAJUfDggJtkhJcBvktFtO4DUFrBTJupyMqmYA6HFNPumjXPOoun6H2tdMwOwCkCoRYEtHoCwZ+OsZiJvsOOKBCMeuuBYAdCQYUZ2gut2ucbAKcdlHMTXgsd8UwY8WsfMC8YEVGDsUEDjiPDYBEcgpCjMUCSCYOjgL0bcv6pALcSog8aschhsa8ZUEUIiTAVTN+HAVMScZiRwsugCTiVIkQHcqyUSVmCSQRDCeSZtLUK+FtpgacEaCOIXv0fMTTi4WYWDDDIPK0uKKzGgdOJKRDmRiJmftKXnAhq+EFChsduhoXAzqrN-naBYAROqXYjDtQSodYPJkFDoI0EHB4IWHtt+K+P9kdF4TDLslwdbg1hThUeCTTofq9iEk1NUKcB4K8WWKTEhpyBYCYDUAstabbqMLrvrsLsoTqUOCIUWLLodgDidv7pweNm5pbMXhHgumXlKaGbqd4LoBTPiEPMqbgZnv4DxA0SOB-JsvEqEEAA */
     context: {
       transcriptions: {},
       isTranscribing: false,
       isMomentaryEnabled: false,
+      isMomentaryActive: false,
       lastState: "inactive",
       userIsSpeaking: false,
       timeUserStoppedSpeaking: 0,
@@ -453,127 +455,68 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 actions: [
                   assign({
                     isMomentaryEnabled: true,
+                    isMomentaryActive: true,
                   }),
                   {
                     type: "momentaryHasStarted",
                   },
-                ], 
-                 target: [
-                  "#sayPi.listening.momentaryRecording",
                 ],
+                description:
+                  'Enable Momentary Mode. Now recording will only stop if the user releases the button.',
+              },
+              "saypi:momentaryPause": {
+
+                target: [
+                  "momentaryPaused",
+                ],
+                actions: [
+                  assign({
+                    isMomentaryActive: false,
+                  }),
+                  {
+                    type: "momentaryHasPaused",
+                  },
+                  {
+                    type: "stopAnimation",
+                    params: {
+                      animation: "glow",
+                    },
+                  }
+                ],
+                description:
+                  'Enable Momentary Mode. Now recording will only stop if the user releases the button.',
+              },             
+              "saypi:momentaryStop": {
+                actions: [
+                  assign({
+                    isMomentaryActive: false,
+                    isMomentaryEnabled: false,
+                  }),
+                  {
+                    type: "momentaryHasStopped",
+                  },
+                ], 
                 description:
                   'Enable Momentary Mode. Now recording will only stop if the user releases the button.',
               },
             },
           },
 
-          momentaryRecording: {
-            description:
-              "Momentary button is depressed, the microphone is on and VAD is actively listening for user speech.",
-            initial: "notSpeaking",
-            entry: [
-              {
-                type: "startAnimation",
-                params: {
-                  animation: "glow",
-                },
-              },
-              {
-                type: "listenPrompt",
-              },
-              {
-                type: "justForFun"
-              },
-            ],
-            exit: [
-              {
-                type: "stopAnimation",
-                params: {
-                  animation: "glow",
-                },
-              },
-              {
-                type: "clearPrompt",
-              },
-            ],
-            states: {
-              notSpeaking: {
-                description:
-                  "Microphone is recording but no speech is detected.",
-                on: {
-                  "saypi:userSpeaking": {
-                    target: "userSpeaking",
-                  },
-                },
-              },
-              userSpeaking: {
-                description:
-                  "User is speaking and being recorded by the microphone.\nWaveform animation.",
-                entry: [
-                  {
-                    type: "startAnimation",
-                    params: {
-                      animation: "userSpeaking",
-                    },
-                  },
-                  assign({ userIsSpeaking: true }),
-                  {
-                    type: "cancelCountdownAnimation",
-                  },
-                ],
-                exit: {
-                  type: "stopAnimation",
-                  params: {
-                    animation: "userSpeaking",
-                  },
-                },
-              },   
-            },
-            on: {
-              "saypi:momentaryPause": [
-                {
-                  target: [
-                    "#sayPi.listening.converting.transcribing",
-                  ],
-                  cond: "hasAudio",
-                  actions: [
-                    assign({
-                      userIsSpeaking: false,
-                      timeUserStoppedSpeaking: () => new Date().getTime(),
-                    }),
-                    {
-                      type: "transcribeAudio",
-                    },
-                  ],
-                },
-                {
-                  target: "#sayPi.listening.momentaryPaused",
-                  cond: "hasNoAudio",
-                  description: 'Pause Momentary Mode. Now recording will be ignored.',
-                  actions: [
-                    { 
-                      type: "momentaryHasPaused",
-                    },
-                  ]
-                },
-                {
-                  actions: [
-                    { 
-                      type: "justForFun2",
-                    },
-                  ]
-                },
-              ],
-            },
-          },
-          
           momentaryPaused: {
             description:
               "In momentary mode and the button has been released, so the microphone is ignoring input",
-              entry: {
-                type: "justForFun",
+            
+            on: {             
+              "saypi:momentaryListen": {
+              actions: [
+                  assign({ isMomentaryActive: true }), 
+                  {
+                    type: "momentaryHasStarted"
+                  },
+                ], 
+                target: "#sayPi.listening.recording",
+                description: 'Returning to the standard recording mode.',
               },
-            on: {
               "saypi:momentaryStop": {
                 actions: [
                   assign({ isMomentaryEnabled: false }), 
@@ -584,10 +527,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 target: "#sayPi.listening.recording",
                 description: 'Returning to the standard recording mode.',
               },
-              "saypi:momentaryListen": {               
-                target: "#sayPi.listening.momentaryRecording",
-                description: 'Return to recording in momentary mode.',
-              },
+              
             },
           },
           
@@ -1173,13 +1113,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       pauseRecording: (context, event) => {
         EventBus.emit("audio:input:stop");
       },
-      justForFun : () => {
-        console.log("Entered just for fun!");
-      },
-      justForFun2 : () => {
-        console.log("Entered just for fun 2!");
-      },
-
+      
       pauseRecordingIfInterruptionsNotAllowed: (context, event) => {
         const handsFreeInterrupt =
           userPreferences.getCachedAllowInterruptions();
@@ -1308,15 +1242,18 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       momentaryHasStarted: () => {
         console.log("SayPiMachine entered momentaryHasStarted()");
         buttonModule.callMomentary();
+        EventBus.emit("audio:input:reconnect");
        // TODO: fix this sayPi.isMomentaryEnabled = true;
       },
       momentaryHasPaused: () => {
         console.log("SayPiMachine entered momentaryHasPaused()");
         buttonModule.pauseMomentary();
+        EventBus.emit("audio:input:stop");
       },
       momentaryHasStopped: () => {
         console.log("SayPiMachine entered momentaryHasStopped()");
         buttonModule.callActive();
+        EventBus.emit("audio:input:reconnect");
       },
       callNotStarted: () => {
         if (buttonModule) {
