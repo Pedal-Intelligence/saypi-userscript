@@ -1308,6 +1308,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       suppressResponseWhenMaintainance: (context: SayPiContext, event) => {
         if (context.isMaintainanceMessage) {
           EventBus.emit("audio:skipCurrent");
+          EventBus.emit("saypi:ui:hide-message");
           console.debug("Suppressing response due to this being a maintainance message");
         } else {
           console.debug("Allowing response due to this being a requested message, not a maintainance message", context);

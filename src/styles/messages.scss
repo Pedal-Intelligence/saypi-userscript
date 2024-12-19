@@ -97,3 +97,31 @@
     border-color: rgb(255, 183, 0);
 }
 */
+
+.assistant-message.maintenance-message {
+  .content {
+    font-style: italic;
+    font-size: 0.9em;
+    color: #666;
+  }
+
+  &.silenced {
+    opacity: 0.7;
+    cursor: pointer;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+
+    .content {
+      &:before {
+        content: "Maintenance message - click to expand";
+        display: block;
+      }
+      > * {
+        display: none;
+      }
+    }
+
+    .message-hover-menu {
+      display: none;
+    }
+  }
+}

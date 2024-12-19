@@ -281,6 +281,27 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     });
   }
 
+  registerMessageHideListeners(): void {
+    const hideMessageListener = () => {
+      const assistantMessages = document.querySelectorAll(".assistant-message");
+      if (assistantMessages.length > 0) {
+        const lastMessage = assistantMessages[assistantMessages.length - 1] as HTMLElement;
+        lastMessage.classList.add("maintenance-message", "silenced");
+        // Add click handler to toggle the collapsed state
+        lastMessage.addEventListener("click", () => {
+          lastMessage.classList.toggle("silenced");
+        });
+      }
+    };
+
+    EventBus.on("saypi:ui:hide-message", hideMessageListener);
+
+    this.eventListeners.push({
+      event: "saypi:ui:hide-message",
+      listener: hideMessageListener,
+    });
+  }
+
   // Teardown method to disconnect event listeners and release resources
   teardown(): void {
     this.eventListeners.forEach(({ event, listener }) => {
@@ -307,5 +328,6 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     this.registerSpeechStreamListeners(chatHistoryElement);
     this.registerMessageErrorListeners();
     this.registerMessageChargeListeners();
+    this.registerMessageHideListeners();
   }
 }
