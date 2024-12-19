@@ -24,6 +24,7 @@ import { AssistantResponse } from "./MessageElements";
 import { AssistantWritingEvent } from "./MessageEvents";
 import { Chatbot } from "../chatbots/Chatbot";
 import { findRootAncestor } from "./DOMModule";
+import { MessageState, MessageHistoryModule } from "../tts/MessageHistoryModule";
 interface ResourceReleasable {
   teardown(): void;
 }
@@ -127,6 +128,7 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
   protected speechSynthesis: SpeechSynthesisModule;
   protected ttsControlsModule: TTSControlsModule;
   protected haltOnFirst: boolean = false; // stop searching after the first chat message is found
+  protected messageHistory = MessageHistoryModule.getInstance();
   constructor(
     chatHistoryElement: HTMLElement,
     selector: string,
@@ -146,6 +148,10 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
   protected abstract streamSpeech(
     message: AssistantResponse
   ): Promise<StreamedSpeech | null>;
+
+  protected abstract streamState(
+    message: AssistantResponse
+  ): Promise<MessageState | null>;
 
   protected async callback(mutations: MutationRecord[]): Promise<void> {
     for (const mutation of mutations) {
@@ -269,6 +275,11 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
         );
         decoratedObservations.push(decoratedObservation);
 
+        const state = await this.streamState(message);
+        if (state) {
+          await message.decorateState(state);
+        }
+
         const speech = await this.streamSpeech(message);
         if (speech) {
           if (speech.utterance) {
@@ -338,6 +349,11 @@ class ChatHistoryOldMessageObserver extends ChatHistoryMessageObserver {
   ): Promise<StreamedSpeech | null> {
     // query the speech history module for the utterance
     return await this.streamSpeechFromHistory(this.speechHistory, message);
+  }
+
+  async streamState(message: AssistantResponse): Promise<MessageState | null> {
+    const hash = await message.stableHash();
+    return this.messageHistory.getMessageState(hash);
   }
 }
 
@@ -540,6 +556,11 @@ class ChatHistoryNewMessageObserver
         onError(lateChange);
       }
     });
+  }
+
+  async streamState(message: AssistantResponse): Promise<MessageState | null> {
+    const hash = message.hash;
+    return this.messageHistory.getMessageState(hash);
   }
 }
 

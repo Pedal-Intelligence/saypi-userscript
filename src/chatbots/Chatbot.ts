@@ -22,6 +22,7 @@ export interface Chatbot {
   isChatablePath(path: string): boolean; // can the chatbot chat on this URL path?
   // ... other methods for different selectors
   getExtraCallButtonClasses(): string[];
+  getContextWindowCapacityCharacters(): number; // Returns the context window capacity in characters
 
   getPrompt(element: HTMLElement): UserPrompt;
   getAssistantResponse(
