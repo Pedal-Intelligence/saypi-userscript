@@ -352,7 +352,7 @@ class ChatHistoryOldMessageObserver extends ChatHistoryMessageObserver {
   }
 
   async streamState(message: AssistantResponse): Promise<MessageState | null> {
-    const hash = await message.stableHash();
+    const hash = message.hash;
     return this.messageHistory.getMessageState(hash);
   }
 }

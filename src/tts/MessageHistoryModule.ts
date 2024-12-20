@@ -95,7 +95,7 @@ export class MessageHistoryModule {
    * @param message The assistant response to check
    */
   public async isMaintenanceMessage(message: AssistantResponse): Promise<boolean> {
-    const hash = await message.stableHash();
+    const hash = message.hash;
     const state = await this.getMessageState(hash);
     return state?.isMaintenanceMessage || false;
   }
