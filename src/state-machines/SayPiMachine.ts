@@ -495,7 +495,12 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   submissionDelay: {
                     target: "submitting",
                     cond: "submissionConditionsMet",
-                    description: "Submit combined transcript to Pi.",
+                    description: "Submit combined transcript to Pi after waiting for user to stop speaking.",
+                  },
+                  "30000": {
+                    target: "submitting",
+                    cond: "submissionConditionsMet",
+                    description: "Submit combined transcript to Pi after prolonged period of user not speaking.",
                   },
                 },
                 entry: {
@@ -1294,12 +1299,12 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       }),
       updatePreferences: assign({ shouldRespond: () => shouldAlwaysRespond() }),
       setMaintainanceFlag: assign((context: SayPiContext, event) => {
-        // set maintainance flag when we don't want to respond, but we have to respond due to context window approaching capacity
-        const mustRespond = isContextWindowApproachingCapacity(context.transcriptions);
+        const timeoutReached = isTimeoutReached(context);
+        const mustRespond = mustRespondToMessage(context);
         const shouldSetFlag = mustRespond && !(shouldAlwaysRespond() || context.shouldRespond);
         console.debug(shouldSetFlag 
-          ? "Setting maintainance flag due to context window approaching capacity"
-          : "Clearing maintainance flag due to context window not approaching capacity"
+          ? `Setting maintainance flag due to ${timeoutReached ? "timeout reached" : "context window approaching capacity"}`
+          : "Clearing maintainance flag due to context window not approaching capacity and no timeout"
         );
         return { 
           isMaintainanceMessage: shouldSetFlag 
@@ -1351,16 +1356,18 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       ) => {
         const { state } = meta;
         const autoSubmitEnabled = userPreferences.getCachedAutoSubmit();
-        const mustRespond = context.shouldRespond || isContextWindowApproachingCapacity(context.transcriptions);
-        console.debug(
-          "Must respond?",
-          mustRespond,
-          `(${context.shouldRespond ? "response triggered" : "no response trigger"}, ${
-            isContextWindowApproachingCapacity(context.transcriptions)
-              ? "context window near capacity"
-              : "context window has space"
-          })`
-        );
+        const mustRespond = mustRespondToMessage(context);
+        if (!isTimeoutReached(context)) {
+          console.debug(
+            "Must respond?",
+            mustRespond,
+            `(${context.shouldRespond ? "response triggered" : "no response trigger"}, ${
+              isContextWindowApproachingCapacity(context.transcriptions)
+                ? "context window near capacity"
+                : "context window has space"
+            })`
+          );
+        }
         return mustRespond && autoSubmitEnabled && readyToSubmit(state, context);
       },
       wasListening: (context: SayPiContext) => {
@@ -1453,6 +1460,20 @@ function readyToSubmit(
     state.matches("listening.converting.transcribing")
   );
   return readyToSubmitOnAllowedState(allowedState, context);
+}
+
+function isTimeoutReached(context: SayPiContext): boolean {
+  const timeSinceStoppedSpeaking = Date.now() - context.timeUserStoppedSpeaking;
+  return timeSinceStoppedSpeaking > 30000; // 30 seconds
+}
+
+function mustRespondToMessage(context: SayPiContext): boolean {
+  const timeoutReached = isTimeoutReached(context);
+  if (timeoutReached) {
+    const timeSinceStoppedSpeaking = Date.now() - context.timeUserStoppedSpeaking;
+    console.debug("Must respond due to timeout - user stopped speaking", timeSinceStoppedSpeaking/1000, "seconds ago");
+  }
+  return context.shouldRespond || isContextWindowApproachingCapacity(context.transcriptions) || timeoutReached;
 }
 
 export function createSayPiMachine(bot: Chatbot) {

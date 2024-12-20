@@ -123,7 +123,7 @@ class PiAIChatbot implements Chatbot {
   }
 
   getContextWindowCapacityCharacters(): number {
-    return 300; // Pi has a 4k character limit
+    return 500; // Pi has a 4k character limit
   }
 }
 
