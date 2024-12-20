@@ -506,6 +506,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             description:
               "In momentary mode and the button has been released, so the microphone is ignoring input",
             
+              entry: {
+                type: "doNothing",
+              },
             on: {             
               "saypi:momentaryListen": {
               actions: [
@@ -967,15 +970,30 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           },
           waitingForPiToStopSpeaking: {
             on: {
-              "saypi:piStoppedSpeaking": {
-                target: "userInterrupting",
-              },
-            },
+              "saypi:piStoppedSpeaking":[ 
+                {
+                  cond: "isMomentaryEnabled",
+                  actions: "momentaryHasPaused",
+                  target: "#sayPi.listening.momentaryPaused",
+                },  
+                {
+                  target: "userInterrupting",
+                  cond: "isMomentaryDisabled"
+                },
+            ]},
             after: {
-              500: {
+              500: [
+                {
+                  cond: "isMomentaryEnabled",
+                  actions: "momentaryHasPaused",
+                  target: "#sayPi.listening.momentaryPaused",
+                },  
+                {
                 target: "userInterrupting",
+                cond: "isMomentaryDisabled",
                 description: "Fallback transition after 500ms if piStoppedSpeaking event does not fire.",
               },
+            ]
             },
             description: "Interrupt requested. Waiting for Pi to stop speaking before recording.",
           },
@@ -1248,6 +1266,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       momentaryHasPaused: () => {
         console.log("SayPiMachine entered momentaryHasPaused()");
         buttonModule.pauseMomentary();
+        AnimationModule.stopAnimation("glow");
         EventBus.emit("audio:input:stop");
       },
       momentaryHasStopped: () => {
@@ -1327,6 +1346,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
       resumeAudio: () => {
         EventBus.emit("audio:output:resume");
+      },      
+      doNothing: () => {
+        console.log("SayPiMachine, Entered doNothing()");
       },
     },
     services: {},
@@ -1371,6 +1393,14 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       interruptionsNotAllowed: (context: SayPiContext) => {
         const allowInterrupt = userPreferences.getCachedAllowInterruptions();
         return !allowInterrupt;
+      },      
+      isMomentaryEnabled: (context: SayPiContext) => {
+        console.log("Entered isMomentaryEnabled: result: " + context.isMomentaryEnabled);
+        return context.isMomentaryEnabled;
+      },      
+      isMomentaryDisabled: (context: SayPiContext) => {
+        console.log("SayPiMachine, Entered isMomentaryDiabled: result: " + (!context.isMomentaryEnabled));
+        return !context.isMomentaryEnabled;
       },
     },
     delays: {
