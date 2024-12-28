@@ -77,6 +77,7 @@ type SayPiEvent =
   | { type: "saypi:momentaryListen" }
   | { type: "saypi:momentaryPause" }
   | { type: "saypi:momentaryStop" }
+  | { type: "saypi:momentarySubmitTranscriptions" }
   | { type: "saypi:callReady" }
   | { type: "saypi:callFailed" }
   | { type: "saypi:hangup" }
@@ -507,7 +508,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               "In momentary mode and the button has been released, so the microphone is ignoring input",
             
               entry: {
-                type: "doNothing",
+                type: "submitTranscriptions"
               },
             on: {             
               "saypi:momentaryListen": {
@@ -530,6 +531,10 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 target: "#sayPi.listening.recording",
                 description: 'Returning to the standard recording mode.',
               },
+              "saypi:momentarySubmitTranscriptions": {
+                target: "#sayPi.listening.converting.submitting",
+                description: 'Submit current transcriptions.',
+              },
               
             },
           },
@@ -546,8 +551,13 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     cond: "submissionConditionsMet",
                     description: "Submit combined transcript to Pi.",
                   },
+                  100: {
+                    target: "#sayPi.listening.recording",
+                    cond: "momentaryIsActive",
+                    description: "Will return to listening because momentary mode is active.",
+                  },
                 },
-                entry: {
+                entry: { 
                   type: "draftPrompt",
                 },
                 invoke: {
@@ -1152,6 +1162,12 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         EventBus.emit("audio:tearDownRecording");
       },
 
+      submitTranscriptions: (context: SayPiContext, event) => {
+        if(readyToSubmitOnAllowedState(true, context)){
+          EventBus.emit("saypi:momentarySubmitTranscriptions");
+        }
+      },
+
       reconnectAudio: (context, event) => {
         EventBus.emit("audio:input:reconnect");
       },
@@ -1378,7 +1394,8 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       ) => {
         const { state } = meta;
         const autoSubmitEnabled = userPreferences.getCachedAutoSubmit();
-        return autoSubmitEnabled && readyToSubmit(state, context);
+        const isMomentaryInactive = !context.isMomentaryEnabled && !context.isMomentaryActive;
+        return autoSubmitEnabled && readyToSubmit(state, context) && isMomentaryInactive;
       },
       wasListening: (context: SayPiContext) => {
         return context.lastState === "listening";
@@ -1402,6 +1419,12 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         console.log("SayPiMachine, Entered isMomentaryDiabled: result: " + (!context.isMomentaryEnabled));
         return !context.isMomentaryEnabled;
       },
+      momentaryIsActive: (context: SayPiContext) => {
+        return context.isMomentaryEnabled && context.isMomentaryActive;
+      },
+      momentaryDisabledOrPaused: (context: SayPiContext) => {
+        return !context.isMomentaryEnabled || (context.isMomentaryEnabled && !context.isMomentaryActive);
+      }
     },
     delays: {
       submissionDelay: (context: SayPiContext, event: SayPiEvent) => {
