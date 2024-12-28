@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Налаштування",
     "description": "Текст кнопки для відкриття налаштувань розширення."
+  },
+  "submitModeControl": {
+    "description": "Заголовок (спливаюча підказка) елемента керування для вибору часу надсилання повідомлень.",
+    "message": "Виберіть, коли надсилати повідомлення"
+  },
+  "submit_mode_agent": {
+    "description": "Режим подання, керований ШІ.",
+    "message": "агент"
+  },
+  "submit_mode_agent_description": {
+    "description": "Опис режиму подання, керованого ШІ.",
+    "message": "$chatbot$ вирішує, коли відповідати на основі контексту",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Режим автоматичної подачі.",
+    "message": "авто"
+  },
+  "submit_mode_auto_description": {
+    "description": "Опис режиму автоматичної подачі.",
+    "message": "Автоматично надсилати, коли ви припините говорити"
+  },
+  "submit_mode_off": {
+    "description": "Ручний режим подачі.",
+    "message": "посібник"
+  },
+  "submit_mode_off_description": {
+    "description": "Опис для ручного режиму подання.",
+    "message": "Надсилайте лише після натискання кнопки"
   }
 }

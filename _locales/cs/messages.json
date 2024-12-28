@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Nastavení",
     "description": "Text tlačítka pro otevření nastavení rozšíření."
+  },
+  "submitModeControl": {
+    "description": "Název (popisek) ovládacího prvku pro výběr, kdy mají být zprávy odesílány.",
+    "message": "Vyberte, kdy chcete zprávy odeslat"
+  },
+  "submit_mode_agent": {
+    "description": "Režim odesílání řízený umělou inteligencí.",
+    "message": "činidlo"
+  },
+  "submit_mode_agent_description": {
+    "description": "Popis režimu odesílání řízeného umělou inteligencí.",
+    "message": "$chatbot$ rozhoduje, kdy odpovědět, na základě kontextu",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Režim automatického odesílání.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Popis režimu automatického odesílání.",
+    "message": "Automaticky odeslat, když přestanete mluvit"
+  },
+  "submit_mode_off": {
+    "description": "Režim ručního odesílání.",
+    "message": "manuál"
+  },
+  "submit_mode_off_description": {
+    "description": "Popis režimu ručního odesílání.",
+    "message": "Odešlete pouze po stisknutí tlačítka"
   }
 }

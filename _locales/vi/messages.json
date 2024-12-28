@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Cài đặt",
     "description": "Văn bản của nút để mở cài đặt của tiện ích mở rộng."
+  },
+  "submitModeControl": {
+    "description": "Tiêu đề (chú giải công cụ) của điều khiển để chọn thời điểm gửi tin nhắn.",
+    "message": "Chọn thời điểm gửi tin nhắn của bạn"
+  },
+  "submit_mode_agent": {
+    "description": "Chế độ gửi do AI điều khiển.",
+    "message": "đại lý"
+  },
+  "submit_mode_agent_description": {
+    "description": "Mô tả cho chế độ gửi do AI điều khiển.",
+    "message": "$chatbot$ quyết định thời điểm phản hồi dựa trên ngữ cảnh",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Chế độ gửi tự động.",
+    "message": "tự động"
+  },
+  "submit_mode_auto_description": {
+    "description": "Mô tả cho chế độ gửi tự động.",
+    "message": "Tự động gửi khi bạn ngừng nói"
+  },
+  "submit_mode_off": {
+    "description": "Chế độ gửi thủ công.",
+    "message": "thủ công"
+  },
+  "submit_mode_off_description": {
+    "description": "Mô tả cho chế độ gửi thủ công.",
+    "message": "Chỉ gửi khi bạn nhấn nút"
   }
 }

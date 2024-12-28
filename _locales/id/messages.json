@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Pengaturan",
     "description": "Teks tombol untuk membuka pengaturan ekstensi."
+  },
+  "submitModeControl": {
+    "description": "Judul (keterangan alat) kontrol untuk memilih kapan pesan harus dikirimkan.",
+    "message": "Pilih waktu untuk mengirimkan pesan Anda"
+  },
+  "submit_mode_agent": {
+    "description": "Mode pengiriman berbasis AI.",
+    "message": "agen"
+  },
+  "submit_mode_agent_description": {
+    "description": "Deskripsi untuk mode pengiriman berbasis AI.",
+    "message": "$chatbot$ memutuskan kapan harus merespons berdasarkan konteks",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Mode pengiriman otomatis.",
+    "message": "mobil"
+  },
+  "submit_mode_auto_description": {
+    "description": "Deskripsi untuk mode pengiriman otomatis.",
+    "message": "Kirim secara otomatis saat Anda berhenti berbicara"
+  },
+  "submit_mode_off": {
+    "description": "Mode pengiriman manual.",
+    "message": "panduan"
+  },
+  "submit_mode_off_description": {
+    "description": "Deskripsi untuk mode pengiriman manual.",
+    "message": "Hanya kirimkan ketika Anda menekan tombol"
   }
 }

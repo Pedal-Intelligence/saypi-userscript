@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Настройки",
     "description": "Текстът на бутона за отваряне на настройките на разширението."
+  },
+  "submitModeControl": {
+    "description": "Заглавието (подсказка) на контролата за избор кога да се изпращат съобщения.",
+    "message": "Изберете кога да изпратите вашите съобщения"
+  },
+  "submit_mode_agent": {
+    "description": "Режим на подаване, управляван от AI.",
+    "message": "агент"
+  },
+  "submit_mode_agent_description": {
+    "description": "Описание за управлявания от AI режим на подаване.",
+    "message": "$chatbot$ решава кога да отговори въз основа на контекста",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Автоматичен режим на подаване.",
+    "message": "авто"
+  },
+  "submit_mode_auto_description": {
+    "description": "Описание на режима на автоматично подаване.",
+    "message": "Автоматично изпращане, когато спрете да говорите"
+  },
+  "submit_mode_off": {
+    "description": "Режим на ръчно подаване.",
+    "message": "ръководство"
+  },
+  "submit_mode_off_description": {
+    "description": "Описание на режима на ръчно подаване.",
+    "message": "Изпратете само когато натиснете бутона"
   }
 }

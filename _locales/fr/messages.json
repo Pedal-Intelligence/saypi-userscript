@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Paramètres",
     "description": "Le texte du bouton pour ouvrir les paramètres de l'extension."
+  },
+  "submitModeControl": {
+    "description": "Le titre (info-bulle) du contrôle permettant de sélectionner le moment où les messages doivent être soumis.",
+    "message": "Sélectionnez quand soumettre vos messages"
+  },
+  "submit_mode_agent": {
+    "description": "Mode de soumission piloté par l'IA.",
+    "message": "agent"
+  },
+  "submit_mode_agent_description": {
+    "description": "Description du mode de soumission piloté par l'IA.",
+    "message": "$chatbot$ décide quand répondre en fonction du contexte",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Mode de soumission automatique.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Description du mode de soumission automatique.",
+    "message": "Soumettre automatiquement lorsque vous arrêtez de parler"
+  },
+  "submit_mode_off": {
+    "description": "Mode de soumission manuelle.",
+    "message": "manuel"
+  },
+  "submit_mode_off_description": {
+    "description": "Description du mode de soumission manuelle.",
+    "message": "Soumettez uniquement lorsque vous appuyez sur le bouton"
   }
 }

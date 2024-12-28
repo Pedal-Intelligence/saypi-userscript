@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Mga setting",
     "description": "Ang text ng button para buksan ang mga setting ng extension."
+  },
+  "submitModeControl": {
+    "description": "Ang pamagat (tooltip) ng kontrol upang piliin kung kailan dapat isumite ang mga mensahe.",
+    "message": "Piliin kung kailan isusumite ang iyong mga mensahe"
+  },
+  "submit_mode_agent": {
+    "description": "AI-driven submission mode.",
+    "message": "ahente"
+  },
+  "submit_mode_agent_description": {
+    "description": "Paglalarawan para sa mode ng pagsusumite na hinimok ng AI.",
+    "message": "Nagpapasya ang $chatbot$ kung kailan tutugon batay sa konteksto",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Awtomatikong mode ng pagsusumite.",
+    "message": "sasakyan"
+  },
+  "submit_mode_auto_description": {
+    "description": "Paglalarawan para sa mode ng awtomatikong pagsusumite.",
+    "message": "Awtomatikong isumite kapag huminto ka sa pagsasalita"
+  },
+  "submit_mode_off": {
+    "description": "Manu-manong mode ng pagsusumite.",
+    "message": "manwal"
+  },
+  "submit_mode_off_description": {
+    "description": "Paglalarawan para sa manu-manong mode ng pagsusumite.",
+    "message": "Isumite lamang kapag pinindot mo ang pindutan"
   }
 }

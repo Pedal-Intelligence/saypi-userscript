@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Impostazioni",
     "description": "Il testo del pulsante per aprire le impostazioni dell'estensione."
+  },
+  "submitModeControl": {
+    "description": "Il titolo (descrizione comando) del controllo per selezionare quando inviare i messaggi.",
+    "message": "Scegli quando inviare i tuoi messaggi"
+  },
+  "submit_mode_agent": {
+    "description": "Modalità di invio basata sull'intelligenza artificiale.",
+    "message": "agente"
+  },
+  "submit_mode_agent_description": {
+    "description": "Descrizione della modalità di invio basata sull'intelligenza artificiale.",
+    "message": "$chatbot$ decide quando rispondere in base al contesto",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Modalità di invio automatico.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Descrizione della modalità di invio automatico.",
+    "message": "Invia automaticamente quando smetti di parlare"
+  },
+  "submit_mode_off": {
+    "description": "Modalità di invio manuale.",
+    "message": "manuale"
+  },
+  "submit_mode_off_description": {
+    "description": "Descrizione della modalità di invio manuale.",
+    "message": "Invia solo quando premi il pulsante"
   }
 }

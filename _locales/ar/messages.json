@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "إعدادات",
     "description": "نص الزر لفتح إعدادات الامتداد."
+  },
+  "submitModeControl": {
+    "description": "عنوان (تلميح الأداة) لعنصر التحكم لتحديد متى يجب إرسال الرسائل.",
+    "message": "حدد متى ترسل رسائلك"
+  },
+  "submit_mode_agent": {
+    "description": "وضع التقديم القائم على الذكاء الاصطناعي.",
+    "message": "عامل"
+  },
+  "submit_mode_agent_description": {
+    "description": "وصف لوضع التقديم المعتمد على الذكاء الاصطناعي.",
+    "message": "يقرر $chatbot$ متى يتم الرد بناءً على السياق",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "وضع التقديم التلقائي.",
+    "message": "آلي"
+  },
+  "submit_mode_auto_description": {
+    "description": "وصف لوضع التقديم التلقائي.",
+    "message": "الإرسال تلقائيًا عند التوقف عن التحدث"
+  },
+  "submit_mode_off": {
+    "description": "وضع التقديم اليدوي.",
+    "message": "يدوي"
+  },
+  "submit_mode_off_description": {
+    "description": "وصف لوضع التقديم اليدوي.",
+    "message": "أرسل فقط عند الضغط على الزر"
   }
 }

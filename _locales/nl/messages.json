@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Instellingen",
     "description": "De tekst van de knop om de instellingen van de extensie te openen."
+  },
+  "submitModeControl": {
+    "description": "De titel (tooltip) van het besturingselement waarmee u kunt selecteren wanneer berichten moeten worden verzonden.",
+    "message": "Selecteer wanneer u uw berichten wilt verzenden"
+  },
+  "submit_mode_agent": {
+    "description": "AI-gestuurde indieningsmodus.",
+    "message": "tussenpersoon"
+  },
+  "submit_mode_agent_description": {
+    "description": "Beschrijving voor de AI-gestuurde indieningsmodus.",
+    "message": "$chatbot$ beslist wanneer er moet worden gereageerd op basis van de context",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatische indieningsmodus.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Beschrijving voor de automatische indieningsmodus.",
+    "message": "Automatisch indienen als u stopt met spreken"
+  },
+  "submit_mode_off": {
+    "description": "Handmatige verzendmodus.",
+    "message": "handmatig"
+  },
+  "submit_mode_off_description": {
+    "description": "Beschrijving voor de handmatige indieningsmodus.",
+    "message": "Alleen verzenden als u op de knop drukt"
   }
 }

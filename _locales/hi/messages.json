@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "सेटिंग्स",
     "description": "एक्सटेंशन की सेटिंग खोलने के लिए बटन का टेक्स्ट."
+  },
+  "submitModeControl": {
+    "description": "संदेशों को कब सबमिट किया जाना चाहिए यह चुनने के लिए नियंत्रण का शीर्षक (टूलटिप)।",
+    "message": "अपने संदेश कब सबमिट करना है चुनें"
+  },
+  "submit_mode_agent": {
+    "description": "एआई-संचालित सबमिशन मोड।",
+    "message": "प्रतिनिधि"
+  },
+  "submit_mode_agent_description": {
+    "description": "एआई-संचालित सबमिशन मोड का विवरण।",
+    "message": "$chatbot$ संदर्भ के आधार पर निर्णय लेता है कि कब प्रतिक्रिया देनी है",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "स्वचालित सबमिशन मोड.",
+    "message": "ऑटो"
+  },
+  "submit_mode_auto_description": {
+    "description": "स्वचालित सबमिशन मोड का विवरण।",
+    "message": "जब आप बोलना बंद कर दें तो स्वचालित रूप से सबमिट करें"
+  },
+  "submit_mode_off": {
+    "description": "मैन्युअल सबमिशन मोड.",
+    "message": "नियमावली"
+  },
+  "submit_mode_off_description": {
+    "description": "मैन्युअल सबमिशन मोड का विवरण.",
+    "message": "जब आप बटन दबाएँ तभी सबमिट करें"
   }
 }

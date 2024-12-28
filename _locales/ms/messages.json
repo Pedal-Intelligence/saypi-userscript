@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "tetapan",
     "description": "Teks butang untuk membuka tetapan sambungan."
+  },
+  "submitModeControl": {
+    "description": "Tajuk (petua alat) kawalan untuk memilih bila mesej harus diserahkan.",
+    "message": "Pilih masa untuk menghantar mesej anda"
+  },
+  "submit_mode_agent": {
+    "description": "Mod penyerahan dipacu AI.",
+    "message": "ejen"
+  },
+  "submit_mode_agent_description": {
+    "description": "Penerangan untuk mod penyerahan dipacu AI.",
+    "message": "$chatbot$ memutuskan masa untuk bertindak balas berdasarkan konteks",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Mod penyerahan automatik.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Penerangan untuk mod penyerahan automatik.",
+    "message": "Serahkan secara automatik apabila anda berhenti bercakap"
+  },
+  "submit_mode_off": {
+    "description": "Mod penyerahan manual.",
+    "message": "manual"
+  },
+  "submit_mode_off_description": {
+    "description": "Penerangan untuk mod penyerahan manual.",
+    "message": "Hanya serahkan apabila anda menekan butang"
   }
 }

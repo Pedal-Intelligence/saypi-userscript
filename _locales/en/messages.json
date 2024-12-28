@@ -471,14 +471,6 @@
       }
     }
   },
-  "discretionaryMode": {
-    "message": "Patient Listening",
-    "description": "Label for the checkbox to enable/disable discretionary response mode."
-  },
-  "discretionaryModeDescription": {
-    "message": "Pi will decide whether to respond based on the context of the conversation.",
-    "description": "Description of what the discretionary response mode setting does."
-  },
   "submitModeControl": {
     "message": "Select when to submit your messages",
     "description": "The title (tooltip) of the control to select when messages should be submitted."
@@ -500,8 +492,14 @@
     "description": "Description for the automatic submission mode."
   },
   "submit_mode_agent_description": {
-    "message": "Pi decides when to respond based on context",
-    "description": "Description for the AI-driven submission mode."
+    "message": "$chatbot$ decides when to respond based on context",
+    "description": "Description for the AI-driven submission mode.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "submit_mode_off_description": {
     "message": "Only submit when you press the button",

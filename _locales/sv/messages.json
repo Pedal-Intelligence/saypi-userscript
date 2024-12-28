@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Inställningar",
     "description": "Texten på knappen för att öppna tilläggets inställningar."
+  },
+  "submitModeControl": {
+    "description": "Titeln (verktygstips) för kontrollen för att välja när meddelanden ska skickas.",
+    "message": "Välj när du vill skicka dina meddelanden"
+  },
+  "submit_mode_agent": {
+    "description": "AI-drivet inlämningsläge.",
+    "message": "ombud"
+  },
+  "submit_mode_agent_description": {
+    "description": "Beskrivning för det AI-drivna inlämningsläget.",
+    "message": "$chatbot$ bestämmer när man ska svara baserat på sammanhang",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatiskt inlämningsläge.",
+    "message": "bil"
+  },
+  "submit_mode_auto_description": {
+    "description": "Beskrivning för det automatiska inlämningsläget.",
+    "message": "Skicka automatiskt när du slutar prata"
+  },
+  "submit_mode_off": {
+    "description": "Manuellt inlämningsläge.",
+    "message": "manuell"
+  },
+  "submit_mode_off_description": {
+    "description": "Beskrivning för det manuella inlämningsläget.",
+    "message": "Skicka bara när du trycker på knappen"
   }
 }
