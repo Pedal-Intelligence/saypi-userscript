@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "설정",
     "description": "확장 프로그램의 설정을 여는 버튼의 텍스트입니다."
+  },
+  "submitModeControl": {
+    "description": "메시지를 제출해야 하는 시기를 선택하는 컨트롤의 제목(도구 설명)입니다.",
+    "message": "메시지 제출 시기 선택"
+  },
+  "submit_mode_agent": {
+    "description": "AI 기반 제출 모드.",
+    "message": "대리인"
+  },
+  "submit_mode_agent_description": {
+    "description": "AI 기반 제출 모드에 대한 설명입니다.",
+    "message": "$chatbot$은 상황에 따라 응답 시기를 결정합니다.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "자동 제출 모드.",
+    "message": "자동"
+  },
+  "submit_mode_auto_description": {
+    "description": "자동 제출 모드에 대한 설명입니다.",
+    "message": "말하기를 중단하면 자동으로 제출"
+  },
+  "submit_mode_off": {
+    "description": "수동 제출 모드.",
+    "message": "수동"
+  },
+  "submit_mode_off_description": {
+    "description": "수동 제출 모드에 대한 설명입니다.",
+    "message": "버튼을 누를 때만 제출하세요."
   }
 }

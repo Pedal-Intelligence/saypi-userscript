@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Ρυθμίσεις",
     "description": "Το κείμενο του κουμπιού για το άνοιγμα των ρυθμίσεων της επέκτασης."
+  },
+  "submitModeControl": {
+    "description": "Ο τίτλος (επεξήγηση εργαλείου) του στοιχείου ελέγχου για να επιλέξετε πότε πρέπει να υποβάλλονται μηνύματα.",
+    "message": "Επιλέξτε πότε θα υποβάλετε τα μηνύματά σας"
+  },
+  "submit_mode_agent": {
+    "description": "Λειτουργία υποβολής βάσει AI.",
+    "message": "μέσο"
+  },
+  "submit_mode_agent_description": {
+    "description": "Περιγραφή για τη λειτουργία υποβολής που βασίζεται σε AI.",
+    "message": "Το $chatbot$ αποφασίζει πότε θα απαντήσει με βάση το περιβάλλον",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Λειτουργία αυτόματης υποβολής.",
+    "message": "αυτο"
+  },
+  "submit_mode_auto_description": {
+    "description": "Περιγραφή για τη λειτουργία αυτόματης υποβολής.",
+    "message": "Αυτόματη υποβολή όταν σταματήσετε να μιλάτε"
+  },
+  "submit_mode_off": {
+    "description": "Λειτουργία χειροκίνητης υποβολής.",
+    "message": "εγχειρίδιο"
+  },
+  "submit_mode_off_description": {
+    "description": "Περιγραφή για τη λειτουργία μη αυτόματης υποβολής.",
+    "message": "Υποβολή μόνο όταν πατήσετε το κουμπί"
   }
 }

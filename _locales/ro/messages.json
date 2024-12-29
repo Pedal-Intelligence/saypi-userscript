@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Setări",
     "description": "Textul butonului pentru a deschide setările extensiei."
+  },
+  "submitModeControl": {
+    "description": "Titlul (tooltip) controlului pentru a selecta când trebuie trimise mesajele.",
+    "message": "Selectați când să trimiteți mesajele"
+  },
+  "submit_mode_agent": {
+    "description": "Mod de trimitere bazat pe AI.",
+    "message": "agent"
+  },
+  "submit_mode_agent_description": {
+    "description": "Descrierea modului de trimitere bazat pe AI.",
+    "message": "$chatbot$ decide când să răspundă în funcție de context",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Mod de trimitere automată.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Descrierea modului de trimitere automată.",
+    "message": "Trimiteți automat când încetați să vorbiți"
+  },
+  "submit_mode_off": {
+    "description": "Mod de transmitere manuală.",
+    "message": "manual"
+  },
+  "submit_mode_off_description": {
+    "description": "Descrierea modului de trimitere manuală.",
+    "message": "Trimiteți doar când apăsați butonul"
   }
 }

@@ -21,6 +21,7 @@ interface StorageResult {
   voiceId?: string; // prefered speech synthesis voice
   theme?: string; // 'light' or 'dark'
   shareData?: boolean; // has the user consented to data sharing?
+  discretionaryMode?: boolean; // new beta feature for discretionary responses
 }
 
 class UserPreferenceModule {
@@ -34,6 +35,10 @@ class UserPreferenceModule {
     return UserPreferenceModule.instance;
   }
 
+  /**
+   * Constructor for UserPreferenceModule
+   * Note: cache may not be fully populated immediately after construction (takes a few milliseconds)
+   */
   private constructor() {
     this.reloadCache();
     this.registerMessageListeners();
@@ -48,6 +53,10 @@ class UserPreferenceModule {
     });
     this.isTTSBetaPaused().then((value) => {
       this.cache.setCachedValue("isTTSBetaPaused", value);
+    });
+    this.getDiscretionaryMode().then((value) => {
+      this.cache.setCachedValue("discretionaryMode", value);
+      EventBus.emit("userPreferenceChanged", { discretionaryMode: value }); // propagate the change to other modules - this is a bit of a hack for the cache not being ready immediately after construction
     });
   }
 
@@ -70,6 +79,10 @@ class UserPreferenceModule {
             "allowInterruptions",
             request.allowInterruptions
           );
+        }
+        if ("discretionaryMode" in request) {
+          this.cache.setCachedValue("discretionaryMode", request.discretionaryMode);
+          EventBus.emit("userPreferenceChanged", { discretionaryMode: request.discretionaryMode }); // propagate the change to other modules
         }
       });
     }
@@ -340,6 +353,14 @@ class UserPreferenceModule {
     }
     const cachedResult = this.cache.getCachedValue("allowInterruptions", true);
     return cachedResult;
+  }
+
+  public getDiscretionaryMode(): Promise<boolean> {
+    return this.getStoredValue("discretionaryMode", false);
+  }
+
+  public getCachedDiscretionaryMode(): boolean {
+    return this.cache.getCachedValue("discretionaryMode", false);
   }
 }
 

@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Configurações",
     "description": "O texto do botão para abrir as configurações da extensão."
+  },
+  "submitModeControl": {
+    "description": "O título (dica) do controle para selecionar quando as mensagens devem ser enviadas.",
+    "message": "Selecione quando enviar suas mensagens"
+  },
+  "submit_mode_agent": {
+    "description": "Modo de envio orientado por IA.",
+    "message": "agente"
+  },
+  "submit_mode_agent_description": {
+    "description": "Descrição do modo de envio orientado por IA.",
+    "message": "$chatbot$ decide quando responder com base no contexto",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Modo de envio automático.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Descrição do modo de envio automático.",
+    "message": "Enviar automaticamente quando você parar de falar"
+  },
+  "submit_mode_off": {
+    "description": "Modo de envio manual.",
+    "message": "manual"
+  },
+  "submit_mode_off_description": {
+    "description": "Descrição do modo de envio manual.",
+    "message": "Envie apenas quando você pressionar o botão"
   }
 }

@@ -116,7 +116,11 @@ class ClaudeChatbot implements Chatbot {
   }
 
   getExtraCallButtonClasses(): string[] {
-    return ["rounded-full"];
+    return ["claude-call-button"];
+  }
+
+  getContextWindowCapacityCharacters(): number {
+    return 200000; // Claude has a 200k token limit
   }
 }
 

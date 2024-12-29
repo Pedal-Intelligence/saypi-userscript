@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "设置",
     "description": "用于打开扩展程序设置的按钮的文本。"
+  },
+  "submitModeControl": {
+    "description": "用于选择何时应提交消息的控件的标题（工具提示）。",
+    "message": "选择何时提交您的消息"
+  },
+  "submit_mode_agent": {
+    "description": "AI驱动的提交模式。",
+    "message": "代理人"
+  },
+  "submit_mode_agent_description": {
+    "description": "AI驱动提交模式的描述。",
+    "message": "$chatbot$ 根据上下文决定何时响应",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "自动提交模式。",
+    "message": "汽车"
+  },
+  "submit_mode_auto_description": {
+    "description": "自动提交模式的说明。",
+    "message": "当您停止说话时自动提交"
+  },
+  "submit_mode_off": {
+    "description": "手动提交模式。",
+    "message": "手动的"
+  },
+  "submit_mode_off_description": {
+    "description": "手动提交模式的说明。",
+    "message": "仅在按下按钮时提交"
   }
 }

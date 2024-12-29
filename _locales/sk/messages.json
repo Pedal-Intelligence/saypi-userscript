@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Nastavenia",
     "description": "Text tlačidla na otvorenie nastavení rozšírenia."
+  },
+  "submitModeControl": {
+    "description": "Názov (popis) ovládacieho prvku na výber, kedy sa majú odosielať správy.",
+    "message": "Vyberte, kedy sa majú odosielať správy"
+  },
+  "submit_mode_agent": {
+    "description": "Režim odosielania riadený AI.",
+    "message": "agent"
+  },
+  "submit_mode_agent_description": {
+    "description": "Popis režimu odosielania riadeného AI.",
+    "message": "$chatbot$ rozhoduje o tom, kedy reagovať na základe kontextu",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Režim automatického odosielania.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Popis režimu automatického odosielania.",
+    "message": "Automaticky odoslať, keď prestanete hovoriť"
+  },
+  "submit_mode_off": {
+    "description": "Režim manuálneho odosielania.",
+    "message": "manuál"
+  },
+  "submit_mode_off_description": {
+    "description": "Popis pre režim manuálneho odosielania.",
+    "message": "Odošlite iba vtedy, keď stlačíte tlačidlo"
   }
 }

@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Ayarlar",
     "description": "Uzantının ayarlarını açmaya yarayan düğmenin metni."
+  },
+  "submitModeControl": {
+    "description": "İletilerin ne zaman gönderilmesi gerektiğini seçen kontrolün başlığı (ipucu).",
+    "message": "Mesajlarınızı ne zaman göndereceğinizi seçin"
+  },
+  "submit_mode_agent": {
+    "description": "Yapay zeka odaklı gönderim modu.",
+    "message": "ajan"
+  },
+  "submit_mode_agent_description": {
+    "description": "Yapay zeka odaklı gönderim modunun açıklaması.",
+    "message": "$chatbot$ bağlama göre ne zaman yanıt vereceğine karar verir",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Otomatik gönderim modu.",
+    "message": "otomatik"
+  },
+  "submit_mode_auto_description": {
+    "description": "Otomatik gönderim modunun açıklaması.",
+    "message": "Konuşmayı bıraktığınızda otomatik olarak gönder"
+  },
+  "submit_mode_off": {
+    "description": "Manuel gönderim modu.",
+    "message": "manuel"
+  },
+  "submit_mode_off_description": {
+    "description": "Manuel gönderim modunun açıklaması.",
+    "message": "Yalnızca düğmeye bastığınızda gönderin"
   }
 }

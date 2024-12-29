@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "সেটিংস",
     "description": "এক্সটেনশনের সেটিংস খুলতে বোতামের পাঠ্য।"
+  },
+  "submitModeControl": {
+    "description": "কন্ট্রোলের শিরোনাম (টুলটিপ) নির্বাচন করার জন্য কখন বার্তা জমা দিতে হবে।",
+    "message": "কখন আপনার বার্তা জমা দিতে হবে তা নির্বাচন করুন"
+  },
+  "submit_mode_agent": {
+    "description": "এআই-চালিত জমা দেওয়ার মোড।",
+    "message": "এজেন্ট"
+  },
+  "submit_mode_agent_description": {
+    "description": "এআই-চালিত জমা দেওয়ার মোডের বিবরণ।",
+    "message": "$chatbot$ প্রেক্ষাপটের উপর ভিত্তি করে কখন প্রতিক্রিয়া জানাবে তা নির্ধারণ করে",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "স্বয়ংক্রিয় জমা মোড.",
+    "message": "স্বয়ংক্রিয়"
+  },
+  "submit_mode_auto_description": {
+    "description": "স্বয়ংক্রিয় জমা মোড জন্য বর্ণনা.",
+    "message": "আপনি কথা বলা বন্ধ করলে স্বয়ংক্রিয়ভাবে জমা দিন"
+  },
+  "submit_mode_off": {
+    "description": "ম্যানুয়াল জমা মোড.",
+    "message": "ম্যানুয়াল"
+  },
+  "submit_mode_off_description": {
+    "description": "ম্যানুয়াল জমা মোড জন্য বর্ণনা.",
+    "message": "আপনি বোতাম টিপে শুধুমাত্র জমা দিন"
   }
 }

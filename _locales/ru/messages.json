@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Настройки",
     "description": "Текст кнопки открытия настроек расширения."
+  },
+  "submitModeControl": {
+    "description": "Заголовок (подсказка) элемента управления, позволяющий выбрать время отправки сообщений.",
+    "message": "Выберите, когда отправлять сообщения"
+  },
+  "submit_mode_agent": {
+    "description": "Режим подачи, управляемый искусственным интеллектом.",
+    "message": "агент"
+  },
+  "submit_mode_agent_description": {
+    "description": "Описание режима отправки, управляемого искусственным интеллектом.",
+    "message": "$chatbot$ решает, когда ответить, в зависимости от контекста",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Автоматический режим подачи.",
+    "message": "авто"
+  },
+  "submit_mode_auto_description": {
+    "description": "Описание режима автоматической отправки.",
+    "message": "Автоматически отправлять, когда вы перестаете говорить"
+  },
+  "submit_mode_off": {
+    "description": "Ручной режим подачи.",
+    "message": "руководство"
+  },
+  "submit_mode_off_description": {
+    "description": "Описание режима отправки вручную.",
+    "message": "Отправлять только при нажатии кнопки"
   }
 }

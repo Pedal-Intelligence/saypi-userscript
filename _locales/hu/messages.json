@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Beállítások elemre",
     "description": "A bővítmény beállításainak megnyitására szolgáló gomb szövege."
+  },
+  "submitModeControl": {
+    "description": "A vezérlőelem címe (elemleírása), amellyel kiválaszthatja, hogy mikor kell elküldeni az üzeneteket.",
+    "message": "Válassza ki, hogy mikor küldje el üzeneteit"
+  },
+  "submit_mode_agent": {
+    "description": "AI-vezérelt benyújtási mód.",
+    "message": "ügynök"
+  },
+  "submit_mode_agent_description": {
+    "description": "Az AI-vezérelt küldési mód leírása.",
+    "message": "A $chatbot$ a kontextus alapján dönti el, hogy mikor válaszoljon",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatikus beküldési mód.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Az automatikus beküldési mód leírása.",
+    "message": "Automatikus beküldés, ha abbahagyja a beszédet"
+  },
+  "submit_mode_off": {
+    "description": "Kézi beküldési mód.",
+    "message": "kézikönyv"
+  },
+  "submit_mode_off_description": {
+    "description": "A kézi beküldési mód leírása.",
+    "message": "Csak akkor küldje el, ha megnyomja a gombot"
   }
 }

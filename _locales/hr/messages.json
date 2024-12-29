@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "postavke",
     "description": "Tekst gumba za otvaranje postavki proširenja."
+  },
+  "submitModeControl": {
+    "description": "Naslov (opis) kontrole za odabir vremena slanja poruka.",
+    "message": "Odaberite kada želite poslati svoje poruke"
+  },
+  "submit_mode_agent": {
+    "description": "Način podnošenja vođen umjetnom inteligencijom.",
+    "message": "agent"
+  },
+  "submit_mode_agent_description": {
+    "description": "Opis za način podnošenja vođen umjetnom inteligencijom.",
+    "message": "$chatbot$ odlučuje kada će odgovoriti na temelju konteksta",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatski način podnošenja.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Opis za način automatskog podnošenja.",
+    "message": "Automatski pošalji kada prestaneš govoriti"
+  },
+  "submit_mode_off": {
+    "description": "Način ručnog podnošenja.",
+    "message": "priručnik"
+  },
+  "submit_mode_off_description": {
+    "description": "Opis za način ručnog podnošenja.",
+    "message": "Pošaljite samo kada pritisnete gumb"
   }
 }

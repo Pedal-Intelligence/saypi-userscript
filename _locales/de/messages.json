@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Einstellungen",
     "description": "Der Text der Schaltfläche zum Öffnen der Einstellungen der Erweiterung."
+  },
+  "submitModeControl": {
+    "description": "Der Titel (Tooltip) des Steuerelements zur Auswahl, wann Nachrichten übermittelt werden sollen.",
+    "message": "Wählen Sie aus, wann Sie Ihre Nachrichten senden möchten"
+  },
+  "submit_mode_agent": {
+    "description": "KI-gesteuerter Einreichungsmodus.",
+    "message": "Agent"
+  },
+  "submit_mode_agent_description": {
+    "description": "Beschreibung für den KI-gesteuerten Einreichungsmodus.",
+    "message": "$chatbot$ entscheidet basierend auf dem Kontext, wann er antwortet",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatischer Übermittlungsmodus.",
+    "message": "Auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Beschreibung für den automatischen Übermittlungsmodus.",
+    "message": "Automatisches Absenden, wenn Sie aufhören zu sprechen"
+  },
+  "submit_mode_off": {
+    "description": "Manueller Übermittlungsmodus.",
+    "message": "Handbuch"
+  },
+  "submit_mode_off_description": {
+    "description": "Beschreibung für den manuellen Übermittlungsmodus.",
+    "message": "Senden Sie es erst ab, wenn Sie auf die Schaltfläche klicken"
   }
 }

@@ -134,6 +134,10 @@ class PiAIChatbot implements Chatbot {
       -1
     )}.mp3`;
   }
+
+  getContextWindowCapacityCharacters(): number {
+    return 500; // Pi has a 4k character limit
+  }
 }
 
 class PiResponse extends AssistantResponse {

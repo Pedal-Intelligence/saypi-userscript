@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Asetukset",
     "description": "Laajennuksen asetusten avaamispainikkeen teksti."
+  },
+  "submitModeControl": {
+    "description": "Ohjaimen otsikko (työkaluvinkki), jolla valitaan, milloin viestit lähetetään.",
+    "message": "Valitse, milloin lähetät viestisi"
+  },
+  "submit_mode_agent": {
+    "description": "AI-ohjattu lähetystila.",
+    "message": "agentti"
+  },
+  "submit_mode_agent_description": {
+    "description": "Tekoälypohjaisen lähetystilan kuvaus.",
+    "message": "$chatbot$ päättää, milloin vastataan kontekstin perusteella",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automaattinen lähetystila.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Automaattisen lähetystilan kuvaus.",
+    "message": "Lähetä automaattisesti, kun lopetat puhumisen"
+  },
+  "submit_mode_off": {
+    "description": "Manuaalinen lähetystila.",
+    "message": "manuaalinen"
+  },
+  "submit_mode_off_description": {
+    "description": "Manuaalisen lähetystilan kuvaus.",
+    "message": "Lähetä vain, kun painat painiketta"
   }
 }

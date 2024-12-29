@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "設定",
     "description": "拡張機能の設定を開くボタンのテキスト。"
+  },
+  "submitModeControl": {
+    "description": "メッセージをいつ送信するかを選択するコントロールのタイトル (ツールチップ)。",
+    "message": "メッセージをいつ送信するかを選択してください"
+  },
+  "submit_mode_agent": {
+    "description": "AI 主導の送信モード。",
+    "message": "エージェント"
+  },
+  "submit_mode_agent_description": {
+    "description": "AI 主導の送信モードの説明。",
+    "message": "$chatbot$ はコンテキストに基づいていつ応答するかを決定します",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "自動提出モード。",
+    "message": "自動"
+  },
+  "submit_mode_auto_description": {
+    "description": "自動送信モードの説明。",
+    "message": "話すのをやめると自動的に送信される"
+  },
+  "submit_mode_off": {
+    "description": "手動送信モード。",
+    "message": "マニュアル"
+  },
+  "submit_mode_off_description": {
+    "description": "手動送信モードの説明。",
+    "message": "ボタンを押したときのみ送信します"
   }
 }

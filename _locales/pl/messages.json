@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Ustawienia",
     "description": "Tekst przycisku otwierającego ustawienia rozszerzenia."
+  },
+  "submitModeControl": {
+    "description": "Tytuł (etykietka) kontrolki umożliwiającej określenie, kiedy wiadomości mają być przesyłane.",
+    "message": "Wybierz, kiedy chcesz przesłać wiadomości"
+  },
+  "submit_mode_agent": {
+    "description": "Tryb przesyłania oparty na sztucznej inteligencji.",
+    "message": "agent"
+  },
+  "submit_mode_agent_description": {
+    "description": "Opis trybu przesyłania opartego na sztucznej inteligencji.",
+    "message": "$chatbot$ decyduje, kiedy odpowiedzieć na podstawie kontekstu",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatyczny tryb przesyłania.",
+    "message": "automatyczny"
+  },
+  "submit_mode_auto_description": {
+    "description": "Opis trybu automatycznego przesyłania.",
+    "message": "Przesyłaj automatycznie, gdy przestaniesz mówić"
+  },
+  "submit_mode_off": {
+    "description": "Ręczny tryb przesyłania.",
+    "message": "podręcznik"
+  },
+  "submit_mode_off_description": {
+    "description": "Opis ręcznego trybu przesyłania.",
+    "message": "Prześlij dopiero po naciśnięciu przycisku"
   }
 }

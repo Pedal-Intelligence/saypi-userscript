@@ -470,5 +470,39 @@
   "extensionSettings": {
     "message": "Indstillinger",
     "description": "Teksten på knappen for at åbne udvidelsens indstillinger."
+  },
+  "submitModeControl": {
+    "description": "Titlen (værktøjstip) på kontrolelementet til at vælge, hvornår meddelelser skal sendes.",
+    "message": "Vælg, hvornår dine beskeder skal sendes"
+  },
+  "submit_mode_agent": {
+    "description": "AI-drevet indsendelsestilstand.",
+    "message": "agent"
+  },
+  "submit_mode_agent_description": {
+    "description": "Beskrivelse af den AI-drevne indsendelsestilstand.",
+    "message": "$chatbot$ bestemmer, hvornår der skal svares baseret på kontekst",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatisk indsendelsestilstand.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Beskrivelse for den automatiske indsendelsestilstand.",
+    "message": "Send automatisk, når du holder op med at tale"
+  },
+  "submit_mode_off": {
+    "description": "Manuel indsendelsestilstand.",
+    "message": "manuel"
+  },
+  "submit_mode_off_description": {
+    "description": "Beskrivelse af den manuelle indsendelsestilstand.",
+    "message": "Send først, når du trykker på knappen"
   }
 }
