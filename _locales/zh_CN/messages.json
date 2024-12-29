@@ -163,7 +163,7 @@
     "message": "分享分析"
   },
   "enterImmersiveModeShort": {
-    "message": "沉浸式",
+    "message": "浸没",
     "description": "进入桌面沉浸模式的按钮文本"
   },
   "exitImmersiveModeLong": {
@@ -462,5 +462,13 @@
   "microphoneErrorUnknown": {
     "description": "当麦克风访问由于未知原因而失败时出现一般错误消息。",
     "message": "无法访问麦克风。\n请检查您的设备设置并重试。"
+  },
+  "ttsDisabledSafari": {
+    "message": "Safari 目前不支持多语言语音。",
+    "description": "在 Safari 中禁用 TTS 时显示的消息"
+  },
+  "extensionSettings": {
+    "message": "设置",
+    "description": "用于打开扩展程序设置的按钮的文本。"
   }
 }

@@ -1,4 +1,5 @@
 import { getResourceUrl } from "../ResourceModule";
+import { simd, threads } from "wasm-feature-detect";
 
 // Types for capability detection results
 export interface BasicAudioSupport {
@@ -34,10 +35,21 @@ export interface BrowserSpecificNotes {
   relevantSettings?: string[];
 }
 
+export interface WebAssemblySupport {
+  simd: boolean;
+  threads: boolean;
+  memory: {
+    initial: boolean;
+    growth: boolean;
+    maximumSize: number;  // in pages (64KB each)
+  };
+}
+
 export interface AudioCapabilityResults {
   basicSupport: BasicAudioSupport;
   appliedConstraints: AppliedAudioConstraints | null;
   echoCancellationQuality: EchoCancellationQuality | null;
+  webAssembly: WebAssemblySupport;  // Replace individual SIMD/threads fields
   browserSpecificNotes: BrowserSpecificNotes;
 }
 
@@ -279,13 +291,111 @@ export class AudioCapabilityDetector {
     }
   }
 
+  private async checkSimdSupport(): Promise<boolean> {
+    try {
+      const isSimdSupported = await simd();
+      console.log(
+        `WebAssembly SIMD support: ${isSimdSupported ? "Enabled" : "Disabled"}`
+      );
+      return isSimdSupported;
+    } catch (error) {
+      console.error("Error detecting SIMD support:", error);
+      return false;
+    }
+  }
+
+  private async checkThreadingSupport(): Promise<boolean> {
+    try {
+      const isThreadingSupported = await threads();
+      console.log(
+        `WebAssembly Threading support: ${isThreadingSupported ? "Enabled" : "Disabled"}`
+      );
+      return isThreadingSupported;
+    } catch (error) {
+      console.error("Error detecting threading support:", error);
+      return false;
+    }
+  }
+
+  private async checkWebAssemblyMemory(): Promise<{
+    initial: boolean;
+    growth: boolean;
+    maximumSize: number;
+  }> {
+    try {
+      // Test initial memory allocation (32MB)
+      const initialPages = 512; // 32MB (512 * 64KB)
+      let memory: WebAssembly.Memory | null = null;
+      
+      try {
+        memory = new WebAssembly.Memory({ 
+          initial: initialPages,
+          maximum: initialPages * 2
+        });
+        console.log(`Successfully allocated ${initialPages * 64}KB initial WebAssembly memory`);
+      } catch (error) {
+        console.warn('Failed to allocate initial WebAssembly memory:', error);
+        return {
+          initial: false,
+          growth: false,
+          maximumSize: 0
+        };
+      }
+
+      // Test memory growth
+      let maxPages = initialPages;
+      const growthTestStep = 256; // Test growth in 16MB increments
+      let canGrow = true;
+
+      try {
+        while (canGrow && maxPages < 65536) { // 65536 is the theoretical maximum
+          try {
+            memory.grow(growthTestStep);
+            maxPages += growthTestStep;
+          } catch (error) {
+            canGrow = false;
+          }
+        }
+
+        console.log(`Maximum WebAssembly memory: ${maxPages * 64}KB (${maxPages} pages)`);
+        console.log("Memory growth test completed successfully");
+      } catch (error) {
+        console.warn('Error during memory growth test:', error);
+      }
+
+      return {
+        initial: true,
+        growth: maxPages > initialPages,
+        maximumSize: maxPages
+      };
+    } catch (error) {
+      console.error('WebAssembly memory test failed:', error);
+      return {
+        initial: false,
+        growth: false,
+        maximumSize: 0
+      };
+    }
+  }
+
   async assessAudioCapabilities(): Promise<AudioCapabilityResults> {
     const isFirefox = navigator.userAgent.toLowerCase().includes("firefox");
 
+    const basicSupport = await this.checkBasicAudioSupport();
+    const appliedConstraints = await this.testAudioConstraints();
+    const simdSupported = await this.checkSimdSupport();
+    const threadsSupported = await this.checkThreadingSupport();
+    const memorySupport = await this.checkWebAssemblyMemory();
+
     const results: AudioCapabilityResults = {
-      basicSupport: await this.checkBasicAudioSupport(),
-      appliedConstraints: await this.testAudioConstraints(),
+      basicSupport,
+      appliedConstraints,
       echoCancellationQuality: null,
+      webAssembly: {
+        simd: simdSupported,
+        threads: threadsSupported,
+        memory: memorySupport
+      },
       browserSpecificNotes: {},
     };
 
@@ -303,10 +413,23 @@ export class AudioCapabilityDetector {
       };
     }
 
+    // Add browser-specific notes based on memory constraints
+    if (!memorySupport.initial) {
+      results.browserSpecificNotes.message = 
+        "This browser cannot allocate sufficient WebAssembly memory for voice detection.";
+      results.browserSpecificNotes.recommendation = 
+        "Voice detection features may be unavailable. Consider updating your browser or operating system.";
+    } else if (!memorySupport.growth) {
+      results.browserSpecificNotes.message = 
+        "This browser has limited WebAssembly memory growth capabilities.";
+      results.browserSpecificNotes.recommendation = 
+        "Voice detection features may be unstable. Consider updating your browser or operating system.";
+    }
+
     // Only run echo test if basic support checks pass
     if (
-      results.basicSupport.echoCancellation &&
-      results.appliedConstraints?.echoCancellation
+      basicSupport.echoCancellation &&
+      appliedConstraints?.echoCancellation
     ) {
       results.echoCancellationQuality = await this.testEchoCancellation();
     }

@@ -308,7 +308,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Il testo del pulsante per accedere alla modalità immersiva sul desktop.",
-    "message": "Immersivo"
+    "message": "Immersione"
   },
   "exitImmersiveModeLong": {
     "description": "L'etichetta aria e il titolo del pulsante per uscire dalla modalità immersiva sui dispositivi mobili e tornare alla modalità desktop basata su testo.",
@@ -462,5 +462,13 @@
   "microphoneErrorUnknown": {
     "description": "Messaggio di errore generico quando l'accesso al microfono non riesce per motivi sconosciuti.",
     "message": "Impossibile accedere al microfono. \nControlla le impostazioni del tuo dispositivo e riprova."
+  },
+  "ttsDisabledSafari": {
+    "message": "Le voci multilingue non sono attualmente supportate in Safari.",
+    "description": "Messaggio mostrato quando TTS è disabilitato in Safari"
+  },
+  "extensionSettings": {
+    "message": "Impostazioni",
+    "description": "Il testo del pulsante per aprire le impostazioni dell'estensione."
   }
 }

@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
     zoomAndPan="magnify" viewBox="0 0 768 767.999994" preserveAspectRatio="xMidYMid meet"
     version="1.0">
-    <path fill="#e4d8c1" class="outer"
+    <path fill="#ede1d1" class="outer"
         d="M 768.132812 379.535156 C 768.132812 169.089844 597.523438 -1.496094 387.050781 -1.496094 C 176.609375 -1.496094 5.996094 169.089844 5.996094 379.535156 C 5.996094 589.949219 176.609375 760.539062 387.050781 760.539062 C 597.523438 760.539062 768.132812 589.949219 768.132812 379.535156 "
         fill-opacity="1" fill-rule="nonzero" />
     <path fill="#776d6d" class="inner"

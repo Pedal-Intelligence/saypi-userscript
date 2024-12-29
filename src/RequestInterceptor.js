@@ -9,7 +9,13 @@ const filesToRedirect = [
   "ort-wasm.wasm",
 ];
 
-// Function to redirect specific XMLHttpRequests
+// MIME type mapping for different file extensions
+const mimeTypes = {
+  '.wasm': 'application/wasm',
+  '.onnx': 'application/x-onnx'
+};
+
+// Function to redirect specific XMLHttpRequest
 function redirectXMLHttpRequest(open) {
   XMLHttpRequest.prototype.open = function (
     method,
@@ -26,12 +32,42 @@ function redirectXMLHttpRequest(open) {
   };
 }
 
-// Function to redirect specific fetch requests
+// Function to redirect specific fetch requests with correct MIME types
 function redirectFetch(_fetch) {
-  window.fetch = function (url, opts) {
-    const filename = url.split("/").pop();
+  window.fetch = async function (url, opts = {}) {
+    const filename = url.toString().split("/").pop();
     if (filename && filesToRedirect.includes(filename)) {
-      arguments[0] = getResourceUrl(filename);
+      const resourceUrl = getResourceUrl(filename);
+      
+      // Get file extension and corresponding MIME type
+      const extension = filename.substring(filename.lastIndexOf('.'));
+      const mimeType = mimeTypes[extension];
+
+      // If it's a WASM file, we need to set the MIME type in the request
+      if (extension === '.wasm') {
+        opts = {
+          ...opts,
+          headers: {
+            ...opts.headers,
+            'Accept': 'application/wasm',
+          }
+        };
+      }
+
+      const response = await _fetch.apply(this, [resourceUrl, opts]);
+
+      // Set correct MIME type in response if needed
+      if (mimeType) {
+        const blob = await response.blob();
+        return new Response(blob, {
+          headers: {
+            'Content-Type': mimeType
+          },
+          status: response.status,
+          statusText: response.statusText
+        });
+      }
+      return response;
     }
     return _fetch.apply(this, arguments);
   };

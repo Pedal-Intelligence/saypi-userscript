@@ -16,8 +16,12 @@
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices."
   },
   "enterImmersiveModeShort": {
-    "message": "Immersive",
+    "message": "Immersion",
     "description": "The text of the button to enter immersive mode on desktop."
+  },
+  "extensionSettings": {
+    "message": "Settings",
+    "description": "The text of the button to open the extension's settings."
   },
   "callInProgress": {
     "message": "End hands-free conversation",
@@ -357,6 +361,10 @@
   "enableTTS": {
     "message": "Multilingual voices",
     "description": "Label for the checkbox to enable/disable text-to-speech."
+  },
+  "ttsDisabledSafari": {
+    "message": "Multilingual voices are currently not supported in Safari.",
+    "description": "Message shown when TTS is disabled in Safari"
   },
   "previewStatusActive": {
     "message": "Beta Active"

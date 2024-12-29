@@ -7,7 +7,7 @@ import {
   PiAIVoice,
   SpeechSynthesisVoiceRemote,
 } from "../tts/SpeechModel";
-import { isFirefox } from "../UserAgentModule";
+import { isFirefox, isSafari } from "../UserAgentModule";
 
 type Preference = "speed" | "balanced" | "accuracy" | null;
 type VoicePreference = SpeechSynthesisVoiceRemote | null;
@@ -320,6 +320,9 @@ class UserPreferenceModule {
   }
 
   public getTextToSpeechEnabled(): Promise<boolean> {
+    if (isSafari()) {
+      return Promise.resolve(false);
+    }
     return Promise.all([
       this.getStoredValue("enableTTS", true),
       this.getCachedIsTTSBetaPaused(),

@@ -46,10 +46,13 @@ html.desktop-view {
     margin-top: 0.35rem;
   }
 
-  #saypi-side-panel .immersive-mode-button svg {
-    width: 30px;
-    .cls-1 {
-      stroke: #24381b;
+  #saypi-side-panel .saypi-control-button {
+    cursor: pointer;
+    svg {
+      width: 30px;
+      .cls-1 {
+        stroke: #24381b;
+      }
     }
   }
 
@@ -70,9 +73,12 @@ html.desktop-view {
     font-size: 1.2rem;
   }
   
-  .tooltip[aria-label]:hover::after {
-    opacity: 1;
-    z-index: 101; // ensure tooltip is on top of other elements
+  // Show on hover (desktop)
+  @media (hover: hover) {
+    .tooltip[aria-label]:hover::after {
+        opacity: 1;
+        z-index: 101;
+    }
   }
 
   @media only screen and (max-width:1200px){ // media query 

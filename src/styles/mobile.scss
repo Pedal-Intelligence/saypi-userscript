@@ -99,8 +99,16 @@ html.immersive-view {
 
   /* override lg:hidden, making the control panel's buttons visible in immersive view on desktops */
   #saypi-control-panel-main.lg\:hidden {
-    display: block;
+    display: flex;
   }
+
+  #saypi-control-panel-main a.saypi-control-button {
+    // make the svg background transparent for the settings button in immersive view
+    svg {
+      background: transparent;
+    }
+  }
+
   /* override lg:flex-row-reverse, making the audio control button visible in immersive view on desktops */
   div.lg\:flex-row-reverse {
     flex-direction: unset;
@@ -143,9 +151,16 @@ html.mobile-device .chat-message .message-hover-menu .saypi-cost-container {
   }
 }
 
-html.firefox-android {
-  .tooltip[aria-label]::after {
-    display: none;
+/* hide the settings button on Firefox Android because the popup is not supported */
+html.firefox-android .saypi-control-panel .settings-button.mini {
+  display: none !important;
+}
+
+// Hide tooltip on touch devices after touch ends
+@media (hover: none) {
+  .tooltip[aria-label]:active::after {
+      opacity: 1;
+      z-index: 101;
   }
 }
 

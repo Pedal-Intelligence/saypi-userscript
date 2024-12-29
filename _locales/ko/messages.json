@@ -168,7 +168,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "데스크톱에서 몰입 모드로 들어가기 위한 버튼의 텍스트",
-    "message": "몰입형"
+    "message": "담금"
   },
   "exitImmersiveModeLong": {
     "description": "모바일 장치에서 몰입 모드를 종료하고 텍스트 기반의 데스크톱 모드로 돌아가는 버튼의 aria-label과 제목.",
@@ -462,5 +462,13 @@
   "microphoneErrorUnknown": {
     "description": "알 수 없는 이유로 마이크 액세스에 실패할 때 발생하는 일반 오류 메시지입니다.",
     "message": "마이크에 액세스할 수 없습니다. \n기기 설정을 확인하고 다시 시도해 주세요."
+  },
+  "ttsDisabledSafari": {
+    "message": "현재 Safari에서는 다국어 음성이 지원되지 않습니다.",
+    "description": "Safari에서 TTS가 비활성화되었을 때 표시되는 메시지"
+  },
+  "extensionSettings": {
+    "message": "설정",
+    "description": "확장 프로그램의 설정을 여는 버튼의 텍스트입니다."
   }
 }

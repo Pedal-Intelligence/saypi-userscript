@@ -163,7 +163,7 @@
     "message": "Chia sẻ phân tích"
   },
   "enterImmersiveModeShort": {
-    "message": "Trải nghiệm mạnh mẽ",
+    "message": "Ngâm",
     "description": "Văn bản của nút để vào chế độ toàn màn hình trên máy tính."
   },
   "exitImmersiveModeLong": {
@@ -462,5 +462,13 @@
   "microphoneErrorUnknown": {
     "description": "Thông báo lỗi chung khi truy cập micrô không thành công vì lý do không xác định.",
     "message": "Không thể truy cập micrô. \nVui lòng kiểm tra cài đặt thiết bị của bạn và thử lại."
+  },
+  "ttsDisabledSafari": {
+    "message": "Giọng nói đa ngôn ngữ hiện không được hỗ trợ trong Safari.",
+    "description": "Thông báo hiển thị khi TTS bị tắt trong Safari"
+  },
+  "extensionSettings": {
+    "message": "Cài đặt",
+    "description": "Văn bản của nút để mở cài đặt của tiện ích mở rộng."
   }
 }

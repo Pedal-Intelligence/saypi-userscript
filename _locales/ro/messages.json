@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Textul butonului pentru a intra în modul imersiv pe desktop.",
-    "message": "Imersiv"
+    "message": "Imersiune"
   },
   "exitImmersiveModeLong": {
     "description": "Eticheta-aria și titlul butonului pentru a ieși din modul imersiv pe dispozitivele mobile, înapoi la modul desktop bazat pe text.",
@@ -462,5 +462,13 @@
   "microphoneErrorUnknown": {
     "description": "Mesaj de eroare generic atunci când accesul la microfon eșuează din motive necunoscute.",
     "message": "Nu se poate accesa microfonul. \nVerificați setările dispozitivului și încercați din nou."
+  },
+  "ttsDisabledSafari": {
+    "message": "Vocile multilingve nu sunt acceptate momentan în Safari.",
+    "description": "Mesaj afișat când TTS este dezactivat în Safari"
+  },
+  "extensionSettings": {
+    "message": "Setări",
+    "description": "Textul butonului pentru a deschide setările extensiei."
   }
 }

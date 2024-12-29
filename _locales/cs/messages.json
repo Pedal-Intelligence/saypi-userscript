@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Text tlačítka pro vstup do ponořovacího režimu na stolním počítači.",
-    "message": "Pohlcující"
+    "message": "Ponoření"
   },
   "exitImmersiveModeLong": {
     "description": "Aria-label a název tlačítka pro ukončení ponořeného režimu na mobilních zařízeních, zpět do textového režimu pro stolní počítače.",
@@ -462,5 +462,13 @@
   "microphoneErrorUnknown": {
     "description": "Obecná chybová zpráva, když z neznámých důvodů selže přístup k mikrofonu.",
     "message": "Nelze získat přístup k mikrofonu. \nZkontrolujte nastavení zařízení a zkuste to znovu."
+  },
+  "ttsDisabledSafari": {
+    "message": "V Safari momentálně nejsou podporovány vícejazyčné hlasy.",
+    "description": "Zpráva zobrazená, když je TTS zakázáno v Safari"
+  },
+  "extensionSettings": {
+    "message": "Nastavení",
+    "description": "Text tlačítka pro otevření nastavení rozšíření."
   }
 }

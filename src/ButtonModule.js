@@ -6,6 +6,7 @@ import { submitErrorHandler } from "./SubmitErrorHandler.ts";
 import exitIconSVG from "./icons/exit.svg";
 import maximizeIconSVG from "./icons/maximize.svg";
 import immersiveIconSVG from "./icons/immersive.svg";
+import settingsIconSVG from "./icons/settings.svg";
 import callIconSVG from "./icons/call.svg";
 import callStartingIconSVG from "./icons/call-starting.svg";
 import hangupIconSVG from "./icons/hangup.svg";
@@ -20,6 +21,8 @@ import { Chatbot } from "./chatbots/Chatbot.ts";
 import { ChatbotService } from "./chatbots/ChatbotService.ts";
 import { IconModule } from "./icons/IconModule.ts";
 import { ImmersionStateChecker } from "./ImmersionServiceLite.ts";
+import { GlowColorUpdater } from "./buttons/GlowColorUpdater.js";
+import { openSettings } from "./popup/popupopener.ts";
 
 class ButtonModule {
   /**
@@ -31,6 +34,7 @@ class ButtonModule {
     this.userPreferences = UserPreferenceModule.getInstance();
     this.chatbot = chatbot;
     this.immersionService = new ImmersionService(chatbot);
+    this.glowColorUpdater = new GlowColorUpdater();
     this.sayPiActor = StateMachineService.actor; // the Say, Pi state machine
     this.screenLockActor = StateMachineService.screenLockActor;
     // Binding methods to the current instance
@@ -169,58 +173,119 @@ class ButtonModule {
     }
   }
 
-  createExitButton(container, position = 0) {
-    const label = getMessage("exitImmersiveModeLong");
-    const button = this.createButton("", () => {
-      ImmersionService.exitImmersiveMode();
-    });
+  /**
+   * Creates a control button for the main (i.e. horizontal) control panel with an icon and tooltip
+   * @param {Object} options Button configuration options
+   * @param {string} options.id Button ID
+   * @param {string} options.label Tooltip/aria label
+   * @param {string} options.icon SVG icon content
+   * @param {Function} options.onClick Click handler
+   * @param {string} [options.className=''] Additional CSS classes
+   * @returns {HTMLButtonElement} The created button
+   */
+  createIconButton(options) {
+    const { id, label, icon, onClick, className = '' } = options;
+    const button = document.createElement("button");
+    button.id = id;
     button.type = "button";
-    button.className =
-      "saypi-exit-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
+    button.className = `saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip mini ${className}`;
     button.setAttribute("aria-label", label);
 
-    const svgElement = createSVGElement(exitIconSVG);
+    const svgElement = createSVGElement(icon);
     button.appendChild(svgElement);
+
+    if (onClick) {
+      button.onclick = onClick;
+    }
+
+    return button;
+  }
+
+  createExitButton(container, position = 0) {
+    const button = this.createIconButton({
+      id: 'saypi-exit-button',
+      label: getMessage("exitImmersiveModeLong"),
+      icon: exitIconSVG,
+      onClick: () => ImmersionService.exitImmersiveMode(),
+      className: 'saypi-exit-button'
+    });
 
     addChild(container, button, position);
     return button;
   }
 
   createEnterButton(container, position = 0) {
-    const label = getMessage("enterImmersiveModeLong");
-    const button = this.createButton("", () => {
-      this.immersionService.enterImmersiveMode();
+    const button = this.createIconButton({
+      id: 'saypi-enter-button', 
+      label: getMessage("enterImmersiveModeLong"),
+      icon: maximizeIconSVG,
+      onClick: () => this.immersionService.enterImmersiveMode(),
+      className: 'saypi-enter-button'
     });
-    button.type = "button";
-    button.className =
-      "saypi-enter-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
-    button.setAttribute("aria-label", label);
-
-    const svgElement = createSVGElement(maximizeIconSVG);
-    button.appendChild(svgElement);
 
     addChild(container, button, position);
     return button;
   }
 
-  createImmersiveModeButton(container, position = 0) {
-    const label = getMessage("enterImmersiveModeShort");
-    const title = getMessage("enterImmersiveModeLong");
+  /**
+   * Create a control button for Pi's side panel with a short label, long label, icon, and click handler
+   * @param {*} options 
+   * @returns 
+   */
+  createControlButton(options) {
+    const { shortLabel, longLabel = shortLabel, icon, onClick, className = '' } = options;
     const button = createElement("a", {
-      className:
-        "immersive-mode-button saypi-control-button tooltip flex h-16 w-16 flex-col items-center justify-center rounded-xl text-neutral-900 hover:bg-neutral-50-hover hover:text-neutral-900-hover active:bg-neutral-50-tap active:text-neutral-900-tap gap-0.5",
-      ariaLabel: title,
-      onclick: () => this.immersionService.enterImmersiveMode(),
+      className: `${className} maxi saypi-control-button tooltip flex h-16 w-16 flex-col items-center justify-center rounded-xl text-neutral-900 hover:bg-neutral-50-hover hover:text-neutral-900-hover active:bg-neutral-50-tap active:text-neutral-900-tap gap-0.5`,
+      ariaLabel: longLabel,
+      onclick: onClick,
     });
 
-    const svgElement = createSVGElement(immersiveIconSVG);
+    const svgElement = createSVGElement(icon);
     button.appendChild(svgElement);
 
     const labelDiv = createElement("div", {
       className: "t-label",
-      textContent: label,
-    });
+      textContent: shortLabel,
+    }, );
     button.appendChild(labelDiv);
+
+    return button;
+  }
+
+  createImmersiveModeButton(container, position = 0) {
+    const button = this.createControlButton({
+      shortLabel: getMessage("enterImmersiveModeShort"),
+      longLabel: getMessage("enterImmersiveModeLong"),
+      icon: immersiveIconSVG,
+      onClick: () => this.immersionService.enterImmersiveMode(),
+      className: 'immersive-mode-button'
+    });
+
+    addChild(container, button, position);
+    return button;
+  }
+
+  createSettingsButton(container, position = 0) {
+    const label = getMessage("extensionSettings");
+    const button = this.createControlButton({
+      shortLabel: label,
+      icon: settingsIconSVG,
+      onClick: () => openSettings(),
+      className: 'settings-button'
+    });
+
+    addChild(container, button, position);
+    return button;
+  }
+
+  createMiniSettingsButton(container, position = 0) {
+    const button = this.createIconButton({
+      id: 'saypi-settingsButton',
+      label: getMessage("extensionSettings"),
+      icon: settingsIconSVG,
+      onClick: () => openSettings(),
+      className: 'settings-button'
+    });
 
     addChild(container, button, position);
     return button;
@@ -231,8 +296,6 @@ class ButtonModule {
     button.id = "saypi-callButton";
     button.type = "button";
     button.classList.add("call-button", "saypi-button", "tooltip");
-
-    // add all classes in chatbot.getExtraCallButtonClasses() to the button
     button.classList.add(...this.chatbot.getExtraCallButtonClasses());
     if (this.callIsActive) {
       this.callActive(button);
@@ -258,57 +321,12 @@ class ButtonModule {
     }
   }
 
-  updateCallButtonGlowColor(color) {
-    // set the `--glow-color` CSS variable on the call button
-    const callButton = document.getElementById("saypi-callButton");
-    if (callButton) {
-      callButton.style.setProperty("--glow-color", color);
-    }
-  }
-  /**
-   * Interpolates between a base colour and a peak colour based on intensity.
-   *
-   * @param {string} baseColor - The base colour in hexadecimal format.
-   * @param {string} peakColor - The peak colour in hexadecimal format.
-   * @param {number} intensity - The intensity factor (0.0 to 1.0).
-   * @returns {string} The interpolated colour in hexadecimal format.
-   */
-  interpolateColor(baseColor, peakColor, intensity) {
-    // Ensure intensity is within the range of 0.0 to 1.0
-    intensity = Math.max(0, Math.min(1, intensity));
-
-    // Convert the base and peak colours from hexadecimal to RGB
-    let baseRed = parseInt(baseColor.substring(1, 3), 16);
-    let baseGreen = parseInt(baseColor.substring(3, 5), 16);
-    let baseBlue = parseInt(baseColor.substring(5, 7), 16);
-    let peakRed = parseInt(peakColor.substring(1, 3), 16);
-    let peakGreen = parseInt(peakColor.substring(3, 5), 16);
-    let peakBlue = parseInt(peakColor.substring(5, 7), 16);
-
-    // Interpolate each colour component
-    let newRed = Math.round(baseRed + (peakRed - baseRed) * intensity);
-    let newGreen = Math.round(baseGreen + (peakGreen - baseGreen) * intensity);
-    let newBlue = Math.round(baseBlue + (peakBlue - baseBlue) * intensity);
-
-    // Convert the interpolated RGB back to hexadecimal
-    return `#${newRed.toString(16).padStart(2, "0")}${newGreen
-      .toString(16)
-      .padStart(2, "0")}${newBlue.toString(16).padStart(2, "0")}`;
-  }
-
   /**
    *
    * @param { isSpeech: number; notSpeech: number } probabilities
    */
   handleAudioFrame(probabilities) {
-    var baseColor = "#ffd1dc"; // sunset-peach
-    const peakColor = "#FF7F50"; // coral
-    const updatedColor = this.interpolateColor(
-      baseColor,
-      peakColor,
-      probabilities.isSpeech
-    );
-    this.updateCallButtonGlowColor(updatedColor);
+    this.glowColorUpdater.updateGlowColor(probabilities.isSpeech);
   }
 
   updateCallButton(callButton, svgIcon, label, onClick, isActive = false) {

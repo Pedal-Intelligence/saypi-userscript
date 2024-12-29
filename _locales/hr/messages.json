@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Tekst gumba za ulazak u uronjeni način na stolnom računalu.",
-    "message": "Imersivno"
+    "message": "Uranjanje"
   },
   "exitImmersiveModeLong": {
     "description": "Aria-label i naslov gumba za izlazak iz uronjenog načina rada na mobilnim uređajima, natrag u tekstualni radni način.",
@@ -462,5 +462,13 @@
   "microphoneErrorUnknown": {
     "description": "Generička poruka o pogrešci kada pristup mikrofonu ne uspije iz nepoznatih razloga.",
     "message": "Nije moguće pristupiti mikrofonu. \nProvjerite postavke uređaja i pokušajte ponovno."
+  },
+  "ttsDisabledSafari": {
+    "message": "Višejezični glasovi trenutno nisu podržani u Safariju.",
+    "description": "Poruka se prikazuje kada je TTS onemogućen u Safariju"
+  },
+  "extensionSettings": {
+    "message": "postavke",
+    "description": "Tekst gumba za otvaranje postavki proširenja."
   }
 }

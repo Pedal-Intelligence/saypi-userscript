@@ -163,7 +163,7 @@
     "message": "Compartilhar análises"
   },
   "enterImmersiveModeShort": {
-    "message": "Imersivo",
+    "message": "Imersão",
     "description": "O texto do botão para entrar no modo imersivo no desktop."
   },
   "exitImmersiveModeLong": {
@@ -462,5 +462,13 @@
   "microphoneErrorUnknown": {
     "description": "Mensagem de erro genérica quando o acesso ao microfone falha por motivos desconhecidos.",
     "message": "Não é possível acessar o microfone. \nVerifique as configurações do seu dispositivo e tente novamente."
+  },
+  "ttsDisabledSafari": {
+    "message": "Atualmente, vozes multilíngues não são suportadas no Safari.",
+    "description": "Mensagem mostrada quando o TTS está desativado no Safari"
+  },
+  "extensionSettings": {
+    "message": "Configurações",
+    "description": "O texto do botão para abrir as configurações da extensão."
   }
 }

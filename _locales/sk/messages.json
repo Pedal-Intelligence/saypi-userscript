@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Text tlačidla pre vstup do ponorového režimu na stolnom počítači.",
-    "message": "Pohlcujúci"
+    "message": "Ponorenie"
   },
   "exitImmersiveModeLong": {
     "description": "Aria-label a názov tlačidla na ukončenie pohlcujúceho režimu na mobilných zariadeniach, späť do textového režimu pre stolné počítače.",
@@ -462,5 +462,13 @@
   "microphoneErrorUnknown": {
     "description": "Všeobecné chybové hlásenie, keď z neznámych dôvodov zlyhá prístup k mikrofónu.",
     "message": "Nedá sa získať prístup k mikrofónu. \nSkontrolujte nastavenia zariadenia a skúste to znova."
+  },
+  "ttsDisabledSafari": {
+    "message": "V Safari momentálne nie sú podporované viacjazyčné hlasy.",
+    "description": "Správa sa zobrazí, keď je TTS zakázaný v Safari"
+  },
+  "extensionSettings": {
+    "message": "Nastavenia",
+    "description": "Text tlačidla na otvorenie nastavení rozšírenia."
   }
 }

@@ -168,7 +168,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Le texte du bouton pour entrer en mode immersif sur le bureau.",
-    "message": "Immersif"
+    "message": "Immersion"
   },
   "exitImmersiveModeLong": {
     "description": "Le aria-label et le titre du bouton pour quitter le mode immersif sur les appareils mobiles, pour revenir au mode bureau basé sur le texte.",
@@ -462,5 +462,13 @@
   "microphoneErrorUnknown": {
     "description": "Message d'erreur générique lorsque l'accès au microphone échoue pour des raisons inconnues.",
     "message": "Impossible d'accéder au micro. \nVeuillez vérifier les paramètres de votre appareil et réessayer."
+  },
+  "ttsDisabledSafari": {
+    "message": "Les voix multilingues ne sont actuellement pas prises en charge dans Safari.",
+    "description": "Message affiché lorsque TTS est désactivé dans Safari"
+  },
+  "extensionSettings": {
+    "message": "Paramètres",
+    "description": "Le texte du bouton pour ouvrir les paramètres de l'extension."
   }
 }

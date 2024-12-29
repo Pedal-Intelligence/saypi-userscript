@@ -6,11 +6,11 @@ import EventBus from "../events/EventBus.js";
 import { debounce } from "lodash";
 import { getResourceUrl } from "../ResourceModule";
 import { customModelFetcher } from "../vad/custom-model-fetcher";
-import { isFirefox } from "../UserAgentModule";
+import { isFirefox, isSafari } from "../UserAgentModule";
 import { AudioCapabilityDetector } from "../audio/AudioCapabilities";
 import getMessage from "../i18n";
 
-const fullWorkletURL: string = isFirefox()
+const fullWorkletURL: string = isFirefox() || isSafari()
   ? getResourceUrl("vad.worklet.bundle.js")
   : getResourceUrl("vad.worklet.bundle.min.js");
 let listening: boolean = false;
@@ -178,6 +178,18 @@ const firefoxMicVADOptions: Partial<RealTimeVADOptions> &
   modelFetcher: customModelFetcher,
 };
 
+// Safari-specific options
+const safariMicVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
+  ...micVADOptions,
+  workletOptions: {},
+  modelFetcher: customModelFetcher,
+  ortConfig: (ort: any) => {
+    // Basic configuration
+    ort.env.wasm.numThreads = 1; // Disable threading (default is 2)
+    ort.env.wasm.simd = true; // Enable SIMD
+  },
+};
+
 async function checkAudioCapabilities() {
   const detector = new AudioCapabilityDetector();
   const thresholds = {
@@ -185,6 +197,33 @@ async function checkAudioCapabilities() {
     preferredEchoQuality: 0.75,
   };
   const config = await detector.configureAudioFeatures(thresholds);
+
+  // Check WebAssembly capabilities
+  const { webAssembly } = config.audioQualityDetails;
+  
+  // Required memory for ONNX model (approximately 32MB)
+  const requiredPages = 512; // 32MB = 512 pages * 64KB
+  
+  if (!webAssembly.memory.initial) {
+    throw new Error(getMessage("webAssemblyMemoryUnavailable"));
+  }
+  
+  if (webAssembly.memory.maximumSize < requiredPages) {
+    throw new Error(getMessage("webAssemblyInsufficientMemory", 
+      `Required: ${requiredPages * 64}KB, Available: ${webAssembly.memory.maximumSize * 64}KB`));
+  }
+
+  if (!webAssembly.memory.growth) {
+    console.warn("WebAssembly memory growth is not supported. VAD may be unstable.");
+  }
+
+  if (!webAssembly.simd) {
+    console.warn("WebAssembly SIMD is not supported. VAD may not function optimally.");
+  }
+
+  if (!webAssembly.threads) {
+    console.info("WebAssembly Threading is not supported, but probably won't affect performance.");
+  }
 
   if (config.enableInterruptions) {
     console.debug("The interrupt feature can be enabled", config);
@@ -205,6 +244,8 @@ async function checkAudioCapabilities() {
       }`
     );
   }
+
+  return config;
 }
 
 async function setupRecording(completion_callback?: () => void): Promise<void> {
@@ -213,18 +254,30 @@ async function setupRecording(completion_callback?: () => void): Promise<void> {
   }
 
   try {
+    //const capabilities = await checkAudioCapabilities();
+    
     stream = await navigator.mediaDevices.getUserMedia({
       audio: {
         channelCount: 1,
-        echoCancellation: true, // critical for interruptions
+        echoCancellation: true,
         autoGainControl: true,
         noiseSuppression: true,
       },
     });
 
+    // Configure VAD options based on capabilities
+    const baseOptions = isFirefox() ? firefoxMicVADOptions : 
+                       isSafari() ? safariMicVADOptions :
+                       micVADOptions;
+
+    // Adjust options based on capabilities
     const partialVADOptions = {
-      ...(isFirefox() ? firefoxMicVADOptions : micVADOptions),
+      ...baseOptions,
       stream,
+      ortConfig: (ort: any) => {
+        // Call the original ortConfig if it exists
+        baseOptions.ortConfig?.(ort);
+      }
     };
 
     console.debug("Permission granted for microphone access");
@@ -236,7 +289,18 @@ async function setupRecording(completion_callback?: () => void): Promise<void> {
     }
   } catch (err) {
     console.error("VAD microphone failed to load.", err);
-    throw err; // reject the promise
+    
+    // Emit a user-friendly error notification
+    if (err instanceof Error) {
+      EventBus.emit("saypi:ui:show-notification", {
+        message: err.message,
+        type: "text",
+        seconds: 20,
+        icon: "microphone-muted",
+      });
+    }
+    
+    throw err;
   }
 }
 

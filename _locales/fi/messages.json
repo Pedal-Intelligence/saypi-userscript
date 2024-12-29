@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Napin teksti, jolla siirrytään immersiiviseen tilaan työpöydällä.",
-    "message": "Immersiivinen"
+    "message": "Upotus"
   },
   "exitImmersiveModeLong": {
     "description": "Aria-labelin ja napin otsikon käännös, jolla poistutaan immersiivisestä tilasta mobiililaitteissa takaisin tekstipohjaiseen työpöytätilaan.",
@@ -462,5 +462,13 @@
   "microphoneErrorUnknown": {
     "description": "Yleinen virheilmoitus, kun mikrofonin käyttö epäonnistuu tuntemattomista syistä.",
     "message": "Mikrofonia ei voi käyttää. \nTarkista laitteesi asetukset ja yritä uudelleen."
+  },
+  "ttsDisabledSafari": {
+    "message": "Monikielisiä ääniä ei tällä hetkellä tueta Safarissa.",
+    "description": "Viesti näytetään, kun TTS on poistettu käytöstä Safarissa"
+  },
+  "extensionSettings": {
+    "message": "Asetukset",
+    "description": "Laajennuksen asetusten avaamispainikkeen teksti."
   }
 }

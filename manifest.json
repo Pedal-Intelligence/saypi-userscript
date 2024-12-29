@@ -11,6 +11,9 @@
       "js": ["public/saypi.user.js"]
     }
   ],
+  "background": {
+    "service_worker": "public/background.js"
+  },
   "icons": {
     "16": "src/icons/bubble-16px.png",
     "32": "src/icons/bubble-32px.png",
@@ -24,7 +27,7 @@
         "public/*.wasm",
         "public/vad.worklet.bundle.js",
         "public/vad.worklet.bundle.min.js",
-        "public/ort-wasm-simd-threaded.mjs",
+        "public/ort-wasm*",
         "public/audio/*.mp3",
         "public/icons/*.svg",
         "public/icons/*.png",

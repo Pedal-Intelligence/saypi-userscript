@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Ang teksto ng pindutan para pumasok sa immersive mode sa desktop.",
-    "message": "Nakakalibang"
+    "message": "Paglulubog"
   },
   "exitImmersiveModeLong": {
     "description": "Ang aria-label at pamagat ng pindutan para umalis sa immersive mode sa mga mobile device, bumalik sa text-based desktop mode.",
@@ -462,5 +462,13 @@
   "microphoneErrorUnknown": {
     "description": "Generic na mensahe ng error kapag nabigo ang pag-access sa mikropono sa hindi malamang dahilan.",
     "message": "Hindi ma-access ang mikropono. \nPakisuri ang mga setting ng iyong device at subukang muli."
+  },
+  "ttsDisabledSafari": {
+    "message": "Kasalukuyang hindi sinusuportahan sa Safari ang mga multilingguwal na boses.",
+    "description": "Ipinapakita ang mensahe kapag hindi pinagana ang TTS sa Safari"
+  },
+  "extensionSettings": {
+    "message": "Mga setting",
+    "description": "Ang text ng button para buksan ang mga setting ng extension."
   }
 }

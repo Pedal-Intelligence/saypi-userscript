@@ -9,3 +9,4 @@ public/*.js.map
 public/*.wasm
 src/audio/vad-configs.json
 src/audio/capabilities-test.json
+.DS_Store

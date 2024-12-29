@@ -186,7 +186,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "Teksten på knappen for at indtaste nedsænkningstilstand på skrivebordet.",
-    "message": "Immersiv"
+    "message": "Nedsænkning"
   },
   "exitImmersiveModeLong": {
     "description": "Aria-label og titlen på knappen til at afslutte den immersive tilstand på mobile enheder, tilbage til tekstbaseret skrivebordstilstand.",
@@ -462,5 +462,13 @@
   "microphoneErrorUnknown": {
     "description": "Generisk fejlmeddelelse, når mikrofonadgang mislykkes af ukendte årsager.",
     "message": "Kan ikke få adgang til mikrofonen. \nTjek venligst dine enhedsindstillinger og prøv igen."
+  },
+  "ttsDisabledSafari": {
+    "message": "Flersprogede stemmer understøttes i øjeblikket ikke i Safari.",
+    "description": "Meddelelse vises, når TTS er deaktiveret i Safari"
+  },
+  "extensionSettings": {
+    "message": "Indstillinger",
+    "description": "Teksten på knappen for at åbne udvidelsens indstillinger."
   }
 }

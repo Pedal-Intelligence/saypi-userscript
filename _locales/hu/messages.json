@@ -168,7 +168,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "A gomb szövege, amellyel beléphet az immerszív módba asztali gépen.",
-    "message": "Elmerülő"
+    "message": "Merítés"
   },
   "exitImmersiveModeLong": {
     "description": "Az aria-címke és a gomb címe, amely kilép az immerszív módból mobil eszközökön, vissza a szövegalapú asztali módhoz.",
@@ -462,5 +462,13 @@
   "microphoneErrorUnknown": {
     "description": "Általános hibaüzenet, ha a mikrofonhoz való hozzáférés ismeretlen okból meghiúsul.",
     "message": "Nem lehet hozzáférni a mikrofonhoz. \nKérjük, ellenőrizze az eszköz beállításait, és próbálja újra."
+  },
+  "ttsDisabledSafari": {
+    "message": "A Safari jelenleg nem támogatja a többnyelvű hangokat.",
+    "description": "Üzenet jelenik meg, amikor a TTS le van tiltva a Safariban"
+  },
+  "extensionSettings": {
+    "message": "Beállítások elemre",
+    "description": "A bővítmény beállításainak megnyitására szolgáló gomb szövege."
   }
 }
