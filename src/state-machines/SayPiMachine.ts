@@ -1040,6 +1040,20 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   description: "User has spoken.",
                 },
               ],
+              "saypi:momentaryListen" : [
+                {
+                  actions: [ 
+                    assign({
+                      isMomentaryEnabled: true,
+                      isMomentaryActive: true,
+                    }), 
+                    {
+                      type: "momentaryHasStarted"
+                    },
+                  ], 
+                  target: "#sayPi.listening.recording",
+                },
+              ],
             },
             entry: [
               {
