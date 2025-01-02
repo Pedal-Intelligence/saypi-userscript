@@ -469,6 +469,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
 
                 target: [
                   "momentaryPaused",
+                  //"#sayPi.momentaryPaused",
                 ],
                 actions: [
                   assign({
@@ -476,6 +477,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   }),
                   {
                     type: "momentaryHasPaused",
+                  },
+                  {
+                    type: "submitTranscriptions",
                   },
                   {
                     type: "stopAnimation",
@@ -502,14 +506,11 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               },
             },
           },
-
           momentaryPaused: {
             description:
               "In momentary mode and the button has been released, so the microphone is ignoring input",
             
-              entry: {
-                type: "submitTranscriptions"
-              },
+          
             on: {             
               "saypi:momentaryListen": {
               actions: [
@@ -535,10 +536,25 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 target: "#sayPi.listening.converting.submitting",
                 description: 'Submit current transcriptions.',
               },
-              
+              "saypi:userStoppedSpeaking": [
+                    {
+                      target: [
+                        "#sayPi.listening.converting.transcribing",
+                      ],
+                      cond: "hasAudio",
+                      actions: [
+                        assign({
+                          userIsSpeaking: false,
+                          timeUserStoppedSpeaking: () => new Date().getTime(),
+                        }),
+                        {
+                          type: "transcribeAudio",
+                        },
+                      ],
+                    },
+                  ],
             },
           },
-          
           converting: {
             initial: "accumulating",
             states: {
@@ -812,6 +828,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         type: "parallel",
       },
 
+      
+      
+      
       responding: {
         initial: "piThinking",
         on: {
@@ -984,6 +1003,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 {
                   cond: "isMomentaryEnabled",
                   actions: "momentaryHasPaused",
+                  //target: "#sayPi.momentaryPaused",
                   target: "#sayPi.listening.momentaryPaused",
                 },  
                 {
@@ -996,6 +1016,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 {
                   cond: "isMomentaryEnabled",
                   actions: "momentaryHasPaused",
+                  //target: "#sayPi.momentaryPaused",
                   target: "#sayPi.listening.momentaryPaused",
                 },  
                 {
@@ -1177,9 +1198,19 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
 
       submitTranscriptions: (context: SayPiContext, event) => {
-        if(readyToSubmitOnAllowedState(true, context)){
+        let isReadyToSubmit = readyToSubmitOnAllowedState(true, context);
+        console.log("entered submitTranscriptions() isReadyToSubmit: " + isReadyToSubmit);
+        if(isReadyToSubmit) {
+          console.log("calling for momentarySubmitTranscriptions event!");
           EventBus.emit("saypi:momentarySubmitTranscriptions");
         }
+      },
+      test123: (context: SayPiContext, event) => {
+        console.log("Entered test123() !!!");
+      },
+
+      testAbc: (context: SayPiContext, event) => {
+        console.log("Entered testAbc() !!!");
       },
 
       reconnectAudio: (context, event) => {
@@ -1364,13 +1395,28 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           wait_time_ms: submission_delay_ms,
         });
       },
-      clearPendingTranscriptionsAction: () => {
+      clearPendingTranscriptionsAction: (context: SayPiContext) => {
         // discard in-flight transcriptions. Called after a successful submission
+        /*
+        console.log("Entered clearPendingTranscriptionsAction()");
+        
+        if(!context.isMomentaryEnabled){
+          console.log("momentary is not enabled, so clearing pending transcripts!!");
+          clearPendingTranscriptions();
+        }
+          */
         clearPendingTranscriptions();
       },
       clearTranscriptsAction: assign({
         transcriptions: () => ({}),
       }),
+      clearTranscripts:(context: SayPiContext) => {
+        console.log("Entered clearTranscripts()");
+        if(!context.isMomentaryEnabled) {
+          console.log("clearTranscripts() momentary is not enabled, so clearing transcripts!");
+          context.transcriptions = {};
+        }
+      },
       pauseAudio: () => {
         EventBus.emit("audio:output:pause");
       },
@@ -1500,6 +1546,7 @@ function readyToSubmitOnAllowedState(
   const empty = Object.keys(context.transcriptions).length === 0;
   const pending = isTranscriptionPending();
   const ready = allowedState && !empty && !pending;
+  console.log("Entered readyToSubmitOnAllowedState() empty: " + empty + " any pending: " + pending + " is ready: " + ready);
   return ready;
 }
 function provisionallyReadyToSubmit(context: SayPiContext): boolean {
