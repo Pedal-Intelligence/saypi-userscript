@@ -2,6 +2,7 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import EventBus from "../events/EventBus";
 import { ImmersionStateChecker } from "../ImmersionServiceLite";
 import { AssistantResponse } from "../dom/MessageElements";
+import { shortenTranscript } from "../TextModule";
 
 export interface Chatbot {
   getChatHistorySelector(): string;
@@ -99,17 +100,11 @@ export abstract class UserPrompt {
     if(!isFocused){
       textarea.readOnly = true;
     }
+    if (this.preferences.getCachedAutoSubmit()) {
+      // overflowing the prompt textarea will cause the auto submit to fail
+      transcript = shortenTranscript(transcript, this.PROMPT_CHARACTER_LIMIT);
+    }
     if (ImmersionStateChecker.isViewImmersive()) {
-      // if transcript is > max characters, truncate it to max-1 characters plus an ellipsis
-      if (transcript.length > this.PROMPT_CHARACTER_LIMIT) {
-        const truncatedLength = this.PROMPT_CHARACTER_LIMIT - 1;
-        transcript = `${transcript.substring(0, truncatedLength)}…`;
-        console.warn(
-          `Transcript was too long for Pi. Truncated to ${truncatedLength} characters, losing the following text: ... ${transcript.substring(
-            truncatedLength
-          )}`
-        );
-      }
       this.enterTextAndSubmit(transcript, true);
     } else {
       this.typeText(`${transcript} `, true); // types and submits the prompt
