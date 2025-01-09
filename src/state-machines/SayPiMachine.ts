@@ -469,7 +469,6 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
 
                 target: [
                   "momentaryPaused",
-                  //"#sayPi.momentaryPaused",
                 ],
                 actions: [
                   assign({
@@ -828,8 +827,41 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         type: "parallel",
       },
 
-      
-      
+      momentaryPaused2: {
+        description:
+          "In momentary mode and the button has been released, so the microphone is ignoring input",
+        
+          entry:[
+            {
+              type: "pauseAudio",
+            },  
+            {
+              type: "momentaryReturnsToPaused",
+            }, 
+          ],       
+        on: {             
+          "saypi:momentaryListen": {
+          actions: [
+              assign({ isMomentaryActive: true }), 
+              {
+                type: "momentaryHasStarted"
+              },
+            ], 
+            target: "#sayPi.listening.recording",
+            description: 'Returning to the standard recording mode.',
+          },
+          "saypi:momentaryStop": {
+            actions: [
+              assign({ isMomentaryEnabled: false }), 
+              {
+                type: "momentaryHasStopped"
+              },
+            ], 
+            target: "#sayPi.listening.recording",
+            description: 'Returning to the standard recording mode.',
+          },          
+        },
+      },
       
       responding: {
         initial: "piThinking",
@@ -903,10 +935,18 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             on: {
               "saypi:piStoppedSpeaking": [
                 {
+                  target: "#sayPi.momentaryPaused2",
+                  cond:
+                    {
+                      type: "isMomentaryEnabled",
+                    },
+                },
+                {
                   target: "#sayPi.listening",
-                  cond: {
-                    type: "wasListening",
-                  },
+                  cond:
+                    {
+                      type: "wasListening",
+                    },
                 },
                 {
                   target: "#sayPi.inactive",
@@ -915,9 +955,16 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   },
                 },
               ],
-              "saypi:piFinishedSpeaking": {
-                target: "#sayPi.listening",
-              },
+              "saypi:piFinishedSpeaking": [
+                {
+                  cond: "isMomentaryEnabled",
+                  target: "#sayPi.momentaryPaused2",
+                },  
+                {
+                  target: "#sayPi.listening",
+                  cond: "isMomentaryDisabled"
+                },
+              ],
               "saypi:userSpeaking": {
                 target: "userInterrupting",
                 cond: {
@@ -1003,7 +1050,6 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 {
                   cond: "isMomentaryEnabled",
                   actions: "momentaryHasPaused",
-                  //target: "#sayPi.momentaryPaused",
                   target: "#sayPi.listening.momentaryPaused",
                 },  
                 {
@@ -1016,7 +1062,6 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 {
                   cond: "isMomentaryEnabled",
                   actions: "momentaryHasPaused",
-                  //target: "#sayPi.momentaryPaused",
                   target: "#sayPi.listening.momentaryPaused",
                 },  
                 {
@@ -1328,7 +1373,11 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         console.log("SayPiMachine entered momentaryHasPaused()");
         buttonModule.pauseMomentary();
         AnimationModule.stopAnimation("glow");
-        EventBus.emit("audio:input:stop");
+        EventBus.emit("audio:stopRecording"); //JAC temp message -> soft stop instead of hard stop, see if this will produce an audio blob
+      },
+      momentaryReturnsToPaused: () => {
+        console.log("SayPiMachine entered momentaryReturnsToPaused()");
+        buttonModule.pauseMomentary();
       },
       momentaryHasStopped: () => {
         console.log("SayPiMachine entered momentaryHasStopped()");
@@ -1458,7 +1507,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         return autoSubmitEnabled && readyToSubmit(state, context) && isMomentaryInactive;
       },
       wasListening: (context: SayPiContext) => {
-        return context.lastState === "listening";
+        return context.lastState === "listening" && !context.isMomentaryEnabled;
       },
       wasInactive: (context: SayPiContext) => {
         return context.lastState === "inactive";
