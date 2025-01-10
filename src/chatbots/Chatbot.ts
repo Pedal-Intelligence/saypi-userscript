@@ -55,6 +55,7 @@ export abstract class UserPrompt {
   setDraft(transcript: string): void {
     this.preferences.getAutoSubmit().then((autoSubmit) => {
       if (autoSubmit) {
+        console.debug(`Setting placeholder text of ${transcript.length} characters`);
         this.setPlaceholderText(`${transcript}`);
       } else {
         this.setPlaceholderText("");
@@ -96,20 +97,22 @@ export abstract class UserPrompt {
     const textarea = document.getElementById(
       "saypi-prompt"
     ) as HTMLTextAreaElement;
-    let isFocused = (document.activeElement === textarea);
-    if(!isFocused){
+
+    let isFocused = document.activeElement === textarea;
+    if (!isFocused) {
       textarea.readOnly = true;
     }
     if (this.preferences.getCachedAutoSubmit()) {
       // overflowing the prompt textarea will cause the auto submit to fail
-      transcript = shortenTranscript(transcript, this.PROMPT_CHARACTER_LIMIT);
+      const PROMPT_LIMIT_BUFFER = 10; // margin of error
+      transcript = shortenTranscript(transcript, this.PROMPT_CHARACTER_LIMIT - PROMPT_LIMIT_BUFFER);
     }
     if (ImmersionStateChecker.isViewImmersive()) {
       this.enterTextAndSubmit(transcript, true);
     } else {
       this.typeText(`${transcript} `, true); // types and submits the prompt
     }
-    if(!isFocused){
+    if (!isFocused) {
       textarea.blur();
       textarea.readOnly = false;
     }
