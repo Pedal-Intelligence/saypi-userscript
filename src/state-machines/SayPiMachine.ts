@@ -465,31 +465,25 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 description:
                   'Enable Momentary Mode. Now recording will only stop if the user releases the button.',
               },
-              "saypi:momentaryPause": {
-
-                target: [
-                  "momentaryPaused",
-                ],
-                actions: [
-                  assign({
-                    isMomentaryActive: false,
-                  }),
-                  {
-                    type: "momentaryHasPaused",
-                  },
-                  {
-                    type: "submitTranscriptions",
-                  },
-                  {
-                    type: "stopAnimation",
-                    params: {
-                      animation: "glow",
+              "saypi:momentaryPause":
+                {
+                  target: "#sayPi.listening.converting.submitting",
+                  cond: "readyToSubmitFromMomentary",
+                  actions: [
+                    assign({
+                      isMomentaryActive: false,
+                    }),
+                    {
+                      type: "momentaryHasPaused",
                     },
-                  }
-                ],
-                description:
-                  'Enable Momentary Mode. Now recording will only stop if the user releases the button.',
-              },             
+                    {                    
+                      type: "stopAnimation",
+                      params: {
+                        animation: "glow",
+                      },
+                    },
+                  ],
+                },
               "saypi:momentaryStop": {
                 actions: [
                   assign({
@@ -505,55 +499,6 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               },
             },
           },
-          momentaryPaused: {
-            description:
-              "In momentary mode and the button has been released, so the microphone is ignoring input",
-            
-          
-            on: {             
-              "saypi:momentaryListen": {
-              actions: [
-                  assign({ isMomentaryActive: true }), 
-                  {
-                    type: "momentaryHasStarted"
-                  },
-                ], 
-                target: "#sayPi.listening.recording",
-                description: 'Returning to the standard recording mode.',
-              },
-              "saypi:momentaryStop": {
-                actions: [
-                  assign({ isMomentaryEnabled: false }), 
-                  {
-                    type: "momentaryHasStopped"
-                  },
-                ], 
-                target: "#sayPi.listening.recording",
-                description: 'Returning to the standard recording mode.',
-              },
-              "saypi:momentarySubmitTranscriptions": {
-                target: "#sayPi.listening.converting.submitting",
-                description: 'Submit current transcriptions.',
-              },
-              "saypi:userStoppedSpeaking": [
-                    {
-                      target: [
-                        "#sayPi.listening.converting.transcribing",
-                      ],
-                      cond: "hasAudio",
-                      actions: [
-                        assign({
-                          userIsSpeaking: false,
-                          timeUserStoppedSpeaking: () => new Date().getTime(),
-                        }),
-                        {
-                          type: "transcribeAudio",
-                        },
-                      ],
-                    },
-                  ],
-            },
-          },
           converting: {
             initial: "accumulating",
             states: {
@@ -566,11 +511,12 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     cond: "submissionConditionsMet",
                     description: "Submit combined transcript to Pi.",
                   },
-                  100: {
+                  /*
+                  momentarySubmissionDelay: {
                     target: "#sayPi.listening.recording",
                     cond: "momentaryIsActive",
                     description: "Will return to listening because momentary mode is active.",
-                  },
+                  }, */
                 },
                 entry: { 
                   type: "draftPrompt",
@@ -700,6 +646,12 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                       type: "handleTranscriptionResponse",
                     },
                     description: "Successfully transcribed user audio to text.",
+                  },
+
+                  "saypi:momentaryPause": {
+                    actions: {
+                      type: "logPauseEvent",
+                    },
                   },
                   "saypi:transcribeFailed": {
                     target: [
@@ -1047,11 +999,13 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           waitingForPiToStopSpeaking: {
             on: {
               "saypi:piStoppedSpeaking":[ 
+               /*
                 {
                   cond: "isMomentaryEnabled",
                   actions: "momentaryHasPaused",
                   target: "#sayPi.listening.momentaryPaused",
-                },  
+                }, 
+                */ 
                 {
                   target: "userInterrupting",
                   cond: "isMomentaryDisabled"
@@ -1059,11 +1013,13 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             ]},
             after: {
               500: [
+                /*
                 {
                   cond: "isMomentaryEnabled",
                   actions: "momentaryHasPaused",
                   target: "#sayPi.listening.momentaryPaused",
                 },  
+                */
                 {
                 target: "userInterrupting",
                 cond: "isMomentaryDisabled",
@@ -1200,6 +1156,12 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           });
         }
       },
+      logPauseEvent: (
+        SayPiContext,
+        event: SayPiTranscribedEvent
+      ) => {
+        console.log("-------> logPauseEvent() Momentary Pause detected from accumulating state!");
+      },
 
       acquireMicrophone: (context, event) => {
         // warmup the microphone on idle in mobile view,
@@ -1241,23 +1203,15 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         EventBus.emit("audio:stopRecording");
         EventBus.emit("audio:tearDownRecording");
       },
-
+/*
       submitTranscriptions: (context: SayPiContext, event) => {
         let isReadyToSubmit = readyToSubmitOnAllowedState(true, context);
         console.log("entered submitTranscriptions() isReadyToSubmit: " + isReadyToSubmit);
         if(isReadyToSubmit) {
           console.log("calling for momentarySubmitTranscriptions event!");
-          EventBus.emit("saypi:momentarySubmitTranscriptions");
+          EventBus.emit("saypi:submit");
         }
-      },
-      test123: (context: SayPiContext, event) => {
-        console.log("Entered test123() !!!");
-      },
-
-      testAbc: (context: SayPiContext, event) => {
-        console.log("Entered testAbc() !!!");
-      },
-
+      },*/
       reconnectAudio: (context, event) => {
         EventBus.emit("audio:input:reconnect");
       },
@@ -1506,6 +1460,13 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         const isMomentaryInactive = !context.isMomentaryEnabled && !context.isMomentaryActive;
         return autoSubmitEnabled && readyToSubmit(state, context) && isMomentaryInactive;
       },
+      readyToSubmitFromMomentary: (context: SayPiContext, event: SayPiEvent) => {
+        console.log("-----> Entered readyToSubmitFromMomentary() result: " + readyToSubmitOnAllowedState(true, context));
+        return readyToSubmitOnAllowedState(true, context);
+      },
+      notReadyToSubmitFromMomentary: (context: SayPiContext, event: SayPiEvent) => {
+        return !readyToSubmitOnAllowedState(true, context);;
+      },
       wasListening: (context: SayPiContext) => {
         return context.lastState === "listening" && !context.isMomentaryEnabled;
       },
@@ -1582,8 +1543,11 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
 
         // Capture the delay for analytics events
         lastSubmissionDelay = finalDelay;
-
+        
         return finalDelay;
+      },
+      momentarySubmissionDelay: (context: SayPiContext, event: SayPiEvent) => {
+        return 100;
       },
     },
   }
