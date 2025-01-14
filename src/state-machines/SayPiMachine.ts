@@ -779,7 +779,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         type: "parallel",
       },
 
-      momentaryPaused2: {
+      momentaryPaused: {
         description:
           "In momentary mode and the button has been released, so the microphone is ignoring input",
         
@@ -887,7 +887,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             on: {
               "saypi:piStoppedSpeaking": [
                 {
-                  target: "#sayPi.momentaryPaused2",
+                  target: "#sayPi.momentaryPaused",
                   cond:
                     {
                       type: "isMomentaryEnabled",
@@ -910,7 +910,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               "saypi:piFinishedSpeaking": [
                 {
                   cond: "isMomentaryEnabled",
-                  target: "#sayPi.momentaryPaused2",
+                  target: "#sayPi.momentaryPaused",
                 },  
                 {
                   target: "#sayPi.listening",
@@ -934,6 +934,12 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   description: `The user has forced an interruption, i.e. tapped to interrupt Pi, during a call.`,
                   actions: "pauseAudio",
                   cond: "wasListening",
+                },           
+                {
+                  target: "#sayPi.momentaryPaused",
+                  description: `The user has forced an interruption while momentary mode was enabled, i.e. tapped to interrupt Pi, during a call.`,
+                  actions: "pauseAudio",
+                  cond: "wasListeningWithMomentary",
                 },
                 {
                   target: "#sayPi.inactive",
@@ -999,13 +1005,11 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           waitingForPiToStopSpeaking: {
             on: {
               "saypi:piStoppedSpeaking":[ 
-               /*
                 {
                   cond: "isMomentaryEnabled",
                   actions: "momentaryHasPaused",
-                  target: "#sayPi.listening.momentaryPaused",
+                  target: "#sayPi.momentaryPaused",
                 }, 
-                */ 
                 {
                   target: "userInterrupting",
                   cond: "isMomentaryDisabled"
@@ -1013,13 +1017,11 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             ]},
             after: {
               500: [
-                /*
                 {
                   cond: "isMomentaryEnabled",
                   actions: "momentaryHasPaused",
-                  target: "#sayPi.listening.momentaryPaused",
+                  target: "#sayPi.momentaryPaused",
                 },  
-                */
                 {
                 target: "userInterrupting",
                 cond: "isMomentaryDisabled",
@@ -1469,6 +1471,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
       wasListening: (context: SayPiContext) => {
         return context.lastState === "listening" && !context.isMomentaryEnabled;
+      },
+      wasListeningWithMomentary: (context: SayPiContext) => {
+        return context.lastState === "listening" && context.isMomentaryEnabled;
       },
       wasInactive: (context: SayPiContext) => {
         return context.lastState === "inactive";
