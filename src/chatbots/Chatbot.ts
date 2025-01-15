@@ -3,6 +3,7 @@ import EventBus from "../events/EventBus";
 import { ImmersionStateChecker } from "../ImmersionServiceLite";
 import { AssistantResponse } from "../dom/MessageElements";
 import { VoiceSelector } from "../tts/VoiceMenu";
+import { shortenTranscript } from "../TextModule";
 
 export interface Chatbot {
   getChatHistorySelector(): string;
@@ -60,6 +61,7 @@ export abstract class UserPrompt {
   setDraft(transcript: string): void {
     this.preferences.getAutoSubmit().then((autoSubmit) => {
       if (autoSubmit) {
+        console.debug(`Setting placeholder text of ${transcript.length} characters`);
         this.setPlaceholderText(`${transcript}`);
       } else {
         this.setPlaceholderText("");
@@ -101,26 +103,22 @@ export abstract class UserPrompt {
     const textarea = document.getElementById(
       "saypi-prompt"
     ) as HTMLTextAreaElement;
-    let isFocused = (document.activeElement === textarea);
-    if(!isFocused){
+
+    let isFocused = document.activeElement === textarea;
+    if (!isFocused) {
       textarea.readOnly = true;
     }
+    if (this.preferences.getCachedAutoSubmit()) {
+      // overflowing the prompt textarea will cause the auto submit to fail
+      const PROMPT_LIMIT_BUFFER = 10; // margin of error
+      transcript = shortenTranscript(transcript, this.PROMPT_CHARACTER_LIMIT - PROMPT_LIMIT_BUFFER);
+    }
     if (ImmersionStateChecker.isViewImmersive()) {
-      // if transcript is > max characters, truncate it to max-1 characters plus an ellipsis
-      if (transcript.length > this.PROMPT_CHARACTER_LIMIT) {
-        const truncatedLength = this.PROMPT_CHARACTER_LIMIT - 1;
-        transcript = `${transcript.substring(0, truncatedLength)}…`;
-        console.warn(
-          `Transcript was too long for Pi. Truncated to ${truncatedLength} characters, losing the following text: ... ${transcript.substring(
-            truncatedLength
-          )}`
-        );
-      }
       this.enterTextAndSubmit(transcript, true);
     } else {
       this.typeText(`${transcript} `, true); // types and submits the prompt
     }
-    if(!isFocused){
+    if (!isFocused) {
       textarea.blur();
       textarea.readOnly = false;
     }
