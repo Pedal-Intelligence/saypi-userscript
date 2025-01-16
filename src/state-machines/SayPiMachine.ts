@@ -603,6 +603,22 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     description:
                       "Out of sequence empty response from the /transcribe API",
                   },
+                  "saypi:momentaryPause": {
+                    actions: [
+                      assign({
+                        isMomentaryActive: false,
+                      }),
+                      {
+                        type: "momentaryHasPaused",
+                      },
+                      {                    
+                        type: "stopAnimation",
+                        params: {
+                          animation: "glow",
+                        },
+                      },
+                    ],
+                  },
                 },
               },
               submitting: {
@@ -647,11 +663,21 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     },
                     description: "Successfully transcribed user audio to text.",
                   },
-
                   "saypi:momentaryPause": {
-                    actions: {
-                      type: "logPauseEvent",
-                    },
+                    actions: [
+                      assign({
+                        isMomentaryActive: false,
+                      }),
+                      {
+                        type: "momentaryHasPaused",
+                      },
+                      {                    
+                        type: "stopAnimation",
+                        params: {
+                          animation: "glow",
+                        },
+                      },
+                    ],
                   },
                   "saypi:transcribeFailed": {
                     target: [
@@ -1459,8 +1485,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       ) => {
         const { state } = meta;
         const autoSubmitEnabled = userPreferences.getCachedAutoSubmit();
-        const isMomentaryInactive = !context.isMomentaryEnabled && !context.isMomentaryActive;
-        return autoSubmitEnabled && readyToSubmit(state, context) && isMomentaryInactive;
+        return autoSubmitEnabled && readyToSubmit(state, context) && !context.isMomentaryActive;
       },
       readyToSubmitFromMomentary: (context: SayPiContext, event: SayPiEvent) => {
         console.log("-----> Entered readyToSubmitFromMomentary() result: " + readyToSubmitOnAllowedState(true, context));
