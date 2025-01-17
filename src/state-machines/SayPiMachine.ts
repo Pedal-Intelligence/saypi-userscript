@@ -128,6 +128,7 @@ type SayPiStateSchema = {
         };
       };
     };
+    momentaryPaused: {};
     responding: {
       states: {
         piThinking: {};
@@ -465,25 +466,24 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 description:
                   'Enable Momentary Mode. Now recording will only stop if the user releases the button.',
               },
-              "saypi:momentaryPause":
-                {
-                  target: "#sayPi.listening.converting.submitting",
-                  cond: "readyToSubmitFromMomentary",
-                  actions: [
-                    assign({
-                      isMomentaryActive: false,
-                    }),
-                    {
-                      type: "momentaryHasPaused",
+              "saypi:momentaryPause": {
+                target: "#sayPi.listening.converting.submitting",
+                cond: "readyToSubmitFromMomentary",
+                actions: [
+                  assign({
+                    isMomentaryActive: false,
+                  }),
+                  {
+                    type: "momentaryHasPaused",
+                  },
+                  {                    
+                    type: "stopAnimation",
+                    params: {
+                      animation: "glow",
                     },
-                    {                    
-                      type: "stopAnimation",
-                      params: {
-                        animation: "glow",
-                      },
-                    },
-                  ],
-                },
+                  },
+                ],
+              },
               "saypi:momentaryStop": {
                 actions: [
                   assign({
@@ -511,12 +511,6 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     cond: "submissionConditionsMet",
                     description: "Submit combined transcript to Pi.",
                   },
-                  /*
-                  momentarySubmissionDelay: {
-                    target: "#sayPi.listening.recording",
-                    cond: "momentaryIsActive",
-                    description: "Will return to listening because momentary mode is active.",
-                  }, */
                 },
                 entry: { 
                   type: "draftPrompt",
@@ -806,17 +800,16 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
 
       momentaryPaused: {
-        description:
-          "In momentary mode and the button has been released, so the microphone is ignoring input",
-        
-          entry:[
-            {
-              type: "pauseAudio",
-            },  
-            {
-              type: "momentaryReturnsToPaused",
-            }, 
-          ],       
+        // this state obviates the modification of the user_interrupting state for when momentary mode is enabled
+        description: "In momentary mode and the button has been released, so the microphone is ignoring input",    
+        entry:[
+          {
+            type: "pauseAudio",
+          },  
+          {
+            type: "momentaryReturnsToPaused",
+          }, 
+        ],       
         on: {             
           "saypi:momentaryListen": {
           actions: [
@@ -1049,11 +1042,11 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   target: "#sayPi.momentaryPaused",
                 },  
                 {
-                target: "userInterrupting",
-                cond: "isMomentaryDisabled",
-                description: "Fallback transition after 500ms if piStoppedSpeaking event does not fire.",
-              },
-            ]
+                  target: "userInterrupting",
+                  cond: "isMomentaryDisabled",
+                  description: "Fallback transition after 500ms if piStoppedSpeaking event does not fire.",
+                },
+              ]
             },
             description: "Interrupt requested. Waiting for Pi to stop speaking before recording.",
           },
@@ -1184,13 +1177,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           });
         }
       },
-      logPauseEvent: (
-        SayPiContext,
-        event: SayPiTranscribedEvent
-      ) => {
-        console.log("-------> logPauseEvent() Momentary Pause detected from accumulating state!");
-      },
-
+  
       acquireMicrophone: (context, event) => {
         // warmup the microphone on idle in mobile view,
         // since there's no mouseover event to trigger it
@@ -1231,15 +1218,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         EventBus.emit("audio:stopRecording");
         EventBus.emit("audio:tearDownRecording");
       },
-/*
-      submitTranscriptions: (context: SayPiContext, event) => {
-        let isReadyToSubmit = readyToSubmitOnAllowedState(true, context);
-        console.log("entered submitTranscriptions() isReadyToSubmit: " + isReadyToSubmit);
-        if(isReadyToSubmit) {
-          console.log("calling for momentarySubmitTranscriptions event!");
-          EventBus.emit("saypi:submit");
-        }
-      },*/
+
       reconnectAudio: (context, event) => {
         EventBus.emit("audio:input:reconnect");
       },
@@ -1279,6 +1258,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           getPromptOrNull()?.setMessage(message);
         }
       },
+
       callStartingPrompt: () => {
         const message = getMessage("callStarting");
         if (message) {
@@ -1287,18 +1267,21 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           getPromptOrNull()?.setMessage(message);
         }
       },
+
       thinkingPrompt: () => {
         const message = getMessage("assistantIsThinking", chatbot.getName());
         if (message) {
           getPromptOrNull()?.setMessage(message);
         }
       },
+
       writingPrompt: () => {
         const message = getMessage("assistantIsWriting", chatbot.getName());
         if (message) {
           getPromptOrNull()?.setMessage(message);
         }
       },
+
       speakingPrompt: (context: SayPiContext) => {
         const handsFreeInterrupt =
           userPreferences.getCachedAllowInterruptions();
@@ -1312,6 +1295,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           getPromptOrNull()?.setMessage(message);
         }
       },
+
       interruptingPiPrompt: () => {
         const message = getMessage(
           "userStartedInterrupting",
@@ -1321,9 +1305,11 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           getPromptOrNull()?.setMessage(message);
         }
       },
+
       clearPrompt: (context: SayPiContext) => {
         getPromptOrNull()?.setMessage(context.defaultPlaceholderText);
       },
+
       draftPrompt: (context: SayPiContext) => {
         const text = mergeService
           .mergeTranscriptsLocal(context.transcriptions)
@@ -1341,83 +1327,78 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       callIsStarting: () => {
         buttonModule.callStarting();
       },
+
       callFailedToStart: () => {
         buttonModule.callInactive();
         audibleNotifications.callFailed();
       },     
-      momentaryHasStarted: () => {
-        console.log("SayPiMachine entered momentaryHasStarted()");
-        buttonModule.callMomentary();
-        EventBus.emit("audio:input:reconnect");
-       // TODO: fix this sayPi.isMomentaryEnabled = true;
-      },
-      momentaryHasPaused: () => {
-        console.log("SayPiMachine entered momentaryHasPaused()");
-        buttonModule.pauseMomentary();
-        AnimationModule.stopAnimation("glow");
-        EventBus.emit("audio:stopRecording"); //JAC temp message -> soft stop instead of hard stop, see if this will produce an audio blob
-      },
-      momentaryReturnsToPaused: () => {
-        console.log("SayPiMachine entered momentaryReturnsToPaused()");
-        buttonModule.pauseMomentary();
-      },
-      momentaryHasStopped: () => {
-        console.log("SayPiMachine entered momentaryHasStopped()");
-        buttonModule.callActive();
-        EventBus.emit("audio:input:reconnect");
-      },
+
       callNotStarted: () => {
         if (buttonModule) {
           // buttonModule may not be available on initial load
           buttonModule.callInactive();
         }
       },
+
       callHasStarted: () => {
         buttonModule.callActive();
         audibleNotifications.callStarted();
         EventBus.emit("session:started");
       },
+
       callInterruptible: () => {
         buttonModule.callInterruptible();
       },
+
       callInterruptibleIfListening: (context: SayPiContext) => {
         if (context.lastState === "listening") {
           buttonModule.callInterruptible();
         }
       },
+
       callContinues: () => {
         buttonModule.callActive();
       },
+
       callHasEnded: () => {
         visualNotifications.listeningStopped();
         buttonModule.callInactive();
         audibleNotifications.callEnded();
         EventBus.emit("session:ended");
       },
+
       callHasErrors: () => {
         buttonModule.callError();
       },
+
       callHasNoErrors: () => {
         buttonModule.callActive();
       },
+
       disableCallButton: () => {
         buttonModule.disableCallButton();
       },
+
       enableCallButton: () => {
         buttonModule.enableCallButton();
       },
+
       cancelCountdownAnimation: () => {
         visualNotifications.listeningStopped();
       },
+
       activateAudioOutput: () => {
         audioControls.activateAudioOutput(true);
       },
+
       requestWakeLock: () => {
         requestWakeLock();
       },
+
       releaseWakeLock: () => {
         releaseWakeLock();
       },
+
       notifySentMessage: (context: SayPiContext, event: SayPiEvent) => {
         const delay_ms = Date.now() - context.timeUserStoppedSpeaking;
         const submission_delay_ms = lastSubmissionDelay;
@@ -1426,36 +1407,42 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           wait_time_ms: submission_delay_ms,
         });
       },
+
       clearPendingTranscriptionsAction: (context: SayPiContext) => {
         // discard in-flight transcriptions. Called after a successful submission
-        /*
-        console.log("Entered clearPendingTranscriptionsAction()");
-        
-        if(!context.isMomentaryEnabled){
-          console.log("momentary is not enabled, so clearing pending transcripts!!");
-          clearPendingTranscriptions();
-        }
-          */
         clearPendingTranscriptions();
       },
+
       clearTranscriptsAction: assign({
         transcriptions: () => ({}),
       }),
-      clearTranscripts:(context: SayPiContext) => {
-        console.log("Entered clearTranscripts()");
-        if(!context.isMomentaryEnabled) {
-          console.log("clearTranscripts() momentary is not enabled, so clearing transcripts!");
-          context.transcriptions = {};
-        }
-      },
+
       pauseAudio: () => {
         EventBus.emit("audio:output:pause");
       },
+
       resumeAudio: () => {
         EventBus.emit("audio:output:resume");
       },      
-      doNothing: () => {
-        console.log("SayPiMachine, Entered doNothing()");
+
+      momentaryHasStarted: () => {
+        buttonModule.callMomentary();
+        EventBus.emit("audio:input:reconnect");
+      },
+
+      momentaryHasPaused: () => {
+        buttonModule.pauseMomentary();
+        AnimationModule.stopAnimation("glow");
+        EventBus.emit("audio:stopRecording"); //JAC temp message -> soft stop instead of hard stop, see if this will produce an audio blob
+      },
+
+      momentaryReturnsToPaused: () => {
+        buttonModule.pauseMomentary();
+      },
+
+      momentaryHasStopped: () => {
+        buttonModule.callActive();
+        EventBus.emit("audio:input:reconnect");
       },
     },
     services: {},
@@ -1487,44 +1474,35 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         const autoSubmitEnabled = userPreferences.getCachedAutoSubmit();
         return autoSubmitEnabled && readyToSubmit(state, context) && !context.isMomentaryActive;
       },
-      readyToSubmitFromMomentary: (context: SayPiContext, event: SayPiEvent) => {
-        console.log("-----> Entered readyToSubmitFromMomentary() result: " + readyToSubmitOnAllowedState(true, context));
-        return readyToSubmitOnAllowedState(true, context);
-      },
-      notReadyToSubmitFromMomentary: (context: SayPiContext, event: SayPiEvent) => {
-        return !readyToSubmitOnAllowedState(true, context);;
-      },
+
       wasListening: (context: SayPiContext) => {
         return context.lastState === "listening" && !context.isMomentaryEnabled;
       },
-      wasListeningWithMomentary: (context: SayPiContext) => {
-        return context.lastState === "listening" && context.isMomentaryEnabled;
-      },
+
       wasInactive: (context: SayPiContext) => {
         return context.lastState === "inactive";
       },
+
       interruptionsAllowed: (context: SayPiContext) => {
         const allowInterrupt = userPreferences.getCachedAllowInterruptions();
         return allowInterrupt;
-      },
-      interruptionsNotAllowed: (context: SayPiContext) => {
-        const allowInterrupt = userPreferences.getCachedAllowInterruptions();
-        return !allowInterrupt;
-      },      
+      },   
+
       isMomentaryEnabled: (context: SayPiContext) => {
-        console.log("Entered isMomentaryEnabled: result: " + context.isMomentaryEnabled);
         return context.isMomentaryEnabled;
-      },      
+      },  
+
       isMomentaryDisabled: (context: SayPiContext) => {
-        console.log("SayPiMachine, Entered isMomentaryDiabled: result: " + (!context.isMomentaryEnabled));
         return !context.isMomentaryEnabled;
+      },   
+
+      readyToSubmitFromMomentary: (context: SayPiContext) => {
+        return readyToSubmitOnAllowedState(true, context);
+      },   
+
+      wasListeningWithMomentary: (context: SayPiContext) => {
+        return context.lastState === "listening" && context.isMomentaryEnabled;
       },
-      momentaryIsActive: (context: SayPiContext) => {
-        return context.isMomentaryEnabled && context.isMomentaryActive;
-      },
-      momentaryDisabledOrPaused: (context: SayPiContext) => {
-        return !context.isMomentaryEnabled || (context.isMomentaryEnabled && !context.isMomentaryActive);
-      }
     },
     delays: {
       submissionDelay: (context: SayPiContext, event: SayPiEvent) => {
@@ -1582,6 +1560,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
     },
   }
 );
+
 function readyToSubmitOnAllowedState(
   allowedState: boolean,
   context: SayPiContext
@@ -1592,10 +1571,12 @@ function readyToSubmitOnAllowedState(
   console.log("Entered readyToSubmitOnAllowedState() empty: " + empty + " any pending: " + pending + " is ready: " + ready);
   return ready;
 }
+
 function provisionallyReadyToSubmit(context: SayPiContext): boolean {
   const allowedState = !(context.userIsSpeaking || context.isTranscribing); // we don't have access to the state, so we read from a copy in the context (!DRY)
   return readyToSubmitOnAllowedState(allowedState, context);
 }
+
 function readyToSubmit(
   state: State<SayPiContext, SayPiEvent, any, any, any>,
   context: SayPiContext
