@@ -380,21 +380,21 @@ class ButtonModule {
   }
 
   createEvent(eventName) {
-    
     return () => { 
-      console.log(" ^^^^^^^^^^^ ButtonModule.createEvent() ->>> : " + eventName);
-      this.sayPiActor.send(eventName); };
+      this.sayPiActor.send(eventName); 
+    };
   }
 
   callStarting(callButton) {
     const label = getMessage("callStarting");
-    this.updateCallButton(callButton, callStartingIconSVG, label, () =>
-      this.sayPiActor.send("saypi:hangup")
+    this.updateCallButton(callButton, 
+      callStartingIconSVG, 
+      label, 
+      () => this.sayPiActor.send("saypi:hangup")
     );
   }
 
   callActive(callButton) {
-    console.log("ButtonModule entered callActive()");
     this.updateLongClickCallButton(
       callButton,
       hangupIconSVG,
@@ -406,7 +406,6 @@ class ButtonModule {
   }
 
   callMomentary(callButton) {
-    console.log("ButtonModule entered callMomentary()");
      this.updateLongClickCallButton(
        callButton,
        momentaryListeningIconSVG,
@@ -418,7 +417,6 @@ class ButtonModule {
    }
  
    pauseMomentary(callButton) {
-    console.log("ButtonModule entered pauseMomentary()");
      this.updateLongClickCallButton(
        callButton,
        momentaryPausedIconSVG,
@@ -452,14 +450,11 @@ class ButtonModule {
 
   isShortClick(clickStartTime, limit) {
     const clickDuration =  (Date.now() - clickStartTime);
-    console.log("ButtonModule.isShortClick() startTime: " + clickStartTime + " duration: " + clickDuration);
     return clickStartTime == 0 || clickDuration < limit;
   }
 
-
   handleLongClick(button, onClick, onLongPressDown, onLongPressUp ) {
     const longPressMinimumMilliseconds = 500;
-    var clickStartTime = 0;
     var isMouseUpDetected = false;
     
     onClick = this.setEmptyDefault(onClick);
@@ -471,7 +466,6 @@ class ButtonModule {
       this.clickStartTime = Date.now();
       window.setTimeout( () => {
         if(!isMouseUpDetected) {
-          console.log("ButtonModule.handleLongClick(): long press down detected!");
           onLongPressDown();
         }
       }, longPressMinimumMilliseconds);
@@ -480,10 +474,8 @@ class ButtonModule {
     button.onmouseup = () => { 
       isMouseUpDetected = true;
       if(this.isShortClick(this.clickStartTime, longPressMinimumMilliseconds)) {
-        console.log("ButtonModule.handleLongClick(): short click detected!");
         onClick();
       } else {
-        console.log("ButtonModule.handleLongClick(): long press up detected!");
         onLongPressUp();
       }
     }
