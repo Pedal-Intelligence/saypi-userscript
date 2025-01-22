@@ -8,10 +8,22 @@ import { isMobileDevice } from "./UserAgentModule";
 const focusActor = interpret(focusMachine);
 const tickInterval = 1000;
 var ticker: NodeJS.Timeout;
-const userInputEvents = ["mousemove", "click", "keypress"];
+const userInputEvents = ["mousemove", "keypress"];
 
 function handleUserInput() {
   focusActor.send({ type: "blur" });
+}
+
+function handleMouseDown() {
+  if(document.fullscreenEnabled) {
+    focusActor.send({ type: "pause" });
+  }
+}
+
+function handleMouseUp() {
+  if(document.fullscreenEnabled) {
+    focusActor.send({ type: "resume" });
+  }
 }
 
 function startFocusModeListener() {
@@ -23,6 +35,8 @@ function startFocusModeListener() {
   for (const event of userInputEvents) {
     document.addEventListener(event, handleUserInput);
   }
+  document.addEventListener("mousedown", handleMouseDown);
+  document.addEventListener("mouseup", handleMouseUp);
 }
 
 function stopFocusModeListener() {

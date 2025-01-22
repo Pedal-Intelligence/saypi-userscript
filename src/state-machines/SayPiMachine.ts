@@ -1427,21 +1427,25 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
 
       momentaryHasStarted: () => {
         buttonModule.callMomentary();
+        AnimationModule.startAnimation("glow");
         EventBus.emit("audio:input:reconnect");
       },
 
       momentaryHasPaused: () => {
         buttonModule.pauseMomentary();
         AnimationModule.stopAnimation("glow");
+        AnimationModule.stopAnimation("userSpeaking");
         EventBus.emit("audio:stopRecording"); //JAC temp message -> soft stop instead of hard stop, see if this will produce an audio blob
       },
 
       momentaryReturnsToPaused: () => {
+        AnimationModule.stopAnimation("glow");
         buttonModule.pauseMomentary();
       },
 
       momentaryHasStopped: () => {
         buttonModule.callActive();
+        AnimationModule.startAnimation("glow");
         EventBus.emit("audio:input:reconnect");
       },
     },
