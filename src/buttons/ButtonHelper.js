@@ -2,14 +2,17 @@ import getMessage from "../i18n.ts";
 import StateMachineService from "../StateMachineService.js";
 import { createSVGElement } from "../dom/DOMModule.ts";
 
-class ClickHandler{
+class ButtonUpdater{
 
-    constructor(){
-        console.log("^^^ entered ClickHandler constructor, setting initializing clickStartTime to 0");
+    constructor() {
         this.clickStartTime = 0;
         this.isLongClickEngaged = false;      
         this.isMouseDown = false;
+
         this.sayPiActor = StateMachineService.actor;
+
+        // track whether a call is active, so that new button instances can be initialized correctly
+        this.callIsActive = false;
     }
 
     removeChildrenFrom(callButton) {
@@ -63,7 +66,6 @@ class ClickHandler{
         button.onmousedown = () => {
             this.isMouseDown = true;
             this.clickStartTime = Date.now();
-            console.log("^^^ on mouse down, click start time is: " + this.clickStartTime);
             window.setTimeout( () => {
             if (this.isMouseDown === true) {
                 onLongPressDown();
@@ -75,10 +77,8 @@ class ClickHandler{
         button.onmouseup = () => { 
             this.isMouseDown = false;
             if (this.isShortClick(this.clickStartTime, longPressMinimumMilliseconds)) {
-                console.log("^^^ shortClick onClick() clickStartTime: " + this.clickStartTime);
                 onClick();
             } else if (this.isLongClickEngaged) {
-                console.log("^^^ about to run onLongPressUp()");
                 onLongPressUp();
                 this.isLongClickEngaged = false;
             }
@@ -94,39 +94,45 @@ class ClickHandler{
         }
     }
 
+    isCallActive() {
+        return this.callIsActive;
+    }
+
     updateCallButton(options) {
-        let {callButton, icon, label, clickEventName, longPressEventName, longReleaseEventName, labelArgument = null, isCallActive = false, isMouseOutProcessed = false} = options;
-        if (!callButton) {
-            callButton = document.getElementById("saypi-callButton");
+        let {button, icon, label, labelArgument, clickEventName, longPressEventName, longReleaseEventName, isCallActive = false, isMouseOutProcessed = false} = options;
+        if (!button) {
+            button = document.getElementById("saypi-callButton");
         }
-        if (callButton) {
-            this.removeChildrenFrom(callButton);
-            this.addIconTo(callButton, icon);
-            this.resetListenersOf(callButton);
-            this.setAriaLabelOf(callButton, label, labelArgument);
-        
+        if (button) {
+            this.removeChildrenFrom(button);
+            this.addIconTo(button, icon);
+            this.resetListenersOf(button);
+            this.setAriaLabelOf(button, label, labelArgument);
             this.handleButtonClicks({
-                button: callButton,
+                button: button,
                 onClick: this.createEvent(clickEventName),
                 onLongPressDown: this.createEvent(longPressEventName),
                 onLongPressUp: this.createEvent(longReleaseEventName),
                 isMouseOutHandled: isMouseOutProcessed,
             });
-            this.toggleActiveState(callButton, isCallActive);
+            this.toggleActiveState(button, isCallActive);
+            this.callIsActive = isCallActive;
         }
     }
 }
 
-class ButtonUpdater {
+class ButtonHelper {
     constructor() {
-        this.clickHandler = new ClickHandler();
+        this.buttonUpdater = new ButtonUpdater();
     }
 
     updateCallButton(options) {
-        this.clickHandler.updateCallButton(options);
+        this.buttonUpdater.updateCallButton(options);
+    }
+
+    isCallActive() {
+        return this.buttonUpdater.isCallActive();
     }
 }
 
-
-
-export { ButtonUpdater }
+export { ButtonHelper }

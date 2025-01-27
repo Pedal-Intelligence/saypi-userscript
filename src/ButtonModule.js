@@ -25,7 +25,7 @@ import { IconModule } from "./icons/IconModule.ts";
 import { ImmersionStateChecker } from "./ImmersionServiceLite.ts";
 import { GlowColorUpdater } from "./buttons/GlowColorUpdater.js";
 import { openSettings } from "./popup/popupopener.ts";
-import { ButtonUpdater } from "./buttons/ButtonUpdater.js";
+import { ButtonHelper } from "./buttons/ButtonHelper.js";
 
 class ButtonModule {
   /**
@@ -34,22 +34,17 @@ class ButtonModule {
    */
   constructor(chatbot) {
     this.icons = new IconModule();
+    this.buttonHelper = new ButtonHelper();
     this.userPreferences = UserPreferenceModule.getInstance();
     this.chatbot = chatbot;
     this.immersionService = new ImmersionService(chatbot);
     this.glowColorUpdater = new GlowColorUpdater();
-    this.sayPiActor = StateMachineService.actor; // the Say, Pi state machine
     this.screenLockActor = StateMachineService.screenLockActor;
     // Binding methods to the current instance
     this.registerOtherEvents();
 
     // track the frequency of bug #26
     this.submissionsWithoutAnError = 0;
-
-    // track whether a call is active, so that new button instances can be initialized correctly
-    this.callIsActive = false;
-    this.clickStartTime = 0;
-    this.buttonUpdater = new ButtonUpdater();
   }
 
   registerOtherEvents() {
@@ -302,28 +297,18 @@ class ButtonModule {
     button.type = "button";
     button.classList.add("call-button", "saypi-button", "tooltip");
     button.classList.add(...this.chatbot.getExtraCallButtonClasses());
-    if (this.callIsActive) {
+    if (this.buttonHelper.isCallActive()) {
       this.callActive(button);
     } else {
       this.callInactive(button);
     }
 
     addChild(container, button, position);
-    if (this.callIsActive) {
+    if (this.buttonHelper.isCallActive()) {
       // if the call is active, start the glow animation once added to the DOM
       AnimationModule.startAnimation("glow");
     }
     return button;
-  }
-
-  updateCallButtonColor(color) {
-    const callButton = document.getElementById("saypi-callButton");
-    // find first path element descendant of the call button's svg element child
-    const path = callButton?.querySelector("svg path");
-    if (path) {
-      // set the fill color of the path element
-      path.style.fill = color;
-    }
   }
 
   /**
@@ -332,55 +317,20 @@ class ButtonModule {
    */
   handleAudioFrame(probabilities) {
     this.glowColorUpdater.updateGlowColor(probabilities.isSpeech);
-
-  }
-  removeChildrenFrom(callButton) {
-    while (callButton.firstChild) {
-      callButton.removeChild(callButton.firstChild);
-    }
-  }
-
-  addIconTo(callButton, svgIcon) {
-    const svgElement = createSVGElement(svgIcon);
-    callButton.appendChild(svgElement);
-  }
-
-  toggleActiveState(callButton, isActive) {
-    callButton.classList.toggle("active", isActive);
-  }
-
-  updateCallButton(callButton, svgIcon, label, onClick, isActive = false) {  
-    if (!callButton) {
-      callButton = document.getElementById("saypi-callButton");
-    }
-    if (callButton) {
-      this.removeChildrenFrom(callButton);
-      this.addIconTo(callButton, svgIcon);
-      callButton.setAttribute("aria-label", label);
-      this.handleLongClick(callButton, onClick);
-      this.toggleActiveState(callButton, isActive);
-    }
-    this.callIsActive = isActive;
-  }
-
-  createEvent(eventName) {
-    return () => { 
-      this.sayPiActor.send(eventName); 
-    };
   }
 
   callStarting(callButton) {
-    const label = getMessage("callStarting");
-    this.updateCallButton(callButton, 
-      callStartingIconSVG, 
-      label, 
-      () => this.sayPiActor.send("saypi:hangup")
-    );
+    this.buttonHelper.updateCallButton({
+      button: callButton,
+      icon: callStartingIconSVG,
+      label: "callStarting",
+      clickEventName: "saypi:hangup",
+    });
   }
 
   callActive(callButton) {
-    this.buttonUpdater.updateCallButton({
-      button:callButton,
+    this.buttonHelper.updateCallButton({
+      button: callButton,
       icon: hangupIconSVG,
       label: "callInProgress",
       clickEventName: "saypi:hangup",
@@ -390,9 +340,8 @@ class ButtonModule {
   }
 
   callMomentary(callButton) {
-    this.callIsActive = true;
-    this.buttonUpdater.updateCallButton({
-      button:callButton,
+    this.buttonHelper.updateCallButton({
+      button: callButton,
       icon: momentaryListeningIconSVG,
       label: "callInProgress",
       clickEventName: "saypi:momentaryStop",
@@ -403,8 +352,8 @@ class ButtonModule {
    }
  
    pauseMomentary(callButton) {
-    this.buttonUpdater.updateCallButton({
-      button:callButton,
+    this.buttonHelper.updateCallButton({
+      button: callButton,
       icon: momentaryPausedIconSVG,
       label: "callInProgress",
       clickEventName: "saypi:momentaryStop",
@@ -416,67 +365,34 @@ class ButtonModule {
   callInterruptible(callButton) {
     const handsFreeInterruptEnabled =
       this.userPreferences.getCachedAllowInterruptions();
+
     if (!handsFreeInterruptEnabled) {
-      const label = getMessage("callInterruptible");
-      this.updateCallButton(
-        callButton,
-        interruptIconSVG,
-        label,
-        () => {
-          this.sayPiActor.send("saypi:interrupt");
-        },
-        true
-      );
-    }
-  }
-
-  setEmptyDefault(runnable) {
-    return runnable ? runnable : () => {};
-  }
-
-  isShortClick(clickStartTime, limit) {
-    const clickDuration =  (Date.now() - clickStartTime);
-    return clickStartTime == 0 || clickDuration < limit;
-  }
-
-  handleLongClick(button, onClick, onLongPressDown, onLongPressUp ) {
-    const longPressMinimumMilliseconds = 500;
-    var isMouseUpDetected = false;
-    
-    onClick = this.setEmptyDefault(onClick);
-    onLongPressDown = this.setEmptyDefault(onLongPressDown);
-    onLongPressUp = this.setEmptyDefault(onLongPressUp);
-    
-    button.onmousedown = () => {
-      isMouseUpDetected = false;
-      this.clickStartTime = Date.now();
-      window.setTimeout( () => {
-        if(!isMouseUpDetected) {
-          onLongPressDown();
-        }
-      }, longPressMinimumMilliseconds);
-    }
-    
-    button.onmouseup = () => { 
-      isMouseUpDetected = true;
-      if(this.isShortClick(this.clickStartTime, longPressMinimumMilliseconds)) {
-        onClick();
-      } else {
-        onLongPressUp();
-      }
+      this.buttonHelper.updateCallButton({
+        button: callButton,
+        icon: interruptIconSVG,
+        label: "callInterruptible",
+        clickEventName: "saypi:interrupt",
+        isCallActive: true,
+      });
     }
   }
 
   callInactive(callButton) {
-    const label = getMessage("callNotStarted", this.chatbot.getName());
-    this.updateCallButton(callButton, callIconSVG, label, () =>
-      this.sayPiActor.send("saypi:call")
-    );
+    this.buttonHelper.updateCallButton({
+      button: callButton,
+      icon: callIconSVG,
+      label: "callNotStarted",
+      labelArgument: this.chatbot.getName(),
+      clickEventName: "saypi:call",
+    });
   }
 
   callError(callButton) {
-    const label = getMessage("callError");
-    this.updateCallButton(callButton, hangupMincedIconSVG, label, null);
+    this.buttonHelper.updateCallButton({
+      button: callButton,
+      icon: hangupMincedIconSVG,
+      label: "callError",
+    });
   }
 
   disableCallButton() {
