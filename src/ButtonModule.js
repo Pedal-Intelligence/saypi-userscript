@@ -25,6 +25,7 @@ import { IconModule } from "./icons/IconModule.ts";
 import { ImmersionStateChecker } from "./ImmersionServiceLite.ts";
 import { GlowColorUpdater } from "./buttons/GlowColorUpdater.js";
 import { openSettings } from "./popup/popupopener.ts";
+import { ButtonUpdater } from "./buttons/ButtonUpdater.js";
 
 class ButtonModule {
   /**
@@ -48,6 +49,7 @@ class ButtonModule {
     // track whether a call is active, so that new button instances can be initialized correctly
     this.callIsActive = false;
     this.clickStartTime = 0;
+    this.buttonUpdater = new ButtonUpdater();
   }
 
   registerOtherEvents() {
@@ -361,24 +363,6 @@ class ButtonModule {
     this.callIsActive = isActive;
   }
 
-  updateLongClickCallButton(callButton, svgIcon, label, clickEventName, longPressEventName, longReleaseEventName, isActive = true) {
-    if (!callButton) {
-      callButton = document.getElementById("saypi-callButton");
-    }
-    if (callButton) {
-      this.removeChildrenFrom(callButton);
-      this.addIconTo(callButton, svgIcon);
-      callButton.onclick = () => {};
-      this.setAriaLabelOf(callButton, label);
-      let onClick = this.createEvent(clickEventName);
-      let onLongPressDown = this.createEvent(longPressEventName);
-      let onLongPressUp = this.createEvent(longReleaseEventName);
-      this.handleLongClick(callButton, onClick, onLongPressDown, onLongPressUp);
-      this.toggleActiveState(callButton, isActive);
-    }
-    this.callIsActive = isActive;
-  }
-
   createEvent(eventName) {
     return () => { 
       this.sayPiActor.send(eventName); 
@@ -395,36 +379,38 @@ class ButtonModule {
   }
 
   callActive(callButton) {
-    this.updateLongClickCallButton(
-      callButton,
-      hangupIconSVG,
-      "callInProgress",
-      "saypi:hangup",
-      "saypi:momentaryListen",
-      "saypi:momentaryPause",
-    ); 
+    this.buttonUpdater.updateCallButton({
+      button:callButton,
+      icon: hangupIconSVG,
+      label: "callInProgress",
+      clickEventName: "saypi:hangup",
+      longPressEventName: "saypi:momentaryListen",
+      isCallActive: true,
+    });
   }
 
   callMomentary(callButton) {
-     this.updateLongClickCallButton(
-       callButton,
-       momentaryListeningIconSVG,
-       "callInProgress",
-       "saypi:momentaryStop",
-       "saypi:momentaryPause",
-       "saypi:momentaryPause",
-     );
+    this.callIsActive = true;
+    this.buttonUpdater.updateCallButton({
+      button:callButton,
+      icon: momentaryListeningIconSVG,
+      label: "callInProgress",
+      clickEventName: "saypi:momentaryStop",
+      longReleaseEventName: "saypi:momentaryPause",
+      isMouseOutProcessed: true,
+      isCallActive: true,
+    });
    }
  
    pauseMomentary(callButton) {
-     this.updateLongClickCallButton(
-       callButton,
-       momentaryPausedIconSVG,
-       "callInProgress",
-       "saypi:momentaryStop",
-       "saypi:momentaryListen",
-       "saypi:momentaryPause",
-     );
+    this.buttonUpdater.updateCallButton({
+      button:callButton,
+      icon: momentaryPausedIconSVG,
+      label: "callInProgress",
+      clickEventName: "saypi:momentaryStop",
+      longPressEventName: "saypi:momentaryListen",
+      isCallActive: true,
+    });
    }
  
   callInterruptible(callButton) {
