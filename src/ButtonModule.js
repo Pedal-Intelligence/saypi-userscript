@@ -343,7 +343,7 @@ class ButtonModule {
     this.buttonHelper.updateCallButton({
       button: callButton,
       icon: momentaryListeningIconSVG,
-      label: "callInProgress",
+      label: "momentaryCallListening",
       clickEventName: "saypi:momentaryStop",
       longReleaseEventName: "saypi:momentaryPause",
       isMouseOutProcessed: true,
@@ -355,7 +355,7 @@ class ButtonModule {
     this.buttonHelper.updateCallButton({
       button: callButton,
       icon: momentaryPausedIconSVG,
-      label: "callInProgress",
+      label: "momentaryCallPaused",
       clickEventName: "saypi:momentaryStop",
       longPressEventName: "saypi:momentaryListen",
       isCallActive: true,

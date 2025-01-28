@@ -27,6 +27,14 @@
     "message": "End hands-free conversation",
     "description": "The tooltip to display on the call button when a call is in progress."
   },
+  "momentaryCallPaused": {
+    "message": "Hold to speak, or click to return to hands-free mode",
+    "description": "The tooltip to display on the call button when a call is in progress and momentary mode is paused."
+  },
+  "momentaryCallListening": {
+    "message": "Release when finished speaking",
+    "description": "The tooltip to display on the call button when a call is in progress and momentary mode is active."
+  },
   "callInterruptible": {
     "message": "Tap to interrupt",
     "description": "The tooltip to display on the call button when a call is in progress and manual interruption is possible."
@@ -192,6 +200,16 @@
   "userStartedInterrupting": {
     "message": "Go ahead, $chatbot$ is listening...",
     "description": "Message displayed when the user starts speaking while the assistant is speaking.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },  
+  "microphoneIsMuted": {
+    "message": "The microphone is muted...",
+    "description": "Message displayed when the 'momentary' mode is enabled but paused.",
     "placeholders": {
       "chatbot": {
         "content": "$1",

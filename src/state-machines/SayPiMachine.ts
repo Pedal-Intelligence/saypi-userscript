@@ -364,7 +364,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 },
               },
               {
-                type: "listenPrompt",
+                type: "listenOrPausedPrompt",
               },
             ],
             exit: [
@@ -468,6 +468,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   {
                     type: "momentaryHasStarted",
                   },
+                  {
+                    type: "listenPrompt",
+                  },
                 ],
                 description:
                   'Enable Momentary Mode. Now recording will only stop if the user releases the button.',
@@ -478,8 +481,12 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     assign({
                       isMomentaryActive: false,
                     }),
+                    {
+                      type: "momentaryPausedPrompt",
+                    },
                   ]
                 },
+
                 {
                   target: "#sayPi.listening.converting.submitting",
                   cond: "readyToSubmitFromMomentary",
@@ -498,6 +505,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   }),
                   {
                     type: "momentaryHasStopped",
+                  },
+                  {
+                    type: "listenPrompt"
                   },
                 ], 
                 description:
@@ -815,10 +825,13 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           {
             type: "momentaryReturnsToPaused",
           }, 
+          {
+            type: "momentaryPausedPrompt",
+          },
         ],       
         on: {             
           "saypi:momentaryListen": {
-          actions: [
+            actions: [
               assign({ isMomentaryActive: true }), 
               {
                 type: "momentaryHasStarted"
@@ -832,6 +845,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               assign({ isMomentaryEnabled: false }), 
               {
                 type: "momentaryHasStopped"
+              },
+              {
+                type: "listenPrompt"
               },
             ], 
             target: "#sayPi.listening.recording",
@@ -1265,6 +1281,24 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         }
       },
 
+      listenOrPausedPrompt: (context: SayPiContext) => {
+        const isMomentaryPaused = context.isMomentaryEnabled && !context.isMomentaryActive;
+        const message = isMomentaryPaused
+          ? getMessage("microphoneIsMuted")
+          : getMessage("assistantIsListening", chatbot.getName());
+
+        if (message) {
+          getPromptOrNull()?.setMessage(message);
+        }
+      },
+
+      momentaryPausedPrompt: () => {
+        const message = getMessage("microphoneIsMuted");
+        if (message) {
+          getPromptOrNull()?.setMessage(message);
+        }
+      },
+
       callStartingPrompt: () => {
         const message = getMessage("callStarting");
         if (message) {
@@ -1307,6 +1341,13 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           "userStartedInterrupting",
           chatbot.getName()
         );
+        if (message) {
+          getPromptOrNull()?.setMessage(message);
+        }
+      },
+
+      pushToTalkPrompt: () => {
+        const message = getMessage("pressAndHoldToSpeak");
         if (message) {
           getPromptOrNull()?.setMessage(message);
         }
@@ -1583,6 +1624,13 @@ function readyToSubmitOnAllowedState(
   console.log("Entered readyToSubmitOnAllowedState() empty: " + empty + " any pending: " + pending + " is ready: " + ready);
   return ready;
 }
+
+function showMomentaryPausedPrompt (): void {
+  const message = getMessage("microphoneIsMuted");
+  if (message) {
+    getPromptOrNull()?.setMessage(message);
+  }
+};
 
 function provisionallyReadyToSubmit(context: SayPiContext): boolean {
   const allowedState = !(context.userIsSpeaking || context.isTranscribing); // we don't have access to the state, so we read from a copy in the context (!DRY)
