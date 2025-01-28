@@ -98,6 +98,7 @@ interface SayPiContext {
   sessionId?: string;
   isMomentaryEnabled: boolean;
   isMomentaryActive: boolean;
+  hasUserSpoken: boolean;
 }
 
 // Define the state schema
@@ -217,6 +218,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       userIsSpeaking: false,
       timeUserStoppedSpeaking: 0,
       defaultPlaceholderText: "",
+      hasUserSpoken: false,
     },
     id: "sayPi",
     initial: "inactive",
@@ -399,7 +401,10 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                       animation: "userSpeaking",
                     },
                   },
-                  assign({ userIsSpeaking: true }),
+                  assign({ 
+                    userIsSpeaking: true,
+                    hasUserSpoken: true,
+                   }),
                   {
                     type: "cancelCountdownAnimation",
                   },
@@ -458,6 +463,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   assign({
                     isMomentaryEnabled: true,
                     isMomentaryActive: true,
+                    hasUserSpoken: false,
                   }),
                   {
                     type: "momentaryHasStarted",
@@ -466,24 +472,24 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 description:
                   'Enable Momentary Mode. Now recording will only stop if the user releases the button.',
               },
-              "saypi:momentaryPause": {
-                target: "#sayPi.listening.converting.submitting",
-                cond: "readyToSubmitFromMomentary",
-                actions: [
-                  assign({
-                    isMomentaryActive: false,
-                  }),
-                  {
-                    type: "momentaryHasPaused",
-                  },
-                  {                    
-                    type: "stopAnimation",
-                    params: {
-                      animation: "glow",
+              "saypi:momentaryPause": [
+                {
+                  actions: [
+                    assign({
+                      isMomentaryActive: false,
+                    }),
+                  ]
+                },
+                {
+                  target: "#sayPi.listening.converting.submitting",
+                  cond: "readyToSubmitFromMomentary",
+                  actions: [
+                    {
+                      type: "momentaryHasPaused",
                     },
-                  },
-                ],
-              },
+                  ],
+                },
+              ],
               "saypi:momentaryStop": {
                 actions: [
                   assign({
@@ -1431,11 +1437,11 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         EventBus.emit("audio:input:reconnect");
       },
 
-      momentaryHasPaused: () => {
+      momentaryHasPaused: (context: SayPiContext,) => {
         buttonModule.pauseMomentary();
         AnimationModule.stopAnimation("glow");
         AnimationModule.stopAnimation("userSpeaking");
-        EventBus.emit("audio:stopRecording"); //JAC temp message -> soft stop instead of hard stop, see if this will produce an audio blob
+        EventBus.emit(context.hasUserSpoken ? "audio:stopRecording" : "audio:quickStopRecording");
       },
 
       momentaryReturnsToPaused: () => {
@@ -1458,6 +1464,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         }
         return false;
       },
+
       hasNoAudio: (context: SayPiContext, event: SayPiEvent) => {
         if (event.type === "saypi:userStoppedSpeaking") {
           event = event as SayPiSpeechStoppedEvent;
@@ -1469,6 +1476,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         }
         return false;
       },
+
       submissionConditionsMet: (
         context: SayPiContext,
         event: SayPiEvent,
