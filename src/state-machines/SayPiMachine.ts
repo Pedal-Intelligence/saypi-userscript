@@ -968,6 +968,19 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 },
                 description:
                   "The user starting speaking while Pi was speaking.",
+              },              
+              "saypi:momentaryListen": {
+                target: "#sayPi.listening.recording",
+                actions:[
+                  {
+                    type: "pauseAudio",
+                  },
+                  {
+                    type: "momentaryHasStarted",
+                  }
+                ],
+                description:
+                  "The user pushed the momentary button while while Pi was speaking.",
               },
               "saypi:interrupt": [
                 {
