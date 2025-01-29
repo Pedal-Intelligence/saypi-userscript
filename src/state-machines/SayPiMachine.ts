@@ -484,17 +484,14 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     {
                       type: "momentaryPausedPrompt",
                     },
-                  ]
-                },
-
-                {
-                  target: "#sayPi.listening.converting.submitting",
-                  cond: "readyToSubmitFromMomentary",
-                  actions: [
                     {
                       type: "momentaryHasPaused",
                     },
-                  ],
+                  ]
+                },
+                {
+                  target: "#sayPi.listening.converting.submitting",
+                  cond: "readyToSubmitFromMomentary",
                 },
               ],
               "saypi:momentaryStop": {
@@ -1288,28 +1285,22 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
 
       listenPrompt: () => {
-        const message = getMessage("assistantIsListening", chatbot.getName());
-        if (message) {
-          getPromptOrNull()?.setMessage(message);
-        }
+        setPromptMessage("assistantIsListening", chatbot);
       },
 
       listenOrPausedPrompt: (context: SayPiContext) => {
         const isMomentaryPaused = context.isMomentaryEnabled && !context.isMomentaryActive;
-        const message = isMomentaryPaused
-          ? getMessage("microphoneIsMuted")
-          : getMessage("assistantIsListening", chatbot.getName());
-
-        if (message) {
-          getPromptOrNull()?.setMessage(message);
+        if (isMomentaryPaused) {
+          setPromptMessage("microphoneIsMuted");
+        } else {
+          setPromptMessage("assistantIsListening", chatbot);
         }
       },
 
-      momentaryPausedPrompt: () => {
-        const message = getMessage("microphoneIsMuted");
-        if (message) {
-          getPromptOrNull()?.setMessage(message);
-        }
+      momentaryPausedPrompt: (context: SayPiContext) => {
+        context.hasUserSpoken
+          ? setPromptMessage("assistantIsThinking", chatbot)
+          : setPromptMessage("microphoneIsMuted");
       },
 
       callStartingPrompt: () => {
@@ -1322,48 +1313,28 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
 
       thinkingPrompt: () => {
-        const message = getMessage("assistantIsThinking", chatbot.getName());
-        if (message) {
-          getPromptOrNull()?.setMessage(message);
-        }
+        setPromptMessage("assistantIsThinking", chatbot);
       },
 
       writingPrompt: () => {
-        const message = getMessage("assistantIsWriting", chatbot.getName());
-        if (message) {
-          getPromptOrNull()?.setMessage(message);
-        }
+        setPromptMessage("assistantIsWriting", chatbot);
       },
 
       speakingPrompt: (context: SayPiContext) => {
         const handsFreeInterrupt =
           userPreferences.getCachedAllowInterruptions();
-        const message = handsFreeInterrupt
-          ? getMessage("assistantIsSpeaking", chatbot.getName())
-          : getMessage(
-              "assistantIsSpeakingWithManualInterrupt",
-              chatbot.getName()
-            );
-        if (message) {
-          getPromptOrNull()?.setMessage(message);
-        }
+
+        handsFreeInterrupt
+          ? setPromptMessage("assistantIsSpeaking", chatbot)
+          : setPromptMessage("assistantIsSpeakingWithManualInterrupt", chatbot);
       },
 
       interruptingPiPrompt: () => {
-        const message = getMessage(
-          "userStartedInterrupting",
-          chatbot.getName()
-        );
-        if (message) {
-          getPromptOrNull()?.setMessage(message);
-        }
+        setPromptMessage("userStartedInterrupting", chatbot);
       },
 
       pushToTalkPrompt: () => {
-        const message = getMessage("pressAndHoldToSpeak");
-        if (message) {
-          getPromptOrNull()?.setMessage(message);
-        }
+        setPromptMessage("pressAndHoldToSpeak");
       },
 
       clearPrompt: (context: SayPiContext) => {
@@ -1634,20 +1605,21 @@ function readyToSubmitOnAllowedState(
   const empty = Object.keys(context.transcriptions).length === 0;
   const pending = isTranscriptionPending();
   const ready = allowedState && !empty && !pending;
-  console.log("Entered readyToSubmitOnAllowedState() empty: " + empty + " any pending: " + pending + " is ready: " + ready);
   return ready;
 }
-
-function showMomentaryPausedPrompt (): void {
-  const message = getMessage("microphoneIsMuted");
-  if (message) {
-    getPromptOrNull()?.setMessage(message);
-  }
-};
 
 function provisionallyReadyToSubmit(context: SayPiContext): boolean {
   const allowedState = !(context.userIsSpeaking || context.isTranscribing); // we don't have access to the state, so we read from a copy in the context (!DRY)
   return readyToSubmitOnAllowedState(allowedState, context);
+}
+
+function setPromptMessage(messageName: string, chatbot?: Chatbot) : void {
+  const message = chatbot 
+  ? getMessage(messageName, chatbot.getName())
+  : getMessage(messageName);
+  if (message) {
+    getPromptOrNull()?.setMessage(message);
+  }
 }
 
 function readyToSubmit(
