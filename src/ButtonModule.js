@@ -348,6 +348,7 @@ class ButtonModule {
       longReleaseEventName: "saypi:momentaryPause",
       isMouseOutProcessed: true,
       isCallActive: true,
+      overwriteSvg: true,
     });
    }
  
