@@ -17,7 +17,7 @@
 • If a user never initiates this login, the extension should continue to allow API calls as "unauthenticated" (see API requirements below).
 
 ────────────────────────────  
-3. JWT Exchange, Storage & Refresh  
+3. JWT Exchange, Storage & Refresh  [DONE]
 ────────────────────────────  
 • After login, when the session cookie (e.g., auth_session) is set on the AUTH_SERVER_URL domain, use a getCookie function to read it.  
 • Implement a getJwtToken function that uses the session cookie in a POST request to AUTH_SERVER_URL (e.g., '/api/auth/refresh') to exchange it for a JWT and expiration info.  
@@ -25,6 +25,7 @@
   – Stores the JWT token and its expiration timestamp
   – Has an initialize() method that checks for the session cookie, exchanges it for a JWT (if available), and sets up automatic token refresh after an interval (configurable via environment variables so that sessions are long-lived)  
   – Provides a getAuthHeader() method that returns the Authorization header value ("Bearer token"), but only if a JWT exists  
+• The JwtManager should be initialized in the background script, not the popup. Because they execute in different contexts, the popup cannot access the JwtManager, so uses its own logic to parse the JWT from the cookie.
 
 ────────────────────────────  
 4. Making API Requests (Authenticated & Unauthenticated)  

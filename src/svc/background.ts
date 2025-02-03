@@ -1,5 +1,9 @@
 import { isFirefox } from "../UserAgentModule";
 import { config } from "../ConfigModule";
+import { jwtManager } from "../JwtManager";
+
+// Expose instances globally for popup access
+(self as any).jwtManager = jwtManager;
 
 // Helper function to check auth cookie
 async function checkAuthCookie() {
@@ -25,77 +29,11 @@ async function checkAuthCookie() {
   }
 }
 
-// Helper function to exchange cookie for JWT
-async function exchangeCookieForJWT() {
-  if (!config.authServerUrl) {
-    console.warn('Auth server URL not configured');
-    return;
-  }
-
-  try {
-    // First get the cookie value
-    const cookie = await checkAuthCookie();
-    if (!cookie) {
-      throw new Error('No auth cookie found');
-    }
-
-    // Make the exchange request with explicit cookie
-    const response = await fetch(`${config.authServerUrl}/api/auth/refresh`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Cookie': `auth_session=${cookie.value}`,
-        'Origin': chrome.runtime.getURL(''),
-      }
-    });
-
-    if (!response.ok) {
-      console.error('JWT exchange failed:', {
-        status: response.status,
-        statusText: response.statusText,
-        headers: Object.fromEntries(response.headers.entries())
-      });
-      throw new Error(`Failed to exchange cookie for JWT: ${response.status} ${response.statusText}`);
-    }
-
-    const { token, expiresIn } = await response.json();
-    
-    // Store the token
-    await chrome.storage.local.set({ 
-      token,
-      tokenExpiresAt: Date.now() + (parseInt(expiresIn) * 1000)
-    });
-
-    // Get the return URL if it exists
-    const { authReturnUrl } = await chrome.storage.local.get('authReturnUrl');
-    if (authReturnUrl) {
-      // Clear the return URL
-      await chrome.storage.local.remove('authReturnUrl');
-      // Close the auth tab and return to the popup
-      const tabs = await chrome.tabs.query({ url: `${config.authServerUrl}/*` });
-      for (const tab of tabs) {
-        if (tab.id !== undefined) {
-          await chrome.tabs.remove(tab.id);
-        }
-      }
-      if (authReturnUrl.startsWith('chrome-extension://')) {
-        await chrome.tabs.create({ url: authReturnUrl });
-      }
-    }
-  } catch (error) {
-    console.error('Failed to exchange cookie for JWT:', error);
-  }
-}
-
-// Expose helper functions for debugging
-(self as any).checkAuthCookie = checkAuthCookie;
-(self as any).exchangeCookieForJWT = exchangeCookieForJWT;
-
 // Initialize: check for existing auth cookie
 checkAuthCookie().then(cookie => {
   if (cookie) {
-    console.log('Found existing auth cookie, exchanging for JWT...');
-    exchangeCookieForJWT();
+    console.log('Found existing auth cookie, initializing JWT manager...');
+    jwtManager.initialize();
   }
 });
 
@@ -147,11 +85,11 @@ chrome.cookies.onChanged.addListener(async (changeInfo) => {
     });
     
     if (!removed) {
-      // Cookie was added/updated - exchange it for JWT
-      await exchangeCookieForJWT();
+      // Cookie was added/updated - refresh JWT
+      await jwtManager.refresh();
     } else {
       // Cookie was removed - clear the token
-      await chrome.storage.local.remove(['token', 'tokenExpiresAt']);
+      jwtManager.clear();
     }
   }
 });
