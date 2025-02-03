@@ -15,14 +15,15 @@ class ButtonUpdater{
         // track whether a call is active, so that new button instances can be initialized correctly
         this.callIsActive = false;
 
-        this.currentOnClick = () => {};
-        this.currentOnLongClick = () => {};
-        this.currentOnLongRelease = () => {};
+        this.clickEventName = "";
+        this.longDownEventName = "";
+        this.longUpEventName = "";
 
         this.isMouseOutHandled = false;
         this.areButtonClicksConfigured = false;
 
         this.iconSvgCache = new Array();
+        this.areListenersEnabled = true;
     }
 
     removeChildrenFrom(button) {
@@ -40,62 +41,69 @@ class ButtonUpdater{
         callButton.classList.toggle("active", isActive);
     }
 
-    setEmptyDefault(runnable) {
-        return runnable ? runnable : () => {};
-    }
-
     isShortClick() {
         const clickDuration =  (Date.now() - this.clickStartTime);
         return this.clickStartTime == 0 || clickDuration < this.longPressMilliseconds;
     }
 
-    createEvent(eventName) {
-      return eventName 
-        ? () => { this.log("createEvent() sending event: " + eventName); this.sayPiActor.send(eventName); }
-        : () => {};
+    sendEvent(eventName) {
+        if (eventName) {
+            this.sayPiActor.send(eventName);
+        }
     }
 
-    resetListenersOf(button) {
-        button.onclick = () => {};
-        button.addEventListener("mouseout", () => {});
-        button.addEventListener("touchstart", ()=> {});
-        button.addEventListener("touchend", ()=> {});
-        button.addEventListener("touchcancel", ()=> {});
+    sendClickEvent() {
+        this.sendEvent(this.clickEventName);
+    }
+
+    sendLongDownEvent() {
+        this.sendEvent(this.longDownEventName);
+    }
+
+    sendLongUpEvent() {
+        this.sendEvent(this.longUpEventName);
     }
 
     onDown() {
+        if (!this.areListenersEnabled) {
+            return;
+        }
         this.isMouseDown = true;
         this.clickStartTime = Date.now();
         window.setTimeout( () => {
             if (this.isMouseDown === true) {
-                this.log("onDown() about to currentOnLongClick()");
-                this.currentOnLongClick();
+                this.sendLongDownEvent();
                 this.isLongClickEngaged = true;
             }
         }, this.longPressMilliseconds);
     }
 
     onUp() {
+        if (!this.areListenersEnabled) {
+            return;
+        }
         this.isMouseDown = false;
         if (this.isShortClick()) {
-            this.log("onUp() about to currentOnClick()");
-            this.currentOnClick();
+            this.sendClickEvent();
         } else if (this.isLongClickEngaged) {
-            this.log("onUp() about to currentOnLongRelease()");
-            this.currentOnLongRelease();
+            this.sendLongUpEvent();
             this.isLongClickEngaged = false;
         }
     }
 
-    onOut() {
-        if (this.isMouseOutHandled && this.isLongClickEngaged) {
-            this.currentOnLongRelease();
+    onMouseMovedOut() {
+        if (this.isMouseOutHandled && this.isLongClickEngaged && this.areListenersEnabled) {
+            this.sendLongUpEvent();
             this.isLongClickEngaged = false;
         }
+    }
+
+    isUsingTouchEvents() {
+        return typeof(window.ontouchstart) != 'undefined';
     }
 
     setupButtonListeners(button) {
-        if (typeof(window.ontouchstart) != 'undefined') {
+        if (this.isUsingTouchEvents()) {
             button.addEventListener('touchstart',() => {
                 this.onDown();
             });
@@ -107,34 +115,23 @@ class ButtonUpdater{
                 this.onUp();
             });
         } else {
-            button.onmousedown = () => {
-                this.log("onmousedown");
-                this.onDown();
-            }
-            button.onmouseup = () => {
-                this.log("onmouseup");
-                this.onUp();
-            }
-            button.addEventListener("mouseout", () => this.onOut());
+            button.onmousedown = () => this.onDown() ;
+            button.onmouseup = () => this.onUp();
+            button.addEventListener("mouseout", () => this.onMouseMovedOut());
         }
     }
 
     updateButtonRoles(options) {
-        let { button, clickEventName, longDownEventName, longUpEventName, isMouseOutHandled = false } = options;
+        let { button, clickEventName = "", longDownEventName = "", longUpEventName = "", isMouseOutHandled = false } = options;
                   
-        if (this.areButtonClicksConfigured === false) {
+        if (!this.areButtonClicksConfigured) {
             this.setupButtonListeners(button);
             this.areButtonClicksConfigured = true;
         }
-
-        this.currentOnClick = this.createEvent(clickEventName);
-        this.currentOnLongClick = this.createEvent(longDownEventName);
-        this.currentOnLongRelease = this.createEvent(longUpEventName);
+        this.clickEventName = clickEventName
+        this.longDownEventName = longDownEventName
+        this.longUpEventName = longUpEventName;
         this.isMouseOutHandled = isMouseOutHandled;
-    }
-
-    log(msg) {
-        console.log("^^^ ButtonHelper: " + msg);
     }
 
     isCallActive() {
@@ -143,28 +140,21 @@ class ButtonUpdater{
   
     getSvgElement(icon, key) {
         if (!this.iconSvgCache.includes(key)) {
-            this.log("getSvgElement() creating the icon for: " + key);
             this.iconSvgCache[key] =  createSVGElement(icon);
-        } 
-        this.log("getting cached icon for: " + key);
+        }
         return this.iconSvgCache[key];
     }
 
     changeIcon(button, icon, iconKey, isSvgOverwritten) {
         const svgElement = this.getSvgElement(icon, iconKey);
-        if (!isSvgOverwritten) {
-            this.log("svgIs not to be overwritten, about to remove children from button");
+        if (!isSvgOverwritten || !this.isUsingTouchEvents()) {
             this.removeChildrenFrom(button);
-            this.log("svgIs not to be overwritten, about to append svg child to button");
             button.appendChild(svgElement);
         } else if (button.firstChild) {
-            this.log("button has a first child, appending svg to it");
             button.firstChild.appendChild(svgElement);
         } else {
-            this.log("button has no children, creating an svg child for it");
             button.appendChild(svgElement);
         }
-        this.log("end of changeIcon()");
     }
 
     updateCallButton(options) {
@@ -173,11 +163,13 @@ class ButtonUpdater{
             button = document.getElementById("saypi-callButton");
         }
         if (button) {
+            this.areListenersEnabled = false;
             const iconKey = label;
             this.changeIcon(button, icon, iconKey, overwriteSvg);
-            this.log("about to setAriaLabelOf button");
             this.setAriaLabelOf(button, label, labelArgument);
-            this.log("about to update button roles");
+            this.toggleActiveState(button, isCallActive);
+            this.callIsActive = isCallActive;
+
             this.updateButtonRoles({
                 button: button,
                 clickEventName: clickEventName,
@@ -185,11 +177,7 @@ class ButtonUpdater{
                 longUpEventName: longReleaseEventName,
                 isMouseOutHandled: isMouseOutProcessed,
             });
-            this.log("about to toggleActiveState of button");
-            this.toggleActiveState(button, isCallActive);
-            this.log("setting call active");
-            this.callIsActive = isCallActive;
-            this.log("exiting updateCallButton");
+            this.areListenersEnabled = true;
         }
     }
 }
