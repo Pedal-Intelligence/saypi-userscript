@@ -26,15 +26,27 @@ function parseJwt(token) {
 }
 
 // Event handlers
-signInButton.addEventListener('click', () => {
-  // config.authServerUrl is defined in src/popup/popup-config.js
-  const loginUrl = `${config.authServerUrl}/auth/login`;
-  // Store current URL as return URL
-  const returnUrl = window.location.href;
-  browserAPI.storage.local.set({ authReturnUrl: returnUrl });
-  // Open login page in new tab
-  browserAPI.tabs.create({ url: loginUrl });
+signInButton.addEventListener('click', async () => {
+  if (isAuthenticated) {
+    // Handle sign out
+    await signOut();
+  } else {
+    // Handle sign in (existing code)
+    const loginUrl = `${config.authServerUrl}/auth/login`;
+    const returnUrl = window.location.href;
+    browserAPI.storage.local.set({ authReturnUrl: returnUrl });
+    browserAPI.tabs.create({ url: loginUrl });
+  }
 });
+
+// Sign out functionality
+async function signOut() {
+  // Clear stored token
+  await browserAPI.storage.local.remove(['token', 'authReturnUrl']);
+  
+  // Update UI
+  updateAuthUI(false);
+}
 
 // Update UI based on auth state
 function updateAuthUI(authenticated, userData = null) {
