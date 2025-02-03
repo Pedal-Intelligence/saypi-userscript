@@ -470,5 +470,35 @@
         "example": "Permission denied"
       }
     }
+  },
+  "profile": {
+    "message": "Profile",
+    "description": "Label for the profile section in settings."
+  },
+  "signIn": {
+    "message": "Sign In",
+    "description": "Text for the sign in button when user is not authenticated."
+  },
+  "signOut": {
+    "message": "Sign Out",
+    "description": "Text for the sign out button when user is authenticated."
+  },
+  "notSignedIn": {
+    "message": "Not signed in",
+    "description": "Status text shown when user is not authenticated."
+  },
+  "signedIn": {
+    "message": "Signed in",
+    "description": "Status text shown when user is authenticated (without email)."
+  },
+  "signedInAs": {
+    "message": "Signed in as $email$",
+    "description": "Status text shown when user is authenticated, including their email.",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
   }
 }
