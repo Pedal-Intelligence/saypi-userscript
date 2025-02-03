@@ -44,6 +44,18 @@
   </head>
   <body class="flex items-center justify-center">
     <section id="preferences">
+      <div id="profile" class="user-preference-item w-full max-w-lg">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <span class="label-text" data-i18n="profile">Profile</span>
+            <span id="profile-status" class="ml-2 text-sm text-gray-500" data-i18n="notSignedIn">Not signed in</span>
+          </div>
+          <button id="sign-in-button" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" data-i18n="signIn">
+            Sign In
+          </button>
+        </div>
+      </div>
+
       <div
         id="preference-selector"
         class="w-full max-w-lg user-preference-item"
@@ -325,8 +337,10 @@
     </section>
     <section id="application-status-detail" class="hidden issue" />
 
+    <script src="popup-config.js"></script>
     <script src="simple-user-agent.js"></script>
     <script src="language-picker.js"></script>
+    <script src="auth.js"></script>
     <script src="popup.js"></script>
     <script src="status.js"></script>
     <script src="status-tts.js"></script>
