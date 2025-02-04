@@ -28,6 +28,13 @@
 • The JwtManager should be initialized in the background script, not the popup. Because they execute in different contexts, the popup cannot access the JwtManager, so uses its own logic to parse the JWT from the cookie.
 
 ────────────────────────────  
+3.5 Showing User Quota, Concluding Multilingual Voices Beta
+────────────────────────────  
+* With the release of this update, the Multilingual Voices beta will be complete.
+* Move TTS settings out of beta, replacing the "Beta Active" section with a "Quota" section that displays the user's quota and remaining usage.
+* For users without TTS credits, the "Multilingual voices" section should be replaced with a "Upgrade" section that displays a button to upgrade to a paid plan.
+
+────────────────────────────  
 4. Making API Requests (Authenticated & Unauthenticated)  
 ────────────────────────────  
 • Implement a generic callApi() function that will:
