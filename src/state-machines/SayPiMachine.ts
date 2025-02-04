@@ -1464,7 +1464,7 @@ function readyToSubmit(
 
 function isTimeoutReached(context: SayPiContext): boolean {
   const timeSinceStoppedSpeaking = Date.now() - context.timeUserStoppedSpeaking;
-  return timeSinceStoppedSpeaking > 30000; // 30 seconds
+  return timeSinceStoppedSpeaking > 15000; // 15 seconds
 }
 
 function mustRespondToMessage(context: SayPiContext): boolean {
