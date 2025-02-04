@@ -19,6 +19,10 @@ const AUDIO_DEVICE_RECONNECT = "saypi:audio:reconnect";
 const END_CALL = "saypi:hangup";
 const SESSION_ASSIGNED = "saypi:session:assigned";
 const UI_SHOW_NOTIFICATION = "saypi:ui:show-notification";
+const MOMENTARY_LISTEN = "saypi:momentaryListen";
+const MOMENTARY_PAUSE = "saypi:momentaryPause";
+const MOMENTARY_STOP = "saypi:momentaryStop";
+const MOMENTARY_SUBMIT_TRANSCRIPTIONS = "saypi:momentarySubmitTranscriptions";
 
 /**
  * The EventModule translates events sent on the EventBus to StateMachine events,
@@ -76,6 +80,10 @@ export default class EventModule {
       PI_STOPPED_SPEAKING,
       PI_FINISHED_SPEAKING,
       END_CALL,
+      MOMENTARY_LISTEN,
+      MOMENTARY_PAUSE,
+      MOMENTARY_STOP,
+      MOMENTARY_SUBMIT_TRANSCRIPTIONS,
     ].forEach((eventName) => {
       EventBus.on(eventName, () => {
         actor.send(eventName);

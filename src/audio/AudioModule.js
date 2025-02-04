@@ -375,6 +375,10 @@ export default class AudioModule {
       // soft stop recording
       inputActor.send("stopRequested");
     });
+    EventBus.on("audio:quickStopRecording", function (e) {
+      // soft stop recording but quickly
+      inputActor.send("quickStopRequested");
+    });
     // audio input (recording) events (pass media recorder events -> audio input machine actor)
     EventBus.on("audio:dataavailable", (detail) => {
       inputActor.send({ type: "dataAvailable", ...detail });

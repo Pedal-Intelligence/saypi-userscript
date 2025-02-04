@@ -17,6 +17,8 @@ type FocusContext = {
 };
 type TickEvent = { type: "tick"; time_ms: number };
 type BlurEvent = { type: "blur" };
+type PauseEvent = { type: "pause" };
+type ResumeEvent = { type: "resume" };
 
 export const machine = createMachine<FocusContext>(
   {
@@ -44,6 +46,19 @@ export const machine = createMachine<FocusContext>(
           },
           tick: {
             actions: "incrementInactivityTime",
+          },
+          pause: {
+            target: "Paused"
+          }
+        },
+      },
+      Paused: {
+        description:
+          "The machine is not waiting for user activity",
+        on: {
+          resume: {
+            actions: "resetInactivityTime",
+            target: "#focusMachine",
           },
         },
       },

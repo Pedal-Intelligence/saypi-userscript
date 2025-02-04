@@ -313,7 +313,7 @@ function tearDownRecording(): void {
     microphone.pause();
     listening = false;
     stream.getTracks().forEach((track) => track.stop());
-    microphone.destroy(); //added by JAC
+    microphone.destroy();
   } else {
     console.log("microphone does not exist!");
   }
@@ -324,6 +324,7 @@ interface AudioInputContext {
   waitingToStop: boolean;
   waitingToStart: boolean;
   recordingStartTime: number;
+  isQuickStopRequested: boolean;
 }
 
 type AudioInputEvent =
@@ -331,6 +332,7 @@ type AudioInputEvent =
   | { type: "release" }
   | { type: "start" }
   | { type: "stopRequested" }
+  | { type: "quickStopRequested" }
   | { type: "dataAvailable"; blob: Blob; duration: number }
   | { type: "stop" }
   | { type: "error.platform"; data: any };
@@ -347,6 +349,7 @@ export const audioInputMachine = createMachine<
       waitingToStop: false,
       waitingToStart: false,
       recordingStartTime: 0,
+      isQuickStopRequested: false,
     },
     states: {
       released: {
@@ -412,6 +415,13 @@ export const audioInputMachine = createMachine<
               stopRequested: {
                 target: "pendingStop",
                 description: "Stop gracefully.",
+                actions: [ assign({isQuickStopRequested: false}) ],
+              },    
+
+              quickStopRequested: {
+                target: "pendingStop",
+                description: "Stop gracefully and quickly.",
+                actions: [ assign({isQuickStopRequested: true}) ],
               },
 
               stop: {
@@ -436,7 +446,7 @@ export const audioInputMachine = createMachine<
               type: "prepareStop",
             },
             after: {
-              "5000": [
+              stopRecordingDelay: [
                 {
                   target: "#audioInput.acquired.stopped",
                   actions: ["stopIfWaiting"],
@@ -459,7 +469,7 @@ export const audioInputMachine = createMachine<
               },
             },
           },
-
+          
           stopped: {
             entry: assign({ waitingToStop: false }),
             always: {
@@ -609,7 +619,11 @@ export const audioInputMachine = createMachine<
         return context.waitingToStart === true;
       },
     },
-    delays: {},
+    delays: {
+      stopRecordingDelay: (context) => {
+        return context.isQuickStopRequested === true ? 1000 : 5000;
+      }
+    },
   }
 );
 interface OverconstrainedError extends DOMException {
