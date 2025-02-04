@@ -479,6 +479,40 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Load the saved nickname when the popup opens
+  const nicknameInput = document.getElementById("assistant-nickname");
+  getStoredValue("nickname", null).then((nickname) => {
+    if (nickname) {
+      nicknameInput.value = nickname;
+    }
+  });
+
+  // Save the nickname when it changes
+  nicknameInput.addEventListener("change", function() {
+    const nickname = this.value.trim();
+    if (nickname) {
+      chrome.storage.sync.set({ nickname }, function() {
+        console.log("Nickname saved:", nickname);
+      });
+      // Notify content script of the change
+      message({ nickname });
+    } else {
+      // If the input is empty, remove the nickname
+      chrome.storage.sync.remove("nickname", function() {
+        console.log("Nickname removed");
+      });
+      // Notify content script of the removal
+      message({ nickname: null });
+    }
+  });
+
+  // Handle Enter key on nickname input
+  nicknameInput.addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
+      this.blur(); // Remove focus, which will trigger the change event if value changed
+    }
+  });
+
   i18nReplace();
   sliderInput();
   switchInputs();

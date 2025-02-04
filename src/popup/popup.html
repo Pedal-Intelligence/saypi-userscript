@@ -160,18 +160,6 @@
         </div>
       </div>
       <div
-        class="user-preference-item w-full max-w-lg"
-        id="sounds-effects-preference"
-      >
-        <label class="wraper" for="sound-effects">
-          <span class="label-text" data-i18n="soundEffects">Sound Effects</span>
-          <div class="switch-wrap control">
-            <input type="checkbox" id="sound-effects" name="soundEffects" />
-            <div class="switch"></div>
-          </div>
-        </label>
-      </div>
-      <div
         id="submit-mode-selector"
         class="w-full max-w-lg user-preference-item mode-selector"
       >
@@ -234,6 +222,36 @@
         <div class="description" data-i18n="submit_mode_off_description">
           Only submit when you press the button
         </div>
+      </div>
+      <div
+        class="user-preference-item w-full max-w-lg"
+        id="nickname-preference"
+      >
+        <label class="wraper" for="assistant-nickname">
+          <span class="label-text" data-i18n="nicknameLabel">Nickname</span>
+          <div class="control">
+            <input
+              type="text"
+              id="assistant-nickname"
+              name="assistantNickname"
+              class="px-2 py-1 border rounded w-20 text-sm text-right"
+              data-i18n-attr="placeholder:nicknamePlaceholder"
+              placeholder="Pi"
+            />
+          </div>
+        </label>
+      </div>
+      <div
+        class="user-preference-item w-full max-w-lg"
+        id="sounds-effects-preference"
+      >
+        <label class="wraper" for="sound-effects">
+          <span class="label-text" data-i18n="soundEffects">Sound Effects</span>
+          <div class="switch-wrap control">
+            <input type="checkbox" id="sound-effects" name="soundEffects" />
+            <div class="switch"></div>
+          </div>
+        </label>
       </div>
       <div
         class="user-preference-item w-full max-w-lg"

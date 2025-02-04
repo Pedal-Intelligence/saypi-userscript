@@ -8,10 +8,18 @@ import {
 } from "../tts/InputStream";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { Chatbot, UserPrompt } from "./Chatbot";
+import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
 class ClaudeChatbot implements Chatbot {
+  private readonly preferences = UserPreferenceModule.getInstance();
+
   getName(): string {
     return "Claude";
+  }
+
+  async getNickname(): Promise<string> {
+    const nickname = await this.preferences.getNickname();
+    return nickname || this.getName();
   }
 
   getPrompt(element: HTMLElement): UserPrompt {

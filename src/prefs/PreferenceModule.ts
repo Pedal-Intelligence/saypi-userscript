@@ -22,6 +22,7 @@ interface StorageResult {
   theme?: string; // 'light' or 'dark'
   shareData?: boolean; // has the user consented to data sharing?
   discretionaryMode?: boolean; // new beta feature for discretionary responses
+  nickname?: string; // user's preferred nickname for the AI assistant
 }
 
 class UserPreferenceModule {
@@ -361,6 +362,34 @@ class UserPreferenceModule {
 
   public getCachedDiscretionaryMode(): boolean {
     return this.cache.getCachedValue("discretionaryMode", false);
+  }
+
+  public getNickname(): Promise<string | null> {
+    return this.getStoredValue("nickname", null);
+  }
+
+  public setNickname(nickname: string | null): Promise<void> {
+    return new Promise((resolve) => {
+      if (
+        typeof chrome !== "undefined" &&
+        chrome.storage &&
+        chrome.storage.sync
+      ) {
+        if (nickname === null) {
+          chrome.storage.sync.remove("nickname", () => {
+            resolve();
+          });
+        } else {
+          chrome.storage.sync.set({ nickname }, () => {
+            resolve();
+          });
+        }
+      } else {
+        // If Chrome storage API is not supported, do nothing
+        resolve();
+      }
+      EventBus.emit("userPreferenceChanged", { nickname });
+    });
   }
 }
 

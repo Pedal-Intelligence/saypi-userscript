@@ -31,6 +31,7 @@ export interface Chatbot {
     includeInitialText?: boolean
   ): AssistantResponse;
   getName(): string;
+  getNickname(): Promise<string>; // Returns the user's preferred nickname for the AI assistant, or the default name if not set
 }
 
 export abstract class UserPrompt {

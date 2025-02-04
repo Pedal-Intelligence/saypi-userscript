@@ -11,10 +11,18 @@ import { SpeechSynthesisVoiceRemote } from "../tts/SpeechModel";
 import { PiSpeechSourceParser } from "../tts/SpeechSourceParsers";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { Chatbot, UserPrompt } from "./Chatbot";
+import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
 class PiAIChatbot implements Chatbot {
+  private readonly preferences = UserPreferenceModule.getInstance();
+
   getName(): string {
     return "Pi";
+  }
+
+  async getNickname(): Promise<string> {
+    const nickname = await this.preferences.getNickname();
+    return nickname || this.getName();
   }
 
   getPrompt(element: HTMLElement): UserPrompt {

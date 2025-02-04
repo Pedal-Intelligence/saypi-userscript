@@ -2,6 +2,7 @@ import { config } from "./ConfigModule.js";
 import StateMachineService from "./StateMachineService.js";
 import { logger } from "./LoggingModule.js";
 import { UserPreferenceModule } from "./prefs/PreferenceModule";
+import { ChatbotService } from "./chatbots/ChatbotService";
 
 // Define the shape of the response JSON object
 interface TranscriptionResponse {
@@ -272,6 +273,14 @@ async function constructTranscriptionFormData(
   const discretionaryMode = await userPreferences.getDiscretionaryMode();
   if (discretionaryMode) {
     formData.append("analyzeForResponse", "true");
+  }
+
+  // Get the chatbot's nickname if set
+  const chatbot = ChatbotService.getChatbot();
+  const nickname = await chatbot.getNickname();
+  const defaultName = chatbot.getName();
+  if (nickname && nickname !== defaultName) {
+    formData.append("nickname", nickname);
   }
 
   return formData;

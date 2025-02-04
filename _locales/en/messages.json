@@ -504,5 +504,13 @@
   "submit_mode_off_description": {
     "message": "Only submit when you press the button",
     "description": "Description for the manual submission mode."
+  },
+  "nicknameLabel": {
+    "message": "Nickname",
+    "description": "Label for the input field to set a custom nickname for the AI assistant."
+  },
+  "nicknamePlaceholder": {
+    "message": "Pi",
+    "description": "Placeholder text for the nickname input field."
   }
 }
