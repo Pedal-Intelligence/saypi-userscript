@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "수동 제출 모드에 대한 설명입니다.",
     "message": "버튼을 누를 때만 제출하세요."
+  },
+  "nicknameLabel": {
+    "message": "별명",
+    "description": "입력 필드의 레이블 AI 어시스턴트의 사용자 정의 별명을 설정하십시오."
   }
 }

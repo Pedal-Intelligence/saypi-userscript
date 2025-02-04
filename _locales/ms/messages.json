@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "Penerangan untuk mod penyerahan manual.",
     "message": "Hanya serahkan apabila anda menekan butang"
+  },
+  "nicknameLabel": {
+    "message": "Nama samaran",
+    "description": "Label untuk medan input untuk menetapkan nama samaran tersuai untuk pembantu AI."
   }
 }

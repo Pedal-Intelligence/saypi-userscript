@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "Deskripsi untuk mode pengiriman manual.",
     "message": "Hanya kirimkan ketika Anda menekan tombol"
+  },
+  "nicknameLabel": {
+    "message": "Nama panggilan",
+    "description": "Label untuk bidang input untuk mengatur nama panggilan khusus untuk asisten AI."
   }
 }

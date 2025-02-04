@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "手动提交模式的说明。",
     "message": "仅在按下按钮时提交"
+  },
+  "nicknameLabel": {
+    "message": "昵称",
+    "description": "标签输入字段，为AI助手设置自定义昵称。"
   }
 }

@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "Mô tả cho chế độ gửi thủ công.",
     "message": "Chỉ gửi khi bạn nhấn nút"
+  },
+  "nicknameLabel": {
+    "message": "Biệt danh",
+    "description": "Nhãn cho trường đầu vào để đặt biệt danh tùy chỉnh cho Trợ lý AI."
   }
 }

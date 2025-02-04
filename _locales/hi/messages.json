@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "मैन्युअल सबमिशन मोड का विवरण.",
     "message": "जब आप बटन दबाएँ तभी सबमिट करें"
+  },
+  "nicknameLabel": {
+    "message": "उपनाम",
+    "description": "AI सहायक के लिए एक कस्टम उपनाम सेट करने के लिए इनपुट फ़ील्ड के लिए लेबल।"
   }
 }

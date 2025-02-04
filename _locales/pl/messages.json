@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "Opis ręcznego trybu przesyłania.",
     "message": "Prześlij dopiero po naciśnięciu przycisku"
+  },
+  "nicknameLabel": {
+    "message": "Przydomek",
+    "description": "Etykieta dla pola wejściowego, aby ustawić niestandardowy pseudonim dla asystenta AI."
   }
 }

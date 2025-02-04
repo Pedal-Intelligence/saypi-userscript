@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "Beskrivelse af den manuelle indsendelsestilstand.",
     "message": "Send først, når du trykker på knappen"
+  },
+  "nicknameLabel": {
+    "message": "Kælenavn",
+    "description": "Label til inputfeltet til at indstille et brugerdefineret kaldenavn til AI -assistenten."
   }
 }

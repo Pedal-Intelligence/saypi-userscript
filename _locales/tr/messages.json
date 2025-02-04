@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "Manuel gönderim modunun açıklaması.",
     "message": "Yalnızca düğmeye bastığınızda gönderin"
+  },
+  "nicknameLabel": {
+    "message": "Takma ad",
+    "description": "AI asistanı için özel bir takma ad ayarlamak için giriş alanının etiketi."
   }
 }

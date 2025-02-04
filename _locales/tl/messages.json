@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "Paglalarawan para sa manu-manong mode ng pagsusumite.",
     "message": "Isumite lamang kapag pinindot mo ang pindutan"
+  },
+  "nicknameLabel": {
+    "message": "Palayaw",
+    "description": "Lagyan ng label para sa patlang ng pag -input upang magtakda ng isang pasadyang palayaw para sa katulong ng AI."
   }
 }

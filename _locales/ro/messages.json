@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "Descrierea modului de trimitere manuală.",
     "message": "Trimiteți doar când apăsați butonul"
+  },
+  "nicknameLabel": {
+    "message": "Poreclă",
+    "description": "Etichetați pentru câmpul de intrare pentru a seta o poreclă personalizată pentru asistentul AI."
   }
 }

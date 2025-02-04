@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "手動送信モードの説明。",
     "message": "ボタンを押したときのみ送信します"
+  },
+  "nicknameLabel": {
+    "message": "ニックネーム",
+    "description": "AIアシスタントのカスタムニックネームを設定するための入力フィールドのラベル。"
   }
 }

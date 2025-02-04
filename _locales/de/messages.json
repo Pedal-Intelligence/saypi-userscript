@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "Beschreibung für den manuellen Übermittlungsmodus.",
     "message": "Senden Sie es erst ab, wenn Sie auf die Schaltfläche klicken"
+  },
+  "nicknameLabel": {
+    "message": "Spitzname",
+    "description": "Beschriftet für das Eingabefeld einen benutzerdefinierten Spitznamen für den AI -Assistenten."
   }
 }

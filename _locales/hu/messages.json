@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "A kézi beküldési mód leírása.",
     "message": "Csak akkor küldje el, ha megnyomja a gombot"
+  },
+  "nicknameLabel": {
+    "message": "Becenév",
+    "description": "Címkézze a bemeneti mezőt az AI asszisztens egyedi becenevének beállításához."
   }
 }

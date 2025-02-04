@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "وصف لوضع التقديم اليدوي.",
     "message": "أرسل فقط عند الضغط على الزر"
+  },
+  "nicknameLabel": {
+    "message": "كنية",
+    "description": "تسمية لحقل الإدخال لتعيين لقب مخصص لمساعد الذكاء الاصطناعى."
   }
 }

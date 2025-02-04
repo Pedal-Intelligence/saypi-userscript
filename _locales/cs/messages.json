@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "Popis režimu ručního odesílání.",
     "message": "Odešlete pouze po stisknutí tlačítka"
+  },
+  "nicknameLabel": {
+    "message": "Přezdívka",
+    "description": "Štítek pro vstupní pole pro nastavení vlastní přezdívky pro asistenta AI."
   }
 }

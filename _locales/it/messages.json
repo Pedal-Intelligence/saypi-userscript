@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "Descrizione della modalità di invio manuale.",
     "message": "Invia solo quando premi il pulsante"
+  },
+  "nicknameLabel": {
+    "message": "Soprannome",
+    "description": "Etichetta per il campo di input per impostare un soprannome personalizzato per l'assistente AI."
   }
 }

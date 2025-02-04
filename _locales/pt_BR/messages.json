@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "Descrição do modo de envio manual.",
     "message": "Envie apenas quando você pressionar o botão"
+  },
+  "nicknameLabel": {
+    "message": "Apelido",
+    "description": "Etiqueta para o campo de entrada para definir um apelido personalizado para o assistente de IA."
   }
 }

@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "Opis za način ručnog podnošenja.",
     "message": "Pošaljite samo kada pritisnete gumb"
+  },
+  "nicknameLabel": {
+    "message": "Nadimak",
+    "description": "Oznaka za polje unosa za postavljanje prilagođenog nadimka za pomoćnika AI."
   }
 }

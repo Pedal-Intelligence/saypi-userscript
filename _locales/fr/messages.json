@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "Description du mode de soumission manuelle.",
     "message": "Soumettez uniquement lorsque vous appuyez sur le bouton"
+  },
+  "nicknameLabel": {
+    "message": "Surnom",
+    "description": "Étiquetez le champ de saisie pour définir un surnom personnalisé pour l'assistant AI."
   }
 }

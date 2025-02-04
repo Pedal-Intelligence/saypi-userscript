@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "Popis pre režim manuálneho odosielania.",
     "message": "Odošlite iba vtedy, keď stlačíte tlačidlo"
+  },
+  "nicknameLabel": {
+    "message": "Prezývka",
+    "description": "Obeň pre vstupné pole na nastavenie vlastnej prezývky pre asistenta AI."
   }
 }

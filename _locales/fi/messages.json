@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "Manuaalisen lähetystilan kuvaus.",
     "message": "Lähetä vain, kun painat painiketta"
+  },
+  "nicknameLabel": {
+    "message": "Lempinimi",
+    "description": "Syöttökentän etiketti asettaa mukautetun lempinimen AI -avustajalle."
   }
 }

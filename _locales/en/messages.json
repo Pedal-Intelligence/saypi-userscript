@@ -508,9 +508,5 @@
   "nicknameLabel": {
     "message": "Nickname",
     "description": "Label for the input field to set a custom nickname for the AI assistant."
-  },
-  "nicknamePlaceholder": {
-    "message": "Pi",
-    "description": "Placeholder text for the nickname input field."
   }
 }

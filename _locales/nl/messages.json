@@ -504,5 +504,9 @@
   "submit_mode_off_description": {
     "description": "Beschrijving voor de handmatige indieningsmodus.",
     "message": "Alleen verzenden als u op de knop drukt"
+  },
+  "nicknameLabel": {
+    "message": "Bijnaam",
+    "description": "Label voor het invoerveld om een ​​aangepaste bijnaam in te stellen voor de AI -assistent."
   }
 }
