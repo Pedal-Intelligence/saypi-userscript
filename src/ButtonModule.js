@@ -346,9 +346,8 @@ class ButtonModule {
       label: "momentaryCallListening",
       clickEventName: "saypi:momentaryStop",
       longReleaseEventName: "saypi:momentaryPause",
-      isMouseOutProcessed: true,
+      
       isCallActive: true,
-      overwriteSvg: true,
     });
    }
  

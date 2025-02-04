@@ -158,18 +158,20 @@ class ButtonUpdater{
     }
 
     updateCallButton(options) {
-        let {button, icon, label, labelArgument, clickEventName, longPressEventName, longReleaseEventName, isCallActive = false, isMouseOutProcessed = false, overwriteSvg = false} = options;
+        let {button, icon, label, labelArgument, clickEventName, longPressEventName, longReleaseEventName, isCallActive = false} = options;
         if (!button) {
             button = document.getElementById("saypi-callButton");
         }
         if (button) {
             this.areListenersEnabled = false;
             const iconKey = label;
-            this.changeIcon(button, icon, iconKey, overwriteSvg);
+            const isSvgOverwritten = longReleaseEventName? true : false;
+            const isMouseOutProcessed = isSvgOverwritten;
+
+            this.changeIcon(button, icon, iconKey, isSvgOverwritten);
             this.setAriaLabelOf(button, label, labelArgument);
             this.toggleActiveState(button, isCallActive);
             this.callIsActive = isCallActive;
-
             this.updateButtonRoles({
                 button: button,
                 clickEventName: clickEventName,
