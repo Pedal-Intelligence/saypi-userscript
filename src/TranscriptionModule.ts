@@ -24,7 +24,7 @@ const knownNetworkErrorMessages = [
 ];
 
 // timeout for transcription requests
-const TIMEOUT_MS = 30000; // 30 seconds
+const TIMEOUT_MS = 10000; // 30 seconds
 
 // track sequence numbers for in-flight transcription requests
 let sequenceNum = 0;
