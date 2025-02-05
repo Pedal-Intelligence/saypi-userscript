@@ -232,6 +232,10 @@ function getChatbotDefaultPlaceholder(): string {
   // 3. State machine assigns the default placeholder text to the context, as an internal state transition from "inactive" to "inactive" (checkmark)
   return "";
 }
+
+// Define a constant for the timeout (in milliseconds) for the user stopped speaking event
+const USER_STOPPED_TIMEOUT_MS = 15000;
+
 const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
   {
     /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAxAV1jACcMiwAzYsAOwGMwBhACxWpggG0AGAXUVAAOAe1hYALliHV+IAB6IuAGhBoFAXzXLUmLADos1FLQkA3MDm0CsCAUSEBbAWIBKYFBDTc+SEMNESpGXkEAGYAdgAOAE5dMKiwrhCAFgAmADYAVgikjIzlVQQARkKUrl0IiOSoiOLqwviNLXRsfUNjLDMLdCsEWhQAG36vGT9xSWkfYKiU-MQopJiUrLCUsNyliK4wxpBtFoMjU3NLaysAZQE3AGsDKGGfUYCJ0GCk4ozYqLSojMSQjJKeRUiEKyRC5RCaTChQi0K4GTC4R2ez0fUGZzEKCIEjYXTQPTR-Vc7k8vBGIjGgUmiBySV0hSS2SyFSScTiQIKjI+SSSaRSqyihTShS4SUhyOaqIG-QxWJxUDxPRYbDwAnuggpTyCiAiM2BRS4P10v1h-0RaTSXEKGQlOl0hNl2NuiushIAYigsP1IOrfJrxtqEDy6QymRVsmyfrMilFwRkQlFEwDRTUE7aWg7MU7cbJYJixGBdChyAWiAAKUpcKsASjxGeljvlvseAepQYyIcZOXDrPiUf1yTKiZCgNWmUyNs0u0lun6WDzNGdJxsWAAKkwDDc2M3-VSXogQpDwWyq1lvmkkvDo4eMml6RUocVYVCkum9HOF9Ql91TlgLtdbh3fxW33UJ-mPeJTwic9Lw5A8SjCXQ3l+FYfhSSpKjfWd5wLL9cWXEx5ywAAjb0gMpZ45BBC0ImNM8akyflshCaNrXSWJoi+MIEiWQEsI-XDv3xawUDwCBJF6KRqDAYwfTJB5d0o4IhV5XQE15GDYziVixTKQ8X3U8JeUKficMXfCfwQUTxKEBAyFoKSZLEcitTbFTEMYnJRSrIVkmveNEMhBjqi83lTM-ISekIWBRCkKyYqwKBpM4eSNWAvcqKKC86QWfkeUfaD4mvHkh2tQoEjCS9QWtcLBLYXR7KEIhxIs4SEGVKBVRckDMpvCCEnhQqLyvfVK3BEJ4XWBMEyWV8pxRbCIvqxrmtuXRqCEMR-xQLcFWXAhiDdAx5yYSBtt27qMuCPrPgGs8vlg6N+VFXQLQWf4Ig7XUQlq8yoAamSmpa-6Nq2y4dsi6wDqIc7ANSv10qUkE-l0FIhQFVYrUtCInsNO9piieFvlKdJtnmmcBL+gGHNW+rodh1qenpsQhAES4IAZu54ZbK6dQZY10MiRkRTenHRvqRCCZU35knjNJfrw-6VuB3R6fB3aXQQZnWfZzmOEKbw0oowMajpDJBeyGouFFp6GUQ1JBRFaEYUteXybtSnFftKQzGzf6jFoPB7DwfoUHlHAICkQsDBMIQrkLexiBgAB5JwsHsHCsFoS6kYNLIkLCTIFmKVIlj1Ap0KFCE0gqBIR1WCIFbWhzqF9+Ui1oQPg9D8PiDsIhdAEHvyCa+xdETogU7TjO8yznPAxFDIYgZHIEWSa0qxY0aVnGypvi4TZWRSVkm-qlu27WgOg5DsPIYQMQiFYWBaCIEi5MNhHjbbeJwTR2FKkqomKEYQnoIg+LGUUjIJqWlZD9d2LRPbNx9sQduV9u630ZtYB+T8X5vw9F6d+5JEaBjRuxBM2QJy-GqFvCuw1dCCgWITSqKQvhwKaB7MyXtz4oMvp3a+Pc77YOoM-V+xFIAAFFHBiFJB-HmudSF3nIbyXIVDKhPU2HeN4CxIigjRhaMm7CEGcKQa3Hh9U0E33DrmfMhZiyljLCUKsXBawLUQWfZBfsO5d0sXDWRilAxKH1FwU+-1uGeIsQInMeYw62JLMQMssA8DERnrFagAARMAoc0AuIpsY9xpjwl8PQU2bm-i3JvEQn-RES86hcDRteTe9JMh-FBJECak5DHvjyaEjx7dEnJPEOHeebZ9L9SgjBEaBQRzcXoQyQmpRCZZBCd7Ap7chEiJIoIx+wjcFiJSn44hbZ4x0iqWsQ8ADRTqKroeCqiRoJWzmp0xadUemrLWus3ZWycGiLAPg70+yiFf1Asc1GMJuLxhCBcpIT15gnMJqCGawp4QGOnBwparyL71Q+aIr5OyfkQEkU4GRgLXLAuSKC2EZzIXhEuQOOpd4WFVlWAsXU6EOmoqMei3QfcmqyjEAQblRB+6wBwNYmJRY4nll+DWOsXSuU8phvmAVCrYDDNAiwlI4IoR9iTAiTYNDEBLDiEhOZsIuKavFPAvQZBYDCGoMDTWHUuqlMOaBN41pPjfBlv8QErFrS0UvHXfkDI+TlSwjau1Dr9qEBhurXxJKeqvBuUhaY3ZzbRH+HBUIYpwSGiPtjTVCxw1wEjWtKw65Nx33OHG7cLqgWZVZHU+h2RpgHz-pCBp3xYjC0TPlaojcrUA1tVIFW5aNzUA1suKwAB1V+JSDn1teDxZtuU20wg7QOY+KRUaMjRo7NGYpi3DvtWWv8Na9qWXOCzNmZ1z1qsynya8FRt38kLvENGkJUiPI5daktI7T2c01lenWt6ALbgNgm3mQZ3iep+H8AESw-VbHoVsRI3YLyCjdk8iN-76rVrAxetqVgjpflgKdDmd662ksyuba8sZt0rHBSKeEmqOxHtLXhs9BHNZqwI-e4I8YjSfUTDUBE0JcjXnSLRBhsYJrWh9d+haOGT2ccA8uAwpYiCqmclRxNiAl6sl0HU3UuRRObHLgeJF9IJroX7YifK7HcP-XwxDTBCANN920-rBd1HgihsKMaNIkIFksITFmzNZRQTGbs8kMKg7lOjqwLOsYbmXMXV01BgKelIQFuthhyTMITWMjiPycISz4t-pU85pLc6q1-mvezZL87IO5xWE+kcsQxxilLqKeYjmqu6AAO6enlG6Jq2BVxCAxKzNTl76sgYo3xjLudAkFGCRV49KthspagGNkga4pvXsA2KgsEr7HSpyXaBLa1tujfGwd6bAg9bLYCdGdb2HKsq2hgASWoJp7Td9tY3sW65rmPm9MICy2pHLba8sLGvAmO89zg2lBbQOj7m21o-b+55tObmge6zvRBhSrrMq6mvFCJHpCIysjiP8DQU4NoQDgDIFELXAwAFoV7Rg5wsMo0rDRLxWMfC8KKFoHHaGYdnIy1gBdSPUdGw5yogP1AhcakJKrWxhNorCmY5S3Gl26izQY0ZGYVyhTIQpoghMN5lDnXweeXlzU4pe6bsjFGWcrA3JPF2Gq7emuIQW96y5VwUbXtEqyMeMiw2knvAa0xBptTmtvlKatopUZIuo1jMltuhekcQrdIu4lCOPNMvsxuTz73z8FEIB9YcHgEofDWGm3ZHn1obqjcWWWE+UKfEC87FgUDnsJjROKCrGX4Klu+9N4d4yJUA+8IEFB8P++r7NgINQgFhHrGUHxCEayoJlB1uIxWY-6-SM5iF71XiH5UvjlBKMVnk3EhRpBhebV6zSGQJgL9BafbysVtkNliJvcjZq8Ywm8t9pgV9OIER3JExlkFU+UCBF9j4ag1IQpwg2kVgs0mIYgtFEwSgWEOwGhj9ulBV+5kDYB1pR4BhUD1gMDmJuIAFEMBxypuQN4D4W9zZEChVeUlVqCVV6CWFGCxRmDwhWCK55cisfhuIaVoh2VXFyCkCBCKCmpqDsU8FPR-l6CZklEsCWDcDhRwRkI-gRx3VFNcl5U+DFUw5lUbDqCM5aBxEbDdDApMDxCcCnpmDZlfhSg65pl+tgZF8B8edNVa8nFC5KgqwndLCrtPtT0K0J1QDP5wCc17ZU0sh00J9wtqp6FqheJDRphgEgiANz1F8sgm1cpohUNnp+wplBZrNRRERNhqh4xSjOMmsUi5FAxtEAtN4JoVhYR-Drx6gygWV+QgtUghYsMf0h0ON-pbtbg9sJtDsZtyib8oNVsDwEhaIosakShPoFg4iWhrs6YY1ft-s8cF9Njc5GRohXpD5GVrRRcEd0DYtERDwShEwtgGc1AgA */
@@ -505,10 +509,10 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     cond: "submissionConditionsMet",
                     description: "Submit combined transcript to Pi after waiting for user to stop speaking.",
                   },
-                  "15000": { // 15 seconds - should not be less than the threshold in isTimeoutReached
+                  [USER_STOPPED_TIMEOUT_MS]: { // Uses the constant as the delay duration
                     target: "submitting",
                     cond: "submissionConditionsMet",
-                    description: "Submit combined transcript to Pi after prolonged period of user not speaking.",
+                    description: "Submit combined transcript to Pi after a prolonged period of user not speaking.",
                   },
                 },
                 entry: {
@@ -1491,7 +1495,7 @@ function isTimeoutReached(context: SayPiContext): boolean {
     return false;
   }
   const timeSinceStoppedSpeaking = Date.now() - context.timeUserStoppedSpeaking;
-  return timeSinceStoppedSpeaking > 15000; // 15 seconds - should be changed with the fallback timer in accumulating state (line 508)
+  return timeSinceStoppedSpeaking > USER_STOPPED_TIMEOUT_MS;
 }
 
 function mustRespondToMessage(context: SayPiContext): boolean {
