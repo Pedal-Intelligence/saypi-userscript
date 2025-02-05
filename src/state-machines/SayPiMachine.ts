@@ -234,7 +234,7 @@ function getChatbotDefaultPlaceholder(): string {
 }
 
 // Define a constant for the timeout (in milliseconds) for the user stopped speaking event
-const USER_STOPPED_TIMEOUT_MS = 15000;
+const USER_STOPPED_TIMEOUT_MS = 10000;
 
 const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
   {
