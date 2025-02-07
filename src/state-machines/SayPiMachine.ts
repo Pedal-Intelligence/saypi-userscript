@@ -606,14 +606,14 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 description: "Submitting prompt to Pi.",
                 entry: [
                   {
+                    type: "setMaintainanceFlag",
+                  },
+                  {
                     type: "mergeAndSubmitTranscript",
                   },
                   {
                     type: "notifySentMessage",
                   },
-                  {
-                    type: "setMaintainanceFlag",
-                  }
                 ],
                 exit: ["acknowledgeUserInput"],
                 always: "#sayPi.responding.piThinking",
@@ -1316,7 +1316,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         const shouldSetFlag = mustRespond && !(shouldAlwaysRespond() || context.shouldRespond);
         console.debug(shouldSetFlag 
           ? `Setting maintainance flag due to ${timeoutReached ? "timeout reached" : "context window approaching capacity"}`
-          : "Clearing maintainance flag due to context window not approaching capacity and no timeout"
+          : "Clearing maintainance flag since below context window capacity and timeout threshold"
         );
         return { 
           isMaintainanceMessage: shouldSetFlag 
