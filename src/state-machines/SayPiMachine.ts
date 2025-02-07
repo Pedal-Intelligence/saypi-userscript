@@ -1231,7 +1231,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         const text = mergeService
           .mergeTranscriptsLocal(context.transcriptions)
           .trim();
-        if (text) getPromptOrNull()?.setFinal(text);
+        if (text) getPromptOrNull()?.setFinal(text, context.isMaintainanceMessage);
       },
 
       callIsStarting: () => {

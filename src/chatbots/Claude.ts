@@ -7,19 +7,12 @@ import {
   InputStreamOptions,
 } from "../tts/InputStream";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
-import { Chatbot, UserPrompt } from "./Chatbot";
-import { UserPreferenceModule } from "../prefs/PreferenceModule";
+import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
+import { UserPrompt } from "./Chatbot";
 
-class ClaudeChatbot implements Chatbot {
-  private readonly preferences = UserPreferenceModule.getInstance();
-
+class ClaudeChatbot extends AbstractChatbot {
   getName(): string {
     return "Claude";
-  }
-
-  async getNickname(): Promise<string> {
-    const nickname = await this.preferences.getNickname();
-    return nickname || this.getName();
   }
 
   getPrompt(element: HTMLElement): UserPrompt {
@@ -282,7 +275,7 @@ class ClaudeTextStream extends ElementTextStream {
   }
 }
 
-class ClaudePrompt extends UserPrompt {
+class ClaudePrompt extends AbstractUserPrompt {
   private promptElement: HTMLDivElement;
   private placeholderManager: PlaceholderManager;
   readonly PROMPT_CHARACTER_LIMIT = 200000; // max prompt length is the same as context window length, 200k tokens

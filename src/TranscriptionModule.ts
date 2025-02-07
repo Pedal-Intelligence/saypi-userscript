@@ -276,7 +276,7 @@ async function constructTranscriptionFormData(
   }
 
   // Get the chatbot's nickname if set
-  const chatbot = ChatbotService.getChatbot();
+  const chatbot = await ChatbotService.getChatbot();
   const nickname = await chatbot.getNickname();
   const defaultName = chatbot.getName();
   if (nickname && nickname !== defaultName) {

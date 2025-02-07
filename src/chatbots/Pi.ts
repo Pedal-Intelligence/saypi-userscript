@@ -10,19 +10,12 @@ import {
 import { SpeechSynthesisVoiceRemote } from "../tts/SpeechModel";
 import { PiSpeechSourceParser } from "../tts/SpeechSourceParsers";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
-import { Chatbot, UserPrompt } from "./Chatbot";
-import { UserPreferenceModule } from "../prefs/PreferenceModule";
+import { UserPrompt } from "./Chatbot";
+import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
 
-class PiAIChatbot implements Chatbot {
-  private readonly preferences = UserPreferenceModule.getInstance();
-
+class PiAIChatbot extends AbstractChatbot {
   getName(): string {
     return "Pi";
-  }
-
-  async getNickname(): Promise<string> {
-    const nickname = await this.preferences.getNickname();
-    return nickname || this.getName();
   }
 
   getPrompt(element: HTMLElement): UserPrompt {
@@ -360,7 +353,7 @@ class PiTextStream extends ElementTextStream {
   }
 }
 
-class PiPrompt extends UserPrompt {
+class PiPrompt extends AbstractUserPrompt {
   private textArea: HTMLTextAreaElement = this.element as HTMLTextAreaElement;
   readonly PROMPT_CHARACTER_LIMIT = 4000;
 
