@@ -119,8 +119,12 @@ export abstract class AbstractChatbot implements Chatbot {
         const hasNickname = await chatbot.hasNickname();
         if (hasNickname) {
           const nickname = await chatbot.getNickname();
+          const groupSuppressionInstruction = `Your nickname is ${nickname}. Respond only when addressed by your nickname. Stay in character. State your name when responding so that others know who is speaking. Do not respond to messages addressed to other people.`;
+          const internalMonologueInstruction = "This is a maintenance message to help you stay aware of the conversation. Your response will not be shown or heard by users. Process this information as internal thoughts, referring to speakers in the third person and maintaining empathy. Feel free to reflect on their situation and consider ways you might help, but keep these thoughts to yourself for now. Focus on understanding both the facts and emotions being shared.";
           const instruction = `<instruction>
-Your nickname is ${nickname}. Respond only when addressed by your nickname. Do not respond to messages addressed to other people. Stay in character. State your name when responding so that others know who is speaking.
+${groupSuppressionInstruction}
+
+${internalMonologueInstruction}
 </instruction>`;
 
           // Only include instruction if it won't overflow the prompt
