@@ -1090,9 +1090,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             delete SayPiContext.transcriptions[mergedSequenceNumber];
           });
         }
-        if (shouldRespondToThis) {
-          SayPiContext.shouldRespond = true;
-        }
+        SayPiContext.shouldRespond = shouldRespondToThis ?? shouldAlwaysRespond();
       },
 
       acquireMicrophone: (context, event) => {
