@@ -36,12 +36,12 @@
     transition: width 0.3s ease;
 }
 
-.progress-bar .used {
-    background-color: #4a5568;
+.progress-bar .remaining {
+    background-color: #4a5568;  /* darker color for remaining credits */
 }
 
-.progress-bar .remaining {
-    background-color: #e2e8f0;
+.progress-bar .used {
+    background-color: #e2e8f0;  /* lighter color for used portion */
 }
 
 .progress-label {

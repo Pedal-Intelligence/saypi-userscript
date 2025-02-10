@@ -36,13 +36,12 @@ function updateQuotaProgress(status) {
   upgradeSection.classList.add("hidden");
   voiceSection.classList.remove("hidden");
 
-  const percentageUsed = 1 - (status.quota.remaining / status.quota.total);
+  // Calculate percentage remaining
+  const percentageRemaining = status.quota.remaining / status.quota.total;
   const progressBarUsed = document.querySelector(".progress-bar .used");
-  progressBarUsed.style.width = `${percentageUsed * 100}%`;
-  const progressBarRemaining = document.querySelector(
-    ".progress-bar .remaining"
-  );
-  progressBarRemaining.style.width = `${(1 - percentageUsed) * 100}%`;
+  progressBarUsed.style.width = `${(1 - percentageRemaining) * 100}%`;
+  const progressBarRemaining = document.querySelector(".progress-bar .remaining");
+  progressBarRemaining.style.width = `${percentageRemaining * 100}%`;
 
   // Update the quota value display
   quotaValue.textContent = status.quota.remaining.toLocaleString();
@@ -66,6 +65,11 @@ function getTTSStatus() {
   fetch(statusEndpoint)
     .then((response) => response.json())
     .then((data) => {
+      // fake quota data for testing
+      data.quota = {
+        remaining: 100,
+        total: 1000,
+      };
       updateQuotaProgress(data);
     })
     .catch((error) => {
