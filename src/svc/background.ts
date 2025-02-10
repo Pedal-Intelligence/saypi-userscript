@@ -78,16 +78,19 @@ chrome.cookies.onChanged.addListener(async (changeInfo) => {
   
   // Only interested in our auth cookie
   if (cookie.name === 'auth_session' && config.authServerUrl && cookie.domain === new URL(config.authServerUrl).hostname) {
-    console.log('Auth session cookie changed:', {
+    console.debug('Auth session cookie changed:', {
       removed,
       cause,
       domain: cookie.domain
     });
     
-    if (!removed) {
-      // Cookie was added/updated - refresh JWT
-      await jwtManager.refresh();
-    } else {
+    // Only refresh on explicit cookie additions or updates
+    if (!removed && (cause === 'explicit' || cause === 'overwrite')) {
+      // Only refresh if we don't have a valid token already
+      if (!jwtManager.isAuthenticated()) {
+        await jwtManager.refresh();
+      }
+    } else if (removed) {
       // Cookie was removed - clear the token
       jwtManager.clear();
     }

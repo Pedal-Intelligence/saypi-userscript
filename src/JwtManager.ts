@@ -10,7 +10,8 @@ interface JwtClaims {
   exp: number;
 }
 
-class JwtManager {
+// Export the class for testing
+export class JwtManager {
   private token: string | null = null;
   private expiresAt: number | null = null;
   private refreshTimeout: NodeJS.Timeout | null = null;
@@ -85,9 +86,33 @@ class JwtManager {
     }
   }
 
-  public async refresh(): Promise<void> {
+  private parseDuration(duration: string): number {
+    const match = duration.match(/^(\d+)(m|h|d|s)$/);
+    if (!match) {
+      throw new Error(`Invalid duration format: ${duration}`);
+    }
+    
+    const value = parseInt(match[1]);
+    const unit = match[2];
+    
+    switch (unit) {
+      case 's': return value * 1000;
+      case 'm': return value * 60 * 1000;
+      case 'h': return value * 60 * 60 * 1000;
+      case 'd': return value * 24 * 60 * 60 * 1000;
+      default: throw new Error(`Unknown duration unit: ${unit}`);
+    }
+  }
+
+  public async refresh(force: boolean = false): Promise<void> {
     if (!config.authServerUrl) {
       console.warn('Auth server URL not configured');
+      return;
+    }
+
+    // Skip refresh if we have a valid token and this isn't a forced refresh
+    if (!force && this.isAuthenticated() && this.expiresAt && this.expiresAt > Date.now() + 60000) {
+      console.debug('Skipping token refresh - current token still valid');
       return;
     }
 
@@ -113,7 +138,7 @@ class JwtManager {
       const { token, expiresIn } = await response.json();
       
       this.token = token;
-      this.expiresAt = Date.now() + (parseInt(expiresIn) * 1000);
+      this.expiresAt = Date.now() + this.parseDuration(expiresIn);
       
       await this.saveToStorage();
       this.scheduleRefresh();
@@ -162,5 +187,6 @@ class JwtManager {
   }
 }
 
-// Export a singleton instance
-export const jwtManager = new JwtManager(); 
+// Export the singleton instance as default
+export const jwtManager = new JwtManager();
+export default jwtManager; 

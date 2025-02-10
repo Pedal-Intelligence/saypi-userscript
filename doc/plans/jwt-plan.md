@@ -28,7 +28,7 @@
 • The JwtManager should be initialized in the background script, not the popup. Because they execute in different contexts, the popup cannot access the JwtManager, so uses its own logic to parse the JWT from the cookie.
 
 ────────────────────────────  
-3.5 Showing User Quota, Concluding Multilingual Voices Beta
+3.5 Showing User Quota, Concluding Multilingual Voices Beta [DONE]
 ────────────────────────────  
 * With the release of this update, the Multilingual Voices beta will be complete.
 * Move TTS settings out of beta, replacing the "Beta Active" section with a "Quota" section that displays the user's quota and remaining usage.
