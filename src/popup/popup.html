@@ -229,23 +229,27 @@
       </div>
     </section>
 
-    <div class="pre-release">
-
-      <section id="preview-status">
-        <div class="preview-progress beta">
+    <div class=""premium">
+      <section id="premium-status">
+        <div class="quota-progress">
+          <div class="progress-label">
+            <span class="label" data-i18n="quotaRemaining">Quota Remaining</span>
+            <span class="value">
+              <span id="quota-remaining-value">0</span>
+              <span data-i18n="quotaCredits">credits</span>
+            </span>
+          </div>
           <div class="progress-bar">
             <span class="share used"></span>
             <span class="share remaining"></span>
           </div>
-          <div class="progress-label">
-            <span class="label">Beta Active</span>
         </div>
       </section>
 
       <section id="voice">
-        <div class="user-preference-item w-full max-w-lg x-hidden">
+        <div class="user-preference-item w-full max-w-lg">
           <label class="wraper" for="enable-tts">
-            <span class="label-text" data-i18n="enableTTS">Custom voices </span>
+            <span class="label-text" data-i18n="enableTTS">Multilingual voices</span>
             <div class="switch-wrap control">
               <input type="checkbox" id="enable-tts" name="enableTTS" />
               <div class="switch"></div>
@@ -254,18 +258,16 @@
         </div>
       </section>
 
-      <section id="usage">
-        <div class="usage-charges-item w-full max-w-lg">
-          <span class="label" data-i18n="currentCharges">Current charges</span>
-          <div id="current-charges" class="value balance">
-            <span class="currency">&dollar;</span
-            ><span class="value" id="current-charges-numeric">0</span>
-          </div>
+      <section id="upgrade" class="hidden">
+        <div class="flex items-center justify-center w-full max-w-lg">
+          <button id="upgrade-button" class="px-4 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" data-i18n="upgradeButton">
+            Upgrade Plan
+          </button>
         </div>
       </section>
 
       <!-- Controls for testing and development -->
-      <section id="devtools">
+      <section id="devtools" class="hidden">
         <div class="user-preference-item w-full max-w-lg x-hidden">
           <button type="button" id="clear-preferences" class="btn btn-primary">
             Clear Preferences

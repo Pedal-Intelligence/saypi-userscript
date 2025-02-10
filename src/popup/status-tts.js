@@ -1,6 +1,6 @@
 const ttsStatusUnknown = {
   status_code: "unknown",
-  message: chrome.i18n.getMessage("previewStatusUnknown"),
+  message: chrome.i18n.getMessage("quotaStatusUnknown"),
 };
 
 function pauseTTSPreview(paused = true) {
@@ -14,28 +14,29 @@ function pauseTTSPreview(paused = true) {
   }
 }
 
-function updatePreviewProgress(status) {
+function updateQuotaProgress(status) {
   const progressLabel = document.querySelector(
-    "#preview-status .progress-label .label"
+    "#premium-status .progress-label .label"
   );
-  if (status.beta.status === "active") {
-    progressLabel.textContent = chrome.i18n.getMessage("previewStatusActive");
-  } else if (status.beta.status === "paused") {
-    const nextResetDate = new Date(status.beta.next_reset_unix_seconds * 1000);
-    progressLabel.textContent = chrome.i18n.getMessage("previewStatusPaused", [
-      nextResetDate.toLocaleDateString(navigator.language),
-    ]);
-    pauseTTSPreview();
-  } else if (status.beta.status === "completed") {
-    progressLabel.textContent = chrome.i18n.getMessage(
-      "previewStatusCompleted"
-    );
-  } else {
-    progressLabel.textContent = chrome.i18n.getMessage("previewStatusUnknown");
+  const quotaValue = document.getElementById("quota-remaining-value");
+  const upgradeSection = document.getElementById("upgrade");
+  const voiceSection = document.getElementById("voice");
+
+  if (!status.quota || status.quota.remaining <= 0) {
+    // No quota or exhausted quota - show upgrade section
+    upgradeSection.classList.remove("hidden");
+    voiceSection.classList.add("hidden");
+    progressLabel.textContent = chrome.i18n.getMessage("quotaExhausted");
+    quotaValue.textContent = "0";
+    pauseTTSPreview(true);
+    return;
   }
 
-  const percentageUsed =
-    status.beta.character_count / status.beta.character_limit;
+  // Hide upgrade section and show voice controls if we have quota
+  upgradeSection.classList.add("hidden");
+  voiceSection.classList.remove("hidden");
+
+  const percentageUsed = 1 - (status.quota.remaining / status.quota.total);
   const progressBarUsed = document.querySelector(".progress-bar .used");
   progressBarUsed.style.width = `${percentageUsed * 100}%`;
   const progressBarRemaining = document.querySelector(
@@ -43,11 +44,20 @@ function updatePreviewProgress(status) {
   );
   progressBarRemaining.style.width = `${(1 - percentageUsed) * 100}%`;
 
+  // Update the quota value display
+  quotaValue.textContent = status.quota.remaining.toLocaleString();
+
   const progressBar = document.querySelector(".progress-bar");
-  progressBar.title = chrome.i18n.getMessage("previewProgress", [
-    status.beta.character_count,
-    status.beta.character_limit,
+  progressBar.title = chrome.i18n.getMessage("quotaProgress", [
+    status.quota.remaining.toLocaleString(),
+    status.quota.total.toLocaleString(),
   ]);
+
+  // Add click handler to upgrade button
+  const upgradeButton = document.getElementById("upgrade-button");
+  upgradeButton.addEventListener("click", () => {
+    window.open(`${config.authServerUrl}/upgrade`, "_blank");
+  });
 }
 
 function getTTSStatus() {
@@ -56,12 +66,12 @@ function getTTSStatus() {
   fetch(statusEndpoint)
     .then((response) => response.json())
     .then((data) => {
-      updatePreviewProgress(data);
+      updateQuotaProgress(data);
     })
     .catch((error) => {
       // Handle any errors
       console.error("Error:", error);
-      updatePreviewProgress(unknown);
+      updateQuotaProgress(ttsStatusUnknown);
     });
 }
 

@@ -500,5 +500,29 @@
         "example": "user@example.com"
       }
     }
+  },
+  "quotaRemaining": {
+    "message": "Quota Remaining",
+    "description": "Label for the quota remaining progress bar"
+  },
+  "quotaExhausted": {
+    "message": "Quota Exhausted",
+    "description": "Message shown when user has no remaining quota"
+  },
+  "quotaProgress": {
+    "message": "$1 of $2 credits remaining",
+    "description": "Tooltip showing quota usage, $1 is remaining quota, $2 is total quota"
+  },
+  "quotaStatusUnknown": {
+    "message": "Unable to check quota status",
+    "description": "Message shown when quota status cannot be determined"
+  },
+  "upgradeButton": {
+    "message": "Upgrade Plan",
+    "description": "Button text for upgrading to a paid plan"
+  },
+  "quotaCredits": {
+    "message": "credits",
+    "description": "Unit label for TTS credits"
   }
 }
