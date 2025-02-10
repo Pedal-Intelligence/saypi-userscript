@@ -325,9 +325,8 @@ document.addEventListener("DOMContentLoaded", function () {
   function showHideConsent() {
     const sections = [
       "preferences",
-      "preview-status",
+      "premium-status",
       "voice",
-      "usage",
       "devtools",
     ];
     chrome.storage.sync.get("shareData").then((result) => {
