@@ -69,7 +69,7 @@ This approach aligns quota-related UI elements directly with the authenticated s
 * userId and name are required fields in the JWT token, avatar is optional
 
 ────────────────────────────  
-3.8 Detailed Profile Display
+3.8 Detailed Profile Display [SKIPPED]
 ────────────────────────────
 * Display additional user profile information in the popup.html when the user is authenticated.
 * Feature the user's name, userId, and avatar.
