@@ -78,18 +78,57 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       sendResponse({ claims: null });
     }
   } else if (message.type === 'REDIRECT_TO_LOGIN') {
-    // Handle login redirect request
-    try {
-      if (config.authServerUrl) {
-        chrome.tabs.create({
-          url: `${config.authServerUrl}/auth/login`
-        });
-      } else {
-        console.error('Auth server URL not configured');
+    // Handle login redirect request - async handler
+    (async () => {
+      try {
+        if (config.authServerUrl) {
+          // Check cookie first
+          const cookie = await chrome.cookies.get({
+            name: 'auth_session',
+            url: config.authServerUrl
+          });
+
+          if (!cookie) {
+            // No cookie present, redirect to login immediately
+            chrome.tabs.create({
+              url: `${config.authServerUrl}/auth/login`
+            });
+            return;
+          }
+
+          // Cookie exists, try to refresh
+          try {
+            await jwtManager.refresh(true);
+            
+            if (jwtManager.isAuthenticated()) {
+              // Refresh succeeded, notify popup
+              sendResponse({ authenticated: true });
+            } else {
+              // Refresh failed or token invalid, redirect to login
+              chrome.tabs.create({
+                url: `${config.authServerUrl}/auth/login`
+              });
+            }
+          } catch (error) {
+            console.error('Failed to refresh token:', error);
+            // On refresh failure, redirect to login
+            chrome.tabs.create({
+              url: `${config.authServerUrl}/auth/login`
+            });
+          }
+        } else {
+          console.error('Auth server URL not configured');
+        }
+      } catch (error) {
+        console.error('Failed to check auth state:', error);
+        // On any error, try redirect to login
+        if (config.authServerUrl) {
+          chrome.tabs.create({
+            url: `${config.authServerUrl}/auth/login`
+          });
+        }
       }
-    } catch (error) {
-      console.error('Failed to redirect to login:', error);
-    }
+    })();
   } else if (message.type === 'SIGN_OUT') {
     // Handle sign out request
     try {

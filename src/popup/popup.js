@@ -380,7 +380,12 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById('auth-button').addEventListener('click', function() {
     const isSignIn = this.getAttribute('data-i18n') === 'signIn';
     if (isSignIn) {
-      chrome.runtime.sendMessage({ type: 'REDIRECT_TO_LOGIN' });
+      chrome.runtime.sendMessage({ type: 'REDIRECT_TO_LOGIN' }, function(response) {
+        if (response && response.authenticated) {
+          // Token was refreshed successfully, update the UI
+          updateProfileDisplay();
+        }
+      });
     } else {
       chrome.runtime.sendMessage({ type: 'SIGN_OUT' }, function() {
         updateProfileDisplay(); // Refresh the display after signing out
