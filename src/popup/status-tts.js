@@ -44,24 +44,44 @@ function updateQuotaProgress(status) {
   });
 }
 
-function getTTSStatus() {
-  // config.apiBaseUrl is defined in src/popup/status.js
-  const statusEndpoint = `${config.apiBaseUrl}/status/tts`;
-  fetch(statusEndpoint)
-    .then((response) => response.json())
-    .then((data) => {
-      // fake quota data for testing
-      data.quota = {
-        remaining: 100,
-        total: 1000,
-      };
-      updateQuotaProgress(data);
-    })
-    .catch((error) => {
-      // Handle any errors
-      console.error("Error:", error);
-      updateQuotaProgress(ttsStatusUnknown);
-    });
+async function getJwtQuota() {
+  try {
+    // Send message to background script to get quota details
+    const quotaDetails = await chrome.runtime.sendMessage({ type: 'GET_QUOTA_DETAILS' });
+    if (!quotaDetails?.hasQuota) {
+      return null;
+    }
+
+    return {
+      quota: {
+        remaining: quotaDetails.remaining,
+        total: quotaDetails.total
+      }
+    };
+  } catch (error) {
+    console.error('Failed to get JWT quota:', error);
+    return null;
+  }
+}
+
+async function getTTSStatus() {
+  try {
+    // First try to get quota from JWT
+    const jwtQuota = await getJwtQuota();
+    if (jwtQuota) {
+      updateQuotaProgress(jwtQuota);
+      return;
+    }
+
+    // Fall back to API endpoint if no JWT quota available
+    const statusEndpoint = `${config.apiBaseUrl}/status/tts`;
+    const response = await fetch(statusEndpoint);
+    const data = await response.json();
+    updateQuotaProgress(data);
+  } catch (error) {
+    console.error("Error:", error);
+    updateQuotaProgress(ttsStatusUnknown);
+  }
 }
 
 getTTSStatus();

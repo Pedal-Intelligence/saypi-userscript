@@ -10,6 +10,12 @@ interface JwtClaims {
   exp: number;
 }
 
+export interface QuotaDetails {
+  remaining: number;
+  total: number;
+  hasQuota: boolean;
+}
+
 // Export the class for testing
 export class JwtManager {
   private token: string | null = null;
@@ -184,6 +190,23 @@ export class JwtManager {
     chrome.storage.local.remove(['token', 'tokenExpiresAt']).catch(error => {
       console.error('Failed to clear token from storage:', error);
     });
+  }
+
+  public getQuotaDetails(): QuotaDetails {
+    const claims = this.getClaims();
+    if (!claims || typeof claims.ttsQuotaRemaining !== 'number' || typeof claims.ttsQuotaMonthly !== 'number') {
+      return {
+        remaining: 0,
+        total: 0,
+        hasQuota: false
+      };
+    }
+
+    return {
+      remaining: claims.ttsQuotaRemaining,
+      total: claims.ttsQuotaMonthly,
+      hasQuota: claims.ttsQuotaMonthly > 0
+    };
   }
 }
 

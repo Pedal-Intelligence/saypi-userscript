@@ -121,14 +121,16 @@ const DEFAULT_CONFIG: SayPiConfig = {
 The JWT contains user entitlements that your extension should respect:
 
 ```typescript
-interface JwtClaims {
+{
   userId: string;
   teamId: string;
   planId: string;
   ttsQuotaRemaining: number;
   ttsQuotaMonthly: number;
-  iat: number;
-  exp: number;
+  name: string; // User's display name
+  avatarUrl: string | null; // Optional URL to user's avatar image
+  iat: number; // Issued at timestamp
+  exp: number; // Expiration timestamp
 }
 ```
 

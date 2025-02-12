@@ -130,4 +130,88 @@ describe('JwtManager', () => {
       expect(fetch).toHaveBeenCalled();
     });
   });
+
+  describe('getQuotaDetails', () => {
+    it('returns zero quotas when no token exists', () => {
+      const quotaDetails = jwtManager.getQuotaDetails();
+      expect(quotaDetails).toEqual({
+        remaining: 0,
+        total: 0,
+        hasQuota: false
+      });
+    });
+
+    it('returns correct quota details from valid token', () => {
+      // Create a test token with quota claims
+      const claims = {
+        userId: 'test-user',
+        teamId: 'test-team',
+        planId: 'test-plan',
+        ttsQuotaRemaining: 50,
+        ttsQuotaMonthly: 100,
+        iat: Math.floor(Date.now() / 1000),
+        exp: Math.floor(Date.now() / 1000) + 3600
+      };
+      
+      const token = 'header.' + btoa(JSON.stringify(claims)) + '.signature';
+      
+      // @ts-expect-error: accessing private property for testing
+      jwtManager.token = token;
+
+      const quotaDetails = jwtManager.getQuotaDetails();
+      expect(quotaDetails).toEqual({
+        remaining: 50,
+        total: 100,
+        hasQuota: true
+      });
+    });
+
+    it('returns zero quotas for token with missing quota claims', () => {
+      // Create a test token without quota claims
+      const claims = {
+        userId: 'test-user',
+        teamId: 'test-team',
+        planId: 'test-plan',
+        iat: Math.floor(Date.now() / 1000),
+        exp: Math.floor(Date.now() / 1000) + 3600
+      };
+      
+      const token = 'header.' + btoa(JSON.stringify(claims)) + '.signature';
+      
+      // @ts-expect-error: accessing private property for testing
+      jwtManager.token = token;
+
+      const quotaDetails = jwtManager.getQuotaDetails();
+      expect(quotaDetails).toEqual({
+        remaining: 0,
+        total: 0,
+        hasQuota: false
+      });
+    });
+
+    it('indicates no quota when monthly quota is zero', () => {
+      // Create a test token with zero quota
+      const claims = {
+        userId: 'test-user',
+        teamId: 'test-team',
+        planId: 'test-plan',
+        ttsQuotaRemaining: 0,
+        ttsQuotaMonthly: 0,
+        iat: Math.floor(Date.now() / 1000),
+        exp: Math.floor(Date.now() / 1000) + 3600
+      };
+      
+      const token = 'header.' + btoa(JSON.stringify(claims)) + '.signature';
+      
+      // @ts-expect-error: accessing private property for testing
+      jwtManager.token = token;
+
+      const quotaDetails = jwtManager.getQuotaDetails();
+      expect(quotaDetails).toEqual({
+        remaining: 0,
+        total: 0,
+        hasQuota: false
+      });
+    });
+  });
 }); 

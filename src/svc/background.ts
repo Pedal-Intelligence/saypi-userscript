@@ -59,8 +59,17 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     } catch (error) {
       console.error('Failed to open popup:', error);
     }
+  } else if (message.type === 'GET_QUOTA_DETAILS') {
+    // Handle quota details request
+    try {
+      const quotaDetails = jwtManager.getQuotaDetails();
+      sendResponse(quotaDetails);
+    } catch (error) {
+      console.error('Failed to get quota details:', error);
+      sendResponse(null);
+    }
   }
-  return false;  // synchronous response pattern
+  return true;  // indicates we will send a response asynchronously
 });
 
 // Handle authentication cookie changes

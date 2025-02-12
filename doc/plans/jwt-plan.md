@@ -35,6 +35,41 @@
 * For users without TTS credits, the "Multilingual voices" section should be replaced with a "Upgrade" section that displays a button to upgrade to a paid plan.
 
 ────────────────────────────  
+3.6 Quotas, Claims & Entitlements [DONE]
+────────────────────────────
+We plan to leverage the JWT token returned from the authentication server to include user-specific quota and entitlement details. Below is our proposed approach:
+
+1. JWT Token Claims: 
+   • The JWT token obtained during the authentication (see auth.md and auth-refresh.md) will include claims representing the user's quotas (e.g., quota_total, quota_remaining) and other entitlements.
+
+2. Enhancing JwtManager:
+   • Update the JwtManager module to decode the JWT token and extract quota and entitlement claims.
+   • Add a new method (e.g., getQuotaDetails) that returns these values in a structured format.
+
+3. Integrating with the Popup UI:
+   • Modify the quota display component in popup.html (and its associated script in status-tts.js) to check for the presence of a valid JWT token.
+   • If authenticated and the JWT token contains quota details, use them to populate the quota progress bar and upgrade prompt in the extension settings.
+   • If the token is missing or lacks quota information, revert to the current behavior using the generic TTS status endpoint from the API server.
+
+4. Token Refresh and Updates:
+   • Ensure that the token refresh process (outlined in auth-refresh.md) updates the quota claims, so the extension always displays current user-specific data.
+
+5. Fallback and Error Handling:
+   • When quota claims are absent or error occurs during decoding, gracefully fall back to default quota values retrieved from the API server.
+
+This approach aligns quota-related UI elements directly with the authenticated state of the user, ensuring that the quotas reflect the actual entitlements specified by the authentication server.
+
+────────────────────────────  
+3.7 Showing User Profile
+────────────────────────────
+• Display the user's profile information (e.g., name, userId, avatar) in the popup.html when the user is authenticated.
+* name, userId, and avatar should be displayed in a top corner of the popup.html
+* data should be fetched from the JWT token (see auth.md for jwt contents)
+* userId and name are required, avatar is optional
+** if avatar is not available, display a generic circular icon with the user's initials
+
+
+────────────────────────────  
 4. Making API Requests (Authenticated & Unauthenticated)  
 ────────────────────────────  
 • Implement a generic callApi() function that will:
