@@ -80,6 +80,15 @@ class StateMachineService {
   }
 }
 
-// Singleton
-const chatbot = ChatbotService.getChatbot();
-export default new StateMachineService(chatbot);
+// Singleton initialization
+let instance = null;
+
+async function initializeService() {
+  if (!instance) {
+    const chatbot = await ChatbotService.getChatbot();
+    instance = new StateMachineService(chatbot);
+  }
+  return instance;
+}
+
+export default await initializeService();

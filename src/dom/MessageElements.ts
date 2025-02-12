@@ -15,6 +15,7 @@ import EventBus from "../events/EventBus";
 import { isMobileDevice } from "../UserAgentModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { SpeechHistoryModule } from "../tts/SpeechHistoryModule";
+import { MessageState } from "../tts/MessageHistoryModule";
 
 class PopupMenu {
   private _element: HTMLElement;
@@ -203,6 +204,16 @@ abstract class AssistantResponse {
 
   async decorateCost(charge: UtteranceCharge): Promise<void> {
     this.messageControls.decorateCost(charge);
+  }
+
+  async decorateState(state: MessageState): Promise<void> {
+    if (state.isMaintenanceMessage) {
+      const element = this.element;
+      element.classList.add("maintenance-message", "silenced");
+      element.addEventListener("click", () => {
+        element.classList.toggle("silenced");
+      });
+    }
   }
 
   toString(): string {
