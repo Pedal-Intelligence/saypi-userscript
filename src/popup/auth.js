@@ -1,5 +1,5 @@
 // DOM elements
-const signInButton = document.getElementById('sign-in-button');
+const authButton = document.getElementById('auth-button');
 const profileStatus = document.getElementById('profile-status');
 
 // State
@@ -26,7 +26,7 @@ function parseJwt(token) {
 }
 
 // Event handlers
-signInButton.addEventListener('click', async () => {
+authButton.addEventListener('click', async () => {
   if (isAuthenticated) {
     // Handle sign out
     await signOut();
@@ -53,13 +53,13 @@ function updateAuthUI(authenticated, userData = null) {
   isAuthenticated = authenticated;
   
   if (authenticated && userData) {
-    signInButton.textContent = chrome.i18n.getMessage('signOut');
-    signInButton.dataset.i18n = 'signOut';
+    authButton.textContent = chrome.i18n.getMessage('signOut');
+    authButton.dataset.i18n = 'signOut';
     profileStatus.textContent = chrome.i18n.getMessage('signedIn');
     profileStatus.dataset.i18n = 'signedIn';
   } else {
-    signInButton.textContent = chrome.i18n.getMessage('signIn');
-    signInButton.dataset.i18n = 'signIn';
+    authButton.textContent = chrome.i18n.getMessage('signIn');
+    authButton.dataset.i18n = 'signIn';
     profileStatus.textContent = chrome.i18n.getMessage('notSignedIn');
     profileStatus.dataset.i18n = 'notSignedIn';
   }

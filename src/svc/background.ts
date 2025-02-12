@@ -68,6 +68,45 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       console.error('Failed to get quota details:', error);
       sendResponse(null);
     }
+  } else if (message.type === 'GET_JWT_CLAIMS') {
+    // Handle JWT claims request
+    try {
+      const claims = jwtManager.getClaims();
+      sendResponse({ claims });
+    } catch (error) {
+      console.error('Failed to get JWT claims:', error);
+      sendResponse({ claims: null });
+    }
+  } else if (message.type === 'REDIRECT_TO_LOGIN') {
+    // Handle login redirect request
+    try {
+      if (config.authServerUrl) {
+        chrome.tabs.create({
+          url: `${config.authServerUrl}/auth/login`
+        });
+      } else {
+        console.error('Auth server URL not configured');
+      }
+    } catch (error) {
+      console.error('Failed to redirect to login:', error);
+    }
+  } else if (message.type === 'SIGN_OUT') {
+    // Handle sign out request
+    try {
+      // Clear the auth cookie
+      if (config.authServerUrl) {
+        chrome.cookies.remove({
+          name: 'auth_session',
+          url: config.authServerUrl
+        });
+      }
+      // Clear the JWT token
+      jwtManager.clear();
+      sendResponse({ success: true });
+    } catch (error) {
+      console.error('Failed to sign out:', error);
+      sendResponse({ success: false });
+    }
   }
   return true;  // indicates we will send a response asynchronously
 });

@@ -2,6 +2,7 @@ import { config } from './ConfigModule';
 
 interface JwtClaims {
   userId: string;
+  name: string;
   teamId: string;
   planId: string;
   ttsQuotaRemaining: number;

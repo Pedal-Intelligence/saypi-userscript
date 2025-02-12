@@ -60,13 +60,21 @@ We plan to leverage the JWT token returned from the authentication server to inc
 This approach aligns quota-related UI elements directly with the authenticated state of the user, ensuring that the quotas reflect the actual entitlements specified by the authentication server.
 
 ────────────────────────────  
-3.7 Showing User Profile
+3.7 Showing User Profile [DONE]
 ────────────────────────────
 • Display the user's profile information (e.g., name, userId, avatar) in the popup.html when the user is authenticated.
-* name, userId, and avatar should be displayed in a top corner of the popup.html
+* KISS: In this initial release, we will only display the name, so that the user can quickly verify that the extension is working at a glance.
+** E.g. "Hi, [name]!" or "Signed in as [name]"
 * data should be fetched from the JWT token (see auth.md for jwt contents)
-* userId and name are required, avatar is optional
-** if avatar is not available, display a generic circular icon with the user's initials
+* userId and name are required fields in the JWT token, avatar is optional
+
+────────────────────────────  
+3.8 Detailed Profile Display
+────────────────────────────
+* Display additional user profile information in the popup.html when the user is authenticated.
+* Feature the user's name, userId, and avatar.
+* if avatar is not available, display a generic circular icon with the user's initials
+* name, userId, and avatar should be displayed in a top corner of the popup.html
 
 
 ────────────────────────────  

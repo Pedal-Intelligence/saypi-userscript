@@ -473,19 +473,19 @@
   },
   "profile": {
     "message": "Profile",
-    "description": "Label for the profile section in settings."
+    "description": "Label for the profile section"
   },
   "signIn": {
     "message": "Sign In",
-    "description": "Text for the sign in button when user is not authenticated."
+    "description": "Text for the sign in button"
   },
   "signOut": {
     "message": "Sign Out",
-    "description": "Text for the sign out button when user is authenticated."
+    "description": "Text for the sign out button"
   },
   "notSignedIn": {
     "message": "Not signed in",
-    "description": "Status text shown when user is not authenticated."
+    "description": "Text shown when user is not signed in"
   },
   "signedIn": {
     "message": "Signed in",
@@ -524,5 +524,15 @@
   "quotaCredits": {
     "message": "credits",
     "description": "Unit label for TTS credits"
+  },
+  "greeting": {
+    "message": "Hi, $name$!",
+    "description": "Greeting message shown when user is signed in",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
   }
 }
