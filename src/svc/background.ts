@@ -93,6 +93,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             chrome.tabs.create({
               url: `${config.authServerUrl}/auth/login`
             });
+            sendResponse({ authenticated: false });
             return;
           }
 
@@ -108,6 +109,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
               chrome.tabs.create({
                 url: `${config.authServerUrl}/auth/login`
               });
+              sendResponse({ authenticated: false });
             }
           } catch (error) {
             console.error('Failed to refresh token:', error);
@@ -115,9 +117,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             chrome.tabs.create({
               url: `${config.authServerUrl}/auth/login`
             });
+            sendResponse({ authenticated: false });
           }
         } else {
           console.error('Auth server URL not configured');
+          sendResponse({ authenticated: false });
         }
       } catch (error) {
         console.error('Failed to check auth state:', error);
@@ -127,8 +131,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             url: `${config.authServerUrl}/auth/login`
           });
         }
+        sendResponse({ authenticated: false });
       }
     })();
+    return true; // indicates we will send a response asynchronously
   } else if (message.type === 'SIGN_OUT') {
     // Handle sign out request
     try {
@@ -147,7 +153,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       sendResponse({ success: false });
     }
   }
-  return true;  // indicates we will send a response asynchronously
+  
+  // Return true if we're handling the response asynchronously
+  return message.type === 'REDIRECT_TO_LOGIN';
 });
 
 // Handle authentication cookie changes
