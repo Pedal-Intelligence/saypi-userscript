@@ -10,6 +10,18 @@ function updateQuotaProgress(status) {
   const quotaValue = document.getElementById("quota-remaining-value");
   const upgradeSection = document.getElementById("upgrade");
 
+  // Add click handler to upgrade button - moved outside quota check
+  const upgradeButton = document.getElementById("upgrade-button");
+  upgradeButton.addEventListener("click", () => {
+    // Check authentication state
+    chrome.runtime.sendMessage({ type: 'GET_JWT_CLAIMS' }, function(response) {
+      const isAuthenticated = !!(response && response.claims);
+      const baseUrl = config.authServerUrl;
+      const targetPath = isAuthenticated ? '/app/settings/team/billing' : '/pricing';
+      window.open(`${baseUrl}${targetPath}`, "_blank");
+    });
+  });
+
   if (!status.quota || status.quota.remaining <= 0) {
     // No quota or exhausted quota - show upgrade section
     upgradeSection.classList.remove("hidden");
@@ -36,12 +48,6 @@ function updateQuotaProgress(status) {
     status.quota.remaining.toLocaleString(),
     status.quota.total.toLocaleString(),
   ]);
-
-  // Add click handler to upgrade button
-  const upgradeButton = document.getElementById("upgrade-button");
-  upgradeButton.addEventListener("click", () => {
-    window.open(`${config.authServerUrl}/upgrade`, "_blank");
-  });
 }
 
 async function getJwtQuota() {
