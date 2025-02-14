@@ -78,7 +78,7 @@ This approach aligns quota-related UI elements directly with the authenticated s
 
 
 ────────────────────────────  
-4. Making API Requests (Authenticated & Unauthenticated)  
+4. Making API Requests (Authenticated & Unauthenticated) [DONE]
 ────────────────────────────  
 • Implement a generic callApi() function that will:
   – Check whether a JWT token is available in the JwtManager  
@@ -87,7 +87,7 @@ This approach aligns quota-related UI elements directly with the authenticated s
   – Upon receiving a 401 from the API, do not automatically prevent use or force a login gesture—simply return the response error so that the UI or business logic can decide what to do (for instance, prompt the user to sign in or show a restricted functionality message)  
 
 ────────────────────────────  
-5. Manifest (v3) Considerations  
+5. Manifest (v3) Considerations  [DONE]
 ────────────────────────────  
 • Update manifest.json to ensure the extension can access session cookies for authentication:
   – Add the "cookies" permission so that the extension is allowed to read the auth_session cookie. For example:
