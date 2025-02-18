@@ -510,8 +510,18 @@
     "description": "Message shown when user has no remaining quota"
   },
   "quotaProgress": {
-    "message": "$1 of $2 credits remaining",
-    "description": "Tooltip showing quota usage, $1 is remaining quota, $2 is total quota"
+    "message": "$remaining$ of $total$ credits remaining",
+    "description": "Tooltip showing quota usage, $remaining is remaining quota, $total is total quota",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
   },
   "quotaStatusUnknown": {
     "message": "Unable to check quota status",
