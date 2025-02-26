@@ -5,7 +5,7 @@
 const config = {
   // Development URLs (DANGER! DEBUGGING ONLY)
   // apiBaseUrl: "https://localhost:5001",
-  authServerUrl: "https://localhost:3443",
+  authServerUrl: "http://localhost:3000",
   
   // Production URLs (Always change back before publishing)
   apiBaseUrl: "https://api.saypi.ai",

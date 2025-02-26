@@ -4,7 +4,7 @@ const browserAPI = chrome || browser;
 // Config (duplicated from popup-config.js since background scripts can't access popup scripts)
 const config = {
   authServerUrl: process.env.NODE_ENV === 'development' 
-    ? "https://localhost:3443"
+    ? "http://localhost:3000"
     : "https://www.saypi.ai"
 };
 
