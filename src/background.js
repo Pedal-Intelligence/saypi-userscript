@@ -4,9 +4,12 @@ const browserAPI = chrome || browser;
 // Config (duplicated from popup-config.js since background scripts can't access popup scripts)
 const config = {
   authServerUrl: process.env.NODE_ENV === 'development' 
-    ? "http://localhost:3000"
+    ? "https://localhost:3443"
     : "https://www.saypi.ai"
 };
+
+// Import the JWT manager
+import { jwtManager } from './JwtManager';
 
 // Listen for changes to the auth cookie
 browserAPI.cookies.onChanged.addListener(async (changeInfo) => {
@@ -15,8 +18,12 @@ browserAPI.cookies.onChanged.addListener(async (changeInfo) => {
   // Only interested in our auth cookie
   if (cookie.name === 'auth_session' && cookie.domain === new URL(config.authServerUrl).hostname) {
     if (!removed) {
-      // Cookie was added/updated - exchange it for JWT
+      // Cookie was added/updated - store the session token value
       try {
+        // Store the session token value for later use
+        await jwtManager.storeSessionToken(cookie.value);
+        
+        // Exchange it for JWT
         const response = await fetch(`${config.authServerUrl}/api/auth/refresh`, {
           method: 'POST',
           credentials: 'include',  // Important: Send cookies with request
@@ -52,8 +59,9 @@ browserAPI.cookies.onChanged.addListener(async (changeInfo) => {
         console.error('Failed to exchange cookie for JWT:', error);
       }
     } else {
-      // Cookie was removed - clear the token
-      await browserAPI.storage.local.remove(['token', 'tokenExpiresAt']);
+      // Cookie was removed - clear the token and session token
+      await browserAPI.storage.local.remove(['token', 'tokenExpiresAt', 'sessionToken']);
+      jwtManager.clear();
     }
   }
 }); 

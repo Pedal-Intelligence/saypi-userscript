@@ -22,6 +22,7 @@ export class JwtManager {
   private token: string | null = null;
   private expiresAt: number | null = null;
   private refreshTimeout: NodeJS.Timeout | null = null;
+  private sessionToken: string | null = null;
 
   constructor() {
     // Load token from storage on initialization
@@ -30,10 +31,11 @@ export class JwtManager {
 
   private async loadFromStorage(): Promise<void> {
     try {
-      const { token, tokenExpiresAt } = await chrome.storage.local.get(['token', 'tokenExpiresAt']);
+      const { token, tokenExpiresAt, sessionToken } = await chrome.storage.local.get(['token', 'tokenExpiresAt', 'sessionToken']);
       if (token && tokenExpiresAt) {
         this.token = token;
         this.expiresAt = tokenExpiresAt;
+        this.sessionToken = sessionToken;
         this.scheduleRefresh();
       }
     } catch (error) {
@@ -45,7 +47,8 @@ export class JwtManager {
     try {
       await chrome.storage.local.set({
         token: this.token,
-        tokenExpiresAt: this.expiresAt
+        tokenExpiresAt: this.expiresAt,
+        sessionToken: this.sessionToken
       });
     } catch (error) {
       console.error('Failed to save token to storage:', error);
@@ -69,28 +72,11 @@ export class JwtManager {
     this.refreshTimeout = setTimeout(() => this.refresh(), refreshTime);
   }
 
-  private async checkAuthCookie(): Promise<chrome.cookies.Cookie | null> {
-    if (!config.authServerUrl) {
-      console.warn('Auth server URL not configured');
-      return null;
-    }
-    
-    try {
-      return await chrome.cookies.get({
-        name: 'auth_session',
-        url: config.authServerUrl
-      });
-    } catch (error) {
-      console.error('Failed to check auth cookie:', error);
-      return null;
-    }
-  }
-
-  public async initialize(): Promise<void> {
-    const cookie = await this.checkAuthCookie();
-    if (cookie) {
-      await this.refresh();
-    }
+  // Add method to store session token
+  public async storeSessionToken(sessionToken: string): Promise<void> {
+    console.debug('Storing session token');
+    this.sessionToken = sessionToken;
+    await this.saveToStorage();
   }
 
   private parseDuration(duration: string): number {
@@ -111,6 +97,26 @@ export class JwtManager {
     }
   }
 
+  public async initialize(): Promise<void> {
+    // Check if the user is already authenticated with the auth server
+    // by verifying if the auth_session cookie exists
+    try {
+      if (chrome.cookies && config.authServerUrl) {
+        const cookie = await chrome.cookies.get({
+          name: 'auth_session',
+          url: config.authServerUrl
+        });
+        
+        if (cookie) {
+          // If the cookie exists, attempt to refresh the token
+          await this.refresh();
+        }
+      }
+    } catch (error) {
+      console.error('Failed to check auth cookie during initialization:', error);
+    }
+  }
+
   public async refresh(force: boolean = false): Promise<void> {
     if (!config.authServerUrl) {
       console.warn('Auth server URL not configured');
@@ -124,25 +130,38 @@ export class JwtManager {
     }
 
     try {
-      const cookie = await this.checkAuthCookie();
-      if (!cookie) {
-        throw new Error('No auth cookie found');
-      }
-
-      const response = await fetch(`${config.authServerUrl}/api/auth/refresh`, {
+      // The correct endpoint path is /api/auth/refresh
+      const refreshUrl = `${config.authServerUrl}/api/auth/refresh`;
+      console.debug(`Refreshing token from ${refreshUrl}`);
+      
+      // Include both approaches: cookies and session token in body
+      const requestOptions: RequestInit = {
         method: 'POST',
         credentials: 'include',
         headers: {
-          'Cookie': `auth_session=${cookie.value}`,
-          'Origin': chrome.runtime.getURL(''),
+          'Content-Type': 'application/json',
+          'Origin': chrome.runtime?.getURL?.('') || window.location.origin,
         }
-      });
+      };
+      
+      // Add session token to request body if available
+      if (this.sessionToken) {
+        console.debug('Including session token in request body');
+        requestOptions.body = JSON.stringify({
+          sessionToken: this.sessionToken
+        });
+      }
+      
+      const response = await fetch(refreshUrl, requestOptions);
 
       if (!response.ok) {
-        throw new Error(`Failed to refresh token: ${response.status} ${response.statusText}`);
+        const errorText = await response.text().catch(() => 'No error details');
+        throw new Error(`Failed to refresh token: ${response.status} ${response.statusText} - ${errorText}`);
       }
 
       const { token, expiresIn } = await response.json();
+      
+      console.debug('Token refreshed successfully, expires in:', expiresIn);
       
       this.token = token;
       this.expiresAt = Date.now() + this.parseDuration(expiresIn);
@@ -184,11 +203,12 @@ export class JwtManager {
   public clear(): void {
     this.token = null;
     this.expiresAt = null;
+    this.sessionToken = null;
     if (this.refreshTimeout) {
       clearTimeout(this.refreshTimeout);
       this.refreshTimeout = null;
     }
-    chrome.storage.local.remove(['token', 'tokenExpiresAt']).catch(error => {
+    chrome.storage.local.remove(['token', 'tokenExpiresAt', 'sessionToken']).catch(error => {
       console.error('Failed to clear token from storage:', error);
     });
   }

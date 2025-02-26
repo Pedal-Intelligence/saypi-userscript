@@ -87,7 +87,8 @@ describe('JwtManager', () => {
       // Verify token was saved with correct expiration
       expect(chrome.storage.local.set).toHaveBeenCalledWith({
         token: 'test-token',
-        tokenExpiresAt: now + (15 * 60 * 1000) // 15 minutes in ms
+        tokenExpiresAt: now + (15 * 60 * 1000), // 15 minutes in ms
+        sessionToken: null
       });
 
       // Verify next refresh is scheduled 1 minute before expiration
@@ -128,6 +129,44 @@ describe('JwtManager', () => {
 
       // Verify API call was made despite valid token
       expect(fetch).toHaveBeenCalled();
+    });
+  });
+
+  describe('storeSessionToken', () => {
+    it('stores the session token in memory and storage', async () => {
+      const sessionToken = 'test-session-token';
+      
+      await jwtManager.storeSessionToken(sessionToken);
+      
+      // Check it was saved to storage
+      expect(chrome.storage.local.set).toHaveBeenCalledWith(
+        expect.objectContaining({
+          sessionToken: sessionToken
+        })
+      );
+      
+      // Verify token is stored in memory
+      // @ts-expect-error: accessing private property for testing
+      expect(jwtManager.sessionToken).toBe(sessionToken);
+    });
+  });
+
+  describe('refresh with sessionToken', () => {
+    it('includes session token in request body when available', async () => {
+      const sessionToken = 'test-session-token';
+      // @ts-expect-error: accessing private property for testing
+      jwtManager.sessionToken = sessionToken;
+      
+      await jwtManager.refresh(true);
+      
+      // Verify fetch was called with the session token in the body
+      expect(fetch).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({
+          method: 'POST',
+          body: JSON.stringify({ sessionToken })
+        })
+      );
     });
   });
 
@@ -212,6 +251,32 @@ describe('JwtManager', () => {
         total: 0,
         hasQuota: false
       });
+    });
+  });
+
+  describe('clear', () => {
+    it('clears token, sessionToken, and expiresAt', () => {
+      // Setup initial state
+      // @ts-expect-error: accessing private properties for testing
+      jwtManager.token = 'test-token';
+      // @ts-expect-error: accessing private properties for testing
+      jwtManager.expiresAt = Date.now() + 60000;
+      // @ts-expect-error: accessing private properties for testing
+      jwtManager.sessionToken = 'test-session-token';
+      
+      // Call clear
+      jwtManager.clear();
+      
+      // Verify properties are cleared
+      // @ts-expect-error: accessing private properties for testing
+      expect(jwtManager.token).toBeNull();
+      // @ts-expect-error: accessing private properties for testing
+      expect(jwtManager.expiresAt).toBeNull();
+      // @ts-expect-error: accessing private properties for testing
+      expect(jwtManager.sessionToken).toBeNull();
+      
+      // Verify storage is cleared
+      expect(chrome.storage.local.remove).toHaveBeenCalledWith(['token', 'tokenExpiresAt', 'sessionToken']);
     });
   });
 }); 
