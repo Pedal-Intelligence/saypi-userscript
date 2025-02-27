@@ -1,5 +1,4 @@
 import { jwtManager } from './JwtManager';
-import { config } from './ConfigModule';
 
 interface ApiRequestOptions extends RequestInit {
   requiresAuth?: boolean;

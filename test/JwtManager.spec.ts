@@ -86,9 +86,9 @@ describe('JwtManager', () => {
 
       // Verify token was saved with correct expiration
       expect(chrome.storage.local.set).toHaveBeenCalledWith({
-        token: 'test-token',
+        jwtToken: 'test-token',
         tokenExpiresAt: now + (15 * 60 * 1000), // 15 minutes in ms
-        sessionToken: null
+        authCookieValue: null
       });
 
       // Verify next refresh is scheduled 1 minute before expiration
@@ -102,7 +102,7 @@ describe('JwtManager', () => {
 
       // Setup initial token
       // @ts-expect-error: accessing private properties for testing
-      jwtManager.token = 'existing-token';
+      jwtManager.jwtToken = 'existing-token';
       // @ts-expect-error: accessing private properties for testing
       jwtManager.expiresAt = now + (10 * 60 * 1000); // expires in 10 minutes
 
@@ -118,7 +118,7 @@ describe('JwtManager', () => {
 
       // Setup initial token
       // @ts-expect-error: accessing private properties for testing
-      jwtManager.token = 'existing-token';
+      jwtManager.jwtToken = 'existing-token';
       // @ts-expect-error: accessing private properties for testing
       jwtManager.expiresAt = now + (10 * 60 * 1000); // expires in 10 minutes
 
@@ -132,39 +132,39 @@ describe('JwtManager', () => {
     });
   });
 
-  describe('storeSessionToken', () => {
-    it('stores the session token in memory and storage', async () => {
-      const sessionToken = 'test-session-token';
+  describe('storeAuthCookieValue', () => {
+    it('stores the auth cookie value in memory and storage', async () => {
+      const cookieValue = 'test-cookie-value';
       
-      await jwtManager.storeSessionToken(sessionToken);
+      await jwtManager.storeAuthCookieValue(cookieValue);
       
       // Check it was saved to storage
       expect(chrome.storage.local.set).toHaveBeenCalledWith(
         expect.objectContaining({
-          sessionToken: sessionToken
+          authCookieValue: cookieValue
         })
       );
       
-      // Verify token is stored in memory
+      // Verify cookie value is stored in memory
       // @ts-expect-error: accessing private property for testing
-      expect(jwtManager.sessionToken).toBe(sessionToken);
+      expect(jwtManager.authCookieValue).toBe(cookieValue);
     });
   });
 
-  describe('refresh with sessionToken', () => {
-    it('includes session token in request body when available', async () => {
-      const sessionToken = 'test-session-token';
+  describe('refresh with auth cookie value', () => {
+    it('includes auth cookie value in request body when available', async () => {
+      const cookieValue = 'test-cookie-value';
       // @ts-expect-error: accessing private property for testing
-      jwtManager.sessionToken = sessionToken;
+      jwtManager.authCookieValue = cookieValue;
       
       await jwtManager.refresh(true);
       
-      // Verify fetch was called with the session token in the body
+      // Verify fetch was called with the session token parameter in the body
       expect(fetch).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({
           method: 'POST',
-          body: JSON.stringify({ sessionToken })
+          body: JSON.stringify({ auth_session: cookieValue })
         })
       );
     });
@@ -195,7 +195,7 @@ describe('JwtManager', () => {
       const token = 'header.' + btoa(JSON.stringify(claims)) + '.signature';
       
       // @ts-expect-error: accessing private property for testing
-      jwtManager.token = token;
+      jwtManager.jwtToken = token;
 
       const quotaDetails = jwtManager.getQuotaDetails();
       expect(quotaDetails).toEqual({
@@ -218,7 +218,7 @@ describe('JwtManager', () => {
       const token = 'header.' + btoa(JSON.stringify(claims)) + '.signature';
       
       // @ts-expect-error: accessing private property for testing
-      jwtManager.token = token;
+      jwtManager.jwtToken = token;
 
       const quotaDetails = jwtManager.getQuotaDetails();
       expect(quotaDetails).toEqual({
@@ -243,7 +243,7 @@ describe('JwtManager', () => {
       const token = 'header.' + btoa(JSON.stringify(claims)) + '.signature';
       
       // @ts-expect-error: accessing private property for testing
-      jwtManager.token = token;
+      jwtManager.jwtToken = token;
 
       const quotaDetails = jwtManager.getQuotaDetails();
       expect(quotaDetails).toEqual({
@@ -255,28 +255,30 @@ describe('JwtManager', () => {
   });
 
   describe('clear', () => {
-    it('clears token, sessionToken, and expiresAt', () => {
-      // Setup initial state
-      // @ts-expect-error: accessing private properties for testing
-      jwtManager.token = 'test-token';
-      // @ts-expect-error: accessing private properties for testing
-      jwtManager.expiresAt = Date.now() + 60000;
-      // @ts-expect-error: accessing private properties for testing
-      jwtManager.sessionToken = 'test-session-token';
+    it('clears token, authCookieValue, and expiresAt', () => {
+      const now = new Date('2024-01-01T12:00:00Z').getTime();
+      vi.setSystemTime(now);
       
-      // Call clear
+      // Setup initial values
+      // @ts-expect-error: accessing private properties for testing
+      jwtManager.jwtToken = 'test-token';
+      // @ts-expect-error: accessing private properties for testing
+      jwtManager.expiresAt = now + 3600000;
+      // @ts-expect-error: accessing private properties for testing
+      jwtManager.authCookieValue = 'test-cookie-value';
+      
       jwtManager.clear();
       
-      // Verify properties are cleared
+      // Check memory values are cleared
       // @ts-expect-error: accessing private properties for testing
-      expect(jwtManager.token).toBeNull();
+      expect(jwtManager.jwtToken).toBeNull();
       // @ts-expect-error: accessing private properties for testing
       expect(jwtManager.expiresAt).toBeNull();
       // @ts-expect-error: accessing private properties for testing
-      expect(jwtManager.sessionToken).toBeNull();
+      expect(jwtManager.authCookieValue).toBeNull();
       
-      // Verify storage is cleared
-      expect(chrome.storage.local.remove).toHaveBeenCalledWith(['token', 'tokenExpiresAt', 'sessionToken']);
+      // Check storage values are cleared
+      expect(chrome.storage.local.remove).toHaveBeenCalledWith(['jwtToken', 'tokenExpiresAt', 'authCookieValue']);
     });
   });
 }); 

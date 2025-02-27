@@ -181,9 +181,39 @@ chrome.cookies.onChanged.addListener(async (changeInfo) => {
     
     // Only refresh on explicit cookie additions or updates
     if (!removed && (cause === 'explicit' || cause === 'overwrite')) {
+      // Store the cookie value for fallback authentication
+      await jwtManager.storeAuthCookieValue(cookie.value);
+      
       // Only refresh if we don't have a valid token already
       if (!jwtManager.isAuthenticated()) {
         await jwtManager.refresh();
+        
+        // Get and handle return URL if it exists
+        try {
+          const { authReturnUrl } = await chrome.storage.local.get('authReturnUrl');
+          if (authReturnUrl) {
+            console.debug('Found return URL, redirecting to:', authReturnUrl);
+            
+            // Clear the return URL
+            await chrome.storage.local.remove('authReturnUrl');
+            
+            // Close the auth tab and return to the popup
+            const tabs = await chrome.tabs.query({ url: `${config.authServerUrl}/*` });
+            for (const tab of tabs) {
+              if (tab.id !== undefined) {
+                await chrome.tabs.remove(tab.id);
+              }
+            }
+            
+            // If the return URL is an extension URL, open it
+            if (authReturnUrl.startsWith('chrome-extension://') || 
+                authReturnUrl.startsWith('moz-extension://')) {
+              await chrome.tabs.create({ url: authReturnUrl });
+            }
+          }
+        } catch (error) {
+          console.error('Failed to handle return URL:', error);
+        }
       }
     } else if (removed) {
       // Cookie was removed - clear the token

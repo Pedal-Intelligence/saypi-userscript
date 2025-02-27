@@ -19,10 +19,14 @@ export interface QuotaDetails {
 
 // Export the class for testing
 export class JwtManager {
-  private token: string | null = null;
+  // The JWT token used for API authorization
+  private jwtToken: string | null = null;
+  // When the JWT token expires (in milliseconds since epoch)
   private expiresAt: number | null = null;
+  // Timer for refreshing the JWT before expiration
   private refreshTimeout: NodeJS.Timeout | null = null;
-  private sessionToken: string | null = null;
+  // Value of the auth_session cookie - used as fallback when cookies can't be sent
+  private authCookieValue: string | null = null;
 
   constructor() {
     // Load token from storage on initialization
@@ -31,11 +35,11 @@ export class JwtManager {
 
   private async loadFromStorage(): Promise<void> {
     try {
-      const { token, tokenExpiresAt, sessionToken } = await chrome.storage.local.get(['token', 'tokenExpiresAt', 'sessionToken']);
-      if (token && tokenExpiresAt) {
-        this.token = token;
+      const { jwtToken, tokenExpiresAt, authCookieValue } = await chrome.storage.local.get(['jwtToken', 'tokenExpiresAt', 'authCookieValue']);
+      if (jwtToken && tokenExpiresAt) {
+        this.jwtToken = jwtToken;
         this.expiresAt = tokenExpiresAt;
-        this.sessionToken = sessionToken;
+        this.authCookieValue = authCookieValue;
         this.scheduleRefresh();
       }
     } catch (error) {
@@ -46,9 +50,9 @@ export class JwtManager {
   private async saveToStorage(): Promise<void> {
     try {
       await chrome.storage.local.set({
-        token: this.token,
+        jwtToken: this.jwtToken,
         tokenExpiresAt: this.expiresAt,
-        sessionToken: this.sessionToken
+        authCookieValue: this.authCookieValue
       });
     } catch (error) {
       console.error('Failed to save token to storage:', error);
@@ -72,10 +76,14 @@ export class JwtManager {
     this.refreshTimeout = setTimeout(() => this.refresh(), refreshTime);
   }
 
-  // Add method to store session token
-  public async storeSessionToken(sessionToken: string): Promise<void> {
-    console.debug('Storing session token');
-    this.sessionToken = sessionToken;
+  /**
+   * Stores the value of the auth_session cookie
+   * This is used as a fallback authentication method when cookies can't be sent
+   * due to browser security restrictions
+   */
+  public async storeAuthCookieValue(cookieValue: string): Promise<void> {
+    console.debug('Storing auth cookie value for fallback authentication');
+    this.authCookieValue = cookieValue;
     await this.saveToStorage();
   }
 
@@ -108,6 +116,9 @@ export class JwtManager {
         });
         
         if (cookie) {
+          // Store the cookie value for fallback authentication
+          await this.storeAuthCookieValue(cookie.value);
+          
           // If the cookie exists, attempt to refresh the token
           await this.refresh();
         }
@@ -117,6 +128,12 @@ export class JwtManager {
     }
   }
 
+  /**
+   * Refreshes the JWT token using the auth_session cookie
+   * Uses a dual approach:
+   * 1. Sends the cookie via credentials: 'include' (primary)
+   * 2. Sends the cookie value in the request body (fallback)
+   */
   public async refresh(force: boolean = false): Promise<void> {
     if (!config.authServerUrl) {
       console.warn('Auth server URL not configured');
@@ -134,21 +151,22 @@ export class JwtManager {
       const refreshUrl = `${config.authServerUrl}/api/auth/refresh`;
       console.debug(`Refreshing token from ${refreshUrl}`);
       
-      // Include both approaches: cookies and session token in body
+      // Primary approach: Include cookies via credentials: 'include'
+      // Fallback approach: Include auth cookie value in request body
       const requestOptions: RequestInit = {
         method: 'POST',
-        credentials: 'include',
+        credentials: 'include', // Primary: Send cookies automatically
         headers: {
           'Content-Type': 'application/json',
           'Origin': chrome.runtime?.getURL?.('') || window.location.origin,
         }
       };
       
-      // Add session token to request body if available
-      if (this.sessionToken) {
-        console.debug('Including session token in request body');
+      // Add auth cookie value to request body if available (fallback approach)
+      if (this.authCookieValue) {
+        console.debug('Including auth cookie value in request body as fallback');
         requestOptions.body = JSON.stringify({
-          sessionToken: this.sessionToken
+          auth_session: this.authCookieValue // Server expects 'auth_session' parameter
         });
       }
       
@@ -163,7 +181,7 @@ export class JwtManager {
       
       console.debug('Token refreshed successfully, expires in:', expiresIn);
       
-      this.token = token;
+      this.jwtToken = token;
       this.expiresAt = Date.now() + this.parseDuration(expiresIn);
       
       await this.saveToStorage();
@@ -175,15 +193,15 @@ export class JwtManager {
   }
 
   public getAuthHeader(): string | null {
-    if (!this.token) return null;
-    return `Bearer ${this.token}`;
+    if (!this.jwtToken) return null;
+    return `Bearer ${this.jwtToken}`;
   }
 
   public getClaims(): JwtClaims | null {
-    if (!this.token) return null;
+    if (!this.jwtToken) return null;
     
     try {
-      const base64Url = this.token.split('.')[1];
+      const base64Url = this.jwtToken.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => 
         '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
@@ -196,19 +214,23 @@ export class JwtManager {
     }
   }
 
+  /**
+   * Do we have a valid JWT token?
+   * @returns true if we have obtained a valid JWT token from the auth server, and it is not expired
+   */
   public isAuthenticated(): boolean {
-    return !!this.token && !!this.expiresAt && this.expiresAt > Date.now();
+    return !!this.jwtToken && !!this.expiresAt && this.expiresAt > Date.now();
   }
 
   public clear(): void {
-    this.token = null;
+    this.jwtToken = null;
     this.expiresAt = null;
-    this.sessionToken = null;
+    this.authCookieValue = null;
     if (this.refreshTimeout) {
       clearTimeout(this.refreshTimeout);
       this.refreshTimeout = null;
     }
-    chrome.storage.local.remove(['token', 'tokenExpiresAt', 'sessionToken']).catch(error => {
+    chrome.storage.local.remove(['jwtToken', 'tokenExpiresAt', 'authCookieValue']).catch(error => {
       console.error('Failed to clear token from storage:', error);
     });
   }
