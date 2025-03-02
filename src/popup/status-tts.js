@@ -57,29 +57,51 @@ function updateQuotaProgress(status, type = 'tts') {
     upgradeSection.classList.add("hidden");
   }
 
-  // Calculate percentage remaining
+  // Calculate percentage used and remaining
   const percentageRemaining = status.quota.remaining / status.quota.total;
-  const percentLeft = Math.round(percentageRemaining * 100);
+  const percentageUsed = 1 - percentageRemaining;
+  const percentUsed = Math.round(percentageUsed * 100);
   
   // Update progress bar
-  const progressBarUsed = quotaProgress.querySelector(`.progress-bar .used`);
-  progressBarUsed.style.width = `${(1 - percentageRemaining) * 100}%`;
-  const progressBarRemaining = quotaProgress.querySelector(`.progress-bar .remaining`);
+  const progressBar = quotaProgress.querySelector(`.progress-bar`);
+  const progressBarUsed = progressBar.querySelector(`.used`);
+  const progressBarRemaining = progressBar.querySelector(`.remaining`);
+  
+  // Set widths - used part shows the actual usage
+  progressBarUsed.style.width = `${percentageUsed * 100}%`;
   progressBarRemaining.style.width = `${percentageRemaining * 100}%`;
   
-  // Change bar color based on remaining percentage
-  if (percentLeft < 20) {
-    progressBarRemaining.classList.add('bg-red-500');
-    progressBarRemaining.classList.remove('bg-blue-500');
+  // Change bar color based on usage percentage
+  if (percentUsed > 80) {
+    progressBarUsed.classList.add('bg-red-500');
+    progressBarUsed.classList.remove('bg-blue-500', 'bg-green-500', 'bg-yellow-500');
+  } else if (percentUsed > 60) {
+    progressBarUsed.classList.add('bg-yellow-500');
+    progressBarUsed.classList.remove('bg-blue-500', 'bg-green-500', 'bg-red-500');
   } else {
-    progressBarRemaining.classList.remove('bg-red-500');
-    progressBarRemaining.classList.add('bg-blue-500');
+    progressBarUsed.classList.add('bg-green-500');
+    progressBarUsed.classList.remove('bg-blue-500', 'bg-red-500', 'bg-yellow-500');
   }
 
-  // Update the quota value display
-  quotaValue.textContent = status.quota.remaining.toLocaleString();
-  quotaPercentage.textContent = `${percentLeft}% left`;
-
+  // Hide the quota value in the header (to avoid redundancy)
+  const valueContainer = quotaProgress.querySelector('.progress-label .value');
+  if (valueContainer) {
+    valueContainer.style.display = 'none';
+  }
+  
+  // Update percentage text to only show remaining text
+  quotaPercentage.innerHTML = `<span class="text-muted-foreground">${status.quota.remaining.toLocaleString()} ${type === 'tts' ? 'characters' : 'seconds'} remaining</span>`;
+  
+  // Add percentage label inside progress bar
+  // First, check if the label already exists
+  let percentageLabel = progressBar.querySelector('.percentage-label');
+  if (!percentageLabel) {
+    // Create the label if it doesn't exist
+    percentageLabel = document.createElement('div');
+    percentageLabel.className = 'percentage-label';
+    progressBar.appendChild(percentageLabel);
+  }
+  percentageLabel.textContent = `${percentUsed}% used`;
   
   // Show reset date if available
   if (status.quota.resetDate) {
@@ -90,7 +112,6 @@ function updateQuotaProgress(status, type = 'tts') {
     }
   }
 
-  const progressBar = quotaProgress.querySelector(`.progress-bar`);
   progressBar.title = chrome.i18n.getMessage(`${type}QuotaProgress`, [
     status.quota.remaining.toLocaleString(),
     status.quota.total.toLocaleString(),

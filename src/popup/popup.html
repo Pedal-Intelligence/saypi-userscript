@@ -234,35 +234,35 @@
       <section id="premium-status">
         <div class="quota-progress tts">
           <div class="progress-label">
-            <span class="label" data-i18n="ttsQuotaRemaining">Voice Generation Left</span>
-            <span class="value">
+            <span class="label" data-i18n="ttsQuotaRemaining">Voice Generation</span>
+            <span class="value" style="display: none;">
               <span id="tts-quota-remaining-value" class="quota-remaining-value">0</span>
               <span data-i18n="ttsQuotaCharacters">characters</span>
             </span>
           </div>
           <div class="progress-bar">
-            <div class="share remaining"></div>
             <div class="share used"></div>
+            <div class="share remaining"></div>
           </div>
           <div class="text-xs text-gray-500 text-right mt-1 quota-percentage"></div>
         </div>
         <!-- Add Speech Recognition quota section -->
-          <div class="quota-progress mt-4 stt">
+          <div class="quota-progress mt-2 stt">
           <div class="progress-label">
-            <span class="label" data-i18n="sttQuotaRemaining">Speech Recognition Left</span>
-            <span class="value">
+            <span class="label" data-i18n="sttQuotaRemaining">Speech Recognition</span>
+            <span class="value" style="display: none;">
               <span id="stt-quota-remaining-value" class="quota-remaining-value">0</span>
               <span data-i18n="sttQuotaSeconds">seconds</span>
             </span>
           </div>
           <div class="progress-bar">
-            <div class="share remaining"></div>
             <div class="share used"></div>
+            <div class="share remaining"></div>
           </div>
           <div class="text-xs text-gray-500 text-right mt-1 quota-percentage"></div>
         </div>
         <!-- Single view details link for both quota sections -->
-        <div class="text-center mt-2">
+        <div class="flex justify-between items-center mt-2 px-4">
           <a id="view-quota-details" class="view-details" data-i18n="viewDetails" 
              href="#" 
              onclick="window.open(config && config.authServerUrl ? `${config.authServerUrl}/app/dashboard` : 'https://www.saypi.ai/app/dashboard', '_blank'); return false;">

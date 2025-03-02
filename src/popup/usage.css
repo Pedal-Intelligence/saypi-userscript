@@ -5,20 +5,37 @@
   }
 
 .quota-progress {
-  margin: 0.5rem 1rem;
+  margin: 0.25rem 0.75rem;
 }
 
 .quota-progress .progress-label {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.2rem;
 }
 
 .quota-progress .progress-bar {
   display: flex;
-  height: 8px;
-  border-radius: 4px;
+  height: 12px;
+  border-radius: 6px;
   overflow: hidden;
+  background-color: #e5e7eb; /* gray-200 - background for the entire bar */
+  position: relative;
+  flex-direction: row; /* Ensure flex direction is row */
+}
+
+/* Percentage label inside progress bar */
+.quota-progress .progress-bar .percentage-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.75rem;
+  color: white;
+  font-weight: 600;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.7);
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 .quota-progress .progress-bar .share {
@@ -26,31 +43,43 @@
 }
 
 .quota-progress .progress-bar .remaining {
-  background-color: #3b82f6; /* blue-500 */
-}
-
-.quota-progress .progress-bar .remaining.bg-red-500 {
-  background-color: #ef4444; /* red-500 */
+  background-color: transparent; /* Make remaining part transparent to show the gray background */
 }
 
 .quota-progress .progress-bar .used {
-  background-color: #e5e7eb; /* gray-200 */
+  background-color: #22c55e; /* green-500 default color */
+}
+
+.quota-progress .progress-bar .used.bg-green-500 {
+  background-color: #22c55e; /* green-500 */
+}
+
+.quota-progress .progress-bar .used.bg-yellow-500 {
+  background-color: #eab308; /* yellow-500 */
+}
+
+.quota-progress .progress-bar .used.bg-red-500 {
+  background-color: #ef4444; /* red-500 */
 }
 
 .reset-date {
-  margin-left: 0.25rem;
+  font-size: 0.75rem;
+  color: #6b7280; /* gray-500 */
 }
 
 /* View details link */
 .view-details {
-  display: block;
   font-size: 0.75rem;
   color: #3b82f6;
   text-decoration: none;
-  margin-top: 0.25rem;
   cursor: pointer;
 }
 
 .view-details:hover {
   text-decoration: underline;
+}
+
+.text-muted-foreground {
+  color: #6b7280; /* gray-500 */
+  font-size: 0.75rem;
 }
