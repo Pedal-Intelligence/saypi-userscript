@@ -59,13 +59,22 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     } catch (error) {
       console.error('Failed to open popup:', error);
     }
-  } else if (message.type === 'GET_QUOTA_DETAILS') {
-    // Handle quota details request
+  } else if (message.type === 'GET_TTS_QUOTA_DETAILS') {
+    // Handle TTS quota details request
     try {
-      const quotaDetails = jwtManager.getQuotaDetails();
+      const quotaDetails = jwtManager.getTTSQuotaDetails();
       sendResponse(quotaDetails);
     } catch (error) {
       console.error('Failed to get quota details:', error);
+      sendResponse(null);
+    }
+  } else if (message.type === 'GET_STT_QUOTA_DETAILS') {
+    // Handle STT quota details request
+    try {
+      const sttQuotaDetails = jwtManager.getSTTQuotaDetails();
+      sendResponse(sttQuotaDetails);
+    } catch (error) {
+      console.error('Failed to get STT quota details:', error);
       sendResponse(null);
     }
   } else if (message.type === 'GET_JWT_CLAIMS') {

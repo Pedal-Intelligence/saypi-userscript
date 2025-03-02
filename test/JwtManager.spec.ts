@@ -172,7 +172,7 @@ describe('JwtManager', () => {
 
   describe('getQuotaDetails', () => {
     it('returns zero quotas when no token exists', () => {
-      const quotaDetails = jwtManager.getQuotaDetails();
+      const quotaDetails = jwtManager.getTTSQuotaDetails();
       expect(quotaDetails).toEqual({
         remaining: 0,
         total: 0,
@@ -197,7 +197,7 @@ describe('JwtManager', () => {
       // @ts-expect-error: accessing private property for testing
       jwtManager.jwtToken = token;
 
-      const quotaDetails = jwtManager.getQuotaDetails();
+      const quotaDetails = jwtManager.getTTSQuotaDetails();
       expect(quotaDetails).toEqual({
         remaining: 50,
         total: 100,
@@ -220,7 +220,7 @@ describe('JwtManager', () => {
       // @ts-expect-error: accessing private property for testing
       jwtManager.jwtToken = token;
 
-      const quotaDetails = jwtManager.getQuotaDetails();
+      const quotaDetails = jwtManager.getTTSQuotaDetails();
       expect(quotaDetails).toEqual({
         remaining: 0,
         total: 0,
@@ -245,7 +245,7 @@ describe('JwtManager', () => {
       // @ts-expect-error: accessing private property for testing
       jwtManager.jwtToken = token;
 
-      const quotaDetails = jwtManager.getQuotaDetails();
+      const quotaDetails = jwtManager.getTTSQuotaDetails();
       expect(quotaDetails).toEqual({
         remaining: 0,
         total: 0,

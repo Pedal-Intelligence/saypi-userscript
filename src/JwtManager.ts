@@ -7,6 +7,9 @@ interface JwtClaims {
   planId: string;
   ttsQuotaRemaining: number;
   ttsQuotaMonthly: number;
+  sttQuotaRemaining: number;
+  sttQuotaMonthly: number;
+  nextQuotaReset: number; // Unix timestamp for quota reset date
   iat: number;
   exp: number;
 }
@@ -15,6 +18,7 @@ export interface QuotaDetails {
   remaining: number;
   total: number;
   hasQuota: boolean;
+  resetDate?: number; // Unix timestamp for quota reset date
 }
 
 // Export the class for testing
@@ -235,7 +239,7 @@ export class JwtManager {
     });
   }
 
-  public getQuotaDetails(): QuotaDetails {
+  public getTTSQuotaDetails(): QuotaDetails {
     const claims = this.getClaims();
     if (!claims || typeof claims.ttsQuotaRemaining !== 'number' || typeof claims.ttsQuotaMonthly !== 'number') {
       return {
@@ -248,7 +252,26 @@ export class JwtManager {
     return {
       remaining: claims.ttsQuotaRemaining,
       total: claims.ttsQuotaMonthly,
-      hasQuota: claims.ttsQuotaMonthly > 0
+      hasQuota: claims.ttsQuotaMonthly > 0,
+      resetDate: claims.nextQuotaReset
+    };
+  }
+
+  public getSTTQuotaDetails(): QuotaDetails {
+    const claims = this.getClaims();
+    if (!claims || typeof claims.sttQuotaRemaining !== 'number' || typeof claims.sttQuotaMonthly !== 'number') {
+      return {
+        remaining: 0,
+        total: 0,
+        hasQuota: false
+      };
+    }
+
+    return {
+      remaining: claims.sttQuotaRemaining,
+      total: claims.sttQuotaMonthly,
+      hasQuota: claims.sttQuotaMonthly > 0,
+      resetDate: claims.nextQuotaReset
     };
   }
 }

@@ -473,19 +473,19 @@
   },
   "profile": {
     "message": "Profile",
-    "description": "Label for the profile section"
+    "description": "Label for the user profile section."
   },
   "signIn": {
     "message": "Sign In",
-    "description": "Text for the sign in button"
+    "description": "Text for the sign in button."
   },
   "signOut": {
     "message": "Sign Out",
-    "description": "Text for the sign out button"
+    "description": "Text for the sign out button."
   },
   "notSignedIn": {
     "message": "Not signed in",
-    "description": "Text shown when user is not signed in"
+    "description": "Text to show when the user is not signed in."
   },
   "signedIn": {
     "message": "Signed in",
@@ -505,17 +505,17 @@
     "message": "Quota Remaining",
     "description": "Label for the quota remaining progress bar"
   },
-  "quotaExhausted": {
-    "message": "Quota Exhausted",
-    "description": "Message shown when user has no remaining quota"
+  "ttsQuotaExhausted": {
+    "message": "Voice Unavailable",
+    "description": "Text to show when TTS quota is exhausted."
   },
-  "quotaProgress": {
-    "message": "$remaining$ of $total$ credits remaining",
-    "description": "Tooltip showing quota usage, $remaining is remaining quota, $total is total quota",
+  "ttsQuotaProgress": {
+    "message": "$remaining$ of $total$ characters remaining",
+    "description": "Tooltip for the TTS quota progress bar.",
     "placeholders": {
       "remaining": {
         "content": "$1",
-        "example": "100"
+        "example": "500"
       },
       "total": {
         "content": "$2",
@@ -529,7 +529,7 @@
   },
   "upgradeButton": {
     "message": "Upgrade Plan",
-    "description": "Button text for upgrading to a paid plan"
+    "description": "Text for the button to upgrade the plan when quota is exhausted."
   },
   "quotaCredits": {
     "message": "credits",
@@ -542,6 +542,44 @@
       "name": {
         "content": "$1",
         "example": "John"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "message": "Voice Generation",
+    "description": "Label for the TTS quota remaining display."
+  },
+  "ttsQuotaCharacters": {
+    "message": "credits",
+    "description": "Unit for TTS quota (characters)."
+  },
+  "sttQuotaRemaining": {
+    "message": "Speech Recognition",
+    "description": "Label for the STT quota remaining display."
+  },
+  "sttQuotaSeconds": {
+    "message": "secs",
+    "description": "Unit for STT quota (seconds)."
+  },
+  "viewDetails": {
+    "message": "View details",
+    "description": "Text for the link to view full quota details on the dashboard."
+  },
+  "sttQuotaExhausted": {
+    "message": "Speech Recognition Unavailable",
+    "description": "Text to show when STT quota is exhausted."
+  },
+  "sttQuotaProgress": {
+    "message": "$remaining$ of $total$ seconds remaining",
+    "description": "Tooltip for the STT quota progress bar.",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
       }
     }
   }

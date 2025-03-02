@@ -3,3 +3,54 @@
     justify-content: space-between;
     align-items: center;
   }
+
+.quota-progress {
+  margin: 0.5rem 1rem;
+}
+
+.quota-progress .progress-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.quota-progress .progress-bar {
+  display: flex;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.quota-progress .progress-bar .share {
+  transition: width 0.3s ease;
+}
+
+.quota-progress .progress-bar .remaining {
+  background-color: #3b82f6; /* blue-500 */
+}
+
+.quota-progress .progress-bar .remaining.bg-red-500 {
+  background-color: #ef4444; /* red-500 */
+}
+
+.quota-progress .progress-bar .used {
+  background-color: #e5e7eb; /* gray-200 */
+}
+
+.reset-date {
+  margin-left: 0.25rem;
+}
+
+/* View details link */
+.view-details {
+  display: block;
+  font-size: 0.75rem;
+  color: #3b82f6;
+  text-decoration: none;
+  margin-top: 0.25rem;
+  cursor: pointer;
+}
+
+.view-details:hover {
+  text-decoration: underline;
+}
