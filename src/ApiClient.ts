@@ -9,6 +9,12 @@ export async function callApi(
   options: ApiRequestOptions = {}
 ): Promise<Response> {
   const headers = new Headers(options.headers);
+
+  // preemptively refresh the token if it's about to expire
+  if (jwtManager.isTokenExpired()) {
+    console.debug('Token is about to expire, refreshing...');
+    await jwtManager.refresh();
+  }
   
   // If authentication is required or a token exists, add it
   const authHeader = jwtManager.getAuthHeader();

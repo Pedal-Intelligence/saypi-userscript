@@ -218,12 +218,16 @@ export class JwtManager {
     }
   }
 
+  public isTokenExpired(): boolean {
+    return !!this.expiresAt && this.expiresAt < Date.now();
+  }
+
   /**
    * Do we have a valid JWT token?
    * @returns true if we have obtained a valid JWT token from the auth server, and it is not expired
    */
   public isAuthenticated(): boolean {
-    return !!this.jwtToken && !!this.expiresAt && this.expiresAt > Date.now();
+    return !!this.jwtToken && !this.isTokenExpired();
   }
 
   public clear(): void {
