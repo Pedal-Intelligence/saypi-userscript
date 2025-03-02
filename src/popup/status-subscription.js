@@ -24,6 +24,40 @@ function formatResetDate(timestamp) {
   }
 }
 
+// Track quota status across both types
+let quotaStatuses = {
+  tts: null,
+  stt: null
+};
+
+// Function to check if upgrade button should be shown
+function shouldShowUpgradeButton() {
+  // Show upgrade button if either quota is below 20% or exhausted
+  if (!quotaStatuses.tts || !quotaStatuses.tts.quota || quotaStatuses.tts.quota.remaining <= 0) {
+    return true;
+  }
+  if (!quotaStatuses.stt || !quotaStatuses.stt.quota || quotaStatuses.stt.quota.remaining <= 0) {
+    return true;
+  }
+  
+  // Calculate percentage remaining for each quota
+  const ttsPercentRemaining = quotaStatuses.tts.quota.remaining / quotaStatuses.tts.quota.total;
+  const sttPercentRemaining = quotaStatuses.stt.quota.remaining / quotaStatuses.stt.quota.total;
+  
+  // Show upgrade button if either quota is below 20%
+  return ttsPercentRemaining < 0.2 || sttPercentRemaining < 0.2;
+}
+
+// Function to update the upgrade button visibility
+function updateUpgradeButtonVisibility() {
+  const upgradeSection = document.getElementById("upgrade");
+  if (shouldShowUpgradeButton()) {
+    upgradeSection.classList.remove("hidden");
+  } else {
+    upgradeSection.classList.add("hidden");
+  }
+}
+
 function updateQuotaProgress(status, type = 'tts') {
   const quotaProgress = document.querySelector(`.quota-progress.${type}`);
   
@@ -33,7 +67,9 @@ function updateQuotaProgress(status, type = 'tts') {
   const quotaValue = quotaProgress.querySelector(`.quota-remaining-value`);
   const quotaResetDate = document.getElementById(`quota-reset-date`);
   const quotaPercentage = quotaProgress.querySelector(`.quota-percentage`);
-  const upgradeSection = document.getElementById("upgrade");
+  
+  // Store the status for this quota type
+  quotaStatuses[type] = status;
 
   // Add click handler to upgrade button - moved outside quota check
   const upgradeButton = document.getElementById("upgrade-button");
@@ -49,12 +85,11 @@ function updateQuotaProgress(status, type = 'tts') {
 
   if (!status.quota || status.quota.remaining <= 0) {
     // No quota or exhausted quota
-    upgradeSection.classList.remove("hidden");
     progressLabel.textContent = chrome.i18n.getMessage(`${type}QuotaExhausted`);
     quotaValue.textContent = "0";
+    // Update upgrade button visibility after checking both quotas
+    updateUpgradeButtonVisibility();
     return;
-  } else {
-    upgradeSection.classList.add("hidden");
   }
 
   // Calculate percentage used and remaining
@@ -138,6 +173,9 @@ function updateQuotaProgress(status, type = 'tts') {
       totalMinutes
     ]);
   }
+  
+  // Update upgrade button visibility after checking both quotas
+  updateUpgradeButtonVisibility();
 }
 
 async function getJwtQuota() {
