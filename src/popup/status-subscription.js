@@ -30,9 +30,27 @@ let quotaStatuses = {
   stt: null
 };
 
+// Track authentication state
+let isUserAuthenticated = false;
+
+// Function to check authentication status
+async function checkAuthenticationStatus() {
+  return new Promise((resolve) => {
+    chrome.runtime.sendMessage({ type: 'GET_JWT_CLAIMS' }, function(response) {
+      isUserAuthenticated = !!(response && response.claims);
+      resolve(isUserAuthenticated);
+    });
+  });
+}
+
 // Function to check if upgrade button should be shown
 function shouldShowUpgradeButton() {
-  // Show upgrade button if either quota is below 20% or exhausted
+  // Always show for unauthenticated users
+  if (!isUserAuthenticated) {
+    return true;
+  }
+
+  // For authenticated users, check quota levels
   if (!quotaStatuses.tts || !quotaStatuses.tts.quota || quotaStatuses.tts.quota.remaining <= 0) {
     return true;
   }
@@ -58,7 +76,58 @@ function updateUpgradeButtonVisibility() {
   }
 }
 
+// Function to handle unauthenticated state display
+function updateUnauthenticatedDisplay() {
+  // Hide the quota progress sections
+  const quotaProgressSections = document.querySelectorAll('.quota-progress');
+  quotaProgressSections.forEach(section => {
+    section.classList.add('hidden');
+  });
+  
+  // Hide the view details link and reset date
+  const viewDetailsContainer = document.querySelector('.flex.justify-between.items-center');
+  if (viewDetailsContainer) {
+    viewDetailsContainer.classList.add('hidden');
+  }
+  
+  // Show the unauthenticated message
+  const unauthenticatedMessage = document.getElementById('unauthenticated-message');
+  if (unauthenticatedMessage) {
+    unauthenticatedMessage.classList.remove('hidden');
+  }
+  
+  // Make sure the upgrade button is visible and has the right text
+  updateUpgradeButtonVisibility();
+  updateUpgradeButtonText();
+}
+
+// Function to restore display for authenticated users
+function restoreAuthenticatedDisplay() {
+  // Show the quota progress sections
+  const quotaProgressSections = document.querySelectorAll('.quota-progress');
+  quotaProgressSections.forEach(section => {
+    section.classList.remove('hidden');
+  });
+  
+  // Show the view details link and reset date
+  const viewDetailsContainer = document.querySelector('.flex.justify-between.items-center');
+  if (viewDetailsContainer) {
+    viewDetailsContainer.classList.remove('hidden');
+  }
+  
+  // Hide the unauthenticated message
+  const unauthenticatedMessage = document.getElementById('unauthenticated-message');
+  if (unauthenticatedMessage) {
+    unauthenticatedMessage.classList.add('hidden');
+  }
+}
+
 function updateQuotaProgress(status, type = 'tts') {
+  // If user is not authenticated, don't process quota updates
+  if (!isUserAuthenticated) {
+    return;
+  }
+
   const quotaProgress = document.querySelector(`.quota-progress.${type}`);
   
   const progressLabel = quotaProgress.querySelector(
@@ -70,18 +139,6 @@ function updateQuotaProgress(status, type = 'tts') {
   
   // Store the status for this quota type
   quotaStatuses[type] = status;
-
-  // Add click handler to upgrade button - moved outside quota check
-  const upgradeButton = document.getElementById("upgrade-button");
-  upgradeButton.addEventListener("click", () => {
-    // Check authentication state
-    chrome.runtime.sendMessage({ type: 'GET_JWT_CLAIMS' }, function(response) {
-      const isAuthenticated = !!(response && response.claims);
-      const baseUrl = config.authServerUrl;
-      const targetPath = isAuthenticated ? '/app/settings/team/billing' : '/pricing';
-      window.open(`${baseUrl}${targetPath}`, "_blank");
-    });
-  });
 
   if (!status.quota || status.quota.remaining <= 0) {
     // No quota or exhausted quota
@@ -105,6 +162,7 @@ function updateQuotaProgress(status, type = 'tts') {
   // Set widths - used part shows the actual usage
   progressBarUsed.style.width = `${percentageUsed * 100}%`;
   progressBarRemaining.style.width = `${percentageRemaining * 100}%`;
+  progressBarRemaining.classList.remove('bg-gray-300');
   
   // Change bar color based on usage percentage
   if (percentUsed > 80) {
@@ -218,7 +276,19 @@ async function getJwtQuota() {
 
 async function getQuotaStatus() {
   try {
-    // First try to get quota from JWT
+    // First check authentication status
+    await checkAuthenticationStatus();
+    
+    // If user is not authenticated, update display accordingly and return
+    if (!isUserAuthenticated) {
+      updateUnauthenticatedDisplay();
+      return;
+    }
+    
+    // User is authenticated, restore proper display
+    restoreAuthenticatedDisplay();
+    
+    // Continue with normal quota checking for authenticated users
     const quotaData = await getJwtQuota();
     
     // Update TTS quota
@@ -306,10 +376,39 @@ function setupViewDetailsLinks() {
   }
 }
 
-// Make sure the function is called after DOM is fully loaded
-document.addEventListener('DOMContentLoaded', function() {
-  getQuotaStatus();
+// Update the upgrade button text based on authentication status
+function updateUpgradeButtonText() {
+  const upgradeButton = document.getElementById("upgrade-button");
+  if (!upgradeButton) return;
   
-  // Add a direct reference to ensure it's set up even if getQuotaStatus has issues
-  setTimeout(setupViewDetailsLinks, 500);
+  // Set different text for authenticated vs unauthenticated users
+  if (!isUserAuthenticated) {
+    upgradeButton.textContent = chrome.i18n.getMessage('signIn');
+    upgradeButton.dataset.i18n = 'signIn';
+  } else {
+    upgradeButton.textContent = chrome.i18n.getMessage('upgradeButton');
+    upgradeButton.dataset.i18n = 'upgradeButton';
+  }
+  
+  // Update click handler for the upgrade button
+  upgradeButton.onclick = () => {
+    const baseUrl = config.authServerUrl || 'https://www.saypi.ai';
+    const targetPath = isUserAuthenticated ? '/app/settings/team/billing' : '/auth/login';
+    window.open(`${baseUrl}${targetPath}`, "_blank");
+  };
+}
+
+// Make sure the function is called after DOM is fully loaded
+document.addEventListener('DOMContentLoaded', async function() {
+  try {
+    await getQuotaStatus();
+    
+    // Update upgrade button text based on authentication status
+    updateUpgradeButtonText();
+    
+    // Add a direct reference to ensure it's set up even if getQuotaStatus has issues
+    setTimeout(setupViewDetailsLinks, 500);
+  } catch (error) {
+    console.error("Error initializing status:", error);
+  }
 });

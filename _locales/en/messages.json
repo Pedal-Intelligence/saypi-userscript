@@ -569,6 +569,10 @@
     "message": "Speech Recognition Unavailable",
     "description": "Text to show when STT quota is exhausted."
   },
+  "quotaUnauthenticatedMessage": {
+    "message": "Log in to access voice generation and other premium features",
+    "description": "Message shown when user is not authenticated."
+  },
   "sttQuotaProgress": {
     "message": "$remaining$ of $total$ seconds remaining",
     "description": "Tooltip for the STT quota progress bar.",
