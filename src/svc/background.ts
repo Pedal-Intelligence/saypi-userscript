@@ -37,6 +37,38 @@ checkAuthCookie().then(cookie => {
   }
 });
 
+// Fallback polling mechanism for cookie changes
+let lastAuthCookieValue: string | null = null;
+
+async function pollAuthCookie() {
+  if (!config.authServerUrl) return;
+  try {
+    const cookie = await chrome.cookies.get({
+      name: 'auth_session',
+      url: config.authServerUrl
+    });
+    if (cookie) {
+      if (cookie.value !== lastAuthCookieValue) {
+        console.debug('Cookie change detected via polling:', cookie.value);
+        lastAuthCookieValue = cookie.value;
+        await jwtManager.storeAuthCookieValue(cookie.value);
+        await jwtManager.refresh(true);
+      }
+    } else {
+      if (lastAuthCookieValue !== null) {
+        console.debug('Cookie removal detected via polling. Clearing JWT.');
+        lastAuthCookieValue = null;
+        jwtManager.clear();
+      }
+    }
+  } catch (error) {
+    console.error('Error polling auth cookie:', error);
+  }
+}
+
+// Poll every 5 seconds
+setInterval(pollAuthCookie, 5000);
+
 // Handle popup opening
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === 'openPopup') {
@@ -192,7 +224,7 @@ chrome.cookies.onChanged.addListener(async (changeInfo) => {
     if (!removed && (cause === 'explicit' || cause === 'overwrite')) {
       // Store the cookie value for fallback authentication
       await jwtManager.storeAuthCookieValue(cookie.value);
-      
+
       // Only refresh if we don't have a valid token already
       if (!jwtManager.isAuthenticated()) {
         await jwtManager.refresh();
