@@ -89,8 +89,19 @@ function updateQuotaProgress(status, type = 'tts') {
     valueContainer.style.display = 'none';
   }
   
+  // Format the remaining quota for display
+  let remainingText;
+  if (type === 'tts') {
+    remainingText = `${status.quota.remaining.toLocaleString()} characters remaining`;
+  } else {
+    // Convert seconds to minutes for STT
+    const minutes = Math.floor(status.quota.remaining / 60);
+    const plural = minutes !== 1 ? 's' : '';
+    remainingText = chrome.i18n.getMessage('sttMinutesRemaining', [minutes, plural]);
+  }
+  
   // Update percentage text to only show remaining text
-  quotaPercentage.innerHTML = `<span class="text-muted-foreground">${status.quota.remaining.toLocaleString()} ${type === 'tts' ? 'characters' : 'seconds'} remaining</span>`;
+  quotaPercentage.innerHTML = `<span class="text-muted-foreground">${remainingText}</span>`;
   
   // Add percentage label inside progress bar
   // First, check if the label already exists
@@ -112,10 +123,21 @@ function updateQuotaProgress(status, type = 'tts') {
     }
   }
 
-  progressBar.title = chrome.i18n.getMessage(`${type}QuotaProgress`, [
-    status.quota.remaining.toLocaleString(),
-    status.quota.total.toLocaleString(),
-  ]);
+  // Set the tooltip for the progress bar
+  if (type === 'tts') {
+    progressBar.title = chrome.i18n.getMessage(`${type}QuotaProgress`, [
+      status.quota.remaining.toLocaleString(),
+      status.quota.total.toLocaleString(),
+    ]);
+  } else {
+    // For STT, convert to minutes for the tooltip
+    const remainingMinutes = Math.floor(status.quota.remaining / 60);
+    const totalMinutes = Math.floor(status.quota.total / 60);
+    progressBar.title = chrome.i18n.getMessage('sttQuotaProgressMinutes', [
+      remainingMinutes,
+      totalMinutes
+    ]);
+  }
 }
 
 async function getJwtQuota() {

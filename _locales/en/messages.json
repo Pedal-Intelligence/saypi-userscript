@@ -582,5 +582,33 @@
         "example": "300"
       }
     }
+  },
+  "sttQuotaProgressMinutes": {
+    "message": "$remaining$ of $total$ minutes remaining",
+    "description": "Tooltip for the STT quota progress bar in minutes.",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "message": "$minutes$ minute$plural$ remaining",
+    "description": "Text showing remaining STT quota in minutes.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
   }
 }
