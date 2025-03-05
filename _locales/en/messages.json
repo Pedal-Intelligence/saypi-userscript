@@ -506,7 +506,7 @@
     "description": "Label for the quota remaining progress bar"
   },
   "ttsQuotaExhausted": {
-    "message": "Voice Unavailable",
+    "message": "Voice Quota Exhausted",
     "description": "Text to show when TTS quota is exhausted."
   },
   "ttsQuotaProgress": {
@@ -566,7 +566,7 @@
     "description": "Text for the link to view full quota details on the dashboard."
   },
   "sttQuotaExhausted": {
-    "message": "Speech Recognition Unavailable",
+    "message": "Speech Recognition Quota Exhausted",
     "description": "Text to show when STT quota is exhausted."
   },
   "quotaUnauthenticatedMessage": {

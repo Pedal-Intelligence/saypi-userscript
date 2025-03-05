@@ -50,6 +50,11 @@ function shouldShowUpgradeButton() {
     return true;
   }
 
+  // For authenticated users with no entitlement, always show the upgrade button
+  if (quotaStatuses.tts?.noEntitlement || quotaStatuses.stt?.noEntitlement) {
+    return true;
+  }
+
   // For authenticated users, check quota levels
   if (!quotaStatuses.tts || !quotaStatuses.tts.quota || quotaStatuses.tts.quota.remaining <= 0) {
     return true;
@@ -140,10 +145,59 @@ function updateQuotaProgress(status, type = 'tts') {
   // Store the status for this quota type
   quotaStatuses[type] = status;
 
-  if (!status.quota || status.quota.remaining <= 0) {
-    // No quota or exhausted quota
+  // Check if user has no quota entitlement at all
+  if (status.noEntitlement || !status.quota) {
+    // No quota entitlement - hide this quota section
+    quotaProgress.classList.add('hidden');
+    
+    // Update upgrade button visibility after checking both quotas
+    updateUpgradeButtonVisibility();
+    return;
+  }
+  
+  // Show the quota section since user has entitlement
+  quotaProgress.classList.remove('hidden');
+  
+  // Check if quota is exhausted
+  if (status.quota.remaining <= 0) {
+    // Exhausted quota
     progressLabel.textContent = chrome.i18n.getMessage(`${type}QuotaExhausted`);
     quotaValue.textContent = "0";
+    
+    // Update progress bar to show 100% used
+    const progressBar = quotaProgress.querySelector(`.progress-bar`);
+    const progressBarUsed = progressBar.querySelector(`.used`);
+    const progressBarRemaining = progressBar.querySelector(`.remaining`);
+    
+    // Set the progress bar to 100% used
+    progressBarUsed.style.width = "100%";
+    progressBarRemaining.style.width = "0%";
+    progressBarUsed.classList.add('bg-red-500');
+    progressBarUsed.classList.remove('bg-blue-500', 'bg-green-500', 'bg-yellow-500');
+    
+    // Add percentage label inside progress bar
+    let percentageLabel = progressBar.querySelector('.percentage-label');
+    if (!percentageLabel) {
+      percentageLabel = document.createElement('div');
+      percentageLabel.className = 'percentage-label';
+      progressBar.appendChild(percentageLabel);
+    }
+    percentageLabel.textContent = "100% used";
+    
+    // Update quota percentage to show "0 credits remaining"
+    const quotaUnit = type === 'tts' ? 'characters' : 'seconds';
+    quotaPercentage.innerHTML = `<span class="text-muted-foreground">0 ${quotaUnit} remaining</span>`;
+    
+    // Set tooltip for progress bar
+    if (status.quota && status.quota.total) {
+      progressBar.title = chrome.i18n.getMessage(`${type}QuotaProgress`, [
+        "0",
+        status.quota.total.toLocaleString(),
+      ]);
+    } else {
+      progressBar.title = "Quota exhausted";
+    }
+    
     // Update upgrade button visibility after checking both quotas
     updateUpgradeButtonVisibility();
     return;
@@ -247,6 +301,7 @@ async function getJwtQuota() {
       stt: null
     };
     
+    // For TTS, explicitly check if the user has a quota entitlement
     if (ttsQuotaDetails?.hasQuota) {
       result.tts = {
         quota: {
@@ -255,8 +310,12 @@ async function getJwtQuota() {
           resetDate: ttsQuotaDetails.resetDate
         }
       };
+    } else {
+      // User has no TTS quota entitlement
+      result.tts = { noEntitlement: true };
     }
     
+    // For STT, explicitly check if the user has a quota entitlement
     if (sttQuotaDetails?.hasQuota) {
       result.stt = {
         quota: {
@@ -265,12 +324,18 @@ async function getJwtQuota() {
           resetDate: sttQuotaDetails.resetDate
         }
       };
+    } else {
+      // User has no STT quota entitlement
+      result.stt = { noEntitlement: true };
     }
     
     return result;
   } catch (error) {
     console.error('Failed to get JWT quota:', error);
-    return { tts: null, stt: null };
+    return { 
+      tts: { noEntitlement: true },
+      stt: { noEntitlement: true }
+    };
   }
 }
 
@@ -300,10 +365,17 @@ async function getQuotaStatus() {
         const statusEndpoint = `${config.apiBaseUrl}/status/tts`;
         const response = await fetch(statusEndpoint);
         const data = await response.json();
+        
+        // If the API response indicates no quota, mark as no entitlement
+        if (!data.quota || !data.quota.total) {
+          data.noEntitlement = true;
+        }
+        
         updateQuotaProgress(data, 'tts');
       } catch (error) {
         console.error("Error fetching TTS status:", error);
-        updateQuotaProgress(quotaStatusUnknown, 'tts');
+        // Indicate no entitlement when status is unknown
+        updateQuotaProgress({ noEntitlement: true }, 'tts');
       }
     }
     
@@ -315,10 +387,17 @@ async function getQuotaStatus() {
         const statusEndpoint = `${config.apiBaseUrl}/status/stt`;
         const response = await fetch(statusEndpoint);
         const data = await response.json();
+        
+        // If the API response indicates no quota, mark as no entitlement
+        if (!data.quota || !data.quota.total) {
+          data.noEntitlement = true;
+        }
+        
         updateQuotaProgress(data, 'stt');
       } catch (error) {
         console.error("Error fetching STT status:", error);
-        updateQuotaProgress(quotaStatusUnknown, 'stt');
+        // Indicate no entitlement when status is unknown
+        updateQuotaProgress({ noEntitlement: true }, 'stt');
       }
     }
     
