@@ -241,8 +241,8 @@
     "description": "चेकबॉक्स के लिए लेबल, जो पाई के प्रतिक्रियाओं को व्यवधान करने/ना करने की सुविधा देता है, जब माइक्रोसॉफ्ट समर्थन से बात करता है."
   },
   "currencyUSDAbbreviation": {
-    "description": "संयुक्त राज्य डॉलर का संक्षिप्ति.",
-    "message": "यूएसडी"
+    "message": "क्रेडिट्स",
+    "description": "The abbreviation for the TTS credit units."
   },
   "currentCharges": {
     "description": "उपयोगकर्ता द्वारा संचित की गई वर्तमान शुल्क (क्रमिक कुल) को वर्णन करने के लिए प्रयुक्त शब्द।",

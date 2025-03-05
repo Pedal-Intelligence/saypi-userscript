@@ -62,7 +62,7 @@ export class TTSControlsModule {
     return button;
   }
 
-  createGenerateSpeechButton(price?: number, currency = "USD") {
+  createGenerateSpeechButton(price?: number, currency = "credits") {
     const message = price
       ? getMessage("regenerateButtonTitle", [price.toFixed(2), currency])
       : getMessage("regenerateButtonTitleFree");
@@ -271,6 +271,15 @@ export class TTSControlsModule {
     valueSpan.classList.add("value");
     valueSpan.innerText = cost.toFixed(2);
     priceSpan.appendChild(valueSpan);
+    
+    // Add credits label
+    if (cost > 0) {
+      const currencySpan = document.createElement("span");
+      currencySpan.classList.add("currency-label");
+      currencySpan.innerText = " " + getMessage("currencyUSDAbbreviation");
+      priceSpan.appendChild(currencySpan);
+    }
+    
     return priceSpan;
   }
 
@@ -325,9 +334,18 @@ export class TTSControlsModule {
         const currency = getMessage("currencyUSDAbbreviation");
         costElement.setAttribute(
           "aria-label",
-          getMessage("ttsCostExplanation", [charge.cost.toFixed(2), currency])
+          getMessage("ttsCostExplanation", [charge.cost.toFixed(2), currency, "Say, Pi"])
         );
         costElement.classList.remove("cost-free");
+        
+        // Update or add currency label
+        let currencyLabel = costElement.querySelector(".currency-label");
+        if (!currencyLabel) {
+          currencyLabel = document.createElement("span");
+          currencyLabel.classList.add("currency-label");
+          valueElement.parentNode?.appendChild(currencyLabel);
+        }
+        currencyLabel.textContent = " " + currency;
       } else {
         costElement.setAttribute(
           "aria-label",
