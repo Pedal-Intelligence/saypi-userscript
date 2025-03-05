@@ -329,8 +329,12 @@
     }
   },
   "currencyUSDAbbreviation": {
+    "message": "USD",
+    "description": "The abbreviation for the US dollar."
+  },
+  "ttsCredits": {
     "message": "credits",
-    "description": "The abbreviation for the TTS credit units."
+    "description": "The term used for the credits currency in the text-to-speech feature."
   },
   "ttsPoweredBy": {
     "message": "Text-to-speech powered by $ttsEngine$",

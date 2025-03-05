@@ -223,14 +223,14 @@ export class TTSControlsModule {
     const costBasisContainer = document.createElement("div");
     costBasisContainer.classList.add("saypi-cost-container", "tts-item");
 
-    const currency = getMessage("currencyUSDAbbreviation");
+    const currency = getMessage("ttsCredits");
     const costElement = containerIsMenu
       ? this.createCostElementForMenu()
       : this.createCostElementForMessage();
     let chargeExplanation;
     if (cost) {
       chargeExplanation = getMessage("ttsCostExplanation", [
-        cost.toFixed(2),
+        Math.round(cost).toString(),
         currency,
         "Say, Pi", // provider name
       ]);
@@ -269,14 +269,15 @@ export class TTSControlsModule {
     priceSpan.classList.add("price");
     const valueSpan = document.createElement("span");
     valueSpan.classList.add("value");
-    valueSpan.innerText = cost.toFixed(2);
+    // Round the cost to the nearest integer for display
+    valueSpan.textContent = Math.round(cost).toString();
     priceSpan.appendChild(valueSpan);
     
     // Add credits label
     if (cost > 0) {
       const currencySpan = document.createElement("span");
       currencySpan.classList.add("currency-label");
-      currencySpan.innerText = " " + getMessage("currencyUSDAbbreviation");
+      currencySpan.textContent = " " + getMessage("ttsCredits");
       priceSpan.appendChild(currencySpan);
     }
     
@@ -329,12 +330,13 @@ export class TTSControlsModule {
     ) as HTMLElement | null;
     if (costElement) {
       const valueElement = costElement.querySelector(".value") as HTMLElement;
-      valueElement.textContent = charge.cost.toFixed(2);
+      // Round the cost to the nearest integer for display
+      valueElement.textContent = Math.round(charge.cost).toString();
       if (charge.cost) {
-        const currency = getMessage("currencyUSDAbbreviation");
+        const currency = getMessage("ttsCredits");
         costElement.setAttribute(
           "aria-label",
-          getMessage("ttsCostExplanation", [charge.cost.toFixed(2), currency, "Say, Pi"])
+          getMessage("ttsCostExplanation", [Math.round(charge.cost).toString(), currency, "Say, Pi"])
         );
         costElement.classList.remove("cost-free");
         
@@ -343,15 +345,24 @@ export class TTSControlsModule {
         if (!currencyLabel) {
           currencyLabel = document.createElement("span");
           currencyLabel.classList.add("currency-label");
-          valueElement.parentNode?.appendChild(currencyLabel);
+          currencyLabel.textContent = " " + currency;
+          const valueElement = costElement.querySelector(".value");
+          if (valueElement && valueElement.parentNode) {
+            valueElement.parentNode.appendChild(currencyLabel);
+          }
         }
-        currencyLabel.textContent = " " + currency;
       } else {
         costElement.setAttribute(
           "aria-label",
           getMessage("ttsCostExplanationFree")
         );
         costElement.classList.add("cost-free");
+        
+        // Remove currency label if it exists
+        const currencyLabel = costElement.querySelector(".currency-label");
+        if (currencyLabel) {
+          currencyLabel.remove();
+        }
       }
     }
   }
