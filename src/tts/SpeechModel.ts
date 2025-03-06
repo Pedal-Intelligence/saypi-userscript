@@ -274,7 +274,7 @@ class PiAIVoice extends AIVoice {
       0,
       0,
       "inflection.ai",
-      false,
+      voiceNumber === 1,
       false,
       ""
     );

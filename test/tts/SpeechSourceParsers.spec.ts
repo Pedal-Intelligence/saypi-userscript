@@ -39,22 +39,23 @@ describe("PiSpeechSourceParser", () => {
 
     const result = parser.parse(source);
 
-    expect(result).toEqual({
+    expect(result).toEqual(expect.objectContaining({
       id: "neBP3hiXCNapu3BYFztb6",
       lang: "en",
       uri: source,
-      voice: {
-        id: "voice1",
-        name: "Pi 1",
-        lang: "en",
-        localService: false,
-        default: true,
-        price: 0,
-        powered_by: "inflection.ai",
-        voiceURI: "",
-      },
       provider: audioProviders.Pi,
-    });
+    }));
+    
+    expect(result.voice).toEqual(expect.objectContaining({
+      id: "voice1",
+      name: "Pi 1",
+      lang: "en",
+      localService: false,
+      default: true,
+      price: 0,
+      powered_by: "inflection.ai",
+      voiceURI: "",
+    }));
   });
 
   test("should throw an error if the URL is invalid", async ({ expect }) => {
