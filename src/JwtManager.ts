@@ -178,6 +178,18 @@ export class JwtManager {
 
       if (!response.ok) {
         const errorText = await response.text().catch(() => 'No error details');
+        
+        // Special handling for 403 responses during onboarding
+        if (response.status === 403) {
+          console.info('User has a valid session but profile is not fully populated yet (likely during onboarding)');
+          
+          // Don't clear the authentication state
+          // Schedule another refresh attempt after 1 minute
+          setTimeout(() => this.refresh(), 60000);
+          
+          return; // Exit without throwing an error
+        }
+        
         throw new Error(`Failed to refresh token: ${response.status} ${response.statusText} - ${errorText}`);
       }
 
