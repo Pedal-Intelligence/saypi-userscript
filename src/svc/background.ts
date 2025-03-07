@@ -32,25 +32,44 @@ async function checkAuthCookie() {
 // New function to broadcast authentication status to all content scripts
 async function broadcastAuthStatus() {
   const isAuthenticated = jwtManager.isAuthenticated();
-  console.debug('Broadcasting auth status to content scripts:', isAuthenticated);
+  // Just log a single message about the broadcast
+  console.log(`Broadcasting auth status (authenticated: ${isAuthenticated}) to content scripts`);
   
   try {
-    // Get all tabs with content scripts
+    // Query all tabs - we'll filter and handle errors silently
     const tabs = await chrome.tabs.query({});
     
-    // Send message to all tabs
+    // Track tabs where we successfully send messages
+    let successCount = 0;
+    
+    // Send message to all tabs but handle errors silently
     for (const tab of tabs) {
       if (tab.id) {
+        // Only log success or unexpected errors, not connection errors
         chrome.tabs.sendMessage(tab.id, { 
           type: 'AUTH_STATUS_CHANGED',
           isAuthenticated,
           timestamp: Date.now()
-        }).catch(err => {
-          // This may fail for tabs where content script isn't loaded, which is expected
-          console.debug(`Failed to send auth status to tab ${tab.id}:`, err);
+        })
+        .then(() => {
+          // Message was delivered successfully - increment counter but don't log individually
+          successCount++;
+        })
+        .catch(err => {
+          // Most errors will be "Could not establish connection" which we can ignore
+          // Only log truly unexpected errors
+          if (!err.message?.includes("Could not establish connection")) {
+            console.error(`Unexpected error sending auth status to tab ${tab.id}: ${err.message}`);
+          }
         });
       }
     }
+    
+    // After all promises settle, log success count (as info level, not debug)
+    setTimeout(() => {
+      console.log(`Auth status broadcast complete: ${successCount} tab(s) updated`);
+    }, 500);
+    
   } catch (error) {
     console.error('Failed to broadcast auth status:', error);
   }
