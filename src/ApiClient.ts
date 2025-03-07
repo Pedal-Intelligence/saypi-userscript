@@ -1,8 +1,14 @@
 import { jwtManager } from './JwtManager';
+import EventBus from './events/EventBus';
 
 interface ApiRequestOptions extends RequestInit {
   requiresAuth?: boolean;
 }
+
+// Listen for authentication status changes
+EventBus.on('saypi:auth:status-changed', (isAuthenticated) => {
+  console.log('ApiClient detected auth status change:', isAuthenticated);
+});
 
 export async function callApi(
   url: string,

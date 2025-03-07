@@ -29,11 +29,41 @@ async function checkAuthCookie() {
   }
 }
 
+// New function to broadcast authentication status to all content scripts
+async function broadcastAuthStatus() {
+  const isAuthenticated = jwtManager.isAuthenticated();
+  console.debug('Broadcasting auth status to content scripts:', isAuthenticated);
+  
+  try {
+    // Get all tabs with content scripts
+    const tabs = await chrome.tabs.query({});
+    
+    // Send message to all tabs
+    for (const tab of tabs) {
+      if (tab.id) {
+        chrome.tabs.sendMessage(tab.id, { 
+          type: 'AUTH_STATUS_CHANGED',
+          isAuthenticated,
+          timestamp: Date.now()
+        }).catch(err => {
+          // This may fail for tabs where content script isn't loaded, which is expected
+          console.debug(`Failed to send auth status to tab ${tab.id}:`, err);
+        });
+      }
+    }
+  } catch (error) {
+    console.error('Failed to broadcast auth status:', error);
+  }
+}
+
 // Initialize: check for existing auth cookie
 checkAuthCookie().then(cookie => {
   if (cookie) {
     console.log('Found existing auth cookie, initializing JWT manager...');
-    jwtManager.initialize();
+    jwtManager.initialize().then(() => {
+      // Broadcast initial auth status after initialization
+      broadcastAuthStatus();
+    });
   }
 });
 
@@ -188,10 +218,23 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       }
       // Clear the JWT token
       jwtManager.clear();
+      
+      // Broadcast auth status change
+      broadcastAuthStatus();
+      
       sendResponse({ success: true });
     } catch (error) {
       console.error('Failed to sign out:', error);
       sendResponse({ success: false });
+    }
+  } else if (message.type === 'GET_AUTH_STATUS') {
+    // New handler for direct auth status requests from content scripts
+    try {
+      const isAuthenticated = jwtManager.isAuthenticated();
+      sendResponse({ isAuthenticated });
+    } catch (error) {
+      console.error('Failed to get auth status:', error);
+      sendResponse({ isAuthenticated: false });
     }
   }
   
@@ -229,6 +272,9 @@ chrome.cookies.onChanged.addListener(async (changeInfo) => {
       if (!jwtManager.isAuthenticated()) {
         await jwtManager.refresh();
         
+        // Broadcast auth status change after refresh
+        broadcastAuthStatus();
+        
         // Get and handle return URL if it exists
         try {
           const { authReturnUrl } = await chrome.storage.local.get('authReturnUrl');
@@ -257,8 +303,29 @@ chrome.cookies.onChanged.addListener(async (changeInfo) => {
         }
       }
     } else if (removed) {
-      // Cookie was removed - clear the token
+      // If cookie was removed, clear JWT and broadcast status change
       jwtManager.clear();
+      broadcastAuthStatus();
     }
   }
 });
+
+// Override the refresh method to broadcast auth status after refreshing
+const originalRefresh = jwtManager.refresh.bind(jwtManager);
+jwtManager.refresh = async (force = false) => {
+  const wasAuthenticated = jwtManager.isAuthenticated();
+  await originalRefresh(force);
+  const isAuthenticated = jwtManager.isAuthenticated();
+  
+  // If auth status changed, broadcast it
+  if (wasAuthenticated !== isAuthenticated) {
+    broadcastAuthStatus();
+  }
+};
+
+// Override the clear method to broadcast auth status after clearing
+const originalClear = jwtManager.clear.bind(jwtManager);
+jwtManager.clear = () => {
+  originalClear();
+  broadcastAuthStatus();
+};

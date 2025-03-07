@@ -37,7 +37,7 @@ export class JwtManager {
     this.loadFromStorage();
   }
 
-  private async loadFromStorage(): Promise<void> {
+  public async loadFromStorage(): Promise<void> {
     try {
       const { jwtToken, tokenExpiresAt, authCookieValue } = await chrome.storage.local.get(['jwtToken', 'tokenExpiresAt', 'authCookieValue']);
       if (jwtToken && tokenExpiresAt) {
