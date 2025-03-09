@@ -470,5 +470,153 @@
   "extensionSettings": {
     "message": "Ayarlar",
     "description": "Uzantının ayarlarını açmaya yarayan düğmenin metni."
+  },
+  "greeting": {
+    "description": "Kullanıcı oturum açtığında gösterilen selamlama mesajı",
+    "message": "Merhaba, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Kullanıcının oturum açmadığı zaman gösterilecek metin.",
+    "message": "Oturum açmadı"
+  },
+  "profile": {
+    "description": "Kullanıcı profili bölümü için etiket.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "TTS kredileri için birim etiketi",
+    "message": "krediler"
+  },
+  "quotaRemaining": {
+    "description": "Kalan Kalan İlerleme Çubuğu için Etiket",
+    "message": "Kota Kalan"
+  },
+  "quotaStatusUnknown": {
+    "description": "Kota durumu belirlenemediğinde gösterilen mesaj",
+    "message": "Kota durumunu kontrol edemiyor"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Kullanıcı kimliği doğrulanmadığında gösterilen mesaj.",
+    "message": "Ses üretimine ve diğer premium özelliklere erişmek için oturum açın"
+  },
+  "signIn": {
+    "description": "Oturum açma düğmesi için metin.",
+    "message": "Oturum açmak"
+  },
+  "signOut": {
+    "description": "Outut düğmesi için metin.",
+    "message": "Oturumu Kapat"
+  },
+  "signedIn": {
+    "description": "Durum metni kullanıcı kimlik doğrulandığında (e -posta olmadan).",
+    "message": "Oturum açmış"
+  },
+  "signedInAs": {
+    "description": "Durum metni E -postaları da dahil olmak üzere kullanıcı kimliği doğrulandığında gösterilir.",
+    "message": "$email$ olarak oturum açtı",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Dakikalar halinde kalan STT kotasını gösteren metin.",
+    "message": "$minutes$ dakika$plural$ kalan",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "STT kotasının ne zaman tükendiğini göstermek için metin.",
+    "message": "Konuşma tanıma kotası bitkin"
+  },
+  "sttQuotaProgress": {
+    "description": "STT kota ilerleme çubuğu için araç ipucu.",
+    "message": "$remaining$ / $total$ saniye kalan",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "STT kota ilerleme çubuğu için araç ipucu dakikalar içinde.",
+    "message": "$remaining$ / $total$ dakika kalan",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Kalan STT kotası için etiket.",
+    "message": "Konuşma"
+  },
+  "sttQuotaSeconds": {
+    "description": "STT kotası için birim (saniye).",
+    "message": "snats"
+  },
+  "ttsCredits": {
+    "description": "Metin-konuşma özelliğindeki kredi para birimi için kullanılan terim.",
+    "message": "krediler"
+  },
+  "ttsQuotaCharacters": {
+    "description": "TTS kotası (karakterler) birimi.",
+    "message": "krediler"
+  },
+  "ttsQuotaExhausted": {
+    "description": "TTS kotası ne zaman tükendiğinde gösterilecek metin.",
+    "message": "Sesli kota bitkin"
+  },
+  "ttsQuotaProgress": {
+    "description": "TTS kota ilerleme çubuğu için araç ipucu.",
+    "message": "$remaining$ / $total$ karakter kalan",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Kalan TTS kotası için etiket.",
+    "message": "Ses üretimi"
+  },
+  "upgradeButton": {
+    "description": "Kota tükendiğinde planı yükseltmek için düğmeye metin.",
+    "message": "Yükseltme planı"
+  },
+  "viewDetails": {
+    "description": "Gösterge tablosunda tam kota ayrıntılarını görüntülemek için bağlantının metni.",
+    "message": "Ayrıntıları Görüntüle"
   }
 }

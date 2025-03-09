@@ -470,5 +470,153 @@
   "extensionSettings": {
     "message": "সেটিংস",
     "description": "এক্সটেনশনের সেটিংস খুলতে বোতামের পাঠ্য।"
+  },
+  "greeting": {
+    "description": "ব্যবহারকারী সাইন ইন করা হলে শুভেচ্ছা বার্তা দেখানো হয়েছে",
+    "message": "হাই, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "ব্যবহারকারী যখন সাইন ইন না হয় তখন পাঠ্য পাঠানোর জন্য পাঠ্য।",
+    "message": "সাইন ইন না"
+  },
+  "profile": {
+    "description": "ব্যবহারকারী প্রোফাইল বিভাগের জন্য লেবেল।",
+    "message": "প্রোফাইল"
+  },
+  "quotaCredits": {
+    "description": "টিটিএস ক্রেডিটের জন্য ইউনিট লেবেল",
+    "message": "ক্রেডিট"
+  },
+  "quotaRemaining": {
+    "description": "কোটা অবশিষ্ট অগ্রগতি বারের জন্য লেবেল",
+    "message": "কোটা বাকি"
+  },
+  "quotaStatusUnknown": {
+    "description": "যখন কোটা স্থিতি নির্ধারণ করা যায় না তখন বার্তা দেখানো হয়েছে",
+    "message": "কোটা স্থিতি পরীক্ষা করতে অক্ষম"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "ব্যবহারকারী প্রমাণিত না হলে বার্তা দেখানো হয়েছে।",
+    "message": "ভয়েস জেনারেশন এবং অন্যান্য প্রিমিয়াম বৈশিষ্ট্যগুলি অ্যাক্সেস করতে লগ ইন করুন"
+  },
+  "signIn": {
+    "description": "সাইন ইন বোতামের জন্য পাঠ্য।",
+    "message": "সাইন ইন"
+  },
+  "signOut": {
+    "description": "সাইন আউট বোতামের জন্য পাঠ্য।",
+    "message": "সাইন আউট"
+  },
+  "signedIn": {
+    "description": "যখন ব্যবহারকারী প্রমাণীকরণ করা হয় (ইমেল ছাড়াই) স্থিতি পাঠ্য প্রদর্শিত হয়।",
+    "message": "সাইন ইন"
+  },
+  "signedInAs": {
+    "description": "ব্যবহারকারী যখন তাদের ইমেল সহ প্রমাণীকরণ করা হয় তখন স্ট্যাটাস টেক্সট প্রদর্শিত হয়।",
+    "message": "সাইন ইন হিসাবে $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "কয়েক মিনিটের মধ্যে স্টাটি কোটা বাকি দেখায় পাঠ্য।",
+    "message": "$minutes$ মিনিট $plural$ বাকি",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "পাঠ্য কোটা শেষ হয়ে গেলে পাঠ্য।",
+    "message": "বক্তৃতা স্বীকৃতি কোটা ক্লান্ত"
+  },
+  "sttQuotaProgress": {
+    "description": "এসটিটি কোটা প্রগতিশীল বারের জন্য টুলটিপ।",
+    "message": "$remaining$ মোট $total$ সেকেন্ড বাকি",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "কয়েক মিনিটের মধ্যে এসটিটি কোটা অগ্রগতি বারের জন্য সরঞ্জামটিপ।",
+    "message": "$remaining$ মোট $total$ মিনিট বাকি",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "এসটিটি কোটা অবশিষ্ট ডিসপ্লে জন্য লেবেল।",
+    "message": "বক্তৃতা স্বীকৃতি"
+  },
+  "sttQuotaSeconds": {
+    "description": "এসটিটি কোটার জন্য ইউনিট (সেকেন্ড)।",
+    "message": "সেকেন্ড"
+  },
+  "ttsCredits": {
+    "description": "পাঠ্য-থেকে-স্পিচ বৈশিষ্ট্যে ক্রেডিট মুদ্রার জন্য ব্যবহৃত শব্দটি।",
+    "message": "ক্রেডিট"
+  },
+  "ttsQuotaCharacters": {
+    "description": "টিটিএস কোটা (অক্ষর) এর জন্য ইউনিট।",
+    "message": "ক্রেডিট"
+  },
+  "ttsQuotaExhausted": {
+    "description": "টিটিএস কোটা শেষ হয়ে গেলে পাঠ্য পাঠানোর জন্য পাঠ্য।",
+    "message": "ভয়েস কোটা ক্লান্ত"
+  },
+  "ttsQuotaProgress": {
+    "description": "টিটিএস কোটা প্রগ্রেস বারের জন্য সরঞ্জামটিপ।",
+    "message": "$remaining$ মোট $total$ অক্ষর বাকি",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "টিটিএস কোটা বাকী ডিসপ্লে জন্য লেবেল।",
+    "message": "ভয়েস জেনারেশন"
+  },
+  "upgradeButton": {
+    "description": "কোটা শেষ হয়ে গেলে পরিকল্পনাটি আপগ্রেড করার জন্য বোতামটির জন্য পাঠ্য।",
+    "message": "আপগ্রেড পরিকল্পনা"
+  },
+  "viewDetails": {
+    "description": "ড্যাশবোর্ডে সম্পূর্ণ কোটা বিশদ দেখতে লিঙ্কটির জন্য পাঠ্য।",
+    "message": "বিশদ দেখুন"
   }
 }

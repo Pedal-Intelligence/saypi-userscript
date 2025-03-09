@@ -470,5 +470,153 @@
   "extensionSettings": {
     "message": "Ustawienia",
     "description": "Tekst przycisku otwierającego ustawienia rozszerzenia."
+  },
+  "greeting": {
+    "description": "Wiadomość z życzeniami pokazana, gdy użytkownik jest zalogowany",
+    "message": "Cześć, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Tekst, który pokazuje, kiedy użytkownik nie jest zalogowany.",
+    "message": "Nie zalogowane"
+  },
+  "profile": {
+    "description": "Etykieta sekcji profilu użytkownika.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Etykieta jednostkowa dla kredytów TTS",
+    "message": "kredyty"
+  },
+  "quotaRemaining": {
+    "description": "Etykieta dla pozostałego paska postępu",
+    "message": "Pozostała kwota"
+  },
+  "quotaStatusUnknown": {
+    "description": "Wiadomości pokazane, gdy nie można ustalić statusu kwotu",
+    "message": "Nie można sprawdzić statusu kwoty"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Wiadomość pokazana, gdy użytkownik nie jest uwierzytelniony.",
+    "message": "Zaloguj się, aby uzyskać dostęp do generowania głosu i inne funkcje premium"
+  },
+  "signIn": {
+    "description": "SMS -y do przycisku zaloguj się.",
+    "message": "Zalogować się"
+  },
+  "signOut": {
+    "description": "SMS -y do przycisku wylogowania się.",
+    "message": "Wyloguj się"
+  },
+  "signedIn": {
+    "description": "Tekst statusu pokazany, gdy użytkownik jest uwierzytelniony (bez wiadomości e -mail).",
+    "message": "Zalogowany"
+  },
+  "signedInAs": {
+    "description": "Tekst statusu pokazany, gdy użytkownik jest uwierzytelniony, w tym ich e -mail.",
+    "message": "Zalogowany jako $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Tekst pokazujący pozostałą kwotę STT w ciągu kilku minut.",
+    "message": "$minutes$ minut$plural$ pozostało",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Tekst, który pokazuje, kiedy kwota STT jest wyczerpana.",
+    "message": "Wyczerpany kwot rozpoznawania mowy"
+  },
+  "sttQuotaProgress": {
+    "description": "Pokłata dla paska postępu w STT.",
+    "message": "$remaining$ z $total$ sekund pozostało",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Pokłata dla paska postępu w STT w minutach.",
+    "message": "$remaining$ z $total$ minut pozostało",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Etykieta dla pozostałego wyświetlacza kwotu STT.",
+    "message": "Rozpoznawanie mowy"
+  },
+  "sttQuotaSeconds": {
+    "description": "Jednostka do kwoty STT (sekundy).",
+    "message": "Secs"
+  },
+  "ttsCredits": {
+    "description": "Termin użyty dla waluty kredytów w funkcji tekstu na mowę.",
+    "message": "kredyty"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Jednostka dla kwoty TTS (znaki).",
+    "message": "kredyty"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Tekst pokazujący, gdy kwota TTS jest wyczerpana.",
+    "message": "Kwota głosowa wyczerpana"
+  },
+  "ttsQuotaProgress": {
+    "description": "Pokłata dla paska postępu kwot TTS.",
+    "message": "$remaining$ z $total$ znaków pozostało",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Etykieta dla pozostałego wyświetlacza kwot TTS.",
+    "message": "Generowanie głosu"
+  },
+  "upgradeButton": {
+    "description": "SMS -y do przycisku, aby zaktualizować plan, gdy kwot jest wyczerpany.",
+    "message": "Plan aktualizacji"
+  },
+  "viewDetails": {
+    "description": "SMS -y do linku, aby wyświetlić pełne szczegóły kwot na desce rozdzielczej.",
+    "message": "Zobacz szczegóły"
   }
 }

@@ -470,5 +470,153 @@
   "extensionSettings": {
     "message": "Paramètres",
     "description": "Le texte du bouton pour ouvrir les paramètres de l'extension."
+  },
+  "greeting": {
+    "description": "Message de salutation affiché lorsque l'utilisateur est connecté",
+    "message": "Salut, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Texte pour montrer quand l'utilisateur n'est pas connecté.",
+    "message": "Non signé"
+  },
+  "profile": {
+    "description": "Étiquetez la section du profil utilisateur.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Étiquette d'unité pour les crédits TTS",
+    "message": "crédits"
+  },
+  "quotaRemaining": {
+    "description": "Étiqueter la barre de progression du quota restant",
+    "message": "Quota restant"
+  },
+  "quotaStatusUnknown": {
+    "description": "Message affiché lorsque l'état du quota ne peut pas être déterminé",
+    "message": "Impossible de vérifier l'état du quota"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Message affiché lorsque l'utilisateur n'est pas authentifié.",
+    "message": "Connectez-vous pour accéder à la génération de voix et à d'autres fonctionnalités premium"
+  },
+  "signIn": {
+    "description": "Texte pour le bouton de connexion.",
+    "message": "Se connecter"
+  },
+  "signOut": {
+    "description": "Texte pour le bouton de déconnexion.",
+    "message": "Se déconnecter"
+  },
+  "signedIn": {
+    "description": "Texte d'état indiqué lorsque l'utilisateur est authentifié (sans e-mail).",
+    "message": "Signé"
+  },
+  "signedInAs": {
+    "description": "Texte d'état indiqué lorsque l'utilisateur est authentifié, y compris leur e-mail.",
+    "message": "Signé comme $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Texte montrant le quota STT restant en quelques minutes.",
+    "message": "$minutes$ minutes $plural$ restant",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Texte à montrer quand le quota STT est épuisé.",
+    "message": "Quota de reconnaissance de la parole épuisé"
+  },
+  "sttQuotaProgress": {
+    "description": "Infiltration pour la barre de progression du quota STT.",
+    "message": "$remaining$ de $total$ secondes restantes",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Infiltration pour la barre de progression du quota STT en quelques minutes.",
+    "message": "$remaining$ de $total$ minutes restantes",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Étiquette pour l'affichage restant du quota STT.",
+    "message": "Reconnaissance de la parole"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unité pour le quota STT (secondes).",
+    "message": "secondes"
+  },
+  "ttsCredits": {
+    "description": "Le terme utilisé pour la monnaie de crédits dans la fonction de texte vocale.",
+    "message": "crédits"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Unité pour le quota TTS (caractères).",
+    "message": "crédits"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Texte à montrer quand le quota TTS est épuisé.",
+    "message": "Quota vocal épuisé"
+  },
+  "ttsQuotaProgress": {
+    "description": "Infiltration pour la barre de progression du quota TTS.",
+    "message": "$remaining$ de $total$ caractères restants",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Étiquette pour l'affichage restant du quota TTS.",
+    "message": "Génération de voix"
+  },
+  "upgradeButton": {
+    "description": "Texte pour le bouton pour mettre à niveau le plan lorsque le quota est épuisé.",
+    "message": "Plan de mise à niveau"
+  },
+  "viewDetails": {
+    "description": "Texte pour le lien pour afficher les détails du quota complet sur le tableau de bord.",
+    "message": "Afficher les détails"
   }
 }

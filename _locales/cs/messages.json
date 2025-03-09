@@ -470,5 +470,153 @@
   "extensionSettings": {
     "message": "Nastavení",
     "description": "Text tlačítka pro otevření nastavení rozšíření."
+  },
+  "greeting": {
+    "description": "Zobrazení pozdravování, když je uživatel přihlášen",
+    "message": "Ahoj, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Text, který se zobrazí, kdy není uživatel přihlášen.",
+    "message": "Není přihlášeno"
+  },
+  "profile": {
+    "description": "Štítek pro sekci profilu uživatelského profilu.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Jednotka štítku pro kredity TTS",
+    "message": "Kredity"
+  },
+  "quotaRemaining": {
+    "description": "Štítek pro kvóto zbývající pruh pro pokrok",
+    "message": "Zbývající kvóta"
+  },
+  "quotaStatusUnknown": {
+    "description": "Zpráva zobrazená, když nelze stanovit stav kvóty",
+    "message": "Nelze zkontrolovat stav kvóty"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Zpráva zobrazená, když uživatel není ověřen.",
+    "message": "Přihlaste se pro přístup k generování hlasu a další prvotřídní funkce"
+  },
+  "signIn": {
+    "description": "Text pro tlačítko přihlášení.",
+    "message": "Přihlaste se"
+  },
+  "signOut": {
+    "description": "Text pro tlačítko Odhlásit.",
+    "message": "Odhlásit se"
+  },
+  "signedIn": {
+    "description": "Stav text zobrazen, když je uživatel ověřen (bez e -mailu).",
+    "message": "Přihlášeno"
+  },
+  "signedInAs": {
+    "description": "Stavový text zobrazený, když je uživatel ověřen, včetně jejich e -mailu.",
+    "message": "Přihlášeno jako $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Text zobrazující zbývající kvótu STT během několika minut.",
+    "message": "$minutes$ minuty $plural$ zbývající",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text, který se zobrazí, kdy je kvóta STT vyčerpána.",
+    "message": "Vyčerpaná kvóta na rozpoznávání řeči"
+  },
+  "sttQuotaProgress": {
+    "description": "TOOTTIP pro progresní lištu STT kvóty.",
+    "message": "$remaining$ zbývá $total$ sekundy",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "TOOTTIP pro pokrok kvóty STT v minutách v minutách.",
+    "message": "$remaining$ zbývá $total$ minut",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Štítek pro zbývající displej STT kvóty.",
+    "message": "Rozpoznávání řeči"
+  },
+  "sttQuotaSeconds": {
+    "description": "Jednotka pro kvótu STT (sekundy).",
+    "message": "Secs"
+  },
+  "ttsCredits": {
+    "description": "Termín používaný pro měnu kreditů ve funkci textu na řeč.",
+    "message": "Kredity"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Jednotka pro kvótu TTS (znaky).",
+    "message": "Kredity"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Text, který se zobrazí, kdy je kvóta TTS vyčerpána.",
+    "message": "Hlasová kvóta vyčerpaná"
+  },
+  "ttsQuotaProgress": {
+    "description": "TOOTTIP pro TTS kvóta Progress Pane.",
+    "message": "$remaining$ zbývá $total$ znaky",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Štítek pro zbývající kvótu TTS.",
+    "message": "Generování hlasu"
+  },
+  "upgradeButton": {
+    "description": "Text pro tlačítko pro upgrade plánu při vyčerpání kvóty.",
+    "message": "Plán upgradu"
+  },
+  "viewDetails": {
+    "description": "Text pro odkaz pro zobrazení úplných podrobností o kvótě na palubní desce.",
+    "message": "Zobrazit podrobnosti"
   }
 }
