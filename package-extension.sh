@@ -24,7 +24,7 @@ check_jq_installed() {
 
 modify_firefox_manifest() {
     local manifest_file="$1"
-    jq '.background += {"scripts": ["public/background.js"], "type": "module", "persistent": false}' "$manifest_file" > "$manifest_file.tmp" && mv "$manifest_file.tmp" "$manifest_file"
+    jq '.background += {"scripts": ["public/background.js"], "type": "module"}' "$manifest_file" > "$manifest_file.tmp" && mv "$manifest_file.tmp" "$manifest_file"
 }
 
 # Check dependencies before processing
