@@ -301,6 +301,7 @@ document.addEventListener("DOMContentLoaded", function () {
       "preferences",
       "premium-status",
       "devtools",
+      "upgrade"
     ];
     chrome.storage.sync.get("shareData").then((result) => {
       // if the user has not made a decision yet, show the consent section
