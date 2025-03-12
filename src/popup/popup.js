@@ -394,6 +394,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  // Add click handler for view quota details link
+  document.getElementById('view-quota-details').addEventListener('click', function(e) {
+    e.preventDefault();
+    const dashboardUrl = config && config.authServerUrl 
+      ? `${config.authServerUrl}/app/dashboard` 
+      : 'https://www.saypi.ai/app/dashboard';
+    window.open(dashboardUrl, '_blank');
+  });
+
   i18nReplace();
   sliderInput();
   switchInputs();
