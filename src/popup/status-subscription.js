@@ -74,6 +74,15 @@ function shouldShowUpgradeButton() {
 // Function to update the upgrade button visibility
 function updateUpgradeButtonVisibility() {
   const upgradeSection = document.getElementById("upgrade");
+  const consentSection = document.getElementById("analytics-consent");
+  
+  // Don't show upgrade button if consent form is visible
+  if (consentSection && !consentSection.classList.contains("hidden")) {
+    upgradeSection.classList.add("hidden");
+    return;
+  }
+  
+  // Normal visibility logic
   if (shouldShowUpgradeButton()) {
     upgradeSection.classList.remove("hidden");
   } else {
