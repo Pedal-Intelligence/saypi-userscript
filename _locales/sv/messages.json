@@ -470,5 +470,153 @@
   "extensionSettings": {
     "message": "Inställningar",
     "description": "Texten på knappen för att öppna tilläggets inställningar."
+  },
+  "greeting": {
+    "description": "Hälsningsmeddelande som visas när användaren är inloggad",
+    "message": "Hej, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Text för att visa när användaren inte är inloggad.",
+    "message": "Inte inloggad"
+  },
+  "profile": {
+    "description": "Etikett för avsnittet Användarprofil.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Enhetsetikett för TTS -krediter",
+    "message": "krediter"
+  },
+  "quotaRemaining": {
+    "description": "Etikett för kvoten återstående framstegsfält",
+    "message": "Kvot kvar"
+  },
+  "quotaStatusUnknown": {
+    "description": "Meddelande som visas när kvotstatus inte kan fastställas",
+    "message": "Det går inte att kontrollera kvotstatus"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Meddelande som visas när användaren inte är autentiserad.",
+    "message": "Logga in för att få tillgång till röstgenerering och andra premiumfunktioner"
+  },
+  "signIn": {
+    "description": "Text för inloggningsknappen.",
+    "message": "Logga in"
+  },
+  "signOut": {
+    "description": "Text för inloggningsknappen.",
+    "message": "Utfärda"
+  },
+  "signedIn": {
+    "description": "Statusext som visas när användaren är autentiserad (utan e -post).",
+    "message": "Inloggad"
+  },
+  "signedInAs": {
+    "description": "Statusext som visas när användaren är autentiserad, inklusive deras e -post.",
+    "message": "Inloggad som $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Text visar återstående STT -kvot på några minuter.",
+    "message": "$minutes$ minut$plural$ återstående",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text för att visa när STT -kvoten är uttömd.",
+    "message": "Taligenkvot utmattad"
+  },
+  "sttQuotaProgress": {
+    "description": "Verktygstips för STT -kvotens framstegsfält.",
+    "message": "$remaining$ av $total$ sekunder kvar",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Verktygstips för STT -kvotens framstegsfält på några minuter.",
+    "message": "$remaining$ av $total$ minuter kvar",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Etikett för återstående STT -kvot.",
+    "message": "Taligenkänning"
+  },
+  "sttQuotaSeconds": {
+    "description": "Enhet för STT -kvot (sekunder).",
+    "message": "sekund"
+  },
+  "ttsCredits": {
+    "description": "Termen som används för kreditvalutan i funktionen text-till-tal.",
+    "message": "krediter"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Enhet för TTS -kvot (tecken).",
+    "message": "krediter"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Text för att visa när TTS -kvoten är uttömd.",
+    "message": "Röstkvoten utmattad"
+  },
+  "ttsQuotaProgress": {
+    "description": "Verktygstips för TTS -kvotens framstegsfält.",
+    "message": "$remaining$ av $total$ tecken kvar",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Etikett för TTS -kvoten återstående display.",
+    "message": "Röstproduktion"
+  },
+  "upgradeButton": {
+    "description": "Text för knappen för att uppgradera planen när kvoten är uttömd.",
+    "message": "Uppgraderingsplan"
+  },
+  "viewDetails": {
+    "description": "Text för länken för att se fullständiga kvotinformation på instrumentpanelen.",
+    "message": "Visa detaljer"
   }
 }

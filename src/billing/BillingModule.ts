@@ -60,7 +60,10 @@ export class BillingModule {
   }
 
   quote(voice: SpeechSynthesisVoiceRemote, text: string): number {
-    return (text.length * voice.price) / 1000;
+    // Use price_per_thousand_chars_in_credits if available, otherwise fall back to price for backward compatibility
+    const priceInCredits = voice.price_per_thousand_chars_in_credits;
+    const cost = (text.length * priceInCredits) / 1000;
+    return Math.round(cost);
   }
 
   charge(utterance: SpeechUtterance, text: string): UtteranceCharge {

@@ -253,7 +253,7 @@
     "message": "多语言的声音"
   },
   "enhancedVoice": {
-    "description": "标题（工具提示）为“说，派增强语音”。",
+    "description": "标题（工具提示）为\"说，派增强语音\"。",
     "message": "$product$ 增强语音",
     "placeholders": {
       "product": {
@@ -470,5 +470,153 @@
   "extensionSettings": {
     "message": "设置",
     "description": "用于打开扩展程序设置的按钮的文本。"
+  },
+  "greeting": {
+    "description": "用户签名时显示的问候消息",
+    "message": "嗨，$name$！",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "文字显示何时未签名用户。",
+    "message": "未签名"
+  },
+  "profile": {
+    "description": "用户配置文件部分的标签。",
+    "message": "轮廓"
+  },
+  "quotaCredits": {
+    "description": "TTS积分的单元标签",
+    "message": "学分"
+  },
+  "quotaRemaining": {
+    "description": "配额剩余进度栏的标签",
+    "message": "剩余配额"
+  },
+  "quotaStatusUnknown": {
+    "description": "当无法确定配额状态时显示的消息",
+    "message": "无法检查配额状态"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "当用户未经身份验证时显示的消息。",
+    "message": "登录以访问语音生成和其他优质功能"
+  },
+  "signIn": {
+    "description": "文字以示意按钮。",
+    "message": "登入"
+  },
+  "signOut": {
+    "description": "签名按钮的文字。",
+    "message": "登出"
+  },
+  "signedIn": {
+    "description": "用户经过身份验证时显示的状态文本（没有电子邮件）。",
+    "message": "签名"
+  },
+  "signedInAs": {
+    "description": "用户经过身份验证（包括电子邮件）时显示的状态文本。",
+    "message": "登录为$email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "文本显示剩余的STT配额在几分钟内。",
+    "message": "$minutes$分钟$plural$剩余",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "文字显示何时耗尽STT配额。",
+    "message": "语音识别配额用尽"
+  },
+  "sttQuotaProgress": {
+    "description": "STT配额进度栏的工具提示。",
+    "message": "$remaining$/$total$秒剩余",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "STT配额进度栏的工具提示在几分钟内。",
+    "message": "$remaining$/$total$分钟剩余",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "剩余显示的STT配额标签。",
+    "message": "语音识别"
+  },
+  "sttQuotaSeconds": {
+    "description": "STT配额的单位（秒）。",
+    "message": "第二节"
+  },
+  "ttsCredits": {
+    "description": "在文本到语音功能中用于信用货币的术语。",
+    "message": "学分"
+  },
+  "ttsQuotaCharacters": {
+    "description": "TTS配额（字符）的单位。",
+    "message": "学分"
+  },
+  "ttsQuotaExhausted": {
+    "description": "文字显示何时耗尽TTS配额。",
+    "message": "语音配额精疲力尽"
+  },
+  "ttsQuotaProgress": {
+    "description": "TTS配额进度栏的工具提示。",
+    "message": "$remaining$/$total$字符剩余",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "TTS配额剩余显示的标签。",
+    "message": "语音生成"
+  },
+  "upgradeButton": {
+    "description": "耗尽配额时，该按钮的文本以升级计划。",
+    "message": "升级计划"
+  },
+  "viewDetails": {
+    "description": "链接的文本以查看仪表板上的完整配额详细信息。",
+    "message": "查看详细信息"
   }
 }

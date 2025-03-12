@@ -341,6 +341,11 @@ class UserPreferenceModule {
     const cachedResult = this.cache.getCachedValue("allowInterruptions", true);
     return cachedResult;
   }
+
+  isTTSEnabled() {
+    // TTS is now implicitly enabled when the user has credits
+    return Promise.resolve(true);
+  }
 }
 
 // Singleton class for caching user preferences

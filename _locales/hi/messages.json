@@ -241,8 +241,8 @@
     "description": "चेकबॉक्स के लिए लेबल, जो पाई के प्रतिक्रियाओं को व्यवधान करने/ना करने की सुविधा देता है, जब माइक्रोसॉफ्ट समर्थन से बात करता है."
   },
   "currencyUSDAbbreviation": {
-    "description": "संयुक्त राज्य डॉलर का संक्षिप्ति.",
-    "message": "यूएसडी"
+    "message": "क्रेडिट्स",
+    "description": "The abbreviation for the TTS credit units."
   },
   "currentCharges": {
     "description": "उपयोगकर्ता द्वारा संचित की गई वर्तमान शुल्क (क्रमिक कुल) को वर्णन करने के लिए प्रयुक्त शब्द।",
@@ -470,5 +470,153 @@
   "extensionSettings": {
     "message": "सेटिंग्स",
     "description": "एक्सटेंशन की सेटिंग खोलने के लिए बटन का टेक्स्ट."
+  },
+  "greeting": {
+    "description": "उपयोगकर्ता पर हस्ताक्षर किए जाने पर अभिवादन संदेश दिखाया गया है",
+    "message": "हाय, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "जब उपयोगकर्ता पर हस्ताक्षर नहीं किया जाता है, तो यह दिखाने के लिए पाठ।",
+    "message": "प्रवेश नहीं किया"
+  },
+  "profile": {
+    "description": "उपयोगकर्ता प्रोफ़ाइल अनुभाग के लिए लेबल।",
+    "message": "प्रोफ़ाइल"
+  },
+  "quotaCredits": {
+    "description": "टीटीएस क्रेडिट के लिए यूनिट लेबल",
+    "message": "क्रेडिट"
+  },
+  "quotaRemaining": {
+    "description": "कोटा शेष प्रगति पट्टी के लिए लेबल",
+    "message": "कोटा शेष"
+  },
+  "quotaStatusUnknown": {
+    "description": "कोटा स्थिति निर्धारित नहीं किया जा सकता है",
+    "message": "कोटा स्थिति की जांच करने में असमर्थ"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "जब उपयोगकर्ता प्रमाणित नहीं होता है तो संदेश दिखाया गया है।",
+    "message": "वॉयस जेनरेशन और अन्य प्रीमियम सुविधाओं तक पहुंचने के लिए लॉग इन करें"
+  },
+  "signIn": {
+    "description": "बटन इन बटन के लिए पाठ।",
+    "message": "दाखिल करना"
+  },
+  "signOut": {
+    "description": "साइन आउट बटन के लिए पाठ।",
+    "message": "साइन आउट"
+  },
+  "signedIn": {
+    "description": "स्टेटस टेक्स्ट दिखाया गया है जब उपयोगकर्ता को प्रमाणित किया जाता है (ईमेल के बिना)।",
+    "message": "में हस्ताक्षरित"
+  },
+  "signedInAs": {
+    "description": "स्टेटस टेक्स्ट दिखाया गया है जब उपयोगकर्ता को प्रमाणित किया जाता है, जिसमें उनके ईमेल भी शामिल हैं।",
+    "message": "में हस्ताक्षरित $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "मिनटों में शेष stt कोटा दिखा रहा है।",
+    "message": "$minutes$ मिनट $plural$ शेष",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "STT कोटा समाप्त होने पर दिखाने के लिए पाठ।",
+    "message": "भाषण मान्यता कोटा समाप्त हो गया"
+  },
+  "sttQuotaProgress": {
+    "description": "STT कोटा प्रगति बार के लिए टूलटिप।",
+    "message": "$remaining$ कुल $total$ सेकंड शेष है",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "मिनटों में STT कोटा प्रगति बार के लिए टूलटिप।",
+    "message": "$remaining$ कुल $total$ मिनट शेष है",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "STT कोटा शेष प्रदर्शन के लिए लेबल।",
+    "message": "वाक् पहचान"
+  },
+  "sttQuotaSeconds": {
+    "description": "STT कोटा (सेकंड) के लिए इकाई।",
+    "message": "सेकेंड"
+  },
+  "ttsCredits": {
+    "description": "टेक्स्ट-टू-स्पीच फीचर में क्रेडिट मुद्रा के लिए इस्तेमाल किया गया शब्द।",
+    "message": "क्रेडिट"
+  },
+  "ttsQuotaCharacters": {
+    "description": "TTS कोटा (वर्ण) के लिए इकाई।",
+    "message": "क्रेडिट"
+  },
+  "ttsQuotaExhausted": {
+    "description": "TTS कोटा कब समाप्त होने पर दिखाने के लिए पाठ।",
+    "message": "आवाज कोटा थका हुआ"
+  },
+  "ttsQuotaProgress": {
+    "description": "TTS कोटा प्रगति बार के लिए टूलटिप।",
+    "message": "$remaining$ कुल $total$ वर्ण शेष",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "टीटीएस कोटा शेष प्रदर्शन के लिए लेबल।",
+    "message": "आवाज"
+  },
+  "upgradeButton": {
+    "description": "कोटा समाप्त होने पर योजना को अपग्रेड करने के लिए बटन के लिए पाठ।",
+    "message": "अपग्रेड योजना"
+  },
+  "viewDetails": {
+    "description": "डैशबोर्ड पर पूर्ण कोटा विवरण देखने के लिए लिंक के लिए पाठ।",
+    "message": "विवरण देखें"
   }
 }

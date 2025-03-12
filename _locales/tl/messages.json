@@ -470,5 +470,153 @@
   "extensionSettings": {
     "message": "Mga setting",
     "description": "Ang text ng button para buksan ang mga setting ng extension."
+  },
+  "greeting": {
+    "description": "Ang mensahe ng pagbati na ipinakita kapag naka -sign in ang gumagamit",
+    "message": "Kumusta, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Teksto upang ipakita kapag ang gumagamit ay hindi naka -sign in.",
+    "message": "Hindi naka -sign in"
+  },
+  "profile": {
+    "description": "Lagyan ng label para sa seksyon ng Profile ng Gumagamit.",
+    "message": "Profile"
+  },
+  "quotaCredits": {
+    "description": "Unit Label para sa mga kredito ng TTS",
+    "message": "mga kredito"
+  },
+  "quotaRemaining": {
+    "description": "Lagyan ng label para sa natitirang bar ng quota",
+    "message": "Natitirang quota"
+  },
+  "quotaStatusUnknown": {
+    "description": "Ang mensahe na ipinakita kapag ang katayuan ng quota ay hindi matukoy",
+    "message": "Hindi masuri ang katayuan ng quota"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Ang mensahe na ipinakita kapag ang gumagamit ay hindi napatunayan.",
+    "message": "Mag -log in upang ma -access ang henerasyon ng boses at iba pang mga tampok na premium"
+  },
+  "signIn": {
+    "description": "Teksto para sa pindutan ng pag -sign in.",
+    "message": "Mag -sign in"
+  },
+  "signOut": {
+    "description": "Teksto para sa pindutan ng pag -sign out.",
+    "message": "Mag -sign out"
+  },
+  "signedIn": {
+    "description": "Ang teksto ng katayuan na ipinakita kapag ang gumagamit ay napatunayan (nang walang email).",
+    "message": "Naka -sign in"
+  },
+  "signedInAs": {
+    "description": "Ang teksto ng katayuan na ipinakita kapag napatunayan ang gumagamit, kasama ang kanilang email.",
+    "message": "Naka -sign in bilang $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Ang teksto na nagpapakita ng natitirang quota ng STT sa ilang minuto.",
+    "message": "$minutes$ minuto$plural$ natitira",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Teksto upang ipakita kapag naubos ang quota ng STT.",
+    "message": "Pagod na pagkilala sa pagsasalita"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip para sa STT quota Progress Bar.",
+    "message": "$remaining$ ng $total$ segundo ang natitira",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip para sa STT quota Progress Bar sa ilang minuto.",
+    "message": "$remaining$ ng $total$ minuto ang natitira",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Lagyan ng label para sa natitirang display ng stt quota.",
+    "message": "Pagkilala sa pagsasalita"
+  },
+  "sttQuotaSeconds": {
+    "description": "Yunit para sa stt quota (segundo).",
+    "message": "secs"
+  },
+  "ttsCredits": {
+    "description": "Ang term na ginamit para sa pera ng mga kredito sa tampok na text-to-speech.",
+    "message": "mga kredito"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Yunit para sa TTS Quota (mga character).",
+    "message": "mga kredito"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Teksto upang ipakita kapag naubos ang quota ng TTS.",
+    "message": "Napapagod ang voice quota"
+  },
+  "ttsQuotaProgress": {
+    "description": "Tooltip para sa TTS Quota Progress Bar.",
+    "message": "$remaining$ ng $total$ character na natitira",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Lagyan ng label para sa natitirang display ng TTS quota.",
+    "message": "Henerasyon ng boses"
+  },
+  "upgradeButton": {
+    "description": "Teksto para sa pindutan upang i -upgrade ang plano kapag naubos ang quota.",
+    "message": "Plano ng pag -upgrade"
+  },
+  "viewDetails": {
+    "description": "Teksto para sa link upang matingnan ang buong mga detalye ng quota sa dashboard.",
+    "message": "Tingnan ang mga detalye"
   }
 }

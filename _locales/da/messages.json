@@ -470,5 +470,153 @@
   "extensionSettings": {
     "message": "Indstillinger",
     "description": "Teksten på knappen for at åbne udvidelsens indstillinger."
+  },
+  "greeting": {
+    "description": "Hilsenbesked vist, når brugeren er logget ind",
+    "message": "Hej, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Tekst for at vise, hvornår brugeren ikke er logget ind.",
+    "message": "Ikke logget ind"
+  },
+  "profile": {
+    "description": "Label til sektionen for brugerprofil.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Enhedsmærke til TTS -kreditter",
+    "message": "Kreditter"
+  },
+  "quotaRemaining": {
+    "description": "Etiket til den resterende statuslinje",
+    "message": "Resterende kvote"
+  },
+  "quotaStatusUnknown": {
+    "description": "Besked vist, når kvotestatus ikke kan bestemmes",
+    "message": "Kan ikke kontrollere kvotestatus"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Besked vist, når brugeren ikke er godkendt.",
+    "message": "Log ind for at få adgang til stemmegenerering og andre premium -funktioner"
+  },
+  "signIn": {
+    "description": "Tekst til knappen Log ind.",
+    "message": "Log ind"
+  },
+  "signOut": {
+    "description": "Tekst til knappen Tegn out.",
+    "message": "Log ud"
+  },
+  "signedIn": {
+    "description": "Stataltekst vist, når brugeren er godkendt (uden e -mail).",
+    "message": "Underskrevet"
+  },
+  "signedInAs": {
+    "description": "Statustekst vist, når brugeren er godkendt, inklusive deres e -mail.",
+    "message": "Underskrevet som $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Tekst, der viser resterende STT -kvote på få minutter.",
+    "message": "$minutes$ minutter $plural$ tilbage",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Tekst, der vises, når STT -kvote er opbrugt.",
+    "message": "Talegenkendelseskvote udmattet"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip til STT Quota -statuslinjen.",
+    "message": "$remaining$ på $total$ sekunder tilbage",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip til STT -kvotens statuslinje på få minutter.",
+    "message": "$remaining$ på $total$ minutter tilbage",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Mærkning til stt -kvoten resterende display.",
+    "message": "Talegenkendelse"
+  },
+  "sttQuotaSeconds": {
+    "description": "Enhed til STT -kvote (sekunder).",
+    "message": "Secs"
+  },
+  "ttsCredits": {
+    "description": "Udtrykket, der bruges til kreditter valuta i funktionen tekst-til-tale.",
+    "message": "Kreditter"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Enhed til TTS -kvote (tegn).",
+    "message": "Kreditter"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Tekst, der vises, når TTS -kvote er opbrugt.",
+    "message": "Stemmekvote udmattet"
+  },
+  "ttsQuotaProgress": {
+    "description": "Tooltip til TTS Quota Progress Bar.",
+    "message": "$remaining$ af $total$ tegn tilbage",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Label til TTS -kvoten resterende display.",
+    "message": "Stemmegenerering"
+  },
+  "upgradeButton": {
+    "description": "Tekst til knappen for at opgradere planen, når kvote er opbrugt.",
+    "message": "Opgraderingsplan"
+  },
+  "viewDetails": {
+    "description": "Tekst til linket for at se fulde kvoteoplysninger på instrumentbrættet.",
+    "message": "Se detaljer"
   }
 }

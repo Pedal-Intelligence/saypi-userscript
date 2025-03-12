@@ -470,5 +470,153 @@
   "extensionSettings": {
     "message": "postavke",
     "description": "Tekst gumba za otvaranje postavki proširenja."
+  },
+  "greeting": {
+    "description": "Poruka pozdrava prikazana kada je korisnik prijavljen",
+    "message": "Bok, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Tekst za prikaz kada korisnik nije prijavljen.",
+    "message": "Nije prijavljen"
+  },
+  "profile": {
+    "description": "Oznaka za odjeljak Korisnički profil.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Oznaka jedinice za TTS kredit",
+    "message": "zasluga"
+  },
+  "quotaRemaining": {
+    "description": "Oznaka za kvotu preostala traka napretka",
+    "message": "Preostala kvota"
+  },
+  "quotaStatusUnknown": {
+    "description": "Poruka prikazana kada se status kvote ne može utvrditi",
+    "message": "Nije moguće provjeriti status kvote"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Poruka prikazana kada korisnik nije ovjeren.",
+    "message": "Prijavite se kako biste pristupili generaciji glasa i ostalim premium značajkama"
+  },
+  "signIn": {
+    "description": "Tekst za gumb za prijavu.",
+    "message": "Prijaviti se"
+  },
+  "signOut": {
+    "description": "Tekst za gumb za odjavu.",
+    "message": "Odjaviti"
+  },
+  "signedIn": {
+    "description": "Tekst statusa prikazan kada je korisnik ovjeren (bez e -pošte).",
+    "message": "Prijavljen"
+  },
+  "signedInAs": {
+    "description": "Tekst statusa prikazan kada je korisnik ovjeren, uključujući njihovu e -poštu.",
+    "message": "Potpisano kao $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Tekst koji prikazuje preostalu kvotu STT za nekoliko minuta.",
+    "message": "$minutes$ minute$plural$ preostala",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Tekst za prikaz kada je STT kvota iscrpljena.",
+    "message": "Kvota prepoznavanja govora iscrpljena"
+  },
+  "sttQuotaProgress": {
+    "description": "Alat za traku STT kvota.",
+    "message": "$remaining$ od $total$ sekundi preostalih",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Alat za STT kvota za napredak u nekoliko minuta.",
+    "message": "$remaining$ od $total$ preostale minute",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Oznaka za STT kvota preostali zaslon.",
+    "message": "Prepoznavanje govora"
+  },
+  "sttQuotaSeconds": {
+    "description": "Jedinica za kvotu STT (sekunde).",
+    "message": "sekse"
+  },
+  "ttsCredits": {
+    "description": "Izraz koji se koristi za valutu kredita u značajci teksta u govor.",
+    "message": "zasluga"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Jedinica za kvotu TTS (znakove).",
+    "message": "zasluga"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Tekst za prikaz kada je kvota TTS iscrpljena.",
+    "message": "Glasovna kvota iscrpljena"
+  },
+  "ttsQuotaProgress": {
+    "description": "Alat za TTS kvotu traku napretka.",
+    "message": "$remaining$ od $total$ preostalih znakova",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Oznaka za TTS kvota preostali zaslon.",
+    "message": "Generacija glasa"
+  },
+  "upgradeButton": {
+    "description": "Tekst za gumb za nadogradnju plana kada je kvota iscrpljena.",
+    "message": "Plan nadogradnje"
+  },
+  "viewDetails": {
+    "description": "Tekst za vezu za prikaz potpunih detalja o kvoti na nadzornoj ploči.",
+    "message": "Pogledajte detalje"
   }
 }

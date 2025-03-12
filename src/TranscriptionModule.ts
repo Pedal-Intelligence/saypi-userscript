@@ -2,6 +2,7 @@ import { config } from "./ConfigModule.js";
 import StateMachineService from "./StateMachineService.js";
 import { logger } from "./LoggingModule.js";
 import { UserPreferenceModule } from "./prefs/PreferenceModule";
+import { callApi } from "./ApiClient";
 
 // Define the shape of the response JSON object
 interface TranscriptionResponse {
@@ -142,12 +143,11 @@ async function uploadAudio(
         return {
           role: "user",
           content: content,
-          sequenceNumber: Number(seq), // Convert the string to a number
+          sequenceNumber: Number(seq),
         };
       }
     );
 
-    // Await the async function to get the formData
     const formData = await constructTranscriptionFormData(
       audioBlob,
       audioDurationMillis / 1000,
@@ -162,7 +162,7 @@ async function uploadAudio(
     setTimeout(() => controller.abort(), TIMEOUT_MS);
 
     const startTime = new Date().getTime();
-    const response: Response = await fetch(
+    const response = await callApi(
       `${config.apiServerUrl}/transcribe?language=${language}`,
       {
         method: "POST",

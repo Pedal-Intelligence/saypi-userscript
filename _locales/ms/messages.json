@@ -470,5 +470,153 @@
   "extensionSettings": {
     "message": "tetapan",
     "description": "Teks butang untuk membuka tetapan sambungan."
+  },
+  "greeting": {
+    "description": "Mesej ucapan yang ditunjukkan apabila pengguna ditandatangani",
+    "message": "Hai, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Teks untuk ditunjukkan apabila pengguna tidak ditandatangani.",
+    "message": "Tidak masuk"
+  },
+  "profile": {
+    "description": "Label untuk bahagian Profil Pengguna.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Label Unit untuk Kredit TTS",
+    "message": "Kredit"
+  },
+  "quotaRemaining": {
+    "description": "Label untuk kuota yang tinggal bar kemajuan",
+    "message": "Baki kuota"
+  },
+  "quotaStatusUnknown": {
+    "description": "Mesej yang ditunjukkan apabila status kuota tidak dapat ditentukan",
+    "message": "Tidak dapat memeriksa status kuota"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Mesej yang ditunjukkan apabila pengguna tidak disahkan.",
+    "message": "Log masuk untuk mengakses penjanaan suara dan ciri premium lain"
+  },
+  "signIn": {
+    "description": "Teks untuk butang log masuk.",
+    "message": "Log masuk"
+  },
+  "signOut": {
+    "description": "Teks untuk butang Sign Out.",
+    "message": "Log masuk"
+  },
+  "signedIn": {
+    "description": "Teks status yang ditunjukkan apabila pengguna disahkan (tanpa e -mel).",
+    "message": "Ditandatangani dalam"
+  },
+  "signedInAs": {
+    "description": "Teks status yang ditunjukkan apabila pengguna disahkan, termasuk e -mel mereka.",
+    "message": "Ditandatangani sebagai $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Teks menunjukkan kuota STT yang tinggal dalam beberapa minit.",
+    "message": "$minutes$ minit$plural$ baki",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Teks untuk ditunjukkan apabila kuota STT habis.",
+    "message": "Kuota pengiktirafan pertuturan habis"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip untuk bar kemajuan kuota STT.",
+    "message": "$remaining$ sebanyak $total$ detik",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip untuk bar kemajuan kuota STT dalam beberapa minit.",
+    "message": "$remaining$ sebanyak $total$ minit tersisa",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Label untuk paparan baki kuota STT.",
+    "message": "Pengiktirafan pertuturan"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unit untuk kuota STT (saat).",
+    "message": "Secs"
+  },
+  "ttsCredits": {
+    "description": "Istilah yang digunakan untuk mata wang kredit dalam ciri teks-ke-ucapan.",
+    "message": "Kredit"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Unit untuk kuota TTS (aksara).",
+    "message": "Kredit"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Teks untuk ditunjukkan apabila kuota TTS habis.",
+    "message": "Kuota suara habis"
+  },
+  "ttsQuotaProgress": {
+    "description": "Tooltip untuk bar kemajuan kuota TTS.",
+    "message": "$remaining$ daripada $total$ aksara",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Label untuk paparan baki kuota TTS.",
+    "message": "Penjanaan suara"
+  },
+  "upgradeButton": {
+    "description": "Teks untuk butang untuk menaik taraf pelan apabila kuota habis.",
+    "message": "Rancangan menaik taraf"
+  },
+  "viewDetails": {
+    "description": "Teks untuk pautan untuk melihat butiran kuota penuh di papan pemuka.",
+    "message": "Lihat butiran"
   }
 }

@@ -470,5 +470,153 @@
   "extensionSettings": {
     "message": "Cài đặt",
     "description": "Văn bản của nút để mở cài đặt của tiện ích mở rộng."
+  },
+  "greeting": {
+    "description": "Thông báo chào được hiển thị khi người dùng được đăng nhập",
+    "message": "Xin chào, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Văn bản để hiển thị khi người dùng không đăng nhập.",
+    "message": "Không đăng nhập"
+  },
+  "profile": {
+    "description": "Dán nhãn cho phần Hồ sơ người dùng.",
+    "message": "Hồ sơ"
+  },
+  "quotaCredits": {
+    "description": "Nhãn đơn vị cho các khoản tín dụng TTS",
+    "message": "Tín dụng"
+  },
+  "quotaRemaining": {
+    "description": "Nhãn cho thanh tiến độ còn lại",
+    "message": "Hạn ngạch còn lại"
+  },
+  "quotaStatusUnknown": {
+    "description": "Thông báo hiển thị khi trạng thái hạn ngạch không thể được xác định",
+    "message": "Không thể kiểm tra trạng thái hạn ngạch"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Thông báo hiển thị khi người dùng không được xác thực.",
+    "message": "Đăng nhập để truy cập tạo giọng nói và các tính năng cao cấp khác"
+  },
+  "signIn": {
+    "description": "Nhắn tin cho nút đăng nhập.",
+    "message": "Đăng nhập"
+  },
+  "signOut": {
+    "description": "Nhắn tin cho nút đăng nhập.",
+    "message": "Đăng xuất"
+  },
+  "signedIn": {
+    "description": "Văn bản trạng thái hiển thị khi người dùng được xác thực (không có email).",
+    "message": "Đã đăng nhập"
+  },
+  "signedInAs": {
+    "description": "Văn bản trạng thái hiển thị khi người dùng được xác thực, bao gồm cả email của họ.",
+    "message": "Đăng nhập dưới dạng $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Văn bản hiển thị hạn ngạch STT còn lại trong vài phút.",
+    "message": "$minutes$ phút$plural$ còn lại",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Văn bản để hiển thị khi hạn ngạch STT đã cạn kiệt.",
+    "message": "Hạn ngạch nhận dạng giọng nói kiệt sức"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip cho thanh tiến trình hạn ngạch STT.",
+    "message": "$remaining$ của $total$ giây còn lại",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip cho thanh tiến trình hạn ngạch STT trong vài phút.",
+    "message": "$remaining$ của $total$ phút còn lại",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Nhãn cho Hạn ngạch STT còn lại màn hình còn lại.",
+    "message": "Nhận dạng giọng nói"
+  },
+  "sttQuotaSeconds": {
+    "description": "Đơn vị cho hạn ngạch STT (giây).",
+    "message": "giây"
+  },
+  "ttsCredits": {
+    "description": "Thuật ngữ được sử dụng cho tiền tệ tín dụng trong tính năng văn bản thành giọng nói.",
+    "message": "Tín dụng"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Đơn vị cho hạn ngạch TTS (ký tự).",
+    "message": "Tín dụng"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Văn bản để hiển thị khi hạn ngạch TTS đã cạn kiệt.",
+    "message": "Tiếng nói sẽ kiệt sức"
+  },
+  "ttsQuotaProgress": {
+    "description": "Tooltip cho thanh tiến trình hạn ngạch TTS.",
+    "message": "$remaining$ của $total$ ký tự còn lại",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Nhãn cho Hạn ngạch TTS còn lại hiển thị.",
+    "message": "Tạo giọng nói"
+  },
+  "upgradeButton": {
+    "description": "Văn bản cho nút để nâng cấp kế hoạch khi hạn ngạch kiệt sức.",
+    "message": "Kế hoạch nâng cấp"
+  },
+  "viewDetails": {
+    "description": "Văn bản cho liên kết để xem chi tiết hạn ngạch đầy đủ trên bảng điều khiển.",
+    "message": "Xem chi tiết"
   }
 }

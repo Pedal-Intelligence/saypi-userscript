@@ -19,6 +19,10 @@
       display: flex;
       align-items: center; // center the text vertically
     }
+    .currency-label {
+      font-size: 0.9em;
+      color: #6b6255; // Pi light brown text color
+    }
     svg,
     img {
       width: 24px;
