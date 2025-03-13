@@ -30,7 +30,7 @@ export default (env, argv) => {
 
   return {
     mode: isProduction ? "production" : "development",
-    devtool: isProduction ? "source-map" : "inline-source-map",
+    devtool: isProduction ? false : "inline-source-map",
     entry: {
       main: "./src/saypi.index.js",
       background: "./src/svc/background.ts"
