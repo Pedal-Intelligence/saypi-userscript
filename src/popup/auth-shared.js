@@ -62,16 +62,57 @@ function handleSignIn() {
  * Handler for sign out button click
  */
 function handleSignOut() {
-  // Use the signOut function from auth.js if available
-  if (typeof window.signOut === 'function') {
-    window.signOut().then(() => {
-      refreshAuthUI(); // Refresh the display after signing out
+  // First, call the SaaS logout endpoint to invalidate the server session
+  logoutFromSaas().then((success) => {
+    // Then use the signOut function from auth.js if available
+    if (typeof window.signOut === 'function') {
+      window.signOut().then(() => {
+        updateAuthUI(false);
+      });
+    } else {
+      // Fallback if signOut is not available
+      chrome.runtime.sendMessage({ type: 'SIGN_OUT' }, function() {
+        updateAuthUI(false);
+      });
+    }
+  }).catch(error => {
+    console.error('Error during logout:', error);
+    // Continue with local logout even if server logout fails
+    if (typeof window.signOut === 'function') {
+      window.signOut().then(() => updateAuthUI(false));
+    } else {
+      chrome.runtime.sendMessage({ type: 'SIGN_OUT' }, function() {
+        updateAuthUI(false);
+      });
+    }
+  });
+}
+
+/**
+ * Calls the SaaS server logout endpoint to invalidate the session
+ * @returns {Promise<boolean>} Whether the logout was successful
+ */
+async function logoutFromSaas() {
+  try {
+    // Use config if available, otherwise fall back to default URL
+    const baseUrl = (typeof config !== 'undefined' && config.authServerUrl) 
+      ? config.authServerUrl 
+      : 'https://www.saypi.ai';
+    
+    const logoutUrl = `${baseUrl}/api/auth/logout`;
+    
+    const response = await fetch(logoutUrl, {
+      method: 'POST',
+      credentials: 'include', // Important: This sends cookies with the request
     });
-  } else {
-    // Fallback if signOut is not available
-    chrome.runtime.sendMessage({ type: 'SIGN_OUT' }, function() {
-      refreshAuthUI(); // Refresh the display after signing out
-    });
+    
+    const result = await response.json();
+    console.log('Logout result:', result);
+    
+    return result.success;
+  } catch (error) {
+    console.error('Logout from SaaS failed:', error);
+    return false;
   }
 }
 
@@ -92,4 +133,5 @@ function refreshAuthUI() {
 window.updateAuthUI = updateAuthUI;
 window.handleSignIn = handleSignIn;
 window.handleSignOut = handleSignOut;
-window.refreshAuthUI = refreshAuthUI; 
+window.refreshAuthUI = refreshAuthUI;
+window.logoutFromSaas = logoutFromSaas; 
