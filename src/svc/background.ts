@@ -20,8 +20,8 @@ async function checkAuthCookie() {
   if (isFirefox()) {
     console.debug('Firefox detected - attempting direct JWT refresh');
     try {
-      // Trigger a refresh and check if it succeeds
-      await jwtManager.refresh(true);
+      // During initial check, we still want to see errors, so no silent401
+      await jwtManager.refresh(true, false);
       
       if (jwtManager.isAuthenticated()) {
         console.debug('Successfully authenticated via direct refresh in Firefox');
@@ -111,20 +111,65 @@ checkAuthCookie().then(cookie => {
 
 // Fallback polling mechanism for cookie changes
 let lastAuthCookieValue: string | null = null;
+// Track last direct refresh attempt time for Firefox to avoid hammering
+let lastFirefoxRefreshAttempt = 0;
+const FIREFOX_REFRESH_MIN_INTERVAL = 30000; // 30 seconds minimum between direct refresh attempts
 
 async function pollAuthCookie() {
   if (!config.authServerUrl) return;
+  
   try {
+    // Special handling for Firefox extensions
+    if (isFirefox()) {
+      const now = Date.now();
+      
+      // If we're already authenticated via JWT, we don't need to check the cookie
+      if (jwtManager.isAuthenticated()) {
+        // We're already authenticated, so we don't need to do anything special
+        // The JWT manager's internal refresh schedule will handle token renewals
+        return;
+      }
+      
+      // If not authenticated, try a direct refresh but with rate limiting
+      // to avoid hammering the server
+      if (now - lastFirefoxRefreshAttempt >= FIREFOX_REFRESH_MIN_INTERVAL) {
+        console.debug('Firefox polling: attempting direct refresh');
+        lastFirefoxRefreshAttempt = now;
+        
+        try {
+          // Pass silent401=true to suppress error logging for expected 401 responses
+          await jwtManager.refresh(true, true);
+          
+          if (jwtManager.isAuthenticated()) {
+            console.debug('Firefox polling: authentication successful');
+            // Create a synthetic cookie value for state tracking
+            lastAuthCookieValue = 'firefox-synthetic-value';
+          } else {
+            // This is an expected state during polling, so just debug log
+            console.debug('Firefox polling: not authenticated (expected during polling)');
+          }
+        } catch (error) {
+          // Should only get here for non-401 errors
+          console.warn('Firefox polling: unexpected error during refresh', error);
+        }
+      }
+      
+      return; // Skip standard cookie checking for Firefox
+    }
+    
+    // Standard approach for Chrome and other browsers
     const cookie = await chrome.cookies.get({
       name: 'auth_session',
       url: config.authServerUrl
     });
+    
     if (cookie) {
       if (cookie.value !== lastAuthCookieValue) {
         console.debug('Cookie change detected via polling:', cookie.value);
         lastAuthCookieValue = cookie.value;
         await jwtManager.storeAuthCookieValue(cookie.value);
-        await jwtManager.refresh(true);
+        // Use silent401=true for polling to avoid error logging
+        await jwtManager.refresh(true, true);
       }
     } else {
       if (lastAuthCookieValue !== null) {

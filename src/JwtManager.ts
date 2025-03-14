@@ -138,7 +138,7 @@ export class JwtManager {
    * 1. Sends the cookie via credentials: 'include' (primary)
    * 2. Sends the cookie value in the request body (fallback)
    */
-  public async refresh(force: boolean = false): Promise<void> {
+  public async refresh(force: boolean = false, silent401: boolean = true): Promise<void> {
     if (!config.authServerUrl) {
       console.warn('Auth server URL not configured');
       return;
@@ -194,6 +194,18 @@ export class JwtManager {
           // Don't clear the authentication state
           // Schedule another refresh attempt after 1 minute
           setTimeout(() => this.refresh(), 60000);
+          
+          return; // Exit without throwing an error
+        }
+        
+        // Special handling for 401 responses during polling
+        if (response.status === 401 && silent401) {
+          console.debug('Auth check during polling: not authenticated (expected)');
+          
+          // Clear the token but don't log an error
+          this.jwtToken = null;
+          this.expiresAt = null;
+          await this.saveToStorage();
           
           return; // Exit without throwing an error
         }
