@@ -38,6 +38,19 @@ function updateAuthUI(isAuthenticated, userData = null) {
 }
 
 /**
+ * Redirects user to login by opening a new tab with the login URL
+ * @param {string} loginUrl - The full URL to the login page
+ * @param {string} returnUrl - The URL to return to after login
+ */
+function redirectToLogin(loginUrl, returnUrl) {
+  // Save return URL for after authentication
+  chrome.storage.local.set({ authReturnUrl: returnUrl });
+  
+  // Open login page in a new tab
+  chrome.tabs.create({ url: loginUrl });
+}
+
+/**
  * Handler for sign in button click
  */
 function handleSignIn() {
@@ -45,8 +58,7 @@ function handleSignIn() {
   if (typeof config !== 'undefined' && config.authServerUrl) {
     const loginUrl = `${config.authServerUrl}/auth/login`;
     const returnUrl = window.location.href;
-    chrome.storage.local.set({ authReturnUrl: returnUrl });
-    chrome.tabs.create({ url: loginUrl });
+    redirectToLogin(loginUrl, returnUrl);
   } else {
     // Fallback to using the message API
     chrome.runtime.sendMessage({ type: 'REDIRECT_TO_LOGIN' }, function(response) {
