@@ -1,4 +1,5 @@
 import { config } from './ConfigModule';
+import { isFirefox as isFirefoxBrowser } from './UserAgentModule';
 
 interface JwtClaims {
   userId: string;
@@ -161,14 +162,15 @@ export class JwtManager {
         credentials: 'include', // Primary: Send cookies automatically
         headers: {
           'Content-Type': 'application/json',
-          'Origin': chrome.runtime?.getURL?.('') || window.location.origin,
+          // Use extension origin if available, otherwise fallback to a safe default
+          // This avoids issues with window.location.origin in service worker contexts
+          'Origin': this.getExtensionOrigin(),
         }
       };
       
       // Add auth cookie value to request body as fallback, but only if we're not in Firefox
       // Firefox should rely on credentials:include since we've fixed CORS
-      const isFirefoxBrowser = navigator.userAgent.includes('Firefox') || 
-                               (typeof (window as any).browser !== 'undefined');
+      const isFirefoxBrowser = this.isFirefoxBrowser();
       
       if (this.authCookieValue && !isFirefoxBrowser) {
         console.debug('Including auth cookie value in request body as fallback');
@@ -309,6 +311,55 @@ export class JwtManager {
       hasQuota: claims.sttQuotaMonthly > 0,
       resetDate: claims.nextQuotaReset
     };
+  }
+
+  /**
+   * Gets a safe extension origin value that works in both content scripts and service workers
+   */
+  private getExtensionOrigin(): string {
+    // First try to use the extension's URL
+    if (typeof chrome !== 'undefined' && chrome.runtime?.getURL) {
+      return new URL(chrome.runtime.getURL('')).origin;
+    }
+    
+    // Fallback for content scripts if chrome API is not available
+    if (typeof window !== 'undefined' && window.location) {
+      return window.location.origin;
+    }
+    
+    // Final fallback - use null which is a valid Origin value
+    // This indicates "no particular origin" to the server
+    return 'null';
+  }
+
+  /**
+   * Safely detects if the browser is Firefox, works in both content scripts and service workers
+   */
+  private isFirefoxBrowser(): boolean {
+    try {
+      // Try to use the imported function first
+      return isFirefoxBrowser();
+    } catch (error) {
+      // If that fails (e.g., in service worker where navigator might be unavailable),
+      // use our fallback detection
+      
+      // Check if we're in a context with navigator
+      if (typeof navigator !== 'undefined' && navigator.userAgent) {
+        if (navigator.userAgent.includes('Firefox')) {
+          return true;
+        }
+      }
+      
+      // Check for browser object (Firefox-specific)
+      if (typeof window !== 'undefined' && (window as any).browser !== undefined) {
+        return true;
+      }
+      
+      // In service worker context, we can't reliably detect Firefox without navigator
+      // If we can't determine, default to false
+      // This means we'll include the auth cookie in the body, which is the safer approach
+      return false;
+    }
   }
 }
 

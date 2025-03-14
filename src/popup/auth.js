@@ -26,44 +26,19 @@ function parseJwt(token) {
 }
 
 // Event handlers
-authButton.addEventListener('click', async () => {
-  if (isAuthenticated) {
-    // Handle sign out
-    await signOut();
-  } else {
-    // Handle sign in (existing code)
-    const loginUrl = `${config.authServerUrl}/auth/login`;
-    const returnUrl = window.location.href;
-    browserAPI.storage.local.set({ authReturnUrl: returnUrl });
-    browserAPI.tabs.create({ url: loginUrl });
-  }
-});
+// The updateAuthUI function is now in auth-shared.js
 
-// Sign out functionality
+// Sign out functionality - used by the shared handleSignOut function
 async function signOut() {
   // Clear stored token
   await browserAPI.storage.local.remove(['token', 'authReturnUrl']);
   
-  // Update UI
+  // Update UI using the shared function
   updateAuthUI(false);
 }
 
-// Update UI based on auth state
-function updateAuthUI(authenticated, userData = null) {
-  isAuthenticated = authenticated;
-  
-  if (authenticated && userData) {
-    authButton.textContent = chrome.i18n.getMessage('signOut');
-    authButton.dataset.i18n = 'signOut';
-    profileStatus.textContent = chrome.i18n.getMessage('signedIn');
-    profileStatus.dataset.i18n = 'signedIn';
-  } else {
-    authButton.textContent = chrome.i18n.getMessage('signIn');
-    authButton.dataset.i18n = 'signIn';
-    profileStatus.textContent = chrome.i18n.getMessage('notSignedIn');
-    profileStatus.dataset.i18n = 'notSignedIn';
-  }
-}
+// Make signOut available to the shared module
+window.signOut = signOut;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
@@ -75,22 +50,28 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (claims) {
         // Extract user data from JWT claims
         const userData = {
+          name: claims.name,
           userId: claims.userId,
           teamId: claims.teamId,
           planId: claims.planId,
           ttsQuotaRemaining: claims.ttsQuotaRemaining,
           ttsQuotaMonthly: claims.ttsQuotaMonthly
         };
+        // Use the shared updateAuthUI function
         updateAuthUI(true, userData);
+        isAuthenticated = true;
       } else {
         // Invalid or expired token
         updateAuthUI(false);
+        isAuthenticated = false;
       }
     } else {
       updateAuthUI(false);
+      isAuthenticated = false;
     }
   } catch (error) {
     console.error('Failed to initialize auth UI:', error);
     updateAuthUI(false);
+    isAuthenticated = false;
   }
 }); 

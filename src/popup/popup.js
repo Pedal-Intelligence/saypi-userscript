@@ -347,52 +347,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Function to update the profile display
-  function updateProfileDisplay() {
-    chrome.runtime.sendMessage({ type: 'GET_JWT_CLAIMS' }, function(response) {
-      const profileStatus = document.getElementById('profile-status');
-      const profileName = document.getElementById('profile-name');
-      const authButton = document.getElementById('auth-button');
-
-      if (response && response.claims && response.claims.name) {
-        // User is signed in
-        profileStatus.classList.add('hidden');
-        profileName.classList.remove('hidden');
-        // Update button to show Sign Out
-        authButton.setAttribute('data-i18n', 'signOut');
-        authButton.textContent = chrome.i18n.getMessage('signOut');
-        // Use i18n for greeting with name
-        profileName.textContent = chrome.i18n.getMessage('greeting', [response.claims.name]);
-      } else {
-        // User is not signed in
-        profileStatus.classList.remove('hidden');
-        profileName.classList.add('hidden');
-        // Update button to show Sign In
-        authButton.setAttribute('data-i18n', 'signIn');
-        authButton.textContent = chrome.i18n.getMessage('signIn');
-      }
-    });
-  }
-
-  // Call updateProfileDisplay when popup opens
-  updateProfileDisplay();
-
-  // Add click handler for auth button
-  document.getElementById('auth-button').addEventListener('click', function() {
-    const isSignIn = this.getAttribute('data-i18n') === 'signIn';
-    if (isSignIn) {
-      chrome.runtime.sendMessage({ type: 'REDIRECT_TO_LOGIN' }, function(response) {
-        if (response && response.authenticated) {
-          // Token was refreshed successfully, update the UI
-          updateProfileDisplay();
-        }
-      });
-    } else {
-      chrome.runtime.sendMessage({ type: 'SIGN_OUT' }, function() {
-        updateProfileDisplay(); // Refresh the display after signing out
-      });
-    }
-  });
+  // Call refreshAuthUI when popup opens to update the authentication UI
+  refreshAuthUI();
 
   // Add click handler for view quota details link
   document.getElementById('view-quota-details').addEventListener('click', function(e) {

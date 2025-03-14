@@ -113,7 +113,8 @@ checkAuthCookie().then(cookie => {
 let lastAuthCookieValue: string | null = null;
 // Track last direct refresh attempt time for Firefox to avoid hammering
 let lastFirefoxRefreshAttempt = 0;
-const FIREFOX_REFRESH_MIN_INTERVAL = 30000; // 30 seconds minimum between direct refresh attempts
+// Longer interval for Firefox since we now refresh on popup open
+const FIREFOX_REFRESH_MIN_INTERVAL = 300000; // 5 minutes minimum between polling attempts (increased from 30 seconds)
 
 async function pollAuthCookie() {
   if (!config.authServerUrl) return;
@@ -183,8 +184,9 @@ async function pollAuthCookie() {
   }
 }
 
-// Poll every 5 seconds
-setInterval(pollAuthCookie, 5000);
+// Poll every 5 seconds for standard browsers, but much less frequently for Firefox
+const pollingInterval = isFirefox() ? 300000 : 5000; // 5 minutes for Firefox, 5 seconds for others
+setInterval(pollAuthCookie, pollingInterval);
 
 // Handle popup opening
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
