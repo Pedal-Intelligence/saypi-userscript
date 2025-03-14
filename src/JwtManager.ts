@@ -155,8 +155,7 @@ export class JwtManager {
       const refreshUrl = `${config.authServerUrl}/api/auth/refresh`;
       console.debug(`Refreshing token from ${refreshUrl}`);
       
-      // Primary approach: Include cookies via credentials: 'include'
-      // Fallback approach: Include auth cookie value in request body
+      // Build the request options
       const requestOptions: RequestInit = {
         method: 'POST',
         credentials: 'include', // Primary: Send cookies automatically
@@ -166,12 +165,21 @@ export class JwtManager {
         }
       };
       
-      // Add auth cookie value to request body if available (fallback approach)
-      if (this.authCookieValue) {
+      // Add auth cookie value to request body as fallback, but only if we're not in Firefox
+      // Firefox should rely on credentials:include since we've fixed CORS
+      const isFirefoxBrowser = navigator.userAgent.includes('Firefox') || 
+                               (typeof (window as any).browser !== 'undefined');
+      
+      if (this.authCookieValue && !isFirefoxBrowser) {
         console.debug('Including auth cookie value in request body as fallback');
         requestOptions.body = JSON.stringify({
           auth_session: this.authCookieValue // Server expects 'auth_session' parameter
         });
+      } else if (isFirefoxBrowser) {
+        console.debug('Firefox detected: relying on credentials:include for cookie transmission');
+        // Firefox will automatically include cookies with credentials:include
+        // No additional body needed
+        requestOptions.body = JSON.stringify({}); // Empty body but still valid JSON
       }
       
       const response = await fetch(refreshUrl, requestOptions);

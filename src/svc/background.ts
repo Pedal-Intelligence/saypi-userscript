@@ -15,6 +15,29 @@ async function checkAuthCookie() {
   const domain = new URL(config.authServerUrl).hostname;
   console.debug('Checking for auth cookie on domain:', domain);
   
+  // For Firefox, we'll try a direct JWT refresh since we've fixed CORS on the server
+  // This allows us to use the cookie without directly accessing it
+  if (isFirefox()) {
+    console.debug('Firefox detected - attempting direct JWT refresh');
+    try {
+      // Trigger a refresh and check if it succeeds
+      await jwtManager.refresh(true);
+      
+      if (jwtManager.isAuthenticated()) {
+        console.debug('Successfully authenticated via direct refresh in Firefox');
+        // Return a synthetic cookie object to keep things working with existing code
+        return {
+          name: 'auth_session',
+          value: 'firefox-synthetic-value',
+          domain: domain
+        };
+      }
+    } catch (error) {
+      console.debug('Firefox direct refresh failed, will fall back to standard cookie check');
+    }
+  }
+  
+  // Standard method - try to get cookie directly (works in Chrome)
   try {
     const cookie = await chrome.cookies.get({
       name: 'auth_session',
