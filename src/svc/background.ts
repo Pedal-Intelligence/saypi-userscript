@@ -227,14 +227,32 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       sendResponse(null);
     }
   } else if (message.type === 'GET_JWT_CLAIMS') {
-    // Handle JWT claims request
-    try {
-      const claims = jwtManager.getClaims();
-      sendResponse({ claims });
-    } catch (error) {
-      console.error('Failed to get JWT claims:', error);
-      sendResponse({ claims: null });
-    }
+    // Handle JWT claims request - async handler
+    (async () => {
+      try {
+        // For Firefox, try to refresh the token whenever the popup opens
+        if (isFirefox()) {
+          console.debug('Firefox detected: refreshing token on popup open');
+          
+          // Use silent refresh to avoid errors for expected 401 responses
+          try {
+            await jwtManager.refresh(false, true);
+          } catch (refreshError) {
+            console.debug('Refresh attempt on popup open failed:', refreshError);
+            // Continue with getting claims even if refresh fails
+          }
+        }
+        
+        // Now get the claims (which will reflect the refreshed state if refresh succeeded)
+        const claims = jwtManager.getClaims();
+        sendResponse({ claims });
+      } catch (error) {
+        console.error('Failed to get JWT claims:', error);
+        sendResponse({ claims: null });
+      }
+    })();
+    
+    return true; // indicates we will send a response asynchronously
   } else if (message.type === 'REDIRECT_TO_LOGIN') {
     // Handle login redirect request - async handler
     (async () => {
