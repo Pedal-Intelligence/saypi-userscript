@@ -500,3 +500,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     console.error("Error initializing status:", error);
   }
 });
+
+// Export functions to global scope for use in other scripts
+window.updateUnauthenticatedDisplay = updateUnauthenticatedDisplay;

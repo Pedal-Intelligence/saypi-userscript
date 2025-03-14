@@ -59,33 +59,47 @@ function handleSignIn() {
 }
 
 /**
+ * Updates UI after signing out
+ * This function handles both auth UI and quota display updates
+ */
+function updateUIAfterSignOut() {
+  // Update auth UI
+  updateAuthUI(false);
+  
+  // Also update quota display if the function is available
+  if (typeof window.updateUnauthenticatedDisplay === 'function') {
+    window.updateUnauthenticatedDisplay();
+  }
+}
+
+/**
+ * Performs local sign out operations
+ * @returns {Promise<void>}
+ */
+async function performLocalSignOut() {
+  if (typeof window.signOut === 'function') {
+    await window.signOut();
+  } else {
+    // Use message API as fallback
+    await new Promise(resolve => {
+      chrome.runtime.sendMessage({ type: 'SIGN_OUT' }, resolve);
+    });
+  }
+  updateUIAfterSignOut();
+}
+
+/**
  * Handler for sign out button click
  */
 function handleSignOut() {
   // First, call the SaaS logout endpoint to invalidate the server session
-  logoutFromSaas().then((success) => {
-    // Then use the signOut function from auth.js if available
-    if (typeof window.signOut === 'function') {
-      window.signOut().then(() => {
-        updateAuthUI(false);
-      });
-    } else {
-      // Fallback if signOut is not available
-      chrome.runtime.sendMessage({ type: 'SIGN_OUT' }, function() {
-        updateAuthUI(false);
-      });
-    }
-  }).catch(error => {
-    console.error('Error during logout:', error);
-    // Continue with local logout even if server logout fails
-    if (typeof window.signOut === 'function') {
-      window.signOut().then(() => updateAuthUI(false));
-    } else {
-      chrome.runtime.sendMessage({ type: 'SIGN_OUT' }, function() {
-        updateAuthUI(false);
-      });
-    }
-  });
+  logoutFromSaas()
+    .then(() => performLocalSignOut())
+    .catch(error => {
+      console.error('Error during logout:', error);
+      // Continue with local logout even if server logout fails
+      performLocalSignOut();
+    });
 }
 
 /**
@@ -134,4 +148,6 @@ window.updateAuthUI = updateAuthUI;
 window.handleSignIn = handleSignIn;
 window.handleSignOut = handleSignOut;
 window.refreshAuthUI = refreshAuthUI;
-window.logoutFromSaas = logoutFromSaas; 
+window.logoutFromSaas = logoutFromSaas;
+window.updateUIAfterSignOut = updateUIAfterSignOut;
+window.performLocalSignOut = performLocalSignOut; 
