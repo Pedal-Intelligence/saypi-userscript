@@ -1,0 +1,11 @@
+version: "2"
+authtoken: 2sGPjQVQoEk4TlrerY6pChOFzGR_3M4RKCBEaLbTvJmCUyJdk
+tunnels:
+  api:
+    addr: https://localhost:5001
+    proto: http
+    inspect: false
+  auth:
+    addr: http://localhost:3000
+    proto: http
+    inspect: false 
