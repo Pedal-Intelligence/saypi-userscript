@@ -9,8 +9,7 @@
   ],
   "host_permissions": [
     "https://api.saypi.ai/*",
-    "https://www.saypi.ai/*",
-    "http://localhost:3000/*"
+    "https://www.saypi.ai/*"
   ],
   "content_scripts": [
     {
