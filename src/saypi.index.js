@@ -8,6 +8,7 @@ import getMessage from "./i18n.ts";
 import { DOMObserver } from "./chatbots/bootstrap.ts";
 import EventBus from "./events/EventBus.js";
 import { jwtManager } from "./JwtManager.ts";
+import telemetryModule from "./TelemetryModule.ts";
 
 import "./styles/common.scss";
 import "./styles/desktop.scss";
@@ -23,6 +24,10 @@ import SlowResponseHandler from "./SlowResponseHandler.ts";
 
   const chatbot = ChatbotService.getChatbot();
   const audioModule = AudioModule.getInstance(); // inits the audio module's offline functions
+  
+  // Initialize telemetry module
+  console.debug("Initializing telemetry module");
+  telemetryModule; // This will invoke the getInstance() singleton which sets up event listeners
 
   // Setup listener for authentication status changes from background script
   function setupAuthListener() {

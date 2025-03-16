@@ -14,6 +14,33 @@
     .saypi-speak-button {
       border-radius: 50%;
     }
+    .saypi-telemetry-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      margin: 0 4px;
+      padding: 0;
+      border: none;
+      background: none;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        opacity: 1;
+        transform: scale(1.05);
+      }
+      
+      svg {
+        width: 24px;
+        height: 24px;
+        path {
+          fill: #6b6255; // Pi light brown text color
+        }
+      }
+    }
     .saypi-cost,
     .saypi-powered-by {
       display: flex;
@@ -75,6 +102,238 @@
       border-left: 1px solid;
       margin-right: 0.5rem;
     }
+  }
+}
+
+// Telemetry visualization styles
+.saypi-telemetry-container {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  width: 100%;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  
+  button {
+    padding: 3px 8px;
+    border: none;
+    border-radius: 4px;
+    background-color: #ddd;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    
+    &:hover {
+      background-color: #ccc;
+    }
+    
+    &.active {
+      background-color: #0078d7;
+      color: white;
+    }
+  }
+  
+  .saypi-timeline-chart {
+    margin: 12px 0;
+    padding: 10px 0;
+    
+    .timeline-row {
+      position: relative;
+      height: 30px;
+      margin-bottom: 4px;
+      
+      .timeline-row-label {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 120px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        font-weight: 500;
+        padding-right: 10px;
+      }
+      
+      .timeline-segment {
+        position: absolute;
+        height: 100%;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        
+        &:hover {
+          opacity: 0.8;
+        }
+        
+        .segment-tooltip {
+          position: absolute;
+          z-index: 1000;
+          background-color: #333;
+          color: white;
+          padding: 4px 8px;
+          border-radius: 4px;
+          font-size: 12px;
+          white-space: nowrap;
+          pointer-events: none;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+          
+          small {
+            opacity: 0.8;
+            font-size: 10px;
+          }
+        }
+      }
+    }
+    
+    .timeline-axis {
+      position: relative;
+      height: 20px;
+      margin-top: 10px;
+      margin-left: 120px;
+      border-top: 1px solid #ccc;
+      
+      .timeline-tick {
+        position: absolute;
+        width: 1px;
+        height: 5px;
+        background-color: #888;
+      }
+      
+      .timeline-tick-label {
+        position: absolute;
+        transform: translateX(-50%);
+        font-size: 10px;
+        color: #888;
+      }
+    }
+    
+    .timeline-legend {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      justify-content: center;
+      
+      .legend-item {
+        display: flex;
+        align-items: center;
+        margin-right: 15px;
+        margin-bottom: 5px;
+        
+        div {
+          width: 12px;
+          height: 12px;
+          margin-right: 5px;
+          border-radius: 2px;
+        }
+        
+        span {
+          font-size: 12px;
+        }
+      }
+    }
+    
+    .timeline-explanation {
+      font-size: 12px;
+      color: #666;
+      margin-top: 10px;
+      text-align: center;
+      
+      i {
+        font-style: italic;
+      }
+    }
+  }
+}
+
+// Timeline visualization specific styles
+.saypi-timeline-chart {
+  border: 1px solid #e5ddd1;
+  border-radius: 6px;
+  overflow: hidden;
+  
+  .timeline-segment {
+    position: absolute;
+    height: 20px;
+    border-radius: 4px;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.1);
+      z-index: 10;
+    }
+  }
+  
+  .timeline-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 15px 0;
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      font-size: 10px;
+      cursor: help;
+      padding: 3px 6px;
+      border-radius: 4px;
+      background-color: rgba(245, 245, 245, 0.5);
+      
+      .color-box {
+        width: 10px;
+        height: 10px;
+        margin-right: 5px;
+        border-radius: 2px;
+      }
+    }
+  }
+}
+
+// Dark mode support
+.dark {
+  .saypi-telemetry-container {
+    background-color: #2a2a2a;
+    border-color: #444;
+    
+    button {
+      background-color: #444;
+      color: #ddd;
+      
+      &:hover {
+        background-color: #555;
+      }
+      
+      &.active {
+        background-color: #0078d7;
+        color: white;
+      }
+    }
+    
+    .saypi-timeline-chart {
+      .timeline-axis {
+        border-color: #444;
+        
+        .timeline-tick {
+          background-color: #666;
+        }
+        
+        .timeline-tick-label {
+          color: #aaa;
+        }
+      }
+      
+      .timeline-explanation {
+        color: #aaa;
+      }
+    }
+  }
+}
+
+.dark .saypi-tts-controls {
+  .saypi-telemetry-button svg path {
+    fill: #a0a0a0;
   }
 }
 
