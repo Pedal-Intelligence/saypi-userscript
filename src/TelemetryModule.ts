@@ -24,6 +24,18 @@ export interface TelemetryData {
   
   // Time from start of chat completion to start of audio playback
   timeToTalk?: number;
+  
+  // Absolute timestamps for key events (in milliseconds since epoch)
+  timestamps?: {
+    speechStart?: number;
+    speechEnd?: number;
+    transcriptionStart?: number;
+    transcriptionEnd?: number;
+    promptSubmission?: number;
+    completionStart?: number;
+    completionEnd?: number;
+    audioPlaybackStart?: number;
+  };
 }
 
 /**
@@ -34,7 +46,9 @@ export class TelemetryModule {
   private static instance: TelemetryModule;
   
   // Single telemetry record for the current message
-  private currentTelemetry: TelemetryData = {};
+  private currentTelemetry: TelemetryData = {
+    timestamps: {}
+  };
   
   // Timing variables for the current message
   private speechStartTime: number = 0;
@@ -49,6 +63,9 @@ export class TelemetryModule {
   
   // Current sequence number for transcription
   private currentSequence: number = 0;
+  
+  // The reference start time (earliest event in the current session)
+  private sessionStartTime: number = 0;
 
   private constructor() {
     this.setupEventListeners();
@@ -69,16 +86,30 @@ export class TelemetryModule {
     EventBus.on("saypi:userSpeaking", () => {
       this.resetTelemetry();
       this.speechStartTime = Date.now();
+      this.sessionStartTime = this.speechStartTime; // Set initial reference time
+      this.currentTelemetry.timestamps = { speechStart: this.speechStartTime };
+      this.emitUpdate();
     });
 
     EventBus.on("saypi:userStoppedSpeaking", () => {
       this.speechEndTime = Date.now();
+      if (!this.currentTelemetry.timestamps) this.currentTelemetry.timestamps = {};
+      this.currentTelemetry.timestamps.speechEnd = this.speechEndTime;
+      this.emitUpdate();
     });
 
     // Listen for transcription events
     EventBus.on("saypi:transcribing", (event: any) => {
       this.currentSequence = event.sequenceNumber;
       this.transcriptionStartTime = event.timestamp || Date.now();
+      
+      // Update session start time if this is earlier
+      if (this.sessionStartTime === 0 || this.transcriptionStartTime < this.sessionStartTime) {
+        this.sessionStartTime = this.transcriptionStartTime;
+      }
+      
+      if (!this.currentTelemetry.timestamps) this.currentTelemetry.timestamps = {};
+      this.currentTelemetry.timestamps.transcriptionStart = this.transcriptionStartTime;
       
       // Record grace period (time between user stopped speaking and transcription request)
       if (this.speechEndTime > 0) {
@@ -92,6 +123,9 @@ export class TelemetryModule {
     EventBus.on("saypi:transcribed", () => {
       this.transcriptionEndTime = Date.now();
       this.lastTranscriptionTime = Date.now();
+      
+      if (!this.currentTelemetry.timestamps) this.currentTelemetry.timestamps = {};
+      this.currentTelemetry.timestamps.transcriptionEnd = this.transcriptionEndTime;
       
       // Update transcription time
       if (this.transcriptionStartTime > 0) {
@@ -112,6 +146,9 @@ export class TelemetryModule {
     EventBus.on("session:message-sent", () => {
       this.promptSubmissionTime = Date.now();
       
+      if (!this.currentTelemetry.timestamps) this.currentTelemetry.timestamps = {};
+      this.currentTelemetry.timestamps.promptSubmission = this.promptSubmissionTime;
+      
       // Calculate transcription delay
       if (this.lastTranscriptionTime > 0) {
         this.currentTelemetry.transcriptionDelay = this.promptSubmissionTime - this.lastTranscriptionTime;
@@ -121,6 +158,9 @@ export class TelemetryModule {
 
     EventBus.on("saypi:piWriting", () => {
       this.completionStartTime = Date.now();
+      
+      if (!this.currentTelemetry.timestamps) this.currentTelemetry.timestamps = {};
+      this.currentTelemetry.timestamps.completionStart = this.completionStartTime;
       
       // Calculate completion response time
       if (this.promptSubmissionTime > 0) {
@@ -132,6 +172,9 @@ export class TelemetryModule {
     EventBus.on("saypi:piStoppedWriting", () => {
       this.completionEndTime = Date.now();
       
+      if (!this.currentTelemetry.timestamps) this.currentTelemetry.timestamps = {};
+      this.currentTelemetry.timestamps.completionEnd = this.completionEndTime;
+      
       // Calculate streaming duration
       if (this.completionStartTime > 0) {
         this.currentTelemetry.streamingDuration = this.completionEndTime - this.completionStartTime;
@@ -142,6 +185,9 @@ export class TelemetryModule {
     // Listen for audio playback events
     EventBus.on("saypi:piSpeaking", () => {
       this.audioPlaybackStartTime = Date.now();
+      
+      if (!this.currentTelemetry.timestamps) this.currentTelemetry.timestamps = {};
+      this.currentTelemetry.timestamps.audioPlaybackStart = this.audioPlaybackStartTime;
       
       // Calculate time to talk
       if (this.completionStartTime > 0) {
@@ -155,7 +201,9 @@ export class TelemetryModule {
    * Reset all telemetry data for a new message
    */
   public resetTelemetry(): void {
-    this.currentTelemetry = {};
+    this.currentTelemetry = {
+      timestamps: {}
+    };
     this.speechStartTime = 0;
     this.speechEndTime = 0;
     this.transcriptionStartTime = 0;
@@ -165,6 +213,7 @@ export class TelemetryModule {
     this.completionEndTime = 0;
     this.audioPlaybackStartTime = 0;
     this.currentSequence = 0;
+    this.sessionStartTime = 0;
     
     // Emit an empty update to clear any visualizations
     this.emitUpdate();
@@ -178,10 +227,23 @@ export class TelemetryModule {
   }
 
   /**
+   * Get the session start time (earliest event in the current session)
+   */
+  public getSessionStartTime(): number {
+    return this.sessionStartTime;
+  }
+
+  /**
    * Update telemetry data manually
    */
   public updateTelemetryData(data: Partial<TelemetryData>): void {
     this.currentTelemetry = { ...this.currentTelemetry, ...data };
+    
+    // Make sure timestamps object exists
+    if (!this.currentTelemetry.timestamps) {
+      this.currentTelemetry.timestamps = {};
+    }
+    
     this.emitUpdate();
   }
   

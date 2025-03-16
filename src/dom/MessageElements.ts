@@ -626,35 +626,61 @@ abstract class MessageControls {
   private fetchTelemetryData(): Record<string, number> | null {
     // Use the singleton telemetryModule instance to get the data
     const telemetryData = telemetryModule.getCurrentTelemetry();
+    console.debug("Raw telemetry data:", JSON.stringify(telemetryData));
+    
     if (!telemetryData) return null;
     
     // Convert TelemetryData to Record<string, number> format
     const result: Record<string, number> = {};
     
     // Add properties that exist and are numbers
-    if (telemetryData.gracePeriod !== undefined) 
+    if (telemetryData.gracePeriod !== undefined) {
       result.voiceActivityDetection = telemetryData.gracePeriod;
+      console.debug(`Mapped gracePeriod ${telemetryData.gracePeriod}ms to voiceActivityDetection`);
+    }
     
-    if (telemetryData.transcriptionTime !== undefined) 
+    if (telemetryData.transcriptionTime !== undefined) {
       result.transcriptionDuration = telemetryData.transcriptionTime;
+      console.debug(`Mapped transcriptionTime ${telemetryData.transcriptionTime}ms to transcriptionDuration`);
+    }
     
-    if (telemetryData.streamingDuration !== undefined) 
+    if (telemetryData.streamingDuration !== undefined) {
       result.streamingDuration = telemetryData.streamingDuration;
+      console.debug(`Mapped streamingDuration ${telemetryData.streamingDuration}ms`);
+    }
     
-    if (telemetryData.timeToTalk !== undefined) 
+    if (telemetryData.timeToTalk !== undefined) {
       result.timeToTalk = telemetryData.timeToTalk;
+      console.debug(`Mapped timeToTalk ${telemetryData.timeToTalk}ms`);
+    }
     
-    if (telemetryData.completionResponse !== undefined) 
+    if (telemetryData.completionResponse !== undefined) {
       result.completionResponse = telemetryData.completionResponse;
+      console.debug(`Mapped completionResponse ${telemetryData.completionResponse}ms`);
+    }
     
     // Calculate a total time if we have streaming and transcription durations
     if (telemetryData.streamingDuration !== undefined && 
-        telemetryData.transcriptionTime !== undefined &&
-        telemetryData.completionResponse !== undefined) {
-      result.totalTime = telemetryData.transcriptionTime + 
-                          telemetryData.completionResponse + 
-                          telemetryData.streamingDuration;
+        telemetryData.transcriptionTime !== undefined) {
+      
+      let totalTime = 0;
+      
+      // Add transcription time
+      totalTime += telemetryData.transcriptionTime;
+      
+      // Add completion response time if available
+      if (telemetryData.completionResponse !== undefined) {
+        totalTime += telemetryData.completionResponse;
+      }
+      
+      // Add streaming duration
+      totalTime += telemetryData.streamingDuration;
+      
+      result.totalTime = totalTime;
+      console.debug(`Calculated totalTime: ${totalTime}ms`);
     }
+    
+    console.debug("Mapped telemetry metrics:", Object.keys(result).join(", "));
     
     return Object.keys(result).length > 0 ? result : null;
   }
@@ -679,10 +705,10 @@ abstract class MessageControls {
     if (telemetryData.voiceActivityDetection) {
       metrics.push({
         key: "voiceActivityDetection",
-        label: "Voice Activity Detection",
+        label: "Grace Period",
         color: "#4285F4", // Google Blue
         value: telemetryData.voiceActivityDetection,
-        explanation: "Time taken to detect voice activity in the audio"
+        explanation: "Waiting time between receiving the last transcription and submitting the prompt to the LLM"
       });
     }
     
@@ -696,13 +722,23 @@ abstract class MessageControls {
       });
     }
     
+    if (telemetryData.completionResponse) {
+      metrics.push({
+        key: "completionResponse",
+        label: "LLM Wait Time",
+        color: "#8E24AA", // Purple
+        value: telemetryData.completionResponse,
+        explanation: "Time between prompt submission and start of Pi's response (thinking time)"
+      });
+    }
+    
     if (telemetryData.streamingDuration) {
       metrics.push({
         key: "streamingDuration",
         label: "Streaming Duration",
         color: "#FBBC05", // Google Yellow
         value: telemetryData.streamingDuration,
-        explanation: "Time taken to stream the assistant's response"
+        explanation: "Time taken for Pi to generate and stream the entire written response"
       });
     }
     
@@ -712,7 +748,7 @@ abstract class MessageControls {
         label: "Time to Talk",
         color: "#34A853", // Google Green
         value: telemetryData.timeToTalk,
-        explanation: "Total time from message sent until audio started playing"
+        explanation: "Time from response start until speech audio begins playing"
       });
     }
     
@@ -722,7 +758,7 @@ abstract class MessageControls {
         label: "Total Time",
         color: "#9e9e9e", // Grey
         value: telemetryData.totalTime,
-        explanation: "Total time for the entire conversation turn"
+        explanation: "Total time from the end of transcription until Pi completes the response"
       });
     }
     
@@ -857,170 +893,303 @@ abstract class MessageControls {
   }
 
   /**
-   * Create a timeline chart visualization that shows overlapping processes
+   * Create a timeline chart visualization that shows overlapping processes in Gantt chart style
    */
   private createTimelineChart(container: HTMLElement, metrics: MetricDefinition[]): void {
     // Sort metrics by key based on a predefined order
-    const orderArray = ['voiceActivityDetection', 'transcriptionDuration', 'streamingDuration', 'timeToTalk', 'totalTime'];
+    const orderArray = ['voiceActivityDetection', 'transcriptionDuration', 'completionResponse', 'streamingDuration', 'timeToTalk', 'totalTime'];
     metrics.sort((a, b) => {
       return orderArray.indexOf(a.key) - orderArray.indexOf(b.key);
     });
 
+    // Log available metrics for debugging
+    console.debug("Available metrics for timeline:", metrics.map(m => `${m.key}: ${m.value}ms`).join(", "));
+
     // Get timeline data with proper positioning
     const { segments, timelineEnd } = this.calculateTimelinePositions(metrics);
     
-    // Find maximum row number to determine chart height
-    const maxRow = segments.reduce((max, segment) => Math.max(max, segment.row || 0), 0);
+    // Debug: log all segments to see what's being calculated
+    console.debug("Timeline segments:", segments.map(s => 
+      `${s.metricKey}: start=${(s.start/1000).toFixed(2)}s, end=${(s.end/1000).toFixed(2)}s, duration=${(s.duration/1000).toFixed(2)}s`
+    ).join("\n"));
+    
+    // Check if important segments are missing
+    const hasTranscription = segments.some(s => s.metricKey === 'transcriptionDuration');
+    const hasCompletionResponse = segments.some(s => s.metricKey === 'completionResponse');
+    const hasStreaming = segments.some(s => s.metricKey === 'streamingDuration');
+    console.debug(`Key segments present - Transcription: ${hasTranscription}, LLM Wait: ${hasCompletionResponse}, Streaming: ${hasStreaming}`);
+    
+    // Calculate time scale - round up to the nearest second for better tick marks
+    const timelineEndSeconds = Math.ceil(timelineEnd / 1000);
     
     // Create timeline chart container
     const chartContainer = document.createElement("div");
     chartContainer.className = "saypi-timeline-chart";
+    chartContainer.style.fontFamily = "system-ui, -apple-system, sans-serif";
+    chartContainer.style.fontSize = "12px";
+    chartContainer.style.position = "relative";
+    chartContainer.style.padding = "10px 0";
     container.appendChild(chartContainer);
     
-    // Calculate chart properties
-    const totalWidth = 100; // percentage width
-    const rowHeight = 30; // px
-    const tickInterval = Math.ceil(timelineEnd / 5) * 100; // round to nearest 100ms
+    // Create time scale at the top
+    const timeScale = document.createElement("div");
+    timeScale.className = "timeline-scale";
+    timeScale.style.position = "relative";
+    timeScale.style.height = "24px";
+    timeScale.style.marginLeft = "160px"; // Space for labels
+    timeScale.style.marginBottom = "5px";
+    timeScale.style.borderBottom = "1px solid #ccc";
     
-    // Group segments by row
-    const rowsMap = new Map<number, TimelineSegment[]>();
-    segments.forEach(segment => {
-      const row = segment.row || 0;
-      if (!rowsMap.has(row)) {
-        rowsMap.set(row, []);
-      }
-      rowsMap.get(row)?.push(segment);
-    });
-    
-    // Create rows for each process group
-    rowsMap.forEach((rowSegments, rowIndex) => {
-      // Find the metric for this row (use the first segment's metric)
-      const firstSegment = rowSegments[0];
-      const metric = metrics.find(m => m.key === firstSegment.metricKey);
-      if (!metric) return;
-      
-      const rowContainer = document.createElement("div");
-      rowContainer.className = "timeline-row";
-      rowContainer.style.position = "relative";
-      rowContainer.style.height = `${rowHeight}px`;
-      rowContainer.style.marginBottom = "4px";
-      
-      // Add row label
-      const rowLabel = document.createElement("div");
-      rowLabel.className = "timeline-row-label";
-      rowLabel.textContent = metric.label;
-      rowLabel.style.position = "absolute";
-      rowLabel.style.left = "0";
-      rowLabel.style.top = "0";
-      rowLabel.style.width = "120px";
-      rowLabel.style.height = `${rowHeight}px`;
-      rowLabel.style.display = "flex";
-      rowLabel.style.alignItems = "center";
-      rowLabel.style.fontSize = "12px";
-      rowLabel.style.fontWeight = "500";
-      rowContainer.appendChild(rowLabel);
-      
-      // Add segments for this row
-      rowSegments.forEach(segment => {
-        const segmentElem = document.createElement("div");
-        segmentElem.className = "timeline-segment";
-        segmentElem.style.position = "absolute";
-        segmentElem.style.left = `calc(120px + ${(segment.start / timelineEnd) * totalWidth}%)`;
-        segmentElem.style.width = `${(segment.duration / timelineEnd) * totalWidth}%`;
-        segmentElem.style.top = "0";
-        segmentElem.style.height = `${rowHeight}px`;
-        segmentElem.style.backgroundColor = segment.color;
-        segmentElem.style.borderRadius = "3px";
-        
-        // Add tooltip on hover
-        const tooltip = document.createElement("div");
-        tooltip.className = "segment-tooltip";
-        tooltip.innerHTML = `${segment.label}: ${segment.duration.toFixed(0)}ms`;
-        if (segment.explanation) {
-          tooltip.innerHTML += `<br><small>${segment.explanation}</small>`;
-        }
-        tooltip.style.position = "absolute";
-        tooltip.style.display = "none";
-        tooltip.style.backgroundColor = "#333";
-        tooltip.style.color = "white";
-        tooltip.style.padding = "4px 8px";
-        tooltip.style.borderRadius = "4px";
-        tooltip.style.fontSize = "12px";
-        tooltip.style.zIndex = "1000";
-        tooltip.style.whiteSpace = "nowrap";
-        
-        segmentElem.appendChild(tooltip);
-        
-        segmentElem.addEventListener("mouseenter", () => {
-          tooltip.style.display = "block";
-          tooltip.style.bottom = `${rowHeight}px`;
-          tooltip.style.left = "0";
-        });
-        
-        segmentElem.addEventListener("mouseleave", () => {
-          tooltip.style.display = "none";
-        });
-        
-        rowContainer.appendChild(segmentElem);
-      });
-      
-      chartContainer.appendChild(rowContainer);
-    });
-    
-    // Add time axis at the bottom
-    const timeAxis = document.createElement("div");
-    timeAxis.className = "timeline-axis";
-    timeAxis.style.position = "relative";
-    timeAxis.style.height = "20px";
-    timeAxis.style.marginTop = "10px";
-    timeAxis.style.marginLeft = "120px";
-    timeAxis.style.borderTop = "1px solid #ccc";
-    
-    // Add tick marks
-    for (let i = 0; i <= timelineEnd; i += tickInterval) {
-      const tick = document.createElement("div");
-      tick.className = "timeline-tick";
-      tick.style.position = "absolute";
-      tick.style.left = `${(i / timelineEnd) * totalWidth}%`;
-      tick.style.width = "1px";
-      tick.style.height = "5px";
-      tick.style.top = "0";
-      tick.style.backgroundColor = "#888";
+    // Add second markers
+    for (let i = 0; i <= timelineEndSeconds; i++) {
+      const tickMark = document.createElement("div");
+      tickMark.className = "tick-mark";
+      tickMark.style.position = "absolute";
+      tickMark.style.left = `${(i * 1000 / timelineEnd) * 100}%`;
+      tickMark.style.bottom = "0";
+      tickMark.style.width = "1px";
+      tickMark.style.height = "6px";
+      tickMark.style.backgroundColor = "#888";
       
       const tickLabel = document.createElement("div");
-      tickLabel.className = "timeline-tick-label";
-      tickLabel.textContent = `${i}ms`;
+      tickLabel.className = "tick-label";
+      tickLabel.textContent = `${i}s`;
       tickLabel.style.position = "absolute";
-      tickLabel.style.left = `${(i / timelineEnd) * totalWidth}%`;
+      tickLabel.style.left = `${(i * 1000 / timelineEnd) * 100}%`;
+      tickLabel.style.bottom = "8px";
       tickLabel.style.transform = "translateX(-50%)";
-      tickLabel.style.top = "6px";
       tickLabel.style.fontSize = "10px";
-      tickLabel.style.color = "#888";
+      tickLabel.style.color = "#555";
       
-      timeAxis.appendChild(tick);
-      timeAxis.appendChild(tickLabel);
+      timeScale.appendChild(tickMark);
+      timeScale.appendChild(tickLabel);
     }
     
-    chartContainer.appendChild(timeAxis);
+    // Add 'Timeline (seconds)' label
+    const scaleLabel = document.createElement("div");
+    scaleLabel.textContent = "Timeline (seconds)";
+    scaleLabel.style.position = "absolute";
+    scaleLabel.style.left = "0";
+    scaleLabel.style.top = "0";
+    scaleLabel.style.fontSize = "11px";
+    scaleLabel.style.fontWeight = "500";
+    scaleLabel.style.color = "#555";
+    timeScale.appendChild(scaleLabel);
     
-    // Add legend
+    chartContainer.appendChild(timeScale);
+    
+    // Create a row for each metric
+    const ganttRows = document.createElement("div");
+    ganttRows.className = "gantt-rows";
+    ganttRows.style.position = "relative";
+    
+    // Group segments by metric key
+    const metricSegments = new Map<string, TimelineSegment[]>();
+    segments.forEach(segment => {
+      // Handle gap segments separately
+      if (segment.metricKey.startsWith('gap_')) {
+        if (!metricSegments.has('gaps')) {
+          metricSegments.set('gaps', []);
+        }
+        metricSegments.get('gaps')?.push(segment);
+      } else {
+        if (!metricSegments.has(segment.metricKey)) {
+          metricSegments.set(segment.metricKey, []);
+        }
+        metricSegments.get(segment.metricKey)?.push(segment);
+      }
+    });
+    
+    // Check if we have any gap segments
+    const hasGaps = metricSegments.has('gaps');
+    
+    // Create a row for each metric (even if it has multiple segments)
+    metrics.forEach(metric => {
+      const rowSegments = metricSegments.get(metric.key) || [];
+      if (rowSegments.length === 0) {
+        console.debug(`No segments found for metric ${metric.key}, skipping row`);
+        return;
+      }
+      
+      const rowContainer = document.createElement("div");
+      rowContainer.className = "gantt-row";
+      rowContainer.style.position = "relative";
+      rowContainer.style.height = "30px";
+      rowContainer.style.marginBottom = "6px";
+      rowContainer.style.display = "flex";
+      
+      // Create label column
+      const labelColumn = document.createElement("div");
+      labelColumn.className = "row-label";
+      labelColumn.style.width = "160px";
+      labelColumn.style.paddingRight = "10px";
+      labelColumn.style.boxSizing = "border-box";
+      labelColumn.style.textAlign = "right";
+      labelColumn.style.display = "flex";
+      labelColumn.style.alignItems = "center";
+      labelColumn.style.justifyContent = "flex-end";
+      labelColumn.style.fontWeight = "500";
+      
+      // Add label with value
+      const formattedValue = metric.value !== undefined ? 
+        (metric.value > 1000 ? `${(metric.value/1000).toFixed(2)}s` : `${metric.value.toFixed(0)}ms`) : 
+        '0ms';
+      labelColumn.innerHTML = `<span>${metric.label}:</span> <span style="font-weight:bold;margin-left:4px;">${formattedValue}</span>`;
+      labelColumn.title = metric.explanation;
+      
+      // Create timeline column
+      const timelineColumn = document.createElement("div");
+      timelineColumn.className = "row-timeline";
+      timelineColumn.style.flex = "1";
+      timelineColumn.style.position = "relative";
+      timelineColumn.style.height = "100%";
+      timelineColumn.style.backgroundColor = "#f5f5f5";
+      timelineColumn.style.border = "1px solid #e0e0e0";
+      timelineColumn.style.borderRadius = "4px";
+      
+      // Add segments within this row
+      rowSegments.forEach(segment => {
+        const segmentElem = document.createElement("div");
+        segmentElem.className = "gantt-segment";
+        segmentElem.style.position = "absolute";
+        segmentElem.style.left = `${(segment.start / timelineEnd) * 100}%`;
+        segmentElem.style.width = `${(segment.duration / timelineEnd) * 100}%`;
+        segmentElem.style.top = "4px";
+        segmentElem.style.bottom = "4px";
+        segmentElem.style.backgroundColor = segment.color;
+        segmentElem.style.borderRadius = "3px";
+        segmentElem.style.boxShadow = "0 1px 2px rgba(0,0,0,0.1)";
+        
+        // Add start/end time labels if segment is wide enough
+        if (segment.duration / timelineEnd > 0.05) {
+          const startTime = document.createElement("span");
+          startTime.className = "segment-time start-time";
+          startTime.textContent = `${(segment.start/1000).toFixed(2)}s`;
+          startTime.style.position = "absolute";
+          startTime.style.left = "4px";
+          startTime.style.top = "50%";
+          startTime.style.transform = "translateY(-50%)";
+          startTime.style.fontSize = "9px";
+          startTime.style.color = "#fff";
+          startTime.style.textShadow = "0 0 2px rgba(0,0,0,0.5)";
+          segmentElem.appendChild(startTime);
+          
+          const endTime = document.createElement("span");
+          endTime.className = "segment-time end-time";
+          endTime.textContent = `${(segment.end/1000).toFixed(2)}s`;
+          endTime.style.position = "absolute";
+          endTime.style.right = "4px";
+          endTime.style.top = "50%";
+          endTime.style.transform = "translateY(-50%)";
+          endTime.style.fontSize = "9px";
+          endTime.style.color = "#fff";
+          endTime.style.textShadow = "0 0 2px rgba(0,0,0,0.5)";
+          segmentElem.appendChild(endTime);
+        }
+        
+        // Add tooltip on hover
+        segmentElem.title = `${segment.label}: ${(segment.duration/1000).toFixed(2)}s\n${segment.explanation || ''}`;
+        
+        timelineColumn.appendChild(segmentElem);
+      });
+      
+      rowContainer.appendChild(labelColumn);
+      rowContainer.appendChild(timelineColumn);
+      ganttRows.appendChild(rowContainer);
+    });
+    
+    // Add a row for gaps if any
+    if (hasGaps) {
+      const gapSegments = metricSegments.get('gaps') || [];
+      
+      const rowContainer = document.createElement("div");
+      rowContainer.className = "gantt-row";
+      rowContainer.style.position = "relative";
+      rowContainer.style.height = "30px";
+      rowContainer.style.marginBottom = "6px";
+      rowContainer.style.display = "flex";
+      
+      // Create label column
+      const labelColumn = document.createElement("div");
+      labelColumn.className = "row-label";
+      labelColumn.style.width = "160px";
+      labelColumn.style.paddingRight = "10px";
+      labelColumn.style.boxSizing = "border-box";
+      labelColumn.style.textAlign = "right";
+      labelColumn.style.display = "flex";
+      labelColumn.style.alignItems = "center";
+      labelColumn.style.justifyContent = "flex-end";
+      labelColumn.style.fontWeight = "500";
+      labelColumn.innerHTML = `<span>Wait Times:</span>`;
+      labelColumn.title = "Periods of time between processes";
+      
+      // Create timeline column
+      const timelineColumn = document.createElement("div");
+      timelineColumn.className = "row-timeline";
+      timelineColumn.style.flex = "1";
+      timelineColumn.style.position = "relative";
+      timelineColumn.style.height = "100%";
+      timelineColumn.style.backgroundColor = "#f5f5f5";
+      timelineColumn.style.border = "1px solid #e0e0e0";
+      timelineColumn.style.borderRadius = "4px";
+      
+      // Add gap segments
+      gapSegments.forEach(segment => {
+        const segmentElem = document.createElement("div");
+        segmentElem.className = "gantt-segment";
+        segmentElem.style.position = "absolute";
+        segmentElem.style.left = `${(segment.start / timelineEnd) * 100}%`;
+        segmentElem.style.width = `${(segment.duration / timelineEnd) * 100}%`;
+        segmentElem.style.top = "4px";
+        segmentElem.style.bottom = "4px";
+        segmentElem.style.backgroundColor = segment.color;
+        segmentElem.style.borderRadius = "3px";
+        segmentElem.style.border = "1px dashed #aaa";
+        
+        // Add start/end time labels if segment is wide enough
+        if (segment.duration / timelineEnd > 0.05) {
+          const duration = document.createElement("span");
+          duration.className = "segment-time duration";
+          duration.textContent = `${(segment.duration/1000).toFixed(2)}s`;
+          duration.style.position = "absolute";
+          duration.style.left = "50%";
+          duration.style.top = "50%";
+          duration.style.transform = "translate(-50%, -50%)";
+          duration.style.fontSize = "9px";
+          duration.style.color = "#666";
+          segmentElem.appendChild(duration);
+        }
+        
+        // Add tooltip on hover
+        segmentElem.title = `${segment.explanation}: ${(segment.duration/1000).toFixed(2)}s`;
+        
+        timelineColumn.appendChild(segmentElem);
+      });
+      
+      rowContainer.appendChild(labelColumn);
+      rowContainer.appendChild(timelineColumn);
+      ganttRows.appendChild(rowContainer);
+    }
+    
+    chartContainer.appendChild(ganttRows);
+    
+    // Add legend below the chart
     const legend = document.createElement("div");
     legend.className = "timeline-legend";
     legend.style.display = "flex";
     legend.style.flexWrap = "wrap";
-    legend.style.marginTop = "20px";
+    legend.style.marginTop = "15px";
     legend.style.justifyContent = "center";
     
-    // Use unique metrics for the legend to avoid duplicates
-    const uniqueMetrics = metrics.filter(m => m.value !== undefined);
-    
-    uniqueMetrics.forEach(metric => {
+    metrics.forEach(metric => {
+      if (metric.value === undefined) return;
+      
       const legendItem = document.createElement("div");
       legendItem.className = "legend-item";
       legendItem.style.display = "flex";
       legendItem.style.alignItems = "center";
       legendItem.style.marginRight = "15px";
-      legendItem.style.marginBottom = "5px";
+      legendItem.style.marginBottom = "8px";
       
       const colorBox = document.createElement("div");
       colorBox.style.width = "12px";
@@ -1030,105 +1199,333 @@ abstract class MessageControls {
       colorBox.style.borderRadius = "2px";
       
       const label = document.createElement("span");
-      label.textContent = `${metric.label}: ${metric.value.toFixed(0)}ms`;
+      label.textContent = `${metric.label}: ${(metric.value/1000).toFixed(2)}s`;
       label.style.fontSize = "12px";
       
       legendItem.appendChild(colorBox);
       legendItem.appendChild(label);
+      legendItem.title = metric.explanation;
+      
       legend.appendChild(legendItem);
     });
     
+    // Add a legend item for gap segments if any
+    if (hasGaps) {
+      const legendItem = document.createElement("div");
+      legendItem.className = "legend-item";
+      legendItem.style.display = "flex";
+      legendItem.style.alignItems = "center";
+      legendItem.style.marginRight = "15px";
+      legendItem.style.marginBottom = "8px";
+      
+      const colorBox = document.createElement("div");
+      colorBox.style.width = "12px";
+      colorBox.style.height = "12px";
+      colorBox.style.backgroundColor = "#E0E0E0";
+      colorBox.style.marginRight = "5px";
+      colorBox.style.borderRadius = "2px";
+      colorBox.style.border = "1px dashed #aaa";
+      
+      const label = document.createElement("span");
+      label.textContent = "Wait Times";
+      label.style.fontSize = "12px";
+      
+      legendItem.appendChild(colorBox);
+      legendItem.appendChild(label);
+      legendItem.title = "Periods of waiting between processes";
+      
+      legend.appendChild(legendItem);
+    }
+    
     chartContainer.appendChild(legend);
     
-    // Add explanation text
+    // Add explanation
     const explanation = document.createElement("div");
     explanation.className = "timeline-explanation";
-    explanation.style.fontSize = "12px";
+    explanation.style.fontSize = "11px";
     explanation.style.color = "#666";
     explanation.style.marginTop = "10px";
     explanation.style.textAlign = "center";
-    explanation.innerHTML = "This timeline shows how different processes overlap during message processing.<br>Hover over segments for details.";
-    
-    if (uniqueMetrics.find(m => m.key === 'timeToTalk')) {
-      explanation.innerHTML += "<br><i>Note: Time to talk measures how long it took from when the message was sent until the assistant started speaking.</i>";
-    }
+    explanation.innerHTML = "This timeline shows the speech-to-speech response time, from the end of user speech to the start of Pi's audio response.<br>Gaps between processes represent waiting periods.<br>Hover over segments for additional details.";
     
     chartContainer.appendChild(explanation);
+    
+    // The telemetry visualization is already inserted into the DOM in createTelemetryVisualization
   }
 
   /**
-   * Calculate timeline positions considering overlaps between processes
+   * Calculate timeline positions for proper visualization of process timings
    */
   private calculateTimelinePositions(metrics: MetricDefinition[]): { segments: TimelineSegment[], timelineEnd: number } {
-    // Initialize segments array and timelineEnd
+    // Initialize segments array and overall timeline end
+    const segments: TimelineSegment[] = [];
+    
+    // Get telemetry data with timestamps
+    const telemetryData = telemetryModule.getCurrentTelemetry();
+    const timestamps = telemetryData.timestamps || {};
+    
+    // Find the earliest timestamp to use as a reference point
+    const allTimestamps = Object.values(timestamps).filter(t => t !== undefined) as number[];
+    const earliestTimestamp = allTimestamps.length > 0 ? Math.min(...allTimestamps) : 0;
+    
+    // If we don't have timestamps, fall back to the old calculation method
+    if (earliestTimestamp === 0) {
+      return this.calculateTimelinePositionsFromDurations(metrics);
+    }
+    
+    // Create a segment for each process using actual timestamps
+    metrics.forEach(metric => {
+      if (metric.value === undefined) return;
+      
+      let start = 0;
+      let end = 0;
+      
+      switch (metric.key) {
+        case 'voiceActivityDetection':
+          // For grace period, use transcription end to prompt submission time
+          if (timestamps.transcriptionEnd && timestamps.promptSubmission) {
+            start = timestamps.transcriptionEnd - earliestTimestamp;
+            end = timestamps.promptSubmission - earliestTimestamp;
+          } else if (timestamps.transcriptionEnd) {
+            // Fallback if we only have transcription end
+            start = timestamps.transcriptionEnd - earliestTimestamp;
+            end = start + metric.value;
+          }
+          break;
+          
+        case 'transcriptionDuration':
+          if (timestamps.transcriptionStart && timestamps.transcriptionEnd) {
+            start = timestamps.transcriptionStart - earliestTimestamp;
+            end = timestamps.transcriptionEnd - earliestTimestamp;
+          } else if (timestamps.transcriptionStart) {
+            // If we have start but no end, use the duration
+            start = timestamps.transcriptionStart - earliestTimestamp;
+            end = start + metric.value;
+          } else if (timestamps.speechEnd) {
+            // If no transcription timestamps, position it after speech ended
+            start = (timestamps.speechEnd - earliestTimestamp) || 0;
+            end = start + metric.value;
+          } else {
+            // Fallback - just use the duration starting from 0
+            start = 0;
+            end = metric.value;
+          }
+          break;
+          
+        case 'completionResponse':
+          if (timestamps.promptSubmission && timestamps.completionStart) {
+            start = timestamps.promptSubmission - earliestTimestamp;
+            end = timestamps.completionStart - earliestTimestamp;
+          } else if (timestamps.promptSubmission) {
+            // If we only have the start, use the duration
+            start = timestamps.promptSubmission - earliestTimestamp;
+            end = start + metric.value;
+          } else if (timestamps.transcriptionEnd) {
+            // Position after transcription if no explicit timestamps
+            start = timestamps.transcriptionEnd - earliestTimestamp;
+            end = start + metric.value;
+          }
+          break;
+          
+        case 'streamingDuration':
+          if (timestamps.completionStart && timestamps.completionEnd) {
+            start = timestamps.completionStart - earliestTimestamp;
+            end = timestamps.completionEnd - earliestTimestamp;
+          } else if (timestamps.completionStart) {
+            // If we only have the start, use the duration
+            start = timestamps.completionStart - earliestTimestamp;
+            end = start + metric.value;
+          }
+          break;
+          
+        case 'timeToTalk':
+          if (timestamps.completionStart && timestamps.audioPlaybackStart) {
+            start = timestamps.completionStart - earliestTimestamp;
+            end = timestamps.audioPlaybackStart - earliestTimestamp;
+          } else if (timestamps.completionStart) {
+            start = timestamps.completionStart - earliestTimestamp;
+            end = start + metric.value;
+          }
+          break;
+          
+        case 'totalTime':
+          start = 0;
+          // Use audioPlaybackStart as the end time 
+          if (timestamps.audioPlaybackStart) {
+            end = timestamps.audioPlaybackStart - earliestTimestamp;
+          } else {
+            // Fall back to the value if audioPlaybackStart is not available
+            end = metric.value;
+          }
+          break;
+          
+        default:
+          // Fall back to simple calculation for unknown metric types
+          start = 0;
+          end = metric.value;
+      }
+      
+      // Only create a segment if we have valid start and end times
+      if (end > start) {
+        const segment: TimelineSegment = {
+          metricKey: metric.key,
+          label: metric.label,
+          start: start,
+          end: end,
+          duration: end - start,
+          color: metric.color,
+          explanation: metric.explanation
+        };
+        
+        segments.push(segment);
+      }
+    });
+    
+    // Add "gap segments" to show waiting periods between processes
+    const orderedProcesses = [
+      { key: 'transcriptionDuration', label: 'Transcription' },
+      { key: 'voiceActivityDetection', label: 'Grace Period' }, // Updated order to match actual flow
+      { key: 'completionResponse', label: 'LLM Wait Time' },
+      { key: 'streamingDuration', label: 'Streaming' }
+    ];
+    
+    // Check for gaps between consecutive processes and add gap segments
+    for (let i = 0; i < orderedProcesses.length - 1; i++) {
+      const currentProcess = orderedProcesses[i];
+      const nextProcess = orderedProcesses[i + 1];
+      
+      const currentSegment = segments.find(s => s.metricKey === currentProcess.key);
+      const nextSegment = segments.find(s => s.metricKey === nextProcess.key);
+      
+      if (currentSegment && nextSegment && nextSegment.start > currentSegment.end) {
+        // There's a gap between processes, add a gap segment
+        const gapSegment: TimelineSegment = {
+          metricKey: `gap_${currentProcess.key}_${nextProcess.key}`,
+          label: `Waiting`,
+          start: currentSegment.end,
+          end: nextSegment.start,
+          duration: nextSegment.start - currentSegment.end,
+          color: '#E0E0E0', // Light gray
+          explanation: `Time between end of ${currentProcess.label} and start of ${nextProcess.label}`
+        };
+        
+        segments.push(gapSegment);
+      }
+    }
+    
+    // Find the latest ending time for the timeline end - but cap it at audioPlaybackStart if available
+    let timelineEnd = segments.reduce((max, segment) => Math.max(max, segment.end), 0);
+    
+    // If we have audioPlaybackStart, use that as the end of the timeline instead
+    if (timestamps.audioPlaybackStart) {
+      const audioStartTime = timestamps.audioPlaybackStart - earliestTimestamp;
+      // Only use audioPlaybackStart if it's not zero (which would indicate it's missing)
+      if (audioStartTime > 0) {
+        timelineEnd = audioStartTime;
+      }
+    }
+    
+    // Add a 10% margin to the end of the timeline for readability
+    return { segments, timelineEnd: timelineEnd * 1.1 };
+  }
+  
+  /**
+   * Fall back method to calculate timeline positions from durations when timestamps aren't available
+   */
+  private calculateTimelinePositionsFromDurations(metrics: MetricDefinition[]): { segments: TimelineSegment[], timelineEnd: number } {
+    // Initialize segments array and overall timeline end
     const segments: TimelineSegment[] = [];
     let timelineEnd = 0;
     
-    // First, convert the metrics into segments with default start time of 0
+    // Calculate the timing of each process based on relationships
+    // First, create a map to hold process start times
+    const processStartTimes: Record<string, number> = {};
+    const processEndTimes: Record<string, number> = {};
+    
+    // Estimate initial processing time (approximately 1.8s based on observation)
+    const estimatedInitialDelay = 1800; // 1.8 seconds in ms
+    
+    // We'll keep this initial delay as empty space but won't create a segment for it
+    
+    // Adjust process start times to account for initial delay
+    // Start with transcription at time initialDelay
+    if (metrics.find(m => m.key === 'transcriptionDuration')) {
+      const transcriptionDuration = metrics.find(m => m.key === 'transcriptionDuration')!.value;
+      processStartTimes['transcriptionDuration'] = estimatedInitialDelay; 
+      processEndTimes['transcriptionDuration'] = estimatedInitialDelay + transcriptionDuration;
+      
+      // Grace period follows transcription
+      let nextTime = estimatedInitialDelay + transcriptionDuration;
+      
+      // Calculate grace period (comes after transcription)
+      if (metrics.find(m => m.key === 'voiceActivityDetection')) {
+        const gracePeriodDuration = metrics.find(m => m.key === 'voiceActivityDetection')!.value;
+        processStartTimes['voiceActivityDetection'] = nextTime;
+        processEndTimes['voiceActivityDetection'] = nextTime + gracePeriodDuration;
+        nextTime += gracePeriodDuration;
+      }
+      
+      // Calculate completion response times (Pi's thinking time)
+      if (metrics.find(m => m.key === 'completionResponse')) {
+        const completionResponseDuration = metrics.find(m => m.key === 'completionResponse')!.value;
+        processStartTimes['completionResponse'] = nextTime;
+        processEndTimes['completionResponse'] = nextTime + completionResponseDuration;
+        nextTime += completionResponseDuration;
+      }
+      
+      // For speech-to-speech measurement, end the timeline at the audio playback start
+      // Streaming happens before audio playback
+      if (metrics.find(m => m.key === 'streamingDuration')) {
+        const streamingDuration = metrics.find(m => m.key === 'streamingDuration')!.value;
+        processStartTimes['streamingDuration'] = nextTime;
+        processEndTimes['streamingDuration'] = nextTime + streamingDuration;
+        nextTime += streamingDuration;
+      }
+      
+      // Calculate time to talk (which ends at audio playback start)
+      // This is what we use to determine the end of our timeline
+      if (metrics.find(m => m.key === 'timeToTalk')) {
+        const timeToTalkDuration = metrics.find(m => m.key === 'timeToTalk')!.value;
+        processStartTimes['timeToTalk'] = processStartTimes['streamingDuration'] || nextTime;
+        processEndTimes['timeToTalk'] = processStartTimes['timeToTalk'] + timeToTalkDuration;
+        
+        // Set timeline end at the audio playback start (end of timeToTalk)
+        timelineEnd = processEndTimes['timeToTalk'];
+      } else {
+        // If no timeToTalk metric, end at streaming
+        timelineEnd = nextTime;
+      }
+    }
+    
+    // Calculate total time (spans from beginning to audio playback start)
+    if (metrics.find(m => m.key === 'totalTime')) {
+      processStartTimes['totalTime'] = 0;
+      // End at audio playback start for speech-to-speech measurement
+      processEndTimes['totalTime'] = timelineEnd;
+    }
+    
+    // Create segments based on calculated times
     metrics.forEach(metric => {
-      // Skip metrics with undefined values
       if (metric.value === undefined) return;
+      
+      const start = processStartTimes[metric.key] || 0;
+      const end = processEndTimes[metric.key] || metric.value;
       
       const segment: TimelineSegment = {
         metricKey: metric.key,
         label: metric.label,
-        start: 0,
-        end: metric.value,
-        duration: metric.value,
+        start: start,
+        end: end,
+        duration: end - start,
         color: metric.color,
         explanation: metric.explanation
       };
       
       segments.push(segment);
-      
-      // Update total timeline duration
-      if (segment.end > timelineEnd) {
-        timelineEnd = segment.end;
-      }
     });
     
-    // Adjust for overlapping processes
-    segments.forEach(segment => {
-      if (segment.metricKey === "timeToTalk") {
-        // Find streaming duration segment
-        const streamingSegment = segments.find(s => s.metricKey === "streamingDuration");
-        if (streamingSegment) {
-          segment.start = streamingSegment.start;
-          // The end time stays the same, it represents when audio actually started
-        }
-      }
-    });
-    
-    // Assign segments to rows to minimize overlaps
-    const rows: TimelineSegment[][] = [];
-    
-    segments.forEach(segment => {
-      let placed = false;
-      
-      // Try to place in an existing row
-      for (let i = 0; i < rows.length; i++) {
-        const row = rows[i];
-        
-        // Check if this segment overlaps with any segment in this row
-        const overlaps = row.some(existingSegment => 
-          (segment.start < existingSegment.end && segment.end > existingSegment.start)
-        );
-        
-        if (!overlaps) {
-          row.push(segment);
-          segment.row = i;
-          placed = true;
-          break;
-        }
-      }
-      
-      // If not placed in any existing row, create a new row
-      if (!placed) {
-        const newRow: TimelineSegment[] = [segment];
-        segment.row = rows.length;
-        rows.push(newRow);
-      }
-    });
+    // Add a 10% margin to the end of the timeline for readability
+    timelineEnd = timelineEnd * 1.1;
     
     return { segments, timelineEnd };
   }
