@@ -185,7 +185,7 @@ export class TelemetryModule {
     // Listen for audio playback events
     EventBus.on("saypi:piSpeaking", () => {
       this.audioPlaybackStartTime = Date.now();
-      
+      console.debug("Pi started speaking at", this.audioPlaybackStartTime);
       if (!this.currentTelemetry.timestamps) this.currentTelemetry.timestamps = {};
       this.currentTelemetry.timestamps.audioPlaybackStart = this.audioPlaybackStartTime;
       

@@ -147,6 +147,7 @@ class ButtonModule {
         this.submissionsWithoutAnError++;
         submitButton.click();
       }
+      console.debug("Sending message to Pi at", Date.now());
     } else {
       /* hit enter key in the prompt textarea, might not work as expected on "new ui layout" */
       const textarea = document.getElementById("saypi-prompt");
