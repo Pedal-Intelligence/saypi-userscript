@@ -157,7 +157,6 @@ abstract class AssistantResponse {
           }
         }
       });
-      observer.observe(this._element, { childList: true, subtree: true });
     });
   }
 
@@ -629,16 +628,16 @@ abstract class MessageControls {
     
     const metrics: MetricDefinition[] = [];
     
+    // Get timestamps for additional calculations
+    const timestamps = telemetryData.timestamps || {};
+    
     // Map telemetry data to display metrics
     if (telemetryData.transcriptionDelay) {
       console.debug("Mapped transcriptionDelay", telemetryData.transcriptionDelay + "ms", "to voiceActivityDetection");
-      // Ensure a minimum value for visibility even if the actual delay is very small
-      const displayValue = Math.max(telemetryData.transcriptionDelay, 200); // At least 200ms for visibility
       metrics.push({
         key: 'voiceActivityDetection',
         label: 'Grace Period',
-        value: displayValue, // Use the adjusted value for display
-        actualValue: telemetryData.transcriptionDelay, // Store the actual value
+        value: telemetryData.transcriptionDelay,
         color: '#4285F4', // Blue
         explanation: 'Time between final transcription and submitting prompt to LLM'
       });
@@ -646,6 +645,7 @@ abstract class MessageControls {
       console.warn("No transcriptionDelay found in telemetry data:", telemetryData);
     }
     
+    // Check for transcription data, either in the direct property or calculate from timestamps
     if (telemetryData.transcriptionTime) {
       console.debug("Mapped transcriptionTime", telemetryData.transcriptionTime + "ms", "to transcriptionDuration");
       metrics.push({
@@ -654,6 +654,17 @@ abstract class MessageControls {
         value: telemetryData.transcriptionTime,
         color: '#DB4437', // Red
         explanation: 'Time taken to transcribe speech to text'
+      });
+    } else if (timestamps.transcriptionStart && timestamps.transcriptionEnd) {
+      // Calculate transcription time from timestamps
+      const calculatedTranscriptionTime = timestamps.transcriptionEnd - timestamps.transcriptionStart;
+      console.debug("Calculated transcriptionTime from timestamps:", calculatedTranscriptionTime + "ms");
+      metrics.push({
+        key: 'transcriptionDuration',
+        label: 'Transcription',
+        value: calculatedTranscriptionTime,
+        color: '#DB4437', // Red
+        explanation: 'Time taken to transcribe speech to text (calculated from timestamps)'
       });
     }
     
@@ -669,7 +680,6 @@ abstract class MessageControls {
     }
     
     // Add a new metric for speech playback
-    const timestamps = telemetryData.timestamps || {};
     if (timestamps.audioPlaybackStart) {
       console.debug("Added Pi's speech playback marker");
       metrics.push({
@@ -720,10 +730,10 @@ abstract class MessageControls {
     
     metrics.push({
       key: 'totalTime',
-      label: 'Total Time',
+      label: 'Speech to Speech',
       value: totalTime,
       color: '#9E9E9E', // Gray
-      explanation: 'Total time from end of speech to beginning of Pi\'s audio response'
+      explanation: 'Total time from end of user speech to beginning of Pi\'s audio response'
     });
     
     console.debug("Mapped telemetry metrics:", metrics.map(m => m.key).join(", "));
@@ -754,7 +764,6 @@ abstract class MessageControls {
         label: metric.label,
         color: metric.color,
         value: metric.value,
-        actualValue: metric.actualValue,
         explanation: metric.explanation || ""
       });
     });
@@ -893,8 +902,8 @@ abstract class MessageControls {
    * Create a timeline chart visualization that shows overlapping processes in Gantt chart style
    */
   private createTimelineChart(container: HTMLElement, metrics: MetricDefinition[]): void {
-    // Sort metrics by key based on a predefined order
-    const orderArray = ['voiceActivityDetection', 'transcriptionDuration', 'completionResponse', 'streamingDuration', 'speechPlayback', 'timeToTalk', 'totalTime'];
+    // Sort metrics by key based on a predefined order for consistency
+    const orderArray = ['transcriptionDuration', 'voiceActivityDetection', 'completionResponse', 'streamingDuration', 'speechPlayback', 'timeToTalk', 'totalTime'];
     metrics.sort((a, b) => {
       return orderArray.indexOf(a.key) - orderArray.indexOf(b.key);
     });
@@ -902,19 +911,15 @@ abstract class MessageControls {
     // Log available metrics for debugging
     console.debug("Available metrics for timeline:", metrics.map(m => `${m.key}: ${m.value}ms`).join(", "));
 
-    // Get timeline data with proper positioning
+    // Get telemetry data with proper positioning
     const { segments, timelineEnd } = this.calculateTimelinePositions(metrics);
+    
+    // No longer adding synthetic segments - only use actual data
     
     // Debug: log all segments to see what's being calculated
     console.debug("Timeline segments:", segments.map(s => 
       `${s.metricKey}: start=${(s.start/1000).toFixed(2)}s, end=${(s.end/1000).toFixed(2)}s, duration=${(s.duration/1000).toFixed(2)}s`
     ).join("\n"));
-    
-    // Check if important segments are missing
-    const hasTranscription = segments.some(s => s.metricKey === 'transcriptionDuration');
-    const hasCompletionResponse = segments.some(s => s.metricKey === 'completionResponse');
-    const hasStreaming = segments.some(s => s.metricKey === 'streamingDuration');
-    console.debug(`Key segments present - Transcription: ${hasTranscription}, LLM Wait: ${hasCompletionResponse}, Streaming: ${hasStreaming}`);
     
     // Calculate time scale - round up to the nearest second for better tick marks
     const timelineEndSeconds = Math.ceil(timelineEnd / 1000);
@@ -1003,6 +1008,7 @@ abstract class MessageControls {
     // Create a row for each metric (even if it has multiple segments)
     metrics.forEach(metric => {
       const rowSegments = metricSegments.get(metric.key) || [];
+      
       if (rowSegments.length === 0) {
         console.debug(`No segments found for metric ${metric.key}, skipping row`);
         return;
@@ -1057,6 +1063,28 @@ abstract class MessageControls {
         segmentElem.style.borderRadius = "3px";
         segmentElem.style.boxShadow = "0 1px 2px rgba(0,0,0,0.1)";
         
+        // Add open-ended indicator for Pi Speaks segment
+        if (segment.metricKey === 'speechPlayback') {
+          // Make the segment extend to the right edge of the chart
+          const originalWidth = segmentElem.style.width;
+          segmentElem.style.width = `calc(100% - ${(segment.start / timelineEnd) * 100}%)`;
+          
+          // Add "ongoing" label to the end time if it's wide enough
+          if (segment.duration / timelineEnd > 0.05) {
+            const endTimeLabel = document.createElement("span");
+            endTimeLabel.className = "segment-time end-time";
+            endTimeLabel.textContent = `${(segment.end/1000).toFixed(2)}s+ (ongoing)`;
+            endTimeLabel.style.position = "absolute";
+            endTimeLabel.style.right = "4px";
+            endTimeLabel.style.top = "50%";
+            endTimeLabel.style.transform = "translateY(-50%)";
+            endTimeLabel.style.fontSize = "9px";
+            endTimeLabel.style.color = "#fff";
+            endTimeLabel.style.textShadow = "0 0 2px rgba(0,0,0,0.5)";
+            segmentElem.appendChild(endTimeLabel);
+          }
+        }
+        
         // Add start/end time labels if segment is wide enough
         if (segment.duration / timelineEnd > 0.05) {
           const startTime = document.createElement("span");
@@ -1085,9 +1113,7 @@ abstract class MessageControls {
         }
         
         // Add tooltip on hover
-        segmentElem.title = metric.key === 'voiceActivityDetection' && metric.actualValue !== undefined ?
-          `${segment.label}: ${(segment.duration/1000).toFixed(2)}s (actual: ${(metric.actualValue/1000).toFixed(2)}s)\n${segment.explanation || ''}` :
-          `${segment.label}: ${(segment.duration/1000).toFixed(2)}s\n${segment.explanation || ''}`;
+        segmentElem.title = `${segment.label}: ${(segment.duration/1000).toFixed(2)}s\n${segment.explanation || ''}`;
         
         timelineColumn.appendChild(segmentElem);
       });
@@ -1263,6 +1289,10 @@ abstract class MessageControls {
     const telemetryData = telemetryModule.getCurrentTelemetry();
     const timestamps = telemetryData.timestamps || {};
     
+    // NOTE: The timeline starts at the end of the user's speech, which is captured at the
+    // LAST saypi:userStoppedSpeaking event. The TelemetryModule overwrites timestamps.speechEnd
+    // each time this event fires, so we're always using the most recent (final) speech end time.
+    
     // Log all raw timestamps to understand the timing issues
     console.debug("RAW TIMESTAMPS:", JSON.stringify(timestamps, null, 2));
     
@@ -1333,6 +1363,11 @@ abstract class MessageControls {
       return this.calculateTimelinePositionsFromDurations(metrics);
     }
     
+    // Instead of using the earliest timestamp as reference, use speechEnd
+    // This ensures the timeline starts at the end of user speech, not the beginning
+    const referenceTimestamp = timestamps.speechEnd || earliestTimestamp;
+    console.debug(`Using reference timestamp: ${referenceTimestamp} (speech end: ${timestamps.speechEnd}, earliest: ${earliestTimestamp})`);
+    
     // Create a segment for each process using actual timestamps
     metrics.forEach(metric => {
       if (metric.value === undefined) return;
@@ -1344,12 +1379,12 @@ abstract class MessageControls {
         case 'voiceActivityDetection':
           // For transcriptionDelay, use transcription end to prompt submission time
           if (timestamps.transcriptionEnd && timestamps.promptSubmission) {
-            start = timestamps.transcriptionEnd - earliestTimestamp;
-            end = timestamps.promptSubmission - earliestTimestamp;
+            start = timestamps.transcriptionEnd - referenceTimestamp;
+            end = timestamps.promptSubmission - referenceTimestamp;
             console.debug(`Grace Period: Using actual timestamps - start: ${start}ms, end: ${end}ms, duration: ${end-start}ms`);
           } else if (timestamps.transcriptionEnd) {
             // Fallback if we only have transcription end
-            start = timestamps.transcriptionEnd - earliestTimestamp;
+            start = timestamps.transcriptionEnd - referenceTimestamp;
             end = start + metric.value;
             console.debug(`Grace Period: Using fallback - start: ${start}ms, end: ${end}ms, duration: ${end-start}ms`);
           } else {
@@ -1363,17 +1398,17 @@ abstract class MessageControls {
           
         case 'transcriptionDuration':
           if (timestamps.transcriptionStart && timestamps.transcriptionEnd) {
-            start = timestamps.transcriptionStart - earliestTimestamp;
-            end = timestamps.transcriptionEnd - earliestTimestamp;
+            start = timestamps.transcriptionStart - referenceTimestamp;
+            end = timestamps.transcriptionEnd - referenceTimestamp;
             console.debug(`Transcription: Using actual timestamps - start: ${start}ms, end: ${end}ms`);
           } else if (timestamps.transcriptionStart) {
             // If we have start but no end, use the duration
-            start = timestamps.transcriptionStart - earliestTimestamp;
+            start = timestamps.transcriptionStart - referenceTimestamp;
             end = start + metric.value;
             console.debug(`Transcription: Using start + duration - start: ${start}ms, end: ${end}ms`);
           } else if (timestamps.speechEnd) {
             // If no transcription timestamps, position it after speech ended
-            start = (timestamps.speechEnd - earliestTimestamp) || 0;
+            start = (timestamps.speechEnd - referenceTimestamp) || 0;
             end = start + metric.value;
             console.debug(`Transcription: Using speechEnd + duration - start: ${start}ms, end: ${end}ms`);
           } else {
@@ -1386,24 +1421,24 @@ abstract class MessageControls {
           
         case 'completionResponse':
           if (timestamps.promptSubmission && timestamps.completionStart) {
-            start = timestamps.promptSubmission - earliestTimestamp;
+            start = timestamps.promptSubmission - referenceTimestamp;
             // End at completion start, unless audio playback starts earlier 
             // (rare but possible edge case where Pi starts speaking before text appears)
             if (timestamps.audioPlaybackStart && timestamps.audioPlaybackStart < timestamps.completionStart) {
-              end = timestamps.audioPlaybackStart - earliestTimestamp;
+              end = timestamps.audioPlaybackStart - referenceTimestamp;
               console.debug(`LLM Wait Time: Ending at audioPlaybackStart instead of completionStart because it came first: ${end}ms`);
             } else {
-              end = timestamps.completionStart - earliestTimestamp;
+              end = timestamps.completionStart - referenceTimestamp;
             }
-            console.debug(`LLM Wait Time: Using actual timestamps - start: ${start}ms, end: ${end}ms (raw: ${timestamps.promptSubmission} to ${end + earliestTimestamp})`);
+            console.debug(`LLM Wait Time: Using actual timestamps - start: ${start}ms, end: ${end}ms (raw: ${timestamps.promptSubmission} to ${end + referenceTimestamp})`);
           } else if (timestamps.promptSubmission) {
             // If we only have the start, use the duration
-            start = timestamps.promptSubmission - earliestTimestamp;
+            start = timestamps.promptSubmission - referenceTimestamp;
             end = start + metric.value;
             console.debug(`LLM Wait Time: Using promptSubmission + duration - start: ${start}ms, end: ${end}ms`);
           } else if (timestamps.transcriptionEnd) {
             // Position after transcription if no explicit timestamps
-            start = timestamps.transcriptionEnd - earliestTimestamp;
+            start = timestamps.transcriptionEnd - referenceTimestamp;
             end = start + metric.value;
             console.debug(`LLM Wait Time: Using transcriptionEnd + duration - start: ${start}ms, end: ${end}ms`);
           }
@@ -1411,12 +1446,12 @@ abstract class MessageControls {
           
         case 'streamingDuration':
           if (timestamps.completionStart && timestamps.completionEnd) {
-            start = timestamps.completionStart - earliestTimestamp;
-            end = timestamps.completionEnd - earliestTimestamp;
+            start = timestamps.completionStart - referenceTimestamp;
+            end = timestamps.completionEnd - referenceTimestamp;
             console.debug(`Streaming: Using actual timestamps - start: ${start}ms, end: ${end}ms (raw: ${timestamps.completionStart} to ${timestamps.completionEnd})`);
           } else if (timestamps.completionStart) {
             // If we only have the start, use the duration
-            start = timestamps.completionStart - earliestTimestamp;
+            start = timestamps.completionStart - referenceTimestamp;
             end = start + metric.value;
             console.debug(`Streaming: Using completionStart + duration - start: ${start}ms, end: ${end}ms`);
           }
@@ -1425,7 +1460,7 @@ abstract class MessageControls {
         case 'speechPlayback':
           // Speech playback is a specific point in time - make it a short segment
           if (timestamps.audioPlaybackStart) {
-            const audioStartTime = timestamps.audioPlaybackStart - earliestTimestamp;
+            const audioStartTime = timestamps.audioPlaybackStart - referenceTimestamp;
             start = audioStartTime;
             end = audioStartTime + 5000; // Make it 5s long for visibility
             console.debug(`Speech Playback: Marking at time - start: ${start}ms, end: ${end}ms (raw: ${timestamps.audioPlaybackStart})`);
@@ -1434,11 +1469,11 @@ abstract class MessageControls {
           
         case 'timeToTalk':
           if (timestamps.completionStart && timestamps.audioPlaybackStart) {
-            start = timestamps.completionStart - earliestTimestamp;
-            end = timestamps.audioPlaybackStart - earliestTimestamp;
+            start = timestamps.completionStart - referenceTimestamp;
+            end = timestamps.audioPlaybackStart - referenceTimestamp;
             console.debug(`Time to Talk: Using actual timestamps - start: ${start}ms, end: ${end}ms (raw: ${timestamps.completionStart} to ${timestamps.audioPlaybackStart})`);
           } else if (timestamps.completionStart) {
-            start = timestamps.completionStart - earliestTimestamp;
+            start = timestamps.completionStart - referenceTimestamp;
             end = start + metric.value;
             console.debug(`Time to Talk: Using completionStart + duration - start: ${start}ms, end: ${end}ms`);
           }
@@ -1448,7 +1483,7 @@ abstract class MessageControls {
           start = 0;
           // Use audioPlaybackStart as the end time 
           if (timestamps.audioPlaybackStart) {
-            end = timestamps.audioPlaybackStart - earliestTimestamp;
+            end = timestamps.audioPlaybackStart - referenceTimestamp;
             console.debug(`Total Time: Using 0 to audioPlaybackStart - start: ${start}ms, end: ${end}ms`);
           } else {
             // Fall back to the value if audioPlaybackStart is not available
@@ -1465,43 +1500,17 @@ abstract class MessageControls {
       
       // Only create a segment if we have valid start and end times
       if (end > start) {
-        // Ensure a minimum duration for visibility (especially for grace period)
-        const minDuration = 200; // 200ms minimum for visibility
-        const displayDuration = metric.key === 'voiceActivityDetection' && (end - start) < minDuration ? 
-          minDuration : end - start;
-        
         const segment: TimelineSegment = {
           metricKey: metric.key,
           label: metric.label,
           start: start,
           end: end,
-          duration: displayDuration, // Use the adjusted duration for display purposes
+          duration: end - start,
           color: metric.color,
           explanation: metric.explanation
         };
         
         segments.push(segment);
-      } else if (metric.key === 'voiceActivityDetection' && metric.value > 0) {
-        // Special case for grace period - if it has a value but timestamps don't give us a valid range
-        // Create a segment with a minimum duration at the estimated position (after transcription)
-        const transcriptionSegment = segments.find(s => s.metricKey === 'transcriptionDuration');
-        if (transcriptionSegment) {
-          const start = transcriptionSegment.end;
-          const end = start + Math.max(200, metric.value); // At least 200ms for visibility
-          
-          const segment: TimelineSegment = {
-            metricKey: metric.key,
-            label: metric.label,
-            start: start,
-            end: end,
-            duration: end - start,
-            color: metric.color,
-            explanation: metric.explanation
-          };
-          
-          console.debug(`Created fallback grace period segment: start=${start}ms, end=${end}ms, duration=${end-start}ms`);
-          segments.push(segment);
-        }
       }
     });
     
@@ -1543,7 +1552,7 @@ abstract class MessageControls {
     
     // If we have audioPlaybackStart, use that as the reference but extend the timeline beyond it
     if (timestamps.audioPlaybackStart) {
-      const audioStartTime = timestamps.audioPlaybackStart - earliestTimestamp;
+      const audioStartTime = timestamps.audioPlaybackStart - referenceTimestamp;
       // Only adjust if audioPlaybackStart is not zero (which would indicate it's missing)
       if (audioStartTime > 0) {
         // Extend timeline to show more processes beyond speech start

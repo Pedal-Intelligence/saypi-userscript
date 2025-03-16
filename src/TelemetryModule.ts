@@ -93,6 +93,7 @@ export class TelemetryModule {
 
     EventBus.on("saypi:userStoppedSpeaking", () => {
       this.speechEndTime = Date.now();
+      console.debug("User stopped speaking at", this.speechEndTime);
       if (!this.currentTelemetry.timestamps) this.currentTelemetry.timestamps = {};
       this.currentTelemetry.timestamps.speechEnd = this.speechEndTime;
       this.emitUpdate();
@@ -110,34 +111,13 @@ export class TelemetryModule {
       
       if (!this.currentTelemetry.timestamps) this.currentTelemetry.timestamps = {};
       this.currentTelemetry.timestamps.transcriptionStart = this.transcriptionStartTime;
-      
-      // Record grace period (time between user stopped speaking and transcription request)
-      if (this.speechEndTime > 0) {
-        const gracePeriod = this.transcriptionStartTime - this.speechEndTime;
-        console.debug(`Grace period: ${gracePeriod}ms`);
-        this.currentTelemetry.gracePeriod = gracePeriod;
-        this.emitUpdate();
-      }
-    });
-
-    EventBus.on("saypi:transcribed", () => {
-      this.transcriptionEndTime = Date.now();
-      this.lastTranscriptionTime = Date.now();
-      
-      if (!this.currentTelemetry.timestamps) this.currentTelemetry.timestamps = {};
-      this.currentTelemetry.timestamps.transcriptionEnd = this.transcriptionEndTime;
-      
-      // Update transcription time
-      if (this.transcriptionStartTime > 0) {
-        this.currentTelemetry.transcriptionTime = this.transcriptionEndTime - this.transcriptionStartTime;
-        this.emitUpdate();
-      }
     });
     
     // Handle specific transcription events from TranscriptionModule
     EventBus.on("saypi:transcription:received", (event: any) => {
-      if (event.sequenceNumber === this.currentSequence && event.duration) {
-        this.currentTelemetry.transcriptionTime = event.duration;
+      if (event.sequenceNumber === this.currentSequence && event.timestamp) {
+        if (!this.currentTelemetry.timestamps) this.currentTelemetry.timestamps = {};
+        this.currentTelemetry.timestamps.transcriptionEnd = event.timestamp;
         this.emitUpdate();
       }
     });
