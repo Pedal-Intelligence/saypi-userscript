@@ -125,7 +125,7 @@ async function logoutFromSaas() {
       ? config.authServerUrl 
       : 'https://www.saypi.ai';
     
-    const logoutUrl = `${baseUrl}/auth/logout`;
+    const logoutUrl = `${baseUrl}/api/auth/logout`;
     
     const response = await fetch(logoutUrl, {
       method: 'POST',

@@ -1,7 +1,7 @@
 /**
  * Auto-generated from .env.production - DO NOT MODIFY DIRECTLY
  * This file is regenerated on each build to ensure it uses the correct environment settings.
- * Generated on: 2025-03-15T13:45:51.505Z
+ * Generated on: 2025-03-17T11:23:59.453Z
  */
 const config = {
   // Values from .env.production
@@ -9,5 +9,5 @@ const config = {
   authServerUrl: "https://www.saypi.ai"
 };
 
-// Export the config for backward compatibility
-export default config;
+// Config is now globally accessible via window.config
+// No export needed in popup context
