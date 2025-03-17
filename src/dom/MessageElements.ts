@@ -684,10 +684,10 @@ abstract class MessageControls {
       console.debug("Added Pi's speech playback marker");
       metrics.push({
         key: 'speechPlayback',
-        label: 'Pi Speaks',
+        label: 'Pi Speaks: 5+s',
         value: 5000, // Just a small duration to make it visible - this is just a marker
         color: '#0F9D58', // Green
-        explanation: 'Point when Pi begins speaking the response'
+        explanation: 'Point when Pi begins speaking the response (continues beyond timeline)'
       });
     }
     
@@ -752,150 +752,28 @@ abstract class MessageControls {
     }
 
     // Create container for telemetry data
-    const barsContainer = document.createElement("div");
-    barsContainer.className = "saypi-telemetry-container";
+    const container = document.createElement("div");
+    container.className = "saypi-telemetry-container";
     
-    // Create metrics with explanations
-    const metricsWithExplanations: MetricDefinition[] = [];
-    
-    metrics.forEach(metric => {
-      metricsWithExplanations.push({
-        key: metric.key,
-        label: metric.label,
-        color: metric.color,
-        value: metric.value,
-        explanation: metric.explanation || ""
-      });
-    });
-    
-    if (metricsWithExplanations.length === 0) {
-      console.warn("No metrics to display");
-      return;
-    }
-
     // Add title
     const title = document.createElement("h4");
     title.textContent = "Performance Metrics";
     title.style.margin = "0 0 10px 0";
     title.style.fontSize = "14px";
     title.style.fontWeight = "bold";
-    barsContainer.appendChild(title);
-
-    // Calculate total time for percentages
-    const totalTimeForPercentages = Math.max(...metricsWithExplanations.map(m => m.value));
-
-    // Add visualization type selector
-    const vizTypeContainer = document.createElement("div");
-    vizTypeContainer.style.display = "flex";
-    vizTypeContainer.style.marginBottom = "10px";
-    vizTypeContainer.style.justifyContent = "center";
-
-    const barChartButton = document.createElement("button");
-    barChartButton.textContent = "Bar Chart";
-    barChartButton.style.marginRight = "10px";
-    barChartButton.style.padding = "3px 8px";
-    barChartButton.style.border = "none";
-    barChartButton.style.borderRadius = "4px";
-    barChartButton.style.backgroundColor = "#ddd";
-    barChartButton.style.cursor = "pointer";
-    barChartButton.classList.add("active");
-
-    const timelineButton = document.createElement("button");
-    timelineButton.textContent = "Timeline";
-    timelineButton.style.padding = "3px 8px";
-    timelineButton.style.border = "none";
-    timelineButton.style.borderRadius = "4px";
-    timelineButton.style.backgroundColor = "#ddd";
-    timelineButton.style.cursor = "pointer";
-
-    vizTypeContainer.appendChild(barChartButton);
-    vizTypeContainer.appendChild(timelineButton);
-    barsContainer.appendChild(vizTypeContainer);
+    container.appendChild(title);
 
     // Create chart container
     const chartContainer = document.createElement("div");
     chartContainer.style.padding = "10px 0";
-    barsContainer.appendChild(chartContainer);
+    container.appendChild(chartContainer);
 
-    // Create a bar chart first (default view)
-    this.createBarChart(chartContainer, metricsWithExplanations, totalTimeForPercentages);
-
-    // Add event listeners to toggle between chart types
-    barChartButton.addEventListener("click", () => {
-      barChartButton.classList.add("active");
-      timelineButton.classList.remove("active");
-      chartContainer.innerHTML = "";
-      this.createBarChart(chartContainer, metricsWithExplanations, totalTimeForPercentages);
-    });
-
-    timelineButton.addEventListener("click", () => {
-      timelineButton.classList.add("active");
-      barChartButton.classList.remove("active");
-      chartContainer.innerHTML = "";
-      this.createTimelineChart(chartContainer, metricsWithExplanations);
-    });
+    // Create the timeline chart (Gantt chart)
+    this.createTimelineChart(chartContainer, metrics);
 
     // Insert the telemetry visualization into the DOM
-    this.message.element.appendChild(barsContainer);
-    this.telemetryContainer = barsContainer;
-  }
-
-  /**
-   * Create a bar chart visualization
-   */
-  private createBarChart(container: HTMLElement, metrics: MetricDefinition[], totalTime: number): void {
-    // Create a bar for each metric
-    metrics.forEach(metric => {
-      const value = metric.value || 0;
-      const percentage = (value / totalTime) * 100;
-      
-      const row = document.createElement("div");
-      row.style.display = "flex";
-      row.style.alignItems = "center";
-      row.style.marginBottom = "5px";
-      row.style.position = "relative";
-      
-      const label = document.createElement("div");
-      label.textContent = `${metric.label}: ${(value / 1000).toFixed(2)}s`;
-      label.style.marginRight = "10px";
-      label.style.width = "200px";
-      label.style.cursor = "help";
-      label.title = metric.explanation;
-      
-      const barContainer = document.createElement("div");
-      barContainer.style.height = "16px";
-      barContainer.style.flexGrow = "1";
-      barContainer.style.backgroundColor = "#e0e0e0";
-      barContainer.style.borderRadius = "5px";
-      barContainer.style.overflow = "hidden";
-      barContainer.style.position = "relative";
-      
-      const bar = document.createElement("div");
-      bar.style.width = `${percentage}%`;
-      bar.style.height = "100%";
-      bar.style.backgroundColor = metric.color;
-      
-      // Add question mark icon for explanation
-      const infoIcon = document.createElement("div");
-      infoIcon.style.position = "absolute";
-      infoIcon.style.right = "5px";
-      infoIcon.style.top = "0";
-      infoIcon.style.bottom = "0";
-      infoIcon.style.display = "flex";
-      infoIcon.style.alignItems = "center";
-      infoIcon.style.justifyContent = "center";
-      infoIcon.style.fontSize = "10px";
-      infoIcon.style.color = "#555";
-      infoIcon.style.cursor = "help";
-      infoIcon.title = metric.explanation;
-      infoIcon.innerHTML = "?";
-      
-      barContainer.appendChild(bar);
-      barContainer.appendChild(infoIcon);
-      row.appendChild(label);
-      row.appendChild(barContainer);
-      container.appendChild(row);
-    });
+    this.message.element.appendChild(container);
+    this.telemetryContainer = container;
   }
 
   /**
@@ -1014,6 +892,9 @@ abstract class MessageControls {
         return;
       }
       
+      // Calculate the total actual duration for the displayed segments
+      const actualDuration = rowSegments.reduce((total, segment) => total + segment.duration, 0);
+      
       const rowContainer = document.createElement("div");
       rowContainer.className = "gantt-row";
       rowContainer.style.position = "relative";
@@ -1033,11 +914,12 @@ abstract class MessageControls {
       labelColumn.style.justifyContent = "flex-end";
       labelColumn.style.fontWeight = "500";
       
-      // Add label with value
-      const formattedValue = metric.value !== undefined ? 
-        (metric.value > 1000 ? `${(metric.value/1000).toFixed(2)}s` : `${metric.value.toFixed(0)}ms`) : 
-        '0ms';
-      labelColumn.innerHTML = `<span>${metric.label}:</span> <span style="font-weight:bold;margin-left:4px;">${formattedValue}</span>`;
+      // Add label with actual calculated duration from segments
+      const labelText = metric.key === 'speechPlayback' ? 
+        metric.label : // For speechPlayback, use the predefined label that includes "5+s"
+        `${metric.label.split(':')[0]}: ${(actualDuration/1000).toFixed(2)}s`; // For other metrics, use calculated duration
+      
+      labelColumn.innerHTML = `<span>${labelText}</span>`;
       labelColumn.title = metric.explanation;
       
       // Create timeline column
@@ -1063,53 +945,80 @@ abstract class MessageControls {
         segmentElem.style.borderRadius = "3px";
         segmentElem.style.boxShadow = "0 1px 2px rgba(0,0,0,0.1)";
         
-        // Add open-ended indicator for Pi Speaks segment
+        // For Pi Speaks segment, extend to the right edge
         if (segment.metricKey === 'speechPlayback') {
           // Make the segment extend to the right edge of the chart
-          const originalWidth = segmentElem.style.width;
           segmentElem.style.width = `calc(100% - ${(segment.start / timelineEnd) * 100}%)`;
-          
-          // Add "ongoing" label to the end time if it's wide enough
-          if (segment.duration / timelineEnd > 0.05) {
+        }
+        
+        // Add start/end time labels if segment is wide enough
+        if (segment.duration / timelineEnd > 0.05) {
+          // For the Pi Speaks segment, just show a single "(ongoing)" label since it extends to the right edge
+          if (segment.metricKey === 'speechPlayback') {
             const endTimeLabel = document.createElement("span");
             endTimeLabel.className = "segment-time end-time";
-            endTimeLabel.textContent = `${(segment.end/1000).toFixed(2)}s+ (ongoing)`;
+            endTimeLabel.textContent = `${(segment.start/1000).toFixed(2)}s+`;
             endTimeLabel.style.position = "absolute";
-            endTimeLabel.style.right = "4px";
+            endTimeLabel.style.left = "4px";
             endTimeLabel.style.top = "50%";
             endTimeLabel.style.transform = "translateY(-50%)";
             endTimeLabel.style.fontSize = "9px";
             endTimeLabel.style.color = "#fff";
             endTimeLabel.style.textShadow = "0 0 2px rgba(0,0,0,0.5)";
             segmentElem.appendChild(endTimeLabel);
+          } else {
+            // For regular segments, check if there's enough width for both labels
+            // If segment is less than 15% of timeline width, only show one label in the middle
+            if (segment.duration / timelineEnd < 0.15) {
+              const middleLabel = document.createElement("span");
+              middleLabel.className = "segment-time middle-time";
+              middleLabel.textContent = `${(segment.duration/1000).toFixed(2)}s`;
+              middleLabel.style.position = "absolute";
+              middleLabel.style.left = "50%";
+              middleLabel.style.top = "50%";
+              middleLabel.style.transform = "translate(-50%, -50%)";
+              middleLabel.style.fontSize = "9px";
+              middleLabel.style.color = "#fff";
+              middleLabel.style.textShadow = "0 0 2px rgba(0,0,0,0.5)";
+              middleLabel.style.whiteSpace = "nowrap"; // Prevent text wrapping
+              
+              // For very small segments, show label outside the segment instead of inside
+              if (segment.duration / timelineEnd < 0.05) {
+                middleLabel.style.color = "#333";
+                middleLabel.style.textShadow = "none";
+                middleLabel.style.top = "-15px"; // Position above the segment
+              }
+              
+              segmentElem.appendChild(middleLabel);
+            } else {
+              // For wider segments, show both start and end times with enough space
+              const startTime = document.createElement("span");
+              startTime.className = "segment-time start-time";
+              startTime.textContent = `${(segment.start/1000).toFixed(2)}s`;
+              startTime.style.position = "absolute";
+              startTime.style.left = "4px";
+              startTime.style.top = "50%";
+              startTime.style.transform = "translateY(-50%)";
+              startTime.style.fontSize = "9px";
+              startTime.style.color = "#fff";
+              startTime.style.textShadow = "0 0 2px rgba(0,0,0,0.5)";
+              startTime.style.whiteSpace = "nowrap"; // Prevent text wrapping
+              segmentElem.appendChild(startTime);
+              
+              const endTime = document.createElement("span");
+              endTime.className = "segment-time end-time";
+              endTime.textContent = `${(segment.end/1000).toFixed(2)}s`;
+              endTime.style.position = "absolute";
+              endTime.style.right = "4px";
+              endTime.style.top = "50%";
+              endTime.style.transform = "translateY(-50%)";
+              endTime.style.fontSize = "9px";
+              endTime.style.color = "#fff";
+              endTime.style.textShadow = "0 0 2px rgba(0,0,0,0.5)";
+              endTime.style.whiteSpace = "nowrap"; // Prevent text wrapping
+              segmentElem.appendChild(endTime);
+            }
           }
-        }
-        
-        // Add start/end time labels if segment is wide enough
-        if (segment.duration / timelineEnd > 0.05) {
-          const startTime = document.createElement("span");
-          startTime.className = "segment-time start-time";
-          startTime.textContent = `${(segment.start/1000).toFixed(2)}s`;
-          startTime.style.position = "absolute";
-          startTime.style.left = "4px";
-          startTime.style.top = "50%";
-          startTime.style.transform = "translateY(-50%)";
-          startTime.style.fontSize = "9px";
-          startTime.style.color = "#fff";
-          startTime.style.textShadow = "0 0 2px rgba(0,0,0,0.5)";
-          segmentElem.appendChild(startTime);
-          
-          const endTime = document.createElement("span");
-          endTime.className = "segment-time end-time";
-          endTime.textContent = `${(segment.end/1000).toFixed(2)}s`;
-          endTime.style.position = "absolute";
-          endTime.style.right = "4px";
-          endTime.style.top = "50%";
-          endTime.style.transform = "translateY(-50%)";
-          endTime.style.fontSize = "9px";
-          endTime.style.color = "#fff";
-          endTime.style.textShadow = "0 0 2px rgba(0,0,0,0.5)";
-          segmentElem.appendChild(endTime);
         }
         
         // Add tooltip on hover
@@ -1206,6 +1115,15 @@ abstract class MessageControls {
     legend.style.marginTop = "15px";
     legend.style.justifyContent = "center";
     
+    // Create a map of actual durations
+    const metricDurations = new Map<string, number>();
+    segments.forEach(segment => {
+      if (!segment.metricKey.startsWith('gap_')) {
+        const currentTotal = metricDurations.get(segment.metricKey) || 0;
+        metricDurations.set(segment.metricKey, currentTotal + segment.duration);
+      }
+    });
+    
     metrics.forEach(metric => {
       if (metric.value === undefined) return;
       
@@ -1224,7 +1142,17 @@ abstract class MessageControls {
       colorBox.style.borderRadius = "2px";
       
       const label = document.createElement("span");
-      label.textContent = `${metric.label}: ${(metric.value/1000).toFixed(2)}s`;
+      
+      // Use the actual duration from segments for the label
+      const actualDuration = metricDurations.get(metric.key) || metric.value;
+      
+      // For speech playback, use a special label format
+      if (metric.key === 'speechPlayback') {
+        label.textContent = `Pi Speaks: 5+s`;
+      } else {
+        label.textContent = `${metric.label.split(':')[0]}: ${(actualDuration/1000).toFixed(2)}s`;
+      }
+      
       label.style.fontSize = "12px";
       
       legendItem.appendChild(colorBox);
