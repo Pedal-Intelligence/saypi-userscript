@@ -15,6 +15,7 @@ export class MetricsProcessor {
     
     // Get timestamps for additional calculations
     const timestamps = telemetryData.timestamps || {};
+    console.debug("Available timestamps:", Object.keys(timestamps).join(", "));
     
     // Map telemetry data to display metrics
     if (telemetryData.transcriptionDelay) {
@@ -25,6 +26,17 @@ export class MetricsProcessor {
         value: telemetryData.transcriptionDelay,
         color: '#4285F4', // Blue
         explanation: 'Time between final transcription and submitting prompt to LLM'
+      });
+    } else if (timestamps.promptSubmission && timestamps.transcriptionEnd) {
+      // Calculate delay from timestamps if direct value is not available
+      const calculatedDelay = timestamps.promptSubmission - timestamps.transcriptionEnd;
+      console.debug("Calculated grace period from timestamps:", calculatedDelay + "ms");
+      metrics.push({
+        key: 'voiceActivityDetection',
+        label: 'Grace Period',
+        value: calculatedDelay,
+        color: '#4285F4', // Blue
+        explanation: 'Time between final transcription and submitting prompt to LLM (calculated from timestamps)'
       });
     } else {
       console.warn("No transcriptionDelay found in telemetry data:", telemetryData);
@@ -62,6 +74,19 @@ export class MetricsProcessor {
         color: '#F4B400', // Yellow/Gold
         explanation: 'Time taken to stream the text response'
       });
+    } else if (timestamps.completionStart && timestamps.completionEnd) {
+      // Calculate streaming duration from timestamps if direct value is not available
+      const calculatedStreamingDuration = timestamps.completionEnd - timestamps.completionStart;
+      console.debug("Calculated streaming duration from timestamps:", calculatedStreamingDuration + "ms");
+      if (calculatedStreamingDuration > 0) {
+        metrics.push({
+          key: 'streamingDuration',
+          label: 'Pi writes',
+          value: calculatedStreamingDuration,
+          color: '#F4B400', // Yellow/Gold
+          explanation: 'Time taken to stream the text response (calculated from timestamps)'
+        });
+      }
     }
     
     // Add a new metric for speech playback
@@ -85,6 +110,19 @@ export class MetricsProcessor {
         color: '#673AB7', // Purple
         explanation: 'Time waiting for Pi to formulate a response'
       });
+    } else if (timestamps.promptSubmission && timestamps.completionStart) {
+      // Calculate completion response time from timestamps if direct value is not available
+      const calculatedCompletionResponse = timestamps.completionStart - timestamps.promptSubmission;
+      console.debug("Calculated LLM Wait Time from timestamps:", calculatedCompletionResponse + "ms");
+      if (calculatedCompletionResponse > 0) {
+        metrics.push({
+          key: 'completionResponse',
+          label: 'LLM Wait Time',
+          value: calculatedCompletionResponse,
+          color: '#673AB7', // Purple
+          explanation: 'Time waiting for Pi to formulate a response (calculated from timestamps)'
+        });
+      }
     }
     
     if (telemetryData.timeToTalk) {
@@ -96,22 +134,38 @@ export class MetricsProcessor {
         color: '#3F51B5', // Indigo
         explanation: 'Time from start of response to start of audio playback'
       });
+    } else if (timestamps.completionStart && timestamps.audioPlaybackStart) {
+      // Calculate time to talk from timestamps if direct value is not available
+      const calculatedTimeToTalk = timestamps.audioPlaybackStart - timestamps.completionStart;
+      console.debug("Calculated Time to Talk from timestamps:", calculatedTimeToTalk + "ms");
+      if (calculatedTimeToTalk > 0) {
+        metrics.push({
+          key: 'timeToTalk',
+          label: 'Time to Talk',
+          value: calculatedTimeToTalk,
+          color: '#3F51B5', // Indigo
+          explanation: 'Time from start of response to start of audio playback (calculated from timestamps)'
+        });
+      }
     }
     
     // Calculate total end-to-end time
     let totalTime = 0;
     
     // If we have timestamps, calculate from speechEnd to audioPlaybackStart
-    if (telemetryData.timestamps?.speechEnd && telemetryData.timestamps?.audioPlaybackStart) {
-      totalTime = telemetryData.timestamps.audioPlaybackStart - telemetryData.timestamps.speechEnd;
+    if (timestamps.speechEnd && timestamps.audioPlaybackStart) {
+      totalTime = timestamps.audioPlaybackStart - timestamps.speechEnd;
+      console.debug("Calculated totalTime from speechEnd to audioPlaybackStart:", totalTime + "ms");
     } else {
       // Otherwise sum up the component times
-      totalTime = (telemetryData.transcriptionTime || 0) + 
-                 (telemetryData.transcriptionDelay || 0) + 
-                 (telemetryData.completionResponse || 0);
+      totalTime = (metrics.find(m => m.key === 'transcriptionDuration')?.value || 0) + 
+                 (metrics.find(m => m.key === 'voiceActivityDetection')?.value || 0) + 
+                 (metrics.find(m => m.key === 'completionResponse')?.value || 0) +
+                 (metrics.find(m => m.key === 'streamingDuration')?.value || 0);
+      console.debug("Calculated totalTime by summing components:", totalTime + "ms");
     }
     
-    console.debug("Calculated totalTime:", totalTime + "ms");
+    console.debug("Final totalTime:", totalTime + "ms");
     
     metrics.push({
       key: 'totalTime',
@@ -121,7 +175,7 @@ export class MetricsProcessor {
       explanation: 'Total time from end of user speech to beginning of Pi\'s audio response'
     });
     
-    console.debug("Mapped telemetry metrics:", metrics.map(m => m.key).join(", "));
+    console.debug("All available metrics:", metrics.map(m => `${m.key}: ${m.value}ms`).join(", "));
     
     return { metrics, totalTime };
   }
