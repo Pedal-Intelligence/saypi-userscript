@@ -40,8 +40,8 @@ const config = {
   authServerUrl: ${JSON.stringify(envVariables.AUTH_SERVER_URL)}
 };
 
-// Export the config for backward compatibility
-export default config;
+// Config is now globally accessible via window.config
+// No export needed in popup context
 `;
 
   // Write the content directly to the existing popup-config.js file

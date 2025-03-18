@@ -195,7 +195,11 @@ function updateQuotaProgress(status, type = 'tts') {
     
     // Update quota percentage to show "0 credits remaining"
     const quotaUnit = type === 'tts' ? 'characters' : 'seconds';
-    quotaPercentage.innerHTML = `<span class="text-muted-foreground">0 ${quotaUnit} remaining</span>`;
+    quotaPercentage.textContent = '';
+    const remainingSpan = document.createElement('span');
+    remainingSpan.className = 'text-muted-foreground';
+    remainingSpan.textContent = `0 ${quotaUnit} remaining`;
+    quotaPercentage.appendChild(remainingSpan);
     
     // Set tooltip for progress bar
     if (status.quota && status.quota.total) {
@@ -257,7 +261,11 @@ function updateQuotaProgress(status, type = 'tts') {
   }
   
   // Update percentage text to only show remaining text
-  quotaPercentage.innerHTML = `<span class="text-muted-foreground">${remainingText}</span>`;
+  quotaPercentage.textContent = '';
+  const remainingTextSpan = document.createElement('span');
+  remainingTextSpan.className = 'text-muted-foreground';
+  remainingTextSpan.textContent = remainingText;
+  quotaPercentage.appendChild(remainingTextSpan);
   
   // Add percentage label inside progress bar
   // First, check if the label already exists

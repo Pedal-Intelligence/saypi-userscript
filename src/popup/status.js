@@ -7,48 +7,81 @@ function updateStatus(status) {
   const statusContainer = document.querySelector(".status");
   statusContainer.className = `status ${status.status_code}`;
 
-  let summaryHtml = "";
+  // Clear previous content
+  statusContainer.textContent = '';
+
   if (status.status_code === "normal" || status.status_code === "unknown") {
-    summaryHtml = `<p class="message ${status.status_code}">${status.message}</p>`;
+    const messagePara = document.createElement("p");
+    messagePara.className = `message ${status.status_code}`;
+    messagePara.textContent = status.message;
+    statusContainer.appendChild(messagePara);
   } else if (status.status_code === "issue") {
     const summaryIssueMessage = chrome.i18n.getMessage(
       "applicationStatusIssue"
     );
     const recommendedActionsMessage =
       chrome.i18n.getMessage("recommendedActions");
-    summaryHtml = `<p id="issue-summary" class="message ${status.status_code} ${status.severity}">${summaryIssueMessage}</p>`;
-    detailHtml = `
-            <h2 class="${status.severity}">${summaryIssueMessage}</h2>
-            <p class="message">${status.message}</p>
-            ${status.details ? `<p class="details">${status.details}</p>` : ""}
-            ${
-              status.recommended_actions
-                ? `
-                <p class="recommended-actions"><strong>${recommendedActionsMessage}</strong></p>
-                <ul>
-                    ${status.recommended_actions
-                      .map((action) => `<li>${action.description}</li>`)
-                      .join("")}
-                </ul>
-            `
-                : ""
-            }
-            ${
-              status.version
-                ? `<p class="version">${status.version.message}</p>`
-                : ""
-            }
-            <button id="dismiss-alert" class="button dismiss">${chrome.i18n.getMessage(
-              "dismissAlert"
-            )}</button>
-        `;
+    
+    const issueSummary = document.createElement("p");
+    issueSummary.id = "issue-summary";
+    issueSummary.className = `message ${status.status_code} ${status.severity}`;
+    issueSummary.textContent = summaryIssueMessage;
+    statusContainer.appendChild(issueSummary);
+    
+    // Create detail elements for application status detail
     const applicationStatusDetail = document.querySelector(
       "#application-status-detail"
     );
-    applicationStatusDetail.innerHTML = detailHtml;
+    // Clear previous content
+    applicationStatusDetail.textContent = '';
+    
+    const detailHeader = document.createElement("h2");
+    detailHeader.className = status.severity;
+    detailHeader.textContent = summaryIssueMessage;
+    applicationStatusDetail.appendChild(detailHeader);
+    
+    const messagePara = document.createElement("p");
+    messagePara.className = "message";
+    messagePara.textContent = status.message;
+    applicationStatusDetail.appendChild(messagePara);
+    
+    if (status.details) {
+      const detailsPara = document.createElement("p");
+      detailsPara.className = "details";
+      detailsPara.textContent = status.details;
+      applicationStatusDetail.appendChild(detailsPara);
+    }
+    
+    if (status.recommended_actions) {
+      const recommendedActionsPara = document.createElement("p");
+      recommendedActionsPara.className = "recommended-actions";
+      const strongElement = document.createElement("strong");
+      strongElement.textContent = recommendedActionsMessage;
+      recommendedActionsPara.appendChild(strongElement);
+      applicationStatusDetail.appendChild(recommendedActionsPara);
+      
+      const actionsList = document.createElement("ul");
+      status.recommended_actions.forEach(action => {
+        const listItem = document.createElement("li");
+        listItem.textContent = action.description;
+        actionsList.appendChild(listItem);
+      });
+      applicationStatusDetail.appendChild(actionsList);
+    }
+    
+    if (status.version) {
+      const versionPara = document.createElement("p");
+      versionPara.className = "version";
+      versionPara.textContent = status.version.message;
+      applicationStatusDetail.appendChild(versionPara);
+    }
+    
+    const dismissButton = document.createElement("button");
+    dismissButton.id = "dismiss-alert";
+    dismissButton.className = "button dismiss";
+    dismissButton.textContent = chrome.i18n.getMessage("dismissAlert");
+    applicationStatusDetail.appendChild(dismissButton);
   }
-
-  statusContainer.innerHTML = summaryHtml;
 }
 
 function showIssueDetails(applicationStatusDetail) {

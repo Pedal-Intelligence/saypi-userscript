@@ -57,7 +57,8 @@ function handleSignIn() {
   // Try to use config from the global scope
   if (typeof config !== 'undefined' && config.authServerUrl) {
     const loginUrl = `${config.authServerUrl}/auth/login`;
-    const returnUrl = window.location.href;
+    // Use the Pi AI talk page instead of the SaaS dashboard
+    const returnUrl = 'https://pi.ai/talk';
     redirectToLogin(loginUrl, returnUrl);
   } else {
     // Fallback to using the message API
@@ -137,7 +138,7 @@ async function logoutFromSaas() {
     
     return result.success;
   } catch (error) {
-    console.error('Logout from SaaS failed:', error);
+    console.error('Logout failed:', error);
     return false;
   }
 }
