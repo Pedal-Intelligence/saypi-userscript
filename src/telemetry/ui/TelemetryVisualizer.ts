@@ -1,405 +1,435 @@
-import { TelemetryData } from "../../TelemetryModule";
-import { MetricsProcessor } from "./MetricsProcessor";
-import { TimelineCalculator } from "./TimelineCalculator";
-import { MetricDefinition, TimelineSegment } from "./types";
+/**
+ * Interface for a metric definition
+ */
+interface MetricDefinition {
+  key: string;
+  label: string;
+  color: string;
+  value: number;
+  actualValue?: number; // Actual value before any display adjustments
+  explanation: string;
+}
 
 /**
- * Renders telemetry visualizations
+ * Visualizes telemetry data in a timeline format
  */
 export class TelemetryVisualizer {
-  private telemetryContainer: HTMLElement | null = null;
-  private isVisible: boolean = false;
-
   /**
-   * Creates a new TelemetryVisualizer
-   * @param parentElement The element to attach the visualization to
+   * Creates a visualization of the telemetry data
+   * @param container The container element to append the visualization to
+   * @param metrics The metrics to visualize
    */
-  constructor(private parentElement: HTMLElement) {}
-
-  /**
-   * Create and display the telemetry visualization
-   * @param telemetryData The telemetry data to visualize
-   */
-  public visualize(telemetryData: TelemetryData): void {
-    // Remove any existing visualization
-    if (this.telemetryContainer) {
-      this.telemetryContainer.remove();
-      this.telemetryContainer = null;
-    }
-
-    // Process the telemetry data into metrics
-    const { metrics, totalTime } = MetricsProcessor.processMetrics(telemetryData);
+  public createVisualization(container: HTMLElement, metrics: MetricDefinition[]): void {
     if (!metrics.length) {
       console.warn("No metrics to display");
       return;
     }
 
-    // Create the visualization container
-    this.createVisualization(metrics);
-    this.isVisible = true;
-  }
+    // Clear container
+    container.innerHTML = '';
 
-  /**
-   * Check if the visualization is currently visible
-   */
-  public isVisualizationVisible(): boolean {
-    return this.isVisible;
-  }
-
-  /**
-   * Toggle the visibility of the telemetry visualization
-   * @returns The new visibility state
-   */
-  public toggleVisibility(): boolean {
-    console.debug("TelemetryVisualizer.toggleVisibility called, current state:", this.isVisible);
-
-    // If no container exists yet, create one with current telemetry data
-    if (!this.telemetryContainer) {
-      console.debug("No telemetry container exists yet, creating one");
-      const telemetryData = require('../../telemetry').telemetryModule.getCurrentTelemetry();
-      this.visualize(telemetryData);
-      
-      // Container should now be visible since visualize() sets isVisible = true
-      return this.isVisible;
-    }
-
-    // Toggle visibility of existing container
-    if (this.isVisible) {
-      console.debug("Hiding telemetry visualization");
-      this.telemetryContainer.style.display = "none";
-      this.isVisible = false;
-    } else {
-      console.debug("Showing telemetry visualization");
-      this.telemetryContainer.style.display = "block";
-      this.isVisible = true;
-    }
-
-    return this.isVisible;
-  }
-
-  /**
-   * Create the telemetry visualization
-   * @param metrics The metrics to visualize
-   */
-  private createVisualization(metrics: MetricDefinition[]): void {
-    // Create container for telemetry data
-    const container = document.createElement("div");
-    container.className = "saypi-telemetry-container";
-    container.style.padding = "15px";
-    container.style.backgroundColor = "#f8f8f8";
-    container.style.border = "1px solid #e0e0e0";
-    container.style.borderRadius = "8px";
-    
     // Add title
-    const title = document.createElement("h4");
+    const title = document.createElement("h3");
     title.textContent = "Performance Metrics";
-    title.style.margin = "0 0 15px 0";
-    title.style.fontSize = "16px";
+    title.style.margin = "0 0 10px 0";
+    title.style.fontSize = "18px";
     title.style.fontWeight = "bold";
     title.style.color = "#333";
     container.appendChild(title);
 
-    // Create chart container
-    const chartContainer = document.createElement("div");
-    chartContainer.style.padding = "10px 0 20px 0";
-    container.appendChild(chartContainer);
-
     // Create the timeline chart
-    this.createTimelineChart(chartContainer, metrics);
-    
+    this.createTimelineChart(container, metrics);
+
     // Add explanatory text
     this.addExplanatoryText(container);
-
-    // Insert the telemetry visualization into the DOM
-    this.parentElement.appendChild(container);
-    this.telemetryContainer = container;
-  }
-  
-  /**
-   * Add explanatory text to the visualization
-   */
-  private addExplanatoryText(container: HTMLElement): void {
-    const explanationContainer = document.createElement("div");
-    explanationContainer.style.marginTop = "20px";
-    explanationContainer.style.fontSize = "12px";
-    explanationContainer.style.color = "#666";
-    explanationContainer.style.lineHeight = "1.5";
-    
-    const explanations = [
-      "This Gantt chart shows when each process starts and ends, and how they overlap in time.",
-      "Gaps between processes represent waiting periods.",
-      "Hover over segments for additional details."
-    ];
-    
-    explanations.forEach(text => {
-      const paragraph = document.createElement("p");
-      paragraph.textContent = text;
-      paragraph.style.margin = "5px 0";
-      explanationContainer.appendChild(paragraph);
-    });
-    
-    container.appendChild(explanationContainer);
   }
 
   /**
-   * Create a timeline chart visualization
+   * Create a timeline chart visualization (Gantt chart)
    * @param container The container element
    * @param metrics The metrics to visualize
    */
   private createTimelineChart(container: HTMLElement, metrics: MetricDefinition[]): void {
     // Calculate timeline segments
-    const { segments, timelineEnd } = TimelineCalculator.calculateTimelineSegments(metrics);
+    const { segments, timelineEnd } = this.calculateTimelineSegments(metrics);
+    
+    // Find the total time metric
+    const totalSegment = segments.find(s => s.metricKey === 'totalTime');
+    if (!totalSegment) {
+      console.warn("No total time metric found");
+      return;
+    }
     
     // Create timeline container
     const timelineContainer = document.createElement("div");
     timelineContainer.className = "saypi-timeline-container";
     timelineContainer.style.position = "relative";
-    timelineContainer.style.height = "160px"; // Increased height for multiple rows
     timelineContainer.style.marginTop = "20px";
     timelineContainer.style.width = "100%";
-    timelineContainer.style.overflowX = "hidden";
+    timelineContainer.style.backgroundColor = "#fff";
+    timelineContainer.style.padding = "15px";
+    timelineContainer.style.borderRadius = "4px";
+    timelineContainer.style.boxShadow = "0 1px 3px rgba(0,0,0,0.1)";
     
-    // Add timeline axis
+    // Add the total time display at the top
+    const totalLabel = document.createElement("div");
+    totalLabel.style.margin = "0 0 20px 0";
+    totalLabel.style.textAlign = "center";
+    totalLabel.style.fontSize = "16px";
+    totalLabel.style.fontWeight = "bold";
+    totalLabel.style.color = "#333";
+    totalLabel.textContent = `Speech to Speech: ${(totalSegment.duration / 1000).toFixed(2)}s`;
+    timelineContainer.appendChild(totalLabel);
+    
+    // Create rows for the main and parallel processes
+    const mainRow = this.createTimelineRow("Main", timelineEnd);
+    const parallelRow = this.createTimelineRow("Parallel", timelineEnd);
+    
+    // Process each segment and add to appropriate row
+    segments.forEach(segment => {
+      if (segment.metricKey === 'totalTime') return; // Skip the total time segment
+      
+      // Create segment bar
+      const bar = this.createSegmentBar(segment, timelineEnd);
+      
+      // Add to appropriate row based on type
+      if (segment.metricKey === 'timeToTalk') {
+        parallelRow.barContainer.appendChild(bar);
+      } else {
+        mainRow.barContainer.appendChild(bar);
+      }
+    });
+    
+    // Add rows to timeline container
+    timelineContainer.appendChild(mainRow.container);
+    timelineContainer.appendChild(parallelRow.container);
+    
+    // Add axis with tick marks
     const axisContainer = document.createElement("div");
-    axisContainer.style.position = "absolute";
-    axisContainer.style.bottom = "20px";
-    axisContainer.style.left = "0";
-    axisContainer.style.width = "100%";
-    axisContainer.style.height = "1px";
-    axisContainer.style.backgroundColor = "#ccc";
+    axisContainer.style.marginTop = "10px";
+    axisContainer.style.position = "relative";
+    axisContainer.style.height = "20px";
+    axisContainer.style.borderTop = "1px solid #ddd";
     
-    // Add timeline axis labels and tick marks
-    const axisStart = document.createElement("div");
-    axisStart.style.position = "absolute";
-    axisStart.style.bottom = "5px";
-    axisStart.style.left = "0";
-    axisStart.style.fontSize = "10px";
-    axisStart.style.color = "#999";
-    axisStart.textContent = "0s";
-    
-    const axisEnd = document.createElement("div");
-    axisEnd.style.position = "absolute";
-    axisEnd.style.bottom = "5px";
-    axisEnd.style.right = "0";
-    axisEnd.style.fontSize = "10px";
-    axisEnd.style.color = "#999";
-    axisEnd.textContent = (timelineEnd / 1000).toFixed(1) + "s";
-    
-    // Add intermediate tick marks
-    const tickInterval = Math.ceil(timelineEnd / 5000) * 1000; // Round to nearest second with about 5 ticks
-    for (let i = tickInterval; i < timelineEnd; i += tickInterval) {
-      const tickPercent = (i / timelineEnd) * 100;
+    // Create tick marks
+    const numTicks = Math.min(Math.ceil(timelineEnd / 1000), 10); // One tick per second, max 10
+    for (let i = 0; i <= numTicks; i++) {
+      const position = (i / numTicks) * 100;
       
       const tick = document.createElement("div");
       tick.style.position = "absolute";
-      tick.style.bottom = "20px";
-      tick.style.left = tickPercent + "%";
+      tick.style.top = "0";
+      tick.style.left = `${position}%`;
       tick.style.width = "1px";
       tick.style.height = "5px";
-      tick.style.backgroundColor = "#ccc";
+      tick.style.backgroundColor = "#999";
+      axisContainer.appendChild(tick);
       
-      const tickLabel = document.createElement("div");
-      tickLabel.style.position = "absolute";
-      tickLabel.style.bottom = "5px";
-      tickLabel.style.left = tickPercent + "%";
-      tickLabel.style.transform = "translateX(-50%)";
-      tickLabel.style.fontSize = "10px";
-      tickLabel.style.color = "#999";
-      tickLabel.textContent = (i / 1000).toFixed(1) + "s";
-      
-      timelineContainer.appendChild(tick);
-      timelineContainer.appendChild(tickLabel);
+      const label = document.createElement("div");
+      label.style.position = "absolute";
+      label.style.top = "6px";
+      label.style.left = `${position}%`;
+      label.style.transform = "translateX(-50%)";
+      label.style.fontSize = "10px";
+      label.style.color = "#666";
+      label.textContent = `${i}s`;
+      axisContainer.appendChild(label);
     }
     
-    // Add row labels for clarity
-    const row0Label = document.createElement("div");
-    row0Label.style.position = "absolute";
-    row0Label.style.left = "0";
-    row0Label.style.top = "35px";
-    row0Label.style.fontSize = "10px";
-    row0Label.style.color = "#666";
-    row0Label.style.fontWeight = "500";
-    row0Label.textContent = "Main";
-    
-    const row1Label = document.createElement("div");
-    row1Label.style.position = "absolute";
-    row1Label.style.left = "0";
-    row1Label.style.top = "65px";
-    row1Label.style.fontSize = "10px";
-    row1Label.style.color = "#666";
-    row1Label.style.fontWeight = "500";
-    row1Label.textContent = "Parallel";
-    
-    timelineContainer.appendChild(row0Label);
-    timelineContainer.appendChild(row1Label);
-    
-    // Add timeline segments
-    segments.forEach(segment => {
-      // Skip the total segment for bar display (it's shown separately)
-      if (segment.metricKey === 'totalTime') return;
-      
-      // Calculate position and size as percentage of timeline
-      const startPercent = (segment.start / timelineEnd) * 100;
-      const widthPercent = ((segment.end - segment.start) / timelineEnd) * 100;
-      
-      // Create segment bar
-      const segmentBar = document.createElement("div");
-      segmentBar.className = "saypi-timeline-segment";
-      segmentBar.style.position = "absolute";
-      segmentBar.style.left = startPercent + "%";
-      segmentBar.style.width = widthPercent + "%";
-      segmentBar.style.height = "24px"; // Increased height
-      segmentBar.style.backgroundColor = segment.color;
-      segmentBar.style.borderRadius = "3px";
-      segmentBar.style.boxShadow = "0 1px 3px rgba(0,0,0,0.2)"; // Add shadow for depth
-      
-      // Adjust vertical position based on row
-      const row = segment.row || 0;
-      segmentBar.style.top = (row * 30) + 40 + "px"; // 40px from top for first row
-      
-      // Add tooltip popup with detailed information
-      segmentBar.title = `${segment.label}: ${(segment.duration / 1000).toFixed(2)}s\n${segment.explanation || ''}`;
-      
-      // Enhanced tooltip effect on hover
-      segmentBar.addEventListener('mouseover', () => {
-        segmentBar.style.boxShadow = "0 3px 6px rgba(0,0,0,0.3)";
-        segmentBar.style.transform = "translateY(-1px)";
-        segmentBar.style.transition = "all 0.2s ease";
-      });
-      
-      segmentBar.addEventListener('mouseout', () => {
-        segmentBar.style.boxShadow = "0 1px 3px rgba(0,0,0,0.2)";
-        segmentBar.style.transform = "translateY(0)";
-      });
-      
-      // Add segment label if there's enough space
-      if (widthPercent > 15) { // Only add label if segment is wide enough
-        const segmentLabel = document.createElement("div");
-        segmentLabel.className = "saypi-timeline-segment-label";
-        segmentLabel.style.position = "absolute";
-        segmentLabel.style.left = "5px";
-        segmentLabel.style.top = "4px";
-        segmentLabel.style.fontSize = "11px"; // Slightly larger text
-        segmentLabel.style.fontWeight = "500"; // Semi-bold 
-        segmentLabel.style.color = "#fff";
-        segmentLabel.style.whiteSpace = "nowrap";
-        segmentLabel.style.overflow = "hidden";
-        segmentLabel.style.textOverflow = "ellipsis";
-        segmentLabel.style.width = "calc(100% - 10px)";
-        segmentLabel.style.textShadow = "0 1px 1px rgba(0,0,0,0.3)"; // Add text shadow for better visibility
-        segmentLabel.textContent = `${segment.label} (${(segment.duration / 1000).toFixed(1)}s)`;
-        segmentBar.appendChild(segmentLabel);
-      } else if (widthPercent > 5) {
-        // For smaller segments, just show time
-        const segmentLabel = document.createElement("div");
-        segmentLabel.className = "saypi-timeline-segment-label";
-        segmentLabel.style.position = "absolute";
-        segmentLabel.style.left = "2px";
-        segmentLabel.style.top = "4px";
-        segmentLabel.style.fontSize = "11px";
-        segmentLabel.style.fontWeight = "500";
-        segmentLabel.style.color = "#fff";
-        segmentLabel.style.whiteSpace = "nowrap";
-        segmentLabel.style.textShadow = "0 1px 1px rgba(0,0,0,0.3)";
-        segmentLabel.textContent = `${(segment.duration / 1000).toFixed(1)}s`;
-        segmentBar.appendChild(segmentLabel);
-      }
-      
-      // Draw connection lines between related segments if needed
-      if (segment.metricKey === 'timeToTalk') {
-        // Create a connector line from completionResponse to audio playback
-        const connectorLine = document.createElement("div");
-        connectorLine.style.position = "absolute";
-        connectorLine.style.left = (startPercent + widthPercent) + "%";
-        connectorLine.style.top = (row * 30) + 52 + "px"; // Connect to middle of segment
-        connectorLine.style.width = "1px";
-        connectorLine.style.height = "30px";
-        connectorLine.style.backgroundColor = "#aaa";
-        connectorLine.style.zIndex = "1";
-        timelineContainer.appendChild(connectorLine);
-      }
-      
-      timelineContainer.appendChild(segmentBar);
-    });
-    
-    // Add the total time label at the top
-    const totalSegment = segments.find(s => s.metricKey === 'totalTime');
-    if (totalSegment) {
-      const totalLabel = document.createElement("div");
-      totalLabel.style.position = "absolute";
-      totalLabel.style.top = "10px";
-      totalLabel.style.left = "0";
-      totalLabel.style.right = "0";
-      totalLabel.style.textAlign = "center";
-      totalLabel.style.fontSize = "13px"; // Larger text
-      totalLabel.style.fontWeight = "bold";
-      totalLabel.style.color = "#333";
-      totalLabel.textContent = `${totalSegment.label}: ${(totalSegment.duration / 1000).toFixed(2)}s`;
-      totalLabel.title = totalSegment.explanation || 'Total time from end of speech to beginning of audio response';
-      timelineContainer.appendChild(totalLabel);
-    }
-    
-    // Assemble the timeline
     timelineContainer.appendChild(axisContainer);
-    timelineContainer.appendChild(axisStart);
-    timelineContainer.appendChild(axisEnd);
     
-    // Add the timeline to the container
-    container.appendChild(timelineContainer);
-    
-    // Add a legend for the segments
-    this.addTimelineLegend(container, segments);
-  }
-  
-  /**
-   * Add a legend for the timeline segments
-   */
-  private addTimelineLegend(container: HTMLElement, segments: TimelineSegment[]): void {
-    // Skip if no segments
-    if (segments.length === 0) return;
-    
-    // Create legend container
+    // Create legend at the bottom
     const legendContainer = document.createElement("div");
     legendContainer.style.display = "flex";
     legendContainer.style.flexWrap = "wrap";
-    legendContainer.style.gap = "10px";
-    legendContainer.style.marginTop = "10px";
-    legendContainer.style.padding = "10px";
+    legendContainer.style.marginTop = "20px";
+    legendContainer.style.gap = "15px";
     
-    // Process segments for legend (exclude total time which is shown separately)
-    const legendItems = segments
-      .filter(segment => segment.metricKey !== 'totalTime')
-      .map(segment => {
-        return {
-          color: segment.color,
-          label: `${segment.label}: ${(segment.duration / 1000).toFixed(2)}s`
-        };
-      });
-    
-    // Create legend items
-    legendItems.forEach(item => {
+    // Add each segment to the legend
+    const legendSegments = segments.filter(s => s.metricKey !== 'totalTime');
+    legendSegments.forEach(segment => {
       const legendItem = document.createElement("div");
       legendItem.style.display = "flex";
       legendItem.style.alignItems = "center";
-      legendItem.style.marginRight = "15px";
       
       const colorBox = document.createElement("div");
       colorBox.style.width = "12px";
       colorBox.style.height = "12px";
-      colorBox.style.backgroundColor = item.color;
+      colorBox.style.backgroundColor = segment.color;
       colorBox.style.marginRight = "5px";
       colorBox.style.borderRadius = "2px";
       
       const label = document.createElement("span");
-      label.style.fontSize = "11px";
-      label.style.color = "#666";
-      label.textContent = item.label;
+      label.style.fontSize = "12px";
+      label.style.color = "#333";
+      label.textContent = `${segment.label}: ${(segment.duration / 1000).toFixed(2)}s`;
       
       legendItem.appendChild(colorBox);
       legendItem.appendChild(label);
       legendContainer.appendChild(legendItem);
     });
     
-    container.appendChild(legendContainer);
+    timelineContainer.appendChild(legendContainer);
+    
+    // Add the timeline container to the main container
+    container.appendChild(timelineContainer);
   }
+  
+  /**
+   * Create a timeline row for the Gantt chart
+   * @param label The row label
+   * @param timelineEnd The end time of the timeline
+   * @returns The row elements
+   */
+  private createTimelineRow(label: string, timelineEnd: number): { container: HTMLElement, barContainer: HTMLElement } {
+    const rowContainer = document.createElement("div");
+    rowContainer.style.display = "flex";
+    rowContainer.style.marginBottom = "10px";
+    rowContainer.style.height = "30px";
+    
+    // Create label
+    const labelElement = document.createElement("div");
+    labelElement.style.width = "80px";
+    labelElement.style.flexShrink = "0";
+    labelElement.style.display = "flex";
+    labelElement.style.alignItems = "center";
+    labelElement.style.justifyContent = "flex-end";
+    labelElement.style.paddingRight = "10px";
+    labelElement.style.fontSize = "12px";
+    labelElement.style.fontWeight = "bold";
+    labelElement.style.color = "#555";
+    labelElement.textContent = label;
+    
+    // Create bar container (timeline)
+    const barContainer = document.createElement("div");
+    barContainer.style.flex = "1";
+    barContainer.style.position = "relative";
+    barContainer.style.height = "100%";
+    barContainer.style.backgroundColor = "#f5f5f5";
+    barContainer.style.borderRadius = "3px";
+    
+    rowContainer.appendChild(labelElement);
+    rowContainer.appendChild(barContainer);
+    
+    return { container: rowContainer, barContainer };
+  }
+  
+  /**
+   * Create a segment bar for the timeline
+   * @param segment The segment data
+   * @param timelineEnd The end time of the timeline
+   * @returns The segment bar element
+   */
+  private createSegmentBar(segment: TimelineSegment, timelineEnd: number): HTMLElement {
+    const bar = document.createElement("div");
+    bar.style.position = "absolute";
+    bar.style.top = "0";
+    bar.style.height = "100%";
+    bar.style.backgroundColor = segment.color;
+    bar.style.borderRadius = "3px";
+    bar.style.boxShadow = "0 1px 3px rgba(0,0,0,0.2)";
+    
+    // Position the bar based on its start and duration
+    const startPercent = (segment.start / timelineEnd) * 100;
+    const widthPercent = ((segment.end - segment.start) / timelineEnd) * 100;
+    bar.style.left = `${startPercent}%`;
+    bar.style.width = `${widthPercent}%`;
+    
+    // Add label inside the bar if there's enough space
+    if (widthPercent > 10) {
+      const label = document.createElement("div");
+      label.style.position = "absolute";
+      label.style.top = "50%";
+      label.style.left = "50%";
+      label.style.transform = "translate(-50%, -50%)";
+      label.style.color = "#fff";
+      label.style.fontSize = "11px";
+      label.style.fontWeight = "500";
+      label.style.whiteSpace = "nowrap";
+      label.style.textShadow = "0 1px 1px rgba(0,0,0,0.5)";
+      label.textContent = `${segment.label} (${(segment.duration / 1000).toFixed(1)}s)`;
+      bar.appendChild(label);
+    }
+    
+    // Add tooltip
+    bar.title = `${segment.label}: ${(segment.duration / 1000).toFixed(2)}s\n${segment.explanation || ''}`;
+    
+    // Add hover effect
+    bar.addEventListener('mouseover', () => {
+      bar.style.boxShadow = "0 2px 5px rgba(0,0,0,0.3)";
+      bar.style.transform = "translateY(-1px)";
+      bar.style.transition = "all 0.2s ease";
+    });
+    
+    bar.addEventListener('mouseout', () => {
+      bar.style.boxShadow = "0 1px 3px rgba(0,0,0,0.2)";
+      bar.style.transform = "translateY(0)";
+    });
+    
+    return bar;
+  }
+  
+  /**
+   * Add explanatory text to the visualization
+   * @param container The container element
+   */
+  private addExplanatoryText(container: HTMLElement): void {
+    const textContainer = document.createElement("div");
+    textContainer.style.marginTop = "20px";
+    textContainer.style.color = "#555";
+    textContainer.style.fontSize = "12px";
+    textContainer.style.lineHeight = "1.5";
+    
+    const lines = [
+      "This Gantt chart shows when each process starts and ends, and how they overlap in time.",
+      "Gaps between processes represent waiting periods.",
+      "Hover over segments for additional details."
+    ];
+    
+    lines.forEach(line => {
+      const paragraph = document.createElement("p");
+      paragraph.style.margin = "5px 0";
+      paragraph.textContent = line;
+      textContainer.appendChild(paragraph);
+    });
+    
+    container.appendChild(textContainer);
+  }
+
+  /**
+   * Calculate timeline segments from metrics
+   * @param metrics The metrics to calculate segments from
+   * @returns The timeline segments and end time
+   */
+  private calculateTimelineSegments(metrics: MetricDefinition[]): { segments: TimelineSegment[], timelineEnd: number } {
+    // Log available metrics for debugging
+    console.debug("Available metrics for timeline calculation:", metrics.map(m => m.key));
+    
+    // Find the end-to-end time
+    const totalTimeMetric = metrics.find(m => m.key === 'totalTime');
+    if (!totalTimeMetric) {
+      console.warn("No total time metric found");
+      return { segments: [], timelineEnd: 0 };
+    }
+    
+    const timelineEnd = totalTimeMetric.value + 200; // Add padding for visual aesthetics
+    
+    // Create segments
+    const segments: TimelineSegment[] = [];
+    let currentPosition = 0;
+    
+    // Add transcription segment
+    const transcriptionMetric = metrics.find(m => m.key === 'transcriptionDuration');
+    if (transcriptionMetric) {
+      const duration = Math.max(transcriptionMetric.value, 300); // Ensure minimum visible width
+      segments.push({
+        metricKey: 'transcriptionDuration',
+        label: 'Transcription',
+        start: currentPosition,
+        end: currentPosition + duration,
+        duration,
+        color: '#c0392b', // Red
+        explanation: 'Time taken to transcribe user speech'
+      });
+      currentPosition += duration;
+    }
+    
+    // Add grace period segment
+    const graceMetric = metrics.find(m => m.key === 'voiceActivityDetection');
+    if (graceMetric && graceMetric.value > 0) {
+      const duration = Math.max(graceMetric.value, 200); // Ensure minimum visible width
+      segments.push({
+        metricKey: 'voiceActivityDetection',
+        label: 'Grace Period',
+        start: currentPosition,
+        end: currentPosition + duration,
+        duration,
+        color: '#3498db', // Blue
+        explanation: 'Waiting period after speech detection'
+      });
+      currentPosition += duration;
+    }
+    
+    // Add LLM wait time segment
+    const completionMetric = metrics.find(m => m.key === 'completionResponse');
+    if (completionMetric) {
+      segments.push({
+        metricKey: 'completionResponse',
+        label: 'LLM Wait Time',
+        start: currentPosition,
+        end: currentPosition + completionMetric.value,
+        duration: completionMetric.value,
+        color: '#5f27cd', // Purple
+        explanation: 'Time waiting for LLM to generate a response'
+      });
+      currentPosition += completionMetric.value;
+    }
+    
+    // Add streaming duration segment
+    const streamingMetric = metrics.find(m => m.key === 'streamingDuration');
+    if (streamingMetric && streamingMetric.value > 0) {
+      segments.push({
+        metricKey: 'streamingDuration',
+        label: 'Pi writes',
+        start: currentPosition,
+        end: currentPosition + streamingMetric.value,
+        duration: streamingMetric.value,
+        color: '#f39c12', // Orange/Yellow
+        explanation: 'Time for Pi to stream the text response'
+      });
+      currentPosition += streamingMetric.value;
+    }
+    
+    // Add time to talk segment
+    const timeToTalkMetric = metrics.find(m => m.key === 'timeToTalk');
+    if (timeToTalkMetric) {
+      // Position time to talk from the start up to the audio playback
+      segments.push({
+        metricKey: 'timeToTalk',
+        label: 'Time to Talk',
+        start: 0,
+        end: currentPosition, // Up to current position
+        duration: currentPosition,
+        color: '#ddd', // Light Gray
+        explanation: 'Total time from user speech to Pi response'
+      });
+    }
+    
+    // Add speech playback marker at the end
+    segments.push({
+      metricKey: 'speechPlayback',
+      label: 'Pi Speaks',
+      start: currentPosition - 100, // Place just before the end
+      end: currentPosition + 100,
+      duration: 200,
+      color: '#27ae60', // Green
+      explanation: 'Pi begins speaking the response'
+    });
+    
+    // Add total time segment spanning the entire timeline
+    segments.push({
+      metricKey: 'totalTime',
+      label: 'Speech to Speech',
+      start: 0,
+      end: timelineEnd - 200, // Account for the padding
+      duration: totalTimeMetric.value,
+      color: '#7f8c8d', // Gray
+      explanation: 'Total time from user speech to Pi speech response'
+    });
+    
+    return { segments, timelineEnd };
+  }
+}
+
+/**
+ * Represents a segment in the timeline visualization
+ */
+interface TimelineSegment {
+  metricKey: string;
+  label: string;
+  start: number;
+  end: number;
+  duration: number;
+  color: string;
+  explanation?: string;
 } 
