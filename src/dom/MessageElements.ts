@@ -854,8 +854,18 @@ abstract class MessageControls {
     timeScale.style.marginBottom = "5px";
     timeScale.style.borderBottom = "1px solid #ccc";
     
-    // Add second markers
-    for (let i = 0; i <= timelineEndSeconds; i++) {
+    // Determine appropriate tick interval based on timeline length
+    let tickInterval = 1; // Default: show every second
+    if (timelineEndSeconds > 60) {
+      tickInterval = 10; // For very long timelines (>60s), show every 10 seconds
+    } else if (timelineEndSeconds > 30) {
+      tickInterval = 5; // For long timelines (>30s), show every 5 seconds
+    } else if (timelineEndSeconds > 15) {
+      tickInterval = 2; // For medium timelines (>15s), show every 2 seconds
+    }
+    
+    // Add second markers with dynamic intervals
+    for (let i = 0; i <= timelineEndSeconds; i += tickInterval) {
       const tickMark = document.createElement("div");
       tickMark.className = "tick-mark";
       tickMark.style.position = "absolute";
@@ -879,9 +889,11 @@ abstract class MessageControls {
       timeScale.appendChild(tickLabel);
     }
     
-    // Add 'Timeline (seconds)' label
+    // Add 'Timeline (seconds)' label with interval information
     const scaleLabel = document.createElement("div");
-    scaleLabel.textContent = "Timeline (seconds)";
+    scaleLabel.textContent = tickInterval > 1 ? 
+      `Timeline (seconds, marks at ${tickInterval}s intervals)` : 
+      "Timeline (seconds)";
     scaleLabel.style.position = "absolute";
     scaleLabel.style.left = "0";
     scaleLabel.style.top = "0";
