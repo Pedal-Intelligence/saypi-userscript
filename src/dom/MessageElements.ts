@@ -161,6 +161,15 @@ abstract class AssistantResponse {
   }
 
   /**
+   * Check if this is the last, i.e. most recent message in the chat history
+   * @returns true if this is the most recent message, false otherwise
+   */
+  isLastMessage(): boolean {
+    const lastMessage = document.querySelector("#saypi-chat-history .present-messages .assistant-message:last-of-type");
+    return lastMessage === this._element;
+  }
+
+  /**
    * Get the text content of the chat message,
    * as it is at the time of calling this method, which may not be completely loaded if the response is still streaming
    * Get stableText() to get the finished text content of the chat message
@@ -315,8 +324,10 @@ abstract class MessageControls {
     this.hoverMenu = this.messageControlsElement = null; // will be initialized in decorateControls()
     this.decorateControls(message);
     
-    // Listen for telemetry updates
-    EventBus.on("telemetry:updated", this.handleTelemetryUpdate);
+    if (this.message.isLastMessage()) {
+      // Listen for telemetry updates
+      EventBus.on("telemetry:updated", this.handleTelemetryUpdate);
+    }
   }
 
   protected getExtraControlClasses(): string[] {
