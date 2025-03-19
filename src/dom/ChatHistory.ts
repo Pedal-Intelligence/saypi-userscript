@@ -404,6 +404,7 @@ class ChatHistoryNewMessageObserver
     message.decorateSpeech(utterance);
 
     const messageContent = await message.decoratedContent();
+    let startTime = 0;
     this.observeChatMessageElement(
       message,
       messageContent,
@@ -413,13 +414,16 @@ class ChatHistoryNewMessageObserver
           utterance: utterance,
         };
         EventBus.emit("saypi:piWriting", writingEvent);
+        startTime = Date.now();
+        console.debug("Pi started writing at", startTime);
       },
       (text) => {
         EventBus.emit("saypi:piStoppedWriting", {
           utterance: utterance,
           text,
         });
-        console.debug("Closed audio input stream", utterance.id);
+        const endTime = Date.now();
+        console.debug("Pi stopped writing at", endTime, "after", endTime - startTime, "ms");
       },
       (lateChange) => {
         message.decorateIncompleteSpeech(true);
