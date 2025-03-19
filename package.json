@@ -1,6 +1,6 @@
 {
   "name": "saypi-userscript",
-  "version": "1.6.9",
+  "version": "1.7.1",
   "type": "module",
   "scripts": {
     "prebuild": "node i18n-validate.cjs",
@@ -10,7 +10,8 @@
     "test:jest": "NODE_OPTIONS=--experimental-vm-modules npx jest --detectOpenHandles --forceExit",
     "test:vitest": "vitest run --config vitest.config.js",
     "test:vitest:watch": "vitest --watch --config vitest.config.js",
-    "test": "npm-run-all -s test:jest test:vitest"
+    "test": "npm-run-all -s test:jest test:vitest",
+    "build:firefox": "npm run build && ./package-extension.sh firefox"
   },
   "jest": {
     "preset": "ts-jest/presets/default-esm",

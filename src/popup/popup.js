@@ -367,42 +367,6 @@ document.addEventListener("DOMContentLoaded", function () {
         this.parentElement.classList.remove("checked");
       }
     });
-
-    const enableTTSInput = document.getElementById("enable-tts");
-    const enableTTSLabel = enableTTSInput.closest('.wraper');
-    
-    function isSafari() {
-      // copied from UserAgentModule.ts
-      return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    }
-
-    // Check if Safari
-    if (isSafari()) {
-      enableTTSInput.disabled = true;
-      enableTTSLabel.classList.add('disabled');
-      // Use i18n message for tooltip
-      enableTTSLabel.setAttribute('title', 
-        chrome.i18n.getMessage('ttsDisabledSafari'));
-      selectInput(enableTTSInput, false);
-    } else {
-      getStoredValue("enableTTS", true).then((enableTTS) => {
-        selectInput(enableTTSInput, enableTTS);
-      });
-    }
-
-    enableTTSInput.addEventListener("change", function () {
-      chrome.storage.sync.set({ enableTTS: this.checked }, function () {
-        console.log(
-          "Preference saved: Text-to-speech is " +
-            (enableTTSInput.checked ? "on" : "off")
-        );
-      });
-      if (this.checked) {
-        this.parentElement.classList.add("checked");
-      } else {
-        this.parentElement.classList.remove("checked");
-      }
-    });
   }
 
   function hideAll(sections) {
@@ -412,7 +376,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     sections.forEach((section) => {
-      document.getElementById(section).classList.add("hidden");
+      const element = document.getElementById(section);
+      if (element) {
+        element.classList.add("hidden");
+      } else {
+        console.warn(`Section ${section} not found. Please check section definition in popup.js`);
+      }
     });
   }
 
@@ -423,17 +392,21 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     sections.forEach((section) => {
-      document.getElementById(section).classList.remove("hidden");
+      const element = document.getElementById(section);
+      if (element) {
+        element.classList.remove("hidden");
+      } else {
+        console.warn(`Section ${section} not found. Please check section definition in popup.js`);
+      }
     });
   }
 
   function showHideConsent() {
     const sections = [
       "preferences",
-      "preview-status",
-      "voice",
-      "usage",
+      "premium-status",
       "devtools",
+      "upgrade"
     ];
     chrome.storage.sync.get("shareData").then((result) => {
       // if the user has not made a decision yet, show the consent section
@@ -478,6 +451,18 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
   }
+
+  // Call refreshAuthUI when popup opens to update the authentication UI
+  refreshAuthUI();
+
+  // Add click handler for view quota details link
+  document.getElementById('view-quota-details').addEventListener('click', function(e) {
+    e.preventDefault();
+    const dashboardUrl = config && config.authServerUrl 
+      ? `${config.authServerUrl}/app/dashboard` 
+      : 'https://www.saypi.ai/app/dashboard';
+    window.open(dashboardUrl, '_blank');
+  });
 
   // Load the saved nickname when the popup opens
   const nicknameInput = document.getElementById("assistant-nickname");

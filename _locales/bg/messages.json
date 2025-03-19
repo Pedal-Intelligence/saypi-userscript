@@ -508,5 +508,153 @@
   "nicknameLabel": {
     "message": "Псевдоним",
     "description": "Етикет за полето за въвеждане, за да зададете персонализиран псевдоним за AI асистента."
+  },
+  "greeting": {
+    "description": "Поздравително съобщение, показано, когато потребителят е влязъл",
+    "message": "Здравей, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Текст, за да се покаже кога потребителят не е влязъл.",
+    "message": "Не е влязъл в"
+  },
+  "profile": {
+    "description": "Етикет за секцията за потребителски профил.",
+    "message": "Профил"
+  },
+  "quotaCredits": {
+    "description": "Единичен етикет за TTS кредити",
+    "message": "кредити"
+  },
+  "quotaRemaining": {
+    "description": "Етикет за квотата, останал бар за напредък",
+    "message": "Останала квота"
+  },
+  "quotaStatusUnknown": {
+    "description": "Съобщение, показано, когато състоянието на квотата не може да бъде определено",
+    "message": "Не може да се провери състоянието на квотата"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Показано съобщение, когато потребителят не е удостоверен.",
+    "message": "Влезте за достъп до генериране на глас и други премиум функции"
+  },
+  "signIn": {
+    "description": "Текст за бутона за влизане.",
+    "message": "Влезте"
+  },
+  "signOut": {
+    "description": "Текст за бутона за изписване.",
+    "message": "Излезте"
+  },
+  "signedIn": {
+    "description": "Текст на състоянието, показан, когато потребителят е удостоверен (без имейл).",
+    "message": "Влязъл в"
+  },
+  "signedInAs": {
+    "description": "Текст на състоянието, показан, когато потребителят е удостоверен, включително имейла им.",
+    "message": "Вписан като $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Текст, показващ останалата STT квота за минути.",
+    "message": "$minutes$ минути $plural$ остава",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Текстът за показване, когато квотата STT е изчерпана.",
+    "message": "Изчерпана квота за разпознаване на реч"
+  },
+  "sttQuotaProgress": {
+    "description": "TOULTIP за лентата за прогрес на квотите STT.",
+    "message": "$remaining$ остава $total$ секунди",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "TOULTIP за лентата за прогрес на квотите STT за минути.",
+    "message": "$remaining$ остава $total$ минути",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Етикет за STT квота, останал дисплей.",
+    "message": "Разпознаване на речта"
+  },
+  "sttQuotaSeconds": {
+    "description": "Единица за квота STT (секунди).",
+    "message": "Сек"
+  },
+  "ttsCredits": {
+    "description": "Терминът, използван за валутата на кредитите в функцията за текст в реч.",
+    "message": "кредити"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Единица за квота TTS (символи).",
+    "message": "кредити"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Текст, за да се покаже кога е изчерпана квотата TTS.",
+    "message": "Гласовата квота изтощена"
+  },
+  "ttsQuotaProgress": {
+    "description": "TOULTIP за лентата за прогрес на квотите TTS.",
+    "message": "$remaining$ остава $total$ символи",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Етикет за TTS квота Останалото дисплей.",
+    "message": "Гласово генериране"
+  },
+  "upgradeButton": {
+    "description": "Текст за бутона за надграждане на плана, когато квотата е изчерпана.",
+    "message": "План за надстройка"
+  },
+  "viewDetails": {
+    "description": "Текст за връзката за преглед на пълни подробности за квотите на таблото за управление.",
+    "message": "Вижте подробности"
   }
 }

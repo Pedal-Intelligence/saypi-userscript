@@ -37,11 +37,17 @@ const mockStorage = (() => {
       keys.forEach((key) => {
         result[key] = storage[key];
       });
-      callback(result);
+      if (typeof callback === 'function') {
+        callback(result);
+      }
+      return Promise.resolve(result);
     },
     set: (items, callback) => {
       storage = { ...storage, ...items };
-      callback();
+      if (typeof callback === 'function') {
+        callback();
+      }
+      return Promise.resolve();
     },
     clear: () => {
       storage = {};
@@ -76,4 +82,25 @@ vi.mock("../src/icons/volume-mid.svg", () => ({
 
 vi.mock("../src/icons/regenerate.svg", () => ({
   default: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/></svg>'
+}));
+
+// Add mocks for theme icons
+vi.mock("../src/icons/mode-night.svg", () => ({
+  default: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7z"/></svg>'
+}));
+
+vi.mock("../src/icons/mode-day.svg", () => ({
+  default: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69zm-2 5.79V18h-3.52L12 20.48 9.52 18H6v-3.52L3.52 12 6 9.52V6h3.52L12 3.52 14.48 6H18v3.52L20.48 12 18 14.48z"/></svg>'
+}));
+
+vi.mock("../src/icons/rectangles.svg", () => ({
+  default: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"/></svg>'
+}));
+
+vi.mock("../src/icons/rectangles-moonlight.svg", () => ({
+  default: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2" ry="2"/></svg>'
+}));
+
+vi.mock("../src/icons/stopwatch.svg", () => ({
+  default: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 2c5.519 0 10 4.481 10 10s-4.481 10-10 10-10-4.481-10-10 4.481-10 10-10zm1 5v5h4v2h-6v-7h2z"/></svg>'
 }));

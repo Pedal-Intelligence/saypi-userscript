@@ -7,6 +7,8 @@ import { submitErrorHandler } from "./SubmitErrorHandler.ts";
 import getMessage from "./i18n.ts";
 import { DOMObserver } from "./chatbots/bootstrap.ts";
 import EventBus from "./events/EventBus.js";
+import { jwtManager } from "./JwtManager.ts";
+import telemetryModule from "./TelemetryModule.ts";
 
 import "./styles/common.scss";
 import "./styles/desktop.scss";
@@ -22,6 +24,38 @@ import SlowResponseHandler from "./SlowResponseHandler.ts";
 
   const chatbot = await ChatbotService.getChatbot();
   const audioModule = AudioModule.getInstance(); // inits the audio module's offline functions
+  
+  // Initialize telemetry module
+  console.debug("Initializing telemetry module");
+  telemetryModule; // This will invoke the getInstance() singleton which sets up event listeners
+
+  // Setup listener for authentication status changes from background script
+  function setupAuthListener() {
+    console.log("Setting up authentication listener in content script");
+    
+    // Check auth status on initial load
+    chrome.runtime.sendMessage({ type: "GET_AUTH_STATUS" }, (response) => {
+      if (response && response.isAuthenticated !== undefined) {
+        console.log("Initial authentication status:", response.isAuthenticated);
+      }
+    });
+    
+    // Listen for auth status changes from background script
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      if (message.type === "AUTH_STATUS_CHANGED") {
+        console.log("Received auth status change:", message.isAuthenticated);
+        
+        // Refresh token to ensure we have the latest from storage
+        jwtManager.loadFromStorage().then(() => {
+          // Optionally, you can add more logic here if needed
+          console.log("JWT manager updated with latest token");
+          EventBus.emit("saypi:auth:status-changed", message.isAuthenticated);
+        });
+      }
+      // Make sure to return false as we're not sending a response asynchronously
+      return false;
+    });
+  }
 
   function startAudioModule() {
     window.addEventListener("unload", () => {
@@ -54,6 +88,7 @@ import SlowResponseHandler from "./SlowResponseHandler.ts";
   await ChatbotService.addChatbotFlags();
   EventModule.init();
   new DOMObserver(chatbot).observeDOM();
+  setupAuthListener(); // Setup the auth listener
 
   function addVisualisations(container) {
     // Create a containing div

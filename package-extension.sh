@@ -24,7 +24,20 @@ check_jq_installed() {
 
 modify_firefox_manifest() {
     local manifest_file="$1"
-    jq '.background += {"scripts": ["public/background.js"], "type": "module", "persistent": false}' "$manifest_file" > "$manifest_file.tmp" && mv "$manifest_file.tmp" "$manifest_file"
+    jq '.background += {"scripts": ["public/background.js"], "type": "module"}' "$manifest_file" > "$manifest_file.tmp" && mv "$manifest_file.tmp" "$manifest_file"
+}
+
+modify_chrome_edge_manifest() {
+    local manifest_file="$1"
+    local worklet_file="$2"
+    
+    # Remove the unused worklet bundle from web_accessible_resources
+    jq --arg worklet "$worklet_file" '
+    .web_accessible_resources[0].resources = [
+      .web_accessible_resources[0].resources[] | 
+      select(. != "public/vad.worklet.bundle.js" and . != "public/vad.worklet.bundle.min.js")
+    ] + [$worklet]
+    ' "$manifest_file" > "$manifest_file.tmp" && mv "$manifest_file.tmp" "$manifest_file"
 }
 
 # Check dependencies before processing
@@ -107,6 +120,11 @@ for BROWSER in "$@"; do
     # Add Firefox-specific background properties if building for Firefox
     if [ "$BROWSER" = "firefox" ]; then
         modify_firefox_manifest "$EXT_DIR/manifest.json"
+    fi
+    
+    # Modify manifest for Chrome and Edge to include only the used worklet file
+    if [ "$BROWSER" = "chrome" ] || [ "$BROWSER" = "edge" ]; then
+        modify_chrome_edge_manifest "$EXT_DIR/manifest.json" "$WORKLET_FILE"
     fi
 
     mkdir -p "$AUDIO_DIR"

@@ -356,6 +356,11 @@ class UserPreferenceModule {
     return cachedResult;
   }
 
+  isTTSEnabled() {
+    // TTS is now implicitly enabled when the user has credits
+    return Promise.resolve(true);
+  }
+
   public getDiscretionaryMode(): Promise<boolean> {
     return this.getStoredValue("discretionaryMode", false);
   }

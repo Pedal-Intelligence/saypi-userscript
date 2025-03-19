@@ -911,6 +911,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               {
                 type: "suppressResponseWhenMaintainance",
               },
+              {
+                type: "notifyPiSpeaking",
+              },
             ],
             exit: [
               {
@@ -1298,6 +1301,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           delay_ms: delay_ms,
           wait_time_ms: submission_delay_ms,
         });
+      },
+      notifyPiSpeaking: () => {
+        EventBus.emit("saypi:piSpeaking");
       },
       clearPendingTranscriptionsAction: () => {
         // discard in-flight transcriptions. Called after a successful submission
