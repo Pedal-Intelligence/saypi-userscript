@@ -638,11 +638,34 @@ abstract class MessageControls {
         key: 'voiceActivityDetection',
         label: 'Grace Period',
         value: telemetryData.transcriptionDelay,
-        color: '#4285F4', // Blue
-        explanation: 'Time between final transcription and submitting prompt to LLM'
+        color: '#2979FF', // Brighter blue to make it more noticeable
+        explanation: 'Intentional delay between receiving final transcription and submitting prompt to LLM - allows for detecting if user is truly finished speaking'
       });
     } else {
       console.warn("No transcriptionDelay found in telemetry data:", telemetryData);
+      
+      // Calculate the grace period from timestamps if available
+      if (timestamps.transcriptionEnd && timestamps.promptSubmission) {
+        const calculatedGracePeriod = timestamps.promptSubmission - timestamps.transcriptionEnd;
+        console.debug("Calculated grace period from timestamps:", calculatedGracePeriod + "ms");
+        metrics.push({
+          key: 'voiceActivityDetection',
+          label: 'Grace Period',
+          value: calculatedGracePeriod,
+          color: '#2979FF', // Brighter blue to make it more noticeable
+          explanation: 'Intentional delay between receiving final transcription and submitting prompt to LLM - allows for detecting if user is truly finished speaking'
+        });
+      } else {
+        // If no timestamps either, add a placeholder with zero duration to ensure visibility
+        console.debug("Adding placeholder grace period with zero duration");
+        metrics.push({
+          key: 'voiceActivityDetection',
+          label: 'Grace Period',
+          value: 0,
+          color: '#2979FF', // Brighter blue to make it more noticeable
+          explanation: 'Intentional delay between receiving final transcription and submitting prompt to LLM - allows for detecting if user is truly finished speaking'
+        });
+      }
     }
     
     // Check for transcription data, either in the direct property or calculate from timestamps
@@ -1313,14 +1336,21 @@ abstract class MessageControls {
           } else if (timestamps.transcriptionEnd) {
             // Fallback if we only have transcription end
             start = timestamps.transcriptionEnd - referenceTimestamp;
-            end = start + metric.value;
+            end = start + Math.max(metric.value, 100); // Ensure at least 100ms visibility
             console.debug(`Grace Period: Using fallback - start: ${start}ms, end: ${end}ms, duration: ${end-start}ms`);
           } else {
-            console.warn("Cannot position Grace Period - missing required timestamps or value:", { 
-              transcriptionEnd: timestamps.transcriptionEnd, 
-              promptSubmission: timestamps.promptSubmission,
-              value: metric.value 
-            });
+            // Last resort fallback - position after transcription (if any) or at start
+            const transcriptionSegment = segments.find(s => s.metricKey === 'transcriptionDuration');
+            if (transcriptionSegment) {
+              start = transcriptionSegment.end;
+              end = start + Math.max(metric.value, 100); // Ensure at least 100ms visibility
+              console.debug(`Grace Period: Using position after transcription - start: ${start}ms, end: ${end}ms`);
+            } else {
+              // If no transcription segment, just position at beginning
+              start = 0;
+              end = Math.max(metric.value, 100);
+              console.debug(`Grace Period: No reference points, using beginning - start: ${start}ms, end: ${end}ms`);
+            }
           }
           break;
           
@@ -1540,8 +1570,13 @@ abstract class MessageControls {
       if (metrics.find(m => m.key === 'voiceActivityDetection')) {
         const gracePeriodDuration = metrics.find(m => m.key === 'voiceActivityDetection')!.value;
         processStartTimes['voiceActivityDetection'] = nextTime;
-        processEndTimes['voiceActivityDetection'] = nextTime + gracePeriodDuration;
-        nextTime += gracePeriodDuration;
+        // Ensure grace period has a minimum visible duration
+        const visibleDuration = Math.max(gracePeriodDuration, 100);
+        processEndTimes['voiceActivityDetection'] = nextTime + visibleDuration;
+        nextTime += visibleDuration;
+        console.debug(`Grace Period positioned at ${processStartTimes['voiceActivityDetection']}ms with duration ${visibleDuration}ms`);
+      } else {
+        console.debug("No grace period metric found in metrics array for duration-based timeline");
       }
       
       // Calculate completion response times (Pi's thinking time)
