@@ -7,9 +7,10 @@ import {
   InputStreamOptions,
 } from "../tts/InputStream";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
-import { Chatbot, UserPrompt } from "./Chatbot";
+import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
+import { UserPrompt } from "./Chatbot";
 
-class ClaudeChatbot implements Chatbot {
+class ClaudeChatbot extends AbstractChatbot {
   getName(): string {
     return "Claude";
   }
@@ -96,7 +97,11 @@ class ClaudeChatbot implements Chatbot {
   }
 
   getExtraCallButtonClasses(): string[] {
-    return ["rounded-full"];
+    return ["claude-call-button"];
+  }
+
+  getContextWindowCapacityCharacters(): number {
+    return 200000; // Claude has a 200k token limit
   }
 }
 
@@ -270,7 +275,7 @@ class ClaudeTextStream extends ElementTextStream {
   }
 }
 
-class ClaudePrompt extends UserPrompt {
+class ClaudePrompt extends AbstractUserPrompt {
   private promptElement: HTMLDivElement;
   private placeholderManager: PlaceholderManager;
   readonly PROMPT_CHARACTER_LIMIT = 200000; // max prompt length is the same as context window length, 200k tokens

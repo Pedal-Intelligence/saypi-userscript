@@ -21,7 +21,12 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll("[data-i18n]").forEach((el) => {
       let messageKey = el.getAttribute("data-i18n");
       // we use the chrome api instead of i18n.ts because module loading is not supported in the popup
-      el.textContent = chrome.i18n.getMessage(messageKey);
+      // Check if this is a message that needs the chatbot parameter
+      if (messageKey === "submit_mode_agent_description") {
+        el.textContent = chrome.i18n.getMessage(messageKey, ["Pi"]);
+      } else {
+        el.textContent = chrome.i18n.getMessage(messageKey);
+      }
     });
     // Update attributes for internationalisation
     document.querySelectorAll("[data-i18n-attr]").forEach((el) => {
@@ -58,6 +63,14 @@ document.addEventListener("DOMContentLoaded", function () {
     2: "accuracy",
   };
 
+  var submitModeSlider = document.getElementById("submitModeRange");
+  var submitModeOutput = document.getElementById("submitModeValue");
+  var submitModeIcons = {
+    0: "auto",
+    1: "agent",
+    2: "off",
+  };
+
   // Load the saved preference when the popup opens
   getStoredValue("prefer", "balanced").then((prefer) => {
     var selectedValue = Object.keys(preferenceIcons).find(
@@ -68,6 +81,46 @@ document.addEventListener("DOMContentLoaded", function () {
     output.textContent = chrome.i18n.getMessage(messageKey);
     setActiveIcon(prefer);
     showDescription(prefer);
+  });
+
+  // Load the saved submit mode when the popup opens
+  getStoredValue("submitMode", null).then((submitMode) => {
+    if (submitMode === null) {
+      // No submitMode found - check for old schema and migrate
+      getStoredValue("autoSubmit", true).then((autoSubmit) => {
+        // Default to 'auto' if autoSubmit is true, 'off' if false
+        const migratedMode = autoSubmit ? "auto" : "off";
+        
+        // Save the new preference
+        chrome.storage.sync.set({ 
+          submitMode: migratedMode,
+          // Keep autoSubmit for backward compatibility
+          autoSubmit: autoSubmit
+        }, function () {
+          console.log("Migrated autoSubmit preference to submitMode: " + migratedMode);
+        });
+
+        // Update the UI
+        var selectedValue = Object.keys(submitModeIcons).find(
+          (key) => submitModeIcons[key] === migratedMode
+        );
+        submitModeSlider.value = selectedValue;
+        const messageKey = "submit_mode_" + migratedMode;
+        submitModeOutput.textContent = chrome.i18n.getMessage(messageKey);
+        setActiveSubmitModeIcon(migratedMode);
+        showSubmitModeDescription(migratedMode);
+      });
+    } else {
+      // Use existing submitMode
+      var selectedValue = Object.keys(submitModeIcons).find(
+        (key) => submitModeIcons[key] === submitMode
+      );
+      submitModeSlider.value = selectedValue;
+      const messageKey = "submit_mode_" + submitMode;
+      submitModeOutput.textContent = chrome.i18n.getMessage(messageKey);
+      setActiveSubmitModeIcon(submitMode);
+      showSubmitModeDescription(submitMode);
+    }
   });
 
   // Update the current slider value (each time you drag the slider handle)
@@ -84,6 +137,30 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   };
 
+  // Update the current submit mode slider value
+  submitModeSlider.oninput = function () {
+    var submitMode = submitModeIcons[this.value];
+    const messageKey = "submit_mode_" + submitMode;
+    submitModeOutput.textContent = chrome.i18n.getMessage(messageKey);
+    setActiveSubmitModeIcon(submitMode);
+    showSubmitModeDescription(submitMode);
+
+    // Save the submit mode and update related settings
+    chrome.storage.sync.set({ 
+      submitMode: submitMode,
+      autoSubmit: submitMode !== "off",
+      discretionaryMode: submitMode === "agent"
+    }, function () {
+      console.log("User preference saved: submitMode " + submitMode);
+    });
+
+    // Notify content script of changes
+    message({ 
+      autoSubmit: submitMode !== "off",
+      discretionaryMode: submitMode === "agent"
+    });
+  };
+
   // Set active icon based on the preference
   function setActiveIcon(preference) {
     Object.keys(preferenceIcons).forEach((key) => {
@@ -97,8 +174,21 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Set active icon based on the submit mode
+  function setActiveSubmitModeIcon(submitMode) {
+    Object.keys(submitModeIcons).forEach((key) => {
+      var iconId = submitModeIcons[key];
+      var iconElement = document.getElementById(iconId);
+      if (iconId === submitMode) {
+        iconElement.classList.add("active");
+      } else {
+        iconElement.classList.remove("active");
+      }
+    });
+  }
+
   function showDescription(preference) {
-    const descriptions = document.querySelectorAll(".description");
+    const descriptions = document.querySelectorAll("#preference-selector .description");
     descriptions.forEach((description) => {
       if (
         description.getAttribute("data-i18n") ===
@@ -111,8 +201,22 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  function showSubmitModeDescription(submitMode) {
+    const descriptions = document.querySelectorAll("#submit-mode-selector .description");
+    descriptions.forEach((description) => {
+      if (
+        description.getAttribute("data-i18n") ===
+        `submit_mode_${submitMode}_description`
+      ) {
+        description.classList.add("selected");
+      } else {
+        description.classList.remove("selected");
+      }
+    });
+  }
+
   function sliderInput() {
-    const icons = document.querySelectorAll(".icon");
+    const icons = document.querySelectorAll("#preference-selector .icon");
     const moveSlider = (position) => {
       slider.value = position;
       // fire input event to update sliderValue
@@ -133,6 +237,31 @@ document.addEventListener("DOMContentLoaded", function () {
             break;
           default:
             moveSlider(1);
+        }
+      });
+    });
+
+    const submitModeIcons = document.querySelectorAll("#submit-mode-selector .icon");
+    const moveSubmitModeSlider = (position) => {
+      submitModeSlider.value = position;
+      // fire input event to update submitModeValue
+      submitModeSlider.dispatchEvent(new Event("input"));
+    };
+    // Add event listener for the submit mode icon click
+    submitModeIcons.forEach((icon) => {
+      icon.addEventListener("click", function () {
+        switch (this.id) {
+          case "auto":
+            moveSubmitModeSlider(0);
+            break;
+          case "agent":
+            moveSubmitModeSlider(1);
+            break;
+          case "off":
+            moveSubmitModeSlider(2);
+            break;
+          default:
+            moveSubmitModeSlider(0);
         }
       });
     });
@@ -181,30 +310,6 @@ document.addEventListener("DOMContentLoaded", function () {
         this.parentElement.classList.remove("checked");
       }
     });
-
-    const autoSubmitInput = document.getElementById("auto-submit");
-    getStoredValue("autoSubmit", true).then((autoSubmit) => {
-      selectInput(autoSubmitInput, autoSubmit);
-    });
-
-    autoSubmitInput.addEventListener("change", function () {
-      chrome.storage.sync.set(
-        { autoSubmit: this.checked },
-        function () {
-          console.log(
-            "Preference saved: Auto-submit is " + (this.checked ? "on" : "off")
-          );
-        }.bind(this)
-      ); // Ensure 'this' inside the callback refers to autoSubmitInput
-      if (this.checked) {
-        this.parentElement.classList.add("checked");
-      } else {
-        this.parentElement.classList.remove("checked");
-      }
-      // Use the message function to send a message to the content script
-      message({ autoSubmit: this.checked });
-    });
-
     const allowInterruptionsInput = document.getElementById(
       "allow-interruptions"
     );
@@ -357,6 +462,40 @@ document.addEventListener("DOMContentLoaded", function () {
       ? `${config.authServerUrl}/app/dashboard` 
       : 'https://www.saypi.ai/app/dashboard';
     window.open(dashboardUrl, '_blank');
+  });
+
+  // Load the saved nickname when the popup opens
+  const nicknameInput = document.getElementById("assistant-nickname");
+  getStoredValue("nickname", null).then((nickname) => {
+    if (nickname) {
+      nicknameInput.value = nickname;
+    }
+  });
+
+  // Save the nickname when it changes
+  nicknameInput.addEventListener("change", function() {
+    const nickname = this.value.trim();
+    if (nickname) {
+      chrome.storage.sync.set({ nickname }, function() {
+        console.log("Nickname saved:", nickname);
+      });
+      // Notify content script of the change
+      message({ nickname });
+    } else {
+      // If the input is empty, remove the nickname
+      chrome.storage.sync.remove("nickname", function() {
+        console.log("Nickname removed");
+      });
+      // Notify content script of the removal
+      message({ nickname: null });
+    }
+  });
+
+  // Handle Enter key on nickname input
+  nicknameInput.addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
+      this.blur(); // Remove focus, which will trigger the change event if value changed
+    }
   });
 
   i18nReplace();

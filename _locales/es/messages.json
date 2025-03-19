@@ -471,6 +471,44 @@
     "message": "Ajustes",
     "description": "El texto del botón para abrir la configuración de la extensión."
   },
+  "submitModeControl": {
+    "description": "El título (información sobre herramientas) del control para seleccionar cuándo se deben enviar los mensajes.",
+    "message": "Seleccione cuándo enviar sus mensajes"
+  },
+  "submit_mode_agent": {
+    "description": "Modo de envío impulsado por IA.",
+    "message": "agente"
+  },
+  "submit_mode_agent_description": {
+    "description": "Descripción del modo de envío impulsado por IA.",
+    "message": "$chatbot$ decide cuándo responder según el contexto",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Modo de envío automático.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Descripción del modo de envío automático.",
+    "message": "Enviar automáticamente cuando dejes de hablar"
+  },
+  "submit_mode_off": {
+    "description": "Modo de envío manual.",
+    "message": "manual"
+  },
+  "submit_mode_off_description": {
+    "description": "Descripción del modo de envío manual.",
+    "message": "Envíe solo cuando presione el botón"
+  },
+  "nicknameLabel": {
+    "message": "Apodo",
+    "description": "Etiqueta para el campo de entrada para establecer un apodo personalizado para el asistente de IA."
+  },
   "greeting": {
     "description": "Mensaje de saludo que se muestra cuando el usuario está iniciado",
     "message": "Hola, $name$!",

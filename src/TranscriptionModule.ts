@@ -5,6 +5,7 @@ import { UserPreferenceModule } from "./prefs/PreferenceModule";
 import { callApi } from "./ApiClient";
 import EventBus from "./events/EventBus";
 import telemetryModule from "./TelemetryModule";
+import { ChatbotService } from "./chatbots/ChatbotService";
 
 // Define the shape of the response JSON object
 interface TranscriptionResponse {
@@ -13,6 +14,9 @@ interface TranscriptionResponse {
   pFinishedSpeaking?: number;
   tempo?: number;
   merged?: number[];
+  responseAnalysis?: {
+    shouldRespond: boolean;
+  };
 }
 
 const knownNetworkErrorMessages = [
@@ -23,7 +27,7 @@ const knownNetworkErrorMessages = [
 ];
 
 // timeout for transcription requests
-const TIMEOUT_MS = 30000; // 30 seconds
+const TIMEOUT_MS = 10000; // 30 seconds
 
 // track sequence numbers for in-flight transcription requests
 let sequenceNum = 0;
@@ -215,6 +219,9 @@ async function uploadAudio(
     if (responseJson.hasOwnProperty("merged")) {
       payload.merged = responseJson.merged;
     }
+    if (responseJson.hasOwnProperty("responseAnalysis")) {
+      payload.responseAnalysis = responseJson.responseAnalysis;
+    }
 
     logger.info(
       `Transcribed ${Math.round(
@@ -276,10 +283,23 @@ async function constructTranscriptionFormData(
     formData.append("sessionId", sessionId);
   }
 
-  // Wait for the preference to be retrieved before appending it to the FormData
+  // Wait for preferences to be retrieved before appending them to the FormData
   const preference = await userPreferences.getTranscriptionMode();
   if (preference) {
     formData.append("prefer", preference);
+  }
+
+  const discretionaryMode = await userPreferences.getDiscretionaryMode();
+  if (discretionaryMode) {
+    formData.append("analyzeForResponse", "true");
+  }
+
+  // Get the chatbot's nickname if set
+  const chatbot = await ChatbotService.getChatbot();
+  const nickname = await chatbot.getNickname();
+  const defaultName = chatbot.getName();
+  if (nickname && nickname !== defaultName) {
+    formData.append("nickname", nickname);
   }
 
   return formData;

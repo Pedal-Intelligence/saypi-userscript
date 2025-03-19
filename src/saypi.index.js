@@ -22,7 +22,7 @@ import SlowResponseHandler from "./SlowResponseHandler.ts";
 (async function () {
   "use strict";
 
-  const chatbot = ChatbotService.getChatbot();
+  const chatbot = await ChatbotService.getChatbot();
   const audioModule = AudioModule.getInstance(); // inits the audio module's offline functions
   
   // Initialize telemetry module
@@ -85,7 +85,7 @@ import SlowResponseHandler from "./SlowResponseHandler.ts";
   });
 
   addUserAgentFlags();
-  ChatbotService.addChatbotFlags(chatbot);
+  await ChatbotService.addChatbotFlags();
   EventModule.init();
   new DOMObserver(chatbot).observeDOM();
   setupAuthListener(); // Setup the auth listener

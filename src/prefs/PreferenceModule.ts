@@ -21,6 +21,8 @@ interface StorageResult {
   voiceId?: string; // prefered speech synthesis voice
   theme?: string; // 'light' or 'dark'
   shareData?: boolean; // has the user consented to data sharing?
+  discretionaryMode?: boolean; // new beta feature for discretionary responses
+  nickname?: string; // user's preferred nickname for the AI assistant
 }
 
 class UserPreferenceModule {
@@ -34,6 +36,10 @@ class UserPreferenceModule {
     return UserPreferenceModule.instance;
   }
 
+  /**
+   * Constructor for UserPreferenceModule
+   * Note: cache may not be fully populated immediately after construction (takes a few milliseconds)
+   */
   private constructor() {
     this.reloadCache();
     this.registerMessageListeners();
@@ -48,6 +54,10 @@ class UserPreferenceModule {
     });
     this.isTTSBetaPaused().then((value) => {
       this.cache.setCachedValue("isTTSBetaPaused", value);
+    });
+    this.getDiscretionaryMode().then((value) => {
+      this.cache.setCachedValue("discretionaryMode", value);
+      EventBus.emit("userPreferenceChanged", { discretionaryMode: value }); // propagate the change to other modules - this is a bit of a hack for the cache not being ready immediately after construction
     });
   }
 
@@ -70,6 +80,10 @@ class UserPreferenceModule {
             "allowInterruptions",
             request.allowInterruptions
           );
+        }
+        if ("discretionaryMode" in request) {
+          this.cache.setCachedValue("discretionaryMode", request.discretionaryMode);
+          EventBus.emit("userPreferenceChanged", { discretionaryMode: request.discretionaryMode }); // propagate the change to other modules
         }
       });
     }
@@ -345,6 +359,42 @@ class UserPreferenceModule {
   isTTSEnabled() {
     // TTS is now implicitly enabled when the user has credits
     return Promise.resolve(true);
+  }
+
+  public getDiscretionaryMode(): Promise<boolean> {
+    return this.getStoredValue("discretionaryMode", false);
+  }
+
+  public getCachedDiscretionaryMode(): boolean {
+    return this.cache.getCachedValue("discretionaryMode", false);
+  }
+
+  public getNickname(): Promise<string | null> {
+    return this.getStoredValue("nickname", null);
+  }
+
+  public setNickname(nickname: string | null): Promise<void> {
+    return new Promise((resolve) => {
+      if (
+        typeof chrome !== "undefined" &&
+        chrome.storage &&
+        chrome.storage.sync
+      ) {
+        if (nickname === null) {
+          chrome.storage.sync.remove("nickname", () => {
+            resolve();
+          });
+        } else {
+          chrome.storage.sync.set({ nickname }, () => {
+            resolve();
+          });
+        }
+      } else {
+        // If Chrome storage API is not supported, do nothing
+        resolve();
+      }
+      EventBus.emit("userPreferenceChanged", { nickname });
+    });
   }
 }
 
