@@ -8,6 +8,7 @@ import { logger, serializeStateValue } from "../LoggingModule.js";
 import EventBus from "../events/EventBus.js";
 import { isSafari } from "../UserAgentModule.ts";
 import SlowResponseHandler from "../SlowResponseHandler.ts";
+import { SlowResponseHandlerAdapter } from "./SlowResponseHandlerAdapter.js";
 import { CacheBuster } from "../CacheBuster.ts";
 import { UserPreferenceModule } from "../prefs/PreferenceModule.ts";
 
@@ -99,7 +100,8 @@ export default class AudioModule {
     this.registerAudioPlaybackEvents(this.audioElement, this.voiceConverter);
     // handle slow responses from pi.ai - since 2024-07
     const slowResponseHandler = SlowResponseHandler.getInstance();
-    this.registerAudioErrorEvents(this.audioElement, slowResponseHandler);
+    const slowResponseAdapter = new SlowResponseHandlerAdapter(slowResponseHandler);
+    this.registerAudioErrorEvents(this.audioElement, slowResponseAdapter);
     this.registerLifecycleDebug();
 
     // audio input (user)
@@ -175,7 +177,8 @@ export default class AudioModule {
     this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
     this.registerAudioPlaybackEvents(this.audioElement, this.voiceConverter);
     const slowResponseHandler = SlowResponseHandler.getInstance();
-    this.registerAudioErrorEvents(this.audioElement, slowResponseHandler);
+    const slowResponseAdapter = new SlowResponseHandlerAdapter(slowResponseHandler);
+    this.registerAudioErrorEvents(this.audioElement, slowResponseAdapter);
     if (isSafari()) {
       this.registerAudioPlaybackEvents(this.audioElement, this.audioRetryActor);
       this.registerSourceChangeEvents(this.audioElement, this.audioRetryActor);
@@ -591,12 +594,15 @@ export default class AudioModule {
   /**
    * Register error events on the audio element to handle slow responses from pi.ai
    * @param {HTMLAudioElement} audioElement
-   * @param {SlowResponseHandler} slowResponseHandler
+   * @param {SlowResponseHandlerAdapter | InterpretedActor} actor
    */
   registerAudioErrorEvents(audio, actor) {
     // Handle explicit errors
     audio.addEventListener("error", (event) => {
-      actor.send("error", { source: audio.currentSrc });
+      actor.send("error", { 
+        source: audio.currentSrc,
+        error: audio.error 
+      });
     });
 
     // Handle Safari range request failures
@@ -611,7 +617,8 @@ export default class AudioModule {
         console.debug('[audio lifecycle] Detected Safari range request failure, triggering retry');
         actor.send("error", { 
           source: audio.currentSrc,
-          detail: "Safari range request failure detected"
+          detail: "Safari range request failure detected",
+          error: audio.error
         });
       }
     });
