@@ -508,5 +508,153 @@
   "nicknameLabel": {
     "message": "Becenév",
     "description": "Címkézze a bemeneti mezőt az AI asszisztens egyedi becenevének beállításához."
+  },
+  "greeting": {
+    "description": "Üdvözlőlap -üzenet jelenik meg, amikor a felhasználó be van jelentkezve",
+    "message": "Szia, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Szöveg, amelyet meg lehet mutatni, amikor a felhasználó nincs bejelentkezve.",
+    "message": "Nem jelentkezett be"
+  },
+  "profile": {
+    "description": "Címke a felhasználói profil szakaszhoz.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Egységcímke a TTS -kreditekhez",
+    "message": "jóváírás"
+  },
+  "quotaRemaining": {
+    "description": "Címke a fennmaradó kvóta előrehaladási sávjához",
+    "message": "A megmaradó kvóta"
+  },
+  "quotaStatusUnknown": {
+    "description": "A kvóta állapotát nem lehet meghatározni",
+    "message": "Nem lehet ellenőrizni a kvóta állapotát"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "A felhasználó nem hitelesített üzenet.",
+    "message": "Jelentkezzen be, hogy hozzáférjen a hanggeneráláshoz és más prémium funkciókhoz"
+  },
+  "signIn": {
+    "description": "Szöveg a bejelentkezés gombhoz.",
+    "message": "Bejelentkezik"
+  },
+  "signOut": {
+    "description": "Szöveg a bejelentkezési gombhoz.",
+    "message": "Kijelentkezik"
+  },
+  "signedIn": {
+    "description": "Állapotszöveg jelenik meg, amikor a felhasználót hitelesítették (e -mail nélkül).",
+    "message": "Beiratkozott"
+  },
+  "signedInAs": {
+    "description": "Állapotszöveg, amikor a felhasználót hitelesítik, beleértve az e -maileket is.",
+    "message": "Bejelentkezett $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "A fennmaradó STT -kvótát mutató szöveg percek alatt.",
+    "message": "$minutes$ perc$plural$ megmarad",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Szöveg, amelyet meg lehet mutatni, amikor az STT kvóta kimerül.",
+    "message": "A beszédfelismerési kvóta kimerült"
+  },
+  "sttQuotaProgress": {
+    "description": "ToolTIP az STT kvóta előrehaladási sávjához.",
+    "message": "$remaining$ $total$ másodperc marad",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Az STT kvóta előrehaladási sávjának eszköztése percek alatt.",
+    "message": "$remaining$ $total$ perc maradt",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Címke az STT kvóta fennmaradó kijelzőjéhez.",
+    "message": "Beszédfelismerés"
+  },
+  "sttQuotaSeconds": {
+    "description": "Egység az STT kvóta számára (másodperc).",
+    "message": "SECS"
+  },
+  "ttsCredits": {
+    "description": "A Credits Pevizához használt kifejezés a szöveg-beszéd funkcióban.",
+    "message": "jóváírás"
+  },
+  "ttsQuotaCharacters": {
+    "description": "A TTS kvóta (karakterek) egység.",
+    "message": "jóváírás"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Szöveg, amelyet meg lehet mutatni, amikor a TTS kvóta kimerül.",
+    "message": "Kimerült a hangkvóta"
+  },
+  "ttsQuotaProgress": {
+    "description": "Eszköztip a TTS kvóta előrehaladási sávjához.",
+    "message": "$remaining$ $total$ karakterek maradnak",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Címke a TTS kvóta fennmaradó kijelzőjéhez.",
+    "message": "Hangtermelés"
+  },
+  "upgradeButton": {
+    "description": "Szöveges szöveg a terv frissítéséhez, amikor a kvóta kimerül.",
+    "message": "Frissítési terv"
+  },
+  "viewDetails": {
+    "description": "Szöveg a linkhez a teljes kvóta részleteinek megtekintéséhez a műszerfalon.",
+    "message": "A részletek megtekintése"
   }
 }

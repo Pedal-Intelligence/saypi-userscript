@@ -508,5 +508,153 @@
   "nicknameLabel": {
     "message": "Lempinimi",
     "description": "Syöttökentän etiketti asettaa mukautetun lempinimen AI -avustajalle."
+  },
+  "greeting": {
+    "description": "Tervehdysviesti, joka näkyy, kun käyttäjä on kirjautunut sisään",
+    "message": "Hei, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Teksti näyttää, kun käyttäjää ei kirjata sisään.",
+    "message": "Ei allekirjoitettu"
+  },
+  "profile": {
+    "description": "Käyttäjäprofiiliosa.",
+    "message": "Profiili"
+  },
+  "quotaCredits": {
+    "description": "Yksikkötarra TTS -hyvityksille",
+    "message": "hyvitykset"
+  },
+  "quotaRemaining": {
+    "description": "Label Qualing Progress Barille",
+    "message": "Jäljellä oleva kiintiö"
+  },
+  "quotaStatusUnknown": {
+    "description": "Viesti, joka näkyy, kun kiintiötilaa ei voida määrittää",
+    "message": "Kiinan tilaa ei voi tarkistaa"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Viesti, joka näkyy, kun käyttäjää ei ole todennettu.",
+    "message": "Kirjaudu sisään Access -äänen luomiseen ja muihin premium -ominaisuuksiin"
+  },
+  "signIn": {
+    "description": "Kirjaudu sisään painikkeeseen.",
+    "message": "Kirjautua sisään"
+  },
+  "signOut": {
+    "description": "Teksti kirjaudu -painiketta varten.",
+    "message": "Ilmoittautua"
+  },
+  "signedIn": {
+    "description": "Tila -teksti, joka näytetään, kun käyttäjä on todennettu (ilman sähköpostia).",
+    "message": "Allekirjoitettu"
+  },
+  "signedInAs": {
+    "description": "Tila -teksti, joka näytetään, kun käyttäjä on todennettu, mukaan lukien heidän sähköpostinsa.",
+    "message": "Kirjautunut sisään $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Teksti, joka näyttää jäljellä olevan STT -kiintiön muutamassa minuutissa.",
+    "message": "$minutes$ minuutti $plural$ jäljellä",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Teksti näytetään, kun STT -kiintiö on uupunut.",
+    "message": "Puheentunnistuskiintiö on uupunut"
+  },
+  "sttQuotaProgress": {
+    "description": "Työkaluvidi STT -kiintiön etenemispalkkiin.",
+    "message": "$remaining$ Jäljelle jäävä $total$ sekuntia jäljellä",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Työkaluvidi STT -kiintiön etenemispalkkiin muutamassa minuutissa.",
+    "message": "$remaining$ Jäljelle jää $total$ minuuttia",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "STT -kiintiön jäljellä oleva näyttö.",
+    "message": "Puheentunnistus"
+  },
+  "sttQuotaSeconds": {
+    "description": "Yksikkö STT -kiintiölle (sekunnit).",
+    "message": "sekuntia"
+  },
+  "ttsCredits": {
+    "description": "Termi, jota käytetään hyvitysvaluuttaan tekstistä puheeksi -ominaisuudessa.",
+    "message": "hyvitykset"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Yksikkö TTS -kiintiölle (merkit).",
+    "message": "hyvitykset"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Teksti näyttää, kun TTS -kiintiö on uupunut.",
+    "message": "Äänikiintiö on uupunut"
+  },
+  "ttsQuotaProgress": {
+    "description": "Työkaluvidi TTS -kiintiön etenemispalkkiin.",
+    "message": "$remaining$ Jäljellä oleva $total$ merkkiä",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "TTS -kiintiön jäljellä oleva näyttö.",
+    "message": "Äänen sukupolvi"
+  },
+  "upgradeButton": {
+    "description": "Teksti painikkeen päivittämiseksi suunnitelman päivittämiseksi, kun kiintiö on käytetty loppuun.",
+    "message": "Päivityssuunnitelma"
+  },
+  "viewDetails": {
+    "description": "Teksti linkkille nähdäksesi täydelliset kiintiötiedot kojelaudassa.",
+    "message": "Katso yksityiskohdat"
   }
 }

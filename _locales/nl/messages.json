@@ -508,5 +508,153 @@
   "nicknameLabel": {
     "message": "Bijnaam",
     "description": "Label voor het invoerveld om een ​​aangepaste bijnaam in te stellen voor de AI -assistent."
+  },
+  "greeting": {
+    "description": "Groetbericht getoond wanneer de gebruiker wordt aangemeld",
+    "message": "Hallo, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Tekst om te laten zien wanneer de gebruiker niet is aangemeld.",
+    "message": "Niet aangemeld"
+  },
+  "profile": {
+    "description": "Label voor de sectie Gebruikersprofiel.",
+    "message": "Profiel"
+  },
+  "quotaCredits": {
+    "description": "Eenheidslabel voor TTS -credits",
+    "message": "credits"
+  },
+  "quotaRemaining": {
+    "description": "Label voor de resterende voortgangsbalk",
+    "message": "Quota overgebleven"
+  },
+  "quotaStatusUnknown": {
+    "description": "Bericht dat wordt weergegeven wanneer quotumstatus niet kan worden bepaald",
+    "message": "Niet in staat om de quotumstatus te controleren"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Bericht weergegeven wanneer de gebruiker niet is geverifieerd.",
+    "message": "Log in om toegang te krijgen tot spraakgeneratie en andere premium -functies"
+  },
+  "signIn": {
+    "description": "Tekst voor de knop Aanmelden.",
+    "message": "Inloggen"
+  },
+  "signOut": {
+    "description": "Tekst voor de knop SPORT OUT.",
+    "message": "Uitmelden"
+  },
+  "signedIn": {
+    "description": "Statustekst weergegeven wanneer de gebruiker is geverifieerd (zonder e -mail).",
+    "message": "Getekend"
+  },
+  "signedInAs": {
+    "description": "Statustekst weergegeven wanneer de gebruiker wordt geverifieerd, inclusief hun e -mail.",
+    "message": "Getekend als $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Tekst met resterende STT -quota in minuten.",
+    "message": "$minutes$ minuten $plural$ overgebleven",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Tekst om te laten zien wanneer STT -quotum is uitgeput.",
+    "message": "Spraakherkenning quotum uitgeput"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip voor de STT Quota Progress Bar.",
+    "message": "$remaining$ van $total$ seconden overgebleven",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip voor de STT Quota -voortgangsbalk in minuten.",
+    "message": "$remaining$ van $total$ minuten over",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Label voor het resterende STT -quota -weergave.",
+    "message": "Spraakherkenning"
+  },
+  "sttQuotaSeconds": {
+    "description": "Eenheid voor STT Quota (seconden).",
+    "message": "tweede"
+  },
+  "ttsCredits": {
+    "description": "De term die wordt gebruikt voor de valuta van de credits in de tekst-naar-spraakfunctie.",
+    "message": "credits"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Eenheid voor TTS -quota (tekens).",
+    "message": "credits"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Tekst om te laten zien wanneer TTS -quotum is uitgeput.",
+    "message": "Stemquotum uitgeput"
+  },
+  "ttsQuotaProgress": {
+    "description": "Tooltip voor de TTS Quota Progress Bar.",
+    "message": "$remaining$ van $total$ personages overgebleven",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Label voor het resterende TTS -quota -weergave.",
+    "message": "Spraakgeneratie"
+  },
+  "upgradeButton": {
+    "description": "Tekst voor de knop om het plan te upgraden wanneer quotum is uitgeput.",
+    "message": "Upgradeplan"
+  },
+  "viewDetails": {
+    "description": "Tekst voor de link om volledige quota -details op het dashboard te bekijken.",
+    "message": "Bekijk details"
   }
 }

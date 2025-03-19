@@ -508,5 +508,153 @@
   "nicknameLabel": {
     "message": "Prezývka",
     "description": "Obeň pre vstupné pole na nastavenie vlastnej prezývky pre asistenta AI."
+  },
+  "greeting": {
+    "description": "Pozdravná správa zobrazená, keď je používateľ prihlásený",
+    "message": "Ahoj, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Text, ktorý sa má zobraziť, keď používateľ nie je podpísaný.",
+    "message": "Nie podpísané"
+  },
+  "profile": {
+    "description": "Štítok pre sekciu profilu používateľa.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Značko jednotky pre TTS kredity",
+    "message": "kredity"
+  },
+  "quotaRemaining": {
+    "description": "Štítok pre zostávajúcu lištu pokroku",
+    "message": "Zostáva kvóta"
+  },
+  "quotaStatusUnknown": {
+    "description": "Správa zobrazená, keď nie je možné určiť stav kvóty",
+    "message": "Nemožno skontrolovať stav kvóty"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Správa zobrazená, keď používateľ nie je overený.",
+    "message": "Prihláste sa na prístup k generácii hlasu a ďalším prémiovým funkciám"
+  },
+  "signIn": {
+    "description": "Text pre tlačidlo Prihlásiť sa.",
+    "message": "Prihlásiť sa"
+  },
+  "signOut": {
+    "description": "Text pre tlačidlo Out Out.",
+    "message": "Odhlásiť sa"
+  },
+  "signedIn": {
+    "description": "Stavový text zobrazený, keď je používateľ autentifikovaný (bez e -mailu).",
+    "message": "Podpísaný"
+  },
+  "signedInAs": {
+    "description": "Stavový text zobrazený, keď je používateľ autentifikovaný, vrátane ich e -mailu.",
+    "message": "Prihlásený ako $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Text zobrazujúci zostávajúcu kvótu STT za pár minút.",
+    "message": "$minutes$ minút$plural$ zostávajú",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text, ktorý sa má zobrazovať, keď je kvóta STT vyčerpaná.",
+    "message": "Kvóta na rozpoznávanie reči vyčerpaná"
+  },
+  "sttQuotaProgress": {
+    "description": "Popesp pre lištu progresie STT.",
+    "message": "$remaining$ z $total$ zostáva",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Poplažok pre lištu progresie STT v minútach v minútach.",
+    "message": "$remaining$ z $total$ minút zostáva",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Štítok pre zostávajúce displej STT kvóty.",
+    "message": "Rozpoznávanie reči"
+  },
+  "sttQuotaSeconds": {
+    "description": "Jednotka pre kvótu STT (sekundy).",
+    "message": "sekundy"
+  },
+  "ttsCredits": {
+    "description": "Pojem používaný pre menu kreditov vo funkcii textu na reč.",
+    "message": "kredity"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Jednotka pre TTS kvóty (znaky).",
+    "message": "kredity"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Text, ktorý sa má zobrazovať, keď je kvóta TTS vyčerpaná.",
+    "message": "Hlasová kvóta vyčerpaná"
+  },
+  "ttsQuotaProgress": {
+    "description": "Popesp pre lištu pokroku TTS.",
+    "message": "$remaining$ z $total$ znakov",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Štítok pre zostávajúce displej TTS.",
+    "message": "Generácia hlasu"
+  },
+  "upgradeButton": {
+    "description": "Text pre tlačidlo Ak chcete vylepšiť plán, keď je kvóta vyčerpaná.",
+    "message": "Plán aktualizácie"
+  },
+  "viewDetails": {
+    "description": "Text pre odkaz na zobrazenie úplných podrobností kvóty na prístrojovej doske.",
+    "message": "Zobraziť podrobnosti"
   }
 }

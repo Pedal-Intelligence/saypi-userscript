@@ -508,5 +508,153 @@
   "nicknameLabel": {
     "message": "Apelido",
     "description": "Etiqueta para o campo de entrada para definir um apelido personalizado para o assistente de IA."
+  },
+  "greeting": {
+    "description": "Mensagem de saudação mostrada quando o usuário está assinado",
+    "message": "Oi, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Texto para mostrar quando o usuário não está conectado.",
+    "message": "Não assinou"
+  },
+  "profile": {
+    "description": "Etiqueta para a seção de perfil do usuário.",
+    "message": "Perfil"
+  },
+  "quotaCredits": {
+    "description": "Rótulo da unidade para créditos TTS",
+    "message": "Créditos"
+  },
+  "quotaRemaining": {
+    "description": "Etiqueta para a cota barra de progresso restante",
+    "message": "Cota restante"
+  },
+  "quotaStatusUnknown": {
+    "description": "Mensagem mostrada quando o status da cota não pode ser determinado",
+    "message": "Incapaz de verificar o status da cota"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Mensagem mostrada quando o usuário não é autenticado.",
+    "message": "Faça login para acessar a geração de voz e outros recursos premium"
+  },
+  "signIn": {
+    "description": "Texto para o botão de entrada.",
+    "message": "Entrar"
+  },
+  "signOut": {
+    "description": "Texto para o botão Sign Out.",
+    "message": "Sair"
+  },
+  "signedIn": {
+    "description": "Texto de status mostrado quando o usuário é autenticado (sem email).",
+    "message": "Assinou"
+  },
+  "signedInAs": {
+    "description": "Texto de status mostrado quando o usuário é autenticado, incluindo o email.",
+    "message": "Assinou como $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Texto mostrando a cota STT restante em minutos.",
+    "message": "$minutes$ minuto$plural$ restante",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Texto a ser mostrado quando a cota STT está esgotada.",
+    "message": "Cota de reconhecimento de fala exausta"
+  },
+  "sttQuotaProgress": {
+    "description": "Dica de ferramenta para a barra de progresso da cota STT.",
+    "message": "$remaining$ de $total$ segundos restantes",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Distima de ferramentas para a barra de progresso da cota STT em minutos.",
+    "message": "$remaining$ de $total$ minutos",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Etiqueta para a exibição restante da cota STT.",
+    "message": "Reconhecimento de fala"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unidade para cota STT (segundos).",
+    "message": "Secs"
+  },
+  "ttsCredits": {
+    "description": "O termo usado para a moeda de créditos no recurso Texto-fala.",
+    "message": "Créditos"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Unidade para cota TTS (caracteres).",
+    "message": "Créditos"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Texto a ser mostrado quando a cota TTS está esgotada.",
+    "message": "Cota de voz exausta"
+  },
+  "ttsQuotaProgress": {
+    "description": "Distribuição de ferramentas para a barra de progresso da cota TTS.",
+    "message": "$remaining$ de $total$ caracteres restantes",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Etiqueta para a exibição restante da cota TTS.",
+    "message": "Geração de voz"
+  },
+  "upgradeButton": {
+    "description": "Texto para o botão para atualizar o plano quando a cota estiver esgotada.",
+    "message": "Plano de atualização"
+  },
+  "viewDetails": {
+    "description": "Texto para o link para visualizar detalhes completos da cota no painel.",
+    "message": "Ver detalhes"
   }
 }

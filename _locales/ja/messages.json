@@ -508,5 +508,153 @@
   "nicknameLabel": {
     "message": "ニックネーム",
     "description": "AIアシスタントのカスタムニックネームを設定するための入力フィールドのラベル。"
+  },
+  "greeting": {
+    "description": "ユーザーがサインインされたときに表示されるグリーティングメッセージ",
+    "message": "こんにちは、$name$！",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "ユーザーがサインインしていないときに表示するテキスト。",
+    "message": "サインインしていません"
+  },
+  "profile": {
+    "description": "ユーザープロファイルセクションのラベル。",
+    "message": "プロフィール"
+  },
+  "quotaCredits": {
+    "description": "TTSクレジット用のユニットラベル",
+    "message": "クレジット"
+  },
+  "quotaRemaining": {
+    "description": "クォータの残りの進行状況バーのラベル",
+    "message": "残りのクォータ"
+  },
+  "quotaStatusUnknown": {
+    "description": "クォータステータスを決定できない場合に表示されます",
+    "message": "クォータステータスを確認できません"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "ユーザーが認証されていないときに表示されるメッセージ。",
+    "message": "ログインして音声生成やその他のプレミアム機能にアクセスします"
+  },
+  "signIn": {
+    "description": "サインインボタンのテキスト。",
+    "message": "サインイン"
+  },
+  "signOut": {
+    "description": "サインアウトボタンのテキスト。",
+    "message": "サインアウト"
+  },
+  "signedIn": {
+    "description": "ユーザーが認証されているときに表示されるステータステキスト（電子メールなし）。",
+    "message": "サインイン"
+  },
+  "signedInAs": {
+    "description": "ユーザーが電子メールを含めて認証されているときに表示されるステータステキスト。",
+    "message": "$email$として署名されました",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "残りのSTTクォータを数分で示すテキスト。",
+    "message": "$minutes$分$plural$の残り",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "STTクォータが使い果たされたときに示すテキスト。",
+    "message": "音声認識クォータは使い果たされました"
+  },
+  "sttQuotaProgress": {
+    "description": "STTクォータの進行状況バーのツールチップ。",
+    "message": "$remaining$の$total$秒の残り",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "数分でSTTクォータの進行状況バーのツールチップ。",
+    "message": "$remaining$の$total$分の残り",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "STTクォータの残りの表示用ラベル。",
+    "message": "音声認識"
+  },
+  "sttQuotaSeconds": {
+    "description": "STTクォータのユニット（秒）。",
+    "message": "秒"
+  },
+  "ttsCredits": {
+    "description": "テキストからスピーチの機能のクレジット通貨に使用される用語。",
+    "message": "クレジット"
+  },
+  "ttsQuotaCharacters": {
+    "description": "TTSクォータ（文字）のユニット。",
+    "message": "クレジット"
+  },
+  "ttsQuotaExhausted": {
+    "description": "TTSクォータが使い果たされたときに表示するテキスト。",
+    "message": "音声クォータは使い果たされました"
+  },
+  "ttsQuotaProgress": {
+    "description": "TTSクォータプログレスバーのツールチップ。",
+    "message": "$remaining$の$total$文字が残っています",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "TTSクォータの残りの表示のラベル。",
+    "message": "音声生成"
+  },
+  "upgradeButton": {
+    "description": "クォータが使い果たされたときにプランをアップグレードするボタンのテキスト。",
+    "message": "プランのアップグレード"
+  },
+  "viewDetails": {
+    "description": "ダッシュボードで完全なクォータの詳細を表示するためのリンクのテキスト。",
+    "message": "詳細を表示します"
   }
 }

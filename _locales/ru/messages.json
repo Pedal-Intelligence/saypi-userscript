@@ -508,5 +508,153 @@
   "nicknameLabel": {
     "message": "Прозвище",
     "description": "Метка для поля ввода, чтобы установить индивидуальное прозвище для помощника ИИ."
+  },
+  "greeting": {
+    "description": "Приветствующее сообщение, показанное при вписании пользователя",
+    "message": "Привет, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Текст, чтобы показать, когда пользователь не подписан.",
+    "message": "Не подписан"
+  },
+  "profile": {
+    "description": "Метка для раздела профиля пользователя.",
+    "message": "Профиль"
+  },
+  "quotaCredits": {
+    "description": "Метка блока для TTS кредитов",
+    "message": "Кредиты"
+  },
+  "quotaRemaining": {
+    "description": "Этикетка для квоты остается",
+    "message": "Квота остается"
+  },
+  "quotaStatusUnknown": {
+    "description": "Сообщение показано, когда статус квоты не может быть определен",
+    "message": "Невозможно проверить статус квоты"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Сообщение, показанное, когда пользователь не аутентифицируется.",
+    "message": "Войдите в систему, чтобы получить доступ к генерации голоса и других премиальных функций"
+  },
+  "signIn": {
+    "description": "Текст для кнопки «Знаком».",
+    "message": "Войти"
+  },
+  "signOut": {
+    "description": "Текст для кнопки выхода.",
+    "message": "Выход"
+  },
+  "signedIn": {
+    "description": "Текст статуса, показанный, когда пользователь аутентифицируется (без электронной почты).",
+    "message": "Вписался в"
+  },
+  "signedInAs": {
+    "description": "Текст статуса, показанный, когда пользователь аутентифицируется, включая их электронную почту.",
+    "message": "Подписался как $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Текст, показывающий оставшуюся квоту STT за считанные минуты.",
+    "message": "$minutes$ минут$plural$",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Текст, чтобы показать, когда квота STT исчерпана.",
+    "message": "Квота распознавания речи истощена"
+  },
+  "sttQuotaProgress": {
+    "description": "Подсказка для панели прогресса Quatta STT.",
+    "message": "$remaining$ из $total$ остались",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Подсказка для панели прогресса в квоте STT за считанные минуты.",
+    "message": "$remaining$ из $total$ минут",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Метка для оставшегося дисплея квоты STT.",
+    "message": "Распознавание речи"
+  },
+  "sttQuotaSeconds": {
+    "description": "Блок для квоты STT (секунды).",
+    "message": "секунды"
+  },
+  "ttsCredits": {
+    "description": "Термин, используемый для валюты кредитов в функции текста в речь.",
+    "message": "Кредиты"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Блок для квоты TTS (символы).",
+    "message": "Кредиты"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Текст, чтобы показать, когда квота TTS исчерпана.",
+    "message": "Голосовая квота истощена"
+  },
+  "ttsQuotaProgress": {
+    "description": "Подсказка для панели прогресса в квоту TTS.",
+    "message": "$remaining$ из $total$",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Метка для оставшегося дисплея квоты TTS.",
+    "message": "Генерация голоса"
+  },
+  "upgradeButton": {
+    "description": "Текст для кнопки для обновления плана, когда квота исчерпана.",
+    "message": "План обновления"
+  },
+  "viewDetails": {
+    "description": "Текст для ссылки для просмотра полной квоты на приборной панели.",
+    "message": "Просмотреть детали"
   }
 }
