@@ -118,6 +118,10 @@ export class TelemetryModule {
       if (event.sequenceNumber === this.currentSequence && event.timestamp) {
         if (!this.currentTelemetry.timestamps) this.currentTelemetry.timestamps = {};
         this.currentTelemetry.timestamps.transcriptionEnd = event.timestamp;
+        // Save the last transcription time for grace period calculation
+        this.lastTranscriptionTime = event.timestamp;
+        this.transcriptionEndTime = event.timestamp;
+        console.debug(`Transcription received and lastTranscriptionTime updated: ${this.lastTranscriptionTime}`);
         this.emitUpdate();
       }
     });
@@ -129,10 +133,18 @@ export class TelemetryModule {
       if (!this.currentTelemetry.timestamps) this.currentTelemetry.timestamps = {};
       this.currentTelemetry.timestamps.promptSubmission = this.promptSubmissionTime;
       
-      // Calculate transcription delay
+      // Calculate transcription delay (grace period)
       if (this.lastTranscriptionTime > 0) {
         this.currentTelemetry.transcriptionDelay = this.promptSubmissionTime - this.lastTranscriptionTime;
+        console.debug(`Calculated transcriptionDelay (grace period): ${this.currentTelemetry.transcriptionDelay}ms`);
         this.emitUpdate();
+      } else if (this.currentTelemetry.timestamps.transcriptionEnd) {
+        // Alternative calculation if lastTranscriptionTime is not set but we have the timestamp
+        this.currentTelemetry.transcriptionDelay = this.promptSubmissionTime - this.currentTelemetry.timestamps.transcriptionEnd;
+        console.debug(`Calculated transcriptionDelay (grace period) from timestamps: ${this.currentTelemetry.transcriptionDelay}ms`);
+        this.emitUpdate();
+      } else {
+        console.warn("Cannot calculate grace period - no transcription end time available");
       }
     });
 

@@ -162,6 +162,15 @@ abstract class AssistantResponse {
   }
 
   /**
+   * Check if this is the last, i.e. most recent message in the chat history
+   * @returns true if this is the most recent message, false otherwise
+   */
+  isLastMessage(): boolean {
+    const lastMessage = document.querySelector("#saypi-chat-history .present-messages .assistant-message:last-of-type");
+    return lastMessage === this._element;
+  }
+
+  /**
    * Get the text content of the chat message,
    * as it is at the time of calling this method, which may not be completely loaded if the response is still streaming
    * Get stableText() to get the finished text content of the chat message
@@ -326,8 +335,10 @@ abstract class MessageControls {
     this.hoverMenu = this.messageControlsElement = null; // will be initialized in decorateControls()
     this.decorateControls(message);
     
-    // Listen for telemetry updates
-    EventBus.on("telemetry:updated", this.handleTelemetryUpdate);
+    if (this.message.isLastMessage()) {
+      // Listen for telemetry updates
+      EventBus.on("telemetry:updated", this.handleTelemetryUpdate);
+    }
   }
 
   protected getExtraControlClasses(): string[] {
@@ -649,11 +660,34 @@ abstract class MessageControls {
         key: 'voiceActivityDetection',
         label: 'Grace Period',
         value: telemetryData.transcriptionDelay,
-        color: '#4285F4', // Blue
-        explanation: 'Time between final transcription and submitting prompt to LLM'
+        color: '#2979FF', // Brighter blue to make it more noticeable
+        explanation: 'Intentional delay between receiving final transcription and submitting prompt to LLM - allows for detecting if user is truly finished speaking'
       });
     } else {
       console.warn("No transcriptionDelay found in telemetry data:", telemetryData);
+      
+      // Calculate the grace period from timestamps if available
+      if (timestamps.transcriptionEnd && timestamps.promptSubmission) {
+        const calculatedGracePeriod = timestamps.promptSubmission - timestamps.transcriptionEnd;
+        console.debug("Calculated grace period from timestamps:", calculatedGracePeriod + "ms");
+        metrics.push({
+          key: 'voiceActivityDetection',
+          label: 'Grace Period',
+          value: calculatedGracePeriod,
+          color: '#2979FF', // Brighter blue to make it more noticeable
+          explanation: 'Intentional delay between receiving final transcription and submitting prompt to LLM - allows for detecting if user is truly finished speaking'
+        });
+      } else {
+        // If no timestamps either, add a placeholder with zero duration to ensure visibility
+        console.debug("Adding placeholder grace period with zero duration");
+        metrics.push({
+          key: 'voiceActivityDetection',
+          label: 'Grace Period',
+          value: 0,
+          color: '#2979FF', // Brighter blue to make it more noticeable
+          explanation: 'Intentional delay between receiving final transcription and submitting prompt to LLM - allows for detecting if user is truly finished speaking'
+        });
+      }
     }
     
     // Check for transcription data, either in the direct property or calculate from timestamps
@@ -831,8 +865,18 @@ abstract class MessageControls {
     timeScale.style.marginBottom = "5px";
     timeScale.style.borderBottom = "1px solid #ccc";
     
-    // Add second markers
-    for (let i = 0; i <= timelineEndSeconds; i++) {
+    // Determine appropriate tick interval based on timeline length
+    let tickInterval = 1; // Default: show every second
+    if (timelineEndSeconds > 60) {
+      tickInterval = 10; // For very long timelines (>60s), show every 10 seconds
+    } else if (timelineEndSeconds > 30) {
+      tickInterval = 5; // For long timelines (>30s), show every 5 seconds
+    } else if (timelineEndSeconds > 15) {
+      tickInterval = 2; // For medium timelines (>15s), show every 2 seconds
+    }
+    
+    // Add second markers with dynamic intervals
+    for (let i = 0; i <= timelineEndSeconds; i += tickInterval) {
       const tickMark = document.createElement("div");
       tickMark.className = "tick-mark";
       tickMark.style.position = "absolute";
@@ -856,9 +900,11 @@ abstract class MessageControls {
       timeScale.appendChild(tickLabel);
     }
     
-    // Add 'Timeline (seconds)' label
+    // Add 'Timeline (seconds)' label with interval information
     const scaleLabel = document.createElement("div");
-    scaleLabel.textContent = "Timeline (seconds)";
+    scaleLabel.textContent = tickInterval > 1 ? 
+      `Timeline (seconds, marks at ${tickInterval}s intervals)` : 
+      "Timeline (seconds)";
     scaleLabel.style.position = "absolute";
     scaleLabel.style.left = "0";
     scaleLabel.style.top = "0";
@@ -1324,14 +1370,21 @@ abstract class MessageControls {
           } else if (timestamps.transcriptionEnd) {
             // Fallback if we only have transcription end
             start = timestamps.transcriptionEnd - referenceTimestamp;
-            end = start + metric.value;
+            end = start + Math.max(metric.value, 100); // Ensure at least 100ms visibility
             console.debug(`Grace Period: Using fallback - start: ${start}ms, end: ${end}ms, duration: ${end-start}ms`);
           } else {
-            console.warn("Cannot position Grace Period - missing required timestamps or value:", { 
-              transcriptionEnd: timestamps.transcriptionEnd, 
-              promptSubmission: timestamps.promptSubmission,
-              value: metric.value 
-            });
+            // Last resort fallback - position after transcription (if any) or at start
+            const transcriptionSegment = segments.find(s => s.metricKey === 'transcriptionDuration');
+            if (transcriptionSegment) {
+              start = transcriptionSegment.end;
+              end = start + Math.max(metric.value, 100); // Ensure at least 100ms visibility
+              console.debug(`Grace Period: Using position after transcription - start: ${start}ms, end: ${end}ms`);
+            } else {
+              // If no transcription segment, just position at beginning
+              start = 0;
+              end = Math.max(metric.value, 100);
+              console.debug(`Grace Period: No reference points, using beginning - start: ${start}ms, end: ${end}ms`);
+            }
           }
           break;
           
@@ -1551,8 +1604,13 @@ abstract class MessageControls {
       if (metrics.find(m => m.key === 'voiceActivityDetection')) {
         const gracePeriodDuration = metrics.find(m => m.key === 'voiceActivityDetection')!.value;
         processStartTimes['voiceActivityDetection'] = nextTime;
-        processEndTimes['voiceActivityDetection'] = nextTime + gracePeriodDuration;
-        nextTime += gracePeriodDuration;
+        // Ensure grace period has a minimum visible duration
+        const visibleDuration = Math.max(gracePeriodDuration, 100);
+        processEndTimes['voiceActivityDetection'] = nextTime + visibleDuration;
+        nextTime += visibleDuration;
+        console.debug(`Grace Period positioned at ${processStartTimes['voiceActivityDetection']}ms with duration ${visibleDuration}ms`);
+      } else {
+        console.debug("No grace period metric found in metrics array for duration-based timeline");
       }
       
       // Calculate completion response times (Pi's thinking time)

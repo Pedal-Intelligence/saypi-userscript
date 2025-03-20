@@ -74,6 +74,16 @@
   }
 }
 
+// Hide telemetry button on all assistant messages except the last one
+.chat-history .assistant-message .saypi-telemetry-button
+{
+  display: none;
+}
+.present-messages .assistant-message:last-of-type .saypi-telemetry-button:has(svg)
+{
+  display: flex;
+}
+
 .assistant-message .popup-menu button.saypi-button svg {
   width: 24px;
   height: 24px;
