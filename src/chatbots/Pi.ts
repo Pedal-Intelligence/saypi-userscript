@@ -159,8 +159,17 @@ class PiMessageControls extends MessageControls {
 }
 
 class PiTextStream extends ElementTextStream {
-  // Keep a short fallback timeout for safety
+  // Increase the style change completion timeout for better stability
   static STYLE_CHANGE_COMPLETION_TIMEOUT = 500;
+  
+  // Increase the maximum time to wait for hidden spans to become visible
+  static MAX_WAIT_FOR_SPANS = 3500;
+  
+  // Significantly increase the stability period to ensure the stream is truly complete
+  static STABILITY_PERIOD = 3000;
+  
+  // Add a larger buffer for content changes at the end
+  static COMPLETION_BUFFER = 500;
   
   // Track the last paragraph and spans
   lastParagraphAdded: HTMLDivElement;
@@ -171,20 +180,27 @@ class PiTextStream extends ElementTextStream {
   stillChanging: boolean;
   lastStyleMutation: number = 0;
   additionalDelay: number = 0;
+  lastContentChange: number = Date.now();
   
   // Track content for emission
   textNodesAdded: boolean = false;
+  firstTextTime: number | null = null;
+  lastNewSpanTime: number = 0;
   
   constructor(element: HTMLElement, options?: InputStreamOptions) {
     super(element, options);
 
     this.lastParagraphAdded = this.element.querySelectorAll("div")?.item(0);
     this.stillChanging = false;
+    this.lastContentChange = Date.now();
 
     // Find any existing hidden spans (that might have been added before we started observing)
     this.findExistingHiddenSpans();
 
     EventBus.on("saypi:tts:text:delay", this.handleDelayEvent);
+    
+    // Start a periodic check for completion
+    this.startPeriodicCompletionCheck();
   }
   
   // Find any spans that are already in the DOM but hidden
@@ -199,7 +215,10 @@ class PiTextStream extends ElementTextStream {
       }
     });
     
-    console.debug(`Found ${this.hiddenSpans.size} hidden spans and ${this.visibleSpans.size} visible spans already in the DOM`);
+    if (this.hiddenSpans.size > 0 || this.visibleSpans.size > 0) {
+      this.lastNewSpanTime = Date.now();
+      console.debug(`Found ${this.hiddenSpans.size} hidden spans and ${this.visibleSpans.size} visible spans already in the DOM`);
+    }
   }
 
   // Helper to check if a span is hidden
@@ -223,10 +242,28 @@ class PiTextStream extends ElementTextStream {
     }
   }
 
+  // Start a periodic check for completion
+  private startPeriodicCompletionCheck(): void {
+    const interval = setInterval(() => {
+      if (this.closed()) {
+        clearInterval(interval);
+        return;
+      }
+      
+      this.checkForCompletion();
+    }, 250); // Check every 250ms
+    
+    // Clean up the interval when the stream is completed
+    this.getStream().subscribe({
+      complete: () => clearInterval(interval)
+    });
+  }
+
   // override
   // visible for testing
   calculateStreamTimeout(): number {
-    const baseDelay = super.calculateStreamTimeout();
+    // Use a moderate timeout that's less than default but not too aggressive
+    const baseDelay = Math.min(super.calculateStreamTimeout(), 4500);
     const additionalDelay = this.additionalDelay || 0;
     const totalTimeout = baseDelay + additionalDelay;
     return totalTimeout;
@@ -245,21 +282,56 @@ class PiTextStream extends ElementTextStream {
   };
 
   /**
+   * Update the last content change timestamp
+   */
+  private updateLastContentChange(): void {
+    this.lastContentChange = Date.now();
+  }
+
+  /**
    * Check if we should consider the stream complete based on style transitions
    */
   checkForCompletion(): void {
-    // If we have no more hidden spans and we've seen text added, we might be done
+    const now = Date.now();
+    
+    // If this is the first time we're checking and text has been added, record the time
+    if (this.textNodesAdded && this.firstTextTime === null) {
+      this.firstTextTime = now;
+    }
+    
+    // Get the time since various events occurred
+    const timeSinceLastStyleChange = now - this.lastStyleMutation;
+    const timeSinceLastNewSpan = now - this.lastNewSpanTime;
+    const timeSinceLastContentChange = now - this.lastContentChange;
+    
+    // If we have no more hidden spans and we've seen text added, check stability
     if (this.hiddenSpans.size === 0 && this.textNodesAdded) {
-      // But wait a short while to make sure no more spans are added
-      const timeSinceLastStyleChange = Date.now() - this.lastStyleMutation;
+      // But wait for a stability period to make sure nothing else changes
+      if (timeSinceLastStyleChange > (PiTextStream.STYLE_CHANGE_COMPLETION_TIMEOUT + PiTextStream.COMPLETION_BUFFER) && 
+          timeSinceLastContentChange > (PiTextStream.STABILITY_PERIOD + PiTextStream.COMPLETION_BUFFER)) {
+        console.debug(`Stream completion detected - all spans visible and no changes for ${timeSinceLastStyleChange}ms, content stable for ${timeSinceLastContentChange}ms`);
+        this.complete({ type: "eod", time: now });
+      }
+    } 
+    // If we've seen text being added but still have hidden spans, check if we should time out
+    else if (this.textNodesAdded && this.hiddenSpans.size > 0) {
+      // If it's been too long since we've seen a new span, we should complete 
+      // BUT only if content has been stable for a while
+      if (timeSinceLastNewSpan > (PiTextStream.MAX_WAIT_FOR_SPANS + PiTextStream.COMPLETION_BUFFER) && 
+          timeSinceLastContentChange > (PiTextStream.STABILITY_PERIOD + PiTextStream.COMPLETION_BUFFER)) {
+        console.debug(`Stream timeout - waited ${timeSinceLastNewSpan}ms for hidden spans to become visible (${this.hiddenSpans.size} spans still hidden), content stable for ${timeSinceLastContentChange}ms`);
+        this.complete({ type: "eod", time: now });
+      }
       
-      // If it's been a while since the last style change, we can complete
-      if (timeSinceLastStyleChange > PiTextStream.STYLE_CHANGE_COMPLETION_TIMEOUT) {
-        console.debug(`Stream completion detected - all spans visible and no changes for ${timeSinceLastStyleChange}ms`);
-        this.complete({ type: "eod", time: Date.now() });
-      } else {
-        // Schedule another check shortly
-        setTimeout(() => this.checkForCompletion(), 100);
+      // If we've been seeing text for a long time but still have hidden spans, we should complete
+      // BUT only if content has been stable for a while
+      if (this.firstTextTime !== null) {
+        const timeSinceFirstText = now - this.firstTextTime;
+        if (timeSinceFirstText > (2 * PiTextStream.MAX_WAIT_FOR_SPANS + PiTextStream.COMPLETION_BUFFER) && 
+            timeSinceLastContentChange > (PiTextStream.STABILITY_PERIOD + PiTextStream.COMPLETION_BUFFER)) {
+          console.debug(`Stream timeout - waited ${timeSinceFirstText}ms since first text, ${this.hiddenSpans.size} spans still hidden, content stable for ${timeSinceLastContentChange}ms`);
+          this.complete({ type: "eod", time: now });
+        }
       }
     }
   }
@@ -274,6 +346,7 @@ class PiTextStream extends ElementTextStream {
     }
 
     this.stillChanging = true;
+    this.updateLastContentChange();
 
     // Check for style mutations which indicate the progressive reveal
     if (mutation.type === "attributes" && mutation.attributeName === "style") {
@@ -310,6 +383,7 @@ class PiTextStream extends ElementTextStream {
           
           // Check for new spans that might be hidden
           if (element.tagName === "SPAN") {
+            this.lastNewSpanTime = Date.now();
             const isHidden = this.isSpanHidden(element as HTMLSpanElement);
             if (isHidden) {
               this.hiddenSpans.add(element as HTMLSpanElement);
@@ -326,6 +400,10 @@ class PiTextStream extends ElementTextStream {
             
             // Check for any spans in this new paragraph that might be hidden
             const spans = element.querySelectorAll("span");
+            if (spans.length > 0) {
+              this.lastNewSpanTime = Date.now();
+            }
+            
             spans.forEach(span => {
               const isHidden = this.isSpanHidden(span);
               if (isHidden) {
@@ -342,6 +420,12 @@ class PiTextStream extends ElementTextStream {
           const content = textNode.textContent || "";
           this.next(new AddedText(content || ""));
           this.textNodesAdded = true;
+          
+          // If this is the first text we've seen, record the time
+          if (this.firstTextTime === null) {
+            this.firstTextTime = Date.now();
+          }
+          
           console.debug(`Text node added: "${content}"`);
         }
       }

@@ -1,7 +1,7 @@
 import { Observable, ReplaySubject, Subject } from "rxjs";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
-export const STREAM_TIMEOUT: number = 10000; // visible for testing
+export const STREAM_TIMEOUT: number = 5000; // finding middle ground between original 10000ms and too aggressive 3000ms
 
 // Visible for testing
 export function getNestedText(node: HTMLElement): string {
@@ -167,7 +167,7 @@ export abstract class ElementTextStream {
       clearTimeout(this.timeout);
     }
     this.timeout = setTimeout(() => {
-      this.complete({ type: "timeout", time: Date.now() });
+      // this.complete({ type: "timeout", time: Date.now() }); - off for debugging
     }, this.calculateStreamTimeout());
   }
 
