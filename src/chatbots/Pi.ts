@@ -233,7 +233,6 @@ class PiTextStream extends ElementTextStream {
           if (element.tagName === "SPAN") {
             const isHidden = this.isSpanHidden(element as HTMLSpanElement);
             if (isHidden) {
-              console.debug(`Hidden span added: ${element.textContent}`);
               if (this.hiddenTextQueue.isEmpty()) {
                 EventBus.emit("saypi:llm:first-token", {text: element.textContent || "", time: Date.now()});
               }
@@ -253,7 +252,6 @@ class PiTextStream extends ElementTextStream {
             }
           }
           this.next(new AddedText(content || ""));
-          console.debug(`Text node added: "${content}"`);
 
           if (this.hiddenTextQueue.isEmpty()) {
             console.debug("Stream completion detected - all hidden text has been added");
