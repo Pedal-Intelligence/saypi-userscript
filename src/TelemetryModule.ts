@@ -148,7 +148,7 @@ export class TelemetryModule {
       }
     });
 
-    EventBus.on("saypi:piWriting", () => {
+    EventBus.on("saypi:llm:first-token", () => {
       this.completionStartTime = Date.now();
       
       if (!this.currentTelemetry.timestamps) this.currentTelemetry.timestamps = {};

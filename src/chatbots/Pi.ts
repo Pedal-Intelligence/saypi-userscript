@@ -175,6 +175,7 @@ class PiTextStream extends ElementTextStream {
   lastParagraphAdded: HTMLDivElement;
   hiddenSpans: Set<HTMLSpanElement> = new Set();
   visibleSpans: Set<HTMLSpanElement> = new Set();
+  hiddenTextQueue: Queue<String> = new Queue();
   
   // Track the state of the stream
   stillChanging: boolean;
@@ -388,6 +389,8 @@ class PiTextStream extends ElementTextStream {
             if (isHidden) {
               this.hiddenSpans.add(element as HTMLSpanElement);
               console.debug(`Hidden span added: ${element.textContent}`);
+              this.hiddenTextQueue.enqueue(element.textContent || "");
+              EventBus.emit("saypi:llm:first-token", {text: element.textContent || "", time: Date.now()});
             } else {
               this.visibleSpans.add(element as HTMLSpanElement);
               console.debug(`Visible span added: ${element.textContent}`);
@@ -418,6 +421,14 @@ class PiTextStream extends ElementTextStream {
         else if (node.nodeType === Node.TEXT_NODE) {
           const textNode = node as Text;
           const content = textNode.textContent || "";
+
+          const head = this.hiddenTextQueue.peek();
+          if (head) {
+            if (head.trim() === content.trim()) {
+              this.hiddenTextQueue.dequeue();
+            }
+          }
+
           this.next(new AddedText(content || ""));
           this.textNodesAdded = true;
           
@@ -427,6 +438,11 @@ class PiTextStream extends ElementTextStream {
           }
           
           console.debug(`Text node added: "${content}"`);
+
+          if (this.hiddenTextQueue.isEmpty()) {
+            console.debug("Stream completion detected - all hidden text has been added");
+            this.complete({ type: "eod", time: Date.now() });
+          }
         }
       }
     } 
@@ -517,6 +533,35 @@ class PiPrompt extends UserPrompt {
 
     // Scroll to the bottom
     textarea.scrollTop = textarea.scrollHeight;
+  }
+}
+
+class Queue<T> {
+  private items: T[] = [];
+  
+  // Add an element to the tail
+  enqueue(item: T): void {
+    this.items.push(item);
+  }
+  
+  // Remove and return the element at the head
+  dequeue(): T | undefined {
+    return this.items.shift();
+  }
+  
+  // Look at the head element without removing it
+  peek(): T | undefined {
+    return this.items[0];
+  }
+  
+  // Get the current size of the queue
+  get size(): number {
+    return this.items.length;
+  }
+  
+  // Check if the queue is empty
+  isEmpty(): boolean {
+    return this.items.length === 0;
   }
 }
 
