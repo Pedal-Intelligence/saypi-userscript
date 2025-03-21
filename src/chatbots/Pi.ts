@@ -159,87 +159,77 @@ class PiMessageControls extends MessageControls {
 }
 
 class PiTextStream extends ElementTextStream {
-  static DATA_TIMEOUT = 1000;
-  static DEFAULT_ADDITIONAL_TIMEOUT = 0;
-  // Timeout values above base for different languages - derived from empirical testing on pi.ai
-  static LANGUAGE_TIMEOUTS: { [key: string]: number } = {
-    en: 0,
-    ar: 3000,
-    de: 250,
-    es: 250,
-    fr: 1500,
-    hi: 1500,
-    it: 0,
-    nl: 0,
-    pl: 750,
-    pt: 1000,
-    ja: 1000,
-    ko: 1250,
-    ru: 2500,
-    uk: 2250,
-    zh: 0,
-    bg: 1500,
-    hr: 250,
-    cs: 750,
-    da: 1500,
-    tl: 250,
-    fi: 250,
-    el: 1250,
-    id: 0,
-    ms: 1000,
-    ro: 750,
-    sk: 1000,
-    sv: 1250,
-    ta: 500,
-    tr: 750,
-  };
+  // Keep a short fallback timeout for safety
+  static STYLE_CHANGE_COMPLETION_TIMEOUT = 500;
+  
+  // Track the last paragraph and spans
   lastParagraphAdded: HTMLDivElement;
-  spansAdded: number;
-  spansRemoved: number;
-  spansReplaced: number;
+  hiddenSpans: Set<HTMLSpanElement> = new Set();
+  visibleSpans: Set<HTMLSpanElement> = new Set();
+  
+  // Track the state of the stream
   stillChanging: boolean;
+  lastStyleMutation: number = 0;
   additionalDelay: number = 0;
-
+  
+  // Track content for emission
+  textNodesAdded: boolean = false;
+  
   constructor(element: HTMLElement, options?: InputStreamOptions) {
     super(element, options);
 
     this.lastParagraphAdded = this.element.querySelectorAll("div")?.item(0);
-    this.spansAdded = 0;
-    this.spansRemoved = 0;
-    this.spansReplaced = 0;
     this.stillChanging = false;
-    this.additionalDelay = 0;
+
+    // Find any existing hidden spans (that might have been added before we started observing)
+    this.findExistingHiddenSpans();
 
     EventBus.on("saypi:tts:text:delay", this.handleDelayEvent);
+  }
+  
+  // Find any spans that are already in the DOM but hidden
+  private findExistingHiddenSpans(): void {
+    const spans = this.element.querySelectorAll("span");
+    spans.forEach(span => {
+      const isHidden = this.isSpanHidden(span);
+      if (isHidden) {
+        this.hiddenSpans.add(span);
+      } else {
+        this.visibleSpans.add(span);
+      }
+    });
+    
+    console.debug(`Found ${this.hiddenSpans.size} hidden spans and ${this.visibleSpans.size} visible spans already in the DOM`);
+  }
+
+  // Helper to check if a span is hidden
+  private isSpanHidden(span: HTMLSpanElement): boolean {
+    try {
+      // First check inline style which is more reliable in test environments
+      if (span.style.display === "none" || span.style.opacity === "0") {
+        return true;
+      }
+      
+      // Fall back to computed style for browser environment
+      if (typeof window !== 'undefined' && window.getComputedStyle) {
+        const style = window.getComputedStyle(span);
+        return style.display === "none" || parseFloat(style.opacity) === 0;
+      }
+      
+      return false;
+    } catch (e) {
+      console.error("Error checking if span is hidden", e);
+      return false;
+    }
   }
 
   // override
   // visible for testing
   calculateStreamTimeout(): number {
     const baseDelay = super.calculateStreamTimeout();
-    const additionalDelay = this.additionalDelay || 0; // default to 0 if additionalDelay is undefined or NaN
+    const additionalDelay = this.additionalDelay || 0;
     const totalTimeout = baseDelay + additionalDelay;
     return totalTimeout;
-  }
-
-  /**
-   * The data timeout is the time to wait after the last change event before
-   * considering the stream to be complete.
-   * This differs from the stream timeout, which is the time to wait after the
-   * start of the stream before considering it to be complete.
-   */
-  calculateDataTimeout(text: string, lang: string): number {
-    // Extract the base language code (e.g., 'en' from 'en-US')
-    const baseLanguage = lang.split("-")[0];
-
-    const additionalTimeout =
-      PiTextStream.LANGUAGE_TIMEOUTS[baseLanguage] ??
-      PiTextStream.DEFAULT_ADDITIONAL_TIMEOUT;
-    const totalTime = PiTextStream.DATA_TIMEOUT + additionalTimeout;
-    console.debug(
-      `Timeout for "${text}" in ${lang} (base: ${baseLanguage}) is ${totalTime}ms (${PiTextStream.DATA_TIMEOUT} + ${additionalTimeout})`
-    );
-    return totalTime;
   }
 
   /**
@@ -254,6 +244,26 @@ class PiTextStream extends ElementTextStream {
     this.resetStreamTimeout();
   };
 
+  /**
+   * Check if we should consider the stream complete based on style transitions
+   */
+  checkForCompletion(): void {
+    // If we have no more hidden spans and we've seen text added, we might be done
+    if (this.hiddenSpans.size === 0 && this.textNodesAdded) {
+      // But wait a short while to make sure no more spans are added
+      const timeSinceLastStyleChange = Date.now() - this.lastStyleMutation;
+      
+      // If it's been a while since the last style change, we can complete
+      if (timeSinceLastStyleChange > PiTextStream.STYLE_CHANGE_COMPLETION_TIMEOUT) {
+        console.debug(`Stream completion detected - all spans visible and no changes for ${timeSinceLastStyleChange}ms`);
+        this.complete({ type: "eod", time: Date.now() });
+      } else {
+        // Schedule another check shortly
+        setTimeout(() => this.checkForCompletion(), 100);
+      }
+    }
+  }
+
   handleMutationEvent = (mutation: MutationRecord) => {
     if (this.closed()) {
       console.debug(
@@ -263,82 +273,101 @@ class PiTextStream extends ElementTextStream {
       return;
     }
 
-    if (mutation.type === "childList") {
-      for (let i = 0; i < mutation.removedNodes.length; i++) {
-        const node = mutation.removedNodes[i];
-        if (node.nodeType === Node.ELEMENT_NODE) {
-          const element = node as HTMLElement;
-          if (element.tagName === "SPAN") {
-            this.spansRemoved++;
-          }
+    this.stillChanging = true;
+
+    // Check for style mutations which indicate the progressive reveal
+    if (mutation.type === "attributes" && mutation.attributeName === "style") {
+      const span = mutation.target as HTMLElement;
+      if (span.tagName === "SPAN") {
+        const isHidden = this.isSpanHidden(span as HTMLSpanElement);
+        const wasHidden = this.hiddenSpans.has(span as HTMLSpanElement);
+        
+        // Record the style transition
+        this.lastStyleMutation = Date.now();
+        
+        if (wasHidden && !isHidden) {
+          // The span has transitioned from hidden to visible
+          this.hiddenSpans.delete(span as HTMLSpanElement);
+          this.visibleSpans.add(span as HTMLSpanElement);
+          console.debug(`Span transitioned to visible: ${span.textContent}`);
+          
+          // Check if this might be the last span
+          this.checkForCompletion();
+        } else if (!wasHidden && isHidden) {
+          // The span has transitioned from visible to hidden (unusual)
+          this.visibleSpans.delete(span as HTMLSpanElement);
+          this.hiddenSpans.add(span as HTMLSpanElement);
         }
       }
+    }
+    // Check for node additions which might be spans or text
+    else if (mutation.type === "childList") {
       for (let i = 0; i < mutation.addedNodes.length; i++) {
-        this.stillChanging = true;
         const node = mutation.addedNodes[i];
+        
         if (node.nodeType === Node.ELEMENT_NODE) {
           const element = node as HTMLElement;
+          
+          // Check for new spans that might be hidden
           if (element.tagName === "SPAN") {
-            this.spansAdded++;
-          } else if (element.tagName === "DIV") {
-            const paragraph = element as HTMLDivElement;
-            this.lastParagraphAdded = paragraph;
+            const isHidden = this.isSpanHidden(element as HTMLSpanElement);
+            if (isHidden) {
+              this.hiddenSpans.add(element as HTMLSpanElement);
+              console.debug(`Hidden span added: ${element.textContent}`);
+            } else {
+              this.visibleSpans.add(element as HTMLSpanElement);
+              console.debug(`Visible span added: ${element.textContent}`);
+            }
+          } 
+          // Check for new paragraphs
+          else if (element.tagName === "DIV") {
+            this.lastParagraphAdded = element as HTMLDivElement;
+            console.debug(`New paragraph added`);
+            
+            // Check for any spans in this new paragraph that might be hidden
+            const spans = element.querySelectorAll("span");
+            spans.forEach(span => {
+              const isHidden = this.isSpanHidden(span);
+              if (isHidden) {
+                this.hiddenSpans.add(span);
+              } else {
+                this.visibleSpans.add(span);
+              }
+            });
           }
-        } else if (node.nodeType === Node.TEXT_NODE) {
+        } 
+        // Check for new text nodes
+        else if (node.nodeType === Node.TEXT_NODE) {
           const textNode = node as Text;
           const content = textNode.textContent || "";
           this.next(new AddedText(content || ""));
-          this.spansReplaced++;
-          // we're finished when the paragraph has no more preliminary content
-          const paragraph = textNode.parentElement;
-          const spansRemaining =
-            paragraph?.querySelectorAll("span")?.length || 0;
-          const isFinalParagraph = paragraph === this.lastParagraphAdded;
-
-          if (
-            this.spansReplaced >= this.spansRemoved &&
-            this.spansReplaced >= this.spansAdded &&
-            spansRemaining === 0 &&
-            isFinalParagraph
-          ) {
-            this.stillChanging = false;
-            // complete soon if not still changing
-            const startTime = Date.now();
-            const additionsRemaining = mutation.addedNodes.length - i - 1;
-            console.debug(
-              `Possible end of stream detected on ${content}, ${additionsRemaining} additions remaining.`
-            );
-            setTimeout(() => {
-              if (!this.stillChanging) {
-                const timeElapsed = Date.now() - startTime;
-                const lastContent = this.emittedValues.slice(-1)[0]?.text;
-                console.debug(
-                  `end of stream confirmed as "${lastContent}", +${timeElapsed}ms after last change event`
-                );
-                this.complete({ type: "eod", time: Date.now() });
-              }
-            }, this.calculateDataTimeout(content, this.languageGuess));
-          }
+          this.textNodesAdded = true;
+          console.debug(`Text node added: "${content}"`);
         }
       }
-    } else if (mutation.type === "characterData") {
+    } 
+    // Check for text content changes
+    else if (mutation.type === "characterData") {
       const textNode = mutation.target as Text;
-      const content = textNode.textContent;
-      // text node content changed from "${mutation.oldValue}" to "${content}"`
-      // emit a change event only if the old value is present in the already emitted values
+      const content = textNode.textContent || "";
       const oldValue = mutation.oldValue || "";
+      
+      // Only emit if we've seen this text before
       const alreadyEmitted = this.emittedValues.some(
         (value) => value.text === oldValue
       );
+      
       if (alreadyEmitted) {
-        this.stillChanging = true;
-        this.next(new ChangedText(content || "", oldValue));
+        this.next(new ChangedText(content, oldValue));
+        console.debug(`Text changed from "${oldValue}" to "${content}"`);
       } else {
         console.debug(
           `Skipping change event for "${content}" because the old value "${oldValue}" was not emitted`
         );
       }
     }
+
+    this.stillChanging = false;
   };
 
   // clean up the event listener when the stream is closed

@@ -63,6 +63,8 @@ describe("ChatHistoryMessageObserver", () => {
       localService: false,
       default: false,
       price: 0.3,
+      price_per_thousand_chars_in_usd: 0.3,
+      price_per_thousand_chars_in_credits: 300,
       powered_by: "saypi.ai",
       voiceURI: "",
     };

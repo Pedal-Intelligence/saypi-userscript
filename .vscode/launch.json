@@ -43,6 +43,22 @@
         "--inspect-brk",
         "test/dom/ChatHistoryObserver.spec.ts"
       ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Specific Test",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "vitest",
+        "run",
+        "--inspect-brk",
+        "test/tts/InputStream.spec.ts",
+        "-t",
+        "PiTextStream detects stream completion via style transitions"
+      ],
+      "autoAttachChildProcesses": true,
+      "console": "integratedTerminal"
     }
   ]
 }
