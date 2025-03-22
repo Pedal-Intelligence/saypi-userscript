@@ -15,6 +15,7 @@ export interface Chatbot {
   getPromptSubmitButtonSelector(): string;
   getAssistantResponseSelector(): string;
   getAssistantResponseContentSelector(): string;
+  getUserPromptSelector(): string; // Selector to find user's chat messages
   getChatPath(): string;
   isChatablePath(path: string): boolean; // can the chatbot chat on this URL path?
   // ... other methods for different selectors

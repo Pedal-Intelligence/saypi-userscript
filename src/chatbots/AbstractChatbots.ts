@@ -23,6 +23,7 @@ export abstract class AbstractChatbot implements Chatbot {
     abstract getPromptSubmitButtonSelector(): string;
     abstract getAssistantResponseSelector(): string;
     abstract getAssistantResponseContentSelector(): string;
+    abstract getUserPromptSelector(): string;
     abstract getChatPath(): string;
     abstract isChatablePath(path: string): boolean;
     abstract getExtraCallButtonClasses(): string[];

@@ -85,6 +85,10 @@ class ClaudeChatbot extends AbstractChatbot {
     return 'div[data-is-streaming]:has(div[class*="font-claude-message"])';
   }
 
+  getUserPromptSelector(): string {
+    return 'div.mb-1.mt-1';
+  }
+
   getAssistantResponseContentSelector(): string {
     return "div[class*='font-claude-message']";
   }

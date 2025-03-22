@@ -85,6 +85,10 @@ class PiAIChatbot extends AbstractChatbot {
     return "div.break-anywhere:not(.justify-end)";
   }
 
+  getUserPromptSelector(): string {
+    return "div.flex.justify-end.break-anywhere";
+  }
+
   getAssistantResponseContentSelector(): string {
     return "div.w-full";
   }
