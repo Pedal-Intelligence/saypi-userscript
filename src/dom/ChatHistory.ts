@@ -489,8 +489,6 @@ class ChatHistoryNewMessageObserver
             start = true;
           }
           lastChunkTime = currentTime;
-          const delay = currentTime - (firstChunkTime as number);
-          console.debug(`+${delay}ms, streamed text: "${txt}"`);
           const textAddedEvent: TextAddedEvent = {
             text: txt,
             utterance: utterance,

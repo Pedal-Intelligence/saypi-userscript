@@ -43,6 +43,22 @@
         "--inspect-brk",
         "test/dom/ChatHistoryObserver.spec.ts"
       ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Specific Test",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "vitest",
+        "run",
+        "--inspect-brk",
+        "test/dom/ChatHistoryObserver.spec.ts",
+        "-t",
+        "text and stable text should converge"
+      ],
+      "autoAttachChildProcesses": true,
+      "console": "integratedTerminal"
     }
   ]
 }
