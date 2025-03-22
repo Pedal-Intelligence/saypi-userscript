@@ -801,7 +801,10 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         entry: [
           {
             type: "disableCallButton",
-          }
+          },
+          {
+            type: "suppressResponseEarlyWhenMaintainance",
+          },
         ],
         exit: [
           {
@@ -1326,13 +1329,17 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           isMaintainanceMessage: shouldSetFlag 
         };
       }),
+      suppressResponseEarlyWhenMaintainance: (context: SayPiContext, event) => {
+        if (context.isMaintainanceMessage) {
+          // these actions can be performed early, before the message is fully written
+          EventBus.emit("saypi:ui:hide-message");
+          EventBus.emit("saypi:tts:skipCurrent");
+        }
+      },
       suppressResponseWhenMaintainance: (context: SayPiContext, event) => {
         if (context.isMaintainanceMessage) {
           EventBus.emit("audio:skipCurrent");
-          EventBus.emit("saypi:ui:hide-message");
           console.debug("Suppressing response due to this being a maintainance message");
-        } else {
-          console.debug("Allowing response due to this being a requested message, not a maintainance message", context);
         }
       },
       clearMaintainanceFlag: (SayPiContext, event) => {
