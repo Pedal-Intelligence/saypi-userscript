@@ -53,9 +53,9 @@
         "vitest",
         "run",
         "--inspect-brk",
-        "test/tts/InputStream.spec.ts",
+        "test/dom/ChatHistoryObserver.spec.ts",
         "-t",
-        "PiTextStream detects stream completion via style transitions"
+        "text and stable text should converge"
       ],
       "autoAttachChildProcesses": true,
       "console": "integratedTerminal"

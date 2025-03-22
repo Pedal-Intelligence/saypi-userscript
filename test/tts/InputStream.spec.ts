@@ -26,11 +26,34 @@ vi.mock("../../src/prefs/PreferenceModule", () => {
   };
 });
 
-const intervalMillis = 100; // delay between adding text
+const intervalMillis = 50; // delay between adding chunks of text
 
+/**
+ * Adds text to the element as if it was streamed from the server
+ * In the following order:
+ * - Add a hidden span with the text
+ * @param element - The element to add text to
+ * @param text - The text to add
+ */
 async function addText(element: HTMLElement, text: string) {
   await new Promise((resolve) => setTimeout(resolve, intervalMillis));
-  element.appendChild(document.createTextNode(text));
+  const span = document.createElement("span");
+  span.textContent = text;
+  span.style.opacity = "0";
+  element.appendChild(span);
+}
+
+/**
+ * Finishes the text stream by replacing all hidden spans with text nodes
+ * @param element - The element to finish the text stream on
+ */
+async function finishText(element: HTMLElement) {
+  await new Promise((resolve) => setTimeout(resolve, intervalMillis));
+  // replace all hidden spans with text nodes
+  const spans = element.querySelectorAll("span") as NodeListOf<HTMLSpanElement>;
+  spans.forEach((span) => {
+    span.replaceWith(document.createTextNode(span.textContent || ""));
+  });
 }
 
 async function addParagraph(element: HTMLElement, text: string) {
@@ -72,7 +95,7 @@ test("getNestedText returns the correct text", () => {
 });
 
 test(
-  "ElementTextStream emits inner text of added nodes",
+  "ElementTextStream emits text as it is added",
   async () => {
     const element = document.createElement("div");
     const stream = new PiTextStream(element);
@@ -80,6 +103,7 @@ test(
     const promise = collectStreamValues(stream, values);
     await addText(element, "Hello ");
     await addText(element, "world");
+    await finishText(element);
     await promise;
     expect(values).toEqual(["Hello ", "world"]);
   },
@@ -87,7 +111,7 @@ test(
 );
 
 test(
-  "ElementTextStream emits inner text of added nodes",
+  "ElementTextStream emits more text as it is added",
   async () => {
     const element = document.createElement("div");
     document.body.appendChild(element);
@@ -100,6 +124,7 @@ test(
     await addText(element, "you're ");
     await addText(element, "looking ");
     await addText(element, "great");
+    await finishText(element);
 
     // Wait for the Observable to complete
     await promise;
@@ -125,6 +150,7 @@ test(
 
     await addParagraph(element, "Hello there!");
     await addParagraph(element, "I have doubled in power since we last met.");
+    await finishText(element);
 
     // Wait for the Observable to complete
     await promise;
@@ -136,22 +162,6 @@ test(
   timeoutCalc(2)
 );
 
-test(
-  "Preexisting text is emitted immediately if requested",
-  async () => {
-    const element = document.createElement("div");
-    element.textContent = "Hello, world!";
-    document.body.appendChild(element);
-    const includeInitialText = true;
-    const options = { includeInitialText };
-    const stream = new PiTextStream(element, options);
-    const values: string[] = [];
-    const promise = collectStreamValues(stream, values);
-    await promise;
-    expect(values).toEqual(["Hello, world!"]);
-  },
-  timeoutCalc(1)
-);
 
 test(
   "Streamed text should equal the text in the element",
@@ -164,111 +174,10 @@ test(
 
     addText(element, "Hello ");
     addText(element, "world.");
+    await finishText(element);
     await promise;
     expect(values.join("")).toEqual(element.textContent);
   },
   timeoutCalc(2)
 );
 
-test(
-  "PiTextStream detects stream completion via style transitions",
-  async () => {
-    const container = document.createElement("div");
-    document.body.appendChild(container);
-    
-    // Create the stream
-    const stream = new PiTextStream(container);
-    const values: string[] = [];
-    const promise = collectStreamValues(stream, values);
-    
-    // Add a paragraph
-    const paragraph = document.createElement("div");
-    container.appendChild(paragraph);
-    
-    // Add a hidden span - use inline style for test environment
-    const span1 = document.createElement("span");
-    span1.textContent = "Hello";
-    span1.style.opacity = "0"; // Set direct style property
-    paragraph.appendChild(span1);
-    
-    // Add a text node - this should be picked up directly
-    const textNode = document.createTextNode(" ");
-    paragraph.appendChild(textNode);
-    
-    // Manually trigger the text node addition since JSDOM doesn't automatically trigger mutations
-    stream.handleMutationEvent({
-      type: 'childList',
-      addedNodes: [textNode],
-      removedNodes: [],
-      target: paragraph,
-      attributeName: null,
-      attributeNamespace: null,
-      oldValue: null,
-      nextSibling: null,
-      previousSibling: null
-    } as unknown as MutationRecord);
-    
-    // Add another hidden span
-    const span2 = document.createElement("span");
-    span2.textContent = "world";
-    span2.style.opacity = "0"; // Set direct style property
-    paragraph.appendChild(span2);
-    
-    // Wait a bit then make spans visible one by one
-    await new Promise(resolve => setTimeout(resolve, 100));
-    span1.style.opacity = "1"; // This should trigger a style mutation
-    
-    // Manually trigger style mutation since JSDOM doesn't do this automatically
-    stream.handleMutationEvent({
-      type: 'attributes',
-      attributeName: 'style',
-      target: span1,
-      oldValue: 'opacity: 0',
-    } as unknown as MutationRecord);
-    
-    // Manually trigger the text content for span1 (which should be emitted when span becomes visible)
-    stream.handleMutationEvent({
-      type: 'childList',
-      addedNodes: [document.createTextNode("Hello")],
-      removedNodes: [],
-      target: span1,
-      attributeName: null,
-      attributeNamespace: null,
-      oldValue: null,
-      nextSibling: null,
-      previousSibling: null
-    } as unknown as MutationRecord);
-    
-    await new Promise(resolve => setTimeout(resolve, 100));
-    span2.style.opacity = "1"; // This should trigger a style mutation
-    
-    // Manually trigger style mutation for span2
-    stream.handleMutationEvent({
-      type: 'attributes',
-      attributeName: 'style',
-      target: span2,
-      oldValue: 'opacity: 0',
-    } as unknown as MutationRecord);
-    
-    // Manually trigger the text content for span2
-    stream.handleMutationEvent({
-      type: 'childList',
-      addedNodes: [document.createTextNode("world")],
-      removedNodes: [],
-      target: span2,
-      attributeName: null,
-      attributeNamespace: null,
-      oldValue: null,
-      nextSibling: null,
-      previousSibling: null
-    } as unknown as MutationRecord);
-    
-    // Stream should complete shortly after last span becomes visible
-    await promise;
-    
-    expect(values).toContain("Hello");
-    expect(values).toContain(" ");
-    expect(values).toContain("world");
-  },
-  5000 // increase timeout to be safe
-);

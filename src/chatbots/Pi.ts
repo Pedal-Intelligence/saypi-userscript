@@ -209,7 +209,10 @@ class PiTextStream extends ElementTextStream {
     this.lastContentChange = Date.now();
   }
 
-
+  /**
+   * Handle a mutation event on the element
+   * @param mutation - The mutation record
+   */
   handleMutationEvent = (mutation: MutationRecord) => {
     if (this.closed()) {
       console.debug(
