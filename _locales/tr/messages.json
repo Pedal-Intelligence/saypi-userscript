@@ -656,5 +656,69 @@
   "viewDetails": {
     "description": "Gösterge tablosunda tam kota ayrıntılarını görüntülemek için bağlantının metni.",
     "message": "Ayrıntıları Görüntüle"
+  },
+  "clickToCollapse": {
+    "description": "Kullanıcıyı gösteren metin genişletilmiş içeriği gizlemek için tıklayabilir.",
+    "message": "çökmek için tıklayın"
+  },
+  "clickToExpand": {
+    "description": "Kullanıcıyı gösteren metin çökmüş içeriği göstermek için tıklayabilir.",
+    "message": "Genişletmek için tıklayın"
+  },
+  "instructionLabel_context": {
+    "description": "Arka plan bilgileri sağlayan kullanıcı talimatı için dostça etiket.",
+    "message": "Bağlam sağlamak ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Kullanıcının ne istediğini tanımlayan kullanıcı talimatı için dostça etiket.",
+    "message": "Beklentileri netleştiriyor ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Konuşma kapsamını daraltan kullanıcı talimatı için dostça etiket.",
+    "message": "Tartışmayı odaklamak ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Konuşma için sınırlar oluşturan kullanıcı talimatı için dostça etiket.",
+    "message": "Korkuluklar Ayar ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "AI'nın nasıl yanıt vermesi gerektiğine rehberlik eden kullanıcı talimatı için dostça etiket.",
+    "message": "Yol gösterici yanıtlar ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Bir yön öneren kullanıcı talimatı için dostça etiket.",
+    "message": "Bir dürtme vermek ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Konuşma yönünü yönlendiren kullanıcı talimatı için dostça etiket.",
+    "message": "Sohbeti yönlendiriyor ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Çıkmış Asistan Bakım Mesajı için dostça etiket.",
+    "message": "Bu düşünceyi tutarak ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Çıkmış Asistan Bakım Mesajı için dostça etiket.",
+    "message": "Zihinsel bir not yapmak ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Çıkmış Asistan Bakım Mesajı için dostça etiket.",
+    "message": "Arka planda işleme ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Çıkmış Asistan Bakım Mesajı için dostça etiket.",
+    "message": "Bu ayrıntıyı hatırlamak ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Çıkmış Asistan Bakım Mesajı için dostça etiket.",
+    "message": "Bu düşünceyi daha sonra kurtarmak ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Çıkmış Asistan Bakım Mesajı için dostça etiket.",
+    "message": "Bağlamı takip etmek ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Çıkmış Asistan Bakım Mesajı için dostça etiket.",
+    "message": "Bunu sıkmak ..."
   }
 }

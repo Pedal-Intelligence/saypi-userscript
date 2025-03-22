@@ -656,5 +656,69 @@
   "viewDetails": {
     "description": "ダッシュボードで完全なクォータの詳細を表示するためのリンクのテキスト。",
     "message": "詳細を表示します"
+  },
+  "clickToCollapse": {
+    "description": "ユーザーを示すテキストは、クリックして拡張コンテンツを非表示にできます。",
+    "message": "クリックして崩壊します"
+  },
+  "clickToExpand": {
+    "description": "ユーザーを示すテキストは、崩壊したコンテンツを表示するためにクリックできます。",
+    "message": "クリックして展開します"
+  },
+  "instructionLabel_context": {
+    "description": "背景情報を提供するユーザー命令のためのフレンドリーなラベル。",
+    "message": "コンテキストを提供する..."
+  },
+  "instructionLabel_expectations": {
+    "description": "ユーザーが望むものを定義するユーザー指示のためのフレンドリーなラベル。",
+    "message": "期待を明確にする..."
+  },
+  "instructionLabel_focusing": {
+    "description": "会話の範囲を狭めるユーザー指導のためのフレンドリーなラベル。",
+    "message": "議論に焦点を当てる..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "会話の境界を確立するユーザー指導のためのフレンドリーなラベル。",
+    "message": "ガードレールの設定..."
+  },
+  "instructionLabel_guiding": {
+    "description": "AIがどのように応答するかをガイドするユーザー指示のためのフレンドリーなラベル。",
+    "message": "ガイド応答..."
+  },
+  "instructionLabel_nudge": {
+    "description": "方向性を優しく提案するユーザー指導のためのフレンドリーなラベル。",
+    "message": "ナッジを与える..."
+  },
+  "instructionLabel_steering": {
+    "description": "会話の方向性を導くユーザー指導のためのフレンドリーなラベル。",
+    "message": "会話を操縦..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "崩壊したアシスタントメンテナンスメッセージのフレンドリーラベル。",
+    "message": "この考えを持っています..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "崩壊したアシスタントメンテナンスメッセージのフレンドリーラベル。",
+    "message": "メンタルノートを作る..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "崩壊したアシスタントメンテナンスメッセージのフレンドリーラベル。",
+    "message": "バックグラウンドで処理..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "崩壊したアシスタントメンテナンスメッセージのフレンドリーラベル。",
+    "message": "この詳細を覚えています..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "崩壊したアシスタントメンテナンスメッセージのフレンドリーラベル。",
+    "message": "後でその考えを救う..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "崩壊したアシスタントメンテナンスメッセージのフレンドリーラベル。",
+    "message": "文脈を追跡する..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "崩壊したアシスタントメンテナンスメッセージのフレンドリーラベル。",
+    "message": "これを取り除く..."
   }
 }

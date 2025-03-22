@@ -656,5 +656,69 @@
   "viewDetails": {
     "description": "Tekst za vezu za prikaz potpunih detalja o kvoti na nadzornoj ploči.",
     "message": "Pogledajte detalje"
+  },
+  "clickToCollapse": {
+    "description": "Tekst koji označava korisnik može kliknuti za sakrivanje proširenog sadržaja.",
+    "message": "Kliknite za kolaps"
+  },
+  "clickToExpand": {
+    "description": "Tekst koji označava korisnik može kliknuti za prikaz urušenog sadržaja.",
+    "message": "Kliknite za proširenje"
+  },
+  "instructionLabel_context": {
+    "description": "Prijateljska naljepnica za upute korisnika koja pruža pozadinske informacije.",
+    "message": "Pružanje konteksta ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Prijateljska naljepnica za upute korisnika koja definira ono što korisnik želi.",
+    "message": "Pojašnjavajući očekivanja ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Prijateljska oznaka za upute korisnika koja sužava opseg razgovora.",
+    "message": "Usredotočujući raspravu ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Prijateljska oznaka za upute korisnika koja uspostavlja granice za razgovor.",
+    "message": "Postavljajući garders ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Prijateljska naljepnica za upute korisnika koja vodi kako AI treba reagirati.",
+    "message": "Vodeći odgovori ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Prijateljska naljepnica za upute korisnika koja nježno sugerira smjer.",
+    "message": "Davanje guranja ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Prijateljska naljepnica za upute korisnika koja vodi smjer razgovora.",
+    "message": "Upravljanje razgovorom ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
+    "message": "Držeći ovu misao ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
+    "message": "Izrada mentalne note ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
+    "message": "Obrada u pozadini ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
+    "message": "Prisjećajući se ovog detalja ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
+    "message": "Spašavajući tu misao za kasnije ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
+    "message": "Praćenje konteksta ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
+    "message": "Uguravanje ovoga ..."
   }
 }

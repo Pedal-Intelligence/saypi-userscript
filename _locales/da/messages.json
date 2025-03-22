@@ -656,5 +656,69 @@
   "viewDetails": {
     "description": "Tekst til linket for at se fulde kvoteoplysninger på instrumentbrættet.",
     "message": "Se detaljer"
+  },
+  "clickToCollapse": {
+    "description": "Tekst, der angiver brugeren, kan klikke for at skjule udvidet indhold.",
+    "message": "Klik for at kollapse"
+  },
+  "clickToExpand": {
+    "description": "Tekst, der angiver brugeren, kan klikke for at vise kollapset indhold.",
+    "message": "Klik for at udvide"
+  },
+  "instructionLabel_context": {
+    "description": "Venlig etiket til brugerinstruktion, der giver baggrundsoplysninger.",
+    "message": "Giver kontekst ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Venlig etiket til brugerinstruktion, der definerer, hvad brugeren ønsker.",
+    "message": "Afklarende forventninger ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Venlig etiket til brugerinstruktion, der indsnævrer samtalens omfang.",
+    "message": "Fokusering af diskussionen ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Venlig label til brugerinstruktion, der fastlægger grænser for samtalen.",
+    "message": "Indstilling af rækker ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Venlig label til brugerinstruktion, der guider, hvordan AI skal reagere.",
+    "message": "Vejledende svar ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Venlig label til brugerinstruktion, der forsigtigt foreslår en retning.",
+    "message": "At give et skub ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Venlig label til brugerinstruktion, der guider samtaleretningen.",
+    "message": "Styring af samtalen ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Venlig etiket til sammenbrudt assisterende vedligeholdelsesmeddelelse.",
+    "message": "Holder denne tanke ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Venlig etiket til sammenbrudt assisterende vedligeholdelsesmeddelelse.",
+    "message": "Gør en mental note ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Venlig etiket til sammenbrudt assisterende vedligeholdelsesmeddelelse.",
+    "message": "Behandling i baggrunden ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Venlig etiket til sammenbrudt assisterende vedligeholdelsesmeddelelse.",
+    "message": "Husker denne detalje ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Venlig etiket til sammenbrudt assisterende vedligeholdelsesmeddelelse.",
+    "message": "Gemme den tanke til senere ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Venlig etiket til sammenbrudt assisterende vedligeholdelsesmeddelelse.",
+    "message": "Hold styr på kontekst ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Venlig etiket til sammenbrudt assisterende vedligeholdelsesmeddelelse.",
+    "message": "Gemt dette væk ..."
   }
 }

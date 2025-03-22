@@ -656,5 +656,69 @@
   "viewDetails": {
     "description": "Teks untuk pautan untuk melihat butiran kuota penuh di papan pemuka.",
     "message": "Lihat butiran"
+  },
+  "clickToCollapse": {
+    "description": "Teks yang menunjukkan pengguna boleh mengklik untuk menyembunyikan kandungan yang diperluaskan.",
+    "message": "Klik untuk runtuh"
+  },
+  "clickToExpand": {
+    "description": "Teks yang menunjukkan pengguna boleh mengklik untuk menunjukkan kandungan yang runtuh.",
+    "message": "Klik untuk berkembang"
+  },
+  "instructionLabel_context": {
+    "description": "Label mesra untuk arahan pengguna yang menyediakan maklumat latar belakang.",
+    "message": "Menyediakan konteks ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Label mesra untuk arahan pengguna yang mentakrifkan apa yang pengguna inginkan.",
+    "message": "Menjelaskan jangkaan ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Label mesra untuk arahan pengguna yang menyempitkan skop perbualan.",
+    "message": "Memfokuskan perbincangan ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Label mesra untuk arahan pengguna yang menetapkan sempadan untuk perbualan.",
+    "message": "Menetapkan Guardrails ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Label mesra untuk arahan pengguna yang membimbing bagaimana AI harus bertindak balas.",
+    "message": "Membimbing jawapan ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Label mesra untuk arahan pengguna yang perlahan mencadangkan arah.",
+    "message": "Memberi nudge ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Label mesra untuk arahan pengguna yang membimbing arah perbualan.",
+    "message": "Mengarahkan perbualan ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Label mesra untuk mesej pembantu penyelenggaraan yang runtuh.",
+    "message": "Memegang pemikiran ini ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Label mesra untuk mesej pembantu penyelenggaraan yang runtuh.",
+    "message": "Membuat nota mental ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Label mesra untuk mesej pembantu penyelenggaraan yang runtuh.",
+    "message": "Pemprosesan di latar belakang ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Label mesra untuk mesej pembantu penyelenggaraan yang runtuh.",
+    "message": "Mengingati perincian ini ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Label mesra untuk mesej pembantu penyelenggaraan yang runtuh.",
+    "message": "Menyimpan pemikiran itu untuk kemudian ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Label mesra untuk mesej pembantu penyelenggaraan yang runtuh.",
+    "message": "Menjejaki konteks ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Label mesra untuk mesej pembantu penyelenggaraan yang runtuh.",
+    "message": "Tucking ini ..."
   }
 }

@@ -656,5 +656,69 @@
   "viewDetails": {
     "description": "Text för länken för att se fullständiga kvotinformation på instrumentpanelen.",
     "message": "Visa detaljer"
+  },
+  "clickToCollapse": {
+    "description": "Text som indikerar att användaren kan klicka för att dölja utvidgat innehåll.",
+    "message": "Klicka för att kollapsa"
+  },
+  "clickToExpand": {
+    "description": "Text som indikerar att användaren kan klicka för att visa kollapsat innehåll.",
+    "message": "Klicka för att expandera"
+  },
+  "instructionLabel_context": {
+    "description": "Vänlig etikett för användarinstruktioner som ger bakgrundsinformation.",
+    "message": "Tillhandahåller kontext ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Vänlig etikett för användarinstruktioner som definierar vad användaren vill ha.",
+    "message": "Förklarande förväntningar ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Vänlig etikett för användarinstruktioner som minskar konversationsomfånget.",
+    "message": "Fokusera diskussionen ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Vänlig etikett för användarinstruktioner som fastställer gränser för konversationen.",
+    "message": "Ställa in skyddsräcken ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Vänlig etikett för användarinstruktioner som styr hur AI ska svara.",
+    "message": "Vägledande svar ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Vänlig etikett för användarinstruktioner som försiktigt föreslår en riktning.",
+    "message": "Ger en nudge ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Vänlig etikett för användarinstruktioner som styr konversationsriktningen.",
+    "message": "Styr konversationen ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Vänlig etikett för kollapsat assistentunderhållsmeddelande.",
+    "message": "Håller denna tanke ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Vänlig etikett för kollapsat assistentunderhållsmeddelande.",
+    "message": "Gör en mental anmärkning ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Vänlig etikett för kollapsat assistentunderhållsmeddelande.",
+    "message": "Bearbetning i bakgrunden ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Vänlig etikett för kollapsat assistentunderhållsmeddelande.",
+    "message": "Kom ihåg denna detalj ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Vänlig etikett för kollapsat assistentunderhållsmeddelande.",
+    "message": "Sparar den tanken för senare ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Vänlig etikett för kollapsat assistentunderhållsmeddelande.",
+    "message": "Att hålla reda på kontext ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Vänlig etikett för kollapsat assistentunderhållsmeddelande.",
+    "message": "Tucking detta bort ..."
   }
 }

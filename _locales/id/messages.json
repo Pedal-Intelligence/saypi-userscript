@@ -656,5 +656,69 @@
   "viewDetails": {
     "description": "Teks untuk tautan untuk melihat detail kuota lengkap di dasbor.",
     "message": "Lihat detail"
+  },
+  "clickToCollapse": {
+    "description": "Teks yang menunjukkan pengguna dapat mengklik untuk menyembunyikan konten yang diperluas.",
+    "message": "Klik untuk runtuh"
+  },
+  "clickToExpand": {
+    "description": "Teks yang menunjukkan pengguna dapat mengklik untuk menampilkan konten yang runtuh.",
+    "message": "Klik untuk memperluas"
+  },
+  "instructionLabel_context": {
+    "description": "Label ramah untuk instruksi pengguna yang memberikan informasi latar belakang.",
+    "message": "Memberikan konteks ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Label ramah untuk instruksi pengguna yang mendefinisikan apa yang diinginkan pengguna.",
+    "message": "Mengklarifikasi harapan ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Label ramah untuk instruksi pengguna yang mempersempit ruang lingkup percakapan.",
+    "message": "Memfokuskan diskusi ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Label ramah untuk instruksi pengguna yang menetapkan batasan untuk percakapan.",
+    "message": "Mengatur pagar pembatas ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Label ramah untuk instruksi pengguna yang memandu bagaimana AI harus merespons.",
+    "message": "Membimbing tanggapan ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Label ramah untuk instruksi pengguna yang dengan lembut menunjukkan arah.",
+    "message": "Memberikan dorongan ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Label ramah untuk instruksi pengguna yang memandu arah percakapan.",
+    "message": "Mengarahkan percakapan ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Label ramah untuk pesan pemeliharaan asisten yang runtuh.",
+    "message": "Memegang pemikiran ini ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Label ramah untuk pesan pemeliharaan asisten yang runtuh.",
+    "message": "Membuat catatan mental ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Label ramah untuk pesan pemeliharaan asisten yang runtuh.",
+    "message": "Memproses di latar belakang ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Label ramah untuk pesan pemeliharaan asisten yang runtuh.",
+    "message": "Mengingat detail ini ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Label ramah untuk pesan pemeliharaan asisten yang runtuh.",
+    "message": "Menyimpan pemikiran itu nanti ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Label ramah untuk pesan pemeliharaan asisten yang runtuh.",
+    "message": "Melacak konteks ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Label ramah untuk pesan pemeliharaan asisten yang runtuh.",
+    "message": "Menyelipkan ini ..."
   }
 }

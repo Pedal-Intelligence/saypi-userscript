@@ -656,5 +656,69 @@
   "viewDetails": {
     "description": "链接的文本以查看仪表板上的完整配额详细信息。",
     "message": "查看详细信息"
+  },
+  "clickToCollapse": {
+    "description": "表示用户可以单击以隐藏扩展的内容的文本。",
+    "message": "点击崩溃"
+  },
+  "clickToExpand": {
+    "description": "表明用户可以单击以显示崩溃的内容的文本。",
+    "message": "单击以展开"
+  },
+  "instructionLabel_context": {
+    "description": "提供背景信息的用户说明的友好标签。",
+    "message": "提供上下文..."
+  },
+  "instructionLabel_expectations": {
+    "description": "友好标签用于定义用户想要的用户指令。",
+    "message": "澄清期望..."
+  },
+  "instructionLabel_focusing": {
+    "description": "友好的标签用于用户说明，可缩小对话范围。",
+    "message": "集中讨论..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "友好标签用于用户指令，为对话建立界限。",
+    "message": "设置护栏..."
+  },
+  "instructionLabel_guiding": {
+    "description": "友好的标签用于指导AI应如何响应的用户指令。",
+    "message": "指导回应..."
+  },
+  "instructionLabel_nudge": {
+    "description": "友好的标签用于用户说明，该标签轻轻地暗示了一个方向。",
+    "message": "轻推..."
+  },
+  "instructionLabel_steering": {
+    "description": "友好的标签用于指导对话方向的用户说明。",
+    "message": "指导对话..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "友好的标签，用于倒塌的助手维护消息。",
+    "message": "抱着这个想法..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "友好的标签，用于倒塌的助手维护消息。",
+    "message": "做一个心理..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "友好的标签，用于倒塌的助手维护消息。",
+    "message": "在后台处理..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "友好的标签，用于倒塌的助手维护消息。",
+    "message": "记住这个细节..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "友好的标签，用于倒塌的助手维护消息。",
+    "message": "节省了以后的想法..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "友好的标签，用于倒塌的助手维护消息。",
+    "message": "跟踪上下文..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "友好的标签，用于倒塌的助手维护消息。",
+    "message": "把这个塞了..."
   }
 }

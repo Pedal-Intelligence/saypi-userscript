@@ -656,5 +656,69 @@
   "viewDetails": {
     "description": "Testo per il collegamento per visualizzare i dettagli della quota completa sulla dashboard.",
     "message": "Visualizza i dettagli"
+  },
+  "clickToCollapse": {
+    "description": "Il testo che indica l'utente può fare clic per nascondere il contenuto espanso.",
+    "message": "Fai clic per crollare"
+  },
+  "clickToExpand": {
+    "description": "Il testo che indica l'utente può fare clic per mostrare il contenuto collassato.",
+    "message": "Fai clic per espandere"
+  },
+  "instructionLabel_context": {
+    "description": "Etichetta amichevole per l'istruzione utente che fornisce informazioni di base.",
+    "message": "Fornire contesto ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Etichetta amichevole per l'istruzione dell'utente che definisce ciò che l'utente desidera.",
+    "message": "Chiaristi aspettative ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Etichetta amichevole per l'istruzione utente che restringe l'ambito della conversazione.",
+    "message": "Focalizzare la discussione ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Etichetta amichevole per l'istruzione utente che stabilisce i confini per la conversazione.",
+    "message": "Impostazione dei guardrail ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Etichetta amichevole per l'istruzione dell'utente che guida come dovrebbe rispondere l'IA.",
+    "message": "Risposte guida ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Etichetta amichevole per l'istruzione utente che suggerisce delicatamente una direzione.",
+    "message": "Dare una spinta ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Etichetta amichevole per l'istruzione utente che guida la direzione della conversazione.",
+    "message": "Guidare la conversazione ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Etichetta amichevole per il messaggio di manutenzione assistente crollata.",
+    "message": "Tenendo questo pensiero ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Etichetta amichevole per il messaggio di manutenzione assistente crollata.",
+    "message": "Fare una nota mentale ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Etichetta amichevole per il messaggio di manutenzione assistente crollata.",
+    "message": "Elaborazione in background ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Etichetta amichevole per il messaggio di manutenzione assistente crollata.",
+    "message": "Ricordando questo dettaglio ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Etichetta amichevole per il messaggio di manutenzione assistente crollata.",
+    "message": "Salvando quel pensiero per dopo ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Etichetta amichevole per il messaggio di manutenzione assistente crollata.",
+    "message": "Tenere traccia del contesto ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Etichetta amichevole per il messaggio di manutenzione assistente crollata.",
+    "message": "Trancandolo ..."
   }
 }

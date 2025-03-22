@@ -656,5 +656,69 @@
   "viewDetails": {
     "description": "대시 보드에서 전체 할당량 세부 정보를 볼 수있는 링크의 텍스트.",
     "message": "자세한 내용을보십시오"
+  },
+  "clickToCollapse": {
+    "description": "텍스트는 사용자가 클릭하여 확장 된 컨텐츠를 숨길 수 있습니다.",
+    "message": "붕괴하려면 클릭하십시오"
+  },
+  "clickToExpand": {
+    "description": "텍스트는 사용자가 클릭하여 붕괴 된 콘텐츠를 표시 할 수 있습니다.",
+    "message": "확장하려면 클릭하십시오"
+  },
+  "instructionLabel_context": {
+    "description": "배경 정보를 제공하는 사용자 명령에 대한 친숙한 레이블.",
+    "message": "컨텍스트 제공 ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "사용자가 원하는 것을 정의하는 사용자 명령에 대한 친숙한 레이블.",
+    "message": "기대치를 명확하게 ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "대화의 범위를 좁히는 사용자 지침에 대한 친숙한 레이블.",
+    "message": "토론에 집중하고 ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "대화의 경계를 설정하는 사용자 지침에 대한 친숙한 레이블.",
+    "message": "가드 레일 설정 ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "AI가 어떻게 응답 해야하는지 안내하는 사용자 지침에 대한 친숙한 레이블.",
+    "message": "안내 응답 ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "방향을 부드럽게 제안하는 사용자 명령에 대한 친숙한 레이블.",
+    "message": "멍청이주는 ..."
+  },
+  "instructionLabel_steering": {
+    "description": "대화 방향을 안내하는 사용자 지침에 대한 친숙한 레이블.",
+    "message": "대화를 조종 ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
+    "message": "이 생각을 잡고 ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
+    "message": "정신 메모 만들기 ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
+    "message": "백그라운드에서 처리 ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
+    "message": "이 세부 사항을 기억합니다 ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
+    "message": "나중에 그 생각을 저장 ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
+    "message": "맥락을 추적하는 ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
+    "message": "이것을 멀리 잡고 ..."
   }
 }

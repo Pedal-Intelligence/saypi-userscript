@@ -656,5 +656,69 @@
   "viewDetails": {
     "description": "SMS -y do linku, aby wyświetlić pełne szczegóły kwot na desce rozdzielczej.",
     "message": "Zobacz szczegóły"
+  },
+  "clickToCollapse": {
+    "description": "Tekst wskazujący użytkownik może kliknąć, aby ukryć rozszerzoną zawartość.",
+    "message": "Kliknij, aby zawalić się"
+  },
+  "clickToExpand": {
+    "description": "Tekst wskazujący, że użytkownik może kliknąć, aby wyświetlić zmierzoną zawartość.",
+    "message": "Kliknij, aby rozwinąć"
+  },
+  "instructionLabel_context": {
+    "description": "Przyjazna etykieta dla instrukcji użytkownika, która zawiera informacje podstawowe.",
+    "message": "Zapewnienie kontekstu ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Przyjazna etykieta do instrukcji użytkownika, która określa, czego chce użytkownik.",
+    "message": "Wyjaśnianie oczekiwań ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Przyjazna etykieta do instrukcji użytkownika, która zawęża zakres rozmowy.",
+    "message": "Skupienie dyskusji ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Przyjazna etykieta do instrukcji użytkownika, która ustanawia granice rozmowy.",
+    "message": "Ustawienie poręczy ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Przyjazna etykieta do instrukcji użytkownika, która kieruje, jak AI powinna zareagować.",
+    "message": "Prowadzenie odpowiedzi ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Przyjazna etykieta dla instrukcji użytkownika, która delikatnie sugeruje kierunek.",
+    "message": "Dając szturchanie ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Przyjazna etykieta dla instrukcji użytkownika, która kieruje kierunkiem rozmowy.",
+    "message": "Kierowanie rozmowy ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Trzymając tę ​​myśl ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Notatka psychiczna ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Przetwarzanie w tle ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Pamiętając o tym szczegółach ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Oszczędzanie tej myśli na później ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Śledzenie kontekstu ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Wykrzykując to ..."
   }
 }

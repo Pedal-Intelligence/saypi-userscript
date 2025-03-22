@@ -656,5 +656,69 @@
   "viewDetails": {
     "description": "Texto para el enlace para ver los detalles de la cuota completa en el tablero.",
     "message": "Ver detalles"
+  },
+  "clickToCollapse": {
+    "description": "El texto que indica el usuario puede hacer clic para ocultar contenido ampliado.",
+    "message": "Haga clic para colapsar"
+  },
+  "clickToExpand": {
+    "description": "El texto que indica el usuario puede hacer clic para mostrar contenido colapsado.",
+    "message": "Haga clic para expandir"
+  },
+  "instructionLabel_context": {
+    "description": "Etiqueta amigable para la instrucción del usuario que proporciona información de fondo.",
+    "message": "Proporcionando contexto ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Etiqueta amigable para la instrucción del usuario que define lo que el usuario quiere.",
+    "message": "Aclarando las expectativas ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Etiqueta amistosa para la instrucción del usuario que reduce el alcance de la conversación.",
+    "message": "Centrar la discusión ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Etiqueta amistosa para la instrucción del usuario que establece límites para la conversación.",
+    "message": "Configuración de barandas ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Etiqueta amigable para la instrucción del usuario que guía cómo debe responder la IA.",
+    "message": "Respuestas guiantes ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Etiqueta amistosa para la instrucción del usuario que sugiere suavemente una dirección.",
+    "message": "Dando un empujón ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Etiqueta amigable para la instrucción del usuario que guía la dirección de conversación.",
+    "message": "Dirigir la conversación ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Etiqueta amigable para el mensaje de mantenimiento de asistente colapsado.",
+    "message": "Sosteniendo este pensamiento ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Etiqueta amigable para el mensaje de mantenimiento de asistente colapsado.",
+    "message": "Haciendo una nota mental ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Etiqueta amigable para el mensaje de mantenimiento de asistente colapsado.",
+    "message": "Procesamiento en segundo plano ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Etiqueta amigable para el mensaje de mantenimiento de asistente colapsado.",
+    "message": "Recordando este detalle ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Etiqueta amigable para el mensaje de mantenimiento de asistente colapsado.",
+    "message": "Guardar ese pensamiento para más tarde ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Etiqueta amigable para el mensaje de mantenimiento de asistente colapsado.",
+    "message": "Haciendo un seguimiento del contexto ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Etiqueta amigable para el mensaje de mantenimiento de asistente colapsado.",
+    "message": "Alegando esto ..."
   }
 }

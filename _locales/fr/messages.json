@@ -656,5 +656,69 @@
   "viewDetails": {
     "description": "Texte pour le lien pour afficher les détails du quota complet sur le tableau de bord.",
     "message": "Afficher les détails"
+  },
+  "clickToCollapse": {
+    "description": "Le texte indiquant que l'utilisateur peut cliquer pour masquer le contenu élargi.",
+    "message": "Cliquez pour s'effondrer"
+  },
+  "clickToExpand": {
+    "description": "Le texte indiquant que l'utilisateur peut cliquer pour afficher le contenu effondré.",
+    "message": "Cliquez pour agrandir"
+  },
+  "instructionLabel_context": {
+    "description": "Étiquette conviviale pour l'instruction de l'utilisateur qui fournit des informations générales.",
+    "message": "Fournir un contexte ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Étiquette amicale pour l'instruction de l'utilisateur qui définit ce que veut l'utilisateur.",
+    "message": "Clarifier les attentes ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Étiquette amicale pour l'instruction de l'utilisateur qui rétrécit la portée de la conversation.",
+    "message": "Concentrer la discussion ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Étiquette amicale pour l'instruction de l'utilisateur qui établit des limites pour la conversation.",
+    "message": "Faire partie de garde-corps ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Étiquette amicale pour l'instruction de l'utilisateur qui guide la façon dont l'IA doit réagir.",
+    "message": "Réponses guidant ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Étiquette amicale pour l'instruction utilisateur qui suggère doucement une direction.",
+    "message": "Donner un coup de pouce ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Étiquette amicale pour l'instruction de l'utilisateur qui guide la direction de la conversation.",
+    "message": "Diriger la conversation ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Étiquette amicale pour le message de maintenance de l'assistant effondré.",
+    "message": "Tenir cette pensée ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Étiquette amicale pour le message de maintenance de l'assistant effondré.",
+    "message": "Faire une note mentale ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Étiquette amicale pour le message de maintenance de l'assistant effondré.",
+    "message": "Traitement en arrière-plan ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Étiquette amicale pour le message de maintenance de l'assistant effondré.",
+    "message": "Se souvenir de ce détail ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Étiquette amicale pour le message de maintenance de l'assistant effondré.",
+    "message": "Sauver cette pensée pour plus tard ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Étiquette amicale pour le message de maintenance de l'assistant effondré.",
+    "message": "Garder une trace du contexte ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Étiquette amicale pour le message de maintenance de l'assistant effondré.",
+    "message": "Gucking ça ..."
   }
 }

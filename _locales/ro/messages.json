@@ -656,5 +656,69 @@
   "viewDetails": {
     "description": "Text pentru linkul pentru a vizualiza detaliile cotei complete pe tabloul de bord.",
     "message": "Vizualizați detalii"
+  },
+  "clickToCollapse": {
+    "description": "Text care indică utilizatorul poate face clic pentru a ascunde conținut extins.",
+    "message": "Faceți clic pentru a se prăbuși"
+  },
+  "clickToExpand": {
+    "description": "Text care indică utilizatorul poate face clic pentru a afișa conținut prăbușit.",
+    "message": "Faceți clic pentru a extinde"
+  },
+  "instructionLabel_context": {
+    "description": "Etichetă prietenoasă pentru instrucțiunile utilizatorului care oferă informații de fundal.",
+    "message": "Furnizarea de context ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Etichetă prietenoasă pentru instrucțiunea utilizatorului care definește ceea ce își dorește utilizatorul.",
+    "message": "Clarificarea așteptărilor ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Etichetă prietenoasă pentru instrucțiuni de utilizator care restrânge domeniul de aplicare al conversației.",
+    "message": "Concentrarea discuției ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Etichetă prietenoasă pentru instrucțiunea utilizatorului care stabilește granițe pentru conversație.",
+    "message": "Stabilirea balustradelor ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Etichetă prietenoasă pentru instrucțiunea utilizatorului care ghidează modul în care AI ar trebui să răspundă.",
+    "message": "Răspunsuri îndrumătoare ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Etichetă prietenoasă pentru instrucțiuni de utilizator care sugerează ușor o direcție.",
+    "message": "Dând un nud ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Etichetă prietenoasă pentru instrucțiunea utilizatorului care ghidează direcția conversației.",
+    "message": "Direcționând conversația ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Etichetă prietenoasă pentru mesajul de întreținere a asistentului prăbușit.",
+    "message": "Ținând acest gând ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Etichetă prietenoasă pentru mesajul de întreținere a asistentului prăbușit.",
+    "message": "Făcând o notă mentală ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Etichetă prietenoasă pentru mesajul de întreținere a asistentului prăbușit.",
+    "message": "Procesarea în fundal ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Etichetă prietenoasă pentru mesajul de întreținere a asistentului prăbușit.",
+    "message": "Amintindu -mi acest detaliu ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Etichetă prietenoasă pentru mesajul de întreținere a asistentului prăbușit.",
+    "message": "Salvând gândul pentru mai târziu ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Etichetă prietenoasă pentru mesajul de întreținere a asistentului prăbușit.",
+    "message": "Urmărirea contextului ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Etichetă prietenoasă pentru mesajul de întreținere a asistentului prăbușit.",
+    "message": "Îndepărtând asta ..."
   }
 }

@@ -656,5 +656,69 @@
   "viewDetails": {
     "description": "Teksti linkkille nähdäksesi täydelliset kiintiötiedot kojelaudassa.",
     "message": "Katso yksityiskohdat"
+  },
+  "clickToCollapse": {
+    "description": "Teksti, joka osoittaa, että käyttäjä voi napsauttaa laajennetun sisällön.",
+    "message": "Napsauta romahtaa"
+  },
+  "clickToExpand": {
+    "description": "Teksti, joka osoittaa, että käyttäjä voi napsauttaa, näyttääksesi romahtuneen sisällön.",
+    "message": "Napsauta laajentaaksesi"
+  },
+  "instructionLabel_context": {
+    "description": "Ystävällinen etiketti käyttäjäohjeille, jotka tarjoavat taustatietoja.",
+    "message": "Tarjoaa kontekstia ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Ystävällinen etiketti käyttäjäohjeisiin, jotka määrittelevät mitä käyttäjä haluaa.",
+    "message": "Selventävät odotukset ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Ystävällinen etiketti käyttäjäohjeisiin, jotka kapenevat keskustelun laajuutta.",
+    "message": "Keskittyminen keskusteluun ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Ystävällinen etiketti käyttäjäohjeisiin, jotka luovat keskustelun rajat.",
+    "message": "Suojakaiteiden asettaminen ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Ystävällinen etiketti käyttäjäohjeisiin, jotka ohjaavat, kuinka AI: n tulisi vastata.",
+    "message": "Ohjaavat vastaukset ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Ystävällinen etiketti käyttäjäohjeille, jotka ehdottavat varovasti suuntaa.",
+    "message": "Annetaan kummallinen ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Ystävällinen etiketti käyttäjäohjeisiin, jotka ohjaavat keskustelua.",
+    "message": "Keskustelun ohjaaminen ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
+    "message": "Pitää tätä ajatusta ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
+    "message": "Henkisen muistiinpanon tekeminen ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
+    "message": "Käsittely taustalla ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
+    "message": "Muistaa tämä yksityiskohta ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
+    "message": "Säästät ajatuksen myöhempää käyttöä varten ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
+    "message": "Seurata kontekstia ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
+    "message": "Tämän työntäminen ..."
   }
 }

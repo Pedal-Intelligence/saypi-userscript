@@ -656,5 +656,69 @@
   "viewDetails": {
     "description": "نص على الرابط لعرض تفاصيل الحصص الكاملة على لوحة القيادة.",
     "message": "عرض التفاصيل"
+  },
+  "clickToCollapse": {
+    "description": "يمكن للنص الذي يشير إلى المستخدم النقر لإخفاء المحتوى الموسع.",
+    "message": "انقر للانهيار"
+  },
+  "clickToExpand": {
+    "description": "يمكن للمستخدم الذي يشير إلى أن المستخدم ينقر لإظهار المحتوى المنهار.",
+    "message": "انقر للتوسع"
+  },
+  "instructionLabel_context": {
+    "description": "تسمية ودية لتعليم المستخدم الذي يوفر معلومات أساسية.",
+    "message": "توفير السياق ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "تسمية ودية لتعليم المستخدم الذي يحدد ما يريده المستخدم.",
+    "message": "توضيح التوقعات ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "تسمية ودية لتعليم المستخدم الذي يضيق نطاق المحادثة.",
+    "message": "تركيز المناقشة ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "تسمية ودية لتعليم المستخدم الذي يحدد حدود للمحادثة.",
+    "message": "إعداد الدرابزين ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "تسمية ودية لتعليم المستخدم الذي يوجه كيفية الرد على الذكاء الاصطناعى.",
+    "message": "ردود توجيهية ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "تسمية ودية لتعليم المستخدم الذي يوحي برفق الاتجاه.",
+    "message": "إعطاء دفع ..."
+  },
+  "instructionLabel_steering": {
+    "description": "تسمية ودية لتعليم المستخدم الذي يوجه اتجاه المحادثة.",
+    "message": "توجيه المحادثة ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "تسمية ودية لرسالة صيانة مساعد.",
+    "message": "عقد هذا الفكر ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "تسمية ودية لرسالة صيانة مساعد.",
+    "message": "تقديم ملاحظة عقلية ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "تسمية ودية لرسالة صيانة مساعد.",
+    "message": "المعالجة في الخلفية ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "تسمية ودية لرسالة صيانة مساعد.",
+    "message": "تذكر هذه التفاصيل ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "تسمية ودية لرسالة صيانة مساعد.",
+    "message": "إنقاذ هذا الفكر في وقت لاحق ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "تسمية ودية لرسالة صيانة مساعد.",
+    "message": "تتبع السياق ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "تسمية ودية لرسالة صيانة مساعد.",
+    "message": "سقيف هذا بعيدا ..."
   }
 }

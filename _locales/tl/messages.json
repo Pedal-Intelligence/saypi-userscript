@@ -656,5 +656,69 @@
   "viewDetails": {
     "description": "Teksto para sa link upang matingnan ang buong mga detalye ng quota sa dashboard.",
     "message": "Tingnan ang mga detalye"
+  },
+  "clickToCollapse": {
+    "description": "Ang teksto na nagpapahiwatig ng gumagamit ay maaaring mag -click upang itago ang pinalawak na nilalaman.",
+    "message": "Mag -click upang gumuho"
+  },
+  "clickToExpand": {
+    "description": "Ang teksto na nagpapahiwatig ng gumagamit ay maaaring mag -click upang ipakita ang gumuho na nilalaman.",
+    "message": "Mag -click upang mapalawak"
+  },
+  "instructionLabel_context": {
+    "description": "Friendly label para sa pagtuturo ng gumagamit na nagbibigay ng impormasyon sa background.",
+    "message": "Nagbibigay ng konteksto ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Friendly label para sa pagtuturo ng gumagamit na tumutukoy sa nais ng gumagamit.",
+    "message": "Paglilinaw ng mga inaasahan ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Friendly label para sa pagtuturo ng gumagamit na makitid sa saklaw ng pag -uusap.",
+    "message": "Nakatuon ang talakayan ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Friendly label para sa pagtuturo ng gumagamit na nagtatatag ng mga hangganan para sa pag -uusap.",
+    "message": "Pagtatakda ng mga bantay ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Friendly label para sa pagtuturo ng gumagamit na gumagabay kung paano dapat tumugon ang AI.",
+    "message": "Gabay na mga tugon ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Friendly label para sa pagtuturo ng gumagamit na malumanay na nagmumungkahi ng isang direksyon.",
+    "message": "Nagbibigay ng isang nudge ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Friendly label para sa pagtuturo ng gumagamit na gumagabay sa direksyon ng pag -uusap.",
+    "message": "Pagpipiloto ng pag -uusap ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
+    "message": "Hawak ang kaisipang ito ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
+    "message": "Paggawa ng isang Mental Note ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
+    "message": "Pagproseso sa background ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
+    "message": "Naaalala ang detalyeng ito ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
+    "message": "Sine -save ang kaisipang iyon para sa ibang pagkakataon ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
+    "message": "Sinusubaybayan ang konteksto ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
+    "message": "Tucking ito ..."
   }
 }
