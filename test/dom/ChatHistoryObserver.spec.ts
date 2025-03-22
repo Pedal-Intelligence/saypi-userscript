@@ -63,6 +63,8 @@ describe("ChatHistoryMessageObserver", () => {
       localService: false,
       default: false,
       price: 0.3,
+      price_per_thousand_chars_in_usd: 0.3,
+      price_per_thousand_chars_in_credits: 300,
       powered_by: "saypi.ai",
       voiceURI: "",
     };
@@ -311,13 +313,17 @@ describe("ChatHistoryMessageObserver", () => {
     });
 
     it(
-      "text and stable text should converge",
+      "text and stable text should eventually converge",
       async () => {
         const chatMessageElement = createAssistantMessage([
           "Hello there!",
           "How are you doing?",
         ]);
         const message = new PiResponse(chatMessageElement);
+        setTimeout(() => {
+          // there must be a trigger to start and end the stream, otherwise it will never complete
+          addTextToAssistantMessage(chatMessageElement, "How are the kids?");
+        }, 3000);
         const stableText = await message.stableText();
         expect(message.text).toBe(stableText);
 
