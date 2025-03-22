@@ -1,6 +1,6 @@
 {
   "name": "saypi-userscript",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "type": "module",
   "scripts": {
     "prebuild": "node i18n-validate.cjs",
