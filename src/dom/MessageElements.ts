@@ -1746,3 +1746,167 @@ abstract class MessageControls {
 }
 
 export { AssistantResponse, MessageControls, PopupMenu };
+
+/**
+ * Represents a user message in the chat history
+ */
+class UserMessage {
+  private _element: HTMLElement;
+  private _contentElement: HTMLElement | null = null;
+  private chatbot: Chatbot;
+
+  constructor(element: HTMLElement, chatbot: Chatbot) {
+    this._element = element;
+    this.chatbot = chatbot;
+    this.decorate();
+  }
+
+  private decorate(): void {
+    this._element.classList.add("chat-message", "user-prompt");
+  }
+
+  /**
+   * Gets the CSS selector for content within this user message
+   */
+  get contentSelector(): string {
+    return this.chatbot.getUserMessageContentSelector();
+  }
+
+  /**
+   * Gets the actual content container element within the message
+   * @returns The content element or null if not found
+   */
+  get contentElement(): HTMLElement | null {
+    if (this._contentElement) {
+      return this._contentElement;
+    }
+
+    // Use the chatbot-provided selector to find the content element
+    const contentElement = this._element.querySelector(this.contentSelector);
+    if (contentElement) {
+      this._contentElement = contentElement as HTMLElement;
+      contentElement.classList.add("user-message-content");
+      return this._contentElement;
+    }
+
+    // Fallback to the first div if the specific selector fails
+    const firstDiv = this._element.querySelector("div > div");
+    if (firstDiv) {
+      this._contentElement = firstDiv as HTMLElement;
+      return this._contentElement;
+    }
+
+    return null;
+  }
+
+  /**
+   * Get the full element for this message
+   */
+  get element(): HTMLElement {
+    return this._element;
+  }
+
+  /**
+   * Get the text content of the user message
+   */
+  get text(): string {
+    const content = this.contentElement;
+    if (content) {
+      return content.innerText || content.textContent || "";
+    }
+    return "";
+  }
+
+  /**
+   * Checks if this message contains maintenance instructions
+   */
+  hasInstructions(): boolean {
+    const content = this.contentElement;
+    if (!content) return false;
+    
+    // Check for both unescaped and escaped instruction tags
+    const html = content.innerHTML;
+    return (
+      /<instruction>([\s\S]*?)<\/instruction>/.test(html) || 
+      /&lt;instruction&gt;([\s\S]*?)&lt;\/instruction&gt;/.test(html)
+    );
+  }
+
+  /**
+   * Process and collapse instruction blocks in the message
+   */
+  processInstructions(): void {
+    const content = this.contentElement;
+    if (!content) return;
+    
+    const html = content.innerHTML;
+    
+    // Check for both unescaped and escaped instruction tags
+    const unescapedRegex = /<instruction>([\s\S]*?)<\/instruction>/;
+    const escapedRegex = /&lt;instruction&gt;([\s\S]*?)&lt;\/instruction&gt;/;
+    
+    let instructionMatch = html.match(unescapedRegex);
+    let isEscaped = false;
+    
+    // If no match with unescaped tags, try with escaped tags
+    if (!instructionMatch) {
+      instructionMatch = html.match(escapedRegex);
+      isEscaped = true;
+    }
+    
+    if (instructionMatch) {
+      // Mark the message as having instructions
+      this._element.classList.add("with-instructions");
+      
+      // Generate a friendly label from a set of options
+      const friendlyLabels = [
+        "Steering the conversation...",
+        "Giving a nudge...",
+        "Guiding responses...",
+        "Setting guardrails...",
+        "Providing context...",
+        "Focusing the discussion...",
+        "Clarifying expectations..."
+      ];
+      const randomLabel = friendlyLabels[Math.floor(Math.random() * friendlyLabels.length)];
+      
+      // Create a wrapper for the instruction block - keep the HTML as is for proper rendering
+      const instructionHTML = instructionMatch[1];
+      
+      // Replace the instruction block with our custom elements while preserving other content
+      const newHTML = isEscaped ? 
+        html.replace(
+          escapedRegex,
+          `<div class="instruction-label" data-label="${randomLabel}"></div>
+           <div class="instruction-block">${instructionHTML}</div>`
+        ) :
+        html.replace(
+          unescapedRegex,
+          `<div class="instruction-label" data-label="${randomLabel}"></div>
+           <div class="instruction-block">${instructionHTML}</div>`
+        );
+      
+      content.innerHTML = newHTML;
+      
+      // Add collapsed class by default
+      this._element.classList.add("collapsed");
+      
+      // Add click handler to toggle visibility
+      this._element.addEventListener("click", (e) => {
+        // Only toggle if clicking on the message itself, not on links or other interactive elements
+        if (e.target === this._element || 
+            (e.target as HTMLElement).classList.contains('instruction-label') ||
+            this._element.contains(e.target as HTMLElement)) {
+          this._element.classList.toggle("collapsed");
+          e.stopPropagation(); // Prevent event bubbling
+        }
+      });
+    }
+  }
+
+  toString(): string {
+    return `UserMessage: "${this.text.substring(0, 20)}..."`;
+  }
+}
+
+export { UserMessage };

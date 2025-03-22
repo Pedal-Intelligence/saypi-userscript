@@ -1,4 +1,4 @@
-import { AssistantResponse, MessageControls } from "../dom/MessageElements";
+import { AssistantResponse, MessageControls, UserMessage } from "../dom/MessageElements";
 import { Observation } from "../dom/Observation";
 import {
   AddedText,
@@ -89,6 +89,10 @@ class ClaudeChatbot extends AbstractChatbot {
     return 'div.mb-1.mt-1';
   }
 
+  getUserMessageContentSelector(): string {
+    return "div[class*='font-user-message']";
+  }
+
   getAssistantResponseContentSelector(): string {
     return "div[class*='font-claude-message']";
   }
@@ -98,6 +102,10 @@ class ClaudeChatbot extends AbstractChatbot {
     includeInitialText?: boolean
   ): AssistantResponse {
     return new ClaudeResponse(element, includeInitialText);
+  }
+
+  getUserMessage(element: HTMLElement): UserMessage {
+    return new UserMessage(element, this);
   }
 
   getExtraCallButtonClasses(): string[] {

@@ -398,3 +398,64 @@
     }
   }
 }
+
+// Style for user prompts with maintenance instructions
+.user-prompt {
+  // Add special handling for maintenance messages with instructions
+  &.with-instructions {
+    cursor: pointer;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    position: relative;
+    
+    // Generate a friendly label from a set of options
+    .instruction-label {
+      font-style: italic;
+      font-size: 0.9em;
+      color: #666;
+      padding: 0.5rem 0;
+      margin-bottom: 0.25rem;
+      border-radius: 6px;
+      
+      &:before {
+        content: attr(data-label);
+        display: block;
+      }
+      
+      &:after {
+        content: " (click to expand)";
+        font-size: 0.8em;
+        opacity: 0.8;
+      }
+    }
+    
+    // Styling for the instruction block
+    .instruction-block {
+      padding: 1rem;
+      margin: 0.5rem 0;
+      background-color: rgba(245, 234, 220, 0.5);
+      border-radius: 6px;
+      border-left: 3px solid #e0d5c5;
+      font-size: 0.95em;
+      white-space: pre-wrap;
+    }
+    
+    // Initially hide the instruction block
+    &.collapsed {
+      .instruction-block {
+        display: none;
+      }
+      .whitespace-pre-wrap {
+        // override the default whitespace-pre-wrap behavior
+        // to collapse the instruction block
+        white-space: normal;
+      }
+    }
+    
+    // When expanded
+    &:not(.collapsed) {
+      .instruction-label:after {
+        content: " (click to collapse)";
+      }
+    }
+  }
+}

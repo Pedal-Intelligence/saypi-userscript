@@ -20,7 +20,7 @@ import {
   audioProviders,
 } from "../tts/SpeechModel";
 import EventBus from "../events/EventBus";
-import { AssistantResponse } from "./MessageElements";
+import { AssistantResponse, UserMessage } from "./MessageElements";
 import { AssistantWritingEvent } from "./MessageEvents";
 import { Chatbot } from "../chatbots/Chatbot";
 import { findRootAncestor } from "./DOMModule";
@@ -295,9 +295,19 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
   /**
    * Decorates the user prompt message with the necessary classes and attributes
    * @param messageElement - the chat message to decorate
+   * @returns UserMessage - the decorated user message
    */
-  public decorateUserPrompt(messageElement: HTMLElement): void {
-    messageElement.classList.add("chat-message", "user-prompt");
+  public decorateUserPrompt(
+    messageElement: HTMLElement
+  ): UserMessage {
+    const message = this.chatbot.getUserMessage(messageElement);
+    
+    // Process any maintenance instructions
+    if (message.hasInstructions()) {
+      message.processInstructions();
+    }
+    
+    return message;
   }
 
   async findAndDecorateAssistantResponses(
@@ -355,8 +365,13 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
         initialObservation.isNew &&
         !initialObservation.decorated
       ) {
-        this.decorateUserPrompt(initialObservation.target as HTMLElement);
-        const decoratedObservation = Observation.foundAndDecorated(initialObservation);
+        const message = this.decorateUserPrompt(
+          initialObservation.target as HTMLElement
+        );
+        const decoratedObservation = Observation.foundAndDecorated(
+          initialObservation,
+          message
+        );
         decoratedObservations.push(decoratedObservation);
       }
     }

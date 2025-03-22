@@ -1,4 +1,5 @@
 import { AssistantResponse } from "../dom/MessageElements";
+import { UserMessage } from "../dom/MessageElements";
 
 export interface Chatbot {
   getChatHistorySelector(): string;
@@ -16,6 +17,7 @@ export interface Chatbot {
   getAssistantResponseSelector(): string;
   getAssistantResponseContentSelector(): string;
   getUserPromptSelector(): string; // Selector to find user's chat messages
+  getUserMessageContentSelector(): string; // Selector to find content within user messages
   getChatPath(): string;
   isChatablePath(path: string): boolean; // can the chatbot chat on this URL path?
   // ... other methods for different selectors
@@ -27,6 +29,7 @@ export interface Chatbot {
     element: HTMLElement,
     includeInitialText?: boolean
   ): AssistantResponse;
+  getUserMessage(element: HTMLElement): UserMessage; // Get a user message from an element
   getName(): string;
   getNickname(): Promise<string>; // Returns the user's preferred nickname for the AI assistant, or the default name if not set
   hasNickname(): Promise<boolean>;

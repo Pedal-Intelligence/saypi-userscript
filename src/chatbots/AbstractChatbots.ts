@@ -4,7 +4,7 @@ import EventBus from "../events/EventBus";
 import { shortenTranscript } from "../TextModule";
 import { ImmersionStateChecker } from "../ImmersionServiceLite";
 import { ChatbotService } from "./ChatbotService";
-import { AssistantResponse } from "../dom/MessageElements";
+import { AssistantResponse, UserMessage } from "../dom/MessageElements";
 
 export abstract class AbstractChatbot implements Chatbot {
     protected readonly preferences = UserPreferenceModule.getInstance();
@@ -24,12 +24,14 @@ export abstract class AbstractChatbot implements Chatbot {
     abstract getAssistantResponseSelector(): string;
     abstract getAssistantResponseContentSelector(): string;
     abstract getUserPromptSelector(): string;
+    abstract getUserMessageContentSelector(): string;
     abstract getChatPath(): string;
     abstract isChatablePath(path: string): boolean;
     abstract getExtraCallButtonClasses(): string[];
     abstract getContextWindowCapacityCharacters(): number;
     abstract getPrompt(element: HTMLElement): UserPrompt;
     abstract getAssistantResponse(element: HTMLElement, includeInitialText?: boolean): AssistantResponse;
+    abstract getUserMessage(element: HTMLElement): UserMessage;
     abstract getName(): string;
   
     async getNickname(): Promise<string> {

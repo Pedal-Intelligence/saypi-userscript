@@ -1,4 +1,4 @@
-import { AssistantResponse, MessageControls } from "../dom/MessageElements";
+import { AssistantResponse, MessageControls, UserMessage } from "../dom/MessageElements";
 import EventBus from "../events/EventBus";
 import {
   AddedText,
@@ -89,12 +89,20 @@ class PiAIChatbot extends AbstractChatbot {
     return "div.flex.justify-end.break-anywhere";
   }
 
+  getUserMessageContentSelector(): string {
+    return "div.max-w-full";
+  }
+
   getAssistantResponseContentSelector(): string {
     return "div.w-full";
   }
 
   getAssistantResponse(element: HTMLElement): AssistantResponse {
     return new PiResponse(element);
+  }
+
+  getUserMessage(element: HTMLElement): UserMessage {
+    return new UserMessage(element, this);
   }
 
   getExtraCallButtonClasses(): string[] {
