@@ -422,7 +422,7 @@
       }
       
       &:after {
-        content: " (click to expand)";
+        content: " (" attr(data-expand-text) ")";
         font-size: 0.8em;
         opacity: 0.8;
       }
@@ -454,7 +454,7 @@
     // When expanded
     &:not(.collapsed) {
       .instruction-label:after {
-        content: " (click to collapse)";
+        content: " (" attr(data-collapse-text) ")";
       }
     }
   }

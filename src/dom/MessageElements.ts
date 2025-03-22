@@ -311,20 +311,20 @@ abstract class AssistantResponse {
       
       // Generate a friendly label from a set of options
       const friendlyLabels = [
-        "Saving that thought for later...",
-        "Processing in the background...",
-        "Holding this thought...",
-        "Making a mental note...",
-        "Keeping track of context...",
-        "Tucking this away...",
-        "Remembering this detail..."
+        chrome.i18n.getMessage("maintenanceLabel_saving"),
+        chrome.i18n.getMessage("maintenanceLabel_processing"),
+        chrome.i18n.getMessage("maintenanceLabel_holding"),
+        chrome.i18n.getMessage("maintenanceLabel_mental_note"),
+        chrome.i18n.getMessage("maintenanceLabel_tracking"),
+        chrome.i18n.getMessage("maintenanceLabel_tucking"),
+        chrome.i18n.getMessage("maintenanceLabel_remembering")
       ];
       const randomLabel = friendlyLabels[Math.floor(Math.random() * friendlyLabels.length)];
       
       // Find the content element and add the label as a data attribute
       const contentElement = await this.decoratedContent();
       if (contentElement) {
-        contentElement.dataset.messageLabel = `${randomLabel} (click to expand)`;
+        contentElement.dataset.messageLabel = `${randomLabel} (${chrome.i18n.getMessage("clickToExpand")})`;
       }
       
       element.addEventListener("click", () => {
@@ -1879,13 +1879,13 @@ class UserMessage {
       
       // Generate a friendly label from a set of options
       const friendlyLabels = [
-        "Steering the conversation...",
-        "Giving a nudge...",
-        "Guiding responses...",
-        "Setting guardrails...",
-        "Providing context...",
-        "Focusing the discussion...",
-        "Clarifying expectations..."
+        chrome.i18n.getMessage("instructionLabel_steering"),
+        chrome.i18n.getMessage("instructionLabel_nudge"),
+        chrome.i18n.getMessage("instructionLabel_guiding"),
+        chrome.i18n.getMessage("instructionLabel_guardrails"),
+        chrome.i18n.getMessage("instructionLabel_context"),
+        chrome.i18n.getMessage("instructionLabel_focusing"),
+        chrome.i18n.getMessage("instructionLabel_expectations")
       ];
       const randomLabel = friendlyLabels[Math.floor(Math.random() * friendlyLabels.length)];
       
@@ -1896,12 +1896,12 @@ class UserMessage {
       const newHTML = isEscaped ? 
         html.replace(
           escapedRegex,
-          `<div class="instruction-label" data-label="${randomLabel}"></div>
+          `<div class="instruction-label" data-label="${randomLabel}" data-expand-text="${chrome.i18n.getMessage("clickToExpand")}" data-collapse-text="${chrome.i18n.getMessage("clickToCollapse")}"></div>
            <div class="instruction-block">${instructionHTML}</div>`
         ) :
         html.replace(
           unescapedRegex,
-          `<div class="instruction-label" data-label="${randomLabel}"></div>
+          `<div class="instruction-label" data-label="${randomLabel}" data-expand-text="${chrome.i18n.getMessage("clickToExpand")}" data-collapse-text="${chrome.i18n.getMessage("clickToCollapse")}"></div>
            <div class="instruction-block">${instructionHTML}</div>`
         );
       
