@@ -167,7 +167,7 @@ export abstract class ElementTextStream {
       clearTimeout(this.timeout);
     }
     this.timeout = setTimeout(() => {
-      // this.complete({ type: "timeout", time: Date.now() }); - off for debugging
+      // this.complete({ type: "timeout", time: Date.now() }); // no longer needed with effective endpointing for Pi
     }, this.calculateStreamTimeout());
   }
 
