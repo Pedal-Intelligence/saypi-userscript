@@ -308,6 +308,25 @@ abstract class AssistantResponse {
     if (state.isMaintenanceMessage) {
       const element = this.element;
       element.classList.add("maintenance-message", "silenced");
+      
+      // Generate a friendly label from a set of options
+      const friendlyLabels = [
+        "Saving that thought for later...",
+        "Processing in the background...",
+        "Holding this thought...",
+        "Making a mental note...",
+        "Keeping track of context...",
+        "Tucking this away...",
+        "Remembering this detail..."
+      ];
+      const randomLabel = friendlyLabels[Math.floor(Math.random() * friendlyLabels.length)];
+      
+      // Find the content element and add the label as a data attribute
+      const contentElement = await this.decoratedContent();
+      if (contentElement) {
+        contentElement.dataset.messageLabel = `${randomLabel} (click to expand)`;
+      }
+      
       element.addEventListener("click", () => {
         element.classList.toggle("silenced");
       });

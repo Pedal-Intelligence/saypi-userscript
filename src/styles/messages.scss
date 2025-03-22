@@ -385,7 +385,7 @@
 
     .content {
       &:before {
-        content: "Saving that thought for later... (click to expand)";
+        content: attr(data-message-label);
         display: block;
       }
       > * {
