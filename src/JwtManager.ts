@@ -11,6 +11,7 @@ interface JwtClaims {
   sttQuotaRemaining: number;
   sttQuotaMonthly: number;
   nextQuotaReset: number; // Unix timestamp for quota reset date
+  features?: string[]; // Array of feature codes the user is entitled to
   iat: number;
   exp: number;
 }
@@ -360,6 +361,19 @@ export class JwtManager {
       // This means we'll include the auth cookie in the body, which is the safer approach
       return false;
     }
+  }
+
+  /**
+   * Checks if the user is entitled to a specific feature
+   * @param featureCode The feature code to check for entitlement
+   * @returns boolean True if the user is entitled to the feature, false otherwise
+   */
+  public hasFeatureEntitlement(featureCode: string): boolean {
+    const claims = this.getClaims();
+    if (!claims || !claims.features) {
+      return false;
+    }
+    return claims.features.includes(featureCode);
   }
 }
 

@@ -8,6 +8,7 @@ import {
   SpeechSynthesisVoiceRemote,
 } from "../tts/SpeechModel";
 import { isFirefox, isSafari } from "../UserAgentModule";
+import { jwtManager } from "../JwtManager";
 
 type Preference = "speed" | "balanced" | "accuracy" | null;
 type VoicePreference = SpeechSynthesisVoiceRemote | null;
@@ -24,6 +25,11 @@ interface StorageResult {
   discretionaryMode?: boolean; // new beta feature for discretionary responses
   nickname?: string; // user's preferred nickname for the AI assistant
 }
+
+// Define feature codes
+export const FEATURE_CODES = {
+  AGENT_MODE: "agent_mode"
+};
 
 class UserPreferenceModule {
   private cache: UserPreferenceCache = UserPreferenceCache.getInstance();
@@ -361,12 +367,47 @@ class UserPreferenceModule {
     return Promise.resolve(true);
   }
 
-  public getDiscretionaryMode(): Promise<boolean> {
-    return this.getStoredValue("discretionaryMode", false);
+  /**
+   * Checks if the user is entitled to a specific feature
+   * @param featureCode The feature code to check for entitlement
+   * @returns Promise<boolean> True if the user is entitled to the feature, false otherwise
+   */
+  public hasFeatureEntitlement(featureCode: string): Promise<boolean> {
+    return Promise.resolve(jwtManager.hasFeatureEntitlement(featureCode));
   }
 
+  /**
+   * Checks if the user is entitled to use agent mode
+   * @returns Promise<boolean> True if user is entitled to agent mode
+   */
+  public hasAgentModeEntitlement(): Promise<boolean> {
+    return this.hasFeatureEntitlement(FEATURE_CODES.AGENT_MODE);
+  }
+
+  /**
+   * Gets the current discretionary mode setting, but only returns true if the user
+   * is entitled to use agent mode
+   */
+  public getDiscretionaryMode(): Promise<boolean> {
+    return Promise.all([
+      this.getStoredValue("discretionaryMode", false),
+      this.hasAgentModeEntitlement()
+    ]).then(([discretionaryMode, hasEntitlement]) => {
+      // Only return true if both the setting is enabled AND the user has entitlement
+      return discretionaryMode && hasEntitlement;
+    });
+  }
+
+  /**
+   * Gets the cached discretionary mode value, but only returns true if the user
+   * is entitled to use agent mode
+   */
   public getCachedDiscretionaryMode(): boolean {
-    return this.cache.getCachedValue("discretionaryMode", false);
+    const cachedSetting = this.cache.getCachedValue("discretionaryMode", false);
+    const hasEntitlement = jwtManager.hasFeatureEntitlement(FEATURE_CODES.AGENT_MODE);
+    
+    // Only return true if both the setting is enabled AND the user has entitlement
+    return cachedSetting && hasEntitlement;
   }
 
   public getNickname(): Promise<string | null> {
