@@ -22,10 +22,15 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     
-    - name: Clear npm cache and install dependencies
+    - name: Install dependencies
       run: |
         npm cache clean --force
-        npm ci
+        # Try to use the existing lockfile first, if it fails then regenerate
+        npm install --no-fund --prefer-offline || (
+          echo "Initial install failed, regenerating package-lock.json..."
+          rm -f package-lock.json
+          npm install --no-fund
+        )
       timeout-minutes: 10
       env:
         npm_config_fetch_retries: 5
