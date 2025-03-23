@@ -2,6 +2,10 @@
   "name": "saypi-userscript",
   "version": "1.7.3",
   "type": "module",
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
     "prebuild": "node i18n-validate.cjs",
     "build": "webpack --mode production",
