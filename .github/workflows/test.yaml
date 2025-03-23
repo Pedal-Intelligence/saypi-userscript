@@ -12,14 +12,25 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20.5.0]
+        node-version: [20.9.0]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm test
+        cache: 'npm'
+    - name: Install dependencies
+      run: npm ci
+      continue-on-error: false
+      timeout-minutes: 10
+      # Add retry mechanism for network-related failures
+      env:
+        npm_config_fetch_retries: 5
+        npm_config_fetch_retry_factor: 2
+        npm_config_fetch_retry_mintimeout: 20000
+        npm_config_fetch_retry_maxtimeout: 120000
+    - name: Run tests
+      run: npm test
 
