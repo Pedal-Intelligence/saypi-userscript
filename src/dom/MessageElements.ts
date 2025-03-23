@@ -1928,6 +1928,26 @@ class UserMessage {
       
       content.innerHTML = newHTML;
       
+      // Add the steering wheel icon
+      const steerIcon = IconModule.steer ? IconModule.steer.cloneNode(true) as SVGElement : null;
+      
+      if (steerIcon) {
+        steerIcon.classList.add("steer-icon");
+        
+        // Create a container for the icon
+        const iconContainer = document.createElement("div");
+        iconContainer.className = "steer-icon-container";
+        
+        // Add the icon to the container
+        iconContainer.appendChild(steerIcon);
+        
+        // Insert the container before the instruction label
+        const instructionLabel = content.querySelector('.instruction-label');
+        if (instructionLabel) {
+          instructionLabel.insertBefore(iconContainer, instructionLabel.firstChild);
+        }
+      }
+      
       // Add collapsed class by default
       this._element.classList.add("collapsed");
       

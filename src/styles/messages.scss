@@ -339,6 +339,46 @@
       }
     }
   }
+
+  // Dark mode for user instructions
+  .user-message {
+    &.with-instructions {
+      .instruction-label {
+        color: #aaa;
+      }
+      
+      svg.steer-icon {
+        fill: #aaa;
+      }
+      
+      .instruction-block {
+        background-color: rgba(40, 40, 40, 0.4);
+        border-left: 3px solid #444;
+      }
+    }
+  }
+
+  .maintenance-message {
+    &.silenced {
+      background-color: rgba(40, 40, 40, 0.4);
+      
+      .content {
+        &::before {
+          color: #aaa;
+        }
+      }
+      
+      .thinking-icon-container {
+        svg.thinking-icon {
+          stroke: #aaa;
+        }
+      }
+      
+      &:hover {
+        background-color: rgba(50, 50, 50, 0.7);
+      }
+    }
+  }
 }
 
 .dark .saypi-tts-controls {
@@ -422,6 +462,8 @@
       padding: 0.5rem 0;
       margin-bottom: 0.25rem;
       border-radius: 6px;
+      position: relative;
+      margin-left: 34px; // Space for the steering wheel icon
       
       &:before {
         content: attr(data-label);
@@ -433,6 +475,24 @@
         font-size: 0.8em;
         opacity: 0.8;
       }
+    }
+    
+    // Steering wheel icon styles
+    .steer-icon-container {
+      position: absolute;
+      left: -30px;
+      top: 14px;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    svg.steer-icon {
+      width: 24px;
+      height: 24px;
+      opacity: 0.7;
+      fill: #666;
     }
     
     // Styling for the instruction block
@@ -528,31 +588,6 @@
     
     .message-hover-menu {
       display: none;
-    }
-  }
-}
-
-// Dark mode support
-.dark-mode, [data-theme="dark"] {
-  .maintenance-message {
-    &.silenced {
-      background-color: rgba(40, 40, 40, 0.4);
-      
-      .content {
-        &::before {
-          color: #aaa;
-        }
-      }
-      
-      .thinking-icon-container {
-        svg.thinking-icon {
-          stroke: #aaa;
-        }
-      }
-      
-      &:hover {
-        background-color: rgba(50, 50, 50, 0.7);
-      }
     }
   }
 }
