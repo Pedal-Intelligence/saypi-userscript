@@ -21,16 +21,18 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - name: Install dependencies
-      run: npm ci
-      continue-on-error: false
+    
+    - name: Clear npm cache and install dependencies
+      run: |
+        npm cache clean --force
+        npm ci
       timeout-minutes: 10
-      # Add retry mechanism for network-related failures
       env:
         npm_config_fetch_retries: 5
         npm_config_fetch_retry_factor: 2
         npm_config_fetch_retry_mintimeout: 20000
         npm_config_fetch_retry_maxtimeout: 120000
+    
     - name: Run tests
       run: npm test
 
