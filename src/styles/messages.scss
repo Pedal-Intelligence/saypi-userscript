@@ -302,7 +302,7 @@
 }
 
 // Dark mode support
-.dark {
+.dark-mode, [data-theme="dark"] {
   .saypi-telemetry-container {
     background-color: #2a2a2a;
     border-color: #444;
@@ -339,6 +339,46 @@
       }
     }
   }
+
+  // Dark mode for user instructions
+  .user-message {
+    &.with-instructions {
+      .instruction-label {
+        color: #aaa;
+      }
+      
+      svg.steer-icon {
+        fill: #aaa;
+      }
+      
+      .instruction-block {
+        background-color: rgba(40, 40, 40, 0.4);
+        border-left: 3px solid #444;
+      }
+    }
+  }
+
+  .maintenance-message {
+    &.silenced {
+      background-color: rgba(40, 40, 40, 0.4);
+      
+      .content {
+        &::before {
+          color: #aaa;
+        }
+      }
+      
+      .thinking-icon-container {
+        svg.thinking-icon {
+          stroke: #aaa;
+        }
+      }
+      
+      &:hover {
+        background-color: rgba(50, 50, 50, 0.7);
+      }
+    }
+  }
 }
 
 .dark .saypi-tts-controls {
@@ -370,3 +410,184 @@
     border-color: rgb(255, 183, 0);
 }
 */
+
+.assistant-message.maintenance-message {
+  .content {
+    font-style: italic;
+    font-size: 0.9em;
+    color: #666;
+    position: relative;
+  }
+
+  &.silenced {
+    opacity: 0.7;
+    cursor: pointer;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+
+    .content {
+      &:before {
+        content: attr(data-message-label);
+        display: block;
+      }
+      > *:not(.thinking-icon-container) {
+        display: none;
+      }
+    }
+
+    .thinking-icon-container {
+      position: absolute;
+      left: 10px;
+      z-index: 1;
+    }
+
+    .message-hover-menu {
+      display: none;
+    }
+  }
+}
+
+// Style for user prompts with maintenance instructions
+.user-prompt {
+  // Add special handling for maintenance messages with instructions
+  &.with-instructions {
+    cursor: pointer;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    position: relative;
+    
+    // Generate a friendly label from a set of options
+    .instruction-label {
+      font-style: italic;
+      font-size: 0.9em;
+      color: #666;
+      padding: 0.5rem 0;
+      margin-bottom: 0.25rem;
+      border-radius: 6px;
+      position: relative;
+      margin-left: 34px; // Space for the steering wheel icon
+      
+      &:before {
+        content: attr(data-label);
+        display: block;
+      }
+      
+      &:after {
+        content: " (" attr(data-expand-text) ")";
+        font-size: 0.8em;
+        opacity: 0.8;
+      }
+    }
+    
+    // Steering wheel icon styles
+    .steer-icon-container {
+      position: absolute;
+      left: -30px;
+      top: 14px;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    svg.steer-icon {
+      width: 24px;
+      height: 24px;
+      opacity: 0.7;
+      fill: #666;
+    }
+    
+    // Styling for the instruction block
+    .instruction-block {
+      padding: 1rem;
+      margin: 0.5rem 0;
+      background-color: rgba(245, 234, 220, 0.5);
+      border-radius: 6px;
+      border-left: 3px solid #e0d5c5;
+      font-size: 0.95em;
+      white-space: pre-wrap;
+    }
+    
+    // Initially hide the instruction block
+    &.collapsed {
+      .instruction-block {
+        display: none;
+      }
+      .whitespace-pre-wrap {
+        // override the default whitespace-pre-wrap behavior
+        // to collapse the instruction block
+        white-space: normal;
+      }
+    }
+    
+    // When expanded
+    &:not(.collapsed) {
+      .instruction-label:after {
+        content: " (" attr(data-collapse-text) ")";
+      }
+    }
+  }
+}
+
+// Styling for maintenance messages and the brain/thinking icon
+.maintenance-message {
+  position: relative;
+  
+  // Hide the thinking icon by default (for expanded state)
+  .thinking-icon-container {
+    display: none;
+  }
+  
+  &.silenced {
+    max-height: 40px;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease;
+    background-color: rgba(245, 245, 245, 0.5);
+    
+    // Show the thinking icon only when silenced/collapsed
+    .thinking-icon-container {
+      position: absolute;
+      left: 6px;
+      top: 4px;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      
+      svg.thinking-icon {
+        width: 20px;
+        height: 20px;
+        stroke: #666;
+        opacity: 0.8;
+      }
+    }
+    
+    .content {
+      opacity: 0.7;
+      position: relative;
+      
+      &::before {
+        content: attr(data-message-label);
+        display: block;
+        font-size: 0.9em;
+        font-style: italic;
+        color: #666;
+        margin-left: 34px;
+      }
+    }
+    
+    &:hover {
+      background-color: rgba(245, 245, 245, 0.8);
+      .content {
+        opacity: 0.9;
+      }
+    }
+    
+    .message-hover-menu {
+      display: none;
+    }
+  }
+}

@@ -471,6 +471,44 @@
     "message": "Cài đặt",
     "description": "Văn bản của nút để mở cài đặt của tiện ích mở rộng."
   },
+  "submitModeControl": {
+    "description": "Tiêu đề (chú giải công cụ) của điều khiển để chọn thời điểm gửi tin nhắn.",
+    "message": "Chọn thời điểm gửi tin nhắn của bạn"
+  },
+  "submit_mode_agent": {
+    "description": "Chế độ gửi do AI điều khiển.",
+    "message": "đại lý"
+  },
+  "submit_mode_agent_description": {
+    "description": "Mô tả cho chế độ gửi do AI điều khiển.",
+    "message": "$chatbot$ quyết định thời điểm phản hồi dựa trên ngữ cảnh",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Chế độ gửi tự động.",
+    "message": "tự động"
+  },
+  "submit_mode_auto_description": {
+    "description": "Mô tả cho chế độ gửi tự động.",
+    "message": "Tự động gửi khi bạn ngừng nói"
+  },
+  "submit_mode_off": {
+    "description": "Chế độ gửi thủ công.",
+    "message": "thủ công"
+  },
+  "submit_mode_off_description": {
+    "description": "Mô tả cho chế độ gửi thủ công.",
+    "message": "Chỉ gửi khi bạn nhấn nút"
+  },
+  "nicknameLabel": {
+    "message": "Biệt danh",
+    "description": "Nhãn cho trường đầu vào để đặt biệt danh tùy chỉnh cho Trợ lý AI."
+  },
   "greeting": {
     "description": "Thông báo chào được hiển thị khi người dùng được đăng nhập",
     "message": "Xin chào, $name$!",
@@ -618,5 +656,69 @@
   "viewDetails": {
     "description": "Văn bản cho liên kết để xem chi tiết hạn ngạch đầy đủ trên bảng điều khiển.",
     "message": "Xem chi tiết"
+  },
+  "clickToCollapse": {
+    "description": "Văn bản cho biết người dùng có thể nhấp để ẩn nội dung mở rộng.",
+    "message": "Bấm để sụp đổ"
+  },
+  "clickToExpand": {
+    "description": "Văn bản cho biết người dùng có thể nhấp để hiển thị nội dung bị sụp đổ.",
+    "message": "Bấm để mở rộng"
+  },
+  "instructionLabel_context": {
+    "description": "Nhãn thân thiện cho hướng dẫn người dùng cung cấp thông tin cơ bản.",
+    "message": "Cung cấp bối cảnh ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Nhãn thân thiện cho hướng dẫn người dùng xác định những gì người dùng muốn.",
+    "message": "Làm rõ những kỳ vọng ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Nhãn thân thiện cho hướng dẫn người dùng thu hẹp phạm vi của cuộc trò chuyện.",
+    "message": "Tập trung vào cuộc thảo luận ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Nhãn thân thiện cho hướng dẫn người dùng thiết lập ranh giới cho cuộc trò chuyện.",
+    "message": "Thiết lập các bảo vệ ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Nhãn thân thiện cho hướng dẫn người dùng hướng dẫn cách AI nên phản hồi.",
+    "message": "Hướng dẫn phản hồi ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Nhãn thân thiện cho hướng dẫn sử dụng mà nhẹ nhàng gợi ý một hướng.",
+    "message": "Đưa ra một cú hích ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Nhãn thân thiện cho hướng dẫn người dùng hướng dẫn hướng hội thoại.",
+    "message": "Chỉ đạo cuộc trò chuyện ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
+    "message": "Giữ suy nghĩ này ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
+    "message": "Ghi chú tinh thần ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
+    "message": "Xử lý trong nền ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
+    "message": "Ghi nhớ chi tiết này ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
+    "message": "Tiết kiệm suy nghĩ đó cho sau này ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
+    "message": "Theo dõi bối cảnh ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
+    "message": "Tucking cái này đi ..."
   }
 }

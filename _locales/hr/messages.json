@@ -471,6 +471,44 @@
     "message": "postavke",
     "description": "Tekst gumba za otvaranje postavki proširenja."
   },
+  "submitModeControl": {
+    "description": "Naslov (opis) kontrole za odabir vremena slanja poruka.",
+    "message": "Odaberite kada želite poslati svoje poruke"
+  },
+  "submit_mode_agent": {
+    "description": "Način podnošenja vođen umjetnom inteligencijom.",
+    "message": "agent"
+  },
+  "submit_mode_agent_description": {
+    "description": "Opis za način podnošenja vođen umjetnom inteligencijom.",
+    "message": "$chatbot$ odlučuje kada će odgovoriti na temelju konteksta",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatski način podnošenja.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Opis za način automatskog podnošenja.",
+    "message": "Automatski pošalji kada prestaneš govoriti"
+  },
+  "submit_mode_off": {
+    "description": "Način ručnog podnošenja.",
+    "message": "priručnik"
+  },
+  "submit_mode_off_description": {
+    "description": "Opis za način ručnog podnošenja.",
+    "message": "Pošaljite samo kada pritisnete gumb"
+  },
+  "nicknameLabel": {
+    "message": "Nadimak",
+    "description": "Oznaka za polje unosa za postavljanje prilagođenog nadimka za pomoćnika AI."
+  },
   "greeting": {
     "description": "Poruka pozdrava prikazana kada je korisnik prijavljen",
     "message": "Bok, $name$!",
@@ -618,5 +656,69 @@
   "viewDetails": {
     "description": "Tekst za vezu za prikaz potpunih detalja o kvoti na nadzornoj ploči.",
     "message": "Pogledajte detalje"
+  },
+  "clickToCollapse": {
+    "description": "Tekst koji označava korisnik može kliknuti za sakrivanje proširenog sadržaja.",
+    "message": "Kliknite za kolaps"
+  },
+  "clickToExpand": {
+    "description": "Tekst koji označava korisnik može kliknuti za prikaz urušenog sadržaja.",
+    "message": "Kliknite za proširenje"
+  },
+  "instructionLabel_context": {
+    "description": "Prijateljska naljepnica za upute korisnika koja pruža pozadinske informacije.",
+    "message": "Pružanje konteksta ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Prijateljska naljepnica za upute korisnika koja definira ono što korisnik želi.",
+    "message": "Pojašnjavajući očekivanja ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Prijateljska oznaka za upute korisnika koja sužava opseg razgovora.",
+    "message": "Usredotočujući raspravu ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Prijateljska oznaka za upute korisnika koja uspostavlja granice za razgovor.",
+    "message": "Postavljajući garders ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Prijateljska naljepnica za upute korisnika koja vodi kako AI treba reagirati.",
+    "message": "Vodeći odgovori ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Prijateljska naljepnica za upute korisnika koja nježno sugerira smjer.",
+    "message": "Davanje guranja ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Prijateljska naljepnica za upute korisnika koja vodi smjer razgovora.",
+    "message": "Upravljanje razgovorom ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
+    "message": "Držeći ovu misao ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
+    "message": "Izrada mentalne note ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
+    "message": "Obrada u pozadini ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
+    "message": "Prisjećajući se ovog detalja ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
+    "message": "Spašavajući tu misao za kasnije ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
+    "message": "Praćenje konteksta ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
+    "message": "Uguravanje ovoga ..."
   }
 }

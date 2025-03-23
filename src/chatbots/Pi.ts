@@ -1,4 +1,4 @@
-import { AssistantResponse, MessageControls } from "../dom/MessageElements";
+import { AssistantResponse, MessageControls, UserMessage } from "../dom/MessageElements";
 import EventBus from "../events/EventBus";
 import {
   AddedText,
@@ -10,9 +10,10 @@ import {
 import { SpeechSynthesisVoiceRemote } from "../tts/SpeechModel";
 import { PiSpeechSourceParser } from "../tts/SpeechSourceParsers";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
-import { Chatbot, UserPrompt } from "./Chatbot";
+import { UserPrompt } from "./Chatbot";
+import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
 
-class PiAIChatbot implements Chatbot {
+class PiAIChatbot extends AbstractChatbot {
   getName(): string {
     return "Pi";
   }
@@ -84,12 +85,24 @@ class PiAIChatbot implements Chatbot {
     return "div.break-anywhere:not(.justify-end)";
   }
 
+  getUserPromptSelector(): string {
+    return "div.flex.justify-end.break-anywhere";
+  }
+
+  getUserMessageContentSelector(): string {
+    return "div.max-w-full";
+  }
+
   getAssistantResponseContentSelector(): string {
     return "div.w-full";
   }
 
   getAssistantResponse(element: HTMLElement): AssistantResponse {
     return new PiResponse(element);
+  }
+
+  getUserMessage(element: HTMLElement): UserMessage {
+    return new UserMessage(element, this);
   }
 
   getExtraCallButtonClasses(): string[] {
@@ -120,6 +133,10 @@ class PiAIChatbot implements Chatbot {
     return `https://pi.ai/public/media/voice-previews/voice-${voiceId.slice(
       -1
     )}.mp3`;
+  }
+
+  getContextWindowCapacityCharacters(): number {
+    return 500; // Pi has a 4k character limit
   }
 }
 
@@ -292,7 +309,7 @@ class PiTextStream extends ElementTextStream {
   }
 }
 
-class PiPrompt extends UserPrompt {
+class PiPrompt extends AbstractUserPrompt {
   private textArea: HTMLTextAreaElement = this.element as HTMLTextAreaElement;
   readonly PROMPT_CHARACTER_LIMIT = 4000;
 

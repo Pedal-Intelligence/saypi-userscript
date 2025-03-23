@@ -400,6 +400,7 @@ export default class AudioModule {
       voiceConverter.send({ type: "changeVoice", ...detail });
     });
     EventBus.on("audio:skipNext", (e) => {
+      console.debug("Skipping next audio");
       outputActor.send("skipNext");
     });
     EventBus.on("audio:skipCurrent", (e) => {

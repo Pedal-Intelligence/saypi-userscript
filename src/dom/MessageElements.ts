@@ -15,6 +15,7 @@ import EventBus from "../events/EventBus";
 import { isMobileDevice } from "../UserAgentModule";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { SpeechHistoryModule } from "../tts/SpeechHistoryModule";
+import { MessageState } from "../tts/MessageHistoryModule";
 import telemetryModule, { TelemetryData } from "../TelemetryModule";
 import { IconModule } from "../icons/IconModule";
 
@@ -301,6 +302,56 @@ abstract class AssistantResponse {
 
   async decorateCost(charge: UtteranceCharge): Promise<void> {
     this.messageControls.decorateCost(charge);
+  }
+
+  async decorateState(state: MessageState): Promise<void> {
+    if (state.isMaintenanceMessage) {
+      const element = this.element;
+      element.classList.add("maintenance-message", "silenced");
+      
+      // Generate a friendly label from a set of options
+      const friendlyLabels = [
+        chrome.i18n.getMessage("maintenanceLabel_saving"),
+        chrome.i18n.getMessage("maintenanceLabel_processing"),
+        chrome.i18n.getMessage("maintenanceLabel_holding"),
+        chrome.i18n.getMessage("maintenanceLabel_mental_note"),
+        chrome.i18n.getMessage("maintenanceLabel_tracking"),
+        chrome.i18n.getMessage("maintenanceLabel_tucking"),
+        chrome.i18n.getMessage("maintenanceLabel_remembering")
+      ];
+      const randomLabel = friendlyLabels[Math.floor(Math.random() * friendlyLabels.length)];
+      
+      // Find the content element and add the label as a data attribute
+      const contentElement = await this.decoratedContent();
+      if (contentElement) {
+        // Create a label that includes both icon and text
+        const brainIcon = IconModule.brain ? IconModule.brain.cloneNode(true) as SVGElement : null;
+        
+        // Set the label with the icon marker that will be replaced with actual SVG in CSS
+        contentElement.dataset.messageLabel = `${randomLabel} (${chrome.i18n.getMessage("clickToExpand")})`;
+        
+        // If we have a brain icon from IconModule, add it to the content element
+        if (brainIcon) {
+          brainIcon.classList.add("thinking-icon");
+          contentElement.dataset.hasThinkingIcon = "true";
+          
+          // Create a container for the icon if it doesn't exist
+          let iconContainer = contentElement.querySelector(".thinking-icon-container");
+          if (!iconContainer) {
+            iconContainer = document.createElement("div");
+            iconContainer.className = "thinking-icon-container";
+            contentElement.insertBefore(iconContainer, contentElement.firstChild);
+          }
+          
+          // Add the icon to the container
+          iconContainer.appendChild(brainIcon);
+        }
+      }
+      
+      element.addEventListener("click", () => {
+        element.classList.toggle("silenced");
+      });
+    }
   }
 
   toString(): string {
@@ -1735,3 +1786,187 @@ abstract class MessageControls {
 }
 
 export { AssistantResponse, MessageControls, PopupMenu };
+
+/**
+ * Represents a user message in the chat history
+ */
+class UserMessage {
+  private _element: HTMLElement;
+  private _contentElement: HTMLElement | null = null;
+  private chatbot: Chatbot;
+
+  constructor(element: HTMLElement, chatbot: Chatbot) {
+    this._element = element;
+    this.chatbot = chatbot;
+    this.decorate();
+  }
+
+  private decorate(): void {
+    this._element.classList.add("chat-message", "user-prompt");
+  }
+
+  /**
+   * Gets the CSS selector for content within this user message
+   */
+  get contentSelector(): string {
+    return this.chatbot.getUserMessageContentSelector();
+  }
+
+  /**
+   * Gets the actual content container element within the message
+   * @returns The content element or null if not found
+   */
+  get contentElement(): HTMLElement | null {
+    if (this._contentElement) {
+      return this._contentElement;
+    }
+
+    // Use the chatbot-provided selector to find the content element
+    const contentElement = this._element.querySelector(this.contentSelector);
+    if (contentElement) {
+      this._contentElement = contentElement as HTMLElement;
+      contentElement.classList.add("user-message-content");
+      return this._contentElement;
+    }
+
+    // Fallback to the first div if the specific selector fails
+    const firstDiv = this._element.querySelector("div > div");
+    if (firstDiv) {
+      this._contentElement = firstDiv as HTMLElement;
+      return this._contentElement;
+    }
+
+    return null;
+  }
+
+  /**
+   * Get the full element for this message
+   */
+  get element(): HTMLElement {
+    return this._element;
+  }
+
+  /**
+   * Get the text content of the user message
+   */
+  get text(): string {
+    const content = this.contentElement;
+    if (content) {
+      return content.innerText || content.textContent || "";
+    }
+    return "";
+  }
+
+  /**
+   * Checks if this message contains maintenance instructions
+   */
+  hasInstructions(): boolean {
+    const content = this.contentElement;
+    if (!content) return false;
+    
+    // Check for both unescaped and escaped instruction tags
+    const html = content.innerHTML;
+    return (
+      /<instruction>([\s\S]*?)<\/instruction>/.test(html) || 
+      /&lt;instruction&gt;([\s\S]*?)&lt;\/instruction&gt;/.test(html)
+    );
+  }
+
+  /**
+   * Process and collapse instruction blocks in the message
+   */
+  processInstructions(): void {
+    const content = this.contentElement;
+    if (!content) return;
+    
+    const html = content.innerHTML;
+    
+    // Check for both unescaped and escaped instruction tags
+    const unescapedRegex = /<instruction>([\s\S]*?)<\/instruction>/;
+    const escapedRegex = /&lt;instruction&gt;([\s\S]*?)&lt;\/instruction&gt;/;
+    
+    let instructionMatch = html.match(unescapedRegex);
+    let isEscaped = false;
+    
+    // If no match with unescaped tags, try with escaped tags
+    if (!instructionMatch) {
+      instructionMatch = html.match(escapedRegex);
+      isEscaped = true;
+    }
+    
+    if (instructionMatch) {
+      // Mark the message as having instructions
+      this._element.classList.add("with-instructions");
+      
+      // Generate a friendly label from a set of options
+      const friendlyLabels = [
+        chrome.i18n.getMessage("instructionLabel_steering"),
+        chrome.i18n.getMessage("instructionLabel_nudge"),
+        chrome.i18n.getMessage("instructionLabel_guiding"),
+        chrome.i18n.getMessage("instructionLabel_guardrails"),
+        chrome.i18n.getMessage("instructionLabel_context"),
+        chrome.i18n.getMessage("instructionLabel_focusing"),
+        chrome.i18n.getMessage("instructionLabel_expectations")
+      ];
+      const randomLabel = friendlyLabels[Math.floor(Math.random() * friendlyLabels.length)];
+      
+      // Create a wrapper for the instruction block - keep the HTML as is for proper rendering
+      const instructionHTML = instructionMatch[1];
+      
+      // Replace the instruction block with our custom elements while preserving other content
+      const newHTML = isEscaped ? 
+        html.replace(
+          escapedRegex,
+          `<div class="instruction-label" data-label="${randomLabel}" data-expand-text="${chrome.i18n.getMessage("clickToExpand")}" data-collapse-text="${chrome.i18n.getMessage("clickToCollapse")}"></div>
+           <div class="instruction-block">${instructionHTML}</div>`
+        ) :
+        html.replace(
+          unescapedRegex,
+          `<div class="instruction-label" data-label="${randomLabel}" data-expand-text="${chrome.i18n.getMessage("clickToExpand")}" data-collapse-text="${chrome.i18n.getMessage("clickToCollapse")}"></div>
+           <div class="instruction-block">${instructionHTML}</div>`
+        );
+      
+      content.innerHTML = newHTML;
+      
+      // Add the steering wheel icon
+      const steerIcon = IconModule.steer ? IconModule.steer.cloneNode(true) as SVGElement : null;
+      
+      if (steerIcon) {
+        steerIcon.classList.add("steer-icon");
+        
+        // Create a container for the icon
+        const iconContainer = document.createElement("div");
+        iconContainer.className = "steer-icon-container";
+        
+        // Add the icon to the container
+        iconContainer.appendChild(steerIcon);
+        
+        // Insert the container before the instruction label
+        const instructionLabel = content.querySelector('.instruction-label');
+        if (instructionLabel) {
+          instructionLabel.insertBefore(iconContainer, instructionLabel.firstChild);
+        }
+      }
+      
+      // Add collapsed class by default
+      this._element.classList.add("collapsed");
+      
+      // Add click handler to toggle visibility
+      this._element.addEventListener("click", (e) => {
+        // Only toggle if clicking on the message itself, not on links or other interactive elements
+        if (e.target === this._element || 
+            (e.target as HTMLElement).classList.contains('instruction-label') ||
+            this._element.contains(e.target as HTMLElement)) {
+          this._element.classList.toggle("collapsed");
+          e.stopPropagation(); // Prevent event bubbling
+        }
+      });
+    }
+  }
+
+  toString(): string {
+    return `UserMessage: "${this.text.substring(0, 20)}..."`;
+  }
+}
+
+export { UserMessage };

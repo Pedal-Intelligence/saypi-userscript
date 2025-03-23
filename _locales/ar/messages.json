@@ -471,6 +471,44 @@
     "message": "إعدادات",
     "description": "نص الزر لفتح إعدادات الامتداد."
   },
+  "submitModeControl": {
+    "description": "عنوان (تلميح الأداة) لعنصر التحكم لتحديد متى يجب إرسال الرسائل.",
+    "message": "حدد متى ترسل رسائلك"
+  },
+  "submit_mode_agent": {
+    "description": "وضع التقديم القائم على الذكاء الاصطناعي.",
+    "message": "عامل"
+  },
+  "submit_mode_agent_description": {
+    "description": "وصف لوضع التقديم المعتمد على الذكاء الاصطناعي.",
+    "message": "يقرر $chatbot$ متى يتم الرد بناءً على السياق",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "وضع التقديم التلقائي.",
+    "message": "آلي"
+  },
+  "submit_mode_auto_description": {
+    "description": "وصف لوضع التقديم التلقائي.",
+    "message": "الإرسال تلقائيًا عند التوقف عن التحدث"
+  },
+  "submit_mode_off": {
+    "description": "وضع التقديم اليدوي.",
+    "message": "يدوي"
+  },
+  "submit_mode_off_description": {
+    "description": "وصف لوضع التقديم اليدوي.",
+    "message": "أرسل فقط عند الضغط على الزر"
+  },
+  "nicknameLabel": {
+    "message": "كنية",
+    "description": "تسمية لحقل الإدخال لتعيين لقب مخصص لمساعد الذكاء الاصطناعى."
+  },
   "greeting": {
     "description": "رسالة تحية معروضة عند تسجيل الدخول للمستخدم",
     "message": "مرحبًا ، اسم $name$!",
@@ -618,5 +656,69 @@
   "viewDetails": {
     "description": "نص على الرابط لعرض تفاصيل الحصص الكاملة على لوحة القيادة.",
     "message": "عرض التفاصيل"
+  },
+  "clickToCollapse": {
+    "description": "يمكن للنص الذي يشير إلى المستخدم النقر لإخفاء المحتوى الموسع.",
+    "message": "انقر للانهيار"
+  },
+  "clickToExpand": {
+    "description": "يمكن للمستخدم الذي يشير إلى أن المستخدم ينقر لإظهار المحتوى المنهار.",
+    "message": "انقر للتوسع"
+  },
+  "instructionLabel_context": {
+    "description": "تسمية ودية لتعليم المستخدم الذي يوفر معلومات أساسية.",
+    "message": "توفير السياق ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "تسمية ودية لتعليم المستخدم الذي يحدد ما يريده المستخدم.",
+    "message": "توضيح التوقعات ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "تسمية ودية لتعليم المستخدم الذي يضيق نطاق المحادثة.",
+    "message": "تركيز المناقشة ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "تسمية ودية لتعليم المستخدم الذي يحدد حدود للمحادثة.",
+    "message": "إعداد الدرابزين ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "تسمية ودية لتعليم المستخدم الذي يوجه كيفية الرد على الذكاء الاصطناعى.",
+    "message": "ردود توجيهية ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "تسمية ودية لتعليم المستخدم الذي يوحي برفق الاتجاه.",
+    "message": "إعطاء دفع ..."
+  },
+  "instructionLabel_steering": {
+    "description": "تسمية ودية لتعليم المستخدم الذي يوجه اتجاه المحادثة.",
+    "message": "توجيه المحادثة ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "تسمية ودية لرسالة صيانة مساعد.",
+    "message": "عقد هذا الفكر ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "تسمية ودية لرسالة صيانة مساعد.",
+    "message": "تقديم ملاحظة عقلية ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "تسمية ودية لرسالة صيانة مساعد.",
+    "message": "المعالجة في الخلفية ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "تسمية ودية لرسالة صيانة مساعد.",
+    "message": "تذكر هذه التفاصيل ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "تسمية ودية لرسالة صيانة مساعد.",
+    "message": "إنقاذ هذا الفكر في وقت لاحق ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "تسمية ودية لرسالة صيانة مساعد.",
+    "message": "تتبع السياق ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "تسمية ودية لرسالة صيانة مساعد.",
+    "message": "سقيف هذا بعيدا ..."
   }
 }

@@ -474,6 +474,15 @@ class ButtonModule {
   }
 }
 
-// Singleton
-const chatbot = ChatbotService.getChatbot();
-export const buttonModule = new ButtonModule(chatbot);
+// Singleton initialization
+let instance = null;
+
+async function initializeModule() {
+  if (!instance) {
+    const chatbot = await ChatbotService.getChatbot();
+    instance = new ButtonModule(chatbot);
+  }
+  return instance;
+}
+
+export const buttonModule = await initializeModule();

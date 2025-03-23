@@ -471,6 +471,44 @@
     "message": "Beállítások elemre",
     "description": "A bővítmény beállításainak megnyitására szolgáló gomb szövege."
   },
+  "submitModeControl": {
+    "description": "A vezérlőelem címe (elemleírása), amellyel kiválaszthatja, hogy mikor kell elküldeni az üzeneteket.",
+    "message": "Válassza ki, hogy mikor küldje el üzeneteit"
+  },
+  "submit_mode_agent": {
+    "description": "AI-vezérelt benyújtási mód.",
+    "message": "ügynök"
+  },
+  "submit_mode_agent_description": {
+    "description": "Az AI-vezérelt küldési mód leírása.",
+    "message": "A $chatbot$ a kontextus alapján dönti el, hogy mikor válaszoljon",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatikus beküldési mód.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Az automatikus beküldési mód leírása.",
+    "message": "Automatikus beküldés, ha abbahagyja a beszédet"
+  },
+  "submit_mode_off": {
+    "description": "Kézi beküldési mód.",
+    "message": "kézikönyv"
+  },
+  "submit_mode_off_description": {
+    "description": "A kézi beküldési mód leírása.",
+    "message": "Csak akkor küldje el, ha megnyomja a gombot"
+  },
+  "nicknameLabel": {
+    "message": "Becenév",
+    "description": "Címkézze a bemeneti mezőt az AI asszisztens egyedi becenevének beállításához."
+  },
   "greeting": {
     "description": "Üdvözlőlap -üzenet jelenik meg, amikor a felhasználó be van jelentkezve",
     "message": "Szia, $name$!",
@@ -618,5 +656,69 @@
   "viewDetails": {
     "description": "Szöveg a linkhez a teljes kvóta részleteinek megtekintéséhez a műszerfalon.",
     "message": "A részletek megtekintése"
+  },
+  "clickToCollapse": {
+    "description": "A felhasználó jelző szöveg kattintson a kibővített tartalom elrejtésére.",
+    "message": "Kattintson az összeomláshoz"
+  },
+  "clickToExpand": {
+    "description": "A felhasználó jelző szöveg kattinthat az összeomlott tartalom megjelenítéséhez.",
+    "message": "Kattintson a bővítéshez"
+  },
+  "instructionLabel_context": {
+    "description": "Barátságos címke a felhasználói oktatáshoz, amely háttérinformációkat szolgáltat.",
+    "message": "Kontextus biztosítása ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Barátságos címke a felhasználói oktatáshoz, amely meghatározza, hogy mit akar a felhasználó.",
+    "message": "Az elvárások tisztázása ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Barátságos címke a felhasználói oktatáshoz, amely szűkíti a beszélgetés körét.",
+    "message": "A vita összpontosítása ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Barátságos címke a felhasználói oktatáshoz, amely meghatározza a beszélgetés határait.",
+    "message": "A Guardbils beállítása ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Barátságos címke a felhasználói oktatáshoz, amely irányítja, hogy az AI hogyan reagáljon.",
+    "message": "Vezető válaszok ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Barátságos címke a felhasználói oktatáshoz, amely óvatosan javasol egy irányt.",
+    "message": "Bizonyítva ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Barátságos címke a felhasználói oktatáshoz, amely irányítja a beszélgetési irányt.",
+    "message": "A beszélgetés irányítása ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Barátságos címke az összeomlott asszisztens karbantartási üzenethez.",
+    "message": "Ezt a gondolatot tartva ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Barátságos címke az összeomlott asszisztens karbantartási üzenethez.",
+    "message": "Mentális jegyzet készítése ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Barátságos címke az összeomlott asszisztens karbantartási üzenethez.",
+    "message": "Feldolgozás a háttérben ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Barátságos címke az összeomlott asszisztens karbantartási üzenethez.",
+    "message": "Emlékezve erre a részletre ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Barátságos címke az összeomlott asszisztens karbantartási üzenethez.",
+    "message": "Megmenteni ezt a gondolatot később ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Barátságos címke az összeomlott asszisztens karbantartási üzenethez.",
+    "message": "A kontextus nyomon követése ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Barátságos címke az összeomlott asszisztens karbantartási üzenethez.",
+    "message": "Ezt eldobva ..."
   }
 }

@@ -471,6 +471,44 @@
     "message": "Nastavení",
     "description": "Text tlačítka pro otevření nastavení rozšíření."
   },
+  "submitModeControl": {
+    "description": "Název (popisek) ovládacího prvku pro výběr, kdy mají být zprávy odesílány.",
+    "message": "Vyberte, kdy chcete zprávy odeslat"
+  },
+  "submit_mode_agent": {
+    "description": "Režim odesílání řízený umělou inteligencí.",
+    "message": "činidlo"
+  },
+  "submit_mode_agent_description": {
+    "description": "Popis režimu odesílání řízeného umělou inteligencí.",
+    "message": "$chatbot$ rozhoduje, kdy odpovědět, na základě kontextu",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Režim automatického odesílání.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Popis režimu automatického odesílání.",
+    "message": "Automaticky odeslat, když přestanete mluvit"
+  },
+  "submit_mode_off": {
+    "description": "Režim ručního odesílání.",
+    "message": "manuál"
+  },
+  "submit_mode_off_description": {
+    "description": "Popis režimu ručního odesílání.",
+    "message": "Odešlete pouze po stisknutí tlačítka"
+  },
+  "nicknameLabel": {
+    "message": "Přezdívka",
+    "description": "Štítek pro vstupní pole pro nastavení vlastní přezdívky pro asistenta AI."
+  },
   "greeting": {
     "description": "Zobrazení pozdravování, když je uživatel přihlášen",
     "message": "Ahoj, $name$!",
@@ -618,5 +656,69 @@
   "viewDetails": {
     "description": "Text pro odkaz pro zobrazení úplných podrobností o kvótě na palubní desce.",
     "message": "Zobrazit podrobnosti"
+  },
+  "clickToCollapse": {
+    "description": "Text označující uživatel může kliknout a skrýt rozšířený obsah.",
+    "message": "Kliknutím na kolaps"
+  },
+  "clickToExpand": {
+    "description": "Text označující uživatel může kliknout a zobrazit zhroucený obsah.",
+    "message": "Kliknutím rozbalte"
+  },
+  "instructionLabel_context": {
+    "description": "Přátelský štítek pro instrukci uživatele, který poskytuje základní informace.",
+    "message": "Poskytování kontextu ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Přátelský štítek pro instrukci uživatele, který definuje, co uživatel chce.",
+    "message": "Objasnění očekávání ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Přátelský štítek pro instrukci uživatele, který zužuje rozsah konverzace.",
+    "message": "Zaměření na diskusi ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Přátelský štítek pro instrukci uživatele, který stanoví hranice pro konverzaci.",
+    "message": "Nastavení zábradlí ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Přátelský štítek pro instrukci uživatele, který vede, jak by měla AI reagovat.",
+    "message": "Vedení odpovědí ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Přátelský štítek pro instrukci uživatele, který jemně navrhuje směr.",
+    "message": "Dávat šťouchnutí ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Přátelský štítek pro instrukci uživatele, který vede směr konverzace.",
+    "message": "Řízení konverzace ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
+    "message": "Držet tuto myšlenku ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
+    "message": "Dělat mentální poznámku ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
+    "message": "Zpracování na pozadí ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
+    "message": "Vzpomínka na tento detail ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
+    "message": "Ukládání této myšlenky na později ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
+    "message": "Sledování kontextu ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
+    "message": "Zastrčit to pryč ..."
   }
 }

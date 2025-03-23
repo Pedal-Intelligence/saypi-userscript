@@ -20,10 +20,11 @@ import {
   audioProviders,
 } from "../tts/SpeechModel";
 import EventBus from "../events/EventBus";
-import { AssistantResponse } from "./MessageElements";
+import { AssistantResponse, UserMessage } from "./MessageElements";
 import { AssistantWritingEvent } from "./MessageEvents";
 import { Chatbot } from "../chatbots/Chatbot";
 import { findRootAncestor } from "./DOMModule";
+import { MessageState, MessageHistoryModule } from "../tts/MessageHistoryModule";
 interface ResourceReleasable {
   teardown(): void;
 }
@@ -127,6 +128,7 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
   protected speechSynthesis: SpeechSynthesisModule;
   protected ttsControlsModule: TTSControlsModule;
   protected haltOnFirst: boolean = false; // stop searching after the first chat message is found
+  protected messageHistory = MessageHistoryModule.getInstance();
   constructor(
     chatHistoryElement: HTMLElement,
     selector: string,
@@ -147,6 +149,10 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
     message: AssistantResponse
   ): Promise<StreamedSpeech | null>;
 
+  protected abstract streamState(
+    message: AssistantResponse
+  ): Promise<MessageState | null>;
+
   protected async callback(mutations: MutationRecord[]): Promise<void> {
     for (const mutation of mutations) {
       // Iterate over added nodes
@@ -155,6 +161,8 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
           const addedElement = node as Element;
           const responseObservations =
             await this.findAndDecorateAssistantResponses(addedElement);
+          const promptObservations = 
+            await this.findAndDecorateUserPrompts(addedElement);
           if (this.haltOnFirst && responseObservations[0]?.isReady()) {
             // only expecting one new chat message at a time, so
             // skip this mutation if the chat message is already decorated
@@ -171,6 +179,7 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
       ) {
         const mutatedElement = mutation.target as Element;
         this.findAndDecorateAssistantResponses(mutatedElement);
+        this.findAndDecorateUserPrompts(mutatedElement);
       }
     }
   }
@@ -216,6 +225,36 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
     return observations;
   }
 
+  static findUserPrompt(
+    searchRoot: Element,
+    match: Element
+  ): Observation {
+    if (match) {
+      const found = Observation.foundUndecorated(match.id, match);
+      if (match.classList.contains("user-prompt")) {
+        return Observation.foundAndDecorated(found);
+      }
+      return found;
+    }
+    return Observation.notFound("");
+  }
+
+  static findUserPrompts(
+    searchRoot: Element,
+    querySelector: string
+  ): Observation[] {
+    const deepMatches = searchRoot.querySelectorAll(querySelector);
+    const observations: Observation[] = [];
+    for (const match of deepMatches) {
+      const observation = ChatHistoryMessageObserver.findUserPrompt(
+        searchRoot,
+        match
+      );
+      observations.push(observation);
+    }
+    return observations;
+  }
+
   static findFirstAssistantResponse(
     searchRoot: Element,
     querySelector: string
@@ -235,6 +274,11 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
     return ChatHistoryMessageObserver.findAssistantResponses(searchRoot, query);
   }
 
+  findUserPrompts(searchRoot: Element): Observation[] {
+    const query = this.chatbot.getUserPromptSelector();
+    return ChatHistoryMessageObserver.findUserPrompts(searchRoot, query);
+  }
+
   /**
    * Decorates the assistant response with the necessary classes and attributes,
    * but does not add any additional functionality, i.e. speech
@@ -245,6 +289,24 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
     messageElement: HTMLElement
   ): AssistantResponse {
     const message = this.chatbot.getAssistantResponse(messageElement);
+    return message;
+  }
+
+  /**
+   * Decorates the user prompt message with the necessary classes and attributes
+   * @param messageElement - the chat message to decorate
+   * @returns UserMessage - the decorated user message
+   */
+  public decorateUserPrompt(
+    messageElement: HTMLElement
+  ): UserMessage {
+    const message = this.chatbot.getUserMessage(messageElement);
+    
+    // Process any maintenance instructions
+    if (message.hasInstructions()) {
+      message.processInstructions();
+    }
+    
     return message;
   }
 
@@ -269,6 +331,11 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
         );
         decoratedObservations.push(decoratedObservation);
 
+        const state = await this.streamState(message);
+        if (state) {
+          await message.decorateState(state);
+        }
+
         const speech = await this.streamSpeech(message);
         if (speech) {
           if (speech.utterance) {
@@ -285,6 +352,30 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
         }
       }
     }
+    return decoratedObservations;
+  }
+
+  async findAndDecorateUserPrompts(searchRoot: Element): Promise<Observation[]> {
+    const initialObservations: Observation[] = this.findUserPrompts(searchRoot);
+    const decoratedObservations: Observation[] = [];
+    
+    for (const initialObservation of initialObservations) {
+      if (
+        initialObservation.found &&
+        initialObservation.isNew &&
+        !initialObservation.decorated
+      ) {
+        const message = this.decorateUserPrompt(
+          initialObservation.target as HTMLElement
+        );
+        const decoratedObservation = Observation.foundAndDecorated(
+          initialObservation,
+          message
+        );
+        decoratedObservations.push(decoratedObservation);
+      }
+    }
+    
     return decoratedObservations;
   }
 
@@ -330,6 +421,9 @@ class ChatHistoryOldMessageObserver extends ChatHistoryMessageObserver {
       }
     }
 
+    // Also decorate user prompts during initial load
+    await this.findAndDecorateUserPrompts(root);
+
     return messagesFound;
   }
 
@@ -338,6 +432,11 @@ class ChatHistoryOldMessageObserver extends ChatHistoryMessageObserver {
   ): Promise<StreamedSpeech | null> {
     // query the speech history module for the utterance
     return await this.streamSpeechFromHistory(this.speechHistory, message);
+  }
+
+  async streamState(message: AssistantResponse): Promise<MessageState | null> {
+    const hash = message.hash;
+    return this.messageHistory.getMessageState(hash);
   }
 }
 
@@ -542,6 +641,11 @@ class ChatHistoryNewMessageObserver
         onError(lateChange);
       }
     });
+  }
+
+  async streamState(message: AssistantResponse): Promise<MessageState | null> {
+    const hash = message.hash;
+    return this.messageHistory.getMessageState(hash);
   }
 }
 

@@ -471,6 +471,44 @@
     "message": "Configurações",
     "description": "O texto do botão para abrir as configurações da extensão."
   },
+  "submitModeControl": {
+    "description": "O título (dica) do controle para selecionar quando as mensagens devem ser enviadas.",
+    "message": "Selecione quando enviar suas mensagens"
+  },
+  "submit_mode_agent": {
+    "description": "Modo de envio orientado por IA.",
+    "message": "agente"
+  },
+  "submit_mode_agent_description": {
+    "description": "Descrição do modo de envio orientado por IA.",
+    "message": "$chatbot$ decide quando responder com base no contexto",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Modo de envio automático.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Descrição do modo de envio automático.",
+    "message": "Enviar automaticamente quando você parar de falar"
+  },
+  "submit_mode_off": {
+    "description": "Modo de envio manual.",
+    "message": "manual"
+  },
+  "submit_mode_off_description": {
+    "description": "Descrição do modo de envio manual.",
+    "message": "Envie apenas quando você pressionar o botão"
+  },
+  "nicknameLabel": {
+    "message": "Apelido",
+    "description": "Etiqueta para o campo de entrada para definir um apelido personalizado para o assistente de IA."
+  },
   "greeting": {
     "description": "Mensagem de saudação mostrada quando o usuário está assinado",
     "message": "Oi, $name$!",
@@ -618,5 +656,69 @@
   "viewDetails": {
     "description": "Texto para o link para visualizar detalhes completos da cota no painel.",
     "message": "Ver detalhes"
+  },
+  "clickToCollapse": {
+    "description": "O texto indicando o usuário pode clicar para ocultar o conteúdo expandido.",
+    "message": "Clique para entrar em colapso"
+  },
+  "clickToExpand": {
+    "description": "O texto indicando o usuário pode clicar para mostrar conteúdo em colapso.",
+    "message": "Clique para expandir"
+  },
+  "instructionLabel_context": {
+    "description": "Etiqueta amigável para instrução do usuário que fornece informações básicas.",
+    "message": "Fornecendo contexto ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Etiqueta amigável para instrução do usuário que define o que o usuário deseja.",
+    "message": "Esclarecendo as expectativas ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Etiqueta amigável para instrução do usuário que restringe o escopo da conversa.",
+    "message": "Concentrando a discussão ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Etiqueta amigável para instrução do usuário que estabelece limites para a conversa.",
+    "message": "Definindo o Guardrails ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Etiqueta amigável para instrução do usuário que orienta como a IA deve responder.",
+    "message": "Respostas orientadoras ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Etiqueta amigável para instrução do usuário que sugere gentilmente uma direção.",
+    "message": "Dando uma cutucada ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Etiqueta amigável para instrução do usuário que orienta a direção da conversa.",
+    "message": "Dirigindo a conversa ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Etiqueta amigável para mensagem de manutenção do assistente em colapso.",
+    "message": "Segurando este pensamento ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Etiqueta amigável para mensagem de manutenção do assistente em colapso.",
+    "message": "Fazendo uma nota mental ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Etiqueta amigável para mensagem de manutenção do assistente em colapso.",
+    "message": "Processamento em segundo plano ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Etiqueta amigável para mensagem de manutenção do assistente em colapso.",
+    "message": "Lembrando esse detalhe ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Etiqueta amigável para mensagem de manutenção do assistente em colapso.",
+    "message": "Salvando esse pensamento para mais tarde ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Etiqueta amigável para mensagem de manutenção do assistente em colapso.",
+    "message": "Mantendo o controle do contexto ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Etiqueta amigável para mensagem de manutenção do assistente em colapso.",
+    "message": "Afastando isso ..."
   }
 }

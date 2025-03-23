@@ -475,6 +475,44 @@
       }
     }
   },
+  "submitModeControl": {
+    "message": "Select when to submit your messages",
+    "description": "The title (tooltip) of the control to select when messages should be submitted."
+  },
+  "submit_mode_auto": {
+    "message": "auto",
+    "description": "Automatic submission mode."
+  },
+  "submit_mode_agent": {
+    "message": "agent",
+    "description": "AI-driven submission mode."
+  },
+  "submit_mode_off": {
+    "message": "manual",
+    "description": "Manual submission mode."
+  },
+  "submit_mode_auto_description": {
+    "message": "Automatically submit when you stop speaking",
+    "description": "Description for the automatic submission mode."
+  },
+  "submit_mode_agent_description": {
+    "message": "$chatbot$ decides when to respond based on context",
+    "description": "Description for the AI-driven submission mode.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_off_description": {
+    "message": "Only submit when you press the button",
+    "description": "Description for the manual submission mode."
+  },
+  "nicknameLabel": {
+    "message": "Nickname",
+    "description": "Label for the input field to set a custom nickname for the AI assistant."
+  },
   "profile": {
     "message": "Profile",
     "description": "Label for the user profile section."
@@ -618,5 +656,69 @@
         "example": "s"
       }
     }
+  },
+  "instructionLabel_steering": {
+    "message": "Steering the conversation...",
+    "description": "Friendly label for user instruction that guides the conversation direction."
+  },
+  "instructionLabel_nudge": {
+    "message": "Giving a nudge...",
+    "description": "Friendly label for user instruction that gently suggests a direction."
+  },
+  "instructionLabel_guiding": {
+    "message": "Guiding responses...",
+    "description": "Friendly label for user instruction that guides how the AI should respond."
+  },
+  "instructionLabel_guardrails": {
+    "message": "Setting guardrails...",
+    "description": "Friendly label for user instruction that establishes boundaries for the conversation."
+  },
+  "instructionLabel_context": {
+    "message": "Providing context...",
+    "description": "Friendly label for user instruction that provides background information."
+  },
+  "instructionLabel_focusing": {
+    "message": "Focusing the discussion...",
+    "description": "Friendly label for user instruction that narrows the scope of conversation."
+  },
+  "instructionLabel_expectations": {
+    "message": "Clarifying expectations...",
+    "description": "Friendly label for user instruction that defines what the user wants."
+  },
+  "maintenanceLabel_saving": {
+    "message": "Saving that thought for later...",
+    "description": "Friendly label for collapsed assistant maintenance message."
+  },
+  "maintenanceLabel_processing": {
+    "message": "Processing in the background...",
+    "description": "Friendly label for collapsed assistant maintenance message."
+  },
+  "maintenanceLabel_holding": {
+    "message": "Holding this thought...",
+    "description": "Friendly label for collapsed assistant maintenance message."
+  },
+  "maintenanceLabel_mental_note": {
+    "message": "Making a mental note...",
+    "description": "Friendly label for collapsed assistant maintenance message."
+  },
+  "maintenanceLabel_tracking": {
+    "message": "Keeping track of context...",
+    "description": "Friendly label for collapsed assistant maintenance message."
+  },
+  "maintenanceLabel_tucking": {
+    "message": "Tucking this away...",
+    "description": "Friendly label for collapsed assistant maintenance message."
+  },
+  "maintenanceLabel_remembering": {
+    "message": "Remembering this detail...",
+    "description": "Friendly label for collapsed assistant maintenance message."
+  },
+  "clickToExpand": {
+    "message": "click to expand",
+    "description": "Text indicating user can click to show collapsed content."
+  },
+  "clickToCollapse": {
+    "message": "click to collapse",
+    "description": "Text indicating user can click to hide expanded content."
   }
 }

@@ -471,6 +471,44 @@
     "message": "Asetukset",
     "description": "Laajennuksen asetusten avaamispainikkeen teksti."
   },
+  "submitModeControl": {
+    "description": "Ohjaimen otsikko (työkaluvinkki), jolla valitaan, milloin viestit lähetetään.",
+    "message": "Valitse, milloin lähetät viestisi"
+  },
+  "submit_mode_agent": {
+    "description": "AI-ohjattu lähetystila.",
+    "message": "agentti"
+  },
+  "submit_mode_agent_description": {
+    "description": "Tekoälypohjaisen lähetystilan kuvaus.",
+    "message": "$chatbot$ päättää, milloin vastataan kontekstin perusteella",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automaattinen lähetystila.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Automaattisen lähetystilan kuvaus.",
+    "message": "Lähetä automaattisesti, kun lopetat puhumisen"
+  },
+  "submit_mode_off": {
+    "description": "Manuaalinen lähetystila.",
+    "message": "manuaalinen"
+  },
+  "submit_mode_off_description": {
+    "description": "Manuaalisen lähetystilan kuvaus.",
+    "message": "Lähetä vain, kun painat painiketta"
+  },
+  "nicknameLabel": {
+    "message": "Lempinimi",
+    "description": "Syöttökentän etiketti asettaa mukautetun lempinimen AI -avustajalle."
+  },
   "greeting": {
     "description": "Tervehdysviesti, joka näkyy, kun käyttäjä on kirjautunut sisään",
     "message": "Hei, $name$!",
@@ -618,5 +656,69 @@
   "viewDetails": {
     "description": "Teksti linkkille nähdäksesi täydelliset kiintiötiedot kojelaudassa.",
     "message": "Katso yksityiskohdat"
+  },
+  "clickToCollapse": {
+    "description": "Teksti, joka osoittaa, että käyttäjä voi napsauttaa laajennetun sisällön.",
+    "message": "Napsauta romahtaa"
+  },
+  "clickToExpand": {
+    "description": "Teksti, joka osoittaa, että käyttäjä voi napsauttaa, näyttääksesi romahtuneen sisällön.",
+    "message": "Napsauta laajentaaksesi"
+  },
+  "instructionLabel_context": {
+    "description": "Ystävällinen etiketti käyttäjäohjeille, jotka tarjoavat taustatietoja.",
+    "message": "Tarjoaa kontekstia ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Ystävällinen etiketti käyttäjäohjeisiin, jotka määrittelevät mitä käyttäjä haluaa.",
+    "message": "Selventävät odotukset ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Ystävällinen etiketti käyttäjäohjeisiin, jotka kapenevat keskustelun laajuutta.",
+    "message": "Keskittyminen keskusteluun ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Ystävällinen etiketti käyttäjäohjeisiin, jotka luovat keskustelun rajat.",
+    "message": "Suojakaiteiden asettaminen ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Ystävällinen etiketti käyttäjäohjeisiin, jotka ohjaavat, kuinka AI: n tulisi vastata.",
+    "message": "Ohjaavat vastaukset ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Ystävällinen etiketti käyttäjäohjeille, jotka ehdottavat varovasti suuntaa.",
+    "message": "Annetaan kummallinen ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Ystävällinen etiketti käyttäjäohjeisiin, jotka ohjaavat keskustelua.",
+    "message": "Keskustelun ohjaaminen ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
+    "message": "Pitää tätä ajatusta ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
+    "message": "Henkisen muistiinpanon tekeminen ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
+    "message": "Käsittely taustalla ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
+    "message": "Muistaa tämä yksityiskohta ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
+    "message": "Säästät ajatuksen myöhempää käyttöä varten ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
+    "message": "Seurata kontekstia ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
+    "message": "Tämän työntäminen ..."
   }
 }

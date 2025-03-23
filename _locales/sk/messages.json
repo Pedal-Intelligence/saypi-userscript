@@ -471,6 +471,44 @@
     "message": "Nastavenia",
     "description": "Text tlačidla na otvorenie nastavení rozšírenia."
   },
+  "submitModeControl": {
+    "description": "Názov (popis) ovládacieho prvku na výber, kedy sa majú odosielať správy.",
+    "message": "Vyberte, kedy sa majú odosielať správy"
+  },
+  "submit_mode_agent": {
+    "description": "Režim odosielania riadený AI.",
+    "message": "agent"
+  },
+  "submit_mode_agent_description": {
+    "description": "Popis režimu odosielania riadeného AI.",
+    "message": "$chatbot$ rozhoduje o tom, kedy reagovať na základe kontextu",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Režim automatického odosielania.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Popis režimu automatického odosielania.",
+    "message": "Automaticky odoslať, keď prestanete hovoriť"
+  },
+  "submit_mode_off": {
+    "description": "Režim manuálneho odosielania.",
+    "message": "manuál"
+  },
+  "submit_mode_off_description": {
+    "description": "Popis pre režim manuálneho odosielania.",
+    "message": "Odošlite iba vtedy, keď stlačíte tlačidlo"
+  },
+  "nicknameLabel": {
+    "message": "Prezývka",
+    "description": "Obeň pre vstupné pole na nastavenie vlastnej prezývky pre asistenta AI."
+  },
   "greeting": {
     "description": "Pozdravná správa zobrazená, keď je používateľ prihlásený",
     "message": "Ahoj, $name$!",
@@ -618,5 +656,69 @@
   "viewDetails": {
     "description": "Text pre odkaz na zobrazenie úplných podrobností kvóty na prístrojovej doske.",
     "message": "Zobraziť podrobnosti"
+  },
+  "clickToCollapse": {
+    "description": "Text označujúci používateľ môže kliknúť na skrytie rozšíreného obsahu.",
+    "message": "Kliknutím sa zrúti"
+  },
+  "clickToExpand": {
+    "description": "Text označujúci kliknutím používateľa môže kliknúť, aby sa zobrazil zrútený obsah.",
+    "message": "Kliknutím rozbaľte"
+  },
+  "instructionLabel_context": {
+    "description": "Priateľský štítok pre inštrukciu používateľa, ktorý poskytuje informácie o pozadí.",
+    "message": "Poskytovanie kontextu ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Priateľský štítok pre inštrukciu používateľa, ktorá definuje, čo chce používateľ.",
+    "message": "Objasnenie očakávaní ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Priateľská štítok pre inštrukciu používateľa, ktorý zužuje rozsah konverzácie.",
+    "message": "Zameranie diskusie ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Priateľský štítok pre inštrukciu používateľa, ktorý stanovuje hranice konverzácie.",
+    "message": "Nastavenie zábradlia ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Priateľské označenie pre inštrukciu používateľa, ktorá vedie, ako by mala AI reagovať.",
+    "message": "Vedúce reakcie ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Priateľská štítok pre inštrukciu používateľa, ktorý jemne navrhuje smer.",
+    "message": "Dať štipku ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Priateľská štítok pre inštrukciu používateľa, ktorý vedie smer konverzácie.",
+    "message": "Riadenie rozhovoru ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Priateľský štítok pre zrútenú správu asistenta údržby.",
+    "message": "Držanie tejto myšlienky ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Priateľský štítok pre zrútenú správu asistenta údržby.",
+    "message": "Robiť mentálnu poznámku ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Priateľský štítok pre zrútenú správu asistenta údržby.",
+    "message": "Spracovanie v pozadí ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Priateľský štítok pre zrútenú správu asistenta údržby.",
+    "message": "Pamätajte si na tento detail ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Priateľský štítok pre zrútenú správu asistenta údržby.",
+    "message": "Zachránenie tejto myšlienky na neskôr ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Priateľský štítok pre zrútenú správu asistenta údržby.",
+    "message": "Sledovanie kontextu ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Priateľský štítok pre zrútenú správu asistenta údržby.",
+    "message": "To zastrčenie ..."
   }
 }

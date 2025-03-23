@@ -471,6 +471,44 @@
     "message": "설정",
     "description": "확장 프로그램의 설정을 여는 버튼의 텍스트입니다."
   },
+  "submitModeControl": {
+    "description": "메시지를 제출해야 하는 시기를 선택하는 컨트롤의 제목(도구 설명)입니다.",
+    "message": "메시지 제출 시기 선택"
+  },
+  "submit_mode_agent": {
+    "description": "AI 기반 제출 모드.",
+    "message": "대리인"
+  },
+  "submit_mode_agent_description": {
+    "description": "AI 기반 제출 모드에 대한 설명입니다.",
+    "message": "$chatbot$은 상황에 따라 응답 시기를 결정합니다.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "자동 제출 모드.",
+    "message": "자동"
+  },
+  "submit_mode_auto_description": {
+    "description": "자동 제출 모드에 대한 설명입니다.",
+    "message": "말하기를 중단하면 자동으로 제출"
+  },
+  "submit_mode_off": {
+    "description": "수동 제출 모드.",
+    "message": "수동"
+  },
+  "submit_mode_off_description": {
+    "description": "수동 제출 모드에 대한 설명입니다.",
+    "message": "버튼을 누를 때만 제출하세요."
+  },
+  "nicknameLabel": {
+    "message": "별명",
+    "description": "입력 필드의 레이블 AI 어시스턴트의 사용자 정의 별명을 설정하십시오."
+  },
   "greeting": {
     "description": "사용자가 로그인 할 때 표시되는 인사말 메시지",
     "message": "안녕하세요, $name$!",
@@ -618,5 +656,69 @@
   "viewDetails": {
     "description": "대시 보드에서 전체 할당량 세부 정보를 볼 수있는 링크의 텍스트.",
     "message": "자세한 내용을보십시오"
+  },
+  "clickToCollapse": {
+    "description": "텍스트는 사용자가 클릭하여 확장 된 컨텐츠를 숨길 수 있습니다.",
+    "message": "붕괴하려면 클릭하십시오"
+  },
+  "clickToExpand": {
+    "description": "텍스트는 사용자가 클릭하여 붕괴 된 콘텐츠를 표시 할 수 있습니다.",
+    "message": "확장하려면 클릭하십시오"
+  },
+  "instructionLabel_context": {
+    "description": "배경 정보를 제공하는 사용자 명령에 대한 친숙한 레이블.",
+    "message": "컨텍스트 제공 ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "사용자가 원하는 것을 정의하는 사용자 명령에 대한 친숙한 레이블.",
+    "message": "기대치를 명확하게 ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "대화의 범위를 좁히는 사용자 지침에 대한 친숙한 레이블.",
+    "message": "토론에 집중하고 ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "대화의 경계를 설정하는 사용자 지침에 대한 친숙한 레이블.",
+    "message": "가드 레일 설정 ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "AI가 어떻게 응답 해야하는지 안내하는 사용자 지침에 대한 친숙한 레이블.",
+    "message": "안내 응답 ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "방향을 부드럽게 제안하는 사용자 명령에 대한 친숙한 레이블.",
+    "message": "멍청이주는 ..."
+  },
+  "instructionLabel_steering": {
+    "description": "대화 방향을 안내하는 사용자 지침에 대한 친숙한 레이블.",
+    "message": "대화를 조종 ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
+    "message": "이 생각을 잡고 ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
+    "message": "정신 메모 만들기 ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
+    "message": "백그라운드에서 처리 ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
+    "message": "이 세부 사항을 기억합니다 ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
+    "message": "나중에 그 생각을 저장 ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
+    "message": "맥락을 추적하는 ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
+    "message": "이것을 멀리 잡고 ..."
   }
 }

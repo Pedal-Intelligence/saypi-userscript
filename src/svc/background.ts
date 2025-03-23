@@ -203,7 +203,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           url: popupURL,
           type: 'popup',
           width: 400,
-          height: 600,
+          height: 720,
           focused: true
         });
       }
@@ -253,8 +253,17 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         sendResponse({ claims: null });
       }
     })();
-    
-    return true; // indicates we will send a response asynchronously
+    return true; // Indicate we'll respond asynchronously
+  } else if (message.type === 'CHECK_FEATURE_ENTITLEMENT') {
+    // Check if user is entitled to a specific feature
+    try {
+      const hasEntitlement = jwtManager.hasFeatureEntitlement(message.feature);
+      sendResponse({ hasEntitlement });
+    } catch (error) {
+      console.error('Failed to check feature entitlement:', error);
+      sendResponse({ hasEntitlement: false });
+    }
+    return true; // Indicate we'll respond asynchronously
   } else if (message.type === 'REDIRECT_TO_LOGIN') {
     // Handle login redirect request - async handler
     (async () => {

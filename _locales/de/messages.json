@@ -471,6 +471,44 @@
     "message": "Einstellungen",
     "description": "Der Text der Schaltfläche zum Öffnen der Einstellungen der Erweiterung."
   },
+  "submitModeControl": {
+    "description": "Der Titel (Tooltip) des Steuerelements zur Auswahl, wann Nachrichten übermittelt werden sollen.",
+    "message": "Wählen Sie aus, wann Sie Ihre Nachrichten senden möchten"
+  },
+  "submit_mode_agent": {
+    "description": "KI-gesteuerter Einreichungsmodus.",
+    "message": "Agent"
+  },
+  "submit_mode_agent_description": {
+    "description": "Beschreibung für den KI-gesteuerten Einreichungsmodus.",
+    "message": "$chatbot$ entscheidet basierend auf dem Kontext, wann er antwortet",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatischer Übermittlungsmodus.",
+    "message": "Auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Beschreibung für den automatischen Übermittlungsmodus.",
+    "message": "Automatisches Absenden, wenn Sie aufhören zu sprechen"
+  },
+  "submit_mode_off": {
+    "description": "Manueller Übermittlungsmodus.",
+    "message": "Handbuch"
+  },
+  "submit_mode_off_description": {
+    "description": "Beschreibung für den manuellen Übermittlungsmodus.",
+    "message": "Senden Sie es erst ab, wenn Sie auf die Schaltfläche klicken"
+  },
+  "nicknameLabel": {
+    "message": "Spitzname",
+    "description": "Beschriftet für das Eingabefeld einen benutzerdefinierten Spitznamen für den AI -Assistenten."
+  },
   "greeting": {
     "description": "Begrüßungsnachricht angezeigt, wenn der Benutzer unterschrieben ist",
     "message": "Hallo, $name$!",
@@ -618,5 +656,69 @@
   "viewDetails": {
     "description": "Text für den Link zum Anzeigen der vollständigen Kontingendetails im Dashboard.",
     "message": "Details anzeigen"
+  },
+  "clickToCollapse": {
+    "description": "Der Text, der angibt, dass der Benutzer angezeigt werden kann, um erweiterte Inhalte auszublenden.",
+    "message": "Klicken Sie hier, um zusammenzubrechen"
+  },
+  "clickToExpand": {
+    "description": "Der Text, der angibt, dass der Benutzer klicken kann, um zusammengebrochene Inhalte anzuzeigen.",
+    "message": "Klicken Sie hier, um zu erweitern"
+  },
+  "instructionLabel_context": {
+    "description": "Freundlicher Etikett für Benutzeranweisung, der Hintergrundinformationen enthält.",
+    "message": "Bereitstellung von Kontext ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Freundliches Etikett für Benutzeranweisung, der definiert, was der Benutzer will.",
+    "message": "Erwartungen klären ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Freundliches Etikett für Benutzeranweisungen, der den Umfang der Konversation verengt.",
+    "message": "Fokussierung der Diskussion ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Freundliches Etikett für Benutzeranweisungen, der Grenzen für das Gespräch festlegt.",
+    "message": "Guardcails einstellen ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Freundliches Etikett für die Benutzeranweisung, die leitet, wie die KI reagieren sollte.",
+    "message": "Reaktionen führen ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Freundliches Etikett für Benutzeranweisung, der sanft eine Richtung vorschlägt.",
+    "message": "Einen Schubs geben ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Freundliches Etikett für Benutzeranweisung, der die Gesprächsrichtung leitet.",
+    "message": "Das Gespräch steuern ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Freundliches Etikett für ein zusammengebrochenes Assistant -Wartungsnachricht.",
+    "message": "Diesen Gedanken halten ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Freundliches Etikett für ein zusammengebrochenes Assistant -Wartungsnachricht.",
+    "message": "Mentale Notiz machen ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Freundliches Etikett für ein zusammengebrochenes Assistant -Wartungsnachricht.",
+    "message": "Verarbeitung im Hintergrund ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Freundliches Etikett für ein zusammengebrochenes Assistant -Wartungsnachricht.",
+    "message": "Erinnern Sie sich an dieses Detail ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Freundliches Etikett für ein zusammengebrochenes Assistant -Wartungsnachricht.",
+    "message": "Den Gedanken für später retten ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Freundliches Etikett für ein zusammengebrochenes Assistant -Wartungsnachricht.",
+    "message": "Kontext im Auge behalten ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Freundliches Etikett für ein zusammengebrochenes Assistant -Wartungsnachricht.",
+    "message": "Das wegstecken ..."
   }
 }

@@ -59,7 +59,7 @@
 
       <div
         id="preference-selector"
-        class="w-full max-w-lg user-preference-item"
+        class="w-full max-w-lg user-preference-item mode-selector"
       >
         <!-- Slider with icons -->
         <div>
@@ -173,6 +173,87 @@
         </div>
       </div>
       <div
+        id="submit-mode-selector"
+        class="w-full max-w-lg user-preference-item mode-selector"
+      >
+        <!-- Slider with icons -->
+        <div>
+          <!-- Icons -->
+          <div class="flex justify-between mb-2">
+            <span
+              role="img"
+              class="icon text-2xl"
+              aria-label="Rocket"
+              slider-value="0"
+              id="auto"
+              >🚀</span
+            >
+            <span
+              role="img"
+              class="icon text-2xl"
+              aria-label="Robot"
+              slider-value="1"
+              id="agent"
+              >🤖</span
+            >
+            <span
+              role="img"
+              class="icon text-2xl"
+              aria-label="Hand"
+              slider-value="2"
+              id="off"
+              >🖐️</span
+            >
+          </div>
+          <!-- Slider -->
+          <input
+            type="range"
+            min="0"
+            max="2"
+            value="0"
+            class="slider w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
+            id="submitModeRange"
+            data-i18n-attr="title:submitModeControl"
+            title="Select when to submit your messages"
+          />
+        </div>
+        <!-- Text below slider -->
+        <div
+          id="submitModeValue"
+          class="mt-2 text-lg font-semibold text-gray-700"
+          data-i18n="submit_mode_auto"
+        >
+          auto
+        </div>
+        <!-- Descriptions below each icon -->
+        <div class="description" data-i18n="submit_mode_auto_description">
+          Automatically submit when you stop speaking
+        </div>
+        <div class="description" data-i18n="submit_mode_agent_description">
+          Pi decides when to respond based on context
+        </div>
+        <div class="description" data-i18n="submit_mode_off_description">
+          Only submit when you press the button
+        </div>
+      </div>
+      <div
+        class="user-preference-item w-full max-w-lg"
+        id="nickname-preference"
+      >
+        <label class="wraper" for="assistant-nickname">
+          <span class="label-text" data-i18n="nicknameLabel">Nickname</span>
+          <div class="control">
+            <input
+              type="text"
+              id="assistant-nickname"
+              name="assistantNickname"
+              class="px-2 py-1 border rounded w-20 text-sm text-right"
+              placeholder="Pi"
+            />
+          </div>
+        </label>
+      </div>
+      <div
         class="user-preference-item w-full max-w-lg"
         id="sounds-effects-preference"
       >
@@ -180,18 +261,6 @@
           <span class="label-text" data-i18n="soundEffects">Sound Effects</span>
           <div class="switch-wrap control">
             <input type="checkbox" id="sound-effects" name="soundEffects" />
-            <div class="switch"></div>
-          </div>
-        </label>
-      </div>
-      <div
-        class="user-preference-item w-full max-w-lg"
-        id="auto-submit-preference"
-      >
-        <label class="wraper" for="auto-submit">
-          <span class="label-text" data-i18n="autoSubmit">Auto Submit</span>
-          <div class="switch-wrap control">
-            <input type="checkbox" id="auto-submit" name="autoSubmit" />
             <div class="switch"></div>
           </div>
         </label>

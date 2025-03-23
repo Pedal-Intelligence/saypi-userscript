@@ -471,6 +471,44 @@
     "message": "सेटिंग्स",
     "description": "एक्सटेंशन की सेटिंग खोलने के लिए बटन का टेक्स्ट."
   },
+  "submitModeControl": {
+    "description": "संदेशों को कब सबमिट किया जाना चाहिए यह चुनने के लिए नियंत्रण का शीर्षक (टूलटिप)।",
+    "message": "अपने संदेश कब सबमिट करना है चुनें"
+  },
+  "submit_mode_agent": {
+    "description": "एआई-संचालित सबमिशन मोड।",
+    "message": "प्रतिनिधि"
+  },
+  "submit_mode_agent_description": {
+    "description": "एआई-संचालित सबमिशन मोड का विवरण।",
+    "message": "$chatbot$ संदर्भ के आधार पर निर्णय लेता है कि कब प्रतिक्रिया देनी है",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "स्वचालित सबमिशन मोड.",
+    "message": "ऑटो"
+  },
+  "submit_mode_auto_description": {
+    "description": "स्वचालित सबमिशन मोड का विवरण।",
+    "message": "जब आप बोलना बंद कर दें तो स्वचालित रूप से सबमिट करें"
+  },
+  "submit_mode_off": {
+    "description": "मैन्युअल सबमिशन मोड.",
+    "message": "नियमावली"
+  },
+  "submit_mode_off_description": {
+    "description": "मैन्युअल सबमिशन मोड का विवरण.",
+    "message": "जब आप बटन दबाएँ तभी सबमिट करें"
+  },
+  "nicknameLabel": {
+    "message": "उपनाम",
+    "description": "AI सहायक के लिए एक कस्टम उपनाम सेट करने के लिए इनपुट फ़ील्ड के लिए लेबल।"
+  },
   "greeting": {
     "description": "उपयोगकर्ता पर हस्ताक्षर किए जाने पर अभिवादन संदेश दिखाया गया है",
     "message": "हाय, $name$!",
@@ -618,5 +656,69 @@
   "viewDetails": {
     "description": "डैशबोर्ड पर पूर्ण कोटा विवरण देखने के लिए लिंक के लिए पाठ।",
     "message": "विवरण देखें"
+  },
+  "clickToCollapse": {
+    "description": "पाठ का संकेत उपयोगकर्ता विस्तारित सामग्री को छिपाने के लिए क्लिक कर सकता है।",
+    "message": "पतन के लिए क्लिक करें"
+  },
+  "clickToExpand": {
+    "description": "पाठ का संकेत उपयोगकर्ता ढह गई सामग्री दिखाने के लिए क्लिक कर सकता है।",
+    "message": "विस्तार करने के लिए क्लिक करें"
+  },
+  "instructionLabel_context": {
+    "description": "उपयोगकर्ता निर्देश के लिए अनुकूल लेबल जो पृष्ठभूमि की जानकारी प्रदान करता है।",
+    "message": "संदर्भ प्रदान करना ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "उपयोगकर्ता निर्देश के लिए अनुकूल लेबल जो परिभाषित करता है कि उपयोगकर्ता क्या चाहता है।",
+    "message": "उम्मीदों को स्पष्ट करना ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "उपयोगकर्ता निर्देश के लिए अनुकूल लेबल जो वार्तालाप के दायरे को कम करता है।",
+    "message": "चर्चा पर ध्यान केंद्रित करना ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "उपयोगकर्ता निर्देश के लिए अनुकूल लेबल जो वार्तालाप के लिए सीमाएं स्थापित करता है।",
+    "message": "रेलिंग सेटिंग ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "उपयोगकर्ता निर्देश के लिए अनुकूल लेबल जो यह मार्गदर्शन करता है कि एआई को कैसे प्रतिक्रिया दी जानी चाहिए।",
+    "message": "मार्गदर्शक प्रतिक्रियाएं ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "उपयोगकर्ता निर्देश के लिए अनुकूल लेबल जो धीरे से एक दिशा का सुझाव देता है।",
+    "message": "एक कुहनी दे ..."
+  },
+  "instructionLabel_steering": {
+    "description": "उपयोगकर्ता निर्देश के लिए अनुकूल लेबल जो वार्तालाप दिशा का मार्गदर्शन करता है।",
+    "message": "बातचीत को स्टीयरिंग ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "ढह गए सहायक रखरखाव संदेश के लिए अनुकूल लेबल।",
+    "message": "इस विचार को पकड़े हुए ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "ढह गए सहायक रखरखाव संदेश के लिए अनुकूल लेबल।",
+    "message": "एक मानसिक नोट बनाना ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "ढह गए सहायक रखरखाव संदेश के लिए अनुकूल लेबल।",
+    "message": "पृष्ठभूमि में प्रसंस्करण ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "ढह गए सहायक रखरखाव संदेश के लिए अनुकूल लेबल।",
+    "message": "इस विवरण को याद करते हुए ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "ढह गए सहायक रखरखाव संदेश के लिए अनुकूल लेबल।",
+    "message": "बाद में सोचा गया कि सहेजना ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "ढह गए सहायक रखरखाव संदेश के लिए अनुकूल लेबल।",
+    "message": "संदर्भ का ट्रैक रखना ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "ढह गए सहायक रखरखाव संदेश के लिए अनुकूल लेबल।",
+    "message": "इस दूर टक ..."
   }
 }

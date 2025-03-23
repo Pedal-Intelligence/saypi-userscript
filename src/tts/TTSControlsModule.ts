@@ -13,6 +13,7 @@ import { AssistantWritingEvent } from "../dom/MessageEvents";
 import { createSVGElement } from "../dom/DOMModule";
 
 export class TTSControlsModule {
+  private skipCurrent = false;
   private constructor(private speechSynthesis: SpeechSynthesisModule) {
     this.registerEventListeners();
   }
@@ -28,7 +29,16 @@ export class TTSControlsModule {
   }
 
   private registerEventListeners() {
+    EventBus.on("saypi:tts:skipCurrent", () => {
+      this.skipCurrent = true;
+    });
+
     EventBus.on("saypi:piWriting", (event: AssistantWritingEvent) => {
+      if (this.skipCurrent) {
+        console.debug("Suppressing TTS generation due to skipCurrent flag");
+        this.skipCurrent = false;
+        return;
+      }
       this.autoplaySpeech(event.utterance, 200); // wait a beat after starting the input stream before starting the output stream
     });
   }

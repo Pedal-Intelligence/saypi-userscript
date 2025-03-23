@@ -471,6 +471,44 @@
     "message": "Ustawienia",
     "description": "Tekst przycisku otwierającego ustawienia rozszerzenia."
   },
+  "submitModeControl": {
+    "description": "Tytuł (etykietka) kontrolki umożliwiającej określenie, kiedy wiadomości mają być przesyłane.",
+    "message": "Wybierz, kiedy chcesz przesłać wiadomości"
+  },
+  "submit_mode_agent": {
+    "description": "Tryb przesyłania oparty na sztucznej inteligencji.",
+    "message": "agent"
+  },
+  "submit_mode_agent_description": {
+    "description": "Opis trybu przesyłania opartego na sztucznej inteligencji.",
+    "message": "$chatbot$ decyduje, kiedy odpowiedzieć na podstawie kontekstu",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatyczny tryb przesyłania.",
+    "message": "automatyczny"
+  },
+  "submit_mode_auto_description": {
+    "description": "Opis trybu automatycznego przesyłania.",
+    "message": "Przesyłaj automatycznie, gdy przestaniesz mówić"
+  },
+  "submit_mode_off": {
+    "description": "Ręczny tryb przesyłania.",
+    "message": "podręcznik"
+  },
+  "submit_mode_off_description": {
+    "description": "Opis ręcznego trybu przesyłania.",
+    "message": "Prześlij dopiero po naciśnięciu przycisku"
+  },
+  "nicknameLabel": {
+    "message": "Przydomek",
+    "description": "Etykieta dla pola wejściowego, aby ustawić niestandardowy pseudonim dla asystenta AI."
+  },
   "greeting": {
     "description": "Wiadomość z życzeniami pokazana, gdy użytkownik jest zalogowany",
     "message": "Cześć, $name$!",
@@ -618,5 +656,69 @@
   "viewDetails": {
     "description": "SMS -y do linku, aby wyświetlić pełne szczegóły kwot na desce rozdzielczej.",
     "message": "Zobacz szczegóły"
+  },
+  "clickToCollapse": {
+    "description": "Tekst wskazujący użytkownik może kliknąć, aby ukryć rozszerzoną zawartość.",
+    "message": "Kliknij, aby zawalić się"
+  },
+  "clickToExpand": {
+    "description": "Tekst wskazujący, że użytkownik może kliknąć, aby wyświetlić zmierzoną zawartość.",
+    "message": "Kliknij, aby rozwinąć"
+  },
+  "instructionLabel_context": {
+    "description": "Przyjazna etykieta dla instrukcji użytkownika, która zawiera informacje podstawowe.",
+    "message": "Zapewnienie kontekstu ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Przyjazna etykieta do instrukcji użytkownika, która określa, czego chce użytkownik.",
+    "message": "Wyjaśnianie oczekiwań ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Przyjazna etykieta do instrukcji użytkownika, która zawęża zakres rozmowy.",
+    "message": "Skupienie dyskusji ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Przyjazna etykieta do instrukcji użytkownika, która ustanawia granice rozmowy.",
+    "message": "Ustawienie poręczy ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Przyjazna etykieta do instrukcji użytkownika, która kieruje, jak AI powinna zareagować.",
+    "message": "Prowadzenie odpowiedzi ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Przyjazna etykieta dla instrukcji użytkownika, która delikatnie sugeruje kierunek.",
+    "message": "Dając szturchanie ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Przyjazna etykieta dla instrukcji użytkownika, która kieruje kierunkiem rozmowy.",
+    "message": "Kierowanie rozmowy ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Trzymając tę ​​myśl ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Notatka psychiczna ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Przetwarzanie w tle ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Pamiętając o tym szczegółach ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Oszczędzanie tej myśli na później ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Śledzenie kontekstu ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Wykrzykując to ..."
   }
 }

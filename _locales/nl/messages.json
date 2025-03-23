@@ -471,6 +471,44 @@
     "message": "Instellingen",
     "description": "De tekst van de knop om de instellingen van de extensie te openen."
   },
+  "submitModeControl": {
+    "description": "De titel (tooltip) van het besturingselement waarmee u kunt selecteren wanneer berichten moeten worden verzonden.",
+    "message": "Selecteer wanneer u uw berichten wilt verzenden"
+  },
+  "submit_mode_agent": {
+    "description": "AI-gestuurde indieningsmodus.",
+    "message": "tussenpersoon"
+  },
+  "submit_mode_agent_description": {
+    "description": "Beschrijving voor de AI-gestuurde indieningsmodus.",
+    "message": "$chatbot$ beslist wanneer er moet worden gereageerd op basis van de context",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatische indieningsmodus.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Beschrijving voor de automatische indieningsmodus.",
+    "message": "Automatisch indienen als u stopt met spreken"
+  },
+  "submit_mode_off": {
+    "description": "Handmatige verzendmodus.",
+    "message": "handmatig"
+  },
+  "submit_mode_off_description": {
+    "description": "Beschrijving voor de handmatige indieningsmodus.",
+    "message": "Alleen verzenden als u op de knop drukt"
+  },
+  "nicknameLabel": {
+    "message": "Bijnaam",
+    "description": "Label voor het invoerveld om een ​​aangepaste bijnaam in te stellen voor de AI -assistent."
+  },
   "greeting": {
     "description": "Groetbericht getoond wanneer de gebruiker wordt aangemeld",
     "message": "Hallo, $name$!",
@@ -618,5 +656,69 @@
   "viewDetails": {
     "description": "Tekst voor de link om volledige quota -details op het dashboard te bekijken.",
     "message": "Bekijk details"
+  },
+  "clickToCollapse": {
+    "description": "Tekstaangevende gebruiker kan klikken om uitgebreide inhoud te verbergen.",
+    "message": "Klik om in te storten"
+  },
+  "clickToExpand": {
+    "description": "Tekst die de gebruiker aangeeft, kan klikken om ingeklapte inhoud weer te geven.",
+    "message": "Klik om uit te vouwen"
+  },
+  "instructionLabel_context": {
+    "description": "Vriendelijk label voor gebruikersinstructie die achtergrondinformatie biedt.",
+    "message": "Context bieden ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Vriendelijk label voor gebruikersinstructie die bepaalt wat de gebruiker wil.",
+    "message": "Verduidelijking van de verwachtingen ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Vriendelijk label voor gebruikersinstructie die de reikwijdte van het gesprek beperkt.",
+    "message": "De discussie concentreren ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Vriendelijk label voor gebruikersinstructie die grenzen voor het gesprek stelt.",
+    "message": "Garden instellen ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Vriendelijk label voor gebruikersinstructie die begeleidt hoe de AI moet reageren.",
+    "message": "Geleidende reacties ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Vriendelijk label voor gebruikersinstructie die voorzichtig een richting suggereert.",
+    "message": "Een duwtje geven ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Vriendelijk label voor gebruikersinstructie die de conversatierichting begeleidt.",
+    "message": "Stuur het gesprek ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Vriendelijk label voor ingestort assistent -onderhoudsboodschap.",
+    "message": "Deze gedachte vasthouden ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Vriendelijk label voor ingestort assistent -onderhoudsboodschap.",
+    "message": "Een mentale notitie maken ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Vriendelijk label voor ingestort assistent -onderhoudsboodschap.",
+    "message": "Verwerking op de achtergrond ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Vriendelijk label voor ingestort assistent -onderhoudsboodschap.",
+    "message": "Herinnering aan dit detail ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Vriendelijk label voor ingestort assistent -onderhoudsboodschap.",
+    "message": "Die gedachte opslaan voor later ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Vriendelijk label voor ingestort assistent -onderhoudsboodschap.",
+    "message": "Context bijhouden ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Vriendelijk label voor ingestort assistent -onderhoudsboodschap.",
+    "message": "Dit wegstappen ..."
   }
 }
