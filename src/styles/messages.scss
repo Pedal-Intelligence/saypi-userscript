@@ -302,7 +302,7 @@
 }
 
 // Dark mode support
-.dark {
+.dark-mode, [data-theme="dark"] {
   .saypi-telemetry-container {
     background-color: #2a2a2a;
     border-color: #444;
@@ -376,6 +376,7 @@
     font-style: italic;
     font-size: 0.9em;
     color: #666;
+    position: relative;
   }
 
   &.silenced {
@@ -388,9 +389,15 @@
         content: attr(data-message-label);
         display: block;
       }
-      > * {
+      > *:not(.thinking-icon-container) {
         display: none;
       }
+    }
+
+    .thinking-icon-container {
+      position: absolute;
+      left: 10px;
+      z-index: 1;
     }
 
     .message-hover-menu {
@@ -455,6 +462,96 @@
     &:not(.collapsed) {
       .instruction-label:after {
         content: " (" attr(data-collapse-text) ")";
+      }
+    }
+  }
+}
+
+// Styling for maintenance messages and the brain/thinking icon
+.maintenance-message {
+  position: relative;
+  
+  // Hide the thinking icon by default (for expanded state)
+  .thinking-icon-container {
+    display: none;
+  }
+  
+  &.silenced {
+    max-height: 40px;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease;
+    background-color: rgba(245, 245, 245, 0.5);
+    
+    // Show the thinking icon only when silenced/collapsed
+    .thinking-icon-container {
+      position: absolute;
+      left: 6px;
+      top: 4px;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      
+      svg.thinking-icon {
+        width: 20px;
+        height: 20px;
+        stroke: #666;
+        opacity: 0.8;
+      }
+    }
+    
+    .content {
+      opacity: 0.7;
+      position: relative;
+      
+      &::before {
+        content: attr(data-message-label);
+        display: block;
+        font-size: 0.9em;
+        font-style: italic;
+        color: #666;
+        margin-left: 34px;
+      }
+    }
+    
+    &:hover {
+      background-color: rgba(245, 245, 245, 0.8);
+      .content {
+        opacity: 0.9;
+      }
+    }
+    
+    .message-hover-menu {
+      display: none;
+    }
+  }
+}
+
+// Dark mode support
+.dark-mode, [data-theme="dark"] {
+  .maintenance-message {
+    &.silenced {
+      background-color: rgba(40, 40, 40, 0.4);
+      
+      .content {
+        &::before {
+          color: #aaa;
+        }
+      }
+      
+      .thinking-icon-container {
+        svg.thinking-icon {
+          stroke: #aaa;
+        }
+      }
+      
+      &:hover {
+        background-color: rgba(50, 50, 50, 0.7);
       }
     }
   }

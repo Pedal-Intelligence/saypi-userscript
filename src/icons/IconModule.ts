@@ -3,6 +3,7 @@ import lightModeIconSVG from "./mode-day.svg";
 import rectanglesSVG from "./rectangles.svg";
 import rectanglesDarkModeSVG from "./rectangles-moonlight.svg";
 import stopwatchSVG from "./stopwatch.svg";
+import brainSVG from "./brain.svg";
 import { createSVGElement } from "../dom/DOMModule";
 
 export class IconModule {
@@ -10,6 +11,7 @@ export class IconModule {
   static darkMode = createSVGElement(darkModeIconSVG);
   static lightMode = createSVGElement(lightModeIconSVG);
   static stopwatch = createSVGElement(stopwatchSVG);
+  static brain = createSVGElement(brainSVG);
 
   rectangles(theme = "light") {
     if (theme === "dark") {

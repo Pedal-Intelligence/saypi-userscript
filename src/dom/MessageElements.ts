@@ -324,7 +324,28 @@ abstract class AssistantResponse {
       // Find the content element and add the label as a data attribute
       const contentElement = await this.decoratedContent();
       if (contentElement) {
+        // Create a label that includes both icon and text
+        const brainIcon = IconModule.brain ? IconModule.brain.cloneNode(true) as SVGElement : null;
+        
+        // Set the label with the icon marker that will be replaced with actual SVG in CSS
         contentElement.dataset.messageLabel = `${randomLabel} (${chrome.i18n.getMessage("clickToExpand")})`;
+        
+        // If we have a brain icon from IconModule, add it to the content element
+        if (brainIcon) {
+          brainIcon.classList.add("thinking-icon");
+          contentElement.dataset.hasThinkingIcon = "true";
+          
+          // Create a container for the icon if it doesn't exist
+          let iconContainer = contentElement.querySelector(".thinking-icon-container");
+          if (!iconContainer) {
+            iconContainer = document.createElement("div");
+            iconContainer.className = "thinking-icon-container";
+            contentElement.insertBefore(iconContainer, contentElement.firstChild);
+          }
+          
+          // Add the icon to the container
+          iconContainer.appendChild(brainIcon);
+        }
       }
       
       element.addEventListener("click", () => {
