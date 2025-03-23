@@ -131,7 +131,7 @@ for BROWSER in "$@"; do
     cp public/saypi.user.js "$PUBLIC_DIR"
     cp public/background.js "$PUBLIC_DIR"
     cp public/silero_vad.onnx "$PUBLIC_DIR"
-    cp public/ort-wasm*.wasm "$PUBLIC_DIR"
+    cp public/ort-wasm*.{wasm,mjs} "$PUBLIC_DIR"
     cp "$WORKLET_FILE" "$PUBLIC_DIR"
     cp public/audio/*.mp3 "$AUDIO_DIR"
 
