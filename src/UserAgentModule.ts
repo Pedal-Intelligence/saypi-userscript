@@ -17,16 +17,18 @@ export function isMobileDevice(): boolean {
 }
 
 export function addUserAgentFlags(): void {
-  const isFirefoxAndroid: boolean =
-    /Firefox/.test(navigator.userAgent) && /Android/.test(navigator.userAgent);
   const element: HTMLElement = document.documentElement;
 
-  if (isFirefoxAndroid) {
+  if (isFirefoxAndroid()) {
     element.classList.add("firefox-android");
   }
 
   addDeviceFlags(element);
   //addViewFlags(element); // redundant, as this is called in initMode
+}
+
+export function isFirefoxAndroid() : boolean {
+  return /Firefox/.test(navigator.userAgent) && /Android/.test(navigator.userAgent);
 }
 
 export function addDeviceFlags(element: HTMLElement): void {
