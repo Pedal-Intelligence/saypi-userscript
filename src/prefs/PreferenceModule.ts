@@ -49,6 +49,7 @@ class UserPreferenceModule {
   private constructor() {
     this.reloadCache();
     this.registerMessageListeners();
+    this.registerJwtClaimsListener();
   }
 
   private reloadCache(): void {
@@ -61,7 +62,7 @@ class UserPreferenceModule {
     this.isTTSBetaPaused().then((value) => {
       this.cache.setCachedValue("isTTSBetaPaused", value);
     });
-    this.getDiscretionaryMode().then((value) => {
+    this.getDiscretionaryMode(false).then((value) => {
       this.cache.setCachedValue("discretionaryMode", value);
       EventBus.emit("userPreferenceChanged", { discretionaryMode: value }); // propagate the change to other modules - this is a bit of a hack for the cache not being ready immediately after construction
     });
@@ -123,6 +124,19 @@ class UserPreferenceModule {
         }
       });
     }
+  }
+
+  /**
+   * Register a listener for JWT claims changes to update the cache
+   */
+  private registerJwtClaimsListener(): void {
+    EventBus.on('jwt:claims:changed', () => {
+      console.debug('JWT claims changed, reloading discretionary mode setting');
+      this.getDiscretionaryMode().then((value) => {
+        this.cache.setCachedValue("discretionaryMode", value);
+        EventBus.emit("userPreferenceChanged", { discretionaryMode: value });
+      });
+    });
   }
 
   /**
@@ -387,14 +401,18 @@ class UserPreferenceModule {
   /**
    * Gets the current discretionary mode setting, but only returns true if the user
    * is entitled to use agent mode
+   * @param checkEntitlement - if true, check if the user has entitlement to use agent mode
    */
-  public getDiscretionaryMode(): Promise<boolean> {
+  public getDiscretionaryMode(checkEntitlement: boolean = true): Promise<boolean> {
     return Promise.all([
       this.getStoredValue("discretionaryMode", false),
       this.hasAgentModeEntitlement()
     ]).then(([discretionaryMode, hasEntitlement]) => {
-      // Only return true if both the setting is enabled AND the user has entitlement
-      return discretionaryMode && hasEntitlement;
+      if (checkEntitlement) {
+        // Only return true if both the setting is enabled AND the user has entitlement
+        return discretionaryMode && hasEntitlement;
+      }
+      return discretionaryMode;
     });
   }
 
@@ -407,7 +425,9 @@ class UserPreferenceModule {
     const hasEntitlement = jwtManager.hasFeatureEntitlement(FEATURE_CODES.AGENT_MODE);
     
     // Only return true if both the setting is enabled AND the user has entitlement
-    return cachedSetting && hasEntitlement;
+    const result = cachedSetting && hasEntitlement;
+    //console.debug(`getCachedDiscretionaryMode: cachedSetting=${cachedSetting}, hasEntitlement=${hasEntitlement}, result=${result}`);
+    return result;
   }
 
   public getNickname(): Promise<string | null> {

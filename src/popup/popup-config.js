@@ -1,7 +1,7 @@
 /**
  * Auto-generated from .env.production - DO NOT MODIFY DIRECTLY
  * This file is regenerated on each build to ensure it uses the correct environment settings.
- * Generated on: 2025-03-23T19:36:39.272Z
+ * Generated on: 2025-03-23T22:35:44.557Z
  */
 const config = {
   // Values from .env.production

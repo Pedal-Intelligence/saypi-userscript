@@ -1,5 +1,6 @@
 import { config } from './ConfigModule';
 import { isFirefox as isFirefoxBrowser } from './UserAgentModule';
+import EventBus from './events/EventBus';
 
 interface JwtClaims {
   userId: string;
@@ -220,15 +221,46 @@ export class JwtManager {
       
       console.debug('Token refreshed successfully, expires in:', expiresIn);
       
+      // Get the old claims to compare
+      const oldClaims = this.getClaims();
+      
       this.jwtToken = token;
       this.expiresAt = Date.now() + this.parseDuration(expiresIn);
       
       await this.saveToStorage();
       this.scheduleRefresh();
+      
+      // Get the new claims
+      const newClaims = this.getClaims();
+      
+      // Check if features have changed
+      if (this.haveClaimsChanged(oldClaims, newClaims)) {
+        console.debug('JWT claims have changed, emitting event');
+        EventBus.emit('jwt:claims:changed', { newClaims });
+      }
     } catch (error) {
       console.error('Failed to refresh token:', error);
       this.clear();
     }
+  }
+
+  /**
+   * Compare old and new claims to detect changes, especially in features
+   */
+  private haveClaimsChanged(oldClaims: JwtClaims | null, newClaims: JwtClaims | null): boolean {
+    // If either is null, consider it a change
+    if (!oldClaims || !newClaims) return true;
+    
+    // Check if features have changed
+    const oldFeatures = oldClaims.features || [];
+    const newFeatures = newClaims.features || [];
+    
+    // Different features length indicates a change
+    if (oldFeatures.length !== newFeatures.length) return true;
+    
+    // Check if any feature is different
+    return oldFeatures.some(feature => !newFeatures.includes(feature)) ||
+           newFeatures.some(feature => !oldFeatures.includes(feature));
   }
 
   public getAuthHeader(): string | null {
