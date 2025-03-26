@@ -1,4 +1,4 @@
-import { AssistantResponse, MessageControls } from "../dom/MessageElements";
+import { AssistantResponse, MessageControls, UserMessage } from "../dom/MessageElements";
 import { Observation } from "../dom/Observation";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import {
@@ -9,10 +9,11 @@ import {
 } from "../tts/InputStream";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { VoiceSelector } from "../tts/VoiceMenu";
-import { Chatbot, UserPrompt } from "./Chatbot";
+import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
+import { UserPrompt } from "./Chatbot";
 import { ClaudeVoiceMenu } from "./ClaudeVoiceMenu";
 
-class ClaudeChatbot implements Chatbot {
+class ClaudeChatbot extends AbstractChatbot {
   private promptCache: Map<HTMLElement, ClaudePrompt> = new Map();
 
   getName(): string {
@@ -104,6 +105,14 @@ class ClaudeChatbot implements Chatbot {
     return 'div[data-is-streaming]:has(div[class*="font-claude-message"])';
   }
 
+  getUserPromptSelector(): string {
+    return 'div.mb-1.mt-1';
+  }
+
+  getUserMessageContentSelector(): string {
+    return "div[class*='font-user-message']";
+  }
+
   getAssistantResponseContentSelector(): string {
     return "div[class*='font-claude-message']";
   }
@@ -113,6 +122,10 @@ class ClaudeChatbot implements Chatbot {
     includeInitialText?: boolean
   ): AssistantResponse {
     return new ClaudeResponse(element, includeInitialText);
+  }
+
+  getUserMessage(element: HTMLElement): UserMessage {
+    return new UserMessage(element, this);
   }
 
   getExtraCallButtonClasses(): string[] {
@@ -321,7 +334,7 @@ function findAndDecorateCustomPlaceholderElement(
   }
 }
 
-class ClaudePrompt extends UserPrompt {
+class ClaudePrompt extends AbstractUserPrompt {
   private promptElement: HTMLDivElement;
   private placeholderManager!: PlaceholderManager; // initialized from the constructor
   readonly PROMPT_CHARACTER_LIMIT = 200000; // max prompt length is the same as context window length, 200k tokens

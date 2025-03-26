@@ -504,5 +504,221 @@
   "submit_mode_off_description": {
     "description": "Popis režimu ručního odesílání.",
     "message": "Odešlete pouze po stisknutí tlačítka"
+  },
+  "nicknameLabel": {
+    "message": "Přezdívka",
+    "description": "Štítek pro vstupní pole pro nastavení vlastní přezdívky pro asistenta AI."
+  },
+  "greeting": {
+    "description": "Zobrazení pozdravování, když je uživatel přihlášen",
+    "message": "Ahoj, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Text, který se zobrazí, kdy není uživatel přihlášen.",
+    "message": "Není přihlášeno"
+  },
+  "profile": {
+    "description": "Štítek pro sekci profilu uživatelského profilu.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Jednotka štítku pro kredity TTS",
+    "message": "Kredity"
+  },
+  "quotaRemaining": {
+    "description": "Štítek pro kvóto zbývající pruh pro pokrok",
+    "message": "Zbývající kvóta"
+  },
+  "quotaStatusUnknown": {
+    "description": "Zpráva zobrazená, když nelze stanovit stav kvóty",
+    "message": "Nelze zkontrolovat stav kvóty"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Zpráva zobrazená, když uživatel není ověřen.",
+    "message": "Přihlaste se pro přístup k generování hlasu a další prvotřídní funkce"
+  },
+  "signIn": {
+    "description": "Text pro tlačítko přihlášení.",
+    "message": "Přihlaste se"
+  },
+  "signOut": {
+    "description": "Text pro tlačítko Odhlásit.",
+    "message": "Odhlásit se"
+  },
+  "signedIn": {
+    "description": "Stav text zobrazen, když je uživatel ověřen (bez e -mailu).",
+    "message": "Přihlášeno"
+  },
+  "signedInAs": {
+    "description": "Stavový text zobrazený, když je uživatel ověřen, včetně jejich e -mailu.",
+    "message": "Přihlášeno jako $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Text zobrazující zbývající kvótu STT během několika minut.",
+    "message": "$minutes$ minuty $plural$ zbývající",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text, který se zobrazí, kdy je kvóta STT vyčerpána.",
+    "message": "Vyčerpaná kvóta na rozpoznávání řeči"
+  },
+  "sttQuotaProgress": {
+    "description": "TOOTTIP pro progresní lištu STT kvóty.",
+    "message": "$remaining$ zbývá $total$ sekundy",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "TOOTTIP pro pokrok kvóty STT v minutách v minutách.",
+    "message": "$remaining$ zbývá $total$ minut",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Štítek pro zbývající displej STT kvóty.",
+    "message": "Rozpoznávání řeči"
+  },
+  "sttQuotaSeconds": {
+    "description": "Jednotka pro kvótu STT (sekundy).",
+    "message": "Secs"
+  },
+  "ttsCredits": {
+    "description": "Termín používaný pro měnu kreditů ve funkci textu na řeč.",
+    "message": "Kredity"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Jednotka pro kvótu TTS (znaky).",
+    "message": "Kredity"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Text, který se zobrazí, kdy je kvóta TTS vyčerpána.",
+    "message": "Hlasová kvóta vyčerpaná"
+  },
+  "ttsQuotaProgress": {
+    "description": "TOOTTIP pro TTS kvóta Progress Pane.",
+    "message": "$remaining$ zbývá $total$ znaky",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Štítek pro zbývající kvótu TTS.",
+    "message": "Generování hlasu"
+  },
+  "upgradeButton": {
+    "description": "Text pro tlačítko pro upgrade plánu při vyčerpání kvóty.",
+    "message": "Plán upgradu"
+  },
+  "viewDetails": {
+    "description": "Text pro odkaz pro zobrazení úplných podrobností o kvótě na palubní desce.",
+    "message": "Zobrazit podrobnosti"
+  },
+  "clickToCollapse": {
+    "description": "Text označující uživatel může kliknout a skrýt rozšířený obsah.",
+    "message": "Kliknutím na kolaps"
+  },
+  "clickToExpand": {
+    "description": "Text označující uživatel může kliknout a zobrazit zhroucený obsah.",
+    "message": "Kliknutím rozbalte"
+  },
+  "instructionLabel_context": {
+    "description": "Přátelský štítek pro instrukci uživatele, který poskytuje základní informace.",
+    "message": "Poskytování kontextu ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Přátelský štítek pro instrukci uživatele, který definuje, co uživatel chce.",
+    "message": "Objasnění očekávání ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Přátelský štítek pro instrukci uživatele, který zužuje rozsah konverzace.",
+    "message": "Zaměření na diskusi ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Přátelský štítek pro instrukci uživatele, který stanoví hranice pro konverzaci.",
+    "message": "Nastavení zábradlí ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Přátelský štítek pro instrukci uživatele, který vede, jak by měla AI reagovat.",
+    "message": "Vedení odpovědí ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Přátelský štítek pro instrukci uživatele, který jemně navrhuje směr.",
+    "message": "Dávat šťouchnutí ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Přátelský štítek pro instrukci uživatele, který vede směr konverzace.",
+    "message": "Řízení konverzace ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
+    "message": "Držet tuto myšlenku ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
+    "message": "Dělat mentální poznámku ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
+    "message": "Zpracování na pozadí ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
+    "message": "Vzpomínka na tento detail ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
+    "message": "Ukládání této myšlenky na později ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
+    "message": "Sledování kontextu ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
+    "message": "Zastrčit to pryč ..."
   }
 }

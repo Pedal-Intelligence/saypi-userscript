@@ -504,5 +504,221 @@
   "submit_mode_off_description": {
     "description": "Descrição do modo de envio manual.",
     "message": "Envie apenas quando você pressionar o botão"
+  },
+  "nicknameLabel": {
+    "message": "Apelido",
+    "description": "Etiqueta para o campo de entrada para definir um apelido personalizado para o assistente de IA."
+  },
+  "greeting": {
+    "description": "Mensagem de saudação mostrada quando o usuário está assinado",
+    "message": "Oi, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Texto para mostrar quando o usuário não está conectado.",
+    "message": "Não assinou"
+  },
+  "profile": {
+    "description": "Etiqueta para a seção de perfil do usuário.",
+    "message": "Perfil"
+  },
+  "quotaCredits": {
+    "description": "Rótulo da unidade para créditos TTS",
+    "message": "Créditos"
+  },
+  "quotaRemaining": {
+    "description": "Etiqueta para a cota barra de progresso restante",
+    "message": "Cota restante"
+  },
+  "quotaStatusUnknown": {
+    "description": "Mensagem mostrada quando o status da cota não pode ser determinado",
+    "message": "Incapaz de verificar o status da cota"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Mensagem mostrada quando o usuário não é autenticado.",
+    "message": "Faça login para acessar a geração de voz e outros recursos premium"
+  },
+  "signIn": {
+    "description": "Texto para o botão de entrada.",
+    "message": "Entrar"
+  },
+  "signOut": {
+    "description": "Texto para o botão Sign Out.",
+    "message": "Sair"
+  },
+  "signedIn": {
+    "description": "Texto de status mostrado quando o usuário é autenticado (sem email).",
+    "message": "Assinou"
+  },
+  "signedInAs": {
+    "description": "Texto de status mostrado quando o usuário é autenticado, incluindo o email.",
+    "message": "Assinou como $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Texto mostrando a cota STT restante em minutos.",
+    "message": "$minutes$ minuto$plural$ restante",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Texto a ser mostrado quando a cota STT está esgotada.",
+    "message": "Cota de reconhecimento de fala exausta"
+  },
+  "sttQuotaProgress": {
+    "description": "Dica de ferramenta para a barra de progresso da cota STT.",
+    "message": "$remaining$ de $total$ segundos restantes",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Distima de ferramentas para a barra de progresso da cota STT em minutos.",
+    "message": "$remaining$ de $total$ minutos",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Etiqueta para a exibição restante da cota STT.",
+    "message": "Reconhecimento de fala"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unidade para cota STT (segundos).",
+    "message": "Secs"
+  },
+  "ttsCredits": {
+    "description": "O termo usado para a moeda de créditos no recurso Texto-fala.",
+    "message": "Créditos"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Unidade para cota TTS (caracteres).",
+    "message": "Créditos"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Texto a ser mostrado quando a cota TTS está esgotada.",
+    "message": "Cota de voz exausta"
+  },
+  "ttsQuotaProgress": {
+    "description": "Distribuição de ferramentas para a barra de progresso da cota TTS.",
+    "message": "$remaining$ de $total$ caracteres restantes",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Etiqueta para a exibição restante da cota TTS.",
+    "message": "Geração de voz"
+  },
+  "upgradeButton": {
+    "description": "Texto para o botão para atualizar o plano quando a cota estiver esgotada.",
+    "message": "Plano de atualização"
+  },
+  "viewDetails": {
+    "description": "Texto para o link para visualizar detalhes completos da cota no painel.",
+    "message": "Ver detalhes"
+  },
+  "clickToCollapse": {
+    "description": "O texto indicando o usuário pode clicar para ocultar o conteúdo expandido.",
+    "message": "Clique para entrar em colapso"
+  },
+  "clickToExpand": {
+    "description": "O texto indicando o usuário pode clicar para mostrar conteúdo em colapso.",
+    "message": "Clique para expandir"
+  },
+  "instructionLabel_context": {
+    "description": "Etiqueta amigável para instrução do usuário que fornece informações básicas.",
+    "message": "Fornecendo contexto ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Etiqueta amigável para instrução do usuário que define o que o usuário deseja.",
+    "message": "Esclarecendo as expectativas ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Etiqueta amigável para instrução do usuário que restringe o escopo da conversa.",
+    "message": "Concentrando a discussão ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Etiqueta amigável para instrução do usuário que estabelece limites para a conversa.",
+    "message": "Definindo o Guardrails ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Etiqueta amigável para instrução do usuário que orienta como a IA deve responder.",
+    "message": "Respostas orientadoras ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Etiqueta amigável para instrução do usuário que sugere gentilmente uma direção.",
+    "message": "Dando uma cutucada ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Etiqueta amigável para instrução do usuário que orienta a direção da conversa.",
+    "message": "Dirigindo a conversa ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Etiqueta amigável para mensagem de manutenção do assistente em colapso.",
+    "message": "Segurando este pensamento ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Etiqueta amigável para mensagem de manutenção do assistente em colapso.",
+    "message": "Fazendo uma nota mental ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Etiqueta amigável para mensagem de manutenção do assistente em colapso.",
+    "message": "Processamento em segundo plano ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Etiqueta amigável para mensagem de manutenção do assistente em colapso.",
+    "message": "Lembrando esse detalhe ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Etiqueta amigável para mensagem de manutenção do assistente em colapso.",
+    "message": "Salvando esse pensamento para mais tarde ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Etiqueta amigável para mensagem de manutenção do assistente em colapso.",
+    "message": "Mantendo o controle do contexto ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Etiqueta amigável para mensagem de manutenção do assistente em colapso.",
+    "message": "Afastando isso ..."
   }
 }

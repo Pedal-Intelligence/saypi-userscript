@@ -504,5 +504,221 @@
   "submit_mode_off_description": {
     "description": "Mô tả cho chế độ gửi thủ công.",
     "message": "Chỉ gửi khi bạn nhấn nút"
+  },
+  "nicknameLabel": {
+    "message": "Biệt danh",
+    "description": "Nhãn cho trường đầu vào để đặt biệt danh tùy chỉnh cho Trợ lý AI."
+  },
+  "greeting": {
+    "description": "Thông báo chào được hiển thị khi người dùng được đăng nhập",
+    "message": "Xin chào, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Văn bản để hiển thị khi người dùng không đăng nhập.",
+    "message": "Không đăng nhập"
+  },
+  "profile": {
+    "description": "Dán nhãn cho phần Hồ sơ người dùng.",
+    "message": "Hồ sơ"
+  },
+  "quotaCredits": {
+    "description": "Nhãn đơn vị cho các khoản tín dụng TTS",
+    "message": "Tín dụng"
+  },
+  "quotaRemaining": {
+    "description": "Nhãn cho thanh tiến độ còn lại",
+    "message": "Hạn ngạch còn lại"
+  },
+  "quotaStatusUnknown": {
+    "description": "Thông báo hiển thị khi trạng thái hạn ngạch không thể được xác định",
+    "message": "Không thể kiểm tra trạng thái hạn ngạch"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Thông báo hiển thị khi người dùng không được xác thực.",
+    "message": "Đăng nhập để truy cập tạo giọng nói và các tính năng cao cấp khác"
+  },
+  "signIn": {
+    "description": "Nhắn tin cho nút đăng nhập.",
+    "message": "Đăng nhập"
+  },
+  "signOut": {
+    "description": "Nhắn tin cho nút đăng nhập.",
+    "message": "Đăng xuất"
+  },
+  "signedIn": {
+    "description": "Văn bản trạng thái hiển thị khi người dùng được xác thực (không có email).",
+    "message": "Đã đăng nhập"
+  },
+  "signedInAs": {
+    "description": "Văn bản trạng thái hiển thị khi người dùng được xác thực, bao gồm cả email của họ.",
+    "message": "Đăng nhập dưới dạng $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Văn bản hiển thị hạn ngạch STT còn lại trong vài phút.",
+    "message": "$minutes$ phút$plural$ còn lại",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Văn bản để hiển thị khi hạn ngạch STT đã cạn kiệt.",
+    "message": "Hạn ngạch nhận dạng giọng nói kiệt sức"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip cho thanh tiến trình hạn ngạch STT.",
+    "message": "$remaining$ của $total$ giây còn lại",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip cho thanh tiến trình hạn ngạch STT trong vài phút.",
+    "message": "$remaining$ của $total$ phút còn lại",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Nhãn cho Hạn ngạch STT còn lại màn hình còn lại.",
+    "message": "Nhận dạng giọng nói"
+  },
+  "sttQuotaSeconds": {
+    "description": "Đơn vị cho hạn ngạch STT (giây).",
+    "message": "giây"
+  },
+  "ttsCredits": {
+    "description": "Thuật ngữ được sử dụng cho tiền tệ tín dụng trong tính năng văn bản thành giọng nói.",
+    "message": "Tín dụng"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Đơn vị cho hạn ngạch TTS (ký tự).",
+    "message": "Tín dụng"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Văn bản để hiển thị khi hạn ngạch TTS đã cạn kiệt.",
+    "message": "Tiếng nói sẽ kiệt sức"
+  },
+  "ttsQuotaProgress": {
+    "description": "Tooltip cho thanh tiến trình hạn ngạch TTS.",
+    "message": "$remaining$ của $total$ ký tự còn lại",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Nhãn cho Hạn ngạch TTS còn lại hiển thị.",
+    "message": "Tạo giọng nói"
+  },
+  "upgradeButton": {
+    "description": "Văn bản cho nút để nâng cấp kế hoạch khi hạn ngạch kiệt sức.",
+    "message": "Kế hoạch nâng cấp"
+  },
+  "viewDetails": {
+    "description": "Văn bản cho liên kết để xem chi tiết hạn ngạch đầy đủ trên bảng điều khiển.",
+    "message": "Xem chi tiết"
+  },
+  "clickToCollapse": {
+    "description": "Văn bản cho biết người dùng có thể nhấp để ẩn nội dung mở rộng.",
+    "message": "Bấm để sụp đổ"
+  },
+  "clickToExpand": {
+    "description": "Văn bản cho biết người dùng có thể nhấp để hiển thị nội dung bị sụp đổ.",
+    "message": "Bấm để mở rộng"
+  },
+  "instructionLabel_context": {
+    "description": "Nhãn thân thiện cho hướng dẫn người dùng cung cấp thông tin cơ bản.",
+    "message": "Cung cấp bối cảnh ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Nhãn thân thiện cho hướng dẫn người dùng xác định những gì người dùng muốn.",
+    "message": "Làm rõ những kỳ vọng ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Nhãn thân thiện cho hướng dẫn người dùng thu hẹp phạm vi của cuộc trò chuyện.",
+    "message": "Tập trung vào cuộc thảo luận ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Nhãn thân thiện cho hướng dẫn người dùng thiết lập ranh giới cho cuộc trò chuyện.",
+    "message": "Thiết lập các bảo vệ ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Nhãn thân thiện cho hướng dẫn người dùng hướng dẫn cách AI nên phản hồi.",
+    "message": "Hướng dẫn phản hồi ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Nhãn thân thiện cho hướng dẫn sử dụng mà nhẹ nhàng gợi ý một hướng.",
+    "message": "Đưa ra một cú hích ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Nhãn thân thiện cho hướng dẫn người dùng hướng dẫn hướng hội thoại.",
+    "message": "Chỉ đạo cuộc trò chuyện ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
+    "message": "Giữ suy nghĩ này ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
+    "message": "Ghi chú tinh thần ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
+    "message": "Xử lý trong nền ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
+    "message": "Ghi nhớ chi tiết này ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
+    "message": "Tiết kiệm suy nghĩ đó cho sau này ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
+    "message": "Theo dõi bối cảnh ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
+    "message": "Tucking cái này đi ..."
   }
 }

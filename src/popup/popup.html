@@ -44,6 +44,19 @@
   </head>
   <body class="flex items-center justify-center">
     <section id="preferences">
+      <div id="profile" class="user-preference-item w-full max-w-lg">
+        <div class="flex items-center w-full">
+          <div class="flex items-center flex-grow">
+            <span class="label-text hidden" data-i18n="profile">Profile</span>
+            <span id="profile-status" class="ml-2 text-sm text-gray-600" data-i18n="notSignedIn">Not signed in</span>
+            <span id="profile-name" class="ml-2 text-normal hidden"></span>
+          </div>
+          <button id="auth-button" class="control px-4 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" data-i18n="signIn">
+            Sign In
+          </button>
+        </div>
+      </div>
+
       <div
         id="preference-selector"
         class="w-full max-w-lg user-preference-item mode-selector"
@@ -160,18 +173,6 @@
         </div>
       </div>
       <div
-        class="user-preference-item w-full max-w-lg"
-        id="sounds-effects-preference"
-      >
-        <label class="wraper" for="sound-effects">
-          <span class="label-text" data-i18n="soundEffects">Sound Effects</span>
-          <div class="switch-wrap control">
-            <input type="checkbox" id="sound-effects" name="soundEffects" />
-            <div class="switch"></div>
-          </div>
-        </label>
-      </div>
-      <div
         id="submit-mode-selector"
         class="w-full max-w-lg user-preference-item mode-selector"
       >
@@ -237,6 +238,35 @@
       </div>
       <div
         class="user-preference-item w-full max-w-lg"
+        id="nickname-preference"
+      >
+        <label class="wraper" for="assistant-nickname">
+          <span class="label-text" data-i18n="nicknameLabel">Nickname</span>
+          <div class="control">
+            <input
+              type="text"
+              id="assistant-nickname"
+              name="assistantNickname"
+              class="px-2 py-1 border rounded w-20 text-sm text-right"
+              placeholder="Pi"
+            />
+          </div>
+        </label>
+      </div>
+      <div
+        class="user-preference-item w-full max-w-lg"
+        id="sounds-effects-preference"
+      >
+        <label class="wraper" for="sound-effects">
+          <span class="label-text" data-i18n="soundEffects">Sound Effects</span>
+          <div class="switch-wrap control">
+            <input type="checkbox" id="sound-effects" name="soundEffects" />
+            <div class="switch"></div>
+          </div>
+        </label>
+      </div>
+      <div
+        class="user-preference-item w-full max-w-lg"
         id="allow-interruptions-preference"
       >
         <label class="wraper" for="allow-interruptions">
@@ -269,43 +299,64 @@
       </div>
     </section>
 
-    <div class="pre-release">
-
-      <section id="preview-status">
-        <div class="preview-progress beta">
-          <div class="progress-bar">
-            <span class="share used"></span>
-            <span class="share remaining"></span>
-          </div>
+    <div class=""premium">
+      <section id="premium-status">
+        <div class="quota-progress tts">
           <div class="progress-label">
-            <span class="label">Beta Active</span>
-        </div>
-      </section>
-
-      <section id="voice">
-        <div class="user-preference-item w-full max-w-lg x-hidden">
-          <label class="wraper" for="enable-tts">
-            <span class="label-text" data-i18n="enableTTS">Custom voices </span>
-            <div class="switch-wrap control">
-              <input type="checkbox" id="enable-tts" name="enableTTS" />
-              <div class="switch"></div>
-            </div>
-          </label>
-        </div>
-      </section>
-
-      <section id="usage">
-        <div class="usage-charges-item w-full max-w-lg">
-          <span class="label" data-i18n="currentCharges">Current charges</span>
-          <div id="current-charges" class="value balance">
-            <span class="currency">&dollar;</span
-            ><span class="value" id="current-charges-numeric">0</span>
+            <span class="label" data-i18n="ttsQuotaRemaining">Voice Generation</span>
+            <span class="value" style="display: none;">
+              <span id="tts-quota-remaining-value" class="quota-remaining-value">0</span>
+              <span data-i18n="ttsQuotaCharacters">characters</span>
+            </span>
           </div>
+          <div class="progress-bar">
+            <div class="share used"></div>
+            <div class="share remaining"></div>
+          </div>
+          <div class="text-xs text-gray-500 text-right mt-1 quota-percentage"></div>
+        </div>
+        <!-- Add Speech Recognition quota section -->
+          <div class="quota-progress mt-2 stt">
+          <div class="progress-label">
+            <span class="label" data-i18n="sttQuotaRemaining">Speech Recognition</span>
+            <span class="value" style="display: none;">
+              <span id="stt-quota-remaining-value" class="quota-remaining-value">0</span>
+              <span data-i18n="sttQuotaSeconds">seconds</span>
+            </span>
+          </div>
+          <div class="progress-bar">
+            <div class="share used"></div>
+            <div class="share remaining"></div>
+          </div>
+          <div class="text-xs text-gray-500 text-right mt-1 quota-percentage"></div>
+        </div>
+        <!-- Single view details link for both quota sections -->
+        <div class="flex justify-between items-center mt-2 px-4">
+          <a id="view-quota-details" class="view-details" data-i18n="viewDetails" 
+             href="#">
+            View details
+          </a>
+          <span id="quota-reset-date" class="reset-date text-xs text-gray-500"></span>
+        </div>
+        
+        <!-- Container for unauthenticated message -->
+        <div id="unauthenticated-message" class="hidden w-full max-w-lg px-4 py-2">
+          <p class="text-sm text-gray-600" data-i18n="quotaUnauthenticatedMessage">
+            Sign in to access voice generation and other premium features
+          </p>
+        </div>
+      </section>
+
+      <section id="upgrade" class="hidden">
+        <div class="flex items-center justify-center w-full max-w-lg">
+          <button id="upgrade-button" class="px-4 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" data-i18n="upgradeButton">
+            Upgrade Plan
+          </button>
         </div>
       </section>
 
       <!-- Controls for testing and development -->
-      <section id="devtools">
+      <section id="devtools" class="hidden">
         <div class="user-preference-item w-full max-w-lg x-hidden">
           <button type="button" id="clear-preferences" class="btn btn-primary">
             Clear Preferences
@@ -377,11 +428,13 @@
     </section>
     <section id="application-status-detail" class="hidden issue" />
 
+    <script src="popup-config.js"></script>
     <script src="simple-user-agent.js"></script>
     <script src="language-picker.js"></script>
+    <script src="auth-shared.js"></script>
+    <script src="auth.js"></script>
     <script src="popup.js"></script>
     <script src="status.js"></script>
-    <script src="status-tts.js"></script>
-    <script src="usage.js"></script>
+    <script src="status-subscription.js"></script>
   </body>
 </html>

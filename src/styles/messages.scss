@@ -14,10 +14,41 @@
     .saypi-speak-button {
       border-radius: 50%;
     }
+    .saypi-telemetry-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      margin: 0 4px;
+      padding: 0;
+      border: none;
+      background: none;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        opacity: 1;
+        transform: scale(1.05);
+      }
+      
+      svg {
+        width: 24px;
+        height: 24px;
+        path {
+          fill: #6b6255; // Pi light brown text color
+        }
+      }
+    }
     .saypi-cost,
     .saypi-powered-by {
       display: flex;
       align-items: center; // center the text vertically
+    }
+    .currency-label {
+      font-size: 0.9em;
+      color: #6b6255; // Pi light brown text color
     }
     svg,
     img {
@@ -41,6 +72,16 @@
     max-width: 600px; // set a max width for the tooltip
     text-align: center; // center the text in the tooltip
   }
+}
+
+// Hide telemetry button on all assistant messages except the last one
+.chat-history .assistant-message .saypi-telemetry-button
+{
+  display: none;
+}
+.present-messages .assistant-message:last-of-type .saypi-telemetry-button:has(svg)
+{
+  display: flex;
 }
 
 .assistant-message .popup-menu button.saypi-button svg {
@@ -74,6 +115,278 @@
   }
 }
 
+// Telemetry visualization styles
+.saypi-telemetry-container {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  width: 100%;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  
+  button {
+    padding: 3px 8px;
+    border: none;
+    border-radius: 4px;
+    background-color: #ddd;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    
+    &:hover {
+      background-color: #ccc;
+    }
+    
+    &.active {
+      background-color: #0078d7;
+      color: white;
+    }
+  }
+  
+  .saypi-timeline-chart {
+    margin: 12px 0;
+    padding: 10px 0;
+    
+    .timeline-row {
+      position: relative;
+      height: 30px;
+      margin-bottom: 4px;
+      
+      .timeline-row-label {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 120px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        font-weight: 500;
+        padding-right: 10px;
+      }
+      
+      .timeline-segment {
+        position: absolute;
+        height: 100%;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        
+        &:hover {
+          opacity: 0.8;
+        }
+        
+        .segment-tooltip {
+          position: absolute;
+          z-index: 1000;
+          background-color: #333;
+          color: white;
+          padding: 4px 8px;
+          border-radius: 4px;
+          font-size: 12px;
+          white-space: nowrap;
+          pointer-events: none;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+          
+          small {
+            opacity: 0.8;
+            font-size: 10px;
+          }
+        }
+      }
+    }
+    
+    .timeline-axis {
+      position: relative;
+      height: 20px;
+      margin-top: 10px;
+      margin-left: 120px;
+      border-top: 1px solid #ccc;
+      
+      .timeline-tick {
+        position: absolute;
+        width: 1px;
+        height: 5px;
+        background-color: #888;
+      }
+      
+      .timeline-tick-label {
+        position: absolute;
+        transform: translateX(-50%);
+        font-size: 10px;
+        color: #888;
+      }
+    }
+    
+    .timeline-legend {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      justify-content: center;
+      
+      .legend-item {
+        display: flex;
+        align-items: center;
+        margin-right: 15px;
+        margin-bottom: 5px;
+        
+        div {
+          width: 12px;
+          height: 12px;
+          margin-right: 5px;
+          border-radius: 2px;
+        }
+        
+        span {
+          font-size: 12px;
+        }
+      }
+    }
+    
+    .timeline-explanation {
+      font-size: 12px;
+      color: #666;
+      margin-top: 10px;
+      text-align: center;
+      
+      i {
+        font-style: italic;
+      }
+    }
+  }
+}
+
+// Timeline visualization specific styles
+.saypi-timeline-chart {
+  border: 1px solid #e5ddd1;
+  border-radius: 6px;
+  overflow: hidden;
+  
+  .timeline-segment {
+    position: absolute;
+    height: 20px;
+    border-radius: 4px;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.1);
+      z-index: 10;
+    }
+  }
+  
+  .timeline-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 15px 0;
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      font-size: 10px;
+      cursor: help;
+      padding: 3px 6px;
+      border-radius: 4px;
+      background-color: rgba(245, 245, 245, 0.5);
+      
+      .color-box {
+        width: 10px;
+        height: 10px;
+        margin-right: 5px;
+        border-radius: 2px;
+      }
+    }
+  }
+}
+
+// Dark mode support
+.dark-mode, [data-theme="dark"] {
+  .saypi-telemetry-container {
+    background-color: #2a2a2a;
+    border-color: #444;
+    
+    button {
+      background-color: #444;
+      color: #ddd;
+      
+      &:hover {
+        background-color: #555;
+      }
+      
+      &.active {
+        background-color: #0078d7;
+        color: white;
+      }
+    }
+    
+    .saypi-timeline-chart {
+      .timeline-axis {
+        border-color: #444;
+        
+        .timeline-tick {
+          background-color: #666;
+        }
+        
+        .timeline-tick-label {
+          color: #aaa;
+        }
+      }
+      
+      .timeline-explanation {
+        color: #aaa;
+      }
+    }
+  }
+
+  // Dark mode for user instructions
+  .user-message {
+    &.with-instructions {
+      .instruction-label {
+        color: #aaa;
+      }
+      
+      svg.steer-icon {
+        fill: #aaa;
+      }
+      
+      .instruction-block {
+        background-color: rgba(40, 40, 40, 0.4);
+        border-left: 3px solid #444;
+      }
+    }
+  }
+
+  .maintenance-message {
+    &.silenced {
+      background-color: rgba(40, 40, 40, 0.4);
+      
+      .content {
+        &::before {
+          color: #aaa;
+        }
+      }
+      
+      .thinking-icon-container {
+        svg.thinking-icon {
+          stroke: #aaa;
+        }
+      }
+      
+      &:hover {
+        background-color: rgba(50, 50, 50, 0.7);
+      }
+    }
+  }
+}
+
+.dark .saypi-tts-controls {
+  .saypi-telemetry-button svg path {
+    fill: #a0a0a0;
+  }
+}
+
 /*
  * these styles are for debugging purposes, to make it easier to see when messages are being detected
  *
@@ -103,23 +416,200 @@
     font-style: italic;
     font-size: 0.9em;
     color: #666;
+    position: relative;
   }
 
   &.silenced {
     opacity: 0.7;
     cursor: pointer;
     transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    border-radius: 8px;
+    position: relative;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.05); /* Subtle highlight for iOS tap */
+    
+    /* Add a minimum touch target size - 44px is Apple's recommendation */
+    min-height: 38px;
+    
+    /* Visual feedback on hover/active state */
+    &:hover, &:active {
+      opacity: 0.9;
+      background-color: rgba(245, 245, 245, 0.8);
+    }
 
     .content {
       &:before {
-        content: "Saving that thought for later... (click to expand)";
+        content: attr(data-message-label);
         display: block;
+        padding: 4px 0;
       }
-      > * {
+      > *:not(.thinking-icon-container) {
         display: none;
       }
     }
 
+    .thinking-icon-container {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1;
+      
+      svg.thinking-icon {
+        display: block; /* Ensure SVG is visible */
+      }
+    }
+
+    .message-hover-menu {
+      display: none;
+    }
+  }
+  
+  /* Smooth transition when expanded */
+  &:not(.silenced) {
+    transition: opacity 0.2s ease;
+  }
+}
+
+// Style for user prompts with maintenance instructions
+.user-prompt {
+  // Add special handling for maintenance messages with instructions
+  &.with-instructions {
+    cursor: pointer;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    position: relative;
+    
+    // Generate a friendly label from a set of options
+    .instruction-label {
+      font-style: italic;
+      font-size: 0.9em;
+      color: #666;
+      padding: 0.5rem 0;
+      margin-bottom: 0.25rem;
+      border-radius: 6px;
+      position: relative;
+      margin-left: 34px; // Space for the steering wheel icon
+      
+      &:before {
+        content: attr(data-label);
+        display: block;
+      }
+      
+      &:after {
+        content: " (" attr(data-expand-text) ")";
+        font-size: 0.8em;
+        opacity: 0.8;
+      }
+    }
+    
+    // Steering wheel icon styles
+    .steer-icon-container {
+      position: absolute;
+      left: -30px;
+      top: 14px;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    svg.steer-icon {
+      width: 24px;
+      height: 24px;
+      opacity: 0.7;
+      fill: #666;
+    }
+    
+    // Styling for the instruction block
+    .instruction-block {
+      padding: 1rem;
+      margin: 0.5rem 0;
+      background-color: rgba(245, 234, 220, 0.5);
+      border-radius: 6px;
+      border-left: 3px solid #e0d5c5;
+      font-size: 0.95em;
+      white-space: pre-wrap;
+    }
+    
+    // Initially hide the instruction block
+    &.collapsed {
+      .instruction-block {
+        display: none;
+      }
+      .whitespace-pre-wrap {
+        // override the default whitespace-pre-wrap behavior
+        // to collapse the instruction block
+        white-space: normal;
+      }
+    }
+    
+    // When expanded
+    &:not(.collapsed) {
+      .instruction-label:after {
+        content: " (" attr(data-collapse-text) ")";
+      }
+    }
+  }
+}
+
+// Styling for maintenance messages and the brain/thinking icon
+.maintenance-message {
+  position: relative;
+  
+  // Hide the thinking icon by default (for expanded state)
+  .thinking-icon-container {
+    display: none;
+  }
+  
+  &.silenced {
+    max-height: 40px;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease;
+    background-color: rgba(245, 245, 245, 0.5);
+    
+    // Show the thinking icon only when silenced/collapsed
+    .thinking-icon-container {
+      position: absolute;
+      left: 6px;
+      top: 4px;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      
+      svg.thinking-icon {
+        width: 20px;
+        height: 20px;
+        stroke: #666;
+        opacity: 0.8;
+      }
+    }
+    
+    .content {
+      opacity: 0.7;
+      position: relative;
+      
+      &::before {
+        content: attr(data-message-label);
+        display: block;
+        font-size: 0.9em;
+        font-style: italic;
+        color: #666;
+        margin-left: 34px;
+      }
+    }
+    
+    &:hover {
+      background-color: rgba(245, 245, 245, 0.8);
+      .content {
+        opacity: 0.9;
+      }
+    }
+    
     .message-hover-menu {
       display: none;
     }

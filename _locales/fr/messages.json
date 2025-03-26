@@ -504,5 +504,221 @@
   "submit_mode_off_description": {
     "description": "Description du mode de soumission manuelle.",
     "message": "Soumettez uniquement lorsque vous appuyez sur le bouton"
+  },
+  "nicknameLabel": {
+    "message": "Surnom",
+    "description": "Étiquetez le champ de saisie pour définir un surnom personnalisé pour l'assistant AI."
+  },
+  "greeting": {
+    "description": "Message de salutation affiché lorsque l'utilisateur est connecté",
+    "message": "Salut, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Texte pour montrer quand l'utilisateur n'est pas connecté.",
+    "message": "Non signé"
+  },
+  "profile": {
+    "description": "Étiquetez la section du profil utilisateur.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Étiquette d'unité pour les crédits TTS",
+    "message": "crédits"
+  },
+  "quotaRemaining": {
+    "description": "Étiqueter la barre de progression du quota restant",
+    "message": "Quota restant"
+  },
+  "quotaStatusUnknown": {
+    "description": "Message affiché lorsque l'état du quota ne peut pas être déterminé",
+    "message": "Impossible de vérifier l'état du quota"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Message affiché lorsque l'utilisateur n'est pas authentifié.",
+    "message": "Connectez-vous pour accéder à la génération de voix et à d'autres fonctionnalités premium"
+  },
+  "signIn": {
+    "description": "Texte pour le bouton de connexion.",
+    "message": "Se connecter"
+  },
+  "signOut": {
+    "description": "Texte pour le bouton de déconnexion.",
+    "message": "Se déconnecter"
+  },
+  "signedIn": {
+    "description": "Texte d'état indiqué lorsque l'utilisateur est authentifié (sans e-mail).",
+    "message": "Signé"
+  },
+  "signedInAs": {
+    "description": "Texte d'état indiqué lorsque l'utilisateur est authentifié, y compris leur e-mail.",
+    "message": "Signé comme $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Texte montrant le quota STT restant en quelques minutes.",
+    "message": "$minutes$ minutes $plural$ restant",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Texte à montrer quand le quota STT est épuisé.",
+    "message": "Quota de reconnaissance de la parole épuisé"
+  },
+  "sttQuotaProgress": {
+    "description": "Infiltration pour la barre de progression du quota STT.",
+    "message": "$remaining$ de $total$ secondes restantes",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Infiltration pour la barre de progression du quota STT en quelques minutes.",
+    "message": "$remaining$ de $total$ minutes restantes",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Étiquette pour l'affichage restant du quota STT.",
+    "message": "Reconnaissance de la parole"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unité pour le quota STT (secondes).",
+    "message": "secondes"
+  },
+  "ttsCredits": {
+    "description": "Le terme utilisé pour la monnaie de crédits dans la fonction de texte vocale.",
+    "message": "crédits"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Unité pour le quota TTS (caractères).",
+    "message": "crédits"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Texte à montrer quand le quota TTS est épuisé.",
+    "message": "Quota vocal épuisé"
+  },
+  "ttsQuotaProgress": {
+    "description": "Infiltration pour la barre de progression du quota TTS.",
+    "message": "$remaining$ de $total$ caractères restants",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Étiquette pour l'affichage restant du quota TTS.",
+    "message": "Génération de voix"
+  },
+  "upgradeButton": {
+    "description": "Texte pour le bouton pour mettre à niveau le plan lorsque le quota est épuisé.",
+    "message": "Plan de mise à niveau"
+  },
+  "viewDetails": {
+    "description": "Texte pour le lien pour afficher les détails du quota complet sur le tableau de bord.",
+    "message": "Afficher les détails"
+  },
+  "clickToCollapse": {
+    "description": "Le texte indiquant que l'utilisateur peut cliquer pour masquer le contenu élargi.",
+    "message": "Cliquez pour s'effondrer"
+  },
+  "clickToExpand": {
+    "description": "Le texte indiquant que l'utilisateur peut cliquer pour afficher le contenu effondré.",
+    "message": "Cliquez pour agrandir"
+  },
+  "instructionLabel_context": {
+    "description": "Étiquette conviviale pour l'instruction de l'utilisateur qui fournit des informations générales.",
+    "message": "Fournir un contexte ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Étiquette amicale pour l'instruction de l'utilisateur qui définit ce que veut l'utilisateur.",
+    "message": "Clarifier les attentes ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Étiquette amicale pour l'instruction de l'utilisateur qui rétrécit la portée de la conversation.",
+    "message": "Concentrer la discussion ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Étiquette amicale pour l'instruction de l'utilisateur qui établit des limites pour la conversation.",
+    "message": "Faire partie de garde-corps ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Étiquette amicale pour l'instruction de l'utilisateur qui guide la façon dont l'IA doit réagir.",
+    "message": "Réponses guidant ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Étiquette amicale pour l'instruction utilisateur qui suggère doucement une direction.",
+    "message": "Donner un coup de pouce ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Étiquette amicale pour l'instruction de l'utilisateur qui guide la direction de la conversation.",
+    "message": "Diriger la conversation ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Étiquette amicale pour le message de maintenance de l'assistant effondré.",
+    "message": "Tenir cette pensée ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Étiquette amicale pour le message de maintenance de l'assistant effondré.",
+    "message": "Faire une note mentale ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Étiquette amicale pour le message de maintenance de l'assistant effondré.",
+    "message": "Traitement en arrière-plan ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Étiquette amicale pour le message de maintenance de l'assistant effondré.",
+    "message": "Se souvenir de ce détail ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Étiquette amicale pour le message de maintenance de l'assistant effondré.",
+    "message": "Sauver cette pensée pour plus tard ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Étiquette amicale pour le message de maintenance de l'assistant effondré.",
+    "message": "Garder une trace du contexte ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Étiquette amicale pour le message de maintenance de l'assistant effondré.",
+    "message": "Gucking ça ..."
   }
 }

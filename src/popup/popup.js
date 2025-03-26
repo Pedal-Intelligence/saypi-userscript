@@ -83,6 +83,111 @@ document.addEventListener("DOMContentLoaded", function () {
     showDescription(prefer);
   });
 
+  /**
+   * Checks if the user is entitled to use agent mode
+   * @returns {Promise<boolean>} True if the user is entitled to agent mode
+   */
+  function hasAgentModeEntitlement() {
+    return new Promise((resolve) => {
+      chrome.runtime.sendMessage({ type: 'CHECK_FEATURE_ENTITLEMENT', feature: 'agent_mode' }, function(response) {
+        resolve(!!response && response.hasEntitlement);
+      });
+    });
+  }
+
+  /**
+   * Updates the submit mode UI based on user entitlements
+   * If agent mode is entitled, shows the 3-way slider and nickname field
+   * Otherwise, shows only the auto-submit toggle and hides nickname field
+   */
+  function updateSubmitModeUI() {
+    hasAgentModeEntitlement().then((hasEntitlement) => {
+      const submitModeSelector = document.getElementById("submit-mode-selector");
+      const nicknamePreference = document.getElementById("nickname-preference");
+      const autoSubmitToggle = document.createElement("div");
+      autoSubmitToggle.className = "user-preference-item w-full max-w-lg";
+      autoSubmitToggle.id = "auto-submit-preference";
+      
+      if (hasEntitlement) {
+        // User is entitled to agent mode - show the 3-way slider and nickname field
+        if (submitModeSelector) {
+          submitModeSelector.classList.remove("hidden");
+        }
+        
+        if (nicknamePreference) {
+          nicknamePreference.classList.remove("hidden");
+        }
+        
+        // Remove the auto-submit toggle if it exists
+        const existingToggle = document.getElementById("auto-submit-preference");
+        if (existingToggle) {
+          existingToggle.remove();
+        }
+      } else {
+        // User is NOT entitled to agent mode - hide the 3-way slider and nickname field
+        if (submitModeSelector) {
+          submitModeSelector.classList.add("hidden");
+        }
+        
+        if (nicknamePreference) {
+          nicknamePreference.classList.add("hidden");
+        }
+        
+        // Only create the toggle if it doesn't already exist
+        if (!document.getElementById("auto-submit-preference")) {
+          // Create a simple auto-submit toggle switch instead
+          autoSubmitToggle.innerHTML = `
+            <label class="wraper" for="auto-submit">
+              <span class="label-text" data-i18n="autoSubmit">Auto-submit</span>
+              <div class="switch-wrap control">
+                <input type="checkbox" id="auto-submit" name="autoSubmit" />
+                <div class="switch"></div>
+              </div>
+            </label>
+          `;
+          
+          // Insert after the language preference
+          const languagePreference = document.getElementById("language-preference");
+          if (languagePreference && languagePreference.parentNode) {
+            languagePreference.parentNode.insertBefore(autoSubmitToggle, languagePreference.nextSibling);
+          }
+          
+          // Set up the auto-submit toggle switch
+          const autoSubmitInput = document.getElementById("auto-submit");
+          getStoredValue("autoSubmit", true).then((autoSubmit) => {
+            selectInput(autoSubmitInput, autoSubmit);
+          });
+          
+          autoSubmitInput.addEventListener("change", function () {
+            chrome.storage.sync.set({ 
+              autoSubmit: this.checked,
+              // Make sure discretionaryMode is false when toggling this way
+              discretionaryMode: false,
+              // Set submitMode to match autoSubmit (either "auto" or "off")
+              submitMode: this.checked ? "auto" : "off"
+            }, function () {
+              console.log("Preference saved: Auto-submit is " + (autoSubmitInput.checked ? "on" : "off"));
+            });
+            
+            if (this.checked) {
+              this.parentElement.classList.add("checked");
+            } else {
+              this.parentElement.classList.remove("checked");
+            }
+            
+            message({ 
+              autoSubmit: this.checked,
+              discretionaryMode: false 
+            });
+          });
+        }
+      }
+      
+      // Update i18n for the newly added element
+      i18nReplace();
+    });
+  }
+
   // Load the saved submit mode when the popup opens
   getStoredValue("submitMode", null).then((submitMode) => {
     if (submitMode === null) {
@@ -367,42 +472,6 @@ document.addEventListener("DOMContentLoaded", function () {
         this.parentElement.classList.remove("checked");
       }
     });
-
-    const enableTTSInput = document.getElementById("enable-tts");
-    const enableTTSLabel = enableTTSInput.closest('.wraper');
-    
-    function isSafari() {
-      // copied from UserAgentModule.ts
-      return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    }
-
-    // Check if Safari
-    if (isSafari()) {
-      enableTTSInput.disabled = true;
-      enableTTSLabel.classList.add('disabled');
-      // Use i18n message for tooltip
-      enableTTSLabel.setAttribute('title', 
-        chrome.i18n.getMessage('ttsDisabledSafari'));
-      selectInput(enableTTSInput, false);
-    } else {
-      getStoredValue("enableTTS", true).then((enableTTS) => {
-        selectInput(enableTTSInput, enableTTS);
-      });
-    }
-
-    enableTTSInput.addEventListener("change", function () {
-      chrome.storage.sync.set({ enableTTS: this.checked }, function () {
-        console.log(
-          "Preference saved: Text-to-speech is " +
-            (enableTTSInput.checked ? "on" : "off")
-        );
-      });
-      if (this.checked) {
-        this.parentElement.classList.add("checked");
-      } else {
-        this.parentElement.classList.remove("checked");
-      }
-    });
   }
 
   function hideAll(sections) {
@@ -412,7 +481,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     sections.forEach((section) => {
-      document.getElementById(section).classList.add("hidden");
+      const element = document.getElementById(section);
+      if (element) {
+        element.classList.add("hidden");
+      } else {
+        console.warn(`Section ${section} not found. Please check section definition in popup.js`);
+      }
     });
   }
 
@@ -423,17 +497,21 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     sections.forEach((section) => {
-      document.getElementById(section).classList.remove("hidden");
+      const element = document.getElementById(section);
+      if (element) {
+        element.classList.remove("hidden");
+      } else {
+        console.warn(`Section ${section} not found. Please check section definition in popup.js`);
+      }
     });
   }
 
   function showHideConsent() {
     const sections = [
       "preferences",
-      "preview-status",
-      "voice",
-      "usage",
+      "premium-status",
       "devtools",
+      "upgrade"
     ];
     chrome.storage.sync.get("shareData").then((result) => {
       // if the user has not made a decision yet, show the consent section
@@ -479,10 +557,59 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Call refreshAuthUI when popup opens to update the authentication UI
+  refreshAuthUI();
+
+  // Add click handler for view quota details link
+  document.getElementById('view-quota-details').addEventListener('click', function(e) {
+    e.preventDefault();
+    const dashboardUrl = config && config.authServerUrl 
+      ? `${config.authServerUrl}/app/dashboard` 
+      : 'https://www.saypi.ai/app/dashboard';
+    window.open(dashboardUrl, '_blank');
+  });
+
+  // Load the saved nickname when the popup opens
+  const nicknameInput = document.getElementById("assistant-nickname");
+  getStoredValue("nickname", null).then((nickname) => {
+    if (nickname) {
+      nicknameInput.value = nickname;
+    }
+  });
+
+  // Save the nickname when it changes
+  nicknameInput.addEventListener("change", function() {
+    const nickname = this.value.trim();
+    if (nickname) {
+      chrome.storage.sync.set({ nickname }, function() {
+        console.log("Nickname saved:", nickname);
+      });
+      // Notify content script of the change
+      message({ nickname });
+    } else {
+      // If the input is empty, remove the nickname
+      chrome.storage.sync.remove("nickname", function() {
+        console.log("Nickname removed");
+      });
+      // Notify content script of the removal
+      message({ nickname: null });
+    }
+  });
+
+  // Handle Enter key on nickname input
+  nicknameInput.addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
+      this.blur(); // Remove focus, which will trigger the change event if value changed
+    }
+  });
+
   i18nReplace();
   sliderInput();
   switchInputs();
   consentButtons();
   showHideConsent();
   resetButton();
+  
+  // Check for feature entitlements and update UI accordingly
+  updateSubmitModeUI();
 });

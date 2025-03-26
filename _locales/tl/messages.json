@@ -504,5 +504,221 @@
   "submit_mode_off_description": {
     "description": "Paglalarawan para sa manu-manong mode ng pagsusumite.",
     "message": "Isumite lamang kapag pinindot mo ang pindutan"
+  },
+  "nicknameLabel": {
+    "message": "Palayaw",
+    "description": "Lagyan ng label para sa patlang ng pag -input upang magtakda ng isang pasadyang palayaw para sa katulong ng AI."
+  },
+  "greeting": {
+    "description": "Ang mensahe ng pagbati na ipinakita kapag naka -sign in ang gumagamit",
+    "message": "Kumusta, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Teksto upang ipakita kapag ang gumagamit ay hindi naka -sign in.",
+    "message": "Hindi naka -sign in"
+  },
+  "profile": {
+    "description": "Lagyan ng label para sa seksyon ng Profile ng Gumagamit.",
+    "message": "Profile"
+  },
+  "quotaCredits": {
+    "description": "Unit Label para sa mga kredito ng TTS",
+    "message": "mga kredito"
+  },
+  "quotaRemaining": {
+    "description": "Lagyan ng label para sa natitirang bar ng quota",
+    "message": "Natitirang quota"
+  },
+  "quotaStatusUnknown": {
+    "description": "Ang mensahe na ipinakita kapag ang katayuan ng quota ay hindi matukoy",
+    "message": "Hindi masuri ang katayuan ng quota"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Ang mensahe na ipinakita kapag ang gumagamit ay hindi napatunayan.",
+    "message": "Mag -log in upang ma -access ang henerasyon ng boses at iba pang mga tampok na premium"
+  },
+  "signIn": {
+    "description": "Teksto para sa pindutan ng pag -sign in.",
+    "message": "Mag -sign in"
+  },
+  "signOut": {
+    "description": "Teksto para sa pindutan ng pag -sign out.",
+    "message": "Mag -sign out"
+  },
+  "signedIn": {
+    "description": "Ang teksto ng katayuan na ipinakita kapag ang gumagamit ay napatunayan (nang walang email).",
+    "message": "Naka -sign in"
+  },
+  "signedInAs": {
+    "description": "Ang teksto ng katayuan na ipinakita kapag napatunayan ang gumagamit, kasama ang kanilang email.",
+    "message": "Naka -sign in bilang $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Ang teksto na nagpapakita ng natitirang quota ng STT sa ilang minuto.",
+    "message": "$minutes$ minuto$plural$ natitira",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Teksto upang ipakita kapag naubos ang quota ng STT.",
+    "message": "Pagod na pagkilala sa pagsasalita"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip para sa STT quota Progress Bar.",
+    "message": "$remaining$ ng $total$ segundo ang natitira",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip para sa STT quota Progress Bar sa ilang minuto.",
+    "message": "$remaining$ ng $total$ minuto ang natitira",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Lagyan ng label para sa natitirang display ng stt quota.",
+    "message": "Pagkilala sa pagsasalita"
+  },
+  "sttQuotaSeconds": {
+    "description": "Yunit para sa stt quota (segundo).",
+    "message": "secs"
+  },
+  "ttsCredits": {
+    "description": "Ang term na ginamit para sa pera ng mga kredito sa tampok na text-to-speech.",
+    "message": "mga kredito"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Yunit para sa TTS Quota (mga character).",
+    "message": "mga kredito"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Teksto upang ipakita kapag naubos ang quota ng TTS.",
+    "message": "Napapagod ang voice quota"
+  },
+  "ttsQuotaProgress": {
+    "description": "Tooltip para sa TTS Quota Progress Bar.",
+    "message": "$remaining$ ng $total$ character na natitira",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Lagyan ng label para sa natitirang display ng TTS quota.",
+    "message": "Henerasyon ng boses"
+  },
+  "upgradeButton": {
+    "description": "Teksto para sa pindutan upang i -upgrade ang plano kapag naubos ang quota.",
+    "message": "Plano ng pag -upgrade"
+  },
+  "viewDetails": {
+    "description": "Teksto para sa link upang matingnan ang buong mga detalye ng quota sa dashboard.",
+    "message": "Tingnan ang mga detalye"
+  },
+  "clickToCollapse": {
+    "description": "Ang teksto na nagpapahiwatig ng gumagamit ay maaaring mag -click upang itago ang pinalawak na nilalaman.",
+    "message": "Mag -click upang gumuho"
+  },
+  "clickToExpand": {
+    "description": "Ang teksto na nagpapahiwatig ng gumagamit ay maaaring mag -click upang ipakita ang gumuho na nilalaman.",
+    "message": "Mag -click upang mapalawak"
+  },
+  "instructionLabel_context": {
+    "description": "Friendly label para sa pagtuturo ng gumagamit na nagbibigay ng impormasyon sa background.",
+    "message": "Nagbibigay ng konteksto ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Friendly label para sa pagtuturo ng gumagamit na tumutukoy sa nais ng gumagamit.",
+    "message": "Paglilinaw ng mga inaasahan ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Friendly label para sa pagtuturo ng gumagamit na makitid sa saklaw ng pag -uusap.",
+    "message": "Nakatuon ang talakayan ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Friendly label para sa pagtuturo ng gumagamit na nagtatatag ng mga hangganan para sa pag -uusap.",
+    "message": "Pagtatakda ng mga bantay ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Friendly label para sa pagtuturo ng gumagamit na gumagabay kung paano dapat tumugon ang AI.",
+    "message": "Gabay na mga tugon ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Friendly label para sa pagtuturo ng gumagamit na malumanay na nagmumungkahi ng isang direksyon.",
+    "message": "Nagbibigay ng isang nudge ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Friendly label para sa pagtuturo ng gumagamit na gumagabay sa direksyon ng pag -uusap.",
+    "message": "Pagpipiloto ng pag -uusap ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
+    "message": "Hawak ang kaisipang ito ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
+    "message": "Paggawa ng isang Mental Note ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
+    "message": "Pagproseso sa background ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
+    "message": "Naaalala ang detalyeng ito ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
+    "message": "Sine -save ang kaisipang iyon para sa ibang pagkakataon ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
+    "message": "Sinusubaybayan ang konteksto ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
+    "message": "Tucking ito ..."
   }
 }

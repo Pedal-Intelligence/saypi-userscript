@@ -1,10 +1,16 @@
 {
   "manifest_version": 3,
   "name": "__MSG_appName__",
-  "version": "1.7.0",
+  "version": "1.7.2",
   "description": "__MSG_appDescription__",
-  "permissions": ["storage"],
-  "host_permissions": ["https://api.saypi.ai/*"],
+  "permissions": [
+    "storage",
+    "cookies"
+  ],
+  "host_permissions": [
+    "https://api.saypi.ai/*",
+    "https://www.saypi.ai/*"
+  ],
   "content_scripts": [
     {
       "matches": ["https://pi.ai/*", "https://claude.ai/*"],

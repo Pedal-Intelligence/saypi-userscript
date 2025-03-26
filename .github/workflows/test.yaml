@@ -12,14 +12,32 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20.5.0]
+        node-version: [22.x]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm test
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: |
+        npm cache clean --force
+        # Try to use the existing lockfile first, if it fails then regenerate
+        npm install --no-fund --prefer-offline || (
+          echo "Initial install failed, regenerating package-lock.json..."
+          rm -f package-lock.json
+          npm install --no-fund
+        )
+      timeout-minutes: 10
+      env:
+        npm_config_fetch_retries: 5
+        npm_config_fetch_retry_factor: 2
+        npm_config_fetch_retry_mintimeout: 20000
+        npm_config_fetch_retry_maxtimeout: 120000
+    
+    - name: Run tests
+      run: npm test
 

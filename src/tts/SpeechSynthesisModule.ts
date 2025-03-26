@@ -10,8 +10,12 @@ import {
   SpeechSynthesisVoiceRemote,
   audioProviders,
   SpeechPlaceholder,
+  AIVoice,
+  PiAIVoice,
+  MatchableVoice,
+  VoiceFactory
 } from "./SpeechModel";
-import { BillingModule } from "../billing/BillingModule";
+import { BillingModule, UtteranceCharge } from "../billing/BillingModule";
 import { Chatbot } from "../chatbots/Chatbot";
 
 function generateUUID(): string {
@@ -110,6 +114,22 @@ class SpeechSynthesisModule {
     if (!foundVoice) {
       throw new Error(`Voice with id ${id} not found`);
     }
+    
+    // Convert plain voice object to proper voice instance with methods
+    if (foundVoice && !("matchesId" in foundVoice) && "powered_by" in foundVoice) {
+      try {
+        // Since AIVoice implements both MatchableVoice and SpeechSynthesisVoiceRemote,
+        // the result from VoiceFactory will be compatible with both
+        const matchableVoice = VoiceFactory.matchableFromVoiceRemote(foundVoice);
+        // TypeScript needs reassurance that this is a SpeechSynthesisVoiceRemote
+        return matchableVoice as unknown as SpeechSynthesisVoiceRemote;
+      } catch (e) {
+        console.error(`Error converting voice ${id} to matchable voice:`, e);
+        // Return the plain object if conversion fails
+        return foundVoice;
+      }
+    }
+    
     return foundVoice;
   }
 

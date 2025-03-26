@@ -18,8 +18,8 @@ We are not accepting external contributions to the codebase at this time. Please
 
 ### Prerequisites
 
-- Node.js v20.17.0 or later
-- npm v10.8.2 or later
+- Node.js (compatible with v22 LTS or later)
+- npm v10 or later
 - bash shell (Linux/Mac) or Git Bash (Windows)
 - `jq` - Required for building Firefox extensions
   - Ubuntu/Debian: `sudo apt-get install jq`
@@ -30,14 +30,39 @@ We are not accepting external contributions to the codebase at this time. Please
 
 1. Unzip or clone the source code into a directory of your choosing
 2. Open a terminal and navigate to that directory
-3. Install dependencies:
+3. Copy `.env.example` to `.env.production` and update the values as needed
+4. Install dependencies:
    ```bash
    npm install
    ```
-4. Build the content script:
+5. Build the extension:
    ```bash
-   npm run build
+   npm run build:firefox
    ```
+6. The generated add-on package will be located in the 'dist' directory
+
+## For Mozilla Reviewers
+
+This extension uses webpack to bundle JavaScript files. Here's what you need to know:
+
+- **Build Environment**: The build process is compatible with Node v22 LTS and npm v10 as used in Mozilla's review environment
+- **Required Configuration**: The build process requires environment variables defined in `.env.production` (see `.env.example` for required variables)
+- **Build Steps**:
+  ```bash
+  # Install dependencies
+  npm install
+  
+  # Create .env.production with the required variables
+  cp .env.example .env.production
+  
+  # Build the extension
+  npm run build
+  
+  # Package for Firefox
+  ./package-extension.sh firefox
+  ```
+
+The build output in the `dist` directory exactly matches the submitted extension code. The packaging script creates the final XPI by copying the required files from the build output.
 
 ### Packaging Browser Extensions
 

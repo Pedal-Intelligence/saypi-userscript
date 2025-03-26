@@ -350,7 +350,7 @@
     "description": "Вступ для голосу Джої."
   },
   "voiceIntroduction_paola": {
-    "message": "Чао! \nБонжур! \nПривіт! \nЯ Пі, і я вільно розмовляю 32 мовами. \nВід арабської до української, я тут, щоб подолати мовні бар’єри. \nЯк вам звучить цей голос?",
+    "message": "Чао! \nБонжур! \nПривіт! \nЯ Пі, і я вільно розмовляю 32 мовами. \nВід арабської до української, я тут, щоб подолати мовні бар'єри. \nЯк вам звучить цей голос?",
     "description": "Вступ для голосу Паоли."
   },
   "regenerateButtonTitle": {
@@ -504,5 +504,221 @@
   "submit_mode_off_description": {
     "description": "Опис для ручного режиму подання.",
     "message": "Надсилайте лише після натискання кнопки"
+  },
+  "nicknameLabel": {
+    "message": "Прізвисько",
+    "description": "Етикетка для поля введення для встановлення спеціального прізвисько для помічника AI."
+  },
+  "greeting": {
+    "description": "Вітальне повідомлення, показане, коли користувач підписався",
+    "message": "Привіт, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Текст, щоб показати, коли користувач не ввійшов.",
+    "message": "Не ввійшов"
+  },
+  "profile": {
+    "description": "Мітка для розділу профілю користувача.",
+    "message": "Профіл"
+  },
+  "quotaCredits": {
+    "description": "Етикетка одиниць для кредитів TTS",
+    "message": "кредити"
+  },
+  "quotaRemaining": {
+    "description": "Етикетка для квоти, що залишилася",
+    "message": "Квота, що залишилася"
+  },
+  "quotaStatusUnknown": {
+    "description": "Повідомлення, показане, коли статус квоти неможливо визначити",
+    "message": "Неможливо перевірити статус квоти"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Повідомлення, показане, коли користувач не є автентифікацією.",
+    "message": "Увійдіть, щоб отримати доступ до генерації голосу та інших преміальних функцій"
+  },
+  "signIn": {
+    "description": "Текст для кнопки входу.",
+    "message": "Увійти"
+  },
+  "signOut": {
+    "description": "Текст для кнопки виписки.",
+    "message": "Виходити"
+  },
+  "signedIn": {
+    "description": "Текст статусу, показаний, коли користувач автентифікується (без електронної пошти).",
+    "message": "Підписаний"
+  },
+  "signedInAs": {
+    "description": "Текст статусу, показаний під час автентифікації користувача, включаючи свою електронну пошту.",
+    "message": "Увійти як $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Текст, що показує решту квоти STT за лічені хвилини.",
+    "message": "$minutes$ хвилини$plural$ залишилось",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Текст, щоб показати, коли квота STT вичерпана.",
+    "message": "Квота розпізнавання мови виснажена"
+  },
+  "sttQuotaProgress": {
+    "description": "Підказка для панелі прогресу квоти STT.",
+    "message": "$remaining$ з $total$ секунди залишилось",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Підказка для панелі прогресу квоти STT за лічені хвилини.",
+    "message": "$remaining$ з $total$ хвилини залишилось",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Етикетка для квоти STT, що залишилася.",
+    "message": "Розпізнавання мови"
+  },
+  "sttQuotaSeconds": {
+    "description": "Одиниця для квоти STT (секунди).",
+    "message": "секунди"
+  },
+  "ttsCredits": {
+    "description": "Термін, що використовується для валюти кредитів у функції текст-мовлення.",
+    "message": "кредити"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Одиниця для квоти TTS (символів).",
+    "message": "кредити"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Текст, щоб показати, коли квота TTS вичерпана.",
+    "message": "Голосова квота виснажена"
+  },
+  "ttsQuotaProgress": {
+    "description": "Підказка для панелі прогресу TTS.",
+    "message": "$remaining$ з $total$ символів залишилось",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Мітка для квоти TTS, що залишилася.",
+    "message": "Генерування голосу"
+  },
+  "upgradeButton": {
+    "description": "Текст для кнопки для оновлення плану, коли квота вичерпана.",
+    "message": "План оновлення"
+  },
+  "viewDetails": {
+    "description": "Текст для посилання для перегляду повних деталей квот на інформаційній панелі.",
+    "message": "Переглянути деталі"
+  },
+  "clickToCollapse": {
+    "description": "Текст, що вказує на користувача, може натиснути, щоб приховати розширений вміст.",
+    "message": "Клацніть, щоб згорнути"
+  },
+  "clickToExpand": {
+    "description": "Текст, що вказує на користувача, може натиснути, щоб показати згорнутий вміст.",
+    "message": "Клацніть, щоб розширити"
+  },
+  "instructionLabel_context": {
+    "description": "Дружня етикетка для інструкції користувача, яка надає довідкову інформацію.",
+    "message": "Надання контексту ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Дружня етикетка для інструкції користувача, яка визначає, чого хоче користувач.",
+    "message": "Уточнюючи очікування ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Дружня етикетка для інструкції користувача, яка звужує сферу розмови.",
+    "message": "Фокусування дискусії ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Дружня етикетка для інструкції користувача, яка встановлює межі для розмови.",
+    "message": "Встановлення огородження ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Дружня етикетка для інструкції користувача, яка керує, як АІ повинен реагувати.",
+    "message": "Керівні відповіді ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Дружня етикетка для інструкції користувача, яка обережно пропонує напрямок.",
+    "message": "Даючи підштовхування ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Дружня етикетка для інструкції користувача, яка керує напрямком розмови.",
+    "message": "Керування розмовою ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Дружня етикетка для згорнутого помічника повідомлення про технічне обслуговування.",
+    "message": "Тримаючи цю думку ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Дружня етикетка для згорнутого помічника повідомлення про технічне обслуговування.",
+    "message": "Зробити розумову записку ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Дружня етикетка для згорнутого помічника повідомлення про технічне обслуговування.",
+    "message": "Обробка на задньому плані ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Дружня етикетка для згорнутого помічника повідомлення про технічне обслуговування.",
+    "message": "Пам'ятаючи цю деталь ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Дружня етикетка для згорнутого помічника повідомлення про технічне обслуговування.",
+    "message": "Збереження цієї думки на потім ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Дружня етикетка для згорнутого помічника повідомлення про технічне обслуговування.",
+    "message": "Відстеження контексту ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Дружня етикетка для згорнутого помічника повідомлення про технічне обслуговування.",
+    "message": "Відбиваючи це ..."
   }
 }

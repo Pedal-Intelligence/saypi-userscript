@@ -28,9 +28,30 @@ export default (env, argv) => {
     return prev;
   }, {});
 
+  // Generate popup-config.js content with environment variables
+  const popupConfigContent = `/**
+ * Auto-generated from ${envFile} - DO NOT MODIFY DIRECTLY
+ * This file is regenerated on each build to ensure it uses the correct environment settings.
+ * Generated on: ${new Date().toISOString()}
+ */
+const config = {
+  // Values from ${envFile}
+  apiBaseUrl: ${JSON.stringify(envVariables.API_SERVER_URL)},
+  authServerUrl: ${JSON.stringify(envVariables.AUTH_SERVER_URL)}
+};
+
+// Config is now globally accessible via window.config
+// No export needed in popup context
+`;
+
+  // Write the content directly to the existing popup-config.js file
+  const popupConfigPath = path.resolve(__dirname, "src/popup/popup-config.js");
+  fs.writeFileSync(popupConfigPath, popupConfigContent);
+  console.log(`Updated src/popup/popup-config.js with values from ${envFile}`);
+
   return {
     mode: isProduction ? "production" : "development",
-    devtool: isProduction ? "source-map" : "inline-source-map",
+    devtool: isProduction ? false : "inline-source-map",
     entry: {
       main: "./src/saypi.index.js",
       background: "./src/svc/background.ts"

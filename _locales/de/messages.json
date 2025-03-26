@@ -504,5 +504,221 @@
   "submit_mode_off_description": {
     "description": "Beschreibung für den manuellen Übermittlungsmodus.",
     "message": "Senden Sie es erst ab, wenn Sie auf die Schaltfläche klicken"
+  },
+  "nicknameLabel": {
+    "message": "Spitzname",
+    "description": "Beschriftet für das Eingabefeld einen benutzerdefinierten Spitznamen für den AI -Assistenten."
+  },
+  "greeting": {
+    "description": "Begrüßungsnachricht angezeigt, wenn der Benutzer unterschrieben ist",
+    "message": "Hallo, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Text zum Anzeigen, wenn der Benutzer nicht angemeldet ist.",
+    "message": "Nicht signiert"
+  },
+  "profile": {
+    "description": "Beschriften Sie für den Bereich des Benutzerprofils.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Einheitenbezeichnung für TTS -Credits",
+    "message": "Credits"
+  },
+  "quotaRemaining": {
+    "description": "Etikett für die verbleibende Fortschrittsleiste",
+    "message": "Quote verbleibend"
+  },
+  "quotaStatusUnknown": {
+    "description": "Meldung angezeigt, wenn der Quotenstatus nicht ermittelt werden kann",
+    "message": "Der Status des Quoten kann nicht prüfen"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Nachricht angezeigt, wenn der Benutzer nicht authentifiziert ist.",
+    "message": "Melden Sie sich an, um auf die Sprachgenerierung und andere Premium -Funktionen zuzugreifen"
+  },
+  "signIn": {
+    "description": "Text für die Schaltfläche \"Anmelden in der Schaltfläche\".",
+    "message": "Anmelden"
+  },
+  "signOut": {
+    "description": "Text für die Schaltfläche \"Anmelden\".",
+    "message": "Abmelden"
+  },
+  "signedIn": {
+    "description": "Statustext angezeigt, wenn der Benutzer authentifiziert ist (ohne E -Mail).",
+    "message": "Signiert in"
+  },
+  "signedInAs": {
+    "description": "Statustext angezeigt, wenn der Benutzer authentifiziert ist, einschließlich ihrer E -Mail.",
+    "message": "Unterschrieben als $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Text mit der verbleibenden STT -Quote in Minuten.",
+    "message": "$minutes$ Minuten $plural$ verbleibend",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text, um zu zeigen, wann STT -Quoten erschöpft ist.",
+    "message": "Spracherkennungsquote erschöpft"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip für die STT -Quoten -Fortschrittsleiste.",
+    "message": "$remaining$ verbleibende $total$ Sekunden",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip für die STT -Quoten -Fortschrittsleiste in Minuten.",
+    "message": "$remaining$ verbleibende $total$ Minuten",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Etikett für die verbleibende STT -Quote.",
+    "message": "Spracherkennung"
+  },
+  "sttQuotaSeconds": {
+    "description": "Einheit für STT -Quoten (Sekunden).",
+    "message": "Secs"
+  },
+  "ttsCredits": {
+    "description": "Der Begriff, der für die Credits-Währung in der Text-zu-Sprache-Funktion verwendet wird.",
+    "message": "Credits"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Einheit für TTS -Quoten (Zeichen).",
+    "message": "Credits"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Text, um zu zeigen, wann die TTS -Quote erschöpft ist.",
+    "message": "Sprachquote erschöpft"
+  },
+  "ttsQuotaProgress": {
+    "description": "Tooltip für die TTS -Quoten -Fortschrittsleiste.",
+    "message": "$remaining$ verbleibende $total$ Zeichen",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Etikett für die verbleibende TTS -Quote.",
+    "message": "Sprachgenerierung"
+  },
+  "upgradeButton": {
+    "description": "Text für die Schaltfläche, um den Plan zu aktualisieren, wenn die Quoten erschöpft ist.",
+    "message": "Upgrade -Plan"
+  },
+  "viewDetails": {
+    "description": "Text für den Link zum Anzeigen der vollständigen Kontingendetails im Dashboard.",
+    "message": "Details anzeigen"
+  },
+  "clickToCollapse": {
+    "description": "Der Text, der angibt, dass der Benutzer angezeigt werden kann, um erweiterte Inhalte auszublenden.",
+    "message": "Klicken Sie hier, um zusammenzubrechen"
+  },
+  "clickToExpand": {
+    "description": "Der Text, der angibt, dass der Benutzer klicken kann, um zusammengebrochene Inhalte anzuzeigen.",
+    "message": "Klicken Sie hier, um zu erweitern"
+  },
+  "instructionLabel_context": {
+    "description": "Freundlicher Etikett für Benutzeranweisung, der Hintergrundinformationen enthält.",
+    "message": "Bereitstellung von Kontext ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Freundliches Etikett für Benutzeranweisung, der definiert, was der Benutzer will.",
+    "message": "Erwartungen klären ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Freundliches Etikett für Benutzeranweisungen, der den Umfang der Konversation verengt.",
+    "message": "Fokussierung der Diskussion ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Freundliches Etikett für Benutzeranweisungen, der Grenzen für das Gespräch festlegt.",
+    "message": "Guardcails einstellen ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Freundliches Etikett für die Benutzeranweisung, die leitet, wie die KI reagieren sollte.",
+    "message": "Reaktionen führen ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Freundliches Etikett für Benutzeranweisung, der sanft eine Richtung vorschlägt.",
+    "message": "Einen Schubs geben ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Freundliches Etikett für Benutzeranweisung, der die Gesprächsrichtung leitet.",
+    "message": "Das Gespräch steuern ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Freundliches Etikett für ein zusammengebrochenes Assistant -Wartungsnachricht.",
+    "message": "Diesen Gedanken halten ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Freundliches Etikett für ein zusammengebrochenes Assistant -Wartungsnachricht.",
+    "message": "Mentale Notiz machen ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Freundliches Etikett für ein zusammengebrochenes Assistant -Wartungsnachricht.",
+    "message": "Verarbeitung im Hintergrund ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Freundliches Etikett für ein zusammengebrochenes Assistant -Wartungsnachricht.",
+    "message": "Erinnern Sie sich an dieses Detail ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Freundliches Etikett für ein zusammengebrochenes Assistant -Wartungsnachricht.",
+    "message": "Den Gedanken für später retten ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Freundliches Etikett für ein zusammengebrochenes Assistant -Wartungsnachricht.",
+    "message": "Kontext im Auge behalten ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Freundliches Etikett für ein zusammengebrochenes Assistant -Wartungsnachricht.",
+    "message": "Das wegstecken ..."
   }
 }

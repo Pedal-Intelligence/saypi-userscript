@@ -8,6 +8,7 @@ import {
   SpeechSynthesisVoiceRemote,
 } from "../tts/SpeechModel";
 import { isFirefox, isSafari } from "../UserAgentModule";
+import { jwtManager } from "../JwtManager";
 
 type Preference = "speed" | "balanced" | "accuracy" | null;
 type VoicePreference = SpeechSynthesisVoiceRemote | null;
@@ -22,7 +23,13 @@ interface StorageResult {
   theme?: string; // 'light' or 'dark'
   shareData?: boolean; // has the user consented to data sharing?
   discretionaryMode?: boolean; // new beta feature for discretionary responses
+  nickname?: string; // user's preferred nickname for the AI assistant
 }
+
+// Define feature codes
+export const FEATURE_CODES = {
+  AGENT_MODE: "agent_mode"
+};
 
 class UserPreferenceModule {
   private cache: UserPreferenceCache = UserPreferenceCache.getInstance();
@@ -42,6 +49,7 @@ class UserPreferenceModule {
   private constructor() {
     this.reloadCache();
     this.registerMessageListeners();
+    this.registerJwtClaimsListener();
   }
 
   private reloadCache(): void {
@@ -54,7 +62,7 @@ class UserPreferenceModule {
     this.isTTSBetaPaused().then((value) => {
       this.cache.setCachedValue("isTTSBetaPaused", value);
     });
-    this.getDiscretionaryMode().then((value) => {
+    this.getDiscretionaryMode(false).then((value) => {
       this.cache.setCachedValue("discretionaryMode", value);
       EventBus.emit("userPreferenceChanged", { discretionaryMode: value }); // propagate the change to other modules - this is a bit of a hack for the cache not being ready immediately after construction
     });
@@ -116,6 +124,19 @@ class UserPreferenceModule {
         }
       });
     }
+  }
+
+  /**
+   * Register a listener for JWT claims changes to update the cache
+   */
+  private registerJwtClaimsListener(): void {
+    EventBus.on('jwt:claims:changed', () => {
+      console.debug('JWT claims changed, reloading discretionary mode setting');
+      this.getDiscretionaryMode().then((value) => {
+        this.cache.setCachedValue("discretionaryMode", value);
+        EventBus.emit("userPreferenceChanged", { discretionaryMode: value });
+      });
+    });
   }
 
   /**
@@ -355,12 +376,86 @@ class UserPreferenceModule {
     return cachedResult;
   }
 
-  public getDiscretionaryMode(): Promise<boolean> {
-    return this.getStoredValue("discretionaryMode", false);
+  isTTSEnabled() {
+    // TTS is now implicitly enabled when the user has credits
+    return Promise.resolve(true);
   }
 
+  /**
+   * Checks if the user is entitled to a specific feature
+   * @param featureCode The feature code to check for entitlement
+   * @returns Promise<boolean> True if the user is entitled to the feature, false otherwise
+   */
+  public hasFeatureEntitlement(featureCode: string): Promise<boolean> {
+    return Promise.resolve(jwtManager.hasFeatureEntitlement(featureCode));
+  }
+
+  /**
+   * Checks if the user is entitled to use agent mode
+   * @returns Promise<boolean> True if user is entitled to agent mode
+   */
+  public hasAgentModeEntitlement(): Promise<boolean> {
+    return this.hasFeatureEntitlement(FEATURE_CODES.AGENT_MODE);
+  }
+
+  /**
+   * Gets the current discretionary mode setting, but only returns true if the user
+   * is entitled to use agent mode
+   * @param checkEntitlement - if true, check if the user has entitlement to use agent mode
+   */
+  public getDiscretionaryMode(checkEntitlement: boolean = true): Promise<boolean> {
+    return Promise.all([
+      this.getStoredValue("discretionaryMode", false),
+      this.hasAgentModeEntitlement()
+    ]).then(([discretionaryMode, hasEntitlement]) => {
+      if (checkEntitlement) {
+        // Only return true if both the setting is enabled AND the user has entitlement
+        return discretionaryMode && hasEntitlement;
+      }
+      return discretionaryMode;
+    });
+  }
+
+  /**
+   * Gets the cached discretionary mode value, but only returns true if the user
+   * is entitled to use agent mode
+   */
   public getCachedDiscretionaryMode(): boolean {
-    return this.cache.getCachedValue("discretionaryMode", false);
+    const cachedSetting = this.cache.getCachedValue("discretionaryMode", false);
+    const hasEntitlement = jwtManager.hasFeatureEntitlement(FEATURE_CODES.AGENT_MODE);
+    
+    // Only return true if both the setting is enabled AND the user has entitlement
+    const result = cachedSetting && hasEntitlement;
+    //console.debug(`getCachedDiscretionaryMode: cachedSetting=${cachedSetting}, hasEntitlement=${hasEntitlement}, result=${result}`);
+    return result;
+  }
+
+  public getNickname(): Promise<string | null> {
+    return this.getStoredValue("nickname", null);
+  }
+
+  public setNickname(nickname: string | null): Promise<void> {
+    return new Promise((resolve) => {
+      if (
+        typeof chrome !== "undefined" &&
+        chrome.storage &&
+        chrome.storage.sync
+      ) {
+        if (nickname === null) {
+          chrome.storage.sync.remove("nickname", () => {
+            resolve();
+          });
+        } else {
+          chrome.storage.sync.set({ nickname }, () => {
+            resolve();
+          });
+        }
+      } else {
+        // If Chrome storage API is not supported, do nothing
+        resolve();
+      }
+      EventBus.emit("userPreferenceChanged", { nickname });
+    });
   }
 }
 

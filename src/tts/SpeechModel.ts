@@ -106,6 +106,8 @@ const placeholderVoice: SpeechSynthesisVoiceRemote = {
   id: "unassigned",
   lang: "en",
   price: 0,
+  price_per_thousand_chars_in_usd: 0,
+  price_per_thousand_chars_in_credits: 0,
   powered_by: "unassigned",
   default: false,
   localService: false,
@@ -193,7 +195,9 @@ class UtteranceFactory {
 
 interface SpeechSynthesisVoiceRemote extends SpeechSynthesisVoice {
   id: string;
-  price: number; // price per 1000 characters
+  price: number; // price per 1000 characters (legacy field)
+  price_per_thousand_chars_in_usd: number; // price in USD per 1k characters
+  price_per_thousand_chars_in_credits: number; // price in credits per 1k characters
   powered_by: string;
 }
 
@@ -221,6 +225,8 @@ class VoiceFactory {
 abstract class AIVoice implements SpeechSynthesisVoiceRemote, MatchableVoice {
   id: string;
   price: number;
+  price_per_thousand_chars_in_usd: number;
+  price_per_thousand_chars_in_credits: number;
   powered_by: string;
   default: boolean;
   lang: string;
@@ -232,6 +238,8 @@ abstract class AIVoice implements SpeechSynthesisVoiceRemote, MatchableVoice {
     name: string,
     lang: string,
     price: number,
+    price_per_thousand_chars_in_usd: number,
+    price_per_thousand_chars_in_credits: number,
     powered_by: string,
     defaultVoice: boolean,
     localService: boolean,
@@ -241,6 +249,8 @@ abstract class AIVoice implements SpeechSynthesisVoiceRemote, MatchableVoice {
     this.name = name;
     this.lang = lang;
     this.price = price;
+    this.price_per_thousand_chars_in_usd = price_per_thousand_chars_in_usd;
+    this.price_per_thousand_chars_in_credits = price_per_thousand_chars_in_credits;
     this.powered_by = powered_by;
     this.default = defaultVoice;
     this.localService = localService;
@@ -261,8 +271,10 @@ class PiAIVoice extends AIVoice {
       `Pi ${voiceNumber}`,
       "en",
       0,
+      0,
+      0,
       "inflection.ai",
-      true,
+      voiceNumber === 1,
       false,
       ""
     );
@@ -309,6 +321,8 @@ class SayPiVoice extends AIVoice {
       voice.name,
       lang,
       voice.price,
+      voice.price_per_thousand_chars_in_usd,
+      voice.price_per_thousand_chars_in_credits,
       voice.powered_by,
       voice.default,
       voice.localService,

@@ -2,6 +2,10 @@ import { config } from "./ConfigModule.js";
 import StateMachineService from "./StateMachineService.js";
 import { logger } from "./LoggingModule.js";
 import { UserPreferenceModule } from "./prefs/PreferenceModule";
+import { callApi } from "./ApiClient";
+import EventBus from "./events/EventBus";
+import telemetryModule from "./TelemetryModule";
+import { ChatbotService } from "./chatbots/ChatbotService";
 
 // Define the shape of the response JSON object
 interface TranscriptionResponse {
@@ -23,7 +27,7 @@ const knownNetworkErrorMessages = [
 ];
 
 // timeout for transcription requests
-const TIMEOUT_MS = 30000; // 30 seconds
+const TIMEOUT_MS = 10000; // 30 seconds
 
 // track sequence numbers for in-flight transcription requests
 let sequenceNum = 0;
@@ -57,11 +61,20 @@ function transcriptionReceived(seq: number): void {
   sequenceNumsPendingTranscription.forEach((entry) => {
     if (entry.seq === seq) {
       sequenceNumsPendingTranscription.delete(entry);
+      const transcriptionDuration = Date.now() - entry.timestamp;
       logger.debug(
         `Transcription response ${seq} received after ${
-          (Date.now() - entry.timestamp) / 1000
+          transcriptionDuration / 1000
         }s`
       );
+      
+      // Track in telemetry
+      EventBus.emit("saypi:transcription:received", {
+        sequenceNumber: seq,
+        duration: transcriptionDuration,
+        timestamp: Date.now()
+      });
+      
       return;
     }
   });
@@ -164,7 +177,14 @@ async function uploadAudio(
     setTimeout(() => controller.abort(), TIMEOUT_MS);
 
     const startTime = new Date().getTime();
-    const response: Response = await fetch(
+    
+    // Emit transcription started event for telemetry tracking
+    EventBus.emit("saypi:transcribing", {
+      sequenceNumber: sequenceNum,
+      timestamp: startTime,
+    });
+    
+    const response = await callApi(
       `${config.apiServerUrl}/transcribe?language=${language}`,
       {
         method: "POST",
@@ -272,6 +292,14 @@ async function constructTranscriptionFormData(
   const discretionaryMode = await userPreferences.getDiscretionaryMode();
   if (discretionaryMode) {
     formData.append("analyzeForResponse", "true");
+  }
+
+  // Get the chatbot's nickname if set
+  const chatbot = await ChatbotService.getChatbot();
+  const nickname = await chatbot.getNickname();
+  const defaultName = chatbot.getName();
+  if (nickname && nickname !== defaultName) {
+    formData.append("nickname", nickname);
   }
 
   return formData;

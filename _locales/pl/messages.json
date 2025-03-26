@@ -504,5 +504,221 @@
   "submit_mode_off_description": {
     "description": "Opis ręcznego trybu przesyłania.",
     "message": "Prześlij dopiero po naciśnięciu przycisku"
+  },
+  "nicknameLabel": {
+    "message": "Przydomek",
+    "description": "Etykieta dla pola wejściowego, aby ustawić niestandardowy pseudonim dla asystenta AI."
+  },
+  "greeting": {
+    "description": "Wiadomość z życzeniami pokazana, gdy użytkownik jest zalogowany",
+    "message": "Cześć, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Tekst, który pokazuje, kiedy użytkownik nie jest zalogowany.",
+    "message": "Nie zalogowane"
+  },
+  "profile": {
+    "description": "Etykieta sekcji profilu użytkownika.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Etykieta jednostkowa dla kredytów TTS",
+    "message": "kredyty"
+  },
+  "quotaRemaining": {
+    "description": "Etykieta dla pozostałego paska postępu",
+    "message": "Pozostała kwota"
+  },
+  "quotaStatusUnknown": {
+    "description": "Wiadomości pokazane, gdy nie można ustalić statusu kwotu",
+    "message": "Nie można sprawdzić statusu kwoty"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Wiadomość pokazana, gdy użytkownik nie jest uwierzytelniony.",
+    "message": "Zaloguj się, aby uzyskać dostęp do generowania głosu i inne funkcje premium"
+  },
+  "signIn": {
+    "description": "SMS -y do przycisku zaloguj się.",
+    "message": "Zalogować się"
+  },
+  "signOut": {
+    "description": "SMS -y do przycisku wylogowania się.",
+    "message": "Wyloguj się"
+  },
+  "signedIn": {
+    "description": "Tekst statusu pokazany, gdy użytkownik jest uwierzytelniony (bez wiadomości e -mail).",
+    "message": "Zalogowany"
+  },
+  "signedInAs": {
+    "description": "Tekst statusu pokazany, gdy użytkownik jest uwierzytelniony, w tym ich e -mail.",
+    "message": "Zalogowany jako $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Tekst pokazujący pozostałą kwotę STT w ciągu kilku minut.",
+    "message": "$minutes$ minut$plural$ pozostało",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Tekst, który pokazuje, kiedy kwota STT jest wyczerpana.",
+    "message": "Wyczerpany kwot rozpoznawania mowy"
+  },
+  "sttQuotaProgress": {
+    "description": "Pokłata dla paska postępu w STT.",
+    "message": "$remaining$ z $total$ sekund pozostało",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Pokłata dla paska postępu w STT w minutach.",
+    "message": "$remaining$ z $total$ minut pozostało",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Etykieta dla pozostałego wyświetlacza kwotu STT.",
+    "message": "Rozpoznawanie mowy"
+  },
+  "sttQuotaSeconds": {
+    "description": "Jednostka do kwoty STT (sekundy).",
+    "message": "Secs"
+  },
+  "ttsCredits": {
+    "description": "Termin użyty dla waluty kredytów w funkcji tekstu na mowę.",
+    "message": "kredyty"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Jednostka dla kwoty TTS (znaki).",
+    "message": "kredyty"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Tekst pokazujący, gdy kwota TTS jest wyczerpana.",
+    "message": "Kwota głosowa wyczerpana"
+  },
+  "ttsQuotaProgress": {
+    "description": "Pokłata dla paska postępu kwot TTS.",
+    "message": "$remaining$ z $total$ znaków pozostało",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Etykieta dla pozostałego wyświetlacza kwot TTS.",
+    "message": "Generowanie głosu"
+  },
+  "upgradeButton": {
+    "description": "SMS -y do przycisku, aby zaktualizować plan, gdy kwot jest wyczerpany.",
+    "message": "Plan aktualizacji"
+  },
+  "viewDetails": {
+    "description": "SMS -y do linku, aby wyświetlić pełne szczegóły kwot na desce rozdzielczej.",
+    "message": "Zobacz szczegóły"
+  },
+  "clickToCollapse": {
+    "description": "Tekst wskazujący użytkownik może kliknąć, aby ukryć rozszerzoną zawartość.",
+    "message": "Kliknij, aby zawalić się"
+  },
+  "clickToExpand": {
+    "description": "Tekst wskazujący, że użytkownik może kliknąć, aby wyświetlić zmierzoną zawartość.",
+    "message": "Kliknij, aby rozwinąć"
+  },
+  "instructionLabel_context": {
+    "description": "Przyjazna etykieta dla instrukcji użytkownika, która zawiera informacje podstawowe.",
+    "message": "Zapewnienie kontekstu ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Przyjazna etykieta do instrukcji użytkownika, która określa, czego chce użytkownik.",
+    "message": "Wyjaśnianie oczekiwań ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Przyjazna etykieta do instrukcji użytkownika, która zawęża zakres rozmowy.",
+    "message": "Skupienie dyskusji ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Przyjazna etykieta do instrukcji użytkownika, która ustanawia granice rozmowy.",
+    "message": "Ustawienie poręczy ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Przyjazna etykieta do instrukcji użytkownika, która kieruje, jak AI powinna zareagować.",
+    "message": "Prowadzenie odpowiedzi ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Przyjazna etykieta dla instrukcji użytkownika, która delikatnie sugeruje kierunek.",
+    "message": "Dając szturchanie ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Przyjazna etykieta dla instrukcji użytkownika, która kieruje kierunkiem rozmowy.",
+    "message": "Kierowanie rozmowy ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Trzymając tę ​​myśl ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Notatka psychiczna ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Przetwarzanie w tle ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Pamiętając o tym szczegółach ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Oszczędzanie tej myśli na później ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Śledzenie kontekstu ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
+    "message": "Wykrzykując to ..."
   }
 }

@@ -20,7 +20,7 @@ import {
   audioProviders,
 } from "../tts/SpeechModel";
 import EventBus from "../events/EventBus";
-import { AssistantResponse } from "./MessageElements";
+import { AssistantResponse, UserMessage } from "./MessageElements";
 import { AssistantWritingEvent } from "./MessageEvents";
 import { Chatbot } from "../chatbots/Chatbot";
 import { findRootAncestor } from "./DOMModule";
@@ -161,6 +161,8 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
           const addedElement = node as Element;
           const responseObservations =
             await this.findAndDecorateAssistantResponses(addedElement);
+          const promptObservations = 
+            await this.findAndDecorateUserPrompts(addedElement);
           if (this.haltOnFirst && responseObservations[0]?.isReady()) {
             // only expecting one new chat message at a time, so
             // skip this mutation if the chat message is already decorated
@@ -177,6 +179,7 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
       ) {
         const mutatedElement = mutation.target as Element;
         this.findAndDecorateAssistantResponses(mutatedElement);
+        this.findAndDecorateUserPrompts(mutatedElement);
       }
     }
   }
@@ -222,6 +225,36 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
     return observations;
   }
 
+  static findUserPrompt(
+    searchRoot: Element,
+    match: Element
+  ): Observation {
+    if (match) {
+      const found = Observation.foundUndecorated(match.id, match);
+      if (match.classList.contains("user-prompt")) {
+        return Observation.foundAndDecorated(found);
+      }
+      return found;
+    }
+    return Observation.notFound("");
+  }
+
+  static findUserPrompts(
+    searchRoot: Element,
+    querySelector: string
+  ): Observation[] {
+    const deepMatches = searchRoot.querySelectorAll(querySelector);
+    const observations: Observation[] = [];
+    for (const match of deepMatches) {
+      const observation = ChatHistoryMessageObserver.findUserPrompt(
+        searchRoot,
+        match
+      );
+      observations.push(observation);
+    }
+    return observations;
+  }
+
   static findFirstAssistantResponse(
     searchRoot: Element,
     querySelector: string
@@ -241,6 +274,11 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
     return ChatHistoryMessageObserver.findAssistantResponses(searchRoot, query);
   }
 
+  findUserPrompts(searchRoot: Element): Observation[] {
+    const query = this.chatbot.getUserPromptSelector();
+    return ChatHistoryMessageObserver.findUserPrompts(searchRoot, query);
+  }
+
   /**
    * Decorates the assistant response with the necessary classes and attributes,
    * but does not add any additional functionality, i.e. speech
@@ -251,6 +289,24 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
     messageElement: HTMLElement
   ): AssistantResponse {
     const message = this.chatbot.getAssistantResponse(messageElement);
+    return message;
+  }
+
+  /**
+   * Decorates the user prompt message with the necessary classes and attributes
+   * @param messageElement - the chat message to decorate
+   * @returns UserMessage - the decorated user message
+   */
+  public decorateUserPrompt(
+    messageElement: HTMLElement
+  ): UserMessage {
+    const message = this.chatbot.getUserMessage(messageElement);
+    
+    // Process any maintenance instructions
+    if (message.hasInstructions()) {
+      message.processInstructions();
+    }
+    
     return message;
   }
 
@@ -299,6 +355,30 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
     return decoratedObservations;
   }
 
+  async findAndDecorateUserPrompts(searchRoot: Element): Promise<Observation[]> {
+    const initialObservations: Observation[] = this.findUserPrompts(searchRoot);
+    const decoratedObservations: Observation[] = [];
+    
+    for (const initialObservation of initialObservations) {
+      if (
+        initialObservation.found &&
+        initialObservation.isNew &&
+        !initialObservation.decorated
+      ) {
+        const message = this.decorateUserPrompt(
+          initialObservation.target as HTMLElement
+        );
+        const decoratedObservation = Observation.foundAndDecorated(
+          initialObservation,
+          message
+        );
+        decoratedObservations.push(decoratedObservation);
+      }
+    }
+    
+    return decoratedObservations;
+  }
+
   async streamSpeechFromHistory(
     history: SpeechHistoryModule,
     message: AssistantResponse
@@ -340,6 +420,9 @@ class ChatHistoryOldMessageObserver extends ChatHistoryMessageObserver {
         messagesFound.push(observation.decorations[0]);
       }
     }
+
+    // Also decorate user prompts during initial load
+    await this.findAndDecorateUserPrompts(root);
 
     return messagesFound;
   }
@@ -420,6 +503,7 @@ class ChatHistoryNewMessageObserver
     message.decorateSpeech(utterance);
 
     const messageContent = await message.decoratedContent();
+    let startTime = 0;
     this.observeChatMessageElement(
       message,
       messageContent,
@@ -429,13 +513,16 @@ class ChatHistoryNewMessageObserver
           utterance: utterance,
         };
         EventBus.emit("saypi:piWriting", writingEvent);
+        startTime = Date.now();
+        console.debug("Pi started writing at", startTime);
       },
       (text) => {
         EventBus.emit("saypi:piStoppedWriting", {
           utterance: utterance,
           text,
         });
-        console.debug("Closed audio input stream", utterance.id);
+        const endTime = Date.now();
+        console.debug("Pi stopped writing at", endTime, "after", endTime - startTime, "ms");
       },
       (lateChange) => {
         message.decorateIncompleteSpeech(true);
@@ -501,8 +588,6 @@ class ChatHistoryNewMessageObserver
             start = true;
           }
           lastChunkTime = currentTime;
-          const delay = currentTime - (firstChunkTime as number);
-          console.debug(`+${delay}ms, streamed text: "${txt}"`);
           const textAddedEvent: TextAddedEvent = {
             text: txt,
             utterance: utterance,

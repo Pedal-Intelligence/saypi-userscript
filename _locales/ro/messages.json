@@ -504,5 +504,221 @@
   "submit_mode_off_description": {
     "description": "Descrierea modului de trimitere manuală.",
     "message": "Trimiteți doar când apăsați butonul"
+  },
+  "nicknameLabel": {
+    "message": "Poreclă",
+    "description": "Etichetați pentru câmpul de intrare pentru a seta o poreclă personalizată pentru asistentul AI."
+  },
+  "greeting": {
+    "description": "Mesaj de salut afișat atunci când utilizatorul este conectat",
+    "message": "Bună, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Text pentru a arăta când utilizatorul nu este conectat.",
+    "message": "Nu a fost conectat"
+  },
+  "profile": {
+    "description": "Etichetă pentru secțiunea Profilul utilizatorului.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Etichetă unitară pentru credite TTS",
+    "message": "credite"
+  },
+  "quotaRemaining": {
+    "description": "Etichetă pentru cota rămasă bara de progres",
+    "message": "Cota rămasă"
+  },
+  "quotaStatusUnknown": {
+    "description": "Mesaj afișat atunci când starea cotei nu poate fi determinată",
+    "message": "Imposibil de verificat starea cotei"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Mesaj afișat atunci când utilizatorul nu este autentificat.",
+    "message": "Conectați -vă pentru a accesa generarea vocală și alte funcții premium"
+  },
+  "signIn": {
+    "description": "Text pentru butonul de conectare.",
+    "message": "Conectare"
+  },
+  "signOut": {
+    "description": "Text pentru butonul de conectare.",
+    "message": "Sign out"
+  },
+  "signedIn": {
+    "description": "Textul de stare afișat atunci când utilizatorul este autentificat (fără e -mail).",
+    "message": "A semnat"
+  },
+  "signedInAs": {
+    "description": "Textul de stare afișat atunci când utilizatorul este autentificat, inclusiv e -mailul lor.",
+    "message": "A semnat ca $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Text care arată cota stt rămasă în câteva minute.",
+    "message": "$minutes$ minut$plural$ rămase",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text pentru a arăta când cota STT este epuizată.",
+    "message": "Cota de recunoaștere a vorbirii epuizată"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip pentru bara de progres a cotei STT.",
+    "message": "$remaining$ din $total$ secunde rămase",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip pentru bara de progres a cotei STT în câteva minute.",
+    "message": "$remaining$ din $total$ minute rămase",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Etichetă pentru afișajul rămase al cotei STT.",
+    "message": "Recunoașterea vorbirii"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unitate pentru cota STT (secunde).",
+    "message": "sec"
+  },
+  "ttsCredits": {
+    "description": "Termenul utilizat pentru moneda de credite în funcția de text la vorbire.",
+    "message": "credite"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Unitate pentru cota TTS (caractere).",
+    "message": "credite"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Text pentru a arăta când cota TTS este epuizată.",
+    "message": "Cota vocală epuizată"
+  },
+  "ttsQuotaProgress": {
+    "description": "Tooltip pentru bara de progres a cotei TTS.",
+    "message": "$remaining$ din $total$ caractere rămase",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Etichetă pentru afișajul TTS de cote rămase.",
+    "message": "Generarea vocală"
+  },
+  "upgradeButton": {
+    "description": "Text pentru butonul pentru a actualiza planul atunci când cota este epuizată.",
+    "message": "Plan de actualizare"
+  },
+  "viewDetails": {
+    "description": "Text pentru linkul pentru a vizualiza detaliile cotei complete pe tabloul de bord.",
+    "message": "Vizualizați detalii"
+  },
+  "clickToCollapse": {
+    "description": "Text care indică utilizatorul poate face clic pentru a ascunde conținut extins.",
+    "message": "Faceți clic pentru a se prăbuși"
+  },
+  "clickToExpand": {
+    "description": "Text care indică utilizatorul poate face clic pentru a afișa conținut prăbușit.",
+    "message": "Faceți clic pentru a extinde"
+  },
+  "instructionLabel_context": {
+    "description": "Etichetă prietenoasă pentru instrucțiunile utilizatorului care oferă informații de fundal.",
+    "message": "Furnizarea de context ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Etichetă prietenoasă pentru instrucțiunea utilizatorului care definește ceea ce își dorește utilizatorul.",
+    "message": "Clarificarea așteptărilor ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Etichetă prietenoasă pentru instrucțiuni de utilizator care restrânge domeniul de aplicare al conversației.",
+    "message": "Concentrarea discuției ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Etichetă prietenoasă pentru instrucțiunea utilizatorului care stabilește granițe pentru conversație.",
+    "message": "Stabilirea balustradelor ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Etichetă prietenoasă pentru instrucțiunea utilizatorului care ghidează modul în care AI ar trebui să răspundă.",
+    "message": "Răspunsuri îndrumătoare ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Etichetă prietenoasă pentru instrucțiuni de utilizator care sugerează ușor o direcție.",
+    "message": "Dând un nud ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Etichetă prietenoasă pentru instrucțiunea utilizatorului care ghidează direcția conversației.",
+    "message": "Direcționând conversația ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Etichetă prietenoasă pentru mesajul de întreținere a asistentului prăbușit.",
+    "message": "Ținând acest gând ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Etichetă prietenoasă pentru mesajul de întreținere a asistentului prăbușit.",
+    "message": "Făcând o notă mentală ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Etichetă prietenoasă pentru mesajul de întreținere a asistentului prăbușit.",
+    "message": "Procesarea în fundal ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Etichetă prietenoasă pentru mesajul de întreținere a asistentului prăbușit.",
+    "message": "Amintindu -mi acest detaliu ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Etichetă prietenoasă pentru mesajul de întreținere a asistentului prăbușit.",
+    "message": "Salvând gândul pentru mai târziu ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Etichetă prietenoasă pentru mesajul de întreținere a asistentului prăbușit.",
+    "message": "Urmărirea contextului ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Etichetă prietenoasă pentru mesajul de întreținere a asistentului prăbușit.",
+    "message": "Îndepărtând asta ..."
   }
 }

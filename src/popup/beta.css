@@ -13,27 +13,63 @@
     background-size: 45px;
 }
 
-.progress-bar {
-    height: 0.5em;
-    width: 100%;
+.quota-progress {
+    width: 250px;
+    margin: 0.5rem 1rem;
+    padding: 0.5rem 0;
+    /* border-bottom: 1px solid #e2e8f0; */
 }
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background-color: #e2e8f0;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+
 .progress-bar .share {
     display: inline-block;
     height: 100%;
-}
-.progress-bar .share.used {
-    background-color: #FF9800;
     float: left;
-    width: 50%;
+    transition: width 0.3s ease;
 }
-.progress-bar .share.remaining {
-    background-color: #4CAF50;
-    float: right;
-    width: 50%;
+
+.progress-bar .remaining {
+    background-color: #4a5568;  /* darker color for remaining credits */
 }
+
+.progress-bar .used {
+    background-color: #e2e8f0;  /* lighter color for used portion */
+}
+
 .progress-label {
-    border-bottom: 1px solid #e2e8f0;
-    padding: 0.25rem 1rem 0.5rem 1rem;
+    font-size: 0.875rem;
+    color: #4a5568;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0.25rem;
+}
+
+.progress-label .value {
+    font-weight: 500;
+    color: #1a202c;  /* slightly darker for better contrast */
+}
+
+#upgrade div {
+    padding: 0.5rem 1rem;
+    border-bottom: none;
+}
+
+#upgrade-button {
+    width: 180px;  /* narrower, more focused width for the CTA */
+}
+
+/* Hide beta-specific styles */
+.beta {
+    display: none;
 }
 
 button#clear-preferences {

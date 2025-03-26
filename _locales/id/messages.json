@@ -504,5 +504,221 @@
   "submit_mode_off_description": {
     "description": "Deskripsi untuk mode pengiriman manual.",
     "message": "Hanya kirimkan ketika Anda menekan tombol"
+  },
+  "nicknameLabel": {
+    "message": "Nama panggilan",
+    "description": "Label untuk bidang input untuk mengatur nama panggilan khusus untuk asisten AI."
+  },
+  "greeting": {
+    "description": "Pesan ucapan yang ditampilkan saat pengguna masuk",
+    "message": "Hai, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "notSignedIn": {
+    "description": "Teks untuk ditampilkan kapan pengguna tidak masuk.",
+    "message": "Tidak masuk"
+  },
+  "profile": {
+    "description": "Label untuk bagian Profil Pengguna.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Label unit untuk kredit TTS",
+    "message": "kredit"
+  },
+  "quotaRemaining": {
+    "description": "Label untuk bilah kemajuan kuota yang tersisa",
+    "message": "Kuota tersisa"
+  },
+  "quotaStatusUnknown": {
+    "description": "Pesan yang ditampilkan saat status kuota tidak dapat ditentukan",
+    "message": "Tidak dapat memeriksa status kuota"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Pesan yang ditampilkan saat pengguna tidak diautentikasi.",
+    "message": "Masuk untuk mengakses pembuatan suara dan fitur premium lainnya"
+  },
+  "signIn": {
+    "description": "Teks untuk tombol Masuk.",
+    "message": "Masuk"
+  },
+  "signOut": {
+    "description": "Teks untuk tombol masuk.",
+    "message": "Keluar"
+  },
+  "signedIn": {
+    "description": "Teks status ditampilkan saat pengguna diautentikasi (tanpa email).",
+    "message": "Masuk"
+  },
+  "signedInAs": {
+    "description": "Teks status yang ditampilkan ketika pengguna diautentikasi, termasuk email mereka.",
+    "message": "Masuk sebagai $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "description": "Teks menunjukkan kuota STT yang tersisa dalam hitungan menit.",
+    "message": "$minutes$ menit$plural$ tersisa",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Teks untuk ditampilkan saat kuota STT habis.",
+    "message": "Kuota pengenalan ucapan habis"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip untuk bilah kemajuan kuota STT.",
+    "message": "$remaining$ dari $total$ detik tersisa",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip untuk bilah kemajuan kuota STT dalam hitungan menit.",
+    "message": "$remaining$ dari $total$ menit tersisa",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Label untuk tampilan STT Quota yang tersisa.",
+    "message": "Pengakuan ucapan"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unit untuk kuota STT (detik).",
+    "message": "secs"
+  },
+  "ttsCredits": {
+    "description": "Istilah yang digunakan untuk mata uang kredit dalam fitur teks-ke-speech.",
+    "message": "kredit"
+  },
+  "ttsQuotaCharacters": {
+    "description": "Unit untuk kuota TTS (karakter).",
+    "message": "kredit"
+  },
+  "ttsQuotaExhausted": {
+    "description": "Teks untuk ditampilkan kapan kuota TTS habis.",
+    "message": "Kuota suara habis"
+  },
+  "ttsQuotaProgress": {
+    "description": "Tooltip untuk bilah kemajuan kuota TTS.",
+    "message": "$remaining$ dari $total$ karakter tersisa",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "description": "Label untuk tampilan TTS Quota yang tersisa.",
+    "message": "Generasi suara"
+  },
+  "upgradeButton": {
+    "description": "Teks untuk tombol untuk meningkatkan rencana saat kuota habis.",
+    "message": "Paket Upgrade"
+  },
+  "viewDetails": {
+    "description": "Teks untuk tautan untuk melihat detail kuota lengkap di dasbor.",
+    "message": "Lihat detail"
+  },
+  "clickToCollapse": {
+    "description": "Teks yang menunjukkan pengguna dapat mengklik untuk menyembunyikan konten yang diperluas.",
+    "message": "Klik untuk runtuh"
+  },
+  "clickToExpand": {
+    "description": "Teks yang menunjukkan pengguna dapat mengklik untuk menampilkan konten yang runtuh.",
+    "message": "Klik untuk memperluas"
+  },
+  "instructionLabel_context": {
+    "description": "Label ramah untuk instruksi pengguna yang memberikan informasi latar belakang.",
+    "message": "Memberikan konteks ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Label ramah untuk instruksi pengguna yang mendefinisikan apa yang diinginkan pengguna.",
+    "message": "Mengklarifikasi harapan ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Label ramah untuk instruksi pengguna yang mempersempit ruang lingkup percakapan.",
+    "message": "Memfokuskan diskusi ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Label ramah untuk instruksi pengguna yang menetapkan batasan untuk percakapan.",
+    "message": "Mengatur pagar pembatas ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Label ramah untuk instruksi pengguna yang memandu bagaimana AI harus merespons.",
+    "message": "Membimbing tanggapan ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Label ramah untuk instruksi pengguna yang dengan lembut menunjukkan arah.",
+    "message": "Memberikan dorongan ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Label ramah untuk instruksi pengguna yang memandu arah percakapan.",
+    "message": "Mengarahkan percakapan ..."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Label ramah untuk pesan pemeliharaan asisten yang runtuh.",
+    "message": "Memegang pemikiran ini ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Label ramah untuk pesan pemeliharaan asisten yang runtuh.",
+    "message": "Membuat catatan mental ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Label ramah untuk pesan pemeliharaan asisten yang runtuh.",
+    "message": "Memproses di latar belakang ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Label ramah untuk pesan pemeliharaan asisten yang runtuh.",
+    "message": "Mengingat detail ini ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Label ramah untuk pesan pemeliharaan asisten yang runtuh.",
+    "message": "Menyimpan pemikiran itu nanti ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Label ramah untuk pesan pemeliharaan asisten yang runtuh.",
+    "message": "Melacak konteks ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Label ramah untuk pesan pemeliharaan asisten yang runtuh.",
+    "message": "Menyelipkan ini ..."
   }
 }

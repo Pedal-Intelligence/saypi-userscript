@@ -330,7 +330,11 @@
   },
   "currencyUSDAbbreviation": {
     "message": "USD",
-    "description": "The abbreviation for the United States Dollar."
+    "description": "The abbreviation for the US dollar."
+  },
+  "ttsCredits": {
+    "message": "credits",
+    "description": "The term used for the credits currency in the text-to-speech feature."
   },
   "ttsPoweredBy": {
     "message": "Text-to-speech powered by $ttsEngine$",
@@ -504,5 +508,217 @@
   "submit_mode_off_description": {
     "message": "Only submit when you press the button",
     "description": "Description for the manual submission mode."
+  },
+  "nicknameLabel": {
+    "message": "Nickname",
+    "description": "Label for the input field to set a custom nickname for the AI assistant."
+  },
+  "profile": {
+    "message": "Profile",
+    "description": "Label for the user profile section."
+  },
+  "signIn": {
+    "message": "Sign In",
+    "description": "Text for the sign in button."
+  },
+  "signOut": {
+    "message": "Sign Out",
+    "description": "Text for the sign out button."
+  },
+  "notSignedIn": {
+    "message": "Not signed in",
+    "description": "Text to show when the user is not signed in."
+  },
+  "signedIn": {
+    "message": "Signed in",
+    "description": "Status text shown when user is authenticated (without email)."
+  },
+  "signedInAs": {
+    "message": "Signed in as $email$",
+    "description": "Status text shown when user is authenticated, including their email.",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "quotaRemaining": {
+    "message": "Quota Remaining",
+    "description": "Label for the quota remaining progress bar"
+  },
+  "ttsQuotaExhausted": {
+    "message": "Voice Quota Exhausted",
+    "description": "Text to show when TTS quota is exhausted."
+  },
+  "ttsQuotaProgress": {
+    "message": "$remaining$ of $total$ characters remaining",
+    "description": "Tooltip for the TTS quota progress bar.",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "500"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1000"
+      }
+    }
+  },
+  "quotaStatusUnknown": {
+    "message": "Unable to check quota status",
+    "description": "Message shown when quota status cannot be determined"
+  },
+  "upgradeButton": {
+    "message": "Upgrade Plan",
+    "description": "Text for the button to upgrade the plan when quota is exhausted."
+  },
+  "quotaCredits": {
+    "message": "credits",
+    "description": "Unit label for TTS credits"
+  },
+  "greeting": {
+    "message": "Hi, $name$!",
+    "description": "Greeting message shown when user is signed in",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "ttsQuotaRemaining": {
+    "message": "Voice Generation",
+    "description": "Label for the TTS quota remaining display."
+  },
+  "ttsQuotaCharacters": {
+    "message": "credits",
+    "description": "Unit for TTS quota (characters)."
+  },
+  "sttQuotaRemaining": {
+    "message": "Speech Recognition",
+    "description": "Label for the STT quota remaining display."
+  },
+  "sttQuotaSeconds": {
+    "message": "secs",
+    "description": "Unit for STT quota (seconds)."
+  },
+  "viewDetails": {
+    "message": "View details",
+    "description": "Text for the link to view full quota details on the dashboard."
+  },
+  "sttQuotaExhausted": {
+    "message": "Speech Recognition Quota Exhausted",
+    "description": "Text to show when STT quota is exhausted."
+  },
+  "quotaUnauthenticatedMessage": {
+    "message": "Log in to access voice generation and other premium features",
+    "description": "Message shown when user is not authenticated."
+  },
+  "sttQuotaProgress": {
+    "message": "$remaining$ of $total$ seconds remaining",
+    "description": "Tooltip for the STT quota progress bar.",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "message": "$remaining$ of $total$ minutes remaining",
+    "description": "Tooltip for the STT quota progress bar in minutes.",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttMinutesRemaining": {
+    "message": "$minutes$ minute$plural$ remaining",
+    "description": "Text showing remaining STT quota in minutes.",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "instructionLabel_steering": {
+    "message": "Steering the conversation...",
+    "description": "Friendly label for user instruction that guides the conversation direction."
+  },
+  "instructionLabel_nudge": {
+    "message": "Giving a nudge...",
+    "description": "Friendly label for user instruction that gently suggests a direction."
+  },
+  "instructionLabel_guiding": {
+    "message": "Guiding responses...",
+    "description": "Friendly label for user instruction that guides how the AI should respond."
+  },
+  "instructionLabel_guardrails": {
+    "message": "Setting guardrails...",
+    "description": "Friendly label for user instruction that establishes boundaries for the conversation."
+  },
+  "instructionLabel_context": {
+    "message": "Providing context...",
+    "description": "Friendly label for user instruction that provides background information."
+  },
+  "instructionLabel_focusing": {
+    "message": "Focusing the discussion...",
+    "description": "Friendly label for user instruction that narrows the scope of conversation."
+  },
+  "instructionLabel_expectations": {
+    "message": "Clarifying expectations...",
+    "description": "Friendly label for user instruction that defines what the user wants."
+  },
+  "maintenanceLabel_saving": {
+    "message": "Saving that thought for later...",
+    "description": "Friendly label for collapsed assistant maintenance message."
+  },
+  "maintenanceLabel_processing": {
+    "message": "Processing in the background...",
+    "description": "Friendly label for collapsed assistant maintenance message."
+  },
+  "maintenanceLabel_holding": {
+    "message": "Holding this thought...",
+    "description": "Friendly label for collapsed assistant maintenance message."
+  },
+  "maintenanceLabel_mental_note": {
+    "message": "Making a mental note...",
+    "description": "Friendly label for collapsed assistant maintenance message."
+  },
+  "maintenanceLabel_tracking": {
+    "message": "Keeping track of context...",
+    "description": "Friendly label for collapsed assistant maintenance message."
+  },
+  "maintenanceLabel_tucking": {
+    "message": "Tucking this away...",
+    "description": "Friendly label for collapsed assistant maintenance message."
+  },
+  "maintenanceLabel_remembering": {
+    "message": "Remembering this detail...",
+    "description": "Friendly label for collapsed assistant maintenance message."
+  },
+  "clickToExpand": {
+    "message": "click to expand",
+    "description": "Text indicating user can click to show collapsed content."
+  },
+  "clickToCollapse": {
+    "message": "click to collapse",
+    "description": "Text indicating user can click to hide expanded content."
   }
 }
