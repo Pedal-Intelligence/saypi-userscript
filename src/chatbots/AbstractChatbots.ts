@@ -5,6 +5,7 @@ import { shortenTranscript } from "../TextModule";
 import { ImmersionStateChecker } from "../ImmersionServiceLite";
 import { ChatbotService } from "./ChatbotService";
 import { AssistantResponse, UserMessage } from "../dom/MessageElements";
+import { VoiceSelector } from "../tts/VoiceMenu";
 
 export abstract class AbstractChatbot implements Chatbot {
     protected readonly preferences = UserPreferenceModule.getInstance();
@@ -33,7 +34,8 @@ export abstract class AbstractChatbot implements Chatbot {
     abstract getAssistantResponse(element: HTMLElement, includeInitialText?: boolean): AssistantResponse;
     abstract getUserMessage(element: HTMLElement): UserMessage;
     abstract getName(): string;
-    
+    abstract getVoiceMenu(preferences: UserPreferenceModule, element: HTMLElement): VoiceSelector;
+
     getID(): string {
       return this.getName().toLowerCase();
     }

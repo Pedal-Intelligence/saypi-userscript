@@ -1,7 +1,7 @@
 import { AssistantResponse } from "../dom/MessageElements";
 import { UserMessage } from "../dom/MessageElements";
 import { VoiceSelector } from "../tts/VoiceMenu";
-import { shortenTranscript } from "../TextModule";
+import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
 export interface Chatbot {
   getChatHistorySelector(): string;
@@ -36,6 +36,7 @@ export interface Chatbot {
   getID(): string; // the name of the chatbot as it appears in URLs, etc., e.g. "pi", "claude"
   getNickname(): Promise<string>; // Returns the user's preferred nickname for the AI assistant, or the default name if not set
   hasNickname(): Promise<boolean>;
+  getVoiceMenu(preferences: UserPreferenceModule, element: HTMLElement): VoiceSelector;
 }
 
 export interface UserPrompt {
