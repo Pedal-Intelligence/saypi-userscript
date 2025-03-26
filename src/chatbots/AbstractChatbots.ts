@@ -33,6 +33,10 @@ export abstract class AbstractChatbot implements Chatbot {
     abstract getAssistantResponse(element: HTMLElement, includeInitialText?: boolean): AssistantResponse;
     abstract getUserMessage(element: HTMLElement): UserMessage;
     abstract getName(): string;
+    
+    getID(): string {
+      return this.getName().toLowerCase();
+    }
   
     async getNickname(): Promise<string> {
       const nickname = await this.preferences.getNickname();

@@ -32,7 +32,8 @@ export interface Chatbot {
     includeInitialText?: boolean
   ): AssistantResponse;
   getUserMessage(element: HTMLElement): UserMessage; // Get a user message from an element
-  getName(): string;
+  getName(): string; // the display name of the chatbot, e.g. "Pi", "Claude"
+  getID(): string; // the name of the chatbot as it appears in URLs, etc., e.g. "pi", "claude"
   getNickname(): Promise<string>; // Returns the user's preferred nickname for the AI assistant, or the default name if not set
   hasNickname(): Promise<boolean>;
 }
