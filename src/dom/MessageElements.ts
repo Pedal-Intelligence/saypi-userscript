@@ -348,7 +348,15 @@ abstract class AssistantResponse {
         }
       }
       
+      // Add touchend event for mobile support, using a separate handler to ensure proper event behavior
       element.addEventListener("click", () => {
+        element.classList.toggle("silenced");
+      });
+      
+      // Add touchend event for mobile devices
+      element.addEventListener("touchend", (e) => {
+        // Prevent default only for touchend to avoid interfering with scrolling
+        e.preventDefault();
         element.classList.toggle("silenced");
       });
     }

@@ -167,3 +167,18 @@ html.firefox-android .saypi-control-panel .settings-button.mini {
 @import "dark-mode.scss";
 @import "focus-mode.scss";
 @import "lock.scss";
+
+/* Improve tappability of maintenance messages on mobile */
+html.mobile-device .assistant-message.maintenance-message {
+  &.silenced {
+    opacity: 0.85;
+    min-height: 36px; // Ensure sufficient tap target size
+    background-color: rgba(245, 234, 220, 0.3);
+    border-radius: 8px;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1); // Better tap feedback for iOS
+    
+    &:active {
+      background-color: rgba(245, 234, 220, 0.5); // Visual feedback when tapped
+    }
+  }
+}

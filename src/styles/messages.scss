@@ -423,11 +423,24 @@
     opacity: 0.7;
     cursor: pointer;
     transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    border-radius: 8px;
+    position: relative;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.05); /* Subtle highlight for iOS tap */
+    
+    /* Add a minimum touch target size - 44px is Apple's recommendation */
+    min-height: 38px;
+    
+    /* Visual feedback on hover/active state */
+    &:hover, &:active {
+      opacity: 0.9;
+      background-color: rgba(245, 245, 245, 0.8);
+    }
 
     .content {
       &:before {
         content: attr(data-message-label);
         display: block;
+        padding: 4px 0;
       }
       > *:not(.thinking-icon-container) {
         display: none;
@@ -437,12 +450,23 @@
     .thinking-icon-container {
       position: absolute;
       left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
       z-index: 1;
+      
+      svg.thinking-icon {
+        display: block; /* Ensure SVG is visible */
+      }
     }
 
     .message-hover-menu {
       display: none;
     }
+  }
+  
+  /* Smooth transition when expanded */
+  &:not(.silenced) {
+    transition: opacity 0.2s ease;
   }
 }
 
