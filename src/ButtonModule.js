@@ -296,7 +296,7 @@ class ButtonModule {
     const button = this.createButton();
     button.id = "saypi-callButton";
     button.type = "button";
-    button.classList.add("call-button", "saypi-button", "tooltip");
+    button.classList.add("call-button", "saypi-button", "tooltip", "rounded-full");
     button.classList.add(...this.chatbot.getExtraCallButtonClasses());
     if (this.callIsActive) {
       this.callActive(button);
