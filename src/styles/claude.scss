@@ -10,10 +10,6 @@ html body.claude {
     height: 32px;
   }
 
-  #saypi-submitButton {
-    background-color: #840f7c; /* just for debugging */
-  }
-
   /* hide Claude's original placeholder when custom placeholder is present and non-empty */
   #saypi-prompt-container:has(+ .custom-placeholder) #saypi-prompt {
     // this selector may not be working?

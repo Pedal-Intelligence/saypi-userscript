@@ -66,7 +66,7 @@ class ClaudeChatbot extends AbstractChatbot {
   }
 
   getPromptSubmitButtonSelector(): string {
-    return "#saypi-prompt-controls-container button.bg-accent-main-100:last-of-type:not(:has(~ * button))";
+    return "fieldset div[data-state] button[type=\"button\"].font-medium";
   }
 
   getAudioControlsSelector(): string {
