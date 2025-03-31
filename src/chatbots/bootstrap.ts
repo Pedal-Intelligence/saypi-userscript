@@ -108,17 +108,17 @@ export class DOMObserver {
   // Function to decorate the prompt input element, and other elements that depend on it
   decoratePrompt(prompt: HTMLElement): void {
     prompt.id = "saypi-prompt";
-    const promptParent = prompt.parentElement;
-    if (promptParent) {
-      promptParent.classList.add("saypi-prompt-container");
-      const promptGrandparent = promptParent.parentElement;
-      if (promptGrandparent) {
-        promptGrandparent.id = "saypi-prompt-controls-container";
-        const ancestor = this.addIdPromptAncestor(promptGrandparent);
+    const promptContainer = this.chatbot.getPromptContainer(prompt);
+    if (promptContainer) {
+      promptContainer.classList.add("saypi-prompt-container");
+      const controlsContainer = this.chatbot.getPromptControlsContainer(promptContainer);
+      if (controlsContainer) {
+        controlsContainer.id = "saypi-prompt-controls-container";
+        const ancestor = this.addIdPromptAncestor(controlsContainer);
         if (ancestor) this.monitorForSubmitButton(ancestor);
-        const submitButtonSearch = this.findSubmitButton(promptGrandparent);
+        const submitButtonSearch = this.findSubmitButton(controlsContainer);
         const insertionPosition = submitButtonSearch.found ? -1 : 0;
-        buttonModule.createCallButton(promptGrandparent, insertionPosition);
+        buttonModule.createCallButton(controlsContainer, insertionPosition);
       }
     }
   }
@@ -309,9 +309,7 @@ export class DOMObserver {
       return Observation.foundAlreadyDecorated(id, existingPrompt);
     }
 
-    const promptInput = searchRoot.querySelector(
-      this.chatbot.getPromptTextInputSelector()
-    );
+    const promptInput = this.chatbot.getPromptInput(searchRoot);
     if (promptInput) {
       return Observation.foundUndecorated(id, promptInput);
     }

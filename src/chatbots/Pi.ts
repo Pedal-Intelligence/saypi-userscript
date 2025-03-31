@@ -35,6 +35,20 @@ class PiAIChatbot extends AbstractChatbot {
     return new PiPrompt(element);
   }
 
+  getPromptInput(searchRoot: Element): HTMLElement {
+    return searchRoot.querySelector(
+      this.getPromptTextInputSelector()
+    ) as HTMLElement;
+  }
+
+  getPromptContainer(prompt: HTMLElement): HTMLElement {
+    return prompt.parentElement as HTMLElement;
+  }
+
+  getPromptControlsContainer(promptContainer: HTMLElement): HTMLElement {
+    return promptContainer.parentElement as HTMLElement;
+  }
+
   getPromptTextInputSelector(): string {
     return "textarea[enterkeyhint]";
   }

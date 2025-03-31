@@ -1,10 +1,10 @@
 /**
- * Auto-generated from .env.production - DO NOT MODIFY DIRECTLY
+ * Auto-generated from .env - DO NOT MODIFY DIRECTLY
  * This file is regenerated on each build to ensure it uses the correct environment settings.
- * Generated on: 2025-03-30T12:49:46.678Z
+ * Generated on: 2025-03-31T08:55:32.514Z
  */
 const config = {
-  // Values from .env.production
+  // Values from .env
   apiBaseUrl: "https://api.saypi.ai",
   authServerUrl: "https://www.saypi.ai"
 };

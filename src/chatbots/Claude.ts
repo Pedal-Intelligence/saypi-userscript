@@ -38,6 +38,29 @@ class ClaudeChatbot extends AbstractChatbot {
     return this.promptCache.get(element) as ClaudePrompt;
   }
 
+  /**
+   * Get the prompt input editor element
+   * @param searchRoot Search is optimised to start in the search root element, but will fall back to the document if not found
+   * @returns The prompt input element, or null if not found
+   */
+  getPromptInput(searchRoot: Element): HTMLElement {
+    const selector = this.getPromptTextInputSelector();
+    const localPromptInput = searchRoot.querySelector(selector) as HTMLElement;
+    if (localPromptInput) {
+      return localPromptInput;
+    }
+    return document.querySelector(selector) as HTMLElement;
+  }
+
+  getPromptContainer(prompt: HTMLElement): HTMLElement {
+    return prompt.ownerDocument.querySelector("fieldset.w-full") as HTMLElement;
+  }
+
+  getPromptControlsContainer(promptContainer: HTMLElement): HTMLElement {
+    // for Claude, the prompt controls container the first div with class "w-full" that is a descendant of the prompt container
+    return promptContainer.querySelector("div.w-full.items-center") as HTMLElement;
+  }
+
   getPromptTextInputSelector(): string {
     return "div[enterkeyhint]";
   }

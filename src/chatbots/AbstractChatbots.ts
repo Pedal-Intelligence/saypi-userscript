@@ -30,6 +30,9 @@ export abstract class AbstractChatbot implements Chatbot {
     abstract getExtraCallButtonClasses(): string[];
     abstract getContextWindowCapacityCharacters(): number;
     abstract getPrompt(element: HTMLElement): UserPrompt;
+    abstract getPromptInput(searchRoot: Element): HTMLElement; // search for the prompt input element
+    abstract getPromptContainer(prompt: HTMLElement): HTMLElement;
+    abstract getPromptControlsContainer(promptContainer: HTMLElement): HTMLElement;
     abstract getAssistantResponse(element: HTMLElement, includeInitialText?: boolean): AssistantResponse;
     abstract getUserMessage(element: HTMLElement): UserMessage;
     abstract getName(): string;
