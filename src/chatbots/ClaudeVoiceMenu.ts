@@ -252,7 +252,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       });
 
       // Set initial selected voice
-      this.userPreferences.getVoice().then((voice) => {
+      this.userPreferences.getVoice(chatbot).then((voice) => {
         this.updateSelectedVoice(voice);
       });
 
@@ -264,5 +264,9 @@ export class ClaudeVoiceMenu extends VoiceSelector {
         }
       });
     });
+  }
+
+  getPositionFromEnd(): number {
+    return 3; // insert the voice menu 3 positions from the end (previously -3)
   }
 }

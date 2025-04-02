@@ -4,6 +4,8 @@ import { VoiceSelector } from "../tts/VoiceMenu";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 
 export interface Chatbot {
+  getChatHistory(searchRoot: HTMLElement): HTMLElement;
+  getAudioControls(searchRoot: Element): HTMLElement;
   getPromptInput(searchRoot: Element): HTMLElement;
   getPromptContainer(prompt: HTMLElement): HTMLElement; // get the element that contains the prompt text area
   getPromptControlsContainer(promptContainer: HTMLElement): HTMLElement; // get the element that contains the submit button and other prompt controls

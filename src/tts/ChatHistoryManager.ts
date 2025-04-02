@@ -36,7 +36,7 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
 
   findAndDecorateVoiceMenu(): Observation {
     const audioControlsContainer = document.querySelector(
-      "#saypi-audio-controls"
+      ".saypi-audio-controls"
     );
     if (!audioControlsContainer) {
       return Observation.notFound("saypi-audio-controls");
@@ -58,11 +58,24 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     // create a div under the container to hold the voice menu
     voiceMenuElement = document.createElement("div");
     voiceMenuElement.id = "saypi-voice-menu";
-    audioControlsContainer.appendChild(voiceMenuElement);
     this.voiceMenu = this.chatbot.getVoiceMenu(
       this.userPreferences,
       voiceMenuElement
     );
+    const positionFromEnd = this.voiceMenu?.getPositionFromEnd();
+    
+    // Calculate insertion position from the end
+    const childrenCount = audioControlsContainer.children.length;
+    const insertionIndex = Math.max(0, childrenCount - positionFromEnd);
+    
+    if (insertionIndex >= childrenCount) {
+      audioControlsContainer.appendChild(voiceMenuElement);
+    } else {
+      audioControlsContainer.insertBefore(
+        voiceMenuElement, 
+        audioControlsContainer.children[insertionIndex]
+      );
+    }
     const obs = Observation.foundUndecorated(
       "saypi-voice-menu",
       voiceMenuElement
@@ -347,5 +360,14 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     this.registerMessageErrorListeners();
     this.registerMessageChargeListeners();
     this.registerMessageHideListeners();
+  }
+
+  findAudioControls(searchRoot: Element): Observation {
+    const className = "saypi-audio-controls";
+    const existingAudioControls = searchRoot.querySelector("." + className);
+    if (existingAudioControls) {
+      return Observation.foundAlreadyDecorated(className, existingAudioControls);
+    }
+    return Observation.notFound(className);
   }
 }

@@ -9,6 +9,7 @@ import { VoiceSelector } from "../tts/VoiceMenu";
 export abstract class AbstractChatbot implements Chatbot {
     protected readonly preferences = UserPreferenceModule.getInstance();
   
+    abstract getChatHistory(searchRoot: HTMLElement): HTMLElement;
     abstract getChatHistorySelector(): string;
     abstract getPastChatHistorySelector(): string;
     abstract getRecentChatHistorySelector(): string;
@@ -16,6 +17,7 @@ export abstract class AbstractChatbot implements Chatbot {
     abstract getVoiceSettingsSelector(): string;
     abstract getDiscoveryPanelSelector(): string;
     abstract getAudioOutputButtonSelector(): string;
+    abstract getAudioControls(searchRoot: Element): HTMLElement;
     abstract getAudioControlsSelector(): string;
     abstract getControlPanelSelector(): string;
     abstract getSidePanelSelector(): string;

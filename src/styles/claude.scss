@@ -63,8 +63,10 @@ html body.claude {
   }
 
   /* the voice selection menu */
-  #saypi-audio-controls {
+  .saypi-audio-controls {
     justify-content: space-between;
+    width: 100%;
+    margin-top: unset; // unset the margin-top set by the desktop styles
   }
 
   #saypi-voice-menu {

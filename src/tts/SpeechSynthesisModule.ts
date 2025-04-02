@@ -107,8 +107,8 @@ class SpeechSynthesisModule {
     return this.voicesCache;
   }
 
-  async getVoiceById(id: string): Promise<SpeechSynthesisVoiceRemote> {
-    const voices = await this.getVoices(); // populate cache
+  async getVoiceById(id: string, chatbot?: Chatbot): Promise<SpeechSynthesisVoiceRemote> {
+    const voices = await this.getVoices(chatbot); // populate cache
 
     const foundVoice = voices.find((voice) => voice.id === id);
     if (!foundVoice) {

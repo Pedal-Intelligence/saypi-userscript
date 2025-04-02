@@ -9,6 +9,7 @@ import {
 } from "../tts/SpeechModel";
 import { isFirefox, isSafari } from "../UserAgentModule";
 import { jwtManager } from "../JwtManager";
+import { Chatbot } from "../chatbots/Chatbot";
 
 type Preference = "speed" | "balanced" | "accuracy" | null;
 type VoicePreference = SpeechSynthesisVoiceRemote | null;
@@ -246,7 +247,7 @@ class UserPreferenceModule {
     });
   }
 
-  public getVoice(): Promise<VoicePreference> {
+  public getVoice(chatbot?: Chatbot): Promise<VoicePreference> {
     const apiServerUrl = config.apiServerUrl;
     if (!apiServerUrl) {
       throw new Error("API server URL is not set");
@@ -264,7 +265,7 @@ class UserPreferenceModule {
             if (PiAIVoice.isPiVoiceId(result.voiceId)) {
               voice = PiAIVoice.fromVoiceId(result.voiceId);
             } else {
-              voice = await tts.getVoiceById(result.voiceId);
+              voice = await tts.getVoiceById(result.voiceId, chatbot);
             }
             resolve(voice);
           } else {

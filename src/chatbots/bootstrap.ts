@@ -80,6 +80,11 @@ export class DOMObserver {
       });
     });
 
+    // when the dom has finished loading, we need to find and decorate the chat history
+    EventBus.on("saypi:ui:content-loaded", () => {
+      this.findAndDecorateChatHistory(document.body);
+    });
+
     // Start observing
     observer.observe(document.body, { childList: true, subtree: true });
   }
@@ -325,24 +330,26 @@ export class DOMObserver {
   }
 
   findAudioControls(searchRoot: Element): Observation {
-    const id = "saypi-audio-controls";
-    const existingAudioControls = document.getElementById(id);
+    const className = "saypi-audio-controls";
+    const existingAudioControls = searchRoot.querySelector("." + className);
     if (existingAudioControls) {
       // Audio controls already exist, no need to search
-      return Observation.foundAlreadyDecorated(id, existingAudioControls);
+      return Observation.foundAlreadyDecorated(className, existingAudioControls);
     }
 
-    const audioControls = searchRoot.querySelector(
-      this.chatbot.getAudioControlsSelector()
-    );
+    const audioControls = this.chatbot.getAudioControls(searchRoot);
     if (audioControls) {
-      return Observation.foundUndecorated(id, audioControls);
+      // Check if the found element already has the class (might have been added dynamically)
+      if (audioControls.classList.contains(className)) {
+        return Observation.foundAlreadyDecorated(className, audioControls);
+      }
+      return Observation.foundUndecorated(className, audioControls);
     }
-    return Observation.notFound(id);
+    return Observation.notFound(className);
   }
 
   decorateAudioControls(audioControls: HTMLElement): void {
-    audioControls.id = "saypi-audio-controls";
+    audioControls.classList.add("saypi-audio-controls");
   }
 
   findAndDecorateAudioControls(searchRoot: Element): Observation {
@@ -389,9 +396,7 @@ export class DOMObserver {
       // Chat history already exists, no need to search
       return Observation.foundAlreadyDecorated(id, existingChatHistory);
     }
-    const chatHistory = searchRoot.querySelector(
-      this.chatbot.getChatHistorySelector()
-    );
+    const chatHistory = this.chatbot.getChatHistory(searchRoot);
     if (chatHistory) {
       return Observation.foundUndecorated(id, chatHistory);
     }

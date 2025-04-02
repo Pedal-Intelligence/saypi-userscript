@@ -302,6 +302,17 @@ export abstract class VoiceSelector {
       this.populateVoices(pi.getExtraVoices(), voiceSelector);
     }
   }
+
+  /**
+   * Returns the position from the end where the voice menu should be inserted in its parent container
+   * @returns 0: append at the end of the container
+   * @returns 1: insert as the second-to-last element
+   * @returns 2: insert as the third-to-last element
+   * etc.
+   */
+  getPositionFromEnd(): number {
+    return 0;
+  }
 }
 
 export class PiVoiceMenu extends VoiceSelector {
@@ -395,16 +406,15 @@ export class PiVoiceMenu extends VoiceSelector {
   }
 
   addVoiceMenuExpansionListener(): Observation {
-    const audioControlsContainer = document.getElementById(
-      "saypi-audio-controls"
-    );
+    const className = "saypi-audio-controls";
+    const audioControlsContainer = document.querySelector("." + className) as HTMLElement;
     const voiceMenu = document.getElementById(this.getId());
 
     if (!audioControlsContainer || !voiceMenu) {
-      return Observation.notFound("saypi-audio-controls");
+      return Observation.notFound(className);
     }
     let foundAudioCtrls = Observation.foundUndecorated(
-      "saypi-audio-controls",
+      className,
       audioControlsContainer
     );
 
