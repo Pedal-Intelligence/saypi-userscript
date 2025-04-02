@@ -30,17 +30,38 @@ export class ClaudeVoiceMenu extends VoiceSelector {
 
   getButtonClasses(): string[] {
     return [
-      "flex",
+      "inline-flex",
       "items-center",
-      "px-3",
-      "py-2",
-      "rounded-lg",
-      "hover:bg-neutral-100",
+      "justify-center",
+      "relative",
+      "shrink-0",
+      "can-focus",
+      "select-none",
+      "disabled:pointer-events-none", 
+      "disabled:opacity-50",
+      "disabled:shadow-none",
+      "disabled:drop-shadow-none",
+      "h-7",
+      "border-0.5",
+      "text-text-100",
+      "ml-1.5",
+      "inline-flex",
+      "items-start",
+      "gap-[0.175em]",
+      "rounded-md",
+      "border-transparent",
       "text-sm",
-      "text-neutral-300",
-      "font-normal",
-      "transition-colors",
-      "duration-100"
+      "opacity-80",
+      "transition",
+      "hover:opacity-100",
+      "disabled:!opacity-80", 
+      "sm:ml-0",
+      "sm:pb-1",
+      "sm:pl-1.5",
+      "sm:pr-1",
+      "sm:pt-1",
+      "hover:bg-bg-100",
+      "hover:border-border-400"
     ];
   }
 
@@ -51,36 +72,63 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     button.classList.add(...this.getButtonClasses());
     button.setAttribute("aria-haspopup", "true");
     button.setAttribute("aria-expanded", "false");
+    button.setAttribute("type", "button");
 
+    // Create a div to match Claude's model selector structure
+    const contentDiv = document.createElement("div");
+    contentDiv.classList.add(
+      "font-tiempos",
+      "inline-flex",
+      "items-center",
+      "gap-[3px]",
+      "text-[14px]",
+      "h-[14px]",
+      "leading-none",
+    );
+
+    // Use a muted waveform icon
     addSvgToButton(
-      button,
+      contentDiv,
       waveformSvgContent,
       "voiced-by",
       "block",
       "fill-current",
       "w-4",
       "h-4",
-      "text-neutral-600",
       "mr-1"
     );
 
+    // Add the voice name in a container div
+    const nameContainer = document.createElement("div");
+    nameContainer.classList.add(
+      "flex", 
+      "items-center", 
+      "gap-[4px]"
+    );
+    
     const voiceName = document.createElement("span");
     voiceName.classList.add(
       "voice-name",
-      "whitespace-nowrap"
+      "whitespace-nowrap",
+      "tracking-tight",
+      "select-none"
     );
     voiceName.innerText = voice ? voice.name : "Voice off";
-    button.appendChild(voiceName);
+    nameContainer.appendChild(voiceName);
+    contentDiv.appendChild(nameContainer);
+    
+    button.appendChild(contentDiv);
 
+    // Add the chevron icon as a separate SVG
     addSvgToButton(
       button,
       chevronSvgContent,
       "chevron",
-      "fill-current",
-      "w-3.5",
-      "h-3.5",
-      "ml-1.5",
-      "text-neutral-400"
+      "text-text-500",
+      "shrink-0",
+      "w-3",
+      "h-3",
+      "ml-1.5"
     );
 
     button.addEventListener("click", () => this.toggleMenu());
@@ -92,10 +140,11 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     menu.classList.add(
       "z-50",
       "bg-white",
-      "border",
-      "border-gray-200",
+      "border-0.5",
+      "border-border-300",
+      "backdrop-blur-xl",
       "rounded-lg",
-      "shadow-lg",
+      "shadow-element",
       "min-w-[160px]",
       "max-h-[280px]",
       "overflow-y-auto",
@@ -114,44 +163,49 @@ export class ClaudeVoiceMenu extends VoiceSelector {
   ): HTMLDivElement {
     const item = document.createElement("div");
     item.classList.add(
-      "py-2",
-      "px-3",
+      "py-1",
+      "px-2",
       "rounded-md",
       "cursor-pointer",
       "whitespace-nowrap",
       "overflow-hidden",
       "text-ellipsis",
-      "flex",
-      "flex-col",
-      "gap-0.5",
+      "grid",
+      "grid-cols-[minmax(0,_1fr)_auto]",
+      "gap-2",
+      "items-center",
       "outline-none",
       "select-none",
-      "hover:bg-neutral-100",
-      "transition-colors",
-      "duration-100"
+      "[&[data-highlighted]]:bg-bg-400",
+      "[&[data-highlighted]]:text-text-000",
+      "group",
+      "pr-1",
+      "hover:bg-bg-300"
     );
     item.setAttribute("role", "menuitem");
     item.setAttribute("tabindex", "-1");
 
+    const content = document.createElement("div");
     const nameContainer = document.createElement("div");
-    nameContainer.classList.add("flex", "items-center", "justify-between");
+    nameContainer.classList.add("flex", "items-center");
     
     const name = document.createElement("div");
-    name.classList.add("text-sm", "font-normal", "text-neutral-300");
+    name.classList.add("flex-1", "text-sm", "font-normal", "text-text-300");
     name.innerText = voice ? voice.name : "Voice off";
     nameContainer.appendChild(name);
-    
-    // Add space for checkmark
-    const checkmarkContainer = document.createElement("div");
-    checkmarkContainer.classList.add("checkmark-container", "w-5", "h-5", "text-accent-secondary-100");
-    nameContainer.appendChild(checkmarkContainer);
-    
-    item.appendChild(nameContainer);
+    content.appendChild(nameContainer);
 
     const description = document.createElement("div");
-    description.classList.add("text-xs", "text-neutral-500");
+    description.classList.add("text-text-500", "pr-4", "text-xs");
     description.innerText = voice ? "TTS voice" : "Disable text-to-speech";
-    item.appendChild(description);
+    content.appendChild(description);
+
+    item.appendChild(content);
+
+    // Add space for checkmark
+    const checkmarkContainer = document.createElement("div");
+    checkmarkContainer.classList.add("checkmark-container", "text-accent-secondary-100");
+    item.appendChild(checkmarkContainer);
 
     item.addEventListener("click", () => this.handleVoiceSelection(voice));
     return item;
@@ -209,14 +263,14 @@ export class ClaudeVoiceMenu extends VoiceSelector {
         const itemName = item.querySelector(".text-sm")?.textContent;
         const isSelected = itemName === (selectedVoice ? selectedVoice.name : "Voice off");
         
-        // Toggle selected state
-        item.classList.toggle("bg-blue-50", isSelected);
+        // Toggle selected state with Claude's styling
+        item.classList.toggle("bg-bg-300", isSelected);
         
         // Update checkmark
         const checkmarkContainer = item.querySelector(".checkmark-container");
         if (checkmarkContainer) {
           checkmarkContainer.innerHTML = isSelected ? 
-            '<svg class="w-5 h-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>' : 
+            '<svg width="16" height="16" viewBox="0 0 256 256" class="text-accent-secondary-100 mb-1 mr-1.5" fill="currentColor"><path d="M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z"></path></svg>' : 
             '';
         }
       }
