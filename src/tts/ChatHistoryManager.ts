@@ -62,7 +62,7 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
       this.userPreferences,
       voiceMenuElement
     );
-    const positionFromEnd = this.voiceMenu?.getPositionFromEnd();
+    const positionFromEnd = this.voiceMenu?.getPositionFromEnd() ?? 0;
     
     // Calculate insertion position from the end
     const childrenCount = audioControlsContainer.children.length;

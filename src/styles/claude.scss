@@ -67,22 +67,57 @@ html body.claude {
     justify-content: space-between;
     width: 100%;
     margin-top: unset; // unset the margin-top set by the desktop styles
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
 
   #saypi-voice-menu {
     position: relative; // so that menu can be positioned relative to this
+    margin-right: auto; // push to the left side
 
-    svg.voiced-by {
-      height: 11.5px;
-      width: 25.4px;
-    }
-    svg.chevron {
-      height: 12px;
-      width: 12px;
-    }
     .voice-menu-content {
       position: absolute;
       z-index: 1000;
+      margin-top: 0; /* Remove top margin */
+      margin-bottom: 4px; /* Add bottom margin instead */
+      width: auto;
+      transform-origin: bottom left; /* Change origin for animation */
+      animation: menuFadeIn 0.1s ease-out;
+    }
+
+    @keyframes menuFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.98) translateY(5px); /* Adjust animation for upward appearance */
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+  }
+
+  /* Ensure claude-voice-selector has similar styling to model selector */
+  #claude-voice-selector {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 8px;
+    
+    button {
+      border: 1px solid transparent;
+      position: relative; /* Ensure proper positioning context */
+      
+      &[aria-expanded="true"] {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+    }
+    
+    /* Position menu content relative to the top of the button */
+    .voice-menu-content {
+      bottom: 100%; /* Position above the button */
+      left: 0;
+      min-width: 100%;
     }
   }
 }

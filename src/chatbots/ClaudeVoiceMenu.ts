@@ -30,13 +30,17 @@ export class ClaudeVoiceMenu extends VoiceSelector {
 
   getButtonClasses(): string[] {
     return [
-      "font-tiempos",
-      "inline-flex",
-      "gap-[4px]",
-      "text-[14px]",
-      "leading-none",
+      "flex",
       "items-center",
-      "text-text-100",
+      "px-3",
+      "py-2",
+      "rounded-lg",
+      "hover:bg-neutral-100",
+      "text-sm",
+      "text-neutral-300",
+      "font-normal",
+      "transition-colors",
+      "duration-100"
     ];
   }
 
@@ -53,15 +57,17 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       waveformSvgContent,
       "voiced-by",
       "block",
-      "translate-y-[1.5px]",
-      "fill-current"
+      "fill-current",
+      "w-4",
+      "h-4",
+      "text-neutral-600",
+      "mr-1"
     );
 
     const voiceName = document.createElement("span");
     voiceName.classList.add(
       "voice-name",
-      "whitespace-nowrap",
-      "tracking-tight"
+      "whitespace-nowrap"
     );
     voiceName.innerText = voice ? voice.name : "Voice off";
     button.appendChild(voiceName);
@@ -70,11 +76,11 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       button,
       chevronSvgContent,
       "chevron",
-      "text-text-500",
-      "ml-px",
-      "shrink-0",
-      "translate-y-px",
-      "fill-current"
+      "fill-current",
+      "w-3.5",
+      "h-3.5",
+      "ml-1.5",
+      "text-neutral-400"
     );
 
     button.addEventListener("click", () => this.toggleMenu());
@@ -85,17 +91,17 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     const menu = document.createElement("div");
     menu.classList.add(
       "z-50",
-      "bg-bg-300",
-      "border-0.5",
-      "border-border-300",
-      "backdrop-blur-xl",
+      "bg-white",
+      "border",
+      "border-gray-200",
       "rounded-lg",
-      "min-w-[8rem]",
-      "overflow-hidden",
+      "shadow-lg",
+      "min-w-[160px]",
+      "max-h-[280px]",
+      "overflow-y-auto",
+      "overflow-x-hidden",
       "p-1",
-      "text-text-200",
-      "shadow-element",
-      "!bg-bg-200"
+      "voice-menu-content"
     );
     menu.setAttribute("role", "menu");
     menu.setAttribute("aria-orientation", "vertical");
@@ -108,42 +114,44 @@ export class ClaudeVoiceMenu extends VoiceSelector {
   ): HTMLDivElement {
     const item = document.createElement("div");
     item.classList.add(
-      "py-1",
-      "px-2",
+      "py-2",
+      "px-3",
       "rounded-md",
       "cursor-pointer",
       "whitespace-nowrap",
       "overflow-hidden",
       "text-ellipsis",
-      "grid",
-      "grid-cols-[minmax(0,_1fr)_auto]",
-      "gap-2",
-      "items-center",
+      "flex",
+      "flex-col",
+      "gap-0.5",
       "outline-none",
       "select-none",
-      "[&[data-highlighted]]:bg-bg-400",
-      "[&[data-highlighted]]:text-text-000",
-      "group",
-      "pr-1"
+      "hover:bg-neutral-100",
+      "transition-colors",
+      "duration-100"
     );
     item.setAttribute("role", "menuitem");
     item.setAttribute("tabindex", "-1");
 
-    const content = document.createElement("div");
     const nameContainer = document.createElement("div");
-    nameContainer.classList.add("flex", "items-center");
+    nameContainer.classList.add("flex", "items-center", "justify-between");
+    
     const name = document.createElement("div");
-    name.classList.add("flex-1", "text-sm", "font-medium", "text-text-100");
+    name.classList.add("text-sm", "font-normal", "text-neutral-300");
     name.innerText = voice ? voice.name : "Voice off";
     nameContainer.appendChild(name);
-    content.appendChild(nameContainer);
+    
+    // Add space for checkmark
+    const checkmarkContainer = document.createElement("div");
+    checkmarkContainer.classList.add("checkmark-container", "w-5", "h-5", "text-accent-secondary-100");
+    nameContainer.appendChild(checkmarkContainer);
+    
+    item.appendChild(nameContainer);
 
     const description = document.createElement("div");
-    description.classList.add("text-text-400", "pr-4", "text-xs");
+    description.classList.add("text-xs", "text-neutral-500");
     description.innerText = voice ? "TTS voice" : "Disable text-to-speech";
-    content.appendChild(description);
-
-    item.appendChild(content);
+    item.appendChild(description);
 
     item.addEventListener("click", () => this.handleVoiceSelection(voice));
     return item;
@@ -151,15 +159,12 @@ export class ClaudeVoiceMenu extends VoiceSelector {
 
   private positionMenuAboveButton(): void {
     const buttonRect = this.menuButton.getBoundingClientRect();
-    const menuRect = this.menuContent.getBoundingClientRect();
-
+    
+    // Set the menu to be positioned above the button
     this.menuContent.style.position = "absolute";
-    this.menuContent.style.bottom = `${window.innerHeight - buttonRect.top}px`;
-    this.menuContent.style.left = "0"; // Align with nearest positioned ancestor
-    this.menuContent.style.width = `${Math.max(
-      buttonRect.width,
-      menuRect.width
-    )}px`;
+    this.menuContent.style.bottom = `calc(100% + 8px)`; // Position above with gap
+    this.menuContent.style.left = "0";
+    this.menuContent.style.minWidth = `${Math.max(buttonRect.width, 160)}px`;
   }
 
   private toggleMenu(): void {
@@ -201,33 +206,18 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     const menuItems = this.menuContent.querySelectorAll("[role='menuitem']");
     menuItems.forEach((item) => {
       if (item instanceof HTMLElement) {
-        const isSelected =
-          item.textContent ===
-          (selectedVoice ? selectedVoice.name : "Voice off");
-        item.classList.toggle("bg-bg-300", isSelected);
-        item.classList.toggle("text-text-100", isSelected);
-
-        // Add or remove checkmark
-        const checkmark = item.querySelector(".checkmark");
-        if (isSelected && !checkmark) {
-          const checkmarkSvg = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "svg"
-          );
-          checkmarkSvg.classList.add(
-            "checkmark",
-            "text-accent-main-100",
-            "mb-1",
-            "mr-1.5"
-          );
-          checkmarkSvg.setAttribute("width", "20");
-          checkmarkSvg.setAttribute("height", "20");
-          checkmarkSvg.setAttribute("viewBox", "0 0 256 256");
-          checkmarkSvg.innerHTML =
-            '<path d="M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z"></path>';
-          item.appendChild(checkmarkSvg);
-        } else if (!isSelected && checkmark) {
-          checkmark.remove();
+        const itemName = item.querySelector(".text-sm")?.textContent;
+        const isSelected = itemName === (selectedVoice ? selectedVoice.name : "Voice off");
+        
+        // Toggle selected state
+        item.classList.toggle("bg-blue-50", isSelected);
+        
+        // Update checkmark
+        const checkmarkContainer = item.querySelector(".checkmark-container");
+        if (checkmarkContainer) {
+          checkmarkContainer.innerHTML = isSelected ? 
+            '<svg class="w-5 h-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>' : 
+            '';
         }
       }
     });
@@ -267,6 +257,6 @@ export class ClaudeVoiceMenu extends VoiceSelector {
   }
 
   getPositionFromEnd(): number {
-    return 3; // insert the voice menu 3 positions from the end (previously -3)
+    return 1; // Position right before the model selector
   }
 }
