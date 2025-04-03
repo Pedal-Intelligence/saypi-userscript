@@ -53,12 +53,17 @@ html body.claude {
 
     button svg,
     img {
-      width: 12px;
-      height: 12px;
+      width: 16px;
+      height: 16px;
     }
     .saypi-copy-button,
     .saypi-powered-by {
       display: none;
+    }
+
+    .saypi-telemetry-button svg {
+      width: 16px;
+      height: 16px;
     }
   }
 

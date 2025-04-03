@@ -532,4 +532,5 @@ export function addSvgToButton(
   svg.innerHTML = innerContent(svgContent);
   svg.setAttribute("viewBox", viewbox(svgContent));
   classNames.forEach((className) => svg.classList.add(className));
+  svg.setAttribute("fill", "currentColor");
 }

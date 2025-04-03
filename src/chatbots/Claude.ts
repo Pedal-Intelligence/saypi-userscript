@@ -206,7 +206,7 @@ class ClaudeMessageControls extends MessageControls {
   }
 
   protected getExtraControlClasses(): string[] {
-    return ["text-xs"];
+    return ["text-sm"];
   }
 
   getHoverMenuSelector(): string {
