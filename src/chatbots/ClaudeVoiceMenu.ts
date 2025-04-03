@@ -311,6 +311,6 @@ export class ClaudeVoiceMenu extends VoiceSelector {
   }
 
   getPositionFromEnd(): number {
-    return 1; // Position right before the model selector
+    return 2; // Position right after the model selector and before the call button
   }
 }
