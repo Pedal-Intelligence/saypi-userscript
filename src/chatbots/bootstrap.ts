@@ -6,13 +6,19 @@ import { Observation } from "../dom/Observation";
 import { VoiceSettings } from "../tts/VoiceMenu";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { ThemeManager } from "../themes/ThemeManagerModule";
+import { VoiceMenuUIManager } from "../tts/VoiceMenuUIManager";
 
 export class DOMObserver {
   ttsUiMgr: ChatHistorySpeechManager | null = null;
-  constructor(private chatbot: Chatbot) {}
+  voiceMenuUiMgr: VoiceMenuUIManager;
+  constructor(private chatbot: Chatbot) {
+    this.voiceMenuUiMgr = new VoiceMenuUIManager(
+      this.chatbot,
+      UserPreferenceModule.getInstance()
+    );
+  }
 
   observeDOM(): void {
-    // MutationObserver setup in a separate file or the same file where you start observing
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         [...mutation.addedNodes]
@@ -23,7 +29,6 @@ export class DOMObserver {
             const ctrlPanelObs = this.findAndDecorateControlPanel(addedElement);
             const sidePanelObs = this.findAndDecorateSidePanel(addedElement);
             if (sidePanelObs.found && sidePanelObs.decorated) {
-              // this condition is particular to pi.ai
               const discoveryPanelObs =
                 this.findAndDecorateDiscoveryPanel(addedElement);
               const voiceSettingsObs =
@@ -31,13 +36,16 @@ export class DOMObserver {
             }
             const audioControlsObs =
               this.findAndDecorateAudioControls(addedElement);
+            if (audioControlsObs.isReady()) {
+              this.voiceMenuUiMgr.findAndDecorateVoiceMenu(
+                audioControlsObs.target as HTMLElement
+              );
+            }
             const audioOutputButtonObs =
               this.findAndDecorateAudioOutputButton(addedElement);
-            // ... handle other elements
             const chatHistoryObs =
               this.findAndDecorateChatHistory(addedElement);
 
-            // notify listeners that (all critical) script content has been loaded
             if (promptObs.isReady()) {
               EventBus.emit("saypi:ui:content-loaded");
             }
@@ -48,44 +56,47 @@ export class DOMObserver {
             const removedElement = node as HTMLElement;
             const obs = this.findPrompt(removedElement);
             if (obs.found) {
-              // Prompt field is being removed, so search for a replacement in the main document
               this.findAndDecoratePrompt(document.body);
               if (obs.found && obs.isNew && obs.decorated) {
-                // emit event to notify listeners that script content has been loaded
                 EventBus.emit("saypi:ui:content-loaded");
               }
             }
             const ctrlPanelObs = this.findControlPanel(removedElement);
             if (ctrlPanelObs.found) {
-              // Control panel is being removed, so search for a replacement in the main document
               this.findAndDecorateControlPanel(document.body);
             }
             const audioControlsObs = this.findAudioControls(removedElement);
             if (audioControlsObs.found) {
-              // Audio controls are being removed, so search for a replacement in the main document
-              this.findAndDecorateAudioControls(document.body);
+              const replacementAudioControls = this.findAndDecorateAudioControls(document.body);
+              if (replacementAudioControls.isReady()) {
+                this.voiceMenuUiMgr.findAndDecorateVoiceMenu(
+                  replacementAudioControls.target as HTMLElement
+                );
+              }
             }
             const audioOutputButtonObs =
               this.findAudioOutputButton(removedElement);
             if (audioOutputButtonObs.found) {
-              // Audio output button is being removed, so search for a replacement in the main document
               this.findAndDecorateAudioOutputButton(document.body);
             }
             const chatHistoryObs = this.findChatHistory(removedElement);
             if (chatHistoryObs.found) {
-              // Chat history is being removed, so search for a replacement in the main document
               this.findAndDecorateChatHistory(document.body);
             }
           });
       });
     });
 
-    // when the dom has finished loading, we need to find and decorate the chat history
     EventBus.on("saypi:ui:content-loaded", () => {
+      const audioControlsObs = this.findAndDecorateAudioControls(document.body);
+      if (audioControlsObs.isReady()) {
+        this.voiceMenuUiMgr.findAndDecorateVoiceMenu(
+          audioControlsObs.target as HTMLElement
+        );
+      }
       this.findAndDecorateChatHistory(document.body);
     });
 
-    // Start observing
     observer.observe(document.body, { childList: true, subtree: true });
   }
 
