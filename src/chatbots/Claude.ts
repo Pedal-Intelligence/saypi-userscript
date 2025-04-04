@@ -1,5 +1,6 @@
 import { AssistantResponse, MessageControls, UserMessage } from "../dom/MessageElements";
 import { Observation } from "../dom/Observation";
+import EventBus from "../events/EventBus";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import {
   AddedText,
@@ -230,28 +231,28 @@ class ClaudeTextBlockCapture extends ElementTextStream {
     super(element, options);
 
     const messageElement = element.parentElement;
-    if (messageElement && messageElement.hasAttribute("data-is-streaming")) {
+    if (this.isClaudeTextStream(messageElement)) {
+      const claudeMessage = messageElement as HTMLElement;
+      let wasStreaming = false;
       const messageObserver = new MutationObserver((mutations) => {
-        const isStreaming = messageElement.getAttribute("data-is-streaming");
-        const streamingInProgress = isStreaming === "true";
-        if (streamingInProgress) {
+        const streamingInProgress = this.dataIsStreaming(claudeMessage);
+        const streamingStarted = !wasStreaming && streamingInProgress;
+        const streamingStopped = wasStreaming && !streamingInProgress;
+        if (streamingStarted) {
+          console.log("Claude started streaming.");
+          // fire a new event to indicate that the streaming has started - this should not be necessary when streaming all data with subject.next(), but it's here since we only stream all data when the message is complete
+          EventBus.emit("saypi:llm:first-token", {text: this.getNestedText(element), time: Date.now()});
+        } else if (streamingStopped) {
+          const text = this.getNestedText(element);
+          this.subject.next(new AddedText(text));
+          this.subject.complete();
+          console.log("Claude stopped streaming.");
+        } else if (streamingInProgress) {
           console.log("Claude is streaming...");
         }
-        mutations.forEach((mutation) => {
-          const streamingChanged =
-            mutation.attributeName === "data-is-streaming";
-          const streamingStarted = streamingChanged && isStreaming === "true";
-          const streamingStopped = streamingChanged && isStreaming === "false";
-          if (streamingStarted) {
-            console.log("Claude started streaming...");
-          } else if (streamingStopped) {
-            const text = this.getNestedText(element);
-            this.subject.next(new AddedText(text));
-            this.subject.complete();
-          }
-        });
+        wasStreaming = streamingInProgress;
       });
-      messageObserver.observe(messageElement, {
+      messageObserver.observe(claudeMessage, {
         childList: false,
         subtree: false,
         characterData: false,
@@ -262,6 +263,14 @@ class ClaudeTextBlockCapture extends ElementTextStream {
 
   getNestedText(node: HTMLElement): string {
     return node.textContent ?? node.innerText ?? "";
+  }
+
+  dataIsStreaming(element: HTMLElement | null): boolean {
+    return element !== null && element.hasAttribute("data-is-streaming") && element.getAttribute("data-is-streaming") === "true";
+  }
+
+  isClaudeTextStream(element: HTMLElement | null): boolean {
+    return element !== null && element.hasAttribute("data-is-streaming");
   }
 }
 
