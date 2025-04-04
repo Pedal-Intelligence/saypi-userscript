@@ -386,10 +386,12 @@ class ButtonModule {
   }
 
   callInactive(callButton) {
-    const label = getMessage("callNotStarted", this.chatbot.getName());
-    this.updateCallButton(callButton, callIconSVG, label, () =>
-      this.sayPiActor.send("saypi:call")
-    );
+    this.chatbot.getNickname().then(nickname => {
+      const label = getMessage("callNotStarted", nickname);
+      this.updateCallButton(callButton, callIconSVG, label, () =>
+        this.sayPiActor.send("saypi:call")
+      );
+    });
   }
 
   callError(callButton) {

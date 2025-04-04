@@ -1174,10 +1174,12 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
 
       listenPrompt: () => {
-        const message = getMessage("assistantIsListening", chatbot.getName());
-        if (message) {
-          getPromptOrNull()?.setMessage(message);
-        }
+        chatbot.getNickname().then(nickname => {
+          const message = getMessage("assistantIsListening", nickname);
+          if (message) {
+            getPromptOrNull()?.setMessage(message);
+          }
+        });
       },
       callStartingPrompt: () => {
         const message = getMessage("callStarting");
@@ -1188,38 +1190,47 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         }
       },
       thinkingPrompt: () => {
-        const message = getMessage("assistantIsThinking", chatbot.getName());
-        if (message) {
-          getPromptOrNull()?.setMessage(message);
-        }
+        chatbot.getNickname().then(nickname => {
+          const message = getMessage("assistantIsThinking", nickname);
+          if (message) {
+            getPromptOrNull()?.setMessage(message);
+          }
+        });
       },
       writingPrompt: () => {
-        const message = getMessage("assistantIsWriting", chatbot.getName());
-        if (message) {
-          getPromptOrNull()?.setMessage(message);
-        }
+        chatbot.getNickname().then(nickname => {
+          const message = getMessage("assistantIsWriting", nickname);
+          if (message) {
+            getPromptOrNull()?.setMessage(message);
+          }
+        });
       },
       speakingPrompt: (context: SayPiContext) => {
         const handsFreeInterrupt =
           userPreferences.getCachedAllowInterruptions();
-        const message = handsFreeInterrupt
-          ? getMessage("assistantIsSpeaking", chatbot.getName())
-          : getMessage(
-              "assistantIsSpeakingWithManualInterrupt",
-              chatbot.getName()
-            );
-        if (message) {
-          getPromptOrNull()?.setMessage(message);
-        }
+        
+        chatbot.getNickname().then(nickname => {
+          const message = handsFreeInterrupt
+            ? getMessage("assistantIsSpeaking", nickname)
+            : getMessage(
+                "assistantIsSpeakingWithManualInterrupt",
+                nickname
+              );
+          if (message) {
+            getPromptOrNull()?.setMessage(message);
+          }
+        });
       },
       interruptingPiPrompt: () => {
-        const message = getMessage(
-          "userStartedInterrupting",
-          chatbot.getName()
-        );
-        if (message) {
-          getPromptOrNull()?.setMessage(message);
-        }
+        chatbot.getNickname().then(nickname => {
+          const message = getMessage(
+            "userStartedInterrupting",
+            nickname
+          );
+          if (message) {
+            getPromptOrNull()?.setMessage(message);
+          }
+        });
       },
       clearPrompt: (context: SayPiContext) => {
         getPromptOrNull()?.setMessage(context.defaultPlaceholderText);
