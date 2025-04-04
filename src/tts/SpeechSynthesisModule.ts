@@ -17,6 +17,7 @@ import {
 } from "./SpeechModel";
 import { BillingModule, UtteranceCharge } from "../billing/BillingModule";
 import { Chatbot } from "../chatbots/Chatbot";
+import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
 
 function generateUUID(): string {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -26,11 +27,13 @@ function generateUUID(): string {
   });
 }
 
-function getUtteranceURI(speech: SpeechUtterance): string {
+async function getUtteranceURI(speech: SpeechUtterance, appId?: string): Promise<string> {
   if (speech.uri.includes("?")) {
     return speech.uri;
   } else {
-    return `${speech.uri}?voice_id=${speech.voice.id}&lang=${speech.lang}`;
+    // Use provided appId or get it from ChatbotIdentifier
+    const app = appId || ChatbotIdentifier.getAppId();
+    return `${speech.uri}?voice_id=${speech.voice.id}&lang=${speech.lang}&app=${app}`;
   }
 }
 
@@ -221,8 +224,9 @@ class SpeechSynthesisModule {
     }
     console.debug(`Speaking: ${speech.toString()}`);
     // Start audio playback with utterance.uri as the audio source
-    const audioSource = getUtteranceURI(speech);
-    EventBus.emit("audio:load", { url: audioSource }); // indirectly calls AudioModule.loadAudio
+    getUtteranceURI(speech).then((uri) => {
+      EventBus.emit("audio:load", { url: uri }); // indirectly calls AudioModule.loadAudio
+    });
   }
 
   cancel(): Promise<void> {

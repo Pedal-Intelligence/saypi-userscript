@@ -193,7 +193,7 @@ class ClaudeResponse extends AssistantResponse {
     content: HTMLElement,
     options: InputStreamOptions
   ): ElementTextStream {
-    return new ClaudeTextBlockCapture(content, options);
+    return new ClaudeTextStream(content, options);
   }
 
   decorateControls(): MessageControls {
@@ -238,17 +238,18 @@ class ClaudeTextBlockCapture extends ElementTextStream {
         const streamingInProgress = this.dataIsStreaming(claudeMessage);
         const streamingStarted = !wasStreaming && streamingInProgress;
         const streamingStopped = wasStreaming && !streamingInProgress;
+        const streamingText = this.getNestedText(element);
         if (streamingStarted) {
           console.log("Claude started streaming.");
           // fire a new event to indicate that the streaming has started - this should not be necessary when streaming all data with subject.next(), but it's here since we only stream all data when the message is complete
-          EventBus.emit("saypi:llm:first-token", {text: this.getNestedText(element), time: Date.now()});
+          EventBus.emit("saypi:llm:first-token", {text: streamingText, time: Date.now()});
+          this.handleTextAddition(streamingText);
         } else if (streamingStopped) {
-          const text = this.getNestedText(element);
-          this.subject.next(new AddedText(text));
+          this.handleTextAddition(streamingText, true);
           this.subject.complete();
           console.log("Claude stopped streaming.");
         } else if (streamingInProgress) {
-          console.log("Claude is streaming...");
+          this.handleTextAddition(streamingText);
         }
         wasStreaming = streamingInProgress;
       });
@@ -272,97 +273,20 @@ class ClaudeTextBlockCapture extends ElementTextStream {
   isClaudeTextStream(element: HTMLElement | null): boolean {
     return element !== null && element.hasAttribute("data-is-streaming");
   }
+
+  handleTextAddition(allText: string, isFinal: boolean = false): void {
+    if (isFinal) {
+      this.subject.next(new AddedText(allText));
+    }
+  }
 }
 
-class ClaudeTextStream extends ElementTextStream {
-  private lastContentBlock: HTMLElement | null = null; // this will be a "block" element, like a paragraph or list item
-  private blockElements = [
-    "P",
-    "OL",
-    "UL",
-    "DIV",
-    "H1",
-    "H2",
-    "H3",
-    "H4",
-    "H5",
-    "H6",
-  ];
-  constructor(
-    element: HTMLElement,
-    options: InputStreamOptions = { includeInitialText: true }
-  ) {
+class ClaudeTextStream extends ClaudeTextBlockCapture {
+  private _textProcessedSoFar: string = "";
+  constructor(element: HTMLElement, options: InputStreamOptions = { includeInitialText: false }) {
     super(element, options);
-
-    const messageElement = element.parentElement;
-    if (messageElement && messageElement.hasAttribute("data-is-streaming")) {
-      const messageObserver = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.attributeName === "data-is-streaming") {
-            const isStreaming =
-              messageElement.getAttribute("data-is-streaming");
-            if (isStreaming === "false") {
-              const finalParagraph = this.element.querySelector("p:last-child");
-              const text = this.getNestedText(finalParagraph as HTMLElement);
-              console.log("Claude says: ", text);
-              this.subject.next(new AddedText(text));
-              this.subject.complete();
-            }
-          }
-        });
-      });
-      messageObserver.observe(messageElement, {
-        childList: false,
-        subtree: false,
-        characterData: false,
-        attributes: true,
-      });
-    }
-
-    throw new Error("Text stream not implemented. Use block capture instead."); // use the block capture approach instead, for now
   }
 
-  getNestedText(node: HTMLElement): string {
-    return node.textContent ?? node.innerText ?? "";
-  }
-
-  handleMutationEvent(mutation: MutationRecord): void {
-    // auto generated method stub
-    if (mutation.type === "childList") {
-      const addedNodes = Array.from(mutation.addedNodes) as HTMLElement[];
-
-      for (const node of addedNodes) {
-        if (
-          node.nodeType === Node.ELEMENT_NODE &&
-          this.blockElements.includes(node.tagName)
-        ) {
-          if (node.tagName === "OL" || node.tagName === "UL") {
-            const lastListItem = node.querySelector(
-              "li:last-child"
-            ) as HTMLElement;
-            if (lastListItem && lastListItem.tagName === "LI") {
-              const listItemText = this.getNestedText(lastListItem);
-              console.log("Claude says: ", listItemText);
-              this.subject.next(new AddedText(listItemText));
-              this.lastContentBlock = null; // prevent the final list item from being emitted twice
-            }
-          } else {
-            this.lastContentBlock = node as HTMLElement;
-          }
-        } else if (
-          node.nodeType === Node.TEXT_NODE &&
-          node.textContent === "\n" &&
-          this.lastContentBlock
-        ) {
-          // paragraph separator reached, emit the text of the last paragraph
-          const text = this.getNestedText(this.lastContentBlock);
-          console.log("Claude says: ", text);
-          this.subject.next(new AddedText(text));
-          // this approach omits the final paragraph of the stream, since it is not followed by a paragraph separator
-        }
-      }
-    }
-  }
 }
 
 function findAndDecorateCustomPlaceholderElement(
