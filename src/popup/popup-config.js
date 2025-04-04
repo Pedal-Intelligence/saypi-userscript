@@ -1,7 +1,7 @@
 /**
  * Auto-generated from .env - DO NOT MODIFY DIRECTLY
  * This file is regenerated on each build to ensure it uses the correct environment settings.
- * Generated on: 2025-04-03T14:37:09.945Z
+ * Generated on: 2025-04-03T18:45:44.785Z
  */
 const config = {
   // Values from .env
