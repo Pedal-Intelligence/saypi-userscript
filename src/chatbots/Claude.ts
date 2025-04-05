@@ -15,6 +15,7 @@ import { UserPrompt } from "./Chatbot";
 import { ClaudeVoiceMenu } from "./ClaudeVoiceMenu";
 import { openSettings } from "../popup/popupopener";
 import getMessage from "../i18n";
+import { IconModule } from "../icons/IconModule";
 
 class ClaudeChatbot extends AbstractChatbot {
   private promptCache: Map<HTMLElement, ClaudePrompt> = new Map();
@@ -411,30 +412,28 @@ class ClaudePrompt extends AbstractUserPrompt {
       const iconContainer = document.createElement('div');
       iconContainer.className = 'group/icon h-4 w-4 flex items-center justify-center text-text-300 shrink-0 group-hover:text-text-100';
       
-      // Create settings icon SVG
-      const iconSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      iconSvg.setAttribute('width', '18');
-      iconSvg.setAttribute('height', '18');
-      iconSvg.setAttribute('viewBox', '0 0 20 20');
-      iconSvg.setAttribute('fill', 'currentColor');
-      iconSvg.classList.add('shrink-0', '-m-[1px]');
+      // Use the bubble icon from IconModule
+      const bubbleIcon = IconModule.bubbleBw.cloneNode(true) as SVGElement;
+      bubbleIcon.setAttribute('width', '18');
+      bubbleIcon.setAttribute('height', '18');
+      bubbleIcon.classList.add('shrink-0', '-m-[1px]');
       
-      // Settings icon path
-      const iconPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      iconPath.setAttribute('fill-rule', 'evenodd');
-      iconPath.setAttribute('clip-rule', 'evenodd');
-      iconPath.setAttribute('d', 'M10 2C9.44772 2 9 2.44772 9 3V3.10512C9 3.82331 8.47054 4.42871 7.76907 4.58865C7.5227 4.64335 7.27961 4.71169 7.04146 4.79336C6.37524 5.00312 5.62509 4.78925 5.17299 4.23579L5.10512 4.15199C4.74858 3.7171 4.12563 3.66193 3.70708 4.04417L3.04417 4.62882C2.62563 5.01106 2.57045 5.63401 2.95199 6.05256L3.03841 6.15584C3.50524 6.72188 3.60191 7.52051 3.22631 8.19613C3.16252 8.3156 3.10274 8.43738 3.04713 8.56124C2.79791 9.10256 2.26794 9.46863 1.68279 9.46863H1.5C0.947715 9.46863 0.5 9.91635 0.5 10.4686V11.4059C0.5 11.9582 0.947715 12.4059 1.5 12.4059H1.68279C2.26794 12.4059 2.79791 12.772 3.04713 13.3133C3.10274 13.4372 3.16252 13.559 3.22631 13.6784C3.60192 14.354 3.50524 15.1527 3.03841 15.7187L2.95199 15.822C2.57045 16.2405 2.62563 16.8635 3.04417 17.2457L3.70708 17.8304C4.12563 18.2126 4.74858 18.1574 5.10512 17.7226L5.17299 17.6388C5.62509 17.0853 6.37524 16.8714 7.04146 17.0812C7.27961 17.1629 7.5227 17.2312 7.76907 17.2859C8.47054 17.4458 9 18.0512 9 18.7694V18.875C9 19.4273 9.44772 19.875 10 19.875H11C11.5523 19.875 12 19.4273 12 18.875V18.7694C12 18.0512 12.5295 17.4458 13.2309 17.2859C13.4773 17.2312 13.7204 17.1629 13.9585 17.0812C14.6248 16.8714 15.3749 17.0853 15.827 17.6388L15.8949 17.7226C16.2514 18.1574 16.8744 18.2126 17.2929 17.8304L17.9558 17.2457C18.3744 16.8635 18.4295 16.2405 18.048 15.822L17.9616 15.7187C17.4948 15.1527 17.3981 14.354 17.7737 13.6784C17.8375 13.559 17.8973 13.4372 17.9529 13.3133C18.2021 12.772 18.7321 12.4059 19.3172 12.4059H19.5C20.0523 12.4059 20.5 11.9582 20.5 11.4059V10.4686C20.5 9.91635 20.0523 9.46863 19.5 9.46863H19.3172C18.7321 9.46863 18.2021 9.10256 17.9529 8.56124C17.8973 8.43738 17.8375 8.3156 17.7737 8.19613C17.3981 7.52051 17.4948 6.72188 17.9616 6.15584L18.048 6.05256C18.4295 5.63401 18.3744 5.01106 17.9558 4.62882L17.2929 4.04417C16.8744 3.66193 16.2514 3.7171 15.8949 4.15199L15.827 4.23579C15.3749 4.78925 14.6248 5.00312 13.9585 4.79336C13.7204 4.71169 13.4773 4.64335 13.2309 4.58865C12.5295 4.42871 12 3.82331 12 3.10512V3C12 2.44772 11.5523 2 11 2H10ZM9.15447 14.0001C7.28538 13.5948 5.94527 11.8303 6.10478 9.89571C6.26428 7.96115 7.9289 6.4855 9.99999 6.50017C12.0711 6.51484 13.7357 8.01119 13.8952 9.94574C14.0547 11.8803 12.7146 13.6449 10.8455 14.0501C10.5732 14.0999 10.2936 14.1246 10.0124 14.1241C9.7216 14.1235 9.4323 14.0956 9.15447 14.0001ZM13.4451 11.0797C13.7974 10.1855 13.6955 9.14749 13.1235 8.3359C12.5515 7.52432 11.6338 7.00024 10.6403 7.00024C9.64687 7.00024 8.72912 7.52432 8.15712 8.3359C7.58512 9.14749 7.48318 10.1855 7.83553 11.0797C8.18789 11.9739 8.98398 12.6435 9.96067 12.8732C10.9374 13.103 11.9727 12.8669 12.7493 12.2313C13.5259 11.5958 13.9717 10.6401 13.8905 9.70024');
-      iconSvg.appendChild(iconPath);
-      iconContainer.appendChild(iconSvg);
+      // Change the fill color of black paths to dark gray
+      const blackPaths = bubbleIcon.querySelectorAll('path[fill="#000000"]');
+      blackPaths.forEach(path => {
+        path.setAttribute('fill', 'rgb(61, 61, 58)');
+      });
+      
+      iconContainer.appendChild(bubbleIcon);
       
       // Create text container
       const textContainer = document.createElement('div');
       textContainer.className = 'flex flex-row items-center flex-1 min-w-0';
       
-      // Create text paragraph
+      // Create text paragraph with "Voice settings" label
       const textParagraph = document.createElement('p');
       textParagraph.className = 'text-[0.9375rem] text-text-300 text-ellipsis break-words whitespace-nowrap leading-tight min-w-0 overflow-hidden group-hover:text-text-100';
-      textParagraph.textContent = getMessage("extensionSettings");
+      textParagraph.textContent = getMessage("voiceSettings");
       
       // Assemble the elements
       textContainer.appendChild(textParagraph);
