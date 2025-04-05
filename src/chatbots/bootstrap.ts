@@ -16,6 +16,34 @@ export class DOMObserver {
       this.chatbot,
       UserPreferenceModule.getInstance()
     );
+    this.monitorForRouteChanges();
+  }
+
+  monitorForRouteChanges(): void {
+    // Store the current URL for comparison
+    let lastUrl = window.location.href;
+    
+    // Check for URL changes every 300ms
+    setInterval(() => {
+      const currentUrl = window.location.href;
+      if (currentUrl !== lastUrl) {
+        console.log('Route changed:', lastUrl, '->', currentUrl);
+        lastUrl = currentUrl;
+        
+        // Check if the new path is a chatable path
+        if (this.chatbot.isChatablePath(window.location.pathname)) {
+          this.handleRouteChange();
+        }
+      }
+    }, 300);
+  }
+
+  handleRouteChange(): void {
+    // Allow time for DOM to update after route change
+    setTimeout(() => {
+      this.findAndDecorateChatHistory(document.body);
+      // Additional route change handling can be added here
+    }, 300);
   }
 
   observeDOM(): void {
