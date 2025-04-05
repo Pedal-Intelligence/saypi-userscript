@@ -13,6 +13,8 @@ import { VoiceSelector } from "../tts/VoiceMenu";
 import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
 import { UserPrompt } from "./Chatbot";
 import { ClaudeVoiceMenu } from "./ClaudeVoiceMenu";
+import { openSettings } from "../popup/popupopener";
+import getMessage from "../i18n";
 
 class ClaudeChatbot extends AbstractChatbot {
   private promptCache: Map<HTMLElement, ClaudePrompt> = new Map();
@@ -53,7 +55,11 @@ class ClaudeChatbot extends AbstractChatbot {
     return document.querySelector(selector) as HTMLElement;
   }
 
-  getPromptContainer(prompt: HTMLElement): HTMLElement {
+   getPromptContainer(prompt: HTMLElement): HTMLElement {
+    return prompt.ownerDocument.querySelector("fieldset.w-full") as HTMLElement;
+  }
+
+  static getPromptContainer(prompt: HTMLElement): HTMLElement {
     return prompt.ownerDocument.querySelector("fieldset.w-full") as HTMLElement;
   }
 
@@ -318,6 +324,119 @@ class ClaudePrompt extends AbstractUserPrompt {
     super(element);
     this.promptElement = element as HTMLDivElement;
     this.initializePlaceholderManager(this.promptElement);
+    this.addSettingsButtonToToolsMenu();
+  }
+
+  /**
+   * Get the selector for the tools menu button in Claude's UI
+   * Centralizing this makes it easier to update if Claude's UI changes
+   */
+  private getToolsMenuButtonSelector(): string {
+    return '[data-testid="input-menu-tools"]';
+  }
+
+  /**
+   * Get the selector for the tools menu dialog in Claude's UI
+   */
+  private getToolsMenuDialogSelector(): string {
+    return '.top-10.block';
+  }
+
+  /**
+   * Add a settings button to Claude's search and tools menu
+   * This adds a shortcut to the SayPi extension settings within Claude's UI
+   */
+  private addSettingsButtonToToolsMenu(): void {
+    // Wait for the DOM to be fully loaded
+    setTimeout(() => {
+      try {
+        // Find the tools menu button within the prompt editor's container
+        const promptContainer = ClaudeChatbot.getPromptContainer(this.promptElement);
+        const toolsButton = promptContainer?.querySelector(this.getToolsMenuButtonSelector());
+        if (!toolsButton) {
+          console.debug("Claude tools menu button not found, settings button not added");
+          return;
+        }
+
+        // Observer to detect when the menu is opened
+        const bodyObserver = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+              // Look for the tools menu that appears when the button is clicked
+              const toolsMenu = promptContainer?.querySelector(this.getToolsMenuDialogSelector());
+              if (toolsMenu && !toolsMenu.querySelector('.saypi-settings-menu-item')) {
+                this.insertSettingsMenuItem(toolsMenu);
+              }
+            }
+          });
+        });
+
+        // Start observing the body for the menu to appear
+        bodyObserver.observe(document.body, { childList: true, subtree: true });
+
+        // Click handler for the tools button to ensure we can find the menu when it opens
+        toolsButton.addEventListener('click', () => {
+          // Look for the menu after a short delay to ensure it's in the DOM
+          setTimeout(() => {
+            const toolsMenu = document.body.querySelector(this.getToolsMenuDialogSelector());
+            if (toolsMenu && !toolsMenu.querySelector('.saypi-settings-menu-item')) {
+              this.insertSettingsMenuItem(toolsMenu);
+            }
+          }, 100);
+        });
+      } catch (error) {
+        console.error("Error adding settings button to Claude tools menu:", error);
+      }
+    }, 1000); // Wait for Claude's UI to initialize
+  }
+
+  /**
+   * Insert the settings menu item into the tools menu
+   * @param toolsMenu The tools menu element
+   */
+  private insertSettingsMenuItem(toolsMenu: Element): void {
+    try {
+      // Find the existing menu items to match their style
+      const existingItems = toolsMenu.querySelectorAll('[role="menuitem"]');
+      if (existingItems.length === 0) return;
+
+      // Create a new menu item with the same classes as existing items
+      const settingsItem = document.createElement('div');
+      settingsItem.className = existingItems[0].className + ' saypi-settings-menu-item';
+      settingsItem.setAttribute('role', 'menuitem');
+      settingsItem.setAttribute('tabindex', '0');
+      
+      // Get text content from first menu item as example
+      const textElement = existingItems[0].querySelector('div > div');
+      if (textElement) {
+        // Create content with same structure
+        const contentContainer = document.createElement('div');
+        contentContainer.className = textElement.parentElement?.className || '';
+        
+        const textDiv = document.createElement('div');
+        textDiv.className = textElement.className || '';
+        textDiv.textContent = getMessage("extensionSettings");
+        
+        contentContainer.appendChild(textDiv);
+        settingsItem.appendChild(contentContainer);
+      } else {
+        // Fallback simple structure
+        settingsItem.textContent = getMessage("extensionSettings");
+      }
+
+      // Add click handler to open settings
+      settingsItem.addEventListener('click', () => {
+        // Close the menu by simulating a click outside
+        document.body.click();
+        // Open settings popup
+        openSettings();
+      });
+      
+      // Add the item to the menu
+      toolsMenu.appendChild(settingsItem);
+    } catch (error) {
+      console.error("Error inserting settings menu item:", error);
+    }
   }
 
   /**
