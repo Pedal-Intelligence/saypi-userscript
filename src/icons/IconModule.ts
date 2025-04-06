@@ -5,6 +5,7 @@ import rectanglesDarkModeSVG from "./rectangles-moonlight.svg";
 import stopwatchSVG from "./stopwatch.svg";
 import brainSVG from "./brain.svg";
 import steerSVG from "./steer.svg";
+import bubbleBwSVG from "./bubble-bw.svg";
 import { createSVGElement } from "../dom/DOMModule";
 
 export class IconModule {
@@ -14,6 +15,7 @@ export class IconModule {
   private static _stopwatch: SVGElement | null = null;
   private static _brain: SVGElement | null = null;
   private static _steer: SVGElement | null = null;
+  private static _bubbleBw: SVGElement | null = null;
   
   // Create an empty SVG element to use as fallback
   private static createEmptySVG(): SVGElement {
@@ -83,6 +85,18 @@ export class IconModule {
       }
     }
     return this._steer;
+  }
+  
+  static get bubbleBw(): SVGElement {
+    if (!this._bubbleBw) {
+      try {
+        this._bubbleBw = createSVGElement(bubbleBwSVG);
+      } catch (e) {
+        console.warn('Failed to load bubble-bw icon', e);
+        this._bubbleBw = this.createEmptySVG();
+      }
+    }
+    return this._bubbleBw;
   }
 
   rectangles(theme = "light"): SVGElement {

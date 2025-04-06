@@ -1,5 +1,7 @@
 import { AssistantResponse, MessageControls, UserMessage } from "../dom/MessageElements";
 import { Observation } from "../dom/Observation";
+import EventBus from "../events/EventBus";
+import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import {
   AddedText,
   ChangedText,
@@ -7,32 +9,90 @@ import {
   InputStreamOptions,
 } from "../tts/InputStream";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
+import { VoiceSelector } from "../tts/VoiceMenu";
 import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
 import { UserPrompt } from "./Chatbot";
+import { ClaudeVoiceMenu } from "./ClaudeVoiceMenu";
+import { openSettings } from "../popup/popupopener";
+import getMessage from "../i18n";
+import { IconModule } from "../icons/IconModule";
 
 class ClaudeChatbot extends AbstractChatbot {
+  private promptCache: Map<HTMLElement, ClaudePrompt> = new Map();
+
   getName(): string {
     return "Claude";
   }
 
-  getPrompt(element: HTMLElement): UserPrompt {
-    return new ClaudePrompt(element);
+  getID(): string {
+    return "claude";
   }
+
+  getVoiceMenu(
+    preferences: UserPreferenceModule,
+    element: HTMLElement
+  ): VoiceSelector {
+    return new ClaudeVoiceMenu(this, preferences, element);
+  }
+
+  getPrompt(element: HTMLElement): UserPrompt {
+    if (!this.promptCache.has(element)) {
+      this.promptCache.set(element, new ClaudePrompt(element));
+    }
+    return this.promptCache.get(element) as ClaudePrompt;
+  }
+
+  /**
+   * Get the prompt input editor element
+   * @param searchRoot Search is optimised to start in the search root element, but will fall back to the document if not found
+   * @returns The prompt input element, or null if not found
+   */
+  getPromptInput(searchRoot: Element): HTMLElement {
+    const selector = this.getPromptTextInputSelector();
+    const localPromptInput = searchRoot.querySelector(selector) as HTMLElement;
+    if (localPromptInput) {
+      return localPromptInput;
+    }
+    return document.querySelector(selector) as HTMLElement;
+  }
+
+   getPromptContainer(prompt: HTMLElement): HTMLElement {
+    return prompt.ownerDocument.querySelector("fieldset.w-full") as HTMLElement;
+  }
+
+  static getPromptContainer(prompt: HTMLElement): HTMLElement {
+    return prompt.ownerDocument.querySelector("fieldset.w-full") as HTMLElement;
+  }
+
+  PROMPT_CONTROLS_CONTAINER_SELECTOR = "div.flex.gap-2\\.5.w-full.items-center";
+  getPromptControlsContainer(promptContainer: HTMLElement): HTMLElement {
+    return promptContainer.querySelector(this.PROMPT_CONTROLS_CONTAINER_SELECTOR) as HTMLElement;
+  }
+
   getPromptTextInputSelector(): string {
     return "div[enterkeyhint]";
   }
 
   getPromptSubmitButtonSelector(): string {
-    return "#saypi-prompt-controls-container button.bg-accent-main-100:last-of-type:not(:has(~ * button))";
+    return "fieldset div[data-state] button[type=\"button\"].font-medium";
+  }
+
+  getAudioControls(searchRoot: Element): HTMLElement {
+    const selector = this.getAudioControlsSelector();
+    const localAudioControls = searchRoot.querySelector(selector) as HTMLElement;
+    if (localAudioControls) {
+      return localAudioControls;
+    }
+    return searchRoot.ownerDocument.querySelector(selector) as HTMLElement;
   }
 
   getAudioControlsSelector(): string {
-    return "audio + div";
+    return "#saypi-prompt-ancestor " + this.PROMPT_CONTROLS_CONTAINER_SELECTOR; // for Claude, the audio controls are the same as the prompt editor controls
   }
 
   getAudioOutputButtonSelector(): string {
     // audio button is the last button element in the audio controls container
-    return "#saypi-audio-controls > div > div.relative.flex.items-center.justify-end.self-end.p-2 > button";
+    return ".saypi-audio-controls > div > div.relative.flex.items-center.justify-end.self-end.p-2 > button";
   }
 
   getControlPanelSelector(): string {
@@ -57,11 +117,21 @@ class ClaudeChatbot extends AbstractChatbot {
   }
 
   getVoiceMenuSelector(): string {
-    return "div.t-action-m";
+    return ".voice-menu"; // we define our own voice menu for Claude
   }
 
   getVoiceSettingsSelector(): string {
     return "div.mx-auto.w-full.px-6.py-10 > div.grid.grid-cols-2.gap-4";
+  }
+
+  getChatHistory(searchRoot: HTMLElement): HTMLElement {
+    const selector = this.getChatHistorySelector();
+    const localChatHistory = searchRoot.querySelector(selector) as HTMLElement;
+    if (localChatHistory) {
+      return localChatHistory;
+    }
+    //return searchRoot.ownerDocument.querySelector(selector) as HTMLElement;
+    return null as unknown as HTMLElement;
   }
 
   getChatHistorySelector(): string {
@@ -109,7 +179,7 @@ class ClaudeChatbot extends AbstractChatbot {
   }
 
   getExtraCallButtonClasses(): string[] {
-    return ["claude-call-button"];
+    return ["claude-call-button", "rounded-full"];
   }
 
   getContextWindowCapacityCharacters(): number {
@@ -130,7 +200,7 @@ class ClaudeResponse extends AssistantResponse {
     content: HTMLElement,
     options: InputStreamOptions
   ): ElementTextStream {
-    return new ClaudeTextBlockCapture(content, options);
+    return new ClaudeTextStream(content, options);
   }
 
   decorateControls(): MessageControls {
@@ -144,7 +214,7 @@ class ClaudeMessageControls extends MessageControls {
   }
 
   protected getExtraControlClasses(): string[] {
-    return ["text-xs"];
+    return ["text-sm"];
   }
 
   getHoverMenuSelector(): string {
@@ -168,21 +238,29 @@ class ClaudeTextBlockCapture extends ElementTextStream {
     super(element, options);
 
     const messageElement = element.parentElement;
-    if (messageElement && messageElement.hasAttribute("data-is-streaming")) {
+    if (this.isClaudeTextStream(messageElement)) {
+      const claudeMessage = messageElement as HTMLElement;
+      let wasStreaming = false;
       const messageObserver = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.attributeName === "data-is-streaming") {
-            const isStreaming =
-              messageElement.getAttribute("data-is-streaming");
-            if (isStreaming === "false") {
-              const text = this.getNestedText(element);
-              this.subject.next(new AddedText(text));
-              this.subject.complete();
-            }
-          }
-        });
+        const streamingInProgress = this.dataIsStreaming(claudeMessage);
+        const streamingStarted = !wasStreaming && streamingInProgress;
+        const streamingStopped = wasStreaming && !streamingInProgress;
+        const streamingText = this.getNestedText(element);
+        if (streamingStarted) {
+          console.log("Claude started streaming.");
+          // fire a new event to indicate that the streaming has started - this should not be necessary when streaming all data with subject.next(), but it's here since we only stream all data when the message is complete
+          EventBus.emit("saypi:llm:first-token", {text: streamingText, time: Date.now()});
+          this.handleTextAddition(streamingText);
+        } else if (streamingStopped) {
+          this.handleTextAddition(streamingText, true);
+          this.subject.complete();
+          console.log("Claude stopped streaming.");
+        } else if (streamingInProgress) {
+          this.handleTextAddition(streamingText);
+        }
+        wasStreaming = streamingInProgress;
       });
-      messageObserver.observe(messageElement, {
+      messageObserver.observe(claudeMessage, {
         childList: false,
         subtree: false,
         characterData: false,
@@ -193,129 +271,264 @@ class ClaudeTextBlockCapture extends ElementTextStream {
 
   getNestedText(node: HTMLElement): string {
     return node.textContent ?? node.innerText ?? "";
+  }
+
+  dataIsStreaming(element: HTMLElement | null): boolean {
+    return element !== null && element.hasAttribute("data-is-streaming") && element.getAttribute("data-is-streaming") === "true";
+  }
+
+  isClaudeTextStream(element: HTMLElement | null): boolean {
+    return element !== null && element.hasAttribute("data-is-streaming");
+  }
+
+  handleTextAddition(allText: string, isFinal: boolean = false): void {
+    if (isFinal) {
+      this.subject.next(new AddedText(allText));
+    }
   }
 }
 
-class ClaudeTextStream extends ElementTextStream {
-  private lastContentBlock: HTMLElement | null = null; // this will be a "block" element, like a paragraph or list item
-  private blockElements = [
-    "P",
-    "OL",
-    "UL",
-    "DIV",
-    "H1",
-    "H2",
-    "H3",
-    "H4",
-    "H5",
-    "H6",
-  ];
-  constructor(
-    element: HTMLElement,
-    options: InputStreamOptions = { includeInitialText: true }
-  ) {
+class ClaudeTextStream extends ClaudeTextBlockCapture {
+  private _textProcessedSoFar: string = "";
+  constructor(element: HTMLElement, options: InputStreamOptions = { includeInitialText: false }) {
     super(element, options);
-
-    const messageElement = element.parentElement;
-    if (messageElement && messageElement.hasAttribute("data-is-streaming")) {
-      const messageObserver = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.attributeName === "data-is-streaming") {
-            const isStreaming =
-              messageElement.getAttribute("data-is-streaming");
-            if (isStreaming === "false") {
-              const finalParagraph = this.element.querySelector("p:last-child");
-              const text = this.getNestedText(finalParagraph as HTMLElement);
-              console.log("Claude says: ", text);
-              this.subject.next(new AddedText(text));
-              this.subject.complete();
-            }
-          }
-        });
-      });
-      messageObserver.observe(messageElement, {
-        childList: false,
-        subtree: false,
-        characterData: false,
-        attributes: true,
-      });
-    }
-
-    throw new Error("Text stream not implemented. Use block capture instead."); // use the block capture approach instead, for now
   }
 
-  getNestedText(node: HTMLElement): string {
-    return node.textContent ?? node.innerText ?? "";
-  }
+}
 
-  handleMutationEvent(mutation: MutationRecord): void {
-    // auto generated method stub
-    if (mutation.type === "childList") {
-      const addedNodes = Array.from(mutation.addedNodes) as HTMLElement[];
-
-      for (const node of addedNodes) {
-        if (
-          node.nodeType === Node.ELEMENT_NODE &&
-          this.blockElements.includes(node.tagName)
-        ) {
-          if (node.tagName === "OL" || node.tagName === "UL") {
-            const lastListItem = node.querySelector(
-              "li:last-child"
-            ) as HTMLElement;
-            if (lastListItem && lastListItem.tagName === "LI") {
-              const listItemText = this.getNestedText(lastListItem);
-              console.log("Claude says: ", listItemText);
-              this.subject.next(new AddedText(listItemText));
-              this.lastContentBlock = null; // prevent the final list item from being emitted twice
-            }
-          } else {
-            this.lastContentBlock = node as HTMLElement;
-          }
-        } else if (
-          node.nodeType === Node.TEXT_NODE &&
-          node.textContent === "\n" &&
-          this.lastContentBlock
-        ) {
-          // paragraph separator reached, emit the text of the last paragraph
-          const text = this.getNestedText(this.lastContentBlock);
-          console.log("Claude says: ", text);
-          this.subject.next(new AddedText(text));
-          // this approach omits the final paragraph of the stream, since it is not followed by a paragraph separator
-        }
-      }
-    }
+function findAndDecorateCustomPlaceholderElement(
+  prompt: HTMLElement
+): Observation {
+  const existing = prompt.parentElement?.querySelector("#claude-placeholder");
+  if (existing) {
+    return Observation.foundAlreadyDecorated("claude-placeholder", existing);
+  } else {
+    // find and copy the existing placeholder element
+    const originalPlaceholder = prompt.querySelector("p[data-placeholder]");
+    const placeholder = originalPlaceholder
+      ? (originalPlaceholder.cloneNode(true) as HTMLElement)
+      : document.createElement("p");
+    placeholder.classList.add("custom-placeholder");
+    placeholder.id = "claude-placeholder";
+    // add custom placeholder element as a sibling to the prompt element (sic)
+    prompt.insertAdjacentElement("afterend", placeholder);
+    return new Observation(placeholder, placeholder.id, true, true, true);
   }
 }
 
 class ClaudePrompt extends AbstractUserPrompt {
   private promptElement: HTMLDivElement;
-  private placeholderManager: PlaceholderManager;
+  private placeholderManager!: PlaceholderManager; // initialized from the constructor
   readonly PROMPT_CHARACTER_LIMIT = 200000; // max prompt length is the same as context window length, 200k tokens
 
   constructor(element: HTMLElement) {
     super(element);
     this.promptElement = element as HTMLDivElement;
-    const observation = this.findAndDecorateCustomPlaceholderElement(element);
+    this.initializePlaceholderManager(this.promptElement);
+    this.addSettingsButtonToToolsMenu();
+  }
+
+  /**
+   * Get the selector for the tools menu button in Claude's UI
+   * Centralizing this makes it easier to update if Claude's UI changes
+   */
+  private getToolsMenuButtonSelector(): string {
+    return '[data-testid="input-menu-tools"]';
+  }
+
+  /**
+   * Get the selector for the tools menu dialog in Claude's UI
+   */
+  private getToolsMenuDialogSelector(): string {
+    return '.top-10.block, .bottom-10.block';
+  }
+
+  /**
+   * Add a settings button to Claude's search and tools menu
+   * This adds a shortcut to the SayPi extension settings within Claude's UI
+   */
+  private addSettingsButtonToToolsMenu(): void {
+    // Wait for the DOM to be fully loaded
+    setTimeout(() => {
+      try {
+        // Find the tools menu button within the prompt editor's container
+        const promptContainer = ClaudeChatbot.getPromptContainer(this.promptElement);
+        const toolsButton = promptContainer?.querySelector(this.getToolsMenuButtonSelector());
+        if (!toolsButton) {
+          console.debug("Claude tools menu button not found, settings button not added");
+          return;
+        }
+
+        // Flag to track when the tools button is clicked
+        let toolsButtonClicked = false;
+        let lastToolsButtonClickTime = 0;
+        
+        // Observer to detect when the menu is opened
+        const bodyObserver = new MutationObserver((mutations) => {
+          // Wait a heartbeat before checking if button was clicked
+          // This prevents race conditions between click and mutation events
+          setTimeout(() => {
+            // Only proceed if the tools button was clicked recently (within last 800ms)
+            const currentTime = Date.now();
+            const isRecentClick = (currentTime - lastToolsButtonClickTime) < 800;
+            
+            if (!toolsButtonClicked && !isRecentClick) return;
+            
+            mutations.forEach((mutation) => {
+              if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                // Look for the tools menu that appears when the button is clicked
+                const toolsMenu = promptContainer?.querySelector(this.getToolsMenuDialogSelector());
+                if (toolsMenu && !toolsMenu.querySelector('.saypi-settings-menu-item')) {
+                  this.insertSettingsMenuItem(toolsMenu);
+                  // Reset the flag after we've added the menu item
+                  toolsButtonClicked = false;
+                }
+              }
+            });
+          }, 10); // Small delay to allow click event to process first
+        });
+
+        // Start observing the body for the menu to appear
+        bodyObserver.observe(document.body, { childList: true, subtree: true });
+
+        // Click handler for the tools button
+        toolsButton.addEventListener('click', () => {
+          // Set the flag when the tools button is clicked
+          toolsButtonClicked = true;
+          lastToolsButtonClickTime = Date.now();
+          
+          // Reset the flag after a timeout in case the menu doesn't appear
+          setTimeout(() => {
+            toolsButtonClicked = false;
+          }, 500);
+        });
+      } catch (error) {
+        console.error("Error adding settings button to Claude tools menu:", error);
+      }
+    }, 1000); // Wait for Claude's UI to initialize
+  }
+
+  /**
+   * Insert the settings menu item into the tools menu
+   * @param toolsMenu The tools menu element
+   */
+  private insertSettingsMenuItem(toolsMenu: Element): void {
+    try {
+      // Find the specific menu items container
+      const menuItemsContainer = toolsMenu.querySelector('.flex.flex-col > div:first-child > div.p-1\\.5 > div.flex.flex-col');
+      if (!menuItemsContainer) {
+        console.debug("Menu items container not found in tools menu");
+        return;
+      }
+
+      // Create the button element using exact classes from existing items
+      const button = document.createElement('button');
+      button.className = 'saypi-settings-menu-item group flex w-full items-center text-left gap-2.5 h-[2rem] py-auto px-1.5 text-[0.875rem] text-text-200 rounded-md transition-colors select-none active:!scale-100 active:scale-[0.995] hover:bg-bg-200/50 hover:text-text-000';
+      
+      // Create icon container
+      const iconContainer = document.createElement('div');
+      iconContainer.className = 'group/icon h-4 w-4 flex items-center justify-center text-text-300 shrink-0 group-hover:text-text-100';
+      
+      // Use the bubble icon from IconModule
+      const bubbleIcon = IconModule.bubbleBw.cloneNode(true) as SVGElement;
+      bubbleIcon.setAttribute('width', '18');
+      bubbleIcon.setAttribute('height', '18');
+      bubbleIcon.classList.add('shrink-0', '-m-[1px]');
+      
+      // Change the fill color of black paths to dark gray
+      const blackPaths = bubbleIcon.querySelectorAll('path[fill="#000000"]');
+      blackPaths.forEach(path => {
+        path.setAttribute('fill', 'rgb(61, 61, 58)');
+      });
+      
+      iconContainer.appendChild(bubbleIcon);
+      
+      // Create text container
+      const textContainer = document.createElement('div');
+      textContainer.className = 'flex flex-row items-center flex-1 min-w-0';
+      
+      // Create text paragraph with "Voice settings" label
+      const textParagraph = document.createElement('p');
+      textParagraph.className = 'text-[0.9375rem] text-text-300 text-ellipsis break-words whitespace-nowrap leading-tight min-w-0 overflow-hidden group-hover:text-text-100';
+      textParagraph.textContent = getMessage("voiceSettings");
+      
+      // Assemble the elements
+      textContainer.appendChild(textParagraph);
+      button.appendChild(iconContainer);
+      button.appendChild(textContainer);
+      
+      // Add click handler to open settings
+      button.addEventListener('click', () => {
+        // Close the menu by simulating a click outside
+        document.body.click();
+        // Open settings popup
+        openSettings();
+      });
+      
+      // Create a wrapper div like the other menu items have
+      const wrapper = document.createElement('div');
+      wrapper.className = '';
+      wrapper.appendChild(button);
+      
+      // Add to the menu after the existing items
+      menuItemsContainer.appendChild(wrapper);
+    } catch (error) {
+      console.error("Error inserting settings menu item:", error);
+    }
+  }
+
+  /**
+   * Initialize the placeholder manager for the prompt element
+   * This method is self-healing, in that it will reinitialize the placeholder manager
+   * if the custom placeholder element is removed from the DOM for any reason.
+   */
+  initializePlaceholderManager(promptElement: HTMLElement): void {
+    const observation = findAndDecorateCustomPlaceholderElement(promptElement);
+    if (!observation.found) {
+      console.error(
+        "Failed to find or decorate the custom placeholder element for Claude's prompt."
+      );
+      return;
+    }
+
+    // Create new placeholder manager
     this.placeholderManager = new PlaceholderManager(
-      element,
+      promptElement,
       observation.target as HTMLElement,
       this.getDefaultPlaceholderText()
     );
-  }
+    console.debug("Placeholder manager initialized");
 
-  findAndDecorateCustomPlaceholderElement(prompt: HTMLElement): Observation {
-    const existing = prompt.parentElement?.querySelector(
-      "p.custom-placeholder"
-    );
-    if (existing) {
-      return Observation.foundAlreadyDecorated("claude-placeholder", existing);
+    // Add mutation observer to detect when target is removed
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === "childList") {
+          const removedNodes = Array.from(mutation.removedNodes);
+          if (removedNodes.includes(observation.target as Node)) {
+            console.debug(
+              "Custom placeholder element removed, reinitializing..."
+            );
+            // Target was removed, reinitialize
+            observer.disconnect();
+            this.initializePlaceholderManager(promptElement);
+          }
+        }
+      });
+    });
+
+    // Observe the parent element for child removals (can be null if removed from DOM)
+    const promptContainer = promptElement.parentElement
+      ? promptElement.parentElement
+      : document.getElementsByClassName("saypi-prompt-container")[0];
+    if (promptContainer) {
+      observer.observe(promptContainer as Node, {
+        childList: true,
+        subtree: false,
+      });
     } else {
-      const placeholder = document.createElement("p");
-      placeholder.classList.add("custom-placeholder", "text-text-500");
-      placeholder.id = "claude-placeholder";
-      // add placeholder element as a sibling to the prompt element
-      prompt.insertAdjacentElement("afterend", placeholder);
-      return new Observation(placeholder, placeholder.id, true, true, true);
+      console.error(
+        "Prompt element parent element not found, cannot observe for placeholder removals."
+      );
     }
   }
 
@@ -362,7 +575,7 @@ class ClaudePrompt extends AbstractUserPrompt {
   clear(): void {
     this.placeholderManager.setPlaceholder("");
     const promptParagraphs = this.promptElement.querySelectorAll(
-      "p[!data-placeholder]"
+      "p:not([data-placeholder])"
     );
     promptParagraphs.forEach((p) => {
       p.remove();
@@ -372,7 +585,7 @@ class ClaudePrompt extends AbstractUserPrompt {
 
 class PlaceholderManager {
   private input: HTMLElement;
-  private placeholder: HTMLElement;
+  private customPlaceholder: HTMLElement | null;
   private placeholderText: string;
   private inputHandler: EventListener;
 
@@ -382,7 +595,7 @@ class PlaceholderManager {
     initialPlaceholder: string
   ) {
     this.input = inputElement;
-    this.placeholder = placeholderElement;
+    this.customPlaceholder = placeholderElement;
     this.placeholderText = initialPlaceholder;
     this.inputHandler = this.handleInput.bind(this);
     this.initializePlaceholder();
@@ -398,20 +611,34 @@ class PlaceholderManager {
     this.updatePlaceholderVisibility();
   }
 
+  isPromptEmpty() {
+    return this.input.textContent === "";
+  }
+
+  promptEmptied() {
+    this.showCustomPlaceholder();
+    this.hideStandardPlaceholder();
+  }
+
+  promptFilled() {
+    this.hideCustomPlaceholder();
+  }
+
   updatePlaceholderVisibility() {
-    if (this.input.textContent?.trim() === "") {
-      this.placeholder.style.display = "block";
-      this.hideStandardPlaceholder();
+    if (this.isPromptEmpty()) {
+      this.promptEmptied();
     } else {
-      this.placeholder.style.display = "none";
-      this.showStandardPlaceholder();
+      this.promptFilled();
     }
   }
 
   setPlaceholder(newPlaceholder: string) {
     this.placeholderText = newPlaceholder;
-    this.placeholder.textContent = this.placeholderText;
-    this.updatePlaceholderVisibility();
+    // only set the placeholder text if the prompt is empty
+    if (this.isPromptEmpty()) {
+      this.getOrCreateCustomPlaceholder().textContent = this.placeholderText;
+      this.updatePlaceholderVisibility();
+    }
   }
 
   getPlaceholder() {
@@ -421,19 +648,45 @@ class PlaceholderManager {
   /**
    * Get Claude's own placeholder element, which is hidden when the prompt is not empty
    */
-  private getStandardPlaceholder(): HTMLParagraphElement | null {
+  protected getStandardPlaceholder(): HTMLParagraphElement | null {
     return this.input.querySelector("p[data-placeholder]");
   }
   private showStandardPlaceholder() {
     const placeholder = this.getStandardPlaceholder();
     if (placeholder) {
-      placeholder.style.display = "block";
+      placeholder.style.visibility = "visible";
     }
   }
   private hideStandardPlaceholder() {
     const placeholder = this.getStandardPlaceholder();
     if (placeholder) {
-      placeholder.style.display = "none";
+      placeholder.style.visibility = "hidden";
+    }
+  }
+
+  private getOrCreateCustomPlaceholder(): HTMLElement {
+    if (this.customPlaceholder) {
+      return this.customPlaceholder;
+    }
+    const placeholder = findAndDecorateCustomPlaceholderElement(this.input);
+    if (placeholder.found) {
+      this.customPlaceholder = placeholder.target as HTMLElement;
+      return this.customPlaceholder;
+    }
+    throw new Error(
+      "Failed to find or create the custom placeholder element. Ensure the prompt is empty."
+    );
+  }
+
+  private showCustomPlaceholder() {
+    this.customPlaceholder = this.getOrCreateCustomPlaceholder();
+  }
+
+  private hideCustomPlaceholder() {
+    if (this.customPlaceholder) {
+      // remove the custom placeholder element from the DOM
+      this.customPlaceholder.parentNode?.removeChild(this.customPlaceholder);
+      this.customPlaceholder = null;
     }
   }
 }

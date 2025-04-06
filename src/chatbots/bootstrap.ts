@@ -6,13 +6,47 @@ import { Observation } from "../dom/Observation";
 import { VoiceSettings } from "../tts/VoiceMenu";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { ThemeManager } from "../themes/ThemeManagerModule";
+import { VoiceMenuUIManager } from "../tts/VoiceMenuUIManager";
 
 export class DOMObserver {
   ttsUiMgr: ChatHistorySpeechManager | null = null;
-  constructor(private chatbot: Chatbot) {}
+  voiceMenuUiMgr: VoiceMenuUIManager;
+  constructor(private chatbot: Chatbot) {
+    this.voiceMenuUiMgr = new VoiceMenuUIManager(
+      this.chatbot,
+      UserPreferenceModule.getInstance()
+    );
+    this.monitorForRouteChanges();
+  }
+
+  monitorForRouteChanges(): void {
+    // Store the current URL for comparison
+    let lastUrl = window.location.href;
+    
+    // Check for URL changes every 300ms
+    setInterval(() => {
+      const currentUrl = window.location.href;
+      if (currentUrl !== lastUrl) {
+        console.log('Route changed:', lastUrl, '->', currentUrl);
+        lastUrl = currentUrl;
+        
+        // Check if the new path is a chatable path
+        if (this.chatbot.isChatablePath(window.location.pathname)) {
+          this.handleRouteChange();
+        }
+      }
+    }, 300);
+  }
+
+  handleRouteChange(): void {
+    // Allow time for DOM to update after route change
+    setTimeout(() => {
+      EventBus.emit("saypi:ui:content-loaded");
+      // Additional route change handling can be added here
+    }, 300);
+  }
 
   observeDOM(): void {
-    // MutationObserver setup in a separate file or the same file where you start observing
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         [...mutation.addedNodes]
@@ -23,7 +57,6 @@ export class DOMObserver {
             const ctrlPanelObs = this.findAndDecorateControlPanel(addedElement);
             const sidePanelObs = this.findAndDecorateSidePanel(addedElement);
             if (sidePanelObs.found && sidePanelObs.decorated) {
-              // this condition is particular to pi.ai
               const discoveryPanelObs =
                 this.findAndDecorateDiscoveryPanel(addedElement);
               const voiceSettingsObs =
@@ -31,13 +64,16 @@ export class DOMObserver {
             }
             const audioControlsObs =
               this.findAndDecorateAudioControls(addedElement);
+            if (audioControlsObs.isReady()) {
+              this.voiceMenuUiMgr.findAndDecorateVoiceMenu(
+                audioControlsObs.target as HTMLElement
+              );
+            }
             const audioOutputButtonObs =
               this.findAndDecorateAudioOutputButton(addedElement);
-            // ... handle other elements
             const chatHistoryObs =
               this.findAndDecorateChatHistory(addedElement);
 
-            // notify listeners that (all critical) script content has been loaded
             if (promptObs.isReady()) {
               EventBus.emit("saypi:ui:content-loaded");
             }
@@ -48,39 +84,47 @@ export class DOMObserver {
             const removedElement = node as HTMLElement;
             const obs = this.findPrompt(removedElement);
             if (obs.found) {
-              // Prompt field is being removed, so search for a replacement in the main document
               this.findAndDecoratePrompt(document.body);
               if (obs.found && obs.isNew && obs.decorated) {
-                // emit event to notify listeners that script content has been loaded
                 EventBus.emit("saypi:ui:content-loaded");
               }
             }
             const ctrlPanelObs = this.findControlPanel(removedElement);
             if (ctrlPanelObs.found) {
-              // Control panel is being removed, so search for a replacement in the main document
               this.findAndDecorateControlPanel(document.body);
             }
             const audioControlsObs = this.findAudioControls(removedElement);
             if (audioControlsObs.found) {
-              // Audio controls are being removed, so search for a replacement in the main document
-              this.findAndDecorateAudioControls(document.body);
+              const replacementAudioControls = this.findAndDecorateAudioControls(document.body);
+              if (replacementAudioControls.isReady()) {
+                this.voiceMenuUiMgr.findAndDecorateVoiceMenu(
+                  replacementAudioControls.target as HTMLElement
+                );
+              }
             }
             const audioOutputButtonObs =
               this.findAudioOutputButton(removedElement);
             if (audioOutputButtonObs.found) {
-              // Audio output button is being removed, so search for a replacement in the main document
               this.findAndDecorateAudioOutputButton(document.body);
             }
             const chatHistoryObs = this.findChatHistory(removedElement);
             if (chatHistoryObs.found) {
-              // Chat history is being removed, so search for a replacement in the main document
               this.findAndDecorateChatHistory(document.body);
             }
           });
       });
     });
 
-    // Start observing
+    EventBus.on("saypi:ui:content-loaded", () => {
+      const audioControlsObs = this.findAndDecorateAudioControls(document.body);
+      if (audioControlsObs.isReady()) {
+        this.voiceMenuUiMgr.findAndDecorateVoiceMenu(
+          audioControlsObs.target as HTMLElement
+        );
+      }
+      this.findAndDecorateChatHistory(document.body);
+    });
+
     observer.observe(document.body, { childList: true, subtree: true });
   }
 
@@ -108,17 +152,17 @@ export class DOMObserver {
   // Function to decorate the prompt input element, and other elements that depend on it
   decoratePrompt(prompt: HTMLElement): void {
     prompt.id = "saypi-prompt";
-    const promptParent = prompt.parentElement;
-    if (promptParent) {
-      promptParent.classList.add("saypi-prompt-container");
-      const promptGrandparent = promptParent.parentElement;
-      if (promptGrandparent) {
-        promptGrandparent.id = "saypi-prompt-controls-container";
-        const ancestor = this.addIdPromptAncestor(promptGrandparent);
+    const promptContainer = this.chatbot.getPromptContainer(prompt);
+    if (promptContainer) {
+      promptContainer.classList.add("saypi-prompt-container");
+      const controlsContainer = this.chatbot.getPromptControlsContainer(promptContainer);
+      if (controlsContainer) {
+        controlsContainer.id = "saypi-prompt-controls-container";
+        const ancestor = this.addIdPromptAncestor(controlsContainer);
         if (ancestor) this.monitorForSubmitButton(ancestor);
-        const submitButtonSearch = this.findSubmitButton(promptGrandparent);
+        const submitButtonSearch = this.findSubmitButton(controlsContainer);
         const insertionPosition = submitButtonSearch.found ? -1 : 0;
-        buttonModule.createCallButton(promptGrandparent, insertionPosition);
+        buttonModule.createCallButton(controlsContainer, insertionPosition);
       }
     }
   }
@@ -309,9 +353,7 @@ export class DOMObserver {
       return Observation.foundAlreadyDecorated(id, existingPrompt);
     }
 
-    const promptInput = searchRoot.querySelector(
-      this.chatbot.getPromptTextInputSelector()
-    );
+    const promptInput = this.chatbot.getPromptInput(searchRoot);
     if (promptInput) {
       return Observation.foundUndecorated(id, promptInput);
     }
@@ -327,24 +369,26 @@ export class DOMObserver {
   }
 
   findAudioControls(searchRoot: Element): Observation {
-    const id = "saypi-audio-controls";
-    const existingAudioControls = document.getElementById(id);
+    const className = "saypi-audio-controls";
+    const existingAudioControls = searchRoot.querySelector("." + className);
     if (existingAudioControls) {
       // Audio controls already exist, no need to search
-      return Observation.foundAlreadyDecorated(id, existingAudioControls);
+      return Observation.foundAlreadyDecorated(className, existingAudioControls);
     }
 
-    const audioControls = searchRoot.querySelector(
-      this.chatbot.getAudioControlsSelector()
-    );
+    const audioControls = this.chatbot.getAudioControls(searchRoot);
     if (audioControls) {
-      return Observation.foundUndecorated(id, audioControls);
+      // Check if the found element already has the class (might have been added dynamically)
+      if (audioControls.classList.contains(className)) {
+        return Observation.foundAlreadyDecorated(className, audioControls);
+      }
+      return Observation.foundUndecorated(className, audioControls);
     }
-    return Observation.notFound(id);
+    return Observation.notFound(className);
   }
 
   decorateAudioControls(audioControls: HTMLElement): void {
-    audioControls.id = "saypi-audio-controls";
+    audioControls.classList.add("saypi-audio-controls");
   }
 
   findAndDecorateAudioControls(searchRoot: Element): Observation {
@@ -391,9 +435,7 @@ export class DOMObserver {
       // Chat history already exists, no need to search
       return Observation.foundAlreadyDecorated(id, existingChatHistory);
     }
-    const chatHistory = searchRoot.querySelector(
-      this.chatbot.getChatHistorySelector()
-    );
+    const chatHistory = this.chatbot.getChatHistory(searchRoot);
     if (chatHistory) {
       return Observation.foundUndecorated(id, chatHistory);
     }

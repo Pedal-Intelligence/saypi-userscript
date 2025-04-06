@@ -5,39 +5,124 @@
  */
 
 html body.claude {
-    #saypi-callButton {
-        width: 38px; /* for an effective width of 32px - idk why */
-        height: 32px;
+  #saypi-callButton {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* hide Claude's original placeholder when custom placeholder is present and non-empty */
+  #saypi-prompt-container:has(+ .custom-placeholder) #saypi-prompt {
+    // this selector may not be working?
+    p[data-placeholder].is-empty {
+      visibility: hidden; // display: none doesn't work, causes it to reappear
+    }
+  }
+
+  #saypi-prompt p.is-empty.is-editor-empty::before {
+    // hide Claude's original placeholder, but somehow keep the caret visible
+    // display: none doesn't work, and causes the placeholder to reappear
+    // visibility: hidden doesn't work, and causes the caret to disappear
+    --tw-text-opacity: 0 !important; // hide the text while keeping the caret visible
+  }
+
+  /* shift the custom placeholder up to Claude's standard placeholder position */
+  #claude-placeholder {
+    margin-top: -24px;
+    visibility: visible;
+  }
+
+  .tooltip[aria-label]::after {
+    font-size: 0.75rem; /* text-xs */
+    background-color: hsl(var(--black) / 0.8); /* bg-black/80 */
+    top: -130%; /* position the tooltip above the button */
+  }
+
+  .message-hover-menu .saypi-tts-controls {
+    /* unset pi-specific styles */
+    padding: unset;
+    margin-top: unset;
+    background-color: unset;
+    border-radius: unset;
+
+    .tts-item:hover {
+      width: 100%;
+      height: 100%;
+      background-color: hsl(49 26.8% 92% / 1);
+      border-radius: 0.375rem;
     }
 
-    #saypi-submitButton {
-        background-color: #840f7c; /* just for debugging */
+    button svg,
+    img {
+      width: 16px;
+      height: 16px;
+    }
+    .saypi-copy-button,
+    .saypi-powered-by {
+      display: none;
     }
 
-    /* hide Claude's original placeholder when custom placeholder is present and non-empty */
-    #saypi-prompt:has(+ .custom-placeholder:not(:empty)) p[data-placeholder].is-empty {
-        display: none;
+    .saypi-telemetry-button svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  /* the voice selection menu */
+  .saypi-audio-controls {
+    justify-content: space-between;
+    width: 100%;
+    margin-top: unset; // unset the margin-top set by the desktop styles
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  #saypi-voice-menu {
+    position: relative; // so that menu can be positioned relative to this
+    margin-right: auto; // push to the left side
+
+    .voice-menu-content {
+      position: absolute;
+      z-index: 1000;
+      margin-top: 0; /* Remove top margin */
+      margin-bottom: 4px; /* Add bottom margin instead */
+      width: auto;
+      transform-origin: bottom left; /* Change origin for animation */
+      animation: menuFadeIn 0.1s ease-out;
     }
 
-    /* reduce the height of the prompt input area, which somehow grew by 24px when we added the custom placeholder
-     * and shift the custom placeholder up to Claude's standard placeholder position */
-    #saypi-prompt:has(+ .custom-placeholder:not(:empty)) {
-        margin-bottom: -24px;
+    @keyframes menuFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.98) translateY(5px); /* Adjust animation for upward appearance */
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
     }
+  }
 
-    .tooltip[aria-label]::after {
-        font-size: 0.75rem; /* text-xs */
-        background-color: hsl(var(--black)/.8); /* bg-black/80 */
-        top: -130%; /* position the tooltip above the button */
+  /* Ensure claude-voice-selector has similar styling to model selector */
+  #claude-voice-selector {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 8px;
+    
+    button {
+      border: 1px solid transparent;
+      position: relative; /* Ensure proper positioning context */
+      
+      &[aria-expanded="true"] {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
     }
-
-    .message-hover-menu .saypi-tts-controls {
-        button svg, img {
-            width: 12px;
-            height: 12px;
-        }
-        .saypi-copy-button {
-            display: none;
-        }
+    
+    /* Position menu content relative to the top of the button */
+    .voice-menu-content {
+      bottom: 100%; /* Position above the button */
+      left: 0;
+      min-width: 100%;
     }
+  }
 }

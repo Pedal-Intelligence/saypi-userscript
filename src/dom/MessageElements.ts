@@ -166,7 +166,12 @@ abstract class AssistantResponse {
    * @returns true if this is the most recent message, false otherwise
    */
   isLastMessage(): boolean {
-    const lastMessage = document.querySelector("#saypi-chat-history .present-messages .assistant-message:last-of-type");
+    // Get all assistant messages in the chat history
+    const allAssistantMessages = document.querySelectorAll(".present-messages .assistant-message");
+    if (allAssistantMessages.length === 0) return false;
+    
+    // Check if this element is the last one in the list
+    const lastMessage = allAssistantMessages[allAssistantMessages.length - 1];
     return lastMessage === this._element;
   }
 

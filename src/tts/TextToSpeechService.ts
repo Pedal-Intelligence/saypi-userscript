@@ -6,6 +6,8 @@ import {
   SpeechUtterance,
 } from "./SpeechModel";
 import { callApi } from "../ApiClient";
+import { Chatbot } from "../chatbots/Chatbot";
+import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
 
 export class TextToSpeechService {
   private sequenceNumbers: { [key: string]: number } = {};
@@ -18,8 +20,10 @@ export class TextToSpeechService {
     return response.json();
   }
 
-  public async getVoices(): Promise<SpeechSynthesisVoiceRemote[]> {
-    const response = await callApi(`${this.serviceUrl}/voices`);
+  public async getVoices(chatbot?: Chatbot): Promise<SpeechSynthesisVoiceRemote[]> {
+    const appId = chatbot ? chatbot.getID() : ChatbotIdentifier.getAppId();
+    const endpoint = `${this.serviceUrl}/voices?app=${appId}`;
+    const response = await callApi(endpoint);
     if (!response.ok) {
       throw new Error(`Failed to get voices: ${response.status}`);
     }

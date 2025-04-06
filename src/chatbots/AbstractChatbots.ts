@@ -3,12 +3,13 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import EventBus from "../events/EventBus";
 import { shortenTranscript } from "../TextModule";
 import { ImmersionStateChecker } from "../ImmersionServiceLite";
-import { ChatbotService } from "./ChatbotService";
 import { AssistantResponse, UserMessage } from "../dom/MessageElements";
+import { VoiceSelector } from "../tts/VoiceMenu";
 
 export abstract class AbstractChatbot implements Chatbot {
     protected readonly preferences = UserPreferenceModule.getInstance();
   
+    abstract getChatHistory(searchRoot: HTMLElement): HTMLElement;
     abstract getChatHistorySelector(): string;
     abstract getPastChatHistorySelector(): string;
     abstract getRecentChatHistorySelector(): string;
@@ -16,6 +17,7 @@ export abstract class AbstractChatbot implements Chatbot {
     abstract getVoiceSettingsSelector(): string;
     abstract getDiscoveryPanelSelector(): string;
     abstract getAudioOutputButtonSelector(): string;
+    abstract getAudioControls(searchRoot: Element): HTMLElement;
     abstract getAudioControlsSelector(): string;
     abstract getControlPanelSelector(): string;
     abstract getSidePanelSelector(): string;
@@ -30,9 +32,17 @@ export abstract class AbstractChatbot implements Chatbot {
     abstract getExtraCallButtonClasses(): string[];
     abstract getContextWindowCapacityCharacters(): number;
     abstract getPrompt(element: HTMLElement): UserPrompt;
+    abstract getPromptInput(searchRoot: Element): HTMLElement; // search for the prompt input element
+    abstract getPromptContainer(prompt: HTMLElement): HTMLElement;
+    abstract getPromptControlsContainer(promptContainer: HTMLElement): HTMLElement;
     abstract getAssistantResponse(element: HTMLElement, includeInitialText?: boolean): AssistantResponse;
     abstract getUserMessage(element: HTMLElement): UserMessage;
     abstract getName(): string;
+    abstract getVoiceMenu(preferences: UserPreferenceModule, element: HTMLElement): VoiceSelector;
+
+    getID(): string {
+      return this.getName().toLowerCase();
+    }
   
     async getNickname(): Promise<string> {
       const nickname = await this.preferences.getNickname();
@@ -117,30 +127,9 @@ export abstract class AbstractChatbot implements Chatbot {
       }
   
       if (isMaintainanceMessage) {
-        // Add custom instruction for maintainance messages
-        const chatbot = await ChatbotService.getChatbot();
-        const hasNickname = await chatbot.hasNickname();
-        if (hasNickname) {
-          const nickname = await chatbot.getNickname();
-          const groupSuppressionInstruction = `Your nickname is ${nickname}. Respond only when addressed by your nickname. Stay in character. State your name when responding so that others know who is speaking. Do not respond to messages addressed to other people.`;
-          const internalMonologueInstruction = "This is a maintenance message to help you stay aware of the conversation. Your response will not be shown or heard by users. Process this information as internal thoughts, referring to speakers in the third person and maintaining empathy. Feel free to reflect on their situation and consider ways you might help, but keep these thoughts to yourself for now. Focus on understanding both the facts and emotions being shared.";
-          const instruction = `<instruction>
-${groupSuppressionInstruction}
-
-${internalMonologueInstruction}
-</instruction>`;
-
-          // Only include instruction if it won't overflow the prompt
-          const combinedLength = instruction.length + transcript.length;
-          if (combinedLength <= this.PROMPT_CHARACTER_LIMIT - 10) { // 10 char buffer
-            transcript = `${instruction}\n\n${transcript}`;
-          }
-
-          this.submitFinalTranscript(transcript, isFocused, textarea);
-        } else {
-          // If no nickname is set, just submit the transcript as is
-          this.submitFinalTranscript(transcript, isFocused, textarea);
-        }
+        // Since we can't use ChatbotService due to circular dependency,
+        // we'll use a more generic approach without nickname customization
+        this.submitFinalTranscript(transcript, isFocused, textarea);
       } else {
         this.submitFinalTranscript(transcript, isFocused, textarea);
       }

@@ -23,6 +23,10 @@
     "message": "Settings",
     "description": "The text of the button to open the extension's settings."
   },
+  "voiceSettings": {
+    "message": "Voice settings",
+    "description": "The text of the menu item to access voice-related settings."
+  },
   "callInProgress": {
     "message": "End hands-free conversation",
     "description": "The tooltip to display on the call button when a call is in progress."

@@ -47,7 +47,7 @@ export const audioOutputMachine = createMachine(
       skip: false,
       autoplay: false,
       replaying: false,
-      provider: audioProviders.Pi,
+      provider: audioProviders.getDefault(),
       voice: null,
     },
     id: "audioOutput",

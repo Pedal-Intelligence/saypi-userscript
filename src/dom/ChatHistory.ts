@@ -477,9 +477,15 @@ class ChatHistoryNewMessageObserver
     message: AssistantResponse
   ): Promise<StreamedSpeech | null> {
     // check if the message is already in the ignore list
-    console.debug("Checking if message is in ignore list", message.text);
+    const snippet = message.text.substring(0, 10);
+    console.debug(`Checking if \"${snippet}...\" is in ignore list`);
     if (this.ignoreMessages.some((m) => m.hash === message.hash)) {
-      console.debug("Message is in ignore list, stream from history instead");
+      console.debug(`${snippet}... is in ignore list, stream from history instead`);
+      return await this.streamSpeechFromHistory(this.speechHistory, message);
+    }
+    // only start streaming speech for the last message
+    if (!message.isLastMessage()) {
+      console.debug(`${snippet}... is not the last message, streaming from history instead`);
       return await this.streamSpeechFromHistory(this.speechHistory, message);
     }
 
@@ -492,6 +498,7 @@ class ChatHistoryNewMessageObserver
         return new AssistantSpeech(utterance);
       };
       //EventBus.on("saypi:tts:speechStreamStarted", streamStartedListener); // redunandant with ChatHistoryManager?
+      console.debug(`${snippet}... is being streamed by ${provider.name}`);
       this.EventListeners.push({
         event: "saypi:tts:speechStreamStarted",
         listener: streamStartedListener,

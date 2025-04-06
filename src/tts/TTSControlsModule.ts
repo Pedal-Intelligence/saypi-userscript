@@ -34,12 +34,26 @@ export class TTSControlsModule {
     });
 
     EventBus.on("saypi:piWriting", (event: AssistantWritingEvent) => {
+      // short-circuit for block capture - remove this line to enable TTS streaming
+      return;
       if (this.skipCurrent) {
         console.debug("Suppressing TTS generation due to skipCurrent flag");
         this.skipCurrent = false;
         return;
       }
+      console.debug("Starting TTS generation for LLM as soon as possible");
       this.autoplaySpeech(event.utterance, 200); // wait a beat after starting the input stream before starting the output stream
+    });
+
+    EventBus.on("saypi:piStoppedWriting", (event: AssistantWritingEvent) => {
+      // for Claude block capture, wait until all text is available before starting the audio output stream
+      if (this.skipCurrent) {
+        console.debug("Suppressing TTS generation due to skipCurrent flag");
+        this.skipCurrent = false;
+        return;
+      }
+      console.debug("Waited for LLM to finish writing before starting TTS");
+      this.autoplaySpeech(event.utterance, 100); // wait a beat after starting the input stream before starting the output stream
     });
   }
 

@@ -1,5 +1,6 @@
 import { AssistantResponse, MessageControls, UserMessage } from "../dom/MessageElements";
 import EventBus from "../events/EventBus";
+import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import {
   AddedText,
   ChangedText,
@@ -10,6 +11,7 @@ import {
 import { SpeechSynthesisVoiceRemote } from "../tts/SpeechModel";
 import { PiSpeechSourceParser } from "../tts/SpeechSourceParsers";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
+import { PiVoiceMenu, VoiceSelector } from "../tts/VoiceMenu";
 import { UserPrompt } from "./Chatbot";
 import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
 
@@ -18,8 +20,33 @@ class PiAIChatbot extends AbstractChatbot {
     return "Pi";
   }
 
+  getID(): string {
+    return "pi";
+  }
+
+  getVoiceMenu(
+    preferences: UserPreferenceModule,
+    element: HTMLElement
+  ): VoiceSelector {
+    return new PiVoiceMenu(this, preferences, element);
+  }
+
   getPrompt(element: HTMLElement): UserPrompt {
     return new PiPrompt(element);
+  }
+
+  getPromptInput(searchRoot: Element): HTMLElement {
+    return searchRoot.querySelector(
+      this.getPromptTextInputSelector()
+    ) as HTMLElement;
+  }
+
+  getPromptContainer(prompt: HTMLElement): HTMLElement {
+    return prompt.parentElement as HTMLElement;
+  }
+
+  getPromptControlsContainer(promptContainer: HTMLElement): HTMLElement {
+    return promptContainer.parentElement as HTMLElement;
   }
 
   getPromptTextInputSelector(): string {
@@ -30,13 +57,17 @@ class PiAIChatbot extends AbstractChatbot {
     return "#saypi-prompt-controls-container button.rounded-full.transition-colors.duration-300"; // falls back to use JS instead if unsuccessful (see bootstrap.ts)
   }
 
+  getAudioControls(searchRoot: Element): HTMLElement {
+    return searchRoot.querySelector(this.getAudioControlsSelector()) as HTMLElement;
+  }
+
   getAudioControlsSelector(): string {
     return "audio + div";
   }
 
   getAudioOutputButtonSelector(): string {
     // audio button is the last button element in the audio controls container
-    return "#saypi-audio-controls > div > div.relative.flex.items-center.justify-end.self-end.p-2 > button";
+    return ".saypi-audio-controls > div > div.relative.flex.items-center.justify-end.self-end.p-2 > button";
   }
 
   getControlPanelSelector(): string {
@@ -62,6 +93,10 @@ class PiAIChatbot extends AbstractChatbot {
 
   getVoiceSettingsSelector(): string {
     return "div.mx-auto.w-full.px-6.py-10 > div.grid.grid-cols-2.gap-4";
+  }
+
+  getChatHistory(searchRoot: HTMLElement): HTMLElement {
+    return searchRoot.querySelector(this.getChatHistorySelector()) as HTMLElement;
   }
 
   getChatHistorySelector(): string {

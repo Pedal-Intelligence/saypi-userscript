@@ -1,6 +1,7 @@
 import { config } from "../ConfigModule.js";
 import { UtteranceCharge } from "../billing/BillingModule";
 import { PiSpeechSourceParser } from "./SpeechSourceParsers";
+import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
 
 const saypiAudioDomain = config.apiServerUrl
   ? new URL(config.apiServerUrl).hostname
@@ -54,6 +55,19 @@ const audioProviders = {
   ): AudioProvider => {
     return audioProviders.retrieveProviderByEngine(voice.powered_by);
   },
+  
+  // Get the default audio provider based on the current chatbot
+  getDefault: (): AudioProvider => {
+    const chatbotId = ChatbotIdentifier.identifyChatbot();
+    switch (chatbotId) {
+      case "pi":
+        return audioProviders.Pi;
+      case "claude":
+        return audioProviders.SayPi;
+      default:
+        return audioProviders.SayPi; // Default fallback
+    }
+  }
 };
 
 interface SpeechUtterance {

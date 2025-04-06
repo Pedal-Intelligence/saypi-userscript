@@ -33,7 +33,7 @@ html.immersive-view {
   }
 
   /* Pi controls: mute/unmute */
-  #saypi-audio-controls {
+  .saypi-audio-controls {
     /* align the mute button with the horizontal control panel */
     margin-top: 0.375rem;
     /* hide the voice options */
@@ -53,6 +53,8 @@ html.immersive-view {
     div.bg-neutral-200 {
       background-color: transparent;
     }
+    justify-content: space-between;
+    width: 100%;
   }
 
   /* fix an alignment issue with the "new ui layout" */

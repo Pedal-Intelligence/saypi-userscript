@@ -11,6 +11,7 @@ import SlowResponseHandler from "../SlowResponseHandler.ts";
 import { SlowResponseHandlerAdapter } from "./SlowResponseHandlerAdapter.js";
 import { CacheBuster } from "../CacheBuster.ts";
 import { UserPreferenceModule } from "../prefs/PreferenceModule.ts";
+import { ChatbotService } from "../chatbots/ChatbotService.ts";
 
 export default class AudioModule {
   constructor() {
@@ -132,13 +133,15 @@ export default class AudioModule {
 
   initializeVoiceConverter() {
     const prefs = UserPreferenceModule.getInstance();
-    prefs.getVoice().then((voice) => {
-      if (voice) {
-        console.log("Preferred voice is", voice);
-        this.voiceConverter.send({ type: "changeVoice", voice });
-      } else {
-        console.log("Default voice is preferred");
-      }
+    ChatbotService.getChatbot().then((chatbot) => {
+      prefs.getVoice(chatbot).then((voice) => {
+        if (voice) {
+          console.log("Preferred voice is", voice);
+          this.voiceConverter.send({ type: "changeVoice", voice });
+        } else {
+          console.log("Default voice is preferred");
+        }
+      });
     });
   }
 

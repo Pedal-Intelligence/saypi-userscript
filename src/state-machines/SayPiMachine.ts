@@ -614,6 +614,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   {
                     type: "notifySentMessage",
                   },
+                  {
+                    type: "setMaintainanceFlag",
+                  }
                 ],
                 exit: ["acknowledgeUserInput"],
                 always: "#sayPi.responding.piThinking",

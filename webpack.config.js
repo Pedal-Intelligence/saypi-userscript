@@ -119,6 +119,15 @@ const config = {
     },
     optimization: {
       minimize: false, // Prevents minification in production mode
+      splitChunks: {
+        // Disable code splitting to ensure all code is included in the main bundle
+        chunks: 'async',
+        cacheGroups: {
+          defaultVendors: false,
+          default: false
+        }
+      },
+      runtimeChunk: false
     },
     plugins: [
       new webpack.BannerPlugin({

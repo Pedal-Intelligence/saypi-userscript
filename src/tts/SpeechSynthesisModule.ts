@@ -16,6 +16,8 @@ import {
   VoiceFactory
 } from "./SpeechModel";
 import { BillingModule, UtteranceCharge } from "../billing/BillingModule";
+import { Chatbot } from "../chatbots/Chatbot";
+import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
 
 function generateUUID(): string {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
@@ -25,11 +27,13 @@ function generateUUID(): string {
   });
 }
 
-function getUtteranceURI(speech: SpeechUtterance): string {
+async function getUtteranceURI(speech: SpeechUtterance, appId?: string): Promise<string> {
   if (speech.uri.includes("?")) {
     return speech.uri;
   } else {
-    return `${speech.uri}?voice_id=${speech.voice.id}&lang=${speech.lang}`;
+    // Use provided appId or get it from ChatbotIdentifier
+    const app = appId || ChatbotIdentifier.getAppId();
+    return `${speech.uri}?voice_id=${speech.voice.id}&lang=${speech.lang}&app=${app}`;
   }
 }
 
@@ -92,12 +96,12 @@ class SpeechSynthesisModule {
   private voicesCache: SpeechSynthesisVoiceRemote[] = [];
   private voicesLoading: Promise<void> | null = null;
 
-  async getVoices(): Promise<SpeechSynthesisVoiceRemote[]> {
+  async getVoices(chatbot?: Chatbot): Promise<SpeechSynthesisVoiceRemote[]> {
     if (this.voicesCache.length > 0) {
       return this.voicesCache;
     }
     if (!this.voicesLoading) {
-      this.voicesLoading = this.ttsService.getVoices().then((voices) => {
+      this.voicesLoading = this.ttsService.getVoices(chatbot).then((voices) => {
         this.voicesCache = voices;
         this.voicesLoading = null;
       });
@@ -106,8 +110,8 @@ class SpeechSynthesisModule {
     return this.voicesCache;
   }
 
-  async getVoiceById(id: string): Promise<SpeechSynthesisVoiceRemote> {
-    const voices = await this.getVoices(); // populate cache
+  async getVoiceById(id: string, chatbot?: Chatbot): Promise<SpeechSynthesisVoiceRemote> {
+    const voices = await this.getVoices(chatbot); // populate cache
 
     const foundVoice = voices.find((voice) => voice.id === id);
     if (!foundVoice) {
@@ -220,8 +224,9 @@ class SpeechSynthesisModule {
     }
     console.debug(`Speaking: ${speech.toString()}`);
     // Start audio playback with utterance.uri as the audio source
-    const audioSource = getUtteranceURI(speech);
-    EventBus.emit("audio:load", { url: audioSource }); // indirectly calls AudioModule.loadAudio
+    getUtteranceURI(speech).then((uri) => {
+      EventBus.emit("audio:load", { url: uri }); // indirectly calls AudioModule.loadAudio
+    });
   }
 
   cancel(): Promise<void> {

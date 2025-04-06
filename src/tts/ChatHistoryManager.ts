@@ -15,7 +15,6 @@ import {
   getAssistantMessageByUtterance as getAssistantMessageByUtteranceId,
 } from "../dom/ChatHistory";
 import { Observation } from "../dom/Observation";
-import { VoiceMenu } from "./VoiceMenu";
 import { SpeechUtterance } from "./SpeechModel";
 import { findRootAncestor } from "../dom/DOMModule";
 import { UtteranceCharge } from "../billing/BillingModule";
@@ -26,38 +25,12 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
   private speechHistory = SpeechHistoryModule.getInstance();
   private messageHistory = MessageHistoryModule.getInstance();
   private replaying = false; // flag to indicate whether the user requested a replay of an utterance
-  private voiceMenu: VoiceMenu | null = null;
 
   // managed resources
   private eventListeners: EventListener[] = [];
   private observers: Observer[] = [];
 
   private newMessageObserver: ChatHistoryAdditionsObserver | null = null;
-
-  findAndDecorateVoiceMenu(): Observation {
-    const audioControlsContainer = document.querySelector(
-      "#saypi-audio-controls"
-    );
-    if (!audioControlsContainer) {
-      return Observation.notFound("saypi-audio-controls");
-    }
-    const voiceMenuElement = audioControlsContainer.querySelector(
-      this.chatbot.getVoiceMenuSelector()
-    );
-    if (voiceMenuElement && voiceMenuElement instanceof HTMLElement) {
-      let obs = Observation.foundUndecorated(
-        "saypi-voice-menu",
-        voiceMenuElement
-      );
-      this.voiceMenu = new VoiceMenu(
-        this.chatbot,
-        this.userPreferences,
-        voiceMenuElement
-      );
-      return Observation.foundAndDecorated(obs);
-    }
-    return Observation.notFound("saypi-voice-menu");
-  }
 
   // Methods for DOM manipulation and element ID assignment
   addIdChatHistory(chatHistory: HTMLElement): void {
@@ -325,7 +298,6 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
   // Constructor
   constructor(private chatbot: Chatbot, chatHistoryElement: HTMLElement) {
     this.addIdChatHistory(chatHistoryElement);
-    this.findAndDecorateVoiceMenu(); // voice menu is not within the chat history, but is a related element
     this.registerPastChatHistoryListener(chatHistoryElement);
     this.registerPresentChatHistoryListener(chatHistoryElement).then(
       (observer) => {
@@ -336,5 +308,14 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     this.registerMessageErrorListeners();
     this.registerMessageChargeListeners();
     this.registerMessageHideListeners();
+  }
+
+  findAudioControls(searchRoot: Element): Observation {
+    const className = "saypi-audio-controls";
+    const existingAudioControls = searchRoot.querySelector("." + className);
+    if (existingAudioControls) {
+      return Observation.foundAlreadyDecorated(className, existingAudioControls);
+    }
+    return Observation.notFound(className);
   }
 }

@@ -41,9 +41,8 @@ html.desktop-view {
     to { opacity: 0; }
   }
 
-  #saypi-audio-controls {
-    /* additional margin to align with control panel row */
-    margin-top: 0.35rem;
+  .saypi-audio-controls {
+    margin-top: 0.35rem; /* additional margin to align with control panel row on pi.ai */
   }
 
   #saypi-side-panel .saypi-control-button {
