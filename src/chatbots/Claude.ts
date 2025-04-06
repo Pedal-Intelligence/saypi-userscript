@@ -340,7 +340,7 @@ class ClaudePrompt extends AbstractUserPrompt {
    * Get the selector for the tools menu dialog in Claude's UI
    */
   private getToolsMenuDialogSelector(): string {
-    return '.top-10.block';
+    return '.top-10.block, .bottom-10.block';
   }
 
   /**
