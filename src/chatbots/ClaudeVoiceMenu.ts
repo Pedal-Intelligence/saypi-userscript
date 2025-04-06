@@ -214,10 +214,20 @@ export class ClaudeVoiceMenu extends VoiceSelector {
   private positionMenuAboveButton(): void {
     const buttonRect = this.menuButton.getBoundingClientRect();
     
-    // Set the menu to be positioned above the button
-    this.menuContent.style.position = "absolute";
-    this.menuContent.style.bottom = `calc(100% + 8px)`; // Position above with gap
-    this.menuContent.style.left = "0";
+    // Use fixed positioning with transform to match Claude's native UI pattern
+    this.menuContent.style.position = "fixed";
+    this.menuContent.style.left = "0px";
+    this.menuContent.style.top = "0px";
+    
+    // Calculate the X position (left edge of button)
+    const leftPosition = buttonRect.left;
+    
+    // Calculate the Y position (top edge of button minus menu height minus gap)
+    const topPosition = buttonRect.top - this.menuContent.offsetHeight - 8;
+    
+    // Apply transform to position the menu precisely
+    this.menuContent.style.transform = `translate(${leftPosition}px, ${topPosition}px)`;
+    this.menuContent.style.zIndex = "50";
     this.menuContent.style.minWidth = `${Math.max(buttonRect.width, 160)}px`;
   }
 
