@@ -139,7 +139,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     const menu = document.createElement("div");
     menu.classList.add(
       "z-50",
-      "bg-white",
+      "bg-bg-000",
       "border-0.5",
       "border-border-300",
       "backdrop-blur-xl",
