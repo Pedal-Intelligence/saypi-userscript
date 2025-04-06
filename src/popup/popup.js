@@ -97,25 +97,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /**
    * Updates the submit mode UI based on user entitlements
-   * If agent mode is entitled, shows the 3-way slider and nickname field
-   * Otherwise, shows only the auto-submit toggle and hides nickname field
+   * If agent mode is entitled, shows the 3-way slider
+   * Otherwise, shows only the auto-submit toggle
+   * The nickname field is always visible to all users
    */
   function updateSubmitModeUI() {
     hasAgentModeEntitlement().then((hasEntitlement) => {
       const submitModeSelector = document.getElementById("submit-mode-selector");
-      const nicknamePreference = document.getElementById("nickname-preference");
       const autoSubmitToggle = document.createElement("div");
       autoSubmitToggle.className = "user-preference-item w-full max-w-lg";
       autoSubmitToggle.id = "auto-submit-preference";
       
       if (hasEntitlement) {
-        // User is entitled to agent mode - show the 3-way slider and nickname field
+        // User is entitled to agent mode - show the 3-way slider
         if (submitModeSelector) {
           submitModeSelector.classList.remove("hidden");
-        }
-        
-        if (nicknamePreference) {
-          nicknamePreference.classList.remove("hidden");
         }
         
         // Remove the auto-submit toggle if it exists
@@ -124,13 +120,9 @@ document.addEventListener("DOMContentLoaded", function () {
           existingToggle.remove();
         }
       } else {
-        // User is NOT entitled to agent mode - hide the 3-way slider and nickname field
+        // User is NOT entitled to agent mode - hide the 3-way slider
         if (submitModeSelector) {
           submitModeSelector.classList.add("hidden");
-        }
-        
-        if (nicknamePreference) {
-          nicknamePreference.classList.add("hidden");
         }
         
         // Only create the toggle if it doesn't already exist
