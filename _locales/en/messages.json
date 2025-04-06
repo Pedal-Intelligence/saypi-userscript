@@ -724,5 +724,21 @@
   "clickToCollapse": {
     "message": "click to collapse",
     "description": "Text indicating user can click to hide expanded content."
+  },
+  "voiceOff": {
+    "message": "Voice off",
+    "description": "Label for when text-to-speech is disabled"
+  },
+  "ttsVoice": {
+    "message": "TTS voice",
+    "description": "Label describing a text-to-speech voice option in the menu"
+  },
+  "signInForTTS": {
+    "message": "Sign in for text-to-speech",
+    "description": "Prompt shown when user needs to authenticate to access text-to-speech features"
+  },
+  "disableTTS": {
+    "message": "Disable text-to-speech",
+    "description": "Label for the option to turn off text-to-speech"
   }
 }

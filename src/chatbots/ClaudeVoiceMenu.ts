@@ -5,6 +5,8 @@ import { Chatbot } from "./Chatbot";
 import waveformSvgContent from "../icons/wave.svg";
 import chevronSvgContent from "../icons/claude-chevron.svg";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
+import jwtManager from "../JwtManager";
+import getMessage from "../i18n";
 
 export class ClaudeVoiceMenu extends VoiceSelector {
   private menuButton: HTMLButtonElement;
@@ -113,7 +115,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       "tracking-tight",
       "select-none"
     );
-    voiceName.innerText = voice ? voice.name : "Voice off";
+    voiceName.innerText = voice ? voice.name : getMessage("voiceOff");
     nameContainer.appendChild(voiceName);
     contentDiv.appendChild(nameContainer);
     
@@ -159,7 +161,8 @@ export class ClaudeVoiceMenu extends VoiceSelector {
   }
 
   protected createMenuItem(
-    voice: SpeechSynthesisVoiceRemote | null
+    voice: SpeechSynthesisVoiceRemote | null,
+    noVoicesAvailable: boolean = false
   ): HTMLDivElement {
     const item = document.createElement("div");
     item.classList.add(
@@ -191,13 +194,28 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     
     const name = document.createElement("div");
     name.classList.add("flex-1", "text-sm", "font-normal", "text-text-300");
-    name.innerText = voice ? voice.name : "Voice off";
+    name.innerText = voice ? voice.name : getMessage("voiceOff");
     nameContainer.appendChild(name);
     content.appendChild(nameContainer);
 
     const description = document.createElement("div");
     description.classList.add("text-text-500", "pr-4", "text-xs");
-    description.innerText = voice ? "TTS voice" : "Disable text-to-speech";
+    
+    // Determine the appropriate description text
+    if (voice) {
+      description.innerText = getMessage("ttsVoice");
+    } else {
+      const isAuthenticated = jwtManager.isAuthenticated();
+      
+      if (noVoicesAvailable && !isAuthenticated) {
+        description.innerText = getMessage("signInForTTS");
+        // Add sign-in indicator class
+        description.classList.add("text-accent-secondary-100");
+      } else {
+        description.innerText = getMessage("disableTTS");
+      }
+    }
+    
     content.appendChild(description);
 
     item.appendChild(content);
@@ -264,14 +282,14 @@ export class ClaudeVoiceMenu extends VoiceSelector {
   ): void {
     const voiceName = this.menuButton.querySelector(".voice-name");
     if (voiceName) {
-      voiceName.textContent = selectedVoice ? selectedVoice.name : "Voice off";
+      voiceName.textContent = selectedVoice ? selectedVoice.name : getMessage("voiceOff");
     }
 
     const menuItems = this.menuContent.querySelectorAll("[role='menuitem']");
     menuItems.forEach((item) => {
       if (item instanceof HTMLElement) {
         const itemName = item.querySelector(".text-sm")?.textContent;
-        const isSelected = itemName === (selectedVoice ? selectedVoice.name : "Voice off");
+        const isSelected = itemName === (selectedVoice ? selectedVoice.name : getMessage("voiceOff"));
         
         // Toggle selected state with Claude's styling
         item.classList.toggle("bg-bg-300", isSelected);
@@ -296,10 +314,14 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       this.menuContent = this.createVoiceMenu();
       this.element.appendChild(this.menuContent);
 
-      // Add "Voice off" option
-      const voiceOffItem = this.createMenuItem(null);
+      // Check if we have any voices available besides "Voice off"
+      const noVoicesAvailable = voices.length === 0;
+
+      // Add "Voice off" option with appropriate messaging
+      const voiceOffItem = this.createMenuItem(null, noVoicesAvailable);
       this.menuContent.appendChild(voiceOffItem);
 
+      // Add available voices
       voices.forEach((voice) => {
         const menuItem = this.createMenuItem(voice);
         this.menuContent.appendChild(menuItem);
