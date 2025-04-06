@@ -31,7 +31,7 @@ describe("TextToSpeechService", () => {
 
     const voices = await textToSpeechService.getVoices();
 
-    expect(ApiClient.callApi).toHaveBeenCalledWith("http://example.com/voices");
+    expect(ApiClient.callApi).toHaveBeenCalledWith("http://example.com/voices?app=pi");
     expect(voices).toEqual(mockVoices);
   });
 
