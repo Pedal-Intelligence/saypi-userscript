@@ -78,12 +78,19 @@ class ClaudeChatbot extends AbstractChatbot {
   }
 
   getAudioControls(searchRoot: Element): HTMLElement {
+    const document = searchRoot.ownerDocument;
+    const existingAudioControls = document.querySelector('.saypi-audio-controls') as HTMLElement;
+    if (existingAudioControls) {
+      return existingAudioControls;
+    }
+
     const selector = this.getAudioControlsSelector();
     const localAudioControls = searchRoot.querySelector(selector) as HTMLElement;
     if (localAudioControls) {
       return localAudioControls;
     }
-    return searchRoot.ownerDocument.querySelector(selector) as HTMLElement;
+
+    return document.querySelector(selector) as HTMLElement;
   }
 
   getAudioControlsSelector(): string {
