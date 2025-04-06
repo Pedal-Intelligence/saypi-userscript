@@ -41,7 +41,7 @@ export class DOMObserver {
   handleRouteChange(): void {
     // Allow time for DOM to update after route change
     setTimeout(() => {
-      this.findAndDecorateChatHistory(document.body);
+      EventBus.emit("saypi:ui:content-loaded");
       // Additional route change handling can be added here
     }, 300);
   }
