@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "崩壊したアシスタントメンテナンスメッセージのフレンドリーラベル。",
     "message": "これを取り除く..."
+  },
+  "disableTTS": {
+    "description": "テキストからスピーチをオフにするオプションのラベル",
+    "message": "テキストからスピーチを無効にします"
+  },
+  "signInForTTS": {
+    "description": "ユーザーがテキストからスピーチへのアクセスにアクセスするために認証する必要があるときに示されるプロンプトが表示されます",
+    "message": "テキストからスピーチにサインインします"
+  },
+  "ttsVoice": {
+    "description": "メニューのテキストからスピーチの音声オプションを説明するラベル",
+    "message": "TTS音声"
+  },
+  "voiceOff": {
+    "description": "テキストからスピーチが無効になっている場合のラベル",
+    "message": "声をかけます"
+  },
+  "voiceSettings": {
+    "description": "音声関連設定にアクセスするメニュー項目のテキスト。",
+    "message": "音声設定"
   }
 }

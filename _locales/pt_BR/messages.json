@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "Etiqueta amigável para mensagem de manutenção do assistente em colapso.",
     "message": "Afastando isso ..."
+  },
+  "disableTTS": {
+    "description": "Rótulo para a opção de desativar o texto em fala",
+    "message": "Desative o texto em fala"
+  },
+  "signInForTTS": {
+    "description": "Prompt mostrado quando o usuário precisa autenticar para acessar os recursos de texto em fala",
+    "message": "Faça login para fazer falar em fala"
+  },
+  "ttsVoice": {
+    "description": "Etiqueta descrevendo uma opção de voz de texto em fala no menu",
+    "message": "Voz tts"
+  },
+  "voiceOff": {
+    "description": "Etiqueta para quando o texto em fala está desativado",
+    "message": "Voz fora"
+  },
+  "voiceSettings": {
+    "description": "O texto do item de menu para acessar configurações relacionadas à voz.",
+    "message": "Configurações de voz"
   }
 }

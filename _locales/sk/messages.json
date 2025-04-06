@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "Priateľský štítok pre zrútenú správu asistenta údržby.",
     "message": "To zastrčenie ..."
+  },
+  "disableTTS": {
+    "description": "Štítok pre možnosť vypnúť text-reč",
+    "message": "Zakázať text-reč"
+  },
+  "signInForTTS": {
+    "description": "Výzva zobrazená, keď používateľ potrebuje autentifikáciu, aby získal prístup k funkciám textu na reč",
+    "message": "Prihláste sa pre režij"
+  },
+  "ttsVoice": {
+    "description": "Štítok popisujúca voľbu hlasu textu do reči v ponuke",
+    "message": "TTS hlas"
+  },
+  "voiceOff": {
+    "description": "Štítok, keď je deaktivovaný text na reč",
+    "message": "Vypnúť"
+  },
+  "voiceSettings": {
+    "description": "Text položky ponuky na prístup k nastaveniam súvisiacim s hlasom.",
+    "message": "Nastavenia hlasu"
   }
 }

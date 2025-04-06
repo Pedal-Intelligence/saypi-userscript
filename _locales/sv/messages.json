@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "Vänlig etikett för kollapsat assistentunderhållsmeddelande.",
     "message": "Tucking detta bort ..."
+  },
+  "disableTTS": {
+    "description": "Etikett för möjligheten att stänga av text-till-tal",
+    "message": "Inaktivera text-till-tal"
+  },
+  "signInForTTS": {
+    "description": "Frågan visas när användaren behöver autentisera för att få åtkomst till text-till-talfunktioner",
+    "message": "Logga in för text-till-tal"
+  },
+  "ttsVoice": {
+    "description": "Etikett som beskriver ett text-till-tal-röstalternativ i menyn",
+    "message": "TTS -röst"
+  },
+  "voiceOff": {
+    "description": "Etikett för när text-till-tal är inaktiverad",
+    "message": "Rösta sig"
+  },
+  "voiceSettings": {
+    "description": "Texten på menyalternativet för att komma åt röstrelaterade inställningar.",
+    "message": "Röstinställningar"
   }
 }

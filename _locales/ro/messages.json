@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "Etichetă prietenoasă pentru mesajul de întreținere a asistentului prăbușit.",
     "message": "Îndepărtând asta ..."
+  },
+  "disableTTS": {
+    "description": "Etichetați pentru opțiunea de a opri text la discurs",
+    "message": "Dezactivați text-la-speech"
+  },
+  "signInForTTS": {
+    "description": "Prompt afișat atunci când utilizatorul trebuie să se autentifice pentru a accesa caracteristici text la vorbire",
+    "message": "Conectați-vă pentru text la discurs"
+  },
+  "ttsVoice": {
+    "description": "Etichetă care descrie o opțiune vocală text-la-vorbire din meniu",
+    "message": "Voce tts"
+  },
+  "voiceOff": {
+    "description": "Etichetați pentru momentul în care textul la discurs este dezactivat",
+    "message": "Voce oprit"
+  },
+  "voiceSettings": {
+    "description": "Textul elementului de meniu pentru a accesa setări legate de voce.",
+    "message": "Setări vocale"
   }
 }

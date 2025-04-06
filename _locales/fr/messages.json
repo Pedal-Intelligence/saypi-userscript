@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "Étiquette amicale pour le message de maintenance de l'assistant effondré.",
     "message": "Gucking ça ..."
+  },
+  "disableTTS": {
+    "description": "Étiquetez l'option pour désactiver le texte à la disposition",
+    "message": "Désactiver le texte vocal"
+  },
+  "signInForTTS": {
+    "description": "Invite affiché lorsque l'utilisateur doit s'authentifier pour accéder aux fonctionnalités de texte vocale",
+    "message": "Connectez-vous pour le texte vocal"
+  },
+  "ttsVoice": {
+    "description": "Étiquette décrivant une option vocale de texte vocale dans le menu",
+    "message": "Voix tts"
+  },
+  "voiceOff": {
+    "description": "Étiqueter lorsque le texte vocal est désactivé",
+    "message": "Exprimer"
+  },
+  "voiceSettings": {
+    "description": "Le texte de l'élément de menu pour accéder aux paramètres liés à la voix.",
+    "message": "Paramètres vocaux"
   }
 }

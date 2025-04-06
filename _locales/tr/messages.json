@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "Çıkmış Asistan Bakım Mesajı için dostça etiket.",
     "message": "Bunu sıkmak ..."
+  },
+  "disableTTS": {
+    "description": "Metin-Konuşma'yı kapatma seçeneği için etiket",
+    "message": "Metin-konuşma devre dışı bırakın"
+  },
+  "signInForTTS": {
+    "description": "Metin-konuşma özelliklerine erişmek için kullanıcının kimlik doğrulaması yapması gerektiğinde gösterildi",
+    "message": "Metin-konuşma için oturum açın"
+  },
+  "ttsVoice": {
+    "description": "Menüde bir metin-konuşma ses seçeneğini açıklayan etiket",
+    "message": "TTS Sesi"
+  },
+  "voiceOff": {
+    "description": "Metin-konuşma devre dışı bırakıldığında etiket",
+    "message": "Seslendirmek"
+  },
+  "voiceSettings": {
+    "description": "Sesle ilgili ayarlara erişmek için menü öğesinin metni.",
+    "message": "Ses Ayarları"
   }
 }

@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
     "message": "Tucking ito ..."
+  },
+  "disableTTS": {
+    "description": "Lagyan ng label para sa pagpipilian upang patayin ang text-to-speech",
+    "message": "Huwag paganahin ang text-to-speech"
+  },
+  "signInForTTS": {
+    "description": "Prompt na ipinakita kapag ang gumagamit ay kailangang patunayan upang ma-access ang mga tampok na text-to-speech",
+    "message": "Mag-sign in para sa text-to-speech"
+  },
+  "ttsVoice": {
+    "description": "Label na naglalarawan ng isang pagpipilian sa boses ng text-to-speech sa menu",
+    "message": "TTS Voice"
+  },
+  "voiceOff": {
+    "description": "Lagyan ng label kung kailan hindi pinagana ang text-to-speech",
+    "message": "Boses"
+  },
+  "voiceSettings": {
+    "description": "Ang teksto ng item ng menu upang ma-access ang mga setting na nauugnay sa boses.",
+    "message": "Mga setting ng boses"
   }
 }

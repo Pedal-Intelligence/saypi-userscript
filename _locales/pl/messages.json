@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "Przyjazna etykieta dla zwiniętej wiadomości asystenta konserwacji.",
     "message": "Wykrzykując to ..."
+  },
+  "disableTTS": {
+    "description": "Etykieta dla opcji wyłączenia tekstu na mowę",
+    "message": "Wyłącz tekst na mowę"
+  },
+  "signInForTTS": {
+    "description": "Pokazany wiersz, gdy użytkownik musi uwierzytelnić, aby uzyskać dostęp do funkcji tekstu na mowę",
+    "message": "Zaloguj się na tekst na mowę"
+  },
+  "ttsVoice": {
+    "description": "Etykieta opisująca opcję głosu na mowę w menu",
+    "message": "Głos TTS"
+  },
+  "voiceOff": {
+    "description": "Etykieta, kiedy wyłączono tekst na mowę",
+    "message": "Głos"
+  },
+  "voiceSettings": {
+    "description": "Tekst elementu menu, aby uzyskać dostęp do ustawień związanych z głosem.",
+    "message": "Ustawienia głosu"
   }
 }

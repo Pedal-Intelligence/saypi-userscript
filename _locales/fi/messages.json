@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
     "message": "Tämän työntäminen ..."
+  },
+  "disableTTS": {
+    "description": "Edellystä, jonka avulla tekstiä voidaan sammuttaa puheeksi",
+    "message": "Poista tekstistä puheeksi"
+  },
+  "signInForTTS": {
+    "description": "Kehote, joka näytetään, kun käyttäjän on todennettava pääsemään tekstistä puheeksi -ominaisuuksiin",
+    "message": "Kirjaudu sisään tekstiä puheeksi"
+  },
+  "ttsVoice": {
+    "description": "Tarra, joka kuvaa tekstistä puhe-ääni -vaihtoehtoa valikossa",
+    "message": "TTS -ääni"
+  },
+  "voiceOff": {
+    "description": "Tarra, kun teksti-puheeksi on poistettu käytöstä",
+    "message": "Äänestää"
+  },
+  "voiceSettings": {
+    "description": "Valikkokohteen teksti käyttää ääniin liittyviä asetuksia.",
+    "message": "Ääni -asetukset"
   }
 }

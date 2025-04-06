@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
     "message": "Uguravanje ovoga ..."
+  },
+  "disableTTS": {
+    "description": "Oznaka za mogućnost isključivanja teksta u govor",
+    "message": "Onemogućite tekst u govor"
+  },
+  "signInForTTS": {
+    "description": "Brz prikazan kada se korisnik mora provjeriti za pristup značajkama teksta u govor",
+    "message": "Prijavite se za tekst u govor"
+  },
+  "ttsVoice": {
+    "description": "Oznaka koja opisuje glasovnu opciju teksta u govor u izborniku",
+    "message": "TTS glas"
+  },
+  "voiceOff": {
+    "description": "Oznaka za kada je onemogućena tekst-u govor",
+    "message": "Odbiti"
+  },
+  "voiceSettings": {
+    "description": "Tekst stavke izbornika za pristup postavkama povezanim s glasom.",
+    "message": "Glasovne postavke"
   }
 }

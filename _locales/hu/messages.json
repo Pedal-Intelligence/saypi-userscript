@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "Barátságos címke az összeomlott asszisztens karbantartási üzenethez.",
     "message": "Ezt eldobva ..."
+  },
+  "disableTTS": {
+    "description": "Címke a szöveg-beszéd kikapcsolásának lehetőségéhez",
+    "message": "Tiltsa le a szöveges beszédet"
+  },
+  "signInForTTS": {
+    "description": "A PROMICE akkor jelenik meg, amikor a felhasználónak hitelesítenie kell a szöveg-beszéd funkciók elérését",
+    "message": "Jelentkezzen be a szöveges beszédre"
+  },
+  "ttsVoice": {
+    "description": "Címke, amely leírja a menüben a szöveg-beszéd hang opciót",
+    "message": "TTS hang"
+  },
+  "voiceOff": {
+    "description": "Címke arra, ha a szöveg-beszéd le van tiltva",
+    "message": "Lehangol"
+  },
+  "voiceSettings": {
+    "description": "A menüpont szövege a hanggal kapcsolatos beállítások eléréséhez.",
+    "message": "Hangbeállítások"
   }
 }

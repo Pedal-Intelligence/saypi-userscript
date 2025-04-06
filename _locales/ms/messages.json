@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "Label mesra untuk mesej pembantu penyelenggaraan yang runtuh.",
     "message": "Tucking ini ..."
+  },
+  "disableTTS": {
+    "description": "Label untuk pilihan untuk mematikan teks-ke-ucapan",
+    "message": "Lumpuhkan teks-ke-ucapan"
+  },
+  "signInForTTS": {
+    "description": "Prompt ditunjukkan apabila pengguna perlu mengesahkan untuk mengakses ciri-ciri teks-ke-ucapan",
+    "message": "Log masuk untuk teks-ke-ucapan"
+  },
+  "ttsVoice": {
+    "description": "Label yang menerangkan pilihan suara teks-ke-ucapan di menu",
+    "message": "Suara TTS"
+  },
+  "voiceOff": {
+    "description": "Label untuk apabila teks-ke-ucapan dilumpuhkan",
+    "message": "Suara"
+  },
+  "voiceSettings": {
+    "description": "Teks item menu untuk mengakses tetapan yang berkaitan dengan suara.",
+    "message": "Tetapan suara"
   }
 }

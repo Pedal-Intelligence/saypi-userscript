@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
     "message": "이것을 멀리 잡고 ..."
+  },
+  "disableTTS": {
+    "description": "텍스트 음성을 끄는 옵션에 대한 레이블",
+    "message": "텍스트 음성 연설을 비활성화합니다"
+  },
+  "signInForTTS": {
+    "description": "사용자가 텍스트 음성 기능에 액세스하기 위해 인증 해야하는 경우에 표시됩니다.",
+    "message": "텍스트 음성 연사에 로그인하십시오"
+  },
+  "ttsVoice": {
+    "description": "메뉴에서 텍스트 음성 음성 옵션을 설명하는 레이블",
+    "message": "TTS 음성"
+  },
+  "voiceOff": {
+    "description": "텍스트 음성 연사가 비활성화 된 시점에 대한 레이블",
+    "message": "목소리"
+  },
+  "voiceSettings": {
+    "description": "음성 관련 설정에 액세스하기위한 메뉴 항목의 텍스트.",
+    "message": "음성 설정"
   }
 }

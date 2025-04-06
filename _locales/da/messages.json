@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "Venlig etiket til sammenbrudt assisterende vedligeholdelsesmeddelelse.",
     "message": "Gemt dette væk ..."
+  },
+  "disableTTS": {
+    "description": "Label til muligheden for at slukke for tekst-til-tale",
+    "message": "Deaktiver tekst-til-tale"
+  },
+  "signInForTTS": {
+    "description": "Prompt vist, hvornår brugeren skal autentificere for at få adgang til tekst-til-tale-funktioner",
+    "message": "Log ind til tekst-til-tale"
+  },
+  "ttsVoice": {
+    "description": "Etiket, der beskriver en tekst-til-tale stemmemulighed i menuen",
+    "message": "Tts stemme"
+  },
+  "voiceOff": {
+    "description": "Etiket til når tekst-til-tale er deaktiveret",
+    "message": "Stemme væk"
+  },
+  "voiceSettings": {
+    "description": "Teksten til menupunktet for at få adgang til stemmelaterede indstillinger.",
+    "message": "Stemmeindstillinger"
   }
 }

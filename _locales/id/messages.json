@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "Label ramah untuk pesan pemeliharaan asisten yang runtuh.",
     "message": "Menyelipkan ini ..."
+  },
+  "disableTTS": {
+    "description": "Label untuk opsi untuk mematikan teks-ke-pidato",
+    "message": "Nonaktifkan teks-ke-pidato"
+  },
+  "signInForTTS": {
+    "description": "Prompt ditampilkan saat pengguna perlu mengotentikasi untuk mengakses fitur teks-ke-bicara",
+    "message": "Masuk untuk teks-ke-kekuatan"
+  },
+  "ttsVoice": {
+    "description": "Label yang menggambarkan opsi suara teks-ke-bicara di menu",
+    "message": "Suara tts"
+  },
+  "voiceOff": {
+    "description": "Label saat teks-ke-speech dinonaktifkan",
+    "message": "Menyuarakan"
+  },
+  "voiceSettings": {
+    "description": "Teks item menu untuk mengakses pengaturan terkait suara.",
+    "message": "Pengaturan Suara"
   }
 }

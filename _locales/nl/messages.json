@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "Vriendelijk label voor ingestort assistent -onderhoudsboodschap.",
     "message": "Dit wegstappen ..."
+  },
+  "disableTTS": {
+    "description": "Label voor de optie om tekst-naar-spraak uit te schakelen",
+    "message": "Schakel tekst-naar-spraak uit"
+  },
+  "signInForTTS": {
+    "description": "Prompt weergegeven wanneer de gebruiker moet authenticeren om toegang te krijgen tot tekst-naar-spraakfuncties",
+    "message": "Log in voor tekst-tot-spraak"
+  },
+  "ttsVoice": {
+    "description": "Label dat een tekst-naar-spraakstemoptie beschrijft in het menu",
+    "message": "TTS -stem"
+  },
+  "voiceOff": {
+    "description": "Label voor wanneer tekst-naar-spraak is uitgeschakeld",
+    "message": "Stemmen"
+  },
+  "voiceSettings": {
+    "description": "De tekst van het menu-item voor toegang tot spraakgerelateerde instellingen.",
+    "message": "Spraakinstellingen"
   }
 }

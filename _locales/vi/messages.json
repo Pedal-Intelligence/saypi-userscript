@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
     "message": "Tucking cái này đi ..."
+  },
+  "disableTTS": {
+    "description": "Dán nhãn cho tùy chọn tắt văn bản thành bài báo",
+    "message": "Vô hiệu hóa văn bản để nói"
+  },
+  "signInForTTS": {
+    "description": "Nhắc hiển thị khi người dùng cần xác thực để truy cập các tính năng văn bản thành giọng nói",
+    "message": "Đăng nhập để nhận văn bản thành bài báo"
+  },
+  "ttsVoice": {
+    "description": "Nhãn mô tả tùy chọn giọng nói văn bản thành giọng nói trong menu",
+    "message": "TTS Voice"
+  },
+  "voiceOff": {
+    "description": "Nhãn khi khi văn bản thành bài báo bị tắt",
+    "message": "Giọng nói tắt"
+  },
+  "voiceSettings": {
+    "description": "Văn bản của mục menu để truy cập các cài đặt liên quan đến giọng nói.",
+    "message": "Cài đặt giọng nói"
   }
 }

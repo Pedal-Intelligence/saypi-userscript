@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
     "message": "Zastrčit to pryč ..."
+  },
+  "disableTTS": {
+    "description": "Štítek pro možnost vypnout text-to-řeč",
+    "message": "Zakázat text na řeč"
+  },
+  "signInForTTS": {
+    "description": "Vyzvaní, když se uživatel musí ověřit pro přístup k funkcím textu na řeč",
+    "message": "Přihlaste se k řeči textu"
+  },
+  "ttsVoice": {
+    "description": "Štítek popisující možnost hlasu textu na řeč v nabídce",
+    "message": "TTS hlas"
+  },
+  "voiceOff": {
+    "description": "Štítek, kdy je deaktivován text na řeč",
+    "message": "Voice off"
+  },
+  "voiceSettings": {
+    "description": "Text položky nabídky pro přístup k nastavení hlasového hlasového řízení.",
+    "message": "Nastavení hlasu"
   }
 }

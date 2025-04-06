@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "Etichetta amichevole per il messaggio di manutenzione assistente crollata.",
     "message": "Trancandolo ..."
+  },
+  "disableTTS": {
+    "description": "Etichetta per l'opzione per disattivare il testo a discorso",
+    "message": "Disabilita il testo-Speech"
+  },
+  "signInForTTS": {
+    "description": "Prompt mostrato quando l'utente deve autenticare per accedere alle funzionalità text-to-spealch",
+    "message": "Accedi per il testo-Speech"
+  },
+  "ttsVoice": {
+    "description": "Etichetta che descrive un'opzione vocale testo a parlare nel menu",
+    "message": "Voce di TTS"
+  },
+  "voiceOff": {
+    "description": "Etichetta per quando il testo-vicolato è disabilitato",
+    "message": "Voce"
+  },
+  "voiceSettings": {
+    "description": "Il testo della voce di menu per accedere alle impostazioni vocali.",
+    "message": "Impostazioni vocali"
   }
 }

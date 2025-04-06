@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "友好的标签，用于倒塌的助手维护消息。",
     "message": "把这个塞了..."
+  },
+  "disableTTS": {
+    "description": "标签以关闭文本到语音的选项",
+    "message": "禁用文本到语音"
+  },
+  "signInForTTS": {
+    "description": "在用户需要身份验证以访问文本到语音功能时显示了提示",
+    "message": "登录文本到语音"
+  },
+  "ttsVoice": {
+    "description": "标签菜单中描述文本到语音选项",
+    "message": "TTS声音"
+  },
+  "voiceOff": {
+    "description": "何时禁用文本到语音的标签",
+    "message": "发出声音"
+  },
+  "voiceSettings": {
+    "description": "菜单项的文本访问与语音相关的设置。",
+    "message": "语音设置"
   }
 }

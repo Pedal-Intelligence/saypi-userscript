@@ -720,5 +720,25 @@
   "maintenanceLabel_tucking": {
     "description": "Freundliches Etikett für ein zusammengebrochenes Assistant -Wartungsnachricht.",
     "message": "Das wegstecken ..."
+  },
+  "disableTTS": {
+    "description": "Beschriften Sie die Option zum Ausschalten von Text-to-Speech",
+    "message": "Deaktivieren Sie Text-to-Speech"
+  },
+  "signInForTTS": {
+    "description": "Eingabeaufforderung angezeigt, wenn der Benutzer authentifiziert werden muss, um auf Text-to-Speech-Funktionen zugreifen zu können",
+    "message": "Melden Sie sich für Text-to-Speech an"
+  },
+  "ttsVoice": {
+    "description": "Etikettieren Sie im Menü eine Sprachoption einer Text-zu-Sprach-Sprache",
+    "message": "TTS -Stimme"
+  },
+  "voiceOff": {
+    "description": "Beschriftung für die Deaktivierung von Text-to-Speech",
+    "message": "Stimme ab"
+  },
+  "voiceSettings": {
+    "description": "Der Text des Menüelements zum Zugriff auf sprachbezogene Einstellungen.",
+    "message": "Spracheinstellungen"
   }
 }
