@@ -359,31 +359,48 @@ class ClaudePrompt extends AbstractUserPrompt {
           return;
         }
 
+        // Flag to track when the tools button is clicked
+        let toolsButtonClicked = false;
+        let lastToolsButtonClickTime = 0;
+        
         // Observer to detect when the menu is opened
         const bodyObserver = new MutationObserver((mutations) => {
-          mutations.forEach((mutation) => {
-            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-              // Look for the tools menu that appears when the button is clicked
-              const toolsMenu = promptContainer?.querySelector(this.getToolsMenuDialogSelector());
-              if (toolsMenu && !toolsMenu.querySelector('.saypi-settings-menu-item')) {
-                this.insertSettingsMenuItem(toolsMenu);
+          // Wait a heartbeat before checking if button was clicked
+          // This prevents race conditions between click and mutation events
+          setTimeout(() => {
+            // Only proceed if the tools button was clicked recently (within last 800ms)
+            const currentTime = Date.now();
+            const isRecentClick = (currentTime - lastToolsButtonClickTime) < 800;
+            
+            if (!toolsButtonClicked && !isRecentClick) return;
+            
+            mutations.forEach((mutation) => {
+              if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                // Look for the tools menu that appears when the button is clicked
+                const toolsMenu = promptContainer?.querySelector(this.getToolsMenuDialogSelector());
+                if (toolsMenu && !toolsMenu.querySelector('.saypi-settings-menu-item')) {
+                  this.insertSettingsMenuItem(toolsMenu);
+                  // Reset the flag after we've added the menu item
+                  toolsButtonClicked = false;
+                }
               }
-            }
-          });
+            });
+          }, 10); // Small delay to allow click event to process first
         });
 
         // Start observing the body for the menu to appear
         bodyObserver.observe(document.body, { childList: true, subtree: true });
 
-        // Click handler for the tools button to ensure we can find the menu when it opens
+        // Click handler for the tools button
         toolsButton.addEventListener('click', () => {
-          // Look for the menu after a short delay to ensure it's in the DOM
+          // Set the flag when the tools button is clicked
+          toolsButtonClicked = true;
+          lastToolsButtonClickTime = Date.now();
+          
+          // Reset the flag after a timeout in case the menu doesn't appear
           setTimeout(() => {
-            const toolsMenu = document.body.querySelector(this.getToolsMenuDialogSelector());
-            if (toolsMenu && !toolsMenu.querySelector('.saypi-settings-menu-item')) {
-              this.insertSettingsMenuItem(toolsMenu);
-            }
-          }, 100);
+            toolsButtonClicked = false;
+          }, 500);
         });
       } catch (error) {
         console.error("Error adding settings button to Claude tools menu:", error);
