@@ -7,6 +7,8 @@ import chevronSvgContent from "../icons/claude-chevron.svg";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import jwtManager from "../JwtManager";
 import getMessage from "../i18n";
+import { config } from "../ConfigModule";
+import { openSettings } from "../popup/popupopener";
 
 export class ClaudeVoiceMenu extends VoiceSelector {
   private menuButton: HTMLButtonElement;
@@ -188,6 +190,15 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     item.setAttribute("role", "menuitem");
     item.setAttribute("tabindex", "-1");
 
+    // Check if this is a sign-in prompt item
+    const isAuthenticated = jwtManager.isAuthenticated();
+    const isSignInPrompt = !voice && noVoicesAvailable && !isAuthenticated;
+    
+    if (isSignInPrompt) {
+      // Mark this as a sign-in item for handling in click events
+      item.dataset.action = "sign-in";
+    }
+
     const content = document.createElement("div");
     const nameContainer = document.createElement("div");
     nameContainer.classList.add("flex", "items-center");
@@ -205,9 +216,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     if (voice) {
       description.innerText = getMessage("ttsVoice");
     } else {
-      const isAuthenticated = jwtManager.isAuthenticated();
-      
-      if (noVoicesAvailable && !isAuthenticated) {
+      if (isSignInPrompt) {
         description.innerText = getMessage("signInForTTS");
         // Add sign-in indicator class
         description.classList.add("text-accent-secondary-100");
@@ -225,7 +234,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     checkmarkContainer.classList.add("checkmark-container", "text-accent-secondary-100");
     item.appendChild(checkmarkContainer);
 
-    item.addEventListener("click", () => this.handleVoiceSelection(voice));
+    item.addEventListener("click", () => this.handleVoiceSelection(voice, item));
     return item;
   }
 
@@ -261,7 +270,18 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     }
   }
 
-  private handleVoiceSelection(voice: SpeechSynthesisVoiceRemote | null): void {
+  private handleVoiceSelection(
+    voice: SpeechSynthesisVoiceRemote | null,
+    menuItem?: HTMLElement
+  ): void {
+    // Check if this is a sign-in prompt
+    if (menuItem?.dataset?.action === "sign-in") {
+      this.toggleMenu(); // Close the menu
+      // Open the extension popup which has the sign-in button (gives users context about the extension before signing in)
+      openSettings();
+      return;
+    }
+    
     if (voice) {
       this.userPreferences.setVoice(voice).then(() => {
         console.log(`Selected voice: ${voice.name}`);
