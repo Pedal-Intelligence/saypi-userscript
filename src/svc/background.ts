@@ -362,15 +362,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 chrome.cookies.onChanged.addListener(async (changeInfo) => {
   const { cookie, removed, cause } = changeInfo;
   
-  // Debug logging for all cookie changes
-  console.debug('Cookie change detected:', {
-    name: cookie.name,
-    domain: cookie.domain,
-    removed,
-    cause,
-    expectedDomain: config.authServerUrl ? new URL(config.authServerUrl).hostname : 'not configured'
-  });
-  
   // Only interested in our auth cookie
   if (cookie.name === 'auth_session' && config.authServerUrl && cookie.domain === new URL(config.authServerUrl).hostname) {
     console.debug('Auth session cookie changed:', {
