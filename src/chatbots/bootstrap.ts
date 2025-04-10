@@ -122,7 +122,10 @@ export class DOMObserver {
           audioControlsObs.target as HTMLElement
         );
       }
-      this.findAndDecorateChatHistory(document.body);
+      const chatHistoryObs = this.findAndDecorateChatHistory(document.body);
+      if (!chatHistoryObs.found) {
+        console.warn("No chat history found on page load. Voice functionality may not work.");
+      }
     });
 
     observer.observe(document.body, { childList: true, subtree: true });
