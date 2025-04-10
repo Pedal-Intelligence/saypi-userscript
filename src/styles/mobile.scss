@@ -199,13 +199,32 @@ html.mobile-device {
   
   /* Make all controls in the prompt bar more compact */
   .saypi-audio-controls {
-    gap: 4px !important;
+    gap: 6px !important;
+    padding: 0 2px !important;
+    
+    /* Ensure consistent button sizing */
+    button {
+      min-height: 32px !important;
+      min-width: 32px !important;
+    }
   }
   
   /* Give more breathing room to the prompt element on mobile */
   .saypi-prompt-container {
     .flex.flex-col.gap-3\.5 {
       gap: 8px !important;
+    }
+  }
+  
+  /* Improve spacing around voice menus */
+  [id$="-voice-selector"] {
+    margin: 0 2px !important;
+    
+    .voice-menu-content {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+      border: 1px solid rgba(0, 0, 0, 0.1) !important;
+      border-radius: 8px !important;
+      overflow: hidden !important;
     }
   }
 }

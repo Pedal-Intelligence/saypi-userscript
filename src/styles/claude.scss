@@ -127,7 +127,37 @@ html body.claude {
   }
 }
 
-/* Claude-specific mobile styling */
+/* Fix voice menu display for both mobile and desktop */
+html body.claude #claude-voice-selector {
+  margin: 0 4px !important;
+  
+  /* Button styling for both mobile and desktop */
+  button {
+    position: relative !important;
+  }
+  
+  /* Make the dropdown menu display properly */
+  .voice-menu-content {
+    width: auto !important;
+    min-width: 200px !important;
+    z-index: 1000 !important;
+    display: none; /* Hide by default, will be shown via JS */
+    border-radius: 8px !important;
+    background-color: #fff !important;
+    
+    /* Ensure menu items are styled nicely */
+    [role="menuitem"] {
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    
+    &[style*="display: block"] {
+      display: block !important; /* Ensure display:block works when set via JS */
+    }
+  }
+}
+
+/* Mobile specific selectors - should come AFTER general selectors */
 html.mobile-device body.claude {
   /* Ensure the model selector doesn't take up too much room */
   [data-testid="model-selector-dropdown"] {
@@ -198,12 +228,6 @@ html.mobile-device body.claude {
       .voiced-by {
         margin: 0 !important;
       }
-    }
-    
-    /* Position voice menu properly on mobile */
-    .voice-menu-content {
-      position: fixed !important;
-      max-width: 80vw !important;
     }
   }
 }

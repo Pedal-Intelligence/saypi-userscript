@@ -249,44 +249,44 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     const buttonRect = this.menuButton.getBoundingClientRect();
     const isMobile = document.documentElement.classList.contains('mobile-device');
     
-    // Use fixed positioning with transform to match Claude's native UI pattern
-    this.menuContent.style.position = "fixed";
-    this.menuContent.style.left = "0px";
-    this.menuContent.style.top = "0px";
+    // First make sure the menu is visible with correct dimensions
+    this.menuContent.style.display = "block";
     
-    // Calculate the X position (left edge of button)
-    let leftPosition = buttonRect.left;
-    
-    // On mobile, ensure the menu doesn't go off-screen to the right
-    if (isMobile) {
-      const menuWidth = Math.max(buttonRect.width, 160);
-      const windowWidth = window.innerWidth;
+    // Wait for the browser to calculate dimensions
+    setTimeout(() => {
+      // Use fixed positioning with transform to match Claude's native UI pattern
+      this.menuContent.style.position = "fixed";
       
-      // Adjust position to keep menu visible
-      if (leftPosition + menuWidth > windowWidth - 10) {
-        leftPosition = Math.max(10, windowWidth - menuWidth - 10);
+      // Calculate menu dimensions
+      const menuWidth = this.menuContent.offsetWidth || 200;
+      const menuHeight = this.menuContent.offsetHeight || 200;
+      
+      // Calculate the X position (left edge of button)
+      let leftPosition = buttonRect.left;
+      
+      // On mobile, ensure the menu doesn't go off-screen to the right
+      if (isMobile) {
+        const windowWidth = window.innerWidth;
+        
+        // Adjust position to keep menu visible
+        if (leftPosition + menuWidth > windowWidth - 10) {
+          leftPosition = Math.max(10, windowWidth - menuWidth - 10);
+        }
       }
-    }
-    
-    // Calculate the Y position (top edge of button minus menu height minus gap)
-    let topPosition = buttonRect.top - this.menuContent.offsetHeight - 8;
-    
-    // On mobile, ensure the menu doesn't go off the top of the screen
-    if (isMobile && topPosition < 10) {
-      // Position below the button instead
-      topPosition = buttonRect.bottom + 8;
-    }
-    
-    // Apply transform to position the menu precisely
-    this.menuContent.style.transform = `translate(${leftPosition}px, ${topPosition}px)`;
-    this.menuContent.style.zIndex = "50";
-    this.menuContent.style.minWidth = `${Math.max(buttonRect.width, 160)}px`;
-    
-    // On mobile, limit the max width to prevent oversized menus
-    if (isMobile) {
-      const maxMenuWidth = window.innerWidth * 0.8;
-      this.menuContent.style.maxWidth = `${maxMenuWidth}px`;
-    }
+      
+      // Calculate the Y position (top edge of button minus menu height minus gap)
+      let topPosition = buttonRect.top - menuHeight - 8;
+      
+      // On mobile, ensure the menu doesn't go off the top of the screen
+      if (topPosition < 10) {
+        // Position below the button instead
+        topPosition = buttonRect.bottom + 8;
+      }
+      
+      // Apply transform to position the menu precisely
+      this.menuContent.style.transform = `translate(${leftPosition}px, ${topPosition}px)`;
+      this.menuContent.style.zIndex = "1000";
+    }, 0);
   }
 
   private toggleMenu(): void {
@@ -294,9 +294,10 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     this.menuButton.setAttribute("aria-expanded", (!isExpanded).toString());
 
     if (!isExpanded) {
-      this.menuContent.style.display = "block";
+      // Show and position the menu
       this.positionMenuAboveButton();
     } else {
+      // Hide the menu
       this.menuContent.style.display = "none";
     }
   }
