@@ -277,8 +277,9 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       
       // Calculate the Y position
       // Position the menu above the button with adequate spacing
-      // Add more space (25px instead of 8px) between button and menu
-      let topPosition = buttonRect.top - menuHeight - 25;
+      // Add some space between button and menu
+      const paddingY = 8;
+      let topPosition = buttonRect.top - paddingY;
       
       // Ensure the menu doesn't go off the top of the screen
       if (topPosition < 10) {
@@ -289,7 +290,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       // Ensure the menu doesn't go off the bottom of the screen
       if (topPosition + menuHeight > window.innerHeight - 10) {
         // Position above the button if it would go off the bottom
-        topPosition = Math.max(10, buttonRect.top - menuHeight - 25);
+        topPosition = Math.max(10, topPosition);
       }
       
       // Apply transform to position the menu precisely
