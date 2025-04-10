@@ -2,12 +2,11 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { SpeechSynthesisVoiceRemote } from "../tts/SpeechModel";
 import { VoiceSelector, addSvgToButton } from "../tts/VoiceMenu";
 import { Chatbot } from "./Chatbot";
-import waveformSvgContent from "../icons/wave.svg";
 import chevronSvgContent from "../icons/claude-chevron.svg";
+import volumeSvgContent from "../icons/volume-mid.svg";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import jwtManager from "../JwtManager";
 import getMessage from "../i18n";
-import { config } from "../ConfigModule";
 import { openSettings } from "../popup/popupopener";
 
 export class ClaudeVoiceMenu extends VoiceSelector {
@@ -24,6 +23,11 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     // Initialize properties with placeholder elements - to satisfy TypeScript compiler
     this.menuButton = document.createElement("button");
     this.menuContent = document.createElement("div");
+
+    // for claude, the containing element might be a brand new element, so we will id it ourselves 
+    if (!this.element.id) {
+      this.element.id = this.getId();
+    }
 
     this.initializeVoiceSelector(chatbot);
   }
@@ -77,6 +81,9 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     button.setAttribute("aria-haspopup", "true");
     button.setAttribute("aria-expanded", "false");
     button.setAttribute("type", "button");
+    
+    // Add data attribute to indicate if voice is active
+    button.setAttribute("data-voice-active", voice ? "true" : "false");
 
     // Create a div to match Claude's model selector structure
     const contentDiv = document.createElement("div");
@@ -90,10 +97,10 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       "leading-none",
     );
 
-    // Use a muted waveform icon
+    // Use the volume icon for better mobile display
     addSvgToButton(
       contentDiv,
-      waveformSvgContent,
+      volumeSvgContent,
       "voiced-by",
       "block",
       "fill-current",
@@ -240,6 +247,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
 
   private positionMenuAboveButton(): void {
     const buttonRect = this.menuButton.getBoundingClientRect();
+    const isMobile = document.documentElement.classList.contains('mobile-device');
     
     // Use fixed positioning with transform to match Claude's native UI pattern
     this.menuContent.style.position = "fixed";
@@ -247,15 +255,38 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     this.menuContent.style.top = "0px";
     
     // Calculate the X position (left edge of button)
-    const leftPosition = buttonRect.left;
+    let leftPosition = buttonRect.left;
+    
+    // On mobile, ensure the menu doesn't go off-screen to the right
+    if (isMobile) {
+      const menuWidth = Math.max(buttonRect.width, 160);
+      const windowWidth = window.innerWidth;
+      
+      // Adjust position to keep menu visible
+      if (leftPosition + menuWidth > windowWidth - 10) {
+        leftPosition = Math.max(10, windowWidth - menuWidth - 10);
+      }
+    }
     
     // Calculate the Y position (top edge of button minus menu height minus gap)
-    const topPosition = buttonRect.top - this.menuContent.offsetHeight - 8;
+    let topPosition = buttonRect.top - this.menuContent.offsetHeight - 8;
+    
+    // On mobile, ensure the menu doesn't go off the top of the screen
+    if (isMobile && topPosition < 10) {
+      // Position below the button instead
+      topPosition = buttonRect.bottom + 8;
+    }
     
     // Apply transform to position the menu precisely
     this.menuContent.style.transform = `translate(${leftPosition}px, ${topPosition}px)`;
     this.menuContent.style.zIndex = "50";
     this.menuContent.style.minWidth = `${Math.max(buttonRect.width, 160)}px`;
+    
+    // On mobile, limit the max width to prevent oversized menus
+    if (isMobile) {
+      const maxMenuWidth = window.innerWidth * 0.8;
+      this.menuContent.style.maxWidth = `${maxMenuWidth}px`;
+    }
   }
 
   private toggleMenu(): void {
@@ -304,6 +335,9 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     if (voiceName) {
       voiceName.textContent = selectedVoice ? selectedVoice.name : getMessage("voiceOff");
     }
+    
+    // Update the data-voice-active attribute
+    this.menuButton.setAttribute("data-voice-active", selectedVoice ? "true" : "false");
 
     const menuItems = this.menuContent.querySelectorAll("[role='menuitem']");
     menuItems.forEach((item) => {

@@ -186,7 +186,7 @@ class ClaudeChatbot extends AbstractChatbot {
   }
 
   getExtraCallButtonClasses(): string[] {
-    return ["claude-call-button", "rounded-full"];
+    return ["claude-call-button", "rounded-full", "claude-mobile-call-button"];
   }
 
   getContextWindowCapacityCharacters(): number {
