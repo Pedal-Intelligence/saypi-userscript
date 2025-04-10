@@ -187,36 +187,27 @@ html.mobile-device body.claude {
       justify-content: center !important;
       align-items: center !important;
       display: flex !important;
-      background-color: rgba(0, 0, 0, 0.03) !important;
+      background-color: transparent !important;
       transition: all 0.2s ease !important;
-      border: 1px solid transparent !important;
-      
-      /* Active state - when voice is enabled */
-      &[data-voice-active="true"] {
-        background-color: rgba(65, 138, 47, 0.1) !important;
-        
-        .voiced-by {
-          color: #418a2f !important;
-        }
-      }
+      border: 1px solid rgba(0, 0, 0, 0.1) !important;
       
       /* Inactive state - when voice is disabled */
       &[data-voice-active="false"] {
         .voiced-by {
-          opacity: 0.6 !important;
+          opacity: 0.7 !important;
         }
       }
       
       /* Match hover style with other Claude buttons */
       &:hover {
         background-color: rgba(0, 0, 0, 0.05) !important;
-        border-color: rgba(0, 0, 0, 0.1) !important;
+        border-color: rgba(0, 0, 0, 0.15) !important;
       }
       
       /* Active button state */
       &[aria-expanded="true"] {
         background-color: rgba(0, 0, 0, 0.05) !important;
-        border-color: rgba(0, 0, 0, 0.1) !important;
+        border-color: rgba(0, 0, 0, 0.15) !important;
       }
       
       /* Hide text and chevron on mobile */

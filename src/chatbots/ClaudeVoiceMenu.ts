@@ -4,6 +4,7 @@ import { VoiceSelector, addSvgToButton } from "../tts/VoiceMenu";
 import { Chatbot } from "./Chatbot";
 import chevronSvgContent from "../icons/claude-chevron.svg";
 import volumeSvgContent from "../icons/volume-mid.svg";
+import volumeMutedSvgContent from "../icons/volume-muted.svg";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import jwtManager from "../JwtManager";
 import getMessage from "../i18n";
@@ -97,10 +98,10 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       "leading-none",
     );
 
-    // Use the volume icon for better mobile display
+    // Use the appropriate volume icon based on voice state
     addSvgToButton(
       contentDiv,
-      volumeSvgContent,
+      voice ? volumeSvgContent : volumeMutedSvgContent,
       "voiced-by",
       "block",
       "fill-current",
@@ -274,13 +275,21 @@ export class ClaudeVoiceMenu extends VoiceSelector {
         }
       }
       
-      // Calculate the Y position (top edge of button minus menu height minus gap)
-      let topPosition = buttonRect.top - menuHeight - 8;
+      // Calculate the Y position
+      // Position the menu above the button with adequate spacing
+      // Add more space (25px instead of 8px) between button and menu
+      let topPosition = buttonRect.top - menuHeight - 25;
       
-      // On mobile, ensure the menu doesn't go off the top of the screen
+      // Ensure the menu doesn't go off the top of the screen
       if (topPosition < 10) {
         // Position below the button instead
         topPosition = buttonRect.bottom + 8;
+      }
+      
+      // Ensure the menu doesn't go off the bottom of the screen
+      if (topPosition + menuHeight > window.innerHeight - 10) {
+        // Position above the button if it would go off the bottom
+        topPosition = Math.max(10, buttonRect.top - menuHeight - 25);
       }
       
       // Apply transform to position the menu precisely
@@ -339,6 +348,13 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     
     // Update the data-voice-active attribute
     this.menuButton.setAttribute("data-voice-active", selectedVoice ? "true" : "false");
+    
+    // Update the icon based on the voice state
+    const iconContainer = this.menuButton.querySelector(".voiced-by");
+    if (iconContainer) {
+      // Replace the icon with the appropriate one based on voice state
+      iconContainer.innerHTML = selectedVoice ? volumeSvgContent : volumeMutedSvgContent;
+    }
 
     const menuItems = this.menuContent.querySelectorAll("[role='menuitem']");
     menuItems.forEach((item) => {
