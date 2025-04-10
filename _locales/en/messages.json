@@ -4,7 +4,7 @@
     "description": "The name of the application."
   },
   "appDescription": {
-    "message": "Your Voice-Powered Companion for Pi AI",
+    "message": "Your Voice-Powered Companion for Pi and Claude AI",
     "description": "The description of the application."
   },
   "exitImmersiveModeLong": {

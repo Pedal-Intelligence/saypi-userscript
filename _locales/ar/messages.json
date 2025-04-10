@@ -1,7 +1,7 @@
 {
   "appDescription": {
     "description": "وصف التطبيق.",
-    "message": "رفيقك المدعوم بالصوت لـ Pi AI"
+    "message": "رفيقك الذي يعمل بالصوت لـ PI و Claude AI"
   },
   "appName": {
     "description": "اسم التطبيق.",

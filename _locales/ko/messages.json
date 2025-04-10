@@ -4,7 +4,7 @@
     "description": "애플리케이션의 이름입니다."
   },
   "appDescription": {
-    "message": "당신의 Pi AI를 위한 음성 제어 동반자",
+    "message": "PI 및 Claude AI의 음성 동반자",
     "description": "애플리케이션의 설명입니다."
   },
   "callInProgress": {

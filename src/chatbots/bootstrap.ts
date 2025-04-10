@@ -122,7 +122,15 @@ export class DOMObserver {
           audioControlsObs.target as HTMLElement
         );
       }
-      this.findAndDecorateChatHistory(document.body);
+      
+      // First immediate attempt to find chat history
+      const chatHistoryObs = this.findAndDecorateChatHistory(document.body);
+      
+      // If not found on first try, start progressive backoff search
+      if (!chatHistoryObs.found) {
+        console.info("Chat history not found on initial load - starting progressive search");
+        this.startChatHistoryProgressiveSearch();
+      }
     });
 
     observer.observe(document.body, { childList: true, subtree: true });
@@ -465,5 +473,28 @@ export class DOMObserver {
       return Observation.notFound("saypi-chat-history");
     }
     return Observation.foundAndDecorated(obs);
+  }
+  
+  /**
+   * Progressively searches for the chat history with exponential backoff
+   * This makes the chat history detection more resilient to timing differences
+   * between when UI elements are added to the DOM
+   */
+  startChatHistoryProgressiveSearch(attempt = 1, maxAttempts = 10): void {
+    // Base delay is 100ms, with exponential backoff up to ~3 seconds between attempts
+    const delay = Math.min(100 * Math.pow(1.5, attempt - 1), 3000);
+    
+    setTimeout(() => {
+      const chatHistoryObs = this.findAndDecorateChatHistory(document.body);
+      
+      if (chatHistoryObs.found) {
+        console.info(`Chat history found on progressive search attempt ${attempt}`);
+      } else if (attempt < maxAttempts) {
+        console.debug(`Chat history not found on attempt ${attempt}, retrying in ${delay}ms`);
+        this.startChatHistoryProgressiveSearch(attempt + 1, maxAttempts);
+      } else {
+        console.warn(`Failed to find chat history after ${maxAttempts} attempts`);
+      }
+    }, delay);
   }
 }

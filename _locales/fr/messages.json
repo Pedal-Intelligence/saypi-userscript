@@ -4,7 +4,7 @@
     "description": "Le nom de l'application."
   },
   "appDescription": {
-    "message": "Votre Compagnon à Commande Vocale pour Pi IA",
+    "message": "Votre compagnon propulsé par la voix pour Pi et Claude Ai",
     "description": "La description de l'application."
   },
   "callInProgress": {

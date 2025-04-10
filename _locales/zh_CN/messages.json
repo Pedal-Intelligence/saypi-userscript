@@ -4,7 +4,7 @@
     "description": "应用程序的名称。"
   },
   "appDescription": {
-    "message": "您的Pi AI语音助手",
+    "message": "您的PI和Claude AI的语音伴侣",
     "description": "应用程序的描述。"
   },
   "callInProgress": {

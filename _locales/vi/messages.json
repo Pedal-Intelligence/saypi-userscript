@@ -4,7 +4,7 @@
     "description": "Tên của ứng dụng."
   },
   "appDescription": {
-    "message": "Người Đồng Hành Được Kích Hoạt Bằng Giọng Nói Của Bạn Cho Pi AI",
+    "message": "Người bạn đồng hành chạy bằng giọng nói của bạn cho Pi và Claude AI",
     "description": "Mô tả của ứng dụng."
   },
   "callInProgress": {

@@ -1,6 +1,6 @@
 {
   "name": "saypi-userscript",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "type": "module",
   "engines": {
     "node": ">=22.0.0",
@@ -16,7 +16,8 @@
     "test:vitest": "vitest run --config vitest.config.js",
     "test:vitest:watch": "vitest --watch --config vitest.config.js",
     "test": "npm-run-all -s test:jest test:vitest",
-    "build:firefox": "npm run build && ./package-extension.sh firefox"
+    "build:firefox": "npm run build && ./package-extension.sh firefox",
+    "source-archive": "git archive --format=zip -o source-code.zip HEAD"
   },
   "jest": {
     "preset": "ts-jest/presets/default-esm",

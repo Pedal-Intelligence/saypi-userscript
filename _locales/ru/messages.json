@@ -4,7 +4,7 @@
     "description": "Название приложения."
   },
   "appDescription": {
-    "message": "Ваш голосовой помощник для Pi AI",
+    "message": "Ваш голосовой компаньон для Pi и Claude AI",
     "description": "Описание приложения."
   },
   "callInProgress": {
