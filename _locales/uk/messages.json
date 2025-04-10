@@ -4,7 +4,7 @@
     "description": "Назва програми."
   },
   "appDescription": {
-    "message": "Ваш голосовий супутник для Pi AI",
+    "message": "Ваш супутник, що працює на голосі, для PI та Claude AI",
     "description": "Опис програми."
   },
   "callInProgress": {

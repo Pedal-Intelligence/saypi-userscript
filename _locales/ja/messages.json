@@ -4,7 +4,7 @@
     "description": "アプリケーションの名前。"
   },
   "appDescription": {
-    "message": "あなたの声操作型Pi AIコンパニオン",
+    "message": "PiとClaude Aiの声で駆動した仲間",
     "description": "アプリケーションの説明。"
   },
   "callInProgress": {

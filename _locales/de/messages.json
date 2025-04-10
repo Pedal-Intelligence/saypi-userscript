@@ -4,7 +4,7 @@
     "description": "Der Name der Anwendung."
   },
   "appDescription": {
-    "message": "Ihr sprachgesteuerter Begleiter für Pi AI",
+    "message": "Ihr sprachantrieber Begleiter für PI und Claude AI",
     "description": "Die Beschreibung der Anwendung."
   },
   "callInProgress": {
