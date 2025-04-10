@@ -32,7 +32,7 @@ export default (env, argv) => {
   const popupConfigContent = `/**
  * Auto-generated from ${envFile} - DO NOT MODIFY DIRECTLY
  * This file is regenerated on each build to ensure it uses the correct environment settings.
- * Generated on: ${new Date().toISOString()}
+ * Generated on: ${new Date().toISOString().split('T')[0]}
  */
 const config = {
   // Values from ${envFile}

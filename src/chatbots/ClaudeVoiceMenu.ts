@@ -2,12 +2,12 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { SpeechSynthesisVoiceRemote } from "../tts/SpeechModel";
 import { VoiceSelector, addSvgToButton } from "../tts/VoiceMenu";
 import { Chatbot } from "./Chatbot";
-import waveformSvgContent from "../icons/wave.svg";
 import chevronSvgContent from "../icons/claude-chevron.svg";
+import volumeSvgContent from "../icons/volume-mid.svg";
+import volumeMutedSvgContent from "../icons/volume-muted.svg";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import jwtManager from "../JwtManager";
 import getMessage from "../i18n";
-import { config } from "../ConfigModule";
 import { openSettings } from "../popup/popupopener";
 
 export class ClaudeVoiceMenu extends VoiceSelector {
@@ -24,6 +24,11 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     // Initialize properties with placeholder elements - to satisfy TypeScript compiler
     this.menuButton = document.createElement("button");
     this.menuContent = document.createElement("div");
+
+    // for claude, the containing element might be a brand new element, so we will id it ourselves 
+    if (!this.element.id) {
+      this.element.id = this.getId();
+    }
 
     this.initializeVoiceSelector(chatbot);
   }
@@ -77,6 +82,9 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     button.setAttribute("aria-haspopup", "true");
     button.setAttribute("aria-expanded", "false");
     button.setAttribute("type", "button");
+    
+    // Add data attribute to indicate if voice is active
+    button.setAttribute("data-voice-active", voice ? "true" : "false");
 
     // Create a div to match Claude's model selector structure
     const contentDiv = document.createElement("div");
@@ -90,10 +98,10 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       "leading-none",
     );
 
-    // Use a muted waveform icon
+    // Use the appropriate volume icon based on voice state
     addSvgToButton(
       contentDiv,
-      waveformSvgContent,
+      voice ? volumeSvgContent : volumeMutedSvgContent,
       "voiced-by",
       "block",
       "fill-current",
@@ -240,22 +248,55 @@ export class ClaudeVoiceMenu extends VoiceSelector {
 
   private positionMenuAboveButton(): void {
     const buttonRect = this.menuButton.getBoundingClientRect();
+    const isMobile = document.documentElement.classList.contains('mobile-device');
     
-    // Use fixed positioning with transform to match Claude's native UI pattern
-    this.menuContent.style.position = "fixed";
-    this.menuContent.style.left = "0px";
-    this.menuContent.style.top = "0px";
+    // First make sure the menu is visible with correct dimensions
+    this.menuContent.style.display = "block";
     
-    // Calculate the X position (left edge of button)
-    const leftPosition = buttonRect.left;
-    
-    // Calculate the Y position (top edge of button minus menu height minus gap)
-    const topPosition = buttonRect.top - this.menuContent.offsetHeight - 8;
-    
-    // Apply transform to position the menu precisely
-    this.menuContent.style.transform = `translate(${leftPosition}px, ${topPosition}px)`;
-    this.menuContent.style.zIndex = "50";
-    this.menuContent.style.minWidth = `${Math.max(buttonRect.width, 160)}px`;
+    // Wait for the browser to calculate dimensions
+    setTimeout(() => {
+      // Use fixed positioning with transform to match Claude's native UI pattern
+      this.menuContent.style.position = "fixed";
+      
+      // Calculate menu dimensions
+      const menuWidth = this.menuContent.offsetWidth || 200;
+      const menuHeight = this.menuContent.offsetHeight || 200;
+      
+      // Calculate the X position (left edge of button)
+      let leftPosition = buttonRect.left;
+      
+      // On mobile, ensure the menu doesn't go off-screen to the right
+      if (isMobile) {
+        const windowWidth = window.innerWidth;
+        
+        // Adjust position to keep menu visible
+        if (leftPosition + menuWidth > windowWidth - 10) {
+          leftPosition = Math.max(10, windowWidth - menuWidth - 10);
+        }
+      }
+      
+      // Calculate the Y position
+      // Position the menu above the button with adequate spacing
+      // Add some space between button and menu
+      const paddingY = 8;
+      let topPosition = buttonRect.top - paddingY;
+      
+      // Ensure the menu doesn't go off the top of the screen
+      if (topPosition < 10) {
+        // Position below the button instead
+        topPosition = buttonRect.bottom + 8;
+      }
+      
+      // Ensure the menu doesn't go off the bottom of the screen
+      if (topPosition + menuHeight > window.innerHeight - 10) {
+        // Position above the button if it would go off the bottom
+        topPosition = Math.max(10, topPosition);
+      }
+      
+      // Apply transform to position the menu precisely
+      this.menuContent.style.transform = `translate(${leftPosition}px, ${topPosition}px)`;
+      this.menuContent.style.zIndex = "1000";
+    }, 0);
   }
 
   private toggleMenu(): void {
@@ -263,9 +304,10 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     this.menuButton.setAttribute("aria-expanded", (!isExpanded).toString());
 
     if (!isExpanded) {
-      this.menuContent.style.display = "block";
+      // Show and position the menu
       this.positionMenuAboveButton();
     } else {
+      // Hide the menu
       this.menuContent.style.display = "none";
     }
   }
@@ -303,6 +345,16 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     const voiceName = this.menuButton.querySelector(".voice-name");
     if (voiceName) {
       voiceName.textContent = selectedVoice ? selectedVoice.name : getMessage("voiceOff");
+    }
+    
+    // Update the data-voice-active attribute
+    this.menuButton.setAttribute("data-voice-active", selectedVoice ? "true" : "false");
+    
+    // Update the icon based on the voice state
+    const iconContainer = this.menuButton.querySelector(".voiced-by");
+    if (iconContainer) {
+      // Replace the icon with the appropriate one based on voice state
+      iconContainer.innerHTML = selectedVoice ? volumeSvgContent : volumeMutedSvgContent;
     }
 
     const menuItems = this.menuContent.querySelectorAll("[role='menuitem']");

@@ -126,3 +126,142 @@ html body.claude {
     }
   }
 }
+
+/* Fix voice menu display for both mobile and desktop */
+html body.claude #claude-voice-selector {
+  margin: 0 4px !important;
+  
+  /* Button styling for both mobile and desktop */
+  button {
+    position: relative !important;
+  }
+  
+  /* Make the dropdown menu display properly */
+  .voice-menu-content {
+    width: auto !important;
+    min-width: 200px !important;
+    z-index: 1000 !important;
+    display: none; /* Hide by default, will be shown via JS */
+    border-radius: 8px !important;
+    background-color: #fff !important;
+    
+    /* Ensure menu items are styled nicely */
+    [role="menuitem"] {
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    
+    &[style*="display: block"] {
+      display: block !important; /* Ensure display:block works when set via JS */
+    }
+  }
+}
+
+/* Mobile specific selectors - should come AFTER general selectors */
+html.mobile-device body.claude {
+  /* Ensure the model selector doesn't take up too much room */
+  [data-testid="model-selector-dropdown"] {
+    padding: 0 !important;
+    
+    /* Keep the Claude logo but reduce the space */
+    .claude-logo-model-selector {
+      margin-right: 4px !important;
+    }
+    
+    /* Reduce text size of model name */
+    .whitespace-nowrap {
+      font-size: 12px !important;
+    }
+  }
+  
+  /* Simplify Claude's voice selector on mobile */
+  #claude-voice-selector {
+    button {
+      /* Make the button more compact for mobile */
+      padding: 4px !important;
+      margin-left: 0 !important;
+      min-width: 32px !important;
+      width: 32px !important;
+      height: 32px !important;
+      border-radius: 6px !important;
+      justify-content: center !important;
+      align-items: center !important;
+      display: flex !important;
+      background-color: transparent !important;
+      transition: all 0.2s ease !important;
+      border: 1px solid rgba(0, 0, 0, 0.1) !important;
+      
+      /* Inactive state - when voice is disabled */
+      &[data-voice-active="false"] {
+        .voiced-by {
+          opacity: 0.7 !important;
+        }
+      }
+      
+      /* Match hover style with other Claude buttons */
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.05) !important;
+        border-color: rgba(0, 0, 0, 0.15) !important;
+      }
+      
+      /* Active button state */
+      &[aria-expanded="true"] {
+        background-color: rgba(0, 0, 0, 0.05) !important;
+        border-color: rgba(0, 0, 0, 0.15) !important;
+      }
+      
+      /* Hide text and chevron on mobile */
+      .voice-name, .chevron {
+        display: none !important;
+      }
+      
+      /* Only show simple icon */
+      .voiced-by {
+        margin: 0 !important;
+      }
+    }
+  }
+}
+
+/* Portrait orientation - extra compact for Claude */
+@media (max-width: 480px) {
+  html.mobile-device body.claude {
+    /* Further simplify the model selector on very small screens */
+    [data-testid="model-selector-dropdown"] {
+      .font-tiempos {
+        .whitespace-nowrap {
+          max-width: 70px !important;
+          overflow: hidden !important;
+          text-overflow: ellipsis !important;
+        }
+      }
+      
+      /* Further reduce padding */
+      padding: 0 !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+  }
+}
+
+/* Landscape orientation - more breathing room for Claude */
+@media (min-width: 481px) and (max-height: 480px) {
+  html.mobile-device body.claude {
+    /* Add back the voice name in landscape as there's more horizontal space */
+    #claude-voice-selector button {
+      width: auto !important;
+      
+      .voice-name {
+        display: inline !important;
+        max-width: 70px !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+      }
+      
+      .chevron {
+        display: inline !important;
+        margin-left: 2px !important;
+      }
+    }
+  }
+}
