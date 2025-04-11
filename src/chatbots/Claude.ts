@@ -301,6 +301,15 @@ class ClaudeTextStream extends ClaudeTextBlockCapture {
     super(element, options);
   }
 
+  override handleTextAddition(allText: string, isFinal: boolean = false): void {
+    const unseenText = allText.replace(this._textProcessedSoFar, "");
+    if (!unseenText) { return; } // some chunks may be empty, in which case we don't need to process them
+
+    console.log(`[ClaudeTextStream] sending text to buffer: "${unseenText}"`);
+    this.subject.next(new AddedText(unseenText));
+    this._textProcessedSoFar = allText;
+  }
+
 }
 
 function findAndDecorateCustomPlaceholderElement(

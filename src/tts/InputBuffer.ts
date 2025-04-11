@@ -2,6 +2,20 @@ import { TextToSpeechService } from "./TextToSpeechService";
 
 type FlushEvent = "eos" | "timeout" | "close";
 
+const SENTENCE_BREAK_CHARS = [
+  ".",
+  "!",
+  "?",
+  "。", // chinese period/japanese maru
+  "……", // chinese ellipsis
+  "。。。", // chinese - ideographic full stop
+  "～", // chinese wave dash,
+  "・・・", // japanese - kanten
+  "―", // japanese dash
+  "~", // tilde (used in some Korean and some other languages as a sentence break)
+  "\n", // newline
+];
+
 export class InputBuffer {
   private buffer: string = "";
   private bufferTimeout?: NodeJS.Timeout;
@@ -47,40 +61,80 @@ export class InputBuffer {
       throw new Error(`Cannot add text to a closed buffer: ${this.uuid}`);
     }
 
+    console.log(`[InputBuffer] adding text to buffer: "${text}"`);
+
     this.buffer += text;
     this.resetBufferTimeout();
 
     if (text === this.END_OF_SPEECH_MARKER) {
       this.closeBuffer();
-    } else if (this.shouldFlushBuffer(text)) {
-      this.flushBuffer("eos");
+    } else {
+      this.checkAndFlushPartialBuffer();
     }
   }
 
-  private shouldFlushBuffer(text: string): boolean {
-    return (
-      [
-        ".",
-        "!",
-        "?",
-        "。", // chinese period/japanese maru
-        "……", // chinese ellipsis
-        "。。。", // chinese - ideographic full stop
-        "～", // chinese wave dash,
-        "・・・", // japanese - kanten
-        "―", // japanese dash
-        "~", // tilde (used in some Korean and some other languages as a sentence break)
-      ].some((end) => text.endsWith(end)) || text === this.END_OF_SPEECH_MARKER
-    );
+  private findLastBreakIndex(text: string): number {
+    let lastIndex = -1;
+    // Iterate through all known break characters
+    for (const char of SENTENCE_BREAK_CHARS) {
+      // Find the last occurrence of this specific break character in the text
+      const index = text.lastIndexOf(char);
+      // If this character's last occurrence is later than the latest one found so far, update lastIndex
+      if (index > lastIndex) {
+        lastIndex = index;
+      }
+    }
+    // Return the index of the very last break character found, or -1 if none were found
+    return lastIndex;
+  }
+
+  private checkAndFlushPartialBuffer(): void {
+    const lastBreakIndex = this.findLastBreakIndex(this.buffer);
+
+    if (lastBreakIndex !== -1) {
+        // Found a break character
+        if (lastBreakIndex === this.buffer.length - 1) {
+            // Case 1: Buffer ends with a break character. Flush the whole buffer.
+            const textToFlush = this.buffer;
+            console.log(`[InputBuffer] flushing buffer due to end-text break: "${textToFlush}"`);
+            this.flushBuffer(textToFlush, "eos");
+            this.buffer = "";
+            // Clear potential timeout explicitly as buffer is empty
+            if (this.bufferTimeout) {
+                clearTimeout(this.bufferTimeout);
+                this.bufferTimeout = undefined;
+            }
+        } else {
+            // Case 2: Buffer contains a break, but not at the very end. Flush up to the break.
+            const textToFlush = this.buffer.substring(0, lastBreakIndex + 1);
+            const remainingText = this.buffer.substring(lastBreakIndex + 1);
+            console.log(`[InputBuffer] flushing buffer due to mid-text break: "${textToFlush}"`);
+            this.flushBuffer(textToFlush, "eos");
+            this.buffer = remainingText;
+            // Timeout reset is handled in addText after this function returns, based on the updated buffer
+        }
+    }
+    // If no break character is found, do nothing. Timeout will handle later.
   }
 
   private resetBufferTimeout(): void {
     if (this.bufferTimeout) {
       clearTimeout(this.bufferTimeout);
     }
-    this.bufferTimeout = setTimeout(() => {
-      this.flushBuffer("timeout");
-    }, this.BUFFER_TIMEOUT_MS);
+    // Only set a new timeout if the buffer has content.
+    if (this.buffer.length > 0) {
+      this.bufferTimeout = setTimeout(() => {
+          if (this.buffer.length > 0) { // Double check buffer has content before flushing on timeout
+              console.log(`[InputBuffer] flushing buffer due to timeout: "${this.buffer}"`);
+              this.flushBuffer(this.buffer, "timeout");
+              this.buffer = "";
+          } else {
+              console.log(`[InputBuffer] timeout occurred but buffer is empty.`);
+          }
+      }, this.BUFFER_TIMEOUT_MS);
+    } else {
+         this.bufferTimeout = undefined; // Ensure no timeout if buffer is empty
+    }
   }
 
   /**
@@ -93,14 +147,19 @@ export class InputBuffer {
     }, closeAfterMs);
   }
 
-  private async flushBuffer(event: FlushEvent): Promise<void> {
-    const text = this.buffer;
-    this.buffer = "";
+  private async flushBuffer(textToFlush: string, event: FlushEvent): Promise<void> {
+    if (!textToFlush && event !== "close") {
+      // Don't flush empty strings unless closing
+      return;
+    }
+
+    // const text = this.buffer; // Old logic: always flushed the whole buffer
+    // this.buffer = ""; // Old logic: always cleared the whole buffer
 
     try {
-      await this.ttsService.addTextToSpeechStream(this.uuid, text);
+      await this.ttsService.addTextToSpeechStream(this.uuid, textToFlush);
       console.debug(
-        `Buffer flushed on ${event} for UUID: ${this.uuid}: "${text}"`
+        `Buffer flushed on ${event} for UUID: ${this.uuid}: "${textToFlush}"`
       );
     } catch (error) {
       console.error("Error sending buffer:", error);
@@ -125,7 +184,9 @@ export class InputBuffer {
       clearTimeout(this.streamTimeout);
     }
 
-    await this.flushBuffer("close");
+    // Flush any remaining text before closing
+    await this.flushBuffer(this.buffer, "close");
+    this.buffer = ""; // Ensure buffer is empty after closing
     console.log(`Buffer closed for UUID: ${this.uuid}`);
   }
 

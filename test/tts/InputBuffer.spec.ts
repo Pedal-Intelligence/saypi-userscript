@@ -92,4 +92,50 @@ describe('InputBuffer', () => {
     expect(inputBuffer.hasEnded()).toBe(true);
     expect(ttsService.addTextToSpeechStream).toHaveBeenCalledWith(uuid, '');
   });
+
+  it('should flush only up to the last sentence break and keep the rest', async () => {
+    inputBuffer.addText('First sentence. Second sentence starts');
+    // Assuming flush happens immediately upon detecting the break
+    expect(ttsService.addTextToSpeechStream).toHaveBeenCalledWith(uuid, 'First sentence.');
+    expect(inputBuffer.getPendingText()).toBe(' Second sentence starts');
+
+    // Add more text, ending with a break
+    inputBuffer.addText(' and ends.');
+    expect(ttsService.addTextToSpeechStream).toHaveBeenCalledWith(uuid, ' Second sentence starts and ends.');
+    expect(inputBuffer.getPendingText()).toBe('');
+
+    // Add text with multiple breaks
+    inputBuffer.addText('Another sentence. And one more! This part stays');
+    // Should flush up to the last break ('!')
+    expect(ttsService.addTextToSpeechStream).toHaveBeenCalledWith(uuid, 'Another sentence. And one more!');
+    expect(inputBuffer.getPendingText()).toBe(' This part stays');
+
+    // Flush remaining on timeout
+    vi.advanceTimersByTime(flushAfterMs);
+    expect(ttsService.addTextToSpeechStream).toHaveBeenCalledWith(uuid, ' This part stays');
+    expect(inputBuffer.getPendingText()).toBe('');
+  });
+
+  it('should flush only up to the last line break and keep the rest', async () => {
+    inputBuffer.addText('First line.\nSecond line starts');
+    // Assuming flush happens immediately upon detecting the break
+    expect(ttsService.addTextToSpeechStream).toHaveBeenCalledWith(uuid, 'First line.\n');
+    expect(inputBuffer.getPendingText()).toBe('Second line starts');
+
+     // Add more text, ending with a break
+     inputBuffer.addText(' and ends.\n');
+     expect(ttsService.addTextToSpeechStream).toHaveBeenCalledWith(uuid, 'Second line starts and ends.\n');
+     expect(inputBuffer.getPendingText()).toBe('');
+
+    // Add text with multiple breaks (using sentence break and newline)
+    inputBuffer.addText('Another sentence.\nAnd one more!\nThis part stays');
+    // Should flush up to the last break ('\n')
+    expect(ttsService.addTextToSpeechStream).toHaveBeenCalledWith(uuid, 'Another sentence.\nAnd one more!\n');
+    expect(inputBuffer.getPendingText()).toBe('This part stays');
+
+    // Flush remaining on timeout
+    vi.advanceTimersByTime(flushAfterMs);
+    expect(ttsService.addTextToSpeechStream).toHaveBeenCalledWith(uuid, 'This part stays');
+    expect(inputBuffer.getPendingText()).toBe('');
+  });
 });
