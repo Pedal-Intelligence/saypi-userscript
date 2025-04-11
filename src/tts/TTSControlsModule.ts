@@ -34,8 +34,7 @@ export class TTSControlsModule {
     });
 
     EventBus.on("saypi:piWriting", (event: AssistantWritingEvent) => {
-      // short-circuit for block capture - remove this line to enable TTS streaming
-      return;
+      // full stream mode
       if (this.skipCurrent) {
         console.debug("Suppressing TTS generation due to skipCurrent flag");
         this.skipCurrent = false;
@@ -47,6 +46,7 @@ export class TTSControlsModule {
 
     EventBus.on("saypi:piStoppedWriting", (event: AssistantWritingEvent) => {
       // for Claude block capture, wait until all text is available before starting the audio output stream
+      return; // TODO: remove this line to switch between TTS streaming and TTS block capture
       if (this.skipCurrent) {
         console.debug("Suppressing TTS generation due to skipCurrent flag");
         this.skipCurrent = false;

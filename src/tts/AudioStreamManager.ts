@@ -3,7 +3,7 @@ import { InputBuffer } from "./InputBuffer";
 import { SpeechSynthesisVoiceRemote, SpeechUtterance } from "./SpeechModel";
 
 const STREAM_TIMEOUT_MS = 19000; // end streams after prolonged inactivity (<= 20s)
-const BUFFER_TIMEOUT_MS = 1000; // flush buffers after inactivity
+const BUFFER_TIMEOUT_MS = 1500; // flush buffers after inactivity
 const START_OF_SPEECH_MARKER = " "; // In the first message, the text should be a space " " to indicate the start of speech (why?)
 
 export class AudioStreamManager {
