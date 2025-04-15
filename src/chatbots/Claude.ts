@@ -252,7 +252,7 @@ class ClaudeTextBlockCapture extends ElementTextStream {
         const streamingInProgress = this.dataIsStreaming(claudeMessage);
         const streamingStarted = !wasStreaming && streamingInProgress;
         const streamingStopped = wasStreaming && !streamingInProgress;
-        const streamingText = this.getNestedText(element);
+        const streamingText = this.getNestedText(element).trimEnd(); // trim any trailing newline character from the text
         if (streamingStarted) {
           console.log("Claude started streaming.");
           // fire a new event to indicate that the streaming has started - this should not be necessary when streaming all data with subject.next(), but it's here since we only stream all data when the message is complete
