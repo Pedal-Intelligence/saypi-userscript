@@ -61,7 +61,7 @@ export class InputBuffer {
       throw new Error(`Cannot add text to a closed buffer: ${this.uuid}`);
     }
 
-    console.log(`[InputBuffer] adding text to buffer: "${text}"`);
+    console.debug(`[InputBuffer] adding text to buffer: "${text}"`);
 
     this.buffer += text;
     this.resetBufferTimeout();
@@ -96,7 +96,7 @@ export class InputBuffer {
         if (lastBreakIndex === this.buffer.length - 1) {
             // Case 1: Buffer ends with a break character. Flush the whole buffer.
             const textToFlush = this.buffer;
-            console.log(`[InputBuffer] flushing buffer due to end-text break: "${textToFlush}"`);
+            console.debug(`[InputBuffer] flushing buffer due to end-text break: "${textToFlush}"`);
             this.flushBuffer(textToFlush, "eos");
             this.buffer = "";
             // Clear potential timeout explicitly as buffer is empty
@@ -108,7 +108,7 @@ export class InputBuffer {
             // Case 2: Buffer contains a break, but not at the very end. Flush up to the break.
             const textToFlush = this.buffer.substring(0, lastBreakIndex + 1);
             const remainingText = this.buffer.substring(lastBreakIndex + 1);
-            console.log(`[InputBuffer] flushing buffer due to mid-text break: "${textToFlush}"`);
+            console.debug(`[InputBuffer] flushing buffer due to mid-text break: "${textToFlush}"`);
             this.flushBuffer(textToFlush, "eos");
             this.buffer = remainingText;
             // Timeout reset is handled in addText after this function returns, based on the updated buffer
@@ -125,11 +125,11 @@ export class InputBuffer {
     if (this.buffer.length > 0) {
       this.bufferTimeout = setTimeout(() => {
           if (this.buffer.length > 0) { // Double check buffer has content before flushing on timeout
-              console.log(`[InputBuffer] flushing buffer due to timeout: "${this.buffer}"`);
+              console.debug(`[InputBuffer] flushing buffer due to timeout: "${this.buffer}"`);
               this.flushBuffer(this.buffer, "timeout");
               this.buffer = "";
           } else {
-              console.log(`[InputBuffer] timeout occurred but buffer is empty.`);
+              console.debug(`[InputBuffer] timeout occurred but buffer is empty.`);
           }
       }, this.BUFFER_TIMEOUT_MS);
     } else {
@@ -187,7 +187,7 @@ export class InputBuffer {
     // Flush any remaining text before closing
     await this.flushBuffer(this.buffer, "close");
     this.buffer = ""; // Ensure buffer is empty after closing
-    console.log(`Buffer closed for UUID: ${this.uuid}`);
+    console.debug(`Buffer closed for UUID: ${this.uuid}`);
   }
 
   endInput(): void {
@@ -198,7 +198,7 @@ export class InputBuffer {
         console.error("Error ending input stream:", error);
       }
     } else {
-      console.log("Input stream already ended or not found");
+      console.debug("Input stream already ended or not found");
     }
   }
 
