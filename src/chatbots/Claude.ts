@@ -252,16 +252,14 @@ class ClaudeTextBlockCapture extends ElementTextStream {
         const streamingInProgress = this.dataIsStreaming(claudeMessage);
         const streamingStarted = !wasStreaming && streamingInProgress;
         const streamingStopped = wasStreaming && !streamingInProgress;
-        const streamingText = this.getNestedText(element);
+        const streamingText = this.getNestedText(element).trimEnd(); // trim any trailing newline character from the text
         if (streamingStarted) {
-          console.log("Claude started streaming.");
           // fire a new event to indicate that the streaming has started - this should not be necessary when streaming all data with subject.next(), but it's here since we only stream all data when the message is complete
           EventBus.emit("saypi:llm:first-token", {text: streamingText, time: Date.now()});
           this.handleTextAddition(streamingText);
         } else if (streamingStopped) {
           this.handleTextAddition(streamingText, true);
           this.subject.complete();
-          console.log("Claude stopped streaming.");
         } else if (streamingInProgress) {
           this.handleTextAddition(streamingText);
         }
@@ -299,6 +297,14 @@ class ClaudeTextStream extends ClaudeTextBlockCapture {
   private _textProcessedSoFar: string = "";
   constructor(element: HTMLElement, options: InputStreamOptions = { includeInitialText: false }) {
     super(element, options);
+  }
+
+  override handleTextAddition(allText: string, isFinal: boolean = false): void {
+    const unseenText = allText.replace(this._textProcessedSoFar, "");
+    if (!unseenText) { return; } // some chunks may be empty, in which case we don't need to process them
+
+    this.subject.next(new AddedText(unseenText));
+    this._textProcessedSoFar = allText;
   }
 
 }

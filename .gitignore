@@ -12,3 +12,4 @@ src/audio/capabilities-test.json
 .DS_Store
 source-code.zip
 doc/dom/claude/*
+doc/data/*
