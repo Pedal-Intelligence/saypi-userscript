@@ -605,13 +605,16 @@ class PlaceholderManager {
   initializePlaceholder() {
     // set initial placeholder text and bind event listeners for all edit operations
     this.setPlaceholder(this.placeholderText);
-    // keyboard input
+
+    // any keyboard input
     this.input.addEventListener("input", this.handleInput.bind(this));
     // paste from clipboard
     this.input.addEventListener("paste", () => setTimeout(() => this.handleInput(), 0));
     // cut to clipboard
     this.input.addEventListener("cut", () => setTimeout(() => this.handleInput(), 0));
-    // initial visibility
+    // note: undo/redo is not covered
+
+    // set initial visibility
     this.updatePlaceholderVisibility();
   }
 
