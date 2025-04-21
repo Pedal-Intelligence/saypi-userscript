@@ -915,7 +915,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 type: "pauseRecordingIfInterruptionsNotAllowed",
               },
               {
-                type: "suppressResponseWhenMaintainance",
+                type: "suppressSpokenResponseWhenMaintainance",
               },
               {
                 type: "notifyPiSpeaking",
@@ -948,6 +948,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               },
               "saypi:piStoppedWriting": {
                 target: "#sayPi.listening",
+                actions: {
+                  type: "suppressWrittenResponseWhenMaintainance",
+                },
               },
             },
             entry: {
@@ -1347,13 +1350,19 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         if (context.isMaintainanceMessage) {
           // these actions can be performed early, before the message is fully written
           EventBus.emit("saypi:tts:skipCurrent");
+          console.debug("Skipping speech generation due to this being a maintainance message");
         }
       },
-      suppressResponseWhenMaintainance: (context: SayPiContext, event) => {
+      suppressWrittenResponseWhenMaintainance: (context: SayPiContext, event) => {
+        if (context.isMaintainanceMessage) {
+          EventBus.emit("saypi:ui:hide-message");
+          console.debug("Hiding message due to this being a maintainance message");
+        }
+      },
+      suppressSpokenResponseWhenMaintainance: (context: SayPiContext, event) => {
         if (context.isMaintainanceMessage) {
           EventBus.emit("audio:skipCurrent");
-          EventBus.emit("saypi:ui:hide-message");
-          console.debug("Suppressing response due to this being a maintainance message");
+          console.debug("Skipping speech due to this being a maintainance message");
         }
       },
       clearMaintainanceFlag: (SayPiContext, event) => {
