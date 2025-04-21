@@ -330,9 +330,10 @@ function findAndDecorateCustomPlaceholderElement(
 }
 
 class ClaudePrompt extends AbstractUserPrompt {
+  private placeholderInitialized = false;
   private promptElement: HTMLDivElement;
-  private placeholderManager!: PlaceholderManager; // initialized from the constructor
-  readonly PROMPT_CHARACTER_LIMIT = 200000; // max prompt length is the same as context window length, 200k tokens
+  private placeholderManager!: PlaceholderManager;
+  readonly PROMPT_CHARACTER_LIMIT = 200000;
 
   constructor(element: HTMLElement) {
     super(element);
@@ -496,6 +497,11 @@ class ClaudePrompt extends AbstractUserPrompt {
    * if the custom placeholder element is removed from the DOM for any reason.
    */
   initializePlaceholderManager(promptElement: HTMLElement): void {
+    if (this.placeholderInitialized) {
+      console.debug("Placeholder manager already initialized; skipping");
+      return;
+    }
+    this.placeholderInitialized = true;
     const observation = findAndDecorateCustomPlaceholderElement(promptElement);
     if (!observation.found) {
       console.error(
@@ -519,34 +525,18 @@ class ClaudePrompt extends AbstractUserPrompt {
           const removedNodes = Array.from(mutation.removedNodes);
           if (removedNodes.includes(observation.target as Node)) {
             console.debug(
-              "Custom placeholder element removed, reinitializing..."
+              "Custom placeholder element removed. Skipping reinitialize due to guard."
             );
-            // Target was removed, reinitialize
             observer.disconnect();
-            this.initializePlaceholderManager(promptElement);
           }
         }
       });
     });
-
-    // Observe the parent element for child removals (can be null if removed from DOM)
-    const promptContainer = promptElement.parentElement
-      ? promptElement.parentElement
-      : document.getElementsByClassName("saypi-prompt-container")[0];
-    if (promptContainer) {
-      observer.observe(promptContainer as Node, {
-        childList: true,
-        subtree: false,
-      });
-    } else {
-      console.error(
-        "Prompt element parent element not found, cannot observe for placeholder removals."
-      );
-    }
   }
 
   setText(text: string): void {
     this.promptElement.innerText = text;
+    this.placeholderManager.updatePlaceholderVisibility();
   }
   getText(): string {
     return this.promptElement.innerText;
@@ -568,8 +558,12 @@ class ClaudePrompt extends AbstractUserPrompt {
     const placeholder = this.promptElement.querySelector(
       "p[data-placeholder]"
     ) as HTMLParagraphElement;
+    // If placeholderManager not yet initialized, fall back to standard placeholder attribute
+    const managerText = this.placeholderManager
+      ? this.placeholderManager.getPlaceholder()
+      : undefined;
     return (
-      this.placeholderManager.getPlaceholder() ||
+      managerText ||
       placeholder?.getAttribute("data-placeholder") ||
       ""
     );
@@ -587,12 +581,8 @@ class ClaudePrompt extends AbstractUserPrompt {
    */
   clear(): void {
     this.placeholderManager.setPlaceholder("");
-    const promptParagraphs = this.promptElement.querySelectorAll(
-      "p:not([data-placeholder])"
-    );
-    promptParagraphs.forEach((p) => {
-      p.remove();
-    });
+    const promptParagraphs = this.promptElement.querySelectorAll("p:not([data-placeholder])");
+    promptParagraphs.forEach((p) => p.remove());
   }
 }
 
@@ -600,7 +590,6 @@ class PlaceholderManager {
   private input: HTMLElement;
   private customPlaceholder: HTMLElement | null;
   private placeholderText: string;
-  private inputHandler: EventListener;
 
   constructor(
     inputElement: HTMLElement,
@@ -610,13 +599,19 @@ class PlaceholderManager {
     this.input = inputElement;
     this.customPlaceholder = placeholderElement;
     this.placeholderText = initialPlaceholder;
-    this.inputHandler = this.handleInput.bind(this);
     this.initializePlaceholder();
   }
 
   initializePlaceholder() {
+    // set initial placeholder text and bind event listeners for all edit operations
     this.setPlaceholder(this.placeholderText);
-    this.input.addEventListener("input", this.inputHandler);
+    // keyboard input
+    this.input.addEventListener("input", this.handleInput.bind(this));
+    // paste from clipboard
+    this.input.addEventListener("paste", () => setTimeout(() => this.handleInput(), 0));
+    // cut to clipboard
+    this.input.addEventListener("cut", () => setTimeout(() => this.handleInput(), 0));
+    // initial visibility
     this.updatePlaceholderVisibility();
   }
 
@@ -693,6 +688,7 @@ class PlaceholderManager {
 
   private showCustomPlaceholder() {
     this.customPlaceholder = this.getOrCreateCustomPlaceholder();
+    this.customPlaceholder.textContent = this.placeholderText;
   }
 
   private hideCustomPlaceholder() {
