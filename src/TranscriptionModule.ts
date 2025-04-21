@@ -4,7 +4,6 @@ import { logger } from "./LoggingModule.js";
 import { UserPreferenceModule } from "./prefs/PreferenceModule";
 import { callApi } from "./ApiClient";
 import EventBus from "./events/EventBus";
-import telemetryModule from "./TelemetryModule";
 import { ChatbotService } from "./chatbots/ChatbotService";
 
 // Define the shape of the response JSON object
@@ -163,13 +162,16 @@ async function uploadAudio(
       }
     );
 
+    const chatbot = await ChatbotService.getChatbot();
     const formData = await constructTranscriptionFormData(
       audioBlob,
       audioDurationMillis / 1000,
       messages,
-      sessionId
+      sessionId,
+      chatbot
     );
     const language = await userPreferences.getLanguage();
+    const appId = chatbot.getID();
 
     const controller = new AbortController();
     const { signal } = controller;
@@ -185,7 +187,7 @@ async function uploadAudio(
     });
     
     const response = await callApi(
-      `${config.apiServerUrl}/transcribe?language=${language}`,
+      `${config.apiServerUrl}/transcribe?app=${appId}&language=${language}`,
       {
         method: "POST",
         body: formData,
@@ -256,7 +258,8 @@ async function constructTranscriptionFormData(
   audioBlob: Blob,
   audioDurationSeconds: number,
   messages: { role: string; content: string; sequenceNumber?: number }[],
-  sessionId?: string
+  sessionId?: string,
+  chatbot?: any
 ) {
   const formData = new FormData();
   let audioFilename = "audio.webm";
@@ -295,7 +298,9 @@ async function constructTranscriptionFormData(
   }
 
   // Get the chatbot's nickname if set
-  const chatbot = await ChatbotService.getChatbot();
+  if (!chatbot) {
+    chatbot = await ChatbotService.getChatbot();
+  }
   const nickname = await chatbot.getNickname();
   const defaultName = chatbot.getName();
   if (nickname && nickname !== defaultName) {
