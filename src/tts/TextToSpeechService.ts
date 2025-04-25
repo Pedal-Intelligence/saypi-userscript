@@ -47,7 +47,8 @@ export class TextToSpeechService {
       throw new Error("Cannot create speech from placeholder");
     }
     const voice_id = voice.id;
-    const data = { voice: voice_id, text: text, lang: lang };
+    const data = { voice: voice_id, text: text, lang: lang, sequenceNumber: 0};
+    this.sequenceNumbers[uuid] = 0; // initialize sequence number for this utterance
     const baseUri = `${this.serviceUrl}/speak/${uuid}`;
     const queryParams = `voice_id=${voice_id}&lang=${lang}`;
     let uri = stream
@@ -80,7 +81,7 @@ export class TextToSpeechService {
       return;
     }
     if (!this.sequenceNumbers[uuid]) {
-      this.sequenceNumbers[uuid] = 0;
+      this.sequenceNumbers[uuid] = 1; // assume additions follow an initial creation with sequence number 0
     }
     const sequenceNumber = this.sequenceNumbers[uuid]++;
     const data = { text: text, sequenceNumber: sequenceNumber };
