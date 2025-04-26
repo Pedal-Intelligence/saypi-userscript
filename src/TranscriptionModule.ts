@@ -270,7 +270,7 @@ async function constructTranscriptionFormData(
     audioFilename = "audio.wav";
   }
 
-  logger.info(
+  logger.debug(
     `Transcribing audio Blob with MIME type: ${audioBlob.type}, size: ${(
       audioBlob.size / 1024
     ).toFixed(2)}kb`

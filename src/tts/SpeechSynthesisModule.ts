@@ -249,10 +249,11 @@ class SpeechSynthesisModule {
    * @returns {Promise<AudioProvider>}
    */
   async getActiveAudioProvider(): Promise<AudioProvider> {
-    const customVoiceIsSelected = await this.userPreferences.hasVoice();
-    if (customVoiceIsSelected) {
-      // custom voice can be a multi-language voice by SayPi (e.g. Paola and Joey), or an "extra" voice by Pi (i.e. Pi 7 and Pi 8)
-      const voice = await this.userPreferences.getVoice();
+    const userHasSavedAVoicePreference = await this.userPreferences.hasVoice();
+    // custom voice can be a multi-language voice by SayPi (e.g. Paola and Joey), or an "extra" voice by Pi (i.e. Pi 7 and Pi 8)
+    const voice = await this.userPreferences.getVoice();
+    const voicePreferenceIsAvailable = userHasSavedAVoicePreference && voice !== null;
+    if (voicePreferenceIsAvailable) {
       return audioProviders.retreiveProviderByVoice(voice!); // voice is not null if customVoiceIsSelected is true
     }
     return audioProviders.Pi;

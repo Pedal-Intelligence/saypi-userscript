@@ -462,7 +462,6 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                           userIsSpeaking: false,
                           timeUserStoppedSpeaking: () => new Date().getTime(),
                         }),
-                        log("User stopped speaking. Transcribing audio."),
                         {
                           type: "transcribeAudio",
                         },
@@ -1337,7 +1336,8 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       setMaintainanceFlag: assign((context: SayPiContext, event) => {
         const timeoutReached = isTimeoutReached(context);
         const mustRespond = mustRespondToMessage(context);
-        const shouldSetFlag = mustRespond && !(shouldAlwaysRespond() || context.shouldRespond);
+        const shouldRespond = shouldAlwaysRespond() || context.shouldRespond;
+        const shouldSetFlag = mustRespond && !shouldRespond;
         console.debug(shouldSetFlag 
           ? `Setting maintainance flag due to ${timeoutReached ? "timeout reached" : "context window approaching capacity"}`
           : "Clearing maintainance flag since below context window capacity and timeout threshold"
@@ -1474,11 +1474,13 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           maxDelay
         );
 
-        console.log(
-          "Waiting for",
-          (finalDelay / 1000).toFixed(1),
-          "seconds before submitting"
-        );
+        if (finalDelay > 0) {
+          console.info(
+            "Waiting for",
+            (finalDelay / 1000).toFixed(1),
+            "seconds before submitting"
+          );
+        }
 
         // ideally we would use the current state to determine if we're ready to submit,
         // but we don't have access to the state here, so we'll use the provisional readyToSubmit

@@ -84,8 +84,9 @@ export class DOMObserver {
             const removedElement = node as HTMLElement;
             const obs = this.findPrompt(removedElement);
             if (obs.found) {
-              this.findAndDecoratePrompt(document.body);
-              if (obs.found && obs.isNew && obs.decorated) {
+              // if the prompt is removed, we need to find a new one
+              const replacementPromptObs = this.findAndDecoratePrompt(document.body);
+              if (replacementPromptObs.found && replacementPromptObs.isNew && replacementPromptObs.decorated) {
                 EventBus.emit("saypi:ui:content-loaded");
               }
             }

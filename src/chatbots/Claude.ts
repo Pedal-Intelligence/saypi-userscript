@@ -282,6 +282,10 @@ class ClaudeTextBlockCapture extends ElementTextStream {
     return element !== null && element.hasAttribute("data-is-streaming") && element.getAttribute("data-is-streaming") === "true";
   }
 
+  override closed(): boolean {
+    return super.closed() || !this.dataIsStreaming(this.element);
+  }
+
   isClaudeTextStream(element: HTMLElement | null): boolean {
     return element !== null && element.hasAttribute("data-is-streaming");
   }

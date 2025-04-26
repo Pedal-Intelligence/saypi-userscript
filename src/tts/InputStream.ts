@@ -142,7 +142,7 @@ export abstract class ElementTextStream {
    * so we need to use our own flag to check if the stream is closed.
    * @returns true if the stream is closed, false otherwise
    */
-  protected closed(): boolean {
+  public closed(): boolean {
     return this.subject.closed || this.completed;
   }
 

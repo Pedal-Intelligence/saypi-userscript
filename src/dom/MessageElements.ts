@@ -201,6 +201,10 @@ abstract class AssistantResponse {
     const content = await this.decoratedContent();
     const options = { includeInitialText: this.includeInitialText };
     const textStream = this.createTextStream(content, options);
+    if (textStream.closed()) {
+      this.stable = true;
+      return this.text;
+    }
     return new Promise((resolve) => {
       textStream.getStream().subscribe({
         complete: () => {
@@ -345,11 +349,10 @@ abstract class AssistantResponse {
           if (!iconContainer) {
             iconContainer = document.createElement("div");
             iconContainer.className = "thinking-icon-container";
+            // Add the icon to the new container
+            iconContainer.appendChild(brainIcon);
             contentElement.insertBefore(iconContainer, contentElement.firstChild);
           }
-          
-          // Add the icon to the container
-          iconContainer.appendChild(brainIcon);
         }
       }
       
