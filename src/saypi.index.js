@@ -15,6 +15,7 @@ import "./styles/desktop.scss";
 import "./styles/mobile.scss";
 import "./styles/rectangles.css";
 import "./styles/claude.scss"; // scoped by chatbot flags, i.e. <body class="claude">
+import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
 import { ChatbotService } from "./chatbots/ChatbotService.ts";
 import { addChild } from "./dom/DOMModule.ts";
 import SlowResponseHandler from "./SlowResponseHandler.ts";

@@ -57,10 +57,20 @@
       path {
         fill: #6b6255; // Pi light brown text color
       }
-      display: inline-block;
     }
     .cost-free {
       display: none; // hide the price when it's free
+    }
+
+    .saypi-credit-notification {
+      width: unset; // allow for a wide credit notification label
+    }
+    .saypi-cost-container {
+      width: unset; // allow for a wide charge notification label
+      a {
+        display: flex;
+        align-items: center; // center the saypi logo vertically
+      }
     }
   }
 

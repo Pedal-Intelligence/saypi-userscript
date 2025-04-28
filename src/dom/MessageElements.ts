@@ -20,6 +20,9 @@ import telemetryModule, { TelemetryData } from "../TelemetryModule";
 import { IconModule } from "../icons/IconModule";
 import { FailedSpeechUtterance } from "../tts/FailedSpeechUtterance";
 import { config } from "../ConfigModule";
+import volumeMutedSvgContent from "../icons/volume-muted.svg";
+import { addSvgToButton } from "../tts/VoiceMenu";
+import getMessage from "../i18n";
 
 // Add this interface definition near the top of the file after imports
 interface MetricDefinition {
@@ -274,6 +277,14 @@ abstract class AssistantResponse {
 
   async decorateIncompleteSpeech(replace: boolean = false): Promise<void> {
     this._element.classList.add("speech-incomplete");
+
+    // if already has a regenerate button, remove it
+    const existingRegenButton = this._element.querySelector(
+      ".saypi-regenerate-button"
+    );
+    if (existingRegenButton) {
+      existingRegenButton.remove();
+    }
 
     const price = await UserPreferenceModule.getInstance()
       .getVoice()
@@ -1828,30 +1839,54 @@ abstract class MessageControls {
     if (ttsControlsElement && !ttsControlsElement.querySelector(".saypi-credit-notification")) {
       const creditNotification = document.createElement("div");
       creditNotification.className = "saypi-credit-notification";
-      creditNotification.style.display = "inline-flex";
-      creditNotification.style.alignItems = "center";
-      creditNotification.style.marginLeft = "8px";
-      creditNotification.style.fontSize = "12px";
-      creditNotification.style.color = "#d32f2f"; // Red color for attention
       
-      // Create a simple warning icon using text
-      const warningText = document.createElement("span");
-      warningText.textContent = "⚠️ ";  // Unicode warning symbol
-      warningText.style.marginRight = "4px";
-      creditNotification.appendChild(warningText);
+      // Apply Claude's styling
+      creditNotification.classList.add(
+        "flex", 
+        "items-center", 
+        "gap-1.5",
+        "ml-2", 
+        "text-sm",
+        "tts-item"
+      );
       
+      // Add the muted volume icon from volume-muted.svg
+      try {
+        // Create container for the icon
+        const iconContainer = document.createElement("div");
+        iconContainer.className = "shrink-0";
+        
+        // Use the addSvgToButton helper to add the SVG content with 16x16 size
+        addSvgToButton(
+          iconContainer,
+          volumeMutedSvgContent,
+          "volume-muted",
+          "block",
+          "fill-current",
+          "w-4",
+          "h-4" // 16px x 16px
+        );
+        
+        creditNotification.appendChild(iconContainer);
+      } catch (e) {
+        console.warn("Failed to add volume-muted icon", e);
+      }
+      
+      // Add the text with Claude styling using i18n
       const textSpan = document.createElement("span");
-      textSpan.textContent = "Voice paused - ";
+      textSpan.textContent = getMessage("voicePaused");
       creditNotification.appendChild(textSpan);
       
-      // Add a link to the credits page
+      // Add a link to the credits page with Claude styling
       const linkSpan = document.createElement("a");
-      linkSpan.textContent = "Add credits";
+      linkSpan.textContent = getMessage("addCredits");
       const dashboardUrl = config.authServerUrl + "/app/dashboard";
       linkSpan.href = dashboardUrl;
-      linkSpan.style.textDecoration = "underline";
-      linkSpan.style.cursor = "pointer";
-      linkSpan.style.color = "#1976d2"; // Blue for links
+      linkSpan.className = "text-accent-secondary-100 underline cursor-pointer";
+      
+      // Open link in a new tab
+      linkSpan.target = "_blank";
+      linkSpan.rel = "noopener noreferrer";
       
       creditNotification.appendChild(linkSpan);
       

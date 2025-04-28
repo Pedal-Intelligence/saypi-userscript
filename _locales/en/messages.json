@@ -744,5 +744,13 @@
   "disableTTS": {
     "message": "Disable text-to-speech",
     "description": "Label for the option to turn off text-to-speech"
+  },
+  "voicePaused": {
+    "message": "Voice paused - ",
+    "description": "Text shown when voice is paused due to insufficient credits"
+  },
+  "addCredits": {
+    "message": "Add credits",
+    "description": "Text for link to add more voice credits"
   }
 }
