@@ -755,7 +755,7 @@
   },
   "assistantIsListeningAttentively": {
     "description": "Meddelelse vises, når assistenten lytter til tale i agenttilstand.",
-    "message": "$ chatbot $ lytter opmærksomt ...",
+    "message": "$chatbot$ lytter opmærksomt ...",
     "placeholders": {
       "chatbot": {
         "content": "$1",

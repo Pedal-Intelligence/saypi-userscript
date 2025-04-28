@@ -755,7 +755,7 @@
   },
   "assistantIsListeningAttentively": {
     "description": "Boodschap dat wordt weergegeven wanneer de assistent luistert naar spraak in de Agent -modus.",
-    "message": "$ chatbot $ luistert aandachtig ...",
+    "message": "$chatbot$ luistert aandachtig ...",
     "placeholders": {
       "chatbot": {
         "content": "$1",

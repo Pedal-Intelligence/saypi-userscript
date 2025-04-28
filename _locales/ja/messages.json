@@ -755,7 +755,7 @@
   },
   "assistantIsListeningAttentively": {
     "description": "アシスタントがエージェントモードでスピーチを聞いているときにメッセージが表示されます。",
-    "message": "$ chatbot $は注意深く聞いています...",
+    "message": "$chatbot$は注意深く聞いています...",
     "placeholders": {
       "chatbot": {
         "content": "$1",

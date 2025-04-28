@@ -755,7 +755,7 @@
   },
   "assistantIsListeningAttentively": {
     "description": "Сообщение отображается, когда помощник слушает речь в режиме агента.",
-    "message": "$ Chatbot $ внимательно слушает ...",
+    "message": "$chatbot$ внимательно слушает ...",
     "placeholders": {
       "chatbot": {
         "content": "$1",

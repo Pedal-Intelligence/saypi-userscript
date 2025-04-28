@@ -755,7 +755,7 @@
   },
   "assistantIsListeningAttentively": {
     "description": "உதவியாளர் முகவர் பயன்முறையில் பேச்சைக் கேட்கும்போது செய்தி காண்பிக்கப்படுகிறது.",
-    "message": "$ சாட்போட் $ கவனத்துடன் கேட்கிறது ...",
+    "message": "$chatbot$ கவனத்துடன் கேட்கிறது ...",
     "placeholders": {
       "chatbot": {
         "content": "$1",

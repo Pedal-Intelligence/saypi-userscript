@@ -755,7 +755,7 @@
   },
   "assistantIsListeningAttentively": {
     "description": "Εμφανίζεται το μήνυμα όταν ο βοηθός ακούει για ομιλία σε λειτουργία πράκτορα.",
-    "message": "Το $ chatbot $ ακούει προσεκτικά ...",
+    "message": "Το $chatbot$ ακούει προσεκτικά ...",
     "placeholders": {
       "chatbot": {
         "content": "$1",

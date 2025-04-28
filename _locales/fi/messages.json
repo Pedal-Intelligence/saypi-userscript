@@ -755,7 +755,7 @@
   },
   "assistantIsListeningAttentively": {
     "description": "Viesti näkyy, kun avustaja kuuntelee puhetta agenttitilassa.",
-    "message": "$ chatbot $ kuuntelee tarkkaan ...",
+    "message": "$chatbot$ kuuntelee tarkkaan ...",
     "placeholders": {
       "chatbot": {
         "content": "$1",

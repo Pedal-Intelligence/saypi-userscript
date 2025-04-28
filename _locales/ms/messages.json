@@ -755,7 +755,7 @@
   },
   "assistantIsListeningAttentively": {
     "description": "Mesej yang dipaparkan apabila pembantu sedang mendengar ucapan dalam mod ejen.",
-    "message": "$ chatbot $ sedang mendengar dengan penuh perhatian ...",
+    "message": "$chatbot$ sedang mendengar dengan penuh perhatian ...",
     "placeholders": {
       "chatbot": {
         "content": "$1",

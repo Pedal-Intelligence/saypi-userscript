@@ -755,7 +755,7 @@
   },
   "assistantIsListeningAttentively": {
     "description": "Ipinapakita ang mensahe kapag nakikinig ang katulong para sa pagsasalita sa mode ng ahente.",
-    "message": "Ang $ Chatbot $ ay nakikinig nang mabuti ...",
+    "message": "Ang $chatbot$ ay nakikinig nang mabuti ...",
     "placeholders": {
       "chatbot": {
         "content": "$1",

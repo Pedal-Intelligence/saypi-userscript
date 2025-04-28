@@ -755,7 +755,7 @@
   },
   "assistantIsListeningAttentively": {
     "description": "Správa sa zobrazuje, keď asistent počúva reč v režime agenta.",
-    "message": "$ chatbot $ pozorne počúva ...",
+    "message": "$chatbot$ pozorne počúva ...",
     "placeholders": {
       "chatbot": {
         "content": "$1",

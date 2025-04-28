@@ -755,7 +755,7 @@
   },
   "assistantIsListeningAttentively": {
     "description": "الرسالة المعروضة عندما يستمع المساعد إلى الكلام في وضع الوكيل.",
-    "message": "$ chatbot $ يستمع باهتمام ...",
+    "message": "$chatbot$ يستمع باهتمام ...",
     "placeholders": {
       "chatbot": {
         "content": "$1",

@@ -755,7 +755,7 @@
   },
   "assistantIsListeningAttentively": {
     "description": "Meddelande visas när assistenten lyssnar på tal i agentläge.",
-    "message": "$ chatbot $ lyssnar uppmärksamt ...",
+    "message": "$chatbot$ lyssnar uppmärksamt ...",
     "placeholders": {
       "chatbot": {
         "content": "$1",

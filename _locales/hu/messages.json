@@ -755,7 +755,7 @@
   },
   "assistantIsListeningAttentively": {
     "description": "Az üzenet jelenik meg, amikor az asszisztens ügynök módban hallgatja a beszédet.",
-    "message": "A $ chatbot $ figyelmesen hallgat ...",
+    "message": "A $chatbot$ figyelmesen hallgat ...",
     "placeholders": {
       "chatbot": {
         "content": "$1",

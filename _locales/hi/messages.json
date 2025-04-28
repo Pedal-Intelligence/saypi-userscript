@@ -755,7 +755,7 @@
   },
   "assistantIsListeningAttentively": {
     "description": "जब सहायक एजेंट मोड में भाषण के लिए सुन रहा हो तो संदेश प्रदर्शित होता है।",
-    "message": "$ चैटबॉट $ ध्यान से सुन रहा है ...",
+    "message": "$chatbot$ ध्यान से सुन रहा है ...",
     "placeholders": {
       "chatbot": {
         "content": "$1",

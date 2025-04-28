@@ -755,7 +755,7 @@
   },
   "assistantIsListeningAttentively": {
     "description": "어시스턴트가 에이전트 모드에서 음성을 듣고있을 때 메시지가 표시됩니다.",
-    "message": "$ chatbot $는주의 깊게 듣고 있습니다 ...",
+    "message": "$chatbot$는주의 깊게 듣고 있습니다 ...",
     "placeholders": {
       "chatbot": {
         "content": "$1",

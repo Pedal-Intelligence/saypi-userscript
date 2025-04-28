@@ -755,7 +755,7 @@
   },
   "assistantIsListeningAttentively": {
     "description": "Mesaj afișat atunci când asistentul ascultă vorbirea în modul agent.",
-    "message": "$ chatbot $ ascultă atent ...",
+    "message": "$chatbot$ ascultă atent ...",
     "placeholders": {
       "chatbot": {
         "content": "$1",

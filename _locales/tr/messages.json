@@ -755,7 +755,7 @@
   },
   "assistantIsListeningAttentively": {
     "description": "Asistan aracı modunda konuşma dinlerken görüntülenir.",
-    "message": "$ chatbot $ dikkatle dinliyor ...",
+    "message": "$chatbot$ dikkatle dinliyor ...",
     "placeholders": {
       "chatbot": {
         "content": "$1",

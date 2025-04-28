@@ -755,7 +755,7 @@
   },
   "assistantIsListeningAttentively": {
     "description": "Poruka prikazana kada pomoćnik sluša govor u načinu agencije.",
-    "message": "$ chatbot $ pažljivo sluša ...",
+    "message": "$chatbot$ pažljivo sluša ...",
     "placeholders": {
       "chatbot": {
         "content": "$1",

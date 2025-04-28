@@ -755,7 +755,7 @@
   },
   "assistantIsListeningAttentively": {
     "description": "অ্যাসিস্ট্যান্ট এজেন্ট মোডে বক্তৃতা শুনে যখন বার্তা প্রদর্শিত হয়।",
-    "message": "$ চ্যাটবট $ মনোযোগ সহকারে শুনছে ...",
+    "message": "$chatbot$ মনোযোগ সহকারে শুনছে ...",
     "placeholders": {
       "chatbot": {
         "content": "$1",

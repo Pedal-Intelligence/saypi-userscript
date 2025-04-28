@@ -755,7 +755,7 @@
   },
   "assistantIsListeningAttentively": {
     "description": "Messaggio visualizzato quando l'assistente ascolta il discorso in modalità agente.",
-    "message": "$ chatbot $ sta ascoltando attentamente ...",
+    "message": "$chatbot$ sta ascoltando attentamente ...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
