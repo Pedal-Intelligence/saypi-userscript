@@ -740,5 +740,27 @@
   "voiceSettings": {
     "description": "A menüpont szövege a hanggal kapcsolatos beállítások eléréséhez.",
     "message": "Hangbeállítások"
+  },
+  "addCredits": {
+    "description": "Szöveg a linkhez további hanghitelek hozzáadásához",
+    "message": "Hitelek hozzáadása"
+  },
+  "upgradeForTTS": {
+    "description": "A Proment megjelenő, amikor a felhasználónak frissítenie kell a szöveg-beszéd kreditek beszerzéséhez",
+    "message": "Frissítés a hanggeneráláshoz"
+  },
+  "voicePaused": {
+    "description": "A hang szüneteltetése, amikor a hang szünetet tartanak a nem megfelelő kredit miatt",
+    "message": "A hang megállt -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Az üzenet jelenik meg, amikor az asszisztens ügynök módban hallgatja a beszédet.",
+    "message": "A $ chatbot $ figyelmesen hallgat ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

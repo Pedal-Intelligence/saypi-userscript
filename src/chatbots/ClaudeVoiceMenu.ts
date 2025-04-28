@@ -170,6 +170,12 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     return menu;
   }
 
+  /**
+   * Create a menu item for the voice selector
+   * @param voice - The voice to create a menu item for
+   * @param noVoicesAvailable - Whether any voices are available
+   * @returns A menu item element
+   */
   protected createMenuItem(
     voice: SpeechSynthesisVoiceRemote | null,
     noVoicesAvailable: boolean = false
@@ -201,10 +207,15 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     // Check if this is a sign-in prompt item
     const isAuthenticated = jwtManager.isAuthenticated();
     const isSignInPrompt = !voice && noVoicesAvailable && !isAuthenticated;
+    const claims = jwtManager.getClaims();
+    const hasTTSQuota = claims?.ttsQuotaRemaining && claims.ttsQuotaRemaining > 0;
+    const isUpgradePrompt = !voice && isAuthenticated && !hasTTSQuota;
     
     if (isSignInPrompt) {
       // Mark this as a sign-in item for handling in click events
       item.dataset.action = "sign-in";
+    } else if (isUpgradePrompt) {
+      item.dataset.action = "upgrade";
     }
 
     const content = document.createElement("div");
@@ -227,6 +238,10 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       if (isSignInPrompt) {
         description.innerText = getMessage("signInForTTS");
         // Add sign-in indicator class
+        description.classList.add("text-accent-secondary-100");
+      } else if (isUpgradePrompt) {
+        description.innerText = getMessage("upgradeForTTS");
+        // Add upgrade indicator class
         description.classList.add("text-accent-secondary-100");
       } else {
         description.innerText = getMessage("disableTTS");

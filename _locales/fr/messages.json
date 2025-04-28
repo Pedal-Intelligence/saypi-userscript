@@ -740,5 +740,27 @@
   "voiceSettings": {
     "description": "Le texte de l'élément de menu pour accéder aux paramètres liés à la voix.",
     "message": "Paramètres vocaux"
+  },
+  "addCredits": {
+    "description": "Texte pour le lien pour ajouter plus de crédits vocaux",
+    "message": "Ajouter des crédits"
+  },
+  "upgradeForTTS": {
+    "description": "Invite affiché lorsque l'utilisateur doit mettre à jour pour obtenir des crédits de texte végétal",
+    "message": "Mise à niveau de la génération de voix"
+  },
+  "voicePaused": {
+    "description": "Texte affiché lorsque la voix est interrompue en raison de crédits insuffisants",
+    "message": "La voix était en pause -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Message affiché lorsque l'assistant écoute la parole en mode agent.",
+    "message": "$ chatbot $ écoute attentivement ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

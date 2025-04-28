@@ -265,7 +265,13 @@ class UserPreferenceModule {
             if (PiAIVoice.isPiVoiceId(result.voiceId)) {
               voice = PiAIVoice.fromVoiceId(result.voiceId);
             } else {
-              voice = await tts.getVoiceById(result.voiceId, chatbot);
+              try {
+                voice = await tts.getVoiceById(result.voiceId, chatbot);
+              } catch (error: any) {
+                // Voice not found for the current chatbot or other error occurred
+                console.warn(`Voice with ID ${result.voiceId} not found for ${chatbot?.getName() || "current chatbot"}`);
+                voice = null;
+              }
             }
             resolve(voice);
           } else {

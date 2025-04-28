@@ -740,5 +740,27 @@
   "voiceSettings": {
     "description": "Textul elementului de meniu pentru a accesa setări legate de voce.",
     "message": "Setări vocale"
+  },
+  "addCredits": {
+    "description": "Text pentru link pentru a adăuga mai multe credite vocale",
+    "message": "Adăugați credite"
+  },
+  "upgradeForTTS": {
+    "description": "Prompt afișat atunci când utilizatorul trebuie să se actualizeze pentru a obține credite text-la-vorbire",
+    "message": "Actualizare pentru generarea vocală"
+  },
+  "voicePaused": {
+    "description": "Text afișat atunci când vocea este întreruptă din cauza creditelor insuficiente",
+    "message": "Vocea pusă în pauză -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Mesaj afișat atunci când asistentul ascultă vorbirea în modul agent.",
+    "message": "$ chatbot $ ascultă atent ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

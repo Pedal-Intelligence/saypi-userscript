@@ -740,5 +740,27 @@
   "voiceSettings": {
     "description": "Text položky nabídky pro přístup k nastavení hlasového hlasového řízení.",
     "message": "Nastavení hlasu"
+  },
+  "addCredits": {
+    "description": "Text pro odkaz přidat další hlasové kredity",
+    "message": "Přidejte kredity"
+  },
+  "upgradeForTTS": {
+    "description": "Protální výzvu, kdy uživatel potřebuje upgradovat, aby získal kredity na řeč textu na řeč",
+    "message": "Upgrade na generování hlasu"
+  },
+  "voicePaused": {
+    "description": "Text zobrazen, když je hlas pozastaven kvůli nedostatečným kreditům",
+    "message": "Hlas se zastavil -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Zpráva zobrazená, když asistent poslouchá řeč v režimu agenta.",
+    "message": "$ chatbot $ pozorně poslouchá ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

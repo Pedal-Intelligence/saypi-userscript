@@ -462,7 +462,6 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                           userIsSpeaking: false,
                           timeUserStoppedSpeaking: () => new Date().getTime(),
                         }),
-                        log("User stopped speaking. Transcribing audio."),
                         {
                           type: "transcribeAudio",
                         },
@@ -915,7 +914,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 type: "pauseRecordingIfInterruptionsNotAllowed",
               },
               {
-                type: "suppressResponseWhenMaintainance",
+                type: "suppressSpokenResponseWhenMaintainance",
               },
               {
                 type: "notifyPiSpeaking",
@@ -948,6 +947,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
               },
               "saypi:piStoppedWriting": {
                 target: "#sayPi.listening",
+                actions: {
+                  type: "suppressWrittenResponseWhenMaintainance",
+                },
               },
             },
             entry: {
@@ -1178,7 +1180,8 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
 
       listenPrompt: () => {
         chatbot.getNickname().then(nickname => {
-          const message = getMessage("assistantIsListening", nickname);
+          const normalMode = shouldAlwaysRespond();
+          const message = getMessage(normalMode ? "assistantIsListening" : "assistantIsListeningAttentively", nickname);
           if (message) {
             getPromptOrNull()?.setMessage(message);
           }
@@ -1334,7 +1337,8 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       setMaintainanceFlag: assign((context: SayPiContext, event) => {
         const timeoutReached = isTimeoutReached(context);
         const mustRespond = mustRespondToMessage(context);
-        const shouldSetFlag = mustRespond && !(shouldAlwaysRespond() || context.shouldRespond);
+        const shouldRespond = shouldAlwaysRespond() || context.shouldRespond;
+        const shouldSetFlag = mustRespond && !shouldRespond;
         console.debug(shouldSetFlag 
           ? `Setting maintainance flag due to ${timeoutReached ? "timeout reached" : "context window approaching capacity"}`
           : "Clearing maintainance flag since below context window capacity and timeout threshold"
@@ -1347,13 +1351,20 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         if (context.isMaintainanceMessage) {
           // these actions can be performed early, before the message is fully written
           EventBus.emit("saypi:tts:skipCurrent");
+          console.debug("Skipping speech generation due to this being a maintainance message");
         }
       },
-      suppressResponseWhenMaintainance: (context: SayPiContext, event) => {
+      suppressWrittenResponseWhenMaintainance: (context: SayPiContext, event) => {
         if (context.isMaintainanceMessage) {
-          EventBus.emit("audio:skipCurrent");
           EventBus.emit("saypi:ui:hide-message");
-          console.debug("Suppressing response due to this being a maintainance message");
+          console.debug("Hiding message due to this being a maintainance message");
+        }
+      },
+      suppressSpokenResponseWhenMaintainance: (context: SayPiContext, event) => {
+        if (context.isMaintainanceMessage) {
+          EventBus.emit("saypi:ui:hide-message"); // send again to ensure the message is hidden
+          EventBus.emit("audio:skipCurrent");
+          console.debug("Skipping speech due to this being a maintainance message");
         }
       },
       clearMaintainanceFlag: (SayPiContext, event) => {
@@ -1465,11 +1476,13 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           maxDelay
         );
 
-        console.log(
-          "Waiting for",
-          (finalDelay / 1000).toFixed(1),
-          "seconds before submitting"
-        );
+        if (finalDelay > 0) {
+          console.info(
+            "Waiting for",
+            (finalDelay / 1000).toFixed(1),
+            "seconds before submitting"
+          );
+        }
 
         // ideally we would use the current state to determine if we're ready to submit,
         // but we don't have access to the state here, so we'll use the provisional readyToSubmit

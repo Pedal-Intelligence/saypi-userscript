@@ -740,5 +740,27 @@
   "voiceSettings": {
     "description": "菜单项的文本访问与语音相关的设置。",
     "message": "语音设置"
+  },
+  "addCredits": {
+    "description": "链接的文本以添加更多语音积分",
+    "message": "添加积分"
+  },
+  "upgradeForTTS": {
+    "description": "提示显示用户需要升级以获取文本到语音信用的提示",
+    "message": "升级语音生成"
+  },
+  "voicePaused": {
+    "description": "由于信用不足而暂停声音时显示的文字",
+    "message": "声音暂停 - "
+  },
+  "assistantIsListeningAttentively": {
+    "description": "当助手在代理模式下聆听语音时显示的消息。",
+    "message": "$聊天机器人$正在专心听...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

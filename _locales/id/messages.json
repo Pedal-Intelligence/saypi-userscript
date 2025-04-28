@@ -740,5 +740,27 @@
   "voiceSettings": {
     "description": "Teks item menu untuk mengakses pengaturan terkait suara.",
     "message": "Pengaturan Suara"
+  },
+  "addCredits": {
+    "description": "Teks untuk tautan untuk menambahkan lebih banyak kredit suara",
+    "message": "Tambahkan kredit"
+  },
+  "upgradeForTTS": {
+    "description": "Prompt ditampilkan saat pengguna perlu meningkatkan untuk mendapatkan kredit teks-ke-unggun",
+    "message": "Tingkatkan untuk pembuatan suara"
+  },
+  "voicePaused": {
+    "description": "Teks yang ditampilkan saat suara dijeda karena kredit yang tidak mencukupi",
+    "message": "Suara berhenti -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Pesan ditampilkan saat asisten mendengarkan pidato dalam mode agen.",
+    "message": "$ chatbot $ mendengarkan dengan penuh perhatian ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

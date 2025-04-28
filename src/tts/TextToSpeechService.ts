@@ -1,6 +1,6 @@
-import axios from "axios";
 import {
   isPlaceholderUtterance,
+  isFailedUtterance,
   SayPiSpeech,
   SpeechSynthesisVoiceRemote,
   SpeechUtterance,
@@ -8,6 +8,8 @@ import {
 import { callApi } from "../ApiClient";
 import { Chatbot } from "../chatbots/Chatbot";
 import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
+import { FailedSpeechUtterance } from "./FailedSpeechUtterance";
+import { SpeechFailureReason } from "./SpeechFailureReason";
 
 export class TextToSpeechService {
   private sequenceNumbers: { [key: string]: number } = {};
@@ -47,7 +49,8 @@ export class TextToSpeechService {
       throw new Error("Cannot create speech from placeholder");
     }
     const voice_id = voice.id;
-    const data = { voice: voice_id, text: text, lang: lang };
+    const data = { voice: voice_id, text: text, lang: lang, sequenceNumber: 0};
+    this.sequenceNumbers[uuid] = 0; // initialize sequence number for this utterance
     const baseUri = `${this.serviceUrl}/speak/${uuid}`;
     const queryParams = `voice_id=${voice_id}&lang=${lang}`;
     let uri = stream
@@ -62,6 +65,16 @@ export class TextToSpeechService {
         "Content-Type": "application/json",
       },
     });
+    
+    if (response.status === 429) {
+      // "expected failure" → return object, not exception
+      return new FailedSpeechUtterance(
+        uuid,
+        lang,
+        voice,
+        SpeechFailureReason.InsufficientCredit
+      );
+    }
     
     if (![200, 201].includes(response.status)) {
       throw new Error("Failed to synthesize speech");
@@ -79,8 +92,19 @@ export class TextToSpeechService {
       );
       return;
     }
+    
+    // Check if this is a failed utterance ID we're tracking
+    // This is a simple way to prevent sending additional requests when we know they'll fail
+    // A more robust solution would track failed utterances in a separate collection
+    if (uuid.startsWith("failed-")) {
+      console.info(
+        `Cannot add text to failed utterance. Skipping ${text.length} characters.`
+      );
+      return;
+    }
+    
     if (!this.sequenceNumbers[uuid]) {
-      this.sequenceNumbers[uuid] = 0;
+      this.sequenceNumbers[uuid] = 1; // assume additions follow an initial creation with sequence number 0
     }
     const sequenceNumber = this.sequenceNumbers[uuid]++;
     const data = { text: text, sequenceNumber: sequenceNumber };
@@ -92,7 +116,14 @@ export class TextToSpeechService {
         "Content-Type": "application/json",
       },
     });
-    
+
+    if (response.status === 429) {
+      // "expected failure" → return object, not exception
+      console.info(
+        `Cannot add text to failed utterance ${uuid}. Skipping ${text.length} characters.`
+      );
+      return;
+    }
     if (![200, 201].includes(response.status)) {
       throw new Error("Failed to add text to speech stream");
     }

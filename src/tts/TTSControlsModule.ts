@@ -41,7 +41,7 @@ export class TTSControlsModule {
         return;
       }
       console.debug("Starting TTS generation for LLM as soon as possible");
-      this.autoplaySpeech(event.utterance, 200); // wait a beat after starting the input stream before starting the output stream
+      this.autoplaySpeech(event.utterance, 500); // wait a beat after starting the input stream before starting the output stream
     });
 
     EventBus.on("saypi:piStoppedWriting", (event: AssistantWritingEvent) => {

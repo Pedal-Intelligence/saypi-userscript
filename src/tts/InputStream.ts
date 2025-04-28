@@ -142,7 +142,7 @@ export abstract class ElementTextStream {
    * so we need to use our own flag to check if the stream is closed.
    * @returns true if the stream is closed, false otherwise
    */
-  protected closed(): boolean {
+  public closed(): boolean {
     return this.subject.closed || this.completed;
   }
 
@@ -177,7 +177,7 @@ export abstract class ElementTextStream {
 
   protected registerObserver(): void {
     const contentMutationHandler = (mutationsList: MutationRecord[]) => {
-      if (this.closed()) {
+      if (this.closed() && this.completionReason) {
         const timeSinceCompletion = Date.now() - this.completionReason!.time;
         const warningMessage = `Content changed after the stream has closed. Try increasing the data timeout by at least ${timeSinceCompletion}ms for ${this.languageGuess}.`;
         console.warn(warningMessage);

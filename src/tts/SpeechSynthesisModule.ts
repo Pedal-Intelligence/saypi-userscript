@@ -13,7 +13,9 @@ import {
   AIVoice,
   PiAIVoice,
   MatchableVoice,
-  VoiceFactory
+  VoiceFactory,
+  isFailedUtterance,
+  isPlaceholderUtterance
 } from "./SpeechModel";
 import { BillingModule, UtteranceCharge } from "../billing/BillingModule";
 import { Chatbot } from "../chatbots/Chatbot";
@@ -218,8 +220,12 @@ class SpeechSynthesisModule {
   }
 
   speak(speech: SpeechUtterance): void {
-    if (speech instanceof SpeechPlaceholder) {
+    if (isPlaceholderUtterance(speech)) {
       console.warn("Cannot speak a placeholder");
+      return;
+    }
+    if (isFailedUtterance(speech)) {
+      console.warn(`Cannot speak a failed utterance: ${speech.toString()}`);
       return;
     }
     console.debug(`Speaking: ${speech.toString()}`);
@@ -249,10 +255,11 @@ class SpeechSynthesisModule {
    * @returns {Promise<AudioProvider>}
    */
   async getActiveAudioProvider(): Promise<AudioProvider> {
-    const customVoiceIsSelected = await this.userPreferences.hasVoice();
-    if (customVoiceIsSelected) {
-      // custom voice can be a multi-language voice by SayPi (e.g. Paola and Joey), or an "extra" voice by Pi (i.e. Pi 7 and Pi 8)
-      const voice = await this.userPreferences.getVoice();
+    const userHasSavedAVoicePreference = await this.userPreferences.hasVoice();
+    // custom voice can be a multi-language voice by SayPi (e.g. Paola and Joey), or an "extra" voice by Pi (i.e. Pi 7 and Pi 8)
+    const voice = await this.userPreferences.getVoice();
+    const voicePreferenceIsAvailable = userHasSavedAVoicePreference && voice !== null;
+    if (voicePreferenceIsAvailable) {
       return audioProviders.retreiveProviderByVoice(voice!); // voice is not null if customVoiceIsSelected is true
     }
     return audioProviders.Pi;

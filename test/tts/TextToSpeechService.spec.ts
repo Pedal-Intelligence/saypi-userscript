@@ -68,7 +68,7 @@ describe("TextToSpeechService", () => {
 
     const call = (ApiClient.callApi as any).mock.calls[0];
     expect(call[0]).toBe(`http://example.com/speak/uuid?voice_id=${mockVoice.id}&lang=en-US`);
-    expect(JSON.parse(call[1].body)).toEqual({ voice: mockVoice.id, text: "Hello", lang: "en-US" });
+    expect(JSON.parse(call[1].body)).toEqual({ voice: mockVoice.id, text: "Hello", lang: "en-US", sequenceNumber: 0 });
     expect(call[1].method).toBe("POST");
     expect(call[1].headers).toEqual({ "Content-Type": "application/json" });
     expect(actualSpeech).toEqual(expectedSpeech);
@@ -82,7 +82,7 @@ describe("TextToSpeechService", () => {
 
     const call = (ApiClient.callApi as any).mock.calls[0];
     expect(call[0]).toBe("http://example.com/speak/uuid/stream");
-    expect(JSON.parse(call[1].body)).toEqual({ text: "Hello", sequenceNumber: 0 });
+    expect(JSON.parse(call[1].body)).toEqual({ text: "Hello", sequenceNumber: 1 });
     expect(call[1].method).toBe("PUT");
     expect(call[1].headers).toEqual({ "Content-Type": "application/json" });
   });

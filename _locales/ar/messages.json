@@ -740,5 +740,27 @@
   "voiceSettings": {
     "description": "نص عنصر القائمة للوصول إلى الإعدادات المتعلقة بالصوت.",
     "message": "إعدادات الصوت"
+  },
+  "addCredits": {
+    "description": "نص رابط لإضافة المزيد من الاعتمادات الصوتية",
+    "message": "إضافة ائتمانات"
+  },
+  "upgradeForTTS": {
+    "description": "مطالبة مبينة عندما يحتاج المستخدم إلى الترقية للحصول على أرصدة نص إلى كلام",
+    "message": "ترقية لتوليد الصوت"
+  },
+  "voicePaused": {
+    "description": "النص المعروض عندما يتم إيقاف الصوت بسبب عدم كفاية الاعتمادات",
+    "message": "توقف الصوت مؤقتًا -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "الرسالة المعروضة عندما يستمع المساعد إلى الكلام في وضع الوكيل.",
+    "message": "$ chatbot $ يستمع باهتمام ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }
