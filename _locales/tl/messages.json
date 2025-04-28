@@ -740,5 +740,17 @@
   "voiceSettings": {
     "description": "Ang teksto ng item ng menu upang ma-access ang mga setting na nauugnay sa boses.",
     "message": "Mga setting ng boses"
+  },
+  "addCredits": {
+    "description": "Teksto para sa Link upang magdagdag ng higit pang mga kredito sa boses",
+    "message": "Magdagdag ng mga kredito"
+  },
+  "upgradeForTTS": {
+    "description": "Prompt na ipinakita kapag kailangang mag-upgrade ang gumagamit upang makakuha ng mga kredito ng text-to-speech",
+    "message": "Mag -upgrade para sa henerasyon ng boses"
+  },
+  "voicePaused": {
+    "description": "Ang teksto na ipinakita kapag ang boses ay naka -pause dahil sa hindi sapat na mga kredito",
+    "message": "Tumigil ang boses -"
   }
 }

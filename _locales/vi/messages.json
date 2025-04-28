@@ -740,5 +740,17 @@
   "voiceSettings": {
     "description": "Văn bản của mục menu để truy cập các cài đặt liên quan đến giọng nói.",
     "message": "Cài đặt giọng nói"
+  },
+  "addCredits": {
+    "description": "Văn bản cho liên kết để thêm nhiều tín dụng thoại",
+    "message": "Thêm tín dụng"
+  },
+  "upgradeForTTS": {
+    "description": "Nhắc hiển thị khi người dùng cần nâng cấp để có được tín dụng văn bản thành giọng nói",
+    "message": "Nâng cấp để tạo giọng nói"
+  },
+  "voicePaused": {
+    "description": "Văn bản hiển thị khi giọng nói bị tạm dừng do không đủ tín dụng",
+    "message": "Giọng nói dừng lại -"
   }
 }

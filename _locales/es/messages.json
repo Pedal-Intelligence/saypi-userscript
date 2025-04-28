@@ -740,5 +740,17 @@
   "voiceSettings": {
     "description": "El texto del elemento del menú para acceder a la configuración relacionada con la voz.",
     "message": "Configuración de voz"
+  },
+  "addCredits": {
+    "description": "Texto para el enlace para agregar más créditos de voz",
+    "message": "Agregar créditos"
+  },
+  "upgradeForTTS": {
+    "description": "Aplicado que se muestra cuando el usuario necesita actualizar para obtener créditos de texto a voz",
+    "message": "Actualización para la generación de voz"
+  },
+  "voicePaused": {
+    "description": "Texto que se muestra cuando la voz se detiene debido a créditos insuficientes",
+    "message": "Voz en pausa -"
   }
 }

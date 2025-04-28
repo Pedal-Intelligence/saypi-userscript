@@ -740,5 +740,17 @@
   "voiceSettings": {
     "description": "Text položky ponuky na prístup k nastaveniam súvisiacim s hlasom.",
     "message": "Nastavenia hlasu"
+  },
+  "addCredits": {
+    "description": "Text pre odkaz na pridanie ďalších hlasových kreditov",
+    "message": "Pridať kredity"
+  },
+  "upgradeForTTS": {
+    "description": "Výzva, keď používateľ potrebuje upgradovať, aby získal kredity na reč textu na reč",
+    "message": "Inovácia pre generáciu hlasu"
+  },
+  "voicePaused": {
+    "description": "Text zobrazený, keď je hlas pozastavený z dôvodu nedostatočných kreditov",
+    "message": "Hlas sa zastavil -"
   }
 }

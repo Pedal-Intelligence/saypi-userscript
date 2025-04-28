@@ -740,5 +740,17 @@
   "voiceSettings": {
     "description": "Teksten til menupunktet for at få adgang til stemmelaterede indstillinger.",
     "message": "Stemmeindstillinger"
+  },
+  "addCredits": {
+    "description": "Tekst til link for at tilføje flere stemmekreditter",
+    "message": "Tilføj kreditter"
+  },
+  "upgradeForTTS": {
+    "description": "Prompt vist, hvornår brugeren skal opgradere for at få tekst-til-tale-kreditter",
+    "message": "Opgradering til stemmegenerering"
+  },
+  "voicePaused": {
+    "description": "Tekst vist, når stemmen er pause på grund af utilstrækkelige kreditter",
+    "message": "Stemme pausede -"
   }
 }

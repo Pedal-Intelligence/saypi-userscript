@@ -740,5 +740,17 @@
   "voiceSettings": {
     "description": "Tekst stavke izbornika za pristup postavkama povezanim s glasom.",
     "message": "Glasovne postavke"
+  },
+  "addCredits": {
+    "description": "Tekst za vezu da biste dodali više glasovnih kredita",
+    "message": "Dodajte kredite"
+  },
+  "upgradeForTTS": {
+    "description": "Brz prikazan kada korisnik treba nadograditi kako bi dobio kredite u tekstu u govor",
+    "message": "Nadogradnja za generaciju glasa"
+  },
+  "voicePaused": {
+    "description": "Tekst prikazan kada je glas zastao zbog nedovoljnih kredita",
+    "message": "Glas zastao -"
   }
 }

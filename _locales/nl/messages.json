@@ -740,5 +740,17 @@
   "voiceSettings": {
     "description": "De tekst van het menu-item voor toegang tot spraakgerelateerde instellingen.",
     "message": "Spraakinstellingen"
+  },
+  "addCredits": {
+    "description": "Tekst voor link om meer spraakcredits toe te voegen",
+    "message": "Credits toevoegen"
+  },
+  "upgradeForTTS": {
+    "description": "Prompt getoond wanneer de gebruiker moet upgraden om tekst-naar-spraakkredieten te verkrijgen",
+    "message": "Upgrade voor spraakgeneratie"
+  },
+  "voicePaused": {
+    "description": "Tekst getoond wanneer spraak wordt gepauzeerd vanwege onvoldoende credits",
+    "message": "Stem gepauzeerd -"
   }
 }

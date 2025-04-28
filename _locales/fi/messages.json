@@ -740,5 +740,17 @@
   "voiceSettings": {
     "description": "Valikkokohteen teksti käyttää ääniin liittyviä asetuksia.",
     "message": "Ääni -asetukset"
+  },
+  "addCredits": {
+    "description": "Teksti linkki lisäämään lisää äänihyvityksiä",
+    "message": "Lisätä hyvityksiä"
+  },
+  "upgradeForTTS": {
+    "description": "Kehote, joka näytetään, kun käyttäjän on päivitettävä tekstistä puheeksi-hyvityksille",
+    "message": "Päivitys äänen sukupolveen"
+  },
+  "voicePaused": {
+    "description": "Teksti, joka näkyy, kun ääni on keskeytetty riittämättömien hyvitysten takia",
+    "message": "Ääni pysähtyi -"
   }
 }

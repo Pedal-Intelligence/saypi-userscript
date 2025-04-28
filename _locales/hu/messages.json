@@ -740,5 +740,17 @@
   "voiceSettings": {
     "description": "A menüpont szövege a hanggal kapcsolatos beállítások eléréséhez.",
     "message": "Hangbeállítások"
+  },
+  "addCredits": {
+    "description": "Szöveg a linkhez további hanghitelek hozzáadásához",
+    "message": "Hitelek hozzáadása"
+  },
+  "upgradeForTTS": {
+    "description": "A Proment megjelenő, amikor a felhasználónak frissítenie kell a szöveg-beszéd kreditek beszerzéséhez",
+    "message": "Frissítés a hanggeneráláshoz"
+  },
+  "voicePaused": {
+    "description": "A hang szüneteltetése, amikor a hang szünetet tartanak a nem megfelelő kredit miatt",
+    "message": "A hang megállt -"
   }
 }

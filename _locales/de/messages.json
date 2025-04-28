@@ -740,5 +740,17 @@
   "voiceSettings": {
     "description": "Der Text des Menüelements zum Zugriff auf sprachbezogene Einstellungen.",
     "message": "Spracheinstellungen"
+  },
+  "addCredits": {
+    "description": "Text für Link zum Hinzufügen weiterer Sprachnachweise",
+    "message": "Fügen Sie Credits hinzu"
+  },
+  "upgradeForTTS": {
+    "description": "Eingabeaufforderung angezeigt, wenn der Benutzer aktualisieren muss, um Text-to-Speech-Credits zu erhalten",
+    "message": "Upgrade für die Sprachgenerierung"
+  },
+  "voicePaused": {
+    "description": "Text angezeigt, wenn die Stimme aufgrund unzureichender Credits durchgeführt wird",
+    "message": "Stimme pausierte -"
   }
 }

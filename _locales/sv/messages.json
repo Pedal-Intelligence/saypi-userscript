@@ -740,5 +740,17 @@
   "voiceSettings": {
     "description": "Texten på menyalternativet för att komma åt röstrelaterade inställningar.",
     "message": "Röstinställningar"
+  },
+  "addCredits": {
+    "description": "Text för länk för att lägga till fler röstkrediter",
+    "message": "Lägg till krediter"
+  },
+  "upgradeForTTS": {
+    "description": "Frågan visas när användaren måste uppgradera för att få krediter för text-till-tal",
+    "message": "Uppgradering för röstproduktion"
+  },
+  "voicePaused": {
+    "description": "Text som visas när röst är pausad på grund av otillräckliga krediter",
+    "message": "Röst pausade -"
   }
 }

@@ -740,5 +740,17 @@
   "voiceSettings": {
     "description": "Tekst elementu menu, aby uzyskać dostęp do ustawień związanych z głosem.",
     "message": "Ustawienia głosu"
+  },
+  "addCredits": {
+    "description": "SMS -y dla linku, aby dodać więcej kredytów głosowych",
+    "message": "Dodaj kredyty"
+  },
+  "upgradeForTTS": {
+    "description": "Pokazany wiersz, gdy użytkownik musi zaktualizować, aby uzyskać kredyty tekstowe na mowę",
+    "message": "Ulepszenie dla generowania głosu"
+  },
+  "voicePaused": {
+    "description": "Tekst pokazany, gdy głos jest zatrzymywany z powodu niewystarczających kredytów",
+    "message": "Głos wstrzymany -"
   }
 }

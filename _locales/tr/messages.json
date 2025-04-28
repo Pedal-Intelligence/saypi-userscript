@@ -740,5 +740,17 @@
   "voiceSettings": {
     "description": "Sesle ilgili ayarlara erişmek için menü öğesinin metni.",
     "message": "Ses Ayarları"
+  },
+  "addCredits": {
+    "description": "Daha fazla ses kredisi eklemek için bağlantı için metin",
+    "message": "Kredi ekle"
+  },
+  "upgradeForTTS": {
+    "description": "Metin-konuşma kredileri elde etmek için kullanıcının yükseltilmesi gerektiğinde gösterilen istem",
+    "message": "Ses üretimi için yükseltme"
+  },
+  "voicePaused": {
+    "description": "Yetersiz kredi nedeniyle ses duraklatıldığında gösterilen metin",
+    "message": "Ses durakladı -"
   }
 }
