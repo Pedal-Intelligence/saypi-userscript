@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "Текст показан при приостановке голоса из -за недостаточных кредитов",
     "message": "Голос остановился -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Сообщение отображается, когда помощник слушает речь в режиме агента.",
+    "message": "$ Chatbot $ внимательно слушает ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

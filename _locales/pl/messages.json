@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "Tekst pokazany, gdy głos jest zatrzymywany z powodu niewystarczających kredytów",
     "message": "Głos wstrzymany -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Wiadomość wyświetlana, gdy asystent słucha mowy w trybie agenta.",
+    "message": "$ chatbot $ słucha uważnie ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "போதிய வரவுகளால் குரல் இடைநிறுத்தப்படும்போது காட்டப்படும் உரை",
     "message": "குரல் இடைநிறுத்தப்பட்டது -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "உதவியாளர் முகவர் பயன்முறையில் பேச்சைக் கேட்கும்போது செய்தி காண்பிக்கப்படுகிறது.",
+    "message": "$ சாட்போட் $ கவனத்துடன் கேட்கிறது ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

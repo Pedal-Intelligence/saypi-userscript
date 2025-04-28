@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "Văn bản hiển thị khi giọng nói bị tạm dừng do không đủ tín dụng",
     "message": "Giọng nói dừng lại -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Tin nhắn được hiển thị khi trợ lý đang nghe bài phát biểu ở chế độ đại lý.",
+    "message": "$ chatbot $ đang nghe chăm chú ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

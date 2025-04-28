@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "অপ্রতুল ক্রেডিটের কারণে ভয়েস বিরতি দেওয়া হলে পাঠ্য প্রদর্শিত",
     "message": "ভয়েস বিরতি -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "অ্যাসিস্ট্যান্ট এজেন্ট মোডে বক্তৃতা শুনে যখন বার্তা প্রদর্শিত হয়।",
+    "message": "$ চ্যাটবট $ মনোযোগ সহকারে শুনছে ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

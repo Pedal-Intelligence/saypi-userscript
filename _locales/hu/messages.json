@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "A hang szüneteltetése, amikor a hang szünetet tartanak a nem megfelelő kredit miatt",
     "message": "A hang megállt -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Az üzenet jelenik meg, amikor az asszisztens ügynök módban hallgatja a beszédet.",
+    "message": "A $ chatbot $ figyelmesen hallgat ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

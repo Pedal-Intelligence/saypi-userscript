@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "Testo mostrato quando la voce viene messa in pausa a causa di crediti insufficienti",
     "message": "Voce in pausa -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Messaggio visualizzato quando l'assistente ascolta il discorso in modalità agente.",
+    "message": "$ chatbot $ sta ascoltando attentamente ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

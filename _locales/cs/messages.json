@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "Text zobrazen, když je hlas pozastaven kvůli nedostatečným kreditům",
     "message": "Hlas se zastavil -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Zpráva zobrazená, když asistent poslouchá řeč v režimu agenta.",
+    "message": "$ chatbot $ pozorně poslouchá ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

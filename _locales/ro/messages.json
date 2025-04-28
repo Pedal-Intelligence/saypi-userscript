@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "Text afișat atunci când vocea este întreruptă din cauza creditelor insuficiente",
     "message": "Vocea pusă în pauză -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Mesaj afișat atunci când asistentul ascultă vorbirea în modul agent.",
+    "message": "$ chatbot $ ascultă atent ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

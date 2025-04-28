@@ -337,9 +337,17 @@ abstract class AssistantResponse {
     this.messageControls.decorateCost(charge);
   }
 
+  /**
+   * Decorate the message with a state, e.g. maintenance message
+   * This method is re-entrant and will not add multiple classes
+   * @param state The state to decorate the message with
+   */
   async decorateState(state: MessageState): Promise<void> {
     if (state.isMaintenanceMessage) {
       const element = this.element;
+      if (element.classList.contains("maintenance-message")) {
+        return;
+      }
       element.classList.add("maintenance-message", "silenced");
       
       // Generate a friendly label from a set of options

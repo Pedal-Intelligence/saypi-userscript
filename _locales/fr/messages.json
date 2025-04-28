@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "Texte affiché lorsque la voix est interrompue en raison de crédits insuffisants",
     "message": "La voix était en pause -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Message affiché lorsque l'assistant écoute la parole en mode agent.",
+    "message": "$ chatbot $ écoute attentivement ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "النص المعروض عندما يتم إيقاف الصوت بسبب عدم كفاية الاعتمادات",
     "message": "توقف الصوت مؤقتًا -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "الرسالة المعروضة عندما يستمع المساعد إلى الكلام في وضع الوكيل.",
+    "message": "$ chatbot $ يستمع باهتمام ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

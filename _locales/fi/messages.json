@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "Teksti, joka näkyy, kun ääni on keskeytetty riittämättömien hyvitysten takia",
     "message": "Ääni pysähtyi -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Viesti näkyy, kun avustaja kuuntelee puhetta agenttitilassa.",
+    "message": "$ chatbot $ kuuntelee tarkkaan ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

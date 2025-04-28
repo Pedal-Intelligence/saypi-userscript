@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "Текст, показаний, коли голос призупинений через недостатню кількість кредитів",
     "message": "Голос зробив паузу -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Повідомлення, що відображається, коли помічник слухає мовлення в режимі агента.",
+    "message": "$ chatbot $ слухає уважно ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

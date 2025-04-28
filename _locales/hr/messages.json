@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "Tekst prikazan kada je glas zastao zbog nedovoljnih kredita",
     "message": "Glas zastao -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Poruka prikazana kada pomoćnik sluša govor u načinu agencije.",
+    "message": "$ chatbot $ pažljivo sluša ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

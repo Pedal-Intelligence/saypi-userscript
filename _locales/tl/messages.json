@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "Ang teksto na ipinakita kapag ang boses ay naka -pause dahil sa hindi sapat na mga kredito",
     "message": "Tumigil ang boses -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Ipinapakita ang mensahe kapag nakikinig ang katulong para sa pagsasalita sa mode ng ahente.",
+    "message": "Ang $ Chatbot $ ay nakikinig nang mabuti ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

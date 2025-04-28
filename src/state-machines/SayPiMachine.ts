@@ -1180,7 +1180,8 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
 
       listenPrompt: () => {
         chatbot.getNickname().then(nickname => {
-          const message = getMessage("assistantIsListening", nickname);
+          const normalMode = shouldAlwaysRespond();
+          const message = getMessage(normalMode ? "assistantIsListening" : "assistantIsListeningAttentively", nickname);
           if (message) {
             getPromptOrNull()?.setMessage(message);
           }
@@ -1361,6 +1362,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
       suppressSpokenResponseWhenMaintainance: (context: SayPiContext, event) => {
         if (context.isMaintainanceMessage) {
+          EventBus.emit("saypi:ui:hide-message"); // send again to ensure the message is hidden
           EventBus.emit("audio:skipCurrent");
           console.debug("Skipping speech due to this being a maintainance message");
         }

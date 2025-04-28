@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "由于信用不足而暂停声音时显示的文字",
     "message": "声音暂停 - "
+  },
+  "assistantIsListeningAttentively": {
+    "description": "当助手在代理模式下聆听语音时显示的消息。",
+    "message": "$聊天机器人$正在专心听...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

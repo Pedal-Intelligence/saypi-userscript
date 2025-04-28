@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "Κείμενο που εμφανίζεται όταν η φωνή είναι παύση λόγω ανεπαρκών πιστώσεων",
     "message": "Η φωνή σταμάτησε -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Εμφανίζεται το μήνυμα όταν ο βοηθός ακούει για ομιλία σε λειτουργία πράκτορα.",
+    "message": "Το $ chatbot $ ακούει προσεκτικά ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "Text som visas när röst är pausad på grund av otillräckliga krediter",
     "message": "Röst pausade -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Meddelande visas när assistenten lyssnar på tal i agentläge.",
+    "message": "$ chatbot $ lyssnar uppmärksamt ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

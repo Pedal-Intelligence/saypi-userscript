@@ -153,6 +153,16 @@
       }
     }
   },
+  "assistantIsListeningAttentively": {
+    "message": "$chatbot$ is listening attentively...",
+    "description": "Message displayed when the assistant is listening for speech in agent mode.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
   "assistantIsThinking": {
     "message": "$chatbot$ is thinking...",
     "description": "Message displayed when the assistant is preparing its response.",

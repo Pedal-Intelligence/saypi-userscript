@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "クレジットが不十分であるために音声が一時停止されたときに表示されるテキスト",
     "message": "声が一時停止 - "
+  },
+  "assistantIsListeningAttentively": {
+    "description": "アシスタントがエージェントモードでスピーチを聞いているときにメッセージが表示されます。",
+    "message": "$ chatbot $は注意深く聞いています...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

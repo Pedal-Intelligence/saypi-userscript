@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "Текст, показан, когато гласът е спрян поради недостатъчни кредити",
     "message": "Гласът спря -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Съобщение, показано, когато асистентът слуша реч в режим на агент.",
+    "message": "$ chatbot $ слуша внимателно ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "Tekst getoond wanneer spraak wordt gepauzeerd vanwege onvoldoende credits",
     "message": "Stem gepauzeerd -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Boodschap dat wordt weergegeven wanneer de assistent luistert naar spraak in de Agent -modus.",
+    "message": "$ chatbot $ luistert aandachtig ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }

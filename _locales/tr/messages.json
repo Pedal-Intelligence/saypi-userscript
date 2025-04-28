@@ -752,5 +752,15 @@
   "voicePaused": {
     "description": "Yetersiz kredi nedeniyle ses duraklatıldığında gösterilen metin",
     "message": "Ses durakladı -"
+  },
+  "assistantIsListeningAttentively": {
+    "description": "Asistan aracı modunda konuşma dinlerken görüntülenir.",
+    "message": "$ chatbot $ dikkatle dinliyor ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   }
 }
