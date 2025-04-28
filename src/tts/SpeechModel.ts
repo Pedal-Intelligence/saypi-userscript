@@ -2,6 +2,7 @@ import { config } from "../ConfigModule.js";
 import { UtteranceCharge } from "../billing/BillingModule";
 import { PiSpeechSourceParser } from "./SpeechSourceParsers";
 import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
+import { FailedSpeechUtterance } from "./FailedSpeechUtterance";
 
 const saypiAudioDomain = config.apiServerUrl
   ? new URL(config.apiServerUrl).hostname
@@ -134,6 +135,13 @@ function isPlaceholderUtterance(utterance: SpeechUtterance | string): boolean {
     return utterance.startsWith("placeholder-");
   }
   return utterance instanceof SpeechPlaceholder;
+}
+
+function isFailedUtterance(utterance: SpeechUtterance | string): boolean {
+  if (typeof utterance === "string") {
+    return utterance.startsWith("failed-");
+  }
+  return utterance instanceof FailedSpeechUtterance || "kind" in utterance && utterance.kind === "failed";
 }
 
 class SpeechPlaceholder extends BaseSpeechUtterance {
@@ -361,8 +369,8 @@ class ChangeVoiceEvent {
 }
 
 interface StreamedSpeech {
-  utterance: SpeechUtterance;
-  charge?: UtteranceCharge;
+  utterance: SpeechUtterance;          // may be SayPiSpeech, PlaceholderUtterance, or FailedSpeechUtterance
+  charge?: UtteranceCharge;            // undefined for failed / placeholder cases
 }
 
 class AssistantSpeech implements StreamedSpeech {
@@ -390,5 +398,6 @@ export {
   SayPiSpeech,
   PiSpeech,
   isPlaceholderUtterance,
+  isFailedUtterance,
   UtteranceFactory,
 };

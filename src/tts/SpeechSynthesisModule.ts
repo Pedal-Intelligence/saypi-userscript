@@ -13,7 +13,9 @@ import {
   AIVoice,
   PiAIVoice,
   MatchableVoice,
-  VoiceFactory
+  VoiceFactory,
+  isFailedUtterance,
+  isPlaceholderUtterance
 } from "./SpeechModel";
 import { BillingModule, UtteranceCharge } from "../billing/BillingModule";
 import { Chatbot } from "../chatbots/Chatbot";
@@ -218,8 +220,12 @@ class SpeechSynthesisModule {
   }
 
   speak(speech: SpeechUtterance): void {
-    if (speech instanceof SpeechPlaceholder) {
+    if (isPlaceholderUtterance(speech)) {
       console.warn("Cannot speak a placeholder");
+      return;
+    }
+    if (isFailedUtterance(speech)) {
+      console.warn(`Cannot speak a failed utterance: ${speech.toString()}`);
       return;
     }
     console.debug(`Speaking: ${speech.toString()}`);

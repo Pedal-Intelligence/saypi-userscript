@@ -18,6 +18,8 @@ import { SpeechHistoryModule } from "../tts/SpeechHistoryModule";
 import { MessageState } from "../tts/MessageHistoryModule";
 import telemetryModule, { TelemetryData } from "../TelemetryModule";
 import { IconModule } from "../icons/IconModule";
+import { FailedSpeechUtterance } from "../tts/FailedSpeechUtterance";
+import { config } from "../ConfigModule";
 
 // Add this interface definition near the top of the file after imports
 interface MetricDefinition {
@@ -257,6 +259,17 @@ abstract class AssistantResponse {
     
     // Add speech-enabled class to the message element
     this._element.classList.add("speech-enabled");
+
+    // listen for utterance failure
+    EventBus.on("saypi:billing:utteranceFailed", (utterance: FailedSpeechUtterance) => {
+      if (utterance.id === this.utteranceId) {
+        this.decorateFailedSpeech(true);
+      }
+    });
+  }
+
+  decorateFailedSpeech(replace: boolean = false): void {
+    this.messageControls.decorateFailedSpeech(replace);
   }
 
   async decorateIncompleteSpeech(replace: boolean = false): Promise<void> {
@@ -1798,6 +1811,52 @@ abstract class MessageControls {
     // Add any additional controls here
     
     container.appendChild(controlsContainer);
+  }
+
+  /**
+   * Apply failed speech UI to this chat message
+   * @param replace Whether to replace existing controls
+   */
+  decorateFailedSpeech(replace: boolean = false): void {
+    this.message.element.classList.add("speech-failed");
+    
+    const ttsControlsElement = this.message.element.querySelector(
+      ".saypi-tts-controls"
+    ) as HTMLDivElement | null;
+    
+    // If we already have a credit notification, don't add another one
+    if (ttsControlsElement && !ttsControlsElement.querySelector(".saypi-credit-notification")) {
+      const creditNotification = document.createElement("div");
+      creditNotification.className = "saypi-credit-notification";
+      creditNotification.style.display = "inline-flex";
+      creditNotification.style.alignItems = "center";
+      creditNotification.style.marginLeft = "8px";
+      creditNotification.style.fontSize = "12px";
+      creditNotification.style.color = "#d32f2f"; // Red color for attention
+      
+      // Create a simple warning icon using text
+      const warningText = document.createElement("span");
+      warningText.textContent = "⚠️ ";  // Unicode warning symbol
+      warningText.style.marginRight = "4px";
+      creditNotification.appendChild(warningText);
+      
+      const textSpan = document.createElement("span");
+      textSpan.textContent = "Voice paused - ";
+      creditNotification.appendChild(textSpan);
+      
+      // Add a link to the credits page
+      const linkSpan = document.createElement("a");
+      linkSpan.textContent = "Add credits";
+      const dashboardUrl = config.authServerUrl + "/app/dashboard";
+      linkSpan.href = dashboardUrl;
+      linkSpan.style.textDecoration = "underline";
+      linkSpan.style.cursor = "pointer";
+      linkSpan.style.color = "#1976d2"; // Blue for links
+      
+      creditNotification.appendChild(linkSpan);
+      
+      ttsControlsElement.appendChild(creditNotification);
+    }
   }
 }
 

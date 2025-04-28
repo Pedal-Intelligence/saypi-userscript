@@ -1,5 +1,7 @@
 import { md5 } from "js-md5";
 import {
+  isFailedUtterance,
+  isPlaceholderUtterance,
   SpeechSynthesisVoiceRemote,
   SpeechUtterance,
 } from "../tts/SpeechModel";
@@ -54,7 +56,17 @@ export class BillingModule {
 
   registerEventListeners() {
     EventBus.on("saypi:piStoppedWriting", ({ utterance, text }) => {
+      if (isPlaceholderUtterance(utterance)) {
+        // we do not charge for placeholder utterances because we didn't generate their TTS audio
+        return;
+      }
+      if (isFailedUtterance(utterance)) {
+        console.debug(`No charge for failed utterance: ${utterance.toString()}`);
+        EventBus.emit("saypi:billing:utteranceFailed", utterance);
+        return;
+      }
       const charge = this.charge(utterance, text);
+      console.debug(`Charged ${charge.cost} credits for utterance: ${utterance.toString()}`);
       EventBus.emit("saypi:billing:utteranceCharged", charge);
     });
   }

@@ -737,6 +737,10 @@
     "message": "Sign in for text-to-speech",
     "description": "Prompt shown when user needs to authenticate to access text-to-speech features"
   },
+  "upgradeForTTS": {
+    "message": "Upgrade for voice generation",
+    "description": "Prompt shown when user needs to upgrade to obtain text-to-speech credits"
+  },
   "disableTTS": {
     "message": "Disable text-to-speech",
     "description": "Label for the option to turn off text-to-speech"
