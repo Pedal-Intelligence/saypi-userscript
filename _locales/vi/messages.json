@@ -4,7 +4,7 @@
     "description": "Tên của ứng dụng."
   },
   "appDescription": {
-    "message": "Kiểm soát giọng nói cho PI và Claude. \nNói một cách tự nhiên, nhận được câu trả lời giống như thật. \nChỉ cần nói nó.",
+    "message": "Nói chuyện với Pi và Claude bằng giọng nói của bạn. Nói tự nhiên, nghe phản hồi. Cứ nói đi.",
     "description": "Mô tả của ứng dụng."
   },
   "callInProgress": {
