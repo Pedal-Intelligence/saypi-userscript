@@ -13,7 +13,7 @@
   },
   "appDescription": {
     "description": "Popis aplikácie.",
-    "message": "Hlasové ovládanie pre Pi a Claude. \nHovorte prirodzene, získajte záchranné odpovede. \nLen to povedz."
+    "message": "Hlasové ovládanie pre Pi a Claude. Hovorte prirodzene, získajte záchranné odpovede. Len to povedz."
   },
   "appName": {
     "description": "Názov aplikácie.",

@@ -207,7 +207,7 @@
   },
   "appDescription": {
     "description": "Deskripsi aplikasi.",
-    "message": "Kontrol Suara untuk Pi dan Claude. \nBicaralah secara alami, dapatkan balasan seperti hidup. \nKatakan saja."
+    "message": "Kontrol Suara untuk Pi dan Claude. Bicaralah secara alami, dapatkan balasan seperti hidup. Katakan saja."
   },
   "appName": {
     "description": "Nama aplikasi.",

@@ -199,7 +199,7 @@
   },
   "appDescription": {
     "description": "La descripción de la aplicación.",
-    "message": "Control de voz para Pi y Claude. \nHabla naturalmente, obtenga respuestas realistas. \nSolo dilo."
+    "message": "Control de voz para Pi y Claude. Habla naturalmente, obtenga respuestas realistas. Solo dilo."
   },
   "appName": {
     "description": "El nombre de la aplicación.",

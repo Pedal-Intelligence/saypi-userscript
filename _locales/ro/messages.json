@@ -13,7 +13,7 @@
   },
   "appDescription": {
     "description": "Descrierea aplicației.",
-    "message": "Controlul vocii pentru Pi și Claude. \nVorbește natural, primește răspunsuri LIFEIKE. \nSpune -i doar."
+    "message": "Controlul vocii pentru Pi și Claude. Vorbește natural, primește răspunsuri LIFEIKE. Spune -i doar."
   },
   "appName": {
     "description": "Numele aplicației.",

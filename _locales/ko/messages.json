@@ -4,7 +4,7 @@
     "description": "애플리케이션의 이름입니다."
   },
   "appDescription": {
-    "message": "PI 및 Claude의 음성 제어. \n자연스럽게 말하고 생명과 같은 대답을하십시오. \n그냥 말해.",
+    "message": "PI 및 Claude의 음성 제어. 자연스럽게 말하고 생명과 같은 대답을하십시오. 그냥 말해.",
     "description": "애플리케이션의 설명입니다."
   },
   "callInProgress": {

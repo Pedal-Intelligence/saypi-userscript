@@ -13,7 +13,7 @@
   },
   "appDescription": {
     "description": "Beskrivning av applikationen.",
-    "message": "Röstkontroll för PI och Claude. \nTala naturligt, få livtroiga svar. \nSäg bara det."
+    "message": "Röstkontroll för PI och Claude. Tala naturligt, få livtroiga svar. Säg bara det."
   },
   "appName": {
     "description": "Namnet på applikationen.",

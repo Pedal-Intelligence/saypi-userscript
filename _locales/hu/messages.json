@@ -4,7 +4,7 @@
     "description": "Az alkalmazás neve."
   },
   "appDescription": {
-    "message": "Hangvezérlés Pi és Claude számára. \nBeszéljen természetesen, kapjon élethű válaszokat. \nCsak mondd meg.",
+    "message": "Hangvezérlés Pi és Claude számára. Beszéljen természetesen, kapjon élethű válaszokat. Csak mondd meg.",
     "description": "Az alkalmazás leírása."
   },
   "callInProgress": {

@@ -207,7 +207,7 @@
   },
   "appDescription": {
     "description": "Opis aplikacji.",
-    "message": "Kontrola głosu dla PI i Claude. \nMów naturalnie, zdobądź realistyczne odpowiedzi. \nPo prostu to powiedz."
+    "message": "Kontrola głosu dla PI i Claude. Mów naturalnie, zdobądź realistyczne odpowiedzi. Po prostu to powiedz."
   },
   "appName": {
     "description": "Nazwa aplikacji.",

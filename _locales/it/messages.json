@@ -207,7 +207,7 @@
   },
   "appDescription": {
     "description": "La descrizione dell'applicazione.",
-    "message": "Controllo vocale per Pi e Claude. \nParla naturalmente, ottieni risposte realistiche. \nDillo e basta."
+    "message": "Controllo vocale per Pi e Claude. Parla naturalmente, ottieni risposte realistiche. Dillo e basta."
   },
   "appName": {
     "description": "Il nome dell'applicazione.",

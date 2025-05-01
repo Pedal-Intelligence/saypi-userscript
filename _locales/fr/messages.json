@@ -4,7 +4,7 @@
     "description": "Le nom de l'application."
   },
   "appDescription": {
-    "message": "Contrôle vocal pour Pi et Claude. \nParlez naturellement, obtenez des réponses réalistes. \nDites-le.",
+    "message": "Contrôle vocal pour Pi et Claude. Parlez naturellement, obtenez des réponses réalistes. Dites-le.",
     "description": "La description de l'application."
   },
   "callInProgress": {

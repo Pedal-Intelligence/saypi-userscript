@@ -4,7 +4,7 @@
     "description": "Der Name der Anwendung."
   },
   "appDescription": {
-    "message": "Sprachkontrolle für Pi und Claude. \nSprechen Sie natürlich, erhalten Sie lebensechte Antworten. \nSag es einfach.",
+    "message": "Sprachkontrolle für Pi und Claude. Sprechen Sie natürlich, erhalten Sie lebensechte Antworten. Sag es einfach.",
     "description": "Die Beschreibung der Anwendung."
   },
   "callInProgress": {

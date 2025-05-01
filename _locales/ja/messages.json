@@ -4,7 +4,7 @@
     "description": "アプリケーションの名前。"
   },
   "appDescription": {
-    "message": "PiとClaudeの音声制御。\n当然話をして、リアルな返信を取得してください。\n言ってください。",
+    "message": "PiとClaudeの音声制御。 当然話をして、リアルな返信を取得してください。 言ってください。",
     "description": "アプリケーションの説明。"
   },
   "callInProgress": {

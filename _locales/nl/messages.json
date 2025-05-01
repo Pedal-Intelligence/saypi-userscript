@@ -4,7 +4,7 @@
     "description": "De naam van de applicatie."
   },
   "appDescription": {
-    "message": "Spraakcontrole voor PI en Claude. \nSpreek op natuurlijke wijze, krijg levensechte antwoorden. \nZeg het gewoon.",
+    "message": "Spraakcontrole voor PI en Claude. Spreek op natuurlijke wijze, krijg levensechte antwoorden. Zeg het gewoon.",
     "description": "De beschrijving van de applicatie."
   },
   "callInProgress": {

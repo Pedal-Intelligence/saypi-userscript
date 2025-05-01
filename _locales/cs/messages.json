@@ -13,7 +13,7 @@
   },
   "appDescription": {
     "description": "Popis aplikace.",
-    "message": "Hlasová ovládání pro PI a Claude. \nMluvte přirozeně, získejte LifeLike odpovědi. \nJen to řekni."
+    "message": "Hlasová ovládání pro PI a Claude. Mluvte přirozeně, získejte LifeLike odpovědi. Jen to řekni."
   },
   "appName": {
     "description": "Název aplikace.",
