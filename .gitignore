@@ -13,3 +13,4 @@ src/audio/capabilities-test.json
 source-code.zip
 doc/dom/claude/*
 doc/data/*
+doc/store/*

@@ -1,20 +1,39 @@
-Biến đổi cuộc trò chuyện của bạn với Pi, chatbot AI cách mạng từ Inflection AI. Say, Pi là tiện ích mở rộng trình duyệt cần thiết, giúp bạn giao tiếp với Pi bằng giọng nói của mình, một cách dễ dàng và trong nhiều ngôn ngữ.
+Say, Pi biến các cuộc trò chuyện của bạn với Pi và Claude thành những trải nghiệm mượt mà, điều khiển bằng giọng nói.  
+Chỉ cần nhấn nút gọi, nói như bạn đang nói chuyện với một người, và nhận các câu trả lời giọng nói sống động.  
+Hoàn hảo cho đa nhiệm, khả năng truy cập, hoặc bất kỳ ai suy nghĩ tốt hơn khi nói ra.
 
-Các Tính Năng Chính:
 
-- Trò Chuyện Rảnh Tay: Trò chuyện với Pi chỉ bằng giọng nói của bạn, hoàn hảo cho việc đa nhiệm hoặc khi gõ phím không tiện lợi.
-- Độ Chính Xác & Tốc Độ Vượt Trội: Tận dụng việc triển khai nhanh nhất thế giới của công nghệ Whisper từ OpenAI, Say, Pi mang lại khả năng nhận dạng giọng nói không đối thủ và phiên mã nhanh như chớp.
-- Đa Ngôn Ngữ: Giao tiếp liền mạch trong 29 ngôn ngữ, với các giọng nói nâng cấp và chân thực như Paola và Joey.
-- Phát Hiện Kết Thúc Lời Nói Thông Minh: Say, Pi biết khi nào bạn đã nói xong, đảm bảo rằng suy nghĩ của bạn được ghi lại đầy đủ.
-- Chế Độ Đắm Chìm & Chế Độ Desktop: Chọn cách bạn muốn tương tác – xem cuộc trò chuyện dưới dạng văn bản hoặc hòa mình vào trải nghiệm không gây xao nhãng.
-- Chế Độ Tối: Bảo vệ mắt của bạn với giao diện tối thoải mái.
-- Khả Năng Sử Dụng Toàn Cầu: Sử dụng Say, Pi trên macOS, Windows, Android và iOS.
+MIỄN PHÍ – DÙNG NGAY, KHÔNG CẦN TÀI KHOẢN  
+- Nói Thay vì Gõ: Nói chuyện với Pi và Claude với nhận dạng giọng nói Whisper, biết khi nào bạn kết thúc nói.  
+- Chính Xác & Nhanh Chóng: Thưởng thức chuyển đổi giọng nói thành văn bản với độ chính xác cao, ngay cả với giọng điệu khác nhau và tiếng ồn xung quanh.  
+- Nghe Giọng Thật của Pi: Câu trả lời bằng giọng nói tự nhiên theo phong cách gốc của Pi.  
+- Bố Cục Linh Hoạt: Sử dụng chế độ toàn màn hình nhập vai hoặc chế độ xem chat chuẩn.  
+- Hỗ Trợ Chế Độ Tối: Thiết kế thân thiện với mắt hòa hợp với giao diện của Pi.  
+- Hoạt Động Khắp Nơi: Mac, Windows, Linux, Android, iOS – tất cả đều được hỗ trợ.
 
-Tại Sao Chọn Say, Pi:
 
-- Nâng Cao Khả Năng Tiếp Cận: Tạo điều kiện cho người dùng bị giảm thị lực hoặc suy giảm vận động giao tiếp với Pi một cách dễ dàng.
-- Tăng Năng Suất: Đa nhiệm, ghi chú hoặc động não các ý tưởng trong khi tay vẫn tự do.
-- Mở Rộng Khả Năng Của Pi: Mở khóa các cuộc trò chuyện đa ngôn ngữ và khám phá nhiều giọng nói chân thực khác nhau.
-- Tham Gia Cộng Đồng: Trở thành một phần của cộng đồng người dùng tích cực và hỗ trợ định hình tương lai của Say, Pi.
+SAY, PI PREMIUM – MỞ KHÓA TRẢI NGHIỆM ĐẦY ĐỦ  
+Giọng nói của bạn, ngôn ngữ của bạn, AI của bạn – trên tất cả các thiết bị của bạn.  
+- Hỗ Trợ Claude & Pi: Chuyển đổi liền mạch giữa các trợ lý AI hàng đầu.  
+- Câu Trả Lời Sống Động trong 32+ Ngôn Ngữ: Được cung cấp bởi ElevenLabs, được chế tạo để nghe tự nhiên trong ngôn ngữ của bạn.  
+- Giới Hạn Sử Dụng Lớn Hơn: Thêm thời gian nói chuyện, thêm thời gian nghe.  
+- Một Tài Khoản, Khắp Nơi: Premium đi theo bạn qua các nền tảng và trình duyệt.
 
-Trải nghiệm tương lai của tương tác AI kích hoạt bằng giọng nói. Tải Say, Pi ngay hôm nay!
+Xem giá tại: https://saypi.ai/pricing
+
+
+TẠI SAO HÀNG NGHÌN NGƯỜI YÊU THÍCH SAY, PI  
+- Tăng Cường Quy Trình Công Việc: Ghi chú, ý tưởng, hoặc phác thảo khi tay vẫn tự do.  
+- Nói Bất Kỳ Ngôn Ngữ Nào: Hỗ trợ đa ngôn ngữ với chuyển đổi mượt mà giữa cuộc trò chuyện.  
+- Xây Dựng Cho Khả Năng Tiếp Cận: Thiết kế với ý tưởng bao trọn – tuyệt vời cho người dùng có thử thách về vận động hoặc thị giác.  
+- Được Đánh Giá ★ 4.9/5 bởi Hơn 2,000 Người Dùng: Được tin cậy bởi một cộng đồng toàn cầu đang phát triển.  
+- Ưu Tiên Quyền Riêng Tư: Dữ liệu giọng nói của bạn được bảo mật và không bị lạm dụng. Xem chính sách tại: https://saypi.ai/legal/privacy
+
+  
+BẮT ĐẦU TRONG VÀI GIÂY  
+1. Cài đặt tiện ích mở rộng.  
+2. Mở pi.ai hoặc claude.ai.  
+3. Nhấp vào nút gọi và nói. Chỉ vậy thôi.
+
+
+Bắt đầu nói chuyện với AI theo cách tự nhiên – cài đặt Say, Pi và trải nghiệm tương lai của hội thoại.

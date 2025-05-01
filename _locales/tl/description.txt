@@ -1,20 +1,32 @@
-Baguhin ang iyong mga pag-uusap gamit ang Pi, ang rebolusyonaryong AI chatbot mula sa Inflection AI. Sabihin, ang Pi ay iyong mahalagang browser extension, na nagbibigay kakayahan sa iyo na makipag-komunikasyon sa Pi gamit ang iyong boses, nang walang kahirap-hirap at sa iba't ibang wika.
+Say, Pi ay ginagawang mga makinis at boses-ang mumuno sa karanasan ang inyong mga pag-uusap kay Pi at Claude. Pindutin lamang ang pindutan ng tawag, magsalita na parang nakikipag-usap sa tao, at makakuha ng mga makatotohanang tugon. Perpekto para sa multitasking, accessibility, o sino mang mas nakapag-isip nang mas mabuti ng malakas.
 
-Pangunahing Tampok:
+PLANONG LIBRE – SUBUKAN AGAD, WALANG KAILANGANG ACCOUNT
+- Magsalita Kapalit ng Pag-type: Makipag-usap kay Pi at Claude gamit ang Whisper-powered na pagkilala ng boses na alam kung kailan ka tapos magsalita.  
+- Tumpak at Mabilis: Tamasa ng mataas na katumpakan sa speech-to-text, kahit may accent at ingay sa background.  
+- Marinig ang Tunay na Boses ni Pi: Mga natural na tugon ng boses sa mga built-in na estilo ni Pi.  
+- Mga Flexible Layout: Gamitin ang full-screen immersive mode o standard na view ng chat.  
+- Suporta sa Dark Mode: Disenyo na magiliw sa mata na umaangkop sa interface ni Pi.  
+- Gumagana Kahit Saan: Mac, Windows, Linux, Android, iOS – lahat ay sakop.
 
-- Mga Pag-uusap na Walang Kamay: Makipag-chat sa Pi gamit lamang ang iyong boses, perpekto para sa multitasking o kapag hindi maginhawa ang pag-type.
-- Walang Kapantay na Katumpakan at Bilis: Gamit ang pinakamabilis na implementasyon ng OpenAI's Whisper technology sa mundo, nagbibigay ang Say, Pi ng walang kapantay na pagkilala ng pagsasalita at mabilis na mga transkripsyon.
-- Multilingual na Kapangyarihan: Makipag-komunikasyon nang walang putol sa 29 na wika, na may mga realistic at pinahusay na mga boses tulad nina Paola at Joey.
-- Matalinong Pagtukoy ng Pagtatapos ng Pagsasalita: Alam ng Say, Pi kung kailan ka natapos magsalita, siguradong nakakapture ang iyong mga ideya nang buo.
-- Nakaka-immersibong at Desktop na mga Mode: Pumili ng paano mo gustong makipag-ugnayan – makita ang iyong usapan sa teksto o mag-dive sa isang karanasang walang distraksyon.
-- Dark Mode: Protektahan ang iyong mga mata gamit ang komportableng dark theme.
-- Pangkalahatang Pagkakaroon: Gamitin ang Say, Pi sa macOS, Windows, Android, at iOS.
+SAY, PI PREMIUM – IUNLOCK ANG BUONG KARANASAN 
+Ang iyong boses, ang iyong wika, ang iyong AI – sa lahat ng iyong device.  
+- Suporta kay Claude at Pi: Walang putol na paglipat sa pagitan ng mga top AI assistants.  
+- Makatotohanang Tugon sa Higit 32 Wika: Pinapagana ng ElevenLabs, dinisenyo na makatotohanan ang tunog sa iyong wika.  
+- Mas Malalaking Limitasyon sa Paggamit: Mas mahabang oras ng pakikipag-usap, mas mahabang oras ng pakikinig.  
+- Isang Account, Kahit Saan: Ang Premium ay sumusunod sa iyo sa mga platform at browser.
 
-Bakit Pumili ng Say, Pi:
+Tingnan ang presyo sa: https://saypi.ai/pricing
 
-- Pahusayin ang Aksesibilidad: Bigyan ng kapangyarihan ang mga gumagamit na may visual o motor impairments na makipag-ugnayan sa Pi nang walang kahirap-hirap.
-- Palakasin ang Produktibidad: Magsabay-sabay sa gawain, gumawa ng mga tala, o mag-brainstorm ng mga ideya habang nananatiling malaya ang iyong mga kamay.
-- Palawakin ang mga Kakayahan ng Pi: I-unlock ang mga multilingual na pag-uusap at tuklasin ang iba't ibang realistic na boses.
-- Sumali sa Komunidad: Maging bahagi ng aktibo at suportadong user base na humuhubog sa hinaharap ng Say, Pi.
+BAKIT MAHAL NG LIBU-LIBO ANG SAY, PI
+- Palakasin ang Iyong Workflow: Kumuha ng tala, mag-ideate, o mag-draft habang nakalibre ang iyong mga kamay.  
+- Magsalita ng Anumang Wika: Multilingual na suporta na may maayos na pagbago sa gitna ng pag-uusap.  
+- Built for Accessibility: Dinisenyo na isinasaalang-alang ang inclusivity – magaling para sa mga gumagamit na may mga hamon sa motor o visual.  
+- Nakatanggap ng rating na ★ 4.9/5 ng higit sa 2,000+ mga Gumagamit: Mapagkakatiwalaan ng lumalagong pandaigdigang komunidad.  
+- Privacy First: Ang iyong voice data ay secure at hindi kailanman inabuso. Tingnan ang aming patakaran sa: https://saypi.ai/legal/privacy
 
-Maranasan ang hinaharap ng voice-enabled AI interaction. I-download ang Say, Pi ngayon!
+MAGSIMULA SA LOOB NG ILANG SEGUNDO
+1. I-install ang extension.  
+2. Buksan ang pi.ai o claude.ai.  
+3. I-click ang pindutan ng tawag at magsalita. Iyon na 'yon.
+
+Simulan ang pakikipag-usap sa AI sa natural na paraan—i-install ang Say, Pi at maranasan ang hinaharap ng pag-uusap.

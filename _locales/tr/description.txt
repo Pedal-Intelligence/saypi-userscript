@@ -1,20 +1,39 @@
-Konuşmalarınızı Inflection AI'nin devrim niteliğindeki AI sohbet botu Pi ile dönüştürün. Say, Pi, Pi ile sesinizi kullanarak zahmetsizce ve birçok dilde iletişim kurmanızı sağlayan önemli tarayıcı uzantınızdır.
+Say, Pi, konuşmalarınızı Pi ve Claude ile pürüzsüz, ses odaklı deneyimlere dönüştürür.
+Sadece çağrı düğmesine dokunun, bir kişiyle konuşur gibi konuşun ve gerçekçi bir şekilde sesli yanıtlar alın.
+Çoklu görev, erişilebilirlik veya yüksek sesle düşünmeyi tercih eden herkes için mükemmel.
 
-Öne Çıkan Özellikler:
 
-- Eller Serbest Konuşmalar: Pi ile sadece sesinizi kullanarak sohbet edin, çoklu görev yaparken veya yazmak uygun olmadığında mükemmel bir çözüm.
-- Eşsiz Doğruluk ve Hız: Dünyanın en hızlı OpenAI'nin Whisper teknolojisi uygulamasını kullanarak, Say, Pi rakipsiz konuşma tanıma ve inanılmaz hızlı transkripsiyonlar sunar.
-- Çok Dilli Güç Merkezi: Paola ve Joey gibi gerçekçi, geliştirilmiş seslerle 29 dilde sorunsuz iletişim kurun.
-- Akıllı Konuşma Sonu Tespiti: Say, Pi konuşmanızı bitirdiğinizde bunu anlar ve düşüncelerinizin tamamen kaydedilmesini sağlar.
-- Sürükleyici & Masaüstü Modları: Nasıl etkileşimde bulunmak istediğinizi seçin – konuşmanızı metin olarak görün veya dikkat dağıtıcı olmayan bir deneyime dalın.
-- Karanlık Mod: Gözlerinizi koruyacak rahat bir karanlık tema.
-- Küresel Kullanılabilirlik: Say, Pi'yi macOS, Windows, Android ve iOS'ta kullanın.
+ÜCRETSİZ PLAN – HEMEN DENE, HESAP GEREKMEZ
+- Yazmak Yerine Konuş: Konuşma bittiğinde anlayan Whisper destekli ses tanıma ile Pi ve Claude ile konuşun.
+- Doğru ve Hızlı: Aksanlar ve arka plan gürültüsüne rağmen yüksek doğrulukta sesli metin dönüştürmenin keyfini çıkarın.
+- Pi’nin Gerçek Sesini Duyun: Pi’nin yerleşik tarzlarında doğal sesli yanıtlar.
+- Esnek Düzenler: Tam ekran sürükleyici modu veya standart sohbet görünümünü kullanın.
+- Karanlık Mod Desteği: Pi’nin arayüzüyle uyumlu göz dostu tasarım.
+- Her Yerde Çalışır: Mac, Windows, Linux, Android, iOS – hepsi kapsanır.
 
-Neden Say, Pi'yi Seçmelisiniz:
 
-- Erişilebilirliği Artırın: Görsel veya motor engelli kullanıcıların Pi ile zahmetsizce etkileşimde bulunmalarını sağlayın.
-- Verimliliği Artırın: Çoklu görev yapın, not alın veya ellerinizi serbest bırakırken fikirlerinizi beyin fırtınası yapın.
-- Pi'nin Yeteneklerini Genişletin: Çok dilli sohbetlerin kilidini açın ve çeşitli gerçekçi sesleri keşfedin.
-- Topluluğa Katılın: Say, Pi'nin geleceğini şekillendiren aktif ve destekleyici bir kullanıcı kitlesinin parçası olun.
+SAY, PI PREMIUM – TAM DENEYİMİ KİLITSİZ AÇIN
+Sesiniz, diliniz, yapay zekanız – tüm cihazlarınızda.
+- Claude & Pi Desteği: En iyi yapay zeka asistanları arasında sorunsuz geçiş.
+- 32+ Dilde Gerçekçi Yanıtlar: ElevenLabs tarafından desteklenen, dilinizde doğal ses çıkaracak şekilde tasarlanmış.
+- Daha Büyük Kullanım Sınırları: Daha fazla konuşma süresi, daha fazla dinleme süresi.
+- Tek Hesap, Her Yerde: Premium her platformda ve tarayıcıda sizinle birlikte gelir.
 
-Sesle etkinleştirilen AI ile etkileşimin geleceğini deneyimleyin. Say, Pi'yi bugün indirin!
+Fiyatlandırmayı görün: https://saypi.ai/pricing
+
+
+NEDEN BİNLER SAY, PI'Yİ SEVİYOR
+- İş Akışınızı Artırın: Ellerinizi serbest tutarak not alın, fikir oluşturun veya taslak hazırlayın.
+- Her Dilde Konuşun: Akıcı bir şekilde konuşma sırasında geçiş desteği ile çok dilli destek.
+- Erişilebilirlik için Yapılmış: Herkesi kapsayıcı tasarlanmış – motor veya görsel zorlukları olan kullanıcılar için harika.
+- 2.000+ Kullanıcı Tarafından ★ 4.9/5 Olarak Derecelendirildi: Büyüyen küresel bir topluluk tarafından güvenilen.
+- Önce Gizlilik: Ses verileriniz güvende ve asla kötüye kullanılmaz. Politikamıza bakın: https://saypi.ai/legal/privacy
+
+
+BİRKAÇ SANİYEDE BAŞLAYIN
+1. Eklentiyi yükleyin.
+2. pi.ai veya claude.ai'yi açın.
+3. Çağrı düğmesine tıklayın ve konuşun. Hepsi bu.
+
+
+Yapay zekayla doğal bir şekilde konuşmaya başlayın—Say, Pi'yi yükleyin ve konuşmanın geleceğini deneyimleyin.

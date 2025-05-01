@@ -22,7 +22,7 @@ def translate_text(text, target_lang, api_key):
             {"role": "system", "content": "You are a helpful assistant."},
             {
                 "role": "user",
-                "content": f"Translate the following English text to {target_lang}:\n{text}",
+                "content": f"Translate the following English text to {target_lang}. Do not include any other text or comments, just the translated text. The text is a browser extension listing description. Do not translate product names, i.e. 'Say, Pi' should remain as 'Say, Pi':\n{text}",
             },
         ],
     }
@@ -58,8 +58,9 @@ def translate_all(source_file):
             translated_text = translate_text(source_text, lang_dir, api_key)
             with open(target_file, "w") as f:
                 f.write(translated_text)
+            print(f"{lang_dir} ✅")
 
 
 source_description = "_locales/en/description.txt"
 translate_all(source_description)
-print("Description translation complete")
+print("All translations complete ✅")

@@ -1,20 +1,32 @@
-Trasforma le tue conversazioni con Pi, il rivoluzionario chatbot AI di Inflection AI. Say, Pi è la tua estensione browser essenziale, che ti permette di comunicare con Pi usando la tua voce, senza sforzo e in più lingue.
+Say, Pi trasforma le tue conversazioni con Pi e Claude in esperienze fluide e guidate dalla voce. Basta toccare il pulsante di chiamata, parlare come faresti con una persona e ricevere risposte vocali realistiche. Perfetto per il multitasking, l’accessibilità, o per chiunque pensi meglio a voce alta.
 
-Caratteristiche Principali:
+PIANO GRATUITO – PROVA ISTANTANEA, NESSUN ACCOUNT NECESSARIO
+- Parla invece di digitare: Parla con Pi e Claude con il riconoscimento vocale alimentato da Whisper che sa quando hai finito di parlare.
+- Preciso e Veloce: Goditi una trascrizione del parlato di alta precisione, anche con accenti e rumore di fondo.
+- Ascolta la Vera Voce di Pi: Risposte vocali naturali negli stili integrati di Pi.
+- Layout Flessibili: Usa la modalità immersiva a schermo intero o la vista chat standard.
+- Supporto Modalità Scura: Design adatto agli occhi che si integra con l'interfaccia di Pi.
+- Funziona Ovunque: Mac, Windows, Linux, Android, iOS – tutto coperto.
 
-- Conversazioni Senza Mani: Chatta con Pi usando solo la tua voce, perfetto per il multitasking o quando digitare non è conveniente.
-- Precisione e Velocità senza Eguali: Sfruttando la più veloce implementazione al mondo della tecnologia Whisper di OpenAI, Say, Pi offre un riconoscimento vocale impareggiabile e trascrizioni rapidissime.
-- Potenza Multilingue: Comunica senza problemi in 29 lingue con voci realistiche ed avanzate come Paola e Joey.
-- Rilevamento Intelligente della Fine del Discorso: Say, Pi capisce quando hai terminato di parlare, assicurando che i tuoi pensieri siano catturati completamente.
-- Modalità Immersiva e Desktop: Scegli come vuoi interagire – vedi la tua conversazione in testo o immergiti in un'esperienza senza distrazioni.
-- Modalità Scura: Proteggi i tuoi occhi con un comodo tema scuro.
-- Disponibilità Globale: Usa Say, Pi su macOS, Windows, Android e iOS.
+SAY, PI PREMIUM – SBLOCCA L'ESPERIENZA COMPLETA
+La tua voce, la tua lingua, la tua AI – su tutti i tuoi dispositivi.
+- Supporto per Claude e Pi: Passaggio senza soluzione di continuità tra i principali assistenti AI.
+- Risposte reali in oltre 32 lingue: Alimentato da ElevenLabs, progettato per suonare naturale nella tua lingua.
+- Limiti di utilizzo maggiori: Più tempo per parlare, più tempo per ascoltare.
+- Un account, ovunque: Il Premium ti segue su piattaforme e browser.
 
-Perché Scegliere Say, Pi:
+Vedi i prezzi su: https://saypi.ai/pricing
 
-- Migliora l'Accessibilità: Permetti agli utenti con disabilità visive o motorie di interagire con Pi senza sforzo.
-- Aumenta la Produttività: Fai multitasking, prendi appunti o fai brainstorming mentre le tue mani restano libere.
-- Espandi le Capacità di Pi: Sblocca conversazioni multilingue ed esplora una varietà di voci realistiche.
-- Unisciti alla Comunità: Fai parte di una base di utenti attiva e di supporto che sta plasmando il futuro di Say, Pi.
+PERCHÉ MIGLIAIA AMANO SAY, PI
+- Migliora il tuo flusso di lavoro: Prendi appunti, idea o fai bozze mantenendo le mani libere.
+- Parla qualsiasi lingua: Supporto multilingue con passaggio fluido tra le conversazioni.
+- Costruito per l'accessibilità: Progettato con inclusività in mente – ottimo per utenti con difficoltà motorie o visive.
+- Valutato ★ 4.9/5 da oltre 2000 utenti: Affidato da una comunità globale in crescita.
+- Privacy al Primo Posto: I tuoi dati vocali sono sicuri e mai utilizzati impropriamente. Vedi la nostra politica su: https://saypi.ai/legal/privacy
 
-Vivi il futuro dell'interazione vocale con l'IA. Scarica Say, Pi oggi stesso!
+INIZIA IN POCHI SECONDI
+1. Installa l'estensione.
+2. Apri pi.ai o claude.ai.
+3. Clicca sul pulsante di chiamata e parla. Ecco fatto.
+
+Inizia a parlare con l'IA in modo naturale: installa Say, Pi e scopri il futuro della conversazione.

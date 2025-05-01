@@ -1,20 +1,39 @@
-Transformă-ți conversațiile cu Pi, chatbot-ul revoluționar AI de la Inflection AI. Spune, Pi este extensia de browser esențială pentru tine, care îți permite să comunici cu Pi folosindu-ți vocea, fără efort și în mai multe limbi.
+Say, Pi transformă conversațiile tale cu Pi și Claude în experiențe fluide, bazate pe voce. 
+Doar apasă butonul de apel, vorbește ca și cum ai vorbi cu o persoană și primește răspunsuri verbale realiste. 
+Perfect pentru multitasking, accesibilitate sau pentru oricine gândește mai bine vorbind.
 
-Caracteristici Cheie:
 
-- Conversații Fără Mâini: Chat cu Pi folosind doar vocea ta, perfect pentru multitasking sau atunci când tastarea nu este convenabilă.
-- Acuratețe și Viteză Fără Egal: Folosind cea mai rapidă implementare din lume a tehnologiei Whisper de la OpenAI, Spune, Pi oferă recunoaștere vocală de neegalat și transcrieri de mare viteză.
-- Multilingv Puternic: Comunică fără întreruperi în 29 de limbi, cu voci realiste și îmbunătățite, cum ar fi Paola și Joey.
-- Detectare Inteligentă a Sfârșitului de Vorbire: Spune, Pi știe când ai terminat de vorbit, asigurând capturarea completă a gândurilor tale.
-- Moduri Imersive și Desktop: Alege cum vrei să interacționezi – vezi conversația ta în text sau lasă-te absorbit de o experiență fără distrageri.
-- Mod Întunecat: Protejează-ți ochii cu o temă întunecată confortabilă.
-- Disponibilitate Globală: Folosește Spune, Pi pe macOS, Windows, Android și iOS.
+PLAN GRATUIT – ÎNCERCAȚI INSTANT, NU ESTE NECESAR CONT
+- Vorbește în loc să tastezi: Comunică cu Pi și Claude folosind recunoașterea vocală Whisper care știe când ai terminat de vorbit.  
+- Precis și Rapid: Bucură-te de transcriere voce-text cu acuratețe ridicată, chiar și cu accente și zgomot de fond.  
+- Ascultă Vocea Reală a lui Pi: Răspunsuri vocale naturale în stilurile integrate ale lui Pi.  
+- Configurații Flexibile: Utilizează modul full-screen imersiv sau vizualizarea standard a chat-ului.  
+- Suport pentru Modul Întunecat: Design prietenos cu ochii care se îmbină cu interfața lui Pi.  
+- Funcționează Oriunde: Mac, Windows, Linux, Android, iOS – toate acoperite.
 
-De Ce Să Alegi Spune, Pi:
 
-- Creșterea Accesibilității: Oferă utilizatorilor cu deficiențe vizuale sau motorii posibilitatea de a interacționa cu Pi fără efort.
-- Sporește Productivitatea: Multitask, ia notițe sau generează idei în timp ce îți eliberezi mâinile.
-- Extinde Capacitățile lui Pi: Deblochează conversațiile multilingve și explorează o varietate de voci realiste.
-- Alătură-te Comunității: Fii parte a unei baze de utilizatori active și susținătoare, care dă formă viitorului lui Spune, Pi.
+SAY, PI PREMIUM – DEBLOCHEAZĂ EXPERIENȚA COMPLETĂ
+Vocea ta, limba ta, AI-ul tău – pe toate dispozitivele tale.  
+- Suport Claude & Pi: Trecere fără probleme între asistenții AI de top.  
+- Răspunsuri Realiste în 32+ Limbi: Furnizate de ElevenLabs, concepute să sune natural în limba ta.  
+- Limite de Utilizare Mai Mari: Mai mult timp de vorbit, mai mult timp de ascultat.  
+- Un Cont, Peste Tot: Premium te urmează pe toate platformele și browserele.
 
-Experimentează viitorul interacțiunii AI activată vocal. Descarcă Spune, Pi astăzi!
+Vezi prețurile la: https://saypi.ai/pricing
+
+
+DE CE MII DE OAMENI IUBESC SAY, PI
+- Îmbunătățește-ți Fluxul de Lucru: Ia notițe, dezvoltă idei sau scrie păstrându-ți mâinile libere.  
+- Vorbește Orice Limbă: Suport multilingv cu trecere lină între conversații.  
+- Creat pentru Accesibilitate: Proiectat cu gândul la incluziune – excelent pentru utilizatorii cu provocări motorii sau vizuale.  
+- Evaluat ★ 4.9/5 de către 2,000+ Utilizatori: De încredere pentru o comunitate globală în creștere.  
+- Confidențialitatea pe Primul Loc: Datele tale vocale sunt sigure și nu sunt folosite abuziv. Vezi politica noastră la: https://saypi.ai/legal/privacy
+
+
+ÎNCEPE ÎN CÂTEVA SECUNDE
+1. Instalează extensia.  
+2. Deschide pi.ai sau claude.ai.  
+3. Apasă butonul de apel și vorbește. Asta e tot.
+
+
+Începe să vorbești cu AI în mod natural – instalează Say, Pi și experimentează viitorul conversației.

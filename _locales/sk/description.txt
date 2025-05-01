@@ -1,20 +1,39 @@
-Transformujte svoje rozhovory s Pi, revolučným AI chatbotom od Inflection AI.  Say, Pi je váš nevyhnutný rozšírenie prehliadača, ktoré vás oprávňuje komunikovať s Pi pomocou hlasu, bez námahy a v mnohých jazykoch.
+Say, Pi mení vaše konverzácie s Pi a Claude na plynulé, hlasom riadené zážitky.  
+Stačí klepnúť na tlačidlo hovoru, hovoriť ako k osobe a dostávať realistické odpovede.  
+Perfektné na multitasking, prístupnosť alebo pre kohokoľvek, kto rozmýšľa lepšie nahlas.  
 
-Kľúčové vlastnosti:
 
-- Rozhovory bez rúk: Chat s Pi pomocou iba vášho hlasu, ideálne pre multitasking alebo keď písanie nie je pohodlné.
-- Neporovnateľná presnosť a rýchlosť: Využívajúc najrýchlejšie implementáciu technológie OpenAI Whisper na svete, Say, Pi poskytuje bezkonkurenčné rozpoznávanie reči a bleskurýchle prepísanie.
-- Viacjazyčná sila: Komunikujte plynule v 29 jazykoch s realistickými, vylepšenými hlasmi ako Paola a Joey.
-- Inteligentná detekcia konca reči: Say, Pi vie, kedy ste dokončili hovoriť, čím zabezpečuje, že vaše myšlienky sú zachytené úplne.
-- Ponorené a desktopové režimy: Vyberte si, ako chcete komunikovať – vidieť svoj rozhovor v texte alebo sa ponoriť do nerušenej skúsenosti.
-- Tmavý režim: Chráňte svoje oči pohodlnou tmavou témou.
-- Celosvetová dostupnosť: Používajte Say, Pi na macOS, Windows, Android a iOS.
+ZDARMA PLÁN – VYSKÚŠAJTE OKAMŽITE, NIE JE POTREBNÝ ÚČET  
+- Hovorte namiesto písania: Hovorte s Pi a Claude prostredníctvom rozpoznávania hlasu poháňaného Whisper, ktoré vie, keď skončíte hovoriť.  
+- Presné a rýchle: Užite si vysokú presnosť prepisu reči na text, aj s prízvukmi a hlukom pozadia.  
+- Počujte Piho skutočný hlas: Prirodzené hlasové odpovede v Piho vnorených štýloch.  
+- Flexibilné rozloženie: Použite režim na celú obrazovku alebo štandardný pohľad na chat.  
+- Podpora tmavého režimu: Okoľadne priateľský dizajn, ktorý sa prispôsobí rozhraniu Pi.  
+- Funguje všade: Mac, Windows, Linux, Android, iOS – všetko pokryté.
 
-Prečo si vybrať Say, Pi:
 
-- Zvýšte prístupnosť: Umožnite používateľom so zrakovým alebo motorickým postihnutím jednoducho komunikovať s Pi.
-- Zvýšte produktivitu: Multitaskujte, robte si poznámky alebo premýšľajte o nápadoch, pričom máte voľné ruky.
-- Rozšírte schopnosti Pi: Odomknite viacjazyčné rozhovory a preskúmajte rôzne realistické hlasy.
-- Pridajte sa do komunity: Buďte súčasťou aktívnej a podporujúcej používateľskej základne, ktorá formuje budúcnosť Say, Pi.
+SAY, PI PREMIUM – ODOMKNITE PLNÝ ZÁŽITOK  
+Váš hlas, váš jazyk, vaša AI – na všetkých vašich zariadeniach.  
+- Podpora Claude a Pi: Bezproblémové prepínanie medzi vrcholovými AI asistentmi.  
+- Realistické odpovede vo viac než 32 jazykoch: Poháňa ElevenLabs, vytvorené aby zneli prirodzene vo vašom jazyku.  
+- Väčšie limity použitia: Viac času na hovorenie, viac času na počúvanie.  
+- Jeden účet, všade: Premium vás sleduje naprieč platformami a prehliadačmi.
 
-Zažite budúcnosť hlasom ovládanej AI interakcie. Stiahnite si Say, Pi dnes!
+Pozrite si ceny na: https://saypi.ai/pricing
+
+
+PREČO TISÍCE MILUJÚ SAY, PI  
+- Zlepšite svoj pracovný postup: Robte si poznámky, vytvárajte nápady alebo píšte návrhy bez použitia rúk.  
+- Hovorte akýmkoľvek jazykom: Viacjazyčná podpora s plynulým prepínaním počas konverzácie.  
+- Navrhnuté pre prístupnosť: Určené s ohľadom na inkluzivitu – skvelé pre používateľov s motorickými alebo zrakovými výzvami.  
+- Hodnotené ★ 4.9/5 viac než 2 000 používateľmi: Dôveruje mu rastúca globálna komunita.  
+- Ochrana súkromia na prvom mieste: Vaše hlasové dáta sú bezpečné a nikdy nesprávne použité. Pozrite si našu politiku na: https://saypi.ai/legal/privacy
+
+
+ZAČNITE KROK PO KROKU  
+1. Nainštalujte rozšírenie.  
+2. Otvorte pi.ai alebo claude.ai.  
+3. Kliknite na tlačidlo hovoru a hovorte. To je všetko.
+
+
+Začnite hovoriť s AI prirodzeným spôsobom – nainštalujte Say, Pi a zažite budúcnosť konverzácie.

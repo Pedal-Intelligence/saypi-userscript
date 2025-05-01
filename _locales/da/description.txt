@@ -1,20 +1,39 @@
-Transformér dine samtaler med Pi, den revolutionerende AI chatbot fra Inflection AI. Sig, at Pi er din essentielle browserudvidelse, der giver dig mulighed for at kommunikere med Pi ved hjælp af din stemme, ubesværet og på flere sprog.
+Say, Pi forvandler dine samtaler med Pi og Claude til glatte, stemmedrevne oplevelser.  
+Bare tryk på opkaldsknappen, tal som du ville til en person, og få livagtige talte svar.  
+Perfekt til multitasking, tilgængelighed eller enhver, der tænker bedre højt.
 
-Nøglefunktioner:
 
-- Håndfri Samtaler: Chat med Pi ved kun at bruge din stemme, perfekt til multitasking eller når det ikke er bekvemt at skrive.
-- Uovertruffen Præcision & Hastighed: Ved hjælp af verdens hurtigste implementering af OpenAIs Whisper teknologi leverer Sig, Pi enestående talegenkendelse og lynhurtige transskriptioner.
-- Flersproget Kraftcenter: Kommuniker problemfrit på 29 sprog, med realistiske, forbedrede stemmer som Paola og Joey.
-- Smart Taleafslutningsdetektion: Sig, Pi ved, hvornår du er færdig med at tale, og sikrer, at dine tanker bliver fuldstændigt fanget.
-- Immersive & Desktop-tilstande: Vælg, hvordan du vil interagere – se din samtale i tekst eller dyk ned i en distraktionsfri oplevelse.
-- Mørk Tilstand: Beskyt dine øjne med et behageligt mørkt tema.
-- Global Tilgængelighed: Brug Sig, Pi på macOS, Windows, Android og iOS.
+GRATIS PLAN – PRØV MED DET SAMME, INTET KONTO NØDVENDIG  
+- Tal i stedet for at skrive: Tal med Pi og Claude med Whisper-drevet stemmegenkendelse, der ved, hvornår du er færdig med at tale.  
+- Præcis & Hurtig: Nyd høj-nøjagtighed tale-til-tekst, selv med accenter og baggrundsstøj.  
+- Hør Pi’s Rigtige Stemmer: Naturlige stemmesvar i Pi’s indbyggede stilarter.  
+- Fleksible Layouts: Brug fuldskærmsoplevelsesmode eller standard chatvisning.  
+- Dark Mode Support: Øjenvenligt design, der smelter sammen med Pi's interface.  
+- Fungerer Overalt: Mac, Windows, Linux, Android, iOS – alt er dækket.
 
-Hvorfor Vælge Sig, Pi:
 
-- Forbedre Tilgængelighed: Giv brugere med visuelle eller motoriske funktionsnedsættelser mulighed for at interagere med Pi ubesværet.
-- Øg Produktiviteten: Multitask, tag noter eller brainstorm ideer, mens du holder dine hænder fri.
-- Udvid Pis Funktioner: Lås op for flersprogede samtaler og udforsk en række realistiske stemmer.
-- Bliv en Del af Fællesskabet: Vær en del af en aktiv og støttende brugerbase, der former fremtiden for Sig, Pi.
+SAY, PI PREMIUM – LÅSE OP FOR DEN FULDE OPLEVELSE  
+Din stemme, dit sprog, din AI – på alle dine enheder.  
+- Claude & Pi Support: Problemfrit skift mellem top AI-assistenter.  
+- Livagtige svar på 32+ sprog: Drevet af ElevenLabs, designet til at lyde naturligt på dit sprog.  
+- Større Brug Grænser: Mere taletid, mere lyttetid.  
+- Én Konto, Overalt: Premium følger dig på tværs af platforme og browsere.
 
-Oplev fremtiden for stemmeaktiveret AI interaktion. Download Sig, Pi i dag!
+Se priser på: https://saypi.ai/pricing
+
+
+HVORFOR TUSINDER ELSKER SAY, PI  
+- Boost Din Arbejdsgang: Tag noter, idégenerér, eller skriv kladder mens du holder hænderne fri.  
+- Tal Ethvert Sprog: Flersproget support med glat midt-samtaleskift.  
+- Bygget for Tilgængelighed: Designet med inklusivitet i tankerne – fantastisk for brugere med motoriske eller visuelle udfordringer.  
+- Bedømt ★ 4.9/5 af 2.000+ Brugere: Betroet af et voksende globalt fællesskab.  
+- Privacy Først: Dine stemmedata er sikre og bliver aldrig misbrugt. Se vores politik på: https://saypi.ai/legal/privacy
+
+
+KOM I GANG PÅ FÅ SEKUNDER  
+1. Installer udvidelsen.  
+2. Åbn pi.ai eller claude.ai.  
+3. Klik på opkaldsknappen og tal. Det er det.
+
+
+Begynd at tale med AI på den naturlige måde—installer Say, Pi og oplev fremtiden for samtale.

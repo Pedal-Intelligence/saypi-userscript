@@ -1,20 +1,34 @@
-Transformiere deine Gespräche mit Pi, dem revolutionären KI-Chatbot von Inflection AI. Say, Pi ist deine unverzichtbare Browser-Erweiterung, die es dir ermöglicht, mühelos und in mehreren Sprachen mit Pi über deine Stimme zu kommunizieren.
+Say, Pi verwandelt Ihre Gespräche mit Pi und Claude in flüssige, sprachgesteuerte Erlebnisse.
+Einfach den Anrufen-Button drücken, reden wie mit einer Person und lebensechte gesprochene Antworten erhalten.
+Perfekt für Multitasking, Barrierefreiheit oder für alle, die besser laut denken.
 
-Hauptmerkmale:
+KOSTENLOSER PLAN – SOFORT AUSPROBIEREN, KEIN KONTO NÖTIG
+- Sprechen statt Tippen: Reden Sie mit Pi und Claude mit Whisper-gestützter Spracherkennung, die erkennt, wenn Sie fertig gesprochen haben.
+- Genau & Schnell: Genießen Sie hochpräzise Spracherkennung, auch bei Akzenten und Hintergrundgeräuschen.
+- Hören Sie Pis echte Stimme: Natürliche Stimmantworten in Pis integrierten Stilen.
+- Flexible Layouts: Nutzen Sie den Vollbild-Immersionsmodus oder die Standard-Chat-Ansicht.
+- Dunkelmodus-Unterstützung: Augenfreundliches Design, das sich in Pis Oberfläche einfügt.
+- Funktioniert überall: Mac, Windows, Linux, Android, iOS – alles abgedeckt.
 
-- Freihändige Gespräche: Chatte mit Pi nur mit deiner Stimme – ideal zum Multitasking oder wenn Tippen nicht bequem ist.
-- Unübertroffene Genauigkeit und Geschwindigkeit: Dank der weltweit schnellsten Implementierung der Whisper-Technologie von OpenAI bietet Say, Pi unvergleichliche Spracherkennung und blitzschnelle Transkriptionen.
-- Mehrsprachiges Kraftpaket: Kommuniziere nahtlos in 29 Sprachen, mit realistischen, verbesserten Stimmen wie Paola und Joey.
-- Intelligente Spracherkennung: Say, Pi weiß, wann du aufgehört hast zu sprechen und stellt sicher, dass deine Gedanken vollständig erfasst werden.
-- Immersive- & Desktop-Modi: Wähle, wie du interagieren möchtest – sieh dein Gespräch in Textform oder tauche in eine ablenkungsfreie Erfahrung ein.
-- Dunkelmodus: Schütze deine Augen mit einem angenehmen dunklen Thema.
-- Globale Verfügbarkeit: Nutze Say, Pi auf macOS, Windows, Android und iOS.
+SAY, PI PREMIUM – ERLEBEN SIE DIE VOLLE ERFAHRUNG
+Ihre Stimme, Ihre Sprache, Ihre KI – auf all Ihren Geräten.
+- Claude & Pi Unterstützung: Nahtloses Umschalten zwischen führenden KI-Assistenten.
+- Lebensechte Antworten in 32+ Sprachen: Angetrieben von ElevenLabs, um natürlich in Ihrer Sprache zu klingen.
+- Größere Nutzungslimits: Mehr Sprechzeit, mehr Hörzeit.
+- Ein Konto, überall: Premium begleitet Sie über alle Plattformen und Browser.
 
-Warum Say, Pi wählen:
+Preise ansehen unter: https://saypi.ai/pricing
 
-- Barrierefreiheit verbessern: Ermögliche Nutzern mit Seh- oder motorischen Beeinträchtigungen, mühelos mit Pi zu interagieren.
-- Produktivität steigern: Multitask, mache Notizen oder sammle Ideen, während deine Hände frei bleiben.
-- Erweiterte Fähigkeiten von Pi: Schalte mehrsprachige Gespräche frei und erkunde eine Vielzahl realistischer Stimmen.
-- Werde Teil der Community: Sei Teil einer aktiven und unterstützenden Nutzerbasis, die die Zukunft von Say, Pi gestaltet.
+WARUM TAUSENDE SAY, PI LIEBEN
+- Steigern Sie Ihren Workflow: Notizen machen, Ideen entwickeln oder Entwürfe erstellen, während Ihre Hände frei sind.
+- Jede Sprache sprechen: Mehrsprachige Unterstützung mit nahtlosem Umschalten während des Gesprächs.
+- Für Barrierefreiheit gebaut: Inklusiv gestaltet – ideal für Nutzer mit motorischen oder visuellen Herausforderungen.
+- Bewertet mit ★ 4.9/5 von 2.000+ Nutzern: Von einer wachsenden globalen Gemeinschaft vertraut.
+- Datenschutz an erster Stelle: Ihre Sprachdaten sind sicher und werden niemals missbraucht. Unsere Richtlinie sehen Sie unter: https://saypi.ai/legal/privacy
 
-Erlebe die Zukunft der sprachgesteuerten KI-Interaktion. Lade Say, Pi noch heute herunter!
+IN SEKUNDEN LOSLEGEN
+1. Installieren Sie die Erweiterung.
+2. Öffnen Sie pi.ai oder claude.ai.
+3. Klicken Sie auf den Anrufen-Button und sprechen Sie. Das war’s.
+
+Beginnen Sie, auf natürliche Weise mit KI zu sprechen – installieren Sie Say, Pi und erleben Sie die Zukunft des Gesprächs.

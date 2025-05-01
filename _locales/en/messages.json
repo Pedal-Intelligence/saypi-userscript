@@ -4,7 +4,7 @@
     "description": "The name of the application."
   },
   "appDescription": {
-    "message": "Your Voice-Powered Companion for Pi and Claude AI",
+    "message": "Talk to Pi & Claude with your voice. Hands-free, accurate speech-to-text, natural replies in 30+ languages. Just say it.",
     "description": "The description of the application."
   },
   "exitImmersiveModeLong": {

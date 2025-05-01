@@ -1,20 +1,32 @@
-Przekształć swoje rozmowy z Pi, rewolucyjnym chatbotem AI od Inflection AI. Powiedz, że Pi to niezbędne rozszerzenie przeglądarki, które umożliwia ci komunikację z Pi przy użyciu głosu, bez wysiłku i w wielu językach.
+Say, Pi zamienia Twoje rozmowy z Pi i Claude w płynne, głosowe doświadczenia. Wystarczy dotknąć przycisku połączenia, mówić jak do osoby i otrzymać realistyczne odpowiedzi głosowe. Doskonałe do wielozadaniowości, dostępności lub dla osób, które lepiej myślą na głos.
 
-Kluczowe funkcje:
+DARMOWY PLAN – WYPRÓBUJ NATYCHMIAST, BEZ KONTA
+- Mów zamiast pisać: Rozmawiaj z Pi i Claude za pomocą rozpoznawania głosu Whisper, które wie, kiedy skończysz mówić.
+- Dokładne i szybkie: Ciesz się wysoką dokładnością przekształcania mowy na tekst, nawet przy akcentach i hałasie w tle.
+- Usłysz prawdziwy głos Pi: Naturalne odpowiedzi głosowe w wbudowanych stylach Pi.
+- Elastyczne układy: Używaj zanurzeniowego trybu pełnoekranowego lub standardowego widoku czatu.
+- Wsparcie trybu ciemnego: Przyjazny dla oczu projekt, który wpasowuje się w interfejs Pi.
+- Działa wszędzie: Mac, Windows, Linux, Android, iOS – wszystkie objęte.
 
-- Rozmowy bez użycia rąk: Rozmawiaj z Pi tylko przy użyciu głosu, idealne do wielozadaniowości lub gdy pisanie nie jest wygodne.
-- Niezrównana dokładność i szybkość: Dzięki najszybszej implementacji technologii Whisper od OpenAI, Say, Pi zapewnia niezrównane rozpoznawanie mowy i błyskawiczne transkrypcje.
-- Wielojęzyczny Potęga: Komunikuj się płynnie w 29 językach, z realistycznymi, ulepszonymi głosami, takimi jak Paola i Joey.
-- Inteligentne wykrywanie końca wypowiedzi: Say, Pi wie, kiedy skończyłeś mówić, zapewniając pełne uchwycenie twoich myśli.
-- Tryby immersyjne i desktopowe: Wybierz, jak chcesz się komunikować – zobacz swoją rozmowę w tekście lub zanurz się w środowisku wolnym od rozpraszaczy.
-- Tryb ciemny: Chroń swoje oczy dzięki wygodnemu, ciemnemu motywowi.
-- Globalna dostępność: Korzystaj z Say, Pi na macOS, Windows, Androidzie i iOS.
+SAY, PI PREMIUM – ODBLOKUJ PEŁNE DOŚWIADCZENIE
+Twój głos, twój język, twój AI – na wszystkich Twoich urządzeniach.
+- Wsparcie Claude i Pi: Płynne przełączanie między najlepszymi asystentami AI.
+- Realistyczne odpowiedzi w ponad 32 językach: Napędzane przez ElevenLabs, stworzone, by brzmieć naturalnie w Twoim języku.
+- Większe limity użytkowania: Więcej czasu na rozmowy, więcej czasu na słuchanie.
+- Jedno konto, wszędzie: Premium podąża za Tobą na różnych platformach i przeglądarkach.
 
-Dlaczego warto wybrać Say, Pi:
+Zobacz cennik pod adresem: https://saypi.ai/pricing
 
-- Zwiększ dostępność: Umożliwiaj użytkownikom z wadami wzroku lub ruchowymi łatwą interakcję z Pi.
-- Zwiększ produktywność: Wielozadaniowość, robienie notatek lub burza mózgów bez użycia rąk.
-- Rozszerz możliwości Pi: Odkrywaj rozmowy w wielu językach i różnorodne realistyczne głosy.
-- Dołącz do społeczności: Bądź częścią aktywnej i wspierającej społeczności kształtującej przyszłość Say, Pi.
+DLACZEGO TYSIĄCE UWIELBIAJĄ SAY, PI
+- Zwiększ swoją wydajność: Sporządzaj notatki, twórz pomysły lub szkice, mając ręce wolne.
+- Mów w każdym języku: Wsparcie dla wielu języków i płynne przełączanie w trakcie rozmowy.
+- Stworzone dla dostępności: Zaprojektowane z myślą o inkluzyjności – doskonałe dla użytkowników z wyzwaniami motorycznymi lub wzrokowymi.
+- Ocenione na ★ 4,9/5 przez ponad 2000 użytkowników: Zaufane przez rosnącą globalną społeczność.
+- Prywatność na pierwszym miejscu: Twoje dane głosowe są zabezpieczone i nigdy niewłaściwie wykorzystywane. Zobacz naszą politykę: https://saypi.ai/legal/privacy
 
-Doświadcz przyszłości interakcji AI umożliwiającej korzystanie z głosu. Pobierz Say, Pi już dziś!
+ZACZNIJ W KILKA SEKUND
+1. Zainstaluj rozszerzenie.
+2. Otwórz pi.ai lub claude.ai.
+3. Kliknij przycisk połączenia i mów. To wszystko.
+
+Zacznij rozmawiać z AI w naturalny sposób — zainstaluj Say, Pi i doświadcz przyszłości konwersacji.

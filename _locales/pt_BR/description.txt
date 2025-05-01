@@ -1,20 +1,39 @@
-Transforme suas conversas com o Pi, o revolucionário chatbot de IA da Inflection AI. Diga, Pi é sua extensão de navegador essencial, capacitando você a se comunicar com Pi usando sua voz, de forma simples e em vários idiomas.
+Say, Pi transforma suas conversas com Pi e Claude em experiências suaves e controladas por voz.  
+Basta tocar no botão de chamada, falar como você falaria com uma pessoa e receber respostas faladas realistas.  
+Ideal para multitarefa, acessibilidade ou para quem pensa melhor em voz alta.
 
-Principais Recursos:
 
-- Conversas sem Uso das Mãos: Converse com o Pi usando apenas sua voz, perfeito para multitarefas ou quando digitar não é conveniente.
-- Precisão e Velocidade Incomparáveis: Aproveitando a implementação mais rápida do mundo da tecnologia Whisper da OpenAI, Diga, Pi oferece reconhecimento de fala inigualável e transcrições super-rápidas.
-- Potência Multilíngue: Comunique-se sem problemas em 29 idiomas, com vozes realistas e aprimoradas como Paola e Joey.
-- Detecção Inteligente do Fim da Fala: Diga, Pi sabe quando você terminou de falar, garantindo que seus pensamentos sejam capturados completamente.
-- Modos Imersivo e Desktop: Escolha como deseja interagir – veja sua conversa em texto ou mergulhe em uma experiência sem distrações.
-- Modo Escuro: Proteja seus olhos com um tema escuro confortável.
-- Disponibilidade Global: Use Diga, Pi no macOS, Windows, Android e iOS.
+PLANO GRATUITO – EXPERIMENTE INSTANTANEAMENTE, SEM NECESSIDADE DE CONTA
+- Fale em vez de digitar: Converse com Pi e Claude usando reconhecimento de voz alimentado por Whisper, que sabe quando você terminou de falar.  
+- Preciso e Rápido: Desfrute de uma transcrição de voz precisa, mesmo com sotaques e ruído de fundo.  
+- Ouça a Voz Real do Pi: Respostas em voz natural nos estilos incorporados do Pi.  
+- Layouts Flexíveis: Use modo imersivo em tela cheia ou modo de chat padrão.  
+- Suporte ao Modo Escuro: Design agradável aos olhos que se integra à interface do Pi.  
+- Funciona em Todos os Lugares: Mac, Windows, Linux, Android, iOS – tudo coberto.
 
-Por Que Escolher Diga, Pi:
 
-- Melhore a Acessibilidade: Capacite usuários com deficiências visuais ou motoras a interagir com Pi sem dificuldades.
-- Aumente a Produtividade: Multitarefa, tome notas ou faça brainstorming de ideias mantendo suas mãos livres.
-- Expanda as Capacidades do Pi: Desbloqueie conversas multilíngues e explore uma variedade de vozes realistas.
-- Junte-se à Comunidade: Faça parte de uma base de usuários ativa e solidária que está moldando o futuro de Diga, Pi.
+SAY, PI PREMIUM – DESTRAVE A EXPERIÊNCIA COMPLETA
+Sua voz, seu idioma, sua IA – em todos os seus dispositivos.  
+- Suporte a Claude & Pi: Troca perfeita entre os principais assistentes de IA.  
+- Respostas Realistas em 32+ Idiomas: Impulsionado por ElevenLabs, elaborado para soar natural no seu idioma.  
+- Limites de Uso Aumentados: Mais tempo para falar, mais tempo para ouvir.  
+- Uma Conta, em Todos os Lugares: O Premium o acompanha em plataformas e navegadores.
 
-Experimente o futuro da interação com IA habilitada por voz. Baixe o Diga, Pi hoje mesmo!
+Consulte os preços em: https://saypi.ai/pricing
+
+
+POR QUE MILHARES AMAM SAY, PI
+- Aumente Sua Produtividade: Tome notas, gere ideias ou rascunhos mantendo as mãos livres.  
+- Fale Qualquer Idioma: Suporte multilíngue com troca suave de idioma no meio da conversa.  
+- Construído para Acessibilidade: Projetado com inclusão em mente – ótimo para usuários com desafios motores ou visuais.  
+- Avaliado com ★ 4,9/5 por mais de 2.000 Usuários: Confiado por uma comunidade global em crescimento.  
+- Privacidade em Primeiro Lugar: Seus dados de voz são seguros e nunca mal utilizados. Veja nossa política em: https://saypi.ai/legal/privacy
+
+
+COMECE EM SEGUNDOS
+1. Instale a extensão.  
+2. Abra pi.ai ou claude.ai.  
+3. Clique no botão de chamada e fale. É isso.
+
+
+Comece a conversar com IA de forma natural – instale Say, Pi e experimente o futuro da conversa.

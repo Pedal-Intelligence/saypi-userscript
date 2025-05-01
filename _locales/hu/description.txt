@@ -1,20 +1,39 @@
-Alakítsa át beszélgetéseit a Pi-vel, az Inflection AI forradalmi AI chatbotjával! A Say, Pi az Ön elengedhetetlen böngészőbővítménye, amely lehetővé teszi, hogy hangját használva, erőfeszítés nélkül és több nyelven kommunikáljon Pi-vel.
+A Say, Pi zökkenőmentes, hangalapú élménnyé alakítja a beszélgetéseket Pi-vel és Claude-dal. 
+Csak koppintson a hívás gombra, beszéljen úgy, mint egy emberrel, és kapjon élethű, beszélt válaszokat. 
+Tökéletes többfeladatos munkavégzéshez, a hozzáférhetőség növeléséhez, vagy bárkinek, aki jobban gondolkodik hangosan.
 
-Főbb jellemzők:
 
-- Kéz nélküli beszélgetések: Csak a hangját használja a Pi-vel való csevegéshez, ami tökéletes a többfeladatossághoz vagy ha a gépelés nem kényelmes.
-- Páratlan pontosság és sebesség: A világ leggyorsabb OpenAI Whisper technológia implementálásával a Say, Pi páratlan beszédfelismerést és villámgyors átiratokat kínál.
-- Többnyelvű erőmű: Zökkenőmentes kommunikáció 29 nyelven, valósághű, fejlett hangokkal, mint például Paola és Joey.
-- Intelligens beszédvég észlelés: A Say, Pi tudja, mikor fejezte be a beszédet, biztosítva, hogy gondolatai teljes egészében rögzüljenek.
-- Immerszív és asztali módok: Válassza ki, hogyan szeretne kommunikálni – lássa beszélgetését szövegként, vagy merüljön el egy zavarómentes élményben.
-- Sötét mód: Óvja szemeit egy kényelmes sötét témával.
-- Globális elérhetőség: Használja a Say, Pi-t macOS, Windows, Android és iOS platformokon.
+INGYENES TERV – PRÓBÁLJA KI AZONNAL, NEM SZÜKSÉGES FIÓK
+- Beszéljen a Gépelés Helyett: Beszéljen Pi-vel és Claude-dal Whisper-alapú hangfelismeréssel, amely tudja, mikor fejezte be a beszédet.  
+- Pontos és Gyors: Élvezze a nagy pontosságú beszédfelismerést, még akcentusokkal és háttérzajjal is.  
+- Hallja Pi Valódi Hangját: Természetes hangú válaszok Pi beépített stílusaiban.  
+- Rugalmas Elrendezések: Használja a teljes képernyős magával ragadó módot vagy a standard csevegő nézetet.  
+- Sötét Mód Támogatás: Szemkímélő kialakítás, amely beleolvad Pi felületébe.  
+- Mindenhol Működik: Mac, Windows, Linux, Android, iOS – mindenhol elérhető.
 
-Miért válassza a Say, Pi-t:
 
-- Növelje a hozzáférhetőséget: Tegye lehetővé a vizuális vagy motoros késztetésekkel rendelkező felhasználók számára, hogy gond nélkül kommunikáljanak Pi-vel.
-- Növelje a termelékenységet: Végezzen több feladatot egyszerre, készítsen jegyzeteket vagy agyaljon ötleteken úgy, hogy közben szabadon maradnak a kezei.
-- Bővítse Pi képességeit: Nyissa meg a többnyelvű beszélgetéseket, és fedezzen fel különféle valósághű hangokat.
-- Csatlakozzon a közösséghez: Legyen része egy aktív és támogató felhasználói bázisnak, amely formálja a Say, Pi jövőjét.
+SAY, PI PRÉMIUM – NYISSON MEG A TELJES ÉLMÉNYT
+Az Ön hangja, az Ön nyelve, az Ön AI-ja - minden eszközén.  
+- Claude & Pi Támogatás: Zökkenőmentes váltás a legjobb AI asszisztensek között.  
+- Élethű Válaszok 32+ Nyelven: ElevenLabs által támogatott, természetes hangzású, az Ön nyelvén.  
+- Nagyobb Használati Korlátok: Több beszélgetési idő, több hallgatási idő.  
+- Egy Fiók, Mindenhol: A prémium követi Önt minden platformon és böngészőben.
 
-Tapasztalja meg a hanggal vezérelt AI interakció jövőjét. Töltse le a Say, Pi-t még ma!
+Árlista megtekintése: https://saypi.ai/pricing
+
+
+MIÉRT SZERETIK EZREK A SAY, PI-T
+- Növelje a Munkafolyamatát: Jegyzetelés, ötletelés vagy vázlatok készítése kézhasználat nélkül.  
+- Beszéljen Bármely Nyelven: Többnyelvű támogatás, a beszélgetés közbeni zökkenőmentes váltással.  
+- Hozzáférhetőségre Tervezve: Befogadást szem előtt tartva tervezett – remek választás mozgás- vagy látáskihívásokkal küzdő felhasználóknak.  
+- Értékelés ★ 4,9/5 Több mint 2000 Felhasználó Által: Megbízható, növekvő globális közösség által.  
+- Adatvédelem Először: Az Ön hangadatai biztonságban vannak és soha nem kerülnek visszaélésszerű felhasználásra. Adatvédelmi irányelveinket megtekintheti itt: https://saypi.ai/legal/privacy
+
+
+KEZDJE EL PÁR MÁSODPERC ALATT
+1. Telepítse a bővítményt.  
+2. Nyissa meg a pi.ai vagy a claude.ai oldalt.  
+3. Kattintson a hívás gombra és beszéljen. Ennyi az egész.
+
+
+Kezdje el a természetes módon folytatni a beszélgetéseket mesterséges intelligenciával - telepítse a Say, Pi-t, és tapasztalja meg a beszélgetés jövőjét.
