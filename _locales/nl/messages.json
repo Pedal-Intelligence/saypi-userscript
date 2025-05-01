@@ -4,7 +4,7 @@
     "description": "De naam van de applicatie."
   },
   "appDescription": {
-    "message": "Uw stemaangepanteerde metgezel voor PI en Claude AI",
+    "message": "Spraakcontrole voor PI en Claude. \nSpreek op natuurlijke wijze, krijg levensechte antwoorden. \nZeg het gewoon.",
     "description": "De beschrijving van de applicatie."
   },
   "callInProgress": {

@@ -13,7 +13,7 @@
   },
   "appDescription": {
     "description": "Uygulamanın açıklaması.",
-    "message": "Pi ve Claude AI için sesle çalışan refakatçiniz"
+    "message": "Pi ve Claude için ses kontrolü. \nDoğal olarak konuşun, gerçekçi cevaplar alın. \nSadece söyle."
   },
   "appName": {
     "description": "Uygulamanın adı.",

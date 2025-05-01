@@ -4,7 +4,7 @@
     "description": "Az alkalmazás neve."
   },
   "appDescription": {
-    "message": "A hangos társod Pi és Claude AI számára",
+    "message": "Hangvezérlés Pi és Claude számára. \nBeszéljen természetesen, kapjon élethű válaszokat. \nCsak mondd meg.",
     "description": "Az alkalmazás leírása."
   },
   "callInProgress": {

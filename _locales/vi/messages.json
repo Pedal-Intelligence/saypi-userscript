@@ -4,7 +4,7 @@
     "description": "Tên của ứng dụng."
   },
   "appDescription": {
-    "message": "Người bạn đồng hành chạy bằng giọng nói của bạn cho Pi và Claude AI",
+    "message": "Kiểm soát giọng nói cho PI và Claude. \nNói một cách tự nhiên, nhận được câu trả lời giống như thật. \nChỉ cần nói nó.",
     "description": "Mô tả của ứng dụng."
   },
   "callInProgress": {

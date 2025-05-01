@@ -1,7 +1,7 @@
 {
   "appDescription": {
     "description": "وصف التطبيق.",
-    "message": "رفيقك الذي يعمل بالصوت لـ PI و Claude AI"
+    "message": "التحكم الصوتي لـ PI و كلود. \nالتحدث بشكل طبيعي ، احصل على ردود نابضة بالحياة. \nفقط قل ذلك."
   },
   "appName": {
     "description": "اسم التطبيق.",

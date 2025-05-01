@@ -4,7 +4,7 @@
     "description": "Der Name der Anwendung."
   },
   "appDescription": {
-    "message": "Ihr sprachantrieber Begleiter für PI und Claude AI",
+    "message": "Sprachkontrolle für Pi und Claude. \nSprechen Sie natürlich, erhalten Sie lebensechte Antworten. \nSag es einfach.",
     "description": "Die Beschreibung der Anwendung."
   },
   "callInProgress": {

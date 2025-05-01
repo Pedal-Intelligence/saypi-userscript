@@ -13,7 +13,7 @@
   },
   "appDescription": {
     "description": "Popis aplikácie.",
-    "message": "Váš hlasový spoločník pre Pi a Claude Ai"
+    "message": "Hlasové ovládanie pre Pi a Claude. \nHovorte prirodzene, získajte záchranné odpovede. \nLen to povedz."
   },
   "appName": {
     "description": "Názov aplikácie.",

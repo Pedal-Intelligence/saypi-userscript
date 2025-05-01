@@ -13,7 +13,7 @@
   },
   "appDescription": {
     "description": "Opis aplikacije.",
-    "message": "Vaš suputnik za glasove za Pi i Claude Ai"
+    "message": "Glasovna kontrola za PI i Claude. \nGovorite prirodno, dobijte životne odgovore. \nSamo to reci."
   },
   "appName": {
     "description": "Naziv aplikacije.",

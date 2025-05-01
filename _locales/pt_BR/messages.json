@@ -4,7 +4,7 @@
     "description": "O nome da aplicação."
   },
   "appDescription": {
-    "message": "Seu companheiro de voz para Pi e Claude Ai",
+    "message": "Controle de voz para Pi e Claude. \nFale naturalmente, obtenha respostas realistas. \nApenas diga isso.",
     "description": "A descrição da aplicação."
   },
   "callInProgress": {

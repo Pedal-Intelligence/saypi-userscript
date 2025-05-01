@@ -13,7 +13,7 @@
   },
   "appDescription": {
     "description": "Beskrivning av applikationen.",
-    "message": "Din röstdrivna följeslagare för PI och Claude Ai"
+    "message": "Röstkontroll för PI och Claude. \nTala naturligt, få livtroiga svar. \nSäg bara det."
   },
   "appName": {
     "description": "Namnet på applikationen.",

@@ -4,7 +4,7 @@
     "description": "The name of the application."
   },
   "appDescription": {
-    "message": "Talk to Pi & Claude with your voice. Hands-free, accurate speech-to-text, natural replies in 30+ languages. Just say it.",
+    "message": "Voice control for Pi and Claude. Speak naturally, get lifelike replies. Just say it.",
     "description": "The description of the application."
   },
   "exitImmersiveModeLong": {

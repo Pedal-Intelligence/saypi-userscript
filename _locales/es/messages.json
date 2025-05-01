@@ -199,7 +199,7 @@
   },
   "appDescription": {
     "description": "La descripción de la aplicación.",
-    "message": "Tu compañero a prueba de voz para Pi y Claude Ai"
+    "message": "Control de voz para Pi y Claude. \nHabla naturalmente, obtenga respuestas realistas. \nSolo dilo."
   },
   "appName": {
     "description": "El nombre de la aplicación.",

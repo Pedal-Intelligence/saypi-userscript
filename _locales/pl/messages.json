@@ -207,7 +207,7 @@
   },
   "appDescription": {
     "description": "Opis aplikacji.",
-    "message": "Twój towarzysz napędzany głosem PI i Claude AI"
+    "message": "Kontrola głosu dla PI i Claude. \nMów naturalnie, zdobądź realistyczne odpowiedzi. \nPo prostu to powiedz."
   },
   "appName": {
     "description": "Nazwa aplikacji.",
