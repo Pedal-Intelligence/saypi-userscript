@@ -17,7 +17,7 @@
   },
   "appName": {
     "description": "Sovelluksen nimi.",
-    "message": "Sano, Pi"
+    "message": "Say, Pi"
   },
   "applicationStatusIssue": {
     "description": "Viesti, joka näytetään kun sovelluksessa on ongelmia.",

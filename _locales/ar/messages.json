@@ -5,7 +5,7 @@
   },
   "appName": {
     "description": "اسم التطبيق.",
-    "message": "قل، باي"
+    "message": "Say, Pi"
   },
   "assistantIsListening": {
     "description": "الرسالة المعروضة عندما يكون المساعد يستمع للكلام.",

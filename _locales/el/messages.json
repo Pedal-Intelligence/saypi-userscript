@@ -17,7 +17,7 @@
   },
   "appName": {
     "description": "Το όνομα της εφαρμογής.",
-    "message": "Πες, Πι"
+    "message": "Say, Pi"
   },
   "applicationStatusIssue": {
     "description": "Μήνυμα προς εμφάνιση όταν η εφαρμογή αντιμετωπίζει προβλήματα.",

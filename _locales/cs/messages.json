@@ -17,7 +17,7 @@
   },
   "appName": {
     "description": "Název aplikace.",
-    "message": "Řekněte, Pi"
+    "message": "Say, Pi"
   },
   "applicationStatusIssue": {
     "description": "Zpráva k zobrazení, když aplikace má problémy.",

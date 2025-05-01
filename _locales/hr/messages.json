@@ -17,7 +17,7 @@
   },
   "appName": {
     "description": "Naziv aplikacije.",
-    "message": "Reci, Pi"
+    "message": "Say, Pi"
   },
   "applicationStatusIssue": {
     "description": "Poruka za prikaz kada aplikacija ima problema.",

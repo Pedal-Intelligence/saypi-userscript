@@ -211,7 +211,7 @@
   },
   "appName": {
     "description": "Nazwa aplikacji.",
-    "message": "Powiedz, Pi"
+    "message": "Say, Pi"
   },
   "applicationStatusIssue": {
     "description": "Komunikat wyświetlany, gdy w aplikacji występują problemy.",

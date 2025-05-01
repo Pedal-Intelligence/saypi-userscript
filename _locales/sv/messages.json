@@ -17,7 +17,7 @@
   },
   "appName": {
     "description": "Namnet på applikationen.",
-    "message": "Säg, Pi"
+    "message": "Say, Pi"
   },
   "applicationStatusIssue": {
     "description": "Meddelande att visa när applikationen upplever problem.",

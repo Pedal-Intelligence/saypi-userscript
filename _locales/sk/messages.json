@@ -17,7 +17,7 @@
   },
   "appName": {
     "description": "Názov aplikácie.",
-    "message": "Povedz, Pi"
+    "message": "Say, Pi"
   },
   "applicationStatusIssue": {
     "description": "Správa na zobrazenie, keď aplikácia má problémy.",

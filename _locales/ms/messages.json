@@ -17,7 +17,7 @@
   },
   "appName": {
     "description": "Nama aplikasi.",
-    "message": "Katakan, Pi"
+    "message": "Say, Pi"
   },
   "applicationStatusIssue": {
     "description": "Mesej untuk dipaparkan apabila aplikasi mengalami masalah.",

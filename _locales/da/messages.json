@@ -17,7 +17,7 @@
   },
   "appName": {
     "description": "Navnet på applikationen.",
-    "message": "Sig, Pi"
+    "message": "Say, Pi"
   },
   "applicationStatusIssue": {
     "description": "Besked til visning, når applikationen oplever problemer.",

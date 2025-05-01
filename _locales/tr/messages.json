@@ -17,7 +17,7 @@
   },
   "appName": {
     "description": "Uygulamanın adı.",
-    "message": "Dey, Pi"
+    "message": "Say, Pi"
   },
   "applicationStatusIssue": {
     "description": "Uygulamanın sorun yaşadığı zaman gösterilecek mesaj.",
