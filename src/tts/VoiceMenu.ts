@@ -36,14 +36,12 @@ export abstract class VoiceSelector {
    */
   protected registerAuthenticationChangeHandler(): void {
     EventBus.on('saypi:auth:status-changed', (isAuthenticated) => {
-      if (isAuthenticated) {
-        // User just logged in, refresh the voice selector
-        console.log("Authentication status changed to authenticated, refreshing voice selector");
-        const id = this.getId();
-        const voiceSelector = document.getElementById(id);
-        if (voiceSelector) {
-          this.addVoicesToSelector(voiceSelector as HTMLElement);
-        }
+      // Authentication status changed, refresh the voice selector
+      console.log(`User has logged ${isAuthenticated ? "in" : "out"}, refreshing voice selector`);
+      const id = this.getId();
+      const voiceSelector = document.getElementById(id);
+      if (voiceSelector) {
+        this.addVoicesToSelector(voiceSelector as HTMLElement);
       }
     });
   }

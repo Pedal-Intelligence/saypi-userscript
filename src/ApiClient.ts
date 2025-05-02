@@ -24,11 +24,9 @@ export async function callApi(
   
   // If authentication is required or a token exists, add it
   const authHeader = jwtManager.getAuthHeader();
+  // if no auth header is set here and this is an authenticated endpoint, expect a 401 response
   if (authHeader) {
     headers.set('Authorization', authHeader);
-    console.debug(`Adding auth header to request: ${url}`);
-  } else {
-    console.warn(`No auth header available for request: ${url}`);
   }
 
   // For local development, ensure credentials are included
@@ -49,10 +47,7 @@ export async function callApi(
 
   const response = await fetch(url, requestOptions);
 
-  // Log response status for debugging
-  console.debug(`API response from ${url}: ${response.status}`);
-
-  // If we get a 401 or 403 and have a token, try to refresh and retry once
+  // If we get a 401 or 403 in response to an authenticated request, try to refresh the token and retry once
   if ((response.status === 401 || response.status === 403) && authHeader) {
     console.debug('Received 401/403, attempting to refresh token...');
     await jwtManager.refresh(true);

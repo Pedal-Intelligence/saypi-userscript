@@ -268,8 +268,8 @@ class UserPreferenceModule {
               try {
                 voice = await tts.getVoiceById(result.voiceId, chatbot);
               } catch (error: any) {
-                // Voice not found for the current chatbot or other error occurred
-                console.warn(`Voice with ID ${result.voiceId} not found for ${chatbot?.getName() || "current chatbot"}`);
+                // Voice not found for the current chatbot or other error occurred - can happen if the voice belongs to a different chatbot
+                console.info(`Voice with ID ${result.voiceId} not found for ${chatbot?.getName() || "current chatbot"}`);
                 voice = null;
               }
             }
