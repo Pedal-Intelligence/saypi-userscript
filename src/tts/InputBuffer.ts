@@ -184,6 +184,9 @@ export class InputBuffer {
       clearTimeout(this.streamTimeout);
     }
 
+    // Add a small delay to ensure prior flushes reach the server
+    await new Promise(resolve => setTimeout(resolve, 75));
+    
     // Flush any remaining text before closing
     await this.flushBuffer(this.buffer, "close");
     this.buffer = ""; // Ensure buffer is empty after closing
