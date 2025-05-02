@@ -185,12 +185,15 @@ export class InputBuffer {
     }
 
     // Add a small delay to ensure prior flushes reach the server
-    await new Promise(resolve => setTimeout(resolve, 75));
-    
-    // Flush any remaining text before closing
-    await this.flushBuffer(this.buffer, "close");
-    this.buffer = ""; // Ensure buffer is empty after closing
-    console.debug(`Buffer closed for UUID: ${this.uuid}`);
+    return new Promise<void>((resolve) => {
+      setTimeout(async () => {
+        // Flush any remaining text before closing
+        await this.flushBuffer(this.buffer, "close");
+        this.buffer = ""; // Ensure buffer is empty after closing
+        console.debug(`Buffer closed for UUID: ${this.uuid}`);
+        resolve();
+      }, 75);
+    });
   }
 
   endInput(): void {

@@ -88,6 +88,8 @@ describe('InputBuffer', () => {
 
   it('should close buffer on endInput', () => {
     inputBuffer.endInput();
+    const closeAfterMs = 100;
+    vi.advanceTimersByTime(closeAfterMs);
 
     expect(inputBuffer.hasEnded()).toBe(true);
     expect(ttsService.addTextToSpeechStream).toHaveBeenCalledWith(uuid, '');
