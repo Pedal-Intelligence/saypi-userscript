@@ -110,11 +110,9 @@ class ButtonModule {
           if (mutation.attributeName === "class") {
             if (document.documentElement.classList.contains("immersive-view")) {
               // view mode changed to 'immersive'
-              console.log("immersive view");
               this.updateIconContent(container);
             } else {
               // view mode changed to 'desktop'
-              console.log("desktop view");
               this.updateIconContent(container);
             }
           }

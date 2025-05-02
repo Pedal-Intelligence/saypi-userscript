@@ -26,6 +26,10 @@ export class TextToSpeechService {
     const appId = chatbot ? chatbot.getID() : ChatbotIdentifier.getAppId();
     const endpoint = `${this.serviceUrl}/voices?app=${appId}`;
     const response = await callApi(endpoint);
+    if (response.status === 401) {
+      // treat unauthenticated the same as "no voices"
+      return [];
+    }
     if (!response.ok) {
       throw new Error(`Failed to get voices: ${response.status}`);
     }

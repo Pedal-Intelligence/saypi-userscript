@@ -392,27 +392,42 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     });
   }
 
+  override populateVoices(voices: SpeechSynthesisVoiceRemote[], voiceSelector: HTMLElement): boolean {
+    // Remove previously created menu elements (if any) to prevent duplicates
+    if (this.menuButton && this.menuButton.parentElement === voiceSelector) {
+      voiceSelector.removeChild(this.menuButton);
+    }
+    if (this.menuContent && this.menuContent.parentElement === voiceSelector) {
+      voiceSelector.removeChild(this.menuContent);
+    }
+
+    // Recreate the menu button and content from scratch
+    this.menuButton = this.createVoiceButton(null);
+    voiceSelector.appendChild(this.menuButton);
+
+    this.menuContent = this.createVoiceMenu();
+    voiceSelector.appendChild(this.menuContent);
+
+    // Check if we have any voices available besides "Voice off"
+    const noVoicesAvailable = voices.length === 0;
+
+    // Add "Voice off" option with appropriate messaging
+    const voiceOffItem = this.createMenuItem(null, noVoicesAvailable);
+    this.menuContent.appendChild(voiceOffItem);
+
+    // Add available voices
+    voices.forEach((voice) => {
+      const menuItem = this.createMenuItem(voice);
+      this.menuContent.appendChild(menuItem);
+    });
+
+    return !noVoicesAvailable;
+  }
+
   private initializeVoiceSelector(chatbot: Chatbot): void {
     const speechSynthesis = SpeechSynthesisModule.getInstance();
     speechSynthesis.getVoices(chatbot).then((voices) => {
-      this.menuButton = this.createVoiceButton(null);
-      this.element.appendChild(this.menuButton);
-
-      this.menuContent = this.createVoiceMenu();
-      this.element.appendChild(this.menuContent);
-
-      // Check if we have any voices available besides "Voice off"
-      const noVoicesAvailable = voices.length === 0;
-
-      // Add "Voice off" option with appropriate messaging
-      const voiceOffItem = this.createMenuItem(null, noVoicesAvailable);
-      this.menuContent.appendChild(voiceOffItem);
-
-      // Add available voices
-      voices.forEach((voice) => {
-        const menuItem = this.createMenuItem(voice);
-        this.menuContent.appendChild(menuItem);
-      });
+      this.populateVoices(voices, this.element);
 
       // Set initial selected voice
       this.userPreferences.getVoice(chatbot).then((voice) => {

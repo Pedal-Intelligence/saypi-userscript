@@ -24,10 +24,29 @@ export abstract class VoiceSelector {
     this.chatbot = chatbot;
     this.userPreferences = userPreferences;
     this.element = element;
+    this.registerAuthenticationChangeHandler();
   }
 
   abstract getId(): string;
   abstract getButtonClasses(): string[];
+
+  /**
+   * Registers an event listener to handle authentication status changes.
+   * This allows the voice menu to update dynamically when a user signs in.
+   */
+  protected registerAuthenticationChangeHandler(): void {
+    EventBus.on('saypi:auth:status-changed', (isAuthenticated) => {
+      if (isAuthenticated) {
+        // User just logged in, refresh the voice selector
+        console.log("Authentication status changed to authenticated, refreshing voice selector");
+        const id = this.getId();
+        const voiceSelector = document.getElementById(id);
+        if (voiceSelector) {
+          this.addVoicesToSelector(voiceSelector as HTMLElement);
+        }
+      }
+    });
+  }
 
   // Voice selection management
   registerVoiceChangeHandler(menu: HTMLElement): boolean {
