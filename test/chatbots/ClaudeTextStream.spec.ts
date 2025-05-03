@@ -69,4 +69,26 @@ test("getNestedText skips text inside elements with the 'transition-all' class",
 
   expect(extracted).toBe("Hello World");
   expect(extracted.includes("THIS SHOULD NOT BE READ")).toBe(false);
+});
+
+test("getNestedText skips text inside <pre> code blocks", async () => {
+  const { ClaudeTextStream } = await importClaude();
+
+  const root = document.createElement("div");
+  root.appendChild(document.createTextNode("Start "));
+
+  const pre = document.createElement("pre");
+  pre.textContent = "console.log('should not read');";
+  root.appendChild(pre);
+
+  root.appendChild(document.createTextNode(" End"));
+
+  const stream = new ClaudeTextStream(root, { includeInitialText: false });
+  const extracted = stream.getNestedText(root).trim();
+
+  // Collapse multiple whitespace to single space for comparison
+  const collapsed = extracted.replace(/\s+/g, " ");
+
+  expect(collapsed).toBe("Start End");
+  expect(collapsed.includes("console.log")).toBe(false);
 }); 

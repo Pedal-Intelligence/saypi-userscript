@@ -290,11 +290,18 @@ class ClaudeTextBlockCapture extends ElementTextStream {
     // Any element bearing one of these classes – or a descendant of such an element – should
     // be ignored for the purposes of TTS.  Currently only `transition-all` is required, but
     // the Set makes it trivial to extend.
-    const BLOCKED_CLASSES = new Set(["transition-all", "transition-colors"]);
+    const BLOCKED_CLASSES = new Set(["transition-all", "transition-colors", "code-block__code"]);
+    const SKIPPED_ELEMENTS = new Set(["pre"]); // code blocks and other pre-formatted text are skipped
 
-    // If the current node is an Element, check whether it carries a blocked class.
+    // If the current node is an Element, check whether it should be skipped.
     if (node.nodeType === Node.ELEMENT_NODE) {
       const el = node as HTMLElement;
+
+      if (SKIPPED_ELEMENTS.has(el.tagName.toLowerCase())) {
+        return "";
+      }
+
+      // Skip any element bearing a blocked class.
       for (const cls of el.classList) {
         if (BLOCKED_CLASSES.has(cls)) {
           return ""; // Skip this entire subtree.
