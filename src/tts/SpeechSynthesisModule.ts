@@ -33,9 +33,12 @@ async function getUtteranceURI(speech: SpeechUtterance, appId?: string): Promise
   if (speech.uri.includes("?")) {
     return speech.uri;
   } else {
-    // Use provided appId or get it from ChatbotIdentifier
-    const app = appId || ChatbotIdentifier.getAppId();
-    return `${speech.uri}?voice_id=${speech.voice.id}&lang=${speech.lang}&app=${app}`;
+    // Use appId only if provided
+    if (appId) {
+      return `${speech.uri}?voice_id=${speech.voice.id}&lang=${speech.lang}&app=${appId}`;
+    } else {
+      return `${speech.uri}?voice_id=${speech.voice.id}&lang=${speech.lang}`;
+    }
   }
 }
 
@@ -149,7 +152,8 @@ class SpeechSynthesisModule {
   async createSpeech(
     text: string,
     stream: boolean = false,
-    lang?: string
+    lang?: string,
+    chatbot?: Chatbot
   ): Promise<SpeechUtterance> {
     const preferedVoice: SpeechSynthesisVoiceRemote | null =
       await this.userPreferences.getVoice();
@@ -163,7 +167,8 @@ class SpeechSynthesisModule {
       text,
       preferedVoice,
       preferedLang,
-      stream
+      stream,
+      chatbot
     );
   }
 
@@ -175,16 +180,17 @@ class SpeechSynthesisModule {
   }
 
   async createSpeechStreamOrPlaceholder(
-    provider: AudioProvider
+    provider: AudioProvider,
+    chatbot?: Chatbot
   ): Promise<SpeechUtterance> {
     if (provider === audioProviders.SayPi) {
-      return this.createSpeechStream();
+      return this.createSpeechStream(chatbot);
     } else {
       return this.createSpeechPlaceholder(provider);
     }
   }
 
-  async createSpeechStream(): Promise<SpeechUtterance> {
+  async createSpeechStream(chatbot?: Chatbot): Promise<SpeechUtterance> {
     const preferedVoice: SpeechSynthesisVoiceRemote | null =
       await this.userPreferences.getVoice();
     if (!preferedVoice) {
@@ -195,7 +201,8 @@ class SpeechSynthesisModule {
     const utterance = this.audioStreamManager.createStream(
       uuid,
       preferedVoice,
-      preferedLang
+      preferedLang,
+      chatbot
     );
 
     return utterance;
@@ -219,7 +226,7 @@ class SpeechSynthesisModule {
     EventBus.emit("saypi:tts:speechStreamEnded", utterance);
   }
 
-  speak(speech: SpeechUtterance): void {
+  speak(speech: SpeechUtterance, chatbot?: Chatbot): void {
     if (isPlaceholderUtterance(speech)) {
       console.warn("Cannot speak a placeholder");
       return;
@@ -230,7 +237,8 @@ class SpeechSynthesisModule {
     }
     console.debug(`Speaking: ${speech.toString()}`);
     // Start audio playback with utterance.uri as the audio source
-    getUtteranceURI(speech).then((uri) => {
+    const appId = chatbot ? chatbot.getID() : ChatbotIdentifier.getAppId();
+    getUtteranceURI(speech, appId).then((uri) => {
       EventBus.emit("audio:load", { url: uri }); // indirectly calls AudioModule.loadAudio
     });
   }

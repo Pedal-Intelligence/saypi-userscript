@@ -1,6 +1,7 @@
 import { TextToSpeechService } from "./TextToSpeechService";
 import { InputBuffer } from "./InputBuffer";
 import { SpeechSynthesisVoiceRemote, SpeechUtterance } from "./SpeechModel";
+import { Chatbot } from "../chatbots/Chatbot";
 
 const STREAM_TIMEOUT_MS = 19000; // end streams after prolonged inactivity (<= 20s)
 const BUFFER_TIMEOUT_MS = 1500; // flush buffers after inactivity
@@ -14,14 +15,16 @@ export class AudioStreamManager {
   async createStream(
     uuid: string,
     voice: SpeechSynthesisVoiceRemote,
-    lang: string
+    lang: string,
+    chatbot?: Chatbot
   ): Promise<SpeechUtterance> {
     const utterance = await this.ttsService.createSpeech(
       uuid,
       START_OF_SPEECH_MARKER,
       voice,
       lang,
-      true
+      true,
+      chatbot
     );
 
     return utterance;

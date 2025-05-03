@@ -3,6 +3,7 @@ import { TextToSpeechService } from "../../src/tts/TextToSpeechService";
 import { mockVoices } from "../data/Voices";
 import { audioProviders } from "../../src/tts/SpeechModel";
 import * as ApiClient from "../../src/ApiClient";
+import { Chatbot } from "../../src/chatbots/Chatbot";
 
 // Mock the callApi function
 vi.mock("../../src/ApiClient", () => ({
@@ -52,22 +53,27 @@ describe("TextToSpeechService", () => {
       id: "uuid",
       lang: "en-US",
       voice: mockVoice,
-      uri: `http://example.com/speak/uuid?voice_id=${mockVoice.id}&lang=en-US`,
+      uri: `http://example.com/speak/uuid?voice_id=${mockVoice.id}&lang=en-US&app=mockbot`,
       provider: audioProviders.SayPi,
     };
     const mockResponse = new Response(JSON.stringify(expectedSpeech), { status: 200 });
     (ApiClient.callApi as any).mockResolvedValue(mockResponse);
+
+    const mockChatbot = {
+      getID: vi.fn().mockReturnValue("mockbot"),
+    } as unknown as Chatbot;
 
     const actualSpeech = await textToSpeechService.createSpeech(
       "uuid",
       "Hello",
       mockVoice,
       "en-US",
-      false
+      false,
+      mockChatbot
     );
 
     const call = (ApiClient.callApi as any).mock.calls[0];
-    expect(call[0]).toBe(`http://example.com/speak/uuid?voice_id=${mockVoice.id}&lang=en-US`);
+    expect(call[0]).toBe(`http://example.com/speak/uuid?voice_id=${mockVoice.id}&lang=en-US&app=mockbot`);
     expect(JSON.parse(call[1].body)).toEqual({ voice: mockVoice.id, text: "Hello", lang: "en-US", sequenceNumber: 0 });
     expect(call[1].method).toBe("POST");
     expect(call[1].headers).toEqual({ "Content-Type": "application/json" });

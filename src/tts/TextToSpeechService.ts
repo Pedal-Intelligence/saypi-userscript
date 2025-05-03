@@ -47,16 +47,18 @@ export class TextToSpeechService {
     text: string,
     voice: SpeechSynthesisVoiceRemote,
     lang: string,
-    stream: boolean
+    stream: boolean,
+    chatbot?: Chatbot
   ): Promise<SpeechUtterance> {
     if (isPlaceholderUtterance(uuid)) {
       throw new Error("Cannot create speech from placeholder");
     }
     const voice_id = voice.id;
+    const appId = chatbot ? chatbot.getID() : ChatbotIdentifier.getAppId();
     const data = { voice: voice_id, text: text, lang: lang, sequenceNumber: 0};
     this.sequenceNumbers[uuid] = 0; // initialize sequence number for this utterance
     const baseUri = `${this.serviceUrl}/speak/${uuid}`;
-    const queryParams = `voice_id=${voice_id}&lang=${lang}`;
+    const queryParams = `voice_id=${voice_id}&lang=${lang}&app=${appId}`;
     let uri = stream
       ? `${baseUri}/stream?${queryParams}`
       : `${baseUri}?${queryParams}`;

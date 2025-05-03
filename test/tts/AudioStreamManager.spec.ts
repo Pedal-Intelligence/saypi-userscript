@@ -7,6 +7,7 @@ import {
   SpeechSynthesisVoiceRemote,
   SpeechUtterance,
 } from "../../src/tts/SpeechModel";
+import { Chatbot } from "../../src/chatbots/Chatbot";
 
 vi.mock("../../src/tts/TextToSpeechService");
 vi.useFakeTimers();
@@ -25,7 +26,9 @@ describe(
       id: "testId",
       price: 0,
       powered_by: "testProvider",
-    };
+      price_per_thousand_chars_in_usd: 0,
+      price_per_thousand_chars_in_credits: 0,
+    } as unknown as SpeechSynthesisVoiceRemote;
 
     beforeEach(() => {
       textToSpeechService = {
@@ -72,10 +75,15 @@ describe(
         mockUtterance
       );
 
+      const mockChatbot = {
+        getID: vi.fn().mockReturnValue("mockbot"),
+      } as unknown as Chatbot;
+
       const utterance = await audioStreamManager.createStream(
         "uuid",
         mockVoice,
-        "en-US"
+        "en-US",
+        mockChatbot
       );
 
       expect(textToSpeechService.createSpeech).toHaveBeenCalledWith(
@@ -83,7 +91,8 @@ describe(
         " ",
         mockVoice,
         "en-US",
-        true
+        true,
+        mockChatbot
       );
       expect(utterance).toEqual(mockUtterance);
     });
