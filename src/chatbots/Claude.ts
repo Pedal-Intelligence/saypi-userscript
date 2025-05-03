@@ -274,8 +274,45 @@ class ClaudeTextBlockCapture extends ElementTextStream {
     }
   }
 
-  getNestedText(node: HTMLElement): string {
-    return node.textContent ?? node.innerText ?? "";
+  /**
+   * Recursively gather text from the supplied DOM node while **excluding** any text that is
+   * contained within elements we do **not** want to read aloud (for example, Claude's
+   * tool-call UI such as Gmail search or Web search results).  These elements are currently
+   * identified by the Tailwind utility class `transition-all` but the logic is deliberately
+   * written so it can be extended with additional blocked class names in the future.
+   *
+   * The algorithm traverses the DOM tree depth-first, concatenating the textual content of
+   * text nodes and allowed element nodes, while *skipping* any branch whose root element
+   * matches one of the blocked classes.  This ensures that neither the container element
+   * nor any of its descendants contribute text to the final result.
+   */
+  getNestedText(node: Node): string {
+    // Any element bearing one of these classes – or a descendant of such an element – should
+    // be ignored for the purposes of TTS.  Currently only `transition-all` is required, but
+    // the Set makes it trivial to extend.
+    const BLOCKED_CLASSES = new Set(["transition-all", "transition-colors"]);
+
+    // If the current node is an Element, check whether it carries a blocked class.
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      const el = node as HTMLElement;
+      for (const cls of el.classList) {
+        if (BLOCKED_CLASSES.has(cls)) {
+          return ""; // Skip this entire subtree.
+        }
+      }
+    }
+
+    // If the node is a Text node, simply return its data.
+    if (node.nodeType === Node.TEXT_NODE) {
+      return node.textContent ?? "";
+    }
+
+    // Otherwise, recursively concatenate the text of child nodes.
+    let text = "";
+    node.childNodes.forEach((child) => {
+      text += this.getNestedText(child);
+    });
+    return text;
   }
 
   dataIsStreaming(element: HTMLElement | null): boolean {
@@ -707,4 +744,4 @@ class PlaceholderManager {
   }
 }
 
-export { ClaudeChatbot, ClaudePrompt };
+export { ClaudeChatbot, ClaudePrompt, ClaudeTextStream };
