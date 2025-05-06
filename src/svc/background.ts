@@ -1,4 +1,4 @@
-import { isFirefox } from "../UserAgentModule";
+import { isFirefox, isFirefoxAndroid } from "../UserAgentModule";
 import { config } from "../ConfigModule";
 import { jwtManager } from "../JwtManager";
 
@@ -193,7 +193,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === 'openPopup') {
     try {
       const isNotFirefox = !isFirefox();
-      if (isNotFirefox && chrome.action?.openPopup) {
+      if (isFirefoxAndroid()) {
+        chrome.runtime.openOptionsPage();
+      } else if (isNotFirefox && chrome.action?.openPopup) {
         // Default popup for Chrome on desktop
         chrome.action.openPopup();
       } else {
