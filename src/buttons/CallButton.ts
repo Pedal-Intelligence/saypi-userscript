@@ -260,23 +260,34 @@ class CallButton {
         const svgWidth = viewBox ? viewBox[2] : 80; // Default guess
         const svgHeight = viewBox ? viewBox[3] : 80; // Default guess
         const center = svgWidth / 2; // Use width for center X assuming square/circular
-        const radius = Math.min(svgWidth, svgHeight) / 2 * 0.9; // Outer radius factor
-        const strokeWidth = radius * 0.12; // Stroke width factor
-        const segmentRadius = radius - strokeWidth / 2; // Radius for the center of the stroke
+        const radius = Math.min(svgWidth, svgHeight) / 2 * 0.9; // Outer radius factor for the pie wedges
+        const segmentRadius = radius; // For filled wedges, use the full radius
 
         const gap = 1.5; // Gap between segments in degrees
 
         let anglePerSegment = 0;
         if (totalSegments > 0) {
-            const totalGap = totalSegments * gap;
-            if (totalGap < 360) {
-                anglePerSegment = (360 - totalGap) / totalSegments;
+            if (totalSegments === 1) {
+                anglePerSegment = 360; // Single segment covers the whole circle
             } else {
-                 anglePerSegment = 0;
-                 console.warn("Too many segments for the given gap size.");
+                const totalGap = totalSegments * gap;
+                if (totalGap < 360) {
+                    anglePerSegment = (360 - totalGap) / totalSegments;
+                } else {
+                    anglePerSegment = 0;
+                    console.warn("Too many segments for the given gap size.");
+                }
             }
         }
-        if (anglePerSegment <= 0) return;
+        if (anglePerSegment <= 0 && totalSegments > 1) { // Allow anglePerSegment to be 0 if totalSegments is 1 and it becomes 360, then gets reset by gap logic for >1 scenario
+            console.warn("Angle per segment is zero or negative with multiple segments.");
+            return;
+        }
+        if (totalSegments === 1 && anglePerSegment !== 360) {
+            // This case should ideally not be hit if logic above is correct for totalSegments = 1
+            // but as a fallback, ensure a single segment is 360 if it wasn't set already.
+            anglePerSegment = 360;
+        }
 
         let startAngle = -90; // Start from the top
 
@@ -285,43 +296,38 @@ class CallButton {
             const color = statusColors[segmentData.status] || '#cccccc';
 
             const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            const arcPath = this.describeArc(center, center, segmentRadius, startAngle, endAngle);
+            const wedgePath = this.describeWedge(center, center, segmentRadius, startAngle, endAngle);
 
-            path.setAttribute('d', arcPath);
-            path.setAttribute('fill', 'none');
-            path.setAttribute('stroke', color);
-            path.setAttribute('stroke-width', strokeWidth.toString());
-            path.setAttribute('stroke-linecap', 'butt');
+            path.setAttribute('d', wedgePath);
+            path.setAttribute('fill', color);
             segmentsGroup!.appendChild(path);
 
             startAngle = endAngle + gap;
         });
     }
 
-    private describeArc(x: number, y: number, radius: number, startAngle: number, endAngle: number): string {
-        // Ensure angles are within 0-360 range if needed, though differences matter more
-        // Handle full circle case by slightly adjusting endAngle
+    private describeWedge(x: number, y: number, radius: number, startAngle: number, endAngle: number): string {
+        // Handle full circle case by slightly adjusting endAngle to ensure the arc is drawn
+        // For a wedge, if it's a full circle, it's just a circle path, but our segment logic shouldn't produce this for a wedge.
         if (endAngle - startAngle >= 359.99) {
-            endAngle = startAngle + 359.99;
+            endAngle = startAngle + 359.99; // Prevent full overlap that might cause rendering issues for an arc
         }
 
-        const startRad = ((startAngle - 90) * Math.PI) / 180;
-        const endRad = ((endAngle - 90) * Math.PI) / 180;
+        const startRad = ((startAngle - 90) * Math.PI) / 180; // -90 to make 0 degrees at the top
+        const endRad = ((endAngle - 90) * Math.PI) / 180;   // -90 to make 0 degrees at the top
 
-        const start = {
-            x: x + radius * Math.cos(startRad),
-            y: y + radius * Math.sin(startRad)
-        };
-        const end = {
-            x: x + radius * Math.cos(endRad),
-            y: y + radius * Math.sin(endRad)
-        };
+        const arcStartX = x + radius * Math.cos(startRad);
+        const arcStartY = y + radius * Math.sin(startRad);
+        const arcEndX = x + radius * Math.cos(endRad);
+        const arcEndY = y + radius * Math.sin(endRad);
 
         const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
 
         const d = [
-            "M", start.x.toFixed(3), start.y.toFixed(3),
-            "A", radius.toFixed(3), radius.toFixed(3), 0, largeArcFlag, 1, end.x.toFixed(3), end.y.toFixed(3)
+            "M", x.toFixed(3), y.toFixed(3), // Move to Center
+            "L", arcStartX.toFixed(3), arcStartY.toFixed(3), // Line to Arc Start
+            "A", radius.toFixed(3), radius.toFixed(3), 0, largeArcFlag, 1, arcEndX.toFixed(3), arcEndY.toFixed(3), // Arc
+            "Z" // Close Path (line back to center)
         ].join(" ");
 
         return d;
@@ -373,26 +379,35 @@ class CallButton {
         }
 
         // 2. Create the new SVG element from the icon string.
-        const newSvgElement = createSVGElement(svgIconString); // This should be the <svg> element
-        if (!newSvgElement || !(newSvgElement instanceof SVGElement)) { // Type check
+        const newSvgElement = createSVGElement(svgIconString);
+        if (!newSvgElement || !(newSvgElement instanceof SVGElement)) {
             console.error("Failed to create SVG element from string or invalid type:", svgIconString);
             callButton.textContent = label; // Fallback: just show the label as text
             return;
         }
 
-        // 3. Create the segments group that will live inside the new SVG element.
+        // 3. Identify & Remove Original Background from the newSvgElement IF THE CALL IS ACTIVE
+        if (isActiveState) {
+            const originalBackground = newSvgElement.querySelector('path#background') || newSvgElement.querySelector('path:first-of-type');
+            if (originalBackground && originalBackground.parentNode === newSvgElement) {
+                newSvgElement.removeChild(originalBackground);
+                console.debug("Original SVG background removed because call is active.");
+            }
+        } else {
+            console.debug("Original SVG background preserved because call is not active.");
+        }
+
+        // 4. Create the segments group that will live inside the new SVG element.
         const segmentsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         segmentsGroup.setAttribute('id', 'saypi-segments-group');
 
-        // 4. Insert segmentsGroup as the first child of the new SVG element.
-        // This ensures other parts of the icon (like the phone receiver path) draw on top of the segments.
+        // 5. Insert segmentsGroup as the first child of the new SVG element.
         newSvgElement.insertBefore(segmentsGroup, newSvgElement.firstChild);
 
-        // 5. Append the complete new SVG element (which now contains the empty segments group and the icon paths)
-        // directly to the button.
+        // 6. Append the complete new SVG element directly to the button.
         callButton.appendChild(newSvgElement);
 
-        // 6. Set attributes and event listeners on the button itself.
+        // 7. Set attributes and event listeners on the button itself.
         callButton.setAttribute("aria-label", label);
         if (onClick) {
             callButton.onclick = onClick;
@@ -401,13 +416,13 @@ class CallButton {
         }
         callButton.classList.toggle("active", isActiveState);
 
-        // 7. Update internal state.
+        // 8. Update internal state.
         this.callIsActive = isActiveState;
 
-        // 8. Now that the SVG structure is in the DOM, draw/update the segments into the segmentsGroup.
+        // 9. Now that the SVG structure is in the DOM, draw/update the segments into the segmentsGroup.
         this.updateButtonSegments();
 
-        // 9. Handle glow animation (primarily managed by state machine subscription).
+        // 10. Handle glow animation (primarily managed by state machine subscription).
         if (!this.callIsActive) {
             AnimationModule.stopAnimation("glow");
             this.glowColorUpdater.updateGlowColor(0);
