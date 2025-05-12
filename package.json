@@ -8,9 +8,10 @@
   },
   "scripts": {
     "copy-onnx": "node copy-onnx-files.js",
-    "prebuild": "node i18n-validate.cjs && npm run copy-onnx",
-    "build": "webpack --mode production",
+    "predev": "node scripts/update-manifest.js",
     "dev": "webpack --mode development --watch",
+    "prebuild": "NODE_ENV=production node scripts/update-manifest.js && node i18n-validate.cjs && npm run copy-onnx",
+    "build": "webpack --mode production",
     "start": "node server.js",
     "test:jest": "NODE_OPTIONS=--experimental-vm-modules npx jest --detectOpenHandles --forceExit",
     "test:vitest": "vitest run --config vitest.config.js",
