@@ -106,9 +106,9 @@ class CallButton {
         EventBus.on("saypi:userSpeaking", () => this.handleUserSpeaking());
         EventBus.on("saypi:userStoppedSpeaking", (data: { duration: number; blob?: Blob }) => this.handleUserStoppedSpeaking(data));
         EventBus.on("session:transcribing", (data: { sequenceNumber: number }) => this.handleSessionTranscribing(data));
-        EventBus.on("saypi:transcribed", (data: { sequenceNumber: number, text: string }) => this.handleTranscriptionReceived(data));
-        EventBus.on("saypi:transcribeFailed", (data: { sequenceNumber: number }) => this.handleTranscriptionFailed(data));
-        EventBus.on("saypi:transcribedEmpty", (data: { sequenceNumber: number }) => this.handleTranscriptionEmpty(data));
+        EventBus.on("saypi:transcription:received", (data: { sequenceNumber: number }) => this.handleTranscriptionReceived(data));
+        EventBus.on("saypi:transcription:failed", (data: { sequenceNumber: number }) => this.handleTranscriptionFailed(data));
+        EventBus.on("saypi:transcription:empty", (data: { sequenceNumber: number }) => this.handleTranscriptionEmpty(data));
         EventBus.on("session:started", () => this.resetSegments());
         EventBus.on("session:ended", () => {
             this.resetSegments();
@@ -174,7 +174,7 @@ class CallButton {
         }
     }
 
-    handleTranscriptionReceived(data: { sequenceNumber: number, text: string }) {
+    handleTranscriptionReceived(data: { sequenceNumber: number }) {
         if (!this.callIsActive) return;
         const segment = this.segments.find(s => s.seqNum === data.sequenceNumber);
         if (segment) {
