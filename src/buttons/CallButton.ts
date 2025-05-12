@@ -106,7 +106,7 @@ class CallButton {
         EventBus.on("saypi:userSpeaking", () => this.handleUserSpeaking());
         EventBus.on("saypi:userStoppedSpeaking", (data: { duration: number; blob?: Blob }) => this.handleUserStoppedSpeaking(data));
         EventBus.on("session:transcribing", (data: { sequenceNumber: number }) => this.handleSessionTranscribing(data));
-        EventBus.on("saypi:transcription:received", (data: { sequenceNumber: number }) => this.handleTranscriptionReceived(data));
+        EventBus.on("saypi:transcription:received", (data: { sequenceNumber: number}) => this.handleTranscriptionReceived(data));
         EventBus.on("saypi:transcription:failed", (data: { sequenceNumber: number }) => this.handleTranscriptionFailed(data));
         EventBus.on("saypi:transcription:empty", (data: { sequenceNumber: number }) => this.handleTranscriptionEmpty(data));
         EventBus.on("session:started", () => this.resetSegments());
@@ -176,39 +176,39 @@ class CallButton {
 
     handleTranscriptionReceived(data: { sequenceNumber: number }) {
         if (!this.callIsActive) return;
-        const segment = this.segments.find(s => s.seqNum === data.sequenceNumber);
+        const targetSeqNum = data.sequenceNumber - 1;
+        const segment = this.segments.find(s => s.seqNum === targetSeqNum);
         if (segment) {
             segment.status = 'completed-success';
-            console.debug(`Segment ${data.sequenceNumber}: Completed-Success`);
             this.updateButtonSegments();
         } else {
-            console.warn("Transcription received for unknown sequence number:", data.sequenceNumber);
+            // console.warn("[CallButton] Transcription received, but no matching segment found for internal seqNum:", targetSeqNum, "Available internal seqNums:", this.segments.map(s=>s.seqNum));
         }
     }
 
      handleTranscriptionFailed(data: { sequenceNumber: number }) {
          if (!this.callIsActive) return;
-        const segment = this.segments.find(s => s.seqNum === data.sequenceNumber);
+        const targetSeqNum = data.sequenceNumber - 1;
+        const segment = this.segments.find(s => s.seqNum === targetSeqNum);
         if (segment) {
             segment.status = 'completed-error';
             segment.errorType = 'transcription-api-error';
-            console.debug(`Segment ${data.sequenceNumber}: Completed-Error (API)`);
             this.updateButtonSegments();
         } else {
-            console.warn("Transcription failed for unknown sequence number:", data.sequenceNumber);
+            // console.warn("[CallButton] Transcription failed, but no matching segment found for internal seqNum:", targetSeqNum, "Available internal seqNums:", this.segments.map(s=>s.seqNum));
         }
      }
 
      handleTranscriptionEmpty(data: { sequenceNumber: number }) {
          if (!this.callIsActive) return;
-         const segment = this.segments.find(s => s.seqNum === data.sequenceNumber);
+         const targetSeqNum = data.sequenceNumber - 1;
+         const segment = this.segments.find(s => s.seqNum === targetSeqNum);
          if (segment) {
              segment.status = 'completed-error';
              segment.errorType = 'no-speech-detected';
-             console.debug(`Segment ${data.sequenceNumber}: Completed-Error (Empty)`);
              this.updateButtonSegments();
          } else {
-             console.warn("Transcription empty for unknown sequence number:", data.sequenceNumber);
+            // console.warn("[CallButton] Transcription empty, but no matching segment found for internal seqNum:", targetSeqNum, "Available internal seqNums:", this.segments.map(s=>s.seqNum));
          }
      }
 
