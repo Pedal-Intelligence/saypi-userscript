@@ -1,4 +1,3 @@
-import { buttonModule } from "../ButtonModule.js";
 import {
   createMachine,
   Typestate,
@@ -1256,51 +1255,51 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
 
       callIsStarting: () => {
-        buttonModule.callStarting();
+        // buttonModule.callStarting();
       },
       callFailedToStart: () => {
-        buttonModule.callInactive();
+        // buttonModule.callInactive();
         audibleNotifications.callFailed();
       },
       callNotStarted: () => {
-        if (buttonModule) {
+        //if (buttonModule) {
           // buttonModule may not be available on initial load
-          buttonModule.callInactive();
-        }
+          // buttonModule.callInactive();
+        //}
       },
       callHasStarted: () => {
-        buttonModule.callActive();
+        // buttonModule.callActive();
         audibleNotifications.callStarted();
         EventBus.emit("session:started");
       },
       callInterruptible: () => {
-        buttonModule.callInterruptible();
+        // buttonModule.callInterruptible();
       },
       callInterruptibleIfListening: (context: SayPiContext) => {
         if (context.lastState === "listening") {
-          buttonModule.callInterruptible();
+          // buttonModule.callInterruptible();
         }
       },
       callContinues: () => {
-        buttonModule.callActive();
+        // buttonModule.callActive();
       },
       callHasEnded: () => {
         visualNotifications.listeningStopped();
-        buttonModule.callInactive();
+        // buttonModule.callInactive();
         audibleNotifications.callEnded();
         EventBus.emit("session:ended");
       },
       callHasErrors: () => {
-        buttonModule.callError();
+        // buttonModule.callError();
       },
       callHasNoErrors: () => {
-        buttonModule.callActive();
+        // buttonModule.callActive();
       },
       disableCallButton: () => {
-        buttonModule.disableCallButton();
+        // buttonModule.disableCallButton();
       },
       enableCallButton: () => {
-        buttonModule.enableCallButton();
+        // buttonModule.enableCallButton();
       },
       cancelCountdownAnimation: () => {
         visualNotifications.listeningStopped();

@@ -1,28 +1,23 @@
 import { ImmersionService } from "./ImmersionService.js";
 import { addChild, createElement, createSVGElement } from "./dom/DOMModule.ts";
 import EventBus from "./events/EventBus.js";
-import StateMachineService from "./StateMachineService.js";
 import { submitErrorHandler } from "./SubmitErrorHandler.ts";
 import exitIconSVG from "./icons/exit.svg";
 import maximizeIconSVG from "./icons/maximize.svg";
 import immersiveIconSVG from "./icons/immersive.svg";
 import settingsIconSVG from "./icons/settings.svg";
-import callIconSVG from "./icons/call.svg";
-import callStartingIconSVG from "./icons/call-starting.svg";
-import hangupIconSVG from "./icons/hangup.svg";
-import interruptIconSVG from "./icons/interrupt.svg";
-import hangupMincedIconSVG from "./icons/hangup-minced.svg";
 import lockIconSVG from "./icons/lock.svg";
 import unlockIconSVG from "./icons/unlock.svg";
 import getMessage from "./i18n.ts";
 import { UserPreferenceModule } from "./prefs/PreferenceModule.ts";
-import AnimationModule from "./AnimationModule.js";
 import { Chatbot } from "./chatbots/Chatbot.ts";
 import { ChatbotService } from "./chatbots/ChatbotService.ts";
 import { IconModule } from "./icons/IconModule.ts";
 import { ImmersionStateChecker } from "./ImmersionServiceLite.ts";
 import { GlowColorUpdater } from "./buttons/GlowColorUpdater.js";
 import { openSettings } from "./popup/popupopener.ts";
+import { initializeCallButton, getCallButtonInstance } from "./buttons/CallButton.ts";
+import StateMachineService from "./StateMachineService.js";
 
 class ButtonModule {
   /**
@@ -35,28 +30,25 @@ class ButtonModule {
     this.chatbot = chatbot;
     this.immersionService = new ImmersionService(chatbot);
     this.glowColorUpdater = new GlowColorUpdater();
-    this.sayPiActor = StateMachineService.actor; // the Say, Pi state machine
+    this.sayPiActor = StateMachineService.actor;
     this.screenLockActor = StateMachineService.screenLockActor;
-    // Binding methods to the current instance
-    this.registerOtherEvents();
-
-    // track the frequency of bug #26
     this.submissionsWithoutAnError = 0;
-
-    // track whether a call is active, so that new button instances can be initialized correctly
     this.callIsActive = false;
+    this.segments = [];
+    this.currentSeqNum = 0;
+    this.currentSegment = null;
+    this.registerTranscriptionEvents();
+    initializeCallButton(chatbot);
+    this.registerSubmissionEvent();
   }
 
-  registerOtherEvents() {
+  registerSubmissionEvent() {
+    // handle a request to automatically submit the user's prompt
     EventBus.on("saypi:autoSubmit", () => {
       this.handleAutoSubmit();
     });
-    EventBus.on("audio:frame", (probabilities) => {
-      this.handleAudioFrame(probabilities);
-    });
   }
 
-  // Function to create a new button
   createButton(textLabel, onClickCallback) {
     const button = document.createElement("button");
     if (textLabel) {
@@ -68,7 +60,6 @@ class ButtonModule {
     return button;
   }
 
-  // Function to style a given button
   styleButton(button, styles) {
     for (let key in styles) {
       if (styles.hasOwnProperty(key)) {
@@ -93,14 +84,8 @@ class ButtonModule {
     iconContainer.classList.add("saypi-icon");
   }
 
-  /**
-   * Monitors an element for changes in the view class
-   * i.e. when the view mode is toggled between 'immersive' and 'desktop'
-   * and updates the icon content accordingly (why?)
-   * @param {*} container - The HTML element to hold the icon
-   */
   setupViewObserver(container) {
-    const targetNode = document.documentElement; // The <html> element
+    const targetNode = document.documentElement;
 
     const config = { attributes: true, attributeFilter: ["class"] };
 
@@ -109,10 +94,8 @@ class ButtonModule {
         if (mutation.type === "attributes") {
           if (mutation.attributeName === "class") {
             if (document.documentElement.classList.contains("immersive-view")) {
-              // view mode changed to 'immersive'
               this.updateIconContent(container);
             } else {
-              // view mode changed to 'desktop'
               this.updateIconContent(container);
             }
           }
@@ -122,20 +105,14 @@ class ButtonModule {
 
     const observer = new MutationObserver(callback);
 
-    // Start observing the target node for configured mutations
     observer.observe(targetNode, config);
-
-    // Later, you can stop observing by calling:
-    // observer.disconnect();
   }
 
-  // Simulate an "Enter" keypress event on a form
   simulateFormSubmit() {
     const submitButton = document.getElementById("saypi-submitButton");
 
     if (submitButton) {
       if (submitErrorHandler.detectSubmitError()) {
-        // track how often this happens
         console.error(
           `Autosubmit failed after ${this.submissionsWithoutAnError} turns.`
         );
@@ -147,24 +124,24 @@ class ButtonModule {
       }
       console.debug("Sending message to Pi at", Date.now());
     } else {
-      /* hit enter key in the prompt textarea, might not work as expected on "new ui layout" */
       const textarea = document.getElementById("saypi-prompt");
-
-      const enterEvent = new KeyboardEvent("keydown", {
-        bubbles: true,
-        key: "Enter",
-        keyCode: 13,
-        which: 13,
-      });
-
-      textarea.dispatchEvent(enterEvent);
+      if (textarea) {
+        const enterEvent = new KeyboardEvent("keydown", {
+          bubbles: true,
+          key: "Enter",
+          keyCode: 13,
+          which: 13,
+        });
+        textarea.dispatchEvent(enterEvent);
+      } else {
+        console.error("Cannot simulate submit: Textarea not found.");
+      }
     }
   }
 
-  // Function to handle auto-submit based on the user preference
   async handleAutoSubmit() {
     const autoSubmitEnabled = await this.userPreferences.getAutoSubmit();
-    const isImmersive = ImmersionStateChecker.isViewImmersive(); // must auto-submit in immersive mode
+    const isImmersive = ImmersionStateChecker.isViewImmersive();
     if (autoSubmitEnabled || isImmersive) {
       this.simulateFormSubmit();
     } else {
@@ -172,16 +149,6 @@ class ButtonModule {
     }
   }
 
-  /**
-   * Creates a control button for the main (i.e. horizontal) control panel with an icon and tooltip
-   * @param {Object} options Button configuration options
-   * @param {string} options.id Button ID
-   * @param {string} options.label Tooltip/aria label
-   * @param {string} options.icon SVG icon content
-   * @param {Function} options.onClick Click handler
-   * @param {string} [options.className=''] Additional CSS classes
-   * @returns {HTMLButtonElement} The created button
-   */
   createIconButton(options) {
     const { id, label, icon, onClick, className = '' } = options;
     const button = document.createElement("button");
@@ -191,7 +158,11 @@ class ButtonModule {
     button.setAttribute("aria-label", label);
 
     const svgElement = createSVGElement(icon);
-    button.appendChild(svgElement);
+    if (svgElement) {
+      button.appendChild(svgElement);
+    } else {
+      console.error("Failed to create SVG for icon button:", icon);
+    }
 
     if (onClick) {
       button.onclick = onClick;
@@ -226,11 +197,6 @@ class ButtonModule {
     return button;
   }
 
-  /**
-   * Create a control button for Pi's side panel with a short label, long label, icon, and click handler
-   * @param {*} options 
-   * @returns 
-   */
   createControlButton(options) {
     const { shortLabel, longLabel = shortLabel, icon, onClick, className = '' } = options;
     const button = createElement("a", {
@@ -240,7 +206,11 @@ class ButtonModule {
     });
 
     const svgElement = createSVGElement(icon);
-    button.appendChild(svgElement);
+    if (svgElement) {
+      button.appendChild(svgElement);
+    } else {
+      console.error("Failed to create SVG for control button:", icon);
+    }
 
     const labelDiv = createElement("div", {
       className: "t-label",
@@ -291,128 +261,12 @@ class ButtonModule {
   }
 
   createCallButton(container, position = 0) {
-    const button = this.createButton();
-    button.id = "saypi-callButton";
-    button.type = "button";
-    button.classList.add("call-button", "saypi-button", "tooltip", "rounded-full");
-    button.classList.add(...this.chatbot.getExtraCallButtonClasses());
-    if (this.callIsActive) {
-      this.callActive(button);
+    const callButtonInstance = getCallButtonInstance();
+    if (callButtonInstance) {
+      return callButtonInstance.createButton(container, position);
     } else {
-      this.callInactive(button);
-    }
-
-    addChild(container, button, position);
-    if (this.callIsActive) {
-      // if the call is active, start the glow animation once added to the DOM
-      AnimationModule.startAnimation("glow");
-    }
-    return button;
-  }
-
-  updateCallButtonColor(color) {
-    const callButton = document.getElementById("saypi-callButton");
-    // find first path element descendant of the call button's svg element child
-    const path = callButton?.querySelector("svg path");
-    if (path) {
-      // set the fill color of the path element
-      path.style.fill = color;
-    }
-  }
-
-  /**
-   *
-   * @param { isSpeech: number; notSpeech: number } probabilities
-   */
-  handleAudioFrame(probabilities) {
-    this.glowColorUpdater.updateGlowColor(probabilities.isSpeech);
-  }
-
-  updateCallButton(callButton, svgIcon, label, onClick, isActive = false) {
-    if (!callButton) {
-      callButton = document.getElementById("saypi-callButton");
-    }
-    if (callButton) {
-      // Remove all existing child nodes
-      while (callButton.firstChild) {
-        callButton.removeChild(callButton.firstChild);
-      }
-
-      const svgElement = createSVGElement(svgIcon);
-      callButton.appendChild(svgElement);
-
-      callButton.setAttribute("aria-label", label);
-      callButton.onclick = onClick;
-      callButton.classList.toggle("active", isActive);
-    }
-    this.callIsActive = isActive;
-  }
-
-  callStarting(callButton) {
-    const label = getMessage("callStarting");
-    this.updateCallButton(callButton, callStartingIconSVG, label, () =>
-      this.sayPiActor.send("saypi:hangup")
-    );
-  }
-
-  callActive(callButton) {
-    const label = getMessage("callInProgress");
-    this.updateCallButton(
-      callButton,
-      hangupIconSVG,
-      label,
-      () => this.sayPiActor.send("saypi:hangup"),
-      true
-    );
-  }
-
-  callInterruptible(callButton) {
-    const handsFreeInterruptEnabled =
-      this.userPreferences.getCachedAllowInterruptions();
-    if (!handsFreeInterruptEnabled) {
-      const label = getMessage("callInterruptible");
-      this.updateCallButton(
-        callButton,
-        interruptIconSVG,
-        label,
-        () => {
-          this.sayPiActor.send("saypi:interrupt");
-        },
-        true
-      );
-    }
-  }
-
-  callInactive(callButton) {
-    this.chatbot.getNickname().then(nickname => {
-      const label = getMessage("callNotStarted", nickname);
-      this.updateCallButton(callButton, callIconSVG, label, () =>
-        this.sayPiActor.send("saypi:call")
-      );
-    });
-  }
-
-  callError(callButton) {
-    const label = getMessage("callError");
-    this.updateCallButton(callButton, hangupMincedIconSVG, label, null);
-  }
-
-  disableCallButton() {
-    const callButton = document.getElementById("saypi-callButton");
-    if (callButton) {
-      callButton.classList.add("disabled");
-      // disable the call action, but always allow hangup
-      if (!callButton.classList.contains("active")) {
-        callButton.disabled = true;
-      }
-    }
-  }
-
-  enableCallButton() {
-    const callButton = document.getElementById("saypi-callButton");
-    if (callButton) {
-      callButton.classList.remove("disabled");
-      callButton.disabled = false;
+      console.error("CallButton instance not initialized.");
+      return document.createElement("button");
     }
   }
 
@@ -424,11 +278,15 @@ class ButtonModule {
       className:
         "lock-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip",
       ariaLabel: label,
-      onclick: () => this.screenLockActor.send("lock"),
+      onclick: () => this.screenLockActor.send({ type: "lock" }),
     });
 
     const svgElement = createSVGElement(lockIconSVG);
-    button.appendChild(svgElement);
+    if (svgElement) {
+      button.appendChild(svgElement);
+    } else {
+      console.error("Failed to create SVG for lock button:", lockIconSVG);
+    }
 
     if (container) {
       container.appendChild(button);
@@ -444,7 +302,14 @@ class ButtonModule {
     button.className =
       "lock-button saypi-control-button rounded-full bg-cream-550 enabled:hover:bg-cream-650 tooltip";
     button.setAttribute("aria-label", label);
-    button.appendChild(createSVGElement(unlockIconSVG));
+
+    const unlockSvgElement = createSVGElement(unlockIconSVG);
+    if (unlockSvgElement) {
+      button.appendChild(unlockSvgElement);
+    } else {
+      console.error("Failed to create SVG for unlock button:", unlockIconSVG);
+    }
+
     if (container) {
       container.appendChild(button);
       let pressTimer;
@@ -457,12 +322,11 @@ class ButtonModule {
           instruction.textContent = continueUnlockingMessage;
         }
         pressTimer = setTimeout(() => {
-          this.screenLockActor.send("unlock");
-        }, 1500); // Adjust the duration (in milliseconds) for a long-press
+          this.screenLockActor.send({ type: "unlock" });
+        }, 1500);
       };
 
       button.onmouseup = button.ontouchend = () => {
-        // reset the message
         const instruction = document.getElementById("saypi-unlock-instruction");
         if (instruction) {
           instruction.textContent = originalMessage;
@@ -472,9 +336,221 @@ class ButtonModule {
     }
     return button;
   }
+
+  registerTranscriptionEvents() {
+    EventBus.on("saypi:userSpeaking", () => this.handleUserSpeaking());
+    EventBus.on("saypi:userStoppedSpeaking", (data) => this.handleUserStoppedSpeaking(data));
+    EventBus.on("audio:dataavailable", (data) => this.handleAudioDataAvailable(data));
+    EventBus.on("session:transcribing", (data) => this.handleSessionTranscribing(data));
+    EventBus.on("saypi:transcribed", (data) => this.handleTranscriptionReceived(data));
+    EventBus.on("saypi:transcribeFailed", (data) => this.handleTranscriptionFailed(data));
+    EventBus.on("saypi:transcribedEmpty", (data) => this.handleTranscriptionEmpty(data));
+    EventBus.on("session:started", () => this.resetSegments());
+    EventBus.on("session:ended", () => this.resetSegments());
+  }
+
+  resetSegments() {
+    this.segments = [];
+    this.currentSeqNum = 0;
+    this.currentSegment = null;
+    this.updateButtonSegments();
+  }
+
+  handleUserSpeaking() {
+    if (!this.currentSegment) {
+       this.currentSegment = {
+         seqNum: this.currentSeqNum,
+         status: 'capturing',
+         startTime: Date.now(),
+       };
+       console.debug(`Segment ${this.currentSeqNum}: Started capturing`);
+       this.updateButtonSegments();
+    } else if (this.currentSegment.status !== 'capturing') {
+        this.currentSegment.status = 'capturing';
+        this.updateButtonSegments();
+    }
+  }
+
+  handleUserStoppedSpeaking(data) {
+    if (this.currentSegment && this.currentSegment.status === 'capturing') {
+        console.debug(`Segment ${this.currentSegment.seqNum}: VAD stopped`);
+     }
+  }
+
+   handleAudioDataAvailable(data) {
+     const seqNum = data.sequenceNumber;
+     if (this.currentSegment && this.currentSegment.seqNum === seqNum) {
+       this.currentSegment.endTime = Date.now();
+       this.currentSegment.status = 'processing';
+       this.segments.push({...this.currentSegment});
+       console.debug(`Segment ${seqNum}: Audio data available, marked processing`);
+       this.currentSeqNum++;
+       this.currentSegment = null;
+       this.updateButtonSegments();
+     } else {
+        console.warn("Audio data available for unexpected sequence number:", seqNum, "Current:", this.currentSegment);
+     }
+   }
+
+   handleSessionTranscribing(data) {
+     const segment = this.segments.find(s => s.seqNum === data.sequenceNumber);
+     if (segment && segment.status !== 'processing') {
+       segment.status = 'processing';
+       console.debug(`Segment ${data.sequenceNumber}: Confirmed processing`);
+       this.updateButtonSegments();
+     }
+   }
+
+   handleTranscriptionReceived(data) {
+     const segment = this.segments.find(s => s.seqNum === data.sequenceNumber);
+     if (segment) {
+       segment.status = 'completed-success';
+       console.debug(`Segment ${data.sequenceNumber}: Completed-Success`);
+       this.updateButtonSegments();
+     } else {
+       console.warn("Transcription received for unknown sequence number:", data.sequenceNumber);
+     }
+   }
+
+   handleTranscriptionFailed(data) {
+      const segment = this.segments.find(s => s.seqNum === data.sequenceNumber);
+      if (segment) {
+        segment.status = 'completed-error';
+        segment.errorType = 'transcription-api-error';
+        console.debug(`Segment ${data.sequenceNumber}: Completed-Error (API)`);
+        this.updateButtonSegments();
+      } else {
+         console.warn("Transcription failed for unknown sequence number:", data.sequenceNumber);
+      }
+   }
+
+    handleTranscriptionEmpty(data) {
+        const segment = this.segments.find(s => s.seqNum === data.sequenceNumber);
+        if (segment) {
+            segment.status = 'completed-error';
+            segment.errorType = 'no-speech-detected';
+            console.debug(`Segment ${data.sequenceNumber}: Completed-Error (Empty)`);
+            this.updateButtonSegments();
+        } else {
+            console.warn("Transcription empty for unknown sequence number:", data.sequenceNumber);
+        }
+    }
+
+  updateButtonSegments() {
+    const callButton = document.getElementById("saypi-callButton");
+    if (!callButton) return;
+
+    let segmentsGroup = callButton.querySelector("#saypi-segments-group");
+    if (!segmentsGroup) {
+      const svg = callButton.querySelector("svg");
+      if (!svg) return;
+      segmentsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      segmentsGroup.setAttribute('id', 'saypi-segments-group');
+      svg.insertBefore(segmentsGroup, svg.firstChild);
+    }
+
+    while (segmentsGroup.firstChild) {
+      segmentsGroup.removeChild(segmentsGroup.firstChild);
+    }
+
+    const statusColors = {
+      capturing: '#808080',
+      processing: '#3498db',
+      'completed-success': '#2ecc71',
+      'completed-error': '#e74c3c',
+    };
+
+    const totalSegments = this.segments.length + (this.currentSegment ? 1 : 0);
+    if (totalSegments === 0) return;
+
+    const svg = callButton.querySelector("svg");
+    const viewBox = svg ? svg.getAttribute('viewBox')?.split(' ').map(Number) : null;
+    const svgWidth = viewBox ? viewBox[2] : 80;
+    const svgHeight = viewBox ? viewBox[3] : 80;
+    const center = svgWidth / 2;
+    const radius = Math.min(svgWidth, svgHeight) / 2 * 0.85;
+    const strokeWidth = radius * 0.15;
+
+    const gap = 1;
+
+    let anglePerSegment = 0;
+    if (totalSegments > 0) {
+        const totalGap = totalSegments * gap;
+        if (totalGap < 360) {
+            anglePerSegment = (360 - totalGap) / totalSegments;
+        } else {
+             anglePerSegment = 0;
+             console.warn("Too many segments for the given gap size.");
+        }
+    }
+    if (anglePerSegment <= 0) return;
+
+
+    let startAngle = -90;
+
+    const describeArc = (x, y, radius, startAngle, endAngle) => {
+        const startRad = ((startAngle - 90) * Math.PI) / 180;
+        const endRad = ((endAngle - 90) * Math.PI) / 180;
+
+        const start = {
+            x: x + radius * Math.cos(startRad),
+            y: y + radius * Math.sin(startRad)
+        };
+        const end = {
+            x: x + radius * Math.cos(endRad),
+            y: y + radius * Math.sin(endRad)
+        };
+
+        const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+        if (Math.abs(endAngle - startAngle) >= 359.99) {
+             const endRadAdjusted = ((endAngle - 0.01 - 90) * Math.PI) / 180;
+             end.x = x + radius * Math.cos(endRadAdjusted);
+             end.y = y + radius * Math.sin(endRadAdjusted);
+        }
+
+        const d = [
+            "M", start.x, start.y,
+            "A", radius, radius, 0, largeArcFlag, 1, end.x, end.y
+        ].join(" ");
+
+        return d;
+    }
+
+
+    const drawSegment = (segmentData, index) => {
+        const endAngle = startAngle + anglePerSegment;
+        const color = statusColors[segmentData.status] || '#cccccc';
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const arcPath = describeArc(center, center, radius - strokeWidth / 2, startAngle, endAngle);
+
+        path.setAttribute('d', arcPath);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', color);
+        path.setAttribute('stroke-width', strokeWidth.toString());
+        path.setAttribute('stroke-linecap', 'butt');
+
+        if (segmentsGroup) {
+            segmentsGroup.appendChild(path);
+        } else {
+            callButton.appendChild(svgElement);
+            const newSegmentsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            newSegmentsGroup.setAttribute('id', 'saypi-segments-group');
+            svgElement.insertBefore(newSegmentsGroup, svgElement.firstChild);
+        }
+
+        startAngle = endAngle + gap;
+    };
+
+    this.segments.forEach((seg, index) => drawSegment(seg, index));
+
+    if (this.currentSegment) {
+        drawSegment(this.currentSegment, this.segments.length);
+    }
+  }
 }
 
-// Singleton initialization
 let instance = null;
 
 async function initializeModule() {
