@@ -104,12 +104,11 @@ class CallButton {
 
     registerTranscriptionEvents() {
         EventBus.on("saypi:userSpeaking", () => this.handleUserSpeaking());
-        EventBus.on("saypi:userStoppedSpeaking", (data: any) => this.handleUserStoppedSpeaking(data)); // Type data appropriately
-        EventBus.on("audio:dataavailable", (data: any) => this.handleAudioDataAvailable(data));
-        EventBus.on("session:transcribing", (data: any) => this.handleSessionTranscribing(data));
-        EventBus.on("saypi:transcribed", (data: any) => this.handleTranscriptionReceived(data));
-        EventBus.on("saypi:transcribeFailed", (data: any) => this.handleTranscriptionFailed(data));
-        EventBus.on("saypi:transcribedEmpty", (data: any) => this.handleTranscriptionEmpty(data));
+        EventBus.on("saypi:userStoppedSpeaking", (data: { duration: number; blob?: Blob }) => this.handleUserStoppedSpeaking(data));
+        EventBus.on("session:transcribing", (data: { sequenceNumber: number }) => this.handleSessionTranscribing(data));
+        EventBus.on("saypi:transcribed", (data: { sequenceNumber: number, text: string }) => this.handleTranscriptionReceived(data));
+        EventBus.on("saypi:transcribeFailed", (data: { sequenceNumber: number }) => this.handleTranscriptionFailed(data));
+        EventBus.on("saypi:transcribedEmpty", (data: { sequenceNumber: number }) => this.handleTranscriptionEmpty(data));
         EventBus.on("session:started", () => this.resetSegments());
         EventBus.on("session:ended", () => {
             this.resetSegments();
@@ -148,25 +147,21 @@ class CallButton {
     handleUserStoppedSpeaking(data: { duration: number; blob?: Blob }) {
        if (!this.callIsActive || !this.currentSegment) return;
        if (this.currentSegment.status === 'capturing') {
-          console.debug(`Segment ${this.currentSegment.seqNum}: VAD stopped`);
-          // Wait for audio:dataavailable to finalize
-       }
-    }
-
-    handleAudioDataAvailable(data: { sequenceNumber: number, blob: Blob, duration: number }) {
-        if (!this.callIsActive) return;
-        const seqNum = data.sequenceNumber;
-        if (this.currentSegment && this.currentSegment.seqNum === seqNum) {
+          console.debug(`Segment ${this.currentSegment.seqNum}: VAD stopped (raw userStoppedSpeaking event)`);
+          // Actual finalization logic based on blob/duration:
+          if (data.blob && data.blob.size > 0 && data.duration > 0) {
             this.currentSegment.endTime = Date.now();
-            this.currentSegment.status = 'processing';
+            this.currentSegment.status = 'processing'; // Optimistically mark as processing
             this.segments.push({...this.currentSegment});
-            console.debug(`Segment ${seqNum}: Audio data available, marked processing`);
-            this.currentSeqNum++;
-            this.currentSegment = null;
-            this.updateButtonSegments();
-        } else {
-            console.warn("Audio data available for unexpected sequence number:", seqNum, "Current:", this.currentSegment);
-        }
+            console.debug(`Segment ${this.currentSegment.seqNum}: Finalized as processing, duration: ${data.duration}ms`);
+            this.currentSeqNum++; // Prepare for the next segment
+            this.currentSegment = null; // Current capture is done
+          } else {
+            console.debug(`Segment ${this.currentSegment.seqNum}: No audio data, cancelling capture.`);
+            this.currentSegment = null; // Cancel this empty/false-positive segment
+          }
+          this.updateButtonSegments();
+       }
     }
 
     handleSessionTranscribing(data: { sequenceNumber: number }) {
