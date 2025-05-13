@@ -178,6 +178,13 @@ class ClaudeChatbot extends AbstractChatbot {
     element: HTMLElement,
     includeInitialText?: boolean
   ): AssistantResponse {
+    return super.getAssistantResponse(element, includeInitialText);
+  }
+
+  protected createAssistantResponse(
+    element: HTMLElement,
+    includeInitialText?: boolean
+  ): AssistantResponse {
     return new ClaudeResponse(element, includeInitialText);
   }
 
