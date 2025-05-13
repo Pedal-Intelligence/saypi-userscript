@@ -123,7 +123,7 @@ class CallButton {
     // --- Segment Handling Methods ---
     resetSegments() {
         this.segments = [];
-        this.currentSeqNum = 0;
+        // don't reset currentSeqNum, as it's used to track the current transcription sequence number and continues to increment in TranscriptionModule.js
         this.currentSegment = null;
         this.updateButtonSegments();
     }
