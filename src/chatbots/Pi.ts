@@ -267,10 +267,9 @@ class PiTextStream extends ElementTextStream {
    */
   handleMutationEvent = (mutation: MutationRecord) => {
     if (this.closed()) {
-      console.debug(
-        `Skipping change event on ${mutation.target} because the stream has already been completed`,
-        mutation
-      );
+      // console.debug(
+      //   `Skipping change event on ${mutation.target} because the stream has already been completed`
+      // );
       return;
     }
 
