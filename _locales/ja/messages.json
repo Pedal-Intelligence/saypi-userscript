@@ -89,7 +89,7 @@
   },
   "audioInputError": {
     "description": "オーディオが空の転写を結果として表示されるメッセージ - 通常はフィルタリングの結果です。",
-    "message": "おっと、$chatbot$がそれを理解できませんでした。もう一度言ってみていただけますか？",
+    "message": "うーん、$chatbot$にはわずかなしゃっくりがありました。\nもう一度言ってもらえますか？",
     "placeholders": {
       "chatbot": {
         "content": "$1",

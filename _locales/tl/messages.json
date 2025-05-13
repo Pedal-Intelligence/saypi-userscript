@@ -69,7 +69,7 @@
   },
   "audioInputError": {
     "description": "Mensahe na ipinapakita kapag ang audio ay nagresulta sa isang walang laman na transkripsyon - karaniwang resulta ng pag-filter.",
-    "message": "Naku, hindi nakuha iyon ni $chatbot$. Maaari mo bang sabihin ulit?",
+    "message": "Hmm, $chatbot$ ay may kaunting hiccup. \nMaaari mo bang subukang sabihin iyon muli?",
     "placeholders": {
       "chatbot": {
         "content": "$1",

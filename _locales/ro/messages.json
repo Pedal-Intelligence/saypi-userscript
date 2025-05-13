@@ -69,7 +69,7 @@
   },
   "audioInputError": {
     "description": "Mesaj afișat când transcrierea audio a rezultat într-o transcriere goală - de obicei, rezultatul filtrării.",
-    "message": "Hopa, $chatbot$ nu a înțeles asta. Poți încerca să o spui din nou?",
+    "message": "Hmm, $chatbot$ a avut un sughiț ușor. \nAi putea încerca să spui asta din nou?",
     "placeholders": {
       "chatbot": {
         "content": "$1",

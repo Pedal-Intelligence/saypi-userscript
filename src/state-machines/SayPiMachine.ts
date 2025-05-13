@@ -27,6 +27,7 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import getMessage from "../i18n";
 import { Chatbot, UserPrompt } from "../chatbots/Chatbot";
 import { ImmersionStateChecker } from "../ImmersionServiceLite";
+import TranscriptionErrorManager from "../error-management/TranscriptionErrorManager";
 
 type SayPiTranscribedEvent = {
   type: "saypi:transcribed";
@@ -592,11 +593,17 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                       "#sayPi.listening.errorStatus.errors.transcribeFailed",
                     description:
                       "Out of sequence error response from the /transcribe API",
+                    actions: {
+                      type: "recordTranscriptionFailure"
+                    }
                   },
                   "saypi:transcribedEmpty": {
                     target: "#sayPi.listening.errorStatus.errors.micError",
                     description:
                       "Out of sequence empty response from the /transcribe API",
+                    actions: {
+                      type: "recordTranscriptionFailure"
+                    }
                   },
                 },
               },
@@ -655,6 +662,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     ],
                     description:
                       "Received an error response from the /transcribe API",
+                    actions: {
+                      type: "recordTranscriptionFailure"
+                    }
                   },
                   "saypi:transcribedEmpty": {
                     target: [
@@ -663,6 +673,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     ],
                     description:
                       "Received an empty response from the /transcribe API (no speech detected)",
+                    actions: {
+                      type: "recordTranscriptionFailure"
+                    }
                   },
                 },
               },
@@ -715,11 +728,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   micError: {
                     description: "No audio input detected",
                     entry: {
-                      type: "showNotification",
-                      params: {
-                        message: getMessage("audioInputError", "Say, Pi"),
-                        icon: "microphone-muted",
-                      },
+                      type: "showOrSuppressAudioInputErrorHint",
                     },
                     exit: {
                       type: "dismissNotification",
@@ -1093,8 +1102,17 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         const transcription = event.text;
         const sequenceNumber = event.sequenceNumber;
         const shouldRespondToThis = event.responseAnalysis?.shouldRespond;
-        console.debug(`Partial transcript [${sequenceNumber}]: ${transcription} [${shouldRespondToThis ? "respond" : "don't respond"}]`);
-        SayPiContext.transcriptions[sequenceNumber] = transcription;
+        console.debug(`Partial transcript [${sequenceNumber}]: ${transcription} [${shouldRespondToThis ? "respond" : "don\'t respond"}]`);
+        
+        if (transcription && transcription.trim() !== "") {
+          SayPiContext.transcriptions[sequenceNumber] = transcription;
+          TranscriptionErrorManager.recordAttempt(true); // Record success
+        } else {
+          // This case should ideally be handled by saypi:transcribedEmpty if the API guarantees it,
+          // but as a fallback, we can record a failure here if text is empty.
+          // However, the primary failure recording for empty will be on the saypi:transcribedEmpty event transition.
+        }
+
         if (event.merged) {
           event.merged.forEach((mergedSequenceNumber) => {
             delete SayPiContext.transcriptions[mergedSequenceNumber];
@@ -1374,6 +1392,17 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
       resumeAudio: () => {
         EventBus.emit("audio:output:resume");
+      },
+      recordTranscriptionFailure: (context, event) => {
+        TranscriptionErrorManager.recordAttempt(false);
+      },
+      showOrSuppressAudioInputErrorHint: (context, event) => {
+        if (TranscriptionErrorManager.shouldShowUserHint()) {
+          textualNotifications.showNotification(getMessage("audioInputError", "Say, Pi"), "microphone-muted");
+        } else {
+          // Optionally, log that the hint was suppressed, or do nothing.
+          console.debug("Transcription failure hint suppressed due to low error rate.");
+        }
       },
     },
     services: {},

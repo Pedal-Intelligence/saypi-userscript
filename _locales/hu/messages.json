@@ -89,7 +89,7 @@
   },
   "audioInputError": {
     "description": "Üzenet jelenik meg, amikor az audio üres átiratot eredményez - ez általában a szűrés eredménye.",
-    "message": "Hoppá, a $chatbot$ nem értette meg. Megpróbálhatná újra mondani?",
+    "message": "Hmm, $chatbot$ enyhe csuklás volt. \nMegpróbálhatnád ezt újra mondani?",
     "placeholders": {
       "chatbot": {
         "content": "$1",

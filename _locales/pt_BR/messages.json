@@ -89,7 +89,7 @@
   },
   "audioInputError": {
     "description": "Mensagem exibida quando o áudio resultou em uma transcrição vazia - geralmente o resultado de filtragem.",
-    "message": "Ops, $chatbot$ não entendeu isso. Você pode tentar dizer novamente?",
+    "message": "Hmm, $chatbot$ teve um leve soluço. \nVocê poderia tentar dizer isso de novo?",
     "placeholders": {
       "chatbot": {
         "content": "$1",

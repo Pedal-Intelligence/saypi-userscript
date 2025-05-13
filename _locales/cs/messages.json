@@ -69,7 +69,7 @@
   },
   "audioInputError": {
     "description": "Zpráva zobrazená, když audio vyústilo v prázdný přepis - obvykle výsledek filtrování.",
-    "message": "Jejda, $chatbot$ to nepochopil. Můžete to zkusit říct znovu?",
+    "message": "Hmm, $chatbot$ měl mírnou škytavku. \nMohl byste to zkusit znovu říct?",
     "placeholders": {
       "chatbot": {
         "content": "$1",

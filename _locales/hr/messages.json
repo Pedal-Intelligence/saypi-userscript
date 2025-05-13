@@ -69,7 +69,7 @@
   },
   "audioInputError": {
     "description": "Poruka prikazana kada audio rezultira praznom transkripcijom - obično je rezultat filtriranja.",
-    "message": "Ups, $chatbot$ to nije uhvatio. Možete li pokušati ponovno reći?",
+    "message": "Hmm, $chatbot$ imao je blagi štucanje. \nMožete li to pokušati ponovo reći?",
     "placeholders": {
       "chatbot": {
         "content": "$1",

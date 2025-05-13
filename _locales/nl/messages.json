@@ -89,7 +89,7 @@
   },
   "audioInputError": {
     "description": "Bericht weergegeven wanneer audio resulteerde in een lege transcriptie - meestal het gevolg van filteren.",
-    "message": "Oeps, $chatbot$ heeft dat niet opgevangen. Kun je het nog eens proberen te zeggen?",
+    "message": "Hmm, $chatbot$ had een lichte hik. \nZou je dat nog een keer kunnen proberen te zeggen?",
     "placeholders": {
       "chatbot": {
         "content": "$1",

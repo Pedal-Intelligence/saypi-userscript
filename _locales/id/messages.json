@@ -83,7 +83,7 @@
       }
     },
     "description": "Pesan yang ditampilkan ketika audio menghasilkan transkripsi kosong - biasanya merupakan hasil pemfilteran.",
-    "message": "Ups, $chatbot$ tidak mengerti. \nBisakah kamu mencoba mengatakannya lagi?"
+    "message": "Hmm, $chatbot$ memiliki sedikit cegukan. \nBisakah Anda mencoba mengatakan itu lagi?"
   },
   "assistantIsListening": {
     "placeholders": {
