@@ -462,8 +462,11 @@ class CallButton {
              // AnimationModule.startAnimation("glow"); // Ensure glow is on -- Handled by subscription
         } else {
             // If hands-free interrupt is ON, just show the regular hangup icon
-            this.callActive(button);
-            this.callInactive(button);
+            if (this.callIsActive) {
+                this.callActive(button);
+            } else {
+                this.callInactive(button);
+            }
         }
     }
 
