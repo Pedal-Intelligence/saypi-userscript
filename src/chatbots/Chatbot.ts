@@ -42,6 +42,10 @@ export interface Chatbot {
   getNickname(): Promise<string>; // Returns the user's preferred nickname for the AI assistant, or the default name if not set
   hasNickname(): Promise<boolean>;
   getVoiceMenu(preferences: UserPreferenceModule, element: HTMLElement): VoiceSelector;
+
+  // Cache and utility methods - implementations are in AbstractChatbot
+  getCachedAssistantResponse(element: HTMLElement): AssistantResponse | undefined;
+  clearCachedAssistantResponse(element: HTMLElement): boolean;
 }
 
 export interface UserPrompt {

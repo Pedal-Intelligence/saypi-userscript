@@ -1,4 +1,3 @@
-import { buttonModule } from "../ButtonModule.js";
 import {
   createMachine,
   Typestate,
@@ -28,6 +27,7 @@ import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import getMessage from "../i18n";
 import { Chatbot, UserPrompt } from "../chatbots/Chatbot";
 import { ImmersionStateChecker } from "../ImmersionServiceLite";
+import TranscriptionErrorManager from "../error-management/TranscriptionErrorManager";
 
 type SayPiTranscribedEvent = {
   type: "saypi:transcribed";
@@ -593,11 +593,17 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                       "#sayPi.listening.errorStatus.errors.transcribeFailed",
                     description:
                       "Out of sequence error response from the /transcribe API",
+                    actions: {
+                      type: "recordTranscriptionFailure"
+                    }
                   },
                   "saypi:transcribedEmpty": {
                     target: "#sayPi.listening.errorStatus.errors.micError",
                     description:
                       "Out of sequence empty response from the /transcribe API",
+                    actions: {
+                      type: "recordTranscriptionFailure"
+                    }
                   },
                 },
               },
@@ -656,6 +662,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     ],
                     description:
                       "Received an error response from the /transcribe API",
+                    actions: {
+                      type: "recordTranscriptionFailure"
+                    }
                   },
                   "saypi:transcribedEmpty": {
                     target: [
@@ -664,6 +673,9 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     ],
                     description:
                       "Received an empty response from the /transcribe API (no speech detected)",
+                    actions: {
+                      type: "recordTranscriptionFailure"
+                    }
                   },
                 },
               },
@@ -716,11 +728,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   micError: {
                     description: "No audio input detected",
                     entry: {
-                      type: "showNotification",
-                      params: {
-                        message: getMessage("audioInputError", "Say, Pi"),
-                        icon: "microphone-muted",
-                      },
+                      type: "showOrSuppressAudioInputErrorHint",
                     },
                     exit: {
                       type: "dismissNotification",
@@ -1094,8 +1102,17 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         const transcription = event.text;
         const sequenceNumber = event.sequenceNumber;
         const shouldRespondToThis = event.responseAnalysis?.shouldRespond;
-        console.debug(`Partial transcript [${sequenceNumber}]: ${transcription} [${shouldRespondToThis ? "respond" : "don't respond"}]`);
-        SayPiContext.transcriptions[sequenceNumber] = transcription;
+        console.debug(`Partial transcript [${sequenceNumber}]: ${transcription} [${shouldRespondToThis ? "respond" : "don\'t respond"}]`);
+        
+        if (transcription && transcription.trim() !== "") {
+          SayPiContext.transcriptions[sequenceNumber] = transcription;
+          TranscriptionErrorManager.recordAttempt(true); // Record success
+        } else {
+          // This case should ideally be handled by saypi:transcribedEmpty if the API guarantees it,
+          // but as a fallback, we can record a failure here if text is empty.
+          // However, the primary failure recording for empty will be on the saypi:transcribedEmpty event transition.
+        }
+
         if (event.merged) {
           event.merged.forEach((mergedSequenceNumber) => {
             delete SayPiContext.transcriptions[mergedSequenceNumber];
@@ -1256,51 +1273,51 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
 
       callIsStarting: () => {
-        buttonModule.callStarting();
+        // buttonModule.callStarting();
       },
       callFailedToStart: () => {
-        buttonModule.callInactive();
+        // buttonModule.callInactive();
         audibleNotifications.callFailed();
       },
       callNotStarted: () => {
-        if (buttonModule) {
+        //if (buttonModule) {
           // buttonModule may not be available on initial load
-          buttonModule.callInactive();
-        }
+          // buttonModule.callInactive();
+        //}
       },
       callHasStarted: () => {
-        buttonModule.callActive();
+        // buttonModule.callActive();
         audibleNotifications.callStarted();
         EventBus.emit("session:started");
       },
       callInterruptible: () => {
-        buttonModule.callInterruptible();
+        // buttonModule.callInterruptible();
       },
       callInterruptibleIfListening: (context: SayPiContext) => {
         if (context.lastState === "listening") {
-          buttonModule.callInterruptible();
+          // buttonModule.callInterruptible();
         }
       },
       callContinues: () => {
-        buttonModule.callActive();
+        // buttonModule.callActive();
       },
       callHasEnded: () => {
         visualNotifications.listeningStopped();
-        buttonModule.callInactive();
+        // buttonModule.callInactive();
         audibleNotifications.callEnded();
         EventBus.emit("session:ended");
       },
       callHasErrors: () => {
-        buttonModule.callError();
+        // buttonModule.callError();
       },
       callHasNoErrors: () => {
-        buttonModule.callActive();
+        // buttonModule.callActive();
       },
       disableCallButton: () => {
-        buttonModule.disableCallButton();
+        // buttonModule.disableCallButton();
       },
       enableCallButton: () => {
-        buttonModule.enableCallButton();
+        // buttonModule.enableCallButton();
       },
       cancelCountdownAnimation: () => {
         visualNotifications.listeningStopped();
@@ -1375,6 +1392,21 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
       resumeAudio: () => {
         EventBus.emit("audio:output:resume");
+      },
+      recordTranscriptionFailure: (context, event) => {
+        TranscriptionErrorManager.recordAttempt(false);
+      },
+      showOrSuppressAudioInputErrorHint: (context, event) => {
+        if (TranscriptionErrorManager.shouldShowUserHint()) {
+          chatbot.getNickname().then(nickname => {
+            const displayForSeconds = 10;
+            textualNotifications.showNotification(getMessage("audioInputError", nickname), "microphone-muted", displayForSeconds);
+            TranscriptionErrorManager.reset();
+          });
+        } else {
+          // Optionally, log that the hint was suppressed, or do nothing.
+          console.debug("Transcription failure hint suppressed due to low error rate.");
+        }
       },
     },
     services: {},

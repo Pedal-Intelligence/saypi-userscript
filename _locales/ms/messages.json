@@ -69,7 +69,7 @@
   },
   "audioInputError": {
     "description": "Mesej yang dipaparkan apabila audio menghasilkan transkripsi kosong - biasanya hasil daripada penapisan.",
-    "message": "Oops, $chatbot$ tidak menangkap itu. Bolehkah anda cuba mengatakannya lagi?",
+    "message": "Hmm, $chatbot$ mempunyai sedikit cegukan. \nBolehkah anda mencuba mengatakannya lagi?",
     "placeholders": {
       "chatbot": {
         "content": "$1",

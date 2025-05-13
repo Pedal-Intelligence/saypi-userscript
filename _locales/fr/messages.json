@@ -89,7 +89,7 @@
   },
   "audioInputError": {
     "description": "Message affiché lorsque l'audio a donné lieu à une transcription vide - généralement le résultat d'un filtrage.",
-    "message": "Oups, $chatbot$ n'a pas compris cela. Pouvez-vous essayer de le dire à nouveau?",
+    "message": "Hmm, $chatbot$ avait un léger hoquet. \nPourriez-vous essayer de redonner cela?",
     "placeholders": {
       "chatbot": {
         "content": "$1",

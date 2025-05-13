@@ -89,7 +89,7 @@
   },
   "audioInputError": {
     "description": "오디오가 빈 전사로 이어졌을 때 표시되는 메시지 - 보통 필터링의 결과입니다.",
-    "message": "이런, $chatbot$가 그것을 이해하지 못했습니다. 다시 말해 볼 수 있을까요?",
+    "message": "흠, $chatbot$에는 약간의 딸꾹질이있었습니다. \n다시 말해 주시겠습니까?",
     "placeholders": {
       "chatbot": {
         "content": "$1",

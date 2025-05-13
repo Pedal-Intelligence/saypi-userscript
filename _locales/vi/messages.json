@@ -89,7 +89,7 @@
   },
   "audioInputError": {
     "description": "Thông điệp hiển thị khi âm thanh dẫn đến một bản ghi âm trống - thường là kết quả của việc lọc.",
-    "message": "Ồ, $chatbot$ không hiểu được. Bạn có thể nói lại không?",
+    "message": "Hmm, $chatbot$ có một chút nấc cụt. \nBạn có thể thử nói điều đó một lần nữa không?",
     "placeholders": {
       "chatbot": {
         "content": "$1",

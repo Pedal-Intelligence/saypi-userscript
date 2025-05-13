@@ -171,6 +171,32 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
         }
       }
 
+      // Iterate over removed nodes
+      for (const node of [...mutation.removedNodes]) {
+        if (node instanceof HTMLElement) { // Ensure it's an HTMLElement
+          const removedElement = node as HTMLElement;
+          // Check if the removed node itself is an assistant message we might have cached
+          const cachedResponse = this.chatbot.getCachedAssistantResponse(removedElement);
+          if (cachedResponse) {
+            cachedResponse.teardown();
+            this.chatbot.clearCachedAssistantResponse(removedElement);
+          } else {
+            // If the removed node itself wasn't cached, check its descendants.
+            // This is important if a container of assistant messages is removed.
+            const descendantAssistantMessages = removedElement.querySelectorAll(".assistant-message");
+            descendantAssistantMessages.forEach(descendantNode => {
+              if (descendantNode instanceof HTMLElement) {
+                const cachedDescendantResponse = this.chatbot.getCachedAssistantResponse(descendantNode);
+                if (cachedDescendantResponse) {
+                  cachedDescendantResponse.teardown();
+                  this.chatbot.clearCachedAssistantResponse(descendantNode);
+                }
+              }
+            });
+          }
+        }
+      }
+
       // Iterate over nodes with changed attributes
       // e.g. when a message element becomes matchable during streaming
       if (

@@ -134,8 +134,8 @@
     }
   },
   "audioInputError": {
-    "message": "Oops, $chatbot$ didn't catch that. Can you try saying it again?",
-    "description": "Message displayed when audio resulted in an empty transcription - usually the result of filtering.",
+    "message": "Hmm, $chatbot$ had a slight hiccup. Could you try saying that again?",
+    "description": "Message displayed when audio transcription failed - usually the result of an ASR or LLM API error.",
     "placeholders": {
       "chatbot": {
         "content": "$1",

@@ -69,7 +69,7 @@
   },
   "audioInputError": {
     "description": "Viesti, joka näytetään kun ääni johti tyhjään transkriptioon - yleensä suodatuksen tulosta.",
-    "message": "Hups, $chatbot$ ei saanut sitä kiinni. Voisitko yrittää sanoa sen uudelleen?",
+    "message": "Hmm, $chatbot$ oli pieni hikka. \nVoisitko yrittää sanoa sen uudelleen?",
     "placeholders": {
       "chatbot": {
         "content": "$1",

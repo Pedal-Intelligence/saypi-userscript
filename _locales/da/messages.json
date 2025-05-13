@@ -69,7 +69,7 @@
   },
   "audioInputError": {
     "description": "Besked vist, når lyd resulterede i en tom transskription - normalt resultatet af filtrering.",
-    "message": "Ups, $chatbot$ fangede ikke det. Kan du prøve at sige det igen?",
+    "message": "Hmm, $chatbot$ havde en let hik. \nKunne du prøve at sige det igen?",
     "placeholders": {
       "chatbot": {
         "content": "$1",

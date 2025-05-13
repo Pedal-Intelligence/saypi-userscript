@@ -83,7 +83,7 @@
       }
     },
     "description": "Messaggio visualizzato quando l'audio ha prodotto una trascrizione vuota, in genere il risultato di un filtraggio.",
-    "message": "Spiacenti, $chatbot$ non l'ha capito. \nPuoi provare a dirlo di nuovo?"
+    "message": "Hmm, $chatbot$ aveva un leggero singhiozzo. \nPotresti provare di nuovo?"
   },
   "assistantIsListening": {
     "placeholders": {

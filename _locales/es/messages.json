@@ -55,7 +55,7 @@
       }
     },
     "description": "Mensaje que se muestra cuando el audio da como resultado una transcripción vacía, generalmente como resultado del filtrado.",
-    "message": "Vaya, $chatbot$ no captó eso. \n¿Puedes intentar decirlo de nuevo?"
+    "message": "Hmm, $chatbot$ tenía un ligero hipo. \n¿Podrías intentar decir eso de nuevo?"
   },
   "assistantIsListening": {
     "placeholders": {

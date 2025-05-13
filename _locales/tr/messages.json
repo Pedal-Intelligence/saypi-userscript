@@ -69,7 +69,7 @@
   },
   "audioInputError": {
     "description": "Sesin boş bir transkript sonucu verdiği durumlarda görüntülenen mesaj - genellikle filtrelemenin bir sonucudur.",
-    "message": "Hata, $chatbot$ bunu anlamadı. Tekrar söyleyebilir misiniz?",
+    "message": "Hmm, $chatbot$ hafif bir hıçkırık vardı. \nBunu tekrar söylemeyi deneyebilir misin?",
     "placeholders": {
       "chatbot": {
         "content": "$1",

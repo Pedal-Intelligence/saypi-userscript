@@ -83,7 +83,7 @@
       }
     },
     "description": "Komunikat wyświetlany, gdy dźwięk spowodował pustą transkrypcję – zwykle w wyniku filtrowania.",
-    "message": "Ups, $chatbot$ tego nie załapał. \nMożesz spróbować powiedzieć to jeszcze raz?"
+    "message": "Hmm, $chatbot$ miała lekką czkawkę. \nCzy możesz spróbować to powiedzieć?"
   },
   "assistantIsListening": {
     "placeholders": {

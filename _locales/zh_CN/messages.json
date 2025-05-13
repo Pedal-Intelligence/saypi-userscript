@@ -89,7 +89,7 @@
   },
   "audioInputError": {
     "description": "当音频导致空白转录时显示的消息 - 通常是过滤的结果。",
-    "message": "哎呀，$chatbot$没有抓住那个。你能再说一遍吗？",
+    "message": "嗯，$chatbot$有点打ic。\n你能再说一次吗？",
     "placeholders": {
       "chatbot": {
         "content": "$1",

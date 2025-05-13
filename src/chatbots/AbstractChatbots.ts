@@ -9,7 +9,17 @@ import type { ChatbotService } from "./ChatbotService";
 
 export abstract class AbstractChatbot implements Chatbot {
     protected readonly preferences = UserPreferenceModule.getInstance();
+    private assistantResponseCache = new WeakMap<HTMLElement, AssistantResponse>();
   
+  
+    public getCachedAssistantResponse(element: HTMLElement): AssistantResponse | undefined {
+      return this.assistantResponseCache.get(element);
+    }
+
+    public clearCachedAssistantResponse(element: HTMLElement): boolean {
+      return this.assistantResponseCache.delete(element);
+    }
+
     abstract getChatHistory(searchRoot: HTMLElement): HTMLElement;
     abstract getChatHistorySelector(): string;
     abstract getPastChatHistorySelector(): string;
@@ -36,7 +46,21 @@ export abstract class AbstractChatbot implements Chatbot {
     abstract getPromptInput(searchRoot: Element): HTMLElement; // search for the prompt input element
     abstract getPromptContainer(prompt: HTMLElement): HTMLElement;
     abstract getPromptControlsContainer(promptContainer: HTMLElement): HTMLElement;
-    abstract getAssistantResponse(element: HTMLElement, includeInitialText?: boolean): AssistantResponse;
+    
+    protected abstract createAssistantResponse(element: HTMLElement, includeInitialText?: boolean): AssistantResponse;
+
+    getAssistantResponse(element: HTMLElement, includeInitialText?: boolean): AssistantResponse {
+      if (this.assistantResponseCache.has(element)) {
+        // TODO: Consider if includeInitialText should affect a cached instance.
+        // For now, returning cached instance directly as per user agreement.
+        // console.debug(`Cache hit for element (xpathHash: ${this.simpleHash(this.getElementXPath(element))}, utteranceId: ${element.dataset.utteranceId || "N/A"})`);
+        return this.assistantResponseCache.get(element)!;
+      }
+      const newResponse = this.createAssistantResponse(element, includeInitialText);
+      this.assistantResponseCache.set(element, newResponse);
+      // console.debug(`Cache miss for element (xpathHash: ${this.simpleHash(this.getElementXPath(element))}, utteranceId: ${element.dataset.utteranceId || "N/A"})`);
+      return newResponse;
+    }
     abstract getUserMessage(element: HTMLElement): UserMessage;
     abstract getName(): string;
     abstract getVoiceMenu(preferences: UserPreferenceModule, element: HTMLElement): VoiceSelector;

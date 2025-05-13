@@ -133,6 +133,10 @@ class PiAIChatbot extends AbstractChatbot {
   }
 
   getAssistantResponse(element: HTMLElement): AssistantResponse {
+    return super.getAssistantResponse(element);
+  }
+
+  protected createAssistantResponse(element: HTMLElement): AssistantResponse {
     return new PiResponse(element);
   }
 
@@ -267,10 +271,9 @@ class PiTextStream extends ElementTextStream {
    */
   handleMutationEvent = (mutation: MutationRecord) => {
     if (this.closed()) {
-      console.debug(
-        `Skipping change event on ${mutation.target} because the stream has already been completed`,
-        mutation
-      );
+      // console.debug(
+      //   `Skipping change event on ${mutation.target} because the stream has already been completed`
+      // );
       return;
     }
 

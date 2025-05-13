@@ -46,6 +46,12 @@ interface TimelineSegment {
   row?: number;
 }
 
+// Add this type definition if it's not already globally available or imported
+type EventListener = {
+  event: string;
+  listener: (...args: any[]) => void;
+};
+
 // Add the window interface augmentation at the top of the file
 declare global {
   interface Window {
@@ -105,6 +111,7 @@ abstract class AssistantResponse {
   protected includeInitialText = true; // stable text may be called on completed messages, so include the initial text unless streaming
   protected ttsControlsModule: TTSControlsModule;
   protected messageControls: MessageControls;
+  private textStream: ElementTextStream | null = null; // Added to track the text stream
 
   abstract get contentSelector(): string;
   abstract createTextStream(
@@ -119,7 +126,15 @@ abstract class AssistantResponse {
     this.ttsControlsModule = TTSControlsModule.getInstance();
     this.decorate();
     this.messageControls = this.decorateControls();
+    EventBus.on("saypi:billing:utteranceFailed", this.handleUtteranceFailed);
+    // Store this listener if not already tracked elsewhere
   }
+
+  private handleUtteranceFailed = (utterance: FailedSpeechUtterance) => {
+    if (utterance.id === this.utteranceId) {
+      this.decorateFailedSpeech(true);
+    }
+  };
 
   private async decorate(): Promise<void> {
     this._element.classList.add("chat-message", "assistant-message");
@@ -408,6 +423,17 @@ abstract class AssistantResponse {
       : `AssistantResponse: { id: ${this.element.id}, utteranceId: ${this.utteranceId}, hash: ${this.hash} }`;
     return text;
   }
+
+  public teardown(): void {
+    console.debug(`Tearing down AssistantResponse for element: ${this.element.outerHTML.substring(0, 100)}...`);
+    this.messageControls.teardown();
+    if (this.textStream) {
+      this.textStream.disconnect(); // Assuming disconnect is the cleanup method
+      this.textStream = null;
+    }
+    EventBus.off("saypi:billing:utteranceFailed", this.handleUtteranceFailed);
+    // Add any other specific listener removal for AssistantResponse here
+  }
 }
 
 abstract class MessageControls {
@@ -415,6 +441,7 @@ abstract class MessageControls {
   protected messageControlsElement: HTMLElement | null; // message controls is the container for Say, Pi buttons etc.
   protected telemetryData: TelemetryData | null = null;
   protected telemetryContainer: HTMLElement | null = null;
+  private eventListeners: EventListener[] = []; // Added to track event listeners
 
   constructor(
     protected message: AssistantResponse,
@@ -426,7 +453,17 @@ abstract class MessageControls {
     if (this.message.isLastMessage()) {
       // Listen for telemetry updates
       EventBus.on("telemetry:updated", this.handleTelemetryUpdate);
+      this.eventListeners.push({ event: "telemetry:updated", listener: this.handleTelemetryUpdate });
     }
+  }
+
+  public teardown(): void {
+    console.debug("Tearing down MessageControls...");
+    this.eventListeners.forEach(({ event, listener }) => {
+      EventBus.off(event, listener);
+    });
+    this.eventListeners = [];
+    // Add any other specific cleanup for MessageControls here
   }
 
   protected getExtraControlClasses(): string[] {
@@ -653,23 +690,23 @@ abstract class MessageControls {
       EventBus.on(
         "saypi:tts:menuPop",
         (event: { utteranceId: string; menu: PopupMenu }) => {
-          const id = this.message.element.dataset.utteranceId;
-          if (
-            !id ||
-            id !== event.utteranceId ||
+    const id = this.message.element.dataset.utteranceId;
+    if (
+      !id ||
+      id !== event.utteranceId ||
             id !== charge.utteranceId ||
             !charge.cost
-          ) {
-            return;
-          }
-          const menuElement = event.menu.element;
-          const menuCostElement = menuElement.querySelector(".saypi-cost");
-          if (menuCostElement) {
-            this.ttsControls.updateCostBasis(menuElement, charge);
-          } else {
-            this.ttsControls.addCostBasis(menuElement, charge, true);
-          }
-        }
+    ) {
+      return;
+    }
+    const menuElement = event.menu.element;
+    const menuCostElement = menuElement.querySelector(".saypi-cost");
+      if (menuCostElement) {
+        this.ttsControls.updateCostBasis(menuElement, charge);
+      } else {
+        this.ttsControls.addCostBasis(menuElement, charge, true);
+      }
+    }
       );
     }
   }

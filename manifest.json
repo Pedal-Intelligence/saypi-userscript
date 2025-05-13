@@ -13,8 +13,13 @@
   ],
   "content_scripts": [
     {
-      "matches": ["https://pi.ai/*", "https://claude.ai/*"],
-      "js": ["public/saypi.user.js"]
+      "matches": [
+        "https://pi.ai/*",
+        "https://claude.ai/*"
+      ],
+      "js": [
+        "public/saypi.user.js"
+      ]
     }
   ],
   "background": {
@@ -42,10 +47,12 @@
         "src/icons/flags/*.svg",
         "src/popup/*.svg"
       ],
-      "matches": ["https://pi.ai/*", "https://claude.ai/*"]
+      "matches": [
+        "https://pi.ai/*",
+        "https://claude.ai/*"
+      ]
     }
   ],
-
   "author": "Ross Cadogan",
   "homepage_url": "https://www.saypi.ai",
   "action": {
