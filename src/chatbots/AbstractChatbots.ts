@@ -11,51 +11,15 @@ export abstract class AbstractChatbot implements Chatbot {
     protected readonly preferences = UserPreferenceModule.getInstance();
     private assistantResponseCache = new WeakMap<HTMLElement, AssistantResponse>();
   
-    private getElementXPath(element: HTMLElement): string {
-      if (element && element.id) {
-        return `id("${element.id}")`;
-      }
-      const parts: string[] = [];
-      while (element && element.nodeType === Node.ELEMENT_NODE) {
-        let nbOfPreviousSiblings = 0;
-        let hasNextSiblings = false;
-        let sibling = element.previousSibling;
-        while (sibling) {
-          if (sibling.nodeType === Node.ELEMENT_NODE && sibling.nodeName === element.nodeName) {
-            nbOfPreviousSiblings++;
-          }
-          sibling = sibling.previousSibling;
-        }
-        sibling = element.nextSibling;
-        while (sibling) {
-          if (sibling.nodeType === Node.ELEMENT_NODE && sibling.nodeName === element.nodeName) {
-            hasNextSiblings = true;
-            break;
-          }
-          sibling = sibling.nextSibling;
-        }
-        const prefix = element.prefix ? element.prefix + ":" : "";
-        const nth = nbOfPreviousSiblings || hasNextSiblings ? `[${nbOfPreviousSiblings + 1}]` : "";
-        parts.unshift(prefix + element.localName + nth);
-        if (element.parentNode instanceof HTMLElement) {
-          element = element.parentNode;
-        } else {
-          break; // Stop if parent is not an HTMLElement (e.g., DocumentFragment or null)
-        }
-      }
-      return parts.length ? "/" + parts.join("/") : "";
+  
+    public getCachedAssistantResponse(element: HTMLElement): AssistantResponse | undefined {
+      return this.assistantResponseCache.get(element);
     }
 
-    private simpleHash(str: string): number {
-      let hash = 0;
-      for (let i = 0; i < str.length; i++) {
-        const char = str.charCodeAt(i);
-        hash = (hash << 5) - hash + char;
-        hash |= 0; // Convert to 32bit integer
-      }
-      return hash;
+    public clearCachedAssistantResponse(element: HTMLElement): boolean {
+      return this.assistantResponseCache.delete(element);
     }
-  
+
     abstract getChatHistory(searchRoot: HTMLElement): HTMLElement;
     abstract getChatHistorySelector(): string;
     abstract getPastChatHistorySelector(): string;
@@ -89,12 +53,12 @@ export abstract class AbstractChatbot implements Chatbot {
       if (this.assistantResponseCache.has(element)) {
         // TODO: Consider if includeInitialText should affect a cached instance.
         // For now, returning cached instance directly as per user agreement.
-        console.debug(`Cache hit for element with XPath hash: ${this.simpleHash(this.getElementXPath(element))}`);
+        // console.debug(`Cache hit for element (xpathHash: ${this.simpleHash(this.getElementXPath(element))}, utteranceId: ${element.dataset.utteranceId || "N/A"})`);
         return this.assistantResponseCache.get(element)!;
       }
       const newResponse = this.createAssistantResponse(element, includeInitialText);
       this.assistantResponseCache.set(element, newResponse);
-      console.debug(`Cache miss for element with XPath hash: ${this.simpleHash(this.getElementXPath(element))}`);
+      // console.debug(`Cache miss for element (xpathHash: ${this.simpleHash(this.getElementXPath(element))}, utteranceId: ${element.dataset.utteranceId || "N/A"})`);
       return newResponse;
     }
     abstract getUserMessage(element: HTMLElement): UserMessage;
