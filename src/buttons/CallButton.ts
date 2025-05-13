@@ -225,13 +225,16 @@ class CallButton {
             return;
         }
 
+        // Get the original background element
+        const originalBackground = svg.querySelector('path#background') || svg.querySelector('path:first-of-type');
+
         if (!segmentsGroup) {
             segmentsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
             segmentsGroup.setAttribute('id', 'saypi-segments-group');
             svg.insertBefore(segmentsGroup, svg.firstChild);
         }
 
-        // Clear existing segments
+        // Clear existing drawn segments from the segmentsGroup first
         while (segmentsGroup.firstChild) {
             segmentsGroup.removeChild(segmentsGroup.firstChild);
         }
@@ -249,7 +252,21 @@ class CallButton {
         }
 
         const totalSegments = allSegmentsData.length;
-        if (totalSegments === 0) return;
+
+        if (totalSegments === 0) {
+            // No segments to draw, ensure original background is visible
+            if (originalBackground) {
+                originalBackground.setAttribute('fill-opacity', '0.8'); // Assuming 0.8 is the default
+                // Or use originalBackground.style.display = 'block'; if it was hidden by display:none
+            }
+            return; // Exit early
+        }
+
+        // If we have segments, hide the original background
+        if (originalBackground) {
+            originalBackground.setAttribute('fill-opacity', '0');
+            // Or use originalBackground.style.display = 'none';
+        }
 
         const viewBox = svg.getAttribute('viewBox')?.split(' ').map(Number);
         const svgWidth = viewBox ? viewBox[2] : 80; // Default guess
@@ -381,16 +398,7 @@ class CallButton {
             return;
         }
 
-        // 3. Identify & Remove Original Background from the newSvgElement IF THE CALL IS ACTIVE
-        if (isActiveState) {
-            const originalBackground = newSvgElement.querySelector('path#background') || newSvgElement.querySelector('path:first-of-type');
-            if (originalBackground && originalBackground.parentNode === newSvgElement) {
-                newSvgElement.removeChild(originalBackground);
-                console.debug("Original SVG background removed because call is active.");
-            }
-        } else {
-            console.debug("Original SVG background preserved because call is not active.");
-        }
+        // 3. Original background is NOT removed here anymore. It will be handled by updateButtonSegments.
 
         // 4. Create the segments group that will live inside the new SVG element.
         const segmentsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
