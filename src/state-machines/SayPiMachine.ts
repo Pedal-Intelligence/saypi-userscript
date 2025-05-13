@@ -1398,7 +1398,11 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
       showOrSuppressAudioInputErrorHint: (context, event) => {
         if (TranscriptionErrorManager.shouldShowUserHint()) {
-          textualNotifications.showNotification(getMessage("audioInputError", "Say, Pi"), "microphone-muted");
+          chatbot.getNickname().then(nickname => {
+            const displayForSeconds = 10;
+            textualNotifications.showNotification(getMessage("audioInputError", nickname), "microphone-muted", displayForSeconds);
+            TranscriptionErrorManager.reset();
+          });
         } else {
           // Optionally, log that the hint was suppressed, or do nothing.
           console.debug("Transcription failure hint suppressed due to low error rate.");

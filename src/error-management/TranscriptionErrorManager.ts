@@ -1,5 +1,5 @@
-const ATTEMPT_WINDOW_SIZE = 10;
-const FAILURE_RATE_THRESHOLD = 0.6; // 60%
+const ATTEMPT_WINDOW_SIZE = 6;
+const FAILURE_RATE_THRESHOLD = 0.5; // 50%
 
 class TranscriptionErrorManager {
   private static instance: TranscriptionErrorManager;
