@@ -1,6 +1,8 @@
 import { isFirefox } from "../UserAgentModule";
 import { config } from "../ConfigModule";
 import { jwtManager } from "../JwtManager";
+import { offscreenManager } from "../offscreen/offscreen_manager";
+import { logger } from "../LoggingModule.js";
 
 // Expose instances globally for popup access
 (self as any).jwtManager = jwtManager;
@@ -188,8 +190,34 @@ async function pollAuthCookie() {
 const pollingInterval = isFirefox() ? 300000 : 5000; // 5 minutes for Firefox, 5 seconds for others
 setInterval(pollAuthCookie, pollingInterval);
 
-// Handle popup opening
+// Handle VAD communication via Offscreen Document
+chrome.runtime.onConnect.addListener((port) => {
+  // Handle connections from content scripts for VAD
+  if (port.name === "vad-content-script-connection") {
+    offscreenManager.registerContentScriptConnection(port);
+  }
+  // Potentially other onConnect handlers could go here or be merged if names conflict
+});
+
+// Handle popup opening AND messages from Offscreen Document AND Error Reports
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // Prioritize messages from the offscreen document (VAD events)
+  // @ts-expect-error chrome.offscreen is not available in types yet
+  if (sender.url === chrome.runtime.getURL(offscreenManager.OFFSCREEN_DOCUMENT_PATH) && message.targetTabId !== undefined && message.origin === "offscreen-document") {
+    logger.debug("[Background] Received VAD event from offscreen document:", message);
+    offscreenManager.forwardMessageToContentScript(message.targetTabId, message);
+    return; // Stop processing if handled as an offscreen VAD event
+  }
+
+  // Handle error reports from any part of the extension using the logger
+  if (message.type === "LOG_ERROR_REPORT" && message.origin === "logger-reportError") {
+    logger.error("[Background] Error reported from extension module:", message.error.message, message.error);
+    // TODO: Implement more robust error storage or analytics reporting if needed
+    // Example: storeErrorForAnalysis(message.error);
+    // Example: if (isCriticalError(message.error)) { showNotification(...) }
+    return; // Error report handled
+  }
+
   if (message.action === 'openPopup') {
     try {
       const isNotFirefox = !isFirefox();
@@ -352,10 +380,25 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       console.error('Failed to get auth status:', error);
       sendResponse({ isAuthenticated: false });
     }
+    // No return true here as it's synchronous
+    return; // Explicitly return to avoid falling through if this was the last handler.
   }
   
-  // Return true if we're handling the response asynchronously
-  return message.type === 'REDIRECT_TO_LOGIN';
+  // Return true if we're handling the response asynchronously for other message types
+  // This ensures that the sendResponse function remains valid for async operations
+  // like REDIRECT_TO_LOGIN, GET_JWT_CLAIMS, etc.
+  const asyncMessageTypes = [
+    'GET_JWT_CLAIMS', 
+    'CHECK_FEATURE_ENTITLEMENT', 
+    'REDIRECT_TO_LOGIN',
+    // Add any other async message types here
+  ];
+  if (asyncMessageTypes.includes(message.type)) {
+    return true;
+  }
+  
+  // If no specific handler matched or it was synchronous and didn't return true,
+  // we don't need to keep the message channel open.
 });
 
 // Handle authentication cookie changes

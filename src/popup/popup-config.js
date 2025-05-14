@@ -5,8 +5,8 @@
  */
 const config = {
   // Values from .env
-  apiBaseUrl: "https://localhost:5001",
-  authServerUrl: "http://localhost:3000"
+  apiBaseUrl: "https://api.saypi.ai",
+  authServerUrl: "https://www.saypi.ai"
 };
 
 // Config is now globally accessible via window.config
