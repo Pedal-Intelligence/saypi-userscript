@@ -140,7 +140,12 @@ const debouncedOnFrameProcessed = debounce(
 
 // Options for MicVAD
 const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
-  workletURL: fullWorkletURL,
+  model: "v5", // specifying a model key triggers loading the silero_vad_v5.onnx model
+  ortConfig: (ort: any) => {
+    ort.env.wasm.wasmPaths = chrome.runtime.getURL("public/");
+    ort.env.wasm.numThreads = 1; // single threading for improved compatibility
+    ort.env.wasm.simd = true; // always true in Silero VAD v5
+  },
   positiveSpeechThreshold: 0.8,
   minSpeechFrames: 3,
   preSpeechPadFrames: 10,
@@ -170,23 +175,18 @@ const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
 
 const firefoxMicVADOptions: Partial<RealTimeVADOptions> &
   MyRealTimeVADCallbacks = {
-  ...micVADOptions,
+  ...micVADOptions, 
   workletOptions: {},
-  ortConfig: (ort: any) => {
-    ort.env.wasm.wasmPaths = chrome.runtime.getURL("public/");
-  },
-  modelFetcher: customModelFetcher,
 };
 
 // Safari-specific options
 const safariMicVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
-  ...micVADOptions,
+  ...micVADOptions, 
   workletOptions: {},
-  modelFetcher: customModelFetcher,
   ortConfig: (ort: any) => {
-    // Basic configuration
-    ort.env.wasm.numThreads = 1; // Disable threading (default is 2)
-    ort.env.wasm.simd = true; // Enable SIMD
+    if (micVADOptions.ortConfig) {
+        micVADOptions.ortConfig(ort);
+    }
   },
 };
 
@@ -274,13 +274,10 @@ async function setupRecording(completion_callback?: () => void): Promise<void> {
     const partialVADOptions = {
       ...baseOptions,
       stream,
-      ortConfig: (ort: any) => {
-        // Call the original ortConfig if it exists
-        baseOptions.ortConfig?.(ort);
-      }
     };
 
     console.debug("Permission granted for microphone access");
+    console.debug("VAD options:", partialVADOptions);
     microphone = await MicVAD.new(partialVADOptions);
     console.debug("VAD microphone loaded");
 
