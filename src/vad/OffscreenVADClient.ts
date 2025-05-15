@@ -177,11 +177,8 @@ export class OffscreenVADClient {
 
   // Register VAD event callbacks
   public on(eventName: keyof VADClientCallbacks, callback: Function): void {
-    if (eventName in this.callbacks) {
-      // @ts-ignore
-      this.callbacks[eventName] = callback;
-    } else {
-      console.warn(`[SayPi OffscreenVADClient] Unknown event name: ${eventName}`);
-    }
+    // Register VAD event callback unconditionally
+    // @ts-ignore
+    this.callbacks[eventName] = callback;
   }
 } 
