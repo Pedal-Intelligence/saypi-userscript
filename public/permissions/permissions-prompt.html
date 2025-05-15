@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Microphone Permission</title>
+  <meta charset="utf-8">
+  <script src="/public/permissions/permissions-prompt.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 20px; text-align: center; margin: 0; background-color: #f4f4f4; color: #333; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; }
+    .container { background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 400px; }
+    h1 { color: #2c3e50; margin-top: 0; }
+    p { margin-bottom: 15px; line-height: 1.6; }
+    #status { margin-top: 20px; font-weight: bold; }
+    .footer-text { font-size: 0.9em; color: #777; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Microphone Access Required</h1>
+    <p>To enable voice features, this extension needs access to your microphone.</p>
+    <p>Please click <strong>"Allow"</strong> in the permission prompt that appears (usually at the top of your browser).</p>
+    <p id="status">Requesting permission...</p>
+    <p class="footer-text">This window will close automatically after you respond.</p>
+  </div>
+</body>
+</html> 

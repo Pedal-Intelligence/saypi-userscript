@@ -55,7 +55,8 @@ const config = {
     entry: {
       main: "./src/saypi.index.js",
       background: "./src/svc/background.ts",
-      offscreenVAD: "./src/offscreen/vad_offscreen.ts"
+      offscreenVAD: "./src/offscreen/vad_offscreen.ts",
+      permissionsPrompt: "./src/permissions/permissions-prompt.ts"
     },
     output: {
       filename: (chunkData) => {
@@ -66,6 +67,8 @@ const config = {
             return "background.js";
           case "offscreenVAD":
             return "offscreen/vad_offscreen.js";
+          case "permissionsPrompt":
+            return "permissions/permissions-prompt.js";
           default:
             return "[name].bundle.js";
         }
@@ -152,6 +155,10 @@ const config = {
           {
             from: "node_modules/onnxruntime-web/dist/ort-wasm*.wasm",
             to: "[name][ext]",
+          },
+          {
+            from: "src/permissions/permissions-prompt.html",
+            to: "permissions/[name][ext]",
           },
         ],
       }),

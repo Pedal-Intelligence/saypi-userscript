@@ -4,6 +4,8 @@ import { jwtManager } from "../JwtManager";
 import { offscreenManager, OFFSCREEN_DOCUMENT_PATH } from "../offscreen/offscreen_manager";
 import { logger } from "../LoggingModule.js";
 
+const PERMISSIONS_PROMPT_PATH_HTML = 'src/permissions/permissions-prompt.html';
+
 // Expose instances globally for popup access
 (self as any).jwtManager = jwtManager;
 
@@ -199,8 +201,128 @@ chrome.runtime.onConnect.addListener((port) => {
   // Potentially other onConnect handlers could go here or be merged if names conflict
 });
 
-// Handle popup opening AND messages from Offscreen Document AND Error Reports
+function replyToRequester(
+  sender: chrome.runtime.MessageSender,
+  payload: any
+) {
+  if (sender.tab?.id !== undefined) {
+    // Came from a content script – send directly to that tab
+    chrome.tabs.sendMessage(sender.tab.id, payload);
+  } else {
+    // Came from another extension page (popup, off-screen, etc.)
+    chrome.runtime.sendMessage(payload);   // fallback broadcast
+  }
+}
+
+async function handleCheckAndRequestMicPermission(originalRequestId: string, originalSender: chrome.runtime.MessageSender) {
+  logger.debug(`[Background] Handling CHECK_AND_REQUEST_MICROPHONE_PERMISSION for request ID ${originalRequestId} from sender: ${originalSender}`);
+  try {
+    const permissionStatus = await navigator.permissions.query({ name: 'microphone' as PermissionName });
+    logger.debug(`[Background] Microphone permission state for extension origin: ${permissionStatus.state}`);
+
+    if (permissionStatus.state === 'granted') {
+      replyToRequester(originalSender, {
+        type: 'MICROPHONE_PERMISSION_RESPONSE',
+        requestId: originalRequestId,
+        granted: true
+      });
+      return;
+    }
+
+    // If 'denied' or 'prompt', proceed to open the permissions tab.
+    const permissionsPageUrl = chrome.runtime.getURL(PERMISSIONS_PROMPT_PATH_HTML);
+    let newTabId: number | undefined;
+    let handlingPrompt = true; // Flag to manage listeners correctly
+
+    const cleanupPromptListeners = () => {
+      if (!handlingPrompt) return;
+      handlingPrompt = false; // Prevent re-entry or duplicate cleanups
+      logger.debug(`[Background] Cleaning up listeners for permission request ${originalRequestId}`);
+      chrome.runtime.onMessage.removeListener(messageListenerFromPromptTab);
+      if (newTabId !== undefined) {
+        chrome.tabs.onRemoved.removeListener(removedListenerForPromptTab);
+      }
+    };
+
+    const sendFinalResponseToRequester = (granted: boolean, error?: string) => {
+      if (!handlingPrompt) { // If listeners already cleaned up (e.g. tab closed by user first)
+        logger.debug(`[Background] Attempted to send final response for ${originalRequestId}, but already handled.`);
+        return;
+      }
+      logger.debug(`[Background] Sending final MICROPHONE_PERMISSION_RESPONSE for ${originalRequestId}: granted=${granted}, error=${error}`);
+      replyToRequester(originalSender, {
+        type: 'MICROPHONE_PERMISSION_RESPONSE',
+        requestId: originalRequestId,
+        granted: granted,
+        error: error
+      });
+      cleanupPromptListeners(); 
+    };
+
+    const messageListenerFromPromptTab = (msg: any, senderFromPrompt: chrome.runtime.MessageSender) => {
+      if (senderFromPrompt.tab?.id === newTabId && msg.type === 'PERMISSION_PROMPT_RESULT') {
+        logger.debug(`[Background] Received PERMISSION_PROMPT_RESULT from tab ${newTabId} for request ${originalRequestId}: granted=${msg.granted}`);
+        sendFinalResponseToRequester(msg.granted, msg.error);
+        // The permissions-prompt.js will close its own tab.
+      }
+    };
+
+    const removedListenerForPromptTab = (tabId: number, removeInfo: chrome.tabs.TabRemoveInfo) => {
+      if (tabId === newTabId) {
+        logger.debug(`[Background] Permissions tab ${newTabId} for request ${originalRequestId} was removed by user or closed.`);
+        // If the tab is removed before the prompt page sends its message, consider it a denial or interruption.
+        sendFinalResponseToRequester(false, 'Permission prompt closed by user or failed to respond.');
+      }
+    };
+    
+    chrome.runtime.onMessage.addListener(messageListenerFromPromptTab);
+
+    try {
+      logger.debug(`[Background] Creating permissions tab for request ${originalRequestId} with URL: ${permissionsPageUrl}`);
+      const tab = await chrome.tabs.create({ url: permissionsPageUrl, active: true });
+      newTabId = tab.id;
+      if (newTabId === undefined) { 
+        throw new Error("Failed to create permissions tab (no ID returned).");
+      }
+      chrome.tabs.onRemoved.addListener(removedListenerForPromptTab);
+      logger.debug(`[Background] Permissions tab ${newTabId} created and listeners attached for request ${originalRequestId}`);
+    } catch (tabError: any) {
+      logger.error(`[Background] Error creating permissions tab for request ${originalRequestId}:`, tabError);
+      sendFinalResponseToRequester(false, `Failed to open permissions tab: ${tabError.message || tabError.toString()}`);
+    }
+
+  } catch (queryError: any) {
+    logger.error(`[Background] Error querying microphone permission for request ${originalRequestId}:`, queryError);
+    replyToRequester(originalSender, {
+      type: 'MICROPHONE_PERMISSION_RESPONSE',
+      requestId: originalRequestId,
+      granted: false,
+      error: `Failed to query microphone permission status: ${queryError.message || queryError.toString()}`
+    });
+  }
+}
+
+// Handle popup opening AND messages from Offscreen Document AND Error Reports AND Mic Permissions
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  logger.debug("[Background] onMessage received:", message, "from sender:", sender);
+
+  // --- START: Microphone Permission Handling ---
+  if (message.type === 'CHECK_AND_REQUEST_MICROPHONE_PERMISSION' && message.requestId) {
+    // Ensure the sender is from the extension itself (e.g., AudioInputMachine)
+    // content scripts will have sender.id as undefined, extension pages will have chrome.runtime.id
+    if (sender.id === chrome.runtime.id || sender.url?.startsWith(chrome.runtime.getURL(''))) {
+      logger.debug("[Background] Received CHECK_AND_REQUEST_MICROPHONE_PERMISSION from valid sender.");
+      handleCheckAndRequestMicPermission(message.requestId, sender);
+      // Acknowledge the request. The actual result is sent asynchronously by handleCheckAndRequestMicPermission.
+      sendResponse({ status: 'processing_permission_check_acknowledged' }); 
+    } else {
+      logger.warn("[Background] CHECK_AND_REQUEST_MICROPHONE_PERMISSION from unexpected sender:", sender);
+      sendResponse({ status: 'error_before_prompt', error: 'Unauthorized sender for permission check' });
+    }
+    return true; // Indicate that the response will be sent asynchronously.
+  }
+  // --- END: Microphone Permission Handling ---
+
   // Log details for the getURL call
   logger.debug(
     "[Background] Pre-getURL check. Path type:", 
@@ -230,10 +352,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // Handle error reports from any part of the extension using the logger
   if (message.type === "LOG_ERROR_REPORT" && message.origin === "logger-reportError") {
     logger.error("[Background] Error reported from extension module:", message.error.message, message.error);
-    // TODO: Implement more robust error storage or analytics reporting if needed
-    // Example: storeErrorForAnalysis(message.error);
-    // Example: if (isCriticalError(message.error)) { showNotification(...) }
-    return; // Error report handled
+    sendResponse({ status: "error_logged" });
+    return; // Synchronous, error logged.
   }
 
   if (message.action === 'openPopup') {
@@ -261,19 +381,21 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     try {
       const quotaDetails = jwtManager.getTTSQuotaDetails();
       sendResponse(quotaDetails);
-    } catch (error) {
-      console.error('Failed to get quota details:', error);
+    } catch (error: any) {
+      logger.error('Failed to get quota details:', error);
       sendResponse(null);
     }
+    return false; // Synchronous response
   } else if (message.type === 'GET_STT_QUOTA_DETAILS') {
     // Handle STT quota details request
     try {
       const sttQuotaDetails = jwtManager.getSTTQuotaDetails();
       sendResponse(sttQuotaDetails);
-    } catch (error) {
-      console.error('Failed to get STT quota details:', error);
+    } catch (error: any) {
+      logger.error('Failed to get STT quota details:', error);
       sendResponse(null);
     }
+    return false; // Synchronous response
   } else if (message.type === 'GET_JWT_CLAIMS') {
     // Handle JWT claims request - async handler
     (async () => {
@@ -302,13 +424,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true; // Indicate we'll respond asynchronously
   } else if (message.type === 'CHECK_FEATURE_ENTITLEMENT') {
     // Check if user is entitled to a specific feature
-    try {
-      const hasEntitlement = jwtManager.hasFeatureEntitlement(message.feature);
-      sendResponse({ hasEntitlement });
-    } catch (error) {
-      console.error('Failed to check feature entitlement:', error);
-      sendResponse({ hasEntitlement: false });
-    }
+    (async () => {
+      try {
+        const hasEntitlement = jwtManager.hasFeatureEntitlement(message.feature);
+        sendResponse({ hasEntitlement });
+      } catch (error: any) {
+        logger.error('Failed to check feature entitlement:', error);
+        sendResponse({ hasEntitlement: false });
+      }
+    })();
     return true; // Indicate we'll respond asynchronously
   } else if (message.type === 'REDIRECT_TO_LOGIN') {
     // Handle login redirect request - async handler
@@ -369,37 +493,39 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     })();
     return true; // indicates we will send a response asynchronously
   } else if (message.type === 'SIGN_OUT') {
-    // Handle sign out request
-    try {
-      // Clear the auth cookie
-      if (config.authServerUrl) {
-        chrome.cookies.remove({
-          name: 'auth_session',
-          url: config.authServerUrl
-        });
+    // Handle sign out request - make this block async
+    (async () => {
+      try {
+        // Clear the auth cookie
+        if (config.authServerUrl) {
+          await chrome.cookies.remove({
+            name: 'auth_session',
+            url: config.authServerUrl
+          });
+        }
+        // Clear the JWT token
+        jwtManager.clear();
+        
+        // Broadcast auth status change
+        broadcastAuthStatus();
+        
+        sendResponse({ success: true });
+      } catch (error: any) {
+        logger.error('Failed to sign out:', error);
+        sendResponse({ success: false });
       }
-      // Clear the JWT token
-      jwtManager.clear();
-      
-      // Broadcast auth status change
-      broadcastAuthStatus();
-      
-      sendResponse({ success: true });
-    } catch (error) {
-      console.error('Failed to sign out:', error);
-      sendResponse({ success: false });
-    }
+    })();
+    return true; // Now this handler is async, so return true
   } else if (message.type === 'GET_AUTH_STATUS') {
     // New handler for direct auth status requests from content scripts
     try {
       const isAuthenticated = jwtManager.isAuthenticated();
       sendResponse({ isAuthenticated });
-    } catch (error) {
-      console.error('Failed to get auth status:', error);
+    } catch (error: any) {
+      logger.error('Failed to get auth status:', error);
       sendResponse({ isAuthenticated: false });
     }
-    // No return true here as it's synchronous
-    return; // Explicitly return to avoid falling through if this was the last handler.
+    return false; // Synchronous response
   }
   
   // Return true if we're handling the response asynchronously for other message types
@@ -417,6 +543,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   
   // If no specific handler matched or it was synchronous and didn't return true,
   // we don't need to keep the message channel open.
+  logger.debug("[Background] Message type not explicitly handled or was synchronous:", message.type);
+  // sendResponse({}); // Optional: send a default empty response if required by some senders
+  return false; // Ensure channel is closed if not handled asynchronously
 });
 
 // Handle authentication cookie changes

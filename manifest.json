@@ -6,7 +6,9 @@
   "permissions": [
     "storage",
     "cookies",
-    "offscreen"
+    "offscreen",
+    "tabs",
+    "audio"
   ],
   "host_permissions": [
     "https://api.saypi.ai/*",
@@ -58,7 +60,9 @@
         "src/icons/flags/*.svg",
         "src/popup/*.svg",
         "src/offscreen/vad_offscreen.html",
-        "src/offscreen/vad_offscreen.js"
+        "src/offscreen/vad_offscreen.js",
+        "src/permissions/permissions-prompt.html",
+        "public/permissions/permissions-prompt.js"
       ],
       "matches": [
         "https://pi.ai/*",

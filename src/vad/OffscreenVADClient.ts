@@ -32,7 +32,10 @@ export class OffscreenVADClient {
 
   private setupListeners(): void {
     this.port.onMessage.addListener((message: any) => {
-      console.debug("[SayPi OffscreenVADClient] Received message from background:", message);
+      if(message.type !== "VAD_FRAME_PROCESSED") {
+        // frame processed messages are too chatty, so we don't log them
+        console.debug("[SayPi OffscreenVADClient] Received message from background:", message);
+      }
       if (message.origin !== "offscreen-document") {
         // console.warn("[SayPi OffscreenVADClient] Ignoring message not from offscreen document via background:", message);
         return;

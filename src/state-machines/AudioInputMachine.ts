@@ -237,38 +237,83 @@ async function checkAudioCapabilities() {
   return config;
 }
 
-async function setupRecording(completion_callback?: (success: boolean, error?: string) => void): Promise<void> {
-  if (microphone) {
-    return;
-  }
+// Helper function to communicate with the background script for permission
+async function checkAndRequestMicrophonePermissionViaBackground(): Promise<boolean> {
+  return new Promise((resolve) => {
+    const requestId = `mic-perm-check-${Date.now()}-${Math.random().toString(36).substring(7)}`;
 
+    const listener = (message: any) => {
+      if (message.type === 'MICROPHONE_PERMISSION_RESPONSE' && message.requestId === requestId) {
+        chrome.runtime.onMessage.removeListener(listener);
+        console.log(`[AudioInputMachine] Received MICROPHONE_PERMISSION_RESPONSE: granted=${message.granted}`);
+        resolve(message.granted);
+      }
+    };
+    chrome.runtime.onMessage.addListener(listener);
+
+    console.log("[AudioInputMachine] Sending CHECK_AND_REQUEST_MICROPHONE_PERMISSION to background.");
+    chrome.runtime.sendMessage({
+      type: 'CHECK_AND_REQUEST_MICROPHONE_PERMISSION',
+      requestId: requestId,
+    }, response => {
+      if (chrome.runtime.lastError) {
+        console.error("[AudioInputMachine] Error sending CHECK_AND_REQUEST_MICROPHONE_PERMISSION:", chrome.runtime.lastError.message);
+        chrome.runtime.onMessage.removeListener(listener);
+        resolve(false);
+      } else if (response && response.status === 'error_before_prompt') {
+        console.error("[AudioInputMachine] Background script reported error before prompting:", response.error);
+        chrome.runtime.onMessage.removeListener(listener);
+        resolve(false);
+      }
+    });
+  });
+}
+
+async function setupRecording(completion_callback?: (success: boolean, error?: string) => void): Promise<void> {
   try {
-    console.log("[AudioInputMachine] Requesting VAD initialization via client...");
+    console.log("[AudioInputMachine] Requesting microphone permission check and prompt (if needed) from background...");
+    const permissionGranted = await checkAndRequestMicrophonePermissionViaBackground();
+
+    if (!permissionGranted) {
+      const errorMsg = getMessage("microphonePermissionDeniedError") || "Microphone permission was not granted. Please ensure you've allowed access in the prompt and in extension settings.";
+      console.error("[AudioInputMachine] Microphone permission not granted after prompt flow.");
+      EventBus.emit("saypi:ui:show-notification", {
+        message: errorMsg,
+        type: "text",
+        seconds: 20,
+        icon: "microphone-muted",
+      });
+      completion_callback?.(false, errorMsg);
+      return;
+    }
+
+    console.log("[AudioInputMachine] Microphone permission is granted. Proceeding with VAD initialization via client...");
     const result = await vadClient.initialize({ /* pass any specific options if needed */ });
+    
     if (result.success) {
-      console.log("[AudioInputMachine] VAD initialized successfully via offscreen.");
+      console.log("[AudioInputMachine] VAD initialized successfully via offscreen. Mode:", result.mode);
       completion_callback?.(true);
     } else {
       console.error("[AudioInputMachine] VAD initialization failed via offscreen:", result.error);
-      completion_callback?.(false, result.error);
-      // Emit a user-friendly error notification
+      const errorMessage = result.error || getMessage("microphoneErrorUnexpected");
       EventBus.emit("saypi:ui:show-notification", {
-        message: result.error || getMessage("microphoneErrorUnexpected"),
+        message: errorMessage,
         type: "text",
         seconds: 20,
         icon: "microphone-muted",
       });
-      throw new Error(result.error || "VAD initialization failed");
+      completion_callback?.(false, errorMessage);
     }
   } catch (err: any) {
-    console.error("[AudioInputMachine] Error in setupRecording via client:", err);
+    console.error("[AudioInputMachine] Error in setupRecording:", err);
+    const finalErrorMessage = err.message || getMessage("microphoneErrorUnexpected");
     EventBus.emit("saypi:ui:show-notification", {
-        message: err.message || getMessage("microphoneErrorUnexpected"),
+        message: finalErrorMessage,
         type: "text",
         seconds: 20,
         icon: "microphone-muted",
       });
-    throw err;
+    completion_callback?.(false, finalErrorMessage);
   }
 }
 
@@ -634,3 +679,5 @@ function isOverconstrainedError(error: any): error is OverconstrainedError {
       error.name === "ConstraintNotSatisfiedError")
   );
 }
+
+export { setupRecording };
