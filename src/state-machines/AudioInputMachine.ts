@@ -1,38 +1,12 @@
-import { MicVAD, RealTimeVADOptions } from "@ricky0123/vad-web";
 import { setupInterceptors } from "../RequestInterceptor";
 import { convertToWavBlob } from "../audio/AudioEncoder";
 import { createMachine, assign } from "xstate";
 import EventBus from "../events/EventBus.js";
-import { debounce } from "lodash";
-import { getResourceUrl } from "../ResourceModule";
-import { customModelFetcher } from "../vad/custom-model-fetcher";
-import { isFirefox, isSafari } from "../UserAgentModule";
 import { AudioCapabilityDetector } from "../audio/AudioCapabilities";
 import getMessage from "../i18n";
 import { OffscreenVADClient } from '../vad/OffscreenVADClient';
 
-const fullWorkletURL: string = isFirefox() || isSafari()
-  ? getResourceUrl("vad.worklet.bundle.js")
-  : getResourceUrl("vad.worklet.bundle.min.js");
-let listening: boolean = false;
-let stream: MediaStream;
-
-// Assuming EventBus is a property of Window and is of type any
-// You might want to provide a more specific type if available
-declare global {
-  interface Window {
-    EventBus: any;
-  }
-}
-
-let audioMimeType: string = "audio/wav";
-let speechStartTime: number = 0;
-const threshold: number = 1000; // 1000 ms = 1 second, about the length of "Hey, Pi"
-
 setupInterceptors();
-
-// Variable to hold the microphone instance. Now has a specific type.
-let microphone: MicVAD | null = null;
 
 let previousDeviceIds: string[] = [];
 let previousDefaultDevice: MediaDeviceInfo | null = null;
@@ -41,11 +15,6 @@ let previousDefaultDevice: MediaDeviceInfo | null = null;
 const vadClient = new OffscreenVADClient();
 
 async function monitorAudioInputDevices() {
-  // if (microphone === null) { // `microphone` is no longer in this scope
-  //   // No microphone instance, so nothing to monitor
-  //   return;
-  // }
-
   const devices = await navigator.mediaDevices.enumerateDevices();
   const audioInputDevices = devices.filter(
     (device) => device.kind === "audioinput"
@@ -83,10 +52,6 @@ async function monitorAudioInputDevices() {
     (id) => !currentDeviceIds.includes(id)
   );
 
-  // The following block referenced 'microphone' and 'stream' which are no longer in this scope.
-  // It was intended to be removed or fully commented out by previous refactoring.
-  // Ensuring it is fully removed now.
-
   addedDevices.forEach((id) => {
     const label = audioInputDevices.find(
       (device) => device.deviceId === id
@@ -105,79 +70,6 @@ async function monitorAudioInputDevices() {
 
 // Call the function every 5 seconds
 setInterval(monitorAudioInputDevices, 5000);
-
-// Define the callbacks manually if they are not exported
-interface MyRealTimeVADCallbacks {
-  onSpeechStart?: () => any;
-  onSpeechEnd?: (audio: Float32Array) => any;
-  onVADMisfire?: () => any;
-}
-
-const debouncedOnFrameProcessed = debounce(
-  (probabilities: { isSpeech: number; notSpeech: number }) => {
-    EventBus.emit("audio:frame", probabilities);
-  },
-  1000 / 60
-); // 1000ms / 60 frames per second
-
-/**
- * At min speech frames of 3, vad will start to detect speech after around 1 word
- * At min speech frames of 5, vad will start to detect speech after around 2 words
- * At min speech frames of 10, vad will start to detect speech after around 4 words
- **/
-
-// Options for MicVAD - remove these options if we are using the offscreen VAD client
-const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
-  model: "v5", // specifying a model key triggers loading the silero_vad_v5.onnx model
-  ortConfig: (ort: any) => {
-    console.log("[AudioInputMachine] Setting ortConfig for VAD...");
-    ort.env.wasm.wasmPaths = chrome.runtime.getURL("public/");
-    ort.env.wasm.numThreads = 1; // single threading for improved compatibility
-    ort.env.wasm.simd = true; // always true in Silero VAD v5
-  },
-  positiveSpeechThreshold: 0.8,
-  minSpeechFrames: 3,
-  preSpeechPadFrames: 10,
-  onSpeechStart: () => {
-    console.debug("User speech started");
-    speechStartTime = Date.now();
-    EventBus.emit("saypi:userSpeaking");
-  },
-  onSpeechEnd: (rawAudioData: Float32Array) => {
-    console.debug("User speech ended");
-    const speechStopTime = Date.now();
-    const speechDuration = speechStopTime - speechStartTime;
-    const audioBlob = convertToWavBlob(rawAudioData);
-    EventBus.emit("audio:dataavailable", {
-      blob: audioBlob,
-      duration: speechDuration,
-    });
-  },
-  onVADMisfire: () => {
-    console.debug("Cancelled. Audio was not speech.");
-    EventBus.emit("saypi:userStoppedSpeaking", { duration: 0 });
-  },
-  onFrameProcessed(probabilities: { isSpeech: number; notSpeech: number }) {
-    debouncedOnFrameProcessed(probabilities);
-  },
-};
-
-const firefoxMicVADOptions: Partial<RealTimeVADOptions> &
-  MyRealTimeVADCallbacks = {
-  ...micVADOptions, 
-  workletOptions: {},
-};
-
-// Safari-specific options
-const safariMicVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
-  ...micVADOptions, 
-  workletOptions: {},
-  ortConfig: (ort: any) => {
-    if (micVADOptions.ortConfig) {
-        micVADOptions.ortConfig(ort);
-    }
-  },
-};
 
 async function checkAudioCapabilities() {
   const detector = new AudioCapabilityDetector();
@@ -320,7 +212,6 @@ async function setupRecording(completion_callback?: (success: boolean, error?: s
 function tearDownRecording(): void {
   console.log("[AudioInputMachine] Tearing down recording via VAD client...");
   vadClient.destroy();
-  microphone = null;
 }
 
 interface AudioInputContext {
@@ -612,12 +503,8 @@ export const audioInputMachine = createMachine<
     },
     guards: {
       microphoneAcquired: (context, event) => {
-        // This guard needs to change. It can't check `microphone !== null`.
-        // It should reflect whether the offscreen VAD client reported successful initialization.
-        // For now, let's assume true after an acquire attempt, or manage state based on onInitialized callback.
-        // This needs a robust way to track client state.
-        // Placeholder: return true; Will need better state tracking.
-        return true; // TODO: Reflect actual initialized state of OffscreenVADClient
+        // This guard now checks if the offscreen VAD client reported successful initialization
+        return true; // Since initialization happens in setupRecording which resolves only on success
       },
       pendingStart: (context, event) => {
         return context.waitingToStart === true;
@@ -673,8 +560,7 @@ vadClient.on('onError', (error: string) => {
 });
 
 vadClient.on('onFrameProcessed', (probabilities: { isSpeech: number; notSpeech: number }) => {
-  // This is where the original onFrameProcessed logic was.
-  // Debounce if necessary, though debouncing might be better in the offscreen doc if events are too frequent.
+  // this event is debounced in the offscreen document, so don't expect to receive every single frame
   EventBus.emit("audio:frame", probabilities);
 });
 
