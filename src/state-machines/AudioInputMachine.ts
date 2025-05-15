@@ -126,7 +126,7 @@ const debouncedOnFrameProcessed = debounce(
  * At min speech frames of 10, vad will start to detect speech after around 4 words
  **/
 
-// Options for MicVAD
+// Options for MicVAD - remove these options if we are using the offscreen VAD client
 const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
   model: "v5", // specifying a model key triggers loading the silero_vad_v5.onnx model
   ortConfig: (ort: any) => {
@@ -634,14 +634,24 @@ vadClient.on('onSpeechStart', () => {
   EventBus.emit("saypi:userSpeaking");
 });
 
-vadClient.on('onSpeechEnd', (data: { duration: number; /* blob?: Blob */ }) => {
+vadClient.on('onSpeechEnd', (data: { duration: number; audioBuffer: ArrayBuffer }) => {
   console.debug("[AudioInputMachine] User speech ended (event from VAD client). Duration:", data.duration);
-  // const audioBlob = convertToWavBlob(rawAudioData); // rawAudioData not available here directly
-  // The blob is not currently sent from offscreen. If it were, it would be in `data.blob`.
-  // For now, we rely on the `data.duration`.
-  // If a blob is needed here, the offscreen and client communication needs to support it.
+  // Reconstruct Float32Array from audio buffer
+  const audioData = new Float32Array(data.audioBuffer);
+  const frameCount = audioData.length;
+  const frameRate = 16000;
+  const duration = frameCount / frameRate;
+  console.debug(`[AudioInputMachine] Speech duration: ${data.duration}ms, Frame count: ${frameCount}, Frame rate: ${frameRate}, Duration: ${duration}s`);
+  if (frameCount === 0) {
+    console.warn("[AudioInputMachine] No audio data available. Skipping emission of audio:dataavailable event.");
+    return;
+  }
+  // Convert to WAV Blob for transcription
+  const audioBlob = convertToWavBlob(audioData);
+  console.debug(`Reconstructed Blob size: ${audioBlob.size} bytes`);
+  // Emit both blob and duration for transcription
   EventBus.emit("audio:dataavailable", {
-    // blob: data.blob, // If blob were sent
+    blob: audioBlob,
     duration: data.duration,
   });
 });

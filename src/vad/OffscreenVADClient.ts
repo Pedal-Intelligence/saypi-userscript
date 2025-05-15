@@ -1,11 +1,12 @@
 import EventBus from '../events/EventBus';
+import { logger } from '../LoggingModule';
 import { VADStatusIndicator } from '../ui/VADStatusIndicator';
 
 console.log("[SayPi OffscreenVADClient] Client loaded.");
 
 interface VADClientCallbacks {
   onSpeechStart?: () => void;
-  onSpeechEnd?: (data: { duration: number; /* blob potentially later */ }) => void;
+  onSpeechEnd?: (data: { duration: number; audioBuffer: ArrayBuffer }) => void;
   onVADMisfire?: () => void;
   onError?: (error: string) => void;
   onFrameProcessed?: (probabilities: { isSpeech: number; notSpeech: number }) => void;
@@ -49,7 +50,22 @@ export class OffscreenVADClient {
         case "VAD_SPEECH_END":
           this.statusIndicator.updateStatus("Processing", `Speech ended (duration: ${message.duration}ms)`);
           setTimeout(() => this.statusIndicator.updateStatus("Ready", "Waiting for speech"), 1500);
-          this.callbacks.onSpeechEnd?.(message);
+          
+          const speechDuration = message.duration;
+          
+          // Convert the array back to Float32Array
+          const rawAudioData = new Float32Array(message.audioData || []);
+          const frameCount = message.frameCount || rawAudioData.length;
+          const frameRate = 16000;
+          const duration = frameCount / frameRate;
+          console.debug(`[SayPi OffscreenVADClient] Speech duration: ${speechDuration}ms, Frame count: ${frameCount}, Frame rate: ${frameRate}, Duration: ${duration}s`);
+          logger.debug(`[SayPi OffscreenVADClient] Speech ended. Duration: ${speechDuration}ms`);
+
+          // Pass the reconstructed Float32Array's buffer as ArrayBuffer
+          this.callbacks.onSpeechEnd?.({ 
+            duration: message.duration, 
+            audioBuffer: rawAudioData.buffer 
+          });
           break;
         case "VAD_MISFIRE":
           this.statusIndicator.updateStatus("Misfire", "Non-speech audio detected");

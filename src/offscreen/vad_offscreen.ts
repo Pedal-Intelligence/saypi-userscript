@@ -1,6 +1,6 @@
 import { MicVAD, RealTimeVADOptions } from "@ricky0123/vad-web";
-import { convertToWavBlob } from "../audio/AudioEncoder"; // Assuming this is needed for onSpeechEnd
 import { logger } from "../LoggingModule.js"; // Import the enhanced logger
+import { debounce } from "lodash";
 // If getResourceUrl or similar is needed from another module, import it.
 // For now, we assume paths will be relative or constructed via chrome.runtime.getURL()
 
@@ -17,6 +17,21 @@ let currentActiveTabId: number | null = null;
 let vadInstance: MicVAD | null = null;
 let stream: MediaStream | null = null;
 let speechStartTime = 0;
+
+// Debounced sender for VAD frame events, max once per 100ms
+const debouncedSendFrameProcessed = debounce(
+  (probabilities: { isSpeech: number; notSpeech: number }) => {
+    if (currentActiveTabId !== null) {
+      chrome.runtime.sendMessage({
+        type: "VAD_FRAME_PROCESSED",
+        probabilities,
+        targetTabId: currentActiveTabId,
+        origin: "offscreen-document",
+      });
+    }
+  },
+  100
+);
 
 // Simplified VAD options: only event handlers and model
 const vadOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
@@ -35,12 +50,20 @@ const vadOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
   onSpeechEnd: (rawAudioData: Float32Array) => {
     const speechStopTime = Date.now();
     const speechDuration = speechStopTime - speechStartTime;
-    const audioBlob = convertToWavBlob(rawAudioData);
-    logger.debug(`[SayPi VAD Offscreen] Speech ended. Duration: ${speechDuration}ms, Size: ${audioBlob.size} bytes`);
+    const frameCount = rawAudioData.length;
+    const frameRate = 16000;
+    const duration = frameCount / frameRate;
+    console.debug(`[SayPi VAD Offscreen] Speech duration: ${speechDuration}ms, Frame count: ${frameCount}, Frame rate: ${frameRate}, Duration: ${duration}s`);
+    logger.debug(`[SayPi VAD Offscreen] Speech ended. Duration: ${speechDuration}ms`);
     if (currentActiveTabId !== null) {
+      // Convert Float32Array to regular Array for proper serialization
+      const audioArray = Array.from(rawAudioData);
+      
       chrome.runtime.sendMessage({
         type: "VAD_SPEECH_END",
         duration: speechDuration,
+        audioData: audioArray,
+        frameCount: frameCount,
         targetTabId: currentActiveTabId,
         origin: "offscreen-document",
       });
@@ -57,14 +80,7 @@ const vadOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
     }
   },
   onFrameProcessed: (probabilities: { isSpeech: number; notSpeech: number }) => {
-    if (currentActiveTabId !== null) {
-      chrome.runtime.sendMessage({
-        type: "VAD_FRAME_PROCESSED",
-        probabilities,
-        targetTabId: currentActiveTabId,
-        origin: "offscreen-document",
-      });
-    }
+    debouncedSendFrameProcessed(probabilities);
   },
 };
 
