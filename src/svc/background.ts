@@ -1,7 +1,7 @@
 import { isFirefox } from "../UserAgentModule";
 import { config } from "../ConfigModule";
 import { jwtManager } from "../JwtManager";
-import { offscreenManager } from "../offscreen/offscreen_manager";
+import { offscreenManager, OFFSCREEN_DOCUMENT_PATH } from "../offscreen/offscreen_manager";
 import { logger } from "../LoggingModule.js";
 
 // Expose instances globally for popup access
@@ -201,9 +201,27 @@ chrome.runtime.onConnect.addListener((port) => {
 
 // Handle popup opening AND messages from Offscreen Document AND Error Reports
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // Log details for the getURL call
+  logger.debug(
+    "[Background] Pre-getURL check. Path type:", 
+    typeof OFFSCREEN_DOCUMENT_PATH,
+    "Path value:", 
+    OFFSCREEN_DOCUMENT_PATH,
+    "Sender URL:",
+    sender.url,
+    "Runtime URL:",
+    chrome.runtime.getURL(OFFSCREEN_DOCUMENT_PATH),
+    "Message:",
+    message
+  );
+
   // Prioritize messages from the offscreen document (VAD events)
-  // @ts-expect-error chrome.offscreen is not available in types yet
-  if (sender.url === chrome.runtime.getURL(offscreenManager.OFFSCREEN_DOCUMENT_PATH) && message.targetTabId !== undefined && message.origin === "offscreen-document") {
+  if (
+    typeof OFFSCREEN_DOCUMENT_PATH === 'string' &&
+    sender.url === chrome.runtime.getURL(OFFSCREEN_DOCUMENT_PATH) &&
+    message.targetTabId !== undefined && 
+    message.origin === "offscreen-document"
+  ) {
     logger.debug("[Background] Received VAD event from offscreen document:", message);
     offscreenManager.forwardMessageToContentScript(message.targetTabId, message);
     return; // Stop processing if handled as an offscreen VAD event

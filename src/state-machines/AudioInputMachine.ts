@@ -130,6 +130,7 @@ const debouncedOnFrameProcessed = debounce(
 const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
   model: "v5", // specifying a model key triggers loading the silero_vad_v5.onnx model
   ortConfig: (ort: any) => {
+    console.log("[AudioInputMachine] Setting ortConfig for VAD...");
     ort.env.wasm.wasmPaths = chrome.runtime.getURL("public/");
     ort.env.wasm.numThreads = 1; // single threading for improved compatibility
     ort.env.wasm.simd = true; // always true in Silero VAD v5

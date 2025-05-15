@@ -54,7 +54,8 @@ const config = {
     devtool: isProduction ? false : "inline-source-map",
     entry: {
       main: "./src/saypi.index.js",
-      background: "./src/svc/background.ts"
+      background: "./src/svc/background.ts",
+      offscreenVAD: "./src/offscreen/vad_offscreen.ts"
     },
     output: {
       filename: (chunkData) => {
@@ -63,6 +64,8 @@ const config = {
             return "saypi.user.js";
           case "background":
             return "background.js";
+          case "offscreenVAD":
+            return "offscreen/vad_offscreen.js";
           default:
             return "[name].bundle.js";
         }

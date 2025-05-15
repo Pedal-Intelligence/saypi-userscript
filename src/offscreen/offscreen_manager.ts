@@ -34,7 +34,7 @@ class OffscreenManager {
     console.log("Creating offscreen document...");
     this.creating = chrome.offscreen.createDocument({
       url: OFFSCREEN_DOCUMENT_PATH,
-      reasons: [chrome.offscreen.Reason.USER_MEDIA, chrome.offscreen.Reason.AUDIO_PLAYBACK],
+      reasons: [chrome.offscreen.Reason.USER_MEDIA],
       justification: "Required for Voice Activity Detection (VAD) processing in an isolated environment to comply with strict CSPs on host pages.",
     });
 

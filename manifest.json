@@ -29,8 +29,7 @@
   "offscreen": {
     "document": "src/offscreen/vad_offscreen.html",
     "reasons": [
-      "USER_MEDIA",
-      "AUDIO_PLAYBACK"
+      "USER_MEDIA"
     ],
     "justification": "Required for Voice Activity Detection (VAD) processing in an isolated environment to comply with strict CSPs on host pages."
   },

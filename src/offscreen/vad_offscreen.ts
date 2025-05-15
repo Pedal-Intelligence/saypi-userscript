@@ -20,6 +20,7 @@ let speechStartTime = 0;
 
 // Function to get resource URLs within the extension package
 function getExtensionFileUrl(relativePath: string): string {
+  console.log("[SayPi VAD Offscreen] Getting extension file URL for:", relativePath);
   return chrome.runtime.getURL(relativePath);
 }
 
