@@ -1,23 +1,39 @@
 {
-  "appName": {
-    "message": "Say, Pi",
-    "description": "Az alkalmazás neve."
+  "activityCheckButton": {
+    "description": "The text of the button to indicate that the user is still present.",
+    "message": "Igen, még mindig itt vagyok!"
+  },
+  "activityCheckMessage": {
+    "description": "The message to display when the conversation has been going on unusually long.",
+    "message": "Hűha, ez egy hosszú beszélgetés. Még ott vagy, vagy csak magunkhoz beszélünk?"
+  },
+  "addCredits": {
+    "description": "Text for link to add more voice credits",
+    "message": "Hitelek hozzáadása"
+  },
+  "allowInterruptions": {
+    "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
+    "message": "Megszakítható"
   },
   "appDescription": {
-    "message": "Hangvezérlés Pi és Claude számára. Beszéljen természetesen, kapjon élethű válaszokat. Csak mondd meg.",
-    "description": "Az alkalmazás leírása."
+    "description": "The description of the application.",
+    "message": "Hangvezérlés Pi és Claude számára. Beszéljen természetesen, kapjon élethű válaszokat. Csak mondd meg."
   },
-  "callInProgress": {
-    "message": "Befejezni a kihangosított beszélgetést",
-    "description": "A hívásgombon megjelenő eszköztipp, amikor a hívás folyamatban van."
+  "appName": {
+    "description": "The name of the application.",
+    "message": "Say, Pi"
   },
-  "callStarting": {
-    "message": "Csatlakozás...",
-    "description": "A hívásgombon megjelenő eszköztipp, amikor a hívás elindul."
+  "applicationStatusIssue": {
+    "description": "Message to display when the application is experiencing issues.",
+    "message": "Rendszerhiba figyelmeztetés"
   },
-  "callNotStarted": {
-    "message": "Indíts egy kihangosított beszélgetést a $chatbot$-tal",
-    "description": "A hívásgombon megjelenő eszköztipp, mielőtt a hívás elindulna.",
+  "applicationStatusUnknown": {
+    "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
+    "message": "Alkalmazás állapota ismeretlen"
+  },
+  "assistantIsListening": {
+    "description": "Message displayed when the assistant is listening for speech.",
+    "message": "$chatbot$ hallgat...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
@@ -25,60 +41,58 @@
       }
     }
   },
-  "callError": {
-    "message": "Nem végzetes hiba történt. Ne aggódjon, még hallgatunk.",
-    "description": "A hívásgombon megjelenő eszköztipp, amikor nem végzetes hiba történik."
+  "assistantIsListeningAttentively": {
+    "description": "Message displayed when the assistant is listening for speech in agent mode.",
+    "message": "A $chatbot$ figyelmesen hallgat ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   },
-  "mode_speed": {
-    "message": "sebesség",
-    "description": "A leggyorsabb transzkripciós mód."
+  "assistantIsSpeaking": {
+    "description": "Message displayed when the assistant is speaking its response.",
+    "message": "$chatbot$ beszél...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "mode_balanced": {
-    "message": "kiegyensúlyozott",
-    "description": "Az alapértelmezett transzkripciós mód."
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Message displayed when the assistant is speaking its response and manual interruption is possible.",
+    "message": "$chatbot$ beszél, érintse meg a megszakításához...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "mode_accuracy": {
-    "message": "pontosság",
-    "description": "A legmagasabb pontosságú transzkripciós mód."
+  "assistantIsThinking": {
+    "description": "Message displayed when the assistant is preparing its response.",
+    "message": "$chatbot$ gondolkodik...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "preferedModeControl": {
-    "message": "Válassza ki a preferált transzkripciós módot",
-    "description": "Az irányító elem címe (eszköztipp), amely a preferált transzkripciós mód kiválasztásához szükséges."
-  },
-  "autoSubmit": {
-    "description": "Címke a jelölőnégyzethez az automatikus beküldés engedélyezéséhez/letiltásához.",
-    "message": "Automatikus beküldés"
-  },
-  "continueUnlocking": {
-    "description": "Utasítások arra vonatkozóan, hogy a felhasználó hogyan folytassa, miután elkezdte megnyomni a feloldó gombot.",
-    "message": "Tartsa lenyomva a feloldáshoz..."
-  },
-  "lockButton": {
-    "description": "A gomb címe (tooltip), amely zárolja a képernyőt a véletlen érintések ellen.",
-    "message": "Nyomja meg a képernyő zárolásához"
-  },
-  "lockedScreen": {
-    "description": "Egy üzenet, amelyet kiemelten jelenítünk meg a képernyő zárolása esetén.",
-    "message": "A képernyő zárolva van."
-  },
-  "soundEffects": {
-    "description": "Címke a hanghatások be-/kikapcsolásához szükséges jelölőnégyzethez.",
-    "message": "Hanghatások"
-  },
-  "unlockButton": {
-    "description": "A gomb címe (tooltip), amely feloldja a képernyőt.",
-    "message": "Nyomja meg a képernyő feloldásához"
-  },
-  "unlockInstruction": {
-    "description": "Utasítások, amelyek elmondják a felhasználónak, hogyan oldja fel a képernyőt, ha le van zárva.",
-    "message": "Tartsd lenyomva a feloldáshoz."
-  },
-  "preferedLanguage": {
-    "message": "Nyelv",
-    "description": "Címke egy vezérlőhöz, amely kiválasztja a preferált átírási nyelvet."
+  "assistantIsWriting": {
+    "description": "Message displayed when the assistant is typing its response.",
+    "message": "$chatbot$ ír...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioConnected": {
-    "description": "Üzenet jelenik meg, amikor egy mikrofon csatlakoztatva van",
+    "description": "Message displayed when a microphone is connected",
     "message": "$microphone$ csatlakoztatva",
     "placeholders": {
       "microphone": {
@@ -88,7 +102,7 @@
     }
   },
   "audioInputError": {
-    "description": "Üzenet jelenik meg, amikor az audio üres átiratot eredményez - ez általában a szűrés eredménye.",
+    "description": "Message displayed when audio transcription failed - usually the result of an ASR or LLM API error.",
     "message": "Hmm, $chatbot$ enyhe csuklás volt. \nMegpróbálhatnád ezt újra mondani?",
     "placeholders": {
       "chatbot": {
@@ -98,7 +112,7 @@
     }
   },
   "audioReconnecting": {
-    "description": "Üzenet, amely megjelenik egy új mikrofon csatlakoztatásakor",
+    "description": "Message displayed when connecting to a new microphone",
     "message": "Váltás a $microphone$...",
     "placeholders": {
       "microphone": {
@@ -107,9 +121,25 @@
       }
     }
   },
-  "assistantIsListening": {
-    "description": "Üzenet, amely akkor jelenik meg, amikor az asszisztens beszédre figyel.",
-    "message": "$chatbot$ hallgat...",
+  "autoSubmit": {
+    "description": "Label for the checkbox to enable/disable automatic prompt submission.",
+    "message": "Automatikus beküldés"
+  },
+  "callError": {
+    "description": "The tooltip to display on the call button when a non-fatal error occurs.",
+    "message": "Nem végzetes hiba történt. Ne aggódjon, még hallgatunk."
+  },
+  "callInProgress": {
+    "description": "The tooltip to display on the call button when a call is in progress.",
+    "message": "Befejezni a kihangosított beszélgetést"
+  },
+  "callInterruptible": {
+    "description": "The tooltip to display on the call button when a call is in progress and manual interruption is possible.",
+    "message": "Érintse meg a megszakításhoz"
+  },
+  "callNotStarted": {
+    "description": "The tooltip to display on the call button before a call is started.",
+    "message": "Indíts egy kihangosított beszélgetést a $chatbot$-tal",
     "placeholders": {
       "chatbot": {
         "content": "$1",
@@ -117,13 +147,21 @@
       }
     }
   },
-  "toggleThemeToDarkMode": {
-    "description": "Címke a sötét módra váltás gombhoz.",
-    "message": "Váltson sötét módra"
+  "callStarting": {
+    "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
+    "message": "Csatlakozás..."
   },
-  "toggleThemeToLightMode": {
-    "description": "Címke a világos módra váltás gombhoz.",
-    "message": "Váltson világos módba"
+  "checkingApplicationStatus": {
+    "description": "Message to display while the system status is being determined, e.g. during load.",
+    "message": "Alkalmazás állapotának ellenőrzése..."
+  },
+  "clickToCollapse": {
+    "description": "Text indicating user can click to hide expanded content.",
+    "message": "Kattintson az összeomláshoz"
+  },
+  "clickToExpand": {
+    "description": "Text indicating user can click to show collapsed content.",
+    "message": "Kattintson a bővítéshez"
   },
   "consentAskParticipate": {
     "message": "Szeretne részt venni?"
@@ -158,102 +196,40 @@
   "consetPrivacyPolicy": {
     "message": "Olvasd el az Adatvédelmi Szabályzatunkat"
   },
-  "shareAnalytics": {
-    "description": "Címke a jelölőnégyzethez az analitikai adatok megosztásának engedélyezéséhez/letiltásához.",
-    "message": "Megosztási analitika"
+  "continueUnlocking": {
+    "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
+    "message": "Tartsa lenyomva a feloldáshoz..."
   },
-  "enterImmersiveModeLong": {
-    "description": "Az aria-label és a cím gombja, hogy belépjen az immerszív módba mobil eszközökön.",
-    "message": "Lépj be az Immerszív Módba"
+  "copiedButtonTitle": {
+    "description": "The title of the button to indicate that the text of a message has been copied to the clipboard.",
+    "message": "Másolva!"
   },
-  "enterImmersiveModeShort": {
-    "description": "A gomb szövege, amellyel beléphet az immerszív módba asztali gépen.",
-    "message": "Merítés"
-  },
-  "exitImmersiveModeLong": {
-    "description": "Az aria-címke és a gomb címe, amely kilép az immerszív módból mobil eszközökön, vissza a szövegalapú asztali módhoz.",
-    "message": "Lépjen ki az immerszív módból"
-  },
-  "applicationStatusIssue": {
-    "description": "Üzenet, amely megjelenik, amikor az alkalmazás problémákkal küzd.",
-    "message": "Rendszerhiba figyelmeztetés"
-  },
-  "applicationStatusUnknown": {
-    "description": "Üzenet megjelenítése, amikor az alkalmazás állapota nem határozható meg. Például, amikor a kliens offline.",
-    "message": "Alkalmazás állapota ismeretlen"
-  },
-  "checkingApplicationStatus": {
-    "description": "Üzenet megjelenítése, míg a rendszer állapotát meghatározzák, például betöltés közben.",
-    "message": "Alkalmazás állapotának ellenőrzése..."
-  },
-  "dismissAlert": {
-    "description": "Címke a rendszerhiba-figyelmeztetés elutasításához szükséges gombhoz.",
-    "message": "Elutasít"
-  },
-  "recommendedActions": {
-    "description": "Üzenet, amely előzi meg a javasolt intézkedések listáját, amelyeket a felhasználó tehet egy ismert probléma orvoslására.",
-    "message": "Ezalatt ajánljuk:"
-  },
-  "extensionPopupTitle": {
-    "description": "A bővítmény felugró párbeszédablakának címe.",
-    "message": "Say, Pi"
-  },
-  "activityCheckButton": {
-    "description": "A gomb szövege, amely jelzi, hogy a felhasználó még mindig jelen van.",
-    "message": "Igen, még mindig itt vagyok!"
-  },
-  "activityCheckMessage": {
-    "description": "Az üzenet, amely megjelenik, amikor a beszélgetés szokatlanul hosszú ideig tart.",
-    "message": "Hűha, ez egy hosszú beszélgetés. Még ott vagy, vagy csak magunkhoz beszélünk?"
-  },
-  "assistantIsThinking": {
-    "message": "$chatbot$ gondolkodik...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "Üzenet, amely akkor jelenik meg, amikor az asszisztens előkészíti a válaszát."
-  },
-  "assistantIsSpeaking": {
-    "message": "$chatbot$ beszél...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "Üzenet jelenik meg, amikor az asszisztens elmondja a válaszát."
-  },
-  "userStartedInterrupting": {
-    "message": "Folytassa, a $chatbot$ hallgat...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "Üzenet, amely akkor jelenik meg, amikor a felhasználó elkezd beszélni, miközben az asszisztens beszél."
-  },
-  "allowInterruptions": {
-    "message": "Megszakítható",
-    "description": "Címke a jelölőnégyzethez, amely engedélyezi/tiltja, hogy a felhasználó megszakíthassa Pi válaszait beszéddel."
+  "copyButtonTitle": {
+    "description": "The title of the button to copy the text of a message to the clipboard.",
+    "message": "Másolat"
   },
   "currencyUSDAbbreviation": {
-    "description": "Az Egyesült Államok dollárjának rövidítése.",
+    "description": "The abbreviation for the US dollar.",
     "message": "USD"
   },
   "currentCharges": {
-    "description": "A felhasználó által felhalmozott aktuális költségek (folyamatos összeg) leírására használt kifejezés.",
+    "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Jelenlegi díjak"
   },
+  "disableTTS": {
+    "description": "Label for the option to turn off text-to-speech",
+    "message": "Tiltsa le a szöveges beszédet"
+  },
+  "dismissAlert": {
+    "description": "Label for the button to dismiss a system issue alert.",
+    "message": "Elutasít"
+  },
   "enableTTS": {
-    "description": "Felirat a szöveg-felolvasás be-/kikapcsolásához használt jelölőnégyzethez.",
+    "description": "Label for the checkbox to enable/disable text-to-speech.",
     "message": "Többnyelvű hangok"
   },
   "enhancedVoice": {
-    "description": "Cím (eszköztipp) a Mondjuk, Pi fokozott hangokhoz.",
+    "description": "Title (tooltip) for Say, Pi enhanced voices.",
     "message": "A hangot a $product$ javította",
     "placeholders": {
       "product": {
@@ -262,8 +238,185 @@
       }
     }
   },
+  "enterImmersiveModeLong": {
+    "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
+    "message": "Lépj be az Immerszív Módba"
+  },
+  "enterImmersiveModeShort": {
+    "description": "The text of the button to enter immersive mode on desktop.",
+    "message": "Merítés"
+  },
+  "exitImmersiveModeLong": {
+    "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
+    "message": "Lépjen ki az immerszív módból"
+  },
+  "extensionPopupTitle": {
+    "description": "The title of the extension's popup dialog.",
+    "message": "Say, Pi"
+  },
+  "extensionSettings": {
+    "description": "The text of the button to open the extension's settings.",
+    "message": "Beállítások elemre"
+  },
+  "greeting": {
+    "description": "Greeting message shown when user is signed in",
+    "message": "Szia, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "instructionLabel_context": {
+    "description": "Friendly label for user instruction that provides background information.",
+    "message": "Kontextus biztosítása ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Friendly label for user instruction that defines what the user wants.",
+    "message": "Az elvárások tisztázása ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Friendly label for user instruction that narrows the scope of conversation.",
+    "message": "A vita összpontosítása ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Friendly label for user instruction that establishes boundaries for the conversation.",
+    "message": "A Guardbils beállítása ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Friendly label for user instruction that guides how the AI should respond.",
+    "message": "Vezető válaszok ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Friendly label for user instruction that gently suggests a direction.",
+    "message": "Bizonyítva ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Friendly label for user instruction that guides the conversation direction.",
+    "message": "A beszélgetés irányítása ..."
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "A Firefox jelenleg nem támogatja a megszakításokat."
+  },
+  "lockButton": {
+    "description": "The title (tooltip) of the button to lock the screen against accidental touches.",
+    "message": "Nyomja meg a képernyő zárolásához"
+  },
+  "lockedScreen": {
+    "description": "A message to display prominently when the screen is locked.",
+    "message": "A képernyő zárolva van."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Ezt a gondolatot tartva ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Mentális jegyzet készítése ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Feldolgozás a háttérben ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Emlékezve erre a részletre ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Megmenteni ezt a gondolatot később ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "A kontextus nyomon követése ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Ezt eldobva ..."
+  },
+  "microphoneErrorConstraints": {
+    "description": "Error message when microphone constraints cannot be satisfied.",
+    "message": "A mikrofon beállításai nem felelnek meg a szükséges előírásoknak. \nPróbáljon meg másik mikrofont használni, vagy módosítsa a hangbeállításokat."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generic error message with details when microphone access fails.",
+    "message": "Nem sikerült elérni a mikrofont: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Error message when microphone is already in use by another application.",
+    "message": "Nem lehet hozzáférni a mikrofonhoz, mert egy másik alkalmazás használja. \nKérjük, zárja be a többi alkalmazást, amely esetleg használja a mikrofonját."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Error message when no microphone device is found.",
+    "message": "Nem észlelhető mikrofon. \nCsatlakoztasson mikrofont, és próbálja újra."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Error message when microphone permission is denied by the user or system.",
+    "message": "Mikrofon hozzáférés szükséges. \nA folytatáshoz engedélyezze a mikrofonhoz való hozzáférést a böngésző beállításaiban."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Error message for unexpected microphone errors with details.",
+    "message": "Váratlan hiba történt a mikrofonnal: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generic error message when microphone access fails for unknown reasons.",
+    "message": "Nem lehet hozzáférni a mikrofonhoz. \nKérjük, ellenőrizze az eszköz beállításait, és próbálja újra."
+  },
+  "mode_accuracy": {
+    "description": "Highest accuracy mode.",
+    "message": "pontosság"
+  },
+  "mode_accuracy_description": {
+    "description": "Description for the accuracy transcription mode.",
+    "message": "A legnagyobb pontosság, de lassabb az átírási sebesség. \nHajlamos a hallucinációkra."
+  },
+  "mode_balanced": {
+    "description": "Default transcription mode.",
+    "message": "kiegyensúlyozott"
+  },
+  "mode_balanced_description": {
+    "description": "Description for the balanced transcription mode.",
+    "message": "Jó egyensúly a sebesség és a pontosság között a legtöbb felhasználáshoz."
+  },
+  "mode_speed": {
+    "description": "Fastest transcription mode.",
+    "message": "sebesség"
+  },
+  "mode_speed_description": {
+    "description": "Description for the speed transcription mode.",
+    "message": "A leggyorsabb válasz, de kevésbé pontos. \nHajlamos a megszakításra."
+  },
+  "nicknameLabel": {
+    "description": "Label for the input field to set a custom nickname for the AI assistant.",
+    "message": "Becenév"
+  },
+  "notSignedIn": {
+    "description": "Text to show when the user is not signed in.",
+    "message": "Nem jelentkezett be"
+  },
+  "preferedLanguage": {
+    "description": "Label for a control to select the prefered transcription language.",
+    "message": "Nyelv"
+  },
+  "preferedModeControl": {
+    "description": "The title (tooltip) of the control to select the prefered transcription mode.",
+    "message": "Válassza ki a preferált transzkripciós módot"
+  },
   "previewProgress": {
-    "description": "Az üzenet, amely megjelenik, amikor a felhasználó egy karakterlimittel rendelkező funkciót tekint előzetesen.",
+    "description": "The message to display when the user is previewing a feature that has a character limit.",
     "message": "$limit$ karakterből $count$ használva",
     "placeholders": {
       "count": {
@@ -283,7 +436,7 @@
     "message": "Béta Befejezve"
   },
   "previewStatusPaused": {
-    "description": "Az üzenet, amely megjelenik, amikor a felhasználó egy szüneteltetett funkciót tekint meg előnézetben.",
+    "description": "The message to display when the user is previewing a feature that has been paused.",
     "message": "Béta szünetel, amíg $resetDate$",
     "placeholders": {
       "resetDate": {
@@ -295,12 +448,187 @@
   "previewStatusUnknown": {
     "message": "Nem sikerül csatlakozni..."
   },
+  "profile": {
+    "description": "Label for the user profile section.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Unit label for TTS credits",
+    "message": "jóváírás"
+  },
+  "quotaRemaining": {
+    "description": "Label for the quota remaining progress bar",
+    "message": "A megmaradó kvóta"
+  },
+  "quotaStatusUnknown": {
+    "description": "Message shown when quota status cannot be determined",
+    "message": "Nem lehet ellenőrizni a kvóta állapotát"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Message shown when user is not authenticated.",
+    "message": "Jelentkezzen be, hogy hozzáférjen a hanggeneráláshoz és más prémium funkciókhoz"
+  },
   "readAloudButtonTitle": {
-    "description": "Az üzenet szövegének felolvasására szolgáló gomb címe.",
+    "description": "The title of the button to read aloud the text of a message.",
     "message": "Hangosan Olvasás"
   },
+  "recommendedActions": {
+    "description": "Message preceding a list of recommended actions the user may take to remediate a known issue.",
+    "message": "Ezalatt ajánljuk:"
+  },
+  "regenerateButtonTitle": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an estimated cost.",
+    "message": "Generáljon hangot $cost$ $currency$-ért",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
+    "message": "Hangot generál"
+  },
+  "shareAnalytics": {
+    "description": "Label for the checkbox to enable/disable sharing of analytics.",
+    "message": "Megosztási analitika"
+  },
+  "signIn": {
+    "description": "Text for the sign in button.",
+    "message": "Bejelentkezik"
+  },
+  "signInForTTS": {
+    "description": "Prompt shown when user needs to authenticate to access text-to-speech features",
+    "message": "Jelentkezzen be a szöveges beszédre"
+  },
+  "signOut": {
+    "description": "Text for the sign out button.",
+    "message": "Kijelentkezik"
+  },
+  "signedIn": {
+    "description": "Status text shown when user is authenticated (without email).",
+    "message": "Beiratkozott"
+  },
+  "signedInAs": {
+    "description": "Status text shown when user is authenticated, including their email.",
+    "message": "Bejelentkezett $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "soundEffects": {
+    "description": "Label for the checkbox to enable/disable sound effects.",
+    "message": "Hanghatások"
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "A hangeffektusok le vannak tiltva a Firefoxban a hangvisszajelzéssel kapcsolatos problémák elkerülése érdekében."
+  },
+  "sttMinutesRemaining": {
+    "description": "Text showing remaining STT quota in minutes.",
+    "message": "$minutes$ perc$plural$ megmarad",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text to show when STT quota is exhausted.",
+    "message": "A beszédfelismerési kvóta kimerült"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip for the STT quota progress bar.",
+    "message": "$remaining$ $total$ másodperc marad",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip for the STT quota progress bar in minutes.",
+    "message": "$remaining$ $total$ perc maradt",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Label for the STT quota remaining display.",
+    "message": "Beszédfelismerés"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unit for STT quota (seconds).",
+    "message": "SECS"
+  },
+  "submitModeControl": {
+    "description": "The title (tooltip) of the control to select when messages should be submitted.",
+    "message": "Válassza ki, hogy mikor küldje el üzeneteit"
+  },
+  "submit_mode_agent": {
+    "description": "AI-driven submission mode.",
+    "message": "ügynök"
+  },
+  "submit_mode_agent_description": {
+    "description": "Description for the AI-driven submission mode.",
+    "message": "A $chatbot$ a kontextus alapján dönti el, hogy mikor válaszoljon",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatic submission mode.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Description for the automatic submission mode.",
+    "message": "Automatikus beküldés, ha abbahagyja a beszédet"
+  },
+  "submit_mode_off": {
+    "description": "Manual submission mode.",
+    "message": "kézikönyv"
+  },
+  "submit_mode_off_description": {
+    "description": "Description for the manual submission mode.",
+    "message": "Csak akkor küldje el, ha megnyomja a gombot"
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Label for the button to toggle to dark mode.",
+    "message": "Váltson sötét módra"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Label for the button to toggle to light mode.",
+    "message": "Váltson világos módba"
+  },
   "ttsCostExplanation": {
-    "description": "A felugró súgó megjelenítése, amikor a szövegfelolvasó motorral hangosan olvassák fel az üzenetet, az üzenet költségével együtt.",
+    "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
     "message": "A $product$ $cost$ $currency$-t számol fel az üzenet meghallgatásáért",
     "placeholders": {
       "cost": {
@@ -318,7 +646,7 @@
     }
   },
   "ttsCostExplanationFree": {
-    "description": "A felugró szöveg, amely akkor jelenik meg, amikor a szövegfelolvasó motorral olvassák fel hangosan az üzenetet, és az üzenet ingyenes. Tartalmazhatja a szolgáltató nevét.",
+    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free. Assumes the provider is Inflection AI.",
     "message": "Ezt a hangot az Inflection AI ingyenesen generálja",
     "placeholders": {
       "provider": {
@@ -327,8 +655,26 @@
       }
     }
   },
+  "ttsCostExplanationSayPi": {
+    "description": "The tooltip to display when the user hovers over the cost explanation link.",
+    "message": "Ismerje meg, hogyan számít fel a $product$ hangdíjat",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "ttsCredits": {
+    "description": "The term used for the credits currency in the text-to-speech feature.",
+    "message": "jóváírás"
+  },
+  "ttsDisabledSafari": {
+    "description": "Message shown when TTS is disabled in Safari",
+    "message": "A Safari jelenleg nem támogatja a többnyelvű hangokat."
+  },
   "ttsPoweredBy": {
-    "description": "Az üzenet, amely megjelenik, amikor a szövegfelolvasó motort használják egy üzenet felolvasásához.",
+    "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Szövegbeszéd által működtetve: $ttsEngine$",
     "placeholders": {
       "ttsEngine": {
@@ -337,302 +683,16 @@
       }
     }
   },
-  "copiedButtonTitle": {
-    "message": "Másolva!",
-    "description": "A gomb címe, amely jelzi, hogy az üzenet szövege másolva lett a vágólapra."
-  },
-  "copyButtonTitle": {
-    "message": "Másolat",
-    "description": "A gomb címe, amely másolja az üzenet szövegét a vágólapra."
-  },
-  "voiceIntroduction_joey": {
-    "message": "Hola! \nПривет! \n你好! \nPi vagyok, a poliglott mesterséges intelligencia asszisztense. \nA rendelkezésemre álló 32 nyelv segítségével felfedezhetünk ötleteket és kultúrákat a világ minden tájáról. \nmit gondolsz erről a hangról?",
-    "description": "Bevezetés a Joey hanghoz."
-  },
-  "voiceIntroduction_paola": {
-    "message": "Ciao! \nBonjour! \nHelló! \nPi vagyok, és 32 nyelven tudok folyékonyan társalogni. \nAz arabtól az ukránig azért vagyok itt, hogy letörjem a nyelvi akadályokat. \nHogy hangzik neked ez a hang?",
-    "description": "Bevezetés a Paola hanghoz."
-  },
-  "regenerateButtonTitle": {
-    "message": "Generáljon hangot $cost$ $currency$-ért",
-    "description": "A gomb címe, amely újragenerálja az üzenet hangját. Bekövetkezhet egy becsült költség.",
-    "placeholders": {
-      "cost": {
-        "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
-      }
-    }
-  },
-  "regenerateButtonTitleFree": {
-    "message": "Hangot generál",
-    "description": "A gomb címe, amely újragenerálja az üzenet hangját. Meghatározatlan költséggel járhat."
-  },
-  "assistantIsWriting": {
-    "description": "Üzenet jelenik meg, amikor az asszisztens beírja a választ.",
-    "message": "$chatbot$ ír...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "ttsCostExplanationSayPi": {
-    "description": "Az elemleírás, amely akkor jelenik meg, amikor a felhasználó a költségmagyarázat link fölé viszi az egérmutatót.",
-    "placeholders": {
-      "product": {
-        "content": "$1",
-        "example": "Say, Pi"
-      }
-    },
-    "message": "Ismerje meg, hogyan számít fel a $product$ hangdíjat"
-  },
-  "interruptionsFirefoxDisabled": {
-    "message": "A Firefox jelenleg nem támogatja a megszakításokat."
-  },
-  "mode_accuracy_description": {
-    "description": "A pontos átírási mód leírása.",
-    "message": "A legnagyobb pontosság, de lassabb az átírási sebesség. \nHajlamos a hallucinációkra."
-  },
-  "mode_balanced_description": {
-    "description": "A kiegyensúlyozott átírási mód leírása.",
-    "message": "Jó egyensúly a sebesség és a pontosság között a legtöbb felhasználáshoz."
-  },
-  "mode_speed_description": {
-    "description": "A gyorsátírási mód leírása.",
-    "message": "A leggyorsabb válasz, de kevésbé pontos. \nHajlamos a megszakításra."
-  },
-  "soundEffectsFirefoxDisabled": {
-    "message": "A hangeffektusok le vannak tiltva a Firefoxban a hangvisszajelzéssel kapcsolatos problémák elkerülése érdekében."
-  },
-  "assistantIsSpeakingWithManualInterrupt": {
-    "description": "Üzenet jelenik meg, amikor az asszisztens elmondja a választ, és kézi megszakítás lehetséges.",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "message": "$chatbot$ beszél, érintse meg a megszakításához..."
-  },
-  "callInterruptible": {
-    "description": "A hívásgombon megjelenítendő eszköztipp hívás közben, és kézi megszakítás lehetséges.",
-    "message": "Érintse meg a megszakításhoz"
-  },
-  "microphoneErrorConstraints": {
-    "description": "Hibaüzenet, ha a mikrofonkorlátozás nem teljesíthető.",
-    "message": "A mikrofon beállításai nem felelnek meg a szükséges előírásoknak. \nPróbáljon meg másik mikrofont használni, vagy módosítsa a hangbeállításokat."
-  },
-  "microphoneErrorGeneric": {
-    "description": "Általános hibaüzenet részletekkel, ha a mikrofon-hozzáférés sikertelen.",
-    "message": "Nem sikerült elérni a mikrofont: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Permission denied"
-      }
-    }
-  },
-  "microphoneErrorInUse": {
-    "description": "Hibaüzenet, ha a mikrofont egy másik alkalmazás már használja.",
-    "message": "Nem lehet hozzáférni a mikrofonhoz, mert egy másik alkalmazás használja. \nKérjük, zárja be a többi alkalmazást, amely esetleg használja a mikrofonját."
-  },
-  "microphoneErrorNotFound": {
-    "description": "Hibaüzenet, ha nem található mikrofoneszköz.",
-    "message": "Nem észlelhető mikrofon. \nCsatlakoztasson mikrofont, és próbálja újra."
-  },
-  "microphoneErrorPermissionDenied": {
-    "description": "Hibaüzenet, ha a felhasználó vagy a rendszer megtagadja a mikrofon engedélyét.",
-    "message": "Mikrofon hozzáférés szükséges. \nA folytatáshoz engedélyezze a mikrofonhoz való hozzáférést a böngésző beállításaiban."
-  },
-  "microphoneErrorUnexpected": {
-    "description": "Hibaüzenet váratlan mikrofonhibák esetén részletekkel.",
-    "message": "Váratlan hiba történt a mikrofonnal: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Device busy"
-      }
-    }
-  },
-  "microphoneErrorUnknown": {
-    "description": "Általános hibaüzenet, ha a mikrofonhoz való hozzáférés ismeretlen okból meghiúsul.",
-    "message": "Nem lehet hozzáférni a mikrofonhoz. \nKérjük, ellenőrizze az eszköz beállításait, és próbálja újra."
-  },
-  "ttsDisabledSafari": {
-    "message": "A Safari jelenleg nem támogatja a többnyelvű hangokat.",
-    "description": "Üzenet jelenik meg, amikor a TTS le van tiltva a Safariban"
-  },
-  "extensionSettings": {
-    "message": "Beállítások elemre",
-    "description": "A bővítmény beállításainak megnyitására szolgáló gomb szövege."
-  },
-  "submitModeControl": {
-    "description": "A vezérlőelem címe (elemleírása), amellyel kiválaszthatja, hogy mikor kell elküldeni az üzeneteket.",
-    "message": "Válassza ki, hogy mikor küldje el üzeneteit"
-  },
-  "submit_mode_agent": {
-    "description": "AI-vezérelt benyújtási mód.",
-    "message": "ügynök"
-  },
-  "submit_mode_agent_description": {
-    "description": "Az AI-vezérelt küldési mód leírása.",
-    "message": "A $chatbot$ a kontextus alapján dönti el, hogy mikor válaszoljon",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "submit_mode_auto": {
-    "description": "Automatikus beküldési mód.",
-    "message": "auto"
-  },
-  "submit_mode_auto_description": {
-    "description": "Az automatikus beküldési mód leírása.",
-    "message": "Automatikus beküldés, ha abbahagyja a beszédet"
-  },
-  "submit_mode_off": {
-    "description": "Kézi beküldési mód.",
-    "message": "kézikönyv"
-  },
-  "submit_mode_off_description": {
-    "description": "A kézi beküldési mód leírása.",
-    "message": "Csak akkor küldje el, ha megnyomja a gombot"
-  },
-  "nicknameLabel": {
-    "message": "Becenév",
-    "description": "Címkézze a bemeneti mezőt az AI asszisztens egyedi becenevének beállításához."
-  },
-  "greeting": {
-    "description": "Üdvözlőlap -üzenet jelenik meg, amikor a felhasználó be van jelentkezve",
-    "message": "Szia, $name$!",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John"
-      }
-    }
-  },
-  "notSignedIn": {
-    "description": "Szöveg, amelyet meg lehet mutatni, amikor a felhasználó nincs bejelentkezve.",
-    "message": "Nem jelentkezett be"
-  },
-  "profile": {
-    "description": "Címke a felhasználói profil szakaszhoz.",
-    "message": "Profil"
-  },
-  "quotaCredits": {
-    "description": "Egységcímke a TTS -kreditekhez",
-    "message": "jóváírás"
-  },
-  "quotaRemaining": {
-    "description": "Címke a fennmaradó kvóta előrehaladási sávjához",
-    "message": "A megmaradó kvóta"
-  },
-  "quotaStatusUnknown": {
-    "description": "A kvóta állapotát nem lehet meghatározni",
-    "message": "Nem lehet ellenőrizni a kvóta állapotát"
-  },
-  "quotaUnauthenticatedMessage": {
-    "description": "A felhasználó nem hitelesített üzenet.",
-    "message": "Jelentkezzen be, hogy hozzáférjen a hanggeneráláshoz és más prémium funkciókhoz"
-  },
-  "signIn": {
-    "description": "Szöveg a bejelentkezés gombhoz.",
-    "message": "Bejelentkezik"
-  },
-  "signOut": {
-    "description": "Szöveg a bejelentkezési gombhoz.",
-    "message": "Kijelentkezik"
-  },
-  "signedIn": {
-    "description": "Állapotszöveg jelenik meg, amikor a felhasználót hitelesítették (e -mail nélkül).",
-    "message": "Beiratkozott"
-  },
-  "signedInAs": {
-    "description": "Állapotszöveg, amikor a felhasználót hitelesítik, beleértve az e -maileket is.",
-    "message": "Bejelentkezett $email$",
-    "placeholders": {
-      "email": {
-        "content": "$1",
-        "example": "user@example.com"
-      }
-    }
-  },
-  "sttMinutesRemaining": {
-    "description": "A fennmaradó STT -kvótát mutató szöveg percek alatt.",
-    "message": "$minutes$ perc$plural$ megmarad",
-    "placeholders": {
-      "minutes": {
-        "content": "$1",
-        "example": "5"
-      },
-      "plural": {
-        "content": "$2",
-        "example": "s"
-      }
-    }
-  },
-  "sttQuotaExhausted": {
-    "description": "Szöveg, amelyet meg lehet mutatni, amikor az STT kvóta kimerül.",
-    "message": "A beszédfelismerési kvóta kimerült"
-  },
-  "sttQuotaProgress": {
-    "description": "ToolTIP az STT kvóta előrehaladási sávjához.",
-    "message": "$remaining$ $total$ másodperc marad",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "100"
-      },
-      "total": {
-        "content": "$2",
-        "example": "300"
-      }
-    }
-  },
-  "sttQuotaProgressMinutes": {
-    "description": "Az STT kvóta előrehaladási sávjának eszköztése percek alatt.",
-    "message": "$remaining$ $total$ perc maradt",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "5"
-      },
-      "total": {
-        "content": "$2",
-        "example": "60"
-      }
-    }
-  },
-  "sttQuotaRemaining": {
-    "description": "Címke az STT kvóta fennmaradó kijelzőjéhez.",
-    "message": "Beszédfelismerés"
-  },
-  "sttQuotaSeconds": {
-    "description": "Egység az STT kvóta számára (másodperc).",
-    "message": "SECS"
-  },
-  "ttsCredits": {
-    "description": "A Credits Pevizához használt kifejezés a szöveg-beszéd funkcióban.",
-    "message": "jóváírás"
-  },
   "ttsQuotaCharacters": {
-    "description": "A TTS kvóta (karakterek) egység.",
+    "description": "Unit for TTS quota (characters).",
     "message": "jóváírás"
   },
   "ttsQuotaExhausted": {
-    "description": "Szöveg, amelyet meg lehet mutatni, amikor a TTS kvóta kimerül.",
+    "description": "Text to show when TTS quota is exhausted.",
     "message": "Kimerült a hangkvóta"
   },
   "ttsQuotaProgress": {
-    "description": "Eszköztip a TTS kvóta előrehaladási sávjához.",
+    "description": "Tooltip for the TTS quota progress bar.",
     "message": "$remaining$ $total$ karakterek maradnak",
     "placeholders": {
       "remaining": {
@@ -646,121 +706,243 @@
     }
   },
   "ttsQuotaRemaining": {
-    "description": "Címke a TTS kvóta fennmaradó kijelzőjéhez.",
+    "description": "Label for the TTS quota remaining display.",
     "message": "Hangtermelés"
   },
-  "upgradeButton": {
-    "description": "Szöveges szöveg a terv frissítéséhez, amikor a kvóta kimerül.",
-    "message": "Frissítési terv"
-  },
-  "viewDetails": {
-    "description": "Szöveg a linkhez a teljes kvóta részleteinek megtekintéséhez a műszerfalon.",
-    "message": "A részletek megtekintése"
-  },
-  "clickToCollapse": {
-    "description": "A felhasználó jelző szöveg kattintson a kibővített tartalom elrejtésére.",
-    "message": "Kattintson az összeomláshoz"
-  },
-  "clickToExpand": {
-    "description": "A felhasználó jelző szöveg kattinthat az összeomlott tartalom megjelenítéséhez.",
-    "message": "Kattintson a bővítéshez"
-  },
-  "instructionLabel_context": {
-    "description": "Barátságos címke a felhasználói oktatáshoz, amely háttérinformációkat szolgáltat.",
-    "message": "Kontextus biztosítása ..."
-  },
-  "instructionLabel_expectations": {
-    "description": "Barátságos címke a felhasználói oktatáshoz, amely meghatározza, hogy mit akar a felhasználó.",
-    "message": "Az elvárások tisztázása ..."
-  },
-  "instructionLabel_focusing": {
-    "description": "Barátságos címke a felhasználói oktatáshoz, amely szűkíti a beszélgetés körét.",
-    "message": "A vita összpontosítása ..."
-  },
-  "instructionLabel_guardrails": {
-    "description": "Barátságos címke a felhasználói oktatáshoz, amely meghatározza a beszélgetés határait.",
-    "message": "A Guardbils beállítása ..."
-  },
-  "instructionLabel_guiding": {
-    "description": "Barátságos címke a felhasználói oktatáshoz, amely irányítja, hogy az AI hogyan reagáljon.",
-    "message": "Vezető válaszok ..."
-  },
-  "instructionLabel_nudge": {
-    "description": "Barátságos címke a felhasználói oktatáshoz, amely óvatosan javasol egy irányt.",
-    "message": "Bizonyítva ..."
-  },
-  "instructionLabel_steering": {
-    "description": "Barátságos címke a felhasználói oktatáshoz, amely irányítja a beszélgetési irányt.",
-    "message": "A beszélgetés irányítása ..."
-  },
-  "maintenanceLabel_holding": {
-    "description": "Barátságos címke az összeomlott asszisztens karbantartási üzenethez.",
-    "message": "Ezt a gondolatot tartva ..."
-  },
-  "maintenanceLabel_mental_note": {
-    "description": "Barátságos címke az összeomlott asszisztens karbantartási üzenethez.",
-    "message": "Mentális jegyzet készítése ..."
-  },
-  "maintenanceLabel_processing": {
-    "description": "Barátságos címke az összeomlott asszisztens karbantartási üzenethez.",
-    "message": "Feldolgozás a háttérben ..."
-  },
-  "maintenanceLabel_remembering": {
-    "description": "Barátságos címke az összeomlott asszisztens karbantartási üzenethez.",
-    "message": "Emlékezve erre a részletre ..."
-  },
-  "maintenanceLabel_saving": {
-    "description": "Barátságos címke az összeomlott asszisztens karbantartási üzenethez.",
-    "message": "Megmenteni ezt a gondolatot később ..."
-  },
-  "maintenanceLabel_tracking": {
-    "description": "Barátságos címke az összeomlott asszisztens karbantartási üzenethez.",
-    "message": "A kontextus nyomon követése ..."
-  },
-  "maintenanceLabel_tucking": {
-    "description": "Barátságos címke az összeomlott asszisztens karbantartási üzenethez.",
-    "message": "Ezt eldobva ..."
-  },
-  "disableTTS": {
-    "description": "Címke a szöveg-beszéd kikapcsolásának lehetőségéhez",
-    "message": "Tiltsa le a szöveges beszédet"
-  },
-  "signInForTTS": {
-    "description": "A PROMICE akkor jelenik meg, amikor a felhasználónak hitelesítenie kell a szöveg-beszéd funkciók elérését",
-    "message": "Jelentkezzen be a szöveges beszédre"
-  },
   "ttsVoice": {
-    "description": "Címke, amely leírja a menüben a szöveg-beszéd hang opciót",
+    "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS hang"
   },
-  "voiceOff": {
-    "description": "Címke arra, ha a szöveg-beszéd le van tiltva",
-    "message": "Lehangol"
+  "unlockButton": {
+    "description": "The title (tooltip) of the button to unlock the screen.",
+    "message": "Nyomja meg a képernyő feloldásához"
   },
-  "voiceSettings": {
-    "description": "A menüpont szövege a hanggal kapcsolatos beállítások eléréséhez.",
-    "message": "Hangbeállítások"
+  "unlockInstruction": {
+    "description": "Instructions telling the user how to unlock the screen when locked.",
+    "message": "Tartsd lenyomva a feloldáshoz."
   },
-  "addCredits": {
-    "description": "Szöveg a linkhez további hanghitelek hozzáadásához",
-    "message": "Hitelek hozzáadása"
+  "upgradeButton": {
+    "description": "Text for the button to upgrade the plan when quota is exhausted.",
+    "message": "Frissítési terv"
   },
   "upgradeForTTS": {
-    "description": "A Proment megjelenő, amikor a felhasználónak frissítenie kell a szöveg-beszéd kreditek beszerzéséhez",
+    "description": "Prompt shown when user needs to upgrade to obtain text-to-speech credits",
     "message": "Frissítés a hanggeneráláshoz"
   },
-  "voicePaused": {
-    "description": "A hang szüneteltetése, amikor a hang szünetet tartanak a nem megfelelő kredit miatt",
-    "message": "A hang megállt -"
-  },
-  "assistantIsListeningAttentively": {
-    "description": "Az üzenet jelenik meg, amikor az asszisztens ügynök módban hallgatja a beszédet.",
-    "message": "A $chatbot$ figyelmesen hallgat ...",
+  "userStartedInterrupting": {
+    "description": "Message displayed when the user starts speaking while the assistant is speaking.",
+    "message": "Folytassa, a $chatbot$ hallgat...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
-        "example": "Claude"
+        "example": "Pi"
       }
     }
+  },
+  "vadDetailActivatingMicrophone": {
+    "description": "VAD detail when activating the microphone.",
+    "message": "Activating microphone..."
+  },
+  "vadDetailCommLinkFailed": {
+    "description": "VAD detail when the communication port link fails.",
+    "message": "Communication link failed."
+  },
+  "vadDetailDeactivatingMicrophone": {
+    "description": "VAD detail when deactivating the microphone.",
+    "message": "Deactivating microphone..."
+  },
+  "vadDetailFailedToReconnectVADService": {
+    "description": "VAD detail when re-establishing connection fails.",
+    "message": "Failed to reconnect VAD service."
+  },
+  "vadDetailInitError": {
+    "description": "VAD detail for an initialization error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to connect to VAD service"
+      }
+    }
+  },
+  "vadDetailInitErrorPromise": {
+    "description": "VAD detail for an initialization promise error.",
+    "message": "Init Error: Promise error"
+  },
+  "vadDetailInitErrorUnknown": {
+    "description": "VAD detail for an unknown initialization error.",
+    "message": "Init Error: Unknown"
+  },
+  "vadDetailInitializedMode": {
+    "description": "VAD detail showing initialization mode.",
+    "message": "",
+    "placeholders": {
+      "mode": {
+        "content": "$1",
+        "example": "Agent"
+      }
+    }
+  },
+  "vadDetailInitializedModeNA": {
+    "description": "VAD detail showing initialization mode as N/A.",
+    "message": "Initialized (Mode: N/A)"
+  },
+  "vadDetailNonSpeechAudioDetected": {
+    "description": "VAD detail for non-speech audio detection.",
+    "message": "Non-speech audio detected"
+  },
+  "vadDetailReleasingVADResources": {
+    "description": "VAD detail when releasing VAD resources.",
+    "message": "Releasing VAD resources..."
+  },
+  "vadDetailRequestingVADSetup": {
+    "description": "VAD detail when requesting setup.",
+    "message": "Requesting VAD setup..."
+  },
+  "vadDetailSpeechDetected": {
+    "description": "VAD detail when speech has been detected.",
+    "message": "Speech detected"
+  },
+  "vadDetailSpeechEndedDuration": {
+    "description": "VAD detail indicating speech ended and its duration.",
+    "message": "",
+    "placeholders": {
+      "duration": {
+        "content": "$1",
+        "example": "1000"
+      }
+    }
+  },
+  "vadDetailStartError": {
+    "description": "VAD detail for a start error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to start VAD service"
+      }
+    }
+  },
+  "vadDetailStartErrorPromise": {
+    "description": "VAD detail for a start promise error.",
+    "message": "Start Error: Promise error"
+  },
+  "vadDetailStartErrorUnknown": {
+    "description": "VAD detail for an unknown start error.",
+    "message": "Start Error: Unknown"
+  },
+  "vadDetailStopError": {
+    "description": "VAD detail for a stop error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to stop VAD service"
+      }
+    }
+  },
+  "vadDetailStopErrorPromise": {
+    "description": "VAD detail for a stop promise error.",
+    "message": "Stop Error: Promise error"
+  },
+  "vadDetailStopErrorUnknown": {
+    "description": "VAD detail for an unknown stop error.",
+    "message": "Stop Error: Unknown"
+  },
+  "vadDetailUnknownVADError": {
+    "description": "VAD detail for an unknown error from the VAD module.",
+    "message": "Unknown VAD error"
+  },
+  "vadDetailVADProcessingStopped": {
+    "description": "VAD detail indicating VAD processing has stopped.",
+    "message": "VAD processing stopped."
+  },
+  "vadDetailVADServiceDisconnected": {
+    "description": "VAD detail when the service disconnects.",
+    "message": "VAD service disconnected. Try reloading."
+  },
+  "vadDetailVADServiceNotConnected": {
+    "description": "VAD detail when the service is not connected.",
+    "message": "VAD service not connected. Try reloading."
+  },
+  "vadDetailVADServiceShutdown": {
+    "description": "VAD detail indicating VAD service has been shut down.",
+    "message": "VAD service shut down."
+  },
+  "vadDetailWaitingForSpeech": {
+    "description": "VAD detail when waiting for user to speak.",
+    "message": "Waiting for speech"
+  },
+  "vadStatusDestroyed": {
+    "description": "VAD status when destroyed.",
+    "message": "Destroyed"
+  },
+  "vadStatusError": {
+    "description": "Generic VAD error status.",
+    "message": "Error"
+  },
+  "vadStatusFailed": {
+    "description": "Generic VAD failure status.",
+    "message": "Failed"
+  },
+  "vadStatusInitializing": {
+    "description": "VAD status when initializing.",
+    "message": "Initializing"
+  },
+  "vadStatusListening": {
+    "description": "VAD status when actively listening.",
+    "message": "Listening"
+  },
+  "vadStatusMisfire": {
+    "description": "VAD status when a misfire (non-speech) is detected.",
+    "message": "Misfire"
+  },
+  "vadStatusProcessing": {
+    "description": "VAD status when processing audio.",
+    "message": "Processing"
+  },
+  "vadStatusReady": {
+    "description": "VAD status when ready and waiting.",
+    "message": "Ready"
+  },
+  "vadStatusShuttingDown": {
+    "description": "VAD status when shutting down.",
+    "message": "Shutting down"
+  },
+  "vadStatusStarting": {
+    "description": "VAD status when starting.",
+    "message": "Starting"
+  },
+  "vadStatusStopped": {
+    "description": "VAD status when stopped.",
+    "message": "Stopped"
+  },
+  "vadStatusStopping": {
+    "description": "VAD status when stopping.",
+    "message": "Stopping"
+  },
+  "viewDetails": {
+    "description": "Text for the link to view full quota details on the dashboard.",
+    "message": "A részletek megtekintése"
+  },
+  "voiceIntroduction_joey": {
+    "description": "Introduction for the Joey voice.",
+    "message": "Hola! \nПривет! \n你好! \nPi vagyok, a poliglott mesterséges intelligencia asszisztense. \nA rendelkezésemre álló 32 nyelv segítségével felfedezhetünk ötleteket és kultúrákat a világ minden tájáról. \nmit gondolsz erről a hangról?"
+  },
+  "voiceIntroduction_paola": {
+    "description": "Introduction for the Paola voice.",
+    "message": "Ciao! \nBonjour! \nHelló! \nPi vagyok, és 32 nyelven tudok folyékonyan társalogni. \nAz arabtól az ukránig azért vagyok itt, hogy letörjem a nyelvi akadályokat. \nHogy hangzik neked ez a hang?"
+  },
+  "voiceOff": {
+    "description": "Label for when text-to-speech is disabled",
+    "message": "Lehangol"
+  },
+  "voicePaused": {
+    "description": "Text shown when voice is paused due to insufficient credits",
+    "message": "A hang megállt -"
+  },
+  "voiceSettings": {
+    "description": "The text of the menu item to access voice-related settings.",
+    "message": "Hangbeállítások"
   }
 }

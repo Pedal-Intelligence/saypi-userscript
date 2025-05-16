@@ -1,34 +1,38 @@
 {
   "activityCheckButton": {
-    "description": "Ang teksto ng pindutan para ipahiwatig na ang gumagamit ay naroroon pa rin.",
+    "description": "The text of the button to indicate that the user is still present.",
     "message": "Oo, nandito pa rin ako!"
   },
   "activityCheckMessage": {
-    "description": "Ang mensahe na ipapakita kapag ang usapan ay tumagal nang hindi pangkaraniwan.",
+    "description": "The message to display when the conversation has been going on unusually long.",
     "message": "Wow, ang haba ng usapan na ito. Nandyan ka pa ba, o nag-uusap lang kami sa aming sarili?"
   },
+  "addCredits": {
+    "description": "Text for link to add more voice credits",
+    "message": "Magdagdag ng mga kredito"
+  },
   "allowInterruptions": {
-    "description": "Label para sa checkbox upang paganahin/hindi paganahin ang pagpapahintulot sa user na putulin ang mga tugon ni Pi sa pamamagitan ng pagsasalita.",
+    "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Mapuputol"
   },
   "appDescription": {
-    "description": "Ang paglalarawan ng aplikasyon.",
+    "description": "The description of the application.",
     "message": "Kontrol ng boses para sa Pi at Claude. Magsalita ng natural, kumuha ng buhay na mga tugon. Sabihin mo lang."
   },
   "appName": {
-    "description": "Ang pangalan ng aplikasyon.",
+    "description": "The name of the application.",
     "message": "Say, Pi"
   },
   "applicationStatusIssue": {
-    "description": "Mensahe na ipapakita kapag ang aplikasyon ay nakakaranas ng mga isyu.",
+    "description": "Message to display when the application is experiencing issues.",
     "message": "Abiso sa Isyu ng Sistema"
   },
   "applicationStatusUnknown": {
-    "description": "Mensahe na ipapakita kapag hindi matukoy ang katayuan ng aplikasyon. Hal. kapag offline ang kliyente.",
+    "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Hindi alam ang katayuan ng aplikasyon"
   },
   "assistantIsListening": {
-    "description": "Mensahe na ipinapakita kapag ang assistant ay nakikinig para sa pagsasalita.",
+    "description": "Message displayed when the assistant is listening for speech.",
     "message": "Ang $chatbot$ ay nakikinig...",
     "placeholders": {
       "chatbot": {
@@ -37,8 +41,18 @@
       }
     }
   },
+  "assistantIsListeningAttentively": {
+    "description": "Message displayed when the assistant is listening for speech in agent mode.",
+    "message": "Ang $chatbot$ ay nakikinig nang mabuti ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
   "assistantIsSpeaking": {
-    "description": "Mensahe na ipinapakita kapag ang assistant ay nagsasalita ng kanyang tugon.",
+    "description": "Message displayed when the assistant is speaking its response.",
     "message": "$chatbot$ ay nagsasalita...",
     "placeholders": {
       "chatbot": {
@@ -47,8 +61,18 @@
       }
     }
   },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Message displayed when the assistant is speaking its response and manual interruption is possible.",
+    "message": "Nagsasalita si $chatbot$, i-tap para matakpan...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "assistantIsThinking": {
-    "description": "Mensahe na ipinapakita kapag ang assistant ay naghahanda ng kanyang tugon.",
+    "description": "Message displayed when the assistant is preparing its response.",
     "message": "$chatbot$ ay nag-iisip...",
     "placeholders": {
       "chatbot": {
@@ -57,8 +81,18 @@
       }
     }
   },
+  "assistantIsWriting": {
+    "description": "Message displayed when the assistant is typing its response.",
+    "message": "Sumulat si $chatbot$...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "audioConnected": {
-    "description": "Mensahe na ipinapakita kapag isang mikropono ay nakakabit",
+    "description": "Message displayed when a microphone is connected",
     "message": "$microphone$ nakakonekta",
     "placeholders": {
       "microphone": {
@@ -68,7 +102,7 @@
     }
   },
   "audioInputError": {
-    "description": "Mensahe na ipinapakita kapag ang audio ay nagresulta sa isang walang laman na transkripsyon - karaniwang resulta ng pag-filter.",
+    "description": "Message displayed when audio transcription failed - usually the result of an ASR or LLM API error.",
     "message": "Hmm, $chatbot$ ay may kaunting hiccup. \nMaaari mo bang subukang sabihin iyon muli?",
     "placeholders": {
       "chatbot": {
@@ -78,7 +112,7 @@
     }
   },
   "audioReconnecting": {
-    "description": "Mensahe na ipinapakita kapag kumokonekta sa isang bagong mikropono",
+    "description": "Message displayed when connecting to a new microphone",
     "message": "Paglipat sa $microphone$...",
     "placeholders": {
       "microphone": {
@@ -88,19 +122,23 @@
     }
   },
   "autoSubmit": {
-    "description": "Label para sa checkbox upang paganahin/hindi paganahin ang awtomatikong pagsumite ng prompt.",
+    "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Awtomatikong ipasa"
   },
   "callError": {
-    "description": "Ang tooltip na ipapakita sa call button kapag may naganap na hindi malubhang error.",
+    "description": "The tooltip to display on the call button when a non-fatal error occurs.",
     "message": "Nakasalubong ng hindi nakamamatay na error. Huwag mag-panic, nakikinig pa rin kami."
   },
   "callInProgress": {
-    "description": "Ang tooltip na ipapakita sa call button kapag may isinasagawang tawag.",
+    "description": "The tooltip to display on the call button when a call is in progress.",
     "message": "Tapusin ang walang-kamay na pag-uusap"
   },
+  "callInterruptible": {
+    "description": "The tooltip to display on the call button when a call is in progress and manual interruption is possible.",
+    "message": "I-tap para matakpan"
+  },
   "callNotStarted": {
-    "description": "Ang tooltip na ipapakita sa pindutan ng tawag bago simulan ang tawag.",
+    "description": "The tooltip to display on the call button before a call is started.",
     "message": "Simulan ang isang hands-free na pag-uusap kasama ng $chatbot$",
     "placeholders": {
       "chatbot": {
@@ -110,12 +148,20 @@
     }
   },
   "callStarting": {
-    "description": "Ang teksto na ipapakita sa tooltip ng pindutan ng tawag at sa lugar ng prompt kapag nagsisimula na ang tawag.",
+    "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Kumokonekta..."
   },
   "checkingApplicationStatus": {
-    "description": "Mensahe na ipapakita habang ang katayuan ng sistema ay tinutukoy, hal. sa panahon ng pag-load.",
+    "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Nagsusuri ng katayuan ng aplikasyon..."
+  },
+  "clickToCollapse": {
+    "description": "Text indicating user can click to hide expanded content.",
+    "message": "Mag -click upang gumuho"
+  },
+  "clickToExpand": {
+    "description": "Text indicating user can click to show collapsed content.",
+    "message": "Mag -click upang mapalawak"
   },
   "consentAskParticipate": {
     "message": "Gusto mo bang lumahok?"
@@ -151,27 +197,39 @@
     "message": "Basahin ang aming Patakaran sa Pagkapribado"
   },
   "continueUnlocking": {
-    "description": "Mga tagubilin na nagsasabi sa gumagamit kung paano magpatuloy kapag sila ay nagsimula nang pindutin ang pindutan ng pag-unlock.",
+    "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Patuloy na hawakan para ma-unlock..."
   },
+  "copiedButtonTitle": {
+    "description": "The title of the button to indicate that the text of a message has been copied to the clipboard.",
+    "message": "Kinopya!"
+  },
+  "copyButtonTitle": {
+    "description": "The title of the button to copy the text of a message to the clipboard.",
+    "message": "Kopya"
+  },
   "currencyUSDAbbreviation": {
-    "description": "Ang pinaikling salita para sa Dolyar ng Estados Unidos.",
+    "description": "The abbreviation for the US dollar.",
     "message": "USD"
   },
   "currentCharges": {
-    "description": "Ang terminong ginagamit upang ilarawan ang kasalukuyang mga singil (tumatakbo na kabuuan) na naipon ng gumagamit.",
+    "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Kasalukuyang singil"
   },
+  "disableTTS": {
+    "description": "Label for the option to turn off text-to-speech",
+    "message": "Huwag paganahin ang text-to-speech"
+  },
   "dismissAlert": {
-    "description": "Label para sa pindutan upang ibasura ang alerto ng isyu sa sistema.",
+    "description": "Label for the button to dismiss a system issue alert.",
     "message": "Iwaksi"
   },
   "enableTTS": {
-    "description": "Label para sa checkbox upang paganahin/hindi paganahin ang text-to-speech.",
+    "description": "Label for the checkbox to enable/disable text-to-speech.",
     "message": "Mga tinig na multilinggwal"
   },
   "enhancedVoice": {
-    "description": "Pamagat (tooltip) para sa Sabihin, mga pinalakas na boses ni Pi.",
+    "description": "Title (tooltip) for Say, Pi enhanced voices.",
     "message": "Pinahusay ng $product$ ang boses",
     "placeholders": {
       "product": {
@@ -181,51 +239,184 @@
     }
   },
   "enterImmersiveModeLong": {
-    "description": "Ang aria-label at pamagat ng pindutan para pumasok sa immersive mode sa mga mobile device.",
+    "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
     "message": "Pasok sa Nakakalibang na Mode"
   },
   "enterImmersiveModeShort": {
-    "description": "Ang teksto ng pindutan para pumasok sa immersive mode sa desktop.",
+    "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Paglulubog"
   },
   "exitImmersiveModeLong": {
-    "description": "Ang aria-label at pamagat ng pindutan para umalis sa immersive mode sa mga mobile device, bumalik sa text-based desktop mode.",
+    "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Lumabas sa Nakakalibang na Mode"
   },
   "extensionPopupTitle": {
-    "description": "Ang pamagat ng popup dialog ng extension.",
+    "description": "The title of the extension's popup dialog.",
     "message": "Sabihin, Mga Setting ng Pi"
   },
+  "extensionSettings": {
+    "description": "The text of the button to open the extension's settings.",
+    "message": "Mga setting"
+  },
+  "greeting": {
+    "description": "Greeting message shown when user is signed in",
+    "message": "Kumusta, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "instructionLabel_context": {
+    "description": "Friendly label for user instruction that provides background information.",
+    "message": "Nagbibigay ng konteksto ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Friendly label for user instruction that defines what the user wants.",
+    "message": "Paglilinaw ng mga inaasahan ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Friendly label for user instruction that narrows the scope of conversation.",
+    "message": "Nakatuon ang talakayan ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Friendly label for user instruction that establishes boundaries for the conversation.",
+    "message": "Pagtatakda ng mga bantay ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Friendly label for user instruction that guides how the AI should respond.",
+    "message": "Gabay na mga tugon ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Friendly label for user instruction that gently suggests a direction.",
+    "message": "Nagbibigay ng isang nudge ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Friendly label for user instruction that guides the conversation direction.",
+    "message": "Pagpipiloto ng pag -uusap ..."
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Kasalukuyang hindi sinusuportahan sa Firefox ang mga pagkaantala."
+  },
   "lockButton": {
-    "description": "Ang pamagat (tooltip) ng pindutan para i-lock ang screen laban sa mga aksidenteng paghawak.",
+    "description": "The title (tooltip) of the button to lock the screen against accidental touches.",
     "message": "Pindutin para i-lock ang screen"
   },
   "lockedScreen": {
-    "description": "Isang mensahe na ipapakita nang malinaw kapag ang screen ay nakakandado.",
+    "description": "A message to display prominently when the screen is locked.",
     "message": "Ang screen ay nakakandado."
   },
+  "maintenanceLabel_holding": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Hawak ang kaisipang ito ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Paggawa ng isang Mental Note ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Pagproseso sa background ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Naaalala ang detalyeng ito ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Sine -save ang kaisipang iyon para sa ibang pagkakataon ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Sinusubaybayan ang konteksto ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Tucking ito ..."
+  },
+  "microphoneErrorConstraints": {
+    "description": "Error message when microphone constraints cannot be satisfied.",
+    "message": "Ang iyong mga setting ng mikropono ay hindi nakakatugon sa mga kinakailangang detalye. \nSubukang gumamit ng ibang mikropono o ayusin ang iyong mga setting ng audio."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generic error message with details when microphone access fails.",
+    "message": "Nabigong ma-access ang mikropono: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Error message when microphone is already in use by another application.",
+    "message": "Hindi ma-access ang mikropono dahil ginagamit ito ng ibang application. \nPakisara ang iba pang mga app na maaaring gumagamit ng iyong mikropono."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Error message when no microphone device is found.",
+    "message": "Walang nakitang mikropono. \nMangyaring magkonekta ng mikropono at subukang muli."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Error message when microphone permission is denied by the user or system.",
+    "message": "Kinakailangan ang access sa mikropono. \nMangyaring payagan ang pag-access sa mikropono sa iyong mga setting ng browser upang magpatuloy."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Error message for unexpected microphone errors with details.",
+    "message": "Isang hindi inaasahang error ang naganap sa iyong mikropono: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generic error message when microphone access fails for unknown reasons.",
+    "message": "Hindi ma-access ang mikropono. \nPakisuri ang mga setting ng iyong device at subukang muli."
+  },
   "mode_accuracy": {
-    "description": "Pinakamataas na katumpakan ng mode.",
+    "description": "Highest accuracy mode.",
     "message": "katumpakan"
   },
+  "mode_accuracy_description": {
+    "description": "Description for the accuracy transcription mode.",
+    "message": "Pinakamataas na katumpakan, ngunit mas mabagal na bilis ng transkripsyon. \nMahilig sa guni-guni."
+  },
   "mode_balanced": {
-    "description": "Default na mode ng transkripsyon.",
+    "description": "Default transcription mode.",
     "message": "balanseado"
   },
+  "mode_balanced_description": {
+    "description": "Description for the balanced transcription mode.",
+    "message": "Magandang balanse ng bilis at katumpakan para sa karamihan ng mga gamit."
+  },
   "mode_speed": {
-    "description": "Pinakamabilis na mode ng transkripsyon.",
+    "description": "Fastest transcription mode.",
     "message": "bilis"
   },
+  "mode_speed_description": {
+    "description": "Description for the speed transcription mode.",
+    "message": "Pinakamabilis na tugon, ngunit hindi gaanong tumpak. \nMahilig makagambala."
+  },
+  "nicknameLabel": {
+    "description": "Label for the input field to set a custom nickname for the AI assistant.",
+    "message": "Palayaw"
+  },
+  "notSignedIn": {
+    "description": "Text to show when the user is not signed in.",
+    "message": "Hindi naka -sign in"
+  },
   "preferedLanguage": {
-    "description": "Label para sa kontrol na pumili ng ginustong wika ng transkripsyon.",
+    "description": "Label for a control to select the prefered transcription language.",
     "message": "Wika"
   },
   "preferedModeControl": {
-    "description": "Ang pamagat (tooltip) ng kontrol para piliin ang ginustong mode ng transkripsyon.",
+    "description": "The title (tooltip) of the control to select the prefered transcription mode.",
     "message": "Piliin ang iyong ginustong mode ng transkripsyon"
   },
   "previewProgress": {
-    "description": "Ang mensahe na ipapakita kapag ang gumagamit ay nagpi-preview ng isang tampok na may limitasyon sa karakter.",
+    "description": "The message to display when the user is previewing a feature that has a character limit.",
     "message": "$count$ na mga karakter mula sa $limit$",
     "placeholders": {
       "count": {
@@ -245,7 +436,7 @@
     "message": "Nakumpleto na ang Beta"
   },
   "previewStatusPaused": {
-    "description": "Ang mensahe na ipapakita kapag ang gumagamit ay nagpi-preview ng isang tampok na nai-pause.",
+    "description": "The message to display when the user is previewing a feature that has been paused.",
     "message": "Beta Itinigil hanggang $resetDate$",
     "placeholders": {
       "resetDate": {
@@ -257,32 +448,187 @@
   "previewStatusUnknown": {
     "message": "Hindi makakonekta..."
   },
+  "profile": {
+    "description": "Label for the user profile section.",
+    "message": "Profile"
+  },
+  "quotaCredits": {
+    "description": "Unit label for TTS credits",
+    "message": "mga kredito"
+  },
+  "quotaRemaining": {
+    "description": "Label for the quota remaining progress bar",
+    "message": "Natitirang quota"
+  },
+  "quotaStatusUnknown": {
+    "description": "Message shown when quota status cannot be determined",
+    "message": "Hindi masuri ang katayuan ng quota"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Message shown when user is not authenticated.",
+    "message": "Mag -log in upang ma -access ang henerasyon ng boses at iba pang mga tampok na premium"
+  },
   "readAloudButtonTitle": {
-    "description": "Ang pamagat ng pindutan upang basahin nang malakas ang teksto ng isang mensahe.",
+    "description": "The title of the button to read aloud the text of a message.",
     "message": "Basahin nang Malakas"
   },
   "recommendedActions": {
-    "description": "Mensahe na sinundan ng isang listahan ng inirerekumendang mga aksyon na maaaring gawin ng user upang malunasan ang isang kilalang problema.",
+    "description": "Message preceding a list of recommended actions the user may take to remediate a known issue.",
     "message": "Sa ngayon, kami ay nagrerekomenda:"
   },
+  "regenerateButtonTitle": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an estimated cost.",
+    "message": "Lumikha ng Audio para sa $cost$ $currency$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
+    "message": "Lumikha ng Audio"
+  },
   "shareAnalytics": {
-    "description": "Label para sa checkbox upang paganahin/hindi paganahin ang pagbabahagi ng analytics.",
+    "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Ibahagi ang analytics"
   },
+  "signIn": {
+    "description": "Text for the sign in button.",
+    "message": "Mag -sign in"
+  },
+  "signInForTTS": {
+    "description": "Prompt shown when user needs to authenticate to access text-to-speech features",
+    "message": "Mag-sign in para sa text-to-speech"
+  },
+  "signOut": {
+    "description": "Text for the sign out button.",
+    "message": "Mag -sign out"
+  },
+  "signedIn": {
+    "description": "Status text shown when user is authenticated (without email).",
+    "message": "Naka -sign in"
+  },
+  "signedInAs": {
+    "description": "Status text shown when user is authenticated, including their email.",
+    "message": "Naka -sign in bilang $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
   "soundEffects": {
-    "description": "Label para sa checkbox upang paganahin/hindi paganahin ang mga tunog na epekto.",
+    "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Mga tunog na epekto"
   },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Ang mga sound effect ay hindi pinagana sa Firefox upang maiwasan ang mga isyu sa audio feedback."
+  },
+  "sttMinutesRemaining": {
+    "description": "Text showing remaining STT quota in minutes.",
+    "message": "$minutes$ minuto$plural$ natitira",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text to show when STT quota is exhausted.",
+    "message": "Pagod na pagkilala sa pagsasalita"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip for the STT quota progress bar.",
+    "message": "$remaining$ ng $total$ segundo ang natitira",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip for the STT quota progress bar in minutes.",
+    "message": "$remaining$ ng $total$ minuto ang natitira",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Label for the STT quota remaining display.",
+    "message": "Pagkilala sa pagsasalita"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unit for STT quota (seconds).",
+    "message": "secs"
+  },
+  "submitModeControl": {
+    "description": "The title (tooltip) of the control to select when messages should be submitted.",
+    "message": "Piliin kung kailan isusumite ang iyong mga mensahe"
+  },
+  "submit_mode_agent": {
+    "description": "AI-driven submission mode.",
+    "message": "ahente"
+  },
+  "submit_mode_agent_description": {
+    "description": "Description for the AI-driven submission mode.",
+    "message": "Nagpapasya ang $chatbot$ kung kailan tutugon batay sa konteksto",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatic submission mode.",
+    "message": "sasakyan"
+  },
+  "submit_mode_auto_description": {
+    "description": "Description for the automatic submission mode.",
+    "message": "Awtomatikong isumite kapag huminto ka sa pagsasalita"
+  },
+  "submit_mode_off": {
+    "description": "Manual submission mode.",
+    "message": "manwal"
+  },
+  "submit_mode_off_description": {
+    "description": "Description for the manual submission mode.",
+    "message": "Isumite lamang kapag pinindot mo ang pindutan"
+  },
   "toggleThemeToDarkMode": {
-    "description": "Label para sa pindutan upang magpalit sa madilim na mode.",
+    "description": "Label for the button to toggle to dark mode.",
     "message": "Lumipat sa madilim na mode"
   },
   "toggleThemeToLightMode": {
-    "description": "Label para sa pindutan upang magpalit sa light mode.",
+    "description": "Label for the button to toggle to light mode.",
     "message": "Lumipat sa liwanag na mode"
   },
   "ttsCostExplanation": {
-    "description": "Ang tooltip na ipapakita kapag ginamit ang engine ng text-to-speech upang basahin nang malakas ang isang mensahe, kasama ang halaga ng mensahe.",
+    "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
     "message": "Ang $product$ ay maniningil ng $cost$ $currency$ para sa pakikinig sa mensaheng ito",
     "placeholders": {
       "cost": {
@@ -300,7 +646,7 @@
     }
   },
   "ttsCostExplanationFree": {
-    "description": "Ang tooltip na ipapakita kapag ginamit ang isang text-to-speech engine upang basahin nang malakas ang isang mensahe, at libre ang mensahe. Maaaring maglaman ng pangalan ng provider.",
+    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free. Assumes the provider is Inflection AI.",
     "message": "Ang audio na ito ay nabuo nang walang bayad ng Inflection AI",
     "placeholders": {
       "provider": {
@@ -309,8 +655,26 @@
       }
     }
   },
+  "ttsCostExplanationSayPi": {
+    "description": "The tooltip to display when the user hovers over the cost explanation link.",
+    "message": "Alamin kung paano naniningil ang $product$ para sa audio",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "ttsCredits": {
+    "description": "The term used for the credits currency in the text-to-speech feature.",
+    "message": "mga kredito"
+  },
+  "ttsDisabledSafari": {
+    "description": "Message shown when TTS is disabled in Safari",
+    "message": "Kasalukuyang hindi sinusuportahan sa Safari ang mga multilingguwal na boses."
+  },
   "ttsPoweredBy": {
-    "description": "Ang mensahe na ipapakita kapag ginamit ang engine ng text-to-speech upang basahin nang malakas ang isang mensahe.",
+    "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Teksto-sa-talumpati na pinapatakbo ng $ttsEngine$",
     "placeholders": {
       "ttsEngine": {
@@ -319,320 +683,16 @@
       }
     }
   },
-  "unlockButton": {
-    "description": "Ang pamagat (tooltip) ng pindutan para ma-unlock ang screen.",
-    "message": "Pindutin para ma-unlock ang screen"
-  },
-  "unlockInstruction": {
-    "description": "Mga instruksyon na nagsasabi sa gumagamit kung paano i-unlock ang screen kapag ito'y nakakandado.",
-    "message": "Hawakan para ma-unlock."
-  },
-  "userStartedInterrupting": {
-    "description": "Mensahe na ipinapakita kapag nagsasalita ang gumagamit habang nagsasalita ang assistant.",
-    "message": "Magpatuloy ka, nakikinig ang $chatbot$...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "copiedButtonTitle": {
-    "message": "Kinopya!",
-    "description": "Ang pamagat ng pindutan upang ipahiwatig na ang teksto ng mensahe ay nakopya na sa clipboard."
-  },
-  "copyButtonTitle": {
-    "message": "Kopya",
-    "description": "Ang pamagat ng pindutan para kopyahin ang teksto ng mensahe sa clipboard."
-  },
-  "voiceIntroduction_joey": {
-    "message": "Hola! \nПривет! \n你好! \nAko si Pi, ang iyong polyglot AI assistant. \nSa 32 wika sa aking utos, maaari nating tuklasin ang mga ideya at kultura mula sa buong mundo. \nAno sa tingin mo ang boses na ito?",
-    "description": "Panimula para sa boses ni Joey."
-  },
-  "voiceIntroduction_paola": {
-    "message": "Ciao! \nBonjour! \nHello! \nAko si Pi, at marunong akong makipag-usap sa 32 wika. \nMula sa Arabic hanggang Ukrainian, narito ako upang sirain ang mga hadlang sa wika. \nAno ang pakiramdam ng boses na ito sa iyo?",
-    "description": "Panimula para sa boses ni Paola."
-  },
-  "regenerateButtonTitle": {
-    "message": "Lumikha ng Audio para sa $cost$ $currency$",
-    "description": "Ang pamagat ng pindutan para muling likhain ang audio ng isang mensahe. Maaaring magdulot ito ng tinatayang gastos.",
-    "placeholders": {
-      "cost": {
-        "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
-      }
-    }
-  },
-  "regenerateButtonTitleFree": {
-    "message": "Lumikha ng Audio",
-    "description": "Ang pamagat ng pindutan para muling makabuo ng audio ng isang mensahe. Maaaring magdulot ito ng hindi matukoy na gastos."
-  },
-  "assistantIsWriting": {
-    "description": "Ipinapakita ang mensahe kapag tina-type ng assistant ang tugon nito.",
-    "message": "Sumulat si $chatbot$...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "ttsCostExplanationSayPi": {
-    "description": "Ang tooltip na ipapakita kapag nag-hover ang user sa link ng paliwanag sa gastos.",
-    "placeholders": {
-      "product": {
-        "content": "$1",
-        "example": "Say, Pi"
-      }
-    },
-    "message": "Alamin kung paano naniningil ang $product$ para sa audio"
-  },
-  "interruptionsFirefoxDisabled": {
-    "message": "Kasalukuyang hindi sinusuportahan sa Firefox ang mga pagkaantala."
-  },
-  "mode_accuracy_description": {
-    "description": "Paglalarawan para sa accuracy transcription mode.",
-    "message": "Pinakamataas na katumpakan, ngunit mas mabagal na bilis ng transkripsyon. \nMahilig sa guni-guni."
-  },
-  "mode_balanced_description": {
-    "description": "Paglalarawan para sa balanseng transcription mode.",
-    "message": "Magandang balanse ng bilis at katumpakan para sa karamihan ng mga gamit."
-  },
-  "mode_speed_description": {
-    "description": "Paglalarawan para sa speed transcription mode.",
-    "message": "Pinakamabilis na tugon, ngunit hindi gaanong tumpak. \nMahilig makagambala."
-  },
-  "soundEffectsFirefoxDisabled": {
-    "message": "Ang mga sound effect ay hindi pinagana sa Firefox upang maiwasan ang mga isyu sa audio feedback."
-  },
-  "assistantIsSpeakingWithManualInterrupt": {
-    "description": "Ipinapakita ang mensahe kapag nagsasalita ang assistant ng tugon nito at posible ang manual interruption.",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "message": "Nagsasalita si $chatbot$, i-tap para matakpan..."
-  },
-  "callInterruptible": {
-    "description": "Ang tooltip na ipapakita sa pindutan ng tawag kapag ang isang tawag ay isinasagawa at ang manu-manong pagkaantala ay posible.",
-    "message": "I-tap para matakpan"
-  },
-  "microphoneErrorConstraints": {
-    "description": "Mensahe ng error kapag hindi matugunan ang mga hadlang sa mikropono.",
-    "message": "Ang iyong mga setting ng mikropono ay hindi nakakatugon sa mga kinakailangang detalye. \nSubukang gumamit ng ibang mikropono o ayusin ang iyong mga setting ng audio."
-  },
-  "microphoneErrorGeneric": {
-    "description": "Generic na mensahe ng error na may mga detalye kapag nabigo ang pag-access sa mikropono.",
-    "message": "Nabigong ma-access ang mikropono: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Permission denied"
-      }
-    }
-  },
-  "microphoneErrorInUse": {
-    "description": "Mensahe ng error kapag ang mikropono ay ginagamit na ng isa pang application.",
-    "message": "Hindi ma-access ang mikropono dahil ginagamit ito ng ibang application. \nPakisara ang iba pang mga app na maaaring gumagamit ng iyong mikropono."
-  },
-  "microphoneErrorNotFound": {
-    "description": "Mensahe ng error kapag walang nakitang microphone device.",
-    "message": "Walang nakitang mikropono. \nMangyaring magkonekta ng mikropono at subukang muli."
-  },
-  "microphoneErrorPermissionDenied": {
-    "description": "Mensahe ng error kapag ang pahintulot ng mikropono ay tinanggihan ng user o system.",
-    "message": "Kinakailangan ang access sa mikropono. \nMangyaring payagan ang pag-access sa mikropono sa iyong mga setting ng browser upang magpatuloy."
-  },
-  "microphoneErrorUnexpected": {
-    "description": "Mensahe ng error para sa hindi inaasahang mga error sa mikropono na may mga detalye.",
-    "message": "Isang hindi inaasahang error ang naganap sa iyong mikropono: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Device busy"
-      }
-    }
-  },
-  "microphoneErrorUnknown": {
-    "description": "Generic na mensahe ng error kapag nabigo ang pag-access sa mikropono sa hindi malamang dahilan.",
-    "message": "Hindi ma-access ang mikropono. \nPakisuri ang mga setting ng iyong device at subukang muli."
-  },
-  "ttsDisabledSafari": {
-    "message": "Kasalukuyang hindi sinusuportahan sa Safari ang mga multilingguwal na boses.",
-    "description": "Ipinapakita ang mensahe kapag hindi pinagana ang TTS sa Safari"
-  },
-  "extensionSettings": {
-    "message": "Mga setting",
-    "description": "Ang text ng button para buksan ang mga setting ng extension."
-  },
-  "submitModeControl": {
-    "description": "Ang pamagat (tooltip) ng kontrol upang piliin kung kailan dapat isumite ang mga mensahe.",
-    "message": "Piliin kung kailan isusumite ang iyong mga mensahe"
-  },
-  "submit_mode_agent": {
-    "description": "AI-driven submission mode.",
-    "message": "ahente"
-  },
-  "submit_mode_agent_description": {
-    "description": "Paglalarawan para sa mode ng pagsusumite na hinimok ng AI.",
-    "message": "Nagpapasya ang $chatbot$ kung kailan tutugon batay sa konteksto",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "submit_mode_auto": {
-    "description": "Awtomatikong mode ng pagsusumite.",
-    "message": "sasakyan"
-  },
-  "submit_mode_auto_description": {
-    "description": "Paglalarawan para sa mode ng awtomatikong pagsusumite.",
-    "message": "Awtomatikong isumite kapag huminto ka sa pagsasalita"
-  },
-  "submit_mode_off": {
-    "description": "Manu-manong mode ng pagsusumite.",
-    "message": "manwal"
-  },
-  "submit_mode_off_description": {
-    "description": "Paglalarawan para sa manu-manong mode ng pagsusumite.",
-    "message": "Isumite lamang kapag pinindot mo ang pindutan"
-  },
-  "nicknameLabel": {
-    "message": "Palayaw",
-    "description": "Lagyan ng label para sa patlang ng pag -input upang magtakda ng isang pasadyang palayaw para sa katulong ng AI."
-  },
-  "greeting": {
-    "description": "Ang mensahe ng pagbati na ipinakita kapag naka -sign in ang gumagamit",
-    "message": "Kumusta, $name$!",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John"
-      }
-    }
-  },
-  "notSignedIn": {
-    "description": "Teksto upang ipakita kapag ang gumagamit ay hindi naka -sign in.",
-    "message": "Hindi naka -sign in"
-  },
-  "profile": {
-    "description": "Lagyan ng label para sa seksyon ng Profile ng Gumagamit.",
-    "message": "Profile"
-  },
-  "quotaCredits": {
-    "description": "Unit Label para sa mga kredito ng TTS",
-    "message": "mga kredito"
-  },
-  "quotaRemaining": {
-    "description": "Lagyan ng label para sa natitirang bar ng quota",
-    "message": "Natitirang quota"
-  },
-  "quotaStatusUnknown": {
-    "description": "Ang mensahe na ipinakita kapag ang katayuan ng quota ay hindi matukoy",
-    "message": "Hindi masuri ang katayuan ng quota"
-  },
-  "quotaUnauthenticatedMessage": {
-    "description": "Ang mensahe na ipinakita kapag ang gumagamit ay hindi napatunayan.",
-    "message": "Mag -log in upang ma -access ang henerasyon ng boses at iba pang mga tampok na premium"
-  },
-  "signIn": {
-    "description": "Teksto para sa pindutan ng pag -sign in.",
-    "message": "Mag -sign in"
-  },
-  "signOut": {
-    "description": "Teksto para sa pindutan ng pag -sign out.",
-    "message": "Mag -sign out"
-  },
-  "signedIn": {
-    "description": "Ang teksto ng katayuan na ipinakita kapag ang gumagamit ay napatunayan (nang walang email).",
-    "message": "Naka -sign in"
-  },
-  "signedInAs": {
-    "description": "Ang teksto ng katayuan na ipinakita kapag napatunayan ang gumagamit, kasama ang kanilang email.",
-    "message": "Naka -sign in bilang $email$",
-    "placeholders": {
-      "email": {
-        "content": "$1",
-        "example": "user@example.com"
-      }
-    }
-  },
-  "sttMinutesRemaining": {
-    "description": "Ang teksto na nagpapakita ng natitirang quota ng STT sa ilang minuto.",
-    "message": "$minutes$ minuto$plural$ natitira",
-    "placeholders": {
-      "minutes": {
-        "content": "$1",
-        "example": "5"
-      },
-      "plural": {
-        "content": "$2",
-        "example": "s"
-      }
-    }
-  },
-  "sttQuotaExhausted": {
-    "description": "Teksto upang ipakita kapag naubos ang quota ng STT.",
-    "message": "Pagod na pagkilala sa pagsasalita"
-  },
-  "sttQuotaProgress": {
-    "description": "Tooltip para sa STT quota Progress Bar.",
-    "message": "$remaining$ ng $total$ segundo ang natitira",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "100"
-      },
-      "total": {
-        "content": "$2",
-        "example": "300"
-      }
-    }
-  },
-  "sttQuotaProgressMinutes": {
-    "description": "Tooltip para sa STT quota Progress Bar sa ilang minuto.",
-    "message": "$remaining$ ng $total$ minuto ang natitira",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "5"
-      },
-      "total": {
-        "content": "$2",
-        "example": "60"
-      }
-    }
-  },
-  "sttQuotaRemaining": {
-    "description": "Lagyan ng label para sa natitirang display ng stt quota.",
-    "message": "Pagkilala sa pagsasalita"
-  },
-  "sttQuotaSeconds": {
-    "description": "Yunit para sa stt quota (segundo).",
-    "message": "secs"
-  },
-  "ttsCredits": {
-    "description": "Ang term na ginamit para sa pera ng mga kredito sa tampok na text-to-speech.",
-    "message": "mga kredito"
-  },
   "ttsQuotaCharacters": {
-    "description": "Yunit para sa TTS Quota (mga character).",
+    "description": "Unit for TTS quota (characters).",
     "message": "mga kredito"
   },
   "ttsQuotaExhausted": {
-    "description": "Teksto upang ipakita kapag naubos ang quota ng TTS.",
+    "description": "Text to show when TTS quota is exhausted.",
     "message": "Napapagod ang voice quota"
   },
   "ttsQuotaProgress": {
-    "description": "Tooltip para sa TTS Quota Progress Bar.",
+    "description": "Tooltip for the TTS quota progress bar.",
     "message": "$remaining$ ng $total$ character na natitira",
     "placeholders": {
       "remaining": {
@@ -646,121 +706,243 @@
     }
   },
   "ttsQuotaRemaining": {
-    "description": "Lagyan ng label para sa natitirang display ng TTS quota.",
+    "description": "Label for the TTS quota remaining display.",
     "message": "Henerasyon ng boses"
   },
-  "upgradeButton": {
-    "description": "Teksto para sa pindutan upang i -upgrade ang plano kapag naubos ang quota.",
-    "message": "Plano ng pag -upgrade"
-  },
-  "viewDetails": {
-    "description": "Teksto para sa link upang matingnan ang buong mga detalye ng quota sa dashboard.",
-    "message": "Tingnan ang mga detalye"
-  },
-  "clickToCollapse": {
-    "description": "Ang teksto na nagpapahiwatig ng gumagamit ay maaaring mag -click upang itago ang pinalawak na nilalaman.",
-    "message": "Mag -click upang gumuho"
-  },
-  "clickToExpand": {
-    "description": "Ang teksto na nagpapahiwatig ng gumagamit ay maaaring mag -click upang ipakita ang gumuho na nilalaman.",
-    "message": "Mag -click upang mapalawak"
-  },
-  "instructionLabel_context": {
-    "description": "Friendly label para sa pagtuturo ng gumagamit na nagbibigay ng impormasyon sa background.",
-    "message": "Nagbibigay ng konteksto ..."
-  },
-  "instructionLabel_expectations": {
-    "description": "Friendly label para sa pagtuturo ng gumagamit na tumutukoy sa nais ng gumagamit.",
-    "message": "Paglilinaw ng mga inaasahan ..."
-  },
-  "instructionLabel_focusing": {
-    "description": "Friendly label para sa pagtuturo ng gumagamit na makitid sa saklaw ng pag -uusap.",
-    "message": "Nakatuon ang talakayan ..."
-  },
-  "instructionLabel_guardrails": {
-    "description": "Friendly label para sa pagtuturo ng gumagamit na nagtatatag ng mga hangganan para sa pag -uusap.",
-    "message": "Pagtatakda ng mga bantay ..."
-  },
-  "instructionLabel_guiding": {
-    "description": "Friendly label para sa pagtuturo ng gumagamit na gumagabay kung paano dapat tumugon ang AI.",
-    "message": "Gabay na mga tugon ..."
-  },
-  "instructionLabel_nudge": {
-    "description": "Friendly label para sa pagtuturo ng gumagamit na malumanay na nagmumungkahi ng isang direksyon.",
-    "message": "Nagbibigay ng isang nudge ..."
-  },
-  "instructionLabel_steering": {
-    "description": "Friendly label para sa pagtuturo ng gumagamit na gumagabay sa direksyon ng pag -uusap.",
-    "message": "Pagpipiloto ng pag -uusap ..."
-  },
-  "maintenanceLabel_holding": {
-    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
-    "message": "Hawak ang kaisipang ito ..."
-  },
-  "maintenanceLabel_mental_note": {
-    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
-    "message": "Paggawa ng isang Mental Note ..."
-  },
-  "maintenanceLabel_processing": {
-    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
-    "message": "Pagproseso sa background ..."
-  },
-  "maintenanceLabel_remembering": {
-    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
-    "message": "Naaalala ang detalyeng ito ..."
-  },
-  "maintenanceLabel_saving": {
-    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
-    "message": "Sine -save ang kaisipang iyon para sa ibang pagkakataon ..."
-  },
-  "maintenanceLabel_tracking": {
-    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
-    "message": "Sinusubaybayan ang konteksto ..."
-  },
-  "maintenanceLabel_tucking": {
-    "description": "Friendly label para sa gumuho na mensahe ng pagpapanatili ng katulong.",
-    "message": "Tucking ito ..."
-  },
-  "disableTTS": {
-    "description": "Lagyan ng label para sa pagpipilian upang patayin ang text-to-speech",
-    "message": "Huwag paganahin ang text-to-speech"
-  },
-  "signInForTTS": {
-    "description": "Prompt na ipinakita kapag ang gumagamit ay kailangang patunayan upang ma-access ang mga tampok na text-to-speech",
-    "message": "Mag-sign in para sa text-to-speech"
-  },
   "ttsVoice": {
-    "description": "Label na naglalarawan ng isang pagpipilian sa boses ng text-to-speech sa menu",
+    "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS Voice"
   },
-  "voiceOff": {
-    "description": "Lagyan ng label kung kailan hindi pinagana ang text-to-speech",
-    "message": "Boses"
+  "unlockButton": {
+    "description": "The title (tooltip) of the button to unlock the screen.",
+    "message": "Pindutin para ma-unlock ang screen"
   },
-  "voiceSettings": {
-    "description": "Ang teksto ng item ng menu upang ma-access ang mga setting na nauugnay sa boses.",
-    "message": "Mga setting ng boses"
+  "unlockInstruction": {
+    "description": "Instructions telling the user how to unlock the screen when locked.",
+    "message": "Hawakan para ma-unlock."
   },
-  "addCredits": {
-    "description": "Teksto para sa Link upang magdagdag ng higit pang mga kredito sa boses",
-    "message": "Magdagdag ng mga kredito"
+  "upgradeButton": {
+    "description": "Text for the button to upgrade the plan when quota is exhausted.",
+    "message": "Plano ng pag -upgrade"
   },
   "upgradeForTTS": {
-    "description": "Prompt na ipinakita kapag kailangang mag-upgrade ang gumagamit upang makakuha ng mga kredito ng text-to-speech",
+    "description": "Prompt shown when user needs to upgrade to obtain text-to-speech credits",
     "message": "Mag -upgrade para sa henerasyon ng boses"
   },
-  "voicePaused": {
-    "description": "Ang teksto na ipinakita kapag ang boses ay naka -pause dahil sa hindi sapat na mga kredito",
-    "message": "Tumigil ang boses -"
-  },
-  "assistantIsListeningAttentively": {
-    "description": "Ipinapakita ang mensahe kapag nakikinig ang katulong para sa pagsasalita sa mode ng ahente.",
-    "message": "Ang $chatbot$ ay nakikinig nang mabuti ...",
+  "userStartedInterrupting": {
+    "description": "Message displayed when the user starts speaking while the assistant is speaking.",
+    "message": "Magpatuloy ka, nakikinig ang $chatbot$...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
-        "example": "Claude"
+        "example": "Pi"
       }
     }
+  },
+  "vadDetailActivatingMicrophone": {
+    "description": "VAD detail when activating the microphone.",
+    "message": "Activating microphone..."
+  },
+  "vadDetailCommLinkFailed": {
+    "description": "VAD detail when the communication port link fails.",
+    "message": "Communication link failed."
+  },
+  "vadDetailDeactivatingMicrophone": {
+    "description": "VAD detail when deactivating the microphone.",
+    "message": "Deactivating microphone..."
+  },
+  "vadDetailFailedToReconnectVADService": {
+    "description": "VAD detail when re-establishing connection fails.",
+    "message": "Failed to reconnect VAD service."
+  },
+  "vadDetailInitError": {
+    "description": "VAD detail for an initialization error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to connect to VAD service"
+      }
+    }
+  },
+  "vadDetailInitErrorPromise": {
+    "description": "VAD detail for an initialization promise error.",
+    "message": "Init Error: Promise error"
+  },
+  "vadDetailInitErrorUnknown": {
+    "description": "VAD detail for an unknown initialization error.",
+    "message": "Init Error: Unknown"
+  },
+  "vadDetailInitializedMode": {
+    "description": "VAD detail showing initialization mode.",
+    "message": "",
+    "placeholders": {
+      "mode": {
+        "content": "$1",
+        "example": "Agent"
+      }
+    }
+  },
+  "vadDetailInitializedModeNA": {
+    "description": "VAD detail showing initialization mode as N/A.",
+    "message": "Initialized (Mode: N/A)"
+  },
+  "vadDetailNonSpeechAudioDetected": {
+    "description": "VAD detail for non-speech audio detection.",
+    "message": "Non-speech audio detected"
+  },
+  "vadDetailReleasingVADResources": {
+    "description": "VAD detail when releasing VAD resources.",
+    "message": "Releasing VAD resources..."
+  },
+  "vadDetailRequestingVADSetup": {
+    "description": "VAD detail when requesting setup.",
+    "message": "Requesting VAD setup..."
+  },
+  "vadDetailSpeechDetected": {
+    "description": "VAD detail when speech has been detected.",
+    "message": "Speech detected"
+  },
+  "vadDetailSpeechEndedDuration": {
+    "description": "VAD detail indicating speech ended and its duration.",
+    "message": "",
+    "placeholders": {
+      "duration": {
+        "content": "$1",
+        "example": "1000"
+      }
+    }
+  },
+  "vadDetailStartError": {
+    "description": "VAD detail for a start error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to start VAD service"
+      }
+    }
+  },
+  "vadDetailStartErrorPromise": {
+    "description": "VAD detail for a start promise error.",
+    "message": "Start Error: Promise error"
+  },
+  "vadDetailStartErrorUnknown": {
+    "description": "VAD detail for an unknown start error.",
+    "message": "Start Error: Unknown"
+  },
+  "vadDetailStopError": {
+    "description": "VAD detail for a stop error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to stop VAD service"
+      }
+    }
+  },
+  "vadDetailStopErrorPromise": {
+    "description": "VAD detail for a stop promise error.",
+    "message": "Stop Error: Promise error"
+  },
+  "vadDetailStopErrorUnknown": {
+    "description": "VAD detail for an unknown stop error.",
+    "message": "Stop Error: Unknown"
+  },
+  "vadDetailUnknownVADError": {
+    "description": "VAD detail for an unknown error from the VAD module.",
+    "message": "Unknown VAD error"
+  },
+  "vadDetailVADProcessingStopped": {
+    "description": "VAD detail indicating VAD processing has stopped.",
+    "message": "VAD processing stopped."
+  },
+  "vadDetailVADServiceDisconnected": {
+    "description": "VAD detail when the service disconnects.",
+    "message": "VAD service disconnected. Try reloading."
+  },
+  "vadDetailVADServiceNotConnected": {
+    "description": "VAD detail when the service is not connected.",
+    "message": "VAD service not connected. Try reloading."
+  },
+  "vadDetailVADServiceShutdown": {
+    "description": "VAD detail indicating VAD service has been shut down.",
+    "message": "VAD service shut down."
+  },
+  "vadDetailWaitingForSpeech": {
+    "description": "VAD detail when waiting for user to speak.",
+    "message": "Waiting for speech"
+  },
+  "vadStatusDestroyed": {
+    "description": "VAD status when destroyed.",
+    "message": "Destroyed"
+  },
+  "vadStatusError": {
+    "description": "Generic VAD error status.",
+    "message": "Error"
+  },
+  "vadStatusFailed": {
+    "description": "Generic VAD failure status.",
+    "message": "Failed"
+  },
+  "vadStatusInitializing": {
+    "description": "VAD status when initializing.",
+    "message": "Initializing"
+  },
+  "vadStatusListening": {
+    "description": "VAD status when actively listening.",
+    "message": "Listening"
+  },
+  "vadStatusMisfire": {
+    "description": "VAD status when a misfire (non-speech) is detected.",
+    "message": "Misfire"
+  },
+  "vadStatusProcessing": {
+    "description": "VAD status when processing audio.",
+    "message": "Processing"
+  },
+  "vadStatusReady": {
+    "description": "VAD status when ready and waiting.",
+    "message": "Ready"
+  },
+  "vadStatusShuttingDown": {
+    "description": "VAD status when shutting down.",
+    "message": "Shutting down"
+  },
+  "vadStatusStarting": {
+    "description": "VAD status when starting.",
+    "message": "Starting"
+  },
+  "vadStatusStopped": {
+    "description": "VAD status when stopped.",
+    "message": "Stopped"
+  },
+  "vadStatusStopping": {
+    "description": "VAD status when stopping.",
+    "message": "Stopping"
+  },
+  "viewDetails": {
+    "description": "Text for the link to view full quota details on the dashboard.",
+    "message": "Tingnan ang mga detalye"
+  },
+  "voiceIntroduction_joey": {
+    "description": "Introduction for the Joey voice.",
+    "message": "Hola! \nПривет! \n你好! \nAko si Pi, ang iyong polyglot AI assistant. \nSa 32 wika sa aking utos, maaari nating tuklasin ang mga ideya at kultura mula sa buong mundo. \nAno sa tingin mo ang boses na ito?"
+  },
+  "voiceIntroduction_paola": {
+    "description": "Introduction for the Paola voice.",
+    "message": "Ciao! \nBonjour! \nHello! \nAko si Pi, at marunong akong makipag-usap sa 32 wika. \nMula sa Arabic hanggang Ukrainian, narito ako upang sirain ang mga hadlang sa wika. \nAno ang pakiramdam ng boses na ito sa iyo?"
+  },
+  "voiceOff": {
+    "description": "Label for when text-to-speech is disabled",
+    "message": "Boses"
+  },
+  "voicePaused": {
+    "description": "Text shown when voice is paused due to insufficient credits",
+    "message": "Tumigil ang boses -"
+  },
+  "voiceSettings": {
+    "description": "The text of the menu item to access voice-related settings.",
+    "message": "Mga setting ng boses"
   }
 }

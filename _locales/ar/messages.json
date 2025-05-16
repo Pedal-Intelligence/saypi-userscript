@@ -1,14 +1,38 @@
 {
+  "activityCheckButton": {
+    "description": "The text of the button to indicate that the user is still present.",
+    "message": "نعم، أنا ما زلت هنا!"
+  },
+  "activityCheckMessage": {
+    "description": "The message to display when the conversation has been going on unusually long.",
+    "message": "واو، هذه محادثة طويلة. هل أنت لا تزال هناك، أم أننا نتحدث إلى أنفسنا؟"
+  },
+  "addCredits": {
+    "description": "Text for link to add more voice credits",
+    "message": "إضافة ائتمانات"
+  },
+  "allowInterruptions": {
+    "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
+    "message": "قابل للمقاطعة"
+  },
   "appDescription": {
-    "description": "وصف التطبيق.",
+    "description": "The description of the application.",
     "message": "التحكم الصوتي لـ PI و كلود. التحدث بشكل طبيعي ، احصل على ردود نابضة بالحياة. فقط قل ذلك."
   },
   "appName": {
-    "description": "اسم التطبيق.",
+    "description": "The name of the application.",
     "message": "Say, Pi"
   },
+  "applicationStatusIssue": {
+    "description": "Message to display when the application is experiencing issues.",
+    "message": "تنبيه على مشكلة في النظام"
+  },
+  "applicationStatusUnknown": {
+    "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
+    "message": "حالة التطبيق غير معروفة"
+  },
   "assistantIsListening": {
-    "description": "الرسالة المعروضة عندما يكون المساعد يستمع للكلام.",
+    "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ يستمع...",
     "placeholders": {
       "chatbot": {
@@ -17,8 +41,58 @@
       }
     }
   },
+  "assistantIsListeningAttentively": {
+    "description": "Message displayed when the assistant is listening for speech in agent mode.",
+    "message": "$chatbot$ يستمع باهتمام ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "assistantIsSpeaking": {
+    "description": "Message displayed when the assistant is speaking its response.",
+    "message": "$chatbot$ يتحدث...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Message displayed when the assistant is speaking its response and manual interruption is possible.",
+    "message": "$chatbot$ يتحدث، انقر للمقاطعة...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "assistantIsThinking": {
+    "description": "Message displayed when the assistant is preparing its response.",
+    "message": "$chatbot$ يفكر...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "assistantIsWriting": {
+    "description": "Message displayed when the assistant is typing its response.",
+    "message": "$chatbot$ يكتب...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "audioConnected": {
-    "description": "الرسالة المعروضة عند توصيل الميكروفون",
+    "description": "Message displayed when a microphone is connected",
     "message": "$microphone$ متصل",
     "placeholders": {
       "microphone": {
@@ -28,7 +102,7 @@
     }
   },
   "audioInputError": {
-    "description": "الرسالة المعروضة عندما يؤدي الصوت إلى تحويل نصي فارغ - وهو عادة نتيجة التصفية.",
+    "description": "Message displayed when audio transcription failed - usually the result of an ASR or LLM API error.",
     "message": "hmm ، $chatbot$ كان لديه الفواق. \nهل يمكنك محاولة قول ذلك مرة أخرى؟",
     "placeholders": {
       "chatbot": {
@@ -38,7 +112,7 @@
     }
   },
   "audioReconnecting": {
-    "description": "الرسالة المعروضة عند الاتصال بميكروفون جديد",
+    "description": "Message displayed when connecting to a new microphone",
     "message": "جارٍ التبديل إلى $microphone$...",
     "placeholders": {
       "microphone": {
@@ -48,19 +122,23 @@
     }
   },
   "autoSubmit": {
-    "description": "تسمية للخانة لتمكين / تعطيل إرسال الموجه التلقائي.",
+    "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "الإرسال التلقائي"
   },
   "callError": {
-    "description": "التلميح الذي سيظهر على زر المكالمة عند حدوث خطأ غير قاتل.",
+    "description": "The tooltip to display on the call button when a non-fatal error occurs.",
     "message": "تم مواجهة خطأ غير قاتل. لا تقلق، نحن ما زلنا نستمع."
   },
   "callInProgress": {
-    "description": "التلميح الذي سيظهر على زر المكالمة عندما تكون المكالمة قيد التقدم.",
+    "description": "The tooltip to display on the call button when a call is in progress.",
     "message": "إنهاء المحادثة بدون استخدام اليدين"
   },
+  "callInterruptible": {
+    "description": "The tooltip to display on the call button when a call is in progress and manual interruption is possible.",
+    "message": "انقر للمقاطعة"
+  },
   "callNotStarted": {
-    "description": "التلميح الذي سيظهر على زر المكالمة قبل بدء المكالمة.",
+    "description": "The tooltip to display on the call button before a call is started.",
     "message": "ابدأ محادثة بدون استخدام اليدين مع $chatbot$",
     "placeholders": {
       "chatbot": {
@@ -70,8 +148,20 @@
     }
   },
   "callStarting": {
-    "description": "التلميح الذي سيظهر على زر المكالمة عند بدء المكالمة.",
+    "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "جاري الاتصال..."
+  },
+  "checkingApplicationStatus": {
+    "description": "Message to display while the system status is being determined, e.g. during load.",
+    "message": "جارٍ التحقق من حالة التطبيق..."
+  },
+  "clickToCollapse": {
+    "description": "Text indicating user can click to hide expanded content.",
+    "message": "انقر للانهيار"
+  },
+  "clickToExpand": {
+    "description": "Text indicating user can click to show collapsed content.",
+    "message": "انقر للتوسع"
   },
   "consentAskParticipate": {
     "message": "هل تود المشاركة؟"
@@ -107,153 +197,39 @@
     "message": "اقرأ سياسة الخصوصية الخاصة بنا"
   },
   "continueUnlocking": {
-    "description": "تعليمات تخبر المستخدم كيفية الاستمرار بعد أن بدأوا في الضغط على زر الفتح.",
+    "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "استمر في الضغط للفتح..."
   },
-  "enterImmersiveModeLong": {
-    "description": "تسمية الأغنية وعنوان الزر لدخول وضع الغمر على أجهزة المحمول.",
-    "message": "أدخل وضع الغمر"
+  "copiedButtonTitle": {
+    "description": "The title of the button to indicate that the text of a message has been copied to the clipboard.",
+    "message": "تم النسخ!"
   },
-  "enterImmersiveModeShort": {
-    "description": "نص الزر للدخول إلى الوضع المغمور على سطح المكتب.",
-    "message": "غمر"
-  },
-  "exitImmersiveModeLong": {
-    "description": "تسمية الأغنية وعنوان الزر للخروج من الوضع المُحاكي على أجهزة الموبايل، إلى الوضع المكتبي بنص.",
-    "message": "الخروج من الوضع الشامل"
-  },
-  "lockButton": {
-    "description": "عنوان (تلميح الأداة) للزر لقفل الشاشة ضد اللمسات العرضية.",
-    "message": "اضغط لقفل الشاشة"
-  },
-  "lockedScreen": {
-    "description": "رسالة لعرضها بشكل بارز عندما يتم قفل الشاشة.",
-    "message": "الشاشة مغلقة."
-  },
-  "mode_accuracy": {
-    "description": "وضع الدقة الأعلى.",
-    "message": "دقة"
-  },
-  "mode_balanced": {
-    "description": "وضع النسخ الافتراضي.",
-    "message": "متوازن"
-  },
-  "mode_speed": {
-    "description": "أسرع وضع للتفريغ الكتابي.",
-    "message": "السرعة"
-  },
-  "preferedLanguage": {
-    "description": "تسمية للتحكم في اختيار اللغة المفضلة للنسخ الطباعي.",
-    "message": "اللغة"
-  },
-  "preferedModeControl": {
-    "description": "عنوان (تلميح الأداة) للتحكم في اختيار وضع الترجمة المفضل.",
-    "message": "اختر وضع التحويل النصي المفضل لديك"
-  },
-  "shareAnalytics": {
-    "description": "تسمية للمربع لتمكين / تعطيل مشاركة التحليلات.",
-    "message": "شارك التحليلات"
-  },
-  "soundEffects": {
-    "description": "تسمية للمربع لتفعيل / تعطيل مؤثرات الصوت.",
-    "message": "تأثيرات الصوت"
-  },
-  "toggleThemeToDarkMode": {
-    "description": "تسمية الزر للتبديل إلى الوضع المظلم.",
-    "message": "التبديل إلى الوضع المظلم"
-  },
-  "toggleThemeToLightMode": {
-    "description": "تسمية الزر للتبديل إلى وضع الإضاءة.",
-    "message": "التبديل إلى الوضع الفاتح"
-  },
-  "unlockButton": {
-    "description": "عنوان (تلميح الأداة) لزر فتح الشاشة.",
-    "message": "اضغط لفتح الشاشة"
-  },
-  "unlockInstruction": {
-    "description": "تعليمات تخبر المستخدم كيفية فتح الشاشة عندما تكون مقفلة.",
-    "message": "اضغط للفتح."
-  },
-  "applicationStatusIssue": {
-    "description": "رسالة لعرضها عندما تواجه التطبيق مشكلات.",
-    "message": "تنبيه على مشكلة في النظام"
-  },
-  "applicationStatusUnknown": {
-    "description": "رسالة لعرضها عندما لا يمكن تحديد حالة التطبيق. على سبيل المثال، عندما يكون العميل غير متصل بالإنترنت.",
-    "message": "حالة التطبيق غير معروفة"
-  },
-  "checkingApplicationStatus": {
-    "description": "رسالة للعرض أثناء تحديد حالة النظام، مثلاً أثناء التحميل.",
-    "message": "جارٍ التحقق من حالة التطبيق..."
-  },
-  "dismissAlert": {
-    "description": "تسمية الزر لإغلاق تنبيه مشكلة النظام.",
-    "message": "رفض"
-  },
-  "recommendedActions": {
-    "description": "رسالة تسبق قائمة بالإجراءات الموصى بها التي يمكن للمستخدم اتخاذها لإصلاح مشكلة معروفة.",
-    "message": "في هذه الأثناء، نوصي ب:"
-  },
-  "extensionPopupTitle": {
-    "description": "عنوان مربع الحوار المنبثق للإضافة.",
-    "message": "Say, Pi"
-  },
-  "activityCheckButton": {
-    "description": "نص الزر للإشارة إلى أن المستخدم ما زال موجودًا.",
-    "message": "نعم، أنا ما زلت هنا!"
-  },
-  "activityCheckMessage": {
-    "description": "الرسالة التي يتم عرضها عندما تستمر المحادثة لفترة غير عادية.",
-    "message": "واو، هذه محادثة طويلة. هل أنت لا تزال هناك، أم أننا نتحدث إلى أنفسنا؟"
-  },
-  "assistantIsThinking": {
-    "message": "$chatbot$ يفكر...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "الرسالة المعروضة عندما يقوم المساعد بإعداد رده."
-  },
-  "assistantIsSpeaking": {
-    "message": "$chatbot$ يتحدث...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "الرسالة المعروضة عندما يتحدث المساعد برده."
-  },
-  "userStartedInterrupting": {
-    "message": "تفضل، $chatbot$ يستمع...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "رسالة تظهر عندما يبدأ المستخدم في الكلام بينما يتحدث المساعد."
-  },
-  "allowInterruptions": {
-    "message": "قابل للمقاطعة",
-    "description": "تسمية للمربع لتمكين / تعطيل السماح للمستخدم بقاطع ردود Pi عن طريق التحدث."
+  "copyButtonTitle": {
+    "description": "The title of the button to copy the text of a message to the clipboard.",
+    "message": "نسخ"
   },
   "currencyUSDAbbreviation": {
-    "description": "اختصار للدولار الأمريكي.",
+    "description": "The abbreviation for the US dollar.",
     "message": "دولار أمريكي"
   },
   "currentCharges": {
-    "description": "المصطلح المستخدم لوصف الرسوم الحالية (الإجمالي المتراكم) التي تكبدها المستخدم.",
+    "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "الرسوم الحالية"
   },
+  "disableTTS": {
+    "description": "Label for the option to turn off text-to-speech",
+    "message": "تعطيل النص إلى الكلام"
+  },
+  "dismissAlert": {
+    "description": "Label for the button to dismiss a system issue alert.",
+    "message": "رفض"
+  },
   "enableTTS": {
-    "description": "تسمية للمربع لتفعيل / تعطيل النص إلى كلام.",
+    "description": "Label for the checkbox to enable/disable text-to-speech.",
     "message": "أصوات متعددة اللغات"
   },
   "enhancedVoice": {
-    "description": "العنوان (تلميح) لـ قل، أصوات Pi المحسّنة.",
+    "description": "Title (tooltip) for Say, Pi enhanced voices.",
     "message": "تم تحسين الصوت بواسطة $product$",
     "placeholders": {
       "product": {
@@ -262,8 +238,185 @@
       }
     }
   },
+  "enterImmersiveModeLong": {
+    "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
+    "message": "أدخل وضع الغمر"
+  },
+  "enterImmersiveModeShort": {
+    "description": "The text of the button to enter immersive mode on desktop.",
+    "message": "غمر"
+  },
+  "exitImmersiveModeLong": {
+    "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
+    "message": "الخروج من الوضع الشامل"
+  },
+  "extensionPopupTitle": {
+    "description": "The title of the extension's popup dialog.",
+    "message": "Say, Pi"
+  },
+  "extensionSettings": {
+    "description": "The text of the button to open the extension's settings.",
+    "message": "إعدادات"
+  },
+  "greeting": {
+    "description": "Greeting message shown when user is signed in",
+    "message": "مرحبًا ، اسم $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "instructionLabel_context": {
+    "description": "Friendly label for user instruction that provides background information.",
+    "message": "توفير السياق ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Friendly label for user instruction that defines what the user wants.",
+    "message": "توضيح التوقعات ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Friendly label for user instruction that narrows the scope of conversation.",
+    "message": "تركيز المناقشة ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Friendly label for user instruction that establishes boundaries for the conversation.",
+    "message": "إعداد الدرابزين ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Friendly label for user instruction that guides how the AI should respond.",
+    "message": "ردود توجيهية ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Friendly label for user instruction that gently suggests a direction.",
+    "message": "إعطاء دفع ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Friendly label for user instruction that guides the conversation direction.",
+    "message": "توجيه المحادثة ..."
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "المقاطعات غير مدعومة حاليًا في Firefox."
+  },
+  "lockButton": {
+    "description": "The title (tooltip) of the button to lock the screen against accidental touches.",
+    "message": "اضغط لقفل الشاشة"
+  },
+  "lockedScreen": {
+    "description": "A message to display prominently when the screen is locked.",
+    "message": "الشاشة مغلقة."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "عقد هذا الفكر ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "تقديم ملاحظة عقلية ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "المعالجة في الخلفية ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "تذكر هذه التفاصيل ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "إنقاذ هذا الفكر في وقت لاحق ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "تتبع السياق ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "سقيف هذا بعيدا ..."
+  },
+  "microphoneErrorConstraints": {
+    "description": "Error message when microphone constraints cannot be satisfied.",
+    "message": "إعدادات الميكروفون لديك لا تتوافق مع المواصفات المطلوبة. \nحاول استخدام ميكروفون مختلف أو ضبط إعدادات الصوت."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generic error message with details when microphone access fails.",
+    "message": "فشل الوصول إلى الميكروفون: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Error message when microphone is already in use by another application.",
+    "message": "لا يمكن الوصول إلى الميكروفون لأنه قيد الاستخدام بواسطة تطبيق آخر. \nيرجى إغلاق التطبيقات الأخرى التي قد تستخدم الميكروفون الخاص بك."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Error message when no microphone device is found.",
+    "message": "لم يتم اكتشاف أي ميكروفون. \nالرجاء توصيل الميكروفون والمحاولة مرة أخرى."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Error message when microphone permission is denied by the user or system.",
+    "message": "مطلوب الوصول إلى الميكروفون. \nيرجى السماح بالوصول إلى الميكروفون في إعدادات المتصفح الخاص بك للمتابعة."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Error message for unexpected microphone errors with details.",
+    "message": "حدث خطأ غير متوقع في الميكروفون الخاص بك: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generic error message when microphone access fails for unknown reasons.",
+    "message": "غير قادر على الوصول إلى الميكروفون. \nيرجى التحقق من إعدادات جهازك والمحاولة مرة أخرى."
+  },
+  "mode_accuracy": {
+    "description": "Highest accuracy mode.",
+    "message": "دقة"
+  },
+  "mode_accuracy_description": {
+    "description": "Description for the accuracy transcription mode.",
+    "message": "أعلى دقة، ولكن سرعة النسخ أبطأ. \nعرضة للهلوسة."
+  },
+  "mode_balanced": {
+    "description": "Default transcription mode.",
+    "message": "متوازن"
+  },
+  "mode_balanced_description": {
+    "description": "Description for the balanced transcription mode.",
+    "message": "توازن جيد بين السرعة والدقة لمعظم الاستخدامات."
+  },
+  "mode_speed": {
+    "description": "Fastest transcription mode.",
+    "message": "السرعة"
+  },
+  "mode_speed_description": {
+    "description": "Description for the speed transcription mode.",
+    "message": "أسرع استجابة، ولكن أقل دقة. \nعرضة للمقاطعة."
+  },
+  "nicknameLabel": {
+    "description": "Label for the input field to set a custom nickname for the AI assistant.",
+    "message": "كنية"
+  },
+  "notSignedIn": {
+    "description": "Text to show when the user is not signed in.",
+    "message": "لم يتم تسجيل الدخول"
+  },
+  "preferedLanguage": {
+    "description": "Label for a control to select the prefered transcription language.",
+    "message": "اللغة"
+  },
+  "preferedModeControl": {
+    "description": "The title (tooltip) of the control to select the prefered transcription mode.",
+    "message": "اختر وضع التحويل النصي المفضل لديك"
+  },
   "previewProgress": {
-    "description": "الرسالة التي يتم عرضها عندما يكون المستخدم يعاين ميزة تحتوي على حد للأحرف.",
+    "description": "The message to display when the user is previewing a feature that has a character limit.",
     "message": "تم استخدام $count$ حرف من أصل $limit$",
     "placeholders": {
       "count": {
@@ -283,7 +436,7 @@
     "message": "اكتمل التجريب"
   },
   "previewStatusPaused": {
-    "description": "الرسالة التي يتم عرضها عندما يقوم المستخدم بمعاينة ميزة تم إيقافها مؤقتًا.",
+    "description": "The message to display when the user is previewing a feature that has been paused.",
     "message": "تم إيقاف التجربة حتى $resetDate$",
     "placeholders": {
       "resetDate": {
@@ -295,12 +448,187 @@
   "previewStatusUnknown": {
     "message": "غير قادر على الاتصال..."
   },
+  "profile": {
+    "description": "Label for the user profile section.",
+    "message": "حساب تعريفي"
+  },
+  "quotaCredits": {
+    "description": "Unit label for TTS credits",
+    "message": "الاعتمادات"
+  },
+  "quotaRemaining": {
+    "description": "Label for the quota remaining progress bar",
+    "message": "الحصة المتبقية"
+  },
+  "quotaStatusUnknown": {
+    "description": "Message shown when quota status cannot be determined",
+    "message": "غير قادر على التحقق من حالة الحصص"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Message shown when user is not authenticated.",
+    "message": "قم بتسجيل الدخول للوصول إلى توليد الصوت والميزات المتميزة الأخرى"
+  },
   "readAloudButtonTitle": {
-    "description": "عنوان الزر لقراءة نص الرسالة بصوت عالٍ",
+    "description": "The title of the button to read aloud the text of a message.",
     "message": "اقرأ بصوت عالي"
   },
+  "recommendedActions": {
+    "description": "Message preceding a list of recommended actions the user may take to remediate a known issue.",
+    "message": "في هذه الأثناء، نوصي ب:"
+  },
+  "regenerateButtonTitle": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an estimated cost.",
+    "message": "توليد الصوت مقابل $cost$ $currency$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
+    "message": "توليد الصوت"
+  },
+  "shareAnalytics": {
+    "description": "Label for the checkbox to enable/disable sharing of analytics.",
+    "message": "شارك التحليلات"
+  },
+  "signIn": {
+    "description": "Text for the sign in button.",
+    "message": "تسجيل الدخول"
+  },
+  "signInForTTS": {
+    "description": "Prompt shown when user needs to authenticate to access text-to-speech features",
+    "message": "تسجيل الدخول للحصول على نص إلى كلام"
+  },
+  "signOut": {
+    "description": "Text for the sign out button.",
+    "message": "تسجيل الخروج"
+  },
+  "signedIn": {
+    "description": "Status text shown when user is authenticated (without email).",
+    "message": "وقعت في"
+  },
+  "signedInAs": {
+    "description": "Status text shown when user is authenticated, including their email.",
+    "message": "وقعت في البريد الإلكتروني $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "soundEffects": {
+    "description": "Label for the checkbox to enable/disable sound effects.",
+    "message": "تأثيرات الصوت"
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "تم تعطيل المؤثرات الصوتية في Firefox لمنع حدوث مشكلات في التعليقات الصوتية."
+  },
+  "sttMinutesRemaining": {
+    "description": "Text showing remaining STT quota in minutes.",
+    "message": "$minutes$ دقيقة متبقية",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text to show when STT quota is exhausted.",
+    "message": "استنفدت حصة التعرف على الكلام"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip for the STT quota progress bar.",
+    "message": "$remaining$ من $total$ ثانية متبقية",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip for the STT quota progress bar in minutes.",
+    "message": "$remaining$ من $total$ دقيقة متبقية",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Label for the STT quota remaining display.",
+    "message": "التعرف على الكلام"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unit for STT quota (seconds).",
+    "message": "ثوانٍ"
+  },
+  "submitModeControl": {
+    "description": "The title (tooltip) of the control to select when messages should be submitted.",
+    "message": "حدد وقت إرسال رسائلك"
+  },
+  "submit_mode_agent": {
+    "description": "AI-driven submission mode.",
+    "message": "عامل"
+  },
+  "submit_mode_agent_description": {
+    "description": "Description for the AI-driven submission mode.",
+    "message": "$chatbot$ يقرر وقت الاستجابة بناءً على السياق",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatic submission mode.",
+    "message": "آلي"
+  },
+  "submit_mode_auto_description": {
+    "description": "Description for the automatic submission mode.",
+    "message": "إرسال تلقائيًا عند التوقف عن التحدث"
+  },
+  "submit_mode_off": {
+    "description": "Manual submission mode.",
+    "message": "يدوي"
+  },
+  "submit_mode_off_description": {
+    "description": "Description for the manual submission mode.",
+    "message": "إرسال فقط عند الضغط على الزر"
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Label for the button to toggle to dark mode.",
+    "message": "التبديل إلى الوضع المظلم"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Label for the button to toggle to light mode.",
+    "message": "التبديل إلى الوضع الفاتح"
+  },
   "ttsCostExplanation": {
-    "description": "التلميح الذي يظهر عند استخدام محرك التحويل من النص إلى الكلام لقراءة رسالة بصوت عالٍ، مع تكلفة الرسالة.",
+    "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
     "message": "سيتم فرض رسوم على $product$ $cost$ $currency$ مقابل الاستماع إلى هذه الرسالة",
     "placeholders": {
       "cost": {
@@ -318,7 +646,7 @@
     }
   },
   "ttsCostExplanationFree": {
-    "description": "التلميح الذي يظهر عند استخدام محرك النص إلى كلام لقراءة رسالة بصوت عالٍ، والرسالة مجانية. قد يحتوي على اسم المزود.",
+    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free. Assumes the provider is Inflection AI.",
     "message": "يتم إنشاء هذا الصوت مجانًا بواسطة Inflection AI",
     "placeholders": {
       "provider": {
@@ -327,8 +655,26 @@
       }
     }
   },
+  "ttsCostExplanationSayPi": {
+    "description": "The tooltip to display when the user hovers over the cost explanation link.",
+    "message": "تعرف على كيفية تحصيل $product$ مقابل الصوت",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "ttsCredits": {
+    "description": "The term used for the credits currency in the text-to-speech feature.",
+    "message": "الاعتمادات"
+  },
+  "ttsDisabledSafari": {
+    "description": "Message shown when TTS is disabled in Safari",
+    "message": "الأصوات متعددة اللغات غير مدعومة حاليًا في Safari."
+  },
   "ttsPoweredBy": {
-    "description": "الرسالة المعروضة عند استخدام محرك النص إلى كلام لقراءة رسالة بصوت عال.",
+    "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "التحويل من النص إلى الكلام بدعم من $ttsEngine$",
     "placeholders": {
       "ttsEngine": {
@@ -337,374 +683,16 @@
       }
     }
   },
-  "copiedButtonTitle": {
-    "message": "تم النسخ!",
-    "description": "عنوان الزر للإشارة إلى أن نص الرسالة تم نسخه إلى الحافظة."
-  },
-  "copyButtonTitle": {
-    "message": "نسخ",
-    "description": "عنوان الزر لنسخ نص الرسالة إلى الحافظة."
-  },
-  "voiceIntroduction_joey": {
-    "message": "مرحبا! \nخاص! \n你好! \nأنا باي، مساعد الذكاء الاصطناعي متعدد اللغات الخاص بك. \nومع وجود 32 لغة تحت تصرفي، يمكننا استكشاف الأفكار والثقافات من جميع أنحاء العالم. \nما رأيك في هذا الصوت؟",
-    "description": "مقدمة لصوت جوي."
-  },
-  "voiceIntroduction_paola": {
-    "message": "تشاو! \nصباح الخير! \nمرحبًا! \nأنا باي، وأستطيع التحدث بـ 32 لغة بطلاقة. \nمن العربية إلى الأوكرانية، أنا هنا لكسر حواجز اللغة. \nكيف يبدو لك هذا الصوت؟",
-    "description": "مقدمة لصوت باولا."
-  },
-  "regenerateButtonTitle": {
-    "message": "توليد الصوت مقابل $cost$ $currency$",
-    "description": "عنوان الزر لإعادة توليد الصوت للرسالة. قد يترتب على ذلك تكلفة مقدرة.",
-    "placeholders": {
-      "cost": {
-        "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
-      }
-    }
-  },
-  "regenerateButtonTitleFree": {
-    "message": "توليد الصوت",
-    "description": "عنوان الزر لإعادة توليد الصوت للرسالة. قد يتحمل تكلفة غير محددة."
-  },
-  "assistantIsWriting": {
-    "description": "يتم عرض الرسالة عندما يقوم المساعد بكتابة رده.",
-    "message": "$chatbot$ يكتب...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "ttsCostExplanationSayPi": {
-    "description": "تلميح الأداة الذي سيتم عرضه عندما يقوم المستخدم بالتمرير فوق رابط شرح التكلفة.",
-    "placeholders": {
-      "product": {
-        "content": "$1",
-        "example": "Say, Pi"
-      }
-    },
-    "message": "تعرف على كيفية تحصيل $product$ مقابل الصوت"
-  },
-  "interruptionsFirefoxDisabled": {
-    "message": "المقاطعات غير مدعومة حاليًا في Firefox."
-  },
-  "mode_accuracy_description": {
-    "description": "وصف لوضع النسخ الدقة.",
-    "message": "أعلى دقة، ولكن سرعة النسخ أبطأ. \nعرضة للهلوسة."
-  },
-  "mode_balanced_description": {
-    "description": "وصف لوضع النسخ المتوازن.",
-    "message": "توازن جيد بين السرعة والدقة لمعظم الاستخدامات."
-  },
-  "mode_speed_description": {
-    "description": "وصف لوضع النسخ السريع.",
-    "message": "أسرع استجابة، ولكن أقل دقة. \nعرضة للمقاطعة."
-  },
-  "soundEffectsFirefoxDisabled": {
-    "message": "تم تعطيل المؤثرات الصوتية في Firefox لمنع حدوث مشكلات في التعليقات الصوتية."
-  },
-  "assistantIsSpeakingWithManualInterrupt": {
-    "description": "يتم عرض الرسالة عندما يتحدث المساعد بإجابته ومن الممكن المقاطعة اليدوية.",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "message": "$chatbot$ يتحدث، انقر للمقاطعة..."
-  },
-  "callInterruptible": {
-    "description": "تلميح الأداة الذي سيتم عرضه على زر الاتصال عندما تكون المكالمة جارية ويكون انقطاعها يدويًا ممكنًا.",
-    "message": "انقر للمقاطعة"
-  },
-  "microphoneErrorConstraints": {
-    "description": "رسالة خطأ عندما لا يمكن تلبية قيود الميكروفون.",
-    "message": "إعدادات الميكروفون لديك لا تتوافق مع المواصفات المطلوبة. \nحاول استخدام ميكروفون مختلف أو ضبط إعدادات الصوت."
-  },
-  "microphoneErrorGeneric": {
-    "description": "رسالة خطأ عامة تحتوي على تفاصيل عند فشل الوصول إلى الميكروفون.",
-    "message": "فشل الوصول إلى الميكروفون: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Permission denied"
-      }
-    }
-  },
-  "microphoneErrorInUse": {
-    "description": "رسالة خطأ عندما يكون الميكروفون قيد الاستخدام بالفعل بواسطة تطبيق آخر.",
-    "message": "لا يمكن الوصول إلى الميكروفون لأنه قيد الاستخدام بواسطة تطبيق آخر. \nيرجى إغلاق التطبيقات الأخرى التي قد تستخدم الميكروفون الخاص بك."
-  },
-  "microphoneErrorNotFound": {
-    "description": "رسالة خطأ عند عدم العثور على جهاز ميكروفون.",
-    "message": "لم يتم اكتشاف أي ميكروفون. \nالرجاء توصيل الميكروفون والمحاولة مرة أخرى."
-  },
-  "microphoneErrorPermissionDenied": {
-    "description": "رسالة خطأ عندما يتم رفض إذن الميكروفون من قبل المستخدم أو النظام.",
-    "message": "مطلوب الوصول إلى الميكروفون. \nيرجى السماح بالوصول إلى الميكروفون في إعدادات المتصفح الخاص بك للمتابعة."
-  },
-  "microphoneErrorUnexpected": {
-    "description": "رسالة خطأ لأخطاء الميكروفون غير المتوقعة مع التفاصيل.",
-    "message": "حدث خطأ غير متوقع في الميكروفون الخاص بك: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Device busy"
-      }
-    }
-  },
-  "microphoneErrorUnknown": {
-    "description": "رسالة خطأ عامة عند فشل الوصول إلى الميكروفون لأسباب غير معروفة.",
-    "message": "غير قادر على الوصول إلى الميكروفون. \nيرجى التحقق من إعدادات جهازك والمحاولة مرة أخرى."
-  },
-  "ttsDisabledSafari": {
-    "message": "الأصوات متعددة اللغات غير مدعومة حاليًا في Safari.",
-    "description": "تظهر الرسالة عند تعطيل تحويل النص إلى كلام (TTS) في Safari"
-  },
-  "extensionSettings": {
-    "message": "إعدادات",
-    "description": "نص الزر لفتح إعدادات الامتداد."
-  },
-  "clickToCollapse": {
-    "description": "يمكن للنص الذي يشير إلى المستخدم النقر لإخفاء المحتوى الموسع.",
-    "message": "انقر للانهيار"
-  },
-  "clickToExpand": {
-    "description": "يمكن للمستخدم الذي يشير إلى أن المستخدم ينقر لإظهار المحتوى المنهار.",
-    "message": "انقر للتوسع"
-  },
-  "disableTTS": {
-    "description": "تسمية لخيار إيقاف تشغيل النص إلى كلام",
-    "message": "تعطيل النص إلى الكلام"
-  },
-  "greeting": {
-    "description": "رسالة تحية معروضة عند تسجيل الدخول للمستخدم",
-    "message": "مرحبًا ، اسم $name$!",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John"
-      }
-    }
-  },
-  "instructionLabel_context": {
-    "description": "تسمية ودية لتعليم المستخدم الذي يوفر معلومات أساسية.",
-    "message": "توفير السياق ..."
-  },
-  "instructionLabel_expectations": {
-    "description": "تسمية ودية لتعليم المستخدم الذي يحدد ما يريده المستخدم.",
-    "message": "توضيح التوقعات ..."
-  },
-  "instructionLabel_focusing": {
-    "description": "تسمية ودية لتعليم المستخدم الذي يضيق نطاق المحادثة.",
-    "message": "تركيز المناقشة ..."
-  },
-  "instructionLabel_guardrails": {
-    "description": "تسمية ودية لتعليم المستخدم الذي يحدد حدود للمحادثة.",
-    "message": "إعداد الدرابزين ..."
-  },
-  "instructionLabel_guiding": {
-    "description": "تسمية ودية لتعليم المستخدم الذي يوجه كيفية الرد على الذكاء الاصطناعى.",
-    "message": "ردود توجيهية ..."
-  },
-  "instructionLabel_nudge": {
-    "description": "تسمية ودية لتعليم المستخدم الذي يوحي برفق الاتجاه.",
-    "message": "إعطاء دفع ..."
-  },
-  "instructionLabel_steering": {
-    "description": "تسمية ودية لتعليم المستخدم الذي يوجه اتجاه المحادثة.",
-    "message": "توجيه المحادثة ..."
-  },
-  "maintenanceLabel_holding": {
-    "description": "تسمية ودية لرسالة صيانة مساعد.",
-    "message": "عقد هذا الفكر ..."
-  },
-  "maintenanceLabel_mental_note": {
-    "description": "تسمية ودية لرسالة صيانة مساعد.",
-    "message": "تقديم ملاحظة عقلية ..."
-  },
-  "maintenanceLabel_processing": {
-    "description": "تسمية ودية لرسالة صيانة مساعد.",
-    "message": "المعالجة في الخلفية ..."
-  },
-  "maintenanceLabel_remembering": {
-    "description": "تسمية ودية لرسالة صيانة مساعد.",
-    "message": "تذكر هذه التفاصيل ..."
-  },
-  "maintenanceLabel_saving": {
-    "description": "تسمية ودية لرسالة صيانة مساعد.",
-    "message": "إنقاذ هذا الفكر في وقت لاحق ..."
-  },
-  "maintenanceLabel_tracking": {
-    "description": "تسمية ودية لرسالة صيانة مساعد.",
-    "message": "تتبع السياق ..."
-  },
-  "maintenanceLabel_tucking": {
-    "description": "تسمية ودية لرسالة صيانة مساعد.",
-    "message": "سقيف هذا بعيدا ..."
-  },
-  "nicknameLabel": {
-    "description": "تسمية لحقل الإدخال لتعيين لقب مخصص لمساعد الذكاء الاصطناعى.",
-    "message": "كنية"
-  },
-  "notSignedIn": {
-    "description": "نص لإظهار متى لا يتم تسجيل الدخول.",
-    "message": "لم يتم تسجيل الدخول"
-  },
-  "profile": {
-    "description": "تسمية لقسم ملف تعريف المستخدم.",
-    "message": "حساب تعريفي"
-  },
-  "quotaCredits": {
-    "description": "علامة الوحدة للحصول على ائتمانات TTS",
-    "message": "الاعتمادات"
-  },
-  "quotaRemaining": {
-    "description": "تسمية لحصة التقدم المتبقية",
-    "message": "الحصة المتبقية"
-  },
-  "quotaStatusUnknown": {
-    "description": "الرسالة المعروضة عندما لا يمكن تحديد حالة الحصص",
-    "message": "غير قادر على التحقق من حالة الحصص"
-  },
-  "quotaUnauthenticatedMessage": {
-    "description": "الرسالة المعروضة عند عدم مصادقة المستخدم.",
-    "message": "قم بتسجيل الدخول للوصول إلى توليد الصوت والميزات المتميزة الأخرى"
-  },
-  "signIn": {
-    "description": "نص لزر تسجيل الدخول.",
-    "message": "تسجيل الدخول"
-  },
-  "signInForTTS": {
-    "description": "مطالبة معروضة عندما يحتاج المستخدم إلى المصادقة للوصول إلى ميزات النص إلى كلام",
-    "message": "تسجيل الدخول للحصول على نص إلى كلام"
-  },
-  "signOut": {
-    "description": "نص لزر تسجيل الخروج.",
-    "message": "تسجيل الخروج"
-  },
-  "signedIn": {
-    "description": "نص الحالة المعروض عند مصادقة المستخدم (بدون بريد إلكتروني).",
-    "message": "وقعت في"
-  },
-  "signedInAs": {
-    "description": "نص الحالة المعروض عند مصادقة المستخدم ، بما في ذلك بريده الإلكتروني.",
-    "message": "وقعت في البريد الإلكتروني $email$",
-    "placeholders": {
-      "email": {
-        "content": "$1",
-        "example": "user@example.com"
-      }
-    }
-  },
-  "sttMinutesRemaining": {
-    "description": "نص يظهر حصة STT المتبقية في دقائق.",
-    "message": "$minutes$ دقيقة متبقية",
-    "placeholders": {
-      "minutes": {
-        "content": "$1",
-        "example": "5"
-      },
-      "plural": {
-        "content": "$2",
-        "example": "s"
-      }
-    }
-  },
-  "sttQuotaExhausted": {
-    "description": "نص لإظهار عندما يتم استنفاد حصة STT.",
-    "message": "استنفدت حصة التعرف على الكلام"
-  },
-  "sttQuotaProgress": {
-    "description": "Tooltip لشريط تقدم الحصص STT.",
-    "message": "$remaining$ من $total$ ثانية متبقية",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "100"
-      },
-      "total": {
-        "content": "$2",
-        "example": "300"
-      }
-    }
-  },
-  "sttQuotaProgressMinutes": {
-    "description": "Tooltip لشريط تقدم الحصص STT في دقائق.",
-    "message": "$remaining$ من $total$ دقيقة متبقية",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "5"
-      },
-      "total": {
-        "content": "$2",
-        "example": "60"
-      }
-    }
-  },
-  "sttQuotaRemaining": {
-    "description": "تسمية لحصة STT المتبقية.",
-    "message": "التعرف على الكلام"
-  },
-  "sttQuotaSeconds": {
-    "description": "وحدة لحصة STT (ثواني).",
-    "message": "ثوانٍ"
-  },
-  "submitModeControl": {
-    "description": "عنوان (Tooltip) من عنصر التحكم لتحديد متى يجب إرسال الرسائل.",
-    "message": "حدد وقت إرسال رسائلك"
-  },
-  "submit_mode_agent": {
-    "description": "وضع التقديم AI-يحركه.",
-    "message": "عامل"
-  },
-  "submit_mode_agent_description": {
-    "description": "الوصف لوضع التقديم AI-ARN.",
-    "message": "$chatbot$ يقرر وقت الاستجابة بناءً على السياق",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "submit_mode_auto": {
-    "description": "وضع التقديم التلقائي.",
-    "message": "آلي"
-  },
-  "submit_mode_auto_description": {
-    "description": "الوصف لوضع التقديم التلقائي.",
-    "message": "إرسال تلقائيًا عند التوقف عن التحدث"
-  },
-  "submit_mode_off": {
-    "description": "وضع التقديم اليدوي.",
-    "message": "يدوي"
-  },
-  "submit_mode_off_description": {
-    "description": "وصف لوضع التقديم اليدوي.",
-    "message": "إرسال فقط عند الضغط على الزر"
-  },
-  "ttsCredits": {
-    "description": "المصطلح المستخدم لعملة الاعتمادات في ميزة النص إلى كلام.",
-    "message": "الاعتمادات"
-  },
   "ttsQuotaCharacters": {
-    "description": "وحدة لحصة TTS (الأحرف).",
+    "description": "Unit for TTS quota (characters).",
     "message": "أحرف"
   },
   "ttsQuotaExhausted": {
-    "description": "نص لإظهار عندما يتم استنفاد حصة TTS.",
+    "description": "Text to show when TTS quota is exhausted.",
     "message": "استنفدت الحصة الصوتية"
   },
   "ttsQuotaProgress": {
-    "description": "Tooltip لشريط تقدم الحصص TTS.",
+    "description": "Tooltip for the TTS quota progress bar.",
     "message": "$remaining$ من $total$ حرف متبقي",
     "placeholders": {
       "remaining": {
@@ -718,49 +706,243 @@
     }
   },
   "ttsQuotaRemaining": {
-    "description": "تسمية لحصة TTS المتبقية.",
+    "description": "Label for the TTS quota remaining display.",
     "message": "جيل الصوت"
   },
   "ttsVoice": {
-    "description": "تسمية تصف خيار صوت النص إلى كلام في القائمة",
+    "description": "Label describing a text-to-speech voice option in the menu",
     "message": "صوت TTS"
   },
+  "unlockButton": {
+    "description": "The title (tooltip) of the button to unlock the screen.",
+    "message": "اضغط لفتح الشاشة"
+  },
+  "unlockInstruction": {
+    "description": "Instructions telling the user how to unlock the screen when locked.",
+    "message": "اضغط للفتح."
+  },
   "upgradeButton": {
-    "description": "نص على الزر لترقية الخطة عند استنفاد الحصة.",
+    "description": "Text for the button to upgrade the plan when quota is exhausted.",
     "message": "خطة الترقية"
   },
-  "viewDetails": {
-    "description": "نص على الرابط لعرض تفاصيل الحصص الكاملة على لوحة القيادة.",
-    "message": "عرض التفاصيل"
-  },
-  "voiceOff": {
-    "description": "تسمية عندما يتم تعطيل النص إلى الكلام",
-    "message": "صوت قبالة"
-  },
-  "voiceSettings": {
-    "description": "نص عنصر القائمة للوصول إلى الإعدادات المتعلقة بالصوت.",
-    "message": "إعدادات الصوت"
-  },
-  "addCredits": {
-    "description": "نص رابط لإضافة المزيد من الاعتمادات الصوتية",
-    "message": "إضافة ائتمانات"
-  },
   "upgradeForTTS": {
-    "description": "مطالبة مبينة عندما يحتاج المستخدم إلى الترقية للحصول على أرصدة نص إلى كلام",
+    "description": "Prompt shown when user needs to upgrade to obtain text-to-speech credits",
     "message": "ترقية لتوليد الصوت"
   },
-  "voicePaused": {
-    "description": "النص المعروض عندما يتم إيقاف الصوت بسبب عدم كفاية الاعتمادات",
-    "message": "توقف الصوت مؤقتًا -"
-  },
-  "assistantIsListeningAttentively": {
-    "description": "الرسالة المعروضة عندما يستمع المساعد إلى الكلام في وضع الوكيل.",
-    "message": "$chatbot$ يستمع باهتمام ...",
+  "userStartedInterrupting": {
+    "description": "Message displayed when the user starts speaking while the assistant is speaking.",
+    "message": "تفضل، $chatbot$ يستمع...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
-        "example": "Claude"
+        "example": "Pi"
       }
     }
+  },
+  "vadDetailActivatingMicrophone": {
+    "description": "VAD detail when activating the microphone.",
+    "message": "تنشيط الميكروفون ..."
+  },
+  "vadDetailCommLinkFailed": {
+    "description": "VAD detail when the communication port link fails.",
+    "message": "فشل رابط الاتصال."
+  },
+  "vadDetailDeactivatingMicrophone": {
+    "description": "VAD detail when deactivating the microphone.",
+    "message": "إلغاء تنشيط الميكروفون ..."
+  },
+  "vadDetailFailedToReconnectVADService": {
+    "description": "VAD detail when re-establishing connection fails.",
+    "message": "فشل في إعادة توصيل خدمة VAD."
+  },
+  "vadDetailInitError": {
+    "description": "VAD detail for an initialization error, with specific error message.",
+    "message": "خطأ في البداية: $error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to connect to VAD service"
+      }
+    }
+  },
+  "vadDetailInitErrorPromise": {
+    "description": "VAD detail for an initialization promise error.",
+    "message": "خطأ في البداية: خطأ وعد"
+  },
+  "vadDetailInitErrorUnknown": {
+    "description": "VAD detail for an unknown initialization error.",
+    "message": "خطأ في البداية: غير معروف"
+  },
+  "vadDetailInitializedMode": {
+    "description": "VAD detail showing initialization mode.",
+    "message": "تهيئة (الوضع: وضع $mode$)",
+    "placeholders": {
+      "mode": {
+        "content": "$1",
+        "example": "Agent"
+      }
+    }
+  },
+  "vadDetailInitializedModeNA": {
+    "description": "VAD detail showing initialization mode as N/A.",
+    "message": "تهيئة (الوضع: n/a)"
+  },
+  "vadDetailNonSpeechAudioDetected": {
+    "description": "VAD detail for non-speech audio detection.",
+    "message": "تم اكتشاف الصوت غير الكلام"
+  },
+  "vadDetailReleasingVADResources": {
+    "description": "VAD detail when releasing VAD resources.",
+    "message": "إطلاق موارد VAD ..."
+  },
+  "vadDetailRequestingVADSetup": {
+    "description": "VAD detail when requesting setup.",
+    "message": "طلب إعداد VAD ..."
+  },
+  "vadDetailSpeechDetected": {
+    "description": "VAD detail when speech has been detected.",
+    "message": "الكلام اكتشف"
+  },
+  "vadDetailSpeechEndedDuration": {
+    "description": "VAD detail indicating speech ended and its duration.",
+    "message": "انتهى الكلام (المدة: $duration$ ms)",
+    "placeholders": {
+      "duration": {
+        "content": "$1",
+        "example": "1000"
+      }
+    }
+  },
+  "vadDetailStartError": {
+    "description": "VAD detail for a start error, with specific error message.",
+    "message": "ابدأ الخطأ: خطأ $error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to start VAD service"
+      }
+    }
+  },
+  "vadDetailStartErrorPromise": {
+    "description": "VAD detail for a start promise error.",
+    "message": "ابدأ الخطأ: خطأ الوعد"
+  },
+  "vadDetailStartErrorUnknown": {
+    "description": "VAD detail for an unknown start error.",
+    "message": "ابدأ الخطأ: غير معروف"
+  },
+  "vadDetailStopError": {
+    "description": "VAD detail for a stop error, with specific error message.",
+    "message": "توقف عن الخطأ: خطأ $error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to stop VAD service"
+      }
+    }
+  },
+  "vadDetailStopErrorPromise": {
+    "description": "VAD detail for a stop promise error.",
+    "message": "توقف عن الخطأ: خطأ وعد"
+  },
+  "vadDetailStopErrorUnknown": {
+    "description": "VAD detail for an unknown stop error.",
+    "message": "توقف عن الخطأ: غير معروف"
+  },
+  "vadDetailUnknownVADError": {
+    "description": "VAD detail for an unknown error from the VAD module.",
+    "message": "خطأ غير معروف VAD"
+  },
+  "vadDetailVADProcessingStopped": {
+    "description": "VAD detail indicating VAD processing has stopped.",
+    "message": "توقفت معالجة VAD."
+  },
+  "vadDetailVADServiceDisconnected": {
+    "description": "VAD detail when the service disconnects.",
+    "message": "خدمة VAD غير متصل. \nحاول إعادة التحميل."
+  },
+  "vadDetailVADServiceNotConnected": {
+    "description": "VAD detail when the service is not connected.",
+    "message": "خدمة VAD غير متصلة. \nحاول إعادة التحميل."
+  },
+  "vadDetailVADServiceShutdown": {
+    "description": "VAD detail indicating VAD service has been shut down.",
+    "message": "خدمة VAD أغلق."
+  },
+  "vadDetailWaitingForSpeech": {
+    "description": "VAD detail when waiting for user to speak.",
+    "message": "في انتظار الكلام"
+  },
+  "vadStatusDestroyed": {
+    "description": "VAD status when destroyed.",
+    "message": "دمر"
+  },
+  "vadStatusError": {
+    "description": "Generic VAD error status.",
+    "message": "خطأ"
+  },
+  "vadStatusFailed": {
+    "description": "Generic VAD failure status.",
+    "message": "فشل"
+  },
+  "vadStatusInitializing": {
+    "description": "VAD status when initializing.",
+    "message": "تهيئة"
+  },
+  "vadStatusListening": {
+    "description": "VAD status when actively listening.",
+    "message": "الاستماع"
+  },
+  "vadStatusMisfire": {
+    "description": "VAD status when a misfire (non-speech) is detected.",
+    "message": "اختل"
+  },
+  "vadStatusProcessing": {
+    "description": "VAD status when processing audio.",
+    "message": "يعالج"
+  },
+  "vadStatusReady": {
+    "description": "VAD status when ready and waiting.",
+    "message": "مستعد"
+  },
+  "vadStatusShuttingDown": {
+    "description": "VAD status when shutting down.",
+    "message": "إغلاق"
+  },
+  "vadStatusStarting": {
+    "description": "VAD status when starting.",
+    "message": "البدء"
+  },
+  "vadStatusStopped": {
+    "description": "VAD status when stopped.",
+    "message": "توقف"
+  },
+  "vadStatusStopping": {
+    "description": "VAD status when stopping.",
+    "message": "وقف"
+  },
+  "viewDetails": {
+    "description": "Text for the link to view full quota details on the dashboard.",
+    "message": "عرض التفاصيل"
+  },
+  "voiceIntroduction_joey": {
+    "description": "Introduction for the Joey voice.",
+    "message": "مرحبا! \nخاص! \n你好! \nأنا باي، مساعد الذكاء الاصطناعي متعدد اللغات الخاص بك. \nومع وجود 32 لغة تحت تصرفي، يمكننا استكشاف الأفكار والثقافات من جميع أنحاء العالم. \nما رأيك في هذا الصوت؟"
+  },
+  "voiceIntroduction_paola": {
+    "description": "Introduction for the Paola voice.",
+    "message": "تشاو! \nصباح الخير! \nمرحبًا! \nأنا باي، وأستطيع التحدث بـ 32 لغة بطلاقة. \nمن العربية إلى الأوكرانية، أنا هنا لكسر حواجز اللغة. \nكيف يبدو لك هذا الصوت؟"
+  },
+  "voiceOff": {
+    "description": "Label for when text-to-speech is disabled",
+    "message": "صوت قبالة"
+  },
+  "voicePaused": {
+    "description": "Text shown when voice is paused due to insufficient credits",
+    "message": "توقف الصوت مؤقتًا -"
+  },
+  "voiceSettings": {
+    "description": "The text of the menu item to access voice-related settings.",
+    "message": "إعدادات الصوت"
   }
 }

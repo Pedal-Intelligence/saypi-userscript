@@ -1,23 +1,39 @@
 {
-  "appName": {
-    "message": "Say, Pi",
-    "description": "애플리케이션의 이름입니다."
+  "activityCheckButton": {
+    "description": "The text of the button to indicate that the user is still present.",
+    "message": "네, 저는 여전히 여기 있습니다!"
+  },
+  "activityCheckMessage": {
+    "description": "The message to display when the conversation has been going on unusually long.",
+    "message": "와우, 이건 정말 긴 대화네요. 아직 계신가요, 아니면 우리가 혼자서 얘기하고 있는 건가요?"
+  },
+  "addCredits": {
+    "description": "Text for link to add more voice credits",
+    "message": "크레딧 추가"
+  },
+  "allowInterruptions": {
+    "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
+    "message": "중단 가능한"
   },
   "appDescription": {
-    "message": "PI 및 Claude의 음성 제어. 자연스럽게 말하고 생명과 같은 대답을하십시오. 그냥 말해.",
-    "description": "애플리케이션의 설명입니다."
+    "description": "The description of the application.",
+    "message": "PI 및 Claude의 음성 제어. 자연스럽게 말하고 생명과 같은 대답을하십시오. 그냥 말해."
   },
-  "callInProgress": {
-    "message": "핸즈프리 대화 종료",
-    "description": "통화가 진행 중일 때 통화 버튼에 표시되는 툴팁입니다."
+  "appName": {
+    "description": "The name of the application.",
+    "message": "Say, Pi"
   },
-  "callStarting": {
-    "message": "연결 중...",
-    "description": "통화가 시작될 때 통화 버튼에 표시되는 툴팁입니다."
+  "applicationStatusIssue": {
+    "description": "Message to display when the application is experiencing issues.",
+    "message": "시스템 문제 경고"
   },
-  "callNotStarted": {
-    "message": "$chatbot$와 핸즈프리 대화를 시작하세요.",
-    "description": "통화가 시작되기 전에 통화 버튼에 표시되는 툴팁입니다.",
+  "applicationStatusUnknown": {
+    "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
+    "message": "응용 프로그램 상태를 알 수 없음"
+  },
+  "assistantIsListening": {
+    "description": "Message displayed when the assistant is listening for speech.",
+    "message": "$chatbot$이 청취 중입니다...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
@@ -25,60 +41,58 @@
       }
     }
   },
-  "callError": {
-    "message": "치명적이지 않은 오류 발생. 걱정마세요, 계속 듣고 있습니다.",
-    "description": "치명적이지 않은 오류가 발생했을 때 통화 버튼에 표시되는 툴팁입니다."
+  "assistantIsListeningAttentively": {
+    "description": "Message displayed when the assistant is listening for speech in agent mode.",
+    "message": "$chatbot$는주의 깊게 듣고 있습니다 ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   },
-  "mode_speed": {
-    "message": "속도",
-    "description": "가장 빠른 전사 모드입니다."
+  "assistantIsSpeaking": {
+    "description": "Message displayed when the assistant is speaking its response.",
+    "message": "$chatbot$이 말하고 있습니다...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "mode_balanced": {
-    "message": "균형",
-    "description": "기본 전사 모드입니다."
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Message displayed when the assistant is speaking its response and manual interruption is possible.",
+    "message": "$chatbot$이 말하고 있습니다. 중단하려면 탭하세요...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "mode_accuracy": {
-    "message": "정확도",
-    "description": "가장 높은 정확도를 가진 전사 모드입니다."
+  "assistantIsThinking": {
+    "description": "Message displayed when the assistant is preparing its response.",
+    "message": "$chatbot$이 생각 중입니다...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "preferedModeControl": {
-    "message": "선호하는 전사 모드 선택",
-    "description": "선호하는 전사 모드를 선택하기 위한 컨트롤의 제목(툴팁)입니다."
-  },
-  "autoSubmit": {
-    "description": "체크박스의 레이블은 자동 프롬프트 제출을 활성화/비활성화합니다.",
-    "message": "자동 제출"
-  },
-  "continueUnlocking": {
-    "description": "사용자가 잠금 해제 버튼을 누르기 시작한 후에 어떻게 계속할지 알려주는 지시사항.",
-    "message": "잠금을 해제하려면 계속 누르십시오..."
-  },
-  "lockButton": {
-    "description": "버튼의 제목 (툴팁)은 화면을 실수로 터치하는 것을 방지하기 위해 잠급니다.",
-    "message": "화면을 잠그려면 누르세요"
-  },
-  "lockedScreen": {
-    "description": "화면이 잠겨 있을 때 중요하게 표시할 메시지.",
-    "message": "화면이 잠겼습니다."
-  },
-  "soundEffects": {
-    "description": "사운드 효과를 활성화/비활성화하는 체크박스의 라벨.",
-    "message": "사운드 이펙트"
-  },
-  "unlockButton": {
-    "description": "화면 잠금 해제 버튼의 제목 (툴팁).",
-    "message": "화면 잠금을 해제하려면 누르세요"
-  },
-  "unlockInstruction": {
-    "description": "사용자가 잠긴 화면을 어떻게 해제하는지 알려주는 지시사항.",
-    "message": "잠금 해제하려면 누르세요."
-  },
-  "preferedLanguage": {
-    "message": "언어",
-    "description": "선호하는 전사 언어를 선택하기 위한 컨트롤 라벨."
+  "assistantIsWriting": {
+    "description": "Message displayed when the assistant is typing its response.",
+    "message": "$chatbot$ 작성 중...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioConnected": {
-    "description": "마이크로폰이 연결될 때 표시되는 메시지",
+    "description": "Message displayed when a microphone is connected",
     "message": "$microphone$ 연결됨",
     "placeholders": {
       "microphone": {
@@ -88,7 +102,7 @@
     }
   },
   "audioInputError": {
-    "description": "오디오가 빈 전사로 이어졌을 때 표시되는 메시지 - 보통 필터링의 결과입니다.",
+    "description": "Message displayed when audio transcription failed - usually the result of an ASR or LLM API error.",
     "message": "흠, $chatbot$에는 약간의 딸꾹질이있었습니다. \n다시 말해 주시겠습니까?",
     "placeholders": {
       "chatbot": {
@@ -98,7 +112,7 @@
     }
   },
   "audioReconnecting": {
-    "description": "새로운 마이크에 연결할 때 표시되는 메시지",
+    "description": "Message displayed when connecting to a new microphone",
     "message": "$microphone$으로 전환 중...",
     "placeholders": {
       "microphone": {
@@ -107,9 +121,25 @@
       }
     }
   },
-  "assistantIsListening": {
-    "description": "비서가 음성을 듣고 있을 때 표시되는 메시지.",
-    "message": "$chatbot$이 청취 중입니다...",
+  "autoSubmit": {
+    "description": "Label for the checkbox to enable/disable automatic prompt submission.",
+    "message": "자동 제출"
+  },
+  "callError": {
+    "description": "The tooltip to display on the call button when a non-fatal error occurs.",
+    "message": "치명적이지 않은 오류 발생. 걱정마세요, 계속 듣고 있습니다."
+  },
+  "callInProgress": {
+    "description": "The tooltip to display on the call button when a call is in progress.",
+    "message": "핸즈프리 대화 종료"
+  },
+  "callInterruptible": {
+    "description": "The tooltip to display on the call button when a call is in progress and manual interruption is possible.",
+    "message": "중단하려면 탭하세요."
+  },
+  "callNotStarted": {
+    "description": "The tooltip to display on the call button before a call is started.",
+    "message": "$chatbot$와 핸즈프리 대화를 시작하세요.",
     "placeholders": {
       "chatbot": {
         "content": "$1",
@@ -117,13 +147,21 @@
       }
     }
   },
-  "toggleThemeToDarkMode": {
-    "description": "다크 모드로 전환하는 버튼의 라벨.",
-    "message": "다크 모드로 전환하세요"
+  "callStarting": {
+    "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
+    "message": "연결 중..."
   },
-  "toggleThemeToLightMode": {
-    "description": "라이트 모드로 전환하는 버튼의 라벨.",
-    "message": "라이트 모드로 전환하세요"
+  "checkingApplicationStatus": {
+    "description": "Message to display while the system status is being determined, e.g. during load.",
+    "message": "응용 프로그램 상태 확인 중..."
+  },
+  "clickToCollapse": {
+    "description": "Text indicating user can click to hide expanded content.",
+    "message": "붕괴하려면 클릭하십시오"
+  },
+  "clickToExpand": {
+    "description": "Text indicating user can click to show collapsed content.",
+    "message": "확장하려면 클릭하십시오"
   },
   "consentAskParticipate": {
     "message": "참여하시겠습니까?"
@@ -158,102 +196,40 @@
   "consetPrivacyPolicy": {
     "message": "우리의 개인정보 보호정책을 읽어보세요."
   },
-  "shareAnalytics": {
-    "description": "분석 공유를 활성화/비활성화하는 체크박스의 라벨.",
-    "message": "분석 공유"
+  "continueUnlocking": {
+    "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
+    "message": "잠금을 해제하려면 계속 누르십시오..."
   },
-  "enterImmersiveModeLong": {
-    "message": "이머시브 모드에 들어가기",
-    "description": "모바일 장치에서 몰입 모드로 들어가기 위한 버튼의 aria-label과 제목."
+  "copiedButtonTitle": {
+    "description": "The title of the button to indicate that the text of a message has been copied to the clipboard.",
+    "message": "복사됨!"
   },
-  "enterImmersiveModeShort": {
-    "description": "데스크톱에서 몰입 모드로 들어가기 위한 버튼의 텍스트",
-    "message": "담금"
-  },
-  "exitImmersiveModeLong": {
-    "description": "모바일 장치에서 몰입 모드를 종료하고 텍스트 기반의 데스크톱 모드로 돌아가는 버튼의 aria-label과 제목.",
-    "message": "이머시브 모드 종료"
-  },
-  "applicationStatusIssue": {
-    "description": "응용 프로그램에 문제가 발생했을 때 표시할 메시지.",
-    "message": "시스템 문제 경고"
-  },
-  "applicationStatusUnknown": {
-    "description": "응용 프로그램 상태를 확인할 수 없을 때 표시할 메시지. 예를 들어, 클라이언트가 오프라인일 때.",
-    "message": "응용 프로그램 상태를 알 수 없음"
-  },
-  "checkingApplicationStatus": {
-    "description": "시스템 상태가 결정되는 동안, 예를 들어 로드 중에 표시할 메시지.",
-    "message": "응용 프로그램 상태 확인 중..."
-  },
-  "dismissAlert": {
-    "description": "시스템 문제 경고를 해제하는 버튼의 레이블.",
-    "message": "해고하다"
-  },
-  "recommendedActions": {
-    "description": "사용자가 알려진 문제를 해결하기 위해 취할 수 있는 권장 조치 목록을 선행하는 메시지.",
-    "message": "그 동안에, 우리는 추천합니다:"
-  },
-  "extensionPopupTitle": {
-    "description": "확장 프로그램의 팝업 대화 상자 제목.",
-    "message": "Say, Pi"
-  },
-  "activityCheckButton": {
-    "description": "사용자가 아직 존재함을 나타내는 버튼의 텍스트",
-    "message": "네, 저는 여전히 여기 있습니다!"
-  },
-  "activityCheckMessage": {
-    "description": "대화가 평소보다 오래 지속될 때 표시할 메시지.",
-    "message": "와우, 이건 정말 긴 대화네요. 아직 계신가요, 아니면 우리가 혼자서 얘기하고 있는 건가요?"
-  },
-  "assistantIsThinking": {
-    "message": "$chatbot$이 생각 중입니다...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "조수가 응답을 준비하는 동안 표시되는 메시지."
-  },
-  "assistantIsSpeaking": {
-    "message": "$chatbot$이 말하고 있습니다...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "조수가 응답을 말하고 있을 때 표시되는 메시지."
-  },
-  "userStartedInterrupting": {
-    "message": "계속하세요, $chatbot$이 듣고 있습니다...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "사용자가 비서가 말하는 동안 말을 시작할 때 표시되는 메시지."
-  },
-  "allowInterruptions": {
-    "message": "중단 가능한",
-    "description": "사용자가 말함으로써 Pi의 응답을 중단할 수 있게 허용/비허용하는 체크박스를 위한 라벨."
+  "copyButtonTitle": {
+    "description": "The title of the button to copy the text of a message to the clipboard.",
+    "message": "복사"
   },
   "currencyUSDAbbreviation": {
-    "description": "미국 달러의 약자.",
+    "description": "The abbreviation for the US dollar.",
     "message": "USD"
   },
   "currentCharges": {
-    "description": "사용자가 누적한 현재 요금(누적 합계)을 설명하는 용어.",
+    "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "현재 요금"
   },
+  "disableTTS": {
+    "description": "Label for the option to turn off text-to-speech",
+    "message": "텍스트 음성 연설을 비활성화합니다"
+  },
+  "dismissAlert": {
+    "description": "Label for the button to dismiss a system issue alert.",
+    "message": "해고하다"
+  },
   "enableTTS": {
-    "description": "텍스트 음성 변환을 활성화/비활성화하는 체크박스의 레이블.",
+    "description": "Label for the checkbox to enable/disable text-to-speech.",
     "message": "다국어 음성"
   },
   "enhancedVoice": {
-    "description": "제목 (툴팁) : Say, Pi 향상된 음성.",
+    "description": "Title (tooltip) for Say, Pi enhanced voices.",
     "message": "$product$로 향상된 음성",
     "placeholders": {
       "product": {
@@ -262,8 +238,185 @@
       }
     }
   },
+  "enterImmersiveModeLong": {
+    "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
+    "message": "이머시브 모드에 들어가기"
+  },
+  "enterImmersiveModeShort": {
+    "description": "The text of the button to enter immersive mode on desktop.",
+    "message": "담금"
+  },
+  "exitImmersiveModeLong": {
+    "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
+    "message": "이머시브 모드 종료"
+  },
+  "extensionPopupTitle": {
+    "description": "The title of the extension's popup dialog.",
+    "message": "Say, Pi"
+  },
+  "extensionSettings": {
+    "description": "The text of the button to open the extension's settings.",
+    "message": "설정"
+  },
+  "greeting": {
+    "description": "Greeting message shown when user is signed in",
+    "message": "안녕하세요, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "instructionLabel_context": {
+    "description": "Friendly label for user instruction that provides background information.",
+    "message": "컨텍스트 제공 ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Friendly label for user instruction that defines what the user wants.",
+    "message": "기대치를 명확하게 ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Friendly label for user instruction that narrows the scope of conversation.",
+    "message": "토론에 집중하고 ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Friendly label for user instruction that establishes boundaries for the conversation.",
+    "message": "가드 레일 설정 ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Friendly label for user instruction that guides how the AI should respond.",
+    "message": "안내 응답 ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Friendly label for user instruction that gently suggests a direction.",
+    "message": "멍청이주는 ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Friendly label for user instruction that guides the conversation direction.",
+    "message": "대화를 조종 ..."
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "현재 Firefox에서는 중단 기능이 지원되지 않습니다."
+  },
+  "lockButton": {
+    "description": "The title (tooltip) of the button to lock the screen against accidental touches.",
+    "message": "화면을 잠그려면 누르세요"
+  },
+  "lockedScreen": {
+    "description": "A message to display prominently when the screen is locked.",
+    "message": "화면이 잠겼습니다."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "이 생각을 잡고 ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "정신 메모 만들기 ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "백그라운드에서 처리 ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "이 세부 사항을 기억합니다 ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "나중에 그 생각을 저장 ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "맥락을 추적하는 ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "이것을 멀리 잡고 ..."
+  },
+  "microphoneErrorConstraints": {
+    "description": "Error message when microphone constraints cannot be satisfied.",
+    "message": "마이크 설정이 필수 사양을 충족하지 않습니다. \n다른 마이크를 사용하거나 오디오 설정을 조정해 보세요."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generic error message with details when microphone access fails.",
+    "message": "마이크 액세스 실패: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Error message when microphone is already in use by another application.",
+    "message": "다른 애플리케이션에서 마이크를 사용하고 있기 때문에 마이크에 액세스할 수 없습니다. \n마이크를 사용하고 있을 수 있는 다른 앱을 종료하세요."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Error message when no microphone device is found.",
+    "message": "마이크가 감지되지 않았습니다. \n마이크를 연결하고 다시 시도해 주세요."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Error message when microphone permission is denied by the user or system.",
+    "message": "마이크 액세스가 필요합니다. \n계속하려면 브라우저 설정에서 마이크 액세스를 허용하세요."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Error message for unexpected microphone errors with details.",
+    "message": "마이크에 예상치 못한 오류가 발생했습니다: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generic error message when microphone access fails for unknown reasons.",
+    "message": "마이크에 액세스할 수 없습니다. \n기기 설정을 확인하고 다시 시도해 주세요."
+  },
+  "mode_accuracy": {
+    "description": "Highest accuracy mode.",
+    "message": "정확도"
+  },
+  "mode_accuracy_description": {
+    "description": "Description for the accuracy transcription mode.",
+    "message": "정확도는 가장 높지만 전사 속도는 느립니다. \n환각에 걸리기 쉽습니다."
+  },
+  "mode_balanced": {
+    "description": "Default transcription mode.",
+    "message": "균형"
+  },
+  "mode_balanced_description": {
+    "description": "Description for the balanced transcription mode.",
+    "message": "대부분의 용도에서 속도와 정확성의 균형이 잘 맞습니다."
+  },
+  "mode_speed": {
+    "description": "Fastest transcription mode.",
+    "message": "속도"
+  },
+  "mode_speed_description": {
+    "description": "Description for the speed transcription mode.",
+    "message": "응답은 가장 빠르지만 정확도는 떨어집니다. \n방해하는 경향이 있습니다."
+  },
+  "nicknameLabel": {
+    "description": "Label for the input field to set a custom nickname for the AI assistant.",
+    "message": "별명"
+  },
+  "notSignedIn": {
+    "description": "Text to show when the user is not signed in.",
+    "message": "로그인하지 않았습니다"
+  },
+  "preferedLanguage": {
+    "description": "Label for a control to select the prefered transcription language.",
+    "message": "언어"
+  },
+  "preferedModeControl": {
+    "description": "The title (tooltip) of the control to select the prefered transcription mode.",
+    "message": "선호하는 전사 모드 선택"
+  },
   "previewProgress": {
-    "description": "사용자가 문자 제한이 있는 기능을 미리보는 경우에 표시할 메시지.",
+    "description": "The message to display when the user is previewing a feature that has a character limit.",
     "message": "$limit$ 중 $count$ 문자 사용됨",
     "placeholders": {
       "count": {
@@ -283,7 +436,7 @@
     "message": "베타 완료"
   },
   "previewStatusPaused": {
-    "description": "사용자가 일시 중지된 기능을 미리보는 경우에 표시할 메시지.",
+    "description": "The message to display when the user is previewing a feature that has been paused.",
     "message": "베타 일시 중지, $resetDate$까지",
     "placeholders": {
       "resetDate": {
@@ -295,12 +448,187 @@
   "previewStatusUnknown": {
     "message": "연결할 수 없습니다..."
   },
+  "profile": {
+    "description": "Label for the user profile section.",
+    "message": "윤곽"
+  },
+  "quotaCredits": {
+    "description": "Unit label for TTS credits",
+    "message": "크레딧"
+  },
+  "quotaRemaining": {
+    "description": "Label for the quota remaining progress bar",
+    "message": "할당량이 남아 있습니다"
+  },
+  "quotaStatusUnknown": {
+    "description": "Message shown when quota status cannot be determined",
+    "message": "할당량 상태를 확인할 수 없습니다"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Message shown when user is not authenticated.",
+    "message": "음성 생성 및 기타 프리미엄 기능에 액세스하려면 로그인"
+  },
   "readAloudButtonTitle": {
-    "description": "메시지 텍스트를 읽어주는 버튼의 제목",
+    "description": "The title of the button to read aloud the text of a message.",
     "message": "읽어주기"
   },
+  "recommendedActions": {
+    "description": "Message preceding a list of recommended actions the user may take to remediate a known issue.",
+    "message": "그 동안에, 우리는 추천합니다:"
+  },
+  "regenerateButtonTitle": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an estimated cost.",
+    "message": "$cost$ $currency$에 대한 오디오 생성",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
+    "message": "오디오 생성"
+  },
+  "shareAnalytics": {
+    "description": "Label for the checkbox to enable/disable sharing of analytics.",
+    "message": "분석 공유"
+  },
+  "signIn": {
+    "description": "Text for the sign in button.",
+    "message": "로그인"
+  },
+  "signInForTTS": {
+    "description": "Prompt shown when user needs to authenticate to access text-to-speech features",
+    "message": "텍스트 음성 연사에 로그인하십시오"
+  },
+  "signOut": {
+    "description": "Text for the sign out button.",
+    "message": "로그 아웃하십시오"
+  },
+  "signedIn": {
+    "description": "Status text shown when user is authenticated (without email).",
+    "message": "로그인"
+  },
+  "signedInAs": {
+    "description": "Status text shown when user is authenticated, including their email.",
+    "message": "$email$로 로그인했습니다",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "soundEffects": {
+    "description": "Label for the checkbox to enable/disable sound effects.",
+    "message": "사운드 이펙트"
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "오디오 피드백 문제를 방지하기 위해 Firefox에서는 사운드 효과가 비활성화되어 있습니다."
+  },
+  "sttMinutesRemaining": {
+    "description": "Text showing remaining STT quota in minutes.",
+    "message": "$minutes$분$plural$ 남음",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text to show when STT quota is exhausted.",
+    "message": "음성 인식 할당량이 소진되었습니다"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip for the STT quota progress bar.",
+    "message": "$remaining$/$total$ 초 남음",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip for the STT quota progress bar in minutes.",
+    "message": "$remaining$/$total$ 분 남음",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Label for the STT quota remaining display.",
+    "message": "음성 인식"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unit for STT quota (seconds).",
+    "message": "SECS"
+  },
+  "submitModeControl": {
+    "description": "The title (tooltip) of the control to select when messages should be submitted.",
+    "message": "메시지 제출 시기 선택"
+  },
+  "submit_mode_agent": {
+    "description": "AI-driven submission mode.",
+    "message": "대리인"
+  },
+  "submit_mode_agent_description": {
+    "description": "Description for the AI-driven submission mode.",
+    "message": "$chatbot$은 상황에 따라 응답 시기를 결정합니다.",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatic submission mode.",
+    "message": "자동"
+  },
+  "submit_mode_auto_description": {
+    "description": "Description for the automatic submission mode.",
+    "message": "말하기를 중단하면 자동으로 제출"
+  },
+  "submit_mode_off": {
+    "description": "Manual submission mode.",
+    "message": "수동"
+  },
+  "submit_mode_off_description": {
+    "description": "Description for the manual submission mode.",
+    "message": "버튼을 누를 때만 제출하세요."
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Label for the button to toggle to dark mode.",
+    "message": "다크 모드로 전환하세요"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Label for the button to toggle to light mode.",
+    "message": "라이트 모드로 전환하세요"
+  },
   "ttsCostExplanation": {
-    "description": "텍스트를 음성으로 변환하여 메시지를 읽어주는 엔진을 사용할 때 표시되는 툴팁, 그리고 메시지의 비용.",
+    "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
     "message": "$product$에서는 이 메시지를 듣는 대가로 $cost$ $currency$를 청구합니다.",
     "placeholders": {
       "cost": {
@@ -318,7 +646,7 @@
     }
   },
   "ttsCostExplanationFree": {
-    "description": "텍스트를 음성으로 변환하여 메시지를 대신 읽어주는 엔진이 사용될 때 표시되는 툴팁, 그리고 메시지가 무료인 경우. 공급자의 이름을 포함할 수 있습니다.",
+    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free. Assumes the provider is Inflection AI.",
     "message": "이 오디오는 Inflection AI에 의해 무료로 생성되었습니다.",
     "placeholders": {
       "provider": {
@@ -327,8 +655,26 @@
       }
     }
   },
+  "ttsCostExplanationSayPi": {
+    "description": "The tooltip to display when the user hovers over the cost explanation link.",
+    "message": "$product$에 오디오 요금이 청구되는 방식 알아보기",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "ttsCredits": {
+    "description": "The term used for the credits currency in the text-to-speech feature.",
+    "message": "크레딧"
+  },
+  "ttsDisabledSafari": {
+    "description": "Message shown when TTS is disabled in Safari",
+    "message": "현재 Safari에서는 다국어 음성이 지원되지 않습니다."
+  },
   "ttsPoweredBy": {
-    "description": "텍스트를 음성으로 변환하여 메시지를 읽어줄 때 표시할 메시지.",
+    "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "$ttsEngine$에 의해 구동되는 텍스트-투-스피치",
     "placeholders": {
       "ttsEngine": {
@@ -337,302 +683,16 @@
       }
     }
   },
-  "copiedButtonTitle": {
-    "message": "복사됨!",
-    "description": "메시지의 텍스트가 클립보드에 복사되었음을 나타내는 버튼의 제목."
-  },
-  "copyButtonTitle": {
-    "message": "복사",
-    "description": "메시지의 텍스트를 클립보드에 복사하는 버튼의 제목."
-  },
-  "voiceIntroduction_joey": {
-    "message": "안녕하세요! \n감사합니다! \n정말! \n저는 여러분의 다국어 AI 비서 Pi입니다. \n32개 언어를 사용하여 전 세계의 아이디어와 문화를 탐색할 수 있습니다. \n이 목소리에 대해 어떻게 생각하시나요?",
-    "description": "Joey 음성에 대한 소개."
-  },
-  "voiceIntroduction_paola": {
-    "message": "챠오! \n봉쥬르! \n안녕하세요! \n저는 파이(Pi)이고 32개 언어로 유창하게 대화할 수 있습니다. \n아랍어에서 우크라이나어까지, 저는 언어 장벽을 허물기 위해 왔습니다. \n이 목소리가 당신에게 어떻게 들립니까?",
-    "description": "Paola 음성에 대한 소개."
-  },
-  "regenerateButtonTitle": {
-    "message": "$cost$ $currency$에 대한 오디오 생성",
-    "description": "메시지의 오디오를 재생성하는 버튼의 제목. 예상 비용이 발생할 수 있습니다.",
-    "placeholders": {
-      "cost": {
-        "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
-      }
-    }
-  },
-  "regenerateButtonTitleFree": {
-    "message": "오디오 생성",
-    "description": "메시지의 오디오를 재생성하는 버튼의 제목. 불확정의 비용이 발생할 수 있습니다."
-  },
-  "assistantIsWriting": {
-    "description": "도우미가 응답을 입력할 때 표시되는 메시지입니다.",
-    "message": "$chatbot$ 작성 중...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "ttsCostExplanationSayPi": {
-    "description": "사용자가 비용 설명 링크 위로 마우스를 가져갈 때 표시되는 도구 설명입니다.",
-    "placeholders": {
-      "product": {
-        "content": "$1",
-        "example": "Say, Pi"
-      }
-    },
-    "message": "$product$에 오디오 요금이 청구되는 방식 알아보기"
-  },
-  "interruptionsFirefoxDisabled": {
-    "message": "현재 Firefox에서는 중단 기능이 지원되지 않습니다."
-  },
-  "mode_accuracy_description": {
-    "description": "정확도 표기 모드에 대한 설명입니다.",
-    "message": "정확도는 가장 높지만 전사 속도는 느립니다. \n환각에 걸리기 쉽습니다."
-  },
-  "mode_balanced_description": {
-    "description": "균형 잡힌 전사 모드에 대한 설명입니다.",
-    "message": "대부분의 용도에서 속도와 정확성의 균형이 잘 맞습니다."
-  },
-  "mode_speed_description": {
-    "description": "속도 전사 모드에 대한 설명입니다.",
-    "message": "응답은 가장 빠르지만 정확도는 떨어집니다. \n방해하는 경향이 있습니다."
-  },
-  "soundEffectsFirefoxDisabled": {
-    "message": "오디오 피드백 문제를 방지하기 위해 Firefox에서는 사운드 효과가 비활성화되어 있습니다."
-  },
-  "assistantIsSpeakingWithManualInterrupt": {
-    "description": "보조자가 응답을 말할 때 표시되는 메시지이며 수동 중단이 가능합니다.",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "message": "$chatbot$이 말하고 있습니다. 중단하려면 탭하세요..."
-  },
-  "callInterruptible": {
-    "description": "통화 중일 때, 수동 중단이 가능할 때 통화 버튼에 표시되는 툴팁입니다.",
-    "message": "중단하려면 탭하세요."
-  },
-  "microphoneErrorConstraints": {
-    "description": "마이크 제약 조건을 충족할 수 없는 경우 오류 메시지가 나타납니다.",
-    "message": "마이크 설정이 필수 사양을 충족하지 않습니다. \n다른 마이크를 사용하거나 오디오 설정을 조정해 보세요."
-  },
-  "microphoneErrorGeneric": {
-    "description": "마이크 액세스 실패 시 세부정보가 포함된 일반 오류 메시지입니다.",
-    "message": "마이크 액세스 실패: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Permission denied"
-      }
-    }
-  },
-  "microphoneErrorInUse": {
-    "description": "다른 응용 프로그램에서 마이크를 이미 사용 중일 때 오류 메시지가 나타납니다.",
-    "message": "다른 애플리케이션에서 마이크를 사용하고 있기 때문에 마이크에 액세스할 수 없습니다. \n마이크를 사용하고 있을 수 있는 다른 앱을 종료하세요."
-  },
-  "microphoneErrorNotFound": {
-    "description": "마이크 장치를 찾을 수 없을 때 나타나는 오류 메시지입니다.",
-    "message": "마이크가 감지되지 않았습니다. \n마이크를 연결하고 다시 시도해 주세요."
-  },
-  "microphoneErrorPermissionDenied": {
-    "description": "사용자 또는 시스템에서 마이크 권한을 거부하면 오류 메시지가 나타납니다.",
-    "message": "마이크 액세스가 필요합니다. \n계속하려면 브라우저 설정에서 마이크 액세스를 허용하세요."
-  },
-  "microphoneErrorUnexpected": {
-    "description": "세부정보가 포함된 예기치 않은 마이크 오류에 대한 오류 메시지입니다.",
-    "message": "마이크에 예상치 못한 오류가 발생했습니다: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Device busy"
-      }
-    }
-  },
-  "microphoneErrorUnknown": {
-    "description": "알 수 없는 이유로 마이크 액세스에 실패할 때 발생하는 일반 오류 메시지입니다.",
-    "message": "마이크에 액세스할 수 없습니다. \n기기 설정을 확인하고 다시 시도해 주세요."
-  },
-  "ttsDisabledSafari": {
-    "message": "현재 Safari에서는 다국어 음성이 지원되지 않습니다.",
-    "description": "Safari에서 TTS가 비활성화되었을 때 표시되는 메시지"
-  },
-  "extensionSettings": {
-    "message": "설정",
-    "description": "확장 프로그램의 설정을 여는 버튼의 텍스트입니다."
-  },
-  "submitModeControl": {
-    "description": "메시지를 제출해야 하는 시기를 선택하는 컨트롤의 제목(도구 설명)입니다.",
-    "message": "메시지 제출 시기 선택"
-  },
-  "submit_mode_agent": {
-    "description": "AI 기반 제출 모드.",
-    "message": "대리인"
-  },
-  "submit_mode_agent_description": {
-    "description": "AI 기반 제출 모드에 대한 설명입니다.",
-    "message": "$chatbot$은 상황에 따라 응답 시기를 결정합니다.",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "submit_mode_auto": {
-    "description": "자동 제출 모드.",
-    "message": "자동"
-  },
-  "submit_mode_auto_description": {
-    "description": "자동 제출 모드에 대한 설명입니다.",
-    "message": "말하기를 중단하면 자동으로 제출"
-  },
-  "submit_mode_off": {
-    "description": "수동 제출 모드.",
-    "message": "수동"
-  },
-  "submit_mode_off_description": {
-    "description": "수동 제출 모드에 대한 설명입니다.",
-    "message": "버튼을 누를 때만 제출하세요."
-  },
-  "nicknameLabel": {
-    "message": "별명",
-    "description": "입력 필드의 레이블 AI 어시스턴트의 사용자 정의 별명을 설정하십시오."
-  },
-  "greeting": {
-    "description": "사용자가 로그인 할 때 표시되는 인사말 메시지",
-    "message": "안녕하세요, $name$!",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John"
-      }
-    }
-  },
-  "notSignedIn": {
-    "description": "사용자가 로그인하지 않을 때 표시 할 텍스트.",
-    "message": "로그인하지 않았습니다"
-  },
-  "profile": {
-    "description": "사용자 프로필 섹션의 레이블.",
-    "message": "윤곽"
-  },
-  "quotaCredits": {
-    "description": "TTS 크레딧에 대한 단위 레이블",
-    "message": "크레딧"
-  },
-  "quotaRemaining": {
-    "description": "할당량 나머지 진행 막대에 대한 레이블",
-    "message": "할당량이 남아 있습니다"
-  },
-  "quotaStatusUnknown": {
-    "description": "할당량 상태를 결정할 수없는 경우 표시됩니다",
-    "message": "할당량 상태를 확인할 수 없습니다"
-  },
-  "quotaUnauthenticatedMessage": {
-    "description": "사용자가 인증되지 않은 경우 표시됩니다.",
-    "message": "음성 생성 및 기타 프리미엄 기능에 액세스하려면 로그인"
-  },
-  "signIn": {
-    "description": "로그인 버튼의 텍스트.",
-    "message": "로그인"
-  },
-  "signOut": {
-    "description": "로그 아웃 버튼에 대한 텍스트.",
-    "message": "로그 아웃하십시오"
-  },
-  "signedIn": {
-    "description": "사용자가 인증 될 때 표시되는 상태 텍스트 (이메일없이).",
-    "message": "로그인"
-  },
-  "signedInAs": {
-    "description": "사용자가 이메일을 포함하여 사용자가 인증 될 때 표시된 상태 텍스트.",
-    "message": "$email$로 로그인했습니다",
-    "placeholders": {
-      "email": {
-        "content": "$1",
-        "example": "user@example.com"
-      }
-    }
-  },
-  "sttMinutesRemaining": {
-    "description": "나머지 STT 할당량을 몇 분 안에 표시하는 텍스트.",
-    "message": "$minutes$분$plural$ 남음",
-    "placeholders": {
-      "minutes": {
-        "content": "$1",
-        "example": "5"
-      },
-      "plural": {
-        "content": "$2",
-        "example": "s"
-      }
-    }
-  },
-  "sttQuotaExhausted": {
-    "description": "STT 할당량이 소진 될 때 표시 할 텍스트.",
-    "message": "음성 인식 할당량이 소진되었습니다"
-  },
-  "sttQuotaProgress": {
-    "description": "STT 할당량 진행률 표시 줄을위한 툴팁.",
-    "message": "$remaining$/$total$ 초 남음",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "100"
-      },
-      "total": {
-        "content": "$2",
-        "example": "300"
-      }
-    }
-  },
-  "sttQuotaProgressMinutes": {
-    "description": "STT 할당량 진행률 표시 줄에 대한 툴팁.",
-    "message": "$remaining$/$total$ 분 남음",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "5"
-      },
-      "total": {
-        "content": "$2",
-        "example": "60"
-      }
-    }
-  },
-  "sttQuotaRemaining": {
-    "description": "STT 할당량 나머지 디스플레이에 대한 레이블.",
-    "message": "음성 인식"
-  },
-  "sttQuotaSeconds": {
-    "description": "STT 할당량 장치 (초).",
-    "message": "SECS"
-  },
-  "ttsCredits": {
-    "description": "텍스트 음성 기능에서 크레딧 통화에 사용되는 용어.",
-    "message": "크레딧"
-  },
   "ttsQuotaCharacters": {
-    "description": "TTS 할당량 (문자)의 단위.",
+    "description": "Unit for TTS quota (characters).",
     "message": "크레딧"
   },
   "ttsQuotaExhausted": {
-    "description": "TTS 할당량이 소진 될 때 표시 할 텍스트.",
+    "description": "Text to show when TTS quota is exhausted.",
     "message": "음성 할당량이 소진되었습니다"
   },
   "ttsQuotaProgress": {
-    "description": "TTS 할당량 진행 막대의 툴팁.",
+    "description": "Tooltip for the TTS quota progress bar.",
     "message": "$remaining$/$total$ 문자 남음",
     "placeholders": {
       "remaining": {
@@ -646,121 +706,243 @@
     }
   },
   "ttsQuotaRemaining": {
-    "description": "TTS 할당량 나머지 디스플레이에 대한 레이블.",
+    "description": "Label for the TTS quota remaining display.",
     "message": "음성 생성"
   },
-  "upgradeButton": {
-    "description": "할당량이 소진 될 때 계획을 업그레이드하려면 버튼의 텍스트.",
-    "message": "업그레이드 계획"
-  },
-  "viewDetails": {
-    "description": "대시 보드에서 전체 할당량 세부 정보를 볼 수있는 링크의 텍스트.",
-    "message": "자세한 내용을보십시오"
-  },
-  "clickToCollapse": {
-    "description": "텍스트는 사용자가 클릭하여 확장 된 컨텐츠를 숨길 수 있습니다.",
-    "message": "붕괴하려면 클릭하십시오"
-  },
-  "clickToExpand": {
-    "description": "텍스트는 사용자가 클릭하여 붕괴 된 콘텐츠를 표시 할 수 있습니다.",
-    "message": "확장하려면 클릭하십시오"
-  },
-  "instructionLabel_context": {
-    "description": "배경 정보를 제공하는 사용자 명령에 대한 친숙한 레이블.",
-    "message": "컨텍스트 제공 ..."
-  },
-  "instructionLabel_expectations": {
-    "description": "사용자가 원하는 것을 정의하는 사용자 명령에 대한 친숙한 레이블.",
-    "message": "기대치를 명확하게 ..."
-  },
-  "instructionLabel_focusing": {
-    "description": "대화의 범위를 좁히는 사용자 지침에 대한 친숙한 레이블.",
-    "message": "토론에 집중하고 ..."
-  },
-  "instructionLabel_guardrails": {
-    "description": "대화의 경계를 설정하는 사용자 지침에 대한 친숙한 레이블.",
-    "message": "가드 레일 설정 ..."
-  },
-  "instructionLabel_guiding": {
-    "description": "AI가 어떻게 응답 해야하는지 안내하는 사용자 지침에 대한 친숙한 레이블.",
-    "message": "안내 응답 ..."
-  },
-  "instructionLabel_nudge": {
-    "description": "방향을 부드럽게 제안하는 사용자 명령에 대한 친숙한 레이블.",
-    "message": "멍청이주는 ..."
-  },
-  "instructionLabel_steering": {
-    "description": "대화 방향을 안내하는 사용자 지침에 대한 친숙한 레이블.",
-    "message": "대화를 조종 ..."
-  },
-  "maintenanceLabel_holding": {
-    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
-    "message": "이 생각을 잡고 ..."
-  },
-  "maintenanceLabel_mental_note": {
-    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
-    "message": "정신 메모 만들기 ..."
-  },
-  "maintenanceLabel_processing": {
-    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
-    "message": "백그라운드에서 처리 ..."
-  },
-  "maintenanceLabel_remembering": {
-    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
-    "message": "이 세부 사항을 기억합니다 ..."
-  },
-  "maintenanceLabel_saving": {
-    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
-    "message": "나중에 그 생각을 저장 ..."
-  },
-  "maintenanceLabel_tracking": {
-    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
-    "message": "맥락을 추적하는 ..."
-  },
-  "maintenanceLabel_tucking": {
-    "description": "붕괴 된 보조 유지 보수 메시지를위한 친숙한 레이블.",
-    "message": "이것을 멀리 잡고 ..."
-  },
-  "disableTTS": {
-    "description": "텍스트 음성을 끄는 옵션에 대한 레이블",
-    "message": "텍스트 음성 연설을 비활성화합니다"
-  },
-  "signInForTTS": {
-    "description": "사용자가 텍스트 음성 기능에 액세스하기 위해 인증 해야하는 경우에 표시됩니다.",
-    "message": "텍스트 음성 연사에 로그인하십시오"
-  },
   "ttsVoice": {
-    "description": "메뉴에서 텍스트 음성 음성 옵션을 설명하는 레이블",
+    "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS 음성"
   },
-  "voiceOff": {
-    "description": "텍스트 음성 연사가 비활성화 된 시점에 대한 레이블",
-    "message": "목소리"
+  "unlockButton": {
+    "description": "The title (tooltip) of the button to unlock the screen.",
+    "message": "화면 잠금을 해제하려면 누르세요"
   },
-  "voiceSettings": {
-    "description": "음성 관련 설정에 액세스하기위한 메뉴 항목의 텍스트.",
-    "message": "음성 설정"
+  "unlockInstruction": {
+    "description": "Instructions telling the user how to unlock the screen when locked.",
+    "message": "잠금 해제하려면 누르세요."
   },
-  "addCredits": {
-    "description": "더 많은 음성 크레딧을 추가 할 링크 텍스트",
-    "message": "크레딧 추가"
+  "upgradeButton": {
+    "description": "Text for the button to upgrade the plan when quota is exhausted.",
+    "message": "업그레이드 계획"
   },
   "upgradeForTTS": {
-    "description": "사용자가 텍스트 음성 학점을 얻기 위해 업그레이드 해야하는 경우에 표시됩니다.",
+    "description": "Prompt shown when user needs to upgrade to obtain text-to-speech credits",
     "message": "음성 생성을 위해 업그레이드"
   },
-  "voicePaused": {
-    "description": "크레딧이 충분하지 않아 음성이 일시 중지 될 때 표시된 텍스트",
-    "message": "음성 일시 정지 -"
-  },
-  "assistantIsListeningAttentively": {
-    "description": "어시스턴트가 에이전트 모드에서 음성을 듣고있을 때 메시지가 표시됩니다.",
-    "message": "$chatbot$는주의 깊게 듣고 있습니다 ...",
+  "userStartedInterrupting": {
+    "description": "Message displayed when the user starts speaking while the assistant is speaking.",
+    "message": "계속하세요, $chatbot$이 듣고 있습니다...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
-        "example": "Claude"
+        "example": "Pi"
       }
     }
+  },
+  "vadDetailActivatingMicrophone": {
+    "description": "VAD detail when activating the microphone.",
+    "message": "Activating microphone..."
+  },
+  "vadDetailCommLinkFailed": {
+    "description": "VAD detail when the communication port link fails.",
+    "message": "Communication link failed."
+  },
+  "vadDetailDeactivatingMicrophone": {
+    "description": "VAD detail when deactivating the microphone.",
+    "message": "Deactivating microphone..."
+  },
+  "vadDetailFailedToReconnectVADService": {
+    "description": "VAD detail when re-establishing connection fails.",
+    "message": "Failed to reconnect VAD service."
+  },
+  "vadDetailInitError": {
+    "description": "VAD detail for an initialization error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to connect to VAD service"
+      }
+    }
+  },
+  "vadDetailInitErrorPromise": {
+    "description": "VAD detail for an initialization promise error.",
+    "message": "Init Error: Promise error"
+  },
+  "vadDetailInitErrorUnknown": {
+    "description": "VAD detail for an unknown initialization error.",
+    "message": "Init Error: Unknown"
+  },
+  "vadDetailInitializedMode": {
+    "description": "VAD detail showing initialization mode.",
+    "message": "",
+    "placeholders": {
+      "mode": {
+        "content": "$1",
+        "example": "Agent"
+      }
+    }
+  },
+  "vadDetailInitializedModeNA": {
+    "description": "VAD detail showing initialization mode as N/A.",
+    "message": "Initialized (Mode: N/A)"
+  },
+  "vadDetailNonSpeechAudioDetected": {
+    "description": "VAD detail for non-speech audio detection.",
+    "message": "Non-speech audio detected"
+  },
+  "vadDetailReleasingVADResources": {
+    "description": "VAD detail when releasing VAD resources.",
+    "message": "Releasing VAD resources..."
+  },
+  "vadDetailRequestingVADSetup": {
+    "description": "VAD detail when requesting setup.",
+    "message": "Requesting VAD setup..."
+  },
+  "vadDetailSpeechDetected": {
+    "description": "VAD detail when speech has been detected.",
+    "message": "Speech detected"
+  },
+  "vadDetailSpeechEndedDuration": {
+    "description": "VAD detail indicating speech ended and its duration.",
+    "message": "",
+    "placeholders": {
+      "duration": {
+        "content": "$1",
+        "example": "1000"
+      }
+    }
+  },
+  "vadDetailStartError": {
+    "description": "VAD detail for a start error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to start VAD service"
+      }
+    }
+  },
+  "vadDetailStartErrorPromise": {
+    "description": "VAD detail for a start promise error.",
+    "message": "Start Error: Promise error"
+  },
+  "vadDetailStartErrorUnknown": {
+    "description": "VAD detail for an unknown start error.",
+    "message": "Start Error: Unknown"
+  },
+  "vadDetailStopError": {
+    "description": "VAD detail for a stop error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to stop VAD service"
+      }
+    }
+  },
+  "vadDetailStopErrorPromise": {
+    "description": "VAD detail for a stop promise error.",
+    "message": "Stop Error: Promise error"
+  },
+  "vadDetailStopErrorUnknown": {
+    "description": "VAD detail for an unknown stop error.",
+    "message": "Stop Error: Unknown"
+  },
+  "vadDetailUnknownVADError": {
+    "description": "VAD detail for an unknown error from the VAD module.",
+    "message": "Unknown VAD error"
+  },
+  "vadDetailVADProcessingStopped": {
+    "description": "VAD detail indicating VAD processing has stopped.",
+    "message": "VAD processing stopped."
+  },
+  "vadDetailVADServiceDisconnected": {
+    "description": "VAD detail when the service disconnects.",
+    "message": "VAD service disconnected. Try reloading."
+  },
+  "vadDetailVADServiceNotConnected": {
+    "description": "VAD detail when the service is not connected.",
+    "message": "VAD service not connected. Try reloading."
+  },
+  "vadDetailVADServiceShutdown": {
+    "description": "VAD detail indicating VAD service has been shut down.",
+    "message": "VAD service shut down."
+  },
+  "vadDetailWaitingForSpeech": {
+    "description": "VAD detail when waiting for user to speak.",
+    "message": "Waiting for speech"
+  },
+  "vadStatusDestroyed": {
+    "description": "VAD status when destroyed.",
+    "message": "Destroyed"
+  },
+  "vadStatusError": {
+    "description": "Generic VAD error status.",
+    "message": "Error"
+  },
+  "vadStatusFailed": {
+    "description": "Generic VAD failure status.",
+    "message": "Failed"
+  },
+  "vadStatusInitializing": {
+    "description": "VAD status when initializing.",
+    "message": "Initializing"
+  },
+  "vadStatusListening": {
+    "description": "VAD status when actively listening.",
+    "message": "Listening"
+  },
+  "vadStatusMisfire": {
+    "description": "VAD status when a misfire (non-speech) is detected.",
+    "message": "Misfire"
+  },
+  "vadStatusProcessing": {
+    "description": "VAD status when processing audio.",
+    "message": "Processing"
+  },
+  "vadStatusReady": {
+    "description": "VAD status when ready and waiting.",
+    "message": "Ready"
+  },
+  "vadStatusShuttingDown": {
+    "description": "VAD status when shutting down.",
+    "message": "Shutting down"
+  },
+  "vadStatusStarting": {
+    "description": "VAD status when starting.",
+    "message": "Starting"
+  },
+  "vadStatusStopped": {
+    "description": "VAD status when stopped.",
+    "message": "Stopped"
+  },
+  "vadStatusStopping": {
+    "description": "VAD status when stopping.",
+    "message": "Stopping"
+  },
+  "viewDetails": {
+    "description": "Text for the link to view full quota details on the dashboard.",
+    "message": "자세한 내용을보십시오"
+  },
+  "voiceIntroduction_joey": {
+    "description": "Introduction for the Joey voice.",
+    "message": "안녕하세요! \n감사합니다! \n정말! \n저는 여러분의 다국어 AI 비서 Pi입니다. \n32개 언어를 사용하여 전 세계의 아이디어와 문화를 탐색할 수 있습니다. \n이 목소리에 대해 어떻게 생각하시나요?"
+  },
+  "voiceIntroduction_paola": {
+    "description": "Introduction for the Paola voice.",
+    "message": "챠오! \n봉쥬르! \n안녕하세요! \n저는 파이(Pi)이고 32개 언어로 유창하게 대화할 수 있습니다. \n아랍어에서 우크라이나어까지, 저는 언어 장벽을 허물기 위해 왔습니다. \n이 목소리가 당신에게 어떻게 들립니까?"
+  },
+  "voiceOff": {
+    "description": "Label for when text-to-speech is disabled",
+    "message": "목소리"
+  },
+  "voicePaused": {
+    "description": "Text shown when voice is paused due to insufficient credits",
+    "message": "음성 일시 정지 -"
+  },
+  "voiceSettings": {
+    "description": "The text of the menu item to access voice-related settings.",
+    "message": "음성 설정"
   }
 }

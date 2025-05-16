@@ -1,34 +1,38 @@
 {
   "activityCheckButton": {
-    "description": "Το κείμενο του κουμπιού για να δηλώσει ότι ο χρήστης είναι ακόμα παρών.",
+    "description": "The text of the button to indicate that the user is still present.",
     "message": "Ναι, είμαι ακόμα εδώ!"
   },
   "activityCheckMessage": {
-    "description": "Το μήνυμα που θα εμφανίζεται όταν η συζήτηση διαρκεί ασυνήθιστα πολύ.",
+    "description": "The message to display when the conversation has been going on unusually long.",
     "message": "Ουάου, αυτή είναι μια μακροσκελής συζήτηση. Είσαι ακόμα εδώ, ή μιλάμε στον εαυτό μας;"
   },
+  "addCredits": {
+    "description": "Text for link to add more voice credits",
+    "message": "Προσθέστε πιστώσεις"
+  },
   "allowInterruptions": {
-    "description": "Ετικέτα για το πλαίσιο επιλογής για την ενεργοποίηση/απενεργοποίηση του δικαιώματος του χρήστη να διακόπτει τις απαντήσεις του Pi μελάλων.",
+    "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Διακόπτομενη"
   },
   "appDescription": {
-    "description": "Η περιγραφή της εφαρμογής.",
+    "description": "The description of the application.",
     "message": "Φωνητικός έλεγχος για PI και Claude. Μιλήστε φυσικά, λάβετε απαντήσεις. Απλά πες το."
   },
   "appName": {
-    "description": "Το όνομα της εφαρμογής.",
+    "description": "The name of the application.",
     "message": "Say, Pi"
   },
   "applicationStatusIssue": {
-    "description": "Μήνυμα προς εμφάνιση όταν η εφαρμογή αντιμετωπίζει προβλήματα.",
+    "description": "Message to display when the application is experiencing issues.",
     "message": "Συναγερμός Προβλήματος Συστήματος"
   },
   "applicationStatusUnknown": {
-    "description": "Μήνυμα προς εμφάνιση όταν δεν μπορεί να καθοριστεί η κατάσταση της εφαρμογής. Π.χ. όταν ο πελάτης είναι εκτός σύνδεσης.",
+    "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Άγνωστη κατάσταση εφαρμογής"
   },
   "assistantIsListening": {
-    "description": "Μήνυμα που εμφανίζεται όταν ο βοηθός ακούει για ομιλία.",
+    "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ ακούει...",
     "placeholders": {
       "chatbot": {
@@ -37,8 +41,18 @@
       }
     }
   },
+  "assistantIsListeningAttentively": {
+    "description": "Message displayed when the assistant is listening for speech in agent mode.",
+    "message": "Το $chatbot$ ακούει προσεκτικά ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
   "assistantIsSpeaking": {
-    "description": "Μήνυμα που εμφανίζεται όταν ο βοηθός μιλάει την απάντησή του.",
+    "description": "Message displayed when the assistant is speaking its response.",
     "message": "Το $chatbot$ μιλάει...",
     "placeholders": {
       "chatbot": {
@@ -47,8 +61,18 @@
       }
     }
   },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Message displayed when the assistant is speaking its response and manual interruption is possible.",
+    "message": "Το $chatbot$ μιλάει, πατήστε για διακοπή...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "assistantIsThinking": {
-    "description": "Μήνυμα που εμφανίζεται όταν ο βοηθός ετοιμάζει την απάντησή του.",
+    "description": "Message displayed when the assistant is preparing its response.",
     "message": "$chatbot$ σκέφτεται...",
     "placeholders": {
       "chatbot": {
@@ -57,8 +81,18 @@
       }
     }
   },
+  "assistantIsWriting": {
+    "description": "Message displayed when the assistant is typing its response.",
+    "message": "Το $chatbot$ γράφει...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "audioConnected": {
-    "description": "Μήνυμα που εμφανίζεται όταν συνδέεται ένα μικρόφωνο",
+    "description": "Message displayed when a microphone is connected",
     "message": "$microphone$ συνδεδεμένο",
     "placeholders": {
       "microphone": {
@@ -68,7 +102,7 @@
     }
   },
   "audioInputError": {
-    "description": "Μήνυμα που εμφανίζεται όταν η μεταγραφή του ήχου κατέληξε σε κενό - συνήθως αποτέλεσμα φιλτραρίσματος.",
+    "description": "Message displayed when audio transcription failed - usually the result of an ASR or LLM API error.",
     "message": "Χμμ, $chatbot$ είχε ένα ελαφρύ λόξυγκας. \nΘα μπορούσατε να το δοκιμάσετε ξανά;",
     "placeholders": {
       "chatbot": {
@@ -78,7 +112,7 @@
     }
   },
   "audioReconnecting": {
-    "description": "Μήνυμα που εμφανίζεται όταν συνδέεστε σε ένα νέο μικρόφωνο",
+    "description": "Message displayed when connecting to a new microphone",
     "message": "Μετάβαση στο $microphone$...",
     "placeholders": {
       "microphone": {
@@ -88,19 +122,23 @@
     }
   },
   "autoSubmit": {
-    "description": "Ετικέτα για το πλαίσιο επιλογής για την ενεργοποίηση/απενεργοποίηση αυτόματης υποβολής πρότασης.",
+    "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Αυτόματη υποβολή"
   },
   "callError": {
-    "description": "Η επεξήγηση που θα εμφανίζεται στο κουμπί κλήσης όταν συμβεί μια μη ανεπανόρθωτη σφάλμα.",
+    "description": "The tooltip to display on the call button when a non-fatal error occurs.",
     "message": "Αντιμετωπίστηκε μη θανατηφόρο σφάλμα. Μην πανικοβληθείς, ακόμα μας ακούς."
   },
   "callInProgress": {
-    "description": "Η επεξήγηση που θα εμφανίζεται στο κουμπί κλήσης όταν μια κλήση βρίσκεται σε εξέλιξη.",
+    "description": "The tooltip to display on the call button when a call is in progress.",
     "message": "Τερματισμός συνομιλίας χωρίς χρήση χεριών"
   },
+  "callInterruptible": {
+    "description": "The tooltip to display on the call button when a call is in progress and manual interruption is possible.",
+    "message": "Πατήστε για διακοπή"
+  },
   "callNotStarted": {
-    "description": "Η επεξήγηση που θα εμφανίζεται στο κουμπί κλήσης πριν ξεκινήσει μια κλήση.",
+    "description": "The tooltip to display on the call button before a call is started.",
     "message": "Ξεκινήστε μια συνομιλία χωρίς χρήση των χεριών με το $chatbot$",
     "placeholders": {
       "chatbot": {
@@ -110,12 +148,20 @@
     }
   },
   "callStarting": {
-    "description": "Το κείμενο που θα εμφανίζεται στην επεξήγηση του κουμπιού κλήσης και στην περιοχή προτροπής όταν ξεκινά μια κλήση.",
+    "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Σύνδεση..."
   },
   "checkingApplicationStatus": {
-    "description": "Μήνυμα προς εμφάνιση ενώ καθορίζεται η κατάσταση του συστήματος, π.χ. κατά τη φόρτωση.",
+    "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Έλεγχος κατάστασης εφαρμογής..."
+  },
+  "clickToCollapse": {
+    "description": "Text indicating user can click to hide expanded content.",
+    "message": "Κάντε κλικ για κατάρρευση"
+  },
+  "clickToExpand": {
+    "description": "Text indicating user can click to show collapsed content.",
+    "message": "Κάντε κλικ για επέκταση"
   },
   "consentAskParticipate": {
     "message": "Θα θέλατε να συμμετάσχετε;"
@@ -151,27 +197,39 @@
     "message": "Διαβάστε την Πολιτική Απορρήτου μας"
   },
   "continueUnlocking": {
-    "description": "Οδηγίες που ενημερώνουν τον χρήστη πώς να συνεχίσει αφού έχει αρχίσει να πατά το κουμπί ξεκλειδώματος.",
+    "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Συνεχίστε να κρατάτε για να ξεκλειδώσετε..."
   },
+  "copiedButtonTitle": {
+    "description": "The title of the button to indicate that the text of a message has been copied to the clipboard.",
+    "message": "Αντιγράφηκε!"
+  },
+  "copyButtonTitle": {
+    "description": "The title of the button to copy the text of a message to the clipboard.",
+    "message": "Αντιγραφή"
+  },
   "currencyUSDAbbreviation": {
-    "description": "Η συντομογραφία για το Δολάριο των Ηνωμένων Πολιτειών.",
+    "description": "The abbreviation for the US dollar.",
     "message": "USD"
   },
   "currentCharges": {
-    "description": "Ο όρος που χρησιμοποιείται για να περιγράψει τις τρέχουσες χρεώσεις (τρέχων σύνολο) που έχουν συσσωρευτεί από τον χρήστη.",
+    "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Τρέχουσες χρεώσεις"
   },
+  "disableTTS": {
+    "description": "Label for the option to turn off text-to-speech",
+    "message": "Απενεργοποιήστε το κείμενο σε ομιλία"
+  },
   "dismissAlert": {
-    "description": "Ετικέτα για το κουμπί απόρριψης ενός συναγερμού θέματος συστήματος.",
+    "description": "Label for the button to dismiss a system issue alert.",
     "message": "Απορρίπτω"
   },
   "enableTTS": {
-    "description": "Ετικέτα για το πλαίσιο επιλογής για την ενεργοποίηση/απενεργοποίηση του κειμένου-προς-ομιλία.",
+    "description": "Label for the checkbox to enable/disable text-to-speech.",
     "message": "Πολύγλωσσες φωνές"
   },
   "enhancedVoice": {
-    "description": "Τίτλος (tooltip) για την επιλογή, Βελτιωμένες φωνές Pi.",
+    "description": "Title (tooltip) for Say, Pi enhanced voices.",
     "message": "Φωνή ενισχυμένη με $product$",
     "placeholders": {
       "product": {
@@ -181,51 +239,184 @@
     }
   },
   "enterImmersiveModeLong": {
-    "description": "Η aria-label και ο τίτλος του κουμπιού για είσοδο σε βυθιστική λειτουργία σε κινητές συσκευές.",
+    "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
     "message": "Εισέλθετε στη Λειτουργία Εμπλοκής"
   },
   "enterImmersiveModeShort": {
-    "description": "Το κείμενο του κουμπιού για να εισέλθετε στην εμπληκτική λειτουργία στον υπολογιστή.",
+    "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Βύθιση"
   },
   "exitImmersiveModeLong": {
-    "description": "Η aria-label και ο τίτλος του κουμπιού για να εξέλθετε από την εμβυθιστική λειτουργία σε κινητές συσκευές, πίσω στη λειτουργία επιφάνειας εργασίας βάσης κειμένου.",
+    "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Έξοδος από τη Λειτουργία Εμβύθισης"
   },
   "extensionPopupTitle": {
-    "description": "Ο τίτλος του αναδυόμενου παραθύρου της επέκτασης.",
+    "description": "The title of the extension's popup dialog.",
     "message": "Πες, Ρυθμίσεις Pi"
   },
+  "extensionSettings": {
+    "description": "The text of the button to open the extension's settings.",
+    "message": "Ρυθμίσεις"
+  },
+  "greeting": {
+    "description": "Greeting message shown when user is signed in",
+    "message": "Γεια, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "instructionLabel_context": {
+    "description": "Friendly label for user instruction that provides background information.",
+    "message": "Παροχή πλαισίου ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Friendly label for user instruction that defines what the user wants.",
+    "message": "Διευκρίνιση των προσδοκιών ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Friendly label for user instruction that narrows the scope of conversation.",
+    "message": "Εστίαση της συζήτησης ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Friendly label for user instruction that establishes boundaries for the conversation.",
+    "message": "Ρύθμιση φύλαξης ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Friendly label for user instruction that guides how the AI should respond.",
+    "message": "Κατευθυντήριες απαντήσεις ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Friendly label for user instruction that gently suggests a direction.",
+    "message": "Δίνοντας μια ώθηση ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Friendly label for user instruction that guides the conversation direction.",
+    "message": "Διεύθυνση της συνομιλίας ..."
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Οι διακοπές δεν υποστηρίζονται αυτήν τη στιγμή στον Firefox."
+  },
   "lockButton": {
-    "description": "Ο τίτλος (tooltip) του κουμπιού για το κλείδωμα της οθόνης από ακούσιες αφής.",
+    "description": "The title (tooltip) of the button to lock the screen against accidental touches.",
     "message": "Πατήστε για να κλειδώσετε την οθόνη"
   },
   "lockedScreen": {
-    "description": "Ένα μήνυμα για να εμφανίζεται ξεκάθαρα όταν η οθόνη είναι κλειδωμένη.",
+    "description": "A message to display prominently when the screen is locked.",
     "message": "Η οθόνη είναι κλειδωμένη."
   },
+  "maintenanceLabel_holding": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Κρατώντας αυτή τη σκέψη ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Κάνοντας μια διανοητική σημείωση ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Επεξεργασία στο παρασκήνιο ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Θυμόμαστε αυτήν τη λεπτομέρεια ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Αποθήκευση αυτής της σκέψης για αργότερα ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Παρακολούθηση του πλαισίου ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Τοποθετώντας αυτό μακριά ..."
+  },
+  "microphoneErrorConstraints": {
+    "description": "Error message when microphone constraints cannot be satisfied.",
+    "message": "Οι ρυθμίσεις του μικροφώνου σας δεν πληρούν τις απαιτούμενες προδιαγραφές. \nΔοκιμάστε να χρησιμοποιήσετε διαφορετικό μικρόφωνο ή να προσαρμόσετε τις ρυθμίσεις ήχου."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generic error message with details when microphone access fails.",
+    "message": "Αποτυχία πρόσβασης στο μικρόφωνο: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Error message when microphone is already in use by another application.",
+    "message": "Δεν είναι δυνατή η πρόσβαση στο μικρόφωνο επειδή χρησιμοποιείται από άλλη εφαρμογή. \nΚλείστε άλλες εφαρμογές που ενδέχεται να χρησιμοποιούν το μικρόφωνό σας."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Error message when no microphone device is found.",
+    "message": "Δεν εντοπίστηκε μικρόφωνο. \nΣυνδέστε ένα μικρόφωνο και δοκιμάστε ξανά."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Error message when microphone permission is denied by the user or system.",
+    "message": "Απαιτείται πρόσβαση στο μικρόφωνο. \nΕπιτρέψτε την πρόσβαση στο μικρόφωνο στις ρυθμίσεις του προγράμματος περιήγησής σας για να συνεχίσετε."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Error message for unexpected microphone errors with details.",
+    "message": "Προέκυψε ένα μη αναμενόμενο σφάλμα με το μικρόφωνό σας: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generic error message when microphone access fails for unknown reasons.",
+    "message": "Δεν είναι δυνατή η πρόσβαση στο μικρόφωνο. \nΕλέγξτε τις ρυθμίσεις της συσκευής σας και δοκιμάστε ξανά."
+  },
   "mode_accuracy": {
-    "description": "Υψηλότερη λειτουργία ακρίβειας.",
+    "description": "Highest accuracy mode.",
     "message": "ακρίβεια"
   },
+  "mode_accuracy_description": {
+    "description": "Description for the accuracy transcription mode.",
+    "message": "Υψηλότερη ακρίβεια, αλλά πιο αργή ταχύτητα μεταγραφής. \nΕπιρρεπείς σε παραισθήσεις."
+  },
   "mode_balanced": {
-    "description": "Προεπιλεγμένη λειτουργία μεταγραφής.",
+    "description": "Default transcription mode.",
     "message": "ισορροπημένος"
   },
+  "mode_balanced_description": {
+    "description": "Description for the balanced transcription mode.",
+    "message": "Καλή ισορροπία ταχύτητας και ακρίβειας για τις περισσότερες χρήσεις."
+  },
   "mode_speed": {
-    "description": "Γρηγορότερη λειτουργία μεταγραφής.",
+    "description": "Fastest transcription mode.",
     "message": "ταχύτητα"
   },
+  "mode_speed_description": {
+    "description": "Description for the speed transcription mode.",
+    "message": "Η ταχύτερη απόκριση, αλλά λιγότερο ακριβής. \nΕπιρρεπής σε διακοπή."
+  },
+  "nicknameLabel": {
+    "description": "Label for the input field to set a custom nickname for the AI assistant.",
+    "message": "Παρατσούκλι"
+  },
+  "notSignedIn": {
+    "description": "Text to show when the user is not signed in.",
+    "message": "Δεν έχει συνδεθεί"
+  },
   "preferedLanguage": {
-    "description": "Ετικέτα για έναν ελεγκτή για την επιλογή της προτιμώμενης γλώσσας μεταγραφής.",
+    "description": "Label for a control to select the prefered transcription language.",
     "message": "Γλώσσα"
   },
   "preferedModeControl": {
-    "description": "Ο τίτλος (tooltip) του ελέγχου για την επιλογή της προτιμώμενης λειτουργίας μεταγραφής.",
+    "description": "The title (tooltip) of the control to select the prefered transcription mode.",
     "message": "Επιλέξτε την προτιμώμενη λειτουργία μεταγραφής σας"
   },
   "previewProgress": {
-    "description": "Το μήνυμα που εμφανίζεται όταν ο χρήστης προεπισκόπησης μιας λειτουργίας που έχει όριο χαρακτήρων.",
+    "description": "The message to display when the user is previewing a feature that has a character limit.",
     "message": "χρησιμοποιήθηκαν $count$ χαρακτήρες από τους $limit$",
     "placeholders": {
       "count": {
@@ -245,7 +436,7 @@
     "message": "Ολοκληρώθηκε η Βήτα"
   },
   "previewStatusPaused": {
-    "description": "Το μήνυμα που εμφανίζεται όταν ο χρήστης προεπισκόπησης μιας λειτουργίας που έχει τεθεί σε παύση.",
+    "description": "The message to display when the user is previewing a feature that has been paused.",
     "message": "Η Βήτα έχει παύσει μέχρι την $resetDate$",
     "placeholders": {
       "resetDate": {
@@ -257,32 +448,187 @@
   "previewStatusUnknown": {
     "message": "Αδυναμία σύνδεσης..."
   },
+  "profile": {
+    "description": "Label for the user profile section.",
+    "message": "Προφίλ"
+  },
+  "quotaCredits": {
+    "description": "Unit label for TTS credits",
+    "message": "πιστώσεις"
+  },
+  "quotaRemaining": {
+    "description": "Label for the quota remaining progress bar",
+    "message": "Παραμένει"
+  },
+  "quotaStatusUnknown": {
+    "description": "Message shown when quota status cannot be determined",
+    "message": "Δεν είναι δυνατό να ελέγξει την κατάσταση των ποσοστώσεων"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Message shown when user is not authenticated.",
+    "message": "Συνδεθείτε για να αποκτήσετε πρόσβαση στη δημιουργία φωνής και άλλες λειτουργίες Premium"
+  },
   "readAloudButtonTitle": {
-    "description": "Ο τίτλος του κουμπιού για να διαβάσει δυνατά το κείμενο ενός μηνύματος.",
+    "description": "The title of the button to read aloud the text of a message.",
     "message": "Διάβασε Δυνατά"
   },
   "recommendedActions": {
-    "description": "Μήνυμα που προηγείται μιας λίστας με συνιστώμενες ενέργειες που ο χρήστης μπορεί να ακολουθήσει για τη διόρθωση ενός γνωστού προβλήματος.",
+    "description": "Message preceding a list of recommended actions the user may take to remediate a known issue.",
     "message": "Εν τω μεταξύ, συνιστούμε:"
   },
+  "regenerateButtonTitle": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an estimated cost.",
+    "message": "Δημιουργήστε Ήχο για $cost$ $currency$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
+    "message": "Δημιουργία Ήχου"
+  },
   "shareAnalytics": {
-    "description": "Ετικέτα για το πλαίσιο επιλογής για την ενεργοποίηση/απενεργοποίηση κοινής χρήσης αναλυτικών στοιχείων.",
+    "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Μοιραστείτε αναλυτικά στοιχεία"
   },
+  "signIn": {
+    "description": "Text for the sign in button.",
+    "message": "Συνδεθώ"
+  },
+  "signInForTTS": {
+    "description": "Prompt shown when user needs to authenticate to access text-to-speech features",
+    "message": "Συνδεθείτε για κείμενο σε ομιλία"
+  },
+  "signOut": {
+    "description": "Text for the sign out button.",
+    "message": "Αποπροσανατολίζω"
+  },
+  "signedIn": {
+    "description": "Status text shown when user is authenticated (without email).",
+    "message": "Υπογεγραμμένος"
+  },
+  "signedInAs": {
+    "description": "Status text shown when user is authenticated, including their email.",
+    "message": "Υπογράφηκε ως $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
   "soundEffects": {
-    "description": "Ετικέτα για το πλαίσιο επιλογής για την ενεργοποίηση/απενεργοποίηση ηχητικών εφέ.",
+    "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Ηχητικά εφέ"
   },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Τα ηχητικά εφέ είναι απενεργοποιημένα στον Firefox για την αποφυγή προβλημάτων με τα ηχητικά σχόλια."
+  },
+  "sttMinutesRemaining": {
+    "description": "Text showing remaining STT quota in minutes.",
+    "message": "$minutes$ λεπτό $plural$",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text to show when STT quota is exhausted.",
+    "message": "Η ποσόστωση αναγνώρισης ομιλίας εξαντλείται"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip for the STT quota progress bar.",
+    "message": "$remaining$ που παραμένει $total$ δευτερόλεπτα που απομένουν",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip for the STT quota progress bar in minutes.",
+    "message": "$remaining$ παραμένοντας $total$ λεπτά που απομένουν",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Label for the STT quota remaining display.",
+    "message": "Αναγνώριση ομιλίας"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unit for STT quota (seconds).",
+    "message": "δευτερόλεπτα"
+  },
+  "submitModeControl": {
+    "description": "The title (tooltip) of the control to select when messages should be submitted.",
+    "message": "Επιλέξτε πότε θα υποβάλετε τα μηνύματά σας"
+  },
+  "submit_mode_agent": {
+    "description": "AI-driven submission mode.",
+    "message": "μέσο"
+  },
+  "submit_mode_agent_description": {
+    "description": "Description for the AI-driven submission mode.",
+    "message": "Το $chatbot$ αποφασίζει πότε θα απαντήσει με βάση το περιβάλλον",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatic submission mode.",
+    "message": "αυτο"
+  },
+  "submit_mode_auto_description": {
+    "description": "Description for the automatic submission mode.",
+    "message": "Αυτόματη υποβολή όταν σταματήσετε να μιλάτε"
+  },
+  "submit_mode_off": {
+    "description": "Manual submission mode.",
+    "message": "εγχειρίδιο"
+  },
+  "submit_mode_off_description": {
+    "description": "Description for the manual submission mode.",
+    "message": "Υποβολή μόνο όταν πατήσετε το κουμπί"
+  },
   "toggleThemeToDarkMode": {
-    "description": "Ετικέτα για το κουμπί εναλλαγής σε σκοτεινή λειτουργία.",
+    "description": "Label for the button to toggle to dark mode.",
     "message": "Μετάβαση σε σκοτεινή λειτουργία"
   },
   "toggleThemeToLightMode": {
-    "description": "Ετικέτα για το κουμπί εναλλαγής σε λευκό θέμα.",
+    "description": "Label for the button to toggle to light mode.",
     "message": "Μεταβείτε στην λειτουργία φωτός"
   },
   "ttsCostExplanation": {
-    "description": "Η επεξήγηση που θα εμφανίζεται όταν χρησιμοποιείται η μηχανή κειμένου-προς-ομιλία για να διαβάσει δυνατά ένα μήνυμα, με το κόστος του μηνύματος.",
+    "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
     "message": "Το $product$ θα χρεώσει το $cost$ $currency$ για την ακρόαση αυτού του μηνύματος",
     "placeholders": {
       "cost": {
@@ -300,7 +646,7 @@
     }
   },
   "ttsCostExplanationFree": {
-    "description": "Η επεξήγηση που θα εμφανίζεται όταν χρησιμοποιείται μηχανή κειμένου-προς-ομιλία για να διαβάσει δυνατά ένα μήνυμα, και το μήνυμα είναι δωρεάν. Θα μπορούσε να περιέχει το όνομа του πάροχου.",
+    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free. Assumes the provider is Inflection AI.",
     "message": "Αυτός ο ήχος δημιουργείται δωρεάν από το Inflection AI",
     "placeholders": {
       "provider": {
@@ -309,8 +655,26 @@
       }
     }
   },
+  "ttsCostExplanationSayPi": {
+    "description": "The tooltip to display when the user hovers over the cost explanation link.",
+    "message": "Μάθετε πώς το $product$ χρεώνει για ήχο",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "ttsCredits": {
+    "description": "The term used for the credits currency in the text-to-speech feature.",
+    "message": "πιστώσεις"
+  },
+  "ttsDisabledSafari": {
+    "description": "Message shown when TTS is disabled in Safari",
+    "message": "Οι πολύγλωσσες φωνές δεν υποστηρίζονται αυτήν τη στιγμή στο Safari."
+  },
   "ttsPoweredBy": {
-    "description": "Το μήνυμα που εμφανίζεται όταν ο κινητήρας μετατροπής κειμένου σε ομιλία χρησιμοποιείται για να διαβάσει δυνατά ένα μήνυμα.",
+    "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Σύνθεση ομιλίας που τροφοδοτείται από $ttsEngine$",
     "placeholders": {
       "ttsEngine": {
@@ -319,320 +683,16 @@
       }
     }
   },
-  "unlockButton": {
-    "description": "Ο τίτλος (tooltip) του κουμπιού για το ξεκλείδωμα της οθόνης.",
-    "message": "Πατήστε για να ξεκλειδώσετε την οθόνη"
-  },
-  "unlockInstruction": {
-    "description": "Οδηγίες που ενημερώνουν τον χρήστη πώς να ξεκλειδώσει την οθόνη όταν είναι κλειδωμένη.",
-    "message": "Κρατήστε για να ξεκλειδώσετε."
-  },
-  "userStartedInterrupting": {
-    "description": "Μήνυμα που εμφανίζεται όταν ο χρήστης αρχίζει να μιλά ενώ το βοηθός μιλά.",
-    "message": "Προχώρα, ο $chatbot$ ακούει...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "copiedButtonTitle": {
-    "message": "Αντιγράφηκε!",
-    "description": "Ο τίτλος του κουμπιού για να δείξει ότι το κείμενο ενός μηνύματος έχει αντιγραφεί στο πρόχειρο."
-  },
-  "copyButtonTitle": {
-    "message": "Αντιγραφή",
-    "description": "Ο τίτλος του κουμπιού για να αντιγράψετε το κείμενο ενός μηνύματος στο πρόχειρο."
-  },
-  "voiceIntroduction_joey": {
-    "message": "Hola! \nΣυμβουλή! \nεσυ! \nΕίμαι ο Πι, ο πολυγλωσσικός σας βοηθός τεχνητής νοημοσύνης. \nΜε 32 γλώσσες υπό τις διαταγές μου, μπορούμε να εξερευνήσουμε ιδέες και πολιτισμούς από όλο τον κόσμο. \nΠώς σας φαίνεται αυτή η φωνή;",
-    "description": "Εισαγωγή για τη φωνή του Joey."
-  },
-  "voiceIntroduction_paola": {
-    "message": "Ciao! \nBonjour! \nΓειά σου! \nΕίμαι ο Πι και μπορώ να συνομιλώ άπταιστα σε 32 γλώσσες. \nΑπό τα αραβικά έως τα ουκρανικά, είμαι εδώ για να σπάσω τα γλωσσικά εμπόδια. \nΠώς σας ακούγεται αυτή η φωνή;",
-    "description": "Εισαγωγή για τη φωνή της Πάολα."
-  },
-  "regenerateButtonTitle": {
-    "message": "Δημιουργήστε Ήχο για $cost$ $currency$",
-    "description": "Ο τίτλος του κουμπιού για να αναδημιουργήσετε τον ήχο ενός μηνύματος. Μπορεί να προκύψει εκτιμώμενο κόστος.",
-    "placeholders": {
-      "cost": {
-        "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
-      }
-    }
-  },
-  "regenerateButtonTitleFree": {
-    "message": "Δημιουργία Ήχου",
-    "description": "Ο τίτλος του κουμπιού για να αναδημιουργήσετε τον ήχο ενός μηνύματος. Μπορεί να προκύψει αόριστη δαπάνη."
-  },
-  "assistantIsWriting": {
-    "description": "Το μήνυμα εμφανίζεται όταν ο βοηθός πληκτρολογεί την απάντησή του.",
-    "message": "Το $chatbot$ γράφει...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "ttsCostExplanationSayPi": {
-    "description": "Η συμβουλή εργαλείου που εμφανίζεται όταν ο χρήστης τοποθετεί το δείκτη του ποντικιού πάνω από τον σύνδεσμο εξήγησης κόστους.",
-    "placeholders": {
-      "product": {
-        "content": "$1",
-        "example": "Say, Pi"
-      }
-    },
-    "message": "Μάθετε πώς το $product$ χρεώνει για ήχο"
-  },
-  "interruptionsFirefoxDisabled": {
-    "message": "Οι διακοπές δεν υποστηρίζονται αυτήν τη στιγμή στον Firefox."
-  },
-  "mode_accuracy_description": {
-    "description": "Περιγραφή για τη λειτουργία μεταγραφής ακρίβειας.",
-    "message": "Υψηλότερη ακρίβεια, αλλά πιο αργή ταχύτητα μεταγραφής. \nΕπιρρεπείς σε παραισθήσεις."
-  },
-  "mode_balanced_description": {
-    "description": "Περιγραφή για τη λειτουργία ισορροπημένης μεταγραφής.",
-    "message": "Καλή ισορροπία ταχύτητας και ακρίβειας για τις περισσότερες χρήσεις."
-  },
-  "mode_speed_description": {
-    "description": "Περιγραφή για τη λειτουργία μεταγραφής ταχύτητας.",
-    "message": "Η ταχύτερη απόκριση, αλλά λιγότερο ακριβής. \nΕπιρρεπής σε διακοπή."
-  },
-  "soundEffectsFirefoxDisabled": {
-    "message": "Τα ηχητικά εφέ είναι απενεργοποιημένα στον Firefox για την αποφυγή προβλημάτων με τα ηχητικά σχόλια."
-  },
-  "assistantIsSpeakingWithManualInterrupt": {
-    "description": "Το μήνυμα εμφανίζεται όταν ο βοηθός εκφωνεί την απόκρισή του και είναι δυνατή η μη αυτόματη διακοπή.",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "message": "Το $chatbot$ μιλάει, πατήστε για διακοπή..."
-  },
-  "callInterruptible": {
-    "description": "Η συμβουλή εργαλείου που εμφανίζεται στο κουμπί κλήσης όταν μια κλήση βρίσκεται σε εξέλιξη και είναι δυνατή η μη αυτόματη διακοπή.",
-    "message": "Πατήστε για διακοπή"
-  },
-  "microphoneErrorConstraints": {
-    "description": "Μήνυμα σφάλματος όταν δεν μπορούν να ικανοποιηθούν οι περιορισμοί μικροφώνου.",
-    "message": "Οι ρυθμίσεις του μικροφώνου σας δεν πληρούν τις απαιτούμενες προδιαγραφές. \nΔοκιμάστε να χρησιμοποιήσετε διαφορετικό μικρόφωνο ή να προσαρμόσετε τις ρυθμίσεις ήχου."
-  },
-  "microphoneErrorGeneric": {
-    "description": "Γενικό μήνυμα σφάλματος με λεπτομέρειες όταν αποτυγχάνει η πρόσβαση στο μικρόφωνο.",
-    "message": "Αποτυχία πρόσβασης στο μικρόφωνο: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Permission denied"
-      }
-    }
-  },
-  "microphoneErrorInUse": {
-    "description": "Μήνυμα σφάλματος όταν το μικρόφωνο χρησιμοποιείται ήδη από άλλη εφαρμογή.",
-    "message": "Δεν είναι δυνατή η πρόσβαση στο μικρόφωνο επειδή χρησιμοποιείται από άλλη εφαρμογή. \nΚλείστε άλλες εφαρμογές που ενδέχεται να χρησιμοποιούν το μικρόφωνό σας."
-  },
-  "microphoneErrorNotFound": {
-    "description": "Μήνυμα σφάλματος όταν δεν βρέθηκε συσκευή μικροφώνου.",
-    "message": "Δεν εντοπίστηκε μικρόφωνο. \nΣυνδέστε ένα μικρόφωνο και δοκιμάστε ξανά."
-  },
-  "microphoneErrorPermissionDenied": {
-    "description": "Μήνυμα σφάλματος όταν ο χρήστης ή το σύστημα αρνείται την άδεια του μικροφώνου.",
-    "message": "Απαιτείται πρόσβαση στο μικρόφωνο. \nΕπιτρέψτε την πρόσβαση στο μικρόφωνο στις ρυθμίσεις του προγράμματος περιήγησής σας για να συνεχίσετε."
-  },
-  "microphoneErrorUnexpected": {
-    "description": "Μήνυμα σφάλματος για απροσδόκητα σφάλματα μικροφώνου με λεπτομέρειες.",
-    "message": "Προέκυψε ένα μη αναμενόμενο σφάλμα με το μικρόφωνό σας: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Device busy"
-      }
-    }
-  },
-  "microphoneErrorUnknown": {
-    "description": "Γενικό μήνυμα σφάλματος όταν η πρόσβαση στο μικρόφωνο αποτυγχάνει για άγνωστους λόγους.",
-    "message": "Δεν είναι δυνατή η πρόσβαση στο μικρόφωνο. \nΕλέγξτε τις ρυθμίσεις της συσκευής σας και δοκιμάστε ξανά."
-  },
-  "ttsDisabledSafari": {
-    "message": "Οι πολύγλωσσες φωνές δεν υποστηρίζονται αυτήν τη στιγμή στο Safari.",
-    "description": "Το μήνυμα εμφανίζεται όταν το TTS είναι απενεργοποιημένο στο Safari"
-  },
-  "extensionSettings": {
-    "message": "Ρυθμίσεις",
-    "description": "Το κείμενο του κουμπιού για το άνοιγμα των ρυθμίσεων της επέκτασης."
-  },
-  "submitModeControl": {
-    "description": "Ο τίτλος (επεξήγηση εργαλείου) του στοιχείου ελέγχου για να επιλέξετε πότε πρέπει να υποβάλλονται μηνύματα.",
-    "message": "Επιλέξτε πότε θα υποβάλετε τα μηνύματά σας"
-  },
-  "submit_mode_agent": {
-    "description": "Λειτουργία υποβολής βάσει AI.",
-    "message": "μέσο"
-  },
-  "submit_mode_agent_description": {
-    "description": "Περιγραφή για τη λειτουργία υποβολής που βασίζεται σε AI.",
-    "message": "Το $chatbot$ αποφασίζει πότε θα απαντήσει με βάση το περιβάλλον",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "submit_mode_auto": {
-    "description": "Λειτουργία αυτόματης υποβολής.",
-    "message": "αυτο"
-  },
-  "submit_mode_auto_description": {
-    "description": "Περιγραφή για τη λειτουργία αυτόματης υποβολής.",
-    "message": "Αυτόματη υποβολή όταν σταματήσετε να μιλάτε"
-  },
-  "submit_mode_off": {
-    "description": "Λειτουργία χειροκίνητης υποβολής.",
-    "message": "εγχειρίδιο"
-  },
-  "submit_mode_off_description": {
-    "description": "Περιγραφή για τη λειτουργία μη αυτόματης υποβολής.",
-    "message": "Υποβολή μόνο όταν πατήσετε το κουμπί"
-  },
-  "nicknameLabel": {
-    "message": "Παρατσούκλι",
-    "description": "Ετικέτα για το πεδίο εισόδου για να ρυθμίσετε ένα προσαρμοσμένο ψευδώνυμο για τον βοηθό AI."
-  },
-  "greeting": {
-    "description": "Χαιρετισμό μηνύματος που εμφανίζεται όταν ο χρήστης έχει εγγραφεί",
-    "message": "Γεια, $name$!",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John"
-      }
-    }
-  },
-  "notSignedIn": {
-    "description": "Κείμενο για να εμφανιστεί όταν ο χρήστης δεν έχει εγγραφεί.",
-    "message": "Δεν έχει συνδεθεί"
-  },
-  "profile": {
-    "description": "Ετικέτα για την ενότητα προφίλ χρήστη.",
-    "message": "Προφίλ"
-  },
-  "quotaCredits": {
-    "description": "Ετικέτα μονάδας για πιστώσεις TTS",
-    "message": "πιστώσεις"
-  },
-  "quotaRemaining": {
-    "description": "Ετικέτα για την εναπομένουσα γραμμή προόδου",
-    "message": "Παραμένει"
-  },
-  "quotaStatusUnknown": {
-    "description": "Το μήνυμα που εμφανίζεται όταν η κατάσταση της ποσόστωσης δεν μπορεί να προσδιοριστεί",
-    "message": "Δεν είναι δυνατό να ελέγξει την κατάσταση των ποσοστώσεων"
-  },
-  "quotaUnauthenticatedMessage": {
-    "description": "Το μήνυμα εμφανίζεται όταν ο χρήστης δεν έχει πιστοποιηθεί.",
-    "message": "Συνδεθείτε για να αποκτήσετε πρόσβαση στη δημιουργία φωνής και άλλες λειτουργίες Premium"
-  },
-  "signIn": {
-    "description": "Κείμενο για το κουμπί SOCT IN.",
-    "message": "Συνδεθώ"
-  },
-  "signOut": {
-    "description": "Κείμενο για το κουμπί Sign Out.",
-    "message": "Αποπροσανατολίζω"
-  },
-  "signedIn": {
-    "description": "Το κείμενο κατάστασης εμφανίζεται όταν ο χρήστης έχει πιστοποιηθεί (χωρίς email).",
-    "message": "Υπογεγραμμένος"
-  },
-  "signedInAs": {
-    "description": "Το κείμενο κατάστασης εμφανίζεται όταν ο χρήστης έχει πιστοποιηθεί, συμπεριλαμβανομένου του email του.",
-    "message": "Υπογράφηκε ως $email$",
-    "placeholders": {
-      "email": {
-        "content": "$1",
-        "example": "user@example.com"
-      }
-    }
-  },
-  "sttMinutesRemaining": {
-    "description": "Κείμενο που δείχνει την υπόλοιπη ποσόστωση STT σε λίγα λεπτά.",
-    "message": "$minutes$ λεπτό $plural$",
-    "placeholders": {
-      "minutes": {
-        "content": "$1",
-        "example": "5"
-      },
-      "plural": {
-        "content": "$2",
-        "example": "s"
-      }
-    }
-  },
-  "sttQuotaExhausted": {
-    "description": "Κείμενο για εμφάνιση όταν εξαντλείται η ποσόστωση STT.",
-    "message": "Η ποσόστωση αναγνώρισης ομιλίας εξαντλείται"
-  },
-  "sttQuotaProgress": {
-    "description": "Tooltip για τη γραμμή προόδου των ποσοστώσεων STT.",
-    "message": "$remaining$ που παραμένει $total$ δευτερόλεπτα που απομένουν",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "100"
-      },
-      "total": {
-        "content": "$2",
-        "example": "300"
-      }
-    }
-  },
-  "sttQuotaProgressMinutes": {
-    "description": "Tooltip για τη γραμμή προόδου των ποσοστώσεων STT σε λίγα λεπτά.",
-    "message": "$remaining$ παραμένοντας $total$ λεπτά που απομένουν",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "5"
-      },
-      "total": {
-        "content": "$2",
-        "example": "60"
-      }
-    }
-  },
-  "sttQuotaRemaining": {
-    "description": "Ετικέτα για την εναπομένουσα οθόνη STT.",
-    "message": "Αναγνώριση ομιλίας"
-  },
-  "sttQuotaSeconds": {
-    "description": "Μονάδα για ποσόστωση STT (δευτερόλεπτα).",
-    "message": "δευτερόλεπτα"
-  },
-  "ttsCredits": {
-    "description": "Ο όρος που χρησιμοποιείται για το νόμισμα των πιστώσεων στη λειτουργία κειμένου προς ομιλία.",
-    "message": "πιστώσεις"
-  },
   "ttsQuotaCharacters": {
-    "description": "Μονάδα για ποσοστώσεις TTS (χαρακτήρες).",
+    "description": "Unit for TTS quota (characters).",
     "message": "πιστώσεις"
   },
   "ttsQuotaExhausted": {
-    "description": "Κείμενο για να δείξει πότε εξαντλείται η ποσόστωση TTS.",
+    "description": "Text to show when TTS quota is exhausted.",
     "message": "Εξαντλημένη με φωνητική ποσόστωση"
   },
   "ttsQuotaProgress": {
-    "description": "Tooltip για τη γραμμή προόδου των ποσοστώσεων TTS.",
+    "description": "Tooltip for the TTS quota progress bar.",
     "message": "$remaining$ παραμένοντας $total$ χαρακτήρες που απομένουν",
     "placeholders": {
       "remaining": {
@@ -646,121 +706,243 @@
     }
   },
   "ttsQuotaRemaining": {
-    "description": "Ετικέτα για την εναπομένουσα οθόνη TTS.",
+    "description": "Label for the TTS quota remaining display.",
     "message": "Παραγωγή φωνής"
   },
-  "upgradeButton": {
-    "description": "Κείμενο για το κουμπί για την αναβάθμιση του σχεδίου όταν εξαντληθεί η ποσόστωση.",
-    "message": "Αναβάθμιση"
-  },
-  "viewDetails": {
-    "description": "Κείμενο για τον σύνδεσμο για να δείτε πλήρεις λεπτομέρειες σχετικά με τον πίνακα ελέγχου.",
-    "message": "Προβολή λεπτομερειών"
-  },
-  "clickToCollapse": {
-    "description": "Το κείμενο που υποδεικνύει ότι ο χρήστης μπορεί να κάνει κλικ για να αποκρύψει το εκτεταμένο περιεχόμενο.",
-    "message": "Κάντε κλικ για κατάρρευση"
-  },
-  "clickToExpand": {
-    "description": "Το κείμενο που υποδεικνύει ότι ο χρήστης μπορεί να κάνει κλικ για να εμφανίσει περιεχόμενο που έχει καταρρεύσει.",
-    "message": "Κάντε κλικ για επέκταση"
-  },
-  "instructionLabel_context": {
-    "description": "Φιλική ετικέτα για οδηγίες χρήστη που παρέχει πληροφορίες φόντου.",
-    "message": "Παροχή πλαισίου ..."
-  },
-  "instructionLabel_expectations": {
-    "description": "Φιλική ετικέτα για οδηγίες χρήστη που καθορίζει τι θέλει ο χρήστης.",
-    "message": "Διευκρίνιση των προσδοκιών ..."
-  },
-  "instructionLabel_focusing": {
-    "description": "Φιλική ετικέτα για οδηγίες χρήστη που περιορίζει το πεδίο της συνομιλίας.",
-    "message": "Εστίαση της συζήτησης ..."
-  },
-  "instructionLabel_guardrails": {
-    "description": "Φιλική ετικέτα για οδηγίες χρήστη που καθορίζει τα όρια για τη συζήτηση.",
-    "message": "Ρύθμιση φύλαξης ..."
-  },
-  "instructionLabel_guiding": {
-    "description": "Φιλική ετικέτα για οδηγίες χρήστη που καθοδηγεί τον τρόπο με τον οποίο πρέπει να ανταποκριθεί το AI.",
-    "message": "Κατευθυντήριες απαντήσεις ..."
-  },
-  "instructionLabel_nudge": {
-    "description": "Φιλική ετικέτα για οδηγίες χρήστη που προτείνει απαλά μια κατεύθυνση.",
-    "message": "Δίνοντας μια ώθηση ..."
-  },
-  "instructionLabel_steering": {
-    "description": "Φιλική ετικέτα για οδηγίες χρήστη που καθοδηγεί την κατεύθυνση της συνομιλίας.",
-    "message": "Διεύθυνση της συνομιλίας ..."
-  },
-  "maintenanceLabel_holding": {
-    "description": "Φιλική ετικέτα για καταρρεύσεις βοηθού μηνύματος συντήρησης.",
-    "message": "Κρατώντας αυτή τη σκέψη ..."
-  },
-  "maintenanceLabel_mental_note": {
-    "description": "Φιλική ετικέτα για καταρρεύσεις βοηθού μηνύματος συντήρησης.",
-    "message": "Κάνοντας μια διανοητική σημείωση ..."
-  },
-  "maintenanceLabel_processing": {
-    "description": "Φιλική ετικέτα για καταρρεύσεις βοηθού μηνύματος συντήρησης.",
-    "message": "Επεξεργασία στο παρασκήνιο ..."
-  },
-  "maintenanceLabel_remembering": {
-    "description": "Φιλική ετικέτα για καταρρεύσεις βοηθού μηνύματος συντήρησης.",
-    "message": "Θυμόμαστε αυτήν τη λεπτομέρεια ..."
-  },
-  "maintenanceLabel_saving": {
-    "description": "Φιλική ετικέτα για καταρρεύσεις βοηθού μηνύματος συντήρησης.",
-    "message": "Αποθήκευση αυτής της σκέψης για αργότερα ..."
-  },
-  "maintenanceLabel_tracking": {
-    "description": "Φιλική ετικέτα για καταρρεύσεις βοηθού μηνύματος συντήρησης.",
-    "message": "Παρακολούθηση του πλαισίου ..."
-  },
-  "maintenanceLabel_tucking": {
-    "description": "Φιλική ετικέτα για καταρρεύσεις βοηθού μηνύματος συντήρησης.",
-    "message": "Τοποθετώντας αυτό μακριά ..."
-  },
-  "disableTTS": {
-    "description": "Ετικέτα για την επιλογή απενεργοποίησης κειμένου σε ομιλία",
-    "message": "Απενεργοποιήστε το κείμενο σε ομιλία"
-  },
-  "signInForTTS": {
-    "description": "Εμφανίζεται όταν ο χρήστης χρειάζεται να πιστοποιήσει την πρόσβαση σε λειτουργίες κειμένου σε ομιλία",
-    "message": "Συνδεθείτε για κείμενο σε ομιλία"
-  },
   "ttsVoice": {
-    "description": "Ετικέτα που περιγράφει μια επιλογή φωνής κειμένου σε ομιλία στο μενού",
+    "description": "Label describing a text-to-speech voice option in the menu",
     "message": "Φωνή TTS"
   },
-  "voiceOff": {
-    "description": "Ετικέτα για το πότε είναι απενεργοποιημένη ετικέτα με κείμενο σε ομιλία",
-    "message": "Εκφοβίζω"
+  "unlockButton": {
+    "description": "The title (tooltip) of the button to unlock the screen.",
+    "message": "Πατήστε για να ξεκλειδώσετε την οθόνη"
   },
-  "voiceSettings": {
-    "description": "Το κείμενο του στοιχείου μενού για πρόσβαση σε ρυθμίσεις που σχετίζονται με τη φωνή.",
-    "message": "Ρυθμίσεις φωνής"
+  "unlockInstruction": {
+    "description": "Instructions telling the user how to unlock the screen when locked.",
+    "message": "Κρατήστε για να ξεκλειδώσετε."
   },
-  "addCredits": {
-    "description": "Κείμενο για σύνδεση για να προσθέσετε περισσότερες φωνητικές πιστώσεις",
-    "message": "Προσθέστε πιστώσεις"
+  "upgradeButton": {
+    "description": "Text for the button to upgrade the plan when quota is exhausted.",
+    "message": "Αναβάθμιση"
   },
   "upgradeForTTS": {
-    "description": "Εμφανίζεται όταν ο χρήστης πρέπει να αναβαθμίσει για να αποκτήσει πιστώσεις κειμένου σε ομιλία",
+    "description": "Prompt shown when user needs to upgrade to obtain text-to-speech credits",
     "message": "Αναβάθμιση για τη δημιουργία φωνής"
   },
-  "voicePaused": {
-    "description": "Κείμενο που εμφανίζεται όταν η φωνή είναι παύση λόγω ανεπαρκών πιστώσεων",
-    "message": "Η φωνή σταμάτησε -"
-  },
-  "assistantIsListeningAttentively": {
-    "description": "Εμφανίζεται το μήνυμα όταν ο βοηθός ακούει για ομιλία σε λειτουργία πράκτορα.",
-    "message": "Το $chatbot$ ακούει προσεκτικά ...",
+  "userStartedInterrupting": {
+    "description": "Message displayed when the user starts speaking while the assistant is speaking.",
+    "message": "Προχώρα, ο $chatbot$ ακούει...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
-        "example": "Claude"
+        "example": "Pi"
       }
     }
+  },
+  "vadDetailActivatingMicrophone": {
+    "description": "VAD detail when activating the microphone.",
+    "message": "Activating microphone..."
+  },
+  "vadDetailCommLinkFailed": {
+    "description": "VAD detail when the communication port link fails.",
+    "message": "Communication link failed."
+  },
+  "vadDetailDeactivatingMicrophone": {
+    "description": "VAD detail when deactivating the microphone.",
+    "message": "Deactivating microphone..."
+  },
+  "vadDetailFailedToReconnectVADService": {
+    "description": "VAD detail when re-establishing connection fails.",
+    "message": "Failed to reconnect VAD service."
+  },
+  "vadDetailInitError": {
+    "description": "VAD detail for an initialization error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to connect to VAD service"
+      }
+    }
+  },
+  "vadDetailInitErrorPromise": {
+    "description": "VAD detail for an initialization promise error.",
+    "message": "Init Error: Promise error"
+  },
+  "vadDetailInitErrorUnknown": {
+    "description": "VAD detail for an unknown initialization error.",
+    "message": "Init Error: Unknown"
+  },
+  "vadDetailInitializedMode": {
+    "description": "VAD detail showing initialization mode.",
+    "message": "",
+    "placeholders": {
+      "mode": {
+        "content": "$1",
+        "example": "Agent"
+      }
+    }
+  },
+  "vadDetailInitializedModeNA": {
+    "description": "VAD detail showing initialization mode as N/A.",
+    "message": "Initialized (Mode: N/A)"
+  },
+  "vadDetailNonSpeechAudioDetected": {
+    "description": "VAD detail for non-speech audio detection.",
+    "message": "Non-speech audio detected"
+  },
+  "vadDetailReleasingVADResources": {
+    "description": "VAD detail when releasing VAD resources.",
+    "message": "Releasing VAD resources..."
+  },
+  "vadDetailRequestingVADSetup": {
+    "description": "VAD detail when requesting setup.",
+    "message": "Requesting VAD setup..."
+  },
+  "vadDetailSpeechDetected": {
+    "description": "VAD detail when speech has been detected.",
+    "message": "Speech detected"
+  },
+  "vadDetailSpeechEndedDuration": {
+    "description": "VAD detail indicating speech ended and its duration.",
+    "message": "",
+    "placeholders": {
+      "duration": {
+        "content": "$1",
+        "example": "1000"
+      }
+    }
+  },
+  "vadDetailStartError": {
+    "description": "VAD detail for a start error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to start VAD service"
+      }
+    }
+  },
+  "vadDetailStartErrorPromise": {
+    "description": "VAD detail for a start promise error.",
+    "message": "Start Error: Promise error"
+  },
+  "vadDetailStartErrorUnknown": {
+    "description": "VAD detail for an unknown start error.",
+    "message": "Start Error: Unknown"
+  },
+  "vadDetailStopError": {
+    "description": "VAD detail for a stop error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to stop VAD service"
+      }
+    }
+  },
+  "vadDetailStopErrorPromise": {
+    "description": "VAD detail for a stop promise error.",
+    "message": "Stop Error: Promise error"
+  },
+  "vadDetailStopErrorUnknown": {
+    "description": "VAD detail for an unknown stop error.",
+    "message": "Stop Error: Unknown"
+  },
+  "vadDetailUnknownVADError": {
+    "description": "VAD detail for an unknown error from the VAD module.",
+    "message": "Unknown VAD error"
+  },
+  "vadDetailVADProcessingStopped": {
+    "description": "VAD detail indicating VAD processing has stopped.",
+    "message": "VAD processing stopped."
+  },
+  "vadDetailVADServiceDisconnected": {
+    "description": "VAD detail when the service disconnects.",
+    "message": "VAD service disconnected. Try reloading."
+  },
+  "vadDetailVADServiceNotConnected": {
+    "description": "VAD detail when the service is not connected.",
+    "message": "VAD service not connected. Try reloading."
+  },
+  "vadDetailVADServiceShutdown": {
+    "description": "VAD detail indicating VAD service has been shut down.",
+    "message": "VAD service shut down."
+  },
+  "vadDetailWaitingForSpeech": {
+    "description": "VAD detail when waiting for user to speak.",
+    "message": "Waiting for speech"
+  },
+  "vadStatusDestroyed": {
+    "description": "VAD status when destroyed.",
+    "message": "Destroyed"
+  },
+  "vadStatusError": {
+    "description": "Generic VAD error status.",
+    "message": "Error"
+  },
+  "vadStatusFailed": {
+    "description": "Generic VAD failure status.",
+    "message": "Failed"
+  },
+  "vadStatusInitializing": {
+    "description": "VAD status when initializing.",
+    "message": "Initializing"
+  },
+  "vadStatusListening": {
+    "description": "VAD status when actively listening.",
+    "message": "Listening"
+  },
+  "vadStatusMisfire": {
+    "description": "VAD status when a misfire (non-speech) is detected.",
+    "message": "Misfire"
+  },
+  "vadStatusProcessing": {
+    "description": "VAD status when processing audio.",
+    "message": "Processing"
+  },
+  "vadStatusReady": {
+    "description": "VAD status when ready and waiting.",
+    "message": "Ready"
+  },
+  "vadStatusShuttingDown": {
+    "description": "VAD status when shutting down.",
+    "message": "Shutting down"
+  },
+  "vadStatusStarting": {
+    "description": "VAD status when starting.",
+    "message": "Starting"
+  },
+  "vadStatusStopped": {
+    "description": "VAD status when stopped.",
+    "message": "Stopped"
+  },
+  "vadStatusStopping": {
+    "description": "VAD status when stopping.",
+    "message": "Stopping"
+  },
+  "viewDetails": {
+    "description": "Text for the link to view full quota details on the dashboard.",
+    "message": "Προβολή λεπτομερειών"
+  },
+  "voiceIntroduction_joey": {
+    "description": "Introduction for the Joey voice.",
+    "message": "Hola! \nΣυμβουλή! \nεσυ! \nΕίμαι ο Πι, ο πολυγλωσσικός σας βοηθός τεχνητής νοημοσύνης. \nΜε 32 γλώσσες υπό τις διαταγές μου, μπορούμε να εξερευνήσουμε ιδέες και πολιτισμούς από όλο τον κόσμο. \nΠώς σας φαίνεται αυτή η φωνή;"
+  },
+  "voiceIntroduction_paola": {
+    "description": "Introduction for the Paola voice.",
+    "message": "Ciao! \nBonjour! \nΓειά σου! \nΕίμαι ο Πι και μπορώ να συνομιλώ άπταιστα σε 32 γλώσσες. \nΑπό τα αραβικά έως τα ουκρανικά, είμαι εδώ για να σπάσω τα γλωσσικά εμπόδια. \nΠώς σας ακούγεται αυτή η φωνή;"
+  },
+  "voiceOff": {
+    "description": "Label for when text-to-speech is disabled",
+    "message": "Εκφοβίζω"
+  },
+  "voicePaused": {
+    "description": "Text shown when voice is paused due to insufficient credits",
+    "message": "Η φωνή σταμάτησε -"
+  },
+  "voiceSettings": {
+    "description": "The text of the menu item to access voice-related settings.",
+    "message": "Ρυθμίσεις φωνής"
   }
 }

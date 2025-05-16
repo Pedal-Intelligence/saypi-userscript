@@ -1,34 +1,38 @@
 {
   "activityCheckButton": {
-    "description": "Tekst gumba koji pokazuje da je korisnik još uvijek prisutan.",
+    "description": "The text of the button to indicate that the user is still present.",
     "message": "Da, još sam ovdje!"
   },
   "activityCheckMessage": {
-    "description": "Poruka za prikaz kada razgovor traje neuobičajeno dugo.",
+    "description": "The message to display when the conversation has been going on unusually long.",
     "message": "Vau, ovo je dug razgovor. Jeste li još uvijek tu, ili razgovaramo sami sa sobom?"
   },
+  "addCredits": {
+    "description": "Text for link to add more voice credits",
+    "message": "Dodajte kredite"
+  },
   "allowInterruptions": {
-    "description": "Oznaka za potvrdni okvir za omogućavanje/onemogućavanje dopuštanja korisniku da prekida Pi-ove odgovore govorenjem.",
+    "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Prekidljiv"
   },
   "appDescription": {
-    "description": "Opis aplikacije.",
+    "description": "The description of the application.",
     "message": "Glasovna kontrola za PI i Claude. Govorite prirodno, dobijte životne odgovore. Samo to reci."
   },
   "appName": {
-    "description": "Naziv aplikacije.",
+    "description": "The name of the application.",
     "message": "Say, Pi"
   },
   "applicationStatusIssue": {
-    "description": "Poruka za prikaz kada aplikacija ima problema.",
+    "description": "Message to display when the application is experiencing issues.",
     "message": "Upozorenje o problemu s sustavom"
   },
   "applicationStatusUnknown": {
-    "description": "Poruka za prikaz kada se status aplikacije ne može odrediti. Npr. kada je klijent izvan mreže.",
+    "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Status aplikacije nepoznat"
   },
   "assistantIsListening": {
-    "description": "Poruka prikazana kada asistent sluša govor.",
+    "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ sluša...",
     "placeholders": {
       "chatbot": {
@@ -37,8 +41,18 @@
       }
     }
   },
+  "assistantIsListeningAttentively": {
+    "description": "Message displayed when the assistant is listening for speech in agent mode.",
+    "message": "$chatbot$ pažljivo sluša ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
   "assistantIsSpeaking": {
-    "description": "Poruka prikazana kada asistent izgovara svoj odgovor.",
+    "description": "Message displayed when the assistant is speaking its response.",
     "message": "$chatbot$ govori...",
     "placeholders": {
       "chatbot": {
@@ -47,8 +61,18 @@
       }
     }
   },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Message displayed when the assistant is speaking its response and manual interruption is possible.",
+    "message": "$chatbot$ govori, dodirnite za prekidanje...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "assistantIsThinking": {
-    "description": "Poruka prikazana kada asistent priprema svoj odgovor.",
+    "description": "Message displayed when the assistant is preparing its response.",
     "message": "$chatbot$ razmišlja...",
     "placeholders": {
       "chatbot": {
@@ -57,8 +81,18 @@
       }
     }
   },
+  "assistantIsWriting": {
+    "description": "Message displayed when the assistant is typing its response.",
+    "message": "$chatbot$ piše...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "audioConnected": {
-    "description": "Poruka prikazana kada je mikrofon povezan",
+    "description": "Message displayed when a microphone is connected",
     "message": "$microphone$ povezan",
     "placeholders": {
       "microphone": {
@@ -68,7 +102,7 @@
     }
   },
   "audioInputError": {
-    "description": "Poruka prikazana kada audio rezultira praznom transkripcijom - obično je rezultat filtriranja.",
+    "description": "Message displayed when audio transcription failed - usually the result of an ASR or LLM API error.",
     "message": "Hmm, $chatbot$ imao je blagi štucanje. \nMožete li to pokušati ponovo reći?",
     "placeholders": {
       "chatbot": {
@@ -78,7 +112,7 @@
     }
   },
   "audioReconnecting": {
-    "description": "Poruka prikazana prilikom povezivanja s novim mikrofonom",
+    "description": "Message displayed when connecting to a new microphone",
     "message": "Prelazak na $microphone$...",
     "placeholders": {
       "microphone": {
@@ -88,19 +122,23 @@
     }
   },
   "autoSubmit": {
-    "description": "Oznaka za potvrdni okvir za omogućavanje/onemogućavanje automatskog slanja upita.",
+    "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Automatsko slanje"
   },
   "callError": {
-    "description": "Opis alata za prikaz na gumbu za poziv kada se dogodi nefatalna greška.",
+    "description": "The tooltip to display on the call button when a non-fatal error occurs.",
     "message": "Naišli smo na neopasnu grešku. Ne paničarite, još uvijek vas slušamo."
   },
   "callInProgress": {
-    "description": "Opis alata za prikaz na gumbu za poziv kada je poziv u tijeku.",
+    "description": "The tooltip to display on the call button when a call is in progress.",
     "message": "Završi razgovor bez upotrebe ruku"
   },
+  "callInterruptible": {
+    "description": "The tooltip to display on the call button when a call is in progress and manual interruption is possible.",
+    "message": "Dodirnite za prekid"
+  },
   "callNotStarted": {
-    "description": "Opis alata za prikaz na gumbu za poziv prije nego što se poziv pokrene.",
+    "description": "The tooltip to display on the call button before a call is started.",
     "message": "Pokrenite razgovor bez upotrebe ruku s $chatbot$",
     "placeholders": {
       "chatbot": {
@@ -110,12 +148,20 @@
     }
   },
   "callStarting": {
-    "description": "Tekst za prikaz na alatnoj traci gumba za poziv i u području upita kada se poziv pokreće.",
+    "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Povezivanje..."
   },
   "checkingApplicationStatus": {
-    "description": "Poruka za prikaz dok se određuje status sustava, npr. tijekom učitavanja.",
+    "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Provjera statusa aplikacije..."
+  },
+  "clickToCollapse": {
+    "description": "Text indicating user can click to hide expanded content.",
+    "message": "Kliknite za kolaps"
+  },
+  "clickToExpand": {
+    "description": "Text indicating user can click to show collapsed content.",
+    "message": "Kliknite za proširenje"
   },
   "consentAskParticipate": {
     "message": "Želite li sudjelovati?"
@@ -151,27 +197,39 @@
     "message": "Pročitajte našu Politiku privatnosti"
   },
   "continueUnlocking": {
-    "description": "Upute koje korisniku govore kako nastaviti jednom kada su počeli pritiskati gumb za otključavanje.",
+    "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Nastavite držati za otključavanje..."
   },
+  "copiedButtonTitle": {
+    "description": "The title of the button to indicate that the text of a message has been copied to the clipboard.",
+    "message": "Kopirano!"
+  },
+  "copyButtonTitle": {
+    "description": "The title of the button to copy the text of a message to the clipboard.",
+    "message": "Kopiraj"
+  },
   "currencyUSDAbbreviation": {
-    "description": "Kratica za američki dolar.",
+    "description": "The abbreviation for the US dollar.",
     "message": "USD"
   },
   "currentCharges": {
-    "description": "Izraz koji se koristi za opisivanje trenutnih troškova (tekući zbroj) koje je korisnik akumulirao.",
+    "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Trenutne naknade"
   },
+  "disableTTS": {
+    "description": "Label for the option to turn off text-to-speech",
+    "message": "Onemogućite tekst u govor"
+  },
   "dismissAlert": {
-    "description": "Oznaka za gumb za odbacivanje upozorenja o problemu sa sustavom.",
+    "description": "Label for the button to dismiss a system issue alert.",
     "message": "Odbaci"
   },
   "enableTTS": {
-    "description": "Oznaka za potvrdni okvir za omogućavanje/onemogućavanje teksta u govor.",
+    "description": "Label for the checkbox to enable/disable text-to-speech.",
     "message": "Višejezični glasovi"
   },
   "enhancedVoice": {
-    "description": "Naslov (opis alata) za Say, Pi poboljšane glasove.",
+    "description": "Title (tooltip) for Say, Pi enhanced voices.",
     "message": "Glas poboljšan $product$",
     "placeholders": {
       "product": {
@@ -181,51 +239,184 @@
     }
   },
   "enterImmersiveModeLong": {
-    "description": "Aria-label i naslov gumba za ulazak u uronjeni način na mobilnim uređajima.",
+    "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
     "message": "Uđite u uronjeni način rada"
   },
   "enterImmersiveModeShort": {
-    "description": "Tekst gumba za ulazak u uronjeni način na stolnom računalu.",
+    "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Uranjanje"
   },
   "exitImmersiveModeLong": {
-    "description": "Aria-label i naslov gumba za izlazak iz uronjenog načina rada na mobilnim uređajima, natrag u tekstualni radni način.",
+    "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Izađite iz uronjenog načina rada"
   },
   "extensionPopupTitle": {
-    "description": "Naslov prozora za proširenje.",
+    "description": "The title of the extension's popup dialog.",
     "message": "Reci, Postavke Pi"
   },
+  "extensionSettings": {
+    "description": "The text of the button to open the extension's settings.",
+    "message": "postavke"
+  },
+  "greeting": {
+    "description": "Greeting message shown when user is signed in",
+    "message": "Bok, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "instructionLabel_context": {
+    "description": "Friendly label for user instruction that provides background information.",
+    "message": "Pružanje konteksta ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Friendly label for user instruction that defines what the user wants.",
+    "message": "Pojašnjavajući očekivanja ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Friendly label for user instruction that narrows the scope of conversation.",
+    "message": "Usredotočujući raspravu ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Friendly label for user instruction that establishes boundaries for the conversation.",
+    "message": "Postavljajući garders ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Friendly label for user instruction that guides how the AI should respond.",
+    "message": "Vodeći odgovori ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Friendly label for user instruction that gently suggests a direction.",
+    "message": "Davanje guranja ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Friendly label for user instruction that guides the conversation direction.",
+    "message": "Upravljanje razgovorom ..."
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Prekidi trenutno nisu podržani u Firefoxu."
+  },
   "lockButton": {
-    "description": "Naslov (opis alata) gumba za zaključavanje ekrana protiv slučajnih dodira.",
+    "description": "The title (tooltip) of the button to lock the screen against accidental touches.",
     "message": "Pritisnite za zaključavanje ekrana"
   },
   "lockedScreen": {
-    "description": "Poruka za istaknuti prikaz kada je zaslon zaključan.",
+    "description": "A message to display prominently when the screen is locked.",
     "message": "Zaslon je zaključan."
   },
+  "maintenanceLabel_holding": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Držeći ovu misao ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Izrada mentalne note ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Obrada u pozadini ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Prisjećajući se ovog detalja ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Spašavajući tu misao za kasnije ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Praćenje konteksta ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Uguravanje ovoga ..."
+  },
+  "microphoneErrorConstraints": {
+    "description": "Error message when microphone constraints cannot be satisfied.",
+    "message": "Vaše postavke mikrofona ne zadovoljavaju potrebne specifikacije. \nPokušajte upotrijebiti drugi mikrofon ili prilagoditi postavke zvuka."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generic error message with details when microphone access fails.",
+    "message": "Pristup mikrofonu nije uspio: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Error message when microphone is already in use by another application.",
+    "message": "Nije moguće pristupiti mikrofonu jer ga koristi druga aplikacija. \nZatvorite druge aplikacije koje možda koriste vaš mikrofon."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Error message when no microphone device is found.",
+    "message": "Nije otkriven mikrofon. \nSpojite mikrofon i pokušajte ponovno."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Error message when microphone permission is denied by the user or system.",
+    "message": "Potreban je pristup mikrofonu. \nZa nastavak dopustite pristup mikrofonu u postavkama preglednika."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Error message for unexpected microphone errors with details.",
+    "message": "Došlo je do neočekivane pogreške s vašim mikrofonom: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generic error message when microphone access fails for unknown reasons.",
+    "message": "Nije moguće pristupiti mikrofonu. \nProvjerite postavke uređaja i pokušajte ponovno."
+  },
   "mode_accuracy": {
-    "description": "Način s najvećom točnošću.",
+    "description": "Highest accuracy mode.",
     "message": "točnost"
   },
+  "mode_accuracy_description": {
+    "description": "Description for the accuracy transcription mode.",
+    "message": "Najveća točnost, ali sporija brzina transkripcije. \nSklon halucinacijama."
+  },
   "mode_balanced": {
-    "description": "Zadani način transkripcije.",
+    "description": "Default transcription mode.",
     "message": "uravnotežen"
   },
+  "mode_balanced_description": {
+    "description": "Description for the balanced transcription mode.",
+    "message": "Dobar omjer brzine i točnosti za većinu namjena."
+  },
   "mode_speed": {
-    "description": "Najbrži način transkripcije.",
+    "description": "Fastest transcription mode.",
     "message": "brzina"
   },
+  "mode_speed_description": {
+    "description": "Description for the speed transcription mode.",
+    "message": "Najbrži odgovor, ali manje točan. \nSklon prekidanju."
+  },
+  "nicknameLabel": {
+    "description": "Label for the input field to set a custom nickname for the AI assistant.",
+    "message": "Nadimak"
+  },
+  "notSignedIn": {
+    "description": "Text to show when the user is not signed in.",
+    "message": "Nije prijavljen"
+  },
   "preferedLanguage": {
-    "description": "Oznaka za kontrolu odabira preferiranog jezika transkripcije.",
+    "description": "Label for a control to select the prefered transcription language.",
     "message": "Jezik"
   },
   "preferedModeControl": {
-    "description": "Naslov (opis alata) kontrole za odabir preferiranog načina transkripcije.",
+    "description": "The title (tooltip) of the control to select the prefered transcription mode.",
     "message": "Odaberite željeni način transkripcije"
   },
   "previewProgress": {
-    "description": "Poruka za prikaz kada korisnik pregledava značajku koja ima ograničenje broja znakova.",
+    "description": "The message to display when the user is previewing a feature that has a character limit.",
     "message": "$count$ znakova iskorišteno od $limit$",
     "placeholders": {
       "count": {
@@ -245,7 +436,7 @@
     "message": "Beta završena"
   },
   "previewStatusPaused": {
-    "description": "Poruka za prikaz kada korisnik pregledava značajku koja je pauzirana.",
+    "description": "The message to display when the user is previewing a feature that has been paused.",
     "message": "Beta pauzirana do $resetDate$",
     "placeholders": {
       "resetDate": {
@@ -257,32 +448,187 @@
   "previewStatusUnknown": {
     "message": "Nije moguće povezati se..."
   },
+  "profile": {
+    "description": "Label for the user profile section.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Unit label for TTS credits",
+    "message": "zasluga"
+  },
+  "quotaRemaining": {
+    "description": "Label for the quota remaining progress bar",
+    "message": "Preostala kvota"
+  },
+  "quotaStatusUnknown": {
+    "description": "Message shown when quota status cannot be determined",
+    "message": "Nije moguće provjeriti status kvote"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Message shown when user is not authenticated.",
+    "message": "Prijavite se kako biste pristupili generaciji glasa i ostalim premium značajkama"
+  },
   "readAloudButtonTitle": {
-    "description": "Naslov gumba za čitanje teksta poruke naglas.",
+    "description": "The title of the button to read aloud the text of a message.",
     "message": "Čitaj naglas"
   },
   "recommendedActions": {
-    "description": "Poruka koja prethodi popisu preporučenih radnji koje korisnik može poduzeti kako bi riješio poznati problem.",
+    "description": "Message preceding a list of recommended actions the user may take to remediate a known issue.",
     "message": "U međuvremenu, preporučujemo:"
   },
+  "regenerateButtonTitle": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an estimated cost.",
+    "message": "Generirajte audio za $cost$ $currency$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
+    "message": "Generiraj Audio"
+  },
   "shareAnalytics": {
-    "description": "Oznaka za potvrdni okvir za omogućavanje/onemogućavanje dijeljenja analitike.",
+    "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Podijeli analitiku"
   },
+  "signIn": {
+    "description": "Text for the sign in button.",
+    "message": "Prijaviti se"
+  },
+  "signInForTTS": {
+    "description": "Prompt shown when user needs to authenticate to access text-to-speech features",
+    "message": "Prijavite se za tekst u govor"
+  },
+  "signOut": {
+    "description": "Text for the sign out button.",
+    "message": "Odjaviti"
+  },
+  "signedIn": {
+    "description": "Status text shown when user is authenticated (without email).",
+    "message": "Prijavljen"
+  },
+  "signedInAs": {
+    "description": "Status text shown when user is authenticated, including their email.",
+    "message": "Potpisano kao $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
   "soundEffects": {
-    "description": "Oznaka za potvrdni okvir za omogućavanje/onemogućavanje zvučnih efekata.",
+    "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Zvučni efekti"
   },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Zvučni efekti su onemogućeni u Firefoxu kako bi se spriječili problemi sa zvučnim povratnim informacijama."
+  },
+  "sttMinutesRemaining": {
+    "description": "Text showing remaining STT quota in minutes.",
+    "message": "$minutes$ minute$plural$ preostala",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text to show when STT quota is exhausted.",
+    "message": "Kvota prepoznavanja govora iscrpljena"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip for the STT quota progress bar.",
+    "message": "$remaining$ od $total$ sekundi preostalih",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip for the STT quota progress bar in minutes.",
+    "message": "$remaining$ od $total$ preostale minute",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Label for the STT quota remaining display.",
+    "message": "Prepoznavanje govora"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unit for STT quota (seconds).",
+    "message": "sekse"
+  },
+  "submitModeControl": {
+    "description": "The title (tooltip) of the control to select when messages should be submitted.",
+    "message": "Odaberite kada želite poslati svoje poruke"
+  },
+  "submit_mode_agent": {
+    "description": "AI-driven submission mode.",
+    "message": "agent"
+  },
+  "submit_mode_agent_description": {
+    "description": "Description for the AI-driven submission mode.",
+    "message": "$chatbot$ odlučuje kada će odgovoriti na temelju konteksta",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatic submission mode.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Description for the automatic submission mode.",
+    "message": "Automatski pošalji kada prestaneš govoriti"
+  },
+  "submit_mode_off": {
+    "description": "Manual submission mode.",
+    "message": "priručnik"
+  },
+  "submit_mode_off_description": {
+    "description": "Description for the manual submission mode.",
+    "message": "Pošaljite samo kada pritisnete gumb"
+  },
   "toggleThemeToDarkMode": {
-    "description": "Oznaka za gumb za prebacivanje u tamni način.",
+    "description": "Label for the button to toggle to dark mode.",
     "message": "Pređi na tamni način"
   },
   "toggleThemeToLightMode": {
-    "description": "Oznaka za gumb za prebacivanje na svijetli način.",
+    "description": "Label for the button to toggle to light mode.",
     "message": "Pređi na svijetli način"
   },
   "ttsCostExplanation": {
-    "description": "Opis alata za prikaz kada se motor za pretvorbu teksta u govor koristi za čitanje poruke naglas, s troškom poruke.",
+    "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
     "message": "$product$ će naplatiti $cost$ $currency$ za slušanje ove poruke",
     "placeholders": {
       "cost": {
@@ -300,7 +646,7 @@
     }
   },
   "ttsCostExplanationFree": {
-    "description": "Opis alata za prikaz kada se koristi motor za pretvaranje teksta u govor kako bi se pročitala poruka, a poruka je besplatna. Može sadržavati ime pružatelja usluge.",
+    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free. Assumes the provider is Inflection AI.",
     "message": "Ovaj zvuk besplatno generira Inflection AI",
     "placeholders": {
       "provider": {
@@ -309,8 +655,26 @@
       }
     }
   },
+  "ttsCostExplanationSayPi": {
+    "description": "The tooltip to display when the user hovers over the cost explanation link.",
+    "message": "Saznajte kako $product$ naplaćuje zvuk",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "ttsCredits": {
+    "description": "The term used for the credits currency in the text-to-speech feature.",
+    "message": "zasluga"
+  },
+  "ttsDisabledSafari": {
+    "description": "Message shown when TTS is disabled in Safari",
+    "message": "Višejezični glasovi trenutno nisu podržani u Safariju."
+  },
   "ttsPoweredBy": {
-    "description": "Poruka za prikaz kada se motor za pretvorbu teksta u govor koristi za čitanje poruke naglas.",
+    "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Tekst-u-govor pokreće $ttsEngine$",
     "placeholders": {
       "ttsEngine": {
@@ -319,320 +683,16 @@
       }
     }
   },
-  "unlockButton": {
-    "description": "Naslov (opis alata) gumba za otključavanje zaslona.",
-    "message": "Pritisnite za otključavanje ekrana"
-  },
-  "unlockInstruction": {
-    "description": "Upute koje korisniku govore kako otključati zaslon kada je zaključan.",
-    "message": "Držite za otključavanje."
-  },
-  "userStartedInterrupting": {
-    "description": "Poruka prikazana kada korisnik počne govoriti dok asistent govori.",
-    "message": "Nastavite, $chatbot$ sluša...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "copiedButtonTitle": {
-    "message": "Kopirano!",
-    "description": "Naslov gumba koji označava da je tekst poruke kopiran u međuspremnik."
-  },
-  "copyButtonTitle": {
-    "message": "Kopiraj",
-    "description": "Naslov gumba za kopiranje teksta poruke u međuspremnik."
-  },
-  "voiceIntroduction_joey": {
-    "message": "Zdravo! \nPrivet! \n你好! \nJa sam Pi, vaš poliglot AI pomoćnik. \nS 32 jezika kojima upravljam, možemo istraživati ​​ideje i kulture iz cijelog svijeta. \nŠto mislite o ovom glasu?",
-    "description": "Uvod za Joeyjev glas."
-  },
-  "voiceIntroduction_paola": {
-    "message": "Ćao! \nBonjour! \nZdravo! \nJa sam Pi i mogu tečno razgovarati na 32 jezika. \nOd arapskog do ukrajinskog, ovdje sam da razbijem jezične barijere. \nKako vam zvuči ovaj glas?",
-    "description": "Uvod za Paolin glas."
-  },
-  "regenerateButtonTitle": {
-    "message": "Generirajte audio za $cost$ $currency$",
-    "description": "Naslov gumba za regeneraciju zvuka poruke. Može nastati procijenjeni trošak.",
-    "placeholders": {
-      "cost": {
-        "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
-      }
-    }
-  },
-  "regenerateButtonTitleFree": {
-    "message": "Generiraj Audio",
-    "description": "Naslov gumba za regeneraciju zvuka poruke. Može uzrokovati neodređene troškove."
-  },
-  "assistantIsWriting": {
-    "description": "Poruka se prikazuje dok pomoćnik upisuje svoj odgovor.",
-    "message": "$chatbot$ piše...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "ttsCostExplanationSayPi": {
-    "description": "Opis alata koji se prikazuje kada korisnik prijeđe pokazivačem iznad veze s objašnjenjem troškova.",
-    "placeholders": {
-      "product": {
-        "content": "$1",
-        "example": "Say, Pi"
-      }
-    },
-    "message": "Saznajte kako $product$ naplaćuje zvuk"
-  },
-  "interruptionsFirefoxDisabled": {
-    "message": "Prekidi trenutno nisu podržani u Firefoxu."
-  },
-  "mode_accuracy_description": {
-    "description": "Opis za način preciznog prijepisa.",
-    "message": "Najveća točnost, ali sporija brzina transkripcije. \nSklon halucinacijama."
-  },
-  "mode_balanced_description": {
-    "description": "Opis uravnoteženog načina transkripcije.",
-    "message": "Dobar omjer brzine i točnosti za većinu namjena."
-  },
-  "mode_speed_description": {
-    "description": "Opis načina brze transkripcije.",
-    "message": "Najbrži odgovor, ali manje točan. \nSklon prekidanju."
-  },
-  "soundEffectsFirefoxDisabled": {
-    "message": "Zvučni efekti su onemogućeni u Firefoxu kako bi se spriječili problemi sa zvučnim povratnim informacijama."
-  },
-  "assistantIsSpeakingWithManualInterrupt": {
-    "description": "Poruka se prikazuje kada pomoćnik izgovara svoj odgovor i moguće je ručno prekidanje.",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "message": "$chatbot$ govori, dodirnite za prekidanje..."
-  },
-  "callInterruptible": {
-    "description": "Opis alata koji se prikazuje na gumbu za pozivanje kada je poziv u tijeku i moguće je ručno prekidanje.",
-    "message": "Dodirnite za prekid"
-  },
-  "microphoneErrorConstraints": {
-    "description": "Poruka o pogrešci kada se ograničenja mikrofona ne mogu zadovoljiti.",
-    "message": "Vaše postavke mikrofona ne zadovoljavaju potrebne specifikacije. \nPokušajte upotrijebiti drugi mikrofon ili prilagoditi postavke zvuka."
-  },
-  "microphoneErrorGeneric": {
-    "description": "Generička poruka o pogrešci s detaljima kada pristup mikrofonu ne uspije.",
-    "message": "Pristup mikrofonu nije uspio: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Permission denied"
-      }
-    }
-  },
-  "microphoneErrorInUse": {
-    "description": "Poruka o pogrešci kada drugu aplikaciju već koristi mikrofon.",
-    "message": "Nije moguće pristupiti mikrofonu jer ga koristi druga aplikacija. \nZatvorite druge aplikacije koje možda koriste vaš mikrofon."
-  },
-  "microphoneErrorNotFound": {
-    "description": "Poruka o pogrešci kada nije pronađen mikrofon.",
-    "message": "Nije otkriven mikrofon. \nSpojite mikrofon i pokušajte ponovno."
-  },
-  "microphoneErrorPermissionDenied": {
-    "description": "Poruka o pogrešci kada korisnik ili sustav odbije pristup mikrofonu.",
-    "message": "Potreban je pristup mikrofonu. \nZa nastavak dopustite pristup mikrofonu u postavkama preglednika."
-  },
-  "microphoneErrorUnexpected": {
-    "description": "Poruka pogreške za neočekivane pogreške mikrofona s detaljima.",
-    "message": "Došlo je do neočekivane pogreške s vašim mikrofonom: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Device busy"
-      }
-    }
-  },
-  "microphoneErrorUnknown": {
-    "description": "Generička poruka o pogrešci kada pristup mikrofonu ne uspije iz nepoznatih razloga.",
-    "message": "Nije moguće pristupiti mikrofonu. \nProvjerite postavke uređaja i pokušajte ponovno."
-  },
-  "ttsDisabledSafari": {
-    "message": "Višejezični glasovi trenutno nisu podržani u Safariju.",
-    "description": "Poruka se prikazuje kada je TTS onemogućen u Safariju"
-  },
-  "extensionSettings": {
-    "message": "postavke",
-    "description": "Tekst gumba za otvaranje postavki proširenja."
-  },
-  "submitModeControl": {
-    "description": "Naslov (opis) kontrole za odabir vremena slanja poruka.",
-    "message": "Odaberite kada želite poslati svoje poruke"
-  },
-  "submit_mode_agent": {
-    "description": "Način podnošenja vođen umjetnom inteligencijom.",
-    "message": "agent"
-  },
-  "submit_mode_agent_description": {
-    "description": "Opis za način podnošenja vođen umjetnom inteligencijom.",
-    "message": "$chatbot$ odlučuje kada će odgovoriti na temelju konteksta",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "submit_mode_auto": {
-    "description": "Automatski način podnošenja.",
-    "message": "auto"
-  },
-  "submit_mode_auto_description": {
-    "description": "Opis za način automatskog podnošenja.",
-    "message": "Automatski pošalji kada prestaneš govoriti"
-  },
-  "submit_mode_off": {
-    "description": "Način ručnog podnošenja.",
-    "message": "priručnik"
-  },
-  "submit_mode_off_description": {
-    "description": "Opis za način ručnog podnošenja.",
-    "message": "Pošaljite samo kada pritisnete gumb"
-  },
-  "nicknameLabel": {
-    "message": "Nadimak",
-    "description": "Oznaka za polje unosa za postavljanje prilagođenog nadimka za pomoćnika AI."
-  },
-  "greeting": {
-    "description": "Poruka pozdrava prikazana kada je korisnik prijavljen",
-    "message": "Bok, $name$!",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John"
-      }
-    }
-  },
-  "notSignedIn": {
-    "description": "Tekst za prikaz kada korisnik nije prijavljen.",
-    "message": "Nije prijavljen"
-  },
-  "profile": {
-    "description": "Oznaka za odjeljak Korisnički profil.",
-    "message": "Profil"
-  },
-  "quotaCredits": {
-    "description": "Oznaka jedinice za TTS kredit",
-    "message": "zasluga"
-  },
-  "quotaRemaining": {
-    "description": "Oznaka za kvotu preostala traka napretka",
-    "message": "Preostala kvota"
-  },
-  "quotaStatusUnknown": {
-    "description": "Poruka prikazana kada se status kvote ne može utvrditi",
-    "message": "Nije moguće provjeriti status kvote"
-  },
-  "quotaUnauthenticatedMessage": {
-    "description": "Poruka prikazana kada korisnik nije ovjeren.",
-    "message": "Prijavite se kako biste pristupili generaciji glasa i ostalim premium značajkama"
-  },
-  "signIn": {
-    "description": "Tekst za gumb za prijavu.",
-    "message": "Prijaviti se"
-  },
-  "signOut": {
-    "description": "Tekst za gumb za odjavu.",
-    "message": "Odjaviti"
-  },
-  "signedIn": {
-    "description": "Tekst statusa prikazan kada je korisnik ovjeren (bez e -pošte).",
-    "message": "Prijavljen"
-  },
-  "signedInAs": {
-    "description": "Tekst statusa prikazan kada je korisnik ovjeren, uključujući njihovu e -poštu.",
-    "message": "Potpisano kao $email$",
-    "placeholders": {
-      "email": {
-        "content": "$1",
-        "example": "user@example.com"
-      }
-    }
-  },
-  "sttMinutesRemaining": {
-    "description": "Tekst koji prikazuje preostalu kvotu STT za nekoliko minuta.",
-    "message": "$minutes$ minute$plural$ preostala",
-    "placeholders": {
-      "minutes": {
-        "content": "$1",
-        "example": "5"
-      },
-      "plural": {
-        "content": "$2",
-        "example": "s"
-      }
-    }
-  },
-  "sttQuotaExhausted": {
-    "description": "Tekst za prikaz kada je STT kvota iscrpljena.",
-    "message": "Kvota prepoznavanja govora iscrpljena"
-  },
-  "sttQuotaProgress": {
-    "description": "Alat za traku STT kvota.",
-    "message": "$remaining$ od $total$ sekundi preostalih",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "100"
-      },
-      "total": {
-        "content": "$2",
-        "example": "300"
-      }
-    }
-  },
-  "sttQuotaProgressMinutes": {
-    "description": "Alat za STT kvota za napredak u nekoliko minuta.",
-    "message": "$remaining$ od $total$ preostale minute",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "5"
-      },
-      "total": {
-        "content": "$2",
-        "example": "60"
-      }
-    }
-  },
-  "sttQuotaRemaining": {
-    "description": "Oznaka za STT kvota preostali zaslon.",
-    "message": "Prepoznavanje govora"
-  },
-  "sttQuotaSeconds": {
-    "description": "Jedinica za kvotu STT (sekunde).",
-    "message": "sekse"
-  },
-  "ttsCredits": {
-    "description": "Izraz koji se koristi za valutu kredita u značajci teksta u govor.",
-    "message": "zasluga"
-  },
   "ttsQuotaCharacters": {
-    "description": "Jedinica za kvotu TTS (znakove).",
+    "description": "Unit for TTS quota (characters).",
     "message": "zasluga"
   },
   "ttsQuotaExhausted": {
-    "description": "Tekst za prikaz kada je kvota TTS iscrpljena.",
+    "description": "Text to show when TTS quota is exhausted.",
     "message": "Glasovna kvota iscrpljena"
   },
   "ttsQuotaProgress": {
-    "description": "Alat za TTS kvotu traku napretka.",
+    "description": "Tooltip for the TTS quota progress bar.",
     "message": "$remaining$ od $total$ preostalih znakova",
     "placeholders": {
       "remaining": {
@@ -646,121 +706,243 @@
     }
   },
   "ttsQuotaRemaining": {
-    "description": "Oznaka za TTS kvota preostali zaslon.",
+    "description": "Label for the TTS quota remaining display.",
     "message": "Generacija glasa"
   },
-  "upgradeButton": {
-    "description": "Tekst za gumb za nadogradnju plana kada je kvota iscrpljena.",
-    "message": "Plan nadogradnje"
-  },
-  "viewDetails": {
-    "description": "Tekst za vezu za prikaz potpunih detalja o kvoti na nadzornoj ploči.",
-    "message": "Pogledajte detalje"
-  },
-  "clickToCollapse": {
-    "description": "Tekst koji označava korisnik može kliknuti za sakrivanje proširenog sadržaja.",
-    "message": "Kliknite za kolaps"
-  },
-  "clickToExpand": {
-    "description": "Tekst koji označava korisnik može kliknuti za prikaz urušenog sadržaja.",
-    "message": "Kliknite za proširenje"
-  },
-  "instructionLabel_context": {
-    "description": "Prijateljska naljepnica za upute korisnika koja pruža pozadinske informacije.",
-    "message": "Pružanje konteksta ..."
-  },
-  "instructionLabel_expectations": {
-    "description": "Prijateljska naljepnica za upute korisnika koja definira ono što korisnik želi.",
-    "message": "Pojašnjavajući očekivanja ..."
-  },
-  "instructionLabel_focusing": {
-    "description": "Prijateljska oznaka za upute korisnika koja sužava opseg razgovora.",
-    "message": "Usredotočujući raspravu ..."
-  },
-  "instructionLabel_guardrails": {
-    "description": "Prijateljska oznaka za upute korisnika koja uspostavlja granice za razgovor.",
-    "message": "Postavljajući garders ..."
-  },
-  "instructionLabel_guiding": {
-    "description": "Prijateljska naljepnica za upute korisnika koja vodi kako AI treba reagirati.",
-    "message": "Vodeći odgovori ..."
-  },
-  "instructionLabel_nudge": {
-    "description": "Prijateljska naljepnica za upute korisnika koja nježno sugerira smjer.",
-    "message": "Davanje guranja ..."
-  },
-  "instructionLabel_steering": {
-    "description": "Prijateljska naljepnica za upute korisnika koja vodi smjer razgovora.",
-    "message": "Upravljanje razgovorom ..."
-  },
-  "maintenanceLabel_holding": {
-    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
-    "message": "Držeći ovu misao ..."
-  },
-  "maintenanceLabel_mental_note": {
-    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
-    "message": "Izrada mentalne note ..."
-  },
-  "maintenanceLabel_processing": {
-    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
-    "message": "Obrada u pozadini ..."
-  },
-  "maintenanceLabel_remembering": {
-    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
-    "message": "Prisjećajući se ovog detalja ..."
-  },
-  "maintenanceLabel_saving": {
-    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
-    "message": "Spašavajući tu misao za kasnije ..."
-  },
-  "maintenanceLabel_tracking": {
-    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
-    "message": "Praćenje konteksta ..."
-  },
-  "maintenanceLabel_tucking": {
-    "description": "Prijateljska naljepnica za urušenu poruku pomoćne održavanja.",
-    "message": "Uguravanje ovoga ..."
-  },
-  "disableTTS": {
-    "description": "Oznaka za mogućnost isključivanja teksta u govor",
-    "message": "Onemogućite tekst u govor"
-  },
-  "signInForTTS": {
-    "description": "Brz prikazan kada se korisnik mora provjeriti za pristup značajkama teksta u govor",
-    "message": "Prijavite se za tekst u govor"
-  },
   "ttsVoice": {
-    "description": "Oznaka koja opisuje glasovnu opciju teksta u govor u izborniku",
+    "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS glas"
   },
-  "voiceOff": {
-    "description": "Oznaka za kada je onemogućena tekst-u govor",
-    "message": "Odbiti"
+  "unlockButton": {
+    "description": "The title (tooltip) of the button to unlock the screen.",
+    "message": "Pritisnite za otključavanje ekrana"
   },
-  "voiceSettings": {
-    "description": "Tekst stavke izbornika za pristup postavkama povezanim s glasom.",
-    "message": "Glasovne postavke"
+  "unlockInstruction": {
+    "description": "Instructions telling the user how to unlock the screen when locked.",
+    "message": "Držite za otključavanje."
   },
-  "addCredits": {
-    "description": "Tekst za vezu da biste dodali više glasovnih kredita",
-    "message": "Dodajte kredite"
+  "upgradeButton": {
+    "description": "Text for the button to upgrade the plan when quota is exhausted.",
+    "message": "Plan nadogradnje"
   },
   "upgradeForTTS": {
-    "description": "Brz prikazan kada korisnik treba nadograditi kako bi dobio kredite u tekstu u govor",
+    "description": "Prompt shown when user needs to upgrade to obtain text-to-speech credits",
     "message": "Nadogradnja za generaciju glasa"
   },
-  "voicePaused": {
-    "description": "Tekst prikazan kada je glas zastao zbog nedovoljnih kredita",
-    "message": "Glas zastao -"
-  },
-  "assistantIsListeningAttentively": {
-    "description": "Poruka prikazana kada pomoćnik sluša govor u načinu agencije.",
-    "message": "$chatbot$ pažljivo sluša ...",
+  "userStartedInterrupting": {
+    "description": "Message displayed when the user starts speaking while the assistant is speaking.",
+    "message": "Nastavite, $chatbot$ sluša...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
-        "example": "Claude"
+        "example": "Pi"
       }
     }
+  },
+  "vadDetailActivatingMicrophone": {
+    "description": "VAD detail when activating the microphone.",
+    "message": "Activating microphone..."
+  },
+  "vadDetailCommLinkFailed": {
+    "description": "VAD detail when the communication port link fails.",
+    "message": "Communication link failed."
+  },
+  "vadDetailDeactivatingMicrophone": {
+    "description": "VAD detail when deactivating the microphone.",
+    "message": "Deactivating microphone..."
+  },
+  "vadDetailFailedToReconnectVADService": {
+    "description": "VAD detail when re-establishing connection fails.",
+    "message": "Failed to reconnect VAD service."
+  },
+  "vadDetailInitError": {
+    "description": "VAD detail for an initialization error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to connect to VAD service"
+      }
+    }
+  },
+  "vadDetailInitErrorPromise": {
+    "description": "VAD detail for an initialization promise error.",
+    "message": "Init Error: Promise error"
+  },
+  "vadDetailInitErrorUnknown": {
+    "description": "VAD detail for an unknown initialization error.",
+    "message": "Init Error: Unknown"
+  },
+  "vadDetailInitializedMode": {
+    "description": "VAD detail showing initialization mode.",
+    "message": "",
+    "placeholders": {
+      "mode": {
+        "content": "$1",
+        "example": "Agent"
+      }
+    }
+  },
+  "vadDetailInitializedModeNA": {
+    "description": "VAD detail showing initialization mode as N/A.",
+    "message": "Initialized (Mode: N/A)"
+  },
+  "vadDetailNonSpeechAudioDetected": {
+    "description": "VAD detail for non-speech audio detection.",
+    "message": "Non-speech audio detected"
+  },
+  "vadDetailReleasingVADResources": {
+    "description": "VAD detail when releasing VAD resources.",
+    "message": "Releasing VAD resources..."
+  },
+  "vadDetailRequestingVADSetup": {
+    "description": "VAD detail when requesting setup.",
+    "message": "Requesting VAD setup..."
+  },
+  "vadDetailSpeechDetected": {
+    "description": "VAD detail when speech has been detected.",
+    "message": "Speech detected"
+  },
+  "vadDetailSpeechEndedDuration": {
+    "description": "VAD detail indicating speech ended and its duration.",
+    "message": "",
+    "placeholders": {
+      "duration": {
+        "content": "$1",
+        "example": "1000"
+      }
+    }
+  },
+  "vadDetailStartError": {
+    "description": "VAD detail for a start error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to start VAD service"
+      }
+    }
+  },
+  "vadDetailStartErrorPromise": {
+    "description": "VAD detail for a start promise error.",
+    "message": "Start Error: Promise error"
+  },
+  "vadDetailStartErrorUnknown": {
+    "description": "VAD detail for an unknown start error.",
+    "message": "Start Error: Unknown"
+  },
+  "vadDetailStopError": {
+    "description": "VAD detail for a stop error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to stop VAD service"
+      }
+    }
+  },
+  "vadDetailStopErrorPromise": {
+    "description": "VAD detail for a stop promise error.",
+    "message": "Stop Error: Promise error"
+  },
+  "vadDetailStopErrorUnknown": {
+    "description": "VAD detail for an unknown stop error.",
+    "message": "Stop Error: Unknown"
+  },
+  "vadDetailUnknownVADError": {
+    "description": "VAD detail for an unknown error from the VAD module.",
+    "message": "Unknown VAD error"
+  },
+  "vadDetailVADProcessingStopped": {
+    "description": "VAD detail indicating VAD processing has stopped.",
+    "message": "VAD processing stopped."
+  },
+  "vadDetailVADServiceDisconnected": {
+    "description": "VAD detail when the service disconnects.",
+    "message": "VAD service disconnected. Try reloading."
+  },
+  "vadDetailVADServiceNotConnected": {
+    "description": "VAD detail when the service is not connected.",
+    "message": "VAD service not connected. Try reloading."
+  },
+  "vadDetailVADServiceShutdown": {
+    "description": "VAD detail indicating VAD service has been shut down.",
+    "message": "VAD service shut down."
+  },
+  "vadDetailWaitingForSpeech": {
+    "description": "VAD detail when waiting for user to speak.",
+    "message": "Waiting for speech"
+  },
+  "vadStatusDestroyed": {
+    "description": "VAD status when destroyed.",
+    "message": "Destroyed"
+  },
+  "vadStatusError": {
+    "description": "Generic VAD error status.",
+    "message": "Error"
+  },
+  "vadStatusFailed": {
+    "description": "Generic VAD failure status.",
+    "message": "Failed"
+  },
+  "vadStatusInitializing": {
+    "description": "VAD status when initializing.",
+    "message": "Initializing"
+  },
+  "vadStatusListening": {
+    "description": "VAD status when actively listening.",
+    "message": "Listening"
+  },
+  "vadStatusMisfire": {
+    "description": "VAD status when a misfire (non-speech) is detected.",
+    "message": "Misfire"
+  },
+  "vadStatusProcessing": {
+    "description": "VAD status when processing audio.",
+    "message": "Processing"
+  },
+  "vadStatusReady": {
+    "description": "VAD status when ready and waiting.",
+    "message": "Ready"
+  },
+  "vadStatusShuttingDown": {
+    "description": "VAD status when shutting down.",
+    "message": "Shutting down"
+  },
+  "vadStatusStarting": {
+    "description": "VAD status when starting.",
+    "message": "Starting"
+  },
+  "vadStatusStopped": {
+    "description": "VAD status when stopped.",
+    "message": "Stopped"
+  },
+  "vadStatusStopping": {
+    "description": "VAD status when stopping.",
+    "message": "Stopping"
+  },
+  "viewDetails": {
+    "description": "Text for the link to view full quota details on the dashboard.",
+    "message": "Pogledajte detalje"
+  },
+  "voiceIntroduction_joey": {
+    "description": "Introduction for the Joey voice.",
+    "message": "Zdravo! \nPrivet! \n你好! \nJa sam Pi, vaš poliglot AI pomoćnik. \nS 32 jezika kojima upravljam, možemo istraživati ​​ideje i kulture iz cijelog svijeta. \nŠto mislite o ovom glasu?"
+  },
+  "voiceIntroduction_paola": {
+    "description": "Introduction for the Paola voice.",
+    "message": "Ćao! \nBonjour! \nZdravo! \nJa sam Pi i mogu tečno razgovarati na 32 jezika. \nOd arapskog do ukrajinskog, ovdje sam da razbijem jezične barijere. \nKako vam zvuči ovaj glas?"
+  },
+  "voiceOff": {
+    "description": "Label for when text-to-speech is disabled",
+    "message": "Odbiti"
+  },
+  "voicePaused": {
+    "description": "Text shown when voice is paused due to insufficient credits",
+    "message": "Glas zastao -"
+  },
+  "voiceSettings": {
+    "description": "The text of the menu item to access voice-related settings.",
+    "message": "Glasovne postavke"
   }
 }

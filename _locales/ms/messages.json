@@ -1,34 +1,38 @@
 {
   "activityCheckButton": {
-    "description": "Teks butang untuk menunjukkan bahawa pengguna masih hadir.",
+    "description": "The text of the button to indicate that the user is still present.",
     "message": "Ya, saya masih di sini!"
   },
   "activityCheckMessage": {
-    "description": "Mesej untuk dipaparkan apabila perbualan berlangsung lama secara tidak biasa.",
+    "description": "The message to display when the conversation has been going on unusually long.",
     "message": "Wow, ini adalah perbualan yang panjang. Adakah anda masih di sana, atau kita sedang bercakap dengan diri sendiri?"
   },
+  "addCredits": {
+    "description": "Text for link to add more voice credits",
+    "message": "Tambah kredit"
+  },
   "allowInterruptions": {
-    "description": "Label untuk kotak semak untuk membolehkan/melarang pengguna mengganggu respons Pi dengan berbicara.",
+    "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Boleh diganggu"
   },
   "appDescription": {
-    "description": "Penerangan tentang aplikasi.",
+    "description": "The description of the application.",
     "message": "Kawalan suara untuk Pi dan Claude. Bercakap secara semulajadi, dapatkan balasan seumur hidup. Cuma katakan."
   },
   "appName": {
-    "description": "Nama aplikasi.",
+    "description": "The name of the application.",
     "message": "Say, Pi"
   },
   "applicationStatusIssue": {
-    "description": "Mesej untuk dipaparkan apabila aplikasi mengalami masalah.",
+    "description": "Message to display when the application is experiencing issues.",
     "message": "Amaran Isu Sistem"
   },
   "applicationStatusUnknown": {
-    "description": "Mesej untuk dipaparkan apabila status aplikasi tidak dapat ditentukan. Contohnya, apabila pelanggan berada di luar talian.",
+    "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Status permohonan tidak diketahui"
   },
   "assistantIsListening": {
-    "description": "Mesej dipaparkan apabila pembantu sedang mendengar ucapan.",
+    "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ sedang mendengar...",
     "placeholders": {
       "chatbot": {
@@ -37,8 +41,18 @@
       }
     }
   },
+  "assistantIsListeningAttentively": {
+    "description": "Message displayed when the assistant is listening for speech in agent mode.",
+    "message": "$chatbot$ sedang mendengar dengan penuh perhatian ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
   "assistantIsSpeaking": {
-    "description": "Mesej dipaparkan apabila pembantu sedang memberikan responsnya.",
+    "description": "Message displayed when the assistant is speaking its response.",
     "message": "$chatbot$ sedang bercakap...",
     "placeholders": {
       "chatbot": {
@@ -47,8 +61,18 @@
       }
     }
   },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Message displayed when the assistant is speaking its response and manual interruption is possible.",
+    "message": "$chatbot$ sedang bercakap, ketik untuk mengganggu...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "assistantIsThinking": {
-    "description": "Mesej dipaparkan apabila pembantu sedang menyediakan responsnya.",
+    "description": "Message displayed when the assistant is preparing its response.",
     "message": "$chatbot$ sedang berfikir...",
     "placeholders": {
       "chatbot": {
@@ -57,8 +81,18 @@
       }
     }
   },
+  "assistantIsWriting": {
+    "description": "Message displayed when the assistant is typing its response.",
+    "message": "$chatbot$ sedang menulis...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "audioConnected": {
-    "description": "Mesej dipaparkan apabila mikrofon disambungkan",
+    "description": "Message displayed when a microphone is connected",
     "message": "$microphone$ disambungkan",
     "placeholders": {
       "microphone": {
@@ -68,7 +102,7 @@
     }
   },
   "audioInputError": {
-    "description": "Mesej yang dipaparkan apabila audio menghasilkan transkripsi kosong - biasanya hasil daripada penapisan.",
+    "description": "Message displayed when audio transcription failed - usually the result of an ASR or LLM API error.",
     "message": "Hmm, $chatbot$ mempunyai sedikit cegukan. \nBolehkah anda mencuba mengatakannya lagi?",
     "placeholders": {
       "chatbot": {
@@ -78,7 +112,7 @@
     }
   },
   "audioReconnecting": {
-    "description": "Mesej dipaparkan apabila menyambung ke mikrofon baru",
+    "description": "Message displayed when connecting to a new microphone",
     "message": "Menukar ke $microphone$...",
     "placeholders": {
       "microphone": {
@@ -88,19 +122,23 @@
     }
   },
   "autoSubmit": {
-    "description": "Label untuk kotak semak untuk mengaktifkan/mematikan penghantaran petunjuk automatik.",
+    "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Hantar secara automatik"
   },
   "callError": {
-    "description": "Tooltip untuk dipaparkan pada butang panggilan apabila ralat tidak membahayakan berlaku.",
+    "description": "The tooltip to display on the call button when a non-fatal error occurs.",
     "message": "Ralat tidak membawa maut dijumpai. Jangan panik, kami masih mendengar."
   },
   "callInProgress": {
-    "description": "Tooltip untuk dipaparkan pada butang panggilan apabila panggilan sedang berlangsung.",
+    "description": "The tooltip to display on the call button when a call is in progress.",
     "message": "Akhiri perbualan tanpa tangan"
   },
+  "callInterruptible": {
+    "description": "The tooltip to display on the call button when a call is in progress and manual interruption is possible.",
+    "message": "Ketik untuk mengganggu"
+  },
   "callNotStarted": {
-    "description": "Tooltip untuk dipaparkan pada butang panggilan sebelum panggilan dimulakan.",
+    "description": "The tooltip to display on the call button before a call is started.",
     "message": "Mulakan perbualan tanpa menggunakan tangan dengan $chatbot$",
     "placeholders": {
       "chatbot": {
@@ -110,12 +148,20 @@
     }
   },
   "callStarting": {
-    "description": "Teks untuk dipaparkan pada tooltip butang panggilan dan di kawasan petunjuk apabila panggilan bermula.",
+    "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Menyambung..."
   },
   "checkingApplicationStatus": {
-    "description": "Mesej untuk dipaparkan semasa status sistem sedang ditentukan, contohnya semasa proses memuat.",
+    "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Memeriksa status aplikasi..."
+  },
+  "clickToCollapse": {
+    "description": "Text indicating user can click to hide expanded content.",
+    "message": "Klik untuk runtuh"
+  },
+  "clickToExpand": {
+    "description": "Text indicating user can click to show collapsed content.",
+    "message": "Klik untuk berkembang"
   },
   "consentAskParticipate": {
     "message": "Adakah anda ingin menyertai?"
@@ -151,27 +197,39 @@
     "message": "Baca Dasar Privasi kami"
   },
   "continueUnlocking": {
-    "description": "Arahan memberitahu pengguna bagaimana untuk meneruskan setelah mereka telah mula menekan butang buka kunci.",
+    "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Teruskan mengekalkan untuk membuka..."
   },
+  "copiedButtonTitle": {
+    "description": "The title of the button to indicate that the text of a message has been copied to the clipboard.",
+    "message": "Disalin!"
+  },
+  "copyButtonTitle": {
+    "description": "The title of the button to copy the text of a message to the clipboard.",
+    "message": "Salin"
+  },
   "currencyUSDAbbreviation": {
-    "description": "Singkatan untuk Dolar Amerika Syarikat.",
+    "description": "The abbreviation for the US dollar.",
     "message": "USD"
   },
   "currentCharges": {
-    "description": "Istilah yang digunakan untuk menggambarkan caj semasa (jumlah berjalan) yang dikumpulkan oleh pengguna.",
+    "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Caj semasa"
   },
+  "disableTTS": {
+    "description": "Label for the option to turn off text-to-speech",
+    "message": "Lumpuhkan teks-ke-ucapan"
+  },
   "dismissAlert": {
-    "description": "Label untuk butang untuk menolak amaran isu sistem.",
+    "description": "Label for the button to dismiss a system issue alert.",
     "message": "Buang"
   },
   "enableTTS": {
-    "description": "Label untuk kotak semak untuk mengaktifkan/mematikan teks-ke-ucapan.",
+    "description": "Label for the checkbox to enable/disable text-to-speech.",
     "message": "Suara pelbagai bahasa"
   },
   "enhancedVoice": {
-    "description": "Tajuk (tooltip) untuk Suara Ditingkatkan Say, Pi.",
+    "description": "Title (tooltip) for Say, Pi enhanced voices.",
     "message": "Suara dipertingkatkan oleh $product$",
     "placeholders": {
       "product": {
@@ -181,51 +239,184 @@
     }
   },
   "enterImmersiveModeLong": {
-    "description": "Aria-label dan tajuk butang untuk memasuki mod celupan pada peranti mudah alih.",
+    "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
     "message": "Masuk Mod Celupan"
   },
   "enterImmersiveModeShort": {
-    "description": "Teks butang untuk memasuki mod celupan pada desktop.",
+    "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Rendaman"
   },
   "exitImmersiveModeLong": {
-    "description": "Aria-label dan tajuk butang untuk keluar dari mod meresap pada peranti mudah alih, kembali ke mod desktop berasaskan teks.",
+    "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Keluar Mod Imersif"
   },
   "extensionPopupTitle": {
-    "description": "Tajuk dialog popup sambungan.",
+    "description": "The title of the extension's popup dialog.",
     "message": "Katakan, Tetapan Pi"
   },
+  "extensionSettings": {
+    "description": "The text of the button to open the extension's settings.",
+    "message": "tetapan"
+  },
+  "greeting": {
+    "description": "Greeting message shown when user is signed in",
+    "message": "Hai, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "instructionLabel_context": {
+    "description": "Friendly label for user instruction that provides background information.",
+    "message": "Menyediakan konteks ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Friendly label for user instruction that defines what the user wants.",
+    "message": "Menjelaskan jangkaan ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Friendly label for user instruction that narrows the scope of conversation.",
+    "message": "Memfokuskan perbincangan ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Friendly label for user instruction that establishes boundaries for the conversation.",
+    "message": "Menetapkan Guardrails ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Friendly label for user instruction that guides how the AI should respond.",
+    "message": "Membimbing jawapan ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Friendly label for user instruction that gently suggests a direction.",
+    "message": "Memberi nudge ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Friendly label for user instruction that guides the conversation direction.",
+    "message": "Mengarahkan perbualan ..."
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Gangguan tidak disokong dalam Firefox pada masa ini."
+  },
   "lockButton": {
-    "description": "Tajuk (tooltip) butang untuk mengunci skrin daripada sentuhan tidak sengaja.",
+    "description": "The title (tooltip) of the button to lock the screen against accidental touches.",
     "message": "Tekan untuk mengunci skrin"
   },
   "lockedScreen": {
-    "description": "Sebuah mesej untuk dipaparkan dengan jelas apabila skrin dikunci.",
+    "description": "A message to display prominently when the screen is locked.",
     "message": "Skrin telah dikunci."
   },
+  "maintenanceLabel_holding": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Memegang pemikiran ini ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Membuat nota mental ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Pemprosesan di latar belakang ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Mengingati perincian ini ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Menyimpan pemikiran itu untuk kemudian ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Menjejaki konteks ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Tucking ini ..."
+  },
+  "microphoneErrorConstraints": {
+    "description": "Error message when microphone constraints cannot be satisfied.",
+    "message": "Tetapan mikrofon anda tidak memenuhi spesifikasi yang diperlukan. \nCuba gunakan mikrofon lain atau laraskan tetapan audio anda."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generic error message with details when microphone access fails.",
+    "message": "Gagal mengakses mikrofon: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Error message when microphone is already in use by another application.",
+    "message": "Tidak dapat mengakses mikrofon kerana ia digunakan oleh aplikasi lain. \nSila tutup apl lain yang mungkin menggunakan mikrofon anda."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Error message when no microphone device is found.",
+    "message": "Tiada mikrofon dikesan. \nSila sambungkan mikrofon dan cuba lagi."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Error message when microphone permission is denied by the user or system.",
+    "message": "Akses mikrofon diperlukan. \nSila benarkan akses mikrofon dalam tetapan penyemak imbas anda untuk diteruskan."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Error message for unexpected microphone errors with details.",
+    "message": "Ralat yang tidak dijangka berlaku dengan mikrofon anda: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generic error message when microphone access fails for unknown reasons.",
+    "message": "Tidak dapat mengakses mikrofon. \nSila semak tetapan peranti anda dan cuba lagi."
+  },
   "mode_accuracy": {
-    "description": "Mod kejituan tertinggi.",
+    "description": "Highest accuracy mode.",
     "message": "ketepatan"
   },
+  "mode_accuracy_description": {
+    "description": "Description for the accuracy transcription mode.",
+    "message": "Ketepatan tertinggi, tetapi kelajuan transkripsi lebih perlahan. \nTerdedah kepada halusinasi."
+  },
   "mode_balanced": {
-    "description": "Mod transkripsi lalai.",
+    "description": "Default transcription mode.",
     "message": "seimbang"
   },
+  "mode_balanced_description": {
+    "description": "Description for the balanced transcription mode.",
+    "message": "Keseimbangan kelajuan dan ketepatan yang baik untuk kebanyakan kegunaan."
+  },
   "mode_speed": {
-    "description": "Mod transkripsi terpantas.",
+    "description": "Fastest transcription mode.",
     "message": "kelajuan"
   },
+  "mode_speed_description": {
+    "description": "Description for the speed transcription mode.",
+    "message": "Respons terpantas, tetapi kurang tepat. \nTerdedah kepada gangguan."
+  },
+  "nicknameLabel": {
+    "description": "Label for the input field to set a custom nickname for the AI assistant.",
+    "message": "Nama samaran"
+  },
+  "notSignedIn": {
+    "description": "Text to show when the user is not signed in.",
+    "message": "Tidak masuk"
+  },
   "preferedLanguage": {
-    "description": "Label untuk kawalan memilih bahasa transkripsi yang disukai.",
+    "description": "Label for a control to select the prefered transcription language.",
     "message": "Bahasa"
   },
   "preferedModeControl": {
-    "description": "Tajuk (tooltip) kawalan untuk memilih mod transkripsi yang disukai.",
+    "description": "The title (tooltip) of the control to select the prefered transcription mode.",
     "message": "Pilih mod transkripsi yang anda prefer."
   },
   "previewProgress": {
-    "description": "Mesej untuk dipaparkan apabila pengguna sedang melihat pratinjau ciri yang mempunyai had karakter.",
+    "description": "The message to display when the user is previewing a feature that has a character limit.",
     "message": "$count$ aksara digunakan daripada $limit$",
     "placeholders": {
       "count": {
@@ -245,7 +436,7 @@
     "message": "Beta Selesai"
   },
   "previewStatusPaused": {
-    "description": "Mesej untuk dipaparkan apabila pengguna sedang melihat pratinjau ciri yang telah dihentikan sementara.",
+    "description": "The message to display when the user is previewing a feature that has been paused.",
     "message": "Beta Ditangguhkan sehingga $resetDate$",
     "placeholders": {
       "resetDate": {
@@ -257,32 +448,187 @@
   "previewStatusUnknown": {
     "message": "Tidak dapat menyambung..."
   },
+  "profile": {
+    "description": "Label for the user profile section.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Unit label for TTS credits",
+    "message": "Kredit"
+  },
+  "quotaRemaining": {
+    "description": "Label for the quota remaining progress bar",
+    "message": "Baki kuota"
+  },
+  "quotaStatusUnknown": {
+    "description": "Message shown when quota status cannot be determined",
+    "message": "Tidak dapat memeriksa status kuota"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Message shown when user is not authenticated.",
+    "message": "Log masuk untuk mengakses penjanaan suara dan ciri premium lain"
+  },
   "readAloudButtonTitle": {
-    "description": "Tajuk butang untuk membaca teks mesej dengan kuat.",
+    "description": "The title of the button to read aloud the text of a message.",
     "message": "Bacakan"
   },
   "recommendedActions": {
-    "description": "Mesej yang mendahului senarai tindakan yang disyorkan yang boleh diambil oleh pengguna untuk membetulkan masalah yang diketahui.",
+    "description": "Message preceding a list of recommended actions the user may take to remediate a known issue.",
     "message": "Sementara itu, kami cadangkan:"
   },
+  "regenerateButtonTitle": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an estimated cost.",
+    "message": "Hasilkan Audio untuk $cost$ $currency$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
+    "message": "Hasilkan Audio"
+  },
   "shareAnalytics": {
-    "description": "Label untuk kotak semak untuk mengaktifkan/mematikan perkongsian analitik.",
+    "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Kongsi analitik"
   },
+  "signIn": {
+    "description": "Text for the sign in button.",
+    "message": "Log masuk"
+  },
+  "signInForTTS": {
+    "description": "Prompt shown when user needs to authenticate to access text-to-speech features",
+    "message": "Log masuk untuk teks-ke-ucapan"
+  },
+  "signOut": {
+    "description": "Text for the sign out button.",
+    "message": "Log masuk"
+  },
+  "signedIn": {
+    "description": "Status text shown when user is authenticated (without email).",
+    "message": "Ditandatangani dalam"
+  },
+  "signedInAs": {
+    "description": "Status text shown when user is authenticated, including their email.",
+    "message": "Ditandatangani sebagai $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
   "soundEffects": {
-    "description": "Label untuk kotak semak untuk mengaktifkan/mematikan kesan bunyi.",
+    "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Kesan bunyi"
   },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Kesan bunyi dilumpuhkan dalam Firefox untuk mengelakkan isu maklum balas audio."
+  },
+  "sttMinutesRemaining": {
+    "description": "Text showing remaining STT quota in minutes.",
+    "message": "$minutes$ minit$plural$ baki",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text to show when STT quota is exhausted.",
+    "message": "Kuota pengiktirafan pertuturan habis"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip for the STT quota progress bar.",
+    "message": "$remaining$ sebanyak $total$ detik",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip for the STT quota progress bar in minutes.",
+    "message": "$remaining$ sebanyak $total$ minit tersisa",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Label for the STT quota remaining display.",
+    "message": "Pengiktirafan pertuturan"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unit for STT quota (seconds).",
+    "message": "Secs"
+  },
+  "submitModeControl": {
+    "description": "The title (tooltip) of the control to select when messages should be submitted.",
+    "message": "Pilih masa untuk menghantar mesej anda"
+  },
+  "submit_mode_agent": {
+    "description": "AI-driven submission mode.",
+    "message": "ejen"
+  },
+  "submit_mode_agent_description": {
+    "description": "Description for the AI-driven submission mode.",
+    "message": "$chatbot$ memutuskan masa untuk bertindak balas berdasarkan konteks",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatic submission mode.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Description for the automatic submission mode.",
+    "message": "Serahkan secara automatik apabila anda berhenti bercakap"
+  },
+  "submit_mode_off": {
+    "description": "Manual submission mode.",
+    "message": "manual"
+  },
+  "submit_mode_off_description": {
+    "description": "Description for the manual submission mode.",
+    "message": "Hanya serahkan apabila anda menekan butang"
+  },
   "toggleThemeToDarkMode": {
-    "description": "Label untuk butang untuk beralih ke mod gelap.",
+    "description": "Label for the button to toggle to dark mode.",
     "message": "Beralih ke mod gelap"
   },
   "toggleThemeToLightMode": {
-    "description": "Label untuk butang untuk beralih ke mod cahaya.",
+    "description": "Label for the button to toggle to light mode.",
     "message": "Beralih ke mod cahaya"
   },
   "ttsCostExplanation": {
-    "description": "Tooltip untuk dipaparkan apabila enjin teks-ke-ucapan digunakan untuk membaca pesanan secara kuat, dengan kos pesanan tersebut.",
+    "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
     "message": "$product$ akan mengenakan bayaran $cost$ $currency$ untuk mendengar mesej ini",
     "placeholders": {
       "cost": {
@@ -300,7 +646,7 @@
     }
   },
   "ttsCostExplanationFree": {
-    "description": "Tooltip untuk dipaparkan apabila enjin teks-ke-ucapan digunakan untuk membaca pesanan secara lantang, dan pesanan itu adalah percuma. Mungkin mengandungi nama penyedia.",
+    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free. Assumes the provider is Inflection AI.",
     "message": "Audio ini dijana secara percuma oleh Inflection AI",
     "placeholders": {
       "provider": {
@@ -309,8 +655,26 @@
       }
     }
   },
+  "ttsCostExplanationSayPi": {
+    "description": "The tooltip to display when the user hovers over the cost explanation link.",
+    "message": "Ketahui cara $product$ mengenakan bayaran untuk audio",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "ttsCredits": {
+    "description": "The term used for the credits currency in the text-to-speech feature.",
+    "message": "Kredit"
+  },
+  "ttsDisabledSafari": {
+    "description": "Message shown when TTS is disabled in Safari",
+    "message": "Suara berbilang bahasa pada masa ini tidak disokong dalam Safari."
+  },
   "ttsPoweredBy": {
-    "description": "Mesej untuk dipaparkan apabila enjin teks-ke-ucapan digunakan untuk membaca mesej dengan kuat.",
+    "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Teks-ke-pertuturan dikuasakan oleh $ttsEngine$",
     "placeholders": {
       "ttsEngine": {
@@ -319,320 +683,16 @@
       }
     }
   },
-  "unlockButton": {
-    "description": "Tajuk (tooltip) butang untuk membuka kunci skrin.",
-    "message": "Tekan untuk membuka skrin"
-  },
-  "unlockInstruction": {
-    "description": "Arahan memberitahu pengguna bagaimana untuk membuka skrin apabila dikunci.",
-    "message": "Tahan untuk membuka kunci."
-  },
-  "userStartedInterrupting": {
-    "description": "Mesej dipaparkan apabila pengguna mula bercakap semasa pembantu sedang bercakap.",
-    "message": "Teruskan, $chatbot$ sedang mendengar...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "copiedButtonTitle": {
-    "message": "Disalin!",
-    "description": "Tajuk butang untuk menunjukkan bahawa teks mesej telah disalin ke papan keratan."
-  },
-  "copyButtonTitle": {
-    "message": "Salin",
-    "description": "Tajuk butang untuk menyalin teks mesej ke papan keratan."
-  },
-  "voiceIntroduction_joey": {
-    "message": "Hola! \nПривет! \n你好! \nSaya Pi, pembantu AI poliglot anda. \nDengan 32 bahasa di bawah arahan saya, kami boleh meneroka idea dan budaya dari seluruh dunia. \nApa pendapat anda tentang suara ini?",
-    "description": "Pengenalan untuk suara Joey."
-  },
-  "voiceIntroduction_paola": {
-    "message": "Ciao! \nBonjour! \nhelo! \nSaya Pi, dan saya boleh bercakap dengan fasih dalam 32 bahasa. \nDari bahasa Arab ke Bahasa Ukraine, saya di sini untuk memecahkan halangan bahasa. \nBagaimanakah suara ini terdengar kepada anda?",
-    "description": "Pengenalan untuk suara Paola."
-  },
-  "regenerateButtonTitle": {
-    "message": "Hasilkan Audio untuk $cost$ $currency$",
-    "description": "Tajuk butang untuk menjana semula audio mesej. Mungkin menimbulkan kos anggaran.",
-    "placeholders": {
-      "cost": {
-        "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
-      }
-    }
-  },
-  "regenerateButtonTitleFree": {
-    "message": "Hasilkan Audio",
-    "description": "Tajuk butang untuk menjana semula audio mesej. Mungkin menimbulkan kos yang tidak ditentukan."
-  },
-  "assistantIsWriting": {
-    "description": "Mesej dipaparkan semasa pembantu menaip responsnya.",
-    "message": "$chatbot$ sedang menulis...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "ttsCostExplanationSayPi": {
-    "description": "Petua alat untuk dipaparkan apabila pengguna menuding pada pautan penjelasan kos.",
-    "placeholders": {
-      "product": {
-        "content": "$1",
-        "example": "Say, Pi"
-      }
-    },
-    "message": "Ketahui cara $product$ mengenakan bayaran untuk audio"
-  },
-  "interruptionsFirefoxDisabled": {
-    "message": "Gangguan tidak disokong dalam Firefox pada masa ini."
-  },
-  "mode_accuracy_description": {
-    "description": "Penerangan untuk mod transkripsi ketepatan.",
-    "message": "Ketepatan tertinggi, tetapi kelajuan transkripsi lebih perlahan. \nTerdedah kepada halusinasi."
-  },
-  "mode_balanced_description": {
-    "description": "Penerangan untuk mod transkripsi seimbang.",
-    "message": "Keseimbangan kelajuan dan ketepatan yang baik untuk kebanyakan kegunaan."
-  },
-  "mode_speed_description": {
-    "description": "Penerangan untuk mod transkripsi kelajuan.",
-    "message": "Respons terpantas, tetapi kurang tepat. \nTerdedah kepada gangguan."
-  },
-  "soundEffectsFirefoxDisabled": {
-    "message": "Kesan bunyi dilumpuhkan dalam Firefox untuk mengelakkan isu maklum balas audio."
-  },
-  "assistantIsSpeakingWithManualInterrupt": {
-    "description": "Mesej dipaparkan apabila pembantu bercakap responsnya dan gangguan manual mungkin berlaku.",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "message": "$chatbot$ sedang bercakap, ketik untuk mengganggu..."
-  },
-  "callInterruptible": {
-    "description": "Petua alat untuk dipaparkan pada butang panggilan apabila panggilan sedang dijalankan dan gangguan manual mungkin berlaku.",
-    "message": "Ketik untuk mengganggu"
-  },
-  "microphoneErrorConstraints": {
-    "description": "Mesej ralat apabila kekangan mikrofon tidak dapat dipenuhi.",
-    "message": "Tetapan mikrofon anda tidak memenuhi spesifikasi yang diperlukan. \nCuba gunakan mikrofon lain atau laraskan tetapan audio anda."
-  },
-  "microphoneErrorGeneric": {
-    "description": "Mesej ralat generik dengan butiran apabila akses mikrofon gagal.",
-    "message": "Gagal mengakses mikrofon: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Permission denied"
-      }
-    }
-  },
-  "microphoneErrorInUse": {
-    "description": "Mesej ralat apabila mikrofon sudah digunakan oleh aplikasi lain.",
-    "message": "Tidak dapat mengakses mikrofon kerana ia digunakan oleh aplikasi lain. \nSila tutup apl lain yang mungkin menggunakan mikrofon anda."
-  },
-  "microphoneErrorNotFound": {
-    "description": "Mesej ralat apabila tiada peranti mikrofon ditemui.",
-    "message": "Tiada mikrofon dikesan. \nSila sambungkan mikrofon dan cuba lagi."
-  },
-  "microphoneErrorPermissionDenied": {
-    "description": "Mesej ralat apabila kebenaran mikrofon dinafikan oleh pengguna atau sistem.",
-    "message": "Akses mikrofon diperlukan. \nSila benarkan akses mikrofon dalam tetapan penyemak imbas anda untuk diteruskan."
-  },
-  "microphoneErrorUnexpected": {
-    "description": "Mesej ralat untuk ralat mikrofon yang tidak dijangka dengan butiran.",
-    "message": "Ralat yang tidak dijangka berlaku dengan mikrofon anda: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Device busy"
-      }
-    }
-  },
-  "microphoneErrorUnknown": {
-    "description": "Mesej ralat generik apabila capaian mikrofon gagal atas sebab yang tidak diketahui.",
-    "message": "Tidak dapat mengakses mikrofon. \nSila semak tetapan peranti anda dan cuba lagi."
-  },
-  "ttsDisabledSafari": {
-    "message": "Suara berbilang bahasa pada masa ini tidak disokong dalam Safari.",
-    "description": "Mesej ditunjukkan apabila TTS dilumpuhkan dalam Safari"
-  },
-  "extensionSettings": {
-    "message": "tetapan",
-    "description": "Teks butang untuk membuka tetapan sambungan."
-  },
-  "submitModeControl": {
-    "description": "Tajuk (petua alat) kawalan untuk memilih bila mesej harus diserahkan.",
-    "message": "Pilih masa untuk menghantar mesej anda"
-  },
-  "submit_mode_agent": {
-    "description": "Mod penyerahan dipacu AI.",
-    "message": "ejen"
-  },
-  "submit_mode_agent_description": {
-    "description": "Penerangan untuk mod penyerahan dipacu AI.",
-    "message": "$chatbot$ memutuskan masa untuk bertindak balas berdasarkan konteks",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "submit_mode_auto": {
-    "description": "Mod penyerahan automatik.",
-    "message": "auto"
-  },
-  "submit_mode_auto_description": {
-    "description": "Penerangan untuk mod penyerahan automatik.",
-    "message": "Serahkan secara automatik apabila anda berhenti bercakap"
-  },
-  "submit_mode_off": {
-    "description": "Mod penyerahan manual.",
-    "message": "manual"
-  },
-  "submit_mode_off_description": {
-    "description": "Penerangan untuk mod penyerahan manual.",
-    "message": "Hanya serahkan apabila anda menekan butang"
-  },
-  "nicknameLabel": {
-    "message": "Nama samaran",
-    "description": "Label untuk medan input untuk menetapkan nama samaran tersuai untuk pembantu AI."
-  },
-  "greeting": {
-    "description": "Mesej ucapan yang ditunjukkan apabila pengguna ditandatangani",
-    "message": "Hai, $name$!",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John"
-      }
-    }
-  },
-  "notSignedIn": {
-    "description": "Teks untuk ditunjukkan apabila pengguna tidak ditandatangani.",
-    "message": "Tidak masuk"
-  },
-  "profile": {
-    "description": "Label untuk bahagian Profil Pengguna.",
-    "message": "Profil"
-  },
-  "quotaCredits": {
-    "description": "Label Unit untuk Kredit TTS",
-    "message": "Kredit"
-  },
-  "quotaRemaining": {
-    "description": "Label untuk kuota yang tinggal bar kemajuan",
-    "message": "Baki kuota"
-  },
-  "quotaStatusUnknown": {
-    "description": "Mesej yang ditunjukkan apabila status kuota tidak dapat ditentukan",
-    "message": "Tidak dapat memeriksa status kuota"
-  },
-  "quotaUnauthenticatedMessage": {
-    "description": "Mesej yang ditunjukkan apabila pengguna tidak disahkan.",
-    "message": "Log masuk untuk mengakses penjanaan suara dan ciri premium lain"
-  },
-  "signIn": {
-    "description": "Teks untuk butang log masuk.",
-    "message": "Log masuk"
-  },
-  "signOut": {
-    "description": "Teks untuk butang Sign Out.",
-    "message": "Log masuk"
-  },
-  "signedIn": {
-    "description": "Teks status yang ditunjukkan apabila pengguna disahkan (tanpa e -mel).",
-    "message": "Ditandatangani dalam"
-  },
-  "signedInAs": {
-    "description": "Teks status yang ditunjukkan apabila pengguna disahkan, termasuk e -mel mereka.",
-    "message": "Ditandatangani sebagai $email$",
-    "placeholders": {
-      "email": {
-        "content": "$1",
-        "example": "user@example.com"
-      }
-    }
-  },
-  "sttMinutesRemaining": {
-    "description": "Teks menunjukkan kuota STT yang tinggal dalam beberapa minit.",
-    "message": "$minutes$ minit$plural$ baki",
-    "placeholders": {
-      "minutes": {
-        "content": "$1",
-        "example": "5"
-      },
-      "plural": {
-        "content": "$2",
-        "example": "s"
-      }
-    }
-  },
-  "sttQuotaExhausted": {
-    "description": "Teks untuk ditunjukkan apabila kuota STT habis.",
-    "message": "Kuota pengiktirafan pertuturan habis"
-  },
-  "sttQuotaProgress": {
-    "description": "Tooltip untuk bar kemajuan kuota STT.",
-    "message": "$remaining$ sebanyak $total$ detik",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "100"
-      },
-      "total": {
-        "content": "$2",
-        "example": "300"
-      }
-    }
-  },
-  "sttQuotaProgressMinutes": {
-    "description": "Tooltip untuk bar kemajuan kuota STT dalam beberapa minit.",
-    "message": "$remaining$ sebanyak $total$ minit tersisa",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "5"
-      },
-      "total": {
-        "content": "$2",
-        "example": "60"
-      }
-    }
-  },
-  "sttQuotaRemaining": {
-    "description": "Label untuk paparan baki kuota STT.",
-    "message": "Pengiktirafan pertuturan"
-  },
-  "sttQuotaSeconds": {
-    "description": "Unit untuk kuota STT (saat).",
-    "message": "Secs"
-  },
-  "ttsCredits": {
-    "description": "Istilah yang digunakan untuk mata wang kredit dalam ciri teks-ke-ucapan.",
-    "message": "Kredit"
-  },
   "ttsQuotaCharacters": {
-    "description": "Unit untuk kuota TTS (aksara).",
+    "description": "Unit for TTS quota (characters).",
     "message": "Kredit"
   },
   "ttsQuotaExhausted": {
-    "description": "Teks untuk ditunjukkan apabila kuota TTS habis.",
+    "description": "Text to show when TTS quota is exhausted.",
     "message": "Kuota suara habis"
   },
   "ttsQuotaProgress": {
-    "description": "Tooltip untuk bar kemajuan kuota TTS.",
+    "description": "Tooltip for the TTS quota progress bar.",
     "message": "$remaining$ daripada $total$ aksara",
     "placeholders": {
       "remaining": {
@@ -646,121 +706,243 @@
     }
   },
   "ttsQuotaRemaining": {
-    "description": "Label untuk paparan baki kuota TTS.",
+    "description": "Label for the TTS quota remaining display.",
     "message": "Penjanaan suara"
   },
-  "upgradeButton": {
-    "description": "Teks untuk butang untuk menaik taraf pelan apabila kuota habis.",
-    "message": "Rancangan menaik taraf"
-  },
-  "viewDetails": {
-    "description": "Teks untuk pautan untuk melihat butiran kuota penuh di papan pemuka.",
-    "message": "Lihat butiran"
-  },
-  "clickToCollapse": {
-    "description": "Teks yang menunjukkan pengguna boleh mengklik untuk menyembunyikan kandungan yang diperluaskan.",
-    "message": "Klik untuk runtuh"
-  },
-  "clickToExpand": {
-    "description": "Teks yang menunjukkan pengguna boleh mengklik untuk menunjukkan kandungan yang runtuh.",
-    "message": "Klik untuk berkembang"
-  },
-  "instructionLabel_context": {
-    "description": "Label mesra untuk arahan pengguna yang menyediakan maklumat latar belakang.",
-    "message": "Menyediakan konteks ..."
-  },
-  "instructionLabel_expectations": {
-    "description": "Label mesra untuk arahan pengguna yang mentakrifkan apa yang pengguna inginkan.",
-    "message": "Menjelaskan jangkaan ..."
-  },
-  "instructionLabel_focusing": {
-    "description": "Label mesra untuk arahan pengguna yang menyempitkan skop perbualan.",
-    "message": "Memfokuskan perbincangan ..."
-  },
-  "instructionLabel_guardrails": {
-    "description": "Label mesra untuk arahan pengguna yang menetapkan sempadan untuk perbualan.",
-    "message": "Menetapkan Guardrails ..."
-  },
-  "instructionLabel_guiding": {
-    "description": "Label mesra untuk arahan pengguna yang membimbing bagaimana AI harus bertindak balas.",
-    "message": "Membimbing jawapan ..."
-  },
-  "instructionLabel_nudge": {
-    "description": "Label mesra untuk arahan pengguna yang perlahan mencadangkan arah.",
-    "message": "Memberi nudge ..."
-  },
-  "instructionLabel_steering": {
-    "description": "Label mesra untuk arahan pengguna yang membimbing arah perbualan.",
-    "message": "Mengarahkan perbualan ..."
-  },
-  "maintenanceLabel_holding": {
-    "description": "Label mesra untuk mesej pembantu penyelenggaraan yang runtuh.",
-    "message": "Memegang pemikiran ini ..."
-  },
-  "maintenanceLabel_mental_note": {
-    "description": "Label mesra untuk mesej pembantu penyelenggaraan yang runtuh.",
-    "message": "Membuat nota mental ..."
-  },
-  "maintenanceLabel_processing": {
-    "description": "Label mesra untuk mesej pembantu penyelenggaraan yang runtuh.",
-    "message": "Pemprosesan di latar belakang ..."
-  },
-  "maintenanceLabel_remembering": {
-    "description": "Label mesra untuk mesej pembantu penyelenggaraan yang runtuh.",
-    "message": "Mengingati perincian ini ..."
-  },
-  "maintenanceLabel_saving": {
-    "description": "Label mesra untuk mesej pembantu penyelenggaraan yang runtuh.",
-    "message": "Menyimpan pemikiran itu untuk kemudian ..."
-  },
-  "maintenanceLabel_tracking": {
-    "description": "Label mesra untuk mesej pembantu penyelenggaraan yang runtuh.",
-    "message": "Menjejaki konteks ..."
-  },
-  "maintenanceLabel_tucking": {
-    "description": "Label mesra untuk mesej pembantu penyelenggaraan yang runtuh.",
-    "message": "Tucking ini ..."
-  },
-  "disableTTS": {
-    "description": "Label untuk pilihan untuk mematikan teks-ke-ucapan",
-    "message": "Lumpuhkan teks-ke-ucapan"
-  },
-  "signInForTTS": {
-    "description": "Prompt ditunjukkan apabila pengguna perlu mengesahkan untuk mengakses ciri-ciri teks-ke-ucapan",
-    "message": "Log masuk untuk teks-ke-ucapan"
-  },
   "ttsVoice": {
-    "description": "Label yang menerangkan pilihan suara teks-ke-ucapan di menu",
+    "description": "Label describing a text-to-speech voice option in the menu",
     "message": "Suara TTS"
   },
-  "voiceOff": {
-    "description": "Label untuk apabila teks-ke-ucapan dilumpuhkan",
-    "message": "Suara"
+  "unlockButton": {
+    "description": "The title (tooltip) of the button to unlock the screen.",
+    "message": "Tekan untuk membuka skrin"
   },
-  "voiceSettings": {
-    "description": "Teks item menu untuk mengakses tetapan yang berkaitan dengan suara.",
-    "message": "Tetapan suara"
+  "unlockInstruction": {
+    "description": "Instructions telling the user how to unlock the screen when locked.",
+    "message": "Tahan untuk membuka kunci."
   },
-  "addCredits": {
-    "description": "Teks untuk pautan untuk menambah lebih banyak kredit suara",
-    "message": "Tambah kredit"
+  "upgradeButton": {
+    "description": "Text for the button to upgrade the plan when quota is exhausted.",
+    "message": "Rancangan menaik taraf"
   },
   "upgradeForTTS": {
-    "description": "Prompt ditunjukkan apabila pengguna perlu menaik taraf untuk mendapatkan kredit teks-ke-ucapan",
+    "description": "Prompt shown when user needs to upgrade to obtain text-to-speech credits",
     "message": "Menaik taraf untuk penjanaan suara"
   },
-  "voicePaused": {
-    "description": "Teks yang ditunjukkan apabila suara dijeda kerana kredit yang tidak mencukupi",
-    "message": "Suara dijeda -"
-  },
-  "assistantIsListeningAttentively": {
-    "description": "Mesej yang dipaparkan apabila pembantu sedang mendengar ucapan dalam mod ejen.",
-    "message": "$chatbot$ sedang mendengar dengan penuh perhatian ...",
+  "userStartedInterrupting": {
+    "description": "Message displayed when the user starts speaking while the assistant is speaking.",
+    "message": "Teruskan, $chatbot$ sedang mendengar...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
-        "example": "Claude"
+        "example": "Pi"
       }
     }
+  },
+  "vadDetailActivatingMicrophone": {
+    "description": "VAD detail when activating the microphone.",
+    "message": "Activating microphone..."
+  },
+  "vadDetailCommLinkFailed": {
+    "description": "VAD detail when the communication port link fails.",
+    "message": "Communication link failed."
+  },
+  "vadDetailDeactivatingMicrophone": {
+    "description": "VAD detail when deactivating the microphone.",
+    "message": "Deactivating microphone..."
+  },
+  "vadDetailFailedToReconnectVADService": {
+    "description": "VAD detail when re-establishing connection fails.",
+    "message": "Failed to reconnect VAD service."
+  },
+  "vadDetailInitError": {
+    "description": "VAD detail for an initialization error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to connect to VAD service"
+      }
+    }
+  },
+  "vadDetailInitErrorPromise": {
+    "description": "VAD detail for an initialization promise error.",
+    "message": "Init Error: Promise error"
+  },
+  "vadDetailInitErrorUnknown": {
+    "description": "VAD detail for an unknown initialization error.",
+    "message": "Init Error: Unknown"
+  },
+  "vadDetailInitializedMode": {
+    "description": "VAD detail showing initialization mode.",
+    "message": "",
+    "placeholders": {
+      "mode": {
+        "content": "$1",
+        "example": "Agent"
+      }
+    }
+  },
+  "vadDetailInitializedModeNA": {
+    "description": "VAD detail showing initialization mode as N/A.",
+    "message": "Initialized (Mode: N/A)"
+  },
+  "vadDetailNonSpeechAudioDetected": {
+    "description": "VAD detail for non-speech audio detection.",
+    "message": "Non-speech audio detected"
+  },
+  "vadDetailReleasingVADResources": {
+    "description": "VAD detail when releasing VAD resources.",
+    "message": "Releasing VAD resources..."
+  },
+  "vadDetailRequestingVADSetup": {
+    "description": "VAD detail when requesting setup.",
+    "message": "Requesting VAD setup..."
+  },
+  "vadDetailSpeechDetected": {
+    "description": "VAD detail when speech has been detected.",
+    "message": "Speech detected"
+  },
+  "vadDetailSpeechEndedDuration": {
+    "description": "VAD detail indicating speech ended and its duration.",
+    "message": "",
+    "placeholders": {
+      "duration": {
+        "content": "$1",
+        "example": "1000"
+      }
+    }
+  },
+  "vadDetailStartError": {
+    "description": "VAD detail for a start error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to start VAD service"
+      }
+    }
+  },
+  "vadDetailStartErrorPromise": {
+    "description": "VAD detail for a start promise error.",
+    "message": "Start Error: Promise error"
+  },
+  "vadDetailStartErrorUnknown": {
+    "description": "VAD detail for an unknown start error.",
+    "message": "Start Error: Unknown"
+  },
+  "vadDetailStopError": {
+    "description": "VAD detail for a stop error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to stop VAD service"
+      }
+    }
+  },
+  "vadDetailStopErrorPromise": {
+    "description": "VAD detail for a stop promise error.",
+    "message": "Stop Error: Promise error"
+  },
+  "vadDetailStopErrorUnknown": {
+    "description": "VAD detail for an unknown stop error.",
+    "message": "Stop Error: Unknown"
+  },
+  "vadDetailUnknownVADError": {
+    "description": "VAD detail for an unknown error from the VAD module.",
+    "message": "Unknown VAD error"
+  },
+  "vadDetailVADProcessingStopped": {
+    "description": "VAD detail indicating VAD processing has stopped.",
+    "message": "VAD processing stopped."
+  },
+  "vadDetailVADServiceDisconnected": {
+    "description": "VAD detail when the service disconnects.",
+    "message": "VAD service disconnected. Try reloading."
+  },
+  "vadDetailVADServiceNotConnected": {
+    "description": "VAD detail when the service is not connected.",
+    "message": "VAD service not connected. Try reloading."
+  },
+  "vadDetailVADServiceShutdown": {
+    "description": "VAD detail indicating VAD service has been shut down.",
+    "message": "VAD service shut down."
+  },
+  "vadDetailWaitingForSpeech": {
+    "description": "VAD detail when waiting for user to speak.",
+    "message": "Waiting for speech"
+  },
+  "vadStatusDestroyed": {
+    "description": "VAD status when destroyed.",
+    "message": "Destroyed"
+  },
+  "vadStatusError": {
+    "description": "Generic VAD error status.",
+    "message": "Error"
+  },
+  "vadStatusFailed": {
+    "description": "Generic VAD failure status.",
+    "message": "Failed"
+  },
+  "vadStatusInitializing": {
+    "description": "VAD status when initializing.",
+    "message": "Initializing"
+  },
+  "vadStatusListening": {
+    "description": "VAD status when actively listening.",
+    "message": "Listening"
+  },
+  "vadStatusMisfire": {
+    "description": "VAD status when a misfire (non-speech) is detected.",
+    "message": "Misfire"
+  },
+  "vadStatusProcessing": {
+    "description": "VAD status when processing audio.",
+    "message": "Processing"
+  },
+  "vadStatusReady": {
+    "description": "VAD status when ready and waiting.",
+    "message": "Ready"
+  },
+  "vadStatusShuttingDown": {
+    "description": "VAD status when shutting down.",
+    "message": "Shutting down"
+  },
+  "vadStatusStarting": {
+    "description": "VAD status when starting.",
+    "message": "Starting"
+  },
+  "vadStatusStopped": {
+    "description": "VAD status when stopped.",
+    "message": "Stopped"
+  },
+  "vadStatusStopping": {
+    "description": "VAD status when stopping.",
+    "message": "Stopping"
+  },
+  "viewDetails": {
+    "description": "Text for the link to view full quota details on the dashboard.",
+    "message": "Lihat butiran"
+  },
+  "voiceIntroduction_joey": {
+    "description": "Introduction for the Joey voice.",
+    "message": "Hola! \nПривет! \n你好! \nSaya Pi, pembantu AI poliglot anda. \nDengan 32 bahasa di bawah arahan saya, kami boleh meneroka idea dan budaya dari seluruh dunia. \nApa pendapat anda tentang suara ini?"
+  },
+  "voiceIntroduction_paola": {
+    "description": "Introduction for the Paola voice.",
+    "message": "Ciao! \nBonjour! \nhelo! \nSaya Pi, dan saya boleh bercakap dengan fasih dalam 32 bahasa. \nDari bahasa Arab ke Bahasa Ukraine, saya di sini untuk memecahkan halangan bahasa. \nBagaimanakah suara ini terdengar kepada anda?"
+  },
+  "voiceOff": {
+    "description": "Label for when text-to-speech is disabled",
+    "message": "Suara"
+  },
+  "voicePaused": {
+    "description": "Text shown when voice is paused due to insufficient credits",
+    "message": "Suara dijeda -"
+  },
+  "voiceSettings": {
+    "description": "The text of the menu item to access voice-related settings.",
+    "message": "Tetapan suara"
   }
 }

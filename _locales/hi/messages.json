@@ -1,23 +1,39 @@
 {
-  "appName": {
-    "message": "Say, Pi",
-    "description": "एप्लिकेशन का नाम।"
+  "activityCheckButton": {
+    "description": "The text of the button to indicate that the user is still present.",
+    "message": "हाँ, मैं अभी भी यहाँ हूँ!"
+  },
+  "activityCheckMessage": {
+    "description": "The message to display when the conversation has been going on unusually long.",
+    "message": "वाह, यह तो एक लंबी बातचीत है। क्या आप अभी भी वहां हैं, या हम स्वयं से ही बात कर रहे हैं?"
+  },
+  "addCredits": {
+    "description": "Text for link to add more voice credits",
+    "message": "क्रेडिट जोड़ें"
+  },
+  "allowInterruptions": {
+    "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
+    "message": "विच्छेदनीय"
   },
   "appDescription": {
-    "message": "पाई और क्लाउड के लिए आवाज नियंत्रण। स्वाभाविक रूप से बोलें, आजीवन उत्तर प्राप्त करें। बस यह कह दो।",
-    "description": "एप्लिकेशन का विवरण।"
+    "description": "The description of the application.",
+    "message": "पाई और क्लाउड के लिए आवाज नियंत्रण। स्वाभाविक रूप से बोलें, आजीवन उत्तर प्राप्त करें। बस यह कह दो।"
   },
-  "callInProgress": {
-    "message": "हाथ मुक्त संवाद को समाप्त करें",
-    "description": "कॉल प्रगति पर होने पर कॉल बटन पर प्रदर्शित टूलटिप।"
+  "appName": {
+    "description": "The name of the application.",
+    "message": "Say, Pi"
   },
-  "callStarting": {
-    "message": "संयोजन...",
-    "description": "कॉल शुरू होने पर कॉल बटन पर प्रदर्शित टूलटिप।"
+  "applicationStatusIssue": {
+    "description": "Message to display when the application is experiencing issues.",
+    "message": "सिस्टम समस्या चेतावनी"
   },
-  "callNotStarted": {
-    "message": "$chatbot$ के साथ हाथ मुक्त वार्ता शुरू करें",
-    "description": "कॉल शुरू होने से पहले कॉल बटन पर प्रदर्शित टूलटिप।",
+  "applicationStatusUnknown": {
+    "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
+    "message": "आवेदन की स्थिति अज्ञात"
+  },
+  "assistantIsListening": {
+    "description": "Message displayed when the assistant is listening for speech.",
+    "message": "$chatbot$ सुन रहा है...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
@@ -25,60 +41,58 @@
       }
     }
   },
-  "callError": {
-    "message": "गैर-घातक त्रुटि का सामना किया गया। घबराएं नहीं, हम अभी भी सुन रहे हैं।",
-    "description": "गैर-घातक त्रुटि होने पर कॉल बटन पर प्रदर्शित टूलटिप।"
+  "assistantIsListeningAttentively": {
+    "description": "Message displayed when the assistant is listening for speech in agent mode.",
+    "message": "$chatbot$ ध्यान से सुन रहा है ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   },
-  "mode_speed": {
-    "message": "गति",
-    "description": "सबसे तेज़ ट्रांसक्रिप्शन मोड।"
+  "assistantIsSpeaking": {
+    "description": "Message displayed when the assistant is speaking its response.",
+    "message": "$chatbot$ बोल रहा है...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "mode_balanced": {
-    "message": "संतुलित",
-    "description": "डिफ़ॉल्ट ट्रांसक्रिप्शन मोड।"
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Message displayed when the assistant is speaking its response and manual interruption is possible.",
+    "message": "$chatbot$ बोल रहा है, बीच में बोलने के लिए टैप करें...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "mode_accuracy": {
-    "message": "सटीकता",
-    "description": "सबसे उच्च सटीकता वाला ट्रांसक्रिप्शन मोड।"
+  "assistantIsThinking": {
+    "description": "Message displayed when the assistant is preparing its response.",
+    "message": "$chatbot$ सोच रहा है...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "preferedModeControl": {
-    "message": "अपना पसंदीदा ट्रांसक्रिप्शन मोड चुनें",
-    "description": "पसंदीदा ट्रांसक्रिप्शन मोड का चयन करने के लिए नियंत्रण का शीर्षक (टूलटिप)।"
-  },
-  "autoSubmit": {
-    "description": "चेकबॉक्स के लिए लेबल स्वत: प्रम्प्ट सबमिशन को सक्षम/निष्क्रिय करने के लिए।",
-    "message": "स्वत: सबमिट"
-  },
-  "continueUnlocking": {
-    "description": "उपयोगकर्ता को निर्देश जो बताते हैं कि वे अनलॉक बटन दबाना शुरू करने के बाद कैसे जारी रखें।",
-    "message": "खोलने के लिए बना रहें..."
-  },
-  "lockButton": {
-    "description": "स्क्रीन को बेवजह छूने से बचाने के लिए बटन का शीर्षक (टूलटिप)।",
-    "message": "स्क्रीन को लॉक करने के लिए दबाएं"
-  },
-  "lockedScreen": {
-    "description": "स्क्रीन लॉक होने पर प्रमुख रूप से प्रदर्शित करने के लिए एक संदेश।",
-    "message": "स्क्रीन लॉक है।"
-  },
-  "soundEffects": {
-    "description": "ध्वनि प्रभावों को सक्षम/निष्क्रिय करने के लिए चेकबॉक्स का लेबल।",
-    "message": "ध्वनि प्रभाव"
-  },
-  "unlockButton": {
-    "description": "स्क्रीन अनलॉक करने के बटन का शीर्षक (टूलटिप)।",
-    "message": "स्क्रीन अनलॉक करने के लिए दबाएं"
-  },
-  "unlockInstruction": {
-    "description": "उपयोगकर्ता को बताने के निर्देश कि स्क्रीन को लॉक होने पर कैसे अनलॉक करें।",
-    "message": "अनलॉक करने के लिए पकड़ें।"
-  },
-  "preferedLanguage": {
-    "message": "भाषा",
-    "description": "वांछित ट्रांसक्रिप्शन भाषा का चयन करने के लिए नियंत्रण का लेबल।"
+  "assistantIsWriting": {
+    "description": "Message displayed when the assistant is typing its response.",
+    "message": "$chatbot$ लिख रहा है...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioConnected": {
-    "description": "माइक्रोफ़ोन कनेक्ट होने पर दिखाई देने वाला संदेश",
+    "description": "Message displayed when a microphone is connected",
     "message": "$microphone$ जुड़ा हुआ है",
     "placeholders": {
       "microphone": {
@@ -88,7 +102,7 @@
     }
   },
   "audioInputError": {
-    "description": "ऑडियो से खाली ट्रांसक्रिप्शन का परिणाम होने पर प्रदर्शित संदेश - आमतौर पर फ़िल्टरिंग का परिणाम।",
+    "description": "Message displayed when audio transcription failed - usually the result of an ASR or LLM API error.",
     "message": "हम्म, $chatbot$ में थोड़ा हिचकी थी। \nक्या आप फिर से ऐसा कहने की कोशिश कर सकते हैं?",
     "placeholders": {
       "chatbot": {
@@ -98,7 +112,7 @@
     }
   },
   "audioReconnecting": {
-    "description": "नए माइक्रोफोन से कनेक्ट होते समय प्रदर्शित संदेश",
+    "description": "Message displayed when connecting to a new microphone",
     "message": "$microphone$ पर स्विच कर रहे हैं...",
     "placeholders": {
       "microphone": {
@@ -107,9 +121,25 @@
       }
     }
   },
-  "assistantIsListening": {
-    "description": "संदेश जो तब प्रदर्शित होता है जब सहायक वाणी के लिए सुन रहा होता है।",
-    "message": "$chatbot$ सुन रहा है...",
+  "autoSubmit": {
+    "description": "Label for the checkbox to enable/disable automatic prompt submission.",
+    "message": "स्वत: सबमिट"
+  },
+  "callError": {
+    "description": "The tooltip to display on the call button when a non-fatal error occurs.",
+    "message": "गैर-घातक त्रुटि का सामना किया गया। घबराएं नहीं, हम अभी भी सुन रहे हैं।"
+  },
+  "callInProgress": {
+    "description": "The tooltip to display on the call button when a call is in progress.",
+    "message": "हाथ मुक्त संवाद को समाप्त करें"
+  },
+  "callInterruptible": {
+    "description": "The tooltip to display on the call button when a call is in progress and manual interruption is possible.",
+    "message": "बीच में रोकने के लिए टैप करें"
+  },
+  "callNotStarted": {
+    "description": "The tooltip to display on the call button before a call is started.",
+    "message": "$chatbot$ के साथ हाथ मुक्त वार्ता शुरू करें",
     "placeholders": {
       "chatbot": {
         "content": "$1",
@@ -117,13 +147,21 @@
       }
     }
   },
-  "toggleThemeToDarkMode": {
-    "description": "डार्क मोड को टॉगल करने के लिए बटन का लेबल।",
-    "message": "डार्क मोड पर स्विच करें"
+  "callStarting": {
+    "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
+    "message": "संयोजन..."
   },
-  "toggleThemeToLightMode": {
-    "description": "लाइट मोड पर टॉगल करने के लिए बटन का लेबल।",
-    "message": "प्रकाश मोड पर स्विच करें"
+  "checkingApplicationStatus": {
+    "description": "Message to display while the system status is being determined, e.g. during load.",
+    "message": "एप्लिकेशन की स्थिति जांच रहे हैं..."
+  },
+  "clickToCollapse": {
+    "description": "Text indicating user can click to hide expanded content.",
+    "message": "पतन के लिए क्लिक करें"
+  },
+  "clickToExpand": {
+    "description": "Text indicating user can click to show collapsed content.",
+    "message": "विस्तार करने के लिए क्लिक करें"
   },
   "consentAskParticipate": {
     "message": "क्या आप भाग लेना चाहेंगे?"
@@ -158,102 +196,40 @@
   "consetPrivacyPolicy": {
     "message": "हमारी गोपनीयता नीति पढ़ें"
   },
-  "shareAnalytics": {
-    "description": "एनालिटिक्स साझा करने / अक्षम करने के लिए चेकबॉक्स का लेबल।",
-    "message": "एनालिटिक्स साझा करें"
+  "continueUnlocking": {
+    "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
+    "message": "खोलने के लिए बना रहें..."
   },
-  "enterImmersiveModeLong": {
-    "description": "मोबाइल उपकरणों पर संलग्न मोड में प्रवेश करने के लिए बटन का aria-label और शीर्षक।",
-    "message": "इमर्सिव मोड में प्रवेश करें"
+  "copiedButtonTitle": {
+    "description": "The title of the button to indicate that the text of a message has been copied to the clipboard.",
+    "message": "प्रतिलिपि बनाई गई!"
   },
-  "enterImmersiveModeShort": {
-    "description": "डेस्कटॉप पर इमर्सिव मोड में प्रवेश करने के लिए बटन का पाठ।",
-    "message": "विसर्जन"
-  },
-  "exitImmersiveModeLong": {
-    "description": "मोबाइल उपकरणों पर संपूर्णता मोड से बाहर निकलने के लिए बटन का aria-label और शीर्षक, पाठ-आधारित डेस्कटॉप मोड पर वापस.",
-    "message": "इमर्सिव मोड से बाहर निकलें"
-  },
-  "applicationStatusIssue": {
-    "description": "जब एप्लिकेशन में समस्याएं हो रही हों, तो प्रदर्शित करने के लिए संदेश।",
-    "message": "सिस्टम समस्या चेतावनी"
-  },
-  "applicationStatusUnknown": {
-    "description": "जब एप्लिकेशन की स्थिति का निर्धारण नहीं किया जा सकता है, तो प्रदर्शित करने के लिए संदेश। उदाहरण के लिए, जब क्लाइंट ऑफलाइन हो।",
-    "message": "आवेदन की स्थिति अज्ञात"
-  },
-  "checkingApplicationStatus": {
-    "description": "सिस्टम स्थिति निर्धारित होने के समय, उदाहरण के लिए, लोड के दौरान प्रदर्शित करने के लिए संदेश।",
-    "message": "एप्लिकेशन की स्थिति जांच रहे हैं..."
-  },
-  "dismissAlert": {
-    "description": "सिस्टम मुद्दे की चेतावनी को खारिज करने के लिए बटन का लेबल।",
-    "message": "खारिज करें"
-  },
-  "recommendedActions": {
-    "description": "एक ज्ञात समस्या को सुधारने के लिए उपयोगकर्ता द्वारा लेने की सिफारिश की गई क्रियाओं की सूची पहले मैसेज।",
-    "message": "इस बीच, हम सिफारिश करते हैं:"
-  },
-  "extensionPopupTitle": {
-    "description": "एक्सटेंशन के पॉपअप डायलॉग का शीर्षक।",
-    "message": "Say, Pi"
-  },
-  "activityCheckButton": {
-    "description": "बटन का पाठ यह संकेत देने के लिए कि उपयोगकर्ता अभी भी मौजूद हैं.",
-    "message": "हाँ, मैं अभी भी यहाँ हूँ!"
-  },
-  "activityCheckMessage": {
-    "description": "जब वार्तालाप असामान्य रूप से लंबा होता है, तो प्रदर्शित करने के लिए संदेश।",
-    "message": "वाह, यह तो एक लंबी बातचीत है। क्या आप अभी भी वहां हैं, या हम स्वयं से ही बात कर रहे हैं?"
-  },
-  "assistantIsThinking": {
-    "message": "$chatbot$ सोच रहा है...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "सहायक अपना प्रतिक्रिया तैयार कर रहा हो, ऐसे समय में प्रदर्शित संदेश।"
-  },
-  "assistantIsSpeaking": {
-    "message": "$chatbot$ बोल रहा है...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "संदेश जो तब प्रदर्शित होता है जब सहायक अपना उत्तर कह रहा होता है।"
-  },
-  "userStartedInterrupting": {
-    "message": "आगे बढ़ो, $chatbot$ सुन रहा है...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "संदेश जो प्रदर्शित होता है जब उपयोगकर्ता सहायक के बोलने के समय बोलना शुरू करता है।"
-  },
-  "allowInterruptions": {
-    "message": "विच्छेदनीय",
-    "description": "चेकबॉक्स के लिए लेबल, जो पाई के प्रतिक्रियाओं को व्यवधान करने/ना करने की सुविधा देता है, जब माइक्रोसॉफ्ट समर्थन से बात करता है."
+  "copyButtonTitle": {
+    "description": "The title of the button to copy the text of a message to the clipboard.",
+    "message": "प्रतिलिपि"
   },
   "currencyUSDAbbreviation": {
-    "message": "क्रेडिट्स",
-    "description": "The abbreviation for the TTS credit units."
+    "description": "The abbreviation for the US dollar.",
+    "message": "क्रेडिट्स"
   },
   "currentCharges": {
-    "description": "उपयोगकर्ता द्वारा संचित की गई वर्तमान शुल्क (क्रमिक कुल) को वर्णन करने के लिए प्रयुक्त शब्द।",
+    "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "वर्तमान शुल्क"
   },
+  "disableTTS": {
+    "description": "Label for the option to turn off text-to-speech",
+    "message": "पाठ-से-भाषण अक्षम करें"
+  },
+  "dismissAlert": {
+    "description": "Label for the button to dismiss a system issue alert.",
+    "message": "खारिज करें"
+  },
   "enableTTS": {
-    "description": "टेक्स्ट-टू-स्पीच को सक्रिय/निष्क्रिय करने के लिए चेकबॉक्स का लेबल।",
+    "description": "Label for the checkbox to enable/disable text-to-speech.",
     "message": "बहुभाषी स्वर"
   },
   "enhancedVoice": {
-    "description": "कहें, पाई उन्नत स्वरों के लिए शीर्षक (टूलटिप)।",
+    "description": "Title (tooltip) for Say, Pi enhanced voices.",
     "message": "$product$ द्वारा आवाज को बढ़ाया गया",
     "placeholders": {
       "product": {
@@ -262,8 +238,185 @@
       }
     }
   },
+  "enterImmersiveModeLong": {
+    "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
+    "message": "इमर्सिव मोड में प्रवेश करें"
+  },
+  "enterImmersiveModeShort": {
+    "description": "The text of the button to enter immersive mode on desktop.",
+    "message": "विसर्जन"
+  },
+  "exitImmersiveModeLong": {
+    "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
+    "message": "इमर्सिव मोड से बाहर निकलें"
+  },
+  "extensionPopupTitle": {
+    "description": "The title of the extension's popup dialog.",
+    "message": "Say, Pi"
+  },
+  "extensionSettings": {
+    "description": "The text of the button to open the extension's settings.",
+    "message": "सेटिंग्स"
+  },
+  "greeting": {
+    "description": "Greeting message shown when user is signed in",
+    "message": "हाय, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "instructionLabel_context": {
+    "description": "Friendly label for user instruction that provides background information.",
+    "message": "संदर्भ प्रदान करना ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Friendly label for user instruction that defines what the user wants.",
+    "message": "उम्मीदों को स्पष्ट करना ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Friendly label for user instruction that narrows the scope of conversation.",
+    "message": "चर्चा पर ध्यान केंद्रित करना ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Friendly label for user instruction that establishes boundaries for the conversation.",
+    "message": "रेलिंग सेटिंग ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Friendly label for user instruction that guides how the AI should respond.",
+    "message": "मार्गदर्शक प्रतिक्रियाएं ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Friendly label for user instruction that gently suggests a direction.",
+    "message": "एक कुहनी दे ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Friendly label for user instruction that guides the conversation direction.",
+    "message": "बातचीत को स्टीयरिंग ..."
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "फ़िलहाल फ़ायरफ़ॉक्स में रुकावटें समर्थित नहीं हैं।"
+  },
+  "lockButton": {
+    "description": "The title (tooltip) of the button to lock the screen against accidental touches.",
+    "message": "स्क्रीन को लॉक करने के लिए दबाएं"
+  },
+  "lockedScreen": {
+    "description": "A message to display prominently when the screen is locked.",
+    "message": "स्क्रीन लॉक है।"
+  },
+  "maintenanceLabel_holding": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "इस विचार को पकड़े हुए ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "एक मानसिक नोट बनाना ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "पृष्ठभूमि में प्रसंस्करण ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "इस विवरण को याद करते हुए ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "बाद में सोचा गया कि सहेजना ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "संदर्भ का ट्रैक रखना ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "इस दूर टक ..."
+  },
+  "microphoneErrorConstraints": {
+    "description": "Error message when microphone constraints cannot be satisfied.",
+    "message": "आपकी माइक्रोफ़ोन सेटिंग्स आवश्यक विशिष्टताओं को पूरा नहीं करती हैं। \nकिसी भिन्न माइक्रोफ़ोन का उपयोग करने या अपनी ऑडियो सेटिंग समायोजित करने का प्रयास करें।"
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generic error message with details when microphone access fails.",
+    "message": "माइक्रोफ़ोन तक पहुँचने में विफल: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Error message when microphone is already in use by another application.",
+    "message": "माइक्रोफ़ोन तक नहीं पहुंच सकता क्योंकि इसका उपयोग किसी अन्य एप्लिकेशन द्वारा किया जा रहा है। \nकृपया अन्य ऐप्स बंद करें जो आपके माइक्रोफ़ोन का उपयोग कर रहे हों।"
+  },
+  "microphoneErrorNotFound": {
+    "description": "Error message when no microphone device is found.",
+    "message": "कोई माइक्रोफ़ोन नहीं मिला. \nकृपया माइक्रोफ़ोन कनेक्ट करें और पुनः प्रयास करें।"
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Error message when microphone permission is denied by the user or system.",
+    "message": "माइक्रोफ़ोन पहुंच आवश्यक है. \nकृपया अपनी ब्राउज़र सेटिंग में माइक्रोफ़ोन एक्सेस जारी रखने की अनुमति दें।"
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Error message for unexpected microphone errors with details.",
+    "message": "आपके माइक्रोफ़ोन में एक अप्रत्याशित त्रुटि उत्पन्न हुई: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generic error message when microphone access fails for unknown reasons.",
+    "message": "माइक्रोफ़ोन तक पहुँचने में असमर्थ. \nकृपया अपनी डिवाइस सेटिंग जांचें और पुनः प्रयास करें।"
+  },
+  "mode_accuracy": {
+    "description": "Highest accuracy mode.",
+    "message": "सटीकता"
+  },
+  "mode_accuracy_description": {
+    "description": "Description for the accuracy transcription mode.",
+    "message": "उच्चतम सटीकता, लेकिन धीमी प्रतिलेखन गति। \nमतिभ्रम की संभावना."
+  },
+  "mode_balanced": {
+    "description": "Default transcription mode.",
+    "message": "संतुलित"
+  },
+  "mode_balanced_description": {
+    "description": "Description for the balanced transcription mode.",
+    "message": "अधिकांश उपयोगों के लिए गति और सटीकता का अच्छा संतुलन।"
+  },
+  "mode_speed": {
+    "description": "Fastest transcription mode.",
+    "message": "गति"
+  },
+  "mode_speed_description": {
+    "description": "Description for the speed transcription mode.",
+    "message": "सबसे तेज़ प्रतिक्रिया, लेकिन कम सटीक। \nव्यवधान उत्पन्न करने वाला।"
+  },
+  "nicknameLabel": {
+    "description": "Label for the input field to set a custom nickname for the AI assistant.",
+    "message": "उपनाम"
+  },
+  "notSignedIn": {
+    "description": "Text to show when the user is not signed in.",
+    "message": "प्रवेश नहीं किया"
+  },
+  "preferedLanguage": {
+    "description": "Label for a control to select the prefered transcription language.",
+    "message": "भाषा"
+  },
+  "preferedModeControl": {
+    "description": "The title (tooltip) of the control to select the prefered transcription mode.",
+    "message": "अपना पसंदीदा ट्रांसक्रिप्शन मोड चुनें"
+  },
   "previewProgress": {
-    "description": "जब उपयोगकर्ता एक सुविधा का पूर्वावलोकन कर रहा होता है, जिसमें अक्षर सीमा होती है, तो प्रदर्शित करने के लिए संदेश।",
+    "description": "The message to display when the user is previewing a feature that has a character limit.",
     "message": "$limit$ में से $count$ वर्ण उपयोग किए गए",
     "placeholders": {
       "count": {
@@ -283,7 +436,7 @@
     "message": "बीटा पूरा हुआ"
   },
   "previewStatusPaused": {
-    "description": "जब उपयोगकर्ता एक सुविधा का पूर्वावलोकन कर रहा होता है, जिसे रोक दिया गया है, तो प्रदर्शित करने के लिए संदेश।",
+    "description": "The message to display when the user is previewing a feature that has been paused.",
     "message": "बीटा $resetDate$ तक रोके गए हैं",
     "placeholders": {
       "resetDate": {
@@ -295,12 +448,187 @@
   "previewStatusUnknown": {
     "message": "संपर्क करने में असमर्थ..."
   },
+  "profile": {
+    "description": "Label for the user profile section.",
+    "message": "प्रोफ़ाइल"
+  },
+  "quotaCredits": {
+    "description": "Unit label for TTS credits",
+    "message": "क्रेडिट"
+  },
+  "quotaRemaining": {
+    "description": "Label for the quota remaining progress bar",
+    "message": "कोटा शेष"
+  },
+  "quotaStatusUnknown": {
+    "description": "Message shown when quota status cannot be determined",
+    "message": "कोटा स्थिति की जांच करने में असमर्थ"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Message shown when user is not authenticated.",
+    "message": "वॉयस जेनरेशन और अन्य प्रीमियम सुविधाओं तक पहुंचने के लिए लॉग इन करें"
+  },
   "readAloudButtonTitle": {
-    "description": "संदेश के पाठ को उच्चारित करने के लिए बटन का शीर्षक।",
+    "description": "The title of the button to read aloud the text of a message.",
     "message": "उच्चारण करके पढ़ें"
   },
+  "recommendedActions": {
+    "description": "Message preceding a list of recommended actions the user may take to remediate a known issue.",
+    "message": "इस बीच, हम सिफारिश करते हैं:"
+  },
+  "regenerateButtonTitle": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an estimated cost.",
+    "message": "$cost$ $currency$ के लिए ऑडियो उत्पन्न करें",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
+    "message": "ऑडियो उत्पन्न करें"
+  },
+  "shareAnalytics": {
+    "description": "Label for the checkbox to enable/disable sharing of analytics.",
+    "message": "एनालिटिक्स साझा करें"
+  },
+  "signIn": {
+    "description": "Text for the sign in button.",
+    "message": "दाखिल करना"
+  },
+  "signInForTTS": {
+    "description": "Prompt shown when user needs to authenticate to access text-to-speech features",
+    "message": "टेक्स्ट-टू-स्पीच के लिए साइन इन करें"
+  },
+  "signOut": {
+    "description": "Text for the sign out button.",
+    "message": "साइन आउट"
+  },
+  "signedIn": {
+    "description": "Status text shown when user is authenticated (without email).",
+    "message": "में हस्ताक्षरित"
+  },
+  "signedInAs": {
+    "description": "Status text shown when user is authenticated, including their email.",
+    "message": "में हस्ताक्षरित $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "soundEffects": {
+    "description": "Label for the checkbox to enable/disable sound effects.",
+    "message": "ध्वनि प्रभाव"
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "ऑडियो फीडबैक समस्याओं को रोकने के लिए फ़ायरफ़ॉक्स में ध्वनि प्रभाव अक्षम हैं।"
+  },
+  "sttMinutesRemaining": {
+    "description": "Text showing remaining STT quota in minutes.",
+    "message": "$minutes$ मिनट $plural$ शेष",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text to show when STT quota is exhausted.",
+    "message": "भाषण मान्यता कोटा समाप्त हो गया"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip for the STT quota progress bar.",
+    "message": "$remaining$ कुल $total$ सेकंड शेष है",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip for the STT quota progress bar in minutes.",
+    "message": "$remaining$ कुल $total$ मिनट शेष है",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Label for the STT quota remaining display.",
+    "message": "वाक् पहचान"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unit for STT quota (seconds).",
+    "message": "सेकेंड"
+  },
+  "submitModeControl": {
+    "description": "The title (tooltip) of the control to select when messages should be submitted.",
+    "message": "अपने संदेश कब सबमिट करना है चुनें"
+  },
+  "submit_mode_agent": {
+    "description": "AI-driven submission mode.",
+    "message": "प्रतिनिधि"
+  },
+  "submit_mode_agent_description": {
+    "description": "Description for the AI-driven submission mode.",
+    "message": "$chatbot$ संदर्भ के आधार पर निर्णय लेता है कि कब प्रतिक्रिया देनी है",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatic submission mode.",
+    "message": "ऑटो"
+  },
+  "submit_mode_auto_description": {
+    "description": "Description for the automatic submission mode.",
+    "message": "जब आप बोलना बंद कर दें तो स्वचालित रूप से सबमिट करें"
+  },
+  "submit_mode_off": {
+    "description": "Manual submission mode.",
+    "message": "नियमावली"
+  },
+  "submit_mode_off_description": {
+    "description": "Description for the manual submission mode.",
+    "message": "जब आप बटन दबाएँ तभी सबमिट करें"
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Label for the button to toggle to dark mode.",
+    "message": "डार्क मोड पर स्विच करें"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Label for the button to toggle to light mode.",
+    "message": "प्रकाश मोड पर स्विच करें"
+  },
   "ttsCostExplanation": {
-    "description": "जब पाठ-से-वाणी इंजन का उपयोग संदेश को उच्चरित करने के लिए किया जाता है, तो संदेश की लागत के साथ प्रदर्शित होने वाला टूलटिप।",
+    "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
     "message": "इस संदेश को सुनने के लिए $product$ $cost$ $currency$ चार्ज करेगा",
     "placeholders": {
       "cost": {
@@ -318,7 +646,7 @@
     }
   },
   "ttsCostExplanationFree": {
-    "description": "जब एक पाठ-से-वाणी इंजन का उपयोग संदेश को जोर से पढ़ने के लिए किया जाता है, और संदेश मुक्त है, तो प्रदर्शित करने के लिए tooltip। प्रदायक का नाम हो सकता है।",
+    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free. Assumes the provider is Inflection AI.",
     "message": "यह ऑडियो इन्फ्लेक्शन एआई द्वारा निःशुल्क तैयार किया गया है",
     "placeholders": {
       "provider": {
@@ -327,8 +655,26 @@
       }
     }
   },
+  "ttsCostExplanationSayPi": {
+    "description": "The tooltip to display when the user hovers over the cost explanation link.",
+    "message": "जानें कि $product$ ऑडियो के लिए कैसे शुल्क लेता है",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "ttsCredits": {
+    "description": "The term used for the credits currency in the text-to-speech feature.",
+    "message": "क्रेडिट"
+  },
+  "ttsDisabledSafari": {
+    "description": "Message shown when TTS is disabled in Safari",
+    "message": "सफ़ारी में वर्तमान में बहुभाषी आवाज़ें समर्थित नहीं हैं।"
+  },
   "ttsPoweredBy": {
-    "description": "जब पाठ-से-वाणी इंजन का उपयोग संदेश को जोर से पढ़ने के लिए किया जाता है, तो प्रदर्शित करने के लिए संदेश।",
+    "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "टेक्स्ट-टू-स्पीच $ttsEngine$ द्वारा संचालित",
     "placeholders": {
       "ttsEngine": {
@@ -337,302 +683,16 @@
       }
     }
   },
-  "copiedButtonTitle": {
-    "message": "प्रतिलिपि बनाई गई!",
-    "description": "संदेश का पाठ क्लिपबोर्ड में प्रतिलिपि बनाने के लिए बटन का शीर्षक।"
-  },
-  "copyButtonTitle": {
-    "message": "प्रतिलिपि",
-    "description": "संदेश के पाठ को क्लिपबोर्ड में कॉपी करने के लिए बटन का शीर्षक।"
-  },
-  "voiceIntroduction_joey": {
-    "message": "होला! \nПривет! \nठीक है! \nमैं पाई हूं, आपका बहुभाषी एआई सहायक। \nमेरे नियंत्रण में 32 भाषाओं के साथ, हम दुनिया भर के विचारों और संस्कृतियों का पता लगा सकते हैं। \nआप इस आवाज़ के बारे में क्या सोचते हैं?",
-    "description": "जोई वाणी के परिचय।"
-  },
-  "voiceIntroduction_paola": {
-    "message": "सियाओ! \nसुप्रभात! \nनमस्ते! \nमैं पाई हूं और 32 भाषाओं में धाराप्रवाह बातचीत कर सकता हूं। \nअरबी से यूक्रेनी तक, मैं भाषा की बाधाओं को तोड़ने के लिए यहां हूं। \nयह आवाज़ आपको कैसी लगती है?",
-    "description": "पाओला वॉइस के लिए परिचय।"
-  },
-  "regenerateButtonTitle": {
-    "message": "$cost$ $currency$ के लिए ऑडियो उत्पन्न करें",
-    "description": "संदेश की ऑडियो को पुनर्जनित करने के लिए बटन का शीर्षक। अनुमानित लागत हो सकती है।",
-    "placeholders": {
-      "cost": {
-        "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
-      }
-    }
-  },
-  "regenerateButtonTitleFree": {
-    "message": "ऑडियो उत्पन्न करें",
-    "description": "संदेश की ऑडियो को पुनर्जन्मित करने के लिए बटन का शीर्षक। अनिर्धारित मूल्यांकन हो सकता है।"
-  },
-  "assistantIsWriting": {
-    "description": "जब सहायक अपनी प्रतिक्रिया टाइप कर रहा हो तो संदेश प्रदर्शित होता है।",
-    "message": "$chatbot$ लिख रहा है...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "ttsCostExplanationSayPi": {
-    "description": "जब उपयोगकर्ता लागत स्पष्टीकरण लिंक पर होवर करता है तो प्रदर्शित होने वाला टूलटिप।",
-    "placeholders": {
-      "product": {
-        "content": "$1",
-        "example": "Say, Pi"
-      }
-    },
-    "message": "जानें कि $product$ ऑडियो के लिए कैसे शुल्क लेता है"
-  },
-  "interruptionsFirefoxDisabled": {
-    "message": "फ़िलहाल फ़ायरफ़ॉक्स में रुकावटें समर्थित नहीं हैं।"
-  },
-  "mode_accuracy_description": {
-    "description": "सटीकता प्रतिलेखन मोड के लिए विवरण।",
-    "message": "उच्चतम सटीकता, लेकिन धीमी प्रतिलेखन गति। \nमतिभ्रम की संभावना."
-  },
-  "mode_balanced_description": {
-    "description": "संतुलित प्रतिलेखन मोड के लिए विवरण।",
-    "message": "अधिकांश उपयोगों के लिए गति और सटीकता का अच्छा संतुलन।"
-  },
-  "mode_speed_description": {
-    "description": "स्पीड ट्रांसक्रिप्शन मोड के लिए विवरण।",
-    "message": "सबसे तेज़ प्रतिक्रिया, लेकिन कम सटीक। \nव्यवधान उत्पन्न करने वाला।"
-  },
-  "soundEffectsFirefoxDisabled": {
-    "message": "ऑडियो फीडबैक समस्याओं को रोकने के लिए फ़ायरफ़ॉक्स में ध्वनि प्रभाव अक्षम हैं।"
-  },
-  "assistantIsSpeakingWithManualInterrupt": {
-    "description": "जब सहायक अपनी प्रतिक्रिया बोल रहा होता है तो संदेश प्रदर्शित होता है और मैन्युअल रुकावट संभव है।",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "message": "$chatbot$ बोल रहा है, बीच में बोलने के लिए टैप करें..."
-  },
-  "callInterruptible": {
-    "description": "जब कॉल चालू हो और मैन्युअल रुकावट संभव हो तो कॉल बटन पर प्रदर्शित होने वाला टूलटिप।",
-    "message": "बीच में रोकने के लिए टैप करें"
-  },
-  "microphoneErrorConstraints": {
-    "description": "जब माइक्रोफ़ोन की बाधाएं पूरी नहीं की जा सकतीं तो त्रुटि संदेश।",
-    "message": "आपकी माइक्रोफ़ोन सेटिंग्स आवश्यक विशिष्टताओं को पूरा नहीं करती हैं। \nकिसी भिन्न माइक्रोफ़ोन का उपयोग करने या अपनी ऑडियो सेटिंग समायोजित करने का प्रयास करें।"
-  },
-  "microphoneErrorGeneric": {
-    "description": "माइक्रोफ़ोन पहुंच विफल होने पर विवरण के साथ सामान्य त्रुटि संदेश।",
-    "message": "माइक्रोफ़ोन तक पहुँचने में विफल: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Permission denied"
-      }
-    }
-  },
-  "microphoneErrorInUse": {
-    "description": "जब माइक्रोफ़ोन पहले से ही किसी अन्य एप्लिकेशन द्वारा उपयोग में हो तो त्रुटि संदेश।",
-    "message": "माइक्रोफ़ोन तक नहीं पहुंच सकता क्योंकि इसका उपयोग किसी अन्य एप्लिकेशन द्वारा किया जा रहा है। \nकृपया अन्य ऐप्स बंद करें जो आपके माइक्रोफ़ोन का उपयोग कर रहे हों।"
-  },
-  "microphoneErrorNotFound": {
-    "description": "कोई माइक्रोफ़ोन डिवाइस न मिलने पर त्रुटि संदेश.",
-    "message": "कोई माइक्रोफ़ोन नहीं मिला. \nकृपया माइक्रोफ़ोन कनेक्ट करें और पुनः प्रयास करें।"
-  },
-  "microphoneErrorPermissionDenied": {
-    "description": "जब उपयोगकर्ता या सिस्टम द्वारा माइक्रोफ़ोन की अनुमति अस्वीकार कर दी जाती है तो त्रुटि संदेश।",
-    "message": "माइक्रोफ़ोन पहुंच आवश्यक है. \nकृपया अपनी ब्राउज़र सेटिंग में माइक्रोफ़ोन एक्सेस जारी रखने की अनुमति दें।"
-  },
-  "microphoneErrorUnexpected": {
-    "description": "विवरण के साथ अप्रत्याशित माइक्रोफ़ोन त्रुटियों के लिए त्रुटि संदेश।",
-    "message": "आपके माइक्रोफ़ोन में एक अप्रत्याशित त्रुटि उत्पन्न हुई: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Device busy"
-      }
-    }
-  },
-  "microphoneErrorUnknown": {
-    "description": "अज्ञात कारणों से माइक्रोफ़ोन पहुंच विफल होने पर सामान्य त्रुटि संदेश।",
-    "message": "माइक्रोफ़ोन तक पहुँचने में असमर्थ. \nकृपया अपनी डिवाइस सेटिंग जांचें और पुनः प्रयास करें।"
-  },
-  "ttsDisabledSafari": {
-    "message": "सफ़ारी में वर्तमान में बहुभाषी आवाज़ें समर्थित नहीं हैं।",
-    "description": "सफ़ारी में टीटीएस अक्षम होने पर संदेश दिखाया जाता है"
-  },
-  "extensionSettings": {
-    "message": "सेटिंग्स",
-    "description": "एक्सटेंशन की सेटिंग खोलने के लिए बटन का टेक्स्ट."
-  },
-  "submitModeControl": {
-    "description": "संदेशों को कब सबमिट किया जाना चाहिए यह चुनने के लिए नियंत्रण का शीर्षक (टूलटिप)।",
-    "message": "अपने संदेश कब सबमिट करना है चुनें"
-  },
-  "submit_mode_agent": {
-    "description": "एआई-संचालित सबमिशन मोड।",
-    "message": "प्रतिनिधि"
-  },
-  "submit_mode_agent_description": {
-    "description": "एआई-संचालित सबमिशन मोड का विवरण।",
-    "message": "$chatbot$ संदर्भ के आधार पर निर्णय लेता है कि कब प्रतिक्रिया देनी है",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "submit_mode_auto": {
-    "description": "स्वचालित सबमिशन मोड.",
-    "message": "ऑटो"
-  },
-  "submit_mode_auto_description": {
-    "description": "स्वचालित सबमिशन मोड का विवरण।",
-    "message": "जब आप बोलना बंद कर दें तो स्वचालित रूप से सबमिट करें"
-  },
-  "submit_mode_off": {
-    "description": "मैन्युअल सबमिशन मोड.",
-    "message": "नियमावली"
-  },
-  "submit_mode_off_description": {
-    "description": "मैन्युअल सबमिशन मोड का विवरण.",
-    "message": "जब आप बटन दबाएँ तभी सबमिट करें"
-  },
-  "nicknameLabel": {
-    "message": "उपनाम",
-    "description": "AI सहायक के लिए एक कस्टम उपनाम सेट करने के लिए इनपुट फ़ील्ड के लिए लेबल।"
-  },
-  "greeting": {
-    "description": "उपयोगकर्ता पर हस्ताक्षर किए जाने पर अभिवादन संदेश दिखाया गया है",
-    "message": "हाय, $name$!",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John"
-      }
-    }
-  },
-  "notSignedIn": {
-    "description": "जब उपयोगकर्ता पर हस्ताक्षर नहीं किया जाता है, तो यह दिखाने के लिए पाठ।",
-    "message": "प्रवेश नहीं किया"
-  },
-  "profile": {
-    "description": "उपयोगकर्ता प्रोफ़ाइल अनुभाग के लिए लेबल।",
-    "message": "प्रोफ़ाइल"
-  },
-  "quotaCredits": {
-    "description": "टीटीएस क्रेडिट के लिए यूनिट लेबल",
-    "message": "क्रेडिट"
-  },
-  "quotaRemaining": {
-    "description": "कोटा शेष प्रगति पट्टी के लिए लेबल",
-    "message": "कोटा शेष"
-  },
-  "quotaStatusUnknown": {
-    "description": "कोटा स्थिति निर्धारित नहीं किया जा सकता है",
-    "message": "कोटा स्थिति की जांच करने में असमर्थ"
-  },
-  "quotaUnauthenticatedMessage": {
-    "description": "जब उपयोगकर्ता प्रमाणित नहीं होता है तो संदेश दिखाया गया है।",
-    "message": "वॉयस जेनरेशन और अन्य प्रीमियम सुविधाओं तक पहुंचने के लिए लॉग इन करें"
-  },
-  "signIn": {
-    "description": "बटन इन बटन के लिए पाठ।",
-    "message": "दाखिल करना"
-  },
-  "signOut": {
-    "description": "साइन आउट बटन के लिए पाठ।",
-    "message": "साइन आउट"
-  },
-  "signedIn": {
-    "description": "स्टेटस टेक्स्ट दिखाया गया है जब उपयोगकर्ता को प्रमाणित किया जाता है (ईमेल के बिना)।",
-    "message": "में हस्ताक्षरित"
-  },
-  "signedInAs": {
-    "description": "स्टेटस टेक्स्ट दिखाया गया है जब उपयोगकर्ता को प्रमाणित किया जाता है, जिसमें उनके ईमेल भी शामिल हैं।",
-    "message": "में हस्ताक्षरित $email$",
-    "placeholders": {
-      "email": {
-        "content": "$1",
-        "example": "user@example.com"
-      }
-    }
-  },
-  "sttMinutesRemaining": {
-    "description": "मिनटों में शेष stt कोटा दिखा रहा है।",
-    "message": "$minutes$ मिनट $plural$ शेष",
-    "placeholders": {
-      "minutes": {
-        "content": "$1",
-        "example": "5"
-      },
-      "plural": {
-        "content": "$2",
-        "example": "s"
-      }
-    }
-  },
-  "sttQuotaExhausted": {
-    "description": "STT कोटा समाप्त होने पर दिखाने के लिए पाठ।",
-    "message": "भाषण मान्यता कोटा समाप्त हो गया"
-  },
-  "sttQuotaProgress": {
-    "description": "STT कोटा प्रगति बार के लिए टूलटिप।",
-    "message": "$remaining$ कुल $total$ सेकंड शेष है",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "100"
-      },
-      "total": {
-        "content": "$2",
-        "example": "300"
-      }
-    }
-  },
-  "sttQuotaProgressMinutes": {
-    "description": "मिनटों में STT कोटा प्रगति बार के लिए टूलटिप।",
-    "message": "$remaining$ कुल $total$ मिनट शेष है",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "5"
-      },
-      "total": {
-        "content": "$2",
-        "example": "60"
-      }
-    }
-  },
-  "sttQuotaRemaining": {
-    "description": "STT कोटा शेष प्रदर्शन के लिए लेबल।",
-    "message": "वाक् पहचान"
-  },
-  "sttQuotaSeconds": {
-    "description": "STT कोटा (सेकंड) के लिए इकाई।",
-    "message": "सेकेंड"
-  },
-  "ttsCredits": {
-    "description": "टेक्स्ट-टू-स्पीच फीचर में क्रेडिट मुद्रा के लिए इस्तेमाल किया गया शब्द।",
-    "message": "क्रेडिट"
-  },
   "ttsQuotaCharacters": {
-    "description": "TTS कोटा (वर्ण) के लिए इकाई।",
+    "description": "Unit for TTS quota (characters).",
     "message": "क्रेडिट"
   },
   "ttsQuotaExhausted": {
-    "description": "TTS कोटा कब समाप्त होने पर दिखाने के लिए पाठ।",
+    "description": "Text to show when TTS quota is exhausted.",
     "message": "आवाज कोटा थका हुआ"
   },
   "ttsQuotaProgress": {
-    "description": "TTS कोटा प्रगति बार के लिए टूलटिप।",
+    "description": "Tooltip for the TTS quota progress bar.",
     "message": "$remaining$ कुल $total$ वर्ण शेष",
     "placeholders": {
       "remaining": {
@@ -646,121 +706,243 @@
     }
   },
   "ttsQuotaRemaining": {
-    "description": "टीटीएस कोटा शेष प्रदर्शन के लिए लेबल।",
+    "description": "Label for the TTS quota remaining display.",
     "message": "आवाज"
   },
-  "upgradeButton": {
-    "description": "कोटा समाप्त होने पर योजना को अपग्रेड करने के लिए बटन के लिए पाठ।",
-    "message": "अपग्रेड योजना"
-  },
-  "viewDetails": {
-    "description": "डैशबोर्ड पर पूर्ण कोटा विवरण देखने के लिए लिंक के लिए पाठ।",
-    "message": "विवरण देखें"
-  },
-  "clickToCollapse": {
-    "description": "पाठ का संकेत उपयोगकर्ता विस्तारित सामग्री को छिपाने के लिए क्लिक कर सकता है।",
-    "message": "पतन के लिए क्लिक करें"
-  },
-  "clickToExpand": {
-    "description": "पाठ का संकेत उपयोगकर्ता ढह गई सामग्री दिखाने के लिए क्लिक कर सकता है।",
-    "message": "विस्तार करने के लिए क्लिक करें"
-  },
-  "instructionLabel_context": {
-    "description": "उपयोगकर्ता निर्देश के लिए अनुकूल लेबल जो पृष्ठभूमि की जानकारी प्रदान करता है।",
-    "message": "संदर्भ प्रदान करना ..."
-  },
-  "instructionLabel_expectations": {
-    "description": "उपयोगकर्ता निर्देश के लिए अनुकूल लेबल जो परिभाषित करता है कि उपयोगकर्ता क्या चाहता है।",
-    "message": "उम्मीदों को स्पष्ट करना ..."
-  },
-  "instructionLabel_focusing": {
-    "description": "उपयोगकर्ता निर्देश के लिए अनुकूल लेबल जो वार्तालाप के दायरे को कम करता है।",
-    "message": "चर्चा पर ध्यान केंद्रित करना ..."
-  },
-  "instructionLabel_guardrails": {
-    "description": "उपयोगकर्ता निर्देश के लिए अनुकूल लेबल जो वार्तालाप के लिए सीमाएं स्थापित करता है।",
-    "message": "रेलिंग सेटिंग ..."
-  },
-  "instructionLabel_guiding": {
-    "description": "उपयोगकर्ता निर्देश के लिए अनुकूल लेबल जो यह मार्गदर्शन करता है कि एआई को कैसे प्रतिक्रिया दी जानी चाहिए।",
-    "message": "मार्गदर्शक प्रतिक्रियाएं ..."
-  },
-  "instructionLabel_nudge": {
-    "description": "उपयोगकर्ता निर्देश के लिए अनुकूल लेबल जो धीरे से एक दिशा का सुझाव देता है।",
-    "message": "एक कुहनी दे ..."
-  },
-  "instructionLabel_steering": {
-    "description": "उपयोगकर्ता निर्देश के लिए अनुकूल लेबल जो वार्तालाप दिशा का मार्गदर्शन करता है।",
-    "message": "बातचीत को स्टीयरिंग ..."
-  },
-  "maintenanceLabel_holding": {
-    "description": "ढह गए सहायक रखरखाव संदेश के लिए अनुकूल लेबल।",
-    "message": "इस विचार को पकड़े हुए ..."
-  },
-  "maintenanceLabel_mental_note": {
-    "description": "ढह गए सहायक रखरखाव संदेश के लिए अनुकूल लेबल।",
-    "message": "एक मानसिक नोट बनाना ..."
-  },
-  "maintenanceLabel_processing": {
-    "description": "ढह गए सहायक रखरखाव संदेश के लिए अनुकूल लेबल।",
-    "message": "पृष्ठभूमि में प्रसंस्करण ..."
-  },
-  "maintenanceLabel_remembering": {
-    "description": "ढह गए सहायक रखरखाव संदेश के लिए अनुकूल लेबल।",
-    "message": "इस विवरण को याद करते हुए ..."
-  },
-  "maintenanceLabel_saving": {
-    "description": "ढह गए सहायक रखरखाव संदेश के लिए अनुकूल लेबल।",
-    "message": "बाद में सोचा गया कि सहेजना ..."
-  },
-  "maintenanceLabel_tracking": {
-    "description": "ढह गए सहायक रखरखाव संदेश के लिए अनुकूल लेबल।",
-    "message": "संदर्भ का ट्रैक रखना ..."
-  },
-  "maintenanceLabel_tucking": {
-    "description": "ढह गए सहायक रखरखाव संदेश के लिए अनुकूल लेबल।",
-    "message": "इस दूर टक ..."
-  },
-  "disableTTS": {
-    "description": "टेक्स्ट-टू-स्पीच को बंद करने के विकल्प के लिए लेबल",
-    "message": "पाठ-से-भाषण अक्षम करें"
-  },
-  "signInForTTS": {
-    "description": "जब उपयोगकर्ता को पाठ-से-भाषण सुविधाओं तक पहुंचने के लिए प्रमाणित करने की आवश्यकता होती है, तो प्रॉम्प्ट दिखाया गया है",
-    "message": "टेक्स्ट-टू-स्पीच के लिए साइन इन करें"
-  },
   "ttsVoice": {
-    "description": "मेनू में टेक्स्ट-टू-स्पीच वॉयस विकल्प का वर्णन करने वाला लेबल",
+    "description": "Label describing a text-to-speech voice option in the menu",
     "message": "टीटीएस आवाज"
   },
-  "voiceOff": {
-    "description": "टेक्स्ट-टू-स्पीच अक्षम होने के लिए लेबल",
-    "message": "गूंजना"
+  "unlockButton": {
+    "description": "The title (tooltip) of the button to unlock the screen.",
+    "message": "स्क्रीन अनलॉक करने के लिए दबाएं"
   },
-  "voiceSettings": {
-    "message": "आवाज सेटिंग्स",
-    "description": "आवाज से संबंधित सेटिंग्स तक पहुंचने के लिए मेनू आइटम का पाठ।"
+  "unlockInstruction": {
+    "description": "Instructions telling the user how to unlock the screen when locked.",
+    "message": "अनलॉक करने के लिए पकड़ें।"
   },
-  "addCredits": {
-    "description": "अधिक वॉयस क्रेडिट जोड़ने के लिए लिंक के लिए पाठ",
-    "message": "क्रेडिट जोड़ें"
+  "upgradeButton": {
+    "description": "Text for the button to upgrade the plan when quota is exhausted.",
+    "message": "अपग्रेड योजना"
   },
   "upgradeForTTS": {
-    "description": "जब उपयोगकर्ता को टेक्स्ट-टू-स्पीच क्रेडिट प्राप्त करने के लिए अपग्रेड करने की आवश्यकता होती है, तो प्रॉम्प्ट दिखाया गया है",
+    "description": "Prompt shown when user needs to upgrade to obtain text-to-speech credits",
     "message": "वॉयस जनरेशन के लिए अपग्रेड"
   },
-  "voicePaused": {
-    "description": "अपर्याप्त क्रेडिट के कारण आवाज को रोका जाता है",
-    "message": "आवाज रोका -"
-  },
-  "assistantIsListeningAttentively": {
-    "description": "जब सहायक एजेंट मोड में भाषण के लिए सुन रहा हो तो संदेश प्रदर्शित होता है।",
-    "message": "$chatbot$ ध्यान से सुन रहा है ...",
+  "userStartedInterrupting": {
+    "description": "Message displayed when the user starts speaking while the assistant is speaking.",
+    "message": "आगे बढ़ो, $chatbot$ सुन रहा है...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
-        "example": "Claude"
+        "example": "Pi"
       }
     }
+  },
+  "vadDetailActivatingMicrophone": {
+    "description": "VAD detail when activating the microphone.",
+    "message": "Activating microphone..."
+  },
+  "vadDetailCommLinkFailed": {
+    "description": "VAD detail when the communication port link fails.",
+    "message": "Communication link failed."
+  },
+  "vadDetailDeactivatingMicrophone": {
+    "description": "VAD detail when deactivating the microphone.",
+    "message": "Deactivating microphone..."
+  },
+  "vadDetailFailedToReconnectVADService": {
+    "description": "VAD detail when re-establishing connection fails.",
+    "message": "Failed to reconnect VAD service."
+  },
+  "vadDetailInitError": {
+    "description": "VAD detail for an initialization error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to connect to VAD service"
+      }
+    }
+  },
+  "vadDetailInitErrorPromise": {
+    "description": "VAD detail for an initialization promise error.",
+    "message": "Init Error: Promise error"
+  },
+  "vadDetailInitErrorUnknown": {
+    "description": "VAD detail for an unknown initialization error.",
+    "message": "Init Error: Unknown"
+  },
+  "vadDetailInitializedMode": {
+    "description": "VAD detail showing initialization mode.",
+    "message": "",
+    "placeholders": {
+      "mode": {
+        "content": "$1",
+        "example": "Agent"
+      }
+    }
+  },
+  "vadDetailInitializedModeNA": {
+    "description": "VAD detail showing initialization mode as N/A.",
+    "message": "Initialized (Mode: N/A)"
+  },
+  "vadDetailNonSpeechAudioDetected": {
+    "description": "VAD detail for non-speech audio detection.",
+    "message": "Non-speech audio detected"
+  },
+  "vadDetailReleasingVADResources": {
+    "description": "VAD detail when releasing VAD resources.",
+    "message": "Releasing VAD resources..."
+  },
+  "vadDetailRequestingVADSetup": {
+    "description": "VAD detail when requesting setup.",
+    "message": "Requesting VAD setup..."
+  },
+  "vadDetailSpeechDetected": {
+    "description": "VAD detail when speech has been detected.",
+    "message": "Speech detected"
+  },
+  "vadDetailSpeechEndedDuration": {
+    "description": "VAD detail indicating speech ended and its duration.",
+    "message": "",
+    "placeholders": {
+      "duration": {
+        "content": "$1",
+        "example": "1000"
+      }
+    }
+  },
+  "vadDetailStartError": {
+    "description": "VAD detail for a start error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to start VAD service"
+      }
+    }
+  },
+  "vadDetailStartErrorPromise": {
+    "description": "VAD detail for a start promise error.",
+    "message": "Start Error: Promise error"
+  },
+  "vadDetailStartErrorUnknown": {
+    "description": "VAD detail for an unknown start error.",
+    "message": "Start Error: Unknown"
+  },
+  "vadDetailStopError": {
+    "description": "VAD detail for a stop error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to stop VAD service"
+      }
+    }
+  },
+  "vadDetailStopErrorPromise": {
+    "description": "VAD detail for a stop promise error.",
+    "message": "Stop Error: Promise error"
+  },
+  "vadDetailStopErrorUnknown": {
+    "description": "VAD detail for an unknown stop error.",
+    "message": "Stop Error: Unknown"
+  },
+  "vadDetailUnknownVADError": {
+    "description": "VAD detail for an unknown error from the VAD module.",
+    "message": "Unknown VAD error"
+  },
+  "vadDetailVADProcessingStopped": {
+    "description": "VAD detail indicating VAD processing has stopped.",
+    "message": "VAD processing stopped."
+  },
+  "vadDetailVADServiceDisconnected": {
+    "description": "VAD detail when the service disconnects.",
+    "message": "VAD service disconnected. Try reloading."
+  },
+  "vadDetailVADServiceNotConnected": {
+    "description": "VAD detail when the service is not connected.",
+    "message": "VAD service not connected. Try reloading."
+  },
+  "vadDetailVADServiceShutdown": {
+    "description": "VAD detail indicating VAD service has been shut down.",
+    "message": "VAD service shut down."
+  },
+  "vadDetailWaitingForSpeech": {
+    "description": "VAD detail when waiting for user to speak.",
+    "message": "Waiting for speech"
+  },
+  "vadStatusDestroyed": {
+    "description": "VAD status when destroyed.",
+    "message": "Destroyed"
+  },
+  "vadStatusError": {
+    "description": "Generic VAD error status.",
+    "message": "Error"
+  },
+  "vadStatusFailed": {
+    "description": "Generic VAD failure status.",
+    "message": "Failed"
+  },
+  "vadStatusInitializing": {
+    "description": "VAD status when initializing.",
+    "message": "Initializing"
+  },
+  "vadStatusListening": {
+    "description": "VAD status when actively listening.",
+    "message": "Listening"
+  },
+  "vadStatusMisfire": {
+    "description": "VAD status when a misfire (non-speech) is detected.",
+    "message": "Misfire"
+  },
+  "vadStatusProcessing": {
+    "description": "VAD status when processing audio.",
+    "message": "Processing"
+  },
+  "vadStatusReady": {
+    "description": "VAD status when ready and waiting.",
+    "message": "Ready"
+  },
+  "vadStatusShuttingDown": {
+    "description": "VAD status when shutting down.",
+    "message": "Shutting down"
+  },
+  "vadStatusStarting": {
+    "description": "VAD status when starting.",
+    "message": "Starting"
+  },
+  "vadStatusStopped": {
+    "description": "VAD status when stopped.",
+    "message": "Stopped"
+  },
+  "vadStatusStopping": {
+    "description": "VAD status when stopping.",
+    "message": "Stopping"
+  },
+  "viewDetails": {
+    "description": "Text for the link to view full quota details on the dashboard.",
+    "message": "विवरण देखें"
+  },
+  "voiceIntroduction_joey": {
+    "description": "Introduction for the Joey voice.",
+    "message": "होला! \nПривет! \nठीक है! \nमैं पाई हूं, आपका बहुभाषी एआई सहायक। \nमेरे नियंत्रण में 32 भाषाओं के साथ, हम दुनिया भर के विचारों और संस्कृतियों का पता लगा सकते हैं। \nआप इस आवाज़ के बारे में क्या सोचते हैं?"
+  },
+  "voiceIntroduction_paola": {
+    "description": "Introduction for the Paola voice.",
+    "message": "सियाओ! \nसुप्रभात! \nनमस्ते! \nमैं पाई हूं और 32 भाषाओं में धाराप्रवाह बातचीत कर सकता हूं। \nअरबी से यूक्रेनी तक, मैं भाषा की बाधाओं को तोड़ने के लिए यहां हूं। \nयह आवाज़ आपको कैसी लगती है?"
+  },
+  "voiceOff": {
+    "description": "Label for when text-to-speech is disabled",
+    "message": "गूंजना"
+  },
+  "voicePaused": {
+    "description": "Text shown when voice is paused due to insufficient credits",
+    "message": "आवाज रोका -"
+  },
+  "voiceSettings": {
+    "description": "The text of the menu item to access voice-related settings.",
+    "message": "आवाज सेटिंग्स"
   }
 }

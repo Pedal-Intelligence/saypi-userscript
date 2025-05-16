@@ -1,34 +1,38 @@
 {
   "activityCheckButton": {
-    "description": "பயனர் இன்னும் உள்ளார் என்பதை குறிப்பிடுவதை button-ின் text.",
+    "description": "The text of the button to indicate that the user is still present.",
     "message": "ஆம், நான் இன்னும் இங்கே உள்ளேன்!"
   },
   "activityCheckMessage": {
-    "description": "உரையாடல் அஸ்வாப்தியுக்கு மிகு நீண்டு சென்றிருக்கும் போth கொிdisplay ்ிmessage.",
+    "description": "The message to display when the conversation has been going on unusually long.",
     "message": "அவ்வளவு, இது ஒரு நீண்ட உரையாடல். நீ இன்னும் அங்கிருக்கிறை, அ‌‌‍‌‍‌‍‌‍‎‎‎‎‎﻿﻿﻿﻿﻿﻿᠎᠎᠎᠎᠎᠎᠎⁦⁦⁦⁦⁧⁧⁧𖥸𖥸𖥸𖥸𐌑𐌑🏴🏴🏴ﺤﺤﺤﻉﻉ⡁⡁⡁⢹⢹⣽⣽㊗️㊗️㊗️㊗️㋛㋛☔︎☔︎☔︎☔︎♲♲♲✂️✂️✂️✂️❓❓❓❓💘💘💘💘 or are we talking to ourselves?"
   },
+  "addCredits": {
+    "description": "Text for link to add more voice credits",
+    "message": "வரவுகளைச் சேர்க்கவும்"
+  },
   "allowInterruptions": {
-    "description": "பையின் பதில்களை பேசுவதன் மூலம் நிறுத்து/ அனுமை/ அ-allowing  the user to interrupt Pi's responses by speaking.",
+    "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "தடுப்பு வேண்டிய"
   },
   "appDescription": {
-    "description": "பயன்பாட்டின் விளக்கம்.",
+    "description": "The description of the application.",
     "message": "உங்கள் குரலைப் பயன்படுத்தி பை மற்றும் கிளாடுடன் பேசுங்கள். இயற்கையாக பதில்கள் கேளுங்கள். அதைச் சொல்லுங்கள்."
   },
   "appName": {
-    "description": "பயன்பாட்டின் பெயர்.",
+    "description": "The name of the application.",
     "message": "Say, Pi"
   },
   "applicationStatusIssue": {
-    "description": "பயன்பாடு சிக்கல்களை அனுபவித்து இருkkal் கொttaiyathu செppaikkaana sandesam.",
+    "description": "Message to display when the application is experiencing issues.",
     "message": "அமைப்பு பிரச்சினை எச்சரிக்கை"
   },
   "applicationStatusUnknown": {
-    "description": "பயன்பாட்டு நிலை முடிவுக்கு அணுக முடியாத போது, உ.  விரை.  விஞ்சி (client) offline-்‌‍‍‍-்‌‍‍‍-்‌‍ ‌ ‌ ‌ -்‌ ‌ -்‌ ‌ -ி ே ெ ே ெ ே ೂ ಿ ಿದೀರುವ ಸಂദೇಶ.",
+    "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "பயன்பாட்டு நிலை தெரியாது"
   },
   "assistantIsListening": {
-    "description": "உதவியாளர் பேச்சை கேட்கும் போது காண்பிக்கும் செய்தி.",
+    "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ கேட்கின்றது...",
     "placeholders": {
       "chatbot": {
@@ -37,8 +41,18 @@
       }
     }
   },
+  "assistantIsListeningAttentively": {
+    "description": "Message displayed when the assistant is listening for speech in agent mode.",
+    "message": "$chatbot$ கவனத்துடன் கேட்கிறது ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
   "assistantIsSpeaking": {
-    "description": "உதவியாளர் அதன் பொது முக்கிய செ‌‌‍‍‍‌‍‌‌",
+    "description": "Message displayed when the assistant is speaking its response.",
     "message": "$chatbot$ பேசுகிறது...",
     "placeholders": {
       "chatbot": {
@@ -47,8 +61,18 @@
       }
     }
   },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Message displayed when the assistant is speaking its response and manual interruption is possible.",
+    "message": "$chatbot$ பேசுகிறது, குறுக்கிட தட்டவும்...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "assistantIsThinking": {
-    "description": "உதவியாளர் அதன் பதிலை தயாரிக்கும் போது கூண்ந்து கொუ்டு வேலை.",
+    "description": "Message displayed when the assistant is preparing its response.",
     "message": "$chatbot$ சிந்திக்கிறது...",
     "placeholders": {
       "chatbot": {
@@ -57,8 +81,18 @@
       }
     }
   },
+  "assistantIsWriting": {
+    "description": "Message displayed when the assistant is typing its response.",
+    "message": "$chatbot$ எழுதுகிறார்...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "audioConnected": {
-    "description": "ஒரு மைக்ரோபோன் இணைக்கப்பட்டு விட்டால் காண்பிக்கும் செய்தி",
+    "description": "Message displayed when a microphone is connected",
     "message": "$microphone$ இணைக்கப்பட்டுள்ளது",
     "placeholders": {
       "microphone": {
@@ -68,7 +102,7 @@
     }
   },
   "audioInputError": {
-    "description": "ஆடியோ முடிவு காலியான பேச்சு உருவை ஏற்பெ்‌‌‍‍‍‍‍‌‌‌﻿﻿﻿﻿﻿﻿﻿\n- அது பொ‌­­­­­­­‐‐‐‐‐–—–—–––———––——————",
+    "description": "Message displayed when audio transcription failed - usually the result of an ASR or LLM API error.",
     "message": "ஹ்ம், $chatbot$ ஒரு சிறிய விக்கல் இருந்தது. \nஅதை மீண்டும் சொல்ல முயற்சிக்கலாமா?",
     "placeholders": {
       "chatbot": {
@@ -78,7 +112,7 @@
     }
   },
   "audioReconnecting": {
-    "description": "புதிய மைக்ரோபோனுக்கு இணைந்து விடும் செய்தி",
+    "description": "Message displayed when connecting to a new microphone",
     "message": "$microphone$ மாறுவதில்...",
     "placeholders": {
       "microphone": {
@@ -88,19 +122,23 @@
     }
   },
   "autoSubmit": {
-    "description": "தானியங்கி விண்ணப்ப சமர்ப்பித்தலை இயக்கு/ முடக்கு எ.்.்.்.்.்",
+    "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "தானியங்கி சமர்ப்பிக்க"
   },
   "callError": {
-    "description": "மிகுந்த பிழை ஏற்படும் போது அழைப்பு பொத்தானில் காண்பிக்க வேண்டிய tooltip.",
+    "description": "The tooltip to display on the call button when a non-fatal error occurs.",
     "message": "மாற்று முடியாத பிழை ஏற்பட்டுள்ளது. அச்சம் வேந்டியிரு, நீங்கே,  ஆலோி்ிி்ி்ி்ி் ்"
   },
   "callInProgress": {
-    "description": "அழைப்பு முடிந்து விட்டால், அழைப்பு பொத்தானில் காண்பிக்க வேந்டிய tooltip.",
+    "description": "The tooltip to display on the call button when a call is in progress.",
     "message": "கையில்லா உரையாடுவதை முடிக்க"
   },
+  "callInterruptible": {
+    "description": "The tooltip to display on the call button when a call is in progress and manual interruption is possible.",
+    "message": "குறுக்கிட தட்டவும்"
+  },
   "callNotStarted": {
-    "description": "அழைப்பு தொடங்குவதற்கு முன் அழைப்பு பொத்தானில் கிளியே செிிிிி்.",
+    "description": "The tooltip to display on the call button before a call is started.",
     "message": "$chatbot$ உடன் கையில்லா உரையாடுவோம்",
     "placeholders": {
       "chatbot": {
@@ -110,12 +148,20 @@
     }
   },
   "callStarting": {
-    "description": "அழைப்பு பொத்தானின் கருவி உத்தியோகியும், ஒரு அழைப்பு ஆரம்பிக்கும் நேர‌‌‌‌‍‍‍‍‌‌‍‍‌﻿﻿﻿﻿﻿﻿ട സംവേദന സ്ഥലത്ത് డిస్పే చెయు ఎం.",
+    "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "இணைக்கின்றது..."
   },
   "checkingApplicationStatus": {
-    "description": "அமைப்பு நிலையை தீர்மானிக்கும் போது, எ.க., ஏற்றுவிடும் போது, கಾண்பிக்க ກໍາ ນົດ ຄໍາ ຂໍ.",
+    "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "பயன்பாட்டு நிலையை சரிபார்க்கின்றேன்..."
+  },
+  "clickToCollapse": {
+    "description": "Text indicating user can click to hide expanded content.",
+    "message": "சரிவதற்கு கிளிக் செய்க"
+  },
+  "clickToExpand": {
+    "description": "Text indicating user can click to show collapsed content.",
+    "message": "விரிவாக்க கிளிக் செய்க"
   },
   "consentAskParticipate": {
     "message": "நீங்கள் பங்கேற்க விரும்புகின்றீர்களா?"
@@ -151,27 +197,39 @@
     "message": "எங்கள் தனியுரிமை கொள்கையை வாசிக்கav"
   },
   "continueUnlocking": {
-    "message": "திறக்க தொடர்ந்து வைத்திரு...",
-    "description": "பயனர் அண்லோக் பொத்தானை அழுத்தி ஆரம்பித்த பிறகு, அவை எவ்விடам் செெிிிி ே ே ே ே  ்     ்      ்       ์         ์          ์"
+    "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
+    "message": "திறக்க தொடர்ந்து வைத்திரு..."
+  },
+  "copiedButtonTitle": {
+    "description": "The title of the button to indicate that the text of a message has been copied to the clipboard.",
+    "message": "நகல் செய்துவிட்டேன்!"
+  },
+  "copyButtonTitle": {
+    "description": "The title of the button to copy the text of a message to the clipboard.",
+    "message": "நகல்"
   },
   "currencyUSDAbbreviation": {
-    "description": "ஐக்கிய அமெரிக்க டாலர் என்பது.",
+    "description": "The abbreviation for the US dollar.",
     "message": "யூ.எஸ்.டி"
   },
   "currentCharges": {
-    "description": "பயனர் சேர்த்து வைத்திருக்கும் நிகழ்வு கட்டண (running total) ஐ விளக்குவதarku பிறி term.",
+    "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "தற்போதைய கட்டணங்கள்"
   },
+  "disableTTS": {
+    "description": "Label for the option to turn off text-to-speech",
+    "message": "உரை-க்கு-பேச்சை முடக்கு"
+  },
   "dismissAlert": {
-    "description": "குறிப்பிட்ட அலர்ட் மீளுத்திருப்பு விசை (button) என்ற label.",
+    "description": "Label for the button to dismiss a system issue alert.",
     "message": "நிராகரி"
   },
   "enableTTS": {
-    "description": "உரை-குறிப்பு செய்வதை இயக்க/ முடக்க எ. செ. அ. (checkbox)  வில்  உள்ள  label.",
+    "description": "Label for the checkbox to enable/disable text-to-speech.",
     "message": "பல்மொழி குரல்கள்"
   },
   "enhancedVoice": {
-    "description": "சொல்லு, பை மேம்படுத்திய குரல்கள் என்ற தலைப்பு (tooltip).",
+    "description": "Title (tooltip) for Say, Pi enhanced voices.",
     "message": "$product$ ஆல் குரல் மேம்படுத்தப்பட்டது",
     "placeholders": {
       "product": {
@@ -181,51 +239,184 @@
     }
   },
   "enterImmersiveModeLong": {
-    "description": "மொபைல் சாத்நரிக்கு ஆழ்வியுறு முறை (immersive mode) - இணை/enter-  பொத்தனின் aria-label மூல, title.",
+    "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
     "message": "இம்மெர்சிவ் மோடுக்கு உள்ளே செல்"
   },
   "enterImmersiveModeShort": {
-    "description": "டெஸ்க்டாப்பில் முழு மோடு நுழைவு பொத்தானின் உரை.",
+    "description": "The text of the button to enter immersive mode on desktop.",
     "message": "மூழ்குதல்"
   },
   "exitImmersiveModeLong": {
-    "description": "மொபைல் சாத்நரிக்கு இருந்து வெளியே செல்வது, உரை-based desktop mode-ku return seyyum button-in aria-label and title.",
+    "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "இம்மேர்சிவ் மோடுக்கு வெளியேறு"
   },
   "extensionPopupTitle": {
-    "description": "நீட்டிப்புக்கான பாப்-அப் உரை திரு.",
+    "description": "The title of the extension's popup dialog.",
     "message": "சொல்லு, பை அமைப்புகள்"
   },
+  "extensionSettings": {
+    "description": "The text of the button to open the extension's settings.",
+    "message": "அமைப்புகள்"
+  },
+  "greeting": {
+    "description": "Greeting message shown when user is signed in",
+    "message": "ஹாய், $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "instructionLabel_context": {
+    "description": "Friendly label for user instruction that provides background information.",
+    "message": "சூழலை வழங்கும் ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Friendly label for user instruction that defines what the user wants.",
+    "message": "எதிர்பார்ப்புகளை தெளிவுபடுத்துதல் ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Friendly label for user instruction that narrows the scope of conversation.",
+    "message": "விவாதத்தில் கவனம் செலுத்துதல் ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Friendly label for user instruction that establishes boundaries for the conversation.",
+    "message": "காவலாளிகளை அமைத்தல் ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Friendly label for user instruction that guides how the AI should respond.",
+    "message": "வழிகாட்டும் பதில்கள் ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Friendly label for user instruction that gently suggests a direction.",
+    "message": "ஒரு முணுமுணுப்பைக் கொடுக்கும் ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Friendly label for user instruction that guides the conversation direction.",
+    "message": "உரையாடலை வழிநடத்துதல் ..."
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Firefox இல் குறுக்கீடுகள் தற்போது ஆதரிக்கப்படவில்லை."
+  },
   "lockButton": {
-    "description": "தொகுப்பின் (tooltip) பெயர், விழுமியை அவ்விலி தொடுத்து நிறுத்துvendiyathu.",
+    "description": "The title (tooltip) of the button to lock the screen against accidental touches.",
     "message": "திரையை பூட்டுவதற்கு அழுத்து"
   },
   "lockedScreen": {
-    "description": "திரை பூட்டப்பட்டு விட்டால் முக்கியமாக காண்பிக்க வேந்டிய செய்தி.",
+    "description": "A message to display prominently when the screen is locked.",
     "message": "திரை பூட்டப்பட்டுள்ளது."
   },
+  "maintenanceLabel_holding": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "இந்த எண்ணத்தை வைத்திருத்தல் ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "ஒரு மன குறிப்பை உருவாக்குதல் ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "பின்னணியில் செயலாக்கம் ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "இந்த விவரத்தை நினைவில் கொள்கிறேன் ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "அந்த எண்ணத்தை பின்னர் சேமிக்கிறது ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "சூழலைக் கண்காணிப்பது ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "இதைத் தவிர்த்து ..."
+  },
+  "microphoneErrorConstraints": {
+    "description": "Error message when microphone constraints cannot be satisfied.",
+    "message": "உங்கள் மைக்ரோஃபோன் அமைப்புகள் தேவையான விவரக்குறிப்புகளைப் பூர்த்தி செய்யவில்லை. \nவேறு மைக்ரோஃபோனைப் பயன்படுத்தவும் அல்லது உங்கள் ஆடியோ அமைப்புகளைச் சரிசெய்யவும்."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generic error message with details when microphone access fails.",
+    "message": "மைக்ரோஃபோனை அணுகுவதில் தோல்வி: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Error message when microphone is already in use by another application.",
+    "message": "மைக்ரோஃபோனை அணுக முடியவில்லை, ஏனெனில் இது மற்றொரு பயன்பாடு மூலம் பயன்படுத்தப்படுகிறது. \nஉங்கள் மைக்ரோஃபோனைப் பயன்படுத்தக்கூடிய பிற பயன்பாடுகளை மூடவும்."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Error message when no microphone device is found.",
+    "message": "மைக்ரோஃபோன் எதுவும் கண்டறியப்படவில்லை. \nமைக்ரோஃபோனை இணைத்து மீண்டும் முயற்சிக்கவும்."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Error message when microphone permission is denied by the user or system.",
+    "message": "மைக்ரோஃபோன் அணுகல் தேவை. \nதொடர உங்கள் உலாவி அமைப்புகளில் மைக்ரோஃபோன் அணுகலை அனுமதிக்கவும்."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Error message for unexpected microphone errors with details.",
+    "message": "உங்கள் மைக்ரோஃபோனில் எதிர்பாராத பிழை ஏற்பட்டது: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generic error message when microphone access fails for unknown reasons.",
+    "message": "மைக்ரோஃபோனை அணுக முடியவில்லை. \nஉங்கள் சாதன அமைப்புகளைச் சரிபார்த்து, மீண்டும் முயற்சிக்கவும்."
+  },
   "mode_accuracy": {
-    "description": "மிக உயர் செல்லுபடியுள்ள முறை.",
+    "description": "Highest accuracy mode.",
     "message": "செம்மை"
   },
+  "mode_accuracy_description": {
+    "description": "Description for the accuracy transcription mode.",
+    "message": "அதிக துல்லியம், ஆனால் மெதுவான டிரான்ஸ்கிரிப்ஷன் வேகம். \nமாயத்தோற்றத்திற்கு ஆளாகும்."
+  },
   "mode_balanced": {
-    "description": "இயல்புநிலை பதிவு முறை.",
+    "description": "Default transcription mode.",
     "message": "சமநிலையான"
   },
+  "mode_balanced_description": {
+    "description": "Description for the balanced transcription mode.",
+    "message": "பெரும்பாலான பயன்பாடுகளுக்கு வேகம் மற்றும் துல்லியத்தின் நல்ல சமநிலை."
+  },
   "mode_speed": {
-    "description": "மிக விரைவான பதிவு முறை.",
+    "description": "Fastest transcription mode.",
     "message": "வேகம்"
   },
+  "mode_speed_description": {
+    "description": "Description for the speed transcription mode.",
+    "message": "வேகமான பதில், ஆனால் குறைவான துல்லியம். \nகுறுக்கிட வாய்ப்புள்ளது."
+  },
+  "nicknameLabel": {
+    "description": "Label for the input field to set a custom nickname for the AI assistant.",
+    "message": "புனைப்பெயர்"
+  },
+  "notSignedIn": {
+    "description": "Text to show when the user is not signed in.",
+    "message": "உள்நுழையவில்லை"
+  },
   "preferedLanguage": {
-    "description": "விருப்ப மொழிபெயர்ப்பு மொழியை தேர்ந்தெடுக்கும் கட்டுப்பாட்டின் சிற஛்சித்தி.",
+    "description": "Label for a control to select the prefered transcription language.",
     "message": "மொழி"
   },
   "preferedModeControl": {
-    "description": "விருப்பத்தேர்வு மொழிபெயர்ப்பு முறையை தேர்ந்தெடுvatharkku control- in (tooltip) peyar.",
+    "description": "The title (tooltip) of the control to select the prefered transcription mode.",
     "message": "உங்களுக்கு விருப்பமான பேச்சு மொழிபெயர்ப்பு முறையை தேர்ந்தெடு"
   },
   "previewProgress": {
-    "description": "பயனர் கேரக்டர் வரையிலுள்ள அம்சத்தை முன்னோட்ட புలியில் உള்ள பொ‌‌‍‍‍‍‌⁠⁠⁠⁠ᏒᎢ ᕱᏂիցʌϓ ɿԾ ϑίςριαϔ.",
+    "description": "The message to display when the user is previewing a feature that has a character limit.",
     "message": "$limit$ இல் $count$ எழுத்துக்கள் பயன்படுத்தியுள்ளேன்",
     "placeholders": {
       "count": {
@@ -245,7 +436,7 @@
     "message": "பீட்டா முடிந்தது"
   },
   "previewStatusPaused": {
-    "description": "பயனர் நிறுத்தி வைக்கப்பட்ட அம்சத்தை முன்னோட்டில் பிளு செ‌‌‍‍‍‍‌‌‍‌‌﻿﻿﻿﻿﻿ ‌ ‌ ﻿ ﻿ ‌ ‌ ﻿ ﻿ ‌",
+    "description": "The message to display when the user is previewing a feature that has been paused.",
     "message": "பீட்டா $resetDate$ வரை நிறுத்தியுள்ளது",
     "placeholders": {
       "resetDate": {
@@ -257,32 +448,187 @@
   "previewStatusUnknown": {
     "message": "இணைக்க முடியவில்லை..."
   },
+  "profile": {
+    "description": "Label for the user profile section.",
+    "message": "சுயவிவரம்"
+  },
+  "quotaCredits": {
+    "description": "Unit label for TTS credits",
+    "message": "வரவு"
+  },
+  "quotaRemaining": {
+    "description": "Label for the quota remaining progress bar",
+    "message": "ஒதுக்கீடு மீதமுள்ளது"
+  },
+  "quotaStatusUnknown": {
+    "description": "Message shown when quota status cannot be determined",
+    "message": "ஒதுக்கீட்டு நிலையை சரிபார்க்க முடியவில்லை"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Message shown when user is not authenticated.",
+    "message": "குரல் உருவாக்கம் மற்றும் பிற பிரீமியம் அம்சங்களை அணுக உள்நுழைக"
+  },
   "readAloudButtonTitle": {
-    "description": "ஒரு செய்தியின் உரையை கேட்கும் பொத்தானின் தலைப்பு.",
+    "description": "The title of the button to read aloud the text of a message.",
     "message": "கேட்கும் போது வாசிக்க"
   },
   "recommendedActions": {
-    "description": "அறியப்பட்ட பிரச்சினைக்கு முறை நெறி செய், பயனர் எटுத்துക் கொჳ்ளும் ஆலோசிக்கап்பадтa аctions-ин pаttiyalai munnilaiyil oru sandesam.",
+    "description": "Message preceding a list of recommended actions the user may take to remediate a known issue.",
     "message": "இத்துடன் நேரில், நாங்கள் பரிந்துரைக்கின்றோம்:"
   },
+  "regenerateButtonTitle": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an estimated cost.",
+    "message": "$cost$ $currency$ ஆடியோ உருவாக்கு",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
+    "message": "ஆடியோ உருவாக்கு"
+  },
   "shareAnalytics": {
-    "description": "புள்ளியியல் பகிர்வை இயக்க/முடக்க செலுத்து box என்ற label.",
+    "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "பகிர்வு பகுப்பாய்வு"
   },
+  "signIn": {
+    "description": "Text for the sign in button.",
+    "message": "உள்நுழைக"
+  },
+  "signInForTTS": {
+    "description": "Prompt shown when user needs to authenticate to access text-to-speech features",
+    "message": "உரை-க்கு-பேச்சுக்கு உள்நுழைக"
+  },
+  "signOut": {
+    "description": "Text for the sign out button.",
+    "message": "வெளியேறு"
+  },
+  "signedIn": {
+    "description": "Status text shown when user is authenticated (without email).",
+    "message": "கையொப்பமிடப்பட்டது"
+  },
+  "signedInAs": {
+    "description": "Status text shown when user is authenticated, including their email.",
+    "message": "$email$ ஆக கையொப்பமிடப்பட்டது",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
   "soundEffects": {
-    "description": "ஒலி விளைவுகளை இயக்க/ முடக்க செய்யும் சொ‌‌‍‍‍‌‍‌‌‍‌ఠు పிரித்து.",
+    "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "ஒலி விளைவுகள்"
   },
+  "soundEffectsFirefoxDisabled": {
+    "message": "ஆடியோ பின்னூட்டச் சிக்கல்களைத் தடுக்க பயர்பாக்ஸில் ஒலி விளைவுகள் முடக்கப்பட்டுள்ளன."
+  },
+  "sttMinutesRemaining": {
+    "description": "Text showing remaining STT quota in minutes.",
+    "message": "$minutes$ நிமிடம்$plural$ மீதமுள்ளது",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text to show when STT quota is exhausted.",
+    "message": "பேச்சு அங்கீகாரம் ஒதுக்கீடு தீர்ந்தது"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip for the STT quota progress bar.",
+    "message": "$remaining$ / $total$ வினாடிகள் மீதமுள்ளவை",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip for the STT quota progress bar in minutes.",
+    "message": "$remaining$ / $total$ நிமிடங்கள் மீதமுள்ளவை",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Label for the STT quota remaining display.",
+    "message": "பேச்சு அங்கீகாரம்"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unit for STT quota (seconds).",
+    "message": "நொடி"
+  },
+  "submitModeControl": {
+    "description": "The title (tooltip) of the control to select when messages should be submitted.",
+    "message": "உங்கள் செய்திகளை எப்போது சமர்ப்பிக்க வேண்டும் என்பதைத் தேர்ந்தெடுக்கவும்"
+  },
+  "submit_mode_agent": {
+    "description": "AI-driven submission mode.",
+    "message": "முகவர்"
+  },
+  "submit_mode_agent_description": {
+    "description": "Description for the AI-driven submission mode.",
+    "message": "சூழலின் அடிப்படையில் எப்போது பதிலளிக்க வேண்டும் என்பதை $chatbot$ தீர்மானிக்கிறது",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatic submission mode.",
+    "message": "ஆட்டோ"
+  },
+  "submit_mode_auto_description": {
+    "description": "Description for the automatic submission mode.",
+    "message": "நீங்கள் பேசுவதை நிறுத்தும்போது தானாகவே சமர்ப்பிக்கவும்"
+  },
+  "submit_mode_off": {
+    "description": "Manual submission mode.",
+    "message": "கையேடு"
+  },
+  "submit_mode_off_description": {
+    "description": "Description for the manual submission mode.",
+    "message": "பொத்தானை அழுத்தினால் மட்டுமே சமர்ப்பிக்கவும்"
+  },
   "toggleThemeToDarkMode": {
-    "description": "இருண்ட முறைக்கு மாற பொத்தானின் லேபிள்.",
+    "description": "Label for the button to toggle to dark mode.",
     "message": "இருண்ட முறைக்கு மாறு"
   },
   "toggleThemeToLightMode": {
-    "description": "ஒளி முறைக்கு மாறுவதை செய்யும் பொத்தானின் லேபிள்.",
+    "description": "Label for the button to toggle to light mode.",
     "message": "ஒளி முறைக்கு மாறு"
   },
   "ttsCostExplanation": {
-    "description": "உரையை கேட்கும் போது உரை-கு-பேச்சு இயின்றில் பிரிவு, செய்தி, முழு விலை.",
+    "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
     "message": "இந்தச் செய்தியைக் கேட்பதற்கு $product$ $cost$ $currency$ வசூலிக்கப்படும்",
     "placeholders": {
       "cost": {
@@ -300,7 +646,7 @@
     }
   },
   "ttsCostExplanationFree": {
-    "description": "ஒரு உரை-க்கு-பேச்சு இயந்திரம் ஒரு செய்தியை கூறி விடும் போது, அல்லது,  the message is free. Could contain the name of the provider.",
+    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free. Assumes the provider is Inflection AI.",
     "message": "இந்த ஆடியோ Inflection AI மூலம் இலவசமாக உருவாக்கப்படுகிறது",
     "placeholders": {
       "provider": {
@@ -309,330 +655,44 @@
       }
     }
   },
+  "ttsCostExplanationSayPi": {
+    "description": "The tooltip to display when the user hovers over the cost explanation link.",
+    "message": "ஆடியோவிற்கு $product$ எப்படி கட்டணம் விதிக்கிறது என்பதை அறிக",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "ttsCredits": {
+    "description": "The term used for the credits currency in the text-to-speech feature.",
+    "message": "வரவு"
+  },
+  "ttsDisabledSafari": {
+    "description": "Message shown when TTS is disabled in Safari",
+    "message": "சஃபாரியில் தற்போது பன்மொழி குரல்கள் ஆதரிக்கப்படவில்லை."
+  },
   "ttsPoweredBy": {
+    "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "$ttsEngine$ ஆல் முதலேற்றப்பட்ட உரை-கு-பேச்சு",
     "placeholders": {
       "ttsEngine": {
         "content": "$1",
         "example": "ElevenLabs"
       }
-    },
-    "description": "உரையை கேட்கும் போது உரை-க்கு-பேச்சு இயினி பயன்பாட்டில் ஒரு செய்தியை aloud விளிம்பு."
-  },
-  "unlockButton": {
-    "description": "திரையை திறக்க பொத்தனின் தலைப்பு (tooltip).",
-    "message": "திரையை திறக்க அழுத்து"
-  },
-  "unlockInstruction": {
-    "description": "பயனர் திரை பூட்டுவது எப்படி அணை நீக்குவது எ.்.்.்.்.்..,.,.,.,.,.,.,",
-    "message": "அன்போடு திறக்க."
-  },
-  "userStartedInterrupting": {
-    "description": "பயனர் உதவியை பேசும்போது ஆரம்பிக்கும் செய்தி காட்டு.",
-    "message": "முன்னேறுங்கள், $chatbot$ கேட்கிறது...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
     }
-  },
-  "copiedButtonTitle": {
-    "message": "நகல் செய்துவிட்டேன்!",
-    "description": "ஒரு செய்தியின் உரை கிளிப்போர்டுக்கு நகல் எடுக்கப்பட்டு விட்டதை குறிப்பிடுvendha button- in peyar."
-  },
-  "copyButtonTitle": {
-    "message": "நகல்",
-    "description": "ஒரு செய்தியின் உரையை கிளிப்போர்டுக்கு நகல் எடுக்க பொத்தானின் தலைப்பு."
-  },
-  "voiceIntroduction_joey": {
-    "message": "ஹலோ! \nநடைமுறை! \nநீங்கள்! \nநான் பை, உங்கள் பாலிகிளாட் AI உதவியாளர். \nஎனது கட்டளையில் 32 மொழிகளைக் கொண்டு, உலகெங்கிலும் உள்ள கருத்துக்களையும் கலாச்சாரங்களையும் நாம் ஆராயலாம். \nஇந்தக் குரலைப் பற்றி நீங்கள் என்ன நினைக்கிறீர்கள்?",
-    "description": "ஜோய் குரலுக்கான அ introduction."
-  },
-  "voiceIntroduction_paola": {
-    "message": "Ciao! \nபோன்ஜர்! \nவணக்கம்! \nநான் பை, என்னால் 32 மொழிகளில் சரளமாகப் பேச முடியும். \nஅரபு முதல் உக்ரேனிய மொழி வரை, மொழி தடைகளை உடைக்க நான் இங்கு வந்துள்ளேன். \nஇந்தக் குரல் உங்களுக்கு எப்படி ஒலிக்கிறது?",
-    "description": "பாவோலா குரலுக்கான அறிமுகம்."
-  },
-  "regenerateButtonTitle": {
-    "message": "$cost$ $currency$ ஆடியோ உருவாக்கு",
-    "description": "ஒரு செய்தியின் ஆடியோவை மீண்டும் உருவாக்குவதற்கு பொത்தானின் தалை.  அநுमाνிக்கап்பெṭṭ ᚎிලා സംഭവി හැක.",
-    "placeholders": {
-      "cost": {
-        "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
-      }
-    }
-  },
-  "regenerateButtonTitleFree": {
-    "message": "ஆடியோ உருவாக்கு",
-    "description": "ஒரு செய்தியின் ஆடியோவை மீண்டும் உருவாக்குவதற்கு பொ, utton- in த, alai. ேி അനിശ്ചിത ഖുദ്‌ എർ‌ പേ‌ ."
-  },
-  "assistantIsWriting": {
-    "description": "உதவியாளர் அதன் பதிலைத் தட்டச்சு செய்யும் போது செய்தி காட்டப்படும்.",
-    "message": "$chatbot$ எழுதுகிறார்...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "ttsCostExplanationSayPi": {
-    "description": "கட்டண விளக்க இணைப்பின் மீது பயனர் வட்டமிடும்போது காண்பிக்க வேண்டிய உதவிக்குறிப்பு.",
-    "placeholders": {
-      "product": {
-        "content": "$1",
-        "example": "Say, Pi"
-      }
-    },
-    "message": "ஆடியோவிற்கு $product$ எப்படி கட்டணம் விதிக்கிறது என்பதை அறிக"
-  },
-  "interruptionsFirefoxDisabled": {
-    "message": "Firefox இல் குறுக்கீடுகள் தற்போது ஆதரிக்கப்படவில்லை."
-  },
-  "mode_accuracy_description": {
-    "description": "துல்லிய டிரான்ஸ்கிரிப்ஷன் பயன்முறைக்கான விளக்கம்.",
-    "message": "அதிக துல்லியம், ஆனால் மெதுவான டிரான்ஸ்கிரிப்ஷன் வேகம். \nமாயத்தோற்றத்திற்கு ஆளாகும்."
-  },
-  "mode_balanced_description": {
-    "description": "சமச்சீர் டிரான்ஸ்கிரிப்ஷன் பயன்முறைக்கான விளக்கம்.",
-    "message": "பெரும்பாலான பயன்பாடுகளுக்கு வேகம் மற்றும் துல்லியத்தின் நல்ல சமநிலை."
-  },
-  "mode_speed_description": {
-    "description": "வேக டிரான்ஸ்கிரிப்ஷன் பயன்முறைக்கான விளக்கம்.",
-    "message": "வேகமான பதில், ஆனால் குறைவான துல்லியம். \nகுறுக்கிட வாய்ப்புள்ளது."
-  },
-  "soundEffectsFirefoxDisabled": {
-    "message": "ஆடியோ பின்னூட்டச் சிக்கல்களைத் தடுக்க பயர்பாக்ஸில் ஒலி விளைவுகள் முடக்கப்பட்டுள்ளன."
-  },
-  "assistantIsSpeakingWithManualInterrupt": {
-    "description": "உதவியாளர் தனது பதிலைப் பேசும்போது செய்தி காட்டப்படும் மற்றும் கைமுறையாக குறுக்கீடு சாத்தியமாகும்.",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "message": "$chatbot$ பேசுகிறது, குறுக்கிட தட்டவும்..."
-  },
-  "callInterruptible": {
-    "description": "அழைப்பு செயலில் இருக்கும் போது, ​​கைமுறையாக குறுக்கீடு ஏற்படும் போது, ​​அழைப்பு பட்டனில் காட்டுவதற்கான உதவிக்குறிப்பு.",
-    "message": "குறுக்கிட தட்டவும்"
-  },
-  "microphoneErrorConstraints": {
-    "description": "மைக்ரோஃபோன் கட்டுப்பாடுகளை பூர்த்தி செய்ய முடியாத போது பிழை செய்தி.",
-    "message": "உங்கள் மைக்ரோஃபோன் அமைப்புகள் தேவையான விவரக்குறிப்புகளைப் பூர்த்தி செய்யவில்லை. \nவேறு மைக்ரோஃபோனைப் பயன்படுத்தவும் அல்லது உங்கள் ஆடியோ அமைப்புகளைச் சரிசெய்யவும்."
-  },
-  "microphoneErrorGeneric": {
-    "description": "மைக்ரோஃபோன் அணுகல் தோல்வியடையும் போது விவரங்களுடன் பொதுவான பிழை செய்தி.",
-    "message": "மைக்ரோஃபோனை அணுகுவதில் தோல்வி: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Permission denied"
-      }
-    }
-  },
-  "microphoneErrorInUse": {
-    "description": "மைக்ரோஃபோன் ஏற்கனவே மற்றொரு பயன்பாட்டில் இருக்கும்போது பிழைச் செய்தி.",
-    "message": "மைக்ரோஃபோனை அணுக முடியவில்லை, ஏனெனில் இது மற்றொரு பயன்பாடு மூலம் பயன்படுத்தப்படுகிறது. \nஉங்கள் மைக்ரோஃபோனைப் பயன்படுத்தக்கூடிய பிற பயன்பாடுகளை மூடவும்."
-  },
-  "microphoneErrorNotFound": {
-    "description": "மைக்ரோஃபோன் சாதனம் எதுவும் இல்லாதபோது பிழைச் செய்தி.",
-    "message": "மைக்ரோஃபோன் எதுவும் கண்டறியப்படவில்லை. \nமைக்ரோஃபோனை இணைத்து மீண்டும் முயற்சிக்கவும்."
-  },
-  "microphoneErrorPermissionDenied": {
-    "description": "மைக்ரோஃபோன் அனுமதி பயனர் அல்லது கணினியால் மறுக்கப்படும்போது பிழைச் செய்தி.",
-    "message": "மைக்ரோஃபோன் அணுகல் தேவை. \nதொடர உங்கள் உலாவி அமைப்புகளில் மைக்ரோஃபோன் அணுகலை அனுமதிக்கவும்."
-  },
-  "microphoneErrorUnexpected": {
-    "description": "விவரங்களுடன் எதிர்பாராத மைக்ரோஃபோன் பிழைகளுக்கான பிழைச் செய்தி.",
-    "message": "உங்கள் மைக்ரோஃபோனில் எதிர்பாராத பிழை ஏற்பட்டது: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Device busy"
-      }
-    }
-  },
-  "microphoneErrorUnknown": {
-    "description": "அறியப்படாத காரணங்களுக்காக மைக்ரோஃபோன் அணுகல் தோல்வியடையும் போது பொதுவான பிழை செய்தி.",
-    "message": "மைக்ரோஃபோனை அணுக முடியவில்லை. \nஉங்கள் சாதன அமைப்புகளைச் சரிபார்த்து, மீண்டும் முயற்சிக்கவும்."
-  },
-  "ttsDisabledSafari": {
-    "message": "சஃபாரியில் தற்போது பன்மொழி குரல்கள் ஆதரிக்கப்படவில்லை.",
-    "description": "சஃபாரியில் TTS முடக்கப்பட்டிருக்கும் போது செய்தி காட்டப்படும்"
-  },
-  "extensionSettings": {
-    "message": "அமைப்புகள்",
-    "description": "நீட்டிப்பின் அமைப்புகளைத் திறப்பதற்கான பொத்தானின் உரை."
-  },
-  "submitModeControl": {
-    "description": "செய்திகளை எப்போது சமர்ப்பிக்க வேண்டும் என்பதைத் தேர்ந்தெடுப்பதற்கான கட்டுப்பாட்டின் தலைப்பு (உதவிக்குறிப்பு).",
-    "message": "உங்கள் செய்திகளை எப்போது சமர்ப்பிக்க வேண்டும் என்பதைத் தேர்ந்தெடுக்கவும்"
-  },
-  "submit_mode_agent": {
-    "description": "AI-உந்துதல் சமர்ப்பிப்பு முறை.",
-    "message": "முகவர்"
-  },
-  "submit_mode_agent_description": {
-    "description": "AI-உந்துதல் சமர்ப்பிப்பு பயன்முறைக்கான விளக்கம்.",
-    "message": "சூழலின் அடிப்படையில் எப்போது பதிலளிக்க வேண்டும் என்பதை $chatbot$ தீர்மானிக்கிறது",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "submit_mode_auto": {
-    "description": "தானியங்கி சமர்ப்பிப்பு முறை.",
-    "message": "ஆட்டோ"
-  },
-  "submit_mode_auto_description": {
-    "description": "தானியங்கி சமர்ப்பிப்பு முறைக்கான விளக்கம்.",
-    "message": "நீங்கள் பேசுவதை நிறுத்தும்போது தானாகவே சமர்ப்பிக்கவும்"
-  },
-  "submit_mode_off": {
-    "description": "கைமுறையாக சமர்ப்பிக்கும் முறை.",
-    "message": "கையேடு"
-  },
-  "submit_mode_off_description": {
-    "description": "கைமுறையாக சமர்ப்பிக்கும் முறைக்கான விளக்கம்.",
-    "message": "பொத்தானை அழுத்தினால் மட்டுமே சமர்ப்பிக்கவும்"
-  },
-  "nicknameLabel": {
-    "message": "புனைப்பெயர்",
-    "description": "AI உதவியாளருக்கு தனிப்பயன் புனைப்பெயரை அமைக்க உள்ளீட்டு புலத்திற்கான லேபிள்."
-  },
-  "greeting": {
-    "description": "பயனர் உள்நுழையும்போது காண்பிக்கப்பட்ட வாழ்த்து செய்தி",
-    "message": "ஹாய், $name$!",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John"
-      }
-    }
-  },
-  "notSignedIn": {
-    "description": "பயனர் உள்நுழையாதபோது காட்ட உரை.",
-    "message": "உள்நுழையவில்லை"
-  },
-  "profile": {
-    "description": "பயனர் சுயவிவரப் பிரிவுக்கு லேபிள்.",
-    "message": "சுயவிவரம்"
-  },
-  "quotaCredits": {
-    "description": "TTS வரவுகளுக்கான அலகு லேபிள்",
-    "message": "வரவு"
-  },
-  "quotaRemaining": {
-    "description": "ஒதுக்கீடு மீதமுள்ள முன்னேற்ற பட்டிக்கான லேபிள்",
-    "message": "ஒதுக்கீடு மீதமுள்ளது"
-  },
-  "quotaStatusUnknown": {
-    "description": "ஒதுக்கீட்டு நிலையை தீர்மானிக்க முடியாதபோது காட்டப்பட்ட செய்தி",
-    "message": "ஒதுக்கீட்டு நிலையை சரிபார்க்க முடியவில்லை"
-  },
-  "quotaUnauthenticatedMessage": {
-    "description": "பயனர் அங்கீகரிக்கப்படாதபோது காட்டப்படும் செய்தி.",
-    "message": "குரல் உருவாக்கம் மற்றும் பிற பிரீமியம் அம்சங்களை அணுக உள்நுழைக"
-  },
-  "signIn": {
-    "description": "உள்நுழைவு பொத்தானுக்கு உரை.",
-    "message": "உள்நுழைக"
-  },
-  "signOut": {
-    "description": "உள்நுழைவு பொத்தானுக்கான உரை.",
-    "message": "வெளியேறு"
-  },
-  "signedIn": {
-    "description": "பயனர் அங்கீகரிக்கப்படும்போது (மின்னஞ்சல் இல்லாமல்) காட்டப்படும் நிலை உரை.",
-    "message": "கையொப்பமிடப்பட்டது"
-  },
-  "signedInAs": {
-    "description": "பயனர் அங்கீகரிக்கப்படும்போது காட்டப்படும் நிலை உரை, அவற்றின் மின்னஞ்சல் உட்பட.",
-    "message": "$email$ ஆக கையொப்பமிடப்பட்டது",
-    "placeholders": {
-      "email": {
-        "content": "$1",
-        "example": "user@example.com"
-      }
-    }
-  },
-  "sttMinutesRemaining": {
-    "description": "நிமிடங்களில் மீதமுள்ள எஸ்.டி.டி ஒதுக்கீட்டைக் காட்டும் உரை.",
-    "message": "$minutes$ நிமிடம்$plural$ மீதமுள்ளது",
-    "placeholders": {
-      "minutes": {
-        "content": "$1",
-        "example": "5"
-      },
-      "plural": {
-        "content": "$2",
-        "example": "s"
-      }
-    }
-  },
-  "sttQuotaExhausted": {
-    "description": "STT ஒதுக்கீடு தீர்ந்துவிட்டால் காண்பிக்க உரை.",
-    "message": "பேச்சு அங்கீகாரம் ஒதுக்கீடு தீர்ந்தது"
-  },
-  "sttQuotaProgress": {
-    "description": "STT ஒதுக்கீடு முன்னேற்ற பட்டிக்கான உதவிக்குறிப்பு.",
-    "message": "$remaining$ / $total$ வினாடிகள் மீதமுள்ளவை",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "100"
-      },
-      "total": {
-        "content": "$2",
-        "example": "300"
-      }
-    }
-  },
-  "sttQuotaProgressMinutes": {
-    "description": "நிமிடங்களில் எஸ்.டி.டி ஒதுக்கீடு முன்னேற்ற பட்டிக்கான உதவிக்குறிப்பு.",
-    "message": "$remaining$ / $total$ நிமிடங்கள் மீதமுள்ளவை",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "5"
-      },
-      "total": {
-        "content": "$2",
-        "example": "60"
-      }
-    }
-  },
-  "sttQuotaRemaining": {
-    "description": "எஸ்.டி.டி ஒதுக்கீடு மீதமுள்ள காட்சிக்கு லேபிள்.",
-    "message": "பேச்சு அங்கீகாரம்"
-  },
-  "sttQuotaSeconds": {
-    "description": "எஸ்.டி.டி ஒதுக்கீட்டிற்கான அலகு (விநாடிகள்).",
-    "message": "நொடி"
-  },
-  "ttsCredits": {
-    "description": "உரை-க்கு-பேச்சு அம்சத்தில் வரவு நாணயத்திற்கு பயன்படுத்தப்படும் சொல்.",
-    "message": "வரவு"
   },
   "ttsQuotaCharacters": {
-    "description": "TTS ஒதுக்கீட்டிற்கான அலகு (எழுத்துக்கள்).",
+    "description": "Unit for TTS quota (characters).",
     "message": "வரவு"
   },
   "ttsQuotaExhausted": {
-    "description": "TTS ஒதுக்கீடு தீர்ந்துவிட்டால் காட்ட உரை.",
+    "description": "Text to show when TTS quota is exhausted.",
     "message": "குரல் ஒதுக்கீடு தீர்ந்துவிட்டது"
   },
   "ttsQuotaProgress": {
-    "description": "TTS ஒதுக்கீட்டு முன்னேற்ற பட்டிக்கான உதவிக்குறிப்பு.",
+    "description": "Tooltip for the TTS quota progress bar.",
     "message": "$remaining$ / $total$ எழுத்துக்கள் மீதமுள்ளவை",
     "placeholders": {
       "remaining": {
@@ -646,121 +706,243 @@
     }
   },
   "ttsQuotaRemaining": {
-    "description": "டி.டி.எஸ் ஒதுக்கீட்டிற்கான லேபிள் மீதமுள்ள காட்சிக்கு.",
+    "description": "Label for the TTS quota remaining display.",
     "message": "குரல் தலைமுறை"
   },
-  "upgradeButton": {
-    "description": "ஒதுக்கீடு தீர்ந்துவிட்டால் திட்டத்தை மேம்படுத்த பொத்தானுக்கான உரை.",
-    "message": "திட்டத்தை மேம்படுத்தவும்"
-  },
-  "viewDetails": {
-    "description": "டாஷ்போர்டில் முழு ஒதுக்கீட்டு விவரங்களைக் காண இணைப்பிற்கான உரை.",
-    "message": "விவரங்களைக் காண்க"
-  },
-  "clickToCollapse": {
-    "description": "விரிவாக்கப்பட்ட உள்ளடக்கத்தை மறைக்க பயனரைக் குறிக்கும் உரை கிளிக் செய்யலாம்.",
-    "message": "சரிவதற்கு கிளிக் செய்க"
-  },
-  "clickToExpand": {
-    "description": "சரிந்த உள்ளடக்கத்தைக் காட்ட பயனரைக் குறிக்கும் உரை கிளிக் செய்யலாம்.",
-    "message": "விரிவாக்க கிளிக் செய்க"
-  },
-  "instructionLabel_context": {
-    "description": "பின்னணி தகவல்களை வழங்கும் பயனர் அறிவுறுத்தலுக்கான நட்பு லேபிள்.",
-    "message": "சூழலை வழங்கும் ..."
-  },
-  "instructionLabel_expectations": {
-    "description": "பயனர் அறிவுறுத்தலுக்கான நட்பு லேபிள் பயனர் விரும்புவதை வரையறுக்கிறது.",
-    "message": "எதிர்பார்ப்புகளை தெளிவுபடுத்துதல் ..."
-  },
-  "instructionLabel_focusing": {
-    "description": "உரையாடலின் நோக்கத்தை குறைக்கும் பயனர் அறிவுறுத்தலுக்கான நட்பு லேபிள்.",
-    "message": "விவாதத்தில் கவனம் செலுத்துதல் ..."
-  },
-  "instructionLabel_guardrails": {
-    "description": "உரையாடலுக்கான எல்லைகளை நிறுவும் பயனர் அறிவுறுத்தலுக்கான நட்பு லேபிள்.",
-    "message": "காவலாளிகளை அமைத்தல் ..."
-  },
-  "instructionLabel_guiding": {
-    "description": "AI எவ்வாறு பதிலளிக்க வேண்டும் என்பதை வழிநடத்தும் பயனர் அறிவுறுத்தலுக்கான நட்பு லேபிள்.",
-    "message": "வழிகாட்டும் பதில்கள் ..."
-  },
-  "instructionLabel_nudge": {
-    "description": "ஒரு திசையை மெதுவாக பரிந்துரைக்கும் பயனர் அறிவுறுத்தலுக்கான நட்பு லேபிள்.",
-    "message": "ஒரு முணுமுணுப்பைக் கொடுக்கும் ..."
-  },
-  "instructionLabel_steering": {
-    "description": "உரையாடல் திசையை வழிநடத்தும் பயனர் அறிவுறுத்தலுக்கான நட்பு லேபிள்.",
-    "message": "உரையாடலை வழிநடத்துதல் ..."
-  },
-  "maintenanceLabel_holding": {
-    "description": "சரிந்த உதவி பராமரிப்பு செய்திக்கான நட்பு லேபிள்.",
-    "message": "இந்த எண்ணத்தை வைத்திருத்தல் ..."
-  },
-  "maintenanceLabel_mental_note": {
-    "description": "சரிந்த உதவி பராமரிப்பு செய்திக்கான நட்பு லேபிள்.",
-    "message": "ஒரு மன குறிப்பை உருவாக்குதல் ..."
-  },
-  "maintenanceLabel_processing": {
-    "description": "சரிந்த உதவி பராமரிப்பு செய்திக்கான நட்பு லேபிள்.",
-    "message": "பின்னணியில் செயலாக்கம் ..."
-  },
-  "maintenanceLabel_remembering": {
-    "description": "சரிந்த உதவி பராமரிப்பு செய்திக்கான நட்பு லேபிள்.",
-    "message": "இந்த விவரத்தை நினைவில் கொள்கிறேன் ..."
-  },
-  "maintenanceLabel_saving": {
-    "description": "சரிந்த உதவி பராமரிப்பு செய்திக்கான நட்பு லேபிள்.",
-    "message": "அந்த எண்ணத்தை பின்னர் சேமிக்கிறது ..."
-  },
-  "maintenanceLabel_tracking": {
-    "description": "சரிந்த உதவி பராமரிப்பு செய்திக்கான நட்பு லேபிள்.",
-    "message": "சூழலைக் கண்காணிப்பது ..."
-  },
-  "maintenanceLabel_tucking": {
-    "description": "சரிந்த உதவி பராமரிப்பு செய்திக்கான நட்பு லேபிள்.",
-    "message": "இதைத் தவிர்த்து ..."
-  },
-  "disableTTS": {
-    "description": "உரை-க்கு-பேச்சை அணைக்க விருப்பத்திற்கு லேபிள்",
-    "message": "உரை-க்கு-பேச்சை முடக்கு"
-  },
-  "signInForTTS": {
-    "description": "உரை-க்கு-பேச்சு அம்சங்களை அணுக பயனர் அங்கீகரிக்க வேண்டியிருக்கும் போது காண்பிக்கப்படுகிறது",
-    "message": "உரை-க்கு-பேச்சுக்கு உள்நுழைக"
-  },
   "ttsVoice": {
-    "description": "மெனுவில் உரை-க்கு-பேச்சு குரல் விருப்பத்தை விவரிக்கும் லேபிள்",
+    "description": "Label describing a text-to-speech voice option in the menu",
     "message": "Tts குரல்"
   },
-  "voiceOff": {
-    "description": "உரை-க்கு-பேச்சு முடக்கப்படும் போது லேபிள்",
-    "message": "குரல் அணைக்கவும்"
+  "unlockButton": {
+    "description": "The title (tooltip) of the button to unlock the screen.",
+    "message": "திரையை திறக்க அழுத்து"
   },
-  "voiceSettings": {
-    "description": "குரல் தொடர்பான அமைப்புகளை அணுக மெனு உருப்படியின் உரை.",
-    "message": "குரல் அமைப்புகள்"
+  "unlockInstruction": {
+    "description": "Instructions telling the user how to unlock the screen when locked.",
+    "message": "அன்போடு திறக்க."
   },
-  "addCredits": {
-    "description": "அதிக குரல் வரவுகளைச் சேர்க்க இணைப்பிற்கான உரை",
-    "message": "வரவுகளைச் சேர்க்கவும்"
+  "upgradeButton": {
+    "description": "Text for the button to upgrade the plan when quota is exhausted.",
+    "message": "திட்டத்தை மேம்படுத்தவும்"
   },
   "upgradeForTTS": {
-    "description": "உரை-க்கு-பேச்சு வரவுகளைப் பெற பயனர் மேம்படுத்த வேண்டியிருக்கும் போது காண்பிக்கப்படுகிறது",
+    "description": "Prompt shown when user needs to upgrade to obtain text-to-speech credits",
     "message": "குரல் தலைமுறைக்கு மேம்படுத்தவும்"
   },
-  "voicePaused": {
-    "description": "போதிய வரவுகளால் குரல் இடைநிறுத்தப்படும்போது காட்டப்படும் உரை",
-    "message": "குரல் இடைநிறுத்தப்பட்டது -"
-  },
-  "assistantIsListeningAttentively": {
-    "description": "உதவியாளர் முகவர் பயன்முறையில் பேச்சைக் கேட்கும்போது செய்தி காண்பிக்கப்படுகிறது.",
-    "message": "$chatbot$ கவனத்துடன் கேட்கிறது ...",
+  "userStartedInterrupting": {
+    "description": "Message displayed when the user starts speaking while the assistant is speaking.",
+    "message": "முன்னேறுங்கள், $chatbot$ கேட்கிறது...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
-        "example": "Claude"
+        "example": "Pi"
       }
     }
+  },
+  "vadDetailActivatingMicrophone": {
+    "description": "VAD detail when activating the microphone.",
+    "message": "Activating microphone..."
+  },
+  "vadDetailCommLinkFailed": {
+    "description": "VAD detail when the communication port link fails.",
+    "message": "Communication link failed."
+  },
+  "vadDetailDeactivatingMicrophone": {
+    "description": "VAD detail when deactivating the microphone.",
+    "message": "Deactivating microphone..."
+  },
+  "vadDetailFailedToReconnectVADService": {
+    "description": "VAD detail when re-establishing connection fails.",
+    "message": "Failed to reconnect VAD service."
+  },
+  "vadDetailInitError": {
+    "description": "VAD detail for an initialization error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to connect to VAD service"
+      }
+    }
+  },
+  "vadDetailInitErrorPromise": {
+    "description": "VAD detail for an initialization promise error.",
+    "message": "Init Error: Promise error"
+  },
+  "vadDetailInitErrorUnknown": {
+    "description": "VAD detail for an unknown initialization error.",
+    "message": "Init Error: Unknown"
+  },
+  "vadDetailInitializedMode": {
+    "description": "VAD detail showing initialization mode.",
+    "message": "",
+    "placeholders": {
+      "mode": {
+        "content": "$1",
+        "example": "Agent"
+      }
+    }
+  },
+  "vadDetailInitializedModeNA": {
+    "description": "VAD detail showing initialization mode as N/A.",
+    "message": "Initialized (Mode: N/A)"
+  },
+  "vadDetailNonSpeechAudioDetected": {
+    "description": "VAD detail for non-speech audio detection.",
+    "message": "Non-speech audio detected"
+  },
+  "vadDetailReleasingVADResources": {
+    "description": "VAD detail when releasing VAD resources.",
+    "message": "Releasing VAD resources..."
+  },
+  "vadDetailRequestingVADSetup": {
+    "description": "VAD detail when requesting setup.",
+    "message": "Requesting VAD setup..."
+  },
+  "vadDetailSpeechDetected": {
+    "description": "VAD detail when speech has been detected.",
+    "message": "Speech detected"
+  },
+  "vadDetailSpeechEndedDuration": {
+    "description": "VAD detail indicating speech ended and its duration.",
+    "message": "",
+    "placeholders": {
+      "duration": {
+        "content": "$1",
+        "example": "1000"
+      }
+    }
+  },
+  "vadDetailStartError": {
+    "description": "VAD detail for a start error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to start VAD service"
+      }
+    }
+  },
+  "vadDetailStartErrorPromise": {
+    "description": "VAD detail for a start promise error.",
+    "message": "Start Error: Promise error"
+  },
+  "vadDetailStartErrorUnknown": {
+    "description": "VAD detail for an unknown start error.",
+    "message": "Start Error: Unknown"
+  },
+  "vadDetailStopError": {
+    "description": "VAD detail for a stop error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to stop VAD service"
+      }
+    }
+  },
+  "vadDetailStopErrorPromise": {
+    "description": "VAD detail for a stop promise error.",
+    "message": "Stop Error: Promise error"
+  },
+  "vadDetailStopErrorUnknown": {
+    "description": "VAD detail for an unknown stop error.",
+    "message": "Stop Error: Unknown"
+  },
+  "vadDetailUnknownVADError": {
+    "description": "VAD detail for an unknown error from the VAD module.",
+    "message": "Unknown VAD error"
+  },
+  "vadDetailVADProcessingStopped": {
+    "description": "VAD detail indicating VAD processing has stopped.",
+    "message": "VAD processing stopped."
+  },
+  "vadDetailVADServiceDisconnected": {
+    "description": "VAD detail when the service disconnects.",
+    "message": "VAD service disconnected. Try reloading."
+  },
+  "vadDetailVADServiceNotConnected": {
+    "description": "VAD detail when the service is not connected.",
+    "message": "VAD service not connected. Try reloading."
+  },
+  "vadDetailVADServiceShutdown": {
+    "description": "VAD detail indicating VAD service has been shut down.",
+    "message": "VAD service shut down."
+  },
+  "vadDetailWaitingForSpeech": {
+    "description": "VAD detail when waiting for user to speak.",
+    "message": "Waiting for speech"
+  },
+  "vadStatusDestroyed": {
+    "description": "VAD status when destroyed.",
+    "message": "Destroyed"
+  },
+  "vadStatusError": {
+    "description": "Generic VAD error status.",
+    "message": "Error"
+  },
+  "vadStatusFailed": {
+    "description": "Generic VAD failure status.",
+    "message": "Failed"
+  },
+  "vadStatusInitializing": {
+    "description": "VAD status when initializing.",
+    "message": "Initializing"
+  },
+  "vadStatusListening": {
+    "description": "VAD status when actively listening.",
+    "message": "Listening"
+  },
+  "vadStatusMisfire": {
+    "description": "VAD status when a misfire (non-speech) is detected.",
+    "message": "Misfire"
+  },
+  "vadStatusProcessing": {
+    "description": "VAD status when processing audio.",
+    "message": "Processing"
+  },
+  "vadStatusReady": {
+    "description": "VAD status when ready and waiting.",
+    "message": "Ready"
+  },
+  "vadStatusShuttingDown": {
+    "description": "VAD status when shutting down.",
+    "message": "Shutting down"
+  },
+  "vadStatusStarting": {
+    "description": "VAD status when starting.",
+    "message": "Starting"
+  },
+  "vadStatusStopped": {
+    "description": "VAD status when stopped.",
+    "message": "Stopped"
+  },
+  "vadStatusStopping": {
+    "description": "VAD status when stopping.",
+    "message": "Stopping"
+  },
+  "viewDetails": {
+    "description": "Text for the link to view full quota details on the dashboard.",
+    "message": "விவரங்களைக் காண்க"
+  },
+  "voiceIntroduction_joey": {
+    "description": "Introduction for the Joey voice.",
+    "message": "ஹலோ! \nநடைமுறை! \nநீங்கள்! \nநான் பை, உங்கள் பாலிகிளாட் AI உதவியாளர். \nஎனது கட்டளையில் 32 மொழிகளைக் கொண்டு, உலகெங்கிலும் உள்ள கருத்துக்களையும் கலாச்சாரங்களையும் நாம் ஆராயலாம். \nஇந்தக் குரலைப் பற்றி நீங்கள் என்ன நினைக்கிறீர்கள்?"
+  },
+  "voiceIntroduction_paola": {
+    "description": "Introduction for the Paola voice.",
+    "message": "Ciao! \nபோன்ஜர்! \nவணக்கம்! \nநான் பை, என்னால் 32 மொழிகளில் சரளமாகப் பேச முடியும். \nஅரபு முதல் உக்ரேனிய மொழி வரை, மொழி தடைகளை உடைக்க நான் இங்கு வந்துள்ளேன். \nஇந்தக் குரல் உங்களுக்கு எப்படி ஒலிக்கிறது?"
+  },
+  "voiceOff": {
+    "description": "Label for when text-to-speech is disabled",
+    "message": "குரல் அணைக்கவும்"
+  },
+  "voicePaused": {
+    "description": "Text shown when voice is paused due to insufficient credits",
+    "message": "குரல் இடைநிறுத்தப்பட்டது -"
+  },
+  "voiceSettings": {
+    "description": "The text of the menu item to access voice-related settings.",
+    "message": "குரல் அமைப்புகள்"
   }
 }

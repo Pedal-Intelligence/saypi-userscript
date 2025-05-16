@@ -1,23 +1,39 @@
 {
-  "appName": {
-    "message": "Say, Pi",
-    "description": "应用程序的名称。"
+  "activityCheckButton": {
+    "description": "The text of the button to indicate that the user is still present.",
+    "message": "是的，我还在这里！"
+  },
+  "activityCheckMessage": {
+    "description": "The message to display when the conversation has been going on unusually long.",
+    "message": "哇，这是一段很长的对话。你还在吗，还是我们在自言自语？"
+  },
+  "addCredits": {
+    "description": "Text for link to add more voice credits",
+    "message": "添加积分"
+  },
+  "allowInterruptions": {
+    "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
+    "message": "可中断的"
   },
   "appDescription": {
-    "message": "PI和Claude的语音控制。 自然说话，得到栩栩如生的答复。 只是说。",
-    "description": "应用程序的描述。"
+    "description": "The description of the application.",
+    "message": "PI和Claude的语音控制。 自然说话，得到栩栩如生的答复。 只是说。"
   },
-  "callInProgress": {
-    "message": "结束免提对话",
-    "description": "通话进行中时，通话按钮上显示的工具提示。"
+  "appName": {
+    "description": "The name of the application.",
+    "message": "Say, Pi"
   },
-  "callStarting": {
-    "message": "正在连接...",
-    "description": "通话开始时，通话按钮上显示的工具提示。"
+  "applicationStatusIssue": {
+    "description": "Message to display when the application is experiencing issues.",
+    "message": "系统问题警报"
   },
-  "callNotStarted": {
-    "message": "开始与$chatbot$进行免提对话",
-    "description": "通话未开始时，通话按钮上显示的工具提示。",
+  "applicationStatusUnknown": {
+    "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
+    "message": "应用程序状态未知"
+  },
+  "assistantIsListening": {
+    "description": "Message displayed when the assistant is listening for speech.",
+    "message": "$chatbot$正在倾听...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
@@ -25,60 +41,58 @@
       }
     }
   },
-  "callError": {
-    "message": "遇到非致命错误。别担心，我们仍在监听。",
-    "description": "遇到非致命错误时，通话按钮上显示的工具提示。"
+  "assistantIsListeningAttentively": {
+    "description": "Message displayed when the assistant is listening for speech in agent mode.",
+    "message": "$chatbot$正在专心听...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   },
-  "mode_speed": {
-    "message": "速度",
-    "description": "最快的转录模式。"
+  "assistantIsSpeaking": {
+    "description": "Message displayed when the assistant is speaking its response.",
+    "message": "$chatbot$正在说话...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "mode_balanced": {
-    "message": "平衡",
-    "description": "默认的转录模式。"
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Message displayed when the assistant is speaking its response and manual interruption is possible.",
+    "message": "$chatbot$ 正在说话，点击即可打断...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "mode_accuracy": {
-    "message": "准确性",
-    "description": "最高准确度的转录模式。"
+  "assistantIsThinking": {
+    "description": "Message displayed when the assistant is preparing its response.",
+    "message": "$chatbot$正在思考...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "preferedModeControl": {
-    "message": "选择您偏好的转录模式",
-    "description": "选择偏好的转录模式的控件的标题（工具提示）。"
-  },
-  "autoSubmit": {
-    "description": "启用/禁用自动提示提交的复选框标签。",
-    "message": "自动提交"
-  },
-  "continueUnlocking": {
-    "description": "指示用户在开始按解锁按钮后如何继续的说明。",
-    "message": "继续按住以解锁..."
-  },
-  "lockButton": {
-    "description": "按钮的标题（工具提示）用于锁定屏幕，防止意外触摸。",
-    "message": "按下以锁定屏幕"
-  },
-  "lockedScreen": {
-    "description": "当屏幕被锁定时，显眼显示的一条信息。",
-    "message": "屏幕已锁定。"
-  },
-  "soundEffects": {
-    "description": "启用/禁用音效的复选框标签。",
-    "message": "音效"
-  },
-  "unlockButton": {
-    "description": "解锁屏幕的按钮标题（工具提示）。",
-    "message": "按下以解锁屏幕"
-  },
-  "unlockInstruction": {
-    "description": "指导用户如何在屏幕锁定时解锁的说明。",
-    "message": "按住以解锁。"
-  },
-  "preferedLanguage": {
-    "message": "语言",
-    "description": "选择首选转录语言的控制标签。"
+  "assistantIsWriting": {
+    "description": "Message displayed when the assistant is typing its response.",
+    "message": "$chatbot$ 正在写入...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioConnected": {
-    "description": "连接麦克风时显示的消息",
+    "description": "Message displayed when a microphone is connected",
     "message": "$microphone$已连接",
     "placeholders": {
       "microphone": {
@@ -88,7 +102,7 @@
     }
   },
   "audioInputError": {
-    "description": "当音频导致空白转录时显示的消息 - 通常是过滤的结果。",
+    "description": "Message displayed when audio transcription failed - usually the result of an ASR or LLM API error.",
     "message": "嗯，$chatbot$有点打ic。\n你能再说一次吗？",
     "placeholders": {
       "chatbot": {
@@ -98,7 +112,7 @@
     }
   },
   "audioReconnecting": {
-    "description": "连接新麦克风时显示的消息",
+    "description": "Message displayed when connecting to a new microphone",
     "message": "切换到$microphone$...",
     "placeholders": {
       "microphone": {
@@ -107,9 +121,25 @@
       }
     }
   },
-  "assistantIsListening": {
-    "description": "当助手正在倾听语音时显示的消息。",
-    "message": "$chatbot$正在倾听...",
+  "autoSubmit": {
+    "description": "Label for the checkbox to enable/disable automatic prompt submission.",
+    "message": "自动提交"
+  },
+  "callError": {
+    "description": "The tooltip to display on the call button when a non-fatal error occurs.",
+    "message": "遇到非致命错误。别担心，我们仍在监听。"
+  },
+  "callInProgress": {
+    "description": "The tooltip to display on the call button when a call is in progress.",
+    "message": "结束免提对话"
+  },
+  "callInterruptible": {
+    "description": "The tooltip to display on the call button when a call is in progress and manual interruption is possible.",
+    "message": "点击即可中断"
+  },
+  "callNotStarted": {
+    "description": "The tooltip to display on the call button before a call is started.",
+    "message": "开始与$chatbot$进行免提对话",
     "placeholders": {
       "chatbot": {
         "content": "$1",
@@ -117,13 +147,21 @@
       }
     }
   },
-  "toggleThemeToDarkMode": {
-    "description": "切换至暗黑模式的按钮标签。",
-    "message": "切换到暗黑模式"
+  "callStarting": {
+    "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
+    "message": "正在连接..."
   },
-  "toggleThemeToLightMode": {
-    "description": "切换到亮模式的按钮标签。",
-    "message": "切换到亮模式"
+  "checkingApplicationStatus": {
+    "description": "Message to display while the system status is being determined, e.g. during load.",
+    "message": "正在检查应用状态..."
+  },
+  "clickToCollapse": {
+    "description": "Text indicating user can click to hide expanded content.",
+    "message": "点击崩溃"
+  },
+  "clickToExpand": {
+    "description": "Text indicating user can click to show collapsed content.",
+    "message": "单击以展开"
   },
   "consentAskParticipate": {
     "message": "你想参加吗？"
@@ -158,102 +196,40 @@
   "consetPrivacyPolicy": {
     "message": "阅读我们的隐私政策"
   },
-  "shareAnalytics": {
-    "description": "用于启用/禁用分享分析的复选框标签。",
-    "message": "分享分析"
+  "continueUnlocking": {
+    "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
+    "message": "继续按住以解锁..."
   },
-  "enterImmersiveModeShort": {
-    "message": "浸没",
-    "description": "进入桌面沉浸模式的按钮文本"
+  "copiedButtonTitle": {
+    "description": "The title of the button to indicate that the text of a message has been copied to the clipboard.",
+    "message": "已复制！"
   },
-  "exitImmersiveModeLong": {
-    "message": "退出沉浸模式",
-    "description": "退出移动设备上的沉浸式模式，返回到基于文本的桌面模式的按钮的aria-label和标题。"
-  },
-  "enterImmersiveModeLong": {
-    "message": "进入沉浸模式",
-    "description": "进入移动设备沉浸模式按钮的aria-label和标题。"
-  },
-  "applicationStatusIssue": {
-    "description": "当应用程序出现问题时显示的消息。",
-    "message": "系统问题警报"
-  },
-  "applicationStatusUnknown": {
-    "description": "当无法确定应用程序状态时显示的消息。例如，当客户端离线时。",
-    "message": "应用程序状态未知"
-  },
-  "checkingApplicationStatus": {
-    "description": "在确定系统状态时显示的消息，例如在加载过程中。",
-    "message": "正在检查应用状态..."
-  },
-  "dismissAlert": {
-    "description": "用于关闭系统问题警报的按钮标签。",
-    "message": "解雇"
-  },
-  "recommendedActions": {
-    "message": "与此同时，我们建议：",
-    "description": "在解决已知问题的过程中，用户可以采取以下推荐操作的消息。"
-  },
-  "extensionPopupTitle": {
-    "description": "扩展程序弹出对话框的标题。",
-    "message": "Say, Pi"
-  },
-  "activityCheckButton": {
-    "message": "是的，我还在这里！",
-    "description": "按钮的文本表示用户仍在场。"
-  },
-  "activityCheckMessage": {
-    "description": "当对话异常地持续很长时间时要显示的消息。",
-    "message": "哇，这是一段很长的对话。你还在吗，还是我们在自言自语？"
-  },
-  "assistantIsThinking": {
-    "message": "$chatbot$正在思考...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "当助手准备其回应时显示的消息。"
-  },
-  "assistantIsSpeaking": {
-    "message": "$chatbot$正在说话...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "当助手在发表其回应时显示的信息。"
-  },
-  "userStartedInterrupting": {
-    "message": "继续，$chatbot$正在倾听...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "当用户在助手讲话时开始说话时显示的消息。"
-  },
-  "allowInterruptions": {
-    "message": "可中断的",
-    "description": "用于启用/禁用允许用户通过说话中断Pi回应的复选框标签。"
+  "copyButtonTitle": {
+    "description": "The title of the button to copy the text of a message to the clipboard.",
+    "message": "复制"
   },
   "currencyUSDAbbreviation": {
-    "description": "美元的缩写。",
+    "description": "The abbreviation for the US dollar.",
     "message": "美元"
   },
   "currentCharges": {
-    "description": "用于描述用户累积的当前费用（运行总计）的术语。",
+    "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "当前费用"
   },
+  "disableTTS": {
+    "description": "Label for the option to turn off text-to-speech",
+    "message": "禁用文本到语音"
+  },
+  "dismissAlert": {
+    "description": "Label for the button to dismiss a system issue alert.",
+    "message": "解雇"
+  },
   "enableTTS": {
-    "description": "启用/禁用语音合成的复选框标签。",
+    "description": "Label for the checkbox to enable/disable text-to-speech.",
     "message": "多语言的声音"
   },
   "enhancedVoice": {
-    "description": "标题（工具提示）为\"说，派增强语音\"。",
+    "description": "Title (tooltip) for Say, Pi enhanced voices.",
     "message": "$product$ 增强语音",
     "placeholders": {
       "product": {
@@ -262,8 +238,185 @@
       }
     }
   },
+  "enterImmersiveModeLong": {
+    "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
+    "message": "进入沉浸模式"
+  },
+  "enterImmersiveModeShort": {
+    "description": "The text of the button to enter immersive mode on desktop.",
+    "message": "浸没"
+  },
+  "exitImmersiveModeLong": {
+    "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
+    "message": "退出沉浸模式"
+  },
+  "extensionPopupTitle": {
+    "description": "The title of the extension's popup dialog.",
+    "message": "Say, Pi"
+  },
+  "extensionSettings": {
+    "description": "The text of the button to open the extension's settings.",
+    "message": "设置"
+  },
+  "greeting": {
+    "description": "Greeting message shown when user is signed in",
+    "message": "嗨，$name$！",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "instructionLabel_context": {
+    "description": "Friendly label for user instruction that provides background information.",
+    "message": "提供上下文..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Friendly label for user instruction that defines what the user wants.",
+    "message": "澄清期望..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Friendly label for user instruction that narrows the scope of conversation.",
+    "message": "集中讨论..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Friendly label for user instruction that establishes boundaries for the conversation.",
+    "message": "设置护栏..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Friendly label for user instruction that guides how the AI should respond.",
+    "message": "指导回应..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Friendly label for user instruction that gently suggests a direction.",
+    "message": "轻推..."
+  },
+  "instructionLabel_steering": {
+    "description": "Friendly label for user instruction that guides the conversation direction.",
+    "message": "指导对话..."
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Firefox 目前不支持中断。"
+  },
+  "lockButton": {
+    "description": "The title (tooltip) of the button to lock the screen against accidental touches.",
+    "message": "按下以锁定屏幕"
+  },
+  "lockedScreen": {
+    "description": "A message to display prominently when the screen is locked.",
+    "message": "屏幕已锁定。"
+  },
+  "maintenanceLabel_holding": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "抱着这个想法..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "做一个心理..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "在后台处理..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "记住这个细节..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "节省了以后的想法..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "跟踪上下文..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "把这个塞了..."
+  },
+  "microphoneErrorConstraints": {
+    "description": "Error message when microphone constraints cannot be satisfied.",
+    "message": "您的麦克风设置不符合所需的规格。\n尝试使用不同的麦克风或调整音频设置。"
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generic error message with details when microphone access fails.",
+    "message": "无法访问麦克风：$message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Error message when microphone is already in use by another application.",
+    "message": "无法访问麦克风，因为它正在被其他应用程序使用。\n请关闭可能正在使用您的麦克风的其他应用程序。"
+  },
+  "microphoneErrorNotFound": {
+    "description": "Error message when no microphone device is found.",
+    "message": "未检测到麦克风。\n请连接麦克风并重试。"
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Error message when microphone permission is denied by the user or system.",
+    "message": "需要麦克风访问。\n请在浏览器设置中允许麦克风访问才能继续。"
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Error message for unexpected microphone errors with details.",
+    "message": "您的麦克风出现意外错误：$message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generic error message when microphone access fails for unknown reasons.",
+    "message": "无法访问麦克风。\n请检查您的设备设置并重试。"
+  },
+  "mode_accuracy": {
+    "description": "Highest accuracy mode.",
+    "message": "准确性"
+  },
+  "mode_accuracy_description": {
+    "description": "Description for the accuracy transcription mode.",
+    "message": "准确度最高，但转录速度较慢。\n容易产生幻觉。"
+  },
+  "mode_balanced": {
+    "description": "Default transcription mode.",
+    "message": "平衡"
+  },
+  "mode_balanced_description": {
+    "description": "Description for the balanced transcription mode.",
+    "message": "对于大多数用途来说，速度和准确性之间具有良好的平衡。"
+  },
+  "mode_speed": {
+    "description": "Fastest transcription mode.",
+    "message": "速度"
+  },
+  "mode_speed_description": {
+    "description": "Description for the speed transcription mode.",
+    "message": "响应速度最快，但准确性较差。\n容易打断。"
+  },
+  "nicknameLabel": {
+    "description": "Label for the input field to set a custom nickname for the AI assistant.",
+    "message": "昵称"
+  },
+  "notSignedIn": {
+    "description": "Text to show when the user is not signed in.",
+    "message": "未签名"
+  },
+  "preferedLanguage": {
+    "description": "Label for a control to select the prefered transcription language.",
+    "message": "语言"
+  },
+  "preferedModeControl": {
+    "description": "The title (tooltip) of the control to select the prefered transcription mode.",
+    "message": "选择您偏好的转录模式"
+  },
   "previewProgress": {
-    "description": "当用户预览具有字符限制的功能时显示的消息。",
+    "description": "The message to display when the user is previewing a feature that has a character limit.",
     "message": "已使用 $count$ 个字符，总计 $limit$ 个字符",
     "placeholders": {
       "count": {
@@ -283,7 +436,7 @@
     "message": "测试版已完成"
   },
   "previewStatusPaused": {
-    "description": "当用户正在预览已暂停的功能时显示的消息。",
+    "description": "The message to display when the user is previewing a feature that has been paused.",
     "message": "Beta 暂停，直到 $resetDate$",
     "placeholders": {
       "resetDate": {
@@ -295,12 +448,187 @@
   "previewStatusUnknown": {
     "message": "无法连接..."
   },
+  "profile": {
+    "description": "Label for the user profile section.",
+    "message": "轮廓"
+  },
+  "quotaCredits": {
+    "description": "Unit label for TTS credits",
+    "message": "学分"
+  },
+  "quotaRemaining": {
+    "description": "Label for the quota remaining progress bar",
+    "message": "剩余配额"
+  },
+  "quotaStatusUnknown": {
+    "description": "Message shown when quota status cannot be determined",
+    "message": "无法检查配额状态"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Message shown when user is not authenticated.",
+    "message": "登录以访问语音生成和其他优质功能"
+  },
   "readAloudButtonTitle": {
-    "description": "阅读消息文本的按钮标题",
+    "description": "The title of the button to read aloud the text of a message.",
     "message": "朗读"
   },
+  "recommendedActions": {
+    "description": "Message preceding a list of recommended actions the user may take to remediate a known issue.",
+    "message": "与此同时，我们建议："
+  },
+  "regenerateButtonTitle": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an estimated cost.",
+    "message": "为$cost$ $currency$生成音频",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
+    "message": "生成音频"
+  },
+  "shareAnalytics": {
+    "description": "Label for the checkbox to enable/disable sharing of analytics.",
+    "message": "分享分析"
+  },
+  "signIn": {
+    "description": "Text for the sign in button.",
+    "message": "登入"
+  },
+  "signInForTTS": {
+    "description": "Prompt shown when user needs to authenticate to access text-to-speech features",
+    "message": "登录文本到语音"
+  },
+  "signOut": {
+    "description": "Text for the sign out button.",
+    "message": "登出"
+  },
+  "signedIn": {
+    "description": "Status text shown when user is authenticated (without email).",
+    "message": "签名"
+  },
+  "signedInAs": {
+    "description": "Status text shown when user is authenticated, including their email.",
+    "message": "登录为$email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "soundEffects": {
+    "description": "Label for the checkbox to enable/disable sound effects.",
+    "message": "音效"
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Firefox 中禁用声音效果以防止出现音频反馈问题。"
+  },
+  "sttMinutesRemaining": {
+    "description": "Text showing remaining STT quota in minutes.",
+    "message": "$minutes$分钟$plural$剩余",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text to show when STT quota is exhausted.",
+    "message": "语音识别配额用尽"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip for the STT quota progress bar.",
+    "message": "$remaining$/$total$秒剩余",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip for the STT quota progress bar in minutes.",
+    "message": "$remaining$/$total$分钟剩余",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Label for the STT quota remaining display.",
+    "message": "语音识别"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unit for STT quota (seconds).",
+    "message": "第二节"
+  },
+  "submitModeControl": {
+    "description": "The title (tooltip) of the control to select when messages should be submitted.",
+    "message": "选择何时提交您的消息"
+  },
+  "submit_mode_agent": {
+    "description": "AI-driven submission mode.",
+    "message": "代理人"
+  },
+  "submit_mode_agent_description": {
+    "description": "Description for the AI-driven submission mode.",
+    "message": "$chatbot$ 根据上下文决定何时响应",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatic submission mode.",
+    "message": "汽车"
+  },
+  "submit_mode_auto_description": {
+    "description": "Description for the automatic submission mode.",
+    "message": "当您停止说话时自动提交"
+  },
+  "submit_mode_off": {
+    "description": "Manual submission mode.",
+    "message": "手动的"
+  },
+  "submit_mode_off_description": {
+    "description": "Description for the manual submission mode.",
+    "message": "仅在按下按钮时提交"
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Label for the button to toggle to dark mode.",
+    "message": "切换到暗黑模式"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Label for the button to toggle to light mode.",
+    "message": "切换到亮模式"
+  },
   "ttsCostExplanation": {
-    "description": "当使用文本到语音引擎大声朗读消息时，显示的工具提示，包括消息的费用。",
+    "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
     "message": "$product$ 将收取 $cost$ $currency$ 收听此消息的费用",
     "placeholders": {
       "cost": {
@@ -318,7 +646,7 @@
     }
   },
   "ttsCostExplanationFree": {
-    "description": "当使用文本到语音引擎大声朗读一条信息，并且该信息是免费的时，要显示的工具提示。可能包含提供商的名称。",
+    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free. Assumes the provider is Inflection AI.",
     "message": "该音频由 Inflection AI 免费生成",
     "placeholders": {
       "provider": {
@@ -327,8 +655,26 @@
       }
     }
   },
+  "ttsCostExplanationSayPi": {
+    "description": "The tooltip to display when the user hovers over the cost explanation link.",
+    "message": "了解 $product$ 如何对音频收费",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "ttsCredits": {
+    "description": "The term used for the credits currency in the text-to-speech feature.",
+    "message": "学分"
+  },
+  "ttsDisabledSafari": {
+    "description": "Message shown when TTS is disabled in Safari",
+    "message": "Safari 目前不支持多语言语音。"
+  },
   "ttsPoweredBy": {
-    "description": "当使用文本到语音引擎大声朗读消息时要显示的信息。",
+    "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "由$ttsEngine$驱动的文字转语音",
     "placeholders": {
       "ttsEngine": {
@@ -337,302 +683,16 @@
       }
     }
   },
-  "copiedButtonTitle": {
-    "message": "已复制！",
-    "description": "表示消息文本已复制到剪贴板的按钮标题。"
-  },
-  "copyButtonTitle": {
-    "message": "复制",
-    "description": "将消息文本复制到剪贴板的按钮标题。"
-  },
-  "voiceIntroduction_joey": {
-    "message": "你好！\n请注意！ \n嗨好！\n我是 Pi，您的多语言人工智能助手。\n通过我掌握的 32 种语言，我们可以探索世界各地的思想和文化。\n你觉得这个声音怎么样？",
-    "description": "乔伊语音的介绍。"
-  },
-  "voiceIntroduction_paola": {
-    "message": "再见！\n你好！\n你好！\n我是 Pi，我能流利地说 32 种语言。\n从阿拉伯语到乌克兰语，我来这里是为了打破语言障碍。\n你觉得这个声音怎么样？",
-    "description": "为Paola语音的介绍。"
-  },
-  "regenerateButtonTitle": {
-    "message": "为$cost$ $currency$生成音频",
-    "description": "重新生成消息音频的按钮标题。可能会产生预计费用。",
-    "placeholders": {
-      "cost": {
-        "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
-      }
-    }
-  },
-  "regenerateButtonTitleFree": {
-    "message": "生成音频",
-    "description": "重新生成消息音频的按钮标题。可能会产生不确定的费用。"
-  },
-  "assistantIsWriting": {
-    "description": "助理键入响应时显示的消息。",
-    "message": "$chatbot$ 正在写入...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "ttsCostExplanationSayPi": {
-    "description": "当用户将鼠标悬停在成本说明链接上时显示的工具提示。",
-    "placeholders": {
-      "product": {
-        "content": "$1",
-        "example": "Say, Pi"
-      }
-    },
-    "message": "了解 $product$ 如何对音频收费"
-  },
-  "interruptionsFirefoxDisabled": {
-    "message": "Firefox 目前不支持中断。"
-  },
-  "mode_accuracy_description": {
-    "description": "准确度转录模式的说明。",
-    "message": "准确度最高，但转录速度较慢。\n容易产生幻觉。"
-  },
-  "mode_balanced_description": {
-    "description": "平衡转录模式的描述。",
-    "message": "对于大多数用途来说，速度和准确性之间具有良好的平衡。"
-  },
-  "mode_speed_description": {
-    "description": "速度转录模式的说明。",
-    "message": "响应速度最快，但准确性较差。\n容易打断。"
-  },
-  "soundEffectsFirefoxDisabled": {
-    "message": "Firefox 中禁用声音效果以防止出现音频反馈问题。"
-  },
-  "assistantIsSpeakingWithManualInterrupt": {
-    "description": "助手说话时显示的消息其响应和手动中断是可能的。",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "message": "$chatbot$ 正在说话，点击即可打断..."
-  },
-  "callInterruptible": {
-    "description": "当通话正在进行并且可以手动中断时，通话按钮上显示的工具提示。",
-    "message": "点击即可中断"
-  },
-  "microphoneErrorConstraints": {
-    "description": "无法满足麦克风限制时的错误消息。",
-    "message": "您的麦克风设置不符合所需的规格。\n尝试使用不同的麦克风或调整音频设置。"
-  },
-  "microphoneErrorGeneric": {
-    "description": "麦克风访问失败时包含详细信息的一般错误消息。",
-    "message": "无法访问麦克风：$message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Permission denied"
-      }
-    }
-  },
-  "microphoneErrorInUse": {
-    "description": "当麦克风已被其他应用程序使用时出现错误消息。",
-    "message": "无法访问麦克风，因为它正在被其他应用程序使用。\n请关闭可能正在使用您的麦克风的其他应用程序。"
-  },
-  "microphoneErrorNotFound": {
-    "description": "未找到麦克风设备时出现错误消息。",
-    "message": "未检测到麦克风。\n请连接麦克风并重试。"
-  },
-  "microphoneErrorPermissionDenied": {
-    "description": "用户或系统拒绝麦克风权限时出现错误消息。",
-    "message": "需要麦克风访问。\n请在浏览器设置中允许麦克风访问才能继续。"
-  },
-  "microphoneErrorUnexpected": {
-    "description": "意外麦克风错误的错误消息及其详细信息。",
-    "message": "您的麦克风出现意外错误：$message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Device busy"
-      }
-    }
-  },
-  "microphoneErrorUnknown": {
-    "description": "当麦克风访问由于未知原因而失败时出现一般错误消息。",
-    "message": "无法访问麦克风。\n请检查您的设备设置并重试。"
-  },
-  "ttsDisabledSafari": {
-    "message": "Safari 目前不支持多语言语音。",
-    "description": "在 Safari 中禁用 TTS 时显示的消息"
-  },
-  "extensionSettings": {
-    "message": "设置",
-    "description": "用于打开扩展程序设置的按钮的文本。"
-  },
-  "submitModeControl": {
-    "description": "用于选择何时应提交消息的控件的标题（工具提示）。",
-    "message": "选择何时提交您的消息"
-  },
-  "submit_mode_agent": {
-    "description": "AI驱动的提交模式。",
-    "message": "代理人"
-  },
-  "submit_mode_agent_description": {
-    "description": "AI驱动提交模式的描述。",
-    "message": "$chatbot$ 根据上下文决定何时响应",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "submit_mode_auto": {
-    "description": "自动提交模式。",
-    "message": "汽车"
-  },
-  "submit_mode_auto_description": {
-    "description": "自动提交模式的说明。",
-    "message": "当您停止说话时自动提交"
-  },
-  "submit_mode_off": {
-    "description": "手动提交模式。",
-    "message": "手动的"
-  },
-  "submit_mode_off_description": {
-    "description": "手动提交模式的说明。",
-    "message": "仅在按下按钮时提交"
-  },
-  "nicknameLabel": {
-    "message": "昵称",
-    "description": "标签输入字段，为AI助手设置自定义昵称。"
-  },
-  "greeting": {
-    "description": "用户签名时显示的问候消息",
-    "message": "嗨，$name$！",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John"
-      }
-    }
-  },
-  "notSignedIn": {
-    "description": "文字显示何时未签名用户。",
-    "message": "未签名"
-  },
-  "profile": {
-    "description": "用户配置文件部分的标签。",
-    "message": "轮廓"
-  },
-  "quotaCredits": {
-    "description": "TTS积分的单元标签",
-    "message": "学分"
-  },
-  "quotaRemaining": {
-    "description": "配额剩余进度栏的标签",
-    "message": "剩余配额"
-  },
-  "quotaStatusUnknown": {
-    "description": "当无法确定配额状态时显示的消息",
-    "message": "无法检查配额状态"
-  },
-  "quotaUnauthenticatedMessage": {
-    "description": "当用户未经身份验证时显示的消息。",
-    "message": "登录以访问语音生成和其他优质功能"
-  },
-  "signIn": {
-    "description": "文字以示意按钮。",
-    "message": "登入"
-  },
-  "signOut": {
-    "description": "签名按钮的文字。",
-    "message": "登出"
-  },
-  "signedIn": {
-    "description": "用户经过身份验证时显示的状态文本（没有电子邮件）。",
-    "message": "签名"
-  },
-  "signedInAs": {
-    "description": "用户经过身份验证（包括电子邮件）时显示的状态文本。",
-    "message": "登录为$email$",
-    "placeholders": {
-      "email": {
-        "content": "$1",
-        "example": "user@example.com"
-      }
-    }
-  },
-  "sttMinutesRemaining": {
-    "description": "文本显示剩余的STT配额在几分钟内。",
-    "message": "$minutes$分钟$plural$剩余",
-    "placeholders": {
-      "minutes": {
-        "content": "$1",
-        "example": "5"
-      },
-      "plural": {
-        "content": "$2",
-        "example": "s"
-      }
-    }
-  },
-  "sttQuotaExhausted": {
-    "description": "文字显示何时耗尽STT配额。",
-    "message": "语音识别配额用尽"
-  },
-  "sttQuotaProgress": {
-    "description": "STT配额进度栏的工具提示。",
-    "message": "$remaining$/$total$秒剩余",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "100"
-      },
-      "total": {
-        "content": "$2",
-        "example": "300"
-      }
-    }
-  },
-  "sttQuotaProgressMinutes": {
-    "description": "STT配额进度栏的工具提示在几分钟内。",
-    "message": "$remaining$/$total$分钟剩余",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "5"
-      },
-      "total": {
-        "content": "$2",
-        "example": "60"
-      }
-    }
-  },
-  "sttQuotaRemaining": {
-    "description": "剩余显示的STT配额标签。",
-    "message": "语音识别"
-  },
-  "sttQuotaSeconds": {
-    "description": "STT配额的单位（秒）。",
-    "message": "第二节"
-  },
-  "ttsCredits": {
-    "description": "在文本到语音功能中用于信用货币的术语。",
-    "message": "学分"
-  },
   "ttsQuotaCharacters": {
-    "description": "TTS配额（字符）的单位。",
+    "description": "Unit for TTS quota (characters).",
     "message": "学分"
   },
   "ttsQuotaExhausted": {
-    "description": "文字显示何时耗尽TTS配额。",
+    "description": "Text to show when TTS quota is exhausted.",
     "message": "语音配额精疲力尽"
   },
   "ttsQuotaProgress": {
-    "description": "TTS配额进度栏的工具提示。",
+    "description": "Tooltip for the TTS quota progress bar.",
     "message": "$remaining$/$total$字符剩余",
     "placeholders": {
       "remaining": {
@@ -646,121 +706,243 @@
     }
   },
   "ttsQuotaRemaining": {
-    "description": "TTS配额剩余显示的标签。",
+    "description": "Label for the TTS quota remaining display.",
     "message": "语音生成"
   },
-  "upgradeButton": {
-    "description": "耗尽配额时，该按钮的文本以升级计划。",
-    "message": "升级计划"
-  },
-  "viewDetails": {
-    "description": "链接的文本以查看仪表板上的完整配额详细信息。",
-    "message": "查看详细信息"
-  },
-  "clickToCollapse": {
-    "description": "表示用户可以单击以隐藏扩展的内容的文本。",
-    "message": "点击崩溃"
-  },
-  "clickToExpand": {
-    "description": "表明用户可以单击以显示崩溃的内容的文本。",
-    "message": "单击以展开"
-  },
-  "instructionLabel_context": {
-    "description": "提供背景信息的用户说明的友好标签。",
-    "message": "提供上下文..."
-  },
-  "instructionLabel_expectations": {
-    "description": "友好标签用于定义用户想要的用户指令。",
-    "message": "澄清期望..."
-  },
-  "instructionLabel_focusing": {
-    "description": "友好的标签用于用户说明，可缩小对话范围。",
-    "message": "集中讨论..."
-  },
-  "instructionLabel_guardrails": {
-    "description": "友好标签用于用户指令，为对话建立界限。",
-    "message": "设置护栏..."
-  },
-  "instructionLabel_guiding": {
-    "description": "友好的标签用于指导AI应如何响应的用户指令。",
-    "message": "指导回应..."
-  },
-  "instructionLabel_nudge": {
-    "description": "友好的标签用于用户说明，该标签轻轻地暗示了一个方向。",
-    "message": "轻推..."
-  },
-  "instructionLabel_steering": {
-    "description": "友好的标签用于指导对话方向的用户说明。",
-    "message": "指导对话..."
-  },
-  "maintenanceLabel_holding": {
-    "description": "友好的标签，用于倒塌的助手维护消息。",
-    "message": "抱着这个想法..."
-  },
-  "maintenanceLabel_mental_note": {
-    "description": "友好的标签，用于倒塌的助手维护消息。",
-    "message": "做一个心理..."
-  },
-  "maintenanceLabel_processing": {
-    "description": "友好的标签，用于倒塌的助手维护消息。",
-    "message": "在后台处理..."
-  },
-  "maintenanceLabel_remembering": {
-    "description": "友好的标签，用于倒塌的助手维护消息。",
-    "message": "记住这个细节..."
-  },
-  "maintenanceLabel_saving": {
-    "description": "友好的标签，用于倒塌的助手维护消息。",
-    "message": "节省了以后的想法..."
-  },
-  "maintenanceLabel_tracking": {
-    "description": "友好的标签，用于倒塌的助手维护消息。",
-    "message": "跟踪上下文..."
-  },
-  "maintenanceLabel_tucking": {
-    "description": "友好的标签，用于倒塌的助手维护消息。",
-    "message": "把这个塞了..."
-  },
-  "disableTTS": {
-    "description": "标签以关闭文本到语音的选项",
-    "message": "禁用文本到语音"
-  },
-  "signInForTTS": {
-    "description": "在用户需要身份验证以访问文本到语音功能时显示了提示",
-    "message": "登录文本到语音"
-  },
   "ttsVoice": {
-    "description": "标签菜单中描述文本到语音选项",
+    "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS声音"
   },
-  "voiceOff": {
-    "description": "何时禁用文本到语音的标签",
-    "message": "发出声音"
+  "unlockButton": {
+    "description": "The title (tooltip) of the button to unlock the screen.",
+    "message": "按下以解锁屏幕"
   },
-  "voiceSettings": {
-    "description": "菜单项的文本访问与语音相关的设置。",
-    "message": "语音设置"
+  "unlockInstruction": {
+    "description": "Instructions telling the user how to unlock the screen when locked.",
+    "message": "按住以解锁。"
   },
-  "addCredits": {
-    "description": "链接的文本以添加更多语音积分",
-    "message": "添加积分"
+  "upgradeButton": {
+    "description": "Text for the button to upgrade the plan when quota is exhausted.",
+    "message": "升级计划"
   },
   "upgradeForTTS": {
-    "description": "提示显示用户需要升级以获取文本到语音信用的提示",
+    "description": "Prompt shown when user needs to upgrade to obtain text-to-speech credits",
     "message": "升级语音生成"
   },
-  "voicePaused": {
-    "description": "由于信用不足而暂停声音时显示的文字",
-    "message": "声音暂停 - "
-  },
-  "assistantIsListeningAttentively": {
-    "description": "当助手在代理模式下聆听语音时显示的消息。",
-    "message": "$chatbot$正在专心听...",
+  "userStartedInterrupting": {
+    "description": "Message displayed when the user starts speaking while the assistant is speaking.",
+    "message": "继续，$chatbot$正在倾听...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
-        "example": "Claude"
+        "example": "Pi"
       }
     }
+  },
+  "vadDetailActivatingMicrophone": {
+    "description": "VAD detail when activating the microphone.",
+    "message": "Activating microphone..."
+  },
+  "vadDetailCommLinkFailed": {
+    "description": "VAD detail when the communication port link fails.",
+    "message": "Communication link failed."
+  },
+  "vadDetailDeactivatingMicrophone": {
+    "description": "VAD detail when deactivating the microphone.",
+    "message": "Deactivating microphone..."
+  },
+  "vadDetailFailedToReconnectVADService": {
+    "description": "VAD detail when re-establishing connection fails.",
+    "message": "Failed to reconnect VAD service."
+  },
+  "vadDetailInitError": {
+    "description": "VAD detail for an initialization error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to connect to VAD service"
+      }
+    }
+  },
+  "vadDetailInitErrorPromise": {
+    "description": "VAD detail for an initialization promise error.",
+    "message": "Init Error: Promise error"
+  },
+  "vadDetailInitErrorUnknown": {
+    "description": "VAD detail for an unknown initialization error.",
+    "message": "Init Error: Unknown"
+  },
+  "vadDetailInitializedMode": {
+    "description": "VAD detail showing initialization mode.",
+    "message": "",
+    "placeholders": {
+      "mode": {
+        "content": "$1",
+        "example": "Agent"
+      }
+    }
+  },
+  "vadDetailInitializedModeNA": {
+    "description": "VAD detail showing initialization mode as N/A.",
+    "message": "Initialized (Mode: N/A)"
+  },
+  "vadDetailNonSpeechAudioDetected": {
+    "description": "VAD detail for non-speech audio detection.",
+    "message": "Non-speech audio detected"
+  },
+  "vadDetailReleasingVADResources": {
+    "description": "VAD detail when releasing VAD resources.",
+    "message": "Releasing VAD resources..."
+  },
+  "vadDetailRequestingVADSetup": {
+    "description": "VAD detail when requesting setup.",
+    "message": "Requesting VAD setup..."
+  },
+  "vadDetailSpeechDetected": {
+    "description": "VAD detail when speech has been detected.",
+    "message": "Speech detected"
+  },
+  "vadDetailSpeechEndedDuration": {
+    "description": "VAD detail indicating speech ended and its duration.",
+    "message": "",
+    "placeholders": {
+      "duration": {
+        "content": "$1",
+        "example": "1000"
+      }
+    }
+  },
+  "vadDetailStartError": {
+    "description": "VAD detail for a start error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to start VAD service"
+      }
+    }
+  },
+  "vadDetailStartErrorPromise": {
+    "description": "VAD detail for a start promise error.",
+    "message": "Start Error: Promise error"
+  },
+  "vadDetailStartErrorUnknown": {
+    "description": "VAD detail for an unknown start error.",
+    "message": "Start Error: Unknown"
+  },
+  "vadDetailStopError": {
+    "description": "VAD detail for a stop error, with specific error message.",
+    "message": "",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to stop VAD service"
+      }
+    }
+  },
+  "vadDetailStopErrorPromise": {
+    "description": "VAD detail for a stop promise error.",
+    "message": "Stop Error: Promise error"
+  },
+  "vadDetailStopErrorUnknown": {
+    "description": "VAD detail for an unknown stop error.",
+    "message": "Stop Error: Unknown"
+  },
+  "vadDetailUnknownVADError": {
+    "description": "VAD detail for an unknown error from the VAD module.",
+    "message": "Unknown VAD error"
+  },
+  "vadDetailVADProcessingStopped": {
+    "description": "VAD detail indicating VAD processing has stopped.",
+    "message": "VAD processing stopped."
+  },
+  "vadDetailVADServiceDisconnected": {
+    "description": "VAD detail when the service disconnects.",
+    "message": "VAD service disconnected. Try reloading."
+  },
+  "vadDetailVADServiceNotConnected": {
+    "description": "VAD detail when the service is not connected.",
+    "message": "VAD service not connected. Try reloading."
+  },
+  "vadDetailVADServiceShutdown": {
+    "description": "VAD detail indicating VAD service has been shut down.",
+    "message": "VAD service shut down."
+  },
+  "vadDetailWaitingForSpeech": {
+    "description": "VAD detail when waiting for user to speak.",
+    "message": "Waiting for speech"
+  },
+  "vadStatusDestroyed": {
+    "description": "VAD status when destroyed.",
+    "message": "Destroyed"
+  },
+  "vadStatusError": {
+    "description": "Generic VAD error status.",
+    "message": "Error"
+  },
+  "vadStatusFailed": {
+    "description": "Generic VAD failure status.",
+    "message": "Failed"
+  },
+  "vadStatusInitializing": {
+    "description": "VAD status when initializing.",
+    "message": "Initializing"
+  },
+  "vadStatusListening": {
+    "description": "VAD status when actively listening.",
+    "message": "Listening"
+  },
+  "vadStatusMisfire": {
+    "description": "VAD status when a misfire (non-speech) is detected.",
+    "message": "Misfire"
+  },
+  "vadStatusProcessing": {
+    "description": "VAD status when processing audio.",
+    "message": "Processing"
+  },
+  "vadStatusReady": {
+    "description": "VAD status when ready and waiting.",
+    "message": "Ready"
+  },
+  "vadStatusShuttingDown": {
+    "description": "VAD status when shutting down.",
+    "message": "Shutting down"
+  },
+  "vadStatusStarting": {
+    "description": "VAD status when starting.",
+    "message": "Starting"
+  },
+  "vadStatusStopped": {
+    "description": "VAD status when stopped.",
+    "message": "Stopped"
+  },
+  "vadStatusStopping": {
+    "description": "VAD status when stopping.",
+    "message": "Stopping"
+  },
+  "viewDetails": {
+    "description": "Text for the link to view full quota details on the dashboard.",
+    "message": "查看详细信息"
+  },
+  "voiceIntroduction_joey": {
+    "description": "Introduction for the Joey voice.",
+    "message": "你好！\n请注意！ \n嗨好！\n我是 Pi，您的多语言人工智能助手。\n通过我掌握的 32 种语言，我们可以探索世界各地的思想和文化。\n你觉得这个声音怎么样？"
+  },
+  "voiceIntroduction_paola": {
+    "description": "Introduction for the Paola voice.",
+    "message": "再见！\n你好！\n你好！\n我是 Pi，我能流利地说 32 种语言。\n从阿拉伯语到乌克兰语，我来这里是为了打破语言障碍。\n你觉得这个声音怎么样？"
+  },
+  "voiceOff": {
+    "description": "Label for when text-to-speech is disabled",
+    "message": "发出声音"
+  },
+  "voicePaused": {
+    "description": "Text shown when voice is paused due to insufficient credits",
+    "message": "声音暂停 - "
+  },
+  "voiceSettings": {
+    "description": "The text of the menu item to access voice-related settings.",
+    "message": "语音设置"
   }
 }
