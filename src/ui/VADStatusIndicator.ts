@@ -107,6 +107,9 @@ export class VADStatusIndicator {
         statusColor = '#66bb6a'; // Green
         break;
       case 'listening':
+        statusColor = '#e0e0e0'; // Default white/light gray
+        break;
+      case 'processing':
       case 'speech detected':
         statusColor = '#42a5f5'; // Blue
         break;
