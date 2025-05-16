@@ -1,23 +1,39 @@
 {
-  "appName": {
-    "message": "Say, Pi",
-    "description": "アプリケーションの名前。"
+  "activityCheckButton": {
+    "description": "The text of the button to indicate that the user is still present.",
+    "message": "はい、まだここにいます！"
+  },
+  "activityCheckMessage": {
+    "description": "The message to display when the conversation has been going on unusually long.",
+    "message": "ワオ、これは長い会話ですね。まだそこにいますか、それとも私たちは自分自身に話しかけているのでしょうか？"
+  },
+  "addCredits": {
+    "description": "Text for link to add more voice credits",
+    "message": "クレジットを追加します"
+  },
+  "allowInterruptions": {
+    "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
+    "message": "中断可能な"
   },
   "appDescription": {
-    "message": "PiとClaudeの音声制御。 当然話をして、リアルな返信を取得してください。 言ってください。",
-    "description": "アプリケーションの説明。"
+    "description": "The description of the application.",
+    "message": "PiとClaudeの音声制御。 当然話をして、リアルな返信を取得してください。 言ってください。"
   },
-  "callInProgress": {
-    "message": "ハンズフリー会話を終了する",
-    "description": "通話中に通話ボタンに表示されるツールチップ。"
+  "appName": {
+    "description": "The name of the application.",
+    "message": "Say, Pi"
   },
-  "callStarting": {
-    "message": "接続中...",
-    "description": "通話開始時に通話ボタンに表示されるツールチップ。"
+  "applicationStatusIssue": {
+    "description": "Message to display when the application is experiencing issues.",
+    "message": "システム問題警告"
   },
-  "callNotStarted": {
-    "message": "$chatbot$とハンズフリーで会話を開始してください",
-    "description": "通話が開始される前に通話ボタンに表示されるツールチップ。",
+  "applicationStatusUnknown": {
+    "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
+    "message": "アプリケーションのステータスが不明"
+  },
+  "assistantIsListening": {
+    "description": "Message displayed when the assistant is listening for speech.",
+    "message": "$chatbot$が聞いています...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
@@ -25,60 +41,58 @@
       }
     }
   },
-  "callError": {
-    "message": "致命的でないエラーが発生しました。心配しないで、まだ聞いています。",
-    "description": "致命的でないエラーが発生した際に通話ボタンに表示されるツールチップ。"
+  "assistantIsListeningAttentively": {
+    "description": "Message displayed when the assistant is listening for speech in agent mode.",
+    "message": "$chatbot$は注意深く聞いています...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   },
-  "mode_speed": {
-    "message": "速度",
-    "description": "最速の転写モード。"
+  "assistantIsSpeaking": {
+    "description": "Message displayed when the assistant is speaking its response.",
+    "message": "$chatbot$が話しています...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "mode_balanced": {
-    "message": "バランス",
-    "description": "デフォルトの転写モード。"
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Message displayed when the assistant is speaking its response and manual interruption is possible.",
+    "message": "$chatbot$ が話しています。タップして中断します...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "mode_accuracy": {
-    "message": "正確さ",
-    "description": "最高の精度を持つ転写モード。"
+  "assistantIsThinking": {
+    "description": "Message displayed when the assistant is preparing its response.",
+    "message": "$chatbot$は考え中です...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "preferedModeControl": {
-    "message": "好みの転写モードを選択",
-    "description": "好みの転写モードを選択するためのコントロールのタイトル（ツールチップ）。"
-  },
-  "autoSubmit": {
-    "description": "チェックボックスのラベルは、自動プロンプト送信を有効/無効にします。",
-    "message": "自動送信"
-  },
-  "continueUnlocking": {
-    "description": "ユーザーがアンロックボタンを押し始めたらどう進めるかを指示する説明。",
-    "message": "ロックを解除するために続けて押し続けてください..."
-  },
-  "lockButton": {
-    "description": "画面を誤ってタッチするのを防ぐためのボタンのタイトル（ツールチップ）。",
-    "message": "画面をロックするために押してください"
-  },
-  "lockedScreen": {
-    "description": "画面がロックされたときに目立つように表示するメッセージ。",
-    "message": "画面はロックされています。"
-  },
-  "soundEffects": {
-    "description": "サウンドエフェクトを有効/無効にするチェックボックスのラベル。",
-    "message": "効果音"
-  },
-  "unlockButton": {
-    "description": "画面のロックを解除するボタンのタイトル（ツールチップ）。",
-    "message": "画面のロックを解除するには押してください"
-  },
-  "unlockInstruction": {
-    "description": "画面がロックされたときにユーザーが画面のロックを解除する方法を指示します。",
-    "message": "アンロックするために押し続けてください。"
-  },
-  "preferedLanguage": {
-    "message": "言語",
-    "description": "選択したい転写言語を制御するためのラベル。"
+  "assistantIsWriting": {
+    "description": "Message displayed when the assistant is typing its response.",
+    "message": "$chatbot$ が書いています...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioConnected": {
-    "description": "マイクロフォンが接続されたときに表示されるメッセージ",
+    "description": "Message displayed when a microphone is connected",
     "message": "$microphone$が接続されました",
     "placeholders": {
       "microphone": {
@@ -88,7 +102,7 @@
     }
   },
   "audioInputError": {
-    "description": "オーディオが空の転写を結果として表示されるメッセージ - 通常はフィルタリングの結果です。",
+    "description": "Message displayed when audio transcription failed - usually the result of an ASR or LLM API error.",
     "message": "うーん、$chatbot$にはわずかなしゃっくりがありました。\nもう一度言ってもらえますか？",
     "placeholders": {
       "chatbot": {
@@ -98,7 +112,7 @@
     }
   },
   "audioReconnecting": {
-    "description": "新しいマイクロフォンに接続するときに表示されるメッセージ",
+    "description": "Message displayed when connecting to a new microphone",
     "message": "$microphone$に切り替え中...",
     "placeholders": {
       "microphone": {
@@ -107,9 +121,25 @@
       }
     }
   },
-  "assistantIsListening": {
-    "description": "アシスタントが音声を聞いているときに表示されるメッセージ。",
-    "message": "$chatbot$が聞いています...",
+  "autoSubmit": {
+    "description": "Label for the checkbox to enable/disable automatic prompt submission.",
+    "message": "自動送信"
+  },
+  "callError": {
+    "description": "The tooltip to display on the call button when a non-fatal error occurs.",
+    "message": "致命的でないエラーが発生しました。心配しないで、まだ聞いています。"
+  },
+  "callInProgress": {
+    "description": "The tooltip to display on the call button when a call is in progress.",
+    "message": "ハンズフリー会話を終了する"
+  },
+  "callInterruptible": {
+    "description": "The tooltip to display on the call button when a call is in progress and manual interruption is possible.",
+    "message": "タップして中断"
+  },
+  "callNotStarted": {
+    "description": "The tooltip to display on the call button before a call is started.",
+    "message": "$chatbot$とハンズフリーで会話を開始してください",
     "placeholders": {
       "chatbot": {
         "content": "$1",
@@ -117,13 +147,21 @@
       }
     }
   },
-  "toggleThemeToDarkMode": {
-    "description": "ダークモードに切り替えるためのボタンのラベル。",
-    "message": "ダークモードに切り替えてください"
+  "callStarting": {
+    "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
+    "message": "接続中..."
   },
-  "toggleThemeToLightMode": {
-    "description": "ライトモードに切り替えるためのボタンのラベル。",
-    "message": "ライトモードに切り替えてください"
+  "checkingApplicationStatus": {
+    "description": "Message to display while the system status is being determined, e.g. during load.",
+    "message": "アプリケーションのステータスを確認中..."
+  },
+  "clickToCollapse": {
+    "description": "Text indicating user can click to hide expanded content.",
+    "message": "クリックして崩壊します"
+  },
+  "clickToExpand": {
+    "description": "Text indicating user can click to show collapsed content.",
+    "message": "クリックして展開します"
   },
   "consentAskParticipate": {
     "message": "参加しますか？"
@@ -158,102 +196,40 @@
   "consetPrivacyPolicy": {
     "message": "私たちのプライバシーポリシーをお読みください"
   },
-  "shareAnalytics": {
-    "description": "分析の共有を有効/無効にするチェックボックスのラベル。",
-    "message": "分析を共有する"
+  "continueUnlocking": {
+    "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
+    "message": "ロックを解除するために続けて押し続けてください..."
   },
-  "enterImmersiveModeLong": {
-    "description": "モバイルデバイスで没入型モードに入るためのボタンのaria-labelとタイトル。",
-    "message": "没入型モードに入る"
+  "copiedButtonTitle": {
+    "description": "The title of the button to indicate that the text of a message has been copied to the clipboard.",
+    "message": "コピーしました！"
   },
-  "enterImmersiveModeShort": {
-    "description": "デスクトップで没入モードに入るためのボタンのテキスト",
-    "message": "浸漬"
-  },
-  "exitImmersiveModeLong": {
-    "description": "モバイルデバイスで没入型モードを終了し、テキストベースのデスクトップモードに戻るためのボタンのaria-labelとタイトル。",
-    "message": "没入モードを終了する"
-  },
-  "applicationStatusIssue": {
-    "description": "アプリケーションが問題を経験しているときに表示するメッセージ。",
-    "message": "システム問題警告"
-  },
-  "applicationStatusUnknown": {
-    "description": "アプリケーションのステータスが判断できないときに表示するメッセージ。例えば、クライアントがオフラインのときなど。",
-    "message": "アプリケーションのステータスが不明"
-  },
-  "checkingApplicationStatus": {
-    "description": "システムの状態が決定されている間に表示するメッセージ、例えばロード中など。",
-    "message": "アプリケーションのステータスを確認中..."
-  },
-  "dismissAlert": {
-    "description": "システム問題の警告を解除するボタンのラベル。",
-    "message": "解散"
-  },
-  "recommendedActions": {
-    "description": "既知の問題を解決するためにユーザーが取ることを推奨される行動のリストに先立つメッセージ。",
-    "message": "その間、私たちは以下をお勧めします:"
-  },
-  "extensionPopupTitle": {
-    "description": "拡張機能のポップアップダイアログのタイトル。",
-    "message": "Say, Pi"
-  },
-  "activityCheckButton": {
-    "description": "ユーザーがまだ存在していることを示すボタンのテキスト。",
-    "message": "はい、まだここにいます！"
-  },
-  "activityCheckMessage": {
-    "description": "会話が異常に長く続いているときに表示するメッセージ。",
-    "message": "ワオ、これは長い会話ですね。まだそこにいますか、それとも私たちは自分自身に話しかけているのでしょうか？"
-  },
-  "assistantIsThinking": {
-    "message": "$chatbot$は考え中です...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "アシスタントが応答を準備しているときに表示されるメッセージ。"
-  },
-  "assistantIsSpeaking": {
-    "message": "$chatbot$が話しています...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "アシスタントが応答を話しているときに表示されるメッセージ。"
-  },
-  "userStartedInterrupting": {
-    "message": "さあ、$chatbot$が聞いています...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "ユーザーがアシスタントが話している最中に話し始めたときに表示されるメッセージ。"
-  },
-  "allowInterruptions": {
-    "message": "中断可能な",
-    "description": "Piの応答を話すことで中断することを許可/不許可するためのチェックボックスのラベル。"
+  "copyButtonTitle": {
+    "description": "The title of the button to copy the text of a message to the clipboard.",
+    "message": "コピー"
   },
   "currencyUSDAbbreviation": {
-    "description": "アメリカ合衆国ドルの略称。",
+    "description": "The abbreviation for the US dollar.",
     "message": "USD"
   },
   "currentCharges": {
-    "description": "ユーザーが蓄積した現在の料金（累計）を表す用語。",
+    "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "現在の料金"
   },
+  "disableTTS": {
+    "description": "Label for the option to turn off text-to-speech",
+    "message": "テキストからスピーチを無効にします"
+  },
+  "dismissAlert": {
+    "description": "Label for the button to dismiss a system issue alert.",
+    "message": "解散"
+  },
   "enableTTS": {
-    "description": "テキスト読み上げを有効/無効にするチェックボックスのラベル。",
+    "description": "Label for the checkbox to enable/disable text-to-speech.",
     "message": "多言語の声"
   },
   "enhancedVoice": {
-    "description": "タイトル（ツールチップ）：「Say、Piエンハンスドボイス」",
+    "description": "Title (tooltip) for Say, Pi enhanced voices.",
     "message": "$product$ による音声強化",
     "placeholders": {
       "product": {
@@ -262,8 +238,241 @@
       }
     }
   },
+  "enterImmersiveModeLong": {
+    "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
+    "message": "没入型モードに入る"
+  },
+  "enterImmersiveModeShort": {
+    "description": "The text of the button to enter immersive mode on desktop.",
+    "message": "浸漬"
+  },
+  "exitImmersiveModeLong": {
+    "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
+    "message": "没入モードを終了する"
+  },
+  "extensionPopupTitle": {
+    "description": "The title of the extension's popup dialog.",
+    "message": "Say, Pi"
+  },
+  "extensionSettings": {
+    "description": "The text of the button to open the extension's settings.",
+    "message": "設定"
+  },
+  "greeting": {
+    "description": "Greeting message shown when user is signed in",
+    "message": "こんにちは、$name$！",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "instructionLabel_context": {
+    "description": "Friendly label for user instruction that provides background information.",
+    "message": "コンテキストを提供する..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Friendly label for user instruction that defines what the user wants.",
+    "message": "期待を明確にする..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Friendly label for user instruction that narrows the scope of conversation.",
+    "message": "議論に焦点を当てる..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Friendly label for user instruction that establishes boundaries for the conversation.",
+    "message": "ガードレールの設定..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Friendly label for user instruction that guides how the AI should respond.",
+    "message": "ガイド応答..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Friendly label for user instruction that gently suggests a direction.",
+    "message": "ナッジを与える..."
+  },
+  "instructionLabel_steering": {
+    "description": "Friendly label for user instruction that guides the conversation direction.",
+    "message": "会話を操縦..."
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "現在、Firefox では中断はサポートされていません。"
+  },
+  "lockButton": {
+    "description": "The title (tooltip) of the button to lock the screen against accidental touches.",
+    "message": "画面をロックするために押してください"
+  },
+  "lockedScreen": {
+    "description": "A message to display prominently when the screen is locked.",
+    "message": "画面はロックされています。"
+  },
+  "maintenanceLabel_holding": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "この考えを持っています..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "メンタルノートを作る..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "バックグラウンドで処理..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "この詳細を覚えています..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "後でその考えを救う..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "文脈を追跡する..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "これを取り除く..."
+  },
+  "microphoneErrorConstraints": {
+    "description": "Error message when microphone constraints cannot be satisfied.",
+    "message": "マイクの設定が必要な仕様を満たしていません。\n別のマイクを使用するか、オーディオ設定を調整してみてください。"
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generic error message with details when microphone access fails.",
+    "message": "マイクにアクセスできませんでした: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Error message when microphone is already in use by another application.",
+    "message": "マイクは別のアプリケーションによって使用されているため、アクセスできません。\nマイクを使用している可能性のある他のアプリを閉じてください。"
+  },
+  "microphoneErrorNotFound": {
+    "description": "Error message when no microphone device is found.",
+    "message": "マイクが検出されませんでした。\nマイクを接続して再試行してください。"
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Error message when microphone permission is denied by the user or system.",
+    "message": "マイクへのアクセスが必要です。\n続行するには、ブラウザ設定でマイクへのアクセスを許可してください。"
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Error message for unexpected microphone errors with details.",
+    "message": "マイクで予期しないエラーが発生しました: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generic error message when microphone access fails for unknown reasons.",
+    "message": "マイクにアクセスできません。\nデバイスの設定を確認して、もう一度試してください。"
+  },
+  "mode_accuracy": {
+    "description": "Highest accuracy mode.",
+    "message": "正確さ"
+  },
+  "mode_accuracy_description": {
+    "description": "Description for the accuracy transcription mode.",
+    "message": "精度は最高ですが、転写速度は遅くなります。\n幻覚が起こりやすい。"
+  },
+  "mode_balanced": {
+    "description": "Default transcription mode.",
+    "message": "バランス"
+  },
+  "mode_balanced_description": {
+    "description": "Description for the balanced transcription mode.",
+    "message": "ほとんどの用途で速度と精度のバランスが取れています。"
+  },
+  "mode_speed": {
+    "description": "Fastest transcription mode.",
+    "message": "速度"
+  },
+  "mode_speed_description": {
+    "description": "Description for the speed transcription mode.",
+    "message": "応答は最速ですが、精度は低くなります。\n中断しがち。"
+  },
+  "nicknameLabel": {
+    "description": "Label for the input field to set a custom nickname for the AI assistant.",
+    "message": "ニックネーム"
+  },
+  "notSignedIn": {
+    "description": "Text to show when the user is not signed in.",
+    "message": "サインインしていません"
+  },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "許可プロンプトページDOMは正しくロードできませんでした。"
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "許可リクエスト中の不明なエラー"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "このウィンドウの上部にブラウザプロンプトが表示されます。 \n<strong>「サイトにアクセスしながら許可」を押してください</strong>。"
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "このタブは、応答すると自動的に閉じられます。"
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣️チャットをしましょう！"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "会話に音声をもたらすには、$productName$がマイクを使用する許可が必要です。\nあなたのプライバシーが重要です - 私たちはあなたが積極的にチャットしているときにのみ聞きます。",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "あなたのゴーアッドを待っています…"
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "マイクの許可"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "うーん、マイクアクセスを取得できませんでした：$errorName$。\nすぐにこのタブを閉じます…",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "ありがとう！\n許可が付与されました。\n物事をまとめる..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "不明なエラー"
+  },
+  "preferedLanguage": {
+    "description": "Label for a control to select the prefered transcription language.",
+    "message": "言語"
+  },
+  "preferedModeControl": {
+    "description": "The title (tooltip) of the control to select the prefered transcription mode.",
+    "message": "好みの転写モードを選択"
+  },
   "previewProgress": {
-    "description": "ユーザーが文字数制限のある機能をプレビューしているときに表示するメッセージ。",
+    "description": "The message to display when the user is previewing a feature that has a character limit.",
     "message": "$limit$のうち$count$文字が使用されました",
     "placeholders": {
       "count": {
@@ -283,7 +492,7 @@
     "message": "ベータ完了"
   },
   "previewStatusPaused": {
-    "description": "ユーザーが一時停止された機能をプレビューしているときに表示するメッセージ。",
+    "description": "The message to display when the user is previewing a feature that has been paused.",
     "message": "ベータ版は$resetDate$まで一時停止中",
     "placeholders": {
       "resetDate": {
@@ -295,12 +504,187 @@
   "previewStatusUnknown": {
     "message": "接続できません..."
   },
+  "profile": {
+    "description": "Label for the user profile section.",
+    "message": "プロフィール"
+  },
+  "quotaCredits": {
+    "description": "Unit label for TTS credits",
+    "message": "クレジット"
+  },
+  "quotaRemaining": {
+    "description": "Label for the quota remaining progress bar",
+    "message": "残りのクォータ"
+  },
+  "quotaStatusUnknown": {
+    "description": "Message shown when quota status cannot be determined",
+    "message": "クォータステータスを確認できません"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Message shown when user is not authenticated.",
+    "message": "ログインして音声生成やその他のプレミアム機能にアクセスします"
+  },
   "readAloudButtonTitle": {
-    "description": "メッセージのテキストを音声で読み上げるボタンのタイトル",
+    "description": "The title of the button to read aloud the text of a message.",
     "message": "音読する"
   },
+  "recommendedActions": {
+    "description": "Message preceding a list of recommended actions the user may take to remediate a known issue.",
+    "message": "その間、私たちは以下をお勧めします:"
+  },
+  "regenerateButtonTitle": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an estimated cost.",
+    "message": "$cost$ $currency$のオーディオを生成します",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
+    "message": "オーディオを生成する"
+  },
+  "shareAnalytics": {
+    "description": "Label for the checkbox to enable/disable sharing of analytics.",
+    "message": "分析を共有する"
+  },
+  "signIn": {
+    "description": "Text for the sign in button.",
+    "message": "サインイン"
+  },
+  "signInForTTS": {
+    "description": "Prompt shown when user needs to authenticate to access text-to-speech features",
+    "message": "テキストからスピーチにサインインします"
+  },
+  "signOut": {
+    "description": "Text for the sign out button.",
+    "message": "サインアウト"
+  },
+  "signedIn": {
+    "description": "Status text shown when user is authenticated (without email).",
+    "message": "サインイン"
+  },
+  "signedInAs": {
+    "description": "Status text shown when user is authenticated, including their email.",
+    "message": "$email$として署名されました",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "soundEffects": {
+    "description": "Label for the checkbox to enable/disable sound effects.",
+    "message": "効果音"
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "音声フィードバックの問題を防ぐために、Firefox ではサウンド効果が無効になっています。"
+  },
+  "sttMinutesRemaining": {
+    "description": "Text showing remaining STT quota in minutes.",
+    "message": "$minutes$分$plural$の残り",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text to show when STT quota is exhausted.",
+    "message": "音声認識クォータは使い果たされました"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip for the STT quota progress bar.",
+    "message": "$remaining$の$total$秒の残り",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip for the STT quota progress bar in minutes.",
+    "message": "$remaining$の$total$分の残り",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Label for the STT quota remaining display.",
+    "message": "音声認識"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unit for STT quota (seconds).",
+    "message": "秒"
+  },
+  "submitModeControl": {
+    "description": "The title (tooltip) of the control to select when messages should be submitted.",
+    "message": "メッセージをいつ送信するかを選択してください"
+  },
+  "submit_mode_agent": {
+    "description": "AI-driven submission mode.",
+    "message": "エージェント"
+  },
+  "submit_mode_agent_description": {
+    "description": "Description for the AI-driven submission mode.",
+    "message": "$chatbot$ はコンテキストに基づいていつ応答するかを決定します",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatic submission mode.",
+    "message": "自動"
+  },
+  "submit_mode_auto_description": {
+    "description": "Description for the automatic submission mode.",
+    "message": "話すのをやめると自動的に送信される"
+  },
+  "submit_mode_off": {
+    "description": "Manual submission mode.",
+    "message": "マニュアル"
+  },
+  "submit_mode_off_description": {
+    "description": "Description for the manual submission mode.",
+    "message": "ボタンを押したときのみ送信します"
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Label for the button to toggle to dark mode.",
+    "message": "ダークモードに切り替えてください"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Label for the button to toggle to light mode.",
+    "message": "ライトモードに切り替えてください"
+  },
   "ttsCostExplanation": {
-    "description": "テキストを音声で読み上げるためにテキストツースピーチエンジンが使用されるときに表示するツールチップ、メッセージのコストと共に。",
+    "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
     "message": "$product$ は、このメッセージを聞くために $cost$ $currency$ を請求します",
     "placeholders": {
       "cost": {
@@ -318,7 +702,7 @@
     }
   },
   "ttsCostExplanationFree": {
-    "description": "テキスト読み上げエンジンがメッセージを音声で読み上げる際に表示するツールチップ、そしてそのメッセージは無料です。プロバイダーの名前を含むこともあります。",
+    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free. Assumes the provider is Inflection AI.",
     "message": "この音声は Inflection AI によって無料で生成されています",
     "placeholders": {
       "provider": {
@@ -327,8 +711,26 @@
       }
     }
   },
+  "ttsCostExplanationSayPi": {
+    "description": "The tooltip to display when the user hovers over the cost explanation link.",
+    "message": "$product$ がオーディオに対してどのように請求するかをご覧ください",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "ttsCredits": {
+    "description": "The term used for the credits currency in the text-to-speech feature.",
+    "message": "クレジット"
+  },
+  "ttsDisabledSafari": {
+    "description": "Message shown when TTS is disabled in Safari",
+    "message": "現在、Safari では多言語音声はサポートされていません。"
+  },
   "ttsPoweredBy": {
-    "description": "テキストを音声で読み上げるためにテキストツーコンピュータスピーチエンジンが使用されるときに表示するメッセージ。",
+    "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "$ttsEngine$によって駆動されるテキスト読み上げ",
     "placeholders": {
       "ttsEngine": {
@@ -337,302 +739,16 @@
       }
     }
   },
-  "copiedButtonTitle": {
-    "message": "コピーしました！",
-    "description": "メッセージのテキストがクリップボードにコピーされたことを示すボタンのタイトル。"
-  },
-  "copyButtonTitle": {
-    "message": "コピー",
-    "description": "メッセージのテキストをクリップボードにコピーするためのボタンのタイトル。"
-  },
-  "voiceIntroduction_joey": {
-    "message": "やあ！ \nПривет! \n你好！\n私は Pi です。多言語 AI アシスタントです。 \n32 の言語を自由に操ることができ、世界中のアイデアや文化を探求できます。\nこの声についてどう思いますか？",
-    "description": "Joey音声の紹介。"
-  },
-  "voiceIntroduction_paola": {
-    "message": "ちゃお！\nボンジュール！\nこんにちは！\n私は Pi です。32 か国語で流暢に会話できます。\nアラビア語からウクライナ語まで、言語の壁を打ち破るために私はここにいます。\nこの声はあなたにはどう聞こえますか？",
-    "description": "Paolaの声の紹介。"
-  },
-  "regenerateButtonTitle": {
-    "message": "$cost$ $currency$のオーディオを生成します",
-    "description": "メッセージのオーディオを再生成するためのボタンのタイトル。推定費用が発生する可能性があります。",
-    "placeholders": {
-      "cost": {
-        "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
-      }
-    }
-  },
-  "regenerateButtonTitleFree": {
-    "message": "オーディオを生成する",
-    "description": "メッセージのオーディオを再生成するためのボタンのタイトル。不確定な費用が発生する可能性があります。"
-  },
-  "assistantIsWriting": {
-    "description": "アシスタントが応答を入力しているときに表示されるメッセージ。",
-    "message": "$chatbot$ が書いています...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "ttsCostExplanationSayPi": {
-    "description": "ユーザーがコストの説明リンクの上にマウスを移動したときに表示されるツールヒント。",
-    "placeholders": {
-      "product": {
-        "content": "$1",
-        "example": "Say, Pi"
-      }
-    },
-    "message": "$product$ がオーディオに対してどのように請求するかをご覧ください"
-  },
-  "interruptionsFirefoxDisabled": {
-    "message": "現在、Firefox では中断はサポートされていません。"
-  },
-  "mode_accuracy_description": {
-    "description": "精度転写モードの説明。",
-    "message": "精度は最高ですが、転写速度は遅くなります。\n幻覚が起こりやすい。"
-  },
-  "mode_balanced_description": {
-    "description": "バランス転写モードの説明。",
-    "message": "ほとんどの用途で速度と精度のバランスが取れています。"
-  },
-  "mode_speed_description": {
-    "description": "高速転写モードの説明。",
-    "message": "応答は最速ですが、精度は低くなります。\n中断しがち。"
-  },
-  "soundEffectsFirefoxDisabled": {
-    "message": "音声フィードバックの問題を防ぐために、Firefox ではサウンド効果が無効になっています。"
-  },
-  "assistantIsSpeakingWithManualInterrupt": {
-    "description": "アシスタントが応答を話しているときにメッセージが表示され、手動で中断することができます。",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "message": "$chatbot$ が話しています。タップして中断します..."
-  },
-  "callInterruptible": {
-    "description": "通話中に手動で中断できるときに通話ボタンに表示されるツールチップ。",
-    "message": "タップして中断"
-  },
-  "microphoneErrorConstraints": {
-    "description": "マイクの制約を満たせない場合のエラー メッセージ。",
-    "message": "マイクの設定が必要な仕様を満たしていません。\n別のマイクを使用するか、オーディオ設定を調整してみてください。"
-  },
-  "microphoneErrorGeneric": {
-    "description": "マイクへのアクセスが失敗した場合の詳細を含む一般的なエラー メッセージ。",
-    "message": "マイクにアクセスできませんでした: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Permission denied"
-      }
-    }
-  },
-  "microphoneErrorInUse": {
-    "description": "マイクが別のアプリケーションによってすでに使用されている場合のエラー メッセージ。",
-    "message": "マイクは別のアプリケーションによって使用されているため、アクセスできません。\nマイクを使用している可能性のある他のアプリを閉じてください。"
-  },
-  "microphoneErrorNotFound": {
-    "description": "マイクデバイスが見つからない場合のエラーメッセージ。",
-    "message": "マイクが検出されませんでした。\nマイクを接続して再試行してください。"
-  },
-  "microphoneErrorPermissionDenied": {
-    "description": "マイクの許可がユーザーまたはシステムによって拒否された場合のエラー メッセージ。",
-    "message": "マイクへのアクセスが必要です。\n続行するには、ブラウザ設定でマイクへのアクセスを許可してください。"
-  },
-  "microphoneErrorUnexpected": {
-    "description": "予期しないマイクエラーに関するエラーメッセージと詳細。",
-    "message": "マイクで予期しないエラーが発生しました: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Device busy"
-      }
-    }
-  },
-  "microphoneErrorUnknown": {
-    "description": "不明な理由でマイクへのアクセスが失敗した場合の一般的なエラー メッセージ。",
-    "message": "マイクにアクセスできません。\nデバイスの設定を確認して、もう一度試してください。"
-  },
-  "ttsDisabledSafari": {
-    "message": "現在、Safari では多言語音声はサポートされていません。",
-    "description": "Safari で TTS が無効になっているときに表示されるメッセージ"
-  },
-  "extensionSettings": {
-    "message": "設定",
-    "description": "拡張機能の設定を開くボタンのテキスト。"
-  },
-  "submitModeControl": {
-    "description": "メッセージをいつ送信するかを選択するコントロールのタイトル (ツールチップ)。",
-    "message": "メッセージをいつ送信するかを選択してください"
-  },
-  "submit_mode_agent": {
-    "description": "AI 主導の送信モード。",
-    "message": "エージェント"
-  },
-  "submit_mode_agent_description": {
-    "description": "AI 主導の送信モードの説明。",
-    "message": "$chatbot$ はコンテキストに基づいていつ応答するかを決定します",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "submit_mode_auto": {
-    "description": "自動提出モード。",
-    "message": "自動"
-  },
-  "submit_mode_auto_description": {
-    "description": "自動送信モードの説明。",
-    "message": "話すのをやめると自動的に送信される"
-  },
-  "submit_mode_off": {
-    "description": "手動送信モード。",
-    "message": "マニュアル"
-  },
-  "submit_mode_off_description": {
-    "description": "手動送信モードの説明。",
-    "message": "ボタンを押したときのみ送信します"
-  },
-  "nicknameLabel": {
-    "message": "ニックネーム",
-    "description": "AIアシスタントのカスタムニックネームを設定するための入力フィールドのラベル。"
-  },
-  "greeting": {
-    "description": "ユーザーがサインインされたときに表示されるグリーティングメッセージ",
-    "message": "こんにちは、$name$！",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John"
-      }
-    }
-  },
-  "notSignedIn": {
-    "description": "ユーザーがサインインしていないときに表示するテキスト。",
-    "message": "サインインしていません"
-  },
-  "profile": {
-    "description": "ユーザープロファイルセクションのラベル。",
-    "message": "プロフィール"
-  },
-  "quotaCredits": {
-    "description": "TTSクレジット用のユニットラベル",
-    "message": "クレジット"
-  },
-  "quotaRemaining": {
-    "description": "クォータの残りの進行状況バーのラベル",
-    "message": "残りのクォータ"
-  },
-  "quotaStatusUnknown": {
-    "description": "クォータステータスを決定できない場合に表示されます",
-    "message": "クォータステータスを確認できません"
-  },
-  "quotaUnauthenticatedMessage": {
-    "description": "ユーザーが認証されていないときに表示されるメッセージ。",
-    "message": "ログインして音声生成やその他のプレミアム機能にアクセスします"
-  },
-  "signIn": {
-    "description": "サインインボタンのテキスト。",
-    "message": "サインイン"
-  },
-  "signOut": {
-    "description": "サインアウトボタンのテキスト。",
-    "message": "サインアウト"
-  },
-  "signedIn": {
-    "description": "ユーザーが認証されているときに表示されるステータステキスト（電子メールなし）。",
-    "message": "サインイン"
-  },
-  "signedInAs": {
-    "description": "ユーザーが電子メールを含めて認証されているときに表示されるステータステキスト。",
-    "message": "$email$として署名されました",
-    "placeholders": {
-      "email": {
-        "content": "$1",
-        "example": "user@example.com"
-      }
-    }
-  },
-  "sttMinutesRemaining": {
-    "description": "残りのSTTクォータを数分で示すテキスト。",
-    "message": "$minutes$分$plural$の残り",
-    "placeholders": {
-      "minutes": {
-        "content": "$1",
-        "example": "5"
-      },
-      "plural": {
-        "content": "$2",
-        "example": "s"
-      }
-    }
-  },
-  "sttQuotaExhausted": {
-    "description": "STTクォータが使い果たされたときに示すテキスト。",
-    "message": "音声認識クォータは使い果たされました"
-  },
-  "sttQuotaProgress": {
-    "description": "STTクォータの進行状況バーのツールチップ。",
-    "message": "$remaining$の$total$秒の残り",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "100"
-      },
-      "total": {
-        "content": "$2",
-        "example": "300"
-      }
-    }
-  },
-  "sttQuotaProgressMinutes": {
-    "description": "数分でSTTクォータの進行状況バーのツールチップ。",
-    "message": "$remaining$の$total$分の残り",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "5"
-      },
-      "total": {
-        "content": "$2",
-        "example": "60"
-      }
-    }
-  },
-  "sttQuotaRemaining": {
-    "description": "STTクォータの残りの表示用ラベル。",
-    "message": "音声認識"
-  },
-  "sttQuotaSeconds": {
-    "description": "STTクォータのユニット（秒）。",
-    "message": "秒"
-  },
-  "ttsCredits": {
-    "description": "テキストからスピーチの機能のクレジット通貨に使用される用語。",
-    "message": "クレジット"
-  },
   "ttsQuotaCharacters": {
-    "description": "TTSクォータ（文字）のユニット。",
+    "description": "Unit for TTS quota (characters).",
     "message": "クレジット"
   },
   "ttsQuotaExhausted": {
-    "description": "TTSクォータが使い果たされたときに表示するテキスト。",
+    "description": "Text to show when TTS quota is exhausted.",
     "message": "音声クォータは使い果たされました"
   },
   "ttsQuotaProgress": {
-    "description": "TTSクォータプログレスバーのツールチップ。",
+    "description": "Tooltip for the TTS quota progress bar.",
     "message": "$remaining$の$total$文字が残っています",
     "placeholders": {
       "remaining": {
@@ -646,121 +762,247 @@
     }
   },
   "ttsQuotaRemaining": {
-    "description": "TTSクォータの残りの表示のラベル。",
+    "description": "Label for the TTS quota remaining display.",
     "message": "音声生成"
   },
-  "upgradeButton": {
-    "description": "クォータが使い果たされたときにプランをアップグレードするボタンのテキスト。",
-    "message": "プランのアップグレード"
-  },
-  "viewDetails": {
-    "description": "ダッシュボードで完全なクォータの詳細を表示するためのリンクのテキスト。",
-    "message": "詳細を表示します"
-  },
-  "clickToCollapse": {
-    "description": "ユーザーを示すテキストは、クリックして拡張コンテンツを非表示にできます。",
-    "message": "クリックして崩壊します"
-  },
-  "clickToExpand": {
-    "description": "ユーザーを示すテキストは、崩壊したコンテンツを表示するためにクリックできます。",
-    "message": "クリックして展開します"
-  },
-  "instructionLabel_context": {
-    "description": "背景情報を提供するユーザー命令のためのフレンドリーなラベル。",
-    "message": "コンテキストを提供する..."
-  },
-  "instructionLabel_expectations": {
-    "description": "ユーザーが望むものを定義するユーザー指示のためのフレンドリーなラベル。",
-    "message": "期待を明確にする..."
-  },
-  "instructionLabel_focusing": {
-    "description": "会話の範囲を狭めるユーザー指導のためのフレンドリーなラベル。",
-    "message": "議論に焦点を当てる..."
-  },
-  "instructionLabel_guardrails": {
-    "description": "会話の境界を確立するユーザー指導のためのフレンドリーなラベル。",
-    "message": "ガードレールの設定..."
-  },
-  "instructionLabel_guiding": {
-    "description": "AIがどのように応答するかをガイドするユーザー指示のためのフレンドリーなラベル。",
-    "message": "ガイド応答..."
-  },
-  "instructionLabel_nudge": {
-    "description": "方向性を優しく提案するユーザー指導のためのフレンドリーなラベル。",
-    "message": "ナッジを与える..."
-  },
-  "instructionLabel_steering": {
-    "description": "会話の方向性を導くユーザー指導のためのフレンドリーなラベル。",
-    "message": "会話を操縦..."
-  },
-  "maintenanceLabel_holding": {
-    "description": "崩壊したアシスタントメンテナンスメッセージのフレンドリーラベル。",
-    "message": "この考えを持っています..."
-  },
-  "maintenanceLabel_mental_note": {
-    "description": "崩壊したアシスタントメンテナンスメッセージのフレンドリーラベル。",
-    "message": "メンタルノートを作る..."
-  },
-  "maintenanceLabel_processing": {
-    "description": "崩壊したアシスタントメンテナンスメッセージのフレンドリーラベル。",
-    "message": "バックグラウンドで処理..."
-  },
-  "maintenanceLabel_remembering": {
-    "description": "崩壊したアシスタントメンテナンスメッセージのフレンドリーラベル。",
-    "message": "この詳細を覚えています..."
-  },
-  "maintenanceLabel_saving": {
-    "description": "崩壊したアシスタントメンテナンスメッセージのフレンドリーラベル。",
-    "message": "後でその考えを救う..."
-  },
-  "maintenanceLabel_tracking": {
-    "description": "崩壊したアシスタントメンテナンスメッセージのフレンドリーラベル。",
-    "message": "文脈を追跡する..."
-  },
-  "maintenanceLabel_tucking": {
-    "description": "崩壊したアシスタントメンテナンスメッセージのフレンドリーラベル。",
-    "message": "これを取り除く..."
-  },
-  "disableTTS": {
-    "description": "テキストからスピーチをオフにするオプションのラベル",
-    "message": "テキストからスピーチを無効にします"
-  },
-  "signInForTTS": {
-    "description": "ユーザーがテキストからスピーチへのアクセスにアクセスするために認証する必要があるときに示されるプロンプトが表示されます",
-    "message": "テキストからスピーチにサインインします"
-  },
   "ttsVoice": {
-    "description": "メニューのテキストからスピーチの音声オプションを説明するラベル",
+    "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS音声"
   },
-  "voiceOff": {
-    "description": "テキストからスピーチが無効になっている場合のラベル",
-    "message": "声をかけます"
+  "unlockButton": {
+    "description": "The title (tooltip) of the button to unlock the screen.",
+    "message": "画面のロックを解除するには押してください"
   },
-  "voiceSettings": {
-    "description": "音声関連設定にアクセスするメニュー項目のテキスト。",
-    "message": "音声設定"
+  "unlockInstruction": {
+    "description": "Instructions telling the user how to unlock the screen when locked.",
+    "message": "アンロックするために押し続けてください。"
   },
-  "addCredits": {
-    "description": "より多くの音声クレジットを追加するためのリンクのテキスト",
-    "message": "クレジットを追加します"
+  "upgradeButton": {
+    "description": "Text for the button to upgrade the plan when quota is exhausted.",
+    "message": "プランのアップグレード"
   },
   "upgradeForTTS": {
-    "description": "ユーザーがテキストからスピーチへのクレジットを取得するためにアップグレードする必要があるときに表示されるプロンプトが表示されます",
+    "description": "Prompt shown when user needs to upgrade to obtain text-to-speech credits",
     "message": "音声生成のためのアップグレード"
   },
-  "voicePaused": {
-    "description": "クレジットが不十分であるために音声が一時停止されたときに表示されるテキスト",
-    "message": "声が一時停止 - "
-  },
-  "assistantIsListeningAttentively": {
-    "description": "アシスタントがエージェントモードでスピーチを聞いているときにメッセージが表示されます。",
-    "message": "$chatbot$は注意深く聞いています...",
+  "userStartedInterrupting": {
+    "description": "Message displayed when the user starts speaking while the assistant is speaking.",
+    "message": "さあ、$chatbot$が聞いています...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
-        "example": "Claude"
+        "example": "Pi"
       }
     }
+  },
+  "vadDetailActivatingMicrophone": {
+    "description": "VAD detail when activating the microphone.",
+    "message": "Activating microphone..."
+  },
+  "vadDetailCommLinkFailed": {
+    "description": "VAD detail when the communication port link fails.",
+    "message": "Communication link failed."
+  },
+  "vadDetailDeactivatingMicrophone": {
+    "description": "VAD detail when deactivating the microphone.",
+    "message": "Deactivating microphone..."
+  },
+  "vadDetailFailedToReconnectVADService": {
+    "description": "VAD detail when re-establishing connection fails.",
+    "message": "Failed to reconnect VAD service."
+  },
+  "vadDetailInitError": {
+    "description": "VAD detail for an initialization error, with specific error message.",
+    "message": "initエラー：$error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to connect to VAD service"
+      }
+    }
+  },
+  "vadDetailInitErrorPromise": {
+    "description": "VAD detail for an initialization promise error.",
+    "message": "Init Error: Promise error"
+  },
+  "vadDetailInitErrorUnknown": {
+    "description": "VAD detail for an unknown initialization error.",
+    "message": "Init Error: Unknown"
+  },
+  "vadDetailInitializedMode": {
+    "description": "VAD detail showing initialization mode.",
+    "message": "初期化（モード：$mode$）",
+    "placeholders": {
+      "mode": {
+        "content": "$1",
+        "example": "Agent"
+      }
+    }
+  },
+  "vadDetailInitializedModeNA": {
+    "description": "VAD detail showing initialization mode as N/A.",
+    "message": "Initialized (Mode: N/A)"
+  },
+  "vadDetailNonSpeechAudioDetected": {
+    "description": "VAD detail for non-speech audio detection.",
+    "message": "Non-speech audio detected"
+  },
+  "vadDetailReleasingVADResources": {
+    "description": "VAD detail when releasing VAD resources.",
+    "message": "Releasing VAD resources..."
+  },
+  "vadDetailRequestingVADSetup": {
+    "description": "VAD detail when requesting setup.",
+    "message": "Requesting VAD setup..."
+  },
+  "vadDetailSpeechDetected": {
+    "description": "VAD detail when speech has been detected.",
+    "message": "Speech detected"
+  },
+  "vadDetailSpeechEndedDuration": {
+    "description": "VAD detail indicating speech ended and its duration.",
+    "message": "スピーチが終了しました（期間：$duration$ ms）",
+    "placeholders": {
+      "duration": {
+        "content": "$1",
+        "example": "1000"
+      }
+    }
+  },
+  "vadDetailStartError": {
+    "description": "VAD detail for a start error, with specific error message.",
+    "message": "エラーを開始：$error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to start VAD service"
+      }
+    }
+  },
+  "vadDetailStartErrorPromise": {
+    "description": "VAD detail for a start promise error.",
+    "message": "Start Error: Promise error"
+  },
+  "vadDetailStartErrorUnknown": {
+    "description": "VAD detail for an unknown start error.",
+    "message": "Start Error: Unknown"
+  },
+  "vadDetailStopError": {
+    "description": "VAD detail for a stop error, with specific error message.",
+    "message": "停止エラー：$error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to stop VAD service"
+      }
+    }
+  },
+  "vadDetailStopErrorPromise": {
+    "description": "VAD detail for a stop promise error.",
+    "message": "Stop Error: Promise error"
+  },
+  "vadDetailStopErrorUnknown": {
+    "description": "VAD detail for an unknown stop error.",
+    "message": "Stop Error: Unknown"
+  },
+  "vadDetailUnknownVADError": {
+    "description": "VAD detail for an unknown error from the VAD module.",
+    "message": "Unknown VAD error"
+  },
+  "vadDetailVADProcessingStopped": {
+    "description": "VAD detail indicating VAD processing has stopped.",
+    "message": "VAD processing stopped."
+  },
+  "vadDetailVADServiceDisconnected": {
+    "description": "VAD detail when the service disconnects.",
+    "message": "VAD service disconnected. Try reloading."
+  },
+  "vadDetailVADServiceNotConnected": {
+    "description": "VAD detail when the service is not connected.",
+    "message": "VAD service not connected. Try reloading."
+  },
+  "vadDetailVADServiceShutdown": {
+    "description": "VAD detail indicating VAD service has been shut down.",
+    "message": "VAD service shut down."
+  },
+  "vadDetailWaitingForSpeech": {
+    "description": "VAD detail when waiting for user to speak.",
+    "message": "Waiting for speech"
+  },
+  "vadStatusDestroyed": {
+    "description": "VAD status when destroyed.",
+    "message": "Destroyed"
+  },
+  "vadStatusError": {
+    "description": "Generic VAD error status.",
+    "message": "Error"
+  },
+  "vadStatusFailed": {
+    "description": "Generic VAD failure status.",
+    "message": "Failed"
+  },
+  "vadStatusIndicatorEnabledLabel": {
+    "description": "Label for the toggle switch that controls the visibility of the Voice Activity Detection status indicator.",
+    "message": "VADステータスを表示します"
+  },
+  "vadStatusInitializing": {
+    "description": "VAD status when initializing.",
+    "message": "Initializing"
+  },
+  "vadStatusListening": {
+    "description": "VAD status when actively listening.",
+    "message": "Listening"
+  },
+  "vadStatusMisfire": {
+    "description": "VAD status when a misfire (non-speech) is detected.",
+    "message": "Misfire"
+  },
+  "vadStatusProcessing": {
+    "description": "VAD status when processing audio.",
+    "message": "Processing"
+  },
+  "vadStatusReady": {
+    "description": "VAD status when ready and waiting.",
+    "message": "Ready"
+  },
+  "vadStatusShuttingDown": {
+    "description": "VAD status when shutting down.",
+    "message": "Shutting down"
+  },
+  "vadStatusStarting": {
+    "description": "VAD status when starting.",
+    "message": "Starting"
+  },
+  "vadStatusStopped": {
+    "description": "VAD status when stopped.",
+    "message": "Stopped"
+  },
+  "vadStatusStopping": {
+    "description": "VAD status when stopping.",
+    "message": "Stopping"
+  },
+  "viewDetails": {
+    "description": "Text for the link to view full quota details on the dashboard.",
+    "message": "詳細を表示します"
+  },
+  "voiceIntroduction_joey": {
+    "description": "Introduction for the Joey voice.",
+    "message": "やあ！ \nПривет! \n你好！\n私は Pi です。多言語 AI アシスタントです。 \n32 の言語を自由に操ることができ、世界中のアイデアや文化を探求できます。\nこの声についてどう思いますか？"
+  },
+  "voiceIntroduction_paola": {
+    "description": "Introduction for the Paola voice.",
+    "message": "ちゃお！\nボンジュール！\nこんにちは！\n私は Pi です。32 か国語で流暢に会話できます。\nアラビア語からウクライナ語まで、言語の壁を打ち破るために私はここにいます。\nこの声はあなたにはどう聞こえますか？"
+  },
+  "voiceOff": {
+    "description": "Label for when text-to-speech is disabled",
+    "message": "声をかけます"
+  },
+  "voicePaused": {
+    "description": "Text shown when voice is paused due to insufficient credits",
+    "message": "声が一時停止 - "
+  },
+  "voiceSettings": {
+    "description": "The text of the menu item to access voice-related settings.",
+    "message": "音声設定"
   }
 }

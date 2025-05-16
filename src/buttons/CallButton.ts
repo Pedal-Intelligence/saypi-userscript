@@ -242,9 +242,9 @@ class CallButton {
 
         const statusColors = {
           capturing: '#808080',
-          processing: '#3498db',
-          'completed-success': '#2ecc71',
-          'completed-error': '#e74c3c',
+          processing: '#42a5f5',
+          'completed-success': '#66bb6a',
+          'completed-error': '#ef5350',
         };
 
         const allSegmentsData = [...this.segments];

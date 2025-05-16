@@ -44,12 +44,54 @@ document.addEventListener("DOMContentLoaded", function () {
    * @returns any
    */
   function getStoredValue(key, defaultValue) {
+    const POPUP_MIGRATABLE_KEYS = ["prefer", "submitMode", "autoSubmit", "discretionaryMode", "soundEffects", "allowInterruptions", "shareData", "nickname"];
     return new Promise((resolve) => {
-      chrome.storage.sync.get([key], function (result) {
-        if (result[key] === undefined) {
+      if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.local) {
+        console.warn(`chrome.storage.local not available. Returning default for ${key}.`);
+        resolve(defaultValue);
+        return;
+      }
+
+      chrome.storage.local.get([key], (localResult) => {
+        if (chrome.runtime && chrome.runtime.lastError) {
+          console.error(`Error getting ${key} from chrome.storage.local:`, chrome.runtime.lastError.message);
           resolve(defaultValue);
+          return;
+        }
+
+        if (localResult && localResult[key] !== undefined) {
+          resolve(localResult[key]);
+        } else if (POPUP_MIGRATABLE_KEYS.includes(key)) {
+          console.log(`[Popup Migration] ${key} not in local. Checking sync.`);
+          if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.sync) {
+            console.warn(`[Popup Migration] chrome.storage.sync not available for ${key}. Using default value.`);
+            resolve(defaultValue);
+            return;
+          }
+          chrome.storage.sync.get([key], (syncResult) => {
+            if (chrome.runtime && chrome.runtime.lastError) {
+              console.warn(`[Popup Migration] Error reading ${key} from sync:`, chrome.runtime.lastError.message, `Using default.`);
+              resolve(defaultValue);
+              return;
+            }
+            if (syncResult && syncResult[key] !== undefined) {
+              console.log(`[Popup Migration] Found ${key} in sync:`, syncResult[key], `. Migrating to local.`);
+              chrome.storage.local.set({ [key]: syncResult[key] }, () => {
+                if (chrome.runtime && chrome.runtime.lastError) {
+                  console.error(`[Popup Migration] Error writing ${key} to local:`, chrome.runtime.lastError.message, `. Using sync value this time.`);
+                  resolve(syncResult[key]);
+                } else {
+                  console.log(`[Popup Migration] Successfully migrated ${key} to local.`);
+                  resolve(syncResult[key]);
+                }
+              });
+            } else {
+              console.log(`[Popup Migration] ${key} not in sync either. Using default.`);
+              resolve(defaultValue);
+            }
+          });
         } else {
-          resolve(result[key]);
+          resolve(defaultValue);
         }
       });
     });
@@ -70,6 +112,8 @@ document.addEventListener("DOMContentLoaded", function () {
     1: "agent",
     2: "off",
   };
+
+  const vadStatusIndicatorEnabledInput = document.getElementById("vad-status-indicator-enabled");
 
   // Load the saved preference when the popup opens
   getStoredValue("prefer", "balanced").then((prefer) => {
@@ -151,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
           });
           
           autoSubmitInput.addEventListener("change", function () {
-            chrome.storage.sync.set({ 
+            chrome.storage.local.set({ 
               autoSubmit: this.checked,
               // Make sure discretionaryMode is false when toggling this way
               discretionaryMode: false,
@@ -189,7 +233,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const migratedMode = autoSubmit ? "auto" : "off";
         
         // Save the new preference
-        chrome.storage.sync.set({ 
+        chrome.storage.local.set({ 
           submitMode: migratedMode,
           // Keep autoSubmit for backward compatibility
           autoSubmit: autoSubmit
@@ -229,7 +273,7 @@ document.addEventListener("DOMContentLoaded", function () {
     showDescription(preference);
 
     // Save the preference
-    chrome.storage.sync.set({ prefer: preference }, function () {
+    chrome.storage.local.set({ prefer: preference }, function () {
       console.log("User preference saved: prefer " + preference);
     });
   };
@@ -243,7 +287,7 @@ document.addEventListener("DOMContentLoaded", function () {
     showSubmitModeDescription(submitMode);
 
     // Save the submit mode and update related settings
-    chrome.storage.sync.set({ 
+    chrome.storage.local.set({ 
       submitMode: submitMode,
       autoSubmit: submitMode !== "off",
       discretionaryMode: submitMode === "agent"
@@ -395,7 +439,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     soundEffectsInput.addEventListener("change", function () {
-      chrome.storage.sync.set({ soundEffects: this.checked }, function () {
+      chrome.storage.local.set({ soundEffects: this.checked }, function () {
         console.log(
           "Preference saved: Sound effects are " +
             (soundEffectsInput.checked ? "on" : "off")
@@ -429,7 +473,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     allowInterruptionsInput.addEventListener("change", function () {
-      chrome.storage.sync.set(
+      chrome.storage.local.set(
         { allowInterruptions: this.checked },
         function () {
           console.log(
@@ -452,7 +496,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     shareDataInput.addEventListener("change", function () {
-      chrome.storage.sync.set({ shareData: this.checked }, function () {
+      chrome.storage.local.set({ shareData: this.checked }, function () {
         console.log(
           "Preference saved: Data sharing is " +
             (shareDataInput.checked ? "on" : "off")
@@ -464,6 +508,30 @@ document.addEventListener("DOMContentLoaded", function () {
         this.parentElement.classList.remove("checked");
       }
     });
+
+    // Handle VAD Status Indicator toggle
+    if (vadStatusIndicatorEnabledInput) {
+      getStoredValue("vadStatusIndicatorEnabled", true).then((enabled) => {
+        selectInput(vadStatusIndicatorEnabledInput, enabled);
+        if (enabled) {
+          vadStatusIndicatorEnabledInput.parentElement.classList.add("checked");
+        } else {
+          vadStatusIndicatorEnabledInput.parentElement.classList.remove("checked");
+        }
+      });
+
+      vadStatusIndicatorEnabledInput.addEventListener("change", function () {
+        chrome.storage.local.set({ vadStatusIndicatorEnabled: this.checked }, function () {
+          console.log("Preference saved: VAD Status Indicator is " + (vadStatusIndicatorEnabledInput.checked ? "on" : "off"));
+        });
+        if (this.checked) {
+          this.parentElement.classList.add("checked");
+        } else {
+          this.parentElement.classList.remove("checked");
+        }
+        message({ vadStatusIndicatorEnabled: this.checked });
+      });
+    }
   }
 
   function hideAll(sections) {
@@ -505,9 +573,9 @@ document.addEventListener("DOMContentLoaded", function () {
       "devtools",
       "upgrade"
     ];
-    chrome.storage.sync.get("shareData").then((result) => {
-      // if the user has not made a decision yet, show the consent section
-      if (!result.hasOwnProperty("shareData")) {
+    getStoredValue("shareData", undefined).then((shareDataValue) => {
+      // if the user has not made a decision yet (value is undefined), show the consent section
+      if (shareDataValue === undefined) {
         showAll("analytics-consent");
         hideAll(sections);
       } else {
@@ -521,14 +589,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const optInButton = document.getElementById("opt-in");
     const optOutButton = document.getElementById("opt-out");
     optInButton.addEventListener("click", function () {
-      chrome.storage.sync.set({ shareData: true }, function () {
+      chrome.storage.local.set({ shareData: true }, function () {
         console.log("User has opted in to data sharing");
         selectInput(document.getElementById("share-data"), true);
         showHideConsent();
       });
     });
     optOutButton.addEventListener("click", function () {
-      chrome.storage.sync.set({ shareData: false }, function () {
+      chrome.storage.local.set({ shareData: false }, function () {
         console.log("User has opted out of data sharing");
         selectInput(document.getElementById("share-data"), false);
         showHideConsent();
@@ -539,7 +607,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function resetButton() {
     const resetButton = document.getElementById("clear-preferences");
     resetButton.addEventListener("click", function () {
-      chrome.storage.sync.clear(function () {
+      chrome.storage.local.clear(function () {
         console.log("All preferences have been cleared");
         location.reload();
       });
@@ -573,14 +641,14 @@ document.addEventListener("DOMContentLoaded", function () {
   nicknameInput.addEventListener("change", function() {
     const nickname = this.value.trim();
     if (nickname) {
-      chrome.storage.sync.set({ nickname }, function() {
+      chrome.storage.local.set({ nickname }, function() {
         console.log("Nickname saved:", nickname);
       });
       // Notify content script of the change
       message({ nickname });
     } else {
       // If the input is empty, remove the nickname
-      chrome.storage.sync.remove("nickname", function() {
+      chrome.storage.local.remove("nickname", function() {
         console.log("Nickname removed");
       });
       // Notify content script of the removal

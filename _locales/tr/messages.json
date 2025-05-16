@@ -1,34 +1,38 @@
 {
   "activityCheckButton": {
-    "description": "Kullanıcının hala mevcut olduğunu belirten düğmenin metni.",
+    "description": "The text of the button to indicate that the user is still present.",
     "message": "Evet, hala buradayım!"
   },
   "activityCheckMessage": {
-    "description": "Konuşma alışılmadık derecede uzun sürdüğünde gösterilecek mesaj.",
+    "description": "The message to display when the conversation has been going on unusually long.",
     "message": "Vay, bu uzun bir konuşma. Hala orada mısın, yoksa kendi kendimize mi konuşuyoruz?"
   },
+  "addCredits": {
+    "description": "Text for link to add more voice credits",
+    "message": "Kredi ekle"
+  },
   "allowInterruptions": {
-    "description": "Kullanıcının Pi'nin yanıtlarını konuşarak kesmesine izin verme/devre dışı bırakma seçeneği için onay kutusu etiketi.",
+    "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Kesilebilir"
   },
   "appDescription": {
-    "description": "Uygulamanın açıklaması.",
+    "description": "The description of the application.",
     "message": "Pi ve Claude için ses kontrolü. Doğal olarak konuşun, gerçekçi cevaplar alın. Sadece söyle."
   },
   "appName": {
-    "description": "Uygulamanın adı.",
+    "description": "The name of the application.",
     "message": "Say, Pi"
   },
   "applicationStatusIssue": {
-    "description": "Uygulamanın sorun yaşadığı zaman gösterilecek mesaj.",
+    "description": "Message to display when the application is experiencing issues.",
     "message": "Sistem Sorunu Uyarısı"
   },
   "applicationStatusUnknown": {
-    "description": "Uygulama durumu belirlenemediğinde görüntülenecek mesaj. Örneğin, istemci çevrimdışıyken.",
+    "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Uygulama durumu bilinmiyor"
   },
   "assistantIsListening": {
-    "description": "Asistanın konuşmayı dinlediği zaman gösterilen mesaj.",
+    "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ dinliyor...",
     "placeholders": {
       "chatbot": {
@@ -37,8 +41,18 @@
       }
     }
   },
+  "assistantIsListeningAttentively": {
+    "description": "Message displayed when the assistant is listening for speech in agent mode.",
+    "message": "$chatbot$ dikkatle dinliyor ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
   "assistantIsSpeaking": {
-    "description": "Asistanın yanıtını söylediği zaman gösterilen mesaj.",
+    "description": "Message displayed when the assistant is speaking its response.",
     "message": "$chatbot$ konuşuyor...",
     "placeholders": {
       "chatbot": {
@@ -47,8 +61,18 @@
       }
     }
   },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Message displayed when the assistant is speaking its response and manual interruption is possible.",
+    "message": "$chatbot$ konuşuyor, sözünü kesmek için dokunun...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "assistantIsThinking": {
-    "description": "Asistanın yanıtını hazırladığı zaman gösterilen mesaj.",
+    "description": "Message displayed when the assistant is preparing its response.",
     "message": "$chatbot$ düşünüyor...",
     "placeholders": {
       "chatbot": {
@@ -57,8 +81,18 @@
       }
     }
   },
+  "assistantIsWriting": {
+    "description": "Message displayed when the assistant is typing its response.",
+    "message": "$chatbot$ yazıyor...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "audioConnected": {
-    "description": "Mikrofon bağlandığında gösterilen mesaj",
+    "description": "Message displayed when a microphone is connected",
     "message": "$microphone$ bağlandı",
     "placeholders": {
       "microphone": {
@@ -68,7 +102,7 @@
     }
   },
   "audioInputError": {
-    "description": "Sesin boş bir transkript sonucu verdiği durumlarda görüntülenen mesaj - genellikle filtrelemenin bir sonucudur.",
+    "description": "Message displayed when audio transcription failed - usually the result of an ASR or LLM API error.",
     "message": "Hmm, $chatbot$ hafif bir hıçkırık vardı. \nBunu tekrar söylemeyi deneyebilir misin?",
     "placeholders": {
       "chatbot": {
@@ -78,7 +112,7 @@
     }
   },
   "audioReconnecting": {
-    "description": "Yeni bir mikrofona bağlanırken görüntülenen mesaj",
+    "description": "Message displayed when connecting to a new microphone",
     "message": "$microphone$ geçiliyor...",
     "placeholders": {
       "microphone": {
@@ -88,19 +122,23 @@
     }
   },
   "autoSubmit": {
-    "description": "Otomatik istek gönderimini etkinleştirmek/devre dışı bırakmak için onay kutusu etiketi.",
+    "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Otomatik gönder"
   },
   "callError": {
-    "description": "Ara düğmesinde, ölümcül olmayan bir hata meydana geldiğinde görüntülenecek araç ipucu.",
+    "description": "The tooltip to display on the call button when a non-fatal error occurs.",
     "message": "Ölümcül olmayan bir hata ile karşılaşıldı. Panik yapmayın, hala dinliyoruz."
   },
   "callInProgress": {
-    "description": "Aramanın devam ettiği sırada arama düğmesinde görüntülenecek ipucu.",
+    "description": "The tooltip to display on the call button when a call is in progress.",
     "message": "Eller serbest konuşmayı sonlandırın"
   },
+  "callInterruptible": {
+    "description": "The tooltip to display on the call button when a call is in progress and manual interruption is possible.",
+    "message": "Ara vermek için dokunun"
+  },
   "callNotStarted": {
-    "description": "Aramanın başlamasından önce arama düğmesinde görüntülenecek ipucu.",
+    "description": "The tooltip to display on the call button before a call is started.",
     "message": "$chatbot$ ile eller serbest bir konuşma başlatın",
     "placeholders": {
       "chatbot": {
@@ -110,12 +148,20 @@
     }
   },
   "callStarting": {
-    "description": "Aramanın başladığı zaman arama düğmesinin araç ipucunda ve istem alanında görüntülenecek metin.",
+    "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Bağlanıyor..."
   },
   "checkingApplicationStatus": {
-    "description": "Sistem durumu belirlenirken, örneğin yükleme sırasında görüntülenecek mesaj.",
+    "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Uygulama durumu kontrol ediliyor..."
+  },
+  "clickToCollapse": {
+    "description": "Text indicating user can click to hide expanded content.",
+    "message": "çökmek için tıklayın"
+  },
+  "clickToExpand": {
+    "description": "Text indicating user can click to show collapsed content.",
+    "message": "Genişletmek için tıklayın"
   },
   "consentAskParticipate": {
     "message": "Katılmak ister misiniz?"
@@ -151,27 +197,39 @@
     "message": "Gizlilik Politikamızı Okuyun"
   },
   "continueUnlocking": {
-    "description": "Kullanıcının kilidi açma düğmesine basmaya başladıktan sonra nasıl devam edeceğini anlatan talimatlar.",
+    "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Kilidi açmak için devam edin..."
   },
+  "copiedButtonTitle": {
+    "description": "The title of the button to indicate that the text of a message has been copied to the clipboard.",
+    "message": "Kopyalandı!"
+  },
+  "copyButtonTitle": {
+    "description": "The title of the button to copy the text of a message to the clipboard.",
+    "message": "Kopyala"
+  },
   "currencyUSDAbbreviation": {
-    "description": "Amerika Birleşik Devletleri Doları'nın kısaltması.",
+    "description": "The abbreviation for the US dollar.",
     "message": "USD"
   },
   "currentCharges": {
-    "description": "Kullanıcının biriktirdiği mevcut ücretleri (devam eden toplam) tanımlamak için kullanılan terim.",
+    "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Mevcut ücretler"
   },
+  "disableTTS": {
+    "description": "Label for the option to turn off text-to-speech",
+    "message": "Metin-konuşma devre dışı bırakın"
+  },
   "dismissAlert": {
-    "description": "Sistem sorunu uyarısını kapatmak için düğmenin etiketi.",
+    "description": "Label for the button to dismiss a system issue alert.",
     "message": "Reddet"
   },
   "enableTTS": {
-    "description": "Metinden konuşmaya geçişi etkinleştirmek/devre dışı bırakmak için onay kutusu etiketi.",
+    "description": "Label for the checkbox to enable/disable text-to-speech.",
     "message": "Çok dilli sesler"
   },
   "enhancedVoice": {
-    "description": "Diyelim ki, Pi geliştirilmiş sesler için başlık (araç ipucu).",
+    "description": "Title (tooltip) for Say, Pi enhanced voices.",
     "message": "$product$ ile geliştirilen ses",
     "placeholders": {
       "product": {
@@ -181,51 +239,240 @@
     }
   },
   "enterImmersiveModeLong": {
-    "description": "Mobil cihazlarda sürükleyici moda giriş yapmak için düğmenin aria-etiketi ve başlığı.",
+    "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
     "message": "Daldırıcı Moda Girin"
   },
   "enterImmersiveModeShort": {
-    "description": "Masaüstünde sürükleyici moda giriş yapmak için düğmenin metni.",
+    "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Daldırma"
   },
   "exitImmersiveModeLong": {
-    "description": "Mobil cihazlarda sürükleyici moddan çıkmak için düğmenin aria-etiketi ve başlığı, metin tabanlı masaüstü moda geri dönün.",
+    "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Daldırıcı Moddan Çık"
   },
   "extensionPopupTitle": {
-    "description": "Uzantının açılır iletişim kutusunun başlığı.",
+    "description": "The title of the extension's popup dialog.",
     "message": "Diyelim ki, Pi Ayarları"
   },
+  "extensionSettings": {
+    "description": "The text of the button to open the extension's settings.",
+    "message": "Ayarlar"
+  },
+  "greeting": {
+    "description": "Greeting message shown when user is signed in",
+    "message": "Merhaba, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "instructionLabel_context": {
+    "description": "Friendly label for user instruction that provides background information.",
+    "message": "Bağlam sağlamak ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Friendly label for user instruction that defines what the user wants.",
+    "message": "Beklentileri netleştiriyor ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Friendly label for user instruction that narrows the scope of conversation.",
+    "message": "Tartışmayı odaklamak ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Friendly label for user instruction that establishes boundaries for the conversation.",
+    "message": "Korkuluklar Ayar ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Friendly label for user instruction that guides how the AI should respond.",
+    "message": "Yol gösterici yanıtlar ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Friendly label for user instruction that gently suggests a direction.",
+    "message": "Bir dürtme vermek ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Friendly label for user instruction that guides the conversation direction.",
+    "message": "Sohbeti yönlendiriyor ..."
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Kesintiler şu anda Firefox'ta desteklenmemektedir."
+  },
   "lockButton": {
-    "description": "Ekranı kazara dokunmalara karşı kilitlemek için düğmenin başlığı (ipucu).",
+    "description": "The title (tooltip) of the button to lock the screen against accidental touches.",
     "message": "Ekranı kilitlemek için basın"
   },
   "lockedScreen": {
-    "description": "Ekran kilitlendiğinde belirgin bir şekilde gösterilecek mesaj.",
+    "description": "A message to display prominently when the screen is locked.",
     "message": "Ekran kilitli."
   },
+  "maintenanceLabel_holding": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Bu düşünceyi tutarak ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Zihinsel bir not yapmak ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Arka planda işleme ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Bu ayrıntıyı hatırlamak ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Bu düşünceyi daha sonra kurtarmak ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Bağlamı takip etmek ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Bunu sıkmak ..."
+  },
+  "microphoneErrorConstraints": {
+    "description": "Error message when microphone constraints cannot be satisfied.",
+    "message": "Mikrofon ayarlarınız gerekli özellikleri karşılamıyor. \nFarklı bir mikrofon kullanmayı veya ses ayarlarınızı değiştirmeyi deneyin."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generic error message with details when microphone access fails.",
+    "message": "Mikrofona erişilemedi: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Error message when microphone is already in use by another application.",
+    "message": "Başka bir uygulama tarafından kullanıldığı için mikrofona erişilemiyor. \nLütfen mikrofonunuzu kullanıyor olabilecek diğer uygulamaları kapatın."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Error message when no microphone device is found.",
+    "message": "Mikrofon algılanmadı. \nLütfen bir mikrofon bağlayın ve tekrar deneyin."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Error message when microphone permission is denied by the user or system.",
+    "message": "Mikrofon erişimi gereklidir. \nDevam etmek için lütfen tarayıcı ayarlarınızdan mikrofon erişimine izin verin."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Error message for unexpected microphone errors with details.",
+    "message": "Mikrofonunuzda beklenmeyen bir hata oluştu: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generic error message when microphone access fails for unknown reasons.",
+    "message": "Mikrofona erişilemiyor. \nLütfen cihaz ayarlarınızı kontrol edip tekrar deneyin."
+  },
   "mode_accuracy": {
-    "description": "En yüksek doğruluk modu.",
+    "description": "Highest accuracy mode.",
     "message": "doğruluk"
   },
+  "mode_accuracy_description": {
+    "description": "Description for the accuracy transcription mode.",
+    "message": "En yüksek doğruluk, ancak daha yavaş transkripsiyon hızı. \nHalüsinasyonlara eğilimli."
+  },
   "mode_balanced": {
-    "description": "Varsayılan transkript modu.",
+    "description": "Default transcription mode.",
     "message": "dengeli"
   },
+  "mode_balanced_description": {
+    "description": "Description for the balanced transcription mode.",
+    "message": "Çoğu kullanım için iyi bir hız ve doğruluk dengesi."
+  },
   "mode_speed": {
-    "description": "En hızlı transkript modu.",
+    "description": "Fastest transcription mode.",
     "message": "hız"
   },
+  "mode_speed_description": {
+    "description": "Description for the speed transcription mode.",
+    "message": "En hızlı yanıt, ancak daha az doğru. \nBölmeye eğilimli."
+  },
+  "nicknameLabel": {
+    "description": "Label for the input field to set a custom nickname for the AI assistant.",
+    "message": "Takma ad"
+  },
+  "notSignedIn": {
+    "description": "Text to show when the user is not signed in.",
+    "message": "Oturum açmadı"
+  },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "İzin istemleri sayfası DOM doğru yüklenemedi."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "İzin talebi sırasında bilinmeyen hata"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "Bu pencerenin üstünde bir tarayıcı istemi göreceksiniz. \nSadece <strong> \"Siteyi ziyaret ederken izin ver\" </strong>, böylece konuşmaya başlayabiliriz."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Yanıtladıktan sonra bu sekme otomatik olarak kapanır."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣️ Sohbet edelim!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "Konuşmalarınıza ses getirmek için $productName$, mikrofonunuzu kullanma iznine ihtiyaç duyar. \nGizliliğiniz önemlidir - Yalnızca aktif olarak sohbet ederken dinliyoruz.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Devam etmenizi bekliyorum ..."
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Mikrofon izni"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Hmm, mikrofon erişimini alamadım: $errorName$. \nBu sekmeyi bir anda kapatma…",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "Teşekkürler! \nİzin verildi. \nİşleri tamamlamak ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Bilinmeyen hata"
+  },
   "preferedLanguage": {
-    "description": "Tercih edilen transkript dilini seçmek için kontrol etiketi.",
+    "description": "Label for a control to select the prefered transcription language.",
     "message": "Dil"
   },
   "preferedModeControl": {
-    "description": "Tercih edilen transkript modunu seçmek için kontrolün başlığı (araç ipucu).",
+    "description": "The title (tooltip) of the control to select the prefered transcription mode.",
     "message": "Tercih ettiğiniz transkript modunu seçin"
   },
   "previewProgress": {
-    "description": "Kullanıcının karakter sınırlaması olan bir özelliği önizlediği zaman gösterilecek mesaj.",
+    "description": "The message to display when the user is previewing a feature that has a character limit.",
     "message": "$limit$ karakter limitinden $count$ karakter kullanıldı.",
     "placeholders": {
       "count": {
@@ -245,7 +492,7 @@
     "message": "Beta Tamamlandı"
   },
   "previewStatusPaused": {
-    "description": "Kullanıcının duraklatılmış bir özelliği önizlediği zaman gösterilecek mesaj.",
+    "description": "The message to display when the user is previewing a feature that has been paused.",
     "message": "Beta, $resetDate$ tarihine kadar duraklatıldı.",
     "placeholders": {
       "resetDate": {
@@ -257,32 +504,187 @@
   "previewStatusUnknown": {
     "message": "Bağlanılamıyor..."
   },
+  "profile": {
+    "description": "Label for the user profile section.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Unit label for TTS credits",
+    "message": "krediler"
+  },
+  "quotaRemaining": {
+    "description": "Label for the quota remaining progress bar",
+    "message": "Kota Kalan"
+  },
+  "quotaStatusUnknown": {
+    "description": "Message shown when quota status cannot be determined",
+    "message": "Kota durumunu kontrol edemiyor"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Message shown when user is not authenticated.",
+    "message": "Ses üretimine ve diğer premium özelliklere erişmek için oturum açın"
+  },
   "readAloudButtonTitle": {
-    "description": "Bir mesajın metnini yüksek sesle okumak için düğmenin başlığı.",
+    "description": "The title of the button to read aloud the text of a message.",
     "message": "Yüksek Sesle Oku"
   },
   "recommendedActions": {
-    "description": "Kullanıcının bilinen bir sorunu düzeltmek için alabileceği önerilen eylemlerin listesini belirten mesaj.",
+    "description": "Message preceding a list of recommended actions the user may take to remediate a known issue.",
     "message": "Bu arada, önerimiz:"
   },
+  "regenerateButtonTitle": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an estimated cost.",
+    "message": "$cost$ $currency$ için Ses Oluşturun",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
+    "message": "Ses Oluştur"
+  },
   "shareAnalytics": {
-    "description": "Analitiklerin paylaşımını etkinleştirmek/devre dışı bırakmak için onay kutusu etiketi.",
+    "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Analitikleri paylaş"
   },
+  "signIn": {
+    "description": "Text for the sign in button.",
+    "message": "Oturum açmak"
+  },
+  "signInForTTS": {
+    "description": "Prompt shown when user needs to authenticate to access text-to-speech features",
+    "message": "Metin-konuşma için oturum açın"
+  },
+  "signOut": {
+    "description": "Text for the sign out button.",
+    "message": "Oturumu Kapat"
+  },
+  "signedIn": {
+    "description": "Status text shown when user is authenticated (without email).",
+    "message": "Oturum açmış"
+  },
+  "signedInAs": {
+    "description": "Status text shown when user is authenticated, including their email.",
+    "message": "$email$ olarak oturum açtı",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
   "soundEffects": {
-    "description": "Ses efektlerini etkinleştirmek/devre dışı bırakmak için onay kutusu etiketi.",
+    "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Ses efektleri"
   },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Sesli geri bildirim sorunlarını önlemek için Firefox'ta ses efektleri devre dışı bırakıldı."
+  },
+  "sttMinutesRemaining": {
+    "description": "Text showing remaining STT quota in minutes.",
+    "message": "$minutes$ dakika$plural$ kalan",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text to show when STT quota is exhausted.",
+    "message": "Konuşma tanıma kotası bitkin"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip for the STT quota progress bar.",
+    "message": "$remaining$ / $total$ saniye kalan",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip for the STT quota progress bar in minutes.",
+    "message": "$remaining$ / $total$ dakika kalan",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Label for the STT quota remaining display.",
+    "message": "Konuşma"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unit for STT quota (seconds).",
+    "message": "snats"
+  },
+  "submitModeControl": {
+    "description": "The title (tooltip) of the control to select when messages should be submitted.",
+    "message": "Mesajlarınızı ne zaman göndereceğinizi seçin"
+  },
+  "submit_mode_agent": {
+    "description": "AI-driven submission mode.",
+    "message": "ajan"
+  },
+  "submit_mode_agent_description": {
+    "description": "Description for the AI-driven submission mode.",
+    "message": "$chatbot$ bağlama göre ne zaman yanıt vereceğine karar verir",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatic submission mode.",
+    "message": "otomatik"
+  },
+  "submit_mode_auto_description": {
+    "description": "Description for the automatic submission mode.",
+    "message": "Konuşmayı bıraktığınızda otomatik olarak gönder"
+  },
+  "submit_mode_off": {
+    "description": "Manual submission mode.",
+    "message": "manuel"
+  },
+  "submit_mode_off_description": {
+    "description": "Description for the manual submission mode.",
+    "message": "Yalnızca düğmeye bastığınızda gönderin"
+  },
   "toggleThemeToDarkMode": {
-    "description": "Karanlık moda geçiş yapmak için düğmenin etiketi.",
+    "description": "Label for the button to toggle to dark mode.",
     "message": "Karanlık moda geçin"
   },
   "toggleThemeToLightMode": {
-    "description": "Aydınlık moda geçiş yapmak için düğmenin etiketi.",
+    "description": "Label for the button to toggle to light mode.",
     "message": "Aydınlık moda geçin"
   },
   "ttsCostExplanation": {
-    "description": "Metni yüksek sesle okumak için metin-konuşma motoru kullanıldığında gösterilecek araç ipucu, mesajın maliyetiyle birlikte.",
+    "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
     "message": "$product$, bu mesajı dinlemek için $cost$ $currency$ tutarında ücret alacaktır",
     "placeholders": {
       "cost": {
@@ -300,7 +702,7 @@
     }
   },
   "ttsCostExplanationFree": {
-    "description": "Bir metin-okuma motoru kullanılarak bir mesaj yüksek sesle okunduğunda ve mesaj ücretsiz olduğunda görüntülenecek araç ipucu. Sağlayıcının adını içerebilir.",
+    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free. Assumes the provider is Inflection AI.",
     "message": "Bu ses Inflection AI tarafından ücretsiz olarak oluşturulmuştur",
     "placeholders": {
       "provider": {
@@ -309,8 +711,26 @@
       }
     }
   },
+  "ttsCostExplanationSayPi": {
+    "description": "The tooltip to display when the user hovers over the cost explanation link.",
+    "message": "$product$'ın ses için nasıl ücretlendirildiğini öğrenin",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "ttsCredits": {
+    "description": "The term used for the credits currency in the text-to-speech feature.",
+    "message": "krediler"
+  },
+  "ttsDisabledSafari": {
+    "description": "Message shown when TTS is disabled in Safari",
+    "message": "Çok dilli sesler şu anda Safari'de desteklenmemektedir."
+  },
   "ttsPoweredBy": {
-    "description": "Metni yüksek sesle okumak için metinden konuşmaya motoru kullanıldığında gösterilecek mesaj.",
+    "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "$ttsEngine$ tarafından desteklenen metinden konuşmaya",
     "placeholders": {
       "ttsEngine": {
@@ -319,320 +739,16 @@
       }
     }
   },
-  "unlockButton": {
-    "description": "Ekranı kilidini açmak için düğmenin başlığı (araç ipucu).",
-    "message": "Ekranı kilidini açmak için basın"
-  },
-  "unlockInstruction": {
-    "description": "Kullanıcının ekranı kilidini nasıl açacağını anlatan talimatlar.",
-    "message": "Kilidi açmak için tutun."
-  },
-  "userStartedInterrupting": {
-    "description": "Kullanıcı, asistan konuşurken konuşmaya başladığında gösterilen mesaj.",
-    "message": "Devam edin, $chatbot$ dinliyor...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "copiedButtonTitle": {
-    "message": "Kopyalandı!",
-    "description": "Bir mesajın metninin panoya kopyalandığını belirtmek için düğmenin başlığı."
-  },
-  "copyButtonTitle": {
-    "message": "Kopyala",
-    "description": "Bir mesajın metnini panoya kopyalamak için düğmenin başlığı."
-  },
-  "voiceIntroduction_joey": {
-    "message": "Selam! \nПривет! \nişte! \nBen Pi, çok dilli yapay zeka asistanınım. \nEmrimdeki 32 dil sayesinde dünyanın dört bir yanından fikirleri ve kültürleri keşfedebiliyoruz. \nBu ses hakkında ne düşünüyorsunuz?",
-    "description": "Joey sesi için giriş."
-  },
-  "voiceIntroduction_paola": {
-    "message": "Merhaba! \nGünaydın! \nMerhaba! \nBen Pi ve 32 dilde akıcı bir şekilde konuşabiliyorum. \nArapça'dan Ukraynaca'ya kadar dil engellerini aşmak için buradayım. \nBu ses size nasıl geliyor?",
-    "description": "Paola sesi için giriş."
-  },
-  "regenerateButtonTitle": {
-    "message": "$cost$ $currency$ için Ses Oluşturun",
-    "description": "Bir mesajın sesini yeniden oluşturmak için düğmenin başlığı. Tahmini bir maliyeti olabilir.",
-    "placeholders": {
-      "cost": {
-        "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
-      }
-    }
-  },
-  "regenerateButtonTitleFree": {
-    "message": "Ses Oluştur",
-    "description": "Bir mesajın sesini yeniden oluşturmak için düğmenin başlığı. Belirsiz bir maliyeti olabilir."
-  },
-  "assistantIsWriting": {
-    "description": "Asistan yanıtını yazarken görüntülenen mesaj.",
-    "message": "$chatbot$ yazıyor...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "ttsCostExplanationSayPi": {
-    "description": "Kullanıcı maliyet açıklaması bağlantısının üzerine geldiğinde görüntülenecek araç ipucu.",
-    "placeholders": {
-      "product": {
-        "content": "$1",
-        "example": "Say, Pi"
-      }
-    },
-    "message": "$product$'ın ses için nasıl ücretlendirildiğini öğrenin"
-  },
-  "interruptionsFirefoxDisabled": {
-    "message": "Kesintiler şu anda Firefox'ta desteklenmemektedir."
-  },
-  "mode_accuracy_description": {
-    "description": "Doğruluk transkripsiyon modunun açıklaması.",
-    "message": "En yüksek doğruluk, ancak daha yavaş transkripsiyon hızı. \nHalüsinasyonlara eğilimli."
-  },
-  "mode_balanced_description": {
-    "description": "Dengeli transkripsiyon modunun açıklaması.",
-    "message": "Çoğu kullanım için iyi bir hız ve doğruluk dengesi."
-  },
-  "mode_speed_description": {
-    "description": "Hızlı transkripsiyon modunun açıklaması.",
-    "message": "En hızlı yanıt, ancak daha az doğru. \nBölmeye eğilimli."
-  },
-  "soundEffectsFirefoxDisabled": {
-    "message": "Sesli geri bildirim sorunlarını önlemek için Firefox'ta ses efektleri devre dışı bırakıldı."
-  },
-  "assistantIsSpeakingWithManualInterrupt": {
-    "description": "Asistan konuşurken görüntülenen mesaj yanıt verir ve manuel olarak kesinti mümkündür.",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "message": "$chatbot$ konuşuyor, sözünü kesmek için dokunun..."
-  },
-  "callInterruptible": {
-    "description": "Bir arama devam ederken ve manuel kesinti mümkün olduğunda, arama düğmesinde görüntülenecek araç ipucu.",
-    "message": "Ara vermek için dokunun"
-  },
-  "microphoneErrorConstraints": {
-    "description": "Mikrofon kısıtlamaları karşılanamadığında hata mesajı.",
-    "message": "Mikrofon ayarlarınız gerekli özellikleri karşılamıyor. \nFarklı bir mikrofon kullanmayı veya ses ayarlarınızı değiştirmeyi deneyin."
-  },
-  "microphoneErrorGeneric": {
-    "description": "Mikrofon erişimi başarısız olduğunda ayrıntıları içeren genel hata mesajı.",
-    "message": "Mikrofona erişilemedi: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Permission denied"
-      }
-    }
-  },
-  "microphoneErrorInUse": {
-    "description": "Mikrofon zaten başka bir uygulama tarafından kullanıldığında oluşan hata mesajı.",
-    "message": "Başka bir uygulama tarafından kullanıldığı için mikrofona erişilemiyor. \nLütfen mikrofonunuzu kullanıyor olabilecek diğer uygulamaları kapatın."
-  },
-  "microphoneErrorNotFound": {
-    "description": "Mikrofon aygıtı bulunamadığında hata mesajı.",
-    "message": "Mikrofon algılanmadı. \nLütfen bir mikrofon bağlayın ve tekrar deneyin."
-  },
-  "microphoneErrorPermissionDenied": {
-    "description": "Mikrofon izni kullanıcı veya sistem tarafından reddedildiğinde oluşan hata mesajı.",
-    "message": "Mikrofon erişimi gereklidir. \nDevam etmek için lütfen tarayıcı ayarlarınızdan mikrofon erişimine izin verin."
-  },
-  "microphoneErrorUnexpected": {
-    "description": "Beklenmeyen mikrofon hatalarına ilişkin ayrıntıları içeren hata mesajı.",
-    "message": "Mikrofonunuzda beklenmeyen bir hata oluştu: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Device busy"
-      }
-    }
-  },
-  "microphoneErrorUnknown": {
-    "description": "Bilinmeyen nedenlerden dolayı mikrofon erişimi başarısız olduğunda genel hata mesajı.",
-    "message": "Mikrofona erişilemiyor. \nLütfen cihaz ayarlarınızı kontrol edip tekrar deneyin."
-  },
-  "ttsDisabledSafari": {
-    "message": "Çok dilli sesler şu anda Safari'de desteklenmemektedir.",
-    "description": "Safari'de TTS devre dışı bırakıldığında gösterilen mesaj"
-  },
-  "extensionSettings": {
-    "message": "Ayarlar",
-    "description": "Uzantının ayarlarını açmaya yarayan düğmenin metni."
-  },
-  "submitModeControl": {
-    "description": "İletilerin ne zaman gönderilmesi gerektiğini seçen kontrolün başlığı (ipucu).",
-    "message": "Mesajlarınızı ne zaman göndereceğinizi seçin"
-  },
-  "submit_mode_agent": {
-    "description": "Yapay zeka odaklı gönderim modu.",
-    "message": "ajan"
-  },
-  "submit_mode_agent_description": {
-    "description": "Yapay zeka odaklı gönderim modunun açıklaması.",
-    "message": "$chatbot$ bağlama göre ne zaman yanıt vereceğine karar verir",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "submit_mode_auto": {
-    "description": "Otomatik gönderim modu.",
-    "message": "otomatik"
-  },
-  "submit_mode_auto_description": {
-    "description": "Otomatik gönderim modunun açıklaması.",
-    "message": "Konuşmayı bıraktığınızda otomatik olarak gönder"
-  },
-  "submit_mode_off": {
-    "description": "Manuel gönderim modu.",
-    "message": "manuel"
-  },
-  "submit_mode_off_description": {
-    "description": "Manuel gönderim modunun açıklaması.",
-    "message": "Yalnızca düğmeye bastığınızda gönderin"
-  },
-  "nicknameLabel": {
-    "message": "Takma ad",
-    "description": "AI asistanı için özel bir takma ad ayarlamak için giriş alanının etiketi."
-  },
-  "greeting": {
-    "description": "Kullanıcı oturum açtığında gösterilen selamlama mesajı",
-    "message": "Merhaba, $name$!",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John"
-      }
-    }
-  },
-  "notSignedIn": {
-    "description": "Kullanıcının oturum açmadığı zaman gösterilecek metin.",
-    "message": "Oturum açmadı"
-  },
-  "profile": {
-    "description": "Kullanıcı profili bölümü için etiket.",
-    "message": "Profil"
-  },
-  "quotaCredits": {
-    "description": "TTS kredileri için birim etiketi",
-    "message": "krediler"
-  },
-  "quotaRemaining": {
-    "description": "Kalan Kalan İlerleme Çubuğu için Etiket",
-    "message": "Kota Kalan"
-  },
-  "quotaStatusUnknown": {
-    "description": "Kota durumu belirlenemediğinde gösterilen mesaj",
-    "message": "Kota durumunu kontrol edemiyor"
-  },
-  "quotaUnauthenticatedMessage": {
-    "description": "Kullanıcı kimliği doğrulanmadığında gösterilen mesaj.",
-    "message": "Ses üretimine ve diğer premium özelliklere erişmek için oturum açın"
-  },
-  "signIn": {
-    "description": "Oturum açma düğmesi için metin.",
-    "message": "Oturum açmak"
-  },
-  "signOut": {
-    "description": "Outut düğmesi için metin.",
-    "message": "Oturumu Kapat"
-  },
-  "signedIn": {
-    "description": "Durum metni kullanıcı kimlik doğrulandığında (e -posta olmadan).",
-    "message": "Oturum açmış"
-  },
-  "signedInAs": {
-    "description": "Durum metni E -postaları da dahil olmak üzere kullanıcı kimliği doğrulandığında gösterilir.",
-    "message": "$email$ olarak oturum açtı",
-    "placeholders": {
-      "email": {
-        "content": "$1",
-        "example": "user@example.com"
-      }
-    }
-  },
-  "sttMinutesRemaining": {
-    "description": "Dakikalar halinde kalan STT kotasını gösteren metin.",
-    "message": "$minutes$ dakika$plural$ kalan",
-    "placeholders": {
-      "minutes": {
-        "content": "$1",
-        "example": "5"
-      },
-      "plural": {
-        "content": "$2",
-        "example": "s"
-      }
-    }
-  },
-  "sttQuotaExhausted": {
-    "description": "STT kotasının ne zaman tükendiğini göstermek için metin.",
-    "message": "Konuşma tanıma kotası bitkin"
-  },
-  "sttQuotaProgress": {
-    "description": "STT kota ilerleme çubuğu için araç ipucu.",
-    "message": "$remaining$ / $total$ saniye kalan",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "100"
-      },
-      "total": {
-        "content": "$2",
-        "example": "300"
-      }
-    }
-  },
-  "sttQuotaProgressMinutes": {
-    "description": "STT kota ilerleme çubuğu için araç ipucu dakikalar içinde.",
-    "message": "$remaining$ / $total$ dakika kalan",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "5"
-      },
-      "total": {
-        "content": "$2",
-        "example": "60"
-      }
-    }
-  },
-  "sttQuotaRemaining": {
-    "description": "Kalan STT kotası için etiket.",
-    "message": "Konuşma"
-  },
-  "sttQuotaSeconds": {
-    "description": "STT kotası için birim (saniye).",
-    "message": "snats"
-  },
-  "ttsCredits": {
-    "description": "Metin-konuşma özelliğindeki kredi para birimi için kullanılan terim.",
-    "message": "krediler"
-  },
   "ttsQuotaCharacters": {
-    "description": "TTS kotası (karakterler) birimi.",
+    "description": "Unit for TTS quota (characters).",
     "message": "krediler"
   },
   "ttsQuotaExhausted": {
-    "description": "TTS kotası ne zaman tükendiğinde gösterilecek metin.",
+    "description": "Text to show when TTS quota is exhausted.",
     "message": "Sesli kota bitkin"
   },
   "ttsQuotaProgress": {
-    "description": "TTS kota ilerleme çubuğu için araç ipucu.",
+    "description": "Tooltip for the TTS quota progress bar.",
     "message": "$remaining$ / $total$ karakter kalan",
     "placeholders": {
       "remaining": {
@@ -646,121 +762,247 @@
     }
   },
   "ttsQuotaRemaining": {
-    "description": "Kalan TTS kotası için etiket.",
+    "description": "Label for the TTS quota remaining display.",
     "message": "Ses üretimi"
   },
-  "upgradeButton": {
-    "description": "Kota tükendiğinde planı yükseltmek için düğmeye metin.",
-    "message": "Yükseltme planı"
-  },
-  "viewDetails": {
-    "description": "Gösterge tablosunda tam kota ayrıntılarını görüntülemek için bağlantının metni.",
-    "message": "Ayrıntıları Görüntüle"
-  },
-  "clickToCollapse": {
-    "description": "Kullanıcıyı gösteren metin genişletilmiş içeriği gizlemek için tıklayabilir.",
-    "message": "çökmek için tıklayın"
-  },
-  "clickToExpand": {
-    "description": "Kullanıcıyı gösteren metin çökmüş içeriği göstermek için tıklayabilir.",
-    "message": "Genişletmek için tıklayın"
-  },
-  "instructionLabel_context": {
-    "description": "Arka plan bilgileri sağlayan kullanıcı talimatı için dostça etiket.",
-    "message": "Bağlam sağlamak ..."
-  },
-  "instructionLabel_expectations": {
-    "description": "Kullanıcının ne istediğini tanımlayan kullanıcı talimatı için dostça etiket.",
-    "message": "Beklentileri netleştiriyor ..."
-  },
-  "instructionLabel_focusing": {
-    "description": "Konuşma kapsamını daraltan kullanıcı talimatı için dostça etiket.",
-    "message": "Tartışmayı odaklamak ..."
-  },
-  "instructionLabel_guardrails": {
-    "description": "Konuşma için sınırlar oluşturan kullanıcı talimatı için dostça etiket.",
-    "message": "Korkuluklar Ayar ..."
-  },
-  "instructionLabel_guiding": {
-    "description": "AI'nın nasıl yanıt vermesi gerektiğine rehberlik eden kullanıcı talimatı için dostça etiket.",
-    "message": "Yol gösterici yanıtlar ..."
-  },
-  "instructionLabel_nudge": {
-    "description": "Bir yön öneren kullanıcı talimatı için dostça etiket.",
-    "message": "Bir dürtme vermek ..."
-  },
-  "instructionLabel_steering": {
-    "description": "Konuşma yönünü yönlendiren kullanıcı talimatı için dostça etiket.",
-    "message": "Sohbeti yönlendiriyor ..."
-  },
-  "maintenanceLabel_holding": {
-    "description": "Çıkmış Asistan Bakım Mesajı için dostça etiket.",
-    "message": "Bu düşünceyi tutarak ..."
-  },
-  "maintenanceLabel_mental_note": {
-    "description": "Çıkmış Asistan Bakım Mesajı için dostça etiket.",
-    "message": "Zihinsel bir not yapmak ..."
-  },
-  "maintenanceLabel_processing": {
-    "description": "Çıkmış Asistan Bakım Mesajı için dostça etiket.",
-    "message": "Arka planda işleme ..."
-  },
-  "maintenanceLabel_remembering": {
-    "description": "Çıkmış Asistan Bakım Mesajı için dostça etiket.",
-    "message": "Bu ayrıntıyı hatırlamak ..."
-  },
-  "maintenanceLabel_saving": {
-    "description": "Çıkmış Asistan Bakım Mesajı için dostça etiket.",
-    "message": "Bu düşünceyi daha sonra kurtarmak ..."
-  },
-  "maintenanceLabel_tracking": {
-    "description": "Çıkmış Asistan Bakım Mesajı için dostça etiket.",
-    "message": "Bağlamı takip etmek ..."
-  },
-  "maintenanceLabel_tucking": {
-    "description": "Çıkmış Asistan Bakım Mesajı için dostça etiket.",
-    "message": "Bunu sıkmak ..."
-  },
-  "disableTTS": {
-    "description": "Metin-Konuşma'yı kapatma seçeneği için etiket",
-    "message": "Metin-konuşma devre dışı bırakın"
-  },
-  "signInForTTS": {
-    "description": "Metin-konuşma özelliklerine erişmek için kullanıcının kimlik doğrulaması yapması gerektiğinde gösterildi",
-    "message": "Metin-konuşma için oturum açın"
-  },
   "ttsVoice": {
-    "description": "Menüde bir metin-konuşma ses seçeneğini açıklayan etiket",
+    "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS Sesi"
   },
-  "voiceOff": {
-    "description": "Metin-konuşma devre dışı bırakıldığında etiket",
-    "message": "Seslendirmek"
+  "unlockButton": {
+    "description": "The title (tooltip) of the button to unlock the screen.",
+    "message": "Ekranı kilidini açmak için basın"
   },
-  "voiceSettings": {
-    "description": "Sesle ilgili ayarlara erişmek için menü öğesinin metni.",
-    "message": "Ses Ayarları"
+  "unlockInstruction": {
+    "description": "Instructions telling the user how to unlock the screen when locked.",
+    "message": "Kilidi açmak için tutun."
   },
-  "addCredits": {
-    "description": "Daha fazla ses kredisi eklemek için bağlantı için metin",
-    "message": "Kredi ekle"
+  "upgradeButton": {
+    "description": "Text for the button to upgrade the plan when quota is exhausted.",
+    "message": "Yükseltme planı"
   },
   "upgradeForTTS": {
-    "description": "Metin-konuşma kredileri elde etmek için kullanıcının yükseltilmesi gerektiğinde gösterilen istem",
+    "description": "Prompt shown when user needs to upgrade to obtain text-to-speech credits",
     "message": "Ses üretimi için yükseltme"
   },
-  "voicePaused": {
-    "description": "Yetersiz kredi nedeniyle ses duraklatıldığında gösterilen metin",
-    "message": "Ses durakladı -"
-  },
-  "assistantIsListeningAttentively": {
-    "description": "Asistan aracı modunda konuşma dinlerken görüntülenir.",
-    "message": "$chatbot$ dikkatle dinliyor ...",
+  "userStartedInterrupting": {
+    "description": "Message displayed when the user starts speaking while the assistant is speaking.",
+    "message": "Devam edin, $chatbot$ dinliyor...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
-        "example": "Claude"
+        "example": "Pi"
       }
     }
+  },
+  "vadDetailActivatingMicrophone": {
+    "description": "VAD detail when activating the microphone.",
+    "message": "Activating microphone..."
+  },
+  "vadDetailCommLinkFailed": {
+    "description": "VAD detail when the communication port link fails.",
+    "message": "Communication link failed."
+  },
+  "vadDetailDeactivatingMicrophone": {
+    "description": "VAD detail when deactivating the microphone.",
+    "message": "Deactivating microphone..."
+  },
+  "vadDetailFailedToReconnectVADService": {
+    "description": "VAD detail when re-establishing connection fails.",
+    "message": "Failed to reconnect VAD service."
+  },
+  "vadDetailInitError": {
+    "description": "VAD detail for an initialization error, with specific error message.",
+    "message": "Init hatası: $error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to connect to VAD service"
+      }
+    }
+  },
+  "vadDetailInitErrorPromise": {
+    "description": "VAD detail for an initialization promise error.",
+    "message": "Init Error: Promise error"
+  },
+  "vadDetailInitErrorUnknown": {
+    "description": "VAD detail for an unknown initialization error.",
+    "message": "Init Error: Unknown"
+  },
+  "vadDetailInitializedMode": {
+    "description": "VAD detail showing initialization mode.",
+    "message": "Başlatılmış (mod: $mode$)",
+    "placeholders": {
+      "mode": {
+        "content": "$1",
+        "example": "Agent"
+      }
+    }
+  },
+  "vadDetailInitializedModeNA": {
+    "description": "VAD detail showing initialization mode as N/A.",
+    "message": "Initialized (Mode: N/A)"
+  },
+  "vadDetailNonSpeechAudioDetected": {
+    "description": "VAD detail for non-speech audio detection.",
+    "message": "Non-speech audio detected"
+  },
+  "vadDetailReleasingVADResources": {
+    "description": "VAD detail when releasing VAD resources.",
+    "message": "Releasing VAD resources..."
+  },
+  "vadDetailRequestingVADSetup": {
+    "description": "VAD detail when requesting setup.",
+    "message": "Requesting VAD setup..."
+  },
+  "vadDetailSpeechDetected": {
+    "description": "VAD detail when speech has been detected.",
+    "message": "Speech detected"
+  },
+  "vadDetailSpeechEndedDuration": {
+    "description": "VAD detail indicating speech ended and its duration.",
+    "message": "Konuşma sona erdi (Süre: $duration$ MS)",
+    "placeholders": {
+      "duration": {
+        "content": "$1",
+        "example": "1000"
+      }
+    }
+  },
+  "vadDetailStartError": {
+    "description": "VAD detail for a start error, with specific error message.",
+    "message": "Başlat hatası: $error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to start VAD service"
+      }
+    }
+  },
+  "vadDetailStartErrorPromise": {
+    "description": "VAD detail for a start promise error.",
+    "message": "Start Error: Promise error"
+  },
+  "vadDetailStartErrorUnknown": {
+    "description": "VAD detail for an unknown start error.",
+    "message": "Start Error: Unknown"
+  },
+  "vadDetailStopError": {
+    "description": "VAD detail for a stop error, with specific error message.",
+    "message": "DURDUR HATA: $error$ $",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to stop VAD service"
+      }
+    }
+  },
+  "vadDetailStopErrorPromise": {
+    "description": "VAD detail for a stop promise error.",
+    "message": "Stop Error: Promise error"
+  },
+  "vadDetailStopErrorUnknown": {
+    "description": "VAD detail for an unknown stop error.",
+    "message": "Stop Error: Unknown"
+  },
+  "vadDetailUnknownVADError": {
+    "description": "VAD detail for an unknown error from the VAD module.",
+    "message": "Unknown VAD error"
+  },
+  "vadDetailVADProcessingStopped": {
+    "description": "VAD detail indicating VAD processing has stopped.",
+    "message": "VAD processing stopped."
+  },
+  "vadDetailVADServiceDisconnected": {
+    "description": "VAD detail when the service disconnects.",
+    "message": "VAD service disconnected. Try reloading."
+  },
+  "vadDetailVADServiceNotConnected": {
+    "description": "VAD detail when the service is not connected.",
+    "message": "VAD service not connected. Try reloading."
+  },
+  "vadDetailVADServiceShutdown": {
+    "description": "VAD detail indicating VAD service has been shut down.",
+    "message": "VAD service shut down."
+  },
+  "vadDetailWaitingForSpeech": {
+    "description": "VAD detail when waiting for user to speak.",
+    "message": "Waiting for speech"
+  },
+  "vadStatusDestroyed": {
+    "description": "VAD status when destroyed.",
+    "message": "Destroyed"
+  },
+  "vadStatusError": {
+    "description": "Generic VAD error status.",
+    "message": "Error"
+  },
+  "vadStatusFailed": {
+    "description": "Generic VAD failure status.",
+    "message": "Failed"
+  },
+  "vadStatusIndicatorEnabledLabel": {
+    "description": "Label for the toggle switch that controls the visibility of the Voice Activity Detection status indicator.",
+    "message": "VAD Durumunu Göster"
+  },
+  "vadStatusInitializing": {
+    "description": "VAD status when initializing.",
+    "message": "Initializing"
+  },
+  "vadStatusListening": {
+    "description": "VAD status when actively listening.",
+    "message": "Listening"
+  },
+  "vadStatusMisfire": {
+    "description": "VAD status when a misfire (non-speech) is detected.",
+    "message": "Misfire"
+  },
+  "vadStatusProcessing": {
+    "description": "VAD status when processing audio.",
+    "message": "Processing"
+  },
+  "vadStatusReady": {
+    "description": "VAD status when ready and waiting.",
+    "message": "Ready"
+  },
+  "vadStatusShuttingDown": {
+    "description": "VAD status when shutting down.",
+    "message": "Shutting down"
+  },
+  "vadStatusStarting": {
+    "description": "VAD status when starting.",
+    "message": "Starting"
+  },
+  "vadStatusStopped": {
+    "description": "VAD status when stopped.",
+    "message": "Stopped"
+  },
+  "vadStatusStopping": {
+    "description": "VAD status when stopping.",
+    "message": "Stopping"
+  },
+  "viewDetails": {
+    "description": "Text for the link to view full quota details on the dashboard.",
+    "message": "Ayrıntıları Görüntüle"
+  },
+  "voiceIntroduction_joey": {
+    "description": "Introduction for the Joey voice.",
+    "message": "Selam! \nПривет! \nişte! \nBen Pi, çok dilli yapay zeka asistanınım. \nEmrimdeki 32 dil sayesinde dünyanın dört bir yanından fikirleri ve kültürleri keşfedebiliyoruz. \nBu ses hakkında ne düşünüyorsunuz?"
+  },
+  "voiceIntroduction_paola": {
+    "description": "Introduction for the Paola voice.",
+    "message": "Merhaba! \nGünaydın! \nMerhaba! \nBen Pi ve 32 dilde akıcı bir şekilde konuşabiliyorum. \nArapça'dan Ukraynaca'ya kadar dil engellerini aşmak için buradayım. \nBu ses size nasıl geliyor?"
+  },
+  "voiceOff": {
+    "description": "Label for when text-to-speech is disabled",
+    "message": "Seslendirmek"
+  },
+  "voicePaused": {
+    "description": "Text shown when voice is paused due to insufficient credits",
+    "message": "Ses durakladı -"
+  },
+  "voiceSettings": {
+    "description": "The text of the menu item to access voice-related settings.",
+    "message": "Ses Ayarları"
   }
 }

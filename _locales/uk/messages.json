@@ -1,23 +1,39 @@
 {
-  "appName": {
-    "message": "Say, Pi",
-    "description": "Назва програми."
+  "activityCheckButton": {
+    "description": "The text of the button to indicate that the user is still present.",
+    "message": "Так, я все ще тут!"
+  },
+  "activityCheckMessage": {
+    "description": "The message to display when the conversation has been going on unusually long.",
+    "message": "Вау, це довга розмова. Ти ще тут, чи ми говоримо самі з собою?"
+  },
+  "addCredits": {
+    "description": "Text for link to add more voice credits",
+    "message": "Додати кредити"
+  },
+  "allowInterruptions": {
+    "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
+    "message": "Переривний"
   },
   "appDescription": {
-    "message": "Голосовий контроль для Пі та Клода. Говоріть природно, отримайте реалістичні відповіді. Просто скажи це.",
-    "description": "Опис програми."
+    "description": "The description of the application.",
+    "message": "Голосовий контроль для Пі та Клода. Говоріть природно, отримайте реалістичні відповіді. Просто скажи це."
   },
-  "callInProgress": {
-    "message": "Закінчити розмову без використання рук",
-    "description": "Підказка, що відображається на кнопці виклику під час виконання виклику."
+  "appName": {
+    "description": "The name of the application.",
+    "message": "Say, Pi"
   },
-  "callStarting": {
-    "message": "Підключення...",
-    "description": "Підказка, що відображається на кнопці виклику, коли виклик починається."
+  "applicationStatusIssue": {
+    "description": "Message to display when the application is experiencing issues.",
+    "message": "Сповіщення про проблему в системі"
   },
-  "callNotStarted": {
-    "message": "Розпочніть розмову без використання рук з $chatbot$",
-    "description": "Підказка, що відображається на кнопці виклику, перш ніж виклик розпочато.",
+  "applicationStatusUnknown": {
+    "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
+    "message": "Статус додатку невідомий"
+  },
+  "assistantIsListening": {
+    "description": "Message displayed when the assistant is listening for speech.",
+    "message": "$chatbot$ слухає...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
@@ -25,60 +41,58 @@
       }
     }
   },
-  "callError": {
-    "message": "Сталася некритична помилка. Не панікуйте, ми все ще слухаємо.",
-    "description": "Підказка, що відображається на кнопці виклику, коли виникає некритична помилка."
+  "assistantIsListeningAttentively": {
+    "description": "Message displayed when the assistant is listening for speech in agent mode.",
+    "message": "$chatbot$ слухає уважно ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   },
-  "mode_speed": {
-    "message": "швидкість",
-    "description": "Найшвидший режим транскрибування."
+  "assistantIsSpeaking": {
+    "description": "Message displayed when the assistant is speaking its response.",
+    "message": "$chatbot$ говорить...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "mode_balanced": {
-    "message": "збалансований",
-    "description": "Стандартний режим транскрибування."
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Message displayed when the assistant is speaking its response and manual interruption is possible.",
+    "message": "$chatbot$ говорить, торкніться, щоб перервати...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "mode_accuracy": {
-    "message": "точність",
-    "description": "Режим транскрибування з найвищою точністю."
+  "assistantIsThinking": {
+    "description": "Message displayed when the assistant is preparing its response.",
+    "message": "$chatbot$ думає...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "preferedModeControl": {
-    "message": "Виберіть бажаний режим транскрибування",
-    "description": "Назва (підказка) елемента керування для вибору бажаного режиму транскрибування."
-  },
-  "autoSubmit": {
-    "description": "Мітка для прапорця, що вмикає/вимикає автоматичне надсилання запиту.",
-    "message": "Автоматичне надсилання"
-  },
-  "continueUnlocking": {
-    "description": "Інструкції, які повідомляють користувачеві, що робити далі, коли вони почали натискати кнопку розблокування.",
-    "message": "Продовжуйте утримувати, щоб розблокувати..."
-  },
-  "lockButton": {
-    "description": "Назва (підказка) кнопки для блокування екрану від випадкових дотиків.",
-    "message": "Натисніть, щоб заблокувати екран"
-  },
-  "lockedScreen": {
-    "description": "Повідомлення, яке відображається на видному місці, коли екран заблоковано.",
-    "message": "Екран заблоковано."
-  },
-  "soundEffects": {
-    "description": "Мітка для прапорця, що вмикає/вимикає звукові ефекти.",
-    "message": "Звукові ефекти"
-  },
-  "unlockButton": {
-    "description": "Назва (підказка) кнопки для розблокування екрану.",
-    "message": "Натисніть, щоб розблокувати екран"
-  },
-  "unlockInstruction": {
-    "description": "Інструкції, які повідомляють користувачеві, як розблокувати екран, коли він заблокований.",
-    "message": "Тримайте, щоб розблокувати."
-  },
-  "preferedLanguage": {
-    "message": "Мова",
-    "description": "Мітка для елемента керування, що вибирає бажану мову транскрипції."
+  "assistantIsWriting": {
+    "description": "Message displayed when the assistant is typing its response.",
+    "message": "$chatbot$ пише...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioConnected": {
-    "description": "Повідомлення, що відображається, коли мікрофон підключено",
+    "description": "Message displayed when a microphone is connected",
     "message": "$microphone$ підключено",
     "placeholders": {
       "microphone": {
@@ -88,7 +102,7 @@
     }
   },
   "audioInputError": {
-    "description": "Повідомлення, що відображається, коли аудіо дає порожню транскрипцію - зазвичай це результат фільтрації.",
+    "description": "Message displayed when audio transcription failed - usually the result of an ASR or LLM API error.",
     "message": "Хм, $chatbot$ мав невелику гикавку. \nЧи можете ви спробувати це ще раз?",
     "placeholders": {
       "chatbot": {
@@ -98,7 +112,7 @@
     }
   },
   "audioReconnecting": {
-    "description": "Повідомлення, що відображається при підключенні нового мікрофону",
+    "description": "Message displayed when connecting to a new microphone",
     "message": "Перехід на $microphone$...",
     "placeholders": {
       "microphone": {
@@ -107,9 +121,25 @@
       }
     }
   },
-  "assistantIsListening": {
-    "description": "Повідомлення, що відображається, коли помічник слухає мовлення.",
-    "message": "$chatbot$ слухає...",
+  "autoSubmit": {
+    "description": "Label for the checkbox to enable/disable automatic prompt submission.",
+    "message": "Автоматичне надсилання"
+  },
+  "callError": {
+    "description": "The tooltip to display on the call button when a non-fatal error occurs.",
+    "message": "Сталася некритична помилка. Не панікуйте, ми все ще слухаємо."
+  },
+  "callInProgress": {
+    "description": "The tooltip to display on the call button when a call is in progress.",
+    "message": "Закінчити розмову без використання рук"
+  },
+  "callInterruptible": {
+    "description": "The tooltip to display on the call button when a call is in progress and manual interruption is possible.",
+    "message": "Торкніться, щоб перервати"
+  },
+  "callNotStarted": {
+    "description": "The tooltip to display on the call button before a call is started.",
+    "message": "Розпочніть розмову без використання рук з $chatbot$",
     "placeholders": {
       "chatbot": {
         "content": "$1",
@@ -117,13 +147,21 @@
       }
     }
   },
-  "toggleThemeToDarkMode": {
-    "description": "Напис для кнопки переключення в темний режим.",
-    "message": "Перейти в темний режим"
+  "callStarting": {
+    "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
+    "message": "Підключення..."
   },
-  "toggleThemeToLightMode": {
-    "description": "Мітка для кнопки переключення на світлий режим.",
-    "message": "Перейти в світлий режим"
+  "checkingApplicationStatus": {
+    "description": "Message to display while the system status is being determined, e.g. during load.",
+    "message": "Перевірка статусу додатку..."
+  },
+  "clickToCollapse": {
+    "description": "Text indicating user can click to hide expanded content.",
+    "message": "Клацніть, щоб згорнути"
+  },
+  "clickToExpand": {
+    "description": "Text indicating user can click to show collapsed content.",
+    "message": "Клацніть, щоб розширити"
   },
   "consentAskParticipate": {
     "message": "Чи хотіли б ви взяти участь?"
@@ -158,102 +196,40 @@
   "consetPrivacyPolicy": {
     "message": "Читайте нашу Політику конфіденційності"
   },
-  "shareAnalytics": {
-    "description": "Мітка для прапорця, що вмикає/вимикає обмін аналітикою.",
-    "message": "Поділитися аналітикою"
+  "continueUnlocking": {
+    "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
+    "message": "Продовжуйте утримувати, щоб розблокувати..."
   },
-  "enterImmersiveModeShort": {
-    "message": "занурення",
-    "description": "Текст кнопки для входу в іммерсивний режим на комп'ютері."
+  "copiedButtonTitle": {
+    "description": "The title of the button to indicate that the text of a message has been copied to the clipboard.",
+    "message": "Скопійовано!"
   },
-  "exitImmersiveModeLong": {
-    "message": "Вийти з іммерсивного режиму",
-    "description": "Арія-мітка та назва кнопки для виходу з іммерсивного режиму на мобільних пристроях, повернення до текстового режиму робочого столу."
-  },
-  "enterImmersiveModeLong": {
-    "message": "Увійти в режим занурення",
-    "description": "aria-label та назва кнопки для входу в іммерсивний режим на мобільних пристроях."
-  },
-  "applicationStatusIssue": {
-    "description": "Повідомлення для відображення, коли додаток зазнає проблем.",
-    "message": "Сповіщення про проблему в системі"
-  },
-  "applicationStatusUnknown": {
-    "description": "Повідомлення для відображення, коли статус програми не може бути визначений. Наприклад, коли клієнт є офлайн.",
-    "message": "Статус додатку невідомий"
-  },
-  "checkingApplicationStatus": {
-    "description": "Повідомлення для відображення поки визначається статус системи, наприклад, під час завантаження.",
-    "message": "Перевірка статусу додатку..."
-  },
-  "dismissAlert": {
-    "description": "Мітка для кнопки, щоб відхилити сповіщення про проблему системи.",
-    "message": "Звільнити"
-  },
-  "recommendedActions": {
-    "description": "Повідомлення, що передує списку рекомендованих дій, які користувач може виконати для усунення відомої проблеми.",
-    "message": "У міжчасі, ми рекомендуємо:"
-  },
-  "extensionPopupTitle": {
-    "description": "Назва спливаючого діалогового вікна розширення.",
-    "message": "Say, Pi"
-  },
-  "activityCheckButton": {
-    "message": "Так, я все ще тут!",
-    "description": "Текст кнопки, що вказує на те, що користувач все ще присутній."
-  },
-  "activityCheckMessage": {
-    "description": "Повідомлення для відображення, коли розмова триває надзвичайно довго.",
-    "message": "Вау, це довга розмова. Ти ще тут, чи ми говоримо самі з собою?"
-  },
-  "assistantIsThinking": {
-    "message": "$chatbot$ думає...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "Повідомлення, що відображається, коли помічник готує свою відповідь."
-  },
-  "assistantIsSpeaking": {
-    "message": "$chatbot$ говорить...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "Повідомлення, що відображається, коли асистент говорить свою відповідь."
-  },
-  "userStartedInterrupting": {
-    "message": "Давайте, $chatbot$ слухає...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "Повідомлення, що відображається, коли користувач починає говорити, поки асистент говорить."
-  },
-  "allowInterruptions": {
-    "message": "Переривний",
-    "description": "Мітка для прапорця, що дозволяє/забороняє користувачеві переривати відповідь Pi, говорячи."
+  "copyButtonTitle": {
+    "description": "The title of the button to copy the text of a message to the clipboard.",
+    "message": "Копіювати"
   },
   "currencyUSDAbbreviation": {
-    "description": "Абревіатура для Долара Сполучених Штатів.",
+    "description": "The abbreviation for the US dollar.",
     "message": "USD"
   },
   "currentCharges": {
-    "description": "Термін, що використовується для опису поточних зборів (поточна сума), накопичених користувачем.",
+    "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Поточні збори"
   },
+  "disableTTS": {
+    "description": "Label for the option to turn off text-to-speech",
+    "message": "Вимкнути текст до мови"
+  },
+  "dismissAlert": {
+    "description": "Label for the button to dismiss a system issue alert.",
+    "message": "Звільнити"
+  },
   "enableTTS": {
-    "description": "Мітка для прапорця, що вмикає/вимикає текст до мовлення.",
+    "description": "Label for the checkbox to enable/disable text-to-speech.",
     "message": "Багатомовні голоси"
   },
   "enhancedVoice": {
-    "description": "Назва (підказка) для голосів Say, Pi покращені.",
+    "description": "Title (tooltip) for Say, Pi enhanced voices.",
     "message": "Голос покращений $product$",
     "placeholders": {
       "product": {
@@ -262,8 +238,241 @@
       }
     }
   },
+  "enterImmersiveModeLong": {
+    "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
+    "message": "Увійти в режим занурення"
+  },
+  "enterImmersiveModeShort": {
+    "description": "The text of the button to enter immersive mode on desktop.",
+    "message": "занурення"
+  },
+  "exitImmersiveModeLong": {
+    "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
+    "message": "Вийти з іммерсивного режиму"
+  },
+  "extensionPopupTitle": {
+    "description": "The title of the extension's popup dialog.",
+    "message": "Say, Pi"
+  },
+  "extensionSettings": {
+    "description": "The text of the button to open the extension's settings.",
+    "message": "Налаштування"
+  },
+  "greeting": {
+    "description": "Greeting message shown when user is signed in",
+    "message": "Привіт, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "instructionLabel_context": {
+    "description": "Friendly label for user instruction that provides background information.",
+    "message": "Надання контексту ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Friendly label for user instruction that defines what the user wants.",
+    "message": "Уточнюючи очікування ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Friendly label for user instruction that narrows the scope of conversation.",
+    "message": "Фокусування дискусії ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Friendly label for user instruction that establishes boundaries for the conversation.",
+    "message": "Встановлення огородження ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Friendly label for user instruction that guides how the AI should respond.",
+    "message": "Керівні відповіді ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Friendly label for user instruction that gently suggests a direction.",
+    "message": "Даючи підштовхування ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Friendly label for user instruction that guides the conversation direction.",
+    "message": "Керування розмовою ..."
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Переривання наразі не підтримуються у Firefox."
+  },
+  "lockButton": {
+    "description": "The title (tooltip) of the button to lock the screen against accidental touches.",
+    "message": "Натисніть, щоб заблокувати екран"
+  },
+  "lockedScreen": {
+    "description": "A message to display prominently when the screen is locked.",
+    "message": "Екран заблоковано."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Тримаючи цю думку ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Зробити розумову записку ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Обробка на задньому плані ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Пам'ятаючи цю деталь ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Збереження цієї думки на потім ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Відстеження контексту ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Відбиваючи це ..."
+  },
+  "microphoneErrorConstraints": {
+    "description": "Error message when microphone constraints cannot be satisfied.",
+    "message": "Ваші налаштування мікрофона не відповідають необхідним характеристикам. \nСпробуйте використати інший мікрофон або налаштувати параметри звуку."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generic error message with details when microphone access fails.",
+    "message": "Не вдалося отримати доступ до мікрофона: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Error message when microphone is already in use by another application.",
+    "message": "Неможливо отримати доступ до мікрофона, оскільки він використовується іншою програмою. \nЗакрийте інші програми, які можуть використовувати ваш мікрофон."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Error message when no microphone device is found.",
+    "message": "Мікрофон не виявлено. \nПідключіть мікрофон і повторіть спробу."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Error message when microphone permission is denied by the user or system.",
+    "message": "Потрібен доступ до мікрофона. \nЩоб продовжити, дозвольте доступ до мікрофона в налаштуваннях браузера."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Error message for unexpected microphone errors with details.",
+    "message": "З мікрофоном сталася неочікувана помилка: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generic error message when microphone access fails for unknown reasons.",
+    "message": "Неможливо отримати доступ до мікрофона. \nПеревірте налаштування свого пристрою та повторіть спробу."
+  },
+  "mode_accuracy": {
+    "description": "Highest accuracy mode.",
+    "message": "точність"
+  },
+  "mode_accuracy_description": {
+    "description": "Description for the accuracy transcription mode.",
+    "message": "Найвища точність, але менша швидкість транскрипції. \nСхильний до галюцинацій."
+  },
+  "mode_balanced": {
+    "description": "Default transcription mode.",
+    "message": "збалансований"
+  },
+  "mode_balanced_description": {
+    "description": "Description for the balanced transcription mode.",
+    "message": "Хороший баланс швидкості та точності для більшості випадків використання."
+  },
+  "mode_speed": {
+    "description": "Fastest transcription mode.",
+    "message": "швидкість"
+  },
+  "mode_speed_description": {
+    "description": "Description for the speed transcription mode.",
+    "message": "Найшвидша відповідь, але менш точна. \nСхильний до переривання."
+  },
+  "nicknameLabel": {
+    "description": "Label for the input field to set a custom nickname for the AI assistant.",
+    "message": "Прізвисько"
+  },
+  "notSignedIn": {
+    "description": "Text to show when the user is not signed in.",
+    "message": "Не ввійшов"
+  },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "Дозвіл на сторінку Дом не вдалося правильно завантажити."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Невідома помилка під час запиту на дозвіл"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "Ви побачите підказку браузера у верхній частині цього вікна. \nПросто натисніть <strong> \"Дозволити під час відвідування сайту\" </strong>, щоб ми могли почати розмову."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Ця вкладка закриється автоматично, як тільки ви відповіли."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣 Давайте спілкуватися!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "Щоб подати голос у свої розмови, $productName$ потребує дозволу на використання вашого мікрофона. \nВаша конфіденційність має значення - ми слухаємо лише тоді, коли ви активно спілкуєтесь.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Чекаю вашого вперед ..."
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Дозвіл мікрофона"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Хм, не вдалося отримати доступ до мікрофона: $errorName$. \nЗакриття цієї вкладки за мить ...",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "Дякую! \nДозвіл надано. \nЗагортає речі ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Невідома помилка"
+  },
+  "preferedLanguage": {
+    "description": "Label for a control to select the prefered transcription language.",
+    "message": "Мова"
+  },
+  "preferedModeControl": {
+    "description": "The title (tooltip) of the control to select the prefered transcription mode.",
+    "message": "Виберіть бажаний режим транскрибування"
+  },
   "previewProgress": {
-    "description": "Повідомлення для відображення, коли користувач переглядає функцію, яка має обмеження за кількістю символів.",
+    "description": "The message to display when the user is previewing a feature that has a character limit.",
     "message": "$count$ символів використано з $limit$",
     "placeholders": {
       "count": {
@@ -283,7 +492,7 @@
     "message": "Бета Завершено"
   },
   "previewStatusPaused": {
-    "description": "Повідомлення для відображення, коли користувач переглядає функцію, яка була призупинена.",
+    "description": "The message to display when the user is previewing a feature that has been paused.",
     "message": "Бета призупинена до $resetDate$",
     "placeholders": {
       "resetDate": {
@@ -295,12 +504,187 @@
   "previewStatusUnknown": {
     "message": "Не вдається підключитися..."
   },
+  "profile": {
+    "description": "Label for the user profile section.",
+    "message": "Профіл"
+  },
+  "quotaCredits": {
+    "description": "Unit label for TTS credits",
+    "message": "кредити"
+  },
+  "quotaRemaining": {
+    "description": "Label for the quota remaining progress bar",
+    "message": "Квота, що залишилася"
+  },
+  "quotaStatusUnknown": {
+    "description": "Message shown when quota status cannot be determined",
+    "message": "Неможливо перевірити статус квоти"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Message shown when user is not authenticated.",
+    "message": "Увійдіть, щоб отримати доступ до генерації голосу та інших преміальних функцій"
+  },
   "readAloudButtonTitle": {
-    "description": "Назва кнопки для читання тексту повідомлення вголос.",
+    "description": "The title of the button to read aloud the text of a message.",
     "message": "Читати вголос"
   },
+  "recommendedActions": {
+    "description": "Message preceding a list of recommended actions the user may take to remediate a known issue.",
+    "message": "У міжчасі, ми рекомендуємо:"
+  },
+  "regenerateButtonTitle": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an estimated cost.",
+    "message": "Генерувати аудіо за $cost$ $currency$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
+    "message": "Генерувати аудіо"
+  },
+  "shareAnalytics": {
+    "description": "Label for the checkbox to enable/disable sharing of analytics.",
+    "message": "Поділитися аналітикою"
+  },
+  "signIn": {
+    "description": "Text for the sign in button.",
+    "message": "Увійти"
+  },
+  "signInForTTS": {
+    "description": "Prompt shown when user needs to authenticate to access text-to-speech features",
+    "message": "Увійдіть до тексту до мови"
+  },
+  "signOut": {
+    "description": "Text for the sign out button.",
+    "message": "Виходити"
+  },
+  "signedIn": {
+    "description": "Status text shown when user is authenticated (without email).",
+    "message": "Підписаний"
+  },
+  "signedInAs": {
+    "description": "Status text shown when user is authenticated, including their email.",
+    "message": "Увійти як $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "soundEffects": {
+    "description": "Label for the checkbox to enable/disable sound effects.",
+    "message": "Звукові ефекти"
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Звукові ефекти вимкнено у Firefox, щоб запобігти проблемам зі звуковими відгуками."
+  },
+  "sttMinutesRemaining": {
+    "description": "Text showing remaining STT quota in minutes.",
+    "message": "$minutes$ хвилини$plural$ залишилось",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text to show when STT quota is exhausted.",
+    "message": "Квота розпізнавання мови виснажена"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip for the STT quota progress bar.",
+    "message": "$remaining$ з $total$ секунди залишилось",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip for the STT quota progress bar in minutes.",
+    "message": "$remaining$ з $total$ хвилини залишилось",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Label for the STT quota remaining display.",
+    "message": "Розпізнавання мови"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unit for STT quota (seconds).",
+    "message": "секунди"
+  },
+  "submitModeControl": {
+    "description": "The title (tooltip) of the control to select when messages should be submitted.",
+    "message": "Виберіть, коли надсилати повідомлення"
+  },
+  "submit_mode_agent": {
+    "description": "AI-driven submission mode.",
+    "message": "агент"
+  },
+  "submit_mode_agent_description": {
+    "description": "Description for the AI-driven submission mode.",
+    "message": "$chatbot$ вирішує, коли відповідати на основі контексту",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatic submission mode.",
+    "message": "авто"
+  },
+  "submit_mode_auto_description": {
+    "description": "Description for the automatic submission mode.",
+    "message": "Автоматично надсилати, коли ви припините говорити"
+  },
+  "submit_mode_off": {
+    "description": "Manual submission mode.",
+    "message": "посібник"
+  },
+  "submit_mode_off_description": {
+    "description": "Description for the manual submission mode.",
+    "message": "Надсилайте лише після натискання кнопки"
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Label for the button to toggle to dark mode.",
+    "message": "Перейти в темний режим"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Label for the button to toggle to light mode.",
+    "message": "Перейти в світлий режим"
+  },
   "ttsCostExplanation": {
-    "description": "Підказка для відображення, коли двигун тексту-до-мови використовується для гучного читання повідомлення, з урахуванням вартості повідомлення.",
+    "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
     "message": "$product$ стягуватиме $cost$ $currency$ за прослуховування цього повідомлення",
     "placeholders": {
       "cost": {
@@ -318,7 +702,7 @@
     }
   },
   "ttsCostExplanationFree": {
-    "description": "Підказка для відображення, коли двигун тексту-до-мови використовується для голосового проголошення повідомлення, і повідомлення є безкоштовним. Може містити назву провайдера.",
+    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free. Assumes the provider is Inflection AI.",
     "message": "Це аудіо створено безкоштовно за допомогою Inflection AI",
     "placeholders": {
       "provider": {
@@ -327,8 +711,26 @@
       }
     }
   },
+  "ttsCostExplanationSayPi": {
+    "description": "The tooltip to display when the user hovers over the cost explanation link.",
+    "message": "Дізнайтеся, як $product$ стягує плату за аудіо",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "ttsCredits": {
+    "description": "The term used for the credits currency in the text-to-speech feature.",
+    "message": "кредити"
+  },
+  "ttsDisabledSafari": {
+    "description": "Message shown when TTS is disabled in Safari",
+    "message": "Багатомовні голоси наразі не підтримуються в Safari."
+  },
   "ttsPoweredBy": {
-    "description": "Повідомлення для відображення, коли двигун тексту до мови використовується для голосового проголошення повідомлення.",
+    "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Текст до мови підтримується $ttsEngine$",
     "placeholders": {
       "ttsEngine": {
@@ -337,302 +739,16 @@
       }
     }
   },
-  "copiedButtonTitle": {
-    "message": "Скопійовано!",
-    "description": "Назва кнопки, що вказує на те, що текст повідомлення було скопійовано до буфера обміну."
-  },
-  "copyButtonTitle": {
-    "message": "Копіювати",
-    "description": "Назва кнопки для копіювання тексту повідомлення в буфер обміну."
-  },
-  "voiceIntroduction_joey": {
-    "message": "Холо! \nПривет! \n你好! \nЯ Пі, ваш помічник ШІ-поліглот. \nЗавдяки 32 мовам у моєму розпорядженні ми можемо досліджувати ідеї та культури з усього світу. \nЩо ви думаєте про цей голос?",
-    "description": "Вступ для голосу Джої."
-  },
-  "voiceIntroduction_paola": {
-    "message": "Чао! \nБонжур! \nПривіт! \nЯ Пі, і я вільно розмовляю 32 мовами. \nВід арабської до української, я тут, щоб подолати мовні бар'єри. \nЯк вам звучить цей голос?",
-    "description": "Вступ для голосу Паоли."
-  },
-  "regenerateButtonTitle": {
-    "message": "Генерувати аудіо за $cost$ $currency$",
-    "description": "Назва кнопки для регенерації аудіо повідомлення. Може виникнути орієнтовна вартість.",
-    "placeholders": {
-      "cost": {
-        "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
-      }
-    }
-  },
-  "regenerateButtonTitleFree": {
-    "message": "Генерувати аудіо",
-    "description": "Назва кнопки для регенерації аудіо повідомлення. Може викликати невизначений витрати."
-  },
-  "assistantIsWriting": {
-    "description": "Повідомлення, яке відображається, коли помічник вводить відповідь.",
-    "message": "$chatbot$ пише...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "ttsCostExplanationSayPi": {
-    "description": "Підказка, яка відображається, коли користувач наводить курсор на посилання пояснення вартості.",
-    "placeholders": {
-      "product": {
-        "content": "$1",
-        "example": "Say, Pi"
-      }
-    },
-    "message": "Дізнайтеся, як $product$ стягує плату за аудіо"
-  },
-  "interruptionsFirefoxDisabled": {
-    "message": "Переривання наразі не підтримуються у Firefox."
-  },
-  "mode_accuracy_description": {
-    "description": "Опис режиму точної транскрипції.",
-    "message": "Найвища точність, але менша швидкість транскрипції. \nСхильний до галюцинацій."
-  },
-  "mode_balanced_description": {
-    "description": "Опис режиму збалансованої транскрипції.",
-    "message": "Хороший баланс швидкості та точності для більшості випадків використання."
-  },
-  "mode_speed_description": {
-    "description": "Опис режиму швидкісної транскрипції.",
-    "message": "Найшвидша відповідь, але менш точна. \nСхильний до переривання."
-  },
-  "soundEffectsFirefoxDisabled": {
-    "message": "Звукові ефекти вимкнено у Firefox, щоб запобігти проблемам зі звуковими відгуками."
-  },
-  "assistantIsSpeakingWithManualInterrupt": {
-    "description": "Повідомлення відображається, коли помічник говорить свою відповідь, і можливе ручне переривання.",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "message": "$chatbot$ говорить, торкніться, щоб перервати..."
-  },
-  "callInterruptible": {
-    "description": "Спливаюча підказка, яка відображатиметься на кнопці виклику під час розмови та можливого переривання вручну.",
-    "message": "Торкніться, щоб перервати"
-  },
-  "microphoneErrorConstraints": {
-    "description": "Повідомлення про помилку, коли обмеження мікрофона не можуть бути задоволені.",
-    "message": "Ваші налаштування мікрофона не відповідають необхідним характеристикам. \nСпробуйте використати інший мікрофон або налаштувати параметри звуку."
-  },
-  "microphoneErrorGeneric": {
-    "description": "Загальне повідомлення про помилку з подробицями, коли не вдається отримати доступ до мікрофона.",
-    "message": "Не вдалося отримати доступ до мікрофона: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Permission denied"
-      }
-    }
-  },
-  "microphoneErrorInUse": {
-    "description": "Повідомлення про помилку, коли мікрофон уже використовується іншою програмою.",
-    "message": "Неможливо отримати доступ до мікрофона, оскільки він використовується іншою програмою. \nЗакрийте інші програми, які можуть використовувати ваш мікрофон."
-  },
-  "microphoneErrorNotFound": {
-    "description": "Повідомлення про помилку, коли мікрофонний пристрій не знайдено.",
-    "message": "Мікрофон не виявлено. \nПідключіть мікрофон і повторіть спробу."
-  },
-  "microphoneErrorPermissionDenied": {
-    "description": "Повідомлення про помилку, коли користувач або система забороняє доступ до мікрофона.",
-    "message": "Потрібен доступ до мікрофона. \nЩоб продовжити, дозвольте доступ до мікрофона в налаштуваннях браузера."
-  },
-  "microphoneErrorUnexpected": {
-    "description": "Повідомлення про несподівані помилки мікрофона з детальною інформацією.",
-    "message": "З мікрофоном сталася неочікувана помилка: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Device busy"
-      }
-    }
-  },
-  "microphoneErrorUnknown": {
-    "description": "Загальне повідомлення про помилку, коли доступ до мікрофона не вдається з невідомих причин.",
-    "message": "Неможливо отримати доступ до мікрофона. \nПеревірте налаштування свого пристрою та повторіть спробу."
-  },
-  "ttsDisabledSafari": {
-    "message": "Багатомовні голоси наразі не підтримуються в Safari.",
-    "description": "Повідомлення відображається, коли в Safari вимкнено TTS"
-  },
-  "extensionSettings": {
-    "message": "Налаштування",
-    "description": "Текст кнопки для відкриття налаштувань розширення."
-  },
-  "submitModeControl": {
-    "description": "Заголовок (спливаюча підказка) елемента керування для вибору часу надсилання повідомлень.",
-    "message": "Виберіть, коли надсилати повідомлення"
-  },
-  "submit_mode_agent": {
-    "description": "Режим подання, керований ШІ.",
-    "message": "агент"
-  },
-  "submit_mode_agent_description": {
-    "description": "Опис режиму подання, керованого ШІ.",
-    "message": "$chatbot$ вирішує, коли відповідати на основі контексту",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "submit_mode_auto": {
-    "description": "Режим автоматичної подачі.",
-    "message": "авто"
-  },
-  "submit_mode_auto_description": {
-    "description": "Опис режиму автоматичної подачі.",
-    "message": "Автоматично надсилати, коли ви припините говорити"
-  },
-  "submit_mode_off": {
-    "description": "Ручний режим подачі.",
-    "message": "посібник"
-  },
-  "submit_mode_off_description": {
-    "description": "Опис для ручного режиму подання.",
-    "message": "Надсилайте лише після натискання кнопки"
-  },
-  "nicknameLabel": {
-    "message": "Прізвисько",
-    "description": "Етикетка для поля введення для встановлення спеціального прізвисько для помічника AI."
-  },
-  "greeting": {
-    "description": "Вітальне повідомлення, показане, коли користувач підписався",
-    "message": "Привіт, $name$!",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John"
-      }
-    }
-  },
-  "notSignedIn": {
-    "description": "Текст, щоб показати, коли користувач не ввійшов.",
-    "message": "Не ввійшов"
-  },
-  "profile": {
-    "description": "Мітка для розділу профілю користувача.",
-    "message": "Профіл"
-  },
-  "quotaCredits": {
-    "description": "Етикетка одиниць для кредитів TTS",
-    "message": "кредити"
-  },
-  "quotaRemaining": {
-    "description": "Етикетка для квоти, що залишилася",
-    "message": "Квота, що залишилася"
-  },
-  "quotaStatusUnknown": {
-    "description": "Повідомлення, показане, коли статус квоти неможливо визначити",
-    "message": "Неможливо перевірити статус квоти"
-  },
-  "quotaUnauthenticatedMessage": {
-    "description": "Повідомлення, показане, коли користувач не є автентифікацією.",
-    "message": "Увійдіть, щоб отримати доступ до генерації голосу та інших преміальних функцій"
-  },
-  "signIn": {
-    "description": "Текст для кнопки входу.",
-    "message": "Увійти"
-  },
-  "signOut": {
-    "description": "Текст для кнопки виписки.",
-    "message": "Виходити"
-  },
-  "signedIn": {
-    "description": "Текст статусу, показаний, коли користувач автентифікується (без електронної пошти).",
-    "message": "Підписаний"
-  },
-  "signedInAs": {
-    "description": "Текст статусу, показаний під час автентифікації користувача, включаючи свою електронну пошту.",
-    "message": "Увійти як $email$",
-    "placeholders": {
-      "email": {
-        "content": "$1",
-        "example": "user@example.com"
-      }
-    }
-  },
-  "sttMinutesRemaining": {
-    "description": "Текст, що показує решту квоти STT за лічені хвилини.",
-    "message": "$minutes$ хвилини$plural$ залишилось",
-    "placeholders": {
-      "minutes": {
-        "content": "$1",
-        "example": "5"
-      },
-      "plural": {
-        "content": "$2",
-        "example": "s"
-      }
-    }
-  },
-  "sttQuotaExhausted": {
-    "description": "Текст, щоб показати, коли квота STT вичерпана.",
-    "message": "Квота розпізнавання мови виснажена"
-  },
-  "sttQuotaProgress": {
-    "description": "Підказка для панелі прогресу квоти STT.",
-    "message": "$remaining$ з $total$ секунди залишилось",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "100"
-      },
-      "total": {
-        "content": "$2",
-        "example": "300"
-      }
-    }
-  },
-  "sttQuotaProgressMinutes": {
-    "description": "Підказка для панелі прогресу квоти STT за лічені хвилини.",
-    "message": "$remaining$ з $total$ хвилини залишилось",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "5"
-      },
-      "total": {
-        "content": "$2",
-        "example": "60"
-      }
-    }
-  },
-  "sttQuotaRemaining": {
-    "description": "Етикетка для квоти STT, що залишилася.",
-    "message": "Розпізнавання мови"
-  },
-  "sttQuotaSeconds": {
-    "description": "Одиниця для квоти STT (секунди).",
-    "message": "секунди"
-  },
-  "ttsCredits": {
-    "description": "Термін, що використовується для валюти кредитів у функції текст-мовлення.",
-    "message": "кредити"
-  },
   "ttsQuotaCharacters": {
-    "description": "Одиниця для квоти TTS (символів).",
+    "description": "Unit for TTS quota (characters).",
     "message": "кредити"
   },
   "ttsQuotaExhausted": {
-    "description": "Текст, щоб показати, коли квота TTS вичерпана.",
+    "description": "Text to show when TTS quota is exhausted.",
     "message": "Голосова квота виснажена"
   },
   "ttsQuotaProgress": {
-    "description": "Підказка для панелі прогресу TTS.",
+    "description": "Tooltip for the TTS quota progress bar.",
     "message": "$remaining$ з $total$ символів залишилось",
     "placeholders": {
       "remaining": {
@@ -646,121 +762,247 @@
     }
   },
   "ttsQuotaRemaining": {
-    "description": "Мітка для квоти TTS, що залишилася.",
+    "description": "Label for the TTS quota remaining display.",
     "message": "Генерування голосу"
   },
-  "upgradeButton": {
-    "description": "Текст для кнопки для оновлення плану, коли квота вичерпана.",
-    "message": "План оновлення"
-  },
-  "viewDetails": {
-    "description": "Текст для посилання для перегляду повних деталей квот на інформаційній панелі.",
-    "message": "Переглянути деталі"
-  },
-  "clickToCollapse": {
-    "description": "Текст, що вказує на користувача, може натиснути, щоб приховати розширений вміст.",
-    "message": "Клацніть, щоб згорнути"
-  },
-  "clickToExpand": {
-    "description": "Текст, що вказує на користувача, може натиснути, щоб показати згорнутий вміст.",
-    "message": "Клацніть, щоб розширити"
-  },
-  "instructionLabel_context": {
-    "description": "Дружня етикетка для інструкції користувача, яка надає довідкову інформацію.",
-    "message": "Надання контексту ..."
-  },
-  "instructionLabel_expectations": {
-    "description": "Дружня етикетка для інструкції користувача, яка визначає, чого хоче користувач.",
-    "message": "Уточнюючи очікування ..."
-  },
-  "instructionLabel_focusing": {
-    "description": "Дружня етикетка для інструкції користувача, яка звужує сферу розмови.",
-    "message": "Фокусування дискусії ..."
-  },
-  "instructionLabel_guardrails": {
-    "description": "Дружня етикетка для інструкції користувача, яка встановлює межі для розмови.",
-    "message": "Встановлення огородження ..."
-  },
-  "instructionLabel_guiding": {
-    "description": "Дружня етикетка для інструкції користувача, яка керує, як АІ повинен реагувати.",
-    "message": "Керівні відповіді ..."
-  },
-  "instructionLabel_nudge": {
-    "description": "Дружня етикетка для інструкції користувача, яка обережно пропонує напрямок.",
-    "message": "Даючи підштовхування ..."
-  },
-  "instructionLabel_steering": {
-    "description": "Дружня етикетка для інструкції користувача, яка керує напрямком розмови.",
-    "message": "Керування розмовою ..."
-  },
-  "maintenanceLabel_holding": {
-    "description": "Дружня етикетка для згорнутого помічника повідомлення про технічне обслуговування.",
-    "message": "Тримаючи цю думку ..."
-  },
-  "maintenanceLabel_mental_note": {
-    "description": "Дружня етикетка для згорнутого помічника повідомлення про технічне обслуговування.",
-    "message": "Зробити розумову записку ..."
-  },
-  "maintenanceLabel_processing": {
-    "description": "Дружня етикетка для згорнутого помічника повідомлення про технічне обслуговування.",
-    "message": "Обробка на задньому плані ..."
-  },
-  "maintenanceLabel_remembering": {
-    "description": "Дружня етикетка для згорнутого помічника повідомлення про технічне обслуговування.",
-    "message": "Пам'ятаючи цю деталь ..."
-  },
-  "maintenanceLabel_saving": {
-    "description": "Дружня етикетка для згорнутого помічника повідомлення про технічне обслуговування.",
-    "message": "Збереження цієї думки на потім ..."
-  },
-  "maintenanceLabel_tracking": {
-    "description": "Дружня етикетка для згорнутого помічника повідомлення про технічне обслуговування.",
-    "message": "Відстеження контексту ..."
-  },
-  "maintenanceLabel_tucking": {
-    "description": "Дружня етикетка для згорнутого помічника повідомлення про технічне обслуговування.",
-    "message": "Відбиваючи це ..."
-  },
-  "disableTTS": {
-    "description": "Мітка для опції вимкнути текст-мовленнєвий",
-    "message": "Вимкнути текст до мови"
-  },
-  "signInForTTS": {
-    "description": "Показано, коли користувачеві потрібно автентифікація для доступу до функцій тексту до мови",
-    "message": "Увійдіть до тексту до мови"
-  },
   "ttsVoice": {
-    "description": "Мітка, що описує опцію голосу тексту в мовлення в меню",
+    "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS -голос"
   },
-  "voiceOff": {
-    "description": "Мітка, коли вимкнено текст-мовлення",
-    "message": "Озвучувати"
+  "unlockButton": {
+    "description": "The title (tooltip) of the button to unlock the screen.",
+    "message": "Натисніть, щоб розблокувати екран"
   },
-  "voiceSettings": {
-    "description": "Текст пункту меню для доступу до голосових налаштувань.",
-    "message": "Налаштування голосу"
+  "unlockInstruction": {
+    "description": "Instructions telling the user how to unlock the screen when locked.",
+    "message": "Тримайте, щоб розблокувати."
   },
-  "addCredits": {
-    "description": "Текст для посилання, щоб додати більше голосових кредитів",
-    "message": "Додати кредити"
+  "upgradeButton": {
+    "description": "Text for the button to upgrade the plan when quota is exhausted.",
+    "message": "План оновлення"
   },
   "upgradeForTTS": {
-    "description": "Підказка, показана, коли користувачеві потрібно оновити, щоб отримати кредити з текстовим мовленням",
+    "description": "Prompt shown when user needs to upgrade to obtain text-to-speech credits",
     "message": "Оновлення для генерації голосу"
   },
-  "voicePaused": {
-    "description": "Текст, показаний, коли голос призупинений через недостатню кількість кредитів",
-    "message": "Голос зробив паузу -"
-  },
-  "assistantIsListeningAttentively": {
-    "description": "Повідомлення, що відображається, коли помічник слухає мовлення в режимі агента.",
-    "message": "$chatbot$ слухає уважно ...",
+  "userStartedInterrupting": {
+    "description": "Message displayed when the user starts speaking while the assistant is speaking.",
+    "message": "Давайте, $chatbot$ слухає...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
-        "example": "Claude"
+        "example": "Pi"
       }
     }
+  },
+  "vadDetailActivatingMicrophone": {
+    "description": "VAD detail when activating the microphone.",
+    "message": "Activating microphone..."
+  },
+  "vadDetailCommLinkFailed": {
+    "description": "VAD detail when the communication port link fails.",
+    "message": "Communication link failed."
+  },
+  "vadDetailDeactivatingMicrophone": {
+    "description": "VAD detail when deactivating the microphone.",
+    "message": "Deactivating microphone..."
+  },
+  "vadDetailFailedToReconnectVADService": {
+    "description": "VAD detail when re-establishing connection fails.",
+    "message": "Failed to reconnect VAD service."
+  },
+  "vadDetailInitError": {
+    "description": "VAD detail for an initialization error, with specific error message.",
+    "message": "Помилка init: $error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to connect to VAD service"
+      }
+    }
+  },
+  "vadDetailInitErrorPromise": {
+    "description": "VAD detail for an initialization promise error.",
+    "message": "Init Error: Promise error"
+  },
+  "vadDetailInitErrorUnknown": {
+    "description": "VAD detail for an unknown initialization error.",
+    "message": "Init Error: Unknown"
+  },
+  "vadDetailInitializedMode": {
+    "description": "VAD detail showing initialization mode.",
+    "message": "Ініціалізований (режим: $mode$)",
+    "placeholders": {
+      "mode": {
+        "content": "$1",
+        "example": "Agent"
+      }
+    }
+  },
+  "vadDetailInitializedModeNA": {
+    "description": "VAD detail showing initialization mode as N/A.",
+    "message": "Initialized (Mode: N/A)"
+  },
+  "vadDetailNonSpeechAudioDetected": {
+    "description": "VAD detail for non-speech audio detection.",
+    "message": "Non-speech audio detected"
+  },
+  "vadDetailReleasingVADResources": {
+    "description": "VAD detail when releasing VAD resources.",
+    "message": "Releasing VAD resources..."
+  },
+  "vadDetailRequestingVADSetup": {
+    "description": "VAD detail when requesting setup.",
+    "message": "Requesting VAD setup..."
+  },
+  "vadDetailSpeechDetected": {
+    "description": "VAD detail when speech has been detected.",
+    "message": "Speech detected"
+  },
+  "vadDetailSpeechEndedDuration": {
+    "description": "VAD detail indicating speech ended and its duration.",
+    "message": "Мовлення закінчилося (Тривалість: $duration$ MS)",
+    "placeholders": {
+      "duration": {
+        "content": "$1",
+        "example": "1000"
+      }
+    }
+  },
+  "vadDetailStartError": {
+    "description": "VAD detail for a start error, with specific error message.",
+    "message": "Помилка запуску: $error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to start VAD service"
+      }
+    }
+  },
+  "vadDetailStartErrorPromise": {
+    "description": "VAD detail for a start promise error.",
+    "message": "Start Error: Promise error"
+  },
+  "vadDetailStartErrorUnknown": {
+    "description": "VAD detail for an unknown start error.",
+    "message": "Start Error: Unknown"
+  },
+  "vadDetailStopError": {
+    "description": "VAD detail for a stop error, with specific error message.",
+    "message": "Помилка зупинки: $error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to stop VAD service"
+      }
+    }
+  },
+  "vadDetailStopErrorPromise": {
+    "description": "VAD detail for a stop promise error.",
+    "message": "Stop Error: Promise error"
+  },
+  "vadDetailStopErrorUnknown": {
+    "description": "VAD detail for an unknown stop error.",
+    "message": "Stop Error: Unknown"
+  },
+  "vadDetailUnknownVADError": {
+    "description": "VAD detail for an unknown error from the VAD module.",
+    "message": "Unknown VAD error"
+  },
+  "vadDetailVADProcessingStopped": {
+    "description": "VAD detail indicating VAD processing has stopped.",
+    "message": "VAD processing stopped."
+  },
+  "vadDetailVADServiceDisconnected": {
+    "description": "VAD detail when the service disconnects.",
+    "message": "VAD service disconnected. Try reloading."
+  },
+  "vadDetailVADServiceNotConnected": {
+    "description": "VAD detail when the service is not connected.",
+    "message": "VAD service not connected. Try reloading."
+  },
+  "vadDetailVADServiceShutdown": {
+    "description": "VAD detail indicating VAD service has been shut down.",
+    "message": "VAD service shut down."
+  },
+  "vadDetailWaitingForSpeech": {
+    "description": "VAD detail when waiting for user to speak.",
+    "message": "Waiting for speech"
+  },
+  "vadStatusDestroyed": {
+    "description": "VAD status when destroyed.",
+    "message": "Destroyed"
+  },
+  "vadStatusError": {
+    "description": "Generic VAD error status.",
+    "message": "Error"
+  },
+  "vadStatusFailed": {
+    "description": "Generic VAD failure status.",
+    "message": "Failed"
+  },
+  "vadStatusIndicatorEnabledLabel": {
+    "description": "Label for the toggle switch that controls the visibility of the Voice Activity Detection status indicator.",
+    "message": "Показати статус VAD"
+  },
+  "vadStatusInitializing": {
+    "description": "VAD status when initializing.",
+    "message": "Initializing"
+  },
+  "vadStatusListening": {
+    "description": "VAD status when actively listening.",
+    "message": "Listening"
+  },
+  "vadStatusMisfire": {
+    "description": "VAD status when a misfire (non-speech) is detected.",
+    "message": "Misfire"
+  },
+  "vadStatusProcessing": {
+    "description": "VAD status when processing audio.",
+    "message": "Processing"
+  },
+  "vadStatusReady": {
+    "description": "VAD status when ready and waiting.",
+    "message": "Ready"
+  },
+  "vadStatusShuttingDown": {
+    "description": "VAD status when shutting down.",
+    "message": "Shutting down"
+  },
+  "vadStatusStarting": {
+    "description": "VAD status when starting.",
+    "message": "Starting"
+  },
+  "vadStatusStopped": {
+    "description": "VAD status when stopped.",
+    "message": "Stopped"
+  },
+  "vadStatusStopping": {
+    "description": "VAD status when stopping.",
+    "message": "Stopping"
+  },
+  "viewDetails": {
+    "description": "Text for the link to view full quota details on the dashboard.",
+    "message": "Переглянути деталі"
+  },
+  "voiceIntroduction_joey": {
+    "description": "Introduction for the Joey voice.",
+    "message": "Холо! \nПривет! \n你好! \nЯ Пі, ваш помічник ШІ-поліглот. \nЗавдяки 32 мовам у моєму розпорядженні ми можемо досліджувати ідеї та культури з усього світу. \nЩо ви думаєте про цей голос?"
+  },
+  "voiceIntroduction_paola": {
+    "description": "Introduction for the Paola voice.",
+    "message": "Чао! \nБонжур! \nПривіт! \nЯ Пі, і я вільно розмовляю 32 мовами. \nВід арабської до української, я тут, щоб подолати мовні бар'єри. \nЯк вам звучить цей голос?"
+  },
+  "voiceOff": {
+    "description": "Label for when text-to-speech is disabled",
+    "message": "Озвучувати"
+  },
+  "voicePaused": {
+    "description": "Text shown when voice is paused due to insufficient credits",
+    "message": "Голос зробив паузу -"
+  },
+  "voiceSettings": {
+    "description": "The text of the menu item to access voice-related settings.",
+    "message": "Налаштування голосу"
   }
 }

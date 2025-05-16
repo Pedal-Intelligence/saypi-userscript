@@ -34,7 +34,9 @@ const mockStorage = (() => {
   return {
     get: (keys, callback) => {
       const result = {};
-      keys.forEach((key) => {
+      // Ensure keys is always an array, as chrome.storage.get expects an array or object
+      const keysArray = Array.isArray(keys) ? keys : (typeof keys === 'string' ? [keys] : Object.keys(keys || {}));
+      keysArray.forEach((key) => {
         result[key] = storage[key];
       });
       if (typeof callback === 'function') {
@@ -49,9 +51,26 @@ const mockStorage = (() => {
       }
       return Promise.resolve();
     },
-    clear: () => {
-      storage = {};
+    remove: (keysToRemove, callback) => {
+      const keysArray = Array.isArray(keysToRemove) ? keysToRemove : [keysToRemove];
+      keysArray.forEach(key => {
+        delete storage[key];
+      });
+      if (typeof callback === 'function') {
+        callback();
+      }
+      return Promise.resolve();
     },
+    clear: (callback) => {
+      storage = {};
+      if (typeof callback === 'function') {
+        callback();
+      }
+      return Promise.resolve();
+    },
+    // Helper to inspect or preload storage for tests
+    _getState: () => storage,
+    _setState: (newState) => { storage = newState; }
   };
 })();
 
@@ -60,11 +79,37 @@ global.chrome = {
     local: {
       get: vi.fn((keys, callback) => mockStorage.get(keys, callback)),
       set: vi.fn((items, callback) => mockStorage.set(items, callback)),
+      remove: vi.fn((keys, callback) => mockStorage.remove(keys, callback)),
+      clear: vi.fn((callback) => mockStorage.clear(callback)),
     },
+    sync: { // Add sync mock
+      get: vi.fn((keys, callback) => mockStorage.get(keys, callback)),
+      set: vi.fn((items, callback) => mockStorage.set(items, callback)),
+      remove: vi.fn((keys, callback) => mockStorage.remove(keys, callback)),
+      clear: vi.fn((callback) => mockStorage.clear(callback)),
+    },
+    onChanged: { // Mock onChanged as well if needed for listener tests
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      hasListener: vi.fn(),
+    }
   },
   runtime: {
-    lastError: null,
+    lastError: null, // You can set this in tests to simulate errors
+    onMessage: {
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      hasListener: vi.fn(),
+    },
+    sendMessage: vi.fn(),
+    getURL: vi.fn(path => `chrome-extension://mockextensionid/${path}`), // Mock getURL
+    getManifest: vi.fn(() => ({ manifest_version: 3, name: "Test Extension", version: "1.0" })), // Mock getManifest
   },
+  // Mock other chrome APIs if UserPreferenceModule or its dependencies use them directly
+  // For example, if i18n is used directly:
+  i18n: {
+    getMessage: vi.fn(messageName => messageName) // Simple mock for getMessage
+  }
 };
 
 // Mock SVG imports because webpack rawloader is not available in the test environment

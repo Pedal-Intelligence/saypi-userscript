@@ -1,23 +1,39 @@
 {
-  "appName": {
-    "message": "Say, Pi",
-    "description": "Tên của ứng dụng."
+  "activityCheckButton": {
+    "description": "The text of the button to indicate that the user is still present.",
+    "message": "Vâng, tôi vẫn còn ở đây!"
+  },
+  "activityCheckMessage": {
+    "description": "The message to display when the conversation has been going on unusually long.",
+    "message": "Wow, đây là một cuộc trò chuyện dài. Bạn còn đó không, hay chúng ta đang tự nói chuyện với bản thân?"
+  },
+  "addCredits": {
+    "description": "Text for link to add more voice credits",
+    "message": "Thêm tín dụng"
+  },
+  "allowInterruptions": {
+    "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
+    "message": "Có thể gián đoạn"
   },
   "appDescription": {
-    "message": "Nói chuyện với Pi và Claude bằng giọng nói của bạn. Nói tự nhiên, nghe phản hồi. Cứ nói đi.",
-    "description": "Mô tả của ứng dụng."
+    "description": "The description of the application.",
+    "message": "Nói chuyện với Pi và Claude bằng giọng nói của bạn. Nói tự nhiên, nghe phản hồi. Cứ nói đi."
   },
-  "callInProgress": {
-    "message": "Kết thúc cuộc trò chuyện không cần tay",
-    "description": "Tooltip hiển thị trên nút gọi khi một cuộc gọi đang diễn ra."
+  "appName": {
+    "description": "The name of the application.",
+    "message": "Say, Pi"
   },
-  "callStarting": {
-    "message": "Đang kết nối...",
-    "description": "Tooltip hiển thị trên nút gọi khi cuộc gọi đang bắt đầu."
+  "applicationStatusIssue": {
+    "description": "Message to display when the application is experiencing issues.",
+    "message": "Cảnh báo vấn đề hệ thống"
   },
-  "callNotStarted": {
-    "message": "Bắt đầu một cuộc trò chuyện không cần tay với $chatbot$",
-    "description": "Tooltip hiển thị trên nút gọi trước khi cuộc gọi được bắt đầu.",
+  "applicationStatusUnknown": {
+    "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
+    "message": "Trạng thái ứng dụng không rõ"
+  },
+  "assistantIsListening": {
+    "description": "Message displayed when the assistant is listening for speech.",
+    "message": "$chatbot$ đang lắng nghe...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
@@ -25,60 +41,58 @@
       }
     }
   },
-  "callError": {
-    "message": "Gặp lỗi không nghiêm trọng. Đừng hoảng sợ, chúng tôi vẫn đang lắng nghe.",
-    "description": "Tooltip hiển thị trên nút gọi khi có lỗi không nghiêm trọng xảy ra."
+  "assistantIsListeningAttentively": {
+    "description": "Message displayed when the assistant is listening for speech in agent mode.",
+    "message": "$chatbot$ đang nghe chăm chú ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
   },
-  "mode_speed": {
-    "message": "tốc độ",
-    "description": "Chế độ chuyển đổi văn bản nhanh nhất."
+  "assistantIsSpeaking": {
+    "description": "Message displayed when the assistant is speaking its response.",
+    "message": "$chatbot$ đang nói...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "mode_balanced": {
-    "message": "cân đối",
-    "description": "Chế độ chuyển đổi văn bản mặc định."
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Message displayed when the assistant is speaking its response and manual interruption is possible.",
+    "message": "$chatbot$ đang nói, nhấn để ngắt lời...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "mode_accuracy": {
-    "message": "chính xác",
-    "description": "Chế độ chuyển đổi văn bản chính xác nhất."
+  "assistantIsThinking": {
+    "description": "Message displayed when the assistant is preparing its response.",
+    "message": "$chatbot$ đang suy nghĩ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
-  "preferedModeControl": {
-    "message": "Chọn chế độ chuyển đổi văn bản ưa thích của bạn",
-    "description": "Tiêu đề (tooltip) của điều khiển để chọn chế độ chuyển đổi văn bản ưa thích."
-  },
-  "autoSubmit": {
-    "description": "Nhãn cho hộp kiểm để bật/tắt tự động gửi lời nhắc.",
-    "message": "Tự động gửi"
-  },
-  "continueUnlocking": {
-    "description": "Hướng dẫn cho người dùng cách tiếp tục sau khi họ đã bắt đầu nhấn nút mở khóa.",
-    "message": "Tiếp tục giữ để mở khóa..."
-  },
-  "lockButton": {
-    "description": "Tiêu đề (chú giải công cụ) của nút để khóa màn hình chống lại những lần chạm tình cờ.",
-    "message": "Nhấn để khóa màn hình"
-  },
-  "lockedScreen": {
-    "description": "Một thông điệp để hiển thị nổi bật khi màn hình bị khóa.",
-    "message": "Màn hình đã bị khóa."
-  },
-  "soundEffects": {
-    "description": "Nhãn cho hộp kiểm để bật/tắt hiệu ứng âm thanh.",
-    "message": "Hiệu ứng âm thanh"
-  },
-  "unlockButton": {
-    "description": "Tiêu đề (chú giải công cụ) của nút để mở khóa màn hình.",
-    "message": "Nhấn để mở khóa màn hình"
-  },
-  "unlockInstruction": {
-    "description": "Hướng dẫn cho người dùng cách mở khóa màn hình khi bị khóa.",
-    "message": "Giữ để mở khóa."
-  },
-  "preferedLanguage": {
-    "message": "Ngôn ngữ",
-    "description": "Nhãn cho một điều khiển để chọn ngôn ngữ phiên âm ưa thích."
+  "assistantIsWriting": {
+    "description": "Message displayed when the assistant is typing its response.",
+    "message": "$chatbot$ đang viết...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
   },
   "audioConnected": {
-    "description": "Thông điệp hiển thị khi một chiếc micro được kết nối",
+    "description": "Message displayed when a microphone is connected",
     "message": "$microphone$ đã được kết nối",
     "placeholders": {
       "microphone": {
@@ -88,7 +102,7 @@
     }
   },
   "audioInputError": {
-    "description": "Thông điệp hiển thị khi âm thanh dẫn đến một bản ghi âm trống - thường là kết quả của việc lọc.",
+    "description": "Message displayed when audio transcription failed - usually the result of an ASR or LLM API error.",
     "message": "Hmm, $chatbot$ có một chút nấc cụt. \nBạn có thể thử nói điều đó một lần nữa không?",
     "placeholders": {
       "chatbot": {
@@ -98,7 +112,7 @@
     }
   },
   "audioReconnecting": {
-    "description": "Thông điệp hiển thị khi kết nối với một micro mới",
+    "description": "Message displayed when connecting to a new microphone",
     "message": "Chuyển sang $microphone$...",
     "placeholders": {
       "microphone": {
@@ -107,9 +121,25 @@
       }
     }
   },
-  "assistantIsListening": {
-    "description": "Thông điệp được hiển thị khi trợ lý đang lắng nghe giọng nói.",
-    "message": "$chatbot$ đang lắng nghe...",
+  "autoSubmit": {
+    "description": "Label for the checkbox to enable/disable automatic prompt submission.",
+    "message": "Tự động gửi"
+  },
+  "callError": {
+    "description": "The tooltip to display on the call button when a non-fatal error occurs.",
+    "message": "Gặp lỗi không nghiêm trọng. Đừng hoảng sợ, chúng tôi vẫn đang lắng nghe."
+  },
+  "callInProgress": {
+    "description": "The tooltip to display on the call button when a call is in progress.",
+    "message": "Kết thúc cuộc trò chuyện không cần tay"
+  },
+  "callInterruptible": {
+    "description": "The tooltip to display on the call button when a call is in progress and manual interruption is possible.",
+    "message": "Nhấn để làm gián đoạn"
+  },
+  "callNotStarted": {
+    "description": "The tooltip to display on the call button before a call is started.",
+    "message": "Bắt đầu một cuộc trò chuyện không cần tay với $chatbot$",
     "placeholders": {
       "chatbot": {
         "content": "$1",
@@ -117,13 +147,21 @@
       }
     }
   },
-  "toggleThemeToDarkMode": {
-    "description": "Nhãn cho nút chuyển sang chế độ tối.",
-    "message": "Chuyển sang chế độ tối"
+  "callStarting": {
+    "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
+    "message": "Đang kết nối..."
   },
-  "toggleThemeToLightMode": {
-    "description": "Nhãn cho nút chuyển sang chế độ sáng.",
-    "message": "Chuyển sang chế độ sáng"
+  "checkingApplicationStatus": {
+    "description": "Message to display while the system status is being determined, e.g. during load.",
+    "message": "Kiểm tra trạng thái ứng dụng..."
+  },
+  "clickToCollapse": {
+    "description": "Text indicating user can click to hide expanded content.",
+    "message": "Bấm để sụp đổ"
+  },
+  "clickToExpand": {
+    "description": "Text indicating user can click to show collapsed content.",
+    "message": "Bấm để mở rộng"
   },
   "consentAskParticipate": {
     "message": "Bạn có muốn tham gia không?"
@@ -158,102 +196,40 @@
   "consetPrivacyPolicy": {
     "message": "Đọc Chính sách Bảo mật của chúng tôi"
   },
-  "shareAnalytics": {
-    "description": "Nhãn cho hộp kiểm để bật/tắt chia sẻ phân tích.",
-    "message": "Chia sẻ phân tích"
+  "continueUnlocking": {
+    "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
+    "message": "Tiếp tục giữ để mở khóa..."
   },
-  "enterImmersiveModeShort": {
-    "message": "Ngâm",
-    "description": "Văn bản của nút để vào chế độ toàn màn hình trên máy tính."
+  "copiedButtonTitle": {
+    "description": "The title of the button to indicate that the text of a message has been copied to the clipboard.",
+    "message": "Đã sao chép!"
   },
-  "exitImmersiveModeLong": {
-    "message": "Thoát Chế Độ Sống Động",
-    "description": "Aria-label và tiêu đề của nút để thoát chế độ toàn màn hình trên thiết bị di động, quay lại chế độ máy tính để bàn dựa trên văn bản."
-  },
-  "enterImmersiveModeLong": {
-    "message": "Nhập Chế Độ Sống Động",
-    "description": "Nhãn aria và tiêu đề của nút để vào chế độ toàn màn hình trên thiết bị di động."
-  },
-  "applicationStatusIssue": {
-    "description": "Thông điệp để hiển thị khi ứng dụng gặp sự cố.",
-    "message": "Cảnh báo vấn đề hệ thống"
-  },
-  "applicationStatusUnknown": {
-    "description": "Thông điệp để hiển thị khi không thể xác định được trạng thái của ứng dụng. Ví dụ: khi máy khách đang ngoại tuyến.",
-    "message": "Trạng thái ứng dụng không rõ"
-  },
-  "checkingApplicationStatus": {
-    "description": "Thông điệp để hiển thị trong khi đang xác định trạng thái hệ thống, ví dụ: trong quá trình tải.",
-    "message": "Kiểm tra trạng thái ứng dụng..."
-  },
-  "dismissAlert": {
-    "description": "Nhãn cho nút để bỏ qua cảnh báo vấn đề hệ thống.",
-    "message": "Đuổi đi"
-  },
-  "recommendedActions": {
-    "description": "Thông điệp trước danh sách các hành động được khuyến nghị mà người dùng có thể thực hiện để khắc phục một vấn đề đã biết.",
-    "message": "Trong thời gian này, chúng tôi khuyên bạn:"
-  },
-  "extensionPopupTitle": {
-    "description": "Tiêu đề của hộp thoại popup của tiện ích mở rộng.",
-    "message": "Say, Pi"
-  },
-  "activityCheckButton": {
-    "message": "Vâng, tôi vẫn còn ở đây!",
-    "description": "Văn bản của nút để chỉ ra rằng người dùng vẫn còn ở đó."
-  },
-  "activityCheckMessage": {
-    "description": "Thông điệp để hiển thị khi cuộc trò chuyện diễn ra quá lâu bất thường.",
-    "message": "Wow, đây là một cuộc trò chuyện dài. Bạn còn đó không, hay chúng ta đang tự nói chuyện với bản thân?"
-  },
-  "assistantIsThinking": {
-    "message": "$chatbot$ đang suy nghĩ...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "Thông điệp được hiển thị khi trợ lý đang chuẩn bị phản hồi của mình."
-  },
-  "assistantIsSpeaking": {
-    "message": "$chatbot$ đang nói...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "Thông điệp được hiển thị khi trợ lý đang phát biểu câu trả lời của mình."
-  },
-  "userStartedInterrupting": {
-    "message": "Hãy tiếp tục, $chatbot$ đang lắng nghe...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "description": "Thông điệp được hiển thị khi người dùng bắt đầu nói trong khi trợ lý đang nói."
-  },
-  "allowInterruptions": {
-    "message": "Có thể gián đoạn",
-    "description": "Nhãn cho hộp kiểm để bật/tắt cho phép người dùng gián đoạn câu trả lời của Pi bằng cách nói."
+  "copyButtonTitle": {
+    "description": "The title of the button to copy the text of a message to the clipboard.",
+    "message": "Sao chép"
   },
   "currencyUSDAbbreviation": {
-    "description": "Viết tắt của Đô la Hoa Kỳ.",
+    "description": "The abbreviation for the US dollar.",
     "message": "USD"
   },
   "currentCharges": {
-    "description": "Thuật ngữ được sử dụng để mô tả các khoản phí hiện tại (tổng cộng đang chạy) mà người dùng đã tích lũy.",
+    "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Các khoản phí hiện tại"
   },
+  "disableTTS": {
+    "description": "Label for the option to turn off text-to-speech",
+    "message": "Vô hiệu hóa văn bản để nói"
+  },
+  "dismissAlert": {
+    "description": "Label for the button to dismiss a system issue alert.",
+    "message": "Đuổi đi"
+  },
   "enableTTS": {
-    "description": "Nhãn cho hộp kiểm để bật/tắt chức năng văn bản thành giọng nói.",
+    "description": "Label for the checkbox to enable/disable text-to-speech.",
     "message": "Các giọng đa ngôn ngữ"
   },
   "enhancedVoice": {
-    "description": "Tiêu đề (chú giải) cho Say, Pi nâng cao giọng nói.",
+    "description": "Title (tooltip) for Say, Pi enhanced voices.",
     "message": "Giọng nói được tăng cường bởi $product$",
     "placeholders": {
       "product": {
@@ -262,8 +238,241 @@
       }
     }
   },
+  "enterImmersiveModeLong": {
+    "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
+    "message": "Nhập Chế Độ Sống Động"
+  },
+  "enterImmersiveModeShort": {
+    "description": "The text of the button to enter immersive mode on desktop.",
+    "message": "Ngâm"
+  },
+  "exitImmersiveModeLong": {
+    "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
+    "message": "Thoát Chế Độ Sống Động"
+  },
+  "extensionPopupTitle": {
+    "description": "The title of the extension's popup dialog.",
+    "message": "Say, Pi"
+  },
+  "extensionSettings": {
+    "description": "The text of the button to open the extension's settings.",
+    "message": "Cài đặt"
+  },
+  "greeting": {
+    "description": "Greeting message shown when user is signed in",
+    "message": "Xin chào, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "instructionLabel_context": {
+    "description": "Friendly label for user instruction that provides background information.",
+    "message": "Cung cấp bối cảnh ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Friendly label for user instruction that defines what the user wants.",
+    "message": "Làm rõ những kỳ vọng ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Friendly label for user instruction that narrows the scope of conversation.",
+    "message": "Tập trung vào cuộc thảo luận ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Friendly label for user instruction that establishes boundaries for the conversation.",
+    "message": "Thiết lập các bảo vệ ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Friendly label for user instruction that guides how the AI should respond.",
+    "message": "Hướng dẫn phản hồi ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Friendly label for user instruction that gently suggests a direction.",
+    "message": "Đưa ra một cú hích ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Friendly label for user instruction that guides the conversation direction.",
+    "message": "Chỉ đạo cuộc trò chuyện ..."
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Sự gián đoạn hiện không được hỗ trợ trong Firefox."
+  },
+  "lockButton": {
+    "description": "The title (tooltip) of the button to lock the screen against accidental touches.",
+    "message": "Nhấn để khóa màn hình"
+  },
+  "lockedScreen": {
+    "description": "A message to display prominently when the screen is locked.",
+    "message": "Màn hình đã bị khóa."
+  },
+  "maintenanceLabel_holding": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Giữ suy nghĩ này ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Ghi chú tinh thần ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Xử lý trong nền ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Ghi nhớ chi tiết này ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Tiết kiệm suy nghĩ đó cho sau này ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Theo dõi bối cảnh ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Tucking cái này đi ..."
+  },
+  "microphoneErrorConstraints": {
+    "description": "Error message when microphone constraints cannot be satisfied.",
+    "message": "Cài đặt micrô của bạn không đáp ứng các thông số kỹ thuật bắt buộc. \nHãy thử sử dụng micrô khác hoặc điều chỉnh cài đặt âm thanh của bạn."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generic error message with details when microphone access fails.",
+    "message": "Không truy cập được micrô: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Error message when microphone is already in use by another application.",
+    "message": "Không thể truy cập micrô vì micrô đang được ứng dụng khác sử dụng. \nVui lòng đóng các ứng dụng khác có thể đang sử dụng micrô của bạn."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Error message when no microphone device is found.",
+    "message": "Không phát hiện thấy micrô. \nVui lòng kết nối micrô và thử lại."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Error message when microphone permission is denied by the user or system.",
+    "message": "Cần có quyền truy cập micrô. \nVui lòng cho phép truy cập micrô trong cài đặt trình duyệt của bạn để tiếp tục."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Error message for unexpected microphone errors with details.",
+    "message": "Đã xảy ra lỗi không mong muốn với micrô của bạn: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generic error message when microphone access fails for unknown reasons.",
+    "message": "Không thể truy cập micrô. \nVui lòng kiểm tra cài đặt thiết bị của bạn và thử lại."
+  },
+  "mode_accuracy": {
+    "description": "Highest accuracy mode.",
+    "message": "chính xác"
+  },
+  "mode_accuracy_description": {
+    "description": "Description for the accuracy transcription mode.",
+    "message": "Độ chính xác cao nhất nhưng tốc độ sao chép chậm hơn. \nDễ bị ảo giác."
+  },
+  "mode_balanced": {
+    "description": "Default transcription mode.",
+    "message": "cân đối"
+  },
+  "mode_balanced_description": {
+    "description": "Description for the balanced transcription mode.",
+    "message": "Cân bằng tốt về tốc độ và độ chính xác cho hầu hết các mục đích sử dụng."
+  },
+  "mode_speed": {
+    "description": "Fastest transcription mode.",
+    "message": "tốc độ"
+  },
+  "mode_speed_description": {
+    "description": "Description for the speed transcription mode.",
+    "message": "Phản hồi nhanh nhất nhưng kém chính xác hơn. \nDễ bị gián đoạn."
+  },
+  "nicknameLabel": {
+    "description": "Label for the input field to set a custom nickname for the AI assistant.",
+    "message": "Biệt danh"
+  },
+  "notSignedIn": {
+    "description": "Text to show when the user is not signed in.",
+    "message": "Không đăng nhập"
+  },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "Quyền nhắc Trang DOM không tải chính xác."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Không xác định lỗi trong khi yêu cầu quyền"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "Bạn sẽ thấy một dấu nhắc trình duyệt ở đầu cửa sổ này. \nChỉ cần nhấn <strong> \"cho phép trong khi truy cập trang web\" </strong> để chúng ta có thể bắt đầu nói chuyện."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Tab này sẽ tự động đóng sau khi bạn đã trả lời."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "Hãy trò chuyện!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "Để mang lại giọng nói cho các cuộc trò chuyện của bạn, $productName$ cần sự cho phép sử dụng micrô của bạn. \nVấn đề về quyền riêng tư của bạn - Chúng tôi chỉ lắng nghe khi bạn đang chủ động trò chuyện.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Chờ đợi bạn đi trước…"
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Cho phép micrô"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Hmm, không thể có quyền truy cập mic: $errorName$. \nĐóng tab này trong một khoảnh khắc…",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "Cảm ơn! \nCho phép được cấp. \nGói mọi thứ lên ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Lỗi không xác định"
+  },
+  "preferedLanguage": {
+    "description": "Label for a control to select the prefered transcription language.",
+    "message": "Ngôn ngữ"
+  },
+  "preferedModeControl": {
+    "description": "The title (tooltip) of the control to select the prefered transcription mode.",
+    "message": "Chọn chế độ chuyển đổi văn bản ưa thích của bạn"
+  },
   "previewProgress": {
-    "description": "Thông điệp để hiển thị khi người dùng đang xem trước một tính năng có giới hạn ký tự.",
+    "description": "The message to display when the user is previewing a feature that has a character limit.",
     "message": "đã sử dụng $count$ ký tự trong tổng số $limit$",
     "placeholders": {
       "count": {
@@ -283,7 +492,7 @@
     "message": "Beta Hoàn Thành"
   },
   "previewStatusPaused": {
-    "description": "Thông điệp để hiển thị khi người dùng đang xem trước một tính năng đã bị tạm dừng.",
+    "description": "The message to display when the user is previewing a feature that has been paused.",
     "message": "Beta Tạm dừng cho đến $resetDate$",
     "placeholders": {
       "resetDate": {
@@ -295,12 +504,187 @@
   "previewStatusUnknown": {
     "message": "Không thể kết nối..."
   },
+  "profile": {
+    "description": "Label for the user profile section.",
+    "message": "Hồ sơ"
+  },
+  "quotaCredits": {
+    "description": "Unit label for TTS credits",
+    "message": "Tín dụng"
+  },
+  "quotaRemaining": {
+    "description": "Label for the quota remaining progress bar",
+    "message": "Hạn ngạch còn lại"
+  },
+  "quotaStatusUnknown": {
+    "description": "Message shown when quota status cannot be determined",
+    "message": "Không thể kiểm tra trạng thái hạn ngạch"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Message shown when user is not authenticated.",
+    "message": "Đăng nhập để truy cập tạo giọng nói và các tính năng cao cấp khác"
+  },
   "readAloudButtonTitle": {
-    "description": "Tiêu đề của nút để đọc to văn bản của một tin nhắn.",
+    "description": "The title of the button to read aloud the text of a message.",
     "message": "Đọc To"
   },
+  "recommendedActions": {
+    "description": "Message preceding a list of recommended actions the user may take to remediate a known issue.",
+    "message": "Trong thời gian này, chúng tôi khuyên bạn:"
+  },
+  "regenerateButtonTitle": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an estimated cost.",
+    "message": "Tạo Âm thanh cho $cost$ $currency$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
+    "message": "Tạo Âm thanh"
+  },
+  "shareAnalytics": {
+    "description": "Label for the checkbox to enable/disable sharing of analytics.",
+    "message": "Chia sẻ phân tích"
+  },
+  "signIn": {
+    "description": "Text for the sign in button.",
+    "message": "Đăng nhập"
+  },
+  "signInForTTS": {
+    "description": "Prompt shown when user needs to authenticate to access text-to-speech features",
+    "message": "Đăng nhập để nhận văn bản thành bài báo"
+  },
+  "signOut": {
+    "description": "Text for the sign out button.",
+    "message": "Đăng xuất"
+  },
+  "signedIn": {
+    "description": "Status text shown when user is authenticated (without email).",
+    "message": "Đã đăng nhập"
+  },
+  "signedInAs": {
+    "description": "Status text shown when user is authenticated, including their email.",
+    "message": "Đăng nhập dưới dạng $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
+  "soundEffects": {
+    "description": "Label for the checkbox to enable/disable sound effects.",
+    "message": "Hiệu ứng âm thanh"
+  },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Hiệu ứng âm thanh bị tắt trong Firefox để ngăn sự cố phản hồi âm thanh."
+  },
+  "sttMinutesRemaining": {
+    "description": "Text showing remaining STT quota in minutes.",
+    "message": "$minutes$ phút$plural$ còn lại",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text to show when STT quota is exhausted.",
+    "message": "Hạn ngạch nhận dạng giọng nói kiệt sức"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip for the STT quota progress bar.",
+    "message": "$remaining$ của $total$ giây còn lại",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip for the STT quota progress bar in minutes.",
+    "message": "$remaining$ của $total$ phút còn lại",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Label for the STT quota remaining display.",
+    "message": "Nhận dạng giọng nói"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unit for STT quota (seconds).",
+    "message": "giây"
+  },
+  "submitModeControl": {
+    "description": "The title (tooltip) of the control to select when messages should be submitted.",
+    "message": "Chọn thời điểm gửi tin nhắn của bạn"
+  },
+  "submit_mode_agent": {
+    "description": "AI-driven submission mode.",
+    "message": "đại lý"
+  },
+  "submit_mode_agent_description": {
+    "description": "Description for the AI-driven submission mode.",
+    "message": "$chatbot$ quyết định thời điểm phản hồi dựa trên ngữ cảnh",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatic submission mode.",
+    "message": "tự động"
+  },
+  "submit_mode_auto_description": {
+    "description": "Description for the automatic submission mode.",
+    "message": "Tự động gửi khi bạn ngừng nói"
+  },
+  "submit_mode_off": {
+    "description": "Manual submission mode.",
+    "message": "thủ công"
+  },
+  "submit_mode_off_description": {
+    "description": "Description for the manual submission mode.",
+    "message": "Chỉ gửi khi bạn nhấn nút"
+  },
+  "toggleThemeToDarkMode": {
+    "description": "Label for the button to toggle to dark mode.",
+    "message": "Chuyển sang chế độ tối"
+  },
+  "toggleThemeToLightMode": {
+    "description": "Label for the button to toggle to light mode.",
+    "message": "Chuyển sang chế độ sáng"
+  },
   "ttsCostExplanation": {
-    "description": "Chú thích hiển thị khi sử dụng công cụ chuyển văn bản thành giọng nói để đọc to một tin nhắn, kèm theo chi phí của tin nhắn.",
+    "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
     "message": "$product$ sẽ tính phí $cost$ $currency$ khi nghe tin nhắn này",
     "placeholders": {
       "cost": {
@@ -318,7 +702,7 @@
     }
   },
   "ttsCostExplanationFree": {
-    "description": "Thông báo hiển thị khi sử dụng công cụ chuyển văn bản thành giọng nói để đọc to một tin nhắn, và tin nhắn là miễn phí. Có thể chứa tên của nhà cung cấp.",
+    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free. Assumes the provider is Inflection AI.",
     "message": "Âm thanh này được tạo miễn phí bởi Inflection AI",
     "placeholders": {
       "provider": {
@@ -327,8 +711,26 @@
       }
     }
   },
+  "ttsCostExplanationSayPi": {
+    "description": "The tooltip to display when the user hovers over the cost explanation link.",
+    "message": "Tìm hiểu cách $product$ tính phí âm thanh",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "ttsCredits": {
+    "description": "The term used for the credits currency in the text-to-speech feature.",
+    "message": "Tín dụng"
+  },
+  "ttsDisabledSafari": {
+    "description": "Message shown when TTS is disabled in Safari",
+    "message": "Giọng nói đa ngôn ngữ hiện không được hỗ trợ trong Safari."
+  },
   "ttsPoweredBy": {
-    "description": "Thông điệp để hiển thị khi sử dụng động cơ văn bản thành giọng nói để đọc to một thông điệp.",
+    "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Chuyển văn bản thành giọng nói được hỗ trợ bởi $ttsEngine$",
     "placeholders": {
       "ttsEngine": {
@@ -337,302 +739,16 @@
       }
     }
   },
-  "copiedButtonTitle": {
-    "message": "Đã sao chép!",
-    "description": "Tiêu đề của nút để chỉ ra rằng văn bản của một tin nhắn đã được sao chép vào bảng tạm."
-  },
-  "copyButtonTitle": {
-    "message": "Sao chép",
-    "description": "Tiêu đề của nút để sao chép văn bản của một tin nhắn vào bộ nhớ tạm."
-  },
-  "voiceIntroduction_joey": {
-    "message": "Hoan hô! \nXin chào! \nbạn ơi! \nTôi là Pi, trợ lý AI đa ngôn ngữ của bạn. \nVới 32 ngôn ngữ trong tầm tay của tôi, chúng ta có thể khám phá các ý tưởng và nền văn hóa từ khắp nơi trên thế giới. \nBạn nghĩ gì về giọng nói này?",
-    "description": "Giới thiệu về giọng nói của Joey."
-  },
-  "voiceIntroduction_paola": {
-    "message": "Chào! \nChúc mừng! \nXin chào! \nTôi là Pi và tôi có thể giao tiếp thành thạo 32 ngôn ngữ. \nTừ tiếng Ả Rập đến tiếng Ukraina, tôi ở đây để phá bỏ rào cản ngôn ngữ. \nGiọng nói này nghe như thế nào đối với bạn?",
-    "description": "Giới thiệu về giọng của Paola."
-  },
-  "regenerateButtonTitle": {
-    "message": "Tạo Âm thanh cho $cost$ $currency$",
-    "description": "Tiêu đề của nút để tái tạo âm thanh của một tin nhắn. Có thể phát sinh chi phí dự kiến.",
-    "placeholders": {
-      "cost": {
-        "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
-      }
-    }
-  },
-  "regenerateButtonTitleFree": {
-    "message": "Tạo Âm thanh",
-    "description": "Tiêu đề của nút để tái tạo âm thanh của một tin nhắn. Có thể phát sinh chi phí không xác định."
-  },
-  "assistantIsWriting": {
-    "description": "Thông báo hiển thị khi trợ lý đang nhập câu trả lời.",
-    "message": "$chatbot$ đang viết...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "ttsCostExplanationSayPi": {
-    "description": "Chú giải công cụ sẽ hiển thị khi người dùng di chuột qua liên kết giải thích chi phí.",
-    "placeholders": {
-      "product": {
-        "content": "$1",
-        "example": "Say, Pi"
-      }
-    },
-    "message": "Tìm hiểu cách $product$ tính phí âm thanh"
-  },
-  "interruptionsFirefoxDisabled": {
-    "message": "Sự gián đoạn hiện không được hỗ trợ trong Firefox."
-  },
-  "mode_accuracy_description": {
-    "description": "Mô tả chế độ sao chép chính xác.",
-    "message": "Độ chính xác cao nhất nhưng tốc độ sao chép chậm hơn. \nDễ bị ảo giác."
-  },
-  "mode_balanced_description": {
-    "description": "Mô tả cho chế độ sao chép cân bằng.",
-    "message": "Cân bằng tốt về tốc độ và độ chính xác cho hầu hết các mục đích sử dụng."
-  },
-  "mode_speed_description": {
-    "description": "Mô tả chế độ sao chép tốc độ.",
-    "message": "Phản hồi nhanh nhất nhưng kém chính xác hơn. \nDễ bị gián đoạn."
-  },
-  "soundEffectsFirefoxDisabled": {
-    "message": "Hiệu ứng âm thanh bị tắt trong Firefox để ngăn sự cố phản hồi âm thanh."
-  },
-  "assistantIsSpeakingWithManualInterrupt": {
-    "description": "Thông báo hiển thị khi trợ lý đang nói phản hồi và có thể ngắt thủ công.",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "message": "$chatbot$ đang nói, nhấn để ngắt lời..."
-  },
-  "callInterruptible": {
-    "description": "Chú giải công cụ hiển thị trên nút gọi khi cuộc gọi đang diễn ra và có thể bị gián đoạn thủ công.",
-    "message": "Nhấn để làm gián đoạn"
-  },
-  "microphoneErrorConstraints": {
-    "description": "Thông báo lỗi khi không thể đáp ứng được các hạn chế về micrô.",
-    "message": "Cài đặt micrô của bạn không đáp ứng các thông số kỹ thuật bắt buộc. \nHãy thử sử dụng micrô khác hoặc điều chỉnh cài đặt âm thanh của bạn."
-  },
-  "microphoneErrorGeneric": {
-    "description": "Thông báo lỗi chung kèm theo thông tin chi tiết khi truy cập micrô không thành công.",
-    "message": "Không truy cập được micrô: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Permission denied"
-      }
-    }
-  },
-  "microphoneErrorInUse": {
-    "description": "Thông báo lỗi khi micrô đã được ứng dụng khác sử dụng.",
-    "message": "Không thể truy cập micrô vì micrô đang được ứng dụng khác sử dụng. \nVui lòng đóng các ứng dụng khác có thể đang sử dụng micrô của bạn."
-  },
-  "microphoneErrorNotFound": {
-    "description": "Thông báo lỗi khi không tìm thấy thiết bị micrô.",
-    "message": "Không phát hiện thấy micrô. \nVui lòng kết nối micrô và thử lại."
-  },
-  "microphoneErrorPermissionDenied": {
-    "description": "Thông báo lỗi khi người dùng hoặc hệ thống từ chối quyền sử dụng micrô.",
-    "message": "Cần có quyền truy cập micrô. \nVui lòng cho phép truy cập micrô trong cài đặt trình duyệt của bạn để tiếp tục."
-  },
-  "microphoneErrorUnexpected": {
-    "description": "Thông báo lỗi về lỗi micrô không mong muốn kèm theo thông tin chi tiết.",
-    "message": "Đã xảy ra lỗi không mong muốn với micrô của bạn: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Device busy"
-      }
-    }
-  },
-  "microphoneErrorUnknown": {
-    "description": "Thông báo lỗi chung khi truy cập micrô không thành công vì lý do không xác định.",
-    "message": "Không thể truy cập micrô. \nVui lòng kiểm tra cài đặt thiết bị của bạn và thử lại."
-  },
-  "ttsDisabledSafari": {
-    "message": "Giọng nói đa ngôn ngữ hiện không được hỗ trợ trong Safari.",
-    "description": "Thông báo hiển thị khi TTS bị tắt trong Safari"
-  },
-  "extensionSettings": {
-    "message": "Cài đặt",
-    "description": "Văn bản của nút để mở cài đặt của tiện ích mở rộng."
-  },
-  "submitModeControl": {
-    "description": "Tiêu đề (chú giải công cụ) của điều khiển để chọn thời điểm gửi tin nhắn.",
-    "message": "Chọn thời điểm gửi tin nhắn của bạn"
-  },
-  "submit_mode_agent": {
-    "description": "Chế độ gửi do AI điều khiển.",
-    "message": "đại lý"
-  },
-  "submit_mode_agent_description": {
-    "description": "Mô tả cho chế độ gửi do AI điều khiển.",
-    "message": "$chatbot$ quyết định thời điểm phản hồi dựa trên ngữ cảnh",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "submit_mode_auto": {
-    "description": "Chế độ gửi tự động.",
-    "message": "tự động"
-  },
-  "submit_mode_auto_description": {
-    "description": "Mô tả cho chế độ gửi tự động.",
-    "message": "Tự động gửi khi bạn ngừng nói"
-  },
-  "submit_mode_off": {
-    "description": "Chế độ gửi thủ công.",
-    "message": "thủ công"
-  },
-  "submit_mode_off_description": {
-    "description": "Mô tả cho chế độ gửi thủ công.",
-    "message": "Chỉ gửi khi bạn nhấn nút"
-  },
-  "nicknameLabel": {
-    "message": "Biệt danh",
-    "description": "Nhãn cho trường đầu vào để đặt biệt danh tùy chỉnh cho Trợ lý AI."
-  },
-  "greeting": {
-    "description": "Thông báo chào được hiển thị khi người dùng được đăng nhập",
-    "message": "Xin chào, $name$!",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John"
-      }
-    }
-  },
-  "notSignedIn": {
-    "description": "Văn bản để hiển thị khi người dùng không đăng nhập.",
-    "message": "Không đăng nhập"
-  },
-  "profile": {
-    "description": "Dán nhãn cho phần Hồ sơ người dùng.",
-    "message": "Hồ sơ"
-  },
-  "quotaCredits": {
-    "description": "Nhãn đơn vị cho các khoản tín dụng TTS",
-    "message": "Tín dụng"
-  },
-  "quotaRemaining": {
-    "description": "Nhãn cho thanh tiến độ còn lại",
-    "message": "Hạn ngạch còn lại"
-  },
-  "quotaStatusUnknown": {
-    "description": "Thông báo hiển thị khi trạng thái hạn ngạch không thể được xác định",
-    "message": "Không thể kiểm tra trạng thái hạn ngạch"
-  },
-  "quotaUnauthenticatedMessage": {
-    "description": "Thông báo hiển thị khi người dùng không được xác thực.",
-    "message": "Đăng nhập để truy cập tạo giọng nói và các tính năng cao cấp khác"
-  },
-  "signIn": {
-    "description": "Nhắn tin cho nút đăng nhập.",
-    "message": "Đăng nhập"
-  },
-  "signOut": {
-    "description": "Nhắn tin cho nút đăng nhập.",
-    "message": "Đăng xuất"
-  },
-  "signedIn": {
-    "description": "Văn bản trạng thái hiển thị khi người dùng được xác thực (không có email).",
-    "message": "Đã đăng nhập"
-  },
-  "signedInAs": {
-    "description": "Văn bản trạng thái hiển thị khi người dùng được xác thực, bao gồm cả email của họ.",
-    "message": "Đăng nhập dưới dạng $email$",
-    "placeholders": {
-      "email": {
-        "content": "$1",
-        "example": "user@example.com"
-      }
-    }
-  },
-  "sttMinutesRemaining": {
-    "description": "Văn bản hiển thị hạn ngạch STT còn lại trong vài phút.",
-    "message": "$minutes$ phút$plural$ còn lại",
-    "placeholders": {
-      "minutes": {
-        "content": "$1",
-        "example": "5"
-      },
-      "plural": {
-        "content": "$2",
-        "example": "s"
-      }
-    }
-  },
-  "sttQuotaExhausted": {
-    "description": "Văn bản để hiển thị khi hạn ngạch STT đã cạn kiệt.",
-    "message": "Hạn ngạch nhận dạng giọng nói kiệt sức"
-  },
-  "sttQuotaProgress": {
-    "description": "Tooltip cho thanh tiến trình hạn ngạch STT.",
-    "message": "$remaining$ của $total$ giây còn lại",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "100"
-      },
-      "total": {
-        "content": "$2",
-        "example": "300"
-      }
-    }
-  },
-  "sttQuotaProgressMinutes": {
-    "description": "Tooltip cho thanh tiến trình hạn ngạch STT trong vài phút.",
-    "message": "$remaining$ của $total$ phút còn lại",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "5"
-      },
-      "total": {
-        "content": "$2",
-        "example": "60"
-      }
-    }
-  },
-  "sttQuotaRemaining": {
-    "description": "Nhãn cho Hạn ngạch STT còn lại màn hình còn lại.",
-    "message": "Nhận dạng giọng nói"
-  },
-  "sttQuotaSeconds": {
-    "description": "Đơn vị cho hạn ngạch STT (giây).",
-    "message": "giây"
-  },
-  "ttsCredits": {
-    "description": "Thuật ngữ được sử dụng cho tiền tệ tín dụng trong tính năng văn bản thành giọng nói.",
-    "message": "Tín dụng"
-  },
   "ttsQuotaCharacters": {
-    "description": "Đơn vị cho hạn ngạch TTS (ký tự).",
+    "description": "Unit for TTS quota (characters).",
     "message": "Tín dụng"
   },
   "ttsQuotaExhausted": {
-    "description": "Văn bản để hiển thị khi hạn ngạch TTS đã cạn kiệt.",
+    "description": "Text to show when TTS quota is exhausted.",
     "message": "Tiếng nói sẽ kiệt sức"
   },
   "ttsQuotaProgress": {
-    "description": "Tooltip cho thanh tiến trình hạn ngạch TTS.",
+    "description": "Tooltip for the TTS quota progress bar.",
     "message": "$remaining$ của $total$ ký tự còn lại",
     "placeholders": {
       "remaining": {
@@ -646,121 +762,247 @@
     }
   },
   "ttsQuotaRemaining": {
-    "description": "Nhãn cho Hạn ngạch TTS còn lại hiển thị.",
+    "description": "Label for the TTS quota remaining display.",
     "message": "Tạo giọng nói"
   },
-  "upgradeButton": {
-    "description": "Văn bản cho nút để nâng cấp kế hoạch khi hạn ngạch kiệt sức.",
-    "message": "Kế hoạch nâng cấp"
-  },
-  "viewDetails": {
-    "description": "Văn bản cho liên kết để xem chi tiết hạn ngạch đầy đủ trên bảng điều khiển.",
-    "message": "Xem chi tiết"
-  },
-  "clickToCollapse": {
-    "description": "Văn bản cho biết người dùng có thể nhấp để ẩn nội dung mở rộng.",
-    "message": "Bấm để sụp đổ"
-  },
-  "clickToExpand": {
-    "description": "Văn bản cho biết người dùng có thể nhấp để hiển thị nội dung bị sụp đổ.",
-    "message": "Bấm để mở rộng"
-  },
-  "instructionLabel_context": {
-    "description": "Nhãn thân thiện cho hướng dẫn người dùng cung cấp thông tin cơ bản.",
-    "message": "Cung cấp bối cảnh ..."
-  },
-  "instructionLabel_expectations": {
-    "description": "Nhãn thân thiện cho hướng dẫn người dùng xác định những gì người dùng muốn.",
-    "message": "Làm rõ những kỳ vọng ..."
-  },
-  "instructionLabel_focusing": {
-    "description": "Nhãn thân thiện cho hướng dẫn người dùng thu hẹp phạm vi của cuộc trò chuyện.",
-    "message": "Tập trung vào cuộc thảo luận ..."
-  },
-  "instructionLabel_guardrails": {
-    "description": "Nhãn thân thiện cho hướng dẫn người dùng thiết lập ranh giới cho cuộc trò chuyện.",
-    "message": "Thiết lập các bảo vệ ..."
-  },
-  "instructionLabel_guiding": {
-    "description": "Nhãn thân thiện cho hướng dẫn người dùng hướng dẫn cách AI nên phản hồi.",
-    "message": "Hướng dẫn phản hồi ..."
-  },
-  "instructionLabel_nudge": {
-    "description": "Nhãn thân thiện cho hướng dẫn sử dụng mà nhẹ nhàng gợi ý một hướng.",
-    "message": "Đưa ra một cú hích ..."
-  },
-  "instructionLabel_steering": {
-    "description": "Nhãn thân thiện cho hướng dẫn người dùng hướng dẫn hướng hội thoại.",
-    "message": "Chỉ đạo cuộc trò chuyện ..."
-  },
-  "maintenanceLabel_holding": {
-    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
-    "message": "Giữ suy nghĩ này ..."
-  },
-  "maintenanceLabel_mental_note": {
-    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
-    "message": "Ghi chú tinh thần ..."
-  },
-  "maintenanceLabel_processing": {
-    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
-    "message": "Xử lý trong nền ..."
-  },
-  "maintenanceLabel_remembering": {
-    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
-    "message": "Ghi nhớ chi tiết này ..."
-  },
-  "maintenanceLabel_saving": {
-    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
-    "message": "Tiết kiệm suy nghĩ đó cho sau này ..."
-  },
-  "maintenanceLabel_tracking": {
-    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
-    "message": "Theo dõi bối cảnh ..."
-  },
-  "maintenanceLabel_tucking": {
-    "description": "Nhãn thân thiện cho tin nhắn bảo trì trợ lý sụp đổ.",
-    "message": "Tucking cái này đi ..."
-  },
-  "disableTTS": {
-    "description": "Dán nhãn cho tùy chọn tắt văn bản thành bài báo",
-    "message": "Vô hiệu hóa văn bản để nói"
-  },
-  "signInForTTS": {
-    "description": "Nhắc hiển thị khi người dùng cần xác thực để truy cập các tính năng văn bản thành giọng nói",
-    "message": "Đăng nhập để nhận văn bản thành bài báo"
-  },
   "ttsVoice": {
-    "description": "Nhãn mô tả tùy chọn giọng nói văn bản thành giọng nói trong menu",
+    "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS Voice"
   },
-  "voiceOff": {
-    "description": "Nhãn khi khi văn bản thành bài báo bị tắt",
-    "message": "Giọng nói tắt"
+  "unlockButton": {
+    "description": "The title (tooltip) of the button to unlock the screen.",
+    "message": "Nhấn để mở khóa màn hình"
   },
-  "voiceSettings": {
-    "description": "Văn bản của mục menu để truy cập các cài đặt liên quan đến giọng nói.",
-    "message": "Cài đặt giọng nói"
+  "unlockInstruction": {
+    "description": "Instructions telling the user how to unlock the screen when locked.",
+    "message": "Giữ để mở khóa."
   },
-  "addCredits": {
-    "description": "Văn bản cho liên kết để thêm nhiều tín dụng thoại",
-    "message": "Thêm tín dụng"
+  "upgradeButton": {
+    "description": "Text for the button to upgrade the plan when quota is exhausted.",
+    "message": "Kế hoạch nâng cấp"
   },
   "upgradeForTTS": {
-    "description": "Nhắc hiển thị khi người dùng cần nâng cấp để có được tín dụng văn bản thành giọng nói",
+    "description": "Prompt shown when user needs to upgrade to obtain text-to-speech credits",
     "message": "Nâng cấp để tạo giọng nói"
   },
-  "voicePaused": {
-    "description": "Văn bản hiển thị khi giọng nói bị tạm dừng do không đủ tín dụng",
-    "message": "Giọng nói dừng lại -"
-  },
-  "assistantIsListeningAttentively": {
-    "description": "Tin nhắn được hiển thị khi trợ lý đang nghe bài phát biểu ở chế độ đại lý.",
-    "message": "$chatbot$ đang nghe chăm chú ...",
+  "userStartedInterrupting": {
+    "description": "Message displayed when the user starts speaking while the assistant is speaking.",
+    "message": "Hãy tiếp tục, $chatbot$ đang lắng nghe...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
-        "example": "Claude"
+        "example": "Pi"
       }
     }
+  },
+  "vadDetailActivatingMicrophone": {
+    "description": "VAD detail when activating the microphone.",
+    "message": "Activating microphone..."
+  },
+  "vadDetailCommLinkFailed": {
+    "description": "VAD detail when the communication port link fails.",
+    "message": "Communication link failed."
+  },
+  "vadDetailDeactivatingMicrophone": {
+    "description": "VAD detail when deactivating the microphone.",
+    "message": "Deactivating microphone..."
+  },
+  "vadDetailFailedToReconnectVADService": {
+    "description": "VAD detail when re-establishing connection fails.",
+    "message": "Failed to reconnect VAD service."
+  },
+  "vadDetailInitError": {
+    "description": "VAD detail for an initialization error, with specific error message.",
+    "message": "Lỗi khởi đầu: $error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to connect to VAD service"
+      }
+    }
+  },
+  "vadDetailInitErrorPromise": {
+    "description": "VAD detail for an initialization promise error.",
+    "message": "Init Error: Promise error"
+  },
+  "vadDetailInitErrorUnknown": {
+    "description": "VAD detail for an unknown initialization error.",
+    "message": "Init Error: Unknown"
+  },
+  "vadDetailInitializedMode": {
+    "description": "VAD detail showing initialization mode.",
+    "message": "Khởi tạo (Chế độ: $mode$)",
+    "placeholders": {
+      "mode": {
+        "content": "$1",
+        "example": "Agent"
+      }
+    }
+  },
+  "vadDetailInitializedModeNA": {
+    "description": "VAD detail showing initialization mode as N/A.",
+    "message": "Initialized (Mode: N/A)"
+  },
+  "vadDetailNonSpeechAudioDetected": {
+    "description": "VAD detail for non-speech audio detection.",
+    "message": "Non-speech audio detected"
+  },
+  "vadDetailReleasingVADResources": {
+    "description": "VAD detail when releasing VAD resources.",
+    "message": "Releasing VAD resources..."
+  },
+  "vadDetailRequestingVADSetup": {
+    "description": "VAD detail when requesting setup.",
+    "message": "Requesting VAD setup..."
+  },
+  "vadDetailSpeechDetected": {
+    "description": "VAD detail when speech has been detected.",
+    "message": "Speech detected"
+  },
+  "vadDetailSpeechEndedDuration": {
+    "description": "VAD detail indicating speech ended and its duration.",
+    "message": "Bài phát biểu kết thúc (Thời lượng: $duration$ MS)",
+    "placeholders": {
+      "duration": {
+        "content": "$1",
+        "example": "1000"
+      }
+    }
+  },
+  "vadDetailStartError": {
+    "description": "VAD detail for a start error, with specific error message.",
+    "message": "Lỗi bắt đầu: $error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to start VAD service"
+      }
+    }
+  },
+  "vadDetailStartErrorPromise": {
+    "description": "VAD detail for a start promise error.",
+    "message": "Start Error: Promise error"
+  },
+  "vadDetailStartErrorUnknown": {
+    "description": "VAD detail for an unknown start error.",
+    "message": "Start Error: Unknown"
+  },
+  "vadDetailStopError": {
+    "description": "VAD detail for a stop error, with specific error message.",
+    "message": "Lỗi dừng: $error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to stop VAD service"
+      }
+    }
+  },
+  "vadDetailStopErrorPromise": {
+    "description": "VAD detail for a stop promise error.",
+    "message": "Stop Error: Promise error"
+  },
+  "vadDetailStopErrorUnknown": {
+    "description": "VAD detail for an unknown stop error.",
+    "message": "Stop Error: Unknown"
+  },
+  "vadDetailUnknownVADError": {
+    "description": "VAD detail for an unknown error from the VAD module.",
+    "message": "Unknown VAD error"
+  },
+  "vadDetailVADProcessingStopped": {
+    "description": "VAD detail indicating VAD processing has stopped.",
+    "message": "VAD processing stopped."
+  },
+  "vadDetailVADServiceDisconnected": {
+    "description": "VAD detail when the service disconnects.",
+    "message": "VAD service disconnected. Try reloading."
+  },
+  "vadDetailVADServiceNotConnected": {
+    "description": "VAD detail when the service is not connected.",
+    "message": "VAD service not connected. Try reloading."
+  },
+  "vadDetailVADServiceShutdown": {
+    "description": "VAD detail indicating VAD service has been shut down.",
+    "message": "VAD service shut down."
+  },
+  "vadDetailWaitingForSpeech": {
+    "description": "VAD detail when waiting for user to speak.",
+    "message": "Waiting for speech"
+  },
+  "vadStatusDestroyed": {
+    "description": "VAD status when destroyed.",
+    "message": "Destroyed"
+  },
+  "vadStatusError": {
+    "description": "Generic VAD error status.",
+    "message": "Error"
+  },
+  "vadStatusFailed": {
+    "description": "Generic VAD failure status.",
+    "message": "Failed"
+  },
+  "vadStatusIndicatorEnabledLabel": {
+    "description": "Label for the toggle switch that controls the visibility of the Voice Activity Detection status indicator.",
+    "message": "Hiển thị trạng thái VAD"
+  },
+  "vadStatusInitializing": {
+    "description": "VAD status when initializing.",
+    "message": "Initializing"
+  },
+  "vadStatusListening": {
+    "description": "VAD status when actively listening.",
+    "message": "Listening"
+  },
+  "vadStatusMisfire": {
+    "description": "VAD status when a misfire (non-speech) is detected.",
+    "message": "Misfire"
+  },
+  "vadStatusProcessing": {
+    "description": "VAD status when processing audio.",
+    "message": "Processing"
+  },
+  "vadStatusReady": {
+    "description": "VAD status when ready and waiting.",
+    "message": "Ready"
+  },
+  "vadStatusShuttingDown": {
+    "description": "VAD status when shutting down.",
+    "message": "Shutting down"
+  },
+  "vadStatusStarting": {
+    "description": "VAD status when starting.",
+    "message": "Starting"
+  },
+  "vadStatusStopped": {
+    "description": "VAD status when stopped.",
+    "message": "Stopped"
+  },
+  "vadStatusStopping": {
+    "description": "VAD status when stopping.",
+    "message": "Stopping"
+  },
+  "viewDetails": {
+    "description": "Text for the link to view full quota details on the dashboard.",
+    "message": "Xem chi tiết"
+  },
+  "voiceIntroduction_joey": {
+    "description": "Introduction for the Joey voice.",
+    "message": "Hoan hô! \nXin chào! \nbạn ơi! \nTôi là Pi, trợ lý AI đa ngôn ngữ của bạn. \nVới 32 ngôn ngữ trong tầm tay của tôi, chúng ta có thể khám phá các ý tưởng và nền văn hóa từ khắp nơi trên thế giới. \nBạn nghĩ gì về giọng nói này?"
+  },
+  "voiceIntroduction_paola": {
+    "description": "Introduction for the Paola voice.",
+    "message": "Chào! \nChúc mừng! \nXin chào! \nTôi là Pi và tôi có thể giao tiếp thành thạo 32 ngôn ngữ. \nTừ tiếng Ả Rập đến tiếng Ukraina, tôi ở đây để phá bỏ rào cản ngôn ngữ. \nGiọng nói này nghe như thế nào đối với bạn?"
+  },
+  "voiceOff": {
+    "description": "Label for when text-to-speech is disabled",
+    "message": "Giọng nói tắt"
+  },
+  "voicePaused": {
+    "description": "Text shown when voice is paused due to insufficient credits",
+    "message": "Giọng nói dừng lại -"
+  },
+  "voiceSettings": {
+    "description": "The text of the menu item to access voice-related settings.",
+    "message": "Cài đặt giọng nói"
   }
 }

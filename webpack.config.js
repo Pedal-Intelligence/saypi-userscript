@@ -54,7 +54,9 @@ const config = {
     devtool: isProduction ? false : "inline-source-map",
     entry: {
       main: "./src/saypi.index.js",
-      background: "./src/svc/background.ts"
+      background: "./src/svc/background.ts",
+      offscreenVAD: "./src/offscreen/vad_offscreen.ts",
+      permissionsPrompt: "./src/permissions/permissions-prompt.ts"
     },
     output: {
       filename: (chunkData) => {
@@ -63,6 +65,10 @@ const config = {
             return "saypi.user.js";
           case "background":
             return "background.js";
+          case "offscreenVAD":
+            return "offscreen/vad_offscreen.js";
+          case "permissionsPrompt":
+            return "permissions/permissions-prompt.js";
           default:
             return "[name].bundle.js";
         }
@@ -149,6 +155,18 @@ const config = {
           {
             from: "node_modules/onnxruntime-web/dist/ort-wasm*.wasm",
             to: "[name][ext]",
+          },
+          {
+            from: "src/permissions/permissions-prompt.html",
+            to: "permissions/[name][ext]",
+          },
+          {
+            from: "src/permissions/himfloyd-mic.png",
+            to: "permissions/[name][ext]",
+          },
+          {
+            from: "src/permissions/permissions-prompt.css",
+            to: "permissions/[name][ext]",
           },
         ],
       }),

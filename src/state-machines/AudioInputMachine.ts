@@ -1,47 +1,49 @@
-import { MicVAD, RealTimeVADOptions } from "@ricky0123/vad-web";
 import { setupInterceptors } from "../RequestInterceptor";
 import { convertToWavBlob } from "../audio/AudioEncoder";
 import { createMachine, assign } from "xstate";
 import EventBus from "../events/EventBus.js";
-import { debounce } from "lodash";
-import { getResourceUrl } from "../ResourceModule";
-import { customModelFetcher } from "../vad/custom-model-fetcher";
-import { isFirefox, isSafari } from "../UserAgentModule";
 import { AudioCapabilityDetector } from "../audio/AudioCapabilities";
 import getMessage from "../i18n";
-
-const fullWorkletURL: string = isFirefox() || isSafari()
-  ? getResourceUrl("vad.worklet.bundle.js")
-  : getResourceUrl("vad.worklet.bundle.min.js");
-let listening: boolean = false;
-let stream: MediaStream;
-
-// Assuming EventBus is a property of Window and is of type any
-// You might want to provide a more specific type if available
-declare global {
-  interface Window {
-    EventBus: any;
-  }
-}
-
-let audioMimeType: string = "audio/wav";
-let speechStartTime: number = 0;
-const threshold: number = 1000; // 1000 ms = 1 second, about the length of "Hey, Pi"
+import { OffscreenVADClient } from '../vad/OffscreenVADClient';
+import { logger } from "../LoggingModule";
 
 setupInterceptors();
 
-// Variable to hold the microphone instance. Now has a specific type.
-let microphone: MicVAD | null = null;
+/**
+ * Logs processing delays based on threshold values
+ * @param captureTimestamp - When the audio was originally captured
+ * @param clientTimestamp - When the client received the data
+ * @param handlerTimestamp - When the handler processed the data
+ */
+function logProcessingDelay(captureTimestamp: number, clientTimestamp: number, handlerTimestamp: number): void {
+  const captureToHandlerDelay = handlerTimestamp - captureTimestamp;
+  const clientToHandlerDelay = handlerTimestamp - clientTimestamp;
+  
+  if (captureToHandlerDelay > 1000) {
+    logger.error(
+      `[AudioInputMachine] Critical delay: ${captureToHandlerDelay}ms from capture to handler. ` +
+      `Client-to-handler: ${clientToHandlerDelay}ms`
+    );
+  } else if (captureToHandlerDelay > 500) {
+    logger.warn(
+      `[AudioInputMachine] High delay: ${captureToHandlerDelay}ms from capture to handler. ` +
+      `Client-to-handler: ${clientToHandlerDelay}ms`
+    );
+  } else if (captureToHandlerDelay > 300) {
+    logger.info(
+      `[AudioInputMachine] Elevated delay: ${captureToHandlerDelay}ms from capture to handler. ` +
+      `Client-to-handler: ${clientToHandlerDelay}ms`
+    );
+  }
+}
 
 let previousDeviceIds: string[] = [];
 let previousDefaultDevice: MediaDeviceInfo | null = null;
 
-async function monitorAudioInputDevices() {
-  if (microphone === null) {
-    // No microphone instance, so nothing to monitor
-    return;
-  }
+// Instantiate the VAD client
+const vadClient = new OffscreenVADClient();
 
+async function monitorAudioInputDevices() {
   const devices = await navigator.mediaDevices.enumerateDevices();
   const audioInputDevices = devices.filter(
     (device) => device.kind === "audioinput"
@@ -79,26 +81,6 @@ async function monitorAudioInputDevices() {
     (id) => !currentDeviceIds.includes(id)
   );
 
-  if (microphone) {
-    const track = stream.getTracks()[0];
-    const settings = track.getSettings();
-    const deviceId = settings.deviceId;
-    const deviceLabel = audioInputDevices.find(
-      (device) => device.deviceId === deviceId
-    )?.label;
-
-    if (deviceId && addedDevices.includes(deviceId)) {
-      console.log(
-        `The audio input device used by MicVAD has been added: ${deviceId} (${deviceLabel}))`
-      );
-      EventBus.emit("saypi:audio:connected", { deviceId, deviceLabel });
-    }
-
-    if (deviceId && removedDevices.includes(deviceId)) {
-      console.log("The audio input device used by MicVAD has been removed.");
-    }
-  }
-
   addedDevices.forEach((id) => {
     const label = audioInputDevices.find(
       (device) => device.deviceId === id
@@ -117,78 +99,6 @@ async function monitorAudioInputDevices() {
 
 // Call the function every 5 seconds
 setInterval(monitorAudioInputDevices, 5000);
-
-// Define the callbacks manually if they are not exported
-interface MyRealTimeVADCallbacks {
-  onSpeechStart?: () => any;
-  onSpeechEnd?: (audio: Float32Array) => any;
-  onVADMisfire?: () => any;
-}
-
-const debouncedOnFrameProcessed = debounce(
-  (probabilities: { isSpeech: number; notSpeech: number }) => {
-    EventBus.emit("audio:frame", probabilities);
-  },
-  1000 / 60
-); // 1000ms / 60 frames per second
-
-/**
- * At min speech frames of 3, vad will start to detect speech after around 1 word
- * At min speech frames of 5, vad will start to detect speech after around 2 words
- * At min speech frames of 10, vad will start to detect speech after around 4 words
- **/
-
-// Options for MicVAD
-const micVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
-  workletURL: fullWorkletURL,
-  positiveSpeechThreshold: 0.8,
-  minSpeechFrames: 3,
-  preSpeechPadFrames: 10,
-  onSpeechStart: () => {
-    console.debug("User speech started");
-    speechStartTime = Date.now();
-    EventBus.emit("saypi:userSpeaking");
-  },
-  onSpeechEnd: (rawAudioData: Float32Array) => {
-    console.debug("User speech ended");
-    const speechStopTime = Date.now();
-    const speechDuration = speechStopTime - speechStartTime;
-    const audioBlob = convertToWavBlob(rawAudioData);
-    EventBus.emit("audio:dataavailable", {
-      blob: audioBlob,
-      duration: speechDuration,
-    });
-  },
-  onVADMisfire: () => {
-    console.debug("Cancelled. Audio was not speech.");
-    EventBus.emit("saypi:userStoppedSpeaking", { duration: 0 });
-  },
-  onFrameProcessed(probabilities: { isSpeech: number; notSpeech: number }) {
-    debouncedOnFrameProcessed(probabilities);
-  },
-};
-
-const firefoxMicVADOptions: Partial<RealTimeVADOptions> &
-  MyRealTimeVADCallbacks = {
-  ...micVADOptions,
-  workletOptions: {},
-  ortConfig: (ort: any) => {
-    ort.env.wasm.wasmPaths = chrome.runtime.getURL("public/");
-  },
-  modelFetcher: customModelFetcher,
-};
-
-// Safari-specific options
-const safariMicVADOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
-  ...micVADOptions,
-  workletOptions: {},
-  modelFetcher: customModelFetcher,
-  ortConfig: (ort: any) => {
-    // Basic configuration
-    ort.env.wasm.numThreads = 1; // Disable threading (default is 2)
-    ort.env.wasm.simd = true; // Enable SIMD
-  },
-};
 
 async function checkAudioCapabilities() {
   const detector = new AudioCapabilityDetector();
@@ -248,76 +158,89 @@ async function checkAudioCapabilities() {
   return config;
 }
 
-async function setupRecording(completion_callback?: () => void): Promise<void> {
-  if (microphone) {
-    return;
-  }
+// Helper function to communicate with the background script for permission
+async function checkAndRequestMicrophonePermissionViaBackground(): Promise<boolean> {
+  return new Promise((resolve) => {
+    const requestId = `mic-perm-check-${Date.now()}-${Math.random().toString(36).substring(7)}`;
 
-  try {
-    //const capabilities = await checkAudioCapabilities();
-    
-    stream = await navigator.mediaDevices.getUserMedia({
-      audio: {
-        channelCount: 1,
-        echoCancellation: true,
-        autoGainControl: true,
-        noiseSuppression: true,
-      },
-    });
-
-    // Configure VAD options based on capabilities
-    const baseOptions = isFirefox() ? firefoxMicVADOptions : 
-                       isSafari() ? safariMicVADOptions :
-                       micVADOptions;
-
-    // Adjust options based on capabilities
-    const partialVADOptions = {
-      ...baseOptions,
-      stream,
-      ortConfig: (ort: any) => {
-        // Call the original ortConfig if it exists
-        baseOptions.ortConfig?.(ort);
+    const listener = (message: any) => {
+      if (message.type === 'MICROPHONE_PERMISSION_RESPONSE' && message.requestId === requestId) {
+        chrome.runtime.onMessage.removeListener(listener);
+        console.log(`[AudioInputMachine] Received MICROPHONE_PERMISSION_RESPONSE: granted=${message.granted}`);
+        resolve(message.granted);
       }
     };
+    chrome.runtime.onMessage.addListener(listener);
 
-    console.debug("Permission granted for microphone access");
-    microphone = await MicVAD.new(partialVADOptions);
-    console.debug("VAD microphone loaded");
+    console.log("[AudioInputMachine] Sending CHECK_AND_REQUEST_MICROPHONE_PERMISSION to background.");
+    chrome.runtime.sendMessage({
+      type: 'CHECK_AND_REQUEST_MICROPHONE_PERMISSION',
+      requestId: requestId,
+    }, response => {
+      if (chrome.runtime.lastError) {
+        console.error("[AudioInputMachine] Error sending CHECK_AND_REQUEST_MICROPHONE_PERMISSION:", chrome.runtime.lastError.message);
+        chrome.runtime.onMessage.removeListener(listener);
+        resolve(false);
+      } else if (response && response.status === 'error_before_prompt') {
+        console.error("[AudioInputMachine] Background script reported error before prompting:", response.error);
+        chrome.runtime.onMessage.removeListener(listener);
+        resolve(false);
+      }
+    });
+  });
+}
 
-    if (typeof completion_callback === "function") {
-      completion_callback();
-    }
-  } catch (err) {
-    console.error("VAD microphone failed to load.", err);
-    
-    // Emit a user-friendly error notification
-    if (err instanceof Error) {
+async function setupRecording(completion_callback?: (success: boolean, error?: string) => void): Promise<void> {
+  try {
+    console.log("[AudioInputMachine] Requesting microphone permission check and prompt (if needed) from background...");
+    const permissionGranted = await checkAndRequestMicrophonePermissionViaBackground();
+
+    if (!permissionGranted) {
+      const errorMsg = getMessage("microphonePermissionDeniedError") || "Microphone permission was not granted. Please ensure you've allowed access in the prompt and in extension settings.";
+      console.error("[AudioInputMachine] Microphone permission not granted after prompt flow.");
       EventBus.emit("saypi:ui:show-notification", {
-        message: err.message,
+        message: errorMsg,
         type: "text",
         seconds: 20,
         icon: "microphone-muted",
       });
+      completion_callback?.(false, errorMsg);
+      return;
     }
+
+    console.log("[AudioInputMachine] Microphone permission is granted. Proceeding with VAD initialization via client...");
+    const result = await vadClient.initialize({ /* pass any specific options if needed */ });
     
-    throw err;
+    if (result.success) {
+      console.log("[AudioInputMachine] VAD initialized successfully via offscreen. Mode:", result.mode);
+      completion_callback?.(true);
+    } else {
+      console.error("[AudioInputMachine] VAD initialization failed via offscreen:", result.error);
+      const errorMessage = result.error || getMessage("microphoneErrorUnexpected");
+      EventBus.emit("saypi:ui:show-notification", {
+        message: errorMessage,
+        type: "text",
+        seconds: 20,
+        icon: "microphone-muted",
+      });
+      completion_callback?.(false, errorMessage);
+    }
+  } catch (err: any) {
+    console.error("[AudioInputMachine] Error in setupRecording:", err);
+    const finalErrorMessage = err.message || getMessage("microphoneErrorUnexpected");
+    EventBus.emit("saypi:ui:show-notification", {
+        message: finalErrorMessage,
+        type: "text",
+        seconds: 20,
+        icon: "microphone-muted",
+      });
+    completion_callback?.(false, finalErrorMessage);
   }
 }
 
 function tearDownRecording(): void {
-  console.log("Entered tearDownRecording()");
-  if (microphone) {
-    console.log(
-      "microphone exists, so pausing mic, and setting listening to false, and stopping all tracks!"
-    );
-    microphone.pause();
-    listening = false;
-    stream.getTracks().forEach((track) => track.stop());
-    microphone.destroy(); //added by JAC
-  } else {
-    console.log("microphone does not exist!");
-  }
-  microphone = null;
+  console.log("[AudioInputMachine] Tearing down recording via VAD client...");
+  vadClient.destroy();
 }
 
 interface AudioInputContext {
@@ -331,7 +254,7 @@ type AudioInputEvent =
   | { type: "release" }
   | { type: "start" }
   | { type: "stopRequested" }
-  | { type: "dataAvailable"; blob: Blob; duration: number }
+  | { type: "dataAvailable"; blob: Blob; duration: number; captureTimestamp?: number; clientReceiveTimestamp?: number; handlerTimestamp?: number }
   | { type: "stop" }
   | { type: "error.platform"; data: any };
 
@@ -482,27 +405,38 @@ export const audioInputMachine = createMachine<
   },
   {
     actions: {
-      startRecording: (context, event) => {
+      startRecording: async (context, event) => {
         context.recordingStartTime = Date.now();
-
-        // Start recording
-        if (microphone && listening === false) {
-          microphone.start();
-          listening = true;
+        console.log("[AudioInputMachine] Requesting VAD start via client...");
+        const result = await vadClient.start();
+        if (!result.success) {
+          console.error("[AudioInputMachine] Failed to start VAD via client:", result.error);
+          // Optionally send an error event to the machine or show notification
+           EventBus.emit("saypi:ui:show-notification", {
+            message: result.error || "Failed to start recording",
+            type: "text",
+            seconds: 10,
+            icon: "microphone-muted",
+          });
         }
       },
 
-      prepareStop: (context, event) => {
-        if (microphone && listening === true) {
-          context.waitingToStop = true;
+      prepareStop: async (context, event) => {
+        // If there's an explicit action needed before onSpeechEnd, send a stop request here.
+        // Otherwise, onSpeechEnd from the offscreen VAD will trigger dataAvailable.
+        console.log("[AudioInputMachine] Requesting VAD stop via client (prepareStop)...");
+        context.waitingToStop = true; // Still useful for local state if needed
+        const result = await vadClient.stop(); // This tells the offscreen VAD to stop listening
+        if (!result.success) {
+          console.error("[AudioInputMachine] Failed to stop VAD via client:", result.error);
         }
       },
 
       sendData: (
         context,
-        event: { type: "dataAvailable"; blob: Blob; duration: number }
+        event: { type: "dataAvailable"; blob: Blob; duration: number; captureTimestamp?: number; clientReceiveTimestamp?: number; handlerTimestamp?: number }
       ) => {
-        const { blob, duration } = event;
+        const { blob, duration, captureTimestamp, clientReceiveTimestamp, handlerTimestamp } = event;
         const sizeInKb = (blob.size / 1024).toFixed(2); // Convert to kilobytes and keep 2 decimal places
         console.debug(`Uploading ${sizeInKb}kb of audio data`);
 
@@ -514,16 +448,20 @@ export const audioInputMachine = createMachine<
           EventBus.emit("saypi:userStoppedSpeaking", {
             duration: speechDuration,
             blob,
+            captureTimestamp,
+            clientReceiveTimestamp,
+            handlerTimestamp
           });
         }
       },
 
       stopIfWaiting: (SayPiContext) => {
+        // This action might become less relevant as stop is handled by prepareStop/vadClient.stop()
+        // and speech end is an event from the offscreen document.
+        // However, if we maintain waitingToStop for UI or other logic, it can stay.
         if (SayPiContext.waitingToStop === true) {
-          if (microphone) {
-            microphone.pause();
-            listening = false;
-          }
+            console.log("[AudioInputMachine] stopIfWaiting: VAD stop was already requested.");
+            // No direct mic.pause() here, already handled by vadClient.stop() in prepareStop
         }
       },
 
@@ -583,19 +521,13 @@ export const audioInputMachine = createMachine<
     services: {
       acquireMicrophone: (context, event) => {
         return new Promise<void>((resolve, reject) => {
-          setupRecording(() => {
-            // called when setupRecording completes - whether successful or not
-            if (microphone) {
+          setupRecording((success, error) => {
+            if (success) {
               resolve();
             } else {
-              reject(
-                new Error(
-                  "Failed to acquire microphone resource for unknown reason."
-                )
-              );
+              reject(new Error(error || "Failed to acquire microphone resource via offscreen VAD."));
             }
           }).catch((err) => {
-            // called if setupRecording throws an error - reject the promise
             reject(err);
           });
         });
@@ -603,7 +535,8 @@ export const audioInputMachine = createMachine<
     },
     guards: {
       microphoneAcquired: (context, event) => {
-        return microphone !== null;
+        // This guard now checks if the offscreen VAD client reported successful initialization
+        return true; // Since initialization happens in setupRecording which resolves only on success
       },
       pendingStart: (context, event) => {
         return context.waitingToStart === true;
@@ -612,6 +545,79 @@ export const audioInputMachine = createMachine<
     delays: {},
   }
 );
+
+// Setup VAD event listeners from the client
+vadClient.on('onSpeechStart', () => {
+  console.debug("[AudioInputMachine] User speech started (event from VAD client).");
+  // speechStartTime is now managed in offscreen, but we can mirror if needed or rely on duration from onSpeechEnd
+  EventBus.emit("saypi:userSpeaking");
+});
+
+vadClient.on('onSpeechEnd', (data: { 
+  duration: number; 
+  audioBuffer: ArrayBuffer; 
+  captureTimestamp: number; 
+  clientReceiveTimestamp: number 
+}) => {
+  console.debug("[AudioInputMachine] User speech ended (event from VAD client). Duration:", data.duration);
+  // Reconstruct Float32Array from audio buffer
+  const audioData = new Float32Array(data.audioBuffer);
+  const frameCount = audioData.length;
+  const frameRate = 16000;
+  const duration = frameCount / frameRate;
+  const handlerTimestamp = Date.now();
+  
+  // Only log basic information about speech data at debug level
+  console.debug(
+    `[AudioInputMachine] Speech duration: ${data.duration}ms, Frame count: ${frameCount}, Frame rate: ${frameRate}, Duration: ${duration}s`
+  );
+  
+  // Log timing information based on delay thresholds
+  logProcessingDelay(data.captureTimestamp, data.clientReceiveTimestamp, handlerTimestamp);
+  
+  if (frameCount === 0) {
+    console.warn("[AudioInputMachine] No audio data available. Skipping emission of audio:dataavailable event.");
+    return;
+  }
+  // Convert to WAV Blob for transcription
+  const audioBlob = convertToWavBlob(audioData);
+  console.debug(`Reconstructed Blob size: ${audioBlob.size} bytes`);
+  // Emit both blob and duration for transcription
+  EventBus.emit("audio:dataavailable", {
+    blob: audioBlob,
+    duration: data.duration,
+    captureTimestamp: data.captureTimestamp,
+    clientReceiveTimestamp: data.clientReceiveTimestamp,
+    handlerTimestamp: handlerTimestamp
+  });
+});
+
+vadClient.on('onVADMisfire', () => {
+  console.debug("[AudioInputMachine] VAD Misfire (event from VAD client).");
+  EventBus.emit("saypi:userStoppedSpeaking", { 
+    duration: 0,
+    captureTimestamp: Date.now(), // As a misfire, we don't have real capture data, using current time
+    clientReceiveTimestamp: Date.now(),
+    handlerTimestamp: Date.now()
+  });
+});
+
+vadClient.on('onError', (error: string) => {
+  console.error("[AudioInputMachine] VAD Error (event from VAD client):", error);
+  EventBus.emit("saypi:ui:show-notification", {
+    message: error || "VAD processing error.",
+    type: "text",
+    seconds: 15,
+    icon: "microphone-muted",
+  });
+  // TODO: Potentially transition the state machine to an error state.
+});
+
+vadClient.on('onFrameProcessed', (probabilities: { isSpeech: number; notSpeech: number }) => {
+  // this event is debounced in the offscreen document, so don't expect to receive every single frame
+  EventBus.emit("audio:frame", probabilities);
+});
+
 interface OverconstrainedError extends DOMException {
   constraint: string;
   message: string;
@@ -623,3 +629,5 @@ function isOverconstrainedError(error: any): error is OverconstrainedError {
       error.name === "ConstraintNotSatisfiedError")
   );
 }
+
+export { setupRecording };

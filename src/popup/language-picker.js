@@ -97,7 +97,7 @@ Util.getIndexInArray = function (array, el) {
    */
   async function selectInitialLanguageOption(options) {
     const result = await new Promise((resolve) =>
-      chrome.storage.sync.get(["language"], resolve)
+      chrome.storage.local.get(["language"], resolve)
     );
     var language = result.language;
     const systemLanguage = navigator.language;
@@ -151,7 +151,7 @@ Util.getIndexInArray = function (array, el) {
     Util.addClass(svgs[0], "li4-icon");
     Util.addClass(svgs[1], "li4-icon");
     // language selection in dropdown
-    // ⚠️ Important: you need to modify this function in production
+    // ⚠️ Important: you need to modify this function in production
     initLanguageSelection(picker);
 
     // click events
@@ -277,7 +277,7 @@ Util.getIndexInArray = function (array, el) {
   }
 
   function saveLanguagePreference(language) {
-    chrome.storage.sync.set({ language: language }, function () {
+    chrome.storage.local.set({ language: language }, function () {
       console.log("Preference saved: Language is set to " + language);
     });
   }
@@ -353,7 +353,7 @@ Util.getIndexInArray = function (array, el) {
   }
 
   function getLanguageUrl(option) {
-    // ⚠️ Important: You should replace this return value with the real link to your website in the selected language
+    // ⚠️ Important: You should replace this return value with the real link to your website in the selected language
     // option.value gives you the value of the language that you can use to create your real url (e.g, 'english' or 'italiano')
     return "#";
   }
@@ -373,7 +373,7 @@ Util.getIndexInArray = function (array, el) {
           event.preventDefault();
           picker.trigger.setAttribute("aria-expanded", "false"); // hide dropdown
         } else {
-          // ⚠️ Important: this 'else' code needs to be removed in production.
+          // ⚠️ Important: this 'else' code needs to be removed in production.
           // The user has to be redirected to the new url -> nothing to do here
           event.preventDefault();
           picker.element
@@ -413,7 +413,7 @@ Util.getIndexInArray = function (array, el) {
         var picker = new LanguagePicker(languagePicker[i]);
         pickerArray.push(picker);
         picker.select.addEventListener("change", function () {
-          chrome.storage.sync.set({ language: this.value }, function () {
+          chrome.storage.local.set({ language: this.value }, function () {
             console.log("Preference saved: Language is set to " + this.value);
           });
         });

@@ -2,6 +2,8 @@ import { getResourceUrl } from "./ResourceModule.ts";
 
 const filesToRedirect = [
   "silero_vad.onnx",
+  "silero_vad_v5.onnx",
+  "silero_vad_legacy.onnx",
   "ort-wasm-simd.wasm",
   "ort.min.js.map",
   "vad.worklet.bundle.js",

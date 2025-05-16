@@ -1,34 +1,38 @@
 {
   "activityCheckButton": {
-    "description": "Text tlačítka pro indikaci, že uživatel je stále přítomen.",
+    "description": "The text of the button to indicate that the user is still present.",
     "message": "Ano, jsem stále tady!"
   },
   "activityCheckMessage": {
-    "description": "Zpráva k zobrazení, když konverzace probíhá neobvykle dlouho.",
+    "description": "The message to display when the conversation has been going on unusually long.",
     "message": "Wow, to je dlouhý rozhovor. Jsi stále tam, nebo si povídáme sami se sebou?"
   },
+  "addCredits": {
+    "description": "Text for link to add more voice credits",
+    "message": "Přidejte kredity"
+  },
   "allowInterruptions": {
-    "description": "Popisek pro zaškrtávací políčko pro povolení/zakázání přerušení odpovědí Pi uživatelem mluvením.",
+    "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Přerušitelný"
   },
   "appDescription": {
-    "description": "Popis aplikace.",
+    "description": "The description of the application.",
     "message": "Hlasová ovládání pro PI a Claude. Mluvte přirozeně, získejte LifeLike odpovědi. Jen to řekni."
   },
   "appName": {
-    "description": "Název aplikace.",
+    "description": "The name of the application.",
     "message": "Say, Pi"
   },
   "applicationStatusIssue": {
-    "description": "Zpráva k zobrazení, když aplikace má problémy.",
+    "description": "Message to display when the application is experiencing issues.",
     "message": "Upozornění na problém systému"
   },
   "applicationStatusUnknown": {
-    "description": "Zpráva k zobrazení, když nelze určit stav aplikace. Např. když je klient offline.",
+    "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Stav aplikace neznámý"
   },
   "assistantIsListening": {
-    "description": "Zpráva zobrazená, když asistent naslouchá řeči.",
+    "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ poslouchá...",
     "placeholders": {
       "chatbot": {
@@ -37,8 +41,18 @@
       }
     }
   },
+  "assistantIsListeningAttentively": {
+    "description": "Message displayed when the assistant is listening for speech in agent mode.",
+    "message": "$chatbot$ pozorně poslouchá ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
   "assistantIsSpeaking": {
-    "description": "Zpráva zobrazená, když asistent mluví svou odpovědí.",
+    "description": "Message displayed when the assistant is speaking its response.",
     "message": "$chatbot$ mluví...",
     "placeholders": {
       "chatbot": {
@@ -47,8 +61,18 @@
       }
     }
   },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Message displayed when the assistant is speaking its response and manual interruption is possible.",
+    "message": "$chatbot$ mluví, klepnutím přerušíte...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "assistantIsThinking": {
-    "description": "Zpráva zobrazená, když asistent připravuje svou odpověď.",
+    "description": "Message displayed when the assistant is preparing its response.",
     "message": "$chatbot$ přemýšlí...",
     "placeholders": {
       "chatbot": {
@@ -57,8 +81,18 @@
       }
     }
   },
+  "assistantIsWriting": {
+    "description": "Message displayed when the assistant is typing its response.",
+    "message": "$chatbot$ píše...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "audioConnected": {
-    "description": "Zpráva zobrazená, když je připojen mikrofon",
+    "description": "Message displayed when a microphone is connected",
     "message": "$microphone$ připojen",
     "placeholders": {
       "microphone": {
@@ -68,7 +102,7 @@
     }
   },
   "audioInputError": {
-    "description": "Zpráva zobrazená, když audio vyústilo v prázdný přepis - obvykle výsledek filtrování.",
+    "description": "Message displayed when audio transcription failed - usually the result of an ASR or LLM API error.",
     "message": "Hmm, $chatbot$ měl mírnou škytavku. \nMohl byste to zkusit znovu říct?",
     "placeholders": {
       "chatbot": {
@@ -78,7 +112,7 @@
     }
   },
   "audioReconnecting": {
-    "description": "Zpráva zobrazená při připojení nového mikrofonu",
+    "description": "Message displayed when connecting to a new microphone",
     "message": "Přepínání na $microphone$...",
     "placeholders": {
       "microphone": {
@@ -88,19 +122,23 @@
     }
   },
   "autoSubmit": {
-    "description": "Popisek pro zaškrtávací políčko pro povolení/zakázání automatického odeslání výzvy.",
+    "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Automatické odeslání"
   },
   "callError": {
-    "description": "Popisek, který se zobrazí na tlačítku volání, když dojde k nezávažné chybě.",
+    "description": "The tooltip to display on the call button when a non-fatal error occurs.",
     "message": "Narazila na nezávadnou chybu. Nepanikařte, stále vás posloucháme."
   },
   "callInProgress": {
-    "description": "Popisek, který se zobrazí na tlačítku volání, když je hovor v průběhu.",
+    "description": "The tooltip to display on the call button when a call is in progress.",
     "message": "Ukončete hovor bez použití rukou"
   },
+  "callInterruptible": {
+    "description": "The tooltip to display on the call button when a call is in progress and manual interruption is possible.",
+    "message": "Klepnutím přerušíte"
+  },
   "callNotStarted": {
-    "description": "Popisek, který se zobrazí na tlačítku volání před zahájením hovoru.",
+    "description": "The tooltip to display on the call button before a call is started.",
     "message": "Zahajte konverzaci s $chatbot$ bez použití rukou",
     "placeholders": {
       "chatbot": {
@@ -110,12 +148,20 @@
     }
   },
   "callStarting": {
-    "description": "Text k zobrazení na nástrojové tipce tlačítka volání a v oblasti výzvy, když se hovor začíná.",
+    "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Připojování..."
   },
   "checkingApplicationStatus": {
-    "description": "Zpráva k zobrazení, zatímco se určuje stav systému, např. během načítání.",
+    "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Kontrola stavu aplikace..."
+  },
+  "clickToCollapse": {
+    "description": "Text indicating user can click to hide expanded content.",
+    "message": "Kliknutím na kolaps"
+  },
+  "clickToExpand": {
+    "description": "Text indicating user can click to show collapsed content.",
+    "message": "Kliknutím rozbalte"
   },
   "consentAskParticipate": {
     "message": "Chcete se zúčastnit?"
@@ -151,27 +197,39 @@
     "message": "Přečtěte si naše Zásady ochrany osobních údajů"
   },
   "continueUnlocking": {
-    "description": "Pokyny uživateli, jak pokračovat, jakmile začnou stiskat tlačítko odemknout.",
+    "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Pokračujte v držení pro odemknutí..."
   },
+  "copiedButtonTitle": {
+    "description": "The title of the button to indicate that the text of a message has been copied to the clipboard.",
+    "message": "Zkopírováno!"
+  },
+  "copyButtonTitle": {
+    "description": "The title of the button to copy the text of a message to the clipboard.",
+    "message": "Kopírovat"
+  },
   "currencyUSDAbbreviation": {
-    "description": "Zkratka pro americký dolar.",
+    "description": "The abbreviation for the US dollar.",
     "message": "USD"
   },
   "currentCharges": {
-    "description": "Pojem používaný k popisu aktuálních poplatků (průběžný součet), které uživatel nahromadil.",
+    "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Aktuální poplatky"
   },
+  "disableTTS": {
+    "description": "Label for the option to turn off text-to-speech",
+    "message": "Zakázat text na řeč"
+  },
   "dismissAlert": {
-    "description": "Popisek pro tlačítko k zrušení upozornění na problém systému.",
+    "description": "Label for the button to dismiss a system issue alert.",
     "message": "Propustit"
   },
   "enableTTS": {
-    "description": "Popisek pro zaškrtávací políčko pro povolení/zakázání textu na řeč.",
+    "description": "Label for the checkbox to enable/disable text-to-speech.",
     "message": "Vícejazyčné hlasy"
   },
   "enhancedVoice": {
-    "description": "Název (popisek) pro Řekněte, Pi vylepšené hlasy.",
+    "description": "Title (tooltip) for Say, Pi enhanced voices.",
     "message": "Hlas vylepšený o $product$",
     "placeholders": {
       "product": {
@@ -181,51 +239,240 @@
     }
   },
   "enterImmersiveModeLong": {
-    "description": "Aria-label a název tlačítka pro vstup do ponořovacího režimu na mobilních zařízeních.",
+    "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
     "message": "Vstoupit do ponořovacího režimu"
   },
   "enterImmersiveModeShort": {
-    "description": "Text tlačítka pro vstup do ponořovacího režimu na stolním počítači.",
+    "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Ponoření"
   },
   "exitImmersiveModeLong": {
-    "description": "Aria-label a název tlačítka pro ukončení ponořeného režimu na mobilních zařízeních, zpět do textového režimu pro stolní počítače.",
+    "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Opustit režim ponoření"
   },
   "extensionPopupTitle": {
-    "description": "Název vyskakovacího dialogu rozšíření.",
+    "description": "The title of the extension's popup dialog.",
     "message": "Řekněte, nastavení Pi"
   },
+  "extensionSettings": {
+    "description": "The text of the button to open the extension's settings.",
+    "message": "Nastavení"
+  },
+  "greeting": {
+    "description": "Greeting message shown when user is signed in",
+    "message": "Ahoj, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "instructionLabel_context": {
+    "description": "Friendly label for user instruction that provides background information.",
+    "message": "Poskytování kontextu ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Friendly label for user instruction that defines what the user wants.",
+    "message": "Objasnění očekávání ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Friendly label for user instruction that narrows the scope of conversation.",
+    "message": "Zaměření na diskusi ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Friendly label for user instruction that establishes boundaries for the conversation.",
+    "message": "Nastavení zábradlí ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Friendly label for user instruction that guides how the AI should respond.",
+    "message": "Vedení odpovědí ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Friendly label for user instruction that gently suggests a direction.",
+    "message": "Dávat šťouchnutí ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Friendly label for user instruction that guides the conversation direction.",
+    "message": "Řízení konverzace ..."
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Přerušení aktuálně nejsou ve Firefoxu podporována."
+  },
   "lockButton": {
-    "description": "Název (popisek) tlačítka pro uzamčení obrazovky proti náhodným dotykům.",
+    "description": "The title (tooltip) of the button to lock the screen against accidental touches.",
     "message": "Stiskněte pro uzamčení obrazovky"
   },
   "lockedScreen": {
-    "description": "Zpráva, která se zobrazí na významném místě, když je obrazovka zamčená.",
+    "description": "A message to display prominently when the screen is locked.",
     "message": "Obrazovka je zamčená."
   },
+  "maintenanceLabel_holding": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Držet tuto myšlenku ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Dělat mentální poznámku ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Zpracování na pozadí ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Vzpomínka na tento detail ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Ukládání této myšlenky na později ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Sledování kontextu ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Zastrčit to pryč ..."
+  },
+  "microphoneErrorConstraints": {
+    "description": "Error message when microphone constraints cannot be satisfied.",
+    "message": "Vaše nastavení mikrofonu nesplňuje požadované specifikace. \nZkuste použít jiný mikrofon nebo upravit nastavení zvuku."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generic error message with details when microphone access fails.",
+    "message": "Nepodařilo se získat přístup k mikrofonu: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Error message when microphone is already in use by another application.",
+    "message": "Nelze získat přístup k mikrofonu, protože jej používá jiná aplikace. \nUkončete prosím ostatní aplikace, které mohou používat váš mikrofon."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Error message when no microphone device is found.",
+    "message": "Nebyl zjištěn žádný mikrofon. \nPřipojte prosím mikrofon a zkuste to znovu."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Error message when microphone permission is denied by the user or system.",
+    "message": "Je vyžadován přístup k mikrofonu. \nChcete-li pokračovat, povolte v nastavení prohlížeče přístup k mikrofonu."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Error message for unexpected microphone errors with details.",
+    "message": "U vašeho mikrofonu došlo k neočekávané chybě: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generic error message when microphone access fails for unknown reasons.",
+    "message": "Nelze získat přístup k mikrofonu. \nZkontrolujte nastavení zařízení a zkuste to znovu."
+  },
   "mode_accuracy": {
-    "description": "Režim s nejvyšší přesností.",
+    "description": "Highest accuracy mode.",
     "message": "přesnost"
   },
+  "mode_accuracy_description": {
+    "description": "Description for the accuracy transcription mode.",
+    "message": "Nejvyšší přesnost, ale nižší rychlost přepisu. \nSklon k halucinacím."
+  },
   "mode_balanced": {
-    "description": "Výchozí režim přepisu.",
+    "description": "Default transcription mode.",
     "message": "vyvážený"
   },
+  "mode_balanced_description": {
+    "description": "Description for the balanced transcription mode.",
+    "message": "Dobrá rovnováha mezi rychlostí a přesností pro většinu použití."
+  },
   "mode_speed": {
-    "description": "Nejrychlejší režim přepisu.",
+    "description": "Fastest transcription mode.",
     "message": "rychlost"
   },
+  "mode_speed_description": {
+    "description": "Description for the speed transcription mode.",
+    "message": "Nejrychlejší odezva, ale méně přesná. \nNáchylné k vyrušování."
+  },
+  "nicknameLabel": {
+    "description": "Label for the input field to set a custom nickname for the AI assistant.",
+    "message": "Přezdívka"
+  },
+  "notSignedIn": {
+    "description": "Text to show when the user is not signed in.",
+    "message": "Není přihlášeno"
+  },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "Výzva oprávnění Page Dom se nepodařilo správně načíst."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Neznámá chyba během žádosti o povolení"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "V horní části tohoto okna uvidíte výzvu prohlížeče. \nStačí stisknout <strong> „Povolit při návštěvě webu“ </strong>, abychom mohli začít mluvit."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Po odpovědi se tato karta uzavře automaticky."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣 Pojďme si povídat!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "Chcete -li přinést hlas k vašim konverzacím, potřebuje $productName$ oprávnění k použití mikrofonu. \nVaše záležitosti soukromí - posloucháme pouze tehdy, když aktivně chatujete.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Čekání na vaši jízdu ..."
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Oprávnění mikrofonu"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Hmm, nemohl jsem získat přístup k mikrofonu: $errorName$. \nZavřete tuto kartu za okamžik ...",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "Díky! \nUděleno povolení. \nZabalení věcí ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Neznámá chyba"
+  },
   "preferedLanguage": {
-    "description": "Popisek pro ovládací prvek pro výběr preferovaného jazyka transkripce.",
+    "description": "Label for a control to select the prefered transcription language.",
     "message": "Jazyk"
   },
   "preferedModeControl": {
-    "description": "Název (popisek) ovládacího prvku pro výběr preferovaného režimu transkripce.",
+    "description": "The title (tooltip) of the control to select the prefered transcription mode.",
     "message": "Vyberte si preferovaný režim transkripce"
   },
   "previewProgress": {
-    "description": "Zpráva k zobrazení, když uživatel prohlíží funkci s omezením počtu znaků.",
+    "description": "The message to display when the user is previewing a feature that has a character limit.",
     "message": "Použito $count$ znaků z $limit$",
     "placeholders": {
       "count": {
@@ -245,7 +492,7 @@
     "message": "Beta Dokončeno"
   },
   "previewStatusPaused": {
-    "description": "Zpráva k zobrazení, když uživatel prohlíží funkci, která byla pozastavena.",
+    "description": "The message to display when the user is previewing a feature that has been paused.",
     "message": "Beta pozastavena do $resetDate$",
     "placeholders": {
       "resetDate": {
@@ -257,32 +504,187 @@
   "previewStatusUnknown": {
     "message": "Nelze se připojit..."
   },
+  "profile": {
+    "description": "Label for the user profile section.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Unit label for TTS credits",
+    "message": "Kredity"
+  },
+  "quotaRemaining": {
+    "description": "Label for the quota remaining progress bar",
+    "message": "Zbývající kvóta"
+  },
+  "quotaStatusUnknown": {
+    "description": "Message shown when quota status cannot be determined",
+    "message": "Nelze zkontrolovat stav kvóty"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Message shown when user is not authenticated.",
+    "message": "Přihlaste se pro přístup k generování hlasu a další prvotřídní funkce"
+  },
   "readAloudButtonTitle": {
-    "description": "Název tlačítka pro přečtení textu zprávy nahlas.",
+    "description": "The title of the button to read aloud the text of a message.",
     "message": "Číst nahlas"
   },
   "recommendedActions": {
-    "description": "Zpráva předcházející seznamu doporučených akcí, které uživatel může podniknout k nápravě známého problému.",
+    "description": "Message preceding a list of recommended actions the user may take to remediate a known issue.",
     "message": "Mezitím doporučujeme:"
   },
+  "regenerateButtonTitle": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an estimated cost.",
+    "message": "Generujte zvuk za $cost$ $currency$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
+    "message": "Generovat zvuk"
+  },
   "shareAnalytics": {
-    "description": "Popisek pro zaškrtávací políčko pro povolení/zakázání sdílení analytiky.",
+    "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Sdílet analytiku"
   },
+  "signIn": {
+    "description": "Text for the sign in button.",
+    "message": "Přihlaste se"
+  },
+  "signInForTTS": {
+    "description": "Prompt shown when user needs to authenticate to access text-to-speech features",
+    "message": "Přihlaste se k řeči textu"
+  },
+  "signOut": {
+    "description": "Text for the sign out button.",
+    "message": "Odhlásit se"
+  },
+  "signedIn": {
+    "description": "Status text shown when user is authenticated (without email).",
+    "message": "Přihlášeno"
+  },
+  "signedInAs": {
+    "description": "Status text shown when user is authenticated, including their email.",
+    "message": "Přihlášeno jako $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
   "soundEffects": {
-    "description": "Popisek pro zaškrtávací políčko pro povolení/zakázání zvukových efektů.",
+    "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Zvukové efekty"
   },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Zvukové efekty jsou ve Firefoxu zakázány, aby se předešlo problémům se zvukovou zpětnou vazbou."
+  },
+  "sttMinutesRemaining": {
+    "description": "Text showing remaining STT quota in minutes.",
+    "message": "$minutes$ minuty $plural$ zbývající",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text to show when STT quota is exhausted.",
+    "message": "Vyčerpaná kvóta na rozpoznávání řeči"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip for the STT quota progress bar.",
+    "message": "$remaining$ zbývá $total$ sekundy",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip for the STT quota progress bar in minutes.",
+    "message": "$remaining$ zbývá $total$ minut",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Label for the STT quota remaining display.",
+    "message": "Rozpoznávání řeči"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unit for STT quota (seconds).",
+    "message": "Secs"
+  },
+  "submitModeControl": {
+    "description": "The title (tooltip) of the control to select when messages should be submitted.",
+    "message": "Vyberte, kdy chcete zprávy odeslat"
+  },
+  "submit_mode_agent": {
+    "description": "AI-driven submission mode.",
+    "message": "činidlo"
+  },
+  "submit_mode_agent_description": {
+    "description": "Description for the AI-driven submission mode.",
+    "message": "$chatbot$ rozhoduje, kdy odpovědět, na základě kontextu",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatic submission mode.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Description for the automatic submission mode.",
+    "message": "Automaticky odeslat, když přestanete mluvit"
+  },
+  "submit_mode_off": {
+    "description": "Manual submission mode.",
+    "message": "manuál"
+  },
+  "submit_mode_off_description": {
+    "description": "Description for the manual submission mode.",
+    "message": "Odešlete pouze po stisknutí tlačítka"
+  },
   "toggleThemeToDarkMode": {
-    "description": "Popisek pro tlačítko pro přepnutí do tmavého režimu.",
+    "description": "Label for the button to toggle to dark mode.",
     "message": "Přepnout na tmavý režim"
   },
   "toggleThemeToLightMode": {
-    "description": "Popisek pro tlačítko pro přepnutí na světlý režim.",
+    "description": "Label for the button to toggle to light mode.",
     "message": "Přepnout na světlý režim"
   },
   "ttsCostExplanation": {
-    "description": "Popisek k zobrazení, když se pro přečtení zprávy nahlas používá nástroj na převod textu na řeč, s cenou zprávy.",
+    "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
     "message": "$product$ si za poslech této zprávy bude účtovat $cost$ $currency$",
     "placeholders": {
       "cost": {
@@ -300,7 +702,7 @@
     }
   },
   "ttsCostExplanationFree": {
-    "description": "Popisek k zobrazení, když se používá motor pro převod textu na řeč k nahlas přečtení zprávy a zpráva je zdarma. Může obsahovat jméno poskytovatele.",
+    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free. Assumes the provider is Inflection AI.",
     "message": "Tento zvuk je generován zdarma Inflection AI",
     "placeholders": {
       "provider": {
@@ -309,8 +711,26 @@
       }
     }
   },
+  "ttsCostExplanationSayPi": {
+    "description": "The tooltip to display when the user hovers over the cost explanation link.",
+    "message": "Přečtěte si, jak $product$ účtuje za zvuk",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "ttsCredits": {
+    "description": "The term used for the credits currency in the text-to-speech feature.",
+    "message": "Kredity"
+  },
+  "ttsDisabledSafari": {
+    "description": "Message shown when TTS is disabled in Safari",
+    "message": "V Safari momentálně nejsou podporovány vícejazyčné hlasy."
+  },
   "ttsPoweredBy": {
-    "description": "Zpráva k zobrazení, když je text-to-speech engine použit k nahlas přečtení zprávy.",
+    "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Text-to-speech poháněný $ttsEngine$",
     "placeholders": {
       "ttsEngine": {
@@ -319,320 +739,16 @@
       }
     }
   },
-  "unlockButton": {
-    "description": "Název (popisek) tlačítka pro odemknutí obrazovky.",
-    "message": "Stiskněte pro odemčení obrazovky"
-  },
-  "unlockInstruction": {
-    "description": "Pokyny uživateli, jak odemknout obrazovku, když je zamčená.",
-    "message": "Držte pro odemčení."
-  },
-  "userStartedInterrupting": {
-    "description": "Zpráva zobrazená, když uživatel začne mluvit, zatímco asistent mluví.",
-    "message": "Pokračujte, $chatbot$ poslouchá...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "copiedButtonTitle": {
-    "message": "Zkopírováno!",
-    "description": "Název tlačítka pro označení, že text zprávy byl zkopírován do schránky."
-  },
-  "copyButtonTitle": {
-    "message": "Kopírovat",
-    "description": "Název tlačítka pro kopírování textu zprávy do schránky."
-  },
-  "voiceIntroduction_joey": {
-    "message": "Ahoj! \nПривет! \n你好! \nJsem Pi, váš polyglot AI asistent. \nS 32 jazyky pod mým vedením můžeme prozkoumávat myšlenky a kultury z celého světa. \nCo si myslíš o tomto hlase?",
-    "description": "Úvod pro hlas Joey."
-  },
-  "voiceIntroduction_paola": {
-    "message": "Čau! \nDobrý den! \nAhoj! \nJmenuji se Pi a umím plynně konverzovat ve 32 jazycích. \nOd arabštiny po ukrajinštinu, jsem tu, abych prolomil jazykové bariéry. \nJak vám zní tento hlas?",
-    "description": "Úvod pro hlas Paola."
-  },
-  "regenerateButtonTitle": {
-    "message": "Generujte zvuk za $cost$ $currency$",
-    "description": "Název tlačítka pro regeneraci zvuku zprávy. Může přinést odhadované náklady.",
-    "placeholders": {
-      "cost": {
-        "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
-      }
-    }
-  },
-  "regenerateButtonTitleFree": {
-    "message": "Generovat zvuk",
-    "description": "Název tlačítka pro regeneraci zvuku zprávy. Může přinést neurčitý náklad."
-  },
-  "assistantIsWriting": {
-    "description": "Zpráva zobrazená, když asistent píše svou odpověď.",
-    "message": "$chatbot$ píše...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "ttsCostExplanationSayPi": {
-    "description": "Popisek, který se zobrazí, když uživatel najede na odkaz s vysvětlením ceny.",
-    "placeholders": {
-      "product": {
-        "content": "$1",
-        "example": "Say, Pi"
-      }
-    },
-    "message": "Přečtěte si, jak $product$ účtuje za zvuk"
-  },
-  "interruptionsFirefoxDisabled": {
-    "message": "Přerušení aktuálně nejsou ve Firefoxu podporována."
-  },
-  "mode_accuracy_description": {
-    "description": "Popis režimu přesnosti přepisu.",
-    "message": "Nejvyšší přesnost, ale nižší rychlost přepisu. \nSklon k halucinacím."
-  },
-  "mode_balanced_description": {
-    "description": "Popis vyváženého transkripčního režimu.",
-    "message": "Dobrá rovnováha mezi rychlostí a přesností pro většinu použití."
-  },
-  "mode_speed_description": {
-    "description": "Popis režimu přepisu rychlosti.",
-    "message": "Nejrychlejší odezva, ale méně přesná. \nNáchylné k vyrušování."
-  },
-  "soundEffectsFirefoxDisabled": {
-    "message": "Zvukové efekty jsou ve Firefoxu zakázány, aby se předešlo problémům se zvukovou zpětnou vazbou."
-  },
-  "assistantIsSpeakingWithManualInterrupt": {
-    "description": "Zpráva zobrazená, když asistent mluví svou odpověď a je možné ruční přerušení.",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "message": "$chatbot$ mluví, klepnutím přerušíte..."
-  },
-  "callInterruptible": {
-    "description": "Popisek, který se zobrazí na tlačítku volání, když probíhá hovor a je možné ruční přerušení.",
-    "message": "Klepnutím přerušíte"
-  },
-  "microphoneErrorConstraints": {
-    "description": "Chybová zpráva, když nelze splnit omezení mikrofonu.",
-    "message": "Vaše nastavení mikrofonu nesplňuje požadované specifikace. \nZkuste použít jiný mikrofon nebo upravit nastavení zvuku."
-  },
-  "microphoneErrorGeneric": {
-    "description": "Obecná chybová zpráva s podrobnostmi, když selže přístup k mikrofonu.",
-    "message": "Nepodařilo se získat přístup k mikrofonu: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Permission denied"
-      }
-    }
-  },
-  "microphoneErrorInUse": {
-    "description": "Chybová zpráva, když mikrofon již používá jiná aplikace.",
-    "message": "Nelze získat přístup k mikrofonu, protože jej používá jiná aplikace. \nUkončete prosím ostatní aplikace, které mohou používat váš mikrofon."
-  },
-  "microphoneErrorNotFound": {
-    "description": "Chybová zpráva, když nebylo nalezeno žádné zařízení s mikrofonem.",
-    "message": "Nebyl zjištěn žádný mikrofon. \nPřipojte prosím mikrofon a zkuste to znovu."
-  },
-  "microphoneErrorPermissionDenied": {
-    "description": "Chybová zpráva, když uživatel nebo systém zamítne oprávnění k mikrofonu.",
-    "message": "Je vyžadován přístup k mikrofonu. \nChcete-li pokračovat, povolte v nastavení prohlížeče přístup k mikrofonu."
-  },
-  "microphoneErrorUnexpected": {
-    "description": "Chybová zpráva pro neočekávané chyby mikrofonu s podrobnostmi.",
-    "message": "U vašeho mikrofonu došlo k neočekávané chybě: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Device busy"
-      }
-    }
-  },
-  "microphoneErrorUnknown": {
-    "description": "Obecná chybová zpráva, když z neznámých důvodů selže přístup k mikrofonu.",
-    "message": "Nelze získat přístup k mikrofonu. \nZkontrolujte nastavení zařízení a zkuste to znovu."
-  },
-  "ttsDisabledSafari": {
-    "message": "V Safari momentálně nejsou podporovány vícejazyčné hlasy.",
-    "description": "Zpráva zobrazená, když je TTS zakázáno v Safari"
-  },
-  "extensionSettings": {
-    "message": "Nastavení",
-    "description": "Text tlačítka pro otevření nastavení rozšíření."
-  },
-  "submitModeControl": {
-    "description": "Název (popisek) ovládacího prvku pro výběr, kdy mají být zprávy odesílány.",
-    "message": "Vyberte, kdy chcete zprávy odeslat"
-  },
-  "submit_mode_agent": {
-    "description": "Režim odesílání řízený umělou inteligencí.",
-    "message": "činidlo"
-  },
-  "submit_mode_agent_description": {
-    "description": "Popis režimu odesílání řízeného umělou inteligencí.",
-    "message": "$chatbot$ rozhoduje, kdy odpovědět, na základě kontextu",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "submit_mode_auto": {
-    "description": "Režim automatického odesílání.",
-    "message": "auto"
-  },
-  "submit_mode_auto_description": {
-    "description": "Popis režimu automatického odesílání.",
-    "message": "Automaticky odeslat, když přestanete mluvit"
-  },
-  "submit_mode_off": {
-    "description": "Režim ručního odesílání.",
-    "message": "manuál"
-  },
-  "submit_mode_off_description": {
-    "description": "Popis režimu ručního odesílání.",
-    "message": "Odešlete pouze po stisknutí tlačítka"
-  },
-  "nicknameLabel": {
-    "message": "Přezdívka",
-    "description": "Štítek pro vstupní pole pro nastavení vlastní přezdívky pro asistenta AI."
-  },
-  "greeting": {
-    "description": "Zobrazení pozdravování, když je uživatel přihlášen",
-    "message": "Ahoj, $name$!",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John"
-      }
-    }
-  },
-  "notSignedIn": {
-    "description": "Text, který se zobrazí, kdy není uživatel přihlášen.",
-    "message": "Není přihlášeno"
-  },
-  "profile": {
-    "description": "Štítek pro sekci profilu uživatelského profilu.",
-    "message": "Profil"
-  },
-  "quotaCredits": {
-    "description": "Jednotka štítku pro kredity TTS",
-    "message": "Kredity"
-  },
-  "quotaRemaining": {
-    "description": "Štítek pro kvóto zbývající pruh pro pokrok",
-    "message": "Zbývající kvóta"
-  },
-  "quotaStatusUnknown": {
-    "description": "Zpráva zobrazená, když nelze stanovit stav kvóty",
-    "message": "Nelze zkontrolovat stav kvóty"
-  },
-  "quotaUnauthenticatedMessage": {
-    "description": "Zpráva zobrazená, když uživatel není ověřen.",
-    "message": "Přihlaste se pro přístup k generování hlasu a další prvotřídní funkce"
-  },
-  "signIn": {
-    "description": "Text pro tlačítko přihlášení.",
-    "message": "Přihlaste se"
-  },
-  "signOut": {
-    "description": "Text pro tlačítko Odhlásit.",
-    "message": "Odhlásit se"
-  },
-  "signedIn": {
-    "description": "Stav text zobrazen, když je uživatel ověřen (bez e -mailu).",
-    "message": "Přihlášeno"
-  },
-  "signedInAs": {
-    "description": "Stavový text zobrazený, když je uživatel ověřen, včetně jejich e -mailu.",
-    "message": "Přihlášeno jako $email$",
-    "placeholders": {
-      "email": {
-        "content": "$1",
-        "example": "user@example.com"
-      }
-    }
-  },
-  "sttMinutesRemaining": {
-    "description": "Text zobrazující zbývající kvótu STT během několika minut.",
-    "message": "$minutes$ minuty $plural$ zbývající",
-    "placeholders": {
-      "minutes": {
-        "content": "$1",
-        "example": "5"
-      },
-      "plural": {
-        "content": "$2",
-        "example": "s"
-      }
-    }
-  },
-  "sttQuotaExhausted": {
-    "description": "Text, který se zobrazí, kdy je kvóta STT vyčerpána.",
-    "message": "Vyčerpaná kvóta na rozpoznávání řeči"
-  },
-  "sttQuotaProgress": {
-    "description": "TOOTTIP pro progresní lištu STT kvóty.",
-    "message": "$remaining$ zbývá $total$ sekundy",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "100"
-      },
-      "total": {
-        "content": "$2",
-        "example": "300"
-      }
-    }
-  },
-  "sttQuotaProgressMinutes": {
-    "description": "TOOTTIP pro pokrok kvóty STT v minutách v minutách.",
-    "message": "$remaining$ zbývá $total$ minut",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "5"
-      },
-      "total": {
-        "content": "$2",
-        "example": "60"
-      }
-    }
-  },
-  "sttQuotaRemaining": {
-    "description": "Štítek pro zbývající displej STT kvóty.",
-    "message": "Rozpoznávání řeči"
-  },
-  "sttQuotaSeconds": {
-    "description": "Jednotka pro kvótu STT (sekundy).",
-    "message": "Secs"
-  },
-  "ttsCredits": {
-    "description": "Termín používaný pro měnu kreditů ve funkci textu na řeč.",
-    "message": "Kredity"
-  },
   "ttsQuotaCharacters": {
-    "description": "Jednotka pro kvótu TTS (znaky).",
+    "description": "Unit for TTS quota (characters).",
     "message": "Kredity"
   },
   "ttsQuotaExhausted": {
-    "description": "Text, který se zobrazí, kdy je kvóta TTS vyčerpána.",
+    "description": "Text to show when TTS quota is exhausted.",
     "message": "Hlasová kvóta vyčerpaná"
   },
   "ttsQuotaProgress": {
-    "description": "TOOTTIP pro TTS kvóta Progress Pane.",
+    "description": "Tooltip for the TTS quota progress bar.",
     "message": "$remaining$ zbývá $total$ znaky",
     "placeholders": {
       "remaining": {
@@ -646,121 +762,247 @@
     }
   },
   "ttsQuotaRemaining": {
-    "description": "Štítek pro zbývající kvótu TTS.",
+    "description": "Label for the TTS quota remaining display.",
     "message": "Generování hlasu"
   },
-  "upgradeButton": {
-    "description": "Text pro tlačítko pro upgrade plánu při vyčerpání kvóty.",
-    "message": "Plán upgradu"
-  },
-  "viewDetails": {
-    "description": "Text pro odkaz pro zobrazení úplných podrobností o kvótě na palubní desce.",
-    "message": "Zobrazit podrobnosti"
-  },
-  "clickToCollapse": {
-    "description": "Text označující uživatel může kliknout a skrýt rozšířený obsah.",
-    "message": "Kliknutím na kolaps"
-  },
-  "clickToExpand": {
-    "description": "Text označující uživatel může kliknout a zobrazit zhroucený obsah.",
-    "message": "Kliknutím rozbalte"
-  },
-  "instructionLabel_context": {
-    "description": "Přátelský štítek pro instrukci uživatele, který poskytuje základní informace.",
-    "message": "Poskytování kontextu ..."
-  },
-  "instructionLabel_expectations": {
-    "description": "Přátelský štítek pro instrukci uživatele, který definuje, co uživatel chce.",
-    "message": "Objasnění očekávání ..."
-  },
-  "instructionLabel_focusing": {
-    "description": "Přátelský štítek pro instrukci uživatele, který zužuje rozsah konverzace.",
-    "message": "Zaměření na diskusi ..."
-  },
-  "instructionLabel_guardrails": {
-    "description": "Přátelský štítek pro instrukci uživatele, který stanoví hranice pro konverzaci.",
-    "message": "Nastavení zábradlí ..."
-  },
-  "instructionLabel_guiding": {
-    "description": "Přátelský štítek pro instrukci uživatele, který vede, jak by měla AI reagovat.",
-    "message": "Vedení odpovědí ..."
-  },
-  "instructionLabel_nudge": {
-    "description": "Přátelský štítek pro instrukci uživatele, který jemně navrhuje směr.",
-    "message": "Dávat šťouchnutí ..."
-  },
-  "instructionLabel_steering": {
-    "description": "Přátelský štítek pro instrukci uživatele, který vede směr konverzace.",
-    "message": "Řízení konverzace ..."
-  },
-  "maintenanceLabel_holding": {
-    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
-    "message": "Držet tuto myšlenku ..."
-  },
-  "maintenanceLabel_mental_note": {
-    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
-    "message": "Dělat mentální poznámku ..."
-  },
-  "maintenanceLabel_processing": {
-    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
-    "message": "Zpracování na pozadí ..."
-  },
-  "maintenanceLabel_remembering": {
-    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
-    "message": "Vzpomínka na tento detail ..."
-  },
-  "maintenanceLabel_saving": {
-    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
-    "message": "Ukládání této myšlenky na později ..."
-  },
-  "maintenanceLabel_tracking": {
-    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
-    "message": "Sledování kontextu ..."
-  },
-  "maintenanceLabel_tucking": {
-    "description": "Přátelský štítek pro zprávu o údržbě asistenta.",
-    "message": "Zastrčit to pryč ..."
-  },
-  "disableTTS": {
-    "description": "Štítek pro možnost vypnout text-to-řeč",
-    "message": "Zakázat text na řeč"
-  },
-  "signInForTTS": {
-    "description": "Vyzvaní, když se uživatel musí ověřit pro přístup k funkcím textu na řeč",
-    "message": "Přihlaste se k řeči textu"
-  },
   "ttsVoice": {
-    "description": "Štítek popisující možnost hlasu textu na řeč v nabídce",
+    "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS hlas"
   },
-  "voiceOff": {
-    "description": "Štítek, kdy je deaktivován text na řeč",
-    "message": "Voice off"
+  "unlockButton": {
+    "description": "The title (tooltip) of the button to unlock the screen.",
+    "message": "Stiskněte pro odemčení obrazovky"
   },
-  "voiceSettings": {
-    "description": "Text položky nabídky pro přístup k nastavení hlasového hlasového řízení.",
-    "message": "Nastavení hlasu"
+  "unlockInstruction": {
+    "description": "Instructions telling the user how to unlock the screen when locked.",
+    "message": "Držte pro odemčení."
   },
-  "addCredits": {
-    "description": "Text pro odkaz přidat další hlasové kredity",
-    "message": "Přidejte kredity"
+  "upgradeButton": {
+    "description": "Text for the button to upgrade the plan when quota is exhausted.",
+    "message": "Plán upgradu"
   },
   "upgradeForTTS": {
-    "description": "Protální výzvu, kdy uživatel potřebuje upgradovat, aby získal kredity na řeč textu na řeč",
+    "description": "Prompt shown when user needs to upgrade to obtain text-to-speech credits",
     "message": "Upgrade na generování hlasu"
   },
-  "voicePaused": {
-    "description": "Text zobrazen, když je hlas pozastaven kvůli nedostatečným kreditům",
-    "message": "Hlas se zastavil -"
-  },
-  "assistantIsListeningAttentively": {
-    "description": "Zpráva zobrazená, když asistent poslouchá řeč v režimu agenta.",
-    "message": "$chatbot$ pozorně poslouchá ...",
+  "userStartedInterrupting": {
+    "description": "Message displayed when the user starts speaking while the assistant is speaking.",
+    "message": "Pokračujte, $chatbot$ poslouchá...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
-        "example": "Claude"
+        "example": "Pi"
       }
     }
+  },
+  "vadDetailActivatingMicrophone": {
+    "description": "VAD detail when activating the microphone.",
+    "message": "Activating microphone..."
+  },
+  "vadDetailCommLinkFailed": {
+    "description": "VAD detail when the communication port link fails.",
+    "message": "Communication link failed."
+  },
+  "vadDetailDeactivatingMicrophone": {
+    "description": "VAD detail when deactivating the microphone.",
+    "message": "Deactivating microphone..."
+  },
+  "vadDetailFailedToReconnectVADService": {
+    "description": "VAD detail when re-establishing connection fails.",
+    "message": "Failed to reconnect VAD service."
+  },
+  "vadDetailInitError": {
+    "description": "VAD detail for an initialization error, with specific error message.",
+    "message": "Chyba init: $error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to connect to VAD service"
+      }
+    }
+  },
+  "vadDetailInitErrorPromise": {
+    "description": "VAD detail for an initialization promise error.",
+    "message": "Init Error: Promise error"
+  },
+  "vadDetailInitErrorUnknown": {
+    "description": "VAD detail for an unknown initialization error.",
+    "message": "Init Error: Unknown"
+  },
+  "vadDetailInitializedMode": {
+    "description": "VAD detail showing initialization mode.",
+    "message": "Inicializovaná (režim: $mode$)",
+    "placeholders": {
+      "mode": {
+        "content": "$1",
+        "example": "Agent"
+      }
+    }
+  },
+  "vadDetailInitializedModeNA": {
+    "description": "VAD detail showing initialization mode as N/A.",
+    "message": "Initialized (Mode: N/A)"
+  },
+  "vadDetailNonSpeechAudioDetected": {
+    "description": "VAD detail for non-speech audio detection.",
+    "message": "Non-speech audio detected"
+  },
+  "vadDetailReleasingVADResources": {
+    "description": "VAD detail when releasing VAD resources.",
+    "message": "Releasing VAD resources..."
+  },
+  "vadDetailRequestingVADSetup": {
+    "description": "VAD detail when requesting setup.",
+    "message": "Requesting VAD setup..."
+  },
+  "vadDetailSpeechDetected": {
+    "description": "VAD detail when speech has been detected.",
+    "message": "Speech detected"
+  },
+  "vadDetailSpeechEndedDuration": {
+    "description": "VAD detail indicating speech ended and its duration.",
+    "message": "Řeč skončila (trvání: $duration$ ms)",
+    "placeholders": {
+      "duration": {
+        "content": "$1",
+        "example": "1000"
+      }
+    }
+  },
+  "vadDetailStartError": {
+    "description": "VAD detail for a start error, with specific error message.",
+    "message": "Chyba zahájení: $error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to start VAD service"
+      }
+    }
+  },
+  "vadDetailStartErrorPromise": {
+    "description": "VAD detail for a start promise error.",
+    "message": "Start Error: Promise error"
+  },
+  "vadDetailStartErrorUnknown": {
+    "description": "VAD detail for an unknown start error.",
+    "message": "Start Error: Unknown"
+  },
+  "vadDetailStopError": {
+    "description": "VAD detail for a stop error, with specific error message.",
+    "message": "Chyba zastavení: $error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to stop VAD service"
+      }
+    }
+  },
+  "vadDetailStopErrorPromise": {
+    "description": "VAD detail for a stop promise error.",
+    "message": "Stop Error: Promise error"
+  },
+  "vadDetailStopErrorUnknown": {
+    "description": "VAD detail for an unknown stop error.",
+    "message": "Stop Error: Unknown"
+  },
+  "vadDetailUnknownVADError": {
+    "description": "VAD detail for an unknown error from the VAD module.",
+    "message": "Unknown VAD error"
+  },
+  "vadDetailVADProcessingStopped": {
+    "description": "VAD detail indicating VAD processing has stopped.",
+    "message": "VAD processing stopped."
+  },
+  "vadDetailVADServiceDisconnected": {
+    "description": "VAD detail when the service disconnects.",
+    "message": "VAD service disconnected. Try reloading."
+  },
+  "vadDetailVADServiceNotConnected": {
+    "description": "VAD detail when the service is not connected.",
+    "message": "VAD service not connected. Try reloading."
+  },
+  "vadDetailVADServiceShutdown": {
+    "description": "VAD detail indicating VAD service has been shut down.",
+    "message": "VAD service shut down."
+  },
+  "vadDetailWaitingForSpeech": {
+    "description": "VAD detail when waiting for user to speak.",
+    "message": "Waiting for speech"
+  },
+  "vadStatusDestroyed": {
+    "description": "VAD status when destroyed.",
+    "message": "Destroyed"
+  },
+  "vadStatusError": {
+    "description": "Generic VAD error status.",
+    "message": "Error"
+  },
+  "vadStatusFailed": {
+    "description": "Generic VAD failure status.",
+    "message": "Failed"
+  },
+  "vadStatusIndicatorEnabledLabel": {
+    "description": "Label for the toggle switch that controls the visibility of the Voice Activity Detection status indicator.",
+    "message": "Zobrazit stav VAD"
+  },
+  "vadStatusInitializing": {
+    "description": "VAD status when initializing.",
+    "message": "Initializing"
+  },
+  "vadStatusListening": {
+    "description": "VAD status when actively listening.",
+    "message": "Listening"
+  },
+  "vadStatusMisfire": {
+    "description": "VAD status when a misfire (non-speech) is detected.",
+    "message": "Misfire"
+  },
+  "vadStatusProcessing": {
+    "description": "VAD status when processing audio.",
+    "message": "Processing"
+  },
+  "vadStatusReady": {
+    "description": "VAD status when ready and waiting.",
+    "message": "Ready"
+  },
+  "vadStatusShuttingDown": {
+    "description": "VAD status when shutting down.",
+    "message": "Shutting down"
+  },
+  "vadStatusStarting": {
+    "description": "VAD status when starting.",
+    "message": "Starting"
+  },
+  "vadStatusStopped": {
+    "description": "VAD status when stopped.",
+    "message": "Stopped"
+  },
+  "vadStatusStopping": {
+    "description": "VAD status when stopping.",
+    "message": "Stopping"
+  },
+  "viewDetails": {
+    "description": "Text for the link to view full quota details on the dashboard.",
+    "message": "Zobrazit podrobnosti"
+  },
+  "voiceIntroduction_joey": {
+    "description": "Introduction for the Joey voice.",
+    "message": "Ahoj! \nПривет! \n你好! \nJsem Pi, váš polyglot AI asistent. \nS 32 jazyky pod mým vedením můžeme prozkoumávat myšlenky a kultury z celého světa. \nCo si myslíš o tomto hlase?"
+  },
+  "voiceIntroduction_paola": {
+    "description": "Introduction for the Paola voice.",
+    "message": "Čau! \nDobrý den! \nAhoj! \nJmenuji se Pi a umím plynně konverzovat ve 32 jazycích. \nOd arabštiny po ukrajinštinu, jsem tu, abych prolomil jazykové bariéry. \nJak vám zní tento hlas?"
+  },
+  "voiceOff": {
+    "description": "Label for when text-to-speech is disabled",
+    "message": "Voice off"
+  },
+  "voicePaused": {
+    "description": "Text shown when voice is paused due to insufficient credits",
+    "message": "Hlas se zastavil -"
+  },
+  "voiceSettings": {
+    "description": "The text of the menu item to access voice-related settings.",
+    "message": "Nastavení hlasu"
   }
 }

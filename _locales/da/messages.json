@@ -1,34 +1,38 @@
 {
   "activityCheckButton": {
-    "description": "Teksten på knappen for at indikere, at brugeren stadig er til stede.",
+    "description": "The text of the button to indicate that the user is still present.",
     "message": "Ja, jeg er stadig her!"
   },
   "activityCheckMessage": {
-    "description": "Beskeden der skal vises, når samtalen har varet usædvanligt længe.",
+    "description": "The message to display when the conversation has been going on unusually long.",
     "message": "Wow, dette er en lang samtale. Er du stadig der, eller taler vi med os selv?"
   },
+  "addCredits": {
+    "description": "Text for link to add more voice credits",
+    "message": "Tilføj kreditter"
+  },
   "allowInterruptions": {
-    "description": "Etiket til afkrydsningsfeltet for at aktivere/deaktivere tilladelse til, at brugeren kan afbryde Pi's svar ved at tale.",
+    "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Afbrydelig"
   },
   "appDescription": {
-    "description": "Beskrivelsen af ​​applikationen.",
+    "description": "The description of the application.",
     "message": "Stemmekontrol for Pi og Claude. Tal naturligt, få naturtro svar. Bare sig det."
   },
   "appName": {
-    "description": "Navnet på applikationen.",
+    "description": "The name of the application.",
     "message": "Say, Pi"
   },
   "applicationStatusIssue": {
-    "description": "Besked til visning, når applikationen oplever problemer.",
+    "description": "Message to display when the application is experiencing issues.",
     "message": "Systemproblem Alarm"
   },
   "applicationStatusUnknown": {
-    "description": "Besked til visning, når applikationsstatus ikke kan bestemmes. F.eks. når klienten er offline.",
+    "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Ansøgningsstatus ukendt"
   },
   "assistantIsListening": {
-    "description": "Besked vises, når assistenten lytter efter tale.",
+    "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ lytter...",
     "placeholders": {
       "chatbot": {
@@ -37,8 +41,18 @@
       }
     }
   },
+  "assistantIsListeningAttentively": {
+    "description": "Message displayed when the assistant is listening for speech in agent mode.",
+    "message": "$chatbot$ lytter opmærksomt ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
   "assistantIsSpeaking": {
-    "description": "Besked vises, når assistenten taler sit svar.",
+    "description": "Message displayed when the assistant is speaking its response.",
     "message": "$chatbot$ taler...",
     "placeholders": {
       "chatbot": {
@@ -47,8 +61,18 @@
       }
     }
   },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Message displayed when the assistant is speaking its response and manual interruption is possible.",
+    "message": "$chatbot$ taler, tryk for at afbryde...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "assistantIsThinking": {
-    "description": "Besked vist, når assistenten forbereder sit svar.",
+    "description": "Message displayed when the assistant is preparing its response.",
     "message": "$chatbot$ tænker...",
     "placeholders": {
       "chatbot": {
@@ -57,8 +81,18 @@
       }
     }
   },
+  "assistantIsWriting": {
+    "description": "Message displayed when the assistant is typing its response.",
+    "message": "$chatbot$ skriver...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "audioConnected": {
-    "description": "Besked vises, når en mikrofon er tilsluttet",
+    "description": "Message displayed when a microphone is connected",
     "message": "$microphone$ tilsluttet",
     "placeholders": {
       "microphone": {
@@ -68,7 +102,7 @@
     }
   },
   "audioInputError": {
-    "description": "Besked vist, når lyd resulterede i en tom transskription - normalt resultatet af filtrering.",
+    "description": "Message displayed when audio transcription failed - usually the result of an ASR or LLM API error.",
     "message": "Hmm, $chatbot$ havde en let hik. \nKunne du prøve at sige det igen?",
     "placeholders": {
       "chatbot": {
@@ -78,7 +112,7 @@
     }
   },
   "audioReconnecting": {
-    "description": "Besked vist, når du tilslutter en ny mikrofon",
+    "description": "Message displayed when connecting to a new microphone",
     "message": "Skifter til $microphone$...",
     "placeholders": {
       "microphone": {
@@ -88,19 +122,23 @@
     }
   },
   "autoSubmit": {
-    "description": "Etiket til afkrydsningsfeltet for at aktivere/deaktivere automatisk indsendelse af prompt.",
+    "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Auto-indsend"
   },
   "callError": {
-    "description": "Værktøjstip der skal vises på opkaldsknappen, når en ikke-fatal fejl opstår.",
+    "description": "The tooltip to display on the call button when a non-fatal error occurs.",
     "message": "Ikke-dødelig fejl opstået. Bare rolig, vi lytter stadig."
   },
   "callInProgress": {
-    "description": "Værktøjstip til at vise på opkaldsknappen, når et opkald er i gang.",
+    "description": "The tooltip to display on the call button when a call is in progress.",
     "message": "Afslut håndfri samtale"
   },
+  "callInterruptible": {
+    "description": "The tooltip to display on the call button when a call is in progress and manual interruption is possible.",
+    "message": "Tryk for at afbryde"
+  },
   "callNotStarted": {
-    "description": "Værktøjstip til visning på opkaldsknappen, før et opkald startes.",
+    "description": "The tooltip to display on the call button before a call is started.",
     "message": "Start en håndfri samtale med $chatbot$",
     "placeholders": {
       "chatbot": {
@@ -110,12 +148,20 @@
     }
   },
   "callStarting": {
-    "description": "Teksten der skal vises på opkaldsknappens værktøjstip og i promptområdet, når et opkald starter.",
+    "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Tilslutter..."
   },
   "checkingApplicationStatus": {
-    "description": "Besked til visning, mens systemstatus bestemmes, f.eks. under indlæsning.",
+    "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Kontrollerer applikationsstatus..."
+  },
+  "clickToCollapse": {
+    "description": "Text indicating user can click to hide expanded content.",
+    "message": "Klik for at kollapse"
+  },
+  "clickToExpand": {
+    "description": "Text indicating user can click to show collapsed content.",
+    "message": "Klik for at udvide"
   },
   "consentAskParticipate": {
     "message": "Vil du gerne deltage?"
@@ -151,27 +197,39 @@
     "message": "Læs vores privatlivspolitik"
   },
   "continueUnlocking": {
-    "description": "Instruktioner der fortæller brugeren, hvordan de skal fortsætte, når de er begyndt at trykke på oplåsningsknappen.",
+    "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Fortsæt med at holde for at låse op..."
   },
+  "copiedButtonTitle": {
+    "description": "The title of the button to indicate that the text of a message has been copied to the clipboard.",
+    "message": "Kopieret!"
+  },
+  "copyButtonTitle": {
+    "description": "The title of the button to copy the text of a message to the clipboard.",
+    "message": "Kopier"
+  },
   "currencyUSDAbbreviation": {
-    "description": "Forkortelsen for United States Dollar.",
+    "description": "The abbreviation for the US dollar.",
     "message": "USD"
   },
   "currentCharges": {
-    "description": "Begrebet brugt til at beskrive de nuværende omkostninger (løbende total) påløbet af brugeren.",
+    "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Nuværende gebyrer"
   },
+  "disableTTS": {
+    "description": "Label for the option to turn off text-to-speech",
+    "message": "Deaktiver tekst-til-tale"
+  },
   "dismissAlert": {
-    "description": "Etiket til knappen for at afvise en systemproblemadvarsel.",
+    "description": "Label for the button to dismiss a system issue alert.",
     "message": "Afskedige"
   },
   "enableTTS": {
-    "description": "Etiket til afkrydsningsfeltet for at aktivere/deaktivere tekst-til-tale.",
+    "description": "Label for the checkbox to enable/disable text-to-speech.",
     "message": "Flersprogede stemmer"
   },
   "enhancedVoice": {
-    "description": "Titel (tooltip) for Sig, Pi forbedrede stemmer.",
+    "description": "Title (tooltip) for Say, Pi enhanced voices.",
     "message": "Stemme forbedret af $product$",
     "placeholders": {
       "product": {
@@ -181,51 +239,240 @@
     }
   },
   "enterImmersiveModeLong": {
-    "description": "Aria-label og titlen på knappen for at indtaste immersiv tilstand på mobile enheder.",
+    "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
     "message": "Indtast Immersiv Tilstand"
   },
   "enterImmersiveModeShort": {
-    "description": "Teksten på knappen for at indtaste nedsænkningstilstand på skrivebordet.",
+    "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Nedsænkning"
   },
   "exitImmersiveModeLong": {
-    "description": "Aria-label og titlen på knappen til at afslutte den immersive tilstand på mobile enheder, tilbage til tekstbaseret skrivebordstilstand.",
+    "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Afslut Immersiv Tilstand"
   },
   "extensionPopupTitle": {
-    "description": "Titlen på udvidelsens popup-dialog.",
+    "description": "The title of the extension's popup dialog.",
     "message": "Sig, Pi Indstillinger"
   },
+  "extensionSettings": {
+    "description": "The text of the button to open the extension's settings.",
+    "message": "Indstillinger"
+  },
+  "greeting": {
+    "description": "Greeting message shown when user is signed in",
+    "message": "Hej, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "instructionLabel_context": {
+    "description": "Friendly label for user instruction that provides background information.",
+    "message": "Giver kontekst ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Friendly label for user instruction that defines what the user wants.",
+    "message": "Afklarende forventninger ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Friendly label for user instruction that narrows the scope of conversation.",
+    "message": "Fokusering af diskussionen ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Friendly label for user instruction that establishes boundaries for the conversation.",
+    "message": "Indstilling af rækker ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Friendly label for user instruction that guides how the AI should respond.",
+    "message": "Vejledende svar ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Friendly label for user instruction that gently suggests a direction.",
+    "message": "At give et skub ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Friendly label for user instruction that guides the conversation direction.",
+    "message": "Styring af samtalen ..."
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Afbrydelser understøttes i øjeblikket ikke i Firefox."
+  },
   "lockButton": {
-    "description": "Titlen (tooltip) på knappen til at låse skærmen mod utilsigtede berøringer.",
+    "description": "The title (tooltip) of the button to lock the screen against accidental touches.",
     "message": "Tryk for at låse skærmen"
   },
   "lockedScreen": {
-    "description": "En besked til at vise fremtrædende, når skærmen er låst.",
+    "description": "A message to display prominently when the screen is locked.",
     "message": "Skærmen er låst."
   },
+  "maintenanceLabel_holding": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Holder denne tanke ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Gør en mental note ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Behandling i baggrunden ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Husker denne detalje ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Gemme den tanke til senere ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Hold styr på kontekst ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Gemt dette væk ..."
+  },
+  "microphoneErrorConstraints": {
+    "description": "Error message when microphone constraints cannot be satisfied.",
+    "message": "Dine mikrofonindstillinger opfylder ikke de påkrævede specifikationer. \nPrøv at bruge en anden mikrofon eller juster dine lydindstillinger."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generic error message with details when microphone access fails.",
+    "message": "Kunne ikke få adgang til mikrofonen: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Error message when microphone is already in use by another application.",
+    "message": "Kan ikke få adgang til mikrofonen, fordi den bruges af en anden applikation. \nLuk venligst andre apps, der muligvis bruger din mikrofon."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Error message when no microphone device is found.",
+    "message": "Ingen mikrofon fundet. \nTilslut en mikrofon, og prøv igen."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Error message when microphone permission is denied by the user or system.",
+    "message": "Mikrofonadgang er påkrævet. \nTillad mikrofonadgang i dine browserindstillinger for at fortsætte."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Error message for unexpected microphone errors with details.",
+    "message": "Der opstod en uventet fejl med din mikrofon: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generic error message when microphone access fails for unknown reasons.",
+    "message": "Kan ikke få adgang til mikrofonen. \nTjek venligst dine enhedsindstillinger og prøv igen."
+  },
   "mode_accuracy": {
-    "description": "Højeste nøjagtighedsmodus.",
+    "description": "Highest accuracy mode.",
     "message": "nøjagtighed"
   },
+  "mode_accuracy_description": {
+    "description": "Description for the accuracy transcription mode.",
+    "message": "Højeste nøjagtighed, men langsommere transskriptionshastighed. \nTilbøjelig til hallucinationer."
+  },
   "mode_balanced": {
-    "description": "Standard transskriptionstilstand.",
+    "description": "Default transcription mode.",
     "message": "afbalanceret"
   },
+  "mode_balanced_description": {
+    "description": "Description for the balanced transcription mode.",
+    "message": "God balance mellem hastighed og nøjagtighed til de fleste anvendelser."
+  },
   "mode_speed": {
-    "description": "Hurtigste transskriptionsmodus.",
+    "description": "Fastest transcription mode.",
     "message": "hastighed"
   },
+  "mode_speed_description": {
+    "description": "Description for the speed transcription mode.",
+    "message": "Hurtigste respons, men mindre præcis. \nTilbøjelig til at afbryde."
+  },
+  "nicknameLabel": {
+    "description": "Label for the input field to set a custom nickname for the AI assistant.",
+    "message": "Kælenavn"
+  },
+  "notSignedIn": {
+    "description": "Text to show when the user is not signed in.",
+    "message": "Ikke logget ind"
+  },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "Tilladelser Prompt Page Dom kunne ikke indlæse korrekt."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Ukendt fejl under anmodning om tilladelse"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "Du kan se en browserprompt øverst i dette vindue. \nBare ramt <strong> \"Tillad, mens du besøger webstedet\" </strong> så vi kan begynde at tale."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Denne fane lukker automatisk, når du har svaret."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣 Lad os chatte!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "For at bringe stemme til dine samtaler har $productName$ brug for tilladelse til at bruge din mikrofon. \nDit privatliv betyder noget - vi lytter kun, når du aktivt chatter.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Venter på din gå-foran ..."
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Mikrofon tilladelse"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Hmm, kunne ikke få Mic Access: $errorName$. \nLukning af denne fane i et øjeblik ...",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "Tak! \nTilladelse tildelt. \nIndpakning af ting ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Ukendt fejl"
+  },
   "preferedLanguage": {
-    "description": "Etiket til en kontrol for at vælge det foretrukne transskriptionssprog.",
+    "description": "Label for a control to select the prefered transcription language.",
     "message": "Sprog"
   },
   "preferedModeControl": {
-    "description": "Titlen (tooltip) på kontrollen til at vælge den foretrukne transskriptionsmetode.",
+    "description": "The title (tooltip) of the control to select the prefered transcription mode.",
     "message": "Vælg din foretrukne transskriptionsmetode"
   },
   "previewProgress": {
-    "description": "Beskeden der vises, når brugeren forhåndsviser en funktion, der har en tegnbegrænsning.",
+    "description": "The message to display when the user is previewing a feature that has a character limit.",
     "message": "$count$ tegn brugt ud af $limit$",
     "placeholders": {
       "count": {
@@ -245,7 +492,7 @@
     "message": "Beta Fuldført"
   },
   "previewStatusPaused": {
-    "description": "Beskeden der skal vises, når brugeren forhåndsviser en funktion, der er blevet sat på pause.",
+    "description": "The message to display when the user is previewing a feature that has been paused.",
     "message": "Beta sat på pause indtil $resetDate$",
     "placeholders": {
       "resetDate": {
@@ -257,32 +504,187 @@
   "previewStatusUnknown": {
     "message": "Kan ikke oprette forbindelse..."
   },
+  "profile": {
+    "description": "Label for the user profile section.",
+    "message": "Profil"
+  },
+  "quotaCredits": {
+    "description": "Unit label for TTS credits",
+    "message": "Kreditter"
+  },
+  "quotaRemaining": {
+    "description": "Label for the quota remaining progress bar",
+    "message": "Resterende kvote"
+  },
+  "quotaStatusUnknown": {
+    "description": "Message shown when quota status cannot be determined",
+    "message": "Kan ikke kontrollere kvotestatus"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Message shown when user is not authenticated.",
+    "message": "Log ind for at få adgang til stemmegenerering og andre premium -funktioner"
+  },
   "readAloudButtonTitle": {
-    "description": "Titlen på knappen til at læse teksten i en besked højt.",
+    "description": "The title of the button to read aloud the text of a message.",
     "message": "Læs Højt"
   },
   "recommendedActions": {
-    "description": "Besked forud for en liste over anbefalede handlinger, brugeren kan tage for at afhjælpe et kendt problem.",
+    "description": "Message preceding a list of recommended actions the user may take to remediate a known issue.",
     "message": "I mellemtiden anbefaler vi:"
   },
+  "regenerateButtonTitle": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an estimated cost.",
+    "message": "Generer lyd for $cost$ $currency$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
+    "message": "Generer Lyd"
+  },
   "shareAnalytics": {
-    "description": "Etiket til afkrydsningsfeltet for at aktivere/deaktivere deling af analyser.",
+    "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Del analytics"
   },
+  "signIn": {
+    "description": "Text for the sign in button.",
+    "message": "Log ind"
+  },
+  "signInForTTS": {
+    "description": "Prompt shown when user needs to authenticate to access text-to-speech features",
+    "message": "Log ind til tekst-til-tale"
+  },
+  "signOut": {
+    "description": "Text for the sign out button.",
+    "message": "Log ud"
+  },
+  "signedIn": {
+    "description": "Status text shown when user is authenticated (without email).",
+    "message": "Underskrevet"
+  },
+  "signedInAs": {
+    "description": "Status text shown when user is authenticated, including their email.",
+    "message": "Underskrevet som $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
   "soundEffects": {
-    "description": "Etiket til afkrydsningsfeltet for at aktivere/deaktivere lydeffekter.",
+    "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Lyd effekter"
   },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Lydeffekter er deaktiveret i Firefox for at forhindre problemer med lydfeedback."
+  },
+  "sttMinutesRemaining": {
+    "description": "Text showing remaining STT quota in minutes.",
+    "message": "$minutes$ minutter $plural$ tilbage",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text to show when STT quota is exhausted.",
+    "message": "Talegenkendelseskvote udmattet"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip for the STT quota progress bar.",
+    "message": "$remaining$ på $total$ sekunder tilbage",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip for the STT quota progress bar in minutes.",
+    "message": "$remaining$ på $total$ minutter tilbage",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Label for the STT quota remaining display.",
+    "message": "Talegenkendelse"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unit for STT quota (seconds).",
+    "message": "Secs"
+  },
+  "submitModeControl": {
+    "description": "The title (tooltip) of the control to select when messages should be submitted.",
+    "message": "Vælg, hvornår dine beskeder skal sendes"
+  },
+  "submit_mode_agent": {
+    "description": "AI-driven submission mode.",
+    "message": "agent"
+  },
+  "submit_mode_agent_description": {
+    "description": "Description for the AI-driven submission mode.",
+    "message": "$chatbot$ bestemmer, hvornår der skal svares baseret på kontekst",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatic submission mode.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Description for the automatic submission mode.",
+    "message": "Send automatisk, når du holder op med at tale"
+  },
+  "submit_mode_off": {
+    "description": "Manual submission mode.",
+    "message": "manuel"
+  },
+  "submit_mode_off_description": {
+    "description": "Description for the manual submission mode.",
+    "message": "Send først, når du trykker på knappen"
+  },
   "toggleThemeToDarkMode": {
-    "description": "Etiket til knappen for at skifte til mørk tilstand.",
+    "description": "Label for the button to toggle to dark mode.",
     "message": "Skift til mørk tilstand"
   },
   "toggleThemeToLightMode": {
-    "description": "Etiket til knappen for at skifte til lys tilstand.",
+    "description": "Label for the button to toggle to light mode.",
     "message": "Skift til lys tilstand"
   },
   "ttsCostExplanation": {
-    "description": "Værktøjstip til visning, når tekst-til-tale-motoren bruges til at læse en besked højt, med omkostningerne ved beskeden.",
+    "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
     "message": "$product$ vil opkræve $cost$ $currency$ for at lytte til denne besked",
     "placeholders": {
       "cost": {
@@ -300,7 +702,7 @@
     }
   },
   "ttsCostExplanationFree": {
-    "description": "Værktøjstip der vises, når en tekst-til-tale motor bruges til at læse en besked højt, og beskeden er gratis. Kan indeholde navnet på udbyderen.",
+    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free. Assumes the provider is Inflection AI.",
     "message": "Denne lyd genereres gratis af Inflection AI",
     "placeholders": {
       "provider": {
@@ -309,8 +711,26 @@
       }
     }
   },
+  "ttsCostExplanationSayPi": {
+    "description": "The tooltip to display when the user hovers over the cost explanation link.",
+    "message": "Lær, hvordan $product$ opkræver for lyd",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "ttsCredits": {
+    "description": "The term used for the credits currency in the text-to-speech feature.",
+    "message": "Kreditter"
+  },
+  "ttsDisabledSafari": {
+    "description": "Message shown when TTS is disabled in Safari",
+    "message": "Flersprogede stemmer understøttes i øjeblikket ikke i Safari."
+  },
   "ttsPoweredBy": {
-    "description": "Beskeden der skal vises, når tekst-til-tale motoren bruges til at læse en besked højt.",
+    "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Tekst-til-tale drevet af $ttsEngine$",
     "placeholders": {
       "ttsEngine": {
@@ -319,320 +739,16 @@
       }
     }
   },
-  "unlockButton": {
-    "description": "Titlen (tooltip) på knappen til at låse skærmen op.",
-    "message": "Tryk for at låse skærmen op"
-  },
-  "unlockInstruction": {
-    "description": "Instruktioner der fortæller brugeren, hvordan man låser skærmen op, når den er låst.",
-    "message": "Hold for at låse op."
-  },
-  "userStartedInterrupting": {
-    "description": "Besked vises, når brugeren begynder at tale, mens assistenten taler.",
-    "message": "Gå videre, $chatbot$ lytter...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "copiedButtonTitle": {
-    "message": "Kopieret!",
-    "description": "Titlen på knappen for at indikere, at teksten i en besked er blevet kopieret til udklipsholderen."
-  },
-  "copyButtonTitle": {
-    "message": "Kopier",
-    "description": "Titlen på knappen til at kopiere teksten af en besked til udklipsholderen."
-  },
-  "voiceIntroduction_joey": {
-    "message": "Hej! \nПривет! \n你好! \nJeg er Pi, din polyglot AI-assistent. \nMed 32 sprog på min kommando, kan vi udforske ideer og kulturer fra hele verden. \nHvad synes du om denne stemme?",
-    "description": "Introduktion til Joey stemmen."
-  },
-  "voiceIntroduction_paola": {
-    "message": "Ciao! \nBonjour! \nHej! \nJeg er Pi, og jeg kan tale flydende på 32 sprog. \nFra arabisk til ukrainsk, jeg er her for at nedbryde sprogbarrierer. \nHvordan lyder denne stemme for dig?",
-    "description": "Introduktion til Paola stemmen."
-  },
-  "regenerateButtonTitle": {
-    "message": "Generer lyd for $cost$ $currency$",
-    "description": "Titlen på knappen til at regenerere lyden af en besked. Kan medføre en estimeret omkostning.",
-    "placeholders": {
-      "cost": {
-        "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
-      }
-    }
-  },
-  "regenerateButtonTitleFree": {
-    "message": "Generer Lyd",
-    "description": "Titlen på knappen til at regenerere lyden af en besked. Kan medføre en ubestemt omkostning."
-  },
-  "assistantIsWriting": {
-    "description": "Meddelelse vises, når assistenten skriver sit svar.",
-    "message": "$chatbot$ skriver...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "ttsCostExplanationSayPi": {
-    "description": "Værktøjstip, der vises, når brugeren holder markøren over linket til omkostningsforklaring.",
-    "placeholders": {
-      "product": {
-        "content": "$1",
-        "example": "Say, Pi"
-      }
-    },
-    "message": "Lær, hvordan $product$ opkræver for lyd"
-  },
-  "interruptionsFirefoxDisabled": {
-    "message": "Afbrydelser understøttes i øjeblikket ikke i Firefox."
-  },
-  "mode_accuracy_description": {
-    "description": "Beskrivelse af nøjagtighedstransskriptionstilstanden.",
-    "message": "Højeste nøjagtighed, men langsommere transskriptionshastighed. \nTilbøjelig til hallucinationer."
-  },
-  "mode_balanced_description": {
-    "description": "Beskrivelse af den balancerede transskriptionstilstand.",
-    "message": "God balance mellem hastighed og nøjagtighed til de fleste anvendelser."
-  },
-  "mode_speed_description": {
-    "description": "Beskrivelse af hastighedstransskriptionstilstanden.",
-    "message": "Hurtigste respons, men mindre præcis. \nTilbøjelig til at afbryde."
-  },
-  "soundEffectsFirefoxDisabled": {
-    "message": "Lydeffekter er deaktiveret i Firefox for at forhindre problemer med lydfeedback."
-  },
-  "assistantIsSpeakingWithManualInterrupt": {
-    "description": "Meddelelse vises, når assistenten taler sit svar, og manuel afbrydelse er mulig.",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "message": "$chatbot$ taler, tryk for at afbryde..."
-  },
-  "callInterruptible": {
-    "description": "Værktøjstip, der vises på opkaldsknappen, når et opkald er i gang, og manuel afbrydelse er mulig.",
-    "message": "Tryk for at afbryde"
-  },
-  "microphoneErrorConstraints": {
-    "description": "Fejlmeddelelse, når mikrofonens begrænsninger ikke kan opfyldes.",
-    "message": "Dine mikrofonindstillinger opfylder ikke de påkrævede specifikationer. \nPrøv at bruge en anden mikrofon eller juster dine lydindstillinger."
-  },
-  "microphoneErrorGeneric": {
-    "description": "Generisk fejlmeddelelse med detaljer, når mikrofonadgang mislykkes.",
-    "message": "Kunne ikke få adgang til mikrofonen: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Permission denied"
-      }
-    }
-  },
-  "microphoneErrorInUse": {
-    "description": "Fejlmeddelelse, når mikrofonen allerede er i brug af en anden applikation.",
-    "message": "Kan ikke få adgang til mikrofonen, fordi den bruges af en anden applikation. \nLuk venligst andre apps, der muligvis bruger din mikrofon."
-  },
-  "microphoneErrorNotFound": {
-    "description": "Fejlmeddelelse, når der ikke findes nogen mikrofonenhed.",
-    "message": "Ingen mikrofon fundet. \nTilslut en mikrofon, og prøv igen."
-  },
-  "microphoneErrorPermissionDenied": {
-    "description": "Fejlmeddelelse, når mikrofontilladelse nægtes af brugeren eller systemet.",
-    "message": "Mikrofonadgang er påkrævet. \nTillad mikrofonadgang i dine browserindstillinger for at fortsætte."
-  },
-  "microphoneErrorUnexpected": {
-    "description": "Fejlmeddelelse for uventede mikrofonfejl med detaljer.",
-    "message": "Der opstod en uventet fejl med din mikrofon: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Device busy"
-      }
-    }
-  },
-  "microphoneErrorUnknown": {
-    "description": "Generisk fejlmeddelelse, når mikrofonadgang mislykkes af ukendte årsager.",
-    "message": "Kan ikke få adgang til mikrofonen. \nTjek venligst dine enhedsindstillinger og prøv igen."
-  },
-  "ttsDisabledSafari": {
-    "message": "Flersprogede stemmer understøttes i øjeblikket ikke i Safari.",
-    "description": "Meddelelse vises, når TTS er deaktiveret i Safari"
-  },
-  "extensionSettings": {
-    "message": "Indstillinger",
-    "description": "Teksten på knappen for at åbne udvidelsens indstillinger."
-  },
-  "submitModeControl": {
-    "description": "Titlen (værktøjstip) på kontrolelementet til at vælge, hvornår meddelelser skal sendes.",
-    "message": "Vælg, hvornår dine beskeder skal sendes"
-  },
-  "submit_mode_agent": {
-    "description": "AI-drevet indsendelsestilstand.",
-    "message": "agent"
-  },
-  "submit_mode_agent_description": {
-    "description": "Beskrivelse af den AI-drevne indsendelsestilstand.",
-    "message": "$chatbot$ bestemmer, hvornår der skal svares baseret på kontekst",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "submit_mode_auto": {
-    "description": "Automatisk indsendelsestilstand.",
-    "message": "auto"
-  },
-  "submit_mode_auto_description": {
-    "description": "Beskrivelse for den automatiske indsendelsestilstand.",
-    "message": "Send automatisk, når du holder op med at tale"
-  },
-  "submit_mode_off": {
-    "description": "Manuel indsendelsestilstand.",
-    "message": "manuel"
-  },
-  "submit_mode_off_description": {
-    "description": "Beskrivelse af den manuelle indsendelsestilstand.",
-    "message": "Send først, når du trykker på knappen"
-  },
-  "nicknameLabel": {
-    "message": "Kælenavn",
-    "description": "Label til inputfeltet til at indstille et brugerdefineret kaldenavn til AI -assistenten."
-  },
-  "greeting": {
-    "description": "Hilsenbesked vist, når brugeren er logget ind",
-    "message": "Hej, $name$!",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John"
-      }
-    }
-  },
-  "notSignedIn": {
-    "description": "Tekst for at vise, hvornår brugeren ikke er logget ind.",
-    "message": "Ikke logget ind"
-  },
-  "profile": {
-    "description": "Label til sektionen for brugerprofil.",
-    "message": "Profil"
-  },
-  "quotaCredits": {
-    "description": "Enhedsmærke til TTS -kreditter",
-    "message": "Kreditter"
-  },
-  "quotaRemaining": {
-    "description": "Etiket til den resterende statuslinje",
-    "message": "Resterende kvote"
-  },
-  "quotaStatusUnknown": {
-    "description": "Besked vist, når kvotestatus ikke kan bestemmes",
-    "message": "Kan ikke kontrollere kvotestatus"
-  },
-  "quotaUnauthenticatedMessage": {
-    "description": "Besked vist, når brugeren ikke er godkendt.",
-    "message": "Log ind for at få adgang til stemmegenerering og andre premium -funktioner"
-  },
-  "signIn": {
-    "description": "Tekst til knappen Log ind.",
-    "message": "Log ind"
-  },
-  "signOut": {
-    "description": "Tekst til knappen Tegn out.",
-    "message": "Log ud"
-  },
-  "signedIn": {
-    "description": "Stataltekst vist, når brugeren er godkendt (uden e -mail).",
-    "message": "Underskrevet"
-  },
-  "signedInAs": {
-    "description": "Statustekst vist, når brugeren er godkendt, inklusive deres e -mail.",
-    "message": "Underskrevet som $email$",
-    "placeholders": {
-      "email": {
-        "content": "$1",
-        "example": "user@example.com"
-      }
-    }
-  },
-  "sttMinutesRemaining": {
-    "description": "Tekst, der viser resterende STT -kvote på få minutter.",
-    "message": "$minutes$ minutter $plural$ tilbage",
-    "placeholders": {
-      "minutes": {
-        "content": "$1",
-        "example": "5"
-      },
-      "plural": {
-        "content": "$2",
-        "example": "s"
-      }
-    }
-  },
-  "sttQuotaExhausted": {
-    "description": "Tekst, der vises, når STT -kvote er opbrugt.",
-    "message": "Talegenkendelseskvote udmattet"
-  },
-  "sttQuotaProgress": {
-    "description": "Tooltip til STT Quota -statuslinjen.",
-    "message": "$remaining$ på $total$ sekunder tilbage",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "100"
-      },
-      "total": {
-        "content": "$2",
-        "example": "300"
-      }
-    }
-  },
-  "sttQuotaProgressMinutes": {
-    "description": "Tooltip til STT -kvotens statuslinje på få minutter.",
-    "message": "$remaining$ på $total$ minutter tilbage",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "5"
-      },
-      "total": {
-        "content": "$2",
-        "example": "60"
-      }
-    }
-  },
-  "sttQuotaRemaining": {
-    "description": "Mærkning til stt -kvoten resterende display.",
-    "message": "Talegenkendelse"
-  },
-  "sttQuotaSeconds": {
-    "description": "Enhed til STT -kvote (sekunder).",
-    "message": "Secs"
-  },
-  "ttsCredits": {
-    "description": "Udtrykket, der bruges til kreditter valuta i funktionen tekst-til-tale.",
-    "message": "Kreditter"
-  },
   "ttsQuotaCharacters": {
-    "description": "Enhed til TTS -kvote (tegn).",
+    "description": "Unit for TTS quota (characters).",
     "message": "Kreditter"
   },
   "ttsQuotaExhausted": {
-    "description": "Tekst, der vises, når TTS -kvote er opbrugt.",
+    "description": "Text to show when TTS quota is exhausted.",
     "message": "Stemmekvote udmattet"
   },
   "ttsQuotaProgress": {
-    "description": "Tooltip til TTS Quota Progress Bar.",
+    "description": "Tooltip for the TTS quota progress bar.",
     "message": "$remaining$ af $total$ tegn tilbage",
     "placeholders": {
       "remaining": {
@@ -646,121 +762,247 @@
     }
   },
   "ttsQuotaRemaining": {
-    "description": "Label til TTS -kvoten resterende display.",
+    "description": "Label for the TTS quota remaining display.",
     "message": "Stemmegenerering"
   },
-  "upgradeButton": {
-    "description": "Tekst til knappen for at opgradere planen, når kvote er opbrugt.",
-    "message": "Opgraderingsplan"
-  },
-  "viewDetails": {
-    "description": "Tekst til linket for at se fulde kvoteoplysninger på instrumentbrættet.",
-    "message": "Se detaljer"
-  },
-  "clickToCollapse": {
-    "description": "Tekst, der angiver brugeren, kan klikke for at skjule udvidet indhold.",
-    "message": "Klik for at kollapse"
-  },
-  "clickToExpand": {
-    "description": "Tekst, der angiver brugeren, kan klikke for at vise kollapset indhold.",
-    "message": "Klik for at udvide"
-  },
-  "instructionLabel_context": {
-    "description": "Venlig etiket til brugerinstruktion, der giver baggrundsoplysninger.",
-    "message": "Giver kontekst ..."
-  },
-  "instructionLabel_expectations": {
-    "description": "Venlig etiket til brugerinstruktion, der definerer, hvad brugeren ønsker.",
-    "message": "Afklarende forventninger ..."
-  },
-  "instructionLabel_focusing": {
-    "description": "Venlig etiket til brugerinstruktion, der indsnævrer samtalens omfang.",
-    "message": "Fokusering af diskussionen ..."
-  },
-  "instructionLabel_guardrails": {
-    "description": "Venlig label til brugerinstruktion, der fastlægger grænser for samtalen.",
-    "message": "Indstilling af rækker ..."
-  },
-  "instructionLabel_guiding": {
-    "description": "Venlig label til brugerinstruktion, der guider, hvordan AI skal reagere.",
-    "message": "Vejledende svar ..."
-  },
-  "instructionLabel_nudge": {
-    "description": "Venlig label til brugerinstruktion, der forsigtigt foreslår en retning.",
-    "message": "At give et skub ..."
-  },
-  "instructionLabel_steering": {
-    "description": "Venlig label til brugerinstruktion, der guider samtaleretningen.",
-    "message": "Styring af samtalen ..."
-  },
-  "maintenanceLabel_holding": {
-    "description": "Venlig etiket til sammenbrudt assisterende vedligeholdelsesmeddelelse.",
-    "message": "Holder denne tanke ..."
-  },
-  "maintenanceLabel_mental_note": {
-    "description": "Venlig etiket til sammenbrudt assisterende vedligeholdelsesmeddelelse.",
-    "message": "Gør en mental note ..."
-  },
-  "maintenanceLabel_processing": {
-    "description": "Venlig etiket til sammenbrudt assisterende vedligeholdelsesmeddelelse.",
-    "message": "Behandling i baggrunden ..."
-  },
-  "maintenanceLabel_remembering": {
-    "description": "Venlig etiket til sammenbrudt assisterende vedligeholdelsesmeddelelse.",
-    "message": "Husker denne detalje ..."
-  },
-  "maintenanceLabel_saving": {
-    "description": "Venlig etiket til sammenbrudt assisterende vedligeholdelsesmeddelelse.",
-    "message": "Gemme den tanke til senere ..."
-  },
-  "maintenanceLabel_tracking": {
-    "description": "Venlig etiket til sammenbrudt assisterende vedligeholdelsesmeddelelse.",
-    "message": "Hold styr på kontekst ..."
-  },
-  "maintenanceLabel_tucking": {
-    "description": "Venlig etiket til sammenbrudt assisterende vedligeholdelsesmeddelelse.",
-    "message": "Gemt dette væk ..."
-  },
-  "disableTTS": {
-    "description": "Label til muligheden for at slukke for tekst-til-tale",
-    "message": "Deaktiver tekst-til-tale"
-  },
-  "signInForTTS": {
-    "description": "Prompt vist, hvornår brugeren skal autentificere for at få adgang til tekst-til-tale-funktioner",
-    "message": "Log ind til tekst-til-tale"
-  },
   "ttsVoice": {
-    "description": "Etiket, der beskriver en tekst-til-tale stemmemulighed i menuen",
+    "description": "Label describing a text-to-speech voice option in the menu",
     "message": "Tts stemme"
   },
-  "voiceOff": {
-    "description": "Etiket til når tekst-til-tale er deaktiveret",
-    "message": "Stemme væk"
+  "unlockButton": {
+    "description": "The title (tooltip) of the button to unlock the screen.",
+    "message": "Tryk for at låse skærmen op"
   },
-  "voiceSettings": {
-    "description": "Teksten til menupunktet for at få adgang til stemmelaterede indstillinger.",
-    "message": "Stemmeindstillinger"
+  "unlockInstruction": {
+    "description": "Instructions telling the user how to unlock the screen when locked.",
+    "message": "Hold for at låse op."
   },
-  "addCredits": {
-    "description": "Tekst til link for at tilføje flere stemmekreditter",
-    "message": "Tilføj kreditter"
+  "upgradeButton": {
+    "description": "Text for the button to upgrade the plan when quota is exhausted.",
+    "message": "Opgraderingsplan"
   },
   "upgradeForTTS": {
-    "description": "Prompt vist, hvornår brugeren skal opgradere for at få tekst-til-tale-kreditter",
+    "description": "Prompt shown when user needs to upgrade to obtain text-to-speech credits",
     "message": "Opgradering til stemmegenerering"
   },
-  "voicePaused": {
-    "description": "Tekst vist, når stemmen er pause på grund af utilstrækkelige kreditter",
-    "message": "Stemme pausede -"
-  },
-  "assistantIsListeningAttentively": {
-    "description": "Meddelelse vises, når assistenten lytter til tale i agenttilstand.",
-    "message": "$chatbot$ lytter opmærksomt ...",
+  "userStartedInterrupting": {
+    "description": "Message displayed when the user starts speaking while the assistant is speaking.",
+    "message": "Gå videre, $chatbot$ lytter...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
-        "example": "Claude"
+        "example": "Pi"
       }
     }
+  },
+  "vadDetailActivatingMicrophone": {
+    "description": "VAD detail when activating the microphone.",
+    "message": "Activating microphone..."
+  },
+  "vadDetailCommLinkFailed": {
+    "description": "VAD detail when the communication port link fails.",
+    "message": "Communication link failed."
+  },
+  "vadDetailDeactivatingMicrophone": {
+    "description": "VAD detail when deactivating the microphone.",
+    "message": "Deactivating microphone..."
+  },
+  "vadDetailFailedToReconnectVADService": {
+    "description": "VAD detail when re-establishing connection fails.",
+    "message": "Failed to reconnect VAD service."
+  },
+  "vadDetailInitError": {
+    "description": "VAD detail for an initialization error, with specific error message.",
+    "message": "Init Error: $error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to connect to VAD service"
+      }
+    }
+  },
+  "vadDetailInitErrorPromise": {
+    "description": "VAD detail for an initialization promise error.",
+    "message": "Init Error: Promise error"
+  },
+  "vadDetailInitErrorUnknown": {
+    "description": "VAD detail for an unknown initialization error.",
+    "message": "Init Error: Unknown"
+  },
+  "vadDetailInitializedMode": {
+    "description": "VAD detail showing initialization mode.",
+    "message": "Initialiseret (tilstand: $mode$)",
+    "placeholders": {
+      "mode": {
+        "content": "$1",
+        "example": "Agent"
+      }
+    }
+  },
+  "vadDetailInitializedModeNA": {
+    "description": "VAD detail showing initialization mode as N/A.",
+    "message": "Initialized (Mode: N/A)"
+  },
+  "vadDetailNonSpeechAudioDetected": {
+    "description": "VAD detail for non-speech audio detection.",
+    "message": "Non-speech audio detected"
+  },
+  "vadDetailReleasingVADResources": {
+    "description": "VAD detail when releasing VAD resources.",
+    "message": "Releasing VAD resources..."
+  },
+  "vadDetailRequestingVADSetup": {
+    "description": "VAD detail when requesting setup.",
+    "message": "Requesting VAD setup..."
+  },
+  "vadDetailSpeechDetected": {
+    "description": "VAD detail when speech has been detected.",
+    "message": "Speech detected"
+  },
+  "vadDetailSpeechEndedDuration": {
+    "description": "VAD detail indicating speech ended and its duration.",
+    "message": "Tale afsluttet (varighed: $duration$ ms)",
+    "placeholders": {
+      "duration": {
+        "content": "$1",
+        "example": "1000"
+      }
+    }
+  },
+  "vadDetailStartError": {
+    "description": "VAD detail for a start error, with specific error message.",
+    "message": "Startfejl: $error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to start VAD service"
+      }
+    }
+  },
+  "vadDetailStartErrorPromise": {
+    "description": "VAD detail for a start promise error.",
+    "message": "Start Error: Promise error"
+  },
+  "vadDetailStartErrorUnknown": {
+    "description": "VAD detail for an unknown start error.",
+    "message": "Start Error: Unknown"
+  },
+  "vadDetailStopError": {
+    "description": "VAD detail for a stop error, with specific error message.",
+    "message": "Stopfejl: $error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to stop VAD service"
+      }
+    }
+  },
+  "vadDetailStopErrorPromise": {
+    "description": "VAD detail for a stop promise error.",
+    "message": "Stop Error: Promise error"
+  },
+  "vadDetailStopErrorUnknown": {
+    "description": "VAD detail for an unknown stop error.",
+    "message": "Stop Error: Unknown"
+  },
+  "vadDetailUnknownVADError": {
+    "description": "VAD detail for an unknown error from the VAD module.",
+    "message": "Unknown VAD error"
+  },
+  "vadDetailVADProcessingStopped": {
+    "description": "VAD detail indicating VAD processing has stopped.",
+    "message": "VAD processing stopped."
+  },
+  "vadDetailVADServiceDisconnected": {
+    "description": "VAD detail when the service disconnects.",
+    "message": "VAD service disconnected. Try reloading."
+  },
+  "vadDetailVADServiceNotConnected": {
+    "description": "VAD detail when the service is not connected.",
+    "message": "VAD service not connected. Try reloading."
+  },
+  "vadDetailVADServiceShutdown": {
+    "description": "VAD detail indicating VAD service has been shut down.",
+    "message": "VAD service shut down."
+  },
+  "vadDetailWaitingForSpeech": {
+    "description": "VAD detail when waiting for user to speak.",
+    "message": "Waiting for speech"
+  },
+  "vadStatusDestroyed": {
+    "description": "VAD status when destroyed.",
+    "message": "Destroyed"
+  },
+  "vadStatusError": {
+    "description": "Generic VAD error status.",
+    "message": "Error"
+  },
+  "vadStatusFailed": {
+    "description": "Generic VAD failure status.",
+    "message": "Failed"
+  },
+  "vadStatusIndicatorEnabledLabel": {
+    "description": "Label for the toggle switch that controls the visibility of the Voice Activity Detection status indicator.",
+    "message": "Vis VAD -status"
+  },
+  "vadStatusInitializing": {
+    "description": "VAD status when initializing.",
+    "message": "Initializing"
+  },
+  "vadStatusListening": {
+    "description": "VAD status when actively listening.",
+    "message": "Listening"
+  },
+  "vadStatusMisfire": {
+    "description": "VAD status when a misfire (non-speech) is detected.",
+    "message": "Misfire"
+  },
+  "vadStatusProcessing": {
+    "description": "VAD status when processing audio.",
+    "message": "Processing"
+  },
+  "vadStatusReady": {
+    "description": "VAD status when ready and waiting.",
+    "message": "Ready"
+  },
+  "vadStatusShuttingDown": {
+    "description": "VAD status when shutting down.",
+    "message": "Shutting down"
+  },
+  "vadStatusStarting": {
+    "description": "VAD status when starting.",
+    "message": "Starting"
+  },
+  "vadStatusStopped": {
+    "description": "VAD status when stopped.",
+    "message": "Stopped"
+  },
+  "vadStatusStopping": {
+    "description": "VAD status when stopping.",
+    "message": "Stopping"
+  },
+  "viewDetails": {
+    "description": "Text for the link to view full quota details on the dashboard.",
+    "message": "Se detaljer"
+  },
+  "voiceIntroduction_joey": {
+    "description": "Introduction for the Joey voice.",
+    "message": "Hej! \nПривет! \n你好! \nJeg er Pi, din polyglot AI-assistent. \nMed 32 sprog på min kommando, kan vi udforske ideer og kulturer fra hele verden. \nHvad synes du om denne stemme?"
+  },
+  "voiceIntroduction_paola": {
+    "description": "Introduction for the Paola voice.",
+    "message": "Ciao! \nBonjour! \nHej! \nJeg er Pi, og jeg kan tale flydende på 32 sprog. \nFra arabisk til ukrainsk, jeg er her for at nedbryde sprogbarrierer. \nHvordan lyder denne stemme for dig?"
+  },
+  "voiceOff": {
+    "description": "Label for when text-to-speech is disabled",
+    "message": "Stemme væk"
+  },
+  "voicePaused": {
+    "description": "Text shown when voice is paused due to insufficient credits",
+    "message": "Stemme pausede -"
+  },
+  "voiceSettings": {
+    "description": "The text of the menu item to access voice-related settings.",
+    "message": "Stemmeindstillinger"
   }
 }

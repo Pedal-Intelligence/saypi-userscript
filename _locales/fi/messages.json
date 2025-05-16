@@ -1,34 +1,38 @@
 {
   "activityCheckButton": {
-    "description": "Napin teksti osoittamaan, että käyttäjä on edelleen läsnä.",
+    "description": "The text of the button to indicate that the user is still present.",
     "message": "Kyllä, olen vielä täällä!"
   },
   "activityCheckMessage": {
-    "description": "Viesti, joka näytetään, kun keskustelu on kestänyt epätavallisen kauan.",
+    "description": "The message to display when the conversation has been going on unusually long.",
     "message": "Vau, tämä on pitkä keskustelu. Oletko vielä siellä, vai puhummeko itseksemme?"
   },
+  "addCredits": {
+    "description": "Text for link to add more voice credits",
+    "message": "Lisätä hyvityksiä"
+  },
   "allowInterruptions": {
-    "description": "Valintaruudun etiketti, joka sallii/estää käyttäjän keskeyttämästä Pi:n vastaukset puhumalla.",
+    "description": "Label for the checkbox to enable/disable allowing the user to interrupt Pi's responses by speaking.",
     "message": "Keskeytettävissä"
   },
   "appDescription": {
-    "description": "Sovelluksen kuvaus.",
+    "description": "The description of the application.",
     "message": "Ääniohjaus PI: lle ja Claudelle. Puhu luonnollisesti, saat elinikäisiä vastauksia. Sano vain se."
   },
   "appName": {
-    "description": "Sovelluksen nimi.",
+    "description": "The name of the application.",
     "message": "Say, Pi"
   },
   "applicationStatusIssue": {
-    "description": "Viesti, joka näytetään kun sovelluksessa on ongelmia.",
+    "description": "Message to display when the application is experiencing issues.",
     "message": "Järjestelmäongelman hälytys"
   },
   "applicationStatusUnknown": {
-    "description": "Viesti, joka näytetään, kun sovelluksen tilaa ei voida määrittää. Esim. kun asiakas on offline-tilassa.",
+    "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Sovelluksen tila tuntematon"
   },
   "assistantIsListening": {
-    "description": "Viesti, joka näkyy kun avustaja kuuntelee puhetta.",
+    "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ kuuntelee...",
     "placeholders": {
       "chatbot": {
@@ -37,8 +41,18 @@
       }
     }
   },
+  "assistantIsListeningAttentively": {
+    "description": "Message displayed when the assistant is listening for speech in agent mode.",
+    "message": "$chatbot$ kuuntelee tarkkaan ...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
   "assistantIsSpeaking": {
-    "description": "Viesti, joka näkyy kun avustaja puhuu vastauksensa.",
+    "description": "Message displayed when the assistant is speaking its response.",
     "message": "$chatbot$ puhuu...",
     "placeholders": {
       "chatbot": {
@@ -47,8 +61,18 @@
       }
     }
   },
+  "assistantIsSpeakingWithManualInterrupt": {
+    "description": "Message displayed when the assistant is speaking its response and manual interruption is possible.",
+    "message": "$chatbot$ puhuu, keskeytä napauttamalla...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "assistantIsThinking": {
-    "description": "Viesti, joka näkyy kun avustaja valmistelee vastaustaan.",
+    "description": "Message displayed when the assistant is preparing its response.",
     "message": "$chatbot$ miettii...",
     "placeholders": {
       "chatbot": {
@@ -57,8 +81,18 @@
       }
     }
   },
+  "assistantIsWriting": {
+    "description": "Message displayed when the assistant is typing its response.",
+    "message": "$chatbot$ kirjoittaa...",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
   "audioConnected": {
-    "description": "Viesti näytetään, kun mikrofoni on kytketty",
+    "description": "Message displayed when a microphone is connected",
     "message": "$microphone$ kytketty",
     "placeholders": {
       "microphone": {
@@ -68,7 +102,7 @@
     }
   },
   "audioInputError": {
-    "description": "Viesti, joka näytetään kun ääni johti tyhjään transkriptioon - yleensä suodatuksen tulosta.",
+    "description": "Message displayed when audio transcription failed - usually the result of an ASR or LLM API error.",
     "message": "Hmm, $chatbot$ oli pieni hikka. \nVoisitko yrittää sanoa sen uudelleen?",
     "placeholders": {
       "chatbot": {
@@ -78,7 +112,7 @@
     }
   },
   "audioReconnecting": {
-    "description": "Viesti näytetään, kun yhdistetään uuteen mikrofoniin",
+    "description": "Message displayed when connecting to a new microphone",
     "message": "Vaihdetaan $microphone$...",
     "placeholders": {
       "microphone": {
@@ -88,19 +122,23 @@
     }
   },
   "autoSubmit": {
-    "description": "Merkintä valintaruudulle, jolla voidaan ottaa käyttöön/poistaa käytöstä automaattinen kehotteen lähetys.",
+    "description": "Label for the checkbox to enable/disable automatic prompt submission.",
     "message": "Automaattinen lähetys"
   },
   "callError": {
-    "description": "Työkaluvihje, joka näytetään soittonapissa, kun ei-kohtalokas virhe tapahtuu.",
+    "description": "The tooltip to display on the call button when a non-fatal error occurs.",
     "message": "Kohdattiin ei-kohtalokas virhe. Älä hätäänny, kuuntelemme edelleen."
   },
   "callInProgress": {
-    "description": "Näytettävä työkaluvihje soittonapissa, kun puhelu on käynnissä.",
+    "description": "The tooltip to display on the call button when a call is in progress.",
     "message": "Lopeta handsfree-keskustelu"
   },
+  "callInterruptible": {
+    "description": "The tooltip to display on the call button when a call is in progress and manual interruption is possible.",
+    "message": "Napauta keskeyttääksesi"
+  },
   "callNotStarted": {
-    "description": "Näytettävä työkaluvihje soittonapissa ennen puhelun aloittamista.",
+    "description": "The tooltip to display on the call button before a call is started.",
     "message": "Aloita kädet vapaa keskustelu $chatbot$ kanssa",
     "placeholders": {
       "chatbot": {
@@ -110,12 +148,20 @@
     }
   },
   "callStarting": {
-    "description": "Teksti, joka näkyy puhelunappulan työkaluvihjeessä ja kehotusalueella, kun puhelu alkaa.",
+    "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Yhdistetään..."
   },
   "checkingApplicationStatus": {
-    "description": "Viesti, joka näytetään kun järjestelmän tilaa määritetään, esim. latauksen aikana.",
+    "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Tarkistetaan sovelluksen tilaa..."
+  },
+  "clickToCollapse": {
+    "description": "Text indicating user can click to hide expanded content.",
+    "message": "Napsauta romahtaa"
+  },
+  "clickToExpand": {
+    "description": "Text indicating user can click to show collapsed content.",
+    "message": "Napsauta laajentaaksesi"
   },
   "consentAskParticipate": {
     "message": "Haluaisitko osallistua?"
@@ -151,27 +197,39 @@
     "message": "Lue tietosuojakäytäntömme"
   },
   "continueUnlocking": {
-    "description": "Ohjeet, jotka kertovat käyttäjälle, miten jatkaa, kun he ovat alkaneet painaa lukituksen poisto -nappia.",
+    "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Jatka pitämistä avataksesi..."
   },
+  "copiedButtonTitle": {
+    "description": "The title of the button to indicate that the text of a message has been copied to the clipboard.",
+    "message": "Kopioitu!"
+  },
+  "copyButtonTitle": {
+    "description": "The title of the button to copy the text of a message to the clipboard.",
+    "message": "Kopioi"
+  },
   "currencyUSDAbbreviation": {
-    "description": "Yhdysvaltain dollarin lyhenne.",
+    "description": "The abbreviation for the US dollar.",
     "message": "USD"
   },
   "currentCharges": {
-    "description": "Termi, jota käytetään kuvaamaan käyttäjän kertyneitä nykyisiä maksuja (juokseva yhteissumma).",
+    "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Nykyiset maksut"
   },
+  "disableTTS": {
+    "description": "Label for the option to turn off text-to-speech",
+    "message": "Poista tekstistä puheeksi"
+  },
   "dismissAlert": {
-    "description": "Napin etiketti, jolla hylätään järjestelmäongelman hälytys.",
+    "description": "Label for the button to dismiss a system issue alert.",
     "message": "Hylkää"
   },
   "enableTTS": {
-    "description": "Merkintä valintaruudulle tekstistä puheeksi -toiminnon käyttöön ottamiseksi/poistamiseksi.",
+    "description": "Label for the checkbox to enable/disable text-to-speech.",
     "message": "Monikieliset äänet"
   },
   "enhancedVoice": {
-    "description": "Otsikko (työkaluvihje) kohdalle Sano, Pi parannetut äänet.",
+    "description": "Title (tooltip) for Say, Pi enhanced voices.",
     "message": "Ääntä paransi $product$",
     "placeholders": {
       "product": {
@@ -181,51 +239,240 @@
     }
   },
   "enterImmersiveModeLong": {
-    "description": "Aria-label ja painikkeen otsikko, jolla siirrytään immersiiviseen tilaan mobiililaitteissa.",
+    "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
     "message": "Siirry immersiiviseen tilaan"
   },
   "enterImmersiveModeShort": {
-    "description": "Napin teksti, jolla siirrytään immersiiviseen tilaan työpöydällä.",
+    "description": "The text of the button to enter immersive mode on desktop.",
     "message": "Upotus"
   },
   "exitImmersiveModeLong": {
-    "description": "Aria-labelin ja napin otsikon käännös, jolla poistutaan immersiivisestä tilasta mobiililaitteissa takaisin tekstipohjaiseen työpöytätilaan.",
+    "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
     "message": "Poistu immersiivisesta tilasta"
   },
   "extensionPopupTitle": {
-    "description": "Laajennuksen ponnahdusikkunan otsikko.",
+    "description": "The title of the extension's popup dialog.",
     "message": "Sano, Pi-asetukset"
   },
+  "extensionSettings": {
+    "description": "The text of the button to open the extension's settings.",
+    "message": "Asetukset"
+  },
+  "greeting": {
+    "description": "Greeting message shown when user is signed in",
+    "message": "Hei, $name$!",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John"
+      }
+    }
+  },
+  "instructionLabel_context": {
+    "description": "Friendly label for user instruction that provides background information.",
+    "message": "Tarjoaa kontekstia ..."
+  },
+  "instructionLabel_expectations": {
+    "description": "Friendly label for user instruction that defines what the user wants.",
+    "message": "Selventävät odotukset ..."
+  },
+  "instructionLabel_focusing": {
+    "description": "Friendly label for user instruction that narrows the scope of conversation.",
+    "message": "Keskittyminen keskusteluun ..."
+  },
+  "instructionLabel_guardrails": {
+    "description": "Friendly label for user instruction that establishes boundaries for the conversation.",
+    "message": "Suojakaiteiden asettaminen ..."
+  },
+  "instructionLabel_guiding": {
+    "description": "Friendly label for user instruction that guides how the AI should respond.",
+    "message": "Ohjaavat vastaukset ..."
+  },
+  "instructionLabel_nudge": {
+    "description": "Friendly label for user instruction that gently suggests a direction.",
+    "message": "Annetaan kummallinen ..."
+  },
+  "instructionLabel_steering": {
+    "description": "Friendly label for user instruction that guides the conversation direction.",
+    "message": "Keskustelun ohjaaminen ..."
+  },
+  "interruptionsFirefoxDisabled": {
+    "message": "Firefox ei tällä hetkellä tue keskeytyksiä."
+  },
   "lockButton": {
-    "description": "Painikkeen otsikko (työkaluvihje), jolla lukitaan näyttö vahingossa tapahtuvia kosketuksia vastaan.",
+    "description": "The title (tooltip) of the button to lock the screen against accidental touches.",
     "message": "Paina lukitaksesi näytön"
   },
   "lockedScreen": {
-    "description": "Viesti, joka näytetään selvästi, kun näyttö on lukittu.",
+    "description": "A message to display prominently when the screen is locked.",
     "message": "Näyttö on lukittu."
   },
+  "maintenanceLabel_holding": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Pitää tätä ajatusta ..."
+  },
+  "maintenanceLabel_mental_note": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Henkisen muistiinpanon tekeminen ..."
+  },
+  "maintenanceLabel_processing": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Käsittely taustalla ..."
+  },
+  "maintenanceLabel_remembering": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Muistaa tämä yksityiskohta ..."
+  },
+  "maintenanceLabel_saving": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Säästät ajatuksen myöhempää käyttöä varten ..."
+  },
+  "maintenanceLabel_tracking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Seurata kontekstia ..."
+  },
+  "maintenanceLabel_tucking": {
+    "description": "Friendly label for collapsed assistant maintenance message.",
+    "message": "Tämän työntäminen ..."
+  },
+  "microphoneErrorConstraints": {
+    "description": "Error message when microphone constraints cannot be satisfied.",
+    "message": "Mikrofoniasetukset eivät täytä vaadittuja määrityksiä. \nKokeile käyttää toista mikrofonia tai säätää ääniasetuksiasi."
+  },
+  "microphoneErrorGeneric": {
+    "description": "Generic error message with details when microphone access fails.",
+    "message": "Mikrofonin käyttö epäonnistui: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "microphoneErrorInUse": {
+    "description": "Error message when microphone is already in use by another application.",
+    "message": "Mikrofonia ei voi käyttää, koska toinen sovellus käyttää sitä. \nSulje muut sovellukset, jotka saattavat käyttää mikrofoniasi."
+  },
+  "microphoneErrorNotFound": {
+    "description": "Error message when no microphone device is found.",
+    "message": "Mikrofonia ei havaittu. \nLiitä mikrofoni ja yritä uudelleen."
+  },
+  "microphoneErrorPermissionDenied": {
+    "description": "Error message when microphone permission is denied by the user or system.",
+    "message": "Mikrofonin käyttö vaaditaan. \nSalli mikrofonin käyttö selaimesi asetuksista jatkaaksesi."
+  },
+  "microphoneErrorUnexpected": {
+    "description": "Error message for unexpected microphone errors with details.",
+    "message": "Mikrofonissasi tapahtui odottamaton virhe: $message$",
+    "placeholders": {
+      "message": {
+        "content": "$1",
+        "example": "Device busy"
+      }
+    }
+  },
+  "microphoneErrorUnknown": {
+    "description": "Generic error message when microphone access fails for unknown reasons.",
+    "message": "Mikrofonia ei voi käyttää. \nTarkista laitteesi asetukset ja yritä uudelleen."
+  },
   "mode_accuracy": {
-    "description": "Korkeimman tarkkuuden tila.",
+    "description": "Highest accuracy mode.",
     "message": "tarkkuus"
   },
+  "mode_accuracy_description": {
+    "description": "Description for the accuracy transcription mode.",
+    "message": "Suurin tarkkuus, mutta hitaampi transkriptionopeus. \nAltis hallusinaatioille."
+  },
   "mode_balanced": {
-    "description": "Oletuspuhtaaksikirjoitustila.",
+    "description": "Default transcription mode.",
     "message": "tasapainoinen"
   },
+  "mode_balanced_description": {
+    "description": "Description for the balanced transcription mode.",
+    "message": "Hyvä nopeuden ja tarkkuuden tasapaino useimpiin käyttötarkoituksiin."
+  },
   "mode_speed": {
-    "description": "Nopein transkriptiotila.",
+    "description": "Fastest transcription mode.",
     "message": "nopeus"
   },
+  "mode_speed_description": {
+    "description": "Description for the speed transcription mode.",
+    "message": "Nopein vastaus, mutta vähemmän tarkka. \nTaipuvainen keskeyttämään."
+  },
+  "nicknameLabel": {
+    "description": "Label for the input field to set a custom nickname for the AI assistant.",
+    "message": "Lempinimi"
+  },
+  "notSignedIn": {
+    "description": "Text to show when the user is not signed in.",
+    "message": "Ei allekirjoitettu"
+  },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "Käyttöoikeuskehotussivu DOM ei lataus oikein."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Tuntematon virhe lupapyyntöjen aikana"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "Näet selaimen kehotuksen tämän ikkunan yläosassa. \nVain osuma <strong> \"Salli vieraillessasi sivustolla\" </strong>, jotta voimme alkaa puhua."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Tämä välilehti sulkeutuu automaattisesti, kun olet vastannut."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣️ Juttelemme!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "Äänen tuomiseksi keskusteluihisi $productName$ tarvitsee luvan mikrofonin käyttämiseen. \nTietosuojasi on merkitystä - kuuntelemme vain, kun juttelet aktiivisesti.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Odottaa menemistäsi ..."
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Mikrofonin lupa"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Hmm, ei saanut mikrofonia: $errorName$. \nTämän välilehden sulkeminen hetkessä…",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "Kiitos! \nLupa myönnetty. \nKääri asiat ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Tuntematon virhe"
+  },
   "preferedLanguage": {
-    "description": "Ohjausvalinnan etiketti suosikkitranskription kielen valitsemiseksi.",
+    "description": "Label for a control to select the prefered transcription language.",
     "message": "Kieli"
   },
   "preferedModeControl": {
-    "description": "Ohjausvalinnan otsikko (työkaluvihje), jolla valitaan suosittu transkriptiotila.",
+    "description": "The title (tooltip) of the control to select the prefered transcription mode.",
     "message": "Valitse haluamasi transkriptiotila"
   },
   "previewProgress": {
-    "description": "Viesti, joka näytetään, kun käyttäjä esikatselee ominaisuutta, jolla on merkkirajoitus.",
+    "description": "The message to display when the user is previewing a feature that has a character limit.",
     "message": "$count$ merkkiä käytetty $limit$:sta",
     "placeholders": {
       "count": {
@@ -245,7 +492,7 @@
     "message": "Beta Valmis"
   },
   "previewStatusPaused": {
-    "description": "Viesti, joka näytetään, kun käyttäjä esikatselee ominaisuutta, joka on keskeytetty.",
+    "description": "The message to display when the user is previewing a feature that has been paused.",
     "message": "Beta keskeytetty, kunnes $resetDate$",
     "placeholders": {
       "resetDate": {
@@ -257,32 +504,187 @@
   "previewStatusUnknown": {
     "message": "Yhteys ei onnistu..."
   },
+  "profile": {
+    "description": "Label for the user profile section.",
+    "message": "Profiili"
+  },
+  "quotaCredits": {
+    "description": "Unit label for TTS credits",
+    "message": "hyvitykset"
+  },
+  "quotaRemaining": {
+    "description": "Label for the quota remaining progress bar",
+    "message": "Jäljellä oleva kiintiö"
+  },
+  "quotaStatusUnknown": {
+    "description": "Message shown when quota status cannot be determined",
+    "message": "Kiinan tilaa ei voi tarkistaa"
+  },
+  "quotaUnauthenticatedMessage": {
+    "description": "Message shown when user is not authenticated.",
+    "message": "Kirjaudu sisään Access -äänen luomiseen ja muihin premium -ominaisuuksiin"
+  },
   "readAloudButtonTitle": {
-    "description": "Painikkeen otsikko, joka lukee viestin tekstin ääneen.",
+    "description": "The title of the button to read aloud the text of a message.",
     "message": "Lue Ääneen"
   },
   "recommendedActions": {
-    "description": "Viesti, joka edeltää luetteloa suositelluista toimenpiteistä, joita käyttäjä voi toteuttaa korjatakseen tunnetun ongelman.",
+    "description": "Message preceding a list of recommended actions the user may take to remediate a known issue.",
     "message": "Sillä välin suosittelemme:"
   },
+  "regenerateButtonTitle": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an estimated cost.",
+    "message": "Luo ääntä $cost$ $currency$ hintaan",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "0.01"
+      },
+      "currency": {
+        "content": "$2",
+        "example": "credits"
+      }
+    }
+  },
+  "regenerateButtonTitleFree": {
+    "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
+    "message": "Luo ääntä"
+  },
   "shareAnalytics": {
-    "description": "Valintaruudun etiketti analytiikan jakamisen käyttöönottoa/vaihtoehtoa varten.",
+    "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Jaa analytiikka"
   },
+  "signIn": {
+    "description": "Text for the sign in button.",
+    "message": "Kirjautua sisään"
+  },
+  "signInForTTS": {
+    "description": "Prompt shown when user needs to authenticate to access text-to-speech features",
+    "message": "Kirjaudu sisään tekstiä puheeksi"
+  },
+  "signOut": {
+    "description": "Text for the sign out button.",
+    "message": "Ilmoittautua"
+  },
+  "signedIn": {
+    "description": "Status text shown when user is authenticated (without email).",
+    "message": "Allekirjoitettu"
+  },
+  "signedInAs": {
+    "description": "Status text shown when user is authenticated, including their email.",
+    "message": "Kirjautunut sisään $email$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "user@example.com"
+      }
+    }
+  },
   "soundEffects": {
-    "description": "Merkintä valintaruudulle, jolla voidaan ottaa käyttöön/poistaa käytöstä ääniefektit.",
+    "description": "Label for the checkbox to enable/disable sound effects.",
     "message": "Ääniefektit"
   },
+  "soundEffectsFirefoxDisabled": {
+    "message": "Äänitehosteet on poistettu käytöstä Firefoxissa äänipalauteongelmien estämiseksi."
+  },
+  "sttMinutesRemaining": {
+    "description": "Text showing remaining STT quota in minutes.",
+    "message": "$minutes$ minuutti $plural$ jäljellä",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      },
+      "plural": {
+        "content": "$2",
+        "example": "s"
+      }
+    }
+  },
+  "sttQuotaExhausted": {
+    "description": "Text to show when STT quota is exhausted.",
+    "message": "Puheentunnistuskiintiö on uupunut"
+  },
+  "sttQuotaProgress": {
+    "description": "Tooltip for the STT quota progress bar.",
+    "message": "$remaining$ Jäljelle jäävä $total$ sekuntia jäljellä",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "100"
+      },
+      "total": {
+        "content": "$2",
+        "example": "300"
+      }
+    }
+  },
+  "sttQuotaProgressMinutes": {
+    "description": "Tooltip for the STT quota progress bar in minutes.",
+    "message": "$remaining$ Jäljelle jää $total$ minuuttia",
+    "placeholders": {
+      "remaining": {
+        "content": "$1",
+        "example": "5"
+      },
+      "total": {
+        "content": "$2",
+        "example": "60"
+      }
+    }
+  },
+  "sttQuotaRemaining": {
+    "description": "Label for the STT quota remaining display.",
+    "message": "Puheentunnistus"
+  },
+  "sttQuotaSeconds": {
+    "description": "Unit for STT quota (seconds).",
+    "message": "sekuntia"
+  },
+  "submitModeControl": {
+    "description": "The title (tooltip) of the control to select when messages should be submitted.",
+    "message": "Valitse, milloin lähetät viestisi"
+  },
+  "submit_mode_agent": {
+    "description": "AI-driven submission mode.",
+    "message": "agentti"
+  },
+  "submit_mode_agent_description": {
+    "description": "Description for the AI-driven submission mode.",
+    "message": "$chatbot$ päättää, milloin vastataan kontekstin perusteella",
+    "placeholders": {
+      "chatbot": {
+        "content": "$1",
+        "example": "Pi"
+      }
+    }
+  },
+  "submit_mode_auto": {
+    "description": "Automatic submission mode.",
+    "message": "auto"
+  },
+  "submit_mode_auto_description": {
+    "description": "Description for the automatic submission mode.",
+    "message": "Lähetä automaattisesti, kun lopetat puhumisen"
+  },
+  "submit_mode_off": {
+    "description": "Manual submission mode.",
+    "message": "manuaalinen"
+  },
+  "submit_mode_off_description": {
+    "description": "Description for the manual submission mode.",
+    "message": "Lähetä vain, kun painat painiketta"
+  },
   "toggleThemeToDarkMode": {
-    "description": "Napin etiketti, jolla vaihdetaan tummaan tilaan.",
+    "description": "Label for the button to toggle to dark mode.",
     "message": "Vaihda tummaan tilaan"
   },
   "toggleThemeToLightMode": {
-    "description": "Napin etiketti, jolla vaihdetaan valotilaan.",
+    "description": "Label for the button to toggle to light mode.",
     "message": "Vaihda valotilaan"
   },
   "ttsCostExplanation": {
-    "description": "Kuvakevihje, joka näytetään kun tekstistä puheeksi -moottoria käytetään viestin lukemiseen ääneen, viestin kustannuksella.",
+    "description": "The tooltip to display when the text-to-speech engine is used to read aloud a message, with the cost of the message.",
     "message": "$product$ veloittaa $cost$ $currency$ tämän viestin kuuntelemisesta",
     "placeholders": {
       "cost": {
@@ -300,7 +702,7 @@
     }
   },
   "ttsCostExplanationFree": {
-    "description": "Tooltipin näyttäminen, kun tekstistä puheeksi -moottoria käytetään viestin lukemiseen ääneen, ja viesti on ilmainen. Saattaa sisältää palveluntarjoajan nimen.",
+    "description": "The tooltip to display when a text-to-speech engine is used to read aloud a message, and the message is free. Assumes the provider is Inflection AI.",
     "message": "Inflection AI tuottaa tämän äänen ilmaiseksi",
     "placeholders": {
       "provider": {
@@ -309,8 +711,26 @@
       }
     }
   },
+  "ttsCostExplanationSayPi": {
+    "description": "The tooltip to display when the user hovers over the cost explanation link.",
+    "message": "Lue, miten $product$ veloittaa äänestä",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "ttsCredits": {
+    "description": "The term used for the credits currency in the text-to-speech feature.",
+    "message": "hyvitykset"
+  },
+  "ttsDisabledSafari": {
+    "description": "Message shown when TTS is disabled in Safari",
+    "message": "Monikielisiä ääniä ei tällä hetkellä tueta Safarissa."
+  },
   "ttsPoweredBy": {
-    "description": "Viesti, joka näytetään, kun tekstistä puheeksi -moottoria käytetään viestin ääneen lukemiseen.",
+    "description": "The message to display when the text-to-speech engine is used to read aloud a message.",
     "message": "Tekstistä puheeksi -toiminto, joka on käyttämä $ttsEngine$",
     "placeholders": {
       "ttsEngine": {
@@ -319,320 +739,16 @@
       }
     }
   },
-  "unlockButton": {
-    "description": "Näytön lukituksen avaamisen painikkeen otsikko (työkaluvihje).",
-    "message": "Paina avataksesi näytön lukituksen"
-  },
-  "unlockInstruction": {
-    "description": "Ohjeet käyttäjälle siitä, kuinka näyttö avataan, kun se on lukittu.",
-    "message": "Pidä avattuna."
-  },
-  "userStartedInterrupting": {
-    "description": "Viesti, joka näytetään, kun käyttäjä alkaa puhua samalla kun avustaja puhuu.",
-    "message": "Jatka, $chatbot$ kuuntelee...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "copiedButtonTitle": {
-    "message": "Kopioitu!",
-    "description": "Painikkeen otsikko, joka ilmaisee, että viestin teksti on kopioitu leikepöydälle."
-  },
-  "copyButtonTitle": {
-    "message": "Kopioi",
-    "description": "Painikkeen otsikko, jolla kopioidaan viestin teksti leikepöydälle."
-  },
-  "voiceIntroduction_joey": {
-    "message": "Hei! \nПривет! \n你好! \nOlen Pi, polyglotti tekoälyavustajasi. \nHallitsemani 32 kielellä voimme tutustua ideoihin ja kulttuureihin ympäri maailmaa. \nMitä mieltä olet tästä äänestä?",
-    "description": "Joey-äänen esittely."
-  },
-  "voiceIntroduction_paola": {
-    "message": "Ciao! \nBonjour! \nHei! \nOlen Pi, ja voin keskustella sujuvasti 32 kielellä. \nArabiasta ukrainaan olen täällä murtaakseni kielimuurit. \nMiltä tämä ääni sinusta kuulostaa?",
-    "description": "Johdanto Paola-äänelle."
-  },
-  "regenerateButtonTitle": {
-    "message": "Luo ääntä $cost$ $currency$ hintaan",
-    "description": "Painikkeen otsikko, jolla uudistetaan viestin ääni. Saattaa aiheuttaa arvioidun kustannuksen.",
-    "placeholders": {
-      "cost": {
-        "content": "$1",
-        "example": "0.01"
-      },
-      "currency": {
-        "content": "$2",
-        "example": "credits"
-      }
-    }
-  },
-  "regenerateButtonTitleFree": {
-    "message": "Luo ääntä",
-    "description": "Painikkeen otsikko, jolla uudistetaan viestin ääni. Saattaa aiheuttaa määrittelemättömän kustannuksen."
-  },
-  "assistantIsWriting": {
-    "description": "Viesti näytetään, kun avustaja kirjoittaa vastaustaan.",
-    "message": "$chatbot$ kirjoittaa...",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "ttsCostExplanationSayPi": {
-    "description": "Työkaluvinkki, joka näytetään, kun käyttäjä vie hiiren osoittimen kustannusselityslinkin päälle.",
-    "placeholders": {
-      "product": {
-        "content": "$1",
-        "example": "Say, Pi"
-      }
-    },
-    "message": "Lue, miten $product$ veloittaa äänestä"
-  },
-  "interruptionsFirefoxDisabled": {
-    "message": "Firefox ei tällä hetkellä tue keskeytyksiä."
-  },
-  "mode_accuracy_description": {
-    "description": "Tarkkuustranskriptiotilan kuvaus.",
-    "message": "Suurin tarkkuus, mutta hitaampi transkriptionopeus. \nAltis hallusinaatioille."
-  },
-  "mode_balanced_description": {
-    "description": "Kuvaus tasapainotetusta transkriptiotilasta.",
-    "message": "Hyvä nopeuden ja tarkkuuden tasapaino useimpiin käyttötarkoituksiin."
-  },
-  "mode_speed_description": {
-    "description": "Kuvaus nopeustranskriptiotilasta.",
-    "message": "Nopein vastaus, mutta vähemmän tarkka. \nTaipuvainen keskeyttämään."
-  },
-  "soundEffectsFirefoxDisabled": {
-    "message": "Äänitehosteet on poistettu käytöstä Firefoxissa äänipalauteongelmien estämiseksi."
-  },
-  "assistantIsSpeakingWithManualInterrupt": {
-    "description": "Viesti näytetään, kun avustaja puhuu vastauksensa, ja manuaalinen keskeytys on mahdollista.",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    },
-    "message": "$chatbot$ puhuu, keskeytä napauttamalla..."
-  },
-  "callInterruptible": {
-    "description": "Työkaluvinkki, joka näytetään soittopainikkeessa puhelun ollessa käynnissä ja manuaalinen keskeytys on mahdollista.",
-    "message": "Napauta keskeyttääksesi"
-  },
-  "microphoneErrorConstraints": {
-    "description": "Virheilmoitus, kun mikrofonin rajoituksia ei voida täyttää.",
-    "message": "Mikrofoniasetukset eivät täytä vaadittuja määrityksiä. \nKokeile käyttää toista mikrofonia tai säätää ääniasetuksiasi."
-  },
-  "microphoneErrorGeneric": {
-    "description": "Yleinen virheilmoitus, jossa on tiedot, kun mikrofonin käyttö epäonnistuu.",
-    "message": "Mikrofonin käyttö epäonnistui: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Permission denied"
-      }
-    }
-  },
-  "microphoneErrorInUse": {
-    "description": "Virheilmoitus, kun mikrofoni on jo toisen sovelluksen käytössä.",
-    "message": "Mikrofonia ei voi käyttää, koska toinen sovellus käyttää sitä. \nSulje muut sovellukset, jotka saattavat käyttää mikrofoniasi."
-  },
-  "microphoneErrorNotFound": {
-    "description": "Virheilmoitus, kun mikrofonilaitetta ei löydy.",
-    "message": "Mikrofonia ei havaittu. \nLiitä mikrofoni ja yritä uudelleen."
-  },
-  "microphoneErrorPermissionDenied": {
-    "description": "Virheilmoitus, kun käyttäjä tai järjestelmä on evännyt mikrofonin luvan.",
-    "message": "Mikrofonin käyttö vaaditaan. \nSalli mikrofonin käyttö selaimesi asetuksista jatkaaksesi."
-  },
-  "microphoneErrorUnexpected": {
-    "description": "Virheilmoitus odottamattomista mikrofonivirheistä ja yksityiskohdista.",
-    "message": "Mikrofonissasi tapahtui odottamaton virhe: $message$",
-    "placeholders": {
-      "message": {
-        "content": "$1",
-        "example": "Device busy"
-      }
-    }
-  },
-  "microphoneErrorUnknown": {
-    "description": "Yleinen virheilmoitus, kun mikrofonin käyttö epäonnistuu tuntemattomista syistä.",
-    "message": "Mikrofonia ei voi käyttää. \nTarkista laitteesi asetukset ja yritä uudelleen."
-  },
-  "ttsDisabledSafari": {
-    "message": "Monikielisiä ääniä ei tällä hetkellä tueta Safarissa.",
-    "description": "Viesti näytetään, kun TTS on poistettu käytöstä Safarissa"
-  },
-  "extensionSettings": {
-    "message": "Asetukset",
-    "description": "Laajennuksen asetusten avaamispainikkeen teksti."
-  },
-  "submitModeControl": {
-    "description": "Ohjaimen otsikko (työkaluvinkki), jolla valitaan, milloin viestit lähetetään.",
-    "message": "Valitse, milloin lähetät viestisi"
-  },
-  "submit_mode_agent": {
-    "description": "AI-ohjattu lähetystila.",
-    "message": "agentti"
-  },
-  "submit_mode_agent_description": {
-    "description": "Tekoälypohjaisen lähetystilan kuvaus.",
-    "message": "$chatbot$ päättää, milloin vastataan kontekstin perusteella",
-    "placeholders": {
-      "chatbot": {
-        "content": "$1",
-        "example": "Pi"
-      }
-    }
-  },
-  "submit_mode_auto": {
-    "description": "Automaattinen lähetystila.",
-    "message": "auto"
-  },
-  "submit_mode_auto_description": {
-    "description": "Automaattisen lähetystilan kuvaus.",
-    "message": "Lähetä automaattisesti, kun lopetat puhumisen"
-  },
-  "submit_mode_off": {
-    "description": "Manuaalinen lähetystila.",
-    "message": "manuaalinen"
-  },
-  "submit_mode_off_description": {
-    "description": "Manuaalisen lähetystilan kuvaus.",
-    "message": "Lähetä vain, kun painat painiketta"
-  },
-  "nicknameLabel": {
-    "message": "Lempinimi",
-    "description": "Syöttökentän etiketti asettaa mukautetun lempinimen AI -avustajalle."
-  },
-  "greeting": {
-    "description": "Tervehdysviesti, joka näkyy, kun käyttäjä on kirjautunut sisään",
-    "message": "Hei, $name$!",
-    "placeholders": {
-      "name": {
-        "content": "$1",
-        "example": "John"
-      }
-    }
-  },
-  "notSignedIn": {
-    "description": "Teksti näyttää, kun käyttäjää ei kirjata sisään.",
-    "message": "Ei allekirjoitettu"
-  },
-  "profile": {
-    "description": "Käyttäjäprofiiliosa.",
-    "message": "Profiili"
-  },
-  "quotaCredits": {
-    "description": "Yksikkötarra TTS -hyvityksille",
-    "message": "hyvitykset"
-  },
-  "quotaRemaining": {
-    "description": "Label Qualing Progress Barille",
-    "message": "Jäljellä oleva kiintiö"
-  },
-  "quotaStatusUnknown": {
-    "description": "Viesti, joka näkyy, kun kiintiötilaa ei voida määrittää",
-    "message": "Kiinan tilaa ei voi tarkistaa"
-  },
-  "quotaUnauthenticatedMessage": {
-    "description": "Viesti, joka näkyy, kun käyttäjää ei ole todennettu.",
-    "message": "Kirjaudu sisään Access -äänen luomiseen ja muihin premium -ominaisuuksiin"
-  },
-  "signIn": {
-    "description": "Kirjaudu sisään painikkeeseen.",
-    "message": "Kirjautua sisään"
-  },
-  "signOut": {
-    "description": "Teksti kirjaudu -painiketta varten.",
-    "message": "Ilmoittautua"
-  },
-  "signedIn": {
-    "description": "Tila -teksti, joka näytetään, kun käyttäjä on todennettu (ilman sähköpostia).",
-    "message": "Allekirjoitettu"
-  },
-  "signedInAs": {
-    "description": "Tila -teksti, joka näytetään, kun käyttäjä on todennettu, mukaan lukien heidän sähköpostinsa.",
-    "message": "Kirjautunut sisään $email$",
-    "placeholders": {
-      "email": {
-        "content": "$1",
-        "example": "user@example.com"
-      }
-    }
-  },
-  "sttMinutesRemaining": {
-    "description": "Teksti, joka näyttää jäljellä olevan STT -kiintiön muutamassa minuutissa.",
-    "message": "$minutes$ minuutti $plural$ jäljellä",
-    "placeholders": {
-      "minutes": {
-        "content": "$1",
-        "example": "5"
-      },
-      "plural": {
-        "content": "$2",
-        "example": "s"
-      }
-    }
-  },
-  "sttQuotaExhausted": {
-    "description": "Teksti näytetään, kun STT -kiintiö on uupunut.",
-    "message": "Puheentunnistuskiintiö on uupunut"
-  },
-  "sttQuotaProgress": {
-    "description": "Työkaluvidi STT -kiintiön etenemispalkkiin.",
-    "message": "$remaining$ Jäljelle jäävä $total$ sekuntia jäljellä",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "100"
-      },
-      "total": {
-        "content": "$2",
-        "example": "300"
-      }
-    }
-  },
-  "sttQuotaProgressMinutes": {
-    "description": "Työkaluvidi STT -kiintiön etenemispalkkiin muutamassa minuutissa.",
-    "message": "$remaining$ Jäljelle jää $total$ minuuttia",
-    "placeholders": {
-      "remaining": {
-        "content": "$1",
-        "example": "5"
-      },
-      "total": {
-        "content": "$2",
-        "example": "60"
-      }
-    }
-  },
-  "sttQuotaRemaining": {
-    "description": "STT -kiintiön jäljellä oleva näyttö.",
-    "message": "Puheentunnistus"
-  },
-  "sttQuotaSeconds": {
-    "description": "Yksikkö STT -kiintiölle (sekunnit).",
-    "message": "sekuntia"
-  },
-  "ttsCredits": {
-    "description": "Termi, jota käytetään hyvitysvaluuttaan tekstistä puheeksi -ominaisuudessa.",
-    "message": "hyvitykset"
-  },
   "ttsQuotaCharacters": {
-    "description": "Yksikkö TTS -kiintiölle (merkit).",
+    "description": "Unit for TTS quota (characters).",
     "message": "hyvitykset"
   },
   "ttsQuotaExhausted": {
-    "description": "Teksti näyttää, kun TTS -kiintiö on uupunut.",
+    "description": "Text to show when TTS quota is exhausted.",
     "message": "Äänikiintiö on uupunut"
   },
   "ttsQuotaProgress": {
-    "description": "Työkaluvidi TTS -kiintiön etenemispalkkiin.",
+    "description": "Tooltip for the TTS quota progress bar.",
     "message": "$remaining$ Jäljellä oleva $total$ merkkiä",
     "placeholders": {
       "remaining": {
@@ -646,121 +762,247 @@
     }
   },
   "ttsQuotaRemaining": {
-    "description": "TTS -kiintiön jäljellä oleva näyttö.",
+    "description": "Label for the TTS quota remaining display.",
     "message": "Äänen sukupolvi"
   },
-  "upgradeButton": {
-    "description": "Teksti painikkeen päivittämiseksi suunnitelman päivittämiseksi, kun kiintiö on käytetty loppuun.",
-    "message": "Päivityssuunnitelma"
-  },
-  "viewDetails": {
-    "description": "Teksti linkkille nähdäksesi täydelliset kiintiötiedot kojelaudassa.",
-    "message": "Katso yksityiskohdat"
-  },
-  "clickToCollapse": {
-    "description": "Teksti, joka osoittaa, että käyttäjä voi napsauttaa laajennetun sisällön.",
-    "message": "Napsauta romahtaa"
-  },
-  "clickToExpand": {
-    "description": "Teksti, joka osoittaa, että käyttäjä voi napsauttaa, näyttääksesi romahtuneen sisällön.",
-    "message": "Napsauta laajentaaksesi"
-  },
-  "instructionLabel_context": {
-    "description": "Ystävällinen etiketti käyttäjäohjeille, jotka tarjoavat taustatietoja.",
-    "message": "Tarjoaa kontekstia ..."
-  },
-  "instructionLabel_expectations": {
-    "description": "Ystävällinen etiketti käyttäjäohjeisiin, jotka määrittelevät mitä käyttäjä haluaa.",
-    "message": "Selventävät odotukset ..."
-  },
-  "instructionLabel_focusing": {
-    "description": "Ystävällinen etiketti käyttäjäohjeisiin, jotka kapenevat keskustelun laajuutta.",
-    "message": "Keskittyminen keskusteluun ..."
-  },
-  "instructionLabel_guardrails": {
-    "description": "Ystävällinen etiketti käyttäjäohjeisiin, jotka luovat keskustelun rajat.",
-    "message": "Suojakaiteiden asettaminen ..."
-  },
-  "instructionLabel_guiding": {
-    "description": "Ystävällinen etiketti käyttäjäohjeisiin, jotka ohjaavat, kuinka AI: n tulisi vastata.",
-    "message": "Ohjaavat vastaukset ..."
-  },
-  "instructionLabel_nudge": {
-    "description": "Ystävällinen etiketti käyttäjäohjeille, jotka ehdottavat varovasti suuntaa.",
-    "message": "Annetaan kummallinen ..."
-  },
-  "instructionLabel_steering": {
-    "description": "Ystävällinen etiketti käyttäjäohjeisiin, jotka ohjaavat keskustelua.",
-    "message": "Keskustelun ohjaaminen ..."
-  },
-  "maintenanceLabel_holding": {
-    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
-    "message": "Pitää tätä ajatusta ..."
-  },
-  "maintenanceLabel_mental_note": {
-    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
-    "message": "Henkisen muistiinpanon tekeminen ..."
-  },
-  "maintenanceLabel_processing": {
-    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
-    "message": "Käsittely taustalla ..."
-  },
-  "maintenanceLabel_remembering": {
-    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
-    "message": "Muistaa tämä yksityiskohta ..."
-  },
-  "maintenanceLabel_saving": {
-    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
-    "message": "Säästät ajatuksen myöhempää käyttöä varten ..."
-  },
-  "maintenanceLabel_tracking": {
-    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
-    "message": "Seurata kontekstia ..."
-  },
-  "maintenanceLabel_tucking": {
-    "description": "Ystävällinen etiketti romahdettuun avustajan huoltoviestiin.",
-    "message": "Tämän työntäminen ..."
-  },
-  "disableTTS": {
-    "description": "Edellystä, jonka avulla tekstiä voidaan sammuttaa puheeksi",
-    "message": "Poista tekstistä puheeksi"
-  },
-  "signInForTTS": {
-    "description": "Kehote, joka näytetään, kun käyttäjän on todennettava pääsemään tekstistä puheeksi -ominaisuuksiin",
-    "message": "Kirjaudu sisään tekstiä puheeksi"
-  },
   "ttsVoice": {
-    "description": "Tarra, joka kuvaa tekstistä puhe-ääni -vaihtoehtoa valikossa",
+    "description": "Label describing a text-to-speech voice option in the menu",
     "message": "TTS -ääni"
   },
-  "voiceOff": {
-    "description": "Tarra, kun teksti-puheeksi on poistettu käytöstä",
-    "message": "Äänestää"
+  "unlockButton": {
+    "description": "The title (tooltip) of the button to unlock the screen.",
+    "message": "Paina avataksesi näytön lukituksen"
   },
-  "voiceSettings": {
-    "description": "Valikkokohteen teksti käyttää ääniin liittyviä asetuksia.",
-    "message": "Ääni -asetukset"
+  "unlockInstruction": {
+    "description": "Instructions telling the user how to unlock the screen when locked.",
+    "message": "Pidä avattuna."
   },
-  "addCredits": {
-    "description": "Teksti linkki lisäämään lisää äänihyvityksiä",
-    "message": "Lisätä hyvityksiä"
+  "upgradeButton": {
+    "description": "Text for the button to upgrade the plan when quota is exhausted.",
+    "message": "Päivityssuunnitelma"
   },
   "upgradeForTTS": {
-    "description": "Kehote, joka näytetään, kun käyttäjän on päivitettävä tekstistä puheeksi-hyvityksille",
+    "description": "Prompt shown when user needs to upgrade to obtain text-to-speech credits",
     "message": "Päivitys äänen sukupolveen"
   },
-  "voicePaused": {
-    "description": "Teksti, joka näkyy, kun ääni on keskeytetty riittämättömien hyvitysten takia",
-    "message": "Ääni pysähtyi -"
-  },
-  "assistantIsListeningAttentively": {
-    "description": "Viesti näkyy, kun avustaja kuuntelee puhetta agenttitilassa.",
-    "message": "$chatbot$ kuuntelee tarkkaan ...",
+  "userStartedInterrupting": {
+    "description": "Message displayed when the user starts speaking while the assistant is speaking.",
+    "message": "Jatka, $chatbot$ kuuntelee...",
     "placeholders": {
       "chatbot": {
         "content": "$1",
-        "example": "Claude"
+        "example": "Pi"
       }
     }
+  },
+  "vadDetailActivatingMicrophone": {
+    "description": "VAD detail when activating the microphone.",
+    "message": "Activating microphone..."
+  },
+  "vadDetailCommLinkFailed": {
+    "description": "VAD detail when the communication port link fails.",
+    "message": "Communication link failed."
+  },
+  "vadDetailDeactivatingMicrophone": {
+    "description": "VAD detail when deactivating the microphone.",
+    "message": "Deactivating microphone..."
+  },
+  "vadDetailFailedToReconnectVADService": {
+    "description": "VAD detail when re-establishing connection fails.",
+    "message": "Failed to reconnect VAD service."
+  },
+  "vadDetailInitError": {
+    "description": "VAD detail for an initialization error, with specific error message.",
+    "message": "Init -virhe: $error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to connect to VAD service"
+      }
+    }
+  },
+  "vadDetailInitErrorPromise": {
+    "description": "VAD detail for an initialization promise error.",
+    "message": "Init Error: Promise error"
+  },
+  "vadDetailInitErrorUnknown": {
+    "description": "VAD detail for an unknown initialization error.",
+    "message": "Init Error: Unknown"
+  },
+  "vadDetailInitializedMode": {
+    "description": "VAD detail showing initialization mode.",
+    "message": "Alustettu (tila: $mode$)",
+    "placeholders": {
+      "mode": {
+        "content": "$1",
+        "example": "Agent"
+      }
+    }
+  },
+  "vadDetailInitializedModeNA": {
+    "description": "VAD detail showing initialization mode as N/A.",
+    "message": "Initialized (Mode: N/A)"
+  },
+  "vadDetailNonSpeechAudioDetected": {
+    "description": "VAD detail for non-speech audio detection.",
+    "message": "Non-speech audio detected"
+  },
+  "vadDetailReleasingVADResources": {
+    "description": "VAD detail when releasing VAD resources.",
+    "message": "Releasing VAD resources..."
+  },
+  "vadDetailRequestingVADSetup": {
+    "description": "VAD detail when requesting setup.",
+    "message": "Requesting VAD setup..."
+  },
+  "vadDetailSpeechDetected": {
+    "description": "VAD detail when speech has been detected.",
+    "message": "Speech detected"
+  },
+  "vadDetailSpeechEndedDuration": {
+    "description": "VAD detail indicating speech ended and its duration.",
+    "message": "Puhe päättyi (kesto: $duration$ ms)",
+    "placeholders": {
+      "duration": {
+        "content": "$1",
+        "example": "1000"
+      }
+    }
+  },
+  "vadDetailStartError": {
+    "description": "VAD detail for a start error, with specific error message.",
+    "message": "Käynnistä virhe: $error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to start VAD service"
+      }
+    }
+  },
+  "vadDetailStartErrorPromise": {
+    "description": "VAD detail for a start promise error.",
+    "message": "Start Error: Promise error"
+  },
+  "vadDetailStartErrorUnknown": {
+    "description": "VAD detail for an unknown start error.",
+    "message": "Start Error: Unknown"
+  },
+  "vadDetailStopError": {
+    "description": "VAD detail for a stop error, with specific error message.",
+    "message": "Pysäytä virhe: $error$",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to stop VAD service"
+      }
+    }
+  },
+  "vadDetailStopErrorPromise": {
+    "description": "VAD detail for a stop promise error.",
+    "message": "Stop Error: Promise error"
+  },
+  "vadDetailStopErrorUnknown": {
+    "description": "VAD detail for an unknown stop error.",
+    "message": "Stop Error: Unknown"
+  },
+  "vadDetailUnknownVADError": {
+    "description": "VAD detail for an unknown error from the VAD module.",
+    "message": "Unknown VAD error"
+  },
+  "vadDetailVADProcessingStopped": {
+    "description": "VAD detail indicating VAD processing has stopped.",
+    "message": "VAD processing stopped."
+  },
+  "vadDetailVADServiceDisconnected": {
+    "description": "VAD detail when the service disconnects.",
+    "message": "VAD service disconnected. Try reloading."
+  },
+  "vadDetailVADServiceNotConnected": {
+    "description": "VAD detail when the service is not connected.",
+    "message": "VAD service not connected. Try reloading."
+  },
+  "vadDetailVADServiceShutdown": {
+    "description": "VAD detail indicating VAD service has been shut down.",
+    "message": "VAD service shut down."
+  },
+  "vadDetailWaitingForSpeech": {
+    "description": "VAD detail when waiting for user to speak.",
+    "message": "Waiting for speech"
+  },
+  "vadStatusDestroyed": {
+    "description": "VAD status when destroyed.",
+    "message": "Destroyed"
+  },
+  "vadStatusError": {
+    "description": "Generic VAD error status.",
+    "message": "Error"
+  },
+  "vadStatusFailed": {
+    "description": "Generic VAD failure status.",
+    "message": "Failed"
+  },
+  "vadStatusIndicatorEnabledLabel": {
+    "description": "Label for the toggle switch that controls the visibility of the Voice Activity Detection status indicator.",
+    "message": "Näytä VAD -tila"
+  },
+  "vadStatusInitializing": {
+    "description": "VAD status when initializing.",
+    "message": "Initializing"
+  },
+  "vadStatusListening": {
+    "description": "VAD status when actively listening.",
+    "message": "Listening"
+  },
+  "vadStatusMisfire": {
+    "description": "VAD status when a misfire (non-speech) is detected.",
+    "message": "Misfire"
+  },
+  "vadStatusProcessing": {
+    "description": "VAD status when processing audio.",
+    "message": "Processing"
+  },
+  "vadStatusReady": {
+    "description": "VAD status when ready and waiting.",
+    "message": "Ready"
+  },
+  "vadStatusShuttingDown": {
+    "description": "VAD status when shutting down.",
+    "message": "Shutting down"
+  },
+  "vadStatusStarting": {
+    "description": "VAD status when starting.",
+    "message": "Starting"
+  },
+  "vadStatusStopped": {
+    "description": "VAD status when stopped.",
+    "message": "Stopped"
+  },
+  "vadStatusStopping": {
+    "description": "VAD status when stopping.",
+    "message": "Stopping"
+  },
+  "viewDetails": {
+    "description": "Text for the link to view full quota details on the dashboard.",
+    "message": "Katso yksityiskohdat"
+  },
+  "voiceIntroduction_joey": {
+    "description": "Introduction for the Joey voice.",
+    "message": "Hei! \nПривет! \n你好! \nOlen Pi, polyglotti tekoälyavustajasi. \nHallitsemani 32 kielellä voimme tutustua ideoihin ja kulttuureihin ympäri maailmaa. \nMitä mieltä olet tästä äänestä?"
+  },
+  "voiceIntroduction_paola": {
+    "description": "Introduction for the Paola voice.",
+    "message": "Ciao! \nBonjour! \nHei! \nOlen Pi, ja voin keskustella sujuvasti 32 kielellä. \nArabiasta ukrainaan olen täällä murtaakseni kielimuurit. \nMiltä tämä ääni sinusta kuulostaa?"
+  },
+  "voiceOff": {
+    "description": "Label for when text-to-speech is disabled",
+    "message": "Äänestää"
+  },
+  "voicePaused": {
+    "description": "Text shown when voice is paused due to insufficient credits",
+    "message": "Ääni pysähtyi -"
+  },
+  "voiceSettings": {
+    "description": "The text of the menu item to access voice-related settings.",
+    "message": "Ääni -asetukset"
   }
 }

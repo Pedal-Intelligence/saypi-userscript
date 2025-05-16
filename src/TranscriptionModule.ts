@@ -18,6 +18,81 @@ interface TranscriptionResponse {
   };
 }
 
+/**
+ * Logs the duration of a specific step if it exceeds defined thresholds.
+ * @param stepName - Name of the step being logged.
+ * @param startTime - The timestamp when the step started.
+ * @param thresholdWarn - Threshold in ms for a warning log.
+ * @param thresholdError - Threshold in ms for an error log.
+ */
+function logStepDuration(stepName: string, startTime: number, thresholdWarn: number = 200, thresholdError: number = 500): void {
+  const duration = Date.now() - startTime;
+  if (duration > thresholdError) {
+    logger.error(`[TranscriptionModule] Critical duration for ${stepName}: ${duration}ms`);
+  } else if (duration > thresholdWarn) {
+    logger.warn(`[TranscriptionModule] High duration for ${stepName}: ${duration}ms`);
+  } else if (duration > 50) { // Log elevated durations as info
+    logger.info(`[TranscriptionModule] Elevated duration for ${stepName}: ${duration}ms`);
+  }
+}
+
+/**
+ * Logs transcription processing delays based on threshold values
+ * @param captureTimestamp - When the audio was originally captured
+ * @param clientTimestamp - When the client received the data 
+ * @param transcriptionTimestamp - When transcription processing began
+ */
+function logTranscriptionDelay(captureTimestamp: number, clientTimestamp: number | null, transcriptionTimestamp: number): void {
+  const captureToTranscriptionDelay = transcriptionTimestamp - captureTimestamp;
+  const clientToTranscriptionDelay = clientTimestamp ? 
+    transcriptionTimestamp - clientTimestamp : null;
+  
+  if (captureToTranscriptionDelay > 1000) {
+    logger.error(
+      `[TranscriptionModule] Critical delay: ${captureToTranscriptionDelay}ms from audio capture to transcription start. ` +
+      `Client-to-transcription: ${clientToTranscriptionDelay}ms`
+    );
+  } else if (captureToTranscriptionDelay > 500) {
+    logger.warn(
+      `[TranscriptionModule] High delay: ${captureToTranscriptionDelay}ms from audio capture to transcription start. ` +
+      `Client-to-transcription: ${clientToTranscriptionDelay}ms`
+    );
+  } else if (captureToTranscriptionDelay > 300) {
+    logger.info(
+      `[TranscriptionModule] Elevated delay: ${captureToTranscriptionDelay}ms from audio capture to transcription start. ` +
+      `Client-to-transcription: ${clientToTranscriptionDelay}ms`
+    );
+  }
+}
+
+/**
+ * Logs API request delays based on threshold values
+ * @param captureTimestamp - When the audio was originally captured
+ * @param transcriptionTimestamp - When transcription processing began
+ * @param apiRequestTimestamp - When the API request was initiated
+ */
+function logApiRequestDelay(captureTimestamp: number, transcriptionTimestamp: number, apiRequestTimestamp: number): void {
+  const captureToApiDelay = apiRequestTimestamp - captureTimestamp;
+  const transcriptionToApiDelay = apiRequestTimestamp - transcriptionTimestamp;
+  
+  if (captureToApiDelay > 1000) {
+    logger.error(
+      `[TranscriptionModule] Critical API request delay: ${captureToApiDelay}ms from capture to API request. ` +
+      `Transcription start to API request: ${transcriptionToApiDelay}ms`
+    );
+  } else if (captureToApiDelay > 500) {
+    logger.warn(
+      `[TranscriptionModule] High API request delay: ${captureToApiDelay}ms from capture to API request. ` +
+      `Transcription start to API request: ${transcriptionToApiDelay}ms`
+    );
+  } else if (captureToApiDelay > 300) {
+    logger.info(
+      `[TranscriptionModule] Elevated API request delay: ${captureToApiDelay}ms from capture to API request. ` +
+      `Transcription start to API request: ${transcriptionToApiDelay}ms`
+    );
+  }
+}
+
 const knownNetworkErrorMessages = [
   "Failed to fetch", // Chromium-based browsers
   "Load failed", // Safari
@@ -94,10 +169,22 @@ export async function uploadAudioWithRetry(
   audioDurationMillis: number,
   precedingTranscripts: Record<number, string> = {},
   sessionId?: string,
-  maxRetries: number = 3
+  maxRetries: number = 3,
+  captureTimestamp?: number,
+  clientReceiveTimestamp?: number
 ): Promise<void> {
   let retryCount = 0;
   let delay = 1000; // initial delay of 1 second
+  const transcriptionStartTimestamp = Date.now();
+  
+  // Log timing information if timestamps are available
+  if (captureTimestamp) {
+    logTranscriptionDelay(
+      captureTimestamp, 
+      clientReceiveTimestamp || null, 
+      transcriptionStartTimestamp
+    );
+  }
 
   const sleep = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
@@ -109,7 +196,9 @@ export async function uploadAudioWithRetry(
         audioBlob,
         audioDurationMillis,
         precedingTranscripts,
-        sessionId
+        sessionId,
+        captureTimestamp,
+        transcriptionStartTimestamp
       );
       return;
     } catch (error) {
@@ -155,7 +244,9 @@ async function uploadAudio(
   audioBlob: Blob,
   audioDurationMillis: number,
   precedingTranscripts: Record<number, string> = {},
-  sessionId?: string
+  sessionId?: string,
+  captureTimestamp?: number,
+  transcriptionStartTimestamp?: number
 ): Promise<void> {
   try {
     const messages = Object.entries(precedingTranscripts).map(
@@ -168,7 +259,11 @@ async function uploadAudio(
       }
     );
 
+    let stepStartTime = Date.now();
     const chatbot = await ChatbotService.getChatbot();
+    logStepDuration("ChatbotService.getChatbot (uploadAudio)", stepStartTime);
+
+    stepStartTime = Date.now();
     const formData = await constructTranscriptionFormData(
       audioBlob,
       audioDurationMillis / 1000,
@@ -176,7 +271,12 @@ async function uploadAudio(
       sessionId,
       chatbot
     );
-    const language = await userPreferences.getLanguage();
+    logStepDuration("constructTranscriptionFormData (total)", stepStartTime);
+    
+    stepStartTime = Date.now();
+    const language = userPreferences.getCachedLanguage();
+    logStepDuration("userPreferences.getCachedLanguage", stepStartTime);
+    
     const appId = chatbot.getID();
 
     const controller = new AbortController();
@@ -186,10 +286,18 @@ async function uploadAudio(
 
     const startTime = new Date().getTime();
     
+    // Additional timing information for API request
+    if (captureTimestamp && transcriptionStartTimestamp) {
+      logApiRequestDelay(captureTimestamp, transcriptionStartTimestamp, startTime);
+    }
+    
     // Emit transcription started event for telemetry tracking
     EventBus.emit("saypi:transcribing", {
       sequenceNumber: sequenceNum,
       timestamp: startTime,
+      captureTimestamp: captureTimestamp,
+      clientReceiveTimestamp: transcriptionStartTimestamp,
+      apiRequestDelay: captureTimestamp ? (startTime - captureTimestamp) : undefined
     });
     
     const response = await callApi(
@@ -238,6 +346,13 @@ async function uploadAudio(
         transcriptionDurationMillis / 1000
       )}s`
     );
+    
+    if (captureTimestamp) {
+      const totalProcessingTime = endTime - captureTimestamp;
+      logger.debug(
+        `Total processing time from audio capture to transcription completion: ${Math.round(totalProcessingTime / 1000)}s`
+      );
+    }
 
     if (responseJson.text.length === 0) {
       StateMachineService.actor.send("saypi:transcribedEmpty");
@@ -297,21 +412,30 @@ async function constructTranscriptionFormData(
   }
 
   // Wait for preferences to be retrieved before appending them to the FormData
-  const preference = await userPreferences.getTranscriptionMode();
+  let stepStartTime = Date.now();
+  const preference = userPreferences.getCachedTranscriptionMode();
+  logStepDuration("userPreferences.getCachedTranscriptionMode", stepStartTime);
   if (preference) {
     formData.append("prefer", preference);
   }
 
-  const discretionaryMode = await userPreferences.getDiscretionaryMode();
+  stepStartTime = Date.now();
+  const discretionaryMode = userPreferences.getCachedDiscretionaryMode();
+  logStepDuration("userPreferences.getCachedDiscretionaryMode", stepStartTime);
   if (discretionaryMode) {
     formData.append("analyzeForResponse", "true");
   }
 
   // Get the chatbot's nickname if set
   if (!chatbot) {
+    stepStartTime = Date.now();
     chatbot = await ChatbotService.getChatbot();
+    logStepDuration("ChatbotService.getChatbot (constructTranscriptionFormData)", stepStartTime);
   }
+  stepStartTime = Date.now();
   const nickname = await chatbot.getNickname();
+  logStepDuration("chatbot.getNickname", stepStartTime);
+  
   const defaultName = chatbot.getName();
   if (nickname && nickname !== defaultName) {
     formData.append("nickname", nickname);

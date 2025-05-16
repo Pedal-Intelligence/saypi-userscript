@@ -5,11 +5,14 @@
   "description": "__MSG_appDescription__",
   "permissions": [
     "storage",
-    "cookies"
+    "cookies",
+    "offscreen",
+    "tabs",
+    "audio"
   ],
   "host_permissions": [
-    "https://api.saypi.ai/*",
-    "https://www.saypi.ai/*"
+    "https://localhost:5001/*",
+    "http://localhost:3000/*"
   ],
   "content_scripts": [
     {
@@ -25,6 +28,16 @@
   "background": {
     "service_worker": "public/background.js"
   },
+  "offscreen": {
+    "document": "src/offscreen/vad_offscreen.html",
+    "reasons": [
+      "USER_MEDIA"
+    ],
+    "justification": "Required for Voice Activity Detection (VAD) processing in an isolated environment to comply with strict CSPs on host pages."
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
   "icons": {
     "16": "src/icons/bubble-16px.png",
     "32": "src/icons/bubble-32px.png",
@@ -34,7 +47,7 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "public/silero_vad.onnx",
+        "public/silero_vad*.onnx",
         "public/*.wasm",
         "public/vad.worklet.bundle.js",
         "public/vad.worklet.bundle.min.js",
@@ -45,7 +58,11 @@
         "public/icons/logos/*.svg",
         "public/icons/logos/*.png",
         "src/icons/flags/*.svg",
-        "src/popup/*.svg"
+        "src/popup/*.svg",
+        "src/offscreen/vad_offscreen.html",
+        "src/offscreen/vad_offscreen.js",
+        "src/permissions/permissions-prompt.html",
+        "public/permissions/permissions-prompt.js"
       ],
       "matches": [
         "https://pi.ai/*",
