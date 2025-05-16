@@ -40,4 +40,5 @@ node_modules/
 # Task files
 tasks.json
 tasks/ 
-public/offscreen/vad_offscreen.js
+public/offscreen/*
+public/permissions/*

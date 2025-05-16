@@ -12,12 +12,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   console.log("[PermissionsPrompt] Requesting microphone permission...");
-  statusElement.textContent = "Requesting microphone permission...";
+  statusElement.textContent = "Waiting for your go-ahead…";
 
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     console.log("[PermissionsPrompt] Microphone permission GRANTED.");
-    statusElement.textContent = "Permission granted. Closing soon...";
+    statusElement.textContent = "Thanks! Permission granted. Wrapping things up...";
 
     stream.getTracks().forEach(track => track.stop());
 
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   } catch (err: any) {
     console.error("[PermissionsPrompt] Microphone permission DENIED or error:", err.name, err.message);
-    statusElement.textContent = `Permission denied or error: ${err.name || 'Unknown Error'}. Closing soon...`;
+    statusElement.textContent = `Hmm, couldn’t get mic access: ${err.name || 'Unknown Error'}. Closing this tab in a moment…`;
     
     chrome.runtime.sendMessage({
       type: 'PERMISSION_PROMPT_RESULT',
