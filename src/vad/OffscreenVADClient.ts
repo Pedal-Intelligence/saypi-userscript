@@ -179,6 +179,22 @@ export class OffscreenVADClient {
   }
 
   public initialize(options: any = {}): Promise<{ success: boolean, error?: string, mode?: string }> {
+    // If port is not connected or doesn't exist, establish a new connection
+    if (!this.port || !this.isPortConnected) {
+      console.log("[SayPi OffscreenVADClient] Port was disconnected or not initialized. Reconnecting...");
+      try {
+        this.port = chrome.runtime.connect({ name: "vad-content-script-connection" });
+        this.isPortConnected = true;
+        this.setupListeners(); // Re-attach listeners to the new port
+        console.log("[SayPi OffscreenVADClient] New port established and listeners set up.");
+      } catch (e) {
+        console.error("[SayPi OffscreenVADClient] Failed to re-establish port connection:", e);
+        this.statusIndicator.updateStatus("Error", "Failed to reconnect VAD service.");
+        // Immediately reject the promise if port cannot be re-established
+        return Promise.resolve({ success: false, error: "Failed to reconnect VAD service port" });
+      }
+    }
+
     this.statusIndicator.updateStatus("Initializing", "Requesting VAD setup...");
     return new Promise((resolve) => {
       this.callbacks.onInitialized = (success, error, mode) => resolve({ success, error, mode });
