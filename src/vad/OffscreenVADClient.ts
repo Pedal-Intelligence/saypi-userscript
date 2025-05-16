@@ -1,6 +1,7 @@
 import EventBus from '../events/EventBus';
 import { logger } from '../LoggingModule';
 import { VADStatusIndicator } from '../ui/VADStatusIndicator';
+import getMessage from '../i18n';
 
 console.log("[SayPi OffscreenVADClient] Client loaded.");
 
@@ -60,12 +61,12 @@ export class OffscreenVADClient {
 
       switch (message.type) {
         case "VAD_SPEECH_START":
-          this.statusIndicator.updateStatus("Listening", "Speech detected");
+          this.statusIndicator.updateStatus(getMessage('vadStatusListening'), getMessage('vadDetailSpeechDetected'));
           this.callbacks.onSpeechStart?.();
           break;
         case "VAD_SPEECH_END":
-          this.statusIndicator.updateStatus("Processing", `Speech ended (duration: ${message.duration}ms)`);
-          setTimeout(() => this.statusIndicator.updateStatus("Ready", "Waiting for speech"), 1500);
+          this.statusIndicator.updateStatus(getMessage('vadStatusProcessing'), getMessage('vadDetailSpeechEndedDuration', message.duration.toString()));
+          setTimeout(() => this.statusIndicator.updateStatus(getMessage('vadStatusReady'), getMessage('vadDetailWaitingForSpeech')), 1500);
           
           const speechDuration = message.duration;
           const captureTimestamp = message.captureTimestamp || 0;
@@ -92,58 +93,64 @@ export class OffscreenVADClient {
           });
           break;
         case "VAD_MISFIRE":
-          this.statusIndicator.updateStatus("Misfire", "Non-speech audio detected");
-          setTimeout(() => this.statusIndicator.updateStatus("Ready", "Waiting for speech"), 1500);
+          this.statusIndicator.updateStatus(getMessage('vadStatusMisfire'), getMessage('vadDetailNonSpeechAudioDetected'));
+          setTimeout(() => this.statusIndicator.updateStatus(getMessage('vadStatusReady'), getMessage('vadDetailWaitingForSpeech')), 1500);
           this.callbacks.onVADMisfire?.();
           break;
         case "VAD_FRAME_PROCESSED":
           this.callbacks.onFrameProcessed?.(message.probabilities);
           break;
         case "VAD_ERROR":
-          this.statusIndicator.updateStatus("Error", message.error || "Unknown VAD error");
-          this.callbacks.onError?.(message.error || "Unknown VAD error from offscreen");
+          this.statusIndicator.updateStatus(getMessage('vadStatusError'), message.error || getMessage('vadDetailUnknownVADError'));
+          this.callbacks.onError?.(message.error || getMessage('vadDetailUnknownVADError'));
           break;
         case "OFFSCREEN_VAD_INITIALIZE_REQUEST_RESPONSE":
           if (message.payload.success) {
-            this.statusIndicator.updateStatus("Ready", `Initialized (Mode: ${message.payload.mode || 'N/A'})`);
+            const mode = message.payload.mode;
+            const detailMessage = mode && mode !== 'N/A' ? getMessage('vadDetailInitializedMode', mode) : getMessage('vadDetailInitializedModeNA');
+            this.statusIndicator.updateStatus(getMessage('vadStatusReady'), detailMessage);
           } else {
-            this.statusIndicator.updateStatus("Failed", `Init Error: ${message.payload.error || 'Unknown'}`);
+            const detail = message.payload.error ? getMessage('vadDetailInitError', message.payload.error) : getMessage('vadDetailInitErrorUnknown');
+            this.statusIndicator.updateStatus(getMessage('vadStatusFailed'), detail);
           }
           this.callbacks.onInitialized?.(message.payload.success, message.payload.error, message.payload.mode);
           break;
         case "OFFSCREEN_VAD_INITIALIZE_REQUEST_ERROR":
-            this.statusIndicator.updateStatus("Failed", `Init Error: ${message.payload.error || 'Promise error'}`);
-            this.callbacks.onInitialized?.(false, message.payload.error || "Initialization promise error");
+            const initPromiseErrorDetail = message.payload.error ? getMessage('vadDetailInitError', message.payload.error) : getMessage('vadDetailInitErrorPromise');
+            this.statusIndicator.updateStatus(getMessage('vadStatusFailed'), initPromiseErrorDetail);
+            this.callbacks.onInitialized?.(false, message.payload.error || getMessage('vadDetailInitErrorPromise'));
             break;
         case "OFFSCREEN_VAD_START_REQUEST_RESPONSE":
           if (message.payload.success) {
-            // Status will be updated to Listening by VAD_SPEECH_START if successful
-            // this.statusIndicator.updateStatus("Starting..."); 
-            this.statusIndicator.updateStatus("Ready", "Waiting for speech");
+            this.statusIndicator.updateStatus(getMessage('vadStatusReady'), getMessage('vadDetailWaitingForSpeech'));
           } else {
-            this.statusIndicator.updateStatus("Failed", `Start Error: ${message.payload.error || 'Unknown'}`);
+            const detail = message.payload.error ? getMessage('vadDetailStartError', message.payload.error) : getMessage('vadDetailStartErrorUnknown');
+            this.statusIndicator.updateStatus(getMessage('vadStatusFailed'), detail);
           }
           this.callbacks.onStarted?.(message.payload.success, message.payload.error);
           break;
         case "OFFSCREEN_VAD_START_REQUEST_ERROR":
-            this.statusIndicator.updateStatus("Failed", `Start Error: ${message.payload.error || 'Promise error'}`);
-            this.callbacks.onStarted?.(false, message.payload.error || "Start promise error");
+            const startPromiseErrorDetail = message.payload.error ? getMessage('vadDetailStartError', message.payload.error) : getMessage('vadDetailStartErrorPromise');
+            this.statusIndicator.updateStatus(getMessage('vadStatusFailed'), startPromiseErrorDetail);
+            this.callbacks.onStarted?.(false, message.payload.error || getMessage('vadDetailStartErrorPromise'));
             break;
         case "OFFSCREEN_VAD_STOP_REQUEST_RESPONSE":
           if (message.payload.success) {
-            this.statusIndicator.updateStatus("Stopped", "VAD processing stopped.");
-            setTimeout(() => this.statusIndicator.updateStatus("Ready", "Waiting for speech"), 1500);
+            this.statusIndicator.updateStatus(getMessage('vadStatusStopped'), getMessage('vadDetailVADProcessingStopped'));
+            setTimeout(() => this.statusIndicator.updateStatus(getMessage('vadStatusReady'), getMessage('vadDetailWaitingForSpeech')), 1500);
           } else {
-            this.statusIndicator.updateStatus("Failed", `Stop Error: ${message.payload.error || 'Unknown'}`);
+            const detail = message.payload.error ? getMessage('vadDetailStopError', message.payload.error) : getMessage('vadDetailStopErrorUnknown');
+            this.statusIndicator.updateStatus(getMessage('vadStatusFailed'), detail);
           }
           this.callbacks.onStopped?.(message.payload.success, message.payload.error);
           break;
         case "OFFSCREEN_VAD_STOP_REQUEST_ERROR":
-            this.statusIndicator.updateStatus("Failed", `Stop Error: ${message.payload.error || 'Promise error'}`);
-            this.callbacks.onStopped?.(false, message.payload.error || "Stop promise error");
+            const stopPromiseErrorDetail = message.payload.error ? getMessage('vadDetailStopError', message.payload.error) : getMessage('vadDetailStopErrorPromise');
+            this.statusIndicator.updateStatus(getMessage('vadStatusFailed'), stopPromiseErrorDetail);
+            this.callbacks.onStopped?.(false, message.payload.error || getMessage('vadDetailStopErrorPromise'));
             break;
         case "OFFSCREEN_VAD_DESTROY_REQUEST_RESPONSE":
-          this.statusIndicator.updateStatus("Destroyed", "VAD service shut down.");
+          this.statusIndicator.updateStatus(getMessage('vadStatusDestroyed'), getMessage('vadDetailVADServiceShutdown'));
           console.log("[SayPi OffscreenVADClient] VAD destroyed in offscreen:", message.payload);
           break;
         default:
@@ -153,9 +160,9 @@ export class OffscreenVADClient {
 
     this.port.onDisconnect.addListener(() => {
       console.warn("[SayPi OffscreenVADClient] Port disconnected from background script.");
-      this.statusIndicator.updateStatus("Error", "VAD service disconnected. Try reloading.");
+      this.statusIndicator.updateStatus(getMessage('vadStatusError'), getMessage('vadDetailVADServiceDisconnected'));
       this.isPortConnected = false;
-      this.callbacks.onError?.("VAD service disconnected. Please try reloading.");
+      this.callbacks.onError?.(getMessage('vadDetailVADServiceDisconnected'));
     });
   }
 
@@ -165,16 +172,16 @@ export class OffscreenVADClient {
         this.port.postMessage(message);
       } catch (error: any) {
         console.error("[SayPi OffscreenVADClient] Error posting message to port:", error, message);
-        this.statusIndicator.updateStatus("Error", "Communication link failed.");
-        this.callbacks.onError?.("Error communicating with VAD service.");
+        this.statusIndicator.updateStatus(getMessage('vadStatusError'), getMessage('vadDetailCommLinkFailed'));
+        this.callbacks.onError?.(getMessage('vadDetailCommLinkFailed'));
         if (error.message.includes("Attempting to use a disconnected port object")) {
             this.isPortConnected = false;
         }
       }
     } else {
       console.error("[SayPi OffscreenVADClient] Port not connected. Cannot send message:", message);
-      this.statusIndicator.updateStatus("Error", "VAD service not connected. Try reloading.");
-      this.callbacks.onError?.("VAD service not connected. Please try reloading.");
+      this.statusIndicator.updateStatus(getMessage('vadStatusError'), getMessage('vadDetailVADServiceNotConnected'));
+      this.callbacks.onError?.(getMessage('vadDetailVADServiceNotConnected'));
     }
   }
 
@@ -189,13 +196,13 @@ export class OffscreenVADClient {
         console.log("[SayPi OffscreenVADClient] New port established and listeners set up.");
       } catch (e) {
         console.error("[SayPi OffscreenVADClient] Failed to re-establish port connection:", e);
-        this.statusIndicator.updateStatus("Error", "Failed to reconnect VAD service.");
+        this.statusIndicator.updateStatus(getMessage('vadStatusError'), getMessage('vadDetailFailedToReconnectVADService'));
         // Immediately reject the promise if port cannot be re-established
-        return Promise.resolve({ success: false, error: "Failed to reconnect VAD service port" });
+        return Promise.resolve({ success: false, error: getMessage('vadDetailFailedToReconnectVADService') });
       }
     }
 
-    this.statusIndicator.updateStatus("Initializing", "Requesting VAD setup...");
+    this.statusIndicator.updateStatus(getMessage('vadStatusInitializing'), getMessage('vadDetailRequestingVADSetup'));
     return new Promise((resolve) => {
       this.callbacks.onInitialized = (success, error, mode) => resolve({ success, error, mode });
       this.sendMessage({ type: "VAD_INITIALIZE_REQUEST", options });
@@ -203,7 +210,7 @@ export class OffscreenVADClient {
   }
 
   public start(): Promise<{ success: boolean, error?: string }> {
-    this.statusIndicator.updateStatus("Starting", "Activating microphone...");
+    this.statusIndicator.updateStatus(getMessage('vadStatusStarting'), getMessage('vadDetailActivatingMicrophone'));
     return new Promise((resolve) => {
       this.callbacks.onStarted = (success, error) => resolve({ success, error });
       this.sendMessage({ type: "VAD_START_REQUEST" });
@@ -211,7 +218,7 @@ export class OffscreenVADClient {
   }
 
   public stop(): Promise<{ success: boolean, error?: string }> {
-    this.statusIndicator.updateStatus("Stopping", "Deactivating microphone...");
+    this.statusIndicator.updateStatus(getMessage('vadStatusStopping'), getMessage('vadDetailDeactivatingMicrophone'));
     return new Promise((resolve) => {
       this.callbacks.onStopped = (success, error) => resolve({ success, error });
       this.sendMessage({ type: "VAD_STOP_REQUEST" });
@@ -219,7 +226,7 @@ export class OffscreenVADClient {
   }
 
   public destroy(): void {
-    this.statusIndicator.updateStatus("Shutting down", "Releasing VAD resources...");
+    this.statusIndicator.updateStatus(getMessage('vadStatusShuttingDown'), getMessage('vadDetailReleasingVADResources'));
     this.sendMessage({ type: "VAD_DESTROY_REQUEST" });
     if (this.isPortConnected && this.port) {
         try {

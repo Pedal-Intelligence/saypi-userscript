@@ -762,5 +762,187 @@
   "addCredits": {
     "message": "Add credits",
     "description": "Text for link to add more voice credits"
+  },
+  "vadStatusListening": {
+    "message": "Listening",
+    "description": "VAD status when actively listening."
+  },
+  "vadDetailSpeechDetected": {
+    "message": "Speech detected",
+    "description": "VAD detail when speech has been detected."
+  },
+  "vadStatusProcessing": {
+    "message": "Processing",
+    "description": "VAD status when processing audio."
+  },
+  "vadDetailSpeechEndedDuration": {
+    "message": "Speech ended (duration: $duration$ms)",
+    "description": "VAD detail indicating speech ended and its duration.",
+    "placeholders": {
+      "duration": {
+        "content": "$1",
+        "example": "1000"
+      }
+    }
+  },
+  "vadStatusReady": {
+    "message": "Ready",
+    "description": "VAD status when ready and waiting."
+  },
+  "vadDetailWaitingForSpeech": {
+    "message": "Waiting for speech",
+    "description": "VAD detail when waiting for user to speak."
+  },
+  "vadStatusMisfire": {
+    "message": "Misfire",
+    "description": "VAD status when a misfire (non-speech) is detected."
+  },
+  "vadDetailNonSpeechAudioDetected": {
+    "message": "Non-speech audio detected",
+    "description": "VAD detail for non-speech audio detection."
+  },
+  "vadStatusError": {
+    "message": "Error",
+    "description": "Generic VAD error status."
+  },
+  "vadDetailUnknownVADError": {
+    "message": "Unknown VAD error",
+    "description": "VAD detail for an unknown error from the VAD module."
+  },
+  "vadDetailInitializedMode": {
+    "message": "Initialized (Mode: $mode$)",
+    "description": "VAD detail showing initialization mode.",
+    "placeholders": {
+      "mode": {
+        "content": "$1",
+        "example": "Agent"
+      }
+    }
+  },
+  "vadDetailInitializedModeNA": {
+    "message": "Initialized (Mode: N/A)",
+    "description": "VAD detail showing initialization mode as N/A."
+  },
+  "vadStatusFailed": {
+    "message": "Failed",
+    "description": "Generic VAD failure status."
+  },
+  "vadDetailInitError": {
+    "message": "Init Error: $error$",
+    "description": "VAD detail for an initialization error, with specific error message.",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to connect to VAD service"
+      }
+    }
+  },
+  "vadDetailInitErrorUnknown": {
+    "message": "Init Error: Unknown",
+    "description": "VAD detail for an unknown initialization error."
+  },
+  "vadDetailInitErrorPromise": {
+    "message": "Init Error: Promise error",
+    "description": "VAD detail for an initialization promise error."
+  },
+  "vadDetailStartError": {
+    "message": "Start Error: $error$",
+    "description": "VAD detail for a start error, with specific error message.",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to start VAD service"
+      }
+    }
+  },
+  "vadDetailStartErrorUnknown": {
+    "message": "Start Error: Unknown",
+    "description": "VAD detail for an unknown start error."
+  },
+  "vadDetailStartErrorPromise": {
+    "message": "Start Error: Promise error",
+    "description": "VAD detail for a start promise error."
+  },
+  "vadStatusStopped": {
+    "message": "Stopped",
+    "description": "VAD status when stopped."
+  },
+  "vadDetailVADProcessingStopped": {
+    "message": "VAD processing stopped.",
+    "description": "VAD detail indicating VAD processing has stopped."
+  },
+  "vadDetailStopError": {
+    "message": "Stop Error: $error$",
+    "description": "VAD detail for a stop error, with specific error message.",
+    "placeholders": {
+      "error": {
+        "content": "$1",
+        "example": "Failed to stop VAD service"
+      }
+    }
+  },
+  "vadDetailStopErrorUnknown": {
+    "message": "Stop Error: Unknown",
+    "description": "VAD detail for an unknown stop error."
+  },
+  "vadDetailStopErrorPromise": {
+    "message": "Stop Error: Promise error",
+    "description": "VAD detail for a stop promise error."
+  },
+  "vadStatusDestroyed": {
+    "message": "Destroyed",
+    "description": "VAD status when destroyed."
+  },
+  "vadDetailVADServiceShutdown": {
+    "message": "VAD service shut down.",
+    "description": "VAD detail indicating VAD service has been shut down."
+  },
+  "vadDetailVADServiceDisconnected": {
+    "message": "VAD service disconnected. Try reloading.",
+    "description": "VAD detail when the service disconnects."
+  },
+  "vadDetailCommLinkFailed": {
+    "message": "Communication link failed.",
+    "description": "VAD detail when the communication port link fails."
+  },
+  "vadDetailVADServiceNotConnected": {
+    "message": "VAD service not connected. Try reloading.",
+    "description": "VAD detail when the service is not connected."
+  },
+  "vadDetailFailedToReconnectVADService": {
+    "message": "Failed to reconnect VAD service.",
+    "description": "VAD detail when re-establishing connection fails."
+  },
+  "vadStatusInitializing": {
+    "message": "Initializing",
+    "description": "VAD status when initializing."
+  },
+  "vadDetailRequestingVADSetup": {
+    "message": "Requesting VAD setup...",
+    "description": "VAD detail when requesting setup."
+  },
+  "vadStatusStarting": {
+    "message": "Starting",
+    "description": "VAD status when starting."
+  },
+  "vadDetailActivatingMicrophone": {
+    "message": "Activating microphone...",
+    "description": "VAD detail when activating the microphone."
+  },
+  "vadStatusStopping": {
+    "message": "Stopping",
+    "description": "VAD status when stopping."
+  },
+  "vadDetailDeactivatingMicrophone": {
+    "message": "Deactivating microphone...",
+    "description": "VAD detail when deactivating the microphone."
+  },
+  "vadStatusShuttingDown": {
+    "message": "Shutting down",
+    "description": "VAD status when shutting down."
+  },
+  "vadDetailReleasingVADResources": {
+    "message": "Releasing VAD resources...",
+    "description": "VAD detail when releasing VAD resources."
   }
 }
