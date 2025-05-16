@@ -119,6 +119,7 @@ export class OffscreenVADClient {
           if (message.payload.success) {
             // Status will be updated to Listening by VAD_SPEECH_START if successful
             // this.statusIndicator.updateStatus("Starting..."); 
+            this.statusIndicator.updateStatus("Ready", "Waiting for speech");
           } else {
             this.statusIndicator.updateStatus("Failed", `Start Error: ${message.payload.error || 'Unknown'}`);
           }
