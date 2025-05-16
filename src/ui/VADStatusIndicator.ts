@@ -1,3 +1,5 @@
+import { UserPreferenceModule } from "../prefs/PreferenceModule";
+
 export class VADStatusIndicator {
   private container: HTMLElement | null = null;
   private statusElement: HTMLElement | null = null;
@@ -81,6 +83,7 @@ export class VADStatusIndicator {
     `;
     closeButton.addEventListener('click', (e) => {
         e.stopPropagation(); 
+        UserPreferenceModule.getInstance().setVadStatusIndicatorEnabled(false);
         this.hide();
     });
     this.container.appendChild(closeButton);
@@ -133,6 +136,17 @@ export class VADStatusIndicator {
 
   public show(): void {
     if (!this.container) return;
+    if (!UserPreferenceModule.getInstance().getCachedVadStatusIndicatorEnabled()) {
+      // If the preference is to hide the indicator, ensure it's not visible
+      // and prevent it from being shown.
+      if (this.visible) {
+        this.container.style.opacity = '0';
+        this.container.style.transform = 'translateY(10px)';
+        this.container.style.display = 'none';
+        this.visible = false;
+      }
+      return;
+    }
     if (!this.visible) {
       this.container.style.display = 'flex';
       // Trigger transition
@@ -161,10 +175,16 @@ export class VADStatusIndicator {
   }
 
   public toggle(): void {
+    // Toggle only changes visibility, does not alter the preference directly.
+    // The preference is only set to false when the close [x] button is clicked.
     if (this.visible) {
       this.hide();
     } else {
-      this.show();
+      // Before showing via toggle, ensure the preference allows it.
+      // This is a bit redundant if show() already checks, but good for clarity.
+      if (UserPreferenceModule.getInstance().getCachedVadStatusIndicatorEnabled()) {
+        this.show();
+      }
     }
   }
   

@@ -941,6 +941,10 @@
     "description": "Generic VAD failure status.",
     "message": "Fehlgeschlagen"
   },
+  "vadStatusIndicatorEnabledLabel": {
+    "description": "Label for the toggle switch that controls the visibility of the Voice Activity Detection status indicator.",
+    "message": "VAD -Status anzeigen"
+  },
   "vadStatusInitializing": {
     "description": "VAD status when initializing.",
     "message": "Initialisierung"

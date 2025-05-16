@@ -113,6 +113,8 @@ document.addEventListener("DOMContentLoaded", function () {
     2: "off",
   };
 
+  const vadStatusIndicatorEnabledInput = document.getElementById("vad-status-indicator-enabled");
+
   // Load the saved preference when the popup opens
   getStoredValue("prefer", "balanced").then((prefer) => {
     var selectedValue = Object.keys(preferenceIcons).find(
@@ -506,6 +508,30 @@ document.addEventListener("DOMContentLoaded", function () {
         this.parentElement.classList.remove("checked");
       }
     });
+
+    // Handle VAD Status Indicator toggle
+    if (vadStatusIndicatorEnabledInput) {
+      getStoredValue("vadStatusIndicatorEnabled", true).then((enabled) => {
+        selectInput(vadStatusIndicatorEnabledInput, enabled);
+        if (enabled) {
+          vadStatusIndicatorEnabledInput.parentElement.classList.add("checked");
+        } else {
+          vadStatusIndicatorEnabledInput.parentElement.classList.remove("checked");
+        }
+      });
+
+      vadStatusIndicatorEnabledInput.addEventListener("change", function () {
+        chrome.storage.local.set({ vadStatusIndicatorEnabled: this.checked }, function () {
+          console.log("Preference saved: VAD Status Indicator is " + (vadStatusIndicatorEnabledInput.checked ? "on" : "off"));
+        });
+        if (this.checked) {
+          this.parentElement.classList.add("checked");
+        } else {
+          this.parentElement.classList.remove("checked");
+        }
+        message({ vadStatusIndicatorEnabled: this.checked });
+      });
+    }
   }
 
   function hideAll(sections) {

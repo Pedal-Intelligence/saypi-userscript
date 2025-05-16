@@ -27,6 +27,7 @@ interface StorageResult {
   nickname?: string; // user's preferred nickname for the AI assistant
   enableTTS?: boolean; // Added for migration
   allowInterruptions?: boolean; // Added for migration
+  vadStatusIndicatorEnabled?: boolean; // To control VAD status indicator visibility
 }
 
 // Define feature codes
@@ -38,7 +39,7 @@ export const FEATURE_CODES = {
 const LOCAL_STORAGE_KEYS = [
   "prefer", "language", "discretionaryMode", "nickname",
   "autoSubmit", "allowInterruptions", "soundEffects", "theme", 
-  "shareData", "voiceId", "enableTTS"
+  "shareData", "voiceId", "enableTTS", "vadStatusIndicatorEnabled"
 ];
 
 class UserPreferenceModule {
@@ -108,6 +109,10 @@ class UserPreferenceModule {
     this.getStoredValue("nickname", null, 'local').then((value: string | null) => {
         this.cache.setCachedValue("nickname", value);
         EventBus.emit("userPreferenceChanged", { nickname: value });
+    });
+    this.getStoredValue("vadStatusIndicatorEnabled", true, 'local').then((value) => {
+      this.cache.setCachedValue("vadStatusIndicatorEnabled", value);
+      EventBus.emit("userPreferenceChanged", { vadStatusIndicatorEnabled: value });
     });
 
     // Network-dependent settings (not in chrome.storage)
@@ -188,6 +193,11 @@ class UserPreferenceModule {
             actions.push(this.setStoredValue("nickname", request.nickname, 'local'));
             EventBus.emit("userPreferenceChanged", { nickname: request.nickname });
         }
+        if ("vadStatusIndicatorEnabled" in request) {
+          this.cache.setCachedValue("vadStatusIndicatorEnabled", request.vadStatusIndicatorEnabled);
+          actions.push(this.setStoredValue("vadStatusIndicatorEnabled", request.vadStatusIndicatorEnabled, 'local'));
+          EventBus.emit("userPreferenceChanged", { vadStatusIndicatorEnabled: request.vadStatusIndicatorEnabled });
+        }
 
         if (actions.length > 0) {
           Promise.all(actions).catch(error => console.error("Error processing preference updates from message listener:", error));
@@ -252,6 +262,10 @@ class UserPreferenceModule {
                   case "enableTTS": 
                     this.cache.setCachedValue("enableTTS", newValue);
                     eventData = { enableTTS: newValue }; 
+                    break;
+                  case "vadStatusIndicatorEnabled":
+                    this.cache.setCachedValue("vadStatusIndicatorEnabled", newValue);
+                    eventData = { vadStatusIndicatorEnabled: newValue };
                     break;
                   default: continue; // Should not happen if LOCAL_STORAGE_KEYS is correct
                 }
@@ -476,6 +490,27 @@ class UserPreferenceModule {
     this.cache.setCachedValue("nickname", nickname);
     EventBus.emit("userPreferenceChanged", { nickname });
     return this.setStoredValue("nickname", nickname, 'local');
+  }
+
+  // VAD Status Indicator Enabled (LOCAL)
+  public async getVadStatusIndicatorEnabled(): Promise<boolean> {
+    const cached = this.cache.getCachedValue("vadStatusIndicatorEnabled", null);
+    if (cached !== null) {
+      return Promise.resolve(cached as boolean);
+    }
+    const stored = await this.getStoredValue("vadStatusIndicatorEnabled", true, 'local') as boolean;
+    this.cache.setCachedValue("vadStatusIndicatorEnabled", stored);
+    return stored;
+  }
+
+  public getCachedVadStatusIndicatorEnabled(): boolean {
+    return this.cache.getCachedValue("vadStatusIndicatorEnabled", true) as boolean;
+  }
+
+  public setVadStatusIndicatorEnabled(enabled: boolean): Promise<void> {
+    this.cache.setCachedValue("vadStatusIndicatorEnabled", enabled);
+    EventBus.emit("userPreferenceChanged", { vadStatusIndicatorEnabled: enabled });
+    return this.setStoredValue("vadStatusIndicatorEnabled", enabled, 'local');
   }
 
   // --- Preferences remaining in chrome.storage.sync ---

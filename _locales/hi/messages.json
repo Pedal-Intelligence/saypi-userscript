@@ -813,7 +813,7 @@
   },
   "vadDetailInitError": {
     "description": "VAD detail for an initialization error, with specific error message.",
-    "message": "",
+    "message": "INIT त्रुटि: $error$",
     "placeholders": {
       "error": {
         "content": "$1",
@@ -831,7 +831,7 @@
   },
   "vadDetailInitializedMode": {
     "description": "VAD detail showing initialization mode.",
-    "message": "",
+    "message": "आरंभीकृत (मोड: $mode$)",
     "placeholders": {
       "mode": {
         "content": "$1",
@@ -861,7 +861,7 @@
   },
   "vadDetailSpeechEndedDuration": {
     "description": "VAD detail indicating speech ended and its duration.",
-    "message": "",
+    "message": "भाषण समाप्त (अवधि: $duration$ एमएस)",
     "placeholders": {
       "duration": {
         "content": "$1",
@@ -871,7 +871,7 @@
   },
   "vadDetailStartError": {
     "description": "VAD detail for a start error, with specific error message.",
-    "message": "",
+    "message": "त्रुटि शुरू करें: $error$",
     "placeholders": {
       "error": {
         "content": "$1",
@@ -889,7 +889,7 @@
   },
   "vadDetailStopError": {
     "description": "VAD detail for a stop error, with specific error message.",
-    "message": "",
+    "message": "स्टॉप त्रुटि: $error$",
     "placeholders": {
       "error": {
         "content": "$1",
@@ -940,6 +940,10 @@
   "vadStatusFailed": {
     "description": "Generic VAD failure status.",
     "message": "Failed"
+  },
+  "vadStatusIndicatorEnabledLabel": {
+    "description": "Label for the toggle switch that controls the visibility of the Voice Activity Detection status indicator.",
+    "message": "वड स्थिति दिखाएं"
   },
   "vadStatusInitializing": {
     "description": "VAD status when initializing.",

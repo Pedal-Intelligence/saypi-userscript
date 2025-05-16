@@ -1000,5 +1000,9 @@
   "permissions_errorUnknownDuringRequest": {
     "message": "Unknown error during permission request",
     "description": "Fallback error message for an unknown error during the permission request process."
+  },
+  "vadStatusIndicatorEnabledLabel": {
+    "message": "Show VAD Status",
+    "description": "Label for the toggle switch that controls the visibility of the Voice Activity Detection status indicator."
   }
 }
