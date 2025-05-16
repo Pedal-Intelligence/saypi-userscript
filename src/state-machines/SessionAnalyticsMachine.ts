@@ -206,7 +206,7 @@ const machine = createMachine<SessionContext, SessionEvent, SessionTypestate>(
         context: SessionContext,
         event: SendMessageEvent
       ) => {
-        const transcriptionMode = await userPreferences.getTranscriptionMode();
+        const transcriptionMode = await userPreferences.getCachedTranscriptionMode();
 
         // calculate the real-time factor (RTF)
         const processing_time_ms = event.delay_ms;
@@ -226,7 +226,7 @@ const machine = createMachine<SessionContext, SessionEvent, SessionTypestate>(
         });
       },
       notifyStartSession: async (context, event: StartSessionEvent) => {
-        const transcriptionMode = await userPreferences.getTranscriptionMode();
+        const transcriptionMode = await userPreferences.getCachedTranscriptionMode();
         const language = await userPreferences.getLanguage();
         const elapsed_ms = 0;
         analytics.sendEvent("session_started", {

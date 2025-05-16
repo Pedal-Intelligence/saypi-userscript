@@ -19,6 +19,24 @@ interface TranscriptionResponse {
 }
 
 /**
+ * Logs the duration of a specific step if it exceeds defined thresholds.
+ * @param stepName - Name of the step being logged.
+ * @param startTime - The timestamp when the step started.
+ * @param thresholdWarn - Threshold in ms for a warning log.
+ * @param thresholdError - Threshold in ms for an error log.
+ */
+function logStepDuration(stepName: string, startTime: number, thresholdWarn: number = 200, thresholdError: number = 500): void {
+  const duration = Date.now() - startTime;
+  if (duration > thresholdError) {
+    logger.error(`[TranscriptionModule] Critical duration for ${stepName}: ${duration}ms`);
+  } else if (duration > thresholdWarn) {
+    logger.warn(`[TranscriptionModule] High duration for ${stepName}: ${duration}ms`);
+  } else if (duration > 50) { // Log elevated durations as info
+    logger.info(`[TranscriptionModule] Elevated duration for ${stepName}: ${duration}ms`);
+  }
+}
+
+/**
  * Logs transcription processing delays based on threshold values
  * @param captureTimestamp - When the audio was originally captured
  * @param clientTimestamp - When the client received the data 
@@ -241,7 +259,11 @@ async function uploadAudio(
       }
     );
 
+    let stepStartTime = Date.now();
     const chatbot = await ChatbotService.getChatbot();
+    logStepDuration("ChatbotService.getChatbot (uploadAudio)", stepStartTime);
+
+    stepStartTime = Date.now();
     const formData = await constructTranscriptionFormData(
       audioBlob,
       audioDurationMillis / 1000,
@@ -249,7 +271,12 @@ async function uploadAudio(
       sessionId,
       chatbot
     );
-    const language = await userPreferences.getLanguage();
+    logStepDuration("constructTranscriptionFormData (total)", stepStartTime);
+    
+    stepStartTime = Date.now();
+    const language = userPreferences.getCachedLanguage();
+    logStepDuration("userPreferences.getCachedLanguage", stepStartTime);
+    
     const appId = chatbot.getID();
 
     const controller = new AbortController();
@@ -385,21 +412,30 @@ async function constructTranscriptionFormData(
   }
 
   // Wait for preferences to be retrieved before appending them to the FormData
-  const preference = await userPreferences.getTranscriptionMode();
+  let stepStartTime = Date.now();
+  const preference = userPreferences.getCachedTranscriptionMode();
+  logStepDuration("userPreferences.getCachedTranscriptionMode", stepStartTime);
   if (preference) {
     formData.append("prefer", preference);
   }
 
-  const discretionaryMode = await userPreferences.getDiscretionaryMode();
+  stepStartTime = Date.now();
+  const discretionaryMode = userPreferences.getCachedDiscretionaryMode();
+  logStepDuration("userPreferences.getCachedDiscretionaryMode", stepStartTime);
   if (discretionaryMode) {
     formData.append("analyzeForResponse", "true");
   }
 
   // Get the chatbot's nickname if set
   if (!chatbot) {
+    stepStartTime = Date.now();
     chatbot = await ChatbotService.getChatbot();
+    logStepDuration("ChatbotService.getChatbot (constructTranscriptionFormData)", stepStartTime);
   }
+  stepStartTime = Date.now();
   const nickname = await chatbot.getNickname();
+  logStepDuration("chatbot.getNickname", stepStartTime);
+  
   const defaultName = chatbot.getName();
   if (nickname && nickname !== defaultName) {
     formData.append("nickname", nickname);

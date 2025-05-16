@@ -67,6 +67,16 @@ class UserPreferenceModule {
       this.cache.setCachedValue("discretionaryMode", value);
       EventBus.emit("userPreferenceChanged", { discretionaryMode: value }); // propagate the change to other modules - this is a bit of a hack for the cache not being ready immediately after construction
     });
+    // Add transcriptionMode to cache reloading
+    this.getStoredValue("prefer", "balanced").then((value: Preference) => {
+      this.cache.setCachedValue("transcriptionMode", value);
+      EventBus.emit("userPreferenceChanged", { transcriptionMode: value });
+    });
+    // Add language to cache reloading
+    this.getStoredValue("language", navigator.language).then((value: string) => {
+      this.cache.setCachedValue("language", value);
+      EventBus.emit("userPreferenceChanged", { language: value });
+    });
   }
 
   /**
@@ -92,6 +102,20 @@ class UserPreferenceModule {
         if ("discretionaryMode" in request) {
           this.cache.setCachedValue("discretionaryMode", request.discretionaryMode);
           EventBus.emit("userPreferenceChanged", { discretionaryMode: request.discretionaryMode }); // propagate the change to other modules
+        }
+        // Listen for changes in transcriptionMode preference
+        if ("transcriptionMode" in request) {
+          this.cache.setCachedValue("transcriptionMode", request.transcriptionMode);
+          EventBus.emit("userPreferenceChanged", { transcriptionMode: request.transcriptionMode });
+        }
+        if ("prefer" in request) { // Also listen for 'prefer' key if used by options/popup
+          this.cache.setCachedValue("transcriptionMode", request.prefer);
+          EventBus.emit("userPreferenceChanged", { transcriptionMode: request.prefer });
+        }
+        // Listen for changes in language preference
+        if ("language" in request) {
+          this.cache.setCachedValue("language", request.language);
+          EventBus.emit("userPreferenceChanged", { language: request.language });
         }
       });
     }
@@ -119,6 +143,12 @@ class UserPreferenceModule {
                 EventBus.emit("userPreferenceChanged", {
                   voiceId: changes[key].newValue,
                 });
+              } else if (key === "prefer") { // Update cache if 'prefer' changes in storage.sync
+                this.cache.setCachedValue("transcriptionMode", changes[key].newValue);
+                EventBus.emit("userPreferenceChanged", { transcriptionMode: changes[key].newValue });
+              } else if (key === "language") { // Update cache if 'language' changes in storage.sync
+                this.cache.setCachedValue("language", changes[key].newValue);
+                EventBus.emit("userPreferenceChanged", { language: changes[key].newValue });
               }
             }
           }
@@ -154,6 +184,12 @@ class UserPreferenceModule {
         chrome.storage.sync
       ) {
         chrome.storage.sync.get([key], function (result) {
+          if (chrome.runtime.lastError) {
+            // Log error and resolve with default value if storage access fails
+            console.error(`Error getting value for ${key} from chrome.storage.sync:`, chrome.runtime.lastError.message);
+            resolve(defaultValue);
+            return;
+          }
           if (result[key] === undefined) {
             resolve(defaultValue);
           } else {
@@ -167,8 +203,29 @@ class UserPreferenceModule {
     });
   }
 
-  public getTranscriptionMode(): Promise<Preference> {
-    return this.getStoredValue("prefer", "balanced");
+  /**
+   * Gets the transcription mode from the user's preferences
+   * This is a slow operation as it requires a network request, so use the cached value if possible
+   * @returns {Promise<Preference>} The transcription mode: "speed", "balanced", "accuracy"
+   */
+  public async getTranscriptionMode(): Promise<Preference> {
+    const cachedMode = this.cache.getCachedValue("transcriptionMode", null);
+    if (cachedMode !== null) {
+      return Promise.resolve(cachedMode as Preference);
+    }
+    // If not in cache, fetch from storage and cache it
+    const storedMode = await this.getStoredValue("prefer", "balanced") as Preference;
+    this.cache.setCachedValue("transcriptionMode", storedMode);
+    return storedMode;
+  }
+
+  /**
+   * Gets the cached transcription mode from the cache
+   * Always prefer this method over getTranscriptionMode() as it is faster
+   * @returns {Preference} The cached transcription mode: "speed", "balanced", "accuracy"
+   */
+  public getCachedTranscriptionMode(): Preference {
+    return this.cache.getCachedValue("transcriptionMode", "balanced") as Preference;
   }
 
   public getSoundEffects(): Promise<boolean> {
@@ -183,8 +240,18 @@ class UserPreferenceModule {
     return this.getStoredValue("autoSubmit", true);
   }
 
-  public getLanguage(): Promise<string> {
-    return this.getStoredValue("language", navigator.language);
+  public async getLanguage(): Promise<string> {
+    const cachedLanguage = this.cache.getCachedValue("language", null);
+    if (cachedLanguage !== null) {
+      return Promise.resolve(cachedLanguage as string);
+    }
+    const storedLanguage = await this.getStoredValue("language", navigator.language) as string;
+    this.cache.setCachedValue("language", storedLanguage);
+    return storedLanguage;
+  }
+
+  public getCachedLanguage(): string {
+    return this.cache.getCachedValue("language", navigator.language) as string;
   }
 
   public getTheme(): Promise<string> {
