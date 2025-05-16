@@ -1,0 +1,47 @@
+body {
+  font-family: sans-serif;
+  padding: 20px;
+  text-align: center;
+  margin: 0;
+  /* background-color: #f4f4f4; */ /* Replaced by background image */
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url('himfloyd-mic.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.container {
+  /* background-color: #fff; */ /* Made slightly transparent */
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  max-width: 400px;
+}
+
+h1 {
+  color: #2c3e50;
+  margin-top: 0;
+}
+
+p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+#status {
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.footer-text {
+  font-size: 0.9em;
+  color: #777;
+  margin-top: 20px;
+}

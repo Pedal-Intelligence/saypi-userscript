@@ -160,6 +160,14 @@ const config = {
             from: "src/permissions/permissions-prompt.html",
             to: "permissions/[name][ext]",
           },
+          {
+            from: "src/permissions/himfloyd-mic.png",
+            to: "permissions/[name][ext]",
+          },
+          {
+            from: "src/permissions/permissions-prompt.css",
+            to: "permissions/[name][ext]",
+          },
         ],
       }),
     ],
