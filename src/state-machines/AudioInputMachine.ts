@@ -5,8 +5,37 @@ import EventBus from "../events/EventBus.js";
 import { AudioCapabilityDetector } from "../audio/AudioCapabilities";
 import getMessage from "../i18n";
 import { OffscreenVADClient } from '../vad/OffscreenVADClient';
+import { logger } from "../LoggingModule";
 
 setupInterceptors();
+
+/**
+ * Logs processing delays based on threshold values
+ * @param captureTimestamp - When the audio was originally captured
+ * @param clientTimestamp - When the client received the data
+ * @param handlerTimestamp - When the handler processed the data
+ */
+function logProcessingDelay(captureTimestamp: number, clientTimestamp: number, handlerTimestamp: number): void {
+  const captureToHandlerDelay = handlerTimestamp - captureTimestamp;
+  const clientToHandlerDelay = handlerTimestamp - clientTimestamp;
+  
+  if (captureToHandlerDelay > 1000) {
+    logger.error(
+      `[AudioInputMachine] Critical delay: ${captureToHandlerDelay}ms from capture to handler. ` +
+      `Client-to-handler: ${clientToHandlerDelay}ms`
+    );
+  } else if (captureToHandlerDelay > 500) {
+    logger.warn(
+      `[AudioInputMachine] High delay: ${captureToHandlerDelay}ms from capture to handler. ` +
+      `Client-to-handler: ${clientToHandlerDelay}ms`
+    );
+  } else if (captureToHandlerDelay > 300) {
+    logger.info(
+      `[AudioInputMachine] Elevated delay: ${captureToHandlerDelay}ms from capture to handler. ` +
+      `Client-to-handler: ${clientToHandlerDelay}ms`
+    );
+  }
+}
 
 let previousDeviceIds: string[] = [];
 let previousDefaultDevice: MediaDeviceInfo | null = null;
@@ -225,7 +254,7 @@ type AudioInputEvent =
   | { type: "release" }
   | { type: "start" }
   | { type: "stopRequested" }
-  | { type: "dataAvailable"; blob: Blob; duration: number }
+  | { type: "dataAvailable"; blob: Blob; duration: number; captureTimestamp?: number; clientReceiveTimestamp?: number; handlerTimestamp?: number }
   | { type: "stop" }
   | { type: "error.platform"; data: any };
 
@@ -405,9 +434,9 @@ export const audioInputMachine = createMachine<
 
       sendData: (
         context,
-        event: { type: "dataAvailable"; blob: Blob; duration: number }
+        event: { type: "dataAvailable"; blob: Blob; duration: number; captureTimestamp?: number; clientReceiveTimestamp?: number; handlerTimestamp?: number }
       ) => {
-        const { blob, duration } = event;
+        const { blob, duration, captureTimestamp, clientReceiveTimestamp, handlerTimestamp } = event;
         const sizeInKb = (blob.size / 1024).toFixed(2); // Convert to kilobytes and keep 2 decimal places
         console.debug(`Uploading ${sizeInKb}kb of audio data`);
 
@@ -419,6 +448,9 @@ export const audioInputMachine = createMachine<
           EventBus.emit("saypi:userStoppedSpeaking", {
             duration: speechDuration,
             blob,
+            captureTimestamp,
+            clientReceiveTimestamp,
+            handlerTimestamp
           });
         }
       },
@@ -521,14 +553,28 @@ vadClient.on('onSpeechStart', () => {
   EventBus.emit("saypi:userSpeaking");
 });
 
-vadClient.on('onSpeechEnd', (data: { duration: number; audioBuffer: ArrayBuffer }) => {
+vadClient.on('onSpeechEnd', (data: { 
+  duration: number; 
+  audioBuffer: ArrayBuffer; 
+  captureTimestamp: number; 
+  clientReceiveTimestamp: number 
+}) => {
   console.debug("[AudioInputMachine] User speech ended (event from VAD client). Duration:", data.duration);
   // Reconstruct Float32Array from audio buffer
   const audioData = new Float32Array(data.audioBuffer);
   const frameCount = audioData.length;
   const frameRate = 16000;
   const duration = frameCount / frameRate;
-  console.debug(`[AudioInputMachine] Speech duration: ${data.duration}ms, Frame count: ${frameCount}, Frame rate: ${frameRate}, Duration: ${duration}s`);
+  const handlerTimestamp = Date.now();
+  
+  // Only log basic information about speech data at debug level
+  console.debug(
+    `[AudioInputMachine] Speech duration: ${data.duration}ms, Frame count: ${frameCount}, Frame rate: ${frameRate}, Duration: ${duration}s`
+  );
+  
+  // Log timing information based on delay thresholds
+  logProcessingDelay(data.captureTimestamp, data.clientReceiveTimestamp, handlerTimestamp);
+  
   if (frameCount === 0) {
     console.warn("[AudioInputMachine] No audio data available. Skipping emission of audio:dataavailable event.");
     return;
@@ -540,12 +586,20 @@ vadClient.on('onSpeechEnd', (data: { duration: number; audioBuffer: ArrayBuffer 
   EventBus.emit("audio:dataavailable", {
     blob: audioBlob,
     duration: data.duration,
+    captureTimestamp: data.captureTimestamp,
+    clientReceiveTimestamp: data.clientReceiveTimestamp,
+    handlerTimestamp: handlerTimestamp
   });
 });
 
 vadClient.on('onVADMisfire', () => {
   console.debug("[AudioInputMachine] VAD Misfire (event from VAD client).");
-  EventBus.emit("saypi:userStoppedSpeaking", { duration: 0 });
+  EventBus.emit("saypi:userStoppedSpeaking", { 
+    duration: 0,
+    captureTimestamp: Date.now(), // As a misfire, we don't have real capture data, using current time
+    clientReceiveTimestamp: Date.now(),
+    handlerTimestamp: Date.now()
+  });
 });
 
 vadClient.on('onError', (error: string) => {

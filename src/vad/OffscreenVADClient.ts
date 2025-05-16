@@ -4,9 +4,25 @@ import { VADStatusIndicator } from '../ui/VADStatusIndicator';
 
 console.log("[SayPi OffscreenVADClient] Client loaded.");
 
+/**
+ * Logs transfer delays based on threshold values
+ * @param captureTimestamp - When the audio was originally captured
+ * @param receiveTimestamp - When the client received the data
+ * @param description - Description of what's being measured
+ */
+function logTransferDelay(captureTimestamp: number, receiveTimestamp: number, description: string = "transfer"): void {
+  const delay = receiveTimestamp - captureTimestamp;
+  
+  if (delay > 500) {
+    logger.warn(`[SayPi OffscreenVADClient] High ${description} delay: ${delay}ms from capture to client receipt`);
+  } else if (delay > 200) {
+    logger.info(`[SayPi OffscreenVADClient] Elevated ${description} delay: ${delay}ms from capture to client receipt`);
+  }
+}
+
 interface VADClientCallbacks {
   onSpeechStart?: () => void;
-  onSpeechEnd?: (data: { duration: number; audioBuffer: ArrayBuffer }) => void;
+  onSpeechEnd?: (data: { duration: number; audioBuffer: ArrayBuffer; captureTimestamp: number; clientReceiveTimestamp: number }) => void;
   onVADMisfire?: () => void;
   onError?: (error: string) => void;
   onFrameProcessed?: (probabilities: { isSpeech: number; notSpeech: number }) => void;
@@ -33,6 +49,8 @@ export class OffscreenVADClient {
 
   private setupListeners(): void {
     this.port.onMessage.addListener((message: any) => {
+      const receiveTimestamp = Date.now();
+      
       if(message.type !== "VAD_FRAME_PROCESSED") {
         // frame processed messages are too chatty, so we don't log them
         console.debug("[SayPi OffscreenVADClient] Received message from background:", message);
@@ -52,19 +70,27 @@ export class OffscreenVADClient {
           setTimeout(() => this.statusIndicator.updateStatus("Ready", "Waiting for speech"), 1500);
           
           const speechDuration = message.duration;
+          const captureTimestamp = message.captureTimestamp || 0;
+          const transferDelay = receiveTimestamp - captureTimestamp;
           
           // Convert the array back to Float32Array
           const rawAudioData = new Float32Array(message.audioData || []);
           const frameCount = message.frameCount || rawAudioData.length;
           const frameRate = 16000;
           const duration = frameCount / frameRate;
+          
+          // Only log basic information at debug level
           console.debug(`[SayPi OffscreenVADClient] Speech duration: ${speechDuration}ms, Frame count: ${frameCount}, Frame rate: ${frameRate}, Duration: ${duration}s`);
-          logger.debug(`[SayPi OffscreenVADClient] Speech ended. Duration: ${speechDuration}ms`);
+          
+          // Log transfer delays only if they exceed thresholds
+          logTransferDelay(captureTimestamp, receiveTimestamp);
 
           // Pass the reconstructed Float32Array's buffer as ArrayBuffer
           this.callbacks.onSpeechEnd?.({ 
             duration: message.duration, 
-            audioBuffer: rawAudioData.buffer 
+            audioBuffer: rawAudioData.buffer,
+            captureTimestamp: captureTimestamp,
+            clientReceiveTimestamp: receiveTimestamp
           });
           break;
         case "VAD_MISFIRE":

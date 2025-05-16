@@ -18,6 +18,63 @@ interface TranscriptionResponse {
   };
 }
 
+/**
+ * Logs transcription processing delays based on threshold values
+ * @param captureTimestamp - When the audio was originally captured
+ * @param clientTimestamp - When the client received the data 
+ * @param transcriptionTimestamp - When transcription processing began
+ */
+function logTranscriptionDelay(captureTimestamp: number, clientTimestamp: number | null, transcriptionTimestamp: number): void {
+  const captureToTranscriptionDelay = transcriptionTimestamp - captureTimestamp;
+  const clientToTranscriptionDelay = clientTimestamp ? 
+    transcriptionTimestamp - clientTimestamp : null;
+  
+  if (captureToTranscriptionDelay > 1000) {
+    logger.error(
+      `[TranscriptionModule] Critical delay: ${captureToTranscriptionDelay}ms from audio capture to transcription start. ` +
+      `Client-to-transcription: ${clientToTranscriptionDelay}ms`
+    );
+  } else if (captureToTranscriptionDelay > 500) {
+    logger.warn(
+      `[TranscriptionModule] High delay: ${captureToTranscriptionDelay}ms from audio capture to transcription start. ` +
+      `Client-to-transcription: ${clientToTranscriptionDelay}ms`
+    );
+  } else if (captureToTranscriptionDelay > 300) {
+    logger.info(
+      `[TranscriptionModule] Elevated delay: ${captureToTranscriptionDelay}ms from audio capture to transcription start. ` +
+      `Client-to-transcription: ${clientToTranscriptionDelay}ms`
+    );
+  }
+}
+
+/**
+ * Logs API request delays based on threshold values
+ * @param captureTimestamp - When the audio was originally captured
+ * @param transcriptionTimestamp - When transcription processing began
+ * @param apiRequestTimestamp - When the API request was initiated
+ */
+function logApiRequestDelay(captureTimestamp: number, transcriptionTimestamp: number, apiRequestTimestamp: number): void {
+  const captureToApiDelay = apiRequestTimestamp - captureTimestamp;
+  const transcriptionToApiDelay = apiRequestTimestamp - transcriptionTimestamp;
+  
+  if (captureToApiDelay > 1000) {
+    logger.error(
+      `[TranscriptionModule] Critical API request delay: ${captureToApiDelay}ms from capture to API request. ` +
+      `Transcription start to API request: ${transcriptionToApiDelay}ms`
+    );
+  } else if (captureToApiDelay > 500) {
+    logger.warn(
+      `[TranscriptionModule] High API request delay: ${captureToApiDelay}ms from capture to API request. ` +
+      `Transcription start to API request: ${transcriptionToApiDelay}ms`
+    );
+  } else if (captureToApiDelay > 300) {
+    logger.info(
+      `[TranscriptionModule] Elevated API request delay: ${captureToApiDelay}ms from capture to API request. ` +
+      `Transcription start to API request: ${transcriptionToApiDelay}ms`
+    );
+  }
+}
+
 const knownNetworkErrorMessages = [
   "Failed to fetch", // Chromium-based browsers
   "Load failed", // Safari
@@ -94,10 +151,22 @@ export async function uploadAudioWithRetry(
   audioDurationMillis: number,
   precedingTranscripts: Record<number, string> = {},
   sessionId?: string,
-  maxRetries: number = 3
+  maxRetries: number = 3,
+  captureTimestamp?: number,
+  clientReceiveTimestamp?: number
 ): Promise<void> {
   let retryCount = 0;
   let delay = 1000; // initial delay of 1 second
+  const transcriptionStartTimestamp = Date.now();
+  
+  // Log timing information if timestamps are available
+  if (captureTimestamp) {
+    logTranscriptionDelay(
+      captureTimestamp, 
+      clientReceiveTimestamp || null, 
+      transcriptionStartTimestamp
+    );
+  }
 
   const sleep = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
@@ -109,7 +178,9 @@ export async function uploadAudioWithRetry(
         audioBlob,
         audioDurationMillis,
         precedingTranscripts,
-        sessionId
+        sessionId,
+        captureTimestamp,
+        transcriptionStartTimestamp
       );
       return;
     } catch (error) {
@@ -155,7 +226,9 @@ async function uploadAudio(
   audioBlob: Blob,
   audioDurationMillis: number,
   precedingTranscripts: Record<number, string> = {},
-  sessionId?: string
+  sessionId?: string,
+  captureTimestamp?: number,
+  transcriptionStartTimestamp?: number
 ): Promise<void> {
   try {
     const messages = Object.entries(precedingTranscripts).map(
@@ -186,10 +259,18 @@ async function uploadAudio(
 
     const startTime = new Date().getTime();
     
+    // Additional timing information for API request
+    if (captureTimestamp && transcriptionStartTimestamp) {
+      logApiRequestDelay(captureTimestamp, transcriptionStartTimestamp, startTime);
+    }
+    
     // Emit transcription started event for telemetry tracking
     EventBus.emit("saypi:transcribing", {
       sequenceNumber: sequenceNum,
       timestamp: startTime,
+      captureTimestamp: captureTimestamp,
+      clientReceiveTimestamp: transcriptionStartTimestamp,
+      apiRequestDelay: captureTimestamp ? (startTime - captureTimestamp) : undefined
     });
     
     const response = await callApi(
@@ -238,6 +319,13 @@ async function uploadAudio(
         transcriptionDurationMillis / 1000
       )}s`
     );
+    
+    if (captureTimestamp) {
+      const totalProcessingTime = endTime - captureTimestamp;
+      logger.debug(
+        `Total processing time from audio capture to transcription completion: ${Math.round(totalProcessingTime / 1000)}s`
+      );
+    }
 
     if (responseJson.text.length === 0) {
       StateMachineService.actor.send("saypi:transcribedEmpty");

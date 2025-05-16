@@ -6,6 +6,22 @@ import { debounce } from "lodash";
 
 logger.log("[SayPi VAD Offscreen] Script loaded.");
 
+/**
+ * Logs message delays based on threshold values
+ * @param captureTimestamp - When the audio was originally captured
+ * @param description - Description of what's being measured
+ */
+function logMessageDelay(captureTimestamp: number, description: string = "message send"): void {
+  const currentTime = Date.now();
+  const delay = currentTime - captureTimestamp;
+  
+  if (delay > 500) {
+    logger.warn(`[SayPi VAD Offscreen] High ${description} delay: ${delay}ms from capture to send`);
+  } else if (delay > 200) {
+    logger.info(`[SayPi VAD Offscreen] Elevated ${description} delay: ${delay}ms from capture to send`);
+  }
+}
+
 interface MyRealTimeVADCallbacks {
   onSpeechStart?: () => any;
   onSpeechEnd?: (audio: Float32Array) => any;
@@ -59,14 +75,21 @@ const vadOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
       // Convert Float32Array to regular Array for proper serialization
       const audioArray = Array.from(rawAudioData);
       
+      // Add precise timestamp of when audio was captured
+      const captureTimestamp = speechStopTime;
+      
       chrome.runtime.sendMessage({
         type: "VAD_SPEECH_END",
         duration: speechDuration,
         audioData: audioArray,
         frameCount: frameCount,
+        captureTimestamp: captureTimestamp,
         targetTabId: currentActiveTabId,
         origin: "offscreen-document",
       });
+      
+      // Log message sending delays if they exceed thresholds
+      logMessageDelay(captureTimestamp);
     }
   },
   onVADMisfire: () => {

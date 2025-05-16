@@ -45,6 +45,9 @@ type SayPiSpeechStoppedEvent = {
   type: "saypi:userStoppedSpeaking";
   duration: number;
   blob?: Blob;
+  captureTimestamp?: number;
+  clientReceiveTimestamp?: number;
+  handlerTimestamp?: number;
 };
 
 type SayPiAudioConnectedEvent = {
@@ -1085,12 +1088,18 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             audioBlob,
             event.duration,
             context.transcriptions,
-            context.sessionId
+            context.sessionId,
+            3, // default maxRetries
+            event.captureTimestamp,
+            event.clientReceiveTimestamp
           );
           EventBus.emit("session:transcribing", {
             audio_duration_seconds: event.duration / 1000,
             speech_end_time: Date.now(), // bit hacky, as it assumes the audio is transcribed immediately
             speech_start_time: Date.now() - event.duration,
+            captureTimestamp: event.captureTimestamp,
+            clientReceiveTimestamp: event.clientReceiveTimestamp,
+            handlerTimestamp: event.handlerTimestamp
           });
         }
       },
