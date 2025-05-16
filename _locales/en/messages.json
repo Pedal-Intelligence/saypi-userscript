@@ -944,5 +944,89 @@
   "vadDetailReleasingVADResources": {
     "message": "Releasing VAD resources...",
     "description": "VAD detail when releasing VAD resources."
+  },
+  "permissions_promptTitle": {
+    "message": "Microphone Permission",
+    "description": "Title of the permissions prompt page."
+  },
+  "permissions_promptHeading": {
+    "message": "🗣️ Let's get chatting!",
+    "description": "Main heading on the permissions prompt page."
+  },
+  "permissions_promptInfo": {
+    "message": "To bring voice to your conversations, $productName$ needs permission to use your microphone. Your privacy matters - we only listen when you're actively chatting.",
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptAction": {
+    "message": "You'll see a browser prompt at the top of this window. Just hit <strong>\"Allow while visiting the site\"</strong> so we can start talking.",
+    "description": "Instructional text on what action the user should take in the browser prompt."
+  },
+  "permissions_promptStatusWaiting": {
+    "message": "Waiting for your go-ahead…",
+    "description": "Initial status message shown on the permissions prompt page."
+  },
+  "permissions_promptFooter": {
+    "message": "This tab will close automatically once you've responded.",
+    "description": "Footer text indicating the tab will auto-close."
+  },
+  "permissions_logStatusElementNotFound": {
+    "message": "[PermissionsPrompt] Status element not found in the DOM.",
+    "description": "Console error when the status HTML element is missing."
+  },
+  "permissions_errorDomLoadFailure": {
+    "message": "Permissions prompt page DOM failed to load correctly.",
+    "description": "Error message sent via runtime message if the DOM fails to load."
+  },
+  "permissions_logErrorSendingDomFailure": {
+    "message": "[PermissionsPrompt] Error sending critical DOM failure message:",
+    "description": "Console error when sending the DOM failure message fails."
+  },
+  "permissions_logRequestingPermission": {
+    "message": "[PermissionsPrompt] Requesting microphone permission...",
+    "description": "Console log when microphone permission is being requested."
+  },
+  "permissions_logPermissionGranted": {
+    "message": "[PermissionsPrompt] Microphone permission GRANTED.",
+    "description": "Console log when microphone permission has been granted."
+  },
+  "permissions_statusPermissionGranted": {
+    "message": "Thanks! Permission granted. Wrapping things up...",
+    "description": "Status message shown when permission is granted."
+  },
+  "permissions_logErrorSendingGrant": {
+    "message": "[PermissionsPrompt] Error sending GRANT message:",
+    "description": "Console error when sending the grant confirmation message fails."
+  },
+  "permissions_logPermissionDeniedOrError": {
+    "message": "[PermissionsPrompt] Microphone permission DENIED or error:",
+    "description": "Console log when microphone permission is denied or an error occurs."
+  },
+  "permissions_statusPermissionDenied": {
+    "message": "Hmm, couldn't get mic access: $errorName$. Closing this tab in a moment…",
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_textUnknownError": {
+    "message": "Unknown Error",
+    "description": "Fallback text for an unknown error name."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "message": "Unknown error during permission request",
+    "description": "Fallback error message for an unknown error during the permission request process."
+  },
+  "permissions_logErrorSendingDeny": {
+    "message": "[PermissionsPrompt] Error sending DENY/ERROR message:",
+    "description": "Console error when sending the deny/error message fails."
   }
 }
