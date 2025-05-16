@@ -975,37 +975,13 @@
     "message": "This tab will close automatically once you've responded.",
     "description": "Footer text indicating the tab will auto-close."
   },
-  "permissions_logStatusElementNotFound": {
-    "message": "[PermissionsPrompt] Status element not found in the DOM.",
-    "description": "Console error when the status HTML element is missing."
-  },
   "permissions_errorDomLoadFailure": {
     "message": "Permissions prompt page DOM failed to load correctly.",
     "description": "Error message sent via runtime message if the DOM fails to load."
   },
-  "permissions_logErrorSendingDomFailure": {
-    "message": "[PermissionsPrompt] Error sending critical DOM failure message:",
-    "description": "Console error when sending the DOM failure message fails."
-  },
-  "permissions_logRequestingPermission": {
-    "message": "[PermissionsPrompt] Requesting microphone permission...",
-    "description": "Console log when microphone permission is being requested."
-  },
-  "permissions_logPermissionGranted": {
-    "message": "[PermissionsPrompt] Microphone permission GRANTED.",
-    "description": "Console log when microphone permission has been granted."
-  },
   "permissions_statusPermissionGranted": {
     "message": "Thanks! Permission granted. Wrapping things up...",
     "description": "Status message shown when permission is granted."
-  },
-  "permissions_logErrorSendingGrant": {
-    "message": "[PermissionsPrompt] Error sending GRANT message:",
-    "description": "Console error when sending the grant confirmation message fails."
-  },
-  "permissions_logPermissionDeniedOrError": {
-    "message": "[PermissionsPrompt] Microphone permission DENIED or error:",
-    "description": "Console log when microphone permission is denied or an error occurs."
   },
   "permissions_statusPermissionDenied": {
     "message": "Hmm, couldn't get mic access: $errorName$. Closing this tab in a moment…",
@@ -1024,9 +1000,5 @@
   "permissions_errorUnknownDuringRequest": {
     "message": "Unknown error during permission request",
     "description": "Fallback error message for an unknown error during the permission request process."
-  },
-  "permissions_logErrorSendingDeny": {
-    "message": "[PermissionsPrompt] Error sending DENY/ERROR message:",
-    "description": "Console error when sending the deny/error message fails."
   }
 }

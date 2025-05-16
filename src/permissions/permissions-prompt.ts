@@ -24,26 +24,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const statusElement = document.getElementById('status');
   if (!statusElement) {
-    console.error(getMessage('permissions_logStatusElementNotFound'));
+    console.error("[PermissionsPrompt] Status element not found in the DOM.");
     chrome.runtime.sendMessage({
       type: 'PERMISSION_PROMPT_RESULT',
       granted: false,
       error: getMessage('permissions_errorDomLoadFailure')
     }, () => { 
       if (chrome.runtime.lastError) {
-        console.error(getMessage('permissions_logErrorSendingDomFailure'), chrome.runtime.lastError.message);
+        console.error("[PermissionsPrompt] Error sending critical DOM failure message:", chrome.runtime.lastError.message);
       }
     });
     return;
   }
 
-  console.log(getMessage('permissions_logRequestingPermission'));
+  console.log("[PermissionsPrompt] Requesting microphone permission...");
   // Set initial status message using the key from HTML part, as it's the same
   statusElement.innerHTML = `<em>${getMessage('permissions_promptStatusWaiting')}</em>`; 
 
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    console.log(getMessage('permissions_logPermissionGranted'));
+    console.log("[PermissionsPrompt] Microphone permission GRANTED.");
     statusElement.textContent = getMessage('permissions_statusPermissionGranted');
 
     stream.getTracks().forEach(track => track.stop());
@@ -53,13 +53,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       granted: true
     }, () => {
       if (chrome.runtime.lastError) {
-        console.error(getMessage('permissions_logErrorSendingGrant'), chrome.runtime.lastError.message);
+        console.error("[PermissionsPrompt] Error sending GRANT message:", chrome.runtime.lastError.message);
       }
       setTimeout(() => window.close(), 1500);
     });
 
   } catch (err: any) {
-    console.error(getMessage('permissions_logPermissionDeniedOrError'), err.name, err.message);
+    console.error("[PermissionsPrompt] Microphone permission DENIED or error:", err.name, err.message);
     const errorName = err.name || getMessage('permissions_textUnknownError');
     statusElement.textContent = getMessage('permissions_statusPermissionDenied', errorName);
     
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       error: err.message || err.name || getMessage('permissions_errorUnknownDuringRequest')
     }, () => {
       if (chrome.runtime.lastError) {
-        console.error(getMessage('permissions_logErrorSendingDeny'), chrome.runtime.lastError.message);
+        console.error("[PermissionsPrompt] Error sending DENY/ERROR message:", chrome.runtime.lastError.message);
       }
       setTimeout(() => window.close(), 2500);
     });
