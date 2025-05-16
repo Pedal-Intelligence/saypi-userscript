@@ -407,6 +407,62 @@
     "description": "Text to show when the user is not signed in.",
     "message": "प्रवेश नहीं किया"
   },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "अनुमतियाँ शीघ्र पृष्ठ DOM सही तरीके से लोड करने में विफल रही।"
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "अनुमति अनुरोध के दौरान अज्ञात त्रुटि"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "आप इस विंडो के शीर्ष पर एक ब्राउज़र प्रॉम्प्ट देखेंगे। \nबस हिट <strong> \"साइट पर जाने के दौरान\" </strong> पर जाने की अनुमति दें ताकि हम बात करना शुरू कर सकें।"
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "आपके द्वारा जवाब देने के बाद यह टैब स्वचालित रूप से बंद हो जाएगा।"
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣 चलो चैटिंग प्राप्त करते हैं!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "अपनी बातचीत में आवाज लाने के लिए, $productName$ को अपने माइक्रोफोन का उपयोग करने की अनुमति की आवश्यकता है। \nआपकी गोपनीयता मायने रखती है - हम केवल तभी सुनते हैं जब आप सक्रिय रूप से बातचीत कर रहे हों।",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "अपने आगे बढ़ने की प्रतीक्षा में ..."
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "माइक्रोफोन अनुमति"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "हम्म, एमआईसी एक्सेस नहीं मिल सका: $errorName$। \nएक पल में इस टैब को बंद करना ...",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "धन्यवाद! \nकी अनुमति दी। \nचीजों को लपेटना ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "अज्ञात त्रुटि"
+  },
   "preferedLanguage": {
     "description": "Label for a control to select the prefered transcription language.",
     "message": "भाषा"

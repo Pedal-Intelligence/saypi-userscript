@@ -407,6 +407,62 @@
     "description": "Text to show when the user is not signed in.",
     "message": "Nie podpísané"
   },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "Výzva Povolenia DOM sa nedokázala správne načítať."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Neznáma chyba počas žiadosti o povolenie"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "V hornej časti tohto okna sa zobrazí výzva prehliadača. \nStačí zasiahnuť <strong> „Povoliť pri návšteve stránky“ </strong>, aby sme mohli začať hovoriť."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Táto karta sa automaticky zatvorí, keď odpovedáte."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣 Poďme sa chatovať!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "Aby ste sa dostali do vašich konverzácií, potrebuje povolenie $productName$ povolenie na používanie vášho mikrofónu. \nNa vašich súkromí záleží - počúvame iba vtedy, keď budete aktívne chatovať.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Čaká sa na tvoju…"
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Mikrofón"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Hmm, nemohol som získať prístup k mikrofónu: $errorName$. \nZatvorenie tejto karty za okamih ...",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "Vďaka! \nUdelené povolenie. \nZabalenie vecí ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Neznáma chyba"
+  },
   "preferedLanguage": {
     "description": "Label for a control to select the prefered transcription language.",
     "message": "Jazyk"

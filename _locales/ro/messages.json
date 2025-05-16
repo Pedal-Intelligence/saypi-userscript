@@ -407,6 +407,62 @@
     "description": "Text to show when the user is not signed in.",
     "message": "Nu a fost conectat"
   },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "Pagina de prompt de permisiuni DOM nu a reușit să se încarce corect."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Eroare necunoscută în timpul cererii de permisiune"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "Veți vedea un prompt de browser în partea de sus a acestei ferestre. \nDoar lovește <strong> „Permiteți -vă în timp ce vizitați site -ul” </strong>, astfel încât să putem începe să vorbim."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Această filă se va închide automat după ce ați răspuns."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣️ Să discutăm!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "Pentru a aduce voce la conversațiile dvs., $productName$ are nevoie de permisiunea pentru a utiliza microfonul. \nContează confidențialitatea dvs. - ascultăm doar atunci când discutați activ.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Aștept-ți drumul înainte ..."
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Permisiunea microfonului"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Hmm, nu a putut primi acces la microfon: $errorName$. \nÎnchideți această filă într -o clipă ...",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "Mulţumesc! \nPermisiunea acordată. \nÎnfășurați lucrurile ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Eroare necunoscută"
+  },
   "preferedLanguage": {
     "description": "Label for a control to select the prefered transcription language.",
     "message": "Limbă"

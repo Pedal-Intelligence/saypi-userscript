@@ -407,6 +407,62 @@
     "description": "Text to show when the user is not signed in.",
     "message": "Nie zalogowane"
   },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "STRONA POMISJI POMÓŻ DOM nie udało się poprawnie załadować."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Nieznany błąd podczas żądania uprawnienia"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "Zobaczysz monit przeglądarki u góry tego okna. \nWystarczy nacisnąć <strong> „Pozwól podczas wizyty w witrynie” </strong>, abyśmy mogli zacząć rozmawiać."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Ta karta zostanie zamknięta automatycznie po odpowiedzi."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣️ Zajmijmy się czatem!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "Aby wnieść głos do swoich rozmów, $productName$ potrzebuje pozwolenia na użycie mikrofonu. \nTwoja prywatność ma znaczenie - słuchamy tylko wtedy, gdy aktywnie rozmawiasz.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Czekam na twoje miejsce…"
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Zezwolenie na mikrofon"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Hmm, nie można uzyskać dostępu do mikrofonu: $errorName$. \nZamknięcie tej zakładki za chwilę…",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "Dzięki! \nPrzyznane pozwolenie. \nOwinięcie rzeczy ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Nieznany błąd"
+  },
   "preferedLanguage": {
     "description": "Label for a control to select the prefered transcription language.",
     "message": "Język"

@@ -407,6 +407,62 @@
     "description": "Text to show when the user is not signed in.",
     "message": "Nicht signiert"
   },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "Die Eingabeaufforderung der Berechtigungen Eingabeaufforderung von DOM konnte nicht korrekt geladen werden."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Unbekannter Fehler während der Berechtigungsanforderung"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "Sie sehen eine Browser -Eingabeaufforderung oben in diesem Fenster. \nKlicken Sie einfach <strong> \"Erlauben Sie beim Besuch der Website\" </strong>, damit wir anfangen können zu reden."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Diese Registerkarte schließt automatisch, sobald Sie geantwortet haben."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣️ Lassen Sie uns unterhalten!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "Um Ihre Gespräche in Ihre Gespräche zu bringen, benötigt $productName$ die Erlaubnis, Ihr Mikrofon zu verwenden. \nIhre Privatsphäre ist wichtig - wir hören nur zu, wenn Sie aktiv chatten.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Warten auf Ihre Startseite ..."
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Mikrofonberechtigung"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Hmm, konnte keinen Mikrofonzugriff erhalten: $errorName$. \nSchließen Sie diese Registerkarte in einem Moment…",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "Danke! \nErlaubnis erteilt. \nDinge einpacken ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Unbekannter Fehler"
+  },
   "preferedLanguage": {
     "description": "Label for a control to select the prefered transcription language.",
     "message": "Sprache"

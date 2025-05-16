@@ -407,6 +407,62 @@
     "description": "Text to show when the user is not signed in.",
     "message": "لم يتم تسجيل الدخول"
   },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "أذونات موجه صفحة DOM فشل في التحميل بشكل صحيح."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "خطأ غير معروف أثناء طلب الإذن"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "سترى موجه المتصفح في الجزء العلوي من هذه النافذة. \nما عليك سوى ضرب <strong> \"السماح أثناء زيارة الموقع\" </strong> حتى نتمكن من البدء في الحديث."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "سيتم إغلاق علامة التبويب هذه تلقائيًا بمجرد الرد."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣 دعونا نتحد!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "لإحضار الصوت إلى محادثاتك ، يحتاج اسم $productName$ إلى إذن لاستخدام الميكروفون الخاص بك. \nتهم خصوصيتك - نستمع فقط عندما تتحدث بنشاط.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "في انتظار الذهاب إلى الأسلحة ..."
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "إذن الميكروفون"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "حسنًا ، لم أستطع الوصول إلى الميكروفون: $errorName$. \nإغلاق علامة التبويب هذه في لحظة ...",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "شكرًا! \nمنح إذن. \nلف الأشياء ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "خطأ غير معروف"
+  },
   "preferedLanguage": {
     "description": "Label for a control to select the prefered transcription language.",
     "message": "اللغة"

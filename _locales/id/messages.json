@@ -407,6 +407,62 @@
     "description": "Text to show when the user is not signed in.",
     "message": "Tidak masuk"
   },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "Izin Prompt Page Dom gagal memuat dengan benar."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Kesalahan tidak diketahui selama permintaan izin"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "Anda akan melihat prompt browser di bagian atas jendela ini. \nCukup tekan <strong> \"Izinkan saat mengunjungi situs\" </strong> sehingga kita bisa mulai berbicara."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Tab ini akan ditutup secara otomatis setelah Anda merespons."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣️ Mari kita mengobrol!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "Untuk membawa suara ke percakapan Anda, $productName$ membutuhkan izin untuk menggunakan mikrofon Anda. \nPrivasi Anda penting - kami hanya mendengarkan saat Anda secara aktif mengobrol.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Menunggu lampu hijau Anda…"
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Izin mikrofon"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Hmm, tidak bisa mendapatkan akses mic: $errorName$. \nMenutup tab ini sebentar lagi…",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "Terima kasih! \nIzin diberikan. \nMembungkus semuanya ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Kesalahan yang tidak diketahui"
+  },
   "preferedLanguage": {
     "description": "Label for a control to select the prefered transcription language.",
     "message": "Bahasa"

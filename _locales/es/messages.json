@@ -407,6 +407,62 @@
     "description": "Text to show when the user is not signed in.",
     "message": "No firmado en"
   },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "Página de inmediato de permisos DOM no se cargó correctamente."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Error desconocido durante la solicitud de permiso"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "Verá un mensaje de navegador en la parte superior de esta ventana. \nSimplemente presione <strong> \"Permitir mientras visita el sitio\" </strong> para que podamos comenzar a hablar."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Esta pestaña se cerrará automáticamente una vez que haya respondido."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣️ Vamos a charlar!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "Para traer voz a sus conversaciones, $productName$ necesita permiso para usar su micrófono. \nSu privacidad es importante: solo escuchamos cuando estás chateando activamente.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Esperando tu visto bueno ..."
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Permiso de micrófono"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Hmm, no pudo obtener acceso al micrófono: $errorName$. \nCerrar esta pestaña en un momento ...",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "¡Gracias! \nPermiso otorgado. \nEnvolver las cosas ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Error desconocido"
+  },
   "preferedLanguage": {
     "description": "Label for a control to select the prefered transcription language.",
     "message": "Idioma"

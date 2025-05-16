@@ -407,6 +407,62 @@
     "description": "Text to show when the user is not signed in.",
     "message": "Không đăng nhập"
   },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "Quyền nhắc Trang DOM không tải chính xác."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Không xác định lỗi trong khi yêu cầu quyền"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "Bạn sẽ thấy một dấu nhắc trình duyệt ở đầu cửa sổ này. \nChỉ cần nhấn <strong> \"cho phép trong khi truy cập trang web\" </strong> để chúng ta có thể bắt đầu nói chuyện."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Tab này sẽ tự động đóng sau khi bạn đã trả lời."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "Hãy trò chuyện!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "Để mang lại giọng nói cho các cuộc trò chuyện của bạn, $productName$ cần sự cho phép sử dụng micrô của bạn. \nVấn đề về quyền riêng tư của bạn - Chúng tôi chỉ lắng nghe khi bạn đang chủ động trò chuyện.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Chờ đợi bạn đi trước…"
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Cho phép micrô"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Hmm, không thể có quyền truy cập mic: $errorName$. \nĐóng tab này trong một khoảnh khắc…",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "Cảm ơn! \nCho phép được cấp. \nGói mọi thứ lên ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Lỗi không xác định"
+  },
   "preferedLanguage": {
     "description": "Label for a control to select the prefered transcription language.",
     "message": "Ngôn ngữ"

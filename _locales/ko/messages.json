@@ -407,6 +407,62 @@
     "description": "Text to show when the user is not signed in.",
     "message": "로그인하지 않았습니다"
   },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "권한 프롬프트 페이지 Dom은 올바르게로드하지 못했습니다."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "허가 요청 중에 알려지지 않은 오류"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "이 창의 상단에 브라우저 프롬프트가 표시됩니다. \n<strong> \"사이트를 방문하는 동안 허용\"</strong>을 누르면 대화를 시작할 수 있습니다."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "응답하면이 탭이 자동으로 닫힙니다."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣️ 채팅하자!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "대화에 음성을 가져 오려면 $productName$는 마이크를 사용할 수있는 권한이 필요합니다. \n개인 정보 보호 문제 - 우리는 적극적으로 채팅 할 때만 듣습니다.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "당신의 전하기를 기다리고 있습니다…"
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "마이크 허가"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "흠, 마이크 액세스를 얻을 수 없음 : $errorName$. \n이 탭을 잠시 닫습니다…",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "감사해요! \n허가가 부여되었습니다. \n마무리하는 것 ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "알 수없는 오류"
+  },
   "preferedLanguage": {
     "description": "Label for a control to select the prefered transcription language.",
     "message": "언어"

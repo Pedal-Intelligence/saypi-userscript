@@ -407,6 +407,62 @@
     "description": "Text to show when the user is not signed in.",
     "message": "Niet aangemeld"
   },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "Machtigingen Prompt Page DOM kan niet correct worden geladen."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Onbekende fout tijdens het toestemmingsverzoek"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "U ziet een browserprompt bovenaan dit venster. \nDruk gewoon <strong> \"Tijdens een bezoek aan de site\" </strong> zodat we kunnen beginnen met praten."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Dit tabblad wordt automatisch gesloten zodra u hebt gereageerd."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣️ Laten we chatten!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "Om spraak naar uw gesprekken te brengen, heeft $productName$ toestemming nodig om uw microfoon te gebruiken. \nUw privacy is belangrijk - we luisteren alleen als u actief aan het chatten bent.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Wachten op je groene licht ..."
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Microfoonvergunning"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Hmm, kon geen MIC -toegang krijgen: $errorName$. \nDit tabblad sluiten in een oogwenk ...",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "Bedankt! \nToestemming verleend. \nDingen inpakken ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Onbekende fout"
+  },
   "preferedLanguage": {
     "description": "Label for a control to select the prefered transcription language.",
     "message": "Taal"

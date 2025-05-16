@@ -407,6 +407,62 @@
     "description": "Text to show when the user is not signed in.",
     "message": "உள்நுழையவில்லை"
   },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "Permissions prompt page DOM failed to load correctly."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Unknown error during permission request"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "You'll see a browser prompt at the top of this window. Just hit <strong>\"Allow while visiting the site\"</strong> so we can start talking."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "நீங்கள் பதிலளித்தவுடன் இந்த தாவல் தானாக மூடப்படும்."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣️ Let's get chatting!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "To bring voice to your conversations, $productName$ needs permission to use your microphone. Your privacy matters - we only listen when you're actively chatting.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "உங்கள் முன்னோக்கி காத்திருக்கிறது…"
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "மைக்ரோஃபோன் அனுமதி"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "ஹ்ம், MIC அணுகலைப் பெற முடியவில்லை: $errorName$. \nஇந்த தாவலை ஒரு கணத்தில் மூடுவது…",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "நன்றி! \nஅனுமதி வழங்கப்பட்டது. \nவிஷயங்களை மடக்குதல் ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "தெரியாத பிழை"
+  },
   "preferedLanguage": {
     "description": "Label for a control to select the prefered transcription language.",
     "message": "மொழி"

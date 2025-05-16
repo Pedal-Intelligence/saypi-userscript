@@ -407,6 +407,62 @@
     "description": "Text to show when the user is not signed in.",
     "message": "সাইন ইন না"
   },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "Permissions prompt page DOM failed to load correctly."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Unknown error during permission request"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "আপনি এই উইন্ডোর শীর্ষে একটি ব্রাউজার প্রম্পট দেখতে পাবেন। \nকেবলমাত্র <strong> \"হিট করুন\" সাইটটি দেখার সময় অনুমতি দিন \"</strong> যাতে আমরা কথা বলা শুরু করতে পারি।"
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "আপনি প্রতিক্রিয়া জানালে এই ট্যাবটি স্বয়ংক্রিয়ভাবে বন্ধ হয়ে যাবে।"
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣 আসুন চ্যাট করা যাক!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "আপনার কথোপকথনে ভয়েস আনতে, $productName$ আপনার মাইক্রোফোনটি ব্যবহার করার অনুমতি প্রয়োজন। \nআপনার গোপনীয়তার বিষয়টি গুরুত্বপূর্ণ - আপনি যখন সক্রিয়ভাবে চ্যাট করছেন তখনই আমরা শুনি।",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Waiting for your go-ahead…"
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "মাইক্রোফোন অনুমতি"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "হুম, মাইক অ্যাক্সেস পেতে পারেনি: $errorName$ $ \nএক মুহুর্তে এই ট্যাবটি বন্ধ করে দেওয়া…",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "ধন্যবাদ! \nঅনুমতি মঞ্জুর। \nজিনিস মোড়ানো ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "অজানা ত্রুটি"
+  },
   "preferedLanguage": {
     "description": "Label for a control to select the prefered transcription language.",
     "message": "ভাষা"

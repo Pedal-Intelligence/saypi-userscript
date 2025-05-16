@@ -407,6 +407,62 @@
     "description": "Text to show when the user is not signed in.",
     "message": "Oturum açmadı"
   },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "İzin istemleri sayfası DOM doğru yüklenemedi."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "İzin talebi sırasında bilinmeyen hata"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "Bu pencerenin üstünde bir tarayıcı istemi göreceksiniz. \nSadece <strong> \"Siteyi ziyaret ederken izin ver\" </strong>, böylece konuşmaya başlayabiliriz."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Yanıtladıktan sonra bu sekme otomatik olarak kapanır."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣️ Sohbet edelim!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "Konuşmalarınıza ses getirmek için $productName$, mikrofonunuzu kullanma iznine ihtiyaç duyar. \nGizliliğiniz önemlidir - Yalnızca aktif olarak sohbet ederken dinliyoruz.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Devam etmenizi bekliyorum ..."
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Mikrofon izni"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Hmm, mikrofon erişimini alamadım: $errorName$. \nBu sekmeyi bir anda kapatma…",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "Teşekkürler! \nİzin verildi. \nİşleri tamamlamak ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Bilinmeyen hata"
+  },
   "preferedLanguage": {
     "description": "Label for a control to select the prefered transcription language.",
     "message": "Dil"

@@ -407,6 +407,62 @@
     "description": "Text to show when the user is not signed in.",
     "message": "Hindi naka -sign in"
   },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "Ang mga pahintulot na prompt na pahina ay nabigo nang tama."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Hindi kilalang error sa kahilingan ng pahintulot"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "Makakakita ka ng isang browser prompt sa tuktok ng window na ito. \nPindutin lamang ang <strong> \"Payagan habang bumibisita sa site\" </strong> upang maaari nating simulan ang pakikipag -usap."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Ang tab na ito ay awtomatikong magsasara sa sandaling tumugon ka."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣️ Mag -chat tayo!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "Upang magdala ng boses sa iyong mga pag -uusap, ang $productName$ ay nangangailangan ng pahintulot upang magamit ang iyong mikropono. \nMahalaga ang iyong privacy - nakikinig lamang kami kapag aktibong nakikipag -chat ka.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Naghihintay para sa iyong go-ahead ..."
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Pahintulot ng mikropono"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Hmm, hindi makakakuha ng pag -access sa mic: $errorName$. \nAng pagsasara ng tab na ito sa isang sandali ...",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "Salamat! \nBinigyan ng pahintulot. \nPagbabalot ng mga bagay ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Hindi kilalang error"
+  },
   "preferedLanguage": {
     "description": "Label for a control to select the prefered transcription language.",
     "message": "Wika"

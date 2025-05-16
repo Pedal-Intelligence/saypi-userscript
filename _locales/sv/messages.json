@@ -407,6 +407,62 @@
     "description": "Text to show when the user is not signed in.",
     "message": "Inte inloggad"
   },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "Behörigheter Prompt Page Dom misslyckades med att ladda korrekt."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Okänt fel under tillståndsbegäran"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "Du ser en webbläsarprompt högst upp i detta fönster. \nHit bara <strong> \"Tillåt när vi besöker webbplatsen\" </strong> så att vi kan börja prata."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Den här fliken stängs automatiskt när du har svarat."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣 Låt oss chatta!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "För att få röst till dina konversationer behöver $productName$ $ tillåtelse för att använda din mikrofon. \nDina integritetsfrågor - vi lyssnar bara när du aktivt chattar.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Väntar på din klarsida ..."
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Mikrofonbehörighet"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Hmm, kunde inte få mic åtkomst: $errorName$. \nStänger den här fliken på ett ögonblick ...",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "Tack! \nTillstånd beviljat. \nInpackning av saker ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Okänt fel"
+  },
   "preferedLanguage": {
     "description": "Label for a control to select the prefered transcription language.",
     "message": "Språk"

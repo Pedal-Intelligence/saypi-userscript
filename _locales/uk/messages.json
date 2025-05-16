@@ -407,6 +407,62 @@
     "description": "Text to show when the user is not signed in.",
     "message": "Не ввійшов"
   },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "Дозвіл на сторінку Дом не вдалося правильно завантажити."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Невідома помилка під час запиту на дозвіл"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "Ви побачите підказку браузера у верхній частині цього вікна. \nПросто натисніть <strong> \"Дозволити під час відвідування сайту\" </strong>, щоб ми могли почати розмову."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Ця вкладка закриється автоматично, як тільки ви відповіли."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣 Давайте спілкуватися!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "Щоб подати голос у свої розмови, $productName$ потребує дозволу на використання вашого мікрофона. \nВаша конфіденційність має значення - ми слухаємо лише тоді, коли ви активно спілкуєтесь.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Чекаю вашого вперед ..."
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Дозвіл мікрофона"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Хм, не вдалося отримати доступ до мікрофона: $errorName$. \nЗакриття цієї вкладки за мить ...",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "Дякую! \nДозвіл надано. \nЗагортає речі ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Невідома помилка"
+  },
   "preferedLanguage": {
     "description": "Label for a control to select the prefered transcription language.",
     "message": "Мова"

@@ -407,6 +407,62 @@
     "description": "Text to show when the user is not signed in.",
     "message": "Не е влязъл в"
   },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "Promption Promption Page DOM не успя да се зареди правилно."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Неизвестна грешка по време на заявка за разрешение"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "Ще видите подкана за браузър в горната част на този прозорец. \nПросто ударете <strong> \"позволете, докато посещавате сайта\" </strong>, за да можем да започнем да говорим."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Този раздел ще се затвори автоматично, след като сте отговорили."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣 Нека разговаряме!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "За да внесете глас към вашите разговори, $productName$ се нуждае от разрешение, за да използвате вашия микрофон. \nВашата поверителност има значение - ние слушаме само когато активно разговаряте.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "В очакване на вашия напред ..."
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Разрешение за микрофон"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Хм, не можах да получи достъп до микрофон: $errorName$. \nЗатваряне на този раздел за миг ...",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "Благодаря! \nРазрешено разрешение. \nОпаковане на нещата ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Неизвестна грешка"
+  },
   "preferedLanguage": {
     "description": "Label for a control to select the prefered transcription language.",
     "message": "Език"

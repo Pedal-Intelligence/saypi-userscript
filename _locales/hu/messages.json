@@ -407,6 +407,62 @@
     "description": "Text to show when the user is not signed in.",
     "message": "Nem jelentkezett be"
   },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "Engedélyek APST oldal A DOM nem sikerült helyesen betölteni."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Ismeretlen hiba az engedélykérés során"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "Az ablak tetején egy böngésző prompt látható. \nCsak nyomja meg a <strong> \"Engedélyezést, miközben meglátogatja a webhelyet\" </strong>, hogy elkezdhessük a beszélgetést."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Ez a lap automatikusan bezáródik, miután válaszolt."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣️ Csevegjünk!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "Ahhoz, hogy hangot hozzon a beszélgetésekbe, a $productName$ engedélyre van szüksége a mikrofon használatához. \nAz Ön adatvédelmi számai - csak akkor hallgatunk, amikor aktívan csevegsz.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Várakozás a go-up-ra…"
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Mikrofon engedély"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Hmm, nem tudtam megkapni a mikrofon hozzáférést: $errorName$. \nEgy pillanat alatt lezárja ezt a fületet ...",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "Köszönöm! \nEngedélyt adva. \nA dolgok csomagolása ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Ismeretlen hiba"
+  },
   "preferedLanguage": {
     "description": "Label for a control to select the prefered transcription language.",
     "message": "Nyelv"

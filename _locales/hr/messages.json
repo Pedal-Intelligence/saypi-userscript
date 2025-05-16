@@ -407,6 +407,62 @@
     "description": "Text to show when the user is not signed in.",
     "message": "Nije prijavljen"
   },
+  "permissions_errorDomLoadFailure": {
+    "description": "Error message sent via runtime message if the DOM fails to load.",
+    "message": "Dopuštena stranica Page Dom nije se ispravno učitala."
+  },
+  "permissions_errorUnknownDuringRequest": {
+    "description": "Fallback error message for an unknown error during the permission request process.",
+    "message": "Nepoznata pogreška tijekom zahtjeva za odobrenje"
+  },
+  "permissions_promptAction": {
+    "description": "Instructional text on what action the user should take in the browser prompt.",
+    "message": "Na vrhu ovog prozora vidjet ćete upit preglednika. \nSamo pogodite <strong> \"Dopustite dok posjećujete web mjesto\" </strong> kako bismo mogli početi razgovarati."
+  },
+  "permissions_promptFooter": {
+    "description": "Footer text indicating the tab will auto-close.",
+    "message": "Ova će se kartica automatski zatvoriti nakon što odgovorite."
+  },
+  "permissions_promptHeading": {
+    "description": "Main heading on the permissions prompt page.",
+    "message": "🗣️ Razgovarajmo!"
+  },
+  "permissions_promptInfo": {
+    "description": "Informational text on the permissions prompt page, explaining why microphone access is needed.",
+    "message": "Da biste unijeli glas u razgovore, $productName$ treba dozvolu za korištenje vašeg mikrofona. \nVaša privatnost je bitna - slušamo samo kad aktivno razgovarate.",
+    "placeholders": {
+      "productName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "permissions_promptStatusWaiting": {
+    "description": "Initial status message shown on the permissions prompt page.",
+    "message": "Čekajući svoj put ..."
+  },
+  "permissions_promptTitle": {
+    "description": "Title of the permissions prompt page.",
+    "message": "Odobrenje mikrofona"
+  },
+  "permissions_statusPermissionDenied": {
+    "description": "Status message shown when permission is denied, includes the error name.",
+    "message": "Hmm, nisam mogao dobiti MIC pristup: $errorName$. \nZatvaranje ove kartice za trenutak ...",
+    "placeholders": {
+      "errorName": {
+        "content": "$1",
+        "example": "NotFoundError"
+      }
+    }
+  },
+  "permissions_statusPermissionGranted": {
+    "description": "Status message shown when permission is granted.",
+    "message": "Hvala! \nOdobrenje odobreno. \nOmotavanje stvari ..."
+  },
+  "permissions_textUnknownError": {
+    "description": "Fallback text for an unknown error name.",
+    "message": "Nepoznata pogreška"
+  },
   "preferedLanguage": {
     "description": "Label for a control to select the prefered transcription language.",
     "message": "Jezik"
