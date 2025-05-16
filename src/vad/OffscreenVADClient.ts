@@ -42,8 +42,6 @@ export class OffscreenVADClient {
     this.port = chrome.runtime.connect({ name: "vad-content-script-connection" });
     console.log("[SayPi OffscreenVADClient] Port established?", this.port);
     this.statusIndicator = new VADStatusIndicator();
-    this.statusIndicator.show();
-    this.statusIndicator.updateStatus("Connecting", "Establishing VAD service link...");
     this.setupListeners();
   }
 
