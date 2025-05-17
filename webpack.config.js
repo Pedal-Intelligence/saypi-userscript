@@ -153,7 +153,7 @@ const config = {
             to: "[name][ext]",
           },
           {
-            from: "node_modules/onnxruntime-web/dist/ort-wasm*.wasm",
+            from: "node_modules/@ricky0123/vad-web/node_modules/onnxruntime-web/dist/ort-wasm*.wasm",
             to: "[name][ext]",
           },
           {

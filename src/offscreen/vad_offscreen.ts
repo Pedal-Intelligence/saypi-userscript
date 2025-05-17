@@ -107,6 +107,12 @@ const vadOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
   },
 };
 
+// https://docs.vad.ricky0123.com/user-guide/browser/#bundling
+const vadBundleOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
+  baseAssetPath: chrome.runtime.getURL("public/"),
+  onnxWASMBasePath: chrome.runtime.getURL("public/"),
+};
+
 async function initializeVAD() {
   if (vadInstance) {
     logger.log("[SayPi VAD Offscreen] VAD already initialized.");
@@ -114,7 +120,8 @@ async function initializeVAD() {
   }
   try {
     logger.log("[SayPi VAD Offscreen] Initializing VAD with default options...");
-    vadInstance = await MicVAD.new(vadOptions);
+    const mergedOptions = { ...vadOptions, ...vadBundleOptions };
+    vadInstance = await MicVAD.new(mergedOptions);
     logger.log("[SayPi VAD Offscreen] MicVAD instance created.");
     return { success: true, mode: "default" };
   } catch (error: any) {
