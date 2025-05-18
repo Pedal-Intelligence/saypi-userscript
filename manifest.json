@@ -11,8 +11,8 @@
     "audio"
   ],
   "host_permissions": [
-    "https://api.saypi.ai/*",
-    "https://www.saypi.ai/*"
+    "https://localhost:5001/*",
+    "http://localhost:3000/*"
   ],
   "content_scripts": [
     {
@@ -29,11 +29,12 @@
     "service_worker": "public/background.js"
   },
   "offscreen": {
-    "document": "src/offscreen/vad_offscreen.html",
+    "document": "src/offscreen/media_offscreen.html",
     "reasons": [
-      "USER_MEDIA"
+      "USER_MEDIA",
+      "AUDIO_PLAYBACK"
     ],
-    "justification": "Required for Voice Activity Detection (VAD) processing in an isolated environment to comply with strict CSPs on host pages."
+    "justification": "Microphone VAD and TTS playback under restrictive host-page CSP"
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
@@ -61,6 +62,8 @@
         "src/popup/*.svg",
         "src/offscreen/vad_offscreen.html",
         "src/offscreen/vad_offscreen.js",
+        "src/offscreen/media_offscreen.html",
+        "src/offscreen/media_offscreen.js",
         "src/permissions/permissions-prompt.html",
         "public/permissions/permissions-prompt.js"
       ],

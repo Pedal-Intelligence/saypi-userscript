@@ -1,4 +1,4 @@
-export const OFFSCREEN_DOCUMENT_PATH = "src/offscreen/vad_offscreen.html";
+export const OFFSCREEN_DOCUMENT_PATH = "src/offscreen/media_offscreen.html";
 
 class OffscreenManager {
   private creating?: Promise<void>;
@@ -34,8 +34,8 @@ class OffscreenManager {
     console.log("Creating offscreen document...");
     this.creating = chrome.offscreen.createDocument({
       url: OFFSCREEN_DOCUMENT_PATH,
-      reasons: [chrome.offscreen.Reason.USER_MEDIA],
-      justification: "Required for Voice Activity Detection (VAD) processing in an isolated environment to comply with strict CSPs on host pages.",
+      reasons: [chrome.offscreen.Reason.USER_MEDIA, chrome.offscreen.Reason.AUDIO_PLAYBACK],
+      justification: "Microphone VAD and TTS playback under restrictive host-page CSP",
     });
 
     try {
@@ -75,7 +75,8 @@ class OffscreenManager {
   }
 
   public registerContentScriptConnection(port: chrome.runtime.Port): void {
-    if (port.name !== "vad-content-script-connection") {
+    // Accept both the old VAD connection name and the new media connection name
+    if (port.name !== "vad-content-script-connection" && port.name !== "media-content-script-connection") {
       return;
     }
     const tabId = port.sender?.tab?.id;
@@ -84,14 +85,22 @@ class OffscreenManager {
       return;
     }
 
-    console.log(`Registered content script connection from tab ${tabId}`);
+    console.log(`Registered ${port.name} connection from tab ${tabId}`);
     this.portMap.set(tabId, port);
 
     port.onMessage.addListener(async (message) => {
       console.debug(`Background received message from content script (tab ${tabId}):`, message);
       // Ensure offscreen document is ready before forwarding certain messages
-      if (message.type === "VAD_START_REQUEST" || message.type === "AUDIO_CHUNK" || message.type === "VAD_STOP_REQUEST") {
-         await this.setupOffscreenDocument(); // Ensure document is active for VAD operations
+      if (
+        message.type === "VAD_START_REQUEST" || 
+        message.type === "AUDIO_CHUNK" || 
+        message.type === "VAD_STOP_REQUEST" ||
+        message.type === "AUDIO_PLAY_REQUEST" ||
+        message.type === "AUDIO_PAUSE_REQUEST" ||
+        message.type === "AUDIO_RESUME_REQUEST" ||
+        message.type === "AUDIO_STOP_REQUEST"
+      ) {
+         await this.setupOffscreenDocument(); // Ensure document is active
       }
       // Forward message to offscreen document, including the source tabId
       this.sendMessageToOffscreenDocument({ ...message, sourceTabId: tabId, origin: "content-script" });

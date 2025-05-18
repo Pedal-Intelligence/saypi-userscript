@@ -341,12 +341,21 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (
     typeof OFFSCREEN_DOCUMENT_PATH === 'string' &&
     sender.url === chrome.runtime.getURL(OFFSCREEN_DOCUMENT_PATH) &&
-    message.targetTabId !== undefined && 
     message.origin === "offscreen-document"
   ) {
-    logger.debug("[Background] Received VAD event from offscreen document:", message);
-    offscreenManager.forwardMessageToContentScript(message.targetTabId, message);
-    return; // Stop processing if handled as an offscreen VAD event
+    // Handle auto-shutdown request
+    if (message.type === "OFFSCREEN_AUTO_SHUTDOWN") {
+      logger.debug("[Background] Received auto-shutdown request from offscreen document");
+      offscreenManager.closeOffscreenDocument();
+      return;
+    }
+    
+    // Forward events to content script
+    if (message.targetTabId !== undefined) {
+      logger.debug("[Background] Received event from offscreen document:", message);
+      offscreenManager.forwardMessageToContentScript(message.targetTabId, message);
+      return; // Stop processing if handled as an offscreen event
+    }
   }
 
   // Handle error reports from any part of the extension using the logger

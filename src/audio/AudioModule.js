@@ -12,6 +12,7 @@ import { SlowResponseHandlerAdapter } from "./SlowResponseHandlerAdapter.js";
 import { CacheBuster } from "../CacheBuster.ts";
 import { UserPreferenceModule } from "../prefs/PreferenceModule.ts";
 import { ChatbotService } from "../chatbots/ChatbotService.ts";
+import OffscreenAudioBridge from "./OffscreenAudioBridge.js";
 
 export default class AudioModule {
   constructor() {
@@ -23,6 +24,10 @@ export default class AudioModule {
     this.audioElement = null;
     this.mutationObserver = null;
     this.swapObserver = null;
+    
+    // Initialize offscreen bridge
+    this.offscreenBridge = OffscreenAudioBridge.getInstance();
+    this.useOffscreenAudio = false; // Will be set in start() based on bridge.isSupported()
 
     this.audioOutputActor = interpret(audioOutputMachine);
     this.audioOutputActor.onTransition((state) => {
@@ -93,40 +98,57 @@ export default class AudioModule {
   }
 
   start() {
-    this.findAndDecorateAudioElement(); // need to ensure an audio element exists before registering event listeners
-    // audio output (Pi)
+    // Initialize offscreen bridge if needed
+    this.offscreenBridge.initialize();
+    this.useOffscreenAudio = this.offscreenBridge.isSupported();
+    
+    logger.debug(`[AudioModule] Using offscreen audio: ${this.useOffscreenAudio}`);
+    
+    // If we're not using offscreen audio, set up the in-page audio element
+    if (!this.useOffscreenAudio) {
+      this.findAndDecorateAudioElement(); // need to ensure an audio element exists before registering event listeners
+      
+      // audio output (Pi)
+      this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
+      // convert voice for Pi's missing voices - since 2024-09
+      this.registerAudioPlaybackEvents(this.audioElement, this.voiceConverter);
+      // handle slow responses from pi.ai - since 2024-07
+      const slowResponseHandler = SlowResponseHandler.getInstance();
+      const slowResponseAdapter = new SlowResponseHandlerAdapter(slowResponseHandler);
+      this.registerAudioErrorEvents(this.audioElement, slowResponseAdapter);
+      this.registerLifecycleDebug();
+      
+      // For Safari, register additional error handlers
+      if (isSafari()) {
+        // audio retry
+        console.log("Using audio retry handler for Safari.");
+        this.audioRetryActor.start();
+        this.registerAudioPlaybackEvents(this.audioElement, this.audioRetryActor);
+        this.registerSourceChangeEvents(this.audioElement, this.audioRetryActor);
+        this.registerAudioErrorEvents(this.audioElement, this.audioRetryActor);
+      }
+      
+      this.listenForAudioElementSwap();
+    }
+    
+    // Start all state machines
     this.audioOutputActor.start();
-    this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
-    // convert voice for Pi's missing voices - since 2024-09
-    this.registerAudioPlaybackEvents(this.audioElement, this.voiceConverter);
-    // handle slow responses from pi.ai - since 2024-07
-    const slowResponseHandler = SlowResponseHandler.getInstance();
-    const slowResponseAdapter = new SlowResponseHandlerAdapter(slowResponseHandler);
-    this.registerAudioErrorEvents(this.audioElement, slowResponseAdapter);
-    this.registerLifecycleDebug();
-
-    // audio input (user)
     this.audioInputActor.start();
+    this.voiceConverter.start();
+    if (isSafari()) {
+      this.audioRetryActor.start();
+    }
+    
+    // Register commands that will direct audio events to the appropriate target
+    // (offscreen or in-page)
     this.registerAudioCommands(
       this.audioInputActor,
       this.audioOutputActor,
       this.voiceConverter
     );
-
-    // voice converter
-    this.voiceConverter.start();
+    
+    // Initialize voice converter
     this.initializeVoiceConverter();
-
-    if (isSafari()) {
-      // audio retry
-      console.log("Using audio retry handler for Safari.");
-      this.audioRetryActor.start();
-      this.registerAudioPlaybackEvents(this.audioElement, this.audioRetryActor);
-      this.registerSourceChangeEvents(this.audioElement, this.audioRetryActor);
-      this.registerAudioErrorEvents(this.audioElement, this.audioRetryActor);
-    }
-
-    this.listenForAudioElementSwap();
   }
 
   stop() {}
@@ -341,20 +363,38 @@ export default class AudioModule {
     EventBus.on(
       "audio:load",
       (detail) => {
-        const audio = this.findAudioElement(document) || new Audio();
-        this.loadAudio(audio, detail.url);
+        if (this.useOffscreenAudio) {
+          // Use offscreen bridge if available
+          this.offscreenBridge.playAudio(detail.url);
+        } else {
+          // Fallback to in-page audio
+          const audio = this.findAudioElement(document) || new Audio();
+          this.loadAudio(audio, detail.url);
+        }
       },
       this
     );
     EventBus.on("audio:reload", (reloadAudioRequest) => {
-      const audio = this.findAudioElement(document) || new Audio();
-      if (reloadAudioRequest?.bypassCache) {
-        const url = audio.src;
-        audio.src = CacheBuster.addCacheBuster(url);
-      }
-      audio.load();
-      if (reloadAudioRequest?.playImmediately) {
-        audio.play();
+      if (this.useOffscreenAudio) {
+        // For offscreen, we'll need to stop and play with a new URL
+        const url = reloadAudioRequest?.bypassCache 
+          ? CacheBuster.addCacheBuster(this.lastAudioUrl || "")
+          : this.lastAudioUrl;
+          
+        if (url) {
+          this.offscreenBridge.playAudio(url);
+        }
+      } else {
+        // For in-page audio
+        const audio = this.findAudioElement(document) || new Audio();
+        if (reloadAudioRequest?.bypassCache) {
+          const url = audio.src;
+          audio.src = CacheBuster.addCacheBuster(url);
+        }
+        audio.load();
+        if (reloadAudioRequest?.playImmediately) {
+          audio.play();
+        }
       }
     });
   }
@@ -407,25 +447,41 @@ export default class AudioModule {
       outputActor.send("skipNext");
     });
     EventBus.on("audio:skipCurrent", (e) => {
-      // Pause the audio
-      this.audioElement.pause();
+      if (this.useOffscreenAudio) {
+        this.offscreenBridge.stopAudio();
+      } else {
+        // Pause the audio
+        this.audioElement.pause();
 
-      // Skip to the end to simulate the completion of the audio, preventing it from being resumed
-      if (
-        Number.isFinite(this.audioElement.duration) &&
-        !isNaN(this.audioElement.duration)
-      ) {
-        this.audioElement.currentTime = this.audioElement.duration;
+        // Skip to the end to simulate the completion of the audio, preventing it from being resumed
+        if (
+          Number.isFinite(this.audioElement.duration) &&
+          !isNaN(this.audioElement.duration)
+        ) {
+          this.audioElement.currentTime = this.audioElement.duration;
+        }
       }
     });
     EventBus.on("audio:output:play", (e) => {
-      this.audioElement.play();
+      if (this.useOffscreenAudio) {
+        this.offscreenBridge.resumeAudio();
+      } else {
+        this.audioElement.play();
+      }
     });
     EventBus.on("audio:output:pause", (e) => {
-      this.audioElement.pause();
+      if (this.useOffscreenAudio) {
+        this.offscreenBridge.pauseAudio();
+      } else {
+        this.audioElement.pause();
+      }
     });
     EventBus.on("audio:output:resume", (e) => {
-      this.audioElement.play();
+      if (this.useOffscreenAudio) {
+        this.offscreenBridge.resumeAudio();
+      } else {
+        this.audioElement.play();
+      }
     });
 
     EventBus.on("saypi:tts:replaying", (e) => {
@@ -444,6 +500,16 @@ export default class AudioModule {
    */
   loadAudio(audioElement, url, play = true) {
     if (url) {
+      // Store the last URL for potential cache busting on reload
+      this.lastAudioUrl = url;
+      
+      if (this.useOffscreenAudio) {
+        // Use offscreen bridge
+        this.offscreenBridge.playAudio(url);
+        return;
+      }
+      
+      // Fallback to in-page audio
       audioElement.src = url;
       if (play) {
         audioElement
@@ -478,6 +544,11 @@ export default class AudioModule {
    * This function is only informational, it does not handle any errors.
    */
   registerLifecycleDebug() {
+    // Only register if we're not using offscreen audio
+    if (this.useOffscreenAudio || !this.audioElement) {
+      return;
+    }
+    
     let starttime;
     this.audioElement.onerror = (event) => {
       console.error(
@@ -601,6 +672,11 @@ export default class AudioModule {
    * @param {SlowResponseHandlerAdapter | InterpretedActor} actor
    */
   registerAudioErrorEvents(audio, actor) {
+    // Only register if we're not using offscreen audio
+    if (this.useOffscreenAudio || !audio) {
+      return;
+    }
+    
     // Handle explicit errors
     audio.addEventListener("error", (event) => {
       actor.send("error", { 
