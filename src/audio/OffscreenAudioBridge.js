@@ -17,10 +17,13 @@ export default class OffscreenAudioBridge {
       return OffscreenAudioBridge.instance;
     }
 
-    this.port = null;
     this.initialized = false;
-    this.isOffscreenSupported = this._checkOffscreenSupport();
+    this.offscreenSupported = null; // Will be set after checking via background
     this.deferredEvents = []; // Store events that arrive before initialization
+    this.activeMessageIds = new Set(); // Track in-flight messages
+    
+    // Set up message listener
+    chrome.runtime.onMessage.addListener(this._handleMessageFromBackground.bind(this));
     
     OffscreenAudioBridge.instance = this;
   }
@@ -33,64 +36,67 @@ export default class OffscreenAudioBridge {
   }
 
   /**
-   * Check if the browser supports offscreen documents
-   * @returns {boolean} True if offscreen documents are supported
+   * Check if the browser supports offscreen documents.
+   * This is a two-step process:
+   * 1. Quick check based on browser type (immediate)
+   * 2. Actual capability check via background (async)
+   * 
+   * @returns {Promise<boolean>} Promise that resolves to true if offscreen is supported
    */
-  _checkOffscreenSupport() {
-    // Firefox doesn't support offscreen
+  async _checkOffscreenSupport() {
+    // Quick fail for known unsupported browsers
     if (isFirefox() || isSafari()) {
-      logger.debug("[OffscreenAudioBridge] Offscreen documents not supported by this browser");
+      logger.debug("[OffscreenAudioBridge] Offscreen documents not supported by this browser type");
       return false;
-    }
-    
-    // Chrome-based browser should have chrome.offscreen, but double-check
-    if (!chrome.offscreen) {
-      logger.debug("[OffscreenAudioBridge] chrome.offscreen not available in this browser");
-      return false;
-    }
-    
-    return true;
-  }
-
-  /**
-   * Initialize the bridge connection to the background script
-   */
-  initialize() {
-    if (this.initialized) {
-      return;
-    }
-    
-    if (!this.isOffscreenSupported) {
-      logger.debug("[OffscreenAudioBridge] Offscreen not supported, bridge initialization skipped");
-      this.initialized = true;
-      return;
     }
     
     try {
-      // Connect to background service worker
-      this.port = chrome.runtime.connect({ name: "media-content-script-connection" });
-      
-      // Listen for messages from the offscreen document via background
-      this.port.onMessage.addListener(this._handleMessageFromOffscreen.bind(this));
-      
-      this.port.onDisconnect.addListener(() => {
-        logger.debug("[OffscreenAudioBridge] Port disconnected");
-        this.port = null;
-        
-        // Try to reconnect after a brief delay
-        setTimeout(() => {
-          this.initialize();
-        }, 1000);
+      // Ask the background service worker to check if offscreen API is available
+      const response = await chrome.runtime.sendMessage({ 
+        type: "CHECK_OFFSCREEN_SUPPORT" 
       });
       
-      this.initialized = true;
-      logger.debug("[OffscreenAudioBridge] Bridge initialized");
+      logger.debug(`[OffscreenAudioBridge] Offscreen support check response: ${JSON.stringify(response)}`);
       
-      // Process any deferred events
-      this._processDeferredEvents();
+      if (response && response.supported === true) {
+        return true;
+      } else {
+        // If we got a response but supported is false
+        return false;
+      }
     } catch (error) {
-      logger.error("[OffscreenAudioBridge] Error initializing bridge", error);
+      // If message sending failed, the background service worker might not be available
+      logger.error("[OffscreenAudioBridge] Error checking offscreen support:", error);
+      return false;
     }
+  }
+
+  /**
+   * Initialize the bridge
+   * @returns {Promise<boolean>} Promise that resolves to true if initialization was successful
+   */
+  async initialize() {
+    if (this.initialized) {
+      return this.offscreenSupported;
+    }
+    
+    // Check if offscreen is supported first
+    if (this.offscreenSupported === null) {
+      this.offscreenSupported = await this._checkOffscreenSupport();
+    }
+    
+    if (!this.offscreenSupported) {
+      logger.debug("[OffscreenAudioBridge] Offscreen not supported, bridge initialization skipped");
+      this.initialized = true;
+      return false;
+    }
+    
+    this.initialized = true;
+    logger.debug("[OffscreenAudioBridge] Bridge initialized (using direct messaging)");
+    
+    // Process any deferred events
+    this._processDeferredEvents();
+    return true;
   }
 
   /**
@@ -109,13 +115,22 @@ export default class OffscreenAudioBridge {
   }
 
   /**
-   * Handle messages from the offscreen document via background
-   * @param {Object} message The message from the offscreen document
+   * Handle messages from the background script
+   * @param {Object} message The message from the background script
+   * @param {Object} sender The sender of the message
+   * @param {Function} sendResponse Function to send a response
+   * @returns {boolean} Whether we'll send a response asynchronously
    */
-  _handleMessageFromOffscreen(message) {
+  _handleMessageFromBackground(message, sender, sendResponse) {
     if (!message || !message.type) {
-      return;
+      return false;
     }
+    
+    // Log receipt of the message
+    logger.debug(`[OffscreenAudioBridge] Received message: ${message.type}`, {
+      origin: message.origin || 'unknown',
+      timestamp: Date.now()
+    });
     
     // Forward audio events to the EventBus
     if (message.type.startsWith("AUDIO_")) {
@@ -147,89 +162,238 @@ export default class OffscreenAudioBridge {
       if (eventBusEvent) {
         EventBus.trigger(eventBusEvent, message.detail);
       }
+      
+      return false; // No async response
     } else if (message.type.startsWith("OFFSCREEN_AUDIO_")) {
       // Handle offscreen audio responses
       const responseType = message.type.replace("OFFSCREEN_AUDIO_", "").toLowerCase();
-      logger.debug(`[OffscreenAudioBridge] Received offscreen response: ${responseType}`);
+      logger.debug(`[OffscreenAudioBridge] Received offscreen response: ${responseType}`, 
+        message.payload ? { success: message.payload.success } : {});
       
-      // Handle specific responses if needed
+      // If this is a response to a message we sent, mark it as received
+      if (message.messageId && this.activeMessageIds.has(message.messageId)) {
+        this.activeMessageIds.delete(message.messageId);
+      }
+      
+      // If there's an error, emit it to the EventBus
+      if (message.payload && message.payload.error) {
+        logger.error(`[OffscreenAudioBridge] Error from offscreen: ${message.payload.error}`);
+        this._emitAudioErrorEvent(responseType, message.payload.error);
+      }
+      
+      return false; // No async response
     }
+    
+    return false; // No async response
+  }
+
+  /**
+   * Generate a unique message ID
+   * @returns {string} A unique message ID
+   */
+  _generateMessageId() {
+    return `audio-msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 
   /**
    * Send a message to the offscreen document via background
    * @param {string} type The message type
    * @param {Object} detail Additional message details
+   * @returns {Promise<boolean>} Promise that resolves to true if message was sent successfully
    */
-  _sendMessageToOffscreen(type, detail = {}) {
+  async _sendMessageToOffscreen(type, detail = {}) {
     if (!this.initialized) {
       // Store the event to be processed after initialization
       this.deferredEvents.push({ type, detail });
-      this.initialize();
-      return;
+      const initSuccess = await this.initialize();
+      
+      // If initialization failed and this is a critical audio message, emit an error event
+      if (!initSuccess && type.startsWith("AUDIO_")) {
+        this._emitAudioErrorEvent(type, "Offscreen initialization failed");
+        return false;
+      }
+      
+      return initSuccess;
     }
     
-    if (!this.isOffscreenSupported) {
+    if (!this.offscreenSupported) {
       // If offscreen is not supported, we can't send messages
       logger.debug(`[OffscreenAudioBridge] Offscreen not supported, cannot send ${type}`);
-      return;
+      
+      // For audio messages, emit an error event so the UI can handle it
+      if (type.startsWith("AUDIO_")) {
+        this._emitAudioErrorEvent(type, "Offscreen not supported in this browser");
+      }
+      
+      return false;
     }
     
-    if (!this.port) {
-      logger.warn(`[OffscreenAudioBridge] No port available, cannot send ${type}`);
-      this.initialize(); // Try to reconnect
-      return;
-    }
+    // Generate a unique ID for this message
+    const messageId = this._generateMessageId();
+    this.activeMessageIds.add(messageId);
     
     // Format the message for the background script
     const message = {
       type,
+      messageId,
+      source: "content-script",
+      timestamp: Date.now(),
       ...detail
     };
     
-    logger.debug(`[OffscreenAudioBridge] Sending message to offscreen: ${type}`);
-    this.port.postMessage(message);
+    logger.debug(`[OffscreenAudioBridge] 📤 Sending message to background: ${type}`, {
+      messageId,
+      messageDetails: JSON.stringify(message),
+      timestamp: Date.now()
+    });
+    
+    try {
+      // Set up a timeout for message sending
+      const timeout = 5000; // 5 seconds
+      
+      // Create a promise that resolves when the message is sent
+      const sendPromise = new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage(message, (response) => {
+          // Check for a runtime error (indicates a disconnected port)
+          const lastError = chrome.runtime.lastError;
+          if (lastError) {
+            reject(new Error(`Failed to send message: ${lastError.message}`));
+            return;
+          }
+          
+          resolve(response);
+        });
+      });
+      
+      // Create a promise that rejects after the timeout
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => {
+          reject(new Error(`Message sending timed out after ${timeout}ms`));
+        }, timeout);
+      });
+      
+      // Race the promises
+      await Promise.race([sendPromise, timeoutPromise]);
+      
+      logger.debug(`[OffscreenAudioBridge] ✅ Message ${type} (ID: ${messageId}) sent successfully`);
+      return true;
+    } catch (error) {
+      logger.error(`[OffscreenAudioBridge] ❌ Error sending message ${type}:`, error);
+      
+      // Clean up the message ID
+      this.activeMessageIds.delete(messageId);
+      
+      // If this is an audio message, emit an error event
+      if (type.startsWith("AUDIO_")) {
+        this._emitAudioErrorEvent(type, `Failed to send message: ${error.message || "Unknown error"}`);
+      }
+      
+      return false;
+    }
+  }
+
+  /**
+   * Emit an audio error event to the EventBus so that UI components can handle it
+   * @param {string} requestType The original request type that failed
+   * @param {string} errorMessage The error message
+   */
+  _emitAudioErrorEvent(requestType, errorMessage) {
+    // Map request types to appropriate error information
+    let errorContext;
+    
+    switch (requestType) {
+      case "AUDIO_PLAY_REQUEST":
+        errorContext = "playing audio";
+        break;
+      case "AUDIO_PAUSE_REQUEST":
+        errorContext = "pausing audio";
+        break;
+      case "AUDIO_RESUME_REQUEST":
+        errorContext = "resuming audio";
+        break;
+      case "AUDIO_STOP_REQUEST":
+        errorContext = "stopping audio";
+        break;
+      default:
+        errorContext = "audio operation";
+    }
+    
+    const errorDetail = {
+      source: "OffscreenAudioBridge",
+      message: `Error ${errorContext}: ${errorMessage}`,
+      originalRequest: requestType,
+      timestamp: Date.now()
+    };
+    
+    logger.error(`[OffscreenAudioBridge] ${errorDetail.message}`);
+    
+    // Trigger an error event that UI components can listen for
+    EventBus.trigger("error", errorDetail);
+  }
+
+  /**
+   * Load an audio file in the offscreen document
+   * @param {string} url The URL of the audio file to load
+   * @param {boolean} autoPlay Whether to play the audio immediately after loading
+   * @returns {Promise<boolean>} Promise that resolves to true if message was sent successfully
+   */
+  async loadAudio(url, autoPlay = true) {
+    if (!url) {
+      logger.error("[OffscreenAudioBridge] No URL provided for loadAudio");
+      this._emitAudioErrorEvent("AUDIO_LOAD_REQUEST", "No URL provided");
+      return false;
+    }
+    
+    return await this._sendMessageToOffscreen("AUDIO_LOAD_REQUEST", { url, autoPlay });
   }
 
   /**
    * Load and play an audio file in the offscreen document
    * @param {string} url The URL of the audio file to play
+   * @returns {Promise<boolean>} Promise that resolves to true if message was sent successfully
    */
-  playAudio(url) {
-    if (!url) {
-      logger.error("[OffscreenAudioBridge] No URL provided for playAudio");
-      return;
+  async playAudio(url) {
+    if (url) {
+      // If URL is provided, load and play
+      return await this.loadAudio(url, true);
+    } else {
+      // If no URL, assume we're playing an already loaded audio
+      return await this._sendMessageToOffscreen("AUDIO_PLAY_REQUEST");
     }
-    
-    this._sendMessageToOffscreen("AUDIO_PLAY_REQUEST", { url });
   }
 
   /**
    * Pause currently playing audio
+   * @returns {Promise<boolean>} Promise that resolves to true if message was sent successfully
    */
-  pauseAudio() {
-    this._sendMessageToOffscreen("AUDIO_PAUSE_REQUEST");
+  async pauseAudio() {
+    return await this._sendMessageToOffscreen("AUDIO_PAUSE_REQUEST");
   }
 
   /**
    * Resume paused audio
+   * @returns {Promise<boolean>} Promise that resolves to true if message was sent successfully
    */
-  resumeAudio() {
-    this._sendMessageToOffscreen("AUDIO_RESUME_REQUEST");
+  async resumeAudio() {
+    return await this._sendMessageToOffscreen("AUDIO_RESUME_REQUEST");
   }
 
   /**
    * Stop audio playback completely
+   * @returns {Promise<boolean>} Promise that resolves to true if message was sent successfully
    */
-  stopAudio() {
-    this._sendMessageToOffscreen("AUDIO_STOP_REQUEST");
+  async stopAudio() {
+    return await this._sendMessageToOffscreen("AUDIO_STOP_REQUEST");
   }
   
   /**
    * Check if offscreen documents are supported
-   * @returns {boolean} True if supported
+   * @returns {Promise<boolean>} Promise that resolves to true if supported
    */
-  isSupported() {
-    return this.isOffscreenSupported;
+  async isSupported() {
+    if (this.offscreenSupported === null) {
+      this.offscreenSupported = await this._checkOffscreenSupport();
+    }
+    return this.offscreenSupported;
   }
 } 

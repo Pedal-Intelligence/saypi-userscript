@@ -56,6 +56,7 @@ const config = {
       main: "./src/saypi.index.js",
       background: "./src/svc/background.ts",
       offscreenVAD: "./src/offscreen/vad_offscreen.ts",
+      offscreenAudio: "./src/offscreen/media_offscreen.ts",
       permissionsPrompt: "./src/permissions/permissions-prompt.ts"
     },
     output: {
@@ -67,6 +68,8 @@ const config = {
             return "background.js";
           case "offscreenVAD":
             return "offscreen/vad_offscreen.js";
+          case "offscreenAudio":
+            return "offscreen/media_offscreen.js";
           case "permissionsPrompt":
             return "permissions/permissions-prompt.js";
           default:

@@ -4,6 +4,43 @@ import { debounce } from "lodash";
 
 logger.log("[SayPi Media Offscreen] Script loaded.");
 
+// Helper function to sanitize messages for logging by removing/truncating large data
+function sanitizeMessageForLogs(message: any): any {
+  if (!message || typeof message !== 'object') {
+    return message;
+  }
+  
+  // Create a sanitized copy
+  const sanitizedMessage = { ...message };
+  
+  // Specifically handle audio data which is typically very large
+  if (sanitizedMessage.audioData && Array.isArray(sanitizedMessage.audioData)) {
+    sanitizedMessage.audioData = `[Array(${sanitizedMessage.audioData.length}) omitted from logs]`;
+  }
+  
+  // Handle any other large arrays
+  for (const key in sanitizedMessage) {
+    if (
+      sanitizedMessage[key] && 
+      Array.isArray(sanitizedMessage[key]) && 
+      sanitizedMessage[key].length > 100
+    ) {
+      sanitizedMessage[key] = `[Array(${sanitizedMessage[key].length}) omitted from logs]`;
+    }
+    
+    // Handle nested objects (but avoid circular references)
+    if (
+      sanitizedMessage[key] && 
+      typeof sanitizedMessage[key] === 'object' && 
+      !Array.isArray(sanitizedMessage[key])
+    ) {
+      sanitizedMessage[key] = sanitizeMessageForLogs(sanitizedMessage[key]);
+    }
+  }
+  
+  return sanitizedMessage;
+}
+
 // ----- Reference counting for usage tracking -----
 interface UsageCounter {
   vad: number;
@@ -176,16 +213,44 @@ function loadAudio(url: string, tabId: number, playImmediately: boolean = true) 
     return { success: false, error: "Audio element initialization failed" };
   }
   
+  if (!url) {
+    logger.error("[SayPi Media Offscreen] No URL provided for audio playback");
+    return { success: false, error: "No audio URL provided" };
+  }
+  
+  logger.debug(`[SayPi Media Offscreen] Loading audio from URL: ${url} for tab ${tabId}`);
+  
   currentAudioTabId = tabId;
   incrementUsage('audio');
   
   try {
+    // Clear any previous errors
+    audioElement.onerror = ((e: Event) => {
+      const target = e.target as HTMLAudioElement;
+      logger.error(`[SayPi Media Offscreen] Audio error:`, {
+        type: e.type,
+        error: target.error,
+        src: target.src,
+        code: target.error?.code
+      });
+      decrementUsage('audio');
+    }) as OnErrorEventHandler;
+    
+    // Set the source
     audioElement.src = url;
     
     if (playImmediately) {
+      logger.debug(`[SayPi Media Offscreen] Attempting to play audio from: ${url}`);
       audioElement.play()
+        .then(() => {
+          logger.debug(`[SayPi Media Offscreen] Audio playback started successfully`);
+        })
         .catch(error => {
-          logger.error(`[SayPi Media Offscreen] Error playing audio: ${error.message}`);
+          logger.error(`[SayPi Media Offscreen] Error playing audio: ${error.message}`, {
+            url,
+            errorName: error.name,
+            errorMessage: error.message
+          });
           decrementUsage('audio');
         });
     } else {
@@ -194,7 +259,11 @@ function loadAudio(url: string, tabId: number, playImmediately: boolean = true) 
     
     return { success: true };
   } catch (error: any) {
-    logger.error(`[SayPi Media Offscreen] Error setting audio source: ${error.message}`);
+    logger.error(`[SayPi Media Offscreen] Error setting audio source: ${error.message}`, {
+      url,
+      errorName: error.name,
+      errorStack: error.stack
+    });
     decrementUsage('audio');
     return { success: false, error: error.message };
   }
@@ -437,16 +506,58 @@ initializeAudio();
 
 // Listen for messages from the background script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.origin !== "content-script" || message.sourceTabId === undefined) {
+  // Log all incoming messages for debugging
+  if (message.type && typeof message.type === 'string') {
+    console.log(`[SayPi Media Offscreen] 📥 Received message: ${message.type}`, {
+      origin: message.origin,
+      source: message.source,
+      sourceTabId: message.sourceTabId,
+      timestamp: Date.now()
+    });
+  }
+
+  // Check if this is a message we should process
+  if ((message.origin !== "content-script" && message.source !== "content-script") || 
+      (message.sourceTabId === undefined && message.tabId === undefined)) {
+    console.warn(`[SayPi Media Offscreen] ⚠️ Skipping message due to invalid origin/source or missing tabId:`, {
+      origin: message.origin,
+      source: message.source,
+      type: message.type,
+      hasSourceTabId: message.sourceTabId !== undefined,
+      hasTabId: message.tabId !== undefined
+    });
     return;
+  }
+
+  // Add debug logging for audio messages
+  if (message.type && message.type.includes("AUDIO_")) {
+    const sanitizedMessage = sanitizeMessageForLogs(message);
+    console.log(`[SayPi Media Offscreen] 🎵 Received audio message: ${message.type}`, {
+      url: sanitizedMessage.url,
+      sourceTabId: sanitizedMessage.sourceTabId || sanitizedMessage.tabId,
+      timestamp: Date.now()
+    });
   }
 
   if(message.type !== "VAD_FRAME_PROCESSED") {
     // frame processed messages are too chatty, so we don't log them
-    logger.debug("[SayPi Media Offscreen] Received message from background:", message);
+    const sanitizedMessage = sanitizeMessageForLogs(message);
+    logger.debug("[SayPi Media Offscreen] Received message from background:", sanitizedMessage);
   }
   
-  const { type, options, sourceTabId } = message; // `sourceTabId` is the original tabId from content script
+  // Use either sourceTabId or tabId (they should be the same - from the content script)
+  const { type, options } = message;
+  const sourceTabId = message.sourceTabId || message.tabId;
+  
+  if (!sourceTabId) {
+    console.error(`[SayPi Media Offscreen] ❌ Message has no valid tab ID:`, {
+      type: message.type,
+      origin: message.origin,
+      source: message.source
+    });
+    return;
+  }
+
   let promise: Promise<any> | null = null;
   let response: any = null;
 
@@ -467,10 +578,24 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       break;
       
     // Audio playback messages
+    case "AUDIO_LOAD_REQUEST":
+      if (message.url) {
+        logger.debug(`[SayPi Media Offscreen] Processing AUDIO_LOAD_REQUEST with URL: ${message.url}`);
+        const autoPlay = message.autoPlay !== false; // Default to true if not specified
+        response = loadAudio(message.url, sourceTabId, autoPlay);
+      } else {
+        logger.warn(`[SayPi Media Offscreen] Missing URL in AUDIO_LOAD_REQUEST`);
+        response = { success: false, error: "No URL provided for loading audio" };
+      }
+      break;
     case "AUDIO_PLAY_REQUEST":
       if (message.url) {
+        // Legacy support - if URL is provided, call loadAudio
+        logger.debug(`[SayPi Media Offscreen] Processing AUDIO_PLAY_REQUEST with URL: ${message.url}`);
         response = loadAudio(message.url, sourceTabId, true);
       } else {
+        // Standard usage - no URL means play current audio
+        logger.debug(`[SayPi Media Offscreen] Processing AUDIO_PLAY_REQUEST (resume playback)`);
         response = playAudio();
       }
       break;

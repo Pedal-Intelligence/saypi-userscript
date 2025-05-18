@@ -63,14 +63,75 @@ class OffscreenManager {
   }
 
   public async sendMessageToOffscreenDocument(message: any, targetTabId?: number): Promise<void> {
-    await this.setupOffscreenDocument(); // Ensure document exists
-    const messageWithTabId = targetTabId !== undefined ? { ...message, tabId: targetTabId } : message;
     try {
-      console.debug("Background sending message to offscreen:", messageWithTabId);
-      chrome.runtime.sendMessage(messageWithTabId);
+      await this.setupOffscreenDocument(); // Ensure document exists
+      
+      // Create the message with correct properties
+      const messageWithTabId = { 
+        ...message,
+        tabId: targetTabId
+      };
+      
+      // If the message has 'source' but not 'origin', map it correctly for the offscreen document
+      if (message.source === "content-script" && !message.origin) {
+        messageWithTabId.origin = "content-script";
+      }
+      
+      // Add specific logging for audio messages
+      if (message.type && typeof message.type === 'string' && message.type.includes('AUDIO_')) {
+        console.log(`[OffscreenManager] 📢 Forwarding audio message to offscreen: ${message.type}`, {
+          tabId: targetTabId,
+          url: message.url,
+          timestamp: Date.now()
+        });
+      }
+      
+      // Create a timeout promise to ensure we don't hang if message delivery fails
+      const messageDeliveryTimeout = 2000; // 2 seconds timeout
+      const timeoutPromise = new Promise<void>((_, reject) => {
+        setTimeout(() => reject(new Error(`Message delivery timed out after ${messageDeliveryTimeout}ms`)), messageDeliveryTimeout);
+      });
+      
+      // Promise for the actual message sending
+      const sendPromise = new Promise<void>((resolve, reject) => {
+        try {
+          console.debug("Background sending message to offscreen:", messageWithTabId);
+          chrome.runtime.sendMessage(messageWithTabId);
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      });
+      
+      // Race the message sending against the timeout
+      await Promise.race([sendPromise, timeoutPromise]);
     } catch (error) {
-      console.error("Error sending message to offscreen document:", error, messageWithTabId);
-      // Potentially try to re-establish or alert the user/system
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error(`[OffscreenManager] Error sending message to offscreen document: ${errorMessage}`, {
+        messageType: message?.type,
+        targetTabId,
+        timestamp: Date.now()
+      });
+      
+      // If this is an audio message, we should notify the content script about the failure
+      if (message.type && typeof message.type === 'string' && message.type.includes('AUDIO_') && targetTabId) {
+        this.notifyMessageFailure(message.type, targetTabId, errorMessage);
+      }
+    }
+  }
+
+  /**
+   * Notify the content script that a message failed to be delivered to the offscreen document
+   */
+  private notifyMessageFailure(messageType: string, tabId: number, errorMessage: string): void {
+    const port = this.portMap.get(tabId);
+    if (port) {
+      const responseType = messageType.replace('REQUEST', 'ERROR');
+      port.postMessage({
+        type: responseType,
+        error: `Failed to send message to offscreen document: ${errorMessage}`,
+        timestamp: Date.now()
+      });
     }
   }
 
@@ -89,6 +150,15 @@ class OffscreenManager {
     this.portMap.set(tabId, port);
 
     port.onMessage.addListener(async (message) => {
+      // Add specific logging for audio messages
+      if (message.type && typeof message.type === 'string' && message.type.includes('AUDIO_')) {
+        console.log(`[OffscreenManager] 🎧 Port received audio message: ${message.type}`, {
+          tabId,
+          url: message.url,
+          timestamp: Date.now()
+        });
+      }
+      
       console.debug(`Background received message from content script (tab ${tabId}):`, message);
       // Ensure offscreen document is ready before forwarding certain messages
       if (

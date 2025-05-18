@@ -1,12 +1,12 @@
 /**
- * Auto-generated from .env - DO NOT MODIFY DIRECTLY
+ * Auto-generated from .env.production - DO NOT MODIFY DIRECTLY
  * This file is regenerated on each build to ensure it uses the correct environment settings.
- * Generated on: 2025-05-17
+ * Generated on: 2025-05-18
  */
 const config = {
-  // Values from .env
-  apiBaseUrl: "https://localhost:5001",
-  authServerUrl: "http://localhost:3000"
+  // Values from .env.production
+  apiBaseUrl: "https://api.saypi.ai",
+  authServerUrl: "https://www.saypi.ai"
 };
 
 // Config is now globally accessible via window.config
