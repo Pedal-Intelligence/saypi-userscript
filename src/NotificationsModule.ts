@@ -249,7 +249,9 @@ export class AudibleNotificationsModule implements INotificationsModule {
   }
 
   private async playSound(sound: HTMLAudioElement) {
-    const soundEnabled = await this.userPreferences.getSoundEffects();
+    // Use the synchronous cached getter from UserPreferenceModule
+    const soundEnabled = this.userPreferences.getCachedSoundEffects();
+    
     if (soundEnabled) {
       sound.play().catch((e) => {
         if (e.name === "NotAllowedError") {

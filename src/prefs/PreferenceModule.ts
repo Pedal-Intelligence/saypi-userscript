@@ -513,154 +513,161 @@ class UserPreferenceModule {
     return this.setStoredValue("vadStatusIndicatorEnabled", enabled, 'local');
   }
 
-  // --- Preferences remaining in chrome.storage.sync ---
+  // --- Preferences that were previously in chrome.storage.sync, now moved to local or handled by cache ---
   
-  public getSoundEffects(): Promise<boolean> {
+  public async getSoundEffects(): Promise<boolean> {
     if (isFirefox()) {
       return Promise.resolve(false);
     }
-    return this.getStoredValue("soundEffects", true, 'sync');
+    const cached = this.cache.getCachedValue("soundEffects", null);
+    if (cached !== null) {
+        return Promise.resolve(cached as boolean);
+    }
+    // Fetch from local storage, then cache it.
+    const stored = await this.getStoredValue("soundEffects", true, 'local') as boolean;
+    this.cache.setCachedValue("soundEffects", stored);
+    return stored;
+  }
+
+  public getCachedSoundEffects(): boolean {
+    if (isFirefox()) { // Keep Firefox-specific logic
+      return false;
+    }
+    return this.cache.getCachedValue("soundEffects", true) as boolean;
   }
   
   public setSoundEffects(enabled: boolean): Promise<void> {
-    this.cache.setCachedValue("soundEffects", enabled); // Assuming cache might be used
+    this.cache.setCachedValue("soundEffects", enabled);
     EventBus.emit("userPreferenceChanged", { soundEffects: enabled });
-    return this.setStoredValue("soundEffects", enabled, 'sync');
+    return this.setStoredValue("soundEffects", enabled, 'local'); // Ensure it uses 'local'
   }
 
-  public getAutoSubmit(): Promise<boolean> {
-    // Cache is checked first by getCachedAutoSubmit, this is the fallback/initial load
+  public async getAutoSubmit(): Promise<boolean> {
      const cached = this.cache.getCachedValue("autoSubmit", null);
-     if (cached !== null) return Promise.resolve(cached);
-     return this.getStoredValue("autoSubmit", true, 'sync').then(val => {
-         this.cache.setCachedValue("autoSubmit", val);
-         return val;
-     });
+     if (cached !== null) return Promise.resolve(cached as boolean);
+     const stored = await this.getStoredValue("autoSubmit", true, 'local') as boolean; // Changed to 'local'
+     this.cache.setCachedValue("autoSubmit", stored);
+     return stored;
   }
   
   public setAutoSubmit(enabled: boolean): Promise<void> {
     this.cache.setCachedValue("autoSubmit", enabled);
     EventBus.emit("userPreferenceChanged", { autoSubmit: enabled });
-    return this.setStoredValue("autoSubmit", enabled, 'sync');
+    return this.setStoredValue("autoSubmit", enabled, 'local'); // Changed to 'local'
   }
 
 
-  public getTheme(): Promise<string> {
-    // Cache is useful here
+  public async getTheme(): Promise<string> {
     const cachedTheme = this.cache.getCachedValue("theme", null);
-    if (cachedTheme !== null) return Promise.resolve(cachedTheme);
-    return this.getStoredValue("theme", "light", 'sync').then(val => {
-        this.cache.setCachedValue("theme", val);
-        return val;
-    });
+    if (cachedTheme !== null) return Promise.resolve(cachedTheme as string);
+    const stored = await this.getStoredValue("theme", "light", 'local') as string; // Changed to 'local'
+    this.cache.setCachedValue("theme", stored);
+    return stored;
   }
 
   public setTheme(theme: string): Promise<void> {
     this.cache.setCachedValue("theme", theme);
     EventBus.emit("userPreferenceChanged", { theme: theme });
-    return this.setStoredValue("theme", theme, 'sync');
+    return this.setStoredValue("theme", theme, 'local'); // Changed to 'local'
   }
 
-  public getDataSharing(): Promise<boolean> {
-    // Cache is useful here
+  public async getDataSharing(): Promise<boolean> {
     const cachedDataSharing = this.cache.getCachedValue("shareData", null);
-    if (cachedDataSharing !== null) return Promise.resolve(cachedDataSharing);
-    return this.getStoredValue("shareData", false, 'sync').then(val => {
-        this.cache.setCachedValue("shareData", val);
-        return val;
-    });
+    if (cachedDataSharing !== null) return Promise.resolve(cachedDataSharing as boolean);
+    const stored = await this.getStoredValue("shareData", false, 'local') as boolean; // Changed to 'local'
+    this.cache.setCachedValue("shareData", stored);
+    return stored;
   }
   
   public setDataSharing(enabled: boolean): Promise<void> {
     this.cache.setCachedValue("shareData", enabled);
     EventBus.emit("userPreferenceChanged", { shareData: enabled });
-    return this.setStoredValue("shareData", enabled, 'sync');
+    return this.setStoredValue("shareData", enabled, 'local'); // Changed to 'local'
   }
   
-  // Voice ID (remains SYNC for cross-device voice preference)
-  public hasVoice(): Promise<boolean> {
-    return new Promise((resolve) => {
-      this.getStoredValue("voiceId", null, 'sync').then(voiceId => resolve(!!voiceId));
-    });
+  // Voice ID (now also local, was sync)
+  public async hasVoice(): Promise<boolean> {
+    const voiceId = await this.getStoredValue("voiceId", null, 'local'); // Changed to 'local'
+    return !!voiceId;
   }
 
-  public getVoice(chatbot?: Chatbot): Promise<VoicePreference> {
+  public async getVoice(chatbot?: Chatbot): Promise<VoicePreference> {
     const apiServerUrl = config.apiServerUrl;
     if (!apiServerUrl) {
       throw new Error("API server URL is not set");
     }
     const tts = SpeechSynthesisModule.getInstance(apiServerUrl);
-    return new Promise((resolve) => {
-       this.getStoredValue("voiceId", null, 'sync').then(async (voiceId: string | null) => {
-        let voice;
-        if (voiceId) {
-          if (PiAIVoice.isPiVoiceId(voiceId)) {
-            voice = PiAIVoice.fromVoiceId(voiceId);
-          } else {
-            try {
-              voice = await tts.getVoiceById(voiceId, chatbot);
-            } catch (error: any) {
-              console.info(`Voice with ID ${voiceId} not found for ${chatbot?.getName() || "current chatbot"}`);
-              voice = null;
-            }
-          }
-          resolve(voice);
-        } else {
-          resolve(null); 
-        }
-      });
-    });
+    // Check cache first
+    const cachedVoiceId = this.cache.getCachedValue("voiceId", null) as string | null;
+    let voiceIdToFetch = cachedVoiceId;
+
+    if (voiceIdToFetch === null) {
+      voiceIdToFetch = await this.getStoredValue("voiceId", null, 'local') as string | null; // Changed to 'local'
+      if (voiceIdToFetch !== null) {
+        this.cache.setCachedValue("voiceId", voiceIdToFetch);
+      }
+    }
+    
+    if (voiceIdToFetch) {
+      if (PiAIVoice.isPiVoiceId(voiceIdToFetch)) {
+        return PiAIVoice.fromVoiceId(voiceIdToFetch);
+      }
+      try {
+        return await tts.getVoiceById(voiceIdToFetch, chatbot);
+      } catch (error: any) {
+        console.info(`Voice with ID ${voiceIdToFetch} not found for ${chatbot?.getName() || "current chatbot"}. Clearing stored voiceId.`);
+        // If voice not found, clear the invalid ID from storage and cache
+        await this.setStoredValue("voiceId", null, 'local');
+        this.cache.setCachedValue("voiceId", null);
+        return null;
+      }
+    }
+    return null;
   }
 
   public setVoice(voice: SpeechSynthesisVoiceRemote): Promise<void> {
     const provider = audioProviders.retrieveProviderByEngine(voice.powered_by);
+    this.cache.setCachedValue("voiceId", voice.id);
     EventBus.emit("userPreferenceChanged", {
       voiceId: voice.id,
       voice: voice,
       audioProvider: provider,
     });
-    // No direct cache set here for voiceId, as getVoice re-fetches and resolves it.
-    // The event is the primary notification.
-    return this.setStoredValue("voiceId", voice.id, 'sync').then(() => {
+    return this.setStoredValue("voiceId", voice.id, 'local').then(() => { // Changed to 'local'
         const audioControls = new AudioControlsModule();
         audioControls.notifyAudioVoiceSelection(voice);
     });
   }
 
   public unsetVoice(): Promise<void> {
+    this.cache.setCachedValue("voiceId", null);
     EventBus.emit("userPreferenceChanged", {
       voiceId: null,
       voice: null,
       audioProvider: audioProviders.Pi,
     });
-    return this.getStoredValue("voiceId", null, 'sync').then(voiceId => {
-        if (voiceId) {
-            return this.setStoredValue("voiceId", null, 'sync'); // Explicitly set to null to clear
-        }
-        return Promise.resolve();
-    }).then(() => {
+    return this.setStoredValue("voiceId", null, 'local').then(() => { // Changed to 'local'
         const audioControls = new AudioControlsModule();
         audioControls.notifyAudioVoiceDeselection();
     });
   }
   
-  // Allow Interruptions (SYNC)
-  public getAllowInterruptions(): Promise<boolean> {
+  // Allow Interruptions (now local, was sync)
+  public async getAllowInterruptions(): Promise<boolean> {
     if (isFirefox()) {
       return Promise.resolve(false);
     }
     const cached = this.cache.getCachedValue("allowInterruptions", null);
-    if (cached !== null) return Promise.resolve(cached);
-    return this.getStoredValue("allowInterruptions", true, 'sync').then(val => {
-        this.cache.setCachedValue("allowInterruptions", val);
-        return val;
-    });
+    if (cached !== null) return Promise.resolve(cached as boolean);
+    const stored = await this.getStoredValue("allowInterruptions", true, 'local') as boolean; // Changed to 'local'
+    this.cache.setCachedValue("allowInterruptions", stored);
+    return stored;
   }
 
   public setAllowInterruptions(enabled: boolean): Promise<void> {
     this.cache.setCachedValue("allowInterruptions", enabled);
     EventBus.emit("userPreferenceChanged", { allowInterruptions: enabled });
-    return this.setStoredValue("allowInterruptions", enabled, 'sync');
+    return this.setStoredValue("allowInterruptions", enabled, 'local'); // Changed to 'local'
   }
 
   // --- Methods primarily using cache or other logic ---
@@ -682,23 +689,20 @@ class UserPreferenceModule {
     return this.cache.getCachedValue("isTTSBetaPaused", false);
   }
 
-  public getTextToSpeechEnabled(): Promise<boolean> {
+  public async getTextToSpeechEnabled(): Promise<boolean> {
     if (isSafari()) {
       return Promise.resolve(false);
     }
-    // isTTSBetaPaused is async and hits network, getCachedIsTTSBetaPaused is sync
-    // enableTTS is from sync storage
     return Promise.all([
-      this.getStoredValue("enableTTS", true, 'sync'), // Assuming enableTTS remains a sync setting
-      this.getCachedIsTTSBetaPaused(), // Use cached for the network call part
+      this.getStoredValue("enableTTS", true, 'local'), // Changed to 'local'
+      this.getCachedIsTTSBetaPaused(), 
     ]).then(([enableTTS, ttsBetaPaused]) => enableTTS && !ttsBetaPaused);
   }
   
   public setEnableTTS(enabled: boolean): Promise<void> {
-    // Assuming "enableTTS" is a sync setting
-    this.cache.setCachedValue("enableTTS", enabled); // Cache it if used elsewhere
+    this.cache.setCachedValue("enableTTS", enabled); 
     EventBus.emit("userPreferenceChanged", { enableTTS: enabled });
-    return this.setStoredValue("enableTTS", enabled, 'sync');
+    return this.setStoredValue("enableTTS", enabled, 'local'); // Changed to 'local'
   }
 
   public getCachedAutoSubmit(): boolean {
