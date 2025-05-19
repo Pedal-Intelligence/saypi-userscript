@@ -42,6 +42,9 @@ const LOCAL_STORAGE_KEYS = [
   "shareData", "voiceId", "enableTTS", "vadStatusIndicatorEnabled"
 ];
 
+// Add a flag to mark that sync-to-local migration has completed
+export const MIGRATION_FLAG = 'prefs_migration_completed';
+
 class UserPreferenceModule {
   private cache: UserPreferenceCache = UserPreferenceCache.getInstance();
 
@@ -54,13 +57,62 @@ class UserPreferenceModule {
   }
 
   /**
+   * One-time migration from chrome.storage.sync to local storage for user preferences
+   */
+  public async migrateStorage(): Promise<void> {
+    const flagKey = MIGRATION_FLAG;
+    // Check if migration already done
+    const flagResult: Record<string, any> = await new Promise(resolve => {
+      chrome.storage.local.get([flagKey], resolve);
+    });
+    if (flagResult[flagKey]) {
+      return;
+    }
+    // Retrieve all sync-stored preferences
+    const syncData: Record<string, any> = await new Promise(resolve => {
+      chrome.storage.sync.get(LOCAL_STORAGE_KEYS, resolve);
+    });
+    // Retrieve existing local data
+    const localData: Record<string, any> = await new Promise(resolve => {
+      chrome.storage.local.get(LOCAL_STORAGE_KEYS, resolve);
+    });
+    // Prepare items to migrate
+    const toMigrate: Record<string, any> = {};
+    for (const key of LOCAL_STORAGE_KEYS) {
+      if (syncData[key] !== undefined && localData[key] === undefined) {
+        toMigrate[key] = syncData[key];
+      }
+    }
+    // Perform migration if needed
+    if (Object.keys(toMigrate).length > 0) {
+      await new Promise<void>((resolve, reject) => {
+        chrome.storage.local.set(toMigrate, () => {
+          if (chrome.runtime && chrome.runtime.lastError) {
+            console.error('Error migrating preferences:', chrome.runtime.lastError);
+            reject(chrome.runtime.lastError);
+          } else {
+            resolve();
+          }
+        });
+      });
+    }
+    // Mark migration complete
+    await new Promise<void>(resolve => {
+      chrome.storage.local.set({ [flagKey]: true }, resolve);
+    });
+  }
+
+  /**
    * Constructor for UserPreferenceModule
    * Note: cache may not be fully populated immediately after construction (takes a few milliseconds)
    */
   private constructor() {
-    this.reloadCache(); // This will now also load from local storage for certain keys
-    this.registerMessageListeners();
-    this.registerJwtClaimsListener();
+    // Run migration before loading cached preferences and setting listeners
+    this.migrateStorage().then(() => {
+      this.reloadCache();
+      this.registerMessageListeners();
+      this.registerJwtClaimsListener();
+    });
   }
 
   private reloadCache(): void {
@@ -309,63 +361,19 @@ class UserPreferenceModule {
    */
   private getStoredValue(key: string, defaultValue: any, storageType: 'sync' | 'local'): Promise<any> {
     return new Promise((resolve) => {
-      const primaryArea = (typeof chrome !== 'undefined' && chrome.storage) ? 
-        (storageType === 'local' ? chrome.storage.local : chrome.storage.sync) : 
-        undefined;
-      
-      const attemptMigration = storageType === 'local' && LOCAL_STORAGE_KEYS.includes(key);
-
-      if (typeof chrome === 'undefined' || !chrome.storage || !primaryArea) {
-        console.warn(`chrome.storage.${storageType} not available or chrome object not defined. Returning default for ${key}.`);
+      if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.local) {
+        console.warn(`chrome.storage.local not available. Returning default for ${key}.`);
         resolve(defaultValue);
         return;
       }
-
-      primaryArea.get([key], (result) => {
-        if (chrome.runtime && chrome.runtime.lastError) { // Check chrome.runtime exists
-          console.error(`Error getting ${key} from chrome.storage.${storageType}:`, chrome.runtime.lastError.message);
+      chrome.storage.local.get([key], (result) => {
+        if (chrome.runtime && chrome.runtime.lastError) {
+          console.error(`Error getting ${key} from chrome.storage.local:`, chrome.runtime.lastError.message);
           resolve(defaultValue);
-          return;
-        }
-
-        if (result && result[key] !== undefined) { // Check result exists
-          resolve(result[key]); 
-        } else if (attemptMigration) {
-          console.log(`[Migration] ${key} not in local. Checking sync.`);
-          if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.sync) {
-            console.warn(`[Migration] chrome.storage.sync not available for ${key}. Using default value.`);
-            resolve(defaultValue);
-            return;
-          }
-          chrome.storage.sync.get([key], (syncResult) => {
-            if (chrome.runtime && chrome.runtime.lastError) { // Check chrome.runtime exists
-              console.warn(`[Migration] Error reading ${key} from sync:`, chrome.runtime.lastError.message, `Using default.`);
-              resolve(defaultValue);
-              return;
-            }
-            if (syncResult && syncResult[key] !== undefined) { // Check syncResult exists
-              console.log(`[Migration] Found ${key} in sync:`, syncResult[key], `. Migrating to local.`);
-              if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.local) {
-                console.error(`[Migration] chrome.storage.local not available to write migrated ${key}. Using sync value this time.`);
-                resolve(syncResult[key]);
-                return;
-              }
-              chrome.storage.local.set({ [key]: syncResult[key] }, () => {
-                if (chrome.runtime && chrome.runtime.lastError) { // Check chrome.runtime exists
-                  console.error(`[Migration] Error writing ${key} to local:`, chrome.runtime.lastError.message, `. Using sync value this time.`);
-                  resolve(syncResult[key]); 
-                } else {
-                  console.log(`[Migration] Successfully migrated ${key} to local.`);
-                  resolve(syncResult[key]);
-                }
-              });
-            } else {
-              console.log(`[Migration] ${key} not in sync either. Using default.`);
-              resolve(defaultValue); 
-            }
-          });
+        } else if (result && result[key] !== undefined) {
+          resolve(result[key]);
         } else {
-          resolve(defaultValue); 
+          resolve(defaultValue);
         }
       });
     });
@@ -379,19 +387,16 @@ class UserPreferenceModule {
    * @returns Promise<void>
    */
   private setStoredValue(key: string, value: any, storageType: 'sync' | 'local'): Promise<void> {
+    // simplified local-only storage
     return new Promise((resolve, reject) => {
-      const storageArea = (typeof chrome !== 'undefined' && chrome.storage) ? 
-        (storageType === 'local' ? chrome.storage.local : chrome.storage.sync) : 
-        undefined;
-
-      if (typeof chrome === 'undefined' || !chrome.storage || !storageArea) {
-        console.warn(`chrome.storage.${storageType} not available or chrome object not defined. Did not set ${key}.`);
-        resolve(); 
+      if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.local) {
+        console.warn(`chrome.storage.local not available. Did not set ${key}.`);
+        resolve();
         return;
       }
-      storageArea.set({ [key]: value }, () => {
-        if (chrome.runtime && chrome.runtime.lastError) { // Check chrome.runtime exists
-          console.error(`Error setting ${key} in chrome.storage.${storageType}:`, chrome.runtime.lastError.message);
+      chrome.storage.local.set({ [key]: value }, () => {
+        if (chrome.runtime && chrome.runtime.lastError) {
+          console.error(`Error setting ${key} in chrome.storage.local:`, chrome.runtime.lastError.message);
           reject(chrome.runtime.lastError);
         } else {
           resolve();
@@ -749,6 +754,13 @@ class UserPreferenceModule {
     } catch (e) {
       console.warn("Could not access localStorage to set view preference: ", e);
     }
+  }
+
+  /**
+   * Synchronous read interface for preference clients
+   */
+  public getPreference<T>(key: string, defaultValue: T): T {
+    return this.cache.getCachedValue(key, defaultValue) as T;
   }
 }
 

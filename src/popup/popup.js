@@ -44,52 +44,19 @@ document.addEventListener("DOMContentLoaded", function () {
    * @returns any
    */
   function getStoredValue(key, defaultValue) {
-    const POPUP_MIGRATABLE_KEYS = ["prefer", "submitMode", "autoSubmit", "discretionaryMode", "soundEffects", "allowInterruptions", "shareData", "nickname"];
+    // Local-only storage access
     return new Promise((resolve) => {
       if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.local) {
         console.warn(`chrome.storage.local not available. Returning default for ${key}.`);
         resolve(defaultValue);
         return;
       }
-
-      chrome.storage.local.get([key], (localResult) => {
+      chrome.storage.local.get([key], (result) => {
         if (chrome.runtime && chrome.runtime.lastError) {
           console.error(`Error getting ${key} from chrome.storage.local:`, chrome.runtime.lastError.message);
           resolve(defaultValue);
-          return;
-        }
-
-        if (localResult && localResult[key] !== undefined) {
-          resolve(localResult[key]);
-        } else if (POPUP_MIGRATABLE_KEYS.includes(key)) {
-          console.log(`[Popup Migration] ${key} not in local. Checking sync.`);
-          if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.sync) {
-            console.warn(`[Popup Migration] chrome.storage.sync not available for ${key}. Using default value.`);
-            resolve(defaultValue);
-            return;
-          }
-          chrome.storage.sync.get([key], (syncResult) => {
-            if (chrome.runtime && chrome.runtime.lastError) {
-              console.warn(`[Popup Migration] Error reading ${key} from sync:`, chrome.runtime.lastError.message, `Using default.`);
-              resolve(defaultValue);
-              return;
-            }
-            if (syncResult && syncResult[key] !== undefined) {
-              console.log(`[Popup Migration] Found ${key} in sync:`, syncResult[key], `. Migrating to local.`);
-              chrome.storage.local.set({ [key]: syncResult[key] }, () => {
-                if (chrome.runtime && chrome.runtime.lastError) {
-                  console.error(`[Popup Migration] Error writing ${key} to local:`, chrome.runtime.lastError.message, `. Using sync value this time.`);
-                  resolve(syncResult[key]);
-                } else {
-                  console.log(`[Popup Migration] Successfully migrated ${key} to local.`);
-                  resolve(syncResult[key]);
-                }
-              });
-            } else {
-              console.log(`[Popup Migration] ${key} not in sync either. Using default.`);
-              resolve(defaultValue);
-            }
-          });
+        } else if (result && result[key] !== undefined) {
+          resolve(result[key]);
         } else {
           resolve(defaultValue);
         }
