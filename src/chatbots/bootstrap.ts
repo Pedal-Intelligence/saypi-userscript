@@ -3,7 +3,7 @@ import { buttonModule } from "../ButtonModule.js";
 import EventBus from "../events/EventBus.js";
 import { ChatHistorySpeechManager } from "../tts/ChatHistoryManager";
 import { Observation } from "../dom/Observation";
-import { VoiceSettings } from "../tts/VoiceMenu";
+import { PiVoiceSettings } from "./PiVoiceMenu";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { ThemeManager } from "../themes/ThemeManagerModule";
 import { VoiceMenuUIManager } from "../tts/VoiceMenuUIManager";
@@ -305,7 +305,7 @@ export class DOMObserver {
   }
 
   decorateVoiceSettings(voiceSettingsElement: HTMLElement): void {
-    const voiceSettings = new VoiceSettings(
+    const voiceSettings = new PiVoiceSettings(
       this.chatbot,
       UserPreferenceModule.getInstance(),
       voiceSettingsElement
