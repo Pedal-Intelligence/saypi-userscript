@@ -42,15 +42,19 @@ export class JwtManager {
 
   public async loadFromStorage(): Promise<void> {
     try {
+      console.debug('[status] Loading token from storage');
       const { jwtToken, tokenExpiresAt, authCookieValue } = await chrome.storage.local.get(['jwtToken', 'tokenExpiresAt', 'authCookieValue']);
       if (jwtToken && tokenExpiresAt) {
+        console.debug('[status] Token loaded from storage');
         this.jwtToken = jwtToken;
         this.expiresAt = tokenExpiresAt;
         this.authCookieValue = authCookieValue;
         this.scheduleRefresh();
+      } else {
+        console.debug('[status] No token found in storage');
       }
     } catch (error) {
-      console.error('Failed to load token from storage:', error);
+      console.error('[status] Failed to load token from storage:', error);
     }
   }
 

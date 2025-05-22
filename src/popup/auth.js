@@ -60,14 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Use the shared updateAuthUI function
         updateAuthUI(true, userData);
         isAuthenticated = true;
-      } else {
-        // Invalid or expired token
-        updateAuthUI(false);
-        isAuthenticated = false;
       }
-    } else {
-      updateAuthUI(false);
-      isAuthenticated = false;
     }
   } catch (error) {
     console.error('Failed to initialize auth UI:', error);

@@ -6,6 +6,8 @@
  * @param {Object} userData - User data from JWT claims (if authenticated)
  */
 function updateAuthUI(isAuthenticated, userData = null) {
+  console.log('updateAuthUI', isAuthenticated, userData);
+
   const profileStatus = document.getElementById('profile-status');
   const profileName = document.getElementById('profile-name');
   const authButton = document.getElementById('auth-button');

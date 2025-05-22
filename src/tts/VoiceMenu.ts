@@ -97,9 +97,21 @@ export abstract class VoiceSelector {
     );
   }
 
+  async refreshMenu(): Promise<void> {
+    // remove all voices from the selector
+    const voiceButtons = Array.from(this.element.querySelectorAll("button"));
+    voiceButtons.forEach((button) => {
+      this.unmarkButtonAsSelectedVoice(button as HTMLButtonElement);
+      this.element.removeChild(button);
+    });
+    // add voices to the selector
+    await this.addVoicesToSelector(this.element);
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+
   addVoicesToSelector(voiceSelector: HTMLElement): void {
     const speechSynthesis = SpeechSynthesisModule.getInstance();
-    speechSynthesis.getVoices().then((voices) => {
+    speechSynthesis.getVoices(this.chatbot).then((voices) => {
       this.populateVoices(voices, voiceSelector);
     });
   }

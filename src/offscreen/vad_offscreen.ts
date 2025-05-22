@@ -120,7 +120,7 @@ async function initializeVAD() {
   }
   try {
     logger.log("[SayPi VAD Offscreen] Initializing VAD with default options...");
-    const mergedOptions = { ...vadOptions, ...vadBundleOptions };
+    const mergedOptions = { ...vadOptions, /*...vadBundleOptions */ };
     vadInstance = await MicVAD.new(mergedOptions);
     logger.log("[SayPi VAD Offscreen] MicVAD instance created.");
     return { success: true, mode: "default" };

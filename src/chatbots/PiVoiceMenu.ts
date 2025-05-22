@@ -163,7 +163,7 @@ export class PiVoiceSettings extends VoiceSelector {
     super(chatbot, userPreferences, element);
     this.addIdVoiceMenu(element);
     SpeechSynthesisModule.getInstance()
-      .getVoices()
+      .getVoices(chatbot)
       .then((multilingualVoices) => {
         this.populateVoices(multilingualVoices, element);
         this.addMissingPiVoices(element);

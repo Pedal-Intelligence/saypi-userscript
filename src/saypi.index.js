@@ -88,8 +88,9 @@ import SlowResponseHandler from "./SlowResponseHandler.ts";
   addUserAgentFlags();
   await ChatbotService.addChatbotFlags();
   EventModule.init();
-  new DOMObserver(chatbot).observeDOM();
+  jwtManager.initialize();
   setupAuthListener(); // Setup the auth listener
+  new DOMObserver(chatbot).observeDOM();
 
   function addVisualisations(container) {
     // Create a containing div

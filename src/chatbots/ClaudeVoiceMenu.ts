@@ -77,14 +77,14 @@ export class ClaudeVoiceMenu extends VoiceSelector {
   protected createVoiceButton(
     voice: SpeechSynthesisVoiceRemote | null
   ): HTMLButtonElement {
-    const button = document.createElement("button");
-    button.classList.add(...this.getButtonClasses());
-    button.setAttribute("aria-haspopup", "true");
-    button.setAttribute("aria-expanded", "false");
-    button.setAttribute("type", "button");
+    const expandButton = document.createElement("button");
+    expandButton.classList.add(...this.getButtonClasses());
+    expandButton.setAttribute("aria-haspopup", "true");
+    expandButton.setAttribute("aria-expanded", "false");
+    expandButton.setAttribute("type", "button");
     
     // Add data attribute to indicate if voice is active
-    button.setAttribute("data-voice-active", voice ? "true" : "false");
+    expandButton.setAttribute("data-voice-active", voice ? "true" : "false");
 
     // Create a div to match Claude's model selector structure
     const contentDiv = document.createElement("div");
@@ -129,11 +129,11 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     nameContainer.appendChild(voiceName);
     contentDiv.appendChild(nameContainer);
     
-    button.appendChild(contentDiv);
+    expandButton.appendChild(contentDiv);
 
     // Add the chevron icon as a separate SVG
     addSvgToButton(
-      button,
+      expandButton,
       chevronSvgContent,
       "chevron",
       "text-text-500",
@@ -143,8 +143,10 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       "ml-1.5"
     );
 
-    button.addEventListener("click", () => this.toggleMenu());
-    return button;
+    expandButton.addEventListener("click", () => {
+      this.toggleMenu();
+    });
+    return expandButton;
   }
 
   protected createVoiceMenu(): HTMLDivElement {
@@ -319,8 +321,13 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     this.menuButton.setAttribute("aria-expanded", (!isExpanded).toString());
 
     if (!isExpanded) {
-      // Show and position the menu
-      this.positionMenuAboveButton();
+      // refresh menu
+      this.refreshMenu().then(() => {
+        // Show and position the menu
+        this.positionMenuAboveButton();
+        // set aria-expanded to true
+        this.menuButton.setAttribute("aria-expanded", "true");
+      });
     } else {
       // Hide the menu
       this.menuContent.style.display = "none";
@@ -426,6 +433,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
 
   private initializeVoiceSelector(chatbot: Chatbot): void {
     const speechSynthesis = SpeechSynthesisModule.getInstance();
+    console.log("[status] Initializing voice selector");
     speechSynthesis.getVoices(chatbot).then((voices) => {
       this.populateVoices(voices, this.element);
 
@@ -442,6 +450,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
         }
       });
     });
+    console.log("[status] Voice selector initialized");
   }
 
   getPositionFromEnd(): number {
