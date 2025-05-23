@@ -7,6 +7,11 @@
 <body>
   <!-- Combined VAD and Audio playback -->
   <audio id="saypi-audio-offscreen" preload="auto"></audio>
+  
+  <!-- Load scripts in dependency order -->
+  <script src="/public/offscreen/media_coordinator.js"></script>
+  <script src="/public/offscreen/vad_handler.js"></script>
+  <script src="/public/offscreen/audio_handler.js"></script>
   <script src="/public/offscreen/media_offscreen.js"></script>
 </body>
 </html> 

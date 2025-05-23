@@ -55,8 +55,10 @@ const config = {
     entry: {
       main: "./src/saypi.index.js",
       background: "./src/svc/background.ts",
-      offscreenVAD: "./src/offscreen/vad_offscreen.ts",
-      offscreenAudio: "./src/offscreen/media_offscreen.ts",
+      mediaCoordinator: "./src/offscreen/media_coordinator.ts",
+      vadHandler: "./src/offscreen/vad_handler.ts",
+      audioHandler: "./src/offscreen/audio_handler.ts",
+      mediaOffscreen: "./src/offscreen/media_offscreen.ts",
       permissionsPrompt: "./src/permissions/permissions-prompt.ts"
     },
     output: {
@@ -66,9 +68,13 @@ const config = {
             return "saypi.user.js";
           case "background":
             return "background.js";
-          case "offscreenVAD":
-            return "offscreen/vad_offscreen.js";
-          case "offscreenAudio":
+          case "mediaCoordinator":
+            return "offscreen/media_coordinator.js";
+          case "vadHandler":
+            return "offscreen/vad_handler.js";
+          case "audioHandler":
+            return "offscreen/audio_handler.js";
+          case "mediaOffscreen":
             return "offscreen/media_offscreen.js";
           case "permissionsPrompt":
             return "permissions/permissions-prompt.js";
