@@ -398,9 +398,6 @@ export class ClaudeVoiceMenu extends VoiceSelector {
         const itemVoiceName = item.dataset.voiceName;
         const isSelected = itemVoiceName === selectedVoiceName;
         
-        // Toggle selected state with Claude's styling
-        item.classList.toggle("bg-bg-300", isSelected);
-        
         // Update checkmark with exact Claude native styling
         const checkmarkContainer = item.querySelector(".checkmark-container");
         if (checkmarkContainer) {
