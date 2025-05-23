@@ -204,7 +204,6 @@ userPreferences.getDiscretionaryMode().then((discretionaryModeEnabled) => {
 
 function shouldAlwaysRespond(): boolean {
   const discretionaryModeEnabled = userPreferences.getCachedDiscretionaryMode();
-  console.debug("Assigning default shouldRespond to", !discretionaryModeEnabled);
   return !discretionaryModeEnabled;
 }
 

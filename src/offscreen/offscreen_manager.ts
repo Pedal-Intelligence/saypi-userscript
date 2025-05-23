@@ -95,7 +95,7 @@ class OffscreenManager {
       // Promise for the actual message sending
       const sendPromise = new Promise<void>((resolve, reject) => {
         try {
-          console.debug("Background sending message to offscreen:", messageWithTabId);
+          console.debug(`[OffscreenManager] forwarding message to offscreen: ${messageWithTabId.type}`);
           chrome.runtime.sendMessage(messageWithTabId);
           resolve();
         } catch (error) {
@@ -189,10 +189,10 @@ class OffscreenManager {
   public forwardMessageToContentScript(tabId: number, message: any): void {
     const port = this.portMap.get(tabId);
     if (port) {
-      console.debug(`Background forwarding message to content script (tab ${tabId}):`, message);
+      console.debug(`[OffscreenManager] forwarding message to content script (tab ${tabId}): ${message.type}`);
       port.postMessage(message);
     } else {
-      console.warn(`No active port found for tab ${tabId} to forward message:`, message);
+      console.warn(`No active port found for tab ${tabId} to forward message: ${message.type}`);
     }
   }
 }
