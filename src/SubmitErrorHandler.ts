@@ -51,7 +51,7 @@ export default class SubmitErrorHandler {
       "saypi-prompt"
     ) as HTMLTextAreaElement | null;
     if (submitButton && textarea) {
-      if (submitButton.disabled && textarea.value.length > 0) {
+      if (submitButton.disabled && textarea.value?.length > 0) {
         console.warn("Submit error detected, but ignored.");
         //return true; // submit error handler disabled in v1.6.0 for evaluation purposes
       }
