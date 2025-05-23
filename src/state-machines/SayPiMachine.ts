@@ -1264,7 +1264,11 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         }
       },
       clearPrompt: (context: SayPiContext) => {
-        getPromptOrNull()?.setMessage(context.defaultPlaceholderText);
+        const prompt = getPromptOrNull();
+        if (prompt) {
+          prompt.clear();
+          prompt.setMessage(context.defaultPlaceholderText);
+        }
       },
       draftPrompt: (context: SayPiContext) => {
         const text = mergeService
