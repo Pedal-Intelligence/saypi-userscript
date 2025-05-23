@@ -21,6 +21,17 @@ class Logger {
     this.prefix = prefix;
     // TODO: Make debugMode configurable, e.g., via storage or a global flag
     this.debugMode = true; // Default to true for easier development, can be changed
+    
+    // Bind original console methods to preserve call stack
+    this._console = {
+      log: console.log.bind(console),
+      debug: console.debug.bind(console),
+      info: console.info.bind(console),
+      warn: console.warn.bind(console),
+      error: console.error.bind(console),
+      group: console.group.bind(console),
+      groupEnd: console.groupEnd.bind(console)
+    };
   }
 
   setDebugMode(enabled) {
@@ -34,33 +45,33 @@ class Logger {
   }
 
   log(...args) {
-    console.log(`[${this.prefix}]`, ...this._formatArgs(args));
+    this._console.log(`[${this.prefix}]`, ...this._formatArgs(args));
   }
 
   debug(...args) {
     if (this.debugMode) {
-      console.debug(`[${this.prefix} DEBUG]`, ...this._formatArgs(args));
+      this._console.debug(`[${this.prefix} DEBUG]`, ...this._formatArgs(args));
     }
   }
 
   info(...args) { // Alias for log
-    console.info(`[${this.prefix} INFO]`, ...this._formatArgs(args));
+    this._console.info(`[${this.prefix} INFO]`, ...this._formatArgs(args));
   }
 
   warn(...args) {
-    console.warn(`[${this.prefix} WARNING]`, ...this._formatArgs(args));
+    this._console.warn(`[${this.prefix} WARNING]`, ...this._formatArgs(args));
   }
 
   error(...args) {
-    console.error(`[${this.prefix} ERROR]`, ...this._formatArgs(args));
+    this._console.error(`[${this.prefix} ERROR]`, ...this._formatArgs(args));
   }
 
   group(label) {
-    console.group(`[${this.prefix}] ${label}`);
+    this._console.group(`[${this.prefix}] ${label}`);
   }
 
   groupEnd() {
-    console.groupEnd();
+    this._console.groupEnd();
   }
 
   reportError(error, context = {}, additionalMessage = "") {
