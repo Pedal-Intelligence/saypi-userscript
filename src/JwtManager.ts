@@ -34,24 +34,72 @@ export class JwtManager {
   private refreshTimeout: NodeJS.Timeout | null = null;
   // Value of the auth_session cookie - used as fallback when cookies can't be sent
   private authCookieValue: string | null = null;
+  // Promise that resolves when initialization is complete
+  private initializationPromise: Promise<void>;
+  // Track if initialization has completed
+  private isInitialized: boolean = false;
 
   constructor() {
     // Load token from storage on initialization
-    this.loadFromStorage();
+    this.initializationPromise = this.loadFromStorage().then(() => {
+      this.isInitialized = true;
+      console.debug('[status] JwtManager initialized');
+    });
+  }
+
+  /**
+   * Ensures the JwtManager is fully initialized before proceeding
+   * @returns Promise that resolves when initialization is complete
+   */
+  public async ensureInitialized(): Promise<void> {
+    if (this.isInitialized) {
+      return Promise.resolve();
+    }
+    return this.initializationPromise;
+  }
+
+  /**
+   * Check if the JwtManager has completed initialization
+   * @returns true if initialization is complete, false otherwise
+   */
+  public isReady(): boolean {
+    return this.isInitialized;
   }
 
   public async loadFromStorage(): Promise<void> {
     try {
       console.debug('[status] Loading token from storage');
       const { jwtToken, tokenExpiresAt, authCookieValue } = await chrome.storage.local.get(['jwtToken', 'tokenExpiresAt', 'authCookieValue']);
+      
+      // Always load authCookieValue if present
+      if (authCookieValue) {
+        this.authCookieValue = authCookieValue;
+      }
+      
       if (jwtToken && tokenExpiresAt) {
         console.debug('[status] Token loaded from storage');
         this.jwtToken = jwtToken;
         this.expiresAt = tokenExpiresAt;
-        this.authCookieValue = authCookieValue;
         this.scheduleRefresh();
       } else {
         console.debug('[status] No token found in storage');
+        
+        // If we have authCookieValue but no JWT token, attempt to refresh
+        // This handles extension reload scenarios where JWT data is lost but auth cookie remains
+        if (authCookieValue) {
+          console.debug('[status] Found auth cookie but no JWT token - attempting refresh to recover authentication');
+          try {
+            await this.refresh(true, true); // Force refresh with silent 401 handling
+            if (this.isAuthenticated()) {
+              console.debug('[status] Successfully recovered authentication state from auth cookie');
+            } else {
+              console.debug('[status] Failed to recover authentication - auth cookie may be invalid');
+            }
+          } catch (error) {
+            console.debug('[status] Failed to refresh token using stored auth cookie:', error);
+            // Don't throw here - we want initialization to complete even if refresh fails
+          }
+        }
       }
     } catch (error) {
       console.error('[status] Failed to load token from storage:', error);
@@ -268,6 +316,7 @@ export class JwtManager {
   }
 
   public getAuthHeader(): string | null {
+    console.debug('[status] Getting auth header');
     if (!this.jwtToken) return null;
     return `Bearer ${this.jwtToken}`;
   }
@@ -413,6 +462,26 @@ export class JwtManager {
   }
 }
 
-// Export the singleton instance as default
-export const jwtManager = new JwtManager();
-export default jwtManager; 
+// Create the singleton instance (private to this module)
+const jwtManagerInstance = new JwtManager();
+
+/**
+ * Factory function that returns a fully initialized JwtManager instance
+ * This is the recommended way to access the JWT manager
+ * @returns Promise that resolves to the initialized JwtManager instance
+ */
+export async function getJwtManager(): Promise<JwtManager> {
+  await jwtManagerInstance.ensureInitialized();
+  return jwtManagerInstance;
+}
+
+/**
+ * Synchronous access to JWT manager (use only when you're sure it's initialized)
+ * Prefer getJwtManager() for most use cases
+ * @returns The JwtManager instance (may not be fully initialized)
+ */
+export function getJwtManagerSync(): JwtManager {
+  return jwtManagerInstance;
+}
+
+export default getJwtManager; 

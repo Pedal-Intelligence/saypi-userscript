@@ -6,9 +6,9 @@ import chevronSvgContent from "../icons/claude-chevron.svg";
 import volumeSvgContent from "../icons/volume-mid.svg";
 import volumeMutedSvgContent from "../icons/volume-muted.svg";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
-import jwtManager from "../JwtManager";
 import getMessage from "../i18n";
 import { openSettings } from "../popup/popupopener";
+import { getJwtManagerSync } from "../JwtManager";
 
 export class ClaudeVoiceMenu extends VoiceSelector {
   private menuButton: HTMLButtonElement;
@@ -206,7 +206,15 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     item.setAttribute("role", "menuitem");
     item.setAttribute("tabindex", "-1");
 
+    // Store voice data on the element for reliable identification
+    if (voice) {
+      item.dataset.voiceName = voice.name;
+    } else {
+      item.dataset.voiceName = "voice-off";
+    }
+
     // Check if this is a sign-in prompt item
+    const jwtManager = getJwtManagerSync();
     const isAuthenticated = jwtManager.isAuthenticated();
     const isSignInPrompt = !voice && noVoicesAvailable && !isAuthenticated;
     const claims = jwtManager.getClaims();
@@ -254,9 +262,9 @@ export class ClaudeVoiceMenu extends VoiceSelector {
 
     item.appendChild(content);
 
-    // Add space for checkmark
+    // Add checkmark container - positioned as second column in grid
     const checkmarkContainer = document.createElement("div");
-    checkmarkContainer.classList.add("checkmark-container", "text-accent-secondary-100");
+    checkmarkContainer.classList.add("checkmark-container");
     item.appendChild(checkmarkContainer);
 
     item.addEventListener("click", () => this.handleVoiceSelection(voice, item));
@@ -379,20 +387,22 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       iconContainer.innerHTML = selectedVoice ? volumeSvgContent : volumeMutedSvgContent;
     }
 
+    const selectedVoiceName = selectedVoice ? selectedVoice.name : "voice-off";
     const menuItems = this.menuContent.querySelectorAll("[role='menuitem']");
+    
     menuItems.forEach((item) => {
       if (item instanceof HTMLElement) {
-        const itemName = item.querySelector(".text-sm")?.textContent;
-        const isSelected = itemName === (selectedVoice ? selectedVoice.name : getMessage("voiceOff"));
+        const itemVoiceName = item.dataset.voiceName;
+        const isSelected = itemVoiceName === selectedVoiceName;
         
         // Toggle selected state with Claude's styling
         item.classList.toggle("bg-bg-300", isSelected);
         
-        // Update checkmark
+        // Update checkmark with exact Claude native styling
         const checkmarkContainer = item.querySelector(".checkmark-container");
         if (checkmarkContainer) {
           checkmarkContainer.innerHTML = isSelected ? 
-            '<svg width="16" height="16" viewBox="0 0 256 256" class="text-accent-secondary-100 mb-1 mr-1.5" fill="currentColor"><path d="M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z"></path></svg>' : 
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256" class="text-accent-secondary-100 mb-1 mr-1.5"><path d="M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z"></path></svg>' : 
             '';
         }
       }

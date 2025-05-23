@@ -1,10 +1,16 @@
 import { isFirefox } from "../UserAgentModule";
 import { config } from "../ConfigModule";
-import { jwtManager } from "../JwtManager";
+import { getJwtManagerSync } from "../JwtManager";
 import { offscreenManager, OFFSCREEN_DOCUMENT_PATH } from "../offscreen/offscreen_manager";
 import { logger } from "../LoggingModule.js";
 
 const PERMISSIONS_PROMPT_PATH_HTML = 'src/permissions/permissions-prompt.html';
+
+// Get the JWT manager instance at startup
+const jwtManager = getJwtManagerSync();
+
+// Expose instances globally for popup access
+(self as any).jwtManager = jwtManager;
 
 // Helper function to sanitize messages for logging by removing/truncating large data
 function sanitizeMessageForLogs(message: any): any {
@@ -42,9 +48,6 @@ function sanitizeMessageForLogs(message: any): any {
   
   return sanitizedMessage;
 }
-
-// Expose instances globally for popup access
-(self as any).jwtManager = jwtManager;
 
 // Helper function to check auth cookie
 async function checkAuthCookie() {
@@ -345,7 +348,7 @@ async function handleCheckAndRequestMicPermission(originalRequestId: string, ori
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // Sanitize the message for logging
   const sanitizedMessage = sanitizeMessageForLogs(message);
-  logger.debug("[Background] onMessage received:", sanitizedMessage, "from sender:", sender);
+  logger.debug(`[Background] onMessage received ${sanitizedMessage.type} from ${sender.tab?.title || sender.url}`);
 
   // --- START: Microphone Permission Handling ---
   if (message.type === 'CHECK_AND_REQUEST_MICROPHONE_PERMISSION' && message.requestId) {
@@ -417,20 +420,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // --- END: Direct Audio Message Handling ---
   }
   // --- END: Audio Request Debug Logging ---
-  
-  // Log details for the getURL call
-  logger.debug(
-    "[Background] Pre-getURL check. Path type:", 
-    typeof OFFSCREEN_DOCUMENT_PATH,
-    "Path value:", 
-    OFFSCREEN_DOCUMENT_PATH,
-    "Sender URL:",
-    sender.url,
-    "Runtime URL:",
-    chrome.runtime.getURL(OFFSCREEN_DOCUMENT_PATH),
-    "Message:",
-    sanitizedMessage
-  );
 
   // Prioritize messages from the offscreen document (VAD events)
   if (
@@ -624,6 +613,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // New handler for direct auth status requests from content scripts
     try {
       const isAuthenticated = jwtManager.isAuthenticated();
+      logger.debug(`[Background] Auth status: ${isAuthenticated}`);
       sendResponse({ isAuthenticated });
     } catch (error: any) {
       logger.error('Failed to get auth status:', error);

@@ -1,4 +1,4 @@
-import { jwtManager } from './JwtManager';
+import { getJwtManager } from './JwtManager';
 import EventBus from './events/EventBus';
 
 interface ApiRequestOptions extends RequestInit {
@@ -15,6 +15,9 @@ export async function callApi(
   options: ApiRequestOptions = {}
 ): Promise<Response> {
   const headers = new Headers(options.headers);
+
+  // Get the fully initialized JWT manager
+  const jwtManager = await getJwtManager();
 
   // preemptively refresh the token if it's about to expire
   if (jwtManager.isTokenExpired()) {

@@ -8,7 +8,7 @@ import {
   SpeechSynthesisVoiceRemote,
 } from "../tts/SpeechModel";
 import { isFirefox, isSafari } from "../UserAgentModule";
-import { jwtManager } from "../JwtManager";
+import { getJwtManager, getJwtManagerSync } from "../JwtManager";
 import { Chatbot } from "../chatbots/Chatbot";
 
 type Preference = "speed" | "balanced" | "accuracy" | null;
@@ -463,7 +463,7 @@ class UserPreferenceModule {
   public getCachedDiscretionaryMode(): boolean {
     // The cache stores the raw local setting for "discretionaryMode"
     const cachedSetting = this.cache.getCachedValue("discretionaryMode", false) as boolean;
-    const hasEntitlement = jwtManager.hasFeatureEntitlement(FEATURE_CODES.AGENT_MODE); // Sync check
+    const hasEntitlement = getJwtManagerSync().hasFeatureEntitlement(FEATURE_CODES.AGENT_MODE); // Sync check
     return cachedSetting && hasEntitlement;
   }
 
@@ -725,8 +725,9 @@ class UserPreferenceModule {
     return Promise.resolve(true);
   }
 
-  public hasFeatureEntitlement(featureCode: string): Promise<boolean> {
-    return Promise.resolve(jwtManager.hasFeatureEntitlement(featureCode));
+  public async hasFeatureEntitlement(featureCode: string): Promise<boolean> {
+    const jwtManager = await getJwtManager();
+    return jwtManager.hasFeatureEntitlement(featureCode);
   }
 
   public hasAgentModeEntitlement(): Promise<boolean> {
