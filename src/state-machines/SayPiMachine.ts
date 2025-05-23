@@ -1223,7 +1223,12 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         const nickname = userPreferences.getCachedNickname() || chatbot.getName();
         const message = getMessage("assistantIsThinking", nickname);
         if (message) {
-          getPromptOrNull()?.setMessage(message);
+          const promptEditor = getPromptOrNull();
+          if (promptEditor) {
+            promptEditor.setMessage(message);
+          } else {
+            console.warn("[SayPiMachine] [thinkingPrompt] no prompt editor found");
+          }
         }
       },
       writingPrompt: () => {
