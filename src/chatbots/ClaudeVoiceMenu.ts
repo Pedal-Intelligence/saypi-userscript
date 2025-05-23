@@ -358,7 +358,10 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       this.userPreferences.setVoice(voice).then(() => {
         console.log(`Selected voice: ${voice.name}`);
         this.updateSelectedVoice(voice);
-        this.introduceVoice(voice);
+        // only introduce the voice if there are other voices available (one of which is "Voice off")
+        if (this.menuContent.querySelectorAll("[role='menuitem']").length > 2) {
+          this.introduceVoice(voice);
+        }
       });
     } else {
       this.userPreferences.unsetVoice().then(() => {
@@ -410,6 +413,26 @@ export class ClaudeVoiceMenu extends VoiceSelector {
   }
 
   override populateVoices(voices: SpeechSynthesisVoiceRemote[], voiceSelector: HTMLElement): boolean {
+    // Get the currently selected voice before recreating the menu
+    let currentSelectedVoice: SpeechSynthesisVoiceRemote | null = null;
+    
+    // Try to get from the current button if it exists
+    if (this.menuButton && this.menuButton.parentElement === voiceSelector) {
+      const voiceNameElement = this.menuButton.querySelector(".voice-name");
+      if (voiceNameElement) {
+        const currentVoiceName = voiceNameElement.textContent;
+        if (currentVoiceName && currentVoiceName !== getMessage("voiceOff")) {
+          // Find the voice object that matches the current selection
+          currentSelectedVoice = voices.find(voice => voice.name === currentVoiceName) || null;
+        }
+      }
+    }
+    
+    // If we couldn't get it from the button, try to get it from user preferences
+    if (!currentSelectedVoice) {
+      // This will be handled asynchronously below
+    }
+
     // Remove previously created menu elements (if any) to prevent duplicates
     if (this.menuButton && this.menuButton.parentElement === voiceSelector) {
       voiceSelector.removeChild(this.menuButton);
@@ -419,7 +442,7 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     }
 
     // Recreate the menu button and content from scratch
-    this.menuButton = this.createVoiceButton(null);
+    this.menuButton = this.createVoiceButton(currentSelectedVoice);
     voiceSelector.appendChild(this.menuButton);
 
     this.menuContent = this.createVoiceMenu();
@@ -438,6 +461,16 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       this.menuContent.appendChild(menuItem);
     });
 
+    // If we found a selected voice from the button, update the menu items to show selection
+    if (currentSelectedVoice) {
+      this.updateSelectedVoice(currentSelectedVoice);
+    } else {
+      // Fall back to getting the voice from preferences asynchronously
+      this.userPreferences.getVoice(this.chatbot).then((voice) => {
+        this.updateSelectedVoice(voice);
+      });
+    }
+
     return !noVoicesAvailable;
   }
 
@@ -447,10 +480,8 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     speechSynthesis.getVoices(chatbot).then((voices) => {
       this.populateVoices(voices, this.element);
 
-      // Set initial selected voice
-      this.userPreferences.getVoice(chatbot).then((voice) => {
-        this.updateSelectedVoice(voice);
-      });
+      // Note: populateVoices() now handles restoring the selected voice,
+      // so we don't need to call updateSelectedVoice() here anymore
 
       // Close menu when clicking outside
       document.addEventListener("click", (event) => {
