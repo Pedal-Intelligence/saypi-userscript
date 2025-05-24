@@ -126,6 +126,15 @@ export default class OffscreenAudioBridge {
       return false;
     }
     
+    // Only process audio-related messages - ignore VAD messages to prevent conflicts
+    const isAudioMessage = message.type.startsWith("AUDIO_") || message.type.startsWith("OFFSCREEN_AUDIO_");
+    const isPermissionMessage = message.type === "MICROPHONE_PERMISSION_RESPONSE";
+    
+    if (!isAudioMessage && !isPermissionMessage) {
+      // Ignore VAD messages and other non-audio messages - they should go to OffscreenVADClient
+      return false;
+    }
+    
     // Log receipt of the message
     logger.debug(`[OffscreenAudioBridge] Received message: ${message.type}`, {
       origin: message.origin || 'unknown',
@@ -180,6 +189,17 @@ export default class OffscreenAudioBridge {
         logger.error(`[OffscreenAudioBridge] Error from offscreen: ${message.payload.error}`);
         this._emitAudioErrorEvent(responseType, message.payload.error);
       }
+      
+      return false; // No async response
+    } else if (message.type === "MICROPHONE_PERMISSION_RESPONSE") {
+      // Handle microphone permission responses (may be relevant for audio functionality)
+      logger.debug(`[OffscreenAudioBridge] Received permission response: ${message.granted}`);
+      
+      // You could emit this to EventBus if other components need to know about permission status
+      EventBus.trigger("microphonePermission", { 
+        granted: message.granted, 
+        error: message.error 
+      });
       
       return false; // No async response
     }

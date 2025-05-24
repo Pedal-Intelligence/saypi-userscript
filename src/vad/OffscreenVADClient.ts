@@ -59,6 +59,12 @@ export class OffscreenVADClient {
         return;
       }
 
+      // Ignore audio messages - they should be handled by OffscreenAudioBridge
+      if (message.type.startsWith("AUDIO_") || message.type.startsWith("OFFSCREEN_AUDIO_")) {
+        console.debug("[SayPi OffscreenVADClient] Ignoring audio message (should go to OffscreenAudioBridge):", message.type);
+        return;
+      }
+
       switch (message.type) {
         case "VAD_SPEECH_START":
           this.statusIndicator.updateStatus(getMessage('vadStatusListening'), getMessage('vadDetailSpeechDetected'));

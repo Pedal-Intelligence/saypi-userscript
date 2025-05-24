@@ -421,6 +421,25 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   // --- END: Audio Request Debug Logging ---
 
+  // --- START: Offscreen Document Message Routing ---
+  /**
+   * IMPORTANT: Message Routing Architecture
+   * 
+   * This extension has two clients in the content script that handle offscreen communication:
+   * 
+   * 1. OffscreenVADClient (src/vad/OffscreenVADClient.ts):
+   *    - Uses chrome.runtime.connect() with port-based messaging
+   *    - Handles VAD_* and OFFSCREEN_VAD_* messages
+   *    - Receives messages via offscreenManager.forwardMessageToContentScript() -> port.postMessage()
+   * 
+   * 2. OffscreenAudioBridge (src/audio/OffscreenAudioBridge.js):
+   *    - Uses chrome.runtime.onMessage.addListener() for direct messaging
+   *    - Handles AUDIO_* and OFFSCREEN_AUDIO_* messages
+   *    - Receives messages via chrome.tabs.sendMessage()
+   * 
+   * The routing logic below prevents message cross-contamination by routing messages
+   * based on their type prefix to the appropriate client communication channel.
+   */
   // Prioritize messages from the offscreen document (VAD events)
   if (
     typeof OFFSCREEN_DOCUMENT_PATH === 'string' &&
@@ -434,13 +453,43 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       return;
     }
     
-    // Forward events to content script
+    // Route messages based on type to the appropriate client
     if (message.targetTabId !== undefined) {
       logger.debug("[Background] Received event from offscreen document:", sanitizedMessage);
+      
+      // Route VAD messages via port to OffscreenVADClient
+      if (message.type.startsWith("VAD_") || message.type.startsWith("OFFSCREEN_VAD_")) {
+        logger.debug(`[Background] Routing VAD message via port: ${message.type}`);
+        offscreenManager.forwardMessageToContentScript(message.targetTabId, message);
+        return; // Stop processing - message handled via port
+      }
+      
+      // Route audio messages via chrome.tabs.sendMessage to OffscreenAudioBridge
+      if (message.type.startsWith("AUDIO_") || message.type.startsWith("OFFSCREEN_AUDIO_")) {
+        logger.debug(`[Background] Routing audio message via tabs.sendMessage: ${message.type}`);
+        try {
+          chrome.tabs.sendMessage(message.targetTabId, message, (response) => {
+            const lastError = chrome.runtime.lastError;
+            if (lastError) {
+              logger.error(`[Background] Error forwarding audio message: ${lastError.message}`);
+            } else {
+              logger.debug(`[Background] Successfully forwarded audio message to tab ${message.targetTabId}`);
+            }
+          });
+        } catch (error: unknown) {
+          const errorMessage = error instanceof Error ? error.message : String(error);
+          logger.error(`[Background] Exception forwarding audio message: ${errorMessage}`);
+        }
+        return; // Stop processing - message handled via tabs.sendMessage
+      }
+      
+      // For other message types, use the default port routing
+      logger.debug(`[Background] Routing other message via port: ${message.type}`);
       offscreenManager.forwardMessageToContentScript(message.targetTabId, message);
       return; // Stop processing if handled as an offscreen event
     }
   }
+  // --- END: Offscreen Document Message Routing ---
 
   // Handle error reports from any part of the extension using the logger
   if (message.type === "LOG_ERROR_REPORT" && message.origin === "logger-reportError") {
@@ -620,30 +669,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       sendResponse({ isAuthenticated: false });
     }
     return false; // Synchronous response
-  }
-  
-  // Handle responses from offscreen document back to content script
-  if (message.origin === "offscreen-document" && message.targetTabId && message.type) {
-    logger.debug(`[Background] Routing offscreen response back to tab ${message.targetTabId}: ${message.type}`);
-    
-    // Use chrome.tabs.sendMessage to get the message to the content script in the specified tab
-    try {
-      chrome.tabs.sendMessage(message.targetTabId, message, (response) => {
-        const lastError = chrome.runtime.lastError;
-        if (lastError) {
-          logger.error(`[Background] Error forwarding offscreen response: ${lastError.message}`);
-        } else {
-          logger.debug(`[Background] Successfully forwarded offscreen response to tab ${message.targetTabId}`);
-        }
-      });
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      logger.error(`[Background] Exception forwarding offscreen response: ${errorMessage}`);
-    }
-    
-    // Acknowledge to the sender (offscreen document)
-    sendResponse({ status: "forwarded_to_tab" });
-    return true; // Tell Chrome we'll respond asynchronously
   }
   
   // Return true if we're handling the response asynchronously for other message types
