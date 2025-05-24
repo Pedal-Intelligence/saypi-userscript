@@ -146,30 +146,42 @@ export default class OffscreenAudioBridge {
       const eventType = message.type.replace("AUDIO_", "").toLowerCase();
       logger.debug(`[OffscreenAudioBridge] Received audio event: ${eventType}`);
       
-      // Map to event bus events
+      // Map offscreen audio events to EventBus events that mirror the audio element events
+      // This ensures consistency with registerAudioPlaybackEvents in AudioModule
       let eventBusEvent = null;
+      let eventDetail = message.detail || {};
       
       switch (eventType) {
+        // Events that include source information (matching sourcedEvents in registerAudioPlaybackEvents)
+        case "loadstart":
         case "play":
         case "playing":
-          eventBusEvent = "play";
-          break;
-        case "pause":
-          eventBusEvent = "pause";
-          break;
-        case "ended":
-          eventBusEvent = "ended";
-          break;
         case "error":
-          eventBusEvent = "error";
+          eventBusEvent = `audio:offscreen:${eventType}`;
+          // Ensure source is included in detail
+          if (!eventDetail.source && message.source) {
+            eventDetail.source = message.source;
+          }
           break;
-        // Add other events as needed
+          
+        // Standard events (matching events array in registerAudioPlaybackEvents)  
+        case "loadedmetadata":
+        case "canplaythrough":
+        case "pause":
+        case "ended":
+        case "seeked":
+        case "emptied":
+          eventBusEvent = `audio:offscreen:${eventType}`;
+          break;
+          
+        // Handle other audio events with a generic pattern
         default:
-          eventBusEvent = eventType;
+          eventBusEvent = `audio:offscreen:${eventType}`;
       }
       
       if (eventBusEvent) {
-        EventBus.trigger(eventBusEvent, message.detail);
+        logger.debug(`[OffscreenAudioBridge] Emitting EventBus event: ${eventBusEvent}`);
+        EventBus.emit(eventBusEvent, eventDetail);
       }
       
       return false; // No async response
@@ -196,7 +208,7 @@ export default class OffscreenAudioBridge {
       logger.debug(`[OffscreenAudioBridge] Received permission response: ${message.granted}`);
       
       // You could emit this to EventBus if other components need to know about permission status
-      EventBus.trigger("microphonePermission", { 
+      EventBus.emit("microphonePermission", { 
         granted: message.granted, 
         error: message.error 
       });
@@ -347,8 +359,8 @@ export default class OffscreenAudioBridge {
     
     logger.error(`[OffscreenAudioBridge] ${errorDetail.message}`);
     
-    // Trigger an error event that UI components can listen for
-    EventBus.trigger("error", errorDetail);
+    // Emit an error event that UI components can listen for
+    EventBus.emit("error", errorDetail);
   }
 
   /**

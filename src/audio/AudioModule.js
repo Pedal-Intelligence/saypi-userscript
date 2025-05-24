@@ -132,6 +132,9 @@ export default class AudioModule {
       
       // Initialize voice converter
       this.initializeVoiceConverter();
+
+      // Register EventBus listeners for offscreen audio events and forward them to audio actors
+      this.registerOffscreenAudioEvents(this.audioOutputActor);
     } catch (error) {
       logger.error("[AudioModule] Error during start:", error);
       // Fallback to in-page audio if there was an error with offscreen initialization
@@ -148,6 +151,10 @@ export default class AudioModule {
       this.voiceConverter.start();
       this.registerAudioCommands(this.audioInputActor, this.audioOutputActor, this.voiceConverter);
       this.initializeVoiceConverter();
+      
+      // Register EventBus listeners for offscreen audio events even in fallback mode
+      // (in case we switch back to offscreen audio later)
+      this.registerOffscreenAudioEvents(this.audioOutputActor);
     }
   }
 
@@ -732,5 +739,54 @@ export default class AudioModule {
         });
       }
     });
+  }
+
+  /**
+   * Register EventBus listeners for offscreen audio events and forward them to the audio output actor
+   * This mirrors the behavior of registerAudioPlaybackEvents but for events from offscreen audio
+   * Only the main audio output actor needs to respond to offscreen events - voice converter and
+   * retry machines are designed specifically for in-page audio elements.
+   * 
+   * @param {some interpreted state machine} outputActor - The audio output actor
+   */
+  registerOffscreenAudioEvents(outputActor) {
+    logger.debug("[AudioModule] Registering offscreen audio event listeners for output actor only");
+    
+    // Events that don't include source information (matching events array in registerAudioPlaybackEvents)
+    const standardEvents = [
+      "loadedmetadata",
+      "canplaythrough", 
+      "pause",
+      "ended",
+      "seeked",
+      "emptied"
+    ];
+    
+    // Events that include source information (matching sourcedEvents in registerAudioPlaybackEvents)
+    const sourcedEvents = ["loadstart", "play", "error"];
+    
+    // Register listeners for standard events
+    standardEvents.forEach((event) => {
+      EventBus.on(`audio:offscreen:${event}`, (detail) => {
+        logger.debug(`[AudioModule] Forwarding offscreen event to audio output actor: ${event}`);
+        outputActor.send(event);
+      }, this);
+    });
+    
+    // Register listeners for sourced events  
+    sourcedEvents.forEach((event) => {
+      EventBus.on(`audio:offscreen:${event}`, (detail) => {
+        logger.debug(`[AudioModule] Forwarding offscreen sourced event to audio output actor: ${event}`, detail);
+        const eventDetail = { source: detail?.source || 'offscreen' };
+        outputActor.send(event, eventDetail);
+      }, this);
+    });
+    
+    // Handle special case for 'playing' event which maps to 'play' 
+    EventBus.on("audio:offscreen:playing", (detail) => {
+      logger.debug("[AudioModule] Forwarding offscreen 'playing' event as 'play' to audio output actor", detail);
+      const eventDetail = { source: detail?.source || 'offscreen' };
+      outputActor.send("play", eventDetail);
+    }, this);
   }
 }
