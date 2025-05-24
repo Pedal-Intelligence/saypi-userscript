@@ -1266,7 +1266,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       clearPrompt: (context: SayPiContext) => {
         const prompt = getPromptOrNull();
         if (prompt) {
-          prompt.clear();
+          //prompt.clear(); // has side effects
           prompt.setMessage(context.defaultPlaceholderText);
         }
       },
@@ -1400,6 +1400,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         assign({ isMaintainanceMessage: () => false });
       },
       pauseAudio: () => {
+        console.debug("[SayPiMachine] [pauseAudio] Pausing audio for user interruption");
         EventBus.emit("audio:output:pause");
       },
       resumeAudio: () => {

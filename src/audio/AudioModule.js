@@ -490,18 +490,18 @@ export default class AudioModule {
       }
     });
     EventBus.on("audio:output:pause", async (e) => {
+      console.debug("[AudioModule] [audio:output:pause] Pausing audio");
+      // pause both offscreen and onscreen audio
       if (this.useOffscreenAudio) {
         await this.offscreenBridge.pauseAudio();
-      } else {
-        this.audioElement.pause();
       }
+      this.audioElement.pause();
     });
     EventBus.on("audio:output:resume", async (e) => {
       if (this.useOffscreenAudio) {
         await this.offscreenBridge.resumeAudio();
-      } else {
-        this.audioElement.play();
       }
+      this.audioElement.play();
     });
 
     EventBus.on("saypi:tts:replaying", (e) => {
