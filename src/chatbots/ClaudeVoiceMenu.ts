@@ -30,6 +30,9 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       this.element.id = this.getId();
     }
 
+    // Clean up any existing voice selector elements before initializing
+    this.cleanupExistingElements(this.element);
+
     this.initializeVoiceSelector(chatbot);
   }
 
@@ -372,6 +375,57 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     this.toggleMenu();
   }
 
+  private cleanupExistingElements(voiceSelector: HTMLElement): void {
+    // Remove any existing buttons and menus to prevent duplicates
+    
+    // 1. Clean up our tracked elements if they exist
+    if (this.menuButton) {
+      if (this.menuButton.parentElement) {
+        this.menuButton.parentElement.removeChild(this.menuButton);
+      }
+      this.menuButton = document.createElement("button"); // Reset to placeholder
+    }
+    
+    if (this.menuContent) {
+      if (this.menuContent.parentElement) {
+        this.menuContent.parentElement.removeChild(this.menuContent);
+      }
+      this.menuContent = document.createElement("div"); // Reset to placeholder
+    }
+    
+    // 2. Find and remove any orphaned voice selector buttons/menus by class/attribute
+    const existingButtons = voiceSelector.querySelectorAll('button[data-voice-active]');
+    existingButtons.forEach(button => {
+      if (button.parentElement) {
+        button.parentElement.removeChild(button);
+      }
+    });
+    
+    const existingMenus = voiceSelector.querySelectorAll('.voice-menu-content');
+    existingMenus.forEach(menu => {
+      if (menu.parentElement) {
+        menu.parentElement.removeChild(menu);
+      }
+    });
+    
+    // 3. Additional safety check - remove any elements that look like voice selector components
+    const possibleDuplicateButtons = voiceSelector.querySelectorAll('button[aria-haspopup="true"]');
+    possibleDuplicateButtons.forEach(button => {
+      // Check if this looks like our voice button by checking for voice-related content
+      const hasVoiceIcon = button.querySelector('.voiced-by');
+      const hasVoiceName = button.querySelector('.voice-name');
+      if (hasVoiceIcon || hasVoiceName) {
+        if (button.parentElement) {
+          button.parentElement.removeChild(button);
+        }
+      }
+    });
+    
+    // 4. Reset initialization flags to allow fresh initialization
+    delete voiceSelector.dataset.voiceSelectorInitialized;
+    delete voiceSelector.dataset.clickListenerAdded;
+  }
+
   private updateSelectedVoice(
     selectedVoice: SpeechSynthesisVoiceRemote | null
   ): void {
@@ -430,13 +484,8 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       // This will be handled asynchronously below
     }
 
-    // Remove previously created menu elements (if any) to prevent duplicates
-    if (this.menuButton && this.menuButton.parentElement === voiceSelector) {
-      voiceSelector.removeChild(this.menuButton);
-    }
-    if (this.menuContent && this.menuContent.parentElement === voiceSelector) {
-      voiceSelector.removeChild(this.menuContent);
-    }
+    // Comprehensive cleanup to prevent duplicates
+    this.cleanupExistingElements(voiceSelector);
 
     // Recreate the menu button and content from scratch
     this.menuButton = this.createVoiceButton(currentSelectedVoice);
@@ -472,6 +521,12 @@ export class ClaudeVoiceMenu extends VoiceSelector {
   }
 
   private initializeVoiceSelector(chatbot: Chatbot): void {
+    // Prevent double initialization
+    if (this.element.dataset.voiceSelectorInitialized === "true") {
+      console.log("[status] Voice selector already initialized, skipping");
+      return;
+    }
+
     const speechSynthesis = SpeechSynthesisModule.getInstance();
     console.log("[status] Initializing voice selector");
     speechSynthesis.getVoices(chatbot).then((voices) => {
@@ -480,13 +535,19 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       // Note: populateVoices() now handles restoring the selected voice,
       // so we don't need to call updateSelectedVoice() here anymore
 
-      // Close menu when clicking outside
-      document.addEventListener("click", (event) => {
-        if (!this.element.contains(event.target as Node)) {
-          this.menuContent.style.display = "none";
-          this.menuButton.setAttribute("aria-expanded", "false");
-        }
-      });
+      // Close menu when clicking outside - only add if not already added
+      if (!this.element.dataset.clickListenerAdded) {
+        document.addEventListener("click", (event) => {
+          if (!this.element.contains(event.target as Node)) {
+            this.menuContent.style.display = "none";
+            this.menuButton.setAttribute("aria-expanded", "false");
+          }
+        });
+        this.element.dataset.clickListenerAdded = "true";
+      }
+
+      // Mark as initialized
+      this.element.dataset.voiceSelectorInitialized = "true";
     });
     console.log("[status] Voice selector initialized");
   }
