@@ -152,6 +152,9 @@ export default class AudioModule {
       this.registerAudioCommands(this.audioInputActor, this.audioOutputActor, this.voiceConverter);
       this.initializeVoiceConverter();
       
+      // Ensure audio element swapping is monitored in fallback mode
+      this.listenForAudioElementSwap();
+      
       // Register EventBus listeners for offscreen audio events even in fallback mode
       // (in case we switch back to offscreen audio later)
       this.registerOffscreenAudioEvents(this.audioOutputActor);
