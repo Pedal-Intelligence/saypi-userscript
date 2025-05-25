@@ -7,7 +7,7 @@ import { submitErrorHandler } from "./SubmitErrorHandler.ts";
 import getMessage from "./i18n.ts";
 import { DOMObserver } from "./chatbots/bootstrap.ts";
 import EventBus from "./events/EventBus.js";
-import { jwtManager } from "./JwtManager.ts";
+import { getJwtManager } from "./JwtManager.ts";
 import telemetryModule from "./TelemetryModule.ts";
 
 import "./styles/common.scss";
@@ -47,10 +47,12 @@ import SlowResponseHandler from "./SlowResponseHandler.ts";
         console.log("Received auth status change:", message.isAuthenticated);
         
         // Refresh token to ensure we have the latest from storage
-        jwtManager.loadFromStorage().then(() => {
-          // Optionally, you can add more logic here if needed
-          console.log("JWT manager updated with latest token");
-          EventBus.emit("saypi:auth:status-changed", message.isAuthenticated);
+        getJwtManager().then(jwtManager => {
+          return jwtManager.loadFromStorage().then(() => {
+            // Optionally, you can add more logic here if needed
+            console.log("JWT manager updated with latest token");
+            EventBus.emit("saypi:auth:status-changed", message.isAuthenticated);
+          });
         });
       }
       // Make sure to return false as we're not sending a response asynchronously
@@ -88,8 +90,14 @@ import SlowResponseHandler from "./SlowResponseHandler.ts";
   addUserAgentFlags();
   await ChatbotService.addChatbotFlags();
   EventModule.init();
-  new DOMObserver(chatbot).observeDOM();
+  
+  // Initialize JWT manager
+  getJwtManager().then(jwtManager => {
+    jwtManager.initialize();
+  });
+  
   setupAuthListener(); // Setup the auth listener
+  new DOMObserver(chatbot).observeDOM();
 
   function addVisualisations(container) {
     // Create a containing div

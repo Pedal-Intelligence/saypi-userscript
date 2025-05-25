@@ -12,6 +12,7 @@ import { SlowResponseHandlerAdapter } from "./SlowResponseHandlerAdapter.js";
 import { CacheBuster } from "../CacheBuster.ts";
 import { UserPreferenceModule } from "../prefs/PreferenceModule.ts";
 import { ChatbotService } from "../chatbots/ChatbotService.ts";
+import OffscreenAudioBridge from "./OffscreenAudioBridge.js";
 
 export default class AudioModule {
   constructor() {
@@ -23,6 +24,10 @@ export default class AudioModule {
     this.audioElement = null;
     this.mutationObserver = null;
     this.swapObserver = null;
+    
+    // Initialize offscreen bridge
+    this.offscreenBridge = OffscreenAudioBridge.getInstance();
+    this.useOffscreenAudio = false; // Will be set in start() based on bridge.isSupported()
 
     this.audioOutputActor = interpret(audioOutputMachine);
     this.audioOutputActor.onTransition((state) => {
@@ -92,10 +97,78 @@ export default class AudioModule {
     return AudioModule.instance;
   }
 
-  start() {
+  async start() {
+    try {
+      // Initialize offscreen bridge and check if supported
+      this.useOffscreenAudio = await this.offscreenBridge.isSupported();
+      
+      logger.debug(`[AudioModule] Using offscreen audio: ${this.useOffscreenAudio}`);
+      
+      // even if we're not using offscreen audio, set up the in-page audio element
+      this.initialiseOnscreenAudio();
+      
+      this.listenForAudioElementSwap();
+
+      if (this.useOffscreenAudio)  {
+        // If we're using offscreen audio, make sure the bridge is initialized
+        await this.offscreenBridge.initialize();
+      }
+      
+      // Start all state machines
+      this.audioOutputActor.start();
+      this.audioInputActor.start();
+      this.voiceConverter.start();
+      if (isSafari()) {
+        this.audioRetryActor.start();
+      }
+      
+      // Register commands that will direct audio events to the appropriate target
+      // (offscreen or in-page)
+      this.registerAudioCommands(
+        this.audioInputActor,
+        this.audioOutputActor,
+        this.voiceConverter
+      );
+      
+      // Initialize voice converter
+      this.initializeVoiceConverter();
+
+      // Register EventBus listeners for offscreen audio events and forward them to audio actors
+      this.registerOffscreenAudioEvents(this.audioOutputActor);
+    } catch (error) {
+      logger.error("[AudioModule] Error during start:", error);
+      // Fallback to in-page audio if there was an error with offscreen initialization
+      this.useOffscreenAudio = false;
+      // Try to set up in-page audio as a fallback
+      this.findAndDecorateAudioElement();
+      this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
+      this.registerAudioPlaybackEvents(this.audioElement, this.voiceConverter);
+      this.registerLifecycleDebug();
+      
+      // Start state machines and register commands
+      this.audioOutputActor.start();
+      this.audioInputActor.start();
+      this.voiceConverter.start();
+      this.registerAudioCommands(this.audioInputActor, this.audioOutputActor, this.voiceConverter);
+      this.initializeVoiceConverter();
+      
+      // Ensure audio element swapping is monitored in fallback mode
+      this.listenForAudioElementSwap();
+      
+      // Register EventBus listeners for offscreen audio events even in fallback mode
+      // (in case we switch back to offscreen audio later)
+      this.registerOffscreenAudioEvents(this.audioOutputActor);
+    }
+  }
+
+  /**
+   * Initialize the in-page audio element
+   * The in-page audio element is used for native audio playback, or when offscreen audio is not supported.
+   */
+  initialiseOnscreenAudio() {
     this.findAndDecorateAudioElement(); // need to ensure an audio element exists before registering event listeners
+
     // audio output (Pi)
-    this.audioOutputActor.start();
     this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
     // convert voice for Pi's missing voices - since 2024-09
     this.registerAudioPlaybackEvents(this.audioElement, this.voiceConverter);
@@ -105,18 +178,7 @@ export default class AudioModule {
     this.registerAudioErrorEvents(this.audioElement, slowResponseAdapter);
     this.registerLifecycleDebug();
 
-    // audio input (user)
-    this.audioInputActor.start();
-    this.registerAudioCommands(
-      this.audioInputActor,
-      this.audioOutputActor,
-      this.voiceConverter
-    );
-
-    // voice converter
-    this.voiceConverter.start();
-    this.initializeVoiceConverter();
-
+    // For Safari, register additional error handlers
     if (isSafari()) {
       // audio retry
       console.log("Using audio retry handler for Safari.");
@@ -125,8 +187,6 @@ export default class AudioModule {
       this.registerSourceChangeEvents(this.audioElement, this.audioRetryActor);
       this.registerAudioErrorEvents(this.audioElement, this.audioRetryActor);
     }
-
-    this.listenForAudioElementSwap();
   }
 
   stop() {}
@@ -340,21 +400,40 @@ export default class AudioModule {
     // audio output (playback) commands
     EventBus.on(
       "audio:load",
-      (detail) => {
-        const audio = this.findAudioElement(document) || new Audio();
-        this.loadAudio(audio, detail.url);
+      async (detail) => {
+        console.log("audio:load", detail, this.useOffscreenAudio ? "offscreen" : "in-page");
+        if (this.useOffscreenAudio) {
+          // Use offscreen bridge if available - now use loadAudio instead of playAudio
+          await this.offscreenBridge.loadAudio(detail.url, true);
+        } else {
+          // Fallback to in-page audio
+          const audio = this.findAudioElement(document) || new Audio();
+          this.loadAudio(audio, detail.url);
+        }
       },
       this
     );
-    EventBus.on("audio:reload", (reloadAudioRequest) => {
-      const audio = this.findAudioElement(document) || new Audio();
-      if (reloadAudioRequest?.bypassCache) {
-        const url = audio.src;
-        audio.src = CacheBuster.addCacheBuster(url);
-      }
-      audio.load();
-      if (reloadAudioRequest?.playImmediately) {
-        audio.play();
+    EventBus.on("audio:reload", async (reloadAudioRequest) => {
+      if (this.useOffscreenAudio) {
+        // For offscreen, we'll need to stop and play with a new URL
+        const url = reloadAudioRequest?.bypassCache 
+          ? CacheBuster.addCacheBuster(this.lastAudioUrl || "")
+          : this.lastAudioUrl;
+          
+        if (url) {
+          await this.offscreenBridge.loadAudio(url, reloadAudioRequest?.playImmediately !== false);
+        }
+      } else {
+        // For in-page audio
+        const audio = this.findAudioElement(document) || new Audio();
+        if (reloadAudioRequest?.bypassCache) {
+          const url = audio.src;
+          audio.src = CacheBuster.addCacheBuster(url);
+        }
+        audio.load();
+        if (reloadAudioRequest?.playImmediately) {
+          audio.play();
+        }
       }
     });
   }
@@ -406,25 +485,32 @@ export default class AudioModule {
       console.debug("Skipping next audio");
       outputActor.send("skipNext");
     });
-    EventBus.on("audio:skipCurrent", (e) => {
-      // Pause the audio
-      this.audioElement.pause();
-
-      // Skip to the end to simulate the completion of the audio, preventing it from being resumed
-      if (
-        Number.isFinite(this.audioElement.duration) &&
-        !isNaN(this.audioElement.duration)
-      ) {
-        this.audioElement.currentTime = this.audioElement.duration;
+    EventBus.on("audio:skipCurrent", async (e) => {
+      // pause both offscreen and onscreen audio
+      this.stopOnscreenAudio();
+      if (this.useOffscreenAudio) {
+        await this.offscreenBridge.stopAudio();
       }
     });
-    EventBus.on("audio:output:play", (e) => {
-      this.audioElement.play();
+    EventBus.on("audio:output:play", async (e) => {
+      if (this.useOffscreenAudio) {
+        await this.offscreenBridge.resumeAudio();
+      } else {
+        this.audioElement.play();
+      }
     });
-    EventBus.on("audio:output:pause", (e) => {
+    EventBus.on("audio:output:pause", async (e) => {
+      console.debug("[AudioModule] [audio:output:pause] Pausing audio");
+      // pause both offscreen and onscreen audio
+      if (this.useOffscreenAudio) {
+        await this.offscreenBridge.pauseAudio();
+      }
       this.audioElement.pause();
     });
-    EventBus.on("audio:output:resume", (e) => {
+    EventBus.on("audio:output:resume", async (e) => {
+      if (this.useOffscreenAudio) {
+        await this.offscreenBridge.resumeAudio();
+      }
       this.audioElement.play();
     });
 
@@ -432,6 +518,16 @@ export default class AudioModule {
       // notify the audio output machine that the next audio is a replay
       outputActor.send("replaying");
     });
+  }
+
+  stopOnscreenAudio() {
+    this.audioElement.pause();
+
+    // Skip to the end to simulate the completion of the audio, preventing it from being resumed
+    if (Number.isFinite(this.audioElement.duration) &&
+      !isNaN(this.audioElement.duration)) {
+      this.audioElement.currentTime = this.audioElement.duration;
+    }
   }
 
   /**
@@ -442,8 +538,18 @@ export default class AudioModule {
    * raise a "audio:load" event with the URL of the audio file to load.
    * @param {string} url
    */
-  loadAudio(audioElement, url, play = true) {
+  async loadAudio(audioElement, url, play = true) {
     if (url) {
+      // Store the last URL for potential cache busting on reload
+      this.lastAudioUrl = url;
+      
+      if (this.useOffscreenAudio) {
+        // Use offscreen bridge - now with loadAudio instead of playAudio
+        await this.offscreenBridge.loadAudio(url, play);
+        return;
+      }
+      
+      // Fallback to in-page audio
       audioElement.src = url;
       if (play) {
         audioElement
@@ -478,6 +584,11 @@ export default class AudioModule {
    * This function is only informational, it does not handle any errors.
    */
   registerLifecycleDebug() {
+    // Only register if we're not using offscreen audio
+    if (this.useOffscreenAudio || !this.audioElement) {
+      return;
+    }
+    
     let starttime;
     this.audioElement.onerror = (event) => {
       console.error(
@@ -601,6 +712,11 @@ export default class AudioModule {
    * @param {SlowResponseHandlerAdapter | InterpretedActor} actor
    */
   registerAudioErrorEvents(audio, actor) {
+    // Only register if we're not using offscreen audio
+    if (this.useOffscreenAudio || !audio) {
+      return;
+    }
+    
     // Handle explicit errors
     audio.addEventListener("error", (event) => {
       actor.send("error", { 
@@ -626,5 +742,54 @@ export default class AudioModule {
         });
       }
     });
+  }
+
+  /**
+   * Register EventBus listeners for offscreen audio events and forward them to the audio output actor
+   * This mirrors the behavior of registerAudioPlaybackEvents but for events from offscreen audio
+   * Only the main audio output actor needs to respond to offscreen events - voice converter and
+   * retry machines are designed specifically for in-page audio elements.
+   * 
+   * @param {some interpreted state machine} outputActor - The audio output actor
+   */
+  registerOffscreenAudioEvents(outputActor) {
+    logger.debug("[AudioModule] Registering offscreen audio event listeners for output actor only");
+    
+    // Events that don't include source information (matching events array in registerAudioPlaybackEvents)
+    const standardEvents = [
+      "loadedmetadata",
+      "canplaythrough", 
+      "pause",
+      "ended",
+      "seeked",
+      "emptied"
+    ];
+    
+    // Events that include source information (matching sourcedEvents in registerAudioPlaybackEvents)
+    const sourcedEvents = ["loadstart", "play", "error"];
+    
+    // Register listeners for standard events
+    standardEvents.forEach((event) => {
+      EventBus.on(`audio:offscreen:${event}`, (detail) => {
+        logger.debug(`[AudioModule] Forwarding offscreen event to audio output actor: ${event}`);
+        outputActor.send(event);
+      }, this);
+    });
+    
+    // Register listeners for sourced events  
+    sourcedEvents.forEach((event) => {
+      EventBus.on(`audio:offscreen:${event}`, (detail) => {
+        logger.debug(`[AudioModule] Forwarding offscreen sourced event to audio output actor: ${event}`, detail);
+        const eventDetail = { source: detail?.source || 'offscreen' };
+        outputActor.send(event, eventDetail);
+      }, this);
+    });
+    
+    // Handle special case for 'playing' event which maps to 'play' 
+    EventBus.on("audio:offscreen:playing", (detail) => {
+      logger.debug("[AudioModule] Forwarding offscreen 'playing' event as 'play' to audio output actor", detail);
+      const eventDetail = { source: detail?.source || 'offscreen' };
+      outputActor.send("play", eventDetail);
+    }, this);
   }
 }

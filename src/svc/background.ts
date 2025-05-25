@@ -1,13 +1,53 @@
 import { isFirefox } from "../UserAgentModule";
 import { config } from "../ConfigModule";
-import { jwtManager } from "../JwtManager";
+import { getJwtManagerSync } from "../JwtManager";
 import { offscreenManager, OFFSCREEN_DOCUMENT_PATH } from "../offscreen/offscreen_manager";
 import { logger } from "../LoggingModule.js";
 
 const PERMISSIONS_PROMPT_PATH_HTML = 'src/permissions/permissions-prompt.html';
 
+// Get the JWT manager instance at startup
+const jwtManager = getJwtManagerSync();
+
 // Expose instances globally for popup access
 (self as any).jwtManager = jwtManager;
+
+// Helper function to sanitize messages for logging by removing/truncating large data
+function sanitizeMessageForLogs(message: any): any {
+  if (!message || typeof message !== 'object') {
+    return message;
+  }
+  
+  // Create a sanitized copy
+  const sanitizedMessage = { ...message };
+  
+  // Specifically handle audio data which is typically very large
+  if (sanitizedMessage.audioData && Array.isArray(sanitizedMessage.audioData)) {
+    sanitizedMessage.audioData = `[Array(${sanitizedMessage.audioData.length}) omitted from logs]`;
+  }
+  
+  // Handle any other large arrays
+  for (const key in sanitizedMessage) {
+    if (
+      sanitizedMessage[key] && 
+      Array.isArray(sanitizedMessage[key]) && 
+      sanitizedMessage[key].length > 100
+    ) {
+      sanitizedMessage[key] = `[Array(${sanitizedMessage[key].length}) omitted from logs]`;
+    }
+    
+    // Handle nested objects (but avoid circular references)
+    if (
+      sanitizedMessage[key] && 
+      typeof sanitizedMessage[key] === 'object' && 
+      !Array.isArray(sanitizedMessage[key])
+    ) {
+      sanitizedMessage[key] = sanitizeMessageForLogs(sanitizedMessage[key]);
+    }
+  }
+  
+  return sanitizedMessage;
+}
 
 // Helper function to check auth cookie
 async function checkAuthCookie() {
@@ -194,11 +234,13 @@ setInterval(pollAuthCookie, pollingInterval);
 
 // Handle VAD communication via Offscreen Document
 chrome.runtime.onConnect.addListener((port) => {
-  // Handle connections from content scripts for VAD
-  if (port.name === "vad-content-script-connection") {
+  // Handle connections from content scripts for VAD and audio
+  if (port.name === "vad-content-script-connection" || port.name === "media-content-script-connection") {
+    logger.debug(`[Background] Port connection established: ${port.name} from tab ${port.sender?.tab?.id}`);
     offscreenManager.registerContentScriptConnection(port);
+  } else {
+    logger.debug(`[Background] Unhandled port connection type: ${port.name}`);
   }
-  // Potentially other onConnect handlers could go here or be merged if names conflict
 });
 
 function replyToRequester(
@@ -304,7 +346,9 @@ async function handleCheckAndRequestMicPermission(originalRequestId: string, ori
 
 // Handle popup opening AND messages from Offscreen Document AND Error Reports AND Mic Permissions
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  logger.debug("[Background] onMessage received:", message, "from sender:", sender);
+  // Sanitize the message for logging
+  const sanitizedMessage = sanitizeMessageForLogs(message);
+  logger.debug(`[Background] onMessage received ${sanitizedMessage.type} from ${sender.tab?.title || sender.url}`);
 
   // --- START: Microphone Permission Handling ---
   if (message.type === 'CHECK_AND_REQUEST_MICROPHONE_PERMISSION' && message.requestId) {
@@ -323,31 +367,129 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   // --- END: Microphone Permission Handling ---
 
-  // Log details for the getURL call
-  logger.debug(
-    "[Background] Pre-getURL check. Path type:", 
-    typeof OFFSCREEN_DOCUMENT_PATH,
-    "Path value:", 
-    OFFSCREEN_DOCUMENT_PATH,
-    "Sender URL:",
-    sender.url,
-    "Runtime URL:",
-    chrome.runtime.getURL(OFFSCREEN_DOCUMENT_PATH),
-    "Message:",
-    message
-  );
+  // --- START: Offscreen API Support Check ---
+  if (message.type === 'CHECK_OFFSCREEN_SUPPORT') {
+    try {
+      // Check if chrome.offscreen is available
+      const isOffscreenSupported = typeof chrome.offscreen !== 'undefined';
+      logger.debug(`[Background] Checking offscreen support: ${isOffscreenSupported}`);
+      
+      // Send the result back to the content script
+      sendResponse({ 
+        supported: isOffscreenSupported,
+        hasHasDocument: typeof chrome.offscreen?.hasDocument === 'function'
+      });
+    } catch (error: any) {
+      logger.error("[Background] Error checking offscreen support:", error);
+      sendResponse({ supported: false, error: error.message });
+    }
+    return true; // Indicate that we're handling the response asynchronously
+  }
+  // --- END: Offscreen API Support Check ---
 
+  // --- START: Audio Request Debug Logging ---
+  if (message.type === "AUDIO_PLAY_REQUEST" || 
+      (typeof message.type === "string" && message.type.includes("AUDIO_"))) {
+    logger.debug(`[Background] 🔊 Received audio message: ${message.type}`, {
+      url: message.url,
+      sender: sender.tab ? `Tab ${sender.tab.id}` : "Extension",
+      timestamp: Date.now()
+    });
+    
+    // --- START: Direct Audio Message Handling ---
+    // If this is a direct message from the content script (not from offscreen)
+    if (sender.tab && message.source === "content-script") {
+      logger.debug(`[Background] Forwarding direct audio message to offscreen document: ${message.type}`);
+      
+      // Forward the message to the offscreen document
+      offscreenManager.sendMessageToOffscreenDocument({
+        ...message,
+        sourceTabId: sender.tab.id,  // Ensure sourceTabId is explicit
+        tabId: sender.tab.id         // Also set tabId for compatibility
+      }, sender.tab.id);
+      
+      // Acknowledge receipt of the message
+      sendResponse({ 
+        status: "audio_message_forwarded", 
+        messageId: message.messageId,
+        timestamp: Date.now()
+      });
+      
+      return true; // We've handled this message
+    }
+    // --- END: Direct Audio Message Handling ---
+  }
+  // --- END: Audio Request Debug Logging ---
+
+  // --- START: Offscreen Document Message Routing ---
+  /**
+   * IMPORTANT: Message Routing Architecture
+   * 
+   * This extension has two clients in the content script that handle offscreen communication:
+   * 
+   * 1. OffscreenVADClient (src/vad/OffscreenVADClient.ts):
+   *    - Uses chrome.runtime.connect() with port-based messaging
+   *    - Handles VAD_* and OFFSCREEN_VAD_* messages
+   *    - Receives messages via offscreenManager.forwardMessageToContentScript() -> port.postMessage()
+   * 
+   * 2. OffscreenAudioBridge (src/audio/OffscreenAudioBridge.js):
+   *    - Uses chrome.runtime.onMessage.addListener() for direct messaging
+   *    - Handles AUDIO_* and OFFSCREEN_AUDIO_* messages
+   *    - Receives messages via chrome.tabs.sendMessage()
+   * 
+   * The routing logic below prevents message cross-contamination by routing messages
+   * based on their type prefix to the appropriate client communication channel.
+   */
   // Prioritize messages from the offscreen document (VAD events)
   if (
     typeof OFFSCREEN_DOCUMENT_PATH === 'string' &&
     sender.url === chrome.runtime.getURL(OFFSCREEN_DOCUMENT_PATH) &&
-    message.targetTabId !== undefined && 
     message.origin === "offscreen-document"
   ) {
-    logger.debug("[Background] Received VAD event from offscreen document:", message);
-    offscreenManager.forwardMessageToContentScript(message.targetTabId, message);
-    return; // Stop processing if handled as an offscreen VAD event
+    // Handle auto-shutdown request
+    if (message.type === "OFFSCREEN_AUTO_SHUTDOWN") {
+      logger.debug("[Background] Received auto-shutdown request from offscreen document");
+      offscreenManager.closeOffscreenDocument();
+      return;
+    }
+    
+    // Route messages based on type to the appropriate client
+    if (message.targetTabId !== undefined) {
+      logger.debug("[Background] Received event from offscreen document:", sanitizedMessage);
+      
+      // Route VAD messages via port to OffscreenVADClient
+      if (message.type.startsWith("VAD_") || message.type.startsWith("OFFSCREEN_VAD_")) {
+        logger.debug(`[Background] Routing VAD message via port: ${message.type}`);
+        offscreenManager.forwardMessageToContentScript(message.targetTabId, message);
+        return; // Stop processing - message handled via port
+      }
+      
+      // Route audio messages via chrome.tabs.sendMessage to OffscreenAudioBridge
+      if (message.type.startsWith("AUDIO_") || message.type.startsWith("OFFSCREEN_AUDIO_")) {
+        logger.debug(`[Background] Routing audio message via tabs.sendMessage: ${message.type}`);
+        try {
+          chrome.tabs.sendMessage(message.targetTabId, message, (response) => {
+            const lastError = chrome.runtime.lastError;
+            if (lastError) {
+              logger.error(`[Background] Error forwarding audio message: ${lastError.message}`);
+            } else {
+              logger.debug(`[Background] Successfully forwarded audio message to tab ${message.targetTabId}`);
+            }
+          });
+        } catch (error: unknown) {
+          const errorMessage = error instanceof Error ? error.message : String(error);
+          logger.error(`[Background] Exception forwarding audio message: ${errorMessage}`);
+        }
+        return; // Stop processing - message handled via tabs.sendMessage
+      }
+      
+      // For other message types, use the default port routing
+      logger.debug(`[Background] Routing other message via port: ${message.type}`);
+      offscreenManager.forwardMessageToContentScript(message.targetTabId, message);
+      return; // Stop processing if handled as an offscreen event
+    }
   }
+  // --- END: Offscreen Document Message Routing ---
 
   // Handle error reports from any part of the extension using the logger
   if (message.type === "LOG_ERROR_REPORT" && message.origin === "logger-reportError") {
@@ -520,6 +662,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // New handler for direct auth status requests from content scripts
     try {
       const isAuthenticated = jwtManager.isAuthenticated();
+      logger.debug(`[Background] Auth status: ${isAuthenticated}`);
       sendResponse({ isAuthenticated });
     } catch (error: any) {
       logger.error('Failed to get auth status:', error);

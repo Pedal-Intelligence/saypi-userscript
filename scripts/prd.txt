@@ -1,0 +1,133 @@
+PRD: Restore TTS Audio Playback on Sites with Strict CSP
+
+Version: 1.0
+Date: 2025-05-16
+Author: Ross Cadogan & ChatGPT
+
+⸻
+
+1  Introduction
+
+The Say Pi browser extension delivers voice-first interaction by (a) capturing microphone input and running Voice Activity Detection (VAD) client-side, and (b) streaming text-to-speech (TTS) audio from https://api.saypi.ai.
+After the recent VAD off-screen refactor we can again record microphone input on claude.ai, but audio playback is now blocked by a new Content-Security-Policy (CSP) directive that whitelists only a small set of media-src origins.
+
+This PRD specifies the work needed to restore reliable TTS playback while retaining simultaneous microphone capture, using a single combined off-screen document. It follows the structure of the earlier "Resolve VAD Initialisation Failure on Sites with Strict CSP" PRD  ￼.
+
+⸻
+
+2  Problem Statement
+
+When the content script injects its <audio id="saypi-audio-main"> element into claude.ai, the browser refuses to load media from https://api.saypi.ai/... because that origin is not in the page's media-src allow-list. The request fails at the CSP check, no network traffic is sent, and the user hears nothing; a console error of the form
+
+Refused to load media from 'https://api.saypi.ai/…' because it violates
+the following Content Security Policy directive: "media-src 'self' …".
+
+is logged on every utterance.
+
+⸻
+
+3  Goals
+	•	Play Say Pi TTS audio successfully on claude.ai and any other sites with similarly restrictive media-src directives.
+	•	Support concurrent microphone capture (VAD) and audio playback.
+	•	Keep the existing XState actor model and event bus unchanged from the point of view of the rest of the extension.
+	•	Work in all Chromium-based browsers that implement the Offscreen API (Chrome 116+, Edge, Brave).
+	•	Fall back gracefully to the in-page player on browsers that lack Offscreen (Firefox, Safari).
+	•	Impose no additional permissions beyond those already present in manifest.json.
+
+⸻
+
+4  Current Situation & Analysis
+
+4.1 Technical Components
+
+Component	Current location	Notes
+Microphone capture & VAD	vad_offscreen.html (off-screen)	Added in VAD refactor.
+TTS audio playback (<audio> element)	Host page (claude.ai)	Fails CSP check.
+Manifest off-screen declaration	"reasons": ["USER_MEDIA"]	Only covers mic/VAD  ￼.
+
+4.2 Root Cause
+	•	claude.ai sets media-src 'self' … and does not include https://api.saypi.ai.
+	•	Off-screen documents are extension pages; they obey the extension's own CSP, not the host page's CSP.
+	•	Only one off-screen document may be open at a time, so playback must share the existing VAD off-screen page.
+
+4.3 Effects
+	•	Every utterance fails with a CSP violation; no speech is heard.
+	•	Users cannot rely on the voice interface for answers read aloud.
+
+4.4 Current Off-screen Implementation Gaps
+
+The off-screen page is initialised solely for VAD; playback remains in the host document, so it is still subject to the host CSP.
+
+⸻
+
+5  Success / Completion Criteria
+
+#	Criterion
+1	On claude.ai, Say Pi plays a complete TTS response from https://api.saypi.ai without CSP violations.
+2	Microphone capture and VAD continue to operate uninterrupted while audio is playing.
+3	Latency to first audio frame adds ≤ 100 ms compared with playback on pi.ai.
+4	No regression on sites that already work (e.g., pi.ai, Gmail).
+5	Falls back cleanly to the in-page player when chrome.offscreen is undefined (Firefox, Safari).
+6	Automated end-to-end test passes: "speak, detect silence, receive reply, play reply" on both pi.ai and claude.ai.
+
+
+⸻
+
+6  Proposed Solution
+
+6.1 High-level Approach
+	•	Unify playback and capture in a single off-screen document.
+	•	Extend the existing off-screen declaration:
+
+"offscreen": {
+  "document": "src/offscreen/media_offscreen.html",
+  "reasons": ["USER_MEDIA", "AUDIO_PLAYBACK"],
+  "justification": "Microphone VAD and TTS playback under restrictive host-page CSP"
+}
+
+	•	Move the <audio> element and playback logic (currently in AudioModule) into media_offscreen.html.
+	•	Forward existing EventBus commands (audio:load, audio:output:*) from the content script to the off-screen page via chrome.runtime.sendMessage.
+	•	Keep the XState machines unchanged; only the transport layer hops from DOM events to extension messaging.
+	•	Close the off-screen document after 30 s of idle time to conserve resources; the background service-worker re-opens it on demand.
+
+6.2 Implementation Sketch
+	1.	Rename / replace off-screen assets
+	•	vad_offscreen.html/js → media_offscreen.html/js and initialise both VAD and playback inside.
+	2.	Manifest update (see JSON snippet above).
+	3.	Background service-worker
+	•	Utility ensureOffscreen() checks for an existing off-screen context; creates one if absent.
+	4.	Content script bridge
+	•	Replace direct audio element manipulation with chrome.runtime.sendMessage({type:'play-tts', url}), etc.
+	5.	Off-screen player (media_offscreen.js)
+	•	Create a single global Audio object.
+	•	Handle play-tts, pause-tts, resume-tts, stop-tts messages.
+	•	Propagate lifecycle events (ended, error) back to the content script so the existing state machines stay informed.
+	6.	Fallback path
+	•	Detect !chrome.offscreen and drop back to the current in-page <audio> logic.
+
+⸻
+
+7  Out of Scope
+	•	Spatial / multi-track audio rendering.
+	•	Requesting host sites to loosen their CSP.
+	•	Migrating VAD to an alternative library.
+
+⸻
+
+8  Risks & Mitigation
+
+Risk	Mitigation
+Off-screen API is Chromium-only.	Feature-detect chrome.offscreen; fallback to in-page player.
+Message-passing latency could desynchronise audio events.	Batch non-critical events; retain current optimistic UI model.
+Single off-screen doc handles two independent lifecycles (mic & playback).	Use reference counting; close document only after both VAD and playback are idle.
+Unexpected Chrome shutdown of idle off-screen page.	Re-open automatically on next play-tts / acquire-mic request.
+
+
+⸻
+
+Appendix A – Manifest Comparison (excerpt)
+
+Key	Before	After
+document	vad_offscreen.html	media_offscreen.html (or audio_offscreen.html)
+reasons	["USER_MEDIA"]	["USER_MEDIA","AUDIO_PLAYBACK"]
+justification	VAD only	VAD + playback under strict CSP 

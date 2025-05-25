@@ -204,7 +204,6 @@ userPreferences.getDiscretionaryMode().then((discretionaryModeEnabled) => {
 
 function shouldAlwaysRespond(): boolean {
   const discretionaryModeEnabled = userPreferences.getCachedDiscretionaryMode();
-  console.debug("Assigning default shouldRespond to", !discretionaryModeEnabled);
   return !discretionaryModeEnabled;
 }
 
@@ -1205,13 +1204,12 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
 
       listenPrompt: () => {
-        chatbot.getNickname().then(nickname => {
-          const normalMode = shouldAlwaysRespond();
-          const message = getMessage(normalMode ? "assistantIsListening" : "assistantIsListeningAttentively", nickname);
-          if (message) {
-            getPromptOrNull()?.setMessage(message);
-          }
-        });
+        const nickname = userPreferences.getCachedNickname() || chatbot.getName();
+        const normalMode = shouldAlwaysRespond();
+        const message = getMessage(normalMode ? "assistantIsListening" : "assistantIsListeningAttentively", nickname);
+        if (message) {
+          getPromptOrNull()?.setMessage(message);
+        }
       },
       callStartingPrompt: () => {
         const message = getMessage("callStarting");
@@ -1222,50 +1220,55 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         }
       },
       thinkingPrompt: () => {
-        chatbot.getNickname().then(nickname => {
-          const message = getMessage("assistantIsThinking", nickname);
-          if (message) {
-            getPromptOrNull()?.setMessage(message);
+        const nickname = userPreferences.getCachedNickname() || chatbot.getName();
+        const message = getMessage("assistantIsThinking", nickname);
+        if (message) {
+          const promptEditor = getPromptOrNull();
+          if (promptEditor) {
+            promptEditor.setMessage(message);
+          } else {
+            console.warn("[SayPiMachine] [thinkingPrompt] no prompt editor found");
           }
-        });
+        }
       },
       writingPrompt: () => {
-        chatbot.getNickname().then(nickname => {
-          const message = getMessage("assistantIsWriting", nickname);
-          if (message) {
-            getPromptOrNull()?.setMessage(message);
-          }
-        });
+        const nickname = userPreferences.getCachedNickname() || chatbot.getName();
+        const message = getMessage("assistantIsWriting", nickname);
+        if (message) {
+          getPromptOrNull()?.setMessage(message);
+        }
       },
       speakingPrompt: (context: SayPiContext) => {
         const handsFreeInterrupt =
           userPreferences.getCachedAllowInterruptions();
         
-        chatbot.getNickname().then(nickname => {
-          const message = handsFreeInterrupt
-            ? getMessage("assistantIsSpeaking", nickname)
-            : getMessage(
-                "assistantIsSpeakingWithManualInterrupt",
-                nickname
-              );
-          if (message) {
-            getPromptOrNull()?.setMessage(message);
-          }
-        });
+        const nickname = userPreferences.getCachedNickname() || chatbot.getName();
+        const message = handsFreeInterrupt
+          ? getMessage("assistantIsSpeaking", nickname)
+          : getMessage(
+              "assistantIsSpeakingWithManualInterrupt",
+              nickname
+            );
+        if (message) {
+          getPromptOrNull()?.setMessage(message);
+        }
       },
       interruptingPiPrompt: () => {
-        chatbot.getNickname().then(nickname => {
-          const message = getMessage(
-            "userStartedInterrupting",
-            nickname
-          );
-          if (message) {
-            getPromptOrNull()?.setMessage(message);
-          }
-        });
+        const nickname = userPreferences.getCachedNickname() || chatbot.getName();
+        const message = getMessage(
+          "userStartedInterrupting",
+          nickname
+        );
+        if (message) {
+          getPromptOrNull()?.setMessage(message);
+        }
       },
       clearPrompt: (context: SayPiContext) => {
-        getPromptOrNull()?.setMessage(context.defaultPlaceholderText);
+        const prompt = getPromptOrNull();
+        if (prompt) {
+          //prompt.clear(); // has side effects
+          prompt.setMessage(context.defaultPlaceholderText);
+        }
       },
       draftPrompt: (context: SayPiContext) => {
         const text = mergeService
@@ -1397,6 +1400,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         assign({ isMaintainanceMessage: () => false });
       },
       pauseAudio: () => {
+        console.debug("[SayPiMachine] [pauseAudio] Pausing audio for user interruption");
         EventBus.emit("audio:output:pause");
       },
       resumeAudio: () => {
@@ -1407,11 +1411,10 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
       showOrSuppressAudioInputErrorHint: (context, event) => {
         if (TranscriptionErrorManager.shouldShowUserHint()) {
-          chatbot.getNickname().then(nickname => {
-            const displayForSeconds = 10;
-            textualNotifications.showNotification(getMessage("audioInputError", nickname), "microphone-muted", displayForSeconds);
-            TranscriptionErrorManager.reset();
-          });
+          const nickname = userPreferences.getCachedNickname() || chatbot.getName();
+          const displayForSeconds = 10;
+          textualNotifications.showNotification(getMessage("audioInputError", nickname), "microphone-muted", displayForSeconds);
+          TranscriptionErrorManager.reset();
         } else {
           // Optionally, log that the hint was suppressed, or do nothing.
           console.debug("Transcription failure hint suppressed due to low error rate.");

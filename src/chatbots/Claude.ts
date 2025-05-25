@@ -635,9 +635,10 @@ class ClaudePrompt extends AbstractUserPrompt {
    * Clear the prompt element
    */
   clear(): void {
-    this.placeholderManager.setPlaceholder("");
+    this.setText(""); // clear the text
+    this.placeholderManager.setPlaceholder(""); // clear the placeholder
     const promptParagraphs = this.promptElement.querySelectorAll("p:not([data-placeholder])");
-    promptParagraphs.forEach((p) => p.remove());
+    promptParagraphs.forEach((p) => p.remove()); // remove any other paragraphs
   }
 }
 

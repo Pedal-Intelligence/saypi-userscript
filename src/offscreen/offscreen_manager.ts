@@ -1,4 +1,4 @@
-export const OFFSCREEN_DOCUMENT_PATH = "src/offscreen/vad_offscreen.html";
+export const OFFSCREEN_DOCUMENT_PATH = "src/offscreen/media_offscreen.html";
 
 class OffscreenManager {
   private creating?: Promise<void>;
@@ -34,8 +34,8 @@ class OffscreenManager {
     console.log("Creating offscreen document...");
     this.creating = chrome.offscreen.createDocument({
       url: OFFSCREEN_DOCUMENT_PATH,
-      reasons: [chrome.offscreen.Reason.USER_MEDIA],
-      justification: "Required for Voice Activity Detection (VAD) processing in an isolated environment to comply with strict CSPs on host pages.",
+      reasons: [chrome.offscreen.Reason.USER_MEDIA, chrome.offscreen.Reason.AUDIO_PLAYBACK],
+      justification: "Microphone VAD and TTS playback under restrictive host-page CSP",
     });
 
     try {
@@ -63,19 +63,81 @@ class OffscreenManager {
   }
 
   public async sendMessageToOffscreenDocument(message: any, targetTabId?: number): Promise<void> {
-    await this.setupOffscreenDocument(); // Ensure document exists
-    const messageWithTabId = targetTabId !== undefined ? { ...message, tabId: targetTabId } : message;
     try {
-      console.debug("Background sending message to offscreen:", messageWithTabId);
-      chrome.runtime.sendMessage(messageWithTabId);
+      await this.setupOffscreenDocument(); // Ensure document exists
+      
+      // Create the message with correct properties
+      const messageWithTabId = { 
+        ...message,
+        tabId: targetTabId
+      };
+      
+      // If the message has 'source' but not 'origin', map it correctly for the offscreen document
+      if (message.source === "content-script" && !message.origin) {
+        messageWithTabId.origin = "content-script";
+      }
+      
+      // Add specific logging for audio messages
+      if (message.type && typeof message.type === 'string' && message.type.includes('AUDIO_')) {
+        console.log(`[OffscreenManager] 📢 Forwarding audio message to offscreen: ${message.type}`, {
+          tabId: targetTabId,
+          url: message.url,
+          timestamp: Date.now()
+        });
+      }
+      
+      // Create a timeout promise to ensure we don't hang if message delivery fails
+      const messageDeliveryTimeout = 2000; // 2 seconds timeout
+      const timeoutPromise = new Promise<void>((_, reject) => {
+        setTimeout(() => reject(new Error(`Message delivery timed out after ${messageDeliveryTimeout}ms`)), messageDeliveryTimeout);
+      });
+      
+      // Promise for the actual message sending
+      const sendPromise = new Promise<void>((resolve, reject) => {
+        try {
+          console.debug(`[OffscreenManager] forwarding message to offscreen: ${messageWithTabId.type}`);
+          chrome.runtime.sendMessage(messageWithTabId);
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      });
+      
+      // Race the message sending against the timeout
+      await Promise.race([sendPromise, timeoutPromise]);
     } catch (error) {
-      console.error("Error sending message to offscreen document:", error, messageWithTabId);
-      // Potentially try to re-establish or alert the user/system
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error(`[OffscreenManager] Error sending message to offscreen document: ${errorMessage}`, {
+        messageType: message?.type,
+        targetTabId,
+        timestamp: Date.now()
+      });
+      
+      // If this is an audio message, we should notify the content script about the failure
+      if (message.type && typeof message.type === 'string' && message.type.includes('AUDIO_') && targetTabId) {
+        this.notifyMessageFailure(message.type, targetTabId, errorMessage);
+      }
+    }
+  }
+
+  /**
+   * Notify the content script that a message failed to be delivered to the offscreen document
+   */
+  private notifyMessageFailure(messageType: string, tabId: number, errorMessage: string): void {
+    const port = this.portMap.get(tabId);
+    if (port) {
+      const responseType = messageType.replace('REQUEST', 'ERROR');
+      port.postMessage({
+        type: responseType,
+        error: `Failed to send message to offscreen document: ${errorMessage}`,
+        timestamp: Date.now()
+      });
     }
   }
 
   public registerContentScriptConnection(port: chrome.runtime.Port): void {
-    if (port.name !== "vad-content-script-connection") {
+    // Accept both the old VAD connection name and the new media connection name
+    if (port.name !== "vad-content-script-connection" && port.name !== "media-content-script-connection") {
       return;
     }
     const tabId = port.sender?.tab?.id;
@@ -84,14 +146,31 @@ class OffscreenManager {
       return;
     }
 
-    console.log(`Registered content script connection from tab ${tabId}`);
+    console.log(`Registered ${port.name} connection from tab ${tabId}`);
     this.portMap.set(tabId, port);
 
     port.onMessage.addListener(async (message) => {
+      // Add specific logging for audio messages
+      if (message.type && typeof message.type === 'string' && message.type.includes('AUDIO_')) {
+        console.log(`[OffscreenManager] 🎧 Port received audio message: ${message.type}`, {
+          tabId,
+          url: message.url,
+          timestamp: Date.now()
+        });
+      }
+      
       console.debug(`Background received message from content script (tab ${tabId}):`, message);
       // Ensure offscreen document is ready before forwarding certain messages
-      if (message.type === "VAD_START_REQUEST" || message.type === "AUDIO_CHUNK" || message.type === "VAD_STOP_REQUEST") {
-         await this.setupOffscreenDocument(); // Ensure document is active for VAD operations
+      if (
+        message.type === "VAD_START_REQUEST" || 
+        message.type === "AUDIO_CHUNK" || 
+        message.type === "VAD_STOP_REQUEST" ||
+        message.type === "AUDIO_PLAY_REQUEST" ||
+        message.type === "AUDIO_PAUSE_REQUEST" ||
+        message.type === "AUDIO_RESUME_REQUEST" ||
+        message.type === "AUDIO_STOP_REQUEST"
+      ) {
+         await this.setupOffscreenDocument(); // Ensure document is active
       }
       // Forward message to offscreen document, including the source tabId
       this.sendMessageToOffscreenDocument({ ...message, sourceTabId: tabId, origin: "content-script" });
@@ -110,10 +189,10 @@ class OffscreenManager {
   public forwardMessageToContentScript(tabId: number, message: any): void {
     const port = this.portMap.get(tabId);
     if (port) {
-      console.debug(`Background forwarding message to content script (tab ${tabId}):`, message);
+      console.debug(`[OffscreenManager] forwarding message to content script (tab ${tabId}): ${message.type}`);
       port.postMessage(message);
     } else {
-      console.warn(`No active port found for tab ${tabId} to forward message:`, message);
+      console.warn(`No active port found for tab ${tabId} to forward message: ${message.type}`);
     }
   }
 }

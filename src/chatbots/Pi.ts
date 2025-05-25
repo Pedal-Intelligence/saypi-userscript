@@ -11,9 +11,10 @@ import {
 import { SpeechSynthesisVoiceRemote } from "../tts/SpeechModel";
 import { PiSpeechSourceParser } from "../tts/SpeechSourceParsers";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
-import { PiVoiceMenu, VoiceSelector } from "../tts/VoiceMenu";
+import { VoiceSelector } from "../tts/VoiceMenu";
 import { UserPrompt } from "./Chatbot";
 import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
+import { PiVoiceMenu } from "./PiVoiceMenu";
 
 class PiAIChatbot extends AbstractChatbot {
   getName(): string {

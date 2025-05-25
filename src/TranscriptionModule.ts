@@ -156,6 +156,7 @@ function transcriptionReceived(seq: number): void {
 
 export function isTranscriptionPending(): boolean {
   checkForExpiredEntries();
+  console.debug(`[TranscriptionModule] in-flight transcription requests: ${sequenceNumsPendingTranscription.size}`);
   return sequenceNumsPendingTranscription.size > 0;
 }
 

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_appName__",
-  "version": "1.8.4",
+  "version": "1.8.5",
   "description": "__MSG_appDescription__",
   "permissions": [
     "storage",
@@ -11,8 +11,8 @@
     "audio"
   ],
   "host_permissions": [
-    "https://localhost:5001/*",
-    "http://localhost:3000/*"
+    "https://api.saypi.ai/*",
+    "https://www.saypi.ai/*"
   ],
   "content_scripts": [
     {
@@ -29,11 +29,12 @@
     "service_worker": "public/background.js"
   },
   "offscreen": {
-    "document": "src/offscreen/vad_offscreen.html",
+    "document": "src/offscreen/media_offscreen.html",
     "reasons": [
-      "USER_MEDIA"
+      "USER_MEDIA",
+      "AUDIO_PLAYBACK"
     ],
-    "justification": "Required for Voice Activity Detection (VAD) processing in an isolated environment to comply with strict CSPs on host pages."
+    "justification": "Microphone VAD and TTS playback under restrictive host-page CSP"
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
@@ -59,8 +60,11 @@
         "public/icons/logos/*.png",
         "src/icons/flags/*.svg",
         "src/popup/*.svg",
-        "src/offscreen/vad_offscreen.html",
-        "src/offscreen/vad_offscreen.js",
+        "src/offscreen/media_offscreen.html",
+        "public/offscreen/media_coordinator.js",
+        "public/offscreen/vad_handler.js",
+        "public/offscreen/audio_handler.js",
+        "public/offscreen/media_offscreen.js",
         "src/permissions/permissions-prompt.html",
         "public/permissions/permissions-prompt.js"
       ],

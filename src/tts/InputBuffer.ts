@@ -61,7 +61,8 @@ export class InputBuffer {
       throw new Error(`Cannot add text to a closed buffer: ${this.uuid}`);
     }
 
-    console.debug(`[InputBuffer] adding text to buffer: "${text}"`);
+    // noisy log messages
+    //console.debug(`[InputBuffer] adding text to buffer: "${text}"`);
 
     this.buffer += text;
     this.resetBufferTimeout();

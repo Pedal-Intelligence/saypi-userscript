@@ -8,7 +8,7 @@ import {
   SpeechSynthesisVoiceRemote,
 } from "../tts/SpeechModel";
 import { isFirefox, isSafari } from "../UserAgentModule";
-import { jwtManager } from "../JwtManager";
+import { getJwtManager, getJwtManagerSync } from "../JwtManager";
 import { Chatbot } from "../chatbots/Chatbot";
 
 type Preference = "speed" | "balanced" | "accuracy" | null;
@@ -42,6 +42,9 @@ const LOCAL_STORAGE_KEYS = [
   "shareData", "voiceId", "enableTTS", "vadStatusIndicatorEnabled"
 ];
 
+// Add a flag to mark that sync-to-local migration has completed
+export const MIGRATION_FLAG = 'prefs_migration_completed';
+
 class UserPreferenceModule {
   private cache: UserPreferenceCache = UserPreferenceCache.getInstance();
 
@@ -54,13 +57,62 @@ class UserPreferenceModule {
   }
 
   /**
+   * One-time migration from chrome.storage.sync to local storage for user preferences
+   */
+  public async migrateStorage(): Promise<void> {
+    const flagKey = MIGRATION_FLAG;
+    // Check if migration already done
+    const flagResult: Record<string, any> = await new Promise(resolve => {
+      chrome.storage.local.get([flagKey], resolve);
+    });
+    if (flagResult[flagKey]) {
+      return;
+    }
+    // Retrieve all sync-stored preferences
+    const syncData: Record<string, any> = await new Promise(resolve => {
+      chrome.storage.sync.get(LOCAL_STORAGE_KEYS, resolve);
+    });
+    // Retrieve existing local data
+    const localData: Record<string, any> = await new Promise(resolve => {
+      chrome.storage.local.get(LOCAL_STORAGE_KEYS, resolve);
+    });
+    // Prepare items to migrate
+    const toMigrate: Record<string, any> = {};
+    for (const key of LOCAL_STORAGE_KEYS) {
+      if (syncData[key] !== undefined && localData[key] === undefined) {
+        toMigrate[key] = syncData[key];
+      }
+    }
+    // Perform migration if needed
+    if (Object.keys(toMigrate).length > 0) {
+      await new Promise<void>((resolve, reject) => {
+        chrome.storage.local.set(toMigrate, () => {
+          if (chrome.runtime && chrome.runtime.lastError) {
+            console.error('Error migrating preferences:', chrome.runtime.lastError);
+            reject(chrome.runtime.lastError);
+          } else {
+            resolve();
+          }
+        });
+      });
+    }
+    // Mark migration complete
+    await new Promise<void>(resolve => {
+      chrome.storage.local.set({ [flagKey]: true }, resolve);
+    });
+  }
+
+  /**
    * Constructor for UserPreferenceModule
    * Note: cache may not be fully populated immediately after construction (takes a few milliseconds)
    */
   private constructor() {
-    this.reloadCache(); // This will now also load from local storage for certain keys
-    this.registerMessageListeners();
-    this.registerJwtClaimsListener();
+    // Run migration before loading cached preferences and setting listeners
+    this.migrateStorage().then(() => {
+      this.reloadCache();
+      this.registerMessageListeners();
+      this.registerJwtClaimsListener();
+    });
   }
 
   private reloadCache(): void {
@@ -309,63 +361,19 @@ class UserPreferenceModule {
    */
   private getStoredValue(key: string, defaultValue: any, storageType: 'sync' | 'local'): Promise<any> {
     return new Promise((resolve) => {
-      const primaryArea = (typeof chrome !== 'undefined' && chrome.storage) ? 
-        (storageType === 'local' ? chrome.storage.local : chrome.storage.sync) : 
-        undefined;
-      
-      const attemptMigration = storageType === 'local' && LOCAL_STORAGE_KEYS.includes(key);
-
-      if (typeof chrome === 'undefined' || !chrome.storage || !primaryArea) {
-        console.warn(`chrome.storage.${storageType} not available or chrome object not defined. Returning default for ${key}.`);
+      if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.local) {
+        console.warn(`chrome.storage.local not available. Returning default for ${key}.`);
         resolve(defaultValue);
         return;
       }
-
-      primaryArea.get([key], (result) => {
-        if (chrome.runtime && chrome.runtime.lastError) { // Check chrome.runtime exists
-          console.error(`Error getting ${key} from chrome.storage.${storageType}:`, chrome.runtime.lastError.message);
+      chrome.storage.local.get([key], (result) => {
+        if (chrome.runtime && chrome.runtime.lastError) {
+          console.error(`Error getting ${key} from chrome.storage.local:`, chrome.runtime.lastError.message);
           resolve(defaultValue);
-          return;
-        }
-
-        if (result && result[key] !== undefined) { // Check result exists
-          resolve(result[key]); 
-        } else if (attemptMigration) {
-          console.log(`[Migration] ${key} not in local. Checking sync.`);
-          if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.sync) {
-            console.warn(`[Migration] chrome.storage.sync not available for ${key}. Using default value.`);
-            resolve(defaultValue);
-            return;
-          }
-          chrome.storage.sync.get([key], (syncResult) => {
-            if (chrome.runtime && chrome.runtime.lastError) { // Check chrome.runtime exists
-              console.warn(`[Migration] Error reading ${key} from sync:`, chrome.runtime.lastError.message, `Using default.`);
-              resolve(defaultValue);
-              return;
-            }
-            if (syncResult && syncResult[key] !== undefined) { // Check syncResult exists
-              console.log(`[Migration] Found ${key} in sync:`, syncResult[key], `. Migrating to local.`);
-              if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.local) {
-                console.error(`[Migration] chrome.storage.local not available to write migrated ${key}. Using sync value this time.`);
-                resolve(syncResult[key]);
-                return;
-              }
-              chrome.storage.local.set({ [key]: syncResult[key] }, () => {
-                if (chrome.runtime && chrome.runtime.lastError) { // Check chrome.runtime exists
-                  console.error(`[Migration] Error writing ${key} to local:`, chrome.runtime.lastError.message, `. Using sync value this time.`);
-                  resolve(syncResult[key]); 
-                } else {
-                  console.log(`[Migration] Successfully migrated ${key} to local.`);
-                  resolve(syncResult[key]);
-                }
-              });
-            } else {
-              console.log(`[Migration] ${key} not in sync either. Using default.`);
-              resolve(defaultValue); 
-            }
-          });
+        } else if (result && result[key] !== undefined) {
+          resolve(result[key]);
         } else {
-          resolve(defaultValue); 
+          resolve(defaultValue);
         }
       });
     });
@@ -379,19 +387,16 @@ class UserPreferenceModule {
    * @returns Promise<void>
    */
   private setStoredValue(key: string, value: any, storageType: 'sync' | 'local'): Promise<void> {
+    // simplified local-only storage
     return new Promise((resolve, reject) => {
-      const storageArea = (typeof chrome !== 'undefined' && chrome.storage) ? 
-        (storageType === 'local' ? chrome.storage.local : chrome.storage.sync) : 
-        undefined;
-
-      if (typeof chrome === 'undefined' || !chrome.storage || !storageArea) {
-        console.warn(`chrome.storage.${storageType} not available or chrome object not defined. Did not set ${key}.`);
-        resolve(); 
+      if (typeof chrome === 'undefined' || !chrome.storage || !chrome.storage.local) {
+        console.warn(`chrome.storage.local not available. Did not set ${key}.`);
+        resolve();
         return;
       }
-      storageArea.set({ [key]: value }, () => {
-        if (chrome.runtime && chrome.runtime.lastError) { // Check chrome.runtime exists
-          console.error(`Error setting ${key} in chrome.storage.${storageType}:`, chrome.runtime.lastError.message);
+      chrome.storage.local.set({ [key]: value }, () => {
+        if (chrome.runtime && chrome.runtime.lastError) {
+          console.error(`Error setting ${key} in chrome.storage.local:`, chrome.runtime.lastError.message);
           reject(chrome.runtime.lastError);
         } else {
           resolve();
@@ -458,7 +463,7 @@ class UserPreferenceModule {
   public getCachedDiscretionaryMode(): boolean {
     // The cache stores the raw local setting for "discretionaryMode"
     const cachedSetting = this.cache.getCachedValue("discretionaryMode", false) as boolean;
-    const hasEntitlement = jwtManager.hasFeatureEntitlement(FEATURE_CODES.AGENT_MODE); // Sync check
+    const hasEntitlement = getJwtManagerSync().hasFeatureEntitlement(FEATURE_CODES.AGENT_MODE); // Sync check
     return cachedSetting && hasEntitlement;
   }
 
@@ -513,154 +518,161 @@ class UserPreferenceModule {
     return this.setStoredValue("vadStatusIndicatorEnabled", enabled, 'local');
   }
 
-  // --- Preferences remaining in chrome.storage.sync ---
+  // --- Preferences that were previously in chrome.storage.sync, now moved to local or handled by cache ---
   
-  public getSoundEffects(): Promise<boolean> {
+  public async getSoundEffects(): Promise<boolean> {
     if (isFirefox()) {
       return Promise.resolve(false);
     }
-    return this.getStoredValue("soundEffects", true, 'sync');
+    const cached = this.cache.getCachedValue("soundEffects", null);
+    if (cached !== null) {
+        return Promise.resolve(cached as boolean);
+    }
+    // Fetch from local storage, then cache it.
+    const stored = await this.getStoredValue("soundEffects", true, 'local') as boolean;
+    this.cache.setCachedValue("soundEffects", stored);
+    return stored;
+  }
+
+  public getCachedSoundEffects(): boolean {
+    if (isFirefox()) { // Keep Firefox-specific logic
+      return false;
+    }
+    return this.cache.getCachedValue("soundEffects", true) as boolean;
   }
   
   public setSoundEffects(enabled: boolean): Promise<void> {
-    this.cache.setCachedValue("soundEffects", enabled); // Assuming cache might be used
+    this.cache.setCachedValue("soundEffects", enabled);
     EventBus.emit("userPreferenceChanged", { soundEffects: enabled });
-    return this.setStoredValue("soundEffects", enabled, 'sync');
+    return this.setStoredValue("soundEffects", enabled, 'local'); // Ensure it uses 'local'
   }
 
-  public getAutoSubmit(): Promise<boolean> {
-    // Cache is checked first by getCachedAutoSubmit, this is the fallback/initial load
+  public async getAutoSubmit(): Promise<boolean> {
      const cached = this.cache.getCachedValue("autoSubmit", null);
-     if (cached !== null) return Promise.resolve(cached);
-     return this.getStoredValue("autoSubmit", true, 'sync').then(val => {
-         this.cache.setCachedValue("autoSubmit", val);
-         return val;
-     });
+     if (cached !== null) return Promise.resolve(cached as boolean);
+     const stored = await this.getStoredValue("autoSubmit", true, 'local') as boolean; // Changed to 'local'
+     this.cache.setCachedValue("autoSubmit", stored);
+     return stored;
   }
   
   public setAutoSubmit(enabled: boolean): Promise<void> {
     this.cache.setCachedValue("autoSubmit", enabled);
     EventBus.emit("userPreferenceChanged", { autoSubmit: enabled });
-    return this.setStoredValue("autoSubmit", enabled, 'sync');
+    return this.setStoredValue("autoSubmit", enabled, 'local'); // Changed to 'local'
   }
 
 
-  public getTheme(): Promise<string> {
-    // Cache is useful here
+  public async getTheme(): Promise<string> {
     const cachedTheme = this.cache.getCachedValue("theme", null);
-    if (cachedTheme !== null) return Promise.resolve(cachedTheme);
-    return this.getStoredValue("theme", "light", 'sync').then(val => {
-        this.cache.setCachedValue("theme", val);
-        return val;
-    });
+    if (cachedTheme !== null) return Promise.resolve(cachedTheme as string);
+    const stored = await this.getStoredValue("theme", "light", 'local') as string; // Changed to 'local'
+    this.cache.setCachedValue("theme", stored);
+    return stored;
   }
 
   public setTheme(theme: string): Promise<void> {
     this.cache.setCachedValue("theme", theme);
     EventBus.emit("userPreferenceChanged", { theme: theme });
-    return this.setStoredValue("theme", theme, 'sync');
+    return this.setStoredValue("theme", theme, 'local'); // Changed to 'local'
   }
 
-  public getDataSharing(): Promise<boolean> {
-    // Cache is useful here
+  public async getDataSharing(): Promise<boolean> {
     const cachedDataSharing = this.cache.getCachedValue("shareData", null);
-    if (cachedDataSharing !== null) return Promise.resolve(cachedDataSharing);
-    return this.getStoredValue("shareData", false, 'sync').then(val => {
-        this.cache.setCachedValue("shareData", val);
-        return val;
-    });
+    if (cachedDataSharing !== null) return Promise.resolve(cachedDataSharing as boolean);
+    const stored = await this.getStoredValue("shareData", false, 'local') as boolean; // Changed to 'local'
+    this.cache.setCachedValue("shareData", stored);
+    return stored;
   }
   
   public setDataSharing(enabled: boolean): Promise<void> {
     this.cache.setCachedValue("shareData", enabled);
     EventBus.emit("userPreferenceChanged", { shareData: enabled });
-    return this.setStoredValue("shareData", enabled, 'sync');
+    return this.setStoredValue("shareData", enabled, 'local'); // Changed to 'local'
   }
   
-  // Voice ID (remains SYNC for cross-device voice preference)
-  public hasVoice(): Promise<boolean> {
-    return new Promise((resolve) => {
-      this.getStoredValue("voiceId", null, 'sync').then(voiceId => resolve(!!voiceId));
-    });
+  // Voice ID (now also local, was sync)
+  public async hasVoice(): Promise<boolean> {
+    const voiceId = await this.getStoredValue("voiceId", null, 'local'); // Changed to 'local'
+    return !!voiceId;
   }
 
-  public getVoice(chatbot?: Chatbot): Promise<VoicePreference> {
+  public async getVoice(chatbot?: Chatbot): Promise<VoicePreference> {
     const apiServerUrl = config.apiServerUrl;
     if (!apiServerUrl) {
       throw new Error("API server URL is not set");
     }
     const tts = SpeechSynthesisModule.getInstance(apiServerUrl);
-    return new Promise((resolve) => {
-       this.getStoredValue("voiceId", null, 'sync').then(async (voiceId: string | null) => {
-        let voice;
-        if (voiceId) {
-          if (PiAIVoice.isPiVoiceId(voiceId)) {
-            voice = PiAIVoice.fromVoiceId(voiceId);
-          } else {
-            try {
-              voice = await tts.getVoiceById(voiceId, chatbot);
-            } catch (error: any) {
-              console.info(`Voice with ID ${voiceId} not found for ${chatbot?.getName() || "current chatbot"}`);
-              voice = null;
-            }
-          }
-          resolve(voice);
-        } else {
-          resolve(null); 
-        }
-      });
-    });
+    // Check cache first
+    const cachedVoiceId = this.cache.getCachedValue("voiceId", null) as string | null;
+    let voiceIdToFetch = cachedVoiceId;
+
+    if (voiceIdToFetch === null) {
+      voiceIdToFetch = await this.getStoredValue("voiceId", null, 'local') as string | null; // Changed to 'local'
+      if (voiceIdToFetch !== null) {
+        this.cache.setCachedValue("voiceId", voiceIdToFetch);
+      }
+    }
+    
+    if (voiceIdToFetch) {
+      if (PiAIVoice.isPiVoiceId(voiceIdToFetch)) {
+        return PiAIVoice.fromVoiceId(voiceIdToFetch);
+      }
+      try {
+        return await tts.getVoiceById(voiceIdToFetch, chatbot);
+      } catch (error: any) {
+        console.info(`Voice with ID ${voiceIdToFetch} not found for ${chatbot?.getName() || "current chatbot"}. Clearing stored voiceId.`);
+        // If voice not found, clear the invalid ID from storage and cache
+        await this.setStoredValue("voiceId", null, 'local');
+        this.cache.setCachedValue("voiceId", null);
+        return null;
+      }
+    }
+    return null;
   }
 
   public setVoice(voice: SpeechSynthesisVoiceRemote): Promise<void> {
     const provider = audioProviders.retrieveProviderByEngine(voice.powered_by);
+    this.cache.setCachedValue("voiceId", voice.id);
     EventBus.emit("userPreferenceChanged", {
       voiceId: voice.id,
       voice: voice,
       audioProvider: provider,
     });
-    // No direct cache set here for voiceId, as getVoice re-fetches and resolves it.
-    // The event is the primary notification.
-    return this.setStoredValue("voiceId", voice.id, 'sync').then(() => {
+    return this.setStoredValue("voiceId", voice.id, 'local').then(() => { // Changed to 'local'
         const audioControls = new AudioControlsModule();
         audioControls.notifyAudioVoiceSelection(voice);
     });
   }
 
   public unsetVoice(): Promise<void> {
+    this.cache.setCachedValue("voiceId", null);
     EventBus.emit("userPreferenceChanged", {
       voiceId: null,
       voice: null,
       audioProvider: audioProviders.Pi,
     });
-    return this.getStoredValue("voiceId", null, 'sync').then(voiceId => {
-        if (voiceId) {
-            return this.setStoredValue("voiceId", null, 'sync'); // Explicitly set to null to clear
-        }
-        return Promise.resolve();
-    }).then(() => {
+    return this.setStoredValue("voiceId", null, 'local').then(() => { // Changed to 'local'
         const audioControls = new AudioControlsModule();
         audioControls.notifyAudioVoiceDeselection();
     });
   }
   
-  // Allow Interruptions (SYNC)
-  public getAllowInterruptions(): Promise<boolean> {
+  // Allow Interruptions (now local, was sync)
+  public async getAllowInterruptions(): Promise<boolean> {
     if (isFirefox()) {
       return Promise.resolve(false);
     }
     const cached = this.cache.getCachedValue("allowInterruptions", null);
-    if (cached !== null) return Promise.resolve(cached);
-    return this.getStoredValue("allowInterruptions", true, 'sync').then(val => {
-        this.cache.setCachedValue("allowInterruptions", val);
-        return val;
-    });
+    if (cached !== null) return Promise.resolve(cached as boolean);
+    const stored = await this.getStoredValue("allowInterruptions", true, 'local') as boolean; // Changed to 'local'
+    this.cache.setCachedValue("allowInterruptions", stored);
+    return stored;
   }
 
   public setAllowInterruptions(enabled: boolean): Promise<void> {
     this.cache.setCachedValue("allowInterruptions", enabled);
     EventBus.emit("userPreferenceChanged", { allowInterruptions: enabled });
-    return this.setStoredValue("allowInterruptions", enabled, 'sync');
+    return this.setStoredValue("allowInterruptions", enabled, 'local'); // Changed to 'local'
   }
 
   // --- Methods primarily using cache or other logic ---
@@ -682,23 +694,20 @@ class UserPreferenceModule {
     return this.cache.getCachedValue("isTTSBetaPaused", false);
   }
 
-  public getTextToSpeechEnabled(): Promise<boolean> {
+  public async getTextToSpeechEnabled(): Promise<boolean> {
     if (isSafari()) {
       return Promise.resolve(false);
     }
-    // isTTSBetaPaused is async and hits network, getCachedIsTTSBetaPaused is sync
-    // enableTTS is from sync storage
     return Promise.all([
-      this.getStoredValue("enableTTS", true, 'sync'), // Assuming enableTTS remains a sync setting
-      this.getCachedIsTTSBetaPaused(), // Use cached for the network call part
+      this.getStoredValue("enableTTS", true, 'local'), // Changed to 'local'
+      this.getCachedIsTTSBetaPaused(), 
     ]).then(([enableTTS, ttsBetaPaused]) => enableTTS && !ttsBetaPaused);
   }
   
   public setEnableTTS(enabled: boolean): Promise<void> {
-    // Assuming "enableTTS" is a sync setting
-    this.cache.setCachedValue("enableTTS", enabled); // Cache it if used elsewhere
+    this.cache.setCachedValue("enableTTS", enabled); 
     EventBus.emit("userPreferenceChanged", { enableTTS: enabled });
-    return this.setStoredValue("enableTTS", enabled, 'sync');
+    return this.setStoredValue("enableTTS", enabled, 'local'); // Changed to 'local'
   }
 
   public getCachedAutoSubmit(): boolean {
@@ -716,8 +725,9 @@ class UserPreferenceModule {
     return Promise.resolve(true);
   }
 
-  public hasFeatureEntitlement(featureCode: string): Promise<boolean> {
-    return Promise.resolve(jwtManager.hasFeatureEntitlement(featureCode));
+  public async hasFeatureEntitlement(featureCode: string): Promise<boolean> {
+    const jwtManager = await getJwtManager();
+    return jwtManager.hasFeatureEntitlement(featureCode);
   }
 
   public hasAgentModeEntitlement(): Promise<boolean> {
@@ -745,6 +755,13 @@ class UserPreferenceModule {
     } catch (e) {
       console.warn("Could not access localStorage to set view preference: ", e);
     }
+  }
+
+  /**
+   * Synchronous read interface for preference clients
+   */
+  public getPreference<T>(key: string, defaultValue: T): T {
+    return this.cache.getCachedValue(key, defaultValue) as T;
   }
 }
 

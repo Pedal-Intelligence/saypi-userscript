@@ -6,9 +6,9 @@ import chevronSvgContent from "../icons/claude-chevron.svg";
 import volumeSvgContent from "../icons/volume-mid.svg";
 import volumeMutedSvgContent from "../icons/volume-muted.svg";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
-import jwtManager from "../JwtManager";
 import getMessage from "../i18n";
 import { openSettings } from "../popup/popupopener";
+import { getJwtManagerSync } from "../JwtManager";
 
 export class ClaudeVoiceMenu extends VoiceSelector {
   private menuButton: HTMLButtonElement;
@@ -29,6 +29,9 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     if (!this.element.id) {
       this.element.id = this.getId();
     }
+
+    // Clean up any existing voice selector elements before initializing
+    this.cleanupExistingElements(this.element);
 
     this.initializeVoiceSelector(chatbot);
   }
@@ -77,14 +80,14 @@ export class ClaudeVoiceMenu extends VoiceSelector {
   protected createVoiceButton(
     voice: SpeechSynthesisVoiceRemote | null
   ): HTMLButtonElement {
-    const button = document.createElement("button");
-    button.classList.add(...this.getButtonClasses());
-    button.setAttribute("aria-haspopup", "true");
-    button.setAttribute("aria-expanded", "false");
-    button.setAttribute("type", "button");
+    const expandButton = document.createElement("button");
+    expandButton.classList.add(...this.getButtonClasses());
+    expandButton.setAttribute("aria-haspopup", "true");
+    expandButton.setAttribute("aria-expanded", "false");
+    expandButton.setAttribute("type", "button");
     
     // Add data attribute to indicate if voice is active
-    button.setAttribute("data-voice-active", voice ? "true" : "false");
+    expandButton.setAttribute("data-voice-active", voice ? "true" : "false");
 
     // Create a div to match Claude's model selector structure
     const contentDiv = document.createElement("div");
@@ -129,11 +132,11 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     nameContainer.appendChild(voiceName);
     contentDiv.appendChild(nameContainer);
     
-    button.appendChild(contentDiv);
+    expandButton.appendChild(contentDiv);
 
     // Add the chevron icon as a separate SVG
     addSvgToButton(
-      button,
+      expandButton,
       chevronSvgContent,
       "chevron",
       "text-text-500",
@@ -143,8 +146,10 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       "ml-1.5"
     );
 
-    button.addEventListener("click", () => this.toggleMenu());
-    return button;
+    expandButton.addEventListener("click", () => {
+      this.toggleMenu();
+    });
+    return expandButton;
   }
 
   protected createVoiceMenu(): HTMLDivElement {
@@ -204,7 +209,15 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     item.setAttribute("role", "menuitem");
     item.setAttribute("tabindex", "-1");
 
+    // Store voice data on the element for reliable identification
+    if (voice) {
+      item.dataset.voiceName = voice.name;
+    } else {
+      item.dataset.voiceName = "voice-off";
+    }
+
     // Check if this is a sign-in prompt item
+    const jwtManager = getJwtManagerSync();
     const isAuthenticated = jwtManager.isAuthenticated();
     const isSignInPrompt = !voice && noVoicesAvailable && !isAuthenticated;
     const claims = jwtManager.getClaims();
@@ -252,9 +265,9 @@ export class ClaudeVoiceMenu extends VoiceSelector {
 
     item.appendChild(content);
 
-    // Add space for checkmark
+    // Add checkmark container - positioned as second column in grid
     const checkmarkContainer = document.createElement("div");
-    checkmarkContainer.classList.add("checkmark-container", "text-accent-secondary-100");
+    checkmarkContainer.classList.add("checkmark-container");
     item.appendChild(checkmarkContainer);
 
     item.addEventListener("click", () => this.handleVoiceSelection(voice, item));
@@ -319,8 +332,13 @@ export class ClaudeVoiceMenu extends VoiceSelector {
     this.menuButton.setAttribute("aria-expanded", (!isExpanded).toString());
 
     if (!isExpanded) {
-      // Show and position the menu
-      this.positionMenuAboveButton();
+      // refresh menu
+      this.refreshMenu().then(() => {
+        // Show and position the menu
+        this.positionMenuAboveButton();
+        // set aria-expanded to true
+        this.menuButton.setAttribute("aria-expanded", "true");
+      });
     } else {
       // Hide the menu
       this.menuContent.style.display = "none";
@@ -343,7 +361,10 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       this.userPreferences.setVoice(voice).then(() => {
         console.log(`Selected voice: ${voice.name}`);
         this.updateSelectedVoice(voice);
-        this.introduceVoice(voice);
+        // only introduce the voice if there are other voices available (one of which is "Voice off")
+        if (this.menuContent.querySelectorAll("[role='menuitem']").length > 2) {
+          this.introduceVoice(voice);
+        }
       });
     } else {
       this.userPreferences.unsetVoice().then(() => {
@@ -352,6 +373,57 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       });
     }
     this.toggleMenu();
+  }
+
+  private cleanupExistingElements(voiceSelector: HTMLElement): void {
+    // Remove any existing buttons and menus to prevent duplicates
+    
+    // 1. Clean up our tracked elements if they exist
+    if (this.menuButton) {
+      if (this.menuButton.parentElement) {
+        this.menuButton.parentElement.removeChild(this.menuButton);
+      }
+      this.menuButton = document.createElement("button"); // Reset to placeholder
+    }
+    
+    if (this.menuContent) {
+      if (this.menuContent.parentElement) {
+        this.menuContent.parentElement.removeChild(this.menuContent);
+      }
+      this.menuContent = document.createElement("div"); // Reset to placeholder
+    }
+    
+    // 2. Find and remove any orphaned voice selector buttons/menus by class/attribute
+    const existingButtons = voiceSelector.querySelectorAll('button[data-voice-active]');
+    existingButtons.forEach(button => {
+      if (button.parentElement) {
+        button.parentElement.removeChild(button);
+      }
+    });
+    
+    const existingMenus = voiceSelector.querySelectorAll('.voice-menu-content');
+    existingMenus.forEach(menu => {
+      if (menu.parentElement) {
+        menu.parentElement.removeChild(menu);
+      }
+    });
+    
+    // 3. Additional safety check - remove any elements that look like voice selector components
+    const possibleDuplicateButtons = voiceSelector.querySelectorAll('button[aria-haspopup="true"]');
+    possibleDuplicateButtons.forEach(button => {
+      // Check if this looks like our voice button by checking for voice-related content
+      const hasVoiceIcon = button.querySelector('.voiced-by');
+      const hasVoiceName = button.querySelector('.voice-name');
+      if (hasVoiceIcon || hasVoiceName) {
+        if (button.parentElement) {
+          button.parentElement.removeChild(button);
+        }
+      }
+    });
+    
+    // 4. Reset initialization flags to allow fresh initialization
+    delete voiceSelector.dataset.voiceSelectorInitialized;
+    delete voiceSelector.dataset.clickListenerAdded;
   }
 
   private updateSelectedVoice(
@@ -372,20 +444,19 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       iconContainer.innerHTML = selectedVoice ? volumeSvgContent : volumeMutedSvgContent;
     }
 
+    const selectedVoiceName = selectedVoice ? selectedVoice.name : "voice-off";
     const menuItems = this.menuContent.querySelectorAll("[role='menuitem']");
+    
     menuItems.forEach((item) => {
       if (item instanceof HTMLElement) {
-        const itemName = item.querySelector(".text-sm")?.textContent;
-        const isSelected = itemName === (selectedVoice ? selectedVoice.name : getMessage("voiceOff"));
+        const itemVoiceName = item.dataset.voiceName;
+        const isSelected = itemVoiceName === selectedVoiceName;
         
-        // Toggle selected state with Claude's styling
-        item.classList.toggle("bg-bg-300", isSelected);
-        
-        // Update checkmark
+        // Update checkmark with exact Claude native styling
         const checkmarkContainer = item.querySelector(".checkmark-container");
         if (checkmarkContainer) {
           checkmarkContainer.innerHTML = isSelected ? 
-            '<svg width="16" height="16" viewBox="0 0 256 256" class="text-accent-secondary-100 mb-1 mr-1.5" fill="currentColor"><path d="M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z"></path></svg>' : 
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256" class="text-accent-secondary-100 mb-1 mr-1.5"><path d="M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z"></path></svg>' : 
             '';
         }
       }
@@ -393,16 +464,31 @@ export class ClaudeVoiceMenu extends VoiceSelector {
   }
 
   override populateVoices(voices: SpeechSynthesisVoiceRemote[], voiceSelector: HTMLElement): boolean {
-    // Remove previously created menu elements (if any) to prevent duplicates
+    // Get the currently selected voice before recreating the menu
+    let currentSelectedVoice: SpeechSynthesisVoiceRemote | null = null;
+    
+    // Try to get from the current button if it exists
     if (this.menuButton && this.menuButton.parentElement === voiceSelector) {
-      voiceSelector.removeChild(this.menuButton);
+      const voiceNameElement = this.menuButton.querySelector(".voice-name");
+      if (voiceNameElement) {
+        const currentVoiceName = voiceNameElement.textContent;
+        if (currentVoiceName && currentVoiceName !== getMessage("voiceOff")) {
+          // Find the voice object that matches the current selection
+          currentSelectedVoice = voices.find(voice => voice.name === currentVoiceName) || null;
+        }
+      }
     }
-    if (this.menuContent && this.menuContent.parentElement === voiceSelector) {
-      voiceSelector.removeChild(this.menuContent);
+    
+    // If we couldn't get it from the button, try to get it from user preferences
+    if (!currentSelectedVoice) {
+      // This will be handled asynchronously below
     }
 
+    // Comprehensive cleanup to prevent duplicates
+    this.cleanupExistingElements(voiceSelector);
+
     // Recreate the menu button and content from scratch
-    this.menuButton = this.createVoiceButton(null);
+    this.menuButton = this.createVoiceButton(currentSelectedVoice);
     voiceSelector.appendChild(this.menuButton);
 
     this.menuContent = this.createVoiceMenu();
@@ -421,27 +507,49 @@ export class ClaudeVoiceMenu extends VoiceSelector {
       this.menuContent.appendChild(menuItem);
     });
 
+    // If we found a selected voice from the button, update the menu items to show selection
+    if (currentSelectedVoice) {
+      this.updateSelectedVoice(currentSelectedVoice);
+    } else {
+      // Fall back to getting the voice from preferences asynchronously
+      this.userPreferences.getVoice(this.chatbot).then((voice) => {
+        this.updateSelectedVoice(voice);
+      });
+    }
+
     return !noVoicesAvailable;
   }
 
   private initializeVoiceSelector(chatbot: Chatbot): void {
+    // Prevent double initialization
+    if (this.element.dataset.voiceSelectorInitialized === "true") {
+      console.log("[status] Voice selector already initialized, skipping");
+      return;
+    }
+
     const speechSynthesis = SpeechSynthesisModule.getInstance();
+    console.log("[status] Initializing voice selector");
     speechSynthesis.getVoices(chatbot).then((voices) => {
       this.populateVoices(voices, this.element);
 
-      // Set initial selected voice
-      this.userPreferences.getVoice(chatbot).then((voice) => {
-        this.updateSelectedVoice(voice);
-      });
+      // Note: populateVoices() now handles restoring the selected voice,
+      // so we don't need to call updateSelectedVoice() here anymore
 
-      // Close menu when clicking outside
-      document.addEventListener("click", (event) => {
-        if (!this.element.contains(event.target as Node)) {
-          this.menuContent.style.display = "none";
-          this.menuButton.setAttribute("aria-expanded", "false");
-        }
-      });
+      // Close menu when clicking outside - only add if not already added
+      if (!this.element.dataset.clickListenerAdded) {
+        document.addEventListener("click", (event) => {
+          if (!this.element.contains(event.target as Node)) {
+            this.menuContent.style.display = "none";
+            this.menuButton.setAttribute("aria-expanded", "false");
+          }
+        });
+        this.element.dataset.clickListenerAdded = "true";
+      }
+
+      // Mark as initialized
+      this.element.dataset.voiceSelectorInitialized = "true";
     });
+    console.log("[status] Voice selector initialized");
   }
 
   getPositionFromEnd(): number {
