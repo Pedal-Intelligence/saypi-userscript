@@ -108,10 +108,13 @@ for BROWSER in "$@"; do
     AUDIO_DIR="$PUBLIC_DIR/audio"
     ICONS_DIR="$PUBLIC_DIR/icons"
     LOGOS_DIR="$ICONS_DIR/logos"
+    PERMISSIONS_DIR="$PUBLIC_DIR/permissions"
+    OFFSCREEN_DIR="$PUBLIC_DIR/offscreen"
     SRC_DIR="$EXT_DIR/src"
     SRC_ICONS_DIR="$SRC_DIR/icons"
     FLAGS_DIR="$SRC_ICONS_DIR/flags"
     POPUP_DIR="$SRC_DIR/popup"
+    SRC_OFFSCREEN_DIR="$SRC_DIR/offscreen"
 
     # Create necessary directories
     mkdir -p "$EXT_DIR"
@@ -135,6 +138,15 @@ for BROWSER in "$@"; do
     cp "$WORKLET_FILE" "$PUBLIC_DIR"
     cp public/audio/*.mp3 "$AUDIO_DIR"
 
+    mkdir -p "$PERMISSIONS_DIR"
+    cp public/permissions/*.html "$PERMISSIONS_DIR"
+    cp public/permissions/*.js "$PERMISSIONS_DIR"
+    cp public/permissions/*.css "$PERMISSIONS_DIR"
+    cp public/permissions/*.png "$PERMISSIONS_DIR"
+
+    mkdir -p "$OFFSCREEN_DIR"
+    cp public/offscreen/*.js "$OFFSCREEN_DIR"
+
     mkdir -p "$LOGOS_DIR"
     cp public/icons/*.svg "$ICONS_DIR"
     cp public/icons/logos/*.svg "$LOGOS_DIR"
@@ -146,6 +158,16 @@ for BROWSER in "$@"; do
 
     mkdir -p "$POPUP_DIR"
     cp src/popup/*.html src/popup/*.js src/popup/*.css src/popup/*.png src/popup/*.svg "$POPUP_DIR"
+
+    mkdir -p "$SRC_OFFSCREEN_DIR"
+    cp src/offscreen/*.html "$SRC_OFFSCREEN_DIR"
+
+    # Copy permissions files to src directory (needed for manifest web_accessible_resources)
+    SRC_PERMISSIONS_DIR="$SRC_DIR/permissions"
+    mkdir -p "$SRC_PERMISSIONS_DIR"
+    cp src/permissions/permissions-prompt.html "$SRC_PERMISSIONS_DIR"
+    cp src/permissions/permissions-prompt.css "$SRC_PERMISSIONS_DIR"
+    cp src/permissions/himfloyd-mic.png "$SRC_PERMISSIONS_DIR"
 
     cp -r _locales "$EXT_DIR"
 
