@@ -156,9 +156,8 @@ export class OnscreenVADClient implements VADClientInterface {
   }
 
   private getMinimalVADOptions(): Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks {
-    // Minimal options - no custom paths, let VAD use defaults
+    // Minimal options - no custom paths, legacy model, let VAD use defaults
     return {
-      model: "v5" as const,
       onSpeechStart: () => {
         logger.debug("[SayPi OnscreenVADClient] Speech started (minimal)");
         this.speechStartTime = Date.now();
