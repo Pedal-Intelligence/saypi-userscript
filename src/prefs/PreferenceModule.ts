@@ -788,7 +788,6 @@ class UserPreferenceCache {
 
   public setCachedValue(key: string, value: any): void {
     this.cache[key] = value;
-    console.debug("Setting cache value: ", key, value);
   }
 }
 

@@ -5,6 +5,8 @@ import EventBus from "../events/EventBus.js";
 import { AudioCapabilityDetector } from "../audio/AudioCapabilities";
 import getMessage from "../i18n";
 import { OffscreenVADClient } from '../vad/OffscreenVADClient';
+import { OnscreenVADClient } from '../vad/OnscreenVADClient';
+import { VADClientInterface } from '../vad/VADClientInterface';
 import { logger } from "../LoggingModule";
 import { likelySupportsOffscreen, getBrowserInfo } from "../UserAgentModule";
 
@@ -13,62 +15,43 @@ setupInterceptors();
 /**
  * Logs processing delays based on threshold values
  * @param captureTimestamp - When the audio was originally captured
- * @param clientTimestamp - When the client received the data
- * @param handlerTimestamp - When the handler processed the data
+ * @param receiveTimestamp - When the client received the data
+ * @param description - Description of what's being measured
  */
-function logProcessingDelay(captureTimestamp: number, clientTimestamp: number, handlerTimestamp: number): void {
-  const captureToHandlerDelay = handlerTimestamp - captureTimestamp;
-  const clientToHandlerDelay = handlerTimestamp - clientTimestamp;
+function logProcessingDelay(captureTimestamp: number, receiveTimestamp: number, description: string = "processing"): void {
+  const delay = receiveTimestamp - captureTimestamp;
   
-  if (captureToHandlerDelay > 1000) {
-    logger.error(
-      `[AudioInputMachine] Critical delay: ${captureToHandlerDelay}ms from capture to handler. ` +
-      `Client-to-handler: ${clientToHandlerDelay}ms`
-    );
-  } else if (captureToHandlerDelay > 500) {
-    logger.warn(
-      `[AudioInputMachine] High delay: ${captureToHandlerDelay}ms from capture to handler. ` +
-      `Client-to-handler: ${clientToHandlerDelay}ms`
-    );
-  } else if (captureToHandlerDelay > 300) {
-    logger.info(
-      `[AudioInputMachine] Elevated delay: ${captureToHandlerDelay}ms from capture to handler. ` +
-      `Client-to-handler: ${clientToHandlerDelay}ms`
-    );
+  if (delay > 500) {
+    logger.warn(`[AudioInputMachine] High ${description} delay: ${delay}ms from capture to client receipt`);
+  } else if (delay > 200) {
+    logger.info(`[AudioInputMachine] Elevated ${description} delay: ${delay}ms from capture to client receipt`);
   }
 }
 
 let previousDeviceIds: string[] = [];
 let previousDefaultDevice: MediaDeviceInfo | null = null;
 
-// Conditionally instantiate the VAD client based on browser support
-let vadClient: OffscreenVADClient | null = null;
-let useOffscreenVAD = false;
+// VAD client instance - will be either OffscreenVADClient or OnscreenVADClient
+let vadClient: VADClientInterface | null = null;
 
-// Check browser compatibility and initialize VAD client if supported
+// Initialize the appropriate VAD client based on browser support
 function initializeVADClient() {
-  if (!likelySupportsOffscreen()) {
-    const browserInfo = getBrowserInfo();
-    logger.debug(`[AudioInputMachine] ${browserInfo.name} detected - offscreen VAD not supported, falling back to in-page processing`, {
-      browser: browserInfo.name,
-      isMobile: browserInfo.isMobile,
-      userAgent: browserInfo.userAgent
-    });
-    useOffscreenVAD = false;
-    vadClient = null;
-    return;
+  const useOffscreenVAD = likelySupportsOffscreen();
+  const browserInfo = getBrowserInfo();
+  
+  if (useOffscreenVAD) {
+    logger.debug(`[AudioInputMachine] Browser supports offscreen documents - using OffscreenVADClient`, browserInfo);
+    vadClient = new OffscreenVADClient();
+  } else {
+    logger.debug(`[AudioInputMachine] Browser does not support offscreen documents - using OnscreenVADClient`, browserInfo);
+    vadClient = new OnscreenVADClient();
   }
   
-  logger.debug("[AudioInputMachine] Browser supports offscreen documents - initializing OffscreenVADClient");
-  useOffscreenVAD = true;
-  vadClient = new OffscreenVADClient();
+  // Setup event listeners for the selected client
   setupVADEventListeners();
 }
 
-// Initialize VAD client based on browser support
-initializeVADClient();
-
-// Setup VAD event listeners (only called if vadClient exists)
+// Setup VAD event listeners (works with both client types)
 function setupVADEventListeners() {
   if (!vadClient) {
     logger.debug("[AudioInputMachine] No VAD client available - skipping event listener setup");
@@ -79,7 +62,6 @@ function setupVADEventListeners() {
 
   vadClient.on('onSpeechStart', () => {
     console.debug("[AudioInputMachine] User speech started (event from VAD client).");
-    // speechStartTime is now managed in offscreen, but we can mirror if needed or rely on duration from onSpeechEnd
     EventBus.emit("saypi:userSpeaking");
   });
 
@@ -89,64 +71,86 @@ function setupVADEventListeners() {
     captureTimestamp: number; 
     clientReceiveTimestamp: number 
   }) => {
-    console.debug("[AudioInputMachine] User speech ended (event from VAD client). Duration:", data.duration);
-    // Reconstruct Float32Array from audio buffer
-    const audioData = new Float32Array(data.audioBuffer);
-    const frameCount = audioData.length;
-    const frameRate = 16000;
-    const duration = frameCount / frameRate;
-    const handlerTimestamp = Date.now();
+    console.debug(`[AudioInputMachine] User speech ended. Duration: ${data.duration}ms`);
     
-    // Only log basic information about speech data at debug level
-    console.debug(
-      `[AudioInputMachine] Speech duration: ${data.duration}ms, Frame count: ${frameCount}, Frame rate: ${frameRate}, Duration: ${duration}s`
-    );
+    // Log processing delays only if they exceed thresholds
+    logProcessingDelay(data.captureTimestamp, data.clientReceiveTimestamp);
     
-    // Log timing information based on delay thresholds
-    logProcessingDelay(data.captureTimestamp, data.clientReceiveTimestamp, handlerTimestamp);
-    
-    if (frameCount === 0) {
-      console.warn("[AudioInputMachine] No audio data available. Skipping emission of audio:dataavailable event.");
-      return;
-    }
-    // Convert to WAV Blob for transcription
-    const audioBlob = convertToWavBlob(audioData);
-    console.debug(`Reconstructed Blob size: ${audioBlob.size} bytes`);
-    // Emit both blob and duration for transcription
-    EventBus.emit("audio:dataavailable", {
-      blob: audioBlob,
+    EventBus.emit("saypi:userStoppedSpeaking", {
+      audioBuffer: data.audioBuffer,
       duration: data.duration,
       captureTimestamp: data.captureTimestamp,
-      clientReceiveTimestamp: data.clientReceiveTimestamp,
-      handlerTimestamp: handlerTimestamp
+      clientReceiveTimestamp: data.clientReceiveTimestamp
     });
   });
 
   vadClient.on('onVADMisfire', () => {
-    console.debug("[AudioInputMachine] VAD Misfire (event from VAD client).");
-    EventBus.emit("saypi:userStoppedSpeaking", { 
-      duration: 0,
-      captureTimestamp: Date.now(), // As a misfire, we don't have real capture data, using current time
-      clientReceiveTimestamp: Date.now(),
-      handlerTimestamp: Date.now()
-    });
-  });
-
-  vadClient.on('onError', (error: string) => {
-    console.error("[AudioInputMachine] VAD Error (event from VAD client):", error);
-    EventBus.emit("saypi:ui:show-notification", {
-      message: error,
-      type: "text",
-      seconds: 10,
-      icon: "microphone-muted",
-    });
+    console.debug("[AudioInputMachine] VAD misfire detected.");
+    EventBus.emit("saypi:vadMisfire");
   });
 
   vadClient.on('onFrameProcessed', (probabilities: { isSpeech: number; notSpeech: number }) => {
-    // this event is debounced in the offscreen document, so don't expect to receive every single frame
-    EventBus.emit("audio:frame", probabilities);
+    EventBus.emit("saypi:vadFrameProcessed", probabilities);
   });
 }
+
+// Initialize the appropriate VAD client based on browser support
+initializeVADClient();
+
+// Event listeners for audio data and VAD events
+EventBus.on("saypi:userStoppedSpeaking", (data: { 
+  audioBuffer: ArrayBuffer; 
+  duration: number; 
+  captureTimestamp: number; 
+  clientReceiveTimestamp: number 
+}) => {
+  console.debug("[AudioInputMachine] Received userStoppedSpeaking event. Duration:", data.duration);
+  
+  // Reconstruct Float32Array from audio buffer
+  const audioData = new Float32Array(data.audioBuffer);
+  const frameCount = audioData.length;
+  const frameRate = 16000;
+  const duration = frameCount / frameRate;
+  const handlerTimestamp = Date.now();
+  
+  // Only log basic information about speech data at debug level
+  console.debug(
+    `[AudioInputMachine] Speech duration: ${data.duration}ms, Frame count: ${frameCount}, Frame rate: ${frameRate}, Duration: ${duration}s`
+  );
+  
+  if (frameCount === 0) {
+    console.warn("[AudioInputMachine] No audio data available. Skipping emission of audio:dataavailable event.");
+    return;
+  }
+  
+  // Convert to WAV Blob for transcription
+  const audioBlob = convertToWavBlob(audioData);
+  console.debug(`Reconstructed Blob size: ${audioBlob.size} bytes`);
+  
+  // Emit both blob and duration for transcription
+  EventBus.emit("audio:dataavailable", {
+    blob: audioBlob,
+    duration: data.duration,
+    captureTimestamp: data.captureTimestamp,
+    clientReceiveTimestamp: data.clientReceiveTimestamp,
+    handlerTimestamp: handlerTimestamp
+  });
+});
+
+EventBus.on("saypi:vadMisfire", () => {
+  console.debug("[AudioInputMachine] VAD Misfire detected.");
+  EventBus.emit("saypi:userStoppedSpeaking", { 
+    audioBuffer: new ArrayBuffer(0),
+    duration: 0,
+    captureTimestamp: Date.now(),
+    clientReceiveTimestamp: Date.now()
+  });
+});
+
+EventBus.on("saypi:vadFrameProcessed", (probabilities: { isSpeech: number; notSpeech: number }) => {
+  // This event is debounced in the VAD clients, so don't expect to receive every single frame
+  EventBus.emit("audio:frame", probabilities);
+});
 
 async function monitorAudioInputDevices() {
   const devices = await navigator.mediaDevices.enumerateDevices();
@@ -306,62 +310,67 @@ async function setupRecording(completion_callback?: (success: boolean, error?: s
       EventBus.emit("saypi:ui:show-notification", {
         message: errorMsg,
         type: "text",
-        seconds: 20,
+        seconds: 10,
         icon: "microphone-muted",
       });
       completion_callback?.(false, errorMsg);
       return;
     }
 
-    if (!useOffscreenVAD || !vadClient) {
-      // Fallback to in-page VAD processing for unsupported browsers
-      logger.debug("[AudioInputMachine] Using in-page VAD processing (offscreen not supported)");
-      // TODO: Implement in-page VAD fallback here
-      // For now, we'll show a notification that VAD is not available
-      const errorMsg = "Voice Activity Detection is not available in this browser. Please use a supported browser like Chrome or Edge.";
+    console.log("[AudioInputMachine] Microphone permission granted. Proceeding with VAD setup...");
+
+    if (!vadClient) {
+      const errorMsg = "VAD client not available - this should not happen";
+      console.error("[AudioInputMachine]", errorMsg);
       EventBus.emit("saypi:ui:show-notification", {
-        message: errorMsg,
+        message: "Voice recording not available",
         type: "text",
-        seconds: 20,
+        seconds: 10,
         icon: "microphone-muted",
       });
       completion_callback?.(false, errorMsg);
       return;
     }
 
-    console.log("[AudioInputMachine] Microphone permission is granted. Proceeding with VAD initialization via client...");
-    const result = await vadClient.initialize({ /* pass any specific options if needed */ });
+    // Initialize the VAD client (works for both offscreen and onscreen)
+    console.log("[AudioInputMachine] Initializing VAD client...");
+    const initResult = await vadClient.initialize();
     
-    if (result.success) {
-      console.log("[AudioInputMachine] VAD initialized successfully via offscreen. Mode:", result.mode);
-      completion_callback?.(true);
-    } else {
-      console.error("[AudioInputMachine] VAD initialization failed via offscreen:", result.error);
-      const errorMessage = result.error || getMessage("microphoneErrorUnexpected");
+    if (!initResult.success) {
+      const errorMsg = initResult.error || "Failed to initialize VAD";
+      console.error("[AudioInputMachine] VAD initialization failed:", errorMsg);
       EventBus.emit("saypi:ui:show-notification", {
-        message: errorMessage,
+        message: "Failed to initialize voice detection",
         type: "text",
-        seconds: 20,
+        seconds: 10,
         icon: "microphone-muted",
       });
-      completion_callback?.(false, errorMessage);
+      completion_callback?.(false, errorMsg);
+      return;
     }
-  } catch (err: any) {
-    console.error("[AudioInputMachine] Error in setupRecording:", err);
-    const finalErrorMessage = err.message || getMessage("microphoneErrorUnexpected");
+
+    console.log(`[AudioInputMachine] VAD initialized successfully in ${initResult.mode} mode`);
+    completion_callback?.(true);
+
+  } catch (error: any) {
+    const errorMsg = error.message || "Unknown error during recording setup";
+    console.error("[AudioInputMachine] Error in setupRecording:", error);
     EventBus.emit("saypi:ui:show-notification", {
-        message: finalErrorMessage,
-        type: "text",
-        seconds: 20,
-        icon: "microphone-muted",
-      });
-    completion_callback?.(false, finalErrorMessage);
+      message: "Failed to set up voice recording",
+      type: "text",
+      seconds: 10,
+      icon: "microphone-muted",
+    });
+    completion_callback?.(false, errorMsg);
   }
 }
 
 function tearDownRecording(): void {
-  console.log("[AudioInputMachine] Tearing down recording via VAD client...");
+  console.log("[AudioInputMachine] Tearing down recording...");
+  
+  // Clean up VAD client if it exists (works for both offscreen and onscreen)
   if (vadClient) {
+    console.log("[AudioInputMachine] Destroying VAD client...");
     vadClient.destroy();
   }
 }
@@ -530,28 +539,50 @@ export const audioInputMachine = createMachine<
     actions: {
       startRecording: async (context, event) => {
         context.recordingStartTime = Date.now();
-        console.log("[AudioInputMachine] Requesting VAD start via client...");
+        
         if (!vadClient) {
           console.error("[AudioInputMachine] VAD client not available - cannot start recording");
           EventBus.emit("saypi:ui:show-notification", {
-            message: "Voice recording not available in this browser",
+            message: "Voice recording not available",
             type: "text",
             seconds: 10,
             icon: "microphone-muted",
           });
           return;
         }
+        
+        console.log("[AudioInputMachine] Starting VAD client...");
         const result = await vadClient.start();
+        
         if (!result.success) {
-          console.error("[AudioInputMachine] Failed to start VAD via client:", result.error);
-          // Optionally send an error event to the machine or show notification
-           EventBus.emit("saypi:ui:show-notification", {
-            message: result.error || "Failed to start recording",
+          console.error("[AudioInputMachine] Failed to start VAD:", result.error);
+          EventBus.emit("saypi:ui:show-notification", {
+            message: "Failed to start voice recording",
             type: "text",
             seconds: 10,
             icon: "microphone-muted",
           });
+          return;
         }
+        
+        console.log("[AudioInputMachine] VAD started successfully");
+      },
+      
+      stopRecording: async (context, event) => {
+        if (!vadClient) {
+          console.error("[AudioInputMachine] VAD client not available - cannot stop recording");
+          return;
+        }
+        
+        console.log("[AudioInputMachine] Stopping VAD client...");
+        const result = await vadClient.stop();
+        
+        if (!result.success) {
+          console.error("[AudioInputMachine] Failed to stop VAD:", result.error);
+          return;
+        }
+        
+        console.log("[AudioInputMachine] VAD stopped successfully");
       },
 
       prepareStop: async (context, event) => {

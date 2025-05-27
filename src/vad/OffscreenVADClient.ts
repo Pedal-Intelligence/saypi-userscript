@@ -2,6 +2,7 @@ import EventBus from '../events/EventBus';
 import { logger } from '../LoggingModule';
 import { VADStatusIndicator } from '../ui/VADStatusIndicator';
 import getMessage from '../i18n';
+import { VADClientInterface, VADClientCallbacks } from './VADClientInterface';
 
 console.log("[SayPi OffscreenVADClient] Client loaded.");
 
@@ -21,18 +22,7 @@ function logTransferDelay(captureTimestamp: number, receiveTimestamp: number, de
   }
 }
 
-interface VADClientCallbacks {
-  onSpeechStart?: () => void;
-  onSpeechEnd?: (data: { duration: number; audioBuffer: ArrayBuffer; captureTimestamp: number; clientReceiveTimestamp: number }) => void;
-  onVADMisfire?: () => void;
-  onError?: (error: string) => void;
-  onFrameProcessed?: (probabilities: { isSpeech: number; notSpeech: number }) => void;
-  onInitialized?: (success: boolean, error?: string, mode?: string) => void;
-  onStarted?: (success: boolean, error?: string) => void;
-  onStopped?: (success: boolean, error?: string) => void;
-}
-
-export class OffscreenVADClient {
+export class OffscreenVADClient implements VADClientInterface {
   private port: chrome.runtime.Port;
   private callbacks: VADClientCallbacks = {};
   private isPortConnected: boolean = true;
