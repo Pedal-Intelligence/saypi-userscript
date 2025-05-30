@@ -65,8 +65,10 @@
         "public/offscreen/vad_handler.js",
         "public/offscreen/audio_handler.js",
         "public/offscreen/media_offscreen.js",
-        "src/permissions/permissions-prompt.html",
-        "public/permissions/permissions-prompt.js"
+        "public/permissions/permissions-prompt.html",
+        "public/permissions/permissions-prompt.js",
+        "public/permissions/*.png",
+        "public/permissions/*.css"
       ],
       "matches": [
         "https://pi.ai/*",
