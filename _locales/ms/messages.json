@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Tetapan suara"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "Kami minta maaf, tetapi $ Browsername $ tidak menyokong ciri suara sepenuhnya dengan $ chatbotname $. \nCuba gunakan penyemak imbas desktop seperti Chrome atau Firefox."
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "Suara tidak disokong pada $ Browsername $ dengan $ chatbotname $. \nSila cuba penyemak imbas desktop."
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "Ciri -ciri suara tidak tersedia dalam penyemak imbas ini. \nCuba gunakan Chrome atau Firefox di desktop untuk pengalaman terbaik."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "Suara tidak tersedia. \nCuba Chrome atau Firefox di desktop."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "Ciri -ciri suara mungkin tidak disokong sepenuhnya pada pelayar mudah alih dengan $ chatbotname $. \nCuba gunakan penyemak imbas desktop untuk pengalaman terbaik."
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "Ciri -ciri suara terhad pada mudah alih. \nSila cuba penyemak imbas desktop."
   }
 }

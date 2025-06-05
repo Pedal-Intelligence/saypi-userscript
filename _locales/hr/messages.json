@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Glasovne postavke"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "Žao nam je, ali $ brawerName $ ne podržava u potpunosti glasovne značajke s $ chatbotname $. \nPokušajte koristiti preglednik za radnu površinu poput Chrome ili Firefox."
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "Glas nije podržan na $ rewerename $ s $ chatbotname $. \nPokušajte s preglednikom za radnu površinu."
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "Glasovne značajke nisu dostupne u ovom pregledniku. \nPokušajte koristiti Chrome ili Firefox na radnoj površini za najbolje iskustvo."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "Glas nije dostupan. \nIsprobajte Chrome ili Firefox na radnoj površini."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "Glasovne značajke možda nisu u potpunosti podržane na mobilnim preglednicima s $ chatbotname $. \nPokušajte koristiti preglednik za radnu površinu za najbolje iskustvo."
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "Glasovne značajke su ograničene na mobilnim uređajima. \nPokušajte s preglednikom za radnu površinu."
   }
 }

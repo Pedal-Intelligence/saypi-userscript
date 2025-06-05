@@ -1,5 +1,4 @@
 import { MicVAD, RealTimeVADOptions } from "@ricky0123/vad-web";
-import EventBus from '../events/EventBus';
 import { logger } from '../LoggingModule';
 import { VADStatusIndicator } from '../ui/VADStatusIndicator';
 import getMessage from '../i18n';
@@ -29,9 +28,10 @@ function logProcessingDelay(captureTimestamp: number, receiveTimestamp: number, 
 /**
  * Creates a user-friendly error message for known incompatible browser/chatbot combinations
  * @param technicalError - The original technical error message
+ * @param useShortVersion - Whether to return a short version suitable for transient notifications
  * @returns A user-friendly error message
  */
-function createUserFriendlyVADError(technicalError: string): string {
+function createUserFriendlyVADError(technicalError: string, useShortVersion: boolean = false): string {
   const browserInfo = getBrowserInfo();
   const chatbotType = ChatbotIdentifier.identifyChatbot();
   const chatbotName = chatbotType === 'claude' ? 'Claude' : chatbotType === 'pi' ? 'Pi' : 'this chatbot';
@@ -55,16 +55,19 @@ function createUserFriendlyVADError(technicalError: string): string {
       }
     }
     
-    return getMessage('vadErrorBrowserChatbotIncompatible', [browserName, chatbotName]);
+    const messageKey = useShortVersion ? 'vadErrorBrowserChatbotIncompatibleShort' : 'vadErrorBrowserChatbotIncompatible';
+    return getMessage(messageKey, [browserName, chatbotName]);
   }
   
   // Check for other potential mobile compatibility issues
   if (browserInfo.isMobile && technicalError.toLowerCase().includes('backend')) {
-    return getMessage('vadErrorMobileBrowserLimited', chatbotName);
+    const messageKey = useShortVersion ? 'vadErrorMobileBrowserLimitedShort' : 'vadErrorMobileBrowserLimited';
+    return getMessage(messageKey, useShortVersion ? undefined : chatbotName);
   }
   
   // Fallback to a more generic but still user-friendly message
-  return getMessage('vadErrorBrowserNotSupported');
+  const messageKey = useShortVersion ? 'vadErrorBrowserNotSupportedShort' : 'vadErrorBrowserNotSupported';
+  return getMessage(messageKey);
 }
 
 interface MyRealTimeVADCallbacks {
@@ -240,7 +243,7 @@ export class OnscreenVADClient implements VADClientInterface {
     };
   }
 
-  public async initialize(options: any = {}): Promise<{ success: boolean, error?: string, mode?: string }> {
+  public async initialize(options: any = {}): Promise<{ success: boolean, error?: string, errorLong?: string, mode?: string }> {
     if (this.isInitialized && this.vadInstance) {
       logger.debug("[SayPi OnscreenVADClient] VAD already initialized.");
       return { success: true, mode: "existing" };
@@ -287,15 +290,18 @@ export class OnscreenVADClient implements VADClientInterface {
         if (strategy === fallbackStrategies[fallbackStrategies.length - 1]) {
           logger.reportError(error, { function: 'OnscreenVADClient.initialize' }, "All VAD initialization strategies failed");
           
-          // Create a user-friendly error message for known compatibility issues
-          const userFriendlyError = createUserFriendlyVADError(error.message || "Unknown error");
-          const detail = getMessage('vadDetailInitError', userFriendlyError);
+          // Create user-friendly error messages for known compatibility issues
+          const userFriendlyErrorLong = createUserFriendlyVADError(error.message || "Unknown error", false);
+          const userFriendlyErrorShort = createUserFriendlyVADError(error.message || "Unknown error", true);
+          const detail = getMessage('vadDetailInitError', userFriendlyErrorLong);
           this.statusIndicator.updateStatus(getMessage('vadStatusFailed'), detail);
           
-          // Call the callback if it exists
-          this.callbacks.onInitialized?.(false, userFriendlyError);
+          // Call the callback if it exists (use long version for VAD status)
+          this.callbacks.onInitialized?.(false, userFriendlyErrorLong);
           
-          return { success: false, error: userFriendlyError, mode: "failed" };
+          // Return both versions - the short one will be used for
+          //  notifications
+          return { success: false, error: userFriendlyErrorShort, errorLong: userFriendlyErrorLong, mode: "failed" };
         }
         
         // Continue to next strategy

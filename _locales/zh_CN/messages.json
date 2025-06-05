@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "语音设置"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "很抱歉，但是$ browsername $没有用$ chatbotname $完全支持语音功能。\n请尝试使用Chrome或Firefox等桌面浏览器。"
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "$ chatbotname $在$ browsername $上不支持语音。\n请尝试桌面浏览器。"
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "此浏览器中没有语音功能。\n请尝试在桌面上使用Chrome或Firefox，以获得最佳体验。"
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "声音不可用。\n在桌面上尝试Chrome或Firefox。"
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "使用$ CHATBOTNAME $的移动浏览器可能无法完全支持语音功能。\n请尝试使用桌面浏览器以获得最佳体验。"
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "语音功能在移动设备上受到限制。\n请尝试桌面浏览器。"
   }
 }

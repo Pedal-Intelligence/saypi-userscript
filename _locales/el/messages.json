@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Ρυθμίσεις φωνής"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "Λυπούμαστε, αλλά το $ Browsername $ δεν υποστηρίζει πλήρως τα χαρακτηριστικά φωνής με $ chatbotname $. \nΔοκιμάστε να χρησιμοποιήσετε ένα πρόγραμμα περιήγησης επιφάνειας εργασίας όπως το Chrome ή το Firefox."
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "Η φωνή δεν υποστηρίζεται στο $ Browsername $ με $ chatbotname $. \nΔοκιμάστε ένα πρόγραμμα περιήγησης επιφάνειας εργασίας."
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "Τα χαρακτηριστικά φωνής δεν είναι διαθέσιμα σε αυτό το πρόγραμμα περιήγησης. \nΔοκιμάστε να χρησιμοποιήσετε το Chrome ή τον Firefox στην επιφάνεια εργασίας για την καλύτερη εμπειρία."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "Η φωνή δεν είναι διαθέσιμη. \nΔοκιμάστε το Chrome ή τον Firefox στην επιφάνεια εργασίας."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "Τα χαρακτηριστικά φωνής ενδέχεται να μην υποστηρίζονται πλήρως σε προγράμματα περιήγησης για κινητά με $ chatbotname $. \nΔοκιμάστε να χρησιμοποιήσετε ένα πρόγραμμα περιήγησης επιφάνειας εργασίας για την καλύτερη εμπειρία."
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "Τα χαρακτηριστικά φωνής είναι περιορισμένα σε κινητά. \nΔοκιμάστε ένα πρόγραμμα περιήγησης επιφάνειας εργασίας."
   }
 }

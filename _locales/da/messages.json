@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Stemmeindstillinger"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "Vi beklager, men $ browsernavn $ understøtter ikke fuldt ud stemmefunktioner med $ chatbotname $. \nPrøv at bruge en desktop -browser som Chrome eller Firefox."
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "Stemmen understøttes ikke på $ browsernavn $ med $ chatbotname $. \nPrøv en desktop -browser."
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "Stemmefunktioner er ikke tilgængelige i denne browser. \nPrøv at bruge Chrome eller Firefox på desktop til den bedste oplevelse."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "Stemme ikke tilgængelig. \nPrøv Chrome eller Firefox på desktop."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "Stemmefunktioner understøttes muligvis ikke fuldt ud på mobile browsere med $ chatbotname $. \nPrøv at bruge en desktop -browser til den bedste oplevelse."
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "Stemmefunktioner er begrænset på mobil. \nPrøv en desktop -browser."
   }
 }

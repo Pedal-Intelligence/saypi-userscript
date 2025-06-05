@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Hangbeállítások"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "Sajnáljuk, de a $ böngészés $ nem támogatja teljes mértékben a hangfunkciókat a $ chatBotName $ segítségével. \nKérjük, próbáljon meg olyan asztali böngészőt használni, mint a Chrome vagy a Firefox."
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "A hangot nem támogatják a $ Browsername $ -on a $ chatBotName $ -val. \nKérjük, próbáljon ki egy asztali böngészőt."
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "A hangjellemzők nem érhetők el ebben a böngészőben. \nKérjük, próbálja meg használni a Chrome vagy a Firefox -ot az asztalon a legjobb élmény érdekében."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "A hang nem érhető el. \nPróbálja ki a Chrome -t vagy a Firefoxot az asztalon."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "Lehet, hogy a hangjellemzőket nem lehet teljes mértékben támogatni a mobil böngészőknél, a $ chatBotName $ -mal. \nKérjük, próbálja meg használni az asztali böngészőt a legjobb élmény érdekében."
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "A hangjellemzők korlátozottak a mobilon. \nKérjük, próbáljon ki egy asztali böngészőt."
   }
 }

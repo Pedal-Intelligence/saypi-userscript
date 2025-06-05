@@ -345,9 +345,14 @@ async function setupRecording(completion_callback?: (success: boolean, error?: s
     
     if (!initResult.success) {
       const errorMsg = initResult.error || "Failed to initialize VAD";
-      console.error("[AudioInputMachine] VAD initialization failed:", errorMsg);
+      const detailedErrorMsg = initResult.errorLong || errorMsg; // Use detailed version for logging and callback
+      console.error("[AudioInputMachine] VAD initialization failed:", detailedErrorMsg);
+      
+      // Use short error message for notification (if available), otherwise fall back to detailed
+      const notificationMessage = initResult.error ? errorMsg : "Failed to initialize voice detection";
+      
       EventBus.emit("saypi:ui:show-notification", {
-        message: "Failed to initialize voice detection",
+        message: notificationMessage,
         type: "text",
         seconds: 10,
         icon: "microphone-muted",

@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Röstinställningar"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "Vi är ledsna, men $ BrowsName $ stöder inte helt röstfunktioner med $ chatBotName $. \nFörsök att använda en skrivbords webbläsare som Chrome eller Firefox."
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "Röst stöds inte på $ webbläsnamn $ med $ chatBotName $. \nFörsök med en skrivbords webbläsare."
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "Röstfunktioner finns inte i denna webbläsare. \nFörsök att använda Chrome eller Firefox på skrivbordet för bästa upplevelse."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "Röst inte tillgänglig. \nProva Chrome eller Firefox på skrivbordet."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "Röstfunktioner kanske inte stöds fullt ut i mobila webbläsare med $ chatBotName $. \nFörsök använda en skrivbordswebbläsare för bästa upplevelse."
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "Röstfunktioner är begränsade på mobilen. \nFörsök med en skrivbords webbläsare."
   }
 }

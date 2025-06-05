@@ -480,7 +480,7 @@
     }
   },
   "microphoneErrorGeneric": {
-    "message": "Failed to access microphone: $message$",
+    "message": "$message$",
     "description": "Generic error message with details when microphone access fails.",
     "placeholders": {
       "message": {
@@ -1032,5 +1032,27 @@
   "vadErrorBrowserNotSupported": {
     "message": "Voice features are not available in this browser. Please try using Chrome or Firefox on desktop for the best experience.",
     "description": "Generic error message shown when voice features are not supported in the current browser."
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "Voice is not supported on $browserName$ with $chatbotName$. Please try a desktop browser.",
+    "description": "Short error message for notifications when a specific browser and chatbot combination is incompatible.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "Voice features are limited on mobile. Please try a desktop browser.",
+    "description": "Short error message for notifications when mobile browsers have limited voice support."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "Voice not available. Try Chrome or Firefox on desktop.",
+    "description": "Short generic error message for notifications when voice features are not supported."
   }
 }

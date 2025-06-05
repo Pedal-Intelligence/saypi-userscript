@@ -25,7 +25,7 @@ export interface VADClientInterface {
    * @param options - Configuration options for VAD initialization
    * @returns Promise resolving to initialization result
    */
-  initialize(options?: any): Promise<{ success: boolean, error?: string, mode?: string }>;
+  initialize(options?: any): Promise<{ success: boolean, error?: string, errorLong?: string, mode?: string }>;
 
   /**
    * Start VAD processing (begin listening for speech)

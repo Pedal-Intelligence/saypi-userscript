@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Ustawienia głosu"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "Przykro nam, ale $ Browername $ nie w pełni obsługuje funkcje głosowe z $ chatbotname $. \nSpróbuj użyć przeglądarki stacjonarnej, takiej jak Chrome lub Firefox."
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "Głos nie jest obsługiwany na $ Browname $ z $ chatbotname $. \nWypróbuj przeglądarkę komputerową."
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "Funkcje głosowe nie są dostępne w tej przeglądarce. \nSpróbuj użyć Chrome lub Firefox na komputerze, aby uzyskać najlepsze wrażenia."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "Głos niedostępny. \nWypróbuj Chrome lub Firefox na komputerze."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "Funkcje głosowe mogą nie być w pełni obsługiwane w przeglądarkach mobilnych z $ chatbotname $. \nSpróbuj użyć przeglądarki stacjonarnej, aby uzyskać najlepsze wrażenia."
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "Funkcje głosowe są ograniczone na urządzeniach mobilnych. \nWypróbuj przeglądarkę komputerową."
   }
 }

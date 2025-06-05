@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Setări vocale"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "Ne pare rău, dar $ browname $ nu acceptă pe deplin funcțiile vocale cu $ chatbotname $. \nVă rugăm să încercați să utilizați un browser desktop precum Chrome sau Firefox."
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "Vocea nu este acceptată pe $ browname $ cu $ chatbotname $. \nVă rugăm să încercați un browser desktop."
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "Caracteristicile vocale nu sunt disponibile în acest browser. \nVă rugăm să încercați să utilizați Chrome sau Firefox pe desktop pentru cea mai bună experiență."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "Vocea nu este disponibilă. \nÎncercați Chrome sau Firefox pe desktop."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "Este posibil ca funcțiile vocale să nu fie pe deplin acceptate pe browserele mobile cu $ chatbotname $. \nVă rugăm să încercați să utilizați un browser desktop pentru cea mai bună experiență."
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "Caracteristicile vocale sunt limitate pe mobil. \nVă rugăm să încercați un browser desktop."
   }
 }

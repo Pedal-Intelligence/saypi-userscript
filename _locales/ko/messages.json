@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "음성 설정"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "미안하지만 $ browsername $는 $ chatbotname $로 음성 기능을 완전히 지원하지 않습니다. \nChrome 또는 Firefox와 같은 데스크탑 브라우저를 사용해보십시오."
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "$ browsername $에서는 $ browsername $에서 음성이 지원되지 않습니다. $ chatbotname $. \n데스크탑 브라우저를 사용해보십시오."
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "이 브라우저에서는 음성 기능을 사용할 수 없습니다. \n최상의 경험을 위해 데스크탑에서 Chrome 또는 Firefox를 사용해보십시오."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "음성을 사용할 수 없습니다. \n데스크탑에서 Chrome 또는 Firefox를 사용해보십시오."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "$ chatbotname $가있는 모바일 브라우저에서 음성 기능이 완전히 지원되지 않을 수 있습니다. \n최상의 경험을 위해 데스크탑 브라우저를 사용해보십시오."
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "음성 기능은 모바일에서 제한됩니다. \n데스크탑 브라우저를 사용해보십시오."
   }
 }

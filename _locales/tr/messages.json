@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Ses Ayarları"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "Üzgünüz, ancak $ browername $ $ chatbotname $ ile ses özelliklerini tam olarak desteklemiyor. \nLütfen Chrome veya Firefox gibi bir masaüstü tarayıcı kullanmayı deneyin."
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "Voice $ chatbotname $ ile $ browername $ 'dan desteklenmez. \nLütfen bir masaüstü tarayıcı deneyin."
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "Bu tarayıcıda ses özellikleri mevcut değildir. \nEn iyi deneyim için lütfen Masaüstünde Chrome veya Firefox kullanmayı deneyin."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "Ses mevcut değil. \nMasaüstünde Chrome veya Firefox'u deneyin."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "Ses özellikleri $ ChatBotname $ ile mobil tarayıcılarda tam olarak desteklenmeyebilir. \nEn iyi deneyim için lütfen bir masaüstü tarayıcı kullanmayı deneyin."
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "Ses özellikleri mobil cihazlarla sınırlıdır. \nLütfen bir masaüstü tarayıcı deneyin."
   }
 }

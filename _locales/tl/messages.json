@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Mga setting ng boses"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "Humihingi kami ng paumanhin, ngunit ang $ Browname $ ay hindi ganap na sumusuporta sa mga tampok ng boses na may $ chatbotname $. \nMangyaring subukang gumamit ng isang desktop browser tulad ng Chrome o Firefox."
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "Ang boses ay hindi suportado sa $ Browname $ na may $ chatbotname $. \nMangyaring subukan ang isang desktop browser."
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "Ang mga tampok ng boses ay hindi magagamit sa browser na ito. \nMangyaring subukang gamitin ang Chrome o Firefox sa desktop para sa pinakamahusay na karanasan."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "Hindi magagamit ang boses. \nSubukan ang Chrome o Firefox sa desktop."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "Ang mga tampok ng boses ay maaaring hindi ganap na suportado sa mga mobile browser na may $ chatbotname $. \nMangyaring subukang gumamit ng isang desktop browser para sa pinakamahusay na karanasan."
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "Ang mga tampok ng boses ay limitado sa mobile. \nMangyaring subukan ang isang desktop browser."
   }
 }

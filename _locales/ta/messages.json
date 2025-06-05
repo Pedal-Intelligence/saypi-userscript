@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "குரல் அமைப்புகள்"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "மன்னிக்கவும், ஆனால் $ BROWSERNAME $ $ சாட்போட்நேம் with உடன் குரல் அம்சங்களை முழுமையாக ஆதரிக்கவில்லை. \nகுரோம் அல்லது பயர்பாக்ஸ் போன்ற டெஸ்க்டாப் உலாவியைப் பயன்படுத்த முயற்சிக்கவும்."
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "$ சாட்போட்நேம் $ உடன் $ BROWSERNAME $ இல் குரல் ஆதரிக்கப்படவில்லை. \nடெஸ்க்டாப் உலாவியை முயற்சிக்கவும்."
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "இந்த உலாவியில் குரல் அம்சங்கள் கிடைக்கவில்லை. \nசிறந்த அனுபவத்திற்காக டெஸ்க்டாப்பில் குரோம் அல்லது பயர்பாக்ஸைப் பயன்படுத்த முயற்சிக்கவும்."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "குரல் கிடைக்கவில்லை. \nடெஸ்க்டாப்பில் குரோம் அல்லது பயர்பாக்ஸை முயற்சிக்கவும்."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "மொபைல் உலாவிகளில் $ சாட்போட்நேம் with உடன் குரல் அம்சங்கள் முழுமையாக ஆதரிக்கப்படாமல் போகலாம். \nசிறந்த அனுபவத்திற்கு டெஸ்க்டாப் உலாவியைப் பயன்படுத்த முயற்சிக்கவும்."
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "குரல் அம்சங்கள் மொபைலில் வரையறுக்கப்பட்டுள்ளன. \nடெஸ்க்டாப் உலாவியை முயற்சிக்கவும்."
   }
 }

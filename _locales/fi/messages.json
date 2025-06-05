@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Ääni -asetukset"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "Olemme pahoillamme, mutta $ Browsername $ ei tue täysin ääniominaisuuksia $ chatbotname $: lla. \nYritä käyttää työpöydän selainta, kuten Chrome tai Firefox."
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "Ääntä ei tueta $ Blawsername $: lla $ chatbotname $: lla. \nKokeile työpöydän selainta."
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "Ääniominaisuuksia ei ole saatavana tässä selaimessa. \nYritä käyttää Chromea tai Firefoxia työpöydällä parhaan kokemuksen saavuttamiseksi."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "Ääni ei ole saatavilla. \nKokeile Chromea tai Firefoxia työpöydällä."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "Ääniominaisuuksia ei ehkä tueta täysin mobiiliselaimissa $ chatbotname $: lla. \nYritä käyttää työpöydän selainta parhaan kokemuksen saamiseksi."
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "Ääniominaisuudet ovat rajoitetut matkapuhelimissa. \nKokeile työpöydän selainta."
   }
 }

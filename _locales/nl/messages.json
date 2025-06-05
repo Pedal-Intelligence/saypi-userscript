@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Spraakinstellingen"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "Het spijt ons, maar $ browsername $ ondersteunt spraakfuncties niet volledig met $ chatbotName $. \nProbeer een desktopbrowser zoals Chrome of Firefox te gebruiken."
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "Voice wordt niet ondersteund op $ browsnernaam $ met $ chatbotName $. \nProbeer een desktopbrowser."
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "Spraakfuncties zijn niet beschikbaar in deze browser. \nProbeer Chrome of Firefox op desktop te gebruiken voor de beste ervaring."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "Stem niet beschikbaar. \nProbeer Chrome of Firefox op desktop."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "Spraakfuncties worden mogelijk niet volledig ondersteund op mobiele browsers met $ chatbotName $. \nProbeer een desktopbrowser te gebruiken voor de beste ervaring."
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "Spraakfuncties zijn beperkt op mobiel. \nProbeer een desktopbrowser."
   }
 }

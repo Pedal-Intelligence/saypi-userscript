@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "ভয়েস সেটিংস"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "আমরা দুঃখিত, তবে $ ব্রাউজারনাম $ Cha চ্যাটবোটনেম $ দিয়ে ভয়েস বৈশিষ্ট্যগুলি পুরোপুরি সমর্থন করে না $ \nক্রোম বা ফায়ারফক্সের মতো একটি ডেস্কটপ ব্রাউজার ব্যবহার করার চেষ্টা করুন।"
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "ভয়েস $ চ্যাটবোটনেম $ দিয়ে $ ব্রাউজারনেম $ এ সমর্থিত নয় $ \nদয়া করে একটি ডেস্কটপ ব্রাউজার চেষ্টা করুন।"
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "এই ব্রাউজারে ভয়েস বৈশিষ্ট্যগুলি পাওয়া যায় না। \nসেরা অভিজ্ঞতার জন্য দয়া করে ডেস্কটপে ক্রোম বা ফায়ারফক্স ব্যবহার করার চেষ্টা করুন।"
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "ভয়েস পাওয়া যায় না। \nডেস্কটপে ক্রোম বা ফায়ারফক্স চেষ্টা করুন।"
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "ভয়েস বৈশিষ্ট্যগুলি $ চ্যাটবোটনেম $ দিয়ে মোবাইল ব্রাউজারগুলিতে পুরোপুরি সমর্থনযোগ্য নয় $ \nসেরা অভিজ্ঞতার জন্য দয়া করে একটি ডেস্কটপ ব্রাউজার ব্যবহার করার চেষ্টা করুন।"
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "ভয়েস বৈশিষ্ট্যগুলি মোবাইলে সীমাবদ্ধ। \nদয়া করে একটি ডেস্কটপ ব্রাউজার চেষ্টা করুন।"
   }
 }

@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Pengaturan Suara"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "Kami minta maaf, tapi $ browsername $ tidak sepenuhnya mendukung fitur suara dengan $ chatbotname $. \nSilakan coba gunakan browser desktop seperti Chrome atau Firefox."
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "Suara tidak didukung di $ browsername $ dengan $ chatbotname $. \nSilakan coba browser desktop."
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "Fitur suara tidak tersedia di browser ini. \nSilakan coba gunakan Chrome atau Firefox di Desktop untuk pengalaman terbaik."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "Suara tidak tersedia. \nCoba chrome atau firefox di desktop."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "Fitur suara mungkin tidak sepenuhnya didukung di browser seluler dengan $ chatbotname $. \nSilakan coba gunakan browser desktop untuk pengalaman terbaik."
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "Fitur suara terbatas di ponsel. \nSilakan coba browser desktop."
   }
 }

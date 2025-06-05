@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "إعدادات الصوت"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "نحن آسفون ، لكن $ browsername $ لا يدعم تمامًا الميزات الصوتية باستخدام $ chatbotname $. \nيرجى محاولة استخدام متصفح سطح المكتب مثل Chrome أو Firefox."
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "لا يتم دعم Voice على $ browsername $ مع $ chatbotname $. \nيرجى تجربة متصفح سطح المكتب."
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "الميزات الصوتية غير متوفرة في هذا المتصفح. \nيرجى محاولة استخدام Chrome أو Firefox على سطح المكتب للحصول على أفضل تجربة."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "صوت غير متوفر. \nجرب Chrome أو Firefox على سطح المكتب."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "قد لا تكون الميزات الصوتية مدعومة بالكامل على متصفحات الهاتف المحمول مع $ chatbotname $. \nيرجى محاولة استخدام متصفح سطح المكتب للحصول على أفضل تجربة."
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "الميزات الصوتية محدودة على الهاتف المحمول. \nيرجى تجربة متصفح سطح المكتب."
   }
 }

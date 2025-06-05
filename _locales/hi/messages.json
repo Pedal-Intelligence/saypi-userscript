@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "आवाज सेटिंग्स"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "हमें खेद है, लेकिन $ Browsername $ $ ChatbotName $ के साथ आवाज सुविधाओं का पूरी तरह से समर्थन नहीं करता है। \nकृपया क्रोम या फ़ायरफ़ॉक्स जैसे डेस्कटॉप ब्राउज़र का उपयोग करने का प्रयास करें।"
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "$ चैटबोटनम $ के साथ $ ब्रोसेर्नम $ पर वॉयस समर्थित नहीं है। \nकृपया एक डेस्कटॉप ब्राउज़र का प्रयास करें।"
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "इस ब्राउज़र में वॉयस फीचर्स उपलब्ध नहीं हैं। \nकृपया सबसे अच्छे अनुभव के लिए डेस्कटॉप पर क्रोम या फ़ायरफ़ॉक्स का उपयोग करने का प्रयास करें।"
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "आवाज उपलब्ध नहीं है। \nडेस्कटॉप पर क्रोम या फ़ायरफ़ॉक्स का प्रयास करें।"
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "वॉयस फीचर्स को $ ChatbotName $ के साथ मोबाइल ब्राउज़रों पर पूरी तरह से समर्थित नहीं किया जा सकता है। \nकृपया सबसे अच्छे अनुभव के लिए डेस्कटॉप ब्राउज़र का उपयोग करने का प्रयास करें।"
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "वॉयस फीचर्स मोबाइल पर सीमित हैं। \nकृपया एक डेस्कटॉप ब्राउज़र का प्रयास करें।"
   }
 }

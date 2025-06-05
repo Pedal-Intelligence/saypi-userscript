@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Гласови настройки"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "Съжаляваме, но $ browsername $ не поддържа напълно гласовите функции с $ chatbotname $. \nМоля, опитайте да използвате браузър на работния плот като Chrome или Firefox."
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "Гласът не се поддържа на $ browsername $ с $ chatbotname $. \nМоля, опитайте браузър на работния плот."
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "Гласовите функции не са налични в този браузър. \nМоля, опитайте да използвате Chrome или Firefox на работния плот за най -доброто изживяване."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "Гласът не е наличен. \nОпитайте Chrome или Firefox на работния плот."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "Гласовите функции може да не се поддържат напълно на мобилни браузъри с $ chatbotname $. \nМоля, опитайте да използвате браузър на работния плот за най -доброто изживяване."
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "Гласовите функции са ограничени на мобилни устройства. \nМоля, опитайте браузър на работния плот."
   }
 }

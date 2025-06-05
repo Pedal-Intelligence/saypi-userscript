@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Impostazioni vocali"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "Siamo spiacenti, ma $ browsername $ non supporta pienamente le funzionalità vocali con $ chatbotname $. \nProva a utilizzare un browser desktop come Chrome o Firefox."
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "La voce non è supportata su $ browsername $ con $ chatbotname $. \nProva un browser desktop."
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "Le caratteristiche vocali non sono disponibili in questo browser. \nProva a utilizzare Chrome o Firefox su desktop per la migliore esperienza."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "Voce non disponibile. \nProva Chrome o Firefox sul desktop."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "Le funzionalità vocali potrebbero non essere completamente supportate sui browser mobili con $ chatbotname $. \nProva a utilizzare un browser desktop per la migliore esperienza."
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "Le caratteristiche vocali sono limitate sul cellulare. \nProva un browser desktop."
   }
 }

@@ -1004,5 +1004,23 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Cài đặt giọng nói"
+  },
+  "vadErrorBrowserChatbotIncompatible": {
+    "message": "Chúng tôi xin lỗi, nhưng $ browsername $ không hỗ trợ đầy đủ các tính năng thoại với $ chatbotname $. \nVui lòng thử sử dụng trình duyệt máy tính để bàn như Chrome hoặc Firefox."
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "message": "Voice không được hỗ trợ trên $ browsername $ với $ chatbotname $. \nVui lòng thử trình duyệt máy tính để bàn."
+  },
+  "vadErrorBrowserNotSupported": {
+    "message": "Các tính năng giọng nói không có sẵn trong trình duyệt này. \nVui lòng thử sử dụng Chrome hoặc Firefox trên máy tính để bàn để có trải nghiệm tốt nhất."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "message": "Giọng nói không có sẵn. \nHãy thử Chrome hoặc Firefox trên máy tính để bàn."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "message": "Các tính năng bằng giọng nói có thể không được hỗ trợ đầy đủ trên các trình duyệt di động với $ chatbotname $. \nVui lòng thử sử dụng trình duyệt máy tính để bàn để có trải nghiệm tốt nhất."
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "message": "Các tính năng giọng nói bị giới hạn trên thiết bị di động. \nVui lòng thử trình duyệt máy tính để bàn."
   }
 }
