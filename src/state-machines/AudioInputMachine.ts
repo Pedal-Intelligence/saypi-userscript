@@ -301,24 +301,6 @@ async function checkAndRequestMicrophonePermissionViaBackground(): Promise<boole
 
 async function setupRecording(completion_callback?: (success: boolean, error?: string) => void): Promise<void> {
   try {
-    console.log("[AudioInputMachine] Requesting microphone permission check and prompt (if needed) from background...");
-    const permissionGranted = await checkAndRequestMicrophonePermissionViaBackground();
-
-    if (!permissionGranted) {
-      const errorMsg = getMessage("microphonePermissionDeniedError") || "Microphone permission was not granted. Please ensure you've allowed access in the prompt and in extension settings.";
-      console.error("[AudioInputMachine] Microphone permission not granted after prompt flow.");
-      EventBus.emit("saypi:ui:show-notification", {
-        message: errorMsg,
-        type: "text",
-        seconds: 10,
-        icon: "microphone-muted",
-      });
-      completion_callback?.(false, errorMsg);
-      return;
-    }
-
-    console.log("[AudioInputMachine] Microphone permission granted. Proceeding with VAD setup...");
-
     if (!vadClient) {
       const errorMsg = "VAD client not available - this should not happen";
       console.error("[AudioInputMachine]", errorMsg);
@@ -330,6 +312,31 @@ async function setupRecording(completion_callback?: (success: boolean, error?: s
       });
       completion_callback?.(false, errorMsg);
       return;
+    }
+
+    // Check if we're using offscreen VAD - only request extension permissions in that case
+    const isOffscreenVAD = vadClient instanceof OffscreenVADClient;
+    
+    if (isOffscreenVAD) {
+      console.log("[AudioInputMachine] Using OffscreenVADClient - requesting extension microphone permission check and prompt (if needed) from background...");
+      const permissionGranted = await checkAndRequestMicrophonePermissionViaBackground();
+
+      if (!permissionGranted) {
+        const errorMsg = getMessage("microphonePermissionDeniedError") || "Microphone permission was not granted. Please ensure you've allowed access in the prompt and in extension settings.";
+        console.error("[AudioInputMachine] Microphone permission not granted after prompt flow.");
+        EventBus.emit("saypi:ui:show-notification", {
+          message: errorMsg,
+          type: "text",
+          seconds: 10,
+          icon: "microphone-muted",
+        });
+        completion_callback?.(false, errorMsg);
+        return;
+      }
+
+      console.log("[AudioInputMachine] Extension microphone permission granted. Proceeding with VAD setup...");
+    } else {
+      console.log("[AudioInputMachine] Using OnscreenVADClient - skipping extension permission check (host site permissions will be requested during VAD initialization)...");
     }
 
     // Initialize the VAD client (works for both offscreen and onscreen)
