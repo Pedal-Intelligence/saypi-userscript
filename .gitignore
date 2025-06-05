@@ -42,3 +42,5 @@ tasks.json
 tasks/ 
 public/offscreen/*
 public/permissions/*
+
+*.patch

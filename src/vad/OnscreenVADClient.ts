@@ -5,6 +5,8 @@ import { VADStatusIndicator } from '../ui/VADStatusIndicator';
 import getMessage from '../i18n';
 import { debounce } from "lodash";
 import { VADClientInterface, VADClientCallbacks } from './VADClientInterface';
+import { getBrowserInfo } from '../UserAgentModule';
+import { ChatbotIdentifier } from '../chatbots/ChatbotIdentifier';
 
 console.log("[SayPi OnscreenVADClient] Client loaded.");
 
@@ -22,6 +24,47 @@ function logProcessingDelay(captureTimestamp: number, receiveTimestamp: number, 
   } else if (delay > 200) {
     logger.info(`[SayPi OnscreenVADClient] Elevated ${description} delay: ${delay}ms from capture to client receipt`);
   }
+}
+
+/**
+ * Creates a user-friendly error message for known incompatible browser/chatbot combinations
+ * @param technicalError - The original technical error message
+ * @returns A user-friendly error message
+ */
+function createUserFriendlyVADError(technicalError: string): string {
+  const browserInfo = getBrowserInfo();
+  const chatbotType = ChatbotIdentifier.identifyChatbot();
+  const chatbotName = chatbotType === 'claude' ? 'Claude' : chatbotType === 'pi' ? 'Pi' : 'this chatbot';
+  
+  // Check for the known problematic combination: Mobile Chromium (like Kiwi) + Claude + "no available backend found"
+  const isKnownIncompatibility = (
+    browserInfo.name === 'Mobile Chromium' && 
+    chatbotType === 'claude' && 
+    technicalError.toLowerCase().includes('no available backend found')
+  );
+  
+  if (isKnownIncompatibility) {
+    // More specific browser name detection for the error message
+    let browserName = browserInfo.name;
+    if (browserInfo.name === 'Mobile Chromium' && browserInfo.isMobile) {
+      // Check if it's specifically Kiwi Browser
+      if (navigator.userAgent.includes('Kiwi')) {
+        browserName = 'Kiwi Browser';
+      } else {
+        browserName = 'this mobile browser';
+      }
+    }
+    
+    return getMessage('vadErrorBrowserChatbotIncompatible', [browserName, chatbotName]);
+  }
+  
+  // Check for other potential mobile compatibility issues
+  if (browserInfo.isMobile && technicalError.toLowerCase().includes('backend')) {
+    return getMessage('vadErrorMobileBrowserLimited', chatbotName);
+  }
+  
+  // Fallback to a more generic but still user-friendly message
+  return getMessage('vadErrorBrowserNotSupported');
 }
 
 interface MyRealTimeVADCallbacks {
@@ -244,13 +287,15 @@ export class OnscreenVADClient implements VADClientInterface {
         if (strategy === fallbackStrategies[fallbackStrategies.length - 1]) {
           logger.reportError(error, { function: 'OnscreenVADClient.initialize' }, "All VAD initialization strategies failed");
           
-          const detail = getMessage('vadDetailInitError', error.message || "Unknown error");
+          // Create a user-friendly error message for known compatibility issues
+          const userFriendlyError = createUserFriendlyVADError(error.message || "Unknown error");
+          const detail = getMessage('vadDetailInitError', userFriendlyError);
           this.statusIndicator.updateStatus(getMessage('vadStatusFailed'), detail);
           
           // Call the callback if it exists
-          this.callbacks.onInitialized?.(false, error.message || "VAD initialization error");
+          this.callbacks.onInitialized?.(false, userFriendlyError);
           
-          return { success: false, error: error.message || "VAD initialization error", mode: "failed" };
+          return { success: false, error: userFriendlyError, mode: "failed" };
         }
         
         // Continue to next strategy
