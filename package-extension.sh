@@ -200,7 +200,8 @@ for BROWSER in "$@"; do
 
     # Package the extension
     cd "$EXT_DIR"
-    zip -r "$ZIP_NAME" *
+    echo "  → Packaging extension files..."
+    zip -r -q "$ZIP_NAME" *
 
     # Move the zip to the dist directory
     cd ../..
@@ -209,7 +210,7 @@ for BROWSER in "$@"; do
     # Clean up
     rm -rf "$EXT_DIR"
 
-    # Instructions
-    echo "Submit $ZIP_NAME to $STORE_URL"
+    echo "  → Generated dist/$ZIP_NAME"
+    echo "  → Submit to $STORE_URL"
     echo "----------------------------------------"
 done
