@@ -23,6 +23,10 @@ export class ChatbotIdentifier {
     return this.identifyChatbot();
   }
 
+  static getChatbotName(): string {
+    return this.identifyChatbot() === "claude" ? "Claude" : "Pi";
+  }
+
   /**
    * Checks if the current chatbot matches a specific type
    * @param type The chatbot type to check against

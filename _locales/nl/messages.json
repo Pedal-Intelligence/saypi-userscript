@@ -929,6 +929,56 @@
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
   },
+  "vadErrorBrowserChatbotIncompatible": {
+    "description": "Error message shown when a specific browser and chatbot combination is known to be incompatible with voice features.",
+    "message": "Het spijt ons, maar $browserName$ ondersteunt spraakfuncties niet volledig met $chatbotName$. \nProbeer een desktopbrowser zoals Chrome of Firefox te gebruiken.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "description": "Short error message for notifications when a specific browser and chatbot combination is incompatible.",
+    "message": "Voice wordt niet ondersteund op $browserName$ met $chatbotName$. \nProbeer een desktopbrowser.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserNotSupported": {
+    "description": "Generic error message shown when voice features are not supported in the current browser.",
+    "message": "Spraakfuncties zijn niet beschikbaar in deze browser. \nProbeer Chrome of Firefox op desktop te gebruiken voor de beste ervaring."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "description": "Short generic error message for notifications when voice features are not supported.",
+    "message": "Stem niet beschikbaar. \nProbeer Chrome of Firefox op desktop."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
+    "message": "Spraakfuncties worden mogelijk niet volledig ondersteund op mobiele browsers met $chatbotName$. \nProbeer een desktopbrowser te gebruiken voor de beste ervaring.",
+    "placeholders": {
+      "chatbotName": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "description": "Short error message for notifications when mobile browsers have limited voice support.",
+    "message": "Spraakfuncties zijn beperkt op mobiel. \nProbeer een desktopbrowser."
+  },
   "vadStatusDestroyed": {
     "description": "VAD status when destroyed.",
     "message": "Destroyed"

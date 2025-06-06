@@ -4,7 +4,7 @@ import { getJwtManagerSync } from "../JwtManager";
 import { offscreenManager, OFFSCREEN_DOCUMENT_PATH } from "../offscreen/offscreen_manager";
 import { logger } from "../LoggingModule.js";
 
-const PERMISSIONS_PROMPT_PATH_HTML = 'src/permissions/permissions-prompt.html';
+const PERMISSIONS_PROMPT_PATH_HTML = 'public/permissions/permissions-prompt.html';
 
 // Get the JWT manager instance at startup
 const jwtManager = getJwtManagerSync();

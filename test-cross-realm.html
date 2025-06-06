@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cross-Realm ArrayBuffer Test</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #007acc;
+            padding-bottom: 10px;
+        }
+        .console-output {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            max-height: 500px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+        button {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #005a9e;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .warning { color: #ff9800; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Cross-Realm ArrayBuffer Detection Test</h1>
+        
+        <p>This test demonstrates the cross-realm ArrayBuffer detection issue in ONNX Runtime and verifies that the fix works correctly.</p>
+        
+        <button onclick="runFullTest()">🚀 Run Full Test</button>
+        <button onclick="clearOutput()">🧹 Clear Output</button>
+        <button onclick="runSimpleDemo()">📝 Simple Demo</button>
+        
+        <div id="output" class="console-output">Click "Run Full Test" to see the results...</div>
+    </div>
+
+    <script src="cross-realm-test-case.js"></script>
+    <script>
+        // Override console.log to display in the page
+        const outputDiv = document.getElementById('output');
+        const originalConsoleLog = console.log;
+        
+        console.log = function(...args) {
+            // Call original console.log
+            originalConsoleLog.apply(console, args);
+            
+            // Display in page
+            const message = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+            ).join(' ');
+            
+            outputDiv.textContent += message + '\n';
+            outputDiv.scrollTop = outputDiv.scrollHeight;
+        };
+        
+        function clearOutput() {
+            outputDiv.textContent = '';
+        }
+        
+        function runFullTest() {
+            clearOutput();
+            console.log('🧪 Starting Cross-Realm ArrayBuffer Detection Test...\n');
+            
+            try {
+                // Run the main test
+                runCrossRealmTest();
+                
+                // Test with actual buffers
+                console.log('\n🔍 Testing with actual buffers:');
+                const { iframeArrayBuffer, iframeUint8Array } = createCrossRealmBuffer();
+                
+                console.log('\nTesting cross-realm ArrayBuffer with ONNX Runtime simulation:');
+                simulateONNXRuntimeDetection(iframeArrayBuffer);
+                
+                console.log('\nTesting cross-realm Uint8Array with ONNX Runtime simulation:');
+                simulateONNXRuntimeDetection(iframeUint8Array);
+                
+                console.log('\n✅ Test completed successfully!');
+                console.log('\n📋 Key Takeaway:');
+                console.log('The cross-realm safe approach (Object.prototype.toString.call) works');
+                console.log('while instanceof fails for objects from different JavaScript realms.');
+                
+            } catch (error) {
+                console.log('❌ Test failed with error:', error.message);
+            }
+        }
+        
+        function runSimpleDemo() {
+            clearOutput();
+            console.log('📝 Simple Cross-Realm Demo\n');
+            
+            // Create buffers in different realms
+            const normalBuffer = new ArrayBuffer(1024);
+            const { iframeArrayBuffer } = createCrossRealmBuffer();
+            
+            console.log('Normal ArrayBuffer:');
+            console.log('  instanceof check:', normalBuffer instanceof ArrayBuffer);
+            console.log('  toString check:', Object.prototype.toString.call(normalBuffer) === "[object ArrayBuffer]");
+            
+            console.log('\nCross-realm ArrayBuffer:');
+            console.log('  instanceof check:', iframeArrayBuffer instanceof ArrayBuffer, '← This fails!');
+            console.log('  toString check:', Object.prototype.toString.call(iframeArrayBuffer) === "[object ArrayBuffer]", '← This works!');
+            
+            console.log('\n💡 This is why ONNX Runtime needs the cross-realm safe fix.');
+        }
+        
+        // Auto-run a simple version when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                console.log('🌟 Cross-Realm ArrayBuffer Test Ready!');
+                console.log('Click the buttons above to run different tests.\n');
+            }, 100);
+        });
+    </script>
+</body>
+</html> 

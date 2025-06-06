@@ -5,9 +5,21 @@ class OffscreenManager {
   private portMap: Map<number, chrome.runtime.Port> = new Map(); // tabId to Port
 
   async hasDocument(): Promise<boolean> {
-    if (chrome.offscreen && typeof chrome.offscreen.hasDocument === 'function') {
-      return await chrome.offscreen.hasDocument();
+    // Check if chrome.offscreen exists first
+    if (!chrome.offscreen) {
+      console.debug("chrome.offscreen API not available in this browser");
+      return false;
     }
+    
+    if (typeof chrome.offscreen.hasDocument === 'function') {
+      try {
+        return await chrome.offscreen.hasDocument();
+      } catch (error) {
+        console.warn("Error calling chrome.offscreen.hasDocument:", error);
+        return false;
+      }
+    }
+    
     // Fallback if hasDocument is not available (e.g., older Chrome versions or different environment)
     // This is a rough heuristic; a more robust check might involve trying to send a message
     // and seeing if it fails, or maintaining an internal state variable.
@@ -20,6 +32,11 @@ class OffscreenManager {
   }
 
   private async setupOffscreenDocument(): Promise<void> {
+    // Check if chrome.offscreen is available
+    if (!chrome.offscreen) {
+      throw new Error("Offscreen documents API not available in this browser");
+    }
+    
     // Check if the document already exists.
     if (await this.hasDocument()) {
       console.log("Offscreen document already exists.");
@@ -32,13 +49,14 @@ class OffscreenManager {
     }
 
     console.log("Creating offscreen document...");
-    this.creating = chrome.offscreen.createDocument({
-      url: OFFSCREEN_DOCUMENT_PATH,
-      reasons: [chrome.offscreen.Reason.USER_MEDIA, chrome.offscreen.Reason.AUDIO_PLAYBACK],
-      justification: "Microphone VAD and TTS playback under restrictive host-page CSP",
-    });
-
+    
     try {
+      this.creating = chrome.offscreen.createDocument({
+        url: OFFSCREEN_DOCUMENT_PATH,
+        reasons: [chrome.offscreen.Reason.USER_MEDIA, chrome.offscreen.Reason.AUDIO_PLAYBACK],
+        justification: "Microphone VAD and TTS playback under restrictive host-page CSP",
+      });
+
       await this.creating;
       console.log("Offscreen document created successfully.");
     } catch (error) {
@@ -50,6 +68,12 @@ class OffscreenManager {
   }
 
   public async closeOffscreenDocument(): Promise<void> {
+    // Check if chrome.offscreen is available
+    if (!chrome.offscreen) {
+      console.debug("chrome.offscreen API not available - cannot close offscreen document");
+      return;
+    }
+    
     if (!(await this.hasDocument())) {
       console.log("No offscreen document to close or hasDocument API not available to confirm.");
       // If hasDocument isn't available, we might still try to close if we think one exists
@@ -57,13 +81,25 @@ class OffscreenManager {
       return;
     }
     console.log("Closing offscreen document...");
-    await chrome.offscreen.closeDocument();
-    this.portMap.clear(); // Clear ports as the document is gone
-    console.log("Offscreen document closed.");
+    
+    try {
+      await chrome.offscreen.closeDocument();
+      this.portMap.clear(); // Clear ports as the document is gone
+      console.log("Offscreen document closed.");
+    } catch (error) {
+      console.warn("Error closing offscreen document:", error);
+      // Clear ports anyway since the document might be gone
+      this.portMap.clear();
+    }
   }
 
   public async sendMessageToOffscreenDocument(message: any, targetTabId?: number): Promise<void> {
     try {
+      // Check if chrome.offscreen is available before trying to set up
+      if (!chrome.offscreen) {
+        throw new Error("Offscreen documents API not available in this browser");
+      }
+      
       await this.setupOffscreenDocument(); // Ensure document exists
       
       // Create the message with correct properties
@@ -105,7 +141,7 @@ class OffscreenManager {
       
       // Race the message sending against the timeout
       await Promise.race([sendPromise, timeoutPromise]);
-    } catch (error) {
+    } catch (error: any) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       console.error(`[OffscreenManager] Error sending message to offscreen document: ${errorMessage}`, {
         messageType: message?.type,

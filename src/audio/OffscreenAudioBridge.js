@@ -1,6 +1,6 @@
 import { logger } from "../LoggingModule.js";
 import EventBus from "../events/EventBus.js";
-import { isFirefox, isSafari } from "../UserAgentModule.ts";
+import { isFirefox, isSafari, isMobileChromium, likelySupportsOffscreen, getBrowserInfo } from "../UserAgentModule.ts";
 
 /**
  * Bridge class that connects the content script to the offscreen document for audio playback
@@ -45,8 +45,13 @@ export default class OffscreenAudioBridge {
    */
   async _checkOffscreenSupport() {
     // Quick fail for known unsupported browsers
-    if (isFirefox() || isSafari()) {
-      logger.debug("[OffscreenAudioBridge] Offscreen documents not supported by this browser type");
+    if (!likelySupportsOffscreen()) {
+      const browserInfo = getBrowserInfo();
+      logger.debug(`[OffscreenAudioBridge] ${browserInfo.name} detected - offscreen documents not supported`, {
+        browser: browserInfo.name,
+        isMobile: browserInfo.isMobile,
+        userAgent: browserInfo.userAgent
+      });
       return false;
     }
     
@@ -59,9 +64,11 @@ export default class OffscreenAudioBridge {
       logger.debug(`[OffscreenAudioBridge] Offscreen support check response: ${JSON.stringify(response)}`);
       
       if (response && response.supported === true) {
+        logger.debug("[OffscreenAudioBridge] Offscreen documents confirmed as supported");
         return true;
       } else {
         // If we got a response but supported is false
+        logger.debug("[OffscreenAudioBridge] Offscreen documents confirmed as not supported by runtime check");
         return false;
       }
     } catch (error) {

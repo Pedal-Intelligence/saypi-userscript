@@ -929,6 +929,56 @@
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
   },
+  "vadErrorBrowserChatbotIncompatible": {
+    "description": "Error message shown when a specific browser and chatbot combination is known to be incompatible with voice features.",
+    "message": "申し訳ありませんが、$browserName$は$chatbotName$で音声機能を完全にサポートしていません。 \nChromeやFirefoxなどのデスクトップブラウザを使用してみてください。",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "description": "Short error message for notifications when a specific browser and chatbot combination is incompatible.",
+    "message": "Voiceは、$chatbotName$を含む$browserName$でサポートされていません。\nデスクトップブラウザを試してください。",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserNotSupported": {
+    "description": "Generic error message shown when voice features are not supported in the current browser.",
+    "message": "このブラウザでは音声機能は使用できません。\n最高の体験のために、デスクトップでChromeまたはFirefoxを使用してみてください。"
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "description": "Short generic error message for notifications when voice features are not supported.",
+    "message": "音声は利用できません。\nデスクトップでChromeまたはFirefoxをお試しください。"
+  },
+  "vadErrorMobileBrowserLimited": {
+    "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
+    "message": "音声機能は、$chatbotName$を使用してモバイルブラウザで完全にサポートされていない場合があります。\n最高の体験のためにデスクトップブラウザを使用してみてください。",
+    "placeholders": {
+      "chatbotName": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "description": "Short error message for notifications when mobile browsers have limited voice support.",
+    "message": "音声機能はモバイルで制限されています。\nデスクトップブラウザを試してください。"
+  },
   "vadStatusDestroyed": {
     "description": "VAD status when destroyed.",
     "message": "Destroyed"

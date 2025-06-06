@@ -929,6 +929,56 @@
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
   },
+  "vadErrorBrowserChatbotIncompatible": {
+    "description": "Error message shown when a specific browser and chatbot combination is known to be incompatible with voice features.",
+    "message": "Kami minta maaf, tapi $browserName$ tidak sepenuhnya mendukung fitur suara dengan $chatbotName$. \nSilakan coba gunakan browser desktop seperti Chrome atau Firefox.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "description": "Short error message for notifications when a specific browser and chatbot combination is incompatible.",
+    "message": "Suara tidak didukung di $browserName$ dengan $chatbotName$. \nSilakan coba browser desktop.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserNotSupported": {
+    "description": "Generic error message shown when voice features are not supported in the current browser.",
+    "message": "Fitur suara tidak tersedia di browser ini. \nSilakan coba gunakan Chrome atau Firefox di Desktop untuk pengalaman terbaik."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "description": "Short generic error message for notifications when voice features are not supported.",
+    "message": "Suara tidak tersedia. \nCoba chrome atau firefox di desktop."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
+    "message": "Fitur suara mungkin tidak sepenuhnya didukung di browser seluler dengan $chatbotName$. \nSilakan coba gunakan browser desktop untuk pengalaman terbaik.",
+    "placeholders": {
+      "chatbotName": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "description": "Short error message for notifications when mobile browsers have limited voice support.",
+    "message": "Fitur suara terbatas di ponsel. \nSilakan coba browser desktop."
+  },
   "vadStatusDestroyed": {
     "description": "VAD status when destroyed.",
     "message": "Destroyed"

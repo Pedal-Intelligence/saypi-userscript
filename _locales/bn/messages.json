@@ -929,6 +929,56 @@
     "description": "VAD detail when waiting for user to speak.",
     "message": "বক্তৃতার জন্য অপেক্ষা করছি"
   },
+  "vadErrorBrowserChatbotIncompatible": {
+    "description": "Error message shown when a specific browser and chatbot combination is known to be incompatible with voice features.",
+    "message": "দুঃখিত, $browserName$ ব্রাউজারটি $chatbotName$-এর সাথে ভয়েস ফিচারগুলো সম্পূর্ণভাবে সমর্থন করে না। অনুগ্রহ করে Chrome বা Firefox-এর মতো একটি ডেস্কটপ ব্রাউজার ব্যবহার করুন।",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "description": "Short error message for notifications when a specific browser and chatbot combination is incompatible.",
+    "message": "ভয়েস $chatbotName$ দিয়ে $browserName$ এ সমর্থিত নয় $ \nদয়া করে একটি ডেস্কটপ ব্রাউজার চেষ্টা করুন।",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserNotSupported": {
+    "description": "Generic error message shown when voice features are not supported in the current browser.",
+    "message": "এই ব্রাউজারে ভয়েস বৈশিষ্ট্যগুলি পাওয়া যায় না। \nসেরা অভিজ্ঞতার জন্য দয়া করে ডেস্কটপে ক্রোম বা ফায়ারফক্স ব্যবহার করার চেষ্টা করুন।"
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "description": "Short generic error message for notifications when voice features are not supported.",
+    "message": "ভয়েস পাওয়া যায় না। \nডেস্কটপে ক্রোম বা ফায়ারফক্স চেষ্টা করুন।"
+  },
+  "vadErrorMobileBrowserLimited": {
+    "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
+    "message": "ভয়েস বৈশিষ্ট্যগুলি $chatbotName$ দিয়ে মোবাইল ব্রাউজারগুলিতে পুরোপুরি সমর্থনযোগ্য নয় $ \nসেরা অভিজ্ঞতার জন্য দয়া করে একটি ডেস্কটপ ব্রাউজার ব্যবহার করার চেষ্টা করুন।",
+    "placeholders": {
+      "chatbotName": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "description": "Short error message for notifications when mobile browsers have limited voice support.",
+    "message": "ভয়েস বৈশিষ্ট্যগুলি মোবাইলে সীমাবদ্ধ। \nদয়া করে একটি ডেস্কটপ ব্রাউজার চেষ্টা করুন।"
+  },
   "vadStatusDestroyed": {
     "description": "VAD status when destroyed.",
     "message": "ধ্বংস"

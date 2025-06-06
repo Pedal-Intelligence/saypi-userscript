@@ -24,7 +24,28 @@ check_jq_installed() {
 
 modify_firefox_manifest() {
     local manifest_file="$1"
-    jq '.background += {"scripts": ["public/background.js"], "type": "module"}' "$manifest_file" > "$manifest_file.tmp" && mv "$manifest_file.tmp" "$manifest_file"
+    
+    # Remove Firefox-incompatible permissions and manifest entries
+    jq '
+    # Add Firefox-specific background properties
+    .background += {"scripts": ["public/background.js"], "type": "module"} |
+    
+    # Remove offscreen and audio permissions (not supported in Firefox)
+    .permissions = (.permissions | map(select(. != "offscreen" and . != "audio"))) |
+    
+    # Remove the offscreen manifest entry (not supported in Firefox)
+    del(.offscreen) |
+    
+    # Remove offscreen-related resources from web_accessible_resources
+    .web_accessible_resources[0].resources = [
+      .web_accessible_resources[0].resources[] | 
+      select(. != "src/offscreen/media_offscreen.html" and 
+             . != "public/offscreen/media_coordinator.js" and
+             . != "public/offscreen/vad_handler.js" and
+             . != "public/offscreen/audio_handler.js" and
+             . != "public/offscreen/media_offscreen.js")
+    ]
+    ' "$manifest_file" > "$manifest_file.tmp" && mv "$manifest_file.tmp" "$manifest_file"
 }
 
 modify_chrome_edge_manifest() {
@@ -122,6 +143,7 @@ for BROWSER in "$@"; do
 
     # Add Firefox-specific background properties if building for Firefox
     if [ "$BROWSER" = "firefox" ]; then
+        echo "  → Modifying manifest for Firefox compatibility (removing offscreen features)"
         modify_firefox_manifest "$EXT_DIR/manifest.json"
     fi
     
@@ -144,8 +166,14 @@ for BROWSER in "$@"; do
     cp public/permissions/*.css "$PERMISSIONS_DIR"
     cp public/permissions/*.png "$PERMISSIONS_DIR"
 
-    mkdir -p "$OFFSCREEN_DIR"
-    cp public/offscreen/*.js "$OFFSCREEN_DIR"
+    # Only copy offscreen files for browsers that support offscreen documents
+    if [ "$BROWSER" != "firefox" ]; then
+        mkdir -p "$OFFSCREEN_DIR"
+        cp public/offscreen/*.js "$OFFSCREEN_DIR"
+        echo "  → Including offscreen JavaScript files for $BROWSER"
+    else
+        echo "  → Skipping offscreen JavaScript files for Firefox"
+    fi
 
     mkdir -p "$LOGOS_DIR"
     cp public/icons/*.svg "$ICONS_DIR"
@@ -159,15 +187,14 @@ for BROWSER in "$@"; do
     mkdir -p "$POPUP_DIR"
     cp src/popup/*.html src/popup/*.js src/popup/*.css src/popup/*.png src/popup/*.svg "$POPUP_DIR"
 
-    mkdir -p "$SRC_OFFSCREEN_DIR"
-    cp src/offscreen/*.html "$SRC_OFFSCREEN_DIR"
-
-    # Copy permissions files to src directory (needed for manifest web_accessible_resources)
-    SRC_PERMISSIONS_DIR="$SRC_DIR/permissions"
-    mkdir -p "$SRC_PERMISSIONS_DIR"
-    cp src/permissions/permissions-prompt.html "$SRC_PERMISSIONS_DIR"
-    cp src/permissions/permissions-prompt.css "$SRC_PERMISSIONS_DIR"
-    cp src/permissions/himfloyd-mic.png "$SRC_PERMISSIONS_DIR"
+    # Only copy offscreen HTML files for browsers that support offscreen documents
+    if [ "$BROWSER" != "firefox" ]; then
+        mkdir -p "$SRC_OFFSCREEN_DIR"
+        cp src/offscreen/*.html "$SRC_OFFSCREEN_DIR"
+        echo "  → Including offscreen HTML files for $BROWSER"
+    else
+        echo "  → Skipping offscreen HTML files for Firefox"
+    fi
 
     cp -r _locales "$EXT_DIR"
 

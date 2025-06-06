@@ -929,6 +929,56 @@
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
   },
+  "vadErrorBrowserChatbotIncompatible": {
+    "description": "Error message shown when a specific browser and chatbot combination is known to be incompatible with voice features.",
+    "message": "Žao nam je, ali $browserName$ ne podržava u potpunosti glasovne značajke s $chatbotName$. \nPokušajte koristiti preglednik za radnu površinu poput Chrome ili Firefox.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "description": "Short error message for notifications when a specific browser and chatbot combination is incompatible.",
+    "message": "Glas nije podržan na $browserName$ s $chatbotName$. \nPokušajte s preglednikom za radnu površinu.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserNotSupported": {
+    "description": "Generic error message shown when voice features are not supported in the current browser.",
+    "message": "Glasovne značajke nisu dostupne u ovom pregledniku. \nPokušajte koristiti Chrome ili Firefox na radnoj površini za najbolje iskustvo."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "description": "Short generic error message for notifications when voice features are not supported.",
+    "message": "Glas nije dostupan. \nIsprobajte Chrome ili Firefox na radnoj površini."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
+    "message": "Glasovne značajke možda nisu u potpunosti podržane na mobilnim preglednicima s $chatbotName$. \nPokušajte koristiti preglednik za radnu površinu za najbolje iskustvo.",
+    "placeholders": {
+      "chatbotName": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "description": "Short error message for notifications when mobile browsers have limited voice support.",
+    "message": "Glasovne značajke su ograničene na mobilnim uređajima. \nPokušajte s preglednikom za radnu površinu."
+  },
   "vadStatusDestroyed": {
     "description": "VAD status when destroyed.",
     "message": "Destroyed"

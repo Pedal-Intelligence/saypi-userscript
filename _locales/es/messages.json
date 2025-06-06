@@ -929,6 +929,56 @@
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
   },
+  "vadErrorBrowserChatbotIncompatible": {
+    "description": "Error message shown when a specific browser and chatbot combination is known to be incompatible with voice features.",
+    "message": "Lo sentimos, pero $browserName$ no admite completamente las funciones de voz con $chatbotName$. \nIntente usar un navegador de escritorio como Chrome o Firefox.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "description": "Short error message for notifications when a specific browser and chatbot combination is incompatible.",
+    "message": "Voice no es compatible con $browserName$ con $chatbotName$. \nPruebe un navegador de escritorio.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserNotSupported": {
+    "description": "Generic error message shown when voice features are not supported in the current browser.",
+    "message": "Las características de voz no están disponibles en este navegador. \nIntente usar Chrome o Firefox en el escritorio para obtener la mejor experiencia."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "description": "Short generic error message for notifications when voice features are not supported.",
+    "message": "Voz no disponible. \nPruebe Chrome o Firefox en el escritorio."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
+    "message": "Las características de voz pueden no ser totalmente compatibles con los navegadores móviles con $chatbotName$. \nIntente usar un navegador de escritorio para la mejor experiencia.",
+    "placeholders": {
+      "chatbotName": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "description": "Short error message for notifications when mobile browsers have limited voice support.",
+    "message": "Las características de voz están limitadas en los dispositivos móviles. \nPruebe un navegador de escritorio."
+  },
   "vadStatusDestroyed": {
     "description": "VAD status when destroyed.",
     "message": "Destroyed"

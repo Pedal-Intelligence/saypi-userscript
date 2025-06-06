@@ -929,6 +929,56 @@
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
   },
+  "vadErrorBrowserChatbotIncompatible": {
+    "description": "Error message shown when a specific browser and chatbot combination is known to be incompatible with voice features.",
+    "message": "Ospravedlňujeme sa, ale $browserName$ nepodporuje hlasové funkcie s $chatbotName$. \nSkúste používať prehliadač na pracovnej ploche, ako je Chrome alebo Firefox.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "description": "Short error message for notifications when a specific browser and chatbot combination is incompatible.",
+    "message": "Hlas nie je podporovaný na $browserName$ s $chatbotName$. \nVyskúšajte stolný prehliadač.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserNotSupported": {
+    "description": "Generic error message shown when voice features are not supported in the current browser.",
+    "message": "V tomto prehliadači nie sú k dispozícii hlasové funkcie. \nSkúste použiť Chrome alebo Firefox na pracovnej ploche, aby ste dosiahli najlepší zážitok."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "description": "Short generic error message for notifications when voice features are not supported.",
+    "message": "Hlas nie je k dispozícii. \nVyskúšajte Chrome alebo Firefox na pracovnej ploche."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
+    "message": "Hlasové funkcie nemusia byť plne podporované v mobilných prehliadačoch s $chatbotName$. \nSkúste pre najlepší zážitok použiť prehliadač stolových počítačov.",
+    "placeholders": {
+      "chatbotName": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "description": "Short error message for notifications when mobile browsers have limited voice support.",
+    "message": "Hlasové funkcie sú obmedzené na mobilných telefónoch. \nVyskúšajte stolný prehliadač."
+  },
   "vadStatusDestroyed": {
     "description": "VAD status when destroyed.",
     "message": "Destroyed"
