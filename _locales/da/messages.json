@@ -929,6 +929,56 @@
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
   },
+  "vadErrorBrowserChatbotIncompatible": {
+    "description": "Error message shown when a specific browser and chatbot combination is known to be incompatible with voice features.",
+    "message": "Vi beklager, men $browserName$ understøtter ikke fuldt ud stemmefunktioner med $chatbotName$. \nPrøv at bruge en desktop -browser som Chrome eller Firefox.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "description": "Short error message for notifications when a specific browser and chatbot combination is incompatible.",
+    "message": "Stemmen understøttes ikke på $browserName$ med $chatbotName$. \nPrøv en desktop -browser.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserNotSupported": {
+    "description": "Generic error message shown when voice features are not supported in the current browser.",
+    "message": "Stemmefunktioner er ikke tilgængelige i denne browser. \nPrøv at bruge Chrome eller Firefox på desktop til den bedste oplevelse."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "description": "Short generic error message for notifications when voice features are not supported.",
+    "message": "Stemme ikke tilgængelig. \nPrøv Chrome eller Firefox på desktop."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
+    "message": "Stemmefunktioner understøttes muligvis ikke fuldt ud på mobile browsere med $chatbotName$. \nPrøv at bruge en desktop -browser til den bedste oplevelse.",
+    "placeholders": {
+      "chatbotName": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "description": "Short error message for notifications when mobile browsers have limited voice support.",
+    "message": "Stemmefunktioner er begrænset på mobil. \nPrøv en desktop -browser."
+  },
   "vadStatusDestroyed": {
     "description": "VAD status when destroyed.",
     "message": "Destroyed"
@@ -1004,23 +1054,5 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Stemmeindstillinger"
-  },
-  "vadErrorBrowserChatbotIncompatible": {
-    "message": "Vi beklager, men $ browsernavn $ understøtter ikke fuldt ud stemmefunktioner med $ chatbotname $. \nPrøv at bruge en desktop -browser som Chrome eller Firefox."
-  },
-  "vadErrorBrowserChatbotIncompatibleShort": {
-    "message": "Stemmen understøttes ikke på $ browsernavn $ med $ chatbotname $. \nPrøv en desktop -browser."
-  },
-  "vadErrorBrowserNotSupported": {
-    "message": "Stemmefunktioner er ikke tilgængelige i denne browser. \nPrøv at bruge Chrome eller Firefox på desktop til den bedste oplevelse."
-  },
-  "vadErrorBrowserNotSupportedShort": {
-    "message": "Stemme ikke tilgængelig. \nPrøv Chrome eller Firefox på desktop."
-  },
-  "vadErrorMobileBrowserLimited": {
-    "message": "Stemmefunktioner understøttes muligvis ikke fuldt ud på mobile browsere med $ chatbotname $. \nPrøv at bruge en desktop -browser til den bedste oplevelse."
-  },
-  "vadErrorMobileBrowserLimitedShort": {
-    "message": "Stemmefunktioner er begrænset på mobil. \nPrøv en desktop -browser."
   }
 }

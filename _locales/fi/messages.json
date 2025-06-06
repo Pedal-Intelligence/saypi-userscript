@@ -929,6 +929,56 @@
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
   },
+  "vadErrorBrowserChatbotIncompatible": {
+    "description": "Error message shown when a specific browser and chatbot combination is known to be incompatible with voice features.",
+    "message": "Olemme pahoillamme, mutta $browserName$ ei tue täysin ääniominaisuuksia $chatbotName$: lla. \nYritä käyttää työpöydän selainta, kuten Chrome tai Firefox.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "description": "Short error message for notifications when a specific browser and chatbot combination is incompatible.",
+    "message": "Ääntä ei tueta $browserName$: lla $chatbotName$: lla. \nKokeile työpöydän selainta.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserNotSupported": {
+    "description": "Generic error message shown when voice features are not supported in the current browser.",
+    "message": "Ääniominaisuuksia ei ole saatavana tässä selaimessa. \nYritä käyttää Chromea tai Firefoxia työpöydällä parhaan kokemuksen saavuttamiseksi."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "description": "Short generic error message for notifications when voice features are not supported.",
+    "message": "Ääni ei ole saatavilla. \nKokeile Chromea tai Firefoxia työpöydällä."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
+    "message": "Ääniominaisuuksia ei ehkä tueta täysin mobiiliselaimissa $chatbotName$: lla. \nYritä käyttää työpöydän selainta parhaan kokemuksen saamiseksi.",
+    "placeholders": {
+      "chatbotName": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "description": "Short error message for notifications when mobile browsers have limited voice support.",
+    "message": "Ääniominaisuudet ovat rajoitetut matkapuhelimissa. \nKokeile työpöydän selainta."
+  },
   "vadStatusDestroyed": {
     "description": "VAD status when destroyed.",
     "message": "Destroyed"
@@ -1004,23 +1054,5 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Ääni -asetukset"
-  },
-  "vadErrorBrowserChatbotIncompatible": {
-    "message": "Olemme pahoillamme, mutta $ Browsername $ ei tue täysin ääniominaisuuksia $ chatbotname $: lla. \nYritä käyttää työpöydän selainta, kuten Chrome tai Firefox."
-  },
-  "vadErrorBrowserChatbotIncompatibleShort": {
-    "message": "Ääntä ei tueta $ Blawsername $: lla $ chatbotname $: lla. \nKokeile työpöydän selainta."
-  },
-  "vadErrorBrowserNotSupported": {
-    "message": "Ääniominaisuuksia ei ole saatavana tässä selaimessa. \nYritä käyttää Chromea tai Firefoxia työpöydällä parhaan kokemuksen saavuttamiseksi."
-  },
-  "vadErrorBrowserNotSupportedShort": {
-    "message": "Ääni ei ole saatavilla. \nKokeile Chromea tai Firefoxia työpöydällä."
-  },
-  "vadErrorMobileBrowserLimited": {
-    "message": "Ääniominaisuuksia ei ehkä tueta täysin mobiiliselaimissa $ chatbotname $: lla. \nYritä käyttää työpöydän selainta parhaan kokemuksen saamiseksi."
-  },
-  "vadErrorMobileBrowserLimitedShort": {
-    "message": "Ääniominaisuudet ovat rajoitetut matkapuhelimissa. \nKokeile työpöydän selainta."
   }
 }

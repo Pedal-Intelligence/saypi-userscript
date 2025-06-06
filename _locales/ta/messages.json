@@ -421,7 +421,7 @@
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
-    "message": "நீங்கள் பதிலளித்தவுடன் இந்த தாவல் தானாக மூடப்படும்."
+    "message": "நீங்கள் பதிலளித்தவுடன் இந்த தாவல் தானாக மூடுவது."
   },
   "permissions_promptHeading": {
     "description": "Main heading on the permissions prompt page.",
@@ -929,6 +929,56 @@
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
   },
+  "vadErrorBrowserChatbotIncompatible": {
+    "description": "Error message shown when a specific browser and chatbot combination is known to be incompatible with voice features.",
+    "message": "மன்னிக்கவும், $browserName$ உலாவியில் $chatbotName$ உடன் குரல் அம்சங்கள் முழுமையாக ஆதரிக்கப்படவில்லை. தயவுசெய்து Chrome அல்லது Firefox போன்ற ஒரு டெஸ்க்டாப் உலாவியை முயற்சிக்கவும்.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "description": "Short error message for notifications when a specific browser and chatbot combination is incompatible.",
+    "message": "$browserName$ இல் $chatbotName$ உடன் குரல் ஆதரிக்கப்படவில்லை. டெஸ்க்டாப் உலாவியை முயற்சிக்கவும்.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserNotSupported": {
+    "description": "Generic error message shown when voice features are not supported in the current browser.",
+    "message": "இந்த உலாவியில் குரல் அம்சங்கள் கிடைக்கவில்லை. \nசிறந்த அனுபவத்திற்காக டெஸ்க்டாப்பில் குரோம் அல்லது பயர்பாக்ஸைப் பயன்படுத்த முயற்சிக்கவும்."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "description": "Short generic error message for notifications when voice features are not supported.",
+    "message": "குரல் கிடைக்கவில்லை. \nடெஸ்க்டாப்பில் குரோம் அல்லது பயர்பாக்ஸை முயற்சிக்கவும்."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
+    "message": "மொபைல் உலாவிகளில் $ சாட்போட்நேம் with உடன் குரல் அம்சங்கள் முழுமையாக ஆதரிக்கப்படாமல் போகலாம். \nசிறந்த அனுபவத்திற்கு டெஸ்க்டாப் உலாவியைப் பயன்படுத்த முயற்சிக்கவும்.",
+    "placeholders": {
+      "chatbotName": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "description": "Short error message for notifications when mobile browsers have limited voice support.",
+    "message": "குரல் அம்சங்கள் மொபைலில் வரையறுக்கப்பட்டுள்ளன. \nடெஸ்க்டாப் உலாவியை முயற்சிக்கவும்."
+  },
   "vadStatusDestroyed": {
     "description": "VAD status when destroyed.",
     "message": "Destroyed"
@@ -1004,23 +1054,5 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "குரல் அமைப்புகள்"
-  },
-  "vadErrorBrowserChatbotIncompatible": {
-    "message": "மன்னிக்கவும், ஆனால் $ BROWSERNAME $ $ சாட்போட்நேம் with உடன் குரல் அம்சங்களை முழுமையாக ஆதரிக்கவில்லை. \nகுரோம் அல்லது பயர்பாக்ஸ் போன்ற டெஸ்க்டாப் உலாவியைப் பயன்படுத்த முயற்சிக்கவும்."
-  },
-  "vadErrorBrowserChatbotIncompatibleShort": {
-    "message": "$ சாட்போட்நேம் $ உடன் $ BROWSERNAME $ இல் குரல் ஆதரிக்கப்படவில்லை. \nடெஸ்க்டாப் உலாவியை முயற்சிக்கவும்."
-  },
-  "vadErrorBrowserNotSupported": {
-    "message": "இந்த உலாவியில் குரல் அம்சங்கள் கிடைக்கவில்லை. \nசிறந்த அனுபவத்திற்காக டெஸ்க்டாப்பில் குரோம் அல்லது பயர்பாக்ஸைப் பயன்படுத்த முயற்சிக்கவும்."
-  },
-  "vadErrorBrowserNotSupportedShort": {
-    "message": "குரல் கிடைக்கவில்லை. \nடெஸ்க்டாப்பில் குரோம் அல்லது பயர்பாக்ஸை முயற்சிக்கவும்."
-  },
-  "vadErrorMobileBrowserLimited": {
-    "message": "மொபைல் உலாவிகளில் $ சாட்போட்நேம் with உடன் குரல் அம்சங்கள் முழுமையாக ஆதரிக்கப்படாமல் போகலாம். \nசிறந்த அனுபவத்திற்கு டெஸ்க்டாப் உலாவியைப் பயன்படுத்த முயற்சிக்கவும்."
-  },
-  "vadErrorMobileBrowserLimitedShort": {
-    "message": "குரல் அம்சங்கள் மொபைலில் வரையறுக்கப்பட்டுள்ளன. \nடெஸ்க்டாப் உலாவியை முயற்சிக்கவும்."
   }
 }

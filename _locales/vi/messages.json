@@ -929,6 +929,56 @@
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
   },
+  "vadErrorBrowserChatbotIncompatible": {
+    "description": "Error message shown when a specific browser and chatbot combination is known to be incompatible with voice features.",
+    "message": "Chúng tôi xin lỗi, nhưng $browserName$ không hỗ trợ đầy đủ các tính năng thoại với $chatbotName$. \nVui lòng thử sử dụng trình duyệt máy tính để bàn như Chrome hoặc Firefox.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "description": "Short error message for notifications when a specific browser and chatbot combination is incompatible.",
+    "message": "Voice không được hỗ trợ trên $browserName$ với $chatbotName$. \nVui lòng thử trình duyệt máy tính để bàn.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserNotSupported": {
+    "description": "Generic error message shown when voice features are not supported in the current browser.",
+    "message": "Các tính năng giọng nói không có sẵn trong trình duyệt này. \nVui lòng thử sử dụng Chrome hoặc Firefox trên máy tính để bàn để có trải nghiệm tốt nhất."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "description": "Short generic error message for notifications when voice features are not supported.",
+    "message": "Giọng nói không có sẵn. \nHãy thử Chrome hoặc Firefox trên máy tính để bàn."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
+    "message": "Các tính năng bằng giọng nói có thể không được hỗ trợ đầy đủ trên các trình duyệt di động với $chatbotName$. \nVui lòng thử sử dụng trình duyệt máy tính để bàn để có trải nghiệm tốt nhất.",
+    "placeholders": {
+      "chatbotName": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "description": "Short error message for notifications when mobile browsers have limited voice support.",
+    "message": "Các tính năng giọng nói bị giới hạn trên thiết bị di động. \nVui lòng thử trình duyệt máy tính để bàn."
+  },
   "vadStatusDestroyed": {
     "description": "VAD status when destroyed.",
     "message": "Destroyed"
@@ -1004,23 +1054,5 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Cài đặt giọng nói"
-  },
-  "vadErrorBrowserChatbotIncompatible": {
-    "message": "Chúng tôi xin lỗi, nhưng $ browsername $ không hỗ trợ đầy đủ các tính năng thoại với $ chatbotname $. \nVui lòng thử sử dụng trình duyệt máy tính để bàn như Chrome hoặc Firefox."
-  },
-  "vadErrorBrowserChatbotIncompatibleShort": {
-    "message": "Voice không được hỗ trợ trên $ browsername $ với $ chatbotname $. \nVui lòng thử trình duyệt máy tính để bàn."
-  },
-  "vadErrorBrowserNotSupported": {
-    "message": "Các tính năng giọng nói không có sẵn trong trình duyệt này. \nVui lòng thử sử dụng Chrome hoặc Firefox trên máy tính để bàn để có trải nghiệm tốt nhất."
-  },
-  "vadErrorBrowserNotSupportedShort": {
-    "message": "Giọng nói không có sẵn. \nHãy thử Chrome hoặc Firefox trên máy tính để bàn."
-  },
-  "vadErrorMobileBrowserLimited": {
-    "message": "Các tính năng bằng giọng nói có thể không được hỗ trợ đầy đủ trên các trình duyệt di động với $ chatbotname $. \nVui lòng thử sử dụng trình duyệt máy tính để bàn để có trải nghiệm tốt nhất."
-  },
-  "vadErrorMobileBrowserLimitedShort": {
-    "message": "Các tính năng giọng nói bị giới hạn trên thiết bị di động. \nVui lòng thử trình duyệt máy tính để bàn."
   }
 }

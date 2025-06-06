@@ -929,6 +929,56 @@
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
   },
+  "vadErrorBrowserChatbotIncompatible": {
+    "description": "Error message shown when a specific browser and chatbot combination is known to be incompatible with voice features.",
+    "message": "Kami minta maaf, tetapi $browserName$ tidak menyokong ciri suara sepenuhnya dengan $chatbotName$. \nCuba gunakan penyemak imbas desktop seperti Chrome atau Firefox.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "description": "Short error message for notifications when a specific browser and chatbot combination is incompatible.",
+    "message": "Suara tidak disokong pada $browserName$ dengan $chatbotName$. \nSila cuba penyemak imbas desktop.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserNotSupported": {
+    "description": "Generic error message shown when voice features are not supported in the current browser.",
+    "message": "Ciri -ciri suara tidak tersedia dalam penyemak imbas ini. \nCuba gunakan Chrome atau Firefox di desktop untuk pengalaman terbaik."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "description": "Short generic error message for notifications when voice features are not supported.",
+    "message": "Suara tidak tersedia. \nCuba Chrome atau Firefox di desktop."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
+    "message": "Ciri -ciri suara mungkin tidak disokong sepenuhnya pada pelayar mudah alih dengan $chatbotName$. \nCuba gunakan penyemak imbas desktop untuk pengalaman terbaik.",
+    "placeholders": {
+      "chatbotName": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "description": "Short error message for notifications when mobile browsers have limited voice support.",
+    "message": "Ciri -ciri suara terhad pada mudah alih. \nSila cuba penyemak imbas desktop."
+  },
   "vadStatusDestroyed": {
     "description": "VAD status when destroyed.",
     "message": "Destroyed"
@@ -1004,23 +1054,5 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Tetapan suara"
-  },
-  "vadErrorBrowserChatbotIncompatible": {
-    "message": "Kami minta maaf, tetapi $ Browsername $ tidak menyokong ciri suara sepenuhnya dengan $ chatbotname $. \nCuba gunakan penyemak imbas desktop seperti Chrome atau Firefox."
-  },
-  "vadErrorBrowserChatbotIncompatibleShort": {
-    "message": "Suara tidak disokong pada $ Browsername $ dengan $ chatbotname $. \nSila cuba penyemak imbas desktop."
-  },
-  "vadErrorBrowserNotSupported": {
-    "message": "Ciri -ciri suara tidak tersedia dalam penyemak imbas ini. \nCuba gunakan Chrome atau Firefox di desktop untuk pengalaman terbaik."
-  },
-  "vadErrorBrowserNotSupportedShort": {
-    "message": "Suara tidak tersedia. \nCuba Chrome atau Firefox di desktop."
-  },
-  "vadErrorMobileBrowserLimited": {
-    "message": "Ciri -ciri suara mungkin tidak disokong sepenuhnya pada pelayar mudah alih dengan $ chatbotname $. \nCuba gunakan penyemak imbas desktop untuk pengalaman terbaik."
-  },
-  "vadErrorMobileBrowserLimitedShort": {
-    "message": "Ciri -ciri suara terhad pada mudah alih. \nSila cuba penyemak imbas desktop."
   }
 }

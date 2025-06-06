@@ -929,6 +929,56 @@
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
   },
+  "vadErrorBrowserChatbotIncompatible": {
+    "description": "Error message shown when a specific browser and chatbot combination is known to be incompatible with voice features.",
+    "message": "Przykro nam, ale $browserName$ nie w pełni obsługuje funkcje głosowe z $chatbotName$. \nSpróbuj użyć przeglądarki stacjonarnej, takiej jak Chrome lub Firefox.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "description": "Short error message for notifications when a specific browser and chatbot combination is incompatible.",
+    "message": "Głos nie jest obsługiwany na $browserName$ z $chatbotName$. \nWypróbuj przeglądarkę komputerową.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserNotSupported": {
+    "description": "Generic error message shown when voice features are not supported in the current browser.",
+    "message": "Funkcje głosowe nie są dostępne w tej przeglądarce. \nSpróbuj użyć Chrome lub Firefox na komputerze, aby uzyskać najlepsze wrażenia."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "description": "Short generic error message for notifications when voice features are not supported.",
+    "message": "Głos niedostępny. \nWypróbuj Chrome lub Firefox na komputerze."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
+    "message": "Funkcje głosowe mogą nie być w pełni obsługiwane w przeglądarkach mobilnych z $chatbotName$. \nSpróbuj użyć przeglądarki stacjonarnej, aby uzyskać najlepsze wrażenia.",
+    "placeholders": {
+      "chatbotName": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "description": "Short error message for notifications when mobile browsers have limited voice support.",
+    "message": "Funkcje głosowe są ograniczone na urządzeniach mobilnych. \nWypróbuj przeglądarkę komputerową."
+  },
   "vadStatusDestroyed": {
     "description": "VAD status when destroyed.",
     "message": "Destroyed"
@@ -1004,23 +1054,5 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Ustawienia głosu"
-  },
-  "vadErrorBrowserChatbotIncompatible": {
-    "message": "Przykro nam, ale $ Browername $ nie w pełni obsługuje funkcje głosowe z $ chatbotname $. \nSpróbuj użyć przeglądarki stacjonarnej, takiej jak Chrome lub Firefox."
-  },
-  "vadErrorBrowserChatbotIncompatibleShort": {
-    "message": "Głos nie jest obsługiwany na $ Browname $ z $ chatbotname $. \nWypróbuj przeglądarkę komputerową."
-  },
-  "vadErrorBrowserNotSupported": {
-    "message": "Funkcje głosowe nie są dostępne w tej przeglądarce. \nSpróbuj użyć Chrome lub Firefox na komputerze, aby uzyskać najlepsze wrażenia."
-  },
-  "vadErrorBrowserNotSupportedShort": {
-    "message": "Głos niedostępny. \nWypróbuj Chrome lub Firefox na komputerze."
-  },
-  "vadErrorMobileBrowserLimited": {
-    "message": "Funkcje głosowe mogą nie być w pełni obsługiwane w przeglądarkach mobilnych z $ chatbotname $. \nSpróbuj użyć przeglądarki stacjonarnej, aby uzyskać najlepsze wrażenia."
-  },
-  "vadErrorMobileBrowserLimitedShort": {
-    "message": "Funkcje głosowe są ograniczone na urządzeniach mobilnych. \nWypróbuj przeglądarkę komputerową."
   }
 }

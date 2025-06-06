@@ -929,6 +929,56 @@
     "description": "VAD detail when waiting for user to speak.",
     "message": "في انتظار الكلام"
   },
+  "vadErrorBrowserChatbotIncompatible": {
+    "description": "Error message shown when a specific browser and chatbot combination is known to be incompatible with voice features.",
+    "message": "نحن آسفون ، لكن $browserName$ لا يدعم تمامًا الميزات الصوتية باستخدام $chatbotName$. \nيرجى محاولة استخدام متصفح سطح المكتب مثل Chrome أو Firefox.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "description": "Short error message for notifications when a specific browser and chatbot combination is incompatible.",
+    "message": "لا يتم دعم Voice على $browserName$ مع $chatbotName$. \nيرجى تجربة متصفح سطح المكتب.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserNotSupported": {
+    "description": "Generic error message shown when voice features are not supported in the current browser.",
+    "message": "الميزات الصوتية غير متوفرة في هذا المتصفح. \nيرجى محاولة استخدام Chrome أو Firefox على سطح المكتب للحصول على أفضل تجربة."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "description": "Short generic error message for notifications when voice features are not supported.",
+    "message": "صوت غير متوفر. \nجرب Chrome أو Firefox على سطح المكتب."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
+    "message": "قد لا تكون الميزات الصوتية مدعومة بالكامل على متصفحات الهاتف المحمول مع $chatbotName$. \nيرجى محاولة استخدام متصفح سطح المكتب للحصول على أفضل تجربة.",
+    "placeholders": {
+      "chatbotName": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "description": "Short error message for notifications when mobile browsers have limited voice support.",
+    "message": "الميزات الصوتية محدودة على الهاتف المحمول. \nيرجى تجربة متصفح سطح المكتب."
+  },
   "vadStatusDestroyed": {
     "description": "VAD status when destroyed.",
     "message": "دمر"
@@ -1004,23 +1054,5 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "إعدادات الصوت"
-  },
-  "vadErrorBrowserChatbotIncompatible": {
-    "message": "نحن آسفون ، لكن $ browsername $ لا يدعم تمامًا الميزات الصوتية باستخدام $ chatbotname $. \nيرجى محاولة استخدام متصفح سطح المكتب مثل Chrome أو Firefox."
-  },
-  "vadErrorBrowserChatbotIncompatibleShort": {
-    "message": "لا يتم دعم Voice على $ browsername $ مع $ chatbotname $. \nيرجى تجربة متصفح سطح المكتب."
-  },
-  "vadErrorBrowserNotSupported": {
-    "message": "الميزات الصوتية غير متوفرة في هذا المتصفح. \nيرجى محاولة استخدام Chrome أو Firefox على سطح المكتب للحصول على أفضل تجربة."
-  },
-  "vadErrorBrowserNotSupportedShort": {
-    "message": "صوت غير متوفر. \nجرب Chrome أو Firefox على سطح المكتب."
-  },
-  "vadErrorMobileBrowserLimited": {
-    "message": "قد لا تكون الميزات الصوتية مدعومة بالكامل على متصفحات الهاتف المحمول مع $ chatbotname $. \nيرجى محاولة استخدام متصفح سطح المكتب للحصول على أفضل تجربة."
-  },
-  "vadErrorMobileBrowserLimitedShort": {
-    "message": "الميزات الصوتية محدودة على الهاتف المحمول. \nيرجى تجربة متصفح سطح المكتب."
   }
 }

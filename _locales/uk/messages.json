@@ -929,6 +929,56 @@
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
   },
+  "vadErrorBrowserChatbotIncompatible": {
+    "description": "Error message shown when a specific browser and chatbot combination is known to be incompatible with voice features.",
+    "message": "Вибачте, але $browserName$ не повністю підтримує функції голосу з $chatbotName$. \nБудь ласка, спробуйте скористатися робочим браузером, як Chrome або Firefox.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "description": "Short error message for notifications when a specific browser and chatbot combination is incompatible.",
+    "message": "Голос не підтримується в $browserName$ за допомогою $chatbotName$. \nБудь ласка, спробуйте настільний браузер.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserNotSupported": {
+    "description": "Generic error message shown when voice features are not supported in the current browser.",
+    "message": "Голосові функції недоступні в цьому браузері. \nБудь ласка, спробуйте використовувати Chrome або Firefox на робочому столі для найкращого досвіду."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "description": "Short generic error message for notifications when voice features are not supported.",
+    "message": "Голос недоступний. \nСпробуйте Chrome або Firefox на робочому столі."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
+    "message": "Голосові функції можуть не повністю підтримуватися в мобільних браузерах з $chatbotName$. \nБудь ласка, спробуйте використовувати браузер для робочого столу для найкращого досвіду.",
+    "placeholders": {
+      "chatbotName": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "description": "Short error message for notifications when mobile browsers have limited voice support.",
+    "message": "Голосові функції обмежені на мобільному. \nБудь ласка, спробуйте настільний браузер."
+  },
   "vadStatusDestroyed": {
     "description": "VAD status when destroyed.",
     "message": "Destroyed"
@@ -1004,23 +1054,5 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Налаштування голосу"
-  },
-  "vadErrorBrowserChatbotIncompatible": {
-    "message": "Вибачте, але $ браузерна $ не повністю підтримує функції голосу з $ chatbotname $. \nБудь ласка, спробуйте скористатися робочим браузером, як Chrome або Firefox."
-  },
-  "vadErrorBrowserChatbotIncompatibleShort": {
-    "message": "Голос не підтримується в $ Browsername $ за допомогою $ chatbotname $. \nБудь ласка, спробуйте настільний браузер."
-  },
-  "vadErrorBrowserNotSupported": {
-    "message": "Голосові функції недоступні в цьому браузері. \nБудь ласка, спробуйте використовувати Chrome або Firefox на робочому столі для найкращого досвіду."
-  },
-  "vadErrorBrowserNotSupportedShort": {
-    "message": "Голос недоступний. \nСпробуйте Chrome або Firefox на робочому столі."
-  },
-  "vadErrorMobileBrowserLimited": {
-    "message": "Голосові функції можуть не повністю підтримуватися в мобільних браузерах з $ chatbotname $. \nБудь ласка, спробуйте використовувати браузер для робочого столу для найкращого досвіду."
-  },
-  "vadErrorMobileBrowserLimitedShort": {
-    "message": "Голосові функції обмежені на мобільному. \nБудь ласка, спробуйте настільний браузер."
   }
 }

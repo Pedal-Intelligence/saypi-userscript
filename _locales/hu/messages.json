@@ -929,6 +929,56 @@
     "description": "VAD detail when waiting for user to speak.",
     "message": "Waiting for speech"
   },
+  "vadErrorBrowserChatbotIncompatible": {
+    "description": "Error message shown when a specific browser and chatbot combination is known to be incompatible with voice features.",
+    "message": "Sajnáljuk, de a $browserName$ nem támogatja teljes mértékben a hangfunkciókat a $chatbotName$ segítségével. \nKérjük, próbáljon meg olyan asztali böngészőt használni, mint a Chrome vagy a Firefox.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserChatbotIncompatibleShort": {
+    "description": "Short error message for notifications when a specific browser and chatbot combination is incompatible.",
+    "message": "A hangot nem támogatják a $browserName$ -on a $chatbotName$ -val. \nKérjük, próbáljon ki egy asztali böngészőt.",
+    "placeholders": {
+      "browserName": {
+        "content": "$1",
+        "example": "Kiwi Browser"
+      },
+      "chatbotName": {
+        "content": "$2",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorBrowserNotSupported": {
+    "description": "Generic error message shown when voice features are not supported in the current browser.",
+    "message": "A hangjellemzők nem érhetők el ebben a böngészőben. \nKérjük, próbálja meg használni a Chrome vagy a Firefox -ot az asztalon a legjobb élmény érdekében."
+  },
+  "vadErrorBrowserNotSupportedShort": {
+    "description": "Short generic error message for notifications when voice features are not supported.",
+    "message": "A hang nem érhető el. \nPróbálja ki a Chrome -t vagy a Firefoxot az asztalon."
+  },
+  "vadErrorMobileBrowserLimited": {
+    "description": "Error message shown when mobile browsers have limited voice feature support with a specific chatbot.",
+    "message": "Lehet, hogy a hangjellemzőket nem lehet teljes mértékben támogatni a mobil böngészőknél, a $chatbotName$ -mal. \nKérjük, próbálja meg használni az asztali böngészőt a legjobb élmény érdekében.",
+    "placeholders": {
+      "chatbotName": {
+        "content": "$1",
+        "example": "Claude"
+      }
+    }
+  },
+  "vadErrorMobileBrowserLimitedShort": {
+    "description": "Short error message for notifications when mobile browsers have limited voice support.",
+    "message": "A hangjellemzők korlátozottak a mobilon. \nKérjük, próbáljon ki egy asztali böngészőt."
+  },
   "vadStatusDestroyed": {
     "description": "VAD status when destroyed.",
     "message": "Destroyed"
@@ -1004,23 +1054,5 @@
   "voiceSettings": {
     "description": "The text of the menu item to access voice-related settings.",
     "message": "Hangbeállítások"
-  },
-  "vadErrorBrowserChatbotIncompatible": {
-    "message": "Sajnáljuk, de a $ böngészés $ nem támogatja teljes mértékben a hangfunkciókat a $ chatBotName $ segítségével. \nKérjük, próbáljon meg olyan asztali böngészőt használni, mint a Chrome vagy a Firefox."
-  },
-  "vadErrorBrowserChatbotIncompatibleShort": {
-    "message": "A hangot nem támogatják a $ Browsername $ -on a $ chatBotName $ -val. \nKérjük, próbáljon ki egy asztali böngészőt."
-  },
-  "vadErrorBrowserNotSupported": {
-    "message": "A hangjellemzők nem érhetők el ebben a böngészőben. \nKérjük, próbálja meg használni a Chrome vagy a Firefox -ot az asztalon a legjobb élmény érdekében."
-  },
-  "vadErrorBrowserNotSupportedShort": {
-    "message": "A hang nem érhető el. \nPróbálja ki a Chrome -t vagy a Firefoxot az asztalon."
-  },
-  "vadErrorMobileBrowserLimited": {
-    "message": "Lehet, hogy a hangjellemzőket nem lehet teljes mértékben támogatni a mobil böngészőknél, a $ chatBotName $ -mal. \nKérjük, próbálja meg használni az asztali böngészőt a legjobb élmény érdekében."
-  },
-  "vadErrorMobileBrowserLimitedShort": {
-    "message": "A hangjellemzők korlátozottak a mobilon. \nKérjük, próbáljon ki egy asztali böngészőt."
   }
 }
