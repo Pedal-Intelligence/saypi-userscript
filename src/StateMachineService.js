@@ -1,5 +1,5 @@
 import { interpret } from "xstate";
-import { createSayPiMachine } from "./state-machines/SayPiMachine.ts";
+import { createConversationMachine } from "./state-machines/ConversationMachine.ts";
 import { machine as screenLockMachine } from "./state-machines/ScreenLockMachine.ts";
 import { createThemeToggleMachine } from "./state-machines/ThemeToggleMachine.ts";
 import { machine as analyticsMachine } from "./state-machines/SessionAnalyticsMachine.ts";
@@ -13,7 +13,7 @@ import EventBus from "./events/EventBus.js";
  */
 class StateMachineService {
   constructor(chatbot) {
-    const conversationMachine = createSayPiMachine(chatbot);
+    const conversationMachine = createConversationMachine(chatbot);
     this.actor = interpret(conversationMachine).onTransition((state) => {
       if (state.changed) {
         const fromState = state.history
@@ -21,7 +21,7 @@ class StateMachineService {
           : "N/A";
         const toState = serializeStateValue(state.value);
         logger.debug(
-          `Say, Pi Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
+          `Conversation Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
         );
       }
     });

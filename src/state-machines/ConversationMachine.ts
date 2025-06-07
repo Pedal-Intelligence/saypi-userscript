@@ -29,7 +29,7 @@ import { Chatbot, UserPrompt } from "../chatbots/Chatbot";
 import { ImmersionStateChecker } from "../ImmersionServiceLite";
 import TranscriptionErrorManager from "../error-management/TranscriptionErrorManager";
 
-type SayPiTranscribedEvent = {
+type ConversationTranscribedEvent = {
   type: "saypi:transcribed";
   text: string;
   sequenceNumber: number;
@@ -41,7 +41,7 @@ type SayPiTranscribedEvent = {
   };
 };
 
-type SayPiSpeechStoppedEvent = {
+type ConversationSpeechStoppedEvent = {
   type: "saypi:userStoppedSpeaking";
   duration: number;
   blob?: Blob;
@@ -50,33 +50,33 @@ type SayPiSpeechStoppedEvent = {
   handlerTimestamp?: number;
 };
 
-type SayPiAudioConnectedEvent = {
+type ConversationAudioConnectedEvent = {
   type: "saypi:audio:connected";
   deviceId: string;
   deviceLabel: string;
 };
-type SayPiAudioReconnectEvent = {
+type ConversationAudioReconnectEvent = {
   type: "saypi:audio:reconnect";
   deviceId: string;
   deviceLabel: string;
 };
-type SayPiSessionAssignedEvent = {
+type ConversationSessionAssignedEvent = {
   type: "saypi:session:assigned";
   session_id: string;
 };
 
-type SayPiUserPreferenceChangedEvent = {
+type ConversationUserPreferenceChangedEvent = {
   type: "userPreferenceChanged";
   discretionaryMode?: boolean;
   voiceId?: string;
   audioProvider?: string;
 };
 
-type SayPiEvent =
+type ConversationEvent =
   | { type: "saypi:userSpeaking" }
-  | SayPiSpeechStoppedEvent
+  | ConversationSpeechStoppedEvent
   | { type: "saypi:userFinishedSpeaking" }
-  | SayPiTranscribedEvent
+  | ConversationTranscribedEvent
   | { type: "saypi:transcribeFailed" }
   | { type: "saypi:transcribedEmpty" }
   | { type: "saypi:piThinking" }
@@ -91,14 +91,14 @@ type SayPiEvent =
   | { type: "saypi:callFailed" }
   | { type: "saypi:hangup" }
   | { type: "saypi:visible" }
-  | SayPiAudioConnectedEvent
-  | SayPiAudioReconnectEvent
-  | SayPiSessionAssignedEvent
+  | ConversationAudioConnectedEvent
+  | ConversationAudioReconnectEvent
+  | ConversationSessionAssignedEvent
   | { type: "saypi:piWriting" }
   | { type: "saypi:piStoppedWriting" }
-  | SayPiUserPreferenceChangedEvent;
+  | ConversationUserPreferenceChangedEvent;
 
-interface SayPiContext {
+interface ConversationContext {
   transcriptions: Record<number, string>;
   isTranscribing: boolean; // duplicate of state.matches("listening.converting.transcribing")
   lastState: "inactive" | "listening";
@@ -111,7 +111,7 @@ interface SayPiContext {
 }
 
 // Define the state schema
-type SayPiStateSchema = {
+type ConversationStateSchema = {
   states: {
     inactive: {};
     errors: {
@@ -148,9 +148,9 @@ type SayPiStateSchema = {
   };
 };
 
-interface SayPiTypestate extends Typestate<SayPiContext> {
+interface ConversationTypestate extends Typestate<ConversationContext> {
   value: "listening" | "inactive" | "callStarting" | "errors" | "responding";
-  context: SayPiContext;
+  context: ConversationContext;
 }
 
 function getHighestKey(transcriptions: Record<number, string>): number {
@@ -238,9 +238,9 @@ function getChatbotDefaultPlaceholder(): string {
 // Define a constant for the timeout (in milliseconds) for the user stopped speaking event
 const USER_STOPPED_TIMEOUT_MS = 10000;
 
-const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
+const machine = createMachine<ConversationContext, ConversationEvent, ConversationTypestate>(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAxAV1jACcMiwAzYsAOwGMwBhACxWpggG0AGAXUVAAOAe1hYALliHV+IAB6IuAGhBoFAXzXLUmLADos1FLQkA3MDm0CsCAUSEBbAWIBKYFBDTc+SEMNESpGXkEAGYAdgAOAE5dMKiwrhCAFgAmADYAVgikjIzlVQQARkKUrl0IiOSoiOLqwviNLXRsfUNjLDMLdCsEWhQAG36vGT9xSWkfYKiU-MQopJiUrLCUsNyliK4wxpBtFoMjU3NLaysAZQE3AGsDKGGfUYCJ0GCk4ozYqLSojMSQjJKeRUiEKyRC5RCaTChQi0K4GTC4R2ez0fUGZzEKCIEjYXTQPTR-Vc7k8vBGIjGgUmiBySV0hSS2SyFSScTiQIKjI+SSSaRSqyihTShS4SUhyOaqIG-QxWJxUDxPRYbDwAnuggpTyCiAiM2BRS4P10v1h-0RaTSXEKGQlOl0hNl2NuiushIAYigsP1IOrfJrxtqEDy6QymRVsmyfrMilFwRkQlFEwDRTUE7aWg7MU7cbJYJixGBdChyAWiAAKUpcKsASjxGeljvlvseAepQYyIcZOXDrPiUf1yTKiZCgNWmUyNs0u0lun6WDzNGdJxsWAAKkwDDc2M3-VSXogQpDwWyq1lvmkkvDo4eMml6RUocVYVCkum9HOF9Ql91TlgLtdbh3fxW33UJ-mPeJTwic9Lw5A8SjCXQ3l+FYfhSSpKjfWd5wLL9cWXEx5ywAAjb0gMpZ45BBC0ImNM8akyflshCaNrXSWJoi+MIEiWQEsI-XDv3xawUDwCBJF6KRqDAYwfTJB5d0o4IhV5XQE15GDYziVixTKQ8X3U8JeUKficMXfCfwQUTxKEBAyFoKSZLEcitTbFTEMYnJRSrIVkmveNEMhBjqi83lTM-ISekIWBRCkKyYqwKBpM4eSNWAvcqKKC86QWfkeUfaD4mvHkh2tQoEjCS9QWtcLBLYXR7KEIhxIs4SEGVKBVRckDMpvCCEnhQqLyvfVK3BEJ4XWBMEyWV8pxRbCIvqxrmtuXRqCEMR-xQLcFWXAhiDdAx5yYSBtt27qMuCPrPgGs8vlg6N+VFXQLQWf4Ig7XUQlq8yoAamSmpa-6Nq2y4dsi6wDqIc7ANSv10qUkE-l0FIhQFVYrUtCInsNO9piieFvlKdJtnmmcBL+gGHNW+rodh1qenpsQhAES4IAZu54ZbK6dQZY10MiRkRTenHRvqRCCZU35knjNJfrw-6VuB3R6fB3aXQQZnWfZzmOEKbw0oowMajpDJBeyGouFFp6GUQ1JBRFaEYUteXybtSnFftKQzGzf6jFoPB7DwfoUHlHAICkQsDBMIQrkLexiBgAB5JwsHsHCsFoS6kYNLIkLCTIFmKVIlj1Ap0KFCE0gqBIR1WCIFbWhzqF9+Ui1oQPg9D8PiDsIhdAEHvyCa+xdETogU7TjO8yznPAxFDIYgZHIEWSa0qxY0aVnGypvi4TZWRSVkm-qlu27WgOg5DsPIYQMQiFYWBaCIEi5MNhHjbbeJwTR2FKkqomKEYQnoIg+LGUUjIJqWlZD9d2LRPbNx9sQduV9u630ZtYB+T8X5vw9F6d+5JEaBjRuxBM2QJy-GqFvCuw1dCCgWITSqKQvhwKaB7MyXtz4oMvp3a+Pc77YOoM-V+xFIAAFFHBiFJB-HmudSF3nIbyXIVDKhPU2HeN4CxIigjRhaMm7CEGcKQa3Hh9U0E33DrmfMhZiyljLCUKsXBawLUQWfZBfsO5d0sXDWRilAxKH1FwU+-1uGeIsQInMeYw62JLMQMssA8DERnrFagAARMAoc0AuIpsY9xpjwl8PQU2bm-i3JvEQn-RES86hcDRteTe9JMh-FBJECak5DHvjyaEjx7dEnJPEOHeebZ9L9SgjBEaBQRzcXoQyQmpRCZZBCd7Ap7chEiJIoIx+wjcFiJSn44hbZ4x0iqWsQ8ADRTqKroeCqiRoJWzmp0xadUemrLWus3ZWycGiLAPg70+yiFf1Asc1GMJuLxhCBcpIT15gnMJqCGawp4QGOnBwparyL71Q+aIr5OyfkQEkU4GRgLXLAuSKC2EZzIXhEuQOOpd4WFVlWAsXU6EOmoqMei3QfcmqyjEAQblRB+6wBwNYmJRY4nll+DWOsXSuU8phvmAVCrYDDNAiwlI4IoR9iTAiTYNDEBLDiEhOZsIuKavFPAvQZBYDCGoMDTWHUuqlMOaBN41pPjfBlv8QErFrS0UvHXfkDI+TlSwjau1Dr9qEBhurXxJKeqvBuUhaY3ZzbRH+HBUIYpwSGiPtjTVCxw1wEjWtKw65Nx33OHG7cLqgWZVZHU+h2RpgHz-pCBp3xYjC0TPlaojcrUA1tVIFW5aNzUA1suKwAB1V+JSDn1teDxZtuU20wg7QOY+KRUaMjRo7NGYpi3DvtWWv8Na9qWXOCzNmZ1z1qsynya8FRt38kLvENGkJUiPI5daktI7T2c01lenWt6ALbgNgm3mQZ3iep+H8AESw-VbHoVsRI3YLyCjdk8iN-76rVrAxetqVgjpflgKdDmd662ksyuba8sZt0rHBSKeEmqOxHtLXhs9BHNZqwI-e4I8YjSfUTDUBE0JcjXnSLRBhsYJrWh9d+haOGT2ccA8uAwpYiCqmclRxNiAl6sl0HU3UuRRObHLgeJF9IJroX7YifK7HcP-XwxDTBCANN920-rBd1HgihsKMaNIkIFksITFmzNZRQTGbs8kMKg7lOjqwLOsYbmXMXV01BgKelIQFuthhyTMITWMjiPycISz4t-pU85pLc6q1-mvezZL87IO5xWE+kcsQxxilLqKeYjmqu6AAO6enlG6Jq2BVxCAxKzNTl76sgYo3xjLudAkFGCRV49KthspagGNkga4pvXsA2KgsEr7HSpyXaBLa1tujfGwd6bAg9bLYCdGdb2HKsq2hgASWoJp7Td9tY3sW65rmPm9MICy2pHLba8sLGvAmO89zg2lBbQOj7m21o-b+55tObmge6zvRBhSrrMq6mvFCJHpCIysjiP8DQU4NoQDgDIFELXAwAFoV7Rg5wsMo0rDRLxWMfC8KKFoHHaGYdnIy1gBdSPUdGw5yogP1AhcakJKrWxhNorCmY5S3Gl26izQY0ZGYVyhTIQpoghMN5lDnXweeXlzU4pe6bsjFGWcrA3JPF2Gq7emuIQW96y5VwUbXtEqyMeMiw2knvAa0xBptTmtvlKatopUZIuo1jMltuhekcQrdIu4lCOPNMvsxuTz73z8FEIB9YcHgEofDWGm3ZHn1obqjcWWWE+UKfEC87FgUDnsJjROKCrGX4Klu+9N4d4yJUA+8IEFB8P++r7NgINQgFhHrGUHxCEayoJlB1uIxWY-6-SM5iF71XiH5UvjlBKMVnk3EhRpBhebV6zSGQJgL9BafbysVtkNliJvcjZq8Ywm8t9pgV9OIER3JExlkFU+UCBF9j4ag1IQpwg2kVgs0mIYgtFEwSgWEOwGhj9ulBV+5kDYB1pR4BhUD1gMDmJuIAFEMBxypuQN4D4W9zZEChVeUlVqCVV6CWFGCxRmDwhWCK55cisfhuIaVoh2VXFyCkCBCKCmpqDsU8FPR-l6CZklEsCWDcDhRwRkI-gRx3VFNcl5U+DFUw5lUbDqCM5aBxEbDdDApMDxCcCnpmDZlfhSg65pl+tgZF8B8edNVa8nFC5KgqwndLCrtPtT0K0J1QDP5wCc17ZU0sh00J9wtqp6FqheJDRphgEgiANz1F8sgm1cpohUNnp+wplBZrNRRERNhqh4xSjOMmsUi5FAxtEAtN4JoVhYR-Drx6gygWV+QgtUghYsMf0h0ON-pbtbg9sJtDsZtyib8oNVsDwEhaIosakShPoFg4iWhrs6YY1ft-s8cF9Njc5GRohXpD5GVrRRcEd0DYtERDwShEwtgGc1AgA */
+    /** @xstate-layout N4IgpgJg5mDOIC5SwIYE8AKBLAxAV1jACcMiwAzYsAOwGMwBhACxWpggG0AGAXUVAAOAe1hYALliHV+IAB6IuAGhBoFAXzXLUmLADos1FLQkA3MDm0CsCAUSEBbAWIBKYFBDTc+SEMNESpGXkEAGYAdgAOAE5dMKiwrhCAFgAmADYAVgikjIzlVQQARkKUrl0IiOSoiOLqwviNLXRsfUNjLDMLdCsEWhQAG36vGT9xSWkfYKiU-MQopJiUrLCUsNyliK4wxpBtFoMjU3NLaysAZQE3AGsDKGGfUYCJ0GCk4ozYqLSojMSQjJKeRUiEKyRC5RCaTChQi0K4GTC4R2ez0fUGZzEKCIEjYXTQPTR-Vc7k8vBGIjGgUmiBySV0hSS2SyFSScTiQIKjI+SSSaRSqyihTShS4SUhyOaqIG-QxWJxUDxPRYbDwAnuggpTyCiAiM2BRS4P10v1h-0RaTSXEKGQlOl0hNl2NuiushIAYigsP1IOrfJrxtqEDy6QymRVsmyfrMilFwRkQlFEwDRTUE7aWg7MU7cbJYJixGBdChyAWiAAKUpcKsASjxGeljvlvceAepQYyIcZOXDrPiUf1yTKiZCgNWmUyNs0u0lun6WDzNGdJxsWAAKkwDDc2M3-VSXogQpDwWyq1lvmkkvDo4eMml6RUocVYVCkum9HOF9Ql91TlgLtdbh3fxW33UJ-mPeJTwic9Lw5A8SjCXQ3l+FYfhSSpKjfWd5wLL9cWXEx5ywAAjb0gMpZ45BBC0ImNM8akyflshCaNrXSWJoi+MIEiWQEsI-XDv3xawUDwCBJF6KRqDAYwfTJB5d0o4IhV5XQE15GDYziVixTKQ8X3U8JeUKficMXfCfwQUTxKEBAyFoKSZLEcitTbFTEMYnJRSrIVkmveNEMhBjqi83lTM-ISekIWBRCkKyYqwKBpM4eSNWAvcqKKC86QWfkeUfaD4mvHkh2tQoEjCS9QWtcLBLYXR7KEIhxIs4SEGVKBVRckDMpvCCEnhQqLyvfVK3BEJ4XWBMEyWV8pxRbCIvqxrmtuXRqCEMR-xQLcFWXAhiDdAx5yYSBtt27qMuCPrPgGs8vlg6N+VFXQLQWf4Ig7XUQlq8yoAamSmpa-6Nq2y4dsi6wDqIc7ANSv10qUkE-l0FIhQFVYrUtCInsNO9piieFvlKdJtnmmcBL+gGHNW+rodh1qenpsQhAES4IAZu54ZbK6dQZY10MiRkRTenHRvqRCCZU35knjNJfrw-6VuB3R6fB3aXQQZnWfZzmOEKbw0oowMajpDJBeyGouFFp6GUQ1JBRFaEYUteXybtSnFftKQzGzf6jFoPB7DwfoUHlHAICkQsDBMIQrkLexiBgAB5JwsHsHCsFoS6kYNLIkLCTIFmKVIlj1Ap0KFCE0gqBIR1WCIFbWhzqF9+Ui1oQPg9D8PiDsIhdAEHvyCa+xdETogU7TjO8yznPAxFDIYgZHIEWSa0qxY0aVnGypvi4TZWRSVkm-qlu27WgOg5DsPIYQMQiFYWBaCIEi5MNhHjbbeJwTR2FKkqomKEYQnoIg+LGUUjIJqWlZD9d2LRPbNx9sQduV9u630ZtYB+T8X5vw9F6d+5JEaBjRuxBM2QJy-GqFvCuw1dCCgWITSqKQvhwKaB7MyXtz4oMvp3a+Pc77YOoM-V+xFIAAFFHBiFJB-HmudSF3nIbyXIVDKhPU2HeN4CxIigjRhaMm7CEGcKQa3Hh9U0E33DrmfMhZiyljLCUKsXBawLUQWfZBfsO5d0sXDWRilAxKH1FwU--1uGeIsQInMeYw62JLMQMssA8DERnrFagAARMAoc0AuIpsY9xpjwl8PQU2bm-i3JvEQn-RES86hcDRteTe9JMh-FBJECak5DHvjyaEjx7dEnJPEOHeebZ9L9SgjBEaBQRzcXoQyQmpRCZZBCd7Ap7chEiJIoIx+wjcFiJSn44hbZ4x0iqWsQ8ADRTqKroeCqiRoJWzmp0xadUemrLWus3ZWycGiLAPg70+yiFf1Asc1GMJuLxhCBcpIT15gnMJqCGawp4QGOnBwparyL71Q+aIr5OyfkQEkU4GRgLXLAuSKC2EZzIXhEuQOOpd4WFVlWAsXU6EOmoqMei3QfcmqyjEAQblRB+6wBwNYmJRY4nll+DWOsXSuU8phvmAVCrYDDNAiwlI4IoR9iTAiTYNDEBLDiEhOZsIuKavFPAvQZBYDCGoMDTWHUuqlMOaBN41pPjfBlv8QErFrS0UvHXfkDI+TlSwjau1Dr9qEBhurXxJKeqvBuUhaY3ZzbRH+HBUIYpwSGiPtjTVCxw1wEjWtKwHrtIeQ1vmLcLqgWZVZHU+h2RpgHz-pCBp3xYjC0TPlaojcrUA1tVIFW5aNzUA1suKwAB1V+JSDn1teDxZtuU20wg7QOY+KRUaMjRo7NGYpi3DvtWWv8Na9qWXOCzNmZ1z1qsynya8FRt38kLvENGkJUiPI5daktI7T2c01lenWt6ALbgNgm3mQZ3iep+H8AESw-VbHoVsRI3YLyCjdk8iN-76rVrAxetqVgjpflgKdDmd662ksyuba8sZt0rHBSKeEmqOxHtLXhs9BHNZqwI-e4I8YjSfUTDUBE0JcjXnSLRBhsYJrWh9d+haOGT2ccA8uAwpYiCqmclRxNiAl6sl0HU3UuRRObHLgeJF9IJroX7YifK7HcP-XwxDTBCANN920-rBd1HgihsKMaNIkIFksITFmzNZRQTGbs8kMKg7lOjqwLOsYbmXMXV01BgKelIQFuthhyTMITWMjiPycISz4t-pU85pLc6q1-mvezZL87IO5xWE+kcsQxxilLqKeYjmqu6AAO6enlG6Jq2BVxCAxKzNTl76sgYo3xjLudAkFGCRV49KthspagGNkga4pvXsA2KgsEr7HSpyXaBLa1tujfGwd6bAg9bLYCdGdb2HKsq2hgASWoJp7Td9tY3sW65rmPm9MICy2pHLba8sLGvAmO89zg2lBbQOj7m21o-b+55tObmge6zvRBhSrrMq6mvFCJHpCIysjiP8DQU4NoQDgDIFELXAwAFoV7Rg5wsMo0rDRLxWMfC8KKFoHHaGYdnIy1gBdSPUdGw5yogP1AhcakJKrWxhNorCmY5S3Gl26izQY0ZGYVyhTIQpoghMN5lDnXweeXlzU4pe6bsjFGWcrA3JPF2Gq7emuIQW96y5VwUbXtEqyMeMiw2knvAa0xBptTmtvlKatopUZIuo1jMltuhekcQrdIu4lCOPNMvsxuTz73z8FEIB9YcHgEofDWGm3ZHn1obqjcWWWE+UKfEC87FgUDnsJjROKCrGX4Klu+9N4d4yJUA+8IEFB8P++r7NgINQgFhHrGUHxCEayoJlB1uIxWY-6-SM5iF71XiH5UvjlBKMVnk3EhRpBhebV6zSGQJgL9BafbysVtkNliJvcjZq8Ywm8t9pgV9OIER3JExlkFU+UCBF9j4W9zZEChVeUlVqCVV6CWFGCxRmDwhWCK55cisfhuIaVoh2VXFyCkCBCKCmpqDsU8FPR-l6CZklEsCWDcDhRwRkI-gRx3VFNcl5U+DFUw5lUbDqCM5aBxEbDdDApMDxCcCnpmDZlfhSg65pl+tgZF8B8edNVa8nFC5KgqwndLCrtPtT0K0J1QDP5wCc17ZU0sh00J9wtqp6FqheJDRphgEgiANz1F8sgm1cpohUNnp+wplBZrNRRERNhqh4xSjOMmsUi5FAxtEAtN4JoVhYR-Drx6gygWV+QgtUghYsMf0h0ON-pbtbg9sJtDsZtyib8oNVsDwEhaIosakShPoFg4iWhrs6YY1ft-s8cF9Njc5GRohXpD5GVrRRcEd0DYtERDwShEwtgGc1AgA */
     context: {
       transcriptions: {},
       isTranscribing: false,
@@ -251,7 +251,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       shouldRespond: shouldAlwaysRespond(),
       isMaintainanceMessage: false,
     },
-    id: "sayPi",
+    id: "conversation",
     initial: "inactive",
     states: {
       inactive: {
@@ -277,12 +277,12 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             description: `Update the context when the prompt area has been loaded in the UI.`,
           },
           "saypi:call": {
-            target: "#sayPi.callStarting",
+            target: "#conversation.callStarting",
             description:
               'Place a "call" to Pi.\nAttempts to start the microphone and begin active listening.',
           },
           "saypi:piSpeaking": {
-            target: "#sayPi.responding.piSpeaking",
+            target: "#conversation.responding.piSpeaking",
           },
         },
       },
@@ -310,7 +310,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         ],
         on: {
           "saypi:callReady": {
-            target: "#sayPi.listening.recording",
+            target: "#conversation.listening.recording",
             actions: [
               {
                 type: "callHasStarted",
@@ -420,7 +420,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   "Microphone is recording but no speech is detected.",
                 on: {
                   "saypi:userFinishedSpeaking": {
-                    target: "#sayPi.inactive",
+                    target: "#conversation.inactive",
                   },
                   "saypi:userSpeaking": {
                     target: "userSpeaking",
@@ -456,7 +456,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     {
                       target: [
                         "notSpeaking",
-                        "#sayPi.listening.converting.transcribing",
+                        "#conversation.listening.converting.transcribing",
                       ],
                       cond: "hasAudio",
                       actions: [
@@ -479,7 +479,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             },
             on: {
               "saypi:hangup": {
-                target: "#sayPi.inactive",
+                target: "#conversation.inactive",
                 actions: [
                   {
                     type: "stopRecording",
@@ -521,7 +521,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 },
                 invoke: {
                   id: "mergeOptimistic",
-                  src: (context: SayPiContext, event: SayPiEvent) => {
+                  src: (context: ConversationContext, event: ConversationEvent) => {
                     // Check if there are two or more transcripts to merge
                     if (Object.keys(context.transcriptions).length > 1) {
                       // This function should return a Promise that resolves with the merged transcript string
@@ -551,7 +551,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     actions: [
                       assign({
                         transcriptions: (
-                          context: SayPiContext,
+                          context: ConversationContext,
                           event: DoneInvokeEvent<string>
                         ) => {
                           // If the event.data is empty, just return the current context.transcriptions
@@ -592,7 +592,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   },
                   "saypi:transcribeFailed": {
                     target:
-                      "#sayPi.listening.errorStatus.errors.transcribeFailed",
+                      "#conversation.listening.errorStatus.errors.transcribeFailed",
                     description:
                       "Out of sequence error response from the /transcribe API",
                     actions: {
@@ -600,7 +600,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                     }
                   },
                   "saypi:transcribedEmpty": {
-                    target: "#sayPi.listening.errorStatus.errors.micError",
+                    target: "#conversation.listening.errorStatus.errors.micError",
                     description:
                       "Out of sequence empty response from the /transcribe API",
                     actions: {
@@ -626,7 +626,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   }
                 ],
                 exit: ["acknowledgeUserInput"],
-                always: "#sayPi.responding.piThinking",
+                always: "#conversation.responding.piThinking",
               },
               transcribing: {
                 description:
@@ -660,7 +660,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   "saypi:transcribeFailed": {
                     target: [
                       "accumulating",
-                      "#sayPi.listening.errorStatus.errors.transcribeFailed",
+                      "#conversation.listening.errorStatus.errors.transcribeFailed",
                     ],
                     description:
                       "Received an error response from the /transcribe API",
@@ -671,7 +671,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   "saypi:transcribedEmpty": {
                     target: [
                       "accumulating",
-                      "#sayPi.listening.errorStatus.errors.micError",
+                      "#conversation.listening.errorStatus.errors.micError",
                     ],
                     description:
                       "Received an empty response from the /transcribe API (no speech detected)",
@@ -702,7 +702,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 after: {
                   "5000": [
                     {
-                      target: "#sayPi.listening.errorStatus.normal",
+                      target: "#conversation.listening.errorStatus.normal",
                       actions: [],
                       description:
                         "Reset to the normal state and clear errors.",
@@ -745,7 +745,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         },
         on: {
           "saypi:piThinking": {
-            target: "#sayPi.responding.piThinking",
+            target: "#conversation.responding.piThinking",
             actions: [
               {
                 type: "acknowledgeUserInput",
@@ -753,7 +753,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             ],
           },
           "saypi:piSpeaking": {
-            target: "#sayPi.responding.piSpeaking",
+            target: "#conversation.responding.piSpeaking",
           },
           "saypi:visible": {
             actions: {
@@ -777,7 +777,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           },
           "saypi:session:assigned": {
             actions: assign({
-              sessionId: (context, event: SayPiSessionAssignedEvent) =>
+              sessionId: (context, event: ConversationSessionAssignedEvent) =>
                 event.session_id,
             }),
           },
@@ -804,7 +804,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             description: "End call while Pi is speaking.",
           },
           "saypi:userSpeaking": {
-            target: "#sayPi.responding.userInterrupting",
+            target: "#conversation.responding.userInterrupting",
             cond: {
               type: "interruptionsAllowed",
             },
@@ -867,20 +867,20 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
             on: {
               "saypi:piStoppedSpeaking": [
                 {
-                  target: "#sayPi.listening",
+                  target: "#conversation.listening",
                   cond: {
                     type: "wasListening",
                   },
                 },
                 {
-                  target: "#sayPi.inactive",
+                  target: "#conversation.inactive",
                   cond: {
                     type: "wasInactive",
                   },
                 },
               ],
               "saypi:piFinishedSpeaking": {
-                target: "#sayPi.listening",
+                target: "#conversation.listening",
               },
               "saypi:userSpeaking": {
                 target: "userInterrupting",
@@ -901,7 +901,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                   cond: "wasListening",
                 },
                 {
-                  target: "#sayPi.inactive",
+                  target: "#conversation.inactive",
                   description: `The user forced an interruption, i.e. tapped to interrupt Pi, outside of a call.`,
                   actions: "pauseAudio",
                 },
@@ -956,7 +956,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 target: "piSpeaking",
               },
               "saypi:piStoppedWriting": {
-                target: "#sayPi.listening",
+                target: "#conversation.listening",
                 actions: {
                   type: "suppressWrittenResponseWhenMaintainance",
                 },
@@ -999,8 +999,8 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
                 },
                 {
                   target: [
-                    "#sayPi.listening.converting.transcribing",
-                    "#sayPi.listening.recording.notSpeaking",
+                    "#conversation.listening.converting.transcribing",
+                    "#conversation.listening.recording.notSpeaking",
                   ],
                   cond: {
                     type: "hasAudio",
@@ -1049,7 +1049,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
     on: {
       "userPreferenceChanged": {
         actions: assign({
-          shouldRespond: (context, event: SayPiUserPreferenceChangedEvent) => {
+          shouldRespond: (context, event: ConversationUserPreferenceChangedEvent) => {
             // Update shouldRespond based on discretionary mode if it was changed
             console.debug("userPreferenceChanged", event);
             if (event.discretionaryMode !== undefined) {
@@ -1078,8 +1078,8 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
 
       transcribeAudio: (
-        context: SayPiContext,
-        event: SayPiSpeechStoppedEvent
+        context: ConversationContext,
+        event: ConversationSpeechStoppedEvent
       ) => {
         const audioBlob = event.blob;
         if (audioBlob) {
@@ -1104,16 +1104,16 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       },
 
       handleTranscriptionResponse: (
-        SayPiContext,
-        event: SayPiTranscribedEvent
+        ConversationContext,
+        event: ConversationTranscribedEvent
       ) => {
         const transcription = event.text;
         const sequenceNumber = event.sequenceNumber;
         const shouldRespondToThis = event.responseAnalysis?.shouldRespond;
-        console.debug(`Partial transcript [${sequenceNumber}]: ${transcription} [${shouldRespondToThis ? "respond" : "don\'t respond"}]`);
+        console.debug(`Partial transcript [${sequenceNumber}]: ${transcription} [${shouldRespondToThis ? "respond" : "don\\'t respond"}]`);
         
         if (transcription && transcription.trim() !== "") {
-          SayPiContext.transcriptions[sequenceNumber] = transcription;
+          ConversationContext.transcriptions[sequenceNumber] = transcription;
           TranscriptionErrorManager.recordAttempt(true); // Record success
         } else {
           // This case should ideally be handled by saypi:transcribedEmpty if the API guarantees it,
@@ -1123,10 +1123,10 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
 
         if (event.merged) {
           event.merged.forEach((mergedSequenceNumber) => {
-            delete SayPiContext.transcriptions[mergedSequenceNumber];
+            delete ConversationContext.transcriptions[mergedSequenceNumber];
           });
         }
-        SayPiContext.shouldRespond = shouldRespondToThis ?? shouldAlwaysRespond();
+        ConversationContext.shouldRespond = shouldRespondToThis ?? shouldAlwaysRespond();
       },
 
       acquireMicrophone: (context, event) => {
@@ -1158,7 +1158,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         }
       },
 
-      resumeRecording: (context: SayPiContext, event) => {
+      resumeRecording: (context: ConversationContext, event) => {
         if (context.lastState === "listening") {
           // only resume recording if we were already listening
           EventBus.emit("audio:startRecording");
@@ -1184,14 +1184,14 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         textualNotifications.showNotification(message, icon);
       },
 
-      notifyAudioConnected: (context, event: SayPiAudioConnectedEvent) => {
+      notifyAudioConnected: (context, event: ConversationAudioConnectedEvent) => {
         const deviceId = event.deviceId;
         const deviceLabel = event.deviceLabel;
         const message = getMessage("audioConnected", deviceLabel);
         textualNotifications.showNotification(message, "microphone");
       },
 
-      notifyAudioReconnecting: (context, event: SayPiAudioReconnectEvent) => {
+      notifyAudioReconnecting: (context, event: ConversationAudioReconnectEvent) => {
         const deviceId = event.deviceId;
         const deviceLabel = event.deviceLabel;
         const message = getMessage("audioReconnecting", deviceLabel);
@@ -1227,7 +1227,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           if (promptEditor) {
             promptEditor.setMessage(message);
           } else {
-            console.warn("[SayPiMachine] [thinkingPrompt] no prompt editor found");
+            console.warn("[ConversationMachine] [thinkingPrompt] no prompt editor found");
           }
         }
       },
@@ -1238,7 +1238,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           getPromptOrNull()?.setMessage(message);
         }
       },
-      speakingPrompt: (context: SayPiContext) => {
+      speakingPrompt: (context: ConversationContext) => {
         const handsFreeInterrupt =
           userPreferences.getCachedAllowInterruptions();
         
@@ -1263,21 +1263,21 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           getPromptOrNull()?.setMessage(message);
         }
       },
-      clearPrompt: (context: SayPiContext) => {
+      clearPrompt: (context: ConversationContext) => {
         const prompt = getPromptOrNull();
         if (prompt) {
           //prompt.clear(); // has side effects
           prompt.setMessage(context.defaultPlaceholderText);
         }
       },
-      draftPrompt: (context: SayPiContext) => {
+      draftPrompt: (context: ConversationContext) => {
         const text = mergeService
           .mergeTranscriptsLocal(context.transcriptions)
           .trim();
         if (text) getPromptOrNull()?.setDraft(text);
       },
 
-      mergeAndSubmitTranscript: (context: SayPiContext) => {
+      mergeAndSubmitTranscript: (context: ConversationContext) => {
         const text = mergeService
           .mergeTranscriptsLocal(context.transcriptions)
           .trim();
@@ -1305,7 +1305,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       callInterruptible: () => {
         // buttonModule.callInterruptible();
       },
-      callInterruptibleIfListening: (context: SayPiContext) => {
+      callInterruptibleIfListening: (context: ConversationContext) => {
         if (context.lastState === "listening") {
           // buttonModule.callInterruptible();
         }
@@ -1343,7 +1343,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
       releaseWakeLock: () => {
         releaseWakeLock();
       },
-      notifySentMessage: (context: SayPiContext, event: SayPiEvent) => {
+      notifySentMessage: (context: ConversationContext, event: ConversationEvent) => {
         const delay_ms = Date.now() - context.timeUserStoppedSpeaking;
         const submission_delay_ms = lastSubmissionDelay;
         EventBus.emit("session:message-sent", {
@@ -1363,7 +1363,7 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         shouldRespond: () => shouldAlwaysRespond(), // reset response trigger for next message
       }),
       updatePreferences: assign({ shouldRespond: () => shouldAlwaysRespond() }),
-      setMaintainanceFlag: assign((context: SayPiContext, event) => {
+      setMaintainanceFlag: assign((context: ConversationContext, event) => {
         const timeoutReached = isTimeoutReached(context);
         const mustRespond = mustRespondToMessage(context);
         const shouldRespond = shouldAlwaysRespond() || context.shouldRespond;
@@ -1376,31 +1376,31 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
           isMaintainanceMessage: shouldSetFlag 
         };
       }),
-      suppressResponseEarlyWhenMaintainance: (context: SayPiContext, event) => {
+      suppressResponseEarlyWhenMaintainance: (context: ConversationContext, event) => {
         if (context.isMaintainanceMessage) {
           // these actions can be performed early, before the message is fully written
           EventBus.emit("saypi:tts:skipCurrent");
           console.debug("Skipping speech generation due to this being a maintainance message");
         }
       },
-      suppressWrittenResponseWhenMaintainance: (context: SayPiContext, event) => {
+      suppressWrittenResponseWhenMaintainance: (context: ConversationContext, event) => {
         if (context.isMaintainanceMessage) {
           EventBus.emit("saypi:ui:hide-message");
           console.debug("Hiding message due to this being a maintainance message");
         }
       },
-      suppressSpokenResponseWhenMaintainance: (context: SayPiContext, event) => {
+      suppressSpokenResponseWhenMaintainance: (context: ConversationContext, event) => {
         if (context.isMaintainanceMessage) {
           EventBus.emit("saypi:ui:hide-message"); // send again to ensure the message is hidden
           EventBus.emit("audio:skipCurrent");
           console.debug("Skipping speech due to this being a maintainance message");
         }
       },
-      clearMaintainanceFlag: (SayPiContext, event) => {
+      clearMaintainanceFlag: (ConversationContext, event) => {
         assign({ isMaintainanceMessage: () => false });
       },
       pauseAudio: () => {
-        console.debug("[SayPiMachine] [pauseAudio] Pausing audio for user interruption");
+        console.debug("[ConversationMachine] [pauseAudio] Pausing audio for user interruption");
         EventBus.emit("audio:output:pause");
       },
       resumeAudio: () => {
@@ -1423,16 +1423,16 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
     },
     services: {},
     guards: {
-      hasAudio: (context: SayPiContext, event: SayPiEvent) => {
+      hasAudio: (context: ConversationContext, event: ConversationEvent) => {
         if (event.type === "saypi:userStoppedSpeaking") {
-          event = event as SayPiSpeechStoppedEvent;
+          event = event as ConversationSpeechStoppedEvent;
           return event.blob !== undefined && event.duration > 0;
         }
         return false;
       },
-      hasNoAudio: (context: SayPiContext, event: SayPiEvent) => {
+      hasNoAudio: (context: ConversationContext, event: ConversationEvent) => {
         if (event.type === "saypi:userStoppedSpeaking") {
-          event = event as SayPiSpeechStoppedEvent;
+          event = event as ConversationSpeechStoppedEvent;
           return (
             event.blob === undefined ||
             event.blob.size === 0 ||
@@ -1442,8 +1442,8 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
         return false;
       },
       submissionConditionsMet: (
-        context: SayPiContext,
-        event: SayPiEvent,
+        context: ConversationContext,
+        event: ConversationEvent,
         meta
       ) => {
         const { state } = meta;
@@ -1477,28 +1477,28 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
 
         return mustRespond && autoSubmitEnabled && ready;
       },
-      wasListening: (context: SayPiContext) => {
+      wasListening: (context: ConversationContext) => {
         return context.lastState === "listening";
       },
-      wasInactive: (context: SayPiContext) => {
+      wasInactive: (context: ConversationContext) => {
         return context.lastState === "inactive";
       },
-      interruptionsAllowed: (context: SayPiContext) => {
+      interruptionsAllowed: (context: ConversationContext) => {
         const allowInterrupt = userPreferences.getCachedAllowInterruptions();
         return allowInterrupt;
       },
-      interruptionsNotAllowed: (context: SayPiContext) => {
+      interruptionsNotAllowed: (context: ConversationContext) => {
         const allowInterrupt = userPreferences.getCachedAllowInterruptions();
         return !allowInterrupt;
       },
     },
     delays: {
-      submissionDelay: (context: SayPiContext, event: SayPiEvent) => {
+      submissionDelay: (context: ConversationContext, event: ConversationEvent) => {
         // check if the event is a transcription event
         if (event.type !== "saypi:transcribed") {
           return 0;
         } else {
-          event = event as SayPiTranscribedEvent;
+          event = event as ConversationTranscribedEvent;
         }
 
         const maxDelay = 7000; // 7 second max submission delay (lowered from 8s in v1.6.0)
@@ -1549,20 +1549,20 @@ const machine = createMachine<SayPiContext, SayPiEvent, SayPiTypestate>(
 );
 function readyToSubmitOnAllowedState(
   allowedState: boolean,
-  context: SayPiContext
+  context: ConversationContext
 ): boolean {
   const empty = Object.keys(context.transcriptions).length === 0;
   const pending = isTranscriptionPending();
   const ready = allowedState && !empty && !pending;
   return ready;
 }
-function provisionallyReadyToSubmit(context: SayPiContext): boolean {
+function provisionallyReadyToSubmit(context: ConversationContext): boolean {
   const allowedState = !(context.userIsSpeaking || context.isTranscribing); // we don't have access to the state, so we read from a copy in the context (!DRY)
   return readyToSubmitOnAllowedState(allowedState, context);
 }
 function readyToSubmit(
-  state: State<SayPiContext, SayPiEvent, any, any, any>,
-  context: SayPiContext
+  state: State<ConversationContext, ConversationEvent, any, any, any>,
+  context: ConversationContext
 ): boolean {
   const allowedState = !(
     state.matches("listening.recording.userSpeaking") ||
@@ -1571,7 +1571,7 @@ function readyToSubmit(
   return readyToSubmitOnAllowedState(allowedState, context);
 }
 
-function isTimeoutReached(context: SayPiContext): boolean {
+function isTimeoutReached(context: ConversationContext): boolean {
   // If timeUserStoppedSpeaking hasn't been updated yet, there's no timeout.
   if (context.timeUserStoppedSpeaking === 0) {
     return false;
@@ -1580,7 +1580,7 @@ function isTimeoutReached(context: SayPiContext): boolean {
   return timeSinceStoppedSpeaking > USER_STOPPED_TIMEOUT_MS;
 }
 
-function mustRespondToMessage(context: SayPiContext): boolean {
+function mustRespondToMessage(context: ConversationContext): boolean {
   const timeoutReached = isTimeoutReached(context);
   if (timeoutReached) {
     const timeSinceStoppedSpeaking = Date.now() - context.timeUserStoppedSpeaking;
@@ -1589,7 +1589,7 @@ function mustRespondToMessage(context: SayPiContext): boolean {
   return context.shouldRespond || isContextWindowApproachingCapacity(context.transcriptions) || timeoutReached;
 }
 
-export function createSayPiMachine(bot: Chatbot) {
+export function createConversationMachine(bot: Chatbot) {
   chatbot = bot;
   return machine;
 }
