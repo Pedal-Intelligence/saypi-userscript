@@ -3,6 +3,7 @@ import { addChild } from "./dom/DOMModule";
 import { createDictationMachine } from "./state-machines/DictationMachine";
 import { interpret } from "xstate";
 import EventBus from "./events/EventBus.js";
+import { IconModule } from "./icons/IconModule";
 
 interface DictationTarget {
   element: HTMLElement;
@@ -134,33 +135,35 @@ export class UniversalDictationModule {
       height: 28px;
       border: none;
       border-radius: 6px;
-      background: #4CAF50;
-      color: white;
+      background: transparent;
       cursor: pointer;
       display: none;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
       transition: all 0.2s ease;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 0;
     `;
 
-    // Add microphone icon
-    button.innerHTML = `
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2c1.1 0 2 .9 2 2v6c0 1.1-.9 2-2 2s-2-.9-2-2V4c0-1.1.9-2 2-2zm-1 16.93c-3.95-.49-7-3.85-7-7.93 0-.55.45-1 1-1s1 .45 1 1c0 3.31 2.69 6 6 6s6-2.69 6-6c0-.55.45-1 1-1s1 .45 1 1c0 4.08-3.05 7.44-7 7.93V20h3c.55 0 1 .45 1 1s-.45 1-1 1h-8c-.55 0-1-.45-1-1s.45-1 1-1h3v-1.07z"/>
-      </svg>
+    // Add bubble icon - sized to fill button
+    const bubbleIcon = IconModule.bubbleBw.cloneNode(true) as SVGElement;
+    bubbleIcon.setAttribute("width", "28");
+    bubbleIcon.setAttribute("height", "28");
+    bubbleIcon.style.cssText = `
+      fill: #4CAF50;
+      transition: all 0.2s ease;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
     `;
+    button.appendChild(bubbleIcon);
 
     // Add hover effects
     button.addEventListener("mouseenter", () => {
-      button.style.background = "#45a049";
-      button.style.transform = "scale(1.05)";
+      bubbleIcon.style.fill = "#45a049";
+      bubbleIcon.style.transform = "scale(1.1)";
     });
 
     button.addEventListener("mouseleave", () => {
-      button.style.background = "#4CAF50";
-      button.style.transform = "scale(1)";
+      bubbleIcon.style.fill = "#4CAF50";
+      bubbleIcon.style.transform = "scale(1)";
     });
 
     // Add to document body for absolute positioning
@@ -174,9 +177,11 @@ export class UniversalDictationModule {
       const rect = inputElement.getBoundingClientRect();
       const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
       const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+      const adjustX = -5;
+      const adjustY = -10; // fine-tune this value to position the button correctly
 
-      button.style.left = `${rect.right - 35 + scrollX}px`;
-      button.style.top = `${rect.top + (rect.height - 28) / 2 + scrollY}px`;
+      button.style.left = `${rect.right - 35 + scrollX + adjustX}px`;
+      button.style.top = `${rect.top + (rect.height - 28) / 2 + scrollY + adjustY}px`;
     };
 
     // Initial positioning
@@ -267,13 +272,20 @@ export class UniversalDictationModule {
     target.machine = service;
     this.currentActiveTarget = target;
 
-    // Update button appearance
-    button.style.background = "#f44336"; // Red for recording
-    button.innerHTML = `
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M6 6h12v12H6z"/>
-      </svg>
-    `;
+    // Update button appearance for recording
+    button.innerHTML = "";
+    const stopIcon = IconModule.bubbleRed.cloneNode(true) as SVGElement;
+    button.appendChild(stopIcon);
+    
+    // Update hover effects for recording state
+    button.onmouseenter = () => {
+      stopIcon.style.fill = "#d32f2f";
+      stopIcon.style.transform = "scale(1.1)";
+    };
+    button.onmouseleave = () => {
+      stopIcon.style.fill = "#f44336";
+      stopIcon.style.transform = "scale(1)";
+    };
     button.setAttribute("aria-label", "Stop dictation");
     button.setAttribute("title", "Stop dictation");
 
@@ -302,13 +314,27 @@ export class UniversalDictationModule {
     }
 
     if (button) {
-      // Reset button appearance
-      button.style.background = "#4CAF50";
-      button.innerHTML = `
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2c1.1 0 2 .9 2 2v6c0 1.1-.9 2-2 2s-2-.9-2-2V4c0-1.1.9-2 2-2zm-1 16.93c-3.95-.49-7-3.85-7-7.93 0-.55.45-1 1-1s1 .45 1 1c0 3.31 2.69 6 6 6s6-2.69 6-6c0-.55.45-1 1-1s1 .45 1 1c0 4.08-3.05 7.44-7 7.93V20h3c.55 0 1 .45 1 1s-.45 1-1 1h-8c-.55 0-1-.45-1-1s.45-1 1-1h3v-1.07z"/>
-        </svg>
+      // Reset button appearance to idle state
+      button.innerHTML = "";
+      const bubbleIcon = IconModule.bubbleGreen.cloneNode(true) as SVGElement;
+      bubbleIcon.setAttribute("width", "28");
+      bubbleIcon.setAttribute("height", "28");
+      bubbleIcon.style.cssText = `
+        fill: #4CAF50;
+        transition: all 0.2s ease;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
       `;
+      button.appendChild(bubbleIcon);
+      
+      // Restore original hover effects
+      button.onmouseenter = () => {
+        bubbleIcon.style.fill = "#45a049";
+        bubbleIcon.style.transform = "scale(1.1)";
+      };
+      button.onmouseleave = () => {
+        bubbleIcon.style.fill = "#4CAF50";
+        bubbleIcon.style.transform = "scale(1)";
+      };
       button.setAttribute("aria-label", "Start dictation");
       button.setAttribute("title", "Start dictation with Say, Pi");
       button.style.display = "none"; // Hide after stopping

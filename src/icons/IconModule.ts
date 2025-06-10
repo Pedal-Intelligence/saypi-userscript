@@ -99,6 +99,28 @@ export class IconModule {
     return this._bubbleBw;
   }
 
+  static bubble(color: string): SVGElement {
+    const svg = this.bubbleBw;
+    const paths = svg.querySelectorAll('path');
+    if (paths) {
+      paths.forEach(path => {
+        // if fill is black, set it to color
+        if (path.getAttribute('fill') === 'black' || path.getAttribute('fill') === '#000000' || path.getAttribute('fill') === '#000') {
+          path.setAttribute('fill', color);
+        }
+      });
+    }
+    return svg;
+  }
+
+  static get bubbleGreen(): SVGElement {
+    return this.bubble('#4CAF50');
+  }
+
+  static get bubbleRed(): SVGElement {
+    return this.bubble('#FF0000');
+  }
+
   rectangles(theme = "light"): SVGElement {
     try {
       if (theme === "dark") {
