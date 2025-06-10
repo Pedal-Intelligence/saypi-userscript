@@ -19,6 +19,7 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
 import { ChatbotService } from "./chatbots/ChatbotService.ts";
 import { addChild } from "./dom/DOMModule.ts";
 import SlowResponseHandler from "./SlowResponseHandler.ts";
+import { UniversalDictationModule } from "./UniversalDictationModule.ts";
 
 (async function () {
   "use strict";
@@ -98,6 +99,10 @@ import SlowResponseHandler from "./SlowResponseHandler.ts";
   
   setupAuthListener(); // Setup the auth listener
   new DOMObserver(chatbot).observeDOM();
+  
+  // Initialize Universal Dictation Module for non-chatbot pages
+  const universalDictation = UniversalDictationModule.getInstance();
+  universalDictation.initialize();
 
   function addVisualisations(container) {
     // Create a containing div

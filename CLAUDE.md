@@ -8,13 +8,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run build` - Production build (validates i18n, copies ONNX files, updates manifest)
 - `npm run build:firefox` - Build and package for Firefox
 - `npm test` - Run all tests (Jest + Vitest)
+- `npm run test:jest` - Run Jest tests only
+- `npm run test:vitest` - Run Vitest tests only  
 - `npm run test:vitest:watch` - Run Vitest in watch mode
 - `npm run copy-onnx` - Copy ONNX model files from dependencies
+- `npm run start` - Start development server
 
 ### Environment Setup
 - Requires Node.js >=22.0.0 and npm >=10.0.0
 - Copy `.env.example` to `.env.production` with required environment variables for production builds
 - Firefox builds require `jq` utility
+- Extension uses ESM modules with TypeScript transpilation
 
 ## Architecture Overview
 
