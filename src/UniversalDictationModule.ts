@@ -208,28 +208,31 @@ export class UniversalDictationModule {
     };
 
     const hideButton = () => {
-      if (button && !this.currentActiveTarget) {
-        button.style.display = "none";
-      }
+      // Use setTimeout to delay hiding so click event can fire first
+      setTimeout(() => {
+        if (button && !this.currentActiveTarget) {
+          button.style.display = "none";
+        }
+      }, 150);
     };
 
     element.addEventListener("focus", showButton);
     element.addEventListener("blur", hideButton);
 
-    // Button click handler
+    // Button click handler - use mousedown for faster response
     const buttonClickHandler = (event: Event) => {
       event.preventDefault();
       event.stopPropagation();
       this.toggleDictation(target);
     };
 
-    button.addEventListener("click", buttonClickHandler);
+    button.addEventListener("mousedown", buttonClickHandler);
 
     // Store cleanup function
     (element as any).__dictationCleanup = () => {
       element.removeEventListener("focus", showButton);
       element.removeEventListener("blur", hideButton);
-      button.removeEventListener("click", buttonClickHandler);
+      button.removeEventListener("mousedown", buttonClickHandler);
       
       if ((button as any).__positionCleanup) {
         (button as any).__positionCleanup();
