@@ -209,9 +209,14 @@ export class UniversalDictationModule {
 
     if (!button) return;
 
-    // Show/hide button on focus/blur
+    // Show/hide button on focus/blur with dictation switching support
     const showButton = () => {
       if (button) button.style.display = "flex";
+      
+      // If dictation is active on another field, switch to this field
+      if (this.currentActiveTarget && this.currentActiveTarget !== target) {
+        this.switchDictationTarget(target);
+      }
     };
 
     const hideButton = () => {
@@ -304,6 +309,52 @@ export class UniversalDictationModule {
     });
 
     console.log("Dictation started for:", element);
+  }
+
+  private switchDictationTarget(newTarget: DictationTarget): void {
+    if (!this.currentActiveTarget) return;
+
+    const previousTarget = this.currentActiveTarget;
+    const { machine } = previousTarget;
+
+    if (!machine) return;
+
+    console.log("Switching dictation target from", previousTarget.element, "to", newTarget.element);
+
+    // Get current machine state to preserve it
+    const currentState = machine.getSnapshot();
+    
+    // Update the target element in the machine - need to update the module-level variable
+    // Since the machine uses a module-level targetInputElement, we need to update that
+    // by sending an event that updates the target
+    machine.send({ 
+      type: "saypi:switchTarget", 
+      targetElement: newTarget.element 
+    });
+
+    // Transfer the machine to the new target
+    newTarget.machine = machine;
+    this.currentActiveTarget = newTarget;
+
+    // Remove machine from previous target
+    previousTarget.machine = null;
+
+    // Update button appearances - hide all buttons except the new target
+    this.decoratedElements.forEach((target, element) => {
+      if (target.button) {
+        if (target === newTarget) {
+          // Show and update the new target button with current state
+          target.button.style.display = "flex";
+          this.updateButtonForState(target, currentState);
+        } else {
+          // Hide all other buttons and set them to idle state
+          target.button.style.display = "none";
+          this.updateButtonForIdleState(target);
+        }
+      }
+    });
+
+    console.log("Dictation target switched successfully");
   }
 
   private stopDictation(): void {
@@ -462,6 +513,36 @@ export class UniversalDictationModule {
     // Update accessibility attributes
     button.setAttribute("aria-label", ariaLabel);
     button.setAttribute("title", title);
+  }
+
+  private updateButtonForIdleState(target: DictationTarget): void {
+    const { button } = target;
+    if (!button) return;
+
+    // Set button to idle state (grey/black & white)
+    button.innerHTML = "";
+    
+    const icon = IconModule.bubbleBw.cloneNode(true) as SVGElement;
+    icon.setAttribute("width", "28");
+    icon.setAttribute("height", "28");
+    icon.style.cssText = `
+      transition: all 0.2s ease;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    `;
+    
+    button.appendChild(icon);
+
+    // Update hover effects
+    button.onmouseenter = () => {
+      icon.style.transform = "scale(1.1)";
+    };
+    button.onmouseleave = () => {
+      icon.style.transform = "scale(1)";
+    };
+
+    // Update accessibility attributes for idle state
+    button.setAttribute("aria-label", "Start dictation");
+    button.setAttribute("title", "Start dictation with Say, Pi");
   }
 
   private setupEventListeners(): void {

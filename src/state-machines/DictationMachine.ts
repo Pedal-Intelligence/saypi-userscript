@@ -59,6 +59,7 @@ type DictationEvent =
   | { type: "saypi:transcribedEmpty" }
   | DictationStartEvent
   | { type: "saypi:stopDictation" }
+  | { type: "saypi:switchTarget"; targetElement: HTMLElement }
   | { type: "saypi:callReady" }
   | { type: "saypi:callFailed" }
   | { type: "saypi:visible" }
@@ -442,6 +443,9 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
             event.session_id,
         }),
       },
+      "saypi:switchTarget": {
+        actions: "switchTargetElement",
+      },
     },
     predictableActionArguments: true,
     preserveActionOrder: true,
@@ -536,6 +540,16 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         });
         
         console.log("Dictation completed:", context.accumulatedText);
+      },
+
+      switchTargetElement: (context: DictationContext, event: any) => {
+        // Update the module-level targetInputElement to point to the new target
+        targetInputElement = event.targetElement;
+        
+        // Also update the context for consistency
+        context.targetElement = event.targetElement;
+        
+        console.log("Dictation target element switched to:", event.targetElement);
       },
     },
     services: {},
