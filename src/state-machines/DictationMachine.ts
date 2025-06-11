@@ -549,7 +549,12 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         // Also update the context for consistency
         context.targetElement = event.targetElement;
         
+        // Clear transcriptions when switching to a new field, just like ConversationMachine
+        // does when starting a new message turn
+        context.transcriptions = {};
+        
         console.log("Dictation target element switched to:", event.targetElement);
+        console.log("Cleared transcriptions for new dictation target");
       },
     },
     services: {},
