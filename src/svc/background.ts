@@ -12,6 +12,34 @@ const jwtManager = getJwtManagerSync();
 // Expose instances globally for popup access
 (self as any).jwtManager = jwtManager;
 
+// Context menu setup for dictation
+chrome.runtime.onInstalled.addListener(() => {
+  // Create context menu item for dictation
+  chrome.contextMenus.create({
+    id: "start-dictation",
+    title: "Start Dictation with Say, Pi",
+    contexts: ["editable"], // Only show on input fields and contenteditable elements
+    documentUrlPatterns: [
+      "file://*/*", 
+      "http://*/*", 
+      "https://*/*"
+    ]
+  });
+});
+
+// Handle context menu clicks
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  if (info.menuItemId === "start-dictation" && tab?.id) {
+    // Send message to content script to start dictation
+    chrome.tabs.sendMessage(tab.id, {
+      type: "start-dictation-from-context-menu",
+      frameId: info.frameId || 0
+    }).catch((error) => {
+      console.debug("Failed to send dictation message to content script:", error);
+    });
+  }
+});
+
 // Helper function to sanitize messages for logging by removing/truncating large data
 function sanitizeMessageForLogs(message: any): any {
   if (!message || typeof message !== 'object') {

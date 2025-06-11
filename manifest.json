@@ -8,7 +8,8 @@
     "cookies",
     "offscreen",
     "tabs",
-    "audio"
+    "audio",
+    "contextMenus"
   ],
   "host_permissions": [
     "https://localhost:5001/*",

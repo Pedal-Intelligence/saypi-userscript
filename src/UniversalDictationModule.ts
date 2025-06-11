@@ -20,6 +20,7 @@ export class UniversalDictationModule {
   private currentActiveTarget: DictationTarget | null = null;
   private mousedownHandler: ((event: Event) => void) | null = null;
   private focusinHandler: ((event: Event) => void) | null = null;
+  private messageListener: ((message: any, sender: chrome.runtime.MessageSender, sendResponse: (response?: any) => void) => void) | null = null;
 
   private constructor() {
     this.setupEventListeners();
@@ -57,6 +58,12 @@ export class UniversalDictationModule {
     if (this.focusinHandler) {
       document.removeEventListener("focusin", this.focusinHandler, true);
       this.focusinHandler = null;
+    }
+    
+    // Remove message listener
+    if (this.messageListener) {
+      chrome.runtime.onMessage.removeListener(this.messageListener);
+      this.messageListener = null;
     }
     
     this.cleanupAllElements();
@@ -583,6 +590,66 @@ export class UniversalDictationModule {
       this.handleInteractionOutsideInputs(event);
     };
     document.addEventListener("focusin", this.focusinHandler, true);
+
+    // Listen for messages from background script (context menu)
+    this.messageListener = (message, _, sendResponse) => {
+      if (message.type === "start-dictation-from-context-menu") {
+        this.handleContextMenuDictation();
+        sendResponse({ success: true });
+      }
+    };
+    chrome.runtime.onMessage.addListener(this.messageListener);
+  }
+
+  private handleContextMenuDictation(): void {
+    // Find the currently focused element
+    const activeElement = document.activeElement as HTMLElement;
+    
+    if (!activeElement) {
+      console.log("No active element found for context menu dictation");
+      return;
+    }
+
+    // Check if the active element is a valid input element
+    if (!this.isInputElement(activeElement)) {
+      console.log("Active element is not a valid input for dictation");
+      return;
+    }
+
+    // Skip if we're on excluded sites
+    if (this.isExcludedSite()) {
+      console.log("Context menu dictation not available on excluded sites");
+      return;
+    }
+
+    // Find or create the dictation target for this element
+    let target = this.decoratedElements.get(activeElement);
+    
+    if (!target) {
+      // Element hasn't been decorated yet, decorate it now
+      this.decorateInput(activeElement);
+      target = this.decoratedElements.get(activeElement);
+    }
+
+    if (!target) {
+      console.error("Failed to create dictation target for context menu");
+      return;
+    }
+
+    // Start dictation on this element
+    console.log("Starting dictation from context menu for element:", activeElement);
+    
+    if (this.currentActiveTarget === target) {
+      // Already active on this target, stop it
+      this.stopDictation();
+    } else {
+      // Start dictation on this target
+      if (this.currentActiveTarget) {
+        // Stop current dictation first
+        this.stopDictation();
+      }
+      this.startDictation(target);
+    }
   }
 
   private handleInteractionOutsideInputs(event: Event): void {
