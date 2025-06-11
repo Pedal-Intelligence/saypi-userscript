@@ -559,14 +559,14 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
     },
     services: {},
     guards: {
-      hasAudio: (context: DictationContext, event: DictationEvent) => {
+      hasAudio: (_, event: DictationEvent) => {
         if (event.type === "saypi:userStoppedSpeaking") {
           event = event as DictationSpeechStoppedEvent;
           return event.blob !== undefined && event.duration > 0;
         }
         return false;
       },
-      hasNoAudio: (context: DictationContext, event: DictationEvent) => {
+      hasNoAudio: (_, event: DictationEvent) => {
         if (event.type === "saypi:userStoppedSpeaking") {
           event = event as DictationSpeechStoppedEvent;
           return (

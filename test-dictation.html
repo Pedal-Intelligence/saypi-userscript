@@ -117,12 +117,26 @@
         <h3>Testing Instructions:</h3>
         <p>This form is designed to test the universal dictation feature. With the Say, Pi extension installed:</p>
         <ol>
-            <li>Focus on any input field or textarea</li>
-            <li>Look for a green microphone button (🎤) that appears on the right side when focused</li>
-            <li>Click the microphone button to start voice input</li>
-            <li>Speak naturally - text should appear in real-time as you speak</li>
-            <li>Click the red stop button (⏹️) or pause speaking for 5 seconds to stop dictation</li>
-            <li>The dictation will automatically end when you switch to another field or close the page</li>
+            <li><strong>Focus on any input field or textarea</strong> - A black & white microphone bubble icon appears on the right side</li>
+            <li><strong>Start dictation in 3 ways:</strong>
+                <ul>
+                    <li>Click the microphone bubble button</li>
+                    <li>Right-click the field → select "Start Dictation with Say, Pi"</li>
+                    <li>Focus the field while dictation is active on another field (auto-switches)</li>
+                </ul>
+            </li>
+            <li><strong>Visual feedback:</strong> The bubble changes color based on state:
+                <ul>
+                    <li>🔸 Orange = Starting/initializing</li>
+                    <li>🟢 Green = Listening/speaking detected</li>
+                    <li>🔵 Blue = Transcribing speech to text</li>
+                    <li>🔴 Red = Error state</li>
+                </ul>
+            </li>
+            <li><strong>Speak naturally</strong> - Text appears in real-time as you speak</li>
+            <li><strong>Seamless field switching:</strong> Tab to another field while speaking to continue dictation there</li>
+            <li><strong>Stop dictation:</strong> Click the colored button, or click/focus anything outside form inputs</li>
+            <li><strong>Auto-stop triggers:</strong> Dictation ends when you click buttons, links, or switch browser tabs</li>
         </ol>
         <p><strong>Note:</strong> This feature only works when the Say, Pi extension is installed and works on any website except pi.ai and claude.ai (which have their own voice features).</p>
     </div>
