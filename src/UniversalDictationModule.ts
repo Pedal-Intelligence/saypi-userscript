@@ -278,32 +278,14 @@ export class UniversalDictationModule {
         logger.debug(
           `Dictation Machine [${element.tagName}] transitioned from ${fromState} to ${toState} with ${state.event.type}`
         );
+        
+        // Update button appearance based on state machine state
+        this.updateButtonForState(target, state);
       }
     });
     
     target.machine = service;
     this.currentActiveTarget = target;
-
-    // Update button appearance for recording (green when active)
-    button.innerHTML = "";
-    const recordingIcon = IconModule.bubbleGreen.cloneNode(true) as SVGElement;
-    recordingIcon.setAttribute("width", "28");
-    recordingIcon.setAttribute("height", "28");
-    recordingIcon.style.cssText = `
-      transition: all 0.2s ease;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-    `;
-    button.appendChild(recordingIcon);
-    
-    // Update hover effects for recording state
-    button.onmouseenter = () => {
-      recordingIcon.style.transform = "scale(1.1)";
-    };
-    button.onmouseleave = () => {
-      recordingIcon.style.transform = "scale(1)";
-    };
-    button.setAttribute("aria-label", "Stop dictation");
-    button.setAttribute("title", "Stop dictation");
 
     // Register dictation events with the machine
     this.registerDictationEvents(service);
@@ -335,29 +317,7 @@ export class UniversalDictationModule {
       machine.stop();
     }
 
-    if (button) {
-      // Reset button appearance to idle state (black & white)
-      button.innerHTML = "";
-      const idleIcon = IconModule.bubbleBw.cloneNode(true) as SVGElement;
-      idleIcon.setAttribute("width", "28");
-      idleIcon.setAttribute("height", "28");
-      idleIcon.style.cssText = `
-        transition: all 0.2s ease;
-        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-      `;
-      button.appendChild(idleIcon);
-      
-      // Restore original hover effects for idle state
-      button.onmouseenter = () => {
-        idleIcon.style.transform = "scale(1.1)";
-      };
-      button.onmouseleave = () => {
-        idleIcon.style.transform = "scale(1)";
-      };
-      button.setAttribute("aria-label", "Start dictation");
-      button.setAttribute("title", "Start dictation with Say, Pi");
-      // Keep button visible in idle state (don't hide it)
-    }
+    // Button appearance will be updated by updateButtonForState when machine transitions to idle
 
     // Clear the active target immediately to prevent double-calling
     this.currentActiveTarget = null;
@@ -405,6 +365,103 @@ export class UniversalDictationModule {
     this.decoratedElements.forEach((target, element) => {
       this.cleanupElement(element);
     });
+  }
+
+  private updateButtonForState(target: DictationTarget, state: any): void {
+    const { button } = target;
+    if (!button) return;
+
+    // Extract the current state value for color mapping
+    const stateValue = state.value;
+    let color = '#bdbdbd'; // Default grey
+    let ariaLabel = 'Dictation';
+    let title = 'Dictation';
+
+    // Map state machine states to colors (following VADStatusIndicator pattern)
+    if (typeof stateValue === 'string') {
+      switch (stateValue) {
+        case 'idle':
+          color = '#bdbdbd'; // Grey - no fill, natural b&w icon
+          ariaLabel = 'Start dictation';
+          title = 'Start dictation with Say, Pi';
+          break;
+        case 'starting':
+          color = '#ffa726'; // Orange - initializing/connecting
+          ariaLabel = 'Starting dictation...';
+          title = 'Initializing voice input';
+          break;
+        case 'listening':
+          color = '#66bb6a'; // Green - ready/listening
+          ariaLabel = 'Stop dictation';
+          title = 'Stop dictation';
+          break;
+        case 'errors':
+          color = '#ef5350'; // Red - error
+          ariaLabel = 'Dictation error';
+          title = 'Dictation error - click to retry';
+          break;
+      }
+    } else if (typeof stateValue === 'object' && stateValue.listening) {
+      // Handle nested listening states
+      const listeningState = stateValue.listening;
+      
+      if (listeningState.recording) {
+        if (listeningState.recording === 'userSpeaking') {
+          color = '#66bb6a'; // Green - user speaking
+          ariaLabel = 'Speaking detected - Stop dictation';
+          title = 'Speaking detected - Stop dictation';
+        } else {
+          color = '#66bb6a'; // Green - listening but not speaking
+          ariaLabel = 'Listening - Stop dictation';
+          title = 'Listening for speech - Stop dictation';
+        }
+      }
+      
+      if (listeningState.converting) {
+        if (listeningState.converting === 'transcribing') {
+          color = '#42a5f5'; // Blue - processing/transcribing
+          ariaLabel = 'Transcribing speech...';
+          title = 'Transcribing speech to text';
+        } else if (listeningState.converting === 'accumulating') {
+          color = '#9c27b0'; // Purple - accumulating transcriptions
+          ariaLabel = 'Processing text...';
+          title = 'Processing transcribed text';
+        }
+      }
+    }
+
+    // Update button icon and color using IconModule.bubble()
+    button.innerHTML = "";
+    
+    let icon: SVGElement;
+    if (color === '#bdbdbd') {
+      // For idle state, use natural b&w icon (no color applied)
+      icon = IconModule.bubbleBw.cloneNode(true) as SVGElement;
+    } else {
+      // For active states, use IconModule.bubble() to apply the color
+      icon = IconModule.bubble(color);
+    }
+    
+    icon.setAttribute("width", "28");
+    icon.setAttribute("height", "28");
+    icon.style.cssText = `
+      transition: all 0.2s ease;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    `;
+    
+    button.appendChild(icon);
+
+    // Update hover effects
+    button.onmouseenter = () => {
+      icon.style.transform = "scale(1.1)";
+    };
+    button.onmouseleave = () => {
+      icon.style.transform = "scale(1)";
+    };
+
+    // Update accessibility attributes
+    button.setAttribute("aria-label", ariaLabel);
+    button.setAttribute("title", title);
   }
 
   private setupEventListeners(): void {

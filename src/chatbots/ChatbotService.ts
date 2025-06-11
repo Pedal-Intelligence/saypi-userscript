@@ -1,6 +1,7 @@
 import { Chatbot } from "./Chatbot";
 import { ClaudeChatbot } from "./Claude";
 import { PiAIChatbot } from "./Pi";
+import { WebDictationChatbot } from "./Web";
 import { ChatbotIdentifier } from "./ChatbotIdentifier";
 
 /**
@@ -9,15 +10,17 @@ import { ChatbotIdentifier } from "./ChatbotIdentifier";
  */
 export class ChatbotService {
   static async getChatbot(): Promise<Chatbot> {
-    // Use the ChatbotIdentifier to determine which chatbot to instantiate
-    const chatbotType = ChatbotIdentifier.identifyChatbot();
+    // Check if we're on a chatbot site
+    const hostname = window.location.hostname;
     
-    switch (chatbotType) {
-      case "claude":
-        return new ClaudeChatbot();
-      case "pi":
-      default:
-        return new PiAIChatbot();
+    // If we're on pi.ai or claude.ai, use the appropriate chatbot
+    if (hostname.includes("pi.ai")) {
+      return new PiAIChatbot();
+    } else if (hostname.includes("claude.ai")) {
+      return new ClaudeChatbot();
+    } else {
+      // For all other sites (universal dictation), use the web dictation chatbot
+      return new WebDictationChatbot();
     }
   }
 
