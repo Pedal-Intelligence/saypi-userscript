@@ -4,6 +4,7 @@ import { createDictationMachine } from "./state-machines/DictationMachine";
 import { interpret } from "xstate";
 import EventBus from "./events/EventBus.js";
 import { IconModule } from "./icons/IconModule";
+import { logger, serializeStateValue } from "./LoggingModule.js";
 
 interface DictationTarget {
   element: HTMLElement;
@@ -33,6 +34,10 @@ export class UniversalDictationModule {
     console.log("Initializing Universal Dictation Module");
     this.startObserving();
     this.decorateExistingElements();
+    
+    // Emit event to signal that dictation capabilities are needed
+    // This will trigger audio module startup for non-chatbot pages
+    EventBus.emit("saypi:dictation:initialized");
   }
 
   public destroy(): void {
@@ -267,7 +272,17 @@ export class UniversalDictationModule {
 
     // Create and start state machine
     const machine = createDictationMachine(element);
-    const service = interpret(machine);
+    const service = interpret(machine).onTransition((state) => {
+      if (state.changed) {
+        const fromState = state.history
+          ? serializeStateValue(state.history.value)
+          : "N/A";
+        const toState = serializeStateValue(state.value);
+        logger.debug(
+          `Dictation Machine [${element.tagName}] transitioned from ${fromState} to ${toState} with ${state.event.type}`
+        );
+      }
+    });
     
     target.machine = service;
     this.currentActiveTarget = target;

@@ -99,10 +99,20 @@ import { UniversalDictationModule } from "./UniversalDictationModule.ts";
   
   setupAuthListener(); // Setup the auth listener
   new DOMObserver(chatbot).observeDOM();
+
+  // Start audio module when dictation is needed on non-chatbot pages
+  EventBus.on("saypi:dictation:initialized", function () {
+    // Only start audio module if we're not on a chatbot page
+    if (!isLoaded) {
+      console.log("Starting audio module for dictation on non-chatbot page");
+      startAudioModule();
+    }
+  });
   
   // Initialize Universal Dictation Module for non-chatbot pages
   const universalDictation = UniversalDictationModule.getInstance();
   universalDictation.initialize();
+
 
   function addVisualisations(container) {
     // Create a containing div
