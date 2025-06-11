@@ -108,7 +108,7 @@ export class IconModule {
   }
 
   static bubble(color: string): SVGElement {
-    const svg = this.bubbleBw;
+    const svg = this.bubbleBw.cloneNode(true) as SVGElement;
     const paths = svg.querySelectorAll('path');
     if (paths) {
       paths.forEach(path => {

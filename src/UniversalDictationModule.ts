@@ -149,25 +149,22 @@ export class UniversalDictationModule {
       padding: 0;
     `;
 
-    // Add bubble icon - sized to fill button
+    // Add bubble icon - sized to fill button (idle state: black & white)
     const bubbleIcon = IconModule.bubbleBw.cloneNode(true) as SVGElement;
     bubbleIcon.setAttribute("width", "28");
     bubbleIcon.setAttribute("height", "28");
     bubbleIcon.style.cssText = `
-      fill: #4CAF50;
       transition: all 0.2s ease;
       filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
     `;
     button.appendChild(bubbleIcon);
 
-    // Add hover effects
+    // Add hover effects for idle state
     button.addEventListener("mouseenter", () => {
-      bubbleIcon.style.fill = "#45a049";
       bubbleIcon.style.transform = "scale(1.1)";
     });
 
     button.addEventListener("mouseleave", () => {
-      bubbleIcon.style.fill = "#4CAF50";
       bubbleIcon.style.transform = "scale(1)";
     });
 
@@ -287,19 +284,23 @@ export class UniversalDictationModule {
     target.machine = service;
     this.currentActiveTarget = target;
 
-    // Update button appearance for recording
+    // Update button appearance for recording (green when active)
     button.innerHTML = "";
-    const stopIcon = IconModule.bubbleGreen.cloneNode(true) as SVGElement;
-    button.appendChild(stopIcon);
+    const recordingIcon = IconModule.bubbleGreen.cloneNode(true) as SVGElement;
+    recordingIcon.setAttribute("width", "28");
+    recordingIcon.setAttribute("height", "28");
+    recordingIcon.style.cssText = `
+      transition: all 0.2s ease;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    `;
+    button.appendChild(recordingIcon);
     
     // Update hover effects for recording state
     button.onmouseenter = () => {
-      stopIcon.style.fill = "#d32f2f";
-      stopIcon.style.transform = "scale(1.1)";
+      recordingIcon.style.transform = "scale(1.1)";
     };
     button.onmouseleave = () => {
-      stopIcon.style.fill = "#f44336";
-      stopIcon.style.transform = "scale(1)";
+      recordingIcon.style.transform = "scale(1)";
     };
     button.setAttribute("aria-label", "Stop dictation");
     button.setAttribute("title", "Stop dictation");
@@ -311,9 +312,11 @@ export class UniversalDictationModule {
     service.start();
     service.send({ type: "saypi:startDictation", targetElement: element });
 
-    // Listen for completion
+    // Listen for completion - but avoid double-calling stopDictation
     service.onTransition((state) => {
-      if (state.matches("idle")) {
+      if (state.matches("idle") && this.currentActiveTarget === target) {
+        // Only call stopDictation if this target is still the active one
+        // and we haven't already stopped
         this.stopDictation();
       }
     });
@@ -325,6 +328,7 @@ export class UniversalDictationModule {
     if (!this.currentActiveTarget) return;
 
     const { button, machine } = this.currentActiveTarget;
+    const stoppingTarget = this.currentActiveTarget; // Store reference before clearing
 
     if (machine) {
       machine.send({ type: "saypi:stopDictation" });
@@ -332,32 +336,30 @@ export class UniversalDictationModule {
     }
 
     if (button) {
-      // Reset button appearance to idle state
+      // Reset button appearance to idle state (black & white)
       button.innerHTML = "";
-      const bubbleIcon = IconModule.bubbleBw.cloneNode(true) as SVGElement;
-      bubbleIcon.setAttribute("width", "28");
-      bubbleIcon.setAttribute("height", "28");
-      bubbleIcon.style.cssText = `
-        fill: #4CAF50;
+      const idleIcon = IconModule.bubbleBw.cloneNode(true) as SVGElement;
+      idleIcon.setAttribute("width", "28");
+      idleIcon.setAttribute("height", "28");
+      idleIcon.style.cssText = `
         transition: all 0.2s ease;
         filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
       `;
-      button.appendChild(bubbleIcon);
+      button.appendChild(idleIcon);
       
-      // Restore original hover effects
+      // Restore original hover effects for idle state
       button.onmouseenter = () => {
-        bubbleIcon.style.fill = "#45a049";
-        bubbleIcon.style.transform = "scale(1.1)";
+        idleIcon.style.transform = "scale(1.1)";
       };
       button.onmouseleave = () => {
-        bubbleIcon.style.fill = "#4CAF50";
-        bubbleIcon.style.transform = "scale(1)";
+        idleIcon.style.transform = "scale(1)";
       };
       button.setAttribute("aria-label", "Start dictation");
       button.setAttribute("title", "Start dictation with Say, Pi");
-      button.style.display = "none"; // Hide after stopping
+      // Keep button visible in idle state (don't hide it)
     }
 
+    // Clear the active target immediately to prevent double-calling
     this.currentActiveTarget = null;
     console.log("Dictation stopped");
   }
