@@ -167,8 +167,6 @@ function setTextInTarget(text: string) {
   }
 }
 
-// Define a constant for the timeout (in milliseconds) for the user stopped speaking event
-const USER_STOPPED_TIMEOUT_MS = 5000; // Shorter timeout for dictation
 
 const machine = createMachine<DictationContext, DictationEvent, DictationTypestate>(
   {
@@ -325,28 +323,37 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           },
 
           converting: {
-            initial: "accumulating",
+            initial: "ready",
             states: {
-              accumulating: {
-                description: "Accumulating transcriptions and streaming to target field.",
-                after: {
-                  [USER_STOPPED_TIMEOUT_MS]: {
-                    target: "#dictation.idle",
-                    description: "Auto-stop dictation after user stops speaking for a while.",
-                    actions: [
-                      {
-                        type: "finalizeDictation",
-                      },
-                    ],
-                  },
-                },
+              ready: {
+                description: "Ready to process transcriptions, but no timeout yet.",
                 on: {
                   "saypi:transcribed": {
                     target: "accumulating",
                     actions: {
                       type: "handleTranscriptionResponse",
                     },
-                    description: "Transcribed speech to text. Stream to target field.",
+                    description: "First transcription received. Start accumulating.",
+                  },
+                  "saypi:transcribeFailed": {
+                    target: "#dictation.errors.transcribeFailed",
+                    description: "Error response from the /transcribe API",
+                  },
+                  "saypi:transcribedEmpty": {
+                    target: "#dictation.errors.micError",
+                    description: "Empty response from the /transcribe API",
+                  },
+                },
+              },
+              accumulating: {
+                description: "Accumulating transcriptions and streaming to target field.",
+                on: {
+                  "saypi:transcribed": {
+                    target: "accumulating",
+                    actions: {
+                      type: "handleTranscriptionResponse",
+                    },
+                    description: "Additional transcriptions received.",
                   },
                   "saypi:transcribeFailed": {
                     target: "#dictation.errors.transcribeFailed",
@@ -375,18 +382,12 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
                     description: "Successfully transcribed user audio to text.",
                   },
                   "saypi:transcribeFailed": {
-                    target: [
-                      "accumulating",
-                      "#dictation.errors.transcribeFailed",
-                    ],
-                    description: "Received an error response from the /transcribe API",
+                    target: "ready",
+                    description: "Transcription failed, return to ready state",
                   },
                   "saypi:transcribedEmpty": {
-                    target: [
-                      "accumulating", 
-                      "#dictation.errors.micError",
-                    ],
-                    description: "Received an empty response from the /transcribe API",
+                    target: "ready",
+                    description: "Empty transcription, return to ready state",
                   },
                 },
               },

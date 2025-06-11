@@ -304,6 +304,9 @@ export class UniversalDictationModule {
     button.setAttribute("aria-label", "Stop dictation");
     button.setAttribute("title", "Stop dictation");
 
+    // Register dictation events with the machine
+    this.registerDictationEvents(service);
+
     // Start the machine
     service.start();
     service.send({ type: "saypi:startDictation", targetElement: element });
@@ -414,6 +417,60 @@ export class UniversalDictationModule {
     // Listen for beforeunload
     window.addEventListener("beforeunload", () => {
       this.destroy();
+    });
+  }
+
+  private registerDictationEvents(dictationService: any): void {
+    // Register EventBus listeners that forward events to the dictation machine
+    // This mirrors the functionality in EventModule.js for conversation events
+
+    const CALL_READY = "saypi:callReady";
+    const USER_SPEAKING = "saypi:userSpeaking";
+    const USER_STOPPED_SPEAKING = "saypi:userStoppedSpeaking";
+    const USER_FINISHED_SPEAKING = "saypi:userFinishedSpeaking";
+    const AUDIO_DEVICE_CONNECTED = "saypi:audio:connected";
+    const SESSION_ASSIGNED = "saypi:session:assigned";
+
+    // Simple events (no additional data)
+    [CALL_READY, USER_SPEAKING, USER_FINISHED_SPEAKING].forEach((eventName) => {
+      EventBus.on(eventName, () => {
+        logger.debug(`[UniversalDictationModule] Forwarding ${eventName} to dictation machine`);
+        dictationService.send(eventName);
+      });
+    });
+
+    // Events with additional data
+    [USER_STOPPED_SPEAKING, AUDIO_DEVICE_CONNECTED, SESSION_ASSIGNED].forEach((eventName) => {
+      EventBus.on(eventName, (detail) => {
+        if (detail) {
+          logger.debug(`[UniversalDictationModule] Forwarding ${eventName} with data to dictation machine`, detail);
+          dictationService.send({ type: eventName, ...detail });
+        } else {
+          logger.warn(`[UniversalDictationModule] Received ${eventName} without details.`);
+        }
+      });
+    });
+
+    // Listen for transcription events
+    EventBus.on("saypi:transcribed", (detail) => {
+      logger.debug(`[UniversalDictationModule] Forwarding transcription to dictation machine`, detail);
+      dictationService.send({ type: "saypi:transcribed", ...detail });
+    });
+
+    EventBus.on("saypi:transcribeFailed", () => {
+      logger.debug(`[UniversalDictationModule] Forwarding transcription failure to dictation machine`);
+      dictationService.send("saypi:transcribeFailed");
+    });
+
+    EventBus.on("saypi:transcribedEmpty", () => {
+      logger.debug(`[UniversalDictationModule] Forwarding empty transcription to dictation machine`);
+      dictationService.send("saypi:transcribedEmpty");
+    });
+
+    // Handle call failures
+    EventBus.on("saypi:callFailed", () => {
+      logger.debug(`[UniversalDictationModule] Forwarding call failure to dictation machine`);
+      dictationService.send("saypi:callFailed");
     });
   }
 

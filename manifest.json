@@ -11,7 +11,7 @@
     "audio"
   ],
   "host_permissions": [
-    "https://api.saypi.ai/*",
+    "https://localhost:5001/*",
     "https://www.saypi.ai/*"
   ],
   "content_scripts": [

@@ -5,7 +5,7 @@
  */
 const config = {
   // Values from .env
-  apiBaseUrl: "https://api.saypi.ai",
+  apiBaseUrl: "https://localhost:5001",
   authServerUrl: "https://www.saypi.ai"
 };
 
