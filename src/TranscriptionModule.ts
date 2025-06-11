@@ -362,6 +362,7 @@ async function uploadAudio(
       });
     } else {
       StateMachineService.actor.send("saypi:transcribed", payload);
+      EventBus.emit("saypi:transcription:completed", payload);
       // no need to emit transcription:received event here, it's handled by transcriptionReceived function
     }
   } catch (error: unknown) {

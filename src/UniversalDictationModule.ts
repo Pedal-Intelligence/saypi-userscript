@@ -423,7 +423,7 @@ export class UniversalDictationModule {
           ariaLabel = 'Transcribing speech...';
           title = 'Transcribing speech to text';
         } else if (listeningState.converting === 'accumulating') {
-          color = '#9c27b0'; // Purple - accumulating transcriptions
+          color = '#66bb6a'; // Green - accumulating transcriptions
           ariaLabel = 'Processing text...';
           title = 'Processing transcribed text';
         }
@@ -511,7 +511,7 @@ export class UniversalDictationModule {
     });
 
     // Listen for transcription events
-    EventBus.on("saypi:transcribed", (detail) => {
+    EventBus.on("saypi:transcription:completed", (detail) => {
       logger.debug(`[UniversalDictationModule] Forwarding transcription to dictation machine`, detail);
       dictationService.send({ type: "saypi:transcribed", ...detail });
     });
