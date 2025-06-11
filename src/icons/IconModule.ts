@@ -99,13 +99,21 @@ export class IconModule {
     return this._bubbleBw;
   }
 
+  static isReplaceableColor(color: string | null): boolean {
+    if (!color) {
+      return false;
+    }
+    color = color.toLowerCase();
+    return color !== 'none' && color !== 'transparent' && color !== 'currentColor' && color !== 'white' && color !== '#ffffff' && color !== '#fff';
+  }
+
   static bubble(color: string): SVGElement {
     const svg = this.bubbleBw;
     const paths = svg.querySelectorAll('path');
     if (paths) {
       paths.forEach(path => {
         // if fill is black, set it to color
-        if (path.getAttribute('fill') === 'black' || path.getAttribute('fill') === '#000000' || path.getAttribute('fill') === '#000') {
+        if (this.isReplaceableColor(path.getAttribute('fill'))) {
           path.setAttribute('fill', color);
         }
       });

@@ -289,7 +289,7 @@ export class UniversalDictationModule {
 
     // Update button appearance for recording
     button.innerHTML = "";
-    const stopIcon = IconModule.bubbleRed.cloneNode(true) as SVGElement;
+    const stopIcon = IconModule.bubbleGreen.cloneNode(true) as SVGElement;
     button.appendChild(stopIcon);
     
     // Update hover effects for recording state
@@ -334,7 +334,7 @@ export class UniversalDictationModule {
     if (button) {
       // Reset button appearance to idle state
       button.innerHTML = "";
-      const bubbleIcon = IconModule.bubbleGreen.cloneNode(true) as SVGElement;
+      const bubbleIcon = IconModule.bubbleBw.cloneNode(true) as SVGElement;
       bubbleIcon.setAttribute("width", "28");
       bubbleIcon.setAttribute("height", "28");
       bubbleIcon.style.cssText = `
