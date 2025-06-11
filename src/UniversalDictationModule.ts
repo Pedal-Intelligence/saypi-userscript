@@ -18,6 +18,8 @@ export class UniversalDictationModule {
   private observer: MutationObserver | null = null;
   private decoratedElements = new Map<HTMLElement, DictationTarget>();
   private currentActiveTarget: DictationTarget | null = null;
+  private mousedownHandler: ((event: Event) => void) | null = null;
+  private focusinHandler: ((event: Event) => void) | null = null;
 
   private constructor() {
     this.setupEventListeners();
@@ -45,6 +47,18 @@ export class UniversalDictationModule {
       this.observer.disconnect();
       this.observer = null;
     }
+    
+    // Remove global event listeners
+    if (this.mousedownHandler) {
+      document.removeEventListener("mousedown", this.mousedownHandler, true);
+      this.mousedownHandler = null;
+    }
+    
+    if (this.focusinHandler) {
+      document.removeEventListener("focusin", this.focusinHandler, true);
+      this.focusinHandler = null;
+    }
+    
     this.cleanupAllElements();
   }
 
@@ -340,7 +354,7 @@ export class UniversalDictationModule {
     previousTarget.machine = null;
 
     // Update button appearances - hide all buttons except the new target
-    this.decoratedElements.forEach((target, element) => {
+    this.decoratedElements.forEach((target) => {
       if (target.button) {
         if (target === newTarget) {
           // Show and update the new target button with current state
@@ -360,8 +374,7 @@ export class UniversalDictationModule {
   private stopDictation(): void {
     if (!this.currentActiveTarget) return;
 
-    const { button, machine } = this.currentActiveTarget;
-    const stoppingTarget = this.currentActiveTarget; // Store reference before clearing
+    const { machine } = this.currentActiveTarget;
 
     if (machine) {
       machine.send({ type: "saypi:stopDictation" });
@@ -377,7 +390,7 @@ export class UniversalDictationModule {
 
   private cleanupRemovedElements(removedElement: HTMLElement): void {
     // Check if any of our decorated elements were removed
-    this.decoratedElements.forEach((target, element) => {
+    this.decoratedElements.forEach((_, element) => {
       if (!document.contains(element) || removedElement.contains(element)) {
         this.cleanupElement(element);
       }
@@ -413,7 +426,7 @@ export class UniversalDictationModule {
   }
 
   private cleanupAllElements(): void {
-    this.decoratedElements.forEach((target, element) => {
+    this.decoratedElements.forEach((_, element) => {
       this.cleanupElement(element);
     });
   }
@@ -557,6 +570,63 @@ export class UniversalDictationModule {
     // Listen for beforeunload
     window.addEventListener("beforeunload", () => {
       this.destroy();
+    });
+
+    // Stop dictation when user clicks outside of form inputs
+    this.mousedownHandler = (event: Event) => {
+      this.handleInteractionOutsideInputs(event);
+    };
+    document.addEventListener("mousedown", this.mousedownHandler, true);
+
+    // Stop dictation when user focuses elements outside of form inputs
+    this.focusinHandler = (event: Event) => {
+      this.handleInteractionOutsideInputs(event);
+    };
+    document.addEventListener("focusin", this.focusinHandler, true);
+  }
+
+  private handleInteractionOutsideInputs(event: Event): void {
+    // Only check if dictation is currently active
+    if (!this.currentActiveTarget) return;
+
+    const target = event.target as HTMLElement;
+    if (!target) return;
+
+    // Check if the interaction is with a form input element
+    const isInputElement = this.isInputElement(target);
+    
+    // Check if the interaction is with our dictation button
+    const isDictationButton = target.closest('.saypi-dictation-button');
+    
+    // If the user interacted with an input element or dictation button, don't stop
+    if (isInputElement || isDictationButton) {
+      return;
+    }
+
+    // If we reach here, the user interacted with something outside of form inputs
+    // Stop dictation to prevent "hot mic" situation
+    console.log("User interacted outside of form inputs, stopping dictation");
+    this.stopDictation();
+  }
+
+  private isInputElement(element: HTMLElement): boolean {
+    // Check if element matches our input selectors
+    const inputSelectors = [
+      'input[type="text"]',
+      'input[type="email"]',
+      'input[type="search"]',
+      'input[type="url"]',
+      'input[type="tel"]',
+      'textarea',
+      '[contenteditable="true"]',
+    ];
+
+    return inputSelectors.some(selector => {
+      try {
+        return element.matches(selector);
+      } catch (e) {
+        return false;
+      }
     });
   }
 
