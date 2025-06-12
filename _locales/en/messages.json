@@ -1054,5 +1054,25 @@
   "vadErrorBrowserNotSupportedShort": {
     "message": "Voice not available. Try Chrome or Firefox on desktop.",
     "description": "Short generic error message for notifications when voice features are not supported."
+  },
+  "contextMenuStartDictation": {
+    "message": "Start dictation with $appName$",
+    "description": "Context menu item text to start dictation on an input field.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "message": "Stop dictation with $appName$",
+    "description": "Context menu item text to stop dictation when it's already active.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Say, Pi"
+      }
+    }
   }
 }

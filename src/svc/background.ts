@@ -3,6 +3,7 @@ import { config } from "../ConfigModule";
 import { getJwtManagerSync } from "../JwtManager";
 import { offscreenManager, OFFSCREEN_DOCUMENT_PATH } from "../offscreen/offscreen_manager";
 import { logger } from "../LoggingModule.js";
+import getMessage from "../i18n";
 
 const PERMISSIONS_PROMPT_PATH_HTML = 'public/permissions/permissions-prompt.html';
 
@@ -19,9 +20,10 @@ const dictationStates = new Map<number, boolean>(); // tabId -> isDictationActiv
 function updateContextMenuTitle(tabId: number, isDictationActive: boolean) {
   dictationStates.set(tabId, isDictationActive);
   
+  const appName = getMessage("appName");
   const title = isDictationActive 
-    ? "Stop dictation with Say, Pi" 
-    : "Start dictation with Say, Pi";
+    ? getMessage("contextMenuStopDictation", appName)
+    : getMessage("contextMenuStartDictation", appName);
     
   chrome.contextMenus.update("start-dictation", {
     title: title
@@ -36,9 +38,10 @@ function updateContextMenuTitle(tabId: number, isDictationActive: boolean) {
 // Context menu setup for dictation
 chrome.runtime.onInstalled.addListener(() => {
   // Create context menu item for dictation
+  const appName = getMessage("appName");
   chrome.contextMenus.create({
     id: "start-dictation",
-    title: "Start Dictation with Say, Pi",
+    title: getMessage("contextMenuStartDictation", appName),
     contexts: ["editable"], // Only show on input fields and contenteditable elements
     documentUrlPatterns: [
       "file://*/*", 
