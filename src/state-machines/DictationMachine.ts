@@ -10,6 +10,7 @@ import {
   uploadAudioWithRetry,
   isTranscriptionPending,
   clearPendingTranscriptions,
+  getCurrentSequenceNumber,
 } from "../TranscriptionModule";
 import { config } from "../ConfigModule";
 import EventBus from "../events/EventBus.js";
@@ -74,6 +75,7 @@ interface DictationContext {
   sessionId?: string;
   targetElement?: HTMLElement; // The input field being dictated to
   accumulatedText: string; // Text accumulated during this dictation session
+  transcriptionTargets: Record<number, HTMLElement>; // Map sequence numbers to their originating target elements
 }
 
 // Define the state schema
@@ -135,9 +137,9 @@ function getTargetElement(): HTMLElement | null {
   return targetInputElement;
 }
 
-// Helper function to set text in the target element
-function setTextInTarget(text: string) {
-  const target = getTargetElement();
+// Helper function to set text in a specific target element
+function setTextInTarget(text: string, targetElement?: HTMLElement) {
+  const target = targetElement || getTargetElement();
   if (!target) return;
 
   if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) {
@@ -178,6 +180,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
       userIsSpeaking: false,
       timeUserStoppedSpeaking: 0,
       accumulatedText: "",
+      transcriptionTargets: {},
     },
     id: "dictation",
     initial: "idle",
@@ -296,6 +299,9 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
                         }),
                         {
                           type: "transcribeAudio",
+                        },
+                        {
+                          type: "recordTranscriptionTarget",
                         },
                       ],
                     },
@@ -488,6 +494,18 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         }
       },
 
+      recordTranscriptionTarget: (
+        context: DictationContext,
+        event: DictationSpeechStoppedEvent
+      ) => {
+        // Record which target element this transcription request originated from
+        const nextSequenceNum = getCurrentSequenceNumber();
+        if (context.targetElement) {
+          context.transcriptionTargets[nextSequenceNum] = context.targetElement;
+          console.debug(`Recorded transcription target for sequence ${nextSequenceNum}:`, context.targetElement);
+        }
+      },
+
       handleTranscriptionResponse: (
         context: DictationContext,
         event: DictationTranscribedEvent
@@ -501,8 +519,16 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           context.transcriptions[sequenceNumber] = transcription;
           TranscriptionErrorManager.recordAttempt(true);
           
-          // Stream text to target field immediately
-          setTextInTarget(transcription);
+          // Stream text to the originating target field, not the current target
+          const originatingTarget = context.transcriptionTargets[sequenceNumber];
+          if (originatingTarget) {
+            setTextInTarget(transcription, originatingTarget);
+            console.debug(`Streaming transcription [${sequenceNumber}] to originating target:`, originatingTarget);
+          } else {
+            // Fallback to current target if no originating target found
+            setTextInTarget(transcription);
+            console.warn(`No originating target found for sequence ${sequenceNumber}, using current target`);
+          }
           
           // Update accumulated text
           context.accumulatedText += transcription;
@@ -511,8 +537,12 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         if (event.merged) {
           event.merged.forEach((mergedSequenceNumber) => {
             delete context.transcriptions[mergedSequenceNumber];
+            delete context.transcriptionTargets[mergedSequenceNumber];
           });
         }
+        
+        // Clean up the transcription target after successful processing
+        delete context.transcriptionTargets[sequenceNumber];
       },
 
       clearPendingTranscriptionsAction: () => {
@@ -521,6 +551,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
 
       clearTranscriptsAction: assign({
         transcriptions: () => ({}),
+        transcriptionTargets: () => ({}),
       }),
 
       resetDictationState: assign({
@@ -530,6 +561,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         timeUserStoppedSpeaking: 0,
         targetElement: () => undefined,
         accumulatedText: "",
+        transcriptionTargets: () => ({}),
       }),
 
       finalizeDictation: (context: DictationContext) => {
@@ -552,6 +584,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         // Clear transcriptions when switching to a new field, just like ConversationMachine
         // does when starting a new message turn
         context.transcriptions = {};
+        context.transcriptionTargets = {};
         
         console.log("Dictation target element switched to:", event.targetElement);
         console.log("Cleared transcriptions for new dictation target");

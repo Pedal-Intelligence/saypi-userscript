@@ -165,6 +165,11 @@ export function clearPendingTranscriptions(): void {
   sequenceNumsPendingTranscription.clear();
 }
 
+// Get the current sequence number (useful for tracking which target element to associate with)
+export function getCurrentSequenceNumber(): number {
+  return sequenceNum;
+}
+
 export async function uploadAudioWithRetry(
   audioBlob: Blob,
   audioDurationMillis: number,
