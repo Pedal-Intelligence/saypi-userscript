@@ -771,21 +771,67 @@ export class UniversalDictationModule {
     const target = event.target as HTMLElement;
     if (!target) return;
 
-    // Check if the interaction is with a form input element
-    const isInputElement = this.isInputElement(target);
-    
     // Check if the interaction is with our dictation button
     const isDictationButton = target.closest('.saypi-dictation-button');
-    
-    // If the user interacted with an input element or dictation button, don't stop
-    if (isInputElement || isDictationButton) {
+    if (isDictationButton) {
       return;
     }
 
-    // If we reach here, the user interacted with something outside of form inputs
+    // Check if the interaction is with any form element within the same form as the current target
+    const isFormElement = this.isFormElement(target);
+    const isWithinSameForm = this.isWithinSameForm(target, this.currentActiveTarget.element);
+    
+    // If the user interacted with a form element within the same form, don't stop
+    if (isFormElement && isWithinSameForm) {
+      return;
+    }
+
+    // If we reach here, the user interacted with something outside of the current form
     // Stop dictation to prevent "hot mic" situation
-    console.log("User interacted outside of form inputs, stopping dictation");
+    console.log("User interacted outside of current form, stopping dictation");
     this.stopDictation();
+  }
+
+  private isFormElement(element: HTMLElement): boolean {
+    // Check if element is any form control element
+    const formSelectors = [
+      'input',
+      'textarea', 
+      'select',
+      'button',
+      'fieldset',
+      'legend',
+      'label',
+      '[contenteditable="true"]',
+    ];
+
+    return formSelectors.some(selector => {
+      try {
+        return element.matches(selector);
+      } catch (e) {
+        return false;
+      }
+    });
+  }
+
+  private isWithinSameForm(targetElement: HTMLElement, currentElement: HTMLElement): boolean {
+    // Find the closest form for both elements
+    const targetForm = targetElement.closest('form');
+    const currentForm = currentElement.closest('form');
+    
+    // If both elements are within forms, check if they're the same form
+    if (targetForm && currentForm) {
+      return targetForm === currentForm;
+    }
+    
+    // If neither element is within a form, consider them to be in the same "virtual form"
+    // This handles cases where form elements exist outside of <form> tags
+    if (!targetForm && !currentForm) {
+      return true;
+    }
+    
+    // If only one is within a form, they're not in the same form context
+    return false;
   }
 
   private isInputElement(element: HTMLElement): boolean {
