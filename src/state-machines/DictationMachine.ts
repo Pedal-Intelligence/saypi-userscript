@@ -581,10 +581,22 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
       ) => {
         const transcription = event.text;
         const sequenceNumber = event.sequenceNumber;
+        const mergedSequences = event.merged || [];
         
-        console.debug(`Dictation transcript [${sequenceNumber}]: ${transcription}`);
+        console.debug(`Dictation transcript [${sequenceNumber}]: ${transcription}${mergedSequences.length > 0 ? ` (merged: [${mergedSequences.join(', ')}])` : ''}`);
         
         if (transcription && transcription.trim() !== "") {
+          // First, handle server-side merging if present
+          if (mergedSequences.length > 0) {
+            // Remove the sequences that were merged server-side
+            mergedSequences.forEach((mergedSeq) => {
+              delete context.transcriptions[mergedSeq];
+              delete context.transcriptionTargets[mergedSeq];
+            });
+            console.debug(`Removed server-merged sequences [${mergedSequences.join(', ')}] from context`);
+          }
+          
+          // Add the new (potentially merged) transcription
           context.transcriptions[sequenceNumber] = transcription;
           TranscriptionErrorManager.recordAttempt(true);
           
@@ -592,39 +604,49 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           const originatingTarget = context.transcriptionTargets[sequenceNumber] || context.targetElement;
           
           if (originatingTarget) {
-            // Get all transcripts that belong to the same target element
-            const targetTranscripts: Record<number, string> = {};
-            Object.entries(context.transcriptions).forEach(([seq, text]) => {
-              const seqNum = parseInt(seq, 10);
-              const targetForSeq = context.transcriptionTargets[seqNum] || context.targetElement;
-              if (targetForSeq === originatingTarget) {
-                targetTranscripts[seqNum] = text;
-              }
-            });
+            // If this is a server-side merged response, use it directly
+            // Otherwise, perform local merging for any remaining transcripts
+            let finalText: string;
             
-            // Merge transcripts for this target using the same logic as ConversationMachine
-            const mergedText = mergeService ? 
-              mergeService.mergeTranscriptsLocal(targetTranscripts) : 
-              Object.values(targetTranscripts).join(" ");
+            if (mergedSequences.length > 0) {
+              // Server already merged - use the response text directly
+              finalText = transcription;
+              console.debug(`Using server-merged text directly: ${finalText}`);
+            } else {
+              // Get all transcripts that belong to the same target element for local merging
+              const targetTranscripts: Record<number, string> = {};
+              Object.entries(context.transcriptions).forEach(([seq, text]) => {
+                const seqNum = parseInt(seq, 10);
+                const targetForSeq = context.transcriptionTargets[seqNum] || context.targetElement;
+                if (targetForSeq === originatingTarget) {
+                  targetTranscripts[seqNum] = text;
+                }
+              });
+              
+              // Merge transcripts for this target using local logic
+              finalText = mergeService ? 
+                mergeService.mergeTranscriptsLocal(targetTranscripts) : 
+                Object.values(targetTranscripts).join(" ");
+              
+              console.debug(`Local merge result for sequences [${Object.keys(targetTranscripts).join(', ')}]: ${finalText}`);
+            }
             
-            // Replace all text in the target with the merged result
-            setTextInTarget(mergedText, originatingTarget, true); // true = replace all content
-            console.debug(`Updated target with merged transcripts [${Object.keys(targetTranscripts).join(', ')}]:`, mergedText);
+            // Replace all text in the target with the final result
+            setTextInTarget(finalText, originatingTarget, true); // true = replace all content
           } else {
             // Fallback to current target if no originating target found
             setTextInTarget(transcription);
             console.warn(`No originating target found for sequence ${sequenceNumber}, using current target`);
           }
           
-          // Update accumulated text with the individual transcription
-          context.accumulatedText += transcription;
-        }
-
-        if (event.merged) {
-          event.merged.forEach((mergedSequenceNumber) => {
-            delete context.transcriptions[mergedSequenceNumber];
-            delete context.transcriptionTargets[mergedSequenceNumber];
-          });
+          // Update accumulated text - use the new transcription
+          // Note: For server-merged responses, this replaces the content that was merged
+          if (mergedSequences.length > 0) {
+            // Rebuild accumulated text from remaining transcriptions
+            context.accumulatedText = Object.values(context.transcriptions).join(" ");
+          } else {
+            context.accumulatedText += transcription;
+          }
         }
         
         // Clean up the transcription target after successful processing
