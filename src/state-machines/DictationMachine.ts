@@ -76,6 +76,7 @@ interface DictationContext {
   targetElement?: HTMLElement; // The input field being dictated to
   accumulatedText: string; // Text accumulated during this dictation session
   transcriptionTargets: Record<number, HTMLElement>; // Map sequence numbers to their originating target elements
+  provisionalTranscriptionTarget?: { sequenceNumber: number; element: HTMLElement }; // Provisional target before audio upload
 }
 
 // Define the state schema
@@ -181,6 +182,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
       timeUserStoppedSpeaking: 0,
       accumulatedText: "",
       transcriptionTargets: {},
+      provisionalTranscriptionTarget: undefined,
     },
     id: "dictation",
     initial: "idle",
@@ -281,6 +283,9 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
                     userIsSpeaking: true,
                     timeUserStoppedSpeaking: 0
                   }),
+                  {
+                    type: "recordProvisionalTranscriptionTarget",
+                  },
                 ],
                 exit: [
                   assign({ userIsSpeaking: false }),
@@ -301,13 +306,18 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
                           type: "transcribeAudio",
                         },
                         {
-                          type: "recordTranscriptionTarget",
+                          type: "confirmTranscriptionTarget",
                         },
                       ],
                     },
                     {
                       target: "notSpeaking",
                       cond: "hasNoAudio",
+                      actions: [
+                        {
+                          type: "discardProvisionalTranscriptionTarget",
+                        },
+                      ],
                     },
                   ],
                 },
@@ -494,15 +504,60 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         }
       },
 
-      recordTranscriptionTarget: (
+      recordProvisionalTranscriptionTarget: (
+        context: DictationContext,
+        event: any
+      ) => {
+        // Provisionally record which target element this transcription will originate from
+        // We use +1 because the transcription request hasn't been sent yet
+        const provisionalSequenceNum = getCurrentSequenceNumber() + 1;
+        if (context.targetElement) {
+          context.provisionalTranscriptionTarget = {
+            sequenceNumber: provisionalSequenceNum,
+            element: context.targetElement
+          };
+          console.debug(`Provisionally recorded transcription target for sequence ${provisionalSequenceNum}:`, context.targetElement);
+        }
+      },
+
+      confirmTranscriptionTarget: (
         context: DictationContext,
         event: DictationSpeechStoppedEvent
       ) => {
-        // Record which target element this transcription request originated from
-        const nextSequenceNum = getCurrentSequenceNumber();
-        if (context.targetElement) {
-          context.transcriptionTargets[nextSequenceNum] = context.targetElement;
-          console.debug(`Recorded transcription target for sequence ${nextSequenceNum}:`, context.targetElement);
+        // Confirm the provisional target when audio upload starts
+        // Now the sequence number should match what we provisionally recorded
+        const currentSequenceNum = getCurrentSequenceNumber();
+        
+        if (context.provisionalTranscriptionTarget) {
+          // Verify the sequence numbers match (they should if our timing is correct)
+          if (context.provisionalTranscriptionTarget.sequenceNumber === currentSequenceNum) {
+            context.transcriptionTargets[currentSequenceNum] = context.provisionalTranscriptionTarget.element;
+            console.debug(`Confirmed transcription target for sequence ${currentSequenceNum}:`, context.provisionalTranscriptionTarget.element);
+          } else {
+            console.warn(`Sequence number mismatch: provisional ${context.provisionalTranscriptionTarget.sequenceNumber} vs current ${currentSequenceNum}`);
+            // Use the provisional target anyway, but with the current sequence number
+            context.transcriptionTargets[currentSequenceNum] = context.provisionalTranscriptionTarget.element;
+          }
+          
+          // Clear the provisional target
+          context.provisionalTranscriptionTarget = undefined;
+        } else {
+          // Fallback: record current target if no provisional target exists
+          if (context.targetElement) {
+            context.transcriptionTargets[currentSequenceNum] = context.targetElement;
+            console.debug(`Fallback: recorded transcription target for sequence ${currentSequenceNum}:`, context.targetElement);
+          }
+        }
+      },
+
+      discardProvisionalTranscriptionTarget: (
+        context: DictationContext,
+        event: any
+      ) => {
+        // Discard provisional target on VAD misfire (user stopped speaking without audio)
+        if (context.provisionalTranscriptionTarget) {
+          console.debug(`Discarding provisional transcription target for sequence ${context.provisionalTranscriptionTarget.sequenceNumber} due to VAD misfire`);
+          context.provisionalTranscriptionTarget = undefined;
         }
       },
 
@@ -562,6 +617,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         targetElement: () => undefined,
         accumulatedText: "",
         transcriptionTargets: () => ({}),
+        provisionalTranscriptionTarget: () => undefined,
       }),
 
       finalizeDictation: (context: DictationContext) => {
@@ -584,7 +640,9 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         // Clear transcriptions when switching to a new field, just like ConversationMachine
         // does when starting a new message turn
         context.transcriptions = {};
-        context.transcriptionTargets = {};
+        // NOTE: Do NOT clear transcriptionTargets or provisionalTranscriptionTarget here
+        // In-flight transcriptions (both confirmed and provisional) need their target mappings preserved
+        // These should only be cleared when the dictation session actually ends
         
         console.log("Dictation target element switched to:", event.targetElement);
         console.log("Cleared transcriptions for new dictation target");
