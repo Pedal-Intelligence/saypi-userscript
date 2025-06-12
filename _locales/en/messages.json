@@ -1074,5 +1074,29 @@
         "example": "Say, Pi"
       }
     }
+  },
+  "dictationPlaceholderStarting": {
+    "message": "Getting ready...",
+    "description": "Placeholder text shown in input field when dictation is starting up."
+  },
+  "dictationPlaceholderListening": {
+    "message": "Listening...",
+    "description": "Placeholder text shown in input field when dictation is listening for speech."
+  },
+  "dictationPlaceholderRecording": {
+    "message": "Recording...",
+    "description": "Placeholder text shown in input field when dictation is recording user speech."
+  },
+  "dictationPlaceholderTranscribing": {
+    "message": "Transcribing...",
+    "description": "Placeholder text shown in input field when dictation is transcribing audio to text."
+  },
+  "dictationPlaceholderProcessing": {
+    "message": "Listening...",
+    "description": "Placeholder text shown in input field when dictation is processing/accumulating transcriptions."
+  },
+  "dictationPlaceholderError": {
+    "message": "Dictation error - tap to retry",
+    "description": "Placeholder text shown in input field when dictation encounters an error."
   }
 }

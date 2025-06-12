@@ -5,12 +5,14 @@ import { interpret } from "xstate";
 import EventBus from "./events/EventBus.js";
 import { IconModule } from "./icons/IconModule";
 import { logger, serializeStateValue } from "./LoggingModule.js";
+import getMessage from "./i18n";
 
 interface DictationTarget {
   element: HTMLElement;
   button: HTMLElement | null;
   decorated: boolean;
   machine?: any;
+  originalPlaceholder?: string; // Store original placeholder text
 }
 
 export class UniversalDictationModule {
@@ -305,8 +307,9 @@ export class UniversalDictationModule {
           `Dictation Machine [${element.tagName}] transitioned from ${fromState} to ${toState} with ${state.event.type}`
         );
         
-        // Update button appearance based on state machine state
+        // Update button appearance and placeholder text based on state machine state
         this.updateButtonForState(target, state);
+        this.updatePlaceholderForState(target, state);
       }
     });
     
@@ -370,10 +373,12 @@ export class UniversalDictationModule {
           // Show and update the new target button with current state
           target.button.style.display = "flex";
           this.updateButtonForState(target, currentState);
+          this.updatePlaceholderForState(target, currentState);
         } else {
           // Hide all other buttons and set them to idle state
           target.button.style.display = "none";
           this.updateButtonForIdleState(target);
+          this.restoreOriginalPlaceholder(target);
         }
       }
     });
@@ -384,12 +389,16 @@ export class UniversalDictationModule {
   private stopDictation(): void {
     if (!this.currentActiveTarget) return;
 
-    const { machine } = this.currentActiveTarget;
+    const currentTarget = this.currentActiveTarget;
+    const { machine } = currentTarget;
 
     if (machine) {
       machine.send({ type: "saypi:stopDictation" });
       machine.stop();
     }
+
+    // Restore original placeholder text
+    this.restoreOriginalPlaceholder(currentTarget);
 
     // Button appearance will be updated by updateButtonForState when machine transitions to idle
 
@@ -424,6 +433,9 @@ export class UniversalDictationModule {
     if ((element as any).__dictationCleanup) {
       (element as any).__dictationCleanup();
     }
+
+    // Restore original placeholder text
+    this.restoreOriginalPlaceholder(target);
 
     // Remove button
     if (target.button && target.button.parentNode) {
@@ -570,6 +582,83 @@ export class UniversalDictationModule {
     // Update accessibility attributes for idle state
     button.setAttribute("aria-label", "Start dictation");
     button.setAttribute("title", "Start dictation with Say, Pi");
+  }
+
+  private updatePlaceholderForState(target: DictationTarget, state: any): void {
+    const { element } = target;
+    if (!this.supportsPlaceholder(element)) return;
+
+    // Store original placeholder if not already stored
+    if (target.originalPlaceholder === undefined) {
+      target.originalPlaceholder = this.getPlaceholder(element) || "";
+    }
+
+    // Extract the current state value for placeholder mapping
+    const stateValue = state.value;
+    let placeholder = target.originalPlaceholder; // Default to original
+
+    // Map state machine states to placeholder texts
+    if (typeof stateValue === 'string') {
+      switch (stateValue) {
+        case 'idle':
+          placeholder = target.originalPlaceholder;
+          break;
+        case 'starting':
+          placeholder = getMessage("dictationPlaceholderStarting");
+          break;
+        case 'listening':
+          placeholder = getMessage("dictationPlaceholderListening");
+          break;
+        case 'errors':
+          placeholder = getMessage("dictationPlaceholderError");
+          break;
+      }
+    } else if (typeof stateValue === 'object' && stateValue.listening) {
+      // Handle nested listening states
+      const listeningState = stateValue.listening;
+      
+      if (listeningState.recording) {
+        if (listeningState.recording === 'userSpeaking') {
+          placeholder = getMessage("dictationPlaceholderRecording");
+        } else {
+          placeholder = getMessage("dictationPlaceholderListening");
+        }
+      }
+      
+      if (listeningState.converting) {
+        if (listeningState.converting === 'transcribing') {
+          placeholder = getMessage("dictationPlaceholderTranscribing");
+        } else if (listeningState.converting === 'accumulating') {
+          placeholder = getMessage("dictationPlaceholderProcessing");
+        }
+      }
+    }
+
+    // Update the placeholder
+    this.setPlaceholder(element, placeholder);
+  }
+
+  private supportsPlaceholder(element: HTMLElement): boolean {
+    return element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement;
+  }
+
+  private getPlaceholder(element: HTMLElement): string | null {
+    if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
+      return element.placeholder;
+    }
+    return null;
+  }
+
+  private setPlaceholder(element: HTMLElement, placeholder: string): void {
+    if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
+      element.placeholder = placeholder;
+    }
+  }
+
+  private restoreOriginalPlaceholder(target: DictationTarget): void {
+    if (target.originalPlaceholder !== undefined) {
+      this.setPlaceholder(target.element, target.originalPlaceholder);
+    }
   }
 
   private setupEventListeners(): void {
