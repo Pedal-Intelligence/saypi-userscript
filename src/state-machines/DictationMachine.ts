@@ -16,6 +16,7 @@ import { config } from "../ConfigModule";
 import EventBus from "../events/EventBus.js";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import TranscriptionErrorManager from "../error-management/TranscriptionErrorManager";
+import { TranscriptMergeService } from "../TranscriptMergeService";
 
 type DictationTranscribedEvent = {
   type: "saypi:transcribed";
@@ -131,6 +132,11 @@ if (apiServerUrl === undefined) {
 
 const userPreferences = UserPreferenceModule.getInstance();
 
+let mergeService: TranscriptMergeService;
+userPreferences.getLanguage().then((language) => {
+  mergeService = new TranscriptMergeService(apiServerUrl, language);
+});
+
 let targetInputElement: HTMLElement | null = null;
 
 // Helper function to get the target element
@@ -139,31 +145,39 @@ function getTargetElement(): HTMLElement | null {
 }
 
 // Helper function to set text in a specific target element
-function setTextInTarget(text: string, targetElement?: HTMLElement) {
+function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: boolean = false) {
   const target = targetElement || getTargetElement();
   if (!target) return;
 
   if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) {
     // For input and textarea elements
-    const currentValue = target.value;
-    const newValue = currentValue + text;
-    target.value = newValue;
+    if (replaceAll) {
+      target.value = text;
+    } else {
+      const currentValue = target.value;
+      const newValue = currentValue + text;
+      target.value = newValue;
+    }
     
     // Dispatch input event for framework compatibility
     target.dispatchEvent(new Event('input', { bubbles: true }));
   } else if (target.contentEditable === 'true') {
     // For contenteditable elements
-    const selection = window.getSelection();
-    if (selection && selection.rangeCount > 0) {
-      const range = selection.getRangeAt(0);
-      range.deleteContents();
-      range.insertNode(document.createTextNode(text));
-      range.collapse(false);
-      selection.removeAllRanges();
-      selection.addRange(range);
+    if (replaceAll) {
+      target.textContent = text;
     } else {
-      // Fallback: append to end
-      target.textContent = (target.textContent || '') + text;
+      const selection = window.getSelection();
+      if (selection && selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        range.deleteContents();
+        range.insertNode(document.createTextNode(text));
+        range.collapse(false);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      } else {
+        // Fallback: append to end
+        target.textContent = (target.textContent || '') + text;
+      }
     }
     
     // Dispatch input event for framework compatibility
@@ -574,18 +588,35 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           context.transcriptions[sequenceNumber] = transcription;
           TranscriptionErrorManager.recordAttempt(true);
           
-          // Stream text to the originating target field, not the current target
-          const originatingTarget = context.transcriptionTargets[sequenceNumber];
+          // Determine the target element for this sequence
+          const originatingTarget = context.transcriptionTargets[sequenceNumber] || context.targetElement;
+          
           if (originatingTarget) {
-            setTextInTarget(transcription, originatingTarget);
-            console.debug(`Streaming transcription [${sequenceNumber}] to originating target:`, originatingTarget);
+            // Get all transcripts that belong to the same target element
+            const targetTranscripts: Record<number, string> = {};
+            Object.entries(context.transcriptions).forEach(([seq, text]) => {
+              const seqNum = parseInt(seq, 10);
+              const targetForSeq = context.transcriptionTargets[seqNum] || context.targetElement;
+              if (targetForSeq === originatingTarget) {
+                targetTranscripts[seqNum] = text;
+              }
+            });
+            
+            // Merge transcripts for this target using the same logic as ConversationMachine
+            const mergedText = mergeService ? 
+              mergeService.mergeTranscriptsLocal(targetTranscripts) : 
+              Object.values(targetTranscripts).join(" ");
+            
+            // Replace all text in the target with the merged result
+            setTextInTarget(mergedText, originatingTarget, true); // true = replace all content
+            console.debug(`Updated target with merged transcripts [${Object.keys(targetTranscripts).join(', ')}]:`, mergedText);
           } else {
             // Fallback to current target if no originating target found
             setTextInTarget(transcription);
             console.warn(`No originating target found for sequence ${sequenceNumber}, using current target`);
           }
           
-          // Update accumulated text
+          // Update accumulated text with the individual transcription
           context.accumulatedText += transcription;
         }
 
@@ -621,13 +652,18 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
       }),
 
       finalizeDictation: (context: DictationContext) => {
+        // Generate final merged text from all transcriptions for consistency
+        const finalText = mergeService ? 
+          mergeService.mergeTranscriptsLocal(context.transcriptions) : 
+          context.accumulatedText;
+        
         // Emit event that dictation is complete
         EventBus.emit("dictation:complete", {
           targetElement: context.targetElement,
-          text: context.accumulatedText,
+          text: finalText,
         });
         
-        console.log("Dictation completed:", context.accumulatedText);
+        console.log("Dictation completed:", finalText);
       },
 
       switchTargetElement: (context: DictationContext, event: any) => {
