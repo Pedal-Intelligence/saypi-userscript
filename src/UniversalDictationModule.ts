@@ -400,7 +400,9 @@ export class UniversalDictationModule {
     // Restore original placeholder text
     this.restoreOriginalPlaceholder(currentTarget);
 
-    // Button appearance will be updated by updateButtonForState when machine transitions to idle
+    // Explicitly update button to idle state to ensure it's updated properly
+    // even when machine transitions don't trigger the normal state update
+    this.updateButtonForIdleState(currentTarget);
 
     // Clear the active target immediately to prevent double-calling
     this.currentActiveTarget = null;
