@@ -329,6 +329,9 @@ export class UniversalDictationModule {
       }
     });
 
+    // Notify background script that dictation started
+    this.notifyDictationStateChanged(true);
+
     console.log("Dictation started for:", element);
   }
 
@@ -392,6 +395,10 @@ export class UniversalDictationModule {
 
     // Clear the active target immediately to prevent double-calling
     this.currentActiveTarget = null;
+    
+    // Notify background script that dictation stopped
+    this.notifyDictationStateChanged(false);
+    
     console.log("Dictation stopped");
   }
 
@@ -596,6 +603,9 @@ export class UniversalDictationModule {
       if (message.type === "start-dictation-from-context-menu") {
         this.handleContextMenuDictation();
         sendResponse({ success: true });
+      } else if (message.type === "stop-dictation-from-context-menu") {
+        this.handleContextMenuStop();
+        sendResponse({ success: true });
       }
     };
     chrome.runtime.onMessage.addListener(this.messageListener);
@@ -650,6 +660,26 @@ export class UniversalDictationModule {
       }
       this.startDictation(target);
     }
+  }
+
+  private handleContextMenuStop(): void {
+    // Simply stop dictation if it's active
+    if (this.currentActiveTarget) {
+      console.log("Stopping dictation from context menu");
+      this.stopDictation();
+    } else {
+      console.log("No active dictation to stop from context menu");
+    }
+  }
+
+  private notifyDictationStateChanged(isActive: boolean): void {
+    // Notify background script of dictation state change
+    chrome.runtime.sendMessage({
+      type: "DICTATION_STATE_CHANGED",
+      isDictationActive: isActive
+    }).catch((error) => {
+      console.debug("Failed to notify background script of dictation state change:", error);
+    });
   }
 
   private handleInteractionOutsideInputs(event: Event): void {
