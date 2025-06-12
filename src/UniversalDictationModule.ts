@@ -323,15 +323,6 @@ export class UniversalDictationModule {
     service.start();
     service.send({ type: "saypi:startDictation", targetElement: element });
 
-    // Listen for completion - but avoid double-calling stopDictation
-    service.onTransition((state) => {
-      if (state.matches("idle") && this.currentActiveTarget === target) {
-        // Only call stopDictation if this target is still the active one
-        // and we haven't already stopped
-        this.stopDictation();
-      }
-    });
-
     // Notify background script that dictation started
     this.notifyDictationStateChanged(true);
 
@@ -394,7 +385,7 @@ export class UniversalDictationModule {
 
     if (machine) {
       machine.send({ type: "saypi:stopDictation" });
-      machine.stop();
+      // machine.stop(); // virtual stop only
     }
 
     // Restore original placeholder text
