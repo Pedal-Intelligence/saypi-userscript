@@ -607,7 +607,6 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
             // Remove the sequences that were merged server-side
             mergedSequences.forEach((mergedSeq) => {
               delete context.transcriptions[mergedSeq];
-              delete context.transcriptionTargets[mergedSeq];
             });
             console.debug(`Removed server-merged sequences [${mergedSequences.join(', ')}] from context`);
           }
@@ -664,9 +663,6 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
             context.accumulatedText += transcription;
           }
         }
-        
-        // Clean up the transcription target after successful processing
-        delete context.transcriptionTargets[sequenceNumber];
       },
 
       clearPendingTranscriptionsAction: () => {
