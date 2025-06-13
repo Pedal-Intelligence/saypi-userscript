@@ -69,7 +69,8 @@ type DictationEvent =
   | DictationSessionAssignedEvent;
 
 interface DictationContext {
-  transcriptions: Record<number, string>;
+  transcriptions: Record<number, string>; // Global transcriptions for backwards compatibility
+  transcriptionsByTarget: Record<string, Record<number, string>>; // Transcriptions grouped by target element ID
   isTranscribing: boolean;
   userIsSpeaking: boolean;
   timeUserStoppedSpeaking: number;
@@ -121,6 +122,24 @@ function getHighestKey(transcriptions: Record<number, string>): number {
     -1
   );
   return highestKey;
+}
+
+function getTargetElementId(element: HTMLElement): string {
+  // Generate a unique identifier for the target element
+  if (element.id) {
+    return element.id;
+  }
+  // Fallback: use a combination of tag name and attributes to create unique ID
+  const tagName = element.tagName.toLowerCase();
+  const className = element.className || '';
+  const name = element.getAttribute('name') || '';
+  const placeholder = element.getAttribute('placeholder') || '';
+  return `${tagName}-${className}-${name}-${placeholder}`.replace(/\s+/g, '-');
+}
+
+function getTranscriptionsForTarget(context: DictationContext, targetElement: HTMLElement): Record<number, string> {
+  const targetId = getTargetElementId(targetElement);
+  return context.transcriptionsByTarget[targetId] || {};
 }
 
 const apiServerUrl = config.apiServerUrl;
@@ -191,6 +210,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
     /** @xstate-layout N4IgpgJg5mDOIC5QQJYGMAuBDDKD2AdgMSxYCeADigrHLPgQlrPVAZANoAMAuoqBTz1chfiAAeiAIxcpAJgB0AdgAscuSoBs2gBwBOOQFYANCDLS5AX0unUmHAwUoIAGzAlyVGtgBOGACLo2CIE3HxIIILCDGKSCFIqUkoKOppKcgYqhnqaCabm8TqKeoYAzFIVpVlcsjrWtkEOhAqwvrgEUB6U1GhYLi4ASmBYEGRhYlEoIbGIhkr5iHJSmgqGZfIqXGVKFXP1IHbBjq1YfigdXV6teBSB9iHjEZPTEXEJSSlpGRrZuSoLCFKmkMCk2miM6SSaxUen2hyaBBabXOnVI3QQvX6ADEsCg3BBHgIhFMYq9pKU9MlUulMr88mZELlFFJDOD5BSuKUlJo6jYDo0QkjTu1OuIThgwAosAAzCU+AAUMhqXAAlER4YKTmcOoTIsSXqA3psqV9aTl6QUVCpkmCfiodDolFwlIY4QLHC4UK0wAQUZdqNdbu7CLrnqTDdI1CaaT9zf8GfEuBoFDy5EUWVI9HpylY+RqPV6Jb6OgofGA0HgfKgLmirhgbncjiHeBN9eGJJHnZ8Y1k4wCpFyuKt9FxNFzNKPcm77gXvcWoKXy5XqwuCHgMABlCjDADWftr1AArrQfFjzl6ABaQLe7lGhtuiMnxCnR769v79wxGUElUqjmoDnoo7Tk2iKenOKKLhWVaQWum7blge41p4R4njeiF3i2TwPgQMwIC6ijOpyOicjCSayP2A4gnoRRFJyqjaIYvINDOzTgUWkFltBK4KMeYA+OhSGoihCB8QJ9YUNuECCZh4REtEj4RggZSlAopRFEoTpMS6QJSP2chAgoNFplwlIGF+3IgQiCjsT6nFLjBJZiTJyHos5ElSS5UAcFIcl6gpuFPipakaVpjplLklGpKCtEslwOilL8ShWYKtnzgoFYEAAbvxIpSmgaCHgAtoeLgOK5XgYD4WAELAaA+CgABGnBYfJJKKR2+FVEZSQJako6lAZ8YFKoijWpSsiGFw9oJclebBmBhZ2SWmU5dqC5YAVxWleVwnolVNV1Q1zU4niLV+WGHVGly3ZvnSw2IHoagprRpSDfamk6K682sYtEErYQa15ZthUlWVIr+ggB21fVTWQAAokVFAYGMrX+e1gVKQkN3UndfYJv1L1plalLckYzH8r9NlLelq25ZBIPbeDfpisEkoynK8pTTUar5mxNOQXT635aDO0iveAV4WkAIGeoRm-uo2jLFRKWzhxAPZfTJbQ0dTX7iJOuw81BJo5dmOdYNKxMUx2hKFm1qGA9CBpEOX4TdkahqFIqv8-9C5C3lhvHfr+3VTDx1gKd+ISxjeGW8ONtpPbLpO3bOgxcT2RTWs00+396v+4DWsLkHesVdQpfG4jyOoxdOFx3IVtfakSdPSnAIOkO9pplU6hJJy3s-aBCj8T4lawAoleR7i+JEKzODs7K-Hyn+PPqgtI8+GPPgT1PUfna2ktPppMtbMUv4VDySUqHnm-bxPRXoPDW+VnP4qL5zq+quvVOj+PCiPzQM-beMcDSdUdP2SkqksxlBqDsTkSxeR8jXBAOAYg+bmzNnhAAtOoAEJRQTrFljCHIShUi32cG4Q+scnxZGSFmLMwIyjvhdKfdSCgtjxRKAOB0jtb5ahFNQsBcRBwKCGolWoStUgy2WKsDIXxHTAmzKUW+aUURCPbHERuAI3p6A4fIp6WxNLciqKogWJYuLLnUdhI+Sk7b9hqNA166QvoGTMX7KCViSxwS8hoq6j05gvRdAkcEtROSUTSGIwaOgkgGW5DoLI7iC6eMcguZyCEhJ+PNm8OQ8wEwVASS9bIuis7yE0Ek5ahdNbrSyXhVQAImKqSTJSXq1p1JzRYsPNRGsgYMy2mDXatTj4fGtglAyVRnR4IJi6UE0TEiGAHLIN6FTaZF2FpXaxbVhEWDkACMmGcEpZh2CZDplNh5-x3kMrGmkQS4zmPbJY8UAT2mgaOIwVFyg5lORgu+-894z0gFczqUgiiqTuXbJ6jydB7JBUZN5pl5DvIpj8i5D8n4vx8ECt4oLbr3MhTIaFCZcjUTeSCyEZNynWEsEAA */
     context: {
       transcriptions: {},
+      transcriptionsByTarget: {},
       isTranscribing: false,
       userIsSpeaking: false,
       timeUserStoppedSpeaking: 0,
@@ -506,26 +526,20 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
       ) => {
         const audioBlob = event.blob;
 
-        // Filter transcriptions so that we only include those that originated from
-        // the same target element as the current dictation event.
-        // context.transcriptionTargets maps sequence numbers -> target HTMLElement.
-        // We build an object of transcripts whose mapped element matches
-        // context.targetElement.
-        const sameTargetTranscriptions: Record<number, string> = Object.entries(context.transcriptions)
-          .filter(([seqStr]) => {
-            const seqNum = parseInt(seqStr, 10);
-            return context.transcriptionTargets[seqNum] === context.targetElement;
-          })
-          .reduce<Record<number, string>>((acc, [seqStr, text]) => {
-            acc[parseInt(seqStr, 10)] = text;
-            return acc;
-          }, {});
+        // Get transcriptions for the current target element only
+        if (!context.targetElement) {
+          console.warn('No target element set for transcription');
+          return;
+        }
+
+        const targetTranscriptions = getTranscriptionsForTarget(context, context.targetElement);
+        console.debug(`Sending ${Object.keys(targetTranscriptions).length} target-specific transcriptions as context for ${getTargetElementId(context.targetElement)}`);
 
         if (audioBlob) {
           uploadAudioWithRetry(
             audioBlob,
             event.duration,
-            sameTargetTranscriptions,
+            targetTranscriptions,
             context.sessionId,
             3, // default maxRetries
             event.captureTimestamp,
@@ -602,65 +616,68 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         console.debug(`Dictation transcript [${sequenceNumber}]: ${transcription}${mergedSequences.length > 0 ? ` (merged: [${mergedSequences.join(', ')}])` : ''}`);
         
         if (transcription && transcription.trim() !== "") {
+          // Determine the target element for this sequence
+          const originatingTarget = context.transcriptionTargets[sequenceNumber];
+          
+          if (!originatingTarget) {
+            console.warn(`No originating target found for sequence ${sequenceNumber}, skipping transcription response`);
+            return;
+          }
+          
+          const targetId = getTargetElementId(originatingTarget);
+          
+          // Initialize target-specific transcriptions if not exists
+          if (!context.transcriptionsByTarget[targetId]) {
+            context.transcriptionsByTarget[targetId] = {};
+          }
+          
           // First, handle server-side merging if present
           if (mergedSequences.length > 0) {
-            // Remove the sequences that were merged server-side
+            // Remove the sequences that were merged server-side from both global and target-specific storage
             mergedSequences.forEach((mergedSeq) => {
               delete context.transcriptions[mergedSeq];
+              const mergedTarget = context.transcriptionTargets[mergedSeq];
+              if (mergedTarget) {
+                const mergedTargetId = getTargetElementId(mergedTarget);
+                delete context.transcriptionsByTarget[mergedTargetId]?.[mergedSeq];
+              }
             });
             console.debug(`Removed server-merged sequences [${mergedSequences.join(', ')}] from context`);
           }
           
-          // Add the new (potentially merged) transcription
+          // Add the new (potentially merged) transcription to both global and target-specific storage
           context.transcriptions[sequenceNumber] = transcription;
+          context.transcriptionsByTarget[targetId][sequenceNumber] = transcription;
           TranscriptionErrorManager.recordAttempt(true);
           
-          // Determine the target element for this sequence
-          const originatingTarget = context.transcriptionTargets[sequenceNumber] || context.targetElement;
+          // Get target-specific transcriptions for merging
+          const targetTranscriptions = context.transcriptionsByTarget[targetId];
+          let finalText: string;
           
-          if (originatingTarget) {
-            // If this is a server-side merged response, use it directly
-            // Otherwise, perform local merging for any remaining transcripts
-            let finalText: string;
-            
-            if (mergedSequences.length > 0) {
-              // Server already merged - use the response text directly
-              finalText = transcription;
-              console.debug(`Using server-merged text directly: ${finalText}`);
-            } else {
-              // Get all transcripts that belong to the same target element for local merging
-              const targetTranscripts: Record<number, string> = {};
-              Object.entries(context.transcriptions).forEach(([seq, text]) => {
-                const seqNum = parseInt(seq, 10);
-                const targetForSeq = context.transcriptionTargets[seqNum]; // only merge transcripts that belong to the same target element
-                if (targetForSeq === originatingTarget) {
-                  targetTranscripts[seqNum] = text;
-                }
-              });
-              
-              // Merge transcripts for this target using local logic
-              finalText = mergeService ? 
-                mergeService.mergeTranscriptsLocal(targetTranscripts) : 
-                Object.values(targetTranscripts).join(" ");
-              
-              console.debug(`Local merge result for sequences [${Object.keys(targetTranscripts).join(', ')}]: ${finalText}`);
-            }
-            
-            // Replace all text in the target with the final result
-            setTextInTarget(finalText, originatingTarget, true); // true = replace all content
+          if (mergedSequences.length > 0) {
+            // Server already merged - use the response text directly
+            finalText = transcription;
+            console.debug(`Using server-merged text directly for target ${targetId}: ${finalText}`);
           } else {
-            // Fallback to current target if no originating target found
-            setTextInTarget(transcription);
-            console.warn(`No originating target found for sequence ${sequenceNumber}, using current target`);
+            // Merge transcripts for this target using local logic
+            finalText = mergeService ? 
+              mergeService.mergeTranscriptsLocal(targetTranscriptions) : 
+              Object.values(targetTranscriptions).join(" ");
+            
+            console.debug(`Local merge result for target ${targetId} sequences [${Object.keys(targetTranscriptions).join(', ')}]: ${finalText}`);
           }
           
-          // Update accumulated text - use the new transcription
-          // Note: For server-merged responses, this replaces the content that was merged
-          if (mergedSequences.length > 0) {
-            // Rebuild accumulated text from remaining transcriptions
-            context.accumulatedText = Object.values(context.transcriptions).join(" ");
-          } else {
-            context.accumulatedText += transcription;
+          // Replace all text in the target with the final result
+          setTextInTarget(finalText, originatingTarget, true); // true = replace all content
+          
+          // Update accumulated text only if this is the current target
+          if (originatingTarget === context.targetElement) {
+            if (mergedSequences.length > 0) {
+              // Rebuild accumulated text from remaining transcriptions for current target
+              context.accumulatedText = Object.values(targetTranscriptions).join(" ");
+            } else {
+              context.accumulatedText = finalText;
+            }
           }
         }
       },
@@ -671,11 +688,13 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
 
       clearTranscriptsAction: assign({
         transcriptions: () => ({}),
+        transcriptionsByTarget: () => ({}),
         transcriptionTargets: () => ({}),
       }),
 
       resetDictationState: assign({
         transcriptions: () => ({}),
+        transcriptionsByTarget: () => ({}),
         isTranscribing: false,
         userIsSpeaking: false,
         timeUserStoppedSpeaking: 0,
@@ -686,10 +705,15 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
       }),
 
       finalizeDictation: (context: DictationContext) => {
-        // Generate final merged text from all transcriptions for consistency
-        const finalText = mergeService ? 
-          mergeService.mergeTranscriptsLocal(context.transcriptions) : 
-          context.accumulatedText;
+        // Generate final merged text from current target's transcriptions
+        let finalText = context.accumulatedText;
+        
+        if (context.targetElement) {
+          const targetTranscriptions = getTranscriptionsForTarget(context, context.targetElement);
+          finalText = mergeService ? 
+            mergeService.mergeTranscriptsLocal(targetTranscriptions) : 
+            Object.values(targetTranscriptions).join(" ");
+        }
         
         // Emit event that dictation is complete
         EventBus.emit("dictation:complete", {
@@ -697,7 +721,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           text: finalText,
         });
         
-        console.log("Dictation completed:", finalText);
+        console.log("Dictation completed for target:", context.targetElement, "with text:", finalText);
       },
 
       switchTargetElement: (context: DictationContext, event: any) => {
@@ -707,15 +731,17 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         // Also update the context for consistency
         context.targetElement = event.targetElement;
         
-        // Clear transcriptions when switching to a new field, just like ConversationMachine
-        // does when starting a new message turn
+        // Clear only global transcriptions, preserve target-specific mappings
+        // This allows in-flight transcriptions to complete for their original targets
         context.transcriptions = {};
-        // NOTE: Do NOT clear transcriptionTargets or provisionalTranscriptionTarget here
+        context.accumulatedText = "";
+        
+        // NOTE: Do NOT clear transcriptionTargets, transcriptionsByTarget, or provisionalTranscriptionTarget here
         // In-flight transcriptions (both confirmed and provisional) need their target mappings preserved
         // These should only be cleared when the dictation session actually ends
         
         console.log("Dictation target element switched to:", event.targetElement);
-        console.log("Cleared transcriptions for new dictation target");
+        console.log("Cleared global transcriptions context, preserved target-specific mappings");
       },
     },
     services: {},
