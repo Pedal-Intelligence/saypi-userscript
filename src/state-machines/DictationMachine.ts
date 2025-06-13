@@ -505,11 +505,27 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         event: DictationSpeechStoppedEvent
       ) => {
         const audioBlob = event.blob;
+
+        // Filter transcriptions so that we only include those that originated from
+        // the same target element as the current dictation event.
+        // context.transcriptionTargets maps sequence numbers -> target HTMLElement.
+        // We build an object of transcripts whose mapped element matches
+        // context.targetElement.
+        const sameTargetTranscriptions: Record<number, string> = Object.entries(context.transcriptions)
+          .filter(([seqStr]) => {
+            const seqNum = parseInt(seqStr, 10);
+            return context.transcriptionTargets[seqNum] === context.targetElement;
+          })
+          .reduce<Record<number, string>>((acc, [seqStr, text]) => {
+            acc[parseInt(seqStr, 10)] = text;
+            return acc;
+          }, {});
+
         if (audioBlob) {
           uploadAudioWithRetry(
             audioBlob,
             event.duration,
-            context.transcriptions,
+            sameTargetTranscriptions,
             context.sessionId,
             3, // default maxRetries
             event.captureTimestamp,
@@ -617,7 +633,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
               const targetTranscripts: Record<number, string> = {};
               Object.entries(context.transcriptions).forEach(([seq, text]) => {
                 const seqNum = parseInt(seq, 10);
-                const targetForSeq = context.transcriptionTargets[seqNum] || context.targetElement;
+                const targetForSeq = context.transcriptionTargets[seqNum]; // only merge transcripts that belong to the same target element
                 if (targetForSeq === originatingTarget) {
                   targetTranscripts[seqNum] = text;
                 }
