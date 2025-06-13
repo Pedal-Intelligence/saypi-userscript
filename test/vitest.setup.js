@@ -24,8 +24,14 @@ Object.defineProperties(global, {
   Node: { value: dom.window.Node },
   NodeList: { value: dom.window.NodeList },
   Element: { value: dom.window.Element },
+  HTMLElement: { value: dom.window.HTMLElement },
+  HTMLInputElement: { value: dom.window.HTMLInputElement },
+  HTMLTextAreaElement: { value: dom.window.HTMLTextAreaElement },
+  HTMLDivElement: { value: dom.window.HTMLDivElement },
   DOMParser: { value: dom.window.DOMParser },
   SVGElement: { value: dom.window.SVGElement },
+  Event: { value: dom.window.Event },
+  Blob: { value: dom.window.Blob },
 });
 
 const mockStorage = (() => {
