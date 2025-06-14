@@ -146,6 +146,83 @@ function getTranscriptionsForTarget(context: DictationContext, targetElement: HT
   return context.transcriptionsByTarget[targetId] || {};
 }
 
+function mapTargetForSequence(
+  context: DictationContext,
+  expectedSequenceNumber: number,
+  defaultTarget: HTMLElement
+): HTMLElement {
+  let finalTarget = defaultTarget;
+
+  if (context.provisionalTranscriptionTarget) {
+    const provisional = context.provisionalTranscriptionTarget;
+    if (provisional.sequenceNumber === expectedSequenceNumber) {
+      finalTarget = provisional.element;
+      console.debug(
+        `Confirmed provisional transcription target for sequence ${expectedSequenceNumber}:`,
+        provisional.element
+      );
+    } else {
+      console.warn(
+        `Sequence number mismatch: provisional ${provisional.sequenceNumber} vs expected ${expectedSequenceNumber}`
+      );
+      finalTarget = provisional.element;
+    }
+    // Clear the provisional reference once handled
+    context.provisionalTranscriptionTarget = undefined;
+  }
+
+  context.transcriptionTargets[expectedSequenceNumber] = finalTarget;
+  return finalTarget;
+}
+
+/**
+ * Common helper for preparing and uploading an audio segment.
+ */
+function uploadAudioSegment(
+  context: DictationContext,
+  audioBlob: Blob,
+  duration: number,
+  targetElement: HTMLElement,
+  sessionId?: string,
+  maxRetries: number = 3,
+  captureTimestamp?: number,
+  clientReceiveTimestamp?: number
+) {
+  const expectedSequenceNumber = getCurrentSequenceNumber() + 1;
+  const finalTarget = mapTargetForSequence(
+    context,
+    expectedSequenceNumber,
+    targetElement
+  );
+
+  const targetTranscriptions = getTranscriptionsForTarget(
+    context,
+    finalTarget
+  );
+  console.debug(
+    `Sending ${Object.keys(targetTranscriptions).length} target-specific transcriptions as context for ${getTargetElementId(
+      finalTarget
+    )}`
+  );
+
+  uploadAudioWithRetry(
+    audioBlob,
+    duration,
+    targetTranscriptions,
+    sessionId,
+    maxRetries,
+    captureTimestamp,
+    clientReceiveTimestamp
+  ).then((sequenceNum) => {
+    console.debug(`Sent transcription ${sequenceNum} to target`, finalTarget);
+    if (sequenceNum !== expectedSequenceNumber) {
+      console.warn(
+        `Sequence number mismatch: expected ${expectedSequenceNumber} but got ${sequenceNum}`
+      );
+    }
+  });
+}
+
 const apiServerUrl = config.apiServerUrl;
 if (apiServerUrl === undefined) {
   throw new Error(
@@ -793,167 +870,99 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         context: DictationContext,
         event: DictationSpeechStoppedEvent
       ) => {
-        // Check if there was a target switch during speech that needs audio splitting
-        if (context.targetSwitchDuringSpeech && event.blob) {
-          console.debug("Processing audio with target switch break", context.targetSwitchDuringSpeech);
-          
-          // Calculate the split point based on the switch timestamp
-          const switchTimestamp = context.targetSwitchDuringSpeech.timestamp;
-          // Calculate audio start time by counting back from capture timestamp
-          // This is more reliable than using recorded speech start time since there may be 
-          // timing differences when the speech start event reaches the state machine
-          const audioStartTimestamp = (event.captureTimestamp || Date.now()) - event.duration;
-          const splitTimeMs = Math.max(0, switchTimestamp - audioStartTimestamp);
-          
-          // Only split if the switch happened within the audio duration
+        // If there's no audio blob, nothing to process
+        if (!event.blob) {
+          return;
+        }
+
+        const SAMPLE_RATE = 16000;
+        const MAX_RETRIES = 3;
+
+        // Utility for processing (and optionally delaying) a single audio segment
+        const processSegment = (
+          audioData: Float32Array,
+          targetElement: HTMLElement,
+          offsetMs: number = 0
+        ) => {
+          if (audioData.length === 0) return;
+
+          const blob = convertToWavBlob(audioData);
+          const duration = (audioData.length / SAMPLE_RATE) * 1000;
+          const captureTs = event.captureTimestamp
+            ? event.captureTimestamp + offsetMs
+            : undefined;
+          const clientReceiveTs = event.clientReceiveTimestamp
+            ? event.clientReceiveTimestamp + offsetMs
+            : undefined;
+
+          uploadAudioSegment(
+            context,
+            blob,
+            duration,
+            targetElement,
+            context.sessionId,
+            MAX_RETRIES,
+            captureTs,
+            clientReceiveTs
+          );
+        };
+
+        // Handle the special case where the user switched targets mid-speech
+        if (context.targetSwitchDuringSpeech) {
+          const {
+            timestamp: switchTs,
+            previousTarget,
+            newTarget,
+          } = context.targetSwitchDuringSpeech;
+
+          // Derive the start timestamp of the captured audio
+          const audioStartTs = (event.captureTimestamp || Date.now()) - event.duration;
+          const splitTimeMs = Math.max(0, switchTs - audioStartTs);
+
+          // Only split if the switch happened within the audio bounds
           if (splitTimeMs > 0 && splitTimeMs < event.duration) {
-            // Get raw audio data from the audioBuffer
-            const rawAudioData = new Float32Array(event.frames || new Float32Array(0));
-            const sampleRate = 16000;
-            const splitSampleOffset = Math.floor((splitTimeMs / 1000) * sampleRate);
-            
-            // Split audio into before and after segments
-            const beforeSwitchAudio = rawAudioData.slice(0, splitSampleOffset);
-            const afterSwitchAudio = rawAudioData.slice(splitSampleOffset);
-            
-            // Capture the target elements before clearing the switch info
-            const previousTarget = context.targetSwitchDuringSpeech.previousTarget;
-            const newTarget = context.targetSwitchDuringSpeech.newTarget;
-            
-            // Process first segment (before switch) with original target
-            if (beforeSwitchAudio.length > 0) {
-              const beforeBlob = convertToWavBlob(beforeSwitchAudio);
-              const beforeDuration = (beforeSwitchAudio.length / sampleRate) * 1000;
+            const raw = new Float32Array(event.frames || new Float32Array(0));
+            const splitOffset = Math.floor((splitTimeMs / 1000) * SAMPLE_RATE);
 
-              const expectedSequenceNumber = getCurrentSequenceNumber() + 1;
-              context.transcriptionTargets[expectedSequenceNumber] = previousTarget;
-              
-              // Process with original target
-              const beforeTargetTranscriptions = getTranscriptionsForTarget(context, previousTarget);
-              // confirm provisional transcription target
-              if (context.provisionalTranscriptionTarget) {
-                context.transcriptionTargets[expectedSequenceNumber] = context.provisionalTranscriptionTarget.element;
-                console.debug(`Confirmed provisional transcription target for sequence ${expectedSequenceNumber}:`, context.provisionalTranscriptionTarget.element);
-              }
+            // Process the segment before the switch immediately
+            processSegment(raw.slice(0, splitOffset), previousTarget, 0);
 
-              uploadAudioWithRetry(
-                beforeBlob,
-                beforeDuration,
-                beforeTargetTranscriptions,
-                context.sessionId,
-                3,
-                event.captureTimestamp,
-                event.clientReceiveTimestamp
-              ).then(sequenceNum => {
-                // Record target for this transcription using the returned sequence number
-                console.debug(`Sent transcription ${sequenceNum} to target ${previousTarget}`);
-                if (sequenceNum !== expectedSequenceNumber) {
-                  console.warn(`Sequence number mismatch: expected ${expectedSequenceNumber} but got ${sequenceNum}`);
-                }
-              });
-            }
-            
-            // Process second segment (after switch) with new target
-            if (afterSwitchAudio.length > 0) {
-              // Use setTimeout for async processing without making the action async
-              setTimeout(async () => {
-                // delay a moment before sending the transcription to avoid overlapping with the previous transcription request
-                await new Promise(resolve => setTimeout(resolve, 100));
+            // Schedule processing of the segment after the switch asynchronously
+            setTimeout(() => {
+              processSegment(raw.slice(splitOffset), newTarget, splitTimeMs);
+            }, 100);
 
-                const afterBlob = convertToWavBlob(afterSwitchAudio);
-                const afterDuration = (afterSwitchAudio.length / sampleRate) * 1000;
-
-                const expectedSequenceNumber = getCurrentSequenceNumber() + 1;
-                context.transcriptionTargets[expectedSequenceNumber] = newTarget;
-
-                // Process with new target
-                const afterTargetTranscriptions = getTranscriptionsForTarget(context, newTarget);
-                uploadAudioWithRetry(
-                  afterBlob,
-                  afterDuration,
-                  afterTargetTranscriptions,
-                  context.sessionId,
-                  3,
-                  event.captureTimestamp ? event.captureTimestamp + splitTimeMs : undefined,
-                  event.clientReceiveTimestamp ? event.clientReceiveTimestamp + splitTimeMs : undefined
-                ).then(sequenceNum => {
-                  // Record target for this transcription using the returned sequence number
-                  console.debug(`Sent transcription ${sequenceNum} to target ${newTarget}`);
-                  if (sequenceNum !== expectedSequenceNumber) {
-                    console.warn(`Sequence number mismatch: expected ${expectedSequenceNumber} but got ${sequenceNum}`);
-                  }
-                });
-              }, 0);
-            }
-            
             console.debug("Successfully split and processed audio", {
               originalDuration: event.duration,
-              beforeDuration: (beforeSwitchAudio.length / sampleRate) * 1000,
-              afterDuration: (afterSwitchAudio.length / sampleRate) * 1000,
-              splitTimeMs
+              beforeDuration: (splitOffset / SAMPLE_RATE) * 1000,
+              afterDuration: ((raw.length - splitOffset) / SAMPLE_RATE) * 1000,
+              splitTimeMs,
             });
-            
-            // Clear the target switch info and exit early (this must happen synchronously)
+
+            // Clear switch info and exit – remaining work handled by the segments above
             context.targetSwitchDuringSpeech = undefined;
             return;
-          } else {
-            // Switch happened outside audio bounds, clear switch info and process normally
-            console.debug("Target switch outside audio bounds, processing normally");
-            context.targetSwitchDuringSpeech = undefined;
-          }
-        }
-        
-        // Normal audio processing (for cases with no target switch or switch outside bounds)
-        {
-          const audioBlob = event.blob;
-          
-          // Get transcriptions for the current target element only
-          if (!context.targetElement) {
-            console.warn('No target element set for transcription');
-            return;
-          }
-          
-          const targetTranscriptions = getTranscriptionsForTarget(context, context.targetElement);
-          console.debug(`Sending ${Object.keys(targetTranscriptions).length} target-specific transcriptions as context for ${getTargetElementId(context.targetElement)}`);
-          
-          const expectedSequenceNumber = getCurrentSequenceNumber() + 1;
-          // Confirm transcription target using the returned sequence number
-          if (context.provisionalTranscriptionTarget) {
-            // Verify the sequence numbers match (they should if our timing is correct)
-            if (context.provisionalTranscriptionTarget.sequenceNumber === expectedSequenceNumber) {
-              context.transcriptionTargets[expectedSequenceNumber] = context.provisionalTranscriptionTarget.element;
-              console.debug(`Confirmed transcription target for sequence ${expectedSequenceNumber}:`, context.provisionalTranscriptionTarget.element);
-            } else {
-              console.warn(`Sequence number mismatch: provisional ${context.provisionalTranscriptionTarget.sequenceNumber} vs expected ${expectedSequenceNumber}`);
-              // Use the provisional target anyway, but with the current sequence number
-              context.transcriptionTargets[expectedSequenceNumber] = context.provisionalTranscriptionTarget.element;
-            }
-            
-            // Clear the provisional target
-            context.provisionalTranscriptionTarget = undefined;
-          } else {
-            // Fallback: record current target if no provisional target exists
-            if (context.targetElement) {
-              context.transcriptionTargets[expectedSequenceNumber] = context.targetElement;
-              console.debug(`Fallback: recorded transcription target for sequence ${expectedSequenceNumber}:`, context.targetElement);
-            }
           }
 
-          if (audioBlob) {
-            uploadAudioWithRetry(
-              audioBlob,
-              event.duration,
-              targetTranscriptions,
-              context.sessionId,
-              3, // default maxRetries
-              event.captureTimestamp,
-              event.clientReceiveTimestamp
-            ).then(sequenceNum => {
-              if (sequenceNum !== expectedSequenceNumber) {
-                console.warn(`Sequence number mismatch: expected ${expectedSequenceNumber} but got ${sequenceNum}`);
-              }
-            });
-          }
+          // Switch was outside audio bounds – clear the record and fall through to normal processing
+          console.debug("Target switch outside audio bounds, processing as single segment");
+          context.targetSwitchDuringSpeech = undefined;
+        }
+
+        // Normal single-segment processing
+        if (context.targetElement) {
+          uploadAudioSegment(
+            context,
+            event.blob,
+            event.duration,
+            context.targetElement,
+            context.sessionId,
+            MAX_RETRIES,
+            event.captureTimestamp,
+            event.clientReceiveTimestamp
+          );
+        } else {
+          console.warn("No target element set for transcription");
         }
       },
 
