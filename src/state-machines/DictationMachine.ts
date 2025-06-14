@@ -285,6 +285,59 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
   }
 }
 
+/**
+ * Ensure the per-target transcription bucket exists and return it.
+ */
+function getOrCreateTargetBucket(
+  context: DictationContext,
+  targetId: string
+): Record<number, string> {
+  if (!context.transcriptionsByTarget[targetId]) {
+    context.transcriptionsByTarget[targetId] = {};
+  }
+  return context.transcriptionsByTarget[targetId];
+}
+
+/**
+ * Remove sequences that the server indicates were merged.
+ */
+function removeMergedSequencesFromContext(
+  context: DictationContext,
+  mergedSequences: number[]
+) {
+  if (mergedSequences.length === 0) return;
+
+  mergedSequences.forEach((seq) => {
+    delete context.transcriptions[seq];
+    const mergedTarget = context.transcriptionTargets[seq];
+    if (mergedTarget) {
+      const mergedTargetId = getTargetElementId(mergedTarget);
+      delete context.transcriptionsByTarget[mergedTargetId]?.[seq];
+    }
+  });
+
+  console.debug(
+    `Removed server-merged sequences [${mergedSequences.join(", ")}] from context`
+  );
+}
+
+/**
+ * Produce the final merged text for a target, preferring server-merged text when available.
+ */
+function computeFinalText(
+  targetTranscriptions: Record<number, string>,
+  mergedSequences: number[],
+  serverText: string
+): string {
+  if (mergedSequences.length > 0) {
+    console.debug("Using server-merged text directly.");
+    return serverText;
+  }
+  // Local merge
+  return mergeService
+    ? mergeService.mergeTranscriptsLocal(targetTranscriptions)
+    : Object.values(targetTranscriptions).join(" ");
+}
 
 const machine = createMachine<DictationContext, DictationEvent, DictationTypestate>(
   {
@@ -615,37 +668,6 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         EventBus.emit("audio:setupRecording");
       },
 
-      transcribeAudio: (
-        context: DictationContext,
-        event: DictationSpeechStoppedEvent
-      ) => {
-        const audioBlob = event.blob;
-
-        // Get transcriptions for the current target element only
-        if (!context.targetElement) {
-          console.warn('No target element set for transcription');
-          return;
-        }
-
-        const targetTranscriptions = getTranscriptionsForTarget(context, context.targetElement);
-        console.debug(`Sending ${Object.keys(targetTranscriptions).length} target-specific transcriptions as context for ${getTargetElementId(context.targetElement)}`);
-
-        if (audioBlob) {
-          uploadAudioWithRetry(
-            audioBlob,
-            event.duration,
-            targetTranscriptions,
-            context.sessionId,
-            3, // default maxRetries
-            event.captureTimestamp,
-            event.clientReceiveTimestamp
-          ).then(sequenceNumber => {
-            // We don't need to do anything with the sequence number here
-            // since this is the legacy transcribeAudio action (not used in handleAudioStopped)
-          });
-        }
-      },
-
       recordProvisionalTranscriptionTarget: (
         context: DictationContext,
         event: any
@@ -659,36 +681,6 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
             element: context.targetElement
           };
           console.debug(`Provisionally recorded transcription target for sequence ${provisionalSequenceNum}:`, context.targetElement);
-        }
-      },
-
-      confirmTranscriptionTarget: (
-        context: DictationContext,
-        event: DictationSpeechStoppedEvent
-      ) => {
-        // Confirm the provisional target when audio upload starts
-        // Now the sequence number should match what we provisionally recorded
-        const currentSequenceNum = getCurrentSequenceNumber();
-        
-        if (context.provisionalTranscriptionTarget) {
-          // Verify the sequence numbers match (they should if our timing is correct)
-          if (context.provisionalTranscriptionTarget.sequenceNumber === currentSequenceNum) {
-            context.transcriptionTargets[currentSequenceNum] = context.provisionalTranscriptionTarget.element;
-            console.debug(`Confirmed transcription target for sequence ${currentSequenceNum}:`, context.provisionalTranscriptionTarget.element);
-          } else {
-            console.warn(`Sequence number mismatch: provisional ${context.provisionalTranscriptionTarget.sequenceNumber} vs current ${currentSequenceNum}`);
-            // Use the provisional target anyway, but with the current sequence number
-            context.transcriptionTargets[currentSequenceNum] = context.provisionalTranscriptionTarget.element;
-          }
-          
-          // Clear the provisional target
-          context.provisionalTranscriptionTarget = undefined;
-        } else {
-          // Fallback: record current target if no provisional target exists
-          if (context.targetElement) {
-            context.transcriptionTargets[currentSequenceNum] = context.targetElement;
-            console.debug(`Fallback: recorded transcription target for sequence ${currentSequenceNum}:`, context.targetElement);
-          }
         }
       },
 
@@ -725,45 +717,28 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           const targetId = getTargetElementId(originatingTarget);
           
           // Initialize target-specific transcriptions if not exists
-          if (!context.transcriptionsByTarget[targetId]) {
-            context.transcriptionsByTarget[targetId] = {};
-          }
+          const targetTranscriptions = getOrCreateTargetBucket(context, targetId);
           
           // First, handle server-side merging if present
           if (mergedSequences.length > 0) {
-            // Remove the sequences that were merged server-side from both global and target-specific storage
-            mergedSequences.forEach((mergedSeq) => {
-              delete context.transcriptions[mergedSeq];
-              const mergedTarget = context.transcriptionTargets[mergedSeq];
-              if (mergedTarget) {
-                const mergedTargetId = getTargetElementId(mergedTarget);
-                delete context.transcriptionsByTarget[mergedTargetId]?.[mergedSeq];
-              }
-            });
+            removeMergedSequencesFromContext(context, mergedSequences);
             console.debug(`Removed server-merged sequences [${mergedSequences.join(', ')}] from context`);
           }
           
           // Add the new (potentially merged) transcription to both global and target-specific storage
           context.transcriptions[sequenceNumber] = transcription;
-          context.transcriptionsByTarget[targetId][sequenceNumber] = transcription;
+          targetTranscriptions[sequenceNumber] = transcription;
           TranscriptionErrorManager.recordAttempt(true);
           
           // Get target-specific transcriptions for merging
-          const targetTranscriptions = context.transcriptionsByTarget[targetId];
-          let finalText: string;
-          
-          if (mergedSequences.length > 0) {
-            // Server already merged - use the response text directly
-            finalText = transcription;
-            console.debug(`Using server-merged text directly for target ${targetId}: ${finalText}`);
-          } else {
-            // Merge transcripts for this target using local logic
-            finalText = mergeService ? 
-              mergeService.mergeTranscriptsLocal(targetTranscriptions) : 
-              Object.values(targetTranscriptions).join(" ");
-            
-            console.debug(`Local merge result for target ${targetId} sequences [${Object.keys(targetTranscriptions).join(', ')}]: ${finalText}`);
-          }
+          const finalText = computeFinalText(
+            targetTranscriptions,
+            mergedSequences,
+            transcription
+          );
+          console.debug(
+            `Merged text for target ${targetId}: ${finalText}`
+          );
           
           // Replace all text in the target with the final result
           setTextInTarget(finalText, originatingTarget, true); // true = replace all content
@@ -810,9 +785,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         
         if (context.targetElement) {
           const targetTranscriptions = getTranscriptionsForTarget(context, context.targetElement);
-          finalText = mergeService ? 
-            mergeService.mergeTranscriptsLocal(targetTranscriptions) : 
-            Object.values(targetTranscriptions).join(" ");
+          finalText = computeFinalText(targetTranscriptions, [], finalText);
         }
         
         // Emit event that dictation is complete
