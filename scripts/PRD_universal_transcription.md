@@ -135,7 +135,7 @@ Say, Pi v1.8.0 extends our proven speech recognition technology to work anywhere
 ## Appendix
 
 ### Market Reality Check
-- Voice In: ~600k installs, likely 1-2% paying = ~10k subscribers
+- Voice In: ~600k claimed installs, likely 1-2% paying = ~10k subscribers
 - Voicy: Smaller user base, ~$8/month
 - Say, Pi advantage: Better accuracy + lower latency + existing user base
 

@@ -122,12 +122,13 @@ function checkForExpiredEntries() {
   });
 }
 
-function transcriptionSent(): void {
+function transcriptionSent(): number {
   sequenceNum++;
   sequenceNumsPendingTranscription.add({
     seq: sequenceNum,
     timestamp: Date.now(),
   });
+  return sequenceNum;
 }
 
 function transcriptionReceived(seq: number): void {
@@ -165,6 +166,11 @@ export function clearPendingTranscriptions(): void {
   sequenceNumsPendingTranscription.clear();
 }
 
+// Get the current sequence number (useful for tracking which target element to associate with)
+export function getCurrentSequenceNumber(): number {
+  return sequenceNum;
+}
+
 export async function uploadAudioWithRetry(
   audioBlob: Blob,
   audioDurationMillis: number,
@@ -172,8 +178,8 @@ export async function uploadAudioWithRetry(
   sessionId?: string,
   maxRetries: number = 3,
   captureTimestamp?: number,
-  clientReceiveTimestamp?: number
-): Promise<void> {
+  clientReceiveTimestamp?: number,
+): Promise<number> {
   let retryCount = 0;
   let delay = 1000; // initial delay of 1 second
   const transcriptionStartTimestamp = Date.now();
@@ -190,18 +196,21 @@ export async function uploadAudioWithRetry(
   const sleep = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
 
+  let usedSequenceNumber: number;
+  
   while (retryCount < maxRetries) {
     try {
-      transcriptionSent();
+      usedSequenceNumber = transcriptionSent();
       await uploadAudio(
         audioBlob,
         audioDurationMillis,
         precedingTranscripts,
         sessionId,
         captureTimestamp,
-        transcriptionStartTimestamp
+        transcriptionStartTimestamp,
+        usedSequenceNumber
       );
-      return;
+      return usedSequenceNumber;
     } catch (error) {
       // check for timeout errors (30s on Heroku)
       if (
@@ -227,7 +236,7 @@ export async function uploadAudioWithRetry(
         EventBus.emit("saypi:transcription:failed", {
           sequenceNumber: sequenceNum,
         });
-        return;
+        throw error; // Re-throw non-network errors to exit the retry loop
       }
     }
   }
@@ -237,8 +246,9 @@ export async function uploadAudioWithRetry(
     detail: new Error("Max retries reached"),
   });
   EventBus.emit("saypi:transcription:failed", {
-    sequenceNumber: sequenceNum,
+    sequenceNumber: usedSequenceNumber!,
   });
+  throw new Error("Max retries reached");
 }
 
 async function uploadAudio(
@@ -247,7 +257,8 @@ async function uploadAudio(
   precedingTranscripts: Record<number, string> = {},
   sessionId?: string,
   captureTimestamp?: number,
-  transcriptionStartTimestamp?: number
+  transcriptionStartTimestamp?: number,
+  sequenceNumber?: number
 ): Promise<void> {
   try {
     const messages = Object.entries(precedingTranscripts).map(
@@ -270,7 +281,8 @@ async function uploadAudio(
       audioDurationMillis / 1000,
       messages,
       sessionId,
-      chatbot
+      chatbot,
+      sequenceNumber
     );
     logStepDuration("constructTranscriptionFormData (total)", stepStartTime);
     
@@ -362,6 +374,7 @@ async function uploadAudio(
       });
     } else {
       StateMachineService.actor.send("saypi:transcribed", payload);
+      EventBus.emit("saypi:transcription:completed", payload);
       // no need to emit transcription:received event here, it's handled by transcriptionReceived function
     }
   } catch (error: unknown) {
@@ -385,7 +398,8 @@ async function constructTranscriptionFormData(
   audioDurationSeconds: number,
   messages: { role: string; content: string; sequenceNumber?: number }[],
   sessionId?: string,
-  chatbot?: any
+  chatbot?: any,
+  sequenceNumber?: number
 ) {
   const formData = new FormData();
   let audioFilename = "audio.webm";
@@ -405,7 +419,7 @@ async function constructTranscriptionFormData(
   // Add the audio and other input parameters to the FormData object
   formData.append("audio", audioBlob, audioFilename);
   formData.append("duration", audioDurationSeconds.toString());
-  formData.append("sequenceNumber", sequenceNum.toString());
+  formData.append("sequenceNumber", sequenceNumber?.toString() || sequenceNum.toString());
   formData.append("messages", JSON.stringify(messages));
   formData.append("acceptsMerge", "true"); // always accept merge requests (since v1.4.10)
   if (sessionId) {

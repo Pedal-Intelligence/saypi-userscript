@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Dictation Test Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .test-section h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        input[type="text"], input[type="email"], textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        input[type="text"]:focus, input[type="email"]:focus, textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin: 10px 0;
+        }
+        
+        .form-row > div {
+            flex: 1;
+        }
+        
+        .contenteditable-field {
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            padding: 12px;
+            min-height: 60px;
+            background: white;
+            margin: 8px 0;
+        }
+        
+        .contenteditable-field:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        
+        .instructions {
+            background-color: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .test-status {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px 10px 0;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Say, Pi Universal Dictation Test Form</h1>
+    
+    <div class="instructions">
+        <h3>Testing Instructions:</h3>
+        <p>This form is designed to test the universal dictation feature. With the Say, Pi extension installed:</p>
+        <ol>
+            <li><strong>Focus on any input field or textarea</strong> - A black & white microphone bubble icon appears on the right side</li>
+            <li><strong>Start dictation in 3 ways:</strong>
+                <ul>
+                    <li>Click the microphone bubble button</li>
+                    <li>Right-click the field → select "Start Dictation with Say, Pi"</li>
+                    <li>Focus the field while dictation is active on another field (auto-switches)</li>
+                </ul>
+            </li>
+            <li><strong>Visual feedback:</strong> The bubble changes color based on state:
+                <ul>
+                    <li>🔸 Orange = Starting/initializing</li>
+                    <li>🟢 Green = Listening/speaking detected</li>
+                    <li>🔵 Blue = Transcribing speech to text</li>
+                    <li>🔴 Red = Error state</li>
+                </ul>
+            </li>
+            <li><strong>Speak naturally</strong> - Text appears in real-time as you speak</li>
+            <li><strong>Seamless field switching:</strong> Tab to another field while speaking to continue dictation there</li>
+            <li><strong>Stop dictation:</strong> Click the colored button, or click/focus anything outside form inputs</li>
+            <li><strong>Auto-stop triggers:</strong> Dictation ends when you click buttons, links, or switch browser tabs</li>
+        </ol>
+        <p><strong>Note:</strong> This feature only works when the Say, Pi extension is installed and works on any website except pi.ai and claude.ai (which have their own voice features).</p>
+    </div>
+
+    <div class="test-section">
+        <h2>Basic Text Inputs</h2>
+        
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" placeholder="Enter your full name">
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="your.email@example.com">
+        
+        <div class="form-row">
+            <div>
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" placeholder="Your city">
+            </div>
+            <div>
+                <label for="country">Country:</label>
+                <input type="text" id="country" name="country" placeholder="Your country">
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Text Areas</h2>
+        
+        <label for="bio">Biography:</label>
+        <textarea id="bio" name="bio" placeholder="Tell us about yourself..."></textarea>
+        
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" placeholder="Write your message here..."></textarea>
+    </div>
+
+    <div class="test-section">
+        <h2>Content Editable (Rich Text)</h2>
+        
+        <label>Rich Text Editor:</label>
+        <div class="contenteditable-field" contenteditable="true" data-placeholder="Start typing or use dictation...">
+        </div>
+        
+        <label>Notes Field:</label>
+        <div class="contenteditable-field" contenteditable="true" data-placeholder="Add your notes here...">
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Form Actions</h2>
+        
+        <div class="test-status">
+            Status: Waiting for dictation implementation...
+        </div>
+        
+        <button type="button" onclick="clearAllFields()">Clear All Fields</button>
+        <button type="button" onclick="fillSampleData()">Fill Sample Data</button>
+        <button type="button" onclick="showFieldValues()">Show Values</button>
+    </div>
+
+    <script>
+        // Helper functions for testing
+        function clearAllFields() {
+            // Clear regular inputs
+            document.querySelectorAll('input[type="text"], input[type="email"], textarea').forEach(field => {
+                field.value = '';
+            });
+            
+            // Clear contenteditable fields
+            document.querySelectorAll('.contenteditable-field').forEach(field => {
+                field.innerHTML = '';
+            });
+            
+            console.log('All fields cleared');
+        }
+        
+        function fillSampleData() {
+            document.getElementById('name').value = 'John Doe';
+            document.getElementById('email').value = 'john.doe@example.com';
+            document.getElementById('city').value = 'San Francisco';
+            document.getElementById('country').value = 'United States';
+            document.getElementById('bio').value = 'Software engineer passionate about voice technology and user experience.';
+            document.getElementById('message').value = 'This is a test message to verify that our dictation system works correctly.';
+            
+            console.log('Sample data filled');
+        }
+        
+        function showFieldValues() {
+            const values = {};
+            
+            // Get regular input values
+            document.querySelectorAll('input[type="text"], input[type="email"], textarea').forEach(field => {
+                if (field.id) {
+                    values[field.id] = field.value;
+                }
+            });
+            
+            // Get contenteditable values
+            document.querySelectorAll('.contenteditable-field').forEach((field, index) => {
+                values[`contenteditable_${index}`] = field.textContent;
+            });
+            
+            console.log('Current field values:', values);
+            alert('Check console for field values');
+        }
+        
+        // Add focus/blur event listeners for testing
+        document.querySelectorAll('input, textarea, .contenteditable-field').forEach(field => {
+            field.addEventListener('focus', function(e) {
+                console.log('Field focused:', e.target.id || e.target.className);
+                // This is where the dictation button would appear
+            });
+            
+            field.addEventListener('blur', function(e) {
+                console.log('Field blurred:', e.target.id || e.target.className);
+                // This is where the dictation button would disappear
+            });
+        });
+        
+        // Placeholder for Say, Pi dictation integration
+        window.saypiDictation = {
+            isAvailable: function() {
+                return typeof window.saypi !== 'undefined';
+            },
+            
+            startDictation: function(targetElement) {
+                console.log('Starting dictation for:', targetElement);
+                // This will be implemented by the actual Say, Pi extension
+                return false;
+            },
+            
+            stopDictation: function() {
+                console.log('Stopping dictation');
+                // This will be implemented by the actual Say, Pi extension
+                return false;
+            }
+        };
+        
+        console.log('Universal Dictation Test Form loaded');
+        console.log('Say, Pi available:', window.saypiDictation.isAvailable());
+    </script>
+</body>
+</html>

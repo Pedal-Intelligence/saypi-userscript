@@ -37,7 +37,16 @@ function redirectXMLHttpRequest(open) {
 // Function to redirect specific fetch requests with correct MIME types
 function redirectFetch(_fetch) {
   window.fetch = async function (url, opts = {}) {
-    const filename = url.toString().split("/").pop();
+    const urlString = url.toString();
+    
+    // Skip interception for API endpoints - check if URL contains API paths
+    if (urlString.includes('/transcribe') || urlString.includes('/api/') || urlString.includes('api.')) {
+      return _fetch.apply(this, arguments);
+    }
+    
+    const filename = urlString.split("/").pop()?.split("?")[0]; // Remove query parameters when extracting filename
+    
+    // Only redirect specific resource files, not API endpoints
     if (filename && filesToRedirect.includes(filename)) {
       const resourceUrl = getResourceUrl(filename);
       
@@ -56,21 +65,29 @@ function redirectFetch(_fetch) {
         };
       }
 
-      const response = await _fetch.apply(this, [resourceUrl, opts]);
+      try {
+        const response = await _fetch.apply(this, [resourceUrl, opts]);
 
-      // Set correct MIME type in response if needed
-      if (mimeType) {
-        const blob = await response.blob();
-        return new Response(blob, {
-          headers: {
-            'Content-Type': mimeType
-          },
-          status: response.status,
-          statusText: response.statusText
-        });
+        // Set correct MIME type in response if needed
+        if (mimeType) {
+          const blob = await response.blob();
+          return new Response(blob, {
+            headers: {
+              'Content-Type': mimeType
+            },
+            status: response.status,
+            statusText: response.statusText
+          });
+        }
+        return response;
+      } catch (error) {
+        console.error(`[RequestInterceptor] Error redirecting ${filename}:`, error);
+        // Fallback to original request if redirect fails
+        return _fetch.apply(this, arguments);
       }
-      return response;
     }
+    
+    // For all other requests (including API calls), use original fetch
     return _fetch.apply(this, arguments);
   };
 }

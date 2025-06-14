@@ -3,6 +3,7 @@ import { config } from "../ConfigModule";
 import { getJwtManagerSync } from "../JwtManager";
 import { offscreenManager, OFFSCREEN_DOCUMENT_PATH } from "../offscreen/offscreen_manager";
 import { logger } from "../LoggingModule.js";
+import getMessage from "../i18n";
 
 const PERMISSIONS_PROMPT_PATH_HTML = 'public/permissions/permissions-prompt.html';
 
@@ -11,6 +12,64 @@ const jwtManager = getJwtManagerSync();
 
 // Expose instances globally for popup access
 (self as any).jwtManager = jwtManager;
+
+// Track dictation state across tabs
+const dictationStates = new Map<number, boolean>(); // tabId -> isDictationActive
+
+// Function to update context menu title based on dictation state
+function updateContextMenuTitle(tabId: number, isDictationActive: boolean) {
+  dictationStates.set(tabId, isDictationActive);
+  
+  const appName = getMessage("appName");
+  const title = isDictationActive 
+    ? getMessage("contextMenuStopDictation", appName)
+    : getMessage("contextMenuStartDictation", appName);
+    
+  chrome.contextMenus.update("start-dictation", {
+    title: title
+  }, () => {
+    // Check for errors in the callback
+    if (chrome.runtime.lastError) {
+      console.debug("Failed to update context menu title:", chrome.runtime.lastError.message);
+    }
+  });
+}
+
+// Context menu setup for dictation
+chrome.runtime.onInstalled.addListener(() => {
+  // Create context menu item for dictation
+  const appName = getMessage("appName");
+  chrome.contextMenus.create({
+    id: "start-dictation",
+    title: getMessage("contextMenuStartDictation", appName),
+    contexts: ["editable"], // Only show on input fields and contenteditable elements
+    documentUrlPatterns: [
+      "file://*/*", 
+      "http://*/*", 
+      "https://*/*"
+    ]
+  });
+});
+
+// Handle context menu clicks
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  if (info.menuItemId === "start-dictation" && tab?.id) {
+    const tabId = tab.id;
+    const isDictationActive = dictationStates.get(tabId) || false;
+    
+    // Send appropriate message based on current dictation state
+    const messageType = isDictationActive 
+      ? "stop-dictation-from-context-menu"
+      : "start-dictation-from-context-menu";
+      
+    chrome.tabs.sendMessage(tabId, {
+      type: messageType,
+      frameId: info.frameId || 0
+    }).catch((error) => {
+      console.debug("Failed to send dictation message to content script:", error);
+    });
+  }
+});
 
 // Helper function to sanitize messages for logging by removing/truncating large data
 function sanitizeMessageForLogs(message: any): any {
@@ -669,6 +728,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       sendResponse({ isAuthenticated: false });
     }
     return false; // Synchronous response
+  } else if (message.type === 'DICTATION_STATE_CHANGED') {
+    // Handle dictation state changes from content scripts
+    if (sender.tab?.id) {
+      const isDictationActive = message.isDictationActive || false;
+      updateContextMenuTitle(sender.tab.id, isDictationActive);
+      logger.debug(`[Background] Dictation state updated for tab ${sender.tab.id}: ${isDictationActive}`);
+    }
+    sendResponse({ success: true });
+    return false; // Synchronous response
   }
   
   // Return true if we're handling the response asynchronously for other message types
@@ -689,6 +757,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   logger.debug("[Background] Message type not explicitly handled or was synchronous:", message.type);
   // sendResponse({}); // Optional: send a default empty response if required by some senders
   return false; // Ensure channel is closed if not handled asynchronously
+});
+
+// Clean up dictation state when tabs are closed
+chrome.tabs.onRemoved.addListener((tabId) => {
+  if (dictationStates.has(tabId)) {
+    dictationStates.delete(tabId);
+    logger.debug(`[Background] Cleaned up dictation state for closed tab ${tabId}`);
+  }
 });
 
 // Handle authentication cookie changes

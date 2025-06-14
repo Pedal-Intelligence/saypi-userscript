@@ -77,6 +77,35 @@ if (formattedAuthUrl) {
 // Build host_permissions array exclusively from environment URLs
 manifest.host_permissions = permissionsToAdd.filter(Boolean);
 
+// Update content_scripts matches based on environment
+const isProduction = process.env.NODE_ENV === 'production';
+const baseMatches = ['http://*/*', 'https://*/*'];
+const developmentMatches = ['file://*/*', ...baseMatches];
+
+// Find the universal content script (the one that excludes pi.ai/claude.ai)
+const universalContentScript = manifest.content_scripts?.find(script => 
+  script.exclude_matches && 
+  script.exclude_matches.includes('https://pi.ai/*')
+);
+
+if (universalContentScript) {
+  universalContentScript.matches = isProduction ? baseMatches : developmentMatches;
+  console.log(`Universal content script matches set to: ${universalContentScript.matches.join(', ')}`);
+}
+
+// Update web_accessible_resources matches for universal access
+const universalWebResources = manifest.web_accessible_resources?.find(resource => 
+  resource.matches && 
+  resource.matches.includes('http://*/*')
+);
+
+if (universalWebResources) {
+  universalWebResources.matches = isProduction ? baseMatches : developmentMatches;
+  console.log(`Web accessible resources matches set to: ${universalWebResources.matches.join(', ')}`);
+}
+
 // Write the updated manifest
 fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), 'utf-8');
-console.log(`manifest.json host_permissions set to: ${manifest.host_permissions.join(', ')}`); 
+console.log(`manifest.json host_permissions set to: ${manifest.host_permissions.join(', ')}`);
+console.log(`Environment: ${isProduction ? 'production' : 'development'}`);
+console.log(`File protocol access: ${isProduction ? 'disabled' : 'enabled'}`); 

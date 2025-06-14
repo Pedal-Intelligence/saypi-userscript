@@ -1,22 +1,37 @@
 {
   "manifest_version": 3,
   "name": "__MSG_appName__",
-  "version": "1.8.5",
+  "version": "1.9.0",
   "description": "__MSG_appDescription__",
   "permissions": [
     "storage",
     "cookies",
     "offscreen",
     "tabs",
-    "audio"
+    "audio",
+    "contextMenus"
   ],
   "host_permissions": [
-    "https://api.saypi.ai/*",
+    "https://localhost:5001/*",
     "https://www.saypi.ai/*"
   ],
   "content_scripts": [
     {
       "matches": [
+        "https://pi.ai/*",
+        "https://claude.ai/*"
+      ],
+      "js": [
+        "public/saypi.user.js"
+      ]
+    },
+    {
+      "matches": [
+        "file://*/*",
+        "http://*/*",
+        "https://*/*"
+      ],
+      "exclude_matches": [
         "https://pi.ai/*",
         "https://claude.ai/*"
       ],
@@ -71,8 +86,9 @@
         "public/permissions/*.css"
       ],
       "matches": [
-        "https://pi.ai/*",
-        "https://claude.ai/*"
+        "file://*/*",
+        "http://*/*",
+        "https://*/*"
       ]
     }
   ],

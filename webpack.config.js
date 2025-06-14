@@ -83,6 +83,7 @@ const config = {
         }
       },
       path: path.resolve(__dirname, "public"),
+      publicPath: "",
     },
     module: {
       rules: [

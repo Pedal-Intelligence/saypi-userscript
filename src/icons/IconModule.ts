@@ -99,6 +99,36 @@ export class IconModule {
     return this._bubbleBw;
   }
 
+  static isReplaceableColor(color: string | null): boolean {
+    if (!color) {
+      return false;
+    }
+    color = color.toLowerCase();
+    return color !== 'none' && color !== 'transparent' && color !== 'currentColor' && color !== 'white' && color !== '#ffffff' && color !== '#fff';
+  }
+
+  static bubble(color: string): SVGElement {
+    const svg = this.bubbleBw.cloneNode(true) as SVGElement;
+    const paths = svg.querySelectorAll('path');
+    if (paths) {
+      paths.forEach(path => {
+        // if fill is black, set it to color
+        if (this.isReplaceableColor(path.getAttribute('fill'))) {
+          path.setAttribute('fill', color);
+        }
+      });
+    }
+    return svg;
+  }
+
+  static get bubbleGreen(): SVGElement {
+    return this.bubble('#4CAF50');
+  }
+
+  static get bubbleRed(): SVGElement {
+    return this.bubble('#FF0000');
+  }
+
   rectangles(theme = "light"): SVGElement {
     try {
       if (theme === "dark") {

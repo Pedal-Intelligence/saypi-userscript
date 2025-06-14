@@ -129,7 +129,8 @@ EventBus.on("saypi:userStoppedSpeaking", (data: {
   
   // Emit both blob and duration for transcription
   EventBus.emit("audio:dataavailable", {
-    blob: audioBlob,
+    frames: audioData, // raw frames for splitting, if needed
+    blob: audioBlob, // WAV blob for transcription
     duration: data.duration,
     captureTimestamp: data.captureTimestamp,
     clientReceiveTimestamp: data.clientReceiveTimestamp,
@@ -614,9 +615,9 @@ export const audioInputMachine = createMachine<
 
       sendData: (
         context,
-        event: { type: "dataAvailable"; blob: Blob; duration: number; captureTimestamp?: number; clientReceiveTimestamp?: number; handlerTimestamp?: number }
+        event: { type: "dataAvailable"; frames: Float32Array; blob: Blob; duration: number; captureTimestamp?: number; clientReceiveTimestamp?: number; handlerTimestamp?: number }
       ) => {
-        const { blob, duration, captureTimestamp, clientReceiveTimestamp, handlerTimestamp } = event;
+        const { frames, blob, duration, captureTimestamp, clientReceiveTimestamp, handlerTimestamp } = event;
         const sizeInKb = (blob.size / 1024).toFixed(2); // Convert to kilobytes and keep 2 decimal places
         console.debug(`Uploading ${sizeInKb}kb of audio data`);
 
@@ -625,8 +626,17 @@ export const audioInputMachine = createMachine<
 
         if (Number(sizeInKb) > 0) {
           // Upload the audio to the server for transcription
+          //
+          // TODO: the VAD emits `saypi:userStoppedSpeaking` events with raw frames when the user stops speaking.
+          // These are converted to `audio:dataavailable` events by the audio input machine, which transforms the raw frames into a WAV blob,
+          // and sends them through the audio module back to itself (this function - `sendData`),
+          // where they are then converted back to `saypi:userStoppedSpeaking` events again, but with the WAV blob,
+          // and forwared to the dictation or conversation machines.
+          // This results in the dictation or conversation machines receiving `saypi:userStoppedSpeaking` events twice - 
+          // once with the raw frames only, and once with the WAV blob.
           EventBus.emit("saypi:userStoppedSpeaking", {
             duration: speechDuration,
+            frames,
             blob,
             captureTimestamp,
             clientReceiveTimestamp,
