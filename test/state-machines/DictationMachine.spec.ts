@@ -4,7 +4,7 @@ import EventBus from '../../src/events/EventBus.js';
 
 // Mock dependencies
 vi.mock('../../src/TranscriptionModule', () => ({
-  uploadAudioWithRetry: vi.fn(),
+  uploadAudioWithRetry: vi.fn(() => Promise.resolve(1)),
   isTranscriptionPending: vi.fn(() => false),
   clearPendingTranscriptions: vi.fn(),
   getCurrentSequenceNumber: vi.fn(() => 1),
@@ -240,7 +240,8 @@ describe('DictationMachine', () => {
         clientReceiveTimestamp: Date.now(),
       });
       
-      expect(service.state.context.transcriptionTargets[5]).toBe(inputElement1);
+      // The implementation now predicts sequence number as getCurrentSequenceNumber() + 1
+      expect(service.state.context.transcriptionTargets[6]).toBe(inputElement1);
       expect(service.state.context.provisionalTranscriptionTarget).toBeUndefined();
     });
 

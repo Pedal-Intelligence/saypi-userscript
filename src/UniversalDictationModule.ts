@@ -878,7 +878,12 @@ export class UniversalDictationModule {
     [USER_STOPPED_SPEAKING, AUDIO_DEVICE_CONNECTED, SESSION_ASSIGNED].forEach((eventName) => {
       EventBus.on(eventName, (detail) => {
         if (detail) {
-          logger.debug(`[UniversalDictationModule] Forwarding ${eventName} with data to dictation machine`, detail);
+          // sanitise the detail object to replace any `frames` property with `[REDACTED]`
+          const sanitisedDetail = { ...detail };
+          if (sanitisedDetail.frames) {
+            sanitisedDetail.frames = "[REDACTED]";
+          }
+          logger.debug(`[UniversalDictationModule] Forwarding ${eventName} with data to dictation machine`, sanitisedDetail);
           dictationService.send({ type: eventName, ...detail });
         } else {
           logger.warn(`[UniversalDictationModule] Received ${eventName} without details.`);
