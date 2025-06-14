@@ -54,6 +54,13 @@ type DictationStartEvent = {
   targetElement?: HTMLElement;
 };
 
+type DictationManualEditEvent = {
+  type: "saypi:manualEdit";
+  targetElement: HTMLElement;
+  newContent: string;
+  oldContent: string;
+};
+
 type DictationEvent =
   | { type: "saypi:userSpeaking" }
   | DictationSpeechStoppedEvent
@@ -68,7 +75,8 @@ type DictationEvent =
   | { type: "saypi:callFailed" }
   | { type: "saypi:visible" }
   | DictationAudioConnectedEvent
-  | DictationSessionAssignedEvent;
+  | DictationSessionAssignedEvent
+  | DictationManualEditEvent;
 
 interface DictationContext {
   transcriptions: Record<number, string>; // Global transcriptions for backwards compatibility
@@ -295,6 +303,13 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
     // Dispatch input event for framework compatibility
     target.dispatchEvent(new Event('input', { bubbles: true }));
   }
+  
+  // Emit event to notify that content was updated from dictation
+  EventBus.emit("dictation:contentUpdated", {
+    targetElement: target,
+    content: text,
+    source: "dictation"
+  });
 }
 
 /**
@@ -331,6 +346,93 @@ function removeMergedSequencesFromContext(
   console.debug(
     `Removed server-merged sequences [${mergedSequences.join(", ")}] from context`
   );
+}
+
+/**
+ * Update transcriptionsByTarget based on manual edits to preserve user changes.
+ * This function tries to match the new content against existing transcriptions
+ * and updates the transcription records to reflect the manual changes.
+ */
+function updateTranscriptionsForManualEdit(
+  context: DictationContext,
+  targetElement: HTMLElement,
+  newContent: string,
+  oldContent: string
+): void {
+  const targetId = getTargetElementId(targetElement);
+  const targetTranscriptions = context.transcriptionsByTarget[targetId];
+  
+  if (!targetTranscriptions || Object.keys(targetTranscriptions).length === 0) {
+    console.debug("No transcriptions found for manually edited target:", targetId);
+    return;
+  }
+
+  // Get the current merged content from transcriptions
+  const currentTranscribedContent = Object.values(targetTranscriptions).join(" ");
+  
+  // Only proceed if the old content matches what we expect from transcriptions
+  // This ensures we're updating the right content
+  if (oldContent !== currentTranscribedContent) {
+    console.debug("Old content doesn't match transcribed content, skipping update", {
+      oldContent,
+      currentTranscribedContent,
+      targetId
+    });
+    return;
+  }
+
+  // Simple approach: if we have exactly one transcription, replace it entirely
+  const transcriptionKeys = Object.keys(targetTranscriptions).map(k => parseInt(k, 10));
+  
+  if (transcriptionKeys.length === 1) {
+    // Single transcription - replace it entirely
+    const sequenceNumber = transcriptionKeys[0];
+    targetTranscriptions[sequenceNumber] = newContent;
+    console.debug(`Updated single transcription [${sequenceNumber}] for target ${targetId}:`, {
+      from: oldContent,
+      to: newContent
+    });
+  } else if (transcriptionKeys.length > 1) {
+    // Multiple transcriptions - try to map changes to the last transcription
+    // This is a simple heuristic: assume the edit was made to the most recent part
+    const sortedKeys = transcriptionKeys.sort((a, b) => a - b);
+    const lastKey = sortedKeys[sortedKeys.length - 1];
+    
+    // Calculate what the content would be without the last transcription
+    const contentWithoutLast = sortedKeys
+      .slice(0, -1)
+      .map(key => targetTranscriptions[key])
+      .join(" ");
+    
+    // If newContent starts with contentWithoutLast, update the last transcription
+    if (newContent.startsWith(contentWithoutLast)) {
+      const remainder = newContent.substring(contentWithoutLast.length).trim();
+      if (remainder) {
+        targetTranscriptions[lastKey] = remainder;
+        console.debug(`Updated last transcription [${lastKey}] for target ${targetId}:`, {
+          from: targetTranscriptions[lastKey],
+          to: remainder
+        });
+      }
+    } else {
+      // Content changed significantly - replace the last transcription with the entire new content
+      // and clear all other transcriptions
+      sortedKeys.slice(0, -1).forEach(key => {
+        delete targetTranscriptions[key];
+        delete context.transcriptions[key];
+      });
+      targetTranscriptions[lastKey] = newContent;
+      console.debug(`Replaced all transcriptions with single updated transcription [${lastKey}] for target ${targetId}:`, {
+        to: newContent
+      });
+    }
+  }
+
+  // Also update the global transcriptions for backward compatibility
+  Object.keys(targetTranscriptions).forEach(key => {
+    const sequenceNumber = parseInt(key, 10);
+    context.transcriptions[sequenceNumber] = targetTranscriptions[sequenceNumber];
+  });
 }
 
 /**
@@ -658,6 +760,9 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
       "saypi:switchTarget": {
         actions: "switchTargetElement",
       },
+      "saypi:manualEdit": {
+        actions: "handleManualEdit",
+      },
     },
     predictableActionArguments: true,
     preserveActionOrder: true,
@@ -968,6 +1073,32 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           console.debug("Clearing target switch info due to audio processing failure");
           context.targetSwitchesDuringSpeech = undefined;
         }
+      },
+
+      handleManualEdit: (
+        context: DictationContext,
+        event: DictationManualEditEvent
+      ) => {
+        console.debug("Processing manual edit event", {
+          targetElement: event.targetElement,
+          newContent: event.newContent,
+          oldContent: event.oldContent
+        });
+
+        // Update transcriptions to reflect the manual edit
+        updateTranscriptionsForManualEdit(
+          context,
+          event.targetElement,
+          event.newContent,
+          event.oldContent
+        );
+
+        // Emit event to notify other components that dictation content was updated
+        EventBus.emit("dictation:contentUpdated", {
+          targetElement: event.targetElement,
+          content: event.newContent,
+          source: "manual-edit"
+        });
       },
     },
     services: {},

@@ -251,8 +251,57 @@ export class UniversalDictationModule {
       }, 150);
     };
 
+    // Track last known dictated content to detect manual edits
+    let lastDictatedContent = this.getElementContent(element);
+    let isUpdatingFromDictation = false;
+
+    // Listen for content changes to detect manual edits
+    const handleContentChange = () => {
+      // Skip if we're currently updating from dictation
+      if (isUpdatingFromDictation) {
+        return;
+      }
+
+      const currentContent = this.getElementContent(element);
+      
+      // Only process if this element has been used for dictation
+      if (this.hasTranscriptionHistory(element)) {
+        // Check if content changed manually (not from dictation)
+        if (currentContent !== lastDictatedContent) {
+          console.debug("Manual edit detected in element:", element, {
+            from: lastDictatedContent,
+            to: currentContent
+          });
+          
+          // Send manual edit event to the dictation machine
+          this.handleManualEdit(element, currentContent, lastDictatedContent);
+        }
+      }
+      
+      lastDictatedContent = currentContent;
+    };
+
+    // Mark when we're updating from dictation to avoid false positives
+    const markDictationUpdate = () => {
+      isUpdatingFromDictation = true;
+      setTimeout(() => {
+        isUpdatingFromDictation = false;
+        lastDictatedContent = this.getElementContent(element);
+      }, 0);
+    };
+
     element.addEventListener("focus", showButton);
     element.addEventListener("blur", hideButton);
+    
+    // Listen for input events to detect manual changes
+    element.addEventListener("input", handleContentChange);
+    
+    // Listen for dictation updates to track dictated content
+    EventBus.on("dictation:contentUpdated", (data) => {
+      if (data.targetElement === element) {
+        markDictationUpdate();
+      }
+    });
 
     // Button click handler - use mousedown for faster response
     const buttonClickHandler = (event: Event) => {
@@ -267,6 +316,7 @@ export class UniversalDictationModule {
     (element as any).__dictationCleanup = () => {
       element.removeEventListener("focus", showButton);
       element.removeEventListener("blur", hideButton);
+      element.removeEventListener("input", handleContentChange);
       button.removeEventListener("mousedown", buttonClickHandler);
       
       if ((button as any).__positionCleanup) {
@@ -921,5 +971,55 @@ export class UniversalDictationModule {
 
   public getCurrentTarget(): HTMLElement | null {
     return this.currentActiveTarget?.element || null;
+  }
+
+  private getElementContent(element: HTMLElement): string {
+    if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
+      return element.value;
+    } else if (element.contentEditable === 'true') {
+      return element.textContent || '';
+    }
+    return '';
+  }
+
+  private hasTranscriptionHistory(element: HTMLElement): boolean {
+    // Check if this element has any transcription history by looking for an active machine
+    // or by checking if it's been used in dictation before
+    const target = this.decoratedElements.get(element);
+    return target?.machine !== null || this.currentActiveTarget?.element === element;
+  }
+
+  private handleManualEdit(element: HTMLElement, newContent: string, oldContent: string): void {
+    // Send manual edit event to the dictation machine if it exists
+    const target = this.decoratedElements.get(element);
+    
+    if (target?.machine) {
+      console.debug("Sending manual edit event to dictation machine", {
+        element,
+        newContent,
+        oldContent
+      });
+      
+      target.machine.send({
+        type: "saypi:manualEdit",
+        targetElement: element,
+        newContent,
+        oldContent
+      });
+    } else if (this.currentActiveTarget?.element === element && this.currentActiveTarget.machine) {
+      // Handle case where element is the current active target
+      console.debug("Sending manual edit event to active dictation machine", {
+        element,
+        newContent,
+        oldContent
+      });
+      
+      this.currentActiveTarget.machine.send({
+        type: "saypi:manualEdit",
+        targetElement: element,
+        newContent,
+        oldContent
+      });
+    }
   }
 }
