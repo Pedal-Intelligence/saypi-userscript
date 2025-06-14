@@ -82,7 +82,19 @@ interface DictationContext {
   accumulatedText: string; // Text accumulated during this dictation session
   transcriptionTargets: Record<number, HTMLElement>; // Map sequence numbers to their originating target elements
   provisionalTranscriptionTarget?: { sequenceNumber: number; element: HTMLElement }; // Provisional target before audio upload
-  targetSwitchDuringSpeech?: { timestamp: number; previousTarget: HTMLElement; newTarget: HTMLElement }; // Track target switches during speech
+  /**
+   * Chronological list of target switches that occurred while the user was speaking.
+   * Each entry records the timestamp at which the switch happened (based on Date.now())
+   * and the new active target that the user had focused at that instant.
+   * This allows the recorder to later split the continuous audio buffer into
+   * multiple segments – one for each target element.
+   */
+  targetSwitchesDuringSpeech?: { timestamp: number; target: HTMLElement }[];
+  /**
+   * The element that was active when the current speech segment started. Needed so
+   * that we always know which target the very first portion of audio belongs to.
+   */
+  speechStartTarget?: HTMLElement;
 }
 
 // Define the state schema
@@ -352,7 +364,8 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
       accumulatedText: "",
       transcriptionTargets: {},
       provisionalTranscriptionTarget: undefined,
-      targetSwitchDuringSpeech: undefined,
+      targetSwitchesDuringSpeech: undefined,
+      speechStartTarget: undefined,
     },
     id: "dictation",
     initial: "idle",
@@ -452,7 +465,8 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
                   assign({ 
                     userIsSpeaking: true,
                     timeUserStoppedSpeaking: 0,
-                    timeUserStartedSpeaking: () => Date.now()
+                    timeUserStartedSpeaking: () => Date.now(),
+                    speechStartTarget: (context) => context.targetElement,
                   }),
                   {
                     type: "recordProvisionalTranscriptionTarget",
@@ -776,7 +790,8 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         accumulatedText: "",
         transcriptionTargets: () => ({}),
         provisionalTranscriptionTarget: () => undefined,
-        targetSwitchDuringSpeech: () => undefined,
+        targetSwitchesDuringSpeech: () => undefined,
+        speechStartTarget: () => undefined,
       }),
 
       finalizeDictation: (context: DictationContext) => {
@@ -821,23 +836,25 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         context: DictationContext,
         event: { type: "saypi:switchTarget"; targetElement: HTMLElement }
       ) => {
-        // Record the target switch event with timestamp
-        if (context.targetElement) {
-          // For the first switch during speech, use current target as previous
-          // For subsequent switches, preserve the original target as previous
-          const previousTarget = context.targetSwitchDuringSpeech 
-            ? context.targetSwitchDuringSpeech.previousTarget 
-            : context.targetElement;
-            
-          context.targetSwitchDuringSpeech = {
-            timestamp: Date.now(),
-            previousTarget: previousTarget,
-            newTarget: event.targetElement
-          };
-          console.debug("Recorded target switch during speech", context.targetSwitchDuringSpeech);
+        // Lazily initialise the array if this is the first switch for this speech
+        if (!context.targetSwitchesDuringSpeech) {
+          context.targetSwitchesDuringSpeech = [];
         }
-      },
 
+        context.targetSwitchesDuringSpeech.push({
+          timestamp: Date.now(),
+          target: event.targetElement,
+        });
+
+        console.debug(
+          "Recorded target switch during speech (#%d)",
+          context.targetSwitchesDuringSpeech.length,
+          {
+            timestamp: context.targetSwitchesDuringSpeech.at(-1)?.timestamp,
+            newTarget: event.targetElement,
+          }
+        );
+      },
 
       handleAudioStopped: (
         context: DictationContext,
@@ -880,49 +897,53 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           );
         };
 
-        // Handle the special case where the user switched targets mid-speech
-        if (context.targetSwitchDuringSpeech) {
-          const {
-            timestamp: switchTs,
-            previousTarget,
-            newTarget,
-          } = context.targetSwitchDuringSpeech;
+        // If there were one or more target switches during the speech, split the audio accordingly
+        if (context.targetSwitchesDuringSpeech && context.targetSwitchesDuringSpeech.length > 0 && event.frames) {
+          const switches = [...context.targetSwitchesDuringSpeech].sort((a, b) => a.timestamp - b.timestamp);
 
-          // Derive the start timestamp of the captured audio
           const audioStartTs = (event.captureTimestamp || Date.now()) - event.duration;
-          const splitTimeMs = Math.max(0, switchTs - audioStartTs);
 
-          // Only split if the switch happened within the audio bounds
-          if (splitTimeMs > 0 && splitTimeMs < event.duration) {
-            const raw = new Float32Array(event.frames || new Float32Array(0));
-            const splitOffset = Math.floor((splitTimeMs / 1000) * SAMPLE_RATE);
+          const raw = new Float32Array(event.frames);
 
-            // Process the segment before the switch immediately
-            processSegment(raw.slice(0, splitOffset), previousTarget, 0);
+          let prevOffset = 0; // in samples
+          let prevTarget: HTMLElement | undefined = context.speechStartTarget || context.targetElement;
 
-            // Schedule processing of the segment after the switch asynchronously
-            setTimeout(() => {
-              processSegment(raw.slice(splitOffset), newTarget, splitTimeMs);
-            }, 100);
+          switches.forEach((sw, idx) => {
+            const splitTimeMs = sw.timestamp - audioStartTs;
 
-            console.debug("Successfully split and processed audio", {
-              originalDuration: event.duration,
-              beforeDuration: (splitOffset / SAMPLE_RATE) * 1000,
-              afterDuration: ((raw.length - splitOffset) / SAMPLE_RATE) * 1000,
-              splitTimeMs,
-            });
+            // Ignore switch events that are out of audio bounds
+            if (splitTimeMs <= 0 || splitTimeMs >= event.duration) {
+              return;
+            }
 
-            // Clear switch info and exit – remaining work handled by the segments above
-            context.targetSwitchDuringSpeech = undefined;
-            return;
+            const splitOffset = Math.floor((splitTimeMs / 1000) * SAMPLE_RATE); // in samples
+
+            // Segment before this switch
+            const segmentBefore = raw.slice(prevOffset, splitOffset);
+            processSegment(segmentBefore, prevTarget as HTMLElement, (prevOffset / SAMPLE_RATE) * 1000);
+
+            // Update trackers for next loop iteration
+            prevOffset = splitOffset;
+            prevTarget = sw.target;
+          });
+
+          // Process the remaining segment after the last switch
+          if (prevTarget) {
+            const segmentAfter = raw.slice(prevOffset);
+            processSegment(segmentAfter, prevTarget, (prevOffset / SAMPLE_RATE) * 1000);
           }
 
-          // Switch was outside audio bounds – clear the record and fall through to normal processing
-          console.debug("Target switch outside audio bounds, processing as single segment");
-          context.targetSwitchDuringSpeech = undefined;
+          console.debug(
+            `Processed speech with ${switches.length} switch(es) into ${switches.length + 1} segment(s).`
+          );
+
+          // Clear switch tracking for next speech
+          context.targetSwitchesDuringSpeech = undefined;
+          context.speechStartTarget = undefined;
+          return;
         }
 
-        // Normal single-segment processing
+        // Fallback – no switches recorded; treat as single segment
         if (context.targetElement) {
           uploadAudioSegment(
             context,
@@ -939,14 +960,13 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         }
       },
 
-
       clearTargetSwitchInfo: (
         context: DictationContext
       ) => {
-        // Clear target switch info (used when VAD misfire occurs)
-        if (context.targetSwitchDuringSpeech) {
+        // Clear any accumulated switch info (used when VAD misfire occurs)
+        if (context.targetSwitchesDuringSpeech && context.targetSwitchesDuringSpeech.length > 0) {
           console.debug("Clearing target switch info due to audio processing failure");
-          context.targetSwitchDuringSpeech = undefined;
+          context.targetSwitchesDuringSpeech = undefined;
         }
       },
     },

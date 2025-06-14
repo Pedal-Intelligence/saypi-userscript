@@ -111,11 +111,14 @@ describe('DictationMachine - Target Switch Audio Breaking', () => {
       
       service.send('saypi:switchTarget', { targetElement: inputElement2 });
       
-      // Check that the target switch was recorded
-      expect(service.state.context.targetSwitchDuringSpeech).toBeDefined();
-      expect(service.state.context.targetSwitchDuringSpeech.previousTarget).toBe(inputElement1);
-      expect(service.state.context.targetSwitchDuringSpeech.newTarget).toBe(inputElement2);
-      expect(service.state.context.targetSwitchDuringSpeech.timestamp).toBeGreaterThanOrEqual(switchTimestamp);
+      // Check that the target switch was recorded in the array structure
+      expect(service.state.context.targetSwitchesDuringSpeech).toBeDefined();
+      expect(service.state.context.targetSwitchesDuringSpeech!.length).toBe(1);
+      const recorded = service.state.context.targetSwitchesDuringSpeech![0];
+      expect(recorded.target).toBe(inputElement2);
+      expect(recorded.timestamp).toBeGreaterThanOrEqual(switchTimestamp);
+      // speechStartTarget should hold the element active when speech began
+      expect(service.state.context.speechStartTarget).toBe(inputElement1);
     });
 
     it('should not trigger any artificial events when target switches during speech', () => {
@@ -161,7 +164,7 @@ describe('DictationMachine - Target Switch Audio Breaking', () => {
       expect(TranscriptionModule.uploadAudioWithRetry).toHaveBeenCalledTimes(2);
       
       // Verify that target switch info was cleared
-      expect(service.state.context.targetSwitchDuringSpeech).toBeUndefined();
+      expect(service.state.context.targetSwitchesDuringSpeech).toBeUndefined();
     });
 
     it('should process normal audio when no target switch occurred', () => {
@@ -194,9 +197,9 @@ describe('DictationMachine - Target Switch Audio Breaking', () => {
       service.send('saypi:switchTarget', { targetElement: inputElement2 });
       
       // Verify that the target switch was recorded (for potential audio splitting)
-      expect(service.state.context.targetSwitchDuringSpeech).toBeDefined();
-      expect(service.state.context.targetSwitchDuringSpeech.previousTarget).toBe(inputElement1);
-      expect(service.state.context.targetSwitchDuringSpeech.newTarget).toBe(inputElement2);
+      expect(service.state.context.targetSwitchesDuringSpeech).toBeDefined();
+      expect(service.state.context.targetSwitchesDuringSpeech!.length).toBe(1);
+      expect(service.state.context.targetSwitchesDuringSpeech![0].target).toBe(inputElement2);
       
       // Verify that the target was ALSO switched immediately (global handler)
       expect(service.state.context.targetElement).toBe(inputElement2);
@@ -219,7 +222,7 @@ describe('DictationMachine - Target Switch Audio Breaking', () => {
       service.send('saypi:switchTarget', { targetElement: inputElement2 });
       
       // Verify normal target switch behavior (not recording target switch during speech)
-      expect(service.state.context.targetSwitchDuringSpeech).toBeUndefined();
+      expect(service.state.context.targetSwitchesDuringSpeech).toBeUndefined();
       expect(service.state.context.targetElement).toBe(inputElement2);
       
       // Should NOT trigger any special events
@@ -241,15 +244,18 @@ describe('DictationMachine - Target Switch Audio Breaking', () => {
       
       // First switch
       service.send('saypi:switchTarget', { targetElement: inputElement2 });
-      const firstSwitchInfo = { ...service.state.context.targetSwitchDuringSpeech };
+      const firstLength = service.state.context.targetSwitchesDuringSpeech?.length ?? 0;
       
       // Second switch (should overwrite the first)
       service.send('saypi:switchTarget', { targetElement: inputElement3 });
       
-      // Only the latest switch should be recorded
-      expect(service.state.context.targetSwitchDuringSpeech.previousTarget).toBe(inputElement1); // Original target
-      expect(service.state.context.targetSwitchDuringSpeech.newTarget).toBe(inputElement3); // Latest target
-      expect(service.state.context.targetSwitchDuringSpeech.timestamp).toBeGreaterThanOrEqual(firstSwitchInfo.timestamp);
+      // There should now be two recorded switches
+      expect(service.state.context.targetSwitchesDuringSpeech!.length).toBe(firstLength + 1);
+      // Latest entry should reference the third input
+      const lastEntry = service.state.context.targetSwitchesDuringSpeech![service.state.context.targetSwitchesDuringSpeech!.length - 1];
+      expect(lastEntry.target).toBe(inputElement3);
+      // speechStartTarget remains the original target
+      expect(service.state.context.speechStartTarget).toBe(inputElement1);
     });
 
     it('should handle audio stopping without blob when target switch occurred', () => {
@@ -263,7 +269,7 @@ describe('DictationMachine - Target Switch Audio Breaking', () => {
       });
       
       // Should handle the case gracefully and clear target switch info
-      expect(service.state.context.targetSwitchDuringSpeech).toBeUndefined();
+      expect(service.state.context.targetSwitchesDuringSpeech).toBeUndefined();
     });
   });
 });
