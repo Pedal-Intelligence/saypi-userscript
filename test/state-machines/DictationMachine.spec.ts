@@ -664,4 +664,240 @@ describe('DictationMachine', () => {
       expect(contentEditableElement.textContent).toBe('Content editable text');
     });
   });
+
+  describe('Manual Edit Handling', () => {
+    beforeEach(() => {
+      service.start();
+    });
+
+    it('should handle manual edit event and update single transcription', () => {
+      // Setup initial transcription
+      service.state.context.transcriptionsByTarget['name-input'] = {
+        1: 'Hello World'
+      };
+      service.state.context.transcriptions[1] = 'Hello World';
+      service.state.context.transcriptionTargets[1] = inputElement1;
+
+      // Send manual edit event
+      service.send('saypi:manualEdit', {
+        targetElement: inputElement1,
+        newContent: 'Hello Earth',
+        oldContent: 'Hello World'
+      });
+
+      // Verify transcription was updated
+      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
+        1: 'Hello Earth'
+      });
+      expect(service.state.context.transcriptions[1]).toBe('Hello Earth');
+      
+      // Verify event was emitted
+      expect(EventBus.emit).toHaveBeenCalledWith('dictation:contentUpdated', {
+        targetElement: inputElement1,
+        content: 'Hello Earth',
+        source: 'manual-edit'
+      });
+    });
+
+    it('should handle manual edit with multiple transcriptions - update last segment', () => {
+      // Setup multiple transcriptions (like the example in requirements)
+      service.state.context.transcriptionsByTarget['name-input'] = {
+        1: 'Hello',
+        2: ', World!'
+      };
+      service.state.context.transcriptions = {
+        1: 'Hello',
+        2: ', World!'
+      };
+      service.state.context.transcriptionTargets[1] = inputElement1;
+      service.state.context.transcriptionTargets[2] = inputElement1;
+
+      // Send manual edit event (Hello , World! -> Hello, Earth!)
+      // Note: when joined with space, "Hello" + " " + ", World!" becomes "Hello , World!"
+      service.send('saypi:manualEdit', {
+        targetElement: inputElement1,
+        newContent: 'Hello, Earth!',
+        oldContent: 'Hello , World!'  // This matches the actual joined content
+      });
+
+      // Verify transcriptions were updated correctly
+      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
+        1: 'Hello',
+        2: ', Earth!'
+      });
+      expect(service.state.context.transcriptions).toEqual({
+        1: 'Hello',
+        2: ', Earth!'
+      });
+    });
+
+    it('should handle manual edit with significant content change', () => {
+      // Setup multiple transcriptions
+      service.state.context.transcriptionsByTarget['name-input'] = {
+        1: 'Hello',
+        2: ', World!'
+      };
+      service.state.context.transcriptions = {
+        1: 'Hello',
+        2: ', World!'
+      };
+      service.state.context.transcriptionTargets[1] = inputElement1;
+      service.state.context.transcriptionTargets[2] = inputElement1;
+
+      // Send manual edit with completely different content
+      service.send('saypi:manualEdit', {
+        targetElement: inputElement1,
+        newContent: 'Completely different text',
+        oldContent: 'Hello , World!'  // This matches the actual joined content
+      });
+
+      // Verify all previous transcriptions were replaced with the new content
+      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
+        2: 'Completely different text'
+      });
+      expect(service.state.context.transcriptions).toEqual({
+        2: 'Completely different text'
+      });
+    });
+
+    it('should skip manual edit when old content does not match', () => {
+      // Setup transcription
+      service.state.context.transcriptionsByTarget['name-input'] = {
+        1: 'Hello World'
+      };
+      service.state.context.transcriptions[1] = 'Hello World';
+      service.state.context.transcriptionTargets[1] = inputElement1;
+
+      // Send manual edit with non-matching old content
+      service.send('saypi:manualEdit', {
+        targetElement: inputElement1,
+        newContent: 'Hello Earth',
+        oldContent: 'Different text'  // Doesn't match current transcribed content
+      });
+
+      // Verify transcription was not changed
+      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
+        1: 'Hello World'
+      });
+      expect(service.state.context.transcriptions[1]).toBe('Hello World');
+    });
+
+    it('should handle manual edit when no transcriptions exist for target', () => {
+      // No transcriptions set up
+      
+      // Send manual edit event
+      service.send('saypi:manualEdit', {
+        targetElement: inputElement1,
+        newContent: 'Some new text',
+        oldContent: ''
+      });
+
+      // Verify nothing was changed (no transcriptions to update)
+      expect(service.state.context.transcriptionsByTarget['name-input']).toBeUndefined();
+      
+      // Event should still be emitted
+      expect(EventBus.emit).toHaveBeenCalledWith('dictation:contentUpdated', {
+        targetElement: inputElement1,
+        content: 'Some new text',
+        source: 'manual-edit'
+      });
+    });
+
+    it('should preserve edits when resuming dictation', () => {
+      // Setup initial transcription
+      service.state.context.transcriptionsByTarget['name-input'] = {
+        1: 'Hello'
+      };
+      service.state.context.transcriptions[1] = 'Hello';
+      service.state.context.transcriptionTargets[1] = inputElement1;
+
+      // Manual edit
+      service.send('saypi:manualEdit', {
+        targetElement: inputElement1,
+        newContent: 'Hello Beautiful',
+        oldContent: 'Hello'
+      });
+
+      // Verify edit was preserved
+      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
+        1: 'Hello Beautiful'
+      });
+
+      // Simulate resumed dictation by manually adding the new transcription
+      // (This simulates what would happen when the transcription system processes a new audio chunk)
+      service.state.context.transcriptionsByTarget['name-input'][2] = 'World';
+      service.state.context.transcriptions[2] = 'World';
+      service.state.context.transcriptionTargets[2] = inputElement1;
+
+      // Verify new transcription is added while preserving edits
+      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
+        1: 'Hello Beautiful',
+        2: 'World'
+      });
+    });
+
+    it('should handle manual edits across different target elements', () => {
+      // Setup transcriptions for two different elements
+      service.state.context.transcriptionsByTarget['name-input'] = {
+        1: 'John'
+      };
+      service.state.context.transcriptionsByTarget['email-input'] = {
+        2: 'john@example.com'
+      };
+      service.state.context.transcriptions = {
+        1: 'John',
+        2: 'john@example.com'
+      };
+      service.state.context.transcriptionTargets[1] = inputElement1;
+      service.state.context.transcriptionTargets[2] = inputElement2;
+
+      // Edit first element
+      service.send('saypi:manualEdit', {
+        targetElement: inputElement1,
+        newContent: 'Jane',
+        oldContent: 'John'
+      });
+
+      // Edit second element
+      service.send('saypi:manualEdit', {
+        targetElement: inputElement2,
+        newContent: 'jane@example.org',
+        oldContent: 'john@example.com'
+      });
+
+      // Verify both edits were applied independently
+      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
+        1: 'Jane'
+      });
+      expect(service.state.context.transcriptionsByTarget['email-input']).toEqual({
+        2: 'jane@example.org'
+      });
+      expect(service.state.context.transcriptions).toEqual({
+        1: 'Jane',
+        2: 'jane@example.org'
+      });
+    });
+
+    it('should emit dictation:contentUpdated event on manual edit', () => {
+      // Setup transcription
+      service.state.context.transcriptionsByTarget['name-input'] = {
+        1: 'Original text'
+      };
+      service.state.context.transcriptionTargets[1] = inputElement1;
+
+      // Send manual edit
+      service.send('saypi:manualEdit', {
+        targetElement: inputElement1,
+        newContent: 'Edited text',
+        oldContent: 'Original text'
+      });
+
+      // Verify the correct event was emitted
+      expect(EventBus.emit).toHaveBeenCalledWith('dictation:contentUpdated', {
+        targetElement: inputElement1,
+        content: 'Edited text',
+        source: 'manual-edit'
+      });
+    });
+  });
 });
