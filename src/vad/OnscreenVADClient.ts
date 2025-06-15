@@ -6,6 +6,7 @@ import { debounce } from "lodash";
 import { VADClientInterface, VADClientCallbacks } from './VADClientInterface';
 import { getBrowserInfo } from '../UserAgentModule';
 import { ChatbotIdentifier } from '../chatbots/ChatbotIdentifier';
+import { VAD_CONFIGS, VADPreset } from "./VADConfigs";
 
 console.log("[SayPi OnscreenVADClient] Client loaded.");
 
@@ -84,6 +85,7 @@ export class OnscreenVADClient implements VADClientInterface {
   private speechStartTime: number = 0;
   private isInitialized: boolean = false;
   private isStarted: boolean = false;
+  private preset: VADPreset = "balanced";
 
   // Debounced sender for VAD frame events, max once per 100ms
   private debouncedSendFrameProcessed = debounce(
@@ -100,8 +102,8 @@ export class OnscreenVADClient implements VADClientInterface {
 
   private getVADOptions(): Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks {
     // Base VAD options without asset paths (similar to offscreen implementation)
+    const presetConfig = VAD_CONFIGS[this.preset] || {};
     const baseOptions = {
-      model: "v5" as const,
       onSpeechStart: () => {
         logger.debug("[SayPi OnscreenVADClient] Speech started.");
         this.speechStartTime = Date.now();
@@ -154,14 +156,19 @@ export class OnscreenVADClient implements VADClientInterface {
     };
 
     // Merge options (same pattern as offscreen implementation)
-    return { ...baseOptions, ...bundleOptions };
+    return {
+      ...baseOptions,
+      ...presetConfig,
+      ...bundleOptions,
+    } as Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks;
   }
 
   private getFallbackVADOptions(): Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks {
     // Fallback options with minimal configuration but still with asset paths
+    const presetConfig = VAD_CONFIGS[this.preset] || {};
     return {
-      model: "v5" as const,
       baseAssetPath: chrome.runtime.getURL("public/"),
+      ...presetConfig,
       onSpeechStart: () => {
         logger.debug("[SayPi OnscreenVADClient] Speech started (fallback)");
         this.speechStartTime = Date.now();
@@ -198,12 +205,14 @@ export class OnscreenVADClient implements VADClientInterface {
       onFrameProcessed: (probabilities: { isSpeech: number; notSpeech: number }) => {
         this.debouncedSendFrameProcessed(probabilities);
       },
-    };
+    } as Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks;
   }
 
   private getMinimalVADOptions(): Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks {
     // Minimal options - no custom paths, legacy model, let VAD use defaults
+    const presetConfig = VAD_CONFIGS[this.preset] || {};
     return {
+      ...presetConfig,
       onSpeechStart: () => {
         logger.debug("[SayPi OnscreenVADClient] Speech started (minimal)");
         this.speechStartTime = Date.now();
@@ -240,16 +249,20 @@ export class OnscreenVADClient implements VADClientInterface {
       onFrameProcessed: (probabilities: { isSpeech: number; notSpeech: number }) => {
         this.debouncedSendFrameProcessed(probabilities);
       },
-    };
+    } as Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks;
   }
 
-  public async initialize(options: any = {}): Promise<{ success: boolean, error?: string, errorLong?: string, mode?: string }> {
+  public async initialize(options: { preset?: VADPreset } = {}): Promise<{ success: boolean, error?: string, errorLong?: string, mode?: string }> {
     if (this.isInitialized && this.vadInstance) {
       logger.debug("[SayPi OnscreenVADClient] VAD already initialized.");
       return { success: true, mode: "existing" };
     }
 
     this.statusIndicator.updateStatus(getMessage('vadStatusInitializing'), getMessage('vadDetailRequestingVADSetup'));
+    
+    if (options.preset && VAD_CONFIGS[options.preset]) {
+      this.preset = options.preset;
+    }
     
     // Progressive fallback strategy for VAD initialization
     const fallbackStrategies = [

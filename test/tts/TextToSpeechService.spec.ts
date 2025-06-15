@@ -4,6 +4,7 @@ import { mockVoices } from "../data/Voices";
 import { audioProviders } from "../../src/tts/SpeechModel";
 import * as ApiClient from "../../src/ApiClient";
 import { Chatbot } from "../../src/chatbots/Chatbot";
+import { ChatbotIdentifier } from "../../src/chatbots/ChatbotIdentifier";
 
 // Mock the callApi function
 vi.mock("../../src/ApiClient", () => ({
@@ -15,6 +16,8 @@ describe("TextToSpeechService", () => {
   const mockVoice = mockVoices[0];
 
   beforeEach(() => {
+    // Ensure ChatbotIdentifier returns 'pi' for these tests regardless of host
+    vi.spyOn(ChatbotIdentifier, "getAppId").mockReturnValue("pi");
     textToSpeechService = new TextToSpeechService("http://example.com");
   });
 
