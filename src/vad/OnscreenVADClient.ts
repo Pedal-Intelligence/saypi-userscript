@@ -104,7 +104,6 @@ export class OnscreenVADClient implements VADClientInterface {
     // Base VAD options without asset paths (similar to offscreen implementation)
     const presetConfig = VAD_CONFIGS[this.preset] || {};
     const baseOptions = {
-      model: "v5" as const,
       onSpeechStart: () => {
         logger.debug("[SayPi OnscreenVADClient] Speech started.");
         this.speechStartTime = Date.now();
@@ -168,7 +167,6 @@ export class OnscreenVADClient implements VADClientInterface {
     // Fallback options with minimal configuration but still with asset paths
     const presetConfig = VAD_CONFIGS[this.preset] || {};
     return {
-      model: "v5" as const,
       baseAssetPath: chrome.runtime.getURL("public/"),
       ...presetConfig,
       onSpeechStart: () => {

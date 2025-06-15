@@ -51,7 +51,6 @@ const debouncedSendFrameProcessed = debounce(
 
 // Callback-only portion of the VAD options (no tuning parameters)
 const vadCallbackOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
-  model: "v5",
   onSpeechStart: () => {
     logger.debug("[SayPi VAD Handler] Speech started.");
     speechStartTime = Date.now();

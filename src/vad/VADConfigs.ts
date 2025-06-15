@@ -12,6 +12,7 @@ export type VADPreset = "highSensitivity" | "balanced" | "conservative" | "none"
  */
 export const VAD_CONFIGS: Record<VADPreset, Partial<RealTimeVADOptions>> = {
   highSensitivity: {
+    model: "v5",
     // Highly responsive – ideal for dictation / very short utterances
     positiveSpeechThreshold: 0.35,
     negativeSpeechThreshold: 0.2,
@@ -21,6 +22,7 @@ export const VAD_CONFIGS: Record<VADPreset, Partial<RealTimeVADOptions>> = {
     submitUserSpeechOnPause: false,
   },
   balanced: {
+    model: "v5",
     // Default – good general-purpose trade-off
     positiveSpeechThreshold: 0.4,
     negativeSpeechThreshold: 0.25,
@@ -30,6 +32,7 @@ export const VAD_CONFIGS: Record<VADPreset, Partial<RealTimeVADOptions>> = {
     submitUserSpeechOnPause: false,
   },
   conservative: {
+    model: "v5",
     // Noisy environments – lower sensitivity
     positiveSpeechThreshold: 0.6,
     negativeSpeechThreshold: 0.45,
