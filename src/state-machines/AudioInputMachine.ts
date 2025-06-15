@@ -9,6 +9,7 @@ import { OnscreenVADClient } from '../vad/OnscreenVADClient';
 import { VADClientInterface } from '../vad/VADClientInterface';
 import { logger } from "../LoggingModule";
 import { likelySupportsOffscreen, getBrowserInfo } from "../UserAgentModule";
+import { VADPreset } from "../vad/VADConfigs";
 
 setupInterceptors();
 
@@ -33,6 +34,9 @@ let previousDefaultDevice: MediaDeviceInfo | null = null;
 
 // VAD client instance - will be either OffscreenVADClient or OnscreenVADClient
 let vadClient: VADClientInterface | null = null;
+
+// Preferred VAD preset (can later be made dynamic)
+const VAD_PRESET: VADPreset = "balanced";
 
 // Initialize the appropriate VAD client based on browser support
 function initializeVADClient() {
@@ -342,7 +346,7 @@ async function setupRecording(completion_callback?: (success: boolean, error?: s
 
     // Initialize the VAD client (works for both offscreen and onscreen)
     console.log("[AudioInputMachine] Initializing VAD client...");
-    const initResult = await vadClient.initialize();
+    const initResult = await vadClient.initialize({ preset: VAD_PRESET });
     
     if (!initResult.success) {
       const errorMsg = initResult.error || "Failed to initialize VAD";
