@@ -2,6 +2,7 @@ import { MicVAD, RealTimeVADOptions } from "@ricky0123/vad-web";
 import { logger } from "../LoggingModule.js";
 import { debounce } from "lodash";
 import { incrementUsage, decrementUsage, resetUsageCounter, registerMessageHandler } from "./media_coordinator";
+import { VAD_CONFIGS, VADPreset } from "../vad/VADConfigs";
 
 logger.log("[SayPi VAD Handler] Script loaded.");
 
@@ -48,8 +49,8 @@ const debouncedSendFrameProcessed = debounce(
   100
 );
 
-// Simplified VAD options: only event handlers and model
-const vadOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
+// Callback-only portion of the VAD options (no tuning parameters)
+const vadCallbackOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
   model: "v5",
   onSpeechStart: () => {
     logger.debug("[SayPi VAD Handler] Speech started.");
@@ -112,17 +113,19 @@ const vadBundleOptions: Partial<RealTimeVADOptions> & MyRealTimeVADCallbacks = {
   onnxWASMBasePath: chrome.runtime.getURL("public/"),
 };
 
-async function initializeVAD() {
+async function initializeVAD(initOptions: { preset?: VADPreset } = {}) {
   if (vadInstance) {
     logger.log("[SayPi VAD Handler] VAD already initialized.");
     return { success: true, mode: "existing" };
   }
   try {
     logger.log("[SayPi VAD Handler] Initializing VAD with default options...");
-    const mergedOptions = { ...vadOptions, ...vadBundleOptions };
+    const preset: VADPreset = initOptions.preset && VAD_CONFIGS[initOptions.preset] ? initOptions.preset : "none";
+    const mergedOptions = { ...vadCallbackOptions, ...VAD_CONFIGS[preset], ...vadBundleOptions };
+    console.debug("[SayPi VAD Handler] VAD options: ", mergedOptions);
     vadInstance = await MicVAD.new(mergedOptions);
-    logger.log("[SayPi VAD Handler] MicVAD instance created.");
-    return { success: true, mode: "default" };
+    logger.log("[SayPi VAD Handler] MicVAD instance created with preset: " + preset);
+    return { success: true, mode: preset };
   } catch (error: any) {
     logger.reportError(error, { function: 'initializeVAD' }, "VAD initialization failed");
     return { success: false, error: error.message || "VAD initialization error", mode: "failed" };
@@ -188,7 +191,7 @@ function destroyVAD() {
 
 // Register VAD message handlers with the coordinator
 registerMessageHandler("VAD_INITIALIZE_REQUEST", (message, sourceTabId) => {
-  return initializeVAD();
+  return initializeVAD(message.options || {});
 });
 
 registerMessageHandler("VAD_START_REQUEST", (message, sourceTabId) => {
