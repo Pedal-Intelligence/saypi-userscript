@@ -16,6 +16,11 @@ import { ChatbotIdentifier } from "./chatbots/ChatbotIdentifier.ts";
 (async function () {
   "use strict";
 
+  // Set webpack publicPath for dynamic imports in extension context
+  if (typeof chrome !== 'undefined' && chrome.runtime?.getURL) {
+    __webpack_public_path__ = chrome.runtime.getURL("public/");
+  }
+
   // Determine the mode based on the current site
   const chatbotType = ChatbotIdentifier.identifyChatbot();
   const isChatbotSite = chatbotType === "claude" || chatbotType === "pi";
