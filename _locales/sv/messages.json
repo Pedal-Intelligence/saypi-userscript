@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "Läs vår sekretesspolicy"
   },
+  "contextMenuStartDictation": {
+    "description": "Text för kontextmenyobjekt för att starta diktering i ett inmatningsfält.",
+    "message": "Starta diktering med $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Säg, Pi"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "Text för kontextmenyobjekt för att stoppa diktering när den redan är aktiv.",
+    "message": "Stoppa diktering med $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Säg, Pi"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Fortsätt hålla för att låsa upp..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Aktuella avgifter"
+  },
+  "dictationPlaceholderError": {
+    "description": "Platshållartabben som visas i inmatningsfältet när diktering stöter på ett fel.",
+    "message": "Dikteringsfel - tryck för att prova igen"
+  },
+  "dictationPlaceholderListening": {
+    "description": "Platshållartabben som visas i inmatningsfältet när diktering lyssnar efter tal.",
+    "message": "Lyssnar..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "Platshållartabben som visas i inmatningsfältet när diktering bearbetar/ackumulerar transkriptioner.",
+    "message": "Lyssnar..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "Platshållartabben som visas i inmatningsfältet när diktering spelar in användartal.",
+    "message": "Spelar in..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "Platshållartabben som visas i inmatningsfältet när diktering startar.",
+    "message": "Förbereder..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "Platshållartabben som visas i inmatningsfältet när diktering transkriberar ljud till text.",
+    "message": "Transkriberar..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Du ser en webbläsarprompt högst upp i detta fönster. \nHit bara <strong> \"Tillåt när vi besöker webbplatsen\" </strong> så att vi kan börja prata."
+    "message": "Du ser en webbläsarprompt högst upp i detta fönster. \nHit bara \u003cstrong\u003e \"Tillåt när vi besöker webbplatsen\" \u003c/strong\u003e så att vi kan börja prata."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

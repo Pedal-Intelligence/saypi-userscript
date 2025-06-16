@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "Citiți Politica noastră de Confidențialitate"
   },
+  "contextMenuStartDictation": {
+    "description": "Textul din meniul contextual pentru a începe dictarea într-un câmp de introducere.",
+    "message": "Începe dictarea cu $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Spune, Pi"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "Textul din meniul contextual pentru a opri dictarea atunci când aceasta este deja activă.",
+    "message": "Oprește dictarea cu $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Spune, Pi"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Continuați să țineți pentru a debloca..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Taxe curente"
+  },
+  "dictationPlaceholderError": {
+    "description": "Textul placeholder afișat în câmpul de introducere atunci când dictarea întâmpină o eroare.",
+    "message": "Eroare la dictare - apasă pentru a reîncerca"
+  },
+  "dictationPlaceholderListening": {
+    "description": "Textul placeholder afișat în câmpul de introducere atunci când dictarea ascultă pentru vorbire.",
+    "message": "Ascultare..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "Textul placeholder afișat în câmpul de introducere atunci când dictarea procesează/accumulează transcripții.",
+    "message": "Ascultare..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "Textul placeholder afișat în câmpul de introducere atunci când dictarea înregistrează vorbirea utilizatorului.",
+    "message": "Înregistrare..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "Textul placeholder afișat în câmpul de introducere atunci când dictarea se pornește.",
+    "message": "Se pregătește..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "Textul placeholder afișat în câmpul de introducere atunci când dictarea transcrie audio în text.",
+    "message": "Transcriere..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Veți vedea un prompt de browser în partea de sus a acestei ferestre. \nDoar lovește <strong> „Permiteți -vă în timp ce vizitați site -ul” </strong>, astfel încât să putem începe să vorbim."
+    "message": "Veți vedea un prompt de browser în partea de sus a acestei ferestre. \nDoar lovește \u003cstrong\u003e „Permiteți -vă în timp ce vizitați site -ul” \u003c/strong\u003e, astfel încât să putem începe să vorbim."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

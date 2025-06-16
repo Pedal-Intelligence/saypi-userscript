@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "Lesen Sie unsere Datenschutzrichtlinie"
   },
+  "contextMenuStartDictation": {
+    "description": "Text des Kontextmenüeintrags zum Starten der Diktatfunktion in einem Eingabefeld.",
+    "message": "Diktat mit $appName$ starten",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Sag, Pi"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "Text des Kontextmenüeintrags zum Stoppen des Diktats, wenn es bereits aktiv ist.",
+    "message": "Diktat mit $appName$ stoppen",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Sag, Pi"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Halten Sie weiterhin gedrückt, um zu entsperren..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Aktuelle Gebühren"
+  },
+  "dictationPlaceholderError": {
+    "description": "Platzhaltertext, der im Eingabefeld angezeigt wird, wenn beim Diktat ein Fehler auftritt.",
+    "message": "Diktatfehler - tippe, um es erneut zu versuchen"
+  },
+  "dictationPlaceholderListening": {
+    "description": "Platzhaltertext, der im Eingabefeld angezeigt wird, wenn das Diktat auf Sprache hört.",
+    "message": "Hört zu..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "Platzhaltertext, der im Eingabefeld angezeigt wird, wenn das Diktat Transkriptionen verarbeitet/akkumuliert.",
+    "message": "Hört zu..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "Platzhaltertext, der im Eingabefeld angezeigt wird, wenn das Diktat die Sprache des Benutzers aufnimmt.",
+    "message": "Aufnahme..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "Platzhaltertext, der im Eingabefeld angezeigt wird, wenn das Diktat hochfährt.",
+    "message": "Bereite vor..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "Platzhaltertext, der im Eingabefeld angezeigt wird, wenn das Diktat Audio in Text umwandelt.",
+    "message": "Transkribiert..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Sie sehen eine Browser -Eingabeaufforderung oben in diesem Fenster. \nKlicken Sie einfach <strong> \"Erlauben Sie beim Besuch der Website\" </strong>, damit wir anfangen können zu reden."
+    "message": "Sie sehen eine Browser -Eingabeaufforderung oben in diesem Fenster. \nKlicken Sie einfach \u003cstrong\u003e \"Erlauben Sie beim Besuch der Website\" \u003c/strong\u003e, damit wir anfangen können zu reden."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

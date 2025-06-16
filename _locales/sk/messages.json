@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "Prečítajte si naše Zásady ochrany osobných údajov"
   },
+  "contextMenuStartDictation": {
+    "description": "Text položky kontextovej ponuky na spustenie diktovania v poli na zadávanie.",
+    "message": "Spustiť diktovanie s $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Povedz, Pi"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "Text položky kontextovej ponuky na zastavenie diktovania, keď je už aktívne.",
+    "message": "Zastaviť diktovanie s $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Povedz, Pi"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Pokračujte v držaní na odomknutie..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Aktuálne poplatky"
+  },
+  "dictationPlaceholderError": {
+    "description": "Text zástupcu zobrazený v poli na zadávanie, keď diktovanie narazí na chybu.",
+    "message": "Chyba diktovania - ťukni na opakovanie"
+  },
+  "dictationPlaceholderListening": {
+    "description": "Text zástupcu zobrazený v poli na zadávanie, keď diktovanie počúva reč.",
+    "message": "Počúvam..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "Text zástupcu zobrazený v poli na zadávanie, keď diktovanie spracováva/zhromažďuje prepisy.",
+    "message": "Počúvam..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "Text zástupcu zobrazený v poli na zadávanie, keď diktovanie nahráva reč používateľa.",
+    "message": "Nahrávam..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "Text zástupcu zobrazený v poli na zadávanie, keď sa diktovanie začína.",
+    "message": "Pripravujem sa..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "Text zástupcu zobrazený v poli na zadávanie, keď diktovanie prepisuje audio na text.",
+    "message": "Prepisujem..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "V hornej časti tohto okna sa zobrazí výzva prehliadača. \nStačí zasiahnuť <strong> „Povoliť pri návšteve stránky“ </strong>, aby sme mohli začať hovoriť."
+    "message": "V hornej časti tohto okna sa zobrazí výzva prehliadača. \nStačí zasiahnuť \u003cstrong\u003e „Povoliť pri návšteve stránky“ \u003c/strong\u003e, aby sme mohli začať hovoriť."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

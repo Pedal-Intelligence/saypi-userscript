@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "Прочетете нашата Политика за поверителност"
   },
+  "contextMenuStartDictation": {
+    "description": "Текст на елемента от контекстното меню за стартиране на диктовка в поле за въвеждане.",
+    "message": "Стартиране на диктовка с $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Кажи, Pi"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "Текст на елемента от контекстното меню за спиране на диктовката, когато вече е активна.",
+    "message": "Спиране на диктовка с $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Кажи, Pi"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Продължете да задържате, за да отключите..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Текущи такси"
+  },
+  "dictationPlaceholderError": {
+    "description": "Текст за показване в поле за въвеждане, когато диктовката срещне грешка.",
+    "message": "Грешка в диктовката - натисни, за да опиташ отново"
+  },
+  "dictationPlaceholderListening": {
+    "description": "Текст за показване в поле за въвеждане, когато диктовката слуша за реч.",
+    "message": "Слушам..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "Текст за показване в поле за въвеждане, когато диктовката обработва/събира транскрипции.",
+    "message": "Слушам..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "Текст за показване в поле за въвеждане, когато диктовката записва речта на потребителя.",
+    "message": "Записвам..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "Текст за показване в поле за въвеждане, когато диктовката се стартира.",
+    "message": "Подготовка..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "Текст за показване в поле за въвеждане, когато диктовката транскрибира аудио в текст.",
+    "message": "Транскрибиране..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Ще видите подкана за браузър в горната част на този прозорец. \nПросто ударете <strong> \"позволете, докато посещавате сайта\" </strong>, за да можем да започнем да говорим."
+    "message": "Ще видите подкана за браузър в горната част на този прозорец. \nПросто ударете \u003cstrong\u003e \"позволете, докато посещавате сайта\" \u003c/strong\u003e, за да можем да започнем да говорим."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

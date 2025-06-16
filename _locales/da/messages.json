@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "Læs vores privatlivspolitik"
   },
+  "contextMenuStartDictation": {
+    "description": "Kontextmenu punkt tekst til at starte diktering på et indtastningsfelt.",
+    "message": "Start diktering med $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Sig, Pi"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "Kontextmenu punkt tekst til at stoppe diktering, når det allerede er aktivt.",
+    "message": "Stop diktering med $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Sig, Pi"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Fortsæt med at holde for at låse op..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Nuværende gebyrer"
+  },
+  "dictationPlaceholderError": {
+    "description": "Pladsholdertekst vist i indtastningsfeltet, når diktering støder på en fejl.",
+    "message": "Dikteringsfejl - tryk for at prøve igen"
+  },
+  "dictationPlaceholderListening": {
+    "description": "Pladsholdertekst vist i indtastningsfeltet, når diktering lytter til tale.",
+    "message": "Lytter..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "Pladsholdertekst vist i indtastningsfeltet, når diktering behandler/opsamler transkriptioner.",
+    "message": "Lytter..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "Pladsholdertekst vist i indtastningsfeltet, når diktering optager brugerens tale.",
+    "message": "Optager..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "Pladsholdertekst vist i indtastningsfeltet, når diktering starter op.",
+    "message": "Gør klar..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "Pladsholdertekst vist i indtastningsfeltet, når diktering transkriberer lyd til tekst.",
+    "message": "Transkriberer..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Du kan se en browserprompt øverst i dette vindue. \nBare ramt <strong> \"Tillad, mens du besøger webstedet\" </strong> så vi kan begynde at tale."
+    "message": "Du kan se en browserprompt øverst i dette vindue. \nBare ramt \u003cstrong\u003e \"Tillad, mens du besøger webstedet\" \u003c/strong\u003e så vi kan begynde at tale."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

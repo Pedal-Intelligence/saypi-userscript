@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "Gizlilik Politikamızı Okuyun"
   },
+  "contextMenuStartDictation": {
+    "description": "Giriş alanında dikteyi başlatmak için bağlam menüsü öğesi metni.",
+    "message": "$appName$ ile dikteyi başlat",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "De, Pi"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "Zaten aktif olan dikteyi durdurmak için bağlam menüsü öğesi metni.",
+    "message": "$appName$ ile dikteyi durdur",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "De, Pi"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Kilidi açmak için devam edin..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Mevcut ücretler"
+  },
+  "dictationPlaceholderError": {
+    "description": "Dikte bir hata ile karşılaştığında giriş alanında gösterilen yer tutucu metin.",
+    "message": "Dikte hatası - yeniden denemek için dokun"
+  },
+  "dictationPlaceholderListening": {
+    "description": "Dikte konuşmayı dinlerken giriş alanında gösterilen yer tutucu metin.",
+    "message": "Dinliyor..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "Dikte transkripsiyonları işleme/ toplama aşamasındayken giriş alanında gösterilen yer tutucu metin.",
+    "message": "Dinliyor..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "Dikte kullanıcı konuşmasını kaydederken giriş alanında gösterilen yer tutucu metin.",
+    "message": "Kaydediliyor..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "Dikte başlatılırken giriş alanında gösterilen yer tutucu metin.",
+    "message": "Hazırlanıyor..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "Dikte sesi metne dönüştürürken giriş alanında gösterilen yer tutucu metin.",
+    "message": "Metne dönüştürülüyor..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Bu pencerenin üstünde bir tarayıcı istemi göreceksiniz. \nSadece <strong> \"Siteyi ziyaret ederken izin ver\" </strong>, böylece konuşmaya başlayabiliriz."
+    "message": "Bu pencerenin üstünde bir tarayıcı istemi göreceksiniz. \nSadece \u003cstrong\u003e \"Siteyi ziyaret ederken izin ver\" \u003c/strong\u003e, böylece konuşmaya başlayabiliriz."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "আমাদের গোপনীয়তা নীতি পড়ুন"
   },
+  "contextMenuStartDictation": {
+    "description": "ইনপুট ফিল্ডে ডিকটেশন শুরু করার জন্য কনটেক্সট মেনু আইটেমের টেক্সট।",
+    "message": "$appName$ এর সাথে ডিকটেশন শুরু করুন",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "বলো, পাই"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "যখন ডিকটেশন ইতিমধ্যে সক্রিয় আছে তখন তা বন্ধ করার জন্য কনটেক্সট মেনু আইটেমের টেক্সট।",
+    "message": "$appName$ এর সাথে ডিকটেশন বন্ধ করুন",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "বলতে, পাই"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "আনলক করার জন্য ধরে রাখুন..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "বর্তমান চার্জ"
+  },
+  "dictationPlaceholderError": {
+    "description": "যখন ডিকটেশন একটি ত্রুটির সম্মুখীন হয় তখন ইনপুট ফিল্ডে প্রদর্শিত প্লেসহোল্ডার টেক্সট।",
+    "message": "ডিকটেশন ত্রুটি - পুনরায় চেষ্টা করতে ট্যাপ করুন"
+  },
+  "dictationPlaceholderListening": {
+    "description": "যখন ডিকটেশন বক্তৃতার জন্য শোনা হচ্ছে তখন ইনপুট ফিল্ডে প্রদর্শিত প্লেসহোল্ডার টেক্সট।",
+    "message": "শুনছে..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "যখন ডিকটেশন ট্রান্সক্রিপশন প্রক্রিয়াকরণ/সংগ্রহ করছে তখন ইনপুট ফিল্ডে প্রদর্শিত প্লেসহোল্ডার টেক্সট।",
+    "message": "শুনছে..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "যখন ডিকটেশন ব্যবহারকারীর বক্তৃতা রেকর্ড করছে তখন ইনপুট ফিল্ডে প্রদর্শিত প্লেসহোল্ডার টেক্সট।",
+    "message": "রেকর্ডিং..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "যখন ডিকটেশন শুরু হচ্ছে তখন ইনপুট ফিল্ডে প্রদর্শিত প্লেসহোল্ডার টেক্সট।",
+    "message": "তৈরি হচ্ছে..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "যখন ডিকটেশন অডিওকে টেক্সটে ট্রান্সক্রাইব করছে তখন ইনপুট ফিল্ডে প্রদর্শিত প্লেসহোল্ডার টেক্সট।",
+    "message": "ট্রান্সক্রাইব করছে..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "আপনি এই উইন্ডোর শীর্ষে একটি ব্রাউজার প্রম্পট দেখতে পাবেন। \nকেবলমাত্র <strong> \"হিট করুন\" সাইটটি দেখার সময় অনুমতি দিন \"</strong> যাতে আমরা কথা বলা শুরু করতে পারি।"
+    "message": "আপনি এই উইন্ডোর শীর্ষে একটি ব্রাউজার প্রম্পট দেখতে পাবেন। \nকেবলমাত্র \u003cstrong\u003e \"হিট করুন\" সাইটটি দেখার সময় অনুমতি দিন \"\u003c/strong\u003e যাতে আমরা কথা বলা শুরু করতে পারি।"
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

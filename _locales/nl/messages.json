@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "Lees ons Privacybeleid"
   },
+  "contextMenuStartDictation": {
+    "description": "Tekst voor het contextmenu-item om dictatie te starten in een invoerveld.",
+    "message": "Start dictatie met $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Zeg, Pi"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "Tekst voor het contextmenu-item om dictatie te stoppen wanneer deze al actief is.",
+    "message": "Stop dictatie met $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Zeg, Pi"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Blijf vasthouden om te ontgrendelen..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Huidige kosten"
+  },
+  "dictationPlaceholderError": {
+    "description": "Plaatsvervangende tekst die in het invoerveld wordt weergegeven wanneer er een fout optreedt bij de dictatie.",
+    "message": "Dictatiefout - tik om het opnieuw te proberen"
+  },
+  "dictationPlaceholderListening": {
+    "description": "Plaatsvervangende tekst die in het invoerveld wordt weergegeven wanneer de dictatie luistert naar spraak.",
+    "message": "Aan het luisteren..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "Plaatsvervangende tekst die in het invoerveld wordt weergegeven wanneer de dictatie transcripties aan het verwerken/verzamelen is.",
+    "message": "Aan het luisteren..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "Plaatsvervangende tekst die in het invoerveld wordt weergegeven wanneer de dictatie de spraak van de gebruiker opneemt.",
+    "message": "Aan het opnemen..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "Plaatsvervangende tekst die in het invoerveld wordt weergegeven wanneer de dictatie aan het opstarten is.",
+    "message": "Bezig met voorbereiden..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "Plaatsvervangende tekst die in het invoerveld wordt weergegeven wanneer de dictatie audio naar tekst transcribeert.",
+    "message": "Transcriberen..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "U ziet een browserprompt bovenaan dit venster. \nDruk gewoon <strong> \"Tijdens een bezoek aan de site\" </strong> zodat we kunnen beginnen met praten."
+    "message": "U ziet een browserprompt bovenaan dit venster. \nDruk gewoon \u003cstrong\u003e \"Tijdens een bezoek aan de site\" \u003c/strong\u003e zodat we kunnen beginnen met praten."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "私たちのプライバシーポリシーをお読みください"
   },
+  "contextMenuStartDictation": {
+    "description": "入力フィールドで音声入力を開始するためのコンテキストメニュー項目のテキスト。",
+    "message": "$appName$で音声入力を開始",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "『Pi』と言ってください"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "音声入力がすでにアクティブなときに、停止するためのコンテキストメニュー項目のテキスト。",
+    "message": "$appName$で音声入力を停止",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "『Pi』と言ってください"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "ロックを解除するために続けて押し続けてください..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "現在の料金"
+  },
+  "dictationPlaceholderError": {
+    "description": "音声入力でエラーが発生したときに入力フィールドに表示されるプレースホルダーテキスト。",
+    "message": "音声入力エラー - リトライをタップ"
+  },
+  "dictationPlaceholderListening": {
+    "description": "音声入力が音声を聴いているときに入力フィールドに表示されるプレースホルダーテキスト。",
+    "message": "聴いています..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "音声入力が文字起こしを処理または蓄積しているときに入力フィールドに表示されるプレースホルダーテキスト。",
+    "message": "聴いています..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "音声入力がユーザーの音声を録音しているときに入力フィールドに表示されるプレースホルダーテキスト。",
+    "message": "録音中..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "音声入力が起動中のときに入力フィールドに表示されるプレースホルダーテキスト。",
+    "message": "準備中..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "音声入力が音声をテキストに変換しているときに入力フィールドに表示されるプレースホルダーテキスト。",
+    "message": "変換中..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "このウィンドウの上部にブラウザプロンプトが表示されます。 \n<strong>「サイトにアクセスしながら許可」を押してください</strong>。"
+    "message": "このウィンドウの上部にブラウザプロンプトが表示されます。 \n\u003cstrong\u003e「サイトにアクセスしながら許可」を押してください\u003c/strong\u003e。"
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "Leggi la nostra Informativa sulla privacy"
   },
+  "contextMenuStartDictation": {
+    "description": "Testo dell'elemento del menu contestuale per avviare la dettatura in un campo di input.",
+    "message": "Avvia la dettatura con $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Dì, Pi"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "Testo dell'elemento del menu contestuale per fermare la dettatura quando è già attiva.",
+    "message": "Ferma la dettatura con $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Dì, Pi"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Continua a tenere premuto per sbloccare..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Spese attuali"
+  },
+  "dictationPlaceholderError": {
+    "description": "Testo segnaposto mostrato nel campo di input quando la dettatura incontra un errore.",
+    "message": "Errore di dettatura - tocca per riprovare"
+  },
+  "dictationPlaceholderListening": {
+    "description": "Testo segnaposto mostrato nel campo di input quando la dettatura è in ascolto per il parlato.",
+    "message": "In ascolto..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "Testo segnaposto mostrato nel campo di input quando la dettatura sta elaborando/accumulando trascrizioni.",
+    "message": "In ascolto..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "Testo segnaposto mostrato nel campo di input quando la dettatura sta registrando il parlato dell'utente.",
+    "message": "Registrazione..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "Testo segnaposto mostrato nel campo di input quando la dettatura si sta avviando.",
+    "message": "Preparazione in corso..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "Testo segnaposto mostrato nel campo di input quando la dettatura sta trascrivendo audio in testo.",
+    "message": "Trascrizione in corso..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Vedrai un prompt del browser nella parte superiore di questa finestra. \nBasta premere <strong> \"Consenti durante la visita del sito\" </strong> in modo da poter iniziare a parlare."
+    "message": "Vedrai un prompt del browser nella parte superiore di questa finestra. \nBasta premere \u003cstrong\u003e \"Consenti durante la visita del sito\" \u003c/strong\u003e in modo da poter iniziare a parlare."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

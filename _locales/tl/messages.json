@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "Basahin ang aming Patakaran sa Pagkapribado"
   },
+  "contextMenuStartDictation": {
+    "description": "Teksto ng item sa menu ng konteksto upang simulan ang pagsasalita sa isang input field.",
+    "message": "Simulan ang pagsasalita gamit ang $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Sabihin, Pi"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "Teksto ng item sa menu ng konteksto upang itigil ang pagsasalita kapag ito ay aktibo na.",
+    "message": "Itigil ang pagsasalita gamit ang $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Sabihin, Pi"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Patuloy na hawakan para ma-unlock..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Kasalukuyang singil"
+  },
+  "dictationPlaceholderError": {
+    "description": "Teksto ng placeholder na ipinapakita sa input field kapag may error sa pagsasalita.",
+    "message": "Error sa pagsasalita - tapikin upang subukan muli"
+  },
+  "dictationPlaceholderListening": {
+    "description": "Teksto ng placeholder na ipinapakita sa input field kapag nakikinig ang pagsasalita.",
+    "message": "Nakikinig..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "Teksto ng placeholder na ipinapakita sa input field kapag pinoproseso o nag-iipon ng mga transkripsyon ang pagsasalita.",
+    "message": "Nakikinig..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "Teksto ng placeholder na ipinapakita sa input field kapag nire-record ng pagsasalita ang boses ng gumagamit.",
+    "message": "Nagre-record..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "Teksto ng placeholder na ipinapakita sa input field kapag nagsisimula ang pagsasalita.",
+    "message": "Naghahanda..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "Teksto ng placeholder na ipinapakita sa input field kapag nagsasalin ang pagsasalita ng audio sa teksto.",
+    "message": "Nagsasalin..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Makakakita ka ng isang browser prompt sa tuktok ng window na ito. \nPindutin lamang ang <strong> \"Payagan habang bumibisita sa site\" </strong> upang maaari nating simulan ang pakikipag -usap."
+    "message": "Makakakita ka ng isang browser prompt sa tuktok ng window na ito. \nPindutin lamang ang \u003cstrong\u003e \"Payagan habang bumibisita sa site\" \u003c/strong\u003e upang maaari nating simulan ang pakikipag -usap."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
