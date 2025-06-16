@@ -44,3 +44,6 @@ public/offscreen/*
 public/permissions/*
 
 *.patch
+
+# Build-generated configuration files
+src/popup/popup-config.js
