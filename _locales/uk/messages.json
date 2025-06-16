@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "Читайте нашу Політику конфіденційності"
   },
+  "contextMenuStartDictation": {
+    "description": "Текст елемента контекстного меню для початку диктування в полі введення.",
+    "message": "Почати диктування з $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Скажіть, Пі"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "Текст елемента контекстного меню для зупинки диктування, коли воно вже активне.",
+    "message": "Зупинити диктування з $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Скажіть, Пі"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Продовжуйте утримувати, щоб розблокувати..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Поточні збори"
+  },
+  "dictationPlaceholderError": {
+    "description": "Текст-плейсхолдер, що відображається в полі введення, коли при диктуванні сталася помилка.",
+    "message": "Помилка диктування - натисніть, щоб спробувати ще раз"
+  },
+  "dictationPlaceholderListening": {
+    "description": "Текст-плейсхолдер, що відображається в полі введення, коли диктування слухає мовлення.",
+    "message": "Слухаю..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "Текст-плейсхолдер, що відображається в полі введення, коли диктування обробляє/збирає транскрипції.",
+    "message": "Слухаю..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "Текст-плейсхолдер, що відображається в полі введення, коли диктування записує мовлення користувача.",
+    "message": "Записую..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "Текст-плейсхолдер, що відображається в полі введення, коли диктування запускається.",
+    "message": "Готуюсь..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "Текст-плейсхолдер, що відображається в полі введення, коли диктування транскрибує аудіо в текст.",
+    "message": "Транскрибую..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Ви побачите підказку браузера у верхній частині цього вікна. \nПросто натисніть <strong> \"Дозволити під час відвідування сайту\" </strong>, щоб ми могли почати розмову."
+    "message": "Ви побачите підказку браузера у верхній частині цього вікна. \nПросто натисніть \u003cstrong\u003e \"Дозволити під час відвідування сайту\" \u003c/strong\u003e, щоб ми могли почати розмову."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

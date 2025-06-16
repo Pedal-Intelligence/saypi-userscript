@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "Lea nuestra Política de Privacidad"
   },
+  "contextMenuStartDictation": {
+    "description": "Texto del elemento del menú contextual para iniciar la dictado en un campo de entrada.",
+    "message": "Iniciar dictado con $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Di, Pi"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "Texto del elemento del menú contextual para detener el dictado cuando ya está activo.",
+    "message": "Detener dictado con $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Di, Pi"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Continúe presionando para desbloquear..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Cargos actuales"
+  },
+  "dictationPlaceholderError": {
+    "description": "Texto de marcador mostrado en el campo de entrada cuando el dictado encuentra un error.",
+    "message": "Error de dictado - toca para reintentar"
+  },
+  "dictationPlaceholderListening": {
+    "description": "Texto de marcador mostrado en el campo de entrada cuando el dictado está escuchando el habla.",
+    "message": "Escuchando..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "Texto de marcador mostrado en el campo de entrada cuando el dictado está procesando/acumulando transcripciones.",
+    "message": "Escuchando..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "Texto de marcador mostrado en el campo de entrada cuando el dictado está grabando el habla del usuario.",
+    "message": "Grabando..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "Texto de marcador mostrado en el campo de entrada cuando el dictado se está iniciando.",
+    "message": "Preparándose..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "Texto de marcador mostrado en el campo de entrada cuando el dictado está transcribiendo audio a texto.",
+    "message": "Transcribiendo..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Verá un mensaje de navegador en la parte superior de esta ventana. \nSimplemente presione <strong> \"Permitir mientras visita el sitio\" </strong> para que podamos comenzar a hablar."
+    "message": "Verá un mensaje de navegador en la parte superior de esta ventana. \nSimplemente presione \u003cstrong\u003e \"Permitir mientras visita el sitio\" \u003c/strong\u003e para que podamos comenzar a hablar."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

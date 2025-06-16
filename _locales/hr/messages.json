@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "Pročitajte našu Politiku privatnosti"
   },
+  "contextMenuStartDictation": {
+    "description": "Tekst stavke kontekstnog izbornika za pokretanje diktiranja u unosnom polju.",
+    "message": "Pokreni diktiranje s $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Reci, Pi"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "Tekst stavke kontekstnog izbornika za zaustavljanje diktiranja kada je već aktivno.",
+    "message": "Zaustavi diktiranje s $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Reci, Pi"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Nastavite držati za otključavanje..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Trenutne naknade"
+  },
+  "dictationPlaceholderError": {
+    "description": "Tekst placeholdera prikazan u unosnom polju kada dođe do pogreške tijekom diktiranja.",
+    "message": "Pogreška u diktiranju - dodirni za ponovni pokušaj"
+  },
+  "dictationPlaceholderListening": {
+    "description": "Tekst placeholdera prikazan u unosnom polju kada diktiranje sluša govor.",
+    "message": "Slušam..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "Tekst placeholdera prikazan u unosnom polju kada diktiranje obrađuje/sakuplja transkripcije.",
+    "message": "Slušam..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "Tekst placeholdera prikazan u unosnom polju kada diktiranje snima korisnički govor.",
+    "message": "Snimam..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "Tekst placeholdera prikazan u unosnom polju kada se diktiranje pokreće.",
+    "message": "Priprema se..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "Tekst placeholdera prikazan u unosnom polju kada diktiranje transkribira audio u tekst.",
+    "message": "Transkribira..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Na vrhu ovog prozora vidjet ćete upit preglednika. \nSamo pogodite <strong> \"Dopustite dok posjećujete web mjesto\" </strong> kako bismo mogli početi razgovarati."
+    "message": "Na vrhu ovog prozora vidjet ćete upit preglednika. \nSamo pogodite \u003cstrong\u003e \"Dopustite dok posjećujete web mjesto\" \u003c/strong\u003e kako bismo mogli početi razgovarati."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "اقرأ سياسة الخصوصية الخاصة بنا"
   },
+  "contextMenuStartDictation": {
+    "description": "نص عنصر قائمة السياق لبدء الإملاء في حقل الإدخال.",
+    "message": "بدء الإملاء مع $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "قل، Pi"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "نص عنصر قائمة السياق لإيقاف الإملاء عندما يكون نشطًا.",
+    "message": "إيقاف الإملاء مع $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "قل، Pi"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "استمر في الضغط للفتح..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "الرسوم الحالية"
+  },
+  "dictationPlaceholderError": {
+    "description": "نص نموذج يظهر في حقل الإدخال عندما يواجه الإملاء خطأ.",
+    "message": "خطأ في الإملاء - انقر لإعادة المحاولة"
+  },
+  "dictationPlaceholderListening": {
+    "description": "نص نموذج يظهر في حقل الإدخال عندما يكون الإملاء يستمع للكلام.",
+    "message": "يستمع..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "نص نموذج يظهر في حقل الإدخال عندما يكون الإملاء يعالج/يجمع التدوينات.",
+    "message": "يستمع..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "نص نموذج يظهر في حقل الإدخال عندما يكون الإملاء يسجل كلام المستخدم.",
+    "message": "يتم التسجيل..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "نص نموذج يظهر في حقل الإدخال عندما يبدأ الإملاء.",
+    "message": "يتم التحضير..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "نص نموذج يظهر في حقل الإدخال عندما يقوم الإملاء بتحويل الصوت إلى نص.",
+    "message": "يتم التحويل..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "سترى موجه المتصفح في الجزء العلوي من هذه النافذة. \nما عليك سوى ضرب <strong> \"السماح أثناء زيارة الموقع\" </strong> حتى نتمكن من البدء في الحديث."
+    "message": "سترى موجه المتصفح في الجزء العلوي من هذه النافذة. \nما عليك سوى ضرب \u003cstrong\u003e \"السماح أثناء زيارة الموقع\" \u003c/strong\u003e حتى نتمكن من البدء في الحديث."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

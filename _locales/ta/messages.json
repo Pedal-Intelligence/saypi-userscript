@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "எங்கள் தனியுரிமை கொள்கையை வாசிக்கav"
   },
+  "contextMenuStartDictation": {
+    "description": "ஒன்றியக் களத்தில் எழுத்துக்களைத் தொடங்குவதற்கான சூழல் பட்டியின் உரை.",
+    "message": "$appName$ மூலம் உரை எழுதудыத் தொடங்கு",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "பேசு, Pi"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "இதுவரை செயல்பாட்டில் உள்ள வரவேற்பை நிறுத்துவதற்கான சூழல் பட்டியின் உரை.",
+    "message": "$appName$ மூலம் உரை எழுதуды நிறுத்து",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "பேசு, Pi"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "திறக்க தொடர்ந்து வைத்திரு..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "தற்போதைய கட்டணங்கள்"
+  },
+  "dictationPlaceholderError": {
+    "description": "எழுத்துக்களைச் செய்யும்போது தோல்வி ஏற்படும்போது உள்ளிடும் வயிற்றில் காட்டப்படும் இடத்தைச் செய்யும் உரை.",
+    "message": "உரை எழுதுவதில் தோல்வி - மீள் முயற்சிக்க கிளிக்கவும்"
+  },
+  "dictationPlaceholderListening": {
+    "description": "பேச்சை கேட்டடிக்கும் போது உள்ளிடும் வயிற்றில் காட்டப்படும் இடத்தைச் செய்யும் உரை.",
+    "message": "கேட்கிறது..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "உரை எழுதுவதில் செயலாக்கம்/மொழிபெயர்ப்பு சேகரிக்கும் போது உள்ளிடும் வயிற்றில் காட்டப்படும் இடத்தைச் செய்யும் உரை.",
+    "message": "கேட்கிறது..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "பயனர் பேச்சை பதிவு செய்யும் போது உள்ளிடும் வயிற்றில் காட்டப்படும் இடத்தைச் செய்யும் உரை.",
+    "message": "பதிகரிக்கிறது..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "உரை எழுதுவதற்கான தொடக்கத்தைத் தொடங்கும் போது உள்ளிடும் வயிற்றில் காட்டப்படும் இடத்தைச் செய்யும் உரை.",
+    "message": " தயார் செய்கிறது..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "சொல்லை உரை என மொழிபெயர்க்கும் போது உள்ளிடும் வயிற்றில் காட்டப்படும் இடத்தைச் செய்யும் உரை.",
+    "message": "மொழியாக்குகிறது..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "You'll see a browser prompt at the top of this window. Just hit <strong>\"Allow while visiting the site\"</strong> so we can start talking."
+    "message": "You'll see a browser prompt at the top of this window. Just hit \u003cstrong\u003e\"Allow while visiting the site\"\u003c/strong\u003e so we can start talking."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

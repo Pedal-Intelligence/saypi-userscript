@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "Baca Dasar Privasi kami"
   },
+  "contextMenuStartDictation": {
+    "description": "Teks item menu konteks untuk memulakan pengucapan pada medan input.",
+    "message": "Mulakan pengucapan dengan $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Katakan, Pi"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "Teks item menu konteks untuk menghentikan pengucapan apabila ia sudah aktif.",
+    "message": "Hentikan pengucapan dengan $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Katakan, Pi"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Teruskan mengekalkan untuk membuka..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Caj semasa"
+  },
+  "dictationPlaceholderError": {
+    "description": "Teks tempat letak yang ditunjukkan dalam medan input apabila pengucapan mengalami ralat.",
+    "message": "Ralat pengucapan - ketuk untuk mencuba lagi"
+  },
+  "dictationPlaceholderListening": {
+    "description": "Teks tempat letak yang ditunjukkan dalam medan input apabila pengucapan sedang mendengar untuk ucapan.",
+    "message": "Mendengar..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "Teks tempat letak yang ditunjukkan dalam medan input apabila pengucapan sedang memproses/menjana transkripsi.",
+    "message": "Mendengar..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "Teks tempat letak yang ditunjukkan dalam medan input apabila pengucapan sedang merakam ucapan pengguna.",
+    "message": "Merakam..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "Teks tempat letak yang ditunjukkan dalam medan input apabila pengucapan sedang memulakan.",
+    "message": "Menyediakan..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "Teks tempat letak yang ditunjukkan dalam medan input apabila pengucapan sedang menyalin audio ke teks.",
+    "message": "Menyalin..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Anda akan melihat penyemak imbas di bahagian atas tetingkap ini. \nHanya tekan <strong> \"Benarkan semasa melawat laman web\" </strong> supaya kita boleh mula bercakap."
+    "message": "Anda akan melihat penyemak imbas di bahagian atas tetingkap ini. \nHanya tekan \u003cstrong\u003e \"Benarkan semasa melawat laman web\" \u003c/strong\u003e supaya kita boleh mula bercakap."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

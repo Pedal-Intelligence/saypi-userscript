@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "Đọc Chính sách Bảo mật của chúng tôi"
   },
+  "contextMenuStartDictation": {
+    "description": "Văn bản mục menu ngữ cảnh để bắt đầu nhập liệu bằng giọng nói trên trường nhập.",
+    "message": "Bắt đầu nhập liệu bằng giọng nói với $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Nói, Pi"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "Văn bản mục menu ngữ cảnh để dừng nhập liệu bằng giọng nói khi đã đang hoạt động.",
+    "message": "Dừng nhập liệu bằng giọng nói với $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Nói, Pi"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Tiếp tục giữ để mở khóa..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Các khoản phí hiện tại"
+  },
+  "dictationPlaceholderError": {
+    "description": "Văn bản placeholder hiển thị trong trường nhập khi nhập liệu bằng giọng nói gặp lỗi.",
+    "message": "Lỗi nhập liệu - chạm để thử lại"
+  },
+  "dictationPlaceholderListening": {
+    "description": "Văn bản placeholder hiển thị trong trường nhập khi nhập liệu bằng giọng nói đang lắng nghe.",
+    "message": "Đang lắng nghe..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "Văn bản placeholder hiển thị trong trường nhập khi nhập liệu bằng giọng nói đang xử lý/tích lũy bản chép.",
+    "message": "Đang lắng nghe..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "Văn bản placeholder hiển thị trong trường nhập khi nhập liệu bằng giọng nói đang ghi lại lời nói của người dùng.",
+    "message": "Đang ghi..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "Văn bản placeholder hiển thị trong trường nhập khi nhập liệu bằng giọng nói đang khởi động.",
+    "message": "Chuẩn bị..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "Văn bản placeholder hiển thị trong trường nhập khi nhập liệu bằng giọng nói đang chuyển đổi âm thanh thành văn bản.",
+    "message": "Đang chuyển đổi..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Bạn sẽ thấy một dấu nhắc trình duyệt ở đầu cửa sổ này. \nChỉ cần nhấn <strong> \"cho phép trong khi truy cập trang web\" </strong> để chúng ta có thể bắt đầu nói chuyện."
+    "message": "Bạn sẽ thấy một dấu nhắc trình duyệt ở đầu cửa sổ này. \nChỉ cần nhấn \u003cstrong\u003e \"cho phép trong khi truy cập trang web\" \u003c/strong\u003e để chúng ta có thể bắt đầu nói chuyện."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

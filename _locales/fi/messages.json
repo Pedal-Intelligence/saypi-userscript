@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "Lue tietosuojakäytäntömme"
   },
+  "contextMenuStartDictation": {
+    "description": "Kontekstivalikon kohteen teksti äänen tallentamisen aloittamiseksi syöttökentässä.",
+    "message": "Aloita äänen tallennus sovelluksessa $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Sano, Pi"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "Kontekstivalikon kohteen teksti äänen tallentamisen lopettamiseksi, kun se on jo aktiivinen.",
+    "message": "Lopeta äänen tallennus sovelluksessa $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Sano, Pi"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Jatka pitämistä avataksesi..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Nykyiset maksut"
+  },
+  "dictationPlaceholderError": {
+    "description": "Paikkamerkkiteksti, joka näkyy syöttökentässä, kun äänen tallennuksessa on virhe.",
+    "message": "Äänen tallennusvirhe - napauta yrittääksesi uudelleen"
+  },
+  "dictationPlaceholderListening": {
+    "description": "Paikkamerkkiteksti, joka näkyy syöttökentässä, kun äänen tallennus kuuntelee puhetta.",
+    "message": "Kuunnellaan..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "Paikkamerkkiteksti, joka näkyy syöttökentässä, kun äänen tallennus prosessoi/kokoaa transkriptioita.",
+    "message": "Kuunnellaan..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "Paikkamerkkiteksti, joka näkyy syöttökentässä, kun äänen tallennus tallentaa käyttäjän puhetta.",
+    "message": "Tallennetaan..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "Paikkamerkkiteksti, joka näkyy syöttökentässä, kun äänen tallennus käynnistyy.",
+    "message": "Valmistellaan..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "Paikkamerkkiteksti, joka näkyy syöttökentässä, kun äänen tallennus muuntaa ääntä tekstiksi.",
+    "message": "Muunnetaan..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Näet selaimen kehotuksen tämän ikkunan yläosassa. \nVain osuma <strong> \"Salli vieraillessasi sivustolla\" </strong>, jotta voimme alkaa puhua."
+    "message": "Näet selaimen kehotuksen tämän ikkunan yläosassa. \nVain osuma \u003cstrong\u003e \"Salli vieraillessasi sivustolla\" \u003c/strong\u003e, jotta voimme alkaa puhua."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

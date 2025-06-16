@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "Прочитайте нашу Политику конфиденциальности"
   },
+  "contextMenuStartDictation": {
+    "description": "Текст элемента контекстного меню для начала диктовки в поле ввода.",
+    "message": "Начать диктовку с $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Скажи, Пи"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "Текст элемента контекстного меню для остановки диктовки, когда она уже активна.",
+    "message": "Остановить диктовку с $appName$",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "Скажи, Пи"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "Продолжайте удерживать для разблокировки..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Текущие платежи"
+  },
+  "dictationPlaceholderError": {
+    "description": "Текст-заместитель, отображаемый в поле ввода, когда диктовка столкнулась с ошибкой.",
+    "message": "Ошибка диктовки - нажмите, чтобы повторить"
+  },
+  "dictationPlaceholderListening": {
+    "description": "Текст-заместитель, отображаемый в поле ввода, когда диктовка слушает речь.",
+    "message": "Слушаю..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "Текст-заместитель, отображаемый в поле ввода, когда диктовка обрабатывает/накапливает транскрипции.",
+    "message": "Слушаю..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "Текст-заместитель, отображаемый в поле ввода, когда диктовка записывает речь пользователя.",
+    "message": "Запись..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "Текст-заместитель, отображаемый в поле ввода, когда диктовка запускается.",
+    "message": "Готовлюсь..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "Текст-заместитель, отображаемый в поле ввода, когда диктовка транскрибирует аудио в текст.",
+    "message": "Транскрибирую..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "Вы увидите подсказку браузера в верхней части этого окна. \nПросто нажмите <strong> «Разрешить во время посещения сайта» </strong>, чтобы мы могли начать говорить."
+    "message": "Вы увидите подсказку браузера в верхней части этого окна. \nПросто нажмите \u003cstrong\u003e «Разрешить во время посещения сайта» \u003c/strong\u003e, чтобы мы могли начать говорить."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

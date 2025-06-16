@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "우리의 개인정보 보호정책을 읽어보세요."
   },
+  "contextMenuStartDictation": {
+    "description": "입력 필드에서 받아쓰기를 시작하는 컨텍스트 메뉴 항목 텍스트입니다.",
+    "message": "$appName$로 받아쓰기를 시작합니다.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "말하세요, 피"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "현재 활성화된 받아쓰기를 중지하는 컨텍스트 메뉴 항목 텍스트입니다.",
+    "message": "$appName$로 받아쓰기를 중지합니다.",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "말하세요, 피"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "잠금을 해제하려면 계속 누르십시오..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "현재 요금"
+  },
+  "dictationPlaceholderError": {
+    "description": "받아쓰기에서 오류가 발생했을 때 입력 필드에 표시되는 자리 표시자 텍스트입니다.",
+    "message": "받아쓰기 오류 - 다시 시도하려면 탭하세요"
+  },
+  "dictationPlaceholderListening": {
+    "description": "받아쓰기가 음성을 듣고 있을 때 입력 필드에 표시되는 자리 표시자 텍스트입니다.",
+    "message": "듣는 중..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "받아쓰기가 전사 작업을 처리하고 있을 때 입력 필드에 표시되는 자리 표시자 텍스트입니다.",
+    "message": "듣는 중..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "사용자의 음성을 받아쓰고 있을 때 입력 필드에 표시되는 자리 표시자 텍스트입니다.",
+    "message": "녹음 중..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "받아쓰기가 시작될 때 입력 필드에 표시되는 자리 표시자 텍스트입니다.",
+    "message": "준비 중..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "받아쓰기가 오디오를 텍스트로 전사하고 있을 때 입력 필드에 표시되는 자리 표시자 텍스트입니다.",
+    "message": "전사 중..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "이 창의 상단에 브라우저 프롬프트가 표시됩니다. \n<strong> \"사이트를 방문하는 동안 허용\"</strong>을 누르면 대화를 시작할 수 있습니다."
+    "message": "이 창의 상단에 브라우저 프롬프트가 표시됩니다. \n\u003cstrong\u003e \"사이트를 방문하는 동안 허용\"\u003c/strong\u003e을 누르면 대화를 시작할 수 있습니다."
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",

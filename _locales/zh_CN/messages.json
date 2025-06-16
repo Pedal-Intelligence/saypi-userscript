@@ -196,6 +196,26 @@
   "consetPrivacyPolicy": {
     "message": "阅读我们的隐私政策"
   },
+  "contextMenuStartDictation": {
+    "description": "在输入框中开始语音输入的上下文菜单项文本。",
+    "message": "使用$appName$开始语音输入",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "说，Pi"
+      }
+    }
+  },
+  "contextMenuStopDictation": {
+    "description": "在语音输入处于活动状态时停止语音输入的上下文菜单项文本。",
+    "message": "使用$appName$停止语音输入",
+    "placeholders": {
+      "appName": {
+        "content": "$1",
+        "example": "说，Pi"
+      }
+    }
+  },
   "continueUnlocking": {
     "description": "Instructions telling the user how to continue once they have started to press the unlock button.",
     "message": "继续按住以解锁..."
@@ -215,6 +235,30 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "当前费用"
+  },
+  "dictationPlaceholderError": {
+    "description": "语音输入遇到错误时在输入框中显示的占位符文本。",
+    "message": "语音输入错误 - 点击重试"
+  },
+  "dictationPlaceholderListening": {
+    "description": "语音输入正在监听语音时在输入框中显示的占位符文本。",
+    "message": "正在监听..."
+  },
+  "dictationPlaceholderProcessing": {
+    "description": "语音输入处理/累积转录时在输入框中显示的占位符文本。",
+    "message": "正在监听..."
+  },
+  "dictationPlaceholderRecording": {
+    "description": "语音输入正在录制用户语音时在输入框中显示的占位符文本。",
+    "message": "正在录制..."
+  },
+  "dictationPlaceholderStarting": {
+    "description": "语音输入启动时在输入框中显示的占位符文本。",
+    "message": "准备中..."
+  },
+  "dictationPlaceholderTranscribing": {
+    "description": "语音输入将音频转录为文本时在输入框中显示的占位符文本。",
+    "message": "正在转录..."
   },
   "disableTTS": {
     "description": "Label for the option to turn off text-to-speech",
@@ -417,7 +461,7 @@
   },
   "permissions_promptAction": {
     "description": "Instructional text on what action the user should take in the browser prompt.",
-    "message": "您会在此窗口的顶部看到一个浏览器提示。\n只需点击<strong>“访问网站时允许” </strong>，我们就可以开始交谈。"
+    "message": "您会在此窗口的顶部看到一个浏览器提示。\n只需点击\u003cstrong\u003e“访问网站时允许” \u003c/strong\u003e，我们就可以开始交谈。"
   },
   "permissions_promptFooter": {
     "description": "Footer text indicating the tab will auto-close.",
