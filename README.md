@@ -165,3 +165,49 @@ If you have any questions or comments, we'd love to hear from you! Drop us a mes
 - Email: info@saypi.ai
 - Twitter/X: @saypi_ai
 - Facebook: [Say, Pi](https://www.facebook.com/profile.php?id=61554182755176)
+
+## Internationalization (i18n) Workflow
+
+This repository uses a **command-line workflow** (rather than the deprecated VS Code *i18n-ally* extension) for translating Chrome-extension locale files. The process is powered by `translate-cli` and the helper script `i18n-translate-chrome.sh` located at the project root.
+
+### One-time setup
+
+1. Install `translate-cli` (requires Go):
+
+   ```bash
+   go install github.com/quailyquaily/translate-cli@latest
+   ```
+
+2. Create a configuration file at `~/.config/translate-cli/config.yaml` with your preferred translation engine credentials. See the [translate-cli docs](https://github.com/quailyquaily/translate-cli) for details.
+
+### Translating locale files
+
+```bash
+./i18n-translate-chrome.sh [LOCALES_DIR] -- [translate-cli flags…]
+```
+
+• `LOCALES_DIR` defaults to `_locales` and should match the Chrome extension locale folder structure (`_locales/<lang>/messages.json`).
+• Any flags after `--` are forwarded to `translate-cli` (e.g. batch size, engine, model).
+
+Example – translate all locales with a batch size of 20 using the defaults:
+
+```bash
+./i18n-translate-chrome.sh -- -b 20
+```
+
+Example – skip the interactive confirmation prompt and use a custom engine:
+
+```bash
+./i18n-translate-chrome.sh -y -- -e openai -m gpt-4o-mini
+```
+
+The script will:
+
+1. Flatten the `_locales` directory into a temporary workspace (converting `en_US` → `en-US` for standards compliance).
+2. Invoke `translate-cli translate`, using `en` as the source and every other locale as the target.
+3. Copy the translated files back into the original Chrome `_locales` folder, restoring the underscore naming that Chrome expects.
+4. Clean up the temporary workspace.
+
+If `translate-cli` is not found on your `$PATH`, the script prints installation instructions and exits.
+
+> **Note**: You no longer need the *i18n-ally* VS Code extension – please remove any related settings from your editor configuration.

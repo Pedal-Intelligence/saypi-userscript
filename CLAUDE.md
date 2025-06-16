@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Build Commands
 
 - `npm run dev` - Development build with watch mode (runs manifest update first)
-- `npm run build` - Production build (validates i18n, copies ONNX files, updates manifest)
+- `npm run build` - Production build (validates locale files, copies ONNX files, updates manifest)
 - `npm run build:firefox` - Build and package for Firefox
 - `npm test` - Run all tests (Jest + Vitest)
 - `npm run test:jest` - Run Jest tests only
