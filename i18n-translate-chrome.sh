@@ -49,22 +49,82 @@
 set -euo pipefail
 
 # --- config & arguments ------------------------------------------------------
-LOCALES_DIR="_locales"
-if [[ $# -gt 0 && $1 != -- ]]; then
-  LOCALES_DIR="$1"
-  shift
-fi
+usage() {
+  cat <<'EOF'
+Usage: ./i18n-translate-chrome.sh [options] [LOCALES_DIR] -- [translate-cli flags…]
 
+Options
+  -h, --help       Show this help message and exit
+  -y, --yes        Skip interactive confirmation prompt
+
+Arguments
+  LOCALES_DIR      Path to the Chrome _locales folder. Defaults to "_locales"
+  --               Everything after the first double-dash is forwarded verbatim
+                  to translate-cli. Example: -- -b 20 -e openai
+
+Examples
+  # Translate using defaults (asks for confirmation)
+  ./i18n-translate-chrome.sh
+
+  # Skip confirmation and pass flags to translate-cli
+  ./i18n-translate-chrome.sh -y -- -b 20
+
+EOF
+}
+
+# Default values
+LOCALES_DIR="_locales"
+SKIP_CONFIRM=0
+
+# --- parse command-line -----------------------------------------------------
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h|--help)
+      usage; exit 0 ;;
+    -y|--yes)
+      SKIP_CONFIRM=1; shift ;;
+    --)
+      shift
+      break ;;           # The rest are translate-cli flags
+    *)
+      LOCALES_DIR="$1"; shift ;;
+  esac
+done
+
+# Anything remaining after '--' (if present) goes straight to translate-cli
+TRANSLATE_FLAGS=("$@")
+
+# --- sanity checks ----------------------------------------------------------
 if [[ ! -d "$LOCALES_DIR" ]]; then
   echo "✘ Directory '$LOCALES_DIR' not found." >&2
   exit 1
 fi
 
-# Capture extra flags for translate-cli after "--" (may be empty)
-TRANSLATE_FLAGS=()
-if [[ $# -gt 0 && $1 == -- ]]; then
-  shift
-  TRANSLATE_FLAGS=("$@")
+# Ensure translate-cli exists
+if ! command -v translate-cli >/dev/null 2>&1; then
+  echo '✘ "translate-cli" not found in PATH.' >&2
+  echo '   Install it with:' >&2
+  echo '     go install github.com/quailyquaily/translate-cli@latest' >&2
+  exit 1
+fi
+
+# Ensure English source exists
+if [[ ! -f "$LOCALES_DIR/en/messages.json" ]]; then
+  echo "✘ English source file '$LOCALES_DIR/en/messages.json' not found." >&2
+  exit 1
+fi
+
+# Count target languages (exclude 'en')
+LANG_COUNT=$(find "$LOCALES_DIR" -mindepth 1 -maxdepth 1 -type d ! -name "en" | wc -l | tr -d ' ')
+
+# Confirmation prompt
+if [[ $SKIP_CONFIRM -eq 0 ]]; then
+  read -r -p "About to translate from 'en' to $LANG_COUNT languages. Proceed? [Y/n] " reply
+  reply=${reply:-Y}
+  if [[ $reply =~ ^[Nn] ]]; then
+    echo "Aborted."
+    exit 0
+  fi
 fi
 
 # --- temp workspace ----------------------------------------------------------
