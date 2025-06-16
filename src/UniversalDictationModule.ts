@@ -98,6 +98,24 @@ export class UniversalDictationModule {
 
   private decorateExistingElements(): void {
     this.findAndDecorateInputs(document.body);
+    // Check if any input is already focused and show its dictation button
+    this.checkInitialFocusState();
+  }
+
+  private checkInitialFocusState(): void {
+    // Check if there's an already focused element that we just decorated
+    const activeElement = document.activeElement;
+    if (activeElement && activeElement instanceof HTMLElement) {
+      // Find if this active element has been decorated by us
+      for (const target of this.decoratedElements.values()) {
+        if (target.element === activeElement && target.button) {
+          // Show the button for the pre-focused element
+          target.button.style.display = "flex";
+          console.log("Universal Dictation: Showing button for pre-focused element:", activeElement);
+          break;
+        }
+      }
+    }
   }
 
   private findAndDecorateInputs(searchRoot: Element): void {
