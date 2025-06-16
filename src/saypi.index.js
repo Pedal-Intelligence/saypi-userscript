@@ -13,13 +13,23 @@ import "./styles/rectangles.css";
 import { ChatbotService } from "./chatbots/ChatbotService.ts";
 import { ChatbotIdentifier } from "./chatbots/ChatbotIdentifier.ts";
 
+// Static imports for all modules (but conditionally execute)
+import { buttonModule } from "./ButtonModule.js";
+import EventModule from "./events/EventModule.js";
+import { ImmersionService } from "./ImmersionService.js";
+import { submitErrorHandler } from "./SubmitErrorHandler.ts";
+import getMessage from "./i18n.ts";
+import { DOMObserver } from "./chatbots/bootstrap.ts";
+import { addChild } from "./dom/DOMModule.ts";
+import SlowResponseHandler from "./SlowResponseHandler.ts";
+import { UniversalDictationModule } from "./UniversalDictationModule.ts";
+
+// Conditional style imports
+import "./styles/claude.scss"; // scoped by chatbot flags, i.e. <body class="claude">
+import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
+
 (async function () {
   "use strict";
-
-  // Set webpack publicPath for dynamic imports in extension context
-  if (typeof chrome !== 'undefined' && chrome.runtime?.getURL) {
-    __webpack_public_path__ = chrome.runtime.getURL("public/");
-  }
 
   // Determine the mode based on the current site
   const chatbotType = ChatbotIdentifier.identifyChatbot();
@@ -88,20 +98,7 @@ import { ChatbotIdentifier } from "./chatbots/ChatbotIdentifier.ts";
   async function initializeChatMode() {
     console.log("Initializing chat mode");
     
-    // Dynamic imports for chatbot-specific modules
-    const { buttonModule } = await import("./ButtonModule.js");
-    const EventModule = (await import("./events/EventModule.js")).default;
-    const { ImmersionService } = await import("./ImmersionService.js");
-    const { submitErrorHandler } = await import("./SubmitErrorHandler.ts");
-    const getMessage = (await import("./i18n.ts")).default;
-    const { DOMObserver } = await import("./chatbots/bootstrap.ts");
-    const { addChild } = await import("./dom/DOMModule.ts");
-    const SlowResponseHandler = (await import("./SlowResponseHandler.ts")).default;
-    
-    // Import chatbot-specific styles
-    await import("./styles/claude.scss");
-    await import("./styles/pi.scss");
-
+    // All modules are already imported statically - just use them
     const chatbot = await ChatbotService.getChatbot();
 
     function startAudioModule() {
@@ -193,8 +190,7 @@ import { ChatbotIdentifier } from "./chatbots/ChatbotIdentifier.ts";
   async function initializeDictationMode() {
     console.log("Initializing dictation mode");
     
-    // Dynamic import for dictation-specific module
-    const { UniversalDictationModule } = await import("./UniversalDictationModule.ts");
+    // UniversalDictationModule is already imported statically - just use it
 
     function startAudioModule() {
       window.addEventListener("unload", () => {
