@@ -161,6 +161,112 @@ function getTargetElementId(element: HTMLElement): string {
   return `${tagName}-${className}-${name}-${placeholder}`.replace(/\s+/g, '-');
 }
 
+/**
+ * Extract contextual information about an input element for transcription API
+ */
+function getInputContext(element: HTMLElement): { inputType: string | null; inputLabel: string | null } {
+  let inputType: string | null = null;
+  let inputLabel: string | null = null;
+
+  // Get input type
+  if (element instanceof HTMLInputElement) {
+    inputType = element.type || 'text';
+  } else if (element instanceof HTMLTextAreaElement) {
+    inputType = 'textarea';
+  } else if (element.contentEditable === 'true') {
+    inputType = 'contenteditable';
+  }
+
+  // Try to find associated label
+  if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement || element instanceof HTMLSelectElement) {
+    // Method 1: Check for <label for="id"> where id matches element.id
+    if (element.id) {
+      const associatedLabel = document.querySelector(`label[for="${element.id}"]`);
+      if (associatedLabel && associatedLabel.textContent) {
+        inputLabel = associatedLabel.textContent.trim();
+      }
+    }
+
+    // Method 2: Check if element is nested inside a <label>
+    if (!inputLabel) {
+      const parentLabel = element.closest('label');
+      if (parentLabel && parentLabel.textContent) {
+        // Extract label text, excluding the input's value
+        const labelText = parentLabel.textContent.trim();
+        const inputValue = element instanceof HTMLInputElement ? element.value : '';
+        if (inputValue && labelText.includes(inputValue)) {
+          inputLabel = labelText.replace(inputValue, '').trim();
+        } else {
+          inputLabel = labelText;
+        }
+      }
+    }
+
+    // Method 3: Check aria-label attribute
+    if (!inputLabel) {
+      const ariaLabel = element.getAttribute('aria-label');
+      if (ariaLabel) {
+        inputLabel = ariaLabel.trim();
+      }
+    }
+
+    // Method 4: Check aria-labelledby attribute
+    if (!inputLabel) {
+      const ariaLabelledBy = element.getAttribute('aria-labelledby');
+      if (ariaLabelledBy) {
+        const labelElement = document.getElementById(ariaLabelledBy);
+        if (labelElement && labelElement.textContent) {
+          inputLabel = labelElement.textContent.trim();
+        }
+      }
+    }
+
+    // Method 5: Check title attribute
+    if (!inputLabel) {
+      const title = element.getAttribute('title');
+      if (title) {
+        inputLabel = title.trim();
+      }
+    }
+
+    // Method 6: Check placeholder as fallback (less ideal but still contextual)
+    if (!inputLabel) {
+      const placeholder = element.getAttribute('placeholder');
+      if (placeholder) {
+        inputLabel = placeholder.trim();
+      }
+    }
+
+    // Method 7: Look for nearby text that might be a label (within same container)
+    if (!inputLabel) {
+      const container = element.parentElement;
+      if (container) {
+        // Look for text nodes or elements that might serve as labels
+        const textNodes: string[] = [];
+        
+        // Check for preceding text elements
+        let prevSibling = element.previousElementSibling;
+        while (prevSibling && textNodes.length < 2) {
+          if (prevSibling.textContent && prevSibling.textContent.trim()) {
+            const text = prevSibling.textContent.trim();
+            // Skip if it looks like another input's value or common UI text
+            if (text.length > 0 && text.length < 100 && !text.match(/^(submit|send|search|go|ok)$/i)) {
+              textNodes.unshift(text);
+            }
+          }
+          prevSibling = prevSibling.previousElementSibling;
+        }
+        
+        if (textNodes.length > 0) {
+          inputLabel = textNodes.join(' ').trim();
+        }
+      }
+    }
+  }
+
+  return { inputType, inputLabel };
+}
+
 function getTranscriptionsForTarget(context: DictationContext, targetElement: HTMLElement): Record<number, string> {
   const targetId = getTargetElementId(targetElement);
   return context.transcriptionsByTarget[targetId] || {};
@@ -225,6 +331,10 @@ function uploadAudioSegment(
     )}`
   );
 
+  // Extract input context for dictation mode
+  const { inputType, inputLabel } = getInputContext(finalTarget);
+  console.debug(`Input context for transcription: type="${inputType}", label="${inputLabel}"`);
+
   uploadAudioWithRetry(
     audioBlob,
     duration,
@@ -232,7 +342,9 @@ function uploadAudioSegment(
     sessionId,
     maxRetries,
     captureTimestamp,
-    clientReceiveTimestamp
+    clientReceiveTimestamp,
+    inputType || undefined,
+    inputLabel || undefined
   ).then((sequenceNum) => {
     console.debug(`Sent transcription ${sequenceNum} to target`, finalTarget);
     if (sequenceNum !== expectedSequenceNumber) {

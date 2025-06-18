@@ -179,6 +179,8 @@ export async function uploadAudioWithRetry(
   maxRetries: number = 3,
   captureTimestamp?: number,
   clientReceiveTimestamp?: number,
+  inputType?: string,
+  inputLabel?: string,
 ): Promise<number> {
   let retryCount = 0;
   let delay = 1000; // initial delay of 1 second
@@ -208,7 +210,9 @@ export async function uploadAudioWithRetry(
         sessionId,
         captureTimestamp,
         transcriptionStartTimestamp,
-        usedSequenceNumber
+        usedSequenceNumber,
+        inputType,
+        inputLabel
       );
       return usedSequenceNumber;
     } catch (error) {
@@ -258,7 +262,9 @@ async function uploadAudio(
   sessionId?: string,
   captureTimestamp?: number,
   transcriptionStartTimestamp?: number,
-  sequenceNumber?: number
+  sequenceNumber?: number,
+  inputType?: string,
+  inputLabel?: string
 ): Promise<void> {
   try {
     const messages = Object.entries(precedingTranscripts).map(
@@ -282,7 +288,9 @@ async function uploadAudio(
       messages,
       sessionId,
       chatbot,
-      sequenceNumber
+      sequenceNumber,
+      inputType,
+      inputLabel
     );
     logStepDuration("constructTranscriptionFormData (total)", stepStartTime);
     
@@ -399,7 +407,9 @@ async function constructTranscriptionFormData(
   messages: { role: string; content: string; sequenceNumber?: number }[],
   sessionId?: string,
   chatbot?: any,
-  sequenceNumber?: number
+  sequenceNumber?: number,
+  inputType?: string,
+  inputLabel?: string
 ) {
   const formData = new FormData();
   let audioFilename = "audio.webm";
@@ -454,6 +464,14 @@ async function constructTranscriptionFormData(
   const defaultName = chatbot.getName();
   if (nickname && nickname !== defaultName) {
     formData.append("nickname", nickname);
+  }
+
+  // Add input context for dictation mode if available
+  if (inputType) {
+    formData.append("inputType", inputType);
+  }
+  if (inputLabel) {
+    formData.append("inputLabel", inputLabel);
   }
 
   return formData;
