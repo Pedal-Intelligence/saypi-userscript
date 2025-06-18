@@ -133,6 +133,7 @@ export class UniversalDictationModule {
       'input[type="tel"]',
       'textarea',
       '[contenteditable="true"]',
+      'input:not([type])',
     ];
 
     const inputs = searchRoot.querySelectorAll(inputSelectors.join(", "));
@@ -912,6 +913,7 @@ export class UniversalDictationModule {
       'input[type="tel"]',
       'textarea',
       '[contenteditable="true"]',
+      'input:not([type])',
     ];
 
     return inputSelectors.some(selector => {
