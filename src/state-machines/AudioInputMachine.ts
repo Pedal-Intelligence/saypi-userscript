@@ -37,7 +37,7 @@ let previousDefaultDevice: MediaDeviceInfo | null = null;
 let vadClient: VADClientInterface | null = null;
 
 // Choose preset once based on chatbot context
-const currentVADPreset: VADPreset = ChatbotIdentifier.isChatbotType("web")
+const currentVADPreset: VADPreset = ChatbotIdentifier.isInDictationMode()
   ? "highSensitivity"
   : "balanced";
 

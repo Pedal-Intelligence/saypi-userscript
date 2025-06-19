@@ -6,6 +6,7 @@ import EventBus from "./events/EventBus.js";
 import { IconModule } from "./icons/IconModule";
 import { logger, serializeStateValue } from "./LoggingModule.js";
 import getMessage from "./i18n";
+import { ChatbotIdentifier } from "./chatbots/ChatbotIdentifier";
 
 interface DictationTarget {
   element: HTMLElement;
@@ -146,8 +147,7 @@ export class UniversalDictationModule {
   }
 
   private isExcludedSite(): boolean {
-    const hostname = window.location.hostname;
-    return hostname.includes("pi.ai") || hostname.includes("claude.ai");
+    return ChatbotIdentifier.isInChatMode();
   }
 
   private decorateInput(inputElement: HTMLElement): void {

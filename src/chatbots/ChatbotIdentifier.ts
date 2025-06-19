@@ -46,4 +46,12 @@ export class ChatbotIdentifier {
     return this.identifyChatbot() === type;
   }
 
+  static isInDictationMode(): boolean {
+    return this.isChatbotType("web");
+  }
+
+  static isInChatMode(): boolean {
+    return !this.isInDictationMode();
+  }
+
 }
