@@ -189,6 +189,7 @@ export class UniversalDictationModule {
       justify-content: center;
       transition: all 0.2s ease;
       padding: 0;
+      transform: translateY(-50%);
     `;
 
     // Add bubble icon - sized to fill button (idle state: black & white)
@@ -217,23 +218,52 @@ export class UniversalDictationModule {
   }
 
   private positionButton(inputElement: HTMLElement, button: HTMLElement): void {
+    const BTN_W = 28; // Default button width
+    const GAP = 4;    // Gap from field edge
+
     const updatePosition = () => {
       const rect = inputElement.getBoundingClientRect();
       const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
       const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-      const adjustX = -5;
-      const adjustY = -10; // fine-tune this value to position the button correctly
 
-      button.style.left = `${rect.right - 35 + scrollX + adjustX}px`;
-      button.style.top = `${rect.top + (rect.height - 28) / 2 + scrollY + adjustY}px`;
+      // Dynamic button sizing for small inputs
+      const buttonSize = Math.min(rect.height * 0.8, BTN_W);
+      button.style.width = `${buttonSize}px`;
+      button.style.height = `${buttonSize}px`;
+      
+      // Update SVG icon size to match button
+      const icon = button.querySelector('svg');
+      if (icon) {
+        icon.setAttribute('width', buttonSize.toString());
+        icon.setAttribute('height', buttonSize.toString());
+      }
+
+      // Position button with proper centering using CSS transforms
+      button.style.left = `${rect.right - buttonSize - GAP + scrollX}px`;
+      button.style.top = `${rect.top + rect.height / 2 + scrollY}px`;
+      button.style.transform = 'translateY(-50%)';
+      
+      // Basic overlap detection - check if another button/icon occupies this space
+      if (this.isPositionOccupied(button, buttonSize)) {
+        // Nudge left if occupied
+        button.style.left = `${rect.right - (buttonSize * 2) - (GAP * 2) + scrollX}px`;
+      }
     };
 
     // Initial positioning
     updatePosition();
 
-    // Update position on scroll/resize
+    // Update position on scroll/resize with intersection observer for visibility
     const resizeObserver = new ResizeObserver(updatePosition);
     resizeObserver.observe(inputElement);
+
+    const intersectionObserver = new IntersectionObserver(
+      ([entry]) => {
+        button.style.visibility = entry.isIntersecting ? 'visible' : 'hidden';
+      },
+      { root: null, threshold: 0 }
+    );
+    intersectionObserver.observe(inputElement);
 
     window.addEventListener("scroll", updatePosition, { passive: true });
     window.addEventListener("resize", updatePosition, { passive: true });
@@ -241,9 +271,45 @@ export class UniversalDictationModule {
     // Store cleanup functions
     (button as any).__positionCleanup = () => {
       resizeObserver.disconnect();
+      intersectionObserver.disconnect();
       window.removeEventListener("scroll", updatePosition);
       window.removeEventListener("resize", updatePosition);
     };
+  }
+
+  private isPositionOccupied(button: HTMLElement, buttonSize: number): boolean {
+    const rect = button.getBoundingClientRect();
+    const centerX = rect.x + buttonSize / 2;
+    const centerY = rect.y + buttonSize / 2;
+    
+    const elementsAtPosition = document.elementsFromPoint(centerX, centerY);
+    
+    return elementsAtPosition.some(el => {
+      if (el === button) return false; // Ignore our own button
+      
+      const tagName = el.tagName.toLowerCase();
+      const element = el as HTMLElement;
+      
+      // Check for other buttons, icons, or small interactive elements
+      if (['svg', 'button', 'img'].indexOf(tagName) !== -1) {
+        // Consider it occupied if it's a small element (likely an icon/button)
+        return element.offsetWidth <= 40 && element.offsetHeight <= 40;
+      }
+      
+      // Check for known extension button classes
+      const classList = element.classList;
+      if (classList) {
+        const knownExtensionClasses = [
+          'onepassword-button',
+          'voicy-speech-input-button',
+          '_1PasswordExtensionButton',
+          'bitwarden-browser-extension-button'
+        ];
+        return knownExtensionClasses.some(className => classList.contains(className));
+      }
+      
+      return false;
+    });
   }
 
   private setupInputEventListeners(target: DictationTarget): void {
