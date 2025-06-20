@@ -583,32 +583,46 @@ function computeFinalText(
   if (mergedSequences.length > 0) {
     console.debug("Using server-merged text directly.");
 
-    // remove the merged sequences from the initial text
+    // Remove any earlier versions of the merged sequences from the prefix
     const mergedTexts = mergedSequences.map(seq => targetTranscriptions[seq]);
     if (mergedTexts === undefined) {
       console.warn("Merged text is undefined, skipping");
-      return serverText;
+      return serverText.trimStart();
     }
     for (const mergedText of mergedTexts) {
-      initialText = initialText.replace(mergedText, "");
+      // Remove the text itself *and* any surplus whitespace around it
+      const escaped = mergedText.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+      const regex = new RegExp(`\\s*${escaped}\\s*`, "g");
+      initialText = initialText.replace(regex, " ");
     }
 
-    const needsSpace = !(initialText.endsWith(" ") || serverText.startsWith(" "));
-    return initialText + (needsSpace ? " " : "") + serverText;
+    // Normalise whitespace on both parts
+    initialText = initialText.replace(/\s{2,}/g, " ").replace(/\s+$/, "");
+    const normalisedServer = serverText.trimStart();
+
+    const needsSpace = initialText !== "" && !initialText.endsWith(" ");
+    const result = (needsSpace ? initialText + " " : initialText) + normalisedServer;
+    return result.replace(/\s{2,}/g, " ");
   }
   // Local merge
   const mergedTranscript = mergeService
     ? mergeService.mergeTranscriptsLocal(targetTranscriptions)
     : Object.values(targetTranscriptions).join(" ");
 
-  // remove the targetTranscriptions from the initial text
-  for (const sequenceNumber of Object.keys(targetTranscriptions)) {
-    const mergedText = targetTranscriptions[parseInt(sequenceNumber, 10)];
-    initialText = initialText.replace(mergedText, "");
+  // Strip old individual transcripts (and surrounding whitespace) from the prefix
+  for (const mergedText of Object.values(targetTranscriptions)) {
+    const escaped = mergedText.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+    const regex = new RegExp(`\\s*${escaped}\\s*`, "g");
+    initialText = initialText.replace(regex, " ");
   }
 
-  const needsSpace = !(initialText.endsWith(" ") || mergedTranscript.startsWith(" "));
-  return initialText + (needsSpace ? " " : "") + mergedTranscript;
+  // Tidy whitespace
+  initialText = initialText.replace(/\s{2,}/g, " ").replace(/\s+$/, "");
+  const normalisedMerged = mergedTranscript.trimStart();
+
+  const needsSpace = initialText !== "" && !initialText.endsWith(" ");
+  const result = (needsSpace ? initialText + " " : initialText) + normalisedMerged;
+  return result.replace(/\s{2,}/g, " ");
 }
 
 const machine = createMachine<DictationContext, DictationEvent, DictationTypestate>(
