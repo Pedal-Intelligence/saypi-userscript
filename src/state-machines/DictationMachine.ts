@@ -517,6 +517,32 @@ function updateTranscriptionsForManualEdit(
     return;
   }
 
+  // If the user cleared the content, delete the associated transcription(s)
+  if (newContent.trim() === "") {
+    const transcriptionKeys = Object.keys(targetTranscriptions).map(k => parseInt(k, 10));
+
+    if (transcriptionKeys.length === 1) {
+      // Only one sequence – remove it completely
+      const seq = transcriptionKeys[0];
+      delete targetTranscriptions[seq];
+      delete context.transcriptions[seq];
+    } else if (transcriptionKeys.length > 1) {
+      // Multiple sequences – assume the user cleared the *last* chunk
+      const sortedKeys = transcriptionKeys.sort((a, b) => a - b);
+      const lastKey = sortedKeys[sortedKeys.length - 1];
+      delete targetTranscriptions[lastKey];
+      delete context.transcriptions[lastKey];
+    }
+
+    // If the bucket is now empty, remove it for neatness
+    if (Object.keys(targetTranscriptions).length === 0) {
+      delete context.transcriptionsByTarget[targetId];
+    }
+
+    console.debug("Cleared transcription entry due to manual deletion for target:", targetId);
+    return;
+  }
+
   // Simple approach: if we have exactly one transcription, replace it entirely
   const transcriptionKeys = Object.keys(targetTranscriptions).map(k => parseInt(k, 10));
   
