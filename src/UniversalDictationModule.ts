@@ -839,7 +839,7 @@ export class UniversalDictationModule {
 
     // Check if the active element is a valid input element
     if (!this.isInputElement(activeElement)) {
-      console.log("Active element is not a valid input for dictation");
+      console.log("Active element is not a valid input for dictation", activeElement);
       return;
     }
 
