@@ -1016,33 +1016,48 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         context: DictationContext,
         event: DictationTranscribedEvent
       ) => {
-        const transcription = event.text;
+        let transcription = event.text;
         const sequenceNumber = event.sequenceNumber;
         const mergedSequences = event.merged || [];
-        
-        console.debug(`Dictation transcript [${sequenceNumber}]: ${transcription}${mergedSequences.length > 0 ? ` (merged: [${mergedSequences.join(', ')}])` : ''}`);
-        
+        // ---- NORMALISE ELLIPSES ----
+        // Convert any ellipsis—either the single Unicode “…” character or the
+        // three‑dot sequence “...” — into a single space so that downstream
+        // merging logic treats them consistently.  Then collapse any duplicate
+        // whitespace that may result and trim the string.
+        const originalTranscription = transcription;
+        transcription = transcription
+          .replace(/\u2026/g, " ")   // “…” → space
+          .replace(/\.{3}/g, " ")    // "..." → space
+          .replace(/\s{2,}/g, " ")   // collapse runs of spaces
+          .trim();
+
+        console.debug(
+          `Dictation transcript [${sequenceNumber}]: ${transcription}` +
+          `${mergedSequences.length > 0 ? ` (merged: [${mergedSequences.join(', ')}])` : ''}` +
+          `${originalTranscription !== transcription ? ` | original: "${originalTranscription}"` : ''}`
+        );
+
         if (transcription && transcription.trim() !== "") {
           // Determine the target element for this sequence
           const originatingTarget = context.transcriptionTargets[sequenceNumber];
-          
+
           if (!originatingTarget) {
             console.warn(`No originating target found for sequence ${sequenceNumber}, skipping transcription response`);
             return;
           }
-          
+
           const targetId = getTargetElementId(originatingTarget);
-          
+
           // Initialize target-specific transcriptions if not exists
           const targetTranscriptions = getOrCreateTargetBucket(context, targetId);
-          
+
           // Add the new (potentially merged) transcription to both global and target-specific storage
           context.transcriptions[sequenceNumber] = transcription;
           targetTranscriptions[sequenceNumber] = transcription;
           TranscriptionErrorManager.recordAttempt(true);
 
           const initialText = getTextInTarget(originatingTarget);
-          
+
           // Get target-specific transcriptions for merging
           const finalText = computeFinalText(
             targetTranscriptions,
@@ -1053,7 +1068,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           console.debug(
             `Merged text for target ${targetId}: ${finalText}`
           );
-          
+
           // Replace all text in the target with the final result
           setTextInTarget(finalText, originatingTarget, true); // true = replace all content
 
@@ -1062,7 +1077,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
             removeMergedSequencesFromContext(context, mergedSequences);
             console.debug(`Removed server-merged sequences [${mergedSequences.join(', ')}] from context`);
           }
-          
+
           // Update accumulated text only if this is the current target
           if (originatingTarget === context.targetElement) {
             if (mergedSequences.length > 0) {
