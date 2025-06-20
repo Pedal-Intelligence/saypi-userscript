@@ -425,6 +425,30 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
 }
 
 /**
+ * Retrieve the current textual content from a target element.
+ *
+ * - For <input> and <textarea> elements, returns the `.value` property.
+ * - For `contenteditable` elements, returns the `textContent`.
+ * - Returns an empty string if the element is undefined or not a supported type.
+ */
+function getTextInTarget(targetElement?: HTMLElement): string {
+  if (!targetElement) return "";
+
+  if (
+    targetElement instanceof HTMLInputElement ||
+    targetElement instanceof HTMLTextAreaElement
+  ) {
+    return targetElement.value || "";
+  }
+
+  if (targetElement.contentEditable === "true") {
+    return targetElement.textContent || "";
+  }
+
+  return "";
+}
+
+/**
  * Ensure the per-target transcription bucket exists and return it.
  */
 function getOrCreateTargetBucket(
@@ -553,16 +577,38 @@ function updateTranscriptionsForManualEdit(
 function computeFinalText(
   targetTranscriptions: Record<number, string>,
   mergedSequences: number[],
-  serverText: string
+  serverText: string,
+  initialText: string = ""
 ): string {
   if (mergedSequences.length > 0) {
     console.debug("Using server-merged text directly.");
-    return serverText;
+
+    // remove the merged sequences from the initial text
+    const mergedTexts = mergedSequences.map(seq => targetTranscriptions[seq]);
+    if (mergedTexts === undefined) {
+      console.warn("Merged text is undefined, skipping");
+      return serverText;
+    }
+    for (const mergedText of mergedTexts) {
+      initialText = initialText.replace(mergedText, "");
+    }
+
+    const needsSpace = !(initialText.endsWith(" ") || serverText.startsWith(" "));
+    return initialText + (needsSpace ? " " : "") + serverText;
   }
   // Local merge
-  return mergeService
+  const mergedTranscript = mergeService
     ? mergeService.mergeTranscriptsLocal(targetTranscriptions)
     : Object.values(targetTranscriptions).join(" ");
+
+  // remove the targetTranscriptions from the initial text
+  for (const sequenceNumber of Object.keys(targetTranscriptions)) {
+    const mergedText = targetTranscriptions[parseInt(sequenceNumber, 10)];
+    initialText = initialText.replace(mergedText, "");
+  }
+
+  const needsSpace = !(initialText.endsWith(" ") || mergedTranscript.startsWith(" "));
+  return initialText + (needsSpace ? " " : "") + mergedTranscript;
 }
 
 const machine = createMachine<DictationContext, DictationEvent, DictationTypestate>(
@@ -950,22 +996,19 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           // Initialize target-specific transcriptions if not exists
           const targetTranscriptions = getOrCreateTargetBucket(context, targetId);
           
-          // First, handle server-side merging if present
-          if (mergedSequences.length > 0) {
-            removeMergedSequencesFromContext(context, mergedSequences);
-            console.debug(`Removed server-merged sequences [${mergedSequences.join(', ')}] from context`);
-          }
-          
           // Add the new (potentially merged) transcription to both global and target-specific storage
           context.transcriptions[sequenceNumber] = transcription;
           targetTranscriptions[sequenceNumber] = transcription;
           TranscriptionErrorManager.recordAttempt(true);
+
+          const initialText = getTextInTarget(originatingTarget);
           
           // Get target-specific transcriptions for merging
           const finalText = computeFinalText(
             targetTranscriptions,
             mergedSequences,
-            transcription
+            transcription,
+            initialText
           );
           console.debug(
             `Merged text for target ${targetId}: ${finalText}`
@@ -973,6 +1016,12 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           
           // Replace all text in the target with the final result
           setTextInTarget(finalText, originatingTarget, true); // true = replace all content
+
+          // Finally, handle server-side merging if present, after those sequences have been referenced in composing the final text
+          if (mergedSequences.length > 0) {
+            removeMergedSequencesFromContext(context, mergedSequences);
+            console.debug(`Removed server-merged sequences [${mergedSequences.join(', ')}] from context`);
+          }
           
           // Update accumulated text only if this is the current target
           if (originatingTarget === context.targetElement) {
