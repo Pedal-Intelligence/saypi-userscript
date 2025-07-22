@@ -1,29 +1,31 @@
-Say, Pi turns your conversations with Pi and Claude into smooth, voice-driven experiences. 
-Just tap the call button, speak like you would to a person, and get lifelike spoken replies. 
+Say, Pi turns your conversations with Pi and Claude into smooth, voice-driven experiences, and brings high-quality voice typing to any website.
+Just tap the call button, speak like you would to a person, and get lifelike spoken replies. Plus, dictate text into any input field across the web with the same accuracy you love.
 Perfect for multitasking, accessibility, or anyone who thinks better out loud.
 
 
 FREE PLAN – TRY INSTANTLY, NO ACCOUNT NEEDED
-- Speak Instead of Typing: Talk to Pi and Claude with Whisper-powered voice recognition that knows when you're done speaking.  
+- Voice Chat with AI: Talk to Pi and Claude with Whisper-powered voice recognition that knows when you're done speaking.  
+- Universal Voice Typing: Dictate into any text field or email on any website – just right-click and select "Start dictation with Say, Pi."
 - Accurate & Fast: Enjoy high-accuracy speech-to-text, even with accents and background noise.  
-- Hear Pi’s Real Voice: Natural voice replies in Pi’s built-in styles.  
+- Hear Pi's Real Voice: Natural voice replies in Pi's built-in styles.  
 - Flexible Layouts: Use full-screen immersive mode or standard chat view.  
 - Dark Mode Support: Eye-friendly design that blends in with Pi's interface.  
 - Works Everywhere: Mac, Windows, Linux, Android, iOS – all covered.
 
 
 SAY, PI PREMIUM – UNLOCK THE FULL EXPERIENCE
-Your voice, your language, your AI – across all your devices.  
+Your voice, your language, your AI – across all your devices and websites.  
 - Claude & Pi Support: Seamless switching between top AI assistants.  
+- Universal Dictation: Professional-grade voice typing for emails, documents, and forms anywhere on the web.
 - Lifelike Replies in 32+ Languages: Powered by ElevenLabs, crafted to sound natural in your language.  
-- Bigger Usage Limits: More talking time, more listening time.  
+- Bigger Usage Limits: More talking time, more listening time, more dictation.  
 - One Account, Everywhere: Premium follows you across platforms and browsers.
 
 See pricing at: https://saypi.ai/pricing
 
 
 WHY THOUSANDS LOVE SAY, PI
-- Boost Your Workflow: Take notes, ideate, or draft while keeping your hands free.  
+- Boost Your Workflow: Take notes, write emails, ideate, or draft while keeping your hands free.  
 - Speak Any Language: Multilingual support with smooth mid-conversation switching.  
 - Built for Accessibility: Designed with inclusivity in mind – great for users with motor or visual challenges.  
 - Rated ★ 4.9/5 by 2,000+ Users: Trusted by a growing global community.  
@@ -32,8 +34,9 @@ WHY THOUSANDS LOVE SAY, PI
 
 GET STARTED IN SECONDS
 1. Install the extension.  
-2. Open pi.ai or claude.ai.  
-3. Click the call button and speak. That’s it.
+2. For AI chat: Open pi.ai or claude.ai and click the call button.
+3. For voice typing: From any text field, press the floating "Say, Pi" icon or right-click and select "Start dictation with Say, Pi."
+4. Speak naturally. That's it.
 
 
-Start talking to AI the natural way—install Say, Pi and experience the future of conversation.
+Start talking to AI and typing with your voice the natural way—install Say, Pi and experience the future of conversation and productivity..

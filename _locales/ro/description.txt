@@ -1,39 +1,40 @@
-Say, Pi transformă conversațiile tale cu Pi și Claude în experiențe fluide, bazate pe voce. 
-Doar apasă butonul de apel, vorbește ca și cum ai vorbi cu o persoană și primește răspunsuri verbale realiste. 
-Perfect pentru multitasking, accesibilitate sau pentru oricine gândește mai bine vorbind.
+Say, Pi transformă conversațiile tale cu Pi și Claude în experiențe fluide, bazate pe voce, și aduce tastarea vocală de înaltă calitate pe orice site web.  
+Doar apasă butonul de apel, vorbește ca și cum ai vorbi cu o persoană și primește răspunsuri vorbite realiste. În plus, dictează text în orice câmp de introducere de pe web cu aceeași acuratețe pe care o adori.  
+Perfect pentru multitasking, accesibilitate sau oricine gândește mai bine cu voce tare.  
 
 
-PLAN GRATUIT – ÎNCERCAȚI INSTANT, NU ESTE NECESAR CONT
-- Vorbește în loc să tastezi: Comunică cu Pi și Claude folosind recunoașterea vocală Whisper care știe când ai terminat de vorbit.  
-- Precis și Rapid: Bucură-te de transcriere voce-text cu acuratețe ridicată, chiar și cu accente și zgomot de fond.  
+PLAN GRATUIT – ÎNCERCAȚI IMEDIAT, NU ESTE NECESAR UN CONT  
+- Chat Vocal cu AI: Vorbește cu Pi și Claude cu recunoaștere vocală alimentată de Whisper care știe când ai terminat de vorbit.  
+- Tastare Vocală Universală: Dictează în orice câmp de text sau email pe orice site web – doar fă clic dreapta și selectează "Start dictation with Say, Pi."  
+- Precis & Rapid: Bucură-te de conversia vorbirii în text cu mare acuratețe, chiar și cu accente și zgomot de fundal.  
 - Ascultă Vocea Reală a lui Pi: Răspunsuri vocale naturale în stilurile integrate ale lui Pi.  
-- Configurații Flexibile: Utilizează modul full-screen imersiv sau vizualizarea standard a chat-ului.  
-- Suport pentru Modul Întunecat: Design prietenos cu ochii care se îmbină cu interfața lui Pi.  
-- Funcționează Oriunde: Mac, Windows, Linux, Android, iOS – toate acoperite.
+- Layout-uri Flexibile: Folosește modul full-screen imersiv sau vizualizarea standard a chaturilor.  
+- Suport pentru Modul Întunecat: Design prietenos pentru ochi care se potrivește cu interfața lui Pi.  
+- Funcționează Oriunde: Mac, Windows, Linux, Android, iOS – toate acoperite.  
 
 
-SAY, PI PREMIUM – DEBLOCHEAZĂ EXPERIENȚA COMPLETĂ
-Vocea ta, limba ta, AI-ul tău – pe toate dispozitivele tale.  
-- Suport Claude & Pi: Trecere fără probleme între asistenții AI de top.  
-- Răspunsuri Realiste în 32+ Limbi: Furnizate de ElevenLabs, concepute să sune natural în limba ta.  
-- Limite de Utilizare Mai Mari: Mai mult timp de vorbit, mai mult timp de ascultat.  
-- Un Cont, Peste Tot: Premium te urmează pe toate platformele și browserele.
-
-Vezi prețurile la: https://saypi.ai/pricing
-
-
-DE CE MII DE OAMENI IUBESC SAY, PI
-- Îmbunătățește-ți Fluxul de Lucru: Ia notițe, dezvoltă idei sau scrie păstrându-ți mâinile libere.  
-- Vorbește Orice Limbă: Suport multilingv cu trecere lină între conversații.  
-- Creat pentru Accesibilitate: Proiectat cu gândul la incluziune – excelent pentru utilizatorii cu provocări motorii sau vizuale.  
-- Evaluat ★ 4.9/5 de către 2,000+ Utilizatori: De încredere pentru o comunitate globală în creștere.  
-- Confidențialitatea pe Primul Loc: Datele tale vocale sunt sigure și nu sunt folosite abuziv. Vezi politica noastră la: https://saypi.ai/legal/privacy
+SAY, PI PREMIUM – DESCARCĂ EXPERIENȚA COMPLETĂ  
+Vocea ta, limbajul tău, AI-ul tău – pe toate dispozitivele și site-urile tale web.  
+- Suport Claude & Pi: Comutare fluidă între cei mai buni asistenți AI.  
+- Dictare Universală: Tastare vocală la standard profesional pentru email-uri, documente și formulare oriunde pe web.  
+- Răspunsuri Realiste în 32+ Limbi: Alimentate de ElevenLabs, concepute să sune natural în limba ta.  
+- Limite de Utilizare Mai Mari: Mai mult timp de vorbit, mai mult timp de ascultat, mai multă dictare.  
+- Un Cont, Peste Tot: Premium te urmărește pe platforme și browsere.  
 
 
-ÎNCEPE ÎN CÂTEVA SECUNDE
+De ce Mii de Oameni Iubesc Say, Pi  
+- Crește-ți Eficiența: Ia notițe, scrie email-uri, generează idei sau creează schițe în timp ce îți menții mâinile libere.  
+- Vorbește Orice Limbă: Suport multilingv cu comutare lină în timpul conversației.  
+- Creat pentru Accesibilitate: Proiectat cu incluziune în minte – excelent pentru utilizatori cu provocări motorice sau vizuale.  
+- Evaluat ★ 4.9/5 de Peste 2.000 de Utilizatori: De încredere pentru o comunitate globală în creștere.  
+- Confidențialitate pe Primul Loc: Datele tale vocale sunt securizate și niciodată utilizate greșit. Vezi politica noastră la: https://saypi.ai/legal/privacy  
+
+
+ÎNCEPE RAPID  
 1. Instalează extensia.  
-2. Deschide pi.ai sau claude.ai.  
-3. Apasă butonul de apel și vorbește. Asta e tot.
+2. Pentru chat AI: Deschide pi.ai sau claude.ai și apasă butonul de apel.  
+3. Pentru tastare vocală: Din orice câmp de text, apasă pictograma plutitoare "Say, Pi" sau fă clic dreapta și selectează "Start dictation with Say, Pi."  
+4. Vorbește natural. Asta e tot.  
 
 
-Începe să vorbești cu AI în mod natural – instalează Say, Pi și experimentează viitorul conversației.
+Începe să vorbești cu AI și să scrii cu vocea ta în mod natural—instalează Say, Pi și experimentează viitorul conversației și productivității.

@@ -1,39 +1,42 @@
-Say, Pi forvandler dine samtaler med Pi og Claude til glatte, stemmedrevne oplevelser.  
-Bare tryk på opkaldsknappen, tal som du ville til en person, og få livagtige talte svar.  
+Say, Pi gør dine samtaler med Pi og Claude til glatte, stemmestyrede oplevelser og bringer stemmebaseret skrivning i høj kvalitet til enhver hjemmeside.
+Bare tryk på opkaldsknappen, tal som du ville til en person, og få livagtige talte svar. Plus, dikter tekst i ethvert indtastningsfelt på nettet med samme nøjagtighed, som du elsker.
 Perfekt til multitasking, tilgængelighed eller enhver, der tænker bedre højt.
 
 
-GRATIS PLAN – PRØV MED DET SAMME, INTET KONTO NØDVENDIG  
-- Tal i stedet for at skrive: Tal med Pi og Claude med Whisper-drevet stemmegenkendelse, der ved, hvornår du er færdig med at tale.  
-- Præcis & Hurtig: Nyd høj-nøjagtighed tale-til-tekst, selv med accenter og baggrundsstøj.  
-- Hør Pi’s Rigtige Stemmer: Naturlige stemmesvar i Pi’s indbyggede stilarter.  
-- Fleksible Layouts: Brug fuldskærmsoplevelsesmode eller standard chatvisning.  
-- Dark Mode Support: Øjenvenligt design, der smelter sammen med Pi's interface.  
-- Fungerer Overalt: Mac, Windows, Linux, Android, iOS – alt er dækket.
+GRATIS PLAN – PRØV ØJEBLIKKELIGT, INGEN KONTO NØDVENDIG
+- Voice Chat med AI: Tal med Pi og Claude med Whisper-drevet stemmegenkendelse, der ved, hvornår du er færdig med at tale.
+- Universel Stemme Skrivning: Diktér i ethvert tekstfelt eller email på enhver hjemmeside – højreklik blot og vælg "Start diktat med Say, Pi."
+- Nøjagtig & Hurtig: Nyd høj-nøjagtighed tale-til-tekst, selv med accenter og baggrundsstøj.
+- Hør Pi's Rigtige Stemme: Naturlige stemmesvar i Pi's indbyggede stilarter.
+- Fleksible Layouts: Brug fuldskærms-immersiv tilstand eller standard chatvisning.
+- Mørk Tilstand Understøttelse: Øjenvenligt design, der smelter sammen med Pi's interface.
+- Fungerer Overalt: Mac, Windows, Linux, Android, iOS – alt dækket.
 
 
-SAY, PI PREMIUM – LÅSE OP FOR DEN FULDE OPLEVELSE  
-Din stemme, dit sprog, din AI – på alle dine enheder.  
-- Claude & Pi Support: Problemfrit skift mellem top AI-assistenter.  
-- Livagtige svar på 32+ sprog: Drevet af ElevenLabs, designet til at lyde naturligt på dit sprog.  
-- Større Brug Grænser: Mere taletid, mere lyttetid.  
-- Én Konto, Overalt: Premium følger dig på tværs af platforme og browsere.
+SAY, PI PREMIUM – LÅS OP FOR DEN FULDE OPLEVELSE
+Din stemme, dit sprog, din AI – på tværs af alle dine enheder og hjemmesider.
+- Claude & Pi Support: Problemfri skift mellem top AI assistenter.
+- Universel Diktat: Professionel-grade stemmeskrivning til emails, dokumenter og formularer hvor som helst på nettet.
+- Livagtige Svar på 32+ Sprog: Drevet af ElevenLabs, designet til at lyde naturligt på dit sprog.
+- Større Brugsgrænser: Mere taletid, mere lyttetid, mere diktat.
+- En Konto, Overalt: Premium følger dig på tværs af platforme og browsere.
 
-Se priser på: https://saypi.ai/pricing
-
-
-HVORFOR TUSINDER ELSKER SAY, PI  
-- Boost Din Arbejdsgang: Tag noter, idégenerér, eller skriv kladder mens du holder hænderne fri.  
-- Tal Ethvert Sprog: Flersproget support med glat midt-samtaleskift.  
-- Bygget for Tilgængelighed: Designet med inklusivitet i tankerne – fantastisk for brugere med motoriske eller visuelle udfordringer.  
-- Bedømt ★ 4.9/5 af 2.000+ Brugere: Betroet af et voksende globalt fællesskab.  
-- Privacy Først: Dine stemmedata er sikre og bliver aldrig misbrugt. Se vores politik på: https://saypi.ai/legal/privacy
+Se pris på: https://saypi.ai/pricing
 
 
-KOM I GANG PÅ FÅ SEKUNDER  
-1. Installer udvidelsen.  
-2. Åbn pi.ai eller claude.ai.  
-3. Klik på opkaldsknappen og tal. Det er det.
+HVORFOR TUSINDER ELSKER SAY, PI
+- Forøg Din Arbejdsgang: Tag noter, skriv e-mails, idéudvikle eller udarbejd mens du har hænderne fri.
+- Tal Ethvert Sprog: Flersproget support med glidende samtaleskift.
+- Bygget til Tilgængelighed: Designet med inklusivitet i tankerne – fantastisk for brugere med motoriske eller visuelle udfordringer.
+- Vurderet ★ 4.9/5 af 2.000+ Brugere: Støttet af et voksende globalt fællesskab.
+- Privatliv Først: Dine stemmedata er sikre og aldrig misbrugt. Se vores politik på: https://saypi.ai/legal/privacy
 
 
-Begynd at tale med AI på den naturlige måde—installer Say, Pi og oplev fremtiden for samtale.
+KOM I GANG PÅ FÅ SEKUNDER
+1. Installer udvidelsen.
+2. For AI chat: Åbn pi.ai eller claude.ai og klik på opkaldsknappen.
+3. For stemmeskrivning: Fra ethvert tekstfelt, tryk på det flydende "Say, Pi" ikon eller højreklik og vælg "Start diktat med Say, Pi."
+4. Tal naturligt. Det er det.
+
+
+Begynd at tale med AI og skrive med din stemme på den naturlige måde—installer Say, Pi og oplev fremtiden for samtale og produktivitet.

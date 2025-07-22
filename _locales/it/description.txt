@@ -1,32 +1,35 @@
-Say, Pi trasforma le tue conversazioni con Pi e Claude in esperienze fluide e guidate dalla voce. Basta toccare il pulsante di chiamata, parlare come faresti con una persona e ricevere risposte vocali realistiche. Perfetto per il multitasking, l’accessibilità, o per chiunque pensi meglio a voce alta.
+Say, Pi trasforma le tue conversazioni con Pi e Claude in esperienze fluide basate sulla voce e porta la digitazione vocale di alta qualità su qualsiasi sito web. Basta toccare il pulsante di chiamata, parlare come faresti con una persona e ricevere risposte vocali realistiche. Inoltre, dettare testo in qualsiasi campo di input sul web con la stessa precisione che ami. Perfetto per il multitasking, l'accessibilità o per chi pensa meglio ad alta voce.
 
-PIANO GRATUITO – PROVA ISTANTANEA, NESSUN ACCOUNT NECESSARIO
-- Parla invece di digitare: Parla con Pi e Claude con il riconoscimento vocale alimentato da Whisper che sa quando hai finito di parlare.
-- Preciso e Veloce: Goditi una trascrizione del parlato di alta precisione, anche con accenti e rumore di fondo.
-- Ascolta la Vera Voce di Pi: Risposte vocali naturali negli stili integrati di Pi.
-- Layout Flessibili: Usa la modalità immersiva a schermo intero o la vista chat standard.
-- Supporto Modalità Scura: Design adatto agli occhi che si integra con l'interfaccia di Pi.
-- Funziona Ovunque: Mac, Windows, Linux, Android, iOS – tutto coperto.
+PIANO GRATUITO – PROVALO SUBITO, NESSUN ACCOUNT NECESSARIO
+- Chat vocale con AI: Parla con Pi e Claude con riconoscimento vocale potenziato da Whisper che sa quando hai finito di parlare.
+- Digitazione vocale universale: Deta in qualsiasi campo di testo o email su qualsiasi sito web – clic destro e seleziona "Avvia dettatura con Say, Pi."
+- Accurato e veloce: Goditi una conversione da voce a testo altamente accurata, anche con accenti e rumori di fondo.
+- Ascolta la vera voce di Pi: Risposte vocali naturali negli stili integrati di Pi.
+- Layout flessibili: Usa la modalità immersiva a schermo intero o la visualizzazione chat standard.
+- Supporto modalità scura: Design a misura d'occhio che si fonde con l'interfaccia di Pi.
+- Funziona ovunque: Mac, Windows, Linux, Android, iOS – tutto coperto.
 
 SAY, PI PREMIUM – SBLOCCA L'ESPERIENZA COMPLETA
-La tua voce, la tua lingua, la tua AI – su tutti i tuoi dispositivi.
-- Supporto per Claude e Pi: Passaggio senza soluzione di continuità tra i principali assistenti AI.
-- Risposte reali in oltre 32 lingue: Alimentato da ElevenLabs, progettato per suonare naturale nella tua lingua.
-- Limiti di utilizzo maggiori: Più tempo per parlare, più tempo per ascoltare.
-- Un account, ovunque: Il Premium ti segue su piattaforme e browser.
+La tua voce, la tua lingua, la tua AI – su tutti i tuoi dispositivi e siti web.
+- Supporto Claude & Pi: Passaggio fluido tra i principali assistenti AI.
+- Dettatura universale: Digitazione vocale di livello professionale per email, documenti e moduli ovunque sul web.
+- Risposte realistiche in 32+ lingue: Alimentato da ElevenLabs, progettato per suonare naturale nella tua lingua.
+- Limiti di utilizzo maggiori: Più tempo di conversazione, più tempo di ascolto, più dettatura.
+- Un account, ovunque: Premium ti segue attraverso piattaforme e browser.
 
 Vedi i prezzi su: https://saypi.ai/pricing
 
 PERCHÉ MIGLIAIA AMANO SAY, PI
-- Migliora il tuo flusso di lavoro: Prendi appunti, idea o fai bozze mantenendo le mani libere.
-- Parla qualsiasi lingua: Supporto multilingue con passaggio fluido tra le conversazioni.
-- Costruito per l'accessibilità: Progettato con inclusività in mente – ottimo per utenti con difficoltà motorie o visive.
-- Valutato ★ 4.9/5 da oltre 2000 utenti: Affidato da una comunità globale in crescita.
-- Privacy al Primo Posto: I tuoi dati vocali sono sicuri e mai utilizzati impropriamente. Vedi la nostra politica su: https://saypi.ai/legal/privacy
+- Migliora il tuo flusso di lavoro: Prendi appunti, scrivi email, elabora idee o bozzetti mantenendo le mani libere.
+- Parla qualsiasi lingua: Supporto multilingue con passaggio fluido durante le conversazioni.
+- Costruito per l'accessibilità: Progettato con l'inclusività in mente – ottimo per utenti con difficoltà motorie o visive.
+- Valutato ★ 4.9/5 da oltre 2,000 utenti: Fidato da una comunità globale in crescita.
+- Privacy prima di tutto: I dati vocali sono sicuri e mai usati impropriamente. Vedi la nostra politica su: https://saypi.ai/legal/privacy
 
 INIZIA IN POCHI SECONDI
 1. Installa l'estensione.
-2. Apri pi.ai o claude.ai.
-3. Clicca sul pulsante di chiamata e parla. Ecco fatto.
+2. Per la chat AI: Apri pi.ai o claude.ai e fai clic sul pulsante di chiamata.
+3. Per la digitazione vocale: Da qualsiasi campo di testo, premi l'icona flottante "Say, Pi" o fai clic destro e seleziona "Avvia dettatura con Say, Pi."
+4. Parla naturalmente. Ecco fatto.
 
-Inizia a parlare con l'IA in modo naturale: installa Say, Pi e scopri il futuro della conversazione.
+Inizia a parlare con l'AI e digitare con la tua voce in modo naturale—installa Say, Pi e vivi il futuro della conversazione e della produttività.

@@ -1,39 +1,42 @@
-Say, Pi muuntaa keskustelusi Pi:n ja Claude:n kanssa sujuviksi, ääniohjatuiksi kokemuksiksi. 
-Napauta vain puhelupainiketta, puhu kuin puhuisit henkilölle ja saat elävän kaltaisia puhuttuja vastauksia. 
-Täydellinen moniajoon, saavutettavuuteen tai kaikille, jotka ajattelevat paremmin ääneen.
+Say, Pi muuttaa keskustelusi Pi:n ja Clauden kanssa sujuviksi, puheohjatuiksi kokemuksiksi ja tuo korkealaatuisen puheentunnistuksen mille tahansa verkkosivustolle. 
+Napauta vain puhelupainiketta, puhu kuin puhuisit henkilölle ja saat luonnollisen kuuloisia vastauksia. Lisäksi voit sanella tekstiä mihin tahansa syöttökenttään verkossa samalla tarkkuudella, jota rakastat.
+Täydellinen moniajoon, esteettömyyteen tai kenelle tahansa, joka ajattelee paremmin ääneen.
 
 
-ILMAINEN SUUNNITELMA – KOKEILE VÄLITTÖMÄSTI, EI TILIÄ TARVITA
-- Puhu kirjoittamisen sijaan: Keskustele Pi:n ja Claude:n kanssa Whisperillä toimivan puheentunnistuksen avulla, joka tietää, milloin lopetat puhumisen.
-- Tarkka ja nopea: Nauti erittäin tarkasta puheentunnistuksesta, jopa aksenttien ja taustamelun kanssa.
-- Kuule Pi:n oikea ääni: Luonnolliset äänivastaukset Pi:n sisäänrakennetuilla tyyleillä.
-- Joustavat asettelut: Käytä koko näytön immersiivistä tilaa tai perinteistä chat-näkymää.
-- Tumman tilan tuki: Silmäystävällinen muotoilu, joka sulautuu Pi:n käyttöliittymään.
+ILMAINEN SUUNNITELMA – KOKEILE VÄLITTÖMÄSTI, EI TARVITA TILIÄ
+- Äänichat tekoälyn kanssa: Keskustele Pi:n ja Clauden kanssa Whisper-pohjaisen puheentunnistuksen avulla, joka tietää, milloin olet puhunut loppuun.  
+- Yleinen puheentunnistus: Sanele mihin tahansa tekstikenttään tai sähköpostiin millä tahansa verkkosivustolla – napsauta vain hiiren oikealla painikkeella ja valitse "Aloita sanelu Say, Pi:n kanssa."
+- Tarkka & Nopea: Nauti erittäin tarkasta puheentunnistuksesta, jopa aksenttien ja taustamelun kanssa.  
+- Kuule Pi:n oikea ääni: Luonnolliset ääni-vastaukset Pi:n sisäänrakennetuissa tyyleissä.  
+- Joustavat asettelut: Käytä koko näytön mukaansatempaavaa tilaa tai tavallista chat-näkymää.  
+- Tumma tila -tuki: Silmäystävällinen muotoilu, joka sulautuu Pi:n käyttöliittymään.  
 - Toimii kaikkialla: Mac, Windows, Linux, Android, iOS – kaikki mukana.
 
 
 SAY, PI PREMIUM – AVAA KOKO KOKEMUS
-Äänesi, kielesi, tekoälysi – kaikilla laitteillasi.
-- Claude- ja Pi-tuki: Saumaton vaihtaminen huippu-tukijoiden välillä.
-- Elävän kaltaiset vastaukset 32+ kielellä: Voimanlähteenä ElevenLabs, luotu kuulostamaan luonnolliselta kielelläsi.
-- Suuremmat käyttörajat: Enemmän puheaikaa, enemmän kuunteluaikaa.
-- Yksi tili, kaikkialla: Premium seuraa sinua kaikilla alustoilla ja selaimissa.
+Sinun äänesi, sinun kielesi, sinun tekoälysi – kaikilla laitteillasi ja verkkosivuillasi.  
+- Claude & Pi -tuki: Saumaton siirtyminen huippu tekoälyavustajien välillä.  
+- Yleinen sanelu: Ammattitasoinen puheentunnistus sähköposteihin, asiakirjoihin ja lomakkeisiin missä tahansa verkossa.
+- Luonnollisen kuuloiset vastaukset 32+ kielellä: ElevenLabsin tukema, suunniteltu kuulostamaan luonnolliselta kielelläsi.  
+- Suuremmat käyttörajat: Enemmän puheaikaa, enemmän kuunteluaikaa, enemmän sanelua.  
+- Yksi tili, kaikkialla: Premium seuraa sinua alustoilla ja selaimilla.
 
 Katso hinnat: https://saypi.ai/pricing
 
 
-MIKSI TUHANNET RAKASTAVAT SAY, PI
-- Tehosta työskentelyäsi: Kirjoita muistiinpanoja, kehitä ideoita tai laadi luonnoksia pitämällä kätesi vapaina.
-- Puhu mitä tahansa kieltä: Monikielinen tuki sujuvalla keskustelun vaihtamisella.
-- Suunniteltu saavutettavuus edellä: Suunniteltu yhdenvertaisuus huomioon ottaen – erinomainen käyttäjille, joilla on motorisia tai näköhaasteita.
-- Arvosana ★ 4.9/5 yli 2 000 käyttäjältä: Luotettu kasvavan kansainvälisen yhteisön toimesta.
-- Yksityisyys ensin: Äänidatasi on turvallista eikä koskaan väärinkäytettyä. Katso politiikkamme osoitteessa: https://saypi.ai/legal/privacy
+MIKSI TUHANNET RAKASTAVAT SAY, PI:TÄ
+- Paranna työnkulkuasi: Tee muistiinpanoja, kirjoita sähköposteja, ideoi tai laadi pitäen kätesi vapaana.  
+- Puhu millä tahansa kielellä: Monikielinen tuki sujuvalla keskustelujen vaihdolla.  
+- Rakennettu esteettömyyttä varten: Suunniteltu inklusiivisuus mielessä – sopii erinomaisesti käyttäjille, joilla on motorisia tai visuaalisia haasteita.  
+- Arvostettu ★ 4.9/5 yli 2 000 käyttäjän toimesta: Luotettu kasvavan globaalin yhteisön toimesta.  
+- Yksityisyys ensin: Äänidatasi on suojattu eikä sitä käytetä väärin. Katso käytäntö: https://saypi.ai/legal/privacy
 
 
-ALOITA MUUTAMASSA SEKUNNISSA
-1. Asenna laajennus.
-2. Avaa pi.ai tai claude.ai.
-3. Klikkaa puhelupainiketta ja puhu. Siinä kaikki.
+ALÄ ROITA KÄYTTÖÖN SEKUNNEISSA
+1. Asenna laajennus.  
+2. Tekoälychatia varten: Avaa pi.ai tai claude.ai ja napsauta puhelupainiketta.
+3. Puheentunnistusta varten: Mistä tahansa tekstikentästä, paina kelluvaa "Say, Pi" -kuvaketta tai napsauta hiiren oikealla painikkeella ja valitse "Aloita sanelu Say, Pi:n kanssa."
+4. Puhu luonnollisesti. Siinä kaikki.
 
 
-Aloita keskustelu tekoälyn kanssa luonnollisella tavalla – asenna Say, Pi ja koe keskustelun tulevaisuus.
+Aloita keskustelut tekoälyn kanssa ja kirjoita äänelläsi luonnollisesti – asenna Say, Pi ja koe keskustelun ja tuottavuuden tulevaisuus.

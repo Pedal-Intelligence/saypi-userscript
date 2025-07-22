@@ -1,32 +1,35 @@
-Say, Pi ay ginagawang mga makinis at boses-ang mumuno sa karanasan ang inyong mga pag-uusap kay Pi at Claude. Pindutin lamang ang pindutan ng tawag, magsalita na parang nakikipag-usap sa tao, at makakuha ng mga makatotohanang tugon. Perpekto para sa multitasking, accessibility, o sino mang mas nakapag-isip nang mas mabuti ng malakas.
+Ang Say, Pi ay ginagawang maayos, naka-boses na karanasan ang iyong mga pag-uusap kay Pi at Claude, at dinadala ang mataas na kalidad na pagsulat gamit ang boses sa anumang website. I-tap lang ang call button, magsalita na parang kausap mo ang isang tao, at makakuha ng mga tugon na parang tunay na tao ang kausap. Dagdag pa, magdikta ng teksto sa anumang input field sa web na may parehong katumpakan na gusto mo. Perpekto para sa multitasking, accessibility, o sinumang mas mahusay mag-isip nang malakas.
 
-PLANONG LIBRE – SUBUKAN AGAD, WALANG KAILANGANG ACCOUNT
-- Magsalita Kapalit ng Pag-type: Makipag-usap kay Pi at Claude gamit ang Whisper-powered na pagkilala ng boses na alam kung kailan ka tapos magsalita.  
-- Tumpak at Mabilis: Tamasa ng mataas na katumpakan sa speech-to-text, kahit may accent at ingay sa background.  
-- Marinig ang Tunay na Boses ni Pi: Mga natural na tugon ng boses sa mga built-in na estilo ni Pi.  
-- Mga Flexible Layout: Gamitin ang full-screen immersive mode o standard na view ng chat.  
-- Suporta sa Dark Mode: Disenyo na magiliw sa mata na umaangkop sa interface ni Pi.  
-- Gumagana Kahit Saan: Mac, Windows, Linux, Android, iOS – lahat ay sakop.
+LIBRENG PLANO – SUBUKAN AGAD, HINDI KAILANGAN NG ACCOUNT
+- Chat gamit ang boses kasama ang AI: Makipag-usap kay Pi at Claude gamit ang Whisper-powered voice recognition na alam kung tapos ka na magsalita.
+- Universal Voice Typing: Magdikta sa anumang text field o email sa anumang website – i-right-click at piliin ang "Start dictation with Say, Pi."
+- Tama at Mabilis: Magsaya sa mataas na katumpakan ng speech-to-text, kahit na may accent at ingay sa background.
+- Makinig sa Tunay na Boses ni Pi: Natural na boses na tugon sa built-in na mga estilo ni Pi.
+- Mga Flexible na Layout: Gamitin ang full-screen immersive mode o standard chat view.
+- Suporta sa Dark Mode: Disenyo na hindi pagod sa mata na sakto sa interface ni Pi.
+- Gumagana Kahit Saan: Mac, Windows, Linux, Android, iOS – lahat sakop.
 
-SAY, PI PREMIUM – IUNLOCK ANG BUONG KARANASAN 
-Ang iyong boses, ang iyong wika, ang iyong AI – sa lahat ng iyong device.  
-- Suporta kay Claude at Pi: Walang putol na paglipat sa pagitan ng mga top AI assistants.  
-- Makatotohanang Tugon sa Higit 32 Wika: Pinapagana ng ElevenLabs, dinisenyo na makatotohanan ang tunog sa iyong wika.  
-- Mas Malalaking Limitasyon sa Paggamit: Mas mahabang oras ng pakikipag-usap, mas mahabang oras ng pakikinig.  
-- Isang Account, Kahit Saan: Ang Premium ay sumusunod sa iyo sa mga platform at browser.
+SAY, PI PREMIUM – I-UNLOCK ANG BUONG KARANASAN
+Iyong boses, iyong wika, iyong AI – sa lahat ng iyong mga device at website.
+- Claude & Pi Support: Walang putol na pagpapalit sa mga nangungunang AI assistants.
+- Universal Dictation: Propesyonal na antas ng pagsulat gamit ang boses para sa mga email, dokumento, at form saanman sa web.
+- Lifelike Replies sa 32+ Wika: Pinapagana ng ElevenLabs, ginawa upang tunog natural sa iyong wika.
+- Mas Malalaking Limitasyon ng Paggamit: Mas mahabang oras ng pagsasalita, mas mahaba ang oras ng pakikinig, mas maraming dikta.
+- Isang Account, Kahit Saan: Sumusunod ang Premium sa iyo sa mga platform at browser.
 
-Tingnan ang presyo sa: https://saypi.ai/pricing
+Tingnan ang mga presyo sa: https://saypi.ai/pricing
 
-BAKIT MAHAL NG LIBU-LIBO ANG SAY, PI
-- Palakasin ang Iyong Workflow: Kumuha ng tala, mag-ideate, o mag-draft habang nakalibre ang iyong mga kamay.  
-- Magsalita ng Anumang Wika: Multilingual na suporta na may maayos na pagbago sa gitna ng pag-uusap.  
-- Built for Accessibility: Dinisenyo na isinasaalang-alang ang inclusivity – magaling para sa mga gumagamit na may mga hamon sa motor o visual.  
-- Nakatanggap ng rating na ★ 4.9/5 ng higit sa 2,000+ mga Gumagamit: Mapagkakatiwalaan ng lumalagong pandaigdigang komunidad.  
-- Privacy First: Ang iyong voice data ay secure at hindi kailanman inabuso. Tingnan ang aming patakaran sa: https://saypi.ai/legal/privacy
+BAKIT MAHAL NG LIBO-LIBO ANG SAY, PI
+- Pabilisin ang Iyong Workflow: Kumuha ng mga tala, magsulat ng mga email, mag-isip ng ideya, o mag-draft habang ang iyong mga kamay ay malaya.
+- Magsalita ng Anumang Wika: Suportahan ng maraming wika na may maayos na pagpapalit sa kalagitnaan ng pag-uusap.
+- Ginawa para sa Accessibility: Dinisenyo nang may inklusibidad sa isip – mahusay para sa mga gumagamit na may motor o visual na mga hamon.
+- Na-rate na ★ 4.9/5 ng mahigit sa 2,000+ Gumagamit: Pinagkakatiwalaan ng lumalaking pandaigdigang komunidad.
+- Privacy First: Ligtas ang iyong boses na data at hindi inaabuso. Tingnan ang aming patakaran sa: https://saypi.ai/legal/privacy
 
-MAGSIMULA SA LOOB NG ILANG SEGUNDO
-1. I-install ang extension.  
-2. Buksan ang pi.ai o claude.ai.  
-3. I-click ang pindutan ng tawag at magsalita. Iyon na 'yon.
+MAGSIMULA SA ILANG SEGUNDO
+1. I-install ang extension.
+2. Para sa AI chat: Buksan ang pi.ai o claude.ai at i-click ang call button.
+3. Para sa voice typing: Mula sa anumang text field, pindutin ang floating "Say, Pi" icon o i-right-click at piliin ang "Start dictation with Say, Pi."
+4. Magsalita ng natural. 'Yun lang.
 
-Simulan ang pakikipag-usap sa AI sa natural na paraan—i-install ang Say, Pi at maranasan ang hinaharap ng pag-uusap.
+Simulan ang pakikipag-usap sa AI at pag-type gamit ang iyong boses sa natural na paraan—i-install ang Say, Pi at maranasan ang hinaharap ng pag-uusap at produktibidad.

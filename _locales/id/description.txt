@@ -1,34 +1,37 @@
-Say, Pi mengubah percakapan Anda dengan Pi dan Claude menjadi pengalaman suara yang halus. 
-Cukup ketuk tombol panggilan, berbicaralah seperti biasa kepada seseorang, dan dapatkan balasan yang terdengar nyata. 
-Sempurna untuk multitasking, aksesibilitas, atau siapa pun yang berpikir lebih baik dengan berbicara.
+Say, Pi mengubah percakapan Anda dengan Pi dan Claude menjadi pengalaman yang lancar dan berbasis suara, serta menghadirkan pengetikan suara berkualitas tinggi ke situs web mana pun.  
+Cukup ketuk tombol panggilan, bicaralah seperti Anda berbicara kepada manusia, dan dapatkan balasan berbicara yang seperti nyata. Plus, ditikkan teks ke dalam kotak isian apa pun di web dengan akurasi yang Anda sukai.  
+Sempurna untuk multitasking, aksesibilitas, atau siapa saja yang lebih berpikir ketika berbicara.
 
-RENCANA GRATIS – COBA LANGSUNG, TIDAK PERLU AKUN
-- Berbicara Alih-alih Mengetik: Bicara dengan Pi dan Claude dengan pengenalan suara berbasis Whisper yang tahu kapan Anda berhenti berbicara.  
-- Akurat & Cepat: Nikmati konversi suara-ke-teks yang akurat, bahkan dengan aksen dan kebisingan latar belakang.  
-- Dengarkan Suara Nyata Pi: Balasan suara alami dalam gaya bawaan Pi.  
-- Tata Letak Fleksibel: Gunakan mode imersif layar penuh atau tampilan obrolan standar.  
-- Dukungan Mode Gelap: Desain ramah mata yang selaras dengan antarmuka Pi.  
-- Bekerja Di Mana Saja: Mac, Windows, Linux, Android, iOS – semuanya tercakup.
+PLANO GRATIS – COBA SEKARANG JUGA, TIDAK PERLU AKUN  
+- Obrolan Suara dengan AI: Bicara dengan Pi dan Claude dengan pengenalan suara yang didukung Whisper yang tahu kapan Anda selesai berbicara.  
+- Pengetikan Suara Universal: Diktekan ke kotak teks atau email mana pun di situs web mana pun – cukup klik kanan dan pilih "Mulai dikte dengan Say, Pi."  
+- Akurat & Cepat: Nikmati konversi suara-ke-teks dengan akurasi tinggi, bahkan dengan aksen dan kebisingan latar belakang.  
+- Dengarkan Suara Asli Pi: Balasan suara alami dalam gaya bawaan Pi.  
+- Tata Letak yang Fleksibel: Gunakan mode imersif layar penuh atau tampilan obrolan standar.  
+- Dukungan Mode Gelap: Desain ramah mata yang menyatu dengan antarmuka Pi.  
+- Bekerja di Mana Saja: Mac, Windows, Linux, Android, iOS – semuanya tercakup.
 
-SAY, PI PREMIUM – BUKA PENGALAMAN PENUH
-Suara Anda, bahasa Anda, AI Anda – di semua perangkat Anda.  
-- Dukungan Claude & Pi: Beralih dengan mulus antara asisten AI teratas.  
-- Balasan Seperti Asli dalam 32+ Bahasa: Ditenagai oleh ElevenLabs, dibuat agar terdengar alami dalam bahasa Anda.  
-- Batas Penggunaan Yang Lebih Besar: Lebih banyak waktu bicara, lebih banyak waktu mendengarkan.  
-- Satu Akun, Di Mana Saja: Premium mengikuti Anda di berbagai platform dan browser.
+SAY, PI PREMIUM – BUAT PENGALAMAN LENGKAP  
+Suara Anda, bahasa Anda, AI Anda – di semua perangkat dan situs web Anda.  
+- Dukungan Claude & Pi: Peralihan mulus antara asisten AI terbaik.  
+- Diktekan Universal: Pengetikan suara profesional untuk email, dokumen, dan formulir di seluruh web.  
+- Balasan Seperti Nyata dalam 32+ Bahasa: Didukung oleh ElevenLabs, dirancang agar terdengar alami dalam bahasa Anda.  
+- Batas Pemakaian Lebih Besar: Waktu bicara lebih banyak, waktu mendengarkan lebih banyak, lebih banyak diktean.  
+- Satu Akun, Di Mana Saja: Premium mengikuti Anda di seluruh platform dan browser.
 
 Lihat harga di: https://saypi.ai/pricing
 
-KENAPA RIBUAN ORANG MENYUKAI SAY, PI
-- Tingkatkan Alur Kerja Anda: Membuat catatan, beride, atau membuat draf sambil menjaga tangan Anda tetap bebas.  
-- Berbicara dalam Bahasa Apa Pun: Dukungan multibahasa dengan peralihan yang mulus di tengah percakapan.  
-- Dibuat untuk Aksesibilitas: Dirancang dengan inklusivitas dalam pikiran – hebat untuk pengguna dengan tantangan motorik atau visual.  
-- Dinilai ★ 4,9/5 oleh 2.000+ Pengguna: Dipercaya oleh komunitas global yang terus berkembang.  
+MENGAPA RIBUAN MENYUKAI SAY, PI  
+- Tingkatkan Produktivitas Anda: Ambil catatan, tulis email, ide, atau draf sambil menjaga tangan Anda bebas.  
+- Berbicara dalam Bahasa Apa Pun: Dukungan multibahasa dengan peralihan di pertengahan percakapan yang mulus.  
+- Dibangun untuk Aksesibilitas: Dirancang dengan inklusi dalam pikiran – bagus untuk pengguna dengan tantangan motorik atau visual.  
+- Dinilai ★ 4,9/5 oleh 2.000+ Pengguna: Dipercaya oleh komunitas global yang semakin berkembang.  
 - Privasi Utama: Data suara Anda aman dan tidak pernah disalahgunakan. Lihat kebijakan kami di: https://saypi.ai/legal/privacy
 
-MULAI DALAM HITUNGAN DETIK
+MULAI DALAM HITUNG DETIK  
 1. Pasang ekstensi.  
-2. Buka pi.ai atau claude.ai.  
-3. Klik tombol panggilan dan berbicara. Itu saja.
+2. Untuk obrolan AI: Buka pi.ai atau claude.ai dan klik tombol panggilan.  
+3. Untuk pengetikan suara: Dari kotak teks mana pun, tekan ikon "Say, Pi" mengambang atau klik kanan dan pilih "Mulai dikte dengan Say, Pi."  
+4. Bicara secara alami. Itu saja.
 
-Mulailah berbicara dengan AI dengan cara yang alami—pasang Say, Pi dan rasakan masa depan percakapan.
+Mulailah berbicara dengan AI dan mengetik dengan suara Anda dengan cara yang alami—pasang Say, Pi dan rasakan masa depan percakapan dan produktivitas.
