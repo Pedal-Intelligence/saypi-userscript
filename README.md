@@ -168,46 +168,82 @@ If you have any questions or comments, we'd love to hear from you! Drop us a mes
 
 ## Internationalization (i18n) Workflow
 
-This repository uses a **command-line workflow** (rather than the deprecated VS Code *i18n-ally* extension) for translating Chrome-extension locale files. The process is powered by `translate-cli` and the helper script `i18n-translate-chrome.sh` located at the project root.
+This repository uses a **unified command-line workflow** for translating both UI strings and browser store descriptions. The process handles two types of content:
+
+1. **UI Strings** (`_locales/{locale}/messages.json`) - Translated via `translate-cli`
+2. **Store Descriptions** (`_locales/{locale}/description.txt`) - Translated via OpenAI API
 
 ### One-time setup
 
-1. Install `translate-cli` (requires Go):
+1. **Install `translate-cli`** (requires Go):
 
    ```bash
    go install github.com/quailyquaily/translate-cli@latest
    ```
 
-2. Create a configuration file at `~/.config/translate-cli/config.yaml` with your preferred translation engine credentials. See the [translate-cli docs](https://github.com/quailyquaily/translate-cli) for details.
+2. **Configure `translate-cli`**: Create a configuration file at `~/.config/translate-cli/config.yaml` with your preferred translation engine credentials. See the [translate-cli docs](https://github.com/quailyquaily/translate-cli) for details.
 
-### Translating locale files
+3. **Set OpenAI API Key** (for store descriptions):
 
+   ```bash
+   export OPENAI_API_KEY="your-api-key-here"
+   ```
+
+### Unified Translation Command
+
+**Recommended**: Use the unified script that handles both UI strings and store descriptions:
+
+```bash
+# Using npm script (recommended)
+npm run translate
+
+# Or directly
+python3 i18n-translate-all.py
+```
+
+**Options:**
+
+```bash
+# Skip confirmation prompts
+npm run translate -- --yes
+
+# Pass specific options to translate-cli
+npm run translate -- --translate-cli-args="-b 20 -e openai"
+
+# Check requirements without running translations
+npm run translate:check
+
+# Skip validation after translation
+npm run translate -- --skip-validation
+```
+
+### What the unified script does
+
+1. **Validates requirements**: Checks for `translate-cli`, OpenAI API key, and required files
+2. **Translates UI strings**: Runs `i18n-translate-chrome.sh` to translate `messages.json` files
+3. **Translates store descriptions**: Runs `i18n-translate-release-text.py` to translate `description.txt` files
+4. **Validates results**: Checks that all locales have valid JSON and description files
+
+### Individual script usage (advanced)
+
+If you need to run translations separately:
+
+**UI strings only:**
 ```bash
 ./i18n-translate-chrome.sh [LOCALES_DIR] -- [translate-cli flags…]
 ```
 
-• `LOCALES_DIR` defaults to `_locales` and should match the Chrome extension locale folder structure (`_locales/<lang>/messages.json`).
-• Any flags after `--` are forwarded to `translate-cli` (e.g. batch size, engine, model).
-
-Example – translate all locales with a batch size of 20 using the defaults:
-
+**Store descriptions only:**
 ```bash
-./i18n-translate-chrome.sh -- -b 20
+python3 i18n-translate-release-text.py
 ```
 
-Example – skip the interactive confirmation prompt and use a custom engine:
+### Translation workflow for releases
 
-```bash
-./i18n-translate-chrome.sh -y -- -e openai -m gpt-4o-mini
-```
+1. Update source content in `_locales/en/messages.json` and `_locales/en/description.txt`
+2. Run `npm run translate` to translate all content
+3. Review translated files in `_locales/`
+4. Test the extension with different locales
+5. Run `npm run build` to validate translations
 
-The script will:
-
-1. Flatten the `_locales` directory into a temporary workspace (converting `en_US` → `en-US` for standards compliance).
-2. Invoke `translate-cli translate`, using `en` as the source and every other locale as the target.
-3. Copy the translated files back into the original Chrome `_locales` folder, restoring the underscore naming that Chrome expects.
-4. Clean up the temporary workspace.
-
-If `translate-cli` is not found on your `$PATH`, the script prints installation instructions and exits.
-
-> **Note**: You no longer need the *i18n-ally* VS Code extension – please remove any related settings from your editor configuration.
+> **Note**: The unified script replaces the need to run individual translation scripts manually, ensuring both UI strings and store descriptions are always kept in sync during release preparation.

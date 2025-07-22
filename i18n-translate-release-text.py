@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 This script is used to translate the contents of version-specific files, specifically promotional text and release notes,
 from English to various other languages, for the Chrome Web Store listing.

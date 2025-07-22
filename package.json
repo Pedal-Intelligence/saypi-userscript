@@ -18,7 +18,9 @@
     "test:vitest:watch": "vitest --watch --config vitest.config.js",
     "test": "npm-run-all -s test:jest test:vitest",
     "build:firefox": "npm run build && ./package-extension.sh firefox",
-    "source-archive": "git archive --format=zip -o source-code.zip HEAD"
+    "source-archive": "git archive --format=zip -o source-code.zip HEAD",
+    "translate": "python3 i18n-translate-all.py",
+    "translate:check": "python3 i18n-translate-all.py --check-only"
   },
   "jest": {
     "preset": "ts-jest/presets/default-esm",
