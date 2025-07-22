@@ -504,7 +504,9 @@ describe('DictationMachine', () => {
         'test-session-123',
         3,
         expect.any(Number),
-        expect.any(Number)
+        expect.any(Number),
+        "text", // inputType from HTML input element
+        "Enter your name" // inputLabel from placeholder attribute
       );
     });
   });

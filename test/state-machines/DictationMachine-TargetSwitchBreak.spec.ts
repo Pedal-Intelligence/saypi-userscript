@@ -185,7 +185,9 @@ describe('DictationMachine - Target Switch Audio Breaking', () => {
         undefined, // no session ID
         3,
         expect.any(Number),
-        expect.any(Number)
+        expect.any(Number),
+        "text", // inputType from HTML input element
+        "Enter your name" // inputLabel from placeholder attribute
       );
       
       // Verify that only one upload was called (normal processing)
