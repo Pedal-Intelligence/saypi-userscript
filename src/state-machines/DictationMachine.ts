@@ -623,12 +623,14 @@ function computeFinalText(
     }
 
     // Normalise whitespace on both parts
-    initialText = initialText.replace(/\s{2,}/g, " ").replace(/\s+$/, "");
+    initialText = initialText
+      .replace(/[ \t]{2,}/g, " ")   // collapse only spaces/tabs, keep newlines
+      .replace(/[ \t]+$/, "");      // trim trailing spaces/tabs but keep final newline
     const normalisedServer = serverText.trimStart();
 
     const needsSpace = initialText !== "" && !initialText.endsWith(" ");
     const result = (needsSpace ? initialText + " " : initialText) + normalisedServer;
-    return result.replace(/\s{2,}/g, " ");
+    return result.replace(/[ \t]{2,}/g, " ");
   }
   // Local merge
   const mergedTranscript = mergeService
@@ -643,12 +645,14 @@ function computeFinalText(
   }
 
   // Tidy whitespace
-  initialText = initialText.replace(/\s{2,}/g, " ").replace(/\s+$/, "");
+  initialText = initialText
+    .replace(/[ \t]{2,}/g, " ")   // collapse only spaces/tabs, keep newlines
+    .replace(/[ \t]+$/, "");      // trim trailing spaces/tabs but keep final newline
   const normalisedMerged = mergedTranscript.trimStart();
 
   const needsSpace = initialText !== "" && !initialText.endsWith(" ");
   const result = (needsSpace ? initialText + " " : initialText) + normalisedMerged;
-  return result.replace(/\s{2,}/g, " ");
+  return result.replace(/[ \t]{2,}/g, " ");
 }
 
 const machine = createMachine<DictationContext, DictationEvent, DictationTypestate>(
@@ -1021,14 +1025,14 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         const mergedSequences = event.merged || [];
         // ---- NORMALISE ELLIPSES ----
         // Convert any ellipsis—either the single Unicode “…” character or the
-        // three‑dot sequence “...” — into a single space so that downstream
-        // merging logic treats them consistently.  Then collapse any duplicate
-        // whitespace that may result and trim the string.
+        // three-dot sequence “...” — into a single space so downstream merging
+        // sees consistent whitespace. Then collapse *spaces or tabs* (but not
+        // line breaks) and trim the string.
         const originalTranscription = transcription;
         transcription = transcription
           .replace(/\u2026/g, " ")   // “…” → space
           .replace(/\.{3}/g, " ")    // "..." → space
-          .replace(/\s{2,}/g, " ")   // collapse runs of spaces
+          .replace(/[ \t]{2,}/g, " ")   // collapse runs of spaces/tabs but keep line-breaks
           .trim();
 
         console.debug(

@@ -642,8 +642,8 @@ export class UniversalDictationModule {
           title = 'Transcribing speech to text';
         } else if (listeningState.converting === 'accumulating') {
           color = '#66bb6a'; // Green - accumulating transcriptions
-          ariaLabel = 'Processing text...';
-          title = 'Processing transcribed text';
+          ariaLabel = 'Processing speech into text...';
+          title = 'Transcribing speech to text';
         }
       }
     }
