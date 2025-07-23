@@ -376,6 +376,38 @@ function getTargetElement(): HTMLElement | null {
   return targetInputElement;
 }
 
+// Helper function to position cursor at the end of contentEditable element
+function positionCursorAtEnd(element: HTMLElement): void {
+  const selection = window.getSelection();
+  if (!selection) return;
+  
+  // Create a range that selects the end of the element's content
+  const range = document.createRange();
+  
+  // Move to the end of the element's content
+  if (element.childNodes.length > 0) {
+    // If there are child nodes, position after the last one
+    const lastNode = element.childNodes[element.childNodes.length - 1];
+    if (lastNode.nodeType === Node.TEXT_NODE) {
+      // If last node is text, position at the end of that text
+      range.setStart(lastNode, lastNode.textContent?.length || 0);
+      range.setEnd(lastNode, lastNode.textContent?.length || 0);
+    } else {
+      // If last node is not text, position after it
+      range.setStartAfter(lastNode);
+      range.setEndAfter(lastNode);
+    }
+  } else {
+    // If no child nodes, position inside the element
+    range.setStart(element, 0);
+    range.setEnd(element, 0);
+  }
+  
+  // Apply the range to the selection
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
 // Helper function to set text in a specific target element
 function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: boolean = false) {
   const target = targetElement || getTargetElement();
@@ -397,6 +429,8 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
     // For contenteditable elements
     if (replaceAll) {
       target.textContent = text;
+      // Position cursor at the end after replacing all content
+      positionCursorAtEnd(target);
     } else {
       const selection = window.getSelection();
       if (selection && selection.rangeCount > 0) {
@@ -409,6 +443,8 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
       } else {
         // Fallback: append to end
         target.textContent = (target.textContent || '') + text;
+        // Position cursor at the end after appending
+        positionCursorAtEnd(target);
       }
     }
     
