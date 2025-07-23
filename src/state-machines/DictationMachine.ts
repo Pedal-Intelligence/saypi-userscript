@@ -1098,6 +1098,47 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
 
           const initialText = getTextInTarget(originatingTarget);
 
+          // CRITICAL FIX: Check if field was externally cleared
+          // If the field is empty but we have existing transcriptions for this target,
+          // AND there's at least one transcription that would have produced non-empty content,
+          // it means external code (like a chat platform) cleared the field without
+          // triggering manual edit detection. Clear the transcription state.
+          const hasExistingTranscriptions = Object.keys(targetTranscriptions).length > 0;
+          const hasNonEmptyTranscriptions = hasExistingTranscriptions && 
+            Object.values(targetTranscriptions).some(text => text.trim() !== "");
+          
+          if (initialText.trim() === "" && hasNonEmptyTranscriptions) {
+            console.debug(`Detected external field clearing for target ${targetId}, clearing transcription state`);
+            
+            // Clear transcriptions for this target
+            Object.keys(targetTranscriptions).forEach(key => {
+              const seq = parseInt(key, 10);
+              delete context.transcriptions[seq];
+              delete targetTranscriptions[seq];
+            });
+            
+            // Clear the transcription bucket if it's now empty
+            if (Object.keys(targetTranscriptions).length === 0) {
+              delete context.transcriptionsByTarget[targetId];
+            }
+            
+            // Reinitialize the bucket for the new transcription
+            const cleanTargetTranscriptions = getOrCreateTargetBucket(context, targetId);
+            cleanTargetTranscriptions[sequenceNumber] = transcription;
+            context.transcriptions[sequenceNumber] = transcription;
+            
+            // Set the text directly without merging since we cleared the state
+            setTextInTarget(transcription, originatingTarget, true);
+            
+            // Update accumulated text only if this is the current target
+            if (originatingTarget === context.targetElement) {
+              context.accumulatedText = transcription;
+            }
+            
+            console.debug(`Reset transcription state for target ${targetId}, new content: "${transcription}"`);
+            return; // Skip the normal merging logic
+          }
+
           // Get target-specific transcriptions for merging
           const finalText = computeFinalText(
             targetTranscriptions,
