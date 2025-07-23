@@ -258,3 +258,171 @@ describe('Universal Dictation State Accumulation Bug', () => {
     });
   });
 });
+
+describe('Universal Dictation State Accumulation Bug - ContentEditable Elements', () => {
+  let service: any;
+  let contentEditableElement: HTMLDivElement;
+  
+  beforeEach(() => {
+    vi.clearAllMocks();
+    
+    // Reset TranscriptionModule mocks
+    let sequenceCounter = 0;
+    vi.mocked(TranscriptionModule.getCurrentSequenceNumber).mockImplementation(() => sequenceCounter);
+    vi.mocked(TranscriptionModule.uploadAudioWithRetry).mockImplementation(() => {
+      sequenceCounter++;
+      return Promise.resolve(sequenceCounter);
+    });
+    
+    // Create a content-editable element (simulating chat platforms that use divs)
+    contentEditableElement = document.createElement('div');
+    contentEditableElement.id = 'chat-editable';
+    contentEditableElement.contentEditable = 'true';
+    contentEditableElement.textContent = '';
+    contentEditableElement.style.minHeight = '20px';
+    document.body.appendChild(contentEditableElement);
+    
+    // Create fresh machine for each test
+    const machine = createDictationMachine(contentEditableElement);
+    service = interpret(machine);
+  });
+
+  afterEach(() => {
+    if (service) {
+      service.stop();
+    }
+    document.body.innerHTML = '';
+  });
+
+  it('should detect external field clearing in contentEditable elements', async () => {
+    console.log('Testing contentEditable field clearing detection...');
+    
+    // Start the dictation machine
+    service.start();
+    
+    // Simulate starting dictation
+    service.send({ type: 'saypi:startDictation', targetElement: contentEditableElement });
+    service.send({ type: 'saypi:callReady' });
+    
+    // First transcription session
+    service.state.context.transcriptionTargets[1] = contentEditableElement;
+    service.send({
+      type: 'saypi:transcribed',
+      text: 'Hello from contentEditable',
+      sequenceNumber: 1,
+    });
+    
+    expect(contentEditableElement.textContent).toBe('Hello from contentEditable');
+    expect(service.state.context.transcriptionsByTarget['chat-editable']).toEqual({
+      1: 'Hello from contentEditable'
+    });
+    
+    // Simulate external clearing (like what chat platforms do)
+    // This is the key test - clearing textContent instead of value
+    contentEditableElement.textContent = '';
+    
+    // Second session - should detect clearing and start fresh
+    service.state.context.transcriptionTargets[2] = contentEditableElement;
+    service.send({
+      type: 'saypi:transcribed',
+      text: 'New message',
+      sequenceNumber: 2,
+    });
+    
+    // Should only contain new content, not accumulated
+    expect(contentEditableElement.textContent).toBe('New message');
+    expect(service.state.context.transcriptionsByTarget['chat-editable']).toEqual({
+      2: 'New message'
+    });
+  });
+
+  it('should handle contentEditable with HTML content before clearing', async () => {
+    console.log('Testing contentEditable with HTML content...');
+    
+    service.start();
+    service.send({ type: 'saypi:startDictation', targetElement: contentEditableElement });
+    service.send({ type: 'saypi:callReady' });
+    
+    // First transcription
+    service.state.context.transcriptionTargets[1] = contentEditableElement;
+    service.send({
+      type: 'saypi:transcribed',
+      text: 'Content with formatting',
+      sequenceNumber: 1,
+    });
+    
+    expect(contentEditableElement.textContent).toBe('Content with formatting');
+    
+    // Simulate platform adding HTML formatting, then clearing
+    contentEditableElement.innerHTML = '<p><br></p>'; // Some platforms do this
+    expect(contentEditableElement.textContent).toBe(''); // textContent should be empty
+    
+    // Second transcription should detect clearing
+    service.state.context.transcriptionTargets[2] = contentEditableElement;
+    service.send({
+      type: 'saypi:transcribed',
+      text: 'Fresh start',
+      sequenceNumber: 2,
+    });
+    
+    expect(contentEditableElement.textContent).toBe('Fresh start');
+    expect(service.state.context.transcriptionsByTarget['chat-editable']).toEqual({
+      2: 'Fresh start'
+    });
+  });
+
+  it('should work with mixed input and contentEditable elements', async () => {
+    console.log('Testing mixed element types...');
+    
+    // Create an input element too
+    const inputElement = document.createElement('input');
+    inputElement.id = 'mixed-input';
+    inputElement.type = 'text';
+    document.body.appendChild(inputElement);
+    
+    service.start();
+    
+    // Test contentEditable first
+    service.send({ type: 'saypi:startDictation', targetElement: contentEditableElement });
+    service.send({ type: 'saypi:callReady' });
+    
+    service.state.context.transcriptionTargets[1] = contentEditableElement;
+    service.send({
+      type: 'saypi:transcribed',
+      text: 'ContentEditable text',
+      sequenceNumber: 1,
+    });
+    
+    expect(contentEditableElement.textContent).toBe('ContentEditable text');
+    
+    // Switch to input element
+    service.send({ type: 'saypi:switchTarget', targetElement: inputElement });
+    
+    service.state.context.transcriptionTargets[2] = inputElement;
+    service.send({
+      type: 'saypi:transcribed',
+      text: 'Input text',
+      sequenceNumber: 2,
+    });
+    
+    expect(inputElement.value).toBe('Input text');
+    
+    // Clear both externally
+    contentEditableElement.textContent = '';
+    inputElement.value = '';
+    
+    // Back to contentEditable - should detect clearing
+    service.send({ type: 'saypi:switchTarget', targetElement: contentEditableElement });
+    service.state.context.transcriptionTargets[3] = contentEditableElement;
+    service.send({
+      type: 'saypi:transcribed',
+      text: 'Fresh contentEditable',
+      sequenceNumber: 3,
+    });
+    
+    expect(contentEditableElement.textContent).toBe('Fresh contentEditable');
+    expect(service.state.context.transcriptionsByTarget['chat-editable']).toEqual({
+      3: 'Fresh contentEditable'
+    });
+  });
+});
