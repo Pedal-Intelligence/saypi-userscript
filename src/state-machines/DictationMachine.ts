@@ -488,26 +488,7 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
         }
       };
 
-      let success = tryNativeInsert();
-
-      // 2. Fallback to the (deprecated but widely supported) execCommand API.
-      if (!success) {
-        try {
-          success = document.execCommand("insertText", false, text);
-        } catch {
-          // Ignore – will fallback further below.
-        }
-      }
-
-      // 3. Last-ditch fallback: append raw text node (may be reverted by Lexical).
-      if (!success) {
-        if (replaceAll) {
-          target.textContent = text;
-        } else {
-          target.textContent = (target.textContent || "") + text;
-        }
-      }
-
+      tryNativeInsert(); // try without fallback
       emitContentUpdated(text);
       return;
     }
@@ -1143,13 +1124,13 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         const sequenceNumber = event.sequenceNumber;
         const mergedSequences = event.merged || [];
         // ---- NORMALISE ELLIPSES ----
-        // Convert any ellipsis—either the single Unicode "…" character or the
-        // three-dot sequence "..." — into a single space so downstream merging
+        // Convert any ellipsis—either the single Unicode “…” character or the
+        // three-dot sequence “...” — into a single space so downstream merging
         // sees consistent whitespace. Then collapse *spaces or tabs* (but not
         // line breaks) and trim the string.
         const originalTranscription = transcription;
         transcription = transcription
-          .replace(/\u2026/g, " ")   // "…" → space
+          .replace(/\u2026/g, " ")   // “…” → space
           .replace(/\.{3}/g, " ")    // "..." → space
           .replace(/[ \t]{2,}/g, " ")   // collapse runs of spaces/tabs but keep line-breaks
           .trim();
@@ -1173,9 +1154,6 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
 
           // Initialize target-specific transcriptions if not exists
           const targetTranscriptions = getOrCreateTargetBucket(context, targetId);
-          
-          // Check if this is the first transcript for this target
-          const isFirstTranscript = Object.keys(targetTranscriptions).length === 0;
 
           // Add the new (potentially merged) transcription to both global and target-specific storage
           context.transcriptions[sequenceNumber] = transcription;
@@ -1189,7 +1167,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           // AND there's at least one transcription that would have produced non-empty content,
           // it means external code (like a chat platform) cleared the field without
           // triggering manual edit detection. Clear the transcription state.
-          const hasExistingTranscriptions = Object.keys(targetTranscriptions).length > 1; // Changed from > 0 to > 1 since we just added current
+          const hasExistingTranscriptions = Object.keys(targetTranscriptions).length > 0;
           const hasNonEmptyTranscriptions = hasExistingTranscriptions && 
             Object.values(targetTranscriptions).some(text => text.trim() !== "");
           
@@ -1225,19 +1203,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
             return; // Skip the normal merging logic
           }
 
-          // For the first transcript, set directly without deduplication to avoid duplication in Lexical editors
-          if (isFirstTranscript) {
-            console.debug(`First transcript for target ${targetId}, setting directly: "${transcription}"`);
-            setTextInTarget(transcription, originatingTarget, true); // true = replace all content
-            
-            // Update accumulated text only if this is the current target
-            if (originatingTarget === context.targetElement) {
-              context.accumulatedText = transcription;
-            }
-            return; // Skip the merging logic
-          }
-
-          // Get target-specific transcriptions for merging (excluding current transcript for deduplication)
+          // Get target-specific transcriptions for merging
           const finalText = computeFinalText(
             targetTranscriptions,
             mergedSequences,
