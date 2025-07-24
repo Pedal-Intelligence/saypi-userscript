@@ -408,92 +408,90 @@ function positionCursorAtEnd(element: HTMLElement): void {
   selection.addRange(range);
 }
 
-// Helper function to set text in a specific target element
-function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: boolean = false) {
-  const target = targetElement || getTargetElement();
-  if (!target) return;
+// Text insertion strategies for different element types
+interface TextInsertionStrategy {
+  canHandle(target: HTMLElement): boolean;
+  insertText(target: HTMLElement, text: string, replaceAll: boolean): void;
+}
 
-  // -- NEW: Detect Lexical rich-text editors ---------------------------------
-  const isLexicalEditor = (el: HTMLElement): boolean => {
+class InputTextareaStrategy implements TextInsertionStrategy {
+  canHandle(target: HTMLElement): boolean {
+    return target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement;
+  }
+
+  insertText(target: HTMLElement, text: string, replaceAll: boolean): void {
+    const inputTarget = target as HTMLInputElement | HTMLTextAreaElement;
+    
+    if (replaceAll) {
+      inputTarget.value = text;
+    } else {
+      inputTarget.value = inputTarget.value + text;
+    }
+
+    // Dispatch input event for framework compatibility
+    inputTarget.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+}
+
+class LexicalEditorStrategy implements TextInsertionStrategy {
+  canHandle(target: HTMLElement): boolean {
+    return target.contentEditable === "true" && this.isLexicalEditor(target);
+  }
+
+  private isLexicalEditor(el: HTMLElement): boolean {
     return (
       el.getAttribute("data-lexical-editor") === "true" ||
       !!el.closest('[data-lexical-editor="true"]')
     );
-  };
-
-  // Helper to emit our content-updated event consistently
-  const emitContentUpdated = (content: string) => {
-    EventBus.emit("dictation:contentUpdated", {
-      targetElement: target,
-      content,
-      source: "dictation",
-    });
-  };
-
-  // -------------------------------------------------------------------------
-  if (
-    target instanceof HTMLInputElement ||
-    target instanceof HTMLTextAreaElement
-  ) {
-    // For <input> and <textarea> elements -----------------------------------
-    if (replaceAll) {
-      target.value = text;
-    } else {
-      target.value = target.value + text;
-    }
-
-    // Dispatch input event for framework compatibility
-    target.dispatchEvent(new Event("input", { bubbles: true }));
-    emitContentUpdated(text);
-    return;
   }
 
-  // Handle contenteditable elements -----------------------------------------
-  if (target.contentEditable === "true") {
-    // Special pathway for Lexical rich-text editors
-    if (isLexicalEditor(target)) {
-      target.focus();
+  insertText(target: HTMLElement, text: string, replaceAll: boolean): void {
+    target.focus();
 
-      // Select all text if we are replacing everything
-      if (replaceAll) {
-        document.execCommand("selectAll");
-      }
-
-      // Attempt programmatic insertion that Lexical will recognise.
-      // 1. Try the modern beforeinput/input pathway with InputEvent.
-      const tryNativeInsert = (): boolean => {
-        try {
-          const before = new InputEvent("beforeinput", {
-            bubbles: true,
-            cancelable: true,
-            inputType: "insertText",
-            data: text,
-            composed: true,
-          });
-
-          const defaultPrevented = !target.dispatchEvent(before);
-          if (!defaultPrevented) {
-            const input = new InputEvent("input", {
-              bubbles: true,
-              cancelable: false,
-              inputType: "insertText",
-              data: text,
-              composed: true,
-            });
-            target.dispatchEvent(input);
-          }
-          return !defaultPrevented;
-        } catch {
-          return false;
-        }
-      };
-
-      tryNativeInsert(); // try without fallback
-      emitContentUpdated(text);
-      return;
+    // Select all text if we are replacing everything
+    if (replaceAll) {
+      document.execCommand("selectAll");
     }
 
-    // ----- Non-Lexical contenteditable (unchanged existing behaviour) ------
+    // Attempt programmatic insertion that Lexical will recognise.
+    // Try the modern beforeinput/input pathway with InputEvent.
+    this.tryNativeInsert(target, text);
+  }
+
+  private tryNativeInsert(target: HTMLElement, text: string): boolean {
+    try {
+      const before = new InputEvent("beforeinput", {
+        bubbles: true,
+        cancelable: true,
+        inputType: "insertText",
+        data: text,
+        composed: true,
+      });
+
+      const defaultPrevented = !target.dispatchEvent(before);
+      if (!defaultPrevented) {
+        const input = new InputEvent("input", {
+          bubbles: true,
+          cancelable: false,
+          inputType: "insertText",
+          data: text,
+          composed: true,
+        });
+        target.dispatchEvent(input);
+      }
+      return !defaultPrevented;
+    } catch {
+      return false;
+    }
+  }
+}
+
+class ContentEditableStrategy implements TextInsertionStrategy {
+  canHandle(target: HTMLElement): boolean {
+    return target.contentEditable === "true";
+  }
+
+  insertText(target: HTMLElement, text: string, replaceAll: boolean): void {
     if (replaceAll) {
       target.textContent = text;
       // Position cursor at the end after replacing all content
@@ -517,11 +515,54 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
 
     // Dispatch input event for framework compatibility
     target.dispatchEvent(new Event("input", { bubbles: true }));
-    emitContentUpdated(text);
-    return;
   }
+}
 
-  // If we reached here, we have no recognised strategy
+class TextInsertionStrategySelector {
+  private strategies: TextInsertionStrategy[] = [
+    new InputTextareaStrategy(),
+    new LexicalEditorStrategy(),
+    new ContentEditableStrategy(),
+  ];
+
+  getStrategy(target: HTMLElement): TextInsertionStrategy | null {
+    // Order matters: LexicalEditorStrategy should be checked before ContentEditableStrategy
+    // since Lexical editors are also contenteditable
+    for (const strategy of this.strategies) {
+      if (strategy.canHandle(target)) {
+        return strategy;
+      }
+    }
+    return null;
+  }
+}
+
+// Create a singleton instance of the strategy selector
+const strategySelector = new TextInsertionStrategySelector();
+
+// Helper function to set text in a specific target element
+function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: boolean = false) {
+  const target = targetElement || getTargetElement();
+  if (!target) return;
+
+  // Helper to emit our content-updated event consistently
+  const emitContentUpdated = (content: string) => {
+    EventBus.emit("dictation:contentUpdated", {
+      targetElement: target,
+      content,
+      source: "dictation",
+    });
+  };
+
+  // Get the appropriate strategy for this target element
+  const strategy = strategySelector.getStrategy(target);
+  
+  if (strategy) {
+    strategy.insertText(target, text, replaceAll);
+    emitContentUpdated(text);
+  } else {
+    console.warn("No text insertion strategy found for target element", target);
+  }
 }
 
 /**
