@@ -413,20 +413,106 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
   const target = targetElement || getTargetElement();
   if (!target) return;
 
-  if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) {
-    // For input and textarea elements
+  // -- NEW: Detect Lexical rich-text editors ---------------------------------
+  const isLexicalEditor = (el: HTMLElement): boolean => {
+    return (
+      el.getAttribute("data-lexical-editor") === "true" ||
+      !!el.closest('[data-lexical-editor="true"]')
+    );
+  };
+
+  // Helper to emit our content-updated event consistently
+  const emitContentUpdated = (content: string) => {
+    EventBus.emit("dictation:contentUpdated", {
+      targetElement: target,
+      content,
+      source: "dictation",
+    });
+  };
+
+  // -------------------------------------------------------------------------
+  if (
+    target instanceof HTMLInputElement ||
+    target instanceof HTMLTextAreaElement
+  ) {
+    // For <input> and <textarea> elements -----------------------------------
     if (replaceAll) {
       target.value = text;
     } else {
-      const currentValue = target.value;
-      const newValue = currentValue + text;
-      target.value = newValue;
+      target.value = target.value + text;
     }
-    
+
     // Dispatch input event for framework compatibility
-    target.dispatchEvent(new Event('input', { bubbles: true }));
-  } else if (target.contentEditable === 'true') {
-    // For contenteditable elements
+    target.dispatchEvent(new Event("input", { bubbles: true }));
+    emitContentUpdated(text);
+    return;
+  }
+
+  // Handle contenteditable elements -----------------------------------------
+  if (target.contentEditable === "true") {
+    // Special pathway for Lexical rich-text editors
+    if (isLexicalEditor(target)) {
+      target.focus();
+
+      // Select all text if we are replacing everything
+      if (replaceAll) {
+        document.execCommand("selectAll");
+      }
+
+      // Attempt programmatic insertion that Lexical will recognise.
+      // 1. Try the modern beforeinput/input pathway with InputEvent.
+      const tryNativeInsert = (): boolean => {
+        try {
+          const before = new InputEvent("beforeinput", {
+            bubbles: true,
+            cancelable: true,
+            inputType: "insertText",
+            data: text,
+            composed: true,
+          });
+
+          const defaultPrevented = !target.dispatchEvent(before);
+          if (!defaultPrevented) {
+            const input = new InputEvent("input", {
+              bubbles: true,
+              cancelable: false,
+              inputType: "insertText",
+              data: text,
+              composed: true,
+            });
+            target.dispatchEvent(input);
+          }
+          return !defaultPrevented;
+        } catch {
+          return false;
+        }
+      };
+
+      let success = tryNativeInsert();
+
+      // 2. Fallback to the (deprecated but widely supported) execCommand API.
+      if (!success) {
+        try {
+          success = document.execCommand("insertText", false, text);
+        } catch {
+          // Ignore – will fallback further below.
+        }
+      }
+
+      // 3. Last-ditch fallback: append raw text node (may be reverted by Lexical).
+      if (!success) {
+        if (replaceAll) {
+          target.textContent = text;
+        } else {
+          target.textContent = (target.textContent || "") + text;
+        }
+      }
+
+      emitContentUpdated(text);
+      return;
+    }
+
+    // ----- Non-Lexical contenteditable (unchanged existing behaviour) ------
     if (replaceAll) {
       target.textContent = text;
       // Position cursor at the end after replacing all content
@@ -442,22 +528,19 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
         selection.addRange(range);
       } else {
         // Fallback: append to end
-        target.textContent = (target.textContent || '') + text;
+        target.textContent = (target.textContent || "") + text;
         // Position cursor at the end after appending
         positionCursorAtEnd(target);
       }
     }
-    
+
     // Dispatch input event for framework compatibility
-    target.dispatchEvent(new Event('input', { bubbles: true }));
+    target.dispatchEvent(new Event("input", { bubbles: true }));
+    emitContentUpdated(text);
+    return;
   }
-  
-  // Emit event to notify that content was updated from dictation
-  EventBus.emit("dictation:contentUpdated", {
-    targetElement: target,
-    content: text,
-    source: "dictation"
-  });
+
+  // If we reached here, we have no recognised strategy
 }
 
 /**
@@ -668,27 +751,17 @@ function computeFinalText(
     const result = (needsSpace ? initialText + " " : initialText) + normalisedServer;
     return result.replace(/[ \t]{2,}/g, " ");
   }
-  // Local merge
+  
+  // For local merges, simply combine all available transcription segments.
+  // The previous logic attempted to preserve manual edits by combining `initialText`
+  // with the merged transcript, but it was flawed and caused duplication.
+  // This simpler approach fixes the duplication bug. Manual edit preservation
+  // during active dictation is handled by the `updateTranscriptionsForManualEdit` function.
   const mergedTranscript = mergeService
     ? mergeService.mergeTranscriptsLocal(targetTranscriptions)
     : Object.values(targetTranscriptions).join(" ");
 
-  // Strip old individual transcripts (and surrounding whitespace) from the prefix
-  for (const mergedText of Object.values(targetTranscriptions)) {
-    const escaped = mergedText.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
-    const regex = new RegExp(`\\s*${escaped}\\s*`, "g");
-    initialText = initialText.replace(regex, " ");
-  }
-
-  // Tidy whitespace
-  initialText = initialText
-    .replace(/[ \t]{2,}/g, " ")   // collapse only spaces/tabs, keep newlines
-    .replace(/[ \t]+$/, "");      // trim trailing spaces/tabs but keep final newline
-  const normalisedMerged = mergedTranscript.trimStart();
-
-  const needsSpace = initialText !== "" && !initialText.endsWith(" ");
-  const result = (needsSpace ? initialText + " " : initialText) + normalisedMerged;
-  return result.replace(/[ \t]{2,}/g, " ");
+  return mergedTranscript;
 }
 
 const machine = createMachine<DictationContext, DictationEvent, DictationTypestate>(
