@@ -408,6 +408,41 @@ function positionCursorAtEnd(element: HTMLElement): void {
   selection.addRange(range);
 }
 
+// Helper function to detect if an element is a Lexical editor
+function isLexicalEditor(element: HTMLElement): boolean {
+  return element.hasAttribute('data-lexical-editor') && element.contentEditable === 'true';
+}
+
+// Helper function to set text in Lexical editors using their expected DOM structure
+function setTextInLexicalEditor(text: string, target: HTMLElement, replaceAll: boolean = false): void {
+  if (text.trim() === '') {
+    // For empty text, revert to Lexical's empty structure: <p><br></p>
+    target.innerHTML = '<p><br></p>';
+  } else {
+    // For non-empty text, create Lexical's expected structure: <p dir="ltr"><span data-lexical-text="true">text</span></p>
+    const paragraph = document.createElement('p');
+    paragraph.setAttribute('dir', 'ltr');
+    
+    const textSpan = document.createElement('span');
+    textSpan.setAttribute('data-lexical-text', 'true');
+    textSpan.textContent = text;
+    
+    paragraph.appendChild(textSpan);
+    
+    if (replaceAll) {
+      target.innerHTML = '';
+      target.appendChild(paragraph);
+    } else {
+      // For append mode, we still replace everything since Lexical doesn't work well with partial updates
+      target.innerHTML = '';
+      target.appendChild(paragraph);
+    }
+  }
+  
+  // Position cursor at the end
+  positionCursorAtEnd(target);
+}
+
 // Helper function to set text in a specific target element
 function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: boolean = false) {
   const target = targetElement || getTargetElement();
@@ -426,25 +461,30 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
     // Dispatch input event for framework compatibility
     target.dispatchEvent(new Event('input', { bubbles: true }));
   } else if (target.contentEditable === 'true') {
-    // For contenteditable elements
-    if (replaceAll) {
-      target.textContent = text;
-      // Position cursor at the end after replacing all content
-      positionCursorAtEnd(target);
+    // Check if this is a Lexical editor
+    if (isLexicalEditor(target)) {
+      setTextInLexicalEditor(text, target, replaceAll);
     } else {
-      const selection = window.getSelection();
-      if (selection && selection.rangeCount > 0) {
-        const range = selection.getRangeAt(0);
-        range.deleteContents();
-        range.insertNode(document.createTextNode(text));
-        range.collapse(false);
-        selection.removeAllRanges();
-        selection.addRange(range);
-      } else {
-        // Fallback: append to end
-        target.textContent = (target.textContent || '') + text;
-        // Position cursor at the end after appending
+      // For standard contenteditable elements
+      if (replaceAll) {
+        target.textContent = text;
+        // Position cursor at the end after replacing all content
         positionCursorAtEnd(target);
+      } else {
+        const selection = window.getSelection();
+        if (selection && selection.rangeCount > 0) {
+          const range = selection.getRangeAt(0);
+          range.deleteContents();
+          range.insertNode(document.createTextNode(text));
+          range.collapse(false);
+          selection.removeAllRanges();
+          selection.addRange(range);
+        } else {
+          // Fallback: append to end
+          target.textContent = (target.textContent || '') + text;
+          // Position cursor at the end after appending
+          positionCursorAtEnd(target);
+        }
       }
     }
     
