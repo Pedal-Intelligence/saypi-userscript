@@ -415,32 +415,43 @@ function isLexicalEditor(element: HTMLElement): boolean {
 
 // Helper function to set text in Lexical editors using their expected DOM structure
 function setTextInLexicalEditor(text: string, target: HTMLElement, replaceAll: boolean = false): void {
-  if (text.trim() === '') {
-    // For empty text, revert to Lexical's empty structure: <p><br></p>
-    target.innerHTML = '<p><br></p>';
-  } else {
-    // For non-empty text, create Lexical's expected structure: <p dir="ltr"><span data-lexical-text="true">text</span></p>
-    const paragraph = document.createElement('p');
-    paragraph.setAttribute('dir', 'ltr');
-    
-    const textSpan = document.createElement('span');
-    textSpan.setAttribute('data-lexical-text', 'true');
-    textSpan.textContent = text;
-    
-    paragraph.appendChild(textSpan);
-    
-    if (replaceAll) {
-      target.innerHTML = '';
-      target.appendChild(paragraph);
+  try {
+    if (text.trim() === '') {
+      // For empty text, revert to Lexical's empty structure: <p><br></p>
+      target.innerHTML = '<p><br></p>';
     } else {
-      // For append mode, we still replace everything since Lexical doesn't work well with partial updates
-      target.innerHTML = '';
-      target.appendChild(paragraph);
+      // For non-empty text, create Lexical's expected structure: <p dir="ltr"><span data-lexical-text="true">text</span></p>
+      const paragraph = document.createElement('p');
+      paragraph.setAttribute('dir', 'ltr');
+      
+      const textSpan = document.createElement('span');
+      textSpan.setAttribute('data-lexical-text', 'true');
+      textSpan.textContent = text;
+      
+      paragraph.appendChild(textSpan);
+      
+      if (replaceAll) {
+        target.innerHTML = '';
+        target.appendChild(paragraph);
+      } else {
+        // For append mode, we still replace everything since Lexical doesn't work well with partial updates
+        target.innerHTML = '';
+        target.appendChild(paragraph);
+      }
     }
+    
+    // Position cursor at the end - but be careful since Lexical manages its own cursor
+    try {
+      positionCursorAtEnd(target);
+    } catch (cursorError) {
+      // If cursor positioning fails, that's okay - Lexical will handle it
+      console.debug('Cursor positioning failed for Lexical editor, which is expected:', cursorError);
+    }
+  } catch (error) {
+    console.error('Failed to set text in Lexical editor:', error);
+    // Fallback to simple text content setting
+    target.textContent = text;
   }
-  
-  // Position cursor at the end
-  positionCursorAtEnd(target);
 }
 
 // Helper function to set text in a specific target element

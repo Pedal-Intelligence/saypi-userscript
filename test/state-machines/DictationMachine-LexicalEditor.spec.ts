@@ -217,6 +217,106 @@ describe('DictationMachine - Lexical Editor Support', () => {
     });
   });
 
+  describe('Edge Cases and Error Handling', () => {
+    it('should handle malformed Lexical editor structure gracefully', () => {
+      // Create a Lexical editor with malformed initial structure
+      const malformedEditor = document.createElement('div');
+      malformedEditor.contentEditable = 'true';
+      malformedEditor.setAttribute('data-lexical-editor', 'true');
+      malformedEditor.id = 'malformed-editor';
+      malformedEditor.innerHTML = '<div>Invalid structure</div>';
+      document.body.appendChild(malformedEditor);
+
+      try {
+        const machine = createDictationMachine(malformedEditor);
+        const malformedService = interpret(machine).start();
+
+        // Clear the malformed content first to simulate starting fresh
+        malformedEditor.innerHTML = '<p><br></p>';
+
+        malformedService.send({ type: 'saypi:startDictation', targetElement: malformedEditor });
+        malformedService.send('saypi:callReady');
+        malformedService.state.context.transcriptionTargets[1] = malformedEditor;
+        malformedService.send({
+          type: 'saypi:transcribed',
+          text: 'Recovery text',
+          sequenceNumber: 1,
+        });
+
+        // Should recover and create proper structure
+        expect(malformedEditor.textContent?.trim()).toBe('Recovery text');
+        const textSpan = malformedEditor.querySelector('span[data-lexical-text="true"]');
+        expect(textSpan?.textContent).toBe('Recovery text');
+        
+        malformedService.stop();
+      } finally {
+        if (malformedEditor.parentNode) {
+          malformedEditor.parentNode.removeChild(malformedEditor);
+        }
+      }
+    });
+
+    it('should handle special characters in Lexical editors', () => {
+      service.send({ type: 'saypi:startDictation', targetElement: lexicalEditor });
+      service.send('saypi:callReady');
+      service.state.context.transcriptionTargets[1] = lexicalEditor;
+
+      const specialText = 'Hello "world" & <special> characters!';
+      service.send({
+        type: 'saypi:transcribed',
+        text: specialText,
+        sequenceNumber: 1,
+      });
+
+      // Should handle special characters correctly
+      expect(lexicalEditor.textContent?.trim()).toBe(specialText);
+      
+      // Should maintain proper structure
+      const textSpan = lexicalEditor.querySelector('span[data-lexical-text="true"]');
+      expect(textSpan?.textContent).toBe(specialText);
+    });
+
+    it('should handle very long text in Lexical editors', () => {
+      service.send({ type: 'saypi:startDictation', targetElement: lexicalEditor });
+      service.send('saypi:callReady');
+      service.state.context.transcriptionTargets[1] = lexicalEditor;
+
+      const longText = 'This is a very long text that might cause issues with DOM manipulation.'.repeat(10); // No space after period
+      service.send({
+        type: 'saypi:transcribed',
+        text: longText,
+        sequenceNumber: 1,
+      });
+
+      // Should handle long text correctly
+      expect(lexicalEditor.textContent?.trim()).toBe(longText.trim());
+      
+      // Should maintain proper structure
+      const textSpan = lexicalEditor.querySelector('span[data-lexical-text="true"]');
+      expect(textSpan?.textContent).toBe(longText);
+    });
+
+    it('should handle Unicode and emoji in Lexical editors', () => {
+      service.send({ type: 'saypi:startDictation', targetElement: lexicalEditor });
+      service.send('saypi:callReady');
+      service.state.context.transcriptionTargets[1] = lexicalEditor;
+
+      const unicodeText = 'Hello 世界! 🌍 Here are some emojis: 🎉 🚀 💻';
+      service.send({
+        type: 'saypi:transcribed',
+        text: unicodeText,
+        sequenceNumber: 1,
+      });
+
+      // Should handle Unicode and emoji correctly
+      expect(lexicalEditor.textContent?.trim()).toBe(unicodeText);
+      
+      // Should maintain proper structure
+      const textSpan = lexicalEditor.querySelector('span[data-lexical-text="true"]');
+      expect(textSpan?.textContent).toBe(unicodeText);
+    });
+  });
+
   describe('Fallback to Standard Behavior', () => {
     let standardContentEditable: HTMLDivElement;
 
