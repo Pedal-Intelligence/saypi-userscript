@@ -61,15 +61,19 @@
     <h1>Lexical Editor Test for Universal Dictation</h1>
     
     <div class="description">
-        <strong>Purpose:</strong> This page demonstrates the Universal Dictation compatibility with Lexical rich text editors.
+        <strong>Purpose:</strong> This page demonstrates the Universal Dictation compatibility with Lexical rich text editors using input event simulation.
         <br><br>
         <strong>How to test:</strong>
         <ol>
             <li>Install the Say, Pi extension with Lexical editor support</li>
             <li>Use the test buttons below to simulate text insertion</li>
-            <li>Observe that the Lexical editor maintains proper structure</li>
+            <li>Observe that the Lexical editor maintains proper structure and state</li>
+            <li>Test the "Input Event Simulation" button to see the new approach</li>
             <li>Compare with standard contenteditable behavior</li>
         </ol>
+        <br>
+        <strong>New Approach:</strong> The latest implementation uses <code>beforeinput</code> and <code>input</code> events 
+        with proper <code>inputType</code> values to work with Lexical's internal state management instead of bypassing it.
     </div>
 
     <h2>Lexical Editor (like Perplexity AI)</h2>
@@ -104,40 +108,24 @@
 
         function setTextInLexicalEditor(text, target, replaceAll = false) {
             try {
-                // Primary approach: Input event simulation
+                // Focus the element first
                 if (document.activeElement !== target) {
                     target.focus();
                 }
 
+                // For replacement mode, select all content first
                 if (replaceAll) {
-                    // Simulate Ctrl+A to select all
-                    const selectAllEvent = new KeyboardEvent('keydown', {
-                        key: 'a',
-                        code: 'KeyA',
-                        ctrlKey: true,
-                        bubbles: true,
-                        cancelable: true,
-                    });
-                    target.dispatchEvent(selectAllEvent);
-
-                    // Delete selected content
-                    setTimeout(() => {
-                        const deleteEvent = new KeyboardEvent('keydown', {
-                            key: 'Delete',
-                            code: 'Delete',
-                            bubbles: true,
-                            cancelable: true,
-                        });
-                        target.dispatchEvent(deleteEvent);
-                        
-                        // Insert new text
-                        setTimeout(() => {
-                            insertTextViaInputEvents(text, target);
-                        }, 10);
-                    }, 10);
-                } else {
-                    insertTextViaInputEvents(text, target);
+                    const selection = window.getSelection();
+                    if (selection) {
+                        const range = document.createRange();
+                        range.selectNodeContents(target);
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                    }
                 }
+
+                // Primary approach: Input event simulation
+                insertTextViaInputEvents(text, target);
             } catch (error) {
                 console.error('Input event simulation failed, using fallback:', error);
                 fallbackSetTextInLexicalEditor(text, target, replaceAll);
@@ -147,7 +135,7 @@
         function insertTextViaInputEvents(text, target) {
             // Use beforeinput event for modern browsers
             const beforeInputEvent = new InputEvent('beforeinput', {
-                inputType: 'insertText',
+                inputType: 'insertReplacementText',
                 data: text,
                 bubbles: true,
                 cancelable: true,
@@ -163,7 +151,7 @@
 
             // Follow with input event
             const inputEvent = new InputEvent('input', {
-                inputType: 'insertText',
+                inputType: 'insertReplacementText',
                 data: text,
                 bubbles: true,
                 cancelable: false,
