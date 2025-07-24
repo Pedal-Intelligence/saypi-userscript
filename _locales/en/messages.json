@@ -4,7 +4,7 @@
     "description": "The name of the application."
   },
   "appDescription": {
-    "message": "Voice control for Pi and Claude. Speak naturally, get lifelike replies. Just say it.",
+    "message": "Voice typing everywhere, seamless chats with Pi and Claude. Speak freely—Say, Pi does the rest.",
     "description": "The description of the application."
   },
   "exitImmersiveModeLong": {

@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "PI 및 Claude의 음성 제어. 자연스럽게 말하고 생명과 같은 대답을하십시오. 그냥 말해."
+    "message": "어디서나 음성 입력, Pi와 Claude와의 매끄러운 대화. 자유롭게 말하세요—Pi가 나머지를 처리합니다."
   },
   "appName": {
     "description": "The name of the application.",

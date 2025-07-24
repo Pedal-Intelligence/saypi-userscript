@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Glasovna kontrola za PI i Claude. Govorite prirodno, dobijte životne odgovore. Samo to reci."
+    "message": "Govorno tipkanje svugdje, neometani razgovori s Pi-jem i Claude-om. Slobodno govori—Kaži, Pi obavlja ostatak."
   },
   "appName": {
     "description": "The name of the application.",

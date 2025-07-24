@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Hangvezérlés Pi és Claude számára. Beszéljen természetesen, kapjon élethű válaszokat. Csak mondd meg."
+    "message": "Hangalapú gépelés bárhol, zökkenőmentes csevegések Pivel és Claudéval. Beszélj szabadon—Pi a többit elvégzi."
   },
   "appName": {
     "description": "The name of the application.",

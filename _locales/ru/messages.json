@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Голосовой контроль для PI и Claude. Говорите естественно, получите жизненные ответы. Просто скажи это."
+    "message": "Голосовой ввод везде, бесшовные чаты с Пи и Клодом. Говори свободно — Пи сделает остальное."
   },
   "appName": {
     "description": "The name of the application.",
