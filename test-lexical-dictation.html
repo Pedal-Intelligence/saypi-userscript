@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lexical Editor Test for Universal Dictation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .editor {
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            min-height: 100px;
+            background: white;
+        }
+        .lexical-editor {
+            border-color: #4CAF50;
+        }
+        .standard-editor {
+            border-color: #2196F3;
+        }
+        .test-button {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .test-button:hover {
+            background: #cc3333;
+        }
+        .status {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .description {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lexical Editor Test for Universal Dictation</h1>
+    
+    <div class="description">
+        <strong>Purpose:</strong> This page demonstrates the Universal Dictation compatibility with Lexical rich text editors.
+        <br><br>
+        <strong>How to test:</strong>
+        <ol>
+            <li>Install the Say, Pi extension with Lexical editor support</li>
+            <li>Use the test buttons below to simulate text insertion</li>
+            <li>Observe that the Lexical editor maintains proper structure</li>
+            <li>Compare with standard contenteditable behavior</li>
+        </ol>
+    </div>
+
+    <h2>Lexical Editor (like Perplexity AI)</h2>
+    <div id="lexical-editor" 
+         class="editor lexical-editor" 
+         contenteditable="true" 
+         data-lexical-editor="true">
+        <p><br></p>
+    </div>
+    <button class="test-button" onclick="testLexicalEditor()">Test Lexical Text Insertion</button>
+    <button class="test-button" onclick="clearLexicalEditor()">Clear Lexical Editor</button>
+
+    <h2>Standard ContentEditable</h2>
+    <div id="standard-editor" 
+         class="editor standard-editor" 
+         contenteditable="true">
+    </div>
+    <button class="test-button" onclick="testStandardEditor()">Test Standard Text Insertion</button>
+    <button class="test-button" onclick="clearStandardEditor()">Clear Standard Editor</button>
+
+    <h2>HTML Structure Inspection</h2>
+    <div class="status" id="status">
+        Click test buttons to see the HTML structure differences...
+    </div>
+
+    <script>
+        // Import the Lexical detection and insertion functions (simplified for demo)
+        function isLexicalEditor(element) {
+            return element.hasAttribute('data-lexical-editor') && element.contentEditable === 'true';
+        }
+
+        function setTextInLexicalEditor(text, target) {
+            if (text.trim() === '') {
+                target.innerHTML = '<p><br></p>';
+            } else {
+                const paragraph = document.createElement('p');
+                paragraph.setAttribute('dir', 'ltr');
+                
+                const textSpan = document.createElement('span');
+                textSpan.setAttribute('data-lexical-text', 'true');
+                textSpan.textContent = text;
+                
+                paragraph.appendChild(textSpan);
+                target.innerHTML = '';
+                target.appendChild(paragraph);
+            }
+        }
+
+        function setTextInTarget(text, target) {
+            if (isLexicalEditor(target)) {
+                setTextInLexicalEditor(text, target);
+                updateStatus(`Lexical: Set text "${text}" with proper structure`);
+            } else {
+                target.textContent = text;
+                updateStatus(`Standard: Set text "${text}" with simple textContent`);
+            }
+        }
+
+        function testLexicalEditor() {
+            const editor = document.getElementById('lexical-editor');
+            const testText = 'Hello from Lexical editor! 🎉';
+            setTextInTarget(testText, editor);
+            showHTML();
+        }
+
+        function testStandardEditor() {
+            const editor = document.getElementById('standard-editor');
+            const testText = 'Hello from standard editor! 🎉';
+            setTextInTarget(testText, editor);
+            showHTML();
+        }
+
+        function clearLexicalEditor() {
+            const editor = document.getElementById('lexical-editor');
+            setTextInTarget('', editor);
+            showHTML();
+        }
+
+        function clearStandardEditor() {
+            const editor = document.getElementById('standard-editor');
+            setTextInTarget('', editor);
+            showHTML();
+        }
+
+        function showHTML() {
+            const lexicalHTML = document.getElementById('lexical-editor').innerHTML;
+            const standardHTML = document.getElementById('standard-editor').innerHTML;
+            
+            const status = document.getElementById('status');
+            status.innerHTML = `
+                <strong>Lexical Editor HTML:</strong><br>
+                <code>${escapeHtml(lexicalHTML)}</code><br><br>
+                <strong>Standard Editor HTML:</strong><br>
+                <code>${escapeHtml(standardHTML)}</code>
+            `;
+        }
+
+        function updateStatus(message) {
+            const status = document.getElementById('status');
+            status.innerHTML = `<strong>Action:</strong> ${message}<br><br>` + status.innerHTML;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Initialize with current HTML
+        showHTML();
+    </script>
+</body>
+</html>
