@@ -417,6 +417,13 @@ function isLexicalEditor(element: HTMLElement): boolean {
 // This approach works with Lexical's internal state management instead of bypassing it
 function setTextInLexicalEditor(text: string, target: HTMLElement, replaceAll: boolean = false): void {
   try {
+    // Emit dictation update event BEFORE dispatching input events to prevent conflicts
+    EventBus.emit("dictation:contentUpdated", {
+      targetElement: target,
+      content: text,
+      source: "dictation"
+    });
+
     // First, focus the element to ensure Lexical is active
     if (document.activeElement !== target) {
       target.focus();
@@ -520,11 +527,18 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
     
     // Dispatch input event for framework compatibility
     target.dispatchEvent(new Event('input', { bubbles: true }));
+    
+    // Emit event to notify that content was updated from dictation
+    EventBus.emit("dictation:contentUpdated", {
+      targetElement: target,
+      content: text,
+      source: "dictation"
+    });
   } else if (target.contentEditable === 'true') {
     // Check if this is a Lexical editor
     if (isLexicalEditor(target)) {
       setTextInLexicalEditor(text, target, replaceAll);
-      // Note: Input events are handled within setTextInLexicalEditor() to work with Lexical's state management
+      // Note: EventBus event is emitted within setTextInLexicalEditor() for proper timing
     } else {
       // For standard contenteditable elements
       if (replaceAll) {
@@ -550,15 +564,15 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
       
       // Dispatch input event for standard contenteditable elements only
       target.dispatchEvent(new Event('input', { bubbles: true }));
+      
+      // Emit event to notify that content was updated from dictation
+      EventBus.emit("dictation:contentUpdated", {
+        targetElement: target,
+        content: text,
+        source: "dictation"
+      });
     }
   }
-  
-  // Emit event to notify that content was updated from dictation
-  EventBus.emit("dictation:contentUpdated", {
-    targetElement: target,
-    content: text,
-    source: "dictation"
-  });
 }
 
 /**

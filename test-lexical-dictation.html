@@ -207,6 +207,7 @@
             updateStatus(`Tested input event simulation with: "${testText}"`);
             showHTML();
         }
+        function testStandardEditor() {
             const editor = document.getElementById('standard-editor');
             const testText = 'Hello from standard editor! 🎉';
             setTextInTarget(testText, editor);

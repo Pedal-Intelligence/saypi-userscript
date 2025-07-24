@@ -317,6 +317,11 @@ export class UniversalDictationModule {
 
     if (!button) return;
 
+    // Helper function to detect if an element is a Lexical editor
+    const isLexicalEditor = (element: HTMLElement): boolean => {
+      return element.hasAttribute('data-lexical-editor') && element.contentEditable === 'true';
+    };
+
     // Show/hide button on focus/blur with dictation switching support
     const showButton = () => {
       if (button) button.style.display = "flex";
@@ -341,10 +346,25 @@ export class UniversalDictationModule {
     let isUpdatingFromDictation = false;
 
     // Listen for content changes to detect manual edits
-    const handleContentChange = () => {
+    const handleContentChange = (event: Event) => {
       // Skip if we're currently updating from dictation
       if (isUpdatingFromDictation) {
         return;
+      }
+
+      // For Lexical editors, be more careful about when we consider it a manual edit
+      // We want to allow normal typing to work after dictation
+      if (isLexicalEditor(element)) {
+        // Only consider it a manual edit if this element has been used for dictation
+        // AND the event is from user interaction (not programmatic)
+        if (!this.hasTranscriptionHistory(element)) {
+          return; // No dictation history, so this is just normal typing
+        }
+        
+        // Check if this is a trusted user event vs a programmatic one
+        if (!event.isTrusted) {
+          return; // Programmatic event, likely from our own input simulation
+        }
       }
 
       const currentContent = this.getElementContent(element);
