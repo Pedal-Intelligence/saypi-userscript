@@ -475,6 +475,8 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
     // Check if this is a Lexical editor
     if (isLexicalEditor(target)) {
       setTextInLexicalEditor(text, target, replaceAll);
+      // DON'T dispatch input event for Lexical editors - it causes reconciliation 
+      // that reverts our programmatic changes since they're not in Lexical's internal state
     } else {
       // For standard contenteditable elements
       if (replaceAll) {
@@ -497,10 +499,10 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
           positionCursorAtEnd(target);
         }
       }
+      
+      // Dispatch input event for standard contenteditable elements only
+      target.dispatchEvent(new Event('input', { bubbles: true }));
     }
-    
-    // Dispatch input event for framework compatibility
-    target.dispatchEvent(new Event('input', { bubbles: true }));
   }
   
   // Emit event to notify that content was updated from dictation

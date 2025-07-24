@@ -16,7 +16,7 @@ Lexical editors are detected by the presence of the `data-lexical-editor="true"`
 
 ### Text Insertion Strategy
 
-For Lexical editors, the system creates the specific DOM structure that Lexical expects:
+For Lexical editors, the system creates the specific DOM structure that Lexical expects and **crucially avoids firing input events** that would trigger Lexical's reconciliation:
 
 **Empty state:**
 ```html
@@ -27,6 +27,8 @@ For Lexical editors, the system creates the specific DOM structure that Lexical 
 ```html
 <p dir="ltr"><span data-lexical-text="true">Hello, world</span></p>
 ```
+
+**Key Point:** Input events are NOT dispatched for Lexical editors because they cause Lexical to reconcile its internal state with the DOM, which would revert programmatic changes that aren't reflected in Lexical's internal state model.
 
 ### Implementation Details
 

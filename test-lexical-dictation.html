@@ -121,10 +121,13 @@
         function setTextInTarget(text, target) {
             if (isLexicalEditor(target)) {
                 setTextInLexicalEditor(text, target);
-                updateStatus(`Lexical: Set text "${text}" with proper structure`);
+                // NOTE: No input event fired for Lexical editors to avoid reconciliation issues
+                updateStatus(`Lexical: Set text "${text}" with proper structure (no input event)`);
             } else {
                 target.textContent = text;
-                updateStatus(`Standard: Set text "${text}" with simple textContent`);
+                // Fire input event for standard contenteditable elements
+                target.dispatchEvent(new Event('input', { bubbles: true }));
+                updateStatus(`Standard: Set text "${text}" with simple textContent + input event`);
             }
         }
 
