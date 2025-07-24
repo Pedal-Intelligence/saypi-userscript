@@ -413,8 +413,64 @@ function isLexicalEditor(element: HTMLElement): boolean {
   return element.hasAttribute('data-lexical-editor') && element.contentEditable === 'true';
 }
 
-// Helper function to set text in Lexical editors using their expected DOM structure
+// Helper function to set text in Lexical editors by simulating appropriate input events
+// This approach works with Lexical's internal state management instead of bypassing it
 function setTextInLexicalEditor(text: string, target: HTMLElement, replaceAll: boolean = false): void {
+  try {
+    // First, focus the element to ensure Lexical is active
+    if (document.activeElement !== target) {
+      target.focus();
+    }
+
+    // For replacement mode, first select all content using DOM selection
+    if (replaceAll) {
+      const selection = window.getSelection();
+      if (selection) {
+        const range = document.createRange();
+        range.selectNodeContents(target);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+    }
+
+    // Use InputEvent with appropriate inputType - this is what modern browsers send for typing
+    const beforeInputEvent = new InputEvent('beforeinput', {
+      inputType: replaceAll ? 'insertReplacementText' : 'insertText',
+      data: text,
+      bubbles: true,
+      cancelable: true,
+    });
+
+    // Dispatch beforeinput first (modern editors use this for processing)
+    const beforeInputHandled = target.dispatchEvent(beforeInputEvent);
+    
+    if (!beforeInputHandled) {
+      // If beforeinput was cancelled, the editor doesn't want this input
+      console.debug('beforeinput event was cancelled by Lexical, falling back to DOM manipulation');
+      fallbackSetTextInLexicalEditor(text, target, replaceAll);
+      return;
+    }
+
+    // Follow up with input event to signal completion
+    const inputEvent = new InputEvent('input', {
+      inputType: replaceAll ? 'insertReplacementText' : 'insertText',
+      data: text,
+      bubbles: true,
+      cancelable: false, // input events are not cancelable
+    });
+
+    target.dispatchEvent(inputEvent);
+    
+    console.debug(`Successfully dispatched input events for Lexical editor with text: "${text}"`);
+  } catch (error) {
+    console.error('Failed to set text in Lexical editor via input event simulation:', error);
+    // Fallback to the old DOM manipulation approach
+    fallbackSetTextInLexicalEditor(text, target, replaceAll);
+  }
+}
+
+// Fallback to the original DOM manipulation approach if input events don't work
+function fallbackSetTextInLexicalEditor(text: string, target: HTMLElement, replaceAll: boolean = false): void {
   try {
     if (text.trim() === '') {
       // For empty text, revert to Lexical's empty structure: <p><br></p>
@@ -430,26 +486,19 @@ function setTextInLexicalEditor(text: string, target: HTMLElement, replaceAll: b
       
       paragraph.appendChild(textSpan);
       
-      if (replaceAll) {
-        target.innerHTML = '';
-        target.appendChild(paragraph);
-      } else {
-        // For append mode, we still replace everything since Lexical doesn't work well with partial updates
-        target.innerHTML = '';
-        target.appendChild(paragraph);
-      }
+      target.innerHTML = '';
+      target.appendChild(paragraph);
     }
     
-    // Position cursor at the end - but be careful since Lexical manages its own cursor
+    // Position cursor at the end
     try {
       positionCursorAtEnd(target);
     } catch (cursorError) {
-      // If cursor positioning fails, that's okay - Lexical will handle it
-      console.debug('Cursor positioning failed for Lexical editor, which is expected:', cursorError);
+      console.debug('Cursor positioning failed for Lexical editor:', cursorError);
     }
   } catch (error) {
-    console.error('Failed to set text in Lexical editor:', error);
-    // Fallback to simple text content setting
+    console.error('Failed to set text in Lexical editor with fallback approach:', error);
+    // Final fallback to simple text content setting
     target.textContent = text;
   }
 }
@@ -475,8 +524,7 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
     // Check if this is a Lexical editor
     if (isLexicalEditor(target)) {
       setTextInLexicalEditor(text, target, replaceAll);
-      // DON'T dispatch input event for Lexical editors - it causes reconciliation 
-      // that reverts our programmatic changes since they're not in Lexical's internal state
+      // Note: Input events are handled within setTextInLexicalEditor() to work with Lexical's state management
     } else {
       // For standard contenteditable elements
       if (replaceAll) {

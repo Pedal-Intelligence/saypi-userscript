@@ -80,6 +80,7 @@
         <p><br></p>
     </div>
     <button class="test-button" onclick="testLexicalEditor()">Test Lexical Text Insertion</button>
+    <button class="test-button" onclick="testLexicalInputEvents()">Test Input Event Simulation</button>
     <button class="test-button" onclick="clearLexicalEditor()">Clear Lexical Editor</button>
 
     <h2>Standard ContentEditable</h2>
@@ -101,7 +102,77 @@
             return element.hasAttribute('data-lexical-editor') && element.contentEditable === 'true';
         }
 
-        function setTextInLexicalEditor(text, target) {
+        function setTextInLexicalEditor(text, target, replaceAll = false) {
+            try {
+                // Primary approach: Input event simulation
+                if (document.activeElement !== target) {
+                    target.focus();
+                }
+
+                if (replaceAll) {
+                    // Simulate Ctrl+A to select all
+                    const selectAllEvent = new KeyboardEvent('keydown', {
+                        key: 'a',
+                        code: 'KeyA',
+                        ctrlKey: true,
+                        bubbles: true,
+                        cancelable: true,
+                    });
+                    target.dispatchEvent(selectAllEvent);
+
+                    // Delete selected content
+                    setTimeout(() => {
+                        const deleteEvent = new KeyboardEvent('keydown', {
+                            key: 'Delete',
+                            code: 'Delete',
+                            bubbles: true,
+                            cancelable: true,
+                        });
+                        target.dispatchEvent(deleteEvent);
+                        
+                        // Insert new text
+                        setTimeout(() => {
+                            insertTextViaInputEvents(text, target);
+                        }, 10);
+                    }, 10);
+                } else {
+                    insertTextViaInputEvents(text, target);
+                }
+            } catch (error) {
+                console.error('Input event simulation failed, using fallback:', error);
+                fallbackSetTextInLexicalEditor(text, target, replaceAll);
+            }
+        }
+
+        function insertTextViaInputEvents(text, target) {
+            // Use beforeinput event for modern browsers
+            const beforeInputEvent = new InputEvent('beforeinput', {
+                inputType: 'insertText',
+                data: text,
+                bubbles: true,
+                cancelable: true,
+            });
+
+            const beforeInputHandled = target.dispatchEvent(beforeInputEvent);
+            
+            if (!beforeInputHandled) {
+                console.debug('beforeinput was cancelled, falling back');
+                fallbackSetTextInLexicalEditor(text, target, false);
+                return;
+            }
+
+            // Follow with input event
+            const inputEvent = new InputEvent('input', {
+                inputType: 'insertText',
+                data: text,
+                bubbles: true,
+                cancelable: false,
+            });
+
+            target.dispatchEvent(inputEvent);
+        }
+
+        function fallbackSetTextInLexicalEditor(text, target, replaceAll = false) {
             if (text.trim() === '') {
                 target.innerHTML = '<p><br></p>';
             } else {
@@ -120,9 +191,8 @@
 
         function setTextInTarget(text, target) {
             if (isLexicalEditor(target)) {
-                setTextInLexicalEditor(text, target);
-                // NOTE: No input event fired for Lexical editors to avoid reconciliation issues
-                updateStatus(`Lexical: Set text "${text}" with proper structure (no input event)`);
+                setTextInLexicalEditor(text, target, true);
+                updateStatus(`Lexical: Set text "${text}" with input event simulation`);
             } else {
                 target.textContent = text;
                 // Fire input event for standard contenteditable elements
@@ -138,7 +208,17 @@
             showHTML();
         }
 
-        function testStandardEditor() {
+        function testLexicalInputEvents() {
+            const editor = document.getElementById('lexical-editor');
+            const testText = 'Input event test! 🚀';
+            
+            // Test the input event simulation directly
+            editor.focus();
+            insertTextViaInputEvents(testText, editor);
+            
+            updateStatus(`Tested input event simulation with: "${testText}"`);
+            showHTML();
+        }
             const editor = document.getElementById('standard-editor');
             const testText = 'Hello from standard editor! 🎉';
             setTextInTarget(testText, editor);

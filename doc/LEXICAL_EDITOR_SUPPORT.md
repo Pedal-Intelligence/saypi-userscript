@@ -14,9 +14,34 @@ We implemented a strategy pattern that detects different types of text input ele
 
 Lexical editors are detected by the presence of the `data-lexical-editor="true"` attribute combined with `contentEditable="true"`.
 
+# Lexical Editor Support for Universal Dictation
+
+This document describes the support for Lexical-based rich text editors in the Say, Pi Universal Dictation feature.
+
+## Problem
+
+The original Universal Dictation feature was incompatible with rich text editors built on the Lexical framework (e.g., Perplexity AI). Lexical editors maintain their own internal state model and don't support direct DOM manipulation that bypasses this state. When Lexical's reconciliation process runs (triggered by various events), it reverts any DOM changes that aren't reflected in its internal state model.
+
+## Solution
+
+We implemented a strategy pattern that detects different types of text input elements and uses appropriate text insertion methods. For Lexical editors, we use **keyboard event simulation** to work with Lexical's input handling mechanisms rather than bypassing them.
+
+### Detection
+
+Lexical editors are detected by the presence of the `data-lexical-editor="true"` attribute combined with `contentEditable="true"`.
+
 ### Text Insertion Strategy
 
-For Lexical editors, the system creates the specific DOM structure that Lexical expects and **crucially avoids firing input events** that would trigger Lexical's reconciliation:
+For Lexical editors, the system now uses keyboard event simulation that integrates with Lexical's input handling:
+
+**Primary Approach - Input Events:**
+1. Focus the Lexical editor to ensure it's active
+2. For replacement: Simulate Ctrl+A (select all) followed by Delete
+3. Dispatch `beforeinput` event with `inputType: 'insertText'` and the target text
+4. Follow with `input` event to complete the insertion process
+
+**Fallback Approach - DOM Manipulation:**
+If input event simulation fails, falls back to the previous DOM structure approach:
 
 **Empty state:**
 ```html
@@ -28,14 +53,21 @@ For Lexical editors, the system creates the specific DOM structure that Lexical 
 <p dir="ltr"><span data-lexical-text="true">Hello, world</span></p>
 ```
 
-**Key Point:** Input events are NOT dispatched for Lexical editors because they cause Lexical to reconcile its internal state with the DOM, which would revert programmatic changes that aren't reflected in Lexical's internal state model.
+### Key Advantages
+
+1. **State Compatibility**: Input events are processed by Lexical's internal state management
+2. **Reconciliation Safe**: Changes made through input events are reflected in Lexical's internal state
+3. **Event-driven**: Works with Lexical's existing event handling mechanisms
+4. **Robust Fallback**: Falls back to DOM manipulation if input events are blocked
 
 ### Implementation Details
 
 - **File:** `src/state-machines/DictationMachine.ts`
 - **Functions:**
   - `isLexicalEditor()` - Detects Lexical editors
-  - `setTextInLexicalEditor()` - Handles Lexical-specific text insertion
+  - `setTextInLexicalEditor()` - Handles Lexical-specific text insertion with input events
+  - `insertTextViaInputEvents()` - Simulates keyboard input for Lexical
+  - `fallbackSetTextInLexicalEditor()` - DOM manipulation fallback
   - `setTextInTarget()` - Updated with strategy pattern
 
 ### Error Handling
