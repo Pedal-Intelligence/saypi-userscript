@@ -5,7 +5,7 @@
   },
   "appDescription": {
     "message": "Voice typing everywhere, seamless chats with Pi and Claude. Speak freely—Say, Pi does the rest.",
-    "description": "The description of the application."
+    "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
   "exitImmersiveModeLong": {
     "message": "Exit Immersive Mode",
