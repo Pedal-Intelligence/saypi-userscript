@@ -135,6 +135,7 @@ export class UniversalDictationModule {
       'textarea',
       '[contenteditable="true"]',
       'input:not([type])',
+      'shreddit-composer', // Add Reddit composers
     ];
 
     const inputs = searchRoot.querySelectorAll(inputSelectors.join(", "));
@@ -938,6 +939,7 @@ export class UniversalDictationModule {
       'legend',
       'label',
       '[contenteditable="true"]',
+      'shreddit-composer', // Add Reddit composers
     ];
 
     return formSelectors.some(selector => {
@@ -982,13 +984,18 @@ export class UniversalDictationModule {
       'input:not([type])',
     ];
 
-    return inputSelectors.some(selector => {
+    const isStandardInput = inputSelectors.some(selector => {
       try {
         return element.matches(selector);
       } catch (e) {
         return false;
       }
     });
+
+    // Check for Reddit composer elements
+    const isRedditComposer = element.tagName.toLowerCase() === 'shreddit-composer';
+
+    return isStandardInput || isRedditComposer;
   }
 
   private registerDictationEvents(dictationService: any): void {
@@ -1064,6 +1071,26 @@ export class UniversalDictationModule {
       return element.value;
     } else if (element.contentEditable === 'true') {
       return element.textContent || '';
+    } else if (element.tagName.toLowerCase() === 'shreddit-composer') {
+      // For Reddit composers, we need to get content from the actual editor inside
+      // This is a simplified approach - in practice, the RedditEditorStrategy handles the details
+      const shadowRoot = element.shadowRoot;
+      if (shadowRoot) {
+        // Try Markdown mode first (textarea)
+        const markdownComposer = shadowRoot.querySelector('shreddit-markdown-composer');
+        if (markdownComposer && markdownComposer.shadowRoot) {
+          const textarea = markdownComposer.shadowRoot.querySelector('textarea') as HTMLTextAreaElement;
+          if (textarea) {
+            return textarea.value || '';
+          }
+        }
+        
+        // Try Rich Text mode (Lexical editor)
+        const lexicalEditor = shadowRoot.querySelector('[data-lexical-editor="true"]') as HTMLElement;
+        if (lexicalEditor) {
+          return lexicalEditor.textContent || '';
+        }
+      }
     }
     return '';
   }

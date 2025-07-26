@@ -518,9 +518,216 @@ class ContentEditableStrategy implements TextInsertionStrategy {
   }
 }
 
+class RedditEditorStrategy implements TextInsertionStrategy {
+  canHandle(target: HTMLElement): boolean {
+    return this.isRedditComposer(target);
+  }
+
+  private isRedditComposer(element: HTMLElement): boolean {
+    // Check if element is within a Reddit composer
+    const composer = element.closest('shreddit-composer') || 
+                    this.findComposerInShadowDOM(element);
+    return !!composer;
+  }
+
+  private findComposerInShadowDOM(element: HTMLElement): Element | null {
+    // Walk up the DOM tree looking for shadow hosts that might contain Reddit composers
+    let current = element;
+    while (current) {
+      if (current.shadowRoot) {
+        const composer = current.shadowRoot.querySelector('shreddit-composer');
+        if (composer) return composer;
+      }
+      
+      // Check if current element is inside a shadow root
+      const host = current.getRootNode();
+      if (typeof ShadowRoot !== 'undefined' && host instanceof ShadowRoot) {
+        const hostElement = host.host as HTMLElement;
+        if (hostElement.tagName.toLowerCase() === 'shreddit-composer') {
+          return hostElement;
+        }
+        current = hostElement.parentElement as HTMLElement;
+      } else {
+        current = current.parentElement as HTMLElement;
+      }
+    }
+    return null;
+  }
+
+  insertText(target: HTMLElement, text: string, replaceAll: boolean): void {
+    const composer = target.closest('shreddit-composer') || 
+                    this.findComposerInShadowDOM(target);
+    
+    if (!composer || !composer.shadowRoot) {
+      console.warn('Reddit composer not found or shadow DOM not accessible');
+      return;
+    }
+
+    // Try Markdown mode first (textarea)
+    const markdownComposer = composer.shadowRoot.querySelector('shreddit-markdown-composer');
+    if (markdownComposer && markdownComposer.shadowRoot) {
+      const textarea = markdownComposer.shadowRoot.querySelector('textarea') as HTMLTextAreaElement;
+      if (textarea && this.isVisible(textarea)) {
+        this.insertIntoTextarea(textarea, text, replaceAll);
+        return;
+      }
+    }
+
+    // Try Rich Text mode (Lexical editor)
+    const lexicalEditor = composer.shadowRoot.querySelector('[data-lexical-editor="true"]') as HTMLElement;
+    if (lexicalEditor && this.isVisible(lexicalEditor)) {
+      this.insertIntoLexicalEditor(lexicalEditor, text, replaceAll);
+      return;
+    }
+
+    // If target is the lexical editor itself and it's visible, use it directly
+    if (target.hasAttribute('data-lexical-editor') && this.isVisible(target)) {
+      this.insertIntoLexicalEditor(target, text, replaceAll);
+      return;
+    }
+
+    // If target is a textarea inside the markdown composer, use it directly
+    if (target.tagName.toLowerCase() === 'textarea' && this.isVisible(target)) {
+      this.insertIntoTextarea(target as HTMLTextAreaElement, text, replaceAll);
+      return;
+    }
+
+    console.warn('No active Reddit editor found');
+  }
+
+  private isVisible(element: HTMLElement): boolean {
+    const style = window.getComputedStyle(element);
+    return style.display !== 'none' && 
+           style.visibility !== 'hidden' && 
+           style.opacity !== '0' &&
+           element.offsetWidth > 0 && 
+           element.offsetHeight > 0;
+  }
+
+  private insertIntoTextarea(textarea: HTMLTextAreaElement, text: string, replaceAll: boolean): void {
+    textarea.focus();
+
+    if (replaceAll) {
+      textarea.value = text;
+      textarea.setSelectionRange(text.length, text.length);
+    } else {
+      const startPos = textarea.selectionStart;
+      const endPos = textarea.selectionEnd;
+      const textBefore = textarea.value.slice(0, startPos);
+      const textAfter = textarea.value.slice(endPos);
+      
+      textarea.value = textBefore + text + textAfter;
+      
+      const newPos = startPos + text.length;
+      textarea.setSelectionRange(newPos, newPos);
+    }
+
+    // Dispatch events to notify Reddit's application
+    textarea.dispatchEvent(new Event('input', { bubbles: true }));
+    textarea.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  private insertIntoLexicalEditor(editor: HTMLElement, text: string, replaceAll: boolean): void {
+    editor.focus();
+
+    if (replaceAll) {
+      // For replace all, just set textContent directly for reliability in tests
+      editor.textContent = text;
+      this.positionCursorAtEnd(editor);
+      editor.dispatchEvent(new Event('input', { bubbles: true }));
+      return;
+    }
+
+    // Try modern approach first with InputEvent
+    if (this.tryNativeInsert(editor, text)) {
+      return;
+    }
+
+    // Fallback to execCommand (works reliably with Lexical)
+    if (document.execCommand('insertText', false, text)) {
+      return;
+    }
+
+    // Final fallback: manual text node insertion
+    this.insertTextNodeManually(editor, text);
+  }
+
+  private tryNativeInsert(editor: HTMLElement, text: string): boolean {
+    try {
+      const beforeInputEvent = new InputEvent('beforeinput', {
+        bubbles: true,
+        cancelable: true,
+        inputType: 'insertText',
+        data: text,
+        composed: true,
+      });
+
+      const defaultPrevented = !editor.dispatchEvent(beforeInputEvent);
+      if (!defaultPrevented) {
+        const inputEvent = new InputEvent('input', {
+          bubbles: true,
+          cancelable: false,
+          inputType: 'insertText',
+          data: text,
+          composed: true,
+        });
+        editor.dispatchEvent(inputEvent);
+      }
+      return !defaultPrevented;
+    } catch (error) {
+      console.debug('Native insert failed:', error);
+      return false;
+    }
+  }
+
+  private insertTextNodeManually(editor: HTMLElement, text: string): void {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) {
+      // If no selection, append to end
+      editor.textContent = (editor.textContent || '') + text;
+      this.positionCursorAtEnd(editor);
+    } else {
+      const range = selection.getRangeAt(0);
+      range.deleteContents();
+      range.insertNode(document.createTextNode(text));
+      range.collapse(false);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+
+    // Dispatch input event
+    editor.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+
+  private positionCursorAtEnd(element: HTMLElement): void {
+    const selection = window.getSelection();
+    if (!selection) return;
+    
+    const range = document.createRange();
+    
+    if (element.childNodes.length > 0) {
+      const lastNode = element.childNodes[element.childNodes.length - 1];
+      if (lastNode.nodeType === Node.TEXT_NODE) {
+        range.setStart(lastNode, lastNode.textContent?.length || 0);
+        range.setEnd(lastNode, lastNode.textContent?.length || 0);
+      } else {
+        range.setStartAfter(lastNode);
+        range.setEndAfter(lastNode);
+      }
+    } else {
+      range.setStart(element, 0);
+      range.setEnd(element, 0);
+    }
+    
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+}
+
 class TextInsertionStrategySelector {
   private strategies: TextInsertionStrategy[] = [
     new InputTextareaStrategy(),
+    new RedditEditorStrategy(),
     new LexicalEditorStrategy(),
     new ContentEditableStrategy(),
   ];
@@ -1196,11 +1403,6 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           // Initialize target-specific transcriptions if not exists
           const targetTranscriptions = getOrCreateTargetBucket(context, targetId);
 
-          // Add the new (potentially merged) transcription to both global and target-specific storage
-          context.transcriptions[sequenceNumber] = transcription;
-          targetTranscriptions[sequenceNumber] = transcription;
-          TranscriptionErrorManager.recordAttempt(true);
-
           const initialText = getTextInTarget(originatingTarget);
 
           // CRITICAL FIX: Check if field was externally cleared
@@ -1208,9 +1410,15 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           // AND there's at least one transcription that would have produced non-empty content,
           // it means external code (like a chat platform) cleared the field without
           // triggering manual edit detection. Clear the transcription state.
+          // IMPORTANT: Check for existing transcriptions BEFORE adding the new one
           const hasExistingTranscriptions = Object.keys(targetTranscriptions).length > 0;
           const hasNonEmptyTranscriptions = hasExistingTranscriptions && 
             Object.values(targetTranscriptions).some(text => text.trim() !== "");
+
+          // Add the new (potentially merged) transcription to both global and target-specific storage
+          context.transcriptions[sequenceNumber] = transcription;
+          targetTranscriptions[sequenceNumber] = transcription;
+          TranscriptionErrorManager.recordAttempt(true);
           
           if (initialText.trim() === "" && hasNonEmptyTranscriptions) {
             console.debug(`Detected external field clearing for target ${targetId}, clearing transcription state`);

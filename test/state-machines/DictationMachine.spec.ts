@@ -45,6 +45,61 @@ vi.mock('../../src/TranscriptMergeService', () => ({
 // Mock EventBus
 vi.spyOn(EventBus, 'emit');
 
+// Mock document.execCommand with actual implementation for insertText
+Object.defineProperty(document, 'execCommand', {
+  value: vi.fn((command: string, showUI: boolean, value: string) => {
+    if (command === 'insertText' && document.activeElement) {
+      const selection = window.getSelection();
+      if (selection && selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        range.deleteContents();
+        range.insertNode(document.createTextNode(value));
+        range.collapse(false);
+      } else {
+        // Fallback: append to active element if it's contenteditable
+        const activeEl = document.activeElement as HTMLElement;
+        if (activeEl && (activeEl.contentEditable === 'true' || activeEl.isContentEditable)) {
+          activeEl.textContent = (activeEl.textContent || '') + value;
+        }
+      }
+      return true;
+    }
+    if (command === 'selectAll' && document.activeElement) {
+      const selection = window.getSelection();
+      const activeEl = document.activeElement as HTMLElement;
+      if (selection && (activeEl.contentEditable === 'true' || activeEl.isContentEditable)) {
+        const range = document.createRange();
+        range.selectNodeContents(activeEl);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        return true;
+      }
+    }
+    return true;
+  }),
+  writable: true
+});
+
+// Mock getSelection for contenteditable support
+Object.defineProperty(window, 'getSelection', {
+  value: vi.fn(() => ({
+    rangeCount: 0,
+    getRangeAt: vi.fn(() => ({
+      deleteContents: vi.fn(),
+      insertNode: vi.fn(),
+      collapse: vi.fn(),
+      selectNodeContents: vi.fn(),
+      setStart: vi.fn(),
+      setEnd: vi.fn(),
+      setStartAfter: vi.fn(),
+      setEndAfter: vi.fn()
+    })),
+    removeAllRanges: vi.fn(),
+    addRange: vi.fn()
+  })),
+  writable: true
+});
+
 // Import the machine after mocks are set up
 import { createDictationMachine } from '../../src/state-machines/DictationMachine';
 import * as TranscriptionModule from '../../src/TranscriptionModule';
@@ -664,6 +719,136 @@ describe('DictationMachine', () => {
       });
       
       expect(contentEditableElement.textContent).toBe('Content editable text');
+    });
+  });
+
+  describe('Reddit Editor Support', () => {
+    let mockComposer: HTMLElement;
+    let mockTextarea: HTMLTextAreaElement;
+    let mockLexicalEditor: HTMLDivElement;
+    let mockMarkdownComposer: HTMLElement;
+
+    beforeAll(() => {
+      // Create mock Reddit composer structure
+      mockComposer = document.createElement('shreddit-composer');
+      const composerShadow = mockComposer.attachShadow({ mode: 'open' });
+      
+      // Mock Markdown composer with textarea
+      mockMarkdownComposer = document.createElement('shreddit-markdown-composer');
+      const markdownShadow = mockMarkdownComposer.attachShadow({ mode: 'open' });
+      mockTextarea = document.createElement('textarea');
+      mockTextarea.id = 'reddit-markdown-textarea';
+      mockTextarea.value = '';
+      markdownShadow.appendChild(mockTextarea);
+      
+      // Mock Lexical editor
+      mockLexicalEditor = document.createElement('div');
+      mockLexicalEditor.contentEditable = 'true';
+      mockLexicalEditor.setAttribute('data-lexical-editor', 'true');
+      mockLexicalEditor.setAttribute('role', 'textbox');
+      mockLexicalEditor.textContent = '';
+      
+      // Add both to composer shadow (only one would be visible at a time normally)
+      composerShadow.appendChild(mockMarkdownComposer);
+      composerShadow.appendChild(mockLexicalEditor);
+      
+      document.body.appendChild(mockComposer);
+    });
+
+    beforeEach(() => {
+      mockTextarea.value = '';
+      mockLexicalEditor.textContent = '';
+      service.start();
+    });
+
+    afterAll(() => {
+      document.body.removeChild(mockComposer);
+    });
+
+    it('should detect Reddit composer for textarea in Markdown mode', () => {
+      // Hide Lexical editor, show textarea
+      mockLexicalEditor.style.display = 'none';
+      mockTextarea.style.display = 'block';
+      
+      service.send('saypi:startDictation', { targetElement: mockTextarea });
+      service.send('saypi:callReady');
+      
+      // Setup transcription
+      service.state.context.transcriptionTargets[1] = mockTextarea;
+      service.send('saypi:transcribed', {
+        text: 'Reddit markdown text',
+        sequenceNumber: 1,
+      });
+      
+      expect(mockTextarea.value).toBe('Reddit markdown text');
+    });
+
+    it('should handle multiple transcriptions in Reddit Markdown mode', () => {
+      mockLexicalEditor.style.display = 'none';
+      mockTextarea.style.display = 'block';
+      
+      service.send('saypi:startDictation', { targetElement: mockTextarea });
+      service.send('saypi:callReady');
+      
+      // Setup transcription targets
+      service.state.context.transcriptionTargets[1] = mockTextarea;
+      service.state.context.transcriptionTargets[2] = mockTextarea;
+      
+      // Send multiple transcriptions
+      service.send('saypi:transcribed', {
+        text: 'First part',
+        sequenceNumber: 1,
+      });
+      
+      service.send('saypi:transcribed', {
+        text: 'second part',
+        sequenceNumber: 2,
+      });
+      
+      expect(mockTextarea.value).toBe('First part second part');
+    });
+
+    it('should replace text content in Reddit textarea when dictating', () => {
+      mockLexicalEditor.style.display = 'none';
+      mockTextarea.style.display = 'block';
+      mockTextarea.value = ''; // Start with empty textarea
+      
+      service.send('saypi:startDictation', { targetElement: mockTextarea });
+      service.send('saypi:callReady');
+      
+      service.state.context.transcriptionTargets[1] = mockTextarea;
+      
+      service.send('saypi:transcribed', {
+        text: 'New dictated content',
+        sequenceNumber: 1,
+      });
+      
+      expect(mockTextarea.value).toBe('New dictated content');
+    });
+
+    it('should generate appropriate target element IDs for Reddit components', () => {
+      service.start();
+      
+      // Test textarea target ID generation
+      mockLexicalEditor.style.display = 'none';
+      mockTextarea.style.display = 'block';
+      
+      service.send('saypi:startDictation', { targetElement: mockTextarea });
+      service.send('saypi:callReady');
+      
+      service.state.context.transcriptionTargets[1] = mockTextarea;
+      service.send('saypi:transcribed', {
+        text: 'Test',
+        sequenceNumber: 1,
+      });
+      
+      // Should create target-specific transcriptions
+      const textareaTargetId = Object.keys(service.state.context.transcriptionsByTarget)[0];
+      // The actual ID is 'reddit-markdown-textarea' since the element has an ID
+      expect(textareaTargetId).toBe('reddit-markdown-textarea');
+      expect(service.state.context.transcriptionsByTarget[textareaTargetId]).toEqual({
+        1: 'Test'
+      });
     });
   });
 
