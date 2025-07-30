@@ -502,9 +502,8 @@ class SlateEditorStrategy implements TextInsertionStrategy {
       el.hasAttribute("data-slate-node") ||
       !!el.closest('[data-slate-node]') ||
       el.classList.contains("slate-editor") ||
-      !!el.closest('.slate-editor') ||
-      // Check for common Slate wrapper patterns
-      !!el.closest('[role="textbox"][contenteditable="true"]')
+      !!el.closest('.slate-editor')
+      // Removed overly broad role="textbox" + contenteditable matcher to avoid conflicts with Quill
     );
   }
 
@@ -604,6 +603,109 @@ class SlateEditorStrategy implements TextInsertionStrategy {
   }
 }
 
+class QuillEditorStrategy implements TextInsertionStrategy {
+  canHandle(target: HTMLElement): boolean {
+    return target.contentEditable === "true" && this.isQuillEditor(target);
+  }
+
+  private isQuillEditor(el: HTMLElement): boolean {
+    // Check for Quill-specific indicators
+    return (
+      el.classList.contains("ql-editor") ||
+      !!el.closest('.ql-editor') ||
+      !!el.closest('.ql-container') ||
+      // Check for common Quill wrapper patterns used by platforms like LinkedIn
+      !!el.closest('[class*="quill"]') ||
+      // LinkedIn uses Quill with specific patterns
+      (el.getAttribute("role") === "textbox" && 
+       el.contentEditable === "true" && 
+       el.hasAttribute("data-placeholder"))
+    );
+  }
+
+  insertText(target: HTMLElement, text: string, replaceAll: boolean): void {
+    target.focus();
+
+    // Handle placeholder clearing for Quill editors (similar to Slate)
+    this.clearPlaceholderIfPresent(target);
+
+    // Select all text if we are replacing everything
+    if (replaceAll) {
+      document.execCommand("selectAll");
+    }
+
+    // Try the proven input event approach first
+    if (!this.tryNativeInsert(target, text)) {
+      // Fallback to direct DOM manipulation if events don't work
+      this.fallbackInsert(target, text, replaceAll);
+    }
+  }
+
+  private clearPlaceholderIfPresent(target: HTMLElement): void {
+    // Clear Quill placeholder attributes
+    if (target.getAttribute('data-placeholder')) {
+      target.removeAttribute('data-placeholder');
+    }
+
+    // Clear empty Quill content that might serve as placeholder
+    if (target.innerHTML === '<p><br></p>' || target.innerHTML === '<p></p>') {
+      target.innerHTML = '';
+    }
+  }
+
+  private tryNativeInsert(target: HTMLElement, text: string): boolean {
+    try {
+      // Use the same proven approach as Lexical and Slate strategies
+      const before = new InputEvent("beforeinput", {
+        bubbles: true,
+        cancelable: true,
+        inputType: "insertText",
+        data: text,
+        composed: true,
+      });
+
+      const defaultPrevented = !target.dispatchEvent(before);
+      if (!defaultPrevented) {
+        const input = new InputEvent("input", {
+          bubbles: true,
+          cancelable: false,
+          inputType: "insertText",
+          data: text,
+          composed: true,
+        });
+        target.dispatchEvent(input);
+      }
+      return !defaultPrevented;
+    } catch {
+      return false;
+    }
+  }
+
+  private fallbackInsert(target: HTMLElement, text: string, replaceAll: boolean): void {
+    if (replaceAll) {
+      target.textContent = text;
+      positionCursorAtEnd(target);
+    } else {
+      const selection = window.getSelection();
+      if (selection && selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        range.deleteContents();
+        range.insertNode(document.createTextNode(text));
+        range.collapse(false);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      } else {
+        // Fallback: append to end
+        target.textContent = (target.textContent || "") + text;
+        positionCursorAtEnd(target);
+      }
+    }
+
+    // Dispatch input event for framework compatibility
+    target.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+}
+
 class ContentEditableStrategy implements TextInsertionStrategy {
   canHandle(target: HTMLElement): boolean {
     return target.contentEditable === "true";
@@ -641,12 +743,13 @@ class TextInsertionStrategySelector {
     new InputTextareaStrategy(),
     new LexicalEditorStrategy(),
     new SlateEditorStrategy(),
+    new QuillEditorStrategy(),
     new ContentEditableStrategy(),
   ];
 
   getStrategy(target: HTMLElement): TextInsertionStrategy | null {
-    // Order matters: LexicalEditorStrategy should be checked before ContentEditableStrategy
-    // since Lexical editors are also contenteditable
+    // Order matters: Specific editor strategies (Lexical, Slate, Quill) should be checked 
+    // before ContentEditableStrategy since these editors are also contenteditable
     for (const strategy of this.strategies) {
       if (strategy.canHandle(target)) {
         return strategy;
