@@ -502,9 +502,8 @@ class SlateEditorStrategy implements TextInsertionStrategy {
       el.hasAttribute("data-slate-node") ||
       !!el.closest('[data-slate-node]') ||
       el.classList.contains("slate-editor") ||
-      !!el.closest('.slate-editor') ||
-      // Check for common Slate wrapper patterns
-      !!el.closest('[role="textbox"][contenteditable="true"]')
+      !!el.closest('.slate-editor')
+      // Removed overly broad role="textbox" + contenteditable matcher to avoid conflicts with Quill
     );
   }
 
@@ -604,6 +603,134 @@ class SlateEditorStrategy implements TextInsertionStrategy {
   }
 }
 
+class QuillEditorStrategy implements TextInsertionStrategy {
+  canHandle(target: HTMLElement): boolean {
+    return target.contentEditable === "true" && this.isQuillEditor(target);
+  }
+
+  private isQuillEditor(el: HTMLElement): boolean {
+    // Check for Quill-specific indicators
+    return (
+      el.classList.contains("ql-editor") ||
+      !!el.closest('.ql-editor') ||
+      !!el.closest('.ql-container') ||
+      // Check for common Quill wrapper patterns used by platforms like LinkedIn
+      !!el.closest('[class*="quill"]') ||
+      // LinkedIn uses Quill with specific patterns
+      (el.getAttribute("role") === "textbox" && 
+       el.contentEditable === "true" && 
+       el.hasAttribute("data-placeholder"))
+    );
+  }
+
+  insertText(target: HTMLElement, text: string, replaceAll: boolean): void {
+    target.focus();
+
+    // Handle placeholder clearing for Quill editors
+    this.clearPlaceholderIfPresent(target);
+
+    // Select all text if we are replacing everything
+    if (replaceAll) {
+      document.execCommand("selectAll");
+    }
+
+    // For Quill, use execCommand('insertText') which actually works
+    // This is the recommended approach per Quill documentation
+    if (!this.tryExecCommandInsert(target, text)) {
+      // Fallback to direct DOM manipulation - Quill syncs its model to DOM changes
+      this.fallbackDOMInsert(target, text, replaceAll);
+    }
+  }
+
+  private clearPlaceholderIfPresent(target: HTMLElement): void {
+    // Clear Quill placeholder attributes (recommended by research)
+    if (target.getAttribute('data-placeholder')) {
+      target.removeAttribute('data-placeholder');
+    }
+
+    // Clear empty Quill content that might serve as placeholder
+    // Quill uses <p><br></p> as empty state
+    if (target.innerHTML === '<p><br></p>' || target.innerHTML === '<p></p>') {
+      target.innerHTML = '';
+    }
+  }
+
+  private tryExecCommandInsert(target: HTMLElement, text: string): boolean {
+    try {
+      // Check if text contains newlines - execCommand('insertText') strips them
+      if (text.includes('\n')) {
+        // Use insertHTML for multi-line text to preserve paragraphs
+        const paragraphs = text.split('\n').map(line => `<p>${line || '<br>'}</p>`).join('');
+        const success = document.execCommand('insertHTML', false, paragraphs);
+        return success;
+      } else {
+        // Use execCommand('insertText') - this is what actually works with Quill
+        // According to research: "using document.execCommand('insertText', false, 'your text') 
+        // on a focused Quill editor will insert text at the cursor and trigger the usual input events"
+        const success = document.execCommand('insertText', false, text);
+        
+        // execCommand returns true if the command was supported and executed
+        return success;
+      }
+    } catch (error) {
+      console.debug('execCommand insert failed:', error);
+      return false;
+    }
+  }
+
+  private fallbackDOMInsert(target: HTMLElement, text: string, replaceAll: boolean): void {
+    // Direct DOM manipulation - Quill syncs its model to DOM changes
+    // Per research: "directly manipulating the Quill editor's DOM is a viable way to insert content"
+    
+    // Handle multi-line text by creating proper paragraph structure
+    const createParagraphsHTML = (text: string): string => {
+      return text.split('\n').map(line => `<p>${line || '<br>'}</p>`).join('');
+    };
+    
+    if (replaceAll) {
+      // Replace all content with properly formatted Quill structure
+      if (text.includes('\n')) {
+        target.innerHTML = createParagraphsHTML(text);
+      } else {
+        target.innerHTML = `<p>${text}</p>`;
+      }
+    } else {
+      // For append mode, check if we have existing content
+      if (target.innerHTML === '' || target.innerHTML === '<p><br></p>') {
+        // Empty editor - set initial content
+        if (text.includes('\n')) {
+          target.innerHTML = createParagraphsHTML(text);
+        } else {
+          target.innerHTML = `<p>${text}</p>`;
+        }
+      } else {
+        // Has content - append new paragraphs
+        if (text.includes('\n')) {
+          target.insertAdjacentHTML('beforeend', createParagraphsHTML(text));
+        } else {
+          const lastP = target.querySelector('p:last-child');
+          if (lastP && lastP.innerHTML !== '<br>') {
+            // Append to existing paragraph
+            lastP.textContent = (lastP.textContent || '') + text;
+          } else {
+            // Create new paragraph
+            const newP = document.createElement('p');
+            newP.textContent = text;
+            target.appendChild(newP);
+          }
+        }
+      }
+    }
+
+    // Position cursor at the end
+    positionCursorAtEnd(target);
+
+    // Dispatch input event so Quill's model syncs and LinkedIn's UI updates
+    // Per research: this ensures "LinkedIn's scripts may listen for focus or input events"
+    target.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+}
+
 class ContentEditableStrategy implements TextInsertionStrategy {
   canHandle(target: HTMLElement): boolean {
     return target.contentEditable === "true";
@@ -641,12 +768,13 @@ class TextInsertionStrategySelector {
     new InputTextareaStrategy(),
     new LexicalEditorStrategy(),
     new SlateEditorStrategy(),
+    new QuillEditorStrategy(),
     new ContentEditableStrategy(),
   ];
 
   getStrategy(target: HTMLElement): TextInsertionStrategy | null {
-    // Order matters: LexicalEditorStrategy should be checked before ContentEditableStrategy
-    // since Lexical editors are also contenteditable
+    // Order matters: Specific editor strategies (Lexical, Slate, Quill) should be checked 
+    // before ContentEditableStrategy since these editors are also contenteditable
     for (const strategy of this.strategies) {
       if (strategy.canHandle(target)) {
         return strategy;
