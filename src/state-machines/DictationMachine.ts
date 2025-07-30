@@ -486,6 +486,124 @@ class LexicalEditorStrategy implements TextInsertionStrategy {
   }
 }
 
+class SlateEditorStrategy implements TextInsertionStrategy {
+  canHandle(target: HTMLElement): boolean {
+    return target.contentEditable === "true" && this.isSlateEditor(target);
+  }
+
+  private isSlateEditor(el: HTMLElement): boolean {
+    // Check for common Slate.js indicators
+    return (
+      el.getAttribute("data-slate-editor") === "true" ||
+      !!el.closest('[data-slate-editor="true"]') ||
+      el.getAttribute("data-slate") === "true" ||
+      !!el.closest('[data-slate="true"]') ||
+      // Check for Slate-specific data attributes or classes
+      el.hasAttribute("data-slate-node") ||
+      !!el.closest('[data-slate-node]') ||
+      el.classList.contains("slate-editor") ||
+      !!el.closest('.slate-editor') ||
+      // Check for common Slate wrapper patterns
+      !!el.closest('[role="textbox"][contenteditable="true"]')
+    );
+  }
+
+  insertText(target: HTMLElement, text: string, replaceAll: boolean): void {
+    target.focus();
+
+    // Handle placeholder clearing for Slate editors
+    this.clearPlaceholderIfPresent(target);
+
+    // Select all text if we are replacing everything
+    if (replaceAll) {
+      document.execCommand("selectAll");
+    }
+
+    // Try the modern beforeinput/input pathway first (similar to Lexical strategy)
+    if (!this.tryNativeInsert(target, text)) {
+      // Fallback to direct DOM manipulation if events don't work
+      this.fallbackInsert(target, text, replaceAll);
+    }
+  }
+
+  private clearPlaceholderIfPresent(target: HTMLElement): void {
+    // Common patterns for Slate placeholders
+    const placeholderSelectors = [
+      '[data-slate-placeholder="true"]',
+      '[data-slate-placeholder]',
+      '.slate-placeholder',
+      '[contenteditable="false"][data-slate-zero-width]'
+    ];
+
+    for (const selector of placeholderSelectors) {
+      const placeholder = target.querySelector(selector);
+      if (placeholder && placeholder.textContent) {
+        // Hide or remove placeholder element
+        (placeholder as HTMLElement).style.display = 'none';
+        // Also try removing the attribute that might control visibility
+        placeholder.removeAttribute('data-slate-placeholder');
+      }
+    }
+
+    // Also check if the target itself has placeholder-like content
+    if (target.getAttribute('data-placeholder') || target.classList.contains('placeholder')) {
+      target.removeAttribute('data-placeholder');
+      target.classList.remove('placeholder');
+    }
+  }
+
+  private tryNativeInsert(target: HTMLElement, text: string): boolean {
+    try {
+      const before = new InputEvent("beforeinput", {
+        bubbles: true,
+        cancelable: true,
+        inputType: "insertText",
+        data: text,
+        composed: true,
+      });
+
+      const defaultPrevented = !target.dispatchEvent(before);
+      if (!defaultPrevented) {
+        const input = new InputEvent("input", {
+          bubbles: true,
+          cancelable: false,
+          inputType: "insertText",
+          data: text,
+          composed: true,
+        });
+        target.dispatchEvent(input);
+      }
+      return !defaultPrevented;
+    } catch {
+      return false;
+    }
+  }
+
+  private fallbackInsert(target: HTMLElement, text: string, replaceAll: boolean): void {
+    if (replaceAll) {
+      target.textContent = text;
+      positionCursorAtEnd(target);
+    } else {
+      const selection = window.getSelection();
+      if (selection && selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        range.deleteContents();
+        range.insertNode(document.createTextNode(text));
+        range.collapse(false);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      } else {
+        // Fallback: append to end
+        target.textContent = (target.textContent || "") + text;
+        positionCursorAtEnd(target);
+      }
+    }
+
+    // Dispatch input event for framework compatibility
+    target.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+}
+
 class ContentEditableStrategy implements TextInsertionStrategy {
   canHandle(target: HTMLElement): boolean {
     return target.contentEditable === "true";
@@ -522,6 +640,7 @@ class TextInsertionStrategySelector {
   private strategies: TextInsertionStrategy[] = [
     new InputTextareaStrategy(),
     new LexicalEditorStrategy(),
+    new SlateEditorStrategy(),
     new ContentEditableStrategy(),
   ];
 
