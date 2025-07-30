@@ -626,7 +626,7 @@ class QuillEditorStrategy implements TextInsertionStrategy {
   insertText(target: HTMLElement, text: string, replaceAll: boolean): void {
     target.focus();
 
-    // Handle placeholder clearing for Quill editors (similar to Slate)
+    // Handle placeholder clearing for Quill editors
     this.clearPlaceholderIfPresent(target);
 
     // Select all text if we are replacing everything
@@ -634,74 +634,99 @@ class QuillEditorStrategy implements TextInsertionStrategy {
       document.execCommand("selectAll");
     }
 
-    // Try the proven input event approach first
-    if (!this.tryNativeInsert(target, text)) {
-      // Fallback to direct DOM manipulation if events don't work
-      this.fallbackInsert(target, text, replaceAll);
+    // For Quill, use execCommand('insertText') which actually works
+    // This is the recommended approach per Quill documentation
+    if (!this.tryExecCommandInsert(target, text)) {
+      // Fallback to direct DOM manipulation - Quill syncs its model to DOM changes
+      this.fallbackDOMInsert(target, text, replaceAll);
     }
   }
 
   private clearPlaceholderIfPresent(target: HTMLElement): void {
-    // Clear Quill placeholder attributes
+    // Clear Quill placeholder attributes (recommended by research)
     if (target.getAttribute('data-placeholder')) {
       target.removeAttribute('data-placeholder');
     }
 
     // Clear empty Quill content that might serve as placeholder
+    // Quill uses <p><br></p> as empty state
     if (target.innerHTML === '<p><br></p>' || target.innerHTML === '<p></p>') {
       target.innerHTML = '';
     }
   }
 
-  private tryNativeInsert(target: HTMLElement, text: string): boolean {
+  private tryExecCommandInsert(target: HTMLElement, text: string): boolean {
     try {
-      // Use the same proven approach as Lexical and Slate strategies
-      const before = new InputEvent("beforeinput", {
-        bubbles: true,
-        cancelable: true,
-        inputType: "insertText",
-        data: text,
-        composed: true,
-      });
-
-      const defaultPrevented = !target.dispatchEvent(before);
-      if (!defaultPrevented) {
-        const input = new InputEvent("input", {
-          bubbles: true,
-          cancelable: false,
-          inputType: "insertText",
-          data: text,
-          composed: true,
-        });
-        target.dispatchEvent(input);
+      // Check if text contains newlines - execCommand('insertText') strips them
+      if (text.includes('\n')) {
+        // Use insertHTML for multi-line text to preserve paragraphs
+        const paragraphs = text.split('\n').map(line => `<p>${line || '<br>'}</p>`).join('');
+        const success = document.execCommand('insertHTML', false, paragraphs);
+        return success;
+      } else {
+        // Use execCommand('insertText') - this is what actually works with Quill
+        // According to research: "using document.execCommand('insertText', false, 'your text') 
+        // on a focused Quill editor will insert text at the cursor and trigger the usual input events"
+        const success = document.execCommand('insertText', false, text);
+        
+        // execCommand returns true if the command was supported and executed
+        return success;
       }
-      return !defaultPrevented;
-    } catch {
+    } catch (error) {
+      console.debug('execCommand insert failed:', error);
       return false;
     }
   }
 
-  private fallbackInsert(target: HTMLElement, text: string, replaceAll: boolean): void {
+  private fallbackDOMInsert(target: HTMLElement, text: string, replaceAll: boolean): void {
+    // Direct DOM manipulation - Quill syncs its model to DOM changes
+    // Per research: "directly manipulating the Quill editor's DOM is a viable way to insert content"
+    
+    // Handle multi-line text by creating proper paragraph structure
+    const createParagraphsHTML = (text: string): string => {
+      return text.split('\n').map(line => `<p>${line || '<br>'}</p>`).join('');
+    };
+    
     if (replaceAll) {
-      target.textContent = text;
-      positionCursorAtEnd(target);
-    } else {
-      const selection = window.getSelection();
-      if (selection && selection.rangeCount > 0) {
-        const range = selection.getRangeAt(0);
-        range.deleteContents();
-        range.insertNode(document.createTextNode(text));
-        range.collapse(false);
-        selection.removeAllRanges();
-        selection.addRange(range);
+      // Replace all content with properly formatted Quill structure
+      if (text.includes('\n')) {
+        target.innerHTML = createParagraphsHTML(text);
       } else {
-        // Fallback: append to end
-        target.textContent = (target.textContent || "") + text;
-        positionCursorAtEnd(target);
+        target.innerHTML = `<p>${text}</p>`;
+      }
+    } else {
+      // For append mode, check if we have existing content
+      if (target.innerHTML === '' || target.innerHTML === '<p><br></p>') {
+        // Empty editor - set initial content
+        if (text.includes('\n')) {
+          target.innerHTML = createParagraphsHTML(text);
+        } else {
+          target.innerHTML = `<p>${text}</p>`;
+        }
+      } else {
+        // Has content - append new paragraphs
+        if (text.includes('\n')) {
+          target.insertAdjacentHTML('beforeend', createParagraphsHTML(text));
+        } else {
+          const lastP = target.querySelector('p:last-child');
+          if (lastP && lastP.innerHTML !== '<br>') {
+            // Append to existing paragraph
+            lastP.textContent = (lastP.textContent || '') + text;
+          } else {
+            // Create new paragraph
+            const newP = document.createElement('p');
+            newP.textContent = text;
+            target.appendChild(newP);
+          }
+        }
       }
     }
 
-    // Dispatch input event for framework compatibility
+    // Position cursor at the end
+    positionCursorAtEnd(target);
+
+    // Dispatch input event so Quill's model syncs and LinkedIn's UI updates
+    // Per research: this ensures "LinkedIn's scripts may listen for focus or input events"
     target.dispatchEvent(new Event("input", { bubbles: true }));
   }
 }
