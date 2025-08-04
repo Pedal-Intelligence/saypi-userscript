@@ -1738,19 +1738,6 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           event.oldContent
         );
 
-        // Update the target element's value directly
-        if (event.targetElement instanceof HTMLInputElement || event.targetElement instanceof HTMLTextAreaElement) {
-          event.targetElement.value = event.newContent;
-          event.targetElement.dispatchEvent(new Event("input", { bubbles: true }));
-        } else if (event.targetElement.contentEditable === "true") {
-          event.targetElement.textContent = event.newContent;
-        }
-
-        // Update accumulated text if this is the current target
-        if (context.targetElement === event.targetElement) {
-          context.accumulatedText = event.newContent;
-        }
-
         // Emit event to notify other components that dictation content was updated
         EventBus.emit("dictation:contentUpdated", {
           targetElement: event.targetElement,
