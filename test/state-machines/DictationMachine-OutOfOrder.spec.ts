@@ -56,7 +56,7 @@ describe('DictationMachine - Out-of-Order Transcription Handling', () => {
   let inputElement2: HTMLInputElement;
 
   // Helper function to simulate realistic user input with manual edit detection
-  const simulateUserEdit = (element: HTMLInputElement, newContent: string, expectation?: string) => {
+  const simulateUserEdit = (element: HTMLInputElement | HTMLTextAreaElement, newContent: string, expectation?: string) => {
     const oldContent = element.value;
     
     // Verify the current content matches expectation if provided
@@ -581,6 +581,67 @@ describe('DictationMachine - Out-of-Order Transcription Handling', () => {
       expect(targetTranscriptions[2]).toBeUndefined(); // merged
       expect(targetTranscriptions[3]).toBe("Hickory dickory dock the mouse ran"); // Contains corrected text
       expect(targetTranscriptions[4]).toBe("up the clock");
+    });
+
+    it('should handle manual edits containing newline characters', () => {
+      // Test newline insertion during manual editing with out-of-order transcriptions
+      // Scenario: User dictates "Dear Sir," -> "How are you" -> manually edits to add line breaks for proper formatting
+      
+      const segments = [
+        { sequenceNumber: 1, text: "Dear Sir," }, // Comma is part of original transcription
+        { sequenceNumber: 2, text: "How are you" },
+        { sequenceNumber: 3, text: "today?" }
+      ];
+
+      // Setup targets (use textarea for realistic multi-line editing)
+      const textareaElement = document.createElement('textarea');
+      textareaElement.id = 'letter-textarea';
+      textareaElement.name = 'letter';
+      textareaElement.placeholder = 'Write your letter';
+
+      segments.forEach(segment => {
+        service.state.context.transcriptionTargets[segment.sequenceNumber] = textareaElement;
+      });
+
+      // Phase 1: First two segments arrive in order
+      service.send('saypi:transcribed', {
+        text: segments[0].text,
+        sequenceNumber: segments[0].sequenceNumber,
+      });
+      
+      service.send('saypi:transcribed', {
+        text: segments[1].text,
+        sequenceNumber: segments[1].sequenceNumber,
+      });
+
+      expect(textareaElement.value).toBe("Dear Sir, How are you");
+
+      // Phase 2: User manually edits to add proper letter formatting with newlines
+      // Simulates user pressing Enter to add line breaks for proper spacing
+      const manuallyFormattedContent = "Dear Sir,\n\nHow are you";
+      simulateUserEdit(textareaElement, manuallyFormattedContent, "Dear Sir, How are you");
+
+      // Verify the newline characters are preserved in the DOM element
+      expect(textareaElement.value).toBe("Dear Sir,\n\nHow are you");
+
+      // Phase 3: Third segment arrives after manual editing (out of order scenario)
+      service.send('saypi:transcribed', {
+        text: segments[2].text,
+        sequenceNumber: segments[2].sequenceNumber,
+      });
+
+      // Final verification - newlines should be preserved and new content properly merged
+      // The new transcription should be appended with proper spacing
+      expect(textareaElement.value).toBe("Dear Sir,\n\nHow are you today?");
+      
+      // Verify internal transcription state correctly handles newlines
+      const targetTranscriptions = service.state.context.transcriptionsByTarget['letter-textarea'];
+      expect(targetTranscriptions[1]).toBe("Dear Sir,");
+      expect(targetTranscriptions[2]).toBe("\n\nHow are you"); // Should preserve newlines in transcription state
+      expect(targetTranscriptions[3]).toBe("today?");
+
+      // Verify accumulated text maintains newline formatting
+      expect(service.state.context.accumulatedText).toBe("Dear Sir,\n\nHow are you today?");
     });
   });
 });
