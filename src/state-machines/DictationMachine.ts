@@ -997,28 +997,24 @@ function computeFinalText(
   if (mergedSequences.length > 0) {
     console.debug("Using server-merged text directly.");
 
-    // Remove any earlier versions of the merged sequences from the prefix
-    const mergedTexts = mergedSequences.map(seq => targetTranscriptions[seq]);
-    if (mergedTexts === undefined) {
-      console.warn("Merged text is undefined, skipping");
-      return serverText.trimStart();
-    }
-    for (const mergedText of mergedTexts) {
-      // Remove the text itself *and* any surplus whitespace around it
-      const escaped = mergedText.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
-      const regex = new RegExp(`\\s*${escaped}\\s*`, "g");
-      initialText = initialText.replace(regex, " ");
-    }
-
-    // Normalise whitespace on both parts
-    initialText = initialText
-      .replace(/[ \t]{2,}/g, " ")   // collapse only spaces/tabs, keep newlines
-      .replace(/[ \t]+$/, "");      // trim trailing spaces/tabs but keep final newline
-    const normalisedServer = serverText.trimStart();
-
-    const needsSpace = initialText !== "" && !initialText.endsWith(" ");
-    const result = (needsSpace ? initialText + " " : initialText) + normalisedServer;
-    return result.replace(/[ \t]{2,}/g, " ");
+    // Create a copy of target transcriptions, removing the merged sequences
+    // The server-merged content is already in targetTranscriptions at the correct sequence number
+    const workingTranscriptions = { ...targetTranscriptions };
+    
+    // Remove the sequences that were merged by the server
+    mergedSequences.forEach(seq => {
+      delete workingTranscriptions[seq];
+    });
+    
+    // Now merge all remaining transcriptions in sequence order using the same logic as local merge
+    const finalMergedText = mergeService
+      ? mergeService.mergeTranscriptsLocal(workingTranscriptions)
+      : Object.keys(workingTranscriptions)
+          .sort((a, b) => parseInt(a) - parseInt(b))
+          .map(key => workingTranscriptions[parseInt(key)])
+          .join(" ");
+    
+    return finalMergedText.trim();
   }
   // Local merge
   const mergedTranscript = mergeService
