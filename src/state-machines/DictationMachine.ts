@@ -1149,24 +1149,46 @@ function computeFinalText(
     ? mergeService.mergeTranscriptsLocal(targetTranscriptions)
     : smartJoinTranscriptions(targetTranscriptions);
 
-  // Check if the merged transcript already matches or contains the initial text
-  // This indicates that we're dealing with manually edited content that should be preserved
+  // Check if we're dealing with manually edited content that should be preserved
+  // First check: exact match or the merged transcript contains the initial text
+  const exactOrContainsMatch = initialText && (mergedTranscript === initialText || mergedTranscript.includes(initialText.trim()));
+  
+  // Second check: if initialText is much longer than expected from just merging transcriptions,
+  // it likely contains manual edits (especially newlines or repeated content)
+  const transcriptionCount = Object.keys(targetTranscriptions).length;
+  const expectedApproximateLength = Object.values(targetTranscriptions).join(' ').length;
+  const actualLength = initialText?.length || 0;
+  const hasSignificantLengthDifference = actualLength > expectedApproximateLength * 1.2; // 20% tolerance
+  
+  // Third check: contains newlines which are often from manual edits
+  const hasNewlines = initialText?.includes('\n');
+  
+  // Fourth check: if there's only one transcription and it matches the entire initial text,
+  // this likely means a significant manual edit consolidated everything
+  const singleTranscriptionMatches = transcriptionCount === 1 && 
+    initialText && Object.values(targetTranscriptions)[0] === initialText;
+  
   console.debug("🔍 NEWLINE DEBUG: Manual edit condition check:", {
     initialText: JSON.stringify(initialText),
     mergedTranscript: JSON.stringify(mergedTranscript),
-    initialTextHasNewlines: initialText?.includes('\n'),
+    initialTextHasNewlines: hasNewlines,
     mergedTranscriptHasNewlines: mergedTranscript.includes('\n'),
-    equals: mergedTranscript === initialText,
-    includes: initialText && mergedTranscript.includes(initialText.trim())
+    exactOrContainsMatch,
+    hasSignificantLengthDifference,
+    transcriptionCount,
+    expectedLength: expectedApproximateLength,
+    actualLength,
+    singleTranscriptionMatches
   });
   
-  if (initialText && (mergedTranscript === initialText || mergedTranscript.includes(initialText.trim()))) {
+  // If any of these conditions indicate manual edits, use the merged transcript directly
+  if (exactOrContainsMatch || hasSignificantLengthDifference || hasNewlines || singleTranscriptionMatches) {
     console.debug("🔍 NEWLINE DEBUG: Using merged transcript directly (manual edit detected):", JSON.stringify(mergedTranscript));
     return mergedTranscript;
   }
 
-  // Strip old individual transcripts (and surrounding whitespace) from the prefix
-  console.debug("🔍 NEWLINE DEBUG: Starting regex stripping process. Initial text:", JSON.stringify(initialText));
+  // Only proceed with regex stripping if we're confident this is not manually edited content
+  console.debug("🔍 NEWLINE DEBUG: Starting regex stripping process (no manual edit detected). Initial text:", JSON.stringify(initialText));
   
   for (const mergedText of Object.values(targetTranscriptions)) {
     const escaped = mergedText.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
