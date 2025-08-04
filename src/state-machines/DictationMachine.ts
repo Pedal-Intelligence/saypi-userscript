@@ -803,8 +803,11 @@ class ContentEditableStrategy implements TextInsertionStrategy {
       targetId: target.id || target.className || 'no-id'
     });
     
+    // Convert newlines to HTML <br> elements for proper display in contenteditable
+    const htmlText = text.replace(/\n/g, '<br>');
+    
     if (replaceAll) {
-      target.textContent = text;
+      target.innerHTML = htmlText;
       // Position cursor at the end after replacing all content
       positionCursorAtEnd(target);
     } else {
@@ -812,13 +815,16 @@ class ContentEditableStrategy implements TextInsertionStrategy {
       if (selection && selection.rangeCount > 0) {
         const range = selection.getRangeAt(0);
         range.deleteContents();
-        range.insertNode(document.createTextNode(text));
+        
+        // Create HTML fragment to properly handle <br> tags
+        const fragment = document.createRange().createContextualFragment(htmlText);
+        range.insertNode(fragment);
         range.collapse(false);
         selection.removeAllRanges();
         selection.addRange(range);
       } else {
         // Fallback: append to end
-        target.textContent = (target.textContent || "") + text;
+        target.innerHTML = (target.innerHTML || "") + htmlText;
         // Position cursor at the end after appending
         positionCursorAtEnd(target);
       }
@@ -827,7 +833,9 @@ class ContentEditableStrategy implements TextInsertionStrategy {
     console.debug("🔍 NEWLINE DEBUG: ContentEditableStrategy.insertText result:", {
       finalTextContent: JSON.stringify(target.textContent || ''),
       finalInnerText: JSON.stringify(target.innerText || ''),
-      finalHasNewlines: (target.textContent || '').includes('\n')
+      finalInnerHTML: JSON.stringify(target.innerHTML || ''),
+      finalHasNewlines: (target.textContent || '').includes('\n'),
+      htmlHasBrTags: (target.innerHTML || '').includes('<br>')
     });
 
     // Dispatch input event for framework compatibility
