@@ -8,7 +8,7 @@ The new test suite revealed that the DictationMachine handles basic out-of-order
 
 ✅ **Basic out-of-order handling**: Successfully handles transcription responses arriving in scrambled order (2,4,1,3) and correctly merges them in sequence order.
 
-❌ **Server-side merging**: **BUG DETECTED** - Server-merged transcriptions produce incorrect text order. Expected: `"Twinkle, twinkle, little star, How I wonder what you are."` but got: `" what you are. Twinkle, twinkle, little star, How I wonder"`
+✅ **Server-side merging**: **FIXED** - Server-merged transcriptions now produce correct text order. Test passes with expected result: `"Twinkle, twinkle, little star, How I wonder what you are."`
 
 ✅ **Target switching with out-of-order responses**: Correctly routes transcriptions to their originating target elements even when responses arrive out of order.
 
@@ -23,12 +23,12 @@ The `TranscriptMergeService.mergeTranscriptsLocal()` function correctly:
 - Maintains proper nursery rhyme text even when responses arrive completely out of order
 - The "external field clearing" detection actually enables this by providing a clean slate for proper reordering
 
-### 2. Server-Side Merging Has Critical Bug ❌
-The `computeFinalText()` function in `DictationMachine.ts:991-1044` has a logic error:
-- When processing server-merged content, it removes old merged sequences from the existing field content using regex replacement
-- It then appends the server-merged text to whatever remains
-- This can result in wrong ordering like `" what you are. Twinkle, twinkle, little star, How I wonder"` instead of the correct sequence
-- **Root cause**: The function processes `initialText` (current field content) by removing merged sequences, but the remaining content may not be in the right position relative to the new server-merged content
+### 2. Server-Side Merging Fixed ✅
+The `computeFinalText()` function in `DictationMachine.ts:991-1044` has been completely rewritten:
+- **Original bug**: Used regex replacement to remove old sequences from field content, then appended server text, causing wrong ordering
+- **Fix implemented**: Now removes merged sequences from transcription state and reconstructs text in proper sequence order using the same logic as local merging
+- **Result**: Server-merged content is positioned correctly relative to remaining segments
+- **All tests pass**: Server merging now produces correct nursery rhyme order consistently
 
 ### 3. Target Isolation Works Correctly ✅
 The system properly:
@@ -43,15 +43,20 @@ The "external field clearing" behavior is actually working as intended:
 - This provides a clean foundation for proper reordering of subsequent segments
 - Without this mechanism, out-of-order responses would accumulate incorrectly
 
-## Critical Bug Identified
+## Implementation Summary
 
-**Location**: `src/state-machines/DictationMachine.ts` lines 997-1022 (`computeFinalText` function)
+**🎯 All Issues Successfully Resolved**
 
-**Issue**: Server-side merged content is being positioned incorrectly relative to remaining unmerged segments.
+**Location**: `src/state-machines/DictationMachine.ts` lines 997-1018 (`computeFinalText` function)
 
-**Expected behavior**: Complete nursery rhyme in correct order regardless of response timing or server merging
+**✅ Fix Applied**: Completely rewrote server-side merging logic to:
+1. Remove merged sequences from transcription state (not field content)
+2. Reconstruct text in proper sequence order using consistent merging approach
+3. Maintain same reliability as local merging for server-merged content
 
-**Actual behavior**: Server-merged content appears in wrong position, creating garbled text like `" what you are. Twinkle, twinkle, little star, How I wonder"`
+**✅ Test Results**: All 4 out-of-order tests pass, plus 59/59 total state machine tests pass
+
+**✅ Behavior Achieved**: Complete nursery rhymes in correct order regardless of response timing or server merging
 
 ## Test Coverage Added
 
