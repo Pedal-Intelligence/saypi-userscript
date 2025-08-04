@@ -55,6 +55,35 @@ describe('DictationMachine - Out-of-Order Transcription Handling', () => {
   let inputElement1: HTMLInputElement;
   let inputElement2: HTMLInputElement;
 
+  // Helper function to simulate realistic user input with manual edit detection
+  const simulateUserEdit = (element: HTMLInputElement, newContent: string, expectation?: string) => {
+    const oldContent = element.value;
+    
+    // Verify the current content matches expectation if provided
+    if (expectation !== undefined) {
+      expect(oldContent).toBe(expectation);
+    }
+    
+    // Simulate user typing (DOM changes first, as it would in real usage)
+    element.value = newContent;
+    element.dispatchEvent(new Event('input', { bubbles: true }));
+    
+    // Verify DOM was updated
+    expect(element.value).toBe(newContent);
+    
+    // Simulate the UniversalDictationModule detecting this change and notifying the state machine
+    service.send('saypi:manualEdit', {
+      targetElement: element,
+      newContent: newContent,
+      oldContent: oldContent
+    });
+    
+    // Verify element still shows the corrected content after state machine processing
+    expect(element.value).toBe(newContent);
+    
+    return { oldContent, newContent };
+  };
+
   beforeAll(() => {
     // Create mock HTML elements for testing
     inputElement1 = document.createElement('input');
@@ -390,14 +419,8 @@ describe('DictationMachine - Out-of-Order Transcription Handling', () => {
       });
 
       // Phase 2: User manually edits the text field to correct "lump" to "lamb"
-      service.send('saypi:manualEdit', {
-        targetElement: inputElement1,
-        newContent: 'Mary had a little lamb',
-        oldContent: 'Mary had a little lump'
-      });
-
-      // Verify manual edit was applied
-      expect(inputElement1.value).toBe("Mary had a little lamb");
+      // Simulate realistic user typing and change detection
+      simulateUserEdit(inputElement1, 'Mary had a little lamb', 'Mary had a little lump');
       expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
         1: "Mary had a",
         2: "little lamb"  // Should be updated by manual edit
@@ -468,13 +491,8 @@ describe('DictationMachine - Out-of-Order Transcription Handling', () => {
       expect(inputElement1.value).toBe("Jack and Jill went up the hell");
 
       // Phase 2: First manual correction - "hell" to "hill"
-      service.send('saypi:manualEdit', {
-        targetElement: inputElement1,
-        newContent: 'Jack and Jill went up the hill',
-        oldContent: 'Jack and Jill went up the hell'
-      });
-
-      expect(inputElement1.value).toBe("Jack and Jill went up the hill");
+      // Simulate realistic user typing and change detection
+      simulateUserEdit(inputElement1, 'Jack and Jill went up the hill', 'Jack and Jill went up the hell');
 
       // Phase 3: Segment 4 arrives out of order (before segment 3)
       service.send('saypi:transcribed', {
@@ -492,12 +510,9 @@ describe('DictationMachine - Out-of-Order Transcription Handling', () => {
 
       expect(inputElement1.value).toBe("Jack and Jill went up the hill to fitch a pail of water");
 
-      // Phase 5: Second manual correction - "fitch a" to "fetch a"
-      service.send('saypi:manualEdit', {
-        targetElement: inputElement1,
-        newContent: 'Jack and Jill went up the hill to fetch a pail of water',
-        oldContent: 'Jack and Jill went up the hill to fitch a pail of water'
-      });
+      // Phase 5: Second manual correction - "fitch a" to "fetch a"  
+      // Simulate realistic user typing and change detection for second correction
+      simulateUserEdit(inputElement1, 'Jack and Jill went up the hill to fetch a pail of water', 'Jack and Jill went up the hill to fitch a pail of water');
 
       // Final verification - both manual corrections should be preserved
       expect(inputElement1.value).toBe("Jack and Jill went up the hill to fetch a pail of water");
@@ -538,13 +553,8 @@ describe('DictationMachine - Out-of-Order Transcription Handling', () => {
       expect(inputElement1.value).toBe("Hickory dickory duck");
 
       // Phase 2: Manual correction - "duck" to "dock"
-      service.send('saypi:manualEdit', {
-        targetElement: inputElement1,
-        newContent: 'Hickory dickory dock',
-        oldContent: 'Hickory dickory duck'
-      });
-
-      expect(inputElement1.value).toBe("Hickory dickory dock");
+      // Simulate realistic user typing and change detection
+      simulateUserEdit(inputElement1, 'Hickory dickory dock', 'Hickory dickory duck');
 
       // Phase 3: Segment 4 arrives out of order
       service.send('saypi:transcribed', {
