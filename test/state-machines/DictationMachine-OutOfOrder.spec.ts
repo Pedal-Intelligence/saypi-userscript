@@ -33,11 +33,34 @@ vi.mock('../../src/error-management/TranscriptionErrorManager', () => ({
 vi.mock('../../src/TranscriptMergeService', () => ({
   TranscriptMergeService: vi.fn().mockImplementation(() => ({
     mergeTranscriptsLocal: vi.fn((transcripts) => {
-      // Simple merge: join all transcripts in order
-      return Object.keys(transcripts)
-        .sort((a, b) => parseInt(a) - parseInt(b))
-        .map(key => transcripts[key])
-        .join(' ');
+      // Smart joining: don't add spaces if either the previous segment ends with whitespace or the current segment starts with whitespace
+      const sortedKeys = Object.keys(transcripts)
+        .map(Number)
+        .sort((a, b) => a - b);
+
+      let result = "";
+      for (let i = 0; i < sortedKeys.length; i++) {
+        const segment = transcripts[sortedKeys[i]];
+        
+        if (i === 0) {
+          // First segment - always add as-is
+          result += segment;
+        } else {
+          // Check if we need to add a space between segments
+          const previousSegmentEndsWithWhitespace = result.match(/\s$/);
+          const currentSegmentStartsWithWhitespace = segment.match(/^\s/);
+          
+          if (previousSegmentEndsWithWhitespace || currentSegmentStartsWithWhitespace) {
+            // Don't add space if previous segment ends with whitespace OR current segment starts with whitespace
+            result += segment;
+          } else {
+            // Add space only if neither condition is met
+            result += " " + segment;
+          }
+        }
+      }
+      
+      return result;
     }),
   })),
 }));
@@ -602,6 +625,9 @@ describe('DictationMachine - Out-of-Order Transcription Handling', () => {
       segments.forEach(segment => {
         service.state.context.transcriptionTargets[segment.sequenceNumber] = textareaElement;
       });
+
+      // Switch dictation target to the textarea
+      service.send('saypi:switchTarget', { targetElement: textareaElement });
 
       // Phase 1: First two segments arrive in order
       service.send('saypi:transcribed', {
