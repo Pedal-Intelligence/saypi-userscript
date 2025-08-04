@@ -354,5 +354,223 @@ describe('DictationMachine - Out-of-Order Transcription Handling', () => {
       // Verify all segments are stored
       expect(Object.keys(service.state.context.transcriptionsByTarget['name-input']).length).toBe(6);
     });
+
+    it('should preserve manual edits during out-of-order transcription completion', () => {
+      // Test manual editing during dictation with out-of-order responses
+      // Scenario: User dictates "Mary had a little lump" -> edits to "lamb" -> continues dictating
+      
+      const nurseryRhymeSegments = [
+        { sequenceNumber: 1, text: "Mary had a" },
+        { sequenceNumber: 2, text: "little lump" }, // Will be manually corrected to "little lamb"
+        { sequenceNumber: 3, text: "its fleece was" },
+        { sequenceNumber: 4, text: "white as snow" }
+      ];
+
+      // Setup transcription targets for all segments
+      nurseryRhymeSegments.forEach(segment => {
+        service.state.context.transcriptionTargets[segment.sequenceNumber] = inputElement1;
+      });
+
+      // Phase 1: First two segments arrive in order (simulating initial dictation)
+      service.send('saypi:transcribed', {
+        text: nurseryRhymeSegments[0].text,
+        sequenceNumber: nurseryRhymeSegments[0].sequenceNumber,
+      });
+      
+      service.send('saypi:transcribed', {
+        text: nurseryRhymeSegments[1].text,
+        sequenceNumber: nurseryRhymeSegments[1].sequenceNumber,
+      });
+
+      // Verify initial transcription
+      expect(inputElement1.value).toBe("Mary had a little lump");
+      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
+        1: "Mary had a",
+        2: "little lump"
+      });
+
+      // Phase 2: User manually edits the text field to correct "lump" to "lamb"
+      service.send('saypi:manualEdit', {
+        targetElement: inputElement1,
+        newContent: 'Mary had a little lamb',
+        oldContent: 'Mary had a little lump'
+      });
+
+      // Verify manual edit was applied
+      expect(inputElement1.value).toBe("Mary had a little lamb");
+      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
+        1: "Mary had a",
+        2: "little lamb"  // Should be updated by manual edit
+      });
+
+      // Phase 3: Remaining segments arrive out of order (4 then 3)
+      // This simulates the user continuing to dictate after the manual correction
+      
+      // Segment 4 arrives first
+      service.send('saypi:transcribed', {
+        text: nurseryRhymeSegments[3].text,
+        sequenceNumber: nurseryRhymeSegments[3].sequenceNumber,
+      });
+
+      // Should preserve manual edit and add new segment in correct order
+      expect(inputElement1.value).toBe("Mary had a little lamb white as snow");
+      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
+        1: "Mary had a",
+        2: "little lamb",  // Manual edit preserved
+        4: "white as snow"
+      });
+
+      // Segment 3 arrives last (out of order)
+      service.send('saypi:transcribed', {
+        text: nurseryRhymeSegments[2].text,
+        sequenceNumber: nurseryRhymeSegments[2].sequenceNumber,
+      });
+
+      // Final verification - manual edit should be preserved in final result
+      expect(inputElement1.value).toBe("Mary had a little lamb its fleece was white as snow");
+      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
+        1: "Mary had a",
+        2: "little lamb",    // Manual correction preserved
+        3: "its fleece was",
+        4: "white as snow"
+      });
+
+      // Verify accumulated text matches
+      expect(service.state.context.accumulatedText).toBe("Mary had a little lamb its fleece was white as snow");
+    });
+
+    it('should handle multiple manual edits with out-of-order responses', () => {
+      // Test scenario with multiple corrections during out-of-order completion
+      
+      const segments = [
+        { sequenceNumber: 1, text: "Jack and Jill" },
+        { sequenceNumber: 2, text: "went up the hell" }, // Will be corrected to "hill"
+        { sequenceNumber: 3, text: "to fitch a" },       // Will be corrected to "fetch a"
+        { sequenceNumber: 4, text: "pail of water" }
+      ];
+
+      // Setup targets
+      segments.forEach(segment => {
+        service.state.context.transcriptionTargets[segment.sequenceNumber] = inputElement1;
+      });
+
+      // Phase 1: Segments 1 and 2 arrive in order
+      service.send('saypi:transcribed', {
+        text: segments[0].text,
+        sequenceNumber: segments[0].sequenceNumber,
+      });
+      
+      service.send('saypi:transcribed', {
+        text: segments[1].text,
+        sequenceNumber: segments[1].sequenceNumber,
+      });
+
+      expect(inputElement1.value).toBe("Jack and Jill went up the hell");
+
+      // Phase 2: First manual correction - "hell" to "hill"
+      service.send('saypi:manualEdit', {
+        targetElement: inputElement1,
+        newContent: 'Jack and Jill went up the hill',
+        oldContent: 'Jack and Jill went up the hell'
+      });
+
+      expect(inputElement1.value).toBe("Jack and Jill went up the hill");
+
+      // Phase 3: Segment 4 arrives out of order (before segment 3)
+      service.send('saypi:transcribed', {
+        text: segments[3].text,
+        sequenceNumber: segments[3].sequenceNumber,
+      });
+
+      expect(inputElement1.value).toBe("Jack and Jill went up the hill pail of water");
+
+      // Phase 4: Segment 3 arrives
+      service.send('saypi:transcribed', {
+        text: segments[2].text,
+        sequenceNumber: segments[2].sequenceNumber,
+      });
+
+      expect(inputElement1.value).toBe("Jack and Jill went up the hill to fitch a pail of water");
+
+      // Phase 5: Second manual correction - "fitch a" to "fetch a"
+      service.send('saypi:manualEdit', {
+        targetElement: inputElement1,
+        newContent: 'Jack and Jill went up the hill to fetch a pail of water',
+        oldContent: 'Jack and Jill went up the hill to fitch a pail of water'
+      });
+
+      // Final verification - both manual corrections should be preserved
+      expect(inputElement1.value).toBe("Jack and Jill went up the hill to fetch a pail of water");
+      
+      // After the second manual edit, the significant change consolidates all transcriptions
+      // into a single entry (this is the intended behavior for major content changes)
+      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
+        4: "Jack and Jill went up the hill to fetch a pail of water"  // Consolidated after second edit
+      });
+    });
+
+    it('should handle manual edits with server-side merging and out-of-order responses', () => {
+      // Complex scenario: manual edit + server merging + out-of-order completion
+      
+      const segments = [
+        { sequenceNumber: 1, text: "Hickory dickory" },
+        { sequenceNumber: 2, text: "duck" },              // Will be corrected to "dock"
+        { sequenceNumber: 3, text: "the mouse ran" },
+        { sequenceNumber: 4, text: "up the clock" }
+      ];
+
+      // Setup targets
+      segments.forEach(segment => {
+        service.state.context.transcriptionTargets[segment.sequenceNumber] = inputElement1;
+      });
+
+      // Phase 1: First two segments arrive
+      service.send('saypi:transcribed', {
+        text: segments[0].text,
+        sequenceNumber: segments[0].sequenceNumber,
+      });
+      
+      service.send('saypi:transcribed', {
+        text: segments[1].text,
+        sequenceNumber: segments[1].sequenceNumber,
+      });
+
+      expect(inputElement1.value).toBe("Hickory dickory duck");
+
+      // Phase 2: Manual correction - "duck" to "dock"
+      service.send('saypi:manualEdit', {
+        targetElement: inputElement1,
+        newContent: 'Hickory dickory dock',
+        oldContent: 'Hickory dickory duck'
+      });
+
+      expect(inputElement1.value).toBe("Hickory dickory dock");
+
+      // Phase 3: Segment 4 arrives out of order
+      service.send('saypi:transcribed', {
+        text: segments[3].text,
+        sequenceNumber: segments[3].sequenceNumber,
+      });
+
+      expect(inputElement1.value).toBe("Hickory dickory dock up the clock");
+
+      // Phase 4: Segment 3 arrives with server-side merging
+      // Server merges corrected segments 1 and 2 with segment 3
+      service.send('saypi:transcribed', {
+        text: "Hickory dickory dock the mouse ran",
+        sequenceNumber: 3,
+        merged: [1, 2], // Server merged corrected content of segments 1 and 2
+      });
+
+      // Final verification - server should preserve the manual correction
+      expect(inputElement1.value).toBe("Hickory dickory dock the mouse ran up the clock");
+      
+      // Check that merged sequences were handled correctly
+      const targetTranscriptions = service.state.context.transcriptionsByTarget['name-input'];
+      expect(targetTranscriptions[1]).toBeUndefined(); // merged
+      expect(targetTranscriptions[2]).toBeUndefined(); // merged
+      expect(targetTranscriptions[3]).toBe("Hickory dickory dock the mouse ran"); // Contains corrected text
+      expect(targetTranscriptions[4]).toBe("up the clock");
+    });
   });
 });
