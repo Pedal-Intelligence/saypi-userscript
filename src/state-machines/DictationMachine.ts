@@ -928,7 +928,29 @@ function getTextInTarget(targetElement?: HTMLElement): string {
   }
 
   if (targetElement.contentEditable === "true") {
-    return targetElement.textContent || "";
+    // For contenteditable elements, convert <br> tags back to \n characters
+    // so the system can work with logical newlines consistently (same logic as UniversalDictationModule.getElementContent)
+    const innerHTML = targetElement.innerHTML || '';
+    
+    // Handle contenteditable paragraph spacing quirk BEFORE general br conversion:
+    // When user presses Enter once, browser creates <br><br> as temporary paragraph spacing
+    // This should be normalized to a single newline since the second <br> gets replaced 
+    // when user continues typing (it's just a placeholder)
+    let normalizedHTML = innerHTML
+      .replace(/<br\s*\/?>\s*<br\s*\/?>/gi, '\n'); // Convert <br><br> pairs to single \n
+    
+    // Convert remaining single <br> tags to \n (these represent intentional single line breaks)
+    let contentWithNewlines = normalizedHTML
+      .replace(/<br\s*\/?>/gi, '\n')  // Match remaining <br>, <br/>, <br />
+      .replace(/<div>/gi, '\n')       // <div> elements often represent line breaks too
+      .replace(/<\/div>/gi, '')       // Remove closing div tags
+      .replace(/<[^>]*>/g, '')        // Remove any other HTML tags
+      .replace(/&nbsp;/g, ' ')        // Convert non-breaking spaces
+      .replace(/&lt;/g, '<')          // Decode common HTML entities
+      .replace(/&gt;/g, '>')
+      .replace(/&amp;/g, '&');       // Decode & last to avoid double-decoding
+    
+    return contentWithNewlines;
   }
 
   return "";
