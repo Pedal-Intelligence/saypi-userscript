@@ -699,5 +699,264 @@ describe('DictationMachine - Out-of-Order Transcription Handling', () => {
       // This test confirms that ContentEditableStrategy successfully converts \n to <br> tags,
       // which resolves the original issue where newlines weren't being preserved in contenteditable elements
     });
+
+    it('should preserve pre-existing text and append dictation at cursor position', () => {
+      // Test that dictation appends to existing text instead of replacing it entirely
+      // This addresses the issue where dictation overwrites user's pre-typed content
+      
+      // Setup textarea with pre-existing content
+      const textareaElement = document.createElement('textarea');
+      textareaElement.id = 'story-textarea';
+      textareaElement.name = 'story';
+      textareaElement.value = 'Incy Wincy Spider\n\nThe wincy wincy spider climbed up the spout again.\n\n';
+      
+      // Simulate cursor position at the end of existing text
+      textareaElement.selectionStart = textareaElement.value.length;
+      textareaElement.selectionEnd = textareaElement.value.length;
+      
+      // Switch dictation target to the textarea
+      service.send('saypi:switchTarget', { targetElement: textareaElement });
+      
+      // User starts dictating new content
+      service.state.context.transcriptionTargets[1] = textareaElement;
+      
+      service.send('saypi:transcribed', {
+        text: 'Jack and Jill.',
+        sequenceNumber: 1,
+      });
+
+      // FAILING TEST: Currently this will fail because the system replaces all content
+      // Expected: Pre-existing text should be preserved and dictation appended
+      const expectedContent = 'Incy Wincy Spider\n\nThe wincy wincy spider climbed up the spout again.\n\nJack and Jill.';
+      expect(textareaElement.value).toBe(expectedContent);
+      
+      // Verify that the original text was not lost
+      expect(textareaElement.value).toContain('Incy Wincy Spider');
+      expect(textareaElement.value).toContain('climbed up the spout again');
+      expect(textareaElement.value).toContain('Jack and Jill.');
+    });
+
+    it('should preserve pre-existing text in contenteditable elements and append dictation', () => {
+      // Test pre-existing text preservation for contenteditable elements
+      
+      // Setup contenteditable div with pre-existing content including <br> tags
+      const contentEditableElement = document.createElement('div');
+      contentEditableElement.contentEditable = 'true';
+      contentEditableElement.id = 'notes-contenteditable';
+      contentEditableElement.innerHTML = 'Meeting Notes:<br><br>- Review quarterly results<br>- Discuss budget<br><br>';
+      
+      // Switch dictation target to the contenteditable element
+      service.send('saypi:switchTarget', { targetElement: contentEditableElement });
+      
+      service.state.context.transcriptionTargets[1] = contentEditableElement;
+      
+      service.send('saypi:transcribed', {
+        text: 'Action items:\nSchedule follow-up meeting',
+        sequenceNumber: 1,
+      });
+
+      // Expected behavior is to append, not replace
+      const expectedHTML = 'Meeting Notes:<br>- Review quarterly results<br>- Discuss budget<br>Action items:<br>Schedule follow-up meeting';
+      expect(contentEditableElement.innerHTML).toBe(expectedHTML);
+      
+      // Verify original content is preserved
+      expect(contentEditableElement.innerHTML).toContain('Meeting Notes:');
+      expect(contentEditableElement.innerHTML).toContain('Review quarterly results');
+      expect(contentEditableElement.innerHTML).toContain('Action items:');
+    });
+
+    it('should not treat whitespace-only contenteditable elements as having initial text', () => {
+      // Test that empty contenteditable elements with whitespace don't get unwanted line breaks
+      
+      // Setup contenteditable div with whitespace (like HTML formatting)
+      const contentEditableElement = document.createElement('div');
+      contentEditableElement.contentEditable = 'true';
+      contentEditableElement.id = 'empty-contenteditable';
+      contentEditableElement.innerHTML = '\n        '; // Whitespace from HTML formatting
+      
+      // Switch dictation target to the contenteditable element
+      service.send('saypi:switchTarget', { targetElement: contentEditableElement });
+      
+      service.state.context.transcriptionTargets[1] = contentEditableElement;
+      
+      service.send('saypi:transcribed', {
+        text: 'Hello world.',
+        sequenceNumber: 1,
+      });
+
+      // Should not have any leading <br> tags or whitespace
+      expect(contentEditableElement.innerHTML).toBe('Hello world.');
+      
+      // Verify no whitespace was preserved
+      expect(contentEditableElement.innerHTML).not.toContain('<br>');
+      expect(contentEditableElement.textContent).toBe('Hello world.');
+    });
+
+    it('should preserve user-entered newlines in contenteditable elements', () => {
+      // Test that user-entered newlines (represented as <br> tags) are preserved
+      
+      // Setup contenteditable div with user-entered newlines  
+      const contentEditableElement = document.createElement('div');
+      contentEditableElement.contentEditable = 'true';
+      contentEditableElement.id = 'user-newlines-contenteditable';
+      contentEditableElement.innerHTML = 'Line 1<br><br>Line 2<br>'; // User entered newlines
+      
+      // Switch dictation target to the contenteditable element
+      service.send('saypi:switchTarget', { targetElement: contentEditableElement });
+      
+      service.state.context.transcriptionTargets[1] = contentEditableElement;
+      
+      service.send('saypi:transcribed', {
+        text: 'Line 3',
+        sequenceNumber: 1,
+      });
+
+      // Should preserve the user-entered newlines AND append new content
+      // Note: <br><br> gets normalized to single <br> per contenteditable paragraph spacing rules
+      const expectedHTML = 'Line 1<br>Line 2<br>Line 3';
+      expect(contentEditableElement.innerHTML).toBe(expectedHTML);
+      
+      // Verify original user content and newlines were preserved
+      expect(contentEditableElement.innerHTML).toContain('Line 1<br>');
+      expect(contentEditableElement.innerHTML).toContain('Line 2<br>');
+      expect(contentEditableElement.innerHTML).toContain('Line 3');
+    });
+
+    it('should use smart spacing when joining initial text with dictation', () => {
+      // Test that initial text and dictation are joined with appropriate spacing
+      
+      // Case 1: Initial text without trailing space + dictation without leading space -> add space
+      const textareaElement1 = document.createElement('textarea');
+      textareaElement1.id = 'spacing-test-1';
+      textareaElement1.value = 'Hello'; // No trailing space
+      
+      service.send('saypi:switchTarget', { targetElement: textareaElement1 });
+      service.state.context.transcriptionTargets[1] = textareaElement1;
+      
+      service.send('saypi:transcribed', {
+        text: 'world', // No leading space
+        sequenceNumber: 1,
+      });
+
+      expect(textareaElement1.value).toBe('Hello world'); // Should add space
+      
+      // Case 2: Initial text with trailing space + dictation without leading space -> no additional space
+      const textareaElement2 = document.createElement('textarea');
+      textareaElement2.id = 'spacing-test-2';
+      textareaElement2.value = 'Hello '; // Trailing space
+      
+      service.send('saypi:switchTarget', { targetElement: textareaElement2 });
+      service.state.context.transcriptionTargets[2] = textareaElement2;
+      
+      service.send('saypi:transcribed', {
+        text: 'world', // No leading space
+        sequenceNumber: 2,
+      });
+
+      expect(textareaElement2.value).toBe('Hello world'); // Should not add extra space
+      
+      // Case 3: Initial text without trailing space + dictation with leading space -> no additional space
+      const textareaElement3 = document.createElement('textarea');
+      textareaElement3.id = 'spacing-test-3';
+      textareaElement3.value = 'Hello'; // No trailing space
+      
+      service.send('saypi:switchTarget', { targetElement: textareaElement3 });
+      service.state.context.transcriptionTargets[3] = textareaElement3;
+      
+      service.send('saypi:transcribed', {
+        text: ' world', // Leading space
+        sequenceNumber: 3,
+      });
+
+      expect(textareaElement3.value).toBe('Hello world'); // Should not add extra space
+    });
+    
+    it('should handle pre-existing text with multiple transcripts without duplication', () => {
+      // Reset machine to idle state first
+      service.send('saypi:stopDictation');
+      
+      // Create a textarea element with pre-existing content (including newlines)
+      const textareaElement = document.createElement('textarea');
+      textareaElement.id = 'bio';
+      textareaElement.value = 'On The Dangers of Fetching Water\n'; // Pre-existing text with newline
+      
+      // Start dictation on this element
+      service.send('saypi:startDictation', { targetElement: textareaElement });
+      
+      // Verify the initial text was captured correctly
+      const targetId = 'bio';
+      expect(service.state.context.initialTextByTarget[targetId]).toBe('On The Dangers of Fetching Water\n');
+      
+      // Transition to listening state (needed for transcript processing)
+      service.send('saypi:callReady');
+      
+      // Setup transcription targets for both segments
+      service.state.context.transcriptionTargets[7] = textareaElement;
+      service.state.context.transcriptionTargets[8] = textareaElement;
+      
+      // First transcript arrives
+      service.send('saypi:transcribed', {
+        text: 'Jack and Jill went up the hill to fetch a pail of water.',
+        sequenceNumber: 7,
+      });
+      
+      // Should have combined pre-existing text with first transcript
+      expect(textareaElement.value).toBe('On The Dangers of Fetching Water\nJack and Jill went up the hill to fetch a pail of water.');
+      
+      // Second transcript arrives
+      service.send('saypi:transcribed', {
+        text: 'Jack fell down and broke his crown.',
+        sequenceNumber: 8,
+      });
+      
+      // Should add second transcript without duplicating previous content
+      // Expected: "On The Dangers of Fetching Water\nJack and Jill went up the hill to fetch a pail of water. Jack fell down and broke his crown."
+      // Bug would produce: "On The Dangers of Fetching Water\nJack and Jill went up the hill to fetch a pail of water. Jack and Jill went up the hill to fetch a pail of water. Jack fell down and broke his crown."
+      expect(textareaElement.value).toBe('On The Dangers of Fetching Water\nJack and Jill went up the hill to fetch a pail of water. Jack fell down and broke his crown.');
+    });
+    
+    it('should not trigger manual edit detection for pre-existing newlines', () => {
+      // Reset machine to idle state first
+      service.send('saypi:stopDictation');
+      
+      // Create a textarea element with pre-existing content (with newlines)
+      const textareaElement = document.createElement('textarea');
+      textareaElement.id = 'memo';
+      textareaElement.value = 'Meeting Notes:\n\n'; // Pre-existing text with multiple newlines
+      
+      // Start dictation on this element
+      service.send('saypi:startDictation', { targetElement: textareaElement });
+      
+      // Verify the initial text was captured correctly
+      expect(service.state.context.initialTextByTarget['memo']).toBe('Meeting Notes:\n\n');
+      
+      // Transition to listening state (needed for transcript processing)
+      service.send('saypi:callReady');
+      
+      // Setup transcription target
+      service.state.context.transcriptionTargets[10] = textareaElement;
+      
+      // First transcript arrives - this should NOT trigger manual edit detection
+      // even though the initial text has newlines, because they're pre-existing
+      service.send('saypi:transcribed', {
+        text: 'Today we discussed the new project.',
+        sequenceNumber: 10,
+      });
+      
+      // Should have combined pre-existing text with first transcript using normal merging logic
+      // (not manual edit logic), which means proper spacing
+      expect(textareaElement.value).toBe('Meeting Notes:\n\nToday we discussed the new project.');
+      
+      // Add another transcript to verify the merging continues to work correctly
+      service.state.context.transcriptionTargets[11] = textareaElement;
+      
+      service.send('saypi:transcribed', {
+        text: 'Also need to assign team members.',
+        sequenceNumber: 11,
+      });
+      
+      // Should append the second transcript with proper spacing
+      expect(textareaElement.value).toBe('Meeting Notes:\n\nToday we discussed the new project. Also need to assign team members.');
+    });
   });
 });

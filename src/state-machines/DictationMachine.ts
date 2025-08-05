@@ -81,6 +81,7 @@ type DictationEvent =
 interface DictationContext {
   transcriptions: Record<number, string>; // Global transcriptions for backwards compatibility
   transcriptionsByTarget: Record<string, Record<number, string>>; // Transcriptions grouped by target element ID
+  initialTextByTarget: Record<string, string>; // Pre-existing text in each target when dictation started
   isTranscribing: boolean;
   userIsSpeaking: boolean;
   timeUserStoppedSpeaking: number;
@@ -151,6 +152,26 @@ function getHighestKey(transcriptions: Record<number, string>): number {
 /**
  * Smart join that doesn't add spaces when segments already start with whitespace
  */
+/**
+ * Smart join two text segments with appropriate spacing logic
+ */
+function smartJoinTwoTexts(firstText: string, secondText: string): string {
+  if (!firstText) return secondText;
+  if (!secondText) return firstText;
+  
+  // Check if we need to add a space between segments
+  const firstEndsWithWhitespace = firstText.match(/\s$/);
+  const secondStartsWithWhitespace = secondText.match(/^\s/);
+  
+  if (firstEndsWithWhitespace || secondStartsWithWhitespace) {
+    // Don't add space if first text ends with whitespace OR second text starts with whitespace
+    return firstText + secondText;
+  } else {
+    // Add space if neither condition is met
+    return firstText + " " + secondText;
+  }
+}
+
 function smartJoinTranscriptions(transcriptions: Record<number, string>): string {
   const sortedKeys = Object.keys(transcriptions)
     .map(Number)
@@ -1145,7 +1166,8 @@ function computeFinalText(
   targetTranscriptions: Record<number, string>,
   mergedSequences: number[],
   serverText: string,
-  initialText: string = ""
+  initialText: string = "",
+  isUsingStoredInitialText: boolean = false
 ): string {
   if (mergedSequences.length > 0) {
     console.debug("Using server-merged text directly.");
@@ -1183,7 +1205,8 @@ function computeFinalText(
   const hasSignificantLengthDifference = actualLength > expectedApproximateLength * 1.2; // 20% tolerance
   
   // Third check: contains newlines which are often from manual edits
-  const hasNewlines = initialText?.includes('\n');
+  // But exclude newlines that are from pre-existing text (not actual manual edits)
+  const hasNewlines = initialText?.includes('\n') && !isUsingStoredInitialText;
   
   // Fourth check: if there's only one transcription and it matches the entire initial text,
   // this likely means a significant manual edit consolidated everything
@@ -1193,7 +1216,9 @@ function computeFinalText(
   console.debug("🔍 NEWLINE DEBUG: Manual edit condition check:", {
     initialText: JSON.stringify(initialText),
     mergedTranscript: JSON.stringify(mergedTranscript),
-    initialTextHasNewlines: hasNewlines,
+    initialTextHasNewlines: initialText?.includes('\n'),
+    hasNewlinesAfterFiltering: hasNewlines,
+    isUsingStoredInitialText,
     mergedTranscriptHasNewlines: mergedTranscript.includes('\n'),
     exactOrContainsMatch,
     hasSignificantLengthDifference,
@@ -1203,10 +1228,20 @@ function computeFinalText(
     singleTranscriptionMatches
   });
   
-  // If any of these conditions indicate manual edits, use the merged transcript directly
+  // If any of these conditions indicate manual edits, handle appropriately
   if (exactOrContainsMatch || hasSignificantLengthDifference || hasNewlines || singleTranscriptionMatches) {
     console.debug("🔍 NEWLINE DEBUG: Using merged transcript directly (manual edit detected):", JSON.stringify(mergedTranscript));
-    return mergedTranscript;
+    
+    // If the merged transcript already contains the initial text, don't combine again
+    if (exactOrContainsMatch) {
+      console.debug("🔍 NEWLINE DEBUG: Merged transcript contains initial text, using as-is");
+      return mergedTranscript;
+    } else {
+      // For other manual edit cases, combine initial text with merged transcript
+      const combinedManualEditResult = smartJoinTwoTexts(initialText, mergedTranscript);
+      console.debug("🔍 NEWLINE DEBUG: Manual edit result with initial text:", JSON.stringify(combinedManualEditResult));
+      return combinedManualEditResult;
+    }
   }
 
   // Only proceed with regex stripping if we're confident this is not manually edited content
@@ -1245,7 +1280,7 @@ function computeFinalText(
   const normalisedMerged = mergedTranscript.trimStart();
   console.debug("🔍 NEWLINE DEBUG: Normalized merged transcript:", JSON.stringify(normalisedMerged));
 
-  const needsSpace = initialText !== "" && !initialText.endsWith(" ");
+  const needsSpace = initialText !== "" && !initialText.endsWith(" ") && !initialText.endsWith("\n");
   const result = (needsSpace ? initialText + " " : initialText) + normalisedMerged;
   const finalResult = result.replace(/[ \t]{2,}/g, " ");
   
@@ -1267,6 +1302,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
     context: {
       transcriptions: {},
       transcriptionsByTarget: {},
+      initialTextByTarget: {},
       isTranscribing: false,
       userIsSpeaking: false,
       timeUserStoppedSpeaking: 0,
@@ -1295,6 +1331,33 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
               assign({
                 targetElement: (context, event: DictationStartEvent) => event.targetElement,
                 accumulatedText: "",
+                initialTextByTarget: (context, event: DictationStartEvent) => {
+                  if (event.targetElement) {
+                    const targetId = getTargetElementId(event.targetElement);
+                    const initialText = getTextInTarget(event.targetElement);
+                    
+                    // For contenteditable elements, distinguish between DOM formatting whitespace vs user-entered content
+                    let cleanedInitialText = initialText;
+                    if (event.targetElement.contentEditable === "true" && initialText.trim() === "") {
+                      // Check if this is just DOM formatting whitespace (spaces, tabs, newlines without <br> tags)
+                      // vs user-entered whitespace (which would contain <br> tags or other HTML)
+                      const innerHTML = event.targetElement.innerHTML || '';
+                      const hasUserEnteredContent = innerHTML.includes('<br') || innerHTML.includes('<div') || innerHTML.includes('&nbsp;');
+                      
+                      if (!hasUserEnteredContent) {
+                        // This is just DOM formatting whitespace, treat as empty
+                        cleanedInitialText = "";
+                      }
+                      // Otherwise preserve the whitespace as it represents user-entered content
+                    }
+                      
+                    const updated = { ...context.initialTextByTarget };
+                    updated[targetId] = cleanedInitialText;
+                    console.log(`Captured initial text for target ${targetId} on start:`, JSON.stringify(cleanedInitialText));
+                    return updated;
+                  }
+                  return context.initialTextByTarget;
+                },
               }),
             ],
           },
@@ -1666,7 +1729,12 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           targetTranscriptions[sequenceNumber] = transcription;
           TranscriptionErrorManager.recordAttempt(true);
 
-          const initialText = getTextInTarget(originatingTarget);
+          // Use stored initial text if it exists and is non-empty, otherwise get current field content
+          // This prevents text duplication when there's pre-existing text, while maintaining 
+          // existing behavior for fields that started empty
+          const storedInitialText = context.initialTextByTarget[targetId];
+          const initialText = storedInitialText ? storedInitialText : getTextInTarget(originatingTarget);
+          const isUsingStoredInitialText = !!storedInitialText;
 
           // CRITICAL FIX: Check if field was externally cleared
           // If the field is empty but we have existing transcriptions for this target,
@@ -1697,8 +1765,10 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
             cleanTargetTranscriptions[sequenceNumber] = transcription;
             context.transcriptions[sequenceNumber] = transcription;
             
-            // Set the text directly without merging since we cleared the state
-            setTextInTarget(transcription, originatingTarget, true);
+            // Combine initial text with first transcription using smart spacing
+            const initialText = context.initialTextByTarget[targetId] || '';
+            const combinedText = smartJoinTwoTexts(initialText, transcription);
+            setTextInTarget(combinedText, originatingTarget, true);
             
             // Update accumulated text only if this is the current target
             if (originatingTarget === context.targetElement) {
@@ -1714,13 +1784,20 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
             targetTranscriptions,
             mergedSequences,
             transcription,
-            initialText
+            initialText,
+            isUsingStoredInitialText
           );
           console.debug(
             `Merged text for target ${targetId}: ${finalText}`
           );
 
-          // Replace all text in the target with the final result
+          // computeFinalText already includes initial text, so use finalText directly
+          console.debug(`🔍 NEWLINE DEBUG: Using final text (already includes initial text):`, {
+            targetId,
+            finalText: JSON.stringify(finalText),
+            initialTextByTargetKeys: Object.keys(context.initialTextByTarget)
+          });
+          
           setTextInTarget(finalText, originatingTarget, true); // true = replace all content
 
           // Finally, handle server-side merging if present, after those sequences have been referenced in composing the final text
@@ -1772,7 +1849,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         
         if (context.targetElement) {
           const targetTranscriptions = getTranscriptionsForTarget(context, context.targetElement);
-          finalText = computeFinalText(targetTranscriptions, [], finalText);
+          finalText = computeFinalText(targetTranscriptions, [], finalText, "", false);
         }
         
         // Emit event that dictation is complete
@@ -1790,6 +1867,29 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         
         // Also update the context for consistency
         context.targetElement = event.targetElement;
+        
+        // Capture the pre-existing text in the new target element
+        const targetId = getTargetElementId(event.targetElement);
+        const initialText = getTextInTarget(event.targetElement);
+        
+        // For contenteditable elements, distinguish between DOM formatting whitespace vs user-entered content
+        let cleanedInitialText = initialText;
+        if (event.targetElement.contentEditable === "true" && initialText.trim() === "") {
+          // Check if this is just DOM formatting whitespace (spaces, tabs, newlines without <br> tags)
+          // vs user-entered whitespace (which would contain <br> tags or other HTML)
+          const innerHTML = event.targetElement.innerHTML || '';
+          const hasUserEnteredContent = innerHTML.includes('<br') || innerHTML.includes('<div') || innerHTML.includes('&nbsp;');
+          
+          if (!hasUserEnteredContent) {
+            // This is just DOM formatting whitespace, treat as empty
+            cleanedInitialText = "";
+          }
+          // Otherwise preserve the whitespace as it represents user-entered content
+        }
+          
+        context.initialTextByTarget[targetId] = cleanedInitialText;
+        
+        console.log(`Captured initial text for target ${targetId}:`, JSON.stringify(cleanedInitialText));
         
         // Clear only global transcriptions, preserve target-specific mappings
         // This allows in-flight transcriptions to complete for their original targets
