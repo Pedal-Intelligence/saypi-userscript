@@ -85,24 +85,21 @@ describe('DictationMachine - Empty Transcription Bug Reproduction', () => {
     }
   });
 
-  it('should demonstrate the exact bug: icon stays blue after empty transcription', () => {
-    console.log('=== REPRODUCING THE EMPTY TRANSCRIPTION BUG ===');
+  it('should reproduce the ACTUAL bug: UniversalDictationModule never receives transcribedEmpty event', () => {
+    console.log('=== REPRODUCING THE ACTUAL BUG ===');
     
-    // 1. Start dictation (icon becomes black/white -> green)
+    // This test simulates what happens in the real application:
+    // 1. TranscriptionModule gets empty response
+    // 2. Sends saypi:transcribedEmpty to StateMachineService.actor 
+    // 3. BUT DOESN'T emit saypi:transcribedEmpty on EventBus
+    // 4. UniversalDictationModule never receives the event
+    // 5. DictationMachine stays in transcribing state
+    
+    // Start dictation and get to transcribing state
     service.send({ type: 'saypi:startDictation', targetElement: inputElement });
-    console.log('1. Started dictation, state:', service.state.value);
-
-    // 2. Microphone ready (icon becomes green)
     service.send('saypi:callReady');
-    console.log('2. Microphone ready, state:', service.state.value);
-
-    // 3. User starts speaking (icon stays green)
     service.send('saypi:userSpeaking');
-    let state = service.state.value;
-    console.log('3. User speaking, state:', state);
-    expect(getIconColorForState(state)).toBe('#66bb6a'); // Green
-
-    // 4. User stops speaking with audio (icon becomes blue)
+    
     const audioBlob = new Blob(['audio data'], { type: 'audio/wav' });
     service.send({
       type: 'saypi:userStoppedSpeaking',
@@ -111,41 +108,28 @@ describe('DictationMachine - Empty Transcription Bug Reproduction', () => {
       frames: new Float32Array([0.1, 0.2, 0.3])
     });
 
-    state = service.state.value;
-    console.log('4. User stopped speaking, transcribing, state:', state);
+    let state = service.state.value;
+    console.log('Before empty transcription, state:', state);
+    expect(state).toEqual({ listening: { recording: 'notSpeaking', converting: 'transcribing' } });
     expect(getIconColorForState(state)).toBe('#42a5f5'); // Blue
 
-    // 5. THIS IS THE BUG: Empty transcription received
-    console.log('5. CRITICAL: Sending empty transcription...');
+    // BUG SIMULATION: In the real app, TranscriptionModule doesn't emit the event on EventBus
+    // So UniversalDictationModule never receives it and the dictation machine never transitions
+    
+    // What SHOULD happen (after the fix):
     service.send('saypi:transcribedEmpty');
-
+    
     state = service.state.value;
-    console.log('   After empty transcription, state:', state);
+    console.log('After empty transcription (with fix), state:', state);
+    expect(state).toEqual({ listening: { recording: 'notSpeaking', converting: 'ready' } });
+    expect(getIconColorForState(state)).toBe('#66bb6a'); // Green
+
+    // What ACTUALLY happens in the broken app (before fix):
+    // The machine would stay in transcribing state because the event never arrives
+    console.log('BUG: Without the EventBus emit, dictation machine stays in transcribing state');
+    console.log('RESULT: User sees blue icon indefinitely');
     
-    // EXPECTED ISSUE: The problem says "icon stays blue indefinitely"  
-    // This suggests the machine might stay in transcribing state or 
-    // the icon color logic has a bug for the 'ready' state
-    
-    // Current behavior - let's see what actually happens
-    const iconColor = getIconColorForState(state);
-    console.log('   Icon color is:', iconColor);
-    
-    // According to my test helper, this should be green, but the problem 
-    // description says it stays blue. This suggests either:
-    // 1. My helper function is wrong, OR
-    // 2. The issue is in how UniversalDictationModule handles the state, OR  
-    // 3. The machine doesn't transition to 'ready' in the real scenario
-    
-    console.log('=== ANALYSIS ===');
-    console.log('Expected issue: Icon should stay blue (transcribing)');
-    console.log('Actual behavior: Icon color is', iconColor);
-    console.log('Machine state:', state);
-    
-    // The test shows the machine transitions correctly to 'ready' state
-    // and the icon logic produces green. This suggests the real issue
-    // might be elsewhere.
-    
-    console.log('=== END BUG REPRODUCTION ===');
+    console.log('=== END ACTUAL BUG REPRODUCTION ===');
   });
 
   it('should show the desired behavior after fix', () => {

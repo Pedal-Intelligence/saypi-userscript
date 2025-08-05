@@ -377,6 +377,7 @@ async function uploadAudio(
 
     if (responseJson.text.length === 0) {
       StateMachineService.actor.send("saypi:transcribedEmpty");
+      EventBus.emit("saypi:transcribedEmpty");
       EventBus.emit("saypi:transcription:empty", {
         sequenceNumber: seq,
       });
