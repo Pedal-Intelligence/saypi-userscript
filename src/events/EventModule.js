@@ -28,7 +28,7 @@ const USER_PREFERENCE_CHANGED = "saypi:userPreferenceChanged";
 export default class EventModule {
   static init() {
     // All the event listeners can be added here
-    this.registerConversationEvents(StateMachineService.actor);
+    this.registerConversationEvents(StateMachineService.conversationActor);
     this.registerSessionEvents(StateMachineService.analyticsMachineActor);
     this.registerNotifications();
     // Any other initializations...

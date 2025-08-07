@@ -24,7 +24,7 @@ interface Segment {
 class CallButton {
     private chatbot: Chatbot;
     private userPreferences: UserPreferenceModule;
-    private sayPiActor: typeof StateMachineService.actor;
+    private sayPiActor: typeof StateMachineService.conversationActor;
     private glowColorUpdater: GlowColorUpdater;
 
     private callIsActive: boolean = false;
@@ -36,7 +36,7 @@ class CallButton {
     constructor(chatbot: Chatbot) {
         this.chatbot = chatbot;
         this.userPreferences = UserPreferenceModule.getInstance();
-        this.sayPiActor = StateMachineService.actor;
+        this.sayPiActor = StateMachineService.conversationActor;
         this.glowColorUpdater = new GlowColorUpdater();
 
         this.registerTranscriptionEvents();
