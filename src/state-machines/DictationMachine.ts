@@ -176,12 +176,7 @@ function smartJoinTranscriptions(transcriptions: Record<number, string>): string
   const sortedKeys = Object.keys(transcriptions)
     .map(Number)
     .sort((a, b) => a - b);
-
-  console.debug("🔍 NEWLINE DEBUG: smartJoinTranscriptions called with:", {
-    transcriptions,
-    sortedKeys,
-    hasNewlines: Object.values(transcriptions).some(t => t.includes('\n'))
-  });
+ 
 
   let result = "";
   for (let i = 0; i < sortedKeys.length; i++) {
@@ -190,7 +185,6 @@ function smartJoinTranscriptions(transcriptions: Record<number, string>): string
     if (i === 0) {
       // First segment - always add as-is
       result += segment;
-      console.debug(`🔍 NEWLINE DEBUG: Added first segment [${sortedKeys[i]}]:`, JSON.stringify(segment));
     } else {
       // Check if we need to add a space between segments
       const previousSegmentEndsWithWhitespace = result.match(/\s$/);
@@ -199,19 +193,13 @@ function smartJoinTranscriptions(transcriptions: Record<number, string>): string
       if (previousSegmentEndsWithWhitespace || currentSegmentStartsWithWhitespace) {
         // Don't add space if previous segment ends with whitespace OR current segment starts with whitespace
         result += segment;
-        console.debug(`🔍 NEWLINE DEBUG: Added segment [${sortedKeys[i]}] without space:`, JSON.stringify(segment), {
-          previousEndsWithWhitespace: !!previousSegmentEndsWithWhitespace,
-          currentStartsWithWhitespace: !!currentSegmentStartsWithWhitespace
-        });
       } else {
         // Add space only if neither condition is met
         result += " " + segment;
-        console.debug(`🔍 NEWLINE DEBUG: Added segment [${sortedKeys[i]}] with space:`, JSON.stringify(segment));
       }
     }
   }
   
-  console.debug("🔍 NEWLINE DEBUG: smartJoinTranscriptions result:", JSON.stringify(result));
   return result;
 }
 
@@ -489,13 +477,7 @@ class InputTextareaStrategy implements TextInsertionStrategy {
   insertText(target: HTMLElement, text: string, replaceAll: boolean): void {
     const inputTarget = target as HTMLInputElement | HTMLTextAreaElement;
     
-    console.debug("🔍 NEWLINE DEBUG: InputTextareaStrategy.insertText called:", {
-      text: JSON.stringify(text),
-      textHasNewlines: text.includes('\n'),
-      replaceAll,
-      targetType: inputTarget.tagName.toLowerCase(),
-      targetId: inputTarget.id || 'no-id'
-    });
+    
     
     if (replaceAll) {
       inputTarget.value = text;
@@ -503,10 +485,7 @@ class InputTextareaStrategy implements TextInsertionStrategy {
       inputTarget.value = inputTarget.value + text;
     }
 
-    console.debug("🔍 NEWLINE DEBUG: InputTextareaStrategy.insertText result:", {
-      finalValue: JSON.stringify(inputTarget.value),
-      finalHasNewlines: inputTarget.value.includes('\n')
-    });
+    
 
     // Dispatch input event for framework compatibility
     inputTarget.dispatchEvent(new Event("input", { bubbles: true }));
@@ -817,12 +796,7 @@ class ContentEditableStrategy implements TextInsertionStrategy {
   }
 
   insertText(target: HTMLElement, text: string, replaceAll: boolean): void {
-    console.debug("🔍 NEWLINE DEBUG: ContentEditableStrategy.insertText called:", {
-      text: JSON.stringify(text),
-      textHasNewlines: text.includes('\n'),
-      replaceAll,
-      targetId: target.id || target.className || 'no-id'
-    });
+    
     
     // Convert newlines to HTML <br> elements for proper display in contenteditable
     const htmlText = text.replace(/\n/g, '<br>');
@@ -851,13 +825,7 @@ class ContentEditableStrategy implements TextInsertionStrategy {
       }
     }
 
-    console.debug("🔍 NEWLINE DEBUG: ContentEditableStrategy.insertText result:", {
-      finalTextContent: JSON.stringify(target.textContent || ''),
-      finalInnerText: JSON.stringify(target.innerText || ''),
-      finalInnerHTML: JSON.stringify(target.innerHTML || ''),
-      finalHasNewlines: (target.textContent || '').includes('\n'),
-      htmlHasBrTags: (target.innerHTML || '').includes('<br>')
-    });
+    
 
     // Dispatch input event for framework compatibility
     target.dispatchEvent(new Event("input", { bubbles: true }));
@@ -893,12 +861,7 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
   const target = targetElement || getTargetElement();
   if (!target) return;
 
-  console.debug("🔍 NEWLINE DEBUG: setTextInTarget called:", {
-    text: JSON.stringify(text),
-    textHasNewlines: text.includes('\n'),
-    targetId: target.id || target.className || 'unknown',
-    replaceAll
-  });
+  
 
   // Helper to emit our content-updated event consistently
   const emitContentUpdated = (content: string) => {
@@ -920,18 +883,14 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
   // Get the appropriate strategy for this target element
   const strategy = strategySelector.getStrategy(target);
   
-  console.debug("🔍 NEWLINE DEBUG: Using text insertion strategy:", strategy?.constructor?.name || 'unknown');
+  
   
   if (strategy) {
     strategy.insertText(target, text, replaceAll);
     
     // Check what actually ended up in the target after insertion
     const finalValue = (target as any).value || (target as any).textContent || (target as any).innerText || '';
-    console.debug("🔍 NEWLINE DEBUG: Text after insertion:", {
-      finalValue: JSON.stringify(finalValue),
-      finalHasNewlines: finalValue.includes('\n'),
-      insertionSuccessful: finalValue === text
-    });
+    
     
     emitContentUpdated(text);
     // Clear the programmatic update flag on the next tick
@@ -1130,13 +1089,7 @@ function updateTranscriptionsForManualEdit(
     if (newContent.startsWith(contentWithoutLast)) {
       let remainder = newContent.substring(contentWithoutLast.length);
       
-      console.debug("🔍 NEWLINE DEBUG: Manual edit remainder processing:", {
-        contentWithoutLast: JSON.stringify(contentWithoutLast),
-        newContent: JSON.stringify(newContent),
-        remainder: JSON.stringify(remainder),
-        remainderStartsWithSpace: remainder.startsWith(" "),
-        remainderIncludesNewlines: remainder.includes("\n")
-      });
+      
       
       // Handle spacing: if remainder starts with a single space (from automatic joining),
       // but now contains special formatting like newlines, preserve the formatting.
@@ -1145,28 +1098,18 @@ function updateTranscriptionsForManualEdit(
         // Contains newlines - this is likely formatting, so preserve leading space-to-newline transitions
         const beforeTrim = remainder;
         remainder = remainder.substring(1); // Remove the single joining space
-        console.debug("🔍 NEWLINE DEBUG: Trimmed leading space from newline-containing remainder:", {
-          before: JSON.stringify(beforeTrim),  
-          after: JSON.stringify(remainder)
-        });
+        
       } else if (remainder.startsWith(" ") && !remainder.includes("\n")) {
         // Normal text edit - trim leading space from joining
         const beforeTrim = remainder;
         remainder = remainder.substring(1);
-        console.debug("🔍 NEWLINE DEBUG: Trimmed leading space from normal remainder:", {
-          before: JSON.stringify(beforeTrim),
-          after: JSON.stringify(remainder)
-        });
+        
       }
       // Note: We preserve other whitespace like tabs, multiple spaces, trailing spaces
       
       if (remainder !== "") {
         targetTranscriptions[lastKey] = remainder;
-        console.debug(`🔍 NEWLINE DEBUG: Updated last transcription [${lastKey}] for target ${targetId}:`, {
-          from: targetTranscriptions[lastKey],
-          to: remainder,
-          finalHasNewlines: remainder.includes('\n')
-        });
+        
       }
     } else {
       // Content changed significantly - replace the last transcription with the entire new content
@@ -1243,39 +1186,26 @@ function computeFinalText(
   const singleTranscriptionMatches = transcriptionCount === 1 && 
     initialText && Object.values(targetTranscriptions)[0] === initialText;
   
-  console.debug("🔍 NEWLINE DEBUG: Manual edit condition check:", {
-    initialText: JSON.stringify(initialText),
-    mergedTranscript: JSON.stringify(mergedTranscript),
-    initialTextHasNewlines: initialText?.includes('\n'),
-    hasNewlinesAfterFiltering: hasNewlines,
-    isUsingStoredInitialText,
-    mergedTranscriptHasNewlines: mergedTranscript.includes('\n'),
-    exactOrContainsMatch,
-    hasSignificantLengthDifference,
-    transcriptionCount,
-    expectedLength: expectedApproximateLength,
-    actualLength,
-    singleTranscriptionMatches
-  });
+  
   
   // If any of these conditions indicate manual edits, handle appropriately
   if (exactOrContainsMatch || hasSignificantLengthDifference || hasNewlines || singleTranscriptionMatches) {
-    console.debug("🔍 NEWLINE DEBUG: Using merged transcript directly (manual edit detected):", JSON.stringify(mergedTranscript));
+    
     
     // If the merged transcript already contains the initial text, don't combine again
     if (exactOrContainsMatch) {
-      console.debug("🔍 NEWLINE DEBUG: Merged transcript contains initial text, using as-is");
+      
       return mergedTranscript;
     } else {
       // For other manual edit cases, combine initial text with merged transcript
       const combinedManualEditResult = smartJoinTwoTexts(initialText, mergedTranscript);
-      console.debug("🔍 NEWLINE DEBUG: Manual edit result with initial text:", JSON.stringify(combinedManualEditResult));
+      
       return combinedManualEditResult;
     }
   }
 
   // Only proceed with regex stripping if we're confident this is not manually edited content
-  console.debug("🔍 NEWLINE DEBUG: Starting regex stripping process (no manual edit detected). Initial text:", JSON.stringify(initialText));
+  
   
   for (const mergedText of Object.values(targetTranscriptions)) {
     const escaped = mergedText.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
@@ -1283,17 +1213,10 @@ function computeFinalText(
     const beforeReplace = initialText;
     initialText = initialText.replace(regex, " ");
     
-    console.debug("🔍 NEWLINE DEBUG: Regex stripping step:", {
-      mergedText: JSON.stringify(mergedText),
-      escaped: JSON.stringify(escaped),
-      regex: regex.toString(),
-      before: JSON.stringify(beforeReplace),
-      after: JSON.stringify(initialText),
-      newlinesRemoved: beforeReplace.includes('\n') && !initialText.includes('\n')
-    });
+    
   }
   
-  console.debug("🔍 NEWLINE DEBUG: Finished regex stripping. Final text:", JSON.stringify(initialText));
+  
 
   // Tidy whitespace
   const beforeWhitespaceTidy = initialText;
@@ -1301,27 +1224,16 @@ function computeFinalText(
     .replace(/[ \t]{2,}/g, " ")   // collapse only spaces/tabs, keep newlines
     .replace(/[ \t]+$/, "");      // trim trailing spaces/tabs but keep final newline
   
-  console.debug("🔍 NEWLINE DEBUG: Whitespace tidying:", {
-    before: JSON.stringify(beforeWhitespaceTidy),
-    after: JSON.stringify(initialText),
-    newlinesPreserved: initialText.includes('\n')
-  });
+  
   
   const normalisedMerged = mergedTranscript.trimStart();
-  console.debug("🔍 NEWLINE DEBUG: Normalized merged transcript:", JSON.stringify(normalisedMerged));
+  
 
   const needsSpace = initialText !== "" && !initialText.endsWith(" ") && !initialText.endsWith("\n");
   const result = (needsSpace ? initialText + " " : initialText) + normalisedMerged;
   const finalResult = result.replace(/[ \t]{2,}/g, " ");
   
-  console.debug("🔍 NEWLINE DEBUG: Final result construction:", {
-    initialText: JSON.stringify(initialText),
-    normalisedMerged: JSON.stringify(normalisedMerged),
-    needsSpace,
-    beforeFinalCleanup: JSON.stringify(result),
-    finalResult: JSON.stringify(finalResult),
-    finalHasNewlines: finalResult.includes('\n')
-  });
+  
   
   return finalResult;
 }
@@ -1812,11 +1724,7 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           );
 
           // computeFinalText already includes initial text, so use finalText directly
-          console.debug(`🔍 NEWLINE DEBUG: Using final text (already includes initial text):`, {
-            targetId,
-            finalText: JSON.stringify(finalText),
-            initialTextByTargetKeys: Object.keys(context.initialTextByTarget)
-          });
+          
           
           setTextInTarget(finalText, originatingTarget, true); // true = replace all content
 
