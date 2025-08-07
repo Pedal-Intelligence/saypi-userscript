@@ -524,10 +524,45 @@ describe('DictationMachine', () => {
       expect(service.state.value).toEqual({ errors: 'transcribeFailed' });
     });
 
-    it('should transition to error state on empty transcription', () => {
+    it('should transition to error state on empty transcription when in ready state', () => {
+      // This tests the case where empty transcription is received when not actively transcribing
+      // (e.g., unsolicited empty transcription, which would be an error)
       service.send('saypi:transcribedEmpty');
       
       expect(service.state.value).toEqual({ errors: 'micError' });
+    });
+
+    it('should transition from transcribing to ready state on empty transcription', () => {
+      // This tests the main bug fix: when transcribing and empty response is received,
+      // should return to ready state, not error state
+      
+      // Start speaking to get to transcribing state
+      service.send('saypi:userSpeaking');
+      const audioBlob = new Blob(['audio data'], { type: 'audio/wav' });
+      service.send({
+        type: 'saypi:userStoppedSpeaking',
+        duration: 1000,
+        blob: audioBlob,
+        frames: new Float32Array([0.1, 0.2, 0.3])
+      });
+      
+      // Should be in transcribing state
+      expect(service.state.value).toEqual({ 
+        listening: { 
+          recording: 'notSpeaking', 
+          converting: 'transcribing' 
+        } 
+      });
+      
+      // Empty transcription should return to ready state (not error)
+      service.send('saypi:transcribedEmpty');
+      
+      expect(service.state.value).toEqual({ 
+        listening: { 
+          recording: 'notSpeaking', 
+          converting: 'ready' 
+        } 
+      });
     });
 
     it('should handle missing target element gracefully in transcribeAudio', () => {

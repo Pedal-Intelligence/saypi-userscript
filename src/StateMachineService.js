@@ -14,7 +14,7 @@ import EventBus from "./events/EventBus.js";
 class StateMachineService {
   constructor(chatbot) {
     const conversationMachine = createConversationMachine(chatbot);
-    this.actor = interpret(conversationMachine).onTransition((state) => {
+    this.conversationActor = interpret(conversationMachine).onTransition((state) => {
       if (state.changed) {
         const fromState = state.history
           ? serializeStateValue(state.history.value)
@@ -25,7 +25,7 @@ class StateMachineService {
         );
       }
     });
-    this.actor.start();
+    this.conversationActor.start();
 
     this.screenLockActor = interpret(screenLockMachine).onTransition(
       (state) => {

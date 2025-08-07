@@ -234,7 +234,7 @@ export async function uploadAudioWithRetry(
         retryCount++;
       } else {
         console.error("Unexpected error: ", error);
-        StateMachineService.actor.send("saypi:transcribeFailed", {
+        StateMachineService.conversationActor.send("saypi:transcribeFailed", {
           detail: error,
         });
         EventBus.emit("saypi:transcription:failed", {
@@ -246,7 +246,7 @@ export async function uploadAudioWithRetry(
   }
 
   console.error("Max retries reached. Giving up.");
-  StateMachineService.actor.send("saypi:transcribeFailed", {
+  StateMachineService.conversationActor.send("saypi:transcribeFailed", {
     detail: new Error("Max retries reached"),
   });
   EventBus.emit("saypi:transcription:failed", {
@@ -376,12 +376,13 @@ async function uploadAudio(
     }
 
     if (responseJson.text.length === 0) {
-      StateMachineService.actor.send("saypi:transcribedEmpty");
+      StateMachineService.conversationActor.send("saypi:transcribedEmpty");
+      EventBus.emit("saypi:transcribedEmpty");
       EventBus.emit("saypi:transcription:empty", {
         sequenceNumber: seq,
       });
     } else {
-      StateMachineService.actor.send("saypi:transcribed", payload);
+      StateMachineService.conversationActor.send("saypi:transcribed", payload);
       EventBus.emit("saypi:transcription:completed", payload);
       // no need to emit transcription:received event here, it's handled by transcriptionReceived function
     }
