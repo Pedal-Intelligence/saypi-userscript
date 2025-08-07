@@ -17,14 +17,53 @@ export class TranscriptMergeService {
     const sortedTranscripts: string[] = [];
 
     for (const key of sortedKeys) {
-      sortedTranscripts.push(transcripts[key].trim());
+      // Don't trim segments to preserve intentional whitespace (including newlines from manual edits)
+      sortedTranscripts.push(transcripts[key]);
     }
     return sortedTranscripts;
   }
 
   mergeTranscriptsLocal(transcripts: Record<number, string>): string {
-    const joinedTranscripts = this.sortTranscripts(transcripts).join(" ");
+    const sortedTranscripts = this.sortTranscripts(transcripts);
+    
+    console.debug("🔍 NEWLINE DEBUG: TranscriptMergeService.mergeTranscriptsLocal called:", {
+      input: transcripts,
+      sorted: sortedTranscripts,
+      hasNewlinesInInput: Object.values(transcripts).some(t => t.includes('\n'))
+    });
+    
+    // Smart joining: don't add spaces if either the previous segment ends with whitespace or the current segment starts with whitespace
+    let joinedTranscripts = "";
+    for (let i = 0; i < sortedTranscripts.length; i++) {
+      const segment = sortedTranscripts[i];
+      
+      if (i === 0) {
+        // First segment - always add as-is
+        joinedTranscripts += segment;
+        console.debug(`🔍 NEWLINE DEBUG: TranscriptMergeService added first segment [${i}]:`, JSON.stringify(segment));
+      } else {
+        // Check if we need to add a space between segments
+        const previousSegmentEndsWithWhitespace = joinedTranscripts.match(/\s$/);
+        const currentSegmentStartsWithWhitespace = segment.match(/^\s/);
+        
+        if (previousSegmentEndsWithWhitespace || currentSegmentStartsWithWhitespace) {
+          // Don't add space if previous segment ends with whitespace OR current segment starts with whitespace
+          joinedTranscripts += segment;
+          console.debug(`🔍 NEWLINE DEBUG: TranscriptMergeService added segment [${i}] without space:`, JSON.stringify(segment), {
+            previousEndsWithWhitespace: !!previousSegmentEndsWithWhitespace,
+            currentStartsWithWhitespace: !!currentSegmentStartsWithWhitespace
+          });
+        } else {
+          // Add space only if neither condition is met
+          joinedTranscripts += " " + segment;
+          console.debug(`🔍 NEWLINE DEBUG: TranscriptMergeService added segment [${i}] with space:`, JSON.stringify(segment));
+        }
+      }
+    }
+    
+    console.debug("🔍 NEWLINE DEBUG: TranscriptMergeService before ellipsis processing:", JSON.stringify(joinedTranscripts));
     const mergedTranscript = replaceEllipsisWithSpace(joinedTranscripts);
+    console.debug("🔍 NEWLINE DEBUG: TranscriptMergeService final result:", JSON.stringify(mergedTranscript));
     return mergedTranscript;
   }
 
