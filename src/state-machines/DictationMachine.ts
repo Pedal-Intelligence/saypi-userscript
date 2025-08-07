@@ -497,8 +497,17 @@ class InputTextareaStrategy implements TextInsertionStrategy {
       targetId: inputTarget.id || 'no-id'
     });
     
+    // Ensure focus so selection updates take effect
+    try { inputTarget.focus(); } catch (_) { /* ignore */ }
+
     if (replaceAll) {
       inputTarget.value = text;
+      // Place caret at the end of the inserted content
+      try {
+        const endPos = inputTarget.value.length;
+        (inputTarget as HTMLInputElement | HTMLTextAreaElement).selectionStart = endPos;
+        (inputTarget as HTMLInputElement | HTMLTextAreaElement).selectionEnd = endPos;
+      } catch (_) { /* ignore */ }
     } else {
       // Insert at caret/selection if available; otherwise append
       try {
