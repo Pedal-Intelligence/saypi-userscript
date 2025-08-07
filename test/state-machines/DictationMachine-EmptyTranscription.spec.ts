@@ -89,7 +89,7 @@ describe('DictationMachine - Empty Transcription Bug Documentation', () => {
     console.log('=== EMPTY TRANSCRIPTION BUG DOCUMENTATION ===');
     console.log('');
     console.log('ROOT CAUSE:');
-    console.log('- TranscriptionModule sends saypi:transcribedEmpty to StateMachineService.actor');
+    console.log('- TranscriptionModule sends saypi:transcribedEmpty to StateMachineService.conversationActor');
     console.log('- BUT does not emit saypi:transcribedEmpty on EventBus');
     console.log('- UniversalDictationModule listens on EventBus, so never receives the event');
     console.log('- DictationMachine stays stuck in transcribing state');
@@ -97,7 +97,7 @@ describe('DictationMachine - Empty Transcription Bug Documentation', () => {
     console.log('');
     console.log('FIX:');
     console.log('- Added EventBus.emit("saypi:transcribedEmpty") in TranscriptionModule.ts');
-    console.log('- Now both StateMachineService.actor AND EventBus receive the event');
+    console.log('- Now both StateMachineService.conversationActor AND EventBus receive the event');
     console.log('- UniversalDictationModule receives event and forwards to DictationMachine');
     console.log('- DictationMachine transitions from transcribing → ready');
     console.log('- Icon changes from blue → green, user can continue dictating');
