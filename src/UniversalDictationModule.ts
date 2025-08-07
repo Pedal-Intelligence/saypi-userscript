@@ -387,6 +387,15 @@ export class UniversalDictationModule {
         markDictationUpdate();
       }
     });
+    
+    // Listen for dictation termination due to manual edit
+    EventBus.on("dictation:terminatedByManualEdit", (data) => {
+      if (data.targetElement === element && this.currentActiveTarget?.element === element) {
+        console.debug("Dictation terminated due to manual edit on element:", element);
+        // Clean up the active dictation state
+        this.stopDictation();
+      }
+    });
 
     // Button click handler - use mousedown for faster response
     const buttonClickHandler = (event: Event) => {

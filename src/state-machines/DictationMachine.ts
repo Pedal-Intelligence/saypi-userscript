@@ -1632,7 +1632,9 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         actions: "switchTargetElement",
       },
       "saypi:manualEdit": {
+        target: "idle",
         actions: "handleManualEdit",
+        description: "Manual edit detected - terminate dictation for predictable behavior"
       },
     },
     predictableActionArguments: true,
@@ -1693,13 +1695,13 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         const sequenceNumber = event.sequenceNumber;
         const mergedSequences = event.merged || [];
         // ---- NORMALISE ELLIPSES ----
-        // Convert any ellipsis—either the single Unicode “…” character or the
-        // three-dot sequence “...” — into a single space so downstream merging
+        // Convert any ellipsis—either the single Unicode "…" character or the
+        // three-dot sequence "..." — into a single space so downstream merging
         // sees consistent whitespace. Then collapse *spaces or tabs* (but not
         // line breaks) and trim the string.
         const originalTranscription = transcription;
         transcription = transcription
-          .replace(/\u2026/g, " ")   // “…” → space
+          .replace(/\u2026/g, " ")   // "…" → space
           .replace(/\.{3}/g, " ")    // "..." → space
           .replace(/[ \t]{2,}/g, " ")   // collapse runs of spaces/tabs but keep line-breaks
           .trim();
@@ -1720,6 +1722,37 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           }
 
           const targetId = getTargetElementId(originatingTarget);
+          
+          // CRITICAL FIX: Check if field was externally cleared BEFORE adding new transcription
+          // This detects when chat platforms clear fields programmatically
+          const currentFieldContent = getTextInTarget(originatingTarget);
+          const existingTargetTranscriptions = context.transcriptionsByTarget[targetId];
+          
+          if (existingTargetTranscriptions && Object.keys(existingTargetTranscriptions).length > 0) {
+            // We have previous transcriptions for this target
+            const previousMergedContent = smartJoinTranscriptions(existingTargetTranscriptions);
+            
+            // Check if field content is empty or doesn't match what we expect
+            // This indicates external clearing (e.g., chat platform clearing after submission)
+            if (currentFieldContent.trim() === "" && previousMergedContent.trim() !== "") {
+              console.debug(`Detected external field clearing for target ${targetId}, resetting transcription state`);
+              
+              // Clear all previous transcriptions for this target
+              Object.keys(existingTargetTranscriptions).forEach(key => {
+                const seq = parseInt(key, 10);
+                delete context.transcriptions[seq];
+              });
+              delete context.transcriptionsByTarget[targetId];
+              
+              // Clear initial text for this target since field was cleared
+              delete context.initialTextByTarget[targetId];
+              
+              // Reset accumulated text if this is the current target
+              if (originatingTarget === context.targetElement) {
+                context.accumulatedText = "";
+              }
+            }
+          }
 
           // Initialize target-specific transcriptions if not exists
           const targetTranscriptions = getOrCreateTargetBucket(context, targetId);
@@ -1733,51 +1766,8 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           // This prevents text duplication when there's pre-existing text, while maintaining 
           // existing behavior for fields that started empty
           const storedInitialText = context.initialTextByTarget[targetId];
-          const initialText = storedInitialText ? storedInitialText : getTextInTarget(originatingTarget);
-          const isUsingStoredInitialText = !!storedInitialText;
-
-          // CRITICAL FIX: Check if field was externally cleared
-          // If the field is empty but we have existing transcriptions for this target,
-          // AND there's at least one transcription that would have produced non-empty content,
-          // it means external code (like a chat platform) cleared the field without
-          // triggering manual edit detection. Clear the transcription state.
-          const hasExistingTranscriptions = Object.keys(targetTranscriptions).length > 0;
-          const hasNonEmptyTranscriptions = hasExistingTranscriptions && 
-            Object.values(targetTranscriptions).some(text => text.trim() !== "");
-          
-          if (initialText.trim() === "" && hasNonEmptyTranscriptions) {
-            console.debug(`Detected external field clearing for target ${targetId}, clearing transcription state`);
-            
-            // Clear transcriptions for this target
-            Object.keys(targetTranscriptions).forEach(key => {
-              const seq = parseInt(key, 10);
-              delete context.transcriptions[seq];
-              delete targetTranscriptions[seq];
-            });
-            
-            // Clear the transcription bucket if it's now empty
-            if (Object.keys(targetTranscriptions).length === 0) {
-              delete context.transcriptionsByTarget[targetId];
-            }
-            
-            // Reinitialize the bucket for the new transcription
-            const cleanTargetTranscriptions = getOrCreateTargetBucket(context, targetId);
-            cleanTargetTranscriptions[sequenceNumber] = transcription;
-            context.transcriptions[sequenceNumber] = transcription;
-            
-            // Combine initial text with first transcription using smart spacing
-            const initialText = context.initialTextByTarget[targetId] || '';
-            const combinedText = smartJoinTwoTexts(initialText, transcription);
-            setTextInTarget(combinedText, originatingTarget, true);
-            
-            // Update accumulated text only if this is the current target
-            if (originatingTarget === context.targetElement) {
-              context.accumulatedText = transcription;
-            }
-            
-            console.debug(`Reset transcription state for target ${targetId}, new content: "${transcription}"`);
-            return; // Skip the normal merging logic
-          }
+          const initialText = storedInitialText !== undefined ? storedInitialText : currentFieldContent;
+          const isUsingStoredInitialText = storedInitialText !== undefined;
 
           // Get target-specific transcriptions for merging
           const finalText = computeFinalText(
@@ -2046,26 +2036,49 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
         context: DictationContext,
         event: DictationManualEditEvent
       ) => {
-        console.debug("Processing manual edit event", {
+        console.debug("Manual edit detected, terminating dictation", {
           targetElement: event.targetElement,
           newContent: event.newContent,
           oldContent: event.oldContent
         });
 
-        // Update transcriptions to reflect the manual edit
-        updateTranscriptionsForManualEdit(
-          context,
-          event.targetElement,
-          event.newContent,
-          event.oldContent
-        );
+        // SIMPLIFIED APPROACH: Terminate dictation on manual edit
+        // This is cleaner and more predictable than trying to reconcile changes
+        
+        // Clear transcription state for the edited target
+        const targetId = getTargetElementId(event.targetElement);
+        const targetTranscriptions = context.transcriptionsByTarget[targetId];
+        
+        if (targetTranscriptions) {
+          // Clear transcriptions for this target from global context
+          // but preserve transcriptions for other targets
+          Object.keys(targetTranscriptions).forEach(key => {
+            const seq = parseInt(key, 10);
+            // Only delete from global if this sequence belongs to the edited target
+            if (context.transcriptionTargets[seq] === event.targetElement) {
+              delete context.transcriptions[seq];
+            }
+          });
+          delete context.transcriptionsByTarget[targetId];
+        }
+        
+        // Clear initial text for this target
+        delete context.initialTextByTarget[targetId];
+        
+        // Reset accumulated text if this is the current target
+        if (event.targetElement === context.targetElement) {
+          context.accumulatedText = "";
+        }
 
-        // Emit event to notify other components that dictation content was updated
-        EventBus.emit("dictation:contentUpdated", {
+        // Emit event to notify that dictation was terminated due to manual edit
+        EventBus.emit("dictation:terminatedByManualEdit", {
           targetElement: event.targetElement,
-          content: event.newContent,
-          source: "manual-edit"
+          reason: "manual-edit"
         });
+        
+        // Stop recording and cleanup
+        EventBus.emit("audio:stopRecording");
+        EventBus.emit("audio:tearDownRecording");
       },
     },
     services: {},
