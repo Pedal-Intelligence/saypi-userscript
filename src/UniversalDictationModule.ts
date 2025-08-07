@@ -342,8 +342,13 @@ export class UniversalDictationModule {
 
     // Listen for content changes to detect manual edits
     const handleContentChange = () => {
-      // Skip if we're currently updating from dictation
+      // Skip if we're currently updating from dictation (event-level debounce)
       if (isUpdatingFromDictation) {
+        return;
+      }
+      // Skip if this element is flagged as being updated programmatically by dictation
+      // The flag is set by the text insertion code and cleared on the next tick
+      if ((element as any).__dictationUpdateInProgress) {
         return;
       }
 
@@ -385,6 +390,15 @@ export class UniversalDictationModule {
     EventBus.on("dictation:contentUpdated", (data) => {
       if (data.targetElement === element) {
         markDictationUpdate();
+      }
+    });
+    
+    // Listen for dictation termination due to manual edit
+    EventBus.on("dictation:terminatedByManualEdit", (data) => {
+      if (data.targetElement === element && this.currentActiveTarget?.element === element) {
+        console.debug("Dictation terminated due to manual edit on element:", element);
+        // Clean up the active dictation state
+        this.stopDictation();
       }
     });
 

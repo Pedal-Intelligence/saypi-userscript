@@ -702,12 +702,16 @@ describe('DictationMachine', () => {
     });
   });
 
-  describe('Manual Edit Handling', () => {
+  describe('Manual Edit Handling - Simplified Behavior', () => {
     beforeEach(() => {
       service.start();
     });
 
-    it('should handle manual edit event and update single transcription', () => {
+    it('should terminate dictation when manual edit is detected', () => {
+      // Start dictation
+      service.send({ type: 'saypi:startDictation', targetElement: inputElement1 });
+      service.send({ type: 'saypi:callReady' });
+      
       // Setup initial transcription
       service.state.context.transcriptionsByTarget['name-input'] = {
         1: 'Hello World'
@@ -722,22 +726,25 @@ describe('DictationMachine', () => {
         oldContent: 'Hello World'
       });
 
-      // Verify transcription was updated
-      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
-        1: 'Hello Earth'
-      });
-      expect(service.state.context.transcriptions[1]).toBe('Hello Earth');
+      // Verify dictation was terminated
+      expect(service.state.value).toBe('idle');
       
-      // Verify event was emitted
-      expect(EventBus.emit).toHaveBeenCalledWith('dictation:contentUpdated', {
+      // Verify transcription state was cleared for the edited target
+      expect(service.state.context.transcriptionsByTarget['name-input']).toBeUndefined();
+      
+      // Verify termination event was emitted
+      expect(EventBus.emit).toHaveBeenCalledWith('dictation:terminatedByManualEdit', {
         targetElement: inputElement1,
-        content: 'Hello Earth',
-        source: 'manual-edit'
+        reason: 'manual-edit'
       });
     });
 
-    it('should handle manual edit with multiple transcriptions - update last segment', () => {
-      // Setup multiple transcriptions (like the example in requirements)
+    it('should terminate dictation with multiple transcriptions', () => {
+      // Start dictation
+      service.send({ type: 'saypi:startDictation', targetElement: inputElement1 });
+      service.send({ type: 'saypi:callReady' });
+      
+      // Setup multiple transcriptions
       service.state.context.transcriptionsByTarget['name-input'] = {
         1: 'Hello',
         2: ', World!'
@@ -749,27 +756,24 @@ describe('DictationMachine', () => {
       service.state.context.transcriptionTargets[1] = inputElement1;
       service.state.context.transcriptionTargets[2] = inputElement1;
 
-      // Send manual edit event (Hello , World! -> Hello, Earth!)
-      // Note: when joined with space, "Hello" + " " + ", World!" becomes "Hello , World!"
+      // Send manual edit event
       service.send('saypi:manualEdit', {
         targetElement: inputElement1,
         newContent: 'Hello, Earth!',
-        oldContent: 'Hello , World!'  // This matches the actual joined content
+        oldContent: 'Hello , World!'
       });
 
-      // Verify transcriptions were updated correctly
-      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
-        1: 'Hello',
-        2: ', Earth!'
-      });
-      expect(service.state.context.transcriptions).toEqual({
-        1: 'Hello',
-        2: ', Earth!'
-      });
+      // Verify dictation was terminated
+      expect(service.state.value).toBe('idle');
+      expect(service.state.context.transcriptionsByTarget['name-input']).toBeUndefined();
     });
 
-    it('should handle manual edit with significant content change', () => {
-      // Setup multiple transcriptions
+    it('should terminate dictation regardless of content change size', () => {
+      // Start dictation
+      service.send({ type: 'saypi:startDictation', targetElement: inputElement1 });
+      service.send({ type: 'saypi:callReady' });
+      
+      // Setup transcriptions
       service.state.context.transcriptionsByTarget['name-input'] = {
         1: 'Hello',
         2: ', World!'
@@ -785,19 +789,19 @@ describe('DictationMachine', () => {
       service.send('saypi:manualEdit', {
         targetElement: inputElement1,
         newContent: 'Completely different text',
-        oldContent: 'Hello , World!'  // This matches the actual joined content
+        oldContent: 'Hello , World!'
       });
 
-      // Verify all previous transcriptions were replaced with the new content
-      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
-        2: 'Completely different text'
-      });
-      expect(service.state.context.transcriptions).toEqual({
-        2: 'Completely different text'
-      });
+      // Verify dictation was terminated
+      expect(service.state.value).toBe('idle');
+      expect(service.state.context.transcriptionsByTarget['name-input']).toBeUndefined();
     });
 
-    it('should skip manual edit when old content does not match', () => {
+    it('should terminate dictation even when old content does not match', () => {
+      // Start dictation
+      service.send({ type: 'saypi:startDictation', targetElement: inputElement1 });
+      service.send({ type: 'saypi:callReady' });
+      
       // Setup transcription
       service.state.context.transcriptionsByTarget['name-input'] = {
         1: 'Hello World'
@@ -809,17 +813,19 @@ describe('DictationMachine', () => {
       service.send('saypi:manualEdit', {
         targetElement: inputElement1,
         newContent: 'Hello Earth',
-        oldContent: 'Different text'  // Doesn't match current transcribed content
+        oldContent: 'Different text'
       });
 
-      // Verify transcription was not changed
-      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
-        1: 'Hello World'
-      });
-      expect(service.state.context.transcriptions[1]).toBe('Hello World');
+      // Verify dictation was still terminated (simplified behavior)
+      expect(service.state.value).toBe('idle');
+      expect(service.state.context.transcriptionsByTarget['name-input']).toBeUndefined();
     });
 
-    it('should handle manual edit when no transcriptions exist for target', () => {
+    it('should handle manual edit when no transcriptions exist', () => {
+      // Start dictation
+      service.send({ type: 'saypi:startDictation', targetElement: inputElement1 });
+      service.send({ type: 'saypi:callReady' });
+      
       // No transcriptions set up
       
       // Send manual edit event
@@ -829,18 +835,21 @@ describe('DictationMachine', () => {
         oldContent: ''
       });
 
-      // Verify nothing was changed (no transcriptions to update)
-      expect(service.state.context.transcriptionsByTarget['name-input']).toBeUndefined();
+      // Verify dictation was terminated
+      expect(service.state.value).toBe('idle');
       
       // Event should still be emitted
-      expect(EventBus.emit).toHaveBeenCalledWith('dictation:contentUpdated', {
+      expect(EventBus.emit).toHaveBeenCalledWith('dictation:terminatedByManualEdit', {
         targetElement: inputElement1,
-        content: 'Some new text',
-        source: 'manual-edit'
+        reason: 'manual-edit'
       });
     });
 
-    it('should preserve edits when resuming dictation', () => {
+    it('should require new dictation session after manual edit', () => {
+      // Start dictation
+      service.send({ type: 'saypi:startDictation', targetElement: inputElement1 });
+      service.send({ type: 'saypi:callReady' });
+      
       // Setup initial transcription
       service.state.context.transcriptionsByTarget['name-input'] = {
         1: 'Hello'
@@ -848,32 +857,26 @@ describe('DictationMachine', () => {
       service.state.context.transcriptions[1] = 'Hello';
       service.state.context.transcriptionTargets[1] = inputElement1;
 
-      // Manual edit
+      // Manual edit terminates dictation
       service.send('saypi:manualEdit', {
         targetElement: inputElement1,
         newContent: 'Hello Beautiful',
         oldContent: 'Hello'
       });
 
-      // Verify edit was preserved
-      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
-        1: 'Hello Beautiful'
-      });
+      // Verify dictation was terminated
+      expect(service.state.value).toBe('idle');
+      expect(service.state.context.transcriptionsByTarget['name-input']).toBeUndefined();
 
-      // Simulate resumed dictation by manually adding the new transcription
-      // (This simulates what would happen when the transcription system processes a new audio chunk)
-      service.state.context.transcriptionsByTarget['name-input'][2] = 'World';
-      service.state.context.transcriptions[2] = 'World';
-      service.state.context.transcriptionTargets[2] = inputElement1;
-
-      // Verify new transcription is added while preserving edits
-      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
-        1: 'Hello Beautiful',
-        2: 'World'
-      });
+      // User would need to start a new dictation session
+      // This is the simplified, predictable behavior
     });
 
-    it('should handle manual edits across different target elements', () => {
+    it('should handle manual edits on any target element', () => {
+      // Start dictation
+      service.send({ type: 'saypi:startDictation', targetElement: inputElement1 });
+      service.send({ type: 'saypi:callReady' });
+      
       // Setup transcriptions for two different elements
       service.state.context.transcriptionsByTarget['name-input'] = {
         1: 'John'
@@ -888,34 +891,23 @@ describe('DictationMachine', () => {
       service.state.context.transcriptionTargets[1] = inputElement1;
       service.state.context.transcriptionTargets[2] = inputElement2;
 
-      // Edit first element
+      // Edit first element - terminates dictation
       service.send('saypi:manualEdit', {
         targetElement: inputElement1,
         newContent: 'Jane',
         oldContent: 'John'
       });
 
-      // Edit second element
-      service.send('saypi:manualEdit', {
-        targetElement: inputElement2,
-        newContent: 'jane@example.org',
-        oldContent: 'john@example.com'
-      });
-
-      // Verify both edits were applied independently
-      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
-        1: 'Jane'
-      });
-      expect(service.state.context.transcriptionsByTarget['email-input']).toEqual({
-        2: 'jane@example.org'
-      });
-      expect(service.state.context.transcriptions).toEqual({
-        1: 'Jane',
-        2: 'jane@example.org'
-      });
+      // Verify dictation was terminated
+      expect(service.state.value).toBe('idle');
+      expect(service.state.context.transcriptionsByTarget['name-input']).toBeUndefined();
     });
 
-    it('should emit dictation:contentUpdated event on manual edit', () => {
+    it('should emit termination event on manual edit', () => {
+      // Start dictation
+      service.send({ type: 'saypi:startDictation', targetElement: inputElement1 });
+      service.send({ type: 'saypi:callReady' });
+      
       // Setup transcription
       service.state.context.transcriptionsByTarget['name-input'] = {
         1: 'Original text'
@@ -929,11 +921,10 @@ describe('DictationMachine', () => {
         oldContent: 'Original text'
       });
 
-      // Verify the correct event was emitted
-      expect(EventBus.emit).toHaveBeenCalledWith('dictation:contentUpdated', {
+      // Verify the termination event was emitted
+      expect(EventBus.emit).toHaveBeenCalledWith('dictation:terminatedByManualEdit', {
         targetElement: inputElement1,
-        content: 'Edited text',
-        source: 'manual-edit'
+        reason: 'manual-edit'
       });
     });
   });

@@ -407,13 +407,13 @@ describe('DictationMachine - Out-of-Order Transcription Handling', () => {
       expect(Object.keys(service.state.context.transcriptionsByTarget['name-input']).length).toBe(6);
     });
 
-    it('should preserve manual edits during out-of-order transcription completion', () => {
-      // Test manual editing during dictation with out-of-order responses
-      // Scenario: User dictates "Mary had a little lump" -> edits to "lamb" -> continues dictating
+    it('should terminate dictation when manual edit is detected during out-of-order transcription', () => {
+      // SIMPLIFIED BEHAVIOR: Manual edits terminate dictation
+      // This provides predictable behavior even with out-of-order responses
       
       const nurseryRhymeSegments = [
         { sequenceNumber: 1, text: "Mary had a" },
-        { sequenceNumber: 2, text: "little lump" }, // Will be manually corrected to "little lamb"
+        { sequenceNumber: 2, text: "little lump" },
         { sequenceNumber: 3, text: "its fleece was" },
         { sequenceNumber: 4, text: "white as snow" }
       ];
@@ -441,57 +441,27 @@ describe('DictationMachine - Out-of-Order Transcription Handling', () => {
         2: "little lump"
       });
 
-      // Phase 2: User manually edits the text field to correct "lump" to "lamb"
-      // Simulate realistic user typing and change detection
+      // Phase 2: User manually edits - this now terminates dictation
       simulateUserEdit(inputElement1, 'Mary had a little lamb', 'Mary had a little lump');
-      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
-        1: "Mary had a",
-        2: "little lamb"  // Should be updated by manual edit
-      });
-
-      // Phase 3: Remaining segments arrive out of order (4 then 3)
-      // This simulates the user continuing to dictate after the manual correction
       
-      // Segment 4 arrives first
-      service.send('saypi:transcribed', {
-        text: nurseryRhymeSegments[3].text,
-        sequenceNumber: nurseryRhymeSegments[3].sequenceNumber,
-      });
-
-      // Should preserve manual edit and add new segment in correct order
-      expect(inputElement1.value).toBe("Mary had a little lamb white as snow");
-      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
-        1: "Mary had a",
-        2: "little lamb",  // Manual edit preserved
-        4: "white as snow"
-      });
-
-      // Segment 3 arrives last (out of order)
-      service.send('saypi:transcribed', {
-        text: nurseryRhymeSegments[2].text,
-        sequenceNumber: nurseryRhymeSegments[2].sequenceNumber,
-      });
-
-      // Final verification - manual edit should be preserved in final result
-      expect(inputElement1.value).toBe("Mary had a little lamb its fleece was white as snow");
-      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
-        1: "Mary had a",
-        2: "little lamb",    // Manual correction preserved
-        3: "its fleece was",
-        4: "white as snow"
-      });
-
-      // Verify accumulated text matches
-      expect(service.state.context.accumulatedText).toBe("Mary had a little lamb its fleece was white as snow");
+      // Verify dictation was terminated
+      expect(service.state.value).toBe('idle');
+      expect(service.state.context.transcriptionsByTarget['name-input']).toBeUndefined();
+      
+      // The manually edited content remains in the field
+      expect(inputElement1.value).toBe('Mary had a little lamb');
+      
+      // Any further transcriptions would not be processed since dictation is terminated
+      // This is the simplified, predictable behavior
     });
 
-    it('should handle multiple manual edits with out-of-order responses', () => {
-      // Test scenario with multiple corrections during out-of-order completion
+    it('should terminate dictation on first manual edit during out-of-order responses', () => {
+      // SIMPLIFIED BEHAVIOR: First manual edit terminates dictation
       
       const segments = [
         { sequenceNumber: 1, text: "Jack and Jill" },
-        { sequenceNumber: 2, text: "went up the hell" }, // Will be corrected to "hill"
-        { sequenceNumber: 3, text: "to fitch a" },       // Will be corrected to "fetch a"
+        { sequenceNumber: 2, text: "went up the hell" },
+        { sequenceNumber: 3, text: "to fitch a" },
         { sequenceNumber: 4, text: "pail of water" }
       ];
 
@@ -513,46 +483,23 @@ describe('DictationMachine - Out-of-Order Transcription Handling', () => {
 
       expect(inputElement1.value).toBe("Jack and Jill went up the hell");
 
-      // Phase 2: First manual correction - "hell" to "hill"
-      // Simulate realistic user typing and change detection
+      // Phase 2: First manual correction terminates dictation
       simulateUserEdit(inputElement1, 'Jack and Jill went up the hill', 'Jack and Jill went up the hell');
 
-      // Phase 3: Segment 4 arrives out of order (before segment 3)
-      service.send('saypi:transcribed', {
-        text: segments[3].text,
-        sequenceNumber: segments[3].sequenceNumber,
-      });
-
-      expect(inputElement1.value).toBe("Jack and Jill went up the hill pail of water");
-
-      // Phase 4: Segment 3 arrives
-      service.send('saypi:transcribed', {
-        text: segments[2].text,
-        sequenceNumber: segments[2].sequenceNumber,
-      });
-
-      expect(inputElement1.value).toBe("Jack and Jill went up the hill to fitch a pail of water");
-
-      // Phase 5: Second manual correction - "fitch a" to "fetch a"  
-      // Simulate realistic user typing and change detection for second correction
-      simulateUserEdit(inputElement1, 'Jack and Jill went up the hill to fetch a pail of water', 'Jack and Jill went up the hill to fitch a pail of water');
-
-      // Final verification - both manual corrections should be preserved
-      expect(inputElement1.value).toBe("Jack and Jill went up the hill to fetch a pail of water");
+      // Verify dictation was terminated
+      expect(service.state.value).toBe('idle');
+      expect(service.state.context.transcriptionsByTarget['name-input']).toBeUndefined();
       
-      // After the second manual edit, the significant change consolidates all transcriptions
-      // into a single entry (this is the intended behavior for major content changes)
-      expect(service.state.context.transcriptionsByTarget['name-input']).toEqual({
-        4: "Jack and Jill went up the hill to fetch a pail of water"  // Consolidated after second edit
-      });
+      // User would need to restart dictation for further transcriptions
+      // This is the simplified, predictable behavior
     });
 
-    it('should handle manual edits with server-side merging and out-of-order responses', () => {
-      // Complex scenario: manual edit + server merging + out-of-order completion
+    it('should terminate dictation when manual edit occurs with server merging', () => {
+      // SIMPLIFIED BEHAVIOR: Manual edit terminates dictation regardless of server merging
       
       const segments = [
         { sequenceNumber: 1, text: "Hickory dickory" },
-        { sequenceNumber: 2, text: "duck" },              // Will be corrected to "dock"
+        { sequenceNumber: 2, text: "duck" },
         { sequenceNumber: 3, text: "the mouse ran" },
         { sequenceNumber: 4, text: "up the clock" }
       ];
@@ -575,43 +522,21 @@ describe('DictationMachine - Out-of-Order Transcription Handling', () => {
 
       expect(inputElement1.value).toBe("Hickory dickory duck");
 
-      // Phase 2: Manual correction - "duck" to "dock"
-      // Simulate realistic user typing and change detection
+      // Phase 2: Manual correction terminates dictation
       simulateUserEdit(inputElement1, 'Hickory dickory dock', 'Hickory dickory duck');
 
-      // Phase 3: Segment 4 arrives out of order
-      service.send('saypi:transcribed', {
-        text: segments[3].text,
-        sequenceNumber: segments[3].sequenceNumber,
-      });
-
-      expect(inputElement1.value).toBe("Hickory dickory dock up the clock");
-
-      // Phase 4: Segment 3 arrives with server-side merging
-      // Server merges corrected segments 1 and 2 with segment 3
-      service.send('saypi:transcribed', {
-        text: "Hickory dickory dock the mouse ran",
-        sequenceNumber: 3,
-        merged: [1, 2], // Server merged corrected content of segments 1 and 2
-      });
-
-      // Final verification - server should preserve the manual correction
-      expect(inputElement1.value).toBe("Hickory dickory dock the mouse ran up the clock");
+      // Verify dictation was terminated
+      expect(service.state.value).toBe('idle');
+      expect(service.state.context.transcriptionsByTarget['name-input']).toBeUndefined();
       
-      // Check that merged sequences were handled correctly
-      const targetTranscriptions = service.state.context.transcriptionsByTarget['name-input'];
-      expect(targetTranscriptions[1]).toBeUndefined(); // merged
-      expect(targetTranscriptions[2]).toBeUndefined(); // merged
-      expect(targetTranscriptions[3]).toBe("Hickory dickory dock the mouse ran"); // Contains corrected text
-      expect(targetTranscriptions[4]).toBe("up the clock");
+      // Any subsequent transcriptions would require a new dictation session
     });
 
-    it('should handle manual edits containing newline characters', () => {
-      // Test newline insertion during manual editing with out-of-order transcriptions
-      // Scenario: User dictates "Dear Sir," -> "How are you" -> manually edits to add line breaks for proper formatting
+    it('should terminate dictation when newline characters are manually added', () => {
+      // SIMPLIFIED BEHAVIOR: Any manual edit, including formatting, terminates dictation
       
       const segments = [
-        { sequenceNumber: 1, text: "Dear Sir," }, // Comma is part of original transcription
+        { sequenceNumber: 1, text: "Dear Sir," },
         { sequenceNumber: 2, text: "How are you" },
         { sequenceNumber: 3, text: "today?" }
       ];
@@ -642,32 +567,19 @@ describe('DictationMachine - Out-of-Order Transcription Handling', () => {
 
       expect(textareaElement.value).toBe("Dear Sir, How are you");
 
-      // Phase 2: User manually edits to add proper letter formatting with newlines
-      // Simulates user pressing Enter to add line breaks for proper spacing
+      // Phase 2: User manually edits to add formatting - this terminates dictation
       const manuallyFormattedContent = "Dear Sir,\n\nHow are you";
       simulateUserEdit(textareaElement, manuallyFormattedContent, "Dear Sir, How are you");
 
-      // Verify the newline characters are preserved in the DOM element
-      expect(textareaElement.value).toBe("Dear Sir,\n\nHow are you");
-
-      // Phase 3: Third segment arrives after manual editing (out of order scenario)
-      service.send('saypi:transcribed', {
-        text: segments[2].text,
-        sequenceNumber: segments[2].sequenceNumber,
-      });
-
-      // Final verification - newlines should be preserved and new content properly merged
-      // The new transcription should be appended with proper spacing
-      expect(textareaElement.value).toBe("Dear Sir,\n\nHow are you today?");
+      // Verify dictation was terminated
+      expect(service.state.value).toBe('idle');
+      expect(service.state.context.transcriptionsByTarget['letter-textarea']).toBeUndefined();
       
-      // Verify internal transcription state correctly handles newlines
-      const targetTranscriptions = service.state.context.transcriptionsByTarget['letter-textarea'];
-      expect(targetTranscriptions[1]).toBe("Dear Sir,");
-      expect(targetTranscriptions[2]).toBe("\n\nHow are you"); // Should preserve newlines in transcription state
-      expect(targetTranscriptions[3]).toBe("today?");
-
-      // Verify accumulated text maintains newline formatting
-      expect(service.state.context.accumulatedText).toBe("Dear Sir,\n\nHow are you today?");
+      // The manually edited content remains in the field
+      expect(textareaElement.value).toBe("Dear Sir,\n\nHow are you");
+      
+      // User would need to restart dictation to continue
+      // This is the simplified, predictable behavior
     });
 
     it('should convert newlines to <br> tags in contenteditable elements during transcription', () => {
