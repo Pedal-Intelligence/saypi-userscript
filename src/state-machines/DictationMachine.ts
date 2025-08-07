@@ -500,7 +500,46 @@ class InputTextareaStrategy implements TextInsertionStrategy {
     if (replaceAll) {
       inputTarget.value = text;
     } else {
-      inputTarget.value = inputTarget.value + text;
+      // Insert at caret/selection if available; otherwise append
+      try {
+        const control = inputTarget as HTMLInputElement | HTMLTextAreaElement;
+        const start = typeof control.selectionStart === 'number' ? (control.selectionStart as number) : inputTarget.value.length;
+        const end = typeof control.selectionEnd === 'number' ? (control.selectionEnd as number) : start;
+
+        const before = inputTarget.value.slice(0, Math.max(0, start));
+        const after = inputTarget.value.slice(Math.max(0, end));
+
+        // Smart spacing at join boundary for plain text fields
+        const firstChar = text.charAt(0);
+        const lastBefore = before.charAt(before.length - 1);
+        const needsSpaceBefore = before.length > 0 && !/\s/.test(lastBefore) && firstChar && !/\s|[.,!?;:)/\]]/.test(firstChar);
+        const insertion = (needsSpaceBefore ? ' ' : '') + text;
+
+        const scrollTop = (inputTarget as HTMLTextAreaElement).scrollTop ?? 0;
+        const scrollLeft = (inputTarget as HTMLTextAreaElement).scrollLeft ?? 0;
+
+        inputTarget.value = before + insertion + after;
+
+        // Restore caret to end of inserted text
+        try {
+          const caretPos = before.length + insertion.length;
+          (control.selectionStart as number) = caretPos;
+          (control.selectionEnd as number) = caretPos;
+        } catch (_) {
+          /* ignore */
+        }
+
+        // Restore scroll (important for large textareas)
+        try {
+          (inputTarget as HTMLTextAreaElement).scrollTop = scrollTop;
+          (inputTarget as HTMLTextAreaElement).scrollLeft = scrollLeft;
+        } catch (_) {
+          /* ignore */
+        }
+      } catch {
+        // Fallback to append
+        inputTarget.value = inputTarget.value + text;
+      }
     }
 
     console.debug("🔍 NEWLINE DEBUG: InputTextareaStrategy.insertText result:", {
@@ -848,6 +887,13 @@ class ContentEditableStrategy implements TextInsertionStrategy {
         target.innerHTML = (target.innerHTML || "") + htmlText;
         // Position cursor at the end after appending
         positionCursorAtEnd(target);
+      }
+
+      // Normalize excessive <br> sequences introduced by browsers (<br><br> → <br>)
+      try {
+        target.innerHTML = (target.innerHTML || "").replace(/(<br\s*\/?>(\s|&nbsp;)*?){2,}/gi, '<br>');
+      } catch (_) {
+        /* ignore normalization errors */
       }
     }
 
@@ -1787,6 +1833,14 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           // Initialize target-specific transcriptions if not exists
           const targetTranscriptions = getOrCreateTargetBucket(context, targetId);
 
+          // Compute previous merged string BEFORE adding this transcription (for delta computation)
+          const previousMergedForTarget = mergeService
+            ? mergeService.mergeTranscriptsLocal(targetTranscriptions)
+            : smartJoinTranscriptions(targetTranscriptions);
+          const existingKeysBefore = Object.keys(targetTranscriptions).map(Number);
+          const highestBefore = existingKeysBefore.length > 0 ? Math.max(...existingKeysBefore) : 0;
+          const isAppendSequence = existingKeysBefore.length === 0 || sequenceNumber === highestBefore + 1;
+
           // Add the new (potentially merged) transcription to both global and target-specific storage
           context.transcriptions[sequenceNumber] = transcription;
           targetTranscriptions[sequenceNumber] = transcription;
@@ -1799,26 +1853,37 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
           const initialText = storedInitialText !== undefined ? storedInitialText : currentFieldContent;
           const isUsingStoredInitialText = storedInitialText !== undefined;
 
-          // Get target-specific transcriptions for merging
-          const finalText = computeFinalText(
-            targetTranscriptions,
-            mergedSequences,
-            transcription,
-            initialText,
-            isUsingStoredInitialText
-          );
-          console.debug(
-            `Merged text for target ${targetId}: ${finalText}`
-          );
+          // Determine how to apply the new text to the field
+          const newMergedForTarget = mergeService
+            ? mergeService.mergeTranscriptsLocal(targetTranscriptions)
+            : smartJoinTranscriptions(targetTranscriptions);
 
-          // computeFinalText already includes initial text, so use finalText directly
-          console.debug(`🔍 NEWLINE DEBUG: Using final text (already includes initial text):`, {
-            targetId,
-            finalText: JSON.stringify(finalText),
-            initialTextByTargetKeys: Object.keys(context.initialTextByTarget)
-          });
-          
-          setTextInTarget(finalText, originatingTarget, true); // true = replace all content
+          // Determine if contenteditable is effectively empty (whitespace-only DOM)
+          const isWhitespaceOnlyContentEditable =
+            (originatingTarget as HTMLElement).contentEditable === 'true' &&
+            !/(<br\b|<div\b|&nbsp;|\S)/i.test(((originatingTarget as HTMLElement).innerHTML || ''));
+
+          if (mergedSequences.length > 0 || !isAppendSequence || isWhitespaceOnlyContentEditable) {
+            // When server indicates merged sequences, re-synchronize full content
+            const finalText = computeFinalText(
+              targetTranscriptions,
+              mergedSequences,
+              transcription,
+              initialText,
+              isUsingStoredInitialText
+            );
+            console.debug(
+              `Merged text for target ${targetId} (server-merge): ${finalText}`
+            );
+            setTextInTarget(finalText, originatingTarget, true);
+          } else {
+            // Otherwise, insert only the delta at the caret to preserve surrounding text
+            const delta = newMergedForTarget.slice(previousMergedForTarget.length);
+            console.debug(`Inserting delta at caret for target ${targetId}:`, JSON.stringify(delta));
+            if (delta) {
+              setTextInTarget(delta, originatingTarget, false);
+            }
+          }
 
           // Finally, handle server-side merging if present, after those sequences have been referenced in composing the final text
           if (mergedSequences.length > 0) {
@@ -1828,12 +1893,8 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
 
           // Update accumulated text only if this is the current target
           if (originatingTarget === context.targetElement) {
-            if (mergedSequences.length > 0) {
-              // Rebuild accumulated text from remaining transcriptions for current target
-              context.accumulatedText = smartJoinTranscriptions(targetTranscriptions);
-            } else {
-              context.accumulatedText = finalText;
-            }
+            // Keep accumulated text in sync with current target's merged transcriptions
+            context.accumulatedText = smartJoinTranscriptions(targetTranscriptions);
           }
         }
       },
