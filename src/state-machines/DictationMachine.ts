@@ -909,6 +909,14 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
     });
   };
 
+  // Mark this element as being updated programmatically by dictation.
+  // Input listeners can use this to avoid treating these changes as manual edits.
+  try {
+    (target as any).__dictationUpdateInProgress = true;
+  } catch (_) {
+    // ignore if property cannot be set
+  }
+
   // Get the appropriate strategy for this target element
   const strategy = strategySelector.getStrategy(target);
   
@@ -926,8 +934,30 @@ function setTextInTarget(text: string, targetElement?: HTMLElement, replaceAll: 
     });
     
     emitContentUpdated(text);
+    // Clear the programmatic update flag on the next tick
+    setTimeout(() => {
+      try {
+        delete (target as any).__dictationUpdateInProgress;
+      } catch (_) {
+        /* no-op */
+      }
+    }, 0);
   } else {
-    console.warn("No text insertion strategy found for target element", target);
+    // Fallback: directly set value/textContent if no strategy is available
+    if ((target as any).value !== undefined) {
+      (target as any).value = text;
+    } else if ((target as any).textContent !== undefined) {
+      (target as any).textContent = text;
+    }
+    emitContentUpdated(text);
+    // Clear the programmatic update flag on the next tick
+    setTimeout(() => {
+      try {
+        delete (target as any).__dictationUpdateInProgress;
+      } catch (_) {
+        /* no-op */
+      }
+    }, 0);
   }
 }
 

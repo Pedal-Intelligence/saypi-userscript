@@ -342,8 +342,13 @@ export class UniversalDictationModule {
 
     // Listen for content changes to detect manual edits
     const handleContentChange = () => {
-      // Skip if we're currently updating from dictation
+      // Skip if we're currently updating from dictation (event-level debounce)
       if (isUpdatingFromDictation) {
+        return;
+      }
+      // Skip if this element is flagged as being updated programmatically by dictation
+      // The flag is set by the text insertion code and cleared on the next tick
+      if ((element as any).__dictationUpdateInProgress) {
         return;
       }
 
