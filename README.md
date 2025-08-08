@@ -150,6 +150,28 @@ Vitest is a test runner designed for Vite. It's used for all ESM and TypeScript 
 npm run test:vitest:watch
 ```
 
+### Dev-only: Save VAD Segments to Files
+
+For debugging and evaluation of VAD segmentation, you can enable a development-only feature to save each detected speech segment as a WAV file to your default Downloads folder.
+
+- Behavior:
+  - Saved file path: `Downloads/SayPiSegments/saypi-segment_<startISO>_to_<endISO>_<durationMs>ms.wav`
+  - Uses the same VAD path as the extension (segments match real behavior)
+
+- Enable (dev only):
+  1. In your `.env` file (used by `npm run dev`), set:
+     ```bash
+     KEEP_SEGMENTS=true
+     ```
+  2. Start development build:
+     ```bash
+     npm run dev
+     ```
+
+- Notes:
+  - No production permission changes. The `downloads` permission is added only in development by `scripts/update-manifest.js`.
+  - In production builds (`npm run build`), `KEEP_SEGMENTS` is ignored and no files are saved.
+
 ## License
 
 This project is licensed under a proprietary commercial license. The source code is made available for public review, but it may not be copied, modified, forked, or redistributed - see the [LICENSE](LICENSE) file for details.

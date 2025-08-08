@@ -9,7 +9,8 @@
     "offscreen",
     "tabs",
     "audio",
-    "contextMenus"
+    "contextMenus",
+    "downloads"
   ],
   "host_permissions": [
     "https://api.saypi.ai/*",
@@ -27,6 +28,7 @@
     },
     {
       "matches": [
+        "file://*/*",
         "http://*/*",
         "https://*/*"
       ],
@@ -85,6 +87,7 @@
         "public/permissions/*.css"
       ],
       "matches": [
+        "file://*/*",
         "http://*/*",
         "https://*/*"
       ]

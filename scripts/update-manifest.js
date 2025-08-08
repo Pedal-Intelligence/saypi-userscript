@@ -104,6 +104,15 @@ if (universalWebResources) {
   console.log(`Web accessible resources matches set to: ${universalWebResources.matches.join(', ')}`);
 }
 
+// Add dev-only permissions (like downloads) without affecting production
+if (process.env.NODE_ENV !== 'production') {
+  manifest.permissions = manifest.permissions || [];
+  const add = (perm) => {
+    if (!manifest.permissions.includes(perm)) manifest.permissions.push(perm);
+  };
+  add('downloads');
+}
+
 // Write the updated manifest
 fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), 'utf-8');
 console.log(`manifest.json host_permissions set to: ${manifest.host_permissions.join(', ')}`);

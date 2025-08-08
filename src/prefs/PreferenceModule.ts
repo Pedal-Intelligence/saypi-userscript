@@ -167,6 +167,8 @@ class UserPreferenceModule {
       EventBus.emit("userPreferenceChanged", { vadStatusIndicatorEnabled: value });
     });
 
+    // keepSegments removed (dev-only via env)
+
     // Network-dependent settings (not in chrome.storage)
     this.isTTSBetaPaused().then((value) => {
       this.cache.setCachedValue("isTTSBetaPaused", value);
@@ -251,6 +253,8 @@ class UserPreferenceModule {
           EventBus.emit("userPreferenceChanged", { vadStatusIndicatorEnabled: request.vadStatusIndicatorEnabled });
         }
 
+        // keepSegments removed (dev-only via env)
+
         if (actions.length > 0) {
           Promise.all(actions).catch(error => console.error("Error processing preference updates from message listener:", error));
         }
@@ -319,6 +323,7 @@ class UserPreferenceModule {
                     this.cache.setCachedValue("vadStatusIndicatorEnabled", newValue);
                     eventData = { vadStatusIndicatorEnabled: newValue };
                     break;
+                  // keepSegments removed (dev-only via env)
                   default: continue; // Should not happen if LOCAL_STORAGE_KEYS is correct
                 }
                 EventBus.emit("userPreferenceChanged", eventData);
@@ -517,6 +522,8 @@ class UserPreferenceModule {
     EventBus.emit("userPreferenceChanged", { vadStatusIndicatorEnabled: enabled });
     return this.setStoredValue("vadStatusIndicatorEnabled", enabled, 'local');
   }
+
+  // keepSegments removed (dev-only via env)
 
   // --- Preferences that were previously in chrome.storage.sync, now moved to local or handled by cache ---
   

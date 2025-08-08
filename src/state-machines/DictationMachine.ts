@@ -1546,8 +1546,8 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
             description: "The /transcribe API responded with an error.",
             after: {
               "3000": {
-                target: "#dictation.idle",
-                description: "Return to idle after showing error briefly.",
+                target: "#dictation.listening.recording.notSpeaking",
+                description: "Return to listening after showing error briefly.",
               },
             },
           },
@@ -1555,8 +1555,8 @@ const machine = createMachine<DictationContext, DictationEvent, DictationTypesta
             description: "Microphone error or no audio input detected",
             after: {
               "3000": {
-                target: "#dictation.idle",
-                description: "Return to idle after showing error briefly.",
+                target: "#dictation.listening.recording.notSpeaking",
+                description: "Return to listening after showing error briefly.",
               },
             },
           },

@@ -426,6 +426,33 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   // --- END: Microphone Permission Handling ---
 
+  // --- START: Save Segmented WAV to Downloads ---
+  if (message.type === 'SAVE_SEGMENT_WAV' && typeof message.base64 === 'string' && typeof message.filename === 'string') {
+    try {
+      const url = `data:audio/wav;base64,${message.base64}`;
+      chrome.downloads.download({
+        url,
+        filename: message.filename,
+        saveAs: false,
+        conflictAction: 'uniquify'
+      }, (downloadId) => {
+        if (chrome.runtime.lastError) {
+          logger.error('[Background] Failed to queue segment download:', chrome.runtime.lastError.message);
+          sendResponse({ ok: false, error: chrome.runtime.lastError.message });
+        } else {
+          logger.debug(`[Background] Queued segment download: ${downloadId} -> ${message.filename}`);
+          sendResponse({ ok: true, id: downloadId });
+        }
+      });
+      return true; // async
+    } catch (error: any) {
+      logger.error('[Background] Exception while saving segment:', error);
+      sendResponse({ ok: false, error: error?.message || 'unknown' });
+      return false;
+    }
+  }
+  // --- END: Save Segmented WAV to Downloads ---
+
   // --- START: Offscreen API Support Check ---
   if (message.type === 'CHECK_OFFSCREEN_SUPPORT') {
     try {

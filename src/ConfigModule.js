@@ -5,4 +5,6 @@ export const config = {
   GA_MEASUREMENT_ID: process.env.GA_MEASUREMENT_ID,
   GA_API_SECRET: process.env.GA_API_SECRET,
   GA_ENDPOINT: process.env.GA_ENDPOINT,
+  // Dev/debug flags
+  keepSegments: process.env.KEEP_SEGMENTS,
 };
