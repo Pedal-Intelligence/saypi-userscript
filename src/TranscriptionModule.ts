@@ -234,9 +234,12 @@ export async function uploadAudioWithRetry(
         retryCount++;
       } else {
         console.error("Unexpected error: ", error);
+        // Notify both conversation and dictation flows of the failure
         StateMachineService.conversationActor.send("saypi:transcribeFailed", {
           detail: error,
         });
+        // Emit a specific failure event that UniversalDictationModule forwards to DictationMachine
+        EventBus.emit("saypi:transcribeFailed");
         EventBus.emit("saypi:transcription:failed", {
           sequenceNumber: sequenceNum,
         });
@@ -249,6 +252,8 @@ export async function uploadAudioWithRetry(
   StateMachineService.conversationActor.send("saypi:transcribeFailed", {
     detail: new Error("Max retries reached"),
   });
+  // Ensure DictationMachine leaves transcribing state on terminal failure
+  EventBus.emit("saypi:transcribeFailed");
   EventBus.emit("saypi:transcription:failed", {
     sequenceNumber: usedSequenceNumber!,
   });
