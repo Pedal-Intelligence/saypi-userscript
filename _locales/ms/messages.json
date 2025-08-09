@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Taip suara di mana-mana, sembang lancar dengan Pi & Claude. Bercakap bebas—Say, Pi urus selebihnya."
+    "message": "Taip suara di mana-mana, sembang lancar dengan Pi \u0026 Claude. Bercakap bebas—Say, Pi urus selebihnya."
   },
   "appName": {
     "description": "The name of the application.",
@@ -593,6 +593,14 @@
   "regenerateButtonTitleFree": {
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Hasilkan Audio"
+  },
+  "removeFillerWordsLabel": {
+    "description": "Label untuk togol yang membolehkan penghapusan kata pengisi dan permulaan salah dari transkrip yang diberdayakan LLM.",
+    "message": "Hapus kata pengisi (beta)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Tooltip yang menerangkan cara pilihan Hapus kata pengisi berfungsi.",
+    "message": "Menghapus 'ums', 'uhs', kata yang berulang, dan kekacauan verbal lain. Menjaga makna, tanda baca, dan pemformatan."
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

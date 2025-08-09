@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "오디오 생성"
   },
+  "removeFillerWordsLabel": {
+    "description": "대본에서 채움말과 잘못된 시작을 LLM을 통해 제거하는 기능을 활성화하는 토글용 레이블입니다.",
+    "message": "채움말 제거하기 (베타)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "채움말 제거 옵션의 작동 방식을 설명하는 툴팁입니다.",
+    "message": "음, 저음, 중복된 단어 및 기타 언어적 불필요한 부분을 삭제합니다. 의미, 구두점 및 형식을 유지합니다."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "분석 공유"

@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Generar audio"
   },
+  "removeFillerWordsLabel": {
+    "description": "Etiqueta para el interruptor que activa la función de eliminación de muletillas y comienzos erróneos en las transcripciones mediante LLM.",
+    "message": "Eliminar muletillas (beta)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Descripción en tooltip sobre cómo funciona la opción Eliminar muletillas.",
+    "message": "Elimina 'ums', 'uhs', palabras repetidas y otros desechos verbales. Preserva el significado, la puntuación y el formato."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Compartir análisis"

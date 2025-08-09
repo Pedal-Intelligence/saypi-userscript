@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Hangot generál"
   },
+  "removeFillerWordsLabel": {
+    "description": "Címke a kapcsolóhoz, amely engedélyezi a LLM-alapú töltelékszavak és hamis kezdetek eltávolítását a jegyzetekből.",
+    "message": "Töltelékszavak eltávolítása (béta)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Tooltip, amely leírja, hogyan működik a Töltelékszavak eltávolítása opció.",
+    "message": "Törli az um-okat, uh-okat, ismételt szavakat és egyéb verbális felesleget. Megőrzi a jelentést, az írásjelet és a formázást."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Megosztási analitika"

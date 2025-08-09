@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Generați Audio"
   },
+  "removeFillerWordsLabel": {
+    "description": "Etichetă pentru comutatorul care activează eliminarea cu ajutorul LLM a cuvintelor de umplutură și a începuturilor false din transcrieri.",
+    "message": "Eliminare cuvinte de umplutură (beta)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Tooltip care descrie cum funcționează opțiunea de eliminare a cuvintelor de umplutură.",
+    "message": "Șterge 'ums', 'uhs', cuvinte repetate și alte elemente verbale inutile. Păstrează sensul, punctuația și formatarea."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Împărtășește analizele"

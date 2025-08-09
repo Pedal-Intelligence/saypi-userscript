@@ -28,6 +28,7 @@ interface StorageResult {
   enableTTS?: boolean; // Added for migration
   allowInterruptions?: boolean; // Added for migration
   vadStatusIndicatorEnabled?: boolean; // To control VAD status indicator visibility
+  removeFillerWords?: boolean; // Prefer cleaned transcripts (LLM-powered)
 }
 
 // Define feature codes
@@ -39,7 +40,7 @@ export const FEATURE_CODES = {
 const LOCAL_STORAGE_KEYS = [
   "prefer", "language", "discretionaryMode", "nickname",
   "autoSubmit", "allowInterruptions", "soundEffects", "theme", 
-  "shareData", "voiceId", "enableTTS", "vadStatusIndicatorEnabled"
+  "shareData", "voiceId", "enableTTS", "vadStatusIndicatorEnabled", "removeFillerWords"
 ];
 
 // Add a flag to mark that sync-to-local migration has completed
@@ -167,6 +168,12 @@ class UserPreferenceModule {
       EventBus.emit("userPreferenceChanged", { vadStatusIndicatorEnabled: value });
     });
 
+    // Remove filler words (default false)
+    this.getStoredValue("removeFillerWords", false, 'local').then((value) => {
+      this.cache.setCachedValue("removeFillerWords", value);
+      EventBus.emit("userPreferenceChanged", { removeFillerWords: value });
+    });
+
     // keepSegments removed (dev-only via env)
 
     // Network-dependent settings (not in chrome.storage)
@@ -253,6 +260,12 @@ class UserPreferenceModule {
           EventBus.emit("userPreferenceChanged", { vadStatusIndicatorEnabled: request.vadStatusIndicatorEnabled });
         }
 
+        if ("removeFillerWords" in request) {
+          this.cache.setCachedValue("removeFillerWords", request.removeFillerWords);
+          actions.push(this.setStoredValue("removeFillerWords", request.removeFillerWords, 'local'));
+          EventBus.emit("userPreferenceChanged", { removeFillerWords: request.removeFillerWords });
+        }
+
         // keepSegments removed (dev-only via env)
 
         if (actions.length > 0) {
@@ -322,6 +335,10 @@ class UserPreferenceModule {
                   case "vadStatusIndicatorEnabled":
                     this.cache.setCachedValue("vadStatusIndicatorEnabled", newValue);
                     eventData = { vadStatusIndicatorEnabled: newValue };
+                    break;
+                  case "removeFillerWords":
+                    this.cache.setCachedValue("removeFillerWords", newValue);
+                    eventData = { removeFillerWords: newValue };
                     break;
                   // keepSegments removed (dev-only via env)
                   default: continue; // Should not happen if LOCAL_STORAGE_KEYS is correct
@@ -521,6 +538,27 @@ class UserPreferenceModule {
     this.cache.setCachedValue("vadStatusIndicatorEnabled", enabled);
     EventBus.emit("userPreferenceChanged", { vadStatusIndicatorEnabled: enabled });
     return this.setStoredValue("vadStatusIndicatorEnabled", enabled, 'local');
+  }
+
+  // Remove Filler Words (LOCAL)
+  public async getRemoveFillerWords(): Promise<boolean> {
+    const cached = this.cache.getCachedValue("removeFillerWords", null);
+    if (cached !== null) {
+      return Promise.resolve(cached as boolean);
+    }
+    const stored = await this.getStoredValue("removeFillerWords", false, 'local') as boolean;
+    this.cache.setCachedValue("removeFillerWords", stored);
+    return stored;
+  }
+
+  public getCachedRemoveFillerWords(): boolean {
+    return this.cache.getCachedValue("removeFillerWords", false) as boolean;
+  }
+
+  public setRemoveFillerWords(enabled: boolean): Promise<void> {
+    this.cache.setCachedValue("removeFillerWords", enabled);
+    EventBus.emit("userPreferenceChanged", { removeFillerWords: enabled });
+    return this.setStoredValue("removeFillerWords", enabled, 'local');
   }
 
   // keepSegments removed (dev-only via env)

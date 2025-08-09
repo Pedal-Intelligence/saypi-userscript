@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Generer Lyd"
   },
+  "removeFillerWordsLabel": {
+    "description": "Label til skiftet, der aktiverer LLM-drevet fjernelse af fyldord og falske begyndelser fra transskriptioner.",
+    "message": "Fjern fyldord (beta)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Tooltip, der beskriver, hvordan muligheden for at fjerne fyldord fungerer.",
+    "message": "Sletter um'er, uh'er, gentagne ord og andet verbalt fyld. Bevarer betydning, tegnsætning og formatering."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Del analytics"

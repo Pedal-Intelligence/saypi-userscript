@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Φωνητική εισαγωγή παντού, άμεσες συνομιλίες με Pi & Claude. Μίλα κι άσε το Say, Pi να κάνει τα υπόλοιπα."
+    "message": "Φωνητική εισαγωγή παντού, άμεσες συνομιλίες με Pi \u0026 Claude. Μίλα κι άσε το Say, Pi να κάνει τα υπόλοιπα."
   },
   "appName": {
     "description": "The name of the application.",
@@ -593,6 +593,14 @@
   "regenerateButtonTitleFree": {
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Δημιουργία Ήχου"
+  },
+  "removeFillerWordsLabel": {
+    "description": "Ετικέτα για την εναλλαγή ενεργοποίησης της αφαίρεσης γεμιστικών λέξεων και ψεύτικων αρχών από τα απομαγνητοφωνημένα κείμενα με τη βοήθεια LLM.",
+    "message": "Αφαίρεση γεμιστικών λέξεων (beta)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Tooltip που περιγράφει πώς λειτουργεί η επιλογή Αφαίρεση γεμιστικών λέξεων.",
+    "message": "Διαγράφει τα «ουμ», «αχ», επαναλαμβανόμενες λέξεις και άλλη λεκτική ακαταστασία. Διατηρεί το νόημα, τη στίξη και τη μορφοποίηση."
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Генерувати аудіо"
   },
+  "removeFillerWordsLabel": {
+    "description": "Мітка для перемикача, що дозволяє використовувати функцію видалення наповнювальних слів та помилкових початків з транскрипцій, що працює на основі LLM.",
+    "message": "Видалити наповнювальні слова (бета)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Підказка, що описує, як працює опція Видалення наповнювальних слів.",
+    "message": "Видаляє \"ем\", \"ах\", повторювані слова та інший вербальний бруд. Зберігає сенс, пунктуацію та форматування."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Поділитися аналітикою"

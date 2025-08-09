@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "オーディオを生成する"
   },
+  "removeFillerWordsLabel": {
+    "description": "文字起こしからフィラー語や言葉の詰まりをLLMを使って削除するためのトグルラベルです。",
+    "message": "フィラー語を削除する（ベータ版）"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "フィラー語削除オプションの動作について説明するツールチップです。",
+    "message": "うーん、あー、繰り返しの言葉などの無駄な言葉を削除します。意味、句読点、フォーマットは維持されます。"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "分析を共有する"

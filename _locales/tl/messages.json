@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Lumikha ng Audio"
   },
+  "removeFillerWordsLabel": {
+    "description": "Label para sa toggle na magbibigay-daan sa pag-alis ng mga filler words at maling pagsisimula mula sa mga transcript gamit ang LLM.",
+    "message": "Tanggalin ang mga filler words (beta)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Tooltip na naglalarawan kung paano gumagana ang pagpipilian na Tanggalin ang mga filler words.",
+    "message": "Tinanggal ang mga 'ums', 'uhs', mga inuulit na salita, at iba pang verbal na kalat. Pinananatili ang kahulugan, bantas, at pormat."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Ibahagi ang analytics"

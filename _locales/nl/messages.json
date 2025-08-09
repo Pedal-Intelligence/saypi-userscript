@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Genereer Audio"
   },
+  "removeFillerWordsLabel": {
+    "description": "Label voor de schakelaar om LLM-gestuurde verwijdering van vulwoorden en valse starts uit transcripties in te schakelen.",
+    "message": "Verwijder vulwoorden (beta)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Tooltip die beschrijft hoe de optie Verwijder vulwoorden werkt.",
+    "message": "Verwijdert uh's, um's, herhaalde woorden en andere verbale rommel. Behoudt betekenis, interpunctie en opmaak."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Deel analyses"

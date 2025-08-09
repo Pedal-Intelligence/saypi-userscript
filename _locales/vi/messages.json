@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Tạo Âm thanh"
   },
+  "removeFillerWordsLabel": {
+    "description": "Nhãn cho công tắc kích hoạt việc loại bỏ từ thừa và những khởi đầu sai từ các bản sao.",
+    "message": "Loại bỏ từ thừa (beta)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Mô tả trợ giúp về cách hoạt động của tùy chọn loại bỏ từ thừa.",
+    "message": "Xóa các từ uh, um, những từ lặp lại và các rườm rà ngôn ngữ khác. Giữ nguyên ý nghĩa, dấu câu và định dạng."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Chia sẻ phân tích"

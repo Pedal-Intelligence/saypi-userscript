@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Wygeneruj dźwięk"
   },
+  "removeFillerWordsLabel": {
+    "description": "Etykieta dla przełącznika umożliwiającego usuwanie słów wypełniających oraz fałszywych początków z transkryptów, wspieranego przez LLM.",
+    "message": "Usuń słowa wypełniające (beta)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Podpowiedź opisująca, jak działa opcja Usuwania słów wypełniających.",
+    "message": "Usuwa 'um', 'uh', powtarzające się słowa i inne werbalne niepotrzebne treści. Zachowuje znaczenie, interpunkcję i formatowanie."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Udostępnij statystyki"
