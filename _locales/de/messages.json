@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Audio generieren"
   },
+  "removeFillerWordsLabel": {
+    "description": "Bezeichnung für den Schalter zur Aktivierung der LLM-gestützten Entfernung von Füllwörtern und falschen Starts aus Transkripten.",
+    "message": "Füllwörter entfernen (Beta)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Tooltip, der erklärt, wie die Option Füllwörter entfernen funktioniert.",
+    "message": "Löscht Ums, Ähs, wiederholte Wörter und andere verbale Unordnung. Bewahrt Bedeutung, Interpunktion und Formatierung."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Teilen Sie Analysen"

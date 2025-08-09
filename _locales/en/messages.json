@@ -889,6 +889,14 @@
     "message": "Stop Error: Promise error",
     "description": "VAD detail for a stop promise error."
   },
+  "removeFillerWordsLabel": {
+    "message": "Remove filler words (beta)",
+    "description": "Label for the toggle to enable LLM-powered removal of filler words and false starts from transcripts."
+  },
+  "removeFillerWordsTooltip": {
+    "message": "Deletes ums, uhs, repeated words, and other verbal clutter. Preserves meaning, punctuation, and formatting.",
+    "description": "Tooltip describing how the Remove filler words option works."
+  },
   "vadStatusDestroyed": {
     "message": "Destroyed",
     "description": "VAD status when destroyed."

@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Generera Ljud"
   },
+  "removeFillerWordsLabel": {
+    "description": "Etikett för omkopplaren som aktiverar borttagning av utfyllnadsord och falska starter från transkriptioner med hjälp av LLM.",
+    "message": "Ta bort utfyllnadsord (beta)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Tooltip som beskriver hur alternativet Ta bort utfyllnadsord fungerar.",
+    "message": "Tar bort åh, eh, upprepade ord och annat verbalt brus. Bevarar betydelse, interpunktion och formatering."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Dela analysdata"

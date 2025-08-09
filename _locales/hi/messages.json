@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "ऑडियो उत्पन्न करें"
   },
+  "removeFillerWordsLabel": {
+    "description": "टॉगल के लिए लेबल जो ट्रांसक्रिप्ट से फलर शब्दों और गलत शुरुआतों को LLM-संचालित तरीके से हटाने के लिए सक्षम करता है।",
+    "message": "फलर शब्द हटाएं (बीटा)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "टूलटिप जो बताता है कि फलर शब्द हटाने का विकल्प कैसे काम करता है।",
+    "message": "उम्म, आह, दोहराए गए शब्द, और अन्य मौखिक अव्यवस्थाएं हटाता है। अर्थ, विराम चिह्न, और प्रारूपण को संरक्षित करता है।"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "एनालिटिक्स साझा करें"

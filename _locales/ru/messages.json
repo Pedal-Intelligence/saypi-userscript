@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Генерировать аудио"
   },
+  "removeFillerWordsLabel": {
+    "description": "Метка для переключателя, позволяющего включить удаление слов-паразитов и ложных започатий из транскрипций с помощью ИИ.",
+    "message": "Удалить слова-паразиты (бета)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Подсказка, описывающая, как работает опция удаления слов-паразитов.",
+    "message": "Удаляет 'эм', 'ээ', повторяющиеся слова и другие вербальные излишества. Сохраняет смысл, пунктуацию и форматирование."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Поделиться аналитикой"

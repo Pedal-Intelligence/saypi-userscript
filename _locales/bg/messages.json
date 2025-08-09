@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Генерирай Аудио"
   },
+  "removeFillerWordsLabel": {
+    "description": "Етикет за превключвателя, който активира функцията за премахване на ненужни думи и фалшиви започвания от транскрипти, базирана на ИИ.",
+    "message": "Премахни ненужни думи (бета)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Подсказка, описваща как работи опцията Премахване на ненужни думи.",
+    "message": "Премахва \"ъ\", \"мм\", повторени думи и друг вербален шум. Запазва значението, пунктуацията и форматирането."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Сподели анализи"

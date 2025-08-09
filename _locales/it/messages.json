@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Genera audio"
   },
+  "removeFillerWordsLabel": {
+    "description": "Etichetta per l'attivazione della rimozione di parole riempitive e di incertezze dai trascritti, tramite LLM.",
+    "message": "Rimuovi parole riempitive (beta)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Tooltip che descrive come funziona l'opzione Rimuovi parole riempitive.",
+    "message": "Elimina 'um', 'uh', parole ripetute e altri elementi verbali superflui. Preserva il significato, la punteggiatura e la formattazione."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Condividi analisi"

@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "எங்கும் குரல் தட்டச்சு, Pi & Claude உடன் உரையாடுங்கள். Say, Pi மீதியை செய்யும்."
+    "message": "எங்கும் குரல் தட்டச்சு, Pi \u0026 Claude உடன் உரையாடுங்கள். Say, Pi மீதியை செய்யும்."
   },
   "appName": {
     "description": "The name of the application.",
@@ -593,6 +593,14 @@
   "regenerateButtonTitleFree": {
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "ஆடியோ உருவாக்கு"
+  },
+  "removeFillerWordsLabel": {
+    "description": "பதிவுகளில் கூடுதல் சொற்கள் மற்றும் தவறான ஆரம்பங்களை அகற்ற LLM-ஆய்வு திறனைக் கொண்ட விருப்பத்தை இயக்குவதற்கான லேபிள்.",
+    "message": "கூடுதல் சொற்களை அகற்று (பீட்டா)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "கூடுதல் சொற்களை அகற்றும் விருப்பம் எப்படி செயல்படுகிறது என்பதை விளக்கும் டூல்டிப்.",
+    "message": "உம், அஹ், மீண்டும் வரும் சொற்கள் மற்றும் பிற வாய்மொழி செயல்களை நீக்குகிறது. அர்த்தம், குறியாக்கம் மற்றும் வடிவமைப்பை பாதுகாக்கிறது."
   },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",

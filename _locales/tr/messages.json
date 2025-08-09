@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Ses Oluştur"
   },
+  "removeFillerWordsLabel": {
+    "description": "Transkriptlerden gereksiz kelimelerin ve yanlış başlangıçların LLM destekli olarak kaldırılmasını etkinleştirmek için etiket.",
+    "message": "Gereksiz kelimeleri kaldır (beta)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Gereksiz kelimeleri kaldır seçeneğinin nasıl çalıştığını açıklayan ipucu.",
+    "message": "Hımm, ıhh, tekrarlanan kelimeler ve diğer sözsel karmaşayı siler. Anlamı, noktalama işaretlerini ve biçimlendirmeyi korur."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Analitikleri paylaş"

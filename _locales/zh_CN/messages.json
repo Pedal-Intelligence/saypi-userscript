@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "生成音频"
   },
+  "removeFillerWordsLabel": {
+    "description": "启用 LLM 驱动的去除稿件中的填充词和错误启动的切换标签说明。",
+    "message": "去除填充词（测试版）"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "描述“去除填充词”选项如何工作的提示。",
+    "message": "删除“嗯”、“啊”、重复词汇和其他语言杂音。保留意义、标点和格式。"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "分享分析"

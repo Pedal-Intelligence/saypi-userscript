@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Gerar Áudio"
   },
+  "removeFillerWordsLabel": {
+    "description": "Rótulo para o botão que ativa a remoção de palavras preenchimento e inícios falsos dos transcrições com o suporte de LLM.",
+    "message": "Remover palavras preenchimento (beta)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Dica explicando como a opção de Remover palavras preenchimento funciona.",
+    "message": "Remove ums, uhs, palavras repetidas e outras desordens verbais. Preserva o significado, a pontuação e a formatação."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Compartilhar análises"

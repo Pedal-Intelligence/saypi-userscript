@@ -81,6 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   const vadStatusIndicatorEnabledInput = document.getElementById("vad-status-indicator-enabled");
+  const removeFillerWordsInput = document.getElementById("remove-filler-words");
 
   // Load the saved preference when the popup opens
   getStoredValue("prefer", "balanced").then((prefer) => {
@@ -497,6 +498,30 @@ document.addEventListener("DOMContentLoaded", function () {
           this.parentElement.classList.remove("checked");
         }
         message({ vadStatusIndicatorEnabled: this.checked });
+      });
+    }
+
+    // Handle Remove Filler Words toggle (default false)
+    if (removeFillerWordsInput) {
+      getStoredValue("removeFillerWords", false).then((enabled) => {
+        selectInput(removeFillerWordsInput, enabled);
+        if (enabled) {
+          removeFillerWordsInput.parentElement.classList.add("checked");
+        } else {
+          removeFillerWordsInput.parentElement.classList.remove("checked");
+        }
+      });
+
+      removeFillerWordsInput.addEventListener("change", function () {
+        chrome.storage.local.set({ removeFillerWords: this.checked }, function () {
+          console.log("Preference saved: Remove filler words is " + (removeFillerWordsInput.checked ? "on" : "off"));
+        });
+        if (this.checked) {
+          this.parentElement.classList.add("checked");
+        } else {
+          this.parentElement.classList.remove("checked");
+        }
+        message({ removeFillerWords: this.checked });
       });
     }
   }

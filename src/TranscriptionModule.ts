@@ -480,5 +480,13 @@ async function constructTranscriptionFormData(
     formData.append("inputLabel", inputLabel);
   }
 
+  // Remove filler words preference (always send if enabled; server decides applicability)
+  stepStartTime = Date.now();
+  const removeFiller = userPreferences.getCachedRemoveFillerWords();
+  logStepDuration("userPreferences.getCachedRemoveFillerWords", stepStartTime);
+  if (removeFiller) {
+    formData.append("removeFillerWords", "true");
+  }
+
   return formData;
 }

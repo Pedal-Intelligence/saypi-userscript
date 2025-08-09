@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "অডিও তৈরি করুন"
   },
+  "removeFillerWordsLabel": {
+    "description": "টগলটি LLM-চালিত ফিলার শব্দ এবং ভূল শুরু মুছে ফেলার জন্য একটি লেবেল।",
+    "message": "ফিলার শব্দ মুছুন (বিটা)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "ফিলার শব্দ অপশনটি কিভাবে কাজ করে তা ব্যাখ্যা করা টুলটিপ।",
+    "message": "মুছে ফেলবে মেঘ, আহ, পুনরাবৃত্ত শব্দ এবং অন্যান্য মৌখিক বিশৃঙ্খলা। অর্থ, ব্যাকরণ এবং বিন্যাস রেখে দেয়।"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "অ্যানালিটিক্স শেয়ার করুন"

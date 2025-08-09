@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Generovat zvuk"
   },
+  "removeFillerWordsLabel": {
+    "description": "Štítek pro přepínač, který umožňuje odstranění zbytečných slov a falešných začátků z přepisů pomocí LLM.",
+    "message": "Odstranit zbytečná slova (beta)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Nápověda popisující, jak možnost Odstranit zbytečná slova funguje.",
+    "message": "Odstraní 'um', 'uh', opakovaná slova a další verbální nečistoty. Zachovává význam, interpunkci a formátování."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Sdílet analytiku"

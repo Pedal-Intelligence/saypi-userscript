@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Generiraj Audio"
   },
+  "removeFillerWordsLabel": {
+    "description": "Oznaka za prekidač koji omogućuje uklanjanje riječi koje nisu bitne i lažnih početaka iz transkripata pomoću LLM-a.",
+    "message": "Ukloni riječi koje nisu bitne (beta)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Savjetnik koji opisuje kako opcija Ukloni riječi koje nisu bitne funkcionira.",
+    "message": "Briše um-ove, uh-ove, ponovljene riječi i ostale verbalne neurednosti. Održava značenje, interpunkciju i formatiranje."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Podijeli analitiku"

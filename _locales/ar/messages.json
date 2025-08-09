@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "توليد الصوت"
   },
+  "removeFillerWordsLabel": {
+    "description": "علامة للتبديل لتمكين إزالة الكلمات الزائدة والبدايات الخاطئة من النصوص باستخدام الذكاء الاصطناعي.",
+    "message": "إزالة الكلمات الزائدة (نسخة تجريبية)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "تلميح يصف كيفية عمل خيار إزالة الكلمات الزائدة.",
+    "message": "يحذف أصوات مثل 'إمم' و 'أه' والكلمات المتكررة وغيرها من الفوضى اللفظية. يحافظ على المعنى وعلامات الترقيم والتنسيق."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "شارك التحليلات"

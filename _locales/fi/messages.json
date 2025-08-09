@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Luo ääntä"
   },
+  "removeFillerWordsLabel": {
+    "description": "Kytkimen etiketti, joka mahdollistaa LLM-teknologian käyttöä täytesanojen ja virheellisten aloittamisten poistamiseen transkripteistä.",
+    "message": "Poista täytesanat (beta)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Tooltip, joka kuvaa, miten täytesanojen poistovaihtoehto toimii.",
+    "message": "Poistaa 'um', 'uh', toistuvat sanat ja muut sanalliset häiriöt. Säilyttää merkityksen, välimerkit ja asettelu."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Jaa analytiikka"

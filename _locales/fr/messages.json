@@ -594,6 +594,14 @@
     "description": "The title of the button to regenerate the audio of a message. May incur an indeterminate cost.",
     "message": "Générer de l'audio"
   },
+  "removeFillerWordsLabel": {
+    "description": "Étiquette pour le basculement permettant la suppression des mots de remplissage et des faux départs des transcriptions par LLM.",
+    "message": "Supprimer les mots de remplissage (bêta)"
+  },
+  "removeFillerWordsTooltip": {
+    "description": "Infobulle décrivant le fonctionnement de l'option Supprimer les mots de remplissage.",
+    "message": "Supprime les 'euh', les répétitions de mots et autres superfluités verbales. Préserve le sens, la ponctuation et la mise en forme."
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Partager les analyses"
