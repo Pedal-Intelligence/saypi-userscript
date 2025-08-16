@@ -81,6 +81,39 @@ export function likelySupportsOffscreen(): boolean {
   return true;
 }
 
+function applyMotionPreferences(): void {
+  try {
+    const prefersReduced = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const lowDeviceMemory = typeof (navigator as any).deviceMemory === "number" && (navigator as any).deviceMemory <= 2;
+    const lowCores = typeof navigator.hardwareConcurrency === "number" && navigator.hardwareConcurrency <= 2;
+    const root = document.documentElement;
+
+    if (prefersReduced || lowDeviceMemory || lowCores) {
+      root.classList.add("low-motion");
+    } else {
+      root.classList.remove("low-motion");
+    }
+
+    if (typeof window.matchMedia === "function") {
+      const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+      if (typeof (mq as any).addEventListener === "function") {
+        (mq as any).addEventListener("change", (e: MediaQueryListEvent) => {
+          if (e.matches) root.classList.add("low-motion");
+          else root.classList.remove("low-motion");
+        });
+      } else if (typeof (mq as any).addListener === "function") {
+        // Fallback for older browsers
+        (mq as any).addListener((e: MediaQueryListEvent) => {
+          if (e.matches) root.classList.add("low-motion");
+          else root.classList.remove("low-motion");
+        });
+      }
+    }
+  } catch (_e) {
+    // no-op
+  }
+}
+
 export function addUserAgentFlags(): void {
   const isFirefoxAndroid: boolean =
     /Firefox/.test(navigator.userAgent) && /Android/.test(navigator.userAgent);
@@ -92,6 +125,9 @@ export function addUserAgentFlags(): void {
 
   addDeviceFlags(element);
   //addViewFlags(element); // redundant, as this is called in initMode
+
+  // Apply motion preferences (reduced-motion and low-motion heuristic)
+  applyMotionPreferences();
 }
 
 export function addDeviceFlags(element: HTMLElement): void {
