@@ -24,6 +24,37 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
 (async function () {
   "use strict";
 
+  function applyMotionPreferences() {
+    try {
+      const prefersReduced = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const lowDeviceMemory = typeof navigator.deviceMemory === "number" && navigator.deviceMemory <= 2;
+      const lowCores = typeof navigator.hardwareConcurrency === "number" && navigator.hardwareConcurrency <= 2;
+      const root = document.documentElement;
+      if (prefersReduced || lowDeviceMemory || lowCores) {
+        root.classList.add("low-motion");
+      } else {
+        root.classList.remove("low-motion");
+      }
+      if (typeof window.matchMedia === "function") {
+        const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+        if (typeof mq.addEventListener === "function") {
+          mq.addEventListener("change", (e) => {
+            if (e.matches) root.classList.add("low-motion");
+            else root.classList.remove("low-motion");
+          });
+        } else if (typeof mq.addListener === "function") {
+          // Fallback for older browsers
+          mq.addListener((e) => {
+            if (e.matches) root.classList.add("low-motion");
+            else root.classList.remove("low-motion");
+          });
+        }
+      }
+    } catch (_e) {
+      // no-op
+    }
+  }
+
   // Determine the mode based on the current site
   const chatbotType = ChatbotIdentifier.identifyChatbot();
   const isChatbotSite = chatbotType === "claude" || chatbotType === "pi";
@@ -40,6 +71,7 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
 
   // Common initialization for both modes
   addUserAgentFlags();
+  applyMotionPreferences();
   await ChatbotService.addChatbotFlags();
   
   // Initialize JWT manager

@@ -477,3 +477,25 @@ html.immersive-view {
     will-change: transform;
   }
 }
+
+/* Reduced motion support: disable animations entirely when user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .outermost,
+  .second,
+  .third,
+  .fourth,
+  .fifth,
+  .innermost {
+    animation: none !important;
+  }
+}
+
+/* Heuristic low-motion mode for low-end devices: disable baseline idle pulsing (but keep event-driven animations) */
+html.low-motion .outermost:not(.piThinking):not(.piSpeaking):not(.userSpeaking):not(.transcribing):not(.error),
+html.low-motion .second:not(.piThinking):not(.piSpeaking):not(.userSpeaking):not(.transcribing):not(.error),
+html.low-motion .third:not(.piThinking):not(.piSpeaking):not(.userSpeaking):not(.transcribing):not(.error),
+html.low-motion .fourth:not(.piThinking):not(.piSpeaking):not(.userSpeaking):not(.transcribing):not(.error),
+html.low-motion .fifth:not(.piThinking):not(.piSpeaking):not(.userSpeaking):not(.transcribing):not(.error),
+html.low-motion .innermost:not(.piThinking):not(.piSpeaking):not(.userSpeaking):not(.transcribing):not(.error) {
+  animation: none !important;
+}
