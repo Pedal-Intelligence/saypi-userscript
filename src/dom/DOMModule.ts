@@ -79,3 +79,95 @@ export function createSVGElement(svgString: string): SVGElement {
       svgString.slice(0, 100)
   );
 }
+
+/**
+ * Compute caret-relative context around the current cursor for the target element.
+ * Produces text immediately before and after the caret (clipped), plus the absolute
+ * cursor position within the element's plain text content.
+ */
+export function getCaretContext(
+  target: HTMLElement,
+  clipChars: number = 800
+): { fieldTextBefore?: string; fieldTextAfter?: string; cursorPosition?: number } {
+  const fullText = getElementText(target);
+
+  // Helper to slice with bounds checking
+  const sliceAround = (text: string, pos: number) => {
+    const start = Math.max(0, pos - clipChars);
+    const end = Math.min(text.length, pos + clipChars);
+    return {
+      before: text.slice(start, pos),
+      after: text.slice(pos, end),
+    };
+  };
+
+  // Inputs and textareas have reliable selection APIs
+  if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) {
+    const value = (target as HTMLInputElement | HTMLTextAreaElement).value || "";
+    const caret = typeof target.selectionStart === "number" && target.selectionStart !== null
+      ? target.selectionStart
+      : value.length;
+    const { before, after } = sliceAround(value, caret);
+    return { fieldTextBefore: before, fieldTextAfter: after, cursorPosition: caret };
+  }
+
+  // Contenteditable: approximate using DOM Range up to caret
+  if (target.contentEditable === "true") {
+    try {
+      const selection = window.getSelection();
+      if (selection && selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        // Ensure the caret is inside the target element
+        if (target.contains(range.endContainer)) {
+          const preRange = range.cloneRange();
+          preRange.selectNodeContents(target);
+          preRange.setEnd(range.endContainer, range.endOffset);
+          const caretPos = preRange.toString().length;
+          const { before, after } = sliceAround(fullText, caretPos);
+          return { fieldTextBefore: before, fieldTextAfter: after, cursorPosition: caretPos };
+        }
+      }
+    } catch (_) {
+      // fall through to default below
+    }
+    // Fallback: assume caret at end
+    const caretPos = fullText.length;
+    const { before, after } = sliceAround(fullText, caretPos);
+    return { fieldTextBefore: before, fieldTextAfter: after, cursorPosition: caretPos };
+  }
+
+  // Unknown element type: provide no context
+  return {};
+}
+
+/**
+ * Normalises textual content of inputs, textareas, and contenteditable elements.
+ */
+function getElementText(targetElement?: HTMLElement): string {
+  if (!targetElement) return "";
+
+  if (
+    targetElement instanceof HTMLInputElement ||
+    targetElement instanceof HTMLTextAreaElement
+  ) {
+    return targetElement.value || "";
+  }
+
+  if (targetElement.contentEditable === "true") {
+    const innerHTML = targetElement.innerHTML || '';
+    let normalizedHTML = innerHTML
+      .replace(/<br\s*\/?>(\s*)<br\s*\/?>(?![^]*<br\s*\/?)/gi, '\n');
+    let contentWithNewlines = normalizedHTML
+      .replace(/<br\s*\/?/gi, '\n')
+      .replace(/<div>/gi, '\n')
+      .replace(/<\/div>/gi, '')
+      .replace(/<[^>]*>/g, '')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&amp;/g, '&');
+    return contentWithNewlines;
+  }
+
+  return "";
+}

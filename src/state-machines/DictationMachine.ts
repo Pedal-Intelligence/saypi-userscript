@@ -13,6 +13,7 @@ import {
   getCurrentSequenceNumber,
 } from "../TranscriptionModule";
 import { config } from "../ConfigModule";
+import { getCaretContext } from "../dom/DOMModule";
 import EventBus from "../events/EventBus.js";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import TranscriptionErrorManager from "../error-management/TranscriptionErrorManager";
@@ -389,6 +390,7 @@ function uploadAudioSegment(
   // Extract input context for dictation mode
   const { inputType, inputLabel } = getInputContext(finalTarget);
   console.debug(`Input context for transcription: type="${inputType}", label="${inputLabel}"`);
+  const { fieldTextBefore, fieldTextAfter, cursorPosition } = getCaretContext(finalTarget);
 
   uploadAudioWithRetry(
     audioBlob,
@@ -399,7 +401,10 @@ function uploadAudioSegment(
     captureTimestamp,
     clientReceiveTimestamp,
     inputType || undefined,
-    inputLabel || undefined
+    inputLabel || undefined,
+    fieldTextBefore,
+    fieldTextAfter,
+    cursorPosition
   ).then((sequenceNum) => {
     console.debug(`Sent transcription ${sequenceNum} to target`, finalTarget);
     if (sequenceNum !== expectedSequenceNumber) {

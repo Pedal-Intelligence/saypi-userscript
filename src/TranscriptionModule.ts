@@ -181,6 +181,9 @@ export async function uploadAudioWithRetry(
   clientReceiveTimestamp?: number,
   inputType?: string,
   inputLabel?: string,
+  fieldTextBefore?: string,
+  fieldTextAfter?: string,
+  cursorPosition?: number,
 ): Promise<number> {
   let retryCount = 0;
   let delay = 1000; // initial delay of 1 second
@@ -212,7 +215,10 @@ export async function uploadAudioWithRetry(
         transcriptionStartTimestamp,
         usedSequenceNumber,
         inputType,
-        inputLabel
+        inputLabel,
+        fieldTextBefore,
+        fieldTextAfter,
+        cursorPosition
       );
       return usedSequenceNumber;
     } catch (error) {
@@ -269,7 +275,10 @@ async function uploadAudio(
   transcriptionStartTimestamp?: number,
   sequenceNumber?: number,
   inputType?: string,
-  inputLabel?: string
+  inputLabel?: string,
+  fieldTextBefore?: string,
+  fieldTextAfter?: string,
+  cursorPosition?: number
 ): Promise<void> {
   try {
     const messages = Object.entries(precedingTranscripts).map(
@@ -295,7 +304,10 @@ async function uploadAudio(
       chatbot,
       sequenceNumber,
       inputType,
-      inputLabel
+      inputLabel,
+      fieldTextBefore,
+      fieldTextAfter,
+      cursorPosition
     );
     logStepDuration("constructTranscriptionFormData (total)", stepStartTime);
     
@@ -415,7 +427,10 @@ async function constructTranscriptionFormData(
   chatbot?: any,
   sequenceNumber?: number,
   inputType?: string,
-  inputLabel?: string
+  inputLabel?: string,
+  fieldTextBefore?: string,
+  fieldTextAfter?: string,
+  cursorPosition?: number
 ) {
   const formData = new FormData();
   let audioFilename = "audio.webm";
@@ -478,6 +493,17 @@ async function constructTranscriptionFormData(
   }
   if (inputLabel) {
     formData.append("inputLabel", inputLabel);
+  }
+
+  // Add field context around caret for improved formatting on server
+  if (typeof fieldTextBefore === "string" && fieldTextBefore.length > 0) {
+    formData.append("fieldTextBefore", fieldTextBefore);
+  }
+  if (typeof fieldTextAfter === "string" && fieldTextAfter.length > 0) {
+    formData.append("fieldTextAfter", fieldTextAfter);
+  }
+  if (typeof cursorPosition === "number" && !Number.isNaN(cursorPosition)) {
+    formData.append("cursorPosition", String(cursorPosition));
   }
 
   // Remove filler words preference (always send if enabled; server decides applicability)
