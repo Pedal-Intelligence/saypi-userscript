@@ -47,3 +47,6 @@ public/permissions/*
 
 # Build-generated configuration files
 src/popup/popup-config.js
+
+# Background documentation
+scripts/rrempel.md
