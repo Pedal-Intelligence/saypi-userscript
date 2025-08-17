@@ -70,10 +70,12 @@ class ButtonModule {
   }
 
   updateIconContent(iconContainer) {
-    if (ImmersionStateChecker.isViewImmersive()) {
-      iconContainer.appendChild(this.icons.rectangles());
-    }
     iconContainer.classList.add("saypi-icon");
+    if (ImmersionStateChecker.isViewImmersive()) {
+      iconContainer.replaceChildren(this.icons.rectangles());
+    } else {
+      iconContainer.replaceChildren();
+    }
   }
 
   setupViewObserver(container) {
