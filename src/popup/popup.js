@@ -140,15 +140,31 @@ document.addEventListener("DOMContentLoaded", function () {
         // Only create the toggle if it doesn't already exist
         if (!document.getElementById("auto-submit-preference")) {
           // Create a simple auto-submit toggle switch instead
-          autoSubmitToggle.innerHTML = `
-            <label class="wraper" for="auto-submit">
-              <span class="label-text" data-i18n="autoSubmit">Auto-submit</span>
-              <div class="switch-wrap control">
-                <input type="checkbox" id="auto-submit" name="autoSubmit" />
-                <div class="switch"></div>
-              </div>
-            </label>
-          `;
+          const label = document.createElement("label");
+          label.className = "wraper";
+          label.setAttribute("for", "auto-submit");
+          
+          const labelText = document.createElement("span");
+          labelText.className = "label-text";
+          labelText.setAttribute("data-i18n", "autoSubmit");
+          labelText.textContent = "Auto-submit";
+          
+          const switchWrap = document.createElement("div");
+          switchWrap.className = "switch-wrap control";
+          
+          const input = document.createElement("input");
+          input.type = "checkbox";
+          input.id = "auto-submit";
+          input.name = "autoSubmit";
+          
+          const switchDiv = document.createElement("div");
+          switchDiv.className = "switch";
+          
+          switchWrap.appendChild(input);
+          switchWrap.appendChild(switchDiv);
+          label.appendChild(labelText);
+          label.appendChild(switchWrap);
+          autoSubmitToggle.appendChild(label);
           
           // Insert after the language preference
           const languagePreference = document.getElementById("language-preference");
