@@ -1,14 +1,13 @@
 // import state machines for audio input and output
 import { interpret } from "xstate";
 import { audioInputMachine } from "../state-machines/AudioInputMachine.ts";
-import { audioOutputMachine } from "../state-machines/AudioOutputMachine.ts";
 import { voiceConverterMachine } from "../state-machines/VoiceConverter.ts";
+import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier.ts";
 import { machine as audioRetryMachine } from "../state-machines/AudioRetryMachine.ts";
 import { logger, serializeStateValue } from "../LoggingModule.js";
 import EventBus from "../events/EventBus.js";
 import { isSafari } from "../UserAgentModule.ts";
-import SlowResponseHandler from "../SlowResponseHandler.ts";
-import { SlowResponseHandlerAdapter } from "./SlowResponseHandlerAdapter.js";
+// SlowResponseHandler and adapter are imported dynamically for Pi.ai only
 import { CacheBuster } from "../CacheBuster.ts";
 import { UserPreferenceModule } from "../prefs/PreferenceModule.ts";
 import { ChatbotService } from "../chatbots/ChatbotService.ts";
@@ -29,18 +28,14 @@ export default class AudioModule {
     this.offscreenBridge = OffscreenAudioBridge.getInstance();
     this.useOffscreenAudio = false; // Will be set in start() based on bridge.isSupported()
 
-    this.audioOutputActor = interpret(audioOutputMachine);
-    this.audioOutputActor.onTransition((state) => {
-      if (state.changed) {
-        const fromState = state.history
-          ? serializeStateValue(state.history.value)
-          : "N/A";
-        const toState = serializeStateValue(state.value);
-        logger.debug(
-          `Audio Output Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
-        );
-      }
-    });
+    // Only initialize audio output machine for chatbot sites that need TTS
+    this.audioOutputActor = null;
+    this.needsAudioOutput = ChatbotIdentifier.isInChatMode();
+    
+    if (this.needsAudioOutput) {
+      // Dynamically import and initialize audio output machine only when needed
+      this.initializeAudioOutputMachine();
+    }
 
     this.audioInputActor = interpret(audioInputMachine);
     this.audioInputActor.onTransition((state) => {
@@ -97,6 +92,29 @@ export default class AudioModule {
     return AudioModule.instance;
   }
 
+  async initializeAudioOutputMachine() {
+    try {
+      // Dynamically import the audio output machine only when needed
+      const { audioOutputMachine } = await import("../state-machines/AudioOutputMachine.ts");
+      
+      this.audioOutputActor = interpret(audioOutputMachine);
+      this.audioOutputActor.onTransition((state) => {
+        if (state.changed) {
+          const fromState = state.history
+            ? serializeStateValue(state.history.value)
+            : "N/A";
+          const toState = serializeStateValue(state.value);
+          logger.debug(
+            `Audio Output Machine transitioned from ${fromState} to ${toState} with ${state.event.type}`
+          );
+        }
+      });
+    } catch (error) {
+      logger.error("[AudioModule] Failed to initialize audio output machine:", error);
+      this.needsAudioOutput = false;
+    }
+  }
+
   async start() {
     try {
       // Initialize offscreen bridge and check if supported
@@ -115,7 +133,9 @@ export default class AudioModule {
       }
       
       // Start all state machines
-      this.audioOutputActor.start();
+      if (this.audioOutputActor) {
+        this.audioOutputActor.start();
+      }
       this.audioInputActor.start();
       this.voiceConverter.start();
       if (isSafari()) {
@@ -134,7 +154,9 @@ export default class AudioModule {
       this.initializeVoiceConverter();
 
       // Register EventBus listeners for offscreen audio events and forward them to audio actors
-      this.registerOffscreenAudioEvents(this.audioOutputActor);
+      if (this.audioOutputActor) {
+        this.registerOffscreenAudioEvents(this.audioOutputActor);
+      }
     } catch (error) {
       logger.error("[AudioModule] Error during start:", error);
       // Fallback to in-page audio if there was an error with offscreen initialization
@@ -146,7 +168,9 @@ export default class AudioModule {
       this.registerLifecycleDebug();
       
       // Start state machines and register commands
-      this.audioOutputActor.start();
+      if (this.audioOutputActor) {
+        this.audioOutputActor.start();
+      }
       this.audioInputActor.start();
       this.voiceConverter.start();
       this.registerAudioCommands(this.audioInputActor, this.audioOutputActor, this.voiceConverter);
@@ -157,7 +181,9 @@ export default class AudioModule {
       
       // Register EventBus listeners for offscreen audio events even in fallback mode
       // (in case we switch back to offscreen audio later)
-      this.registerOffscreenAudioEvents(this.audioOutputActor);
+      if (this.audioOutputActor) {
+        this.registerOffscreenAudioEvents(this.audioOutputActor);
+      }
     }
   }
 
@@ -168,14 +194,18 @@ export default class AudioModule {
   initialiseOnscreenAudio() {
     this.findAndDecorateAudioElement(); // need to ensure an audio element exists before registering event listeners
 
-    // audio output (Pi)
-    this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
+    // audio output (Pi) - only if we need audio output functionality
+    if (this.audioOutputActor) {
+      this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
+    }
     // convert voice for Pi's missing voices - since 2024-09
     this.registerAudioPlaybackEvents(this.audioElement, this.voiceConverter);
-    // handle slow responses from pi.ai - since 2024-07
-    const slowResponseHandler = SlowResponseHandler.getInstance();
-    const slowResponseAdapter = new SlowResponseHandlerAdapter(slowResponseHandler);
-    this.registerAudioErrorEvents(this.audioElement, slowResponseAdapter);
+    
+    // handle slow responses from pi.ai - since 2024-07 (Pi.ai only)
+    if (ChatbotIdentifier.isChatbotType("pi")) {
+      this.initializeSlowResponseHandler();
+    }
+    
     this.registerLifecycleDebug();
 
     // For Safari, register additional error handlers
@@ -203,6 +233,25 @@ export default class AudioModule {
         }
       });
     });
+  }
+
+  async initializeSlowResponseHandler() {
+    try {
+      // Dynamically import SlowResponseHandler modules only for Pi.ai
+      const [SlowResponseHandlerModule, SlowResponseHandlerAdapterModule] = await Promise.all([
+        import("../SlowResponseHandler.ts"),
+        import("./SlowResponseHandlerAdapter.js")
+      ]);
+      
+      const SlowResponseHandler = SlowResponseHandlerModule.default;
+      const { SlowResponseHandlerAdapter } = SlowResponseHandlerAdapterModule;
+      
+      const slowResponseHandler = SlowResponseHandler.getInstance();
+      const slowResponseAdapter = new SlowResponseHandlerAdapter(slowResponseHandler);
+      this.registerAudioErrorEvents(this.audioElement, slowResponseAdapter);
+    } catch (error) {
+      logger.error("[AudioModule] Failed to initialize slow response handler:", error);
+    }
   }
 
   findAudioElement(searchRoot) {
@@ -237,11 +286,15 @@ export default class AudioModule {
 
     this.audioElement = newAudioElement;
     this.decorateAudioElement(this.audioElement);
-    this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
+    if (this.audioOutputActor) {
+      this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
+    }
     this.registerAudioPlaybackEvents(this.audioElement, this.voiceConverter);
-    const slowResponseHandler = SlowResponseHandler.getInstance();
-    const slowResponseAdapter = new SlowResponseHandlerAdapter(slowResponseHandler);
-    this.registerAudioErrorEvents(this.audioElement, slowResponseAdapter);
+    
+    // handle slow responses from pi.ai - since 2024-07 (Pi.ai only)
+    if (ChatbotIdentifier.isChatbotType("pi")) {
+      this.initializeSlowResponseHandler();
+    }
     if (isSafari()) {
       this.registerAudioPlaybackEvents(this.audioElement, this.audioRetryActor);
       this.registerSourceChangeEvents(this.audioElement, this.audioRetryActor);
@@ -451,7 +504,9 @@ export default class AudioModule {
 
     EventBus.on("audio:startRecording", function (e) {
       // Check if Pi is currently speaking and stop her audio
-      outputActor.send("pause");
+      if (outputActor) {
+        outputActor.send("pause");
+      }
 
       // Check if the microphone is acquired before starting?
       inputActor.send(["acquire", "start"]);
@@ -475,15 +530,21 @@ export default class AudioModule {
 
     // audio output (playback) commands
     EventBus.on("audio:changeProvider", (detail) => {
-      outputActor.send({ type: "changeProvider", ...detail });
+      if (outputActor) {
+        outputActor.send({ type: "changeProvider", ...detail });
+      }
     });
     EventBus.on("audio:changeVoice", (detail) => {
-      outputActor.send({ type: "changeVoice", ...detail });
+      if (outputActor) {
+        outputActor.send({ type: "changeVoice", ...detail });
+      }
       voiceConverter.send({ type: "changeVoice", ...detail });
     });
     EventBus.on("audio:skipNext", (e) => {
       console.debug("Skipping next audio");
-      outputActor.send("skipNext");
+      if (outputActor) {
+        outputActor.send("skipNext");
+      }
     });
     EventBus.on("audio:skipCurrent", async (e) => {
       // pause both offscreen and onscreen audio
@@ -516,7 +577,9 @@ export default class AudioModule {
 
     EventBus.on("saypi:tts:replaying", (e) => {
       // notify the audio output machine that the next audio is a replay
-      outputActor.send("replaying");
+      if (outputActor) {
+        outputActor.send("replaying");
+      }
     });
   }
 
