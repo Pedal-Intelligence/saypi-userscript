@@ -263,6 +263,11 @@ class SpeechSynthesisModule {
    * @returns {Promise<AudioProvider>}
    */
   async getActiveAudioProvider(): Promise<AudioProvider> {
+    // For dictation mode (non-chatbot sites), return None provider to prevent audio interference
+    if (ChatbotIdentifier.isInDictationMode()) {
+      return audioProviders.None;
+    }
+    
     const userHasSavedAVoicePreference = await this.userPreferences.hasVoice();
     // custom voice can be a multi-language voice by SayPi (e.g. Paola and Joey), or an "extra" voice by Pi (i.e. Pi 7 and Pi 8)
     const voice = await this.userPreferences.getVoice();
@@ -270,7 +275,8 @@ class SpeechSynthesisModule {
     if (voicePreferenceIsAvailable) {
       return audioProviders.retreiveProviderByVoice(voice!); // voice is not null if customVoiceIsSelected is true
     }
-    return audioProviders.Pi;
+    // Use centralized default provider logic instead of hardcoded Pi fallback
+    return audioProviders.getDefault();
   }
 
   private isStreamOpen(utteranceId: string): boolean {

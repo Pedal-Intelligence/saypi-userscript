@@ -35,9 +35,20 @@ class BaseAudioProvider implements AudioProvider {
   }
 }
 
+class NoneAudioProvider implements AudioProvider {
+  name: string = "None";
+  domain: string = "";
+
+  matches(source: string): boolean {
+    // Never matches any source - no audio interference
+    return false;
+  }
+}
+
 const audioProviders = {
   SayPi: new BaseAudioProvider("Say, Pi", saypiAudioDomain),
   Pi: new BaseAudioProvider("Pi", "pi.ai"),
+  None: new NoneAudioProvider(),
   // Add more providers as needed
 
   // function to get the provider from the text to speech engine name
@@ -65,8 +76,11 @@ const audioProviders = {
         return audioProviders.Pi;
       case "claude":
         return audioProviders.SayPi;
+      case "web":
+        // Dictation mode - no audio output interference
+        return audioProviders.None;
       default:
-        return audioProviders.SayPi; // Default fallback
+        return audioProviders.None; // Safe fallback - no interference
     }
   }
 };
@@ -147,7 +161,7 @@ function isFailedUtterance(utterance: SpeechUtterance | string): boolean {
 class SpeechPlaceholder extends BaseSpeechUtterance {
   constructor(lang: string, provider: AudioProvider) {
     super(
-      "placeholder-" + Math.random().toString(36).substr(2, 9),
+      "placeholder-" + Math.random().toString(36).substring(2, 11),
       lang,
       placeholderVoice,
       "",
