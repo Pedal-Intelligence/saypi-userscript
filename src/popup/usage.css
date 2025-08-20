@@ -16,7 +16,7 @@
 
 .quota-progress .progress-bar {
   display: flex;
-  height: 12px;
+  height: 8px;
   border-radius: 6px;
   overflow: hidden;
   background-color: #e5e7eb; /* gray-200 - background for the entire bar */
@@ -30,7 +30,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: white;
   font-weight: 600;
   text-shadow: 0 0 3px rgba(0, 0, 0, 0.7);

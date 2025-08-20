@@ -150,10 +150,11 @@ document.addEventListener("DOMContentLoaded", function () {
             </label>
           `;
           
-          // Insert after the language preference
-          const languagePreference = document.getElementById("language-preference");
-          if (languagePreference && languagePreference.parentNode) {
-            languagePreference.parentNode.insertBefore(autoSubmitToggle, languagePreference.nextSibling);
+          // Insert into the AI Chat tab (next to the submit mode selector)
+          const chatTab = document.getElementById("tab-chat");
+          if (chatTab) {
+            const insertionPoint = document.getElementById("submit-mode-selector") || chatTab.firstChild;
+            chatTab.insertBefore(autoSubmitToggle, insertionPoint ? insertionPoint.nextSibling : null);
           }
           
           // Set up the auto-submit toggle switch
@@ -612,14 +613,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Call refreshAuthUI when popup opens to update the authentication UI
   refreshAuthUI();
 
-  // Add click handler for view quota details link
-  document.getElementById('view-quota-details').addEventListener('click', function(e) {
-    e.preventDefault();
-    const dashboardUrl = config && config.authServerUrl 
-      ? `${config.authServerUrl}/app/dashboard` 
-      : 'https://www.saypi.ai/app/dashboard';
-    window.open(dashboardUrl, '_blank');
-  });
+  // View details link handled in status-subscription.js
 
   // Load the saved nickname when the popup opens
   const nicknameInput = document.getElementById("assistant-nickname");

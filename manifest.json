@@ -13,7 +13,7 @@
     "downloads"
   ],
   "host_permissions": [
-    "https://api.saypi.ai/*",
+    "https://localhost:5001/*",
     "https://www.saypi.ai/*"
   ],
   "content_scripts": [
@@ -28,6 +28,7 @@
     },
     {
       "matches": [
+        "file://*/*",
         "http://*/*",
         "https://*/*"
       ],
@@ -86,6 +87,7 @@
         "public/permissions/*.css"
       ],
       "matches": [
+        "file://*/*",
         "http://*/*",
         "https://*/*"
       ]
@@ -94,7 +96,7 @@
   "author": "Ross Cadogan",
   "homepage_url": "https://www.saypi.ai",
   "action": {
-    "default_popup": "src/popup/popup.html"
+    "default_title": "Say, Pi"
   },
   "default_locale": "en",
   "browser_specific_settings": {
