@@ -7,8 +7,7 @@ import { machine as audioRetryMachine } from "../state-machines/AudioRetryMachin
 import { logger, serializeStateValue } from "../LoggingModule.js";
 import EventBus from "../events/EventBus.js";
 import { isSafari } from "../UserAgentModule.ts";
-import SlowResponseHandler from "../SlowResponseHandler.ts";
-import { SlowResponseHandlerAdapter } from "./SlowResponseHandlerAdapter.js";
+// SlowResponseHandler and adapter are imported dynamically for Pi.ai only
 import { CacheBuster } from "../CacheBuster.ts";
 import { UserPreferenceModule } from "../prefs/PreferenceModule.ts";
 import { ChatbotService } from "../chatbots/ChatbotService.ts";
@@ -201,10 +200,12 @@ export default class AudioModule {
     }
     // convert voice for Pi's missing voices - since 2024-09
     this.registerAudioPlaybackEvents(this.audioElement, this.voiceConverter);
-    // handle slow responses from pi.ai - since 2024-07
-    const slowResponseHandler = SlowResponseHandler.getInstance();
-    const slowResponseAdapter = new SlowResponseHandlerAdapter(slowResponseHandler);
-    this.registerAudioErrorEvents(this.audioElement, slowResponseAdapter);
+    
+    // handle slow responses from pi.ai - since 2024-07 (Pi.ai only)
+    if (ChatbotIdentifier.isChatbotType("pi")) {
+      this.initializeSlowResponseHandler();
+    }
+    
     this.registerLifecycleDebug();
 
     // For Safari, register additional error handlers
@@ -232,6 +233,25 @@ export default class AudioModule {
         }
       });
     });
+  }
+
+  async initializeSlowResponseHandler() {
+    try {
+      // Dynamically import SlowResponseHandler modules only for Pi.ai
+      const [SlowResponseHandlerModule, SlowResponseHandlerAdapterModule] = await Promise.all([
+        import("../SlowResponseHandler.ts"),
+        import("./SlowResponseHandlerAdapter.js")
+      ]);
+      
+      const SlowResponseHandler = SlowResponseHandlerModule.default;
+      const { SlowResponseHandlerAdapter } = SlowResponseHandlerAdapterModule;
+      
+      const slowResponseHandler = SlowResponseHandler.getInstance();
+      const slowResponseAdapter = new SlowResponseHandlerAdapter(slowResponseHandler);
+      this.registerAudioErrorEvents(this.audioElement, slowResponseAdapter);
+    } catch (error) {
+      logger.error("[AudioModule] Failed to initialize slow response handler:", error);
+    }
   }
 
   findAudioElement(searchRoot) {
@@ -270,9 +290,11 @@ export default class AudioModule {
       this.registerAudioPlaybackEvents(this.audioElement, this.audioOutputActor);
     }
     this.registerAudioPlaybackEvents(this.audioElement, this.voiceConverter);
-    const slowResponseHandler = SlowResponseHandler.getInstance();
-    const slowResponseAdapter = new SlowResponseHandlerAdapter(slowResponseHandler);
-    this.registerAudioErrorEvents(this.audioElement, slowResponseAdapter);
+    
+    // handle slow responses from pi.ai - since 2024-07 (Pi.ai only)
+    if (ChatbotIdentifier.isChatbotType("pi")) {
+      this.initializeSlowResponseHandler();
+    }
     if (isSafari()) {
       this.registerAudioPlaybackEvents(this.audioElement, this.audioRetryActor);
       this.registerSourceChangeEvents(this.audioElement, this.audioRetryActor);

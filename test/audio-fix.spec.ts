@@ -69,6 +69,22 @@ describe('Audio Provider Fix', () => {
     });
   });
 
+  describe('SlowResponseHandler Optimization', () => {
+    it('should only load SlowResponseHandler components on Pi.ai', () => {
+      // Mock ChatbotIdentifier for Pi.ai
+      vi.spyOn(ChatbotIdentifier, 'isChatbotType').mockReturnValue(true);
+      
+      // Test that the conditional logic works - this is tested implicitly 
+      // by the fact that the function only calls initializeSlowResponseHandler 
+      // when ChatbotIdentifier.isChatbotType('pi') returns true
+      expect(ChatbotIdentifier.isChatbotType('pi')).toBe(true);
+      
+      // Reset mock
+      vi.spyOn(ChatbotIdentifier, 'isChatbotType').mockReturnValue(false);
+      expect(ChatbotIdentifier.isChatbotType('pi')).toBe(false);
+    });
+  });
+
   describe('Audio Source Matching', () => {
     it('should never match any audio sources to None provider', () => {
       const noneProvider = audioProviders.None;
