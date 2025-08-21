@@ -68,7 +68,8 @@
     "rxjs": "^7.8.1",
     "serve-handler": "^6.1.5",
     "wasm-feature-detect": "^1.8.0",
-    "xstate": "^4.38.2"
+    "xstate": "^4.38.2",
+    "lucide": "^0.536.0"
   },
   "devDependencies": {
     "@babel/core": "^7.22.9",

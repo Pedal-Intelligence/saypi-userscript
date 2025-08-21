@@ -152,6 +152,7 @@
   align-items: center; justify-content: center;
   background: #e2e8f0;
 }
+.tab-button .icon-circle svg { width: 18px; height: 18px; display: block; }
 .tab-button[data-tab="general"] .icon-circle { background:#e8f6e4; color:#418a2f; }
 .tab-button[data-tab="chat"] .icon-circle { background:#ede9fe; color:#6d28d9; }
 .tab-button[data-tab="dictation"] .icon-circle { background:#dcfce7; color:#15803d; }
