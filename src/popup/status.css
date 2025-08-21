@@ -4,12 +4,7 @@ section#application-status {
     padding: 0;
 }
 
-.status {
-    font-size: 1rem;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 1rem 0;
-}
+.status { font-size: 1rem; margin-left: auto; margin-right: auto; padding: 0.5rem 0; }
 
 .issue h2,
 .status p.normal,
@@ -31,30 +26,31 @@ section#application-status {
     background-size: 1.5rem;
 }
 
-.status p.normal {
-    background-color: green;
-    color: white;
+.status-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 504px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    border: 1px solid #e5e7eb;
 }
+.status-card .status-text { color: #0f172a; font-weight: 600; }
+.status-card.normal .status-icon { background:#dcfce7; color:#15803d; }
+.status-card.unknown .status-icon { background:#ede9fe; color:#6d28d9; }
+.status-card.issue.minor .status-icon { background:#fef9c3; color:#a16207; }
+.status-card.issue.major .status-icon { background:#ffedd5; color:#9a3412; }
+.status-card.issue.critical .status-icon { background:#fee2e2; color:#991b1b; }
+.status-card .status-icon { width: 28px; height: 28px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; }
+.status-card .status-icon svg { width: 18px; height: 18px; display: block; }
 
-.status p.unknown {
-    background-color: #715fd1;
-    color: white;
-}
-
-.status p.issue.major, .issue h2.major {
-    background-color: orange;
-    color: white;
-}
-
-.status p.issue.minor, .issue h2.minor {
-    background-color: rgb(255, 225, 0);
-    color: black;
-}
-
-.status p.issue.critical, .issue h2.critical {
-    background-color: red;
-    color: white;
-}
+/* legacy issue blocks retained for details area */
+.issue h2.major { background-color: orange; color: white; }
+.issue h2.minor { background-color: rgb(255, 225, 0); color: black; }
+.issue h2.critical { background-color: red; color: white; }
 
 .issue ul {
     list-style-type: none;

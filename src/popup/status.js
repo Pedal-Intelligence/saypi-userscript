@@ -11,22 +11,57 @@ function updateStatus(status) {
   statusContainer.textContent = '';
 
   if (status.status_code === "normal" || status.status_code === "unknown") {
-    const messagePara = document.createElement("p");
-    messagePara.className = `message ${status.status_code}`;
-    messagePara.textContent = status.message;
-    statusContainer.appendChild(messagePara);
+    // Card layout with text left and Lucide icon right
+    const card = document.createElement("div");
+    card.className = `status-card ${status.status_code}`;
+
+    const text = document.createElement("div");
+    text.className = "status-text";
+    text.textContent = status.message;
+
+    const iconWrap = document.createElement("span");
+    iconWrap.className = "status-icon icon-circle";
+    const icon = document.createElement("i");
+    icon.setAttribute("data-lucide", status.status_code === 'normal' ? 'check-circle' : 'help-circle');
+    iconWrap.appendChild(icon);
+
+    card.appendChild(text);
+    card.appendChild(iconWrap);
+    statusContainer.appendChild(card);
+
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+      window.lucide.createIcons({ nameAttr: 'data-lucide' });
+    }
   } else if (status.status_code === "issue") {
     const summaryIssueMessage = chrome.i18n.getMessage(
       "applicationStatusIssue"
     );
     const recommendedActionsMessage =
       chrome.i18n.getMessage("recommendedActions");
-    
-    const issueSummary = document.createElement("p");
-    issueSummary.id = "issue-summary";
-    issueSummary.className = `message ${status.status_code} ${status.severity}`;
-    issueSummary.textContent = summaryIssueMessage;
-    statusContainer.appendChild(issueSummary);
+
+    // Summary card (clickable) with icon on the right
+    const card = document.createElement("button");
+    card.type = "button";
+    card.id = "issue-summary";
+    card.className = `status-card ${status.status_code} ${status.severity}`;
+
+    const text = document.createElement("div");
+    text.className = "status-text";
+    text.textContent = summaryIssueMessage;
+
+    const iconWrap = document.createElement("span");
+    iconWrap.className = "status-icon icon-circle";
+    const icon = document.createElement("i");
+    icon.setAttribute("data-lucide", 'alert-triangle');
+    iconWrap.appendChild(icon);
+
+    card.appendChild(text);
+    card.appendChild(iconWrap);
+    statusContainer.appendChild(card);
+
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+      window.lucide.createIcons({ nameAttr: 'data-lucide' });
+    }
     
     // Create detail elements for application status detail
     const applicationStatusDetail = document.querySelector(
