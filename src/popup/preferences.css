@@ -10,10 +10,13 @@
 .icon.active {
   transform: scale(1.5);
 }
-#preferences .mode-selector {
+.mode-selector {
   padding: 1rem;
   display: block;
   position: relative;
+}
+#preference-selector {
+  display: block; /* ensure stacked layout in tabbed UI */
 }
 #language-preference {
   display: block;
@@ -28,12 +31,9 @@
   display: none;
 }
 /* hide the slider description unless it describes the selected preset */
-.mode-selector .description {
-  display: none;
-}
-.mode-selector.user-preference-item:hover .description.selected,
-.mode-selector.user-preference-item:focus-within .description.selected {
-  display: block;
+.mode-selector .description { display: none; }
+.mode-selector .description.selected {
+  display: block; /* always show selected description under label */
   text-align: center;
   margin-top: 0.5rem;
   width: 100%;
