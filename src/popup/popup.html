@@ -142,20 +142,25 @@
 
           <!-- Consent overlay lives here to keep DOM simple -->
           <section id="analytics-consent" class="hidden">
-            <h1 data-i18n="consentBetterTogether">Let's improve Say, Pi together</h1>
-            <p data-i18n="consentSharingPurpose">Sharing your usage data will help us understand how people use Say, Pi so we can make it better for everyone.</p>
-            <ul>
-              <li data-i18n="consentNoPii">We won't collect or see personal data, like messages or names.</li>
-              <li data-i18n="consentPrivacyParamount">Your privacy is paramount. Anything you say remains between you and Pi.</li>
-              <li data-i18n="consentDataDeidentified">Analytics are not tied to individuals. Any data used is de-identified.</li>
-              <li data-i18n="consentNoSale">We won't sell your data to third parties, or use it for advertising.</li>
-              <li data-i18n="consentRightToRevoke">You can change your mind at any time.</li>
-            </ul>
-            <a href="https://www.saypi.ai/privacy-policy" target="_blank" rel="noopener" data-i18n="consentPrivacyPolicy">Read our Privacy Policy</a>
-            <h2 data-i18n="consentAskParticipate">Would you like to participate?</h2>
-            <div class="buttons">
-              <button id="opt-out" type="button" class="btn btn-primary" data-i18n="consentOptOut">No thanks</button>
-              <button id="opt-in" type="button" class="btn btn-primary" data-i18n="consentOptIn">I'm in!</button>
+            <div class="consent-card">
+              <div class="consent-hero" aria-hidden="true" style="--consent-hero-url: url('data-sharing-portrait.jpg');"></div>
+              <div class="consent-content">
+                <h1 data-i18n="consentBetterTogether">Let's improve Say, Pi together</h1>
+                <p data-i18n="consentSharingPurpose">Sharing your usage data will help us understand how people use Say, Pi so we can make it better for everyone.</p>
+                <ul>
+                  <li data-i18n="consentNoPii">We won't collect or see personal data, like messages or names.</li>
+                  <li data-i18n="consentPrivacyParamount">Your privacy is paramount. Anything you say remains between you and Pi.</li>
+                  <li data-i18n="consentDataDeidentified">Analytics are not tied to individuals. Any data used is de-identified.</li>
+                  <li data-i18n="consentNoSale">We won't sell your data to third parties, or use it for advertising.</li>
+                  <li data-i18n="consentRightToRevoke">You can change your mind at any time.</li>
+                </ul>
+                <a href="https://www.saypi.ai/privacy-policy" target="_blank" rel="noopener" data-i18n="consentPrivacyPolicy">Read our Privacy Policy</a>
+                <h2 data-i18n="consentAskParticipate">Would you like to participate?</h2>
+                <div class="buttons">
+                  <button id="opt-out" type="button" class="btn btn-primary" data-i18n="consentOptOut">No thanks</button>
+                  <button id="opt-in" type="button" class="btn btn-primary" data-i18n="consentOptIn">I'm in!</button>
+                </div>
+              </div>
             </div>
           </section>
         </section>

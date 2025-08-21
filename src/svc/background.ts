@@ -6,7 +6,7 @@ function openSettingsWindow() {
       url: popupURL,
       type: 'popup',
       width: 736, // 720px + 16px padding
-      height: 512,
+      height: 600, // just tall enough to show the consent card
       focused: true
     });
   } catch (error) {
