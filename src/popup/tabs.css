@@ -49,15 +49,37 @@
   display: none !important;
 }
 
-@media (max-width: 480px) {
+/* Mobile/portrait-friendly layout: stack and give content full width */
+@media (max-width: 735px) {
   .settings-container {
     flex-direction: column;
+    align-items: stretch;
+    max-width: 100%;
   }
   .sidebar {
     flex-direction: row;
     gap: 0.5rem;
     min-width: unset;
+    width: 100%;
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    background: #f8fafc;
   }
+  .tab-button {
+    width: auto;
+    flex: 1 0 auto;
+    white-space: nowrap;
+  }
+  .content {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+  }
+  .tab-panel { width: 100%; }
+  .quota-progress { width: 100%; }
+  /* Hide secondary unauthenticated message to save space on mobile */
+  .settings-header .profile-banner #unauthenticated-message { display: none !important; }
 }
 
 /* Subtle list tightening */
@@ -100,6 +122,12 @@
   background: transparent;
   padding: 0.25rem 0.5rem;
   border-radius: 10px;
+}
+
+/* Make header and banner fluid on narrow screens */
+@media (max-width: 735px) {
+  .settings-header::after { width: 100%; }
+  .settings-header .profile-banner { width: 100%; }
 }
 
 /* make header greeting row justify space-between and tighten logo size */
@@ -157,5 +185,11 @@
 .tab-button[data-tab="chat"] .icon-circle { background:#ede9fe; color:#6d28d9; }
 .tab-button[data-tab="dictation"] .icon-circle { background:#dcfce7; color:#15803d; }
 .tab-button[data-tab="about"] .icon-circle { background:#e5e7eb; color:#374151; }
+
+/* Ensure card-like rows fill width on phones, overriding fixed widths declared elsewhere */
+@media (max-width: 735px) {
+  .user-preference-item,
+  .usage-charges-item { width: 100% !important; }
+}
 
 
