@@ -2,12 +2,18 @@ import { isFirefox } from "../UserAgentModule";
 function openSettingsWindow() {
   try {
     const popupURL = chrome.runtime.getURL('src/popup/popup.html');
-    chrome.windows.create({
-      url: popupURL,
-      type: 'popup',
-      width: 736, // 720px + 16px padding
-      height: 600, // just tall enough to show the consent card
-      focused: true
+    // Decide initial height based on whether we need to show consent overlay
+    // We check local storage flag 'shareData'. If it's undefined, consent will show.
+    chrome.storage.local.get('shareData', (result) => {
+      const needsConsent = typeof result.shareData === 'undefined';
+      const height = needsConsent ? 600 : 512; // fallback taller for consent, otherwise compact
+      chrome.windows.create({
+        url: popupURL,
+        type: 'popup',
+        width: 736, // 720px + 16px padding
+        height,
+        focused: true
+      });
     });
   } catch (error) {
     console.error('Failed to open popup:', error);
