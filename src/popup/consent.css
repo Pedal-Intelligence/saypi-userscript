@@ -25,7 +25,7 @@
         gap: 12px;
       }
       #analytics-consent .consent-hero {
-        background-image: var(--consent-hero-url, url("data-sharing.png"));
+        background-image: var(--consent-hero-url, url("data-sharing-portrait.jpg"));
         background-size: cover;
         background-position: center;
         border-top-left-radius: 12px;
