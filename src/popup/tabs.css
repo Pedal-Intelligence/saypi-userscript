@@ -111,6 +111,25 @@
   font-weight: 600;
   color: #0f172a;
 }
+.settings-header .profile-banner .unauthenticated-inline {
+  margin-left: 12px;
+  margin-right: 12px;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.25rem; /* 20px */
+  font-weight: 400;
+  color: #4b5563; /* gray-600 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  align-self: center;
+}
+.settings-header .profile-banner .header-divider {
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background: #e5e7eb;
+  margin: 0 12px;
+}
 
 .panel-heading {
   font-size: 1rem;

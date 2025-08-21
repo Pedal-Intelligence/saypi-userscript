@@ -45,9 +45,9 @@ async function checkAuthenticationStatus() {
 
 // Function to check if upgrade button should be shown
 function shouldShowUpgradeButton() {
-  // Always show for unauthenticated users
+  // Do not show for unauthenticated users; primary Sign In lives in header
   if (!isUserAuthenticated) {
-    return true;
+    return false;
   }
 
   // For authenticated users with no entitlement, always show the upgrade button
