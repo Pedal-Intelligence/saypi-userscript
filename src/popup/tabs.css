@@ -72,7 +72,7 @@
   color: #0f172a;
 }
 
-.quota-progress { width: 480px; }
+.quota-progress { width: 464px; }
 .quota-progress .progress-bar { height: 8px; border-radius: 6px; }
 .quota-progress .percentage-label { font-size: 0.7rem; }
 

@@ -67,6 +67,14 @@
   color: #6b7280; /* gray-500 */
 }
 
+/* Ensure the quota footer aligns to the same content width without extra horizontal padding */
+.quota-footer {
+  width: 464px; /* match user-preference-item visual width */
+  padding-left: 0;
+  padding-right: 0;
+  margin: 0 1rem; /* align with quota-progress horizontal spacing */
+}
+
 /* View details link */
 .view-details {
   font-size: 0.75rem;
