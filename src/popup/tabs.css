@@ -86,6 +86,13 @@
   }
   /* panel spacing on mobile */
   .tab-panel { margin-left: 0; margin-right: 0; }
+  /* Align quota blocks with card padding (1rem left/right) */
+  #premium-status .quota-progress,
+  #premium-status .quota-footer {
+    width: calc(100% - 2rem);
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
   .quota-progress { width: 100%; }
   /* Hide secondary unauthenticated message to save space on mobile */
   .settings-header .profile-banner #unauthenticated-message { display: none !important; }
