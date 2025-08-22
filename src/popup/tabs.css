@@ -40,10 +40,12 @@
 
 .content {
   flex: 1;
-  min-width: 320px;
+  min-width: 520px;
   padding: 0.5rem 0 1rem 0;
 }
 .tab-panel { width: 100%; max-width: 520px; }
+/* Ensure consistent desktop sizing for content cards */
+.user-preference-item { min-width: 520px; }
 
 .tab-panel.hidden {
   display: none !important;
@@ -84,6 +86,8 @@
     padding-left: 0.5rem;
     padding-right: 0.5rem;
   }
+  /* Allow cards to shrink on mobile regardless of desktop min-widths */
+  .user-preference-item { min-width: 0; }
   /* panel spacing on mobile */
   .tab-panel { margin-left: 0; margin-right: 0; }
   /* Align quota blocks with card padding (1rem left/right) */
