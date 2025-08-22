@@ -31,7 +31,7 @@ export class JwtManager {
   // When the JWT token expires (in milliseconds since epoch)
   private expiresAt: number | null = null;
   // Timer for refreshing the JWT before expiration
-  private refreshTimeout: NodeJS.Timeout | null = null;
+  private refreshTimeout: ReturnType<typeof setTimeout> | null = null;
   // Value of the auth_session cookie - used as fallback when cookies can't be sent
   private authCookieValue: string | null = null;
   // Promise that resolves when initialization is complete

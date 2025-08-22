@@ -4,7 +4,7 @@ import EventBus from "./events/EventBus.js";
 import { submitErrorHandler } from "./SubmitErrorHandler.ts";
 import exitIconSVG from "./icons/exit.svg";
 import maximizeIconSVG from "./icons/maximize.svg";
-import immersiveIconSVG from "./icons/immersive.svg";
+import immersiveIconSVG from "./icons/focus.svg";
 import settingsIconSVG from "./icons/settings.svg";
 import lockIconSVG from "./icons/lock.svg";
 import unlockIconSVG from "./icons/unlock.svg";

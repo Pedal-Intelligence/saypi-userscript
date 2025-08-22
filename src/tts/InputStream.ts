@@ -56,10 +56,10 @@ export abstract class ElementTextStream {
   protected subject: Subject<TextContent>;
   private lateChangeSubject = new Subject<LateChangeEvent>();
   protected observer!: MutationObserver;
-  protected timeout: NodeJS.Timeout | undefined = undefined;
+  protected timeout: ReturnType<typeof setTimeout> | undefined = undefined;
   protected emittedValues: TextContent[] = [];
   protected timeOfLastTextChange: number = Date.now();
-  protected batchIntervalTimerId: NodeJS.Timeout | null = null;
+  protected batchIntervalTimerId: ReturnType<typeof setTimeout> | null = null;
   protected delimiter: string = "";
   protected languageGuess: string = ""; // the language of the content in the element - guessed from user preferences
   private completionReason: Completion | null = null;
