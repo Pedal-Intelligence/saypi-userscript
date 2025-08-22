@@ -25,7 +25,12 @@
         const wrap = document.createElement('span');
         wrap.className = 'icon-circle';
         const iconName = btn.dataset.tab;
-        const lucideName = iconName === 'chat' ? 'bot-message-square' : iconName === 'general' ? 'settings' : iconName === 'dictation' ? 'mic' : 'info';
+        const TAB_ICON_MAP = {
+          chat: 'bot-message-square',
+          general: 'settings',
+          dictation: 'mic'
+        };
+        const lucideName = TAB_ICON_MAP[iconName] || 'info';
         renderLucideIconInto(wrap, lucideName);
 
         // Capture existing text as the label and rebuild content structure
