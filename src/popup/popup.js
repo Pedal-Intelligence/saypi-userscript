@@ -242,7 +242,9 @@ document.addEventListener("DOMContentLoaded", function () {
     slider.oninput = function () {
       var preference = preferenceIcons[this.value];
       const messageKey = "mode_" + preference;
-      output && (output.textContent = chrome.i18n.getMessage(messageKey));
+      if (output) {
+        output.textContent = chrome.i18n.getMessage(messageKey);
+      }
       setActiveIcon(preference);
       showDescription(preference);
 
