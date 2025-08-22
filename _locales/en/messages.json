@@ -16,7 +16,7 @@
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices."
   },
   "enterImmersiveModeShort": {
-    "message": "Immersion",
+    "message": "Focus",
     "description": "The text of the button to enter immersive mode on desktop."
   },
   "extensionSettings": {
