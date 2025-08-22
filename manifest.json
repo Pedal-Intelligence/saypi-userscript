@@ -28,7 +28,6 @@
     },
     {
       "matches": [
-        "file://*/*",
         "http://*/*",
         "https://*/*"
       ],
@@ -66,6 +65,8 @@
       "resources": [
         "public/silero_vad*.onnx",
         "public/*.wasm",
+        "public/*.js",
+        "public/*.mjs",
         "public/lucide.min.js",
         "public/vad.worklet.bundle.js",
         "public/vad.worklet.bundle.min.js",
@@ -88,7 +89,6 @@
         "public/permissions/*.css"
       ],
       "matches": [
-        "file://*/*",
         "http://*/*",
         "https://*/*"
       ]

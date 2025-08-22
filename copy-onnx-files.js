@@ -14,7 +14,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Define source and destination directories
-const sourceDir = path.join(__dirname, 'node_modules', 'onnxruntime-web', 'dist');
+// Prefer the version nested under vad-web to match its pinned ORT version
+const nestedOrtDir = path.join(__dirname, 'node_modules', '@ricky0123', 'vad-web', 'node_modules', 'onnxruntime-web', 'dist');
+const topLevelOrtDir = path.join(__dirname, 'node_modules', 'onnxruntime-web', 'dist');
+const sourceDir = fs.existsSync(nestedOrtDir) ? nestedOrtDir : topLevelOrtDir;
 const destDir = path.join(__dirname, 'public');
 
 // Ensure destination directory exists
@@ -23,7 +26,7 @@ if (!fs.existsSync(destDir)) {
 }
 
 // Files to copy - both .wasm and .mjs files
-console.log('Copying ONNX runtime files...');
+console.log('Copying ONNX runtime files from:', sourceDir);
 
 // Get all files from the source directory that match the patterns
 const onnxFiles = fs.readdirSync(sourceDir).filter(
