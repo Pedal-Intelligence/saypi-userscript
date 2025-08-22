@@ -92,7 +92,11 @@
 
 		save(key, value) {
 			chrome.storage.local.set({ [key]: value }, function () {
-				console.log(`Preference saved: ${key} ${value}`);
+				if (chrome.runtime && chrome.runtime.lastError) {
+					console.error(`Failed to save preference: ${key} ${value}. Error: ${chrome.runtime.lastError.message}`);
+				} else {
+					console.log(`Preference saved: ${key} ${value}`);
+				}
 			});
 		}
 	}
