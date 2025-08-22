@@ -43,7 +43,7 @@
   min-width: 320px;
   padding: 0.5rem 0 1rem 0;
 }
-.tab-panel { width: 520px; }
+.tab-panel { width: 100%; max-width: 520px; }
 
 .tab-panel.hidden {
   display: none !important;
@@ -55,6 +55,7 @@
     flex-direction: column;
     align-items: stretch;
     max-width: 100%;
+    width: 100%; /* force full width on mobile */
   }
   .sidebar {
     flex-direction: row;
@@ -70,13 +71,21 @@
     width: auto;
     flex: 1 0 auto;
     white-space: nowrap;
+    justify-content: center;
+    gap: 0;
   }
+  /* Icon-only tabs on phones */
+  .tab-button .tab-label { display: none; }
+  .tab-button .icon-circle { margin: 0 auto; }
   .content {
     flex: 1;
     min-width: 0;
     width: 100%;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
-  .tab-panel { width: 100%; }
+  /* panel spacing on mobile */
+  .tab-panel { margin-left: 0; margin-right: 0; }
   .quota-progress { width: 100%; }
   /* Hide secondary unauthenticated message to save space on mobile */
   .settings-header .profile-banner #unauthenticated-message { display: none !important; }
@@ -164,6 +173,10 @@
   font-weight: 600;
   color: #0f172a;
   margin: 0.5rem 0;
+}
+/* Add a bit more left breathing room on mobile for headings */
+@media (max-width: 735px) {
+  .panel-heading { padding-left: 0.5rem; }
 }
 
 /* Match headings to tab accents */

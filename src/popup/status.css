@@ -31,7 +31,8 @@ section#application-status {
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    width: 504px;
+    width: 100%;
+    max-width: 504px;
     padding: 10px 12px;
     border-radius: 10px;
     background: #ffffff;

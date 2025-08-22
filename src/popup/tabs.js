@@ -27,7 +27,17 @@
         const iconName = btn.dataset.tab;
         const lucideName = iconName === 'chat' ? 'bot-message-square' : iconName === 'general' ? 'settings' : iconName === 'dictation' ? 'mic' : 'info';
         renderLucideIconInto(wrap, lucideName);
-        btn.prepend(wrap);
+
+        // Capture existing text as the label and rebuild content structure
+        const labelText = (btn.textContent || '').trim();
+        btn.textContent = '';
+        btn.appendChild(wrap);
+        if (labelText) {
+          const label = document.createElement('span');
+          label.className = 'tab-label';
+          label.textContent = labelText;
+          btn.appendChild(label);
+        }
       }
       btn.addEventListener('click', () => selectTab(btn.dataset.tab));
     });
