@@ -95,7 +95,9 @@ export default class AudioModule {
   async initializeAudioOutputMachine() {
     try {
       // Dynamically import the audio output machine only when needed
-      const { audioOutputMachine } = await import("../state-machines/AudioOutputMachine.ts");
+      const { audioOutputMachine } = await import(
+        /* webpackMode: "eager" */ "../state-machines/AudioOutputMachine.ts"
+      );
       
       this.audioOutputActor = interpret(audioOutputMachine);
       this.audioOutputActor.onTransition((state) => {
@@ -239,8 +241,8 @@ export default class AudioModule {
     try {
       // Dynamically import SlowResponseHandler modules only for Pi.ai
       const [SlowResponseHandlerModule, SlowResponseHandlerAdapterModule] = await Promise.all([
-        import("../SlowResponseHandler.ts"),
-        import("./SlowResponseHandlerAdapter.js")
+        import(/* webpackMode: "eager" */ "../SlowResponseHandler.ts"),
+        import(/* webpackMode: "eager" */ "./SlowResponseHandlerAdapter.js")
       ]);
       
       const SlowResponseHandler = SlowResponseHandlerModule.default;
