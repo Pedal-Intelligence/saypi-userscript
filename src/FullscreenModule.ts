@@ -7,7 +7,7 @@ import { isMobileDevice } from "./UserAgentModule";
 
 const focusActor = interpret(focusMachine);
 const tickInterval = 1000;
-var ticker: NodeJS.Timeout;
+var ticker: ReturnType<typeof setInterval>;
 const userInputEvents = ["mousemove", "click", "keypress"];
 
 function handleUserInput() {
