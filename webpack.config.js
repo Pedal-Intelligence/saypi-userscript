@@ -167,7 +167,16 @@ const config = {
             from: "node_modules/@ricky0123/vad-web/node_modules/onnxruntime-web/dist/ort-wasm*.wasm",
             to: "[name][ext]",
             noErrorOnMissing: true,
+          // Prefer the ORT shipped within vad-web to ensure version match.
+          // It's acceptable for these files to be missing because not all installations of vad-web will have a nested onnxruntime-web.
+          // If missing, the next pattern will attempt to copy from the top-level onnxruntime-web as a fallback.
+          {
+            from: "node_modules/@ricky0123/vad-web/node_modules/onnxruntime-web/dist/ort-wasm*.wasm",
+            to: "[name][ext]",
+            noErrorOnMissing: true,
           },
+          // Fallback: copy from top-level onnxruntime-web if the nested version is missing.
+          // It's acceptable for these files to be missing if onnxruntime-web is not installed at the top level.
           {
             from: "node_modules/onnxruntime-web/dist/ort-wasm*.wasm",
             to: "[name][ext]",
