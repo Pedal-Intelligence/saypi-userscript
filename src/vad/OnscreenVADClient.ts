@@ -130,10 +130,13 @@ export class OnscreenVADClient implements VADClientInterface {
         // Log processing delays only if they exceed thresholds
         logProcessingDelay(captureTimestamp, clientReceiveTimestamp);
 
-        // Pass the Float32Array's buffer as ArrayBuffer (same as OffscreenVADClient)
+        // Ensure we pass a concrete ArrayBuffer (handle potential SharedArrayBuffer)
+        const audioArrayBuffer = rawAudioData.buffer instanceof ArrayBuffer
+          ? rawAudioData.buffer
+          : rawAudioData.slice().buffer;
         this.callbacks.onSpeechEnd?.({ 
           duration: speechDuration, 
-          audioBuffer: rawAudioData.buffer,
+          audioBuffer: audioArrayBuffer,
           captureTimestamp: captureTimestamp,
           clientReceiveTimestamp: clientReceiveTimestamp
         });
@@ -189,9 +192,12 @@ export class OnscreenVADClient implements VADClientInterface {
         
         logProcessingDelay(captureTimestamp, clientReceiveTimestamp);
 
+        const audioArrayBuffer = rawAudioData.buffer instanceof ArrayBuffer
+          ? rawAudioData.buffer
+          : rawAudioData.slice().buffer;
         this.callbacks.onSpeechEnd?.({ 
           duration: speechDuration, 
-          audioBuffer: rawAudioData.buffer,
+          audioBuffer: audioArrayBuffer,
           captureTimestamp: captureTimestamp,
           clientReceiveTimestamp: clientReceiveTimestamp
         });
@@ -233,9 +239,12 @@ export class OnscreenVADClient implements VADClientInterface {
         
         logProcessingDelay(captureTimestamp, clientReceiveTimestamp);
 
+        const audioArrayBuffer = rawAudioData.buffer instanceof ArrayBuffer
+          ? rawAudioData.buffer
+          : rawAudioData.slice().buffer;
         this.callbacks.onSpeechEnd?.({ 
           duration: speechDuration, 
-          audioBuffer: rawAudioData.buffer,
+          audioBuffer: audioArrayBuffer,
           captureTimestamp: captureTimestamp,
           clientReceiveTimestamp: clientReceiveTimestamp
         });

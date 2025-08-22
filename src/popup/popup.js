@@ -83,17 +83,21 @@ document.addEventListener("DOMContentLoaded", function () {
   const vadStatusIndicatorEnabledInput = document.getElementById("vad-status-indicator-enabled");
   const removeFillerWordsInput = document.getElementById("remove-filler-words");
 
-  // Load the saved preference when the popup opens
-  getStoredValue("prefer", "balanced").then((prefer) => {
-    var selectedValue = Object.keys(preferenceIcons).find(
-      (key) => preferenceIcons[key] === prefer
-    );
-    slider.value = selectedValue;
-    const messageKey = "mode_" + prefer;
-    output.textContent = chrome.i18n.getMessage(messageKey);
-    setActiveIcon(prefer);
-    showDescription(prefer);
-  });
+  // Initialize dictation mode selector via reusable component
+  if (window.ModeSelector) {
+    const dictationSelector = new window.ModeSelector({
+      containerId: 'preference-selector',
+      sliderId: 'customRange',
+      labelId: 'sliderValue',
+      storageKey: 'prefer',
+      values: [
+        { id: 'speed', i18nLabelKey: 'mode_speed', i18nDescriptionKey: 'mode_speed_description', lucide: 'rabbit' },
+        { id: 'balanced', i18nLabelKey: 'mode_balanced', i18nDescriptionKey: 'mode_balanced_description', lucide: 'scale' },
+        { id: 'accuracy', i18nLabelKey: 'mode_accuracy', i18nDescriptionKey: 'mode_accuracy_description', lucide: 'turtle' }
+      ]
+    });
+    dictationSelector.init();
+  }
 
   /**
    * Checks if the user is entitled to use agent mode
@@ -150,10 +154,11 @@ document.addEventListener("DOMContentLoaded", function () {
             </label>
           `;
           
-          // Insert after the language preference
-          const languagePreference = document.getElementById("language-preference");
-          if (languagePreference && languagePreference.parentNode) {
-            languagePreference.parentNode.insertBefore(autoSubmitToggle, languagePreference.nextSibling);
+          // Insert into the AI Chat tab (next to the submit mode selector)
+          const chatTab = document.getElementById("tab-chat");
+          if (chatTab) {
+            const insertionPoint = document.getElementById("submit-mode-selector") || chatTab.firstChild;
+            chatTab.insertBefore(autoSubmitToggle, insertionPoint ? insertionPoint.nextSibling : null);
           }
           
           // Set up the auto-submit toggle switch
@@ -233,18 +238,22 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Update the current slider value (each time you drag the slider handle)
-  slider.oninput = function () {
-    var preference = preferenceIcons[this.value];
-    const messageKey = "mode_" + preference;
-    output.textContent = chrome.i18n.getMessage(messageKey);
-    setActiveIcon(preference);
-    showDescription(preference);
+  if (slider) {
+    slider.oninput = function () {
+      var preference = preferenceIcons[this.value];
+      const messageKey = "mode_" + preference;
+      if (output) {
+        output.textContent = chrome.i18n.getMessage(messageKey);
+      }
+      setActiveIcon(preference);
+      showDescription(preference);
 
-    // Save the preference
-    chrome.storage.local.set({ prefer: preference }, function () {
-      console.log("User preference saved: prefer " + preference);
-    });
-  };
+      // Save the preference
+      chrome.storage.local.set({ prefer: preference }, function () {
+        console.log("User preference saved: prefer " + preference);
+      });
+    };
+  }
 
   // Update the current submit mode slider value
   submitModeSlider.oninput = function () {
@@ -325,31 +334,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function sliderInput() {
-    const icons = document.querySelectorAll("#preference-selector .icon");
-    const moveSlider = (position) => {
-      slider.value = position;
-      // fire input event to update sliderValue
-      slider.dispatchEvent(new Event("input"));
-    };
-    // Add event listener for the icon click
-    icons.forEach((icon) => {
-      icon.addEventListener("click", function () {
-        switch (this.id) {
-          case "speed":
-            moveSlider(0);
-            break;
-          case "balanced":
-            moveSlider(1);
-            break;
-          case "accuracy":
-            moveSlider(2);
-            break;
-          default:
-            moveSlider(1);
-        }
-      });
-    });
-
     const submitModeIcons = document.querySelectorAll("#submit-mode-selector .icon");
     const moveSubmitModeSlider = (position) => {
       submitModeSlider.value = position;
@@ -612,14 +596,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Call refreshAuthUI when popup opens to update the authentication UI
   refreshAuthUI();
 
-  // Add click handler for view quota details link
-  document.getElementById('view-quota-details').addEventListener('click', function(e) {
-    e.preventDefault();
-    const dashboardUrl = config && config.authServerUrl 
-      ? `${config.authServerUrl}/app/dashboard` 
-      : 'https://www.saypi.ai/app/dashboard';
-    window.open(dashboardUrl, '_blank');
-  });
+  // View details link handled in status-subscription.js
 
   // Load the saved nickname when the popup opens
   const nicknameInput = document.getElementById("assistant-nickname");

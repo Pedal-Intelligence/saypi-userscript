@@ -45,9 +45,9 @@ async function checkAuthenticationStatus() {
 
 // Function to check if upgrade button should be shown
 function shouldShowUpgradeButton() {
-  // Always show for unauthenticated users
+  // Do not show for unauthenticated users; primary Sign In lives in header
   if (!isUserAuthenticated) {
-    return true;
+    return false;
   }
 
   // For authenticated users with no entitlement, always show the upgrade button
@@ -437,7 +437,6 @@ function setupViewDetailsLinks() {
     
     if (!config || !config.authServerUrl) {
       console.error('Config or authServerUrl is missing:', config);
-      // Fallback to a default URL if config is missing
       window.open('https://www.saypi.ai/app/dashboard', "_blank");
       return;
     }
@@ -446,26 +445,16 @@ function setupViewDetailsLinks() {
       const isAuthenticated = !!(response && response.claims);
       console.log('Auth check result:', isAuthenticated);
       if (!isAuthenticated) {
-        // If not authenticated, open pricing page
         window.open(`${config.authServerUrl}/pricing`, "_blank");
         return;
       }
       
-      // If authenticated, open dashboard
       const baseUrl = `${config.authServerUrl}/app/dashboard`;
       window.open(baseUrl, "_blank");
     });
   };
-  
-  // Set up event listener for the single view details link
+
   if (viewQuotaDetailsLink) {
-    // Remove any existing listeners first
-    viewQuotaDetailsLink.removeEventListener('click', openDashboard);
-    
-    // Add the new click listener
-    viewQuotaDetailsLink.addEventListener('click', openDashboard);
-    
-    // For extra safety, also add it as an onclick property
     viewQuotaDetailsLink.onclick = openDashboard;
   } else {
     console.error('View details link element not found');
@@ -501,9 +490,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     // Update upgrade button text based on authentication status
     updateUpgradeButtonText();
-    
-    // Add a direct reference to ensure it's set up even if getQuotaStatus has issues
-    setTimeout(setupViewDetailsLinks, 500);
+    // Bind view details link after quota status has rendered
+    setupViewDetailsLinks();
   } catch (error) {
     console.error("Error initializing status:", error);
   }

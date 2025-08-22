@@ -16,7 +16,7 @@
 
 .quota-progress .progress-bar {
   display: flex;
-  height: 12px;
+  height: 8px;
   border-radius: 6px;
   overflow: hidden;
   background-color: #e5e7eb; /* gray-200 - background for the entire bar */
@@ -30,7 +30,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: white;
   font-weight: 600;
   text-shadow: 0 0 3px rgba(0, 0, 0, 0.7);
@@ -65,6 +65,14 @@
 .reset-date {
   font-size: 0.75rem;
   color: #6b7280; /* gray-500 */
+}
+
+/* Ensure the quota footer aligns to the same content width without extra horizontal padding */
+.quota-footer {
+  width: 464px; /* match user-preference-item visual width */
+  padding-left: 0;
+  padding-right: 0;
+  margin: 0 1rem; /* align with quota-progress horizontal spacing */
 }
 
 /* View details link */

@@ -1,4 +1,30 @@
 import { isFirefox } from "../UserAgentModule";
+function openSettingsWindow() {
+  try {
+    const popupURL = chrome.runtime.getURL('src/popup/popup.html');
+    // Decide initial height based on whether we need to show consent overlay
+    // We check local storage flag 'shareData'. If it's undefined, consent will show.
+    chrome.storage.local.get('shareData', (result) => {
+      const needsConsent = typeof result.shareData === 'undefined';
+      const height = needsConsent ? 600 : 512; // fallback taller for consent, otherwise compact
+      chrome.windows.create({
+        url: popupURL,
+        type: 'popup',
+        width: 736, // 720px + 16px padding
+        height,
+        focused: true
+      });
+    });
+  } catch (error) {
+    console.error('Failed to open popup:', error);
+  }
+}
+
+// Open settings when the toolbar icon is clicked (no default_popup)
+chrome.action?.onClicked.addListener(() => {
+  openSettingsWindow();
+});
+
 import { config } from "../ConfigModule";
 import { getJwtManagerSync } from "../JwtManager";
 import { offscreenManager, OFFSCREEN_DOCUMENT_PATH } from "../offscreen/offscreen_manager";
@@ -585,25 +611,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 
   if (message.action === 'openPopup') {
-    try {
-      const isNotFirefox = !isFirefox();
-      if (isNotFirefox && chrome.action?.openPopup) {
-        // Default popup for Chrome on desktop
-        chrome.action.openPopup();
-      } else {
-        // Fallback for Firefox and mobile browsers
-        const popupURL = chrome.runtime.getURL('src/popup/popup.html');
-        chrome.windows.create({
-          url: popupURL,
-          type: 'popup',
-          width: 400,
-          height: 720,
-          focused: true
-        });
-      }
-    } catch (error) {
-      console.error('Failed to open popup:', error);
-    }
+    openSettingsWindow();
   } else if (message.type === 'GET_TTS_QUOTA_DETAILS') {
     // Handle TTS quota details request
     try {

@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="preferences.css" />
     <link rel="stylesheet" href="usage.css" />
     <link rel="stylesheet" href="beta.css" />
+    <link rel="stylesheet" href="tabs.css" />
     <style>
       body {
         flex-wrap: wrap;
@@ -24,12 +25,11 @@
       }
       .user-preference-item,
       .usage-charges-item {
-        display: flex;
+        display: block;
         align-items: center;
-        width: 250px;
-        border-bottom: 1px solid #e2e8f0;
+        width: 100%;
+        max-width: 504px;
         padding: 0.5rem 1rem;
-        margin: 0;
         align-content: space-between;
       }
       .control {
@@ -43,416 +43,270 @@
     </style>
   </head>
   <body class="flex items-center justify-center">
-    <section id="preferences">
-      <div id="profile" class="user-preference-item w-full max-w-lg">
+    <!-- Header banner with auth/greeting -->
+    <header class="settings-header">
+      <div id="profile" class="profile-banner">
         <div class="flex items-center w-full">
+          <a href="https://www.saypi.ai" id="saypi-logo-link" title="Open Say, Pi Dashboard" target="_blank">
+            <img class="logo mr-2" src="../icons/bubble-green.svg" alt="Say, Pi" />
+          </a>
           <div class="flex items-center flex-grow">
             <span class="label-text hidden" data-i18n="profile">Profile</span>
             <span id="profile-status" class="ml-2 text-sm text-gray-600" data-i18n="notSignedIn">Not signed in</span>
             <span id="profile-name" class="ml-2 text-normal hidden"></span>
+            <span class="header-divider" aria-hidden="true"></span>
+            <span id="unauthenticated-message" class="unauthenticated-inline hidden" data-i18n="quotaUnauthenticatedMessage">Log in to access voice generation and other premium features</span>
           </div>
-          <button id="auth-button" class="control px-4 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" data-i18n="signIn">
-            Sign In
-          </button>
+          <button id="auth-button" class="control px-4 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" data-i18n="signIn">Sign In</button>
         </div>
       </div>
+    </header>
 
-      <div
-        id="preference-selector"
-        class="w-full max-w-lg user-preference-item mode-selector"
-      >
-        <!-- Slider with icons -->
-        <div>
-          <!-- Icons -->
-          <div class="flex justify-between mb-2">
-            <span
-              role="img"
-              class="icon text-2xl"
-              aria-label="Hare"
-              slider-value="0"
-              id="speed"
-              >🐇</span
-            >
-            <span
-              role="img"
-              class="icon text-2xl active"
-              aria-label="Deer"
-              slider-value="1"
-              id="balanced"
-              >🦌</span
-            >
-            <span
-              role="img"
-              class="icon text-2xl"
-              aria-label="Owl"
-              slider-value="2"
-              id="accuracy"
-              >🦉</span
-            >
+    <div class="settings-container">
+      <nav class="sidebar">
+        <button class="tab-button active" data-tab="general">General</button>
+        <button class="tab-button" data-tab="chat">AI Chat</button>
+        <button class="tab-button" data-tab="dictation">Dictation</button>
+        <button class="tab-button" data-tab="about">About</button>
+      </nav>
+      <main class="content">
+        <!-- General -->
+        <section id="tab-general" class="tab-panel">
+          <h2 class="panel-heading">General</h2>
+          <div class="user-preference-item w-full max-w-lg" id="sounds-effects-preference">
+            <label class="wraper" for="sound-effects">
+              <span class="label-text" data-i18n="soundEffects">Sound Effects</span>
+              <div class="switch-wrap control">
+                <input type="checkbox" id="sound-effects" name="soundEffects" />
+                <div class="switch"></div>
+              </div>
+            </label>
           </div>
-          <!-- Slider -->
-          <input
-            type="range"
-            min="0"
-            max="2"
-            value="1"
-            class="slider w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
-            id="customRange"
-            data-i18n-attr="title:preferedModeControl"
-            title="Select your preferred mode"
-          />
-        </div>
-        <!-- Text below slider -->
-        <div
-          id="sliderValue"
-          class="mt-2 text-lg font-semibold text-gray-700"
-          data-i18n="mode_balanced"
-        >
-          balanced
-        </div>
-        <!-- Descriptions below each icon -->
-        <div class="description" data-i18n="mode_speed_description">
-          Fastest response, but less accurate and may interrupt speech
-        </div>
-        <div class="description" data-i18n="mode_balanced_description">
-          Good balance of speed and accuracy for most uses
-        </div>
-        <div class="description" data-i18n="mode_accuracy_description">
-          Highest accuracy, but slower transcription speed
-        </div>
-      </div>
-      <div
-        class="user-preference-item w-full max-w-lg"
-        id="language-preference"
-      >
-        <div
-          id="language-picker"
-          class="language-picker user-preference language-picker--hide-label js-language-picker"
-          data-trigger-class="li4-btn li4-btn--subtle js-tab-focus"
-        >
-          <label
-            for="language-picker-select"
-            class="label-text"
-            data-i18n="preferedLanguage"
-            >Language</label
-          >
-          <form action="" class="language-picker__form">
-            <select name="language-picker-select" id="language-picker-select">
-              <option lang="ar" value="arabic">العربية</option>
-              <option lang="bg" value="bulgarian">Български</option>
-              <option lang="zh" value="chinese">中文</option>
-              <option lang="hr" value="croatian">Hrvatski</option>
-              <option lang="cs" value="czech">Čeština</option>
-              <option lang="da" value="danish">Dansk</option>
-              <option lang="nl" value="dutch">Nederlands</option>
-              <option lang="en" value="english">English</option>
-              <option lang="tl" value="filipino">Filipino</option>
-              <option lang="fi" value="finnish">Suomi</option>
-              <option lang="fr" value="francais">Français</option>
-              <option lang="de" value="deutsch">Deutsch</option>
-              <option lang="el" value="greek">Ελληνικά</option>
-              <option lang="hi" value="hindi">हिन्दी</option>
-              <option lang="id" value="indonesian">Bahasa Indonesia</option>
-              <option lang="it" value="italiano">Italiano</option>
-              <option lang="ja" value="japanese">日本語</option>
-              <option lang="ko" value="korean">한국어</option>
-              <option lang="ms" value="malay">Bahasa Melayu</option>
-              <option lang="pl" value="polish">Polski</option>
-              <option lang="pt" value="portuguese">Português</option>
-              <option lang="ro" value="romanian">Română</option>
-              <option lang="ru" value="russian">Русский</option>
-              <option lang="sk" value="slovak">Slovenčina</option>
-              <option lang="es" value="espanol">Español</option>
-              <option lang="sv" value="swedish">Svenska</option>
-              <option lang="ta" value="tamil">தமிழ்</option>
-              <option lang="tr" value="turkish">Türkçe</option>
-              <option lang="uk" value="ukrainian">Українська</option>
-              <option lang="" value="global">Auto-detect</option>
-            </select>
-          </form>
-        </div>
-      </div>
-      <div
-        id="submit-mode-selector"
-        class="w-full max-w-lg user-preference-item mode-selector"
-      >
-        <!-- Slider with icons -->
-        <div>
-          <!-- Icons -->
-          <div class="flex justify-between mb-2">
-            <span
-              role="img"
-              class="icon text-2xl"
-              aria-label="Rocket"
-              slider-value="0"
-              id="auto"
-              >🚀</span
-            >
-            <span
-              role="img"
-              class="icon text-2xl"
-              aria-label="Robot"
-              slider-value="1"
-              id="agent"
-              >🤖</span
-            >
-            <span
-              role="img"
-              class="icon text-2xl"
-              aria-label="Hand"
-              slider-value="2"
-              id="off"
-              >🖐️</span
-            >
-          </div>
-          <!-- Slider -->
-          <input
-            type="range"
-            min="0"
-            max="2"
-            value="0"
-            class="slider w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
-            id="submitModeRange"
-            data-i18n-attr="title:submitModeControl"
-            title="Select when to submit your messages"
-          />
-        </div>
-        <!-- Text below slider -->
-        <div
-          id="submitModeValue"
-          class="mt-2 text-lg font-semibold text-gray-700"
-          data-i18n="submit_mode_auto"
-        >
-          auto
-        </div>
-        <!-- Descriptions below each icon -->
-        <div class="description" data-i18n="submit_mode_auto_description">
-          Automatically submit when you stop speaking
-        </div>
-        <div class="description" data-i18n="submit_mode_agent_description">
-          Pi decides when to respond based on context
-        </div>
-        <div class="description" data-i18n="submit_mode_off_description">
-          Only submit when you press the button
-        </div>
-      </div>
-      <div
-        class="user-preference-item w-full max-w-lg"
-        id="nickname-preference"
-      >
-        <label class="wraper" for="assistant-nickname">
-          <span class="label-text" data-i18n="nicknameLabel">Nickname</span>
-          <div class="control">
-            <input
-              type="text"
-              id="assistant-nickname"
-              name="assistantNickname"
-              class="px-2 py-1 border rounded w-20 text-sm text-right"
-              placeholder="Pi"
-            />
-          </div>
-        </label>
-      </div>
-      <div
-        class="user-preference-item w-full max-w-lg"
-        id="sounds-effects-preference"
-      >
-        <label class="wraper" for="sound-effects">
-          <span class="label-text" data-i18n="soundEffects">Sound Effects</span>
-          <div class="switch-wrap control">
-            <input type="checkbox" id="sound-effects" name="soundEffects" />
-            <div class="switch"></div>
-          </div>
-        </label>
-      </div>
-      <div
-        class="user-preference-item w-full max-w-lg"
-        id="allow-interruptions-preference"
-      >
-        <label class="wraper" for="allow-interruptions">
-          <span class="label-text" data-i18n="allowInterruptions"
-            >Interruptible</span
-          >
-          <div class="switch-wrap control">
-            <input
-              type="checkbox"
-              id="allow-interruptions"
-              name="allowInterruptions"
-            />
-            <div class="switch"></div>
-          </div>
-        </label>
-      </div>
-      <div
-        class="user-preference-item w-full max-w-lg"
-        id="analytics-consent-preference-item"
-      >
-        <label class="wraper" for="share-data">
-          <span class="label-text" data-i18n="shareAnalytics">
-            Share analytics
-          </span>
-          <div class="switch-wrap control">
-            <input type="checkbox" id="share-data" name="shareAnalytics" />
-            <div class="switch"></div>
-          </div>
-        </label>
-      </div>
-      <div
-        class="user-preference-item w-full max-w-lg"
-        id="vad-status-indicator-preference"
-      >
-        <label class="wraper" for="vad-status-indicator-enabled">
-          <span class="label-text" data-i18n="vadStatusIndicatorEnabledLabel">Show VAD Status</span>
-          <div class="switch-wrap control">
-            <input type="checkbox" id="vad-status-indicator-enabled" name="vadStatusIndicatorEnabled" />
-            <div class="switch"></div>
-          </div>
-        </label>
-      </div>
 
-      <div
-        class="user-preference-item w-full max-w-lg"
-        id="remove-filler-words-preference"
-      >
-        <label class="wraper" for="remove-filler-words" data-i18n-attr="title:removeFillerWordsTooltip">
-          <span class="label-text" data-i18n="removeFillerWordsLabel">Remove filler words (beta)</span>
-          <div class="switch-wrap control">
-            <input type="checkbox" id="remove-filler-words" name="removeFillerWords" />
-            <div class="switch"></div>
+          <div class="user-preference-item w-full max-w-lg" id="analytics-consent-preference-item">
+            <label class="wraper" for="share-data">
+              <span class="label-text" data-i18n="shareAnalytics">Share analytics</span>
+              <div class="switch-wrap control">
+                <input type="checkbox" id="share-data" name="shareAnalytics" />
+                <div class="switch"></div>
+              </div>
+            </label>
           </div>
-        </label>
-      </div>
-    </section>
 
-    <div class=""premium">
-      <section id="premium-status">
-        <div class="quota-progress tts">
-          <div class="progress-label">
-            <span class="label" data-i18n="ttsQuotaRemaining">Voice Generation</span>
-            <span class="value" style="display: none;">
-              <span id="tts-quota-remaining-value" class="quota-remaining-value">0</span>
-              <span data-i18n="ttsQuotaCharacters">characters</span>
-            </span>
-          </div>
-          <div class="progress-bar">
-            <div class="share used"></div>
-            <div class="share remaining"></div>
-          </div>
-          <div class="text-xs text-gray-500 text-right mt-1 quota-percentage"></div>
-        </div>
-        <!-- Add Speech Recognition quota section -->
-          <div class="quota-progress mt-2 stt">
-          <div class="progress-label">
-            <span class="label" data-i18n="sttQuotaRemaining">Speech Recognition</span>
-            <span class="value" style="display: none;">
-              <span id="stt-quota-remaining-value" class="quota-remaining-value">0</span>
-              <span data-i18n="sttQuotaSeconds">seconds</span>
-            </span>
-          </div>
-          <div class="progress-bar">
-            <div class="share used"></div>
-            <div class="share remaining"></div>
-          </div>
-          <div class="text-xs text-gray-500 text-right mt-1 quota-percentage"></div>
-        </div>
-        <!-- Single view details link for both quota sections -->
-        <div class="flex justify-between items-center mt-2 px-4">
-          <a id="view-quota-details" class="view-details" data-i18n="viewDetails" 
-             href="#">
-            View details
-          </a>
-          <span id="quota-reset-date" class="reset-date text-xs text-gray-500"></span>
-        </div>
-        
-        <!-- Container for unauthenticated message -->
-        <div id="unauthenticated-message" class="hidden w-full max-w-lg px-4 py-2">
-          <p class="text-sm text-gray-600" data-i18n="quotaUnauthenticatedMessage">
-            Sign in to access voice generation and other premium features
-          </p>
-        </div>
-      </section>
+          <!-- Premium / quotas -->
+          <section id="premium-status">
+            <div class="quota-progress tts">
+              <div class="progress-label">
+                <span class="label" data-i18n="ttsQuotaRemaining">Voice Generation</span>
+                <span class="value" style="display: none;">
+                  <span id="tts-quota-remaining-value" class="quota-remaining-value">0</span>
+                  <span data-i18n="ttsQuotaCharacters">characters</span>
+                </span>
+              </div>
+              <div class="progress-bar">
+                <div class="share used"></div>
+                <div class="share remaining"></div>
+              </div>
+              <div class="text-xs text-gray-500 text-right mt-1 quota-percentage"></div>
+            </div>
+            <div class="quota-progress mt-2 stt">
+              <div class="progress-label">
+                <span class="label" data-i18n="sttQuotaRemaining">Speech Recognition</span>
+                <span class="value" style="display: none;">
+                  <span id="stt-quota-remaining-value" class="quota-remaining-value">0</span>
+                  <span data-i18n="sttQuotaSeconds">seconds</span>
+                </span>
+              </div>
+              <div class="progress-bar">
+                <div class="share used"></div>
+                <div class="share remaining"></div>
+              </div>
+              <div class="text-xs text-gray-500 text-right mt-1 quota-percentage"></div>
+            </div>
+            <div class="flex justify-between items-center mt-2 quota-footer">
+              <a id="view-quota-details" class="view-details" data-i18n="viewDetails" href="#">View details</a>
+              <span id="quota-reset-date" class="reset-date text-xs text-gray-500"></span>
+            </div>
+          </section>
 
-      <section id="upgrade" class="hidden">
-        <div class="flex items-center justify-center w-full max-w-lg">
-          <button id="upgrade-button" class="px-4 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" data-i18n="upgradeButton">
-            Upgrade Plan
-          </button>
-        </div>
-      </section>
+          <section id="upgrade" class="hidden">
+            <div class="flex items-center justify-center w-full max-w-lg">
+              <button id="upgrade-button" class="px-4 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" data-i18n="upgradeButton">Upgrade Plan</button>
+            </div>
+          </section>
 
-      <!-- Controls for testing and development -->
-      <section id="devtools" class="hidden">
-        <div class="user-preference-item w-full max-w-lg x-hidden">
-          <button type="button" id="clear-preferences" class="btn btn-primary">
-            Clear Preferences
-          </button>
-        </div>
-      </section>
+          <section id="devtools" class="hidden">
+            <div class="user-preference-item w-full max-w-lg x-hidden">
+              <button type="button" id="clear-preferences" class="btn btn-primary">Clear Preferences</button>
+            </div>
+          </section>
+
+          <!-- Consent overlay lives here to keep DOM simple -->
+          <section id="analytics-consent" class="hidden">
+            <div class="consent-card">
+              <div class="consent-hero" aria-hidden="true" style="--consent-hero-url: url('data-sharing-portrait.jpg');"></div>
+              <div class="consent-content">
+                <h1 data-i18n="consentBetterTogether">Let's improve Say, Pi together</h1>
+                <p data-i18n="consentSharingPurpose">Sharing your usage data will help us understand how people use Say, Pi so we can make it better for everyone.</p>
+                <ul>
+                  <li data-i18n="consentNoPii">We won't collect or see personal data, like messages or names.</li>
+                  <li data-i18n="consentPrivacyParamount">Your privacy is paramount. Anything you say remains between you and Pi.</li>
+                  <li data-i18n="consentDataDeidentified">Analytics are not tied to individuals. Any data used is de-identified.</li>
+                  <li data-i18n="consentNoSale">We won't sell your data to third parties, or use it for advertising.</li>
+                  <li data-i18n="consentRightToRevoke">You can change your mind at any time.</li>
+                </ul>
+                <a href="https://www.saypi.ai/privacy-policy" target="_blank" rel="noopener" data-i18n="consentPrivacyPolicy">Read our Privacy Policy</a>
+                <h2 data-i18n="consentAskParticipate">Would you like to participate?</h2>
+                <div class="buttons">
+                  <button id="opt-out" type="button" class="btn btn-primary" data-i18n="consentOptOut">No thanks</button>
+                  <button id="opt-in" type="button" class="btn btn-primary" data-i18n="consentOptIn">I'm in!</button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- AI Chat -->
+        <section id="tab-chat" class="tab-panel hidden">
+          <h2 class="panel-heading">AI Chat</h2>
+          <div id="submit-mode-selector" class="w-full max-w-lg user-preference-item mode-selector">
+            <div>
+              <div class="flex justify-between mb-2">
+                <span role="img" class="icon text-2xl" aria-label="Rocket" slider-value="0" id="auto">🚀</span>
+                <span role="img" class="icon text-2xl" aria-label="Robot" slider-value="1" id="agent">🤖</span>
+                <span role="img" class="icon text-2xl" aria-label="Hand" slider-value="2" id="off">🖐️</span>
+              </div>
+              <input type="range" min="0" max="2" value="0" class="slider w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer" id="submitModeRange" data-i18n-attr="title:submitModeControl" title="Select when to submit your messages" />
+            </div>
+            <div id="submitModeValue" class="mt-2 text-lg font-semibold text-gray-700" data-i18n="submit_mode_auto">auto</div>
+            <div class="description" data-i18n="submit_mode_auto_description">Automatically submit when you stop speaking</div>
+            <div class="description" data-i18n="submit_mode_agent_description">Pi decides when to respond based on context</div>
+            <div class="description" data-i18n="submit_mode_off_description">Only submit when you press the button</div>
+          </div>
+
+          <div class="user-preference-item w-full max-w-lg" id="nickname-preference">
+            <label class="wraper" for="assistant-nickname">
+              <span class="label-text" data-i18n="nicknameLabel">Nickname</span>
+              <div class="control">
+                <input type="text" id="assistant-nickname" name="assistantNickname" class="px-2 py-1 border rounded w-20 text-sm text-right" placeholder="Pi" />
+              </div>
+            </label>
+          </div>
+
+          <div class="user-preference-item w-full max-w-lg" id="allow-interruptions-preference">
+            <label class="wraper" for="allow-interruptions">
+              <span class="label-text" data-i18n="allowInterruptions">Interruptible</span>
+              <div class="switch-wrap control">
+                <input type="checkbox" id="allow-interruptions" name="allowInterruptions" />
+                <div class="switch"></div>
+              </div>
+            </label>
+          </div>
+        </section>
+
+        <!-- Dictation -->
+        <section id="tab-dictation" class="tab-panel hidden">
+          <h2 class="panel-heading">Dictation</h2>
+          <div id="preference-selector" class="w-full max-w-lg user-preference-item mode-selector">
+            <div>
+              <div class="flex justify-between mb-2">
+                <span class="icon" aria-label="Fast" slider-value="0" id="speed">
+                  <span class="icon-circle"><i data-lucide="rabbit"></i></span>
+                </span>
+                <span class="icon active" aria-label="Balanced" slider-value="1" id="balanced">
+                  <span class="icon-circle"><i data-lucide="scale"></i></span>
+                </span>
+                <span class="icon" aria-label="Accurate" slider-value="2" id="accuracy">
+                  <span class="icon-circle"><i data-lucide="turtle"></i></span>
+                </span>
+              </div>
+              <input type="range" min="0" max="2" value="1" class="slider w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer" id="customRange" data-i18n-attr="title:preferedModeControl" title="Select your preferred mode" />
+            </div>
+            <div id="sliderValue" class="mt-2 text-lg font-semibold text-gray-700" data-i18n="mode_balanced">balanced</div>
+            <div class="description" data-i18n="mode_speed_description">Fastest response, but less accurate and may interrupt speech</div>
+            <div class="description" data-i18n="mode_balanced_description">Good balance of speed and accuracy for most uses</div>
+            <div class="description" data-i18n="mode_accuracy_description">Highest accuracy, but slower transcription speed</div>
+          </div>
+
+          <div class="user-preference-item w-full max-w-lg" id="language-preference">
+            <div id="language-picker" class="language-picker user-preference language-picker--hide-label js-language-picker" data-trigger-class="li4-btn li4-btn--subtle js-tab-focus">
+              <label for="language-picker-select" class="label-text" data-i18n="preferedLanguage">Language</label>
+              <form action="" class="language-picker__form">
+                <select name="language-picker-select" id="language-picker-select">
+                  <option lang="ar" value="arabic">العربية</option>
+                  <option lang="bg" value="bulgarian">Български</option>
+                  <option lang="zh" value="chinese">中文</option>
+                  <option lang="hr" value="croatian">Hrvatski</option>
+                  <option lang="cs" value="czech">Čeština</option>
+                  <option lang="da" value="danish">Dansk</option>
+                  <option lang="nl" value="dutch">Nederlands</option>
+                  <option lang="en" value="english">English</option>
+                  <option lang="tl" value="filipino">Filipino</option>
+                  <option lang="fi" value="finnish">Suomi</option>
+                  <option lang="fr" value="francais">Français</option>
+                  <option lang="de" value="deutsch">Deutsch</option>
+                  <option lang="el" value="greek">Ελληνικά</option>
+                  <option lang="hi" value="hindi">हिन्दी</option>
+                  <option lang="id" value="indonesian">Bahasa Indonesia</option>
+                  <option lang="it" value="italiano">Italiano</option>
+                  <option lang="ja" value="japanese">日本語</option>
+                  <option lang="ko" value="korean">한국어</option>
+                  <option lang="ms" value="malay">Bahasa Melayu</option>
+                  <option lang="pl" value="polish">Polski</option>
+                  <option lang="pt" value="portuguese">Português</option>
+                  <option lang="ro" value="romanian">Română</option>
+                  <option lang="ru" value="russian">Русский</option>
+                  <option lang="sk" value="slovak">Slovenčina</option>
+                  <option lang="es" value="espanol">Español</option>
+                  <option lang="sv" value="swedish">Svenska</option>
+                  <option lang="ta" value="tamil">தமிழ்</option>
+                  <option lang="tr" value="turkish">Türkçe</option>
+                  <option lang="uk" value="ukrainian">Українська</option>
+                  <option lang="" value="global">Auto-detect</option>
+                </select>
+              </form>
+            </div>
+          </div>
+
+          <div class="user-preference-item w-full max-w-lg" id="vad-status-indicator-preference">
+            <label class="wraper" for="vad-status-indicator-enabled">
+              <span class="label-text" data-i18n="vadStatusIndicatorEnabledLabel">Show VAD Status</span>
+              <div class="switch-wrap control">
+                <input type="checkbox" id="vad-status-indicator-enabled" name="vadStatusIndicatorEnabled" />
+                <div class="switch"></div>
+              </div>
+            </label>
+          </div>
+
+          <div class="user-preference-item w-full max-w-lg" id="remove-filler-words-preference">
+            <label class="wraper" for="remove-filler-words" data-i18n-attr="title:removeFillerWordsTooltip">
+              <span class="label-text" data-i18n="removeFillerWordsLabel">Remove filler words (beta)</span>
+              <div class="switch-wrap control">
+                <input type="checkbox" id="remove-filler-words" name="removeFillerWords" />
+                <div class="switch"></div>
+              </div>
+            </label>
+          </div>
+        </section>
+
+        <!-- About -->
+        <section id="tab-about" class="tab-panel hidden">
+          <h2 class="panel-heading">About</h2>
+          <section id="application-status">
+            <div class="status-container">
+              <div class="status">
+                <p class="message unknown" data-i18n="checkingApplicationStatus">Checking on our servers...</p>
+              </div>
+            </div>
+          </section>
+          <section id="application-status-detail" class="hidden issue" />
+        </section>
+      </main>
     </div>
 
-    <section id="analytics-consent" class="hidden">
-      <h1 data-i18n="consentBetterTogether">Let's improve Say, Pi together</h1>
-      <p data-i18n="consentSharingPurpose">
-        Sharing your usage data will help us understand how people use Say, Pi
-        so we can make it better for everyone.
-      </p>
-      <ul>
-        <li data-i18n="consentNoPii">
-          We won't collect or see personal data, like messages or names.
-        </li>
-        <li data-i18n="consentPrivacyParamount">
-          Your privacy is paramount. Anything you say remains between you and
-          Pi.
-        </li>
-        <li data-i18n="consentDataDeidentified">
-          Analytics are not tied to individuals. Any data used is de-identified.
-        </li>
-        <li data-i18n="consentNoSale">
-          We won't sell your data to third parties, or use it for advertising.
-        </li>
-        <li data-i18n="consentRightToRevoke">
-          You can change your mind at any time.
-        </li>
-      </ul>
-      <a
-        href="https://www.saypi.ai/privacy-policy"
-        target="_blank"
-        rel="noopener"
-        data-i18n="consentPrivacyPolicy"
-        >Read our Privacy Policy</a
-      >
-      <h2 data-i18n="consentAskParticipate">Would you like to participate?</h2>
-      <div class="buttons">
-        <button
-          id="opt-out"
-          type="button"
-          class="btn btn-primary"
-          data-i18n="consentOptOut"
-        >
-          No thanks
-        </button>
-        <button
-          id="opt-in"
-          type="button"
-          class="btn btn-primary"
-          data-i18n="consentOptIn"
-        >
-          I'm in!
-        </button>
-      </div>
-    </section>
-
-    <section id="application-status">
-      <div class="status-container">
-        <div class="status">
-          <p class="message unknown" data-i18n="checkingApplicationStatus">
-            Checking on our servers...
-          </p>
-        </div>
-      </div>
-    </section>
-    <section id="application-status-detail" class="hidden issue" />
-
+    <script src="../../public/lucide.min.js"></script>
+    <script src="tabs.js"></script>
+    <script src="mode-selector.js"></script>
     <script src="popup-config.js"></script>
     <script src="simple-user-agent.js"></script>
     <script src="language-picker.js"></script>

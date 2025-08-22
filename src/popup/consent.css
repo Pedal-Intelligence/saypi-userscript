@@ -1,15 +1,55 @@
       /* consent */
       #analytics-consent {
-        width: 580px;
-        padding: 200px 1.5rem 1.5rem 1.5rem;
-        background-image: url("data-sharing.png");
-        background-size: contain;
-        background-repeat: no-repeat;
+        position: fixed;
+        inset: 0;
+        background: rgba(255,255,255,0.95);
+        backdrop-filter: saturate(180%) blur(6px);
+        z-index: 1000;
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        padding: 16px; /* provide a small frame around the card */
+        overflow-y: auto; /* allow page scroll when content is taller than viewport */
+      }
+      #analytics-consent .consent-card {
+        width: 720px;
+        padding: 0 0 1.5rem 0;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08), 0 0 0 1px #e5e7eb;
+        background-color: #fff;
+        height: calc(100vh - 32px); /* fill viewport minus overlay padding */
+        overflow-y: auto; /* internal scroll when needed */
+        -webkit-overflow-scrolling: touch;
+        display: grid;
+        grid-template-columns: 160px 1fr; /* narrower hero to give content more room */
+        gap: 12px;
+      }
+      #analytics-consent .consent-hero {
+        background-image: var(--consent-hero-url, url("data-sharing-portrait.jpg"));
+        background-size: cover;
+        background-position: center;
+        border-top-left-radius: 12px;
+        border-bottom-left-radius: 12px;
+        min-height: 100%;
+      }
+      #analytics-consent .consent-content { 
+        padding: 0.75rem 1rem 1rem 0; 
+        display: flex;
+        flex-direction: column;
+      }
+      #analytics-consent .consent-content h1 { margin: 0.25rem 0 0.75rem 0; }
+      #analytics-consent .consent-content p { margin: 0 0 0.75rem 0; }
+      #analytics-consent .consent-content ul { margin: 0 0 0.75rem 1rem; }
+      #analytics-consent .consent-content li { margin: 0 0 0.5rem 0; }
+      #analytics-consent .consent-content h2 { margin: 0.75rem 0 0.5rem 0; }
+      #analytics-consent .consent-content .buttons { margin-top: 0.5rem; }
+      @media (max-width: 720px) {
+        #analytics-consent .consent-card { grid-template-columns: 1fr; }
+        #analytics-consent .consent-hero { border-bottom-left-radius: 0; border-top-right-radius: 12px; height: 180px; min-height: 180px; }
+        #analytics-consent .consent-content { padding: 1rem; }
       }
       /* Mobile */
-      .mobile-device #analytics-consent {
-        width: 400px;
-      }
+      .mobile-device #analytics-consent .consent-card { width: 400px; }
       #analytics-consent.read {
         display: none;
       }

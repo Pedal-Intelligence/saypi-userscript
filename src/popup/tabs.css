@@ -1,0 +1,219 @@
+.settings-root {
+  background: #f8fafc;
+}
+.settings-container {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem;
+  min-width: 160px;
+}
+
+.tab-button {
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  margin-bottom: 0.25rem;
+  background: transparent;
+  border: none;
+  color: #1a202c;
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  width: 180px;
+}
+
+.tab-button.active {
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 0 0 1px #e5e7eb;
+}
+
+.tab-button:hover { background: #f8fafc; }
+.tab-button { transition: box-shadow 120ms ease, background 120ms ease; }
+
+.content {
+  flex: 1;
+  min-width: 520px;
+  padding: 0.5rem 0 1rem 0;
+}
+.tab-panel { width: 100%; max-width: 520px; }
+/* Ensure consistent desktop sizing for content cards */
+.user-preference-item { min-width: 520px; }
+
+.tab-panel.hidden {
+  display: none !important;
+}
+
+/* Mobile/portrait-friendly layout: stack and give content full width */
+@media (max-width: 735px) {
+  .settings-container {
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 100%;
+    width: 100%; /* force full width on mobile */
+  }
+  .sidebar {
+    flex-direction: row;
+    gap: 0.5rem;
+    min-width: unset;
+    width: 100%;
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    background: #f8fafc;
+  }
+  .tab-button {
+    width: auto;
+    flex: 1 0 auto;
+    white-space: nowrap;
+    justify-content: center;
+    gap: 0;
+  }
+  /* Icon-only tabs on phones */
+  .tab-button .tab-label { display: none; }
+  .tab-button .icon-circle { margin: 0 auto; }
+  .content {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  /* Allow cards to shrink on mobile regardless of desktop min-widths */
+  .user-preference-item { min-width: 0; }
+  /* panel spacing on mobile */
+  .tab-panel { margin-left: 0; margin-right: 0; }
+  /* Align quota blocks with card padding (1rem left/right) */
+  #premium-status .quota-progress,
+  #premium-status .quota-footer {
+    width: calc(100% - 2rem);
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+  .quota-progress { width: 100%; }
+  /* Hide secondary unauthenticated message to save space on mobile */
+  .settings-header .profile-banner #unauthenticated-message { display: none !important; }
+}
+
+/* Subtle list tightening */
+.user-preference-item {
+  border-radius: 10px;
+  margin: 4px 0;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.label-text {
+  color: #0f172a;
+}
+
+.quota-progress { width: 464px; }
+.quota-progress .progress-bar { height: 8px; border-radius: 6px; }
+.quota-progress .percentage-label { font-size: 0.7rem; }
+
+/* Header banner */
+.settings-header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 0.25rem;
+  flex-direction: column;
+  align-items: center;
+}
+.settings-header::after {
+  content: "";
+  display: block;
+  width: 700px;
+  height: 1px;
+  background: #e5e7eb;
+  margin: 8px 0 4px 0;
+}
+.settings-header .profile-banner {
+  width: 720px;
+  display: flex;
+  border: none;
+  background: transparent;
+  padding: 0.25rem 0.5rem;
+  border-radius: 10px;
+}
+
+/* Make header and banner fluid on narrow screens */
+@media (max-width: 735px) {
+  .settings-header::after { width: 100%; }
+  .settings-header .profile-banner { width: 100%; }
+}
+
+/* make header greeting row justify space-between and tighten logo size */
+.settings-header .profile-banner > .flex { justify-content: space-between; width: 100%; padding-left: 12px; }
+.settings-header .profile-banner .logo { width: 28px; height: 28px; }
+.settings-header .profile-banner #profile-name,
+.settings-header .profile-banner #profile-status {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+.settings-header .profile-banner .unauthenticated-inline {
+  margin-left: 12px;
+  margin-right: 12px;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.25rem; /* 20px */
+  font-weight: 400;
+  color: #4b5563; /* gray-600 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  align-self: center;
+}
+.settings-header .profile-banner .header-divider {
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background: #e5e7eb;
+  margin: 0 12px;
+}
+
+.panel-heading {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0.5rem 0;
+}
+/* Add a bit more left breathing room on mobile for headings */
+@media (max-width: 735px) {
+  .panel-heading { padding-left: 0.5rem; }
+}
+
+/* Match headings to tab accents */
+#tab-general .panel-heading { color: #418a2f; }
+#tab-chat .panel-heading { color: #6d28d9; }
+#tab-dictation .panel-heading { color: #15803d; }
+#tab-about .panel-heading { color: #374151; }
+
+/* Tab icons */
+.tab-button .icon-circle {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  background: #e2e8f0;
+}
+.tab-button .icon-circle svg { width: 18px; height: 18px; display: block; }
+.tab-button[data-tab="general"] .icon-circle { background:#e8f6e4; color:#418a2f; }
+.tab-button[data-tab="chat"] .icon-circle { background:#ede9fe; color:#6d28d9; }
+.tab-button[data-tab="dictation"] .icon-circle { background:#dcfce7; color:#15803d; }
+.tab-button[data-tab="about"] .icon-circle { background:#e5e7eb; color:#374151; }
+
+/* Ensure card-like rows fill width on phones, overriding fixed widths declared elsewhere */
+@media (max-width: 735px) {
+  .user-preference-item,
+  .usage-charges-item { width: 100% !important; }
+}
+
+

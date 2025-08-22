@@ -155,6 +155,8 @@ for BROWSER in "$@"; do
     mkdir -p "$AUDIO_DIR"
     cp public/saypi.user.js "$PUBLIC_DIR"
     cp public/background.js "$PUBLIC_DIR"
+    # Ensure lucide UMD bundle is available to the popup
+    cp public/lucide.min.js "$PUBLIC_DIR"
     cp public/silero_vad*.onnx "$PUBLIC_DIR"
     cp public/ort-wasm*.{wasm,mjs} "$PUBLIC_DIR"
     cp "$WORKLET_FILE" "$PUBLIC_DIR"
@@ -181,11 +183,11 @@ for BROWSER in "$@"; do
     cp public/icons/logos/*.png "$LOGOS_DIR"
 
     mkdir -p "$FLAGS_DIR"
-    cp src/icons/bubble-*.png "$SRC_ICONS_DIR"
+    cp src/icons/bubble-*.* "$SRC_ICONS_DIR"
     cp src/icons/flags/*.svg "$FLAGS_DIR"
 
     mkdir -p "$POPUP_DIR"
-    cp src/popup/*.html src/popup/*.js src/popup/*.css src/popup/*.png src/popup/*.svg "$POPUP_DIR"
+    cp src/popup/*.html src/popup/*.js src/popup/*.css src/popup/*.jpg src/popup/*.svg "$POPUP_DIR"
 
     # Only copy offscreen HTML files for browsers that support offscreen documents
     if [ "$BROWSER" != "firefox" ]; then
