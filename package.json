@@ -64,7 +64,7 @@
     "http-proxy-middleware": "^2.0.6",
     "js-md5": "^0.8.3",
     "lodash": "^4.17.21",
-    "onnxruntime-web": "^1.18.0",
+    "onnxruntime-web": "1.14.0",
     "rxjs": "^7.8.1",
     "serve-handler": "^6.1.5",
     "wasm-feature-detect": "^1.8.0",
