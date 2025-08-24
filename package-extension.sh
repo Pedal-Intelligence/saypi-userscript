@@ -61,6 +61,13 @@ modify_chrome_edge_manifest() {
     ' "$manifest_file" > "$manifest_file.tmp" && mv "$manifest_file.tmp" "$manifest_file"
 }
 
+remove_downloads_permission() {
+    local manifest_file="$1"
+    
+    # Remove downloads permission from the manifest
+    jq '.permissions = (.permissions | map(select(. != "downloads")))' "$manifest_file" > "$manifest_file.tmp" && mv "$manifest_file.tmp" "$manifest_file"
+}
+
 # Check dependencies before processing
 check_jq_installed
 
@@ -154,6 +161,10 @@ for BROWSER in "$@"; do
     if [ "$BROWSER" = "chrome" ] || [ "$BROWSER" = "edge" ]; then
         modify_chrome_edge_manifest "$EXT_DIR/manifest.json" "$WORKLET_FILE"
     fi
+    
+    # Remove downloads permission for production builds (always for packaged extensions)
+    echo "  → Removing downloads permission for production build"
+    remove_downloads_permission "$EXT_DIR/manifest.json"
 
     mkdir -p "$AUDIO_DIR"
     cp public/saypi.user.js "$PUBLIC_DIR"
