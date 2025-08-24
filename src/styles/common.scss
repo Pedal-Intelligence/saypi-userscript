@@ -4,8 +4,9 @@
   fill: rgb(245 238 223); /* bg-cream-550 */
 }
 
-
-.saypi-enter-button,
+#saypi-enter-button {
+  margin-left: 6px; /* create some space between the discover button and the focus button */
+}
 .saypi-exit-button,
 .settings-button.mini {
   width: 3rem;
