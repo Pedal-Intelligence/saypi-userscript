@@ -1,0 +1,31 @@
+---
+description: Cross‑realm ArrayBuffer fix for VAD model loading (Firefox) and asset paths
+globs: src/vad/**, src/RequestInterceptor.js, webpack.config.js
+alwaysApply: true
+---
+
+- **Problem (Firefox realms)**
+  - Page scripts and content scripts are different realms. `instanceof ArrayBuffer` fails across realms.
+  - `@ricky0123/vad-web` calls `fetch(url).then(r => r.arrayBuffer())` and passes the result to `onnxruntime-web`.
+  - ORT validates with `instanceof ArrayBuffer`/`SharedArrayBuffer`; cross‑realm buffers cause `TypeError: Unexpected argument[0]`.
+
+- **Solution (current)**
+  - In `src/RequestInterceptor.js`, do NOT rewrap `Response`/`Blob`.
+  - Patch `Response.prototype.arrayBuffer()` to copy into a same‑realm `ArrayBuffer` only for model URLs (`silero_*.onnx`).
+  - Keep `Accept: application/wasm` for `.wasm`; skip forcing response headers to avoid cross‑realm issues.
+
+- **Alternative**
+  - Use `src/vad/custom-model-fetcher.js` and pass as `modelFetcher` to `MicVAD.new({...})` to coerce the model buffer locally.
+
+- **Asset paths**
+  - `baseAssetPath` and `onnxWASMBasePath` must be `chrome.runtime.getURL("public/")`.
+  - Ensure `public/*` is listed in `manifest.json` `web_accessible_resources`.
+
+- **Why not set Content-Type?**
+  - `.onnx` Content-Type is irrelevant for `arrayBuffer()` and ORT. Rewrapping to set it introduces cross‑realm objects.
+  - `.wasm` streaming prefers `Content-Type: application/wasm`; lacking it falls back to non‑streaming. We retain an `Accept` header but do not rewrap.
+
+- **When changing VAD loading**
+  - If removing the shim, wire `customModelFetcher` via VAD options (both onscreen and offscreen clients).
+  - Test Firefox desktop and Android: confirm model loads, no TypeError, VAD starts.
+

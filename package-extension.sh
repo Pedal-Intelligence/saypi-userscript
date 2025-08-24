@@ -145,6 +145,9 @@ for BROWSER in "$@"; do
     if [ "$BROWSER" = "firefox" ]; then
         echo "  → Modifying manifest for Firefox compatibility (removing offscreen features)"
         modify_firefox_manifest "$EXT_DIR/manifest.json"
+        # Also remove contextMenus permission for Firefox (not supported on mobile)
+        tmp_manifest="$EXT_DIR/manifest.json.tmp"
+        cat "$EXT_DIR/manifest.json" | jq ' .permissions = (.permissions // []) | .permissions |= map(select(. != "contextMenus")) ' > "$tmp_manifest" && mv "$tmp_manifest" "$EXT_DIR/manifest.json"
     fi
     
     # Modify manifest for Chrome and Edge to include only the used worklet file
