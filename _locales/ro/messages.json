@@ -187,6 +187,9 @@
   "consentPrivacyParamount": {
     "message": "Confidențialitatea ta este de cea mai mare importanță. Orice spui rămâne între tine și Pi."
   },
+  "consentPrivacyPolicy": {
+    "message": "Citește Politica noastră de confidențialitate"
+  },
   "consentRightToRevoke": {
     "message": "Îți poți schimba părerea oricând."
   },

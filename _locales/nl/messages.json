@@ -187,6 +187,9 @@
   "consentPrivacyParamount": {
     "message": "Uw privacy is van het grootste belang. Alles wat u zegt blijft tussen u en Pi."
   },
+  "consentPrivacyPolicy": {
+    "message": "Lees ons Privacybeleid"
+  },
   "consentRightToRevoke": {
     "message": "Je kunt op elk moment van gedachten veranderen."
   },

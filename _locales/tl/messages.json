@@ -187,6 +187,9 @@
   "consentPrivacyParamount": {
     "message": "Ang iyong privacy ay lubhang mahalaga. Anuman ang iyong sabihin ay mananatiling sa pagitan mo at ni Pi."
   },
+  "consentPrivacyPolicy": {
+    "message": "Basahin ang aming Patakaran sa Privacy"
+  },
   "consentRightToRevoke": {
     "message": "Maaari kang magbago ng isip anumang oras."
   },

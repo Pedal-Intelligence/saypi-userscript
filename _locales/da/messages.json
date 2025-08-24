@@ -187,6 +187,9 @@
   "consentPrivacyParamount": {
     "message": "Dit privatliv er altafgørende. Alt hvad du siger forbliver mellem dig og Pi."
   },
+  "consentPrivacyPolicy": {
+    "message": "Læs vores privatlivspolitik"
+  },
   "consentRightToRevoke": {
     "message": "Du kan ændre din mening når som helst."
   },

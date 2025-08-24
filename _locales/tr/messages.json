@@ -187,6 +187,9 @@
   "consentPrivacyParamount": {
     "message": "Gizliliğiniz çok önemlidir. Söylediğiniz her şey sizin ve Pi arasında kalır."
   },
+  "consentPrivacyPolicy": {
+    "message": "Gizlilik Politikamızı okuyun."
+  },
   "consentRightToRevoke": {
     "message": "İstediğiniz zaman fikrinizi değiştirebilirsiniz."
   },

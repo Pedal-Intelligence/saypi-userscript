@@ -187,6 +187,9 @@
   "consentPrivacyParamount": {
     "message": "Din integritet är av yttersta vikt. Allt du säger stannar mellan dig och Pi."
   },
+  "consentPrivacyPolicy": {
+    "message": "Läs vår integritetspolicy"
+  },
   "consentRightToRevoke": {
     "message": "Du kan ändra dig när som helst."
   },

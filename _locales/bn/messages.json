@@ -187,6 +187,9 @@
   "consentPrivacyParamount": {
     "message": "আপনার গোপনীয়তা সর্বোচ্চ। আপনি যা বলেন, তা Pi-র এবং আপনার মাঝেরে।"
   },
+  "consentPrivacyPolicy": {
+    "message": "আমাদের গোপনীয়তা নীতিমালা পড়ুন"
+  },
   "consentRightToRevoke": {
     "message": "আপনি যে কোনো সময়ে আপনার মনের মতামত পরিবর্তন করতে পারেন।"
   },

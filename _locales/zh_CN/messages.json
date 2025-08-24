@@ -187,6 +187,9 @@
   "consentPrivacyParamount": {
     "message": "您的隐私至关重要。您所说的任何话都只会在您和Pi之间保持。"
   },
+  "consentPrivacyPolicy": {
+    "message": "阅读我们的隐私政策"
+  },
   "consentRightToRevoke": {
     "message": "您可以随时改变主意。"
   },

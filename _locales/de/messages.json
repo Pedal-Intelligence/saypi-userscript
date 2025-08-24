@@ -187,6 +187,9 @@
   "consentPrivacyParamount": {
     "message": "Ihre Privatsphäre ist von größter Bedeutung. Alles, was Sie sagen, bleibt zwischen Ihnen und Pi."
   },
+  "consentPrivacyPolicy": {
+    "message": "Lese unsere Datenschutzrichtlinie"
+  },
   "consentRightToRevoke": {
     "message": "Sie können Ihre Meinung jederzeit ändern."
   },

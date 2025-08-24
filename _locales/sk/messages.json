@@ -187,6 +187,9 @@
   "consentPrivacyParamount": {
     "message": "Vaše súkromie je najdôležitejšie. Všetko, čo poviete, zostane medzi vami a Pi."
   },
+  "consentPrivacyPolicy": {
+    "message": "Prečítaj si našu Zásadu ochrany osobných údajov"
+  },
   "consentRightToRevoke": {
     "message": "Môžete kedykoľvek zmeniť svoje rozhodnutie."
   },

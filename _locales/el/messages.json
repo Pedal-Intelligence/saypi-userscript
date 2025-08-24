@@ -187,6 +187,9 @@
   "consentPrivacyParamount": {
     "message": "Η ιδιωτικότητά σας είναι παραπάνω από όλα. Οτιδήποτε λέτε παραμένει μεταξύ σας και του Pi."
   },
+  "consentPrivacyPolicy": {
+    "message": "Διαβάστε την Πολιτική Απορρήτου μας"
+  },
   "consentRightToRevoke": {
     "message": "Μπορείς να αλλάξεις γνώμη ανά πάσα στιγμή."
   },

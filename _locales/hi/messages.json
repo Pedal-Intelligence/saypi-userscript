@@ -187,6 +187,9 @@
   "consentPrivacyParamount": {
     "message": "आपकी गोपनीयता महत्वपूर्ण है। जो कुछ भी आप कहते हैं, वह आपके और पाई के बीच में ही रहता है।"
   },
+  "consentPrivacyPolicy": {
+    "message": "हमारी गोपनीयता नीति पढ़ें"
+  },
   "consentRightToRevoke": {
     "message": "आप किसी भी समय अपना मन बदल सकते हैं।"
   },

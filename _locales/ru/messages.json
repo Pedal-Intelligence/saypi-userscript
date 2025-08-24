@@ -187,6 +187,9 @@
   "consentPrivacyParamount": {
     "message": "Ваша конфиденциальность превыше всего. Все, что вы говорите, остается между вами и Pi."
   },
+  "consentPrivacyPolicy": {
+    "message": "Ознакомьтесь с нашей Политикой конфиденциальности"
+  },
   "consentRightToRevoke": {
     "message": "Вы можете передумать в любое время."
   },

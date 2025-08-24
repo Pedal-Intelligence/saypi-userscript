@@ -187,6 +187,9 @@
   "consentPrivacyParamount": {
     "message": "உங்கள் தனியுரிமை மிகுந்த முக்கியத்துவம். நீங்கள் சொல்வது Pi- உடைჯி,  உngalukku mattumē irukkum."
   },
+  "consentPrivacyPolicy": {
+    "message": "எங்கள் தனியுரிமை கொள்கையை வாசிக்கவும்"
+  },
   "consentRightToRevoke": {
     "message": "நீங்கள் எப்போதும் உங்கள் மேலும் அணியுவினை மாற்றி விடு."
   },

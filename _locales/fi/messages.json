@@ -187,6 +187,9 @@
   "consentPrivacyParamount": {
     "message": "Yksityisyytesi on ensisijaisen tärkeää. Kaikki mitä sanot, pysyy sinun ja Pin välillä."
   },
+  "consentPrivacyPolicy": {
+    "message": "Lue tietosuojakäytäntömme"
+  },
   "consentRightToRevoke": {
     "message": "Voit muuttaa mieltäsi milloin tahansa."
   },

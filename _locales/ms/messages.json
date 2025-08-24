@@ -187,6 +187,9 @@
   "consentPrivacyParamount": {
     "message": "Privasi anda adalah yang utama. Apa sahaja yang anda katakan kekal di antara anda dan Pi."
   },
+  "consentPrivacyPolicy": {
+    "message": "Baca Dasar Privasi kami"
+  },
   "consentRightToRevoke": {
     "message": "Anda boleh menukar fikiran anda pada bila-bila masa."
   },

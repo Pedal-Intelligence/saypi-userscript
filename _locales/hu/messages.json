@@ -187,6 +187,9 @@
   "consentPrivacyParamount": {
     "message": "Az Ön adatvédelme elsődleges. Amit mond, az Ön és a Pi között marad."
   },
+  "consentPrivacyPolicy": {
+    "message": "Olvasd el az Adatvédelmi Szabályzatunkat"
+  },
   "consentRightToRevoke": {
     "message": "Bármikor megváltoztathatod a véleményed."
   },

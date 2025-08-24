@@ -187,6 +187,9 @@
   "consentPrivacyParamount": {
     "message": "Quyền riêng tư của bạn là quan trọng nhất. Bất cứ điều gì bạn nói chỉ giữa bạn và Pi."
   },
+  "consentPrivacyPolicy": {
+    "message": "Đọc Chính sách Bảo mật của chúng tôi"
+  },
   "consentRightToRevoke": {
     "message": "Bạn có thể thay đổi quyết định của mình vào bất kỳ lúc nào."
   },
