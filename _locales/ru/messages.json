@@ -31,6 +31,30 @@
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Статус приложения неизвестен"
   },
+  "ariaLabelAccurate": {
+    "description": "Ария-метка для иконки режима точной транскрипции.",
+    "message": "Точная"
+  },
+  "ariaLabelBalanced": {
+    "description": "Ария-метка для иконки режима сбалансированной транскрипции.",
+    "message": "Сбалансированная"
+  },
+  "ariaLabelFast": {
+    "description": "Ария-метка для иконки быстрого режима транскрипции.",
+    "message": "Быстрая"
+  },
+  "ariaLabelHand": {
+    "description": "Ария-метка для иконки руки, представляющей ручной режим.",
+    "message": "Рука"
+  },
+  "ariaLabelRobot": {
+    "description": "Ария-метка для иконки робота, представляющего агентский режим.",
+    "message": "Робот"
+  },
+  "ariaLabelRocket": {
+    "description": "Ария-метка для иконки ракеты, представляющей автоматический режим.",
+    "message": "Ракета"
+  },
   "assistantIsListening": {
     "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ слушает...",
@@ -155,6 +179,10 @@
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Проверка статуса приложения..."
   },
+  "clearPreferencesButton": {
+    "description": "Текст для кнопки, очищающей все пользовательские настройки.",
+    "message": "Сбросить настройки"
+  },
   "clickToCollapse": {
     "description": "Text indicating user can click to hide expanded content.",
     "message": "Нажмите, чтобы обрушиться"
@@ -238,6 +266,10 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Текущие платежи"
+  },
+  "dashboardLinkTitle": {
+    "description": "Текст подсказки для ссылки на открытие панели управления Say, Pi.",
+    "message": "Открыть панель управления Say, Pi"
   },
   "dictationPlaceholderError": {
     "description": "Текст-заместитель, отображаемый в поле ввода, когда диктовка столкнулась с ошибкой.",
@@ -450,6 +482,10 @@
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Прозвище"
   },
+  "nicknamePlaceholder": {
+    "description": "Текст-заполнитель для поля ввода имени помощника.",
+    "message": "Пи"
+  },
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Не подписан"
@@ -605,6 +641,22 @@
     "description": "Подсказка, описывающая, как работает опция удаления слов-паразитов.",
     "message": "Удаляет 'эм', 'ээ', повторяющиеся слова и другие вербальные излишества. Сохраняет смысл, пунктуацию и форматирование."
   },
+  "sectionHeadingAIChat": {
+    "description": "Заголовок раздела для настроек AI-чата.",
+    "message": "AI Чат"
+  },
+  "sectionHeadingAbout": {
+    "description": "Заголовок раздела 'О нас'.",
+    "message": "О нас"
+  },
+  "sectionHeadingDictation": {
+    "description": "Заголовок раздела для настроек диктовки.",
+    "message": "Диктовка"
+  },
+  "sectionHeadingGeneral": {
+    "description": "Заголовок раздела для общих настроек.",
+    "message": "Общие"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Поделиться аналитикой"
@@ -729,6 +781,22 @@
   "submit_mode_off_description": {
     "description": "Description for the manual submission mode.",
     "message": "Отправлять только при нажатии кнопки"
+  },
+  "tabAIChat": {
+    "description": "Название вкладки для секции настроек AI-чата.",
+    "message": "AI Чат"
+  },
+  "tabAbout": {
+    "description": "Название вкладки для раздела 'О нас'.",
+    "message": "О нас"
+  },
+  "tabDictation": {
+    "description": "Название вкладки для секции настроек диктовки.",
+    "message": "Диктовка"
+  },
+  "tabGeneral": {
+    "description": "Название вкладки для секции общих настроек.",
+    "message": "Общие"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",

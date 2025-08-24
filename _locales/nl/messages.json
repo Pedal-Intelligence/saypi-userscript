@@ -31,6 +31,30 @@
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Status van de applicatie onbekend"
   },
+  "ariaLabelAccurate": {
+    "description": "Aria-label voor het icoon van de nauwkeurige transcriptiemodus.",
+    "message": "Nauwkeurig"
+  },
+  "ariaLabelBalanced": {
+    "description": "Aria-label voor het icoon van de gebalanceerde transcriptiemodus.",
+    "message": "Gebalanceerd"
+  },
+  "ariaLabelFast": {
+    "description": "Aria-label voor het icoon van de snelle/snelheids transcriptiemodus.",
+    "message": "Snel"
+  },
+  "ariaLabelHand": {
+    "description": "Aria-label voor het handicoon dat de handmatige modus vertegenwoordigt.",
+    "message": "Hand"
+  },
+  "ariaLabelRobot": {
+    "description": "Aria-label voor het roboticoon dat de agentmodus vertegenwoordigt.",
+    "message": "Robot"
+  },
+  "ariaLabelRocket": {
+    "description": "Aria-label voor het raketicoon dat de automatische modus vertegenwoordigt.",
+    "message": "Raket"
+  },
   "assistantIsListening": {
     "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ luistert...",
@@ -155,6 +179,10 @@
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Controleren van applicatiestatus..."
   },
+  "clearPreferencesButton": {
+    "description": "Tekst voor de knop die alle gebruikersvoorkeuren wist.",
+    "message": "Voorkeuren Wissen"
+  },
   "clickToCollapse": {
     "description": "Text indicating user can click to hide expanded content.",
     "message": "Klik om in te storten"
@@ -238,6 +266,10 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Huidige kosten"
+  },
+  "dashboardLinkTitle": {
+    "description": "Tooltiptekst voor de link om het Say, Pi-dashboard te openen.",
+    "message": "Open Say, Pi Dashboard"
   },
   "dictationPlaceholderError": {
     "description": "Plaatsvervangende tekst die in het invoerveld wordt weergegeven wanneer er een fout optreedt bij de dictatie.",
@@ -450,6 +482,10 @@
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Bijnaam"
   },
+  "nicknamePlaceholder": {
+    "description": "Plaatsaanduiding voor het invoerveld van de bijnaam van de assistent.",
+    "message": "Pi"
+  },
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Niet aangemeld"
@@ -605,6 +641,22 @@
     "description": "Tooltip die beschrijft hoe de optie Verwijder vulwoorden werkt.",
     "message": "Verwijdert uh's, um's, herhaalde woorden en andere verbale rommel. Behoudt betekenis, interpunctie en opmaak."
   },
+  "sectionHeadingAIChat": {
+    "description": "Sectiekop voor de AI-chatinstellingen.",
+    "message": "AI Chat"
+  },
+  "sectionHeadingAbout": {
+    "description": "Sectiekop voor de informatie sectie.",
+    "message": "Over"
+  },
+  "sectionHeadingDictation": {
+    "description": "Sectiekop voor de dicteerinstellingen.",
+    "message": "Dicteren"
+  },
+  "sectionHeadingGeneral": {
+    "description": "Sectiekop voor algemene instellingen.",
+    "message": "Algemeen"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Deel analyses"
@@ -729,6 +781,22 @@
   "submit_mode_off_description": {
     "description": "Description for the manual submission mode.",
     "message": "Alleen verzenden als u op de knop drukt"
+  },
+  "tabAIChat": {
+    "description": "Tablabel voor de AI-chatinstellingen.",
+    "message": "AI Chat"
+  },
+  "tabAbout": {
+    "description": "Tablabel voor de informatie sectie.",
+    "message": "Over"
+  },
+  "tabDictation": {
+    "description": "Tablabel voor de dicteerinstellingen.",
+    "message": "Dicteren"
+  },
+  "tabGeneral": {
+    "description": "Tablabel voor de algemene instellingen.",
+    "message": "Algemeen"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",

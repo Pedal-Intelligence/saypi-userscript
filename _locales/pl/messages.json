@@ -31,6 +31,30 @@
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Stan aplikacji nieznany"
   },
+  "ariaLabelAccurate": {
+    "description": "Etykieta aria dla ikony trybu dokładnej transkrypcji.",
+    "message": "Dokładne"
+  },
+  "ariaLabelBalanced": {
+    "description": "Etykieta aria dla ikony trybu zrównoważonej transkrypcji.",
+    "message": "Zrównoważone"
+  },
+  "ariaLabelFast": {
+    "description": "Etykieta aria dla ikony trybu szybkiej transkrypcji.",
+    "message": "Szybkie"
+  },
+  "ariaLabelHand": {
+    "description": "Etykieta aria dla ikony ręki reprezentującej tryb ręczny.",
+    "message": "Ręka"
+  },
+  "ariaLabelRobot": {
+    "description": "Etykieta aria dla ikony robota reprezentującej tryb agenta.",
+    "message": "Robot"
+  },
+  "ariaLabelRocket": {
+    "description": "Etykieta aria dla ikony rakiety reprezentującej tryb automatyczny.",
+    "message": "Rakieta"
+  },
   "assistantIsListening": {
     "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ słucha...",
@@ -155,6 +179,10 @@
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Sprawdzanie statusu aplikacji..."
   },
+  "clearPreferencesButton": {
+    "description": "Tekst przycisku, który usuwa wszystkie preferencje użytkownika.",
+    "message": "Wyczyść preferencje"
+  },
   "clickToCollapse": {
     "description": "Text indicating user can click to hide expanded content.",
     "message": "Kliknij, aby zawalić się"
@@ -238,6 +266,10 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Aktualne opłaty"
+  },
+  "dashboardLinkTitle": {
+    "description": "Tekst wskazówki dla łącza otwierającego panel Say, Pi.",
+    "message": "Otwórz panel Say, Pi"
   },
   "dictationPlaceholderError": {
     "description": "Tekst zastępczy wyświetlany w polu wejściowym, gdy dyktowanie napotyka błąd.",
@@ -450,6 +482,10 @@
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Przydomek"
   },
+  "nicknamePlaceholder": {
+    "description": "Tekst zastępczy dla pola wprowadzania pseudonimu asystenta.",
+    "message": "Pi"
+  },
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Nie zalogowane"
@@ -605,6 +641,22 @@
     "description": "Podpowiedź opisująca, jak działa opcja Usuwania słów wypełniających.",
     "message": "Usuwa 'um', 'uh', powtarzające się słowa i inne werbalne niepotrzebne treści. Zachowuje znaczenie, interpunkcję i formatowanie."
   },
+  "sectionHeadingAIChat": {
+    "description": "Nagłówek sekcji ustawień czatu AI.",
+    "message": "Czat AI"
+  },
+  "sectionHeadingAbout": {
+    "description": "Nagłówek sekcji o aplikacji.",
+    "message": "O aplikacji"
+  },
+  "sectionHeadingDictation": {
+    "description": "Nagłówek sekcji ustawień dyktowania.",
+    "message": "Dyktowanie"
+  },
+  "sectionHeadingGeneral": {
+    "description": "Nagłówek sekcji ustawień ogólnych.",
+    "message": "Ogólne"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Udostępnij statystyki"
@@ -729,6 +781,22 @@
   "submit_mode_off_description": {
     "description": "Description for the manual submission mode.",
     "message": "Prześlij dopiero po naciśnięciu przycisku"
+  },
+  "tabAIChat": {
+    "description": "Etykieta zakładki dla sekcji ustawień czatu AI.",
+    "message": "Czat AI"
+  },
+  "tabAbout": {
+    "description": "Etykieta zakładki dla sekcji o aplikacji.",
+    "message": "O aplikacji"
+  },
+  "tabDictation": {
+    "description": "Etykieta zakładki dla sekcji ustawień dyktowania.",
+    "message": "Dyktowanie"
+  },
+  "tabGeneral": {
+    "description": "Etykieta zakładki dla sekcji ustawień ogólnych.",
+    "message": "Ogólne"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",

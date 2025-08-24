@@ -31,6 +31,30 @@
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Sovelluksen tila tuntematon"
   },
+  "ariaLabelAccurate": {
+    "description": "Aria-tunniste tarkan kirjoitusmoodin kuvakkeelle.",
+    "message": "Tarkka"
+  },
+  "ariaLabelBalanced": {
+    "description": "Aria-tunniste tasapainoisen kirjoitusmoodin kuvakkeelle.",
+    "message": "Tasapainoinen"
+  },
+  "ariaLabelFast": {
+    "description": "Aria-tunniste nopean kirjoitusmoodin kuvakkeelle.",
+    "message": "Nopea"
+  },
+  "ariaLabelHand": {
+    "description": "Aria-tunniste käden kuvakkeelle, joka edustaa manuaalista moodia.",
+    "message": "Käsi"
+  },
+  "ariaLabelRobot": {
+    "description": "Aria-tunniste robotin kuvakkeelle, joka edustaa agenttimoodia.",
+    "message": "Robotti"
+  },
+  "ariaLabelRocket": {
+    "description": "Aria-tunniste raketin kuvakkeelle, joka edustaa automaattista moodia.",
+    "message": "Raketa"
+  },
   "assistantIsListening": {
     "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ kuuntelee...",
@@ -155,6 +179,10 @@
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Tarkistetaan sovelluksen tilaa..."
   },
+  "clearPreferencesButton": {
+    "description": "Teksti painikkeelle, joka tyhjentää kaikki käyttäjäasetukset.",
+    "message": "Tyhjennä asetukset"
+  },
   "clickToCollapse": {
     "description": "Text indicating user can click to hide expanded content.",
     "message": "Napsauta romahtaa"
@@ -238,6 +266,10 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Nykyiset maksut"
+  },
+  "dashboardLinkTitle": {
+    "description": "Vihje teksti linkille, joka avaa Say, Pi -ohjauspaneelin.",
+    "message": "Avaa Say, Pi -ohjauspaneeli"
   },
   "dictationPlaceholderError": {
     "description": "Paikkamerkkiteksti, joka näkyy syöttökentässä, kun äänen tallennuksessa on virhe.",
@@ -450,6 +482,10 @@
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Lempinimi"
   },
+  "nicknamePlaceholder": {
+    "description": "Paikkamerkki apulaisen nimen syöttökentässä.",
+    "message": "Pi"
+  },
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Ei allekirjoitettu"
@@ -605,6 +641,22 @@
     "description": "Tooltip, joka kuvaa, miten täytesanojen poistovaihtoehto toimii.",
     "message": "Poistaa 'um', 'uh', toistuvat sanat ja muut sanalliset häiriöt. Säilyttää merkityksen, välimerkit ja asettelu."
   },
+  "sectionHeadingAIChat": {
+    "description": "Osion otsikko AI-keskusteluasetuksille.",
+    "message": "AI Keskustelu"
+  },
+  "sectionHeadingAbout": {
+    "description": "Osion otsikko info-osastolle.",
+    "message": "Tietoa"
+  },
+  "sectionHeadingDictation": {
+    "description": "Osion otsikko diktaatioasetuksille.",
+    "message": "Diktaatio"
+  },
+  "sectionHeadingGeneral": {
+    "description": "Osion otsikko yleisille asetuksille.",
+    "message": "Yleiset"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Jaa analytiikka"
@@ -729,6 +781,22 @@
   "submit_mode_off_description": {
     "description": "Description for the manual submission mode.",
     "message": "Lähetä vain, kun painat painiketta"
+  },
+  "tabAIChat": {
+    "description": "Välilehden kansi AI-keskusteluasetuksille.",
+    "message": "AI Keskustelu"
+  },
+  "tabAbout": {
+    "description": "Välilehden kansi info-osastolle.",
+    "message": "Tietoa"
+  },
+  "tabDictation": {
+    "description": "Välilehden kansi diktaatioasetuksille.",
+    "message": "Diktaatio"
+  },
+  "tabGeneral": {
+    "description": "Välilehden kansi yleisille asetuksille.",
+    "message": "Yleiset"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",

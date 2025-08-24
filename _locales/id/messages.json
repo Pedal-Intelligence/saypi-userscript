@@ -31,6 +31,30 @@
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Status permohonan tidak diketahui"
   },
+  "ariaLabelAccurate": {
+    "description": "Label aria untuk ikon mode transkripsi akurat.",
+    "message": "Akurat"
+  },
+  "ariaLabelBalanced": {
+    "description": "Label aria untuk ikon mode transkripsi seimbang.",
+    "message": "Seimbang"
+  },
+  "ariaLabelFast": {
+    "description": "Label aria untuk ikon mode transkripsi cepat.",
+    "message": "Cepat"
+  },
+  "ariaLabelHand": {
+    "description": "Label aria untuk ikon tangan yang mewakili mode manual.",
+    "message": "Tangan"
+  },
+  "ariaLabelRobot": {
+    "description": "Label aria untuk ikon robot yang mewakili mode agen.",
+    "message": "Robot"
+  },
+  "ariaLabelRocket": {
+    "description": "Label aria untuk ikon roket yang mewakili mode otomatis.",
+    "message": "Roket"
+  },
   "assistantIsListening": {
     "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ mendengarkan...",
@@ -155,6 +179,10 @@
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Memeriksa status permohonan..."
   },
+  "clearPreferencesButton": {
+    "description": "Teks untuk tombol yang menghapus semua preferensi pengguna.",
+    "message": "Hapus Preferensi"
+  },
   "clickToCollapse": {
     "description": "Text indicating user can click to hide expanded content.",
     "message": "Klik untuk runtuh"
@@ -238,6 +266,10 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Biaya saat ini"
+  },
+  "dashboardLinkTitle": {
+    "description": "Teks tooltip untuk tautan membuka dasbor Say, Pi.",
+    "message": "Buka Dasbor Say, Pi"
   },
   "dictationPlaceholderError": {
     "description": "Teks placeholder yang ditampilkan di bidang input saat terjadi kesalahan pengenalan suara.",
@@ -450,6 +482,10 @@
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Nama panggilan"
   },
+  "nicknamePlaceholder": {
+    "description": "Teks placeholder untuk kolom input nama panggilan asisten.",
+    "message": "Pi"
+  },
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Tidak masuk"
@@ -605,6 +641,22 @@
     "description": "Tooltip yang menjelaskan bagaimana opsi Hapus kata-kata pengisi bekerja.",
     "message": "Menghapus um, uh, kata-kata yang diulang, dan kekacauan verbal lainnya. Menjaga makna, tanda baca, dan format."
   },
+  "sectionHeadingAIChat": {
+    "description": "Judul bagian untuk pengaturan obrolan AI.",
+    "message": "Obrolan AI"
+  },
+  "sectionHeadingAbout": {
+    "description": "Judul bagian untuk bagian tentang.",
+    "message": "Tentang"
+  },
+  "sectionHeadingDictation": {
+    "description": "Judul bagian untuk pengaturan dikte.",
+    "message": "Dikte"
+  },
+  "sectionHeadingGeneral": {
+    "description": "Judul bagian untuk pengaturan umum.",
+    "message": "Umum"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Bagikan analitik"
@@ -729,6 +781,22 @@
   "submit_mode_off_description": {
     "description": "Description for the manual submission mode.",
     "message": "Hanya kirimkan ketika Anda menekan tombol"
+  },
+  "tabAIChat": {
+    "description": "Label tab untuk bagian pengaturan obrolan AI.",
+    "message": "Obrolan AI"
+  },
+  "tabAbout": {
+    "description": "Label tab untuk bagian tentang.",
+    "message": "Tentang"
+  },
+  "tabDictation": {
+    "description": "Label tab untuk bagian pengaturan dikte.",
+    "message": "Dikte"
+  },
+  "tabGeneral": {
+    "description": "Label tab untuk bagian pengaturan umum.",
+    "message": "Umum"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",

@@ -31,6 +31,30 @@
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Uygulama durumu bilinmiyor"
   },
+  "ariaLabelAccurate": {
+    "description": "Doğru transkription modu simgesi için Aria etiketi.",
+    "message": "Doğru"
+  },
+  "ariaLabelBalanced": {
+    "description": "Dengeli transkription modu simgesi için Aria etiketi.",
+    "message": "Dengeli"
+  },
+  "ariaLabelFast": {
+    "description": "Hızlı/çabuk transkription modu simgesi için Aria etiketi.",
+    "message": "Hızlı"
+  },
+  "ariaLabelHand": {
+    "description": "Manuel modu temsil eden el simgesi için Aria etiketi.",
+    "message": "El"
+  },
+  "ariaLabelRobot": {
+    "description": "Ajan modunu temsil eden robot simgesi için Aria etiketi.",
+    "message": "Robot"
+  },
+  "ariaLabelRocket": {
+    "description": "Otomatik modu temsil eden rokete simgesi için Aria etiketi.",
+    "message": "Roket"
+  },
   "assistantIsListening": {
     "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ dinliyor...",
@@ -155,6 +179,10 @@
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Uygulama durumu kontrol ediliyor..."
   },
+  "clearPreferencesButton": {
+    "description": "Tüm kullanıcı tercihlerini temizleyen butonun metni.",
+    "message": "Tercihleri Temizle"
+  },
   "clickToCollapse": {
     "description": "Text indicating user can click to hide expanded content.",
     "message": "çökmek için tıklayın"
@@ -238,6 +266,10 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Mevcut ücretler"
+  },
+  "dashboardLinkTitle": {
+    "description": "Say, Pi kontrol panelini açmak için bağlantının ipucu metni.",
+    "message": "Say, Pi Kontrol Panelini Aç"
   },
   "dictationPlaceholderError": {
     "description": "Dikte bir hata ile karşılaştığında giriş alanında gösterilen yer tutucu metin.",
@@ -450,6 +482,10 @@
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Takma ad"
   },
+  "nicknamePlaceholder": {
+    "description": "Asistan takma adı girişi için yer tutucu metin.",
+    "message": "Pi"
+  },
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Oturum açmadı"
@@ -605,6 +641,22 @@
     "description": "Gereksiz kelimeleri kaldır seçeneğinin nasıl çalıştığını açıklayan ipucu.",
     "message": "Hımm, ıhh, tekrarlanan kelimeler ve diğer sözsel karmaşayı siler. Anlamı, noktalama işaretlerini ve biçimlendirmeyi korur."
   },
+  "sectionHeadingAIChat": {
+    "description": "Yapay zeka sohbet ayarları için bölüm başlığı.",
+    "message": "Yapay Zeka Sohbeti"
+  },
+  "sectionHeadingAbout": {
+    "description": "Hakkında bölümü için bölüm başlığı.",
+    "message": "Hakkında"
+  },
+  "sectionHeadingDictation": {
+    "description": "Dikte ayarları için bölüm başlığı.",
+    "message": "Dikte"
+  },
+  "sectionHeadingGeneral": {
+    "description": "Genel ayarlar için bölüm başlığı.",
+    "message": "Genel"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Analitikleri paylaş"
@@ -729,6 +781,22 @@
   "submit_mode_off_description": {
     "description": "Description for the manual submission mode.",
     "message": "Yalnızca düğmeye bastığınızda gönderin"
+  },
+  "tabAIChat": {
+    "description": "Yapay zeka sohbet ayarları bölümü için sekme etiketi.",
+    "message": "Yapay Zeka Sohbeti"
+  },
+  "tabAbout": {
+    "description": "Hakkında bölümü için sekme etiketi.",
+    "message": "Hakkında"
+  },
+  "tabDictation": {
+    "description": "Dikte ayarları bölümü için sekme etiketi.",
+    "message": "Dikte"
+  },
+  "tabGeneral": {
+    "description": "Genel ayarlar bölümü için sekme etiketi.",
+    "message": "Genel"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",

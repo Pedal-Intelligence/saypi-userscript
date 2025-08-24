@@ -31,6 +31,30 @@
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "应用程序状态未知"
   },
+  "ariaLabelAccurate": {
+    "description": "准确转录模式图标的 Aria 标签。",
+    "message": "准确"
+  },
+  "ariaLabelBalanced": {
+    "description": "平衡转录模式图标的 Aria 标签。",
+    "message": "平衡"
+  },
+  "ariaLabelFast": {
+    "description": "快速转录模式图标的 Aria 标签。",
+    "message": "快速"
+  },
+  "ariaLabelHand": {
+    "description": "代表手动模式的手图标的 Aria 标签。",
+    "message": "手动"
+  },
+  "ariaLabelRobot": {
+    "description": "代表代理模式的机器人图标的 Aria 标签。",
+    "message": "机器人"
+  },
+  "ariaLabelRocket": {
+    "description": "代表自动模式的火箭图标的 Aria 标签。",
+    "message": "火箭"
+  },
   "assistantIsListening": {
     "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$正在倾听...",
@@ -155,6 +179,10 @@
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "正在检查应用状态..."
   },
+  "clearPreferencesButton": {
+    "description": "清除所有用户偏好的按钮文本。",
+    "message": "清除偏好设置"
+  },
   "clickToCollapse": {
     "description": "Text indicating user can click to hide expanded content.",
     "message": "点击崩溃"
@@ -238,6 +266,10 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "当前费用"
+  },
+  "dashboardLinkTitle": {
+    "description": "打开 Say, Pi 控制面板的链接提示文本。",
+    "message": "打开 Say, Pi 控制面板"
   },
   "dictationPlaceholderError": {
     "description": "语音输入遇到错误时在输入框中显示的占位符文本。",
@@ -450,6 +482,10 @@
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "昵称"
   },
+  "nicknamePlaceholder": {
+    "description": "助手昵称输入框的占位符文本。",
+    "message": "Pi"
+  },
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "未签名"
@@ -605,6 +641,22 @@
     "description": "描述“去除填充词”选项如何工作的提示。",
     "message": "删除“嗯”、“啊”、重复词汇和其他语言杂音。保留意义、标点和格式。"
   },
+  "sectionHeadingAIChat": {
+    "description": "AI 聊天设置的部分标题。",
+    "message": "AI 聊天"
+  },
+  "sectionHeadingAbout": {
+    "description": "关于部分的标题。",
+    "message": "关于"
+  },
+  "sectionHeadingDictation": {
+    "description": "听写设置的部分标题。",
+    "message": "听写"
+  },
+  "sectionHeadingGeneral": {
+    "description": "常规设置的部分标题。",
+    "message": "常规"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "分享分析"
@@ -729,6 +781,22 @@
   "submit_mode_off_description": {
     "description": "Description for the manual submission mode.",
     "message": "仅在按下按钮时提交"
+  },
+  "tabAIChat": {
+    "description": "AI 聊天设置部分的标签。",
+    "message": "AI 聊天"
+  },
+  "tabAbout": {
+    "description": "关于部分的标签。",
+    "message": "关于"
+  },
+  "tabDictation": {
+    "description": "听写设置部分的标签。",
+    "message": "听写"
+  },
+  "tabGeneral": {
+    "description": "常规设置部分的标签。",
+    "message": "常规"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",

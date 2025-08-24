@@ -31,6 +31,30 @@
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Άγνωστη κατάσταση εφαρμογής"
   },
+  "ariaLabelAccurate": {
+    "description": "Ετικέτα Aria για το εικονίδιο της ακριβούς μεταγραφής.",
+    "message": "Ακριβής"
+  },
+  "ariaLabelBalanced": {
+    "description": "Ετικέτα Aria για το εικονίδιο της ισορροπημένης μεταγραφής.",
+    "message": "Ισορροπημένο"
+  },
+  "ariaLabelFast": {
+    "description": "Ετικέτα Aria για το εικονίδιο της γρήγορης μεταγραφής.",
+    "message": "Γρήγορα"
+  },
+  "ariaLabelHand": {
+    "description": "Ετικέτα Aria για το εικονίδιο χεριού που εκπροσωπεί τη χειροκίνητη λειτουργία.",
+    "message": "Χέρι"
+  },
+  "ariaLabelRobot": {
+    "description": "Ετικέτα Aria για το εικονίδιο ρομπότ που εκπροσωπεί τη λειτουργία πράκτορα.",
+    "message": "Ρομπότ"
+  },
+  "ariaLabelRocket": {
+    "description": "Ετικέτα Aria για το εικονίδιο πυραύλου που εκπροσωπεί τη αυτόματη λειτουργία.",
+    "message": "Πύραυλος"
+  },
   "assistantIsListening": {
     "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ ακούει...",
@@ -155,6 +179,10 @@
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Έλεγχος κατάστασης εφαρμογής..."
   },
+  "clearPreferencesButton": {
+    "description": "Κείμενο για το κουμπί που διαγράφει όλες τις προτιμήσεις χρήστη.",
+    "message": "Διαγραφή προτιμήσεων"
+  },
   "clickToCollapse": {
     "description": "Text indicating user can click to hide expanded content.",
     "message": "Κάντε κλικ για κατάρρευση"
@@ -238,6 +266,10 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Τρέχουσες χρεώσεις"
+  },
+  "dashboardLinkTitle": {
+    "description": "Κείμενο tooltip για το σύνδεσμο που ανοίγει τον πίνακα ελέγχου Say, Pi.",
+    "message": "Άνοιγμα πίνακα ελέγχου Say, Pi"
   },
   "dictationPlaceholderError": {
     "description": "Κείμενο υποκατάστασης που εμφανίζεται στο πεδίο εισόδου όταν η απομαγνητοφώνηση συναντά ένα σφάλμα.",
@@ -450,6 +482,10 @@
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Παρατσούκλι"
   },
+  "nicknamePlaceholder": {
+    "description": "Κείμενο placeholder για το πεδίο εισαγωγής ψευδωνύμου του βοηθού.",
+    "message": "Pi"
+  },
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Δεν έχει συνδεθεί"
@@ -605,6 +641,22 @@
     "description": "Tooltip που περιγράφει πώς λειτουργεί η επιλογή Αφαίρεση γεμιστικών λέξεων.",
     "message": "Διαγράφει τα «ουμ», «αχ», επαναλαμβανόμενες λέξεις και άλλη λεκτική ακαταστασία. Διατηρεί το νόημα, τη στίξη και τη μορφοποίηση."
   },
+  "sectionHeadingAIChat": {
+    "description": "Τίτλος ενότητας για τις ρυθμίσεις συνομιλίας AI.",
+    "message": "Συνομιλία AI"
+  },
+  "sectionHeadingAbout": {
+    "description": "Τίτλος ενότητας για την ενότητα σχετικά με.",
+    "message": "Σχετικά"
+  },
+  "sectionHeadingDictation": {
+    "description": "Τίτλος ενότητας για τις ρυθμίσεις μεταγραφής.",
+    "message": "Μεταγραφή"
+  },
+  "sectionHeadingGeneral": {
+    "description": "Τίτλος ενότητας για τις γενικές ρυθμίσεις.",
+    "message": "Γενικά"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Μοιραστείτε αναλυτικά στοιχεία"
@@ -729,6 +781,22 @@
   "submit_mode_off_description": {
     "description": "Description for the manual submission mode.",
     "message": "Υποβολή μόνο όταν πατήσετε το κουμπί"
+  },
+  "tabAIChat": {
+    "description": "Ετικέτα καρτέλας για τις ρυθμίσεις συνομιλίας AI.",
+    "message": "Συνομιλία AI"
+  },
+  "tabAbout": {
+    "description": "Ετικέτα καρτέλας για την ενότητα σχετικά με.",
+    "message": "Σχετικά"
+  },
+  "tabDictation": {
+    "description": "Ετικέτα καρτέλας για τις ρυθμίσεις μεταγραφής.",
+    "message": "Μεταγραφή"
+  },
+  "tabGeneral": {
+    "description": "Ετικέτα καρτέλας για τις γενικές ρυθμίσεις.",
+    "message": "Γενικά"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
