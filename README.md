@@ -94,6 +94,31 @@ The extension can be built for different browsers using our packaging script: `.
 - **Real-time Transcription:** As you speak, your speech is transcribed in real-time and sent to Pi, who responds with both text and audio.
 - **Seamless Integration:** The userscript seamlessly integrates with Pi's web platform, ensuring a smooth and natural conversational experience.
 
+### VAD model loading and Firefox cross‑realm ArrayBuffer
+
+The Voice Activity Detection (VAD) library `@ricky0123/vad-web` loads ONNX models by fetching the file and passing the bytes to ONNX Runtime (ORT):
+
+```text
+fetch(modelURL) -> Response.arrayBuffer() -> ort.InferenceSession.create(arrayBuffer)
+```
+
+Firefox runs page scripts and content scripts in different JavaScript realms. If a `Response`/`Blob` is rewrapped in the content script, the resulting `ArrayBuffer` can belong to a different realm. ORT uses `instanceof ArrayBuffer` guards; cross‑realm buffers fail those checks and throw:
+
+```
+TypeError: Unexpected argument[0]: must be 'path' or 'buffer'.
+```
+
+Our approach:
+
+- We avoid rewrapping fetch responses in `src/RequestInterceptor.js`. We only rewrite URLs and keep the original `Response` object.
+- We add a minimal shim in `RequestInterceptor.js` that patches `Response.prototype.arrayBuffer()` for our model URLs. If the returned value quacks like an ArrayBuffer but fails `instanceof`, we copy it into a same‑realm `ArrayBuffer` and return that.
+
+Alternative (not enabled by default): `src/vad/custom-model-fetcher.js` provides a `modelFetcher` that performs the same copy and can be passed to `MicVAD.new({ modelFetcher })` if we ever remove the shim.
+
+Notes:
+- Correct `Content-Type` is not required for `.onnx`. For `.wasm`, `Accept: application/wasm` aids streaming compile; lacking `Content-Type: application/wasm` may only impact performance warnings, not correctness.
+- Asset paths: `baseAssetPath` and `onnxWASMBasePath` point to `chrome.runtime.getURL("public/")`.
+
 ## Installation
 
 _Say, Pi_ is a browser extension. Install it from the [Chrome Web Store](https://chromewebstore.google.com/detail/say-pi/glhhgglpalmjjkoiigojligncepccdei?hl=en) or unpacked from this repo.
