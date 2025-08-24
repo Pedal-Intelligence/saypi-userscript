@@ -131,12 +131,24 @@ fi
 TMP_DIR="$(mktemp -d -t chrome-i18n-XXXXXX)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
+# Use separate folders to avoid treating the English source as a target.
+SRC_DIR="$TMP_DIR/source"
+TARGETS_DIR="$TMP_DIR/targets"
+mkdir -p "$SRC_DIR" "$TARGETS_DIR"
+
 echo "➤ Flattening locale files into $TMP_DIR …"
 for dir in "$LOCALES_DIR"/*/ ; do
   lang_code="${dir#"$LOCALES_DIR"/}"
   lang_code="${lang_code%/}"           # e.g. zh_CN
   bcp47="${lang_code//_/-}"            # e.g. zh-CN
-  cp "$dir/messages.json" "$TMP_DIR/$bcp47.json"
+
+  if [[ "$lang_code" == "en" ]]; then
+    # English is the source
+    cp "$dir/messages.json" "$SRC_DIR/en.json"
+  else
+    # Non-English are targets
+    cp "$dir/messages.json" "$TARGETS_DIR/$bcp47.json"
+  fi
 done
 
 # --- translate ---------------------------------------------------------------
@@ -147,18 +159,21 @@ echo "➤ Running translate-cli …"
 # elements.
 if ((${#TRANSLATE_FLAGS[@]})); then
   translate-cli translate \
-    -s "$TMP_DIR/en.json" \
-    -d "$TMP_DIR" \
+    -s "$SRC_DIR/en.json" \
+    -d "$TARGETS_DIR" \
     "${TRANSLATE_FLAGS[@]}"
 else
   translate-cli translate \
-    -s "$TMP_DIR/en.json" \
-    -d "$TMP_DIR"
+    -s "$SRC_DIR/en.json" \
+    -d "$TARGETS_DIR"
 fi
 
 # --- restore to Chrome structure --------------------------------------------
 echo "➤ Restoring translations to $LOCALES_DIR …"
-for json in "$TMP_DIR"/*.json ; do
+for json in "$TARGETS_DIR"/*.json ; do
+  # Skip if no targets exist
+  [[ -e "$json" ]] || continue
+
   bcp47="$(basename "${json%.json}")"   # zh-CN
   chrome_code="${bcp47//-/_}"          # zh_CN
   outdir="$LOCALES_DIR/$chrome_code"

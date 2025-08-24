@@ -31,6 +31,30 @@
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Anwendungsstatus unbekannt"
   },
+  "ariaLabelAccurate": {
+    "description": "Aria-Label für das Icon des genauen Transkriptionsmodus.",
+    "message": "Genau"
+  },
+  "ariaLabelBalanced": {
+    "description": "Aria-Label für das Icon des ausgewogenen Transkriptionsmodus.",
+    "message": "Ausgewogen"
+  },
+  "ariaLabelFast": {
+    "description": "Aria-Label für das Icon des schnellen Transkriptionsmodus.",
+    "message": "Schnell"
+  },
+  "ariaLabelHand": {
+    "description": "Aria-Label für das Hand-Icon, das den manuellen Modus darstellt.",
+    "message": "Hand"
+  },
+  "ariaLabelRobot": {
+    "description": "Aria-Label für das Roboter-Icon, das den Agentenmodus darstellt.",
+    "message": "Roboter"
+  },
+  "ariaLabelRocket": {
+    "description": "Aria-Label für das Raketen-Icon, das den automatischen Modus darstellt.",
+    "message": "Rakete"
+  },
   "assistantIsListening": {
     "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ hört zu...",
@@ -155,6 +179,10 @@
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Überprüfung des Anwendungsstatus..."
   },
+  "clearPreferencesButton": {
+    "description": "Text für den Button, der alle Benutzereinstellungen zurücksetzt.",
+    "message": "Einstellungen zurücksetzen"
+  },
   "clickToCollapse": {
     "description": "Text indicating user can click to hide expanded content.",
     "message": "Klicken Sie hier, um zusammenzubrechen"
@@ -186,6 +214,9 @@
   },
   "consentPrivacyParamount": {
     "message": "Ihre Privatsphäre ist von größter Bedeutung. Alles, was Sie sagen, bleibt zwischen Ihnen und Pi."
+  },
+  "consentPrivacyPolicy": {
+    "message": "Lese unsere Datenschutzrichtlinie"
   },
   "consentRightToRevoke": {
     "message": "Sie können Ihre Meinung jederzeit ändern."
@@ -235,6 +266,10 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Aktuelle Gebühren"
+  },
+  "dashboardLinkTitle": {
+    "description": "Tooltip-Text für den Link, um das Say, Pi-Dashboard zu öffnen.",
+    "message": "Say, Pi-Dashboard öffnen"
   },
   "dictationPlaceholderError": {
     "description": "Platzhaltertext, der im Eingabefeld angezeigt wird, wenn beim Diktat ein Fehler auftritt.",
@@ -288,7 +323,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
-    "message": "Eintauchen"
+    "message": "Fokus"
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
@@ -447,6 +482,10 @@
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Spitzname"
   },
+  "nicknamePlaceholder": {
+    "description": "Platzhaltertext für das Eingabefeld des Assistenten-Nicknamens.",
+    "message": "Pi"
+  },
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Nicht signiert"
@@ -602,6 +641,22 @@
     "description": "Tooltip, der erklärt, wie die Option Füllwörter entfernen funktioniert.",
     "message": "Löscht Ums, Ähs, wiederholte Wörter und andere verbale Unordnung. Bewahrt Bedeutung, Interpunktion und Formatierung."
   },
+  "sectionHeadingAIChat": {
+    "description": "Bereichsüberschrift für die AI-Chat-Einstellungen.",
+    "message": "AI Chat"
+  },
+  "sectionHeadingAbout": {
+    "description": "Bereichsüberschrift für den Abschnitt ‚Über‘.",
+    "message": "Über"
+  },
+  "sectionHeadingDictation": {
+    "description": "Bereichsüberschrift für die Diktateinstellungen.",
+    "message": "Diktat"
+  },
+  "sectionHeadingGeneral": {
+    "description": "Bereichsüberschrift für die allgemeinen Einstellungen.",
+    "message": "Allgemein"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Teilen Sie Analysen"
@@ -726,6 +781,22 @@
   "submit_mode_off_description": {
     "description": "Description for the manual submission mode.",
     "message": "Senden Sie es erst ab, wenn Sie auf die Schaltfläche klicken"
+  },
+  "tabAIChat": {
+    "description": "Tab-Label für den Abschnitt der AI-Chat-Einstellungen.",
+    "message": "AI Chat"
+  },
+  "tabAbout": {
+    "description": "Tab-Label für den Abschnitt ‚Über‘.",
+    "message": "Über"
+  },
+  "tabDictation": {
+    "description": "Tab-Label für den Abschnitt der Diktateinstellungen.",
+    "message": "Diktat"
+  },
+  "tabGeneral": {
+    "description": "Tab-Label für den Abschnitt der allgemeinen Einstellungen.",
+    "message": "Allgemein"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",

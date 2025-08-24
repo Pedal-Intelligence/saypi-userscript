@@ -1,0 +1,43 @@
+---
+description: How to build, package, and debug SayPi extension bundles
+globs: webpack.config.js, scripts/**, src/**
+alwaysApply: false
+---
+
+- **Prereqs**
+  - Node 22+, npm 10+
+  - Chrome/Firefox for local testing
+
+- **Build scripts**
+  - **dev**: `npm run dev` (watches, writes to `public/`)
+  - **build**: `npm run build` (production)
+  - **build:firefox**: `npm run build:firefox` (packages xpi)
+
+- **Key steps executed by build**
+  - `scripts/update-manifest.js` adjusts content scripts, WER matches, env
+  - `i18n-validate.cjs` sanity-checks locale files
+  - `copy-onnx-files.js` copies ort-wasm*.{wasm,mjs} to `public/`
+  - Webpack emits:
+    - `public/saypi.user.js`
+    - `public/offscreen/*.js`
+    - copied model assets: `silero_vad*.onnx`, `ort-wasm*`, `vad.worklet.bundle*.js`, `lucide.min.js`
+
+- **Dynamic chunk loading**
+  - The extension sets runtime public path via `src/webpack-public-path.js` (first entry) so chunks load from `chrome-extension://.../public/` not the host.
+  - `manifest.json` must include `public/*.js`, `public/*.mjs` in `web_accessible_resources`.
+
+- **VAD/ONNX specifics**
+  - Prefer ORT wasm from `@ricky0123/vad-web`'s nested `onnxruntime-web` version. Webpack CopyPlugin copies nested first, then falls back to top-level with `noErrorOnMissing`.
+  - Offscreen VAD handler sets `baseAssetPath` and `onnxWASMBasePath` to `chrome.runtime.getURL("public/")`.
+
+- **Clean install**
+  - Reproducible: `rm -rf node_modules && npm ci`
+  - Re-resolve: `rm -rf node_modules package-lock.json && npm cache clean --force && npm install`
+
+- **Common issues**
+  - CSP blocked numbered chunks (e.g., 158.js): ensure runtime public path is set early and WER includes `public/*.js`.
+  - ORT init failures: ensure `ort-wasm*` files are copied and match vad-web’s ORT version.
+
+- **Testing**
+  - `npm test` runs jest + vitest
+  - Manual: load unpacked, verify chat mode on pi.ai/claude.ai, confirm VAD starts and TTS plays.

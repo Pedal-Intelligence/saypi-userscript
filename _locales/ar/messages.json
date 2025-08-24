@@ -31,6 +31,30 @@
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "حالة التطبيق غير معروفة"
   },
+  "ariaLabelAccurate": {
+    "description": "تسمية آريا لأيقونة وضع النسخ الدقيق.",
+    "message": "دقيق"
+  },
+  "ariaLabelBalanced": {
+    "description": "تسمية آريا لأيقونة وضع النسخ المتوازن.",
+    "message": "متوازن"
+  },
+  "ariaLabelFast": {
+    "description": "تسمية آريا لأيقونة وضع النسخ السريع.",
+    "message": "سريع"
+  },
+  "ariaLabelHand": {
+    "description": "تسمية آريا لأيقونة اليد التي تمثل الوضع اليدوي.",
+    "message": "يد"
+  },
+  "ariaLabelRobot": {
+    "description": "تسمية آريا لأيقونة الروبوت التي تمثل وضع الوكيل.",
+    "message": "روبوت"
+  },
+  "ariaLabelRocket": {
+    "description": "تسمية آريا لأيقونة الصاروخ التي تمثل الوضع التلقائي.",
+    "message": "صاروخ"
+  },
   "assistantIsListening": {
     "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ يستمع...",
@@ -155,6 +179,10 @@
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "جارٍ التحقق من حالة التطبيق..."
   },
+  "clearPreferencesButton": {
+    "description": "نص الزر الذي يوضح مسح جميع تفضيلات المستخدم.",
+    "message": "مسح التفضيلات"
+  },
   "clickToCollapse": {
     "description": "Text indicating user can click to hide expanded content.",
     "message": "انقر للانهيار"
@@ -186,6 +214,9 @@
   },
   "consentPrivacyParamount": {
     "message": "خصوصيتك هي الأهم. كل ما تقوله يبقى بينك وبين Pi."
+  },
+  "consentPrivacyPolicy": {
+    "message": "اقرأ سياسة الخصوصية الخاصة بنا"
   },
   "consentRightToRevoke": {
     "message": "يمكنك تغيير رأيك في أي وقت."
@@ -235,6 +266,10 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "الرسوم الحالية"
+  },
+  "dashboardLinkTitle": {
+    "description": "نص التلميح للرابط لفتح لوحة تحكم Say, Pi.",
+    "message": "فتح لوحة تحكم Say, Pi"
   },
   "dictationPlaceholderError": {
     "description": "نص نموذج يظهر في حقل الإدخال عندما يواجه الإملاء خطأ.",
@@ -288,7 +323,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
-    "message": "غمر"
+    "message": "تركيز"
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
@@ -447,6 +482,10 @@
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "كنية"
   },
+  "nicknamePlaceholder": {
+    "description": "نص العنصر النائب لحقل إدخال لقب المساعد.",
+    "message": "Pi"
+  },
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "لم يتم تسجيل الدخول"
@@ -602,6 +641,22 @@
     "description": "تلميح يصف كيفية عمل خيار إزالة الكلمات الزائدة.",
     "message": "يحذف أصوات مثل 'إمم' و 'أه' والكلمات المتكررة وغيرها من الفوضى اللفظية. يحافظ على المعنى وعلامات الترقيم والتنسيق."
   },
+  "sectionHeadingAIChat": {
+    "description": "عنوان القسم لإعدادات الدردشة الذكية.",
+    "message": "الدردشة الذكية"
+  },
+  "sectionHeadingAbout": {
+    "description": "عنوان القسم الخاص بمعلومات عن التطبيق.",
+    "message": "حول"
+  },
+  "sectionHeadingDictation": {
+    "description": "عنوان القسم لإعدادات النسخ الصوتي.",
+    "message": "النسخ الصوتي"
+  },
+  "sectionHeadingGeneral": {
+    "description": "عنوان القسم للإعدادات العامة.",
+    "message": "عام"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "شارك التحليلات"
@@ -726,6 +781,22 @@
   "submit_mode_off_description": {
     "description": "Description for the manual submission mode.",
     "message": "إرسال فقط عند الضغط على الزر"
+  },
+  "tabAIChat": {
+    "description": "تسمية التبويب لإعدادات الدردشة الذكية.",
+    "message": "الدردشة الذكية"
+  },
+  "tabAbout": {
+    "description": "تسمية التبويب لقسم المعلومات.",
+    "message": "حول"
+  },
+  "tabDictation": {
+    "description": "تسمية التبويب لإعدادات النسخ الصوتي.",
+    "message": "النسخ الصوتي"
+  },
+  "tabGeneral": {
+    "description": "تسمية التبويب للقسم العام.",
+    "message": "عام"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",

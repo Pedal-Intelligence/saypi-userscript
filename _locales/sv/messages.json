@@ -31,6 +31,30 @@
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Ansökningsstatus okänd"
   },
+  "ariaLabelAccurate": {
+    "description": "Aria etikett för ikonen för noggrann transkriptionsläge.",
+    "message": "Noggrann"
+  },
+  "ariaLabelBalanced": {
+    "description": "Aria etikett för ikonen för balanserat transkriptionsläge.",
+    "message": "Balanserad"
+  },
+  "ariaLabelFast": {
+    "description": "Aria etikett för ikonen för snabbt/transkriptionsläge.",
+    "message": "Snabb"
+  },
+  "ariaLabelHand": {
+    "description": "Aria etikett för handen som representerar manuellt läge.",
+    "message": "Hand"
+  },
+  "ariaLabelRobot": {
+    "description": "Aria etikett för robotikonen som representerar agentläge.",
+    "message": "Robot"
+  },
+  "ariaLabelRocket": {
+    "description": "Aria etikett för raketikonen som representerar automatiskt läge.",
+    "message": "Raket"
+  },
   "assistantIsListening": {
     "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ lyssnar...",
@@ -155,6 +179,10 @@
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Kontrollerar applikationsstatus..."
   },
+  "clearPreferencesButton": {
+    "description": "Text för knappen som rensar alla användarinställningar.",
+    "message": "Rensa Inställningar"
+  },
   "clickToCollapse": {
     "description": "Text indicating user can click to hide expanded content.",
     "message": "Klicka för att kollapsa"
@@ -186,6 +214,9 @@
   },
   "consentPrivacyParamount": {
     "message": "Din integritet är av yttersta vikt. Allt du säger stannar mellan dig och Pi."
+  },
+  "consentPrivacyPolicy": {
+    "message": "Läs vår integritetspolicy"
   },
   "consentRightToRevoke": {
     "message": "Du kan ändra dig när som helst."
@@ -235,6 +266,10 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Aktuella avgifter"
+  },
+  "dashboardLinkTitle": {
+    "description": "Tooltip-text för länken för att öppna Say, Pi-instrumentpanelen.",
+    "message": "Öppna Say, Pi Instrumentpanelen"
   },
   "dictationPlaceholderError": {
     "description": "Platshållartabben som visas i inmatningsfältet när diktering stöter på ett fel.",
@@ -288,7 +323,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
-    "message": "Nedsänkning"
+    "message": "Fokus"
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
@@ -447,6 +482,10 @@
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Smeknamn"
   },
+  "nicknamePlaceholder": {
+    "description": "Platstext för inmatningsfältet för assistentens smeknamn.",
+    "message": "Pi"
+  },
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Inte inloggad"
@@ -602,6 +641,22 @@
     "description": "Tooltip som beskriver hur alternativet Ta bort utfyllnadsord fungerar.",
     "message": "Tar bort åh, eh, upprepade ord och annat verbalt brus. Bevarar betydelse, interpunktion och formatering."
   },
+  "sectionHeadingAIChat": {
+    "description": "Avsnittsrubrik för AI-chattinställningar.",
+    "message": "AI Chatt"
+  },
+  "sectionHeadingAbout": {
+    "description": "Avsnittsrubrik för informationsavsnittet.",
+    "message": "Om"
+  },
+  "sectionHeadingDictation": {
+    "description": "Avsnittsrubrik för dikteringsinställningar.",
+    "message": "Diktering"
+  },
+  "sectionHeadingGeneral": {
+    "description": "Avsnittsrubrik för allmänna inställningar.",
+    "message": "Allmänt"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Dela analysdata"
@@ -726,6 +781,22 @@
   "submit_mode_off_description": {
     "description": "Description for the manual submission mode.",
     "message": "Skicka bara när du trycker på knappen"
+  },
+  "tabAIChat": {
+    "description": "Fliketikett för AI-chattinställningar.",
+    "message": "AI Chatt"
+  },
+  "tabAbout": {
+    "description": "Fliketikett för informationsavsnittet.",
+    "message": "Om"
+  },
+  "tabDictation": {
+    "description": "Fliketikett för dikteringsinställningar.",
+    "message": "Diktering"
+  },
+  "tabGeneral": {
+    "description": "Fliketikett för allmänna inställningar.",
+    "message": "Allmänt"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",

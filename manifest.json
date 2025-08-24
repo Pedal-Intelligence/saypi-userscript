@@ -65,6 +65,9 @@
       "resources": [
         "public/silero_vad*.onnx",
         "public/*.wasm",
+        "public/*.js",
+        "public/*.mjs",
+        "public/lucide.min.js",
         "public/vad.worklet.bundle.js",
         "public/vad.worklet.bundle.min.js",
         "public/ort-wasm*",
@@ -94,7 +97,7 @@
   "author": "Ross Cadogan",
   "homepage_url": "https://www.saypi.ai",
   "action": {
-    "default_popup": "src/popup/popup.html"
+    "default_title": "Say, Pi"
   },
   "default_locale": "en",
   "browser_specific_settings": {

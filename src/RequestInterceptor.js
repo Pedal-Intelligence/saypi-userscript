@@ -11,6 +11,28 @@ const filesToRedirect = [
   "ort-wasm.wasm",
 ];
 
+// Shim Response.arrayBuffer to ensure same-realm ArrayBuffer for model files in Firefox
+// Only applies to our specific model assets to avoid touching unrelated requests
+(() => {
+  const originalArrayBuffer = Response.prototype.arrayBuffer;
+  Response.prototype.arrayBuffer = async function () {
+    try {
+      const url = (this && this.url) || "";
+      const shouldFix = filesToRedirect.some((f) => url.endsWith(f));
+      const ab = await originalArrayBuffer.call(this);
+      if (shouldFix && !(ab instanceof ArrayBuffer) && ab && typeof ab.byteLength === 'number') {
+        const copy = new ArrayBuffer(ab.byteLength);
+        new Uint8Array(copy).set(new Uint8Array(ab));
+        return copy;
+      }
+      return ab;
+    } catch (e) {
+      // In case of any unexpected error, fall back to the original behavior
+      return originalArrayBuffer.call(this);
+    }
+  };
+})();
+
 // MIME type mapping for different file extensions
 const mimeTypes = {
   '.wasm': 'application/wasm',
@@ -34,7 +56,7 @@ function redirectXMLHttpRequest(open) {
   };
 }
 
-// Function to redirect specific fetch requests with correct MIME types
+// Function to redirect specific fetch requests without re-wrapping the Response
 function redirectFetch(_fetch) {
   window.fetch = async function (url, opts = {}) {
     const urlString = url.toString();
@@ -63,23 +85,19 @@ function redirectFetch(_fetch) {
             'Accept': 'application/wasm',
           }
         };
+      } else if (extension === '.onnx') {
+        opts = {
+          ...opts,
+          headers: {
+            ...opts.headers,
+            'Accept': 'application/x-onnx'
+          }
+        };
       }
 
       try {
-        const response = await _fetch.apply(this, [resourceUrl, opts]);
-
-        // Set correct MIME type in response if needed
-        if (mimeType) {
-          const blob = await response.blob();
-          return new Response(blob, {
-            headers: {
-              'Content-Type': mimeType
-            },
-            status: response.status,
-            statusText: response.statusText
-          });
-        }
-        return response;
+        // Important: return the original Response to avoid cross-realm issues in Firefox
+        return await _fetch.apply(this, [resourceUrl, opts]);
       } catch (error) {
         console.error(`[RequestInterceptor] Error redirecting ${filename}:`, error);
         // Fallback to original request if redirect fails

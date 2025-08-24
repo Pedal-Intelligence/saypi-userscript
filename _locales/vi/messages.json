@@ -31,6 +31,30 @@
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Trạng thái ứng dụng không rõ"
   },
+  "ariaLabelAccurate": {
+    "description": "Nhãn Aria cho biểu tượng chế độ phiên âm chính xác.",
+    "message": "Chính xác"
+  },
+  "ariaLabelBalanced": {
+    "description": "Nhãn Aria cho biểu tượng chế độ phiên âm cân bằng.",
+    "message": "Cân bằng"
+  },
+  "ariaLabelFast": {
+    "description": "Nhãn Aria cho biểu tượng chế độ phiên âm nhanh.",
+    "message": "Nhanh"
+  },
+  "ariaLabelHand": {
+    "description": "Nhãn Aria cho biểu tượng bàn tay đại diện cho chế độ thủ công.",
+    "message": "Bàn tay"
+  },
+  "ariaLabelRobot": {
+    "description": "Nhãn Aria cho biểu tượng robot đại diện cho chế độ tự động.",
+    "message": "Robot"
+  },
+  "ariaLabelRocket": {
+    "description": "Nhãn Aria cho biểu tượng tên lửa đại diện cho chế độ tự động.",
+    "message": "Tên lửa"
+  },
   "assistantIsListening": {
     "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ đang lắng nghe...",
@@ -155,6 +179,10 @@
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Kiểm tra trạng thái ứng dụng..."
   },
+  "clearPreferencesButton": {
+    "description": "Văn bản cho nút xóa tất cả tùy chọn của người dùng.",
+    "message": "Xóa Tùy Chọn"
+  },
   "clickToCollapse": {
     "description": "Text indicating user can click to hide expanded content.",
     "message": "Bấm để sụp đổ"
@@ -186,6 +214,9 @@
   },
   "consentPrivacyParamount": {
     "message": "Quyền riêng tư của bạn là quan trọng nhất. Bất cứ điều gì bạn nói chỉ giữa bạn và Pi."
+  },
+  "consentPrivacyPolicy": {
+    "message": "Đọc Chính sách Bảo mật của chúng tôi"
   },
   "consentRightToRevoke": {
     "message": "Bạn có thể thay đổi quyết định của mình vào bất kỳ lúc nào."
@@ -235,6 +266,10 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Các khoản phí hiện tại"
+  },
+  "dashboardLinkTitle": {
+    "description": "Văn bản gợi ý cho liên kết mở bảng điều khiển Say, Pi.",
+    "message": "Mở Bảng Điều Khiển Say, Pi"
   },
   "dictationPlaceholderError": {
     "description": "Văn bản placeholder hiển thị trong trường nhập khi nhập liệu bằng giọng nói gặp lỗi.",
@@ -288,7 +323,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
-    "message": "Ngâm"
+    "message": "Tập trung"
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
@@ -447,6 +482,10 @@
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Biệt danh"
   },
+  "nicknamePlaceholder": {
+    "description": "Văn bản mẫu cho trường nhập bí danh trợ lý.",
+    "message": "Pi"
+  },
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Không đăng nhập"
@@ -602,6 +641,22 @@
     "description": "Mô tả trợ giúp về cách hoạt động của tùy chọn loại bỏ từ thừa.",
     "message": "Xóa các từ uh, um, những từ lặp lại và các rườm rà ngôn ngữ khác. Giữ nguyên ý nghĩa, dấu câu và định dạng."
   },
+  "sectionHeadingAIChat": {
+    "description": "Tiêu đề phần cho cài đặt trò chuyện AI.",
+    "message": "Trò Chuyện AI"
+  },
+  "sectionHeadingAbout": {
+    "description": "Tiêu đề phần cho mục giới thiệu.",
+    "message": "Giới thiệu"
+  },
+  "sectionHeadingDictation": {
+    "description": "Tiêu đề phần cho cài đặt chính tả.",
+    "message": "Chính Tả"
+  },
+  "sectionHeadingGeneral": {
+    "description": "Tiêu đề phần cho cài đặt chung.",
+    "message": "Chung"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Chia sẻ phân tích"
@@ -726,6 +781,22 @@
   "submit_mode_off_description": {
     "description": "Description for the manual submission mode.",
     "message": "Chỉ gửi khi bạn nhấn nút"
+  },
+  "tabAIChat": {
+    "description": "Nhãn tab cho phần cài đặt trò chuyện AI.",
+    "message": "Trò Chuyện AI"
+  },
+  "tabAbout": {
+    "description": "Nhãn tab cho mục giới thiệu.",
+    "message": "Giới thiệu"
+  },
+  "tabDictation": {
+    "description": "Nhãn tab cho phần cài đặt chính tả.",
+    "message": "Chính Tả"
+  },
+  "tabGeneral": {
+    "description": "Nhãn tab cho phần cài đặt chung.",
+    "message": "Chung"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",

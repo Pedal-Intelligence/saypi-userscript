@@ -153,10 +153,7 @@ html.mobile-device .chat-message .message-hover-menu .saypi-cost-container {
   }
 }
 
-/* hide the settings button on Firefox Android because the popup is not supported */
-html.firefox-android .saypi-control-panel .settings-button.mini {
-  display: none !important;
-}
+/* Allow settings button on Firefox Android (popup now opens as a tab) */
 
 // Hide tooltip on touch devices after touch ends
 @media (hover: none) {

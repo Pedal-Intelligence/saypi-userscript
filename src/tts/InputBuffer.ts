@@ -18,8 +18,8 @@ const SENTENCE_BREAK_CHARS = [
 
 export class InputBuffer {
   private buffer: string = "";
-  private bufferTimeout?: NodeJS.Timeout;
-  private streamTimeout?: NodeJS.Timeout;
+  private bufferTimeout?: ReturnType<typeof setTimeout>;
+  private streamTimeout?: ReturnType<typeof setTimeout>;
   private isClosed: boolean = false;
   private readonly BUFFER_TIMEOUT_MS: number;
   private readonly ttsService: TextToSpeechService;

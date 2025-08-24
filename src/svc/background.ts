@@ -1,4 +1,38 @@
-import { isFirefox } from "../UserAgentModule";
+import { isFirefox, isMobileDevice } from "../UserAgentModule";
+// Declare Chrome extension API for TypeScript
+declare const chrome: any;
+function openSettingsWindow() {
+  try {
+    const popupURL = chrome.runtime.getURL('src/popup/popup.html');
+    // Decide initial height based on whether we need to show consent overlay
+    // We check local storage flag 'shareData'. If it's undefined, consent will show.
+    chrome.storage.local.get('shareData', (result: any) => {
+      const needsConsent = typeof result.shareData === 'undefined';
+      const height = needsConsent ? 600 : 512; // fallback taller for consent, otherwise compact
+      // Firefox on Android does not support opening popup windows; open a tab instead
+      if (isFirefox() && isMobileDevice()) {
+        chrome.tabs.create({ url: popupURL, active: true });
+        return;
+      }
+
+      chrome.windows.create({
+        url: popupURL,
+        type: 'popup',
+        width: 736, // 720px + 16px padding
+        height,
+        focused: true
+      });
+    });
+  } catch (error) {
+    console.error('Failed to open popup:', error);
+  }
+}
+
+// Open settings when the toolbar icon is clicked (no default_popup)
+chrome.action?.onClicked.addListener(() => {
+  openSettingsWindow();
+});
+
 import { config } from "../ConfigModule";
 import { getJwtManagerSync } from "../JwtManager";
 import { offscreenManager, OFFSCREEN_DOCUMENT_PATH } from "../offscreen/offscreen_manager";
@@ -25,51 +59,57 @@ function updateContextMenuTitle(tabId: number, isDictationActive: boolean) {
     ? getMessage("contextMenuStopDictation", appName)
     : getMessage("contextMenuStartDictation", appName);
     
-  chrome.contextMenus.update("start-dictation", {
-    title: title
-  }, () => {
-    // Check for errors in the callback
-    if (chrome.runtime.lastError) {
-      console.debug("Failed to update context menu title:", chrome.runtime.lastError.message);
+  try {
+    if (chrome.contextMenus && typeof chrome.contextMenus.update === 'function') {
+      chrome.contextMenus.update("start-dictation", {
+        title: title
+      }, () => {
+        if (chrome.runtime.lastError) {
+          console.debug("Failed to update context menu title:", chrome.runtime.lastError.message);
+        }
+      });
     }
-  });
+  } catch {}
 }
 
 // Context menu setup for dictation
 chrome.runtime.onInstalled.addListener(() => {
-  // Create context menu item for dictation
-  const appName = getMessage("appName");
-  chrome.contextMenus.create({
-    id: "start-dictation",
-    title: getMessage("contextMenuStartDictation", appName),
-    contexts: ["editable"], // Only show on input fields and contenteditable elements
-    documentUrlPatterns: [
-      "file://*/*", 
-      "http://*/*", 
-      "https://*/*"
-    ]
-  });
+  try {
+    if (!chrome.contextMenus || typeof chrome.contextMenus.create !== 'function') return;
+    const appName = getMessage("appName");
+    chrome.contextMenus.create({
+      id: "start-dictation",
+      title: getMessage("contextMenuStartDictation", appName),
+      contexts: ["editable"],
+      documentUrlPatterns: [
+        "file://*/*",
+        "http://*/*",
+        "https://*/*"
+      ]
+    });
+  } catch {}
 });
 
 // Handle context menu clicks
-chrome.contextMenus.onClicked.addListener((info, tab) => {
-  if (info.menuItemId === "start-dictation" && tab?.id) {
-    const tabId = tab.id;
-    const isDictationActive = dictationStates.get(tabId) || false;
-    
-    // Send appropriate message based on current dictation state
-    const messageType = isDictationActive 
-      ? "stop-dictation-from-context-menu"
-      : "start-dictation-from-context-menu";
-      
-    chrome.tabs.sendMessage(tabId, {
-      type: messageType,
-      frameId: info.frameId || 0
-    }).catch((error) => {
-      console.debug("Failed to send dictation message to content script:", error);
+try {
+  if (chrome.contextMenus && typeof chrome.contextMenus.onClicked?.addListener === 'function') {
+    chrome.contextMenus.onClicked.addListener((info: any, tab: any) => {
+      if (info.menuItemId === "start-dictation" && tab?.id) {
+        const tabId = tab.id;
+        const isDictationActive = dictationStates.get(tabId) || false;
+        const messageType = isDictationActive
+          ? "stop-dictation-from-context-menu"
+          : "start-dictation-from-context-menu";
+        chrome.tabs.sendMessage(tabId, {
+          type: messageType,
+          frameId: info.frameId || 0
+        }).catch((error: any) => {
+          console.debug("Failed to send dictation message to content script:", error);
+        });
+      }
     });
   }
-});
+} catch {}
 
 // Helper function to sanitize messages for logging by removing/truncating large data
 function sanitizeMessageForLogs(message: any): any {
@@ -181,7 +221,7 @@ async function broadcastAuthStatus() {
           // Message was delivered successfully - increment counter but don't log individually
           successCount++;
         })
-        .catch(err => {
+        .catch((err: any) => {
           // Most errors will be "Could not establish connection" which we can ignore
           // Only log truly unexpected errors
           if (!err.message?.includes("Could not establish connection")) {
@@ -292,7 +332,7 @@ const pollingInterval = isFirefox() ? 300000 : 5000; // 5 minutes for Firefox, 5
 setInterval(pollAuthCookie, pollingInterval);
 
 // Handle VAD communication via Offscreen Document
-chrome.runtime.onConnect.addListener((port) => {
+chrome.runtime.onConnect.addListener((port: any) => {
   // Handle connections from content scripts for VAD and audio
   if (port.name === "vad-content-script-connection" || port.name === "media-content-script-connection") {
     logger.debug(`[Background] Port connection established: ${port.name} from tab ${port.sender?.tab?.id}`);
@@ -303,7 +343,7 @@ chrome.runtime.onConnect.addListener((port) => {
 });
 
 function replyToRequester(
-  sender: chrome.runtime.MessageSender,
+  sender: any,
   payload: any
 ) {
   if (sender.tab?.id !== undefined) {
@@ -315,7 +355,7 @@ function replyToRequester(
   }
 }
 
-async function handleCheckAndRequestMicPermission(originalRequestId: string, originalSender: chrome.runtime.MessageSender) {
+async function handleCheckAndRequestMicPermission(originalRequestId: string, originalSender: any) {
   logger.debug(`[Background] Handling CHECK_AND_REQUEST_MICROPHONE_PERMISSION for request ID ${originalRequestId} from sender: ${originalSender}`);
   try {
     const permissionStatus = await navigator.permissions.query({ name: 'microphone' as PermissionName });
@@ -360,7 +400,7 @@ async function handleCheckAndRequestMicPermission(originalRequestId: string, ori
       cleanupPromptListeners(); 
     };
 
-    const messageListenerFromPromptTab = (msg: any, senderFromPrompt: chrome.runtime.MessageSender) => {
+    const messageListenerFromPromptTab = (msg: any, senderFromPrompt: any) => {
       if (senderFromPrompt.tab?.id === newTabId && msg.type === 'PERMISSION_PROMPT_RESULT') {
         logger.debug(`[Background] Received PERMISSION_PROMPT_RESULT from tab ${newTabId} for request ${originalRequestId}: granted=${msg.granted}`);
         sendFinalResponseToRequester(msg.granted, msg.error);
@@ -368,7 +408,7 @@ async function handleCheckAndRequestMicPermission(originalRequestId: string, ori
       }
     };
 
-    const removedListenerForPromptTab = (tabId: number, removeInfo: chrome.tabs.TabRemoveInfo) => {
+    const removedListenerForPromptTab = (tabId: number, removeInfo: any) => {
       if (tabId === newTabId) {
         logger.debug(`[Background] Permissions tab ${newTabId} for request ${originalRequestId} was removed by user or closed.`);
         // If the tab is removed before the prompt page sends its message, consider it a denial or interruption.
@@ -404,7 +444,7 @@ async function handleCheckAndRequestMicPermission(originalRequestId: string, ori
 }
 
 // Handle popup opening AND messages from Offscreen Document AND Error Reports AND Mic Permissions
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: any) => {
   // Sanitize the message for logging
   const sanitizedMessage = sanitizeMessageForLogs(message);
   logger.debug(`[Background] onMessage received ${sanitizedMessage.type} from ${sender.tab?.title || sender.url}`);
@@ -435,7 +475,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         filename: message.filename,
         saveAs: false,
         conflictAction: 'uniquify'
-      }, (downloadId) => {
+      }, (downloadId: any) => {
         if (chrome.runtime.lastError) {
           logger.error('[Background] Failed to queue segment download:', chrome.runtime.lastError.message);
           sendResponse({ ok: false, error: chrome.runtime.lastError.message });
@@ -554,7 +594,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       if (message.type.startsWith("AUDIO_") || message.type.startsWith("OFFSCREEN_AUDIO_")) {
         logger.debug(`[Background] Routing audio message via tabs.sendMessage: ${message.type}`);
         try {
-          chrome.tabs.sendMessage(message.targetTabId, message, (response) => {
+          chrome.tabs.sendMessage(message.targetTabId, message, (response: any) => {
             const lastError = chrome.runtime.lastError;
             if (lastError) {
               logger.error(`[Background] Error forwarding audio message: ${lastError.message}`);
@@ -584,26 +624,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return; // Synchronous, error logged.
   }
 
-  if (message.action === 'openPopup') {
-    try {
-      const isNotFirefox = !isFirefox();
-      if (isNotFirefox && chrome.action?.openPopup) {
-        // Default popup for Chrome on desktop
-        chrome.action.openPopup();
-      } else {
-        // Fallback for Firefox and mobile browsers
-        const popupURL = chrome.runtime.getURL('src/popup/popup.html');
-        chrome.windows.create({
-          url: popupURL,
-          type: 'popup',
-          width: 400,
-          height: 720,
-          focused: true
-        });
-      }
-    } catch (error) {
-      console.error('Failed to open popup:', error);
-    }
+  if (message.action === 'openPopup' || message.type === 'openPopup') {
+    openSettingsWindow();
   } else if (message.type === 'GET_TTS_QUOTA_DETAILS') {
     // Handle TTS quota details request
     try {
@@ -769,13 +791,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // Return true if we're handling the response asynchronously for other message types
   // This ensures that the sendResponse function remains valid for async operations
   // like REDIRECT_TO_LOGIN, GET_JWT_CLAIMS, etc.
-  const asyncMessageTypes = [
-    'GET_JWT_CLAIMS', 
-    'CHECK_FEATURE_ENTITLEMENT', 
+  const asyncMessageTypes: string[] = [
+    'GET_JWT_CLAIMS',
+    'CHECK_FEATURE_ENTITLEMENT',
     'REDIRECT_TO_LOGIN',
-    // Add any other async message types here
   ];
-  if (asyncMessageTypes.includes(message.type)) {
+  if (asyncMessageTypes.indexOf(message.type) !== -1) {
     return true;
   }
   
@@ -787,7 +808,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 // Clean up dictation state when tabs are closed
-chrome.tabs.onRemoved.addListener((tabId) => {
+chrome.tabs.onRemoved.addListener((tabId: any) => {
   if (dictationStates.has(tabId)) {
     dictationStates.delete(tabId);
     logger.debug(`[Background] Cleaned up dictation state for closed tab ${tabId}`);
@@ -795,7 +816,7 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 });
 
 // Handle authentication cookie changes
-chrome.cookies.onChanged.addListener(async (changeInfo) => {
+chrome.cookies.onChanged.addListener(async (changeInfo: any) => {
   const { cookie, removed, cause } = changeInfo;
   
   // Only interested in our auth cookie

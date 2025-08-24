@@ -31,6 +31,30 @@
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Hindi alam ang katayuan ng aplikasyon"
   },
+  "ariaLabelAccurate": {
+    "description": "Aria label para sa ikon ng tumpak na transcription mode.",
+    "message": "Tumpak"
+  },
+  "ariaLabelBalanced": {
+    "description": "Aria label para sa ikon ng balanseng transcription mode.",
+    "message": "Balanseng"
+  },
+  "ariaLabelFast": {
+    "description": "Aria label para sa ikon ng mabilis na transcription mode.",
+    "message": "Mabilis"
+  },
+  "ariaLabelHand": {
+    "description": "Aria label para sa ikon na kamay na kumakatawan sa manual mode.",
+    "message": "Kamay"
+  },
+  "ariaLabelRobot": {
+    "description": "Aria label para sa ikon ng robot na kumakatawan sa agent mode.",
+    "message": "Robot"
+  },
+  "ariaLabelRocket": {
+    "description": "Aria label para sa ikon ng rocket na kumakatawan sa automatic mode.",
+    "message": "Rocket"
+  },
   "assistantIsListening": {
     "description": "Message displayed when the assistant is listening for speech.",
     "message": "Ang $chatbot$ ay nakikinig...",
@@ -155,6 +179,10 @@
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Nagsusuri ng katayuan ng aplikasyon..."
   },
+  "clearPreferencesButton": {
+    "description": "Teksto para sa button na naglilinis ng lahat ng kagustuhan ng user.",
+    "message": "Linisin ang Kagustuhan"
+  },
   "clickToCollapse": {
     "description": "Text indicating user can click to hide expanded content.",
     "message": "Mag -click upang gumuho"
@@ -186,6 +214,9 @@
   },
   "consentPrivacyParamount": {
     "message": "Ang iyong privacy ay lubhang mahalaga. Anuman ang iyong sabihin ay mananatiling sa pagitan mo at ni Pi."
+  },
+  "consentPrivacyPolicy": {
+    "message": "Basahin ang aming Patakaran sa Privacy"
   },
   "consentRightToRevoke": {
     "message": "Maaari kang magbago ng isip anumang oras."
@@ -235,6 +266,10 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Kasalukuyang singil"
+  },
+  "dashboardLinkTitle": {
+    "description": "Tooltip na teksto para sa link na magbubukas ng Say, Pi dashboard.",
+    "message": "Buksan ang Say, Pi Dashboard"
   },
   "dictationPlaceholderError": {
     "description": "Teksto ng placeholder na ipinapakita sa input field kapag may error sa pagsasalita.",
@@ -288,7 +323,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
-    "message": "Paglulubog"
+    "message": "Tumok"
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
@@ -447,6 +482,10 @@
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Palayaw"
   },
+  "nicknamePlaceholder": {
+    "description": "Placeholder na teksto para sa input field ng palayaw ng katulong.",
+    "message": "Pi"
+  },
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Hindi naka -sign in"
@@ -602,6 +641,22 @@
     "description": "Tooltip na naglalarawan kung paano gumagana ang pagpipilian na Tanggalin ang mga filler words.",
     "message": "Tinanggal ang mga 'ums', 'uhs', mga inuulit na salita, at iba pang verbal na kalat. Pinananatili ang kahulugan, bantas, at pormat."
   },
+  "sectionHeadingAIChat": {
+    "description": "Pamagat ng seksyon para sa mga setting ng AI chat.",
+    "message": "AI Chat"
+  },
+  "sectionHeadingAbout": {
+    "description": "Pamagat ng seksyon para sa tungkol sa bahagi.",
+    "message": "Tungkol"
+  },
+  "sectionHeadingDictation": {
+    "description": "Pamagat ng seksyon para sa mga setting ng dictation.",
+    "message": "Dictation"
+  },
+  "sectionHeadingGeneral": {
+    "description": "Pamagat ng seksyon para sa mga pangkalahatang setting.",
+    "message": "Pangkalahatan"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Ibahagi ang analytics"
@@ -726,6 +781,22 @@
   "submit_mode_off_description": {
     "description": "Description for the manual submission mode.",
     "message": "Isumite lamang kapag pinindot mo ang pindutan"
+  },
+  "tabAIChat": {
+    "description": "Label ng tab para sa mga setting ng AI chat.",
+    "message": "AI Chat"
+  },
+  "tabAbout": {
+    "description": "Label ng tab para sa tungkol sa seksyon.",
+    "message": "Tungkol"
+  },
+  "tabDictation": {
+    "description": "Label ng tab para sa mga setting ng dictation.",
+    "message": "Dictation"
+  },
+  "tabGeneral": {
+    "description": "Label ng tab para sa mga pangkalahatang setting.",
+    "message": "Pangkalahatan"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",

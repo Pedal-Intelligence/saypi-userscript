@@ -31,6 +31,30 @@
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "பயன்பாட்டு நிலை தெரியாது"
   },
+  "ariaLabelAccurate": {
+    "description": " சரியான தமிழ் உரை மாற்ற முறை சின்னத்திற்கான அரியா லேபல்.",
+    "message": "சரியானது"
+  },
+  "ariaLabelBalanced": {
+    "description": "சமநிலையான தமிழ் உரை மாற்ற முறை சின்னத்திற்கான அரியா லேபல்.",
+    "message": "சமநிலை"
+  },
+  "ariaLabelFast": {
+    "description": "வெகுநான்கான/ வேகமான தமிழ் உரை மாற்ற முறை சின்னத்திற்கான அரியா லேபல்.",
+    "message": "வேகம்"
+  },
+  "ariaLabelHand": {
+    "description": "மாநில முறையை குறிக்கும் கை சின்னத்திற்கான அரியா லேபல்.",
+    "message": "கை"
+  },
+  "ariaLabelRobot": {
+    "description": "ஏஜெண்ட் முறையை குறிக்கும் ரோபோட் சின்னத்திற்கான அரியா லேபல்.",
+    "message": "ரோபோட்"
+  },
+  "ariaLabelRocket": {
+    "description": "இடைத்தோறும் முறையை குறிக்கும் ராக்கெட் சின்னத்திற்கான அரியா லேபல்.",
+    "message": "ராக்கெட்"
+  },
   "assistantIsListening": {
     "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ கேட்கின்றது...",
@@ -155,6 +179,10 @@
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "பயன்பாட்டு நிலையை சரிபார்க்கின்றேன்..."
   },
+  "clearPreferencesButton": {
+    "description": "எல்லா பயனர் விருப்பங்களை நீக்கும் பொத்தானுக்கான உரை.",
+    "message": "விருப்பங்களை நீக்கு"
+  },
   "clickToCollapse": {
     "description": "Text indicating user can click to hide expanded content.",
     "message": "சரிவதற்கு கிளிக் செய்க"
@@ -186,6 +214,9 @@
   },
   "consentPrivacyParamount": {
     "message": "உங்கள் தனியுரிமை மிகுந்த முக்கியத்துவம். நீங்கள் சொல்வது Pi- உடைჯி,  உngalukku mattumē irukkum."
+  },
+  "consentPrivacyPolicy": {
+    "message": "எங்கள் தனியுரிமை கொள்கையை வாசிக்கவும்"
   },
   "consentRightToRevoke": {
     "message": "நீங்கள் எப்போதும் உங்கள் மேலும் அணியுவினை மாற்றி விடு."
@@ -235,6 +266,10 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "தற்போதைய கட்டணங்கள்"
+  },
+  "dashboardLinkTitle": {
+    "description": "செய், பை டாஷ்போர்டை திறக்கும் இணைப்புக்கான Tooltip உரை.",
+    "message": "செய், பை டாஷ்போர்டை திறக்கவும்"
   },
   "dictationPlaceholderError": {
     "description": "எழுத்துக்களைச் செய்யும்போது தோல்வி ஏற்படும்போது உள்ளிடும் வயிற்றில் காட்டப்படும் இடத்தைச் செய்யும் உரை.",
@@ -288,7 +323,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
-    "message": "மூழ்குதல்"
+    "message": "கவனம் செலுத்து"
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
@@ -447,6 +482,10 @@
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "புனைப்பெயர்"
   },
+  "nicknamePlaceholder": {
+    "description": "உதவியாளர் பெயர் உள்ளீட்டு நிலப்பரப்புக்கான இடமாற்ற உரை.",
+    "message": "பி"
+  },
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "உள்நுழையவில்லை"
@@ -602,6 +641,22 @@
     "description": "கூடுதல் சொற்களை அகற்றும் விருப்பம் எப்படி செயல்படுகிறது என்பதை விளக்கும் டூல்டிப்.",
     "message": "உம், அஹ், மீண்டும் வரும் சொற்கள் மற்றும் பிற வாய்மொழி செயல்களை நீக்குகிறது. அர்த்தம், குறியாக்கம் மற்றும் வடிவமைப்பை பாதுகாக்கிறது."
   },
+  "sectionHeadingAIChat": {
+    "description": "AI உரையாடல் அமைப்புக்கு முக்கியப்பங்கை.",
+    "message": "AI உரையாடல்"
+  },
+  "sectionHeadingAbout": {
+    "description": "என்னுடைய பகுதியின் தலைப்பு.",
+    "message": "எண்ணங்கள்"
+  },
+  "sectionHeadingDictation": {
+    "description": "வினவல்கள் அமைப்புக்கு முக்கியப்பங்கை.",
+    "message": "வினவல்கள்"
+  },
+  "sectionHeadingGeneral": {
+    "description": "பொதுவான அமைப்புக்கு முக்கியப்பங்கை.",
+    "message": "பொது"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "பகிர்வு பகுப்பாய்வு"
@@ -726,6 +781,22 @@
   "submit_mode_off_description": {
     "description": "Description for the manual submission mode.",
     "message": "பொத்தானை அழுத்தினால் மட்டுமே சமர்ப்பிக்கவும்"
+  },
+  "tabAIChat": {
+    "description": "AI உரையாடல் அமைப்புக்கான தாப் லேபல்.",
+    "message": "AI உரையாடல்"
+  },
+  "tabAbout": {
+    "description": "என்னுடைய பகுதியின் தாப் லேபல்.",
+    "message": "எண்ணங்கள்"
+  },
+  "tabDictation": {
+    "description": "வினவல்கள் அமைப்புக்கான தாப் லேபல்.",
+    "message": "வினவல்கள்"
+  },
+  "tabGeneral": {
+    "description": "பொதுவான அமைப்புக்கான தாப் லேபல்.",
+    "message": "பொது"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",

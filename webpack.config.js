@@ -53,7 +53,7 @@ const config = {
     mode: isProduction ? "production" : "development",
     devtool: isProduction ? false : "inline-source-map",
     entry: {
-      main: "./src/saypi.index.js",
+      main: ["./src/webpack-public-path.js", "./src/saypi.index.js"],
       background: "./src/svc/background.ts",
       mediaCoordinator: "./src/offscreen/media_coordinator.ts",
       vadHandler: "./src/offscreen/vad_handler.ts",
@@ -162,8 +162,23 @@ const config = {
             from: "node_modules/@ricky0123/vad-web/dist/*.onnx",
             to: "[name][ext]",
           },
+          // Prefer the ORT shipped within vad-web to ensure version match.
+          // It's acceptable for these files to be missing because not all installations of vad-web will have a nested onnxruntime-web.
+          // If missing, the next pattern will attempt to copy from the top-level onnxruntime-web as a fallback.
           {
             from: "node_modules/@ricky0123/vad-web/node_modules/onnxruntime-web/dist/ort-wasm*.wasm",
+            to: "[name][ext]",
+            noErrorOnMissing: true,
+          },
+          // Fallback: copy from top-level onnxruntime-web if the nested version is missing.
+          // It's acceptable for these files to be missing if onnxruntime-web is not installed at the top level.
+          {
+            from: "node_modules/onnxruntime-web/dist/ort-wasm*.wasm",
+            to: "[name][ext]",
+            noErrorOnMissing: true,
+          },
+          {
+            from: "node_modules/lucide/dist/umd/lucide.min.js",
             to: "[name][ext]",
           },
           {

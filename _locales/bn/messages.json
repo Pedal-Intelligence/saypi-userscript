@@ -31,6 +31,30 @@
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "অ্যাপ্লিকেশনের স্থিতি অজানা"
   },
+  "ariaLabelAccurate": {
+    "description": "সঠিক ট্রান্সক্রিপশন মোড আইকনের জন্য আরিয়া লেবেল।",
+    "message": "সঠিক"
+  },
+  "ariaLabelBalanced": {
+    "description": "ব্যালেন্সড ট্রান্সক্রিপশন মোড আইকনের জন্য আরিয়া লেবেল।",
+    "message": "ব্যালেন্সড"
+  },
+  "ariaLabelFast": {
+    "description": "ফাস্ট/স্পিড ট্রান্সক্রিপশন মোড আইকনের জন্য আরিয়া লেবেল।",
+    "message": "ফাস্ট"
+  },
+  "ariaLabelHand": {
+    "description": "ম্যানুয়াল মোডকে প্রতিনিধিত্বকারী হাতে আইকনের জন্য আরিয়া লেবেল।",
+    "message": "হাত"
+  },
+  "ariaLabelRobot": {
+    "description": "এজেন্ট মোডকে প্রতিনিধিত্বকারী রোবট আইকনের জন্য আরিয়া লেবেল।",
+    "message": "রোবট"
+  },
+  "ariaLabelRocket": {
+    "description": "অটোমেটিক মোডকে প্রতিনিধিত্বকারী রকেট আইকনের জন্য আরিয়া লেবেল।",
+    "message": "রকেট"
+  },
   "assistantIsListening": {
     "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ শুনছে...",
@@ -155,6 +179,10 @@
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "অ্যাপ্লিকেশনের অবস্থা যাচাই করা হচ্ছে..."
   },
+  "clearPreferencesButton": {
+    "description": "所有用户偏好的按钮文本以进行清除。",
+    "message": "প্রেফারেন্সসমূহ মুছুন"
+  },
   "clickToCollapse": {
     "description": "Text indicating user can click to hide expanded content.",
     "message": "ধসে ক্লিক করুন"
@@ -186,6 +214,9 @@
   },
   "consentPrivacyParamount": {
     "message": "আপনার গোপনীয়তা সর্বোচ্চ। আপনি যা বলেন, তা Pi-র এবং আপনার মাঝেরে।"
+  },
+  "consentPrivacyPolicy": {
+    "message": "আমাদের গোপনীয়তা নীতিমালা পড়ুন"
   },
   "consentRightToRevoke": {
     "message": "আপনি যে কোনো সময়ে আপনার মনের মতামত পরিবর্তন করতে পারেন।"
@@ -235,6 +266,10 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "বর্তমান চার্জ"
+  },
+  "dashboardLinkTitle": {
+    "description": "সেই, পি ড্যাশবোর্ড খুলতে লিঙ্কের জন্য টুলটিপ টেক্সট।",
+    "message": "সেই, পি ড্যাশবোর্ড খুলুন"
   },
   "dictationPlaceholderError": {
     "description": "যখন ডিকটেশন একটি ত্রুটির সম্মুখীন হয় তখন ইনপুট ফিল্ডে প্রদর্শিত প্লেসহোল্ডার টেক্সট।",
@@ -288,7 +323,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
-    "message": "নিমজ্জন"
+    "message": "মনোযোগ দিন"
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
@@ -447,6 +482,10 @@
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "ডাকনাম"
   },
+  "nicknamePlaceholder": {
+    "description": "সহায়কের ডাকনাম ইনপুট ক্ষেত্রের জন্য স্থানধারক টেক্সট।",
+    "message": "পি"
+  },
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "সাইন ইন না"
@@ -602,6 +641,22 @@
     "description": "ফিলার শব্দ অপশনটি কিভাবে কাজ করে তা ব্যাখ্যা করা টুলটিপ।",
     "message": "মুছে ফেলবে মেঘ, আহ, পুনরাবৃত্ত শব্দ এবং অন্যান্য মৌখিক বিশৃঙ্খলা। অর্থ, ব্যাকরণ এবং বিন্যাস রেখে দেয়।"
   },
+  "sectionHeadingAIChat": {
+    "description": "এআই চ্যাট সেটিংসের জন্য বিভাগ শিরোনাম।",
+    "message": "এআই চ্যাট"
+  },
+  "sectionHeadingAbout": {
+    "description": "এবং সম্পর্কে বিভাগের জন্য বিভাগ শিরোনাম।",
+    "message": "সম্পর্কিত"
+  },
+  "sectionHeadingDictation": {
+    "description": "ডিকশনারী সেটিংসের জন্য বিভাগ শিরোনাম।",
+    "message": "ডিকশনারী"
+  },
+  "sectionHeadingGeneral": {
+    "description": "সাধারণ সেটিংসের জন্য বিভাগ শিরোনাম।",
+    "message": "সাধারণ"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "অ্যানালিটিক্স শেয়ার করুন"
@@ -726,6 +781,22 @@
   "submit_mode_off_description": {
     "description": "Description for the manual submission mode.",
     "message": "আপনি বোতাম টিপে শুধুমাত্র জমা দিন"
+  },
+  "tabAIChat": {
+    "description": "এআই চ্যাট সেটিংস বিভাগের জন্য ট্যাব লেবেল।",
+    "message": "এআই চ্যাট"
+  },
+  "tabAbout": {
+    "description": "সম্পর্কিত বিভাগের জন্য ট্যাব লেবেল।",
+    "message": "সম্পর্কিত"
+  },
+  "tabDictation": {
+    "description": "ডিকশনারী সেটিংস বিভাগের জন্য ট্যাব লেবেল।",
+    "message": "ডিকশনারী"
+  },
+  "tabGeneral": {
+    "description": "সাধারণ সেটিংস বিভাগের জন্য ট্যাব লেবেল।",
+    "message": "সাধারণ"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",

@@ -31,6 +31,30 @@
     "description": "Message to display when the application status cannot be determined. E.g. when the client is offline.",
     "message": "Starea aplicației necunoscută"
   },
+  "ariaLabelAccurate": {
+    "description": "Eticheta aria pentru pictograma modului de transcriere precis.",
+    "message": "Precis"
+  },
+  "ariaLabelBalanced": {
+    "description": "Eticheta aria pentru pictograma modului de transcriere echilibrat.",
+    "message": "Echipostat"
+  },
+  "ariaLabelFast": {
+    "description": "Eticheta aria pentru pictograma modului de transcriere rapid.",
+    "message": "Rapid"
+  },
+  "ariaLabelHand": {
+    "description": "Eticheta aria pentru pictograma mâinii care reprezintă modul manual.",
+    "message": "Mână"
+  },
+  "ariaLabelRobot": {
+    "description": "Eticheta aria pentru pictograma robotului care reprezintă modul agent.",
+    "message": "Robot"
+  },
+  "ariaLabelRocket": {
+    "description": "Eticheta aria pentru pictograma rachetei care reprezintă modul automat.",
+    "message": "Rachetă"
+  },
   "assistantIsListening": {
     "description": "Message displayed when the assistant is listening for speech.",
     "message": "$chatbot$ ascultă...",
@@ -155,6 +179,10 @@
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Verificarea stării aplicației..."
   },
+  "clearPreferencesButton": {
+    "description": "Text pentru butonul care șterge toate preferințele utilizatorului.",
+    "message": "Șterge Preferințe"
+  },
   "clickToCollapse": {
     "description": "Text indicating user can click to hide expanded content.",
     "message": "Faceți clic pentru a se prăbuși"
@@ -186,6 +214,9 @@
   },
   "consentPrivacyParamount": {
     "message": "Confidențialitatea ta este de cea mai mare importanță. Orice spui rămâne între tine și Pi."
+  },
+  "consentPrivacyPolicy": {
+    "message": "Citește Politica noastră de confidențialitate"
   },
   "consentRightToRevoke": {
     "message": "Îți poți schimba părerea oricând."
@@ -235,6 +266,10 @@
   "currentCharges": {
     "description": "The term used to describe the current charges (running total) accrued by the user.",
     "message": "Taxe curente"
+  },
+  "dashboardLinkTitle": {
+    "description": "Text de sugestie pentru link-ul care deschide tabloul de bord Say, Pi.",
+    "message": "Deschide tabloul de bord Say, Pi"
   },
   "dictationPlaceholderError": {
     "description": "Textul placeholder afișat în câmpul de introducere atunci când dictarea întâmpină o eroare.",
@@ -288,7 +323,7 @@
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
-    "message": "Imersiune"
+    "message": "Concentrează-te"
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
@@ -447,6 +482,10 @@
     "description": "Label for the input field to set a custom nickname for the AI assistant.",
     "message": "Poreclă"
   },
+  "nicknamePlaceholder": {
+    "description": "Text plasat pentru câmpul de introducere a poreclei asistentului.",
+    "message": "Pi"
+  },
   "notSignedIn": {
     "description": "Text to show when the user is not signed in.",
     "message": "Nu a fost conectat"
@@ -602,6 +641,22 @@
     "description": "Tooltip care descrie cum funcționează opțiunea de eliminare a cuvintelor de umplutură.",
     "message": "Șterge 'ums', 'uhs', cuvinte repetate și alte elemente verbale inutile. Păstrează sensul, punctuația și formatarea."
   },
+  "sectionHeadingAIChat": {
+    "description": "Titlul secțiunii pentru setările chat-ului AI.",
+    "message": "Chat AI"
+  },
+  "sectionHeadingAbout": {
+    "description": "Titlul secțiunii pentru secțiunea despre.",
+    "message": "Despre"
+  },
+  "sectionHeadingDictation": {
+    "description": "Titlul secțiunii pentru setările de dictare.",
+    "message": "Dictare"
+  },
+  "sectionHeadingGeneral": {
+    "description": "Titlul secțiunii pentru setările generale.",
+    "message": "General"
+  },
   "shareAnalytics": {
     "description": "Label for the checkbox to enable/disable sharing of analytics.",
     "message": "Împărtășește analizele"
@@ -726,6 +781,22 @@
   "submit_mode_off_description": {
     "description": "Description for the manual submission mode.",
     "message": "Trimiteți doar când apăsați butonul"
+  },
+  "tabAIChat": {
+    "description": "Eticheta tab-ului pentru secțiunea setărilor de chat AI.",
+    "message": "Chat AI"
+  },
+  "tabAbout": {
+    "description": "Eticheta tab-ului pentru secțiunea despre.",
+    "message": "Despre"
+  },
+  "tabDictation": {
+    "description": "Eticheta tab-ului pentru secțiunea setărilor de dictare.",
+    "message": "Dictare"
+  },
+  "tabGeneral": {
+    "description": "Eticheta tab-ului pentru secțiunea setărilor generale.",
+    "message": "General"
   },
   "toggleThemeToDarkMode": {
     "description": "Label for the button to toggle to dark mode.",
