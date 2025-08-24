@@ -1106,5 +1106,73 @@
   "dictationPlaceholderError": {
     "message": "Dictation error - tap to retry",
     "description": "Placeholder text shown in input field when dictation encounters an error."
+  },
+  "tabGeneral": {
+    "message": "General",
+    "description": "Tab label for the general settings section."
+  },
+  "tabAIChat": {
+    "message": "AI Chat",
+    "description": "Tab label for the AI chat settings section."
+  },
+  "tabDictation": {
+    "message": "Dictation",
+    "description": "Tab label for the dictation settings section."
+  },
+  "tabAbout": {
+    "message": "About",
+    "description": "Tab label for the about section."
+  },
+  "sectionHeadingGeneral": {
+    "message": "General",
+    "description": "Section heading for general settings."
+  },
+  "sectionHeadingAIChat": {
+    "message": "AI Chat",
+    "description": "Section heading for AI chat settings."
+  },
+  "sectionHeadingDictation": {
+    "message": "Dictation",
+    "description": "Section heading for dictation settings."
+  },
+  "sectionHeadingAbout": {
+    "message": "About",
+    "description": "Section heading for the about section."
+  },
+  "ariaLabelRocket": {
+    "message": "Rocket",
+    "description": "Aria label for the rocket icon representing automatic mode."
+  },
+  "ariaLabelRobot": {
+    "message": "Robot",
+    "description": "Aria label for the robot icon representing agent mode."
+  },
+  "ariaLabelHand": {
+    "message": "Hand",
+    "description": "Aria label for the hand icon representing manual mode."
+  },
+  "ariaLabelFast": {
+    "message": "Fast",
+    "description": "Aria label for the fast/speed transcription mode icon."
+  },
+  "ariaLabelBalanced": {
+    "message": "Balanced",
+    "description": "Aria label for the balanced transcription mode icon."
+  },
+  "ariaLabelAccurate": {
+    "message": "Accurate",
+    "description": "Aria label for the accurate transcription mode icon."
+  },
+  "nicknamePlaceholder": {
+    "message": "Pi",
+    "description": "Placeholder text for the assistant nickname input field."
+  },
+  "clearPreferencesButton": {
+    "message": "Clear Preferences",
+    "description": "Text for the button that clears all user preferences."
+  },
+  "dashboardLinkTitle": {
+    "message": "Open Say, Pi Dashboard",
+    "description": "Tooltip text for the link to open the Say, Pi dashboard."
   }
 }

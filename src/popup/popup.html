@@ -47,7 +47,7 @@
     <header class="settings-header">
       <div id="profile" class="profile-banner">
         <div class="flex items-center w-full">
-          <a href="https://www.saypi.ai" id="saypi-logo-link" title="Open Say, Pi Dashboard" target="_blank">
+          <a href="https://www.saypi.ai" id="saypi-logo-link" data-i18n-attr="title:dashboardLinkTitle" title="Open Say, Pi Dashboard" target="_blank">
             <img class="logo mr-2" src="../icons/bubble-green.svg" alt="Say, Pi" />
           </a>
           <div class="flex items-center flex-grow">
@@ -64,15 +64,15 @@
 
     <div class="settings-container">
       <nav class="sidebar">
-        <button class="tab-button active" data-tab="general">General</button>
-        <button class="tab-button" data-tab="chat">AI Chat</button>
-        <button class="tab-button" data-tab="dictation">Dictation</button>
-        <button class="tab-button" data-tab="about">About</button>
+        <button class="tab-button active" data-tab="general" data-i18n="tabGeneral">General</button>
+        <button class="tab-button" data-tab="chat" data-i18n="tabAIChat">AI Chat</button>
+        <button class="tab-button" data-tab="dictation" data-i18n="tabDictation">Dictation</button>
+        <button class="tab-button" data-tab="about" data-i18n="tabAbout">About</button>
       </nav>
       <main class="content">
         <!-- General -->
         <section id="tab-general" class="tab-panel">
-          <h2 class="panel-heading">General</h2>
+          <h2 class="panel-heading" data-i18n="sectionHeadingGeneral">General</h2>
           <div class="user-preference-item w-full max-w-lg" id="sounds-effects-preference">
             <label class="wraper" for="sound-effects">
               <span class="label-text" data-i18n="soundEffects">Sound Effects</span>
@@ -137,7 +137,7 @@
 
           <section id="devtools" class="hidden">
             <div class="user-preference-item w-full max-w-lg x-hidden">
-              <button type="button" id="clear-preferences" class="btn btn-primary">Clear Preferences</button>
+              <button type="button" id="clear-preferences" class="btn btn-primary" data-i18n="clearPreferencesButton">Clear Preferences</button>
             </div>
           </section>
 
@@ -168,13 +168,13 @@
 
         <!-- AI Chat -->
         <section id="tab-chat" class="tab-panel hidden">
-          <h2 class="panel-heading">AI Chat</h2>
+          <h2 class="panel-heading" data-i18n="sectionHeadingAIChat">AI Chat</h2>
           <div id="submit-mode-selector" class="w-full max-w-lg user-preference-item mode-selector">
             <div>
               <div class="flex justify-between mb-2">
-                <span role="img" class="icon text-2xl" aria-label="Rocket" slider-value="0" id="auto">🚀</span>
-                <span role="img" class="icon text-2xl" aria-label="Robot" slider-value="1" id="agent">🤖</span>
-                <span role="img" class="icon text-2xl" aria-label="Hand" slider-value="2" id="off">🖐️</span>
+                <span role="img" class="icon text-2xl" data-i18n-attr="aria-label:ariaLabelRocket" aria-label="Rocket" slider-value="0" id="auto">🚀</span>
+                <span role="img" class="icon text-2xl" data-i18n-attr="aria-label:ariaLabelRobot" aria-label="Robot" slider-value="1" id="agent">🤖</span>
+                <span role="img" class="icon text-2xl" data-i18n-attr="aria-label:ariaLabelHand" aria-label="Hand" slider-value="2" id="off">🖐️</span>
               </div>
               <input type="range" min="0" max="2" value="0" class="slider w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer" id="submitModeRange" data-i18n-attr="title:submitModeControl" title="Select when to submit your messages" />
             </div>
@@ -188,7 +188,7 @@
             <label class="wraper" for="assistant-nickname">
               <span class="label-text" data-i18n="nicknameLabel">Nickname</span>
               <div class="control">
-                <input type="text" id="assistant-nickname" name="assistantNickname" class="px-2 py-1 border rounded w-20 text-sm text-right" placeholder="Pi" />
+                <input type="text" id="assistant-nickname" name="assistantNickname" class="px-2 py-1 border rounded w-20 text-sm text-right" data-i18n-attr="placeholder:nicknamePlaceholder" placeholder="Pi" />
               </div>
             </label>
           </div>
@@ -206,17 +206,17 @@
 
         <!-- Dictation -->
         <section id="tab-dictation" class="tab-panel hidden">
-          <h2 class="panel-heading">Dictation</h2>
+          <h2 class="panel-heading" data-i18n="sectionHeadingDictation">Dictation</h2>
           <div id="preference-selector" class="w-full max-w-lg user-preference-item mode-selector">
             <div>
               <div class="flex justify-between mb-2">
-                <span class="icon" aria-label="Fast" slider-value="0" id="speed">
+                <span class="icon" data-i18n-attr="aria-label:ariaLabelFast" aria-label="Fast" slider-value="0" id="speed">
                   <span class="icon-circle"><i data-lucide="rabbit"></i></span>
                 </span>
-                <span class="icon active" aria-label="Balanced" slider-value="1" id="balanced">
+                <span class="icon active" data-i18n-attr="aria-label:ariaLabelBalanced" aria-label="Balanced" slider-value="1" id="balanced">
                   <span class="icon-circle"><i data-lucide="scale"></i></span>
                 </span>
-                <span class="icon" aria-label="Accurate" slider-value="2" id="accuracy">
+                <span class="icon" data-i18n-attr="aria-label:ariaLabelAccurate" aria-label="Accurate" slider-value="2" id="accuracy">
                   <span class="icon-circle"><i data-lucide="turtle"></i></span>
                 </span>
               </div>
@@ -291,7 +291,7 @@
 
         <!-- About -->
         <section id="tab-about" class="tab-panel hidden">
-          <h2 class="panel-heading">About</h2>
+          <h2 class="panel-heading" data-i18n="sectionHeadingAbout">About</h2>
           <section id="application-status">
             <div class="status-container">
               <div class="status">
