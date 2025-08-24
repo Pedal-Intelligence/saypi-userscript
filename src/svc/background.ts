@@ -59,51 +59,57 @@ function updateContextMenuTitle(tabId: number, isDictationActive: boolean) {
     ? getMessage("contextMenuStopDictation", appName)
     : getMessage("contextMenuStartDictation", appName);
     
-  chrome.contextMenus.update("start-dictation", {
-    title: title
-  }, () => {
-    // Check for errors in the callback
-    if (chrome.runtime.lastError) {
-      console.debug("Failed to update context menu title:", chrome.runtime.lastError.message);
+  try {
+    if (chrome.contextMenus && typeof chrome.contextMenus.update === 'function') {
+      chrome.contextMenus.update("start-dictation", {
+        title: title
+      }, () => {
+        if (chrome.runtime.lastError) {
+          console.debug("Failed to update context menu title:", chrome.runtime.lastError.message);
+        }
+      });
     }
-  });
+  } catch {}
 }
 
 // Context menu setup for dictation
 chrome.runtime.onInstalled.addListener(() => {
-  // Create context menu item for dictation
-  const appName = getMessage("appName");
-  chrome.contextMenus.create({
-    id: "start-dictation",
-    title: getMessage("contextMenuStartDictation", appName),
-    contexts: ["editable"], // Only show on input fields and contenteditable elements
-    documentUrlPatterns: [
-      "file://*/*", 
-      "http://*/*", 
-      "https://*/*"
-    ]
-  });
+  try {
+    if (!chrome.contextMenus || typeof chrome.contextMenus.create !== 'function') return;
+    const appName = getMessage("appName");
+    chrome.contextMenus.create({
+      id: "start-dictation",
+      title: getMessage("contextMenuStartDictation", appName),
+      contexts: ["editable"],
+      documentUrlPatterns: [
+        "file://*/*",
+        "http://*/*",
+        "https://*/*"
+      ]
+    });
+  } catch {}
 });
 
 // Handle context menu clicks
-chrome.contextMenus.onClicked.addListener((info: any, tab: any) => {
-  if (info.menuItemId === "start-dictation" && tab?.id) {
-    const tabId = tab.id;
-    const isDictationActive = dictationStates.get(tabId) || false;
-    
-    // Send appropriate message based on current dictation state
-    const messageType = isDictationActive 
-      ? "stop-dictation-from-context-menu"
-      : "start-dictation-from-context-menu";
-      
-    chrome.tabs.sendMessage(tabId, {
-      type: messageType,
-      frameId: info.frameId || 0
-    }).catch((error: any) => {
-      console.debug("Failed to send dictation message to content script:", error);
+try {
+  if (chrome.contextMenus && typeof chrome.contextMenus.onClicked?.addListener === 'function') {
+    chrome.contextMenus.onClicked.addListener((info: any, tab: any) => {
+      if (info.menuItemId === "start-dictation" && tab?.id) {
+        const tabId = tab.id;
+        const isDictationActive = dictationStates.get(tabId) || false;
+        const messageType = isDictationActive
+          ? "stop-dictation-from-context-menu"
+          : "start-dictation-from-context-menu";
+        chrome.tabs.sendMessage(tabId, {
+          type: messageType,
+          frameId: info.frameId || 0
+        }).catch((error: any) => {
+          console.debug("Failed to send dictation message to content script:", error);
+        });
+      }
     });
   }
-});
+} catch {}
 
 // Helper function to sanitize messages for logging by removing/truncating large data
 function sanitizeMessageForLogs(message: any): any {
