@@ -1,0 +1,205 @@
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import {
+  serializeApiRequest,
+  deserializeApiRequest,
+  serializeFormData,
+  deserializeFormData,
+  serializeBlob,
+  deserializeBlob,
+  shouldRouteViaBackground
+} from '../../src/utils/ApiRequestSerializer';
+
+describe('ApiRequestSerializer', () => {
+  beforeEach(() => {
+    // Mock global objects
+    global.Blob = vi.fn().mockImplementation((parts, options) => ({
+      size: parts[0]?.byteLength || 0,
+      type: options?.type || '',
+      arrayBuffer: () => Promise.resolve(parts[0] || new ArrayBuffer(0))
+    }));
+
+    global.FormData = vi.fn().mockImplementation(() => {
+      const data = new Map();
+      return {
+        append: vi.fn((key, value) => data.set(key, value)),
+        entries: vi.fn(() => Array.from(data.entries())),
+        get: vi.fn((key) => data.get(key)),
+        has: vi.fn((key) => data.has(key))
+      };
+    });
+
+    global.Headers = vi.fn().mockImplementation((init) => {
+      const headers = new Map();
+      if (init) {
+        for (const [key, value] of Object.entries(init)) {
+          headers.set(key, value);
+        }
+      }
+      return {
+        set: vi.fn((key, value) => headers.set(key, value)),
+        get: vi.fn((key) => headers.get(key)),
+        has: vi.fn((key) => headers.has(key)),
+        forEach: vi.fn((callback) => headers.forEach(callback))
+      };
+    });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe('shouldRouteViaBackground', () => {
+    it('returns true for api.saypi.ai URLs', () => {
+      expect(shouldRouteViaBackground('https://api.saypi.ai/transcribe')).toBe(true);
+    });
+
+    it('returns true for www.saypi.ai URLs', () => {
+      expect(shouldRouteViaBackground('https://www.saypi.ai/auth/refresh')).toBe(true);
+    });
+
+    it('returns false for other URLs', () => {
+      expect(shouldRouteViaBackground('https://claude.ai/api/chat')).toBe(false);
+      expect(shouldRouteViaBackground('https://pi.ai/api/message')).toBe(false);
+      expect(shouldRouteViaBackground('https://example.com/api')).toBe(false);
+    });
+  });
+
+  describe('Blob serialization', () => {
+    it('serializes and deserializes Blob correctly', async () => {
+      const testData = new ArrayBuffer(10);
+      const testBlob = new Blob([testData], { type: 'audio/wav' });
+      
+      const serialized = await serializeBlob(testBlob);
+      expect(serialized.type).toBe('Blob');
+      expect(serialized.mimeType).toBe('audio/wav');
+      expect(serialized.data).toBe(testData);
+
+      const deserialized = deserializeBlob(serialized);
+      expect(deserialized).toEqual(expect.objectContaining({
+        type: 'audio/wav'
+      }));
+    });
+  });
+
+  describe('FormData serialization', () => {
+    it('serializes and deserializes FormData with string values', async () => {
+      const formData = new FormData();
+      formData.append('text', 'hello world');
+      formData.append('number', '42');
+
+      const serialized = await serializeFormData(formData);
+      expect(serialized.type).toBe('FormData');
+      
+      // Check the entries array structure
+      const textEntry = serialized.entries.find(([key]) => key === 'text');
+      const numberEntry = serialized.entries.find(([key]) => key === 'number');
+      expect(textEntry).toEqual(['text', 'hello world']);
+      expect(numberEntry).toEqual(['number', '42']);
+
+      const deserialized = deserializeFormData(serialized);
+      expect(deserialized.append).toHaveBeenCalledWith('text', 'hello world');
+      expect(deserialized.append).toHaveBeenCalledWith('number', '42');
+    });
+
+    it('serializes and deserializes FormData with Blob values', async () => {
+      const testData = new ArrayBuffer(10);
+      
+      // Create a proper Blob mock 
+      const mockBlob = Object.create(Blob.prototype);
+      Object.assign(mockBlob, {
+        type: 'audio/wav',
+        arrayBuffer: () => Promise.resolve(testData)
+      });
+      
+      // Create a proper FormData mock
+      const mockFormData = Object.create(FormData.prototype);
+      const entries = [['audio', mockBlob], ['metadata', 'test']];
+      Object.assign(mockFormData, {
+        append: vi.fn(),
+        entries: vi.fn(() => entries),
+        get: vi.fn(),
+        has: vi.fn()
+      });
+
+      const serialized = await serializeFormData(mockFormData);
+      expect(serialized.type).toBe('FormData');
+      
+      // Check that blob was serialized
+      const audioEntry = serialized.entries.find(([key]) => key === 'audio');
+      expect(audioEntry).toBeDefined();
+      expect(audioEntry![1]).toEqual(expect.objectContaining({
+        type: 'Blob',
+        mimeType: 'audio/wav',
+        data: testData
+      }));
+
+      const deserialized = deserializeFormData(serialized);
+      expect(deserialized.append).toHaveBeenCalledWith('metadata', 'test');
+      expect(deserialized.append).toHaveBeenCalledWith('audio', expect.any(Object));
+    });
+  });
+
+  describe('API request serialization', () => {
+    it('serializes simple GET request', async () => {
+      const url = 'https://api.saypi.ai/voices';
+      const options = { method: 'GET' };
+
+      const serialized = await serializeApiRequest(url, options);
+      expect(serialized.url).toBe(url);
+      expect(serialized.options.method).toBe('GET');
+    });
+
+    it('serializes POST request with headers', async () => {
+      const url = 'https://api.saypi.ai/transcribe';
+      const options = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include' as RequestCredentials
+      };
+
+      const serialized = await serializeApiRequest(url, options);
+      expect(serialized.url).toBe(url);
+      expect(serialized.options.method).toBe('POST');
+      expect(serialized.options.headers).toEqual({ 'Content-Type': 'application/json' });
+      expect(serialized.options.credentials).toBe('include');
+    });
+
+    it('serializes request with FormData body', async () => {
+      // Create a real-ish FormData mock that will trigger instanceof
+      const mockFormData = Object.create(FormData.prototype);
+      Object.assign(mockFormData, {
+        append: vi.fn(),
+        entries: vi.fn(() => [['test', 'value']]),
+        get: vi.fn(),
+        has: vi.fn()
+      });
+      
+      const url = 'https://api.saypi.ai/upload';
+      const options = { method: 'POST', body: mockFormData };
+
+      const serialized = await serializeApiRequest(url, options);
+      expect(serialized.options.body).toEqual(expect.objectContaining({
+        type: 'FormData',
+        entries: expect.arrayContaining([['test', 'value']])
+      }));
+    });
+
+    it('deserializes API request correctly', () => {
+      const serialized = {
+        url: 'https://api.saypi.ai/test',
+        options: {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer token' },
+          credentials: 'include' as RequestCredentials,
+          body: 'test data'
+        }
+      };
+
+      const { url, options } = deserializeApiRequest(serialized);
+      expect(url).toBe('https://api.saypi.ai/test');
+      expect(options.method).toBe('POST');
+      expect(options.credentials).toBe('include');
+      expect(options.body).toBe('test data');
+    });
+  });
+});
