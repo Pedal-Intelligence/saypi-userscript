@@ -71,7 +71,7 @@ export async function serializeBlob(blob: Blob): Promise<SerializedBlob> {
   const arrayBuffer = await blob.arrayBuffer();
   const base64 = arrayBufferToBase64(arrayBuffer);
   // Preserve filename when available (File extends Blob)
-  const maybeFileName = (typeof File !== 'undefined' && typeof (self as any).File !== 'undefined' && blob instanceof (self as any).File)
+  const maybeFileName = (typeof File !== 'undefined' && (blob as any) && (blob as any).name)
     ? (blob as File).name
     : (typeof (blob as any).name === 'string' ? (blob as any).name : undefined);
   return {
