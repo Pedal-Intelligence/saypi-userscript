@@ -135,7 +135,7 @@ describe('ApiRequestSerializer', () => {
 
       const deserialized = deserializeFormData(serialized);
       expect(deserialized.append).toHaveBeenCalledWith('metadata', 'test');
-      expect(deserialized.append).toHaveBeenCalledWith('audio', expect.any(Object));
+      expect(deserialized.append).toHaveBeenCalledWith('audio', expect.any(Object), undefined);
     });
   });
 
@@ -201,5 +201,44 @@ describe('ApiRequestSerializer', () => {
       expect(options.credentials).toBe('include');
       expect(options.body).toBe('test data');
     });
+  });
+
+  it('preserves filename when serializing/deserializing File in FormData', async () => {
+    const testData = new ArrayBuffer(8);
+    const mockFile = Object.create(Blob.prototype);
+    Object.assign(mockFile, {
+      type: 'audio/webm',
+      name: 'audio.webm',
+      arrayBuffer: () => Promise.resolve(testData)
+    });
+    const mockFormData = Object.create(FormData.prototype);
+    const entries = [['audio', mockFile]];
+    Object.assign(mockFormData, {
+      append: vi.fn(),
+      entries: vi.fn(() => entries),
+      get: vi.fn(),
+      has: vi.fn()
+    });
+
+    const serialized = await serializeFormData(mockFormData);
+    const deserialized = deserializeFormData(serialized);
+    expect(deserialized.append).toHaveBeenCalledWith('audio', expect.any(Object), 'audio.webm');
+  });
+
+  it('passes through ArrayBuffer and TypedArray bodies', async () => {
+    const ab = new ArrayBuffer(16);
+    const u8 = new Uint8Array([1,2,3,4]);
+
+    const s1 = await serializeApiRequest('https://api.saypi.ai/a', { method: 'POST', body: ab });
+    expect(s1.options.body).toBeInstanceOf(ArrayBuffer);
+
+    const s2 = await serializeApiRequest('https://api.saypi.ai/b', { method: 'POST', body: u8 });
+    expect(s2.options.body).toBeInstanceOf(ArrayBuffer);
+
+    const d1 = deserializeApiRequest(s1);
+    expect(d1.options.body).toBeInstanceOf(ArrayBuffer);
+
+    const d2 = deserializeApiRequest(s2);
+    expect(d2.options.body).toBeInstanceOf(ArrayBuffer);
   });
 });

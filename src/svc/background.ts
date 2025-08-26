@@ -458,13 +458,19 @@ async function handleApiRequest(message: any, sendResponse: (response: any) => v
     // Get JWT manager and add auth headers if needed
     const headers = new Headers(options.headers);
     
-    // Add authorization header for SayPi API requests
-    if (url.includes('api.saypi.ai') || url.includes('www.saypi.ai')) {
-      const authHeader = jwtManager.getAuthHeader();
-      if (authHeader) {
-        headers.set('Authorization', authHeader);
+    // Add authorization header only for whitelisted SayPi hosts
+    try {
+      const hostname = new URL(url).hostname;
+      const allowedHosts = new Set<string>(['api.saypi.ai', 'www.saypi.ai']);
+      try { if (config?.apiServerUrl) allowedHosts.add(new URL(config.apiServerUrl).hostname); } catch {}
+      try { if (config?.authServerUrl) allowedHosts.add(new URL(config.authServerUrl).hostname); } catch {}
+      if (allowedHosts.has(hostname)) {
+        const authHeader = jwtManager.getAuthHeader();
+        if (authHeader) {
+          headers.set('Authorization', authHeader);
+        }
       }
-    }
+    } catch {}
     
     // Update request options with auth headers
     const requestOptions: RequestInit = {

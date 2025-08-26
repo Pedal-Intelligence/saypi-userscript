@@ -73,12 +73,6 @@ async function callApiViaBackground(
           headers: responseHeaders
         });
 
-        // Copy ok property
-        Object.defineProperty(reconstructedResponse, 'ok', {
-          value: responseData.ok,
-          writable: false
-        });
-
         resolve(reconstructedResponse);
       }
     );
