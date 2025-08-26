@@ -14,9 +14,10 @@ export interface SerializedFormData {
 
 export interface SerializedBlob {
   type: 'Blob';
-  data: ArrayBuffer;
+  data: ArrayBuffer | string; // base64 when encoding === 'base64'
   mimeType: string;
   fileName?: string; // preserved when the original Blob was a File
+  encoding?: 'raw' | 'base64';
 }
 
 export interface SerializedApiRequest {
@@ -41,20 +42,44 @@ function isBlobLike(value: any): value is Blob {
   );
 }
 
+function arrayBufferToBase64(buffer: ArrayBuffer): string {
+  let binary = '';
+  const bytes = new Uint8Array(buffer);
+  const len = bytes.byteLength;
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  // btoa handles binary string ➜ base64
+  return btoa(binary);
+}
+
+function base64ToArrayBuffer(base64: string): ArrayBuffer {
+  const binaryString = atob(base64);
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes.buffer;
+}
+
 /**
  * Serializes a Blob for transmission via structured clone
  */
 export async function serializeBlob(blob: Blob): Promise<SerializedBlob> {
+  // Prefer base64 encoding for maximal structured-clone compatibility across contexts
   const arrayBuffer = await blob.arrayBuffer();
+  const base64 = arrayBufferToBase64(arrayBuffer);
   // Preserve filename when available (File extends Blob)
-  const maybeFileName = (typeof File !== 'undefined' && blob instanceof File)
+  const maybeFileName = (typeof File !== 'undefined' && typeof (self as any).File !== 'undefined' && blob instanceof (self as any).File)
     ? (blob as File).name
     : (typeof (blob as any).name === 'string' ? (blob as any).name : undefined);
   return {
     type: 'Blob',
-    data: arrayBuffer,
+    data: base64,
     mimeType: blob.type,
-    fileName: maybeFileName
+    fileName: maybeFileName,
+    encoding: 'base64'
   };
 }
 
@@ -62,7 +87,13 @@ export async function serializeBlob(blob: Blob): Promise<SerializedBlob> {
  * Deserializes a Blob from structured clone data
  */
 export function deserializeBlob(serialized: SerializedBlob): Blob {
-  return new Blob([serialized.data], { type: serialized.mimeType });
+  let bytes: ArrayBuffer;
+  if (serialized.encoding === 'base64' && typeof serialized.data === 'string') {
+    bytes = base64ToArrayBuffer(serialized.data);
+  } else {
+    bytes = serialized.data as ArrayBuffer;
+  }
+  return new Blob([bytes], { type: serialized.mimeType });
 }
 
 /**
