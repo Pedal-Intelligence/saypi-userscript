@@ -27,6 +27,7 @@ export interface SerializedApiRequest {
     body?: string | SerializedFormData | SerializedBlob | ArrayBuffer;
     credentials?: RequestCredentials;
     signal?: never; // AbortSignal cannot be serialized
+    responseType?: 'json' | 'text' | 'arrayBuffer';
   };
 }
 
@@ -61,7 +62,7 @@ export async function serializeFormData(formData: FormData): Promise<SerializedF
   const entries: Array<[string, string | SerializedBlob]> = [];
   
   for (const [key, value] of formData.entries()) {
-    if (value instanceof Blob || (typeof Blob !== 'undefined' && value instanceof Blob)) {
+    if (typeof value !== 'string' && value instanceof Blob) {
       entries.push([key, await serializeBlob(value as Blob)]);
     } else {
       entries.push([key, String(value)]);
@@ -134,14 +135,20 @@ export async function serializeApiRequest(
       // ArrayBuffer is structured-clone friendly
       serializedOptions.body = bodyAny;
     } else if (typeof ArrayBuffer !== 'undefined' && ArrayBuffer.isView(bodyAny)) {
-      // TypedArray/DataView → copy the exact view into a tightly sized ArrayBuffer
+      // TypedArray/DataView → copy into an ArrayBuffer of exact length
       const view = bodyAny as ArrayBufferView;
-      const copy = new Uint8Array(view.buffer, view.byteOffset, view.byteLength);
-      serializedOptions.body = copy.buffer.slice(0);
+      const buf = new ArrayBuffer(view.byteLength);
+      new Uint8Array(buf).set(new Uint8Array(view.buffer, view.byteOffset, view.byteLength));
+      serializedOptions.body = buf;
     } else {
       // String and other JSON-compatible types
       serializedOptions.body = bodyAny as string;
     }
+  }
+
+  // Pass through optional responseType hint if provided by caller
+  if ((options as any).responseType) {
+    (serializedOptions as any).responseType = (options as any).responseType;
   }
 
   return {

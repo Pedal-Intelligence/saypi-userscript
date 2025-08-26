@@ -509,12 +509,18 @@ async function handleApiRequest(message: any, sendResponse: (response: any) => v
     }
     
     // Convert response to serializable format
-    const responseData = {
+    const responseData: {
+      ok: boolean;
+      status: number;
+      statusText: string;
+      headers: Record<string, string>;
+      body: any;
+    } = {
       ok: response.ok,
       status: response.status,
       statusText: response.statusText,
-      headers: {} as Record<string, string>,
-      body: null as string | null
+      headers: {},
+      body: null
     };
     
     // Serialize response headers
@@ -522,9 +528,23 @@ async function handleApiRequest(message: any, sendResponse: (response: any) => v
       responseData.headers[key] = value;
     });
     
-    // Read response body
+    // Read response body according to requested responseType (default: text)
+    const responseType = (options as any).responseType as ('json'|'text'|'arrayBuffer') | undefined;
     try {
-      responseData.body = await response.text();
+      if (responseType === 'json') {
+        // Attempt JSON parse; if fails, fall back to text
+        try {
+          responseData.body = await response.json();
+        } catch {
+          responseData.body = await response.text();
+        }
+      } else if (responseType === 'arrayBuffer') {
+        const buf = await response.arrayBuffer();
+        // Structured clone can carry ArrayBuffer directly
+        responseData.body = buf;
+      } else {
+        responseData.body = await response.text();
+      }
     } catch (error) {
       logger.warn('[Background] Failed to read response body:', error);
       responseData.body = null;
