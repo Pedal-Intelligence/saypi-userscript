@@ -102,15 +102,22 @@ export function deserializeBlob(serialized: SerializedBlob): Blob {
 export async function serializeFormData(formData: FormData): Promise<SerializedFormData> {
   const entries: Array<[string, string | SerializedBlob]> = [];
   
-  for (const [key, value] of formData.entries()) {
+  // Use forEach for widest cross-browser compat (Firefox sometimes returns a
+  // non-iterable iterator for entries())
+  const tasks: Array<Promise<void>> = [];
+  formData.forEach((value, key) => {
     if (isBlobLike(value)) {
-      // Preserve filename if present (File extends Blob)
-      const serialized = await serializeBlob(value);
-      entries.push([key, serialized]);
+      tasks.push(
+        (async () => {
+          const serialized = await serializeBlob(value as Blob);
+          entries.push([key, serialized]);
+        })()
+      );
     } else {
       entries.push([key, String(value)]);
     }
-  }
+  });
+  await Promise.all(tasks);
   
   return {
     type: 'FormData',
