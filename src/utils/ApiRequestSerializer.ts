@@ -31,6 +31,16 @@ export interface SerializedApiRequest {
   };
 }
 
+function isBlobLike(value: any): value is Blob {
+  return (
+    value &&
+    typeof value === 'object' &&
+    typeof (value as any).arrayBuffer === 'function' &&
+    typeof (value as any).size === 'number' &&
+    typeof (value as any).type === 'string'
+  );
+}
+
 /**
  * Serializes a Blob for transmission via structured clone
  */
@@ -62,8 +72,10 @@ export async function serializeFormData(formData: FormData): Promise<SerializedF
   const entries: Array<[string, string | SerializedBlob]> = [];
   
   for (const [key, value] of formData.entries()) {
-    if (typeof value !== 'string' && value instanceof Blob) {
-      entries.push([key, await serializeBlob(value as Blob)]);
+    if (isBlobLike(value)) {
+      // Preserve filename if present (File extends Blob)
+      const serialized = await serializeBlob(value);
+      entries.push([key, serialized]);
     } else {
       entries.push([key, String(value)]);
     }
