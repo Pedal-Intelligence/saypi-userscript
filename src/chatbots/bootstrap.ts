@@ -152,7 +152,7 @@ export class DOMObserver {
       
       // If not found on first try, start progressive backoff search
       if (!chatHistoryObs.found) {
-        console.info("Chat history not found on initial load - starting progressive search");
+        console.debug("Chat history not found on initial load - starting progressive search");
         this.startChatHistoryProgressiveSearch();
       }
     });
@@ -536,12 +536,12 @@ export class DOMObserver {
       const chatHistoryObs = this.findAndDecorateChatHistory(document.body);
       
       if (chatHistoryObs.found) {
-        console.info(`Chat history found on progressive search attempt ${attempt}`);
+        console.debug(`Chat history found on progressive search attempt ${attempt}`);
       } else if (attempt < maxAttempts) {
         console.debug(`Chat history not found on attempt ${attempt}, retrying in ${delay}ms`);
         this.startChatHistoryProgressiveSearch(attempt + 1, maxAttempts);
       } else {
-        console.warn(`Failed to find chat history after ${maxAttempts} attempts`);
+        console.debug(`Failed to find chat history after ${maxAttempts} attempts`);
       }
     }, delay);
   }
