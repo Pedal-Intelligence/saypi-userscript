@@ -66,8 +66,28 @@ async function callApiViaBackground(
         // Reconstruct Response object from background response
         const responseData = response.response;
         const responseHeaders = new Headers(responseData.headers);
-        
-        const reconstructedResponse = new Response(responseData.body, {
+
+        // Respect desired responseType when reconstructing the Response body
+        const desiredType = (options as any)?.responseType as ('json'|'text'|'arrayBuffer'|undefined);
+        let bodyInit: BodyInit | null = null;
+        if (desiredType === 'json') {
+          if (typeof responseData.body === 'string') {
+            bodyInit = responseData.body as string;
+          } else {
+            bodyInit = JSON.stringify(responseData.body ?? null);
+          }
+          if (!responseHeaders.has('content-type')) {
+            responseHeaders.set('content-type', 'application/json');
+          }
+        } else if (desiredType === 'arrayBuffer') {
+          bodyInit = responseData.body as ArrayBuffer;
+        } else {
+          bodyInit = typeof responseData.body === 'string'
+            ? (responseData.body as string)
+            : String(responseData.body ?? '');
+        }
+
+        const reconstructedResponse = new Response(bodyInit, {
           status: responseData.status,
           statusText: responseData.statusText,
           headers: responseHeaders

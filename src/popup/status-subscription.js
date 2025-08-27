@@ -380,8 +380,28 @@ async function getQuotaStatus() {
       // Fall back to API endpoint if no JWT quota available
       try {
         const statusEndpoint = `${config.apiBaseUrl}/status/tts`;
-        const response = await fetch(statusEndpoint);
-        const data = await response.json();
+        const bgResponse = await new Promise((resolve, reject) => {
+          chrome.runtime.sendMessage({
+            type: 'API_REQUEST',
+            url: statusEndpoint,
+            options: {
+              method: 'GET',
+              headers: {},
+              responseType: 'json'
+            }
+          }, (response) => {
+            if (chrome.runtime.lastError) {
+              reject(new Error(chrome.runtime.lastError.message));
+              return;
+            }
+            if (!response || !response.success) {
+              reject(new Error(response?.error || 'Background API request failed'));
+              return;
+            }
+            resolve(response.response);
+          });
+        });
+        const data = bgResponse && bgResponse.body ? bgResponse.body : {};
         
         // If the API response indicates no quota, mark as no entitlement
         if (!data.quota || !data.quota.total) {
@@ -402,8 +422,28 @@ async function getQuotaStatus() {
     } else {
       try {
         const statusEndpoint = `${config.apiBaseUrl}/status/stt`;
-        const response = await fetch(statusEndpoint);
-        const data = await response.json();
+        const bgResponse = await new Promise((resolve, reject) => {
+          chrome.runtime.sendMessage({
+            type: 'API_REQUEST',
+            url: statusEndpoint,
+            options: {
+              method: 'GET',
+              headers: {},
+              responseType: 'json'
+            }
+          }, (response) => {
+            if (chrome.runtime.lastError) {
+              reject(new Error(chrome.runtime.lastError.message));
+              return;
+            }
+            if (!response || !response.success) {
+              reject(new Error(response?.error || 'Background API request failed'));
+              return;
+            }
+            resolve(response.response);
+          });
+        });
+        const data = bgResponse && bgResponse.body ? bgResponse.body : {};
         
         // If the API response indicates no quota, mark as no entitlement
         if (!data.quota || !data.quota.total) {
