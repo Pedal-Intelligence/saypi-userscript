@@ -1,4 +1,5 @@
 import { config } from "../ConfigModule";
+import { callApi } from "../ApiClient";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import AudioControlsModule from "../audio/AudioControlsModule";
 import EventBus from "../events/EventBus";
@@ -726,29 +727,9 @@ class UserPreferenceModule {
     const defaultStatus = false;
     const statusEndpoint = `${config.apiServerUrl}/status/tts`;
     try {
-      // Route via background to bypass CSP when popup is opened on restrictive hosts
-      const bgResponse = await new Promise<any>((resolve, reject) => {
-        chrome.runtime.sendMessage({
-          type: 'API_REQUEST',
-          url: statusEndpoint,
-          options: {
-            method: 'GET',
-            headers: {},
-            responseType: 'json'
-          }
-        }, (response) => {
-          if (chrome.runtime.lastError) {
-            reject(new Error(chrome.runtime.lastError.message));
-            return;
-          }
-          if (!response || !response.success) {
-            reject(new Error(response?.error || 'Background API request failed'));
-            return;
-          }
-          resolve(response.response);
-        });
-      });
-      const data = bgResponse && bgResponse.body ? bgResponse.body : {};
+      // Use ApiClient to encapsulate background routing and response handling
+      const response = await callApi(statusEndpoint, { method: 'GET', responseType: 'json' } as any);
+      const data = await response.json();
       return data.beta.status === "paused";
     } catch (error) {
       console.warn("Unable to check TTS beta status. API server may be unavailable.", error);
