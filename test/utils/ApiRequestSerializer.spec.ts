@@ -231,7 +231,7 @@ describe('ApiRequestSerializer', () => {
     const serialized = await serializeFormData(mockFormData);
     // Ensure deserialization appends a Blob-like argument for 'audio'
     const deserialized = deserializeFormData(serialized);
-    const calls = appendSpy.mock.calls;
+    const calls = (deserialized.append as any).mock.calls;
     const audioCall = calls.find((c: any[]) => c[0] === 'audio');
     expect(audioCall).toBeTruthy();
     expect(audioCall[1]).toBeTruthy();
