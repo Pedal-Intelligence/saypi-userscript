@@ -85,7 +85,7 @@ class PiAIChatbot extends AbstractChatbot {
 
   isChatablePath(path: string): boolean {
     // true if path starts with /talk or /discover
-    return path.includes("/talk") || path.includes("/discover");
+    return path.startsWith("/talk") || path.startsWith("/discover");
   }
 
   getVoiceMenuSelector(): string {
