@@ -11,12 +11,94 @@ import { VoiceMenuUIManager } from "../tts/VoiceMenuUIManager";
 export class DOMObserver {
   ttsUiMgr: ChatHistorySpeechManager | null = null;
   voiceMenuUiMgr: VoiceMenuUIManager;
+  private domObserver: MutationObserver | null = null;
+  private isObservingDom: boolean = false;
+  private domMutationCallback = (mutations: MutationRecord[]) => {
+    // Skip decoration work entirely on non-chatable pages
+    if (!this.shouldDecorateUI()) {
+      return;
+    }
+    mutations.forEach((mutation) => {
+      [...mutation.addedNodes]
+        .filter((node) => node instanceof HTMLElement)
+        .forEach((node) => {
+          const addedElement = node as HTMLElement;
+          const promptObs = this.findAndDecoratePrompt(addedElement);
+          const ctrlPanelObs = this.findAndDecorateControlPanel(addedElement);
+          const sidePanelObs = this.findAndDecorateSidePanel(addedElement);
+          if (sidePanelObs.found && sidePanelObs.decorated) {
+            const discoveryPanelObs =
+              this.findAndDecorateDiscoveryPanel(addedElement);
+            const voiceSettingsObs =
+              this.findAndDecorateVoiceSettings(addedElement);
+          }
+          const audioControlsObs =
+            this.findAndDecorateAudioControls(addedElement);
+          if (audioControlsObs.isReady()) {
+            this.voiceMenuUiMgr.findAndDecorateVoiceMenu(
+              audioControlsObs.target as HTMLElement
+            );
+          }
+          const audioOutputButtonObs =
+            this.findAndDecorateAudioOutputButton(addedElement);
+          const chatHistoryObs =
+            this.findAndDecorateChatHistory(addedElement);
+
+          if (promptObs.isReady()) {
+            EventBus.emit("saypi:ui:content-loaded");
+          }
+        });
+      [...mutation.removedNodes]
+        .filter((node) => node instanceof HTMLElement)
+        .forEach((node) => {
+          const removedElement = node as HTMLElement;
+          const obs = this.findPrompt(removedElement);
+          if (obs.found) {
+            // if the prompt is removed, we need to find a new one
+            const replacementPromptObs = this.findAndDecoratePrompt(document.body);
+            if (replacementPromptObs.found && replacementPromptObs.isNew && replacementPromptObs.decorated) {
+              EventBus.emit("saypi:ui:content-loaded");
+            }
+          }
+          const ctrlPanelObs = this.findControlPanel(removedElement);
+          if (ctrlPanelObs.found) {
+            this.findAndDecorateControlPanel(document.body);
+          }
+          const audioControlsObs = this.findAudioControls(removedElement);
+          if (audioControlsObs.found) {
+            const replacementAudioControls = this.findAndDecorateAudioControls(document.body);
+            if (replacementAudioControls.isReady()) {
+              this.voiceMenuUiMgr.findAndDecorateVoiceMenu(
+                replacementAudioControls.target as HTMLElement
+              );
+            }
+          }
+          const audioOutputButtonObs =
+            this.findAudioOutputButton(removedElement);
+          if (audioOutputButtonObs.found) {
+            this.findAndDecorateAudioOutputButton(document.body);
+          }
+          const chatHistoryObs = this.findChatHistory(removedElement);
+          if (chatHistoryObs.found) {
+            this.findAndDecorateChatHistory(document.body);
+          }
+        });
+    });
+  };
   constructor(private chatbot: Chatbot) {
     this.voiceMenuUiMgr = new VoiceMenuUIManager(
       this.chatbot,
       UserPreferenceModule.getInstance()
     );
     this.monitorForRouteChanges();
+  }
+
+  /**
+   * Checks if we should decorate UI elements based on the current path.
+   * Only decorate on chatable pages to prevent controls appearing on onboarding, etc.
+   */
+  private shouldDecorateUI(): boolean {
+    return this.chatbot.isChatablePath(window.location.pathname);
   }
 
   monitorForRouteChanges(): void {
@@ -27,12 +109,15 @@ export class DOMObserver {
     setInterval(() => {
       const currentUrl = window.location.href;
       if (currentUrl !== lastUrl) {
-        console.log('Route changed:', lastUrl, '->', currentUrl);
+        console.debug('Route changed:', lastUrl, '->', currentUrl);
         lastUrl = currentUrl;
         
-        // Check if the new path is a chatable path
+        // Start/stop observation based on whether the new path is chatable
         if (this.chatbot.isChatablePath(window.location.pathname)) {
+          this.startObservingDom();
           this.handleRouteChange();
+        } else {
+          this.stopObservingDom();
         }
       }
     }, 300);
@@ -47,76 +132,14 @@ export class DOMObserver {
   }
 
   observeDOM(): void {
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        [...mutation.addedNodes]
-          .filter((node) => node instanceof HTMLElement)
-          .forEach((node) => {
-            const addedElement = node as HTMLElement;
-            const promptObs = this.findAndDecoratePrompt(addedElement);
-            const ctrlPanelObs = this.findAndDecorateControlPanel(addedElement);
-            const sidePanelObs = this.findAndDecorateSidePanel(addedElement);
-            if (sidePanelObs.found && sidePanelObs.decorated) {
-              const discoveryPanelObs =
-                this.findAndDecorateDiscoveryPanel(addedElement);
-              const voiceSettingsObs =
-                this.findAndDecorateVoiceSettings(addedElement);
-            }
-            const audioControlsObs =
-              this.findAndDecorateAudioControls(addedElement);
-            if (audioControlsObs.isReady()) {
-              this.voiceMenuUiMgr.findAndDecorateVoiceMenu(
-                audioControlsObs.target as HTMLElement
-              );
-            }
-            const audioOutputButtonObs =
-              this.findAndDecorateAudioOutputButton(addedElement);
-            const chatHistoryObs =
-              this.findAndDecorateChatHistory(addedElement);
-
-            if (promptObs.isReady()) {
-              EventBus.emit("saypi:ui:content-loaded");
-            }
-          });
-        [...mutation.removedNodes]
-          .filter((node) => node instanceof HTMLElement)
-          .forEach((node) => {
-            const removedElement = node as HTMLElement;
-            const obs = this.findPrompt(removedElement);
-            if (obs.found) {
-              // if the prompt is removed, we need to find a new one
-              const replacementPromptObs = this.findAndDecoratePrompt(document.body);
-              if (replacementPromptObs.found && replacementPromptObs.isNew && replacementPromptObs.decorated) {
-                EventBus.emit("saypi:ui:content-loaded");
-              }
-            }
-            const ctrlPanelObs = this.findControlPanel(removedElement);
-            if (ctrlPanelObs.found) {
-              this.findAndDecorateControlPanel(document.body);
-            }
-            const audioControlsObs = this.findAudioControls(removedElement);
-            if (audioControlsObs.found) {
-              const replacementAudioControls = this.findAndDecorateAudioControls(document.body);
-              if (replacementAudioControls.isReady()) {
-                this.voiceMenuUiMgr.findAndDecorateVoiceMenu(
-                  replacementAudioControls.target as HTMLElement
-                );
-              }
-            }
-            const audioOutputButtonObs =
-              this.findAudioOutputButton(removedElement);
-            if (audioOutputButtonObs.found) {
-              this.findAndDecorateAudioOutputButton(document.body);
-            }
-            const chatHistoryObs = this.findChatHistory(removedElement);
-            if (chatHistoryObs.found) {
-              this.findAndDecorateChatHistory(document.body);
-            }
-          });
-      });
-    });
-
+    // Prepare the DOM observer but only start it on chatable pages
+    if (!this.domObserver) {
+      this.domObserver = new MutationObserver(this.domMutationCallback);
+    }
     EventBus.on("saypi:ui:content-loaded", () => {
+      if (!this.shouldDecorateUI()) {
+        return;
+      }
       const audioControlsObs = this.findAndDecorateAudioControls(document.body);
       if (audioControlsObs.isReady()) {
         this.voiceMenuUiMgr.findAndDecorateVoiceMenu(
@@ -129,12 +152,32 @@ export class DOMObserver {
       
       // If not found on first try, start progressive backoff search
       if (!chatHistoryObs.found) {
-        console.info("Chat history not found on initial load - starting progressive search");
+        console.debug("Chat history not found on initial load - starting progressive search");
         this.startChatHistoryProgressiveSearch();
       }
     });
 
-    observer.observe(document.body, { childList: true, subtree: true });
+    // Start observing immediately only if current page is chatable
+    if (this.shouldDecorateUI()) {
+      this.startObservingDom();
+    }
+  }
+
+  private startObservingDom(): void {
+    if (!this.domObserver) {
+      this.domObserver = new MutationObserver(this.domMutationCallback);
+    }
+    if (!this.isObservingDom) {
+      this.domObserver.observe(document.body, { childList: true, subtree: true });
+      this.isObservingDom = true;
+    }
+  }
+
+  private stopObservingDom(): void {
+    if (this.domObserver && this.isObservingDom) {
+      this.domObserver.disconnect();
+      this.isObservingDom = false;
+    }
   }
 
   monitorForSubmitButton(ancestor: HTMLElement, runInitial = true): void {
@@ -210,10 +253,11 @@ export class DOMObserver {
 
   findAndDecorateControlPanel(searchRoot: Element): Observation {
     const obs = this.findControlPanel(searchRoot);
-    if (obs.found && obs.isNew && !obs.decorated) {
+    if (obs.found && obs.isNew && !obs.decorated && this.shouldDecorateUI()) {
       this.decorateMainControlPanel(obs.target as HTMLElement);
+      return Observation.foundAndDecorated(obs);
     }
-    return Observation.foundAndDecorated(obs);
+    return obs;
   }
 
   findSidePanel(searchRoot: Element): Observation {
@@ -243,10 +287,11 @@ export class DOMObserver {
 
   findAndDecorateSidePanel(searchRoot: Element): Observation {
     const obs = this.findSidePanel(searchRoot);
-    if (obs.found && obs.isNew && !obs.decorated) {
+    if (obs.found && obs.isNew && !obs.decorated && this.shouldDecorateUI()) {
       this.decorateSidePanel(obs.target as HTMLElement);
+      return Observation.foundAndDecorated(obs);
     }
-    return Observation.foundAndDecorated(obs);
+    return obs;
   }
 
   findDiscoveryPanel(searchRoot: Element): Observation {
@@ -371,10 +416,11 @@ export class DOMObserver {
 
   findAndDecoratePrompt(searchRoot: Element): Observation {
     const obs = this.findPrompt(searchRoot);
-    if (obs.found && obs.isNew && !obs.decorated) {
+    if (obs.found && obs.isNew && !obs.decorated && this.shouldDecorateUI()) {
       this.decoratePrompt(obs.target as HTMLElement);
+      return Observation.foundAndDecorated(obs);
     }
-    return Observation.foundAndDecorated(obs);
+    return obs;
   }
 
   findAudioControls(searchRoot: Element): Observation {
@@ -402,10 +448,11 @@ export class DOMObserver {
 
   findAndDecorateAudioControls(searchRoot: Element): Observation {
     const obs = this.findAudioControls(searchRoot);
-    if (obs.isUndecorated()) {
+    if (obs.isUndecorated() && this.shouldDecorateUI()) {
       this.decorateAudioControls(obs.target as HTMLElement);
+      return Observation.foundAndDecorated(obs);
     }
-    return Observation.foundAndDecorated(obs);
+    return obs;
   }
 
   findAudioOutputButton(searchRoot: Element): Observation {
@@ -489,12 +536,12 @@ export class DOMObserver {
       const chatHistoryObs = this.findAndDecorateChatHistory(document.body);
       
       if (chatHistoryObs.found) {
-        console.info(`Chat history found on progressive search attempt ${attempt}`);
+        console.debug(`Chat history found on progressive search attempt ${attempt}`);
       } else if (attempt < maxAttempts) {
         console.debug(`Chat history not found on attempt ${attempt}, retrying in ${delay}ms`);
         this.startChatHistoryProgressiveSearch(attempt + 1, maxAttempts);
       } else {
-        console.warn(`Failed to find chat history after ${maxAttempts} attempts`);
+        console.debug(`Failed to find chat history after ${maxAttempts} attempts`);
       }
     }, delay);
   }
