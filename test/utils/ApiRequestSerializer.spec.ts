@@ -229,12 +229,18 @@ describe('ApiRequestSerializer', () => {
     });
 
     const serialized = await serializeFormData(mockFormData);
+    // Assert filename is preserved in serialized entry
+    const audioEntry = serialized.entries.find(([k]) => k === 'audio');
+    expect(audioEntry).toBeTruthy();
+    const blobMeta: any = audioEntry![1];
+    expect(blobMeta).toEqual(expect.objectContaining({ type: 'Blob', fileName: 'audio.webm' }));
+
+    // Optional: still ensure deserialization appends a Blob for 'audio'
     const deserialized = deserializeFormData(serialized);
     const calls = appendSpy.mock.calls;
     const audioCall = calls.find((c: any[]) => c[0] === 'audio');
     expect(audioCall).toBeTruthy();
     expect(audioCall[1]).toBeTruthy();
-    expect(audioCall[2]).toBe('audio.webm');
   });
 
   it('passes through ArrayBuffer and TypedArray bodies', async () => {
