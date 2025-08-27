@@ -19,6 +19,14 @@ export class DOMObserver {
     this.monitorForRouteChanges();
   }
 
+  /**
+   * Checks if we should decorate UI elements based on the current path.
+   * Only decorate on chatable pages to prevent controls appearing on onboarding, etc.
+   */
+  private shouldDecorateUI(): boolean {
+    return this.chatbot.isChatablePath(window.location.pathname);
+  }
+
   monitorForRouteChanges(): void {
     // Store the current URL for comparison
     let lastUrl = window.location.href;
@@ -210,10 +218,11 @@ export class DOMObserver {
 
   findAndDecorateControlPanel(searchRoot: Element): Observation {
     const obs = this.findControlPanel(searchRoot);
-    if (obs.found && obs.isNew && !obs.decorated) {
+    if (obs.found && obs.isNew && !obs.decorated && this.shouldDecorateUI()) {
       this.decorateMainControlPanel(obs.target as HTMLElement);
+      return Observation.foundAndDecorated(obs);
     }
-    return Observation.foundAndDecorated(obs);
+    return obs;
   }
 
   findSidePanel(searchRoot: Element): Observation {
@@ -243,10 +252,11 @@ export class DOMObserver {
 
   findAndDecorateSidePanel(searchRoot: Element): Observation {
     const obs = this.findSidePanel(searchRoot);
-    if (obs.found && obs.isNew && !obs.decorated) {
+    if (obs.found && obs.isNew && !obs.decorated && this.shouldDecorateUI()) {
       this.decorateSidePanel(obs.target as HTMLElement);
+      return Observation.foundAndDecorated(obs);
     }
-    return Observation.foundAndDecorated(obs);
+    return obs;
   }
 
   findDiscoveryPanel(searchRoot: Element): Observation {
@@ -371,10 +381,11 @@ export class DOMObserver {
 
   findAndDecoratePrompt(searchRoot: Element): Observation {
     const obs = this.findPrompt(searchRoot);
-    if (obs.found && obs.isNew && !obs.decorated) {
+    if (obs.found && obs.isNew && !obs.decorated && this.shouldDecorateUI()) {
       this.decoratePrompt(obs.target as HTMLElement);
+      return Observation.foundAndDecorated(obs);
     }
-    return Observation.foundAndDecorated(obs);
+    return obs;
   }
 
   findAudioControls(searchRoot: Element): Observation {
@@ -402,10 +413,11 @@ export class DOMObserver {
 
   findAndDecorateAudioControls(searchRoot: Element): Observation {
     const obs = this.findAudioControls(searchRoot);
-    if (obs.isUndecorated()) {
+    if (obs.isUndecorated() && this.shouldDecorateUI()) {
       this.decorateAudioControls(obs.target as HTMLElement);
+      return Observation.foundAndDecorated(obs);
     }
-    return Observation.foundAndDecorated(obs);
+    return obs;
   }
 
   findAudioOutputButton(searchRoot: Element): Observation {
