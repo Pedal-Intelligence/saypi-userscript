@@ -1,4 +1,5 @@
 import { config } from "../ConfigModule";
+import { callApi } from "../ApiClient";
 import { SpeechSynthesisModule } from "../tts/SpeechSynthesisModule";
 import AudioControlsModule from "../audio/AudioControlsModule";
 import EventBus from "../events/EventBus";
@@ -726,7 +727,8 @@ class UserPreferenceModule {
     const defaultStatus = false;
     const statusEndpoint = `${config.apiServerUrl}/status/tts`;
     try {
-      const response = await fetch(statusEndpoint);
+      // Use ApiClient to encapsulate background routing and response handling
+      const response = await callApi(statusEndpoint, { method: 'GET', responseType: 'json' } as any);
       const data = await response.json();
       return data.beta.status === "paused";
     } catch (error) {

@@ -43,6 +43,45 @@ async function checkAuthenticationStatus() {
   });
 }
 
+// Encapsulated helper to fetch JSON via ApiClient proxying
+async function callApiJSON(url) {
+  // Prefer using ApiClient abstraction if available in this context
+  try {
+    // Dynamic import to avoid bundling cycles; falls back if not available
+    const api = await import('../ApiClient.ts');
+    if (api && typeof api.callApi === 'function') {
+      const response = await api.callApi(url, { method: 'GET', responseType: 'json' });
+      return await response.json();
+    }
+  } catch (_e) {
+    // Fall back to direct background message if ApiClient is not available in popup bundle
+  }
+
+  // Fallback: call background directly
+  const bg = await new Promise((resolve, reject) => {
+    chrome.runtime.sendMessage({
+      type: 'API_REQUEST',
+      url,
+      options: {
+        method: 'GET',
+        headers: {},
+        responseType: 'json'
+      }
+    }, (response) => {
+      if (chrome.runtime.lastError) {
+        reject(new Error(chrome.runtime.lastError.message));
+        return;
+      }
+      if (!response || !response.success) {
+        reject(new Error(response?.error || 'Background API request failed'));
+        return;
+      }
+      resolve(response.response);
+    });
+  });
+  return (bg && bg.body) ? bg.body : {};
+}
+
 // Function to check if upgrade button should be shown
 function shouldShowUpgradeButton() {
   // Do not show for unauthenticated users; primary Sign In lives in header
@@ -380,8 +419,7 @@ async function getQuotaStatus() {
       // Fall back to API endpoint if no JWT quota available
       try {
         const statusEndpoint = `${config.apiBaseUrl}/status/tts`;
-        const response = await fetch(statusEndpoint);
-        const data = await response.json();
+        const data = await callApiJSON(statusEndpoint);
         
         // If the API response indicates no quota, mark as no entitlement
         if (!data.quota || !data.quota.total) {
@@ -402,8 +440,7 @@ async function getQuotaStatus() {
     } else {
       try {
         const statusEndpoint = `${config.apiBaseUrl}/status/stt`;
-        const response = await fetch(statusEndpoint);
-        const data = await response.json();
+        const data = await callApiJSON(statusEndpoint);
         
         // If the API response indicates no quota, mark as no entitlement
         if (!data.quota || !data.quota.total) {

@@ -1,4 +1,5 @@
 import { isFirefox, isMobileDevice } from "../UserAgentModule";
+import { deserializeApiRequest, type SerializedApiRequest } from "../utils/ApiRequestSerializer";
 // Declare Chrome extension API for TypeScript
 declare const chrome: any;
 function openSettingsWindow() {
@@ -443,6 +444,126 @@ async function handleCheckAndRequestMicPermission(originalRequestId: string, ori
   }
 }
 
+/**
+ * Handles API requests from content scripts by performing the fetch in the background
+ * service worker context to bypass CSP restrictions.
+ */
+async function handleApiRequest(message: any, sendResponse: (response: any) => void) {
+  try {
+    logger.debug(`[Background] Handling API request to: ${message.url}`);
+    
+    // Deserialize the API request
+    const { url, options } = deserializeApiRequest(message as SerializedApiRequest);
+    
+    // Get JWT manager and add auth headers if needed
+    const headers = new Headers(options.headers);
+    
+    // Add authorization header only for whitelisted SayPi hosts
+    try {
+      const hostname = new URL(url).hostname;
+      const allowedHosts = new Set<string>(['api.saypi.ai', 'www.saypi.ai']);
+      try { if (config?.apiServerUrl) allowedHosts.add(new URL(config.apiServerUrl).hostname); } catch {}
+      try { if (config?.authServerUrl) allowedHosts.add(new URL(config.authServerUrl).hostname); } catch {}
+      if (allowedHosts.has(hostname)) {
+        const authHeader = jwtManager.getAuthHeader();
+        if (authHeader) {
+          headers.set('Authorization', authHeader);
+        }
+      }
+    } catch {}
+    
+    // Update request options with auth headers
+    const requestOptions: RequestInit = {
+      ...options,
+      headers
+    };
+    
+    logger.debug(`[Background] Making API request`, { 
+      method: options.method || 'GET',
+      hasAuthHeader: headers.has('Authorization'),
+      url: url
+    });
+    
+    // Perform the fetch request
+    let response = await fetch(url, requestOptions);
+    
+    // Handle 401/403 responses with token refresh and retry
+    if ((response.status === 401 || response.status === 403) && headers.has('Authorization')) {
+      logger.debug('[Background] Received 401/403, attempting to refresh token...');
+      await jwtManager.refresh(true);
+      
+      const newAuthHeader = jwtManager.getAuthHeader();
+      if (newAuthHeader) {
+        // Update headers with new token
+        headers.set('Authorization', newAuthHeader);
+        const retryOptions: RequestInit = {
+          ...options,
+          headers
+        };
+        
+        logger.debug('[Background] Token refreshed, retrying request with new token...');
+        response = await fetch(url, retryOptions);
+      } else {
+        logger.warn('[Background] Token refresh failed, returning original response');
+      }
+    }
+    
+    // Convert response to serializable format
+    const responseData: {
+      ok: boolean;
+      status: number;
+      statusText: string;
+      headers: Record<string, string>;
+      body: any;
+    } = {
+      ok: response.ok,
+      status: response.status,
+      statusText: response.statusText,
+      headers: {},
+      body: null
+    };
+    
+    // Serialize response headers
+    response.headers.forEach((value, key) => {
+      responseData.headers[key] = value;
+    });
+    
+    // Read response body according to requested responseType (default: text)
+    const responseType = (options as any).responseType as ('json'|'text'|'arrayBuffer') | undefined;
+    try {
+      if (responseType === 'json') {
+        // Attempt JSON parse; if fails, fall back to text
+        try {
+          responseData.body = await response.json();
+        } catch {
+          responseData.body = await response.text();
+        }
+      } else if (responseType === 'arrayBuffer') {
+        const buf = await response.arrayBuffer();
+        // Structured clone can carry ArrayBuffer directly
+        responseData.body = buf;
+      } else {
+        responseData.body = await response.text();
+      }
+    } catch (error) {
+      logger.warn('[Background] Failed to read response body:', error);
+      responseData.body = null;
+    }
+    
+    logger.debug(`[Background] API request completed with status: ${response.status}`);
+    sendResponse({ success: true, response: responseData });
+    
+  } catch (error) {
+    logger.error('[Background] API request failed:', error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    sendResponse({ 
+      success: false, 
+      error: errorMessage,
+      name: error instanceof Error ? error.name : 'UnknownError'
+    });
+  }
+}
+
 // Handle popup opening AND messages from Offscreen Document AND Error Reports AND Mic Permissions
 chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: any) => {
   // Sanitize the message for logging
@@ -788,6 +909,13 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
     return false; // Synchronous response
   }
   
+  // --- START: API Request Proxy Handler ---
+  if (message.type === 'API_REQUEST') {
+    handleApiRequest(message, sendResponse);
+    return true; // Async response
+  }
+  // --- END: API Request Proxy Handler ---
+  
   // Return true if we're handling the response asynchronously for other message types
   // This ensures that the sendResponse function remains valid for async operations
   // like REDIRECT_TO_LOGIN, GET_JWT_CLAIMS, etc.
@@ -795,6 +923,7 @@ chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: a
     'GET_JWT_CLAIMS',
     'CHECK_FEATURE_ENTITLEMENT',
     'REDIRECT_TO_LOGIN',
+    'API_REQUEST',
   ];
   if (asyncMessageTypes.indexOf(message.type) !== -1) {
     return true;

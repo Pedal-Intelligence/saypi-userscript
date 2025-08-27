@@ -117,4 +117,12 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
     const universalDictation = UniversalDictationModule.getInstance();
     universalDictation.initialize();
   }
+
+  // Expose API client for testing in development
+  if (typeof window !== 'undefined' && window.location.href.includes('test-csp-bypass.html')) {
+    const { callApi } = await import('./ApiClient.ts');
+    if (!window.sayPi) window.sayPi = {};
+    window.sayPi.callApi = callApi;
+    window.callApi = callApi; // Also expose directly for easier testing
+  }
 })();
