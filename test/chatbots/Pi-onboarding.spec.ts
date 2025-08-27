@@ -43,9 +43,11 @@ describe('Pi Chatbot Path Validation', () => {
   it('should correctly identify chatable paths', () => {
     expect(chatbot.isChatablePath('/talk')).toBe(true);
     expect(chatbot.isChatablePath('/discover')).toBe(true);
+    expect(chatbot.isChatablePath('/threads')).toBe(true);
     expect(chatbot.isChatablePath('/onboarding')).toBe(false);
     expect(chatbot.isChatablePath('/settings')).toBe(false);
-    expect(chatbot.isChatablePath('/profile')).toBe(false);
+    expect(chatbot.isChatablePath('/profile/settings')).toBe(true);
+    expect(chatbot.isChatablePath('/profile')).toBe(true);
     expect(chatbot.isChatablePath('/talk/conversation/123')).toBe(true);
     expect(chatbot.isChatablePath('/discover/featured')).toBe(true);
   });
