@@ -29,6 +29,19 @@ html body.claude {
   #claude-placeholder {
     margin-top: -24px;
     visibility: visible;
+    text-align: left;
+    display: block;
+    width: 100%;
+  }
+
+  /* Mimic native ProseMirror placeholder alignment and behavior */
+  #claude-placeholder::before {
+    color: #adb5bd;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+    white-space: nowrap;
   }
 
   .tooltip[aria-label]::after {
