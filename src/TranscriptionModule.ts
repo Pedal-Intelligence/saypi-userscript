@@ -5,6 +5,8 @@ import { UserPreferenceModule } from "./prefs/PreferenceModule";
 import { callApi } from "./ApiClient";
 import EventBus from "./events/EventBus";
 import { ChatbotService } from "./chatbots/ChatbotService";
+import { getClientId } from "./usage/ClientIdManager";
+import { getExtensionVersion } from "./usage/VersionManager";
 
 // Define the shape of the response JSON object
 interface TranscriptionResponse {
@@ -440,6 +442,32 @@ async function constructTranscriptionFormData(
   formData.append("acceptsMerge", "true"); // always accept merge requests (since v1.4.10)
   if (sessionId) {
     formData.append("sessionId", sessionId);
+  }
+
+  // Add usage analytics metadata as specified in PRD
+  try {
+    const clientId = await getClientId();
+    formData.append("clientId", clientId);
+    
+    const version = getExtensionVersion();
+    formData.append("version", version);
+    
+    // Get chatbot info for app parameter
+    if (!chatbot) {
+      chatbot = await ChatbotService.getChatbot();
+    }
+    const appId = chatbot?.getID() || "unknown";
+    formData.append("app", appId.toLowerCase());
+    
+    // Add language parameter (BCP-47 format)
+    const language = userPreferences.getCachedLanguage();
+    if (language) {
+      formData.append("language", language);
+    }
+    
+  } catch (error) {
+    logger.warn("[TranscriptionModule] Failed to add usage analytics metadata:", error);
+    // Continue without analytics metadata if there's an error
   }
 
   // Wait for preferences to be retrieved before appending them to the FormData

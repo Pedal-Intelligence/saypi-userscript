@@ -11,13 +11,24 @@ vi.mock("../../src/ApiClient", () => ({
   callApi: vi.fn(),
 }));
 
+// Mock the usage analytics modules
+vi.mock("../../src/usage/ClientIdManager");
+vi.mock("../../src/usage/VersionManager");
+
 describe("TextToSpeechService", () => {
   let textToSpeechService: TextToSpeechService;
   const mockVoice = mockVoices[0];
 
-  beforeEach(() => {
+  beforeEach(async () => {
     // Ensure ChatbotIdentifier returns 'pi' for these tests regardless of host
     vi.spyOn(ChatbotIdentifier, "getAppId").mockReturnValue("pi");
+    
+    // Mock the usage analytics functions
+    const { getClientId } = await import("../../src/usage/ClientIdManager");
+    const { getExtensionVersion } = await import("../../src/usage/VersionManager");
+    vi.mocked(getClientId).mockResolvedValue("test-client-id-12345");
+    vi.mocked(getExtensionVersion).mockReturnValue("1.0.0-test");
+    
     textToSpeechService = new TextToSpeechService("http://example.com");
   });
 
@@ -77,7 +88,19 @@ describe("TextToSpeechService", () => {
 
     const call = (ApiClient.callApi as any).mock.calls[0];
     expect(call[0]).toBe(`http://example.com/speak/uuid?voice_id=${mockVoice.id}&lang=en-US&app=mockbot`);
-    expect(JSON.parse(call[1].body)).toEqual({ voice: mockVoice.id, text: "Hello", lang: "en-US", sequenceNumber: 0 });
+    
+    // Updated expectation to include usage analytics metadata
+    const requestBody = JSON.parse(call[1].body);
+    expect(requestBody).toEqual({
+      voice: mockVoice.id,
+      text: "Hello",
+      lang: "en-US",
+      sequenceNumber: 0,
+      clientId: "test-client-id-12345",
+      version: "1.0.0-test",
+      app: "mockbot"
+    });
+    
     expect(call[1].method).toBe("POST");
     expect(call[1].headers).toEqual({ "Content-Type": "application/json" });
     expect(actualSpeech).toEqual(expectedSpeech);

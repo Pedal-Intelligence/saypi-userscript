@@ -10,6 +10,8 @@ import { Chatbot } from "../chatbots/Chatbot";
 import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
 import { FailedSpeechUtterance } from "./FailedSpeechUtterance";
 import { SpeechFailureReason } from "./SpeechFailureReason";
+import { getClientId } from "../usage/ClientIdManager";
+import { getExtensionVersion } from "../usage/VersionManager";
 
 export class TextToSpeechService {
   private sequenceNumbers: { [key: string]: number } = {};
@@ -55,7 +57,29 @@ export class TextToSpeechService {
     }
     const voice_id = voice.id;
     const appId = chatbot ? chatbot.getID() : ChatbotIdentifier.getAppId();
-    const data = { voice: voice_id, text: text, lang: lang, sequenceNumber: 0};
+    
+    // Prepare data with usage analytics metadata as specified in PRD
+    const data: any = { 
+      voice: voice_id, 
+      text: text, 
+      lang: lang, 
+      sequenceNumber: 0
+    };
+    
+    // Add usage analytics metadata
+    try {
+      const clientId = await getClientId();
+      data.clientId = clientId;
+      
+      const version = getExtensionVersion();
+      data.version = version;
+      
+      data.app = appId.toLowerCase();
+    } catch (error) {
+      console.warn("[TextToSpeechService] Failed to add usage analytics metadata:", error);
+      // Continue without analytics metadata if there's an error
+    }
+    
     this.sequenceNumbers[uuid] = 0; // initialize sequence number for this utterance
     const baseUri = `${this.serviceUrl}/speak/${uuid}`;
     const queryParams = `voice_id=${voice_id}&lang=${lang}&app=${appId}`;
