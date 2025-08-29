@@ -13,6 +13,28 @@ import { SpeechFailureReason } from "./SpeechFailureReason";
 import { getClientId } from "../usage/ClientIdManager";
 import { getExtensionVersion } from "../usage/VersionManager";
 
+/**
+ * Interface for TTS request data sent to the /speak/{uuid} endpoint
+ */
+interface TTSRequestData {
+  voice: string;
+  text: string;
+  lang: string;
+  sequenceNumber: number;
+  // Usage analytics metadata (optional but recommended)
+  clientId?: string;
+  version?: string;
+  app?: string;
+}
+
+/**
+ * Interface for TTS stream request data sent to /speak/{uuid}/stream endpoint
+ */
+interface TTSStreamRequestData {
+  text: string;
+  sequenceNumber: number;
+}
+
 export class TextToSpeechService {
   private sequenceNumbers: { [key: string]: number } = {};
 
@@ -59,7 +81,7 @@ export class TextToSpeechService {
     const appId = chatbot ? chatbot.getID() : ChatbotIdentifier.getAppId();
     
     // Prepare data with usage analytics metadata as specified in PRD
-    const data: any = { 
+    const data: TTSRequestData = { 
       voice: voice_id, 
       text: text, 
       lang: lang, 
@@ -137,7 +159,7 @@ export class TextToSpeechService {
       this.sequenceNumbers[uuid] = 1; // assume additions follow an initial creation with sequence number 0
     }
     const sequenceNumber = this.sequenceNumbers[uuid]++;
-    const data = { text: text, sequenceNumber: sequenceNumber };
+    const data: TTSStreamRequestData = { text: text, sequenceNumber: sequenceNumber };
     const uri = `${this.serviceUrl}/speak/${uuid}/stream`;
     const response = await callApi(uri, {
       method: "PUT",
