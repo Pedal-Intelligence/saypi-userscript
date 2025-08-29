@@ -10,8 +10,7 @@ import { Chatbot } from "../chatbots/Chatbot";
 import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
 import { FailedSpeechUtterance } from "./FailedSpeechUtterance";
 import { SpeechFailureReason } from "./SpeechFailureReason";
-import { getClientId } from "../usage/ClientIdManager";
-import { getExtensionVersion } from "../usage/VersionManager";
+import { buildUsageMetadata } from "../usage/UsageMetadata";
 
 /**
  * Interface for TTS request data sent to the /speak/{uuid} endpoint
@@ -90,13 +89,10 @@ export class TextToSpeechService {
     
     // Add usage analytics metadata
     try {
-      const clientId = await getClientId();
-      data.clientId = clientId;
-      
-      const version = getExtensionVersion();
-      data.version = version;
-      
-      data.app = appId.toLowerCase();
+      const usageMeta = await buildUsageMetadata(chatbot);
+      if (usageMeta.clientId) data.clientId = usageMeta.clientId;
+      if (usageMeta.version) data.version = usageMeta.version;
+      if (usageMeta.app) data.app = usageMeta.app;
     } catch (error) {
       console.warn("[TextToSpeechService] Failed to add usage analytics metadata:", error);
       // Continue without analytics metadata if there's an error
@@ -104,10 +100,14 @@ export class TextToSpeechService {
     
     this.sequenceNumbers[uuid] = 0; // initialize sequence number for this utterance
     const baseUri = `${this.serviceUrl}/speak/${uuid}`;
-    const queryParams = `voice_id=${voice_id}&lang=${lang}&app=${appId}`;
+    const params = new URLSearchParams();
+    params.set("voice_id", voice_id);
+    params.set("lang", lang);
+    // Always lowercase app id in query param as well
+    params.set("app", String(appId).toLowerCase());
     let uri = stream
-      ? `${baseUri}/stream?${queryParams}`
-      : `${baseUri}?${queryParams}`;
+      ? `${baseUri}/stream?${params.toString()}`
+      : `${baseUri}?${params.toString()}`;
 
     const utterance: SpeechUtterance = new SayPiSpeech(uuid, lang, voice, uri);
     const response = await callApi(uri, {

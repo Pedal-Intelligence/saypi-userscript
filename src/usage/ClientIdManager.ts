@@ -62,8 +62,27 @@ export class ClientIdManager {
 
   private async initialize(): Promise<void> {
     try {
+      // Prefer chrome.storage.local when available; otherwise use localStorage as a persistent fallback
       if (!isChromeStorageAvailable()) {
-        console.warn('[ClientIdManager] Chrome storage API not available, using temporary client ID');
+        // Try localStorage for persistence across sessions
+        try {
+          if (typeof localStorage !== 'undefined') {
+            const existing = localStorage.getItem(ClientIdManager.STORAGE_KEY);
+            if (existing && this.isValidUuidV4(existing)) {
+              this.clientId = existing;
+              console.debug('[ClientIdManager] Loaded existing client ID from localStorage');
+              return;
+            }
+            const newId = this.generateUuidV4();
+            localStorage.setItem(ClientIdManager.STORAGE_KEY, newId);
+            this.clientId = newId;
+            console.debug('[ClientIdManager] Generated and stored new client ID in localStorage');
+            return;
+          }
+        } catch (e) {
+          console.warn('[ClientIdManager] localStorage unavailable; falling back to temporary client ID', e);
+        }
+        console.warn('[ClientIdManager] Chrome storage API not available and no persistent storage accessible, using temporary client ID');
         this.clientId = this.generateUuidV4();
         return;
       }
@@ -85,7 +104,24 @@ export class ClientIdManager {
       console.debug('[ClientIdManager] Generated and stored new client ID');
     } catch (error) {
       console.error('[ClientIdManager] Failed to initialize client ID:', error);
-      // Fallback to generating a temporary ID that won't persist
+      // Fallback path: attempt localStorage, then temporary
+      try {
+        if (typeof localStorage !== 'undefined') {
+          const existing = localStorage.getItem(ClientIdManager.STORAGE_KEY);
+          if (existing && this.isValidUuidV4(existing)) {
+            this.clientId = existing;
+            console.debug('[ClientIdManager] Loaded existing client ID from localStorage (storage error path)');
+            return;
+          }
+          const newId = this.generateUuidV4();
+          localStorage.setItem(ClientIdManager.STORAGE_KEY, newId);
+          this.clientId = newId;
+          console.debug('[ClientIdManager] Generated and stored new client ID in localStorage (storage error path)');
+          return;
+        }
+      } catch (e) {
+        console.warn('[ClientIdManager] localStorage unavailable during storage error handling', e);
+      }
       this.clientId = this.generateUuidV4();
       console.warn('[ClientIdManager] Using temporary client ID due to storage error');
     }
@@ -162,6 +198,17 @@ export class ClientIdManager {
     const newClientId = this.generateUuidV4();
     
     if (!isChromeStorageAvailable()) {
+      // Try to persist in localStorage
+      try {
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem(ClientIdManager.STORAGE_KEY, newClientId);
+          this.clientId = newClientId;
+          console.debug('[ClientIdManager] Client ID reset and persisted to localStorage');
+          return newClientId;
+        }
+      } catch (e) {
+        console.warn('[ClientIdManager] Failed to persist client ID to localStorage; using in-memory only', e);
+      }
       console.warn('[ClientIdManager] Chrome storage API not available, client ID will not persist');
       this.clientId = newClientId;
       return newClientId;

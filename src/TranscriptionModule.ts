@@ -5,8 +5,8 @@ import { UserPreferenceModule } from "./prefs/PreferenceModule";
 import { callApi } from "./ApiClient";
 import EventBus from "./events/EventBus";
 import { ChatbotService } from "./chatbots/ChatbotService";
-import { getClientId } from "./usage/ClientIdManager";
-import { getExtensionVersion } from "./usage/VersionManager";
+import { buildUsageMetadata } from "./usage/UsageMetadata";
+import { constructTranscriptionFormData } from "./TranscriptionForm";
 
 // Define the shape of the response JSON object
 interface TranscriptionResponse {
@@ -103,7 +103,7 @@ const knownNetworkErrorMessages = [
 ];
 
 // timeout for transcription requests
-const TIMEOUT_MS = 10000; // 30 seconds
+const TIMEOUT_MS = 10000; // 10 seconds
 
 // track sequence numbers for in-flight transcription requests
 let sequenceNum = 0;
@@ -301,11 +301,8 @@ async function uploadAudio(
     );
     logStepDuration("constructTranscriptionFormData (total)", stepStartTime);
     
-    stepStartTime = Date.now();
-    const language = userPreferences.getCachedLanguage();
-    logStepDuration("userPreferences.getCachedLanguage", stepStartTime);
-    
-    const appId = chatbot.getID();
+    // Gather usage metadata once to build URL params safely
+    const usageMeta = await buildUsageMetadata(chatbot);
 
     const controller = new AbortController();
     const { signal } = controller;
@@ -328,8 +325,12 @@ async function uploadAudio(
       apiRequestDelay: captureTimestamp ? (startTime - captureTimestamp) : undefined
     });
     
+    const params = new URLSearchParams();
+    if (usageMeta.app) params.set("app", usageMeta.app);
+    if (usageMeta.language) params.set("language", usageMeta.language);
+
     const response = await callApi(
-      `${config.apiServerUrl}/transcribe?app=${appId}&language=${language}`,
+      `${config.apiServerUrl}/transcribe${params.toString() ? `?${params.toString()}` : ""}`,
       {
         method: "POST",
         body: formData,
@@ -446,25 +447,11 @@ async function constructTranscriptionFormData(
 
   // Add usage analytics metadata as specified in PRD
   try {
-    const clientId = await getClientId();
-    formData.append("clientId", clientId);
-    
-    const version = getExtensionVersion();
-    formData.append("version", version);
-    
-    // Get chatbot info for app parameter
-    if (!chatbot) {
-      chatbot = await ChatbotService.getChatbot();
-    }
-    const appId = chatbot?.getID() || "unknown";
-    formData.append("app", appId.toLowerCase());
-    
-    // Add language parameter (BCP-47 format)
-    const language = userPreferences.getCachedLanguage();
-    if (language) {
-      formData.append("language", language);
-    }
-    
+    const usageMeta = await buildUsageMetadata(chatbot);
+    if (usageMeta.clientId) formData.append("clientId", usageMeta.clientId);
+    if (usageMeta.version) formData.append("version", usageMeta.version);
+    if (usageMeta.app) formData.append("app", usageMeta.app);
+    if (usageMeta.language) formData.append("language", usageMeta.language);
   } catch (error) {
     logger.warn("[TranscriptionModule] Failed to add usage analytics metadata:", error);
     // Continue without analytics metadata if there's an error

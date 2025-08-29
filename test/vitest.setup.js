@@ -32,7 +32,12 @@ Object.defineProperties(global, {
   SVGElement: { value: dom.window.SVGElement },
   Event: { value: dom.window.Event },
   Blob: { value: dom.window.Blob },
+  Audio: { value: dom.window.Audio || vi.fn() },
+  FormData: { value: dom.window.FormData, writable: true, configurable: true },
 });
+
+// Ensure tests can override these globals when needed
+Object.defineProperty(global, 'FormData', { value: dom.window.FormData, writable: true, configurable: true });
 
 const mockStorage = (() => {
   let storage = {};
