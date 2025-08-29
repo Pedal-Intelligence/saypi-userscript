@@ -1,3 +1,5 @@
+import { isChromeStorageAvailable } from './BrowserApiUtils';
+
 /**
  * ClientIdManager handles the generation and storage of a stable client identifier
  * for usage analytics as specified in the SayPi usage analytics PRD.
@@ -60,6 +62,12 @@ export class ClientIdManager {
 
   private async initialize(): Promise<void> {
     try {
+      if (!isChromeStorageAvailable()) {
+        console.warn('[ClientIdManager] Chrome storage API not available, using temporary client ID');
+        this.clientId = this.generateUuidV4();
+        return;
+      }
+
       // Try to load existing client ID from storage
       const result = await chrome.storage.local.get(ClientIdManager.STORAGE_KEY);
       const existingId = result[ClientIdManager.STORAGE_KEY];
@@ -152,6 +160,13 @@ export class ClientIdManager {
    */
   public async resetClientId(): Promise<string> {
     const newClientId = this.generateUuidV4();
+    
+    if (!isChromeStorageAvailable()) {
+      console.warn('[ClientIdManager] Chrome storage API not available, client ID will not persist');
+      this.clientId = newClientId;
+      return newClientId;
+    }
+
     try {
       await chrome.storage.local.set({ [ClientIdManager.STORAGE_KEY]: newClientId });
       this.clientId = newClientId;

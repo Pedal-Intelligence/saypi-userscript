@@ -1,3 +1,5 @@
+import { getExtensionManifest } from './BrowserApiUtils';
+
 /**
  * VersionManager handles retrieving the extension version for usage analytics
  * as specified in the SayPi usage analytics PRD.
@@ -24,14 +26,13 @@ export class VersionManager {
     }
 
     try {
-      // Use chrome.runtime.getManifest() to get version from manifest.json
-      if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getManifest) {
-        const manifest = chrome.runtime.getManifest();
+      const manifest = getExtensionManifest();
+      if (manifest && manifest.version) {
         this.version = manifest.version;
         return this.version;
       }
 
-      console.warn('[VersionManager] Chrome runtime API not available, version unknown');
+      console.warn('[VersionManager] Extension manifest not available, version unknown');
       return 'unknown';
     } catch (error) {
       console.error('[VersionManager] Failed to get extension version:', error);
