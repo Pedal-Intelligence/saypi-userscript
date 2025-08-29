@@ -54,3 +54,5 @@ doc/dom/1password/settings.html
 
 # Test files
 test-csp-bypass.html
+doc/editors/claude/*.png
+doc/editors/claude/*.html
