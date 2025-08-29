@@ -378,6 +378,10 @@ function findAndDecorateCustomPlaceholderElement(
       : document.createElement("p");
     placeholder.classList.add("custom-placeholder");
     placeholder.id = "claude-placeholder";
+    // ensure attribute exists for ::before content rendering
+    if (!placeholder.hasAttribute("data-placeholder")) {
+      placeholder.setAttribute("data-placeholder", "");
+    }
     // add custom placeholder element as a sibling to the prompt element (sic)
     prompt.insertAdjacentElement("afterend", placeholder);
     return new Observation(placeholder, placeholder.id, true, true, true);
@@ -636,7 +640,7 @@ class ClaudePrompt extends AbstractUserPrompt {
    */
   clear(): void {
     this.setText(""); // clear the text
-    this.placeholderManager.setPlaceholder(""); // clear the placeholder
+    this.placeholderManager.setPlaceholder(this.getDefaultPlaceholderText()); // restore default placeholder
     const promptParagraphs = this.promptElement.querySelectorAll("p:not([data-placeholder])");
     promptParagraphs.forEach((p) => p.remove()); // remove any other paragraphs
   }
@@ -675,7 +679,8 @@ class PlaceholderManager {
   }
 
   handleInput() {
-    this.updatePlaceholderVisibility();
+    // Defer evaluation to after DOM updates (handles select-all + cut/undo cases)
+    setTimeout(() => this.updatePlaceholderVisibility(), 0);
   }
 
   isPromptEmpty() {
@@ -703,7 +708,8 @@ class PlaceholderManager {
     this.placeholderText = newPlaceholder;
     // only set the placeholder text if the prompt is empty
     if (this.isPromptEmpty()) {
-      this.getOrCreateCustomPlaceholder().textContent = this.placeholderText;
+      const el = this.getOrCreateCustomPlaceholder();
+      el.setAttribute("data-placeholder", this.placeholderText);
       this.updatePlaceholderVisibility();
     }
   }
@@ -747,7 +753,7 @@ class PlaceholderManager {
 
   private showCustomPlaceholder() {
     this.customPlaceholder = this.getOrCreateCustomPlaceholder();
-    this.customPlaceholder.textContent = this.placeholderText;
+    this.customPlaceholder.setAttribute("data-placeholder", this.placeholderText);
   }
 
   private hideCustomPlaceholder() {
