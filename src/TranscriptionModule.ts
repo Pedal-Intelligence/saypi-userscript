@@ -5,6 +5,8 @@ import { UserPreferenceModule } from "./prefs/PreferenceModule";
 import { callApi } from "./ApiClient";
 import EventBus from "./events/EventBus";
 import { ChatbotService } from "./chatbots/ChatbotService";
+import { buildUsageMetadata } from "./usage/UsageMetadata";
+import { constructTranscriptionFormData } from "./TranscriptionForm";
 
 // Define the shape of the response JSON object
 interface TranscriptionResponse {
@@ -101,7 +103,7 @@ const knownNetworkErrorMessages = [
 ];
 
 // timeout for transcription requests
-const TIMEOUT_MS = 10000; // 30 seconds
+const TIMEOUT_MS = 10000; // 10 seconds
 
 // track sequence numbers for in-flight transcription requests
 let sequenceNum = 0;
@@ -299,11 +301,8 @@ async function uploadAudio(
     );
     logStepDuration("constructTranscriptionFormData (total)", stepStartTime);
     
-    stepStartTime = Date.now();
-    const language = userPreferences.getCachedLanguage();
-    logStepDuration("userPreferences.getCachedLanguage", stepStartTime);
-    
-    const appId = chatbot.getID();
+    // Gather usage metadata once to build URL params safely
+    const usageMeta = await buildUsageMetadata(chatbot);
 
     const controller = new AbortController();
     const { signal } = controller;
@@ -326,8 +325,12 @@ async function uploadAudio(
       apiRequestDelay: captureTimestamp ? (startTime - captureTimestamp) : undefined
     });
     
+    const params = new URLSearchParams();
+    if (usageMeta.app) params.set("app", usageMeta.app);
+    if (usageMeta.language) params.set("language", usageMeta.language);
+
     const response = await callApi(
-      `${config.apiServerUrl}/transcribe?app=${appId}&language=${language}`,
+      `${config.apiServerUrl}/transcribe${params.toString() ? `?${params.toString()}` : ""}`,
       {
         method: "POST",
         body: formData,
@@ -407,86 +410,4 @@ async function uploadAudio(
   }
 }
 
-async function constructTranscriptionFormData(
-  audioBlob: Blob,
-  audioDurationSeconds: number,
-  messages: { role: string; content: string; sequenceNumber?: number }[],
-  sessionId?: string,
-  chatbot?: any,
-  sequenceNumber?: number,
-  inputType?: string,
-  inputLabel?: string
-) {
-  const formData = new FormData();
-  let audioFilename = "audio.webm";
-
-  if (audioBlob.type === "audio/mp4") {
-    audioFilename = "audio.mp4";
-  } else if (audioBlob.type === "audio/wav") {
-    audioFilename = "audio.wav";
-  }
-
-  logger.debug(
-    `Transcribing audio Blob with MIME type: ${audioBlob.type}, size: ${(
-      audioBlob.size / 1024
-    ).toFixed(2)}kb`
-  );
-
-  // Add the audio and other input parameters to the FormData object
-  formData.append("audio", audioBlob, audioFilename);
-  formData.append("duration", audioDurationSeconds.toString());
-  formData.append("sequenceNumber", sequenceNumber?.toString() || sequenceNum.toString());
-  formData.append("messages", JSON.stringify(messages));
-  formData.append("acceptsMerge", "true"); // always accept merge requests (since v1.4.10)
-  if (sessionId) {
-    formData.append("sessionId", sessionId);
-  }
-
-  // Wait for preferences to be retrieved before appending them to the FormData
-  let stepStartTime = Date.now();
-  const preference = userPreferences.getCachedTranscriptionMode();
-  logStepDuration("userPreferences.getCachedTranscriptionMode", stepStartTime);
-  if (preference) {
-    formData.append("prefer", preference);
-  }
-
-  stepStartTime = Date.now();
-  const discretionaryMode = userPreferences.getCachedDiscretionaryMode();
-  logStepDuration("userPreferences.getCachedDiscretionaryMode", stepStartTime);
-  if (discretionaryMode) {
-    formData.append("analyzeForResponse", "true");
-  }
-
-  // Get the chatbot's nickname if set
-  if (!chatbot) {
-    stepStartTime = Date.now();
-    chatbot = await ChatbotService.getChatbot();
-    logStepDuration("ChatbotService.getChatbot (constructTranscriptionFormData)", stepStartTime);
-  }
-  stepStartTime = Date.now();
-  const nickname = await chatbot.getNickname();
-  logStepDuration("chatbot.getNickname", stepStartTime);
-  
-  const defaultName = chatbot.getName();
-  if (nickname && nickname !== defaultName) {
-    formData.append("nickname", nickname);
-  }
-
-  // Add input context for dictation mode if available
-  if (inputType) {
-    formData.append("inputType", inputType);
-  }
-  if (inputLabel) {
-    formData.append("inputLabel", inputLabel);
-  }
-
-  // Remove filler words preference (always send if enabled; server decides applicability)
-  stepStartTime = Date.now();
-  const removeFiller = userPreferences.getCachedRemoveFillerWords();
-  logStepDuration("userPreferences.getCachedRemoveFillerWords", stepStartTime);
-  if (removeFiller) {
-    formData.append("removeFillerWords", "true");
-  }
-
-  return formData;
-}
+// (Local duplicate removed; using imported constructTranscriptionFormData)

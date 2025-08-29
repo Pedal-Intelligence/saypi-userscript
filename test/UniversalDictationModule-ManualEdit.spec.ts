@@ -44,13 +44,23 @@ vi.mock('../src/ResourceModule', () => ({
   getResourceUrl: vi.fn((path) => `chrome-extension://test/${path}`),
 }));
 
-// Mock Audio constructor
-global.Audio = vi.fn(() => ({
-  play: vi.fn(),
-  pause: vi.fn(),
-  addEventListener: vi.fn(),
-  removeEventListener: vi.fn(),
-}));
+// If Audio already defined by setup, don't redefine
+try {
+  // no-op if exists
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+  (global as any).Audio;
+} catch {}
+if (!(global as any).Audio) {
+  Object.defineProperty(global, 'Audio', {
+    value: vi.fn(() => ({
+      play: vi.fn(),
+      pause: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    })),
+    configurable: true,
+  });
+}
 
 vi.mock('../src/icons/IconModule', () => ({
   IconModule: {

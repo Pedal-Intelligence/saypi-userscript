@@ -10,6 +10,29 @@ import { Chatbot } from "../chatbots/Chatbot";
 import { ChatbotIdentifier } from "../chatbots/ChatbotIdentifier";
 import { FailedSpeechUtterance } from "./FailedSpeechUtterance";
 import { SpeechFailureReason } from "./SpeechFailureReason";
+import { buildUsageMetadata } from "../usage/UsageMetadata";
+
+/**
+ * Interface for TTS request data sent to the /speak/{uuid} endpoint
+ */
+interface TTSRequestData {
+  voice: string;
+  text: string;
+  lang: string;
+  sequenceNumber: number;
+  // Usage analytics metadata (optional but recommended)
+  clientId?: string;
+  version?: string;
+  app?: string;
+}
+
+/**
+ * Interface for TTS stream request data sent to /speak/{uuid}/stream endpoint
+ */
+interface TTSStreamRequestData {
+  text: string;
+  sequenceNumber: number;
+}
 
 export class TextToSpeechService {
   private sequenceNumbers: { [key: string]: number } = {};
@@ -55,13 +78,36 @@ export class TextToSpeechService {
     }
     const voice_id = voice.id;
     const appId = chatbot ? chatbot.getID() : ChatbotIdentifier.getAppId();
-    const data = { voice: voice_id, text: text, lang: lang, sequenceNumber: 0};
+    
+    // Prepare data with usage analytics metadata as specified in PRD
+    const data: TTSRequestData = { 
+      voice: voice_id, 
+      text: text, 
+      lang: lang, 
+      sequenceNumber: 0
+    };
+    
+    // Add usage analytics metadata
+    try {
+      const usageMeta = await buildUsageMetadata(chatbot);
+      if (usageMeta.clientId) data.clientId = usageMeta.clientId;
+      if (usageMeta.version) data.version = usageMeta.version;
+      if (usageMeta.app) data.app = usageMeta.app;
+    } catch (error) {
+      console.warn("[TextToSpeechService] Failed to add usage analytics metadata:", error);
+      // Continue without analytics metadata if there's an error
+    }
+    
     this.sequenceNumbers[uuid] = 0; // initialize sequence number for this utterance
     const baseUri = `${this.serviceUrl}/speak/${uuid}`;
-    const queryParams = `voice_id=${voice_id}&lang=${lang}&app=${appId}`;
+    const params = new URLSearchParams();
+    params.set("voice_id", voice_id);
+    params.set("lang", lang);
+    // Always lowercase app id in query param as well
+    params.set("app", String(appId).toLowerCase());
     let uri = stream
-      ? `${baseUri}/stream?${queryParams}`
-      : `${baseUri}?${queryParams}`;
+      ? `${baseUri}/stream?${params.toString()}`
+      : `${baseUri}?${params.toString()}`;
 
     const utterance: SpeechUtterance = new SayPiSpeech(uuid, lang, voice, uri);
     const response = await callApi(uri, {
@@ -113,7 +159,7 @@ export class TextToSpeechService {
       this.sequenceNumbers[uuid] = 1; // assume additions follow an initial creation with sequence number 0
     }
     const sequenceNumber = this.sequenceNumbers[uuid]++;
-    const data = { text: text, sequenceNumber: sequenceNumber };
+    const data: TTSStreamRequestData = { text: text, sequenceNumber: sequenceNumber };
     const uri = `${this.serviceUrl}/speak/${uuid}/stream`;
     const response = await callApi(uri, {
       method: "PUT",
