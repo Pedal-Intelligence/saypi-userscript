@@ -34,13 +34,21 @@ export class ClientIdManager {
     // If initialization is already in progress, wait for it
     if (this.initializationPromise) {
       await this.initializationPromise;
-      return this.clientId!;
+      if (!this.clientId) {
+        throw new Error('[ClientIdManager] Failed to initialize client ID: clientId is null after initialization');
+      }
+      return this.clientId;
     }
 
     // Start initialization
     this.initializationPromise = this.initialize();
     await this.initializationPromise;
-    return this.clientId!;
+    
+    if (!this.clientId) {
+      throw new Error('[ClientIdManager] Failed to initialize client ID: clientId is null after initialization');
+    }
+    
+    return this.clientId;
   }
 
   /**
@@ -151,7 +159,7 @@ export class ClientIdManager {
       return newClientId;
     } catch (error) {
       console.error('[ClientIdManager] Failed to reset client ID:', error);
-      throw error;
+      throw new Error(`[ClientIdManager] Failed to reset client ID: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 }
