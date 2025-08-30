@@ -48,11 +48,15 @@ public/permissions/*
 # Build-generated configuration files
 src/popup/popup-config.js
 
-# Background documentation
+# Supporting documentation and research
 scripts/rrempel.md
 doc/dom/1password/settings.html
+doc/editors/claude/*.png
+doc/editors/claude/*.html
+doc/chatgpt/*.pdf
+doc/chatgpt/saving-standard-voice.md
+doc/editors/chatgpt/*.pdf
+doc/editors/chatgpt/*.html
 
 # Test files
 test-csp-bypass.html
-doc/editors/claude/*.png
-doc/editors/claude/*.html
