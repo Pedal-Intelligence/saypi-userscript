@@ -1,0 +1,46 @@
+/* ChatGPT host-specific UI polish */
+body.chatgpt {
+  /* Tooltip: compact black pill above the button, matching ChatGPT feel */
+  .tooltip[aria-label]::after {
+    content: attr(aria-label);
+    position: absolute;
+    top: -130%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 6px 8px;
+    border-radius: 9999px; /* pill */
+    font-size: 0.75rem; /* text-xs */
+    line-height: 1;
+    opacity: 0;
+    transition: opacity 0.15s ease-in-out;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  @media (hover: hover) {
+    .tooltip[aria-label]:hover::after { opacity: 1; }
+  }
+
+  /* Subtle hover background using ::before overlay (composer-btn inspired) */
+  #saypi-callButton {
+    position: relative;
+  }
+  #saypi-callButton::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background-color: rgba(0,0,0,0); /* transparent by default */
+    z-index: -1; /* behind icon */
+    transition: background-color 0.15s ease-in-out;
+  }
+  @media (hover: hover) {
+    #saypi-callButton:hover::before {
+      background-color: rgba(0,0,0,0.06); /* subtle hover wash */
+    }
+  }
+}
+

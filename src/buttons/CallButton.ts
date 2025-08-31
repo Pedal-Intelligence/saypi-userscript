@@ -385,11 +385,11 @@ class CallButton {
     private overrideLabelForHost(baseLabel: string, isActiveState: boolean, button: HTMLButtonElement): string {
         // Polymorphic host-specific labeling via class attached by chatbot
         if (button.classList.contains('chatgpt-call-button')) {
-            // ChatGPT-style wording with attribution
+            // ChatGPT-style wording
             if (isActiveState) {
-                return 'End standard voice mode - by saypi.ai';
+                return 'End voice mode';
             }
-            // Starting/inactive -> invite to use SVM
+            // Starting/inactive -> invite to use SVM with attribution for clarity
             return 'Use standard voice mode - by saypi.ai';
         }
         return baseLabel;
