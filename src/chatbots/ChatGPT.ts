@@ -124,11 +124,9 @@ class ChatGPTChatbot extends AbstractChatbot {
   }
 
   getChatHistory(searchRoot: HTMLElement): HTMLElement {
-    return (
-      (findThreadRoot(searchRoot) as HTMLElement) ||
-      (document.querySelector(this.getChatHistorySelector()) as HTMLElement) ||
-      document.body
-    );
+    // Only return a concrete history root when it's available; otherwise defer setup
+    const thread = findThreadRoot(searchRoot) as HTMLElement | null;
+    return (thread as HTMLElement) || (null as unknown as HTMLElement);
   }
 
   getChatHistorySelector(): string {
