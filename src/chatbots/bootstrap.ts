@@ -213,17 +213,8 @@ export class DOMObserver {
         const ancestor = this.addIdPromptAncestor(controlsContainer);
         if (ancestor) this.monitorForSubmitButton(ancestor);
         const submitButtonSearch = this.findSubmitButton(controlsContainer);
-        // Deterministic placement: for ChatGPT place left of the submit button if present
-        if ((this.chatbot as any).getID && (this.chatbot as any).getID() === 'chatgpt' && submitButtonSearch.found) {
-          const callBtn = buttonModule.createCallButton(controlsContainer, 0);
-          const submitEl = submitButtonSearch.target as HTMLElement;
-          if (submitEl && callBtn && callBtn instanceof HTMLElement) {
-            controlsContainer.insertBefore(callBtn, submitEl);
-          }
-        } else {
-          const insertionPosition = submitButtonSearch.found ? -1 : 0;
-          buttonModule.createCallButton(controlsContainer, insertionPosition);
-        }
+        const insertionPosition = submitButtonSearch.found ? -1 : 0;
+        buttonModule.createCallButton(controlsContainer, insertionPosition);
       }
     }
   }

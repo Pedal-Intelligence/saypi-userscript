@@ -49,6 +49,7 @@ export function getScopedSubmitSelector(): string {
     'form[data-type="unified-composer"] button[type="submit"]',
     'form[data-type="unified-composer"] [data-testid="send-button"]',
     'form[data-type="unified-composer"] button[aria-label*="Send" i]',
-    'form[data-type="unified-composer"] button[title*="Send" i]'
+    'form[data-type="unified-composer"] button[title*="Send" i]',
+    'form[data-type="unified-composer"] div[data-testid="composer-speech-button-container"]',
   ].join(', ');
 }
