@@ -59,9 +59,9 @@ These elements have some evidence but require further verification:
 
 These assumptions were wrong and have been corrected:
 
-### ~~Unified Composer~~ 
-- **❌ Wrong:** `[data-type="unified-composer"]`
-- **✅ Fixed:** `.composer-parent`
+### Unified Composer 
+- **✅ Confirmed:** `[data-type="unified-composer"]` is present in both snapshots (`chatgpt.html` and `chatgpt-genesis.html`) and wraps the prompt area. Use this for scoping composer queries.
+- **✅ Confirmed:** `.composer-parent` is present and is a reliable ancestor container for the composer UI.
 
 ### ~~Send Button TestId~~
 - **❌ Wrong:** `button[data-testid="send-button"]` 
@@ -94,8 +94,8 @@ These areas need investigation for future phases:
 
 ### Phase 1 ✅ READY
 - **Text Insertion:** ProseMirror strategy working correctly
-- **Input Detection:** Reliable element targeting
-- **Container Detection:** Basic composer container identified
+- **Input Detection:** Reliable element targeting, scoped to `form[data-type="unified-composer"]`
+- **Controls Container:** Trailing group `[grid-area="trailing"]` with `.ms-auto` verified
 
 ### Phase 2 🟡 NEEDS VALIDATION
 - **Button Placement:** Control container selectors need verification
@@ -123,9 +123,9 @@ These areas need investigation for future phases:
 ## Recommendations for Future Development
 
 ### Before Phase 2
-1. **Validate Send Button:** Inspect active chat with send button visible
-2. **Test Control Placement:** Verify where voice controls should be injected
-3. **Confirm Button Behavior:** Understand form submission mechanics
+1. **Validate Send Button:** Inspect active chat with send button visible; prefer `button[type="submit"]` inside `form[data-type="unified-composer"]` with fallbacks to common ARIA/testid labels.
+2. **Test Control Placement:** Verify `[grid-area="trailing"]` + `.ms-auto` as target for SayPi controls.
+3. **Confirm Button Behavior:** Use click on submit button or Enter key dispatch; avoid form submit unless form exists.
 
 ### Before Phase 3
 1. **Map Message Structure:** Complete audit of conversation DOM

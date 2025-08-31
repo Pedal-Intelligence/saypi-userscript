@@ -13,6 +13,9 @@ import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { VoiceSelector } from "../tts/VoiceMenu";
 import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
 import { UserPrompt } from "./Chatbot";
+import { findControlsContainerInComposer, findPromptInputInComposer, getScopedSubmitSelector } from "./chatgpt/ComposerSelectors";
+import { getAssistantContentSelector, getAssistantResponseSelectorScopedToThread } from "./chatgpt/MessageSelectors";
+import { findThreadRoot } from "./chatgpt/HistorySelectors";
 // import { ChatGPTVoiceMenu } from "./ChatGPTVoiceMenu"; // TODO: Phase 3
 
 class ChatGPTChatbot extends AbstractChatbot {
@@ -48,33 +51,7 @@ class ChatGPTChatbot extends AbstractChatbot {
    * @returns The prompt input element, or null if not found
    */
   getPromptInput(searchRoot: Element): HTMLElement {
-    // Primary selector: ProseMirror editor with specific ID (CONFIRMED)
-    let promptInput = searchRoot.querySelector(
-      '#prompt-textarea.ProseMirror[contenteditable="true"]'
-    ) as HTMLElement;
-
-    if (!promptInput) {
-      // Fallback: ProseMirror without ID
-      promptInput = searchRoot.querySelector(
-        '.ProseMirror[contenteditable="true"]'
-      ) as HTMLElement;
-    }
-
-    if (!promptInput) {
-      // Final fallback: hidden textarea (CONFIRMED)
-      promptInput = searchRoot.querySelector(
-        '._fallbackTextarea_ebv8s_2[name="prompt-textarea"]'
-      ) as HTMLElement;
-    }
-
-    if (!promptInput) {
-      // Fallback to document search
-      promptInput = document.querySelector(
-        '#prompt-textarea.ProseMirror[contenteditable="true"]'
-      ) as HTMLElement;
-    }
-
-    return promptInput;
+    return (findPromptInputInComposer(searchRoot) || undefined) as unknown as HTMLElement;
   }
 
   getPromptContainer(prompt: HTMLElement): HTMLElement {
@@ -85,22 +62,7 @@ class ChatGPTChatbot extends AbstractChatbot {
   }
 
   getPromptControlsContainer(promptContainer: HTMLElement): HTMLElement {
-    // Look for trailing controls area (UNVERIFIED - needs validation)
-    let controlsContainer = promptContainer.querySelector('[grid-area="trailing"]') as HTMLElement;
-    
-    if (!controlsContainer) {
-      controlsContainer = promptContainer.querySelector('.ms-auto') as HTMLElement;
-    }
-
-    if (!controlsContainer) {
-      // Fallback: look for any button container (send button selector UNVERIFIED)
-      const buttonContainer = promptContainer.querySelector('button')?.parentElement as HTMLElement;
-      if (buttonContainer) {
-        controlsContainer = buttonContainer;
-      }
-    }
-
-    return controlsContainer || promptContainer;
+    return (findControlsContainerInComposer(promptContainer) || promptContainer) as HTMLElement;
   }
 
   getPromptTextInputSelector(): string {
@@ -108,7 +70,7 @@ class ChatGPTChatbot extends AbstractChatbot {
   }
 
   getPromptSubmitButtonSelector(): string {
-    return 'button'; // UNVERIFIED - specific send button selector needs validation
+    return getScopedSubmitSelector();
   }
 
   getAudioControls(searchRoot: Element): HTMLElement {
@@ -162,12 +124,16 @@ class ChatGPTChatbot extends AbstractChatbot {
   }
 
   getChatHistory(searchRoot: HTMLElement): HTMLElement {
-    return searchRoot.querySelector(this.getChatHistorySelector()) as HTMLElement ||
-           document.querySelector(this.getChatHistorySelector()) as HTMLElement;
+    return (
+      (findThreadRoot(searchRoot) as HTMLElement) ||
+      (document.querySelector(this.getChatHistorySelector()) as HTMLElement) ||
+      document.body
+    );
   }
 
   getChatHistorySelector(): string {
-    return '[data-testid="conversation-turn"], main [role="main"]';
+    // Prefer explicit thread id when available
+    return '#thread';
   }
 
   getPastChatHistorySelector(): string {
@@ -183,11 +149,12 @@ class ChatGPTChatbot extends AbstractChatbot {
   }
 
   getAssistantResponseSelector(): string {
-    return '[data-message-author-role="assistant"]';
+    // Prefer content blocks scoped to the thread root when present, with global fallback
+    return getAssistantResponseSelectorScopedToThread();
   }
 
   getAssistantResponseContentSelector(): string {
-    return '[data-message-author-role="assistant"] .markdown';
+    return getAssistantContentSelector();
   }
 
   getUserPromptSelector(): string {
