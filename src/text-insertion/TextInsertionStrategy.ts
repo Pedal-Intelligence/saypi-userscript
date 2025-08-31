@@ -547,19 +547,26 @@ export class ContentEditableStrategy implements TextInsertionStrategy {
   insertText(target: HTMLElement, text: string, replaceAll: boolean): void {
     target.focus();
 
+    // Convert newlines to <br> tags for proper contenteditable display
+    const htmlText = text.replace(/\n/g, '<br>');
+
     if (replaceAll) {
-      target.textContent = text;
+      target.innerHTML = htmlText;
     } else {
       const selection = window.getSelection();
       if (selection && selection.rangeCount > 0) {
         const range = selection.getRangeAt(0);
         range.deleteContents();
-        range.insertNode(document.createTextNode(text));
+        
+        // Create a document fragment to insert HTML content
+        const fragment = document.createRange().createContextualFragment(htmlText);
+        range.insertNode(fragment);
         range.collapse(false);
         selection.removeAllRanges();
         selection.addRange(range);
       } else {
-        target.textContent = (target.textContent || "") + text;
+        // Append to existing content
+        target.innerHTML = (target.innerHTML || "") + htmlText;
       }
     }
 
