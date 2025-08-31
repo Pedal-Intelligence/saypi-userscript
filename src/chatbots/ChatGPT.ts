@@ -213,6 +213,28 @@ class ChatGPTPrompt extends AbstractUserPrompt {
     }
   }
 
+  /**
+   * Override draft behavior for ChatGPT: always type into the editor so the user sees live text
+   * even when auto-submit is enabled. Using placeholder-only breaks submit flows on ProseMirror.
+   */
+  setDraft(transcript: string): void {
+    this.preferences.getAutoSubmit().then((_autoSubmit) => {
+      // Regardless of autoSubmit, we prefer showing actual text in the composer for ChatGPT
+      this.setPlaceholderText("");
+
+      // Use TextInsertionManager to replace current content with the latest transcript + a trailing space
+      const textInsertionManager = TextInsertionManager.getInstance();
+      this.element.focus();
+      const success = textInsertionManager.insertText(this.element, `${transcript} `, true);
+      if (!success) {
+        // Fallback: direct text insertion with input event to notify ProseMirror
+        this.element.textContent = `${transcript} `;
+        const inputEvent = new Event('input', { bubbles: true });
+        this.element.dispatchEvent(inputEvent);
+      }
+    });
+  }
+
   getPlaceholderText(): string {
     return this.element.getAttribute('data-placeholder') || 
            this.element.getAttribute('placeholder') || "";
