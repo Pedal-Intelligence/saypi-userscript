@@ -382,6 +382,19 @@ class CallButton {
         return button;
     }
 
+    private overrideLabelForHost(baseLabel: string, isActiveState: boolean, button: HTMLButtonElement): string {
+        // Polymorphic host-specific labeling via class attached by chatbot
+        if (button.classList.contains('chatgpt-call-button')) {
+            // ChatGPT-style wording with attribution
+            if (isActiveState) {
+                return 'End standard voice mode - by saypi.ai';
+            }
+            // Starting/inactive -> invite to use SVM
+            return 'Use standard voice mode - by saypi.ai';
+        }
+        return baseLabel;
+    }
+
     private updateCallButton(button: HTMLButtonElement | null, svgIconString: string, label: string, onClick: (() => void) | null, isActiveState: boolean) {
         const callButton = button || this.element;
         if (!callButton) return;
@@ -412,7 +425,8 @@ class CallButton {
         callButton.appendChild(newSvgElement);
 
         // 7. Set attributes and event listeners on the button itself.
-        callButton.setAttribute("aria-label", label);
+        const finalLabel = this.overrideLabelForHost(label, isActiveState, callButton);
+        callButton.setAttribute("aria-label", finalLabel);
         if (onClick) {
             callButton.onclick = onClick;
         } else {

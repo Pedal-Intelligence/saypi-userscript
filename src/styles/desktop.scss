@@ -71,6 +71,16 @@ html.desktop-view {
     pointer-events: none;
     font-size: 1.2rem;
   }
+
+  /* ChatGPT-specific tooltip look (compact black pill, positioned above) */
+  body.chatgpt .tooltip[aria-label]::after {
+    font-size: 0.75rem; /* text-xs */
+    background-color: rgba(0,0,0,0.85);
+    border-radius: 8px;
+    top: -130%;
+    transform: translateX(-50%);
+    padding: 6px 8px;
+  }
   
   // Show on hover (desktop)
   @media (hover: hover) {
