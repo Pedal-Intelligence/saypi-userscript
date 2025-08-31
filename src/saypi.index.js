@@ -26,12 +26,12 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
 (async function () {
   "use strict";
 
-  // Determine the mode based on the current site
+  // Determine the mode based on the centralized identifier helpers
   const chatbotType = ChatbotIdentifier.identifyChatbot();
-  const isChatbotSite = chatbotType === "claude" || chatbotType === "pi";
-  const isDictationSite = chatbotType === "web";
+  const isChatMode = ChatbotIdentifier.isInChatMode();
+  const isDictationMode = ChatbotIdentifier.isInDictationMode();
 
-  console.log(`Say, Pi extension loading in ${isChatbotSite ? 'chat' : 'dictation'} mode for ${chatbotType}`);
+  console.log(`Say, Pi extension loading in ${isChatMode ? 'chat' : 'dictation'} mode for ${chatbotType}`);
 
   // Initialize common modules needed by both modes
   const audioModule = AudioModule.getInstance(); // inits the audio module's offline functions
@@ -53,9 +53,9 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
   setupAuthListener();
 
   // Initialize mode-specific modules
-  if (isChatbotSite) {
+  if (isChatMode) {
     await initializeChatMode();
-  } else if (isDictationSite) {
+  } else if (isDictationMode) {
     await initializeDictationMode();
   }
 

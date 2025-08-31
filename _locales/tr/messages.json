@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Her yerde sesle yazma, Pi ve Claude ile kesintisiz sohbetler. Rahatça konuşun—Pi gerisini halleder."
+    "message": "Her yerde sesle yazma, Pi, Claude ve ChatGPT ile kesintisiz sohbetler. Özgürce konuş—geri kalanını Pi halleder."
   },
   "appName": {
     "description": "The name of the application.",
@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Bağlanıyor..."
   },
+  "chatgpt_call_active_label": {
+    "description": "ChatGPT arama düğmesi etkin olduğunda ARIA etiketi / araç ipucu (ses modunu sonlandırmaya izin verir).",
+    "message": "Ses modunu sonlandır"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "ChatGPT arama düğmesi etkin olmadığında ARIA etiketi / araç ipucu (kullanıcıyı ses modunu başlatmaya davet eder, atıf içerir).",
+    "message": "Standart ses modunu kullan - by saypi.ai"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "ChatGPT istem oluşturucusu için varsayılan yer tutucu metni.",
+    "message": "Herhangi bir şey sor"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Uygulama durumu kontrol ediliyor..."
@@ -319,7 +331,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "Daldırıcı Moda Girin"
+    "message": "Odak Moduna Geç"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +339,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "Daldırıcı Moddan Çık"
+    "message": "Odak Modundan Çık"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

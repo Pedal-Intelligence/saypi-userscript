@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "어디서나 음성 입력, Pi와 Claude와의 매끄러운 대화. 자유롭게 말하세요—Pi가 나머지를 처리합니다."
+    "message": "어디서나 음성 타이핑, Pi, Claude, ChatGPT와 매끄러운 대화. 자유롭게 말하면 Pi가 나머지를 처리해줍니다."
   },
   "appName": {
     "description": "The name of the application.",
@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "연결 중..."
   },
+  "chatgpt_call_active_label": {
+    "description": "활성화된 ChatGPT 통화 버튼에 대한 ARIA 레이블 및 툴팁 (음성 모드 종료 가능).",
+    "message": "음성 모드 종료"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "비활성화된 ChatGPT 통화 버튼에 대한 ARIA 레이블 및 툴팁 (사용자에게 음성 모드 시작을 안내하며 출처 포함).",
+    "message": "표준 음성 모드 사용 - saypi.ai 제공"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "ChatGPT 프롬프트 입력창의 기본 자리 표시자 텍스트.",
+    "message": "무엇이든 물어보세요"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "응용 프로그램 상태 확인 중..."
@@ -319,7 +331,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "이머시브 모드에 들어가기"
+    "message": "집중 모드 시작"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +339,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "이머시브 모드 종료"
+    "message": "집중 모드 종료"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

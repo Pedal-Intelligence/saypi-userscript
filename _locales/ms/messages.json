@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Taip suara di mana-mana, sembang lancar dengan Pi \u0026 Claude. Bercakap bebas—Say, Pi urus selebihnya."
+    "message": "Pengetikan suara di mana-mana, perbualan lancar dengan Pi, Claude, dan ChatGPT. Bersuara dengan bebas—Pi akan uruskan selebihnya."
   },
   "appName": {
     "description": "The name of the application.",
@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Menyambung..."
   },
+  "chatgpt_call_active_label": {
+    "description": "Label ARIA / tooltip untuk butang panggilan ChatGPT apabila aktif (membolehkan menamatkan mod suara).",
+    "message": "Tamatkan mod suara"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "Label ARIA / tooltip untuk butang panggilan ChatGPT apabila tidak aktif (mengajak pengguna memulakan mod suara, termasuk atribusi).",
+    "message": "Gunakan mod suara standard - oleh saypi.ai"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "Teks pemegang tempat lalai untuk penyusun arahan ChatGPT.",
+    "message": "Tanya apa sahaja"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Memeriksa status aplikasi..."
@@ -319,7 +331,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "Masuk Mod Celupan"
+    "message": "Masuk Mod Fokus"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +339,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "Keluar Mod Imersif"
+    "message": "Keluar Mod Fokus"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Голосовой ввод везде, бесшовные чаты с Пи и Клодом. Говори свободно — Пи сделает остальное."
+    "message": "Голосовой ввод везде, плавное общение с Pi, Claude и ChatGPT. Говори свободно — Pi сделает остальное."
   },
   "appName": {
     "description": "The name of the application.",
@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Подключение..."
   },
+  "chatgpt_call_active_label": {
+    "description": "ARIA-метка / подсказка для кнопки вызова ChatGPT в активном состоянии (позволяет завершить голосовой режим).",
+    "message": "Завершить голосовой режим"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "ARIA-метка / подсказка для кнопки вызова ChatGPT в неактивном состоянии (приглашает начать голосовой режим, содержит указание источника).",
+    "message": "Использовать стандартный голосовой режим — by saypi.ai"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "Текст-подсказка по умолчанию для поля ввода запроса в ChatGPT.",
+    "message": "Спроси что угодно"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Проверка статуса приложения..."
@@ -319,7 +331,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "Войти в погружающий режим"
+    "message": "Войти в режим концентрации"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +339,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "Выйти из погружающего режима"
+    "message": "Выйти из режима концентрации"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

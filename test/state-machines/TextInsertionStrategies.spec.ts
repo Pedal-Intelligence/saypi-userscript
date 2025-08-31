@@ -1,70 +1,26 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 
-// Import the strategy classes - we'll need to extract them from DictationMachine
-// For now, we'll mock them to test the concept
-interface TextInsertionStrategy {
-  canHandle(target: HTMLElement): boolean;
-  insertText(target: HTMLElement, text: string, replaceAll: boolean): void;
-}
-
-class SlateEditorStrategy implements TextInsertionStrategy {
-  canHandle(target: HTMLElement): boolean {
-    return target.contentEditable === "true" && this.isSlateEditor(target);
-  }
-
-  private isSlateEditor(el: HTMLElement): boolean {
-    // Check for common Slate.js indicators
-    return (
-      el.getAttribute("data-slate-editor") === "true" ||
-      !!el.closest('[data-slate-editor="true"]') ||
-      el.getAttribute("data-slate") === "true" ||
-      !!el.closest('[data-slate="true"]') ||
-      // Check for Slate-specific data attributes or classes
-      el.hasAttribute("data-slate-node") ||
-      !!el.closest('[data-slate-node]') ||
-      el.classList.contains("slate-editor") ||
-      !!el.closest('.slate-editor')
-      // Removed overly broad role="textbox" + contenteditable matcher to avoid conflicts with Quill
-    );
-  }
-
-  insertText(target: HTMLElement, text: string, replaceAll: boolean): void {
-    // Mock implementation
-  }
-}
-
-class QuillEditorStrategy implements TextInsertionStrategy {
-  canHandle(target: HTMLElement): boolean {
-    return target.contentEditable === "true" && this.isQuillEditor(target);
-  }
-
-  private isQuillEditor(el: HTMLElement): boolean {
-    // Check for Quill-specific indicators
-    return (
-      el.classList.contains("ql-editor") ||
-      !!el.closest('.ql-editor') ||
-      !!el.closest('.ql-container') ||
-      // Check for common Quill wrapper patterns used by platforms like LinkedIn
-      !!el.closest('[class*="quill"]') ||
-      // LinkedIn uses Quill with specific patterns
-      (el.getAttribute("role") === "textbox" && 
-       el.contentEditable === "true" && 
-       el.hasAttribute("data-placeholder"))
-    );
-  }
-
-  insertText(target: HTMLElement, text: string, replaceAll: boolean): void {
-    // Mock implementation
-  }
-}
+// Import the actual strategy classes from the shared module
+import {
+  TextInsertionStrategy,
+  SlateEditorStrategy,
+  QuillEditorStrategy,
+  ProseMirrorEditorStrategy,
+  convertNewlinesToBr
+} from '../../src/text-insertion/TextInsertionStrategy';
+import { TextInsertionManager } from '../../src/text-insertion/TextInsertionManager';
 
 describe('TextInsertionStrategies', () => {
   let slateStrategy: SlateEditorStrategy;
   let quillStrategy: QuillEditorStrategy;
+  let proseMirrorStrategy: ProseMirrorEditorStrategy;
+  let textInsertionManager: TextInsertionManager;
 
   beforeEach(() => {
     slateStrategy = new SlateEditorStrategy();
     quillStrategy = new QuillEditorStrategy();
+    proseMirrorStrategy = new ProseMirrorEditorStrategy();
+    textInsertionManager = TextInsertionManager.getInstance();
   });
 
   describe('QuillEditorStrategy', () => {
@@ -175,23 +131,232 @@ describe('TextInsertionStrategies', () => {
     });
   });
 
+  describe('ProseMirrorEditorStrategy', () => {
+    it('should match ChatGPT ProseMirror editor', () => {
+      // Create ChatGPT's unified composer structure
+      const composerContainer = document.createElement('div');
+      composerContainer.setAttribute('data-type', 'unified-composer');
+      
+      const proseMirrorEditor = document.createElement('div');
+      proseMirrorEditor.className = 'ProseMirror';
+      proseMirrorEditor.contentEditable = 'true';
+      proseMirrorEditor.id = 'prompt-textarea';
+      proseMirrorEditor.setAttribute('role', 'textbox');
+      proseMirrorEditor.setAttribute('aria-multiline', 'true');
+      proseMirrorEditor.setAttribute('data-placeholder', 'Ask anything');
+      
+      composerContainer.appendChild(proseMirrorEditor);
+      document.body.appendChild(composerContainer);
+      
+      expect(proseMirrorStrategy.canHandle(proseMirrorEditor)).toBe(true);
+      
+      // Clean up
+      document.body.removeChild(composerContainer);
+    });
+
+    it('should match generic ProseMirror editors', () => {
+      // Test basic ProseMirror class
+      const basicProseMirror = document.createElement('div');
+      basicProseMirror.className = 'ProseMirror';
+      basicProseMirror.contentEditable = 'true';
+      expect(proseMirrorStrategy.canHandle(basicProseMirror)).toBe(true);
+
+      // Test pm-editor class
+      const pmEditor = document.createElement('div');
+      pmEditor.className = 'pm-editor';
+      pmEditor.contentEditable = 'true';
+      expect(proseMirrorStrategy.canHandle(pmEditor)).toBe(true);
+
+      // Test prosemirror-editor class
+      const proseMirrorEditorClass = document.createElement('div');
+      proseMirrorEditorClass.className = 'prosemirror-editor';
+      proseMirrorEditorClass.contentEditable = 'true';
+      expect(proseMirrorStrategy.canHandle(proseMirrorEditorClass)).toBe(true);
+
+      // Test data-prosemirror attribute
+      const dataProseMirror = document.createElement('div');
+      dataProseMirror.setAttribute('data-prosemirror', 'true');
+      dataProseMirror.contentEditable = 'true';
+      expect(proseMirrorStrategy.canHandle(dataProseMirror)).toBe(true);
+    });
+
+    it('should not match non-ProseMirror contenteditable elements', () => {
+      const genericDiv = document.createElement('div');
+      genericDiv.contentEditable = 'true';
+      expect(proseMirrorStrategy.canHandle(genericDiv)).toBe(false);
+
+      const quillEditor = document.createElement('div');
+      quillEditor.className = 'ql-editor';
+      quillEditor.contentEditable = 'true';
+      expect(proseMirrorStrategy.canHandle(quillEditor)).toBe(false);
+
+      const regularTextarea = document.createElement('textarea');
+      expect(proseMirrorStrategy.canHandle(regularTextarea)).toBe(false);
+    });
+
+    it('should handle text insertion with proper event dispatch', () => {
+      const proseMirrorEditor = document.createElement('div');
+      proseMirrorEditor.className = 'ProseMirror';
+      proseMirrorEditor.contentEditable = 'true';
+      
+      // Mock the dispatchEvent method to track calls
+      const dispatchedEvents: Event[] = [];
+      proseMirrorEditor.dispatchEvent = (event: Event) => {
+        dispatchedEvents.push(event);
+        return true;
+      };
+
+      // Mock focus method
+      proseMirrorEditor.focus = () => {};
+
+      const testText = 'Hello, ProseMirror!';
+      proseMirrorStrategy.insertText(proseMirrorEditor, testText, false);
+
+      // Should dispatch at least one event (input event is always dispatched)
+      expect(dispatchedEvents.length).toBeGreaterThan(0);
+      
+      // The last event should be an input event
+      const lastEvent = dispatchedEvents[dispatchedEvents.length - 1];
+      expect(lastEvent.type).toBe('input');
+      expect(lastEvent.bubbles).toBe(true);
+    });
+  });
+
+  describe('TextInsertionManager', () => {
+    it('should select the correct strategy for different editor types', () => {
+      // Test ProseMirror selection
+      const proseMirrorEditor = document.createElement('div');
+      proseMirrorEditor.className = 'ProseMirror';
+      proseMirrorEditor.contentEditable = 'true';
+      
+      const proseMirrorStrategyMatch = textInsertionManager.getStrategyForTarget(proseMirrorEditor);
+      expect(proseMirrorStrategyMatch).toBeInstanceOf(ProseMirrorEditorStrategy);
+
+      // Test Quill selection
+      const quillEditor = document.createElement('div');
+      quillEditor.className = 'ql-editor';
+      quillEditor.contentEditable = 'true';
+      
+      const quillStrategyMatch = textInsertionManager.getStrategyForTarget(quillEditor);
+      expect(quillStrategyMatch).toBeInstanceOf(QuillEditorStrategy);
+
+      // Test Slate selection
+      const slateEditor = document.createElement('div');
+      slateEditor.contentEditable = 'true';
+      slateEditor.setAttribute('data-slate-editor', 'true');
+      
+      const slateStrategyMatch = textInsertionManager.getStrategyForTarget(slateEditor);
+      expect(slateStrategyMatch).toBeInstanceOf(SlateEditorStrategy);
+    });
+
+    it('should respect strategy priority order', () => {
+      // Create an element that could match multiple strategies
+      // ProseMirror should take priority over generic ContentEditable
+      const ambiguousEditor = document.createElement('div');
+      ambiguousEditor.className = 'ProseMirror some-other-class';
+      ambiguousEditor.contentEditable = 'true';
+      
+      const selectedStrategy = textInsertionManager.getStrategyForTarget(ambiguousEditor);
+      expect(selectedStrategy).toBeInstanceOf(ProseMirrorEditorStrategy);
+    });
+
+    it('should successfully insert text using the manager', () => {
+      const proseMirrorEditor = document.createElement('div');
+      proseMirrorEditor.className = 'ProseMirror';
+      proseMirrorEditor.contentEditable = 'true';
+      
+      // Mock methods
+      proseMirrorEditor.focus = () => {};
+      proseMirrorEditor.dispatchEvent = () => true;
+
+      const testText = 'Manager test text';
+      const success = textInsertionManager.insertText(proseMirrorEditor, testText, true);
+      
+      expect(success).toBe(true);
+    });
+  });
+
   describe('Strategy Priority', () => {
-    it('should have clean separation between Quill and Slate strategies', () => {
-      const editor = document.createElement('div');
-      editor.className = 'ql-editor';
-      editor.setAttribute('contenteditable', 'true');
-      editor.contentEditable = 'true';
-      editor.setAttribute('role', 'textbox');
-      editor.innerHTML = '<p><br></p>';
+    it('should have clean separation between Quill, Slate, and ProseMirror strategies', () => {
+      // Test Quill editor
+      const quillEditor = document.createElement('div');
+      quillEditor.className = 'ql-editor';
+      quillEditor.setAttribute('contenteditable', 'true');
+      quillEditor.contentEditable = 'true';
+      quillEditor.setAttribute('role', 'textbox');
+      quillEditor.innerHTML = '<p><br></p>';
       
-      // After the fix: only Quill strategy should match Quill editors
-      expect(quillStrategy.canHandle(editor)).toBe(true);
-      expect(slateStrategy.canHandle(editor)).toBe(false); // Fixed!
+      expect(quillStrategy.canHandle(quillEditor)).toBe(true);
+      expect(slateStrategy.canHandle(quillEditor)).toBe(false);
+      expect(proseMirrorStrategy.canHandle(quillEditor)).toBe(false);
+
+      // Test ProseMirror editor
+      const proseMirrorEditor = document.createElement('div');
+      proseMirrorEditor.className = 'ProseMirror';
+      proseMirrorEditor.contentEditable = 'true';
       
-      // In a strategy selector, only Quill would match
-      const strategies = [quillStrategy, slateStrategy];
-      const matchingStrategy = strategies.find(s => s.canHandle(editor));
-      expect(matchingStrategy).toBe(quillStrategy);
+      expect(proseMirrorStrategy.canHandle(proseMirrorEditor)).toBe(true);
+      expect(quillStrategy.canHandle(proseMirrorEditor)).toBe(false);
+      expect(slateStrategy.canHandle(proseMirrorEditor)).toBe(false);
+
+      // Test Slate editor
+      const slateEditor = document.createElement('div');
+      slateEditor.contentEditable = 'true';
+      slateEditor.setAttribute('data-slate-editor', 'true');
+      
+      expect(slateStrategy.canHandle(slateEditor)).toBe(true);
+      expect(quillStrategy.canHandle(slateEditor)).toBe(false);
+      expect(proseMirrorStrategy.canHandle(slateEditor)).toBe(false);
+    });
+
+    it('should prioritize more specific strategies in the manager', () => {
+      const strategies = [quillStrategy, slateStrategy, proseMirrorStrategy];
+      
+      // ProseMirror editor should match ProseMirror strategy
+      const proseMirrorEditor = document.createElement('div');
+      proseMirrorEditor.className = 'ProseMirror';
+      proseMirrorEditor.contentEditable = 'true';
+      
+      const matchingStrategy = strategies.find(s => s.canHandle(proseMirrorEditor));
+      expect(matchingStrategy).toBe(proseMirrorStrategy);
+    });
+  });
+
+  describe('Utility Functions', () => {
+    describe('convertNewlinesToBr', () => {
+      it('should convert single newlines to <br> tags', () => {
+        const input = 'Line 1\nLine 2';
+        const expected = 'Line 1<br>Line 2';
+        expect(convertNewlinesToBr(input)).toBe(expected);
+      });
+
+      it('should convert multiple newlines to multiple <br> tags', () => {
+        const input = 'Line 1\n\nLine 2\nLine 3';
+        const expected = 'Line 1<br><br>Line 2<br>Line 3';
+        expect(convertNewlinesToBr(input)).toBe(expected);
+      });
+
+      it('should handle text without newlines unchanged', () => {
+        const input = 'Single line text';
+        const expected = 'Single line text';
+        expect(convertNewlinesToBr(input)).toBe(expected);
+      });
+
+      it('should handle empty strings', () => {
+        expect(convertNewlinesToBr('')).toBe('');
+      });
+
+      it('should handle text with only newlines', () => {
+        const input = '\n\n\n';
+        const expected = '<br><br><br>';
+        expect(convertNewlinesToBr(input)).toBe(expected);
+      });
+
+      it('should handle mixed content with newlines at various positions', () => {
+        const input = '\nStart with newline\nMiddle\nEnd with newline\n';
+        const expected = '<br>Start with newline<br>Middle<br>End with newline<br>';
+        expect(convertNewlinesToBr(input)).toBe(expected);
+      });
     });
   });
 });

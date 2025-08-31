@@ -373,6 +373,12 @@ class CallButton {
 
         addChild(container, button, position);
 
+        // ChatGPT uses overflow-clip on composer, so pseudo-element tooltips get clipped.
+        // For buttons marked with 'chatgpt-call-button', attach a portal-style tooltip to <body>.
+        if (button.classList.contains('chatgpt-call-button')) {
+            this.attachPortalTooltip(button);
+        }
+
         // Ensure segments drawn *after* initial SVG is added by callActive/callInactive
         this.updateButtonSegments();
 
@@ -380,6 +386,78 @@ class CallButton {
             AnimationModule.startAnimation("glow");
         }
         return button;
+    }
+
+    // --- ChatGPT tooltip portal (avoids overflow clipping) ---
+    private tooltipEl: HTMLDivElement | null = null;
+    private hideTooltipBound: any;
+    private repositionTooltipBound: any;
+
+    private attachPortalTooltip(button: HTMLButtonElement) {
+        const show = () => {
+            const label = button.getAttribute('aria-label') || '';
+            if (!label) return;
+            if (!this.tooltipEl) {
+                this.tooltipEl = document.createElement('div');
+                this.tooltipEl.className = 'saypi-tooltip';
+                document.body.appendChild(this.tooltipEl);
+            }
+            this.tooltipEl.textContent = label;
+            this.tooltipEl.style.visibility = 'hidden';
+            this.tooltipEl.style.opacity = '0';
+            this.positionTooltip(button);
+            this.tooltipEl.style.visibility = 'visible';
+            this.tooltipEl.style.opacity = '1';
+        };
+
+        const hide = () => {
+            if (this.tooltipEl) {
+                this.tooltipEl.style.opacity = '0';
+                // remove after fade
+                const el = this.tooltipEl;
+                setTimeout(() => { if (el && el.parentElement) el.parentElement.removeChild(el); }, 120);
+                this.tooltipEl = null;
+            }
+            window.removeEventListener('scroll', this.repositionTooltipBound, true);
+            window.removeEventListener('resize', this.repositionTooltipBound, true);
+        };
+
+        this.hideTooltipBound = hide;
+        this.repositionTooltipBound = () => this.positionTooltip(button);
+
+        button.addEventListener('mouseenter', () => {
+            show();
+            window.addEventListener('scroll', this.repositionTooltipBound, true);
+            window.addEventListener('resize', this.repositionTooltipBound, true);
+        });
+        button.addEventListener('mouseleave', hide);
+        button.addEventListener('blur', hide);
+    }
+
+    private positionTooltip(button: HTMLButtonElement) {
+        if (!this.tooltipEl) return;
+        const rect = button.getBoundingClientRect();
+        const tooltip = this.tooltipEl;
+        tooltip.style.position = 'fixed';
+        tooltip.style.zIndex = '1000';
+        tooltip.style.left = `${rect.left + rect.width / 2}px`;
+        // place above with small gap
+        const gap = 10;
+        tooltip.style.top = `${Math.max(0, rect.top - gap)}px`;
+        tooltip.style.transform = 'translate(-50%, -100%)';
+    }
+
+    private overrideLabelForHost(baseLabel: string, isActiveState: boolean, button: HTMLButtonElement): string {
+        // Polymorphic host-specific labeling via class attached by chatbot
+        if (button.classList.contains('chatgpt-call-button')) {
+            // ChatGPT-style wording (i18n)
+            if (isActiveState) {
+                return getMessage('chatgpt_call_active_label');
+            }
+            // Starting/inactive -> invite to use SVM with attribution for clarity
+            return getMessage('chatgpt_call_inactive_label');
+        }
+        return baseLabel;
     }
 
     private updateCallButton(button: HTMLButtonElement | null, svgIconString: string, label: string, onClick: (() => void) | null, isActiveState: boolean) {
@@ -412,7 +490,8 @@ class CallButton {
         callButton.appendChild(newSvgElement);
 
         // 7. Set attributes and event listeners on the button itself.
-        callButton.setAttribute("aria-label", label);
+        const finalLabel = this.overrideLabelForHost(label, isActiveState, callButton);
+        callButton.setAttribute("aria-label", finalLabel);
         if (onClick) {
             callButton.onclick = onClick;
         } else {

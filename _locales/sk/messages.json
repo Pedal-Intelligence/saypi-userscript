@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Hlasové písanie kdekoľvek, bezproblémové rozhovory s Pi a Claude. Hovor voľne – Povedz, Pi sa postará o zvyšok."
+    "message": "Diktovanie hlasom všade, plynulá komunikácia s Pi, Claude a ChatGPT. Hovor slobodne – Pi sa postará o zvyšok."
   },
   "appName": {
     "description": "The name of the application.",
@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Pripájanie..."
   },
+  "chatgpt_call_active_label": {
+    "description": "ARIA popis / tooltip pre tlačidlo hovoru ChatGPT, keď je aktívne (umožňuje ukončiť hlasový režim).",
+    "message": "Ukončiť hlasový režim"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "ARIA popis / tooltip pre tlačidlo hovoru ChatGPT, keď je neaktívne (vyzýva používateľa na spustenie hlasového režimu, obsahuje pripísanie).",
+    "message": "Použiť štandardný hlasový režim – od saypi.ai"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "Predvolený text zástupného symbolu pre tvorcu výziev ChatGPT.",
+    "message": "Opýtaj sa čokoľvek"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Kontrola stavu aplikácie..."
@@ -319,7 +331,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "Vstúpte do režimu ponorenia"
+    "message": "Vstúpiť do režimu sústredenia"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +339,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "Opustiť režim ponorenia"
+    "message": "Opustiť režim sústredenia"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

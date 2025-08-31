@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Dactilografiere vocală oriunde, conversații fluente cu Pi și Claude. Vorbește liber—Spune, Pi se ocupă de rest."
+    "message": "Dictare vocală peste tot, conversații fluide cu Pi, Claude și ChatGPT. Vorbește liber—Pi se ocupă de restul."
   },
   "appName": {
     "description": "The name of the application.",
@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Conectare..."
   },
+  "chatgpt_call_active_label": {
+    "description": "Etichetă ARIA / tooltip pentru butonul de apel ChatGPT când este activ (permite terminarea modului vocal).",
+    "message": "Încheie modul vocal"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "Etichetă ARIA / tooltip pentru butonul de apel ChatGPT când este inactiv (invită utilizatorul să pornească modul vocal, include atribuirea).",
+    "message": "Folosește modul vocal standard - de saypi.ai"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "Text implicit pentru câmpul de compunere a comenzilor în ChatGPT.",
+    "message": "Întreabă orice"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Verificarea stării aplicației..."
@@ -319,7 +331,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "Intră în Modul Imersiv"
+    "message": "Intră în modul concentrație"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +339,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "Ieșiți din Modul Imersiv"
+    "message": "Ieși din modul concentrație"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

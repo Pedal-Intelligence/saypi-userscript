@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Φωνητική εισαγωγή παντού, άμεσες συνομιλίες με Pi \u0026 Claude. Μίλα κι άσε το Say, Pi να κάνει τα υπόλοιπα."
+    "message": "Φωνητική πληκτρολόγηση παντού, απρόσκοπτες συνομιλίες με Pi, Claude και ChatGPT. Μίλα ελεύθερα—Το Pi θα αναλάβει τα υπόλοιπα."
   },
   "appName": {
     "description": "The name of the application.",
@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Σύνδεση..."
   },
+  "chatgpt_call_active_label": {
+    "description": "Ετικέτα ARIA / υπόδειξη εργαλείου για το κουμπί κλήσης ChatGPT όταν είναι ενεργό (επιτρέπει την τερματισμό της λειτουργίας φωνής).",
+    "message": "Τερματισμός λειτουργίας φωνής"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "Ετικέτα ARIA / υπόδειξη εργαλείου για το κουμπί κλήσης ChatGPT όταν είναι ανενεργό (προτρέπει στην έναρξη λειτουργίας φωνής, περιλαμβάνει απόδοση).",
+    "message": "Χρησιμοποίησε την τυπική λειτουργία φωνής - από saypi.ai"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "Προεπιλεγμένο κείμενο θέσης για τον συντάκτη ερωτημάτων του ChatGPT.",
+    "message": "Ρώτησε οτιδήποτε"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Έλεγχος κατάστασης εφαρμογής..."
@@ -319,7 +331,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "Εισέλθετε στη Λειτουργία Εμπλοκής"
+    "message": "Ενεργοποίηση Λειτουργίας Εστίασης"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +339,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "Έξοδος από τη Λειτουργία Εμβύθισης"
+    "message": "Απενεργοποίηση Λειτουργίας Εστίασης"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

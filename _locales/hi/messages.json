@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "हर जगह वॉयस टाइपिंग, पी और क्लॉड के साथ निर्बाध बातचीत। स्वतंत्रता से बोलें—कहें, पी बाकी का काम कर देता है।"
+    "message": "हर जगह वॉइस टाइपिंग, Pi, Claude और ChatGPT के साथ सहज बातचीत। बेझिझक बोलो—बाकी सब Pi संभालेगा।"
   },
   "appName": {
     "description": "The name of the application.",
@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "संयोजन..."
   },
+  "chatgpt_call_active_label": {
+    "description": "चैटजीपीटी कॉल बटन के लिए ARIA लेबल / टूलटिप जब सक्रिय हो (वॉयस मोड समाप्त करने की अनुमति देता है)।",
+    "message": "वॉयस मोड समाप्त करें"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "चैटजीपीटी कॉल बटन के लिए ARIA लेबल / टूलटिप जब निष्क्रिय हो (उपयोगकर्ता को वॉयस मोड शुरू करने का सुझाव देता है, जिसमें स्रोत का उल्लेख शामिल है)।",
+    "message": "मानक वॉयस मोड का उपयोग करें - by saypi.ai"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "चैटजीपीटी के प्रांप्ट कंपोजर के लिए डिफ़ॉल्ट प्लेसहोल्डर टेक्स्ट।",
+    "message": "कुछ भी पूछें"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "एप्लिकेशन की स्थिति जांच रहे हैं..."
@@ -319,7 +331,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "इमर्सिव मोड में प्रवेश करें"
+    "message": "फोकस मोड में प्रवेश करें"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +339,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "इमर्सिव मोड से बाहर निकलें"
+    "message": "फोकस मोड से बाहर निकलें"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

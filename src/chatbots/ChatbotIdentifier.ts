@@ -19,6 +19,15 @@ export class ChatbotIdentifier {
         return "claude";
       case "pi.ai":
         return "pi";
+      case "chatgpt.com":
+      case "chat.com":
+        return "chatgpt";
+      case "openai.com":
+        // Check if it's chat.openai.com specifically
+        if (hostname.includes("chat.")) {
+          return "chatgpt";
+        }
+        return "web";
       default:
         // Fallback – treat any other site as a generic web page for dictation use-case
         return "web";
@@ -34,7 +43,17 @@ export class ChatbotIdentifier {
   }
 
   static getChatbotName(): string {
-    return this.identifyChatbot() === "claude" ? "Claude" : "Pi";
+    const chatbot = this.identifyChatbot();
+    switch (chatbot) {
+      case "claude":
+        return "Claude";
+      case "pi":
+        return "Pi";
+      case "chatgpt":
+        return "ChatGPT";
+      default:
+        return "Web";
+    }
   }
 
   /**

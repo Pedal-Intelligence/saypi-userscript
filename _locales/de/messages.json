@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Überall Sprachtyping, nahtlose Unterhaltungen mit Pi und Claude. Sprich frei – Pi übernimmt den Rest."
+    "message": "Sprachschreibung überall, nahtlose Chats mit Pi, Claude und ChatGPT. Frei sprechen – Pi erledigt den Rest."
   },
   "appName": {
     "description": "The name of the application.",
@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Verbindung wird hergestellt..."
   },
+  "chatgpt_call_active_label": {
+    "description": "ARIA-Beschreibung / Tooltip für die ChatGPT-Anruftaste im aktiven Zustand (ermöglicht das Beenden des Sprachmodus).",
+    "message": "Sprachmodus beenden"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "ARIA-Beschreibung / Tooltip für die ChatGPT-Anruftaste im inaktiven Zustand (lädt den Nutzer ein, den Sprachmodus zu starten, inklusive Quellenangabe).",
+    "message": "Standard-Sprachmodus verwenden - von saypi.ai"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "Standard-Platzhaltertext für den Texteingabebereich von ChatGPT.",
+    "message": "Stelle eine Frage"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Überprüfung des Anwendungsstatus..."
@@ -319,7 +331,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "Immersivmodus betreten"
+    "message": "Fokusmodus aktivieren"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +339,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "Verlassen Sie den immersiven Modus"
+    "message": "Fokusmodus verlassen"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

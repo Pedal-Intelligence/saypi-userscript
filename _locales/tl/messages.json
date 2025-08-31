@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Pagta-type sa boses kahit saan, tuloy-tuloy na usapan kina Pi at Claude. Magsalita lang—Say, Pi na bahala."
+    "message": "Pagsulat gamit ang boses saanman, tuloy-tuloy na usapan kasama sina Pi, Claude, at ChatGPT. Magsalita nang malaya—Si Pi ang bahala sa iba."
   },
   "appName": {
     "description": "The name of the application.",
@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Kumokonekta..."
   },
+  "chatgpt_call_active_label": {
+    "description": "ARIA label / tooltip para sa ChatGPT call button kapag aktibo (pinapayagan ang pagtatapos ng voice mode).",
+    "message": "Tapusin ang voice mode"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "ARIA label / tooltip para sa ChatGPT call button kapag hindi aktibo (hinihikayat ang gumagamit na simulan ang voice mode, may kasamang attribution).",
+    "message": "Gamitin ang standard voice mode - mula sa saypi.ai"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "Default na placeholder na teksto para sa prompt composer ng ChatGPT.",
+    "message": "Magtanong ng kahit ano"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Nagsusuri ng katayuan ng aplikasyon..."
@@ -319,7 +331,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "Pasok sa Nakakalibang na Mode"
+    "message": "Pumasok sa Mode ng Pokus"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +339,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "Lumabas sa Nakakalibang na Mode"
+    "message": "Lumabas sa Mode ng Pokus"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

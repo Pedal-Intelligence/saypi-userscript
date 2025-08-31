@@ -206,6 +206,17 @@ export class DOMObserver {
     prompt.id = "saypi-prompt";
     const promptContainer = this.chatbot.getPromptContainer(prompt);
     if (promptContainer) {
+      // Ensure ChatGPT does not get the SayPi control panel decorations (Phase 1)
+      if ((this.chatbot as any).getID && (this.chatbot as any).getID() === 'chatgpt') {
+        if (promptContainer.id === 'saypi-control-panel-main') {
+          promptContainer.removeAttribute('id');
+        }
+        promptContainer.classList.remove('saypi-control-panel');
+        // Phase 3+: When re‑enabling the control panel for ChatGPT, remove this
+        // cleanup block and switch CHATGPT_FEATURES.enableControlPanel to true
+        // in src/chatbots/ChatGPT.ts. Also verify the chosen container selector.
+      }
+
       promptContainer.classList.add("saypi-prompt-container");
       const controlsContainer = this.chatbot.getPromptControlsContainer(promptContainer);
       if (controlsContainer) {
@@ -229,9 +240,11 @@ export class DOMObserver {
     if (mainControlPanel) {
       return Observation.foundAlreadyDecorated(id, mainControlPanel);
     }
-    mainControlPanel = searchRoot.querySelector(
-      this.chatbot.getControlPanelSelector()
-    );
+    const selector = this.chatbot.getControlPanelSelector?.();
+    if (!selector || !selector.trim()) {
+      return Observation.notFound(id);
+    }
+    mainControlPanel = searchRoot.querySelector(selector);
     if (!mainControlPanel) {
       return Observation.notFound(id);
     }
@@ -302,9 +315,12 @@ export class DOMObserver {
       return Observation.foundAlreadyDecorated(id, existingDiscoveryPanel);
     }
 
-    const discoveryPanel = searchRoot.querySelector(
-      this.chatbot.getDiscoveryPanelSelector()
-    );
+    const discoverySelector = this.chatbot.getDiscoveryPanelSelector?.();
+    if (!discoverySelector || !discoverySelector.trim()) {
+      return Observation.notFound(id);
+    }
+
+    const discoveryPanel = searchRoot.querySelector(discoverySelector);
     if (discoveryPanel) {
       return Observation.foundUndecorated(id, discoveryPanel);
     }
@@ -340,9 +356,12 @@ export class DOMObserver {
       return Observation.foundAlreadyDecorated(id, existingVoiceSettings);
     }
 
-    const voiceSettings = searchRoot.querySelector(
-      this.chatbot.getVoiceSettingsSelector()
-    );
+    const voiceSettingsSelector = this.chatbot.getVoiceSettingsSelector?.();
+    if (!voiceSettingsSelector || !voiceSettingsSelector.trim()) {
+      return Observation.notFound(id);
+    }
+
+    const voiceSettings = searchRoot.querySelector(voiceSettingsSelector);
     if (voiceSettings) {
       return Observation.foundUndecorated(id, voiceSettings);
     }
@@ -463,9 +482,12 @@ export class DOMObserver {
       return Observation.foundAlreadyDecorated(id, existingAudioOutputButton);
     }
 
-    const audioOutputButton = searchRoot.querySelector(
-      this.chatbot.getAudioOutputButtonSelector()
-    );
+    const selector = this.chatbot.getAudioOutputButtonSelector?.();
+    if (!selector || !selector.trim()) {
+      return Observation.notFound(id);
+    }
+
+    const audioOutputButton = searchRoot.querySelector(selector);
     if (audioOutputButton) {
       return Observation.foundUndecorated(id, audioOutputButton);
     }

@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Dikte suara di mana saja, obrolan lancar dengan Pi \u0026 Claude. Bicara bebas—Say, Pi urus sisanya."
+    "message": "Ketik suara di mana saja, obrolan lancar dengan Pi, Claude, dan ChatGPT. Bicara dengan bebas—Pi akan mengurus sisanya."
   },
   "appName": {
     "description": "The name of the application.",
@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Menghubungkan..."
   },
+  "chatgpt_call_active_label": {
+    "description": "Label ARIA / tooltip untuk tombol panggilan ChatGPT saat aktif (memungkinkan mengakhiri mode suara).",
+    "message": "Akhiri mode suara"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "Label ARIA / tooltip untuk tombol panggilan ChatGPT saat tidak aktif (mengundang pengguna untuk memulai mode suara, termasuk atribusi).",
+    "message": "Gunakan mode suara standar - oleh saypi.ai"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "Teks placeholder default untuk penyusun prompt ChatGPT.",
+    "message": "Tanyakan apa saja"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Memeriksa status permohonan..."
@@ -319,7 +331,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "Masuk ke Mode Imersif"
+    "message": "Masuk Mode Fokus"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +339,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "Keluar dari Mode Imersif"
+    "message": "Keluar dari Mode Fokus"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

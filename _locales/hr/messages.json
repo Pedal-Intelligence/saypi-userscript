@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Govorno tipkanje svugdje, neometani razgovori s Pi-jem i Claude-om. Slobodno govori—Kaži, Pi obavlja ostatak."
+    "message": "Pisanje glasom posvuda, neometani razgovori s Pi, Claudeom i ChatGPT-om. Govori slobodno—Pi će obaviti ostalo."
   },
   "appName": {
     "description": "The name of the application.",
@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Povezivanje..."
   },
+  "chatgpt_call_active_label": {
+    "description": "ARIA oznaka / alatni opis za gumb poziva ChatGPT-a kada je aktivan (omogućuje završetak glasovnog načina).",
+    "message": "Završi glasovni način"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "ARIA oznaka / alatni opis za gumb poziva ChatGPT-a kada nije aktivan (poziva korisnika da započne glasovni način, uključuje atribuciju).",
+    "message": "Koristi standardni glasovni način - by saypi.ai"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "Zadani tekst zamjene za sastavljač upita ChatGPT-a.",
+    "message": "Pitaj bilo što"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Provjera statusa aplikacije..."
@@ -319,7 +331,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "Uđite u uronjeni način rada"
+    "message": "Uđi u fokusirani način"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +339,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "Izađite iz uronjenog načina rada"
+    "message": "Izađi iz fokusiranog načina"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

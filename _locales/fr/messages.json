@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Dictée vocale partout, échanges fluides avec Pi et Claude. Parlez librement—Say, Pi s’occupe du reste."
+    "message": "Saisie vocale partout, conversations fluides avec Pi, Claude et ChatGPT. Parle librement—Pi s’occupe du reste."
   },
   "appName": {
     "description": "The name of the application.",
@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Connexion..."
   },
+  "chatgpt_call_active_label": {
+    "description": "Étiquette ARIA / info-bulle pour le bouton d'appel ChatGPT lorsqu'il est actif (permet de quitter le mode vocal).",
+    "message": "Quitter le mode vocal"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "Étiquette ARIA / info-bulle pour le bouton d'appel ChatGPT lorsqu'il est inactif (invite à démarrer le mode vocal, avec attribution).",
+    "message": "Utiliser le mode vocal standard - par saypi.ai"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "Texte par défaut du champ de saisie du prompt de ChatGPT.",
+    "message": "Demande n'importe quoi"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Vérification du statut de l'application..."
@@ -319,7 +331,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "Entrez en Mode Immersif"
+    "message": "Passer en mode Concentration"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +339,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "Quitter le Mode Immersif"
+    "message": "Quitter le mode Concentration"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

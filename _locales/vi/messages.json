@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Gõ giọng mọi nơi, trò chuyện liền mạch với Pi và Claude. Nói tự do—Nói với Pi, nó sẽ làm phần còn lại."
+    "message": "Nhập văn bản bằng giọng nói mọi lúc, trò chuyện mượt mà với Pi, Claude và ChatGPT. Nói tự nhiên—Pi sẽ lo phần còn lại."
   },
   "appName": {
     "description": "The name of the application.",
@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Đang kết nối..."
   },
+  "chatgpt_call_active_label": {
+    "description": "Nhãn ARIA / tooltip cho nút gọi ChatGPT khi đang hoạt động (cho phép kết thúc chế độ giọng nói).",
+    "message": "Kết thúc chế độ giọng nói"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "Nhãn ARIA / tooltip cho nút gọi ChatGPT khi không hoạt động (mời người dùng bắt đầu chế độ giọng nói, bao gồm ghi nhận nguồn).",
+    "message": "Sử dụng chế độ giọng nói tiêu chuẩn - bởi saypi.ai"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "Văn bản giữ chỗ mặc định cho trình soạn lời nhắc của ChatGPT.",
+    "message": "Hỏi bất cứ điều gì"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Kiểm tra trạng thái ứng dụng..."
@@ -319,7 +331,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "Nhập Chế Độ Sống Động"
+    "message": "Chuyển sang Chế độ Tập Trung"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +339,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "Thoát Chế Độ Sống Động"
+    "message": "Thoát Chế độ Tập Trung"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

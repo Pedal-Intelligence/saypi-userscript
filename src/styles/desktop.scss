@@ -71,6 +71,8 @@ html.desktop-view {
     pointer-events: none;
     font-size: 1.2rem;
   }
+
+  @import "chatgpt.scss";
   
   // Show on hover (desktop)
   @media (hover: hover) {

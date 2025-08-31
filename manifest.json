@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_appName__",
-  "version": "1.9.5",
+  "version": "1.10.0",
   "description": "__MSG_appDescription__",
   "permissions": [
     "storage",
@@ -20,7 +20,10 @@
     {
       "matches": [
         "https://pi.ai/*",
-        "https://claude.ai/*"
+        "https://claude.ai/*",
+        "https://chatgpt.com/*",
+        "https://chat.com/*",
+        "https://chat.openai.com/*"
       ],
       "js": [
         "public/saypi.user.js"
@@ -28,12 +31,16 @@
     },
     {
       "matches": [
+        "file://*/*",
         "http://*/*",
         "https://*/*"
       ],
       "exclude_matches": [
         "https://pi.ai/*",
-        "https://claude.ai/*"
+        "https://claude.ai/*",
+        "https://chatgpt.com/*",
+        "https://chat.com/*",
+        "https://chat.openai.com/*"
       ],
       "js": [
         "public/saypi.user.js"
@@ -89,6 +96,7 @@
         "public/permissions/*.css"
       ],
       "matches": [
+        "file://*/*",
         "http://*/*",
         "https://*/*"
       ]

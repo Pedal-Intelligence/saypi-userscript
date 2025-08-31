@@ -10,28 +10,42 @@ const saypiAudioDomain = config.apiServerUrl
 
 interface AudioProvider {
   name: string;
-  domain: string;
+  domain: string; // primary domain for display
   matches: (source: string) => boolean;
 }
 
 class BaseAudioProvider implements AudioProvider {
   name: string;
   domain: string;
+  private domains: string[];
 
-  constructor(name: string, domain: string) {
+  constructor(name: string, domain: string | string[]) {
     this.name = name;
-    this.domain = domain;
+    this.domains = Array.isArray(domain) ? domain : [domain];
+    this.domain = this.domains[0];
   }
 
   matches(source: string): boolean {
-    let domain: string;
+    let host = "";
     try {
-      domain = new URL(source).hostname;
+      const url = new URL(source);
+      if (url.protocol === 'blob:') {
+        // blob: URLs may embed the real URL in the pathname
+        try {
+          const inner = new URL(url.pathname);
+          host = inner.hostname;
+        } catch {
+          host = "";
+        }
+      } else {
+        host = url.hostname;
+      }
     } catch (_) {
       throw new Error(`Invalid source: ${source} is not a valid URL.`);
     }
 
-    return domain === this.domain;
+    if (!host) return false;
+    return this.domains.some((d) => host === d || host.endsWith(`.${d}`));
   }
 }
 
@@ -48,6 +62,7 @@ class NoneAudioProvider implements AudioProvider {
 const audioProviders = {
   SayPi: new BaseAudioProvider("Say, Pi", saypiAudioDomain),
   Pi: new BaseAudioProvider("Pi", "pi.ai"),
+  ChatGPT: new BaseAudioProvider("ChatGPT", ["chatgpt.com", "openai.com", "chat.openai.com"]),
   None: new NoneAudioProvider(),
   // Add more providers as needed
 
@@ -76,6 +91,8 @@ const audioProviders = {
         return audioProviders.Pi;
       case "claude":
         return audioProviders.SayPi;
+      case "chatgpt":
+        return audioProviders.ChatGPT;
       case "web":
         // Dictation mode - no audio output interference
         return audioProviders.None;
