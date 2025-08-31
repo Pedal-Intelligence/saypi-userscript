@@ -206,12 +206,15 @@ export class DOMObserver {
     prompt.id = "saypi-prompt";
     const promptContainer = this.chatbot.getPromptContainer(prompt);
     if (promptContainer) {
-      // Ensure ChatGPT does not get the SayPi control panel decorations
+      // Ensure ChatGPT does not get the SayPi control panel decorations (Phase 1)
       if ((this.chatbot as any).getID && (this.chatbot as any).getID() === 'chatgpt') {
         if (promptContainer.id === 'saypi-control-panel-main') {
           promptContainer.removeAttribute('id');
         }
         promptContainer.classList.remove('saypi-control-panel');
+        // Phase 3+: When re‑enabling the control panel for ChatGPT, remove this
+        // cleanup block and switch CHATGPT_FEATURES.enableControlPanel to true
+        // in src/chatbots/ChatGPT.ts. Also verify the chosen container selector.
       }
 
       promptContainer.classList.add("saypi-prompt-container");

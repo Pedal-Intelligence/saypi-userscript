@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "हर जगह वॉयस टाइपिंग, पी और क्लॉड के साथ निर्बाध बातचीत। स्वतंत्रता से बोलें—कहें, पी बाकी का काम कर देता है।"
+    "message": "हर जगह वॉइस टाइपिंग, Pi, Claude और ChatGPT के साथ सहज बातचीत। बेझिझक बोलो—बाकी सब Pi संभालेगा।"
   },
   "appName": {
     "description": "The name of the application.",
@@ -319,7 +319,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "इमर्सिव मोड में प्रवेश करें"
+    "message": "फोकस मोड में प्रवेश करें"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +327,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "इमर्सिव मोड से बाहर निकलें"
+    "message": "फोकस मोड से बाहर निकलें"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

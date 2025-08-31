@@ -11,11 +11,24 @@ import {
 import { TextInsertionManager } from "../text-insertion/TextInsertionManager";
 import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { VoiceSelector } from "../tts/VoiceMenu";
+import getMessage from "../i18n";
 import { AbstractChatbot, AbstractUserPrompt } from "./AbstractChatbots";
 import { UserPrompt } from "./Chatbot";
 import { findControlsContainerInComposer, findPromptInputInComposer, getScopedSubmitSelector } from "./chatgpt/ComposerSelectors";
 import { getAssistantContentSelector, getAssistantResponseSelectorScopedToThread } from "./chatgpt/MessageSelectors";
 import { findThreadRoot } from "./chatgpt/HistorySelectors";
+
+/**
+ * Phase flags for ChatGPT integration. These are breadcrumbs to make it
+ * straightforward to re‑introduce additional UI (e.g., a control panel)
+ * in later phases without hunting through multiple files.
+ *
+ * Phase 1: enableControlPanel = false
+ * Phase 3+: set to true and choose a proper container selector below.
+ */
+export const CHATGPT_FEATURES = {
+  enableControlPanel: false,
+};
 // import { ChatGPTVoiceMenu } from "./ChatGPTVoiceMenu"; // TODO: Phase 3
 
 class ChatGPTChatbot extends AbstractChatbot {
@@ -88,7 +101,15 @@ class ChatGPTChatbot extends AbstractChatbot {
   }
 
   getControlPanelSelector(): string {
-    // Phase 1: no SayPi control panel on ChatGPT
+    // Phase 1: no SayPi control panel on ChatGPT.
+    // To re‑enable in Phase 3+, flip CHATGPT_FEATURES.enableControlPanel to true
+    // and return a stable container selector here. Candidates observed:
+    //  - '.composer-parent' (composer wrapper)
+    //  - '#thread-bottom-container' (thread footer wrapper)
+    // Be sure to remove the cleanup guard in bootstrap.decoratePrompt as well.
+    if (CHATGPT_FEATURES.enableControlPanel) {
+      return '.composer-parent';
+    }
     return '';
   }
 
@@ -238,7 +259,8 @@ class ChatGPTPrompt extends AbstractUserPrompt {
   }
 
   getDefaultPlaceholderText(): string {
-    return "Ask anything"; // CONFIRMED from actual DOM
+    // i18n: default placeholder in ChatGPT composer
+    return getMessage("chatgpt_placeholder_default");
   }
 
 }

@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "随时随地进行语音输入，与Pi和Claude无缝聊天。畅所欲言——只需说出内容，Pi会处理其余的。"
+    "message": "随时随地语音输入，与Pi、Claude和ChatGPT无缝交流。畅所欲言，剩下的交给Pi。"
   },
   "appName": {
     "description": "The name of the application.",
@@ -319,7 +319,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "进入沉浸模式"
+    "message": "进入专注模式"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +327,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "退出沉浸模式"
+    "message": "退出专注模式"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

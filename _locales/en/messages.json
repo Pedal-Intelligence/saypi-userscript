@@ -4,15 +4,19 @@
     "description": "The name of the application."
   },
   "appDescription": {
-    "message": "Voice typing everywhere, seamless chats with Pi and Claude. Speak freely—Say, Pi does the rest.",
+    "message": "Voice typing everywhere, seamless chats with Pi, Claude, and ChatGPT. Speak freely—Say, Pi does the rest.",
     "description": "The description of the application as it appears in the Chrome Web Store. (Max 112 characters)"
   },
+  "chatgpt_placeholder_default": {
+    "message": "Ask anything",
+    "description": "Default placeholder text for ChatGPT's prompt composer."
+  },
   "exitImmersiveModeLong": {
-    "message": "Exit Immersive Mode",
+    "message": "Exit Focus Mode",
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode."
   },
   "enterImmersiveModeLong": {
-    "message": "Enter Immersive Mode",
+    "message": "Enter Focus Mode",
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices."
   },
   "enterImmersiveModeShort": {
@@ -52,6 +56,14 @@
   "callError": {
     "message": "Non-fatal error encountered. Don't panic, we're still listening.",
     "description": "The tooltip to display on the call button when a non-fatal error occurs."
+  },
+  "chatgpt_call_inactive_label": {
+    "message": "Use standard voice mode - by saypi.ai",
+    "description": "ARIA label / tooltip for ChatGPT call button when inactive (invites user to start voice mode, includes attribution)."
+  },
+  "chatgpt_call_active_label": {
+    "message": "End voice mode",
+    "description": "ARIA label / tooltip for ChatGPT call button when active (allows ending voice mode)."
   },
   "mode_speed": {
     "message": "speed",

@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Digitazione vocale ovunque, chat fluide con Pi e Claude. Parla libero—Say, Pi fa il resto."
+    "message": "Dettatura vocale ovunque, conversazioni fluide con Pi, Claude e ChatGPT. Parla liberamente—Pi si occupa del resto."
   },
   "appName": {
     "description": "The name of the application.",
@@ -319,7 +319,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "Accedi alla modalità immersiva"
+    "message": "Entra in Modalità Focus"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +327,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "Esci dalla modalità immersiva"
+    "message": "Esci dalla Modalità Focus"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

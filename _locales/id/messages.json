@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Dikte suara di mana saja, obrolan lancar dengan Pi \u0026 Claude. Bicara bebas—Say, Pi urus sisanya."
+    "message": "Ketik suara di mana saja, obrolan lancar dengan Pi, Claude, dan ChatGPT. Bicara dengan bebas—Pi akan mengurus sisanya."
   },
   "appName": {
     "description": "The name of the application.",
@@ -319,7 +319,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "Masuk ke Mode Imersif"
+    "message": "Masuk Mode Fokus"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +327,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "Keluar dari Mode Imersif"
+    "message": "Keluar dari Mode Fokus"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

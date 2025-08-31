@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Dictée vocale partout, échanges fluides avec Pi et Claude. Parlez librement—Say, Pi s’occupe du reste."
+    "message": "Saisie vocale partout, conversations fluides avec Pi, Claude et ChatGPT. Parle librement—Pi s’occupe du reste."
   },
   "appName": {
     "description": "The name of the application.",
@@ -319,7 +319,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "Entrez en Mode Immersif"
+    "message": "Passer en mode Concentration"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +327,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "Quitter le Mode Immersif"
+    "message": "Quitter le mode Concentration"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

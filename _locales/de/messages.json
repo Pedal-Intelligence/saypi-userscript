@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Überall Sprachtyping, nahtlose Unterhaltungen mit Pi und Claude. Sprich frei – Pi übernimmt den Rest."
+    "message": "Sprachschreibung überall, nahtlose Chats mit Pi, Claude und ChatGPT. Frei sprechen – Pi erledigt den Rest."
   },
   "appName": {
     "description": "The name of the application.",
@@ -319,7 +319,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "Immersivmodus betreten"
+    "message": "Fokusmodus aktivieren"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +327,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "Verlassen Sie den immersiven Modus"
+    "message": "Fokusmodus verlassen"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

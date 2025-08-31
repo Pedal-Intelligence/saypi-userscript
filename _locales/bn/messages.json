@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "সব জায়গায় ভয়েস টাইপিং, পাই এবং ক্লদে সাথে নিখুঁত চ্যাট। অবাধে কথা বলুন—বলুন, পাই বাকি কাজটি করে দেবে।"
+    "message": "যেকোনো জায়গায় ভয়েস টাইপিং, Pi, Claude, এবং ChatGPT’র নীতন্তরহীন চ্যাট। মুক্তভাবে বলুন—বাকিটা Pi করবে।"
   },
   "appName": {
     "description": "The name of the application.",
@@ -319,7 +319,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "ইমার্সিভ মোডে প্রবেশ করুন"
+    "message": "ফোকাস মোডে প্রবেশ করুন"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +327,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "ইমার্সিভ মোড থেকে বের হন"
+    "message": "ফোকাস মোড থেকে বেরিয়ে আসুন"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

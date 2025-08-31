@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Φωνητική εισαγωγή παντού, άμεσες συνομιλίες με Pi \u0026 Claude. Μίλα κι άσε το Say, Pi να κάνει τα υπόλοιπα."
+    "message": "Φωνητική πληκτρολόγηση παντού, απρόσκοπτες συνομιλίες με Pi, Claude και ChatGPT. Μίλα ελεύθερα—Το Pi θα αναλάβει τα υπόλοιπα."
   },
   "appName": {
     "description": "The name of the application.",
@@ -319,7 +319,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "Εισέλθετε στη Λειτουργία Εμπλοκής"
+    "message": "Ενεργοποίηση Λειτουργίας Εστίασης"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +327,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "Έξοδος από τη Λειτουργία Εμβύθισης"
+    "message": "Απενεργοποίηση Λειτουργίας Εστίασης"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

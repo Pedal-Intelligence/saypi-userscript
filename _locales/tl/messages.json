@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Pagta-type sa boses kahit saan, tuloy-tuloy na usapan kina Pi at Claude. Magsalita lang—Say, Pi na bahala."
+    "message": "Pagsulat gamit ang boses saanman, tuloy-tuloy na usapan kasama sina Pi, Claude, at ChatGPT. Magsalita nang malaya—Si Pi ang bahala sa iba."
   },
   "appName": {
     "description": "The name of the application.",
@@ -319,7 +319,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "Pasok sa Nakakalibang na Mode"
+    "message": "Pumasok sa Mode ng Pokus"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +327,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "Lumabas sa Nakakalibang na Mode"
+    "message": "Lumabas sa Mode ng Pokus"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

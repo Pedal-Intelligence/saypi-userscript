@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Spraakgestuurd typen overal, naadloze gesprekken met Pi en Claude. Spreek vrijuit—zeg gewoon, Pi doet de rest."
+    "message": "spraakgestuurd typen overal, naadloze chats met Pi, Claude en ChatGPT. Spreek vrijuit—Pi regelt de rest."
   },
   "appName": {
     "description": "The name of the application.",
@@ -319,7 +319,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "Ga naar de meeslepende modus"
+    "message": "Focusmodus inschakelen"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +327,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "Verlaat de meeslepende modus"
+    "message": "Focusmodus uitschakelen"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",

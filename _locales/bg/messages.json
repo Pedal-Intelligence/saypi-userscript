@@ -17,7 +17,7 @@
   },
   "appDescription": {
     "description": "The description of the application.",
-    "message": "Гласово набиране навсякъде, безпроблемни чатове с Pi и Claude. Говори свободно—Кажи, Pi ще свърши останалото."
+    "message": "Гласово въвеждане навсякъде, безпроблемни разговори с Pi, Claude и ChatGPT. Говори свободно — Pi се грижи за останалото."
   },
   "appName": {
     "description": "The name of the application.",
@@ -319,7 +319,7 @@
   },
   "enterImmersiveModeLong": {
     "description": "The aria-label and title of the button to enter immersive mode on mobile devices.",
-    "message": "Влезте в поглъщащ режим"
+    "message": "Влез в режими на фокус"
   },
   "enterImmersiveModeShort": {
     "description": "The text of the button to enter immersive mode on desktop.",
@@ -327,7 +327,7 @@
   },
   "exitImmersiveModeLong": {
     "description": "The aria-label and title of the button to exit immersive mode on mobile devices, back to the text-based desktop mode.",
-    "message": "Излезте от поглъщащия режим"
+    "message": "Излез от режими на фокус"
   },
   "extensionPopupTitle": {
     "description": "The title of the extension's popup dialog.",
