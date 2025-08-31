@@ -136,12 +136,12 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
       this.speechSynthesis,
       this.chatbot
     );
-    const initialMessages = await existingMessagesObserver
-      .runOnce(
-        findRootAncestor(chatHistoryElement).querySelector(
-          selector
-        ) as HTMLElement
-      );
+    const recentContainer = findRootAncestor(chatHistoryElement).querySelector(
+      selector
+    ) as HTMLElement | null;
+    const initialMessages = recentContainer
+      ? await existingMessagesObserver.runOnce(recentContainer)
+      : [];
     console.debug(
       `Found ${initialMessages.length} recent assistant message(s)`
     );

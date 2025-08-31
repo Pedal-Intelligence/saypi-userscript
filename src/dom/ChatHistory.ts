@@ -236,9 +236,11 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
   }
 
   static findAssistantResponses(
-    searchRoot: Element,
+    searchRoot: Element | null | undefined,
     querySelector: string
   ): Observation[] {
+    if (!searchRoot) return [];
+    if (!querySelector || !querySelector.trim()) return [];
     const deepMatches = searchRoot.querySelectorAll(querySelector);
     const observations: Observation[] = [];
     for (const match of deepMatches) {
@@ -266,9 +268,11 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
   }
 
   static findUserPrompts(
-    searchRoot: Element,
+    searchRoot: Element | null | undefined,
     querySelector: string
   ): Observation[] {
+    if (!searchRoot) return [];
+    if (!querySelector || !querySelector.trim()) return [];
     const deepMatches = searchRoot.querySelectorAll(querySelector);
     const observations: Observation[] = [];
     for (const match of deepMatches) {
@@ -282,9 +286,11 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
   }
 
   static findFirstAssistantResponse(
-    searchRoot: Element,
+    searchRoot: Element | null | undefined,
     querySelector: string
   ): Observation {
+    if (!searchRoot) return Observation.notFound("");
+    if (!querySelector || !querySelector.trim()) return Observation.notFound("");
     const allResponses = ChatHistoryMessageObserver.findAssistantResponses(
       searchRoot,
       querySelector
@@ -295,12 +301,14 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
     return Observation.notFound("");
   }
 
-  findAssistantResponses(searchRoot: Element): Observation[] {
+  findAssistantResponses(searchRoot: Element | null | undefined): Observation[] {
+    if (!searchRoot) return [];
     const query = this.chatbot.getAssistantResponseSelector();
     return ChatHistoryMessageObserver.findAssistantResponses(searchRoot, query);
   }
 
-  findUserPrompts(searchRoot: Element): Observation[] {
+  findUserPrompts(searchRoot: Element | null | undefined): Observation[] {
+    if (!searchRoot) return [];
     const query = this.chatbot.getUserPromptSelector();
     return ChatHistoryMessageObserver.findUserPrompts(searchRoot, query);
   }
@@ -337,8 +345,9 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
   }
 
   async findAndDecorateAssistantResponses(
-    searchRoot: Element
+    searchRoot: Element | null | undefined
   ): Promise<Observation[]> {
+    if (!searchRoot) return [];
     const initialObservations: Observation[] =
       this.findAssistantResponses(searchRoot);
     const decoratedObservations: Observation[] = [];
@@ -381,7 +390,8 @@ abstract class ChatHistoryMessageObserver extends BaseObserver {
     return decoratedObservations;
   }
 
-  async findAndDecorateUserPrompts(searchRoot: Element): Promise<Observation[]> {
+  async findAndDecorateUserPrompts(searchRoot: Element | null | undefined): Promise<Observation[]> {
+    if (!searchRoot) return [];
     const initialObservations: Observation[] = this.findUserPrompts(searchRoot);
     const decoratedObservations: Observation[] = [];
     
