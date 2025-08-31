@@ -5,7 +5,8 @@ import {
   TextInsertionStrategy,
   SlateEditorStrategy,
   QuillEditorStrategy,
-  ProseMirrorEditorStrategy
+  ProseMirrorEditorStrategy,
+  convertNewlinesToBr
 } from '../../src/text-insertion/TextInsertionStrategy';
 import { TextInsertionManager } from '../../src/text-insertion/TextInsertionManager';
 
@@ -318,6 +319,44 @@ describe('TextInsertionStrategies', () => {
       
       const matchingStrategy = strategies.find(s => s.canHandle(proseMirrorEditor));
       expect(matchingStrategy).toBe(proseMirrorStrategy);
+    });
+  });
+
+  describe('Utility Functions', () => {
+    describe('convertNewlinesToBr', () => {
+      it('should convert single newlines to <br> tags', () => {
+        const input = 'Line 1\nLine 2';
+        const expected = 'Line 1<br>Line 2';
+        expect(convertNewlinesToBr(input)).toBe(expected);
+      });
+
+      it('should convert multiple newlines to multiple <br> tags', () => {
+        const input = 'Line 1\n\nLine 2\nLine 3';
+        const expected = 'Line 1<br><br>Line 2<br>Line 3';
+        expect(convertNewlinesToBr(input)).toBe(expected);
+      });
+
+      it('should handle text without newlines unchanged', () => {
+        const input = 'Single line text';
+        const expected = 'Single line text';
+        expect(convertNewlinesToBr(input)).toBe(expected);
+      });
+
+      it('should handle empty strings', () => {
+        expect(convertNewlinesToBr('')).toBe('');
+      });
+
+      it('should handle text with only newlines', () => {
+        const input = '\n\n\n';
+        const expected = '<br><br><br>';
+        expect(convertNewlinesToBr(input)).toBe(expected);
+      });
+
+      it('should handle mixed content with newlines at various positions', () => {
+        const input = '\nStart with newline\nMiddle\nEnd with newline\n';
+        const expected = '<br>Start with newline<br>Middle<br>End with newline<br>';
+        expect(convertNewlinesToBr(input)).toBe(expected);
+      });
     });
   });
 });

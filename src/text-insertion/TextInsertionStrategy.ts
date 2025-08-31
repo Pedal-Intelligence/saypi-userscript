@@ -42,6 +42,17 @@ export function positionCursorAtEnd(element: HTMLElement): void {
   selection.addRange(range);
 }
 
+/**
+ * Utility function to convert newlines to HTML <br> tags for contenteditable elements.
+ * This ensures proper visual line breaks when inserting text into contenteditable elements.
+ * 
+ * @param text The text containing newlines to convert
+ * @returns HTML string with newlines converted to <br> tags
+ */
+export function convertNewlinesToBr(text: string): string {
+  return text.replace(/\n/g, '<br>');
+}
+
 export class InputTextareaStrategy implements TextInsertionStrategy {
   canHandle(target: HTMLElement): boolean {
     return target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement;
@@ -548,7 +559,7 @@ export class ContentEditableStrategy implements TextInsertionStrategy {
     target.focus();
 
     // Convert newlines to <br> tags for proper contenteditable display
-    const htmlText = text.replace(/\n/g, '<br>');
+    const htmlText = convertNewlinesToBr(text);
 
     if (replaceAll) {
       target.innerHTML = htmlText;
