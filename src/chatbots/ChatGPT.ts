@@ -88,7 +88,8 @@ class ChatGPTChatbot extends AbstractChatbot {
   }
 
   getControlPanelSelector(): string {
-    return '.composer-parent';
+    // Phase 1: no SayPi control panel on ChatGPT
+    return '';
   }
 
   getSidePanelSelector(): string {

@@ -206,6 +206,14 @@ export class DOMObserver {
     prompt.id = "saypi-prompt";
     const promptContainer = this.chatbot.getPromptContainer(prompt);
     if (promptContainer) {
+      // Ensure ChatGPT does not get the SayPi control panel decorations
+      if ((this.chatbot as any).getID && (this.chatbot as any).getID() === 'chatgpt') {
+        if (promptContainer.id === 'saypi-control-panel-main') {
+          promptContainer.removeAttribute('id');
+        }
+        promptContainer.classList.remove('saypi-control-panel');
+      }
+
       promptContainer.classList.add("saypi-prompt-container");
       const controlsContainer = this.chatbot.getPromptControlsContainer(promptContainer);
       if (controlsContainer) {
@@ -229,9 +237,11 @@ export class DOMObserver {
     if (mainControlPanel) {
       return Observation.foundAlreadyDecorated(id, mainControlPanel);
     }
-    mainControlPanel = searchRoot.querySelector(
-      this.chatbot.getControlPanelSelector()
-    );
+    const selector = this.chatbot.getControlPanelSelector?.();
+    if (!selector || !selector.trim()) {
+      return Observation.notFound(id);
+    }
+    mainControlPanel = searchRoot.querySelector(selector);
     if (!mainControlPanel) {
       return Observation.notFound(id);
     }
