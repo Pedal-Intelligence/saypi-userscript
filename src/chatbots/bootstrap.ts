@@ -302,9 +302,12 @@ export class DOMObserver {
       return Observation.foundAlreadyDecorated(id, existingDiscoveryPanel);
     }
 
-    const discoveryPanel = searchRoot.querySelector(
-      this.chatbot.getDiscoveryPanelSelector()
-    );
+    const discoverySelector = this.chatbot.getDiscoveryPanelSelector?.();
+    if (!discoverySelector || !discoverySelector.trim()) {
+      return Observation.notFound(id);
+    }
+
+    const discoveryPanel = searchRoot.querySelector(discoverySelector);
     if (discoveryPanel) {
       return Observation.foundUndecorated(id, discoveryPanel);
     }
@@ -340,9 +343,12 @@ export class DOMObserver {
       return Observation.foundAlreadyDecorated(id, existingVoiceSettings);
     }
 
-    const voiceSettings = searchRoot.querySelector(
-      this.chatbot.getVoiceSettingsSelector()
-    );
+    const voiceSettingsSelector = this.chatbot.getVoiceSettingsSelector?.();
+    if (!voiceSettingsSelector || !voiceSettingsSelector.trim()) {
+      return Observation.notFound(id);
+    }
+
+    const voiceSettings = searchRoot.querySelector(voiceSettingsSelector);
     if (voiceSettings) {
       return Observation.foundUndecorated(id, voiceSettings);
     }
@@ -463,9 +469,12 @@ export class DOMObserver {
       return Observation.foundAlreadyDecorated(id, existingAudioOutputButton);
     }
 
-    const audioOutputButton = searchRoot.querySelector(
-      this.chatbot.getAudioOutputButtonSelector()
-    );
+    const selector = this.chatbot.getAudioOutputButtonSelector?.();
+    if (!selector || !selector.trim()) {
+      return Observation.notFound(id);
+    }
+
+    const audioOutputButton = searchRoot.querySelector(selector);
     if (audioOutputButton) {
       return Observation.foundUndecorated(id, audioOutputButton);
     }
