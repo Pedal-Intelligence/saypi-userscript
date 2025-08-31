@@ -142,7 +142,7 @@ describe('TextInsertionStrategies', () => {
       proseMirrorEditor.id = 'prompt-textarea';
       proseMirrorEditor.setAttribute('role', 'textbox');
       proseMirrorEditor.setAttribute('aria-multiline', 'true');
-      proseMirrorEditor.setAttribute('data-placeholder', 'Message ChatGPT');
+      proseMirrorEditor.setAttribute('data-placeholder', 'Ask anything');
       
       composerContainer.appendChild(proseMirrorEditor);
       document.body.appendChild(composerContainer);
