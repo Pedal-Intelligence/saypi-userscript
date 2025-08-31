@@ -23,13 +23,8 @@ export function findPromptInputInComposer(searchRoot: Element | Document): HTMLE
     prompt = scopedRoot.querySelector?.('.ProseMirror[contenteditable="true"]') as HTMLElement | null;
   }
   if (!prompt) {
-    prompt = scopedRoot.querySelector?.(
-      '._fallbackTextarea_ebv8s_2[name="prompt-textarea"]'
-    ) as HTMLElement | null;
-  }
-  if (!prompt) {
     prompt = document.querySelector(
-      '#prompt-textarea.ProseMirror[contenteditable="true"], form[data-type="unified-composer"] .ProseMirror[contenteditable="true"], form[data-type="unified-composer"] ._fallbackTextarea_ebv8s_2[name="prompt-textarea"]'
+      '#prompt-textarea.ProseMirror[contenteditable="true"], form[data-type="unified-composer"] .ProseMirror[contenteditable="true"]'
     ) as HTMLElement | null;
   }
   return prompt;
@@ -57,4 +52,3 @@ export function getScopedSubmitSelector(): string {
     'form[data-type="unified-composer"] button[title*="Send" i]'
   ].join(', ');
 }
-

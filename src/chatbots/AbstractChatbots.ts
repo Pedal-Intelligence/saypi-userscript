@@ -226,15 +226,18 @@ ${internalMonologueInstruction}
         const sentence = tokens[i] + (tokens[i + 1] || "");
         sentences.push(sentence);
       }
+      // Avoid reading from the live DOM each frame; build locally to prevent duplication
+      let typedSoFar = "";
       const typeNextSentenceOrSubmit = () => {
         if (sentences.length === 0) {
           if (submit) EventBus.emit("saypi:autoSubmit");
-        } else {
-          // Emit the event only after all sentences have been typed
-          const nextSentence = sentences.shift();
-          this.setText(this.getText() + nextSentence);
-          requestAnimationFrame(typeNextSentenceOrSubmit);
+          return;
         }
+        const nextSentence = sentences.shift() || "";
+        typedSoFar += nextSentence;
+        // Replace all content with the accumulated text to avoid racing with external edits
+        this.setText(typedSoFar);
+        requestAnimationFrame(typeNextSentenceOrSubmit);
       };
       if (sentences.length === 0) {
         this.enterTextAndSubmit(text, submit);
