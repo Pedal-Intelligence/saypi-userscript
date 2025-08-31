@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_appName__",
-  "version": "1.9.5",
+  "version": "1.10.0",
   "description": "__MSG_appDescription__",
   "permissions": [
     "storage",
@@ -31,6 +31,7 @@
     },
     {
       "matches": [
+        "file://*/*",
         "http://*/*",
         "https://*/*"
       ],
@@ -95,6 +96,7 @@
         "public/permissions/*.css"
       ],
       "matches": [
+        "file://*/*",
         "http://*/*",
         "https://*/*"
       ]
