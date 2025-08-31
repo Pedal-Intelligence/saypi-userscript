@@ -42,5 +42,19 @@ body.chatgpt {
       background-color: rgba(0,0,0,0.06); /* subtle hover wash */
     }
   }
-}
 
+  /* Portal tooltip element appended to body to avoid overflow clipping */
+  .saypi-tooltip {
+    position: fixed;
+    background-color: rgba(0,0,0,0.85);
+    color: #fff;
+    padding: 6px 8px;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    line-height: 1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.12s ease-in-out;
+    white-space: nowrap;
+  }
+}
