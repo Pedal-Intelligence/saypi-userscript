@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "接続中..."
   },
+  "chatgpt_call_active_label": {
+    "description": "ChatGPT通話ボタンが有効時のARIAラベル／ツールチップ（ボイスモード終了が可能）",
+    "message": "ボイスモードを終了する"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "ChatGPT通話ボタンが無効時のARIAラベル／ツールチップ（ボイスモード開始を促す。提供元表記あり）",
+    "message": "標準ボイスモードを使う - by saypi.ai"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "ChatGPTのプロンプト入力欄のデフォルトプレースホルダー文言",
+    "message": "何でも質問してください"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "アプリケーションのステータスを確認中..."

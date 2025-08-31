@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Menghubungkan..."
   },
+  "chatgpt_call_active_label": {
+    "description": "Label ARIA / tooltip untuk tombol panggilan ChatGPT saat aktif (memungkinkan mengakhiri mode suara).",
+    "message": "Akhiri mode suara"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "Label ARIA / tooltip untuk tombol panggilan ChatGPT saat tidak aktif (mengundang pengguna untuk memulai mode suara, termasuk atribusi).",
+    "message": "Gunakan mode suara standar - oleh saypi.ai"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "Teks placeholder default untuk penyusun prompt ChatGPT.",
+    "message": "Tanyakan apa saja"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Memeriksa status permohonan..."

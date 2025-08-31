@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Підключення..."
   },
+  "chatgpt_call_active_label": {
+    "description": "ARIA-мітка / підказка для кнопки виклику ChatGPT, коли активна (дозволяє завершити голосовий режим).",
+    "message": "Завершити голосовий режим"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "ARIA-мітка / підказка для кнопки виклику ChatGPT, коли неактивна (запрошує розпочати голосовий режим, включає атрибуцію).",
+    "message": "Використовувати стандартний голосовий режим – by saypi.ai"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "Текст за замовчуванням для підказки у конструкторі запитів ChatGPT.",
+    "message": "Запитай будь-що"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Перевірка статусу додатку..."

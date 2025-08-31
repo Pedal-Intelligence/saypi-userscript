@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "جاري الاتصال..."
   },
+  "chatgpt_call_active_label": {
+    "description": "تسمية ARIA / تلميح أداة لزر مكالمة ChatGPT عند التفعيل (يسمح بإنهاء وضع الصوت).",
+    "message": "إنهاء وضع الصوت"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "تسمية ARIA / تلميح أداة لزر مكالمة ChatGPT عند عدم التفعيل (يدعو المستخدم لبدء وضع الصوت، ويتضمن النسبة المصدرية).",
+    "message": "استخدم وضع الصوت القياسي - بواسطة saypi.ai"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "النص الافتراضي لمؤلف الرجاء لـ ChatGPT.",
+    "message": "اطرح أي سؤال"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "جارٍ التحقق من حالة التطبيق..."

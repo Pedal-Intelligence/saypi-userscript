@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Connessione..."
   },
+  "chatgpt_call_active_label": {
+    "description": "Etichetta ARIA / tooltip per il pulsante di chiamata ChatGPT quando attivo (permette di terminare la modalità vocale).",
+    "message": "Termina modalità vocale"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "Etichetta ARIA / tooltip per il pulsante di chiamata ChatGPT quando inattivo (invita a iniziare la modalità vocale, include attribuzione).",
+    "message": "Usa la modalità vocale standard - by saypi.ai"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "Testo segnaposto predefinito per il compositore di prompt di ChatGPT.",
+    "message": "Chiedi qualsiasi cosa"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Controllo dello stato della domanda in corso..."

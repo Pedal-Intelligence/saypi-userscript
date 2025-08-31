@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "正在连接..."
   },
+  "chatgpt_call_active_label": {
+    "description": "用于ChatGPT通话按钮处于激活状态时的ARIA标签/提示（允许结束语音模式）。",
+    "message": "结束语音模式"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "用于ChatGPT通话按钮处于非激活状态时的ARIA标签/提示（邀请用户启动语音模式，包含归属信息）。",
+    "message": "使用标准语音模式 - 由saypi.ai提供"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "ChatGPT提示编辑器的默认占位符文本。",
+    "message": "问点什么吧"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "正在检查应用状态..."

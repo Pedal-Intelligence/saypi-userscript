@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "இணைக்கின்றது..."
   },
+  "chatgpt_call_active_label": {
+    "description": "செயலில் இருக்கும் ChatGPT அழைப்பு பொத்தானுக்கான ARIA குறிச்சொல் / டூல்டிப் (ஒலி முறையை நிறுத்த அனுமதிக்கும்).",
+    "message": "ஒலி முறையை நிறுத்து"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "செயலிழந்துள்ள ChatGPT அழைப்பு பொத்தானுக்கான ARIA குறிச்சொல் / டூல்டிப் (பயனரை ஒலி முறையை தொடங்க அழைக்கும், சொந்த அடையாளத்துடன்).",
+    "message": "சட்டபூர்வ ஒலி முறையை பயன்படுத்தவும் - by saypi.ai"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "ChatGPT உரையாடல் அமைப்புக்கான இயல்புநிலை இடதுருப்புக் குறிப்பு.",
+    "message": "எதையாவது கேளுங்கள்"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "பயன்பாட்டு நிலையை சரிபார்க்கின்றேன்..."

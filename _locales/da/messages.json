@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "Tilslutter..."
   },
+  "chatgpt_call_active_label": {
+    "description": "ARIA-label / tooltip til ChatGPT-opkaldsknappen, når den er aktiv (giver mulighed for at afslutte stemmetilstand).",
+    "message": "Afslut stemmetilstand"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "ARIA-label / tooltip til ChatGPT-opkaldsknappen, når den er inaktiv (opfordrer til at starte stemmetilstand, inkluderer kildeangivelse).",
+    "message": "Brug standard stemmetilstand - af saypi.ai"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "Standard pladsholdertekst til ChatGPTs prompt-komponist.",
+    "message": "Spørg om hvad som helst"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "Kontrollerer applikationsstatus..."

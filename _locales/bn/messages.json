@@ -175,6 +175,18 @@
     "description": "The text to display on the call button's tooltip and in the prompt area when a call is starting.",
     "message": "সংযোগ করা হচ্ছে..."
   },
+  "chatgpt_call_active_label": {
+    "description": "কার্যকর অবস্থায় ChatGPT কল বোতামের জন্য ARIA লেবেল / টুলটিপ (ভয়েস মোড শেষ করার অনুমতি দেয়)।",
+    "message": "ভয়েস মোড শেষ করুন"
+  },
+  "chatgpt_call_inactive_label": {
+    "description": "নিষ্ক্রিয় অবস্থায় ChatGPT কল বোতামের জন্য ARIA লেবেল / টুলটিপ (ভয়েস মোড শুরু করার জন্য ব্যবহারকারীকে আমন্ত্রণ জানায়, সূত্র উল্লেখ সহ)।",
+    "message": "সাধারণ ভয়েস মোড ব্যবহার করুন - saypi.ai দ্বারা"
+  },
+  "chatgpt_placeholder_default": {
+    "description": "ChatGPT এর কমান্ড প্রবেশফিল্ডের ডিফল্ট প্লেসহোল্ডার পাঠ।",
+    "message": "যেকোনো কিছু জিজ্ঞাসা করুন"
+  },
   "checkingApplicationStatus": {
     "description": "Message to display while the system status is being determined, e.g. during load.",
     "message": "অ্যাপ্লিকেশনের অবস্থা যাচাই করা হচ্ছে..."
