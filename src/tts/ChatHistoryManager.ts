@@ -16,6 +16,7 @@ import {
 } from "../dom/ChatHistory";
 import { Observation } from "../dom/Observation";
 import { SpeechUtterance } from "./SpeechModel";
+import { logger } from "../LoggingModule";
 import { findRootAncestor } from "../dom/DOMModule";
 import { UtteranceCharge } from "../billing/BillingModule";
 
@@ -97,12 +98,12 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
             console.error("Hash is md5 of ' ' - text stream may be empty.");
           }
           assistantMessage.stableText().then((stableText) => {
-            console.debug(`Stable text: "${stableText}"`);
-            console.debug(`Assistant text: "${assistantMessage.text}"`);
+            logger.debug(`Stable text: "${stableText}"`);
+            logger.debug(`Assistant text: "${assistantMessage.text}"`);
           });
           return;
         }
-        console.debug(
+        logger.debug(
           `Saving speech for ${assistantMessage.toString()} with hash: ${hash}`
         );
         SpeechHistoryModule.getInstance().addSpeechToHistory(hash, speech);
@@ -142,9 +143,11 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     const initialMessages = recentContainer
       ? await existingMessagesObserver.runOnce(recentContainer)
       : [];
-    console.debug(
-      `Found ${initialMessages.length} recent assistant message(s)`
-    );
+    if (initialMessages.length > 0) {
+      logger.debug(
+        `Found ${initialMessages.length} recent assistant message(s)`
+      );
+    }
     existingMessagesObserver.disconnect(); // only run once
 
     const newMessagesObserver = new ChatHistoryAdditionsObserver(
@@ -178,6 +181,9 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     EventBus.on("saypi:tts:replaying", replayingListener);
     EventBus.on("saypi:tts:speechStreamStarted", speechStreamStartedListener);
 
+    this.eventListeners.push({ event: "saypi:tts:replaying", listener: replayingListener });
+    this.eventListeners.push({ event: "saypi:tts:speechStreamStarted", listener: speechStreamStartedListener });
+
     this.eventListeners.push(
       { event: "saypi:tts:replaying", listener: replayingListener },
       {
@@ -209,7 +215,7 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
           }
         } catch (e) {
           // message not found - non-fatal error
-          console.debug(
+          logger.debug(
             `Could not find message for utterance ${event.utterance.id}. Won't be able to decorate with speech error.`
           );
         }
@@ -250,7 +256,7 @@ export class ChatHistorySpeechManager implements ResourceReleasable {
     EventBus.on("saypi:billing:utteranceCharged", speechChargeListener);
 
     this.eventListeners.push({
-      event: "saypi:tts:text:charged",
+      event: "saypi:billing:utteranceCharged",
       listener: speechChargeListener,
     });
   }

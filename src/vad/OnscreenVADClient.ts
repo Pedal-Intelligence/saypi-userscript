@@ -8,7 +8,7 @@ import { getBrowserInfo } from '../UserAgentModule';
 import { ChatbotIdentifier } from '../chatbots/ChatbotIdentifier';
 import { VAD_CONFIGS, VADPreset } from "./VADConfigs";
 
-console.log("[SayPi OnscreenVADClient] Client loaded.");
+logger.debug("[SayPi OnscreenVADClient] Client loaded.");
 
 /**
  * Logs processing delays based on threshold values
@@ -96,7 +96,7 @@ export class OnscreenVADClient implements VADClientInterface {
   );
 
   constructor() {
-    console.log("[SayPi OnscreenVADClient] Constructor called.");
+    logger.debug("[SayPi OnscreenVADClient] Constructor called.");
     this.statusIndicator = new VADStatusIndicator();
   }
 
@@ -117,7 +117,7 @@ export class OnscreenVADClient implements VADClientInterface {
         const frameRate = 16000;
         const duration = frameCount / frameRate;
         
-        console.debug(`[SayPi OnscreenVADClient] Speech duration: ${speechDuration}ms, Frame count: ${frameCount}, Frame rate: ${frameRate}, Duration: ${duration}s`);
+        logger.debug(`[SayPi OnscreenVADClient] Speech duration: ${speechDuration}ms, Frame count: ${frameCount}, Frame rate: ${frameRate}, Duration: ${duration}s`);
         logger.debug(`[SayPi OnscreenVADClient] Speech ended. Duration: ${speechDuration}ms`);
         
         this.statusIndicator.updateStatus(getMessage('vadStatusProcessing'), getMessage('vadDetailSpeechEndedDuration', speechDuration.toString()));

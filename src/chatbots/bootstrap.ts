@@ -7,6 +7,7 @@ import { PiVoiceSettings } from "./PiVoiceMenu";
 import { UserPreferenceModule } from "../prefs/PreferenceModule";
 import { ThemeManager } from "../themes/ThemeManagerModule";
 import { VoiceMenuUIManager } from "../tts/VoiceMenuUIManager";
+import { logger } from "../LoggingModule";
 
 export class DOMObserver {
   ttsUiMgr: ChatHistorySpeechManager | null = null;
@@ -109,7 +110,7 @@ export class DOMObserver {
     setInterval(() => {
       const currentUrl = window.location.href;
       if (currentUrl !== lastUrl) {
-        console.debug('Route changed:', lastUrl, '->', currentUrl);
+        logger.debug('Route changed:', lastUrl, '->', currentUrl);
         lastUrl = currentUrl;
         
         // Start/stop observation based on whether the new path is chatable
@@ -152,7 +153,7 @@ export class DOMObserver {
       
       // If not found on first try, start progressive backoff search
       if (!chatHistoryObs.found) {
-        console.debug("Chat history not found on initial load - starting progressive search");
+        logger.debug("Chat history not found on initial load - starting progressive search");
         this.startChatHistoryProgressiveSearch();
       }
     });
@@ -558,12 +559,12 @@ export class DOMObserver {
       const chatHistoryObs = this.findAndDecorateChatHistory(document.body);
       
       if (chatHistoryObs.found) {
-        console.debug(`Chat history found on progressive search attempt ${attempt}`);
+        logger.debug(`Chat history found on progressive search attempt ${attempt}`);
       } else if (attempt < maxAttempts) {
-        console.debug(`Chat history not found on attempt ${attempt}, retrying in ${delay}ms`);
+        logger.debug(`Chat history not found on attempt ${attempt}, retrying in ${delay}ms`);
         this.startChatHistoryProgressiveSearch(attempt + 1, maxAttempts);
       } else {
-        console.debug(`Failed to find chat history after ${maxAttempts} attempts`);
+        logger.debug(`Failed to find chat history after ${maxAttempts} attempts`);
       }
     }, delay);
   }

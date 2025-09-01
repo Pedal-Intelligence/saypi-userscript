@@ -228,10 +228,10 @@ export default class AudioModule {
     ChatbotService.getChatbot().then((chatbot) => {
       prefs.getVoice(chatbot).then((voice) => {
         if (voice) {
-          console.log("Preferred voice is", voice);
+          logger.debug("Preferred voice is", voice);
           this.voiceConverter.send({ type: "changeVoice", voice });
         } else {
-          console.log("Default voice is preferred");
+          logger.debug("Default voice is preferred");
         }
       });
     });

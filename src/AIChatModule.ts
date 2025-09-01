@@ -9,6 +9,7 @@ import { DOMObserver } from "./chatbots/bootstrap";
 import { addChild } from "./dom/DOMModule";
 import SlowResponseHandler from "./SlowResponseHandler";
 import { ChatbotService } from "./chatbots/ChatbotService";
+import { logger } from "./LoggingModule";
 
 export class AIChatModule {
   private static instance: AIChatModule;
@@ -27,7 +28,7 @@ export class AIChatModule {
   }
 
   public async initialize(): Promise<void> {
-    console.log("Initializing chat mode");
+    logger.info("Initializing chat mode");
     
     const chatbot = await ChatbotService.getChatbot();
 

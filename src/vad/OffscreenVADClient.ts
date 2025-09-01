@@ -4,7 +4,7 @@ import { VADStatusIndicator } from '../ui/VADStatusIndicator';
 import getMessage from '../i18n';
 import { VADClientInterface, VADClientCallbacks } from './VADClientInterface';
 
-console.log("[SayPi OffscreenVADClient] Client loaded.");
+logger.debug("[SayPi OffscreenVADClient] Client loaded.");
 
 /**
  * Logs transfer delays based on threshold values
@@ -29,9 +29,9 @@ export class OffscreenVADClient implements VADClientInterface {
   private statusIndicator: VADStatusIndicator;
 
   constructor() {
-    console.log("[SayPi OffscreenVADClient] Constructor called.");
+    logger.debug("[SayPi OffscreenVADClient] Constructor called.");
     this.port = chrome.runtime.connect({ name: "vad-content-script-connection" });
-    console.log("[SayPi OffscreenVADClient] Port established?", this.port);
+    logger.debug("[SayPi OffscreenVADClient] Port established?", this.port);
     this.statusIndicator = new VADStatusIndicator();
     this.setupListeners();
   }
@@ -42,7 +42,7 @@ export class OffscreenVADClient implements VADClientInterface {
       
       if(message.type !== "VAD_FRAME_PROCESSED") {
         // frame processed messages are too chatty, so we don't log them
-        console.debug("[SayPi OffscreenVADClient] Received message from background:", message);
+        logger.debug("[SayPi OffscreenVADClient] Received message from background:", message);
       }
       if (message.origin !== "offscreen-document") {
         // console.warn("[SayPi OffscreenVADClient] Ignoring message not from offscreen document via background:", message);
@@ -51,7 +51,7 @@ export class OffscreenVADClient implements VADClientInterface {
 
       // Ignore audio messages - they should be handled by OffscreenAudioBridge
       if (message.type.startsWith("AUDIO_") || message.type.startsWith("OFFSCREEN_AUDIO_")) {
-        console.debug("[SayPi OffscreenVADClient] Ignoring audio message (should go to OffscreenAudioBridge):", message.type);
+        logger.debug("[SayPi OffscreenVADClient] Ignoring audio message (should go to OffscreenAudioBridge):", message.type);
         return;
       }
 
@@ -75,7 +75,7 @@ export class OffscreenVADClient implements VADClientInterface {
           const duration = frameCount / frameRate;
           
           // Only log basic information at debug level
-          console.debug(`[SayPi OffscreenVADClient] Speech duration: ${speechDuration}ms, Frame count: ${frameCount}, Frame rate: ${frameRate}, Duration: ${duration}s`);
+          logger.debug(`[SayPi OffscreenVADClient] Speech duration: ${speechDuration}ms, Frame count: ${frameCount}, Frame rate: ${frameRate}, Duration: ${duration}s`);
           
           // Log transfer delays only if they exceed thresholds
           logTransferDelay(captureTimestamp, receiveTimestamp);
@@ -147,15 +147,15 @@ export class OffscreenVADClient implements VADClientInterface {
             break;
         case "OFFSCREEN_VAD_DESTROY_REQUEST_RESPONSE":
           this.statusIndicator.updateStatus(getMessage('vadStatusDestroyed'), getMessage('vadDetailVADServiceShutdown'));
-          console.log("[SayPi OffscreenVADClient] VAD destroyed in offscreen:", message.payload);
+          logger.info("[SayPi OffscreenVADClient] VAD destroyed in offscreen:", message.payload);
           break;
         default:
-          console.warn("[SayPi OffscreenVADClient] Received unknown message type:", message.type);
+          logger.warn("[SayPi OffscreenVADClient] Received unknown message type:", message.type);
       }
     });
 
     this.port.onDisconnect.addListener(() => {
-      console.warn("[SayPi OffscreenVADClient] Port disconnected from background script.");
+      logger.warn("[SayPi OffscreenVADClient] Port disconnected from background script.");
       this.statusIndicator.updateStatus(getMessage('vadStatusError'), getMessage('vadDetailVADServiceDisconnected'));
       this.isPortConnected = false;
       this.callbacks.onError?.(getMessage('vadDetailVADServiceDisconnected'));
@@ -167,7 +167,7 @@ export class OffscreenVADClient implements VADClientInterface {
       try {
         this.port.postMessage(message);
       } catch (error: any) {
-        console.error("[SayPi OffscreenVADClient] Error posting message to port:", error, message);
+        logger.error("[SayPi OffscreenVADClient] Error posting message to port:", error, message);
         this.statusIndicator.updateStatus(getMessage('vadStatusError'), getMessage('vadDetailCommLinkFailed'));
         this.callbacks.onError?.(getMessage('vadDetailCommLinkFailed'));
         if (error.message.includes("Attempting to use a disconnected port object")) {
@@ -175,7 +175,7 @@ export class OffscreenVADClient implements VADClientInterface {
         }
       }
     } else {
-      console.error("[SayPi OffscreenVADClient] Port not connected. Cannot send message:", message);
+      logger.error("[SayPi OffscreenVADClient] Port not connected. Cannot send message:", message);
       this.statusIndicator.updateStatus(getMessage('vadStatusError'), getMessage('vadDetailVADServiceNotConnected'));
       this.callbacks.onError?.(getMessage('vadDetailVADServiceNotConnected'));
     }
@@ -184,14 +184,14 @@ export class OffscreenVADClient implements VADClientInterface {
   public initialize(options: any = {}): Promise<{ success: boolean, error?: string, mode?: string }> {
     // If port is not connected or doesn't exist, establish a new connection
     if (!this.port || !this.isPortConnected) {
-      console.log("[SayPi OffscreenVADClient] Port was disconnected or not initialized. Reconnecting...");
+      logger.debug("[SayPi OffscreenVADClient] Port was disconnected or not initialized. Reconnecting...");
       try {
         this.port = chrome.runtime.connect({ name: "vad-content-script-connection" });
         this.isPortConnected = true;
         this.setupListeners(); // Re-attach listeners to the new port
-        console.log("[SayPi OffscreenVADClient] New port established and listeners set up.");
+        logger.debug("[SayPi OffscreenVADClient] New port established and listeners set up.");
       } catch (e) {
-        console.error("[SayPi OffscreenVADClient] Failed to re-establish port connection:", e);
+        logger.error("[SayPi OffscreenVADClient] Failed to re-establish port connection:", e);
         this.statusIndicator.updateStatus(getMessage('vadStatusError'), getMessage('vadDetailFailedToReconnectVADService'));
         // Immediately reject the promise if port cannot be re-established
         return Promise.resolve({ success: false, error: getMessage('vadDetailFailedToReconnectVADService') });

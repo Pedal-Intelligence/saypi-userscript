@@ -13,6 +13,7 @@ import { TTSControlsModule } from "../tts/TTSControlsModule";
 import { BaseObserver } from "./BaseObserver";
 import { Observation } from "./Observation";
 import { SpeechHistoryModule } from "../tts/SpeechHistoryModule";
+import { logger } from "../LoggingModule";
 import {
   AssistantSpeech,
   SpeechUtterance,
@@ -93,7 +94,9 @@ class ChatHistoryRootElementObserver extends BaseObserver {
       this.oldMessageObserver
         .runOnce(pastMessagesContainer)
         .then((messages) => {
-          console.debug(`Found ${messages.length} old assistant messages`);
+          if (messages.length > 0) {
+            logger.debug(`Found ${messages.length} old assistant messages`);
+          }
         });
       this.oldMessageObserver.observe({
         childList: true,
@@ -499,14 +502,14 @@ class ChatHistoryNewMessageObserver
   ): Promise<StreamedSpeech | null> {
     // check if the message is already in the ignore list
     const snippet = message.text.substring(0, 10);
-    console.debug(`Checking if \"${snippet}...\" is in ignore list`);
+    logger.debug(`Checking if \"${snippet}...\" is in ignore list`);
     if (this.ignoreMessages.some((m) => m.hash === message.hash)) {
-      console.debug(`${snippet}... is in ignore list, stream from history instead`);
+      logger.debug(`${snippet}... is in ignore list, stream from history instead`);
       return await this.streamSpeechFromHistory(this.speechHistory, message);
     }
     // only start streaming speech for the last message
     if (!message.isLastMessage()) {
-      console.debug(`${snippet}... is not the last message, streaming from history instead`);
+      logger.debug(`${snippet}... is not the last message, streaming from history instead`);
       return await this.streamSpeechFromHistory(this.speechHistory, message);
     }
 
@@ -519,7 +522,7 @@ class ChatHistoryNewMessageObserver
         return new AssistantSpeech(utterance);
       };
       //EventBus.on("saypi:tts:speechStreamStarted", streamStartedListener); // redunandant with ChatHistoryManager?
-      console.debug(`${snippet}... is being streamed by ${provider.name}`);
+      logger.debug(`${snippet}... is being streamed by ${provider.name}`);
       this.EventListeners.push({
         event: "saypi:tts:speechStreamStarted",
         listener: streamStartedListener,
@@ -542,7 +545,7 @@ class ChatHistoryNewMessageObserver
         };
         EventBus.emit("saypi:piWriting", writingEvent);
         startTime = Date.now();
-        console.debug("Pi started writing at", startTime);
+        logger.debug("Pi started writing at", startTime);
       },
       (text) => {
         EventBus.emit("saypi:piStoppedWriting", {
@@ -550,7 +553,7 @@ class ChatHistoryNewMessageObserver
           text,
         });
         const endTime = Date.now();
-        console.debug("Pi stopped writing at", endTime, "after", endTime - startTime, "ms");
+        logger.debug("Pi stopped writing at", endTime, "after", endTime - startTime, "ms");
       },
       (lateChange) => {
         message.decorateIncompleteSpeech(true);
@@ -596,7 +599,7 @@ class ChatHistoryNewMessageObserver
       (text: TextContent) => {
         let start = false;
         if (text.changed) {
-          console.debug(
+          logger.debug(
             `Text changed from "${text.changedFrom}" to "${text.text}"`
           );
           fullText = fullText.replace(text.changedFrom!, text.text);
@@ -630,20 +633,20 @@ class ChatHistoryNewMessageObserver
         console.error(`Error occurred streaming text from element: ${error}`);
       },
       () => {
-        console.debug(`Stream info (${utterance.id}):`);
+        logger.debug(`Stream info (${utterance.id}):`);
 
-        console.debug(`- Streamed ${fullText.length} characters`);
+        logger.debug(`- Streamed ${fullText.length} characters`);
         if (firstChunkTime) {
-          console.debug(
+          logger.debug(
             `- Time to first token: ${firstChunkTime - streamStartTime}ms`
           );
           const chunkingElapsedTime =
             lastChunkTime! - (firstChunkTime as number);
-          console.debug(
+          logger.debug(
             `- Time from first to last token: ${chunkingElapsedTime}ms`
           );
         }
-        console.debug(
+        logger.debug(
           `- Time to completion: ${Date.now() - streamStartTime}ms`
         );
         const textCompletedEvent: TextCompletedEvent = {
@@ -660,7 +663,7 @@ class ChatHistoryNewMessageObserver
     // watch for changes to the text content of the element after the stream has closed
     // these changes mean the audio stream will be incomplete
     this.textStream.getLateChangeStream().subscribe((lateChange) => {
-      console.warn("Late change detected:", lateChange);
+      logger.warn("Late change detected:", lateChange);
       EventBus.emit("saypi:tts:text:error", {
         error: lateChange,
         utterance: utterance,

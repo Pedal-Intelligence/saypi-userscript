@@ -1,3 +1,5 @@
+import { logger } from "../LoggingModule";
+
 abstract class BaseObserver {
   protected observer: MutationObserver;
   protected target: Element | null;
@@ -18,7 +20,7 @@ abstract class BaseObserver {
       const key = `${selector}`;
       if (!BaseObserver.warned.has(key)) {
         BaseObserver.warned.add(key);
-        console.debug(`Element with selector ${selector} not found (will retry later).`);
+        logger.debug(`Element with selector ${selector} not found (will retry later).`);
       }
     }
   }

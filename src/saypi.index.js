@@ -2,6 +2,7 @@
 import "./webpack-public-path.js";
 import AudioModule from "./audio/AudioModule.js";
 import EventBus from "./events/EventBus.js";
+import { logger } from "./LoggingModule.js";
 import { getJwtManager } from "./JwtManager.ts";
 import telemetryModule from "./TelemetryModule.ts";
 import { addUserAgentFlags } from "./UserAgentModule.ts";
@@ -31,13 +32,13 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
   const isChatMode = ChatbotIdentifier.isInChatMode();
   const isDictationMode = ChatbotIdentifier.isInDictationMode();
 
-  console.log(`Say, Pi extension loading in ${isChatMode ? 'chat' : 'dictation'} mode for ${chatbotType}`);
+  logger.info(`Say, Pi extension loading in ${isChatMode ? 'chat' : 'dictation'} mode for ${chatbotType}`);
 
   // Initialize common modules needed by both modes
   const audioModule = AudioModule.getInstance(); // inits the audio module's offline functions
   
   // Initialize telemetry module
-  console.debug("Initializing telemetry module");
+  logger.debug("Initializing telemetry module");
   telemetryModule; // This will invoke the getInstance() singleton which sets up event listeners
 
   // Common initialization for both modes
@@ -61,25 +62,25 @@ import "./styles/pi.scss"; // scoped by chatbot flags, i.e. <body class="pi">
 
   // Setup listener for authentication status changes from background script
   function setupAuthListener() {
-    console.log("Setting up authentication listener in content script");
+    logger.debug("Setting up authentication listener in content script");
     
     // Check auth status on initial load
     chrome.runtime.sendMessage({ type: "GET_AUTH_STATUS" }, (response) => {
       if (response && response.isAuthenticated !== undefined) {
-        console.log("Initial authentication status:", response.isAuthenticated);
+        logger.debug("Initial authentication status:", response.isAuthenticated);
       }
     });
     
     // Listen for auth status changes from background script
     chrome.runtime.onMessage.addListener((message, _sender, _sendResponse) => {
       if (message.type === "AUTH_STATUS_CHANGED") {
-        console.log("Received auth status change:", message.isAuthenticated);
+        logger.info("Received auth status change:", message.isAuthenticated);
         
         // Refresh token to ensure we have the latest from storage
         getJwtManager().then(async jwtManager => {
           await jwtManager.loadFromStorage();
           // Optionally, you can add more logic here if needed
-          console.log("JWT manager updated with latest token");
+          logger.debug("JWT manager updated with latest token");
           EventBus.emit("saypi:auth:status-changed", message.isAuthenticated);
         });
       }

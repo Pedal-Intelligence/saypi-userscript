@@ -69,7 +69,7 @@ function setupVADEventListeners() {
   logger.debug("[AudioInputMachine] Setting up VAD event listeners");
 
   vadClient.on('onSpeechStart', () => {
-    console.debug("[AudioInputMachine] User speech started (event from VAD client).");
+    logger.debug("[AudioInputMachine] User speech started (event from VAD client).");
     EventBus.emit("saypi:userSpeaking");
   });
 
@@ -79,7 +79,7 @@ function setupVADEventListeners() {
     captureTimestamp: number; 
     clientReceiveTimestamp: number 
   }) => {
-    console.debug(`[AudioInputMachine] User speech ended. Duration: ${data.duration}ms`);
+    logger.debug(`[AudioInputMachine] User speech ended. Duration: ${data.duration}ms`);
     
     // Log processing delays only if they exceed thresholds
     logProcessingDelay(data.captureTimestamp, data.clientReceiveTimestamp);
@@ -93,7 +93,7 @@ function setupVADEventListeners() {
   });
 
   vadClient.on('onVADMisfire', () => {
-    console.debug("[AudioInputMachine] VAD misfire detected.");
+    logger.debug("[AudioInputMachine] VAD misfire detected.");
     EventBus.emit("saypi:vadMisfire");
   });
 
@@ -112,7 +112,7 @@ EventBus.on("saypi:userStoppedSpeaking", (data: {
   captureTimestamp: number; 
   clientReceiveTimestamp: number 
 }) => {
-  console.debug("[AudioInputMachine] Received userStoppedSpeaking event. Duration:", data.duration);
+  logger.debug("[AudioInputMachine] Received userStoppedSpeaking event. Duration:", data.duration);
   
   // Reconstruct Float32Array from audio buffer
   const audioData = new Float32Array(data.audioBuffer);
@@ -122,7 +122,7 @@ EventBus.on("saypi:userStoppedSpeaking", (data: {
   const handlerTimestamp = Date.now();
   
   // Only log basic information about speech data at debug level
-  console.debug(
+  logger.debug(
     `[AudioInputMachine] Speech duration: ${data.duration}ms, Frame count: ${frameCount}, Frame rate: ${frameRate}, Duration: ${duration}s`
   );
   
@@ -133,7 +133,7 @@ EventBus.on("saypi:userStoppedSpeaking", (data: {
   
   // Convert to WAV Blob for transcription
   const audioBlob = convertToWavBlob(audioData);
-  console.debug(`Reconstructed Blob size: ${audioBlob.size} bytes`);
+  logger.debug(`Reconstructed Blob size: ${audioBlob.size} bytes`);
 
   // Optionally persist the segment if keepSegments is enabled
   try {
@@ -172,7 +172,7 @@ EventBus.on("saypi:userStoppedSpeaking", (data: {
 });
 
 EventBus.on("saypi:vadMisfire", () => {
-  console.debug("[AudioInputMachine] VAD Misfire detected.");
+  logger.debug("[AudioInputMachine] VAD Misfire detected.");
   EventBus.emit("saypi:userStoppedSpeaking", { 
     audioBuffer: new ArrayBuffer(0),
     duration: 0,
@@ -203,8 +203,8 @@ async function monitorAudioInputDevices() {
     (!previousDefaultDevice ||
       defaultDevice.label !== previousDefaultDevice.label)
   ) {
-    console.log(
-      `The default audio input device has changed: ${defaultDevice.label}`
+    logger.info(
+      `[AudioInputMachine] Default audio input device changed: ${defaultDevice.label}`
     );
     const firstTime = previousDefaultDevice === null;
     previousDefaultDevice = defaultDevice;
@@ -228,13 +228,13 @@ async function monitorAudioInputDevices() {
     const label = audioInputDevices.find(
       (device) => device.deviceId === id
     )?.label;
-    console.log(`An audio input device has been added: ${id} (${label})`);
+    logger.debug(`[AudioInputMachine] Audio input device added: ${id} (${label})`);
   });
   removedDevices.forEach((id) => {
     const label = audioInputDevices.find(
       (device) => device.deviceId === id
     )?.label;
-    console.log(`An audio input device has been removed: ${id} (${label})`);
+    logger.debug(`[AudioInputMachine] Audio input device removed: ${id} (${label})`);
   });
 
   previousDeviceIds = currentDeviceIds;
@@ -309,13 +309,13 @@ async function checkAndRequestMicrophonePermissionViaBackground(): Promise<boole
     const listener = (message: any) => {
       if (message.type === 'MICROPHONE_PERMISSION_RESPONSE' && message.requestId === requestId) {
         chrome.runtime.onMessage.removeListener(listener);
-        console.log(`[AudioInputMachine] Received MICROPHONE_PERMISSION_RESPONSE: granted=${message.granted}`);
+        logger.debug(`[AudioInputMachine] Received MICROPHONE_PERMISSION_RESPONSE: granted=${message.granted}`);
         resolve(message.granted);
       }
     };
     chrome.runtime.onMessage.addListener(listener);
 
-    console.log("[AudioInputMachine] Sending CHECK_AND_REQUEST_MICROPHONE_PERMISSION to background.");
+    logger.debug("[AudioInputMachine] Sending CHECK_AND_REQUEST_MICROPHONE_PERMISSION to background.");
     chrome.runtime.sendMessage({
       type: 'CHECK_AND_REQUEST_MICROPHONE_PERMISSION',
       requestId: requestId,
@@ -352,7 +352,7 @@ async function setupRecording(completion_callback?: (success: boolean, error?: s
     const isOffscreenVAD = vadClient instanceof OffscreenVADClient;
     
     if (isOffscreenVAD) {
-      console.log("[AudioInputMachine] Using OffscreenVADClient - requesting extension microphone permission check and prompt (if needed) from background...");
+      logger.debug("[AudioInputMachine] Using OffscreenVADClient - requesting extension microphone permission check and prompt (if needed) from background...");
       const permissionGranted = await checkAndRequestMicrophonePermissionViaBackground();
 
       if (!permissionGranted) {
@@ -368,13 +368,13 @@ async function setupRecording(completion_callback?: (success: boolean, error?: s
         return;
       }
 
-      console.log("[AudioInputMachine] Extension microphone permission granted. Proceeding with VAD setup...");
+      logger.debug("[AudioInputMachine] Extension microphone permission granted. Proceeding with VAD setup...");
     } else {
-      console.log("[AudioInputMachine] Using OnscreenVADClient - skipping extension permission check (host site permissions will be requested during VAD initialization)...");
+      logger.debug("[AudioInputMachine] Using OnscreenVADClient - skipping extension permission check (host site permissions will be requested during VAD initialization)...");
     }
 
     // Initialize the VAD client (works for both offscreen and onscreen)
-    console.log("[AudioInputMachine] Initializing VAD client...");
+    logger.debug("[AudioInputMachine] Initializing VAD client...");
     const initResult = await vadClient.initialize({ preset: currentVADPreset });
     
     if (!initResult.success) {
@@ -395,7 +395,7 @@ async function setupRecording(completion_callback?: (success: boolean, error?: s
       return;
     }
 
-    console.log(`[AudioInputMachine] VAD initialized successfully in ${initResult.mode} mode`);
+    logger.info(`[AudioInputMachine] VAD initialized successfully in ${initResult.mode} mode`);
     completion_callback?.(true);
 
   } catch (error: any) {
@@ -412,11 +412,11 @@ async function setupRecording(completion_callback?: (success: boolean, error?: s
 }
 
 function tearDownRecording(): void {
-  console.log("[AudioInputMachine] Tearing down recording...");
+  logger.debug("[AudioInputMachine] Tearing down recording...");
   
   // Clean up VAD client if it exists (works for both offscreen and onscreen)
   if (vadClient) {
-    console.log("[AudioInputMachine] Destroying VAD client...");
+    logger.debug("[AudioInputMachine] Destroying VAD client...");
     vadClient.destroy();
   }
 }
@@ -597,7 +597,7 @@ export const audioInputMachine = createMachine<
           return;
         }
         
-        console.log("[AudioInputMachine] Starting VAD client...");
+        logger.debug("[AudioInputMachine] Starting VAD client...");
         const result = await vadClient.start();
         
         if (!result.success) {
@@ -611,7 +611,7 @@ export const audioInputMachine = createMachine<
           return;
         }
         
-        console.log("[AudioInputMachine] VAD started successfully");
+        logger.debug("[AudioInputMachine] VAD started successfully");
       },
       
       stopRecording: async (context, event) => {
@@ -620,7 +620,7 @@ export const audioInputMachine = createMachine<
           return;
         }
         
-        console.log("[AudioInputMachine] Stopping VAD client...");
+        logger.debug("[AudioInputMachine] Stopping VAD client...");
         const result = await vadClient.stop();
         
         if (!result.success) {
@@ -628,13 +628,13 @@ export const audioInputMachine = createMachine<
           return;
         }
         
-        console.log("[AudioInputMachine] VAD stopped successfully");
+        logger.debug("[AudioInputMachine] VAD stopped successfully");
       },
 
       prepareStop: async (context, event) => {
         // If there's an explicit action needed before onSpeechEnd, send a stop request here.
         // Otherwise, onSpeechEnd from the offscreen VAD will trigger dataAvailable.
-        console.log("[AudioInputMachine] Requesting VAD stop via client (prepareStop)...");
+        logger.debug("[AudioInputMachine] Requesting VAD stop via client (prepareStop)...");
         context.waitingToStop = true; // Still useful for local state if needed
         if (!vadClient) {
           console.warn("[AudioInputMachine] VAD client not available - cannot stop recording");
@@ -652,7 +652,7 @@ export const audioInputMachine = createMachine<
       ) => {
         const { frames, blob, duration, captureTimestamp, clientReceiveTimestamp, handlerTimestamp } = event;
         const sizeInKb = (blob.size / 1024).toFixed(2); // Convert to kilobytes and keep 2 decimal places
-        console.debug(`Uploading ${sizeInKb}kb of audio data`);
+        logger.debug(`Uploading ${sizeInKb}kb of audio data`);
 
         // Use the duration directly from the event
         const speechDuration = duration;
@@ -683,7 +683,7 @@ export const audioInputMachine = createMachine<
         // and speech end is an event from the offscreen document.
         // However, if we maintain waitingToStop for UI or other logic, it can stay.
         if (SayPiContext.waitingToStop === true) {
-            console.log("[AudioInputMachine] stopIfWaiting: VAD stop was already requested.");
+            logger.debug("[AudioInputMachine] stopIfWaiting: VAD stop was already requested.");
             // No direct mic.pause() here, already handled by vadClient.stop() in prepareStop
         }
       },

@@ -4,6 +4,7 @@ import {
 } from "./state-machines/FocusMachine";
 import { interpret } from "xstate";
 import { isMobileDevice } from "./UserAgentModule";
+import { logger } from "./LoggingModule";
 
 const focusActor = interpret(focusMachine);
 const tickInterval = 1000;
@@ -45,12 +46,12 @@ export function enterFullscreen() {
         }
       })
       .catch((err) => {
-        console.info(
+        logger.debug(
           `Unable to enter full-screen mode. Maybe starting in mobile view?: ${err.message} (${err.name})`
         );
       });
   } else {
-    console.log("Fullscreen API is not enabled.");
+    logger.debug("Fullscreen API is not enabled.");
   }
 }
 
@@ -67,11 +68,11 @@ export function exitFullscreen() {
         }
       })
       .catch((err) => {
-        console.info(
+        logger.debug(
           `Unable to exit full-screen mode. Maybe starting in desktop view?: ${err.message} (${err.name})`
         );
       });
   } else {
-    console.log("Fullscreen API is not enabled.");
+    logger.debug("Fullscreen API is not enabled.");
   }
 }

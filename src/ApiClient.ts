@@ -1,6 +1,7 @@
 import { getJwtManager } from './JwtManager';
 import EventBus from './events/EventBus';
 import { serializeApiRequest, shouldRouteViaBackground } from './utils/ApiRequestSerializer';
+import { logger } from './LoggingModule.js';
 
 interface ApiRequestOptions extends RequestInit {
   requiresAuth?: boolean;
@@ -8,7 +9,7 @@ interface ApiRequestOptions extends RequestInit {
 
 // Listen for authentication status changes
 EventBus.on('saypi:auth:status-changed', (isAuthenticated) => {
-  console.log('ApiClient detected auth status change:', isAuthenticated);
+  logger.debug('ApiClient detected auth status change:', isAuthenticated);
 });
 
 export async function callApi(
@@ -20,7 +21,7 @@ export async function callApi(
     try {
       return await callApiViaBackground(url, options);
     } catch (error) {
-      console.warn('Background API request failed, falling back to direct fetch:', error);
+      logger.warn('Background API request failed, falling back to direct fetch:', error);
       // Fall through to direct fetch as fallback
     }
   }
@@ -36,7 +37,7 @@ async function callApiViaBackground(
   url: string,
   options: ApiRequestOptions = {}
 ): Promise<Response> {
-  console.debug(`Routing API request via background to: ${url}`, { 
+  logger.debug(`Routing API request via background to: ${url}`, { 
     method: options.method || 'GET'
   });
 
@@ -113,7 +114,7 @@ async function callApiDirect(
 
   // preemptively refresh the token if it's about to expire
   if (jwtManager.isTokenExpired()) {
-    console.debug('Token is about to expire, refreshing...');
+    logger.debug('Token is about to expire, refreshing...');
     await jwtManager.refresh();
   }
   
@@ -134,7 +135,7 @@ async function callApiDirect(
     credentials
   };
 
-  console.debug(`Making API request to: ${url}`, { 
+  logger.debug(`Making API request to: ${url}`, { 
     method: options.method || 'GET',
     hasAuthHeader: !!authHeader,
     isLocalDev
@@ -144,7 +145,7 @@ async function callApiDirect(
 
   // If we get a 401 or 403 in response to an authenticated request, try to refresh the token and retry once
   if ((response.status === 401 || response.status === 403) && authHeader) {
-    console.debug('Received 401/403, attempting to refresh token...');
+    logger.debug('Received 401/403, attempting to refresh token...');
     await jwtManager.refresh(true);
     
     // If we got a new token after refresh, retry the request
@@ -161,10 +162,10 @@ async function callApiDirect(
         credentials
       };
       
-      console.debug('Token refreshed, retrying request with new token...');
+      logger.debug('Token refreshed, retrying request with new token...');
       return fetch(url, newRequestOptions);
     } else {
-      console.warn('Token refresh failed, returning original response');
+      logger.warn('Token refresh failed, returning original response');
     }
   }
 

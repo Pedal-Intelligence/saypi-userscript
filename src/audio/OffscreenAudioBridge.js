@@ -406,7 +406,7 @@ export default class OffscreenAudioBridge {
    * @returns {Promise<boolean>} Promise that resolves to true if message was sent successfully
    */
   async pauseAudio() {
-    console.debug("[OffscreenAudioBridge] [pauseAudio] Pausing audio");
+    logger.debug("[OffscreenAudioBridge] [pauseAudio] Pausing audio");
     return await this._sendMessageToOffscreen("AUDIO_PAUSE_REQUEST");
   }
 

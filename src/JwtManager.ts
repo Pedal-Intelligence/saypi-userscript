@@ -2,6 +2,7 @@ import { config } from './ConfigModule';
 import { serializeApiRequest, shouldRouteViaBackground } from './utils/ApiRequestSerializer';
 import { isFirefox as isFirefoxBrowser } from './UserAgentModule';
 import EventBus from './events/EventBus';
+import { logger } from './LoggingModule';
 
 interface JwtClaims {
   userId: string;
@@ -44,7 +45,7 @@ export class JwtManager {
     // Load token from storage on initialization
     this.initializationPromise = this.loadFromStorage().then(() => {
       this.isInitialized = true;
-      console.debug('[status] JwtManager initialized');
+      logger.debug('[status] JwtManager initialized');
     });
   }
 
@@ -69,7 +70,7 @@ export class JwtManager {
 
   public async loadFromStorage(): Promise<void> {
     try {
-      console.debug('[status] Loading token from storage');
+      logger.debug('[status] Loading token from storage');
       const { jwtToken, tokenExpiresAt, authCookieValue } = await chrome.storage.local.get(['jwtToken', 'tokenExpiresAt', 'authCookieValue']);
       
       // Always load authCookieValue if present
@@ -78,26 +79,26 @@ export class JwtManager {
       }
       
       if (jwtToken && tokenExpiresAt) {
-        console.debug('[status] Token loaded from storage');
+        logger.debug('[status] Token loaded from storage');
         this.jwtToken = jwtToken;
         this.expiresAt = tokenExpiresAt;
         this.scheduleRefresh();
       } else {
-        console.debug('[status] No token found in storage');
+        logger.debug('[status] No token found in storage');
         
         // If we have authCookieValue but no JWT token, attempt to refresh
         // This handles extension reload scenarios where JWT data is lost but auth cookie remains
         if (authCookieValue) {
-          console.debug('[status] Found auth cookie but no JWT token - attempting refresh to recover authentication');
+          logger.debug('[status] Found auth cookie but no JWT token - attempting refresh to recover authentication');
           try {
             await this.refresh(true, true); // Force refresh with silent 401 handling
             if (this.isAuthenticated()) {
-              console.debug('[status] Successfully recovered authentication state from auth cookie');
+              logger.debug('[status] Successfully recovered authentication state from auth cookie');
             } else {
-              console.debug('[status] Failed to recover authentication - auth cookie may be invalid');
+              logger.debug('[status] Failed to recover authentication - auth cookie may be invalid');
             }
           } catch (error) {
-            console.debug('[status] Failed to refresh token using stored auth cookie:', error);
+            logger.debug('[status] Failed to refresh token using stored auth cookie:', error);
             // Don't throw here - we want initialization to complete even if refresh fails
           }
         }
@@ -142,7 +143,7 @@ export class JwtManager {
    * due to browser security restrictions
    */
   public async storeAuthCookieValue(cookieValue: string): Promise<void> {
-    console.debug('Storing auth cookie value for fallback authentication');
+    logger.debug('Storing auth cookie value for fallback authentication');
     this.authCookieValue = cookieValue;
     await this.saveToStorage();
   }
@@ -202,14 +203,14 @@ export class JwtManager {
 
     // Skip refresh if we have a valid token and this isn't a forced refresh
     if (!force && this.isAuthenticated() && this.expiresAt && this.expiresAt > Date.now() + 60000) {
-      console.debug('Skipping token refresh - current token still valid');
+      logger.debug('Skipping token refresh - current token still valid');
       return;
     }
 
     try {
       // The correct endpoint path is /api/auth/refresh
       const refreshUrl = `${config.authServerUrl}/api/auth/refresh`;
-      console.debug(`Refreshing token from ${refreshUrl}`);
+      logger.debug(`Refreshing token from ${refreshUrl}`);
       
       // Build the request options
       const requestOptions: RequestInit = {
@@ -228,12 +229,12 @@ export class JwtManager {
       const isFirefoxBrowser = this.isFirefoxBrowser();
       
       if (this.authCookieValue && !isFirefoxBrowser) {
-        console.debug('Including auth cookie value in request body as fallback');
+        logger.debug('Including auth cookie value in request body as fallback');
         requestOptions.body = JSON.stringify({
           auth_session: this.authCookieValue // Server expects 'auth_session' parameter
         });
       } else if (isFirefoxBrowser) {
-        console.debug('Firefox detected: relying on credentials:include for cookie transmission');
+        logger.debug('Firefox detected: relying on credentials:include for cookie transmission');
         // Firefox will automatically include cookies with credentials:include
         // No additional body needed
         requestOptions.body = JSON.stringify({}); // Empty body but still valid JSON
@@ -287,7 +288,7 @@ export class JwtManager {
 
         // Special handling for 403 responses during onboarding
         if (respStatus === 403) {
-          console.info('User has a valid session but profile is not fully populated yet (likely during onboarding)');
+          logger.info('User has a valid session but profile is not fully populated yet (likely during onboarding)');
 
           // Don't clear the authentication state
           // Schedule another refresh attempt after 1 minute
@@ -298,7 +299,7 @@ export class JwtManager {
 
         // Special handling for 401 responses during polling
         if (respStatus === 401 && silent401) {
-          console.debug('Auth check during polling: not authenticated (expected)');
+          logger.debug('Auth check during polling: not authenticated (expected)');
 
           // Clear the token but don't log an error
           this.jwtToken = null;
@@ -313,7 +314,7 @@ export class JwtManager {
 
       const { token, expiresIn } = respBody || {};
       
-      console.debug('Token refreshed successfully, expires in:', expiresIn);
+      logger.debug('Token refreshed successfully, expires in:', expiresIn);
       
       // Get the old claims to compare
       const oldClaims = this.getClaims();
@@ -329,7 +330,7 @@ export class JwtManager {
       
       // Check if features have changed
       if (this.haveClaimsChanged(oldClaims, newClaims)) {
-        console.debug('JWT claims have changed, emitting event');
+        logger.debug('JWT claims have changed, emitting event');
         EventBus.emit('jwt:claims:changed', { newClaims });
       }
     } catch (error) {

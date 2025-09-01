@@ -19,8 +19,12 @@ export function serializeStateValue(stateValue) {
 class Logger {
   constructor(prefix = "SayPi") {
     this.prefix = prefix;
-    // TODO: Make debugMode configurable, e.g., via storage or a global flag
-    this.debugMode = true; // Default to true for easier development, can be changed
+    // Default to quiet unless explicitly enabled via env/flag
+    this.debugMode = false;
+    
+    // Simple duplicate suppression window (ms)
+    this.dedupeWindowMs = 2000;
+    this._lastLog = new Map(); // key -> timestamp
     
     // Bind original console methods to preserve call stack
     this._console = {
@@ -32,10 +36,46 @@ class Logger {
       group: console.group.bind(console),
       groupEnd: console.groupEnd.bind(console)
     };
+
+    // Auto-configure debug mode from environment or runtime flags
+    try {
+      const env = (typeof process !== 'undefined' && process.env) ? process.env : {};
+      const envDebug = env.DEBUG_LOGS === 'true' || env.SAYPI_DEBUG === 'true';
+      const urlDebug = (typeof window !== 'undefined' && typeof window.location !== 'undefined')
+        ? (window.location.search || '').includes('saypi_debug=1')
+        : false;
+      const lsDebug = (typeof window !== 'undefined' && window.localStorage)
+        ? window.localStorage.getItem('saypi:debug') === 'true'
+        : false;
+      if (envDebug || urlDebug || lsDebug) {
+        this.debugMode = true;
+      }
+    } catch (_) {
+      // Ignore environment probing errors
+    }
   }
 
   setDebugMode(enabled) {
     this.debugMode = enabled;
+  }
+
+  _buildKey(level, args) {
+    const first = args && args.length ? args[0] : '';
+    const base = typeof first === 'string' ? first : JSON.stringify(first);
+    return `${level}:${base}`;
+  }
+
+  _shouldEmit(level, args) {
+    // Avoid suppressing errors/warnings
+    if (level === 'error' || level === 'warn') return true;
+    const key = this._buildKey(level, args);
+    const now = Date.now();
+    const last = this._lastLog.get(key) || 0;
+    if (now - last < this.dedupeWindowMs) {
+      return false;
+    }
+    this._lastLog.set(key, now);
+    return true;
   }
 
   _formatArgs(args) {
@@ -45,16 +85,18 @@ class Logger {
   }
 
   log(...args) {
+    if (!this._shouldEmit('log', args)) return;
     this._console.log(`[${this.prefix}]`, ...this._formatArgs(args));
   }
 
   debug(...args) {
-    if (this.debugMode) {
+    if (this.debugMode && this._shouldEmit('debug', args)) {
       this._console.debug(`[${this.prefix} DEBUG]`, ...this._formatArgs(args));
     }
   }
 
   info(...args) { // Alias for log
+    if (!this._shouldEmit('info', args)) return;
     this._console.info(`[${this.prefix} INFO]`, ...this._formatArgs(args));
   }
 

@@ -1,4 +1,5 @@
 import EventBus from "./events/EventBus";
+import { logger } from "./LoggingModule";
 
 /**
  * Telemetry data for a single speech/chat message
@@ -93,7 +94,7 @@ export class TelemetryModule {
 
     EventBus.on("saypi:userStoppedSpeaking", () => {
       this.speechEndTime = Date.now();
-      console.debug("User stopped speaking at", this.speechEndTime);
+      logger.debug("User stopped speaking at", this.speechEndTime);
       if (!this.currentTelemetry.timestamps) this.currentTelemetry.timestamps = {};
       this.currentTelemetry.timestamps.speechEnd = this.speechEndTime;
       this.emitUpdate();
@@ -121,7 +122,7 @@ export class TelemetryModule {
         // Save the last transcription time for grace period calculation
         this.lastTranscriptionTime = event.timestamp;
         this.transcriptionEndTime = event.timestamp;
-        console.debug(`Transcription received and lastTranscriptionTime updated: ${this.lastTranscriptionTime}`);
+        logger.debug(`Transcription received and lastTranscriptionTime updated: ${this.lastTranscriptionTime}`);
         this.emitUpdate();
       }
     });
@@ -136,15 +137,15 @@ export class TelemetryModule {
       // Calculate transcription delay (grace period)
       if (this.lastTranscriptionTime > 0) {
         this.currentTelemetry.transcriptionDelay = this.promptSubmissionTime - this.lastTranscriptionTime;
-        console.debug(`Calculated transcriptionDelay (grace period): ${this.currentTelemetry.transcriptionDelay}ms`);
+        logger.debug(`Calculated transcriptionDelay (grace period): ${this.currentTelemetry.transcriptionDelay}ms`);
         this.emitUpdate();
       } else if (this.currentTelemetry.timestamps.transcriptionEnd) {
         // Alternative calculation if lastTranscriptionTime is not set but we have the timestamp
         this.currentTelemetry.transcriptionDelay = this.promptSubmissionTime - this.currentTelemetry.timestamps.transcriptionEnd;
-        console.debug(`Calculated transcriptionDelay (grace period) from timestamps: ${this.currentTelemetry.transcriptionDelay}ms`);
+        logger.debug(`Calculated transcriptionDelay (grace period) from timestamps: ${this.currentTelemetry.transcriptionDelay}ms`);
         this.emitUpdate();
       } else {
-        console.warn("Cannot calculate grace period - no transcription end time available");
+        logger.warn("Cannot calculate grace period - no transcription end time available");
       }
     });
 
@@ -177,7 +178,7 @@ export class TelemetryModule {
     // Listen for audio playback events
     EventBus.on("saypi:piSpeaking", () => {
       this.audioPlaybackStartTime = Date.now();
-      console.debug("Pi started speaking at", this.audioPlaybackStartTime);
+      logger.debug("Pi started speaking at", this.audioPlaybackStartTime);
       if (!this.currentTelemetry.timestamps) this.currentTelemetry.timestamps = {};
       this.currentTelemetry.timestamps.audioPlaybackStart = this.audioPlaybackStartTime;
       

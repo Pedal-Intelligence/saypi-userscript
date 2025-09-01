@@ -1,5 +1,6 @@
 import { match } from "assert";
 import EventBus from "../events/EventBus";
+import { logger } from "../LoggingModule";
 import {
   AIVoice,
   AudioProvider,
@@ -44,12 +45,12 @@ export default class AudioControlsModule {
   }
 
   notifyAudioProviderSelection(provider: AudioProvider): void {
-    console.log(`Speech provided by ${provider.name}`);
+    logger.info(`Speech provided by ${provider.name}`);
     EventBus.emit("audio:changeProvider", { provider });
   }
 
   notifyAudioVoiceSelection(voice: AIVoice | SpeechSynthesisVoiceRemote): void {
-    console.log(`Using ${voice.name} voice for speech`);
+    logger.info(`Using ${voice.name} voice for speech`);
     const matchableVoice =
       voice instanceof AIVoice
         ? voice
@@ -65,7 +66,7 @@ export default class AudioControlsModule {
   }
 
   notifyAudioVoiceDeselection(): void {
-    console.log("Using default voice for speech");
+    logger.info("Using default voice for speech");
     EventBus.emit("audio:changeVoice", { voice: null });
     this.notifyAudioProviderSelection(audioProviders.Pi);
   }
